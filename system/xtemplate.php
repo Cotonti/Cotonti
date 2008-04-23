@@ -1,16 +1,16 @@
 <?PHP
 /*
-|****		Cotonti Engine			****|
-|****		Copyright Cotonti 2008		****|
-|****		http://www.cotonti.com/	****|
-|****		Xtemplate info see below	****|
+|****		Cotonti Engine					****|
+|****		Copyright Cotonti 2008				****|
+|****		http://www.cotonti.com/		****|
+|****		Xtemplate info see below			****|
 */
 /*
-|****		Security Defines  Check	****|
+|****		Security Defines  Check			****|
 */
 if (!defined('COTONTI_CORE')) { header("Location: /"); }
 /*
-|****		File Information			****|
+|****		File Information					****|
 */
 $file['name'] 		= "Xtemplate";
 $file['path']		= "/system/";

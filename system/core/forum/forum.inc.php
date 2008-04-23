@@ -1,15 +1,15 @@
 <?PHP
 /*
-|****		Cotonti Engine			****|
-|****		Copyright Cotonti 2008		****|
-|****		http://www.cotonti.com/	****|
+|****		Cotonti Engine					****|
+|****		Copyright Cotonti 2008				****|
+|****		http://www.cotonti.com/			****|
 */
 /*
-|****		Security Defines  Check	****|
+|****		Security Defines  Check			****|
 */
 if (!defined('COTONTI_CORE') || !defined('COTONTI_FORUM')) { header("Location: /"); }
 /*
-|****		File Information			****|
+|****		File Information					****|
 */
 $file['name'] 		= "Forum - Main";
 $file['path']		= "/system/core/forum/";

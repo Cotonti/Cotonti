@@ -1,16 +1,16 @@
 <?PHP
 /*
-|****		Cotonti Engine			****|
-|****		Copyright Cotonti 2008		****|
-|****		http://www.cotonti.com/	****|
+|****		Cotonti Engine					****|
+|****		Copyright Cotonti 2008				****|
+|****		http://www.cotonti.com/			****|
 */
 /*
-|****		Security Defines			****|
+|****		Security Defines					****|
 */
 define("COTONTI_CORE", TRUE);
 define("COTONTI_PAGE", TRUE);
 /*
-|****		File Information			****|
+|****		File Information					****|
 */
 $file['name'] 		= "Page";
 $file['path']		= "/";
@@ -19,7 +19,7 @@ $file['version']	= "0.0.1";
 $file['updated']	= "04-08-08";
 $file['type']		= "core";
 /*
-|****		Requires/Includes		****|
+|****		Requires/Includes				****|
 */
 require("system/functions.php");
 require("system/xtemplate.php");
