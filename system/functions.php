@@ -64,6 +64,8 @@ function cot_filter($type, $data, $length=0)
 	{
 		$error = FALSE;
 		$data = trim($data);
+		if (MQGPC)
+			{ $data = stripslashes($data); }
 		if($length > 0)
 			{ $data = substr($data, 0, $length); }
 		switch($type)

@@ -1,10 +1,11 @@
 CREATE TABLE `cot_logs` (
-`log_id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`log_date` INT( 11 ) NOT NULL ,
-`log_ip` VARCHAR( 15 ) NOT NULL ,
-`log_usrid` INT( 11 ) NOT NULL ,
-`log_usrname` VARCHAR( 32 ) NOT NULL ,
-`log_type` VARCHAR( 12 ) NOT NULL ,
-`log_message` TEXT NOT NULL ,
-`log_uri` TEXT NOT NULL
-) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_bin;
+  `log_id` int(11) NOT NULL auto_increment,
+  `log_date` int(11) NOT NULL,
+  `log_ip` varchar(15) character set utf8 collate utf8_bin NOT NULL,
+  `log_usrid` int(11) NOT NULL,
+  `log_usrname` varchar(32) character set utf8 collate utf8_bin NOT NULL,
+  `log_type` varchar(12) character set utf8 collate utf8_bin NOT NULL,
+  `log_message` text character set utf8 collate utf8_bin NOT NULL,
+  `log_uri` text character set utf8 collate utf8_bin NOT NULL,
+  PRIMARY KEY  (`log_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
