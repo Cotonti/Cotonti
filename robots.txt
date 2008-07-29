@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /cgi-bin
+Disallow: /datas
+Disallow: /plugins
+Disallow: /skins
+Disallow: /system
