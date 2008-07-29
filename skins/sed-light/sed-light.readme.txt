@@ -1,0 +1,49 @@
+-----------------------
+Seditio Website engine
+Copyright  Neocrome
+http://www.neocrome.net
+----------------------
+
+For Seditio version : 100 or newer
+Updated : 02.26.2008
+Seditio official skin : SED-Light
+Language : English (code:en)
+-----------------------
+Skin made by : Xiode
+Website : http://www.xiodestudios.com
+Copyright © 2008 XiodeStudios.Com. All Rights Reserved.
+-----------------------
+
+Designed By: Xiode - XiodeStudios.Com & Alx - AlxDesign.com
+Programming By: Xiode - XiodeStudios.Com
+
+NOTICE TO USER: PLEASE READ THIS CONTRACT CAREFULLY. BY USING ALL OR 
+ANY PORITION OF THE SOFTWARE YOU ACCEPT ALL THE TERMS AND CONDITIONS 
+OF THIS AGREEMENT.
+
+(i) The SED-Light source code may be modified at the user's risk, but 
+the code (altered or otherwise) may NOT be distributed to other 
+entities without the explicit written permission of XiodeStudios.Com. 
+In other words, SED-Light may be modified for your use only. Under no 
+circumstances may any modified or unmodified part of SED-Light be 
+distributed unless an explicit written permission is granted by 
+XiodeStudios.Com.
+
+(ii) All XiodeStudios.Com copyright notices can not be modified and 
+must remain visible.
+
+(iii) The Redistributable Code is the property of XiodeStudios.Com 
+and is protected by copyright law and international treaty provisions. 
+You are not authorized to reproduce and distribute the Redistributable 
+Code without the explicit written permission of XiodeStudios.Com. 
+It can only be distributed with Sedito Website Engine. XiodeStudios.Com, 
+reserves all rights not expressly granted.
+
+THE REDISTRIBUTABLE CODE IS PROVIDED TO YOU "AS IS" WITHOUT WARRANTY 
+OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
+PARTICULAR PURPOSE. YOU ASSUME THE ENTIRE RISK AS TO THE ACCURACY 
+AND THE USE OF THE REDISTRIBUTABLE CODE. XIODESTUDIOS.COM, SHALL 
+NOT BE LIABLE FOR ANY DAMAGES WHATSOEVER ARISING OUT OF THE USE OF 
+OR INABILITY TO USE THE REDISTRIBUTABLE CODE, EVEN IF XIODESTUDIOS.COM, 
+HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

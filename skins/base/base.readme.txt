@@ -1,0 +1,12 @@
+-----------------------
+Seditio Website engine
+Copyright  Neocrome
+http://www.neocrome.net
+For Seditio version : 100 or newer
+Updated : 2006-mar-16
+Seditio official skin : Ice (International)
+Language : English (code:en)
+-----------------------
+Skin made by : Neocrome
+Website : http://www.neocrome.net
+-----------------------

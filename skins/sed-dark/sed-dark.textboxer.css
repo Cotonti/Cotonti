@@ -1,0 +1,17 @@
+#txb { font-size:10px; }
+#txb #bb, #txb #explain{ border-color:#292929;}
+#txb #explain { height:1em; color:#777;}
+#txb #bb {background-color:#303030; }
+#txb textarea, #txb #preview {color:#777;background-color:#191919;border-color:#292929;font-size:12px;}
+#txb #bb a { color:#777!important;}
+#txb #bb a:hover { color:#777!important;}
+#txb #bb .bbn a{  }
+#txb #bb .bbn a:hover { background-color:#191919; border:1px solid #292929; }
+#txb #bb .bbd { }
+#txb #bb span, #txb #bb .bbd { background-image: url(../../plugins/textboxer2/themes/bbcodes.gif);}
+#txb #bb .dropdown li.bbd:hover, #txb #bb .dropdown li.over{ background-color:#222;}
+#txb #bb .bbd ul { border-color:#292929; background-color:#222;}
+#txb #bb .dropdown a:hover{ background-color:#292929;}
+#txb #bb .bbd a span { background-color:#303030; }
+#txb #bb .dropdown a:hover span{ background-color:#292929;}
+#txb div.cut,#txb div.previewInfo{background-color:#303030;border-color:#292929;}

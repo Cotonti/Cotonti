@@ -1,0 +1,17 @@
+#txb { font-size:10px; }
+#txb #bb, #txb #explain{ border-color:#999999;}
+#txb #explain { height:1em; color:#000000;}
+#txb #bb {background-color:#EEEEEE; -moz-border-radius:0;}
+#txb textarea, #txb #preview {color:#000000;background-color:#FFFFFF;border-color:#999999;font-size:12px;}
+#txb #bb a {-moz-border-radius:0; color:#000000!important;}
+#txb #bb a:hover { color:#000000!important;}
+#txb #bb .bbn a{ background-color:#EEEEEE;}
+#txb #bb .bbn a:hover { border-color:#FFCC00; -moz-border-radius:0; background-color:#FFCC00;}
+#txb #bb .bbd { -moz-border-radius:0; }
+#txb #bb span, #txb #bb .bbd { background-image: url(../../plugins/textboxer2/themes/bbcodes.gif);}
+#txb #bb .dropdown li.bbd:hover, #txb #bb .dropdown li.over{ background-color:#FFCC00;}
+#txb #bb .bbd ul { border-color:#999999; -moz-border-radius:0; background-color:#EEEEEE;}
+#txb #bb .dropdown a:hover{ background-color:#FFCC00;}
+#txb #bb .bbd a span { background-color:#EEEEEE; -moz-border-radius:0;}
+#txb #bb .dropdown a:hover span{ background-color:#FFCC00;}
+#txb div.cut,#txb div.previewInfo{background-color:#EEEEEE;border-color:#999999;}
