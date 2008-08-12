@@ -201,8 +201,8 @@ CREATE TABLE sed_online (
   online_hammer tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (online_id),
   KEY online_lastseen (online_lastseen),
-  KEY online_userid,
-  KEY online_name
+  KEY online_userid (online_userid),
+  KEY online_name (online_name)
 ) TYPE=MyISAM;
 
 CREATE TABLE sed_pages (
@@ -454,7 +454,7 @@ INSERT INTO sed_smilies VALUES (2, ':blush', 'system/smilies/icon_blush.gif', 'B
 INSERT INTO sed_smilies VALUES (3, ':con', 'system/smilies/icon_confused.gif', 'Confused', 42);
 INSERT INTO sed_smilies VALUES (4, ':)', 'system/smilies/icon_smile.gif', 'Smile', 1);
 INSERT INTO sed_smilies VALUES (5, ':cry', 'system/smilies/icon_cry.gif', 'Cry', 44);
-INSERT INTO sed_smilies VALUES (6, ':dontgetit', 'system/smilies/icon_dontgetit.gif', 'Don\'t get it', 41);
+INSERT INTO sed_smilies VALUES (6, ':dontgetit', 'system/smilies/icon_dontgetit.gif', 'Dont get it', 41);
 INSERT INTO sed_smilies VALUES (7, ':dozingoff', 'system/smilies/icon_dozingoff.gif', 'Dozing off', 40);
 INSERT INTO sed_smilies VALUES (8, ':love', 'system/smilies/icon_love.gif', 'Love', 10);
 INSERT INTO sed_smilies VALUES (9, ':((', 'system/smilies/icon_mad.gif', 'Mad', 50);
@@ -496,6 +496,150 @@ INSERT INTO sed_groups VALUES (3, 'banned', 1, 0, 0, 'Banned', '', '', 0, 0, 1);
 INSERT INTO sed_groups VALUES (4, 'members', 1, 0, 0, 'Members', '', '', 0, 0, 1);
 INSERT INTO sed_groups VALUES (5, 'administrators', 99, 0, 0, 'Administrators', '', '', 256, 1024, 1);
 INSERT INTO sed_groups VALUES (6, 'moderators', 50, 0, 0, 'Moderators', '', '', 256, 1024, 1);
+
+# ---------- Default configuration
+
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '01', 'maintitle', 1, 'Title of your site');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '02', 'subtitle', 1, 'Subtitle');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '03', 'mainurl', 1, 'http://www.yourdomain.com');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '04', 'adminemail', 1, 'admin@mysite.com');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '05', 'clustermode', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '05', 'hostip', 1, '999.999.999.999');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '06', 'cache', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '06', 'gzip', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '07', 'devmode', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '10', 'cookiedomain', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '10', 'cookiepath', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '10', 'cookielifetime', 2, '5184000');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '12', 'disablehitstats', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldenabled', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldtadjust', 2, '100');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldzhammer', 2, '25');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_vid', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '20', 'parsebbcodeusertext', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '20', 'parsebbcodecom', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '20', 'parsebbcodeforums', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '20', 'parsebbcodepages', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '30', 'parsesmiliesusertext', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '30', 'parsesmiliescom', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '30', 'parsesmiliesforums', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '30', 'parsesmiliespages', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'time', '11', 'dateformat', 1, 'Y-m-d H:i');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'time', '11', 'formatmonthday', 1, 'm-d');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'time', '11', 'formatyearmonthday', 1, 'Y-m-d');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'time', '11', 'formatmonthdayhourmin', 1, 'm-d H:i');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'time', '11', 'servertimezone', 1, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'time', '12', 'defaulttimezone', 1, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'time', '14', 'timedout', 2, '1200');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'skin', '02', 'forcedefaultskin', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'skin', '04', 'doctypeid', 4, '4');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'skin', '06', 'charset', 4, 'ISO-8859-1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'skin', '08', 'metakeywords', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'skin', '08', 'separator', 1, '/');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'skin', '15', 'disablesysinfos', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'skin', '15', 'keepcrbottom', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'skin', '15', 'showsqlstats', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'lang', '10', 'forcedefaultlang', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '10', 'topline', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '10', 'banner', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '10', 'bottomline', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu1', 0, '<ul>\n<li><a href="index.php">Home</a></li>\n<li><a href="forums.php">Forums</a></li>\n<li><a href="list.php?c=articles">Articles</a></li>\n<li><a href="plug.php?e=search">Search</a></li>\n</ul>');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu2', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu3', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu4', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu5', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu6', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu7', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu8', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '15', 'menu9', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext1', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext2', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext3', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext4', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext5', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext6', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext7', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext8', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'menus', '20', 'freetext9', 0, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'comments', '01', 'disable_comments', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'comments', '10', 'countcomments', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '01', 'disable_forums', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '10', 'hideprivateforums', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '10', 'hottopictrigger', 2, '20');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '10', 'maxtopicsperpage', 2, '30');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '12', 'antibumpforums', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'page', '01', 'disable_page', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'page', '02', 'allowphp_pages', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'page', '05', 'maxrowsperpage', 2, '15');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '01', 'disable_pfs', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '02', 'pfsuserfolder', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_amode', 2, 'GD2');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_x', 2, '112');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_y', 2, '84');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_border', 2, '4');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_dimpriority', 2, 'Width');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_keepratio', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_jpeg_quality', 2, '85');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_colorbg', 2, '000000');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_colortext', 2, 'FFFFFF');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pfs', '10', 'th_textsize', 2, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'plug', '01', 'disable_plug', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pm', '01', 'disable_pm', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pm', '10', 'pm_maxsize', 2, '10000');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'pm', '10', 'pm_allownotifications', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'polls', '01', 'disable_polls', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'ratings', '01', 'disable_ratings', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'trash', '01', 'trash_prunedelay', 2, '7');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'trash', '10', 'trash_comment', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'trash', '11', 'trash_forum', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'trash', '12', 'trash_page', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'trash', '13', 'trash_pm', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'trash', '14', 'trash_user', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '01', 'disablereg', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '03', 'disablewhosonline', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '05', 'maxusersperpage', 2, '50');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '07', 'regrequireadmin', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '10', 'regnoactivation', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '10', 'useremailchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '10', 'usertextimg', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '12', 'av_maxsize', 2, '8000');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '12', 'av_maxx', 2, '64');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '12', 'av_maxy', 2, '64');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '12', 'usertextmax', 2, '300');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '13', 'sig_maxsize', 2, '32000');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '13', 'sig_maxx', 2, '550');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '13', 'sig_maxy', 2, '100');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '14', 'ph_maxsize', 2, '32000');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '14', 'ph_maxx', 2, '128');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '14', 'ph_maxy', 2, '128');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra1title', 1, 'Real name');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra2title', 1, 'Title');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra3title', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra4title', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra5title', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra6title', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra7title', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra8title', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra9title', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra1tsetting', 2, '255');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra2tsetting', 2, '255');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra3tsetting', 2, '255');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra4tsetting', 2, '255');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra5tsetting', 2, '255');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra6tsetting', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra7tsetting', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra8tsetting', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra9tsetting', 1, '');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra1uchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra2uchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra3uchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra4uchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra5uchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra6uchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra7uchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra8uchange', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '20', 'extra9uchange', 3, '0');
+
 
 # ---------- Rights for the core :
 

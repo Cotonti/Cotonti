@@ -14,6 +14,11 @@ Description=Common
 [END_SED]
 ==================== */
 
+/**
+ * @package Seditio-N
+ * @copyright Partial copyright (c) Cotonti Team 2008
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 /* ======== First... ======== */
@@ -32,26 +37,13 @@ unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 $sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
 
-if (sed_sql_numrows($sql_config)<100)
-	{
-	define('SED_ADMIN',TRUE);
-	require_once('system/functions.admin.php');
-	unset($query);
-
-	foreach($cfgmap as $i => $line)
-		{ $query[] = "('core','".$line[0]."','".$line[1]."','".$line[2]."',".(int)$line[3].",'".$line[4]."')"; }
-	$query = implode(",", $query);
-
-	$sql = sed_sql_query("INSERT INTO $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ".$query);
-	}
-
 while ($row = sed_sql_fetcharray($sql_config))
-	{
+{
 	if ($row['config_owner']=='core')
-		{ $cfg[$row['config_name']] = $row['config_value']; }
+	{ $cfg[$row['config_name']] = $row['config_value']; }
 	else
-		{ $cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value']; }
-	}
+	{ $cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value']; }
+}
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 
@@ -70,34 +62,34 @@ $redirect = sed_import('redirect','G','SLU');
 /* ======== Internal cache ======== */
 
 if ($cfg['cache'])
-	{
+{
 	$sql = sed_cache_getall();
 	if ($sql)
-		{
+	{
 		while ($row = sed_sql_fetcharray($sql))
-			{ $$row['c_name'] = unserialize($row['c_value']); }
-		}
+		{ $$row['c_name'] = unserialize($row['c_value']); }
 	}
+}
 
 /* ======== Plugins ======== */
 
 if (!$sed_plugins)
-	{
+{
 	$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE pl_active=1 ORDER BY pl_hook ASC, pl_order ASC");
-	 if (sed_sql_numrows($sql)>0)
-		{
+	if (sed_sql_numrows($sql)>0)
+	{
 		while ($row = sed_sql_fetcharray($sql))
-			{ $sed_plugins[] = $row; }
-		}
-	sed_cache_store('sed_plugins', $sed_plugins, 3300);
+		{ $sed_plugins[] = $row; }
 	}
+	sed_cache_store('sed_plugins', $sed_plugins, 3300);
+}
 
 /* ======== Gzip and output filtering ======== */
 
 if ($cfg['gzip'])
-	{ @ob_start('ob_gzhandler'); }
+{ @ob_start('ob_gzhandler'); }
 else
-	{ ob_start(); }
+{ ob_start(); }
 
 ob_start('sed_outputfilters');
 
@@ -109,30 +101,30 @@ $ipmasks = "('".$userip[0].".".$userip[1].".".$userip[2].".".$userip[3]."','".$u
 $sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks, 'Common/banlist/check');
 
 If (sed_sql_numrows($sql)>0)
-	{
+{
 	$row=sed_sql_fetcharray($sql);
 	if ($sys['now']>$row['banlist_expire'] && $row['banlist_expire']>0)
-		{
+	{
 		$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
-		}
+	}
 	else
-		{
+	{
 		$disp = "Your IP is banned.<br />Reason: ".$row['banlist_reason']."<br />Until: ";
 		$disp .= ($row['banlist_expire']>0) ? @date($cfg['dateformat'], $row['banlist_expire'])." GMT" : "Never expire.";
 		sed_diefatal($disp);
-		}
 	}
+}
 
 /* ======== Groups ======== */
 
 if (!$sed_groups )
-	{
+{
 	$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
 	if (sed_sql_numrows($sql)>0)
-		{
+	{
 		while ($row = sed_sql_fetcharray($sql))
-			{
+		{
 			$sed_groups[$row['grp_id']] = array (
 				'id' => $row['grp_id'],
 				'alias' => $row['grp_alias'],
@@ -146,14 +138,14 @@ if (!$sed_groups )
 				'pfs_maxfile' => $row['grp_pfs_maxfile'],
 				'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
 				'ownerid' => $row['grp_ownerid']
-					);
-			}
+			);
 		}
+	}
 	else
-		{ sed_diefatal('No groups found.'); }
+	{ sed_diefatal('No groups found.'); }
 
 	sed_cache_store('sed_groups',$sed_groups,3600);
-	}
+}
 
 /* ======== User/Guest ======== */
 
@@ -168,37 +160,37 @@ $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
 if ($cfg['authmode']==2 || $cfg['authmode']==3)
-	{ session_start(); }
+{ session_start(); }
 
 if (isset($_SESSION['rsedition']) && ($cfg['authmode']==2 || $cfg['authmode']==3))
-	{
+{
 	$rsedition = $_SESSION['rsedition'];
 	$rseditiop = $_SESSION['rseditiop'];
 	$rseditios = $_SESSION['rseditios'];
-	}
+}
 elseif (isset($_COOKIE['SEDITIO']) && ($cfg['authmode']==1 || $cfg['authmode']==3))
-	{
+{
 	$u = base64_decode($_COOKIE['SEDITIO']);
 	$u = explode(':_:',$u);
 	$rsedition = sed_import($u[0],'D','INT');
 	$rseditiop = sed_import($u[1],'D','PSW');
 	$rseditios = sed_import($u[2],'D','ALP');
-	}
+}
 
 if ($rsedition>0 && $cfg['authmode']>0)
-	{
+{
 	if (strlen($rseditiop)!=32 || eregi("'",$rseditiop) || eregi("\"",$rseditiop))
-		{ sed_diefatal('Wrong value for the password.'); }
+	{ sed_diefatal('Wrong value for the password.'); }
 
 	if ($cfg['ipcheck'])
-		{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_password='$rseditiop' AND user_lastip='".$usr['ip']."'"); }
+	{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_password='$rseditiop' AND user_lastip='".$usr['ip']."'"); }
 	else
-		{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_password='$rseditiop'"); }
+	{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_password='$rseditiop'"); }
 
 	if ($row = sed_sql_fetcharray($sql))
-		{
+	{
 		if ($row['user_maingrp']>3)
-			{
+		{
 			$usr['id'] = $row['user_id'];
 			$usr['sessionid'] = ($cfg['authmode']==1) ? md5($row['user_lastvisit']) : session_id();
 			$usr['name'] = $row['user_name'];
@@ -214,41 +206,41 @@ if ($rsedition>0 && $cfg['authmode']>0)
 			$usr['profile'] = $row;
 
 			if ($usr['lastlog']+$cfg['timedout'] < $sys['now_offset'])
-				{
+			{
 				$sys['comingback']= TRUE;
 				$usr['lastvisit'] = $usr['lastlog'];
 				$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
-				}
+			}
 
 			if (empty($row['user_auth']))
-				{
+			{
 				$usr['auth'] = sed_auth_build($usr['id'], $usr['maingrp']);
 				$sys['sql_update_auth'] = ", user_auth='".serialize($usr['auth'])."'";
-				}
+			}
 
 			$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
-			}
 		}
 	}
+}
 else
-	{
+{
 	if (empty($rseditios) && ($cfg['authmode']==1 || $cfg['authmode']==3))
-		{
+	{
 		$u = base64_encode('0:_:0:_:'.$cfg['defaultskin']);
 		setcookie('SEDITIO',$u,time()+($cfg['cookielifetime']*86400),$cfg['cookiepath'],$cfg['cookiedomain']);
-		}
-	else
-	  	{
-	   $skin = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $rseditios;
-	  	}
 	}
+	else
+	{
+		$skin = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $rseditios;
+	}
+}
 
 if ($usr['id']==0)
-	{
+{
 	$usr['auth'] = sed_auth_build(0);
 	$usr['skin'] = (empty($usr['skin'])) ? $cfg['defaultskin'] : $usr['skin'];
 	$usr['lang'] = $cfg['defaultlang'];
-	}
+}
 
 /* ======== Anti-XSS protection ======== */
 
@@ -268,10 +260,10 @@ $b = sed_import('b','G','ALP',24);
 /* ======== Who's online (part 1) and shield protection ======== */
 
 if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
-	{
+{
 
 	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_lastseen<'$online_timedout'");
-   	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'");
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'");
 	$sys['whosonline_vis_count'] = sed_sql_result($sql, 0, 'COUNT(*)');
 	$sql = sed_sql_query("SELECT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name NOT LIKE 'v' ORDER BY online_name ASC");
 	$sys['whosonline_reg_count'] = sed_sql_numrows($sql);
@@ -279,41 +271,41 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 	$ii=0;
 	while ($row = sed_sql_fetcharray($sql))
-		{
+	{
 		$out['whosonline_reg_list'] .= ($ii>0) ? ', ' : '';
 		$out['whosonline_reg_list'] .= sed_build_user($row['online_userid'], sed_cc($row['online_name']));
 		$sed_usersonline[] = $row['online_userid'];
-      	$ii++;
-		}
+		$ii++;
 	}
+}
 
 /* ======== Max users ======== */
 
 if (!$cfg['disablehitstats'])
-	{
+{
 	$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
 
 	if ($row = sed_sql_fetcharray($sql))
-    	{ $maxusers = $row[0]; }
+	{ $maxusers = $row[0]; }
 	else
-    	{ $sql = sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('maxusers', 1)"); }
+	{ $sql = sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('maxusers', 1)"); }
 
 	if ($maxusers<$sys['whosonline_all_count'])
-    	{ $sql = sed_sql_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."' WHERE stat_name='maxusers'"); }
-	}
+	{ $sql = sed_sql_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."' WHERE stat_name='maxusers'"); }
+}
 
 /* ======== Language ======== */
 
 $mlang = 'system/lang/'.$usr['lang'].'/main.lang.php';
 
 if (!file_exists($mlang))
-	{
+{
 	$usr['lang'] = $cfg['defaultlang'];
 	$mlang = 'system/lang/'.$usr['lang'].'/main.lang.php';
 
 	if (!file_exists($mlang))
-		{ sed_diefatal('Main language file not found.'); }
-	}
+	{ sed_diefatal('Main language file not found.'); }
+}
 
 $lang = $usr['lang'];
 require($mlang);
@@ -328,24 +320,24 @@ $out['copyright'] = "<a href=\"http://www.neocrome.net\">".$L['foo_poweredby']."
 $usr['skin_raw'] = $usr['skin'];
 
 if (@file_exists('skins/'.$usr['skin'].'.'.$usr['lang'].'/header.tpl'))
-	{ $usr['skin'] = $usr['skin'].'.'.$usr['lang']; }
+{ $usr['skin'] = $usr['skin'].'.'.$usr['lang']; }
 
 $mskin = 'skins/'.$usr['skin'].'/header.tpl';
 
 if (!file_exists($mskin))
-	{
+{
 	$out['notices'] .= $L['com_skinfail'].'<br />';
 	$usr['skin'] = $cfg['defaultskin'];
 	$mskin = 'skins/'.$usr['skin'].'/header.tpl';
 
 	if (!file_exists($mskin))
-		{ sed_diefatal('Default skin not found.'); }
-	}
+	{ sed_diefatal('Default skin not found.'); }
+}
 
 $usr['skin_lang'] = 'skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
 
 if (@file_exists($usr['skin_lang']))
-	{ require($usr['skin_lang']); }
+{ require($usr['skin_lang']); }
 
 require('skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
 
@@ -354,60 +346,60 @@ $skin = $usr['skin'];
 /* ======== Basic statistics ======== */
 
 if (!$cfg['disablehitstats'])
-	{
+{
 	sed_stat_inc('totalpages');
 	$hits_today = sed_stat_get($sys['day']);
 
 	if ($hits_today>0)
-		{ sed_stat_inc($sys['day']); }
+	{ sed_stat_inc($sys['day']); }
 	else
-		{ sed_stat_create($sys['day']); }
+	{ sed_stat_create($sys['day']); }
 
 	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
 
 	if (@!eregi($cfg['mainurl'], $sys['referer'])
-		&& @!eregi($cfg['hostip'], $sys['referer'])
-		&& @!eregi(str_replace('www.', '', $cfg['mainurl']), $sys['referer'])
-		&& !empty($sys['referer']))
-		{
+	&& @!eregi($cfg['hostip'], $sys['referer'])
+	&& @!eregi(str_replace('www.', '', $cfg['mainurl']), $sys['referer'])
+	&& !empty($sys['referer']))
+	{
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_referers WHERE ref_url = '".sed_sql_prep($sys['referer'])."'");
 		$count = sed_sql_result($sql,0,"COUNT(*)");
 
 		if ($count>0)
-			{
+		{
 			$sql = sed_sql_query("UPDATE $db_referers SET ref_count=ref_count+1,
-				ref_date='".$sys['now_offset']."'
+			ref_date='".$sys['now_offset']."'
 				WHERE ref_url='".sed_sql_prep($sys['referer'])."'");
-			}
-	    else
-			{
+		}
+		else
+		{
 			$sql = sed_sql_query("INSERT INTO $db_referers
-				(ref_url,
-				ref_count,
-				ref_date)
-				VALUES
-				('".sed_sql_prep($sys['referer'])."',
+			(ref_url,
+			ref_count,
+			ref_date)
+			VALUES
+			('".sed_sql_prep($sys['referer'])."',
 				'1',
 				".(int)$sys['now_offset'].")");
-			}
 		}
 	}
+}
 
 /* ======== Categories ======== */
 
 if (!$sed_cat && !$cfg['disable_page'])
-	{
+{
 	$sed_cat = sed_load_structure();
 	sed_cache_store('sed_cat', $sed_cat, 3600);
-	}
+}
 
 /* ======== Forums ======== */
 
 if (!$sed_forums_str && !$cfg['disable_forums'])
-	{
+{
 	$sed_forums_str = sed_load_forum_structure();
 	sed_cache_store('sed_forums_str', $sed_forums_str, 3600);
-	}
+}
 
 /* ======== Various ======== */
 
@@ -426,15 +418,15 @@ $sed_img_right = $out['img_right'];
 /* ======== Smilies ======== */
 
 if (!$sed_smilies)
-	{
+{
 	$sql = sed_sql_query("SELECT * FROM $db_smilies ORDER by smilie_order ASC, smilie_id ASC");
-	 if (sed_sql_numrows($sql)>0)
-		{
+	if (sed_sql_numrows($sql)>0)
+	{
 		while ($row = sed_sql_fetcharray($sql))
-			{ $sed_smilies[] = $row; }
-		}
-	sed_cache_store('sed_smilies',$sed_smilies,3550);
+		{ $sed_smilies[] = $row; }
 	}
+	sed_cache_store('sed_smilies',$sed_smilies,3550);
+}
 
 /* ======== Local/GMT time ======== */
 
@@ -445,7 +437,7 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 $extp = sed_getextplugins('global');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 /* ======== Pre-loads ======== */
 
