@@ -1,18 +1,18 @@
 <?PHP
 
 /* ====================
- Seditio - Website engine
- Copyright Neocrome
- http://www.neocrome.net
- [BEGIN_SED]
- File=system/functions.php
- Version=125
- Updated=2008-may-26
- Type=Core
- Author=Neocrome
- Description=Functions
- [END_SED]
- ==================== */
+Seditio - Website engine
+Copyright Neocrome
+http://www.neocrome.net
+[BEGIN_SED]
+File=system/functions.php
+Version=125
+Updated=2008-may-26
+Type=Core
+Author=Neocrome
+Description=Functions
+[END_SED]
+==================== */
 
 /**
  * @package Seditio-N
@@ -2050,7 +2050,18 @@ function sed_log_sed_import($s, $e, $v, $o)
 
 /* ------------------ */
 
-function sed_mail($fmail, $subject, $body, $headers='')
+/**
+ * Sends mail with standard PHP mail()
+ *
+ * @global $cfg
+ * @param string $fmail Recipient
+ * @param string $subject Subject
+ * @param string $body Message body
+ * @param string $headers Message headers
+ * @param string $additional_parameters Additional parameters passed to sendmail
+ * @return bool
+ */
+function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
 {
 	global $cfg;
 
@@ -2062,7 +2073,7 @@ function sed_mail($fmail, $subject, $body, $headers='')
 	{
 		$headers = (empty($headers)) ? "From: \"".$cfg['maintitle']."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n"."Content-Type: text/plain; charset=".$cfg['charset']."\n" : $headers;
 		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
-		mail($fmail, $subject, $body, $headers);
+		mail($fmail, $subject, $body, $headers, $additional_parameters);
 		sed_stat_inc('totalmailsent');
 		return(TRUE);
 	}
@@ -2070,6 +2081,17 @@ function sed_mail($fmail, $subject, $body, $headers='')
 
 /* ------------------ */
 
+/**
+ * Creates UNIX timestamp out of a date
+ *
+ * @param int $hour Hours
+ * @param int $minute Minutes
+ * @param int $second Seconds
+ * @param int $month Month
+ * @param int $date Day of the month
+ * @param int $year Year
+ * @return int
+ */
 function sed_mktime($hour = false, $minute = false, $second = false, $month = false, $date = false, $year = false)
 {
 	// Code from http://www.php.net/date
@@ -2090,7 +2112,7 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
 	{ $m_days[1] = 29;  }
 
 	$d_year = 1970 - $year;
-	$days = 0 - $d_year * 365;
+	$days = -1 - $d_year * 365;
 	$days -= floor ($d_year / 4);
 	$days += floor (($d_year - 70) / 100);
 	$days -= floor (($d_year - 370) / 400);
