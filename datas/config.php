@@ -20,8 +20,10 @@ Description=Configuration
 
 $cfg['mysqlhost'] = 'localhost';	// Database host URL
 $cfg['mysqluser'] = 'root';			// Database user
-$cfg['mysqlpassword'] = '';			// Database password
-$cfg['mysqldb'] = 'seditio';			// Database name
+$cfg['mysqlpassword'] = 'myRocks';			// Database password
+$cfg['mysqldb'] = 'sedition';			// Database name
+// Set this to your site charset if your default database charset is different
+//$cfg['mysqlcharset'] = 'utf8';
 
 // ========================
 // Default skin and default language

@@ -26,7 +26,7 @@
 
 			<!-- BEGIN: FORUMS_SECTIONS_ROW_CAT -->
 
-			{FORUMS_SECTIONS_ROW_TBODY_END}<tbody id="{FORUMS_SECTIONS_ROW_CAT_CODE}">
+			<tbody id="{FORUMS_SECTIONS_ROW_CAT_CODE}">
 
 			<tr>
 				<td class="odd" colspan="7" style="padding:4px;">
@@ -77,10 +77,16 @@
 			</tr>
 
 			<!-- END: FORUMS_SECTIONS_ROW_SECTION -->
+			
+			<!-- BEGIN: FORUMS_SECTIONS_FOOTER -->
+
+			</tbody>
+			</tbody>
+
+			<!-- END: FORUMS_SECTIONS_FOOTER -->
 
 			<!-- END: FORUMS_SECTIONS_ROW -->
 
-		</tbody>
 		</table>
 		<div class="bCap"></div>
 	</div>
