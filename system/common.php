@@ -242,6 +242,18 @@ if ($usr['id']==0)
 	$usr['lang'] = $cfg['defaultlang'];
 }
 
+/* === Hook === */
+$extp = sed_getextplugins('input');
+if (is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
+/* ======================== */
+
+
 /* ======== Anti-XSS protection ======== */
 
 $xg = sed_import('x','G','ALP');
