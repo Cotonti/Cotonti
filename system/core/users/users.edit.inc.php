@@ -14,6 +14,13 @@ Description=Users
 [END_SED]
 ==================== */
 
+/**
+ * @package Seditio-N
+ * @version 0.0.1
+ * @copyright Partial copyright (c) 2008 Cotonti Team
+ * @license BSD License
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $y = sed_import('y','P','TXT');
@@ -30,32 +37,32 @@ sed_block($usr['isadmin']);
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
 sed_die(sed_sql_numrows($sql)==0);
 $urr = sed_sql_fetcharray($sql);
 
-$sql1 = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$id' and gru_groupid='5'");
+$sql1 = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$id' and gru_groupid='".SED_GROUP_TOPADMINS."'");
 $sys['edited_istopadmin'] = (sed_sql_numrows($sql1)>0) ? TRUE : FALSE;
 $sys['user_istopadmin'] = sed_auth('admin', 'a', 'A');
 $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
 
 if ($sys['protecttopadmin'])
-	{
+{
 	header("Location: message.php?msg=930");
 	exit;
-	}
+}
 
 if ($a=='update')
-	{
+{
 	sed_check_xg();
 
 	/* === Hook === */
 	$extp = sed_getextplugins('users.edit.update.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT');
@@ -64,7 +71,7 @@ if ($a=='update')
 	$rusercountry = sed_import('rusercountry','P','ALP');
 	$ruseravatar = sed_import('ruseravatar','P','TXT');
 	$ruserphoto = sed_import('ruserphoto','P','TXT');
-   	$rusersignature = sed_import('rusersignature','P','TXT');
+	$rusersignature = sed_import('rusersignature','P','TXT');
 	$rusertext = sed_import('rusertext','P','TXT');
 	$ruseremail = sed_import('ruseremail','P','TXT');
 	$ruserhideemail = sed_import('ruserhideemail','P','INT');
@@ -88,20 +95,20 @@ if ($a=='update')
 	$ruserdelpfs = sed_import('ruserdelpfs','P','BOL');
 	$ruserextra1 = sed_import('ruserextra1','P','TXT');
 	$ruserextra2 = sed_import('ruserextra2','P','TXT');
-  	$ruserextra3 = sed_import('ruserextra3','P','TXT');
-  	$ruserextra4 = sed_import('ruserextra4','P','TXT');
+	$ruserextra3 = sed_import('ruserextra3','P','TXT');
+	$ruserextra4 = sed_import('ruserextra4','P','TXT');
 	$ruserextra5 = sed_import('ruserextra5','P','TXT');
 	$ruserextra6 = sed_import('ruserextra6','P','HTM');
-  	$ruserextra7 = sed_import('ruserextra7','P','HTM');
+	$ruserextra7 = sed_import('ruserextra7','P','HTM');
 	$ruserextra8 = sed_import('ruserextra8','P','HTM');
 	$ruserextra9 = sed_import('ruserextra9','P','HTM');
 	$ruserextra1_p = sed_import('ruserextra1_p','P','BOL');
 	$ruserextra2_p = sed_import('ruserextra2_p','P','BOL');
-  	$ruserextra3_p = sed_import('ruserextra3_p','P','BOL');
-  	$ruserextra4_p = sed_import('ruserextra4_p','P','BOL');
+	$ruserextra3_p = sed_import('ruserextra3_p','P','BOL');
+	$ruserextra4_p = sed_import('ruserextra4_p','P','BOL');
 	$ruserextra5_p = sed_import('ruserextra5_p','P','BOL');
 	$ruserextra6_p = sed_import('ruserextra6_p','P','BOL');
-  	$ruserextra7_p = sed_import('ruserextra7_p','P','BOL');
+	$ruserextra7_p = sed_import('ruserextra7_p','P','BOL');
 	$ruserextra8_p = sed_import('ruserextra8_p','P','BOL');
 	$ruserextra9_p = sed_import('ruserextra9_p','P','BOL');
 	$rusernewpass = sed_import('rusernewpass','P','TXT', 16);
@@ -111,40 +118,40 @@ if ($a=='update')
 	$error_string .= (!empty($rusernewpass) && (strlen($rusernewpass)<4 || sed_alphaonly($rusernewpass)!=$rusernewpass)) ? $L['aut_passwordtooshort']."<br />" : '';
 
 	if ($ruserdelete)
-		{
+	{
 		if ($sys['user_istopadmin'] && !$sys['edited_istopadmin'])
-			{
+		{
 			$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id'");
 
 			if ($row = sed_sql_fetchassoc($sql))
-				{
+			{
 				if ($cfg['trash_user'])
-					{ sed_trash_put('user', $L['User']." #".$id." ".$row['user_name'], $id, $row); }
+				{ sed_trash_put('user', $L['User']." #".$id." ".$row['user_name'], $id, $row); }
 				$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='$id'");
 				$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id'");
 				if ($ruserdelpfs) { sed_pfs_deleteall($id); }
 				sed_log("Deleted user #".$id,'adm');
 				header("Location: message.php?msg=109&rc=200&id=$id");
 				exit;
-			   }
-			}
-		else
-			{
-			header("Location: message.php?msg=930");
-			exit;
 			}
 		}
+		else
+		{
+			header("Location: message.php?msg=930");
+			exit;
+		}
+	}
 
 	if (empty($error_string))
-		{
+	{
 		$ruserpassword = (strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
 
 		if ($rusername=='')
-			{ $rusername = $urr['user_name']; }
+		{ $rusername = $urr['user_name']; }
 		if ($ruserhideemail=='')
-			{ $ruserhideemail = $urr['user_hideemail']; }
+		{ $ruserhideemail = $urr['user_hideemail']; }
 		if ($ruserpmnotify=='')
-			{ $ruserpmnotify = $urr['user_pmnotify']; }
+		{ $ruserpmnotify = $urr['user_pmnotify']; }
 
 		$ruserextra1 = ($ruserextra1_p) ? substr($ruserextra1,0,$cfg['extra1tsetting']) : $urr['user_extra1'];
 		$ruserextra2 = ($ruserextra2_p) ? substr($ruserextra2,0,$cfg['extra2tsetting']) : $urr['user_extra2'];
@@ -158,13 +165,13 @@ if ($a=='update')
 
 		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
 
-	   	if (!$ruserbanned)
-	   		{ $rbanexpire = 0; }
+		if (!$ruserbanned)
+		{ $rbanexpire = 0; }
 		if ($ruserbanned && $rbanexpire>0)
-			{ $rbanexpire += $sys['now']; }
+		{ $rbanexpire += $sys['now']; }
 
 		if ($rusername!=$urr['user_name'])
-			{
+		{
 			$oldname = sed_sql_prep($urr['user_name']);
 			$newname = sed_sql_prep($rusername);
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_lastpostername='$newname' WHERE ft_lastpostername='$oldname'");
@@ -174,7 +181,7 @@ if ($a=='update')
 			$sql = sed_sql_query("UPDATE $db_com SET com_author='$newname' WHERE com_author='$oldname'");
 			$sql = sed_sql_query("UPDATE $db_online SET online_name='$newname' WHERE online_name='$oldname'");
 			$sql = sed_sql_query("UPDATE $db_pm SET pm_fromuser='$newname' WHERE pm_fromuser='$oldname'");
-			}
+		}
 
 		$sql = sed_sql_query("UPDATE $db_users SET
 			user_banexpire='$rbanexpire',
@@ -209,51 +216,53 @@ if ($a=='update')
 			user_location='".sed_sql_prep($ruserlocation)."',
 			user_occupation='".sed_sql_prep($ruseroccupation)."',
 			user_auth=''
-			WHERE user_id='$id'");
+			WHERE user_id='$id'"
+		);
 
-		if ($sys['user_istopadmin'])
-			{
-			$rusermaingrp = ($rusermaingrp<4 && $id==1) ? 5 : $rusermaingrp;
+		$rusermaingrp = ($rusermaingrp < SED_GROUP_MEMBERS && $id==1) ? SED_GROUP_TOPADMINS : $rusermaingrp;
 
+		if($usr['level'] >= $sed_groups[$rusermaingrp]['level'])
+		{
 			if (!$rusergroupsms[$rusermaingrp])
-				{ $rusergroupsms[$rusermaingrp] = 1; }
-
-			$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='$rusermaingrp' WHERE user_id='$id'");
-
-			foreach($sed_groups as $k => $i)
-				{
-				if (isset($rusergroupsms[$k]))
-					{
-					$sql = sed_sql_query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'");
-					if (sed_sql_numrows($sql)==0 && !(($id==1 && $k==3) || ($id==1 && $k==2)))
-						{ $sql = sed_sql_query("INSERT INTO $db_groups_users (gru_userid, gru_groupid) VALUES (".(int)$id.", ".(int)$k.")"); }
-					}
-				elseif (!($id==1 && $k==5))
-					{ $sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'"); }
-				}
-
-			if ($rusermaingrp==4 && $urr['user_maingrp']==2)
-				{
-				$rsubject = $cfg['maintitle']." - ".$L['useed_accountactivated'];
-				$rbody = $L['Hi']." ".$urr['user_name'].",\n\n";
-				$rbody .= $L['useed_email'];
-				$rbody .= $L['auth_contactadmin'];
-				sed_mail($urr['user_email'], $rsubject, $rbody);
-				}
+			{
+				$rusergroupsms[$rusermaingrp] = 1;
 			}
+			$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='$rusermaingrp' WHERE user_id='$id'");
+		}
+
+		foreach($sed_groups as $k => $i)
+		{
+			if (isset($rusergroupsms[$k]) && $usr['level'] >= $sed_groups[$k]['level'])
+			{
+				$sql = sed_sql_query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'");
+				if (sed_sql_numrows($sql)==0 && !(($id==1 && $k==SED_GROUP_BANNED) || ($id==1 && $k==SED_GROUP_INACTIVE)))
+				{ $sql = sed_sql_query("INSERT INTO $db_groups_users (gru_userid, gru_groupid) VALUES (".(int)$id.", ".(int)$k.")"); }
+			}
+			elseif (!($id==1 && $k==SED_GROUP_TOPADMINS))
+			{ $sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'"); }
+		}
+
+		if ($rusermaingrp==SED_GROUP_MEMBERS && $urr['user_maingrp']==SED_GROUP_INACTIVE)
+		{
+			$rsubject = $cfg['maintitle']." - ".$L['useed_accountactivated'];
+			$rbody = $L['Hi']." ".$urr['user_name'].",\n\n";
+			$rbody .= $L['useed_email'];
+			$rbody .= $L['auth_contactadmin'];
+			sed_mail($urr['user_email'], $rsubject, $rbody);
+		}
 
 		/* === Hook === */
 		$extp = sed_getextplugins('users.edit.update.done');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_auth_clear($id);
 		sed_log("Edited user #".$id,'adm');
 		header("Location: users.php?m=edit&id=".$id);
 		exit;
-		}
 	}
+}
 
 $user_form_delete = ($sys['user_istopadmin']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserdelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserdelete\" value=\"0\" checked=\"checked\" />".$L['No']."<br />+ ".$L['PFS'].":<input type=\"checkbox\" class=\"checkbox\" name=\"ruserdelpfs\" />" : $L['na'];
 
@@ -285,7 +294,7 @@ $out['subtitle'] = sed_cc($urr['user_name']);
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 
@@ -295,10 +304,10 @@ $mskin = sed_skinfile(array('users', 'edit', $usr['maingrp']));
 $t = new XTemplate($mskin);
 
 if (!empty($error_string))
-	{
+{
 	$t->assign("USERS_EDIT_ERROR_BODY",$error_string);
 	$t->parse("MAIN.USERS_EDIT_ERROR");
-	}
+}
 
 $t->assign(array(
 	"USERS_EDIT_TITLE" => "<a href=\"users.php\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name']))." ".$cfg['separator']." <a href=\"users.php?m=edit&amp;id=".$urr['user_id']."\">".$L['Edit']."</a>",
@@ -312,7 +321,7 @@ $t->assign(array(
 	"USERS_EDIT_LANG" => "<input type=\"text\" class=\"text\" name=\"ruserlang\" value=\"".$urr['user_lang']."\" size=\"32\" maxlength=\"16\" />",
 	"USERS_EDIT_NEWPASS" => $user_form_pass,
 	"USERS_EDIT_MAINGRP" => sed_build_group($urr['user_maingrp']),
-	"USERS_EDIT_GROUPS" => sed_build_groupsms($urr['user_id'], $sys['user_istopadmin'], $urr['user_maingrp']),
+	"USERS_EDIT_GROUPS" => sed_build_groupsms($urr['user_id'], $usr['isadmin'], $urr['user_maingrp']),
 	"USERS_EDIT_COUNTRY" => $user_form_countries,
 	"USERS_EDIT_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />",
 	"USERS_EDIT_HIDEEMAIL" => $user_form_hideemail,
@@ -354,12 +363,12 @@ $t->assign(array(
 	"USERS_EDIT_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_EDIT_LASTIP" => $urr['user_lastip'],
 	"USERS_EDIT_DELETE" => $user_form_delete,
-		));
+));
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 

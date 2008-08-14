@@ -27,9 +27,9 @@ $adminpath[] = array ("admin.php?m=page&amp;s=structure", $L['Structure']);
 $adminhelp = $L['adm_help_structure'];
 
 if ($n=='options')
-	{
+{
 	if ($a=='update')
-		{
+	{
 		$rpath = sed_import('rpath','P','TXT');
 		$rtitle = sed_import('rtitle','P','TXT');
 		$rtplmode = sed_import('rtplmode','P','INT');
@@ -38,15 +38,15 @@ if ($n=='options')
 		$rgroup = sed_import('rgroup','P','BOL');
 		$rgroup = ($rgroup) ? 1 : 0;
 
-	if ($rtplmode==1)
+		if ($rtplmode==1)
 		{ $rtpl = ''; }
-	elseif ($rtplmode==3)
+		elseif ($rtplmode==3)
 		{ $rtpl = 'same_as_parent'; }
-	else
+		else
 		{ $rtpl = sed_import('rtplforced','P','ALP'); }
 
 		$sql = sed_sql_query("UPDATE $db_structure SET
-			structure_path='".sed_sql_prep($rpath)."',
+		structure_path='".sed_sql_prep($rpath)."',
 			structure_tpl='".sed_sql_prep($rtpl)."',
 			structure_title='".sed_sql_prep($rtitle)."',
 			structure_desc='".sed_sql_prep($rdesc)."',
@@ -57,7 +57,7 @@ if ($n=='options')
 		sed_cache_clear('sed_cat');
 		header("Location: admin.php?m=page&s=structure");
 		exit;
-		}
+	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
 	sed_die(sed_sql_numrows($sql)==0);
@@ -66,12 +66,12 @@ if ($n=='options')
 	$allskinfiles = array();
 
 	while ($f = readdir($handle))
-		{
+	{
 		if (($f != ".") && ($f != "..") && strtolower(substr($f, strrpos($f, '.')+1, 4))=='tpl')
-			{
+		{
 			$allskinfiles[] = $f;
-			}
 		}
+	}
 	closedir($handle);
 
 	$allskinfiles = implode (',', $allskinfiles);
@@ -87,20 +87,20 @@ if ($n=='options')
 	$structure_group = $row['structure_group'];
 
 	if (empty($row['structure_tpl']))
-		{
+	{
 
 		$check1 = " checked=\"checked\"";
-		}
+	}
 	elseif ($row['structure_tpl']=='same_as_parent')
-		{
+	{
 		$structure_tpl_sym = "*";
 		$check3 = " checked=\"checked\"";
-		}
+	}
 	else
-		{
+	{
 		$structure_tpl_sym = "+";
 		$check2 = " checked=\"checked\"";
-		}
+	}
 
 	$adminpath[] = array ("admin.php?m=page&amp;s=structure&amp;n=options&amp;id=".$id, sed_cc($structure_title));
 
@@ -126,61 +126,61 @@ if ($n=='options')
 	$adminmain .=  " <select name=\"rtplforced\" size=\"1\">";
 
 	foreach($sed_cat as $i => $x)
-		{
+	{
 		if ($i!='all')
-			{
+		{
 			$selected = ($i==$row['structure_tpl']) ? "selected=\"selected\"" : '';
 			$adminmain .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
-			}
 		}
+	}
 	$adminmain .= "</select><br/>";
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];
 	$adminmain .= "</td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table></form>";
-	}
+}
 else
-	{
+{
 	if ($a=='update')
-		{
+	{
 		$s = sed_import('s', 'P', 'ARR');
 
 		foreach($s as $i => $k)
-			{
+		{
 			$s[$i]['rgroup'] = (isset($s[$i]['rgroup'])) ? 1 : 0;
 
 			$sql1 = sed_sql_query("UPDATE $db_structure SET
-				structure_path='".sed_sql_prep($s[$i]['rpath'])."',
+			structure_path='".sed_sql_prep($s[$i]['rpath'])."',
 				structure_title='".sed_sql_prep($s[$i]['rtitle'])."',
 				structure_group='".$s[$i]['rgroup']."'
 				WHERE structure_id='".$i."'");
-			}
+		}
 		sed_auth_clear('all');
 		sed_cache_clear('sed_cat');
 		header("Location: admin.php?m=page&s=structure");
 		exit;
-		}
+	}
 	elseif ($a=='add')
-		{
+	{
 		$g = array ('ncode','npath', 'ntitle', 'ndesc', 'nicon', 'ngroup');
 		foreach($g as $k => $x) $$x = $_POST[$x];
-		$group = (isset($group)) ? 1 : 0;
+		$ngroup = (isset($ngroup)) ? 1 : 0;
 		sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
 		header("Location: admin.php?m=page&s=structure");
 		exit;
-		}
+	}
 	elseif ($a=='delete')
-		{
+	{
 		sed_check_xg();
 		sed_structure_delcat($id, $c);
 		header("Location: admin.php?m=page&s=structure");
 		exit;
-		}
+	}
 
 	$sql = sed_sql_query("SELECT DISTINCT(page_cat), COUNT(*) FROM $db_pages WHERE 1 GROUP BY page_cat");
 
 	while ($row = sed_sql_fetcharray($sql))
-		{ $pagecount[$row['page_cat']] = $row['COUNT(*)']; }
+	{ $pagecount[$row['page_cat']] = $row['COUNT(*)']; }
 
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC");
 
@@ -199,7 +199,7 @@ else
 	$adminmain .= "</tr>";
 
 	while ($row = sed_sql_fetcharray($sql))
-		{
+	{
 		$jj++;
 		$structure_id = $row['structure_id'];
 		$structure_code = $row['structure_code'];
@@ -213,11 +213,11 @@ else
 		$pagecount[$structure_code] = (!$pagecount[$structure_code]) ? "0" : $pagecount[$structure_code];
 
 		if (empty($row['structure_tpl']))
-			{ $structure_tpl_sym = "-"; }
+		{ $structure_tpl_sym = "-"; }
 		elseif ($row['structure_tpl']=='same_as_parent')
-			{ $structure_tpl_sym = "*"; }
+		{ $structure_tpl_sym = "*"; }
 		else
-			{ $structure_tpl_sym = "+"; }
+		{ $structure_tpl_sym = "+"; }
 
 		$adminmain .= "<tr><td style=\"text-align:center;\">";
 		$adminmain .= ($pagecount[$structure_code]>0) ? '' : "[<a href=\"admin.php?m=page&amp;s=structure&amp;a=delete&amp;id=".$structure_id."&amp;c=".$row['structure_code']."&amp;".sed_xg()."\">x</a>]";
@@ -235,7 +235,7 @@ else
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=page&amp;io=".$structure_code."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\" /></a></td>";
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=page&amp;s=structure&amp;n=options&amp;id=".$structure_id."&amp;".sed_xg()."\">".$L['Options']."</a></td>";
 		$adminmain .= "</tr>";
-		}
+	}
 
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table></form>";
@@ -249,6 +249,6 @@ else
 	$adminmain .= "<tr><td>".$L['Icon']." :</td><td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Group']." :</td><td><input type=\"checkbox\" class=\"checkbox\" name=\"ngroup\" /></td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\" /></td></tr></table></form>";
-	}
+}
 
 ?>

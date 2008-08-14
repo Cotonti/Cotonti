@@ -23,6 +23,13 @@ Description=Functions
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
+// Group constants
+define('SED_GROUP_GUESTS', 1);
+define('SED_GROUP_INACTIVE', 2);
+define('SED_GROUP_BANNED', 3);
+define('SED_GROUP_MEMBERS', 4);
+define('SED_GROUP_TOPADMINS', 5);
+
 $cfg = array();
 $out = array();
 $plu = array();
@@ -733,21 +740,31 @@ function sed_build_group($grpid)
 
 /* ------------------ */
 
+/**
+ * Builds "edit group" option group for "user edit" part
+ *
+ * @param int $userid Edited user ID
+ * @param bool $edit Permission
+ * @param int $maingrp User main group
+ * @return string
+ */
 function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
 {
-	global $db_groups_users, $sed_groups, $L;
+	global $db_groups_users, $sed_groups, $L, $usr;
 
 	$sql = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
 
 	while ($row = sed_sql_fetcharray($sql))
-	{ $member[$row['gru_groupid']] = TRUE;	}
+	{
+		$member[$row['gru_groupid']] = TRUE;
+	}
 
 	foreach($sed_groups as $k => $i)
 	{
 		$checked = ($member[$k]) ? "checked=\"checked\"" : '';
 		$checked_maingrp = ($maingrp==$k) ? "checked=\"checked\"" : '';
-		$readonly = (!$edit || $k==1 || $k==2 || $k==3 || ($k==5 && $userid==1)) ? "disabled=\"disabled\"" : '';
-		$readonly_maingrp = (!$edit || $k==1 || ($k==2 && $userid==1) || ($k==3 && $userid==1)) ? "disabled=\"disabled\"" : '';
+		$readonly = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==SED_GROUP_GUESTS || $k==SED_GROUP_INACTIVE || $k==SED_GROUP_BANNED || ($k==SED_GROUP_TOPADMINS && $userid==1)) ? "disabled=\"disabled\"" : '';
+		$readonly_maingrp = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==SED_GROUP_GUESTS || ($k==SED_GROUP_INACTIVE && $userid==1) || ($k==SED_GROUP_BANNED && $userid==1)) ? "disabled=\"disabled\"" : '';
 
 		if ($member[$k] || $edit)
 		{
@@ -755,14 +772,14 @@ function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
 			{
 				$res .= "<input type=\"radio\" class=\"radio\" name=\"rusermaingrp\" value=\"$k\" ".$checked_maingrp." ".$readonly_maingrp." /> \n";
 				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"rusergroupsms[$k]\" ".$checked." $readonly />\n";
-				$res .= ($k==1) ? $sed_groups[$k]['title'] : "<a href=\"users.php?g=".$k."\">".$sed_groups[$k]['title']."</a>";
+				$res .= ($k==SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"users.php?g=".$k."\">".$sed_groups[$k]['title']."</a>";
 				$res .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 				$res .= "<br />";
 			}
 		}
 	}
 
-	return($res);
+	return $res;
 }
 
 /* ------------------ */
