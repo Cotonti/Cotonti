@@ -37,60 +37,60 @@ $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 
 if ($a=='update')
-	{
+{
 	$mask = array();
 	$auth = sed_import('auth', 'P', 'ARR');
 
 	$sql = sed_sql_query("UPDATE $db_auth SET auth_rights=0 WHERE auth_code='$ic' AND auth_option='$io'");
 
 	foreach($auth as $i => $j)
-		{
+	{
 		if (is_array($j))
-			{
+		{
 			$mask =0;
 			foreach($j as $l => $m)
-					{ $mask +=  sed_auth_getvalue($l); 	}
-			 $sql = sed_sql_query("UPDATE $db_auth SET auth_rights='$mask' WHERE auth_groupid='$i' AND auth_code='$ic' AND auth_option='$io'");
-		     }
+			{ $mask +=  sed_auth_getvalue($l); 	}
+			$sql = sed_sql_query("UPDATE $db_auth SET auth_rights='$mask' WHERE auth_groupid='$i' AND auth_code='$ic' AND auth_option='$io'");
 		}
+	}
 
 	sed_auth_reorder();
 	sed_auth_clear('all');
 	header("Location: admin.php?m=rightsbyitem&ic=$ic&io=$io");
 	exit;
-	}
+}
 
 $sql = sed_sql_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
-	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-	LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
-	WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC");
+LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
+LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
+WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC");
 
 sed_die(sed_sql_numrows($sql)==0);
 
 switch($ic)
-	{
+{
 	case 'page':
-	$title = " : ".$sed_cat[$io]['title'];
-	break;
+		$title = " : ".$sed_cat[$io]['title'];
+		break;
 
 	case 'forums':
-	$forum = sed_forum_info($io);
-	$title = " : ".sed_cc($forum['fs_title'])." (#".$io.")";
-	break;
+		$forum = sed_forum_info($io);
+		$title = " : ".sed_cc($forum['fs_title'])." (#".$io.")";
+		break;
 
 	case 'plug':
-	$title = " : ".$io;
-	break;
+		$title = " : ".$io;
+		break;
 
 	default:
-	$title = ($io=='a') ? '' : $io;
-	break;
-	}
+		$title = ($io=='a') ? '' : $io;
+		break;
+}
 
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rightsbyitem.case');
 if (is_array($extp))
-   { foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $adminpath[] = array("admin.php?m=rightsbyitem&amp;ic=$ic&amp;io=$io", $L['Rights']." / ".$L['adm_code'][$ic].$title);
@@ -127,24 +127,24 @@ $adminmain .= "<form id=\"saverightsbyitem\" action=\"admin.php?m=rightsbyitem&a
 $adminmain .= "<table class=\"cells\">";
 
 function sed_rights_parseline($row, $title, $link)
-	{
+{
 	global $L, $allow_img, $advanced;
 
 	$mn['R'] = 1;
 	$mn['W'] = 2;
 
 	if ($advanced)
-		{
+	{
 		$mn['1'] = 4;
 		$mn['2'] = 8;
 		$mn['3'] = 16;
 		$mn['4'] = 32;
 		$mn['5'] = 64;
-		}
+	}
 	$mn['A'] = 128;
 
 	foreach ($mn as $code => $value)
-		{
+	{
 		$state[$code] = (($row['auth_rights'] & $value) == $value) ? TRUE : FALSE;
 		$locked[$code] = (($row['auth_rights_lock'] & $value) == $value) ? TRUE : FALSE;
 		$checked[$code] = ($state[$code]) ? "checked=\"checked\"" : '';
@@ -154,17 +154,17 @@ function sed_rights_parseline($row, $title, $link)
 
 
 		if ($locked[$code])
-			{
+		{
 			$box[$code] = ($checked[$code]) ? "<input type=\"hidden\" name=\"auth[".$row['auth_groupid']."][".$code."]\" value=\"1\" />" : '';
 			$box[$code] .= ($checked[$code]) ? "<img src=\"system/img/admin/discheck1.gif\" alt=\"\" />" : "<img src=\"system/img/admin/discheck0.gif\" alt=\"\" />";
-			}
-		else
-			{
-			$box[$code] = "<input type=\"checkbox\" class=\"checkbox\" name=\"auth[".$row['auth_groupid']."][".$code."]\" ".$disabled[$code]." ".$checked[$code]." />";
-			}
-
-
 		}
+		else
+		{
+			$box[$code] = "<input type=\"checkbox\" class=\"checkbox\" name=\"auth[".$row['auth_groupid']."][".$code."]\" ".$disabled[$code]." ".$checked[$code]." />";
+		}
+
+
+	}
 
 	$res .= "<tr>\n";
 	$res .= "<td style=\"padding:1px;\">\n";
@@ -176,20 +176,22 @@ function sed_rights_parseline($row, $title, $link)
 	$res .= "</tr>\n";
 
 	return($res);
-	}
+}
 
 $adminmain .= $headcol;
 
 while ($row = sed_sql_fetcharray($sql))
-	{
+{
 	$link = "admin.php?m=rights&amp;g=".$row['auth_groupid'];
-//	$title = $sed_groups[$row['auth_groupid']]['title'];
+	//	$title = $sed_groups[$row['auth_groupid']]['title'];
 	$title = sed_cc($row['grp_title']);
 	$adminmain .= sed_rights_parseline($row, $title, $link);
-	}
+}
 
 $adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 $adminmain .= "</table></form>";
+
+$adminmain .= '<a href="admin.php?m=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1">'.$L['More'].'</a>';
 
 $adminhelp = $legend;
 

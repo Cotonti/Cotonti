@@ -1827,6 +1827,7 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 function sed_javascript($more='')
 {
 	$result = <<<END
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/base.js"></script>
 <script type="text/javascript">
 <!--
@@ -2941,11 +2942,14 @@ function sed_xg()
 	return ('x='.sed_sourcekey());
 }
 
-/* ------------------ */
-
+/**
+ * Returns XSS protection field for POST forms
+ *
+ * @return string
+ */
 function sed_xp()
 {
-	return ("<div><input type=\"hidden\" id=\"x\" name=\"x\" value=\"".sed_sourcekey()."\" /></div>");
+	return ('<div><input type="hidden" name="x" value="'.sed_sourcekey().'" /></div>');
 }
 
 
