@@ -96,7 +96,7 @@ if ($userid!=$usr['id'])
 /* === Hook === */
 $extp = sed_getextplugins('pfs.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 
@@ -113,7 +113,7 @@ if ($a=='upload')
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.upload.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	if ($folder_id!=0)
@@ -172,7 +172,7 @@ if ($a=='upload')
 					/* === Hook === */
 					$extp = sed_getextplugins('pfs.upload.moved');
 					if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+						{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 					/* ===== */
 
 					$u_size = filesize($cfg['pfs_dir_user'].$u_newname);
@@ -203,7 +203,7 @@ if ($a=='upload')
 					/* === Hook === */
 					$extp = sed_getextplugins('pfs.upload.done');
 					if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+						{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 					/* ===== */
 
 					if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled' && file_exists($cfg['pfs_dir_user'].$u_newname))
@@ -592,7 +592,7 @@ function ratings(rcode)
 	}
 else
 	{
-	require("system/header.php");
+	require_once("system/header.php");
 
 	$t = new XTemplate("skins/".$skin."/pfs.tpl");
 
@@ -604,13 +604,13 @@ else
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.tags');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require("system/footer.php");
+	require_once("system/footer.php");
 	}
 
 ?>

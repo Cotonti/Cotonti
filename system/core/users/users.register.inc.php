@@ -27,7 +27,7 @@ if ($cfg['disablereg'])
 /* === Hook === */
 $extp = sed_getextplugins('users.register.first');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($a=='add')
@@ -38,7 +38,7 @@ if ($a=='add')
 	/* === Hook for the plugins === */
 	$extp = sed_getextplugins('users.register.add.first');
 	if (is_array($extp))
-		{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT', 24, TRUE);
@@ -194,7 +194,7 @@ if ($a=='add')
 		/* === Hook for the plugins === */
 		$extp = sed_getextplugins('users.register.add.done');
 		if (is_array($extp))
-			{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		if ($cfg['regnoactivation'] || $defgroup==5)
@@ -277,10 +277,10 @@ $form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $s
 /* === Hook === */
 $extp = sed_getextplugins('users.register.main');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require_once("system/header.php");
 $t = new XTemplate("skins/".$skin."/users.register.tpl");
 
 if (!empty($error_string))
@@ -322,12 +322,12 @@ $t->assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('users.register.tags');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require_once("system/footer.php");
 
 ?>

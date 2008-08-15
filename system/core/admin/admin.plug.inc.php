@@ -355,7 +355,7 @@ switch ($a)
 		if (file_exists($extplugin_install))
 			{
 			$adminmain .= "Found, executing...<br />";
-			include($extplugin_install);
+			include_once($extplugin_install);
 			}
 		else
 			{ $adminmain .= "Not found.<br />"; 	}			
@@ -387,7 +387,7 @@ switch ($a)
 		if (file_exists($extplugin_uninstall))
 			{
 			$adminmain .= "Found, executing...<br />";
-			include($extplugin_uninstall);
+			include_once($extplugin_uninstall);
 			}
 		else
 			{ $adminmain .= "Not found.<br />"; 	}			

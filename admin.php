@@ -19,11 +19,11 @@ define('SED_ADMIN', TRUE);
 $location = 'Administration';
 $z = 'admin';
 
-require('system/functions.php');
-require('system/functions.admin.php');
-require('datas/config.php');
-require('system/common.php');
-require("system/lang/".$usr['lang']."/admin.lang.php");
-require("system/core/admin/admin.inc.php");
+require_once('./system/functions.php');
+require_once('./system/functions.admin.php');
+require_once('./datas/config.php');
+require_once('./system/common.php');
+require_once("system/lang/".$usr['lang']."/admin.lang.php");
+require_once("system/core/admin/admin.inc.php");
 
 ?>

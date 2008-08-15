@@ -24,7 +24,7 @@ $num = sed_import('num','G','INT');
 $rc = sed_import('rc','G','INT');
 $redirect = sed_import('redirect','G','SLU');
 
-require("system/lang/$lang/message.lang.php");
+require_once("system/lang/$lang/message.lang.php");
 
 unset ($r, $rd, $ru);
 
@@ -273,10 +273,10 @@ elseif ($rd!='')
 /* === Hook === */
 $extp = sed_getextplugins('message.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require_once("system/header.php");
 $t = new XTemplate("skins/".$skin."/message.tpl");
 
 $errmsg = $message;
@@ -288,12 +288,12 @@ $t->assign("MESSAGE_BODY", $body);
 /* === Hook === */
 $extp = sed_getextplugins('message.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require_once("system/footer.php");
 
 ?>

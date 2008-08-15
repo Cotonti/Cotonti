@@ -181,7 +181,7 @@ function ratings(rcode)
 	}
 else
 	{
-	require("system/header.php");
+	require_once("system/header.php");
 
 	$t = new XTemplate("skins/".$skin."/pfs.tpl");
 
@@ -193,7 +193,7 @@ else
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require("system/footer.php");
+	require_once("system/footer.php");
 	}
 
 

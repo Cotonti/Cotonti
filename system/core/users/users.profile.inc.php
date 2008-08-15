@@ -30,7 +30,7 @@ sed_block($usr['auth_write']);
 /* === Hook === */
 $extp = sed_getextplugins('profile.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $id = sed_import('id','G','TXT');
@@ -123,7 +123,7 @@ switch ($a)
 	/* === Hook === */
 	$extp = sed_getextplugins('profile.update.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$uav_tmp_name = $_FILES['userfile']['tmp_name'];
@@ -165,7 +165,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.avatar');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$uav_size = filesize($avatarpath);
@@ -198,7 +198,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.photo');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$uph_size = filesize($photopath);
@@ -231,7 +231,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.signature');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$usig_size = filesize($signaturepath);
@@ -361,7 +361,7 @@ switch ($a)
 		/* === Hook === */
 		$extp = sed_getextplugins('profile.update.done');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		header("Location: message.php?msg=113");
@@ -444,10 +444,10 @@ $out['subtitle'] = $L['Profile'];
 /* === Hook === */
 $extp = sed_getextplugins('profile.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require_once("system/header.php");
 
 $mskin = sed_skinfile(array('users', 'profile'));
 $t = new XTemplate($mskin);
@@ -515,12 +515,12 @@ $t->assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require_once("system/footer.php");
 
 ?>

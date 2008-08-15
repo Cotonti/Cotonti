@@ -35,7 +35,7 @@ $enabled[1] = $L['Enabled'];
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 $sys['inc'] = (empty($m)) ? 'admin.home' : "admin.$m";
 $sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'].".$s";
@@ -77,10 +77,10 @@ $adminmenu .= "<td style=\"width:11%; text-align:center;\"><a href=\"admin.php?m
 $adminmenu .= "<img src=\"system/img/admin/folder.gif\" alt=\"\" /><br />".$L['Other']."</a></td>";
 $adminmenu .= "</tr></table>";
 
-require($sys['inc']);
+require_once($sys['inc']);
 $adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
 
-require("system/header.php");
+require_once("system/header.php");
 
 $t = new XTemplate("skins/".$skin."/admin.tpl");
 
@@ -95,12 +95,12 @@ $t->assign(array(
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require_once("system/footer.php");
 
 ?>

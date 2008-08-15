@@ -45,7 +45,7 @@ $sys['sublocation'] = $L['Home'];
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($n=='markall' && $usr['id']>0)
@@ -92,10 +92,10 @@ $out['subtitle'] = $L['Forums'];
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require_once("system/header.php");
 
 $mskin = "skins/".$skin."/forums.sections.tpl";
 $t = new XTemplate($mskin);
@@ -229,7 +229,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 
 		/* === Hook - Part2 : Include === */
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION");
@@ -248,12 +248,12 @@ while ($fsn = sed_sql_fetcharray($sql))
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require_once("system/footer.php");
 
 ?>

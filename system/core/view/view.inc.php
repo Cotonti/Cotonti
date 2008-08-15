@@ -83,7 +83,7 @@ if (preg_match_all('@<link[^>](.*?)>@si', $ext_head, $ext_links)>0)
 		{ $moremetas .= $link; }
 	}
 
-require("system/header.php");
+require_once("system/header.php");
 $t = new XTemplate("skins/".$skin."/plugin.tpl");
 
 $t-> assign(array(
@@ -94,6 +94,6 @@ $t-> assign(array(
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require_once("system/footer.php");
 
 ?>

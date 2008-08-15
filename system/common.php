@@ -29,7 +29,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /* ======== Connect to the SQL DB======== */
 
-require('system/database.'.$cfg['sqldb'].'.php');
+require_once('./system/database.'.$cfg['sqldb'].'.php');
 sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
@@ -248,7 +248,7 @@ if (is_array($extp))
 {
 	foreach($extp as $k => $pl)
 	{
-		include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
 }
 /* ======================== */
@@ -320,7 +320,7 @@ if (!file_exists($mlang))
 }
 
 $lang = $usr['lang'];
-require($mlang);
+require_once($mlang);
 
 /* ======== Who's online part 2 ======== */
 
@@ -349,9 +349,9 @@ if (!file_exists($mskin))
 $usr['skin_lang'] = 'skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
 
 if (@file_exists($usr['skin_lang']))
-{ require($usr['skin_lang']); }
+{ require_once($usr['skin_lang']); }
 
-require('skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
+require_once('skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
 
 $skin = $usr['skin'];
 
@@ -449,7 +449,7 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 $extp = sed_getextplugins('global');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 /* ======== Pre-loads ======== */
 

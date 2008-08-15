@@ -18,10 +18,10 @@ define('SED_CODE', TRUE);
 
 $dbprefix_sed = "sed_";
 
-require("system/functions.php");
-require("datas/config.php");
+require_once("system/functions.php");
+require_once("datas/config.php");
 $sqldb_file = 'system/database.'.$cfg['sqldb'].'.php';
-require($sqldb_file);
+require_once($sqldb_file);
 
 echo "<html>
 <head>

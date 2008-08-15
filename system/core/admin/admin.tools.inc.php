@@ -30,9 +30,9 @@ if (!empty($p))
 	$path_lang_alt	= "plugins/$p/lang/$p.$lang.lang.php";
 
 	if (@file_exists($path_lang_alt))
-		{ require($path_lang_alt); }
+		{ require_once($path_lang_alt); }
 	elseif (@file_exists($path_lang_def))
-		{ require($path_lang_def); }
+		{ require_once($path_lang_def); }
 
 	$extp = array();
 
@@ -67,7 +67,7 @@ if (!empty($p))
 		{
 		foreach($extp as $k => $pl)
 			 {
-			 include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			 include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			 $adminmain .= $plugin_body;
 			 }
 		}

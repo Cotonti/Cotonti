@@ -19,14 +19,14 @@ define('SED_VIEW', TRUE);
 $location = 'Views';
 $z = 'view';
 
-require('system/functions.php');
-require('datas/config.php');
-require('system/common.php');
+require_once('./system/functions.php');
+require_once('./datas/config.php');
+require_once('./system/common.php');
 
 switch($m)
 	{
 	default:
-	require('system/core/view/view.inc.php');
+	require_once('./system/core/view/view.inc.php');
 	break;
 	}
 

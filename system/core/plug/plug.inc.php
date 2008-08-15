@@ -42,9 +42,9 @@ elseif (!empty($e))
 	$path_skin_alt	= "skins/$skin/plugin.standalone.$e.tpl";
 
 	if (file_exists($path_lang_alt))
-		{ require($path_lang_alt); }
+		{ require_once($path_lang_alt); }
 	elseif (file_exists($path_lang_def))
-		{ require($path_lang_def); }
+		{ require_once($path_lang_def); }
 
 	if (file_exists($path_skin_alt))
 		{
@@ -84,7 +84,7 @@ elseif (!empty($e))
 
 	/* ============= */
 
-	require("system/header.php");
+	require_once("system/header.php");
 
 	$t = new XTemplate($path_skin);
 
@@ -106,7 +106,7 @@ elseif (!empty($e))
 		}
 
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 	if ($autoassigntags)
 		{
@@ -122,7 +122,7 @@ elseif (!empty($e))
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require("system/footer.php");
+	require_once("system/footer.php");
 	}
 
 elseif (!empty($o))
@@ -154,7 +154,7 @@ elseif (!empty($o))
 	$t = new XTemplate($mskin);
 
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 	$t->assign(array(
 		"POPUP_HEADER1" => $popup_header1,
@@ -259,7 +259,7 @@ elseif (!empty($r))
 	$incl = 'plugins/code/'.$r.'.php';
 
 	if (@file_exists($incl))
-		{ require($incl); }
+		{ require_once($incl); }
 	else
 		{ sed_die(); }
 	}
@@ -272,7 +272,7 @@ elseif ($m=='version')
 
 	/* ============= */
 
-	require("system/header.php");
+	require_once("system/header.php");
 
 	$t = new XTemplate("skins/".$skin."/plugin.tpl");
 	$t-> assign(array(
@@ -282,7 +282,7 @@ elseif ($m=='version')
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require("system/footer.php");
+	require_once("system/footer.php");
 
 	}
 

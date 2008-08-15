@@ -89,7 +89,7 @@ $jj=1;
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rights.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql1 = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
@@ -254,7 +254,7 @@ while ($row = sed_sql_fetcharray($sql4))
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rights.end');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";

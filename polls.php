@@ -19,16 +19,16 @@ define('SED_POLLS', TRUE);
 $location = 'Polls';
 $z = 'polls';
 
-require('system/functions.php');
-require('datas/config.php');
-require('system/common.php');
+require_once('./system/functions.php');
+require_once('./datas/config.php');
+require_once('./system/common.php');
 
 sed_dieifdisabled($cfg['disable_polls']);
 
 switch($m)
 	{
 	default:
-	require('system/core/polls/polls.inc.php');
+	require_once('./system/core/polls/polls.inc.php');
 	break;
 	}
 

@@ -37,7 +37,7 @@ $vote = sed_import('vote','G','INT');
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 sed_blockguests();
@@ -107,7 +107,7 @@ if ($a=='update')
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.editpost.update.first');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rtext = sed_import('rtext','P','HTM');
@@ -139,7 +139,7 @@ if ($a=='update')
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.editpost.update.done');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	sed_forum_sectionsetlast($fp_sectionid);
@@ -181,10 +181,10 @@ $out['subtitle'] = $L['Forums'];
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require("system/header.php");
+require_once("system/header.php");
 
 $mskin = sed_skinfile(array('forums', 'editpost', $fs_category, $fp_sectionid));
 $t = new XTemplate($mskin);
@@ -212,12 +212,12 @@ $t->assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require("system/footer.php");
+require_once("system/footer.php");
 
 ?>

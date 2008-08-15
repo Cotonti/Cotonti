@@ -90,7 +90,7 @@ switch($ic)
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rightsbyitem.case');
 if (is_array($extp))
-   { foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+   { foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $adminpath[] = array("admin.php?m=rightsbyitem&amp;ic=$ic&amp;io=$io", $L['Rights']." / ".$L['adm_code'][$ic].$title);

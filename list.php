@@ -19,16 +19,16 @@ define('SED_LIST', TRUE);
 $location = 'Pages';
 $z = 'page';
 
-require('system/functions.php');
-require('datas/config.php');
-require('system/common.php');
+require_once('./system/functions.php');
+require_once('./datas/config.php');
+require_once('./system/common.php');
 
 sed_dieifdisabled($cfg['disable_page']);
 
 switch($m)
 	{
 	default:
-	require('system/core/list/list.inc.php');
+	require_once('./system/core/list/list.inc.php');
 	break;
 	}
 

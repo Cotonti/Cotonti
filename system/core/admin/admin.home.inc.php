@@ -34,7 +34,7 @@ $adminmain .= "</ul>";
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.home', 'R');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 if ($cfg['trash_prunedelay']>0)
 	{

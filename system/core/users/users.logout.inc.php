@@ -21,7 +21,7 @@ sed_check_xg();
 /* === Hook === */
 $extp = sed_getextplugins('users.logout');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($cfg['authmode']==1 || $cfg['authmode']==3)
