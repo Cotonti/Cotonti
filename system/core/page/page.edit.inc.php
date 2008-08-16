@@ -23,7 +23,7 @@ $id = sed_import('id','G','INT');
 $c = sed_import('c','G','TXT');
 
 if ($a=='update')
-	{
+{
 	$sql1 = sed_sql_query("SELECT page_cat, page_ownerid FROM $db_pages WHERE page_id='$id' LIMIT 1");
 	sed_die(sed_sql_numrows($sql1)==0);
 	$row1 = sed_sql_fetcharray($sql1);
@@ -34,7 +34,7 @@ if ($a=='update')
 	/* === Hook === */
 	$extp = sed_getextplugins('page.edit.update.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
@@ -83,15 +83,15 @@ if ($a=='update')
 	$error_string .= (strlen($rpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
 
 	if (empty($error_string) || $rpagedelete)
-		{
+	{
 		if ($rpagedelete)
-			{
+		{
 			$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 
 			if ($row = sed_sql_fetchassoc($sql))
-				{
+			{
 				if ($cfg['trash_page'])
-					{ sed_trash_put('page', $L['Page']." #".$id." ".$row['page_title'], $id, $row); }
+				{ sed_trash_put('page', $L['Page']." #".$id." ".$row['page_title'], $id, $row); }
 
 				$id2 = "p".$id;
 				$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
@@ -101,10 +101,10 @@ if ($a=='update')
 				sed_log("Deleted page #".$id,'adm');
 				header("Location: " . SED_ABSOLUTE_URL . "list.php?c=".$row1['page_cat']);
 				exit;
-				}
 			}
+		}
 		else
-			{
+		{
 			$rpagedate = ($rpagedatenow) ? $sys['now_offset'] : sed_mktime($rhour, $rminute, 0, $rmonth, $rday, $ryear) - $usr['timezone'] * 3600;
 			$rpagebegin = sed_mktime($rhour_beg, $rminute_beg, 0, $rmonth_beg, $rday_beg, $ryear_beg) - $usr['timezone'] * 3600;
 			$rpageexpire = sed_mktime($rhour_exp, $rminute_exp, 0, $rmonth_exp, $rday_exp, $ryear_exp) - $usr['timezone'] * 3600;
@@ -113,13 +113,13 @@ if ($a=='update')
 			$rpagetype = ($usr['maingrp']!=5 && $rpagetype==2) ? 0 : $rpagetype;
 
 			if (!empty($rpagealias))
-				{
+			{
 				$sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($rpagealias)."' AND page_id!='".$id."'");
 				$rpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $rpagealias;
-				}
+			}
 
 			$sql = sed_sql_query("UPDATE $db_pages SET
-				page_cat = '".sed_sql_prep($rpagecat)."',
+			page_cat = '".sed_sql_prep($rpagecat)."',
 				page_type = '".sed_sql_prep($rpagetype)."',
 				page_key = '".sed_sql_prep($rpagekey)."',
 				page_extra1 = '".sed_sql_prep($rpageextra1)."',
@@ -131,30 +131,30 @@ if ($a=='update')
 				page_desc = '".sed_sql_prep($rpagedesc)."',
 				page_text='".sed_sql_prep($rpagetext)."',
 				page_author = '".sed_sql_prep($rpageauthor)."',
-				page_ownerid = '$rpageownerid',
-				page_date = '$rpagedate',
-				page_begin = '$rpagebegin',
-				page_expire = '$rpageexpire',
-				page_file = '".sed_sql_prep($rpagefile)."',
+			page_ownerid = '$rpageownerid',
+			page_date = '$rpagedate',
+			page_begin = '$rpagebegin',
+			page_expire = '$rpageexpire',
+			page_file = '".sed_sql_prep($rpagefile)."',
 				page_url = '".sed_sql_prep($rpageurl)."',
 				page_size = '".sed_sql_prep($rpagesize)."',
-				page_count = '$rpagecount',
-				page_filecount = '$rpagefilecount',
-				page_alias = '".sed_sql_prep($rpagealias)."'
-				WHERE page_id='$id'");
+			page_count = '$rpagecount',
+			page_filecount = '$rpagefilecount',
+			page_alias = '".sed_sql_prep($rpagealias)."'
+			WHERE page_id='$id'");
 
 			/* === Hook === */
 			$extp = sed_getextplugins('page.edit.update.done');
 			if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
 
 			sed_log("Edited page #".$id,'adm');
 			header("Location: " . SED_ABSOLUTE_URL . "page.php?id=".$id);
 			exit;
-			}
 		}
 	}
+}
 
 $sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 sed_die(sed_sql_numrows($sql)==0);
@@ -170,7 +170,7 @@ sed_block($usr['isadmin']);
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $page_form_delete = "<input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"0\" checked=\"checked\" />".$L['No'];
@@ -186,9 +186,9 @@ $page_form_type .= ($usr['maingrp']==5 && $cfg['allowphp_pages'] && $cfg['allowp
 $page_form_type .= "</select>";
 
 if ($pag['page_file'])
-	{ $page_form_file = "<input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"0\" />".$L['No']; }
-	else
-	{ $page_form_file = "<input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"0\" checked=\"checked\" />".$L['No']; }
+{ $page_form_file = "<input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"0\" />".$L['No']; }
+else
+{ $page_form_file = "<input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"0\" checked=\"checked\" />".$L['No']; }
 
 $bbcodes = ($cfg['parsebbcodepages']) ? sed_build_bbcodes('update', 'rpagetext', $L['BBcodes']) : '';
 $smilies = ($cfg['parsesmiliespages']) ? sed_build_smilies('update', 'rpagetext', $L['Smilies']) : '';
@@ -202,7 +202,7 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 require_once("system/header.php");
@@ -211,10 +211,10 @@ $mskin = sed_skinfile(array('page', 'edit', $sed_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 if (!empty($error_string))
-	{
+{
 	$t->assign("PAGEEDIT_ERROR_BODY",$error_string);
 	$t->parse("MAIN.PAGEEDIT_ERROR");
-	}
+}
 
 $t->assign(array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
@@ -225,7 +225,7 @@ $t->assign(array(
 	"PAGEEDIT_FORM_TYPE" => $page_form_type,
 	"PAGEEDIT_FORM_CAT" => $page_form_categories,
 	"PAGEEDIT_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"rpagekey\" value=\"".sed_cc($pag['page_key'])."\" size=\"16\" maxlength=\"16\" />",
-	"PAGEEDIT_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"rpagealias\" value=\"".sed_cc($pag['page_alias'])."\" size=\"16\" maxlength=\"24\" />",
+	"PAGEEDIT_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"rpagealias\" value=\"".sed_cc($pag['page_alias'])."\" size=\"16\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_EXTRA1" => "<input type=\"text\" class=\"text\" name=\"rpageextra1\" value=\"".sed_cc($pag['page_extra1'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_EXTRA2" => "<input type=\"text\" class=\"text\" name=\"rpageextra2\" value=\"".sed_cc($pag['page_extra2'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_EXTRA3" => "<input type=\"text\" class=\"text\" name=\"rpageextra3\" value=\"".sed_cc($pag['page_extra3'])."\" size=\"56\" maxlength=\"255\" />",
@@ -250,12 +250,12 @@ $t->assign(array(
 	"PAGEEDIT_FORM_SMILIES" => $smilies,
 	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
-		));
+));
 
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");

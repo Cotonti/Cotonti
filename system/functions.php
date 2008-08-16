@@ -71,9 +71,15 @@ foreach($sed_dbnames as $k => $i)
 
 /* ------------------ */
 
+/**
+ * Strips everything but alphanumeric, hyphens and underscores
+ *
+ * @param string $text Input
+ * @return string
+ */
 function sed_alphaonly($text)
 {
-	return(preg_replace('/[^a-zA-Z0-9_]/', '', $text));
+	return(preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
 }
 
 /* ------------------ */

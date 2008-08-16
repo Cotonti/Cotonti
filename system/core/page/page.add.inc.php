@@ -26,27 +26,27 @@ sed_block($usr['auth_write']);
 /* === Hook === */
 $extp = sed_getextplugins('page.add.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($a=='add')
-	{
+{
 	sed_shield_protect();
 
 	/* === Hook === */
 	$extp = sed_getextplugins('page.add.add.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$newpagecat = sed_import('newpagecat','P','TXT');
 	$newpagekey = sed_import('newpagekey','P','TXT');
 	$newpagealias = sed_import('newpagealias','P','ALP');
 	$newpageextra1 = sed_import('newpageextra1','P','TXT');
- 	$newpageextra2 = sed_import('newpageextra2','P','TXT');
-  	$newpageextra3 = sed_import('newpageextra3','P','TXT');
- 	$newpageextra4 = sed_import('newpageextra4','P','TXT');
-  	$newpageextra5 = sed_import('newpageextra5','P','TXT');
+	$newpageextra2 = sed_import('newpageextra2','P','TXT');
+	$newpageextra3 = sed_import('newpageextra3','P','TXT');
+	$newpageextra4 = sed_import('newpageextra4','P','TXT');
+	$newpageextra5 = sed_import('newpageextra5','P','TXT');
 	$newpagetitle = sed_import('newpagetitle','P','TXT');
 	$newpagedesc = sed_import('newpagedesc','P','TXT');
 	$newpagetext = sed_import('newpagetext','P','HTM');
@@ -77,39 +77,39 @@ if ($a=='add')
 	$error_string .= (strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
 
 	if (empty($error_string))
-		{
+	{
 		if (!empty($newpagealias))
-			{
+		{
 			$sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($newpagealias)."'");
 			$newpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $newpagealias;
-			}
+		}
 
 		$sql = sed_sql_query("INSERT into $db_pages
-			(page_state,
-			page_type,
-			page_cat,
-			page_key,
-			page_extra1,
-			page_extra2,
-			page_extra3,
-			page_extra4,
-			page_extra5,
-			page_title,
-			page_desc,
-			page_text,
-			page_author,
-			page_ownerid,
-			page_date,
-			page_begin,
-			page_expire,
-			page_file,
-			page_url,
-			page_size,
-			page_alias)
-			VALUES
-			(1,
-			0,
-			'".sed_sql_prep($newpagecat)."',
+		(page_state,
+		page_type,
+		page_cat,
+		page_key,
+		page_extra1,
+		page_extra2,
+		page_extra3,
+		page_extra4,
+		page_extra5,
+		page_title,
+		page_desc,
+		page_text,
+		page_author,
+		page_ownerid,
+		page_date,
+		page_begin,
+		page_expire,
+		page_file,
+		page_url,
+		page_size,
+		page_alias)
+		VALUES
+		(1,
+		0,
+		'".sed_sql_prep($newpagecat)."',
 			'".sed_sql_prep($newpagekey)."',
 			'".sed_sql_prep($newpageextra1)."',
 			'".sed_sql_prep($newpageextra2)."',
@@ -132,19 +132,19 @@ if ($a=='add')
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_shield_update(30, "New page");
 		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=300");
 		exit;
-		}
 	}
+}
 
 if ($newpagefile)
-	{ $pageadd_form_file = "<input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"0\" />".$L['No']; }
-	else
-	{ $pageadd_form_file = "<input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"0\" checked=\"checked\" />".$L['No']; }
+{ $pageadd_form_file = "<input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"0\" />".$L['No']; }
+else
+{ $pageadd_form_file = "<input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"0\" checked=\"checked\" />".$L['No']; }
 
 $newpagecat = (empty($newpagecat)) ? $c : $newpagecat;
 $pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat');
@@ -163,7 +163,7 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 /* === Hook === */
 $extp = sed_getextplugins('page.add.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 require_once("system/header.php");
@@ -172,10 +172,10 @@ $mskin = sed_skinfile(array('page', 'add', $sed_cat[$newpagecat]['tpl']));
 $t = new XTemplate($mskin);
 
 if (!empty($error_string))
-	{
+{
 	$t->assign("PAGEADD_ERROR_BODY",$error_string);
 	$t->parse("MAIN.PAGEADD_ERROR");
-	}
+}
 
 $t->assign(array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
@@ -184,7 +184,7 @@ $t->assign(array(
 	"PAGEADD_FORM_SEND" => "page.php?m=add&amp;a=add",
 	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
 	"PAGEADD_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"newpagekey\" value=\"".sed_cc($newpagekey)."\" size=\"16\" maxlength=\"16\" />",
-	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".sed_cc($newpagealias)."\" size=\"16\" maxlength=\"24\" />",
+	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".sed_cc($newpagealias)."\" size=\"16\" maxlength=\"255\" />",
 	"PAGEADD_FORM_EXTRA1" => "<input type=\"text\" class=\"text\" name=\"newpageextra1\" value=\"".sed_cc($newpageextra1)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_EXTRA2" => "<input type=\"text\" class=\"text\" name=\"newpageextra2\" value=\"".sed_cc($newpageextra2)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_EXTRA3" => "<input type=\"text\" class=\"text\" name=\"newpageextra3\" value=\"".sed_cc($newpageextra3)."\" size=\"56\" maxlength=\"255\" />",
@@ -205,12 +205,12 @@ $t->assign(array(
 	"PAGEADD_FORM_BBCODES" => $bbcodes,
 	"PAGEADD_FORM_SMILIES" => $smilies,
 	"PAGEADD_FORM_MYPFS" => $pfs
-		));
+));
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
