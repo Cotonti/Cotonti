@@ -34,7 +34,7 @@ if ($a=='delete')
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id' ");
 	$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id' ");
-	header("Location: admin.php?m=ratings");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=ratings");
 	exit;
 	}
 

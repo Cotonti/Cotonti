@@ -116,7 +116,7 @@ if ($a=='update' && !empty($id))
 		pfs_folderid='$folderid'
 		WHERE pfs_userid='$userid' AND pfs_id='$id'");
 
-	header("Location: pfs.php?f=$pfs_folderid".$more);
+	header("Location: " . SED_ABSOLUTE_URL . "pfs.php?f=$pfs_folderid".$more);
 	exit;
 	}
 

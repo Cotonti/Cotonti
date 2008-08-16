@@ -54,7 +54,7 @@ if ($a=='update')
 		}
 		sed_auth_reorder();
 		sed_auth_clear('all');
-		header("Location: admin.php?m=rights&g=".$g);
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=rights&g=".$g);
 		exit;
 	}
 	elseif (is_array($_POST['auth']))
@@ -79,7 +79,7 @@ if ($a=='update')
 		}
 		sed_auth_reorder();
 		sed_auth_clear('all');
-		header("Location: admin.php?m=rights&g=".$g);
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=rights&g=".$g);
 		exit;
 	}
 }

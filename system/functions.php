@@ -323,7 +323,7 @@ function sed_block($allowed)
 	if (!$allowed)
 	{
 		global $sys;
-		header("Location: message.php?msg=930&".$sys['url_redirect']);
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
 		exit;
 	}
 	return(FALSE);
@@ -338,7 +338,7 @@ function sed_blockguests()
 
 	if ($usr['id']<1)
 	{
-		header("Location: message.php?msg=930&".$sys['url_redirect']);
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
 		exit;
 	}
 	return(FALSE);
@@ -475,7 +475,7 @@ function sed_build_comments($code, $url, $display)
 				/* ===== */
 
 				sed_shield_update(20, "New comment");
-				header("Location: $url&comments=1");
+				header("Location: " . SED_ABSOLUTE_URL . "$url&comments=1");
 				exit;
 			}
 		}
@@ -501,7 +501,7 @@ function sed_build_comments($code, $url, $display)
 				sed_log("Deleted comment #".$ind." in '".$code."'",'adm');
 			}
 
-			header("Location: ".$url."&comments=1");
+			header("Location: " . SED_ABSOLUTE_URL . "".$url."&comments=1");
 			exit;
 		}
 
@@ -908,7 +908,7 @@ function sed_build_ratings($code, $url, $display)
 			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
 
-			header("Location: $url&ratings=1&ina=added");
+			header("Location: " . SED_ABSOLUTE_URL . "$url&ratings=1&ina=added");
 			exit;
 		}
 
@@ -1455,7 +1455,7 @@ function sed_die($cond=TRUE)
 {
 	if ($cond)
 	{
-		header("Location: message.php?msg=950");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=950");
 		exit;
 	}
 	return(FALSE);
@@ -1478,7 +1478,7 @@ function sed_dieifdisabled($disabled)
 {
 	if ($disabled)
 	{
-		header("Location: message.php?msg=940");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=940");
 		exit;
 	}
 	return;
@@ -2332,7 +2332,11 @@ function sed_readraw($file)
 }
 
 /* ------------------ */
-
+/**
+ * Displays redirect page
+ *
+ * @param string $url Target URI
+ */
 function sed_redirect($url)
 {
 	global $cfg;
@@ -2343,18 +2347,18 @@ function sed_redirect($url)
 		<html>
 		<head>
 		<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
-		<meta http-equiv=\"refresh\" content=\"0; url=".$url."\" />
+		<meta http-equiv=\"refresh\" content=\"0; url=".SED_ABSOLUTE_URL . $url."\" />
 		<title>Redirecting...</title></head>
-		<body>Redirecting to <a href=\"".$url."\">".$cfg['mainurl']."/".$url."</a>
+		<body>Redirecting to <a href=\"". SED_ABSOLUTE_URL .$url."\">".$cfg['mainurl']."/".$url."</a>
 		</body>
 		</html>";
-		header("Refresh: 0; URL=".$url);
+		header("Refresh: 0; URL=". SED_ABSOLUTE_URL .$url);
 		echo($output);
 		exit;
 	}
 	else
 	{
-		header("Location: ".$url);
+		header("Location: " . SED_ABSOLUTE_URL . $url);
 		exit;
 	}
 	return;

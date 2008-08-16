@@ -58,18 +58,18 @@ if ($a=='archive')
 {
 	if ($pm_touserid!=$usr['id'] || $pm_state>1)
 	{
-		header("Location: message.php?msg=550");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=550");
 		exit;
 	}
 	$sql = sed_sql_query("UPDATE $db_pm SET pm_state=2 WHERE pm_id='$id'");
-	header("Location: pm.php");
+	header("Location: " . SED_ABSOLUTE_URL . "pm.php");
 	exit;
 }
 elseif ($a=='delete')
 {
 	if (($pm_state>0 && $pm_state < 3 && $pm_touserid!=$usr['id']) || (($pm_state==0 || $pm_state == 3) && $pm_fromuserid!=$usr['id']))
 	{
-		header("Location: message.php?msg=950");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=950");
 		exit;
 	}
 	$sql = sed_sql_query("SELECT * FROM $db_pm WHERE pm_id='$id' LIMIT 1");
@@ -82,14 +82,14 @@ elseif ($a=='delete')
 		}
 		$sql = sed_sql_query("DELETE FROM $db_pm WHERE pm_id='$id'");
 	}
-	header("Location: pm.php?f=$f");
+	header("Location: " . SED_ABSOLUTE_URL . "pm.php?f=$f");
 	exit;
 }
 elseif ($a=='update')
 {
 	if (($pm_state>0 && $pm_touserid!=$usr['id']) || ($pm_state==0 && $pm_fromuserid!=$usr['id']))
 	{
-		header("Location: message.php?msg=950");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=950");
 		exit;
 	}
 
@@ -97,12 +97,12 @@ elseif ($a=='update')
 
 	if (empty($newpmtext))
 	{
-		header("Location: pm.php?m=edit&a=delete&".sed_xg()."&id=".$id."&f=".$f);
+		header("Location: " . SED_ABSOLUTE_URL . "pm.php?m=edit&a=delete&".sed_xg()."&id=".$id."&f=".$f);
 		exit;
 	}
 
 	$sql = sed_sql_query("UPDATE $db_pm SET pm_text='".sed_sql_prep($newpmtext)."', pm_date='".$sys['now_offset']."' WHERE pm_id='$id'");
-	header("Location: pm.php?id=".$id);
+	header("Location: " . SED_ABSOLUTE_URL . "pm.php?id=".$id);
 	exit;
 }
 

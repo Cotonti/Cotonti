@@ -58,6 +58,14 @@ $sys['unique'] = sed_unique(16);
 $sys['url'] = base64_encode($_SERVER['REQUEST_URI']);
 $sys['url_redirect'] = 'redirect='.$sys['url'];
 $redirect = sed_import('redirect','G','SLU');
+// Getting the server-relative path
+$sys['site_uri'] = dirname($_SERVER['SCRIPT_NAME']);
+$sys['site_uri'] = str_replace('\\', '/', $sys['site_uri']);
+if($sys['site_uri'][strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+define('SED_SITE_URI', $sys['site_uri']);
+// Absolute site url
+$sys['abs_url'] = ($sys['site_uri'][0] == '/') ? 'http://'.$_SERVER['HTTP_HOST'].$sys['site_uri'] : 'http://'.$_SERVER['HTTP_HOST'].'/'.$sys['site_uri'];
+define('SED_ABSOLUTE_URL', $sys['abs_url']);
 
 /* ======== Internal cache ======== */
 
@@ -346,12 +354,12 @@ if (!file_exists($mskin))
 	{ sed_diefatal('Default skin not found.'); }
 }
 
-$usr['skin_lang'] = 'skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
+$usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
 
 if (@file_exists($usr['skin_lang']))
 { require_once($usr['skin_lang']); }
 
-require_once('skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
+require_once('./skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
 
 $skin = $usr['skin'];
 

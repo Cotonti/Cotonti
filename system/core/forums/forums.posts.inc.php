@@ -103,7 +103,7 @@ if ($row = sed_sql_fetcharray($sql))
 
 	if ($fs_state)
 	{
-		header("Location: message.php?msg=602");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=602");
 		exit;
 	}
 }
@@ -190,7 +190,7 @@ if ($a=='newpost')
 
 		sed_forum_sectionsetlast($s);
 		sed_shield_update(30, "New post");
-		header("Location: forums.php?m=posts&q=$q&n=last#bottom");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=posts&q=$q&n=last#bottom");
 		exit;
 	}
 }
@@ -261,7 +261,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			sed_log("Delete topic #".$q." (no post left)",'for');
 			sed_forum_sectionsetlast($s);
 		}
-		header("Location: forums.php?m=topics&s=".$s);
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=".$s);
 		exit;
 	}
 	else
@@ -294,7 +294,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 			if ($row = sed_sql_fetcharray($sql))
 			{
-				header("Location: forums.php?m=posts&p=".$row['fp_id']."#".$row['fp_id']);
+				header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=posts&p=".$row['fp_id']."#".$row['fp_id']);
 				exit;
 			}
 		}

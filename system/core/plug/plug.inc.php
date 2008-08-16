@@ -63,7 +63,7 @@ elseif (!empty($e))
 		}
 	else
 		{
-		header("Location: message.php?msg=907");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=907");
 		exit;
 		}
 
@@ -101,7 +101,7 @@ elseif (!empty($e))
 
 	if (count($extp)==0)
 		{
-		header("Location: message.php?msg=907");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=907");
 		exit;
 		}
 
@@ -140,7 +140,7 @@ elseif (!empty($o))
 
 	if (count($extp)==0)
 		{
-		header("Location: message.php?msg=907");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=907");
 		exit;
 		}
 

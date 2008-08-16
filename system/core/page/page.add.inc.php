@@ -136,7 +136,7 @@ if ($a=='add')
 		/* ===== */
 
 		sed_shield_update(30, "New page");
-		header("Location: message.php?msg=300");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=300");
 		exit;
 		}
 	}

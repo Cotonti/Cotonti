@@ -246,7 +246,7 @@ elseif ($a=='delete')
 			if (file_exists($cfg['th_dir_user'].$pfs_file))
 				{ @unlink($cfg['th_dir_user'].$pfs_file); }
 			$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
-			header("Location: pfs.php?f=$f".$more."&o=".$o);
+			header("Location: " . SED_ABSOLUTE_URL . "pfs.php?f=$f".$more."&o=".$o);
 			exit;
 			}
 		}
@@ -281,7 +281,7 @@ elseif ($a=='newfolder')
 		".(int)$nisgallery.",
 		0)");
 
-	header("Location: pfs.php".$more1);
+	header("Location: " . SED_ABSOLUTE_URL . "pfs.php".$more1);
 	exit;
 	}
 
@@ -291,7 +291,7 @@ elseif ($a=='deletefolder')
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
 	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$f' ");
-	header("Location: pfs.php".$more1);
+	header("Location: " . SED_ABSOLUTE_URL . "pfs.php".$more1);
 	exit;
 	}
 

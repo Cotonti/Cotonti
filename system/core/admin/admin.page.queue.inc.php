@@ -36,7 +36,7 @@ if ($a=='validate')
 		sed_block($usr['isadmin_local']);
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 		sed_cache_clear('latestpages');
-		header("Location: admin.php?m=page&s=queue");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=page&s=queue");
 		exit;
 		}
 	else
@@ -54,7 +54,7 @@ if ($a=='unvalidate')
 		sed_block($usr['isadmin_local']);
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 		sed_cache_clear('latestpages');
-		header("Location: list.php?c=".$row['page_cat']);
+		header("Location: " . SED_ABSOLUTE_URL . "list.php?c=".$row['page_cat']);
 		exit;
 		}
 	else

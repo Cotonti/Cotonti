@@ -55,7 +55,7 @@ if ($n=='options')
 			WHERE structure_id='".$id."'");
 
 		sed_cache_clear('sed_cat');
-		header("Location: admin.php?m=page&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=page&s=structure");
 		exit;
 	}
 
@@ -157,7 +157,7 @@ else
 		}
 		sed_auth_clear('all');
 		sed_cache_clear('sed_cat');
-		header("Location: admin.php?m=page&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=page&s=structure");
 		exit;
 	}
 	elseif ($a=='add')
@@ -166,14 +166,14 @@ else
 		foreach($g as $k => $x) $$x = $_POST[$x];
 		$ngroup = (isset($ngroup)) ? 1 : 0;
 		sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
-		header("Location: admin.php?m=page&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=page&s=structure");
 		exit;
 	}
 	elseif ($a=='delete')
 	{
 		sed_check_xg();
 		sed_structure_delcat($id, $c);
-		header("Location: admin.php?m=page&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=page&s=structure");
 		exit;
 	}
 

@@ -20,7 +20,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if ($usr['id']<1)
 	{
-	header("Location: message.php?msg=100&".$sys['url_redirect']);
+	header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=100&".$sys['url_redirect']);
 	exit;
 	}
 
@@ -59,7 +59,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_avatar='' WHERE user_id='".$usr['id']."'");
-	header("Location: users.php?m=profile#avatar");
+	header("Location: " . SED_ABSOLUTE_URL . "users.php?m=profile#avatar");
 	exit;
 
 	break;
@@ -77,7 +77,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_photo='' WHERE user_id='".$usr['id']."'");
-	header("Location: users.php?m=profile#photo");
+	header("Location: " . SED_ABSOLUTE_URL . "users.php?m=profile#photo");
 	exit;
 
 	break;
@@ -95,7 +95,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_signature='' WHERE user_id='".$usr['id']."'");
-	header("Location: users.php?m=profile#signature");
+	header("Location: " . SED_ABSOLUTE_URL . "users.php?m=profile#signature");
 	exit;
 
 	break;
@@ -109,7 +109,7 @@ switch ($a)
 	$avatar = str_replace(array("'", ",", chr(0x00)), "", $avatar);
 	if (file_exists($avatar))
 		{ $sql = sed_sql_query("UPDATE $db_users SET user_avatar='".sed_sql_prep($avatar)."' WHERE user_id='".$usr['id']."'"); }
-	header("Location: users.php?m=profile#avatar");
+	header("Location: " . SED_ABSOLUTE_URL . "users.php?m=profile#avatar");
 	exit;
 
 	break;
@@ -364,7 +364,7 @@ switch ($a)
 			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		header("Location: message.php?msg=113");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=113");
 		exit;
 		}
 	break;

@@ -399,28 +399,28 @@ switch ($a)
 		case 'pause' :
 		$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl'");
 		sed_cache_clearall();
-		header("Location: admin.php?m=plug&a=details&pl=".$pl);
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=plug&a=details&pl=".$pl);
 		exit;
 		break;
 
 		case 'unpause' :
 		$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
 		sed_cache_clearall();
-		header("Location: admin.php?m=plug&a=details&pl=".$pl);
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=plug&a=details&pl=".$pl);
 		exit;
 		break;
 
 		case 'pausepart' :
 		$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl' AND pl_id='$part'");
 		sed_cache_clearall();
-		header("Location: admin.php?m=plug&a=details&pl=".$pl);
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=plug&a=details&pl=".$pl);
 		exit;
 		break;
 
 		case 'unpausepart' :
 		$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl' AND pl_id='$part'");
 		sed_cache_clearall();
-		header("Location: admin.php?m=plug&a=details&pl=".$pl);
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=plug&a=details&pl=".$pl);
 		exit;
 		break;
 

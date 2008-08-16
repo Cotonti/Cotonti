@@ -58,7 +58,7 @@ switch ($n)
 				$sql1 = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$row['config_name']."' AND config_owner='$o' AND config_cat='$p'");
 				}
 			}
-		header("Location: admin.php?m=config");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=config");
 		exit;
 		}
 

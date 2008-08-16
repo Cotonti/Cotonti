@@ -47,7 +47,7 @@ if (!empty($p))
 
 	if (count($extp)==0)
 		{
-		header("Location: message.php?msg=907");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=907");
 		exit;
 		}
 
@@ -59,7 +59,7 @@ if (!empty($p))
 		}
 	else
 		{
-		header("Location: message.php?msg=907");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=907");
 		exit;
 		}
 

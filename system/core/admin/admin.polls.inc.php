@@ -97,7 +97,7 @@ else
 		$num = $num + sed_sql_affectedrows();
 		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 		$num = $num + sed_sql_affectedrows();
-		header("Location: message.php?msg=916&rc=102&num=".$num);
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=916&rc=102&num=".$num);
 		exit;
 		}
 
@@ -108,7 +108,7 @@ else
 		$num = sed_sql_affectedrows();
 		$sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
 		$num = $num + sed_sql_affectedrows();
-		header("Location: message.php?msg=916&rc=102&num=".$num);
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=916&rc=102&num=".$num);
 		exit;
 		}
 
@@ -116,7 +116,7 @@ else
 		{
 		sed_check_xg();
 		$sql = sed_sql_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
-		header("Location: message.php?msg=916&rc=102&num=1");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=916&rc=102&num=1");
 		exit;
 		}
 

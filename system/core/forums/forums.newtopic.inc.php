@@ -60,7 +60,7 @@ else
 
 if ($fs_state)
 	{
-	header("Location: message.php?msg=602");
+	header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=602");
 	exit;
 	}
 
@@ -162,7 +162,7 @@ if ($a=='newtopic')
 		/* ===== */
 
 		sed_shield_update(45, "New topic");
-		header("Location: forums.php?m=posts&q=$q&n=last#bottom");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=posts&q=$q&n=last#bottom");
 		exit;
 		}
 	}

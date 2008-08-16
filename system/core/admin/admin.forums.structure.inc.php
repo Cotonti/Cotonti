@@ -53,7 +53,7 @@ if ($n=='options')
 			WHERE fn_id='".$id."'");
 
 		sed_cache_clear('sed_forums_str');
-		header("Location: admin.php?m=forums&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums&s=structure");
 		exit;
 		}
 
@@ -140,7 +140,7 @@ else
 				WHERE fn_id='".$i."'");
 			}
 		sed_cache_clear('sed_forums_str');
-		header("Location: admin.php?m=forums&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums&s=structure");
 		exit;
 		}
 	elseif ($a=='add')
@@ -157,7 +157,7 @@ else
 			}
 
 		sed_cache_clear('sed_forums_str');
-		header("Location: admin.php?m=forums&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums&s=structure");
 		exit;
 		}
 	elseif ($a=='delete')
@@ -165,7 +165,7 @@ else
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 		sed_cache_clear('sed_forums_str');
-		header("Location: admin.php?m=forums&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums&s=structure");
 		exit;
 		}
 

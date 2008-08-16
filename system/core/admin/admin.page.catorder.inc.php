@@ -57,7 +57,7 @@ if ($a=='update')
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_order='$order' WHERE structure_id='$i'");
 		}
 	sed_cache_clear('sed_cat');
-   	header("Location: admin.php?m=page");
+   	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=page");
 	}
 
 $sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code");

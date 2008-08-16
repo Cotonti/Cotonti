@@ -57,7 +57,7 @@ sed_block($usr['auth_read']);
 if ($pag['page_state']==1 && !$usr['isadmin'])
 	{
 	sed_log("Attempt to directly access an un-validated page", 'sec');
-	header("Location: message.php?msg=930");
+	header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930");
 	exit;
 	}
 
@@ -65,7 +65,7 @@ if (substr($pag['page_text'], 0, 6)=='redir:')
 	{
 	$redir = str_replace('redir:', '', trim($pag['page_text']));
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
-	header("Location: ".$redir);
+	header("Location: " . SED_ABSOLUTE_URL . "".$redir);
 	exit;
 	}
 elseif (substr($pag['page_text'], 0, 8)=='include:')
@@ -78,7 +78,7 @@ if($pag['page_file'] && $a=='dl')
 	$file_size = @filesize($row['page_url']);
 	$pag['page_filecount']++;
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
-	header("Location: ".$pag['page_url']);
+	header("Location: " . SED_ABSOLUTE_URL . "".$pag['page_url']);
 	echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
 	exit;
 	}

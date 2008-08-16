@@ -35,7 +35,7 @@ if ($a=='update')
 			WHERE smilie_id='$i'");
 		}
 	sed_cache_clear('sed_smilies');
-	header("Location: admin.php?m=smilies");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=smilies");
 	exit;
 	}
 elseif ($a=='add')
@@ -46,7 +46,7 @@ elseif ($a=='add')
 	$nsmilieorder = sed_sql_prep(sed_import('nsmilieorder', 'P', 'TXT'));
 	$sql = sed_sql_query("INSERT INTO $db_smilies (smilie_code, smilie_image, smilie_text, smilie_order) VALUES ('$nsmiliecode', '$nsmilieimage', '$nsmilietext', ".(int)$nsmilieorder.")");
 	sed_cache_clear('sed_smilies');
-	header("Location: admin.php?m=smilies");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=smilies");
 	exit;
 	}
 elseif ($a=='delete')
@@ -55,7 +55,7 @@ elseif ($a=='delete')
 	$id = sed_import('id', 'G', 'INT');
 	$sql = sed_sql_query("DELETE FROM $db_smilies WHERE smilie_id='$id'");
 	sed_cache_clear('sed_smilies');
-	header("Location: admin.php?m=smilies");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=smilies");
 	exit;
 	}
 

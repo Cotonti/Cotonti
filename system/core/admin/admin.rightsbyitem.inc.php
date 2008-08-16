@@ -56,7 +56,7 @@ if ($a=='update')
 
 	sed_auth_reorder();
 	sed_auth_clear('all');
-	header("Location: admin.php?m=rightsbyitem&ic=$ic&io=$io");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=rightsbyitem&ic=$ic&io=$io");
 	exit;
 }
 

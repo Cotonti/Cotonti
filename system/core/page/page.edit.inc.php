@@ -99,7 +99,7 @@ if ($a=='update')
 				$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
 				$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 				sed_log("Deleted page #".$id,'adm');
-				header("Location: list.php?c=".$row1['page_cat']);
+				header("Location: " . SED_ABSOLUTE_URL . "list.php?c=".$row1['page_cat']);
 				exit;
 				}
 			}
@@ -150,7 +150,7 @@ if ($a=='update')
 			/* ===== */
 
 			sed_log("Edited page #".$id,'adm');
-			header("Location: page.php?id=".$id);
+			header("Location: " . SED_ABSOLUTE_URL . "page.php?id=".$id);
 			exit;
 			}
 		}

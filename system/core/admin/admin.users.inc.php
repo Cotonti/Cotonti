@@ -54,7 +54,7 @@ switch($n)
 
 	sed_auth_reorder();
 	sed_cache_clear('sed_groups');
-	header("Location: admin.php?m=users");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=users");
 	exit;
 	break;
 
@@ -79,7 +79,7 @@ switch($n)
 		$sql = sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden' WHERE grp_id='$g'");
 
 		sed_cache_clear('sed_groups');
-		header("Location: admin.php?m=users");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=users");
 		exit;
 		}
 	elseif ($a=='delete' && $g>5)
@@ -89,7 +89,7 @@ switch($n)
 		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
 		sed_auth_clear('all');
 		sed_cache_clear('sed_groups');
-		header("Location: admin.php?m=users");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=users");
 		exit;
 		}
 

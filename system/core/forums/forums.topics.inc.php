@@ -80,7 +80,7 @@ sed_block($usr['auth_read']);
 
 if ($fs_state)
 	{
-	header("Location: message.php?msg=602");
+	header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=602");
 	exit;
 	}
 
@@ -100,7 +100,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_forum_prunetopics('single', $s, $q);
 		sed_log("Deleted topic #".$q, 'for');
 		sed_forum_sectionsetlast($s);
-		header("Location: forums.php?m=topics&s=$s");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
 		exit;
 
 		break;
@@ -177,7 +177,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_forum_sectionsetlast($s);
 		sed_forum_sectionsetlast($ns);
 		sed_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
-		header("Location: forums.php?m=topics&s=".$s);
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=".$s);
 		exit;
 		break;
 
@@ -186,7 +186,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_check_xg();
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_state=1, ft_sticky=0 WHERE ft_id='$q'");
 		sed_log("Locked topic #".$q, 'for');
-		header("Location: forums.php?m=topics&s=$s");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
 		exit;
 		break;
 
@@ -195,7 +195,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_check_xg();
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=0 WHERE ft_id='$q'");
 		sed_log("Pinned topic #".$q, 'for');
-		header("Location: forums.php?m=topics&s=$s");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
 		exit;
 		break;
 
@@ -204,7 +204,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_check_xg();
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=1 WHERE ft_id='$q'");
 		sed_log("Announcement topic #".$q, 'for');
-		header("Location: forums.php?m=topics&s=$s");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
 		exit;
 		break;
 
@@ -214,7 +214,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
 		sed_forum_sectionsetlast($s);
 		sed_log("Bumped topic #".$q, 'for');
-		header("Location: forums.php?m=topics&s=$s");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
 		exit;
 		break;
 
@@ -223,7 +223,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_check_xg();
 		sed_log("Made topic #".$q." private", 'for');
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_mode='1' WHERE ft_id='$q'");
-		header("Location: forums.php?m=topics&s=$s");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
 		exit;
 		break;
 
@@ -232,7 +232,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		sed_check_xg();
 		sed_log("Resetted topic #".$q, 'for');
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=0, ft_state=0, ft_mode=0 WHERE ft_id='$q'");
-		header("Location: forums.php?m=topics&s=$s");
+		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
 		exit;
 		break;
 

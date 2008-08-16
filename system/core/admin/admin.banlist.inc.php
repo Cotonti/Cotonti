@@ -30,7 +30,7 @@ if ($a=='update')
 	$rbanlistemail = sed_sql_prep(sed_import('rbanlistemail', 'P', 'TXT'));
 	$rbanlistreason = sed_sql_prep(sed_import('rbanlistreason', 'P', 'TXT'));
 	$sql = sed_sql_query("UPDATE $db_banlist SET banlist_ip='$rbanlistip', banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'");
-	header("Location: admin.php?m=banlist");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=banlist");
 	exit;
 	}
 elseif ($a=='add')
@@ -46,7 +46,7 @@ elseif ($a=='add')
 	if ($nexpire>0)
 		{ $nexpire += $sys['now']; }
 	$sql = sed_sql_query("INSERT INTO $db_banlist (banlist_ip, banlist_email, banlist_reason, banlist_expire) VALUES ('$nbanlistip', '$nbanlistemail', '$nbanlistreason', ".(int)$nexpire.")");
-	header("Location: admin.php?m=banlist");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=banlist");
 	exit;
 	}
 
@@ -55,7 +55,7 @@ elseif ($a=='delete')
 	sed_check_xg();
 	$id = sed_import('id', 'G', 'INT');
 	$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='$id'");
-	header("Location: admin.php?m=banlist");
+	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=banlist");
 	exit;
 	}
 

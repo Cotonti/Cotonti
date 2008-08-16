@@ -132,7 +132,7 @@ if (is_array($extp))
 
 		sed_stat_inc('totalpms');
 		sed_shield_update(30, "New private message (".$totalrecipients.")");
-		header("Location: message.php?msg=502");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=502");
 		exit;
 		}
 	}

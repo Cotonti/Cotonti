@@ -73,7 +73,7 @@ if ($row = sed_sql_fetcharray($sql))
 {
 	if ($row['fs_state'])
 	{
-		header("Location: message.php?msg=602");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=602");
 		exit;
 	}
 
@@ -91,7 +91,7 @@ if ($row = sed_sql_fetcharray($sql))
 {
 	if ($row['ft_state'] && !$usr['isadmin'])
 	{
-		header("Location: message.php?msg=603");
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=603");
 		exit;
 	}
 	$ft_title = sed_cc($row['ft_title']);
@@ -143,7 +143,7 @@ if ($a=='update')
 	/* ===== */
 
 	sed_forum_sectionsetlast($fp_sectionid);
-	header("Location: forums.php?m=posts&p=$p#$p");
+	header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=posts&p=$p#$p");
 	exit;
 }
 

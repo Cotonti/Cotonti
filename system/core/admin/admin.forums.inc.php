@@ -68,7 +68,7 @@ if ($n=='edit')
 
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_countposts='$rcountposts' WHERE fs_id='$id'");
 
-		header("Location: admin.php?m=forums");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums");
 		exit;
 		}
 	elseif ($a=='delete')
@@ -76,7 +76,7 @@ if ($n=='edit')
 		sed_check_xg();
 		sed_auth_clear('all');
 		$num = sed_forum_deletesection($id);
-		header("Location: message.php?msg=916&rc=103&num=".$num);
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=916&rc=103&num=".$num);
 		exit;
 		}
 	elseif ($a=='resync')
@@ -163,7 +163,7 @@ else
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='".$row_cur['fs_order']."' WHERE fs_id='".$row_oth['fs_id']."'");
 			}
 
-		header("Location: admin.php?m=forums");
+		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums");
 		exit;
 		}
 	elseif ($a=='add')
@@ -210,7 +210,7 @@ else
 				}
 			sed_auth_reorder();
 			sed_auth_clear('all');
-			header("Location: admin.php?m=forums");
+			header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums");
 			}
 		}
 
