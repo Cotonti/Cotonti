@@ -57,6 +57,7 @@ $cfg['allowphp_override'] = FALSE; 		// General lock for execution of the PHP co
 
 $db_auth			= 'sed_auth';
 $db_banlist 		= 'sed_banlist';
+$db_bbcode			= 'sed_bbcode';
 $db_cache 			= 'sed_cache';
 $db_com 			= 'sed_com';
 $db_core			= 'sed_core';

@@ -223,4 +223,130 @@ function sed_sql_rowcount($table)
 	$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $table");
 	return (int) mysql_result($sqltmp, 0, 0);
 }
+
+/**
+ * Performs SQL INSERT on simple data array. Array keys must match table keys, optionally you can specify
+ * key prefix as third parameter. Strings get quoted and escaped automatically.
+ * Ints and floats must be typecasted.
+ * You can use special values in the array:
+ * - PHP NULL => SQL NULL
+ * - 'NOW()' => SQL NOW()
+ * The number of affected records is returned.
+ *
+ * @param string $table_name Table name
+ * @param array $data Associative array containing data for insertion.
+ * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key.
+ * @return int
+ */
+function sed_sql_insert($table_name, $data, $prefix = '')
+{
+	if(!is_array($data))
+	{
+		return 0;
+	}
+	$keys = '';
+	$vals = '';
+	foreach($data as $key => $val)
+	{
+		$keys .= "`{$prefix}$key`,";
+		if(is_null($val))
+		{
+			$vals .= 'NULL,';
+		}
+		elseif($val == 'NOW()')
+		{
+			$vals .= 'NOW(),';
+		}
+		elseif(is_int($val) || is_float($val))
+		{
+			$vals .= $val.',';
+		}
+		else
+		{
+			$vals .= "'".mysql_real_escape_string($val)."',";
+		}
+
+	}
+	if(!empty($keys) && !empty($vals))
+	{
+		$keys = substr($keys, 0, -1);
+		$vals = substr($vals, 0, -1);
+		sed_sql_query("INSERT INTO `$table_name` ($keys) VALUES ($vals)");
+		return mysql_affected_rows();
+	}
+	return 0;
+}
+
+/**
+ * Performs simple SQL DELETE query and returns number of removed items.
+ *
+ * @param string $table_name Table name
+ * @param string $condition Body of WHERE clause
+ * @return int
+ */
+function sed_sql_delete($table_name, $condition = '')
+{
+	if(empty($condition))
+	{
+		sed_sql_query("DELETE FROM $table_name");
+	}
+	else
+	{
+		sed_sql_query("DELETE FROM $table_name WHERE $condition");
+	}
+	return mysql_affected_rows();
+}
+
+/**
+ * Performs SQL UPDATE with simple data array. Array keys must match table keys, optionally you can specify
+ * key prefix as fourth parameter. Strings get quoted and escaped automatically.
+ * Ints and floats must be typecasted.
+ * You can use special values in the array:
+ * - PHP NULL => SQL NULL
+ * - 'NOW()' => SQL NOW()
+ * The number of affected records is returned.
+ *
+ * @param string $table_name Table name
+ * @param string $condition Body of SQL WHERE clause
+ * @param array $data Associative array containing data for insertion.
+ * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key.
+ * @return int
+ */
+function sed_sql_update($table_name, $condition, $data, $prefix = '')
+{
+	if(!is_array($data))
+	{
+		return 0;
+	}
+	$upd = '';
+	$condition = empty($condition) ? '' : 'WHERE '.$condition;
+	foreach($data as $key => $val)
+	{
+		$upd .= "`{$prefix}$key`=";
+		if(is_null($val))
+		{
+			$upd .= 'NULL,';
+		}
+		elseif($val == 'NOW()')
+		{
+			$upd .= 'NOW(),';
+		}
+		elseif(is_int($val) || is_float($val))
+		{
+			$upd .= $val.',';
+		}
+		else
+		{
+			$upd .= "'".mysql_real_escape_string($val)."',";
+		}
+
+	}
+	if(!empty($upd))
+	{
+		$upd = substr($upd, 0, -1);
+		sed_sql_query("UPDATE $table_name SET $upd $condition");
+		return mysql_affected_rows();
+	}
+	return 0;
+}
 ?>

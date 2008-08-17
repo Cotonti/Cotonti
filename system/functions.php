@@ -180,6 +180,158 @@ function sed_auth_clear($id='all')
 
 /* ------------------ */
 
+/*
+ * ================================= BBCode Parser API =================================
+ */
+
+/**
+ * Registers a new bbcode in database.
+ * In 'callback' mode $replacement is normal PHP function body (without declaration) which
+ * takes $input array of matches as parameter and must return a replacement string. These
+ * variables are also imported as globals in callback function: $cfg, $sys, $usr, $L, $skin, $sed_groups
+ *
+ * @global $db_bbcode;
+ * @param string $name BBcode name
+ * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
+ * @param string $pattern Bbcode string or entire regular expression
+ * @param string $replacement Replacement string or regular substitution or callback body
+ * @param int $priority BBcode preority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.
+ * @return bool
+ */
+function sed_bbcode_add($name, $mode, $pattern, $replacement, $priority = 128)
+{
+	global $db_bbcode;
+	$bbc['name'] = $name;
+	$bbc['mode'] = $mode;
+	$bbc['pattern'] = $pattern;
+	$bbc['replacement'] = $replacement;
+	if($priority >= 0 && $priority < 256)
+	{
+		$bbc['priority'] = $priority;
+	}
+	return sed_sql_insert($db_bbcode, $bbc, 'bbc_') == 1;
+}
+
+/**
+ * Removes a bbcode from parser database.
+ *
+ * @global $db_bbcode
+ * @param int $id BBCode ID or 0 to remove all (use carefully)
+ * @return bool
+ */
+function sed_bbcode_remove($id = 0)
+{
+	global $db_bbcode;
+	if($id > 0)
+	{
+		return sed_sql_delete($db_bbcode, "bbc_id = $id") == 1;
+	}
+	else
+	{
+		return sed_sql_delete($db_bbcode) > 0;
+	}
+}
+
+/**
+ * Updates bbcode data in parser database.
+ *
+ * @global $db_bbcode;
+ * @param int $id BBCode ID
+ * @param int $enabled Enable the bbcode (1 - yes, 0 - no)
+ * @param string $name BBcode name
+ * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
+ * @param string $pattern Bbcode string or entire regular expression
+ * @param string $replacement Replacement string or regular substitution or callback body
+ * @param int $priority BBcode preority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.
+ * @return bool
+ */
+function sed_bbcode_update($id, $enabled = 1, $name, $mode, $pattern, $replacement, $priority = 128)
+{
+	global $db_bbcode;
+	$bbc['enabled'] = $enabled;
+	if(!empty($name))
+	{
+		$bbc['name'] = $name;
+	}
+	if(!empty($mode))
+	{
+		$bbc['mode'] = $mode;
+	}
+	if(!empty($pattern))
+	{
+		$bbc['pattern'] = $pattern;
+	}
+	if(!empty($replacement))
+	{
+		$bbc['replacement'] = $replacement;
+	}
+	if($priority >= 0 && $priority < 256)
+	{
+		$bbc['priority'] = $priority;
+	}
+	return sed_sql_update($db_bbcode, "bbc_id = $id", $bbc, 'bbc_') == 1;
+}
+
+/**
+ * Loads bbcodes from database if they havent been already loaded.
+ *
+ * @global $sed_bbcodes
+ * @global $db_bbcode
+ */
+function sed_bbcode_load()
+{
+	global $sed_bbcodes, $db_bbcode;
+	if(!is_array($sed_bbcodes))
+	{
+		$sed_bbcodes = array();
+		$i = 0;
+		$res = sed_sql_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
+		while($row = sed_sql_fetchassoc($res))
+		{
+			foreach($row as $key => $val)
+			{
+				$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
+			}
+			$i++;
+		}
+		sed_sql_freeresult($res);
+	}
+}
+
+/**
+ * Parses bbcodes in text.
+ *
+ * @global $sed_bbcodes
+ * @param string $text Text body
+ */
+function sed_bbcode_parse(&$text)
+{
+	global $sed_bbcodes;
+	$cnt = count($sed_bbcodes);
+	for($i = 0; $i < $cnt; $i++)
+	{
+		switch($sed_bbcodes[$i]['mode'])
+		{
+			case 'str':
+				$text = str_ireplace($sed_bbcodes[$i]['pattern'], $sed_bbcodes[$i]['replacement'], $text);
+			break;
+
+			case 'ereg':
+				$text = eregi_replace($sed_bbcodes[$i]['pattern'], $sed_bbcodes[$i]['replacement'], $text);
+			break;
+
+			case 'preg':
+				$text = preg_replace('`'.$sed_bbcodes[$i]['pattern'].'`i', $sed_bbcodes[$i]['replacement'], $text);
+			break;
+
+			case 'callback':
+				$code = 'global $cfg, $sys, $usr, $L, $skin, $sed_groups;' . $sed_bbcodes[$i]['replacement'];
+				$text = preg_replace_callback('`'.$sed_bbcodes[$i]['pattern'].'`i', create_function('input', $code), $text);
+			break;
+		}
+	}
+}
+
 function sed_bbcode($text)
 {
 	global $L, $skin, $sys, $cfg, $sed_groups;
@@ -1299,14 +1451,18 @@ function sed_cache_store($name,$value,$expire,$auto="1")
 
 /* ------------------ */
 
+/**
+ * Makes HTML sequences safe
+ *
+ * @param string $text Source string
+ * @return string
+ */
 function sed_cc($text)
 {
-	$text = preg_replace('/&#([0-9]{2,4});/is','&&#35$1;',$text);
-	//	$text = eregi_replace('&#([0-9]+)', '&&#35;\\1', $text);
 	$text = str_replace(
 	array('{', '<', '>' , '$', '\'', '"', '\\', '&amp;', '&nbsp;'),
 	array('&#123;', '&lt;', '&gt;', '&#036;', '&#039;', '&quot;', '&#92;', '&amp;amp;', '&amp;nbsp;'), $text);
-	return($text);
+	return $text;
 }
 
 /* ------------------ */
@@ -1770,6 +1926,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			break;
 	}
 
+	$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
 	if ($pass)
 	{ return($v); }
 	else

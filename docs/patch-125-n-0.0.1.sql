@@ -16,3 +16,19 @@ ALTER TABLE sed_forum_posts ADD fp_html TEXT NOT NULL DEFAULT '';
 ALTER TABLE sed_pages ADD page_html TEXT NOT NULL DEFAULT '';
 ALTER TABLE sed_pm ADD pm_html TEXT NOT NULL DEFAULT '';
 ALTER TABLE sed_users ADD user_html TEXT NOT NULL DEFAULT '';
+
+/* New bbcodes feature */
+/* This table is used by parser only, editor part is separate */
+CREATE TABLE sed_bbcode (
+	bbc_id INT NOT NULL AUTO_INCREMENT,
+	bbc_name VARCHAR(100) NOT NULL,
+	bbc_mode ENUM('str', 'ereg', 'pcre', 'callback') NOT NULL DEFAULT 'str',
+	bbc_pattern VARCHAR(255) NOT NULL,
+	bbc_replacement TEXT NOT NULL,
+	bbc_enabled TINYINT(1) NOT NULL DEFAULT 1,
+	bbc_priority TINYINT UNSIGNED NOT NULL DEFAULT 128,
+	PRIMARY KEY (bbc_id),
+	KEY (bbc_enabled),
+	KEY (bbc_priority)
+);
+
