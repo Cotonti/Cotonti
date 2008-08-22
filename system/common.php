@@ -461,6 +461,6 @@ if (is_array($extp))
 
 /* ======== Pre-loads ======== */
 
-$sed_bbcodes = sed_loadbbcodes();
+sed_bbcode_load();
 
 ?>

@@ -69,8 +69,6 @@ foreach($sed_dbnames as $k => $i)
 	$$j = 'sed_'.$i;
 }
 
-/* ------------------ */
-
 /**
  * Strips everything but alphanumeric, hyphens and underscores
  *
@@ -82,8 +80,18 @@ function sed_alphaonly($text)
 	return(preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
 }
 
-/* ------------------ */
+/*
+ * ================================= Authorization Subsystem ==================================
+ */
 
+/**
+ * Returns specific access permissions
+ *
+ * @param string $area Seditio area
+ * @param string $option Option to access
+ * @param string $mask Access mask
+ * @return mixed
+ */
 function sed_auth($area, $option, $mask='RWA')
 {
 	global $sys, $usr;
@@ -111,7 +119,7 @@ function sed_auth($area, $option, $mask='RWA')
 		{
 			$cnt = 0;
 
-			if (is_array($usr['auth'][$area]))
+			if(is_array($usr['auth'][$area]))
 			{
 				foreach($usr['auth'][$area] as $k => $g)
 				{ $cnt += (($g & $mn[$ml]) == $mn[$ml]); }
@@ -127,14 +135,16 @@ function sed_auth($area, $option, $mask='RWA')
 			$res[] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
 		}
 	}
-	if (count($res)==1)
-	{ return ($res[0]); }
-	else
-	{ return($res); }
+	return (count($res) == 1) ? $res[0]: $res;
 }
 
-/* ------------------ */
-
+/**
+ * Builds Access Control List (ACL) for a specific user
+ *
+ * @param int $userid User ID
+ * @param int $maingrp User main group
+ * @return array
+ */
 function sed_auth_build($userid, $maingrp=0)
 {
 	global $db_auth, $db_groups_users;
@@ -165,23 +175,30 @@ function sed_auth_build($userid, $maingrp=0)
 	return($authgrid);
 }
 
-/* ------------------ */
-
+/**
+ * Clears user permissions cache
+ *
+ * @param mixed $id User ID or 'all'
+ * @return int
+ */
 function sed_auth_clear($id='all')
 {
 	global $db_users;
 
 	if($id=='all')
-	{ $sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1"); }
+	{
+		$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
+	}
 	else
-	{ $sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE user_id='$id'"); }
-	return( sed_sql_affectedrows());
+	{
+		$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE user_id='$id'");
+	}
+	return sed_sql_affectedrows();
 }
 
-/* ------------------ */
 
 /*
- * ================================= BBCode Parser API =================================
+ * ================================= BBCode Parser API ==================================
  */
 
 /**
@@ -195,20 +212,30 @@ function sed_auth_clear($id='all')
  * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
  * @param string $pattern Bbcode string or entire regular expression
  * @param string $replacement Replacement string or regular substitution or callback body
+ * @param bool $container Whether bbcode is container (like [bbcode]Something here[/bbcode])
  * @param int $priority BBcode preority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.
+ * @param string $plug Plugin/part name this bbcode belongs to.
+ * @param bool $postrender Whether this bbcode must be applied on a pre-rendered HTML cache.
  * @return bool
  */
-function sed_bbcode_add($name, $mode, $pattern, $replacement, $priority = 128)
+function sed_bbcode_add($name, $mode, $type, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
 {
 	global $db_bbcode;
 	$bbc['name'] = $name;
 	$bbc['mode'] = $mode;
+	$bbc['type'] = $type;
 	$bbc['pattern'] = $pattern;
 	$bbc['replacement'] = $replacement;
+	$bbc['container'] = (int) $container;
 	if($priority >= 0 && $priority < 256)
 	{
-		$bbc['priority'] = $priority;
+		$bbc['priority'] = (int) $priority;
 	}
+	if(!empty($plug))
+	{
+		$bbc['plug'] = $plug;
+	}
+	$bbc['postrender'] = (int) $postrender;
 	return sed_sql_insert($db_bbcode, $bbc, 'bbc_') == 1;
 }
 
@@ -217,14 +244,19 @@ function sed_bbcode_add($name, $mode, $pattern, $replacement, $priority = 128)
  *
  * @global $db_bbcode
  * @param int $id BBCode ID or 0 to remove all (use carefully)
+ * @param string $plug Remove all bbcodes that belong to this plug
  * @return bool
  */
-function sed_bbcode_remove($id = 0)
+function sed_bbcode_remove($id = 0, $plug = '')
 {
 	global $db_bbcode;
 	if($id > 0)
 	{
 		return sed_sql_delete($db_bbcode, "bbc_id = $id") == 1;
+	}
+	elseif(!empty($plug))
+	{
+		return sed_sql_delete($db_bbcode, "bbc_plug = '" . sed_sql_prep($plug) . "'");
 	}
 	else
 	{
@@ -237,18 +269,20 @@ function sed_bbcode_remove($id = 0)
  *
  * @global $db_bbcode;
  * @param int $id BBCode ID
- * @param int $enabled Enable the bbcode (1 - yes, 0 - no)
+ * @param bool $enabled Enable the bbcode
  * @param string $name BBcode name
  * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
  * @param string $pattern Bbcode string or entire regular expression
  * @param string $replacement Replacement string or regular substitution or callback body
+ * @param bool $container Whether bbcode is container (like [bbcode]Something here[/bbcode])
  * @param int $priority BBcode preority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.
+ * @param bool $postrender Whether this bbcode must be applied on a pre-rendered HTML cache.
  * @return bool
  */
-function sed_bbcode_update($id, $enabled = 1, $name, $mode, $pattern, $replacement, $priority = 128)
+function sed_bbcode_update($id, $enabled, $name, $mode, $type, $pattern, $replacement, $container, $priority = 128, $postrender = false)
 {
 	global $db_bbcode;
-	$bbc['enabled'] = $enabled;
+	$bbc['enabled'] = (int) $enabled;
 	if(!empty($name))
 	{
 		$bbc['name'] = $name;
@@ -256,6 +290,10 @@ function sed_bbcode_update($id, $enabled = 1, $name, $mode, $pattern, $replaceme
 	if(!empty($mode))
 	{
 		$bbc['mode'] = $mode;
+	}
+	if(!empty($type))
+	{
+		$bbc['type'] = $type;
 	}
 	if(!empty($pattern))
 	{
@@ -269,6 +307,8 @@ function sed_bbcode_update($id, $enabled = 1, $name, $mode, $pattern, $replaceme
 	{
 		$bbc['priority'] = $priority;
 	}
+	$bbc['container'] = (int) $container;
+	$bbc['postrender'] = (int) $postrender;
 	return sed_sql_update($db_bbcode, "bbc_id = $id", $bbc, 'bbc_') == 1;
 }
 
@@ -280,21 +320,50 @@ function sed_bbcode_update($id, $enabled = 1, $name, $mode, $pattern, $replaceme
  */
 function sed_bbcode_load()
 {
-	global $sed_bbcodes, $db_bbcode;
+	global $db_bbcode, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers, $sed_bbcode_containers_post;
 	if(!is_array($sed_bbcodes))
 	{
 		$sed_bbcodes = array();
+		$sed_bbcodes_post = array();
+		$sed_bbcode_containers = ''; // required for auto-close
+		$sed_bbcode_containers_post = '';
 		$i = 0;
 		$res = sed_sql_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
 		while($row = sed_sql_fetchassoc($res))
 		{
-			foreach($row as $key => $val)
+			if($row['bbc_postrender'] == 1)
 			{
-				$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
+				foreach($row as $key => $val)
+				{
+					$sed_bbcodes_post[$i][str_replace('bbc_', '', $key)] = $val;
+				}
+				if($row['bbc_container'] == 1)
+				{
+					$sed_bbcode_containers_post .= $row['bbc_name'] . '|';
+				}
+			}
+			else
+			{
+				foreach($row as $key => $val)
+				{
+					$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
+				}
+				if($row['bbc_container'] == 1)
+				{
+					$sed_bbcode_containers .= $row['bbc_name'] . '|';
+				}
 			}
 			$i++;
 		}
 		sed_sql_freeresult($res);
+		if(!empty($sed_bbcode_containers))
+		{
+			$sed_bbcode_containers = substr($sed_bbcode_containers, 0, -1);
+		}
+		if(!empty($sed_bbcode_containers_post))
+		{
+			$sed_bbcode_containers_post = substr($sed_bbcode_containers, 0, -1);
+		}
 	}
 }
 
@@ -303,162 +372,195 @@ function sed_bbcode_load()
  *
  * @global $sed_bbcodes
  * @param string $text Text body
+ * @param bool $post Post-rendering
  */
-function sed_bbcode_parse(&$text)
+function sed_bbcode_parse(&$text, $post = false)
 {
-	global $sed_bbcodes;
-	$cnt = count($sed_bbcodes);
+	global $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers, $sed_bbcode_containers_post;
+	// BB auto-close
+	$valid_bb = $post ? $sed_bbcode_containers_post : $sed_bbcode_containers;
+	$bbc = array();
+	if(preg_match_all('#\[(/)?('.$valid_bb.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
+	{
+		// Count all unclosed bbcode entries
+		for($i = 0, $cnt = count($mt); $i < $cnt; $i++)
+		{
+				if($mt[$i][1] == '/')
+				{
+					$bb = $mt[$i][2];
+					// Protect from "[/foo] [/bar][foo][bar]" trick
+					if($bbc[$bb] > 0) $bbc[$bb]--;
+					// else echo 'ERROR: invalid closing bbcode detected';
+				}
+				else
+				{
+					// Count opening tag in
+					$bbc[$mt[$i][2]]++;
+				}
+		}
+		// Close all unclosed tags. Produces non XHTML-compliant output
+		// (doesn't take tag order and semantics into account) but fixes the layout
+		if(count($bbc) > 0)
+		{
+			foreach($bbc as $bb => $c)
+			{
+				$text .= str_repeat("[/$bb]", $c);
+			}
+		}
+	}
+	// Done, ready to parse bbcodes
+	$cnt = $post ? count($sed_bbcodes_post) : count($sed_bbcodes);
 	for($i = 0; $i < $cnt; $i++)
 	{
-		switch($sed_bbcodes[$i]['mode'])
+		$bbcode = $post ? $sed_bbcodes_post[$i] : $sed_bbcodes[$i];
+		switch($bbcode['mode'])
 		{
 			case 'str':
-				$text = str_ireplace($sed_bbcodes[$i]['pattern'], $sed_bbcodes[$i]['replacement'], $text);
+				$text = str_ireplace($bbcode['pattern'], $bbcode['replacement'], $text);
 			break;
 
 			case 'ereg':
-				$text = eregi_replace($sed_bbcodes[$i]['pattern'], $sed_bbcodes[$i]['replacement'], $text);
+				$text = eregi_replace($bbcode['pattern'], $bbcode['replacement'], $text);
 			break;
 
 			case 'preg':
-				$text = preg_replace('`'.$sed_bbcodes[$i]['pattern'].'`i', $sed_bbcodes[$i]['replacement'], $text);
+				$text = preg_replace('`'.$bbcode['pattern'].'`i', $bbcode['replacement'], $text);
 			break;
 
 			case 'callback':
-				$code = 'global $cfg, $sys, $usr, $L, $skin, $sed_groups;' . $sed_bbcodes[$i]['replacement'];
-				$text = preg_replace_callback('`'.$sed_bbcodes[$i]['pattern'].'`i', create_function('input', $code), $text);
+				$code = 'global $cfg, $sys, $usr, $L, $skin, $sed_groups;' . $bbcode['replacement'];
+				$text = preg_replace_callback('`'.$bbcode['pattern'].'`i', create_function('input', $code), $text);
 			break;
 		}
 	}
 }
 
-function sed_bbcode($text)
+/**
+ * JavaScript HTML obfuscator to protect some parts (like email) from bots
+ *
+ * @param string $text Source text
+ * @return string
+ */
+function sed_obfuscate($text)
 {
-	global $L, $skin, $sys, $cfg, $sed_groups;
+	static $calls = 0;
+	$enc_string = '';
+	$length = strlen($text);
+	for ($i=0; $i < $length; $i++) {
+		$inter = ord($text[$i]) + 3;
+		$enc_char =  chr($inter);
+		$enc_string .= ($enc_char == '\\' ? '\\\\' : $enc_char);
+	}
+	// get a random string to use as a function name
+	srand((float) microtime() * 10000000);
+	$letters = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+	$rnd = $letters[array_rand($letters)] . md5(time());
+	// the actual js (in one line to confuse)
+	if($calls++ == 0) $var = 'var a,s,n;';
+	$script = "<script language=\"JavaScript\" type=\"text/javascript\">{$var}function $rnd(s){r='';for(i=0;i<s.length;i++){n=s.charCodeAt(i);if(n>=8364){n=128;}r+=String.fromCharCode(n-3);}return r;}a='".$enc_string."';document.write($rnd(a));</script>";
+	return $script;
+}
 
-	$text = sed_bbcode_autourls($text);
-	$text = " ".$text;
+/**
+ * Automatically detect and parse URLs in text into HTML
+ *
+ * @param string $text Text body
+ */
+function sed_parse_autourls(&$text)
+{
+	$text = preg_replace('(^|\s)(http|https|ftp)://([^\s"\'\[]+)', '$1<a href="$2://$3">$2://$3</a>', $text);
+	$code = 'return $m[1].sed_obfuscate(\'<a href="mailto:\'.$m[2].\'">\'.$m[2].\'</a>\');';
+	$text = preg_replace_callback('(^|\s)(\w[\._\w\-]+@[\w\.\-]+\.[a-z]+)', create_function('m', $code), $text);
+}
 
-	$bbcodes = array(
-	'$' => '&#36;',
-	'[b]' => '<strong>',
-	'[/b]' => '</strong>',
-	'[p]' => '<p>',
-	'[/p]' => '</p>',
-	'[u]' => '<u>',
-	'[/u]' => '</u>',
-	'[i]' => '<em>',
-	'[/i]' => '</em>',
-	'[hr]' => '<hr />',
-	'[_]' => '&nbsp;',
-	'[__]' => '&nbsp; &nbsp;',
-	'[list]' => '<ul type="square">',
-	'[/list]' => '</ul>',
-	'[red]' => '<span style="color:#F93737">',
-	'[/red]' => '</span>',
-	'[white]' => '<span style="color:#FFFFFF">',
-	'[/white]' => '</span>',
-	'[green]' => '<span style="color:#09DD09">',
-	'[/green]' => '</span>',
-	'[blue]' => '<span style="color:#018BFF">',
-	'[/blue]' => '</span>',
-	'[orange]' => '<span style="color:#FF9900">',
-	'[/orange]' => '</span>',
-	'[yellow]' => '<span style="color:#FFFF00">',
-	'[/yellow]' => '</span>',
-	'[purple]' => '<span style="color:#A22ADA">',
-	'[/purple]' => '</span>',
-	'[black]' => '<span style="color:#000000">',
-	'[/black]' => '</span>',
-	'[grey]' => '<span style="color:#B9B9B9">',
-	'[/grey]' => '</span>',
-	'[pink]' => '<span style="color:#FFC0FF">',
-	'[/pink]' => '</span>',
-	'[sky]' => '<span style="color:#D1F4F9">',
-	'[/sky]' => '</span>',
-	'[sea]' => '<span style="color:#171A97">',
-	'[/sea]' => '</span>',
-	'[quote]' => '<blockquote>'.$L['bbcodes_quote'].'<hr />',
-	'[/quote]' => '<hr /></blockquote>',
-	'[br]' => '<br />',
-	'[more]' => ''
-	);
+/**
+ * Parses text body
+ *
+ * @param string $text Source text
+ * @param bool $parse_bbcodes Enable bbcode parsing
+ * @param bool $parse_smilies Enable emoticons
+ * @param bool $parse_newlines Replace line breaks with <br />
+ * @return string
+ */
+function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE)
+{
+	global $cfg, $sys, $sed_smilies, $L, $usr;
 
-	foreach($bbcodes as $bbcode => $bbcodehtml)
-	{ $text = str_replace($bbcode,$bbcodehtml,$text); }
-
-	$bbcodes = array(
-	'\\[img\\]([^\\\'\;\?[]*)\.(jpg|jpeg|gif|png)\\[/img\\]' => '<img src="\\1.\\2" alt="" />',
-	'\\[img=([^\\\'\;\?[]*)\.(jpg|jpeg|gif|png)\\]([^\\[]*)\.(jpg|jpeg|gif|png)\\[/img\\]' => '<a href="\\1.\\2"><img src="\\3.\\4" alt="" /></a>',
-	'\\[thumb=([^\\\'\;\?([]*)\.(jpg|jpeg|gif|png)\\]([^\\[]*)\.(jpg|jpeg|gif|png)\\[/thumb\\]' => ' <a href="pfs.php?m=view&amp;v=\\3.\\4"><img src="\\1.\\2" alt="" /></a>',
-	'\\[pfs]([^\\[]*)\\[/pfs\\]' => '<a href="'.$cfg['pfs_dir'].'\\1"><img src="system/img/admin/pfs.gif" alt="" /> \\1</a>',
-	'\\[t=([^\\\'\;\?([]*)\.(jpg|jpeg|gif|png)\\]([^\\[]*)\.(jpg|jpeg|gif|png)\\[/t\\]' => '<a href="\\3.\\4"><img src="\\1.\\2" alt="" /></a>',
-	'\\[url=([^\\\'\;([]*)\\]([^\\[]*)\\[/url\\]' => '<a href="\\1">\\2</a>',
-	'\\[url\\]([^\\([]*)\\[/url\\]' => '<a href="\\1">\\1</a>',
-	'\\[color=([0-9A-F]{6})\\]([^\\[]*)\\[/color\\]' => '<span style="color:#\\1">\\2</span>',
-	'\\[style=([1-9]{1})\\]([^\\[]*)\\[/style\\]' => '<span class="bbstyle\\1">\\2</span>',
-	'\\[email=([._A-z0-9-]+@[A-z0-9-]+\.[.a-z]+)\\]([^\\[]*)\\[/email\\]' => '<a href="mailto:\\1">\\2</a>',
-	'\\[email\\]([._A-z0-9-]+@[A-z0-9-]+\.[.a-z]+)\\[/email\\]' => '<a href="mailto:\\1">\\1</a>',
-	'\\[user=([0-9]+)\\]([A-z0-9_\. -]+)\\[/user\\]' => '<a href="users.php?m=details&amp;id=\\1">\\2</a>',
-	'\\[page=([0-9]+)\\]([^\\[]*)\\[/page\\]' => '<a href="page.php?id=\\1">\\2</a>',
-	'\\[page\\]([0-9]+)\\[/page\\]' => '<a href="page.php?id=\\1">'.$L['Page'].' #\\1</a>',
-	'\\[group=([0-9]+)\\]([^\\([]*)\\[/group\\]' => '<a href="users.php?g=\\1">\\2</a>',
-	'\\[topic\\]([0-9]+)\\[/topic\\]' => '<a href="forums.php?m=posts&amp;q=\\1">'.$L['Topic'].' #\\1</a>',
-	'\\[post\\]([0-9]+)\\[/post\\]' => '<a href="forums.php?m=posts&amp;p=\\1#\\1">'.$L['Post'].' #\\1</a>',
-	'\\[pm\\]([0-9]+)\\[/pm\\]' => '<a href="pm.php?m=send&amp;to=\\1"><img src="skins/'.$skin.'/img/system/icon-pm.gif" alt=""></a>',
-	'\\[f\\]([a-z][a-z])\\[/f\\]' => '<a href="users.php?f=country_\\1"><img src="system/img/flags/f-\\1.gif" alt="" /></a>',
-	'\\[ac=([^\\[]*)\\]([^\\[]*)\\[/ac\\]' => '<acronym title="\\1">\\2</acronym>',
-	'\\[del\\]([^\\[]*)\\[/del\\]' => '<del>\\1</del>',
-	'\\[quote=([^\\[]*)\\]' => '<blockquote>\\1<hr />',
-	'\\[spoiler\\]' => '<div style="margin:0; margin-top:8px"><div style="margin-bottom:4px"><input type="button" value="'.$L['Show'].'" onClick="if (this.parentNode.parentNode.getElementsByTagName(\'div\')[1].getElementsByTagName(\'div\')[0].style.display != \'\') { this.parentNode.parentNode.getElementsByTagName(\'div\')[1].getElementsByTagName(\'div\')[0].style.display = \'\'; this.innerText = \'\'; this.value = \''.$L['Hide'].'\'; } else { this.parentNode.parentNode.getElementsByTagName(\'div\')[1].getElementsByTagName(\'div\')[0].style.display = \'none\'; this.innerText = \'\'; this.value = \''.$L['Show'].'\'; }"></div><div class="spoiler"><div style="display: none;">',
-	'\\[spoiler=([^\\[]*)\\]' => '<div style="margin:0; margin-top:8px"><div style="margin-bottom:4px"><input type="button" value="'.$L['Show'].':\\1" onClick="if (this.parentNode.parentNode.getElementsByTagName(\'div\')[1].getElementsByTagName(\'div\')[0].style.display != \'\') { this.parentNode.parentNode.getElementsByTagName(\'div\')[1].getElementsByTagName(\'div\')[0].style.display = \'\'; this.innerText = \'\'; this.value = \''.$L['Hide'].':\\1\'; } else { this.parentNode.parentNode.getElementsByTagName(\'div\')[1].getElementsByTagName(\'div\')[0].style.display = \'none\'; this.innerText = \'\'; this.value = \''.$L['Show'].':\\1\'; }"></div><div class="spoiler"><div style="display: none;">',
-
-	'\\[/spoiler\\]' => '</div></div></div>');
-
-	foreach($bbcodes as $bbcode => $bbcodehtml)
-	{ $text = eregi_replace($bbcode,$bbcodehtml,$text); }
-
-	if ($cfg['parser_vid'])
+	// TODO add config option
+	if($cfg['custom_parser'])
 	{
-		$bbcodes = array(
-	'\\[youtube=([^\\[]*)\\]' => '<object width="425" height="350">
-<param name="movie" value="http://www.youtube.com/v/\\1"></param>
-<embed src="http://www.youtube.com/v/\\1" type="application/x-shockwave-flash" width="425" height="350"></embed>
-</object>',
-	'\\[googlevideo=([^\\[]*)\\]' => '<embed style="width:425px; height:326px;" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docId=\\1&hl=en-GB"> </embed>',
-	'\\[metacafe=([^\\[]*)\\]' => '<embed style="width:425px; height:345px;" src="http://www.metacafe.com/fplayer/\\1" width="400" height="345" wmode="transparent" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>');
-
-		foreach($bbcodes as $bbcode => $bbcodehtml)
-		{ $text = eregi_replace($bbcode,$bbcodehtml,$text); }
+		include_once './system/parser.php';
+		if(function_exists('sed_custom_parse'))
+		{
+			return sed_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
+		}
 	}
 
-	$bbcodes = array(
-	'\\[colleft\\]([^\\[]*)\\[/colleft\\]' => '<div class="colleft">\\1</div>',
-	'\\[colright\\]([^\\[]*)\\[/colright\\]' => '<div class="colright">\\1</div>',
-	'\\[center\\]([^\\[]*)\\[/center\\]' => '<div style="text-align:center;">\\1</div>',
-	'\\[right\\]([^\\[]*)\\[/right\\]' => '<div style="text-align:right;">\\1</div>',
-	'\\[left\\]([^\\[]*)\\[/left\\]' => '<div style="text-align:left;">\\1</div>',
-	'\\[c1\\:([^\\[]*)\\]([^\\[]*)\\[c2\\:([^\\[]*)\\]([^\\[]*)\\[c3\\]' => '<table style="margin:0; vertical-align:top; width:100%;"><tr><td style="padding:8px; vertical-align:top; width:\\1%;">\\2</td><td  style="padding:8px; vertical-align:top; width:\\3%;">\\4</td></tr></table>'
-	);
-
-	foreach($bbcodes as $bbcode => $bbcodehtml)
-	{ $text = eregi_replace($bbcode,$bbcodehtml,$text); }
-
-	return(substr($text,1));
-}
-
-/* ------------------ */
-
-function sed_bbcode_autourls($text)
-{
 	$text = ' '.$text;
-	$text = preg_replace("#([\n ])([a-z0-9]+?)://([^\t \n\r]+)#i", "\\1[url]\\2://\\3[/url]", $text);
-	$text = preg_replace("#([\n ])([a-z0-9-_.]+?@[A-z0-9-]+\.[^,\t \n\r]+)#i", "\\1[email]\\2[/email]", $text);
-	return(substr($text,1));
+	$code = array();
+	$unique_seed = $sys['unique'];
+	$ii = 10000;
+
+	sed_parse_autourls($text);
+
+	if($parse_bbcodes)
+	{
+		$p1 = 1;
+		$p2 = 1;
+		while($p1 > 0 && $p2> 0  && $ii < 10031)
+		{
+			$ii++;
+			$p1 = strpos($text, '[code]');
+			$p2 = strpos($text, '[/code]');
+			if($p2 > $p1 && $p1 > 0)
+			{
+				$key = '**'.$ii.$unique_seed.'**';
+				$code[$key] = substr($text, $p1 + 6, ($p2 - $p1) - 6);
+				$code_len = strlen($code[$key]) + 13;
+				$code[$key] = str_replace(
+				array('{', '<', '>' , '\'', '"', "<!--", '$' ),
+				array('&#123;', '&lt;', '&gt;', '&#039;', '&quot;', '"&#60;&#33;--"', '&#036;' ),$code[$key]);
+				$code[$key] = '<pre>'.trim($code[$key])."</pre>";
+				$text = substr_replace($text, $key, $p1, $code_len);
+			}
+		}
+
+		sed_bbcode_parse($text);
+	}
+
+	// TODO replace with new smiley system
+	if ($parse_smilies && is_array($sed_smilies))
+	{
+		reset($sed_smilies);
+		while ((list($j,$dat) = each($sed_smilies)))
+		{
+			$ii++;
+			$key = '**'.$ii.$unique_seed.'**';
+			$code[$key]= "<img class=\"aux\" src=\"".$dat['smilie_image']."\" alt=\"\" />";
+			$text = str_replace($dat['smilie_code'], $key, $text);
+		}
+	}
+
+	if ($parse_bbcodes || $parse_smilies)
+	{
+		foreach($code as $x => $y)
+		{ $text = str_replace($x, $y, $text); }
+	}
+
+	if ($parse_newlines)
+	{
+		$text = nl2br($text);
+		$text = str_replace("\r", '', $text);
+		// Strip extraneous breaks
+		$text = preg_replace('#<(/?)(p|hr|ul|ol|li|blockquote|table|tr|td|th)(.*?)>(\s*)<br />#', '<$1$2$3>', $text);
+		$text = preg_replace_callback('#<pre>(.+?)</pre>#sm', create_function('m', 'return str_replace(\'<br />\', \'\', $m[0]);'), $text);
+	}
+
+	return substr($text, 1);
 }
 
 /* ------------------ */
-
+// TODO eliminate this function
 function sed_bbcode_urls($text)
 {
 	global $cfg;
@@ -474,22 +576,29 @@ function sed_bbcode_urls($text)
 	return($text);
 }
 
-/* ------------------ */
-
+/**
+ * Block user if he is not allowed to access the page
+ *
+ * @param bool $allowed Authorization result
+ * @return bool
+ */
 function sed_block($allowed)
 {
-	if (!$allowed)
+	if(!$allowed)
 	{
 		global $sys;
 		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
 		exit;
 	}
-	return(FALSE);
+	return FALSE;
 }
 
 
-/* ------------------ */
-
+/**
+ * Block guests from viewing the page
+ *
+ * @return bool
+ */
 function sed_blockguests()
 {
 	global $usr, $sys;
@@ -499,11 +608,11 @@ function sed_blockguests()
 		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
 		exit;
 	}
-	return(FALSE);
+	return FALSE;
 }
 
 /* ------------------ */
-
+// TODO eliminate this function
 function sed_build_addtxt($c1, $c2)
 {
 	$result = "
@@ -516,8 +625,12 @@ function sed_build_addtxt($c1, $c2)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Calculates age out of D.O.B.
+ *
+ * @param int $birth Date of birth as UNIX timestamp
+ * @return int
+ */
 function sed_build_age($birth)
 {
 	global $sys;
@@ -545,7 +658,7 @@ function sed_build_age($birth)
 }
 
 /* ------------------ */
-
+// TODO eliminate this function
 function sed_build_bbcodes($c1, $c2, $title)
 {
 	$result = "<a href=\"javascript:help('bbcodes','".$c1."','".$c2."')\">".$title."</a>";
@@ -553,7 +666,7 @@ function sed_build_bbcodes($c1, $c2, $title)
 }
 
 /* ------------------ */
-
+// TODO eliminate this function
 function sed_build_bbcodes_local($limit)
 {
 	global $sed_bbcodes;
@@ -572,21 +685,26 @@ function sed_build_bbcodes_local($limit)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Builds category path
+ *
+ * @param string $cat Category code
+ * @param string $mask Format mask
+ * @return string
+ */
 function sed_build_catpath($cat, $mask)
 {
 	global $sed_cat, $cfg;
-
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
 	foreach($pathcodes as $k => $x)
-	{ $tmp[]= sprintf($mask, $x, $sed_cat[$x]['title']); }
-	$result = implode(' '.$cfg['separator'].' ', $tmp);
-	return ($result);
+	{
+		$tmp[]= sprintf($mask, $x, $sed_cat[$x]['title']);
+	}
+	return implode(' '.$cfg['separator'].' ', $tmp);
 }
 
 /* ------------------ */
-
+// TODO replace with new comments plugin
 function sed_build_comments($code, $url, $display)
 {
 	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys;
@@ -787,101 +905,121 @@ function sed_build_comments($code, $url, $display)
 	return(array($res, $res_display, $nbcomment));
 }
 
-/* ------------------ */
-
+/**
+ * Returns country text button
+ *
+ * @param string $flag Country code
+ * @return string
+ */
 function sed_build_country($flag)
 {
 	global $sed_countries;
 
 	$flag = (empty($flag)) ? '00' : $flag;
-	$result = '<a href="users.php?f=country_'.$flag.'">'.$sed_countries[$flag].'</a>';
-	return($result);
+	return '<a href="users.php?f=country_'.$flag.'">'.$sed_countries[$flag].'</a>';
 }
 
-/* ------------------ */
-
-function sed_build_email($email, $hide=0)
+/**
+ * Returns user email link
+ *
+ * @param string $email E-mail address
+ * @param bool $hide Hide email option
+ * @return string
+ */
+function sed_build_email($email, $hide = false)
 {
 	global $L;
-	if ($hide)
-	{ $result = $L['Hidden']; }
-	elseif (!empty($email) && eregi('@', $email))
+	if($hide)
 	{
-		$email = sed_cc($email);
-		$result = "<a href=\"mailto:".$email."\">".$email."</a>";
+		return $L['Hidden'];
 	}
-
-	return($result);
+	elseif(!empty($email) && preg_match('#^\w[\._\w\-]+@[\w\.\-]+\.[a-z]+$#', $email))
+	{
+		return sed_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
+	}
 }
 
-/* ------------------ */
-
+/**
+ * Returns country flag button
+ *
+ * @param string $flag Country code
+ * @return string
+ */
 function sed_build_flag($flag)
 {
 	$flag = (empty($flag)) ? '00' : $flag;
-	$result = '<a href="users.php?f=country_'.$flag.'"><img src="system/img/flags/f-'.$flag.'.gif" alt="" /></a>';
-	return($result);
+	return '<a href="users.php?f=country_'.$flag.'"><img src="system/img/flags/f-'.$flag.'.gif" alt="'.$flag.'" /></a>';
 }
 
-/* ------------------ */
-
+/**
+ * Returns forum thread path
+ *
+ * @param int $sectionid Section ID
+ * @param string $title Thread title
+ * @param string $category Category code
+ * @param string $link Display as links
+ * @return string
+ */
 function sed_build_forums($sectionid, $title, $category, $link=TRUE)
 {
 	global $sed_forums_str, $cfg;
-
 	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
 
-	if ($link)
+	if($link)
 	{
 		foreach($pathcodes as $k => $x)
-		{ $tmp[]= "<a href=\"forums.php?c=$x#$x\">".sed_cc($sed_forums_str[$x]['title'])."</a>"; }
-		$tmp[]= "<a href=\"forums.php?m=topics&amp;s=$sectionid\">".sed_cc($title)."</a>";
+		{
+			$tmp[] = '<a href="forums.php?c='.$x.'#'.$x.'">'.sed_cc($sed_forums_str[$x]['title']).'</a>';
+		}
+		$tmp[] = '<a href="forums.php?m=topics&s='.$sectionid.'">'.sed_cc($title).'</a>';
 	}
 	else
 	{
 		foreach($pathcodes as $k => $x)
-		{ $tmp[]= sed_cc($sed_forums_str[$x]['title']); }
-		$tmp[]= sed_cc($title);
+		{
+			$tmp[]= sed_cc($sed_forums_str[$x]['title']);
+		}
+		$tmp[] = sed_cc($title);
 	}
 
-	$result = implode(' '.$cfg['separator'].' ', $tmp);
-
-	return($result);
+	return implode(' '.$cfg['separator'].' ', $tmp);
 }
 
 
 /* ------------------ */
-
+// TODO eliminate this function
 function sed_build_gallery($id, $c1, $c2, $title)
 {
 	return("<a href=\"javascript:gallery('".$id."','".$c1."','".$c2."')\">".$title."</a>");
 }
 
-/* ------------------ */
-
+/**
+ * Returns group link (button)
+ *
+ * @param int $grpid Group ID
+ * @return string
+ */
 function sed_build_group($grpid)
 {
+	if(empty($grpid)) return '';
 	global $sed_groups, $L;
 
-	if (empty($grpid))
-	{ $res = ''; }
-	else
+	if($sed_groups[$grpid]['hidden'])
 	{
-		if ($sed_groups[$grpid]['hidden'])
+		if(sed_auth('users', 'a', 'A'))
 		{
-			if (sed_auth('users', 'a', 'A'))
-			{ $res = "<a href=\"users.php?gm=".$grpid."\">".$sed_groups[$grpid]['title']."</a> (".$L['Hidden'].')'; }
-			else
-			{ $res = $L['Hidden']; }
+			return '<a href="users.php?gm='.$grpid.'">'.$sed_groups[$grpid]['title'].'</a> ('.$L['Hidden'].')';
 		}
 		else
-		{ $res = "<a href=\"users.php?gm=".$grpid."\">".$sed_groups[$grpid]['title']."</a>"; }
+		{
+			return $L['Hidden'];
+		}
 	}
-	return($res);
-
+	else
+	{
+		return '<a href="users.php?gm='.$grpid.'">'.$sed_groups[$grpid]['title'].'</a>';
+	}
 }
-
-/* ------------------ */
 
 /**
  * Builds "edit group" option group for "user edit" part
@@ -915,7 +1053,7 @@ function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
 			{
 				$res .= "<input type=\"radio\" class=\"radio\" name=\"rusermaingrp\" value=\"$k\" ".$checked_maingrp." ".$readonly_maingrp." /> \n";
 				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"rusergroupsms[$k]\" ".$checked." $readonly />\n";
-				$res .= ($k==SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"users.php?g=".$k."\">".$sed_groups[$k]['title']."</a>";
+				$res .= ($k == SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"users.php?g=".$k."\">".$sed_groups[$k]['title']."</a>";
 				$res .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 				$res .= "<br />";
 			}
@@ -925,57 +1063,64 @@ function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
 	return $res;
 }
 
-/* ------------------ */
-
+/**
+ * Returns user ICQ pager link
+ *
+ * @param int $text ICQ number
+ * @return string
+ */
 function sed_build_icq($text)
 {
 	global $cfg;
 
-	$text = sed_import($text, 'D', 'INT', 32);
-	if ($text>0)
-	{ $text = $text." <a href=\"http://www.icq.com/".$text."#pager\"><img src=\"http://web.icq.com/whitepages/online?icq=".$text."&amp;img=5\" alt=\"\" /></a>"; }
-	return($text);
+	$text = (int) $text;
+	if($text > 0)
+	{
+		return $text.' <a href="http://www.icq.com/'.$text.'#pager"><img src="http://web.icq.com/whitepages/online?icq='.$text.'&img=5" alt="" /></a>';
+	}
+	return '';
 }
 
-/* ------------------ */
-
+/**
+ * Returns IP Search link
+ *
+ * @param string $ip IP mask
+ * @return string
+ */
 function sed_build_ipsearch($ip)
 {
 	global $xk;
-
-	if (!empty($ip))
+	if(!empty($ip))
 	{
-		$result = "<a href=\"admin.php?m=tools&amp;p=ipsearch&amp;a=search&amp;id=".$ip."&amp;x=".$xk."\">".$ip."</a>";
+		return '<a href="admin.php?m=tools&p=ipsearch&a=search&id='.$ip.'&x='.$xk.'">'.$ip.'</a>';
 	}
-
-	return($result);
+	return '';
 }
 
-/* ------------------ */
-
+/**
+ * Returns MSN link as e-mail link
+ *
+ * @param string $msn MSN address
+ * @return string
+ */
 function sed_build_msn($msn)
 {
-	if (!empty($msn) && eregi('@', $msn))
-	{
-		$msn = sed_cc($msn);
-		$result = "<a href=\"mailto:".$msn."\">".$msn."</a>";
-	}
-
-	return($result);
+	return sed_build_email($msn);
 }
 
-/* ------------------ */
-
+/**
+ * Odd/even class choser for row
+ *
+ * @param int $number Row number
+ * @return string
+ */
 function sed_build_oddeven($number)
 {
-	if ($number % 2 == 0 )
-	{ return ('even'); }
-	else
-	{ return ('odd'); }
+	return ($number % 2 == 0 ) ? 'even' : 'odd';
 }
 
 /* ------------------ */
-
+// TODO eliminate this function
 function sed_build_pfs($id, $c1, $c2, $title)
 {
 	global $L, $cfg, $usr, $sed_groups;
@@ -993,17 +1138,20 @@ function sed_build_pfs($id, $c1, $c2, $title)
 	return($res);
 }
 
-/* ------------------ */
-
+/**
+ * Returns user PM link
+ *
+ * @param int $user User ID
+ * @return string
+ */
 function sed_build_pm($user)
 {
-	global $usr, $cfg, $L;
-	$result = "<a href=\"pm.php?m=send&amp;to=".$user."\"><img src=\"skins/".$usr['skin']."/img/system/icon-pm.gif\"  alt=\"\" /></a>";
-	return($result);
+	global $usr;
+	return '<a href="pm.php?m=send&to='.$user.'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="" /></a>';
 }
 
 /* ------------------ */
-
+// TODO replace with new ratings subsystem
 function sed_build_ratings($code, $url, $display)
 {
 	global $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L;
@@ -1181,7 +1329,7 @@ function sed_build_ratings($code, $url, $display)
 }
 
 /* ------------------ */
-
+// TODO eliminate this function
 function sed_build_smilies($c1, $c2, $title)
 {
 	$result = "<a href=\"javascript:help('smilies','".$c1."','".$c2."')\">".$title."</a>";
@@ -1189,7 +1337,7 @@ function sed_build_smilies($c1, $c2, $title)
 }
 
 /* ------------------ */
-
+// TODO eliminate this function
 function sed_build_smilies_local($limit)
 {
 	global $sed_smilies;
@@ -1209,46 +1357,61 @@ function sed_build_smilies_local($limit)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Returns stars image for user level
+ *
+ * @param int $level User level
+ * @return unknown
+ */
 function sed_build_stars($level)
 {
 	global $skin;
 
-	if ($level>0 and $level<100)
-	{ return("<img src=\"skins/$skin/img/system/stars".(floor($level/10)+1).".gif\" alt=\"\" />"); }
+	if($level>0 and $level<100)
+	{
+		return '<img src="skins/'.$skin.'/img/system/stars'.(floor($level/10)+1).'.gif" alt="" />';
+	}
 	else
-	{ return(''); }
+	{
+		return '';
+	}
 }
 
-/* ------------------ */
-
+/**
+ * Returns time gap between 2 dates
+ *
+ * @param int $t1 Stamp 1
+ * @param int $t2 Stamp2
+ * @return string
+ */
 function sed_build_timegap($t1,$t2)
 {
 	global $L;
 
 	$gap = $t2 - $t1;
 
-	if ($gap<=0 || !$t2 || $gap>94608000)
+	if($gap<=0 || !$t2 || $gap>94608000)
 	{
 		$result = '';
 	}
-	elseif ($gap<60)
+	elseif($gap<60)
 	{
 		$result  = $gap.' '.$L['Seconds'];
 	}
-	elseif ($gap<3600)
+	elseif($gap<3600)
 	{
 		$gap = floor($gap/60);
 		$result = ($gap<2) ? '1 '.$L['Minute'] : $gap.' '.$L['Minutes'];
 	}
-	elseif ($gap<86400)
+	elseif($gap<86400)
 	{
 		$gap1 = floor($gap/3600);
 		$gap2 = floor(($gap-$gap1*3600)/60);
 		$result = ($gap1<2) ? '1 '.$L['Hour'].' ' : $gap1.' '.$L['Hours'].' ';
 		if ($gap2>0)
-		{ $result .= ($gap2<2) ? '1 '.$L['Minute'] : $gap2.' '.$L['Minutes']; }
+		{
+			$result .= ($gap2<2) ? '1 '.$L['Minute'] : $gap2.' '.$L['Minutes'];
+		}
 	}
 	else
 	{
@@ -1256,155 +1419,146 @@ function sed_build_timegap($t1,$t2)
 		$result = ($gap<2) ? '1 '.$L['Day'] : $gap.' '.$L['Days'];
 	}
 
-	return($result);
+	return $result;
 }
 
-/* ------------------ */
-
+/**
+ * Returns user timezone offset
+ *
+ * @param int $tz Timezone
+ * @return string
+ */
 function sed_build_timezone($tz)
 {
 	global $L;
 
 	$result = 'GMT';
 
-	if ($tz==-1 OR $tz==1)
-	{ $result .= $tz.' '.$L['Hour']; }
-	elseif ($tz!=0)
-	{ $result .= $tz.' '.$L['Hours']; }
-	return($result);
+	if($tz==-1 OR $tz==1)
+	{
+		$result .= $tz.' '.$L['Hour'];
+	}
+	elseif($tz!=0)
+	{
+		$result .= $tz.' '.$L['Hours'];
+	}
+	return $result;
 }
 
-/* ------------------ */
-
+/**
+ * Returns link for URL
+ *
+ * @param string $text URL
+ * @param int $maxlen Max. allowed length
+ * @return unknown
+ */
 function sed_build_url($text, $maxlen=64)
 {
 	global $cfg;
 
-	if (!empty($text))
+	if(!empty($text))
 	{
-		if (!eregi('http://', $text))
-		{ $text='http://'. $text; }
+		if(strpos($text, 'http://') !== 0)
+		{
+			$text='http://'. $text;
+		}
 		$text = sed_cc($text);
-		$text = "<a href=\"".$text."\">".sed_cutstring($text, $maxlen)."</a>";
+		$text = '<a href="'.$text.'">'.sed_cutstring($text, $maxlen).'</a>';
 	}
-	return($text);
+	return $text;
 }
 
-/* ------------------ */
-
+/**
+ * Returns link to user profile
+ *
+ * @param int $id User ID
+ * @param string $user User name
+ * @return string
+ */
 function sed_build_user($id, $user)
 {
 	global $cfg;
 
-	if (($id==0 && !empty($user)))
-	{ $result = $user; }
-	elseif ($id==0)
-	{ $result = ''; }
+	if($id == 0 && !empty($user))
+	{
+		return $user;
+	}
+	elseif($id == 0)
+	{
+		return '';
+	}
 	else
-	{ $result = (!empty($user)) ? "<a href=\"users.php?m=details&amp;id=".$id."\">".$user."</a>" : '?';	}
-	return($result);
+	{
+		return (!empty($user)) ? '<a href="users.php?m=details&id='.$id.'">'.$user.'</a>' : '?';
+	}
 }
 
-/* ------------------ */
-
+/**
+ * Returns user avatar image
+ *
+ * @param string $image Image src
+ * @return string
+ */
 function sed_build_userimage($image)
 {
+	// TODO this is quite useless function
 	if (!empty($image))
-	{ $result = "<img src=\"".$image."\" alt=\"\" class=\"avatar\" />"; }
+	{
+		$result = "<img src=\"".$image."\" alt=\"\" class=\"avatar\" />";
+	}
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Parses user signature
+ *
+ * @param string $text Signature source
+ * @return string
+ */
 function sed_build_usertext($text)
 {
+	// TODO this function is obsolete, also config options usertextimg and usertextimg_nocolors
 	global $cfg;
-
-	if (!$cfg['usertextimg'])
-	{
-		$bbcodes_img = array(
-			'\\[img\\]([^\\[]*)\\[/img\\]' => 'No [img] !',
-			'\\[thumb=([^\\[]*)\\[/thumb\\]' => 'No [Thumbs] !',
-			'\\[t=([^\\[]*)\\[/t\\]' => 'No [t] !',
-			'\\[list\\]' => '',
-			'\\[style=([^\\[]*)\\]' => 'No styles !',
-			'\\[quote' => 'No quotes !',
-			'\\[code' => 'No code !'
-			);
-
-			foreach($bbcodes_img as $bbcode => $bbcodehtml)
-			{ $text = eregi_replace($bbcode, $bbcodehtml, $text); }
-	}
-
-	if ($cfg['usertextimg_nocolors'])
-	{
-		$bbcodes_img = array(
-			'\\[red\\]' => '',
-			'\\[/red\\]' => '',
-			'\\[white\\]' => '',
-			'\\[/white\\]' => '',
-			'\\[green\\]' => '',
-			'\\[/green\\]' => '',
-			'\\[blue\\]' => '',
-			'\\[/blue\\]' => '',
-			'\\[orange\\]' => '',
-			'\\[/orange\\]' => '',
-			'\\[yellow\\]' => '',
-			'\\[/yellow\\]' => '',
-			'\\[purple\\]' => '',
-			'\\[/purple\\]' => '',
-			'\\[black\\]' => '',
-			'\\[/black\\]' => '',
-			'\\[grey\\]' => '',
-			'\\[/grey\\]' => '',
-			'\\[pink\\]' => '',
-			'\\[/pink\\]' => '',
-			'\\[sky\\]' => '',
-			'\\[/sky\\]' => '',
-			'\\[sea\\]' => '',
-			'\\[/sea\\]' => '',
-			'\\[color=([^\\[]*)\\]' => 'No colors !'
-			);
-
-			foreach($bbcodes_img as $bbcode => $bbcodehtml)
-			{ $text = eregi_replace($bbcode, $bbcodehtml, $text); }
-
-	}
-
-	$text = sed_cc($text);
-
-	if ($cfg['parsebbcodeusertext'])
-	{ $text = sed_bbcode($text); }
-
-	$text = nl2br($text);
-
-	if ($cfg['parsesmiliesusertext'])
-	{ $text = sed_smilies($text); }
-
-	return($text);
+	return sed_parse($text, $cfg['usertextimg']);
 }
 
-/* ------------------ */
+/*
+ * ================================ Cache Subsystem ================================
+ */
+// TODO scheduled for complete removal and replacement with new cache system
 
+/**
+ * Clears cache item
+ *
+ * @param string $name Item name
+ * @return bool
+ */
 function sed_cache_clear($name)
 {
 	global $db_cache;
 
-	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
+	sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
 	return(TRUE);
 }
 
-/* ------------------ */
-
+/**
+ * Clears cache completely
+ *
+ * @return bool
+ */
 function sed_cache_clearall()
 {
 	global $db_cache;
-	$sql = sed_sql_query("DELETE FROM $db_cache");
+	sed_sql_query("DELETE FROM $db_cache");
 	return(TRUE);
 }
 
-/* ------------------ */
-
+/**
+ * Fetches cache value
+ *
+ * @param string $name Item name
+ * @return mixed
+ */
 function sed_cache_get($name)
 {
 	global $cfg, $sys, $db_cache;
@@ -1418,9 +1572,13 @@ function sed_cache_get($name)
 	{ return(FALSE); }
 }
 
-/* ------------------ */
-
-function sed_cache_getall($auto="1")
+/**
+ * Get all cache data and import it into global scope
+ *
+ * @param int $auto Only with autoload flag
+ * @return mixed
+ */
+function sed_cache_getall($auto = 1)
 {
 	global $cfg, $sys, $db_cache;
 
@@ -1437,8 +1595,15 @@ function sed_cache_getall($auto="1")
 	{ return(FALSE); }
 }
 
-/* ------------------ */
-
+/**
+ * Puts an item into cache
+ *
+ * @param string $name Item name
+ * @param mixed $value Item value
+ * @param int $expire Expires in seconds
+ * @param int $auto Autload flag
+ * @return bool
+ */
 function sed_cache_store($name,$value,$expire,$auto="1")
 {
 	global $db_cache, $sys, $cfg;
@@ -1448,8 +1613,6 @@ function sed_cache_store($name,$value,$expire,$auto="1")
 	$sql = sed_sql_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".sed_sql_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
 	return(TRUE);
 }
-
-/* ------------------ */
 
 /**
  * Makes HTML sequences safe
@@ -1465,40 +1628,54 @@ function sed_cc($text)
 	return $text;
 }
 
-/* ------------------ */
-
+/**
+ * Checks GET anti-XSS parameter
+ *
+ * @return bool
+ */
 function sed_check_xg()
 {
 	global $xg, $cfg;
 
 	if ($xg!=sed_sourcekey())
-	{ sed_diefatal('Wrong parameter in the URL.'); }
-	return (TRUE);
+	{
+		sed_diefatal('Wrong parameter in the URL.');
+	}
+	return TRUE;
 }
 
-/* ------------------ */
-
+/**
+ * Checks POST anti-XSS parameter
+ *
+ * @return string
+ */
 function sed_check_xp()
 {
 	global $xp;
 
 	$sk = sed_sourcekey();
-	if ($_SERVER["REQUEST_METHOD"]=='POST' && !defined('SED_AUTH'))
+	if($_SERVER["REQUEST_METHOD"]=='POST' && !defined('SED_AUTH'))
 	{
 		if ( empty($xp) || $xp!=$sk)
-		{ sed_diefatal('Wrong parameter in the URL.'); }
+		{
+			sed_diefatal('Wrong parameter in the URL.');
+		}
 	}
 	return ($sk);
 }
 
-/* ------------------ */
-
-function sed_cutstring($res,$l)
+/**
+ * Truncates a string
+ *
+ * @param string $res Source string
+ * @param int $l Length
+ * @return unknown
+ */
+function sed_cutstring($res, $l)
 {
 	global $cfg;
-
-	$enc = strtolower($cfg['charset']);
-	if ($enc=='utf-8')
+	// TODO modify after UTF-8 suppport is done
+	if (strtolower($cfg['charset']) == 'utf-8')
 	{
 		if(mb_strlen($res)>$l)
 		{ $res = mb_substr($res, 0, ($l-3), $enc).'...'; }
@@ -1508,11 +1685,27 @@ function sed_cutstring($res,$l)
 		if(strlen($res)>$l)
 		{ $res = substr($res, 0, ($l-3)).'...'; }
 	}
-	return($res);
+	return $res;
 }
 
-/* ------------------ */
-
+/**
+ * Creates image thumbnail
+ *
+ * @param string $img_big Original image path
+ * @param string $img_small Thumbnail path
+ * @param int $small_x Thumbnail width
+ * @param int $small_y Thumbnail height
+ * @param bool $keepratio Keep original ratio
+ * @param string $extension Image type
+ * @param string $filen Original file name
+ * @param int $fsize File size in kB
+ * @param string $textcolor Text color
+ * @param int $textsize Text size
+ * @param string $bgcolor Background color
+ * @param int $bordersize Border thickness
+ * @param int $jpegquality JPEG quality in %
+ * @param string $dim_priority Resize priority dimension
+ */
 function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority="Width")
 {
 	if (!function_exists('gd_info'))
@@ -1608,11 +1801,14 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 
 	imagedestroy($new);
 	imagedestroy($source);
-	return;
 }
 
-/* ------------------ */
-
+/**
+ * Terminates script execution and performs redirect
+ *
+ * @param bool $cond Really die?
+ * @return bool
+ */
 function sed_die($cond=TRUE)
 {
 	if ($cond)
@@ -1620,11 +1816,15 @@ function sed_die($cond=TRUE)
 		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=950");
 		exit;
 	}
-	return(FALSE);
+	return FALSE;
 }
 
-/* ------------------ */
-
+/**
+ * Terminates script execution with fatal error
+ *
+ * @param string $text Reason
+ * @param string $title Message title
+ */
 function sed_diefatal($text='Reason is unknown.', $title='Fatal error')
 {
 	global $cfg;
@@ -1634,8 +1834,11 @@ function sed_diefatal($text='Reason is unknown.', $title='Fatal error')
 	die($disp);
 }
 
-/* ------------------ */
-
+/**
+ * Terminates with "disabled" error
+ *
+ * @param unknown_type $disabled
+ */
 function sed_dieifdisabled($disabled)
 {
 	if ($disabled)
@@ -1646,21 +1849,39 @@ function sed_dieifdisabled($disabled)
 	return;
 }
 
-/* ------------------ */
+/*
+ * ==================================== Forum Functions ==================================
+ */
 
+/**
+ * Gets details for forum section
+ *
+ * @param int $id Section ID
+ * @return mixed
+ */
 function sed_forum_info($id)
 {
 	global $db_forum_sections;
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
-	if ($res = sed_sql_fetcharray($sql))
-	{ return ($res); }
+	if($res = sed_sql_fetcharray($sql))
+	{
+		return ($res);
+	}
 	else
-	{ return (''); }
+	{
+		return ('');
+	}
 }
 
-/* ------------------ */
-
+/**
+ * Moves outdated topics to trash
+ *
+ * @param string $mode Selection criteria
+ * @param int $section Section
+ * @param int $param Selection parameter value
+ * @return int
+ */
 function sed_forum_prunetopics($mode, $section, $param)
 {
 	global $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_sections, $L;
@@ -1716,20 +1937,29 @@ function sed_forum_prunetopics($mode, $section, $param)
 	return($num1);
 }
 
-/* ------------------ */
-
+/**
+ * Changes last message for the section
+ *
+ * @param int $id Section ID
+ */
 function sed_forum_sectionsetlast($id)
 {
 	global $db_forum_topics, $db_forum_sections;
-
+	// FIXME probably this function produces overhead, because lastest post/topic ID should have been known
+	// by the time of its call
 	$sql = sed_sql_query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title, ft_poll FROM $db_forum_topics WHERE ft_sectionid='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
 	$row = sed_sql_fetcharray($sql);
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
 	return;
 }
 
-/* ------------------ */
-
+/**
+ * Returns a list of plugins registered for a hook
+ *
+ * @param string $hook Hook name
+ * @param string $cond Permissions
+ * @return array
+ */
 function sed_getextplugins($hook, $cond='R')
 {
 	global $sed_plugins, $usr;
@@ -1738,14 +1968,14 @@ function sed_getextplugins($hook, $cond='R')
 	{
 		foreach($sed_plugins as $i => $k)
 		{
-			if ($k['pl_hook']==$hook && sed_auth('plug', $k['pl_code'], $cond))
-			{ $extplugins[$i] = $k; }
+			if($k['pl_hook']==$hook && sed_auth('plug', $k['pl_code'], $cond))
+			{
+				$extplugins[$i] = $k;
+			}
 		}
 	}
-	return ($extplugins);
+	return $extplugins;
 }
-
-/* ------------------ */
 
 /**
  * Returns number of comments for item
@@ -1770,7 +2000,7 @@ function sed_get_comcount($code)
 }
 
 /* ------------------ */
-
+// FIXME this function is obsolete, or meta/title generation must be reworked
 function sed_htmlmetas()
 {
 	global $cfg;
@@ -1789,8 +2019,16 @@ function sed_htmlmetas()
 }
 
 
-/* ------------------ */
-
+/**
+ * Imports data from the outer world
+ *
+ * @param string $name Variable name
+ * @param string $source Source type: G (GET), P (POST), C (COOKIE) or D (variable filtering)
+ * @param string $filter Filter type
+ * @param int $maxlen Length limit
+ * @param bool $dieonerror Die with fatal error on wrong input
+ * @return mixed
+ */
 function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 {
 	switch($source)
@@ -1822,13 +2060,19 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	}
 
 	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') )
-	{ $v = stripslashes($v); }
+	{
+		$v = stripslashes($v);
+	}
 
 	if ($v=='')
-	{ return(''); }
+	{
+		return('');
+	}
 
 	if ($maxlen>0)
-	{ $v = substr($v, 0, $maxlen); }
+	{
+		$v = substr($v, 0, $maxlen);
+	}
 
 	$pass = FALSE;
 	$defret = NULL;
@@ -1837,40 +2081,56 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	switch($filter)
 	{
 		case 'INT':
-			if (is_numeric($v)==TRUE && floor($v)==$v)
-			{ $pass = TRUE; }
-			break;
+			if (is_numeric($v) && floor($v)==$v)
+			{
+				$pass = TRUE;
+			}
+		break;
 
 		case 'NUM':
-			if (is_numeric($v)==TRUE)
-			{ $pass = TRUE; }
-			break;
+			if(is_numeric($v))
+			{
+				$pass = TRUE;
+			}
+		break;
 
 		case 'TXT':
 			$v = trim($v);
 			if (strpos($v, '<')===FALSE)
-			{ $pass = TRUE; }
+			{
+				$pass = TRUE;
+			}
 			else
-			{ $defret = str_replace('<', '&lt;', $v); }
-			break;
+			{
+				$defret = str_replace('<', '&lt;', $v);
+			}
+		break;
 
 		case 'SLU':
 			$v = trim($v);
 			$f = preg_replace('/[^a-zA-Z0-9_=\/]/', '', $v);
-			if ($v == $f)
-			{ $pass = TRUE; }
+			if($v == $f)
+			{
+				$pass = TRUE;
+			}
 			else
-			{ $defret = ''; }
-			break;
+			{
+				$defret = '';
+			}
+		break;
 
 		case 'ALP':
 			$v = trim($v);
 			$f = sed_alphaonly($v);
-			if ($v == $f)
-			{ $pass = TRUE; }
+			if($v == $f)
+			{
+				$pass = TRUE;
+			}
 			else
-			{ $defret = $f; }
-			break;
+			{
+				$defret = $f;
+			}
+		break;
 
 		case 'PSW':
 			$v = trim($v);
@@ -1878,43 +2138,50 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			$f = substr($f, 0 ,32);
 
 			if ($v == $f)
-			{ $pass = TRUE; }
+			{
+				$pass = TRUE;
+			}
 			else
-			{ $defret = $f; }
-			break;
+			{
+				$defret = $f;
+			}
+		break;
 
 		case 'HTM':
 			$v = trim($v);
 			$pass = TRUE;
-			break;
+		break;
 
 		case 'ARR':
-			if (TRUE)	// !!!!!!!!!!!
-			{ $pass = TRUE; }
-			break;
+			$pass = TRUE;
+		break;
 
 		case 'BOL':
-			if ($v=="1" || $v=="on")
+			if($v == '1' || $v == 'on')
 			{
 				$pass = TRUE;
-				$v = "1";
+				$v = '1';
 			}
-			elseif ($v=="0" || $v=="off")
+			elseif($v=='0' || $v=='off')
 			{
 				$pass = TRUE;
-				$v = "0";
+				$v = '0';
 			}
 			else
 			{
-				$defret = "0";
+				$defret = '0';
 			}
 			break;
 
 		case 'LVL':
-			if (is_numeric($v)==TRUE && $v>=0 && $v<=100 && floor($v)==$v)
-			{ $pass = TRUE; }
+			if(is_numeric($v) && $v >= 0 && $v <= 100 && floor($v)==$v)
+			{
+				$pass = TRUE;
+			}
 			else
-			{ $defret = NULL; }
+			{
+				$defret = NULL;
+			}
 			break;
 
 		case 'NOC':
@@ -1927,26 +2194,41 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	}
 
 	$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
-	if ($pass)
-	{ return($v); }
+	if($pass)
+	{
+		return($v);
+	}
 	else
 	{
-		if ($log) { sed_log_sed_import($source, $filter, $name, $v); }
-		if ($dieonerror)
-		{ sed_diefatal('Wrong input.'); }
+		if($log)
+		{
+			sed_log_sed_import($source, $filter, $name, $v);
+		}
+		if($dieonerror)
+		{
+			sed_diefatal('Wrong input.');
+		}
 		else
-		{ return($defret); }
+		{
+			return($defret);
+		}
 	}
 }
 
 
-/* ------------------ */
-
+/**
+ * Extract info from SED file headers
+ *
+ * @param string $file File path
+ * @param string $limiter Tag name
+ * @param int $maxsize Max header size
+ * @return array
+ */
 function sed_infoget($file, $limiter='SED', $maxsize=32768)
 {
 	$result = array();
 
-	if ($fp = @fopen($file, 'r'))
+	if($fp = @fopen($file, 'r'))
 	{
 		$limiter_begin = "[BEGIN_".$limiter."]";
 		$limiter_end = "[END_".$limiter."]";
@@ -1979,8 +2261,6 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 	return ($result);
 }
 
-/* ------------------ */
-
 /**
  * Outputs standard javascript
  *
@@ -2001,72 +2281,11 @@ END;
 	return $result;
 }
 
-/* ------------------ */
-
-function sed_loadbbcodes()
-{
-	global $location;
-
-	$result = array();
-	$result[]=array('[b][/b]','bold');
-	$result[]=array('[u][/u]','underline');
-	$result[]=array('[i][/i]','italic');
-	$result[]=array('[left][/left]','left');
-	$result[]=array('[center][/center]','center');
-	$result[]=array('[right][/right]','right');
-	$result[]=array('[_]','spacer');
-	$result[]=array('[code][/code]','code');
-	$result[]=array('[quote][/quote]','quote');
-	$result[]=array('\n[list]1\n2\n3\[/list]','list');
-	$result[]=array('[t=thumbnail]fullsize[/t]','thumb');
-	$result[]=array('[img][/img]','image');
-	$result[]=array('[colleft][/colleft]','colleft');
-	$result[]=array('[colright][/colright]','colright');
-	$result[]=array('[url][/url]','url');
-	$result[]=array('[url=][/url]','urlp');
-	$result[]=array('[email][/email]','email');
-	$result[]=array('[email=][/email]','emailp');
-	$result[]=array('[user=][/user]','user');
-	$result[]=array('[page=][/page]','page');
-	$result[]=array('[link=][/link]','link');
-	$result[]=array('[p][/p]','p');
-	$result[]=array('[ac=][/ac]','ac');
-	$result[]=array('[topic=][/topic]','topic');
-	$result[]=array('[post=][/post]','post');
-	$result[]=array('[black][/black]','black');
-	$result[]=array('[grey][/grey]','grey');
-	$result[]=array('[sea][/sea]','sea');
-	$result[]=array('[blue][/blue]','blue');
-	$result[]=array('[sky][/sky]','sky');
-	$result[]=array('[green][/green]','green');
-	$result[]=array('[yellow][/yellow]','yellow');
-	$result[]=array('[orange][/orange]','orange');
-	$result[]=array('[red][/red]','red');
-	$result[]=array('[white][/white]','white');
-	$result[]=array('[pink][/pink]','pink');
-	$result[]=array('[purple][/purple]','purple');
-	$result[]=array('[hr]','hr');
-	$result[]=array('[f][/f]','flag');
-	$result[]=array('[style=1][/style]','style1');
-	$result[]=array('[style=2][/style]','style2');
-	$result[]=array('[style=3][/style]','style3');
-	$result[]=array('[style=4][/style]','style4');
-	$result[]=array('[style=5][/style]','style5');
-	$result[]=array('[style=6][/style]','style6');
-	$result[]=array('[style=7][/style]','style7');
-	$result[]=array('[style=8][/style]','style8');
-	$result[]=array('[style=9][/style]','style9');
-
-	if ($location=='Pages')
-	{ $result[]=array('[newpage]\n[title]...[/title]','multipages'); }
-	elseif ($location=='Newstopic')
-	{ $result[]=array('[more]','more'); }
-
-	return($result);
-}
-
-/* ------------------ */
-
+/**
+ * Loads comlete category structure into array
+ *
+ * @return array
+ */
 function sed_load_structure()
 {
 	global $db_structure, $cfg, $L;
@@ -2116,8 +2335,11 @@ function sed_load_structure()
 	return($res);
 }
 
-/* ------------------ */
-
+/**
+ * Loads complete forum structure into array
+ *
+ * @return array
+ */
 function sed_load_forum_structure()
 {
 	global $db_forum_structure, $cfg, $L;
@@ -2164,8 +2386,12 @@ function sed_load_forum_structure()
 	return($res);
 }
 
-/* ------------------ */
-
+/**
+ * Logs an event
+ *
+ * @param string $text Event description
+ * @param string $group Event group
+ */
 function sed_log($text, $group='def')
 {
 	global $db_logger, $sys, $usr, $_SERVER;
@@ -2174,16 +2400,20 @@ function sed_log($text, $group='def')
 	return;
 }
 
-/* ------------------ */
-
+/**
+ * Logs wrong input
+ *
+ * @param string $s Source type
+ * @param string $e Filter type
+ * @param string $v Variable name
+ * @param string $o Value
+ */
 function sed_log_sed_import($s, $e, $v, $o)
 {
 	$text = "A variable type check failed, expecting ".$s."/".$e." for '".$v."' : ".$o;
 	sed_log($text, 'sec');
 	return;
 }
-
-/* ------------------ */
 
 /**
  * Sends mail with standard PHP mail()
@@ -2213,8 +2443,6 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 		return(TRUE);
 	}
 }
-
-/* ------------------ */
 
 /**
  * Creates UNIX timestamp out of a date
@@ -2264,8 +2492,12 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
 	return $stamp;
 }
 
-/* ------------------ */
-
+/**
+ * Standard SED output filters, adds XSS protection to forms
+ *
+ * @param unknown_type $output
+ * @return unknown
+ */
 function sed_outputfilters($output)
 {
 	global $cfg;
@@ -2282,8 +2514,15 @@ function sed_outputfilters($output)
 	return($output);
 }
 
-/* ------------------ */
-
+/**
+ * Renders page navigation bar
+ *
+ * @param string $url Basic URL
+ * @param int $current Current page number
+ * @param int $entries Total rows
+ * @param int $perpage Rows per page
+ * @return string
+ */
 function sed_pagination($url, $current, $entries, $perpage)
 {
 	global $cfg;
@@ -2305,8 +2544,16 @@ function sed_pagination($url, $current, $entries, $perpage)
 	return ($res);
 }
 
-/* ------------------ */
-
+/**
+ * Renders page navigation previous/next buttons
+ *
+ * @param string $url Basic URL
+ * @param int $current Current page number
+ * @param int $entries Total rows
+ * @param int $perpage Rows per page
+ * @param bool $res_array Return results as array
+ * @return mixed
+ */
 function sed_pagination_pn($url, $current, $entries, $perpage, $res_array=FALSE)
 {
 	global $L, $sed_img_left, $sed_img_right;
@@ -2329,72 +2576,13 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array=FALSE)
 	else
 	{ return ($res_l." ".$res_r); }
 }
-/* ------------------ */
 
-function sed_parse($text, $parse_bbcodes=TRUE, $parse_smilies=TRUE, $parse_newlines=TRUE)
-{
-	global  $sys, $sed_smilies, $L;
-
-	$text = ' '.$text;
-	$code = array();
-	$unique_seed = $sys['unique'];
-	$ii = 10000;
-
-	if ($parse_bbcodes)
-	{
-		$p1 = 1;
-		$p2 = 1;
-		while ($p1>0 && $p2>0 && $ii<10031)
-		{
-			$ii++;
-			$p1 = strpos($text, '[code]');
-			$p2 = strpos($text, '[/code]');
-			if ($p2>$p1 && $p1>0)
-			{
-				$key = '**'.$ii.$unique_seed.'**';
-				$code[$key]= substr ($text, $p1+6, ($p2-$p1)-6);
-				$code_len = strlen($code[$key])+13;
-				$code[$key] = str_replace('\t','&nbsp; &nbsp;', $code[$key]);
-				$code[$key] = str_replace('  ', '&nbsp; ', $code[$key]);
-				$code[$key] = str_replace('  ', ' &nbsp;', $code[$key]);
-				$code[$key] = str_replace(
-				array('{', '<', '>' , '\'', '"', "<!--", '$' ),
-				array('&#123;', '&lt;', '&gt;', '&#039;', '&quot;', '"&#60;&#33;--"', '&#036;' ),$code[$key]);
-				$code[$key] = "<div class=\"codetitle\">".$L['bbcodes_code'].":</div><div class=\"code\">".trim($code[$key])."</div>";
-				$text = substr_replace($text, $key, $p1, $code_len);
-			}
-		}
-	}
-
-	if ($parse_smilies && is_array($sed_smilies))
-	{
-		reset($sed_smilies);
-		while ((list($j,$dat) = each($sed_smilies)))
-		{
-			$ii++;
-			$key = '**'.$ii.$unique_seed.'**';
-			$code[$key]= "<img src=\"".$dat['smilie_image']."\" alt=\"\" />";
-			$text = str_replace($dat['smilie_code'], $key, $text);
-		}
-	}
-
-	if ($parse_bbcodes)
-	{ $text = sed_bbcode($text); }
-
-	if ($parse_bbcodes || $parse_smilies)
-	{
-		foreach($code as $x => $y)
-		{ $text = str_replace($x, $y, $text); }
-	}
-
-	if ($parse_newlines)
-	{ $text = nl2br($text); }
-
-	return(substr($text, 1));
-}
-
-/* ------------------ */
-
+/**
+ * Delete all PFS files for a specific user. Returns number of items removed.
+ *
+ * @param int $userid User ID
+ * @return int
+ */
 function sed_pfs_deleteall($userid)
 {
 	global $db_pfs_folders, $db_pfs, $cfg;
@@ -2442,8 +2630,12 @@ function sed_pfs_deleteall($userid)
 	return($num);
 }
 
-/* ------------------ */
-
+/**
+ * Returns PFS path for a user, relative from site root
+ *
+ * @param int $userid User ID
+ * @return string
+ */
 function sed_pfs_path($userid)
 {
 	global $cfg;
@@ -2454,8 +2646,12 @@ function sed_pfs_path($userid)
 	{ return($cfg['pfs_dir']); }
 }
 
-/* ------------------ */
-
+/**
+ * Returns PFS path for a user, relative from PFS root
+ *
+ * @param int $userid User ID
+ * @return string
+ */
 function sed_pfs_relpath($userid)
 {
 	global $cfg;
@@ -2466,8 +2662,12 @@ function sed_pfs_relpath($userid)
 	{ return(''); }
 }
 
-/* ------------------ */
-
+/**
+ * Returns absolute path
+ *
+ * @param unknown_type $userid
+ * @return unknown
+ */
 function sed_pfs_thumbpath($userid)
 {
 	global $cfg;
@@ -2478,23 +2678,24 @@ function sed_pfs_thumbpath($userid)
 	{ return($cfg['th_dir']); }
 }
 
-/* ------------------ */
-
+/**
+ * Reads raw data from file
+ *
+ * @param string $file File path
+ * @return string
+ */
 function sed_readraw($file)
 {
-	if ($fp = @fopen($file, 'r'))
+	if(file_exists($file))
 	{
-		$res = fread($fp, 256000);
-		@fclose($fp);
+		return file_get_contents($file);
 	}
 	else
 	{
-		$res = "File not found : ".$file;
+		return 'File not found : '.$file;
 	}
-	return($res);
 }
 
-/* ------------------ */
 /**
  * Displays redirect page
  *
@@ -2527,8 +2728,14 @@ function sed_redirect($url)
 	return;
 }
 
-/* ------------------ */
-
+/**
+ * Renders a dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @param array $values Options available
+ * @return string
+ */
 function sed_selectbox($check, $name, $values)
 {
 	$check = trim($check);
@@ -2545,8 +2752,14 @@ function sed_selectbox($check, $name, $values)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Renders category dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @param bool $hideprivate Hide private categories
+ * @return string
+ */
 function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
 {
 	global $db_structure, $usr, $sed_cat, $L;
@@ -2567,8 +2780,13 @@ function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Renders country dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @return string
+ */
 function sed_selectbox_countries($check,$name)
 {
 	global $sed_countries;
@@ -2585,8 +2803,14 @@ function sed_selectbox_countries($check,$name)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Generates date part dropdown
+ *
+ * @param int $utime Selected timestamp
+ * @param string $mode Display mode: 'short' or complete
+ * @param string $ext Variable name suffix
+ * @return string
+ */
 function sed_selectbox_date($utime, $mode, $ext='')
 {
 	global $L;
@@ -2654,8 +2878,14 @@ function sed_selectbox_date($utime, $mode, $ext='')
 	return ($result);
 }
 
-/* ------------------ */
-
+/**
+ * Renders PFS folder selection dropdown
+ *
+ * @param int $user User ID
+ * @param int $skip Skip folder
+ * @param int $check Checked folder
+ * @return string
+ */
 function sed_selectbox_folders($user, $skip, $check)
 {
 	global $db_pfs_folders;
@@ -2682,8 +2912,13 @@ function sed_selectbox_folders($user, $skip, $check)
 	return ($result);
 }
 
-/* ------------------ */
-
+/**
+ * Returns forum category dropdown code
+ *
+ * @param int $check Selected category
+ * @param string $name Dropdown name
+ * @return string
+ */
 function sed_selectbox_forumcat($check, $name)
 {
 	global $usr, $sed_forums_str, $L;
@@ -2700,8 +2935,13 @@ function sed_selectbox_forumcat($check, $name)
 }
 
 
-/* ------------------ */
-
+/**
+ * Generates gender dropdown
+ *
+ * @param string $check Checked gender
+ * @param string $name Input name
+ * @return string
+ */
 function sed_selectbox_gender($check,$name)
 {
 	global $L;
@@ -2717,8 +2957,14 @@ function sed_selectbox_gender($check,$name)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Returns group selection dropdown code
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @param array $skip Hidden groups
+ * @return string
+ */
 function sed_selectbox_groups($check, $name, $skip=array(0))
 {
 	global $sed_groups;
@@ -2735,8 +2981,13 @@ function sed_selectbox_groups($check, $name, $skip=array(0))
 	return($res);
 }
 
-/* ------------------ */
-
+/**
+ * Returns language selection dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @return string
+ */
 function sed_selectbox_lang($check, $name)
 {
 	global $sed_languages, $sed_countries;
@@ -2762,8 +3013,13 @@ function sed_selectbox_lang($check, $name)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Renders forum section selection dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @return string
+ */
 function sed_selectbox_sections($check, $name)
 {
 	global $db_forum_sections, $cfg;
@@ -2780,8 +3036,13 @@ function sed_selectbox_sections($check, $name)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Returns skin selection dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @return string
+ */
 function sed_selectbox_skin($check, $name)
 {
 	$handle = opendir("skins/");
@@ -2812,8 +3073,12 @@ function sed_selectbox_skin($check, $name)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Gets huge user selection box
+ *
+ * @param int $to Selected user ID
+ * @return string
+ */
 function sed_selectbox_users($to)
 {
 	global $db_users;
@@ -2829,8 +3094,11 @@ function sed_selectbox_users($to)
 	return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Sends standard HTTP headers and disables browser cache
+ *
+ * @return bool
+ */
 function sed_sendheaders()
 {
 	global $cfg;
@@ -2846,7 +3114,7 @@ function sed_sendheaders()
 }
 
 /* ------------------ */
-
+// TODO this function is obsolete, doctype should be set in header.tpl
 function sed_setdoctype($type)
 {
 	switch($type)
@@ -2889,18 +3157,25 @@ function sed_setdoctype($type)
 	}
 }
 
-/* ------------------ */
-
+/**
+ * Clears current user action in Who's online.
+ *
+ */
 function sed_shield_clearaction()
 {
 	global  $db_online, $usr;
 
 	$sql = sed_sql_query("UPDATE $db_online SET online_action='' WHERE online_ip='".$usr['ip']."'");
-	return;
 }
 
-/* ------------------ */
-
+/**
+ * Anti-hammer protection
+ *
+ * @param int $hammer Hammer rate
+ * @param string $action Action type
+ * @param int $lastseen User last seen timestamp
+ * @return int
+ */
 function sed_shield_hammer($hammer,$action, $lastseen)
 {
 	global $cfg, $sys, $usr;
@@ -2930,8 +3205,10 @@ function sed_shield_hammer($hammer,$action, $lastseen)
 	return($hammer);
 }
 
-/* ------------------ */
-
+/**
+ * Warn user of shield protection
+ *
+ */
 function sed_shield_protect()
 {
 	global $cfg, $sys, $online_count, $shield_limit, $shield_action;
@@ -2940,11 +3217,14 @@ function sed_shield_protect()
 	{
 		sed_diefatal('Shield protection activated, please retry in '.($shield_limit-$sys['now']).' seconds...<br />After this duration, you can refresh the current page to continue.<br />Last action was : '.$shield_action);
 	}
-	return;
 }
 
-/* ------------------ */
-
+/**
+ * Updates shield state
+ *
+ * @param int $shield_add Hammer
+ * @param string $shield_newaction New action type
+ */
 function sed_shield_update($shield_add, $shield_newaction)
 {
 	global $cfg, $usr, $sys, $db_online;
@@ -2953,11 +3233,14 @@ function sed_shield_update($shield_add, $shield_newaction)
 		$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] /100);
 		$sql = sed_sql_query("UPDATE $db_online SET online_shield='$shield_newlimit', online_action='$shield_newaction' WHERE online_ip='".$usr['ip']."'");
 	}
-	return;
 }
 
-/* ------------------ */
-
+/**
+ * Returns skin file path
+ *
+ * @param string $base Item name
+ * @return string
+ */
 function sed_skinfile($base)
 {
 	global $usr;
@@ -2973,8 +3256,12 @@ function sed_skinfile($base)
 	return('skins/'.$usr['skin'].'/'.$base[0].'.tpl');
 }
 
-/* ------------------ */
-
+/**
+ * Parses smiles in text
+ *
+ * @param string $res Source text
+ * @return string
+ */
 function sed_smilies($res)
 {
 	global $sed_smilies;
@@ -2987,8 +3274,11 @@ function sed_smilies($res)
 	return($res);
 }
 
-/* ------------------ */
-
+/**
+ * Gets XSS protection code
+ *
+ * @return string
+ */
 function sed_sourcekey()
 {
 	global $usr;
@@ -2997,8 +3287,15 @@ function sed_sourcekey()
 	return ($result);
 }
 
-/* ------------------ */
+/*
+ * ===================================== Statistics API ==========================================
+ */
 
+/**
+ * Creates new stats parameter
+ *
+ * @param string $name Parameter name
+ */
 function sed_stat_create($name)
 {
 	global $db_stats;
@@ -3007,8 +3304,12 @@ function sed_stat_create($name)
 	return;
 }
 
-/* ------------------ */
-
+/**
+ * Returns statistics parameter
+ *
+ * @param string $name Parameter name
+ * @return int
+ */
 function sed_stat_get($name)
 {
 	global $db_stats;
@@ -3018,9 +3319,11 @@ function sed_stat_get($name)
 	return($result);
 }
 
-/* ------------------ */
-
-
+/**
+ * Increments stats
+ *
+ * @param string $name Parameter name
+ */
 function sed_stat_inc($name)
 {
 	global $db_stats;
@@ -3029,8 +3332,14 @@ function sed_stat_inc($name)
 	return;
 }
 
-/* ------------------ */
-
+/**
+ * Returns substring position in file
+ *
+ * @param string $file File path
+ * @param string $str Needle
+ * @param int $maxsize Search limit
+ * @return int
+ */
 function sed_stringinfile($file, $str, $maxsize=32768)
 {
 	if ($fp = @fopen($file, 'r'))
@@ -3045,8 +3354,14 @@ function sed_stringinfile($file, $str, $maxsize=32768)
 	return ($result);
 }
 
-/* ------------------ */
-
+/**
+ * Sends item to trash
+ *
+ * @param string $type Item type
+ * @param string $title Title
+ * @param int $itemid Item ID
+ * @param mixed $datas Item contents
+ */
 function sed_trash_put($type, $title, $itemid, $datas)
 {
 	global $db_trash, $sys, $usr;
@@ -3054,19 +3369,25 @@ function sed_trash_put($type, $title, $itemid, $datas)
 	$sql = sed_sql_query("INSERT INTO $db_trash (tr_date, tr_type, tr_title, tr_itemid, tr_trashedby, tr_datas)
 	VALUES
 	(".$sys['now_offset'].", '".sed_sql_prep($type)."', '".sed_sql_prep($title)."', '".sed_sql_prep($itemid)."', ".$usr['id'].", '".sed_sql_prep(serialize($datas))."')");
-
-	return;
 }
 
-/* ------------------ */
-
+/**
+ * Generates random string
+ *
+ * @param int $l Length
+ * @return string
+ */
 function sed_unique($l=16)
 {
 	return(substr(md5(mt_rand(0,1000000)), 0, $l));
 }
 
-/* ------------------ */
-
+/**
+ * Fetches user entry from DB
+ *
+ * @param int $id User ID
+ * @return array
+ */
 function sed_userinfo($id)
 {
 	global $db_users;
@@ -3081,8 +3402,12 @@ function sed_userinfo($id)
 	}
 }
 
-/* ------------------ */
-
+/**
+ * Checks whether user is online
+ *
+ * @param int $id User ID
+ * @return bool
+ */
 function sed_userisonline($id)
 {
 	global $sed_usersonline;
@@ -3093,8 +3418,13 @@ function sed_userisonline($id)
 	return ($res);
 }
 
-/* ------------------ */
-
+/**
+ * Wraps text
+ *
+ * @param string $str Source text
+ * @param int $wrap Wrapping boundary
+ * @return string
+ */
 function sed_wraptext($str,$wrap=128)
 {
 	if (!empty($str))
@@ -3102,8 +3432,11 @@ function sed_wraptext($str,$wrap=128)
 	return($str);
 }
 
-/* ------------------ */
-
+/**
+ * Returns XSS protection variable for GET URLs
+ *
+ * @return unknown
+ */
 function sed_xg()
 {
 	return ('x='.sed_sourcekey());

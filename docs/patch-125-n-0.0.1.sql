@@ -25,8 +25,11 @@ CREATE TABLE sed_bbcode (
 	bbc_mode ENUM('str', 'ereg', 'pcre', 'callback') NOT NULL DEFAULT 'str',
 	bbc_pattern VARCHAR(255) NOT NULL,
 	bbc_replacement TEXT NOT NULL,
+	bbc_container TINYINT NOT NULL DEFAULT 1,
 	bbc_enabled TINYINT(1) NOT NULL DEFAULT 1,
 	bbc_priority TINYINT UNSIGNED NOT NULL DEFAULT 128,
+	bbc_plug VARCHAR(100) NOT NULL DEFAULT '',
+	bbc_postrender TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (bbc_id),
 	KEY (bbc_enabled),
 	KEY (bbc_priority)
