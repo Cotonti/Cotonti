@@ -94,6 +94,14 @@ elseif ($a=='update')
 	}
 
 	$newpmtext = sed_import('newpmtext','P','HTM');
+	if($cfg['parser_cache'])
+	{
+		$newpmhtml = sed_sql_prep(sed_parse($newpmtext));
+	}
+	else
+	{
+		$newpmhtml = '';
+	}
 
 	if (empty($newpmtext))
 	{
@@ -101,7 +109,7 @@ elseif ($a=='update')
 		exit;
 	}
 
-	$sql = sed_sql_query("UPDATE $db_pm SET pm_text='".sed_sql_prep($newpmtext)."', pm_date='".$sys['now_offset']."' WHERE pm_id='$id'");
+	$sql = sed_sql_query("UPDATE $db_pm SET pm_text='".sed_sql_prep($newpmtext)."', pm_html = '$newpmhtml', pm_date='".$sys['now_offset']."' WHERE pm_id='$id'");
 	header("Location: " . SED_ABSOLUTE_URL . "pm.php?id=".$id);
 	exit;
 }

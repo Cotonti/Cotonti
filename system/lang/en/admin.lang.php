@@ -97,6 +97,8 @@ $L['cfg_showsqlstats'] = array("Show SQL queries statistics", "In footer.tpl");
 $L['cfg_shieldenabled'] = array("Enable the Shield", "Anti-spamming and anti-hammering");
 $L['cfg_shieldtadjust'] = array("Adjust Shield timers (in %)", "The higher, the harder to spam");
 $L['cfg_shieldzhammer'] = array("Anti-hammer after * fast hits", "The smaller, the faster the auto-ban 3 minutes happens");
+$L['cfg_parser_cache'] = array('Enable HTML cache', ''); // New in N-0.0.1
+$L['cfg_parser_custom'] = array('Enable custom parser', ''); // New in N-0.0.1
 $L['cfg_parser_vid'] = array("Allow BBcodes for the videos", "");		// New in v120
 $L['cfg_parser_vid_autolink'] = array("Auto-link URLs to known video sites", "");						// New in v120
 $L['cfg_parsebbcodecom'] = array("Parse BBcode in comments and private messages", "");
@@ -363,5 +365,36 @@ $L['adm_opt_unpauseall_explain'] = "This will un-pause (enable) all the parts of
 
 $L['adm_pm_totaldb'] = "Private messages in the database";
 $L['adm_pm_totalsent'] = "Total of private messages ever sent";
+
+/* ====== BBCode Admin ========*/
+$L['adm_bbcode'] = 'BBCode';
+$L['adm_bbcodes'] = 'BBCodes';
+$L['adm_bbcodes_added'] = 'Successfully added new bbcode.';
+$L['adm_bbcodes_clearcache'] = 'Clear HTML cache';
+$L['adm_bbcodes_clearcache_confirm'] = 'This will clear cache for all pages and posts, continue?';
+$L['adm_bbcodes_clearcache_done'] = 'HTML cache has been cleared.';
+$L['adm_bbcodes_confirm'] = 'Really delete this bbcode?';
+$L['adm_bbcodes_container'] = 'Container';
+$L['adm_bbcodes_mode'] = 'Mode';
+$L['adm_bbcodes_new'] = 'New BBCode';
+$L['adm_bbcodes_pattern'] = 'Pattern';
+$L['adm_bbcodes_postrender'] = 'Post-render';
+$L['adm_bbcodes_priority'] = 'Priority';
+$L['adm_bbcodes_removed'] = 'Successfully removed bbcode.';
+$L['adm_bbcodes_replacement'] = 'Replacement';
+$L['adm_bbcodes_updated'] = 'Successfully updated bbcode.';
+$L['adm_help_bbcodes'] = <<<HTM
+<ul>
+<li><strong>Name</strong> - BBcode name (use alphanumerics and underscores only)
+<li><strong>Mode</strong> - Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
+<li><strong>Pattern</strong> - BBcode string or entire regular expression
+<li><strong>Replacement</strong> - Replacement string or regular substitution or callback body
+<li><strong>Container</strong> - Whether bbcode is container (like [bbcode]Something here[/bbcode])
+<li><strong>Priority</strong> - BBcode priority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.
+<li><strong>Plugin</strong> - Plugin/part name this bbcode belongs to. Leave it blank, this is for plugins only.
+<li><strong>Post-render</strong> - Whether this bbcode must be applied on a pre-rendered HTML cache. Use only if your callback does some per-request calculations.
+</ul>
+HTM;
+
 
 ?>

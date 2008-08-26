@@ -149,6 +149,14 @@ if ($a=='newpost')
 
 	if (empty($error_string) && !empty($newmsg) && !empty($s) && !empty($q))
 	{
+		if($cfg['parser_cache'])
+		{
+			$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+		}
+		else
+		{
+			$rhtml = '';
+		}
 		$sql = sed_sql_query("INSERT into $db_forum_posts
 		(fp_topicid,
 		fp_sectionid,
@@ -158,6 +166,7 @@ if ($a=='newpost')
 		fp_updated,
 		fp_updater,
 		fp_text,
+		fp_html,
 		fp_posterip)
 		VALUES
 		(".(int)$q.",
@@ -168,6 +177,7 @@ if ($a=='newpost')
 			".(int)$sys['now_offset'].",
 			0,
 			'".sed_sql_prep($newmsg)."',
+			'$rhtml',
 			'".$usr['ip']."')");
 
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET
@@ -518,7 +528,19 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 
 	$row['fp_posterip'] = ($usr['isadmin']) ? sed_build_ipsearch($row['fp_posterip']) : '';
-	$row['fp_text'] = sed_parse($row['fp_text'], ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1);
+	if($cfg['parser_cache'])
+	{
+		if(empty($row['fp_html']) && !empty($row['fp_text']))
+		{
+			$row['fp_html'] = sed_parse($row['fp_text'], $cfg['parsebbcodeforums']  && $fs_allowbbcodes, $cfg['parsesmiliesforums']  && $fs_allowsmilies, 1);
+			sed_sql_query("UPDATE $db_forum_posts SET fp_html = '".sed_sql_prep($row['fp_html'])."' WHERE fp_id = " . $row['fp_id']);
+		}
+		$row['fp_text'] = sed_bbcode_parse($row['fp_html'], true);
+	}
+	else
+	{
+		$row['fp_text'] = sed_parse($row['fp_text'], ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1);
+	}
 	$row['fp_useronline'] = (sed_userisonline($row['fp_posterid'])) ? "1" : "0";
 
 	if (!empty($row['fp_updater']))
@@ -526,7 +548,7 @@ while ($row = sed_sql_fetcharray($sql))
 
 	if (!$cache[$row['fp_posterid']]['cached'])
 	{
-		$row['user_text'] = sed_build_usertext($row['user_text']);
+		$row['user_text'] = sed_parse($row['user_text'], $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
 		$row['user_age'] = ($row['user_birthdate']!=0) ? sed_build_age($row['user_birthdate']) : '';
 		$cache[$row['fp_posterid']]['user_text'] = $row['user_text'];
 		$cache[$row['fp_posterid']]['user_age']= $row['user_age'];

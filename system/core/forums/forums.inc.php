@@ -140,7 +140,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 			"FORUMS_SECTIONS_ROW_CAT_TITLE" => $cattitle,
 			"FORUMS_SECTIONS_ROW_CAT_ICON" => $fsn['fn_icon'],
 			"FORUMS_SECTIONS_ROW_CAT_SHORTTITLE" => sed_cc($fsn['fn_title']),
-			"FORUMS_SECTIONS_ROW_CAT_DESC" => sed_bbcode($fsn['fn_desc']),
+			"FORUMS_SECTIONS_ROW_CAT_DESC" => sed_parse_autourls($fsn['fn_desc']),
 			"FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => sed_cc($fsn['fn_defstate']),
 			"FORUMS_SECTIONS_ROW_CAT_TBODY" => $fsn['toggle_body'],
 			"FORUMS_SECTIONS_ROW_CAT_CODE" => $fsn['fs_category'],
@@ -153,7 +153,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 		$fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
 		$fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
 		$fsn['fs_newposts'] = '0';
-		$fsn['fs_desc'] = sed_bbcode($fsn['fs_desc']);
+		$fsn['fs_desc'] = sed_parse_autourls($fsn['fs_desc']);
 		$fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
 		$sed_sections_vw_cur = (!$sed_sections_vw[$fsn['fs_title']]) ? "0" : $sed_sections_vw[$fsn['fs_title']];
 

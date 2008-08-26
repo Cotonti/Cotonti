@@ -84,6 +84,15 @@ if ($a=='add')
 			$newpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $newpagealias;
 		}
 
+		if($cfg['parser_cache'])
+		{
+			$newpagehtml = sed_parse(sed_cc($newpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+		}
+		else
+		{
+			$newpagehtml = '';
+		}
+
 		$sql = sed_sql_query("INSERT into $db_pages
 		(page_state,
 		page_type,
@@ -119,6 +128,7 @@ if ($a=='add')
 			'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
 			'".sed_sql_prep($newpagetext)."',
+			'".sed_sql_prep($newpagehtml)."',
 			'".sed_sql_prep($newpageauthor)."',
 			".(int)$usr['id'].",
 			".(int)$sys['now_offset'].",

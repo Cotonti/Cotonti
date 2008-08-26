@@ -213,20 +213,19 @@ function sed_auth_clear($id='all')
  * @param string $pattern Bbcode string or entire regular expression
  * @param string $replacement Replacement string or regular substitution or callback body
  * @param bool $container Whether bbcode is container (like [bbcode]Something here[/bbcode])
- * @param int $priority BBcode preority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.
+ * @param int $priority BBcode priority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.
  * @param string $plug Plugin/part name this bbcode belongs to.
  * @param bool $postrender Whether this bbcode must be applied on a pre-rendered HTML cache.
  * @return bool
  */
-function sed_bbcode_add($name, $mode, $type, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
+function sed_bbcode_add($name, $mode, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
 {
 	global $db_bbcode;
 	$bbc['name'] = $name;
 	$bbc['mode'] = $mode;
-	$bbc['type'] = $type;
 	$bbc['pattern'] = $pattern;
 	$bbc['replacement'] = $replacement;
-	$bbc['container'] = (int) $container;
+	$bbc['container'] = empty($container) ? 0 : 1;
 	if($priority >= 0 && $priority < 256)
 	{
 		$bbc['priority'] = (int) $priority;
@@ -235,7 +234,7 @@ function sed_bbcode_add($name, $mode, $type, $pattern, $replacement, $container 
 	{
 		$bbc['plug'] = $plug;
 	}
-	$bbc['postrender'] = (int) $postrender;
+	$bbc['postrender'] = empty($postrender) ? 0 : 1;
 	return sed_sql_insert($db_bbcode, $bbc, 'bbc_') == 1;
 }
 
@@ -279,10 +278,10 @@ function sed_bbcode_remove($id = 0, $plug = '')
  * @param bool $postrender Whether this bbcode must be applied on a pre-rendered HTML cache.
  * @return bool
  */
-function sed_bbcode_update($id, $enabled, $name, $mode, $type, $pattern, $replacement, $container, $priority = 128, $postrender = false)
+function sed_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority = 128, $postrender = false)
 {
 	global $db_bbcode;
-	$bbc['enabled'] = (int) $enabled;
+	$bbc['enabled'] = empty($enabled) ? 0 : 1;
 	if(!empty($name))
 	{
 		$bbc['name'] = $name;
@@ -290,10 +289,6 @@ function sed_bbcode_update($id, $enabled, $name, $mode, $type, $pattern, $replac
 	if(!empty($mode))
 	{
 		$bbc['mode'] = $mode;
-	}
-	if(!empty($type))
-	{
-		$bbc['type'] = $type;
 	}
 	if(!empty($pattern))
 	{
@@ -307,8 +302,8 @@ function sed_bbcode_update($id, $enabled, $name, $mode, $type, $pattern, $replac
 	{
 		$bbc['priority'] = $priority;
 	}
-	$bbc['container'] = (int) $container;
-	$bbc['postrender'] = (int) $postrender;
+	$bbc['container'] = empty($container) ? 0 : 1;
+	$bbc['postrender'] = empty($postrender) ? 0 : 1;
 	return sed_sql_update($db_bbcode, "bbc_id = $id", $bbc, 'bbc_') == 1;
 }
 
@@ -320,13 +315,13 @@ function sed_bbcode_update($id, $enabled, $name, $mode, $type, $pattern, $replac
  */
 function sed_bbcode_load()
 {
-	global $db_bbcode, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers, $sed_bbcode_containers_post;
+	global $db_bbcode, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
 	if(!is_array($sed_bbcodes))
 	{
 		$sed_bbcodes = array();
 		$sed_bbcodes_post = array();
 		$sed_bbcode_containers = ''; // required for auto-close
-		$sed_bbcode_containers_post = '';
+		$bbc_cntr = array();
 		$i = 0;
 		$res = sed_sql_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
 		while($row = sed_sql_fetchassoc($res))
@@ -337,10 +332,6 @@ function sed_bbcode_load()
 				{
 					$sed_bbcodes_post[$i][str_replace('bbc_', '', $key)] = $val;
 				}
-				if($row['bbc_container'] == 1)
-				{
-					$sed_bbcode_containers_post .= $row['bbc_name'] . '|';
-				}
 			}
 			else
 			{
@@ -348,10 +339,11 @@ function sed_bbcode_load()
 				{
 					$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
 				}
-				if($row['bbc_container'] == 1)
-				{
-					$sed_bbcode_containers .= $row['bbc_name'] . '|';
-				}
+			}
+			if($row['bbc_container'] == 1 && !isset($bbc_cntr[$row['bbc_name']]))
+			{
+				$sed_bbcode_containers .= $row['bbc_name'] . '|';
+				$bbc_cntr[$row['bbc_name']] = 1;
 			}
 			$i++;
 		}
@@ -359,10 +351,6 @@ function sed_bbcode_load()
 		if(!empty($sed_bbcode_containers))
 		{
 			$sed_bbcode_containers = substr($sed_bbcode_containers, 0, -1);
-		}
-		if(!empty($sed_bbcode_containers_post))
-		{
-			$sed_bbcode_containers_post = substr($sed_bbcode_containers, 0, -1);
 		}
 	}
 }
@@ -373,14 +361,14 @@ function sed_bbcode_load()
  * @global $sed_bbcodes
  * @param string $text Text body
  * @param bool $post Post-rendering
+ * @return string
  */
-function sed_bbcode_parse(&$text, $post = false)
+function sed_bbcode_parse($text, $post = false)
 {
-	global $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers, $sed_bbcode_containers_post;
+	global $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
 	// BB auto-close
-	$valid_bb = $post ? $sed_bbcode_containers_post : $sed_bbcode_containers;
 	$bbc = array();
-	if(preg_match_all('#\[(/)?('.$valid_bb.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
+	if(!$post && preg_match_all('#\[(/)?('.$sed_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
 	{
 		// Count all unclosed bbcode entries
 		for($i = 0, $cnt = count($mt); $i < $cnt; $i++)
@@ -423,16 +411,18 @@ function sed_bbcode_parse(&$text, $post = false)
 				$text = eregi_replace($bbcode['pattern'], $bbcode['replacement'], $text);
 			break;
 
-			case 'preg':
-				$text = preg_replace('`'.$bbcode['pattern'].'`i', $bbcode['replacement'], $text);
+			case 'pcre':
+				$text = preg_replace('`'.$bbcode['pattern'].'`mis', $bbcode['replacement'], $text);
 			break;
 
 			case 'callback':
 				$code = 'global $cfg, $sys, $usr, $L, $skin, $sed_groups;' . $bbcode['replacement'];
-				$text = preg_replace_callback('`'.$bbcode['pattern'].'`i', create_function('input', $code), $text);
+				$text = preg_replace_callback('`'.$bbcode['pattern'].'`i', create_function('$input', $code), $text);
 			break;
 		}
 	}
+
+	return $text;
 }
 
 /**
@@ -462,15 +452,39 @@ function sed_obfuscate($text)
 }
 
 /**
+ * Supplimentary email obfuscator callback
+ *
+ * @param array $m PCRE entry
+ * @return string
+ */
+function sed_obfuscate_eml($m)
+{
+	return $m[1].sed_obfuscate('<a href="mailto:'.$m[2].'">'.$m[2].'</a>');
+}
+
+
+/**
  * Automatically detect and parse URLs in text into HTML
  *
  * @param string $text Text body
+ * @return string
  */
-function sed_parse_autourls(&$text)
+function sed_parse_autourls($text)
 {
-	$text = preg_replace('(^|\s)(http|https|ftp)://([^\s"\'\[]+)', '$1<a href="$2://$3">$2://$3</a>', $text);
-	$code = 'return $m[1].sed_obfuscate(\'<a href="mailto:\'.$m[2].\'">\'.$m[2].\'</a>\');';
-	$text = preg_replace_callback('(^|\s)(\w[\._\w\-]+@[\w\.\-]+\.[a-z]+)', create_function('m', $code), $text);
+	$text = preg_replace('`(^|\s)(http|https|ftp)://([^\s"\'\[]+)`', '$1<a href="$2://$3">$2://$3</a>', $text);
+	$text = preg_replace_callback('`(^|\s)(\w[\._\w\-]+@[\w\.\-]+\.[a-z]+)`', 'sed_obfuscate_eml', $text);
+	return $text;
+}
+
+/**
+ * Supplimentary br stripper callback
+ *
+ * @param array $m PCRE entries
+ * @return string
+ */
+function sed_parse_pre($m)
+{
+	return str_replace('<br />', '', $m[0]);
 }
 
 /**
@@ -486,8 +500,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 {
 	global $cfg, $sys, $sed_smilies, $L, $usr;
 
-	// TODO add config option
-	if($cfg['custom_parser'])
+	if($cfg['parser_custom'])
 	{
 		include_once './system/parser.php';
 		if(function_exists('sed_custom_parse'))
@@ -501,7 +514,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 	$unique_seed = $sys['unique'];
 	$ii = 10000;
 
-	sed_parse_autourls($text);
+	$text = sed_parse_autourls($text);
 
 	if($parse_bbcodes)
 	{
@@ -525,7 +538,8 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 			}
 		}
 
-		sed_bbcode_parse($text);
+		//$text = htmlspecialchars($text);
+		$text = sed_bbcode_parse($text);
 	}
 
 	// TODO replace with new smiley system
@@ -553,7 +567,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 		$text = str_replace("\r", '', $text);
 		// Strip extraneous breaks
 		$text = preg_replace('#<(/?)(p|hr|ul|ol|li|blockquote|table|tr|td|th)(.*?)>(\s*)<br />#', '<$1$2$3>', $text);
-		$text = preg_replace_callback('#<pre>(.+?)</pre>#sm', create_function('m', 'return str_replace(\'<br />\', \'\', $m[0]);'), $text);
+		$text = preg_replace_callback('#<pre>(.+?)</pre>#sm', 'sed_parse_pre', $text);
 	}
 
 	return substr($text, 1);
@@ -1507,19 +1521,6 @@ function sed_build_userimage($image)
 		$result = "<img src=\"".$image."\" alt=\"\" class=\"avatar\" />";
 	}
 	return($result);
-}
-
-/**
- * Parses user signature
- *
- * @param string $text Signature source
- * @return string
- */
-function sed_build_usertext($text)
-{
-	// TODO this function is obsolete, also config options usertextimg and usertextimg_nocolors
-	global $cfg;
-	return sed_parse($text, $cfg['usertextimg']);
 }
 
 /*

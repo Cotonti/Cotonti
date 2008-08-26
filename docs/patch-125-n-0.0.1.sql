@@ -15,9 +15,11 @@ ALTER TABLE sed_structure MODIFY structure_code VARCHAR(255);
 ALTER TABLE sed_forum_posts ADD fp_html TEXT NOT NULL DEFAULT '';
 ALTER TABLE sed_pages ADD page_html TEXT NOT NULL DEFAULT '';
 ALTER TABLE sed_pm ADD pm_html TEXT NOT NULL DEFAULT '';
-ALTER TABLE sed_users ADD user_html TEXT NOT NULL DEFAULT '';
 
 /* New bbcodes feature */
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_custom', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_cache', 3, '1');
+
 /* This table is used by parser only, editor part is separate */
 CREATE TABLE sed_bbcode (
 	bbc_id INT NOT NULL AUTO_INCREMENT,
@@ -35,3 +37,5 @@ CREATE TABLE sed_bbcode (
 	KEY (bbc_priority)
 );
 
+/* Basic bbcode package */
+INSERT INTO `sed_bbcode` VALUES (1,'b','str','[b]','<strong>',1,1,128,'',0),(2,'b','str','[/b]','</strong>',0,1,128,'',0),(3,'i','str','[i]','<em>',1,1,128,'',0),(4,'i','str','[/i]','</em>',1,1,128,'',0),(5,'u','str','[u]','<span style=\"text-decoration:underline\">',1,1,128,'',0),(6,'u','str','[/u]','</span>',1,1,128,'',0),(7,'s','str','[s]','<span style=\"text-decoration:line-through\">',1,1,128,'',0),(8,'s','str','[/s]','</span>',1,1,128,'',0),(9,'center','str','[center]','<div style=\"text-align:center\">',1,1,128,'',0),(10,'center','str','[/center]','</div>',1,1,128,'',0),(11,'left','str','[left]','<div style=\"text-align:left\">',1,1,128,'',0),(12,'left','str','[/left]','</div>',1,1,128,'',0),(13,'right','str','[right]','<div style=\"text-align:right\">',1,1,128,'',0),(14,'right','str','[/right]','</div>',1,1,128,'',0),(15,'justify','str','[justify]','<div style=\"text-align:justify\">',1,1,128,'',0),(16,'justify','str','[/justify]','</div>',1,1,128,'',0),(31,'email','callback','\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]','return sed_obfuscate(\'<a href=\"mailto:\'.$input[1].\'\">\'.$input[2].\'</a>\');',1,1,128,'',0),(26,'quote','pcre','\\[quote=(.+?)\\](.+?)\\[/quote\\]','<blockquote><strong>$1:</strong><hr />$2</blockquote>',1,1,128,'',0),(24,'quote','pcre','\\[quote\\](.+?)\\[/quote\\]','<blockquote>$1</blockquote>',1,1,128,'',0),(23,'color','pcre','\\[color=(#?\\w+)\\](.+?)\\[/color\\]','<span style=\"color:$1\">$2</span>',1,1,128,'',0),(27,'img','pcre','\\[img\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<img src=\"$1\" alt=\"\" />',1,1,128,'',0),(28,'img','pcre','\\[img=((?:http://|https://|ftp://)?[^\\]\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<a href=\"$1\"><img src=\"$2\" alt=\"\" /></a>',1,1,128,'',0),(29,'url','pcre','\\[url=((?:http://|https://|ftp://)?[^\\s\"\\\':\\[]+)\\](.+?)\\[/url\\]','<a href=\"$1\">$2</a>',1,1,128,'',0),(30,'url','pcre','\\[url\\]((?:http://|https://|ftp://)?[^\\s\"\\\':]+)\\[/url\\]','<a href=\"$1\">$1</a>',1,1,128,'',0);

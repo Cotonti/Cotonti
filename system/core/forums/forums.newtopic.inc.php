@@ -75,7 +75,7 @@ if ($a=='newtopic')
 	/* ===== */
 
 	$newtopictitle = sed_import('newtopictitle','P','TXT', 64);
-	$newtopicdesc = sed_import('newtopicdesc','P','TXT', 64);	
+	$newtopicdesc = sed_import('newtopicdesc','P','TXT', 64);
 	$newprvtopic = sed_import('newprvtopic','P','BOL');
 	$newmsg = sed_import('newmsg','P','HTM');
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
@@ -91,7 +91,7 @@ if ($a=='newtopic')
 			ft_sticky,
 			ft_sectionid,
 			ft_title,
-			ft_desc,			
+			ft_desc,
 			ft_creationdate,
 			ft_updated,
 			ft_postcount,
@@ -106,7 +106,7 @@ if ($a=='newtopic')
 			0,
 			".(int)$s.",
 			'".sed_sql_prep($newtopictitle)."',
-			'".sed_sql_prep($newtopicdesc)."',			
+			'".sed_sql_prep($newtopicdesc)."',
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
 			1,
@@ -119,6 +119,15 @@ if ($a=='newtopic')
 		$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE 1 ORDER BY ft_id DESC LIMIT 1");
 		$row = sed_sql_fetcharray($sql);
 		$q = $row['ft_id'];
+
+		if($cfg['parser_cache'])
+		{
+			$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+		}
+		else
+		{
+			$rhtml = '';
+		}
 
 		$sql = sed_sql_query("INSERT into $db_forum_posts
 			(fp_topicid,
@@ -137,6 +146,7 @@ if ($a=='newtopic')
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
 			'".sed_sql_prep($newmsg)."',
+			'$rhtml',
 			'".$usr['ip']."')");
 
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET

@@ -229,6 +229,20 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 		$row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"pm.php?m=edit&amp;a=delete&amp;".sed_xg()."&amp;id=".$row['pm_id']."&amp;f=".$f."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>" : '';
 	}
 
+	if($cfg['parser_cache'])
+	{
+		if(empty($row['pm_html']) && !empty($row['pm_text']))
+		{
+			$row['pm_html'] = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+			sed_sql_query("UPDATE $db_pm SET pm_html = '".sed_sql_prep($row['pm_html'])."' WHERE pm_id = " . $row['pm_id']);
+		}
+		$pm_data = sed_bbcode_parse($row['pm_html'], true);
+	}
+	else
+	{
+		$pm_data = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+	}
+
 	$t-> assign(array(
 		"PM_ROW_ID" => $row['pm_id'],
 		"PM_ROW_STATE" => $row['pm_state'],
@@ -238,8 +252,8 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 		"PM_ROW_TOUSERID" => $pm_touserid,
 		"PM_ROW_TOUSER" => sed_build_user($pm_touserid, $pm_touser),
 		"PM_ROW_TITLE" => "<a href=\"pm.php?id=".$row['pm_id']."\">".sed_cc($row['pm_title'])."</a>",
-		"PM_ROW_TEXT" => sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1).$pm_editbox,
-		"PM_ROW_TEXTBOXER" => sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1).$pm_editbox,
+		"PM_ROW_TEXT" => $pm_data.$pm_editbox,
+		"PM_ROW_TEXTBOXER" => $pm_data.$pm_editbox,
 		"PM_ROW_FROMORTOUSER" => $pm_fromortouser,
 		"PM_ROW_ICON_STATUS" => $row['pm_icon_status'],
 		"PM_ROW_ICON_ACTION" => $row['pm_icon_action'],

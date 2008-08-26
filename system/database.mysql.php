@@ -253,7 +253,7 @@ function sed_sql_insert($table_name, $data, $prefix = '')
 		{
 			$vals .= 'NULL,';
 		}
-		elseif($val == 'NOW()')
+		elseif($val === 'NOW()')
 		{
 			$vals .= 'NOW(),';
 		}
@@ -327,7 +327,7 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '')
 		{
 			$upd .= 'NULL,';
 		}
-		elseif($val == 'NOW()')
+		elseif($val === 'NOW()')
 		{
 			$upd .= 'NOW(),';
 		}

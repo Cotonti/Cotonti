@@ -118,6 +118,15 @@ if ($a=='update')
 				$rpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $rpagealias;
 			}
 
+			if($cfg['parser_cache'])
+			{
+				$rpagehtml = sed_parse(sed_cc($rpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+			}
+			else
+			{
+				$rpagehtml = '';
+			}
+
 			$sql = sed_sql_query("UPDATE $db_pages SET
 			page_cat = '".sed_sql_prep($rpagecat)."',
 				page_type = '".sed_sql_prep($rpagetype)."',
@@ -130,6 +139,7 @@ if ($a=='update')
 				page_title = '".sed_sql_prep($rpagetitle)."',
 				page_desc = '".sed_sql_prep($rpagedesc)."',
 				page_text='".sed_sql_prep($rpagetext)."',
+				page_html='".sed_sql_prep($rpagehtml)."',
 				page_author = '".sed_sql_prep($rpageauthor)."',
 			page_ownerid = '$rpageownerid',
 			page_date = '$rpagedate',

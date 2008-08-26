@@ -44,7 +44,7 @@ while ($row = sed_sql_fetcharray($sql))
 	{
 	$adminmain .= "<tr>";
 	$adminmain .= "<td>";
-	
+
 	$row['ct_title_loc'] = (empty($L["core_".$row['ct_code']])) ? $row['ct_title'] : $L["core_".$row['ct_code']];
 	$adminmain .= sed_linkif("admin.php?m=".$row['ct_code'], "<img src=\"system/img/admin/".$row['ct_code'].".gif\" alt=\"\" /> ".$row['ct_title_loc'], sed_auth($row['ct_code'], 'a', 'A') && $row['ct_code']!='admin' && $row['ct_code']!='index' && $row['ct_code']!='message');
 	$adminmain .= "</td>";
@@ -61,6 +61,10 @@ while ($row = sed_sql_fetcharray($sql))
 
 $adminmain .= "<tr>";
 $adminmain .= "<td colspan=\"3\">".sed_linkif("admin.php?m=cache", "<img src=\"system/img/admin/config.gif\" alt=\"\" /> ".$L['adm_internalcache'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "</tr>";
+
+$adminmain .= "<tr>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif("admin.php?m=bbcode", "<img src=\"system/img/admin/page.gif\" alt=\"\" /> ".$L['adm_bbcodes'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";

@@ -117,8 +117,16 @@ if ($a=='update')
 
 	if(!empty($rtext))
 	{
+		if($cfg['parser_cache'])
+		{
+			$rhtml = sed_sql_prep(sed_parse(sed_cc($rtext), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+		}
+		else
+		{
+			$rhtml = '';
+		}
 		$rtext = sed_sql_prep($rtext);
-		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."' WHERE fp_id='$p'");
+		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_html = '$rhtml', fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."' WHERE fp_id='$p'");
 	}
 
 	if (!empty($rtopictitle))

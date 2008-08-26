@@ -444,6 +444,30 @@ CREATE TABLE sed_users (
   KEY user_regdate (user_regdate)
 ) TYPE=MyISAM;
 
+# --------------- BBCodes module
+/* This table is used by parser only, editor part is separate */
+CREATE TABLE sed_bbcode (
+	bbc_id INT NOT NULL AUTO_INCREMENT,
+	bbc_name VARCHAR(100) NOT NULL,
+	bbc_mode ENUM('str', 'ereg', 'pcre', 'callback') NOT NULL DEFAULT 'str',
+	bbc_pattern VARCHAR(255) NOT NULL,
+	bbc_replacement TEXT NOT NULL,
+	bbc_container TINYINT NOT NULL DEFAULT 1,
+	bbc_enabled TINYINT(1) NOT NULL DEFAULT 1,
+	bbc_priority TINYINT UNSIGNED NOT NULL DEFAULT 128,
+	bbc_plug VARCHAR(100) NOT NULL DEFAULT '',
+	bbc_postrender TINYINT(1) NOT NULL DEFAULT 0,
+	PRIMARY KEY (bbc_id),
+	KEY (bbc_enabled),
+	KEY (bbc_priority)
+);
+
+/* Basic bbcode package */
+INSERT INTO `sed_bbcode` VALUES (1,'b','str','[b]','<strong>',1,1,128,'',0),(2,'b','str','[/b]','</strong>',0,1,128,'',0),(3,'i','str','[i]','<em>',1,1,128,'',0),(4,'i','str','[/i]','</em>',1,1,128,'',0),(5,'u','str','[u]','<span style=\"text-decoration:underline\">',1,1,128,'',0),(6,'u','str','[/u]','</span>',1,1,128,'',0),(7,'s','str','[s]','<span style=\"text-decoration:line-through\">',1,1,128,'',0),(8,'s','str','[/s]','</span>',1,1,128,'',0),(9,'center','str','[center]','<div style=\"text-align:center\">',1,1,128,'',0),(10,'center','str','[/center]','</div>',1,1,128,'',0),(11,'left','str','[left]','<div style=\"text-align:left\">',1,1,128,'',0),(12,'left','str','[/left]','</div>',1,1,128,'',0),(13,'right','str','[right]','<div style=\"text-align:right\">',1,1,128,'',0),(14,'right','str','[/right]','</div>',1,1,128,'',0),(15,'justify','str','[justify]','<div style=\"text-align:justify\">',1,1,128,'',0),(16,'justify','str','[/justify]','</div>',1,1,128,'',0),(31,'email','callback','\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]','return sed_obfuscate(\'<a href=\"mailto:\'.$input[1].\'\">\'.$input[2].\'</a>\');',1,1,128,'',0),(26,'quote','pcre','\\[quote=(.+?)\\](.+?)\\[/quote\\]','<blockquote><strong>$1:</strong><hr />$2</blockquote>',1,1,128,'',0),(24,'quote','pcre','\\[quote\\](.+?)\\[/quote\\]','<blockquote>$1</blockquote>',1,1,128,'',0),(23,'color','pcre','\\[color=(#?\\w+)\\](.+?)\\[/color\\]','<span style=\"color:$1\">$2</span>',1,1,128,'',0),(27,'img','pcre','\\[img\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<img src=\"$1\" alt=\"\" />',1,1,128,'',0),(28,'img','pcre','\\[img=((?:http://|https://|ftp://)?[^\\]\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<a href=\"$1\"><img src=\"$2\" alt=\"\" /></a>',1,1,128,'',0),(29,'url','pcre','\\[url=((?:http://|https://|ftp://)?[^\\s\"\\\':\\[]+)\\](.+?)\\[/url\\]','<a href=\"$1\">$2</a>',1,1,128,'',0),(30,'url','pcre','\\[url\\]((?:http://|https://|ftp://)?[^\\s\"\\\':]+)\\[/url\\]','<a href=\"$1\">$1</a>',1,1,128,'',0);
+
+
+# --------------- Standard structure
+
 INSERT INTO sed_structure VALUES (1, 'articles', '1', '', 'Articles', '', '', 0 ,'title.asc');
 INSERT INTO sed_structure VALUES (2, 'links', '2', '', 'Links', '', '',  0 ,'title.asc');
 INSERT INTO sed_structure VALUES (3, 'events', '3', '', 'Events', '', '',  0 ,'date.asc');
@@ -519,7 +543,8 @@ INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, con
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldenabled', 3, '0');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldtadjust', 2, '100');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldzhammer', 2, '25');
-INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_vid', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_custom', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_cache', 3, '1');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '20', 'parsebbcodeusertext', 3, '1');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '20', 'parsebbcodecom', 3, '1');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '20', 'parsebbcodeforums', 3, '1');
