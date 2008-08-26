@@ -535,11 +535,12 @@ while ($row = sed_sql_fetcharray($sql))
 			$row['fp_html'] = sed_parse($row['fp_text'], $cfg['parsebbcodeforums']  && $fs_allowbbcodes, $cfg['parsesmiliesforums']  && $fs_allowsmilies, 1);
 			sed_sql_query("UPDATE $db_forum_posts SET fp_html = '".sed_sql_prep($row['fp_html'])."' WHERE fp_id = " . $row['fp_id']);
 		}
-		$row['fp_text'] = sed_bbcode_parse($row['fp_html'], true);
+		$row['fp_text'] = sed_post_parse($row['fp_html'], 'forums');
 	}
 	else
 	{
 		$row['fp_text'] = sed_parse($row['fp_text'], ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1);
+		$row['fp_text'] = sed_post_parse($row['fp_text'], 'forums');
 	}
 	$row['fp_useronline'] = (sed_userisonline($row['fp_posterid'])) ? "1" : "0";
 

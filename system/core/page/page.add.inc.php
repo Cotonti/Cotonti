@@ -106,6 +106,7 @@ if ($a=='add')
 		page_title,
 		page_desc,
 		page_text,
+		page_html,
 		page_author,
 		page_ownerid,
 		page_date,

@@ -323,6 +323,7 @@ function sed_bbcode_load()
 		$sed_bbcode_containers = ''; // required for auto-close
 		$bbc_cntr = array();
 		$i = 0;
+		$j = 0;
 		$res = sed_sql_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
 		while($row = sed_sql_fetchassoc($res))
 		{
@@ -330,8 +331,9 @@ function sed_bbcode_load()
 			{
 				foreach($row as $key => $val)
 				{
-					$sed_bbcodes_post[$i][str_replace('bbc_', '', $key)] = $val;
+					$sed_bbcodes_post[$j][str_replace('bbc_', '', $key)] = $val;
 				}
+				$j++;
 			}
 			else
 			{
@@ -339,13 +341,13 @@ function sed_bbcode_load()
 				{
 					$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
 				}
+				$i++;
 			}
 			if($row['bbc_container'] == 1 && !isset($bbc_cntr[$row['bbc_name']]))
 			{
 				$sed_bbcode_containers .= $row['bbc_name'] . '|';
 				$bbc_cntr[$row['bbc_name']] = 1;
 			}
-			$i++;
 		}
 		sed_sql_freeresult($res);
 		if(!empty($sed_bbcode_containers))
@@ -365,7 +367,11 @@ function sed_bbcode_load()
  */
 function sed_bbcode_parse($text, $post = false)
 {
-	global $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
+	global $cfg, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
+	if($cfg['parser_custom'])
+	{
+		return $text;
+	}
 	// BB auto-close
 	$bbc = array();
 	if(!$post && preg_match_all('#\[(/)?('.$sed_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
@@ -400,7 +406,7 @@ function sed_bbcode_parse($text, $post = false)
 	$cnt = $post ? count($sed_bbcodes_post) : count($sed_bbcodes);
 	for($i = 0; $i < $cnt; $i++)
 	{
-		$bbcode = $post ? $sed_bbcodes_post[$i] : $sed_bbcodes[$i];
+		$bbcode = ($post) ? $sed_bbcodes_post[$i] : $sed_bbcodes[$i];
 		switch($bbcode['mode'])
 		{
 			case 'str':
@@ -417,7 +423,7 @@ function sed_bbcode_parse($text, $post = false)
 
 			case 'callback':
 				$code = 'global $cfg, $sys, $usr, $L, $skin, $sed_groups;' . $bbcode['replacement'];
-				$text = preg_replace_callback('`'.$bbcode['pattern'].'`i', create_function('$input', $code), $text);
+				$text = preg_replace_callback('`'.$bbcode['pattern'].'`mis', create_function('$input', $code), $text);
 			break;
 		}
 	}
@@ -573,6 +579,23 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 	return substr($text, 1);
 }
 
+/**
+ * Post-render parser function
+ *
+ * @param string $text Text body
+ * @param string $area Site area to check bbcode enablement
+ * @return string
+ */
+function sed_post_parse($text, $area = '')
+{
+	global $cfg;
+	if(!$cfg['parser_custom'] && (empty($area) || $cfg["parsebbcode$area"]))
+	{
+		return sed_bbcode_parse($text, true);
+	}
+	return $text;
+}
+
 /* ------------------ */
 // TODO eliminate this function
 function sed_bbcode_urls($text)
@@ -675,15 +698,16 @@ function sed_build_age($birth)
 // TODO eliminate this function
 function sed_build_bbcodes($c1, $c2, $title)
 {
-	$result = "<a href=\"javascript:help('bbcodes','".$c1."','".$c2."')\">".$title."</a>";
-	return($result);
+	//$result = "<a href=\"javascript:help('bbcodes','".$c1."','".$c2."')\">".$title."</a>";
+	//return($result);
+	return '';
 }
 
 /* ------------------ */
 // TODO eliminate this function
 function sed_build_bbcodes_local($limit)
 {
-	global $sed_bbcodes;
+	/*global $sed_bbcodes;
 
 	reset ($sed_bbcodes);
 
@@ -696,7 +720,8 @@ function sed_build_bbcodes_local($limit)
 	}
 
 	$result .= "</div>";
-	return($result);
+	return($result);*/
+	return '';
 }
 
 /**

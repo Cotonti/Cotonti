@@ -231,12 +231,14 @@ switch($pag['page_type'])
 				$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 				sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
 			}
-			$cfg['parsebbcodepages'] ? $t->assign('PAGE_TEXT', sed_bbcode_parse($pag['page_html'], true))
-				: $t->assign('PAGE_TEXT', $pag['page_html']);
+			$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
+			$t->assign('PAGE_TEXT', $html);
 		}
 		else
 		{
-			$t->assign("PAGE_TEXT",sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1));
+			$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+			$text = sed_post_parse($text, 'pages');
+			$t->assign('PAGE_TEXT', $text);
 		}
 	break;
 }

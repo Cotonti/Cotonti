@@ -236,11 +236,12 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 			$row['pm_html'] = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
 			sed_sql_query("UPDATE $db_pm SET pm_html = '".sed_sql_prep($row['pm_html'])."' WHERE pm_id = " . $row['pm_id']);
 		}
-		$pm_data = sed_bbcode_parse($row['pm_html'], true);
+		$pm_data = sed_post_parse($row['pm_html']);
 	}
 	else
 	{
 		$pm_data = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+		$pm_data = sed_post_parse($pm_data);
 	}
 
 	$t-> assign(array(

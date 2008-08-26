@@ -267,7 +267,10 @@ if (is_array($extp))
 $xg = sed_import('x','G','ALP');
 $xp = sed_import('x','P','ALP');
 
-$xk = sed_check_xp();
+if(!defined('SED_NO_ANTIXSS'))
+{
+	$xk = sed_check_xp();
+}
 
 /* ======== Zone variables ======== */
 

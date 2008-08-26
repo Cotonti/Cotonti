@@ -125,8 +125,8 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 						$pag['page_html'] .= "<a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a>";
 					}
 
-					$cfg['parsebbcodepages'] ? $news->assign('PAGE_ROW_TEXT', sed_bbcode_parse($pag['page_html'], true))
-					: $news->assign('PAGE_ROW_TEXT', $pag['page_html']);
+					$cfg['parsebbcodepages'] ? $news->assign('PAGE_ROW_TEXT', sed_post_parse($pag['page_html'], 'pages'))
+					: $news->assign('PAGE_ROW_TEXT', sed_cc($pag['page_text']));
 				}
 				else
 				{
@@ -136,7 +136,9 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 						$pag['page_text'] = substr($pag['page_text'], 0, $readmore)."<br />";
 						$pag['page_text'] .= "<a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a>";
 					}
-					$news->assign("PAGE_ROW_TEXT",sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1));
+					$pag['page_text'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+					$pag['page_text'] = sed_post_parse($pag['page_text'], 'pages');
+					$news->assign('PAGE_ROW_TEXT', $pag['page_text']);
 				}
 				break;
 		}
