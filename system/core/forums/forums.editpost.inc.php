@@ -173,7 +173,7 @@ $smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_sm
 $pfs = sed_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rtext", $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('editpost', 'rtext');
-$post_main = "<textarea name=\"rtext\" rows=\"20\" cols=\"56\">".sed_cc($fp_text)."</textarea>";
+$post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.sed_cc($fp_text).'</textarea>';
 
 $toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"forums.php?m=newtopic&amp;s=".$s."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';

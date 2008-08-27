@@ -658,7 +658,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 	$bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : '';
 
 	$post_mark = "<a name=\"np\" id=\"np\"></a>";
-	$post_main = $post_mark."<textarea name=\"newmsg\" rows=\"16\" cols=\"56\">".sed_cc($newmsg)."</textarea>";
+	$post_main = $post_mark.'<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => "forums.php?m=posts&amp;a=newpost&amp;s=".$s."&amp;q=".$q,

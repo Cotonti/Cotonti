@@ -211,8 +211,8 @@ $t->assign(array(
 	"PAGEADD_FORM_FILE" => $pageadd_form_file,
 	"PAGEADD_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"newpageurl\" value=\"".sed_cc($newpageurl)."\" size=\"56\" maxlength=\"255\" /> ".$pfs_form_url_myfiles,
 	"PAGEADD_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"newpagesize\" value=\"".sed_cc($newpagesize)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_TEXT" => "<textarea name=\"newpagetext\" rows=\"24\" cols=\"56\">".sed_cc($newpagetext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
-	"PAGEADD_FORM_TEXTBOXER" => "<textarea name=\"newpagetext\" rows=\"24\" cols=\"56\">".sed_cc($newpagetext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
+	"PAGEADD_FORM_TEXT" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"56\">".sed_cc($newpagetext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
+	"PAGEADD_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"56\">".sed_cc($newpagetext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
 	"PAGEADD_FORM_BBCODES" => $bbcodes,
 	"PAGEADD_FORM_SMILIES" => $smilies,
 	"PAGEADD_FORM_MYPFS" => $pfs

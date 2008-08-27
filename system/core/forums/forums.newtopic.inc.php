@@ -184,7 +184,7 @@ $smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_sm
 $bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes('newtopic', 'newmsg', $L['BBcodes']): '';
 $bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
-$post_main = "<textarea name=\"newmsg\" rows=\"16\" cols=\"56\">".sed_cc($newmsg)."</textarea>";
+$post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
 
 $toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"forums.php?m=newtopic&amp;s=".$s."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
@@ -206,7 +206,7 @@ $t = new XTemplate($mskin);
 $t->assign(array(
 
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
-	"FORUMS_NEWTOPIC_SUBTITLE" => sed_bbcode($fs_desc),
+	"FORUMS_NEWTOPIC_SUBTITLE" => sed_cc($fs_desc),
 	"FORUMS_NEWTOPIC_SEND" => "forums.php?m=newtopic&amp;a=newtopic&amp;s=".$s,
 	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"64\" />",

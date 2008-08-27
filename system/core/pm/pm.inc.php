@@ -205,7 +205,7 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 		{
 			$pm_editbox = "<h4>".$L['Edit']." :</h4>";
 			$pm_editbox .= "<form id=\"newlink\" action=\"pm.php?m=edit&amp;a=update&amp;".sed_xg()."&amp;id=".$id."\" method=\"post\">";
-			$pm_editbox .= "<textarea name=\"newpmtext\" rows=\"8\" cols=\"56\">".sed_cc($row['pm_text'])."</textarea>";
+			$pm_editbox .= "<textarea class=\"editor\" name=\"newpmtext\" rows=\"8\" cols=\"56\">".sed_cc($row['pm_text'])."</textarea>";
 			$pm_editbox .= "<br />&nbsp;<br /><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></form>";
 		}
 	}

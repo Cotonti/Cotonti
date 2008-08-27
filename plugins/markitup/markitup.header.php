@@ -45,7 +45,7 @@ $out['compopup'] .= <<<HTM
 <link rel="stylesheet" type="text/css" href="plugins/markitup/style.css" />
 <script type="text/javascript" >
    $(document).ready(function() {
-      $("textarea:last").markItUp(mySettings);
+      $("textarea.editor").markItUp(mySettings);
    });
 </script>
 
