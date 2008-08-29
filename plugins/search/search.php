@@ -121,7 +121,7 @@ if ($tab=='frm') {
 
 	if ($a=='search')
 	{
-		if (strlen($sq)<3)
+		if (mb_strlen($sq)<3)
 		{
 			$plugin_body .= "<p>".$L['plu_querytooshort']."</p>";
 			$a = '';
@@ -285,7 +285,7 @@ if ($tab=='frm') {
 
 	if ($a=='search')
 	{
-		if (strlen($sq)<3)
+		if (mb_strlen($sq)<3)
 		{
 			$plugin_body .= "<p>".$L['plu_querytooshort']."</p>";
 			$a = '';
@@ -462,7 +462,7 @@ if ($tab=='frm') {
 
 	if ($a=='search')
 	{
-		if (strlen($sq)<3)
+		if (mb_strlen($sq)<3)
 		{
 			$plugin_body .= "<p>".$L['plu_querytooshort']."</p>";
 			$a = '';

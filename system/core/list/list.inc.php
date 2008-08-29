@@ -38,7 +38,7 @@ else
 /* === Hook === */
 $extp = sed_getextplugins('list.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (empty($s))
@@ -119,10 +119,10 @@ $out['subtitle'] = $sed_cat[$c]['title'];
 /* === Hook === */
 $extp = sed_getextplugins('list.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 if ($sed_cat[$c]['group'])
 { $mskin = sed_skinfile(array('list', 'group', $sed_cat[$c]['tpl'])); }
@@ -187,12 +187,12 @@ if (!$sed_cat[$c]['group'])
 $ii=0;
 $jj=1;
 $mtch = $sed_cat[$c]['path'].".";
-$mtchlen = strlen($mtch);
-$mtchlvl = substr_count($mtch,".");
+$mtchlen = mb_strlen($mtch);
+$mtchlvl = mb_substr_count($mtch,".");
 
 while (list($i,$x) = each($sed_cat) )
 {
-	if (substr($x['path'],0,$mtchlen)==$mtch && substr_count($x['path'],".")==$mtchlvl)
+	if (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
 	{
 		$sql4 = sed_sql_query("SELECT COUNT(*) FROM $db_pages p, $db_structure s
 		WHERE p.page_cat=s.structure_code
@@ -225,8 +225,8 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 	if (!empty($pag['page_url']) && $pag['page_file'])
 	{
-		$dotpos = strrpos($pag['page_url'],".")+1;
-		$pag['page_fileicon'] = (strlen($pag['page_url'])-$dotpos>4) ? "system/img/admin/page.gif" : "system/img/pfs/".strtolower(substr($pag['page_url'], $dotpos, 5)).".gif";
+		$dotpos = mb_strrpos($pag['page_url'],".")+1;
+		$pag['page_fileicon'] = (mb_strlen($pag['page_url'])-$dotpos>4) ? "images/admin/page.gif" : "images/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
 		$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\" />";
 	}
 	else
@@ -266,7 +266,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN.LIST_ROW");
@@ -276,12 +276,12 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 /* === Hook === */
 $extp = sed_getextplugins('list.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

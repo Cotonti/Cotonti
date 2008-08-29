@@ -37,7 +37,7 @@ sed_block($usr['isadmin']);
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
@@ -62,7 +62,7 @@ if ($a=='update')
 	/* === Hook === */
 	$extp = sed_getextplugins('users.edit.update.first');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT');
@@ -114,8 +114,8 @@ if ($a=='update')
 	$rusernewpass = sed_import('rusernewpass','P','TXT', 16);
 	$rusergroupsms = sed_import('rusergroupsms', 'P', 'ARR');
 
-	$error_string .= (strlen($rusername)<2 || ereg(",", $rusername) || ereg("'", $rusername)) ? $L['aut_usernametooshort']."<br />" : '';
-	$error_string .= (!empty($rusernewpass) && (strlen($rusernewpass)<4 || sed_alphaonly($rusernewpass)!=$rusernewpass)) ? $L['aut_passwordtooshort']."<br />" : '';
+	$error_string .= (mb_strlen($rusername)<2 || mb_ereg(",", $rusername) || mb_ereg("'", $rusername)) ? $L['aut_usernametooshort']."<br />" : '';
+	$error_string .= (!empty($rusernewpass) && (mb_strlen($rusernewpass)<4 || sed_alphaonly($rusernewpass)!=$rusernewpass)) ? $L['aut_passwordtooshort']."<br />" : '';
 
 	if ($ruserdelete)
 	{
@@ -144,7 +144,7 @@ if ($a=='update')
 
 	if (empty($error_string))
 	{
-		$ruserpassword = (strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
+		$ruserpassword = (mb_strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
 
 		if ($rusername=='')
 		{ $rusername = $urr['user_name']; }
@@ -153,11 +153,11 @@ if ($a=='update')
 		if ($ruserpmnotify=='')
 		{ $ruserpmnotify = $urr['user_pmnotify']; }
 
-		$ruserextra1 = ($ruserextra1_p) ? substr($ruserextra1,0,$cfg['extra1tsetting']) : $urr['user_extra1'];
-		$ruserextra2 = ($ruserextra2_p) ? substr($ruserextra2,0,$cfg['extra2tsetting']) : $urr['user_extra2'];
-		$ruserextra3 = ($ruserextra3_p) ? substr($ruserextra3,0,$cfg['extra3tsetting']) : $urr['user_extra3'];
-		$ruserextra4 = ($ruserextra4_p) ? substr($ruserextra4,0,$cfg['extra4tsetting']) : $urr['user_extra4'];
-		$ruserextra5 = ($ruserextra5_p) ? substr($ruserextra5,0,$cfg['extra5tsetting']) : $urr['user_extra5'];
+		$ruserextra1 = ($ruserextra1_p) ? mb_substr($ruserextra1,0,$cfg['extra1tsetting']) : $urr['user_extra1'];
+		$ruserextra2 = ($ruserextra2_p) ? mb_substr($ruserextra2,0,$cfg['extra2tsetting']) : $urr['user_extra2'];
+		$ruserextra3 = ($ruserextra3_p) ? mb_substr($ruserextra3,0,$cfg['extra3tsetting']) : $urr['user_extra3'];
+		$ruserextra4 = ($ruserextra4_p) ? mb_substr($ruserextra4,0,$cfg['extra4tsetting']) : $urr['user_extra4'];
+		$ruserextra5 = ($ruserextra5_p) ? mb_substr($ruserextra5,0,$cfg['extra5tsetting']) : $urr['user_extra5'];
 		$ruserextra6 = ($ruserextra6_p) ? $ruserextra6 : $urr['user_extra6'];
 		$ruserextra7 = ($ruserextra7_p) ? $ruserextra7 : $urr['user_extra7'];
 		$ruserextra8 = ($ruserextra8_p) ? $ruserextra8 : $urr['user_extra8'];
@@ -254,7 +254,7 @@ if ($a=='update')
 		/* === Hook === */
 		$extp = sed_getextplugins('users.edit.update.done');
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_auth_clear($id);
@@ -294,11 +294,11 @@ $out['subtitle'] = sed_cc($urr['user_name']);
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('users', 'edit', $usr['maingrp']));
 $t = new XTemplate($mskin);
@@ -368,13 +368,13 @@ $t->assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

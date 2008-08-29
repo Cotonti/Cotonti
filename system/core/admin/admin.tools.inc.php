@@ -26,8 +26,8 @@ $p = sed_import('p','G','ALP');
 
 if (!empty($p))
 	{
-	$path_lang_def	= "plugins/$p/lang/$p.en.lang.php";
-	$path_lang_alt	= "plugins/$p/lang/$p.$lang.lang.php";
+	$path_lang_def	= $cfg['plugins_dir']."/$p/lang/$p.en.lang.php";
+	$path_lang_alt	= $cfg['plugins_dir']."/$p/lang/$p.$lang.lang.php";
 
 	if (@file_exists($path_lang_alt))
 		{ require_once($path_lang_alt); }
@@ -51,7 +51,7 @@ if (!empty($p))
 		exit;
 		}
 
-	$extplugin_info = "plugins/".$p."/".$p.".setup.php";
+	$extplugin_info = $cfg['plugins_dir']."/".$p."/".$p.".setup.php";
 
 	if (file_exists($extplugin_info))
 		{
@@ -67,7 +67,7 @@ if (!empty($p))
 		{
 		foreach($extp as $k => $pl)
 			 {
-			 include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			 include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			 $adminmain .= $plugin_body;
 			 }
 		}
@@ -88,14 +88,14 @@ else
 
 	/* === Hook === */
 	$extp = sed_getextplugins('tools');
-	
+
 	if (is_array($extp))
 		{
 		foreach($extp as $k => $pl)
 			{
 			$plugins[]= array ($pl['pl_code'], $pl['pl_title']);
 			}
-			
+
 		usort($plugins, "cmp");
 
 		$adminmain .= "<table class=\"cells\">";
@@ -103,23 +103,23 @@ else
 
 		while (list($i,$x) = each($plugins))
 			{
-			$extplugin_info = "plugins/".$x[0]."/".$x[0].".setup.php";
-		
+			$extplugin_info = $cfg['plugins_dir']."/".$x[0]."/".$x[0].".setup.php";
+
 			if (file_exists($extplugin_info))
 				{
 				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 				}
 			else
 				{
-				include ("system/lang/".$usr['lang']."/message.lang.php");
+				include_once($cfg['system_dir'].'/lang/'.$usr['lang']."/message.lang.php");
 				$info['Name'] = $x[0]." : ".$L['msg907_1'];
 				}
 
 			$plugin_icon = (empty($x[1])) ? 'plugins' : $x[1];
 			$adminmain  .= "<tr><td><a href=\"admin.php?m=tools&amp;p=".$x[0]."\">";
-			$adminmain  .= "<img src=\"system/img/admin/tools.gif\" alt=\"\" /> ".$info['Name']."</a></td></tr>";
+			$adminmain  .= "<img src=\"images/admin/tools.gif\" alt=\"\" /> ".$info['Name']."</a></td></tr>";
 			}
-		$adminmain .= "</table>";				
+		$adminmain .= "</table>";
 		}
 	else
 		{

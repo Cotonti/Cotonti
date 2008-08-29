@@ -33,7 +33,7 @@ unset ($notlastpage);
 /* === Hook === */
 $extp = sed_getextplugins('forums.posts.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($n=='last' && !empty($q))
@@ -142,7 +142,7 @@ if ($a=='newpost')
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.newpost.first');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$newmsg = sed_import('newmsg','P','HTM');
@@ -195,7 +195,7 @@ if ($a=='newpost')
 		/* === Hook === */
 		$extp = sed_getextplugins('forums.posts.newpost.done');
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_forum_sectionsetlast($s);
@@ -212,7 +212,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.delete.first');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	if ($post12[0]==$p && $post12[1]>0)
@@ -238,7 +238,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.delete.done');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$q'");
@@ -265,7 +265,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			/* === Hook === */
 			$extp = sed_getextplugins('forums.posts.emptytopicdel');
 			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
 
 			sed_log("Delete topic #".$q." (no post left)",'for');
@@ -360,10 +360,10 @@ $out['subtitle'] = $L['Forums']." - ".sed_cc($ft_title);
 /* === Hook === */
 $extp = sed_getextplugins('forums.posts.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('forums', 'posts', $fs_category, $s));
 $t = new XTemplate($mskin);
@@ -609,7 +609,7 @@ while ($row = sed_sql_fetcharray($sql))
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN.FORUMS_POSTS_ROW");
@@ -622,18 +622,18 @@ $allowreplybox = ($cfg['antibumpforums'] && $lastposterid>0 && $lastposterid==$u
 function sed_stripquote($string) {
 	global $sys;
 	$starttime = $sys['now'];
-	$startindex = stripos($string,'[quote');
+	$startindex = mb_stripos($string,'[quote');
 	while ($startindex>=0) {
 		if (($sys['now']-$starttime)>2000) { break; }
-		$stopindex = strpos($string,'[/quote]');
+		$stopindex = mb_strpos($string,'[/quote]');
 		if ($stopindex>0) {
 			if (($sys['now']-$starttime)>3000) { break; }
-			$fragment = substr($string,$startindex,($stopindex-$startindex+8));
+			$fragment = mb_substr($string,$startindex,($stopindex-$startindex+8));
 			$string = str_ireplace($fragment,'',$string);
-			$stopindex = stripos($string,'[/quote]');
+			$stopindex = mb_stripos($string,'[/quote]');
 		} else { break; }
 		$string = trim($string);
-		$startindex = stripos($string,'[quote');
+		$startindex = mb_stripos($string,'[quote');
 	}
 	return($string);
 }
@@ -675,7 +675,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 	/* === Hook  === */
 	$extp = sed_getextplugins('forums.posts.newpost.tags');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN.FORUMS_POSTS_NEWPOST");
@@ -699,12 +699,12 @@ if ($ft_mode==1)
 /* === Hook  === */
 $extp = sed_getextplugins('forums.posts.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

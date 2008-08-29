@@ -19,9 +19,9 @@ define('SED_INDEX', TRUE);
 $location = 'Home';
 $z = 'index';
 
-require_once('./system/functions.php');
 require_once('./datas/config.php');
-require_once('./system/common.php');
-require_once('./system/core/index/index.inc.php');
+require_once($cfg['system_dir'].'/functions.php');
+require_once($cfg['system_dir'].'/common.php');
+require_once($cfg['system_dir'].'/core/index/index.inc.php');
 
 ?>

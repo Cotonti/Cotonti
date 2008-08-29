@@ -46,7 +46,7 @@ $cachesize = 0;
 while ($row = sed_sql_fetcharray($sql))
 	{
 	$row['c_value'] = sed_cc($row['c_value']);
-	$row['size'] = strlen($row['c_value']);
+	$row['size'] = mb_strlen($row['c_value']);
 	$cachesize += $row['size'];
 	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"admin.php?m=cache&amp;a=delete&amp;id=".$row['c_name']."&amp;".sed_xg()."\">x</a>]</td>";
 	$adminmain .= "<td>".$row['c_name']."</td>";

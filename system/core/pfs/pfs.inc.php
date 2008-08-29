@@ -79,7 +79,7 @@ function addpix(gfile,c1,c2)
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
 	{
- 	$icon[$line[0]] = "<img src=\"system/img/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
+ 	$icon[$line[0]] = "<img src=\"images/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
  	$filedesc[$line[0]] = $line[1];
  	}
 
@@ -96,7 +96,7 @@ if ($userid!=$usr['id'])
 /* === Hook === */
 $extp = sed_getextplugins('pfs.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 
@@ -113,7 +113,7 @@ if ($a=='upload')
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.upload.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	if ($folder_id!=0)
@@ -138,18 +138,18 @@ if ($a=='upload')
 			$disp_errors .= "<li>".$u_name." : ";
 			$f_extension_ok = 0;
 			$desc = $ndesc[$ii];
-			$u_name = strtolower($u_name);
+			$u_name = mb_strtolower($u_name);
 			$u_newname = ($cfg['pfsuserfolder']) ? $u_name : $userid."-".$u_name;
 			$u_sqlname = sed_sql_prep($u_newname);
-			$dotpos = strrpos($u_name,".")+1;
-			$f_extension = substr($u_name, $dotpos, 5);
+			$dotpos = mb_strrpos($u_name,".")+1;
+			$f_extension = mb_substr($u_name, $dotpos, 5);
 			$f_extension_ok = 0;
 
 			if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4')
 				{
 				foreach ($sed_extensions as $k => $line)
 					{
-					if (strtolower($f_extension) == $line[0])
+					if (mb_strtolower($f_extension) == $line[0])
 						{ $f_extension_ok = 1; }
 					}
 				}
@@ -172,7 +172,7 @@ if ($a=='upload')
 					/* === Hook === */
 					$extp = sed_getextplugins('pfs.upload.moved');
 					if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+						{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 					/* ===== */
 
 					$u_size = filesize($cfg['pfs_dir_user'].$u_newname);
@@ -203,14 +203,14 @@ if ($a=='upload')
 					/* === Hook === */
 					$extp = sed_getextplugins('pfs.upload.done');
 					if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+						{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 					/* ===== */
 
 					if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled' && file_exists($cfg['pfs_dir_user'].$u_newname))
 						{
 						@unlink($cfg['th_dir_user'].$u_newname);
-						$th_colortext = array(hexdec(substr($cfg['th_colortext'],0,2)), hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
-						$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)), hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
+						$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
+						$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
 						sed_createthumb($cfg['pfs_dir_user'].$u_newname, $cfg['th_dir_user'].$u_newname, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
 						}
 					}
@@ -240,7 +240,7 @@ elseif ($a=='delete')
 		$f = $row['pfs_folderid'];
 		$ff = $cfg['pfs_dir_user'].$pfs_file;
 
-		if (file_exists($ff) && (substr($pfs_file, 0, strpos($pfs_file, "-"))==$userid || $usr['isadmin']))
+		if (file_exists($ff) && (mb_substr($pfs_file, 0, mb_strpos($pfs_file, "-"))==$userid || $usr['isadmin']))
 			{
 			@unlink($ff);
 			if (file_exists($cfg['th_dir_user'].$pfs_file))
@@ -368,8 +368,8 @@ else
 
 $files_count = sed_sql_numrows($sql);
 $movebox = (empty($f)) ? sed_selectbox_folders($userid,"/","") : sed_selectbox_folders($userid,"$f","");
-$th_colortext = array(hexdec(substr($cfg['th_colortext'],0,2)), hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
-$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)), hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
+$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
+$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
 
 while ($row = sed_sql_fetcharray($sql))
 	{
@@ -382,8 +382,8 @@ while ($row = sed_sql_fetcharray($sql))
 	$pfs_filesize = floor($row['pfs_size']/1024);
 	$pfs_icon = $icon[$pfs_extension];
 
-	$dotpos = strrpos($pfs_file, ".")+1;
-	$pfs_realext = strtolower(substr($pfs_file, $dotpos, 5));
+	$dotpos = mb_strrpos($pfs_file, ".")+1;
+	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
 	unset($add_thumbnail, $add_image);
 	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"\" /></a>" : '';
 
@@ -397,8 +397,8 @@ while ($row = sed_sql_fetcharray($sql))
 		{
 		if (!file_exists($cfg['th_dir_user'].$pfs_file) && file_exists($cfg['pfs_dir_user'].$pfs_file))
 			{
-			$th_colortext = array(hexdec(substr($cfg['th_colortext'],0,2)), hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
-			$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)), hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
+			$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
+			$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
 			sed_createthumb($cfg['pfs_dir_user'].$pfs_file, $cfg['th_dir_user'].$pfs_file, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $pfs_extension, $pfs_file, $pfs_filesize, $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
 			}
 
@@ -592,7 +592,7 @@ function ratings(rcode)
 	}
 else
 	{
-	require_once("system/header.php");
+	require_once $cfg['system_dir'] . '/header.php';
 
 	$t = new XTemplate("skins/".$skin."/pfs.tpl");
 
@@ -604,13 +604,13 @@ else
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.tags');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require_once("system/footer.php");
+	require_once $cfg['system_dir'] . '/footer.php';
 	}
 
 ?>

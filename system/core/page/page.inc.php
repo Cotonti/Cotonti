@@ -30,7 +30,7 @@ $ratings = sed_import('ratings','G','BOL');
 /* === Hook === */
 $extp = sed_getextplugins('page.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (!empty($al))
@@ -61,16 +61,16 @@ if ($pag['page_state']==1 && !$usr['isadmin'])
 	exit;
 }
 
-if (substr($pag['page_text'], 0, 6)=='redir:')
+if (mb_substr($pag['page_text'], 0, 6)=='redir:')
 {
 	$redir = str_replace('redir:', '', trim($pag['page_text']));
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
 	header("Location: " . SED_ABSOLUTE_URL . "".$redir);
 	exit;
 }
-elseif (substr($pag['page_text'], 0, 8)=='include:')
+elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
 {
-	$pag['page_text'] = sed_readraw('datas/html/'.trim(substr($pag['page_text'], 8, 255)));
+	$pag['page_text'] = sed_readraw('datas/html/'.trim(mb_substr($pag['page_text'], 8, 255)));
 }
 
 if($pag['page_file'] && $a=='dl')
@@ -101,8 +101,8 @@ if ($pag['page_totaltabs']>1)
 
 	for ($i = 0; $i < $pag['page_totaltabs']; $i++)
 	{
-		$p1 = strpos($pag['page_tabs'][$i], '[title]');
-		$p2 = strpos($pag['page_tabs'][$i], '[/title]');
+		$p1 = mb_strpos($pag['page_tabs'][$i], '[title]');
+		$p2 = mb_strpos($pag['page_tabs'][$i], '[/title]');
 
 		if ($p2>$p1 && $p1<4)
 		{
@@ -142,10 +142,10 @@ $out['subtitle'] = $pag['page_title'];
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('page', $sed_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
@@ -243,38 +243,47 @@ switch($pag['page_type'])
 	break;
 }
 
-if($pag['page_file'])
+$pag['page_file'] = intval($pag['page_file']);
+if($pag['page_file'] > 0)
 {
 	if (!empty($pag['page_url']))
 	{
-		$dotpos = strrpos($pag['page_url'],".")+1;
-		$pag['page_fileicon'] = "system/img/pfs/".strtolower(substr($pag['page_url'], $dotpos, 5)).".gif";
+		$dotpos = mb_strrpos($pag['page_url'],".")+1;
+		$pag['page_fileicon'] = "images/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
 		if (!file_exists($pag['page_fileicon']))
-		{ $pag['page_fileicon'] = "system/img/admin/page.gif"; }
+		{ $pag['page_fileicon'] = "images/admin/page.gif"; }
 		$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\">";
 	}
 	else
 	{ $pag['page_fileicon'] = ''; }
 
 	$t->assign(array(
-			"PAGE_FILE_URL" => "page.php?id=".$pag['page_id']."&amp;a=dl",
 			"PAGE_FILE_SIZE" => $pag['page_size'],
 			"PAGE_FILE_COUNT" => $pag['page_filecount'],
 			"PAGE_FILE_ICON" => $pag['page_fileicon'],
 			"PAGE_FILE_NAME" => basename($pag['page_url'])
 	));
+	if($pag['page_file'] === 2 && $usr['id'] == 0)
+	{
+		$t->assign('PAGE_SHORTTITLE', $L['Members_download']);
+	}
+	else
+	{
+		$t->assign('PAGE_FILE_URL', 'page.php?id='.$pag['page_id'].'a=dl');
+	}
 	$t->parse("MAIN.PAGE_FILE");
+	$t->assign('PAGE_SHORTTITLE', $pag['page_title']);
 }
 
 /* === Hook === */
 $extp = sed_getextplugins('page.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

@@ -90,21 +90,21 @@ switch($ic)
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rightsbyitem.case');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $adminpath[] = array("admin.php?m=rightsbyitem&amp;ic=$ic&amp;io=$io", $L['Rights']." / ".$L['adm_code'][$ic].$title);
 
 $adv_columns = ($advanced) ? 5 : 0;
 
-$legend = "<img src=\"system/img/admin/auth_r.gif\" alt=\"\" /> : ".$L['Read']."<br />";
-$legend .= "<img src=\"system/img/admin/auth_w.gif\" alt=\"\" /> : ".$L['Write']."<br />";
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_1.gif\" alt=\"\" /> : ".$L['Custom']." #1<br />" : '';
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_2.gif\" alt=\"\" /> : ".$L['Custom']." #2<br />" : '';
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_3.gif\" alt=\"\" /> : ".$L['Custom']." #3<br />" : '';
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_4.gif\" alt=\"\" /> : ".$L['Custom']." #4<br />" : '';
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_5.gif\" alt=\"\" /> : ".$L['Custom']." #5<br />" : '';
-$legend .= "<img src=\"system/img/admin/auth_a.gif\" alt=\"\" /> : ".$L['Administration'];
+$legend = "<img src=\"images/admin/auth_r.gif\" alt=\"\" /> : ".$L['Read']."<br />";
+$legend .= "<img src=\"images/admin/auth_w.gif\" alt=\"\" /> : ".$L['Write']."<br />";
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_1.gif\" alt=\"\" /> : ".$L['Custom']." #1<br />" : '';
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_2.gif\" alt=\"\" /> : ".$L['Custom']." #2<br />" : '';
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_3.gif\" alt=\"\" /> : ".$L['Custom']." #3<br />" : '';
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_4.gif\" alt=\"\" /> : ".$L['Custom']." #4<br />" : '';
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_5.gif\" alt=\"\" /> : ".$L['Custom']." #5<br />" : '';
+$legend .= "<img src=\"images/admin/auth_a.gif\" alt=\"\" /> : ".$L['Administration'];
 
 $headcol .= "<tr><td class=\"coltop\" rowspan=\"2\">".$L['Groups']."</td>";
 $headcol .= "<td class=\"coltop\" colspan=\"".(3+$adv_columns)."\">".$L['Rights']."</td>";
@@ -113,14 +113,14 @@ $headcol .= "<td class=\"coltop\" rowspan=\"2\" style=\"width:64px;\">".$L['Open
 $headcol .= "</tr>";
 
 $headcol .= "<tr>\n";
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_r.gif\" alt=\"\" /></td>\n";
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_w.gif\" alt=\"\" /></td>\n";
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_1.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_2.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_3.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_4.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_5.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_a.gif\" alt=\"\" /></td>\n";
+$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_r.gif\" alt=\"\" /></td>\n";
+$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_w.gif\" alt=\"\" /></td>\n";
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_1.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_2.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_3.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_4.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_5.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_a.gif\" alt=\"\" /></td>\n";
 $headcol .= "</tr>\n";
 
 $adminmain .= "<form id=\"saverightsbyitem\" action=\"admin.php?m=rightsbyitem&amp;a=update&amp;ic=$ic&amp;io=$io\" method=\"post\">";
@@ -156,7 +156,7 @@ function sed_rights_parseline($row, $title, $link)
 		if ($locked[$code])
 		{
 			$box[$code] = ($checked[$code]) ? "<input type=\"hidden\" name=\"auth[".$row['auth_groupid']."][".$code."]\" value=\"1\" />" : '';
-			$box[$code] .= ($checked[$code]) ? "<img src=\"system/img/admin/discheck1.gif\" alt=\"\" />" : "<img src=\"system/img/admin/discheck0.gif\" alt=\"\" />";
+			$box[$code] .= ($checked[$code]) ? "<img src=\"images/admin/discheck1.gif\" alt=\"\" />" : "<img src=\"images/admin/discheck0.gif\" alt=\"\" />";
 		}
 		else
 		{
@@ -168,11 +168,11 @@ function sed_rights_parseline($row, $title, $link)
 
 	$res .= "<tr>\n";
 	$res .= "<td style=\"padding:1px;\">\n";
-	$res .= "<img src=\"system/img/admin/groups.gif\" alt=\"\" /> ";
+	$res .= "<img src=\"images/admin/groups.gif\" alt=\"\" /> ";
 	$res .= "<a href=\"$link\">".$title."</a></td>\n";
 	$res .= "<td style=\"text-align:center; padding:2px;\">".implode("</td><td style=\"text-align:center; padding:2px;\">", $box)."</td>\n";
 	$res .= "<td style=\"text-align:center; padding:2px;\">".sed_build_user($row['auth_setbyuserid'], sed_cc($row['user_name']))."</td>\n";
-	$res .= "<td style=\"text-align:center;\"><a href=\"users.php?g=".$row['auth_groupid']."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a></td>";
+	$res .= "<td style=\"text-align:center;\"><a href=\"users.php?g=".$row['auth_groupid']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
 	$res .= "</tr>\n";
 
 	return($res);

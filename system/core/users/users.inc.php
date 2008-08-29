@@ -33,7 +33,7 @@ sed_block($usr['auth_read']);
 /* === Hook === */
 $extp = sed_getextplugins('users.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (empty($s)) { $s = 'name'; }
@@ -46,7 +46,7 @@ $localskin = sed_skinfile('users');
 
 if (!empty($sq)) { $y = $sq; }	
 
-if ($f=='search' && strlen($y)>1)
+if ($f=='search' && mb_strlen($y)>1)
 	{
 	$sq = $y;
 	$title .= $cfg['separator']." ". $L['Search']." '".sed_cc($y)."'";
@@ -76,7 +76,7 @@ elseif ($gm>1)
 		LIMIT $d,".$cfg['maxusersperpage']);
 	}
 
-elseif (strlen($f)==1)
+elseif (mb_strlen($f)==1)
 	{
 	if ($f=="_")
 		{
@@ -87,7 +87,7 @@ elseif (strlen($f)==1)
 		}
     else
 		{
-		$f = strtoupper($f);
+		$f = mb_strtoupper($f);
 		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '".$f."'";
 		$i = $f."%";
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_name LIKE '$i'");
@@ -96,9 +96,9 @@ elseif (strlen($f)==1)
 		}
 	}
 
-elseif (substr($f, 0, 8)=='country_')
+elseif (mb_substr($f, 0, 8)=='country_')
 	{
-	$cn = strtolower(substr($f, 8, 2));
+	$cn = mb_strtolower(mb_substr($f, 8, 2));
 	$title .= $cfg['separator']." ".$L['Country']." '";
 	$title .= ($cn=='00') ? $L['None']."'": $sed_countries[$cn]."'";
 	$cn_code = ($cn=='00') ? '' : $cn;
@@ -171,10 +171,10 @@ $out['subtitle'] = $L['Users'];
 /* === Hook === */
 $extp = sed_getextplugins('users.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
 
@@ -291,7 +291,7 @@ while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN.USERS_ROW");
@@ -300,12 +300,12 @@ while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 /* === Hook === */
 $extp = sed_getextplugins('users.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

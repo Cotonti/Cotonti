@@ -21,7 +21,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 /* === Hook === */
 $extp = sed_getextplugins('polls.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
@@ -100,7 +100,7 @@ $out['subtitle'] = $L['Polls'];
 /* === Hook === */
 $extp = sed_getextplugins('polls.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t = new XTemplate("skins/".$skin."/polls.tpl");
@@ -128,7 +128,7 @@ elseif ($id=='viewall')
 			{
 			$result .= "<tr>";
 			$result .= "<td style=\"width:128px;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600)."</td>";
-			$result .= "<td><a href=\"polls.php?id=".$row['poll_id']."\"><img src=\"system/img/admin/polls.gif\" alt=\"\" /></a></td>";
+			$result .= "<td><a href=\"polls.php?id=".$row['poll_id']."\"><img src=\"images/admin/polls.gif\" alt=\"\" /></a></td>";
 			$result .= "<td>".sed_parse(sed_cc($row['poll_text']),1 ,1 ,1)."</td>";
 			$result .= "</tr>";
 			}
@@ -191,7 +191,7 @@ else
 /* === Hook === */
 $extp = sed_getextplugins('polls.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");

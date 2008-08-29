@@ -35,9 +35,9 @@ if ($f=='year' || $f=='month')
 
 	while ($row = sed_sql_fetcharray($sql))
 		{
-		$y = substr($row['stat_name'], 0, 4);
-		$m = substr($row['stat_name'], 5, 2);
-		$d = substr($row['stat_name'], 8, 2);
+		$y = mb_substr($row['stat_name'], 0, 4);
+		$m = mb_substr($row['stat_name'], 5, 2);
+		$d = mb_substr($row['stat_name'], 8, 2);
 		$dat = @date('Y-m-d D', mktime(0,0,0,$m,$d,$y));
 		$hits_d[$dat] = $row['stat_value'];
 		}
@@ -74,9 +74,9 @@ else
 
 	while ($row = sed_sql_fetcharray($sql))
 		{
-		$y = substr($row['stat_name'], 0, 4);
-		$m = substr($row['stat_name'], 5, 2);
-		$d = substr($row['stat_name'], 8, 2);
+		$y = mb_substr($row['stat_name'], 0, 4);
+		$m = mb_substr($row['stat_name'], 5, 2);
+		$d = mb_substr($row['stat_name'], 8, 2);
 		$w = @date('W', mktime(0,0,0,$m,$d,$y));
 		$hits_w[$y."-W".$w] += $row['stat_value'];
 		$hits_m[$y."-".$m] += $row['stat_value'];

@@ -25,8 +25,8 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-require_once("plugins/textboxer2/inc/textboxer2.lang.php");
-require_once("plugins/textboxer2/inc/textboxer2.inc.php");
+require_once($cfg['plugins_dir']."/textboxer2/inc/textboxer2.lang.php");
+require_once($cfg['plugins_dir']."/textboxer2/inc/textboxer2.inc.php");
 
 	$tb2Buttons = array(
 		'tb_ieOnlyStart',

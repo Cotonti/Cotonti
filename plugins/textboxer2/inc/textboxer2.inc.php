@@ -194,9 +194,9 @@ function sed_textboxer2($name, $formname, $content, $rows, $cols, $loc="unknown"
 
 	$result="";
 
-	$textboxer_imgurl = "plugins/textboxer2/themes/";
-	$textboxer_themeurl = "plugins/textboxer2/themes/";
-	$textboxer_jsurl = "plugins/textboxer2/themes/tb2.js";
+	$textboxer_imgurl = $cfg['plugins_dir']."/textboxer2/themes/";
+	$textboxer_themeurl = $cfg['plugins_dir']."/textboxer2/themes/";
+	$textboxer_jsurl = $cfg['plugins_dir']."/textboxer2/themes/tb2.js";
 
 	$pbb = ($parse_bbcodes)?1:0;
 	$psm = ($parse_smilies)?1:0;

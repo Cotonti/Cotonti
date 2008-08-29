@@ -27,7 +27,7 @@ $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 $sys['pagesqueued'] = sed_sql_result($sql,0,'COUNT(*)');
 
 $adminmain .= "<ul>";
-$adminmain .= "<li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=page\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li>";
+$adminmain .= "<li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=page\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
 $adminmain .= "<li>".sed_linkif("page.php?m=add", $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
 $adminmain .= "<li>".sed_linkif("admin.php?m=page&amp;s=queue", $L['adm_valqueue']." : ".$sys['pagesqueued'], sed_auth('page', 'any', 'A'))."</li>";
 $adminmain .= "<li>".sed_linkif("admin.php?m=page&amp;s=structure", $L['adm_structure'], sed_auth('admin', 'a', 'A'))."</li>";

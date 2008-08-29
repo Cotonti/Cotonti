@@ -33,13 +33,13 @@ sed_die(empty($s));
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
 if ($row = sed_sql_fetcharray($sql))
-	{
+{
 	$fs_state = $row['fs_state'];
 	$fs_minlevel = $row['fs_minlevel'];
 	$fs_title = $row['fs_title'];
@@ -54,24 +54,24 @@ if ($row = sed_sql_fetcharray($sql))
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	sed_block($usr['auth_write']);
-	}
+}
 else
-	{ sed_die(); }
+{ sed_die(); }
 
 if ($fs_state)
-	{
+{
 	header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=602");
 	exit;
-	}
+}
 
 if ($a=='newtopic')
-	{
+{
 	sed_shield_protect();
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.newtopic.newtopic.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$newtopictitle = sed_import('newtopictitle','P','TXT', 64);
@@ -80,28 +80,28 @@ if ($a=='newtopic')
 	$newmsg = sed_import('newmsg','P','HTM');
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
 
-	if (strip_tags(strlen($newtopictitle))>0 && strlen($newmsg)>0)
-		{
-		if (substr($newtopictitle, 0 ,1)=="#")
-			{ $newtopictitle = str_replace('#', '', $newtopictitle); }
+	if (strip_tags(mb_strlen($newtopictitle))>0 && mb_strlen($newmsg)>0)
+	{
+		if (mb_substr($newtopictitle, 0 ,1)=="#")
+		{ $newtopictitle = str_replace('#', '', $newtopictitle); }
 
 		$sql = sed_sql_query("INSERT into $db_forum_topics
-			(ft_state,
-			ft_mode,
-			ft_sticky,
-			ft_sectionid,
-			ft_title,
-			ft_desc,
-			ft_creationdate,
-			ft_updated,
-			ft_postcount,
-			ft_viewcount,
-			ft_firstposterid,
-			ft_firstpostername,
-			ft_lastposterid,
-			ft_lastpostername )
-			VALUES
-			(0,
+		(ft_state,
+		ft_mode,
+		ft_sticky,
+		ft_sectionid,
+		ft_title,
+		ft_desc,
+		ft_creationdate,
+		ft_updated,
+		ft_postcount,
+		ft_viewcount,
+		ft_firstposterid,
+		ft_firstpostername,
+		ft_lastposterid,
+		ft_lastpostername )
+		VALUES
+		(0,
 			".(int)$newprvtopic.",
 			0,
 			".(int)$s.",
@@ -130,52 +130,53 @@ if ($a=='newtopic')
 		}
 
 		$sql = sed_sql_query("INSERT into $db_forum_posts
-			(fp_topicid,
-			fp_sectionid,
-			fp_posterid,
-			fp_postername,
-			fp_creation,
-			fp_updated,
-			fp_text,
-			fp_posterip)
-			VALUES
-			(".(int)$q.",
+		(fp_topicid,
+		fp_sectionid,
+		fp_posterid,
+		fp_postername,
+		fp_creation,
+		fp_updated,
+		fp_text,
+		fp_html,
+		fp_posterip)
+		VALUES
+		(".(int)$q.",
 			".(int)$s.",
 			".(int)$usr['id'].",
 			'".sed_sql_prep($usr['name'])."',
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
 			'".sed_sql_prep($newmsg)."',
-			'$rhtml',
-			'".$usr['ip']."')");
+		'$rhtml',
+		'".$usr['ip']."')");
 
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET
-			fs_postcount=fs_postcount+1,
-			fs_topiccount=fs_topiccount+1
-			WHERE fs_id='$s'");
+		fs_postcount=fs_postcount+1,
+		fs_topiccount=fs_topiccount+1
+		WHERE fs_id='$s'");
 
 		if ($fs_autoprune>0)
-			{ sed_forum_prunetopics('updated', $s, $fs_autoprune); }
+		{ sed_forum_prunetopics('updated', $s, $fs_autoprune); }
 
 		if ($fs_countposts)
-			{ $sql = sed_sql_query("UPDATE $db_users SET
-				user_postcount=user_postcount+1
-				WHERE user_id='".$usr['id']."'"); }
+		{ $sql = sed_sql_query("UPDATE $db_users SET
+		user_postcount=user_postcount+1
+		WHERE user_id='".$usr['id']."'"); }
 
 		if (!$newprvtopic)
-			{ sed_forum_sectionsetlast($s); }
+		{ sed_forum_sectionsetlast($s); }
 
 		/* === Hook === */
 		$extp = sed_getextplugins('forums.newtopic.newtopic.done');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_shield_update(45, "New topic");
 		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=posts&q=$q&n=last#bottom");
 		exit;
-		}
 	}
+}
 
 $pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
@@ -195,10 +196,10 @@ $out['subtitle'] = $L['Forums'];
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('forums', 'newtopic', $fs_category, $s));
 $t = new XTemplate($mskin);
@@ -219,28 +220,28 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_BBCODESLOCAL" => $bbcodes_local,
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
 	"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
-		));
+));
 
 if ($fs_allowprvtopics)
-	{
+{
 	$checked = ($newprvtopic) ? "checked=\"checked\"" : '';
 	$prvtopic = "<input type=\"checkbox\" class=\"checkbox\" name=\"newprvtopic\" $checked />";
 
 	$t->assign(array(
 		"FORUMS_NEWTOPIC_ISPRIVATE" => $prvtopic
-			));
+	));
 	$t->parse("MAIN.PRIVATE");
-	}
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

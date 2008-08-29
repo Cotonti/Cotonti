@@ -45,7 +45,7 @@ if ($a=='search')
 		{ $id = $id_p; }
 
 	$userip = explode(".", $id);
-	if (count($userip)!=4 || strlen($userip[0])>3 || strlen($userip[1])>3 || strlen($userip[2])>3 || strlen($userip[3])>3)
+	if (count($userip)!=4 || mb_strlen($userip[0])>3 || mb_strlen($userip[1])>3 || mb_strlen($userip[2])>3 || mb_strlen($userip[3])>3)
 		{ sed_die() ; }
 
 	$ipmask1 = $userip[0].".".$userip[1].".".$userip[2].".".$userip[3];

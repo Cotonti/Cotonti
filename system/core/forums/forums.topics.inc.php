@@ -87,7 +87,7 @@ if ($fs_state)
 /* === Hook === */
 $extp = sed_getextplugins('forums.topics.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($usr['isadmin'] && !empty($q) && !empty($a))
@@ -282,10 +282,10 @@ $out['subtitle'] = $L['Forums']." - ".$fs_title;
 /* === Hook === */
 $extp = sed_getextplugins('forums.topics.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('forums', 'topics', $fs_category, $s));
 $t = new XTemplate($mskin);
@@ -408,7 +408,7 @@ $t->assign(array(
 
 		/* === Hook - Part2 : Include === */
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		$t->parse("MAIN.FORUMS_TOPICS_ROW");
@@ -417,12 +417,12 @@ $t->assign(array(
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.topics.tags');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require_once("system/footer.php");
+	require_once $cfg['system_dir'] . '/footer.php';
 
 	?>

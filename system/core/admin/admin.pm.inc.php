@@ -23,7 +23,7 @@ $adminpath[] = array ("admin.php?m=other", $L['Other']);
 $adminpath[] = array ("admin.php?m=pm", $L['Private_Messages']);
 $adminhelp = $L['adm_help_pm'];
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pm\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pm\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 $totalpmdb = sed_sql_rowcount($db_pm);
 $totalpmsent = sed_stat_get('totalpms');

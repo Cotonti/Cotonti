@@ -200,7 +200,7 @@ while ($row = sed_sql_fetcharray($sql))
 
 $unknown_count = $totalusers - $ii;
 
-$plugin_body .= "<tr><td style=\"text-align:center;\"><img src=\"system/img/flags/f-00.gif\" alt=\"\" /></td>";
+$plugin_body .= "<tr><td style=\"text-align:center;\"><img src=\"images/flags/f-00.gif\" alt=\"\" /></td>";
 $plugin_body .= "<td>".$L['plu_unknown']."</td><td style=\"text-align:right;\">".$unknown_count."</td></tr>";
 $plugin_body .= "<tr><td colspan=\"2\" style=\"text-align:right;\">".$L['plu_total']."</td>";
 $plugin_body .= "<td style=\"text-align:right;\">".$totalusers."</td></tr></table>";

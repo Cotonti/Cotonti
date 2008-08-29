@@ -23,7 +23,7 @@ $adminpath[] = array ("admin.php?m=other", $L['Other']);
 $adminpath[] = array ("admin.php?m=comments", $L['Comments']);
 $adminhelp = $L['adm_help_comments'];
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=comments\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=comments\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($a=='delete')
 	{
@@ -63,8 +63,8 @@ $ii = 0;
 while ($row = sed_sql_fetcharray($sql))
 	{
 	$row['com_text'] = sed_cc(sed_cutstring($row['com_text'], 40));
-	$row['com_type'] = substr($row['com_code'], 0, 1);
-	$row['com_value'] = substr($row['com_code'], 1);
+	$row['com_type'] = mb_substr($row['com_code'], 0, 1);
+	$row['com_value'] = mb_substr($row['com_code'], 1);
 
 	switch($row['com_type'])
 		{
@@ -100,7 +100,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "<td>".$row['com_author']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['com_date'])."</td>";
 	$adminmain .= "<td>".$row['com_text']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$row['com_url']."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a></td></tr>";
+	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$row['com_url']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td></tr>";
 	$ii++;
 	}
 $adminmain .= "<tr><td colspan=\"7\">".$L['Total']." : ".$ii."</td></tr><tr><td colspan=\"7\"></td></tr></table>";

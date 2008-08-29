@@ -18,9 +18,9 @@ define('SED_CODE', TRUE);
 
 $dbprefix_sed = "sed_";
 
-require_once("system/functions.php");
-require_once("datas/config.php");
-$sqldb_file = 'system/database.'.$cfg['sqldb'].'.php';
+require_once './datas/config.php';
+require_once($cfg['system_dir'].'/functions.php');
+$sqldb_file = $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
 require_once($sqldb_file);
 
 echo "<html>
@@ -180,7 +180,7 @@ switch($step)
 
 	while ($row = sed_sql_fetcharray($sql))
 		{
-		$row['page_id'] = substr($row['com_code'], 1, 10);
+		$row['page_id'] = mb_substr($row['com_code'], 1, 10);
 		$out .= sed_query_chk("UPDATE ".$dbprefix_sed."pages SET page_comcount=".$row['COUNT(*)']." WHERE page_id=".$row['page_id']);
 		}
 

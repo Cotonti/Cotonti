@@ -29,8 +29,8 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', '
 // sed_block($usr['auth_read']);
 
 $imgpath = $cfg['pfs_dir'].$v;
-$dotpos = strrpos($imgpath,".")+1;
-$f_extension = strtolower(substr($imgpath, $dotpos,4));
+$dotpos = mb_strrpos($imgpath,".")+1;
+$f_extension = mb_strtolower(mb_substr($imgpath, $dotpos,4));
 
 if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported) )
 	{

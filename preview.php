@@ -10,10 +10,10 @@
  */
 
 define('SED_CODE', true);
-require_once './system/functions.php';
 require_once './datas/config.php';
+require_once $cfg['system_dir'].'/functions.php';
 define('SED_NO_ANTIXSS', true);
-require_once './system/common.php';
+require_once $cfg['system_dir'].'/common.php';
 
 header('Content-type: text/html; charset='.$cfg['charset']);
 

@@ -5,7 +5,7 @@ Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
 [BEGIN_SED]
-File=skins/ice/ice.en.lang.php
+File=skins/base/base.en.lang.php
 Version=101
 Updated=2006-mar-16
 Type=Skin

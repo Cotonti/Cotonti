@@ -20,24 +20,24 @@ define('SED_PAGE', TRUE);
 $location = 'Pages';
 $z = 'page';
 
-require_once('./system/functions.php');
 require_once('./datas/config.php');
-require_once('./system/common.php');
+require_once($cfg['system_dir'].'/functions.php');
+require_once($cfg['system_dir'].'/common.php');
 
 sed_dieifdisabled($cfg['disable_page']);
 
 switch($m)
 	{
 	case 'add':
-	require_once('./system/core/page/page.add.inc.php');
+	require_once($cfg['system_dir'].'/core/page/page.add.inc.php');
 	break;
 
 	case 'edit':
-	require_once('./system/core/page/page.edit.inc.php');
+	require_once($cfg['system_dir'].'/core/page/page.edit.inc.php');
 	break;
 
 	default:
-	require_once('./system/core/page/page.inc.php');
+	require_once($cfg['system_dir'].'/core/page/page.inc.php');
 	break;
 	}
 

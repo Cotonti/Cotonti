@@ -23,7 +23,7 @@ sed_block($usr['isadmin']);
 
 $adminpath[] = array ("admin.php?m=users", $L['Users']);
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=users\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=users\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 switch($n)
 	{
@@ -156,7 +156,7 @@ switch($n)
 	$adminmain .= "<tr><td>".$L['Members']." :</td>";
 	$adminmain .= "<td><a href=\"users.php?g=$g\">".$row['grp_memberscount']."</a></td></tr>";
 	$adminmain .= "<tr><td>".$L['Rights']." :</td>";
-	$adminmain .= "<td><a href=\"admin.php?m=rights&amp;g=$g\"><img src=\"system/img/admin/rights.gif\" alt=\"\" /></a></tr>";
+	$adminmain .= "<td><a href=\"admin.php?m=rights&amp;g=$g\"><img src=\"images/admin/rights.gif\" alt=\"\" /></a></tr>";
 	
 	$adminmain .= ($g>5) ? "<tr><td>".$L['Delete']." :</td><td>[<a href=\"admin.php?m=users&amp;n=edit&amp;a=delete&amp;g=".$g."&amp;".sed_xg()."\">x</a>]</td></tr>" : '';
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr></table></form>";
@@ -188,13 +188,13 @@ switch($n)
 			$row['grp_hidden'] = ($row['grp_hidden']) ? '1' : '0';
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
 			$adminmain .= "<tr>";
-			$adminmain .= "<td><img src=\"system/img/admin/groups.gif\" alt=\"\" /> ";
+			$adminmain .= "<td><img src=\"images/admin/groups.gif\" alt=\"\" /> ";
 			$adminmain .= "<a href=\"admin.php?m=users&amp;n=edit&amp;g=".$row['grp_id']."\">".sed_cc($row['grp_title'])."</a></td>";
 			$adminmain .= "<td style=\"text-align:center;\">".$members[$row['grp_id']]."</td>";
 			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[!$row['grp_disabled']]."</td>";
 			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$row['grp_hidden']]."</td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rights&amp;g=".$row['grp_id']."\"><img src=\"system/img/admin/rights.gif\" alt=\"\" /></a></td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"users.php?g=".$row['grp_id']."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rights&amp;g=".$row['grp_id']."\"><img src=\"images/admin/rights.gif\" alt=\"\" /></a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"users.php?g=".$row['grp_id']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
 			$adminmain .= "</tr>";
 			}
 		}

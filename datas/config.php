@@ -20,7 +20,7 @@ Description=Configuration
 
 $cfg['mysqlhost'] = 'localhost';	// Database host URL
 $cfg['mysqluser'] = 'root';			// Database user
-$cfg['mysqlpassword'] = 'myRocks';			// Database password
+$cfg['mysqlpassword'] = '';			// Database password
 $cfg['mysqldb'] = 'sedition';			// Database name
 // Set this to your site charset if your default database charset is different
 //$cfg['mysqlcharset'] = 'utf8';
@@ -45,6 +45,14 @@ $cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully lo
 $cfg['xmlclient'] = FALSE;  			// For testing-purposes only, else keep it off.
 $cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed
 $cfg['allowphp_override'] = FALSE; 		// General lock for execution of the PHP code by the core
+
+// ========================
+// Directory paths
+// Set it to custom if you want to share
+// folders among different hosts.
+// ========================
+$cfg['plugins_dir'] = './plugins';
+$cfg['system_dir'] = './system';
 
 // ========================
 // Name of MySQL tables

@@ -19,29 +19,29 @@ define('SED_PFS', TRUE);
 $location = 'PFS';
 $z = 'pfs';
 
-require_once('./system/functions.php');
-require_once('./system/config.extensions.php');
 require_once('./datas/config.php');
-require_once('./system/common.php');
+require_once($cfg['system_dir'].'/functions.php');
+require_once($cfg['system_dir'].'/config.extensions.php');
+require_once($cfg['system_dir'].'/common.php');
 
 sed_dieifdisabled($cfg['disable_pfs']);
 
 switch($m)
 	{
 	case 'view':
-	require_once('./system/core/pfs/pfs.view.inc.php');
+	require_once($cfg['system_dir'].'/core/pfs/pfs.view.inc.php');
 	break;
 
 	case 'edit':
-	require_once('./system/core/pfs/pfs.edit.inc.php');
+	require_once($cfg['system_dir'].'/core/pfs/pfs.edit.inc.php');
 	break;
 
 	case 'editfolder':
-	require_once('./system/core/pfs/pfs.editfolder.inc.php');
+	require_once($cfg['system_dir'].'/core/pfs/pfs.editfolder.inc.php');
 	break;
 
 	default:
-	require_once('./system/core/pfs/pfs.inc.php');
+	require_once($cfg['system_dir'].'/core/pfs/pfs.inc.php');
 	break;
 	}
 

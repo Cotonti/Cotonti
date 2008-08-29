@@ -35,52 +35,52 @@ $enabled[1] = $L['Enabled'];
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 $sys['inc'] = (empty($m)) ? 'admin.home' : "admin.$m";
 $sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'].".$s";
-$sys['inc'] = 'system/core/admin/'.$sys['inc'].'.inc.php';
+$sys['inc'] = $cfg['system_dir'].'/core/admin/'.$sys['inc'].'.inc.php';
 
 if (!file_exists($sys['inc']))
 	{ sed_die(); }
 
-$allow_img['0']['0'] = "<img src=\"system/img/admin/deny.gif\" alt=\"\" />";
-$allow_img['1']['0'] = "<img src=\"system/img/admin/allow.gif\" alt=\"\" />";
-$allow_img['0']['1'] = "<img src=\"system/img/admin/deny_locked.gif\" alt=\"\" />";
-$allow_img['1']['1'] = "<img src=\"system/img/admin/allow_locked.gif\" alt=\"\" />";
+$allow_img['0']['0'] = "<img src=\"images/admin/deny.gif\" alt=\"\" />";
+$allow_img['1']['0'] = "<img src=\"images/admin/allow.gif\" alt=\"\" />";
+$allow_img['0']['1'] = "<img src=\"images/admin/deny_locked.gif\" alt=\"\" />";
+$allow_img['1']['1'] = "<img src=\"images/admin/allow_locked.gif\" alt=\"\" />";
 
 $adminmenu = "<table style=\"width:100%;\"><tr>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\"><a href=\"admin.php\">";
-$adminmenu .= "<img src=\"system/img/admin/admin.gif\" alt=\"\" /><br />".$L['Home']."</a></td>";
+$adminmenu .= "<img src=\"images/admin/admin.gif\" alt=\"\" /><br />".$L['Home']."</a></td>";
 $adminmenu .= "<td style=\"width:12%; text-align:center;\">";
-$adminmenu .= sed_linkif("admin.php?m=config", "<img src=\"system/img/admin/config.gif\" alt=\"\" /><br />".$L['Configuration'], sed_auth('admin', 'a', 'A'));
+$adminmenu .= sed_linkif("admin.php?m=config", "<img src=\"images/admin/config.gif\" alt=\"\" /><br />".$L['Configuration'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif("admin.php?m=page", "<img src=\"system/img/admin/page.gif\" alt=\"\" /><br />".$L['Pages'], sed_auth('page', 'any', 'A'));
+$adminmenu .= sed_linkif("admin.php?m=page", "<img src=\"images/admin/page.gif\" alt=\"\" /><br />".$L['Pages'], sed_auth('page', 'any', 'A'));
 $adminmenu .= "</td>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif("admin.php?m=forums", "<img src=\"system/img/admin/forums.gif\" alt=\"\" /><br />".$L['Forums'], sed_auth('admin', 'a', 'A'));
+$adminmenu .= sed_linkif("admin.php?m=forums", "<img src=\"images/admin/forums.gif\" alt=\"\" /><br />".$L['Forums'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif("admin.php?m=users", "<img src=\"system/img/admin/users.gif\" alt=\"\" /><br />".$L['Users'], sed_auth('users', 'a', 'A'));
+$adminmenu .= sed_linkif("admin.php?m=users", "<img src=\"images/admin/users.gif\" alt=\"\" /><br />".$L['Users'], sed_auth('users', 'a', 'A'));
 $adminmenu .= "</td>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif("admin.php?m=plug", "<img src=\"system/img/admin/plugins.gif\" alt=\"\" /><br />".$L['Plugins'], sed_auth('admin', 'a', 'A'));
+$adminmenu .= sed_linkif("admin.php?m=plug", "<img src=\"images/admin/plugins.gif\" alt=\"\" /><br />".$L['Plugins'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif("admin.php?m=tools", "<img src=\"system/img/admin/tools.gif\" alt=\"\" /><br />".$L['Tools'], sed_auth('admin', 'a', 'A'));
+$adminmenu .= sed_linkif("admin.php?m=tools", "<img src=\"images/admin/tools.gif\" alt=\"\" /><br />".$L['Tools'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\">";
-$adminmenu .= sed_linkif("admin.php?m=trashcan", "<img src=\"system/img/admin/delete.gif\" alt=\"\" /><br />".$L['Trashcan'], sed_auth('admin', 'a', 'A'));
+$adminmenu .= sed_linkif("admin.php?m=trashcan", "<img src=\"images/admin/delete.gif\" alt=\"\" /><br />".$L['Trashcan'], sed_auth('admin', 'a', 'A'));
 $adminmenu .= "</td>";
 $adminmenu .= "<td style=\"width:11%; text-align:center;\"><a href=\"admin.php?m=other\">";
-$adminmenu .= "<img src=\"system/img/admin/folder.gif\" alt=\"\" /><br />".$L['Other']."</a></td>";
+$adminmenu .= "<img src=\"images/admin/folder.gif\" alt=\"\" /><br />".$L['Other']."</a></td>";
 $adminmenu .= "</tr></table>";
 
 require_once($sys['inc']);
 $adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
 
-require_once("system/header.php");
+require_once($cfg['system_dir'].'/header.php');
 
 $t = new XTemplate("skins/".$skin."/admin.tpl");
 
@@ -95,12 +95,12 @@ $t->assign(array(
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once($cfg['system_dir'].'/footer.php');
 
 ?>

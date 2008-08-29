@@ -29,7 +29,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /* ======== Connect to the SQL DB======== */
 
-require_once('./system/database.'.$cfg['sqldb'].'.php');
+require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
 sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
@@ -44,6 +44,10 @@ while ($row = sed_sql_fetcharray($sql_config))
 	else
 	{ $cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value']; }
 }
+
+// Mbstring options
+mb_internal_encoding($cfg['charset']);
+mb_regex_encoding($cfg['charset']);
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 
@@ -61,7 +65,7 @@ $redirect = sed_import('redirect','G','SLU');
 // Getting the server-relative path
 $sys['site_uri'] = dirname($_SERVER['SCRIPT_NAME']);
 $sys['site_uri'] = str_replace('\\', '/', $sys['site_uri']);
-if($sys['site_uri'][strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+if($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('SED_SITE_URI', $sys['site_uri']);
 // Absolute site url
 $sys['abs_url'] = ($sys['site_uri'][0] == '/') ? 'http://'.$_SERVER['HTTP_HOST'].$sys['site_uri'] : 'http://'.$_SERVER['HTTP_HOST'].'/'.$sys['site_uri'];
@@ -187,7 +191,7 @@ elseif (isset($_COOKIE['SEDITIO']) && ($cfg['authmode']==1 || $cfg['authmode']==
 
 if ($rsedition>0 && $cfg['authmode']>0)
 {
-	if (strlen($rseditiop)!=32 || eregi("'",$rseditiop) || eregi("\"",$rseditiop))
+	if (mb_strlen($rseditiop)!=32 || mb_strstr($rseditiop, "'") || mb_strstr($rseditiop, '"'))
 	{ sed_diefatal('Wrong value for the password.'); }
 
 	if ($cfg['ipcheck'])
@@ -256,7 +260,7 @@ if (is_array($extp))
 {
 	foreach($extp as $k => $pl)
 	{
-		include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
 }
 /* ======================== */
@@ -274,7 +278,7 @@ if(!defined('SED_NO_ANTIXSS'))
 
 /* ======== Zone variables ======== */
 
-$z = strtolower(sed_import('z','G','ALP',32));
+$z = mb_strtolower(sed_import('z','G','ALP',32));
 $m = sed_import('m','G','ALP',24);
 $n = sed_import('n','G','ALP',24);
 $a = sed_import('a','G','ALP',24);
@@ -319,12 +323,12 @@ if (!$cfg['disablehitstats'])
 
 /* ======== Language ======== */
 
-$mlang = 'system/lang/'.$usr['lang'].'/main.lang.php';
+$mlang = $cfg['system_dir'].'/lang/'.$usr['lang'].'/main.lang.php';
 
 if (!file_exists($mlang))
 {
 	$usr['lang'] = $cfg['defaultlang'];
-	$mlang = 'system/lang/'.$usr['lang'].'/main.lang.php';
+	$mlang = $cfg['system_dir'].'/lang/'.$usr['lang'].'/main.lang.php';
 
 	if (!file_exists($mlang))
 	{ sed_diefatal('Main language file not found.'); }
@@ -378,11 +382,11 @@ if (!$cfg['disablehitstats'])
 	else
 	{ sed_stat_create($sys['day']); }
 
-	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
+	$sys['referer'] = mb_substr($_SERVER['HTTP_REFERER'], 0, 255);
 
-	if (@!eregi($cfg['mainurl'], $sys['referer'])
-	&& @!eregi($cfg['hostip'], $sys['referer'])
-	&& @!eregi(str_replace('www.', '', $cfg['mainurl']), $sys['referer'])
+	if (@!mb_strstr($sys['referer'], $cfg['mainurl'])
+	&& @!mb_strstr($sys['referer'], $cfg['hostip'])
+	&& @!mb_strstr($sys['referer'], str_replace('www.', '', $cfg['mainurl']))
 	&& !empty($sys['referer']))
 	{
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_referers WHERE ref_url = '".sed_sql_prep($sys['referer'])."'");
@@ -460,7 +464,7 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 $extp = sed_getextplugins('global');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 
 /* ======== Pre-loads ======== */
 

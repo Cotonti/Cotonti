@@ -26,7 +26,7 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-require ('plugins/adminqv/lang/adminqv.'.$usr['lang'].'.lang.php');
+require_once($cfg['plugins_dir'].'/adminqv/lang/adminqv.'.$usr['lang'].'.lang.php');
 
 $timeback = $sys['now_offset'] - (7 * 86400); // 7 days
 $timeback_stats = 15; // 15 days
@@ -52,9 +52,9 @@ $newpms = sed_sql_result($sql, 0, "COUNT(*)");
 $sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_stats);
 while ($row = sed_sql_fetcharray($sql))
 	{
-	$y = substr($row['stat_name'], 0, 4);
-	$m = substr($row['stat_name'], 5, 2);
-	$d = substr($row['stat_name'], 8, 2);
+	$y = mb_substr($row['stat_name'], 0, 4);
+	$m = mb_substr($row['stat_name'], 5, 2);
+	$d = mb_substr($row['stat_name'], 8, 2);
 	$dat = @date('d D', mktime(0,0,0,$m,$d,$y));
 	$hits_d[$dat] = $row['stat_value'];
 	}

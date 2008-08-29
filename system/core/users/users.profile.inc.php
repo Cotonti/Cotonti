@@ -30,7 +30,7 @@ sed_block($usr['auth_write']);
 /* === Hook === */
 $extp = sed_getextplugins('profile.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $id = sed_import('id','G','TXT');
@@ -123,7 +123,7 @@ switch ($a)
 	/* === Hook === */
 	$extp = sed_getextplugins('profile.update.first');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$uav_tmp_name = $_FILES['userfile']['tmp_name'];
@@ -146,8 +146,8 @@ switch ($a)
 
 	if (!empty($uav_tmp_name) && $uav_size>0)
 		{
-		$dotpos = strrpos($uav_name,".")+1;
-		$f_extension = strtolower(substr($uav_name, $dotpos, 5));
+		$dotpos = mb_strrpos($uav_name,".")+1;
+		$f_extension = mb_strtolower(mb_substr($uav_name, $dotpos, 5));
 
 		if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && $uav_size<=$cfg['av_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
@@ -165,7 +165,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.avatar');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$uav_size = filesize($avatarpath);
@@ -179,8 +179,8 @@ switch ($a)
 
 	if (!empty($uph_tmp_name) && $uph_size>0)
 		{
-		$dotpos = strrpos($uph_name,".")+1;
-		$f_extension = strtolower(substr($uph_name, $dotpos, 5));
+		$dotpos = mb_strrpos($uph_name,".")+1;
+		$f_extension = mb_strtolower(mb_substr($uph_name, $dotpos, 5));
 
 		if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && $uph_size<=$cfg['ph_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
@@ -198,7 +198,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.photo');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$uph_size = filesize($photopath);
@@ -212,8 +212,8 @@ switch ($a)
 
 	if (!empty($usig_tmp_name) && $usig_size>0)
 		{
-		$dotpos = strrpos($usig_name, ".")+1;
-		$f_extension = strtolower(substr($usig_name, $dotpos, 5));
+		$dotpos = mb_strrpos($usig_name, ".")+1;
+		$f_extension = mb_strtolower(mb_substr($usig_name, $dotpos, 5));
 
 		if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && $usig_size<=$cfg['sig_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
@@ -231,7 +231,7 @@ switch ($a)
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.signature');
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$usig_size = filesize($signaturepath);
@@ -284,7 +284,7 @@ switch ($a)
 	$rnewpass1 = sed_import('rnewpass1','P','TXT');
 	$rnewpass2 = sed_import('rnewpass2','P','TXT');
 
-	$rusertext = substr($rusertext, 0, $cfg['usertextmax']);
+	$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
 
 	if (!empty($rnewpass1) && !empty($rnewpass2))
 		{
@@ -292,7 +292,7 @@ switch ($a)
 		$rnewpass2 = sed_import('rnewpass2','P','PSW');
 
 		$error_string .= ($rnewpass1!=$rnewpass2) ? $L['pro_passdiffer']."<br />" : '';
-		$error_string .= (strlen($rnewpass1)<4 || sed_alphaonly($rnewpass1)!=$rnewpass2) ? $L['pro_passtoshort']."<br />" : '';
+		$error_string .= (mb_strlen($rnewpass1)<4 || sed_alphaonly($rnewpass1)!=$rnewpass2) ? $L['pro_passtoshort']."<br />" : '';
 
 		if (empty($error_string))
 			{
@@ -314,11 +314,11 @@ switch ($a)
 
 	if (empty($error_string))
 		{
-		$ruserextra1 = ($cfg['extra1uchange'] && $ruserextra1_p) ? substr($ruserextra1,0,$cfg['extra1tsetting']) : $urr['user_extra1'];
-		$ruserextra2 = ($cfg['extra2uchange'] && $ruserextra2_p) ? substr($ruserextra2,0,$cfg['extra2tsetting']) : $urr['user_extra2'];
-		$ruserextra3 = ($cfg['extra3uchange'] && $ruserextra3_p) ? substr($ruserextra3,0,$cfg['extra3tsetting']) : $urr['user_extra3'];
-		$ruserextra4 = ($cfg['extra4uchange'] && $ruserextra4_p) ? substr($ruserextra4,0,$cfg['extra4tsetting']) : $urr['user_extra4'];
-		$ruserextra5 = ($cfg['extra5uchange'] && $ruserextra5_p) ? substr($ruserextra5,0,$cfg['extra5tsetting']) : $urr['user_extra5'];
+		$ruserextra1 = ($cfg['extra1uchange'] && $ruserextra1_p) ? mb_substr($ruserextra1,0,$cfg['extra1tsetting']) : $urr['user_extra1'];
+		$ruserextra2 = ($cfg['extra2uchange'] && $ruserextra2_p) ? mb_substr($ruserextra2,0,$cfg['extra2tsetting']) : $urr['user_extra2'];
+		$ruserextra3 = ($cfg['extra3uchange'] && $ruserextra3_p) ? mb_substr($ruserextra3,0,$cfg['extra3tsetting']) : $urr['user_extra3'];
+		$ruserextra4 = ($cfg['extra4uchange'] && $ruserextra4_p) ? mb_substr($ruserextra4,0,$cfg['extra4tsetting']) : $urr['user_extra4'];
+		$ruserextra5 = ($cfg['extra5uchange'] && $ruserextra5_p) ? mb_substr($ruserextra5,0,$cfg['extra5tsetting']) : $urr['user_extra5'];
 		$ruserextra6 = ($cfg['extra6uchange'] && $ruserextra6_p) ? $ruserextra6 : $urr['user_extra6'];
 		$ruserextra7 = ($cfg['extra7uchange'] && $ruserextra7_p) ? $ruserextra7 : $urr['user_extra7'];
 		$ruserextra8 = ($cfg['extra8uchange'] && $ruserextra8_p) ? $ruserextra8 : $urr['user_extra8'];
@@ -361,7 +361,7 @@ switch ($a)
 		/* === Hook === */
 		$extp = sed_getextplugins('profile.update.done');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=113");
@@ -444,10 +444,10 @@ $out['subtitle'] = $L['Profile'];
 /* === Hook === */
 $extp = sed_getextplugins('profile.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('users', 'profile'));
 $t = new XTemplate($mskin);
@@ -515,12 +515,12 @@ $t->assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

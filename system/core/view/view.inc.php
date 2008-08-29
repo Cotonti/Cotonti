@@ -18,7 +18,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $v = sed_import('v','G','TXT');
 
-if (eregi("\.", $v) || eregi("/", $v))
+if (mb_eregi("\.", $v) || mb_eregi("/", $v))
 	{ die('Wrong URL.'); }
 
 $incl_html = "datas/html/".$v.".html";
@@ -57,13 +57,13 @@ if (preg_match('@<body[^>]*?>(.*?)</body>@si', $vd, $ext_body)==1)
 
 $vt = '&nbsp;';
 
-if (stristr($ext_head,'<meta name="sed_title"') !== false) 
+if (mb_stristr($ext_head,'<meta name="sed_title"') !== false)
 	{
-	$vt = stristr($ext_head, '<meta name="sed_title"');
-	$vt = stristr($vt, 'content="');
-	$vt = substr($vt, 9);
-	$tag_title_end = strpos($vt, '">');
-	$vt = substr($vt, 0, $tag_title_end);
+	$vt = mb_stristr($ext_head, '<meta name="sed_title"');
+	$vt = mb_stristr($vt, 'content="');
+	$vt = mb_substr($vt, 9);
+	$tag_title_end = mb_strpos($vt, '">');
+	$vt = mb_substr($vt, 0, $tag_title_end);
 	}
 elseif (preg_match('@<title>(.*?)</title>@si', $ext_head, $vt)==1)
 	{ $vt = $vt[1]; }
@@ -83,7 +83,7 @@ if (preg_match_all('@<link[^>](.*?)>@si', $ext_head, $ext_links)>0)
 		{ $moremetas .= $link; }
 	}
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate("skins/".$skin."/plugin.tpl");
 
 $t-> assign(array(
@@ -94,6 +94,6 @@ $t-> assign(array(
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

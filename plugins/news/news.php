@@ -32,13 +32,13 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 {
 	$jj = 0;
 	$mtch = $sed_cat[$cfg['plugin']['news']['category']]['path'].".";
-	$mtchlen = strlen($mtch);
+	$mtchlen = mb_strlen($mtch);
 	$catsub = array();
 	$catsub[] = $cfg['plugin']['news']['category'];
 
 	foreach($sed_cat as $i => $x)
 	{
-		if (substr($x['path'], 0, $mtchlen)==$mtch && sed_auth('page', $i, 'R'))
+		if (mb_substr($x['path'], 0, $mtchlen)==$mtch && sed_auth('page', $i, 'R'))
 		{ $catsub[] = $i; }
 	}
 
@@ -118,10 +118,10 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 						$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 						sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
 					}
-					$readmore = strpos($pag['page_html'], "[more]");
+					$readmore = mb_strpos($pag['page_html'], "[more]");
 					if($readmore > 0)
 					{
-						$pag['page_html'] = substr($pag['page_html'], 0, $readmore)."<br />";
+						$pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore)."<br />";
 						$pag['page_html'] .= "<a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a>";
 					}
 
@@ -130,10 +130,10 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 				}
 				else
 				{
-					$readmore = strpos($pag['page_text'], "[more]");
+					$readmore = mb_strpos($pag['page_text'], "[more]");
 					if ($readmore>0)
 					{
-						$pag['page_text'] = substr($pag['page_text'], 0, $readmore)."<br />";
+						$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore)."<br />";
 						$pag['page_text'] .= "<a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a>";
 					}
 					$pag['page_text'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);

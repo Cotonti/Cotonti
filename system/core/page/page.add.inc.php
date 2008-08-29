@@ -26,7 +26,7 @@ sed_block($usr['auth_write']);
 /* === Hook === */
 $extp = sed_getextplugins('page.add.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($a=='add')
@@ -36,7 +36,7 @@ if ($a=='add')
 	/* === Hook === */
 	$extp = sed_getextplugins('page.add.add.first');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$newpagecat = sed_import('newpagecat','P','TXT');
@@ -51,9 +51,8 @@ if ($a=='add')
 	$newpagedesc = sed_import('newpagedesc','P','TXT');
 	$newpagetext = sed_import('newpagetext','P','HTM');
 	$newpageauthor = sed_import('newpageauthor','P','TXT');
-	$newpagefile = sed_import('newpagefile','P','TXT');
+	$newpagefile = sed_import('newpagefile','P','INT');
 	$newpageurl = sed_import('newpageurl','P','TXT');
-	$newpageurl = sed_bbcode_urls($newpageurl);
 	$newpagesize = sed_import('newpagesize','P','TXT');
 	$newpageyear_beg = sed_import('ryear_beg','P','INT');
 	$newpagemonth_beg = sed_import('rmonth_beg','P','INT');
@@ -74,7 +73,7 @@ if ($a=='add')
 	sed_block($usr['auth_write']);
 
 	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing']."<br />" : '';
-	$error_string .= (strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
+	$error_string .= (mb_strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
 
 	if (empty($error_string))
 	{
@@ -135,7 +134,7 @@ if ($a=='add')
 			".(int)$sys['now_offset'].",
 			".(int)$newpagebegin.",
 			".(int)$newpageexpire.",
-			".(int)$newpagefile.",
+			".intval($newpagefile).",
 			'".sed_sql_prep($newpageurl)."',
 			'".sed_sql_prep($newpagesize)."',
 			'".sed_sql_prep($newpagealias)."')");
@@ -143,7 +142,7 @@ if ($a=='add')
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_shield_update(30, "New page");
@@ -152,10 +151,33 @@ if ($a=='add')
 	}
 }
 
-if ($newpagefile)
-{ $pageadd_form_file = "<input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"0\" />".$L['No']; }
-else
-{ $pageadd_form_file = "<input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"newpagefile\" value=\"0\" checked=\"checked\" />".$L['No']; }
+switch($newpagefile)
+{
+	case 1:
+		$sel0 = '';
+		$sel1 = ' selected="selected"';
+		$sel2 = '';
+	break;
+
+	case 2:
+		$sel0 = '';
+		$sel1 = '';
+		$sel2 = ' selected="selected"';
+	break;
+
+	default:
+		$sel0 = ' selected="selected"';
+		$sel1 = '';
+		$sel2 = '';
+	break;
+}
+$pageadd_form_file = <<<HTM
+<select name="newpagefile">
+<option value="0"$sel0>{$L['No']}</option>
+<option value="1"$sel1>{$L['Yes']}</option>
+<option value="2"$sel2>{$L['Members_only']}</option>
+</select>
+HTM;
 
 $newpagecat = (empty($newpagecat)) ? $c : $newpagecat;
 $pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat');
@@ -174,10 +196,10 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 /* === Hook === */
 $extp = sed_getextplugins('page.add.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('page', 'add', $sed_cat[$newpagecat]['tpl']));
 $t = new XTemplate($mskin);
@@ -221,12 +243,12 @@ $t->assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('page.add.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

@@ -32,7 +32,7 @@ $found_txt[0] = '<span style="color:#AC5866; font-weight:bold;">'.$L['adm_missin
 $found_txt[1] = '<span style="color:#739E48; font-weight:bold;">'.$L['adm_present'].'</span>';
 unset($disp_errors);
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=plug\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=plug\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 switch ($a)
 	{
@@ -40,19 +40,19 @@ switch ($a)
 	case 'details' :
 	/* =============== */
 
-	$extplugin_info = "plugins/".$pl."/".$pl.".setup.php";
+	$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
 
 	if (file_exists($extplugin_info))
 		{
-		$extplugin_info = "plugins/".$pl."/".$pl.".setup.php";
+		$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
 		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 		$adminpath[] = array ('admin.php?m=plug&amp;a=details&amp;pl='.$pl, $info['Name']." ($pl)");
 
-		$handle=opendir("plugins/".$pl);
+		$handle=opendir($cfg['plugins_dir']."/".$pl);
 		$setupfile = $pl.".setup.php";
 		while ($f = readdir($handle))
 			{
-			if ($f != "." && $f != ".." && $f!=$setupfile && strtolower(substr($f, strrpos($f, '.')+1, 4))=='php')
+			if ($f != "." && $f != ".." && $f!=$setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.')+1, 4))=='php')
 				{ $parts[] = $f; }
 			}
 		closedir($handle);
@@ -62,7 +62,7 @@ switch ($a)
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
 		$totalconfig = sed_sql_result($sql, 0, "COUNT(*)");
 
-		$info['Config'] = ($totalconfig>0) ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=plug&amp;p=".$pl."\"><img src=\"system/img/admin/config.gif\" alt=\"\" /> (".$totalconfig.") ".$L['Edit']."</a>": $L['None'];
+		$info['Config'] = ($totalconfig>0) ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=plug&amp;p=".$pl."\"><img src=\"images/admin/config.gif\" alt=\"\" /> (".$totalconfig.") ".$L['Edit']."</a>": $L['None'];
 
 		$info['Auth_members'] = sed_auth_getvalue($info['Auth_members']);
 		$info['Lock_members'] = sed_auth_getvalue($info['Lock_members']);
@@ -76,7 +76,7 @@ switch ($a)
 		$adminmain .= "<tr><td>".$L['Version'].":</td><td>".$info['Version']."</td></tr>";
 		$adminmain .= "<tr><td>".$L['Date'].":</td><td>".$info['Date']."</td></tr>";
 		$adminmain .= "<tr><td>".$L['Configuration'].":</td><td>".$info['Config']."</td></tr>";
-		$adminmain .= "<tr><td>".$L['Rights'].":</td><td><a href=\"admin.php?m=rightsbyitem&amp;ic=plug&amp;io=".$info['Code']."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\" /></a></td></tr>";		
+		$adminmain .= "<tr><td>".$L['Rights'].":</td><td><a href=\"admin.php?m=rightsbyitem&amp;ic=plug&amp;io=".$info['Code']."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td></tr>";		
 		$adminmain .= "<tr><td>".$L['adm_defauth_guests'].":</td><td>".sed_build_admrights($info['Auth_guests']);
 		$adminmain .= " (".$info['Auth_guests'].")</td></tr>";
 		$adminmain .= "<tr><td>".$L['adm_deflock_guests'].":</td><td>".sed_build_admrights($info['Lock_guests']);
@@ -114,7 +114,7 @@ switch ($a)
 
 		while( list($i,$x) = each($parts) )
 			{
-			$extplugin_file = "plugins/".$pl."/".$x;
+			$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
 			$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
 			if (!empty($info_file['Error']))
@@ -164,7 +164,7 @@ switch ($a)
 					$listtags .= $line[0]." :<br />";
 					foreach ($tags as $k => $v)
 						{
-						if (substr(trim($v),0,1)=='{')
+						if (mb_substr(trim($v),0,1)=='{')
 							{
 							$listtags .= $v." : ";
 							$found = sed_stringinfile('skins/'.$cfg['defaultskin'].'/'.$line[0], trim($v));
@@ -205,7 +205,7 @@ switch ($a)
 		{
 		case 'install' :
 
-		$pl =(strtolower($pl)=='core') ? 'error' : $pl;
+		$pl =(mb_strtolower($pl)=='core') ? 'error' : $pl;
 		$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
 		$adminmain .= "Deleting old installation of this plugin... ";
 		$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
@@ -214,7 +214,7 @@ switch ($a)
 		$adminmain .= "Deleting old configuration entries... ";
 		$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 
-		$extplugin_info = "plugins/".$pl."/".$pl.".setup.php";
+		$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
 
 		$adminmain .= "Looking for the setup file... ";
 
@@ -223,12 +223,12 @@ switch ($a)
 			$adminmain .= "Found:1<br />";
 			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 
-			$handle = opendir("plugins/".$pl);
+			$handle = opendir($cfg['plugins_dir']."/".$pl);
 			$setupfile = $pl.".setup.php";
 			$adminmain .= "Looking for parts...<br />";
 			while ($f = readdir($handle))
 				{
-				if ($f != "." && $f != ".." && $f!=$setupfile && strtolower(substr($f, strrpos($f, '.')+1, 4))=='php')
+				if ($f != "." && $f != ".." && $f!=$setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.')+1, 4))=='php')
 					{
 					$adminmain .= "- Found:".$f."<br />";
 					$parts[] = $f;
@@ -240,7 +240,7 @@ switch ($a)
 			while( list($i,$x) = each($parts) )
 				{
 				$adminmain .= "- Part ".$x." ...";
-				$extplugin_file = "plugins/".$pl."/".$x;
+				$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
 				$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
 				if (empty($info_part['Error']))
@@ -350,7 +350,7 @@ switch ($a)
 		$adminmain .= "Resetting the auth column for all the users... ";
 		$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 
-		$extplugin_install = "plugins/".$pl."/".$pl.".install.php";
+		$extplugin_install = $cfg['plugins_dir']."/".$pl."/".$pl.".install.php";
 		$adminmain .= "Looking for the optional PHP file : ".$extplugin_install."... ";
 		if (file_exists($extplugin_install))
 			{
@@ -382,7 +382,7 @@ switch ($a)
 		$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 		sed_cache_clearall();
 
-		$extplugin_uninstall = "plugins/".$pl."/".$pl.".uninstall.php";
+		$extplugin_uninstall = $cfg['plugins_dir']."/".$pl."/".$pl.".uninstall.php";
 		$adminmain .= "Looking for the optional PHP file : ".$extplugin_uninstall."... ";
 		if (file_exists($extplugin_uninstall))
 			{
@@ -479,7 +479,7 @@ switch ($a)
 
 	while( list($i,$x) = each($extplugins) )
 		{
-		$extplugin_info = "plugins/".$x."/".$x.".setup.php";
+		$extplugin_info = $cfg['plugins_dir']."/".$x."/".$x.".setup.php";
 		if (file_exists($extplugin_info))
 			{
 			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
@@ -514,25 +514,25 @@ switch ($a)
 
 
 				$adminmain .= "<tr><td><a href=\"admin.php?m=plug&amp;a=details&amp;pl=".$info['Code']."\">";
-				$adminmain .= ($plg_tools[$info['Code']]) ? "<img src=\"system/img/admin/tools.gif\" alt=\"\" />" : "<img src=\"system/img/admin/plug.gif\" alt=\"\" />";
+				$adminmain .= ($plg_tools[$info['Code']]) ? "<img src=\"images/admin/tools.gif\" alt=\"\" />" : "<img src=\"images/admin/plug.gif\" alt=\"\" />";
 
 				$adminmain .= " ".$info['Name']."</a></td><td>".$x."</td>";
 
 				$adminmain .= "<td style=\"text-align:center;\">";
-				$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=plug&amp;p=".$info['Code']."\"><img src=\"system/img/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
+				$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=plug&amp;p=".$info['Code']."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
 				$adminmain .= "</td>";
 				$adminmain .= "<td style=\"text-align:center;\">".$info['Partscount']."</td>";
 				$adminmain .= "<td style=\"text-align:center;\">".$status[$part_status]."</td>";
-				$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=plug&amp;io=".$info['Code']."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\" /></a></td>";
+				$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=plug&amp;io=".$info['Code']."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
 				$adminmain .= "<td style=\"text-align:center;\">";
 				
 				if ($plg_tools[$info['Code']])
 					{
-					$adminmain .= "<a href=\"admin.php?m=tools&amp;p=".$info['Code']."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a>";
+					$adminmain .= "<a href=\"admin.php?m=tools&amp;p=".$info['Code']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>";
 					}
 				else
 					{
-					$adminmain .= ($plg_standalone[$info['Code']]) ? "<a href=\"plug.php?e=".$info['Code']."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a>" : '&nbsp;';
+					$adminmain .= ($plg_standalone[$info['Code']]) ? "<a href=\"plug.php?e=".$info['Code']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>" : '&nbsp;';
 					}
 				$adminmain .= "</td></tr>";
 				}

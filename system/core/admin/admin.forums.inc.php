@@ -23,7 +23,7 @@ $id = sed_import('id','G','INT');
 
 $adminpath[] = array ("admin.php?m=forums", $L['Forums']);
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=forums\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li><li>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=forums\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li><li>";
 $adminmain .= sed_linkif("admin.php?m=forums&amp;s=structure", $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'));
 $adminmain .= "</li></ul>";
 
@@ -179,7 +179,7 @@ else
 			else
 				{ $nextorder = 100; }
 
-			$sql = sed_sql_query("INSERT INTO $db_forum_sections (fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('".(int)$nextorder."', '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($ncat)."', 'system/img/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
+			$sql = sed_sql_query("INSERT INTO $db_forum_sections (fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('".(int)$nextorder."', '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($ncat)."', 'images/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
 
 			$forumid = sed_sql_insertid();
 
@@ -261,8 +261,8 @@ else
 		$adminmain .= "<td style=\"text-align:right;\">".$row['fs_topiccount']."</td>";
 		$adminmain .= "<td style=\"text-align:right;\">".$row['fs_postcount']."</td>";
 		$adminmain .= "<td style=\"text-align:right;\">".$row['fs_viewcount']."</td>";
-		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=forums&amp;io=".$row['fs_id']."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\"></a></td>";
-		$adminmain .= "<td style=\"text-align:center;\"><a href=\"forums.php?m=topics&amp;s=".$fs_id."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\"></a></a></td>";
+		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=forums&amp;io=".$row['fs_id']."\"><img src=\"images/admin/rights2.gif\" alt=\"\"></a></td>";
+		$adminmain .= "<td style=\"text-align:center;\"><a href=\"forums.php?m=topics&amp;s=".$fs_id."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a></a></td>";
  		$adminmain .= "</tr>";
  		$line++;
  		}

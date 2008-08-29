@@ -67,7 +67,7 @@ if ($n=='options')
 
 	while ($f = readdir($handle))
 	{
-		if (($f != ".") && ($f != "..") && strtolower(substr($f, strrpos($f, '.')+1, 4))=='tpl')
+		if (($f != ".") && ($f != "..") && mb_strtolower(mb_substr($f, mb_strrpos($f, '.')+1, 4))=='tpl')
 		{
 			$allskinfiles[] = $f;
 		}
@@ -208,8 +208,8 @@ else
 		$structure_desc = $row['structure_desc'];
 		$structure_icon = $row['structure_icon'];
 		$structure_group = $row['structure_group'];
-		$pathfieldlen = (strpos($structure_path, ".")==0) ? 3 : 9;
-		$pathfieldimg = (strpos($structure_path, ".")==0) ? '' : "<img src=\"system/img/admin/join2.gif\" alt=\"\" /> ";
+		$pathfieldlen = (mb_strpos($structure_path, ".")==0) ? 3 : 9;
+		$pathfieldimg = (mb_strpos($structure_path, ".")==0) ? '' : "<img src=\"images/admin/join2.gif\" alt=\"\" /> ";
 		$pagecount[$structure_code] = (!$pagecount[$structure_code]) ? "0" : $pagecount[$structure_code];
 
 		if (empty($row['structure_tpl']))
@@ -231,8 +231,8 @@ else
 		$checked = $structure_group ? "checked=\"checked\"" : '';
 		$adminmain .= "<td style=\"text-align:center;\"><input type=\"checkbox\" class=\"checkbox\" name=\"s[$structure_id][rgroup]\" $checked /></td>";
 		$adminmain .= "<td style=\"text-align:right;\">".$pagecount[$structure_code]." ";
-		$adminmain .= "<a href=\"list.php?c=".$structure_code."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a></td>";
-		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=page&amp;io=".$structure_code."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\" /></a></td>";
+		$adminmain .= "<a href=\"list.php?c=".$structure_code."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
+		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=page&amp;io=".$structure_code."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=page&amp;s=structure&amp;n=options&amp;id=".$structure_id."&amp;".sed_xg()."\">".$L['Options']."</a></td>";
 		$adminmain .= "</tr>";
 	}

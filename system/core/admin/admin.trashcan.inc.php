@@ -45,7 +45,7 @@ $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
 	WHERE 1 ORDER by tr_id DESC");
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=trash\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li><li>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=trash\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li><li>";
 $adminmain .= $L['Wipeall'].": [<a href=\"admin.php?m=trashcan&amp;a=wipeall&amp;".sed_xg()."\">x</a>]</li></ul>";
 $adminmain .= "<table class=\"cells\"><tr>";
 $adminmain .= "<td class=\"coltop\" style=\"width:144px;\">".$L['Date']."</td>";
@@ -99,7 +99,7 @@ while ($row = sed_sql_fetcharray($sql))
 
 	$adminmain .= "<tr>";
 	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['tr_date']+$usr['timezone']*3600)."</td>";
-	$adminmain .= "<td><img src=\"system/img/admin/".$icon."\" alt=\"".$typestr."\" /> ".$typestr."</td>";
+	$adminmain .= "<td><img src=\"images/admin/".$icon."\" alt=\"".$typestr."\" /> ".$typestr."</td>";
 	$adminmain .= "<td>".sed_cc($row['tr_title'])."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">";
 	$adminmain .= ($row['tr_trashedby']==0) ? $L['System'] : sed_build_user($row['tr_trashedby'], sed_cc($row['user_name']));

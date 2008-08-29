@@ -19,7 +19,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 /* === Hook === */
 $extp = sed_getextplugins('footer.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $i = explode(' ', microtime());
@@ -128,11 +128,11 @@ $out['devmode']	 .= $out['devauth'];
 /* === Hook === */
 $extp = sed_getextplugins('footer.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($cfg['enablecustomhf'])
-	{ $mskin = sed_skinfile(array('footer', strtolower($location))); }
+	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location))); }
 else
 	{ $mskin = "skins/".$usr['skin']."/footer.tpl"; }
 $t = new XTemplate($mskin);
@@ -151,7 +151,7 @@ $t->assign(array (
 /* === Hook === */
 $extp = sed_getextplugins('footer.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($usr['id']>0)

@@ -35,7 +35,7 @@ $touser_names = array();
 /* === Hook === */
 $extp = sed_getextplugins('pm.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=2");
@@ -158,12 +158,12 @@ $out['subtitle'] = $L['Private_Messages'];
 /* === Hook === */
 $extp = sed_getextplugins('pm.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $pm_sendlink = ($usr['auth_write']) ? "<a href=\"pm.php?m=send\">".$L['pm_sendnew']."</a>" : '';
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate("skins/".$skin."/pm.tpl");
 
 if ($pm_totalpages=='0') {$pm_totalpages = '1'; }
@@ -263,7 +263,7 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	if (empty($id))
@@ -289,12 +289,12 @@ if (empty($id))
 /* === Hook === */
 $extp = sed_getextplugins('pm.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

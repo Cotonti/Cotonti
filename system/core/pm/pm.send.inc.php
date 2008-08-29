@@ -35,7 +35,7 @@ $touser_names = array();
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=2");
@@ -50,7 +50,7 @@ if ($a=='send')
 	/* === Hook === */
 	$extp = sed_getextplugins('pm.send.send.first');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	sed_shield_protect();
@@ -75,9 +75,9 @@ if ($a=='send')
 	}
 
 	$touser = ($totalrecipients>0) ? implode (",", $touser_names) : '';
-	$error_string .= (strlen($newpmtitle)<2) ? $L['pm_titletooshort']."<br />" : '';
-	$error_string .= (strlen($newpmtext)<2) ? $L['pm_bodytooshort']."<br />" : '';
-	$error_string .= (strlen($newpmtext)>$cfg['pm_maxsize']) ? $L['pm_bodytoolong']."<br />" : '';
+	$error_string .= (mb_strlen($newpmtitle)<2) ? $L['pm_titletooshort']."<br />" : '';
+	$error_string .= (mb_strlen($newpmtext)<2) ? $L['pm_bodytooshort']."<br />" : '';
+	$error_string .= (mb_strlen($newpmtext)>$cfg['pm_maxsize']) ? $L['pm_bodytoolong']."<br />" : '';
 	$error_string .= ($totalrecipients<$touser_req ) ? $L['pm_wrongname']."<br />" : '';
 	$error_string .= ($totalrecipients>10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
 
@@ -138,7 +138,7 @@ if ($a=='send')
 		/* === Hook === */
 		$extp = sed_getextplugins('pm.send.send.done');
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		sed_stat_inc('totalpms');
@@ -149,9 +149,9 @@ if ($a=='send')
 }
 elseif (!empty($to))
 {
-	if (substr(strtolower($to),0,1)=='g' && $usr['maingrp']==5)
+	if (mb_substr(mb_strtolower($to),0,1)=='g' && $usr['maingrp']==5)
 	{
-		$group = sed_import(substr($to, 1, 8), 'D', 'INT');
+		$group = sed_import(mb_substr($to, 1, 8), 'D', 'INT');
 		if ($group>1)
 		{
 			$sql = sed_sql_query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp='$group' ORDER BY user_name ASC");
@@ -214,10 +214,10 @@ $out['subtitle'] = $L['Private_Messages'];
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate("skins/".$skin."/pm.send.tpl");
 
 if (!empty($error_string))
@@ -246,12 +246,12 @@ $t->assign(array(
 	/* === Hook === */
 	$extp = sed_getextplugins('pm.send.tags');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require_once("system/footer.php");
+	require_once $cfg['system_dir'] . '/footer.php';
 
 	?>

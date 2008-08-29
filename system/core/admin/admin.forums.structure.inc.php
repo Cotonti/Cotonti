@@ -65,7 +65,7 @@ if ($n=='options')
 
 	while ($f = readdir($handle))
 		{
-		if (($f != ".") && ($f != "..") && strtolower(substr($f, strrpos($f, '.')+1, 4))=='tpl')
+		if (($f != ".") && ($f != "..") && mb_strtolower(mb_substr($f, mb_strrpos($f, '.')+1, 4))=='tpl')
 			{ $allskinfiles[] = $f; }
 		}
 	closedir($handle);
@@ -198,8 +198,8 @@ else
 		$fn_title = $row['fn_title'];
 		$fn_desc = $row['fn_desc'];
 		$fn_icon = $row['fn_icon'];
-		$pathfieldlen = (strpos($fn_path, ".")==0) ? 3 : 9;
-		$pathfieldimg = (strpos($fn_path, ".")==0) ? '' : "<img src=\"system/img/admin/join2.gif\" alt=\"\" /> ";
+		$pathfieldlen = (mb_strpos($fn_path, ".")==0) ? 3 : 9;
+		$pathfieldimg = (mb_strpos($fn_path, ".")==0) ? '' : "<img src=\"images/admin/join2.gif\" alt=\"\" /> ";
 		$sectioncount[$fn_code] = (!$sectioncount[$fn_code]) ? "0" : $sectioncount[$fn_code];
 	
 		if (empty($row['fn_tpl']))
@@ -228,7 +228,7 @@ else
 
 		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$fn_id][rtitle]\" value=\"".$fn_title."\" size=\"24\" maxlength=\"32\" /></td>";
 		$adminmain .= "<td style=\"text-align:right;\">".$sectioncount[$fn_code]." ";
-		$adminmain .= "<a href=\"forums.php?c=".$fn_code."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a></td>";
+		$adminmain .= "<a href=\"forums.php?c=".$fn_code."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=forums&amp;s=structure&amp;n=options&amp;id=".$fn_id."&amp;".sed_xg()."\">".$L['Options']."</a></td>";
 		$adminmain .= "</tr>";
 		}

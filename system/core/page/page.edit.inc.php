@@ -34,7 +34,7 @@ if ($a=='update')
 	/* === Hook === */
 	$extp = sed_getextplugins('page.edit.update.first');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
@@ -50,9 +50,8 @@ if ($a=='update')
 	$rpagetext = sed_import('rpagetext','P','HTM');
 	$rpageauthor = sed_import('rpageauthor','P','TXT');
 	$rpageownerid = sed_import('rpageownerid','P','INT');
-	$rpagefile = sed_import('rpagefile','P','TXT');
+	$rpagefile = sed_import('rpagefile','P','INT');
 	$rpageurl = sed_import('rpageurl','P','TXT');
-	$rpageurl = sed_bbcode_urls($rpageurl);
 	$rpagesize = sed_import('rpagesize','P','TXT');
 	$rpagecount = sed_import('rpagecount','P','INT');
 	$rpagefilecount = sed_import('rpagefilecount','P','INT');
@@ -80,7 +79,7 @@ if ($a=='update')
 	$rpagedelete = sed_import('rpagedelete','P','BOL');
 
 	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing']."<br />" : '';
-	$error_string .= (strlen($rpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
+	$error_string .= (mb_strlen($rpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
 
 	if (empty($error_string) || $rpagedelete)
 	{
@@ -156,7 +155,7 @@ if ($a=='update')
 			/* === Hook === */
 			$extp = sed_getextplugins('page.edit.update.done');
 			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
 
 			sed_log("Edited page #".$id,'adm');
@@ -180,7 +179,7 @@ sed_block($usr['isadmin']);
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $page_form_delete = "<input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"0\" checked=\"checked\" />".$L['No'];
@@ -195,10 +194,33 @@ $page_form_type .= "<option value=\"1\" $selected1>HTML</option>";
 $page_form_type .= ($usr['maingrp']==5 && $cfg['allowphp_pages'] && $cfg['allowphp_override']) ? "<option value=\"2\" $selected2>PHP</option>" : '';
 $page_form_type .= "</select>";
 
-if ($pag['page_file'])
-{ $page_form_file = "<input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"0\" />".$L['No']; }
-else
-{ $page_form_file = "<input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagefile\" value=\"0\" checked=\"checked\" />".$L['No']; }
+switch($pag['page_file'])
+{
+	case 1:
+		$sel0 = '';
+		$sel1 = ' selected="selected"';
+		$sel2 = '';
+	break;
+
+	case 2:
+		$sel0 = '';
+		$sel1 = '';
+		$sel2 = ' selected="selected"';
+	break;
+
+	default:
+		$sel0 = ' selected="selected"';
+		$sel1 = '';
+		$sel2 = '';
+	break;
+}
+$page_form_file = <<<HTM
+<select name="rpagefile">
+<option value="0"$sel0>{$L['No']}</option>
+<option value="1"$sel1>{$L['Yes']}</option>
+<option value="2"$sel2>{$L['Members_only']}</option>
+</select>
+HTM;
 
 $bbcodes = ($cfg['parsebbcodepages']) ? sed_build_bbcodes('update', 'rpagetext', $L['BBcodes']) : '';
 $smilies = ($cfg['parsesmiliespages']) ? sed_build_smilies('update', 'rpagetext', $L['Smilies']) : '';
@@ -212,10 +234,10 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('page', 'edit', $sed_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
@@ -265,12 +287,12 @@ $t->assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

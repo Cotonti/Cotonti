@@ -23,7 +23,7 @@ $adminpath[] = array ("admin.php?m=other", $L['Other']);
 $adminpath[] = array ("admin.php?m=pfs", $L['PFS']);
 $adminhelp = $L['adm_help_pfs'];
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pfs\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pfs\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
 $adminmain .= "<li><a href=\"admin.php?m=pfs&amp;s=allpfs\">".$L['adm_allpfs']."</a></li>";
 $adminmain .= "<li><a href=\"pfs.php?userid=0\">".$L['SFS']."</a></li></ul>";
 
@@ -41,7 +41,7 @@ if (!function_exists('gd_info'))
 	foreach ($gd_datas as $k => $i)
 		{
 		$adminmain .= $k." : ";
-		if (strlen($i)<2) { $i = $sed_yesno[$i]; }
+		if (mb_strlen($i)<2) { $i = $sed_yesno[$i]; }
 		$adminmain .= $i."<br />";
 		}
 	$adminmain .= "</p>";

@@ -66,7 +66,7 @@ if ($a=='request' && $email!='')
 		exit;
 		}
 	}
-elseif ($a=='auth' && strlen($v)==32)
+elseif ($a=='auth' && mb_strlen($v)==32)
 	{
 	sed_shield_protect();
 

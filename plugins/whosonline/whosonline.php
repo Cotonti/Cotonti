@@ -58,7 +58,7 @@ while ($row = sed_sql_fetcharray($sql1))
 	if ($cfg_showavatars)
 		{
 		$user_avatar = "<a href=\"users.php?m=details&amp;id=".$row['online_userid']."\">";
-		$user_avatar .= (!empty($row['user_avatar'])) ? "<img src=\"".$row['user_avatar']."\" width=\"".$cfg_miniavatar_x."\" height=\"".$cfg_miniavatar_y."\" alt=\"\" /></a>" : "<img src=\"plugins/whosonline/img/blank.gif\" width=\"".$cfg_miniavatar_x."\" height=\"".$cfg_miniavatar_y."\" alt=\"\" /></a>";
+		$user_avatar .= (!empty($row['user_avatar'])) ? "<img src=\"".$row['user_avatar']."\" width=\"".$cfg_miniavatar_x."\" height=\"".$cfg_miniavatar_y."\" alt=\"\" /></a>" : "<img src=\"{$cfg['plugins_dir']}/whosonline/img/blank.gif\" width=\"".$cfg_miniavatar_x."\" height=\"".$cfg_miniavatar_y."\" alt=\"\" /></a>";
 		}
 
 	$plugin_body .= "<tr>";

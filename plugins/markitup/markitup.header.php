@@ -29,20 +29,20 @@ Order=10
  * @license BSD license
  */
 
-$mkup_lang = "plugins/markitup/lang/$lang.lang.js";
+$mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
 if(!file_exists($mkup_lang))
 {
-	$mkup_lang = 'plugins/markitup/lang/en.lang.js';
+	$mkup_lang = $cfg['plugins_dir'].'/markitup/lang/en.lang.js';
 }
 
 $xg = sed_sourcekey();
 
 $out['compopup'] .= <<<HTM
-<script type="text/javascript" src="plugins/markitup/jquery.markitup.js"></script>
+<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/jquery.markitup.js"></script>
 <script type="text/javascript" src="$mkup_lang"></script>
-<script type="text/javascript" src="plugins/markitup/set.js"></script>
-<link rel="stylesheet" type="text/css" href="plugins/markitup/skins/markitup/style.css" />
-<link rel="stylesheet" type="text/css" href="plugins/markitup/style.css" />
+<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/set.js"></script>
+<link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/markitup/style.css" />
+<link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/style.css" />
 <script type="text/javascript" >
    $(document).ready(function() {
       $("textarea.editor").markItUp(mySettings);

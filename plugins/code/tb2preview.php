@@ -56,8 +56,8 @@ function textboxer_preview($text, $bbcode, $smiley, $linebreak, $location){
 				$pag['page_tab'] = ($pag['page_tab']>$pag['page_totaltabs']) ? 1 : $pag['page_tab'];
 
 				for ($i = 0; $i < $pag['page_totaltabs']; $i++){
-					$p1 = strpos($pag['page_tabs'][$i], '[title]');
-					$p2 = strpos($pag['page_tabs'][$i], '[/title]');
+					$p1 = mb_strpos($pag['page_tabs'][$i], '[title]');
+					$p2 = mb_strpos($pag['page_tabs'][$i], '[/title]');
 
 					if ($p2>$p1){
 						$pag['page_tabtitle'][$i] = substr ($pag['page_tabs'][$i], $p1+7, ($p2-$p1)-7);

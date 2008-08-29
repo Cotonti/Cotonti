@@ -26,7 +26,7 @@ $adminpath[] = array ("admin.php?m=other", $L['Other']);
 $adminpath[] = array ("admin.php?m=polls", $L['Polls']);
 $adminhelp = $L['adm_help_polls'];
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=polls\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=polls\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($n=='options')
 	{
@@ -181,9 +181,9 @@ else
 		$adminmain .= "<td style=\"text-align:center;\">";
 
 		if ($type==0)
-			{ $adminmain .= "<a href=\"polls.php?id=".$row['poll_id']."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\"></a>"; }
+			{ $adminmain .= "<a href=\"polls.php?id=".$row['poll_id']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a>"; }
 		else
-			{ $adminmain .= "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\"></a>"; }
+			{ $adminmain .= "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a>"; }
 
 		$adminmain .= "</td></tr>";
 		$ii++;

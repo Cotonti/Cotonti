@@ -89,7 +89,7 @@ $jj=1;
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rights.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $sql1 = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
@@ -119,14 +119,14 @@ $adminpath[] = array ("admin.php?m=rights&amp;g=".$g, $L['Rights']." / ".sed_cc(
 
 $adv_columns = ($advanced) ? 5 : 0;
 
-$legend = "<img src=\"system/img/admin/auth_r.gif\" alt=\"\" /> : ".$L['Read']."<br />";
-$legend .= "<img src=\"system/img/admin/auth_w.gif\" alt=\"\" /> : ".$L['Write']."<br />";
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_1.gif\" alt=\"\" /> : ".$L['Custom']." #1<br />" : '';
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_2.gif\" alt=\"\" /> : ".$L['Custom']." #2<br />" : '';
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_3.gif\" alt=\"\" /> : ".$L['Custom']." #3<br />" : '';
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_4.gif\" alt=\"\" /> : ".$L['Custom']." #4<br />" : '';
-$legend .= ($advanced) ? "<img src=\"system/img/admin/auth_5.gif\" alt=\"\" /> : ".$L['Custom']." #5<br />" : '';
-$legend .= "<img src=\"system/img/admin/auth_a.gif\" alt=\"\" /> : ".$L['Administration'];
+$legend = "<img src=\"images/admin/auth_r.gif\" alt=\"\" /> : ".$L['Read']."<br />";
+$legend .= "<img src=\"images/admin/auth_w.gif\" alt=\"\" /> : ".$L['Write']."<br />";
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_1.gif\" alt=\"\" /> : ".$L['Custom']." #1<br />" : '';
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_2.gif\" alt=\"\" /> : ".$L['Custom']." #2<br />" : '';
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_3.gif\" alt=\"\" /> : ".$L['Custom']." #3<br />" : '';
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_4.gif\" alt=\"\" /> : ".$L['Custom']." #4<br />" : '';
+$legend .= ($advanced) ? "<img src=\"images/admin/auth_5.gif\" alt=\"\" /> : ".$L['Custom']." #5<br />" : '';
+$legend .= "<img src=\"images/admin/auth_a.gif\" alt=\"\" /> : ".$L['Administration'];
 
 $headcol .= "<td class=\"coltop\" rowspan=\"2\">".$L['Section']."</td>";
 $headcol .= "<td class=\"coltop\" style=\"width:128px;\" rowspan=\"2\">".$L['adm_rightspergroup']."</td>";
@@ -135,14 +135,14 @@ $headcol .= "<td class=\"coltop\" style=\"width:80px;\" rowspan=\"2\">".$L['adm_
 $headcol .= "</tr>";
 
 $headcol .= "<tr>\n";
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_r.gif\" alt=\"\" /></td>\n";
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_w.gif\" alt=\"\" /></td>\n";
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_1.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_2.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_3.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_4.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_5.gif\" alt=\"\" /></td>\n" : '';
-$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"system/img/admin/auth_a.gif\" alt=\"\" /></td>\n";
+$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_r.gif\" alt=\"\" /></td>\n";
+$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_w.gif\" alt=\"\" /></td>\n";
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_1.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_2.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_3.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_4.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_5.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_a.gif\" alt=\"\" /></td>\n";
 $headcol .= "</tr>\n";
 
 $adminmain .= "<form id=\"saverights\" action=\"admin.php?m=rights&amp;a=update&amp;g=$g\" method=\"post\">";
@@ -184,7 +184,7 @@ function sed_rights_parseline($row, $title, $link)
 		if ($locked[$code])
 		{
 			$box[$code] = ($checked[$code]) ? "<input type=\"hidden\" name=\"auth[".$row['auth_code']."][".$row['auth_option']."][".$code."]\" value=\"1\" />" : '';
-			$box[$code] .= ($checked[$code]) ? "<img src=\"system/img/admin/discheck1.gif\" alt=\"\" />" : "<img src=\"system/img/admin/discheck0.gif\" alt=\"\" />";
+			$box[$code] .= ($checked[$code]) ? "<img src=\"images/admin/discheck1.gif\" alt=\"\" />" : "<img src=\"images/admin/discheck0.gif\" alt=\"\" />";
 		}
 		else
 		{
@@ -194,9 +194,9 @@ function sed_rights_parseline($row, $title, $link)
 
 	$res .= "<tr>\n";
 	$res .= "<td style=\"padding:1px;\">\n";
-	$res .= "<img src=\"system/img/admin/".$row['auth_code'].".gif\" alt=\"\" /> ";
+	$res .= "<img src=\"images/admin/".$row['auth_code'].".gif\" alt=\"\" /> ";
 	$res .= "<a href=\"$link\">".$title."</a></td>\n";
-	$res .= "<td style=\"text-align:center; padding:2px;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=".$row['auth_code']."&amp;io=".$row['auth_option']."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\" /></a></td>";
+	$res .= "<td style=\"text-align:center; padding:2px;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=".$row['auth_code']."&amp;io=".$row['auth_option']."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
 	$res .= "<td style=\"text-align:center; padding:2px;\">".implode("</td><td style=\"text-align:center; padding:2px;\">", $box)."</td>\n";
 	$res .= "<td style=\"text-align:center; padding:2px;\">".sed_build_user($row['auth_setbyuserid'], sed_cc($row['user_name']))."</td>\n";
 	$res .= "</tr>\n";
@@ -204,7 +204,7 @@ function sed_rights_parseline($row, $title, $link)
 	return($res);
 }
 
-$adminmain .= "<h4><img src=\"system/img/admin/admin.gif\" alt=\"\" /> ".$L['Core']." :</h4>\n";
+$adminmain .= "<h4><img src=\"images/admin/admin.gif\" alt=\"\" /> ".$L['Core']." :</h4>\n";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= $headcol;
 
@@ -216,7 +216,7 @@ while ($row = sed_sql_fetcharray($sql1))
 }
 
 $adminmain .= "</table>";
-$adminmain .= "<h4><img src=\"system/img/admin/forums.gif\" alt=\"\" /> ".$L['Forums']." :</h4>";
+$adminmain .= "<h4><img src=\"images/admin/forums.gif\" alt=\"\" /> ".$L['Forums']." :</h4>";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= $headcol;
 
@@ -228,7 +228,7 @@ while ($row = sed_sql_fetcharray($sql2))
 }
 
 $adminmain .= "</table>";
-$adminmain .= "<h4><img src=\"system/img/admin/page.gif\" alt=\"\" /> ".$L['Pages']." :</h4>";
+$adminmain .= "<h4><img src=\"images/admin/page.gif\" alt=\"\" /> ".$L['Pages']." :</h4>";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= $headcol;
 
@@ -240,7 +240,7 @@ while ($row = sed_sql_fetcharray($sql3))
 }
 
 $adminmain .= "</table>";
-$adminmain .= "<h4><img src=\"system/img/admin/plug.gif\" alt=\"\" /> ".$L['Plugins']." :</h4>";
+$adminmain .= "<h4><img src=\"images/admin/plug.gif\" alt=\"\" /> ".$L['Plugins']." :</h4>";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= $headcol;
 
@@ -254,7 +254,7 @@ while ($row = sed_sql_fetcharray($sql4))
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rights.end');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";

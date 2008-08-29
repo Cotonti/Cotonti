@@ -269,8 +269,8 @@ function sed_sql_insert($table_name, $data, $prefix = '')
 	}
 	if(!empty($keys) && !empty($vals))
 	{
-		$keys = substr($keys, 0, -1);
-		$vals = substr($vals, 0, -1);
+		$keys = mb_substr($keys, 0, -1);
+		$vals = mb_substr($vals, 0, -1);
 		sed_sql_query("INSERT INTO `$table_name` ($keys) VALUES ($vals)");
 		return mysql_affected_rows();
 	}
@@ -343,7 +343,7 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '')
 	}
 	if(!empty($upd))
 	{
-		$upd = substr($upd, 0, -1);
+		$upd = mb_substr($upd, 0, -1);
 		sed_sql_query("UPDATE $table_name SET $upd $condition");
 		return mysql_affected_rows();
 	}

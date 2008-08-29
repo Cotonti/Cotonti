@@ -27,7 +27,7 @@ $id = sed_import('id','G','TXT');
 $ii=0;
 $jj=0;
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=ratings\">".$L['Configuration']." : <img src=\"system/img/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=ratings\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($a=='delete')
 	{
@@ -70,8 +70,8 @@ while ($row = sed_sql_fetcharray($sql))
 	$sql1 = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$id2'");
 	$votes = sed_sql_result($sql1,0,"COUNT(*)");
 
-	$rat_type = substr($row['rating_code'], 0, 1);
-	$rat_value = substr($row['rating_code'], 1);
+	$rat_type = mb_substr($row['rating_code'], 0, 1);
+	$rat_value = mb_substr($row['rating_code'], 1);
 
 	switch($rat_type)
 		{
@@ -89,7 +89,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['rating_creationdate'])."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$votes."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['rating_average']."</td>";
-	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$rat_url."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\"></a></td></tr>";
+	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$rat_url."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a></td></tr>";
 	$ii++;
 	$jj = $jj + $votes;
 	}

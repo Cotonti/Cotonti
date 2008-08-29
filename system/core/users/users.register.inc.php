@@ -27,7 +27,7 @@ if ($cfg['disablereg'])
 /* === Hook === */
 $extp = sed_getextplugins('users.register.first');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($a=='add')
@@ -38,7 +38,7 @@ if ($a=='add')
 	/* === Hook for the plugins === */
 	$extp = sed_getextplugins('users.register.add.first');
 	if (is_array($extp))
-		{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT', 24, TRUE);
@@ -75,13 +75,13 @@ if ($a=='add')
   	$ruserextra7_p = sed_import('ruserextra7_p','P','BOL');
 	$ruserextra8_p = sed_import('ruserextra8_p','P','BOL');
 	$ruserextra9_p = sed_import('ruserextra9_p','P','BOL');
-	$ruseremail = strtolower($ruseremail);
+	$ruseremail = mb_strtolower($ruseremail);
 
 	$sql = sed_sql_query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
 
 	while ($row = sed_sql_fetcharray($sql))
 		{
-		if (eregi($row['banlist_email'], $ruseremail))
+		if (mb_eregi($row['banlist_email'], $ruseremail))
 			{ $bannedreason = $row['banlist_reason']; }
 		}
 
@@ -92,9 +92,9 @@ if ($a=='add')
 
 	$rusername = str_replace('&#160;', '', $rusername);
 	$error_string .= (!empty($bannedreason)) ? $L['aut_emailbanned'].$bannedreason."<br />" : '';
-	$error_string .= (strlen($rusername)<2) ? $L['aut_usernametooshort']."<br />" : '';
-	$error_string .= (strlen($rpassword1)<4 || sed_alphaonly($rpassword1)!=$rpassword1) ? $L['aut_passwordtooshort']."<br />" : '';
-	$error_string .= (strlen($ruseremail)<4 || !eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$",$ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
+	$error_string .= (mb_strlen($rusername)<2) ? $L['aut_usernametooshort']."<br />" : '';
+	$error_string .= (mb_strlen($rpassword1)<4 || sed_alphaonly($rpassword1)!=$rpassword1) ? $L['aut_passwordtooshort']."<br />" : '';
+	$error_string .= (mb_strlen($ruseremail)<4 || !mb_eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$",$ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
 	$error_string .= ($res1>0) ? $L['aut_usernamealreadyindb']."<br />" : '';
 	$error_string .= ($res2>0) ? $L['aut_emailalreadyindb']."<br />" : '';
 	$error_string .= ($rpassword1!=$rpassword2) ? $L['aut_passwordmismatch']."<br />" : '';
@@ -108,11 +108,11 @@ if ($a=='add')
 
 		$mdpass = md5($rpassword1);
 		$ruserbirthdate = ($rmonth=='x' || $rday=='x' || $ryear=='x' || $rmonth==0 || $rday==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
-		$ruserextra1 = ($ruserextra1_p) ? substr($ruserextra1,0,$cfg['extra1tsetting']) : '';
-		$ruserextra2 = ($ruserextra2_p) ? substr($ruserextra2,0,$cfg['extra2tsetting']) : '';
-		$ruserextra3 = ($ruserextra3_p) ? substr($ruserextra3,0,$cfg['extra3tsetting']) : '';
-		$ruserextra4 = ($ruserextra4_p) ? substr($ruserextra4,0,$cfg['extra4tsetting']) : '';
-		$ruserextra5 = ($ruserextra5_p) ? substr($ruserextra5,0,$cfg['extra5tsetting']) : '';
+		$ruserextra1 = ($ruserextra1_p) ? mb_substr($ruserextra1,0,$cfg['extra1tsetting']) : '';
+		$ruserextra2 = ($ruserextra2_p) ? mb_substr($ruserextra2,0,$cfg['extra2tsetting']) : '';
+		$ruserextra3 = ($ruserextra3_p) ? mb_substr($ruserextra3,0,$cfg['extra3tsetting']) : '';
+		$ruserextra4 = ($ruserextra4_p) ? mb_substr($ruserextra4,0,$cfg['extra4tsetting']) : '';
+		$ruserextra5 = ($ruserextra5_p) ? mb_substr($ruserextra5,0,$cfg['extra5tsetting']) : '';
 		$ruserextra6 = ($ruserextra6_p) ? $ruserextra6 : '';
 		$ruserextra7 = ($ruserextra7_p) ? $ruserextra7 : '';
 		$ruserextra8 = ($ruserextra8_p) ? $ruserextra8 : '';
@@ -194,7 +194,7 @@ if ($a=='add')
 		/* === Hook for the plugins === */
 		$extp = sed_getextplugins('users.register.add.done');
 		if (is_array($extp))
-			{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		if ($cfg['regnoactivation'] || $defgroup==5)
@@ -230,7 +230,7 @@ if ($a=='add')
 		}
 	}
 
-elseif ($a=='validate' && strlen($v)==32)
+elseif ($a=='validate' && mb_strlen($v)==32)
 	{
 	sed_shield_protect();
 	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_lostpass='$v' AND user_maingrp=2");
@@ -277,10 +277,10 @@ $form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $s
 /* === Hook === */
 $extp = sed_getextplugins('users.register.main');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-require_once("system/header.php");
+require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate("skins/".$skin."/users.register.tpl");
 
 if (!empty($error_string))
@@ -322,12 +322,12 @@ $t->assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('users.register.tags');
 if (is_array($extp))
-	{ foreach ($extp as $pl) { include_once('./plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once("system/footer.php");
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

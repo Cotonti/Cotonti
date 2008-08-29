@@ -51,7 +51,7 @@ $cfg['th_dir_user'] = sed_pfs_thumbpath($userid);
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
 	{
- 	$icon[$line[0]] = "<img src=\"system/img/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
+ 	$icon[$line[0]] = "<img src=\"images/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
  	$filedesc[$line[0]] = $line[1];
  	}
 
@@ -200,7 +200,7 @@ function ratings(rcode)
 	}
 else
 	{
-	require_once("system/header.php");
+	require_once $cfg['system_dir'] . '/header.php';
 
 	$t = new XTemplate("skins/".$skin."/pfs.tpl");
 
@@ -212,7 +212,7 @@ else
 	$t->parse("MAIN");
 	$t->out("MAIN");
 
-	require_once("system/footer.php");
+	require_once $cfg['system_dir'] . '/footer.php';
 	}
 
 
