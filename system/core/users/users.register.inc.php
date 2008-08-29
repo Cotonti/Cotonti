@@ -281,7 +281,7 @@ if (is_array($extp))
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate("skins/".$skin."/users.register.tpl");
+$t = new XTemplate(sed_skinfile('users.register'));
 
 if (!empty($error_string))
 	{

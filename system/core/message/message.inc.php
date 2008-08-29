@@ -285,7 +285,7 @@ if (is_array($extp))
 $moremetas .= '<meta name="robots" content="noindex" />';
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate("skins/".$skin."/message.tpl");
+$t = new XTemplate(sed_skinfile('message'));
 
 $errmsg = $message;
 $message .= ($usr['isadmin']) ? " (#".$msg.")" : '';

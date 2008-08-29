@@ -33,7 +33,7 @@ sed_block($usr['auth_read']);
 /* === Hook === */
 $extp = sed_getextplugins('users.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if (empty($s)) { $s = 'name'; }
@@ -44,60 +44,60 @@ if (empty($d)) { $d = '0'; }
 $title = "<a href=\"users.php\">".$L['Users']."</a> ";
 $localskin = sed_skinfile('users');
 
-if (!empty($sq)) { $y = $sq; }	
+if (!empty($sq)) { $y = $sq; }
 
 if ($f=='search' && mb_strlen($y)>1)
-	{
+{
 	$sq = $y;
 	$title .= $cfg['separator']." ". $L['Search']." '".sed_cc($y)."'";
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_name LIKE '%".sed_sql_prep($y)."%'");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_name LIKE '%".sed_sql_prep($y)."%' ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']);
-	}
+}
 elseif ($g>1)
-	{
+{
 	$title .= $cfg['separator']." ".$L['Maingroup']." = ".sed_build_group($g);
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_maingrp='$g'");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_maingrp='$g' ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']);
-	}
+}
 
 elseif ($gm>1)
-	{
+{
 	$title .= $cfg['separator']." ".$L['Group']." = ".sed_build_group($gm);
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users as u
-		LEFT JOIN $db_groups_users as g ON g.gru_userid=u.user_id
-		WHERE g.gru_groupid='$gm'");
+	LEFT JOIN $db_groups_users as g ON g.gru_userid=u.user_id
+	WHERE g.gru_groupid='$gm'");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("SELECT u.* FROM $db_users as u
-		LEFT JOIN $db_groups_users as g ON g.gru_userid=u.user_id
-		WHERE g.gru_groupid='$gm'
-		ORDER BY user_$s $w
-		LIMIT $d,".$cfg['maxusersperpage']);
-	}
+	LEFT JOIN $db_groups_users as g ON g.gru_userid=u.user_id
+	WHERE g.gru_groupid='$gm'
+	ORDER BY user_$s $w
+	LIMIT $d,".$cfg['maxusersperpage']);
+}
 
 elseif (mb_strlen($f)==1)
-	{
+{
 	if ($f=="_")
-		{
+	{
 		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '%'";
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_name NOT REGEXP(\"^[a-zA-Z]\")");
 		$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_name NOT REGEXP(\"^[a-zA-Z]\") ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']);
-		}
-    else
-		{
+	}
+	else
+	{
 		$f = mb_strtoupper($f);
 		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '".$f."'";
 		$i = $f."%";
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_name LIKE '$i'");
 		$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_name LIKE '$i' ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']);
-		}
 	}
+}
 
 elseif (mb_substr($f, 0, 8)=='country_')
-	{
+{
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
 	$title .= $cfg['separator']." ".$L['Country']." '";
 	$title .= ($cn=='00') ? $L['None']."'": $sed_countries[$cn]."'";
@@ -105,80 +105,147 @@ elseif (mb_substr($f, 0, 8)=='country_')
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_country='$cn_code'");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_country='$cn_code' ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']);
-	}
+}
 
 elseif ($f=='all')
-	{
+{
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 	if ($s=='maingrp')
-		{ $sql = sed_sql_query("SELECT u.* FROM $db_users as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp ORDER BY grp_level $w LIMIT $d,".$cfg['maxusersperpage']); }
+	{ $sql = sed_sql_query("SELECT u.* FROM $db_users as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp ORDER BY grp_level $w LIMIT $d,".$cfg['maxusersperpage']); }
 	else
-		{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE 1 ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']); }
-	}
+	{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE 1 ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']); }
+}
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage= ceil ($d / $cfg['maxusersperpage'])+1;
+
+/*=========*/
 
 $allfilters = "<form action=\"users.php?f=search\" method=\"post\">".$L['Filters'].": <a href=\"users.php\">".$L['All']."</a> ";
 $allfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"redirect(this)\">";
 
 foreach ($sed_countries as $i => $x)
-	{
+{
 	if ($i=='00')
-		{
+	{
 		$allfilters .= "<option value=\"\">".$L['Country']."...</option>";
 		$selected = ("country_00"==$f) ? "selected=\"selected\"" : '';
 		$allfilters .= "<option value=\"users.php?f=country_00\" ".$selected.">".$L['None']."</option>";
-		}
-       else
-       	{
-       	$selected = ("country_".$i==$f) ? "selected=\"selected\"" : '';
-       	$allfilters .= "<option value=\"users.php?f=country_".$i."\" ".$selected.">".sed_cutstring($x,23)."</option>";
-       	}
 	}
+	else
+	{
+		$selected = ("country_".$i==$f) ? "selected=\"selected\"" : '';
+		$allfilters .= "<option value=\"users.php?f=country_".$i."\" ".$selected.">".sed_cutstring($x,23)."</option>";
+	}
+}
 
 $allfilters .= "</select>";
+
+/*=========*/
+
+$countryfilters = "<form action=\"users.php?f=search\" method=\"post\">".$L['Filters'].": <a href=\"users.php\">".$L['All']."</a> ";
+$countryfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"redirect(this)\">";
+
+foreach ($sed_countries as $i => $x)
+{
+	if ($i=='00')
+	{
+		$countryfilters .= "<option value=\"\">".$L['Country']."...</option>";
+		$selected = ("country_00"==$f) ? "selected=\"selected\"" : '';
+		$countryfilters .= "<option value=\"users.php?f=country_00\" ".$selected.">".$L['None']."</option>";
+	}
+	else
+	{
+		$selected = ("country_".$i==$f) ? "selected=\"selected\"" : '';
+		$countryfilters .= "<option value=\"users.php?f=country_".$i."\" ".$selected.">".sed_cutstring($x,23)."</option>";
+	}
+}
+
+$countryfilters .= "</select>";
+
+
+/*=========*/
+
+
 $allfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Maingroup']."...";
 foreach($sed_groups as $k => $i)
-	{
+{
 	$selected = ($k==$g) ? "selected=\"selected\"" : '';
 	$selected1 = ($k==$gm) ? "selected=\"selected\"" : '';
 	if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
-		{
+	{
 		$allfilters .= ($k>1) ? "<option value=\"users.php?g=".$k."\" $selected> ".$sed_groups[$k]['title'] : '';
 		$allfilters .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 		$grpms .= ($k>1) ? "<option value=\"users.php?gm=".$k."\" $selected1> ".$sed_groups[$k]['title'] : '';
 		$grpms .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-		}
 	}
+}
 $allfilters .= "</select>";
+
+/*=========*/
+
+$maingrpfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Maingroup']."...";
+foreach($sed_groups as $k => $i)
+{
+	$selected = ($k==$g) ? "selected=\"selected\"" : '';
+	$selected1 = ($k==$gm) ? "selected=\"selected\"" : '';
+	if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
+	{
+		$maingrpfilters .= ($k>1) ? "<option value=\"users.php?g=".$k."\" $selected> ".$sed_groups[$k]['title'] : '';
+		$maingrpfilters .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
+		$grpms .= ($k>1) ? "<option value=\"users.php?gm=".$k."\" $selected1> ".$sed_groups[$k]['title'] : '';
+		$grpms .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
+	}
+}
+$maingrpfilters .= "</select>";
+
 $allfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Group']."...";
 $allfilters .= $grpms."</select>";
 
+
+$grpfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Group']."...";
+$grpfilters .= $grpms."</select>";
+
+
+/*=========*/
+
 $allfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".sed_cc($y)."\" size=\"8\" maxlength=\"8\" /><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
+$searchfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".sed_cc($y)."\" size=\"8\" maxlength=\"8\" /><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
+
+/*=========*/
 
 $allfilters .= "\n".$L['Byfirstletter'].":";
 for ($i = 1; $i <= 26; $i++)
-	{
+{
 	$j = chr($i+64);
 	$allfilters .= " <a href=\"users.php?f=".$j."\">".$j."</a>";
-	}
+}
 $allfilters .= " <a href=\"users.php?f=_\">%</a>";
+
+/*=========*/
+
+$otherfilters .= "\n".$L['Byfirstletter'].":";
+for ($i = 1; $i <= 26; $i++)
+{
+	$j = chr($i+64);
+	$otherfilters .= " <a href=\"users.php?f=".$j."\">".$j."</a>";
+}
+$otherfilters .= " <a href=\"users.php?f=_\">%</a>";
 
 $out['subtitle'] = $L['Users'];
 
 /* === Hook === */
 $extp = sed_getextplugins('users.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
 
-	$t-> assign(array(
+$t-> assign(array(
 	"USERS_TITLE" => $title,
 	"USERS_SUBTITLE" => $L['use_subtitle'],
 	"USERS_CURRENTFILTER" => $f,
@@ -187,6 +254,11 @@ $t = new XTemplate($localskin);
 	"USERS_TOP_MAXPERPAGE" => $cfg['maxusersperpage'],
 	"USERS_TOP_TOTALUSERS" => $totalusers,
 	"USERS_TOP_FILTERS" => $allfilters,
+	"USERS_TOP_FILTERS_COUNTRY" => $countryfilters,
+	"USERS_TOP_FILTERS_MAINGROUP" => $maingrpfilters,
+	"USERS_TOP_FILTERS_GROUP" => $grpfilters,
+	"USERS_TOP_FILTERS_SEARCH" => $searchfilters,
+	"USERS_TOP_FILTERS_OTHERS" => $otherfilters,
 	"USERS_TOP_PM" => "PM",
 	"USERS_TOP_EXTRA1_TITLE" => $cfg['extra1title'],
 	"USERS_TOP_EXTRA2_TITLE" => $cfg['extra2title'],
@@ -197,7 +269,7 @@ $t = new XTemplate($localskin);
 	"USERS_TOP_EXTRA7_TITLE" => $cfg['extra7title'],
 	"USERS_TOP_EXTRA8_TITLE" => $cfg['extra8title'],
 	"USERS_TOP_EXTRA9_TITLE" => $cfg['extra9title'],
-			));
+));
 
 $t->assign(array(
 	"USERS_TOP_USERID" => "<a href=\"users.php?f=$f&amp;s=id&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=id&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Userid'],
@@ -214,23 +286,23 @@ $t->assign(array(
 	"USERS_TOP_BIRTHDATE" => "<a href=\"users.php?f=$f&amp;s=birthdate&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=birthdate&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Birthdate'],
 	"USERS_TOP_GENDER" => "<a href=\"users.php?f=$f&amp;s=gender&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=gender&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Gender'],
 	"USERS_TOP_TIMEZONE" => "<a href=\"users.php?f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Timezone']
-		));
+));
 
 if ($d>0)
-	{
+{
 	$prevpage = $d - $cfg['maxusersperpage'];
 	if ($prevpage<0)
-		{ $prevpage=0; }
+	{ $prevpage=0; }
 	$t->assign("USERS_TOP_PAGEPREV",
 		"<a href=\"users.php?f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;d=$prevpage\">".$L['Previous']." $sed_img_left</a>");
-	}
+}
 
 if (($d + $cfg['maxusersperpage'])<$totalusers)
-	{
+{
 	$nextpage = $d + $cfg['maxusersperpage'];
 	$t->assign("USERS_TOP_PAGENEXT",
 		"<a href=\"users.php?f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;d=$nextpage\">$sed_img_right ".$L['Next']."</a>");
-	}
+}
 
 $jj=0;
 
@@ -239,7 +311,7 @@ $extp = sed_getextplugins('users.loop');
 /* ===== */
 
 while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
-	{
+{
 	$jj++;
 	$urr['user_age'] = ($urr['user_birthdate']>0) ? sed_build_age($urr['user_birthdate']) : '';
 	$urr['user_birthdate'] = ($urr['user_birthdate']>0) ? @date($cfg['formatyearmonthday'], $urr['user_birthdate']) : '';
@@ -287,20 +359,20 @@ while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 		"USERS_ROW_LASTIP" => $urr['user_lastip'],
 		"USERS_ROW_ODDEVEN" => sed_build_oddeven($jj),
 		"USERS_ROW" => $urr
-		));
+	));
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$t->parse("MAIN.USERS_ROW");
-	}
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('users.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");

@@ -82,7 +82,7 @@ $adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
 
 require_once($cfg['system_dir'].'/header.php');
 
-$t = new XTemplate("skins/".$skin."/admin.tpl");
+$t = new XTemplate(sed_skinfile('admin'));
 
 $t->assign(array(
 	"ADMIN_TITLE" => sed_build_adminsection($adminpath),

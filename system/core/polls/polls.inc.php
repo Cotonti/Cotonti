@@ -40,7 +40,7 @@ function help(rcode,c1,c2)
 function pfs(id,c1,c2)
 	{
 	window.open('pfs.php?userid='+id+'&c1='+c1+'&c2='+c2,'PFS','status=1, toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width=754,height=512,left=32,top=16');
-	}	
+	}
 //-->
 </script>";
 
@@ -103,7 +103,7 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$t = new XTemplate("skins/".$skin."/polls.tpl");
+$t = new XTemplate(sed_skinfile('polls'));
 
 $t->assign(array(
 	"POLLS_HEADER1" => $polls_header1,

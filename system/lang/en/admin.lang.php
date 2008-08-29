@@ -153,7 +153,7 @@ $L['cfg_disablehitstats'] = array("Disable hit statistics", "Referers and hits p
 $L['cfg_disablereg'] = array("Disable registration process", "Prevent users from registering new accounts");
 $L['cfg_disablewhosonline'] = array("Disable who's online", "Automatically enabled if you turn on the Shield");
 $L['cfg_allowphp_pages'] = array("Allow the PHP page type", "Execution of PHP code in pages, use with caution !");
-
+$L['cfg_count_admin'] = array('Count Administrators\' hits', ''); // N-0.0.1
 
 
 

@@ -19,6 +19,7 @@ ALTER TABLE sed_pm ADD pm_html TEXT NOT NULL DEFAULT '';
 /* New bbcodes feature */
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_custom', 3, '0');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_cache', 3, '1');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'page', '03', 'count_admin', 3, '0');
 
 /* This table is used by parser only, editor part is separate */
 CREATE TABLE sed_bbcode (

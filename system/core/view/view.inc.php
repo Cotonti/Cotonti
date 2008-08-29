@@ -84,7 +84,7 @@ if (preg_match_all('@<link[^>](.*?)>@si', $ext_head, $ext_links)>0)
 	}
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate("skins/".$skin."/plugin.tpl");
+$t = new XTemplate(sed_skinfile('plugin'));
 
 $t-> assign(array(
 	"PLUGIN_TITLE" => $vt,

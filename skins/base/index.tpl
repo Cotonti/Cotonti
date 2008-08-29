@@ -26,7 +26,7 @@
 			
 				<div class="block">
 					<h4>{PHP.skinlang.index.Polls}</h4>
-					{PLUGIN_LATESTPOLL}
+					{PLUGIN_RECENTPOLLS}
 				</div>
 
 				<div class="block">

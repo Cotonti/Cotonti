@@ -37,9 +37,9 @@ elseif (!empty($e))
 {
 	$path_lang_def	= $cfg['plugins_dir']."/$e/lang/$e.en.lang.php";
 	$path_lang_alt	= $cfg['plugins_dir']."/$e/lang/$e.$lang.lang.php";
-	$path_skin_ntg	= "skins/$skin/plugin.tpl";
+	$path_skin_ntg	= sed_skinfile('plugin');
 	$path_skin_def	= $cfg['plugins_dir']."/$e/$e.tpl";
-	$path_skin_alt	= "skins/$skin/plugin.standalone.$e.tpl";
+	$path_skin_alt	= sed_skinfile($e, true);
 
 	if (file_exists($path_lang_alt))
 	{ require_once($path_lang_alt); }
@@ -274,7 +274,7 @@ elseif ($m=='version')
 
 	require_once $cfg['system_dir'] . '/header.php';
 
-	$t = new XTemplate("skins/".$skin."/plugin.tpl");
+	$t = new XTemplate(sed_skinfile('plugin'));
 	$t-> assign(array(
 		"PLUGIN_TITLE" => $plugin_title,
 		"PLUGIN_BODY" => $plugin_body

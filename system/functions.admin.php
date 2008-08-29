@@ -275,6 +275,7 @@ function sed_loadconfigmap()
 	$result[] = array ('forums', '12', 'antibumpforums', 3, '0', '');
 	$result[] = array ('page', '01', 'disable_page', 3, '0', '');
 	$result[] = array ('page', '02', 'allowphp_pages', 3, '0', '');
+	$result[] = array ('page', '03', 'count_admin', 3, '0', '');
 	$result[] = array ('page', '05', 'maxrowsperpage', 2, '15', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
 	$result[] = array ('pfs', '01', 'disable_pfs', 3, '0', '');
 	$result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');

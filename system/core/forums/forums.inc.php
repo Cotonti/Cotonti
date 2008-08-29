@@ -97,8 +97,7 @@ if (is_array($extp))
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = "skins/".$skin."/forums.sections.tpl";
-$t = new XTemplate($mskin);
+$t = new XTemplate(sed_skinfile('forums.sections'));
 
 $t->assign(array(
 	"FORUMS_SECTIONS_PAGETITLE" => "<a href=\"forums.php\">".$L['Forums']."</a>",

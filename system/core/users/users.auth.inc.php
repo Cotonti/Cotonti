@@ -66,7 +66,7 @@ if ($a=='check')
 		$ruserid = $row['user_id'];
 		$rdefskin = $row['user_skin'];
 
-		sed_sql_query("UPDATE $db_users SET user_lastip='".$usr['ip']."', user_logcount=user_logcount+1 WHERE user_id='".$row['user_id']."' LIMIT 1");
+		sed_sql_query("UPDATE $db_users SET user_lastip='".$usr['ip']."' WHERE user_id='".$row['user_id']."' LIMIT 1");
 
 		if ($rcookiettl>0 && ($cfg['authmode']==1 || $cfg['authmode']==3))
 			{
@@ -112,7 +112,7 @@ if (is_array($extp))
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate("skins/".$skin."/users.auth.tpl");
+$t = new XTemplate(sed_skinfile('users.auth'));
 
 $t->assign(array(
 	"USERS_AUTH_TITLE" => $L['aut_logintitle'],

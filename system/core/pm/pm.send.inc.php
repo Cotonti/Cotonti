@@ -218,7 +218,7 @@ if (is_array($extp))
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate("skins/".$skin."/pm.send.tpl");
+$t = new XTemplate(sed_skinfile('pm.send'));
 
 if (!empty($error_string))
 {

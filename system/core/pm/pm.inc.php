@@ -164,7 +164,7 @@ if (is_array($extp))
 $pm_sendlink = ($usr['auth_write']) ? "<a href=\"pm.php?m=send\">".$L['pm_sendnew']."</a>" : '';
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate("skins/".$skin."/pm.tpl");
+$t = new XTemplate(sed_skinfile('pm'));
 
 if ($pm_totalpages=='0') {$pm_totalpages = '1'; }
 

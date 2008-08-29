@@ -594,7 +594,7 @@ else
 	{
 	require_once $cfg['system_dir'] . '/header.php';
 
-	$t = new XTemplate("skins/".$skin."/pfs.tpl");
+	$t = new XTemplate(sed_skinfile('pfs'));
 
 	$t-> assign(array(
 		"PFS_TITLE" => $title,

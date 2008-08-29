@@ -160,7 +160,7 @@ function ratings(rcode)
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";
 
-	$t = new XTemplate("skins/".$skin."/pfs.tpl");
+	$t = new XTemplate(sed_skinfile('pfs'));
 
 	$t->assign(array(
 		"PFS_STANDALONE_HEADER1" => $pfs_header1,
@@ -183,7 +183,7 @@ else
 	{
 	require_once $cfg['system_dir'] . '/header.php';
 
-	$t = new XTemplate("skins/".$skin."/pfs.tpl");
+	$t = new XTemplate(sed_skinfile('pfs'));
 
 	$t-> assign(array(
 		"PFS_TITLE" => $title,

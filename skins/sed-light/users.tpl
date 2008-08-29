@@ -3,7 +3,10 @@
 	<div class="mboxHD">{USERS_TITLE}</div>
 	<div class="mboxBody">
 	
-		<div id="subtitle">{USERS_TOP_FILTERS}</div>
+		<div id="subtitle">
+{USERS_TOP_FILTERS_COUNTRY} {USERS_TOP_FILTERS_MAINGROUP} {USERS_TOP_FILTERS_GROUP} {USERS_TOP_FILTERS_SEARCH}
+	{USERS_TOP_FILTERS_OTHERS}
+</div>
 		
 		<div class="paging">{USERS_TOP_PAGEPREV} &nbsp; {USERS_TOP_PAGENEXT}  &nbsp; {PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
 

@@ -57,7 +57,7 @@ else
 
 /* ============= */
 
-$t = new XTemplate("skins/".$skin."/pfs.view.tpl");
+$t = new XTemplate(sed_skinfile('pfs.view'));
 
 $t->assign(array(
 	"PFSVIEW_HEADER1" => $pfs_header1,

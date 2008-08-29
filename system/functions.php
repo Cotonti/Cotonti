@@ -3255,20 +3255,68 @@ function sed_shield_update($shield_add, $shield_newaction)
  * @param string $base Item name
  * @return string
  */
-function sed_skinfile($base)
+function sed_skinfile($base, $plug = false)
 {
-	global $usr;
+	global $usr, $cfg;
+	if($plug)
+	{
+		$bname = mb_strstr($base, '.') ? mb_substr($base, 0, mb_strpos($base, '.')) : $base;
+		if(file_exists('./skins/'.$usr['skin'].'/plugin.standalone.'.$base.'.tpl'))
+		{
+			return './skins/'.$usr['skin'].'/plugin.standalone.'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$usr['skin'].'/'.$base.'.tpl'))
+		{
+			return './skins/'.$usr['skin'].'/'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$cfg['defaultskin'].'/plugin.standalone.'.$base.'.tpl'))
+		{
+			return './skins/'.$cfg['defaultskin'].'/plugin.standalone.'.$base.'.tpl';
+		}
+		elseif(file_exists('skins/'.$cfg['defaultskin'].'/'.$base.'.tpl'))
+		{
+			return 'skins/'.$cfg['defaultskin'].'/'.$base.'.tpl';
+		}
+		elseif(file_exists($cfg['plugins_dir'].'/'.$bname.'/tpl/'.$base.'.tpl'))
+		{
+			return $cfg['plugins_dir'].'/'.$bname.'/tpl/'.$base.'.tpl';
+		}
+		else
+		{
+			return $cfg['plugins_dir'].'/'.$bname.'/'.$base.'.tpl';
+		}
+	}
 	$base_depth = count($base);
-	if ($base_depth==1) { return($skinfile = 'skins/'.$usr['skin'].'/'.$base.'.tpl'); }
+	if($base_depth==1)
+	{
+		if(file_exists('skins/'.$usr['skin'].'/'.$base.'.tpl'))
+		{
+			return 'skins/'.$usr['skin'].'/'.$base.'.tpl';
+		}
+		else
+		{
+			return 'skins/'.$cfg['defaultskin'].'/'.$base.'.tpl';
+		}
+
+	}
 
 	for($i=$base_depth; $i>1; $i--)
 	{
 		$levels = array_slice($base, 0, $i);
 		$skinfile = 'skins/'.$usr['skin'].'/'.implode('.', $levels).'.tpl';
-		if(file_exists($skinfile)) { return($skinfile); }
+		if(file_exists($skinfile))
+		{
+			return $skinfile;
+		}
+		$skinfile = 'skins/'.$cfg['defaultskin'].'/'.implode('.', $levels).'.tpl';
+		if(file_exists($skinfile))
+		{
+			return $skinfile;
+		}
 	}
-	return('skins/'.$usr['skin'].'/'.$base[0].'.tpl');
+	return 'skins/'.$usr['skin'].'/'.$base[0].'.tpl';
 }
+
 
 /**
  * Parses smiles in text
