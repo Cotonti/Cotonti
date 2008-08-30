@@ -2283,13 +2283,15 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
  */
 function sed_javascript($more='')
 {
-	$result = '
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/base.js"></script>';
+	global $cfg;
+	if($cfg['jquery'])
+	{
+		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
+	}
+	$result .= '<script type="text/javascript" src="js/base.js"></script>';
 	if(!empty($more))
 	{
-		$result .= '
-<script type="text/javascript">
+		$result .= '<script type="text/javascript">
 <!--
 '.$more.'
 //-->

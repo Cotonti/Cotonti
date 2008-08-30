@@ -543,6 +543,7 @@ INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, con
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldenabled', 3, '0');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldtadjust', 2, '100');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '20', 'shieldzhammer', 2, '25');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '30', 'jquery', 3, '1');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_custom', 3, '0');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '10', 'parser_cache', 3, '1');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'parser', '20', 'parsebbcodeusertext', 3, '1');

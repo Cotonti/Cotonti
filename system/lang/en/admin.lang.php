@@ -97,6 +97,7 @@ $L['cfg_showsqlstats'] = array('Show SQL queries statistics', 'In footer.tpl');
 $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
 $L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
 $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
+$L['cfg_jquery'] = array('Enable jQuery', ''); // N-0.0.1
 $L['cfg_parser_cache'] = array('Enable HTML cache', ''); // New in N-0.0.1
 $L['cfg_parser_custom'] = array('Enable custom parser', ''); // New in N-0.0.1
 $L['cfg_parser_vid'] = array('Allow BBcodes for the videos', '');		// New in v120
