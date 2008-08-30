@@ -1,11 +1,12 @@
-<?php
+<?PHP
+
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
 [BEGIN_SED]
 File=skins/sed-dark/sed-dark.ru.lang.php
-Version=125
+Version=101
 Updated=2007-mar-17
 Type=Skin
 Name=sed-dark
@@ -28,6 +29,7 @@ $skinlang['forumseditpost']['Update'] = "Готово";
 
 //forums.newtopic.tpl
 $skinlang['forumsnewtopic']['Title'] = "Заголовок:";
+$skinlang['forumsnewtopic']['Desc'] = "Short description (optional):";
 $skinlang['forumsnewtopic']['privatetopic'] = "Отметьте это поле, если хотите создать \"приватную\" тему:";
 $skinlang['forumsnewtopic']['privatetopic2'] = "Только модераторы форума и создатель темы (вы) смогут ее читать и отвечать в ней.";
 $skinlang['forumsnewtopic']['Submit'] = "Готово";
@@ -59,6 +61,7 @@ $skinlang['forumssections']['FoldAll'] = "Свернуть все";
 $skinlang['forumssections']['UnfoldAll'] = "Развернуть все";
 
 //forums.topics.tpl
+$skinlang['forumstopics']['Newtopic'] = "New topic"; // New in v125
 $skinlang['forumstopics']['Nonewposts'] = "Нет новых сообщений";
 $skinlang['forumstopics']['Newposts'] = "Есть новые сообщения";
 $skinlang['forumstopics']['Sticky'] = "Прикреплено";
@@ -299,4 +302,5 @@ $skinlang['usersregister']['Submit'] = "Завершить";
 $skinlang['users']['Page'] = "Страница";
 $skinlang['users']['usersperpage'] = "пользователей на страницу";
 $skinlang['users']['usersinthissection'] = "пользователей в этом разделе";
+
 ?>

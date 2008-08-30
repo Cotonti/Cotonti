@@ -1,4 +1,4 @@
-﻿<?PHP
+<?PHP
 
 /* ====================
 Seditio - Website engine
@@ -34,7 +34,5 @@ $L['plu_db_datassize'] = "БД SQL, размер данных (KB)";
 $L['plu_db_totalsize'] = "БД SQL, общий размер (KB)";
 
 $L['plu_hitsmonth'] = "Хиты за последние 7 дней";
-
-
 
 ?>

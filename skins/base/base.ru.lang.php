@@ -1,4 +1,4 @@
-﻿<?PHP
+<?PHP
 
 /* ====================
 Seditio - Website engine
@@ -29,6 +29,7 @@ $skinlang['forumseditpost']['Update'] = "Готово";
 
 //forums.newtopic.tpl
 $skinlang['forumsnewtopic']['Title'] = "Заголовок:";
+$skinlang['forumsnewtopic']['Desc'] = "Short description (optional):";
 $skinlang['forumsnewtopic']['privatetopic'] = "Отметьте это поле, если хотите создать \"приватную\" тему:";
 $skinlang['forumsnewtopic']['privatetopic2'] = "Только модераторы форума и создатель темы (вы) смогут ее читать и отвечать в ней.";
 $skinlang['forumsnewtopic']['Submit'] = "Готово";
@@ -60,6 +61,7 @@ $skinlang['forumssections']['FoldAll'] = "Свернуть все";
 $skinlang['forumssections']['UnfoldAll'] = "Развернуть все";
 
 //forums.topics.tpl
+$skinlang['forumstopics']['Newtopic'] = "New topic"; // New in v125
 $skinlang['forumstopics']['Nonewposts'] = "Нет новых сообщений";
 $skinlang['forumstopics']['Newposts'] = "Есть новые сообщения";
 $skinlang['forumstopics']['Sticky'] = "Прикреплено";

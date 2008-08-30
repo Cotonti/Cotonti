@@ -1,37 +1,37 @@
-﻿<?PHP
+<?PHP
 
 /* ====================
 [BEGIN_SED]
 File=plugins/search/lang/search.ru.lang.php
 Version=125
-Updated=2008-aug-04
+Updated=2008-mar-17
 Type=
-Author=Neocrome, Translated by Antar - http://subs.com.ru
+Author=Neocrome, Translated by Antar
 Description=
 [END_SED]
 ==================== */
 
 
-$L['plu_title_frmtab'] = "Поиск на форумах";
-$L['plu_title_frmtab_s'] = "Искать на форумах..";
+$L['plu_title_frmtab'] = "Поиск в форумах";
+$L['plu_title_frmtab_s'] = "Искать в форумах...";
 $L['plu_title_pagtab'] = "Поиск в страницах";
-$L['plu_title_pagtab_s'] = "Искать в страницах..";
+$L['plu_title_pagtab_s'] = "Искать в страницах...";
 $L['plu_title_usetab'] = "Поиск пользователей";
-$L['plu_title_usetab_s'] = "Искать в пользователях";
-$L['plu_title_alltab'] = "Поиск (версия 3.0)";
-$L['plu_title_alltab_s'] = "Искать на форумах и в страницах";
+$L['plu_title_usetab_s'] = "Найти пользователя";
+$L['plu_title_alltab'] = "Поиск";
+$L['plu_title_alltab_s'] = "Искать в форумах и в страницах";
 
 $L['plu_tabs_all'] = "Все";
 $L['plu_tabs_frm'] = "Форумы";
 $L['plu_tabs_pag'] = "Страницы";
 
-$L['plu_advsearchin'] = "Искать в";
+$L['plu_searchin'] = "Искать в";
 
-$L['plu_advsearchin1'] = "Ключевые слова";
-$L['plu_advsearchin2'] = "";
+$L['plu_searchin1'] = "Ключевые слова";
+$L['plu_searchin2'] = "";
 
-$L['plu_querytooshort'] = "Поисковый запрос слишком короткий!";
-$L['plu_toomanywords'] = "Слишком много слов, лимит - ";
+$L['plu_querytooshort'] = "Слишком мало символов в запросе!";
+$L['plu_toomanywords'] = "Слишком много слов, ограничение:";
 $L['plu_found'] = "Найдено";
 $L['plu_match'] = "совпадений";
 
