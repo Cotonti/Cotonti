@@ -109,6 +109,7 @@ CREATE TABLE sed_forum_sections (
   fs_postcount mediumint(8) NOT NULL default '0',
   fs_postcount_pruned int(11) default '0',
   fs_viewcount mediumint(8) NOT NULL default '0',
+  fs_masterid smallint(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (fs_id),
   KEY fs_order (fs_order)
 ) TYPE=MyISAM;

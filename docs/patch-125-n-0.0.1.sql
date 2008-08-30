@@ -43,3 +43,6 @@ INSERT INTO `sed_bbcode` VALUES (1,'b','str','[b]','<strong>',1,1,128,'',0),(2,'
 
 /* Members and extended downloads enablement */
 ALTER TABLE sed_pages MODIFY page_file TINYINT DEFAULT NULL;
+
+/* Subforums patch */
+ALTER TABLE sed_forum_sections ADD COLUMN fs_masterid smallint(5) unsigned NOT NULL default '0';
