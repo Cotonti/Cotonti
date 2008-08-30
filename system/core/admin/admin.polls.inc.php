@@ -26,6 +26,8 @@ $adminpath[] = array ("admin.php?m=other", $L['Other']);
 $adminpath[] = array ("admin.php?m=polls", $L['Polls']);
 $adminhelp = $L['adm_help_polls'];
 
+$ntext = sed_import('ntext','P','HTM');
+
 $adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=polls\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($n=='options')
@@ -40,10 +42,8 @@ if ($n=='options')
 		$rtitle = sed_import('rtitle','P','HTM');
 		$sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($rtitle)."' WHERE poll_id='$id'");
 	}
-	elseif ($a=='add' && !empty($id))
+	elseif ($a=='add' && !empty($id) && !empty($ntext))
 	{
-		$g = array ('ntext');
-		$ntext = sed_import('ntext','P','HTM');
 		$sql = sed_sql_query("INSERT INTO $db_polls_options (po_pollid, po_text) VALUES (".(int)$id.",'".sed_sql_prep($ntext)."')");
 	}
 
@@ -120,9 +120,8 @@ else
 		exit;
 	}
 
-	if ($a=='add')
+	if ($a=='add' && !empty($ntext))
 	{
-		$ntext = sed_import('ntext','P','HTM');
 		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text) valueS (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."')");
 	}
 
