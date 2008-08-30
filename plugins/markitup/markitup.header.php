@@ -22,7 +22,7 @@ Order=10
 /**
  * MarkItUp! connector for Seditio
  *
- * @package Sedition-N
+ * @package Seditio-N
  * @version 0.0.1
  * @author Trustmaster
  * @copyright (c) 2008 Cotonti Team
@@ -35,20 +35,24 @@ if(!file_exists($mkup_lang))
 	$mkup_lang = $cfg['plugins_dir'].'/markitup/lang/en.lang.js';
 }
 
-$xg = sed_sourcekey();
-
 $out['compopup'] .= <<<HTM
-<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/jquery.markitup.js"></script>
+<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jquery.markitup.js"></script>
 <script type="text/javascript" src="$mkup_lang"></script>
-<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/set.js"></script>
+<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/set.js"></script>
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/markitup/style.css" />
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/style.css" />
-<script type="text/javascript" >
-   $(document).ready(function() {
-      $("textarea.editor").markItUp(mySettings);
-   });
-</script>
-
 HTM;
+if($cfg['plugin']['markitup']['chili'])
+{
+	$out['compopup'] .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/markitup/js/chili.js"></script>';
+}
+$autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
+$out['compopup'] .= '
+<script type="text/javascript" >
+mySettings.previewAutorefresh = '.$autorefresh.';
+$(document).ready(function() {
+$("textarea.editor").markItUp(mySettings);
+});
+</script>';
 
 ?>

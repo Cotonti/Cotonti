@@ -573,7 +573,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 		$text = str_replace("\r", '', $text);
 		// Strip extraneous breaks
 		$text = preg_replace('#<(/?)(p|hr|ul|ol|li|blockquote|table|tr|td|th)(.*?)>(\s*)<br />#', '<$1$2$3>', $text);
-		$text = preg_replace_callback('#<pre>(.+?)</pre>#sm', 'sed_parse_pre', $text);
+		$text = preg_replace_callback('#<pre[^>]*>(.+?)</pre>#sm', 'sed_parse_pre', $text);
 	}
 
 	return mb_substr($text, 1);
@@ -2283,15 +2283,18 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
  */
 function sed_javascript($more='')
 {
-	$result = <<<END
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/base.js"></script>
+	$result = '
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/base.js"></script>';
+	if(!empty($more))
+	{
+		$result .= '
 <script type="text/javascript">
 <!--
-$more
+'.$more.'
 //-->
-</script>
-END;
+</script>';
+	}
 	return $result;
 }
 

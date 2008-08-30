@@ -1,11 +1,11 @@
 /**
  * MarkItUp! extended settings for Seditio
  */
-mySettings = {
-	//previewAutorefresh: true, // uncomment this to enable auto-refresh
+var mySettings = {
 	previewParserVar: 'text',
 	previewPosition: 'before',
 	previewParserPath:	'preview.php', // path to your BBCode parser
+	onEnter: {keepDefault: false, replaceWith: '\n'},
 	markupSet: [
 		{name: L.bold, className:'mBold', key:'B', openWith:'[b]', closeWith:'[/b]'},
 		{name: L.italic, className:'mItalic', key:'I', openWith:'[i]', closeWith:'[/i]'},

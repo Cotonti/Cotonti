@@ -47,7 +47,6 @@ while ($row = sed_sql_fetcharray($sql_config))
 
 // Mbstring options
 mb_internal_encoding($cfg['charset']);
-mb_regex_encoding($cfg['charset']);
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 
@@ -230,7 +229,7 @@ if ($rsedition>0 && $cfg['authmode']>0)
 				$sys['sql_update_auth'] = ", user_auth='".serialize($usr['auth'])."'";
 			}
 
-			$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."' ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
+			$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
 		}
 	}
 }
