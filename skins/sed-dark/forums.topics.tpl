@@ -10,6 +10,42 @@
 			{PHP.skinlang.forumstopics.Viewers} : {FORUMS_TOPICS_VIEWERS}
 		</div>
 		
+		<!-- BEGIN: FORUMS_SECTIONS -->
+
+<table class="cells" border="0" cellspacing="1" cellpadding="2">
+
+	<tr>
+		<td class="coltop" style="width: auto;" colspan="2">{PHP.skinlang.forumssections.Sections}</td>
+		<td class="coltop" style="width: 50px; text-align: center;">{PHP.skinlang.forumssections.Topics}</td>
+		<td class="coltop" style="width: 75px; text-align: center;">{PHP.skinlang.forumssections.Posts}</td>
+		<td class="coltop" style="width: 300px;">{PHP.skinlang.forumssections.Lastpost}</td>
+	</tr>
+
+	<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION -->
+	<tr>
+		<td style="width:32px;" class="centerall {FORUMS_SECTIONS_ROW_ODDEVEN}">
+			<img src="{FORUMS_SECTIONS_ROW_NEWPOSTS}" alt="" /></td>
+		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}"><a
+			href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a>{FORUMS_SECTIONS_ROW_DESC}
+
+		<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+		<br />
+		- {FORUMS_SECTIONS_ROW_SLAVE} 
+		<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+
+		</td>
+		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}" style="text-align: center;">{FORUMS_SECTIONS_ROW_TOPICCOUNT_ALL}</td>
+		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}" style="text-align: center;">{FORUMS_SECTIONS_ROW_POSTCOUNT_ALL}</td>
+		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}" style="text-align: right;">{FORUMS_SECTIONS_ROW_LASTPOST}<br />
+		{FORUMS_SECTIONS_ROW_LASTPOSTER} {FORUMS_SECTIONS_ROW_TIMEAGO}</td>
+	</tr>
+
+	<!-- END: FORUMS_SECTIONS_ROW_SECTION -->
+
+</table>
+
+<!-- END: FORUMS_SECTIONS -->
+		
 		<div style="height:27px;">
 			<a href="{FORUMS_TOPICS_NEWTOPICURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /></a>
 			<div class="paging">{FORUMS_TOPICS_PAGES} {FORUMS_TOPICS_PAGEPREV} {FORUMS_TOPICS_PAGENEXT}</div>

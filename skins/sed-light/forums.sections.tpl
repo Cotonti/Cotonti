@@ -48,6 +48,13 @@
 				<td>
 				<h3 style="margin:9px;"><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h3>
 				&nbsp; {FORUMS_SECTIONS_ROW_DESC}
+				
+				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+
+				<br /> - {FORUMS_SECTIONS_ROW_SLAVE}
+
+				<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+				
 				</td>
 
 				<td class="centerall">

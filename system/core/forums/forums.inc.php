@@ -1,18 +1,18 @@
 <?PHP
 
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=forums.php
-Version=122
-Updated=2007-jul-16
-Type=Core
-Author=Neocrome
-Description=Forums
-[END_SED]
-==================== */
+ Seditio - Website engine
+ Copyright Neocrome
+ http://www.neocrome.net
+ [BEGIN_SED]
+ File=forums.php
+ Version=122
+ Updated=2007-jul-16
+ Type=Core
+ Author=Neocrome
+ Description=Forums
+ [END_SED]
+ ==================== */
 
 /**
  * @package Seditio-N
@@ -56,7 +56,7 @@ if ($n=='markall' && $usr['id']>0)
 
 $sql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
 $db_forum_structure AS n ON n.fn_code=s.fs_category
-ORDER by fn_path ASC, fs_order ASC");
+ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC");
 
 if (!$sed_sections_act)
 {
@@ -112,30 +112,50 @@ $extp = sed_getextplugins('forums.sections.loop');
 
 $catnum = 1;
 
+$fcache = array();
+$fcache2 = array();
+$fcache3 = array();
+
 while ($fsn = sed_sql_fetcharray($sql))
 {
-	if ($pcat!=$fsn['fs_category'])
+	if ($fsn['fs_masterid']>0)
 	{
-		$pcat = $fsn['fs_category'];
-		$cattitle = "<a href=\"#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
-		$cattitle .= sed_cc($sed_forums_str[$fsn['fs_category']]['tpath']);
-		$cattitle .= "</a>";
 
-		if ($c=='fold')
-		{ $fold = TRUE; }
-		elseif ($c=='unfold')
-		{ $fold = FALSE; }
-		elseif (!empty($c))
+		if (!$fsn['fs_lt_id'])
+		{ sed_forum_sectionsetlast($fsn['fs_id']); }
+
+		$fcache[$fsn['fs_masterid']][$fsn['fs_id']] = $fsn['fs_title'];
+		$fcache2[$fsn['fs_masterid']][$fsn['fs_id']] = array($fsn['fs_topiccount']+$fsn['fs_topiccount_pruned'], $fsn['fs_postcount']+$fsn['fs_postcount_pruned']);
+		$fcache3[$fsn['fs_masterid']][$fsn['fs_id']] = array($fsn['fs_lt_date'], sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername'])));
+		$fcache3[$fsn['fs_masterid']][$fsn['fs_id']][] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=unread#unread\">".sed_cutstring($fsn['fs_lt_title'], 32)."</a>" : "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=last#bottom\">".sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
+
+	}
+
+	else
+	{
+		$latestp = $fsn['fs_lt_date'];
+		if ($pcat!=$fsn['fs_category'])
 		{
-			$fold = ($c==$fsn['fs_category']) ? FALSE : TRUE;
-		}
-		else
-		{ $fold = (!$sed_forums_str[$fsn['fs_category']]['defstate']) ? TRUE : FALSE; }
+			$pcat = $fsn['fs_category'];
+			$cattitle = "<a href=\"#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
+			$cattitle .= sed_cc($sed_forums_str[$fsn['fs_category']]['tpath']);
+			$cattitle .= "</a>";
 
-		$fsn['toggle_state'] .= ($fold) ? " style=\"display:none;\"" : '';
-		$fsn['toggle_body'] = "<tbody id=\"blk_".$fsn['fs_category']."\" ".$fsn['toggle_state'].">";
+			if ($c=='fold')
+			{ $fold = TRUE; }
+			elseif ($c=='unfold')
+			{ $fold = FALSE; }
+			elseif (!empty($c))
+			{
+				$fold = ($c==$fsn['fs_category']) ? FALSE : TRUE;
+			}
+			else
+			{ $fold = (!$sed_forums_str[$fsn['fs_category']]['defstate']) ? TRUE : FALSE; }
 
-		$t-> assign(array(
+			$fsn['toggle_state'] .= ($fold) ? " style=\"display:none;\"" : '';
+			$fsn['toggle_body'] = "<tbody id=\"blk_".$fsn['fs_category']."\" ".$fsn['toggle_state'].">";
+
+			$t-> assign(array(
 			"FORUMS_SECTIONS_ROW_CAT_TITLE" => $cattitle,
 			"FORUMS_SECTIONS_ROW_CAT_ICON" => $fsn['fn_icon'],
 			"FORUMS_SECTIONS_ROW_CAT_SHORTTITLE" => sed_cc($fsn['fn_title']),
@@ -145,61 +165,71 @@ while ($fsn = sed_sql_fetcharray($sql))
 			"FORUMS_SECTIONS_ROW_CAT_CODE" => $fsn['fs_category'],
 			));
 			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_CAT");
-	}
-
-	if (sed_auth('forums', $fsn['fs_id'], 'R'))
-	{
-		$fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
-		$fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
-		$fsn['fs_newposts'] = '0';
-		$fsn['fs_desc'] = sed_parse_autourls($fsn['fs_desc']);
-		$fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
-		$sed_sections_vw_cur = (!$sed_sections_vw[$fsn['fs_title']]) ? "0" : $sed_sections_vw[$fsn['fs_title']];
-
-		if (!$fsn['fs_lt_id'])
-		{ sed_forum_sectionsetlast($fsn['fs_id']); }
-
-		$fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
-
-		if ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id'])
-		{
-			$fsn['fs_title'] = "+ ".$fsn['fs_title'];
-			$fsn['fs_newposts'] = '1';
 		}
 
-		if ($fsn['fs_lt_id']>0)
+		if (sed_auth('forums', $fsn['fs_id'], 'R'))
 		{
-			$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=unread#unread\">" : "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=last#bottom\">";
-			$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
-		}
-		else
-		{
-			$fsn['lastpost'] = '&nbsp;';
-			$fsn['fs_lt_date'] = '&nbsp;';
-			$fsn['fs_lt_postername'] = '';
-			$fsn['fs_lt_posterid'] = 0;
-		}
+			$fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
+			$fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
+			$fsn['fs_newposts'] = '0';
+			$fsn['fs_desc'] = sed_parse_autourls($fsn['fs_desc']);
+			$fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
+			$sed_sections_vw_cur = (!$sed_sections_vw[$fsn['fs_title']]) ? "0" : $sed_sections_vw[$fsn['fs_title']];
 
-		$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? @date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date'] + $usr['timezone'] * 3600) : '';
-		$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
-		$fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
+			if (!$fsn['fs_lt_id'])
+			{ sed_forum_sectionsetlast($fsn['fs_id']); }
 
-		if (!$secact_max)
-		{
-			$section_activity = '';
-			$section_activity_img = '';
-			$secact_num = 0;
-		}
-		else
-		{
-			$secact_num = round(6.25 * $sed_sections_act[$fsn['fs_id']] / $secact_max);
-			if ($secact_num>5) { $secact_num = 5; }
-			if (!$secact_num && $sed_sections_act[$fsn['fs_id']]>1) { $secact_num = 1; }
-			$section_activity_img = "<img src=\"skins/".$skin."/img/system/activity".$secact_num.".gif\" alt=\"\" />";
-		}
-		$fs_num++;
+			$fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
 
-		$t-> assign(array(
+			if ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id'])
+			{
+				$fsn['fs_title'] = "+ ".$fsn['fs_title'];
+				$fsn['fs_newposts'] = '1';
+			}
+
+			if ($fsn['fs_lt_id']>0)
+			{
+				$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=unread#unread\">" : "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=last#bottom\">";
+				$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
+			}
+			else
+			{
+				$fsn['lastpost'] = '&nbsp;';
+				$fsn['fs_lt_date'] = '&nbsp;';
+				$fsn['fs_lt_postername'] = '';
+				$fsn['fs_lt_posterid'] = 0;
+			}
+
+			$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? @date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date'] + $usr['timezone'] * 3600) : '';
+			$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
+			$fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
+
+			if (!$secact_max)
+			{
+				$section_activity = '';
+				$section_activity_img = '';
+				$secact_num = 0;
+			}
+			else
+			{
+				$secact_num = round(6.25 * $sed_sections_act[$fsn['fs_id']] / $secact_max);
+				if ($secact_num>5) { $secact_num = 5; }
+				if (!$secact_num && $sed_sections_act[$fsn['fs_id']]>1) { $secact_num = 1; }
+				$section_activity_img = "<img src=\"skins/".$skin."/img/system/activity".$secact_num.".gif\" alt=\"\" />";
+			}
+
+			if ($fcache2[$fsn['fs_id']])
+			{
+				foreach ($fcache2[$fsn['fs_id']] as $key => $value)
+				{
+					$fsn['fs_topiccount_all'] = $fsn['fs_topiccount_all']+$value[0];
+					$fsn['fs_postcount_all'] = $fsn['fs_postcount_all']+$value[1];
+				}
+			}
+
+			$fs_num++;
+
+			$t-> assign(array(
 		"FORUMS_SECTIONS_ROW_ID" => $fsn['fs_id'],
 		"FORUMS_SECTIONS_ROW_CAT" => $fsn['fs_category'],
 		"FORUMS_SECTIONS_ROW_STATE" => $fsn['fs_state'],
@@ -224,24 +254,53 @@ while ($fsn = sed_sql_fetcharray($sql))
 		"FORUMS_SECTIONS_ROW_NEWPOSTS" => $fsn['fs_newposts'],
 		"FORUMS_SECTIONS_ROW_ODDEVEN" => sed_build_oddeven($fs_num),
 		"FORUMS_SECTIONS_ROW" => $fsn
-		));
+			));
 
-		/* === Hook - Part2 : Include === */
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-		/* ===== */
+			if ($fcache3[$fsn['fs_id']])
+			{
+				foreach ($fcache3[$fsn['fs_id']] as $key => $value)
+				{
+					if ($value[0]>$latestp)
+					{
+						$t->assign(array(
+					"FORUMS_SECTIONS_ROW_LASTPOSTER" => $value[1],
+					"FORUMS_SECTIONS_ROW_LASTPOST" => $value[2],
+					"FORUMS_SECTIONS_ROW_TIMEAGO" => sed_build_timegap($value[0], $sys['now'])
+						));
+						$latestp = $value[0];
+					}
+				}
 
-		$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION");
+			}
+
+			if ($fcache[$fsn['fs_id']])
+			{
+				foreach ($fcache[$fsn['fs_id']] as $key => $value)
+				{
+					$t->assign("FORUMS_SECTIONS_ROW_SLAVE","<a href=\"forums.php?m=topics&s=".$key."\">".$value."</a>");
+					$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVES");
+				}
+
+			}
+
+			/* === Hook - Part2 : Include === */
+			if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
+
+			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION");
+		}
+
+		// Required to have all divs closed
+		if ($catnum != 1)
+		{
+			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_FOOTER");
+		}
+
+		$t->parse("MAIN.FORUMS_SECTIONS_ROW");
+		$catnum++;
 	}
 
-	// Required to have all divs closed
-	if ($catnum != 1)
-	{
-		$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_FOOTER");
-	}
-
-	$t->parse("MAIN.FORUMS_SECTIONS_ROW");
-	$catnum++;
 }
 
 /* === Hook === */

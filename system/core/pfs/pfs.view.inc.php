@@ -28,12 +28,15 @@ $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 // sed_block($usr['auth_read']);
 
-$imgpath = $cfg['pfs_dir'].$v;
-$dotpos = mb_strrpos($imgpath,".")+1;
-$f_extension = mb_strtolower(mb_substr($imgpath, $dotpos,4));
+$pos = mb_strlen(stristr($v, '-'));
+$fid = mb_substr($v, 0, -$pos);
+$imgpath = ($cfg['pfsuserfolder']) ? $cfg['pfs_dir'].$fid.'/'.$v : $cfg['pfs_dir'].$v;
+
+$dotpos = strrpos($imgpath, '.')+1;
+$f_extension = strtolower(mb_substr($imgpath, $dotpos,4));
 
 if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported) )
-	{
+{
 	$pfs_header1 = "<html><head>
 	<meta name=\"title' content=\"".$cfg['maintitle']."\" />
 	<meta name=\"description\" content=\"".$cfg['maintitle']."\" />
@@ -48,12 +51,19 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported)
 	$pfs_imgsize = @getimagesize($imgpath);
 
 	$sql = sed_sql_query("SELECT p.*, u.user_name FROM $db_pfs p, $db_users u WHERE p.pfs_file='$v' AND p.pfs_userid=u.user_id LIMIT 1");
-	sed_die(sed_sql_numrows($sql)==0);
-	$row = sed_sql_fetcharray($sql);
-	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
+	if(!$row = sed_sql_fetcharray($sql))
+	{
+		$pfs_owner = $L['SFS'];
 	}
+	else
+	{
+		$pfs_owner = sed_build_user($row['pfs_userid'], sed_cc($row['user_name']));
+	}
+
+	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
+}
 else
-	{ sed_die(); }
+{ sed_die(); }
 
 /* ============= */
 
@@ -67,14 +77,14 @@ $t->assign(array(
 	"PFSVIEW_FILE_DATE" => @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600),
 	"PFSVIEW_FILE_ID" => $row['pfs_id'],
 	"PFSVIEW_FILE_USERID" => $row['pfs_userid'],
-	"PFSVIEW_FILE_USERNAME" => sed_build_user($row['pfs_userid'], sed_cc($row['user_name'])),
+	"PFSVIEW_FILE_USERNAME" => $pfs_owner,
 	"PFSVIEW_FILE_DESC" => sed_cc($row['pfs_desc']),
 	"PFSVIEW_FILE_COUNT" => $row['pfs_count'],
 	"PFSVIEW_FILE_SIZE" => floor($row['pfs_size']/1024),
 	"PFSVIEW_FILE_SIZEX" => $pfs_imgsize[0],
 	"PFSVIEW_FILE_SIZEY" => $pfs_imgsize[1],
 	"PFSVIEW_FILE_IMAGE" => $pfs_img
-		));
+));
 
 $t->parse("MAIN");
 $t->out("MAIN");

@@ -318,6 +318,84 @@ $t->assign(array(
 	$extp = sed_getextplugins('forums.topics.loop');
 	/* ===== */
 
+	$sqql = sed_sql_query("SELECT s.*, n.*, u.user_extra8 FROM $db_users AS u, $db_forum_sections AS s, $db_forum_structure AS n
+						   WHERE s.fs_masterid=".$s." AND n.fn_code=s.fs_category AND s.fs_lt_posterid=u.user_id
+						   ORDER BY fs_masterid DESC, fn_path ASC, fs_order ASC");
+
+	$catnum = 1;
+
+	while ($fsn = sed_sql_fetcharray($sqql))
+	{
+
+		if (sed_auth('forums', $fsn['fs_id'], 'R'))
+		{
+			$fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
+			$fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
+			$fsn['fs_desc'] = sed_cc($fsn['fs_desc']);
+			$fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
+
+			if (!$fsn['fs_lt_id']) { sed_forum_sectionsetlast($fsn['fs_id']); }
+
+			$fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
+
+			if ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id'])
+			{ $fsn['fs_newposts'] = 'skins/'.$skin."/img/system/posts_new.gif"; }
+
+			else { $fsn['fs_newposts'] = 'skins/'.$skin."/img/system/posts.gif"; }
+
+
+			if ($fsn['fs_lt_id']>0)
+			{
+				$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=unread#unread\">" : "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=last#bottom\">";
+				$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
+			}
+			else
+			{
+				$fsn['lastpost'] = '&nbsp;';
+				$fsn['fs_lt_date'] = '&nbsp;';
+				$fsn['fs_lt_postername'] = '';
+				$fsn['fs_lt_posterid'] = 0;
+			}
+
+			$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? @date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date'] + $usr['timezone'] * 3600) : '';
+			$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
+			$fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
+
+			$fsn['fs_desc'] = (!empty($fsn['fs_desc'])) ? "<br />".$fsn['fs_desc'] : "";
+
+			$t->assign(array(
+		"FORUMS_SECTIONS_ROW_ID" => $fsn['fs_id'],
+		"FORUMS_SECTIONS_ROW_CAT" => $fsn['fs_category'],
+		"FORUMS_SECTIONS_ROW_STATE" => $fsn['fs_state'],
+		"FORUMS_SECTIONS_ROW_ORDER" => $fsn['fs_order'],
+		"FORUMS_SECTIONS_ROW_TITLE" => $fsn['fs_title'],
+		"FORUMS_SECTIONS_ROW_DESC" => $fsn['fs_desc'],
+		"FORUMS_SECTIONS_ROW_ICON" => $fsn['fs_icon'],
+		"FORUMS_SECTIONS_ROW_TOPICCOUNT" => $fsn['fs_topiccount'],
+		"FORUMS_SECTIONS_ROW_POSTCOUNT" => $fsn['fs_postcount'],
+		"FORUMS_SECTIONS_ROW_TOPICCOUNT_ALL" => $fsn['fs_topiccount_all'],
+		"FORUMS_SECTIONS_ROW_POSTCOUNT_ALL" => $fsn['fs_postcount_all'],
+		"FORUMS_SECTIONS_ROW_VIEWCOUNT" => $fsn['fs_viewcount'],
+		"FORUMS_SECTIONS_ROW_VIEWCOUNT_SHORT" => $fsn['fs_viewcount_short'],
+		"FORUMS_SECTIONS_ROW_URL" => "forums.php?m=topics&s=".$fsn['fs_id'],
+		"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsn['fs_lt_date'],
+		"FORUMS_SECTIONS_ROW_LASTPOSTER" => $fsn['fs_lt_postername'],
+		"FORUMS_SECTIONS_ROW_LASTPOST" => $fsn['lastpost'],
+		"FORUMS_SECTIONS_ROW_TIMEAGO" => $fsn['fs_timago'],
+		"FORUMS_SECTIONS_ROW_ACTIVITY" => $section_activity_img,
+		"FORUMS_SECTIONS_ROW_ACTIVITYVALUE" => $secact_num,
+		"FORUMS_SECTIONS_ROW_NEWPOSTS" => $fsn['fs_newposts'],
+		"FORUMS_SECTIONS_ROW_ODDEVEN" => sed_build_oddeven($catnum),
+		"FORUMS_SECTIONS_ROW" => $fsn
+			));
+			$t->parse("MAIN.FORUMS_SECTIONS.FORUMS_SECTIONS_ROW_SECTION");
+		}
+
+		$catnum++;
+	}
+	if ($catnum>1)
+	{ $t->parse("MAIN.FORUMS_SECTIONS"); }
+
 	while ($row = sed_sql_fetcharray($sql))
 	{
 		$row['ft_icon'] = 'posts';

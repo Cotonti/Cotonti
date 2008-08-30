@@ -239,6 +239,7 @@ $L['adm_help_forums_structure'] = 'Недоступно';	// New in v11
 $L['adm_defstate'] = 'Состояние по умолчанию';	// New in v11
 $L['adm_defstate_0'] = 'Свёрнуто';	// New in v11
 $L['adm_defstate_1'] = 'Развёрнуто';	// New in v11
+$L['adm_forums_master'] = 'Родительская секция';  // New in N-0.0.1
 
 
 /* ====== IP search ====== */
