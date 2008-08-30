@@ -467,6 +467,9 @@ if (is_array($extp))
 
 /* ======== Pre-loads ======== */
 
-sed_bbcode_load();
+if(!$cfg['parser_custom'])
+{
+	sed_bbcode_load();
+}
 
 ?>
