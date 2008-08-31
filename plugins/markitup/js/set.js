@@ -80,6 +80,7 @@ var mySettings = {
 		{separator:'---------------' },
 		{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]'},
 		{name: L.code, className: 'mCode', openWith:'[code]', closeWith:'[/code]'},
+		{name: L.pre, className: 'mPre', openWith:'[pre]', closeWith:'[/pre]'},
 		{name: L.spoiler, className: 'mSpoiler', openWith:'[spoiler=[![' + L.spoiler_text + ']!]]', closeWith:'[/spoiler]'},
 		{name: L.hide, className: 'mHide', openWith:'[hide]', closeWith:'[/hide]'}, 
 		{separator:'---------------' },

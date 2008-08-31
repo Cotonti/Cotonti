@@ -31,6 +31,7 @@ var L = {
 	orange:		'Orange',
 	picture:	'Picture',
 	picture_url:'Enter image URL',
+	pre:		'Preformatted text',
 	preview:	'Preview',
 	purple:		'Purple',
 	quote:		'Quote',

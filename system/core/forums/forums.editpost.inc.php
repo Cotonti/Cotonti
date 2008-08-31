@@ -206,7 +206,7 @@ $t->assign(array(
 	"FORUMS_EDITPOST_SEND" => "forums.php?m=editpost&amp;a=update&amp;s=".$s."&amp;q=".$q."&amp;p=".$p."&amp;".sed_xg(),
 	"FORUMS_EDITPOST_TEXT" => $edittopictitle.$post_main."<br />".$bbcodes." ".$smilies." ".$pfs,
 	"FORUMS_EDITPOST_TEXTONLY" => $edittopictitle.$post_main,
-	"FORUMS_EDITPOST_TEXTBOXER" => $edittopictitle.$post_main,
+	"FORUMS_EDITPOST_TEXTBOXER" => $edittopictitle.$post_main."<br />".$smilies." ".$pfs,
 	"FORUMS_EDITPOST_SMILIES" => $smilies,
 	"FORUMS_EDITPOST_BBCODES" => $bbcodes,
 	"FORUMS_EDITPOST_MYPFS" => $pfs,

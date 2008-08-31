@@ -224,6 +224,9 @@
 .markItUp .mCode a	{
 	background-image:url(images/code.png);
 }
+.markItUp .mPre a	{
+	background-image:url(images/pre.png);
+}
 .markItUp .mSpoiler a	{
 	background-image:url(images/spoiler.png);
 }

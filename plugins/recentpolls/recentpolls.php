@@ -101,7 +101,7 @@ function post$poll_id()
 	$.ajax({
 		type: 'GET',
 		url: 'polls.php?',
-		data: 'id='+id+'&amp;a='+a+'&amp;vote='+vote+'&amp;mode=ajax',
+		data: 'id='+id+'&a='+a+'&vote='+vote+'&mode=ajax',
 
 		beforeSend: function(){
 			if (!vote) {

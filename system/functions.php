@@ -432,6 +432,19 @@ function sed_bbcode_parse($text, $post = false)
 }
 
 /**
+ * Neutralizes bbcodes in text
+ *
+ * @param string $text Source text
+ * @return string
+ */
+function sed_bbcode_cdata($text)
+{
+	$res = str_replace('[', '&#091;', $text);
+	$res = str_replace(']', '&#093;', $res);
+	return $res;
+}
+
+/**
  * JavaScript HTML obfuscator to protect some parts (like email) from bots
  *
  * @param string $text Source text
@@ -521,29 +534,6 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 	$ii = 10000;
 
 	$text = sed_parse_autourls($text);
-
-	if($parse_bbcodes)
-	{
-		$p1 = 1;
-		$p2 = 1;
-		while($p1 > 0 && $p2> 0  && $ii < 10031)
-		{
-			$ii++;
-			$p1 = mb_strpos($text, '[code]');
-			$p2 = mb_strpos($text, '[/code]');
-			if($p2 > $p1 && $p1 > 0)
-			{
-				$key = '**'.$ii.$unique_seed.'**';
-				$code[$key] = mb_substr($text, $p1 + 6, ($p2 - $p1) - 6);
-				$code_len = mb_strlen($code[$key]) + 13;
-				$code[$key] = str_replace(
-				array('{', '<', '>' , '\'', '"', "<!--", '$' ),
-				array('&#123;', '&lt;', '&gt;', '&#039;', '&quot;', '"&#60;&#33;--"', '&#036;' ),$code[$key]);
-				$code[$key] = '<pre>'.trim($code[$key])."</pre>";
-				$text = substr_replace($text, $key, $p1, $code_len);
-			}
-		}
-	}
 
 	// TODO replace with new smiley system
 	if ($parse_smilies && is_array($sed_smilies))
