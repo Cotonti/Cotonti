@@ -46,7 +46,7 @@ switch ($a)
 		{
 			$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
 			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-			$adminpath[] = array ('admin.php?m=plug&a=details&pl='.$pl, $info['Name']." ($pl)");
+			$adminpath[] = array ('admin.php?m=plug&amp;a=details&amp;pl='.$pl, $info['Name']." ($pl)");
 
 			$handle=opendir($cfg['plugins_dir']."/".$pl);
 			$setupfile = $pl.'.setup.php';

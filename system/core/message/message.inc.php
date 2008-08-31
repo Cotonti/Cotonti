@@ -39,7 +39,7 @@ switch( $msg )
 		$body = $L['msg100_1'];
 		$rd = 2;
 		$ru = "users.php?m=auth";
-		$ru .= (!empty($redirect)) ? "&redirect=".$redirect : '';
+		$ru .= (!empty($redirect)) ? "&amp;redirect=".$redirect : '';
 
 		break;
 
@@ -228,7 +228,7 @@ switch( $msg )
 		{
 			$rd = 2;
 			$ru = "users.php?m=auth";
-			$ru .= (!empty($redirect)) ? "&redirect=".$redirect : '';
+			$ru .= (!empty($redirect)) ? "&amp;redirect=".$redirect : '';
 		}
 		break;
 

@@ -41,7 +41,7 @@ $pagination = '';
 for($i = 1; $i <= $totalpages; $i++)
 {
 	$pagination .= ($i == $currentpage) ? ' <span class="pagenav_current">' : ' ';
-	$pagination .= '<a href="admin.php?m=comments&d='.(($i-1)*$cfg['maxrowsperpage']).'">'.$i.'</a>';
+	$pagination .= '<a href="admin.php?m=comments&amp;d='.(($i-1)*$cfg['maxrowsperpage']).'">'.$i.'</a>';
 	$pagination .= ($i == $currentpage) ? '</span> ' : ' ';
 	if($i != $totalpages) $pagination .= '|';
 }
@@ -69,23 +69,23 @@ while ($row = sed_sql_fetcharray($sql))
 	switch($row['com_type'])
 		{
 		case 'p':
-			$row['com_url'] = "page.php?id=".$row['com_value']."&comments=1#c".$row['com_id'];
+			$row['com_url'] = "page.php?id=".$row['com_value']."&amp;comments=1#c".$row['com_id'];
 		break;
 		
 		case 'j':
-			$row['com_url'] = 'plug.php?e=weblogs&m=page&id='.$row['com_value'].'&comments=1#c'.$row['com_id'];
+			$row['com_url'] = 'plug.php?e=weblogs&amp;m=page&amp;id='.$row['com_value'].'&amp;comments=1#c'.$row['com_id'];
 		break;
 		
 		case 'g':
-			$row['com_url'] = 'plug.php?e=gal&pic='.$row['com_value'].'&comments=1#c'.$row['com_id'];
+			$row['com_url'] = 'plug.php?e=gal&amp;pic='.$row['com_value'].'&amp;comments=1#c'.$row['com_id'];
 		break;
 		
 		case 'u':
-			$row['com_url'] = 'users.php?m=details&id='.$row['com_value'].'&comments=1#c'.$row['com_id'];
+			$row['com_url'] = 'users.php?m=details&amp;id='.$row['com_value'].'&amp;comments=1#c'.$row['com_id'];
 		break;
 		
 		case 'v':
-			$row['com_url'] = 'polls.php?id='.$row['com_value'].'&comments=1#c'.$row['com_id'];
+			$row['com_url'] = 'polls.php?id='.$row['com_value'].'&amp;comments=1#c'.$row['com_id'];
 		break;
 		
 		default:

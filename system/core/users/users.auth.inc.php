@@ -58,7 +58,7 @@ if ($a=='check')
 		    else
 		       	{
 				sed_log("Log in attempt, user banned : ".$rusername, 'usr');
-				sed_redirect("message.php?msg=153&num=".$row['user_banexpire']);
+				sed_redirect("message.php?msg=153&amp;num=".$row['user_banexpire']);
 				exit;
 				}
 			}
@@ -90,7 +90,7 @@ if ($a=='check')
 		/* ===== */
 
 		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
-		sed_redirect("message.php?msg=104&redirect=".$redirect);
+		sed_redirect("message.php?msg=104&amp;redirect=".$redirect);
 		exit;
 		}
 	else

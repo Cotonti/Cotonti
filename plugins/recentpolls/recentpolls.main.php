@@ -30,29 +30,29 @@ Order=10
 
 $mode = sed_import('mode','G','ALP');
 if ($mode=='ajax')
-{
-	$result .= '
-	<script type="text/javascript">
+	{
+
+
+	$result .= '<script type="text/javascript">
 
 	function anim(){
 	$(".bar_front").each(function(){
 	var percentage = $(this).attr("id");
-	$(this).css({width: "0%"}).animate({width: percentage}, "slow");
+	if ($(this).attr("id")!="")
+		{ $(this).css({width: "0%"}).animate({width: percentage}, "slow"); }
+	$(this).attr("id","");
 	});}
 
-	$(document).ready(function(){
-	anim();
-		});
 	</script>';
 	$result .= "<table class=\"cells\">";
 
-	$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
-	$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
+		$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
+		$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
 
-	$sql1 = sed_sql_query("SELECT po_id,po_text,po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC ");
+		$sql1 = sed_sql_query("SELECT po_id,po_text,po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC ");
 
 	while ($row1 = sed_sql_fetcharray($sql1))
-	{
+		{
 		$po_id = $row1['po_id'];
 		$po_count = $row1['po_count'];
 		$percent = @round(100 * ($po_count / $totalvotes),1);
@@ -63,7 +63,7 @@ if ($mode=='ajax')
 		$result .= "<tr><td>";
 		$result .= sed_parse(sed_cc($row1['po_text']), 1, 1, 1);
 		$result .= "</td><td><div style=\"width:100px;\"><div class=\"bar_back\"><div class=\"bar_front\" id=\"$percent%\" style=\"width:0%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
-	}
+		}
 
 	$result .= "</table>";
 
@@ -71,5 +71,6 @@ if ($mode=='ajax')
 
 	exit;
 
-}
+	}
+
 ?>

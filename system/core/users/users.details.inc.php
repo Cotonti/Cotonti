@@ -73,7 +73,7 @@ $t->assign(array(
 	"USERS_DETAILS_GROUPS" => sed_build_groupsms($urr['user_id'], FALSE, $urr['user_maingrp']),
 	"USERS_DETAILS_COUNTRY" => sed_build_country($urr['user_country']),
 	"USERS_DETAILS_COUNTRYFLAG" => sed_build_flag($urr['user_country']),
-	"USERS_DETAILS_TEXT" => $urr['user_text'],
+	"USERS_DETAILS_TEXT" => $cfg['parsebbcodeusertext'] ? sed_bbcode_parse($urr['user_text'], true) : $urr['user_text'],
 	"USERS_DETAILS_AVATAR" => sed_build_userimage($urr['user_avatar']),
 	"USERS_DETAILS_PHOTO" => sed_build_userimage($urr['user_photo']),
 	"USERS_DETAILS_SIGNATURE" => sed_build_userimage($urr['user_signature']),

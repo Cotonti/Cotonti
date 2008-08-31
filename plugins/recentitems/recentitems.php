@@ -35,12 +35,7 @@ $cfg['plu_mask_pages'] = "%1\$s"." ".$cfg['separator']." "."%2\$s"." (%3\$s)<br 
 // %2\$s = Link to the page
 // %3\$s = Date
 
-$cfg['plu_mask_topics'] =  "%1\$s"." "."%2\$s"." "."%3\$s"."<br />&nbsp; &nbsp; "."%4\$s"." ("."%5\$s".")<br />";
-// %1\$s = "Follow" image
-// %2\$s = Date
-// %3\$s = Section
-// %4\$s = Topic title
-// %5\$s = Number of replies
+//See the inside of topics function to edit mask
 
 $cfg['plu_mask_polls'] =  "<div>%1\$s</div>";
 
@@ -78,18 +73,76 @@ function sed_get_latestpages($limit, $mask)
 
 /* ------------------ */
 
-function sed_get_latesttopics($limit, $mask)
+function sed_get_latesttopics($limit)
 {
 	global $L, $db_forum_topics, $db_forum_sections, $usr, $cfg, $skin, $plu_empty;
 
 	$l = $limit * $cfg['plugin']['recentitems']['redundancy'];
+	
+	if ($cfg['plugin']['recentitems']['fd']=='Just Topics')
+		{	
+	$mask =  "%1\$s"." "."%2\$s"."<br />&nbsp; &nbsp; "."%3\$s"." ("."%4\$s".")<br />";
+	// %1\$s = "Follow" image
+	// %2\$s = Date
+	// %3\$s = Topic title
+	// %4\$s = Number of replies
+	//Only topics mask
+		}	
+	else
+		{	
+	$mask =  "%1\$s"." "."%2\$s"." "."%3\$s"."<br />&nbsp; &nbsp; "."%4\$s"." ("."%5\$s".")<br />";
+	// %1\$s = "Follow" image
+	// %2\$s = Date
+	// %3\$s = Section
+	// %4\$s = Topic title
+	// %5\$s = Number of replies
+	//Standard, parent only and master forum integrated mask
+		}
+		
+	/*===Standard purposes, old Seditio style===*/
 
+	if ($cfg['plugin']['recentitems']['fd']=='Standard')
+		{
 	$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, t.ft_updated, t.ft_postcount, s.fs_id, s.fs_title, s.fs_category
 	FROM $db_forum_topics t,$db_forum_sections s
 	WHERE t.ft_sectionid=s.fs_id
 	AND t.ft_movedto=0 AND t.ft_mode=0
 	ORDER by t.ft_updated DESC LIMIT $l");
-
+		}
+		
+	/*===Every category the topic attended to. Very detailed, but it looks huge===*/
+		
+	elseif ($cfg['plugin']['recentitems']['fd']=='Subforums with Master Forums')
+		{
+	$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, t.ft_updated, t.ft_postcount, s.fs_id, s.fs_masterid, s.fs_title, s.fs_category
+	FROM $db_forum_topics t,$db_forum_sections s
+	WHERE t.ft_sectionid=s.fs_id
+	AND t.ft_movedto=0 AND t.ft_mode=0
+	ORDER by t.ft_updated DESC LIMIT $l");
+		}
+		
+	/*===Only the category which topic has been posted===*/
+		
+	elseif ($cfg['plugin']['recentitems']['fd']=='Parent only')
+		{
+	$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, t.ft_updated, t.ft_postcount, s.fs_id, s.fs_title
+	FROM $db_forum_topics t,$db_forum_sections s
+	WHERE t.ft_sectionid=s.fs_id
+	AND t.ft_movedto=0 AND t.ft_mode=0
+	ORDER by t.ft_updated DESC LIMIT $l");
+		}
+		
+	/*===Modern style, only topic, date and postcount===*/
+		
+	else
+		{
+	$sql = sed_sql_query("SELECT t.ft_id, t.ft_title, t.ft_updated, t.ft_postcount, s.fs_id
+	FROM $db_forum_topics t,$db_forum_sections s
+	WHERE t.ft_sectionid=s.fs_id
+	AND t.ft_movedto=0 AND t.ft_mode=0
+	ORDER by t.ft_updated DESC LIMIT $l");
+		}
+		
 	$i = 0;
 	while ($i < $limit && $row = sed_sql_fetcharray($sql))
 	{
@@ -97,6 +150,8 @@ function sed_get_latesttopics($limit, $mask)
 		{
 			$img = ($usr['id']>0 && $row['ft_updated']>$usr['lastvisit']) ? "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=unread#unread\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ";
 
+			if ($cfg['plugin']['recentitems']['fd']=='Standard')
+				{
 			$res .= sprintf($mask,
 			$img,
 			date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
@@ -104,6 +159,37 @@ function sed_get_latesttopics($limit, $mask)
 				"<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
 			$row['ft_postcount']-1
 			);
+				}
+			elseif ($cfg['plugin']['recentitems']['fd']=='Subforums with Master Forums')
+				{
+			$res .= sprintf($mask,
+			$img,
+			date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
+			sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, $row['fs_masterid']),
+				"<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
+			$row['ft_postcount']-1
+			);
+				}
+			elseif ($cfg['plugin']['recentitems']['fd']=='Parent only')
+				{
+			$res .= sprintf($mask,
+			$img,
+			date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
+				"<a href=\"forums.php?m=topics&amp;s=".$row['fs_id']."\">".sed_cc(sed_cutstring(stripslashes($row['fs_title']),16))."</a>",
+				"<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
+			$row['ft_postcount']-1
+			);
+				}
+			else
+				{
+			$res .= sprintf($mask,
+			$img,
+			date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
+				"<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
+			$row['ft_postcount']-1
+			);
+				}
+			
 			$i++;
 		}
 	}
@@ -180,7 +266,7 @@ if ($cfg['plugin']['recentitems']['maxpages']>0 && !$cfg['disable_page'])
 { $latestpages = sed_get_latestpages($cfg['plugin']['recentitems']['maxpages'], $cfg['plu_mask_pages']); }
 
 if ($cfg['plugin']['recentitems']['maxtopics']>0 && !$cfg['disable_forums'])
-{ $latesttopics = sed_get_latesttopics($cfg['plugin']['recentitems']['maxtopics'], $cfg['plu_mask_topics']); }
+{ $latesttopics = sed_get_latesttopics($cfg['plugin']['recentitems']['maxtopics']); }
 
 if ($cfg['plugin']['recentitems']['maxpolls']>0 && !$cfg['disable_polls'])
 { $latestpoll = sed_get_latestpolls($cfg['plugin']['recentitems']['maxpolls'], $cfg['plu_mask_polls']); }

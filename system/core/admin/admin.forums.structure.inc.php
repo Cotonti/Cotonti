@@ -34,14 +34,14 @@ if ($n=='options')
 		$rtplmode = sed_import('rtplmode','P','INT');
 		$rdesc = sed_import('rdesc','P','TXT');
 		$ricon = sed_import('ricon','P','TXT');
-		$rdefstate = sed_import('rdefstate','P','BOL');										
+		$rdefstate = sed_import('rdefstate','P','BOL');
 
 	if ($rtplmode==1)
 		{ $rtpl = ''; }
 	elseif ($rtplmode==3)
 		{ $rtpl = 'same_as_parent'; }
 //	else
-//		{ $rtpl = sed_import('rtplforced','P','ALP'); }		
+//		{ $rtpl = sed_import('rtplforced','P','ALP'); }
 
 		$sql = sed_sql_query("UPDATE $db_forum_structure SET
 			fn_path='".sed_sql_prep($rpath)."',
@@ -89,9 +89,9 @@ if ($n=='options')
 		}
 	else
 		{
-		$fn_tpl_sym = "-";	
+		$fn_tpl_sym = "-";
 		$check1 = " checked=\"checked\"";
-		}	
+		}
 
 
 	$adminpath[] = array ("admin.php?m=forums&amp;s=structure&amp;n=options&amp;id=".$id, sed_cc($fn_title));
@@ -113,13 +113,13 @@ if ($n=='options')
 	$adminmain .= "<td>";
 	$selected0 = (!$row['fn_defstate']) ? "selected=\"selected\"" : '';
 	$selected1 = ($row['fn_defstate']) ? "selected=\"selected\"" : '';
-	$adminmain .= "<select name=\"rdefstate\" size=\"1\">";	
+	$adminmain .= "<select name=\"rdefstate\" size=\"1\">";
 	$adminmain .= "<option value=\"1\" $selected1>".$L['adm_defstate_1'];
 	$adminmain .= "<option value=\"0\" $selected0>".$L['adm_defstate_0'];
 	$adminmain .= "</select></td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_tpl_mode']." :</td><td>";
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"1\" $check1 /> ".$L['adm_tpl_empty']."<br/>";
-	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];	
+	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];
 	$adminmain .= "</td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table></form>";
@@ -201,14 +201,14 @@ else
 		$pathfieldlen = (mb_strpos($fn_path, ".")==0) ? 3 : 9;
 		$pathfieldimg = (mb_strpos($fn_path, ".")==0) ? '' : "<img src=\"images/admin/join2.gif\" alt=\"\" /> ";
 		$sectioncount[$fn_code] = (!$sectioncount[$fn_code]) ? "0" : $sectioncount[$fn_code];
-	
+
 		if (empty($row['fn_tpl']))
 			{ $fn_tpl_sym = "-"; }
 		elseif ($row['fn_tpl']=='same_as_parent')
 			{ $fn_tpl_sym = "*"; }
 		else
 			{ $fn_tpl_sym = "+"; }
-		
+
 		$adminmain .= "<tr><td style=\"text-align:center;\">";
 		$adminmain .= ($sectioncount[$fn_code]>0) ? '' : "[<a href=\"admin.php?m=forums&amp;s=structure&amp;a=delete&amp;id=".$fn_id."&amp;c=".$row['fn_code']."&amp;".sed_xg()."\">x</a>]";
 		$adminmain .= "</td>";
@@ -218,12 +218,12 @@ else
 		$adminmain .= "<td style=\"text-align:center;\">";
 		$selected0 = (!$row['fn_defstate']) ? "selected=\"selected\"" : '';
 		$selected1 = ($row['fn_defstate']) ? "selected=\"selected\"" : '';
-		$adminmain .= "<select name=\"s[$fn_id][rdefstate]\" size=\"1\">";	
+		$adminmain .= "<select name=\"s[$fn_id][rdefstate]\" size=\"1\">";
 		$adminmain .= "<option value=\"1\" $selected1>".$L['adm_defstate_1'];
 		$adminmain .= "<option value=\"0\" $selected0>".$L['adm_defstate_0'];
 		$adminmain .= "</select>";
 		$adminmain .= "</td>";
-		
+
 		$adminmain .= "<td style=\"text-align:center;\">".$fn_tpl_sym."</td>";
 
 		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$fn_id][rtitle]\" value=\"".$fn_title."\" size=\"24\" maxlength=\"32\" /></td>";

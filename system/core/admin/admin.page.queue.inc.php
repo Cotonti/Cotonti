@@ -61,9 +61,9 @@ if ($a=='unvalidate')
 		{ sed_die(); }
 	}
 
-$sql = sed_sql_query("SELECT p.*, u.user_name 
-	FROM $db_pages as p 
-	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid 
+$sql = sed_sql_query("SELECT p.*, u.user_name
+	FROM $db_pages as p
+	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE page_state=1 ORDER by page_id DESC");
 
 $adminmain .= "<ul>";

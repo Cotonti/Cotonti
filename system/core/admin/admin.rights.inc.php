@@ -260,7 +260,7 @@ if (is_array($extp))
 $adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 $adminmain .= "</table></form>";
 
-$adminmain .= '<a href="admin.php?m=rights&g='.$g.'&advanced=1">'.$L['More'].'</a>';
+$adminmain .= '<a href="admin.php?m=rights&amp;g='.$g.'&amp;advanced=1">'.$L['More'].'</a>';
 
 $adminhelp = $legend;
 

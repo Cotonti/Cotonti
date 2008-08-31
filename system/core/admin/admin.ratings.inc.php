@@ -48,7 +48,7 @@ $pagination = '';
 for($i = 1; $i <= $totalpages; $i++)
 {
 	$pagination .= ($i == $currentpage) ? ' <span class="pagenav_current">' : ' ';
-	$pagination .= '<a href="admin.php?m=ratings&d='.(($i-1)*$cfg['maxrowsperpage']).'">'.$i.'</a>';
+	$pagination .= '<a href="admin.php?m=ratings&amp;d='.(($i-1)*$cfg['maxrowsperpage']).'">'.$i.'</a>';
 	$pagination .= ($i == $currentpage) ? '</span> ' : ' ';
 	if($i != $totalpages) $pagination .= '|';
 }

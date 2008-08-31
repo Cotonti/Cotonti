@@ -269,7 +269,7 @@ var tbURL="plug.php?r=tb2preview";
 var tbName="'.$name.'";
 var formName="'.$formname.'";
 var popupSmilies='.$cfg['plugin']['textboxer2']['popup_smilies'].';
-var tbLoc="bb='.$pbb.'&smi='.$psm.'&br='.$pbr.'&loc='.$loc.'";
+var tbLoc="bb='.$pbb.'&amp;smi='.$psm.'&amp;br='.$pbr.'&amp;loc='.$loc.'";
 var tbMax='.$smilieDropMaxHeight.';
 var tbdrop=['.implode(',',$bbDropdownIcons).'];
 var tbL={'.

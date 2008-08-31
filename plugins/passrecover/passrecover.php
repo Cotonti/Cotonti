@@ -46,13 +46,13 @@ if ($a=='request' && $email!='')
 			{
 			$validationkey = md5(microtime());
 			$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_lastip='".$usr['ip']."' WHERE user_id='$ruserid'");
-			
+
 			}
 
 		sed_shield_update(60,"Password recovery email sent");
 
 		$rsubject = $cfg['maintitle']." - ".$L['plu_title'];
-		$ractivate = $cfg['mainurl']."/plug.php?e=passrecover&a=auth&v=".$validationkey;
+		$ractivate = $cfg['mainurl']."/plug.php?e=passrecover&amp;a=auth&amp;v=".$validationkey;
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['plu_email1']."\n\n".$ractivate. "\n\n".$L['aut_contactadmin'];
 		sed_mail ($email, $rsubject, $rbody);
 		$plugin_body = $L['plu_mailsent'];

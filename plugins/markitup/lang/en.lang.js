@@ -39,6 +39,8 @@ var L = {
 	right:		'Right',
 	size:		'Font size',
 	size_pt:	'Font size in pt (10-29)',
+	spoiler:	'Spoiler',
+	spoiler_text:'Enter button text here',
 	strike:		'Strike-through',
 	table:		'Table',
 	table_cell:	'Table cell',

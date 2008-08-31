@@ -37,4 +37,5 @@ sed_bbcode_add('th', 'str', '[/th]', '</th>', true, 128, 'markitup');
 sed_bbcode_add('td', 'str', '[td]', '<td>', true, 128, 'markitup');
 sed_bbcode_add('td', 'str', '[/td]', '</td>', true, 128, 'markitup');
 sed_bbcode_add('hide', 'callback', '\[hide\](.+?)\[/hide\]', 'return $usr["id"] > 0 ? $input[1] : "<div class=\"hidden\">".$L["Hidden"]."</div>";', true, 150, 'markitup', true);
+sed_bbcode_add('spoiler', 'pcre', '\[spoiler=([^\]]+)\](.+?)\[/spoiler\]', '<div style="margin:4px 0px 4px 0px"><input type="button" value="$1" onclick="if(this.parentNode.getElementsByTagName(\'div\')[0].style.display != \'\') { this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'\'; } else { this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\'; }" /><div style="display:none" class="spoiler">$2</div></div>', true, 130, 'markitup');
 ?>

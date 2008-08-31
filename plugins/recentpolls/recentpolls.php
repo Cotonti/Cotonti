@@ -85,38 +85,39 @@ function sed_get_recentpolls($limit, $mask)
 
 		$res .= (!$alreadyvoted) ? "
 <style type=\"text/css\">
-#poll-container.loading {
+#poll-container$poll_id.loading {
   background: url('{$cfg['plugins_dir']}/recentpolls/img/spinner_bigger.gif') no-repeat center center;
 }
 </style>
 <script type=\"text/javascript\">
-function postp()
+function post$poll_id()
 	{
 
-		var id = $(\"input[@name='id']\").attr(\"value\");
+		var id = $(\"input[@name='$poll_id.id']\").attr(\"value\");
 		var a = $(\"input[@name='a']\").attr(\"value\");
-		var vote = $(\"input[@name='vote']:checked\").attr(\"value\");
+		var vote = $(\"input[@name='$poll_id.vote']:checked\").attr(\"value\");
 
 
 	$.ajax({
 		type: 'GET',
 		url: 'polls.php?',
-		data: 'id='+id+'&a='+a+'&vote='+vote+'&mode=ajax',
+		data: 'id='+id+'&amp;a='+a+'&amp;vote='+vote+'&amp;mode=ajax',
 
 		beforeSend: function(){
 			if (!vote) {
 			alert('".$L_idx['vote_opt']."');
 			return false;
 			}
-			$('#poll-container').addClass('loading');
+			$('#poll-container$poll_id').addClass('loading');
 			},
 
 		success: function(msg){
-		$('#poll-container').removeClass('loading');
-		$('#poll-container').html(msg).hide().stop().fadeIn('slow');
+		$('#poll-container$poll_id').removeClass('loading');
+		$('#poll-container$poll_id').html(msg).hide().stop().fadeIn('slow');
+		anim();
 			},
 		error: function(msg){
-		$('#poll-container').removeClass('loading');
+		$('#poll-container$poll_id').removeClass('loading');
 		alert('".$L_idx['vote_failed']."');
 			}
 
@@ -130,7 +131,7 @@ function postp()
 
 
 		$res .= "<h5>".sed_parse(sed_cc($row_p['poll_text']), 1, 1, 1)."</h5>";
-		$res .= "<div id='poll-container'>";
+		$res .= "<div id='poll-container$poll_id'>";
 
 
 		$res .= ($alreadyvoted) ? '<table class="cells">' : '';
@@ -146,18 +147,18 @@ function postp()
 			}
 			else
 			{
-				$res .= "<input type='radio' name='vote' id='o".$row['po_id']."' value='".$row['po_id']."' /><label for='o".$row['po_id']."'> ".stripslashes($row['po_text'])."</label><br />";
+				$res .= "<input type='radio' name='$poll_id.vote' id='o".$row['po_id']."' value='".$row['po_id']."' /><label for='o".$row['po_id']."'> ".stripslashes($row['po_text'])."</label><br />";
 			}
 		}
 
 		if (!$alreadyvoted)
 		{
-			$res .= "<input type=\"hidden\" name=\"id\" value=\"".$poll_id."\" />";
+			$res .= "<input type=\"hidden\" name=\"$poll_id.id\" value=\"".$poll_id."\" />";
 			$res .= "<input type=\"hidden\" name=\"a\" value=\"send\" />";
 		}
 
 		if (!$alreadyvoted)
-		{ $res .= "<p style=\"text-align: center; \"><input type=\"submit\" onclick=\"postp();\" class=\"submit\" value=\"".$L_idx['voteit']."\" /></p>"; }
+		{ $res .= "<p style=\"text-align: center; \"><input type=\"submit\" onclick=\"post$poll_id();\" class=\"submit\" value=\"".$L_idx['voteit']."\" /></p>"; }
 
 		$res .= ($alreadyvoted) ? '</table>' : '';
 

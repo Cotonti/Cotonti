@@ -543,9 +543,6 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 				$text = substr_replace($text, $key, $p1, $code_len);
 			}
 		}
-
-		//$text = htmlspecialchars($text);
-		$text = sed_bbcode_parse($text);
 	}
 
 	// TODO replace with new smiley system
@@ -559,6 +556,11 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 			$code[$key]= "<img class=\"aux\" src=\"".$dat['smilie_image']."\" alt=\"\" />";
 			$text = str_replace($dat['smilie_code'], $key, $text);
 		}
+	}
+
+	if($parse_bbcodes)
+	{
+		$text = sed_bbcode_parse($text);
 	}
 
 	if ($parse_bbcodes || $parse_smilies)
@@ -996,14 +998,14 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 		}
 		if(is_array($master))
 		{
-			$tmp[] = '<a href="forums.php?m=topics&s='.$master[0].'">'.sed_cc($master[1]).'</a>';
+			$tmp[] = '<a href="forums.php?m=topics&amp;s='.$master[0].'">'.sed_cc($master[1]).'</a>';
 		}
 		elseif($master)
 		{
 			$rowa = sed_sql_fetcharray(sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id=$master"));
-			$tmp[] = '<a href="forums.php?m=topics&s='.$master.'">'.sed_cc( $rowa['fs_title']).'</a>';
+			$tmp[] = '<a href="forums.php?m=topics&amp;s='.$master.'">'.sed_cc( $rowa['fs_title']).'</a>';
 		}
-		$tmp[] = '<a href="forums.php?m=topics&s='.$sectionid.'">'.sed_cc($title).'</a>';
+		$tmp[] = '<a href="forums.php?m=topics&amp;s='.$sectionid.'">'.sed_cc($title).'</a>';
 	}
 	else
 	{
@@ -1112,7 +1114,7 @@ function sed_build_icq($text)
 	$text = (int) $text;
 	if($text > 0)
 	{
-		return $text.' <a href="http://www.icq.com/'.$text.'#pager"><img src="http://web.icq.com/whitepages/online?icq='.$text.'&img=5" alt="" /></a>';
+		return $text.' <a href="http://www.icq.com/'.$text.'#pager"><img src="http://web.icq.com/whitepages/online?icq='.$text.'&amp;img=5" alt="" /></a>';
 	}
 	return '';
 }
@@ -1128,7 +1130,7 @@ function sed_build_ipsearch($ip)
 	global $xk;
 	if(!empty($ip))
 	{
-		return '<a href="admin.php?m=tools&p=ipsearch&a=search&id='.$ip.'&x='.$xk.'">'.$ip.'</a>';
+		return '<a href="admin.php?m=tools&amp;p=ipsearch&amp;a=search&amp;id='.$ip.'&amp;x='.$xk.'">'.$ip.'</a>';
 	}
 	return '';
 }
@@ -1183,7 +1185,7 @@ function sed_build_pfs($id, $c1, $c2, $title)
 function sed_build_pm($user)
 {
 	global $usr;
-	return '<a href="pm.php?m=send&to='.$user.'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="" /></a>';
+	return '<a href="pm.php?m=send&amp;to='.$user.'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="" /></a>';
 }
 
 /* ------------------ */
@@ -1525,7 +1527,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? '<a href="users.php?m=details&id='.$id.'">'.$user.'</a>' : '?';
+		return (!empty($user)) ? '<a href="users.php?m=details&amp;id='.$id.'">'.$user.'</a>' : '?';
 	}
 }
 
@@ -1554,7 +1556,7 @@ function sed_build_userimage($image)
 function sed_build_usertext($text)
 {
 	global $cfg;
-	return sed_parse($text, $cfg['parsebbcodesusertext'], $cfg['parsesmiliesusertext'], 1);
+	return sed_parse($text, $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
 }
 
 /*

@@ -20,6 +20,8 @@ $adminhelp = $L['adm_help_bbcodes'];
 
 $a = sed_import('a', 'G', 'ALP');
 $id = (int) sed_import('id', 'G', 'INT');
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
 
 if($a == 'add')
 {
@@ -87,7 +89,13 @@ $adminmain .= <<<HTM
 HTM;
 }
 
+$totalitems = sed_sql_rowcount($db_bbcode);
+$pagnav = sed_pagination('admin.php?m=bbcode', $d, $totalitems, $cfg['maxrowsperpage']);
+
 $adminmain .= <<<HTM
+<div class="pagnav">
+$pagnav
+</div>
 <table class="cells">
 <tr>
 	<td class="coltop">{$L['Name']}<br />{$L['adm_bbcodes_mode']} / {$L['Enabled']}</td>
@@ -99,7 +107,7 @@ $adminmain .= <<<HTM
 HTM;
 
 $bbc_modes = array('str', 'ereg', 'pcre', 'callback');
-$res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority");
+$res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
 while($row = sed_sql_fetchassoc($res))
 {
 	$mode = '';
@@ -118,7 +126,7 @@ while($row = sed_sql_fetchassoc($res))
 	$container = $row['bbc_container'] ? ' checked="checked"' : '';
 	$postrender = $row['bbc_postrender'] ? ' checked="checked"' : '';
 	$adminmain .= <<<HTM
-<form action="admin.php?m=bbcode&a=upd&id={$row['bbc_id']}" method="post">
+<form action="admin.php?m=bbcode&amp;a=upd&amp;id={$row['bbc_id']}" method="post">
 <tr>
 	<td>
 		<input type="text" name="bbc_name" value="{$row['bbc_name']}" /><br />
@@ -135,7 +143,7 @@ while($row = sed_sql_fetchassoc($res))
 	</td>
 	<td>
 		<input type="submit" value="{$L['Update']}" /><br />
-		<input type="button" value="{$L['Delete']}" onclick="if(confirm('{$L['adm_bbcodes_confirm']}')) location.href='admin.php?m=bbcode&a=del&id={$row['bbc_id']}'" />
+		<input type="button" value="{$L['Delete']}" onclick="if(confirm('{$L['adm_bbcodes_confirm']}')) location.href='admin.php?m=bbcode&amp;a=del&amp;id={$row['bbc_id']}'" />
 	</td>
 </tr>
 </form>
@@ -160,7 +168,7 @@ $adminmain .= <<<HTM
 <strong>{$L['adm_bbcodes_new']}</strong>
 </td>
 </tr>
-<form action="admin.php?m=bbcode&a=add" method="post">
+<form action="admin.php?m=bbcode&amp;a=add" method="post">
 <tr>
 	<td>
 		<input type="text" name="bbc_name" value="" /><br />
@@ -178,7 +186,7 @@ $adminmain .= <<<HTM
 </tr>
 </form>
 </table>
-<a href="admin.php?m=bbcode&a=clearcache" onclick="return confirm('{$L['adm_bbcodes_clearcache_confirm']}')">{$L['adm_bbcodes_clearcache']}</a>
+<a href="admin.php?m=bbcode&amp;a=clearcache" onclick="return confirm('{$L['adm_bbcodes_clearcache_confirm']}')">{$L['adm_bbcodes_clearcache']}</a>
 HTM;
 
 ?>

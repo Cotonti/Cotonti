@@ -584,7 +584,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_MAINGRPID" => $row['user_maingrp'],
 		"FORUMS_POSTS_ROW_MAINGRPSTARS" => sed_build_stars($sed_groups[$row['user_maingrp']]['level']),
 		"FORUMS_POSTS_ROW_MAINGRPICON" => sed_build_userimage($sed_groups[$row['user_maingrp']]['icon']),
-		"FORUMS_POSTS_ROW_USERTEXT" => $row['user_text'],
+		"FORUMS_POSTS_ROW_USERTEXT" => $cfg['parsebbcodeusertext'] ? sed_bbcode_parse($row['user_text'], true) : $row['user_text'],
 		"FORUMS_POSTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
 		"FORUMS_POSTS_ROW_PHOTO" => sed_build_userimage($row['user_photo']),
 		"FORUMS_POSTS_ROW_SIGNATURE" => sed_build_userimage($row['user_signature']),
@@ -654,7 +654,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 
 		if ($row4 = sed_sql_fetcharray($sql4))
 		{
-			$newmsg = "[quote][url=forums.php?m=posts&p=".$row4['fp_id']."#".$row4['fp_id']."]#[/url] [b]".$row4['fp_postername']." :[/b]\n".sed_stripquote($row4['fp_text'])."\n[/quote]";
+			$newmsg = "[quote][url=forums.php?m=posts&amp;p=".$row4['fp_id']."#".$row4['fp_id']."]#[/url] [b]".$row4['fp_postername']." :[/b]\n".sed_stripquote($row4['fp_text'])."\n[/quote]";
 		}
 	}
 

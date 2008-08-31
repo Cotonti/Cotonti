@@ -384,7 +384,7 @@ $t->assign(array(
 		"FORUMS_SECTIONS_ROW_POSTCOUNT_ALL" => $fsn['fs_postcount_all'],
 		"FORUMS_SECTIONS_ROW_VIEWCOUNT" => $fsn['fs_viewcount'],
 		"FORUMS_SECTIONS_ROW_VIEWCOUNT_SHORT" => $fsn['fs_viewcount_short'],
-		"FORUMS_SECTIONS_ROW_URL" => "forums.php?m=topics&s=".$fsn['fs_id'],
+		"FORUMS_SECTIONS_ROW_URL" => "forums.php?m=topics&amp;s=".$fsn['fs_id'],
 		"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsn['fs_lt_date'],
 		"FORUMS_SECTIONS_ROW_LASTPOSTER" => $fsn['fs_lt_postername'],
 		"FORUMS_SECTIONS_ROW_LASTPOST" => $fsn['lastpost'],

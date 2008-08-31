@@ -33,8 +33,9 @@ Lock_members=W12345A
 [BEGIN_SED_EXTPLUGIN_CONFIG]
 maxpages=01:select:0,1,2,3,4,5,6,7,8,9,10,15,20,25,30:5:Recent pages displayed
 maxtopics=02:select:0,1,2,3,4,5,6,7,8,9,10,15,20,25,30:5:Recent topics in forums displayed
-maxpolls=03:select:0,1,2,3,4,5:1:Recent polls displayed
-redundancy=04:select:1,2,3,4,5:2:Redundancy to come over "private topics" problem
+fd=03:select:Standard, Parent only, Subforums with Master Forums, Just Topics:Standard:Topic path display
+maxpolls=04:select:0,1,2,3,4,5:1:Recent polls displayed
+redundancy=05:select:1,2,3,4,5:2:Redundancy to come over "private topics" problem
 [END_SED_EXTPLUGIN_CONFIG]
 
 ==================== */
