@@ -51,6 +51,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_allowprvtopics = $row['fs_allowprvtopics'];
 	$fs_countposts = $row['fs_countposts'];
+	$fs_masterid = $row['fs_masterid'];
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	sed_block($usr['auth_write']);
@@ -187,7 +188,7 @@ $bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbc
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
 $post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
 
-$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category)." ".$cfg['separator']." <a href=\"forums.php?m=newtopic&amp;s=".$s."\">".$L['for_newtopic']."</a>";
+$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $fs_masterid)." ".$cfg['separator']." <a href=\"forums.php?m=newtopic&amp;s=".$s."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;

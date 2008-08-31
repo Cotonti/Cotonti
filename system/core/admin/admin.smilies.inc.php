@@ -27,12 +27,17 @@ if ($a=='update')
 	$s = sed_import('s', 'P', 'ARR');
 	foreach($s as $i => $k)
 		{
+		
+		if (!empty($s[$i]['code']) && !empty($s[$i]['image']) && !empty($s[$i]['text'])) // mysql can deal with order itself, no need to check if its set
+			{
 		$sql = sed_sql_query("UPDATE $db_smilies SET
 			smilie_code='".sed_sql_prep($s[$i]['code'])."',
 			smilie_image='".sed_sql_prep($s[$i]['image'])."',
 			smilie_text='".sed_sql_prep($s[$i]['text'])."',
 			smilie_order='".sed_sql_prep($s[$i]['order'])."'
 			WHERE smilie_id='$i'");
+			}
+			
 		}
 	sed_cache_clear('sed_smilies');
 	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=smilies");
@@ -44,7 +49,7 @@ elseif ($a=='add')
 	$nsmilieimage = sed_sql_prep(sed_import('nsmilieimage', 'P', 'TXT'));
 	$nsmilietext = sed_sql_prep(sed_import('nsmilietext', 'P', 'TXT'));
 	$nsmilieorder = sed_sql_prep(sed_import('nsmilieorder', 'P', 'TXT'));
-	$sql = sed_sql_query("INSERT INTO $db_smilies (smilie_code, smilie_image, smilie_text, smilie_order) VALUES ('$nsmiliecode', '$nsmilieimage', '$nsmilietext', ".(int)$nsmilieorder.")");
+	$sql = (!empty($nsmiliecode) && !empty($nsmilietext)) ? sed_sql_query("INSERT INTO $db_smilies (smilie_code, smilie_image, smilie_text, smilie_order) VALUES ('$nsmiliecode', '$nsmilieimage', '$nsmilietext', ".(int)$nsmilieorder.")") : '';
 	sed_cache_clear('sed_smilies');
 	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=smilies");
 	exit;

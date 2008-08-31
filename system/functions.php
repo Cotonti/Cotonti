@@ -980,11 +980,12 @@ function sed_build_flag($flag)
  * @param string $title Thread title
  * @param string $category Category code
  * @param string $link Display as links
+ * @param mixed $master Master section
  * @return string
  */
-function sed_build_forums($sectionid, $title, $category, $link=TRUE)
+function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master = false)
 {
-	global $sed_forums_str, $cfg;
+	global $sed_forums_str, $cfg, $db_forum_sections;
 	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
 
 	if($link)
@@ -993,6 +994,15 @@ function sed_build_forums($sectionid, $title, $category, $link=TRUE)
 		{
 			$tmp[] = '<a href="forums.php?c='.$x.'#'.$x.'">'.sed_cc($sed_forums_str[$x]['title']).'</a>';
 		}
+		if(is_array($master))
+		{
+			$tmp[] = '<a href="forums.php?m=topics&s='.$master[0].'">'.sed_cc($master[1]).'</a>';
+		}
+		elseif($master)
+		{
+			$rowa = sed_sql_fetcharray(sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id=$master"));
+			$tmp[] = '<a href="forums.php?m=topics&s='.$master.'">'.sed_cc( $rowa['fs_title']).'</a>';
+		}
 		$tmp[] = '<a href="forums.php?m=topics&s='.$sectionid.'">'.sed_cc($title).'</a>';
 	}
 	else
@@ -1000,6 +1010,10 @@ function sed_build_forums($sectionid, $title, $category, $link=TRUE)
 		foreach($pathcodes as $k => $x)
 		{
 			$tmp[]= sed_cc($sed_forums_str[$x]['title']);
+		}
+		if(is_array($master))
+		{
+			$tmp[] = sed_cc($master[1]);
 		}
 		$tmp[] = sed_cc($title);
 	}

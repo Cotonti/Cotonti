@@ -97,6 +97,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_allowbbcodes = $row['fs_allowbbcodes'];
 	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_countposts = $row['fs_countposts'];
+	$fs_masterid = $row['fs_masterid'];
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	sed_block($usr['auth_read']);
@@ -441,19 +442,24 @@ $notlastpage = (($d + $cfg['maxtopicsperpage'])<$totalposts) ? TRUE : FALSE;
 $pages = sed_pagination("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage']);
 list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage'], TRUE);
 
-$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN
+$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid FROM $db_forum_sections AS s LEFT JOIN
 $db_forum_structure AS n ON n.fn_code=s.fs_category
-ORDER by fn_path ASC, fs_order ASC");
+ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 
 $movebox = "<input type=\"submit\" class=\"submit\" value=\"".$L['Move']."\" /><select name=\"ns\" size=\"1\">";
 $jumpbox .= "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
 $jumpbox .= "<option value=\"forums.php\">".$L['Forums']."</option>";
 
+$ftitles = array();
+
 while ($row1 = sed_sql_fetcharray($sql1))
 {
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
 	{
-		$cfs = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE);
+		$ftitles[$row1['fs_id']] = $row1['fs_title'];
+		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $ftitles[$row1['fs_masterid']]) : false;
+
+		$cfs = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
 
 		if ($row1['fs_id'] != $s && $usr['isadmin'])
 		{ $movebox .= "<option value=\"".$row1['fs_id']."\">".$cfs."</option>"; }
@@ -484,7 +490,9 @@ if ($ft_poll>0)
 
 $ft_title = ($ft_mode==1) ? "# ".sed_cc($ft_title) : sed_cc($ft_title);
 
-$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category);
+$master = ($fs_masterid > 0) ? array($fs_masterid, $ftitles[$fs_masterid]) : false;
+
+$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master);
 $toptitle .= " ".$cfg['separator']." <a href=\"forums.php?m=posts&amp;q=".$q."\">".$ft_title."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 

@@ -35,12 +35,12 @@ if ($n=='options')
 	if ($a=='update' && !empty($id) && !empty($po))
 	{
 		$rtext = sed_import('rtext','P','HTM');
-		$sql = sed_sql_query("UPDATE $db_polls_options SET po_text='".sed_sql_prep($rtext)."' WHERE po_id='$po' AND po_pollid='$id'");
+		$sql = (!empty($rtext)) ? sed_sql_query("UPDATE $db_polls_options SET po_text='".sed_sql_prep($rtext)."' WHERE po_id='$po' AND po_pollid='$id'") : '';
 	}
 	elseif ($a=='updatetitle' && !empty($id))
 	{
 		$rtitle = sed_import('rtitle','P','HTM');
-		$sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($rtitle)."' WHERE poll_id='$id'");
+		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($rtitle)."' WHERE poll_id='$id'") : '';
 	}
 	elseif ($a=='add' && !empty($id) && !empty($ntext))
 	{

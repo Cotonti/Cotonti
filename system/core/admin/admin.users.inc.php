@@ -39,9 +39,9 @@ switch($n)
 	$ncopyrightsfrom = sed_import('ncopyrightsfrom','P','INT');
 	$ndisabled = sed_import('ndisabled','P','BOL');
 	$nhidden = sed_import('nhidden','P','BOL');
-	$ntitle = (empty($ntitle)) ? '???' : $ntitle;
+	//$ntitle = (empty($ntitle)) ? '???' : $ntitle;
 
-	$sql = sed_sql_query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".sed_sql_prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.", '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")");
+	$sql = (!empty($ntitle)) ? sed_sql_query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".sed_sql_prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.", '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
 
 	$grp_id = sed_sql_insertid();
 
@@ -76,7 +76,7 @@ switch($n)
 	   	$ricon = sed_sql_prep($ricon);
 	   	$ralias = sed_sql_prep($ralias);
 
-		$sql = sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden' WHERE grp_id='$g'");
+		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden' WHERE grp_id='$g'") : '';
 
 		sed_cache_clear('sed_groups');
 		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=users");
