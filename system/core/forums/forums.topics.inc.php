@@ -325,8 +325,8 @@ $t->assign(array(
 	$extp = sed_getextplugins('forums.topics.loop');
 	/* ===== */
 
-	$sqql = sed_sql_query("SELECT s.*, n.*, u.user_extra8 FROM $db_users AS u, $db_forum_sections AS s, $db_forum_structure AS n
-						   WHERE s.fs_masterid=".$s." AND n.fn_code=s.fs_category AND s.fs_lt_posterid=u.user_id
+	$sqql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s, $db_forum_structure AS n
+						   WHERE s.fs_masterid=".$s." AND n.fn_code=s.fs_category 
 						   ORDER BY fs_masterid DESC, fn_path ASC, fs_order ASC");
 
 	$catnum = 1;
@@ -369,6 +369,7 @@ $t->assign(array(
 			$fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
 
 			$fsn['fs_desc'] = (!empty($fsn['fs_desc'])) ? "<br />".$fsn['fs_desc'] : "";
+			$fsn['lastpost'] = (!empty($fsn['fs_postcount_all'])) ? $fsn['lastpost'] : $L['No_items'];
 
 			$t->assign(array(
 		"FORUMS_SECTIONS_ROW_ID" => $fsn['fs_id'],

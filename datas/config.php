@@ -29,7 +29,7 @@ $cfg['mysqldb'] = 'sedition';			// Database name
 // Default skin and default language
 // ========================
 
-$cfg['defaultskin'] = 'base';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/... !!
+$cfg['defaultskin'] = 'sed-light';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/... !!
 $cfg['defaultlang'] = 'en';		// Default language code
 
 // ========================

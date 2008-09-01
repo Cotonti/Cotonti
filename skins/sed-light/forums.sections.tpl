@@ -3,6 +3,7 @@
 	<div class="mboxHD">{FORUMS_SECTIONS_PAGETITLE}</div>
 	<div class="mboxBody">
 		
+		
 		<div id="subtitle">
 			<a href="plug.php?e=search&amp;frm=1">{PHP.skinlang.forumssections.Searchinforums}</a> |
 			<a href="plug.php?e=forumstats">{PHP.skinlang.forumssections.Statistics}</a> |
@@ -64,13 +65,11 @@
 				</td>
 
 				<td class="centerall">
-				{FORUMS_SECTIONS_ROW_TOPICCOUNT_ALL}<br />
-				<span class="desc">({FORUMS_SECTIONS_ROW_TOPICCOUNT})</span>
+				{FORUMS_SECTIONS_ROW_TOPICCOUNT}
 				</td>
 
 				<td class="centerall">
-				{FORUMS_SECTIONS_ROW_POSTCOUNT_ALL}<br />
-				<span class="desc">({FORUMS_SECTIONS_ROW_POSTCOUNT})</span>
+				{FORUMS_SECTIONS_ROW_POSTCOUNT}
 				</td>
 
 				<td class="centerall">

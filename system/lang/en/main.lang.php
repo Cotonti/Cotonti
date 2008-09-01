@@ -182,6 +182,7 @@ $L['News'] = 'News';
 $L['Newspost'] = 'News post';
 $L['Newsposts'] = 'News posts';
 $L['No'] = 'No';
+$L['No_items'] = 'No items find';
 $L['None'] = 'None';
 $L['Normal'] = 'No';
 $L['Notes'] = 'Notes';
@@ -488,12 +489,35 @@ $L['aut_emailbanned'] = 'This email (or this host) is banned, reason is : ';
 $L['aut_contactadmin'] = 'If you have any difficulties please contact the board administrator';
 
 $L['aut_regrequesttitle'] = 'Registration request';
-$L['aut_regrequest'] = 'Hi %1$s,\n\nYou are receiving this email because you have (or someone pretending to be you has) registered a new account on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator. \n\nYour account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. Then you will be able to login with : \n\nUsername = %1$s \nPassword = %2$s';
+$L['aut_regrequest'] = 'Hi %1$s,
+
+You are receiving this email because you have (or someone pretending to be you has) registered a new account on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.
+
+Your account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. Then you will be able to login with :
+
+Username = %1$s
+Password = %2$s';
 
 $L['aut_regreqnoticetitle'] = 'New account request';
-$L['aut_regreqnotice'] = 'Hi,\n\nYou are receiving this email because %1$s requested a new account.\nThis user won\'t be able to login until you manually set the account as \'active\', here :\n\n %2$s';
+$L['aut_regreqnotice'] = 'Hi,
 
-$L['aut_emailreg'] = 'Hi %1$s,\n\nYou are receiving this email because you have (or someone pretending to be you has) registered a new account on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.\n\nTo use your account you need to activate it with this link :\n\n %3$s \n\n Then you\'ll be able to login with : \n\nUsername = %1$s \nPassword = %2$s';
+You are receiving this email because %1$s requested a new account.
+This user won\'t be able to login until you manually set the account as \'active\', here :
+
+ %2$s';
+
+$L['aut_emailreg'] = 'Hi %1$s,
+
+You are receiving this email because you have (or someone pretending to be you has) registered a new account on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.
+
+To use your account you need to activate it with this link :
+
+ %3$s
+
+ Then you\'ll be able to login with :
+
+Username = %1$s
+Password = %2$s';
 
 $L['aut_registertitle'] = 'Register a new member account';
 $L['aut_registersubtitle'] = '';
@@ -574,7 +598,11 @@ $L['pm_arcsubtitle'] = 'Old messages, newest is at top';
 $L['pm_replyto'] = 'Reply to this user';
 $L['pm_putinarchives'] = 'Put in archives';
 $L['pm_notifytitle'] = 'New private message';
-$L['pm_notify'] = 'Hi %1$s,\n\nYou are receiving this email because there is a new private message in your inbox.\nThe sender is : %2$s\nClick this link to read it : %3$s';
+$L['pm_notify'] = 'Hi %1$s,
+
+You are receiving this email because there is a new private message in your inbox.
+The sender is : %2$s
+Click this link to read it : %3$s';
 $L['pm_multiplerecipients'] = 'This private messages was also sent to %1$s other recipient(s).';
 
 /* ====== Polls ====== */
@@ -611,7 +639,10 @@ $L['rat_registeredonly'] = 'Only registered users can rate items.';
 $L['use_title'] = 'Users';
 $L['use_subtitle'] = 'Registered members';
 $L['useed_accountactivated'] = 'Account activated';
-$L['useed_email'] = 'You are receiving this email because an administrator activated your account.\nYou may now login using the username and password you received in a previous email.\n\n';
+$L['useed_email'] = 'You are receiving this email because an administrator activated your account.
+You may now login using the username and password you received in a previous email.
+
+';
 $L['useed_title'] = 'Edit';
 $L['useed_subtitle'] = '&nbsp;';
 $L['use_byfirstletter'] = 'Name starting by';

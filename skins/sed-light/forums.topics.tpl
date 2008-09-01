@@ -34,8 +34,8 @@
 		<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
 
 		</td>
-		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}" style="text-align: center;">{FORUMS_SECTIONS_ROW_TOPICCOUNT_ALL}</td>
-		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}" style="text-align: center;">{FORUMS_SECTIONS_ROW_POSTCOUNT_ALL}</td>
+		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}" style="text-align: center;">{FORUMS_SECTIONS_ROW_TOPICCOUNT}</td>
+		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}" style="text-align: center;">{FORUMS_SECTIONS_ROW_POSTCOUNT}</td>
 		<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}" style="text-align: right;">{FORUMS_SECTIONS_ROW_LASTPOST}<br />
 		{FORUMS_SECTIONS_ROW_LASTPOSTER} {FORUMS_SECTIONS_ROW_TIMEAGO}</td>
 	</tr>
