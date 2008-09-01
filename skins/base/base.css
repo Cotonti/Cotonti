@@ -167,7 +167,7 @@ h6 	{ font-size:90%; margin:1em 1em 1em 0; }
 .block h4	{ margin-top:0; }
 .error		{ padding:24px 8px 24px 8px; margin:0; color:#82951b; font-weight:bold; font-size:110%; text-align:center; }
 .codetitle	{ font-size:10px; color:#59739B; padding:2px; margin-top:5px; }
-.code 		{ font-size:11px; color:#59739B; background-color:#EFF0C2; padding:2px; margin-bottom:5px; font-family:monospace; }
+.code 		{ font-size:11px; color:#59739B; background-color:#EFF0C2; overflow: auto; padding:2px; margin-bottom:5px; font-family:monospace; }
 .valid 		{ height:48px; text-align:center; vertical-align:middle; }
 .download 	{ font-size:110%; text-align:center; background-color: #E8E8E8; padding:16px; margin-top:16px; }
 .paging		{ text-align:center; padding:6px; font-size:90%; width:100%; }

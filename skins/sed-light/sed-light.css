@@ -100,7 +100,7 @@ h6 	{ font-size:90%; margin:1em 1em 1em 0; }
 .block h4 { margin-top:0; }
 .error { padding:24px 8px 24px 8px; margin:0; color:#CC1212; font-weight:bold; font-size:110%; text-align:center; }
 .codetitle { font-size:.90em; text-transform:uppercase; font-weight:bold; padding:2px; margin-top:5px; }
-.code { background-color:#FFF; border:1px solid #C8D9E2; width:90%; padding:2px; margin-bottom:5px; font-family:monospace; }
+.code { background-color:#FFF; border:1px solid #C8D9E2; overflow: auto; padding:2px; margin-bottom:5px; font-family:monospace; }
 .valid  { height:48px; text-align:center; vertical-align:middle; }
 .download { font-size:110%; text-align:center; background-color: #FFFFFF; padding:16px; margin-top:16px; }
 .paging { padding:6px; text-align:right; font-size:.90em; }

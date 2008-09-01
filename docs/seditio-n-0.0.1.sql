@@ -782,11 +782,6 @@ INSERT INTO sed_auth VALUES (102, 2, 'plug', 'search', 1, 254, 1);
 INSERT INTO sed_auth VALUES (103, 3, 'plug', 'search', 0, 255, 1);
 INSERT INTO sed_auth VALUES (104, 4, 'plug', 'search', 1, 254, 1);
 INSERT INTO sed_auth VALUES (105, 5, 'plug', 'search', 255, 255, 1);
-INSERT INTO sed_auth VALUES (106, 1, 'plug', 'textboxer2', 0, 255, 1);
-INSERT INTO sed_auth VALUES (107, 2, 'plug', 'textboxer2', 0, 255, 1);
-INSERT INTO sed_auth VALUES (108, 3, 'plug', 'textboxer2', 0, 255, 1);
-INSERT INTO sed_auth VALUES (109, 4, 'plug', 'textboxer2', 1, 254, 1);
-INSERT INTO sed_auth VALUES (110, 5, 'plug', 'textboxer2', 255, 255, 1);
 INSERT INTO sed_auth VALUES (111, 1, 'plug', 'whosonline', 1, 254, 1);
 INSERT INTO sed_auth VALUES (112, 2, 'plug', 'whosonline', 1, 254, 1);
 INSERT INTO sed_auth VALUES (113, 3, 'plug', 'whosonline', 0, 255, 1);
@@ -815,7 +810,6 @@ INSERT INTO sed_auth VALUES (133, 6, 'plug', 'forumstats', 1, 254, 1);
 INSERT INTO sed_auth VALUES (134, 6, 'plug', 'massmovetopics', 0, 255, 1);
 INSERT INTO sed_auth VALUES (135, 6, 'plug', 'passrecover', 1, 254, 1);
 INSERT INTO sed_auth VALUES (136, 6, 'plug', 'search', 1, 254, 1);
-INSERT INTO sed_auth VALUES (137, 6, 'plug', 'textboxer2', 1, 254, 1);
 INSERT INTO sed_auth VALUES (138, 6, 'plug', 'whosonline', 1, 254, 1);
 
 # ---------- Default plugins :
@@ -827,18 +821,7 @@ INSERT INTO sed_plugins VALUES (4, 'tools', 'massmovetopics', 'admin', 'Mass-mov
 INSERT INTO sed_plugins VALUES (5, 'standalone', 'passrecover', 'main', 'Password recovery', 'passrecover', 10, 1);
 INSERT INTO sed_plugins VALUES (6, 'standalone', 'search', 'main', 'Search', 'search', 10, 1);
 INSERT INTO sed_plugins VALUES (7, 'standalone', 'statistics', 'main', 'Statistics', 'statistics', 10, 1);
-INSERT INTO sed_plugins VALUES (8, 'comments.newcomment.tags', 'textboxer2', 'comments', 'Textboxer 2.0', 'tb2.comments', 10, 1);
-INSERT INTO sed_plugins VALUES (9, 'forums.editpost.tags', 'textboxer2', 'forums.editpost', 'Textboxer 2.0', 'tb2.forums.editpost', 10, 1);
-INSERT INTO sed_plugins VALUES (10, 'forums.newtopic.tags', 'textboxer2', 'forums.newtopic', 'Textboxer 2.0', 'tb2.forums.newtopic', 10, 1);
-INSERT INTO sed_plugins VALUES (11, 'forums.posts.newpost.tags', 'textboxer2', 'forums.posts', 'Textboxer 2.0', 'tb2.forums.posts', 10, 1);
-INSERT INTO sed_plugins VALUES (12, 'page.add.tags', 'textboxer2', 'page.add', 'Textboxer 2.0', 'tb2.page.add', 10, 1);
-INSERT INTO sed_plugins VALUES (13, 'page.edit.tags', 'textboxer2', 'page.edit', 'Textboxer 2.0', 'tb2.page.edit', 10, 1);
-INSERT INTO sed_plugins VALUES (14, 'pm.send.tags', 'textboxer2', 'pm.send', 'Textboxer 2.0', 'tb2.pm.send', 10, 1);
-INSERT INTO sed_plugins VALUES (15, 'users.edit.tags', 'textboxer2', 'users.edit', 'Textboxer 2.0', 'tb2.users.edit', 10, 1);
-INSERT INTO sed_plugins VALUES (16, 'profile.tags', 'textboxer2', 'profile', 'Textboxer 2.0', 'tb2.users.profile', 10, 1);
 INSERT INTO sed_plugins VALUES (17, 'standalone', 'whosonline', 'main', 'Who''s online', 'whosonline', 10, 1);
-
-INSERT INTO sed_config VALUES ('plug', 'textboxer2', '01', 'popup_smilies', 3, '0', '', 'Use popup for "More smilies.." instead of extending dropdown.');
 
 # ---------- Plugins : News
 
