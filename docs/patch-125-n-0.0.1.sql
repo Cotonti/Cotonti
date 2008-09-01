@@ -48,3 +48,14 @@ ALTER TABLE sed_pages MODIFY page_file TINYINT DEFAULT NULL;
 
 /* Subforums patch */
 ALTER TABLE sed_forum_sections ADD COLUMN fs_masterid smallint(5) unsigned NOT NULL default '0';
+
+/* Uninstall textboxer */
+DELETE FROM sed_auth WHERE auth_option = 'textboxer2';
+DELETE FROM sed_plugins WHERE pl_code = 'textboxer2';
+DELETE FROM sed_config WHERE config_cat = 'textboxer2';
+
+/* Patch recentitems config */
+INSERT INTO sed_config VALUES ('plug', 'recentitems', 05, 'fd', 2, 'Standard', 'Standard, Parent only, Subforums with Master Forums, Just Topics', 'Topic path display');
+
+/* Patch forum icons */
+UPDATE sed_forum_sections SET fs_icon = 'images/admin/forums.gif' WHERE fs_icon = 'system/img/admin/forums.gif';

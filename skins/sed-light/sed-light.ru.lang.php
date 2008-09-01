@@ -47,7 +47,7 @@ $skinlang['forumspost']['Reply'] = 'Ответить';
 
 //forums.sections.tpl
 $skinlang['forumssections']['Options'] = 'Опции...';
-$skinlang['forumssections']['SearchinForums'] = 'Искать в форумах';
+$skinlang['forumssections']['Searchinforums'] = 'Искать в форумах';
 $skinlang['forumssections']['Statistics'] = 'Статистика';
 $skinlang['forumssections']['Moderators'] = 'Модераторы';
 $skinlang['forumssections']['Markasread'] = 'Отметить все как прочитанные';
