@@ -857,6 +857,7 @@ INSERT INTO sed_plugins VALUES (19, 'index.tags', 'recentitems', 'main', 'Recent
 INSERT INTO sed_config VALUES ('plug', 'recentitems', 01, 'maxpages', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed');
 INSERT INTO sed_config VALUES ('plug', 'recentitems', 03, 'maxpolls', 2, '1', '0,1,2,3,4,5', 'Recent polls displayed');
 INSERT INTO sed_config VALUES ('plug', 'recentitems', 04, 'maxtopics', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed');
+INSERT INTO sed_config VALUES ('plug', 'recentitems', 05, 'fd', 2, 'Standard', 'Standard, Parent only, Subforums with Master Forums, Just Topics', 'Topic path display');
 
 # ---------- Plugin : Statistics
 
