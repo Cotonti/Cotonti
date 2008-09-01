@@ -12,7 +12,7 @@
 		{ADMIN_MAIN}
 
 		<hr />
-		<b>{PHP.skinlang.admin.Help}</b>
+		<strong>{PHP.skinlang.admin.Help}</strong>
 		<hr />
 
 		{ADMIN_HELP}

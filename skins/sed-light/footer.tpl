@@ -4,9 +4,9 @@
             <div id="footer">
                 <div id="ftBar">
 				    <div class="text">
-                        <a href="#">Home</a> / <a href="#">About Us</a> / <a href="#">Documentation</a> / <a href="#">Legal</a> / <a href="#">FAQs</a> / <a href="#">Contact</a>
+                        <a href="index.php">{PHP.L.Home}</a>
                     </div>
-                    <div class="topLink"><a href="#top" title="Top">Top</a></div>
+                    <div class="topLink"><a href="#top" title="{PHP.L.Top}">{PHP.L.Top}</a></div>
                 </div>
             </div>
             <div id="sedCopy"> <a href="http://www.neocrome.net" title="Visit Neocrome.Net for more information on Seditio">POWERED BY SEDITIO</a></div>

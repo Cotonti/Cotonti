@@ -7,11 +7,11 @@
 {PFSVIEW_HEADER2}
 
 <div id="pfsHeader">
-	<div id="pfsBack"><A HREF="javascript:history.go(-1)"> [Go Back]</A></div>
+	<div id="pfsBack"><a href="javascript:history.go(-1)"> [Go Back]</a></div>
 	<div id="pfsTitle">{PFSVIEW_FILE_DESC}</div>
-	<div><b>Demensions:</b> {PFSVIEW_FILE_SIZEX} x {PFSVIEW_FILE_SIZEY}</div>
-	<div><b>Size:</b> {PFSVIEW_FILE_SIZE} kb</div>
-	<div><b>Owner:</b> {PFSVIEW_FILE_USERNAME}</div>
+	<div><strong>{PHP.skinlang.pfs.Demensions}:</strong> {PFSVIEW_FILE_SIZEX} x {PFSVIEW_FILE_SIZEY}</div>
+	<div><strong>{PHP.L.Size}:</strong> {PFSVIEW_FILE_SIZE} {PHP.L.kb}</div>
+	<div><strong>{PHP.L.Owner}:</strong> {PFSVIEW_FILE_USERNAME}</div>
 </div>
 <div id="pfsImage">{PFSVIEW_FILE_IMAGE}</div>
 

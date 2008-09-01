@@ -38,8 +38,8 @@
 			<div class="pageTop"></div>
 			<div class="pageText">
 
-				<a href="{PAGE_FILE_URL}">Download : {PAGE_SHORTTITLE} {PAGE_FILE_ICON}</a><br/>
-				Size: {PAGE_FILE_SIZE}KB, downloaded {PAGE_FILE_COUNT} times
+				<a href="{PAGE_FILE_URL}">{PHP.L.Download} : {PAGE_SHORTTITLE} {PAGE_FILE_ICON}</a><br/>
+				{PHP.L.Size}: {PAGE_FILE_SIZE}{PHP.L.kb}, {PHP.skinlang.page.downloaded} {PAGE_FILE_COUNT} {PHP.skinlang.page.times}
 			</div>
 		</div>
 		<!-- END: PAGE_FILE -->

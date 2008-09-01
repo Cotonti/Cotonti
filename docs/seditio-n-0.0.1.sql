@@ -782,6 +782,11 @@ INSERT INTO sed_auth VALUES (102, 2, 'plug', 'search', 1, 254, 1);
 INSERT INTO sed_auth VALUES (103, 3, 'plug', 'search', 0, 255, 1);
 INSERT INTO sed_auth VALUES (104, 4, 'plug', 'search', 1, 254, 1);
 INSERT INTO sed_auth VALUES (105, 5, 'plug', 'search', 255, 255, 1);
+INSERT INTO sed_auth VALUES (106, 1, 'plug', 'markitup', 1, 254, 1);
+INSERT INTO sed_auth VALUES (107, 2, 'plug', 'markitup', 1, 254, 1);
+INSERT INTO sed_auth VALUES (108, 3, 'plug', 'markitup', 0, 255, 1);
+INSERT INTO sed_auth VALUES (109, 4, 'plug', 'markitup', 3, 252, 1);
+INSERT INTO sed_auth VALUES (110, 5, 'plug', 'markitup', 255, 255, 1);
 INSERT INTO sed_auth VALUES (111, 1, 'plug', 'whosonline', 1, 254, 1);
 INSERT INTO sed_auth VALUES (112, 2, 'plug', 'whosonline', 1, 254, 1);
 INSERT INTO sed_auth VALUES (113, 3, 'plug', 'whosonline', 0, 255, 1);
@@ -810,6 +815,7 @@ INSERT INTO sed_auth VALUES (133, 6, 'plug', 'forumstats', 1, 254, 1);
 INSERT INTO sed_auth VALUES (134, 6, 'plug', 'massmovetopics', 0, 255, 1);
 INSERT INTO sed_auth VALUES (135, 6, 'plug', 'passrecover', 1, 254, 1);
 INSERT INTO sed_auth VALUES (136, 6, 'plug', 'search', 1, 254, 1);
+INSERT INTO sed_auth VALUES (137, 6, 'plug', 'markitup', 3, 252, 1);
 INSERT INTO sed_auth VALUES (138, 6, 'plug', 'whosonline', 1, 254, 1);
 
 # ---------- Default plugins :
@@ -821,7 +827,11 @@ INSERT INTO sed_plugins VALUES (4, 'tools', 'massmovetopics', 'admin', 'Mass-mov
 INSERT INTO sed_plugins VALUES (5, 'standalone', 'passrecover', 'main', 'Password recovery', 'passrecover', 10, 1);
 INSERT INTO sed_plugins VALUES (6, 'standalone', 'search', 'main', 'Search', 'search', 10, 1);
 INSERT INTO sed_plugins VALUES (7, 'standalone', 'statistics', 'main', 'Statistics', 'statistics', 10, 1);
+INSERT INTO sed_plugins VALUES (8, 'header.main', 'markitup', 'header', 'MarkItUp!', 'markitup.header', 10, 1);
 INSERT INTO sed_plugins VALUES (17, 'standalone', 'whosonline', 'main', 'Who''s online', 'whosonline', 10, 1);
+
+INSERT INTO sed_config VALUES ('plug', 'markitup', '01', 'autorefresh', 3, '0', '', 'Enable preview auto-refresh');
+INSERT INTO sed_config VALUES ('plug', 'markitup', '10', 'chili', 3, '0', '', 'Enable Chili tags');
 
 # ---------- Plugins : News
 

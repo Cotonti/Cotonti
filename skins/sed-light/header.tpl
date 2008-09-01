@@ -17,7 +17,7 @@
             <div id="header">
                 <div id="userBar">
                 
-	                <!-- BEGIN: GUEST -->
+	                 <!-- BEGIN: GUEST -->
                     <div class="userBarR"><a href="plug.php?e=passrecover">{PHP.skinlang.header.Lostyourpassword}</a></div>
                     <b>Welcome! <a href="users.php?m=auth">{PHP.skinlang.header.Login}</a> or <a href="users.php?m=register">{PHP.skinlang.header.Register}</a></b>
 	                <!-- END: GUEST -->
@@ -31,7 +31,7 @@
                 </div>
                 <div id="navBar">
                     <div class="text">{PHP.cfg.menu1}</div>
-                    <div class="homeLink"><a href="/index.php" title="Home">Home</a></div>
+                    <div class="homeLink"><a href="/index.php" title="{PHP.L.Home}">{PHP.L.Home}</a></div>
                 </div>
             </div>
             <div id="content">

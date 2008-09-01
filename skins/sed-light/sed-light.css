@@ -13,7 +13,7 @@ a:focus { outline:none; font-weight:bold; }
 #header #userBar { width:380px; height:70px; margin:0 0 0 400px; line-height:30px; vertical-align:middle; padding:0 0 0 10px; }
 #header #userBar a { text-decoration:none; }
 #header #userBar .userBarR { float:right; height:30px; line-height:30px; vertical-align:middle; margin:0 10px 0 0; }
-#header #userBar .userBarL { float:left; height:30px; margin:10px 10px 0 0; font-size:.9em; line-height:1em; }
+#header #userBar .userBarL { float:left; height:30px; margin:10px 10px 0 0; text-align:right; font-size:.9em; line-height:1em; }
 #header #navBar { width:800px; height:30px; margin-top:1px; }
 #header #navBar .text { width:755px; height:30px; float:right; }
 #header #navBar .text a { font-size:11px; line-height:30px; vertical-align:middle; font-weight:bold; margin:0 15px 0 0; text-decoration:none; text-transform:uppercase; }
