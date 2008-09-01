@@ -18,8 +18,8 @@
                 <div id="userBar">
                 
 	                 <!-- BEGIN: GUEST -->
-                    <div class="userBarR"><a href="plug.php?e=passrecover">{PHP.skinlang.header.Lostyourpassword}</a></div>
-                    <b>Welcome! <a href="users.php?m=auth">{PHP.skinlang.header.Login}</a> or <a href="users.php?m=register">{PHP.skinlang.header.Register}</a></b>
+                    <div class="userBarR"><a href="users.php?m=auth">{PHP.skinlang.header.Login}</a>&nbsp;•&nbsp;<a href="users.php?m=register">{PHP.skinlang.header.Register}</a>&nbsp;•&nbsp;<a href="plug.php?e=passrecover">{PHP.skinlang.header.Lostyourpassword}</a></div>
+                    <strong>{PHP.skinlang.header.Welcome}</strong>
 	                <!-- END: GUEST -->
                 
 	                <!-- BEGIN: USER -->
