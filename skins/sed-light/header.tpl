@@ -18,7 +18,7 @@
                 <div id="userBar">
                 
 	                 <!-- BEGIN: GUEST -->
-                    <div class="userBarR"><a href="users.php?m=auth">{PHP.skinlang.header.Login}</a>&nbsp;•&nbsp;<a href="users.php?m=register">{PHP.skinlang.header.Register}</a>&nbsp;•&nbsp;<a href="plug.php?e=passrecover">{PHP.skinlang.header.Lostyourpassword}</a></div>
+                    <div class="userBarR"><a href="users.php?m=auth">{PHP.skinlang.header.Login}</a>&nbsp;&#8226;&nbsp;<a href="users.php?m=register">{PHP.skinlang.header.Register}</a>&nbsp;&#8226;&nbsp;<a href="plug.php?e=passrecover">{PHP.skinlang.header.Lostyourpassword}</a></div>
                     <strong>{PHP.skinlang.header.Welcome}</strong>
 	                <!-- END: GUEST -->
                 
