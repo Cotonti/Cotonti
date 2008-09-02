@@ -1,0 +1,53 @@
+.highlight {
+	/* resets */ margin: 0; padding: 0;
+	background-color: #E8E8E8;
+	overflow: hidden;
+}
+.highlight PRE {
+	margin: 0;
+	padding: 0 0 0 45px;
+	font: 12px "Consolas","Courier New",Courier,mono;
+	overflow: auto;
+}
+.highlight PRE ol {
+	/* resets */ margin: 0; padding: 0;
+	color: #222222;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: decimal-leading-zero;
+}
+.highlight PRE ol li {
+	margin: 0;
+	padding: 0 0 0 10px;
+	border-left: 1px solid #CCCCCC;
+	background-color: #F8F8F8;
+}
+.highlight .bar .tools {
+	padding: 4px 0 4px 50px;
+	font: normal 9px Arial,Helvetica,Geneva,sans-serif;
+	background-color: #EEEEEE;
+	border-bottom: 1px solid #CCCCCC;
+}
+.highlight .bar .tools a {
+	padding: 0 6px;
+	color: #B2B2B2;
+	text-decoration: none;
+	outline: 0;
+}
+.highlight .bar .tools a:hover {
+	color: black;
+}
+/* Hide useless elements in print layouts... */
+@media print {
+    .highlight {
+		margin: 0; padding: 0;
+		border: 0 none;
+    }
+	.highlight PRE {
+		font-size: 14px;
+		overflow: hidden;
+	}
+	.highlight PRE ol li {
+		border-bottom: 0 none;
+	}
+}
