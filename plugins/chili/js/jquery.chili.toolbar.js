@@ -10,7 +10,7 @@
  *   <script src="jquery.chili-toolbar.js" type="text/javascript"></script>
  *   <link href="jquery.chili-toolbar.css" type="text/css" rel="styleshee
  *
- * $Rev: 15 $
+ * $Rev: 16 $
  * $Date:: 2008-09-03 #$
  *
  * Depends:
@@ -28,7 +28,7 @@ ChiliBook.Toolbar = {
 			Label: "view plain",
 			Cmd: function(el){
 				var wnd = window.open("", ChiliBook.Toolbar.Utils.PopUpTarget, "width=750, height=400, resizable=1, scrollbars=0");
-				wnd.document.write('<textarea style="width:99%;height:99%">'+$.data(el, "chili.text")+'</textarea>');
+				wnd.document.write('<textarea style="width:99%;height:99%">'+$.data(el, "chili.text").replace("&", "&amp;")+'</textarea>');
 				wnd.document.close();
 			}
 		},

@@ -8,6 +8,7 @@
 	padding: 0 0 0 45px;
 	font: 12px "Consolas","Courier New",Courier,mono;
 	overflow: auto;
+	line-height: 1.5em; /* fixes hidden horizontal bar in FF with single code line */
 }
 .highlight PRE ol {
 	/* resets */ margin: 0; padding: 0;
@@ -35,7 +36,7 @@
 	outline: 0;
 }
 .highlight .bar .tools a:hover {
-	color: black;
+	color: #3E606F;
 }
 /* Hide useless elements in print layouts... */
 @media print {
