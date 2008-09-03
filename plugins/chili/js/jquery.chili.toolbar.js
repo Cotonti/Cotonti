@@ -1,5 +1,5 @@
 /*
- * ChiliToolbar v1.1
+ * ChiliToolbar v1.2
  *
  * Copyright (c) 2008 Orkan (orkans@gmail.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -10,8 +10,8 @@
  *   <script src="jquery.chili-toolbar.js" type="text/javascript"></script>
  *   <link href="jquery.chili-toolbar.css" type="text/css" rel="styleshee
  *
- * $Rev: 11 $
- * $Date:: 2008-09-02 #$
+ * $Rev: 15 $
+ * $Date:: 2008-09-03 #$
  *
  * Depends:
  *	jquery.chili.js
@@ -21,7 +21,7 @@
 (function($) {
 
 ChiliBook.Toolbar = {
-	Version: "1.1",
+	Version: "1.2",
 	Chili: $.fn.chili,
 	Command: {
 		ViewSource: {
@@ -108,23 +108,36 @@ ChiliBook.Toolbar = {
 
 
 $.fn.chili = function(options) {
-	var self	= this[0];
-	var $bar	= $("<div/>").addClass("bar"),
-		$tools	= $("<div/>").addClass("tools");
 
-	$.each(ChiliBook.Toolbar.Command, function(key, obj){
-		$tools.append( $('<a href="javascript:;"><span>'+obj.Label+'</span></a>').click(function(){obj.Cmd(self);return false;}) );
+	// Prepare toolbar
+	this.bind("chili.before_coloring", function(){
+		var self	= this,
+			$this	= $(this),
+			$bar	= $("<div/>").addClass("bar"),
+			$tools	= $("<div/>").addClass("tools");
+
+		$.each(ChiliBook.Toolbar.Command, function(key, obj){ // TODO: need some improvements here
+			$('<a href="javascript:;"><span>'+obj.Label+'</span></a>')
+				.click(function(){ obj.Cmd(self); })
+				.appendTo($tools);
+		});
+		
+		$this.before($bar.append($tools));
+		$this.data("chili.text", $this.text());
 	});
 
-	this.before($bar.append($tools));
-	this.data("chili.text", this.text());
-
-	ChiliBook.Toolbar.Chili.apply(this, [options]);
-
 	// Overflow IE bug fix 
-	if($.browser.msie && ChiliBook.Toolbar.Utils.IEOverflowFix && self.scrollWidth > self.offsetWidth) {
-          this.css({"padding-bottom": ChiliBook.Toolbar.Utils.IEOverflowFix, "overflow-y": "hidden"});
+	if($.browser.msie && ChiliBook.Toolbar.Utils.IEOverflowFix)
+	{
+		this.bind("chili.after_coloring", function(){
+			if(this.scrollWidth > this.offsetWidth) {
+				  $(this).css({"padding-bottom": ChiliBook.Toolbar.Utils.IEOverflowFix, "overflow-y": "hidden"});
+			}
+		});
 	}
+
+	// Apply Chili
+	ChiliBook.Toolbar.Chili.apply(this, [options]);
 };
 
 }) (jQuery);
