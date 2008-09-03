@@ -17,7 +17,9 @@ require_once $cfg['system_dir'].'/common.php';
 
 header('Content-type: text/html; charset='.$cfg['charset']);
 
+// Preview contents
 $text = sed_import('text', 'P', 'HTM');
-echo sed_post_parse(sed_parse($text));
+$style = '<link rel="stylesheet" type="text/css" href="skins/'.$skin.'/'.$skin.'.css" />'."\n";
+echo $style.sed_post_parse(sed_parse($text));
 ob_end_flush();
 ?>
