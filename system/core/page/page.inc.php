@@ -78,7 +78,7 @@ if($pag['page_file'] && $a=='dl')
 	$file_size = @filesize($row['page_url']);
 	$pag['page_filecount']++;
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
-	header("Location: " . SED_ABSOLUTE_URL . "".$pag['page_url']);
+	header("Location: ".$pag['page_url']);
 	echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
 	exit;
 }
@@ -272,7 +272,7 @@ if($pag['page_file'] > 0)
 	}
 	else
 	{
-		$t->assign('PAGE_FILE_URL', 'page.php?id='.$pag['page_id'].'a=dl');
+		$t->assign('PAGE_FILE_URL', 'page.php?id='.$pag['page_id'].'&amp;a=dl');
 	}
 	$t->parse("MAIN.PAGE_FILE");
 	$t->assign('PAGE_SHORTTITLE', $pag['page_title']);
