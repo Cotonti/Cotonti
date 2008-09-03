@@ -11,5 +11,5 @@
 
 // Installing new bbcodes
 sed_bbcode_remove(0, 'chili');
-sed_bbcode_add('highlight', 'callback', '\[highlight=([\w\-]+)\](.*?)\[/highlight\]', 'return \'<pre class="code"><code class="\'.$input[1].\'">\'.sed_bbcode_cdata($input[2]).\'</code></pre>\';', true, 3, 'chili');
+sed_bbcode_add('highlight', 'callback', '\[highlight=([\w\-]+)\](.*?)\[/highlight\]', 'return \'<div class="highlight"><pre class="\'.$input[1].\'">\'.sed_bbcode_cdata($input[2]).\'</pre></div>\';', true, 3, 'chili');
 ?>
