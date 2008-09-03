@@ -177,8 +177,8 @@ foreach($sed_groups as $k => $i)
 	{
 		$allfilters .= ($k>1) ? "<option value=\"users.php?g=".$k."\" $selected> ".$sed_groups[$k]['title'] : '';
 		$allfilters .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-		$grpms .= ($k>1) ? "<option value=\"users.php?gm=".$k."\" $selected1> ".$sed_groups[$k]['title'] : '';
-		$grpms .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
+		$grpams .= ($k>1) ? "<option value=\"users.php?gm=".$k."\" $selected1> ".$sed_groups[$k]['title'] : '';
+		$grpams .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 	}
 }
 $allfilters .= "</select>";
@@ -186,6 +186,7 @@ $allfilters .= "</select>";
 /*=========*/
 
 $maingrpfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Maingroup']."...";
+unset($grpms);
 foreach($sed_groups as $k => $i)
 {
 	$selected = ($k==$g) ? "selected=\"selected\"" : '';
@@ -201,7 +202,7 @@ foreach($sed_groups as $k => $i)
 $maingrpfilters .= "</select>";
 
 $allfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Group']."...";
-$allfilters .= $grpms."</select>";
+$allfilters .= $grpams."</select>";
 
 
 $grpfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Group']."...";
