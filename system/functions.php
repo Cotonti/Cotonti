@@ -30,44 +30,20 @@ define('SED_GROUP_BANNED', 3);
 define('SED_GROUP_MEMBERS', 4);
 define('SED_GROUP_TOPADMINS', 5);
 
-//$cfg = array();
+/* ======== Pre-sets ========= */
+
 $out = array();
 $plu = array();
 $sys = array();
 $usr = array();
 
-/* ======== Pre-sets ========= */
-
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount);
+//unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount)
 
-$cfg['authmode'] = 3; 				// (1:cookies, 2:sessions, 3:cookies+sessions)
-$cfg['xmlclient'] = FALSE; 			// For testing-purposes only, else keep it off
-$cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
-$cfg['pfs_dir'] = 'datas/users/';
-$cfg['av_dir'] = 'datas/avatars/';
-$cfg['photos_dir'] = 'datas/photos/';
-$cfg['sig_dir'] = 'datas/signatures/';
-$cfg['defav_dir'] = 'datas/defaultav/';
-$cfg['th_dir'] = 'datas/thumbs/';
-$cfg['pagination'] = ' [%s]';
-$cfg['pagination_cur'] = ' <strong>&gt; %s &lt;</strong>';
-$cfg['pfsmaxuploads'] = 8;
-$cfg['version'] = '125';
-$cfg['dbversion'] = '125a';
-$cfg['sqldb'] = 'mysql';
-
-/* ======== Names of the SQL tables ========= */
-
-$sed_dbnames = array ('auth', 'auth_default', 'banlist', 'cache', 'com', 'core', 'config', 'forum_sections', 'forum_structure', 'forum_topics', 'forum_posts', 'groups', 'groups_users', 'logger', 'online', 'pages', 'pfs', 'pfs_folders', 'plugins', 'pm', 'polls_options', 'polls', 'polls_voters', 'rated', 'ratings', 'referers', 'smilies', 'stats', 'structure', 'trash', 'users');
-
-foreach($sed_dbnames as $k => $i)
-{
-	$j = 'db_'.$i;
-	$$j = 'sed_'.$i;
-}
+$cfg['version'] = 'N-0.0.1';
+$cfg['dbversion'] = 'N-0.0.1';
 
 /**
  * Strips everything but alphanumeric, hyphens and underscores
@@ -439,7 +415,9 @@ function sed_bbcode_parse($text, $post = false)
  */
 function sed_bbcode_cdata($text)
 {
-	$res = str_replace('[', '&#091;', $text);
+	$res = $text;
+	//$res = preg_replace('`&(?!amp;)`i', '&amp;$1', $res);
+	$res = str_replace('[', '&#091;', $res);
 	$res = str_replace(']', '&#093;', $res);
 	return $res;
 }

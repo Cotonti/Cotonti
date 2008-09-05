@@ -31,6 +31,10 @@ $cfg['mysqldb'] = 'sedition';			// Database name
 
 $cfg['defaultskin'] = 'sed-light';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/... !!
 $cfg['defaultlang'] = 'en';		// Default language code
+$cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
+
+$cfg['pagination'] = ' [%s]';
+$cfg['pagination_cur'] = ' <strong>&gt; %s &lt;</strong>';
 
 // ========================
 // More settings
@@ -45,6 +49,7 @@ $cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully lo
 $cfg['xmlclient'] = FALSE;  			// For testing-purposes only, else keep it off.
 $cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed
 $cfg['allowphp_override'] = FALSE; 		// General lock for execution of the PHP code by the core
+$cfg['pfsmaxuploads'] = 8;
 
 // ========================
 // Directory paths
@@ -53,6 +58,12 @@ $cfg['allowphp_override'] = FALSE; 		// General lock for execution of the PHP co
 // ========================
 $cfg['plugins_dir'] = './plugins';
 $cfg['system_dir'] = './system';
+$cfg['pfs_dir'] = 'datas/users/';
+$cfg['av_dir'] = 'datas/avatars/';
+$cfg['photos_dir'] = 'datas/photos/';
+$cfg['sig_dir'] = 'datas/signatures/';
+$cfg['defav_dir'] = 'datas/defaultav/';
+$cfg['th_dir'] = 'datas/thumbs/';
 
 // ========================
 // Name of MySQL tables
