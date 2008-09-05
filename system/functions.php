@@ -1627,10 +1627,11 @@ function sed_cache_store($name,$value,$expire,$auto="1")
  */
 function sed_cc($text)
 {
-	$text = str_replace(
+	/*$text = str_replace(
 	array('{', '<', '>' , '$', '\'', '"', '\\', '&amp;', '&nbsp;'),
 	array('&#123;', '&lt;', '&gt;', '&#036;', '&#039;', '&quot;', '&#92;', '&amp;amp;', '&amp;nbsp;'), $text);
-	return $text;
+	return $text;*/
+	return htmlspecialchars($text);
 }
 
 /**
