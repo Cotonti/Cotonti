@@ -381,11 +381,11 @@ if (!$cfg['disablehitstats'])
 	else
 	{ sed_stat_create($sys['day']); }
 
-	$sys['referer'] = mb_substr($_SERVER['HTTP_REFERER'], 0, 255);
+	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
 
-	if (@!mb_strstr($sys['referer'], $cfg['mainurl'])
-	&& @!mb_strstr($sys['referer'], $cfg['hostip'])
-	&& @!mb_strstr($sys['referer'], str_replace('www.', '', $cfg['mainurl']))
+	if (@!strstr($sys['referer'], $cfg['mainurl'])
+	&& @!strstr($sys['referer'], $cfg['hostip'])
+	&& @!strstr($sys['referer'], str_replace('www.', '', $cfg['mainurl']))
 	&& !empty($sys['referer']))
 	{
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_referers WHERE ref_url = '".sed_sql_prep($sys['referer'])."'");
