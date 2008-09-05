@@ -87,7 +87,7 @@ if ($a=='send')
 
 		if($cfg['parser_cache'])
 		{
-			$newpmhtml = sed_sql_prep(sed_parse($newpmtext));
+			$newpmhtml = sed_sql_prep(sed_parse(sed_cc($newpmtext)));
 		}
 		else
 		{
