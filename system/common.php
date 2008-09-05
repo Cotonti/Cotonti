@@ -190,7 +190,7 @@ elseif (isset($_COOKIE['SEDITIO']) && ($cfg['authmode']==1 || $cfg['authmode']==
 
 if ($rsedition>0 && $cfg['authmode']>0)
 {
-	if (mb_strlen($rseditiop)!=32 || mb_strstr($rseditiop, "'") || mb_strstr($rseditiop, '"'))
+	if (mb_strlen($rseditiop)!=32 || strstr($rseditiop, "'") || strstr($rseditiop, '"'))
 	{ sed_diefatal('Wrong value for the password.'); }
 
 	if ($cfg['ipcheck'])

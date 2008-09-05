@@ -3250,7 +3250,7 @@ function sed_skinfile($base, $plug = false)
 	global $usr, $cfg;
 	if($plug)
 	{
-		$bname = mb_strstr($base, '.') ? mb_substr($base, 0, mb_strpos($base, '.')) : $base;
+		$bname = strstr($base, '.') ? mb_substr($base, 0, mb_strpos($base, '.')) : $base;
 		if(file_exists('./skins/'.$usr['skin'].'/plugin.standalone.'.$base.'.tpl'))
 		{
 			return './skins/'.$usr['skin'].'/plugin.standalone.'.$base.'.tpl';
