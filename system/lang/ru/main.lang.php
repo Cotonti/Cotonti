@@ -457,7 +457,7 @@ $L['com_guests'] = 'гость(ей)';
 
 /* ====== Header ====== */
 
-$L['hea_privatemessages'] = '<img src=\'skins/classic/img/newmail.gif\' title=\'pm\'/ alt=\'pm\'/>';
+$L['hea_privatemessages'] = 'новых сообщений';
 $L['hea_noprivatemessages'] = 'Личные сообщения';
 $L['hea_youareloggedas'] = 'Вы вошли как';
 $L['hea_youarenotlogged'] = 'Вы не вошли.';
