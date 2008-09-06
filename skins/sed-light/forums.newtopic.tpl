@@ -12,6 +12,10 @@
 				<tr>
 					<td>{PHP.skinlang.forumsnewtopic.Title} {FORUMS_NEWTOPIC_TITLE}</td>
 				</tr>
+				
+				<tr>
+					<td>{PHP.L.Description}: {FORUMS_NEWTOPIC_DESC}</td>
+				</tr>
 
 				<!-- BEGIN: PRIVATE -->
 

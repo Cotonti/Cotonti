@@ -61,13 +61,19 @@ $sys['unique'] = sed_unique(16);
 $sys['url'] = base64_encode($_SERVER['REQUEST_URI']);
 $sys['url_redirect'] = 'redirect='.$sys['url'];
 $redirect = sed_import('redirect','G','SLU');
+
+// If main URL hasn't been configured properly, try to get it from config.php
+if($cfg['mainurl'] == 'http://www.yourdomain.com')
+{
+	$cfg['mainurl'] = $cfg['temp_url'];
+}
 // Getting the server-relative path
-$sys['site_uri'] = dirname($_SERVER['SCRIPT_NAME']);
-$sys['site_uri'] = str_replace('\\', '/', $sys['site_uri']);
+$url = parse_url($cfg['mainurl']);
+$sys['site_uri'] = $url['path'];
 if($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('SED_SITE_URI', $sys['site_uri']);
 // Absolute site url
-$sys['abs_url'] = ($sys['site_uri'][0] == '/') ? 'http://'.$_SERVER['HTTP_HOST'].$sys['site_uri'] : 'http://'.$_SERVER['HTTP_HOST'].'/'.$sys['site_uri'];
+$sys['abs_url'] = $url['scheme'] . '://' . $_SERVER['HTTP_HOST'] . $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
 
 /* ======== Internal cache ======== */

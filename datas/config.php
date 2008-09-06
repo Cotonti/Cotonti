@@ -26,6 +26,15 @@ $cfg['mysqldb'] = 'sedition';			// Database name
 //$cfg['mysqlcharset'] = 'utf8';
 
 // ========================
+// Main site URL without trailing slash.
+// Required for installation only, you will set  it in
+// Administration => Configuration => Main configuration
+// after you log in
+// ========================
+
+$cfg['temp_url'] = 'http://localhost';
+
+// ========================
 // Default skin and default language
 // ========================
 
