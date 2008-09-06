@@ -52,7 +52,7 @@ if ($a=='request' && $email!='')
 		sed_shield_update(60,"Password recovery email sent");
 
 		$rsubject = $cfg['maintitle']." - ".$L['plu_title'];
-		$ractivate = $cfg['mainurl']."/plug.php?e=passrecover&amp;a=auth&amp;v=".$validationkey;
+		$ractivate = $cfg['mainurl']."/plug.php?e=passrecover&a=auth&v=".$validationkey;
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['plu_email1']."\n\n".$ractivate. "\n\n".$L['aut_contactadmin'];
 		sed_mail ($email, $rsubject, $rbody);
 		$plugin_body = $L['plu_mailsent'];

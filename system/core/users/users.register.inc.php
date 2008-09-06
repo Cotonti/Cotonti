@@ -220,7 +220,7 @@ if ($a=='add')
 		else
 			{
 			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
-			$ractivate = $cfg['mainurl']."/users.php?m=register&amp;a=validate&amp;v=".$validationkey;
+			$ractivate = $cfg['mainurl']."/users.php?m=register&a=validate&v=".$validationkey;
 			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			sed_mail ($ruseremail, $rsubject, $rbody);
