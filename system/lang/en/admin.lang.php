@@ -372,6 +372,11 @@ $L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the parts of
 $L['adm_pm_totaldb'] = 'Private messages in the database';
 $L['adm_pm_totalsent'] = 'Total of private messages ever sent';
 
+/*
+BBCode feature
+N-0.0.1
+*/
+
 /* ====== BBCode Admin ========*/
 $L['adm_bbcode'] = 'BBCode';
 $L['adm_bbcodes'] = 'BBCodes';

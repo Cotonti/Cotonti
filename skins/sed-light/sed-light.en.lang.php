@@ -77,7 +77,7 @@ $skinlang['forumstopics']['Viewers'] = 'Viewers';	// New in v120
 $skinlang['header']['Login'] = 'Login here';
 $skinlang['header']['Register'] = 'Register';
 $skinlang['header']['Lostyourpassword'] = 'Lost your password?';
-$skinlang['header']['Welcome'] = 'Welcome!';
+$skinlang['header']['Welcome'] = 'Welcome!'; // N-0.0.1
 
 //index.tpl
 $skinlang['index']['Newinforums'] = 'New in forums :';
@@ -153,14 +153,14 @@ $skinlang['page']['Filesize'] = 'Filesize:';
 $skinlang['page']['Membersrating'] = 'Members rating:';
 $skinlang['page']['Download'] = 'Download:';
 $skinlang['page']['Hits'] = 'Hits:';
-$skinlang['page']['downloaded'] = 'downloaded';
-$skinlang['page']['times'] = 'times';
+$skinlang['page']['downloaded'] = 'downloaded'; // N-0.0.1
+$skinlang['page']['times'] = 'times'; // N-0.0.1
 
 //pfs.tpl
 $skinlang['pfs']['Insertasthumbnail'] = 'Insert as thumbnail';
 $skinlang['pfs']['Insertasimage'] = 'Insert as full size image';
 $skinlang['pfs']['Insertaslink'] = 'Insert as a link to the file';
-$skinlang['pfs']['Dimensions'] = 'Dimensions';
+$skinlang['pfs']['Dimensions'] = 'Dimensions'; // N-0.0.1
 
 //pm.send.tpl
 $skinlang['pmsend']['Sendmessageto'] = 'Send the message to:';
