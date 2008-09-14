@@ -287,7 +287,9 @@ $skinlang['usersprofile']['Avatar'] = 'Avatar:';
 $skinlang['usersprofile']['Photo'] = 'Photo:';
 $skinlang['usersprofile']['Signature'] = 'Signature:';
 $skinlang['usersprofile']['Newpassword'] = 'Set a new password:';
-$skinlang['usersprofile']['Newpasswordhint'] = '(Leave empty to keep<br />the current password)';
+$skinlang['usersprofile']['Newpasswordhint'] = '(Leave empty to keep<br />the current password)'; // N-0.0.2
+$skinlang['usersprofile']['Newpasswordhint2'] = '(To be sure, enter below your new password twice)'; // N-0.0.2
+$skinlang['usersprofile']['Oldpasswordhint'] = 'You must enter your current password to change with the old one: ';
 $skinlang['usersprofile']['Update'] = 'Update';
 
 //users.register.tpl

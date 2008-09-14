@@ -1125,6 +1125,26 @@ function sed_build_oddeven($number)
 	return ($number % 2 == 0 ) ? 'even' : 'odd';
 }
 
+/**
+*Random password generator for password recovery plugin
+*@return string and numbers ($pass)
+*/
+
+function sed_randompass()
+	{
+	$vars = "abcdefghijklmnoprstuvyz0123456789";
+	srand((double)microtime()*1000000);
+       $i = 0;
+       while ($i <= 7)
+			{
+             $num = rand() % 33;
+             $tmp = substr($vars, $num, 1);
+             $pass = $pass . $tmp;
+             $i++;
+			}			
+       return $pass;
+ }
+
 /* ------------------ */
 // TODO eliminate this function
 function sed_build_pfs($id, $c1, $c2, $title)

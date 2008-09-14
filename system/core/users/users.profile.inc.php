@@ -281,18 +281,26 @@ switch ($a)
   	$ruserextra7_p = sed_import('ruserextra7_p','P','BOL');
 	$ruserextra8_p = sed_import('ruserextra8_p','P','BOL');
 	$ruserextra9_p = sed_import('ruserextra9_p','P','BOL');
+	$roldpass = sed_import('roldpass','P','TXT');
 	$rnewpass1 = sed_import('rnewpass1','P','TXT');
 	$rnewpass2 = sed_import('rnewpass2','P','TXT');
 
 	$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
 
-	if (!empty($rnewpass1) && !empty($rnewpass2))
+	if (!empty($rnewpass1) && !empty($rnewpass2) && !empty($roldpass))
 		{
+		$roldpass = sed_import('roldpass','P','PSW');
+		$roldpass = md5($roldpass);
+		
 		$rnewpass1 = sed_import('rnewpass1','P','PSW');
 		$rnewpass2 = sed_import('rnewpass2','P','PSW');
 
+		$sql = sed_sql_query("SELECT user_password FROM $db_users WHERE user_id='".$usr['id']."' ");
+		$row = sed_sql_fetcharray($sql);
+		
 		$error_string .= ($rnewpass1!=$rnewpass2) ? $L['pro_passdiffer']."<br />" : '';
 		$error_string .= (mb_strlen($rnewpass1)<4 || sed_alphaonly($rnewpass1)!=$rnewpass2) ? $L['pro_passtoshort']."<br />" : '';
+		$error_string .= ($roldpass!=$row['user_password']) ? $L['pro_wrongpass']."<br />" : '';
 
 		if (empty($error_string))
 			{
@@ -508,6 +516,7 @@ $t->assign(array(
 	"USERS_PROFILE_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_PROFILE_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_PROFILE_ADMINRIGHTS" => '',
+	"USERS_PROFILE_OLDPASS" => "<input type=\"password\" class=\"password\" name=\"roldpass\" size=\"12\" maxlength=\"16\" autocomplete=\"off\" />",
 	"USERS_PROFILE_NEWPASS1" => "<input type=\"password\" class=\"password\" name=\"rnewpass1\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_NEWPASS2" => "<input type=\"password\" class=\"password\" name=\"rnewpass2\" size=\"12\" maxlength=\"16\" />",
 		));

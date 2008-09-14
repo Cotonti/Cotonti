@@ -100,7 +100,11 @@
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Newpassword}<br />
 					{PHP.skinlang.usersprofile.Newpasswordhint}</td>
-					<td>{USERS_PROFILE_NEWPASS1} {USERS_PROFILE_NEWPASS2}</td>
+					<td>
+					<small>{PHP.skinlang.usersprofile.Oldpasswordhint}</small><br />
+					{USERS_PROFILE_OLDPASS}<br />
+					<small>{PHP.skinlang.usersprofile.Newpasswordhint2}</small><br />
+					{USERS_PROFILE_NEWPASS1} {USERS_PROFILE_NEWPASS2}</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
