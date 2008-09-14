@@ -24,11 +24,11 @@ if (is_array($extp))
 
 $out['logstatus'] = ($usr['id']>0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
 $out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"users.php\">".$L['Users']."</a>" : '';
-$out['metas'] = sed_htmlmetas().$moremetas;
 $out['compopup'] = sed_javascript($morejavascript);
 $out['fulltitle'] = $cfg['maintitle'];
 $out['subtitle'] = (empty($out['subtitle'])) ? $cfg['subtitle'] : $out['subtitle'];
 $out['fulltitle'] .= (empty($out['subtitle'])) ? '' : ' - '.$out['subtitle'];
+$out['contenttype'] = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
 
 if (sed_auth('page', 'any', 'A'))
 {
@@ -61,8 +61,7 @@ else
 $t = new XTemplate($mskin);
 
 $t->assign(array (
-	"HEADER_TITLE" => $out['fulltitle'],
-	"HEADER_METAS" => $out['metas'],
+	"HEADER_TITLE" => $plug_title.$out['fulltitle'],
 	"HEADER_DOCTYPE" => $cfg['doctype'],
 	"HEADER_CSS" => $cfg['css'],
 	"HEADER_COMPOPUP" => $out['compopup'],
@@ -73,6 +72,13 @@ $t->assign(array (
 	"HEADER_GMTTIME" => $usr['gmttime'],
 	"HEADER_USERLIST" => $out['userlist'],
 	"HEADER_NOTICES" => $out['notices'],
+	"HEADER_BASEHREF" => '<base href="'.$cfg['mainurl'].'/" />',
+	"HEADER_META_CONTENTTYPE" => $out['contenttype'],
+	"HEADER_META_CHARSET" => $cfg['charset'],
+	"HEADER_META_DESCRIPTION" => $plug_desc.$cfg['maintitle']." - ".$cfg['subtitle'],
+	"HEADER_META_KEYWORDS" => $plug_keywords.$cfg['metakeywords'],
+	"HEADER_META_LASTMODIFIED" => gmdate("D, d M Y H:i:s"),
+	"HEADER_HEAD" => $plug_head,
 ));
 
 if ($usr['id']>0)

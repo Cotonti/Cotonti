@@ -1998,26 +1998,6 @@ function sed_get_comcount($code)
 	}
 }
 
-/* ------------------ */
-// FIXME this function is obsolete, or meta/title generation must be reworked
-function sed_htmlmetas()
-{
-	global $cfg;
-	$contenttype = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
-	$result = "<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
-<meta name=\"description\" content=\"".$cfg['maintitle']." - ".$cfg['subtitle']."\" />
-<meta name=\"keywords\" content=\"".$cfg['metakeywords']."\" />
-<meta name=\"generator\" content=\"Seditio by Neocrome http://www.neocrome.net\" />
-<meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
-<meta http-equiv=\"pragma\" content=\"no-cache\" />
-<meta http-equiv=\"cache-control\" content=\"no-cache\" />
-<meta http-equiv=\"last-modified\" content=\"".gmdate("D, d M Y H:i:s")." GMT\" />
-<link rel=\"shortcut icon\" href=\"favicon.ico\" />
-";
-	return ($result);
-}
-
-
 /**
  * Imports data from the outer world
  *

@@ -2,7 +2,15 @@
 {HEADER_DOCTYPE}
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    {HEADER_METAS}
+<meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset={HEADER_META_CHARSET}" />
+<meta name="description" content="{HEADER_META_DESCRIPTION}" />
+<meta name="keywords" content="{HEADER_META_KEYWORDS}" />
+<meta name="generator" content="Seditio by Neocrome http://www.neocrome.net" />
+<meta http-equiv="expires" content="Fri, Apr 01 1974 00:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="last-modified" content="{HEADER_META_LASTMODIFIED} GMT" />
+<link rel="shortcut icon" href="favicon.ico" />
     {HEADER_COMPOPUP}
     <title>{HEADER_TITLE}</title>
     
