@@ -28,7 +28,14 @@ $out['compopup'] = sed_javascript($morejavascript);
 $out['fulltitle'] = $cfg['maintitle'];
 $out['subtitle'] = (empty($out['subtitle'])) ? $cfg['subtitle'] : $out['subtitle'];
 $out['fulltitle'] .= (empty($out['subtitle'])) ? '' : ' - '.$out['subtitle'];
-$out['contenttype'] = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
+$out['meta_contenttype'] = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
+$out['basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
+$out['meta_charset'] = $cfg['charset'];
+$out['meta_desc'] = $plug_desc.$cfg['maintitle']." - ".$cfg['subtitle'];
+$out['meta_keywords'] = $plug_keywords.$cfg['metakeywords'];
+$out['meta_lastmod'] = gmdate("D, d M Y H:i:s");
+$out['head_head'] =$plug_head;
+
 
 if (sed_auth('page', 'any', 'A'))
 {
@@ -72,13 +79,13 @@ $t->assign(array (
 	"HEADER_GMTTIME" => $usr['gmttime'],
 	"HEADER_USERLIST" => $out['userlist'],
 	"HEADER_NOTICES" => $out['notices'],
-	"HEADER_BASEHREF" => '<base href="'.$cfg['mainurl'].'/" />',
-	"HEADER_META_CONTENTTYPE" => $out['contenttype'],
-	"HEADER_META_CHARSET" => $cfg['charset'],
-	"HEADER_META_DESCRIPTION" => $plug_desc.$cfg['maintitle']." - ".$cfg['subtitle'],
-	"HEADER_META_KEYWORDS" => $plug_keywords.$cfg['metakeywords'],
-	"HEADER_META_LASTMODIFIED" => gmdate("D, d M Y H:i:s"),
-	"HEADER_HEAD" => $plug_head,
+	"HEADER_BASEHREF" => $out['basehref'],
+	"HEADER_META_CONTENTTYPE" => $out['meta_contenttype'],
+	"HEADER_META_CHARSET" => $out['meta_charset'],
+	"HEADER_META_DESCRIPTION" => $out['meta_desc'],
+	"HEADER_META_KEYWORDS" => $out['meta_keywords'],
+	"HEADER_META_LASTMODIFIED" => $out['meta_lastmod'],
+	"HEADER_HEAD" => $out['head_head'],
 ));
 
 if ($usr['id']>0)

@@ -31,6 +31,27 @@ $email = sed_import('email','P','TXT');
 
 $plugin_title = $L['plu_title'];
 
+/**
+*Random password generator for password recovery plugin
+*@return string and numbers ($pass)
+*/
+
+function sed_randompass()
+	{
+	$abc = "abcdefghijklmnoprstuvyz";
+	$vars = $abc.strtoupper($abc)."0123456789";
+	srand((double)microtime()*1000000);
+       $i = 0;
+       while ($i <= 7)
+			{
+             $num = rand() % 33;
+             $tmp = substr($vars, $num, 1);
+             $pass = $pass . $tmp;
+             $i++;
+			}			
+       return $pass;
+ }
+
 if ($a=='request' && $email!='')
 	{
 	sed_shield_protect();

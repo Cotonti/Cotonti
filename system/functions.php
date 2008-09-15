@@ -1125,26 +1125,6 @@ function sed_build_oddeven($number)
 	return ($number % 2 == 0 ) ? 'even' : 'odd';
 }
 
-/**
-*Random password generator for password recovery plugin
-*@return string and numbers ($pass)
-*/
-
-function sed_randompass()
-	{
-	$vars = "abcdefghijklmnoprstuvyz0123456789";
-	srand((double)microtime()*1000000);
-       $i = 0;
-       while ($i <= 7)
-			{
-             $num = rand() % 33;
-             $tmp = substr($vars, $num, 1);
-             $pass = $pass . $tmp;
-             $i++;
-			}			
-       return $pass;
- }
-
 /* ------------------ */
 // TODO eliminate this function
 function sed_build_pfs($id, $c1, $c2, $title)
@@ -2446,6 +2426,24 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 		sed_stat_inc('totalmailsent');
 		return(TRUE);
 	}
+}
+/* ------------------ */
+// FIXME this function is obsolete, or meta/title generation must be reworked
+function sed_htmlmetas()
+{
+        global $cfg;
+        $contenttype = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
+        $result = "<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
+<meta name=\"description\" content=\"".$cfg['maintitle']." - ".$cfg['subtitle']."\" />
+<meta name=\"keywords\" content=\"".$cfg['metakeywords']."\" />
+<meta name=\"generator\" content=\"Seditio by Neocrome http://www.neocrome.net\" />
+<meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
+<meta http-equiv=\"pragma\" content=\"no-cache\" />
+<meta http-equiv=\"cache-control\" content=\"no-cache\" />
+<meta http-equiv=\"last-modified\" content=\"".gmdate("D, d M Y H:i:s")." GMT\" />
+<link rel=\"shortcut icon\" href=\"favicon.ico\" />
+";
+        return ($result);
 }
 
 /**
