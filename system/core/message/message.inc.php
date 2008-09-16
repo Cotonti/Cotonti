@@ -266,13 +266,13 @@ if($rc!='')
 	$r['103'] = "admin.php?m=forums";
 	$r['200'] = "users.php";
 
-	$moremetas .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
+	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];
 }
 
 elseif ($rd!='')
 {
-	$moremetas .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />";
+	$plug_head .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];
 }
 
@@ -282,7 +282,7 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$moremetas .= '<meta name="robots" content="noindex" />';
+$plug_head .= '<meta name="robots" content="noindex" />';
 
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('message'));
