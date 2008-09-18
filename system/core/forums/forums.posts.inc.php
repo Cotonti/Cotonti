@@ -347,12 +347,14 @@ if (empty($d))
 if ($usr['id']>0)
 { $morejavascript .= sed_build_addtxt('newpost', 'newmsg'); }
 
+$pi = (!empty($p)) ? " AND fp_id='$p' " : '';
+
 $sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
 u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
 u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
 u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
 FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
-WHERE fp_topicid='$q'
+WHERE fp_topicid='$q' $pi
 ORDER BY fp_id LIMIT $d, ".$cfg['maxtopicsperpage']);
 
 $sys['sublocation'] = $fs_title;
