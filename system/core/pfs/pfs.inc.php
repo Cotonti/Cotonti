@@ -138,6 +138,7 @@ if ($a=='upload')
 			$disp_errors .= "<li>".$u_name." : ";
 			$f_extension_ok = 0;
 			$desc = $ndesc[$ii];
+			$resize = $imgsize[$ii];
 			$u_name = mb_strtolower($u_name);
 			$u_newname = $userid.'-'.$u_name;
 			$u_sqlname = sed_sql_prep($u_newname);
@@ -168,6 +169,66 @@ if ($a=='upload')
 
 					move_uploaded_file($u_tmp_name, $cfg['pfs_dir_user'].$u_newname);
 					@chmod($cfg['pfs_dir_user'].$u_newname, 0766);
+					
+					if (in_array($f_extension, $gd_supported) && $resize)
+					{
+						switch($f_extension)
+							{
+							case 'gif':
+							$im = @imagecreatefromgif($cfg['pfs_dir_user'].$u_newname);
+							break;
+							
+							case 'png':
+							$im = @imagecreatefrompng($cfg['pfs_dir_user'].$u_newname);
+							break;
+							
+							default:
+							$im = @imagecreatefromjpeg($cfg['pfs_dir_user'].$u_newname);
+							break;
+							}
+							
+					if ($im)
+						{
+						$w = imagesx($im);
+						$h = imagesy($im);
+						
+						$nd = explode('x', $resize);
+						
+						$prior = ($h>=$w) ? 'h' : 'w';
+						
+						if ($prior=='w')
+							{
+							$nh = $h/($w/$nd[1]);
+							$nw = $nd[1];
+							}
+						elseif ($prior=='h')
+							{
+							$nw = $w/($h/$nd[0]);
+							$nh = $nd[0];
+							}
+					
+						$imr = imagecreatetruecolor($nw, $nh);
+						imagecopyresampled($imr, $im, 0, 0, 0, 0, $nw, $nh, $w, $h);
+						
+						switch($f_extension)
+							{
+							case 'gif':
+							imagegif($imr, $cfg['pfs_dir_user'].$u_newname);
+							break;
+							
+							case 'png':
+							imagepng($imr, $cfg['pfs_dir_user'].$u_newname);
+							break;
+							
+							default:
+							imagejpeg($imr, $cfg['pfs_dir_user'].$u_newname);
+							break;
+							}
+							
+						imagedestroy($imr);
+						
+						}
+					}
 
 					/* === Hook === */
 					$extp = sed_getextplugins('pfs.upload.moved');
@@ -492,7 +553,16 @@ for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
 {
 	$disp_upload .= "<tr><td style=\"text-align:center;\">#".($ii+1)."</td>";
 	$disp_upload .= "<td><input type=\"text\" class=\"text\" name=\"ndesc[$ii]\" value=\"\" size=\"40\" maxlength=\"255\" /></td>";
-	$disp_upload .= "<td><input name=\"userfile[$ii]\" type=\"file\" class=\"file\" size=\"24\" /></td></tr>";
+	$disp_upload .= "<td><input name=\"userfile[$ii]\" type=\"file\" class=\"file\" size=\"24\" />
+	".$L['pfs_resizeimages']." <select name=\"imgsize[$ii]\">
+	<option value=\"640x480\">640x480</option>
+	<option value=\"800x600\">800x600</option>
+    <option value=\"1024x768\">1024x768</option>
+    <option value=\"1280x1024\">1280x1024</option>
+    <option value=\"1600x1200\">1600x1200</option>
+    <option value=\"0\" selected>".$L['Disabled']."</option>
+	</select>
+</td></tr>";
 }
 $disp_upload .= "<tr><td colspan=\"3\" style=\"text-align:center;\">";
 $disp_upload .= "<input type=\"submit\" class=\"submit\" value=\"".$L['Upload']."\" /></td></tr></table></form>";

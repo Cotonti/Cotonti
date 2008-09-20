@@ -22,6 +22,7 @@ $s = sed_import('s','G','ALP',13);
 $w = sed_import('w','G','ALP',4);
 $d = sed_import('d','G','INT');
 $f = sed_import('f','G','TXT');
+$u = sed_import('u','G','ALP');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['auth_read']);
@@ -32,8 +33,16 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-if (empty($id) && $usr['id']>0)
+if (!empty($u))
+	{
+	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_name='".sed_sql_prep($u)."' ");
+	$u = sed_sql_fetcharray($sql);
+	$id = $u['user_id'];
+	}
+
+elseif (empty($id) && $usr['id']>0)
    { $id = $usr['id']; }
+
 
 $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
 sed_die(sed_sql_numrows($sql)==0);

@@ -46,6 +46,7 @@ sed_die(sed_sql_numrows($sql)==0);
 $pag = sed_sql_fetcharray($sql);
 
 $pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600);
+$pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_begin'] = @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600);
 $pag['page_expire'] = @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600);
 $pag['page_tab'] = (empty($pg)) ? 1 : $pg;
@@ -73,8 +74,17 @@ elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
 	$pag['page_text'] = sed_readraw('datas/html/'.trim(mb_substr($pag['page_text'], 8, 255)));
 }
 
-if($pag['page_file'] && $a=='dl')
+if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='dl')
 {
+
+	if ($_SESSION['dl']!=$pag['page_id'])
+		{
+		header("Location: page.php?id=".$pag['page_id']);
+		exit;
+		}
+		
+	unset($_SESSION['dl']);
+
 	$file_size = @filesize($row['page_url']);
 	$pag['page_filecount']++;
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
@@ -148,6 +158,12 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+if ($pag['page_file'])
+	{
+	unset($_SESSION['dl']);
+	$_SESSION['dl'] = $pag['page_id'];
+	}
+
 require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('page', $sed_cat[$pag['page_cat']]['tpl']));
@@ -206,6 +222,15 @@ if ($usr['isadmin'])
 			$t->parse("MAIN.PAGE_ADMIN");
 }
 
+	if ($pag['page_begin_noformat']>$sys['now_offset'])
+		{
+		$pag['page_text'] = $L['pag_notavailable'].sed_build_timegap($sys['now_offset'], $pag['page_begin_noformat']);
+		$t->assign("PAGE_TEXT", $pag['page_text']);
+		}
+		
+	else
+		{
+
 switch($pag['page_type'])
 {
 	case '1':
@@ -246,9 +271,15 @@ switch($pag['page_type'])
 	break;
 }
 
+		}
+
 $pag['page_file'] = intval($pag['page_file']);
 if($pag['page_file'] > 0)
 {
+
+	if ($sys['now_offset']>$pag['page_begin_noformat'])
+		{
+
 	if (!empty($pag['page_url']))
 	{
 		$dotpos = mb_strrpos($pag['page_url'],".")+1;
@@ -276,6 +307,9 @@ if($pag['page_file'] > 0)
 	}
 	$t->parse("MAIN.PAGE_FILE");
 	$t->assign('PAGE_SHORTTITLE', $pag['page_title']);
+	
+		}
+	
 }
 
 /* === Hook === */

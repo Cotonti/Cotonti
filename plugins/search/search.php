@@ -42,6 +42,7 @@ $cfg_maxitems = 50;
 /* === DO NOT EDIT THE FOLLOWING === */
 
 $sq = sed_import('sq','P','TXT');
+$searchall = sed_import('searchall','P','INT');
 $pre = sed_import('pre','G','TXT');
 $a = sed_import('a','G','TXT');
 $tab = sed_import('tab','G','TXT');
@@ -62,6 +63,7 @@ if ($tab=='frm') {
 	$sea_frmsort2 = sed_sql_prep(sed_import('sea_frmsort2','P','TXT'));
 
 	$sq = (!empty($pre)) ? $pre : $sq;
+	$sachecked = ($searchall) ? ' checked ' : '';
 
 	$plugin_title = $L['plu_title_frmtab'];
 
@@ -71,7 +73,9 @@ if ($tab=='frm') {
 	$plugin_body .= "<form id=\"search\" action=\"plug.php?e=search&amp;tab=frm&amp;a=search\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
 	$plugin_body .= "<tr><td width=\"20%\">".$L['plu_searchin1']."</td>";
-	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."</td></tr>";
+	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."
+	<p><input type=\"checkbox\" name=\"searchall\" value=\"1\" $sachecked />".$L['plu_searchall']."<br />
+	".$L['plu_searchall2']."</p></td></tr>";
 
 	if (!$cfg['disable_forums'])
 	{
@@ -138,8 +142,38 @@ if ($tab=='frm') {
 			$a = '';
 		}
 
-		$sqlsearch = implode("%", $words);
-		$sqlsearch = "%".$sqlsearch."%";
+		$ii = 0;
+		foreach ($words as $key=>$value)
+		{
+			$ii++;
+			if (!$searchall)
+			{
+			if ($sea_frmtext=='1')
+				{
+			$like = 'p.fp_text LIKE ';
+			$sqlsearch1 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			if ($sea_frmtitle=='1')
+				{
+			$like = 't.ft_title LIKE ';
+			$sqlsearch2 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			}
+			else
+			{
+			if ($sea_frmtext=='1')
+				{
+			$like = 'p.fp_text LIKE ';
+			$sqlsearch1 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			if ($sea_frmtitle=='1')
+				{
+			$like = 't.ft_title LIKE ';
+			$sqlsearch2 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			}
+		}
+		
 
 		if (!$cfg['disable_forums'] && !empty($a))
 		{
@@ -167,7 +201,7 @@ if ($tab=='frm') {
 			if ($sea_frmtitle=='1' && $sea_frmtext!='1') {
 				$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-		 	WHERE 1 AND (t.ft_title LIKE '".sed_sql_prep($sqlsearch)."')
+		 	WHERE 1 AND ($sqlsearch2)
 		 	AND p.fp_topicid=t.ft_id $frm_reply
 		 	AND p.fp_sectionid=s.fs_id $sqlsections $sqlsections2
 		 	GROUP BY t.ft_id ORDER BY $orderby
@@ -177,7 +211,7 @@ if ($tab=='frm') {
 			elseif ($sea_frmtext=='1' && $sea_frmtitle!='1') {
 				$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-		 	WHERE 1 AND (p.fp_text LIKE '".sed_sql_prep($sqlsearch)."')
+		 	WHERE 1 AND ($sqlsearch1)
 		 	AND p.fp_topicid=t.ft_id $frm_reply
 		 	AND p.fp_sectionid=s.fs_id $sqlsections $sqlsections2
 		 	GROUP BY t.ft_id ORDER BY $orderby
@@ -187,7 +221,7 @@ if ($tab=='frm') {
 			elseif ($sea_frmtext=='1' && $sea_frmtitle=='1') {
 				$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-		 	WHERE 1 AND (p.fp_text LIKE '".sed_sql_prep($sqlsearch)."' OR t.ft_title LIKE '".sed_sql_prep($sqlsearch)."')
+		 	WHERE 1 AND ( ($sqlsearch1) OR ($sqlsearch2) )
 		 	AND p.fp_topicid=t.ft_id $frm_reply
 		 	AND p.fp_sectionid=s.fs_id $sqlsections $sqlsections2
 		 	GROUP BY t.ft_id ORDER BY $orderby
@@ -202,13 +236,14 @@ if ($tab=='frm') {
 
 			if ($items!='0') {
 				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
+				$hl = strtoupper($sq);
 
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_fs']."</td><td width=\"60%\">".$L['plu_ft']."</td><td width=\"10%\">".$L['plu_fo']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
 					if (sed_auth('forums', $row['fs_id'], 'R'))
 					{
-						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"forums.php?m=posts&amp;p=".$row['fp_id']."#".$row['fp_id']."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
+						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"forums.php?m=posts&amp;id=".$row['fp_id']."&amp;highlight=".$hl."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
 					}
 				}
 				$plugin_body .= "</table>";
@@ -232,7 +267,8 @@ if ($tab=='frm') {
 	$sea_pagsort2 = sed_sql_prep(sed_import('sea_pagsort2','P','TXT'));
 
 	$sq = (!empty($pre)) ? $pre : $sq;
-
+	$sachecked = ($searchall) ? ' checked ' : '';
+	
 	$plugin_title = $L['plu_title_pagtab'];
 
 	$plugin_subtitle .= "<a href=\"plug.php?e=search\">".$L['plu_tabs_all']."</a> &nbsp; <a href=\"plug.php?e=search&amp;tab=frm\">".$L['plu_tabs_frm']."</a> &nbsp; ".$L['plu_tabs_pag'];
@@ -241,7 +277,9 @@ if ($tab=='frm') {
 	$plugin_body .= "<form id=\"search\" action=\"plug.php?e=search&amp;tab=pag&amp;a=search\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
 	$plugin_body .= "<tr><td width=\"20%\">".$L['plu_searchin1']."</td>";
-	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."</td></tr>";
+	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."
+	<p><input type=\"checkbox\" name=\"searchall\" value=\"1\" $sachecked />".$L['plu_searchall']."<br />
+	".$L['plu_searchall2']."</p></td></tr>";
 
 	if (!$cfg['disable_page'])
 	{
@@ -301,9 +339,48 @@ if ($tab=='frm') {
 			$plugin_body .= "<p>".$L['plu_toomanywords']." ".$cfg_maxwords_pag."</p>";
 			$a = '';
 		}
-
-		$sqlsearch = implode("%", $words);
-		$sqlsearch = "%".$sqlsearch."%";
+		
+		$ii = 0;
+		foreach ($words as $key=>$value)
+		{
+			$ii++;
+			if (!$searchall)
+			{
+			if ($sea_pagtitle=='1')
+				{
+			$like = 'p.page_title LIKE ';
+			$sqlsearch2 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			if ($sea_pagdesc=='1')
+				{
+			$like = 'p.page_desc LIKE ';
+			$sqlsearch3 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			if ($sea_pagtext=='1')
+				{
+			$like = 'p.page_text LIKE ';
+			$sqlsearch1 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			}
+			else
+			{
+			if ($sea_pagtitle=='1')
+				{
+			$like = 'p.page_title LIKE ';
+			$sqlsearch2 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			if ($sea_pagdesc=='1')
+				{
+			$like = 'p.page_desc LIKE ';
+			$sqlsearch3 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			if ($sea_pagtext=='1')
+				{
+			$like = 'p.page_text LIKE ';
+			$sqlsearch1 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			}
+		}
 
 		if (!$cfg['disable_page'] && !empty($a))
 		{
@@ -320,25 +397,25 @@ if ($tab=='frm') {
 			}
 
 			if ($sea_pagtitle=='1' && $sea_pagdesc!='1' && $sea_pagtext!='1') {
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."') AND ";
+				$pagsql = "($sqlsearch2) AND ";
 			}
 			elseif ($sea_pagtitle=='1' && $sea_pagdesc=='1' && $sea_pagtext!='1') {
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".$sqlsearch."') AND ";
+				$pagsql = "(($sqlsearch2) OR ($sqlsearch3)) AND ";
 			}
 			elseif ($sea_pagtitle=='1' && $sea_pagdesc!='1' && $sea_pagtext=='1') {
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(($sqlsearch2) OR ($sqlsearch1)) AND ";
 			}
 			elseif ($sea_pagtitle!='1' && $sea_pagdesc=='1' && $sea_pagtext!='1') {
-				$pagsql = "(p.page_desc LIKE '".$sqlsearch."') AND ";
+				$pagsql = "($sqlsearch3) AND ";
 			}
 			elseif ($sea_pagtitle!='1' && $sea_pagdesc=='1' && $sea_pagtext=='1') {
-				$pagsql = "(p.page_desc LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(($sqlsearch3) OR ($sqlsearch1)) AND ";
 			}
 			elseif ($sea_pagtitle!='1' && $sea_pagdesc!='1' && $sea_pagtext=='1') {
-				$pagsql = "(p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "($sqlsearch1) AND ";
 			}
 			elseif ($sea_pagtitle=='1' && $sea_pagdesc=='1' && $sea_pagtext=='1') {
-				$pagsql = "(p.page_text LIKE '".$sqlsearch."' OR p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(($sqlsearch1) OR ($sqlsearch2) OR ($sqlsearch3)) AND ";
 			}
 			else {
 				$pagsql = "";
@@ -375,7 +452,8 @@ if ($tab=='frm') {
 				}
 
 				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
-
+				$hl = strtoupper($sq);
+				
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_ps']."</td><td width=\"60%\">".$L['plu_pt']."</td><td width=\"10%\">".$L['plu_po']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
@@ -383,7 +461,7 @@ if ($tab=='frm') {
 					{
 						$ownername = sed_sql_fetcharray(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
 						$plugin_body .= "<tr><td><a href=\"list.php?c=".$row['page_cat']."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
-						$plugin_body .= "<td><a href=\"page.php?id=".$row['page_id']."\">";
+						$plugin_body .= "<td><a href=\"page.php?id=".$row['page_id']."&amp;highlight=".$hl."\">";
 						$plugin_body .= sed_cc($row['page_title'])."</a></td><td>".sed_build_user($row['page_ownerid'],$ownername['user_name'])."</td></tr>";
 					}
 				}
@@ -404,7 +482,8 @@ if ($tab=='frm') {
 	$sea_pagtext = sed_import('sea_pagtext','P','INT');
 
 	$sq = (!empty($pre)) ? $pre : $sq;
-
+	$sachecked = ($searchall) ? ' checked ' : '';
+	
 	$plugin_title = $L['plu_title_alltab'];
 
 	$plugin_subtitle .= $L['plu_tabs_all']."</b> &nbsp; <a href=\"plug.php?e=search&amp;tab=frm\">".$L['plu_tabs_frm']."</a> &nbsp; <a href=\"plug.php?e=search&amp;tab=pag\">".$L['plu_tabs_pag']."</a>";
@@ -413,7 +492,9 @@ if ($tab=='frm') {
 	$plugin_body .= "<form id=\"search\" action=\"plug.php?e=search&amp;a=search\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
 	$plugin_body .= "<tr><td width=\"20%\">".$L['plu_searchin1']."</td>";
-	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."</td></tr>";
+	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."
+	<p><input type=\"checkbox\" name=\"searchall\" value=\"1\" $sachecked />".$L['plu_searchall']."<br />
+	".$L['plu_searchall2']."</p></td></tr>";
 
 	if (!$cfg['disable_forums'])
 	{
@@ -479,8 +560,67 @@ if ($tab=='frm') {
 			$a = '';
 		}
 
-		$sqlsearch = implode("%", $words);
-		$sqlsearch = "%".$sqlsearch."%";
+		$ii = 0;
+		foreach ($words as $key=>$value)
+		{
+			$ii++;
+			if (!$searchall)
+			{
+			if ($sea_pagtitle=='1')
+				{
+			$like = 'p.page_title LIKE ';
+			$sqlsearch2 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			if ($sea_pagdesc=='1')
+				{
+			$like = 'p.page_desc LIKE ';
+			$sqlsearch3 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			if ($sea_pagtext=='1')
+				{
+			$like = 'p.page_text LIKE ';
+			$sqlsearch1 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			if ($sea_frmtext=='1')
+				{
+			$like = 'p.fp_text LIKE ';
+			$sqlsearchx1 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			if ($sea_frmtitle=='1')
+				{
+			$like = 't.ft_title LIKE ';
+			$sqlsearchx2 .= ($words_count>$ii) ? $like."'%$value%' OR " : $like."'%$value%' ";
+				}
+			}
+			else
+			{
+			if ($sea_pagtitle=='1')
+				{
+			$like = 'p.page_title LIKE ';
+			$sqlsearch2 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			if ($sea_pagdesc=='1')
+				{
+			$like = 'p.page_desc LIKE ';
+			$sqlsearch3 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			if ($sea_pagtext=='1')
+				{
+			$like = 'p.page_text LIKE ';
+			$sqlsearch1 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			if ($sea_frmtext=='1')
+				{
+			$like = 'p.fp_text LIKE ';
+			$sqlsearchx1 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			if ($sea_frmtitle=='1')
+				{
+			$like = 't.ft_title LIKE ';
+			$sqlsearchx2 .= ($words_count>$ii) ? $like."'%$value%' AND " : $like."'%$value%' ";
+				}
+			}
+		}
 
 		if (!$cfg['disable_page'] && !empty($a))
 		{
@@ -497,25 +637,25 @@ if ($tab=='frm') {
 			}
 
 			if ($sea_pagtitle=='1' && $sea_pagdesc!='1' && $sea_pagtext!='1') {
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."') AND ";
+				$pagsql = "($sqlsearch2) AND ";
 			}
 			elseif ($sea_pagtitle=='1' && $sea_pagdesc=='1' && $sea_pagtext!='1') {
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".$sqlsearch."') AND ";
+				$pagsql = "(($sqlsearch2) OR ($sqlsearch3)) AND ";
 			}
 			elseif ($sea_pagtitle=='1' && $sea_pagdesc!='1' && $sea_pagtext=='1') {
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(($sqlsearch2) OR ($sqlsearch1)) AND ";
 			}
 			elseif ($sea_pagtitle!='1' && $sea_pagdesc=='1' && $sea_pagtext!='1') {
-				$pagsql = "(p.page_desc LIKE '".$sqlsearch."') AND ";
+				$pagsql = "($sqlsearch3) AND ";
 			}
 			elseif ($sea_pagtitle!='1' && $sea_pagdesc=='1' && $sea_pagtext=='1') {
-				$pagsql = "(p.page_desc LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(($sqlsearch3) OR ($sqlsearch1)) AND ";
 			}
 			elseif ($sea_pagtitle!='1' && $sea_pagdesc!='1' && $sea_pagtext=='1') {
-				$pagsql = "(p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "($sqlsearch1) AND ";
 			}
 			elseif ($sea_pagtitle=='1' && $sea_pagdesc=='1' && $sea_pagtext=='1') {
-				$pagsql = "(p.page_text LIKE '".$sqlsearch."' OR p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(($sqlsearch1) OR ($sqlsearch2) OR ($sqlsearch3)) AND ";
 			}
 			else {
 				$pagsql = "";
@@ -535,7 +675,8 @@ if ($tab=='frm') {
 				$items = mysql_num_rows($sql);
 
 				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
-
+				$hl = strtoupper($sq);
+				
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_ps']."</td><td width=\"60%\">".$L['plu_pt']."</td><td width=\"10%\">".$L['plu_po']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
@@ -543,7 +684,7 @@ if ($tab=='frm') {
 					{
 						$ownername = sed_sql_fetcharray(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
 						$plugin_body .= "<tr><td><a href=\"list.php?c=".$row['page_cat']."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
-						$plugin_body .= "<td><a href=\"page.php?id=".$row['page_id']."\">";
+						$plugin_body .= "<td><a href=\"page.php?id=".$row['page_id']."&amp;highlight=".$hl."\">";
 						$plugin_body .= sed_cc($row['page_title'])."</a></td><td>".sed_build_user($row['page_ownerid'],$ownername['user_name'])."</td></tr>";
 					}
 				}
@@ -568,31 +709,31 @@ if ($tab=='frm') {
 			if ($sea_frmtitle=='1' && $sea_frmtext!='1') {
 				$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-		 	WHERE 1 AND (t.ft_title LIKE '".sed_sql_prep($sqlsearch)."')
-		 	AND p.fp_topicid=t.ft_id
-		 	AND p.fp_sectionid=s.fs_id $sqlsections
-		 	GROUP BY t.ft_id ORDER BY fp_id DESC
+		 	WHERE 1 AND ($sqlsearchx2)
+		 	AND p.fp_topicid=t.ft_id $frm_reply
+		 	AND p.fp_sectionid=s.fs_id $sqlsections $sqlsections2
+		 	GROUP BY t.ft_id ORDER BY $orderby
 		 	LIMIT $cfg_maxitems");
 		 	$items = mysql_num_rows($sql);
 			}
 			elseif ($sea_frmtext=='1' && $sea_frmtitle!='1') {
 				$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-		 	WHERE 1 AND (p.fp_text LIKE '".sed_sql_prep($sqlsearch)."')
-		 	AND p.fp_topicid=t.ft_id
-		 	AND p.fp_sectionid=s.fs_id $sqlsections
-		 	GROUP BY t.ft_id ORDER BY fp_id DESC
+		 	WHERE 1 AND ($sqlsearchx1)
+		 	AND p.fp_topicid=t.ft_id $frm_reply
+		 	AND p.fp_sectionid=s.fs_id $sqlsections $sqlsections2
+		 	GROUP BY t.ft_id ORDER BY $orderby
 		 	LIMIT $cfg_maxitems");
 		 	$items = mysql_num_rows($sql);
 			}
 			elseif ($sea_frmtext=='1' && $sea_frmtitle=='1') {
-				$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
+		$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-		 	WHERE 1 AND (p.fp_text LIKE '".sed_sql_prep($sqlsearch)."' OR t.ft_title LIKE '".sed_sql_prep($sqlsearch)."')
-		 	AND p.fp_topicid=t.ft_id
-		 	AND p.fp_sectionid=s.fs_id $sqlsections
-		 	GROUP BY t.ft_id ORDER BY fp_id DESC
-		 	LIMIT $cfg_maxitems");
+			WHERE 1 AND ( ($sqlsearchx1) OR ($sqlsearchx2) )
+			AND p.fp_topicid=t.ft_id
+			AND p.fp_sectionid=s.fs_id $sqlsections
+			GROUP BY t.ft_id ORDER BY fp_id DESC
+			LIMIT $cfg_maxitems");
 		 	$items = mysql_num_rows($sql);
 			}
 			else {
@@ -603,13 +744,14 @@ if ($tab=='frm') {
 
 			if ($items!='0') {
 				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
-
+				$hl = strtoupper($sq);
+				
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_fs']."</td><td width=\"60%\">".$L['plu_ft']."</td><td width=\"10%\">".$L['plu_fo']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
 					if (sed_auth('forums', $row['fs_id'], 'R'))
 					{
-						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"forums.php?m=posts&amp;p=".$row['fp_id']."#".$row['fp_id']."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
+						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"forums.php?m=posts&amp;id=".$row['fp_id']."&amp;highlight=".$hl."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
 					}
 				}
 				$plugin_body .= "</table>";

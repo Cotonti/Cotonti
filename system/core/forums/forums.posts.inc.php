@@ -77,6 +77,18 @@ if (!empty($p))
 	else
 	{ sed_die(); }
 }
+elseif (!empty($id))
+{
+	$sql = sed_sql_query("SELECT fp_topicid, fp_sectionid, fp_posterid FROM $db_forum_posts WHERE fp_id='$id' LIMIT 1");
+	if ($row = sed_sql_fetcharray($sql))
+	{
+		$q = $row['fp_topicid'];
+		$s = $row['fp_sectionid'];
+		$fp_posterid = $row['fp_posterid'];
+	}
+	else
+	{ sed_die(); }
+}
 elseif (!empty($q))
 {
 	$sql = sed_sql_query("SELECT ft_sectionid FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
@@ -347,15 +359,25 @@ if (empty($d))
 if ($usr['id']>0)
 { $morejavascript .= sed_build_addtxt('newpost', 'newmsg'); }
 
-$pi = (!empty($p)) ? " AND fp_id='$p' " : '';
-
+if (!empty($id))
+	{
 $sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
 u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
 u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
 u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
 FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
-WHERE fp_topicid='$q' $pi
+WHERE fp_topicid='$q' AND fp_id='$id' ");
+	}
+else
+	{
+$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
+u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
+u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
+u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
+FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
+WHERE fp_topicid='$q'
 ORDER BY fp_id LIMIT $d, ".$cfg['maxtopicsperpage']);
+	}
 
 $sys['sublocation'] = $fs_title;
 $out['subtitle'] = $L['Forums']." - ".sed_cc($ft_title);
@@ -480,7 +502,7 @@ if ($usr['isadmin'])
 	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=lock&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Lock'];
 	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=sticky&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Makesticky'];
 	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=announcement&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Announcement'];
-	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=private&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Private']." (#)";
+	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=private&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Private']." (\$)";
 	$adminoptions .= "</a> &nbsp; <a href=\"forums.php?m=topics&amp;a=clear&amp;".sed_xg()."&amp;q=".$q."&amp;s=".$s."\">".$L['Default'];
 	$adminoptions .= "</a> &nbsp; &nbsp; ".$movebox." &nbsp; &nbsp; ".$L['Delete'].":[<a href=\"forums.php?m=topics&amp;a=delete&amp;".sed_xg()."&amp;s=".$s."&amp;q=".$q."\">x</a>]</form>";
 }
@@ -574,7 +596,7 @@ while ($row = sed_sql_fetcharray($sql))
 
 	$t-> assign(array(
 		"FORUMS_POSTS_ROW_ID" => $row['fp_id'],
-		"FORUMS_POSTS_ROW_IDURL" => "<a id=\"".$row['fp_id']."\" href=\"forums.php?m=posts&amp;p=".$row['fp_id']."#".$row['fp_id']."\">".$row['fp_id']."</a>",
+		"FORUMS_POSTS_ROW_IDURL" => "<a id=\"".$row['fp_id']."\" href=\"forums.php?m=posts&amp;id=".$row['fp_id']."\">".$row['fp_id']."</a>",
 		"FORUMS_POSTS_ROW_CREATION" => $row['fp_created'],
 		"FORUMS_POSTS_ROW_UPDATED" => $row['fp_updated'],
 		"FORUMS_POSTS_ROW_UPDATER" => sed_cc($row['fp_updater']),

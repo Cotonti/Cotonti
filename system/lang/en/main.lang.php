@@ -548,6 +548,8 @@ $L['lis_submitnew'] = 'Submit a new entry';
 
 /* ====== Pages ====== */
 
+$L['pag_notavailable'] = 'This page will be published in '; // N-0.0.2
+
 $L['pag_catmissing'] = 'The category code is missing';
 $L['pag_titletooshort'] = 'The title is too short or missing';
 $L['pag_desctooshort'] = 'The description is too short or missing';
@@ -574,6 +576,7 @@ $L['pfs_newfolder'] = 'Create a new folder :';
 $L['pfs_ispublic'] = 'Public ?';
 $L['pfs_isgallery'] = 'Gallery ?';
 $L['pfs_extallowed'] = 'Extensions allowed';
+$L['pfs_resizeimages'] = 'resize image ?'; // N-0.0.2
 
 /* ====== Plug ====== */
 

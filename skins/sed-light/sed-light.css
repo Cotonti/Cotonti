@@ -109,6 +109,8 @@ h6 	{ font-size:90%; margin:1em 1em 1em 0; }
 .desc { font-size:95%; padding:3px; color:#646464; }
 .spoiler { padding:8px; margin:8px; border:1px dashed #CCCCCC; background-color:#DBE5E9; }
 
+.highlight { background-color: yellow; }
+
 .odd { background-color:#dee4e9!important; }
 .even { background-color:#e8edf1!important; }
 li { margin:2px; }

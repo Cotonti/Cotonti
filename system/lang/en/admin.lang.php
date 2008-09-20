@@ -98,8 +98,8 @@ $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-ham
 $L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
 $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
 $L['cfg_jquery'] = array('Enable jQuery', ''); // N-0.0.1
-$L['cfg_parser_cache'] = array('Enable HTML cache', ''); // New in N-0.0.1
-$L['cfg_parser_custom'] = array('Enable custom parser', ''); // New in N-0.0.1
+$L['cfg_parser_cache'] = array('Enable HTML cache', ''); // N-0.0.1
+$L['cfg_parser_custom'] = array('Enable custom parser', ''); // N-0.0.1
 $L['cfg_parser_vid'] = array('Allow BBcodes for the videos', '');		// New in v120
 $L['cfg_parser_vid_autolink'] = array('Auto-link URLs to known video sites', '');						// New in v120
 $L['cfg_parsebbcodecom'] = array('Parse BBcode in comments and private messages', '');
@@ -241,7 +241,7 @@ $L['adm_help_forums_structure'] = 'Not available';	// New in v110
 $L['adm_defstate'] = 'Default state';	// New in v110
 $L['adm_defstate_0'] = 'Folded';	// New in v110
 $L['adm_defstate_1'] = 'Unfolded';	// New in v110
-$L['adm_forums_master'] = 'Master section';  // New in N-0.0.1
+$L['adm_forums_master'] = 'Master section';  // N-0.0.1
 
 
 /* ====== IP search ====== */

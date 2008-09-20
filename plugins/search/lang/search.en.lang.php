@@ -29,6 +29,8 @@ $L['plu_searchin'] = "Search in";
 
 $L['plu_searchin1'] = "Keyword(s)";
 $L['plu_searchin2'] = "";
+$L['plu_searchall'] = "Search all input entered"; // N-0.0.2
+$L['plu_searchall2'] = "Default is: search <span style='font-size:large;'>any</span> of the given"; // N-0.0.2
 
 $L['plu_querytooshort'] = "The query string is too short !";
 $L['plu_toomanywords'] = "Too many words, limit is set to";

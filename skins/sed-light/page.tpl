@@ -21,7 +21,7 @@
 			</div>
 		</div>
 
-		<div style="padding:0 5px; width:770px; overflow-x:auto;">{PAGE_TEXT}</div>
+		<div class="fmsg" style="padding:0 5px; width:770px; overflow-x:auto;">{PAGE_TEXT}</div>
 
 		<!-- BEGIN: PAGE_MULTI -->
 		<div class="paging">{PAGE_MULTI_TABNAV}</div>
