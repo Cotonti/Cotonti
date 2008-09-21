@@ -29,6 +29,8 @@ $L['plu_searchin'] = "Искать в";
 
 $L['plu_searchin1'] = "Ключевые слова";
 $L['plu_searchin2'] = "";
+$L['plu_searchall'] = "Искать все слова вместе"; // N-0.0.2
+$L['plu_searchall2'] = "По умолчанию: искать <span style='font-size:large;'>любые</span> из слов в запросе"; // N-0.0.2
 
 $L['plu_querytooshort'] = "Слишком мало символов в запросе!";
 $L['plu_toomanywords'] = "Слишком много слов, ограничение:";

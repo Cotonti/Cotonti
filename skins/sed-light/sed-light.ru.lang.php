@@ -290,6 +290,8 @@ $skinlang['usersprofile']['Photo'] = 'Фотография:';
 $skinlang['usersprofile']['Signature'] = 'Подпись:';
 $skinlang['usersprofile']['Newpassword'] = 'Установить новый пароль:';
 $skinlang['usersprofile']['Newpasswordhint'] = '(Оставьте пустым, если хотите сохранить текущий пароль)';
+$skinlang['usersprofile']['Newpasswordhint2'] = '(Введите ваш новый пароль дважды)'; // N-0.0.2
+$skinlang['usersprofile']['Oldpasswordhint'] = 'Вы должны ввести свой старый пароль чтобы установить новый: '; // N-0.0.2
 $skinlang['usersprofile']['Update'] = 'Готово';
 
 //users.register.tpl
