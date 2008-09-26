@@ -44,7 +44,7 @@ if ($mode=='ajax')
 	});}
 
 	</script>';
-	$result .= "<table class=\"cells\">";
+	$result .= "<table>";
 
 		$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
 		$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
@@ -61,7 +61,7 @@ if ($mode=='ajax')
 		$row1['po_text'] = $row1['po_text'];
 
 		$result .= "<tr><td>";
-		$result .= sed_parse(sed_cc($row1['po_text']), 1, 1, 1);
+		$result .= stripslashes($row1['po_text']);
 		$result .= "</td><td><div style=\"width:100px;\"><div class=\"bar_back\"><div class=\"bar_front\" id=\"$percent%\" style=\"width:0%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
 		}
 

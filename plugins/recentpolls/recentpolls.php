@@ -61,8 +61,9 @@ function sed_get_recentpolls($limit, $mask)
 		require $cfg['plugins_dir'].'/recentpolls/lang/recentpolls.en.lang.php';
 	}
 
+	$ii = 0;
+	
 	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by poll_creationdate DESC LIMIT $limit");
-
 	while ($row_p = sed_sql_fetcharray($sql_p))
 	{
 		unset($res);
@@ -80,61 +81,15 @@ function sed_get_recentpolls($limit, $mask)
 			$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
 		}
 		else
-		{ $alreadyvoted = 0; }
-
-
-		$res .= (!$alreadyvoted) ? "
-<style type=\"text/css\">
-#poll-container$poll_id.loading {
-  background: url('{$cfg['plugins_dir']}/recentpolls/img/spinner_bigger.gif') no-repeat center center;
-}
-</style>
-<script type=\"text/javascript\">
-function post$poll_id()
-	{
-
-		var id = $(\"input[@name='$poll_id.id']\").attr(\"value\");
-		var a = $(\"input[@name='a']\").attr(\"value\");
-		var vote = $(\"input[@name='$poll_id.vote']:checked\").attr(\"value\");
-
-
-	$.ajax({
-		type: 'GET',
-		url: 'polls.php?',
-		data: 'id='+id+'&a='+a+'&vote='+vote+'&mode=ajax',
-
-		beforeSend: function(){
-			if (!vote) {
-			alert('".$L_idx['vote_opt']."');
-			return false;
-			}
-			$('#poll-container$poll_id').addClass('loading');
-			},
-
-		success: function(msg){
-		$('#poll-container$poll_id').removeClass('loading');
-		$('#poll-container$poll_id').html(msg).hide().stop().fadeIn('slow');
-		anim();
-			},
-		error: function(msg){
-		$('#poll-container$poll_id').removeClass('loading');
-		alert('".$L_idx['vote_failed']."');
-			}
-
-		});
-
-		return false;
-
-	}
-
-	</script>" : '';
+		{ $alreadyvoted = 0; $ii++; }
 
 
 		$res .= "<h5>".sed_parse(sed_cc($row_p['poll_text']), 1, 1, 1)."</h5>";
-		$res .= "<div id='poll-container$poll_id'>";
+		$res .= "<div id='b".$poll_id."'></div>
+		<div id='p".$poll_id."'>";
 
 
-		$res .= ($alreadyvoted) ? '<table class="cells">' : '';
+		$res .= ($alreadyvoted) ? '<table>' : '';
 
 		$sql = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$poll_id' ORDER by po_id ASC");
 
@@ -147,28 +102,107 @@ function post$poll_id()
 			}
 			else
 			{
-				$res .= "<input type='radio' name='$poll_id.vote' id='o".$row['po_id']."' value='".$row['po_id']."' /><label for='o".$row['po_id']."'> ".stripslashes($row['po_text'])."</label><br />";
+				$res .= "<input type='radio' name='v' value='".$row['po_id']."' />&nbsp;".stripslashes($row['po_text'])."<br />";
 			}
 		}
-
+		
 		if (!$alreadyvoted)
-		{
-			$res .= "<input type=\"hidden\" name=\"$poll_id.id\" value=\"".$poll_id."\" />";
-			$res .= "<input type=\"hidden\" name=\"a\" value=\"send\" />";
-		}
-
-		if (!$alreadyvoted)
-		{ $res .= "<p style=\"text-align: center; \"><input type=\"submit\" onclick=\"post$poll_id();\" class=\"submit\" value=\"".$L_idx['voteit']."\" /></p>"; }
+		{ $res .= "<p style=\"text-align: center; \"><input type=\"submit\" onclick=\"vote(".$poll_id.");\" class=\"submit\" value=\"".$L_idx['voteit']."\" /></p>"; }
 
 		$res .= ($alreadyvoted) ? '</table>' : '';
 
 		$res .= "</div>";
 
 
-		$res .= "<p style=\"text-align: center; \"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></p>";
+		$res .= ($alreadyvoted) ? "<p style=\"text-align: center; \"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></p>" : "<p style=\"text-align: center; \"><a href=\"javascript:res(".$poll_id.",0)\" id=\"a".$poll_id."\">".$L['polls_viewresults']."</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></p>";
 
 		$res_all .= sprintf($mask, $res);
 	}
+	
+	$res_all .= ($ii) ? "
+<style type=\"text/css\">
+.loading {
+  background: url('{$cfg['plugins_dir']}/recentpolls/img/spinner_bigger.gif') no-repeat center center;
+}
+</style>
+<script type=\"text/javascript\">
+
+function vote(id)
+	{
+
+		var v = $('#p'+id+' > input[name=\"v\"]:checked').attr('value');
+
+		$.ajax({
+		type: 'GET',
+		url: 'polls.php?',
+		data: 'id='+id+'&a=send&vote='+v+'&mode=ajax',
+
+		beforeSend: function(){
+		if (!v) {
+			alert('".$L_idx['vote_opt']."');
+			return false;
+		}
+			$('#p'+id).addClass('loading');
+		},
+
+
+		success: function(msg){
+		$('#p'+id).removeClass('loading');
+		$('#p'+id).html(msg).hide().stop().fadeIn('slow');
+		$('#a'+id).attr('href', 'javascript: polls('+id+');');
+		anim();
+			},
+		error: function(msg){
+		$('#p'+id).removeClass('loading');
+		alert('".$L_idx['vote_failed']."');
+			}
+
+		});
+
+		return false;
+
+	}
+	
+function res(id,m)
+	{
+	
+	if (!m)
+		{
+
+	$.ajax({
+		type: 'GET',
+		url: 'polls.php?',
+		data: 'id='+id+'&mode=ajax',
+
+		beforeSend: function(){
+			$('#b'+id).html($('#p'+id).html()).hide();
+			$('#p'+id).addClass('loading');
+			},
+
+		success: function(msg){
+		$('#p'+id).removeClass('loading');
+		$('#p'+id).html(msg).hide().stop().fadeIn('slow');
+		$('#a'+id).html('".$L_idx['voteback']."</a>').attr('href', 'javascript: res('+id+',1);');
+		anim();
+			},
+		error: function(msg){
+		$('#p'+id).removeClass('loading');
+		alert('".$L_idx['vote_failed']."');
+			}
+
+		});
+
+		}
+	
+	if (m)
+		{
+		$('#p'+id).html($('#b'+id).html()).hide().stop().fadeIn('slow');
+		$('#a'+id).html('".$L['polls_viewresults']."</a>').attr('href', 'javascript: res('+id+',0);');
+		}
+		
+	}
+
+	</script>" : '';
 
 	//		{ $res = $plu_empty; }
 
