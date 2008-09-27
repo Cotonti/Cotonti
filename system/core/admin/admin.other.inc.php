@@ -68,6 +68,11 @@ $adminmain .= "<td colspan=\"3\">".sed_linkif("admin.php?m=bbcode", "<img src=\"
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif("admin.php?m=urls", "<img src=\"images/admin/info.gif\" alt=\"\" /> ".$L['adm_urls'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "</tr>";
+
+
+$adminmain .= "<tr>";
 $adminmain .= "<td colspan=\"3\">".sed_linkif("admin.php?m=smilies", "<img src=\"images/admin/smilies.gif\" alt=\"\" /> ".$L['Smilies'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 

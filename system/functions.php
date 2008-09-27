@@ -172,6 +172,41 @@ function sed_auth_clear($id='all')
 	return sed_sql_affectedrows();
 }
 
+/**
+ * Block user if he is not allowed to access the page
+ *
+ * @param bool $allowed Authorization result
+ * @return bool
+ */
+function sed_block($allowed)
+{
+	if(!$allowed)
+	{
+		global $sys;
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
+		exit;
+	}
+	return FALSE;
+}
+
+
+/**
+ * Block guests from viewing the page
+ *
+ * @return bool
+ */
+function sed_blockguests()
+{
+	global $usr, $sys;
+
+	if ($usr['id']<1)
+	{
+		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
+		exit;
+	}
+	return FALSE;
+}
+
 
 /*
  * ================================= BBCode Parser API ==================================
@@ -566,40 +601,9 @@ function sed_post_parse($text, $area = '')
 	return $text;
 }
 
-/**
- * Block user if he is not allowed to access the page
- *
- * @param bool $allowed Authorization result
- * @return bool
+/*
+ * =========================== Output forming functions ===========================
  */
-function sed_block($allowed)
-{
-	if(!$allowed)
-	{
-		global $sys;
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
-		exit;
-	}
-	return FALSE;
-}
-
-
-/**
- * Block guests from viewing the page
- *
- * @return bool
- */
-function sed_blockguests()
-{
-	global $usr, $sys;
-
-	if ($usr['id']<1)
-	{
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
-		exit;
-	}
-	return FALSE;
-}
 
 /* ------------------ */
 // TODO eliminate this function
@@ -3430,6 +3434,101 @@ function sed_trash_put($type, $title, $itemid, $datas)
 function sed_unique($l=16)
 {
 	return(mb_substr(md5(mt_rand(0,1000000)), 0, $l));
+}
+
+/**
+ * Loads URL Transformation Rules
+ *
+ */
+function sed_load_urltrans()
+{
+	global $sed_urltrans;
+	$sed_urltrans = array();
+	$fp = fopen('./datas/urltrans.dat', 'r');
+	// Rules
+	while($line = trim(fgets($fp), " \t\r\n"))
+	{
+		$parts = explode("\t", $line);
+		$rule = array();
+		$rule['trans'] = $parts[2];
+		$parts[1] == '*' ? $rule['params'] = array() : parse_str($parts[1], $rule['params']);
+		foreach($rule['params'] as $key => $val)
+		{
+			if(strstr($val, '|'))
+			{
+				$rule['params'][$key] = explode('|', $val);
+			}
+		}
+		$sed_urltrans[$parts[0]][] = $rule;
+	}
+	fclose($fp);
+}
+
+/**
+ * Transforms parameters into URL by following user-defined rules
+ *
+ * @param string $name Site area or script name
+ * @param mixed $params URL parameters as array or parameter string
+ * @param string $tail URL postfix, e.g. anchor
+ * @param bool $header Set this TRUE if the url will be used in HTTP header rather than body output
+ * @return string
+ */
+function sed_url($name, $params, $tail = '', $header = false)
+{
+	global $cfg, $sed_urltrans;
+	// Preprocess arguments
+	is_array($params) ? $args = $params : parse_str($params, $args);
+	$area = empty($sed_urltrans[$name]) ? '*' : $name;
+	// Find first matching rule
+	$url = $sed_urltrans['*'][0]['trans']; // default rule
+	foreach($sed_urltrans[$area] as $rule)
+	{
+		$matched = true;
+		foreach($rule['params'] as $key => $val)
+		{
+			if(empty($args[$key])
+				|| (is_array($val) && !in_array($args[$key], $val))
+				|| ($val != '*' && $args[$key] != $val))
+			{
+				$matched = false;
+				break;
+			}
+		}
+		if($matched)
+		{
+			$url = $rule['trans'];
+			break;
+		}
+	}
+	// Some special substitutions
+	$mainurl = parse_url($cfg['mainurl']);
+	$spec['_area'] = $name;
+	$spec['_host'] = $mainurl['host'];
+	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
+	$spec['_path'] = SED_SITE_URI;
+	// Transform the data into URL
+	preg_match_all('#\{\$(\w+)\}#', $url, $matches, PREG_SET_ORDER);
+	foreach($matches as $m)
+	{
+		$url = empty($spec[$m[1]]) ? str_replace($m[0], $args[$m[1]], $url) : str_replace($m[0], $spec[$m[1]], $url);
+		unset($args[$m[1]]);
+	}
+	// Append query string if needed
+	if(!empty($args))
+	{
+		$qs = '?';
+		$sep = $header ? '&' : '&amp;';
+		$sep_len = strlen($sep);
+		foreach($args as $key => $val)
+		{
+			$qs .= $key .'=' . $val . $sep;
+		}
+		$qs = substr($qs, 0, -$sep_len);
+		$url .= $qs;
+	}
+	// Almost done
+	$url .= $tail;
+	return $url;
 }
 
 /**

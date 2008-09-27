@@ -477,5 +477,6 @@ if(!$cfg['parser_custom'])
 {
 	sed_bbcode_load();
 }
+sed_load_urltrans();
 
 ?>
