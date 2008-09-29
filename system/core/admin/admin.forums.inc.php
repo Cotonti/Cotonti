@@ -21,10 +21,10 @@ sed_block($usr['isadmin']);
 
 $id = sed_import('id','G','INT');
 
-$adminpath[] = array ("admin.php?m=forums", $L['Forums']);
+$adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=forums\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li><li>";
-$adminmain .= sed_linkif("admin.php?m=forums&amp;s=structure", $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'));
+$adminmain .= "<ul><li><a href=".sed_url('admin', 'm=config&amp;n=edit&amp;o=core&amp;p=forums')."\>".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li><li>";
+$adminmain .= sed_linkif(sed_url('admin', 'm=forums&amp;s=structure'), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'));
 $adminmain .= "</li></ul>";
 
 if ($n=='edit')
@@ -74,7 +74,7 @@ if ($n=='edit')
 
 		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_countposts='$rcountposts' WHERE fs_id='$id'") : '';
 
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums', '', true));
 		exit;
 	}
 	elseif ($a=='delete')
@@ -82,7 +82,7 @@ if ($n=='edit')
 		sed_check_xg();
 		sed_auth_clear('all');
 		$num = sed_forum_deletesection($id);
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=916&rc=103&num=".$num);
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=103&num=".$num, '', true));
 		exit;
 	}
 	elseif ($a=='resync')
@@ -122,9 +122,9 @@ if ($n=='edit')
 
 	$form_countposts = ($fs_countposts) ? "<input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"0\" checked=\"checked\" />".$L['No'];
 
-	$adminpath[] = array ("admin.php?m=forums&amp;n=edit&amp;id=".$id, sed_cc($fs_title));
+	$adminpath[] = array (sed_url('admin', 'm=forums&amp;n=edit&amp;id='.$id), sed_cc($fs_title));
 
-	$adminmain .= "<form id=\"updatesection\" action=\"admin.php?m=forums&amp;n=edit&amp;a=update&amp;id=".$fs_id."\" method=\"post\">";
+	$adminmain .= "<form id=\"updatesection\" action=\"".sed_url('admin', "m=forums&amp;n=edit&amp;a=update&amp;id=".$fs_id)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Section']." :</td><td>".$fs_id."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_forums_master']." :</td><td><select name=\"rmaster\"><option value=\"0\">--</option>";
@@ -153,8 +153,8 @@ if ($n=='edit')
 	$adminmain .= "<tr><td>".$L['adm_countposts']." :</td><td>".$form_countposts."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Locked']." :</td><td>".$form_state."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_autoprune']." :</td><td><input type=\"text\" class=\"text\" name=\"rautoprune\" value=\"".$fs_autoprune."\" size=\"3\" maxlength=\"7\" /></td></tr>";
-	$adminmain .= "<tr><td>".$L['adm_postcounters']." :</td><td><a href=\"admin.php?m=forums&amp;n=edit&amp;a=resync&amp;id=".$fs_id."&amp;".sed_xg()."\">".$L['Resync']."</a></td></tr>";
-	$adminmain .= ($usr['isadmin']) ? "<tr><td>".$L['Delete']." :</td><td>[<a href=\"admin.php?m=forums&amp;n=edit&amp;a=delete&amp;id=".$fs_id."&amp;".sed_xg()."\">x</a>]</td></tr>" : '';
+	$adminmain .= "<tr><td>".$L['adm_postcounters']." :</td><td><a href=\"".sed_url('admin', "m=forums&amp;n=edit&amp;a=resync&amp;id=".$fs_id."&amp;".sed_xg())."\">".$L['Resync']."</a></td></tr>";
+	$adminmain .= ($usr['isadmin']) ? "<tr><td>".$L['Delete']." :</td><td>[<a href=\"".sed_url('admin', "m=forums&amp;n=edit&amp;a=delete&amp;id=".$fs_id."&amp;".sed_xg())."\">x</a>]</td></tr>" : '';
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table></form>";
 }
@@ -185,7 +185,7 @@ else
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='".$row_cur['fs_order']."' WHERE fs_id='".$row_oth['fs_id']."'");
 		}
 
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums', '', true));
 		exit;
 	}
 	elseif ($a=='add')
@@ -232,7 +232,7 @@ else
 			}
 			sed_auth_reorder();
 			sed_auth_clear('all');
-			header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums', '', true));
 		}
 	}
 
@@ -241,7 +241,7 @@ else
 	ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC");
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$adminmain .= "<form id=\"updateorder\" action=\"admin.php?m=forums&amp;a=update\" method=\"post\">";
+	$adminmain .= "<form id=\"updateorder\" action=\"".sed_url('admin', 'm=forums&amp;a=update')."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\"><tr>";
 	$adminmain .= "<td class=\"coltop\">".$L['Section']." ".$L['adm_clicktoedit']."</td>";
 	$adminmain .= "<td class=\"coltop\">".$L['Order']."</td>";
@@ -275,24 +275,24 @@ else
 
 			if ($fs_category!=$prev_cat)
 			{
-				$adminmain .= "<tr><td colspan=\"8\"><strong><a href=\"admin.php?m=forums&amp;s=structure&amp;n=options&amp;id=".$row['fn_id']."\">".sed_cc($row['fn_title']);
+				$adminmain .= "<tr><td colspan=\"8\"><strong><a href=\"".sed_url('admin', "m=forums&amp;s=structure&amp;n=options&amp;id=".$row['fn_id'])."\">".sed_cc($row['fn_title']);
 				$adminmain .= " (".$row['fn_path'].")</a></strong></td></tr>";
 				$prev_cat = $fs_category;
 				$line = 1;
 			}
 
 			$adminmain .= "<tr>";
-			$adminmain .= "<td><a href=\"admin.php?m=forums&amp;n=edit&amp;id=".$fs_id."\">".sed_cc($fs_title)."</a></td>";
+			$adminmain .= "<td><a href=\"".sed_url('admin', "m=forums&amp;n=edit&amp;id=".$fs_id)."\">".sed_cc($fs_title)."</a></td>";
 			$adminmain .= "<td style=\"text-align:center;\">";
-			$adminmain .= "<a href=\"admin.php?m=forums&amp;id=".$fs_id."&amp;a=order&amp;w=up\">$sed_img_up</a> ";
-			$adminmain .= "<a href=\"admin.php?m=forums&amp;id=".$fs_id."&amp;a=order&amp;w=down\">$sed_img_down</a></td>";
+			$adminmain .= "<a href=\"".sed_url('admin', "m=forums&amp;id=".$fs_id."&amp;a=order&amp;w=up")."\">".$sed_img_up."</a> ";
+			$adminmain .= "<a href=\"".sed_url('admin', "m=forums&amp;id=".$fs_id."&amp;a=order&amp;w=down")."\">".$sed_img_down."</a></td>";
 
 			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$row['fs_allowprvtopics']]."</td>";
 			$adminmain .= "<td style=\"text-align:right;\">".$row['fs_topiccount']."</td>";
 			$adminmain .= "<td style=\"text-align:right;\">".$row['fs_postcount']."</td>";
 			$adminmain .= "<td style=\"text-align:right;\">".$row['fs_viewcount']."</td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=forums&amp;io=".$row['fs_id']."\"><img src=\"images/admin/rights2.gif\" alt=\"\"></a></td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"forums.php?m=topics&amp;s=".$fs_id."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a></a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&amp;ic=forums&amp;io=".$row['fs_id'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\"></a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=topics&amp;s=".$fs_id)."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a></a></td>";
 			$adminmain .= "</tr>";
 			$line++;
 			if ($fcache[$fs_id])
@@ -301,16 +301,16 @@ else
 				foreach ($fcache[$fs_id] as $key => $value)
 				{
 					$adminmain .= "<tr>";
-					$adminmain .= "<td><a href=\"admin.php?m=forums&amp;n=edit&amp;id=".$key."\"> - ".sed_cc($value[0])."</a></td>";
+					$adminmain .= "<td><a href=\"".sed_url('admin', "m=forums&amp;n=edit&amp;id=".$key)."\"> - ".sed_cc($value[0])."</a></td>";
 					$adminmain .= "<td style=\"text-align:center;\">";
-					$adminmain .= "<a href=\"admin.php?m=forums&amp;id=".$key."&amp;a=order&amp;w=up\">$sed_img_up</a> ";
-					$adminmain .= "<a href=\"admin.php?m=forums&amp;id=".$key."&amp;a=order&amp;w=down\"$sed_img_down</a></td>";
+					$adminmain .= "<a href=\"".sed_url('admin', "m=forums&amp;id=".$key."&amp;a=order&amp;w=up")."\">".$sed_img_up."</a> ";
+					$adminmain .= "<a href=\"".sed_url('admin', "m=forums&amp;id=".$key."&amp;a=order&amp;w=down")."\">".$sed_img_down."</a></td>";
 					$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$value[4]]."</td>";
 					$adminmain .= "<td style=\"text-align:right;\">".$value[1]."</td>";
 					$adminmain .= "<td style=\"text-align:right;\">".$value[2]."</td>";
 					$adminmain .= "<td style=\"text-align:right;\">".$value[3]."</td>";
-					$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=forums&amp;io=".$key."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\"></a></td>";
-					$adminmain .= "<td style=\"text-align:center;\"><a href=\"forums.php?m=topics&amp;s=".$key."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\"></a></a></td>";
+					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&amp;ic=forums&amp;io=".$key)."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\"></a></td>";
+					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=topics&amp;s=".$key)."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\"></a></a></td>";
 					$adminmain .= "</tr>";
 				}
 
@@ -323,7 +323,7 @@ else
 	$adminmain .= "</table></form>";
 
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$adminmain .= "<form id=\"addsection\" action=\"admin.php?m=forums&amp;a=add\" method=\"post\">";
+	$adminmain .= "<form id=\"addsection\" action=\"".sed_url('admin', "m=forums&amp;a=add")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Category']." :</td><td>".sed_selectbox_forumcat('', 'ncat')."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_forums_master']." :</td><td><select name=\"nmaster\"><option value=\"0\">--</option>";

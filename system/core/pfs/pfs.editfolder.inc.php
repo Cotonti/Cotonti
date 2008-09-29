@@ -116,7 +116,7 @@ if ($a=='update' && !empty($f))
 		pff_isgallery='$risgallery'
 		WHERE pff_userid='$userid' AND pff_id='$f' " );
 
-	header("Location: " . SED_ABSOLUTE_URL . "pfs.php".$more1);
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more1, '', true));
 	exit;
 	}
 

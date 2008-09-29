@@ -14,8 +14,8 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array('admin.php?m=other', $L['Other']);
-$adminpath[] = array('admin.php?m=urls', $L['adm_urls']);
+$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(sed_url('admin', 'm=urls'), $L['adm_urls']);
 $adminhelp = $L['adm_help_urls'];
 
 $a = sed_import('a', 'G', 'ALP');
@@ -257,7 +257,7 @@ foreach($areas as $ar)
 	$areabox .= $ar == '*' ? '<option selected="selected">'.$ar.'</option>' : '<option>'.$ar.'</option>';
 }
 $areabox .= '</select>';
-
+$admin_urls_form = sed_url('admin', "m=urls&amp;a=save");
 // Render rules table
 $adminmain .= <<<HTM
 <h4>{$L['adm_urls_rules']}</h4>
@@ -279,7 +279,7 @@ tr.tDnD_whileDrag td {
 	background-color: yellow;
 }
 </style>
-<form action="admin.php?m=urls&amp;a=save" method="post">
+<form action="{$admin_urls_form}" method="post">
 <table id="rules" class="cells">
 <tr>
 	<td class="coltop">{$L['adm_urls_area']}</td>

@@ -61,7 +61,7 @@ else
 
 if ($fs_state)
 {
-	header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=602");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=602", '', true));
 	exit;
 }
 
@@ -174,7 +174,7 @@ if ($a=='newtopic')
 		/* ===== */
 
 		sed_shield_update(45, "New topic");
-		header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=posts&q=$q&n=last#bottom");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 		exit;
 	}
 }
@@ -188,7 +188,7 @@ $bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbc
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
 $post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
 
-$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $fs_masterid)." ".$cfg['separator']." <a href=\"forums.php?m=newtopic&amp;s=".$s."\">".$L['for_newtopic']."</a>";
+$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $fs_masterid)." ".$cfg['separator']." <a href=\"".sed_url('forums', "m=newtopic&amp;s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;
@@ -209,7 +209,7 @@ $t->assign(array(
 
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_cc($fs_desc),
-	"FORUMS_NEWTOPIC_SEND" => "forums.php?m=newtopic&amp;a=newtopic&amp;s=".$s,
+	"FORUMS_NEWTOPIC_SEND" => sed_url('forums', "m=newtopic&amp;a=newtopic&amp;s=".$s),
 	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />".$poll_form,

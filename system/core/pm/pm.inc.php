@@ -55,7 +55,7 @@ if (!empty($id)) // -------------- Single mode
 	sed_die(sed_sql_numrows($sql1)==0);
 	$row1 = sed_sql_fetcharray($sql1);
 
-	$title = "<a href=\"pm.php\">".$L['Private_Messages']."</a> ".$cfg['separator'];
+	$title = "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator'];
 
 	if ($row1['pm_touserid']==$usr['id'] && $row1['pm_state']==2)
 	{
@@ -104,7 +104,7 @@ else // --------------- List mode
 {
 	unset($id);
 
-	$title = "<a href=\"pm.php\">".$L['Private_Messages']."</a> ".$cfg['separator'];
+	$title = "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator'];
 
 	if ($f=='archives')
 	{
@@ -131,7 +131,7 @@ else // --------------- List mode
 		$sql = sed_sql_query("SELECT * FROM $db_pm
 		WHERE pm_touserid='".$usr['id']."' AND pm_state<2
 		ORDER BY pm_date DESC LIMIT  $d,".$cfg['maxrowsperpage']);
-		$title .= " <a href=\"pm.php\">".$L['pm_inbox']."</a>";
+		$title .= " <a href=\"".sed_url('pm')."\">".$L['pm_inbox']."</a>";
 		$subtitle = $L['pm_inboxsubtitle'];
 	}
 
@@ -172,7 +172,7 @@ $t-> assign(array(
 	"PM_PAGETITLE" => $title,
 	"PM_SUBTITLE" => $subtitle,
 	"PM_SENDNEWPM" => $pm_sendlink,
-	"PM_INBOX" => "<a href=\"pm.php\">".$L['pm_inbox']."</a>:".$totalinbox,
+	"PM_INBOX" => "<a href=\"".sed_url('pm')."\">".$L['pm_inbox']."</a>:".$totalinbox,
 	"PM_ARCHIVES" => "<a href=\"pm.php?f=archives\">".$L['pm_archives']."</a>:".$totalarchives,
 	"PM_SENTBOX" => "<a href=\"pm.php?f=sentbox\">".$L['pm_sentbox']."</a>:".$totalsentbox,
 	"PM_TOP_PAGEPREV" => $pm_pageprev,

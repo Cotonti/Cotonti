@@ -19,8 +19,8 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=other", $L['Other']);
-$adminpath[] = array ("admin.php?m=banlist", $L['Banlist']);
+$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array (sed_url('admin', 'm=banlist'), $L['Banlist']);
 $adminhelp = $L['adm_help_banlist'];
 
 if ($a=='update')
@@ -30,7 +30,7 @@ if ($a=='update')
 	$rbanlistemail = sed_sql_prep(sed_import('rbanlistemail', 'P', 'TXT'));
 	$rbanlistreason = sed_sql_prep(sed_import('rbanlistreason', 'P', 'TXT'));
 	$sql = (!empty($rbanlistip) || !empty($rbanlistemail)) ? sed_sql_query("UPDATE $db_banlist SET banlist_ip='$rbanlistip', banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'") : '';
-	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=banlist");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist", '', true));
 	exit;
 	}
 elseif ($a=='add')
@@ -46,7 +46,7 @@ elseif ($a=='add')
 	if ($nexpire>0)
 		{ $nexpire += $sys['now']; }
 	$sql = (!empty($nbanlistip) || !empty($nbanlistemail)) ? sed_sql_query("INSERT INTO $db_banlist (banlist_ip, banlist_email, banlist_reason, banlist_expire) VALUES ('$nbanlistip', '$nbanlistemail', '$nbanlistreason', ".(int)$nexpire.")") : '';
-	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=banlist");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist", '', true));
 	exit;
 	}
 
@@ -55,7 +55,7 @@ elseif ($a=='delete')
 	sed_check_xg();
 	$id = sed_import('id', 'G', 'INT');
 	$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='$id'");
-	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=banlist");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist", '', true));
 	exit;
 	}
 
@@ -78,8 +78,8 @@ while ($row = sed_sql_fetcharray($sql))
 	$banlist_email = $row['banlist_email'];
 	$banlist_reason = $row['banlist_reason'];
 	$banlist_expire = $row['banlist_expire'];
-	$adminmain .= "<form id=\"savebanlist_".$banlist_id."\" action=\"admin.php?m=banlist&amp;a=update&amp;id=".$banlist_id."\" method=\"post\">";
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"admin.php?m=banlist&amp;a=delete&amp;id=".$banlist_id."&amp;".sed_xg()."\">x</a>]</td>";
+	$adminmain .= "<form id=\"savebanlist_".$banlist_id."\" action=\"".sed_url('admin', 'm=banlist&amp;a=update&amp;id='.$banlist_id)."\" method=\"post\">";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', 'm=banlist&amp;a=delete&amp;id='.$banlist_id."&amp;".sed_xg())."\">x</a>]</td>";
 
 	if ($banlist_expire>0)
 		{ $adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'],$banlist_expire)." GMT</td>"; }
@@ -94,7 +94,7 @@ while ($row = sed_sql_fetcharray($sql))
 $adminmain .= "</table>";
 
 $adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-$adminmain .= "<form id=\"addbanlist\" action=\"admin.php?m=banlist&amp;a=add\" method=\"post\">";
+$adminmain .= "<form id=\"addbanlist\" action=\"".sed_url('admin', 'm=banlist&amp;a=add')."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= "<tr><td>".$L['Duration']." :</td><td><select name=\"nexpire\" size=\"1\">";
 $adminmain .= "<option value=\"3600\">1 hour</option><option value=\"7200\">2 hours</option><option value=\"14400\">4 hours</option><option value=\"28800\">8 hours</option>";

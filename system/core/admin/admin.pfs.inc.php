@@ -19,13 +19,13 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=other", $L['Other']);
-$adminpath[] = array ("admin.php?m=pfs", $L['PFS']);
+$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array (sed_url('admin', 'm=pfs'), $L['PFS']);
 $adminhelp = $L['adm_help_pfs'];
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pfs\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
-$adminmain .= "<li><a href=\"admin.php?m=pfs&amp;s=allpfs\">".$L['adm_allpfs']."</a></li>";
-$adminmain .= "<li><a href=\"pfs.php?userid=0\">".$L['SFS']."</a></li></ul>";
+$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=core&amp;p=pfs")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
+$adminmain .= "<li><a href=\"".sed_url('admin', "m=pfs&amp;s=allpfs")."\">".$L['adm_allpfs']."</a></li>";
+$adminmain .= "<li><a href=\"".sed_url('pfs', "userid=0")."\">".$L['SFS']."</a></li></ul>";
 
 
 $adminmain .= "<h4>".$L['adm_gd']." :</h4>";

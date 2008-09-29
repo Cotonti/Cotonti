@@ -19,7 +19,7 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=plug", $L['Plugins']);
+$adminpath[] = array (sed_url('admin', 'm=plug'), $L['Plugins']);
 
 $pl = sed_import('pl','G','ALP');
 $part = sed_import('part','G','ALP');
@@ -32,7 +32,7 @@ $found_txt[0] = '<span style="color:#AC5866; font-weight:bold;">'.$L['adm_missin
 $found_txt[1] = '<span style="color:#739E48; font-weight:bold;">'.$L['adm_present'].'</span>';
 unset($disp_errors);
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=plug\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=core&amp;p=plug")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 switch ($a)
 {
@@ -46,7 +46,7 @@ switch ($a)
 		{
 			$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
 			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-			$adminpath[] = array ('admin.php?m=plug&amp;a=details&amp;pl='.$pl, $info['Name']." ($pl)");
+			$adminpath[] = array (sed_url('admin', 'm=plug&amp;a=details&amp;pl='.$pl), $info['Name']." ($pl)");
 
 			$handle=opendir($cfg['plugins_dir']."/".$pl);
 			$setupfile = $pl.'.setup.php';
@@ -66,7 +66,7 @@ switch ($a)
 			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
 			$totalconfig = sed_sql_result($sql, 0, "COUNT(*)");
 
-			$info['Config'] = ($totalconfig>0) ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=plug&amp;p=".$pl."\"><img src=\"images/admin/config.gif\" alt=\"\" /> (".$totalconfig.") ".$L['Edit']."</a>": $L['None'];
+			$info['Config'] = ($totalconfig>0) ? "<a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=plug&amp;p=".$pl)."\"><img src=\"images/admin/config.gif\" alt=\"\" /> (".$totalconfig.") ".$L['Edit']."</a>": $L['None'];
 
 			$info['Auth_members'] = sed_auth_getvalue($info['Auth_members']);
 			$info['Lock_members'] = sed_auth_getvalue($info['Lock_members']);
@@ -80,7 +80,7 @@ switch ($a)
 			$adminmain .= "<tr><td>".$L['Version'].":</td><td>".$info['Version']."</td></tr>";
 			$adminmain .= "<tr><td>".$L['Date'].":</td><td>".$info['Date']."</td></tr>";
 			$adminmain .= "<tr><td>".$L['Configuration'].":</td><td>".$info['Config']."</td></tr>";
-			$adminmain .= "<tr><td>".$L['Rights'].":</td><td><a href=\"admin.php?m=rightsbyitem&amp;ic=plug&amp;io=".$info['Code']."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td></tr>";
+			$adminmain .= "<tr><td>".$L['Rights'].":</td><td><a href=\"".sed_url('admin', "?m=rightsbyitem&amp;ic=plug&amp;io=".$info['Code'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td></tr>";
 			$adminmain .= "<tr><td>".$L['adm_defauth_guests'].":</td><td>".sed_build_admrights($info['Auth_guests']);
 			$adminmain .= " (".$info['Auth_guests'].")</td></tr>";
 			$adminmain .= "<tr><td>".$L['adm_deflock_guests'].":</td><td>".sed_build_admrights($info['Lock_guests']);
@@ -96,13 +96,13 @@ switch ($a)
 
 			$adminmain .= "<h4>".$L['Options']." :</h4>";
 			$adminmain .= "<table class=\"cells\">";
-			$adminmain .= "<tr><td><a href=\"admin.php?m=plug&amp;a=edit&amp;pl=".$info['Code']."&amp;b=install\">".$L['adm_opt_installall']."</a></td>";
+			$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&amp;a=edit&amp;pl=".$info['Code']."&amp;b=install")."\">".$L['adm_opt_installall']."</a></td>";
 			$adminmain .= "<td>".$L['adm_opt_installall_explain']."</td></tr>";
-			$adminmain .= "<tr><td><a href=\"admin.php?m=plug&amp;a=edit&amp;pl=".$info['Code']."&amp;b=uninstall\">".$L['adm_opt_uninstallall']."</a></td>";
+			$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&amp;a=edit&amp;pl=".$info['Code']."&amp;b=uninstall")."\">".$L['adm_opt_uninstallall']."</a></td>";
 			$adminmain .= "<td>".$L['adm_opt_uninstallall_explain']."</td></tr>";
-			$adminmain .= "<tr><td><a href=\"admin.php?m=plug&amp;a=edit&amp;pl=".$info['Code']."&amp;b=pause\">".$L['adm_opt_pauseall']."</a></td>";
+			$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&amp;a=edit&amp;pl=".$info['Code']."&amp;b=pause")."\">".$L['adm_opt_pauseall']."</a></td>";
 			$adminmain .= "<td>".$L['adm_opt_pauseall_explain']."</td></tr>";
-			$adminmain .= "<tr><td><a href=\"admin.php?m=plug&amp;a=edit&amp;pl=".$info['Code']."&amp;b=unpause\">".$L['adm_opt_unpauseall']."</a></td>";
+			$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&amp;a=edit&amp;pl=".$info['Code']."&amp;b=unpause")."\">".$L['adm_opt_unpauseall']."</a></td>";
 			$adminmain .= "<td>".$L['adm_opt_unpauseall_explain']."</td></tr>";
 			$adminmain .= "</table>";
 
@@ -149,9 +149,9 @@ switch ($a)
 					if ($info_file['Status']==3)
 					{ $adminmain .= "-"; }
 					elseif ($row['pl_active']==1)
-					{ $adminmain .= "<a href=\"admin.php?m=plug&amp;a=edit&amp;pl=".$pl."&amp;b=pausepart&amp;part=".$row['pl_id']."\">Pause</a>"; }
+					{ $adminmain .= "<a href=\"".sed_url('admin', "m=plug&amp;a=edit&amp;pl=".$pl."&amp;b=pausepart&amp;part=".$row['pl_id'])."\">Pause</a>"; }
 					elseif ($row['pl_active']==0)
-					{ $adminmain .= "<a href=\"admin.php?m=plug&amp;a=edit&amp;pl=".$pl."&amp;b=unpausepart&amp;part=".$row['pl_id']."\">Un-pause</a>"; }
+					{ $adminmain .= "<a href=\"".sed_url('admin', "m=plug&amp;a=edit&amp;pl=".$pl."&amp;b=unpausepart&amp;part=".$row['pl_id'])."\">Un-pause</a>"; }
 
 					$adminmain .= "</td></tr>";
 					$listtags .= "<tr><td style=\"width:32px;\">#".($i+1)."</td><td>".$info_file['Part']."</td><td>";
@@ -367,7 +367,7 @@ switch ($a)
 				sed_auth_reorder();
 				sed_cache_clearall();
 				$adminmain .= "<p>".$edit_log."</p>";
-				$adminmain .= "<a href=\"admin.php?m=plug&amp;a=details&amp;pl=".$pl."\">Click here to continue...</a>";
+				$adminmain .= "<a href=\"".sed_url('admin', "m=plug&amp;a=details&amp;pl=".$pl)."\">Click here to continue...</a>";
 
 				break;
 
@@ -397,34 +397,34 @@ switch ($a)
 										{ $adminmain .= "Not found.<br />"; 	}
 
 										$adminmain .= "<p>".$edit_log."</p>";
-										$adminmain .= "<a href=\"admin.php?m=plug\">Click here to continue...</a>";
+										$adminmain .= "<a href=\"".sed_url('admin', "m=plug")."\">Click here to continue...</a>";
 										break;
 
 									case 'pause' :
 										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl'");
 										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=plug&a=details&pl=".$pl);
+										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
 										exit;
 										break;
 
 									case 'unpause' :
 										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
 										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=plug&a=details&pl=".$pl);
+										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl);
 										exit;
 										break;
 
 									case 'pausepart' :
 										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl' AND pl_id='$part'");
 										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=plug&a=details&pl=".$pl);
+										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl);
 										exit;
 										break;
 
 									case 'unpausepart' :
 										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl' AND pl_id='$part'");
 										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=plug&a=details&pl=".$pl);
+										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl);
 										exit;
 										break;
 
@@ -534,26 +534,26 @@ switch ($a)
 													}
 
 
-													$adminmain .= "<tr><td><a href=\"admin.php?m=plug&amp;a=details&amp;pl=".$info['Code']."\">";
+													$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&amp;a=details&amp;pl=".$info['Code'])."\">";
 													$adminmain .= ($plg_tools[$info['Code']]) ? "<img src=\"images/admin/tools.gif\" alt=\"\" />" : "<img src=\"images/admin/plug.gif\" alt=\"\" />";
 
 													$adminmain .= " ".$info['Name']."</a></td><td>".$x."</td>";
 
 													$adminmain .= "<td style=\"text-align:center;\">";
-													$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"admin.php?m=config&amp;n=edit&amp;o=plug&amp;p=".$info['Code']."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
+													$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=plug&amp;p=".$info['Code'])."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
 													$adminmain .= "</td>";
 													$adminmain .= "<td style=\"text-align:center;\">".$info['Partscount']."</td>";
 													$adminmain .= "<td style=\"text-align:center;\">".$status[$part_status]."</td>";
-													$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=plug&amp;io=".$info['Code']."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
+													$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&amp;ic=plug&amp;io=".$info['Code'])."."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
 													$adminmain .= "<td style=\"text-align:center;\">";
 
 													if ($plg_tools[$info['Code']])
 													{
-														$adminmain .= "<a href=\"admin.php?m=tools&amp;p=".$info['Code']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>";
+														$adminmain .= "<a href=\"".sed_url('admin', "m=tools&amp;p=".$info['Code'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>";
 													}
 													else
 													{
-														$adminmain .= ($plg_standalone[$info['Code']]) ? "<a href=\"plug.php?e=".$info['Code']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>" : '&nbsp;';
+														$adminmain .= ($plg_standalone[$info['Code']]) ? "<a href=\"".sed_url('plug', "e=".$info['Code'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>" : '&nbsp;';
 													}
 													$adminmain .= "</td></tr>";
 												}

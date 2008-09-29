@@ -23,7 +23,7 @@ if (is_array($extp))
 /* ===== */
 
 $out['logstatus'] = ($usr['id']>0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
-$out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"users.php\">".$L['Users']."</a>" : '';
+$out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"".sed_url('users')."\">".$L['Users']."</a>" : '';
 $out['compopup'] = sed_javascript($morejavascript);
 $out['fulltitle'] = $cfg['maintitle'];
 $out['subtitle'] = (empty($out['subtitle'])) ? $cfg['subtitle'] : $out['subtitle'];
@@ -47,9 +47,9 @@ if (sed_auth('page', 'any', 'A'))
 		$out['notices'] .= $L['hea_valqueues'];
 
 		if ($sys['pagesqueued']==1)
-		{ $out['notices'] .= "<a href=\"admin.php?m=page&amp;s=queue\">"."1 ".$L['Page']."</a> "; }
+		{ $out['notices'] .= "<a href=\"".sed_url('admin', 'm=page&amp;s=queue')."\">"."1 ".$L['Page']."</a> "; }
 		elseif ($sys['pagesqueued']>1)
-		{ $out['notices'] .= "<a href=\"admin.php?m=page&amp;s=queue\">".$sys['pagesqueued']." ".$L['Pages']."</a> "; }
+		{ $out['notices'] .= "<a href=\"".sed_url('admin', 'm=page&amp;s=queue')."\">".$sys['pagesqueued']." ".$L['Pages']."</a> "; }
 	}
 }
 
@@ -90,12 +90,12 @@ $t->assign(array (
 
 if ($usr['id']>0)
 {
-	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"admin.php\">".$L['Administration']."</a>" : '';
-	$out['loginout_url'] = "users.php?m=logout&amp;".sed_xg();
+	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"".sed_url('admin')."\">".$L['Administration']."</a>" : '';
+	$out['loginout_url'] = sed_url('users', 'm=logout&amp;'.sed_xg());
 	$out['loginout'] = "<a href=\"".$out['loginout_url']."\">".$L['Logout']."</a>";
-	$out['profile'] = "<a href=\"users.php?m=profile\">".$L['Profile']."</a>";
-	$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"pm.php\">".$L['Private_Messages']."</a>";
-	$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal']==0 || 	$sed_groups[$usr['maingrp']]['pfs_maxfile']==0) ? '' : "<a href=\"pfs.php\">".$L['Mypfs']."</a>";
+	$out['profile'] = "<a href=\"".sed_url('users', 'm=profile')."\">".$L['Profile']."</a>";
+	$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a>";
+	$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal']==0 || 	$sed_groups[$usr['maingrp']]['pfs_maxfile']==0) ? '' : "<a href=\"".sed_url('pfs')."\">".$L['Mypfs']."</a>";
 
 	if (!$cfg['disable_pm'])
 	{
@@ -104,7 +104,7 @@ if ($usr['id']>0)
 			$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=0");
 			$usr['messages'] = sed_sql_result($sqlpm,0,'COUNT(*)');
 		}
-		$out['pmreminder'] = "<a href=\"pm.php\">";
+		$out['pmreminder'] = "<a href=\"".sed_url('pm')."\">";
 		$out['pmreminder'] .= ($usr['messages']>0) ? $usr['messages'].' '.$L['hea_privatemessages'] : $L['hea_noprivatemessages'];
 		$out['pmreminder'] .= "</a>";
 	}
@@ -126,7 +126,7 @@ else
 {
 	$out['guest_username'] = "<input type=\"text\" name=\"rusername\" size=\"12\" maxlength=\"32\" />";
 	$out['guest_password'] = "<input type=\"password\" name=\"rpassword\" size=\"12\" maxlength=\"32\" />";
-	$out['guest_register'] = "<a href=\"users.php?m=register\">".$L["Register"]."</a>";
+	$out['guest_register'] = "<a href=\"".sed_url('users', 'm=register')."\">".$L["Register"]."</a>";
 	$out['guest_cookiettl'] = "<select name=\"rcookiettl\" size=\"1\">";
 	$out['guest_cookiettl'] .= "<option value=\"0\" selected=\"selected\">".$L['No']."</option>";
 

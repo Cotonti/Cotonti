@@ -19,7 +19,7 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=tools", $L['Tools']);
+$adminpath[] = array (sed_url('admin', 'm=tools'), $L['Tools']);
 $adminhelp = $L['adm_help_tools'];
 
 $p = sed_import('p','G','ALP');
@@ -47,7 +47,7 @@ if (!empty($p))
 
 	if (count($extp)==0)
 		{
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=907");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=907", '', true));
 		exit;
 		}
 
@@ -59,7 +59,7 @@ if (!empty($p))
 		}
 	else
 		{
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=907");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=907", '', true));
 		exit;
 		}
 
@@ -72,7 +72,7 @@ if (!empty($p))
 			 }
 		}
 
-	$adminpath[] = array ("admin.php?m=tools&amp;p=$p", sed_cc($info['Name']));
+	$adminpath[] = array (sed_url('admin', "m=tools&amp;p="$p), sed_cc($info['Name']));
 	$adminhelp = $L['Description']." : ".$info['Description']."<br />".$L['Version']." : ".$info['Version']."<br />".$L['Date']." : ".$info['Date']."<br />".$L['Author']." : ".$info['Author']."<br />".$L['Copyright']." : ".$info['Copyright']."<br />".$L['Notes']." : ".$info['Notes'];
 
 	}
@@ -116,7 +116,7 @@ else
 				}
 
 			$plugin_icon = (empty($x[1])) ? 'plugins' : $x[1];
-			$adminmain  .= "<tr><td><a href=\"admin.php?m=tools&amp;p=".$x[0]."\">";
+			$adminmain  .= "<tr><td><a href=\"".sed_url('admin', "m=tools&amp;p=".$x[0])."\">";
 			$adminmain  .= "<img src=\"images/admin/tools.gif\" alt=\"\" /> ".$info['Name']."</a></td></tr>";
 			}
 		$adminmain .= "</table>";

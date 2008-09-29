@@ -78,7 +78,7 @@ function sed_build_adminsection($adminpath)
 	global $cfg, $L;
 
 	$result = array();
-	$result[] = "<a href=\"admin.php\">".$L['Adminpanel']."</a>";
+	$result[] = "<a href=\"".sed_url('admin')."\">".$L['Adminpanel']."</a>";
 	foreach($adminpath as $i => $k)
 	{ $result[] = "<a href=\"".$k[0]."\">".$k[1]."</a>"; }
 	$result = implode(" ".$cfg['separator']." ", $result);

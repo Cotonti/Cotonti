@@ -81,7 +81,7 @@ sed_block($usr['auth_read']);
 
 if ($fs_state)
 {
-	header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=602");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=602", '', true));
 	exit;
 }
 
@@ -101,7 +101,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_forum_prunetopics('single', $s, $q);
 			sed_log("Deleted topic #".$q, 'for');
 			sed_forum_sectionsetlast($s);
-			header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 
 			break;
@@ -178,7 +178,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_forum_sectionsetlast($s);
 			sed_forum_sectionsetlast($ns);
 			sed_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=".$s);
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 			break;
 
@@ -187,7 +187,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_state=1, ft_sticky=0 WHERE ft_id='$q'");
 			sed_log("Locked topic #".$q, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 			break;
 
@@ -196,7 +196,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=0 WHERE ft_id='$q'");
 			sed_log("Pinned topic #".$q, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 			break;
 
@@ -205,7 +205,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=1 WHERE ft_id='$q'");
 			sed_log("Announcement topic #".$q, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 			break;
 
@@ -215,7 +215,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
 			sed_forum_sectionsetlast($s);
 			sed_log("Bumped topic #".$q, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 			break;
 
@@ -224,7 +224,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			sed_log("Made topic #".$q." private", 'for');
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_mode='1' WHERE ft_id='$q'");
-			header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 			break;
 
@@ -233,7 +233,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			sed_log("Resetted topic #".$q, 'for');
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=0, ft_state=0, ft_mode=0 WHERE ft_id='$q'");
-			header("Location: " . SED_ABSOLUTE_URL . "forums.php?m=topics&s=$s");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 			break;
 
@@ -249,7 +249,7 @@ $db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 
 $jumpbox = "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
-$jumpbox .= "<option value=\"forums.php\">".$L['Forums']."</option>";
+$jumpbox .= "<option value=\"".sed_url('forums')."\">".$L['Forums']."</option>";
 
 $ftitles = array();
 
@@ -260,7 +260,7 @@ while ($row1 = sed_sql_fetcharray($sql1))
 		$ftitles[$row1['fs_id']] = $row1['fs_title'];
 		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $ftitles[$row1['fs_masterid']]) : false;
 		$selected = ($row1['fs_id']==$s) ? "selected=\"selected\"" : '';
-		$jumpbox .= "<option $selected value=\"forums.php?m=topics&amp;s=".$row1['fs_id']."\">".sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master)."</option>";
+		$jumpbox .= "<option $selected value=\"".sed_url('forums', "m=topics&amp;s=".$row1['fs_id'])."\">".sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master)."</option>";
 	}
 }
 $jumpbox .= "</select>";
@@ -295,30 +295,30 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'topics', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-$pages = sed_pagination("forums.php?m=topics&amp;s=$s&amp;o=$o&amp;w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']);
-list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=topics&amp;s=$s&amp;o=$o&amp;w=$w", $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE);
+$pages = sed_pagination("forums.php?m=topics&amp;s=$s&amp;o=$o&amp;w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']); //omg, more pagination
+list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=topics&amp;s=$s&amp;o=$o&amp;w=$w", $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE); //someone please kill the pagination monkey
 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $ftitles[$fs_masterid]) : false;
 
-$toptitle = "<a href=\"forums.php\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master);
+$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(
 	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
 	"FORUMS_TOPICS_VIEWERS" => $fs_viewers,
-	"FORUMS_TOPICS_NEWTOPICURL" => "forums.php?m=newtopic&amp;s=".$s,
+	"FORUMS_TOPICS_NEWTOPICURL" => sed_url('forums', "m=newtopic&amp;s=".$s),
 	"FORUMS_TOPICS_PAGES" => $pages,
 	"FORUMS_TOPICS_PAGEPREV" => $pages_prev,
 	"FORUMS_TOPICS_PAGENEXT" => $pages_next,
 	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
 	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
-	"FORUMS_TOPICS_TITLE_TOPICS" => "<a href=\"forums.php?m=topics&amp;s=".$s."&amp;o=title&amp;w=".rev($w)."\">".$L['Topics']." ".cursort($o=='title', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_VIEWS" => "<a href=\"forums.php?m=topics&amp;s=".$s."&amp;o=viewcount&amp;w=".rev($w)."\">".$L['Views']." ".cursort($o=='viewcount', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_POSTS" => "<a href=\"forums.php?m=topics&amp;s=".$s."&amp;o=postcount&amp;w=".rev($w)."\">".$L['Posts']." ".cursort($o=='postcount', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_REPLIES" => "<a href=\"forums.php?m=topics&amp;s=".$s."&amp;o=postcount&amp;w=".rev($w)."\">".$L['Replies']." ".cursort($o=='postcount', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_STARTED" => "<a href=\"forums.php?m=topics&amp;s=".$s."&amp;o=creationdate&amp;w=".rev($w)."\">".$L['Started']." ".cursort($o=='creationdate', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_LASTPOST" => "<a href=\"forums.php?m=topics&amp;s=".$s."&amp;o=updated&amp;w=".rev($w)."\">".$L['Lastpost']." ".cursort($o=='updated', $w)."</a>"
+	"FORUMS_TOPICS_TITLE_TOPICS" => "<a href=\"".sed_url('forums', "m=topics&amp;s=".$s."&amp;o=title&amp;w=".rev($w))."\">".$L['Topics']." ".cursort($o=='title', $w)."</a>",
+	"FORUMS_TOPICS_TITLE_VIEWS" => "<a href=\"".sed_url('forums', "m=topics&amp;s=".$s."&amp;o=viewcount&amp;w=".rev($w))."\">".$L['Views']." ".cursort($o=='viewcount', $w)."</a>",
+	"FORUMS_TOPICS_TITLE_POSTS" => "<a href=\"".sed_url('forums', "m=topics&amp;s=".$s."&amp;o=postcount&amp;w=".rev($w))."\">".$L['Posts']." ".cursort($o=='postcount', $w)."</a>",
+	"FORUMS_TOPICS_TITLE_REPLIES" => "<a href=\"".sed_url('forums', "m=topics&amp;s=".$s."&amp;o=postcount&amp;w=".rev($w))."\">".$L['Replies']." ".cursort($o=='postcount', $w)."</a>",
+	"FORUMS_TOPICS_TITLE_STARTED" => "<a href=\"".sed_url('forums', "m=topics&amp;s=".$s."&amp;o=creationdate&amp;w=".rev($w))."\">".$L['Started']." ".cursort($o=='creationdate', $w)."</a>",
+	"FORUMS_TOPICS_TITLE_LASTPOST" => "<a href=\"".sed_url('forums', "m=topics&amp;s=".$s."&amp;o=updated&amp;w=".rev($w))."\">".$L['Lastpost']." ".cursort($o=='updated', $w)."</a>"
 	));
 
 	/* === Hook - Part1 : Set === */
@@ -353,7 +353,7 @@ $t->assign(array(
 
 			if ($fsn['fs_lt_id']>0)
 			{
-				$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=unread#unread\">" : "<a href=\"forums.php?m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=last#bottom\">";
+				$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url('forums', "m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=unread", "#unread")."\">" : "<a href=\"".sed_url('forums', "m=posts&amp;q=".$fsn['fs_lt_id']."&amp;n=last", "#bottom")."\">";
 				$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
 			}
 			else
@@ -385,7 +385,7 @@ $t->assign(array(
 		"FORUMS_SECTIONS_ROW_POSTCOUNT_ALL" => $fsn['fs_postcount_all'],
 		"FORUMS_SECTIONS_ROW_VIEWCOUNT" => $fsn['fs_viewcount'],
 		"FORUMS_SECTIONS_ROW_VIEWCOUNT_SHORT" => $fsn['fs_viewcount_short'],
-		"FORUMS_SECTIONS_ROW_URL" => "forums.php?m=topics&amp;s=".$fsn['fs_id'],
+		"FORUMS_SECTIONS_ROW_URL" => sed_url('forums', "m=topics&amp;s=".$fsn['fs_id']),
 		"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsn['fs_lt_date'],
 		"FORUMS_SECTIONS_ROW_LASTPOSTER" => $fsn['fs_lt_postername'],
 		"FORUMS_SECTIONS_ROW_LASTPOST" => $fsn['lastpost'],
@@ -416,7 +416,7 @@ $t->assign(array(
 
 		if ($row['ft_movedto']>0)
 		{
-			$row['ft_url'] = "forums.php?m=posts&amp;q=".$row['ft_movedto'];
+			$row['ft_url'] = sed_url('forums', "m=posts&amp;q=".$row['ft_movedto']);
 			$row['ft_icon'] = "<img src=\"skins/$skin/img/system/posts_moved.gif\" alt=\"\" />";
 			$row['ft_title']= $L['Moved'].": ".$row['ft_title'];
 			$row['ft_lastpostername'] = "&nbsp;";
@@ -424,13 +424,13 @@ $t->assign(array(
 			$row['ft_replycount'] = "&nbsp;";
 			$row['ft_viewcount'] = "&nbsp;";
 			$row['ft_lastpostername'] = "&nbsp;";
-			$row['ft_lastposturl'] = "<a href=\"forums.php?m=posts&amp;q=".$row['ft_movedto']."&amp;n=last#bottom\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ".$L['Moved'];
+			$row['ft_lastposturl'] = "<a href=\"".sed_url('forums', "m=posts&amp;q=".$row['ft_movedto']."&amp;n=last", "#bottom")."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ".$L['Moved'];
 			$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 		}
 		else
 		{
-			$row['ft_url'] = "forums.php?m=posts&amp;q=".$row['ft_id'];
-			$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=unread#unread\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a>";
+			$row['ft_url'] = sed_url('forums', "m=posts&amp;q=".$row['ft_id']);
+			$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url('forums', "m=posts&amp;q=".$row['ft_id']."&amp;n=unread", "#unread")."\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('forums', "m=posts&amp;q=".$row['ft_id']."&amp;n=last", "#bottom")."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a>";
 			$row['ft_lastposturl'] .= @date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
 			$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;

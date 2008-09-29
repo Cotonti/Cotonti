@@ -183,7 +183,7 @@ function sed_block($allowed)
 	if(!$allowed)
 	{
 		global $sys;
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
+		header("Location: " . SED_ABSOLUTE_URL .   sed_url('message', "msg=930&".$sys['url_redirect'], '', true));
 		exit;
 	}
 	return FALSE;
@@ -201,7 +201,7 @@ function sed_blockguests()
 
 	if ($usr['id']<1)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=930&".$sys['url_redirect']);
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930&".$sys['url_redirect'], '', true));
 		exit;
 	}
 	return FALSE;
@@ -747,7 +747,7 @@ function sed_build_comments($code, $url, $display)
 				/* ===== */
 
 				sed_shield_update(20, "New comment");
-				header("Location: " . SED_ABSOLUTE_URL . "$url&comments=1");
+				header("Location: " . SED_ABSOLUTE_URL . "$url&comments=1"); //needs trustmaster's attention
 				exit;
 			}
 		}
@@ -845,7 +845,7 @@ function sed_build_comments($code, $url, $display)
 				$com_text = sed_cc($row['com_text']);
 
 				$com_admin = ($usr['isadmin_com']) ? $L['Ip'].":".sed_build_ipsearch($row['com_authorip'])." &nbsp;".$L['Delete'].":[<a href=\"".$url."&amp;comments=1&amp;ina=delete&amp;ind=".$row['com_id']."&amp;".sed_xg()."\">x</a>]" : '' ;
-				$com_authorlink = ($row['com_authorid']>0) ? "<a href=\"users.php?m=details&amp;id=".$row['com_authorid']."\">".$com_author."</a>" : $com_author ;
+				$com_authorlink = ($row['com_authorid']>0) ? "<a href=\"".sed_url('users', 'm=details&amp;id='.$row['com_authorid'])."\">".$com_author."</a>" : $com_author ;
 
 				$t-> assign(array(
 					"COMMENTS_ROW_ID" => $row['com_id'],
@@ -912,7 +912,7 @@ function sed_build_country($flag)
 	global $sed_countries;
 
 	$flag = (empty($flag)) ? '00' : $flag;
-	return '<a href="users.php?f=country_'.$flag.'">'.$sed_countries[$flag].'</a>';
+	return '<a href="'.sed_url('users', 'f=country_'.$flag).'">'.$sed_countries[$flag].'</a>';
 }
 
 /**
@@ -944,7 +944,7 @@ function sed_build_email($email, $hide = false)
 function sed_build_flag($flag)
 {
 	$flag = (empty($flag)) ? '00' : $flag;
-	return '<a href="users.php?f=country_'.$flag.'"><img src="images/flags/f-'.$flag.'.gif" alt="'.$flag.'" /></a>';
+	return '<a href="'.sed_url('users', 'f=country_'.$flag).'"><img src="images/flags/f-'.$flag.'.gif" alt="'.$flag.'" /></a>';
 }
 
 /**
@@ -966,18 +966,18 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 	{
 		foreach($pathcodes as $k => $x)
 		{
-			$tmp[] = '<a href="forums.php?c='.$x.'#'.$x.'">'.sed_cc($sed_forums_str[$x]['title']).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'c='.$x.'#'.$x).'">'.sed_cc($sed_forums_str[$x]['title']).'</a>';
 		}
 		if(is_array($master))
 		{
-			$tmp[] = '<a href="forums.php?m=topics&amp;s='.$master[0].'">'.sed_cc($master[1]).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&amp;s='.$master[0]).'">'.sed_cc($master[1]).'</a>';
 		}
 		elseif($master)
 		{
 			$rowa = sed_sql_fetcharray(sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id=$master"));
-			$tmp[] = '<a href="forums.php?m=topics&amp;s='.$master.'">'.sed_cc( $rowa['fs_title']).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&amp;s='.$master).'">'.sed_cc( $rowa['fs_title']).'</a>';
 		}
-		$tmp[] = '<a href="forums.php?m=topics&amp;s='.$sectionid.'">'.sed_cc($title).'</a>';
+		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&amp;s='.$sectionid).'">'.sed_cc($title).'</a>';
 	}
 	else
 	{
@@ -1018,7 +1018,7 @@ function sed_build_group($grpid)
 	{
 		if(sed_auth('users', 'a', 'A'))
 		{
-			return '<a href="users.php?gm='.$grpid.'">'.$sed_groups[$grpid]['title'].'</a> ('.$L['Hidden'].')';
+			return '<a href="'.sed_url('users', 'gm='.$grpid).'">'.$sed_groups[$grpid]['title'].'</a> ('.$L['Hidden'].')';
 		}
 		else
 		{
@@ -1027,7 +1027,7 @@ function sed_build_group($grpid)
 	}
 	else
 	{
-		return '<a href="users.php?gm='.$grpid.'">'.$sed_groups[$grpid]['title'].'</a>';
+		return '<a href="'.sed_url('users', 'gm='.$grpid).'">'.$sed_groups[$grpid]['title'].'</a>';
 	}
 }
 
@@ -1063,7 +1063,7 @@ function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
 			{
 				$res .= "<input type=\"radio\" class=\"radio\" name=\"rusermaingrp\" value=\"$k\" ".$checked_maingrp." ".$readonly_maingrp." /> \n";
 				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"rusergroupsms[$k]\" ".$checked." $readonly />\n";
-				$res .= ($k == SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"users.php?g=".$k."\">".$sed_groups[$k]['title']."</a>";
+				$res .= ($k == SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"".sed_url('users', 'g='.$k)."\">".$sed_groups[$k]['title']."</a>";
 				$res .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 				$res .= "<br />";
 			}
@@ -1102,7 +1102,7 @@ function sed_build_ipsearch($ip)
 	global $xk;
 	if(!empty($ip))
 	{
-		return '<a href="admin.php?m=tools&amp;p=ipsearch&amp;a=search&amp;id='.$ip.'&amp;x='.$xk.'">'.$ip.'</a>';
+		return '<a href="'.sed_url('admin', 'm=tools&amp;p=ipsearch&amp;a=search&amp;id='.$ip.'&amp;x='.$xk).'">'.$ip.'</a>';
 	}
 	return '';
 }
@@ -1157,7 +1157,7 @@ function sed_build_pfs($id, $c1, $c2, $title)
 function sed_build_pm($user)
 {
 	global $usr;
-	return '<a href="pm.php?m=send&amp;to='.$user.'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="" /></a>';
+	return '<a href="'.sed_url('pm', 'm=send&amp;to='.$user).'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="" /></a>';
 }
 
 /* ------------------ */
@@ -1499,7 +1499,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? '<a href="users.php?m=details&amp;id='.$id.'">'.$user.'</a>' : '?';
+		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&amp;id='.$id.'&amp;'.$user).'">'.$user.'</a>' : '?';
 	}
 }
 
@@ -1815,7 +1815,7 @@ function sed_die($cond=TRUE)
 {
 	if ($cond)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=950");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=950", '', true));
 		exit;
 	}
 	return FALSE;
@@ -1845,7 +1845,7 @@ function sed_dieifdisabled($disabled)
 {
 	if ($disabled)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=940");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=940", '', true));
 		exit;
 	}
 	return;

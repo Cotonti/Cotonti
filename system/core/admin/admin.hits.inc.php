@@ -19,8 +19,8 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['auth_read']);
 
-$adminpath[] = array ("admin.php?m=other", $L['Other']);
-$adminpath[] = array ("admin.php?m=hits", $L['Hits']);
+$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array (sed_url('admin', 'm=hits'), $L['Hits']);
 $adminhelp = $L['adm_help_hits'];
 
 $f = sed_import('f','G','TXT');
@@ -28,7 +28,7 @@ $v = sed_import('v','G','TXT');
 
 if ($f=='year' || $f=='month')
 	{
-	$adminpath[] = array ("admin.php?m=hits&amp;f=".$f."&amp;v=".$v, "(".$v.")");
+	$adminpath[] = array (sed_url('admin'), 'm=hits&amp;f='.$f.'&amp;v='.$v), "(".$v.")");
 	$sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
 	$adminmain .= "<h4>".$v." :</h4>";
 	$adminmain .= "<table class=\"cells\">";
@@ -94,7 +94,7 @@ else
 		{
 		$percentbar = floor(($hits / $hits_y_max) * 100);
 		$adminmain .= "<tr><td style=\"width:80px;text-align:center; padding:1px;\">";
-		$adminmain .= "<a href=\"admin.php?m=hits&amp;f=year&amp;v=$year\">".$year."</a></td>";
+		$adminmain .= "<a href=\"".sed_url('admin', "")."?m=hits&amp;f=year&amp;v=$year\">".$year."</a></td>";
 		$adminmain .= "<td style=\"text-align:right; width:96px; padding:1px;\">".$hits." ".$L['Hits']."</td>";
 		$adminmain .= "<td style=\"text-align:right; width:40px; padding:1px;\">$percentbar%</td><td>";
 		$adminmain .= "<div style=\"width:320px;\"><div class=\"bar_back\">";
@@ -110,7 +110,7 @@ else
 		{
 		$percentbar = floor(($hits / $hits_m_max) * 100);
 		$adminmain .= "<tr><td style=\"width:80px; text-align:center; padding:1px;\">";
-		$adminmain .= "<a href=\"admin.php?m=hits&amp;f=month&amp;v=$month\">".$month."</a></td>";
+		$adminmain .= "<a href=\"".sed_url('admin', "m=hits&amp;f=month&amp;v=$month")."\">".$month."</a></td>";
 		$adminmain .= "<td style=\"text-align:right; width:96px; padding:1px;\">".$hits." ".$L['Hits']."</td>";
 		$adminmain .= "<td style=\"text-align:right; width:40px; padding:1px;\">$percentbar%</td>";
 		$adminmain .= "<td style=\"padding:1px;\">";

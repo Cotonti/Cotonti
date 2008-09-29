@@ -105,7 +105,7 @@ else
 
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
-$submitnewpage = ($usr['auth_write'] && $c!='all') ? "<a href=\"page.php?m=add&amp;c=".$c."\">".$L['lis_submitnew']."</a>" : '';
+$submitnewpage = ($usr['auth_write'] && $c!='all') ? "<a href=\"".sed_url('page', "m=add&amp;c=".$c)."\">".$L['lis_submitnew']."</a>" : '';
 
 $pagination = sed_pagination("list.php?c=$c&amp;s=$s&amp;w=$w&amp;o=$o&amp;p=$p", $d, $totallines, $cfg['maxrowsperpage']);
 list($pageprev, $pagenext) = sed_pagination_pn("list.php?c=$c&amp;s=$s&amp;w=$w&amp;o=$o&amp;p=$p", $d, $totallines, $cfg['maxrowsperpage'], TRUE);
@@ -221,7 +221,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 {
 	$jj++;
 	$pag['page_desc'] = sed_cc($pag['page_desc']);
-	$pag['page_pageurl'] = (empty($pag['page_alias'])) ? "page.php?id=".$pag['page_id'] : "page.php?al=".$pag['page_alias'];
+	$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', "id=".$pag['page_id']) : sed_url('page', "al=".$pag['page_alias']);
 
 	if (!empty($pag['page_url']) && $pag['page_file'])
 	{

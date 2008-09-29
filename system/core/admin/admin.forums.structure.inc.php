@@ -21,8 +21,8 @@ sed_block($usr['isadmin']);
 
 $id = sed_import('id','G','INT');
 
-$adminpath[] = array ("admin.php?m=forums", $L['Forums']);
-$adminpath[] = array ("admin.php?m=forums&amp;s=structure", $L['Structure']);
+$adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
+$adminpath[] = array (sed_url('admin', 'm=forums&amp;s=structure'), $L['Structure']);
 $adminhelp = $L['adm_help_forum_structure'];
 
 if ($n=='options')
@@ -53,7 +53,7 @@ if ($n=='options')
 			WHERE fn_id='".$id."'");
 
 		sed_cache_clear('sed_forums_str');
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure', '', true));
 		exit;
 		}
 
@@ -94,9 +94,9 @@ if ($n=='options')
 		}
 
 
-	$adminpath[] = array ("admin.php?m=forums&amp;s=structure&amp;n=options&amp;id=".$id, sed_cc($fn_title));
+	$adminpath[] = array (sed_url('admin', "m=forums&amp;s=structure&amp;n=options&amp;id=".$id), sed_cc($fn_title));
 
-	$adminmain .= "<form id=\"savestructure\" action=\"admin.php?m=forums&amp;s=structure&amp;n=options&amp;a=update&amp;id=".$fn_id."\" method=\"post\">";
+	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "forums&amp;s=structure&amp;n=options&amp;a=update&amp;id=".$fn_id)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Code']." :</td>";
 	$adminmain .= "<td>".$fn_code."</td></tr>";
@@ -140,7 +140,7 @@ else
 				WHERE fn_id='".$i."'");
 			}
 		sed_cache_clear('sed_forums_str');
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure', '', true));
 		exit;
 		}
 	elseif ($a=='add')
@@ -157,7 +157,7 @@ else
 			}
 
 		sed_cache_clear('sed_forums_str');
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure', '', true));
 		exit;
 		}
 	elseif ($a=='delete')
@@ -165,7 +165,7 @@ else
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 		sed_cache_clear('sed_forums_str');
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=forums&s=structure");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure', '', true));
 		exit;
 		}
 
@@ -177,7 +177,7 @@ else
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC");
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$adminmain .= "<form id=\"savestructure\" action=\"admin.php?m=forums&amp;s=structure&amp;a=update\" method=\"post\">";
+	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=forums&amp;s=structure&amp;a=update")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td class=\"coltop\">".$L['Delete']."</td>";
 	$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
@@ -210,7 +210,7 @@ else
 			{ $fn_tpl_sym = "+"; }
 
 		$adminmain .= "<tr><td style=\"text-align:center;\">";
-		$adminmain .= ($sectioncount[$fn_code]>0) ? '' : "[<a href=\"admin.php?m=forums&amp;s=structure&amp;a=delete&amp;id=".$fn_id."&amp;c=".$row['fn_code']."&amp;".sed_xg()."\">x</a>]";
+		$adminmain .= ($sectioncount[$fn_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=forums&amp;s=structure&amp;a=delete&amp;id=".$fn_id."&amp;c=".$row['fn_code']."&amp;".sed_xg())."\">x</a>]";
 		$adminmain .= "</td>";
 		$adminmain .= "<td>".$fn_code."</td>";
 		$adminmain .= "<td>$pathfieldimg<input type=\"text\" class=\"text\" name=\"s[$fn_id][rpath]\" value=\"".$fn_path."\" size=\"$pathfieldlen\" maxlength=\"24\" /></td>";
@@ -228,15 +228,15 @@ else
 
 		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$fn_id][rtitle]\" value=\"".$fn_title."\" size=\"24\" maxlength=\"32\" /></td>";
 		$adminmain .= "<td style=\"text-align:right;\">".$sectioncount[$fn_code]." ";
-		$adminmain .= "<a href=\"forums.php?c=".$fn_code."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
-		$adminmain .= "<td style=\"text-align:center;\"><a href=\"admin.php?m=forums&amp;s=structure&amp;n=options&amp;id=".$fn_id."&amp;".sed_xg()."\">".$L['Options']."</a></td>";
+		$adminmain .= "<a href=\"".sed_url('admin', "c=".$fn_code)."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
+		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=forums&amp;s=structure&amp;n=options&amp;id=".$fn_id."&amp;".sed_xg())."\">".$L['Options']."</a></td>";
 		$adminmain .= "</tr>";
 		}
 
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table></form>";
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$adminmain .= "<form id=\"addstructure\" action=\"admin.php?m=forums&amp;s=structure&amp;a=add\" method=\"post\">";
+	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url('admin', "m=forums&amp;s=structure&amp;a=add")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td style=\"width:160px;\">".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Path']." :</td><td><input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";

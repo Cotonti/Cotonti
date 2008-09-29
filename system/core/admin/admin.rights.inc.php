@@ -54,7 +54,7 @@ if ($a=='update')
 		}
 		sed_auth_reorder();
 		sed_auth_clear('all');
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=rights&g=".$g);
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=rights&g=".$g, '', true));
 		exit;
 	}
 	elseif (is_array($_POST['auth']))
@@ -79,7 +79,7 @@ if ($a=='update')
 		}
 		sed_auth_reorder();
 		sed_auth_clear('all');
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=rights&g=".$g);
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=rights&g=".$g, '', true));
 		exit;
 	}
 }
@@ -115,7 +115,7 @@ LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 WHERE auth_groupid='$g' AND auth_code='plug'
 ORDER BY auth_option ASC");
 
-$adminpath[] = array ("admin.php?m=rights&amp;g=".$g, $L['Rights']." / ".sed_cc($sed_groups[$g]['title']));
+$adminpath[] = array (sed_url('admin', "m=rights&amp;g=".$g, $L['Rights'])." / ".sed_cc($sed_groups[$g]['title']));
 
 $adv_columns = ($advanced) ? 5 : 0;
 
@@ -145,7 +145,7 @@ $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\
 $headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_a.gif\" alt=\"\" /></td>\n";
 $headcol .= "</tr>\n";
 
-$adminmain .= "<form id=\"saverights\" action=\"admin.php?m=rights&amp;a=update&amp;g=$g\" method=\"post\">";
+$adminmain .= "<form id=\"saverights\" action=\"".sed_url('admin', "m=rights&amp;a=update&amp;g=".$g)."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\">";
 
 if ($g>5)
@@ -196,7 +196,7 @@ function sed_rights_parseline($row, $title, $link)
 	$res .= "<td style=\"padding:1px;\">\n";
 	$res .= "<img src=\"images/admin/".$row['auth_code'].".gif\" alt=\"\" /> ";
 	$res .= "<a href=\"$link\">".$title."</a></td>\n";
-	$res .= "<td style=\"text-align:center; padding:2px;\"><a href=\"admin.php?m=rightsbyitem&amp;ic=".$row['auth_code']."&amp;io=".$row['auth_option']."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
+	$res .= "<td style=\"text-align:center; padding:2px;\"><a href=\"".sed_url('admin', "m=rightsbyitem&amp;ic=".$row['auth_code']."&amp;io=".$row['auth_option'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
 	$res .= "<td style=\"text-align:center; padding:2px;\">".implode("</td><td style=\"text-align:center; padding:2px;\">", $box)."</td>\n";
 	$res .= "<td style=\"text-align:center; padding:2px;\">".sed_build_user($row['auth_setbyuserid'], sed_cc($row['user_name']))."</td>\n";
 	$res .= "</tr>\n";
@@ -210,7 +210,7 @@ $adminmain .= $headcol;
 
 while ($row = sed_sql_fetcharray($sql1))
 {
-	$link = "admin.php?m=".$row['auth_code'];
+	$link = sed_url('admin', "m=".$row['auth_code']);
 	$title = $L['adm_code'][$row['auth_code']];
 	$adminmain .= sed_rights_parseline($row, $title, $link);
 }
@@ -222,7 +222,7 @@ $adminmain .= $headcol;
 
 while ($row = sed_sql_fetcharray($sql2))
 {
-	$link = "admin.php?m=forums&amp;n=edit&amp;id=".$row['auth_option'];
+	$link = sed_url('admin', "m=forums&amp;n=edit&amp;id=".$row['auth_option']);
 	$title = sed_cc(sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],32), FALSE));
 	$adminmain .= sed_rights_parseline($row, $title, $link);
 }
@@ -234,7 +234,7 @@ $adminmain .= $headcol;
 
 while ($row = sed_sql_fetcharray($sql3))
 {
-	$link = "admin.php?m=page";
+	$link = sed_url('admin', "m=page");
 	$title = $sed_cat[$row['auth_option']]['tpath'];
 	$adminmain .= sed_rights_parseline($row, $title, $link);
 }
@@ -246,7 +246,7 @@ $adminmain .= $headcol;
 
 while ($row = sed_sql_fetcharray($sql4))
 {
-	$link = "admin.php?m=plug&amp;a=details&amp;pl=".$row['auth_option'];
+	$link = sed_url('admin', "m=plug&amp;a=details&amp;pl=".$row['auth_option']);
 	$title = $L['Plugin']." : ".$row['auth_option'];
 	$adminmain .= sed_rights_parseline($row, $title, $link);
 }
@@ -260,7 +260,7 @@ if (is_array($extp))
 $adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 $adminmain .= "</table></form>";
 
-$adminmain .= '<a href="admin.php?m=rights&amp;g='.$g.'&amp;advanced=1">'.$L['More'].'</a>';
+$adminmain .= '<a href="'.sed_url('admin', 'm=rights&amp;g='.$g.'&amp;advanced=1').'">'.$L['More'].'</a>';
 
 $adminhelp = $legend;
 

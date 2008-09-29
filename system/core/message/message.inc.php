@@ -38,8 +38,8 @@ switch( $msg )
 		$message = $L['msg100_0'];
 		$body = $L['msg100_1'];
 		$rd = 2;
-		$ru = "users.php?m=auth";
-		$ru .= (!empty($redirect)) ? "&redirect=".$redirect : '';
+		$the_redirect = (!empty($redirect)) ? "&redirect=".$redirect : '';
+		$ru = sed_url('users', 'm=auth'.$redirect);
 
 		break;
 
@@ -53,14 +53,14 @@ switch( $msg )
 		$body = $L['msg102_1'];
 		$r = 1;
 		$rd = 2;
-		$ru = "index.php";
+		$ru = sed_url('index');
 		break;
 
 	case '104':
 		$message = $L['msg104_0'];
 		$body = $L["msg104_1"];
 		$rd = 2;
-		$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
 		break;
 
 	case '105':
@@ -87,7 +87,7 @@ switch( $msg )
 		$message = $L['msg113_0'];
 		$body = $L['msg113_1'];
 		$rd = 2;
-		$ru = "users.php?m=profile";
+		$ru = sed_url('users', 'm=profile');
 		break;
 
 	case '117':
@@ -135,44 +135,44 @@ switch( $msg )
 		$message = $L['msg400_0'];
 		$body = $L["msg400_1"];
 		$rd = 5;
-		$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
 		break;
 
 	case '401':
 		$message = $L['msg401_0'];
 		$body = $L["msg401_1"];
 		$rd = 5;
-		$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
 		break;
 
 	case '403':
 		$message = $L['msg403_0'];
 		$body = $L["msg403_1"];
 		$rd = 5;
-		$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
 		break;
 
 	case '404':
 		$message = $L['msg404_0'];
 		$body = $L["msg404_1"];
 		$rd = 5;
-		$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
 		break;
 
 	case '500':
 		$message = $L['msg500_0'];
 		$body = $L["msg500_1"];
 		$rd = 5;
-		$ru = (empty($redirect)) ? "index.php" : base64_decode($redirect);
+		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
 		break;
 
 		/* ======== Private messages ======== */
 
 	case '502':
 		$message = $L['msg502_0'];
-		$body = $L['msg502_1']."<a href=\"pm.php\">".$L['msg502_2']."</a>".$L['msg502_3'];
+		$body = $L['msg502_1']."<a href=\"".sed_url('pm')."\">".$L['msg502_2']."</a>".$L['msg502_3'];
 		$rd = 2;
-		$ru = "pm.php";
+		$ru = sed_url('pm');
 		break;
 
 		/* ======== Private messages ======== */
@@ -218,7 +218,7 @@ switch( $msg )
 		$message = $L['msg916_0'];
 		$body = $L["msg916_1"];
 		$rd = 2;
-		$ru = "admin.php";
+		$ru = sed_url('admin');
 		break;
 
 	case '930':
@@ -227,8 +227,8 @@ switch( $msg )
 		if ($usr['id']==0)
 		{
 			$rd = 2;
-			$ru = "users.php?m=auth";
-			$ru .= (!empty($redirect)) ? "&redirect=".$redirect : '';
+		$the_redirect = (!empty($redirect)) ? "&redirect=".$redirect : '';
+		$ru = sed_url('users', 'm=auth'.$redirect);
 		}
 		break;
 
@@ -255,16 +255,16 @@ switch( $msg )
 if(empty($rc) && empty($rd))
 {
 	$rd = '5';
-	$ru = 'index.php';
+	$ru = sed_url('index');
 }
 
 if($rc!='')
 {
-	$r['100'] = "admin.php?m=plug";
-	$r['101'] = "admin.php?m=hitsperday";
-	$r['102'] = "admin.php?m=polls";
-	$r['103'] = "admin.php?m=forums";
-	$r['200'] = "users.php";
+	$r['100'] = sed_url('admin', "m=plug");
+	$r['101'] = sed_url('admin', "m=hitsperday");
+	$r['102'] = sed_url('admin', "m=polls");
+	$r['103'] = sed_url('admin', "m=forums");
+	$r['200'] = sed_url('users');
 
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];

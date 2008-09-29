@@ -16,7 +16,7 @@ Description=Administration panel
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
-$adminpath[] = array ('admin.php?m=home', $L['Home']);
+$adminpath[] = array (sed_url('admin', 'm=home'), $L['Home']);
 
 $pagesqueued = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
 $pagesqueued = sed_sql_result($pagesqueued, 0, "COUNT(*)");
@@ -28,7 +28,7 @@ if (!empty($adminwarnings))
 	{ $adminmain .= $L['adm_warnings']." :".$adminwarnings; }
 
 $adminmain .= "<h4>".$L['adm_valqueue']." :</h4><ul>";
-$adminmain .= "<li><a href=\"admin.php?m=page&amp;s=queue\">".$L['Pages']." : ".$pagesqueued."</a></li>";
+$adminmain .= "<li><a href=\"".sed_url('admin', "m=page&amp;s=queue")."\">".$L['Pages']." : ".$pagesqueued."</a></li>";
 $adminmain .= "</ul>";
 
 /* === Hook for the plugins === */

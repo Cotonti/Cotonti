@@ -19,8 +19,8 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=page", $L['Page']);
-$adminpath[] = array ("admin.php?m=page&amp;s=queue", $L['adm_valqueue']);
+$adminpath[] = array (sed_url('admin', 'm=page'), $L['Page']);
+$adminpath[] = array (sed_url('admin', 'm=page&amp;s=queue'), $L['adm_valqueue']);
 $adminhelp = $L['adm_queues_page'];
 
 $id = sed_import('id','G','INT');
@@ -36,7 +36,7 @@ if ($a=='validate')
 		sed_block($usr['isadmin_local']);
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 		sed_cache_clear('latestpages');
-		header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=page&s=queue");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=queue', '', true));
 		exit;
 		}
 	else
@@ -54,7 +54,7 @@ if ($a=='unvalidate')
 		sed_block($usr['isadmin_local']);
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 		sed_cache_clear('latestpages');
-		header("Location: " . SED_ABSOLUTE_URL . "list.php?c=".$row['page_cat']);
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('list', "c=".$row['page_cat'], '', true));
 		exit;
 		}
 	else
@@ -70,7 +70,7 @@ $adminmain .= "<ul>";
 
 while ($row = sed_sql_fetcharray($sql))
 	{
-	$adminmain .= "<li><a href=\"page.php?id=".$row['page_id']."\">".sed_cc($row['page_title'])."</a><br />";
+	$adminmain .= "<li><a href=\"".sed_url('page', "id=".$row['page_id'])."\">".sed_cc($row['page_title'])."</a><br />";
 	$adminmain .= "#".$row['page_id']."<br />";
 	$adminmain .= $L['Category']." : ".$sed_cat[$row['page_cat']]['title']." (".$row["page_cat"].")<br />";
 	$adminmain .= $L['Description']." : ".sed_cc($row['page_desc'])."<br />";
@@ -85,8 +85,8 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= $L['Extrafield']." #1 : ".sed_cc($row['page_extra1'])."<br />";
 	$adminmain .= $L['Extrafield']." #2 : ".sed_cc($row['page_extra2'])."<br />";
 	$adminmain .= $L['Extrafield']." #3 : ".sed_cc($row['page_extra3'])."<br />";
-	$adminmain .= "<a href=\"admin.php?m=page&amp;s=queue&amp;a=validate&amp;id=".$row['page_id']."&amp;".sed_xg()."\">".$L['Validate']."</a>";
-	$adminmain .= " &nbsp; <a href=\"page.php?m=edit&amp;id=".$row["page_id"]."&amp;r=adm\">".$L['Edit']."</a></li>";
+	$adminmain .= "<a href=\"".sed_url('admin', "m=page&amp;s=queue&amp;a=validate&amp;id=".$row['page_id']."&amp;".sed_xg())."\">".$L['Validate']."</a>";
+	$adminmain .= " &nbsp; <a href=\"".sed_url('page', "m=edit&amp;id=".$row["page_id"]."&amp;r=adm")."\">".$L['Edit']."</a></li>";
 	}
 $adminmain .= "</ul>";
 $adminmain .= (sed_sql_numrows($sql)==0) ? "<p>".$L['None']."</p>" : '';

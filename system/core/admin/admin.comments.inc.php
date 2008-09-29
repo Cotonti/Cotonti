@@ -19,11 +19,11 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('comments', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=other", $L['Other']);
-$adminpath[] = array ("admin.php?m=comments", $L['Comments']);
+$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array (sed_url('admin', 'm=comments'), $L['Comments']);
 $adminhelp = $L['adm_help_comments'];
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=comments\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"".sed_url('admin', 'm=config&amp;n=edit&amp;o=core&amp;p=comments')."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($a=='delete')
 	{
@@ -41,7 +41,7 @@ $pagination = '';
 for($i = 1; $i <= $totalpages; $i++)
 {
 	$pagination .= ($i == $currentpage) ? ' <span class="pagenav_current">' : ' ';
-	$pagination .= '<a href="admin.php?m=comments&amp;d='.(($i-1)*$cfg['maxrowsperpage']).'">'.$i.'</a>';
+	$pagination .= '<a href="'.sed_url("admin", "m=comments&amp;d=".(($i-1)*$cfg['maxrowsperpage'])).'">'.$i.'</a>';
 	$pagination .= ($i == $currentpage) ? '</span> ' : ' ';
 	if($i != $totalpages) $pagination .= '|';
 }
@@ -69,23 +69,23 @@ while ($row = sed_sql_fetcharray($sql))
 	switch($row['com_type'])
 		{
 		case 'p':
-			$row['com_url'] = "page.php?id=".$row['com_value']."&amp;comments=1#c".$row['com_id'];
+			$row['com_url'] = sed_url('page', "id=".$row['com_value'], "#c".$row['com_id']);
 		break;
 		
 		case 'j':
-			$row['com_url'] = 'plug.php?e=weblogs&amp;m=page&amp;id='.$row['com_value'].'&amp;comments=1#c'.$row['com_id'];
+			$row['com_url'] = sed_url('plug', 'e=weblogs&amp;m=page&amp;id='.$row['com_value'], '#c'.$row['com_id']);
 		break;
 		
 		case 'g':
-			$row['com_url'] = 'plug.php?e=gal&amp;pic='.$row['com_value'].'&amp;comments=1#c'.$row['com_id'];
+			$row['com_url'] = sed_url('plug', 'e=gal&amp;pic='.$row['com_value'], '#c'.$row['com_id']);
 		break;
 		
 		case 'u':
-			$row['com_url'] = 'users.php?m=details&amp;id='.$row['com_value'].'&amp;comments=1#c'.$row['com_id'];
+			$row['com_url'] = sed_url('users', 'm=details&amp;id='.$row['com_value'], '#c'.$row['com_id']);
 		break;
 		
 		case 'v':
-			$row['com_url'] = 'polls.php?id='.$row['com_value'].'&amp;comments=1#c'.$row['com_id'];
+			$row['com_url'] = sed_url('polls', 'id='.$row['com_value'], '#c'.$row['com_id']);
 		break;
 		
 		default:
@@ -94,7 +94,7 @@ while ($row = sed_sql_fetcharray($sql))
 		}
 
 	$adminmain .= "<tr><td style=\"text-align:center;\">";
-	$adminmain .= "[<a href=\"admin.php?m=comments&amp;a=delete&amp;id=".$row['com_id']."&amp;".sed_xg()."\">x</a>]</td>";
+	$adminmain .= "[<a href=\"".sed_url('admin', "m=comments&amp;a=delete&amp;id=".$row['com_id']."&amp;".sed_xg())."\">x</a>]</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['com_id']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['com_code']."</td>";
 	$adminmain .= "<td>".$row['com_author']."</td>";

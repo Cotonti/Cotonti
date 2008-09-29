@@ -14,8 +14,8 @@ if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array('admin.php?m=other', $L['Other']);
-$adminpath[] = array('admin.php?m=bbcode', $L['adm_bbcodes']);
+$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(sed_url('admin', 'm=bbcode'), $L['adm_bbcodes']);
 $adminhelp = $L['adm_help_bbcodes'];
 
 $a = sed_import('a', 'G', 'ALP');
@@ -90,7 +90,7 @@ HTM;
 }
 
 $totalitems = sed_sql_rowcount($db_bbcode);
-$pagnav = sed_pagination('admin.php?m=bbcode', $d, $totalitems, $cfg['maxrowsperpage']);
+$pagnav = sed_pagination('admin.php?m=bbcode', $d, $totalitems, $cfg['maxrowsperpage']); //this will be changed
 
 $adminmain .= <<<HTM
 <div class="pagnav">
@@ -125,8 +125,10 @@ while($row = sed_sql_fetchassoc($res))
 	$enabled = $row['bbc_enabled'] ? ' checked="checked"' : '';
 	$container = $row['bbc_container'] ? ' checked="checked"' : '';
 	$postrender = $row['bbc_postrender'] ? ' checked="checked"' : '';
+	$bbcode_update_url = sed_url('admin', 'm=bbcode&amp;a=upd&amp;id='.$row['bbc_id']);
+	$bbcode_delete_url = sed_url('admin', 'm=bbcode&amp;a=upd&amp;id='.$row['bbc_id']);
 	$adminmain .= <<<HTM
-<form action="admin.php?m=bbcode&amp;a=upd&amp;id={$row['bbc_id']}" method="post">
+<form action="{$bbcode_update_url}" method="post">
 <tr>
 	<td>
 		<input type="text" name="bbc_name" value="{$row['bbc_name']}" /><br />
@@ -143,7 +145,7 @@ while($row = sed_sql_fetchassoc($res))
 	</td>
 	<td>
 		<input type="submit" value="{$L['Update']}" /><br />
-		<input type="button" value="{$L['Delete']}" onclick="if(confirm('{$L['adm_bbcodes_confirm']}')) location.href='admin.php?m=bbcode&amp;a=del&amp;id={$row['bbc_id']}'" />
+		<input type="button" value="{$L['Delete']}" onclick="if(confirm('{$L['adm_bbcodes_confirm']}')) location.href='{$bbcode_delete_url}'" />
 	</td>
 </tr>
 </form>
@@ -162,13 +164,15 @@ for($i = 1; $i < 256; $i++)
 	$sel = $i == 128 ? ' selected="selected"' : '';
 	$prio .= '<option'.$sel.'>'.$i.'</option>';
 }
+$form_action = sed_url('admin', 'm=bbcode&amp;a=add');
+$form_clear_cache = sed_url('admin', 'm=bbcode&amp;a=clearcache');
 $adminmain .= <<<HTM
 <tr>
 <td colspan="5">
 <strong>{$L['adm_bbcodes_new']}</strong>
 </td>
 </tr>
-<form action="admin.php?m=bbcode&amp;a=add" method="post">
+<form action="{$form_action}" method="post">
 <tr>
 	<td>
 		<input type="text" name="bbc_name" value="" /><br />
@@ -186,7 +190,7 @@ $adminmain .= <<<HTM
 </tr>
 </form>
 </table>
-<a href="admin.php?m=bbcode&amp;a=clearcache" onclick="return confirm('{$L['adm_bbcodes_clearcache_confirm']}')">{$L['adm_bbcodes_clearcache']}</a>
+<a href="{$form_clear_cache}" onclick="return confirm('{$L['adm_bbcodes_clearcache_confirm']}')">{$L['adm_bbcodes_clearcache']}</a>
 HTM;
 
 ?>

@@ -143,7 +143,7 @@ if ($a=='send')
 
 		sed_stat_inc('totalpms');
 		sed_shield_update(30, "New private message (".$totalrecipients.")");
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=502");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=502", '', true));
 		exit;
 	}
 }
@@ -227,10 +227,10 @@ if (!empty($error_string))
 }
 
 $t->assign(array(
-	"PMSEND_TITLE" => "<a href=\"pm.php\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
+	"PMSEND_TITLE" => "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
 	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
 	"PMSEND_SENDNEWPM" => $pm_sendlink,
-	"PMSEND_INBOX" => "<a href=\"pm.php\">".$L['pm_inbox']."</a>:".$totalinbox,
+	"PMSEND_INBOX" => "<a href=\"".sed_url('pm')."\">".$L['pm_inbox']."</a>:".$totalinbox,
 	"PMSEND_ARCHIVES" => "<a href=\"pm.php?f=archives\">".$L['pm_archives']."</a>:".$totalarchives,
 	"PMSEND_SENTBOX" => "<a href=\"pm.php?f=sentbox\">".$L['pm_sentbox']."</a>:".$totalsentbox,
 	"PMSEND_FORM_SEND" => "pm.php?m=send&amp;a=send&amp;to=".$to,

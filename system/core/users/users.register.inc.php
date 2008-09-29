@@ -20,7 +20,7 @@ $v = sed_import('v','G','ALP');
 
 if ($cfg['disablereg'])
 	{
-	sed_redirect("message.php?msg=117");
+	sed_redirect(sed_url('message', 'msg=117'));
 	exit;
 	}
 
@@ -199,7 +199,7 @@ if ($a=='add')
 
 		if ($cfg['regnoactivation'] || $defgroup==5)
 			{
-			sed_redirect("message.php?msg=106");
+			sed_redirect(sed_url('message', 'msg=106'));
 			exit;
 			}
 
@@ -214,7 +214,7 @@ if ($a=='add')
 			$rinactive = $cfg['mainurl']."/users.php?gm=2&amp;s=regdate&amp;w=desc";
 			$rbody = sprintf($L['aut_regreqnotice'], $rusername, $rinactive);
 			sed_mail ($cfg['adminemail'], $rsubject, $rbody);
-			sed_redirect("message.php?msg=118");
+			sed_redirect(sed_url('message', 'msg=118'));
 			exit;
 			}
 		else
@@ -224,7 +224,7 @@ if ($a=='add')
 			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			sed_mail ($ruseremail, $rsubject, $rbody);
-			sed_redirect("message.php?msg=105");
+			sed_redirect(sed_url('message', 'msg=105'));
 			exit;
 			}
 		}
@@ -240,14 +240,14 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp=4 WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
 		$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 		sed_auth_clear($row['user_id']);
-		sed_redirect("message.php?msg=106");
+		sed_redirect(sed_url('message', 'msg=106'));
 		exit;
 		}
 	else
 		{
 		sed_shield_update(7, "Account validation");
 		sed_log("Wrong validation URL", 'sec');
-		sed_redirect("message.php?msg=157");
+		sed_redirect(sed_url('message', 'msg=157'));
 		exit;
 		}
 	}

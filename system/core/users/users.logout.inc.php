@@ -38,12 +38,12 @@ if ($cfg['authmode']==2 || $cfg['authmode']==3)
 if ($usr['id']>0)
 	{
 	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='".$usr['ip']."'");
-	sed_redirect("message.php?msg=102");
+	sed_redirect(sed_url('message', 'msg=102'));
 	exit;
 	}
 else
 	{
-	sed_redirect("message.php?msg=101");
+	sed_redirect(sed_url('message', 'msg=101'));
 	exit;
 	}
 

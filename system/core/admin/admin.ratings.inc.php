@@ -19,22 +19,22 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('ratings', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=other", $L['Other']);
-$adminpath[] = array ("admin.php?m=ratings", $L['Ratings']);
+$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array (sed_url('admin', 'm=ratings'), $L['Ratings']);
 $adminhelp = $L['adm_help_ratings'];
 
 $id = sed_import('id','G','TXT');
 $ii=0;
 $jj=0;
 
-$adminmain .= "<ul><li><a href=\"admin.php?m=config&amp;n=edit&amp;o=core&amp;p=ratings\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=core&amp;p=ratings")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($a=='delete')
 	{
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id' ");
 	$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id' ");
-	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=ratings");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=ratings', '', true));
 	exit;
 	}
 
@@ -48,7 +48,7 @@ $pagination = '';
 for($i = 1; $i <= $totalpages; $i++)
 {
 	$pagination .= ($i == $currentpage) ? ' <span class="pagenav_current">' : ' ';
-	$pagination .= '<a href="admin.php?m=ratings&amp;d='.(($i-1)*$cfg['maxrowsperpage']).'">'.$i.'</a>';
+	$pagination .= '<a href="'.sed_url('admin', 'm=ratings&amp;d='.(($i-1)*$cfg['maxrowsperpage'])).'">'.$i.'</a>';
 	$pagination .= ($i == $currentpage) ? '</span> ' : ' ';
 	if($i != $totalpages) $pagination .= '|';
 }
@@ -76,7 +76,7 @@ while ($row = sed_sql_fetcharray($sql))
 	switch($rat_type)
 		{
 		case 'p':
-			$rat_url = "page.php?id=".$rat_value."&amp;ratings=1";
+			$rat_url = sed_url('page', "id=".$rat_value);
 		break;
 
 		default:
@@ -84,7 +84,7 @@ while ($row = sed_sql_fetcharray($sql))
 		break;
 		}
 
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"admin.php?m=ratings&amp;a=delete&amp;id=".$row['rating_code']."&amp;".sed_xg()."\">x</a>]</td>";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=ratings&amp;a=delete&amp;id=".$row['rating_code']."&amp;".sed_xg())."\">x</a>]</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['rating_code']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['rating_creationdate'])."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$votes."</td>";

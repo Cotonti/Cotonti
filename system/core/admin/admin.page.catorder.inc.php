@@ -19,8 +19,8 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=page", $L['Pages']);
-$adminpath[] = array ("admin.php?m=page&amp;s=catorder", $L['adm_sortingorder']);
+$adminpath[] = array (sed_url('admin', 'm=page'), $L['Pages']);
+$adminpath[] = array (sed_url('admin', 'm=page&amp;s=catorder'), $L['adm_sortingorder']);
 $adminhelp = $L['adm_help_catorder'];
 
 $options_sort = array(
@@ -57,12 +57,12 @@ if ($a=='update')
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_order='$order' WHERE structure_id='$i'");
 		}
 	sed_cache_clear('sed_cat');
-   	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=page");
+   	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page', '', true));
 	}
 
 $sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code");
 
-$adminmain .= "<form id=\"chgorder\" action=\"admin.php?m=page&amp;s=catorder&amp;a=update\" method=\"post\">";
+$adminmain .= "<form id=\"chgorder\" action=\"".sed_url('admin', "m=page&amp;s=catorder&amp;a=update")."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\"><tr><td class=\"coltop\">".$L['Code']."</td><td class=\"coltop\">".$L['Path']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Title']."</td><td class=\"coltop\">".$L['Order']."</td></tr>";
 

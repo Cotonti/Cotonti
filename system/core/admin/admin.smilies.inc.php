@@ -19,8 +19,8 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array ("admin.php?m=other", $L['Other']);
-$adminpath[] = array ("admin.php?m=smilies", $L['Smilies']);
+$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array (sed_url('admin', 'm=smilies'), $L['Smilies']);
 
 if ($a=='update')
 	{
@@ -40,7 +40,7 @@ if ($a=='update')
 			
 		}
 	sed_cache_clear('sed_smilies');
-	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=smilies");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=smilies', '', true));
 	exit;
 	}
 elseif ($a=='add')
@@ -51,7 +51,7 @@ elseif ($a=='add')
 	$nsmilieorder = sed_sql_prep(sed_import('nsmilieorder', 'P', 'TXT'));
 	$sql = (!empty($nsmiliecode) && !empty($nsmilietext)) ? sed_sql_query("INSERT INTO $db_smilies (smilie_code, smilie_image, smilie_text, smilie_order) VALUES ('$nsmiliecode', '$nsmilieimage', '$nsmilietext', ".(int)$nsmilieorder.")") : '';
 	sed_cache_clear('sed_smilies');
-	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=smilies");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=smilies', '', true));
 	exit;
 	}
 elseif ($a=='delete')
@@ -60,14 +60,14 @@ elseif ($a=='delete')
 	$id = sed_import('id', 'G', 'INT');
 	$sql = sed_sql_query("DELETE FROM $db_smilies WHERE smilie_id='$id'");
 	sed_cache_clear('sed_smilies');
-	header("Location: " . SED_ABSOLUTE_URL . "admin.php?m=smilies");
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=smilies', '', true));
 	exit;
 	}
 
 $sql = sed_sql_query("SELECT * FROM $db_smilies ORDER by smilie_order ASC, smilie_id ASC");
 
 $adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-$adminmain .= "<form id=\"savesmilies\" action=\"admin.php?m=smilies&amp;a=update\" method=\"post\">";
+$adminmain .= "<form id=\"savesmilies\" action=\"".sed_url('admin', "m=smilies&amp;a=update")."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\"><tr>";
 $adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Preview']."</td>";
@@ -95,7 +95,7 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['smilie_size'] = "?";
 		}
 
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"admin.php?m=smilies&amp;a=delete&amp;id=".$row['smilie_id']."&amp;".sed_xg()."\">x</a>]";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=smilies&amp;a=delete&amp;id=".$row['smilie_id']."&amp;".sed_xg())."."\">x</a>]";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['smilie_preview']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['smilie_size']."</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[".$row['smilie_id']."][code]\" value=\"".$row['smilie_code']."\" size=\"10\" maxlength=\"16\" /></td>";
@@ -108,7 +108,7 @@ $adminmain .= "<tr><td colspan=\"6\"><input type=\"submit\" class=\"submit\" val
 $adminmain .= "</table></form>";
 
 $adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-$adminmain .= "<form id=\"addsmilie\" action=\"admin.php?m=smilies&amp;a=add\" method=\"post\">";
+$adminmain .= "<form id=\"addsmilie\" action=\"".sed_url('admin', "m=smilies&amp;a=add")."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= "<tr><td>".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"nsmiliecode\" value=\"\" size=\"40\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
 $adminmain .= "<tr><td>".$L['ImageURL']." :</td><td><input type=\"text\" class=\"text\" name=\"nsmilieimage\" value=\"system/smilies/.gif\" size=\"40\" maxlength=\"128\" /> ".$L['adm_required']."</td></tr>";
