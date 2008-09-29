@@ -48,7 +48,7 @@ function sed_randompass()
              $tmp = substr($vars, $num, 1);
              $pass = $pass . $tmp;
              $i++;
-			}			
+			}
        return $pass;
  }
 
@@ -73,7 +73,7 @@ if ($a=='request' && $email!='')
 		sed_shield_update(60,"Password recovery email sent");
 
 		$rsubject = $cfg['maintitle']." - ".$L['plu_title'];
-		$ractivate = $cfg['mainurl']."/plug.php?e=passrecover&a=auth&v=".$validationkey;
+		$ractivate = $cfg['mainurl'].'/'.sed_url('plug', 'e=passrecover&a=auth&v='.$validationkey);
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['plu_email1']."\n\n".$ractivate. "\n\n".$L['aut_contactadmin'];
 		sed_mail ($email, $rsubject, $rbody);
 		$plugin_body = $L['plu_mailsent'];
@@ -83,7 +83,7 @@ if ($a=='request' && $email!='')
 		sed_shield_update(10,"Password recovery requested");
 
 		sed_log("Pass recovery failed, user : ".$rusername);
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=151");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', 'msg=151', '', true));
 		exit;
 		}
 	}
@@ -102,14 +102,14 @@ elseif ($a=='auth' && mb_strlen($v)==32)
 		if ($row['user_maingrp']==2)
 			{
 			sed_log("Password recovery failed, user inactive : ".$rusername);
-			header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=152");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('message', 'msg=152', '', true));
 			exit;
 			}
 
 	 	if ($row['user_maingrp']==3)
 			{
 			sed_log("Password recovery failed, user banned : ".$rusername);
-			header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=153&num=".$row['user_banexpire']);
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
 			exit;
 			}
 
@@ -132,25 +132,25 @@ elseif ($a=='auth' && mb_strlen($v)==32)
 
 		//$plugin_body .= $L['plu_loggedin1'].$rusername." ".$L['plu_loggedin2']."<br />";
 		//$plugin_body .= $L['plu_loggedin3']."<br />";
-		
+
 		$rsubject = $cfg['maintitle']." - ".$L['plu_title'];
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['plu_email2']."\n\n".$newpass. "\n\n".$L['aut_contactadmin'];
 		sed_mail ($email, $rsubject, $rbody);
-		
+
 		$plugin_body .= $L['plu_mailsent2']."<br />";
 		}
 	else
 		{
 		sed_shield_update(7,"Log in");
 		sed_log("Pass recovery failed, user : ".$rusername);
-		header("Location: " . SED_ABSOLUTE_URL . "message.php?msg=151");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', 'msg=151', '', true));
 		exit;
 		}
 	}
 else
 	{
 	$plugin_body .= $L['plu_explain1']."<br />".$L['plu_explain2']."<br />".$L['plu_explain3']."<br />&nbsp;<br />";
-	$plugin_body .= "<form name=\"reqauth\" action=\"plug.php?e=passrecover&amp;a=request\" method=\"post\">";
+	$plugin_body .= "<form name=\"reqauth\" action=\"".sed_url('plug', 'e=passrecover&a=request')."\" method=\"post\">";
 	$plugin_body .= $L['plu_youremail']."<input type=\"text\" class=\"text\" name=\"email\" value=\"\" size=\"20\" maxlength=\"64\" />";
 	$plugin_body .= "<input type=\"submit\" class=\"submit\" value=\"".$L['plu_request']."\" /></form><br />&nbsp;<br />".$L['plu_explain4'];
 

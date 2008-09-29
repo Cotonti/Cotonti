@@ -67,10 +67,10 @@ if ($tab=='frm') {
 
 	$plugin_title = $L['plu_title_frmtab'];
 
-	$plugin_subtitle .= "<a href=\"plug.php?e=search\">".$L['plu_tabs_all']."</a> &nbsp; ".$L['plu_tabs_frm']." &nbsp; <a href=\"plug.php?e=search&amp;tab=pag\">".$L['plu_tabs_pag']."</a>";
+	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['plu_tabs_all']."</a> &nbsp; ".$L['plu_tabs_frm']." &nbsp; <a href=\"plug.php?e=search&amp;tab=pag\">".$L['plu_tabs_pag']."</a>";
 	$plugin_subtitle .= "<br>".$L['plu_title_frmtab_s'];
 
-	$plugin_body .= "<form id=\"search\" action=\"plug.php?e=search&amp;tab=frm&amp;a=search\" method=\"post\">";
+	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&tab=frm&a=search')."\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
 	$plugin_body .= "<tr><td width=\"20%\">".$L['plu_searchin1']."</td>";
 	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."
@@ -173,7 +173,7 @@ if ($tab=='frm') {
 				}
 			}
 		}
-		
+
 
 		if (!$cfg['disable_forums'] && !empty($a))
 		{
@@ -243,7 +243,7 @@ if ($tab=='frm') {
 				{
 					if (sed_auth('forums', $row['fs_id'], 'R'))
 					{
-						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"forums.php?m=posts&amp;id=".$row['fp_id']."&amp;highlight=".$hl."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
+						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"".sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl)."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
 					}
 				}
 				$plugin_body .= "</table>";
@@ -268,13 +268,13 @@ if ($tab=='frm') {
 
 	$sq = (!empty($pre)) ? $pre : $sq;
 	$sachecked = ($searchall) ? ' checked ' : '';
-	
+
 	$plugin_title = $L['plu_title_pagtab'];
 
-	$plugin_subtitle .= "<a href=\"plug.php?e=search\">".$L['plu_tabs_all']."</a> &nbsp; <a href=\"plug.php?e=search&amp;tab=frm\">".$L['plu_tabs_frm']."</a> &nbsp; ".$L['plu_tabs_pag'];
+	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['plu_tabs_all']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['plu_tabs_frm']."</a> &nbsp; ".$L['plu_tabs_pag'];
 	$plugin_subtitle .= "<br>".$L['plu_title_pagtab_s'];
 
-	$plugin_body .= "<form id=\"search\" action=\"plug.php?e=search&amp;tab=pag&amp;a=search\" method=\"post\">";
+	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&tab=pag&a=search')."\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
 	$plugin_body .= "<tr><td width=\"20%\">".$L['plu_searchin1']."</td>";
 	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."
@@ -339,7 +339,7 @@ if ($tab=='frm') {
 			$plugin_body .= "<p>".$L['plu_toomanywords']." ".$cfg_maxwords_pag."</p>";
 			$a = '';
 		}
-		
+
 		$ii = 0;
 		foreach ($words as $key=>$value)
 		{
@@ -453,7 +453,7 @@ if ($tab=='frm') {
 
 				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
 				$hl = strtoupper($sq);
-				
+
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_ps']."</td><td width=\"60%\">".$L['plu_pt']."</td><td width=\"10%\">".$L['plu_po']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
@@ -461,7 +461,7 @@ if ($tab=='frm') {
 					{
 						$ownername = sed_sql_fetcharray(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
 						$plugin_body .= "<tr><td><a href=\"list.php?c=".$row['page_cat']."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
-						$plugin_body .= "<td><a href=\"page.php?id=".$row['page_id']."&amp;highlight=".$hl."\">";
+						$plugin_body .= "<td><a href=\"".sed_url('page', 'id='.$row['page_id'].'&highlight='.$hl)."\">";
 						$plugin_body .= sed_cc($row['page_title'])."</a></td><td>".sed_build_user($row['page_ownerid'],$ownername['user_name'])."</td></tr>";
 					}
 				}
@@ -483,13 +483,13 @@ if ($tab=='frm') {
 
 	$sq = (!empty($pre)) ? $pre : $sq;
 	$sachecked = ($searchall) ? ' checked ' : '';
-	
+
 	$plugin_title = $L['plu_title_alltab'];
 
-	$plugin_subtitle .= $L['plu_tabs_all']."</b> &nbsp; <a href=\"plug.php?e=search&amp;tab=frm\">".$L['plu_tabs_frm']."</a> &nbsp; <a href=\"plug.php?e=search&amp;tab=pag\">".$L['plu_tabs_pag']."</a>";
+	$plugin_subtitle .= $L['plu_tabs_all']."</b> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['plu_tabs_frm']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=pag')."\">".$L['plu_tabs_pag']."</a>";
 	$plugin_subtitle .= "<br>".$L['plu_title_alltab_s'];
 
-	$plugin_body .= "<form id=\"search\" action=\"plug.php?e=search&amp;a=search\" method=\"post\">";
+	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&a=search')."\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
 	$plugin_body .= "<tr><td width=\"20%\">".$L['plu_searchin1']."</td>";
 	$plugin_body .= "<td width=\"80%\"><input type=\"text\" class=\"text\" name=\"sq\" value=\"".sed_cc($sq)."\" size=\"16\" maxlength=\"32\" />".$L['plu_searchin2']."
@@ -676,7 +676,7 @@ if ($tab=='frm') {
 
 				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
 				$hl = strtoupper($sq);
-				
+
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_ps']."</td><td width=\"60%\">".$L['plu_pt']."</td><td width=\"10%\">".$L['plu_po']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
@@ -684,7 +684,7 @@ if ($tab=='frm') {
 					{
 						$ownername = sed_sql_fetcharray(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
 						$plugin_body .= "<tr><td><a href=\"list.php?c=".$row['page_cat']."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
-						$plugin_body .= "<td><a href=\"page.php?id=".$row['page_id']."&amp;highlight=".$hl."\">";
+						$plugin_body .= "<td><a href=\"".sed_url('page', 'id='.$row['page_id'].'&highlight='.$hl)."\">";
 						$plugin_body .= sed_cc($row['page_title'])."</a></td><td>".sed_build_user($row['page_ownerid'],$ownername['user_name'])."</td></tr>";
 					}
 				}
@@ -745,13 +745,13 @@ if ($tab=='frm') {
 			if ($items!='0') {
 				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
 				$hl = strtoupper($sq);
-				
+
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_fs']."</td><td width=\"60%\">".$L['plu_ft']."</td><td width=\"10%\">".$L['plu_fo']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
 					if (sed_auth('forums', $row['fs_id'], 'R'))
 					{
-						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"forums.php?m=posts&amp;id=".$row['fp_id']."&amp;highlight=".$hl."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
+						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"".sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl)."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
 					}
 				}
 				$plugin_body .= "</table>";

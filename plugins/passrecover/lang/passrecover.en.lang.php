@@ -31,10 +31,6 @@ $L['plu_mailsent2'] = "Password reset. Please check your mailbox in few minutes 
 
 $L['plu_youremail'] = "Your email : ";
 $L['plu_request'] = "Request";
-//$L['plu_loggedin1'] = "Welcome back, ";
-//$L['plu_loggedin2'] = "you're now logged in.";
-//$L['plu_loggedin3'] = "You may now go to your <a href='users.php?m=profile'>profile</a>, and set yourself a new password.";
-//$L['plu_email1'] = "You are receiving this email because you have (or someone pretending to be you has) requested an emergency link to log in at a site powered by the Seditio engine. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.\n\nYou may now log in with the link below, then follow instructions :";
 
 $L['plu_email1'] = "You are receiving this email because you have (or someone pretending to be you has) requested an emergency link to log in at a site powered by the Seditio engine. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.\n\nYou may now reset your password with the link below :"; // N-0.0.2
 $L['plu_email2'] = "Your password changed as you demanded, please change your password as soon as possible and delete this email.\n\nYour new password :"; // N-0.0.2

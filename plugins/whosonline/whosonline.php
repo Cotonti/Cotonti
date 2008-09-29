@@ -43,28 +43,28 @@ $visitornum = 0;
 $plugin_body .= $L['plu_mostonline'].$maxusers.".<br />";
 $plugin_body .= $L['plu_therescurrently'].$total2.$L['plu_visitors'].$total1.$L['plu_members']."<br />&nbsp;<br /><table class=\"cells\">";
 
-	$plugin_body .= "<tr>";
-	$plugin_body .= ($cfg_showavatars) ? "<td class=\"coltop\">".$user_avatar."</td>" : '';
-	$plugin_body .= "<td class=\"coltop\">".$L['User']."</td>";
-	$plugin_body .= "<td class=\"coltop\">".$L['Group']."</td>";
-	$plugin_body .= "<td class=\"coltop\">".$L['Country']."</td>";
-	$plugin_body .= "<td class=\"coltop\">".$L['plu_lastseen1']."</td>";
-	$plugin_body .= ($usr['isadmin']) ? "<td class=\"coltop\">".$L['plu_in']."</td>" : '';
-	$plugin_body .= ($usr['isadmin']) ? "<td class=\"coltop\">".$L['Ip']."</td>" : '';
-	$plugin_body .= "</tr>";
+$plugin_body .= "<tr>";
+$plugin_body .= ($cfg_showavatars) ? "<td class=\"coltop\">".$user_avatar."</td>" : '';
+$plugin_body .= "<td class=\"coltop\">".$L['User']."</td>";
+$plugin_body .= "<td class=\"coltop\">".$L['Group']."</td>";
+$plugin_body .= "<td class=\"coltop\">".$L['Country']."</td>";
+$plugin_body .= "<td class=\"coltop\">".$L['plu_lastseen1']."</td>";
+$plugin_body .= ($usr['isadmin']) ? "<td class=\"coltop\">".$L['plu_in']."</td>" : '';
+$plugin_body .= ($usr['isadmin']) ? "<td class=\"coltop\">".$L['Ip']."</td>" : '';
+$plugin_body .= "</tr>";
 
 while ($row = sed_sql_fetcharray($sql1))
-	{
+{
 	if ($cfg_showavatars)
-		{
-		$user_avatar = "<a href=\"users.php?m=details&amp;id=".$row['online_userid']."\">";
+	{
+		$user_avatar = "<a href=\"".sed_url('users', 'm=details&id='.$row['online_userid'])."\">";
 		$user_avatar .= (!empty($row['user_avatar'])) ? "<img src=\"".$row['user_avatar']."\" width=\"".$cfg_miniavatar_x."\" height=\"".$cfg_miniavatar_y."\" alt=\"\" /></a>" : "<img src=\"{$cfg['plugins_dir']}/whosonline/img/blank.gif\" width=\"".$cfg_miniavatar_x."\" height=\"".$cfg_miniavatar_y."\" alt=\"\" /></a>";
-		}
+	}
 
 	$plugin_body .= "<tr>";
 	$plugin_body .= ($cfg_showavatars) ? "<td>".$user_avatar."</td>" : '';
 	$plugin_body .= "<td>".sed_build_user($row['online_userid'], sed_cc($row['online_name']))."</td>";
-	$plugin_body .= "<td><a href=\"users.php?g=".$row['user_maingrp']."\">".$sed_groups[$row['user_maingrp']]['title']."</a></td>";
+	$plugin_body .= "<td><a href=\"".sed_url('users', 'g='.$row['user_maingrp'])."\">".$sed_groups[$row['user_maingrp']]['title']."</a></td>";
 	$plugin_body .= "<td style=\"text-align:center;\">".sed_build_flag($row['user_country'])."</td>";
 	$plugin_body .= "<td>".sed_build_timegap($row['online_lastseen'],$sys['now'])."</td>";
 	$plugin_body .= ($usr['isadmin']) ? "<td>".$L[$row['online_location']] : '';
@@ -72,10 +72,10 @@ while ($row = sed_sql_fetcharray($sql1))
 	$plugin_body .= ($usr['isadmin']) ? "</td>" : '';
 	$plugin_body .= ($usr['isadmin']) ? "<td style=\"text-align:center;\">".$row['online_ip']."</td>" : '';
 	$plugin_body .= "</tr>";
-	}
+}
 
 while ($row = sed_sql_fetcharray($sql2))
-	{
+{
 	$visitornum++;
 	$online_location = $L[$row['online_location']];
 	$plugin_body .= "<tr>";
@@ -87,7 +87,7 @@ while ($row = sed_sql_fetcharray($sql2))
 	$plugin_body .= ($usr['isadmin']) ? "</td>" : '';
 	$plugin_body .= ($usr['isadmin']) ? "<td style=\"text-align:center;\">".$row['online_ip']."</td>" : '';
 	$plugin_body .= "</tr>";
-	}
+}
 
 $plugin_body .= "</table>";
 

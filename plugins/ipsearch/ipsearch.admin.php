@@ -30,7 +30,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 $plugin_title = "IP search";
 
 $plugin_body .= "<h4>".$L['adm_searchthisuser']." :</h4>";
-$plugin_body .= "<form id=\"search\" action=\"admin.php?m=tools&amp;p=ipsearch&amp;a=search&amp;".sed_xg()."\" method=\"post\">";
+$plugin_body .= "<form id=\"search\" action=\"".sed_url('admin', 'm=tools&p=ipsearch&a=search&'.sed_xg())."\" method=\"post\">";
 $plugin_body .= "<input type=\"text\" class=\"text\" name=\"id\" value=\"".$id."\" size=\"16\" maxlength=\"16\" /> ";
 $plugin_body .= "<input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
 

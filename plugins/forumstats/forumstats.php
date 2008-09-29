@@ -75,7 +75,7 @@ if (!$forumstats)
 		$ft_title .= ($row['ft_state']) ? " (x)" : '';
 
 		$plugin_body .= "#".$ii." : ".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'])." ".$cfg['separator']." ";
-		$plugin_body .= (sed_auth('forums', $row['fs_id'], 'R')) ? "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."\">".sed_cc($ft_title)."</a> (".$row['ft_postcount'].")" : $L['plu_hidden'];
+		$plugin_body .= (sed_auth('forums', $row['fs_id'], 'R')) ? "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'])."\">".sed_cc($ft_title)."</a> (".$row['ft_postcount'].")" : $L['plu_hidden'];
 		$plugin_body .= "<br />";
 	}
 
@@ -100,7 +100,7 @@ if (!$forumstats)
 		$ft_title .= ($row['ft_state'] && !$row['ft_sticky']) ? " (x)" : '';
 
 		$plugin_body .= "#".$ii." : ".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'])." ".$cfg['separator']." ";
-		$plugin_body .= (sed_auth('forums', $row['fs_id'], 'R')) ? "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."\">".sed_cc($ft_title)."</a> (".$row['ft_viewcount'].")"  : $L['plu_hidden'];
+		$plugin_body .= (sed_auth('forums', $row['fs_id'], 'R')) ? "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'])."\">".sed_cc($ft_title)."</a> (".$row['ft_viewcount'].")"  : $L['plu_hidden'];
 		$plugin_body .= "<br />";
 	}
 

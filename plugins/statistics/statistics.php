@@ -178,8 +178,8 @@ $sqltotal = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
 $totalusers = sed_sql_result($sqltotal,0,"COUNT(*)");
 
 $plugin_body .= "<h4>".$L['plu_membersbycountry']." :</h4><table class=\"cells\">";
-$plugin_body .= "<tr><td colspan=\"2\" class=\"coltop\"><a href=\"plug.php?e=statistics\">$sed_img_down</a> ".$L['plu_country']."</td>";
-$plugin_body .= "<td style=\"text-align:center;\" class=\"coltop\"><a href=\"plug.php?e=statistics&amp;s=usercount\">$sed_img_down</a> ".$L['Users']."</td></tr>";
+$plugin_body .= "<tr><td colspan=\"2\" class=\"coltop\"><a href=\"".sed_url('plug', 'e=statistics')."\">$sed_img_down</a> ".$L['plu_country']."</td>";
+$plugin_body .= "<td style=\"text-align:center;\" class=\"coltop\"><a href=\"".sed_url('plug', 'e=statistics&s=usercount')."\">$sed_img_down</a> ".$L['Users']."</td></tr>";
 
 $ii = 0;
 
