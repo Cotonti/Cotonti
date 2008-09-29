@@ -326,7 +326,7 @@ $t->assign(array(
 	/* ===== */
 
 	$sqql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s, $db_forum_structure AS n
-						   WHERE s.fs_masterid=".$s." AND n.fn_code=s.fs_category 
+						   WHERE s.fs_masterid=".$s." AND n.fn_code=s.fs_category
 						   ORDER BY fs_masterid DESC, fn_path ASC, fs_order ASC");
 
 	$catnum = 1;
@@ -494,7 +494,7 @@ $t->assign(array(
 
 		/* === Hook - Part2 : Include === */
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		$t->parse("MAIN.FORUMS_TOPICS_ROW");

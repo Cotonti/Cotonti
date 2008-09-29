@@ -861,7 +861,7 @@ function sed_build_comments($code, $url, $display)
 
 				/* === Hook - Part2 : Include === */
 				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
 
 				$t->parse("COMMENTS.COMMENTS_ROW");
@@ -1590,7 +1590,6 @@ function sed_cache_get($name)
 function sed_cache_getall($auto = 1)
 {
 	global $cfg, $sys, $db_cache;
-
 	if (!$cfg['cache'])
 	{ return FALSE; }
 	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");

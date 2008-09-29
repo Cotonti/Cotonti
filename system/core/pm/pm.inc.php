@@ -263,7 +263,7 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	if (empty($id))

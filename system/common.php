@@ -30,7 +30,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 /* ======== Connect to the SQL DB======== */
 
 require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
-sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
+$sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 /* ======== Configuration settings (from the DB) ======== */
@@ -115,7 +115,7 @@ ob_start('sed_outputfilters');
 $userip = explode('.', $usr['ip']);
 $ipmasks = "('".$userip[0].".".$userip[1].".".$userip[2].".".$userip[3]."','".$userip[0].".".$userip[1].".".$userip[2].".*','".$userip[0].".".$userip[1].".*.*','".$userip[0].".*.*.*')";
 
-$sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks, 'Common/banlist/check');
+$sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
 
 If (sed_sql_numrows($sql)>0)
 {

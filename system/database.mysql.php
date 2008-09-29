@@ -26,21 +26,25 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 /**
  * Returns number of rows affected by last query
  *
+ * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_affectedrows()
+function sed_sql_affectedrows($conn = null)
 {
-	return mysql_affected_rows();
+	global $sed_dbc;
+	return is_null($conn) ? mysql_affected_rows($sed_dbc) : mysql_affected_rows($conn);
 }
 
 /**
  * Closes database connection
  *
+ * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_close()
+function sed_sql_close($conn = null)
 {
-	return mysql_close();
+	global $sed_dbc;
+	return is_null($conn) ? mysql_close($sed_dbc) : mysql_close($conn);
 }
 
 /**
@@ -68,21 +72,25 @@ function sed_sql_connect($host, $user, $pass, $db)
 /**
  * Returns last error number
  *
+ * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_errno()
+function sed_sql_errno($conn = null)
 {
-	return mysql_errno();
+	global $sed_dbc;
+	return is_null($conn) ? mysql_errno($sed_dbc) : mysql_errno($conn);
 }
 
 /**
  * Returns last SQL error message
  *
+ * @param resource $conn Custom connection handle
  * @return string
  */
-function sed_sql_error()
+function sed_sql_error($conn = null)
 {
-	return mysql_error();
+	global $sed_dbc;
+	return is_null($conn) ? mysql_error($sed_dbc) : mysql_error($conn);
 }
 
 /**
@@ -132,22 +140,26 @@ function sed_sql_freeresult($res)
 /**
  * Returns ID of last INSERT query
  *
+ * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_insertid()
+function sed_sql_insertid($conn = null)
 {
-	return mysql_insert_id();
+	global $sed_dbc;
+	return is_null($conn) ? mysql_insert_id($sed_dbc) : mysql_insert_id($conn);
 }
 
 /**
  * Returns list of tables for a database. Use sed_sql_fetcharray() to get table names from result
  *
  * @param string $db_name Database name
+ * @param resource $conn Custom connection handle
  * @return resource
  */
-function sed_sql_listtables($db_name)
+function sed_sql_listtables($db_name, $conn = null)
 {
-	return mysql_list_tables($db_name);
+	global $sed_dbc;
+	return is_null($conn) ? mysql_list_tables($db_name, $sed_dbc) : mysql_list_tables($db_name, $conn);
 }
 
 /**
@@ -165,11 +177,13 @@ function sed_sql_numrows($res)
  * Escapes potentially insecure sequences in string
  *
  * @param string $str
+ * @param resource $conn Custom connection handle
  * @return string
  */
-function sed_sql_prep($str)
+function sed_sql_prep($str, $conn = null)
 {
-	return mysql_real_escape_string($str);
+	global $sed_dbc;
+	return is_null($conn) ? mysql_real_escape_string($str, $sed_dbc) : mysql_real_escape_string($str, $conn);
 }
 
 /**
@@ -179,14 +193,16 @@ function sed_sql_prep($str)
  * @global $cfg
  * @global $usr
  * @param string $query SQL query
+ * @param resource $conn Custom connection handle
  * @return resource
  */
-function sed_sql_query($query)
+function sed_sql_query($query, $conn = null)
 {
-	global $sys, $cfg, $usr;
+	global $sys, $cfg, $usr, $sed_dbc;
+	$conn = is_null($conn) ? $sed_dbc : $conn;
 	$sys['qcount']++;
 	$xtime = microtime();
-	$result = mysql_query($query) OR sed_diefatal('SQL error : '.sed_sql_error());
+	$result = mysql_query($query, $conn) OR sed_diefatal('SQL error : '.sed_sql_error($conn));
 	$ytime = microtime();
 	$xtime = explode(' ',$xtime);
 	$ytime = explode(' ',$ytime);
@@ -216,11 +232,14 @@ function sed_sql_result($res, $row, $col)
  * Returns number of rows in a table
  *
  * @param string $table Table name
+ * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_rowcount($table)
+function sed_sql_rowcount($table, $conn = null)
 {
-	$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $table");
+	global $sed_dbc;
+	$conn = is_null($conn) ? $sed_dbc : $conn;
+	$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $table", $conn);
 	return (int) mysql_result($sqltmp, 0, 0);
 }
 
@@ -236,10 +255,13 @@ function sed_sql_rowcount($table)
  * @param string $table_name Table name
  * @param array $data Associative array containing data for insertion.
  * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key.
+ * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_insert($table_name, $data, $prefix = '')
+function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
 {
+	global $sed_dbc;
+	$conn = is_null($conn) ? $sed_dbc : $conn;
 	if(!is_array($data))
 	{
 		return 0;
@@ -263,7 +285,7 @@ function sed_sql_insert($table_name, $data, $prefix = '')
 		}
 		else
 		{
-			$vals .= "'".mysql_real_escape_string($val)."',";
+			$vals .= "'".mysql_real_escape_string($val, $conn)."',";
 		}
 
 	}
@@ -271,8 +293,8 @@ function sed_sql_insert($table_name, $data, $prefix = '')
 	{
 		$keys = mb_substr($keys, 0, -1);
 		$vals = mb_substr($vals, 0, -1);
-		sed_sql_query("INSERT INTO `$table_name` ($keys) VALUES ($vals)");
-		return mysql_affected_rows();
+		sed_sql_query("INSERT INTO `$table_name` ($keys) VALUES ($vals)", $conn);
+		return sed_sql_affectedrows($conn);
 	}
 	return 0;
 }
@@ -282,19 +304,22 @@ function sed_sql_insert($table_name, $data, $prefix = '')
  *
  * @param string $table_name Table name
  * @param string $condition Body of WHERE clause
+ * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_delete($table_name, $condition = '')
+function sed_sql_delete($table_name, $condition = '', $conn = null)
 {
+	global $sed_dbc;
+	$conn = is_null($conn) ? $sed_dbc : $conn;
 	if(empty($condition))
 	{
-		sed_sql_query("DELETE FROM $table_name");
+		sed_sql_query("DELETE FROM $table_name", $conn);
 	}
 	else
 	{
-		sed_sql_query("DELETE FROM $table_name WHERE $condition");
+		sed_sql_query("DELETE FROM $table_name WHERE $condition", $conn);
 	}
-	return mysql_affected_rows();
+	return sed_sql_affectedrows($conn);
 }
 
 /**
@@ -310,10 +335,13 @@ function sed_sql_delete($table_name, $condition = '')
  * @param string $condition Body of SQL WHERE clause
  * @param array $data Associative array containing data for insertion.
  * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key.
+ * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_update($table_name, $condition, $data, $prefix = '')
+function sed_sql_update($table_name, $condition, $data, $prefix = '', $conn = null)
 {
+	global $sed_dbc;
+	$conn = is_null($conn) ? $sed_dbc : $conn;
 	if(!is_array($data))
 	{
 		return 0;
@@ -337,15 +365,15 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '')
 		}
 		else
 		{
-			$upd .= "'".mysql_real_escape_string($val)."',";
+			$upd .= "'".mysql_real_escape_string($val, $conn)."',";
 		}
 
 	}
 	if(!empty($upd))
 	{
 		$upd = mb_substr($upd, 0, -1);
-		sed_sql_query("UPDATE $table_name SET $upd $condition");
-		return mysql_affected_rows();
+		sed_sql_query("UPDATE $table_name SET $upd $condition", $conn);
+		return sed_sql_affectedrows($conn);
 	}
 	return 0;
 }
