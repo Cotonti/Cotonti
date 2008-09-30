@@ -36,7 +36,7 @@ $pagination = sed_pagination(sed_url('admin', 'm=referers'), $d, $totallines, 20
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=referers'), $d, $totallines, 200, TRUE);
 
 $sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d,".$cfg['maxrowsperpage']);
-$adminmain .= ($usr['isadmin']) ? "<ul><li>".$L['adm_purgeall']." : [<a href=\"".sed_url('admin', "m=referers&amp;a=prune&amp;".sed_xg())."\">x</a>]</li><li>".$L['adm_ref_lowhits']." : [<a href=\"".sed_url('admin', "m=referers&amp;a=prunelowhits&amp;".sed_xg())."\">x</a>]</li></ul>" : '';
+$adminmain .= ($usr['isadmin']) ? "<ul><li>".$L['adm_purgeall']." : [<a href=\"".sed_url('admin', "m=referers&a=prune&".sed_xg())."\">x</a>]</li><li>".$L['adm_ref_lowhits']." : [<a href=\"".sed_url('admin', "m=referers&a=prunelowhits&".sed_xg())."\">x</a>]</li></ul>" : '';
 $adminmain .= "<table class=\"paging\"><tr><td class=\"paging_left\">".$pagination_prev."</td>";
 $adminmain .= "<td class=\"paging_center\">".$pagination."</td>";
 $adminmain .= "<td class=\"paging_right\">".$pagination_next."</td></tr></table>";

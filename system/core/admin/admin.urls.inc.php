@@ -257,7 +257,7 @@ foreach($areas as $ar)
 	$areabox .= $ar == '*' ? '<option selected="selected">'.$ar.'</option>' : '<option>'.$ar.'</option>';
 }
 $areabox .= '</select>';
-$admin_urls_form = sed_url('admin', "m=urls&amp;a=save");
+$admin_urls_form = sed_url('admin', "m=urls&a=save");
 // Render rules table
 $adminmain .= <<<HTM
 <h4>{$L['adm_urls_rules']}</h4>

@@ -20,7 +20,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin',
 sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url('admin', 'm=page'), $L['Pages']);
-$adminpath[] = array (sed_url('admin', 'm=page&amp;s=catorder'), $L['adm_sortingorder']);
+$adminpath[] = array (sed_url('admin', 'm=page&s=catorder'), $L['adm_sortingorder']);
 $adminhelp = $L['adm_help_catorder'];
 
 $options_sort = array(
@@ -62,7 +62,7 @@ if ($a=='update')
 
 $sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code");
 
-$adminmain .= "<form id=\"chgorder\" action=\"".sed_url('admin', "m=page&amp;s=catorder&amp;a=update")."\" method=\"post\">";
+$adminmain .= "<form id=\"chgorder\" action=\"".sed_url('admin', "m=page&s=catorder&a=update")."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\"><tr><td class=\"coltop\">".$L['Code']."</td><td class=\"coltop\">".$L['Path']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Title']."</td><td class=\"coltop\">".$L['Order']."</td></tr>";
 

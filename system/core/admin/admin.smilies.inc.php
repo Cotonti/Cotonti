@@ -67,7 +67,7 @@ elseif ($a=='delete')
 $sql = sed_sql_query("SELECT * FROM $db_smilies ORDER by smilie_order ASC, smilie_id ASC");
 
 $adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-$adminmain .= "<form id=\"savesmilies\" action=\"".sed_url('admin', "m=smilies&amp;a=update")."\" method=\"post\">";
+$adminmain .= "<form id=\"savesmilies\" action=\"".sed_url('admin', "m=smilies&a=update")."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\"><tr>";
 $adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Preview']."</td>";
@@ -95,7 +95,7 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['smilie_size'] = "?";
 		}
 
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=smilies&amp;a=delete&amp;id=".$row['smilie_id']."&amp;".sed_xg())."."\">x</a>]";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=smilies&a=delete&id=".$row['smilie_id']."&".sed_xg())."."\">x</a>]";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['smilie_preview']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['smilie_size']."</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[".$row['smilie_id']."][code]\" value=\"".$row['smilie_code']."\" size=\"10\" maxlength=\"16\" /></td>";
@@ -108,7 +108,7 @@ $adminmain .= "<tr><td colspan=\"6\"><input type=\"submit\" class=\"submit\" val
 $adminmain .= "</table></form>";
 
 $adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-$adminmain .= "<form id=\"addsmilie\" action=\"".sed_url('admin', "m=smilies&amp;a=add")."\" method=\"post\">";
+$adminmain .= "<form id=\"addsmilie\" action=\"".sed_url('admin', "m=smilies&a=add")."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= "<tr><td>".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"nsmiliecode\" value=\"\" size=\"40\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
 $adminmain .= "<tr><td>".$L['ImageURL']." :</td><td><input type=\"text\" class=\"text\" name=\"nsmilieimage\" value=\"system/smilies/.gif\" size=\"40\" maxlength=\"128\" /> ".$L['adm_required']."</td></tr>";

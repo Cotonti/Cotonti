@@ -20,7 +20,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 
 sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url('admin', 'm=page'), $L['Page']);
-$adminpath[] = array (sed_url('admin', 'm=page&amp;s=queue'), $L['adm_valqueue']);
+$adminpath[] = array (sed_url('admin', 'm=page&s=queue'), $L['adm_valqueue']);
 $adminhelp = $L['adm_queues_page'];
 
 $id = sed_import('id','G','INT');
@@ -85,8 +85,8 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= $L['Extrafield']." #1 : ".sed_cc($row['page_extra1'])."<br />";
 	$adminmain .= $L['Extrafield']." #2 : ".sed_cc($row['page_extra2'])."<br />";
 	$adminmain .= $L['Extrafield']." #3 : ".sed_cc($row['page_extra3'])."<br />";
-	$adminmain .= "<a href=\"".sed_url('admin', "m=page&amp;s=queue&amp;a=validate&amp;id=".$row['page_id']."&amp;".sed_xg())."\">".$L['Validate']."</a>";
-	$adminmain .= " &nbsp; <a href=\"".sed_url('page', "m=edit&amp;id=".$row["page_id"]."&amp;r=adm")."\">".$L['Edit']."</a></li>";
+	$adminmain .= "<a href=\"".sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&".sed_xg())."\">".$L['Validate']."</a>";
+	$adminmain .= " &nbsp; <a href=\"".sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")."\">".$L['Edit']."</a></li>";
 	}
 $adminmain .= "</ul>";
 $adminmain .= (sed_sql_numrows($sql)==0) ? "<p>".$L['None']."</p>" : '';

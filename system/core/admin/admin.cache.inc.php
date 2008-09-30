@@ -36,8 +36,8 @@ elseif ($a=='delete')
 $sql = sed_sql_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
 
 $adminmain .= "<p><a href=\"".sed_url('admin', 'm=cache')."\">".$L['Refresh']."</a> | ";
-$adminmain .= "<a href=\"".sed_url('admin', 'm=cache&amp;a=purge&amp;'.sed_xg())."\">".$L['adm_purgeall']."</a> | ";
-$adminmain .= "<a href=\"".sed_url('admin', 'm=cache&amp;a=showall')."\">".$L['adm_showall']."</a></p>";
+$adminmain .= "<a href=\"".sed_url('admin', 'm=cache&a=purge&'.sed_xg())."\">".$L['adm_purgeall']."</a> | ";
+$adminmain .= "<a href=\"".sed_url('admin', 'm=cache&a=showall')."\">".$L['adm_showall']."</a></p>";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= "<tr><td class=\"coltop\">".$L['Delete']."</td><td class=\"coltop\">".$L['Item']."</td><td class=\"coltop\">".$L['Expire']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Size']."</td><td class=\"coltop\">".$L['Value']."</td></tr>";
@@ -48,7 +48,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$row['c_value'] = sed_cc($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);
 	$cachesize += $row['size'];
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', 'm=cache&amp;a=delete&amp;id='.$row['c_name'].'&amp;'.sed_xg())."\">x</a>]</td>";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', 'm=cache&a=delete&id='.$row['c_name'].'&'.sed_xg())."\">x</a>]</td>";
 	$adminmain .= "<td>".$row['c_name']."</td>";
 	$adminmain .= "<td style=\"text-align:right;\">".($row['c_expire']-$sys['now'])."</td>";
 	$adminmain .= "<td style=\"text-align:right;\">".$row['size']."</td>";

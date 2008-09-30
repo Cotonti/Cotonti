@@ -50,12 +50,12 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "</td>";
 
 	$adminmain .= "<td style=\"text-align:center;\">";
-	$adminmain .= ($authentries[$row['ct_code']]>0) ? "<a href=\"".sed_url('admin', "m=rightsbyitem&amp;ic=".$row['ct_code']."&amp;io=a")."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a>" : '&nbsp;';
+	$adminmain .= ($authentries[$row['ct_code']]>0) ? "<a href=\"".sed_url('admin', "m=rightsbyitem&ic=".$row['ct_code']."&io=a")."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a>" : '&nbsp;';
 	$adminmain .= 	"</td>";
 
 	$cfgcode = "disable_".$row['ct_code'];
 	$adminmain .= "<td style=\"text-align:center;\">";
-	$adminmain .= ($cfgentries[$row['ct_code']]>0) ? "<a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=core&amp;p=".$row['ct_code'])."."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
+	$adminmain .= ($cfgentries[$row['ct_code']]>0) ? "<a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=".$row['ct_code'])."."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
 	$adminmain .= "</td></tr>";
 	}
 

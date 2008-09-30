@@ -78,8 +78,8 @@ while ($row = sed_sql_fetcharray($sql))
 	$banlist_email = $row['banlist_email'];
 	$banlist_reason = $row['banlist_reason'];
 	$banlist_expire = $row['banlist_expire'];
-	$adminmain .= "<form id=\"savebanlist_".$banlist_id."\" action=\"".sed_url('admin', 'm=banlist&amp;a=update&amp;id='.$banlist_id)."\" method=\"post\">";
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', 'm=banlist&amp;a=delete&amp;id='.$banlist_id."&amp;".sed_xg())."\">x</a>]</td>";
+	$adminmain .= "<form id=\"savebanlist_".$banlist_id."\" action=\"".sed_url('admin', 'm=banlist&a=update&id='.$banlist_id)."\" method=\"post\">";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', 'm=banlist&a=delete&id='.$banlist_id."&".sed_xg())."\">x</a>]</td>";
 
 	if ($banlist_expire>0)
 		{ $adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'],$banlist_expire)." GMT</td>"; }
@@ -94,7 +94,7 @@ while ($row = sed_sql_fetcharray($sql))
 $adminmain .= "</table>";
 
 $adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-$adminmain .= "<form id=\"addbanlist\" action=\"".sed_url('admin', 'm=banlist&amp;a=add')."\" method=\"post\">";
+$adminmain .= "<form id=\"addbanlist\" action=\"".sed_url('admin', 'm=banlist&a=add')."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\">";
 $adminmain .= "<tr><td>".$L['Duration']." :</td><td><select name=\"nexpire\" size=\"1\">";
 $adminmain .= "<option value=\"3600\">1 hour</option><option value=\"7200\">2 hours</option><option value=\"14400\">4 hours</option><option value=\"28800\">8 hours</option>";

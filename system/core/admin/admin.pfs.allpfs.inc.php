@@ -21,7 +21,7 @@ sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=pfs'), $L['PFS']);
-$adminpath[] = array (sed_url('admin', 'm=pfs&amp;s=allpfs'), $L['adm_allpfs']);
+$adminpath[] = array (sed_url('admin', 'm=pfs&s=allpfs'), $L['adm_allpfs']);
 $adminhelp = $L['adm_help_allpfs'];
 
 unset ($disp_list);

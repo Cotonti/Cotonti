@@ -845,7 +845,7 @@ function sed_build_comments($code, $url, $display)
 				$com_text = sed_cc($row['com_text']);
 
 				$com_admin = ($usr['isadmin_com']) ? $L['Ip'].":".sed_build_ipsearch($row['com_authorip'])." &nbsp;".$L['Delete'].":[<a href=\"".$url."&amp;comments=1&amp;ina=delete&amp;ind=".$row['com_id']."&amp;".sed_xg()."\">x</a>]" : '' ;
-				$com_authorlink = ($row['com_authorid']>0) ? "<a href=\"".sed_url('users', 'm=details&amp;id='.$row['com_authorid'])."\">".$com_author."</a>" : $com_author ;
+				$com_authorlink = ($row['com_authorid']>0) ? "<a href=\"".sed_url('users', 'm=details&id='.$row['com_authorid'])."\">".$com_author."</a>" : $com_author ;
 
 				$t-> assign(array(
 					"COMMENTS_ROW_ID" => $row['com_id'],
@@ -970,14 +970,14 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 		}
 		if(is_array($master))
 		{
-			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&amp;s='.$master[0]).'">'.sed_cc($master[1]).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.sed_cc($master[1]).'</a>';
 		}
 		elseif($master)
 		{
 			$rowa = sed_sql_fetcharray(sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id=$master"));
-			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&amp;s='.$master).'">'.sed_cc( $rowa['fs_title']).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master).'">'.sed_cc( $rowa['fs_title']).'</a>';
 		}
-		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&amp;s='.$sectionid).'">'.sed_cc($title).'</a>';
+		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$sectionid).'">'.sed_cc($title).'</a>';
 	}
 	else
 	{
@@ -1102,7 +1102,7 @@ function sed_build_ipsearch($ip)
 	global $xk;
 	if(!empty($ip))
 	{
-		return '<a href="'.sed_url('admin', 'm=tools&amp;p=ipsearch&amp;a=search&amp;id='.$ip.'&amp;x='.$xk).'">'.$ip.'</a>';
+		return '<a href="'.sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$xk).'">'.$ip.'</a>';
 	}
 	return '';
 }
@@ -1157,7 +1157,7 @@ function sed_build_pfs($id, $c1, $c2, $title)
 function sed_build_pm($user)
 {
 	global $usr;
-	return '<a href="'.sed_url('pm', 'm=send&amp;to='.$user).'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="" /></a>';
+	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="" /></a>';
 }
 
 /* ------------------ */
@@ -1499,7 +1499,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&amp;id='.$id.'&amp;'.$user).'">'.$user.'</a>' : '?';
+		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id.'&'.$user).'">'.$user.'</a>' : '?';
 	}
 }
 
@@ -3472,7 +3472,7 @@ function sed_load_urltrans()
  * @param bool $header Set this TRUE if the url will be used in HTTP header rather than body output
  * @return string
  */
-function sed_url($name, $params, $tail = '', $header = false)
+function sed_url($name, $params = '', $tail = '', $header = false)
 {
 	global $cfg, $sed_urltrans;
 	// Preprocess arguments
@@ -3480,23 +3480,26 @@ function sed_url($name, $params, $tail = '', $header = false)
 	$area = empty($sed_urltrans[$name]) ? '*' : $name;
 	// Find first matching rule
 	$url = $sed_urltrans['*'][0]['trans']; // default rule
-	foreach($sed_urltrans[$area] as $rule)
+	if(!empty($sed_urltrans[$area]))
 	{
-		$matched = true;
-		foreach($rule['params'] as $key => $val)
+		foreach($sed_urltrans[$area] as $rule)
 		{
-			if(empty($args[$key])
-				|| (is_array($val) && !in_array($args[$key], $val))
-				|| ($val != '*' && $args[$key] != $val))
+			$matched = true;
+			foreach($rule['params'] as $key => $val)
 			{
-				$matched = false;
+				if(empty($args[$key])
+					|| (is_array($val) && !in_array($args[$key], $val))
+					|| ($val != '*' && $args[$key] != $val))
+				{
+					$matched = false;
+					break;
+				}
+			}
+			if($matched)
+			{
+				$url = $rule['trans'];
 				break;
 			}
-		}
-		if($matched)
-		{
-			$url = $rule['trans'];
-			break;
 		}
 	}
 	// Some special substitutions
@@ -3527,6 +3530,7 @@ function sed_url($name, $params, $tail = '', $header = false)
 	}
 	// Almost done
 	$url .= $tail;
+	$url = str_replace('&amp;amp;', '&amp;', $url);
 	return $url;
 }
 

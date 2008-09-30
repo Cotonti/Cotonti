@@ -27,7 +27,7 @@ $id = sed_import('id','G','TXT');
 $ii=0;
 $jj=0;
 
-$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=core&amp;p=ratings")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=ratings")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($a=='delete')
 	{
@@ -48,7 +48,7 @@ $pagination = '';
 for($i = 1; $i <= $totalpages; $i++)
 {
 	$pagination .= ($i == $currentpage) ? ' <span class="pagenav_current">' : ' ';
-	$pagination .= '<a href="'.sed_url('admin', 'm=ratings&amp;d='.(($i-1)*$cfg['maxrowsperpage'])).'">'.$i.'</a>';
+	$pagination .= '<a href="'.sed_url('admin', 'm=ratings&d='.(($i-1)*$cfg['maxrowsperpage'])).'">'.$i.'</a>';
 	$pagination .= ($i == $currentpage) ? '</span> ' : ' ';
 	if($i != $totalpages) $pagination .= '|';
 }
@@ -84,7 +84,7 @@ while ($row = sed_sql_fetcharray($sql))
 		break;
 		}
 
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=ratings&amp;a=delete&amp;id=".$row['rating_code']."&amp;".sed_xg())."\">x</a>]</td>";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=ratings&a=delete&id=".$row['rating_code']."&".sed_xg())."\">x</a>]</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['rating_code']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row['rating_creationdate'])."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$votes."</td>";

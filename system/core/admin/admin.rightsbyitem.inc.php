@@ -93,7 +93,7 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$adminpath[] = array(sed_url('admin', 'm=rightsbyitem&amp;ic=$ic&amp;io=$io'), $L['Rights']." / ".$L['adm_code'][$ic].$title);
+$adminpath[] = array(sed_url('admin', 'm=rightsbyitem&ic=$ic&io=$io'), $L['Rights']." / ".$L['adm_code'][$ic].$title);
 
 $adv_columns = ($advanced) ? 5 : 0;
 
@@ -123,7 +123,7 @@ $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\
 $headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_a.gif\" alt=\"\" /></td>\n";
 $headcol .= "</tr>\n";
 
-$adminmain .= "<form id=\"saverightsbyitem\" action=\"".sed_url('admin', "m=rightsbyitem&amp;a=update&amp;ic=".$ic."&amp;io=".$io)."\" method=\"post\">";
+$adminmain .= "<form id=\"saverightsbyitem\" action=\"".sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io)."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\">";
 
 function sed_rights_parseline($row, $title, $link)
@@ -182,7 +182,7 @@ $adminmain .= $headcol;
 
 while ($row = sed_sql_fetcharray($sql))
 {
-	$link = sed_url('admin', "m=rights&amp;g=".$row['auth_groupid']);
+	$link = sed_url('admin', "m=rights&g=".$row['auth_groupid']);
 	//	$title = $sed_groups[$row['auth_groupid']]['title'];
 	$title = sed_cc($row['grp_title']);
 	$adminmain .= sed_rights_parseline($row, $title, $link);
@@ -191,7 +191,7 @@ while ($row = sed_sql_fetcharray($sql))
 $adminmain .= "<tr><td colspan=\"".(6+$adv_columns)."\" style=\"text-align:center;\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 $adminmain .= "</table></form>";
 
-$adminmain .= '<a href="'.sed_url('admin', 'm=rightsbyitem&amp;ic='.$ic.'&amp;io='.$io.'&amp;advanced=1').'">'.$L['More'].'</a>';
+$adminmain .= '<a href="'.sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1').'">'.$L['More'].'</a>';
 
 $adminhelp = $legend;
 

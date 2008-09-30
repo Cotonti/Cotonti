@@ -72,7 +72,7 @@ if (!empty($p))
 			 }
 		}
 
-	$adminpath[] = array (sed_url('admin', "m=tools&amp;p="$p), sed_cc($info['Name']));
+	$adminpath[] = array (sed_url('admin', "m=tools&p="$p), sed_cc($info['Name']));
 	$adminhelp = $L['Description']." : ".$info['Description']."<br />".$L['Version']." : ".$info['Version']."<br />".$L['Date']." : ".$info['Date']."<br />".$L['Author']." : ".$info['Author']."<br />".$L['Copyright']." : ".$info['Copyright']."<br />".$L['Notes']." : ".$info['Notes'];
 
 	}
@@ -116,7 +116,7 @@ else
 				}
 
 			$plugin_icon = (empty($x[1])) ? 'plugins' : $x[1];
-			$adminmain  .= "<tr><td><a href=\"".sed_url('admin', "m=tools&amp;p=".$x[0])."\">";
+			$adminmain  .= "<tr><td><a href=\"".sed_url('admin', "m=tools&p=".$x[0])."\">";
 			$adminmain  .= "<img src=\"images/admin/tools.gif\" alt=\"\" /> ".$info['Name']."</a></td></tr>";
 			}
 		$adminmain .= "</table>";

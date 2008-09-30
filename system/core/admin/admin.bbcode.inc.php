@@ -125,8 +125,8 @@ while($row = sed_sql_fetchassoc($res))
 	$enabled = $row['bbc_enabled'] ? ' checked="checked"' : '';
 	$container = $row['bbc_container'] ? ' checked="checked"' : '';
 	$postrender = $row['bbc_postrender'] ? ' checked="checked"' : '';
-	$bbcode_update_url = sed_url('admin', 'm=bbcode&amp;a=upd&amp;id='.$row['bbc_id']);
-	$bbcode_delete_url = sed_url('admin', 'm=bbcode&amp;a=upd&amp;id='.$row['bbc_id']);
+	$bbcode_update_url = sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id']);
+	$bbcode_delete_url = sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id']);
 	$adminmain .= <<<HTM
 <form action="{$bbcode_update_url}" method="post">
 <tr>
@@ -164,8 +164,8 @@ for($i = 1; $i < 256; $i++)
 	$sel = $i == 128 ? ' selected="selected"' : '';
 	$prio .= '<option'.$sel.'>'.$i.'</option>';
 }
-$form_action = sed_url('admin', 'm=bbcode&amp;a=add');
-$form_clear_cache = sed_url('admin', 'm=bbcode&amp;a=clearcache');
+$form_action = sed_url('admin', 'm=bbcode&a=add');
+$form_clear_cache = sed_url('admin', 'm=bbcode&a=clearcache');
 $adminmain .= <<<HTM
 <tr>
 <td colspan="5">

@@ -51,7 +51,7 @@ $group_select = "<form>".$L['Group']." : <select name=\"groups\" size=\"1\" onch
 foreach($log_groups as $grp_code => $grp_name)
 	{
 	$selected = ($grp_code==$n) ? "selected=\"selected\"" : "";
-	$group_select .= "<option value=\"".sed_url('admin', "m=log&amp;n=".$grp_code)."\" $selected>".$grp_name."</option>";
+	$group_select .= "<option value=\"".sed_url('admin', "m=log&n=".$grp_code)."\" $selected>".$grp_name."</option>";
 	$text = str_replace($bbcode, $bbcodehtml, $text);
 	}
 
@@ -66,7 +66,7 @@ if ($n=='all')
 else
 	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 
-$adminmain .= ($usr['isadmin']) ? $L['adm_purgeall']." (".$totaldblog.") : [<a href=\"".sed_url('admin', "m=log&amp;a=purge&amp;".sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
+$adminmain .= ($usr['isadmin']) ? $L['adm_purgeall']." (".$totaldblog.") : [<a href=\"".sed_url('admin', "m=log&a=purge&".sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
 $adminmain .= $group_select;
 $adminmain .= "<table class=\"paging\"><tr><td class=\"paging_left\">".$pagination_prev."</td>";
 $adminmain .= "<td class=\"paging_center\">".$pagination."</td>";
@@ -80,10 +80,10 @@ while ($row = sed_sql_fetcharray($sql))
 	{
 	$adminmain .= "<tr><td>".$row['log_id']."</td>";
 	$adminmain .= "<td>".date($cfg['dateformat'], $row['log_date'])." &nbsp;</td>";
-	$adminmain .= "<td><a href=\"".sed_url('admin', "m=tools&amp;p=ipsearch&amp;a=search&amp;id=".$row['log_ip']."&amp;".sed_xg())."\">";
+	$adminmain .= "<td><a href=\"".sed_url('admin', "m=tools&p=ipsearch&a=search&id=".$row['log_ip']."&".sed_xg())."\">";
 	$adminmain .= $row['log_ip']."</a> &nbsp;</td>";
 	$adminmain .= "<td>".$row['log_name']." &nbsp;</td>";
-	$adminmain .= "<td><a href=\"".sed_url('admin', "m=log&amp;n=".$row['log_group'])."\">";
+	$adminmain .= "<td><a href=\"".sed_url('admin', "m=log&n=".$row['log_group'])."\">";
 	$adminmain .= $log_groups[$row['log_group']]."</a> &nbsp;</td>";
 	$adminmain .= "<td class=\"desc\">".htmlspecialchars($row['log_text'])."</td></tr>";
 	}

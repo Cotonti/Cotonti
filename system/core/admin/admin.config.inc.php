@@ -79,13 +79,13 @@ switch ($n)
 		{ $cfg_params[$line[2]] = $line[5]; }
 
 	if ($o=='core')
-		{ $adminpath[] = array (sed_url('admin', 'm=config&amp;n=edit&amp;o='.$o.'&amp;p='.$p), $L["core_".$p]); }
+		{ $adminpath[] = array (sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L["core_".$p]); }
 	else
 		{
-		$adminpath[] = array (sed_url('admin', 'm=config&amp;n=edit&amp;o='.$o.'&amp;p='.$p), $L['Plugin'].' ('.$o.':'.$p.')');
+		$adminpath[] = array (sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['Plugin'].' ('.$o.':'.$p.')');
 		}
 
-	$adminmain .= "<form id=\"saveconfig\" action=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=".$o."&amp;p=".$p."&amp;a=update")."\" method=\"post\">";
+	$adminmain .= "<form id=\"saveconfig\" action=\"".sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=update")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td  class=\"coltop\" colspan=\"2\">".$L['Configuration']."</td><td class=\"coltop\">".$L['Reset']."</td></tr>";
 
@@ -161,7 +161,7 @@ switch ($n)
 			}
 		$adminmain .= " ".$config_more."</td>";
 		$adminmain .= "<td style=\"text-align:center; width:7%;\">";
-		$adminmain .= ($o=='core') ? "[<a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=".$o."&amp;p=".$p."&amp;a=reset&amp;v=".$config_name)."\">R</a>]" : '&nbsp;';
+		$adminmain .= ($o=='core') ? "[<a href=\"".sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name)."\">R</a>]" : '&nbsp;';
 		$adminmain .= "</td>";
 		$adminmain .= "</tr>";
 		}
@@ -179,7 +179,7 @@ switch ($n)
 	while ($row = sed_sql_fetcharray($sql))
 		{
 		$code = "core_".$row['config_cat'];
-		$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=core&amp;p=".$row['config_cat'])."\">".$L[$code]."</a></li>";
+		$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat'])."\">".$L[$code]."</a></li>";
 		}
 
 
@@ -191,7 +191,7 @@ switch ($n)
 
 	while ($row = sed_sql_fetcharray($sql))
 		{
-		$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=plug&amp;p=".$row['config_cat'])."\">".$row['config_cat']."</a></li>";
+		$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=plug&p=".$row['config_cat'])."\">".$row['config_cat']."</a></li>";
 		}
 
 	$adminmain .= "</ul>";

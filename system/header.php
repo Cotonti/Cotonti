@@ -34,7 +34,7 @@ $out['meta_charset'] = $cfg['charset'];
 $out['meta_desc'] = $plug_desc.$cfg['maintitle']." - ".$cfg['subtitle'];
 $out['meta_keywords'] = $plug_keywords.$cfg['metakeywords'];
 $out['meta_lastmod'] = gmdate("D, d M Y H:i:s");
-$out['head_head'] =$plug_head;
+$out['head_head'] = $plug_head;
 
 
 if (sed_auth('page', 'any', 'A'))
@@ -47,9 +47,9 @@ if (sed_auth('page', 'any', 'A'))
 		$out['notices'] .= $L['hea_valqueues'];
 
 		if ($sys['pagesqueued']==1)
-		{ $out['notices'] .= "<a href=\"".sed_url('admin', 'm=page&amp;s=queue')."\">"."1 ".$L['Page']."</a> "; }
+		{ $out['notices'] .= "<a href=\"".sed_url('admin', 'm=page&s=queue')."\">"."1 ".$L['Page']."</a> "; }
 		elseif ($sys['pagesqueued']>1)
-		{ $out['notices'] .= "<a href=\"".sed_url('admin', 'm=page&amp;s=queue')."\">".$sys['pagesqueued']." ".$L['Pages']."</a> "; }
+		{ $out['notices'] .= "<a href=\"".sed_url('admin', 'm=page&s=queue')."\">".$sys['pagesqueued']." ".$L['Pages']."</a> "; }
 	}
 }
 
@@ -91,7 +91,7 @@ $t->assign(array (
 if ($usr['id']>0)
 {
 	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"".sed_url('admin')."\">".$L['Administration']."</a>" : '';
-	$out['loginout_url'] = sed_url('users', 'm=logout&amp;'.sed_xg());
+	$out['loginout_url'] = sed_url('users', 'm=logout&'.sed_xg());
 	$out['loginout'] = "<a href=\"".$out['loginout_url']."\">".$L['Logout']."</a>";
 	$out['profile'] = "<a href=\"".sed_url('users', 'm=profile')."\">".$L['Profile']."</a>";
 	$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a>";

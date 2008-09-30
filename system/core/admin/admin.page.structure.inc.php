@@ -23,7 +23,7 @@ $id = sed_import('id','G','INT');
 $c = sed_import('c','G','TXT');
 
 $adminpath[] = array (sed_url('admin', 'm=page'), $L['Pages']);
-$adminpath[] = array (sed_url('admin', 'm=page&amp;s=structure'), $L['Structure']);
+$adminpath[] = array (sed_url('admin', 'm=page&s=structure'), $L['Structure']);
 $adminhelp = $L['adm_help_structure'];
 
 if ($n=='options')
@@ -102,9 +102,9 @@ if ($n=='options')
 		$check2 = " checked=\"checked\"";
 	}
 
-	$adminpath[] = array (sed_url('admin', "m=page&amp;s=structure&amp;n=options&amp;id=".$id), sed_cc($structure_title));
+	$adminpath[] = array (sed_url('admin', "m=page&s=structure&n=options&id=".$id), sed_cc($structure_title));
 
-	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=page&amp;s=structure&amp;n=options&amp;a=update&amp;id=".$structure_id)."\" method=\"post\">";
+	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=page&s=structure&n=options&a=update&id=".$structure_id)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Code']." :</td>";
 	$adminmain .= "<td>".$structure_code."</td></tr>";
@@ -185,7 +185,7 @@ else
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC");
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=page&amp;s=structure&amp;a=update")."\" method=\"post\">";
+	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=page&s=structure&a=update")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td class=\"coltop\">".$L['Delete']."</td>";
 	$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
@@ -220,7 +220,7 @@ else
 		{ $structure_tpl_sym = "+"; }
 
 		$adminmain .= "<tr><td style=\"text-align:center;\">";
-		$adminmain .= ($pagecount[$structure_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=page&amp;s=structure&amp;a=delete&amp;id=".$structure_id."&amp;c=".$row['structure_code']."&amp;".sed_xg())."\">x</a>]";
+		$adminmain .= ($pagecount[$structure_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=page&s=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&".sed_xg())."\">x</a>]";
 		$adminmain .= "</td>";
 		$adminmain .= "<td>".$structure_code."</td>";
 		$adminmain .= "<td>$pathfieldimg<input type=\"text\" class=\"text\" name=\"s[$structure_id][rpath]\" value=\"".$structure_path."\" size=\"$pathfieldlen\" maxlength=\"24\" /></td>";
@@ -232,15 +232,15 @@ else
 		$adminmain .= "<td style=\"text-align:center;\"><input type=\"checkbox\" class=\"checkbox\" name=\"s[$structure_id][rgroup]\" $checked /></td>";
 		$adminmain .= "<td style=\"text-align:right;\">".$pagecount[$structure_code]." ";
 		$adminmain .= "<a href=\"list.php?c=".$structure_code."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
-		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&amp;ic=page&amp;io=".$structure_code)."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
-		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=page&amp;s=structure&amp;n=options&amp;id=".$structure_id."&amp;".sed_xg())."\">".$L['Options']."</a></td>";
+		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=page&io=".$structure_code)."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
+		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=page&s=structure&n=options&id=".$structure_id."&".sed_xg())."\">".$L['Options']."</a></td>";
 		$adminmain .= "</tr>";
 	}
 
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table></form>";
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url('admin', "m=page&amp;s=structure&amp;a=add")."\" method=\"post\">";
+	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url('admin', "m=page&s=structure&a=add")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td style=\"width:160px;\">".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"255\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Path']." :</td><td><input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";

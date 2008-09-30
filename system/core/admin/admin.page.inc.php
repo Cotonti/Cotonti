@@ -27,11 +27,11 @@ $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 $sys['pagesqueued'] = sed_sql_result($sql,0,'COUNT(*)');
 
 $adminmain .= "<ul>";
-$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=core&amp;p=page")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
+$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=page")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
 $adminmain .= "<li>".sed_linkif(sed_url('page', 'm=add'), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&amp;s=queue'), $L['adm_valqueue']." : ".$sys['pagesqueued'], sed_auth('page', 'any', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&amp;s=structure'), $L['adm_structure'], sed_auth('admin', 'a', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&amp;s=catorder'), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'))."</li>";
+$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=queue'), $L['adm_valqueue']." : ".$sys['pagesqueued'], sed_auth('page', 'any', 'A'))."</li>";
+$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=structure'), $L['adm_structure'], sed_auth('admin', 'a', 'A'))."</li>";
+$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=catorder'), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'))."</li>";
 $adminmain .= "<li>".$L['Pages']." : ".$totaldbpages." (<a href=\"".sed_url('list', 'c=all')."\">".$L['adm_showall']."</a>)</li>";
 $adminmain .= "</ul>";
 

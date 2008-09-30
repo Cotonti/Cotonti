@@ -23,8 +23,8 @@ $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=pfs'), $L['PFS']);
 $adminhelp = $L['adm_help_pfs'];
 
-$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&amp;n=edit&amp;o=core&amp;p=pfs")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
-$adminmain .= "<li><a href=\"".sed_url('admin', "m=pfs&amp;s=allpfs")."\">".$L['adm_allpfs']."</a></li>";
+$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=pfs")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
+$adminmain .= "<li><a href=\"".sed_url('admin', "m=pfs&s=allpfs")."\">".$L['adm_allpfs']."</a></li>";
 $adminmain .= "<li><a href=\"".sed_url('pfs', "userid=0")."\">".$L['SFS']."</a></li></ul>";
 
 

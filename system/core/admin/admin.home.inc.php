@@ -28,7 +28,7 @@ if (!empty($adminwarnings))
 	{ $adminmain .= $L['adm_warnings']." :".$adminwarnings; }
 
 $adminmain .= "<h4>".$L['adm_valqueue']." :</h4><ul>";
-$adminmain .= "<li><a href=\"".sed_url('admin', "m=page&amp;s=queue")."\">".$L['Pages']." : ".$pagesqueued."</a></li>";
+$adminmain .= "<li><a href=\"".sed_url('admin', "m=page&s=queue")."\">".$L['Pages']." : ".$pagesqueued."</a></li>";
 $adminmain .= "</ul>";
 
 /* === Hook for the plugins === */
