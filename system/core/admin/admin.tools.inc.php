@@ -72,7 +72,7 @@ if (!empty($p))
 			 }
 		}
 
-	$adminpath[] = array (sed_url('admin', "m=tools&p="$p), sed_cc($info['Name']));
+	$adminpath[] = array (sed_url('admin', "m=tools&p=".$p), sed_cc($info['Name']));
 	$adminhelp = $L['Description']." : ".$info['Description']."<br />".$L['Version']." : ".$info['Version']."<br />".$L['Date']." : ".$info['Date']."<br />".$L['Author']." : ".$info['Author']."<br />".$L['Copyright']." : ".$info['Copyright']."<br />".$L['Notes']." : ".$info['Notes'];
 
 	}

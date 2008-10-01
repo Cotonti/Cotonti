@@ -95,7 +95,7 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['smilie_size'] = "?";
 		}
 
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=smilies&a=delete&id=".$row['smilie_id']."&".sed_xg())."."\">x</a>]";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=smilies&a=delete&id=".$row['smilie_id']."&".sed_xg())."\">x</a>]";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['smilie_preview']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['smilie_size']."</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[".$row['smilie_id']."][code]\" value=\"".$row['smilie_code']."\" size=\"10\" maxlength=\"16\" /></td>";

@@ -28,7 +28,7 @@ $v = sed_import('v','G','TXT');
 
 if ($f=='year' || $f=='month')
 	{
-	$adminpath[] = array (sed_url('admin'), 'm=hits&f='.$f.'&v='.$v), "(".$v.")");
+	$adminpath[] = array (sed_url('admin', 'm=hits&f='.$f.'&v='.$v), "(".$v.")");
 	$sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
 	$adminmain .= "<h4>".$v." :</h4>";
 	$adminmain .= "<table class=\"cells\">";

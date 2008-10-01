@@ -410,21 +410,21 @@ switch ($a)
 									case 'unpause' :
 										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
 										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl);
+										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
 										exit;
 										break;
 
 									case 'pausepart' :
 										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl' AND pl_id='$part'");
 										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl);
+										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
 										exit;
 										break;
 
 									case 'unpausepart' :
 										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl' AND pl_id='$part'");
 										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl);
+										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
 										exit;
 										break;
 
@@ -544,7 +544,7 @@ switch ($a)
 													$adminmain .= "</td>";
 													$adminmain .= "<td style=\"text-align:center;\">".$info['Partscount']."</td>";
 													$adminmain .= "<td style=\"text-align:center;\">".$status[$part_status]."</td>";
-													$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code'])."."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
+													$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
 													$adminmain .= "<td style=\"text-align:center;\">";
 
 													if ($plg_tools[$info['Code']])

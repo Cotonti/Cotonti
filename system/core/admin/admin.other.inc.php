@@ -55,7 +55,7 @@ while ($row = sed_sql_fetcharray($sql))
 
 	$cfgcode = "disable_".$row['ct_code'];
 	$adminmain .= "<td style=\"text-align:center;\">";
-	$adminmain .= ($cfgentries[$row['ct_code']]>0) ? "<a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=".$row['ct_code'])."."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
+	$adminmain .= ($cfgentries[$row['ct_code']]>0) ? "<a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=".$row['ct_code'])."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
 	$adminmain .= "</td></tr>";
 	}
 
@@ -64,20 +64,20 @@ $adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=cache"), "<img
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=bbcode"),, "<img src=\"images/admin/page.gif\" alt=\"\" /> ".$L['adm_bbcodes'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=bbcode"), "<img src=\"images/admin/page.gif\" alt=\"\" /> ".$L['adm_bbcodes'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=urls"),, "<img src=\"images/admin/info.gif\" alt=\"\" /> ".$L['adm_urls'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=urls"), "<img src=\"images/admin/info.gif\" alt=\"\" /> ".$L['adm_urls'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=smilies"),, "<img src=\"images/admin/smilies.gif\" alt=\"\" /> ".$L['Smilies'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=smilies"), "<img src=\"images/admin/smilies.gif\" alt=\"\" /> ".$L['Smilies'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=banlist"),, "<img src=\"images/admin/users.gif\" alt=\"\" /> ".$L['Banlist'], sed_auth('users', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=banlist"), "<img src=\"images/admin/users.gif\" alt=\"\" /> ".$L['Banlist'], sed_auth('users', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
@@ -85,15 +85,15 @@ $adminmain .= "<td colspan=\"3\"><a href=\"".sed_url('admin', "m=hits")."\"><img
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=referers"),, "<img src=\"images/admin/info.gif\" alt=\"\" /> ".$L['Referers'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=referers"), "<img src=\"images/admin/info.gif\" alt=\"\" /> ".$L['Referers'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=log"),, "<img src=\"images/admin/page.gif\" alt=\"\" /> ".$L['adm_log'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=log"), "<img src=\"images/admin/page.gif\" alt=\"\" /> ".$L['adm_log'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=infos"),, "<img src=\"images/admin/info.gif\" alt=\"\" /> ".$L['adm_infos'], sed_auth('admin', 'a', 'A'))."</td>";
+$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=infos"), "<img src=\"images/admin/info.gif\" alt=\"\" /> ".$L['adm_infos'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
 $adminmain .= "</table>";
