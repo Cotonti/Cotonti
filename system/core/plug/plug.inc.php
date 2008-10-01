@@ -189,38 +189,6 @@ elseif (!empty($h))
 		{ $popup_body = $L['None']; }
 
 	}
-	elseif ($h=='bbcodes')
-	{
-		reset ($sed_bbcodes);
-		$ii=0;
-		$popup_body = $L['BBcodes']." (".$L['BBcodes_explain'].") :<p>";
-		$popup_body .= "<div class=\"bbcodes\"><table><tr>";
-
-		while (list($i,$dat) = each($sed_bbcodes))
-		{
-			$kk = "bbcodes_".$dat[1];
-			if (mb_substr($dat[1], 0, 5)=='style')
-			{
-				$popup_body .= "<td colspan=\"2\"><a href=\"javascript:add('".$dat[0]."')\">";
-				$popup_body .= "<span class=\"bb".$dat[1]."\">".$L[$kk]." &nbsp;</span></td>";
-			}
-			else
-			{
-				$popup_body .= "<td><a href=\"javascript:add('".$dat[0]."')\">";
-				$popup_body .= "<img src=\"images/bbcodes/".$dat[1].".gif\" alt=\"\" /></a></td>";
-				$popup_body .= "<td>".$L[$kk]." &nbsp;</td>";
-			}
-
-			$ii++;
-			if ($ii==3)
-			{
-				$ii=0;
-				$popup_body .= "</tr><tr>";
-			}
-		}
-
-		$popup_body .= "</table></div></p>";
-	}
 	else
 	{
 		$incl = $cfg['system_dir']."/help/$h.txt";
