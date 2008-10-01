@@ -127,8 +127,11 @@ if ($n=='edit')
 	$adminmain .= "<form id=\"updatesection\" action=\"".sed_url('admin', "m=forums&n=edit&a=update&id=".$fs_id)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Section']." :</td><td>".$fs_id."</td></tr>";
+	$sqlc = sed_sql_query("SELECT fs_id FROM $db_forum_sections WHERE fs_masterid='".$id."' ");
+	if (!mysql_num_rows($sqlc))
+		{
 	$adminmain .= "<tr><td>".$L['adm_forums_master']." :</td><td><select name=\"rmaster\"><option value=\"0\">--</option>";
-	$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM sed_forum_sections AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 ORDER by fn_path ASC, fs_order ASC");
+	$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='".$fs_category."' ORDER by fn_path ASC, fs_order ASC");
 	while ($rowa = sed_sql_fetchassoc($sqla))
 	{
 		$cfs = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
@@ -142,6 +145,7 @@ if ($n=='edit')
 		}
 	}
 	$adminmain .= "</select></td></tr>";
+		}
 	$adminmain .= "<tr><td>".$L['Category']." :</td><td>".sed_selectbox_forumcat($fs_category, 'rcat')."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($fs_title)."\" size=\"56\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".sed_cc($fs_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
@@ -327,7 +331,7 @@ else
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Category']." :</td><td>".sed_selectbox_forumcat('', 'ncat')."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_forums_master']." :</td><td><select name=\"nmaster\"><option value=\"0\">--</option>";
-	$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM sed_forum_sections AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid<1 ORDER by fn_path ASC, fs_order ASC");
+	$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid<1 ORDER by fn_path ASC, fs_order ASC");
 	while ($rowa = sed_sql_fetchassoc($sqla))
 	{
 		$cfs = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);

@@ -50,11 +50,31 @@
 				<h3 style="margin:9px;"><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h3>
 				&nbsp; {FORUMS_SECTIONS_ROW_DESC}
 				
-				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+				<table><tr>
+				
+				<td>
+				
+				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVESI -->
 
-				<br /> - {FORUMS_SECTIONS_ROW_SLAVE}
+				<br /><img src="skins/{PHP.skin}/img/system/icon-subforum.gif" alt="" /> &nbsp;{FORUMS_SECTIONS_ROW_SLAVEI}
 
-				<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+				<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVESI -->
+				
+				</td>
+				
+				<td>
+				
+				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVESII -->
+
+				<br /><img src="skins/{PHP.skin}/img/system/icon-subforum.gif" alt="" /> &nbsp;{FORUMS_SECTIONS_ROW_SLAVEII}
+
+				<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVESII -->
+				
+				</td>
+				
+				</tr></table>
+				
+				
 				
 				</td>
 

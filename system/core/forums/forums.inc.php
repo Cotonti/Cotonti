@@ -275,12 +275,21 @@ while ($fsn = sed_sql_fetcharray($sql))
 
 			if ($fcache[$fsn['fs_id']])
 			{
+			$ii = 0;
 				foreach ($fcache[$fsn['fs_id']] as $key => $value)
 				{
-					$t->assign("FORUMS_SECTIONS_ROW_SLAVE","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$value."</a>");
-					$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVES");
+					$ii++;
+					if ($ii%2!=0)
+						{
+						$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$value."</a>");
+						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESI");
+						}
+					else
+						{
+						$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$value."</a>");
+						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESII");
+						}
 				}
-
 			}
 
 			/* === Hook - Part2 : Include === */
