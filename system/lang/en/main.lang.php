@@ -536,7 +536,6 @@ $L['com_nocommentsyet'] = 'No comments yet';
 $L['for_newtopic'] = 'New topic';
 $L['for_markallasread'] = 'Mark all posts as read';
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
-$L['for_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';
 
 /* ====== List ====== */
 

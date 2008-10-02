@@ -137,7 +137,6 @@ $L['cfg_countcomments'] = array('Count comments', 'Display the count of comments
 $L['cfg_hideprivateforums'] = array('Hide private forums', '');
 $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics or posts per page', '');
-$L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users from posting twice in a row in the same topic');
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded to any PFS, it\'s too late to change this. It is not recommended to change this setting for now.');
 $L['cfg_th_amode'] = array('Thumbnails generation', '');
 $L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');

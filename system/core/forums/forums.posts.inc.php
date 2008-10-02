@@ -132,12 +132,13 @@ if ($a=='newpost')
 {
 	sed_shield_protect();
 
-	$sql = sed_sql_query("SELECT ft_state FROM $db_forum_topics WHERE ft_id='$q'");
+	$sql = sed_sql_query("SELECT ft_state, ft_lastposterid FROM $db_forum_topics WHERE ft_id='$q'");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
 		if ($row['ft_state'])
 		{ sed_die(); }
+		if ($row['ft_lastposterid']==$usr['id']) { $merge = 1; }
 	}
 	else
 	{ sed_die(); }
@@ -146,7 +147,7 @@ if ($a=='newpost')
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
-		if ($cfg['antibumpforums'] && ( ($usr['id']==0 && $row['fp_posterid']==0 && $row['fp_posterip']==$usr['ip']) || ($row['fp_posterid']>0 && $row['fp_posterid']==$usr['id']) ))
+		if (( ($usr['id']==0 && $row['fp_posterid']==0 && $row['fp_posterip']==$usr['ip']) || ($row['fp_posterid']>0 && $row['fp_posterid']==$usr['id']) ))
 		{ sed_die(); }
 	}
 	else
@@ -162,6 +163,9 @@ if ($a=='newpost')
 
 	if (empty($error_string) && !empty($newmsg) && !empty($s) && !empty($q))
 	{
+	
+	if ($merge==0)
+		{
 		if($cfg['parser_cache'])
 		{
 			$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
@@ -215,6 +219,40 @@ if ($a=='newpost')
 		sed_shield_update(30, "New post");
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
 		exit;
+		}
+	else
+		{
+		if($cfg['parser_cache'])
+		{
+			$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+		}
+		else
+		{
+			$rhtml = '';
+		}
+		
+		$sql = sed_sql_query("SELECT fp_id, fp_text, fp_html FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
+		$row = sed_sql_fetcharray($sql);
+		
+		$newmsg = sed_sql_prep($row['fp_text'])."\n\n".sed_sql_prep($newmsg);
+		$newhtml = ($cfg['parser_cache']) ? sed_sql_prep($row['fp_html'])."<br /><br />".$rhtml : '';
+		
+		$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
+		
+		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."', fp_text='".$newmsg."', fp_html='".$newhtml."', fp_posterip='".$usr['ip']."' WHERE fp_id='".$row['fp_id']."' LIMIT 1");
+		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
+
+		/* === Hook === */
+		$extp = sed_getextplugins('forums.posts.newpost.done');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
+		sed_forum_sectionsetlast($s);
+		sed_shield_update(30, "New post");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
+		exit;	
+		}
 	}
 }
 
@@ -647,9 +685,6 @@ while ($row = sed_sql_fetcharray($sql))
 	$t->parse("MAIN.FORUMS_POSTS_ROW");
 }
 
-$allowreplybox = (!$cfg['antibumpforums']) ? TRUE : FALSE;
-$allowreplybox = ($cfg['antibumpforums'] && $lastposterid>0 && $lastposterid==$usr['id'] && $usr['auth_write']) ? FALSE : TRUE;
-
 // Nested quote stripper by Spartan
 function sed_stripquote($string) {
 	global $sys;
@@ -670,7 +705,7 @@ function sed_stripquote($string) {
 	return($string);
 }
 
-if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_write'])
+if (!$notlastpage && !$ft_state && $usr['id']>0 && $usr['auth_write'])
 {
 	if ($quote>0)
 	{
@@ -717,12 +752,6 @@ elseif ($ft_state)
 {
 	$t->assign("FORUMS_POSTS_TOPICLOCKED_BODY", $L['Topiclocked']);
 	$t->parse("MAIN.FORUMS_POSTS_TOPICLOCKED");
-}
-
-elseif(!$allowreplybox && !$notlastpage && !$ft_state && $usr['id']>0)
-{
-	$t->assign("FORUMS_POSTS_ANTIBUMP_BODY", $L['for_antibump']);
-	$t->parse("MAIN.FORUMS_POSTS_ANTIBUMP");
 }
 
 if ($ft_mode==1)

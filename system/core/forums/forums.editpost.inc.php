@@ -152,7 +152,7 @@ if ($a=='update')
 	/* ===== */
 
 	sed_forum_sectionsetlast($fp_sectionid);
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&p="$p, '#'.$p, true));
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&p=".$p, '#'.$p, true));
 	exit;
 }
 

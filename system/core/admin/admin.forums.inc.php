@@ -82,6 +82,8 @@ if ($n=='edit')
 		sed_check_xg();
 		sed_auth_clear('all');
 		$num = sed_forum_deletesection($id);
+		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0' WHERE fs_masterid='".$id."' ");
+		$num += mysql_num_rows($sql);
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=103&num=".$num, '', true));
 		exit;
 	}
