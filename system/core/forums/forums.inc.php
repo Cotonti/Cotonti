@@ -124,7 +124,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 		if (!$fsn['fs_lt_id'])
 		{ sed_forum_sectionsetlast($fsn['fs_id']); }
 
-		$fcache[$fsn['fs_masterid']][$fsn['fs_id']] = $fsn['fs_title'];
+		$fcache[$fsn['fs_masterid']][$fsn['fs_id']] = array($fsn['fs_title'], $fsn['fs_lt_date'], $fsn['fs_lt_posterid']);
 		$fcache2[$fsn['fs_masterid']][$fsn['fs_id']] = array($fsn['fs_topiccount']+$fsn['fs_topiccount_pruned'], $fsn['fs_postcount']+$fsn['fs_postcount_pruned']);
 		$fcache3[$fsn['fs_masterid']][$fsn['fs_id']] = array($fsn['fs_lt_date'], sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername'])));
 		$fcache3[$fsn['fs_masterid']][$fsn['fs_id']][] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread")."\">".sed_cutstring($fsn['fs_lt_title'], 32)."</a>" : "<a href=\"".sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=last". "#bottom")."\">".sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
@@ -278,15 +278,16 @@ while ($fsn = sed_sql_fetcharray($sql))
 			$ii = 0;
 				foreach ($fcache[$fsn['fs_id']] as $key => $value)
 				{
-					$ii++;
+				$new = ($usr['id']>0 && $value[1]>$usr['lastvisit'] && $value[2]!=$usr['id']) ? '+ ' : '';
+				$ii++;
 					if ($ii%2!=0)
 						{
-						$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$value."</a>");
+						$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$new.$value[0]."</a>");
 						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESI");
 						}
 					else
 						{
-						$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$value."</a>");
+						$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$new.$value[0]."</a>");
 						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESII");
 						}
 				}

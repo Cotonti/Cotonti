@@ -46,6 +46,7 @@ if ($n=='edit')
 		$rdesc = sed_sql_prep($rdesc);
 		$rcat = sed_sql_prep($rcat);
 		$rmaster = sed_import('rmaster', 'P', 'INT', 5, TRUE);
+		$mastername = sed_cc($rtitle);
 
 		$sql = sed_sql_query("SELECT fs_id, fs_masterid, fs_order, fs_category FROM $db_forum_sections WHERE fs_id=$id");
 		sed_die(sed_sql_numrows($sql)==0);
@@ -53,7 +54,12 @@ if ($n=='edit')
 
 		if ($row_cur['fs_masterid'] != $rmaster)
 		{
-			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid=$rmaster WHERE fs_id=$id");
+			$sql1 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='$rmaster' ");
+			$row1 = sed_sql_fetcharray($sql1);
+			
+			$master = sed_sql_prep(sed_cc($row1['fs_title']));
+		
+			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='".$rmaster."', fs_mastername='".$master."' WHERE fs_id='".$id."' ");
 		}
 
 		if ($row_cur['fs_category']!=$rcat)
@@ -73,7 +79,8 @@ if ($n=='edit')
 		}
 
 		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_countposts='$rcountposts' WHERE fs_id='$id'") : '';
-
+		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ") : '';
+		
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums', '', true));
 		exit;
 	}
@@ -82,7 +89,7 @@ if ($n=='edit')
 		sed_check_xg();
 		sed_auth_clear('all');
 		$num = sed_forum_deletesection($id);
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0' WHERE fs_masterid='".$id."' ");
+		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='".$id."' ");
 		$num += mysql_num_rows($sql);
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=103&num=".$num, '', true));
 		exit;
@@ -206,8 +213,16 @@ else
 			{ $nextorder = $row1['fs_order']+1; }
 			else
 			{ $nextorder = 100; }
+			
+			if (!empty($nmaster))
+					{
+					$sql2 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='".$nmaster."' ");
+					$row2 = sed_sql_fetcharray($sql2);
+					
+					$mastername = sed_sql_prep(sed_cc($row2['fs_title']));
+					}
 
-			$sql = sed_sql_query("INSERT INTO $db_forum_sections (fs_masterid, fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('".(int)$nmaster."', '".(int)$nextorder."', '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($ncat)."', 'images/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
+			$sql = sed_sql_query("INSERT INTO $db_forum_sections (fs_masterid, fs_mastername, fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('".(int)$nmaster."', '".$mastername."', '".(int)$nextorder."', '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($ncat)."', 'images/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
 
 			$forumid = sed_sql_insertid();
 

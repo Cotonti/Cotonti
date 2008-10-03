@@ -175,7 +175,7 @@ else
 		$adminmain .= "<td style=\"text-align:center;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'])."</td>";
 
 
-		$adminmain .= "<td><a href=\"".sed_url('admin', "?m=polls&n=options&id=".$row['poll_id'])."\">".sed_cc($row['poll_text'])."</a></td>";
+		$adminmain .= "<td><a href=\"".sed_url('admin', "m=polls&n=options&id=".$row['poll_id'])."\">".sed_cc($row['poll_text'])."</a></td>";
 		$adminmain .= "<td style=\"text-align:center;\">".$totalvotes."</td>";
 		$adminmain .= "<td style=\"text-align:center;\">";
 

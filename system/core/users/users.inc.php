@@ -122,28 +122,6 @@ $currentpage= ceil ($d / $cfg['maxusersperpage'])+1;
 
 /*=========*/
 
-$allfilters = "<form action=\"users.php?f=search\" method=\"post\">".$L['Filters'].": <a href=\"users.php\">".$L['All']."</a> ";
-$allfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"redirect(this)\">";
-
-foreach ($sed_countries as $i => $x)
-{
-	if ($i=='00')
-	{
-		$allfilters .= "<option value=\"\">".$L['Country']."...</option>";
-		$selected = ("country_00"==$f) ? "selected=\"selected\"" : '';
-		$allfilters .= "<option value=\"users.php?f=country_00\" ".$selected.">".$L['None']."</option>";
-	}
-	else
-	{
-		$selected = ("country_".$i==$f) ? "selected=\"selected\"" : '';
-		$allfilters .= "<option value=\"users.php?f=country_".$i."\" ".$selected.">".sed_cutstring($x,23)."</option>";
-	}
-}
-
-$allfilters .= "</select>";
-
-/*=========*/
-
 $countryfilters = "<form action=\"users.php?f=search\" method=\"post\">".$L['Filters'].": <a href=\"users.php\">".$L['All']."</a> ";
 $countryfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"redirect(this)\">";
 
@@ -168,23 +146,6 @@ $countryfilters .= "</select>";
 /*=========*/
 
 
-$allfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Maingroup']."...";
-foreach($sed_groups as $k => $i)
-{
-	$selected = ($k==$g) ? "selected=\"selected\"" : '';
-	$selected1 = ($k==$gm) ? "selected=\"selected\"" : '';
-	if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
-	{
-		$allfilters .= ($k>1) ? "<option value=\"users.php?g=".$k."\" $selected> ".$sed_groups[$k]['title'] : '';
-		$allfilters .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-		$grpams .= ($k>1) ? "<option value=\"users.php?gm=".$k."\" $selected1> ".$sed_groups[$k]['title'] : '';
-		$grpams .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-	}
-}
-$allfilters .= "</select>";
-
-/*=========*/
-
 $maingrpfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Maingroup']."...";
 unset($grpms);
 foreach($sed_groups as $k => $i)
@@ -201,28 +162,13 @@ foreach($sed_groups as $k => $i)
 }
 $maingrpfilters .= "</select>";
 
-$allfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Group']."...";
-$allfilters .= $grpams."</select>";
-
-
 $grpfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Group']."...";
 $grpfilters .= $grpms."</select>";
 
 
 /*=========*/
 
-$allfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".sed_cc($y)."\" size=\"8\" maxlength=\"8\" /><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
 $searchfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".sed_cc($y)."\" size=\"8\" maxlength=\"8\" /><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
-
-/*=========*/
-
-$allfilters .= "\n".$L['Byfirstletter'].":";
-for ($i = 1; $i <= 26; $i++)
-{
-	$j = chr($i+64);
-	$allfilters .= " <a href=\"users.php?f=".$j."\">".$j."</a>";
-}
-$allfilters .= " <a href=\"users.php?f=_\">%</a>";
 
 /*=========*/
 
@@ -254,7 +200,6 @@ $t-> assign(array(
 	"USERS_TOP_TOTALPAGE" => $totalpage,
 	"USERS_TOP_MAXPERPAGE" => $cfg['maxusersperpage'],
 	"USERS_TOP_TOTALUSERS" => $totalusers,
-	"USERS_TOP_FILTERS" => $allfilters,
 	"USERS_TOP_FILTERS_COUNTRY" => $countryfilters,
 	"USERS_TOP_FILTERS_MAINGROUP" => $maingrpfilters,
 	"USERS_TOP_FILTERS_GROUP" => $grpfilters,

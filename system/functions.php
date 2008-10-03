@@ -970,12 +970,7 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 		}
 		if(is_array($master))
 		{
-			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.sed_cc($master[1]).'</a>';
-		}
-		elseif($master)
-		{
-			$rowa = sed_sql_fetcharray(sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id=$master"));
-			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master).'">'.sed_cc( $rowa['fs_title']).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.$master[1].'</a>';
 		}
 		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$sectionid).'">'.sed_cc($title).'</a>';
 	}
@@ -987,7 +982,7 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 		}
 		if(is_array($master))
 		{
-			$tmp[] = sed_cc($master[1]);
+			$tmp[] = $master[1];
 		}
 		$tmp[] = sed_cc($title);
 	}

@@ -114,7 +114,7 @@ function sed_get_latesttopics($limit)
 
 	elseif ($cfg['plugin']['recentitems']['fd']=='Subforums with Master Forums')
 	{
-		$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, t.ft_updated, t.ft_postcount, s.fs_id, s.fs_masterid, s.fs_title, s.fs_category
+		$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, t.ft_updated, t.ft_postcount, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
 		FROM $db_forum_topics t,$db_forum_sections s
 		WHERE t.ft_sectionid=s.fs_id
 		AND t.ft_movedto=0 AND t.ft_mode=0
@@ -165,7 +165,7 @@ function sed_get_latesttopics($limit)
 				$res .= sprintf($mask,
 				$img,
 				date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
-				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, $row['fs_masterid']),
+				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, array($row['fs_masterid'],$row['fs_mastername'])),
 				"<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom').'">'.sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
 				$row['ft_postcount']-1
 				);

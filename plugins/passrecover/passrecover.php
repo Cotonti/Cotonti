@@ -98,6 +98,7 @@ elseif ($a=='auth' && mb_strlen($v)==32)
 		$rmdpass  = $row['user_password'];
 		$rusername = $row['user_name'];
 		$ruserid = $row['user_id'];
+		$rusermail = $row['user_mail'];
 
 		if ($row['user_maingrp']==2)
 			{
@@ -117,25 +118,9 @@ elseif ($a=='auth' && mb_strlen($v)==32)
 		$newpass = sed_randompass();
 		$sql = sed_sql_query("UPDATE $db_users SET user_password='".md5($newpass)."', user_lostpass='$validationkey' WHERE user_id='$ruserid'");
 
-		/*if ($cfg['authmode']==1 || $cfg['authmode']==3)
-			{
-			$u = base64_encode("$ruserid:_:$rmdpass:_:".$cfg['defaultskin']);
-			setcookie("SEDITIO", "$u", time() + 86400, $cfg['cookiepath'], $cfg['cookiedomain']);
-			}
-
-		if ($cfg['authmode']==2 || $cfg['authmode']==3)
-			{
-			$_SESSION['rsedition'] = $ruserid;
-			$_SESSION['rseditiop'] = $rmdpass;
-			$_SESSION['rseditioq'] = $rdefskin;
-			}*/
-
-		//$plugin_body .= $L['plu_loggedin1'].$rusername." ".$L['plu_loggedin2']."<br />";
-		//$plugin_body .= $L['plu_loggedin3']."<br />";
-
 		$rsubject = $cfg['maintitle']." - ".$L['plu_title'];
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['plu_email2']."\n\n".$newpass. "\n\n".$L['aut_contactadmin'];
-		sed_mail ($email, $rsubject, $rbody);
+		sed_mail($rusermail, $rsubject, $rbody);
 
 		$plugin_body .= $L['plu_mailsent2']."<br />";
 		}

@@ -575,7 +575,6 @@ $L['pfs_newfolder'] = 'Create a new folder :';
 $L['pfs_ispublic'] = 'Public ?';
 $L['pfs_isgallery'] = 'Gallery ?';
 $L['pfs_extallowed'] = 'Extensions allowed';
-$L['pfs_resizeimages'] = 'resize image ?'; // N-0.0.2
 
 /* ====== Plug ====== */
 

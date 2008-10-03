@@ -72,6 +72,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_postcount = $row['fs_postcount'];
 	$fs_viewcount = $row['fs_viewcount'];
 	$fs_masterid = $row['fs_masterid'];
+	$fs_mastername = $row['fs_mastername'];
 }
 else
 { sed_die(); }
@@ -244,21 +245,18 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 	}
 }
 
-$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid FROM $db_forum_sections AS s LEFT JOIN
+$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername FROM $db_forum_sections AS s LEFT JOIN
 $db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 
 $jumpbox = "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
 $jumpbox .= "<option value=\"".sed_url('forums')."\">".$L['Forums']."</option>";
 
-$ftitles = array();
-
 while ($row1 = sed_sql_fetcharray($sql1))
 {
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
 	{
-		$ftitles[$row1['fs_id']] = $row1['fs_title'];
-		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $ftitles[$row1['fs_masterid']]) : false;
+		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
 		$selected = ($row1['fs_id']==$s) ? "selected=\"selected\"" : '';
 		$jumpbox .= "<option $selected value=\"".sed_url('forums', "m=topics&s=".$row1['fs_id'])."\">".sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master)."</option>";
 	}
@@ -298,7 +296,7 @@ $t = new XTemplate($mskin);
 $pages = sed_pagination("forums.php?m=topics&amp;s=$s&amp;o=$o&amp;w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']); //omg, more pagination
 list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=topics&amp;s=$s&amp;o=$o&amp;w=$w", $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE); //someone please kill the pagination monkey
 
-$master = ($fs_masterid > 0) ? array($fs_masterid, $ftitles[$fs_masterid]) : false;
+$master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
 $toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master);
 $toptitle .= ($usr['isadmin']) ? " *" : '';

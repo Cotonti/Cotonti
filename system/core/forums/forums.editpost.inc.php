@@ -67,7 +67,7 @@ if ($row = sed_sql_fetcharray($sql))
 else
 { sed_die(); }
 
-$sql = sed_sql_query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies, fs_masterid FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
+$sql = sed_sql_query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies, fs_masterid, fs_mastername FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
 
 if ($row = sed_sql_fetcharray($sql))
 {
@@ -82,6 +82,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_allowbbcodes = $row['fs_allowbbcodes'];
 	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_masterid = $row['fs_masterid'];
+	$fs_mastername = $row['fs_mastername'];
 }
 else
 { sed_die(); }
@@ -176,7 +177,7 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "r
 $morejavascript .= sed_build_addtxt('editpost', 'rtext');
 $post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.sed_cc($fp_text).'</textarea>';
 
-$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $fs_masterid)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
+$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, array($fs_masterid, $fs_mastername))." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
 $toptitle .= $cfg['separator']." <a href=\"".sed_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
