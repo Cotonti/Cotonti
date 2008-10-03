@@ -91,7 +91,7 @@ elseif ($a=='auth' && mb_strlen($v)==32)
 	{
 	sed_shield_protect();
 
-	$sql = sed_sql_query("SELECT user_name, user_id, user_password, user_maingrp, user_banexpire FROM $db_users WHERE user_lostpass='".sed_sql_prep($v)."'");
+	$sql = sed_sql_query("SELECT user_name, user_id, user_email, user_password, user_maingrp, user_banexpire FROM $db_users WHERE user_lostpass='".sed_sql_prep($v)."'");
 
 	if ($row = sed_sql_fetcharray($sql))
 		{
