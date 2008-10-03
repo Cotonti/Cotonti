@@ -110,7 +110,8 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_countposts = $row['fs_countposts'];
 	$fs_masterid = $row['fs_masterid'];
-
+	$fs_mastername = $row['fs_mastername'];
+	
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	sed_block($usr['auth_read']);
 
@@ -495,7 +496,7 @@ $notlastpage = (($d + $cfg['maxtopicsperpage'])<$totalposts) ? TRUE : FALSE;
 $pages = sed_pagination("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage']); //trustmaster ... thou shalt edit this
 list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage'], TRUE); //and also this
 
-$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid FROM $db_forum_sections AS s LEFT JOIN
+$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername FROM $db_forum_sections AS s LEFT JOIN
 $db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 

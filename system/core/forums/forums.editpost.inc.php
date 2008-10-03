@@ -177,7 +177,9 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "r
 $morejavascript .= sed_build_addtxt('editpost', 'rtext');
 $post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.sed_cc($fp_text).'</textarea>';
 
-$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, array($fs_masterid, $fs_mastername))." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
+$master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
+
+$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
 $toptitle .= $cfg['separator']." <a href=\"".sed_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
