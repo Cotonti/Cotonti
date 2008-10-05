@@ -71,7 +71,7 @@ function addpix(gfile,c1,c2)
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"pfs.php".$more1."\">".$L['pfs_title']."</a>";
+$title = "<a href=\"".sed_url('pfs', $more1)."\">".$L['pfs_title']."</a>";
 
 if ($userid!=$usr['id'])
 	{
@@ -121,7 +121,7 @@ if ($a=='update' && !empty($id))
 	}
 
 $body .= "<table class=\"cells\">";
-$body .= "<form id=\"edit\" action=\"pfs.php?m=edit&amp;a=update&amp;id=".$pfs_id.$more."\" method=\"post\">";
+$body .= "<form id=\"edit\" action=\"".sed_url('pfs', "m=edit&a=update&id=".$pfs_id.$more)."\" method=\"post\">";
 $body .= "<tr><td>".$L['File']." : </td><td>".$pfs_file."</td></tr>";
 $body .= "<tr><td>".$L['Date']." : </td><td>".$pfs_date."</td></tr>";
 $body .= "<tr><td>".$L['Folder']." : </td><td>".sed_selectbox_folders($userid, "", $pfs_folderid)."</td></tr>";

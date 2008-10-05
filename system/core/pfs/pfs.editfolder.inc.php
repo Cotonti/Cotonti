@@ -124,7 +124,7 @@ $row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone']
 $row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
 
 $body .= "<table class=\"cells\">";
-$body .= "<form id=\"editfolder\" action=\"pfs.php?m=editfolder&amp;a=update&amp;f=".$pff_id.$more."\" method=\"post\">";
+$body .= "<form id=\"editfolder\" action=\"".sed_url('pfs', "m=editfolder&a=update&f=".$pff_id.$more)."\" method=\"post\">";
 $body .= "<tr><td>".$L['Folder']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td>".$L['Description']." : </td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".sed_cc($pff_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td>".$L['Date']." : </td><td>".$row['pff_date']."</td></tr>";

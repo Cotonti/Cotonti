@@ -251,7 +251,7 @@ if (!empty($error_string))
 $t->assign(array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
 	"PAGEEDIT_SUBTITLE" => $L['paged_subtitle'],
-	"PAGEEDIT_FORM_SEND" => "page.php?m=edit&amp;a=update&amp;id=".$pag['page_id']."&amp;r=".$r,
+	"PAGEEDIT_FORM_SEND" => sed_url('page', "m=edit&a=update&id=".$pag['page_id']."&r=".$r),
 	"PAGEEDIT_FORM_ID" => $pag['page_id'],
 	"PAGEEDIT_FORM_STATE" => $pag['page_state'],
 	"PAGEEDIT_FORM_TYPE" => $page_form_type,

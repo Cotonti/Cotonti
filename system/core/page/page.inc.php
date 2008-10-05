@@ -50,7 +50,7 @@ $pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_begin'] = @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600);
 $pag['page_expire'] = @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600);
 $pag['page_tab'] = (empty($pg)) ? 1 : $pg;
-$pag['page_pageurl'] = (empty($pag['page_alias'])) ? "page.php?id=".$pag['page_id'] : "page.php?al=".$pag['page_alias'];
+$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', "id=".$pag['page_id']) : sed_url('page', "al=".$pag['page_alias']);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
 sed_block($usr['auth_read']);
@@ -215,8 +215,8 @@ if ($usr['isadmin'])
 {
 	$t-> assign(array(
 			"PAGE_ADMIN_COUNT" => $pag['page_count'],
-			"PAGE_ADMIN_UNVALIDATE" => "<a href=\"admin.php?m=page&amp;s=queue&amp;a=unvalidate&amp;id=".$pag['page_id']."&amp;".sed_xg()."\">".$L['Putinvalidationqueue']."</a>",
-			"PAGE_ADMIN_EDIT" => "<a href=\"page.php?m=edit&amp;id=".$pag['page_id']."&amp;r=list\">".$L['Edit']."</a>"
+			"PAGE_ADMIN_UNVALIDATE" => "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Putinvalidationqueue']."</a>",
+			"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>"
 			));
 
 			$t->parse("MAIN.PAGE_ADMIN");
@@ -303,7 +303,7 @@ if($pag['page_file'] > 0)
 	}
 	else
 	{
-		$t->assign('PAGE_FILE_URL', 'page.php?id='.$pag['page_id'].'&amp;a=dl');
+		$t->assign('PAGE_FILE_URL', sed_url('page', "id=".$pag['page_id']."&a=dl"));
 	}
 	$t->parse("MAIN.PAGE_FILE");
 	$t->assign('PAGE_SHORTTITLE', $pag['page_title']);

@@ -85,7 +85,7 @@ foreach ($sed_extensions as $k => $line)
 
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"pfs.php".$more1."\">".$L['pfs_title']."</a>";
+$title = "<a href=\"".sed_url('pfs', $more1)."\">".$L['pfs_title']."</a>";
 
 if ($userid!=$usr['id'])
 {
@@ -311,7 +311,7 @@ if ($f>0)
 		$pff_count = $row1['pff_count'];
 
 		$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
-		$title .= " ".$cfg['separator']." <a href=\"pfs.php?f=".$pff_id.$more."\">".$pff_title."</a>";
+		$title .= " ".$cfg['separator']." <a href=\"".sed_url('pfs', "f=".$pff_id.$more)."\">".$pff_title."</a>";
 	}
 	else
 	{ sed_die(); }
@@ -348,8 +348,8 @@ else
 		$pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
 		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 
-		$list_folders .= "<tr><td>[<a href=\"pfs.php?a=deletefolder&amp;".sed_xg()."&amp;f=".$pff_id.$more."\">x</a>]</td>";
-		$list_folders .= "<td><a href=\"pfs.php?m=editfolder&amp;f=".$pff_id.$more."\">".$L['Edit']."</a></td>";
+		$list_folders .= "<tr><td>[<a href=\"".sed_url('pfs', "a=deletefolder&".sed_xg()."&f=".$pff_id.$more)."\">x</a>]</td>";
+		$list_folders .= "<td><a href=\"".sed_url('pfs', "m=editfolder&f=".$pff_id.$more)."\">".$L['Edit']."</a></td>";
 
 		if ($pff_isgallery)
 		{ $icon_f = "<img src=\"skins/$skin/img/system/icon-gallery.gif\" alt=\"\" />"; }
