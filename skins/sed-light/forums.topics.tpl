@@ -8,6 +8,7 @@
 		<div id="subtitle">
 			{FORUMS_TOPICS_SUBTITLE}<br />
 			{PHP.skinlang.forumstopics.Viewers} : {FORUMS_TOPICS_VIEWERS}
+			<p> {FORUMS_TOPICS_VIEWER_NAMES} </p>
 		</div>
 		
 		<!-- BEGIN: FORUMS_SECTIONS -->

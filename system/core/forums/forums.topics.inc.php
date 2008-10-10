@@ -268,8 +268,19 @@ if (empty($d))
 
 $fs_desc = sed_parse_autourls($fs_desc);
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_location='Forums' and online_subloc='".sed_sql_prep($fs_title)."'");
-$fs_viewers = sed_sql_result($sql, 0, "COUNT(*)");
+$v = 0;
+$sqlv = sed_sql_query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' and online_subloc='".sed_sql_prep($fs_title)."' ");
+while ($rowv = sed_sql_fetcharray($sqlv))
+	{
+	if ($rowv['online_name'] != 'v')
+		{
+		$fs_viewers_names .= ($v>0) ? ', ' : '';
+		$fs_viewers_names .= sed_build_user($rowv['online_userid'], sed_cc($rowv['online_name'])); 
+		$v++;
+		}
+	}
+$fs_viewers = $v;
+	
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s' and ft_mode=1");
 $prvtopics = sed_sql_result($sql, 0, "COUNT(*)");
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s'");
@@ -305,6 +316,7 @@ $t->assign(array(
 	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
 	"FORUMS_TOPICS_VIEWERS" => $fs_viewers,
+	"FORUMS_TOPICS_VIEWER_NAMES" => $fs_viewers_names,
 	"FORUMS_TOPICS_NEWTOPICURL" => sed_url('forums', "m=newtopic&s=".$s),
 	"FORUMS_TOPICS_PAGES" => $pages,
 	"FORUMS_TOPICS_PAGEPREV" => $pages_prev,

@@ -1494,7 +1494,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id.'&'.$user).'">'.$user.'</a>' : '?';
+		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id).'">'.$user.'</a>' : '?';
 	}
 }
 
