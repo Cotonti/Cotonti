@@ -55,7 +55,10 @@ $urr['user_birthdate'] = ($urr['user_birthdate']!=0) ? @date($cfg['formatyearmon
 $urr['user_gender'] = ($urr['user_gender']=='' || $urr['user_gender']=='U') ?  '' : $L["Gender_".$urr['user_gender']];
 $urr['user_journal'] = ($urr['user_jrnpagescount']>0 && $urr['user_jrnupdated']>0) ? "<a href=\"journal.php?id=".$urr['user_id']."\"><img src=\"skins/$skin/img/system/icon-journal.gif\" alt=\"\" /></a> ".date($cfg['formatyearmonthday'], $urr['user_jrnupdated'] + $usr['timezone'] * 3600) : '';
 
-$out['subtitle'] = $L['User']." : ".sed_cc($urr['user_name']);
+$title_tags[] = array('{USER}', '{NAME}');
+$title_tags[] = array('%1$s', '%2$s');
+$title_data = array($L['User'], sed_cc($urr['user_name']));
+$out['subtitle'] = sed_title('title_users_details', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.details.main');

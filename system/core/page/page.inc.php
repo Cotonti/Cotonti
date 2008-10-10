@@ -149,8 +149,10 @@ $item_code = 'p'.$pag['page_id'];
 list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $pag['page_pageurl'], $comments);
 list($ratings_link, $ratings_display) = sed_build_ratings($item_code, $pag['page_pageurl'], $ratings);
 
-$sys['sublocation'] = $sed_cat[$c]['title'];
-$out['subtitle'] = $pag['page_title'];
+$title_tags[] = array('{TITLE}', '{CATEGORY}');
+$title_tags[] = array('%1$s', '%1$s');
+$title_data = array($pag['page_title'], $sed_cat[$c]['title']);
+$out['subtitle'] = sed_title('title_page', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('page.main');

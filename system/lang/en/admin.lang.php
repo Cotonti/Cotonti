@@ -37,6 +37,7 @@ $L['core_polls'] = 'Polls';
 $L['core_ratings'] = 'Ratings';
 $L['core_trash'] = 'Trash can';
 $L['core_users'] = 'Users';
+$L['core_title'] = 'Titles';		//N-0.0.2
 
 /* ====== General ====== */
 
@@ -224,6 +225,23 @@ $L['cfg_trash_forum'] = array('Use the trash can for the forums', '');		// New i
 $L['cfg_trash_page'] = array('Use the trash can for the pages', '');		// New in v110
 $L['cfg_trash_pm'] = array('Use the trash can for the private messages', '');		// New in v110
 $L['cfg_trash_user'] = array('Use the trash can for the users', '');		// New in v110
+//N-0.0.2
+$L['cfg_title_forum_main'] = array('Forum Main title', 'Options: {FORUM}');
+$L['cfg_title_forum_topics'] = array('Forum Topics title', 'Options: {FORUM}, {SECTION}');
+$L['cfg_title_forum_posts'] = array('Forum Posts title', 'Options: {FORUM}, {TITLE}');
+$L['cfg_title_forum_newtopic'] = array('Forum NewTopic title', 'Options: {FORUM}, {SECTION}, {NEWTOPIC}');
+$L['cfg_title_forum_editpost'] = array('Forum EditPost title', 'Options: {FORUM}, {SECTION}, {EDIT}');
+$L['cfg_title_list'] = array('List title', 'Options: {TITLE}');
+$L['cfg_title_page'] = array('Page title', 'Options: {TITLE}, {CATEGORY}');
+$L['cfg_title_pfs'] = array('PFS title', 'Options: {PFS}');
+$L['cfg_title_pm_main'] = array('PM title', 'Options: {PM}, {INBOX}, {ARCHIVES}, {SENTBOX}');
+$L['cfg_title_pm_send'] = array('PM Send title', 'Options: {PM}, {SEND_NEW}');
+$L['cfg_title_users_main'] = array('Users Main title', 'Options: {USERS}');
+$L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {NAME}');
+$L['cfg_title_users_profile'] = array('Users Profile title', 'Options: {PROFILE}, {NAME}');
+$L['cfg_title_users_edit'] = array('Users Edit title', 'Options: {EDIT}, {NAME}');
+$L['cfg_title_header'] = array('Header title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
+$L['cfg_title_header_index'] = array('Header Index title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 
 /* ====== Forums ====== */
 

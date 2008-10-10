@@ -203,13 +203,11 @@ function sed_loadcharsets()
 function sed_loadconfigmap()
 {
 	$result = array();
-	$result[] = array ('main', '01', 'maintitle', 1, 'Title of your site', '');
-	$result[] = array ('main', '02', 'subtitle', 1, 'Subtitle', '');
-	$result[] = array ('main', '03', 'mainurl', 1, 'http://www.yourdomain.com', '');
-	$result[] = array ('main', '04', 'adminemail', 1, 'admin@mysite.com', '');
-	$result[] = array ('main', '05', 'clustermode', 3, '0', '');
-	$result[] = array ('main', '05', 'hostip', 1, '999.999.999.999', '');
-	$result[] = array ('main', '06', 'cache', 3, '1', '');
+	$result[] = array ('main', '01', 'mainurl', 1, 'http://www.yourdomain.com', '');
+	$result[] = array ('main', '02', 'adminemail', 1, 'admin@mysite.com', '');
+	$result[] = array ('main', '03', 'clustermode', 3, '0', '');
+	$result[] = array ('main', '04', 'hostip', 1, '999.999.999.999', '');
+	$result[] = array ('main', '05', 'cache', 3, '1', '');
 	$result[] = array ('main', '06', 'gzip', 3, '1', '');
 	$result[] = array ('main', '07', 'devmode', 3, '0', '');
 	$result[] = array ('main', '10', 'cookiedomain', 1, '', '');
@@ -273,7 +271,6 @@ function sed_loadconfigmap()
 	$result[] = array ('forums', '10', 'hideprivateforums', 3, '0', '');
 	$result[] = array ('forums', '10', 'hottopictrigger', 2, '20', array(5,10,15,20,25,30,35,40,50));
 	$result[] = array ('forums', '10', 'maxtopicsperpage', 2, '30', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
-	$result[] = array ('forums', '12', 'antibumpforums', 3, '0', '');
 	$result[] = array ('page', '01', 'disable_page', 3, '0', '');
 	$result[] = array ('page', '02', 'allowphp_pages', 3, '0', '');
 	$result[] = array ('page', '03', 'count_admin', 3, '0', '');
@@ -346,6 +343,25 @@ function sed_loadconfigmap()
 	$result[] = array ('users', '20', 'extra7uchange', 3, '0', '');
 	$result[] = array ('users', '20', 'extra8uchange', 3, '0', '');
 	$result[] = array ('users', '20', 'extra9uchange', 3, '0', '');
+	//N-0.0.2
+	$result[] = array ('title', '01', 'maintitle', 1, 'Title of your site', '');
+	$result[] = array ('title', '02', 'subtitle', 1, 'Subtitle', '');
+	$result[] = array ('title', '03', 'title_forum_main', 1, '{FORUM}', '');
+	$result[] = array ('title', '04', 'title_forum_topics', 1, '{FORUM} - {SECTION}', '');
+	$result[] = array ('title', '05', 'title_forum_posts', 1, '{FORUM} - {TITLE}', '');
+	$result[] = array ('title', '06', 'title_forum_newtopic', 1, '{FORUM} - {SECTION}', '');
+	$result[] = array ('title', '07', 'title_forum_editpost', 1, '{FORUM} - {SECTION}', '');
+	$result[] = array ('title', '08', 'title_list', 1, '{TITLE}', '');
+	$result[] = array ('title', '09', 'title_page', 1, '{TITLE}', '');
+	$result[] = array ('title', '10', 'title_pfs', 1, '{PFS}', '');
+	$result[] = array ('title', '11', 'title_pm_main', 1, '{PM}', '');
+	$result[] = array ('title', '12', 'title_pm_send', 1, '{PM}', '');
+	$result[] = array ('title', '13', 'title_users_main', 1, '{USERS}', '');
+	$result[] = array ('title', '14', 'title_users_details', 1, '{USER} - {NAME}', '');
+	$result[] = array ('title', '15', 'title_users_profile', 1, '{PROFILE}', '');
+	$result[] = array ('title', '16', 'title_users_edit', 1, '{NAME}', '');
+	$result[] = array ('title', '17', 'title_header', 1, '{MAINTITLE} - {SUBTITLE}', '');
+	$result[] = array ('title', '18', 'title_header_index', 1, '{MAINTITLE} - {DESCRIPTION}', '');
 
 	return($result);
 }

@@ -25,9 +25,20 @@ if (is_array($extp))
 $out['logstatus'] = ($usr['id']>0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
 $out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"".sed_url('users')."\">".$L['Users']."</a>" : '';
 $out['compopup'] = sed_javascript($morejavascript);
-$out['fulltitle'] = $cfg['maintitle'];
-$out['subtitle'] = (empty($out['subtitle'])) ? $cfg['subtitle'] : $out['subtitle'];
-$out['fulltitle'] .= (empty($out['subtitle'])) ? '' : ' - '.$out['subtitle'];
+
+unset($title_tags, $title_data);
+$title_tags[] = array('{MAINTITLE}', '{DESCRIPTION}', '{SUBTITLE}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s');
+$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+if(defined('SED_INDEX'))
+{
+	$out['fulltitle'] = sed_title('title_header_index', $title_tags, $title_data);
+}
+else
+{
+	$out['fulltitle'] = sed_title('title_header', $title_tags, $title_data);
+}
+
 $out['meta_contenttype'] = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
 $out['basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
 $out['meta_charset'] = $cfg['charset'];

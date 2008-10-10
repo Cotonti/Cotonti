@@ -410,7 +410,10 @@ ORDER BY fp_id LIMIT $d, ".$cfg['maxtopicsperpage']);
 	}
 
 $sys['sublocation'] = $fs_title;
-$out['subtitle'] = $L['Forums']." - ".sed_cc($ft_title);
+$title_tags[] = array('{FORUM}', '{TITLE}');
+$title_tags[] = array('%1$s', '%2$s');
+$title_data = array($L['Forums'], sed_cc($ft_title));
+$out['subtitle'] = sed_title('title_forum_posts', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.posts.main');

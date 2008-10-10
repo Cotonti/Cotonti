@@ -153,7 +153,10 @@ else // --------------- List mode
 	}
 }
 
-$out['subtitle'] = $L['Private_Messages'];
+$title_tags[] = array('{PM}', '{INBOX}', '{ARCHIVES}', '{SENTBOX}');
+$title_tags[] = array('%1$s', '%2$s', '%3$s', '%4$s');
+$title_data = array($L['Private_Messages'], $totalinbox, $totalarchives, $totalsentbox);
+$out['subtitle'] = sed_title('title_pm_main', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.main');

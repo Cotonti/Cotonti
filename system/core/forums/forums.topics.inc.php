@@ -279,7 +279,10 @@ ORDER by ft_sticky DESC, ft_".$o." ".$w."
 LIMIT $d, ".$cfg['maxtopicsperpage']);
 
 $sys['sublocation'] = $fs_title;
-$out['subtitle'] = $L['Forums']." - ".$fs_title;
+$title_tags[] = array('{FORUM}', '{SECTION}');
+$title_tags[] = array('%1$s', '%2$s');
+$title_data = array($L['Forums'], $fs_title);
+$out['subtitle'] = sed_title('title_forum_topics', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.topics.main');

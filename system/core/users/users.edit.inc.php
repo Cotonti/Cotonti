@@ -289,7 +289,10 @@ $useredit_form_extra7 = sed_selectbox($urr['user_extra7'], 'ruserextra7', $cfg['
 $useredit_form_extra8 = sed_selectbox($urr['user_extra8'], 'ruserextra8', $cfg['extra8tsetting'])."<input type=\"hidden\" name=\"ruserextra8_p\" value=\"1\" />";
 $useredit_form_extra9 = "<textarea name=\"ruserextra9\" rows=\"4\" cols=\"56\">".sed_cc($urr['user_extra9'])."</textarea><input type=\"hidden\" name=\"ruserextra9_p\" value=\"1\" />";
 
-$out['subtitle'] = sed_cc($urr['user_name']);
+$title_tags[] = array('{EDIT}', '{NAME}');
+$title_tags[] = array('%1$s', '%2$s');
+$title_data = array($L['Edit'], sed_cc($urr['user_name']));
+$out['subtitle'] = sed_title('title_users_edit', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.main');

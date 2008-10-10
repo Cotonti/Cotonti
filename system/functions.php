@@ -1494,7 +1494,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id).'">'.$user.'</a>' : '?';
+		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id.'&'.$user).'">'.$user.'</a>' : '?';
 	}
 }
 
@@ -3433,6 +3433,23 @@ function sed_stringinfile($file, $str, $maxsize=32768)
 	{ $result = FALSE; }
 	@fclose($fp);
 	return ($result);
+}
+
+/**
+ * Returns a String afterbeing processed by a sprintf mask for titles
+ *
+ * @param string $area Area maskname or actual mask
+* @param array $tags Tag Masks
+ * @param array $data title options
+  * @return string
+ */
+function sed_title($mask, $tags, $data)
+{
+	global $cfg;
+	$mask = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
+	$mask = str_replace($tags[0], $tags[1], $mask);
+	$title = vsprintf($mask, $data);
+	return $title; 
 }
 
 /**
