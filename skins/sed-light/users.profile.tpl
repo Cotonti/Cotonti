@@ -39,7 +39,7 @@
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Skin}</td>
-					<td>{USERS_PROFILE_SKIN}</td>
+					<td>{USERS_PROFILE_SKIN}{USERS_PROFILE_THEME}</td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Language}</td>

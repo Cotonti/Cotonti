@@ -3074,6 +3074,39 @@ function sed_selectbox_skin($check, $name)
 }
 
 /**
+ * Returns skin selection dropdown
+ *
+ * @param string $skinname Skin name
+ * @param string $name Dropdown name
+ * @param string $theme Selected theme
+ * @return string
+ */
+function sed_selectbox_theme($skinname, $name, $theme)
+{
+	$handle = opendir("skins/$skinname");
+	while ($f = readdir($handle))
+	{
+	$dotpos = mb_strrpos($f,".")+1;
+	$f_extension = mb_substr($f, $dotpos, 5);
+	
+		if ($f_extension  == 'css' && !eregi('textboxer',$f))
+		{ $themelist[] = str_replace('.css', '', $f); }
+	}
+	closedir($handle);
+	sort($themelist);
+
+	$result = "<select name=\"$name\" size=\"1\">";
+	while(list($i,$x) = each($themelist))
+	{
+		$selected = ($x==$theme) ? "selected=\"selected\"" : '';
+		$result .= "<option value=\"$x\" $selected>".$x."</option>";
+	}
+	$result .= "</select>";
+
+	return($result);
+}
+
+/**
  * Gets huge user selection box
  *
  * @param int $to Selected user ID

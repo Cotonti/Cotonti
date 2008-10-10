@@ -184,6 +184,7 @@ if (isset($_SESSION['rsedition']) && ($cfg['authmode']==2 || $cfg['authmode']==3
 	$rsedition = $_SESSION['rsedition'];
 	$rseditiop = $_SESSION['rseditiop'];
 	$rseditios = $_SESSION['rseditios'];
+	$rseditiot = $_SESSION['rseditiot'];
 }
 elseif (isset($_COOKIE['SEDITIO']) && ($cfg['authmode']==1 || $cfg['authmode']==3))
 {
@@ -192,6 +193,7 @@ elseif (isset($_COOKIE['SEDITIO']) && ($cfg['authmode']==1 || $cfg['authmode']==
 	$rsedition = sed_import($u[0],'D','INT');
 	$rseditiop = sed_import($u[1],'D','PSW');
 	$rseditios = sed_import($u[2],'D','ALP');
+	$rseditiot = sed_import($u[3],'D','ALP');
 }
 
 if ($rsedition>0 && $cfg['authmode']>0)
@@ -216,6 +218,7 @@ if ($rsedition>0 && $cfg['authmode']>0)
 			$usr['lastlog'] = $row['user_lastlog'];
 			$usr['timezone'] = $row['user_timezone'];
 			$usr['skin'] = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $row['user_skin'];
+			$usr['theme'] = $row['user_theme'];
 			$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
 			$usr['newpm'] = $row['user_newpm'];
 			$usr['auth'] = unserialize($row['user_auth']);
@@ -246,16 +249,24 @@ else
 		$u = base64_encode('0:_:0:_:'.$cfg['defaultskin']);
 		setcookie('SEDITIO',$u,time()+($cfg['cookielifetime']*86400),$cfg['cookiepath'],$cfg['cookiedomain']);
 	}
+	elseif (empty($rseditiot) && ($cfg['authmode']==1 || $cfg['authmode']==3))
+	{
+		$u = base64_encode('0:_:0:_:'.$cfg['defaultskin'].':'.$cfg['defaulttheme']);
+		setcookie('SEDITIO',$u,time()+($cfg['cookielifetime']*86400),$cfg['cookiepath'],$cfg['cookiedomain']);
+	}
 	else
 	{
 		$skin = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $rseditios;
+		$theme = $rseditiot;
 	}
+
 }
 
 if ($usr['id']==0)
 {
 	$usr['auth'] = sed_auth_build(0);
 	$usr['skin'] = (empty($usr['skin'])) ? $cfg['defaultskin'] : $usr['skin'];
+	$usr['theme'] = $cfg['defaulttheme'];
 	$usr['lang'] = $cfg['defaultlang'];
 }
 
@@ -366,6 +377,18 @@ if (!file_exists($mskin))
 	{ sed_diefatal('Default skin not found.'); }
 }
 
+$mtheme = 'skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
+
+if (!file_exists($mtheme))
+{
+	$out['notices'] .= $L['com_skinfail'].'<br />';
+	$usr['theme'] = $cfg['defaulttheme'];
+	$mtheme = 'skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
+
+	if (!file_exists($mtheme))
+	{ sed_diefatal('Default theme not found.'); }
+}
+
 $usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
 
 if (@file_exists($usr['skin_lang']))
@@ -374,6 +397,7 @@ if (@file_exists($usr['skin_lang']))
 require_once('./skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
 
 $skin = $usr['skin'];
+$theme = $usr['theme'];
 
 /* ======== Basic statistics ======== */
 

@@ -111,6 +111,7 @@ CREATE TABLE sed_forum_sections (
   fs_viewcount mediumint(8) NOT NULL default '0',
   fs_masterid smallint(5) unsigned NOT NULL default '0',
   fs_mastername varchar(128) NOT NULL default '',
+  fs_allowviewers tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (fs_id),
   KEY fs_order (fs_order)
 ) TYPE=MyISAM;
@@ -427,6 +428,7 @@ CREATE TABLE sed_users (
   user_pmnotify tinyint(1) unsigned NOT NULL default '0',
   user_newpm tinyint(1) unsigned NOT NULL default '0',
   user_skin varchar(16) NOT NULL default '',
+  user_theme varchar(16) NOT NULL default '',
   user_lang varchar(16) NOT NULL default '',
   user_regdate int(11) NOT NULL default '0',
   user_lastlog int(11) NOT NULL default '0',
@@ -474,8 +476,8 @@ INSERT INTO sed_structure VALUES (2, 'links', '2', '', 'Links', '', '',  0 ,'tit
 INSERT INTO sed_structure VALUES (3, 'events', '3', '', 'Events', '', '',  0 ,'date.asc');
 INSERT INTO sed_structure VALUES (4, 'news', '4', '', 'News', '', '', 0 ,'date.desc');
 
-INSERT INTO sed_forum_sections VALUES ('1', '0', '100', 'General discussion', 'pub', 'General chat.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, '');
-INSERT INTO sed_forum_sections VALUES ('2', '0', '101', 'Off-topic', 'pub', 'Various and off-topic.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '');
+INSERT INTO sed_forum_sections VALUES ('1', '0', '100', 'General discussion', 'pub', 'General chat.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, '', 1);
+INSERT INTO sed_forum_sections VALUES ('2', '0', '101', 'Off-topic', 'pub', 'Various and off-topic.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '', 1);
 INSERT INTO sed_forum_structure VALUES ('1', '1', 'pub', '', 'Public', '', '', 1);
 
 INSERT INTO sed_smilies VALUES (1, ':D', 'system/smilies/icon_biggrin.gif', 'Mister grin', 5);

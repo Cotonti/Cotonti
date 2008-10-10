@@ -39,7 +39,7 @@ if ($a=='check')
 	$rcookiettl = sed_import('rcookiettl','P','INT');
 	$rmdpass  = md5($rpassword);
 
-	$sql = sed_sql_query("SELECT user_id, user_maingrp, user_banexpire, user_skin, user_lang FROM $db_users WHERE user_password='$rmdpass' AND user_name='".sed_sql_prep($rusername)."'");
+	$sql = sed_sql_query("SELECT user_id, user_maingrp, user_banexpire, user_skin, user_theme, user_lang FROM $db_users WHERE user_password='$rmdpass' AND user_name='".sed_sql_prep($rusername)."'");
 
 	if ($row = sed_sql_fetcharray($sql))
 		{
@@ -65,6 +65,7 @@ if ($a=='check')
 
 		$ruserid = $row['user_id'];
 		$rdefskin = $row['user_skin'];
+		$rdeftheme = $row['user_theme'];
 
 		sed_sql_query("UPDATE $db_users SET user_lastip='".$usr['ip']."' WHERE user_id='".$row['user_id']."' LIMIT 1");
 
@@ -72,7 +73,7 @@ if ($a=='check')
 			{
 			$rcookiettl = ($rcookiettl==0) ? 604800 : $rcookiettl;
 			$rcookiettl = ($rcookiettl > $cfg['cookielifetime']) ? $cfg['cookielifetime'] : $rcookiettl;
-			$u = base64_encode("$ruserid:_:$rmdpass:_:$rdefskin");
+			$u = base64_encode("$ruserid:_:$rmdpass:_:$rdefskin:_:$rdeftheme");
 			setcookie("SEDITIO", "$u", time()+$rcookiettl, $cfg['cookiepath'], $cfg['cookiedomain']);
 			}
 
@@ -81,6 +82,7 @@ if ($a=='check')
 			$_SESSION['rsedition'] = $ruserid;
 			$_SESSION['rseditiop'] = $rmdpass;
 			$_SESSION['rseditioq'] = $rdefskin;
+			$_SESSION['rseditiot'] = $rdeftheme;
 			}
 
 		/* === Hook === */

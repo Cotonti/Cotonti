@@ -246,6 +246,7 @@ switch ($a)
 	$rusertext = sed_import('rusertext','P','TXT');
 	$rusercountry = sed_import('rusercountry','P','ALP');
 	$ruserskin = sed_import('ruserskin','P','TXT');
+	$rusertheme = sed_import('rusertheme','P','TXT');
 	$ruserlang = sed_import('ruserlang','P','ALP');
 	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
 	$rusericq = sed_import('rusericq','P','TXT');
@@ -309,7 +310,7 @@ switch ($a)
 
 			if ($cfg['authmode']==1 || $cfg['authmode']==3)
 				{
-				$u = base64_encode($usr['id'].":_:$rnewpass:_:".$ruserskin);
+				$u = base64_encode($usr['id'].":_:$rnewpass:_:".$ruserskin.":_:".$rusertheme);
 				setcookie("SEDITIO", "$u", time()+63072000, $cfg['cookiepath'], $cfg['cookiedomain']);
 				}
 
@@ -341,6 +342,7 @@ switch ($a)
 			user_text='".sed_sql_prep($rusertext)."',
 			user_country='".sed_sql_prep($rusercountry)."',
 			user_skin='".sed_sql_prep($ruserskin)."',
+			user_theme='".sed_sql_prep($rusertheme)."',
 			user_lang='".sed_sql_prep($ruserlang)."',
 			user_website='".sed_sql_prep($ruserwebsite)."',
 			user_icq='".sed_sql_prep($rusericq)."',
@@ -386,6 +388,7 @@ switch ($a)
 	}
 
 $profile_form_skins .= sed_selectbox_skin($urr['user_skin'], 'ruserskin');
+$profile_form_themes .= sed_selectbox_theme($urr['user_skin'], 'rusertheme', $urr['user_theme']);
 $profile_form_langs .= sed_selectbox_lang($urr['user_lang'], 'ruserlang');
 
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
@@ -503,6 +506,7 @@ $t->assign(array(
 	"USERS_PROFILE_PMNOTIFY" => $profile_form_pmnotify,
 	"USERS_PROFILE_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".$urr['user_website']."\" size=\"56\" maxlength=\"128\" />",
 	"USERS_PROFILE_SKIN" => $profile_form_skins,
+	"USERS_PROFILE_THEME" => $profile_form_themes,
 	"USERS_PROFILE_LANG" => $profile_form_langs,
 	"USERS_PROFILE_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".sed_cc($urr['user_icq'])."\" size=\"32\" maxlength=\"16\" />",
 	"USERS_PROFILE_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".sed_cc($urr['user_msn'])."\" size=\"32\" maxlength=\"64\" />",

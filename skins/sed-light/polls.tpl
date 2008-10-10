@@ -2,7 +2,7 @@
 
 	{POLLS_HEADER1}
 
-	<link href="skins/{PHP.skin}/{PHP.skin}.css" type="text/css" rel="stylesheet">
+	<link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet">
 
 	{POLLS_HEADER2}
 

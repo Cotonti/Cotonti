@@ -241,6 +241,7 @@ $L['adm_defstate'] = 'Default state';	// New in v110
 $L['adm_defstate_0'] = 'Folded';	// New in v110
 $L['adm_defstate_1'] = 'Unfolded';	// New in v110
 $L['adm_forums_master'] = 'Master section';  // N-0.0.1
+$L['adm_enableviewers'] = 'Enable Viewers';  // N-0.0.2
 
 
 /* ====== IP search ====== */
