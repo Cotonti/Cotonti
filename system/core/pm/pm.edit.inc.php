@@ -105,7 +105,7 @@ elseif ($a=='update')
 
 	if (empty($newpmtext))
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$id."&f=".$f, '', true)););
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$id."&f=".$f, '', true));
 		exit;
 	}
 

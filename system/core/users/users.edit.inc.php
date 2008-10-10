@@ -259,7 +259,7 @@ if ($a=='update')
 
 		sed_auth_clear($id);
 		sed_log("Edited user #".$id,'adm');
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "m=edit&id=".$id, '', true));
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('users', "m=edit&id=".$id, '', true));
 		exit;
 	}
 }
