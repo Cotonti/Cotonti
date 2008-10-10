@@ -452,6 +452,7 @@ $L['bbcodes_ex_preview'] = 'Toggle between edit and preview mode';
 /* ====== Common ====== */
 
 $L['com_skinfail'] = 'Warning, failed to load your prefered skin, check your profile.';
+$L['com_themefail'] = 'Warning, failed to load your prefered theme for the prefered skin, please check your profile and update values.'; // N-0.0.2
 $L['com_members'] = 'member(s)';
 $L['com_guests'] = 'guest(s)';
 

@@ -288,6 +288,11 @@ switch ($a)
 
 	$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
 
+	$sql = sed_sql_query("SELECT user_skin FROM $db_users WHERE user_id='".$usr['id']."' ");
+	$row = sed_sql_fetcharray($sql);
+	
+	$rusertheme = ($ruserskin != $row['user_skin']) ? $ruserskin : $rusertheme;
+	
 	if (!empty($rnewpass1) && !empty($rnewpass2) && !empty($roldpass))
 		{
 		$roldpass = sed_import('roldpass','P','PSW');

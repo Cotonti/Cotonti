@@ -381,7 +381,7 @@ $mtheme = 'skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
 
 if (!file_exists($mtheme))
 {
-	$out['notices'] .= $L['com_skinfail'].'<br />';
+	$out['notices'] .= $L['com_themefail'].'<br />';
 	$usr['theme'] = $cfg['defaulttheme'];
 	$mtheme = 'skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
 
