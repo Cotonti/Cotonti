@@ -101,7 +101,7 @@ elseif (mb_substr($f, 0, 8)=='country_')
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
 	$title .= $cfg['separator']." ".$L['Country']." '";
 	$title .= ($cn=='00') ? $L['None']."'": $sed_countries[$cn]."'";
-	$cn_code = ($cn=='00') ? '' : $cn;
+	$cn_code = ($cn=='00') ? '00' : $cn;
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_country='$cn_code'");
 	$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_country='$cn_code' ORDER BY user_$s $w LIMIT $d,".$cfg['maxusersperpage']);
