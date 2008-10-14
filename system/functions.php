@@ -1303,7 +1303,7 @@ function sed_build_ratings($code, $url, $display)
 			$t->assign(array(
 				"RATINGS_EXTRATEXT" => $L['rat_registeredonly'],
 			));
-			$t->parse("MAIN.RATINGS_EXTRA");
+			$t->parse("RATINGS.RATINGS_EXTRA");
 		}
 
 		elseif ($usr['id']>0 && !$alreadyvoted)
@@ -3088,7 +3088,7 @@ function sed_selectbox_theme($skinname, $name, $theme)
 	{
 	$dotpos = mb_strrpos($f,".")+1;
 	$f_extension = mb_substr($f, $dotpos, 5);
-	
+
 		if ($f_extension  == 'css' && !eregi('textboxer',$f))
 		{ $themelist[] = str_replace('.css', '', $f); }
 	}
@@ -3449,7 +3449,7 @@ function sed_title($mask, $tags, $data)
 	$mask = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
 	$mask = str_replace($tags[0], $tags[1], $mask);
 	$title = vsprintf($mask, $data);
-	return $title; 
+	return $title;
 }
 
 /**
