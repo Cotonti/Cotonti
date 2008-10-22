@@ -316,7 +316,7 @@ switch ($a)
 			if ($cfg['authmode']==1 || $cfg['authmode']==3)
 				{
 				$u = base64_encode($usr['id'].":_:$rnewpass:_:".$ruserskin.":_:".$rusertheme);
-				setcookie("SEDITIO", "$u", time()+63072000, $cfg['cookiepath'], $cfg['cookiedomain']);
+				sed_setcookie("SEDITIO", "$u", time()+63072000, $cfg['cookiepath'], $cfg['cookiedomain'], false, true);
 				}
 
 			if ($cfg['authmode']==2 || $cfg['authmode']==3)

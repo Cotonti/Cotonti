@@ -74,7 +74,7 @@ if ($a=='check')
 			$rcookiettl = ($rcookiettl==0) ? 604800 : $rcookiettl;
 			$rcookiettl = ($rcookiettl > $cfg['cookielifetime']) ? $cfg['cookielifetime'] : $rcookiettl;
 			$u = base64_encode("$ruserid:_:$rmdpass:_:$rdefskin:_:$rdeftheme");
-			setcookie("SEDITIO", "$u", time()+$rcookiettl, $cfg['cookiepath'], $cfg['cookiedomain']);
+			sed_setcookie("SEDITIO", "$u", time()+$rcookiettl, $cfg['cookiepath'], $cfg['cookiedomain'], false, true);
 			}
 
 		if ($cfg['authmode']==2 || $cfg['authmode']==3)

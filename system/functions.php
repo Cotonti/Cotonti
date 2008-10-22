@@ -3649,6 +3649,29 @@ function sed_xp()
 	return ('<div><input type="hidden" name="x" value="'.sed_sourcekey().'" /></div>');
 }
 
+/**
+ * Set cookie with optional HttpOnly flag
+ * @param string $name The name of the cookie 
+ * @param string $value The value of the cookie
+ * @param int $expire The time the cookie expires in unixtime
+ * @param string $path The path on the server in which the cookie will be available on. 
+ * @param string $domain The domain that the cookie is available. 
+ * @param bool $secure Indicates that the cookie should only be transmitted over a secure HTTPS connection. When set to TRUE, the cookie will only be set if a secure connection exists.
+ * @param bool $httponly HttpOnly flag
+ * @return bool
+ */
+function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
+{
+if (PHP_VERSION >= '5.2.0')
+{ return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly); }
+
+if (!$httponly && (PHP_VERSION >= '4.0.4'))
+{ return setcookie($name, $value, $expire, $path, $domain, $secure); }
+
+if (trim($domain) != '')
+{ $domain .= ($secure ? '; secure' : '') . ($httponly ? '; httponly' : ''); }
+return setcookie($name, $value, $expire, $path, $domain);
+}
 
 /* ============== FLAGS AND COUNTRIES (ISO 3166) =============== */
 
