@@ -5,13 +5,14 @@ INSERT INTO `sed_plugins` VALUES (19, 'page.first', 'search', 'page', 'Search', 
 INSERT INTO `sed_plugins` VALUES (20, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1); 
 
 /* r103 */
-DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_forums` = 'forums' AND `config_name` = 'antibumpforum' LIMIT 1;
+DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'forums' AND `config_name` = 'antibumpforum' LIMIT 1;
 
 /* r104 */
 ALTER TABLE `sed_forum_sections` ADD COLUMN `fs_mastername` varchar(128) NOT NULL;
 
 /* r111 */
 ALTER TABLE `sed_forum_posts` ADD COLUMN `fp_html` text NOT NULL;
+ALTER TABLE `sed_users` ADD COLUMN `user_theme` VARCHAR(16) NOT NULL DEFAULT '';
 
 /* r112 Title Mask Enhancments */
 UPDATE `sed_config` SET `config_cat` = 'title' WHERE `config_cat` = 'main' AND `config_name` IN ('maintitle', 'subtitle') LIMIT 2;
