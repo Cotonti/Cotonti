@@ -1,0 +1,4 @@
+<FilesMatch "\.(tpl)$">
+Order Deny,Allow
+Deny from all
+</FilesMatch>
