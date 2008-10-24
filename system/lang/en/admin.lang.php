@@ -310,6 +310,7 @@ $L['adm_polls_indexpolls'] = 'Index polls (recent at top) :'; // N-0.0.1
 $L['adm_polls_forumpolls'] = 'Polls from forums (recent at top) :'; // N-0.0.1
 $L['adm_polls_polltopic'] = 'Poll topic'; // N-0.0.1
 $L['adm_help_polls'] = 'Once you created a new poll topics, select \'Edit\' to add options (choices) for this poll.<br />\'Delete\' will delete the selected poll, the options, and all related votes.<br />\'Reset\' will delete all votes for the selected poll. It won\'t delete the poll itself or the options.<br />\'Bump\' will change the poll creation date to the current date, and so will make the poll \'current\', top of the list.';
+$L['adm_polls_on_page'] = 'on page'; // N-0.0.2
 
 /* ====== Statistics ====== */
 
