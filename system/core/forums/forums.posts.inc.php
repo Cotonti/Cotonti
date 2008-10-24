@@ -627,6 +627,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$t-> assign(array(
 		"FORUMS_POSTS_ROW_ID" => $row['fp_id'],
 		"FORUMS_POSTS_ROW_IDURL" => "<a id=\"".$row['fp_id']."\" href=\"".sed_url('forums', "m=posts&id=".$row['fp_id'])."\">".$row['fp_id']."</a>",
+		"FORUMS_POSTS_ROW_URL" => "<a id=\"".$row['fp_id']."\" href=\"".sed_url('forums', "m=posts&p=".$row['fp_id']."#".$row['fp_id'])."\">".$row['fp_id']."</a>",
 		"FORUMS_POSTS_ROW_CREATION" => $row['fp_created'],
 		"FORUMS_POSTS_ROW_UPDATED" => $row['fp_updated'],
 		"FORUMS_POSTS_ROW_UPDATER" => sed_cc($row['fp_updater']),
