@@ -59,6 +59,9 @@ if ($n=='edit')
 			$row1 = sed_sql_fetcharray($sql1);
 			
 			$master = sed_sql_prep(sed_cc($row1['fs_title']));
+			
+			$sql = sed_sql_query("DELETE FROM $db_forum_subforums WHERE fm_id='$id' OR fm_masterid='$id' ");
+			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('$id', '$rmaster', '$mastername') ");
 		
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='".$rmaster."', fs_mastername='".$master."' WHERE fs_id='".$id."' ");
 		}
@@ -79,8 +82,14 @@ if ($n=='edit')
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='$rorder' WHERE fs_id='$id'");
 		}
 
-		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_countposts='$rcountposts' WHERE fs_id='$id'") : '';
-		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ") : '';
+		if (!empty($rtitle))
+		{
+
+		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_countposts='$rcountposts' WHERE fs_id='$id'");
+		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ");
+		$sql = sed_sql_query("UPDATE $db_forum_subforums SET fm_title='".$mastername."' WHERE fm_id='$id' ");
+		
+		}
 		
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums', '', true));
 		exit;
@@ -90,8 +99,10 @@ if ($n=='edit')
 		sed_check_xg();
 		sed_auth_clear('all');
 		$num = sed_forum_deletesection($id);
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='".$id."' ");
-		$num += mysql_num_rows($sql);
+		$sql1 = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='".$id."' ");
+		$sql2 = sed_sql_query("DELETE FROM $db_forum_subforums WHERE fm_id='$id' ");
+		$sql3 = sed_sql_query("UPDATE $db_forum_subforums SET fm_masterid='0' WHERE fm_masterid='$id' ");
+		$num += mysql_num_rows($sql1)+mysql_num_rows($sql2)+mysql_num_rows($sql3);
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=103&num=".$num, '', true));
 		exit;
 	}

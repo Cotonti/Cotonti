@@ -55,7 +55,7 @@ if ($n=='markall' && $usr['id']>0)
 }
 
 $sql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
-$db_forum_structure AS n ON n.fn_code=s.fs_category
+$db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid='0'
 ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC");
 
 if (!$sed_sections_act)
@@ -115,27 +115,9 @@ $extp = sed_getextplugins('forums.sections.loop');
 
 $catnum = 1;
 
-$fcache = array();
-$fcache2 = array();
-$fcache3 = array();
-
 while ($fsn = sed_sql_fetcharray($sql))
 {
-	if ($fsn['fs_masterid']>0)
-	{
 
-		if (!$fsn['fs_lt_id'])
-		{ sed_forum_sectionsetlast($fsn['fs_id']); }
-
-		$fcache[$fsn['fs_masterid']][$fsn['fs_id']] = array($fsn['fs_title'], $fsn['fs_lt_date'], $fsn['fs_lt_posterid']);
-		$fcache2[$fsn['fs_masterid']][$fsn['fs_id']] = array($fsn['fs_topiccount']+$fsn['fs_topiccount_pruned'], $fsn['fs_postcount']+$fsn['fs_postcount_pruned']);
-		$fcache3[$fsn['fs_masterid']][$fsn['fs_id']] = array($fsn['fs_lt_date'], sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername'])));
-		$fcache3[$fsn['fs_masterid']][$fsn['fs_id']][] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread")."\">".sed_cutstring($fsn['fs_lt_title'], 32)."</a>" : "<a href=\"".sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=last". "#bottom")."\">".sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
-
-	}
-
-	else
-	{
 		$latestp = $fsn['fs_lt_date'];
 		if ($pcat!=$fsn['fs_category'])
 		{
@@ -221,15 +203,6 @@ while ($fsn = sed_sql_fetcharray($sql))
 				$section_activity_img = "<img src=\"skins/".$skin."/img/system/activity".$secact_num.".gif\" alt=\"\" />";
 			}
 
-			if ($fcache2[$fsn['fs_id']])
-			{
-				foreach ($fcache2[$fsn['fs_id']] as $key => $value)
-				{
-					$fsn['fs_topiccount_all'] = $fsn['fs_topiccount_all']+$value[0];
-					$fsn['fs_postcount_all'] = $fsn['fs_postcount_all']+$value[1];
-				}
-			}
-
 			$fs_num++;
 
 			$t-> assign(array(
@@ -259,41 +232,45 @@ while ($fsn = sed_sql_fetcharray($sql))
 		"FORUMS_SECTIONS_ROW" => $fsn
 			));
 
-			if ($fcache3[$fsn['fs_id']])
+		$ii = 0;	
+		$sql1 = sed_sql_query("SELECT fm_id, fm_title, fm_lt_date FROM $db_forum_subforums WHERE fm_masterid='".$fsn['fs_id']."' ");
+		while ($row = sed_sql_fetcharray($sql1))
 			{
-				foreach ($fcache3[$fsn['fs_id']] as $key => $value)
+			
+			if ($row['fm_lt_date']>$fsn['fs_lt_date'])
 				{
-					if ($value[0]>$latestp)
-					{
-						$t->assign(array(
-					"FORUMS_SECTIONS_ROW_LASTPOSTER" => $value[1],
-					"FORUMS_SECTIONS_ROW_LASTPOST" => $value[2],
-					"FORUMS_SECTIONS_ROW_TIMEAGO" => sed_build_timegap($value[0], $sys['now'])
-						));
-						$latestp = $value[0];
-					}
+				$sql = sed_sql_query("SELECT fm_lt_id, fm_lt_title, fm_lt_postername FROM $db_forum_subforums WHERE fm_id='".$row['fm_id']."' ");
+				$fsnn = sed_sql_fetcharray($sql);
+				
+				$fsnn['fm_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fm_lt_date'] + $usr['timezone'] * 3600);
+				
+				$fsnn['lastpost'] = "<a href=\"".sed_url('forums', "m=posts&q=".$fsnn['fm_lt_id']."&n=last", "#bottom")."\">";
+				$fsnn['lastpost'] .= sed_cutstring($fsnn['fm_lt_title'], 32)."</a>";
+				
+				$fsnn['fs_timago'] = sed_build_timegap($row['fm_lt_date'], $sys['now_offset']);
+				
+				$t-> assign(array(
+					"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsnn['fm_lt_date'],
+					"FORUMS_SECTIONS_ROW_LASTPOSTER" => $fsnn['fm_lt_postername'],
+					"FORUMS_SECTIONS_ROW_LASTPOST" => $fsnn['lastpost'],
+					"FORUMS_SECTIONS_ROW_TIMEAGO" => $fsnn['fs_timago']
+				));
+				
 				}
-
-			}
-
-			if ($fcache[$fsn['fs_id']])
-			{
-			$ii = 0;
-				foreach ($fcache[$fsn['fs_id']] as $key => $value)
-				{
-				$new = ($usr['id']>0 && $value[1]>$usr['lastvisit'] && $value[2]!=$usr['id']) ? '+ ' : '';
+			
+				$j = ($row['fm_lt_date']>$usr['lastvisit']) ? '+ ' : '';
 				$ii++;
 					if ($ii%2!=0)
 						{
-						$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$new.$value[0]."</a>");
+						$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$row['fm_id'])."\">".$j.$row['fm_title']."</a>");
 						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESI");
 						}
 					else
 						{
-						$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$key)."\">".$new.$value[0]."</a>");
+						$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$row['fm_id'])."\">".$j.$row['fm_title']."</a>");
 						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESII");
 						}
-				}
+			
 			}
 
 			/* === Hook - Part2 : Include === */
@@ -312,7 +289,6 @@ while ($fsn = sed_sql_fetcharray($sql))
 
 		$t->parse("MAIN.FORUMS_SECTIONS_ROW");
 		$catnum++;
-	}
 
 }
 
