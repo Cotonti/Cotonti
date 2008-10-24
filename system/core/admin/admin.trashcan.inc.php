@@ -24,6 +24,9 @@ $adminhelp = $L['adm_help_trashcan'];
 
 $id = sed_import('id','G','INT');
 
+$d = sed_import('d', 'G', 'INT');//Inserted Dayver for Ticket #93
+$d = empty($d) ? 0 : (int) $d;//Inserted Dayver for Ticket #93
+
 if ($a=='wipe')
 	{
 	sed_check_xg();
@@ -41,12 +44,19 @@ elseif ($a=='restore')
 		{ sed_trash_delete($id); }
 	}
 
+$totalitems = sed_sql_rowcount($db_trash);//Inserted Dayver for Ticket #93
+$pagnav = sed_pagination(sed_url('admin','m=trashcan'), $d, $totalitems, $cfg['maxrowsperpage']); //Inserted Dayver for Ticket #93
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=trashcan'), $d, $totallines, $cfg['maxrowsperpage'], TRUE); //Inserted Dayver for Ticket #93
+
 $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
-	WHERE 1 ORDER by tr_id DESC");
+	WHERE 1 ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage']); //Edited Dayver for Ticket #93
 
 $adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=trash")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li><li>";
 $adminmain .= $L['Wipeall'].": [<a href=\"".sed_url('admin', "m=trashcan&a=wipeall&".sed_xg())."\">x</a>]</li></ul>";
+
+$adminmain .= "<div class=\"pagnav\">".$pagnav."</div>";//Inserted Dayver for Ticket #93
+
 $adminmain .= "<table class=\"cells\"><tr>";
 $adminmain .= "<td class=\"coltop\" style=\"width:144px;\">".$L['Date']."</td>";
 $adminmain .= "<td class=\"coltop\" style=\"width:144px;\">".$L['Type']."</td>";
@@ -109,6 +119,6 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "[<a href=\"".sed_url('admin', "m=trashcan&a=restore&id=".$row['tr_id']."&".sed_xg())."\">+</a>]</td></tr>";
 	$ii++;
 	}
-$adminmain .= "<tr><td colspan=\"6\">".$L['Total']." : ".$ii."</td></tr></table>";
+$adminmain .= "<tr><td colspan=\"6\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";//Edited Dayver for Ticket #93
 
 ?>

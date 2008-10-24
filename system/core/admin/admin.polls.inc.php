@@ -28,6 +28,9 @@ $adminhelp = $L['adm_help_polls'];
 
 $ntext = sed_import('ntext','P','HTM');
 
+$d = sed_import('d', 'G', 'INT');//Inserted Dayver for Ticket #93
+$d = empty($d) ? 0 : (int) $d;//Inserted Dayver for Ticket #93
+
 $adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=polls")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($n=='options')
@@ -125,11 +128,18 @@ else
 		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text) valueS (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."')");
 	}
 
+	$totalitems = sed_sql_rowcount($db_polls);//Inserted Dayver for Ticket #93
+	$pagnav = sed_pagination(sed_url('admin','m=polls'), $d, $totalitems, $cfg['maxrowsperpage']); //Inserted Dayver for Ticket #93
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=polls'), $d, $totallines, $cfg['maxrowsperpage'], TRUE); //Inserted Dayver for Ticket #93
+
 	$sql = sed_sql_query("SELECT p.*, t.ft_id FROM $db_polls AS p
 	LEFT JOIN $db_forum_topics AS t ON t.ft_poll = p.poll_id
-	WHERE 1 ORDER BY p.poll_type ASC, p.poll_id DESC LIMIT 20");
+	WHERE 1 ORDER BY p.poll_type ASC, p.poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']); //Edited Dayver for Ticket #93
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
+
+	$adminmain .= "<div class=\"pagnav\">".$pagnav."</div>";//Inserted Dayver for Ticket #93
+
 	$adminmain .= "<table class=\"cells\">";
 
 	$ii = 0;
@@ -187,7 +197,7 @@ else
 		$adminmain .= "</td></tr>";
 		$ii++;
 	}
-	$adminmain .= "<tr><td colspan=\"8\">".$L['Total']." : ".$ii."</td></tr></table>";
+	$adminmain .= "<tr><td colspan=\"8\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";//Edited Dayver for Ticket #93
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 	$adminmain .= "<form id=\"addpoll\" action=\"".sed_url('admin', "m=polls&a=add")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
