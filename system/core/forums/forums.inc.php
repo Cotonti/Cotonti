@@ -237,10 +237,10 @@ while ($fsn = sed_sql_fetcharray($sql))
 		while ($row = sed_sql_fetcharray($sql1))
 			{
 			
-			if ($row['fm_lt_date']>$fsn['fs_lt_date'])
+			if ($row['fm_lt_date']>$latestp)
 				{
-				$sql = sed_sql_query("SELECT fm_lt_id, fm_lt_title, fm_lt_postername FROM $db_forum_subforums WHERE fm_id='".$row['fm_id']."' ");
-				$fsnn = sed_sql_fetcharray($sql);
+				$sql0 = sed_sql_query("SELECT fm_lt_id, fm_lt_title, fm_lt_postername FROM $db_forum_subforums WHERE fm_id='".$row['fm_id']."' ");
+				$fsnn = sed_sql_fetcharray($sql0);
 				
 				$fsnn['fm_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fm_lt_date'] + $usr['timezone'] * 3600);
 				
@@ -255,6 +255,8 @@ while ($fsn = sed_sql_fetcharray($sql))
 					"FORUMS_SECTIONS_ROW_LASTPOST" => $fsnn['lastpost'],
 					"FORUMS_SECTIONS_ROW_TIMEAGO" => $fsnn['fs_timago']
 				));
+				
+				$latestp = $row['fm_lt_date'];
 				
 				}
 			
