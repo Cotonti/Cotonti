@@ -236,11 +236,15 @@ else
 					$row2 = sed_sql_fetcharray($sql2);
 					
 					$mastername = sed_sql_prep(sed_cc($row2['fs_title']));
+					
 					}
 
 			$sql = sed_sql_query("INSERT INTO $db_forum_sections (fs_masterid, fs_mastername, fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('".(int)$nmaster."', '".$mastername."', '".(int)$nextorder."', '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($ncat)."', 'images/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
 
 			$forumid = sed_sql_insertid();
+			
+			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('".(int)$forumid."', '".(int)$nmaster."', '".sed_cc($ntitle)."') ");
+
 
 			foreach($sed_groups as $k => $v)
 			{

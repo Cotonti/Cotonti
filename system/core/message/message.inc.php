@@ -116,7 +116,7 @@ switch( $msg )
 		{
 			$rd = 2;
 		$the_redirect = (!empty($redirect)) ? "&redirect=".$redirect : '';
-		$ru = sed_url('users', 'm=auth'.$redirect);
+		$ru = sed_url('users', 'm=auth'.$the_redirect);
 		}
 		break;
 }
