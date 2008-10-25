@@ -30,6 +30,7 @@ if ($n=='options')
 {
 	if ($a=='update')
 	{
+		$rcode = sed_import('rpath','P','TXT');
 		$rpath = sed_import('rpath','P','TXT');
 		$rtitle = sed_import('rtitle','P','TXT');
 		$rtplmode = sed_import('rtplmode','P','INT');
@@ -37,6 +38,23 @@ if ($n=='options')
 		$ricon = sed_import('ricon','P','TXT');
 		$rgroup = sed_import('rgroup','P','BOL');
 		$rgroup = ($rgroup) ? 1 : 0;
+		
+		$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
+		$roww = sed_sql_fetcharray($sqql);
+		
+		if ($roww['structure_code'] != $rcode)
+		{
+		
+			$sql = sed_sql_query("UPDATE $db_structure SET structure_code='".sed_sql_prep($rcode)."' WHERE structure_code='".sed_sql_prep($roww['structure_code'])."' ");
+			$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='".sed_sql_prep($roww['structure_code'])."' ");
+			$sql = sed_sql_query("UPDATE $db_auth SET auth_option='".sed_sql_prep($rcode)."' WHERE auth_code='page' AND auth_option='".sed_sql_prep($roww['structure_code'])."' ");
+			$sql = sed_sql_query("UPDATE $db_pages SET page_cat='".sed_sql_prep($rcode)."' WHERE page_cat='".sed_sql_prep($roww['structure_code'])."' ");
+			
+			sed_auth_reorder();
+			sed_auth_clear('all');
+			sed_cache_clear('sed_cat');
+			
+		}
 
 		if ($rtplmode==1)
 		{ $rtpl = ''; }
@@ -107,7 +125,7 @@ if ($n=='options')
 	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=page&s=structure&n=options&a=update&id=".$structure_id)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Code']." :</td>";
-	$adminmain .= "<td>".$structure_code."</td></tr>";
+	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rcode\" value=\"".$structure_code."\" size=\"16\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Path']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$structure_path."\" size=\"16\" maxlength=\"16\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Title']." :</td>";
@@ -148,7 +166,24 @@ else
 		foreach($s as $i => $k)
 		{
 			$s[$i]['rgroup'] = (isset($s[$i]['rgroup'])) ? 1 : 0;
-
+			
+			$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
+			$roww = sed_sql_fetcharray($sqql);
+			
+			if ($roww['structure_code'] != $s[$i]['rcode'])
+			{
+			
+				$sql = sed_sql_query("UPDATE $db_structure SET structure_code='".sed_sql_prep($s[$i]['rcode'])."' WHERE structure_code='".sed_sql_prep($roww['structure_code'])."' ");
+				$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='".sed_sql_prep($roww['structure_code'])."' ");
+				$sql = sed_sql_query("UPDATE $db_auth SET auth_option='".sed_sql_prep($s[$i]['rcode'])."' WHERE auth_code='page' AND auth_option='".sed_sql_prep($roww['structure_code'])."' ");
+				$sql = sed_sql_query("UPDATE $db_pages SET page_cat='".sed_sql_prep($s[$i]['rcode'])."' WHERE page_cat='".sed_sql_prep($roww['structure_code'])."' ");
+				
+				sed_auth_reorder();
+				sed_auth_clear('all');
+				sed_cache_clear('sed_cat');
+				
+			}
+		
 			$sql1 = sed_sql_query("UPDATE $db_structure SET
 			structure_path='".sed_sql_prep($s[$i]['rpath'])."',
 				structure_title='".sed_sql_prep($s[$i]['rtitle'])."',
@@ -222,7 +257,7 @@ else
 		$adminmain .= "<tr><td style=\"text-align:center;\">";
 		$adminmain .= ($pagecount[$structure_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=page&s=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&".sed_xg())."\">x</a>]";
 		$adminmain .= "</td>";
-		$adminmain .= "<td>".$structure_code."</td>";
+		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$structure_id][rcode]\" value=\"".$structure_code."\" size=\"8\" maxlength=\"255\" /></td>";
 		$adminmain .= "<td>$pathfieldimg<input type=\"text\" class=\"text\" name=\"s[$structure_id][rpath]\" value=\"".$structure_path."\" size=\"$pathfieldlen\" maxlength=\"24\" /></td>";
 
 		$adminmain .= "<td style=\"text-align:center;\">".$structure_tpl_sym."</td>";
