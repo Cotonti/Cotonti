@@ -29,6 +29,10 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+// Extra fields - getting
+$fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
+while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+
 if ($a=='add')
 {
 	sed_shield_protect();
@@ -68,7 +72,18 @@ if ($a=='add')
 	$newpagebegin = sed_mktime($newpagehour_beg, $newpageminute_beg, 0, $newpagemonth_beg, $newpageday_beg, $newpageyear_beg) - $usr['timezone'] * 3600;
 	$newpageexpire = sed_mktime($newpagehour_exp, $newpageminute_exp, 0, $newpagemonth_exp, $newpageday_exp, $newpageyear_exp) - $usr['timezone'] * 3600;
 	$newpageexpire = ($newpageexpire<=$newpagebegin) ? $newpagebegin+31536000 : $newpageexpire;
-
+	
+	// Extra fields
+	foreach($extrafields as $row) 
+	{
+		$import = sed_import('newpage_my_'.$row['field_name'],'P','HTM');
+		if($row['field_type']=="checkbox")
+		{
+			if ($import == "0" OR $import == "on") $import = 1;
+			else $import = 0;
+		}
+		$newpageextrafields[] = $import;
+	}
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
 
@@ -92,7 +107,7 @@ if ($a=='add')
 			$newpagehtml = '';
 		}
 
-		$sql = sed_sql_query("INSERT into $db_pages
+		$ssql = "INSERT into $db_pages
 		(page_state,
 		page_type,
 		page_cat,
@@ -101,8 +116,9 @@ if ($a=='add')
 		page_extra2,
 		page_extra3,
 		page_extra4,
-		page_extra5,
-		page_title,
+		page_extra5,";
+		foreach($extrafields as $row) $ssql .= "page_my_".$row['field_name'].", "; // Extra fields		
+$ssql.="page_title,
 		page_desc,
 		page_text,
 		page_html,
@@ -117,15 +133,16 @@ if ($a=='add')
 		page_alias)
 		VALUES
 		(1,
-		0,
+		0, 
 		'".sed_sql_prep($newpagecat)."',
 			'".sed_sql_prep($newpagekey)."',
 			'".sed_sql_prep($newpageextra1)."',
 			'".sed_sql_prep($newpageextra2)."',
 			'".sed_sql_prep($newpageextra3)."',
 			'".sed_sql_prep($newpageextra4)."',
-			'".sed_sql_prep($newpageextra5)."',
-			'".sed_sql_prep($newpagetitle)."',
+			'".sed_sql_prep($newpageextra5)."',";
+			foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields		
+  	$ssql.="'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
 			'".sed_sql_prep($newpagetext)."',
 			'".sed_sql_prep($newpagehtml)."',
@@ -137,8 +154,9 @@ if ($a=='add')
 			".intval($newpagefile).",
 			'".sed_sql_prep($newpageurl)."',
 			'".sed_sql_prep($newpagesize)."',
-			'".sed_sql_prep($newpagealias)."')");
-
+			'".sed_sql_prep($newpagealias)."')";
+  		$sql = sed_sql_query($ssql);
+		
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
 		if (is_array($extp))
@@ -210,7 +228,7 @@ if (!empty($error_string))
 	$t->parse("MAIN.PAGEADD_ERROR");
 }
 
-$t->assign(array(
+$pageadd_array = array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
 	"PAGEADD_SUBTITLE" => $L['pagadd_subtitle'],
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
@@ -238,7 +256,33 @@ $t->assign(array(
 	"PAGEADD_FORM_BBCODES" => $bbcodes,
 	"PAGEADD_FORM_SMILIES" => $smilies,
 	"PAGEADD_FORM_MYPFS" => $pfs
-));
+);
+// Extra fields
+foreach($extrafields as $i=>$row)
+{
+	$t1 = "PAGEADD_FORM_MY_".strtoupper($row['field_name']);
+	$t2 = $row['field_html'];
+	switch($row['field_type']) {
+	case "input":	
+		$t2 = str_replace('<input ','<input name="newpage_my_'.$row['field_name'].'" ', $t2);
+		break;
+	case "textarea":
+		$t2 = str_replace('<textarea ','<textarea name="newpage_my_'.$row['field_name'].'" ', $t2);
+		break;
+	case "select":
+		$t2 = str_replace('<select','<select name="newpage_my_'.$row['field_name'].'"', $t2);
+		$options = "";
+		$opt_array = explode(",",$row['field_variants']);
+		if(count($opt_array)!=0) 
+		{	foreach ($opt_array as $var) $options .= "<option value=\"$var\">$var</option>"; }
+		$t2 = str_replace("</select>","$options</select>",$t2); break;
+	case "checkbox":
+		$t2 = str_replace('<input','<input name="newpage_my_'.$row['field_name'].'"', $t2);
+		break;
+	}
+	$pageadd_array[$t1] = $t2;
+}
+$t->assign($pageadd_array);
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.tags');

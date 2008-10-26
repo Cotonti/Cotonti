@@ -480,4 +480,23 @@ your .htaccess (if writable) and provide you with .htaccess/IsapiRewrite4.ini/ng
 (depending on your server type).</li>
 </ol>';
 
+/* ====== Extra Fields Admin ========*/
+
+$L['adm_extrafields'] = "Extra fields";
+$L['adm_extrafields_desc'] = "Add/Edit extra fields for pages";
+$L['adm_extrafield_added'] = "Successfully added new extra field.";
+$L['adm_extrafield_updated'] = "Successfully updated extra field.";
+$L['adm_extrafield_removed'] = "Successfully removed extra field.";
+$L['adm_extrafield_confirmdel'] = 'Really delete this extra field? All data on pages in this field will be lost!';
+$L['adm_extrafield_confirmupd'] = 'Really update this extra field? Some data on pages in this field may be lost!';
+
+$L['extf_Name'] = "Name";
+$L['extf_Type'] = "Type of field";
+$L['extf_Base HTML'] = "Base HTML";
+$L['extf_Page tags'] = "Tags";
+
+$L['adm_extrafield_new'] = 'New extra field';
+$L['adm_extrafield_selectable_values'] = 'Options for select (comma sep.):';
+$L['adm_help_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank';
+
 ?>

@@ -5610,4 +5610,82 @@ class CachingXTemplate extends XTemplate {
 	}
 }
 
+// =========== Extra fields for pages =====================
+
+/**
+ * Add extra field for pages
+ *  
+ * @param string $name Field name (unique)
+ * @param string $type Field type (input, textarea etc)
+ * @param string $html HTML display of element without parameter "name="
+ * @param string $variants Variants of values (for radiobuttons, selectors etc) 
+ * @return bool
+ * 
+ */
+function sed_extrafield_add($name, $type, $html, $variants="")
+{
+	global $db_pages_extra_fields, $db_pages;
+	$extf['name'] = $name;
+	$extf['type'] = $type;
+	$extf['html'] = $html;
+	$extf['variants'] = $variants;
+	$step1 = sed_sql_insert($db_pages_extra_fields, $extf, 'field_') == 1;
+	switch($type)	{
+	case "input": $sqltype = "VARCHAR(255)"; break;
+	case "textarea": $sqltype = "TEXT"; break;
+	case "select": $sqltype = "VARCHAR(255)"; break;
+	case "checkbox": $sqltype = "BOOL"; break;
+	}
+	$sql = "ALTER TABLE $db_pages ADD page_my_$name $sqltype ";
+	//echo $sql; flush; 
+	$step2 = sed_sql_query($sql);
+	return $step1&&$step2;
+}
+
+/**
+ * Update extra field for pages
+ *  
+ * @param string $oldname Exist name of field
+ * @param string $name Field name (unique)
+ * @param string $type Field type (input, textarea etc)
+ * @param string $html HTML display of element without parameter "name="
+ * @param string $variants Variants of values (for radiobuttons, selectors etc) 
+ * @return bool
+ * 
+ */
+function sed_extrafield_update($oldname, $name, $type, $html, $variants="")
+{
+	global $db_pages_extra_fields, $db_pages;
+	$extf['name'] = $name;
+	$extf['type'] = $type;
+	$extf['html'] = $html;
+	$extf['variants'] = $variants;
+	$step1 = sed_sql_update($db_pages_extra_fields, "field_name = '$oldname'", $extf, 'field_') == 1;
+	switch($type)	{
+	case "input": $sqltype = "VARCHAR(255)"; break;
+	case "textarea": $sqltype = "TEXT"; break;
+	case "select": $sqltype = "VARCHAR(255)"; break;
+	case "checkbox": $sqltype = "BOOL"; break;
+	}
+	$sql = "ALTER TABLE $db_pages CHANGE page_my_$oldname page_my_$name $sqltype ";
+	$step2 = sed_sql_query($sql);
+	return $step1&&$step2;
+}
+
+/**
+ * Delete extra field 
+ *  
+ * @param string $name Name of extra field
+ * @return bool
+ * 
+ */
+function sed_extrafield_remove($name)
+{
+	global $db_pages_extra_fields, $db_pages, $firephp;
+	$step1 = sed_sql_delete($db_pages_extra_fields, "field_name = '$name'") == 1;
+	$sql = "ALTER TABLE $db_pages DROP page_my_".$name;
+	$step2 = sed_sql_query($sql);
+	return $step1&&$step2;
+}
+
 ?>
