@@ -31,6 +31,7 @@ $adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=page")
 $adminmain .= "<li>".sed_linkif(sed_url('page', 'm=add'), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
 $adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=queue'), $L['adm_valqueue']." : ".$sys['pagesqueued'], sed_auth('page', 'any', 'A'))."</li>";
 $adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=structure'), $L['adm_structure'], sed_auth('admin', 'a', 'A'))."</li>";
+$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=extrafields'), $L['adm_extrafields_desc'], sed_auth('admin', 'a', 'A'))."</li>";
 $adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=catorder'), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'))."</li>";
 $adminmain .= "<li>".$L['Pages']." : ".$totaldbpages." (<a href=\"".sed_url('list', 'c=all')."\">".$L['adm_showall']."</a>)</li>";
 $adminmain .= "</ul>";

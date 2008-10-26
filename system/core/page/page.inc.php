@@ -202,6 +202,14 @@ $t->assign(array(
 	"PAGE_RATINGS_DISPLAY" => $ratings_display
 ));
 
+// Extra fields
+$fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
+while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+foreach($extrafields as $extrafield)
+{
+	$t->assign('PAGE_MY_'.strtoupper($extrafield['field_name']), $pag['page_my_'.$extrafield['field_name']]);
+}
+
 if($pag['page_totaltabs']>1)
 {
 	$t->assign(array(
@@ -313,6 +321,8 @@ if($pag['page_file'] > 0)
 		}
 	
 }
+
+
 
 /* === Hook === */
 $extp = sed_getextplugins('page.tags');

@@ -22,6 +22,10 @@ sed_block($usr['auth_read']);
 $id = sed_import('id','G','INT');
 $c = sed_import('c','G','TXT');
 
+// Extra fields - getting
+$fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
+while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+
 if ($a=='update')
 {
 	$sql1 = sed_sql_query("SELECT page_cat, page_ownerid FROM $db_pages WHERE page_id='$id' LIMIT 1");
@@ -80,7 +84,18 @@ if ($a=='update')
 
 	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($rpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
-
+	
+	// Extra fields
+	foreach($extrafields as $row) 
+	{
+		$import = sed_import('rpage_my_'.$row['field_name'],'P','HTM');
+		if($row['field_type']=="checkbox")
+		{
+			if ($import == "0") $import = 1;
+			if ($import == "") $import = 0;
+		}
+		$rpageextrafields[] = $import;
+	}
 	if (empty($error_string) || $rpagedelete)
 	{
 		if ($rpagedelete)
@@ -126,7 +141,7 @@ if ($a=='update')
 				$rpagehtml = '';
 			}
 
-			$sql = sed_sql_query("UPDATE $db_pages SET
+			$ssql = "UPDATE $db_pages SET
 			page_cat = '".sed_sql_prep($rpagecat)."',
 				page_type = '".sed_sql_prep($rpagetype)."',
 				page_key = '".sed_sql_prep($rpagekey)."',
@@ -134,8 +149,9 @@ if ($a=='update')
 				page_extra2 = '".sed_sql_prep($rpageextra2)."',
 				page_extra3 = '".sed_sql_prep($rpageextra3)."',
 				page_extra4 = '".sed_sql_prep($rpageextra4)."',
-				page_extra5 = '".sed_sql_prep($rpageextra5)."',
-				page_title = '".sed_sql_prep($rpagetitle)."',
+				page_extra5 = '".sed_sql_prep($rpageextra5)."',";
+				foreach($extrafields as $i=>$row) $ssql .= "page_my_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',"; // Extra fields
+		$ssql.="page_title = '".sed_sql_prep($rpagetitle)."',
 				page_desc = '".sed_sql_prep($rpagedesc)."',
 				page_text='".sed_sql_prep($rpagetext)."',
 				page_html='".sed_sql_prep($rpagehtml)."',
@@ -150,7 +166,8 @@ if ($a=='update')
 			page_count = '$rpagecount',
 			page_filecount = '$rpagefilecount',
 			page_alias = '".sed_sql_prep($rpagealias)."'
-			WHERE page_id='$id'");
+			WHERE page_id='$id'";
+			$sql = sed_sql_query($ssql);
 
 			/* === Hook === */
 			$extp = sed_getextplugins('page.edit.update.done');
@@ -248,7 +265,7 @@ if (!empty($error_string))
 	$t->parse("MAIN.PAGEEDIT_ERROR");
 }
 
-$t->assign(array(
+$pageedit_array = array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
 	"PAGEEDIT_SUBTITLE" => $L['paged_subtitle'],
 	"PAGEEDIT_FORM_SEND" => sed_url('page', "m=edit&a=update&id=".$pag['page_id']."&r=".$r),
@@ -282,8 +299,39 @@ $t->assign(array(
 	"PAGEEDIT_FORM_SMILIES" => $smilies,
 	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
-));
-
+);
+// Extra fields
+foreach($extrafields as $i=>$row)
+{
+	$t1 = "PAGEEDIT_FORM_MY_".strtoupper($row['field_name']);
+	$t2 = $row['field_html'];
+	switch($row['field_type']) {
+	case "input":	
+		$t2 = str_replace('<input ','<input name="rpage_my_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<input ','<input value="'.$pag['page_my_'.$row['field_name']].'" ', $t2); break;
+	case "textarea":
+		$t2 = str_replace('<textarea ','<textarea name="rpage_my_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('</textarea>',$pag['page_my_'.$row['field_name']].'</textarea>', $t2); break;
+	case "select":
+		$t2 = str_replace('<select','<select name="rpage_my_'.$row['field_name'].'"', $t2);
+		$options = "";
+		$opt_array = explode(",",$row['field_variants']);
+		if(count($opt_array)!=0) 
+			foreach ($opt_array as $var) 
+			{
+				$sel = $var == $pag['page_my_'.$row['field_name']] ? ' selected="selected"' : '';
+				$options .= "<option value=\"$var\" $sel>$var</option>";
+				
+			}
+		$t2 = str_replace("</select>","$options</select>",$t2); break;
+	case "checkbox":
+		$t2 = str_replace('<input','<input name="rpage_my_'.$row['field_name'].'"', $t2);
+		$sel = $pag['page_my_'.$row['field_name']]==1 ? ' checked' : '';
+		$t2 = str_replace('<input ','<input value="'.$pag['page_my_'.$row['field_name']].'" '.$sel.' ', $t2); break;
+	}
+	$pageedit_array[$t1] = $t2;
+}
+$t->assign($pageedit_array);
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.tags');
 if (is_array($extp))

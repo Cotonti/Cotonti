@@ -40,7 +40,7 @@ $cfg['temp_url'] = 'http://localhost';
 
 $cfg['defaultskin'] = 'sed-light';	// Default skin code. Be SURE it's pointing to a valid folder in /skins/... !!
 $cfg['defaulttheme'] = 'sed-light';	// Default theme, only name, not like skinname.css. Be SURE it's pointing to a valid folder in /skins/defaultskin/... !!
-$cfg['defaultlang'] = 'en';		// Default language code
+$cfg['defaultlang'] = 'ru';		// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
 $cfg['pagination'] = ' [%s]';
@@ -101,6 +101,7 @@ $db_groups_users 	= 'sed_groups_users';
 $db_logger 			= 'sed_logger';
 $db_online 			= 'sed_online';
 $db_pages 			= 'sed_pages';
+$db_pages_extra_fields	= 'sed_pages_extra_fields';
 $db_pfs 			= 'sed_pfs';
 $db_pfs_folders 	= 'sed_pfs_folders';
 $db_plugins 		= 'sed_plugins';

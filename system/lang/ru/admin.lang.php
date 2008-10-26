@@ -474,4 +474,27 @@ $L['adm_help_urls'] = 'На этой странице вы можете наст
 ваш .htaccess (если возможно), и вам будут предоставлены директивы для .htaccess/IsapiRewrite4.ini/nginx.conf
 (в зависимости от используемого сервера).</li>
 </ol>';
+
+/* ====== Extra Fields Admin ========*/
+
+/* ====== Extra Fields Admin ========*/
+
+$L['adm_extrafields'] = "Дополнительные поля";
+$L['adm_extrafields_desc'] = "Дополнительные поля для страниц";
+$L['adm_extrafield_added'] = "Новое поле добавлено";
+$L['adm_extrafield_updated'] = "Поле успешно отредактировано";
+$L['adm_extrafield_removed'] = "Поле успешно удалено";
+$L['adm_extrafield_confirmdel'] = 'Вы действительно хотите удалить поле? Все данные в этих полях на страницах будут потеряны!';
+$L['adm_extrafield_confirmupd'] = 'Вы действительно хотите редактировать поле? Некоторые данные в этих полях на страницах могут быть потеряны.';
+
+$L['extf_Name'] = "Название поля";
+$L['extf_Type'] = "Тип поля";
+$L['extf_Base HTML'] = "Базовый HTML";
+$L['extf_Page tags'] = "Тэги";
+
+$L['adm_extrafield_new'] = 'Новое поле';
+$L['adm_extrafield_selectable_values'] = 'Значения для select (через запятую):';
+$L['adm_help_extrafield'] = '
+Хинт: Поле "Базовый HTML" установится в дефолтное значение автоматически, если его очистить и нажать Обновить.';
+
 ?>
