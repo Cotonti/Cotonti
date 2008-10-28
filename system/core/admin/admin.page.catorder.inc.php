@@ -47,6 +47,9 @@ $options_way = array (
 	'desc' => $L['Descending']
 	);
 
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
+
 if ($a=='update')
 	{
 	$s = sed_import('s', 'P', 'ARR');
@@ -57,14 +60,21 @@ if ($a=='update')
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_order='$order' WHERE structure_id='$i'");
 		}
 	sed_cache_clear('sed_cat');
-   	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page', '', true));
+   	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=catorder&d='.$d, '', true));
 	}
 
-$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code");
+$totalitems = sed_sql_rowcount($db_structure);
+$pagnav = sed_pagination(sed_url('admin','m=page&s=catorder'), $d, $totalitems, $cfg['maxrowsperpage']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=catorder'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
-$adminmain .= "<form id=\"chgorder\" action=\"".sed_url('admin', "m=page&s=catorder&a=update")."\" method=\"post\">";
+$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code LIMIT $d,".$cfg['maxrowsperpage']);
+
+$adminmain .= "<form id=\"chgorder\" action=\"".sed_url('admin', "m=page&s=catorder&a=update&d=".$d)."\" method=\"post\">";
+$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
 $adminmain .= "<table class=\"cells\"><tr><td class=\"coltop\">".$L['Code']."</td><td class=\"coltop\">".$L['Path']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Title']."</td><td class=\"coltop\">".$L['Order']."</td></tr>";
+
+$ii = 0;
 
 while ($row = sed_sql_fetcharray($sql))
 	{
@@ -101,9 +111,13 @@ while ($row = sed_sql_fetcharray($sql))
 	$form_way .= "</select> ";
 
 	$adminmain  .= "<td>".$form_sort.' '.$form_way."</td></tr>";
+
+	$ii++;
 	}
 
 $adminmain  .= "<tr><td colspan=\"4\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
-$adminmain  .= "</table></form>";
+$adminmain  .= "<tr><td colspan=\"4\">&nbsp;</td></tr>";
+$adminmain .= "<tr><td colspan=\"4\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
+$adminmain  .= "</form>";
 
 ?>

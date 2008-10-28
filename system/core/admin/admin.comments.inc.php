@@ -23,6 +23,9 @@ $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=comments'), $L['Comments']);
 $adminhelp = $L['adm_help_comments'];
 
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
+
 $adminmain .= "<ul><li><a href=\"".sed_url('admin', 'm=config&n=edit&o=core&p=comments')."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
 if ($a=='delete')
@@ -31,25 +34,15 @@ if ($a=='delete')
 	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
 	}
 
-// [Limit patch]
-$d = sed_import('d', 'G', 'INT');
-if(empty($d)) $d = 0;
-$totallines = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com"), 0, 0);
-$totalpages = ceil($totallines / $cfg['maxrowsperpage']);
-$currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
-$pagination = '';
-for($i = 1; $i <= $totalpages; $i++)
-{
-	$pagination .= ($i == $currentpage) ? ' <span class="pagenav_current">' : ' ';
-	$pagination .= '<a href="'.sed_url("admin", "m=comments&d=".(($i-1)*$cfg['maxrowsperpage'])).'">'.$i.'</a>';
-	$pagination .= ($i == $currentpage) ? '</span> ' : ' ';
-	if($i != $totalpages) $pagination .= '|';
-}
-$adminmain .= '<div class="paging">'.$pagination.'</div>';
-$sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
-// [/Limit patch]
+$totalitems = sed_sql_rowcount($db_com);
+$pagnav = sed_pagination(sed_url('admin','m=comments'), $d, $totalitems, $cfg['maxrowsperpage']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=comments'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
-$adminmain .= "<h4>".$L['viewdeleteentries']." :</h4><table class=\"cells\"><tr>";
+$sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
+
+$adminmain .= "<h4>".$L['viewdeleteentries']." :</h4>";
+$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
+$adminmain .= "<table class=\"cells\"><tr>";
 $adminmain .= "<td style=\"width:40px;\" class=\"coltop\">".$L['Delete']."</td>";
 $adminmain .= "<td style=\"width:40px;\" class=\"coltop\">#</td>";
 $adminmain .= "<td style=\"width:40px;\" class=\"coltop\">".$L['Code']."</td>";
@@ -71,30 +64,34 @@ while ($row = sed_sql_fetcharray($sql))
 		case 'p':
 			$row['com_url'] = sed_url('page', "id=".$row['com_value'], "#c".$row['com_id']);
 		break;
-		
+
 		case 'j':
 			$row['com_url'] = sed_url('plug', 'e=weblogs&m=page&id='.$row['com_value'], '#c'.$row['com_id']);
 		break;
-		
+
 		case 'g':
 			$row['com_url'] = sed_url('plug', 'e=gal&pic='.$row['com_value'], '#c'.$row['com_id']);
 		break;
-		
+
 		case 'u':
 			$row['com_url'] = sed_url('users', 'm=details&id='.$row['com_value'], '#c'.$row['com_id']);
 		break;
-		
+
 		case 'v':
 			$row['com_url'] = sed_url('polls', 'id='.$row['com_value'], '#c'.$row['com_id']);
 		break;
-		
+
+		case 's':
+			$row['com_url'] = sed_url('plug', 'e=e_shop&sh=product&productID='.$row['com_value'], '#c'.$row['com_id']);
+		break;
+
 		default:
 			$row['com_url'] = '';
 		break;
 		}
 
 	$adminmain .= "<tr><td style=\"text-align:center;\">";
-	$adminmain .= "[<a href=\"".sed_url('admin', "m=comments&a=delete&id=".$row['com_id']."&".sed_xg())."\">x</a>]</td>";
+	$adminmain .= "[<a href=\"".sed_url('admin', "m=comments&a=delete&id=".$row['com_id']."&d=".$d."&".sed_xg())."\">x</a>]</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['com_id']."</td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$row['com_code']."</td>";
 	$adminmain .= "<td>".$row['com_author']."</td>";
@@ -103,6 +100,6 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "<td style=\"text-align:center;\"><a href=\"".$row['com_url']."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td></tr>";
 	$ii++;
 	}
-$adminmain .= "<tr><td colspan=\"7\">".$L['Total']." : ".$ii."</td></tr><tr><td colspan=\"7\"></td></tr></table>";
+$adminmain .= "<tr><td colspan=\"7\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
 
 ?>

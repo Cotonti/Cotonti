@@ -33,7 +33,7 @@ if ($a=='update')
 	$rbanlistemail = sed_sql_prep(sed_import('rbanlistemail', 'P', 'TXT'));
 	$rbanlistreason = sed_sql_prep(sed_import('rbanlistreason', 'P', 'TXT'));
 	$sql = (!empty($rbanlistip) || !empty($rbanlistemail)) ? sed_sql_query("UPDATE $db_banlist SET banlist_ip='$rbanlistip', banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'") : '';
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist", '', true));
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist&d=".$d, '', true));
 	exit;
 }
 elseif ($a=='add')
@@ -58,18 +58,18 @@ elseif ($a=='delete')
 	sed_check_xg();
 	$id = sed_import('id', 'G', 'INT');
 	$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='$id'");
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist", '', true));
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist&d=".$d, '', true));
 	exit;
 }
 
 $totalitems = sed_sql_rowcount($db_banlist);
 $pagnav = sed_pagination(sed_url('admin','m=banlist'), $d, $totalitems, $cfg['maxrowsperpage']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=banlist'), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 $sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-$adminmain .= "<div class=\"pagnav\">".$pagnav."</div>";
+$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
 $adminmain .= "<table class=\"cells\"><tr>";
 $adminmain .= "<td class=\"coltop\">".$L['Delete']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Until']."</td>";
@@ -79,6 +79,8 @@ $adminmain .= "<td class=\"coltop\">".$L['Reason']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Update']."</td>";
 $adminmain .= "</tr>";
 
+$ii = 0;
+
 while ($row = sed_sql_fetcharray($sql))
 {
 	$banlist_id = $row['banlist_id'];
@@ -86,8 +88,8 @@ while ($row = sed_sql_fetcharray($sql))
 	$banlist_email = $row['banlist_email'];
 	$banlist_reason = $row['banlist_reason'];
 	$banlist_expire = $row['banlist_expire'];
-	$adminmain .= "<form id=\"savebanlist_".$banlist_id."\" action=\"".sed_url('admin', 'm=banlist&a=update&id='.$banlist_id)."\" method=\"post\">";
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', 'm=banlist&a=delete&id='.$banlist_id."&".sed_xg())."\">x</a>]</td>";
+	$adminmain .= "<form id=\"savebanlist_".$banlist_id."\" action=\"".sed_url('admin', 'm=banlist&a=update&id='.$banlist_id.'&d='.$d)."\" method=\"post\">";
+	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', 'm=banlist&a=delete&id='.$banlist_id.'&d='.$d.'&'.sed_xg())."\">x</a>]</td>";
 
 	if ($banlist_expire>0)
 	{ $adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'],$banlist_expire)." GMT</td>"; }
@@ -98,8 +100,9 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rbanlistemail\" value=\"".$banlist_email."\" size=\"10\" maxlength=\"64\" /></td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rbanlistreason\" value=\"".$banlist_reason."\" size=\"18\" maxlength=\"64\" /></td>";
 	$adminmain .= "<td><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr></form>";
+	$ii++;
 }
-$adminmain .= "</table>";
+$adminmain .= "<tr><td colspan=\"6\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
 
 $adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 $adminmain .= "<form id=\"addbanlist\" action=\"".sed_url('admin', 'm=banlist&a=add')."\" method=\"post\">";

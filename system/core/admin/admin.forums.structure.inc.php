@@ -25,6 +25,9 @@ $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 $adminpath[] = array (sed_url('admin', 'm=forums&s=structure'), $L['Structure']);
 $adminhelp = $L['adm_help_forum_structure'];
 
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
+
 if ($n=='options')
 	{
 	if ($a=='update')
@@ -140,7 +143,7 @@ else
 				WHERE fn_id='".$i."'");
 			}
 		sed_cache_clear('sed_forums_str');
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure', '', true));
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure&d='.$d, '', true));
 		exit;
 		}
 	elseif ($a=='add')
@@ -165,7 +168,7 @@ else
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 		sed_cache_clear('sed_forums_str');
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure', '', true));
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure&d='.$d, '', true));
 		exit;
 		}
 
@@ -174,10 +177,15 @@ else
 	while ($row = sed_sql_fetcharray($sql))
 		{ $sectioncount[$row['fs_category']] = $row['COUNT(*)']; }
 
-	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC");
+	$totalitems = sed_sql_rowcount($db_forum_structure);
+	$pagnav = sed_pagination(sed_url('admin','m=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+
+	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=forums&s=structure&a=update")."\" method=\"post\">";
+	$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
+	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=forums&s=structure&a=update&d=".$d)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td class=\"coltop\">".$L['Delete']."</td>";
 	$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
@@ -188,6 +196,8 @@ else
 	$adminmain .= "<td class=\"coltop\">".$L['Sections']."</td>";
 	$adminmain .= "<td class=\"coltop\">".$L['Options']." ".$L['adm_clicktoedit']."</td>";
 	$adminmain .= "</tr>";
+
+	$ii = 0;
 
 	while ($row = sed_sql_fetcharray($sql))
 		{
@@ -210,7 +220,7 @@ else
 			{ $fn_tpl_sym = "+"; }
 
 		$adminmain .= "<tr><td style=\"text-align:center;\">";
-		$adminmain .= ($sectioncount[$fn_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&".sed_xg())."\">x</a>]";
+		$adminmain .= ($sectioncount[$fn_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&d=".$d."&".sed_xg())."\">x</a>]";
 		$adminmain .= "</td>";
 		$adminmain .= "<td>".$fn_code."</td>";
 		$adminmain .= "<td>$pathfieldimg<input type=\"text\" class=\"text\" name=\"s[$fn_id][rpath]\" value=\"".$fn_path."\" size=\"$pathfieldlen\" maxlength=\"24\" /></td>";
@@ -231,10 +241,13 @@ else
 		$adminmain .= "<a href=\"".sed_url('admin', "c=".$fn_code)."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=forums&s=structure&n=options&id=".$fn_id."&".sed_xg())."\">".$L['Options']."</a></td>";
 		$adminmain .= "</tr>";
+		$ii++;
 		}
 
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
-	$adminmain .= "</table></form>";
+	$adminmain .= "<tr><td colspan=\"9\">&nbsp;</td></tr>";
+	$adminmain .= "<tr><td colspan=\"9\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
+	$adminmain .= "</form>";
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url('admin', "m=forums&s=structure&a=add")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";

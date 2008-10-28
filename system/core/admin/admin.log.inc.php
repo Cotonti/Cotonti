@@ -34,7 +34,7 @@ $log_groups = array (
 	);
 
 $d = sed_import('d', 'G', 'INT');
-if(empty($d)) { $d = 0; }
+$d = empty($d) ? 0 : (int) $d;
 
 if ($a=='purge' && $usr['isadmin'])
 	{
@@ -46,7 +46,7 @@ $totaldblog = sed_sql_rowcount($db_logger);
 
 $n = (empty($n)) ? 'all' : $n;
 
-$group_select = "<form>".$L['Group']." : <select name=\"groups\" size=\"1\" onchange=\"redirect(this)\">";
+$group_select = "<form action=\"\">".$L['Group']." : <select name=\"groups\" size=\"1\" onchange=\"redirect(this)\">";
 
 foreach($log_groups as $grp_code => $grp_name)
 	{
@@ -56,25 +56,25 @@ foreach($log_groups as $grp_code => $grp_name)
 	}
 
 $group_select .= "</select></form><br /><br />";
-	
-$totallines = ($n == 'all') ? $totaldblog : sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
-$pagination = sed_pagination("admin.php?m=log&amp;n=".$n, $d, $totallines, 200); //trustmaster is to blame for what happens this line
-list($pagination_prev, $pagination_next) = sed_pagination_pn("admin.php?m=log&amp;n=".$n, $d, $totallines, 200, TRUE); // this line as well!
+
+$totalitems = ($n == 'all') ? $totaldblog : sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
+$pagnav = sed_pagination(sed_url('admin','m=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 if ($n=='all')
-	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
+	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 else
-	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
+	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $adminmain .= ($usr['isadmin']) ? $L['adm_purgeall']." (".$totaldblog.") : [<a href=\"".sed_url('admin', "m=log&a=purge&".sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
 $adminmain .= $group_select;
-$adminmain .= "<table class=\"paging\"><tr><td class=\"paging_left\">".$pagination_prev."</td>";
-$adminmain .= "<td class=\"paging_center\">".$pagination."</td>";
-$adminmain .= "<td class=\"paging_right\">".$pagination_next."</td></tr></table>";
+$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
 $adminmain .= "<table class=\"cells\"><tr><td class=\"coltop\">#</td><td class=\"coltop\">".$L['Date']." (GMT)</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Ip']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['User']."</td><td class=\"coltop\">".$L['Group']."</td>";
 $adminmain .= "<td class=\"coltop\">".$L['Log']."</td></tr>";
+
+$ii = 0;
 
 while ($row = sed_sql_fetcharray($sql))
 	{
@@ -86,7 +86,10 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "<td><a href=\"".sed_url('admin', "m=log&n=".$row['log_group'])."\">";
 	$adminmain .= $log_groups[$row['log_group']]."</a> &nbsp;</td>";
 	$adminmain .= "<td class=\"desc\">".htmlspecialchars($row['log_text'])."</td></tr>";
+
+	$ii++;
 	}
+$adminmain .= "<tr><td colspan=\"6\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr>";
 $adminmain .= "</table>";
 
 ?>

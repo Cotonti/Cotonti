@@ -24,22 +24,20 @@ $adminpath[] = array (sed_url('admin', 'm=referers'), $L['Referers']);
 $adminhelp = $L['adm_help_referers'];
 
 $d = sed_import('d', 'G', 'INT');
-if(empty($d)) { $d = 0; }
+$d = empty($d) ? 0 : (int) $d;
 
 if ($a=='prune' && $usr['isadmin'])
 	{ $sql = sed_sql_query("TRUNCATE $db_referers"); }
 elseif ($a=='prunelowhits' && $usr['isadmin'])
 	{ $sql = sed_sql_query("DELETE FROM $db_referers WHERE ref_count<6"); }
 
-$totallines = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_referers"), 0, 0);
-$pagination = sed_pagination(sed_url('admin', 'm=referers'), $d, $totallines, 200);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=referers'), $d, $totallines, 200, TRUE);
+$totalitems = sed_sql_rowcount($db_referers);
+$pagnav = sed_pagination(sed_url('admin','m=referers'), $d, $totalitems, $cfg['maxrowsperpage']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=referers'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
-$sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d,".$cfg['maxrowsperpage']);
+$sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 $adminmain .= ($usr['isadmin']) ? "<ul><li>".$L['adm_purgeall']." : [<a href=\"".sed_url('admin', "m=referers&a=prune&".sed_xg())."\">x</a>]</li><li>".$L['adm_ref_lowhits']." : [<a href=\"".sed_url('admin', "m=referers&a=prunelowhits&".sed_xg())."\">x</a>]</li></ul>" : '';
-$adminmain .= "<table class=\"paging\"><tr><td class=\"paging_left\">".$pagination_prev."</td>";
-$adminmain .= "<td class=\"paging_center\">".$pagination."</td>";
-$adminmain .= "<td class=\"paging_right\">".$pagination_next."</td></tr></table>";
+$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
 $adminmain .= "<table class=\"cells\"><tr><td class=\"coltop\">".$L['Referer']."</td><td class=\"coltop\">".$L['Hits']."</td></tr>";
 
 if (sed_sql_numrows($sql)>0)
@@ -49,6 +47,8 @@ if (sed_sql_numrows($sql)>0)
 		preg_match_all("|//([^/]+)/|", $row['ref_url'], $a);
 		$referers[$a[1][0]][$row['ref_url']] = $row['ref_count'];
 		}
+
+	$ii = 0;
 
 	foreach($referers as $referer => $url)
 		{
@@ -60,7 +60,9 @@ if (sed_sql_numrows($sql)>0)
 			$adminmain .= "<tr><td>&nbsp; &nbsp; <a href=\"".htmlspecialchars($uri)."\">".htmlspecialchars($uri1)."</a></td>";
 			$adminmain .= "<td style=\"text-align:right;\">".$count."</td></tr>";
 			}
+		$ii++;
 		}
+	$adminmain .= "<tr><td colspan=\"2\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr>";
 	}
 else
 	{ $adminmain .= "<tr><td colspan=\"2\">".$L['None']."</td></tr>"; }
