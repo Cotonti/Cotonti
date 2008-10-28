@@ -25,6 +25,9 @@ $adminhelp = $L['adm_queues_page'];
 
 $id = sed_import('id','G','INT');
 
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
+
 if ($a=='validate')
 	{
 	sed_check_xg();
@@ -36,7 +39,7 @@ if ($a=='validate')
 		sed_block($usr['isadmin_local']);
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 		sed_cache_clear('latestpages');
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=queue', '', true));
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=queue&d='.$d, '', true));
 		exit;
 		}
 	else
@@ -61,13 +64,20 @@ if ($a=='unvalidate')
 		{ sed_die(); }
 	}
 
+$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1"), 0, 0);
+$pagnav = sed_pagination(sed_url('admin','m=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+
 $sql = sed_sql_query("SELECT p.*, u.user_name
 	FROM $db_pages as p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-	WHERE page_state=1 ORDER by page_id DESC");
+	WHERE page_state=1 ORDER by page_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
+
+$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
+
+$ii = 0;
 
 $adminmain .= "<ul>";
-
 while ($row = sed_sql_fetcharray($sql))
 	{
 	$adminmain .= "<li><a href=\"".sed_url('page', "id=".$row['page_id'])."\">".sed_cc($row['page_title'])."</a><br />";
@@ -85,10 +95,12 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= $L['Extrafield']." #1 : ".sed_cc($row['page_extra1'])."<br />";
 	$adminmain .= $L['Extrafield']." #2 : ".sed_cc($row['page_extra2'])."<br />";
 	$adminmain .= $L['Extrafield']." #3 : ".sed_cc($row['page_extra3'])."<br />";
-	$adminmain .= "<a href=\"".sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&".sed_xg())."\">".$L['Validate']."</a>";
-	$adminmain .= " &nbsp; <a href=\"".sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")."\">".$L['Edit']."</a></li>";
+	$adminmain .= "<a href=\"".sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg())."\">".$L['Validate']."</a>";
+	$adminmain .= " &nbsp; <a href=\"".sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")."\">".$L['Edit']."</a><hr /></li>";
+	$ii++;
 	}
 $adminmain .= "</ul>";
+$adminmain .= "<div>".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</div>";
 $adminmain .= (sed_sql_numrows($sql)==0) ? "<p>".$L['None']."</p>" : '';
 
 ?>

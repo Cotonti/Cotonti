@@ -28,8 +28,8 @@ $adminhelp = $L['adm_help_polls'];
 
 $ntext = sed_import('ntext','P','HTM');
 
-$d = sed_import('d', 'G', 'INT');//Inserted Dayver for Ticket #93
-$d = empty($d) ? 0 : (int) $d;//Inserted Dayver for Ticket #93
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
 
 $adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=polls")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
@@ -65,7 +65,7 @@ if ($n=='options')
 	$adminmain .= $L['editdeleteentries']." :<br />&nbsp;<br />";
 	$adminmain .= "<a href=\"javascript:polls('".$row["poll_id"]."')\">".$L['Poll']." #".$row["poll_id"]."</a><br />";
 	$adminmain .= "<form id=\"pollchgtitle\" action=\"".sed_url('admin', "m=polls&n=options&a=updatetitle&id=".$id)."\" method=\"post\">";
-	$adminmain .= $L['Title']." : <input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($row["poll_text"])."\" size=\"56\" maxlength=\"255\">";
+	$adminmain .= $L['Title']." : <input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($row["poll_text"])."\" size=\"56\" maxlength=\"255\" />";
 	$adminmain .= " <input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\"></form><br />";
 	$adminmain .= $L['Date']." : ".date($cfg['dateformat'], $row["poll_creationdate"])." GMT<br />";
 	$adminmain .= "<table class=\"cells\">";
@@ -75,14 +75,14 @@ if ($n=='options')
 	{
 		$adminmain .= "<form id=\"savepollopt\" action=\"".sed_url('admin', "m=polls&n=options&a=update&id=".$row1['po_pollid']."&po=".$row1['po_id'])."\" method=\"post\">";
 		$adminmain .= "<tr><td>[<a href=\"".sed_url('admin', "m=polls&n=options&a=delete&id=".$row1['po_pollid']."&po=".$row1['po_id']."&".sed_xg())."\">x</a>]";
-		$adminmain .= "<td>".$row1['po_id']."</td><td> <input type=\"text\" class=\"text\" name=\"rtext\" value=\"".sed_cc($row1['po_text'])."\" size=\"32\" maxlength=\"128\"> </td>";
+		$adminmain .= "<td>".$row1['po_id']."</td><td> <input type=\"text\" class=\"text\" name=\"rtext\" value=\"".sed_cc($row1['po_text'])."\" size=\"32\" maxlength=\"128\" /> </td>";
 		$adminmain .= "<td><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\"></td></tr></form>";
 	}
 
 	$adminmain .= "</table><br />&nbsp;<br />".$L['addnewentry']." :<br />&nbsp;<br /><table class=\"cells\"><tr>";
 	$adminmain .= "<td>".$L['Option']."</td><td>&nbsp;</td><tr>";
 	$adminmain .= "<form id=\"addpollopt\" action=\"".sed_url('admin', "m=polls&n=options&a=add&id=".$row["poll_id"])."\" method=\"post\"><tr>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ntext\" value=\"\" size=\"32\" maxlength=\"128\"> </td>";
+	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"ntext\" value=\"\" size=\"32\" maxlength=\"128\" /> </td>";
 	$adminmain .= "<td><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\"></td></tr></form></table>";
 }
 else
@@ -128,18 +128,16 @@ else
 		$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text) valueS (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."')");
 	}
 
-	$totalitems = sed_sql_rowcount($db_polls);//Inserted Dayver for Ticket #93
-	$pagnav = sed_pagination(sed_url('admin','m=polls'), $d, $totalitems, $cfg['maxrowsperpage']); //Inserted Dayver for Ticket #93
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=polls'), $d, $totallines, $cfg['maxrowsperpage'], TRUE); //Inserted Dayver for Ticket #93
+	$totalitems = sed_sql_rowcount($db_polls);
+	$pagnav = sed_pagination(sed_url('admin','m=polls'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=polls'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 	$sql = sed_sql_query("SELECT p.*, t.ft_id FROM $db_polls AS p
 	LEFT JOIN $db_forum_topics AS t ON t.ft_poll = p.poll_id
-	WHERE 1 ORDER BY p.poll_type ASC, p.poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']); //Edited Dayver for Ticket #93
+	WHERE 1 ORDER BY p.poll_type ASC, p.poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-
-	$adminmain .= "<div class=\"pagnav\">".$pagnav."</div>";//Inserted Dayver for Ticket #93
-
+	$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
 	$adminmain .= "<table class=\"cells\">";
 
 	$ii = 0;
@@ -190,19 +188,19 @@ else
 		$adminmain .= "<td style=\"text-align:center;\">";
 
 		if ($type==0)
-		{ $adminmain .= "<a href=\"".sed_url('polls', "id=".$row['poll_id'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a>"; }
+		{ $adminmain .= "<a href=\"".sed_url('polls', "id=".$row['poll_id'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>"; }
 		else
-		{ $adminmain .= "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a>"; }
+		{ $adminmain .= "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>"; }
 
 		$adminmain .= "</td></tr>";
 		$ii++;
 	}
-	$adminmain .= "<tr><td colspan=\"8\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";//Edited Dayver for Ticket #93
+	$adminmain .= "<tr><td colspan=\"8\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 	$adminmain .= "<form id=\"addpoll\" action=\"".sed_url('admin', "m=polls&a=add")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
-	$adminmain .= "<tr><td>".$L['adm_polls_polltopic']."</td><td><input type=\"text\" class=\"text\" name=\"ntext\" value=\"\" size=\"64\" maxlength=\"255\"></tr>";
-	$adminmain .= "<td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\"> </td></tr></table></form>";
+	$adminmain .= "<tr><td>".$L['adm_polls_polltopic']."</td><td><input type=\"text\" class=\"text\" name=\"ntext\" value=\"\" size=\"64\" maxlength=\"255\" /></td></tr>";
+	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\" /></td></tr></table></form>";
 }
 
 ?>

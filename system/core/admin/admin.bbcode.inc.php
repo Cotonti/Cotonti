@@ -90,12 +90,11 @@ HTM;
 }
 
 $totalitems = sed_sql_rowcount($db_bbcode);
-$pagnav = sed_pagination('admin.php?m=bbcode', $d, $totalitems, $cfg['maxrowsperpage']); //this will be changed
+$pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 $adminmain .= <<<HTM
-<div class="pagnav">
-$pagnav
-</div>
+<div class="pagnav">$pagination_prev $pagnav $pagination_next</div>
 <table class="cells">
 <tr>
 	<td class="coltop">{$L['Name']}<br />{$L['adm_bbcodes_mode']} / {$L['Enabled']}</td>
@@ -108,6 +107,9 @@ HTM;
 
 $bbc_modes = array('str', 'ereg', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
+
+$ii = 0;
+
 while($row = sed_sql_fetchassoc($res))
 {
 	$mode = '';
@@ -150,6 +152,8 @@ while($row = sed_sql_fetchassoc($res))
 </tr>
 </form>
 HTM;
+
+$ii++;
 }
 sed_sql_freeresult($res);
 $mode = '';
@@ -168,9 +172,13 @@ $form_action = sed_url('admin', 'm=bbcode&a=add');
 $form_clear_cache = sed_url('admin', 'm=bbcode&a=clearcache');
 $adminmain .= <<<HTM
 <tr>
-<td colspan="5">
-<strong>{$L['adm_bbcodes_new']}</strong>
-</td>
+<td colspan="5">{$L['Total']} : $totalitems, {$L['adm_polls_on_page']}: $ii</td>
+</tr>
+<tr>
+<td colspan="5"><br /></td>
+</tr>
+<tr>
+<td colspan="5"><strong>{$L['adm_bbcodes_new']}</strong></td>
 </tr>
 <form action="{$form_action}" method="post">
 <tr>

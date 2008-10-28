@@ -26,6 +26,9 @@ $adminpath[] = array (sed_url('admin', 'm=page'), $L['Pages']);
 $adminpath[] = array (sed_url('admin', 'm=page&s=structure'), $L['Structure']);
 $adminhelp = $L['adm_help_structure'];
 
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
+
 if ($n=='options')
 {
 	if ($a=='update')
@@ -38,22 +41,22 @@ if ($n=='options')
 		$ricon = sed_import('ricon','P','TXT');
 		$rgroup = sed_import('rgroup','P','BOL');
 		$rgroup = ($rgroup) ? 1 : 0;
-		
+
 		$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
 		$roww = sed_sql_fetcharray($sqql);
-		
+
 		if ($roww['structure_code'] != $rcode)
 		{
-		
+
 			$sql = sed_sql_query("UPDATE $db_structure SET structure_code='".sed_sql_prep($rcode)."' WHERE structure_code='".sed_sql_prep($roww['structure_code'])."' ");
 			$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='".sed_sql_prep($roww['structure_code'])."' ");
 			$sql = sed_sql_query("UPDATE $db_auth SET auth_option='".sed_sql_prep($rcode)."' WHERE auth_code='page' AND auth_option='".sed_sql_prep($roww['structure_code'])."' ");
 			$sql = sed_sql_query("UPDATE $db_pages SET page_cat='".sed_sql_prep($rcode)."' WHERE page_cat='".sed_sql_prep($roww['structure_code'])."' ");
-			
+
 			sed_auth_reorder();
 			sed_auth_clear('all');
 			sed_cache_clear('sed_cat');
-			
+
 		}
 
 		if ($rtplmode==1)
@@ -166,24 +169,24 @@ else
 		foreach($s as $i => $k)
 		{
 			$s[$i]['rgroup'] = (isset($s[$i]['rgroup'])) ? 1 : 0;
-			
+
 			$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
 			$roww = sed_sql_fetcharray($sqql);
-			
+
 			if ($roww['structure_code'] != $s[$i]['rcode'])
 			{
-			
+
 				$sql = sed_sql_query("UPDATE $db_structure SET structure_code='".sed_sql_prep($s[$i]['rcode'])."' WHERE structure_code='".sed_sql_prep($roww['structure_code'])."' ");
 				$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='".sed_sql_prep($roww['structure_code'])."' ");
 				$sql = sed_sql_query("UPDATE $db_auth SET auth_option='".sed_sql_prep($s[$i]['rcode'])."' WHERE auth_code='page' AND auth_option='".sed_sql_prep($roww['structure_code'])."' ");
 				$sql = sed_sql_query("UPDATE $db_pages SET page_cat='".sed_sql_prep($s[$i]['rcode'])."' WHERE page_cat='".sed_sql_prep($roww['structure_code'])."' ");
-				
+
 				sed_auth_reorder();
 				sed_auth_clear('all');
 				sed_cache_clear('sed_cat');
-				
+
 			}
-		
+
 			$sql1 = sed_sql_query("UPDATE $db_structure SET
 			structure_path='".sed_sql_prep($s[$i]['rpath'])."',
 				structure_title='".sed_sql_prep($s[$i]['rtitle'])."',
@@ -192,7 +195,7 @@ else
 		}
 		sed_auth_clear('all');
 		sed_cache_clear('sed_cat');
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=structure', '', true));
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=structure&d='.$d, '', true));
 		exit;
 	}
 	elseif ($a=='add')
@@ -208,7 +211,7 @@ else
 	{
 		sed_check_xg();
 		sed_structure_delcat($id, $c);
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=structure', '', true));
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=structure&d='.$d, '', true));
 		exit;
 	}
 
@@ -217,10 +220,15 @@ else
 	while ($row = sed_sql_fetcharray($sql))
 	{ $pagecount[$row['page_cat']] = $row['COUNT(*)']; }
 
-	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC");
+	$totalitems = sed_sql_rowcount($db_structure);
+	$pagnav = sed_pagination(sed_url('admin','m=page&s=structure'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+
+	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC LIMIT $d,".$cfg['maxrowsperpage']);
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=page&s=structure&a=update")."\" method=\"post\">";
+	$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
+	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=page&s=structure&a=update&d=".$d)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td class=\"coltop\">".$L['Delete']."</td>";
 	$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
@@ -232,6 +240,8 @@ else
 	$adminmain .= "<td class=\"coltop\">".$L['Rights']."</td>";
 	$adminmain .= "<td class=\"coltop\">".$L['Options']." ".$L['adm_clicktoedit']."</td>";
 	$adminmain .= "</tr>";
+
+	$ii = 0;
 
 	while ($row = sed_sql_fetcharray($sql))
 	{
@@ -255,7 +265,7 @@ else
 		{ $structure_tpl_sym = "+"; }
 
 		$adminmain .= "<tr><td style=\"text-align:center;\">";
-		$adminmain .= ($pagecount[$structure_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=page&s=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&".sed_xg())."\">x</a>]";
+		$adminmain .= ($pagecount[$structure_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=page&s=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&d=".$d."&".sed_xg())."\">x</a>]";
 		$adminmain .= "</td>";
 		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$structure_id][rcode]\" value=\"".$structure_code."\" size=\"8\" maxlength=\"255\" /></td>";
 		$adminmain .= "<td>$pathfieldimg<input type=\"text\" class=\"text\" name=\"s[$structure_id][rpath]\" value=\"".$structure_path."\" size=\"$pathfieldlen\" maxlength=\"24\" /></td>";
@@ -270,10 +280,13 @@ else
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=page&io=".$structure_code)."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=page&s=structure&n=options&id=".$structure_id."&".sed_xg())."\">".$L['Options']."</a></td>";
 		$adminmain .= "</tr>";
+		$ii++;
 	}
 
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
-	$adminmain .= "</table></form>";
+	$adminmain  .= "<tr><td colspan=\"9\">&nbsp;</td></tr>";
+	$adminmain .= "<tr><td colspan=\"9\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
+	$adminmain .= "</form>";
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 	$adminmain .= "<form id=\"addstructure\" action=\"".sed_url('admin', "m=page&s=structure&a=add")."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
