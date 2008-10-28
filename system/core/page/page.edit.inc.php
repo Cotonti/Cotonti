@@ -23,6 +23,7 @@ $id = sed_import('id','G','INT');
 $c = sed_import('c','G','TXT');
 
 // Extra fields - getting
+$extrafields = array();
 $fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
 while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
@@ -86,6 +87,7 @@ if ($a=='update')
 	$error_string .= (mb_strlen($rpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
 	
 	// Extra fields
+	if(count($extrafields)>0)
 	foreach($extrafields as $row) 
 	{
 		$import = sed_import('rpage_my_'.$row['field_name'],'P','HTM');
@@ -150,7 +152,7 @@ if ($a=='update')
 				page_extra3 = '".sed_sql_prep($rpageextra3)."',
 				page_extra4 = '".sed_sql_prep($rpageextra4)."',
 				page_extra5 = '".sed_sql_prep($rpageextra5)."',";
-				foreach($extrafields as $i=>$row) $ssql .= "page_my_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',"; // Extra fields
+				if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "page_my_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',"; // Extra fields
 		$ssql.="page_title = '".sed_sql_prep($rpagetitle)."',
 				page_desc = '".sed_sql_prep($rpagedesc)."',
 				page_text='".sed_sql_prep($rpagetext)."',
@@ -301,6 +303,7 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
 );
 // Extra fields
+if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
 	$t1 = "PAGEEDIT_FORM_MY_".strtoupper($row['field_name']);

@@ -203,8 +203,10 @@ $t->assign(array(
 ));
 
 // Extra fields
+$extrafields = array();
 $fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
 while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+if(count($extrafields)>0)
 foreach($extrafields as $extrafield)
 {
 	$t->assign('PAGE_MY_'.strtoupper($extrafield['field_name']), $pag['page_my_'.$extrafield['field_name']]);
