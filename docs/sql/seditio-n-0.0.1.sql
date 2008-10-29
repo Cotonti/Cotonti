@@ -110,8 +110,6 @@ CREATE TABLE sed_forum_sections (
   fs_postcount_pruned int(11) default '0',
   fs_viewcount mediumint(8) NOT NULL default '0',
   fs_masterid smallint(5) unsigned NOT NULL default '0',
-  fs_mastername varchar(128) NOT NULL default '',
-  fs_allowviewers tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (fs_id),
   KEY fs_order (fs_order)
 ) TYPE=MyISAM;
@@ -428,7 +426,6 @@ CREATE TABLE sed_users (
   user_pmnotify tinyint(1) unsigned NOT NULL default '0',
   user_newpm tinyint(1) unsigned NOT NULL default '0',
   user_skin varchar(16) NOT NULL default '',
-  user_theme varchar(16) NOT NULL default '',
   user_lang varchar(16) NOT NULL default '',
   user_regdate int(11) NOT NULL default '0',
   user_lastlog int(11) NOT NULL default '0',
@@ -466,7 +463,7 @@ CREATE TABLE sed_bbcode (
 );
 
 /* Basic bbcode package */
-INSERT INTO `sed_bbcode` VALUES (1,'b','str','[b]','<strong>',1,1,128,'',0),(2,'b','str','[/b]','</strong>',0,1,128,'',0),(3,'i','str','[i]','<em>',1,1,128,'',0),(4,'i','str','[/i]','</em>',1,1,128,'',0),(5,'u','str','[u]','<span style=\"text-decoration:underline\">',1,1,128,'',0),(6,'u','str','[/u]','</span>',1,1,128,'',0),(7,'s','str','[s]','<span style=\"text-decoration:line-through\">',1,1,128,'',0),(8,'s','str','[/s]','</span>',1,1,128,'',0),(9,'center','str','[center]','<div style=\"text-align:center\">',1,1,128,'',0),(10,'center','str','[/center]','</div>',1,1,128,'',0),(11,'left','str','[left]','<div style=\"text-align:left\">',1,1,128,'',0),(12,'left','str','[/left]','</div>',1,1,128,'',0),(13,'right','str','[right]','<div style=\"text-align:right\">',1,1,128,'',0),(14,'right','str','[/right]','</div>',1,1,128,'',0),(15,'justify','str','[justify]','<div style=\"text-align:justify\">',1,1,128,'',0),(16,'justify','str','[/justify]','</div>',1,1,128,'',0),(17,'pre','str','[pre]','<pre>',1,1,128,'',0),(18,'pre','str','[/pre]','</pre>',0,1,128,'',0),(19,'nbsp','str','[_]','&nbsp;',0,1,128,'',0),(31,'email','callback','\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]','return sed_obfuscate(\'<a href=\"mailto:\'.$input[1].\'\">\'.$input[2].\'</a>\');',1,1,128,'',0),(26,'quote','pcre','\\[quote=(.+?)\\](.+?)\\[/quote\\]','<blockquote><strong>$1:</strong><hr />$2</blockquote>',1,1,128,'',0),(24,'quote','pcre','\\[quote\\](.+?)\\[/quote\\]','<blockquote>$1</blockquote>',1,1,128,'',0),(23,'color','pcre','\\[color=(#?\\w+)\\](.+?)\\[/color\\]','<span style=\"color:$1\">$2</span>',1,1,128,'',0),(27,'img','pcre','\\[img\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<img src=\"$1\" alt=\"\" />',1,1,128,'',0),(28,'img','pcre','\\[img=((?:http://|https://|ftp://)?[^\\]\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<a href=\"$1\"><img src=\"$2\" alt=\"\" /></a>',1,1,128,'',0),(29,'url','pcre','\\[url=((?:http://|https://|ftp://)?[^\\s\"\\\':\\[]+)\\](.+?)\\[/url\\]','<a href=\"$1\">$2</a>',1,1,128,'',0),(30,'url','pcre','\\[url\\]((?:http://|https://|ftp://)?[^\\s\"\\\':]+)\\[/url\\]','<a href=\"$1\">$1</a>',1,1,128,'',0),(32,'code','callback','\\[code\\](.+?)\\[/code\\]','return \'<pre class=\"code\">\'.sed_bbcode_cdata($input[1]).\'</pre>\';',1,1,1,'',0),(33,'more','str','[more]','<!--more-->',1,1,128,'',0),(34,'more','str','[/more]','&nbsp;',1,1,128,'',0);
+INSERT INTO `sed_bbcode` VALUES (1,'b','str','[b]','<strong>',1,1,128,'',0),(2,'b','str','[/b]','</strong>',0,1,128,'',0),(3,'i','str','[i]','<em>',1,1,128,'',0),(4,'i','str','[/i]','</em>',1,1,128,'',0),(5,'u','str','[u]','<span style=\"text-decoration:underline\">',1,1,128,'',0),(6,'u','str','[/u]','</span>',1,1,128,'',0),(7,'s','str','[s]','<span style=\"text-decoration:line-through\">',1,1,128,'',0),(8,'s','str','[/s]','</span>',1,1,128,'',0),(9,'center','str','[center]','<div style=\"text-align:center\">',1,1,128,'',0),(10,'center','str','[/center]','</div>',1,1,128,'',0),(11,'left','str','[left]','<div style=\"text-align:left\">',1,1,128,'',0),(12,'left','str','[/left]','</div>',1,1,128,'',0),(13,'right','str','[right]','<div style=\"text-align:right\">',1,1,128,'',0),(14,'right','str','[/right]','</div>',1,1,128,'',0),(15,'justify','str','[justify]','<div style=\"text-align:justify\">',1,1,128,'',0),(16,'justify','str','[/justify]','</div>',1,1,128,'',0),(17,'pre','str','[pre]','<pre>',1,1,128,'',0),(18,'pre','str','[/pre]','</pre>',0,1,128,'',0),(19,'nbsp','str','[_]','&nbsp;',0,1,128,'',0),(31,'email','callback','\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]','return sed_obfuscate(\'<a href=\"mailto:\'.$input[1].\'\">\'.$input[2].\'</a>\');',1,1,128,'',0),(26,'quote','pcre','\\[quote=(.+?)\\](.+?)\\[/quote\\]','<blockquote><strong>$1:</strong><hr />$2</blockquote>',1,1,128,'',0),(24,'quote','pcre','\\[quote\\](.+?)\\[/quote\\]','<blockquote>$1</blockquote>',1,1,128,'',0),(23,'color','pcre','\\[color=(#?\\w+)\\](.+?)\\[/color\\]','<span style=\"color:$1\">$2</span>',1,1,128,'',0),(27,'img','pcre','\\[img\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<img src=\"$1\" alt=\"\" />',1,1,128,'',0),(28,'img','pcre','\\[img=((?:http://|https://|ftp://)?[^\\]\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<a href=\"$1\"><img src=\"$2\" alt=\"\" /></a>',1,1,128,'',0),(29,'url','pcre','\\[url=((?:http://|https://|ftp://)?[^\\s\"\\\':\\[]+)\\](.+?)\\[/url\\]','<a href=\"$1\">$2</a>',1,1,128,'',0),(30,'url','pcre','\\[url\\]((?:http://|https://|ftp://)?[^\\s\"\\\':]+)\\[/url\\]','<a href=\"$1\">$1</a>',1,1,128,'',0),(32,'code','callback','\\[code\\](.+?)\\[/code\\]','return \'<pre class=\"code\">\'.sed_bbcode_cdata($input[1]).\'</pre>\';',1,1,1,'',0);
 
 
 # --------------- Standard structure
@@ -476,8 +473,8 @@ INSERT INTO sed_structure VALUES (2, 'links', '2', '', 'Links', '', '',  0 ,'tit
 INSERT INTO sed_structure VALUES (3, 'events', '3', '', 'Events', '', '',  0 ,'date.asc');
 INSERT INTO sed_structure VALUES (4, 'news', '4', '', 'News', '', '', 0 ,'date.desc');
 
-INSERT INTO sed_forum_sections VALUES ('1', '0', '100', 'General discussion', 'pub', 'General chat.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, '', 1);
-INSERT INTO sed_forum_sections VALUES ('2', '0', '101', 'Off-topic', 'pub', 'Various and off-topic.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '', 1);
+INSERT INTO sed_forum_sections VALUES ('1', '0', '100', 'General discussion', 'pub', 'General chat.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0);
+INSERT INTO sed_forum_sections VALUES ('2', '0', '101', 'Off-topic', 'pub', 'Various and off-topic.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0);
 INSERT INTO sed_forum_structure VALUES ('1', '1', 'pub', '', 'Public', '', '', 1);
 
 INSERT INTO sed_smilies VALUES (1, ':D', 'system/smilies/icon_biggrin.gif', 'Mister grin', 5);
@@ -600,6 +597,7 @@ INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, con
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '10', 'hideprivateforums', 3, '0');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '10', 'hottopictrigger', 2, '20');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '10', 'maxtopicsperpage', 2, '30');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'forums', '12', 'antibumpforums', 3, '0');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'page', '01', 'disable_page', 3, '0');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'page', '02', 'allowphp_pages', 3, '0');
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'page', '03', 'count_admin', 3, '0');
@@ -822,18 +820,15 @@ INSERT INTO sed_auth VALUES (138, 6, 'plug', 'whosonline', 1, 254, 1);
 
 # ---------- Default plugins :
 
-INSERT INTO sed_plugins VALUES (NULL, 'admin.home', 'adminqv', 'main', 'Admin QuickView', 'adminqv', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'admin.home', 'cleaner', 'main', 'Cleaner', 'cleaner', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'standalone', 'forumstats', 'main', 'Forum statistics', 'forumstats', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'tools', 'massmovetopics', 'admin', 'Mass-move topics in forums', 'massmovetopics.admin', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'standalone', 'passrecover', 'main', 'Password recovery', 'passrecover', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'standalone', 'search', 'main', 'Search', 'search', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'standalone', 'statistics', 'main', 'Statistics', 'statistics', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'header.main', 'markitup', 'header', 'MarkItUp!', 'markitup.header', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'standalone', 'whosonline', 'main', 'Who''s online', 'whosonline', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'header.main', 'search', 'header', 'Search', 'search.header', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'page.first', 'search', 'page', 'Search', 'search.page.first', 10, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1);
+INSERT INTO sed_plugins VALUES (1, 'admin.home', 'adminqv', 'main', 'Admin QuickView', 'adminqv', 10, 1);
+INSERT INTO sed_plugins VALUES (2, 'admin.home', 'cleaner', 'main', 'Cleaner', 'cleaner', 10, 1);
+INSERT INTO sed_plugins VALUES (3, 'standalone', 'forumstats', 'main', 'Forum statistics', 'forumstats', 10, 1);
+INSERT INTO sed_plugins VALUES (4, 'tools', 'massmovetopics', 'admin', 'Mass-move topics in forums', 'massmovetopics.admin', 10, 1);
+INSERT INTO sed_plugins VALUES (5, 'standalone', 'passrecover', 'main', 'Password recovery', 'passrecover', 10, 1);
+INSERT INTO sed_plugins VALUES (6, 'standalone', 'search', 'main', 'Search', 'search', 10, 1);
+INSERT INTO sed_plugins VALUES (7, 'standalone', 'statistics', 'main', 'Statistics', 'statistics', 10, 1);
+INSERT INTO sed_plugins VALUES (8, 'header.main', 'markitup', 'header', 'MarkItUp!', 'markitup.header', 10, 1);
+INSERT INTO sed_plugins VALUES (17, 'standalone', 'whosonline', 'main', 'Who''s online', 'whosonline', 10, 1);
 
 INSERT INTO sed_config VALUES ('plug', 'markitup', '01', 'autorefresh', 3, '0', '', 'Enable preview auto-refresh');
 INSERT INTO sed_config VALUES ('plug', 'markitup', '10', 'chili', 3, '0', '', 'Enable Chili tags');
@@ -846,7 +841,7 @@ INSERT INTO sed_auth VALUES (141, 3, 'plug', 'news', 0, 255, 1);
 INSERT INTO sed_auth VALUES (142, 4, 'plug', 'news', 1, 254, 1);
 INSERT INTO sed_auth VALUES (143, 5, 'plug', 'news', 255, 255, 1);
 INSERT INTO sed_auth VALUES (144, 6, 'plug', 'news', 1, 254, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'index.tags', 'news', 'homepage', 'News', 'news', 10, 1);
+INSERT INTO sed_plugins VALUES (18, 'index.tags', 'news', 'homepage', 'News', 'news', 10, 1);
 INSERT INTO sed_config VALUES ('plug', 'news', '01', 'category', 1, 'news', '', 'Category code of the parent category');
 INSERT INTO sed_config VALUES ('plug', 'news', '02', 'maxpages', 2, '10', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100', 'Recent pages displayed');
 
@@ -858,7 +853,7 @@ INSERT INTO sed_auth VALUES (147, 3, 'plug', 'recentitems', 0, 255, 1);
 INSERT INTO sed_auth VALUES (148, 4, 'plug', 'recentitems', 1, 254, 1);
 INSERT INTO sed_auth VALUES (149, 5, 'plug', 'recentitems', 255, 255, 1);
 INSERT INTO sed_auth VALUES (150, 6, 'plug', 'recentitems', 1, 254, 1);
-INSERT INTO sed_plugins VALUES (NULL, 'index.tags', 'recentitems', 'main', 'Recent items', 'recentitems', 10, 1);
+INSERT INTO sed_plugins VALUES (19, 'index.tags', 'recentitems', 'main', 'Recent items', 'recentitems', 10, 1);
 INSERT INTO sed_config VALUES ('plug', 'recentitems', 01, 'maxpages', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed');
 INSERT INTO sed_config VALUES ('plug', 'recentitems', 03, 'maxpolls', 2, '1', '0,1,2,3,4,5', 'Recent polls displayed');
 INSERT INTO sed_config VALUES ('plug', 'recentitems', 04, 'maxtopics', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed');
