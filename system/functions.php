@@ -5625,6 +5625,9 @@ class CachingXTemplate extends XTemplate {
 function sed_extrafield_add($name, $type, $html, $variants="")
 {
 	global $db_pages_extra_fields, $db_pages;
+	$fieldsres = sed_sql_query("SELECT field_name FROM $db_pages_extra_fields");
+	while($row = sed_sql_fetchassoc($fieldsres)) $extrafieldsnames[] = $row['field_name'];
+	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
 	$extf['name'] = $name;
 	$extf['type'] = $type;
 	$extf['html'] = $html;
