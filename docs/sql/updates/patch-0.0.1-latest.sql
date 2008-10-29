@@ -1,3 +1,20 @@
+/* r91 */
+INSERT INTO `sed_bbcode` VALUES (33,'more','str','[more]','<!--more-->',1,1,128,'',0),(34,'more','str','[/more]','&nbsp;',1,1,128,'',0);
+INSERT INTO `sed_plugins` VALUES (21, 'header.main', 'search', 'header', 'Search', 'search.header', 10, 1); 
+INSERT INTO `sed_plugins` VALUES (22, 'page.first', 'search', 'page', 'Search', 'search.page.first', 10, 1); 
+INSERT INTO `sed_plugins` VALUES (23, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1); 
+
+/* r103 */
+DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'forums' AND `config_name` = 'antibumpforum' LIMIT 1;
+
+/* r104 */
+ALTER TABLE `sed_forum_sections` ADD COLUMN `fs_mastername` varchar(128) NOT NULL;
+
+/* r111 */
+ALTER TABLE `sed_forum_sections` ADD COLUMN `fs_allowviewers` tinyint(1) NOT NULL default '1';
+ALTER TABLE `sed_forum_posts` ADD COLUMN `fp_html` text NOT NULL;
+ALTER TABLE `sed_users` ADD COLUMN `user_theme` VARCHAR(16) NOT NULL DEFAULT '';
+
 /* r112 Title Mask Enhancments */
 UPDATE `sed_config` SET `config_cat` = 'title' WHERE `config_cat` = 'main' AND `config_name` IN ('maintitle', 'subtitle') LIMIT 2;
 UPDATE `sed_config` SET `config_order` = '01' WHERE `config_cat` = 'main' AND `config_name` = 'mainurl' LIMIT 1;
