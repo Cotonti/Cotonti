@@ -558,6 +558,7 @@ $L['pagadd_title'] = 'New page submission form';
 $L['pagadd_subtitle'] = 'Submit a new page';
 $L['paged_title'] = 'Page properties';
 $L['paged_subtitle'] = 'Update values for this page';
+$L['comm_on_page'] = 'on page'; // N-0.0.2
 
 /* ====== Personal file space ====== */
 

@@ -24,6 +24,8 @@ $w = sed_import('w','G','ALP',4);
 $o = sed_import('o','G','ALP',16);
 $p = sed_import('p','G','ALP',16);
 
+$dc = sed_import('dc','G','INT');
+
 if ($c=='all' || $c=='system')
 {
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
@@ -50,6 +52,7 @@ if (empty($s))
 if (empty($s)) { $s = 'title'; }
 if (empty($w)) { $w = 'asc'; }
 if (empty($d)) { $d = '0'; }
+if (empty($dc)) { (int)$dc = 0; }
 $cfg['maxrowsperpage'] = ($c=='all' || $c=='system') ? $cfg['maxrowsperpage']*2 : $cfg['maxrowsperpage'];
 
 
@@ -189,32 +192,51 @@ if (!$sed_cat[$c]['group'])
 
 $ii=0;
 $jj=1;
+$mm=0;
+$kk=0;
 $mtch = $sed_cat[$c]['path'].".";
 $mtchlen = mb_strlen($mtch);
 $mtchlvl = mb_substr_count($mtch,".");
 
-while (list($i,$x) = each($sed_cat) )
+while (list($i,$x) = each($sed_cat))
 {
-	if (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
-	{
-		$sql4 = sed_sql_query("SELECT COUNT(*) FROM $db_pages p, $db_structure s
-		WHERE p.page_cat=s.structure_code
-		AND s.structure_path LIKE '".$sed_cat[$i]['rpath']."%'
-				AND page_state=0 ");
-		$sub_count = sed_sql_result($sql4,0,"COUNT(*)");
+	if(mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $mm<$dc)
+		{			$mm++;
+			$ii++;
+		}
+	elseif (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $kk<$cfg['maxrowsperpage'])
+		{
+			$sql4 = sed_sql_query("SELECT COUNT(*) FROM $db_pages p, $db_structure s
+			WHERE p.page_cat=s.structure_code
+			AND s.structure_path LIKE '".$sed_cat[$i]['rpath']."%'
+			AND page_state=0 ");
+			$sub_count = sed_sql_result($sql4,0,"COUNT(*)");
 
-		$t-> assign(array(
-				"LIST_ROWCAT_URL" => "list.php?c=".$i,
-				"LIST_ROWCAT_TITLE" => $x['title'],
-				"LIST_ROWCAT_DESC" => $x['desc'],
-				"LIST_ROWCAT_ICON" => $x['icon'],
-				"LIST_ROWCAT_COUNT" => $sub_count,
-				"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($ii)
-		));
-		$t->parse("MAIN.LIST_ROWCAT");
-		$ii++;
-	}
+			$t-> assign(array(
+					"LIST_ROWCAT_URL" => "list.php?c=".$i,
+					"LIST_ROWCAT_TITLE" => $x['title'],
+					"LIST_ROWCAT_DESC" => $x['desc'],
+					"LIST_ROWCAT_ICON" => $x['icon'],
+					"LIST_ROWCAT_COUNT" => $sub_count,
+					"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($kk)
+			));
+			$t->parse("MAIN.LIST_ROWCAT");
+			$kk++;
+		}
+	elseif (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
+		{			$ii++;
+		}
 }
+
+$totalitems = $ii + $kk;
+$pagnav = sed_pagination(sed_url('list','c='.$c), $dc, $totalitems, $cfg['maxrowsperpage'], $characters="dc");
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('list', 'c='.$c), $dc, $totalitems, $cfg['maxrowsperpage'], TRUE, $characters="dc");
+
+$t->assign(array(
+		"LISTCAT_PAGEPREV" => $pagination_prev,
+		"LISTCAT_PAGENEXT" => $pagination_next,
+		"LISTCAT_PAGNAV" => $pagnav)
+);
 
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('list.loop');

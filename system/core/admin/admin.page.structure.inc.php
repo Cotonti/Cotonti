@@ -33,7 +33,7 @@ if ($n=='options')
 {
 	if ($a=='update')
 	{
-		$rcode = sed_import('rpath','P','TXT');
+		$rcode = sed_import('rcode','P','TXT');
 		$rpath = sed_import('rpath','P','TXT');
 		$rtitle = sed_import('rtitle','P','TXT');
 		$rtplmode = sed_import('rtplmode','P','INT');
