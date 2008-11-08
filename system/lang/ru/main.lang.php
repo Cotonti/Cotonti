@@ -558,6 +558,7 @@ $L['pagadd_subtitle'] = 'Добавить новую страницу';
 $L['paged_title'] = 'Свойства страницы';
 $L['paged_subtitle'] = 'Отредактировать страницу';
 $L['pfs_resizeimages'] = 'масштабировать изображение?'; // N-0.0.2
+$L['comm_on_page'] = 'на странице'; // N-0.0.2
 
 /* ====== Personal file space ====== */
 

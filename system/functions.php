@@ -716,6 +716,9 @@ function sed_build_comments($code, $url, $display)
 		$ina = sed_import('ina','G','ALP');
 		$ind = sed_import('ind','G','INT');
 
+		$d = sed_import('d', 'G', 'INT');
+		$d = empty($d) ? 0 : (int) $d;
+
 		if ($ina=='send' && $usr['auth_write_com'])
 		{
 			sed_shield_protect();
@@ -789,7 +792,7 @@ function sed_build_comments($code, $url, $display)
 
 		$sql = sed_sql_query("SELECT c.*, u.user_avatar FROM $db_com AS c
 		LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
-		WHERE com_code='$code' ORDER BY com_id ASC");
+		WHERE com_code='$code' ORDER BY com_id ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 		if (!empty($error_string))
 		{
@@ -832,7 +835,7 @@ function sed_build_comments($code, $url, $display)
 
 		if (sed_sql_numrows($sql)>0)
 		{
-			$i = 0;
+			$i = $d;
 
 			/* === Hook - Part1 : Set === */
 			$extp = sed_getextplugins('comments.loop');
@@ -866,6 +869,18 @@ function sed_build_comments($code, $url, $display)
 
 				$t->parse("COMMENTS.COMMENTS_ROW");
 			}
+
+			$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'"), 0, 0);
+			$pagnav = sed_pagination($url."&amp;comments=1", $d, $totalitems, $cfg['maxrowsperpage']);
+			list($pagination_prev, $pagination_next) = sed_pagination_pn($url."&amp;comments=1", $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+			$t->assign(array(
+				"COMMENTS_PAGES_INFO" => $L['Total']." : ".$totalitems.", ".$L['comm_on_page'].": ".($i-$d),
+				"COMMENTS_PAGES_PAGESPREV" => $pagination_prev,
+				"COMMENTS_PAGES_PAGNAV" => $pagnav,
+				"COMMENTS_PAGES_PAGESNEXT" => $pagination_next
+			));
+			$t->parse("COMMENTS.PAGNAVIGATOR");
+
 		}
 		else
 		{
@@ -2524,7 +2539,7 @@ function sed_outputfilters($output)
  * @param int $perpage Rows per page
  * @return string
  */
-function sed_pagination($url, $current, $entries, $perpage)
+function sed_pagination($url, $current, $entries, $perpage, $characters='d')
 {
 	global $cfg;
 
@@ -2538,9 +2553,9 @@ function sed_pagination($url, $current, $entries, $perpage)
 	{
 		$j = $i * $perpage;
 		if ($i==$currentpage)
-		{ $res .= sprintf($cfg['pagination_cur'], "<a href=\"".$url."&amp;d=".$j."\">".($i+1)."</a>"); }
+		{ $res .= sprintf($cfg['pagination_cur'], "<a href=\"".$url."&amp;".$characters."=".$j."\">".($i+1)."</a>"); }
 		elseif (is_int(($i+1)/10) || $i<4 || ($totalpages-$i)<4 || abs($i-$currentpage)<4)
-		{ $res .= sprintf($cfg['pagination'], "<a href=\"".$url."&amp;d=".$j."\">".($i+1)."</a>"); }
+		{ $res .= sprintf($cfg['pagination'], "<a href=\"".$url."&amp;".$characters."=".$j."\">".($i+1)."</a>"); }
 	}
 	return ($res);
 }
@@ -2555,7 +2570,7 @@ function sed_pagination($url, $current, $entries, $perpage)
  * @param bool $res_array Return results as array
  * @return mixed
  */
-function sed_pagination_pn($url, $current, $entries, $perpage, $res_array=FALSE)
+function sed_pagination_pn($url, $current, $entries, $perpage, $res_array=FALSE, $characters='d')
 {
 	global $L, $sed_img_left, $sed_img_right;
 
@@ -2564,13 +2579,13 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array=FALSE)
 		$prevpage = $current - $perpage;
 		if ($prevpage<0)
 		{ $prevpage = 0; }
-		$res_l = "<a href=\"".$url."&amp;d=".$prevpage."\">".$L['Previous']." $sed_img_left</a>";
+		$res_l = "<a href=\"".$url."&amp;".$characters."=".$prevpage."\">".$L['Previous']." $sed_img_left</a>";
 	}
 
 	if (($current + $perpage)<$entries)
 	{
 		$nextpage = $current + $perpage;
-		$res_r = "<a href=\"".$url."&amp;d=".$nextpage."\">$sed_img_right ".$L['Next']."</a>";
+		$res_r = "<a href=\"".$url."&amp;".$characters."=".$nextpage."\">$sed_img_right ".$L['Next']."</a>";
 	}
 	if ($res_array)
 	{ return (array($res_l, $res_r)); }
@@ -3652,11 +3667,11 @@ function sed_xp()
 
 /**
  * Set cookie with optional HttpOnly flag
- * @param string $name The name of the cookie 
+ * @param string $name The name of the cookie
  * @param string $value The value of the cookie
  * @param int $expire The time the cookie expires in unixtime
- * @param string $path The path on the server in which the cookie will be available on. 
- * @param string $domain The domain that the cookie is available. 
+ * @param string $path The path on the server in which the cookie will be available on.
+ * @param string $domain The domain that the cookie is available.
  * @param bool $secure Indicates that the cookie should only be transmitted over a secure HTTPS connection. When set to TRUE, the cookie will only be set if a secure connection exists.
  * @param bool $httponly HttpOnly flag
  * @return bool
@@ -5614,13 +5629,13 @@ class CachingXTemplate extends XTemplate {
 
 /**
  * Add extra field for pages
- *  
+ *
  * @param string $name Field name (unique)
  * @param string $type Field type (input, textarea etc)
  * @param string $html HTML display of element without parameter "name="
- * @param string $variants Variants of values (for radiobuttons, selectors etc) 
+ * @param string $variants Variants of values (for radiobuttons, selectors etc)
  * @return bool
- * 
+ *
  */
 function sed_extrafield_add($name, $type, $html, $variants="")
 {
@@ -5640,21 +5655,21 @@ function sed_extrafield_add($name, $type, $html, $variants="")
 	case "checkbox": $sqltype = "BOOL"; break;
 	}
 	$sql = "ALTER TABLE $db_pages ADD page_my_$name $sqltype ";
-	//echo $sql; flush; 
+	//echo $sql; flush;
 	$step2 = sed_sql_query($sql);
 	return $step1&&$step2;
 }
 
 /**
  * Update extra field for pages
- *  
+ *
  * @param string $oldname Exist name of field
  * @param string $name Field name (unique)
  * @param string $type Field type (input, textarea etc)
  * @param string $html HTML display of element without parameter "name="
- * @param string $variants Variants of values (for radiobuttons, selectors etc) 
+ * @param string $variants Variants of values (for radiobuttons, selectors etc)
  * @return bool
- * 
+ *
  */
 function sed_extrafield_update($oldname, $name, $type, $html, $variants="")
 {
@@ -5676,11 +5691,11 @@ function sed_extrafield_update($oldname, $name, $type, $html, $variants="")
 }
 
 /**
- * Delete extra field 
- *  
+ * Delete extra field
+ *
  * @param string $name Name of extra field
  * @return bool
- * 
+ *
  */
 function sed_extrafield_remove($name)
 {
