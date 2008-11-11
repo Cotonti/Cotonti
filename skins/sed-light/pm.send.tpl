@@ -2,7 +2,7 @@
 
 	<div class="mboxHD">{PMSEND_TITLE}</div>
 	<div class="mboxBody">
-	
+
 		<div id="subtitle">{PMSEND_SUBTITLE}</div>
 
 		<!-- BEGIN: PMSEND_ERROR -->
@@ -25,7 +25,7 @@
 					<td><div style="width:100%;">{PMSEND_FORM_TEXTBOXER}</div></td>
 				</tr>
 				<tr>
-					<td colspan="2" class="valid"><input type="submit" value="{PHP.skinlang.pmsend.Sendmessage}"></td>
+					<td colspan="2" class="valid"><input type="submit" value="{PHP.skinlang.pmsend.Sendmessage}" /></td>
 				</tr>
 			</table>
 			<div class="bCap"></div>

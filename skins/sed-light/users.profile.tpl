@@ -2,7 +2,7 @@
 
 	<div class="mboxHD">{USERS_PROFILE_TITLE}</div>
 	<div class="mboxBody">
-	
+
 		<div id="subtitle">{USERS_PROFILE_SUBTITLE}</div>
 
 		<!-- BEGIN: USERS_PROFILE_ERROR -->
@@ -10,7 +10,7 @@
 		<!-- END: USERS_PROFILE_ERROR -->
 
 		<form action="{USERS_PROFILE_FORM_SEND}" method="post" enctype="multipart/form-data" name="profile">
-			<input type="hidden" name="userid" value="{USERS_PROFILE_ID}"><input type="hidden" name="curpassword" value="{USERS_PROFILE_PASSWORD}">
+			<input type="hidden" name="userid" value="{USERS_PROFILE_ID}" /><input type="hidden" name="curpassword" value="{USERS_PROFILE_PASSWORD}" />
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<tr>
@@ -108,7 +108,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
-					<input type="submit" value="{PHP.skinlang.usersprofile.Update}">
+					<input type="submit" value="{PHP.skinlang.usersprofile.Update}" />
 					</td>
 				</tr>
 			</table>

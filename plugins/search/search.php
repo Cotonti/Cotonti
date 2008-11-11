@@ -68,7 +68,7 @@ if ($tab=='frm') {
 	$plugin_title = $L['plu_title_frmtab'];
 
 	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['plu_tabs_all']."</a> &nbsp; ".$L['plu_tabs_frm']." &nbsp; <a href=\"plug.php?e=search&amp;tab=pag\">".$L['plu_tabs_pag']."</a>";
-	$plugin_subtitle .= "<br>".$L['plu_title_frmtab_s'];
+	$plugin_subtitle .= "<br />".$L['plu_title_frmtab_s'];
 
 	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&tab=frm&a=search')."\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
@@ -85,7 +85,7 @@ if ($tab=='frm') {
 		ORDER by fn_path ASC, fs_order ASC");
 
 		$plugin_body .= "<tr><td>";
-		$plugin_body .= $L['Forums']."<br />".$L['plu_frm_hint']."</td><td><select multiple name=\"frm_sub[]\" size=\"5\">";
+		$plugin_body .= $L['Forums']."<br />".$L['plu_frm_hint']."</td><td><select multiple=\"multiple\" name=\"frm_sub[]\" size=\"5\">";
 		$plugin_body .= "<option value=\"9999\" selected=\"selected\">".$L['plu_allsections']."</option>";
 
 		while ($row1 = mysql_fetch_array($sql1))
@@ -108,7 +108,7 @@ if ($tab=='frm') {
 		$plugin_body .= "<option value=\"29030400\">".$L['A year ago']."</option>";
 		$plugin_body .= "<option value=\"999999999\" selected=\"selected\">".$L['Any date']."</option>";
 		$plugin_body .= "</select><select name=\"sea_frmtime2\">";
-		$plugin_body .= "<option value=\"new\" select=\"selected\">".$L['And newer']."</option>";
+		$plugin_body .= "<option value=\"new\" selected=\"selected\">".$L['And newer']."</option>";
 		$plugin_body .= "<option value=\"old\">".$L['And older']."</option></select></td></tr>";
 		$plugin_body .= "<tr><td>".$L['Sort results by']."</td><td><select name=\"sea_frmsort\"><option value=\"1\" selected=\"selected\">".$L['Last updated']."</option>";
 		$plugin_body .= "<option value=\"2\">".$L['Creation date']."</option>";
@@ -116,7 +116,7 @@ if ($tab=='frm') {
 		$plugin_body .= "<option value=\"4\">".$L['Number of replies']."</option>";
 		$plugin_body .= "<option value=\"5\">".$L['Number of views']."</option>";
 		$plugin_body .= "</select><select name=\"sea_frmsort2\">";
-		$plugin_body .= "<option value=\"DESC\" select=\"selected\">".$L['Descending']."</option>";
+		$plugin_body .= "<option value=\"DESC\" selected=\"selected\">".$L['Descending']."</option>";
 		$plugin_body .= "<option value=\"ASC\">".$L['Ascending']."</option></select></td></tr>";
 		$plugin_body .= "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></td></tr>";
 	}
@@ -272,7 +272,7 @@ if ($tab=='frm') {
 	$plugin_title = $L['plu_title_pagtab'];
 
 	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['plu_tabs_all']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['plu_tabs_frm']."</a> &nbsp; ".$L['plu_tabs_pag'];
-	$plugin_subtitle .= "<br>".$L['plu_title_pagtab_s'];
+	$plugin_subtitle .= "<br />".$L['plu_title_pagtab_s'];
 
 	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&tab=pag&a=search')."\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
@@ -284,7 +284,7 @@ if ($tab=='frm') {
 	if (!$cfg['disable_page'])
 	{
 		$plugin_body .= "<tr><td>";
-		$plugin_body .= $L['Pages']."<br />".$L['plu_pag_hint']."</td><td><select multiple name=\"pag_sub[]\" size=\"5\">";
+		$plugin_body .= $L['Pages']."<br />".$L['plu_pag_hint']."</td><td><select multiple=\"multiple\" name=\"pag_sub[]\" size=\"5\">";
 		$plugin_body .= "<option value=\"all\" selected=\"selected\">".$L['plu_allcategories']."</option>";
 
 		foreach ($sed_cat as $i =>$x)
@@ -308,13 +308,13 @@ if ($tab=='frm') {
 		$plugin_body .= "<option value=\"29030400\">".$L['A year ago']."</option>";
 		$plugin_body .= "<option value=\"999999999\" selected=\"selected\">".$L['Any date']."</option>";
 		$plugin_body .= "</select><select name=\"sea_pagtime2\">";
-		$plugin_body .= "<option value=\"new\" select=\"selected\">".$L['And newer']."</option>";
+		$plugin_body .= "<option value=\"new\" selected=\"selected\">".$L['And newer']."</option>";
 		$plugin_body .= "<option value=\"old\">".$L['And older']."</option></select></td></tr>";
 		$plugin_body .= "<tr><td>".$L['Sort results by']."</td><td><select name=\"sea_pagsort\"><option value=\"1\" selected=\"selected\">".$L['Creation date']."</option>";
 		$plugin_body .= "<option value=\"2\">".$L['Title']."</option>";
 		$plugin_body .= "<option value=\"3\">".$L['Number of views']."</option>";
 		$plugin_body .= "</select><select name=\"sea_pagsort2\">";
-		$plugin_body .= "<option value=\"DESC\" select=\"selected\">".$L['Descending']."</option>";
+		$plugin_body .= "<option value=\"DESC\" selected=\"selected\">".$L['Descending']."</option>";
 		$plugin_body .= "<option value=\"ASC\">".$L['Ascending']."</option></select></td></tr>";
 		$plugin_body .= "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></td></tr>";
 	}
@@ -486,8 +486,8 @@ if ($tab=='frm') {
 
 	$plugin_title = $L['plu_title_alltab'];
 
-	$plugin_subtitle .= $L['plu_tabs_all']."</b> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['plu_tabs_frm']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=pag')."\">".$L['plu_tabs_pag']."</a>";
-	$plugin_subtitle .= "<br>".$L['plu_title_alltab_s'];
+	$plugin_subtitle .= $L['plu_tabs_all']." &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['plu_tabs_frm']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=pag')."\">".$L['plu_tabs_pag']."</a>";
+	$plugin_subtitle .= "<br />".$L['plu_title_alltab_s'];
 
 	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&a=search')."\" method=\"post\">";
 	$plugin_body .= "<table class=\"cells\">";
@@ -504,7 +504,7 @@ if ($tab=='frm') {
 		ORDER by fn_path ASC, fs_order ASC");
 
 		$plugin_body .= "<tr><td>";
-		$plugin_body .= $L['Forums']."<br />".$L['plu_frm_hint']."</td><td><select multiple name=\"frm_sub[]\" size=\"5\">";
+		$plugin_body .= $L['Forums']."<br />".$L['plu_frm_hint']."</td><td><select multiple=\"multiple\" name=\"frm_sub[]\" size=\"5\">";
 		$plugin_body .= "<option value=\"9999\" selected=\"selected\">".$L['plu_allsections']."</option>";
 
 		while ($row1 = mysql_fetch_array($sql1))
@@ -522,7 +522,7 @@ if ($tab=='frm') {
 	if (!$cfg['disable_page'])
 	{
 		$plugin_body .= "<tr><td>";
-		$plugin_body .= $L['Pages']."<br />".$L['plu_pag_hint']."</td><td><select multiple name=\"pag_sub[]\" size=\"5\">";
+		$plugin_body .= $L['Pages']."<br />".$L['plu_pag_hint']."</td><td><select multiple=\"multiple\" name=\"pag_sub[]\" size=\"5\">";
 		$plugin_body .= "<option value=\"all\" selected=\"selected\">".$L['plu_allcategories']."</option>";
 
 		foreach ($sed_cat as $i =>$x)

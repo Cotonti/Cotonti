@@ -128,7 +128,7 @@ foreach ($sed_countries as $i => $x)
 {
 	if ($i=='00')
 	{
-		$countryfilters .= "<option value=\"\">".$L['Country']."...</option>";
+		$countryfilters .= "<option value=\"users.php\">".$L['Country']."...</option>";
 		$selected = ("country_00"==$f) ? "selected=\"selected\"" : '';
 		$countryfilters .= "<option value=\"users.php?f=country_00\" ".$selected.">".$L['None']."</option>";
 	}
@@ -145,7 +145,7 @@ $countryfilters .= "</select>";
 /*=========*/
 
 
-$maingrpfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Maingroup']."...";
+$maingrpfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"users.php\">".$L['Maingroup']."...</option>";
 unset($grpms);
 foreach($sed_groups as $k => $i)
 {
@@ -153,15 +153,15 @@ foreach($sed_groups as $k => $i)
 	$selected1 = ($k==$gm) ? "selected=\"selected\"" : '';
 	if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
 	{
-		$maingrpfilters .= ($k>1) ? "<option value=\"users.php?g=".$k."\" $selected> ".$sed_groups[$k]['title'] : '';
+		$maingrpfilters .= ($k>1) ? "<option value=\"users.php?g=".$k."\" $selected> ".$sed_groups[$k]['title']."</option>" : '';
 		$maingrpfilters .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-		$grpms .= ($k>1) ? "<option value=\"users.php?gm=".$k."\" $selected1> ".$sed_groups[$k]['title'] : '';
+		$grpms .= ($k>1) ? "<option value=\"users.php?gm=".$k."\" $selected1> ".$sed_groups[$k]['title']."</option>" : '';
 		$grpms .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 	}
 }
 $maingrpfilters .= "</select>";
 
-$grpfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"\">".$L['Group']."...";
+$grpfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"users.php\">".$L['Group']."...</option>";
 $grpfilters .= $grpms."</select>";
 
 

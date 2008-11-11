@@ -116,7 +116,7 @@ if (!$forumstats)
 	while ($row = sed_sql_fetcharray($sql))
 	{
 		$ii++;
-		$plugin_body .= "#".$ii." : ".sed_build_user($row['user_id'], sed_cc($row['user_name']))."</a> (".$row["user_postcount"].")<br />";
+		$plugin_body .= "#".$ii." : ".sed_build_user($row['user_id'], sed_cc($row['user_name']))." (".$row["user_postcount"].")<br />";
 	}
 
 	sed_cache_store('forumstats', $plugin_body, 600);

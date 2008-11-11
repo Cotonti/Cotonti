@@ -2,7 +2,7 @@
 
 	<div class="mboxHD">{PAGEADD_PAGETITLE}</div>
 	<div class="mboxBody">
-	
+
 		<div id="subtitle">{PAGEADD_SUBTITLE}</div>
 
 		<!-- BEGIN: PAGEADD_ERROR -->
@@ -72,7 +72,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
-					<input type="submit" value="{PHP.skinlang.pageadd.Submit}">
+					<input type="submit" value="{PHP.skinlang.pageadd.Submit}" />
 					</td>
 				</tr>
 			</table>

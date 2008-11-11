@@ -2,7 +2,7 @@
 
 	<div class="mboxHD">{FORUMS_NEWTOPIC_PAGETITLE}</div>
 	<div class="mboxBody">
-	
+
 		<div id="subtitle">{FORUMS_NEWTOPIC_SUBTITLE}</div>
 
 		<form action="{FORUMS_NEWTOPIC_SEND}" method="post" name="newtopic">
@@ -12,7 +12,7 @@
 				<tr>
 					<td>{PHP.skinlang.forumsnewtopic.Title} {FORUMS_NEWTOPIC_TITLE}</td>
 				</tr>
-				
+
 				<tr>
 					<td>{PHP.L.Description}: {FORUMS_NEWTOPIC_DESC}</td>
 				</tr>
@@ -36,7 +36,7 @@
 
 				<tr>
 					<td style="text-align:center;">
-					<input type="submit" value="{PHP.skinlang.forumsnewtopic.Submit}">
+					<input type="submit" value="{PHP.skinlang.forumsnewtopic.Submit}" />
 					</td>
 				</tr>
 			</table>

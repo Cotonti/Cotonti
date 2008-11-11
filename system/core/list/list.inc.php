@@ -163,30 +163,30 @@ if (!$sed_cat[$c]['group'])
 	"LIST_TOP_TOTALLINES" => $totallines,
 	"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
 	"LIST_TOP_TOTALPAGES" => $totalpages,
-	"LIST_TOP_TITLE" => "<a href=\"list.php?c=$c&s=title&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=title&w=desc&o=$o&p=$p\">$sed_img_up</a> ".$L['Title'],
-	"LIST_TOP_KEY" => "<a href=\"list.php?c=$c&s=key&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=key&w=desc&o=$o&p=$p\">$sed_img_up</a> ".$L['Key'],
-	"LIST_TOP_EXTRA1" => "<a href=\"list.php?c=$c&s=extra1&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=extra1&w=desc&o=$o&p=$p\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA2" => "<a href=\"list.php?c=$c&s=extra2&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=extra2&w=desc&o=$o&p=$p\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA3" => "<a href=\"list.php?c=$c&s=extra3&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=extra3&w=desc&o=$o&p=$p\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA4" => "<a href=\"list.php?c=$c&s=extra4&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=extra4&w=desc&o=$o&p=$p\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA5" => "<a href=\"list.php?c=$c&s=extra5&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=extra5&w=desc&o=$o&p=$p\">$sed_img_up</a>",
-	"LIST_TOP_DATE" => "<a href=\"list.php?c=$c&s=date&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=date&w=desc&o=$o&p=$p\">$sed_img_up</a> ".$L['Date'],
-	"LIST_TOP_AUTHOR" => "<a href=\"list.php?c=$c&s=author&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=author&w=desc&o=$o&p=$p\">$sed_img_up</a> ".$L['Author'],
-	"LIST_TOP_OWNER" => "<a href=\"list.php?c=$c&s=ownerid&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=ownerid&w=desc&o=$o&p=$p\">$sed_img_up</a> ".$L['Owner'],
-	"LIST_TOP_COUNT" => "<a href=\"list.php?c=$c&s=count&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=count&w=desc&o=$o&p=$p\">$sed_img_up</a> ".$L['Hits'],
-	"LIST_TOP_FILECOUNT" => "<a href=\"list.php?c=$c&s=filecount&w=asc&o=$o&p=$p\">$sed_img_down</a>
-	<a href=\"list.php?c=$c&s=filecount&w=desc&o=$o&p=$p\">$sed_img_up</a> ".$L['Hits']
+	"LIST_TOP_TITLE" => "<a href=\"list.php?c=$c&amp;s=title&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=title&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a> ".$L['Title'],
+	"LIST_TOP_KEY" => "<a href=\"list.php?c=$c&amp;s=key&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=key&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a> ".$L['Key'],
+	"LIST_TOP_EXTRA1" => "<a href=\"list.php?c=$c&amp;s=extra1&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=extra1&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a>",
+	"LIST_TOP_EXTRA2" => "<a href=\"list.php?c=$c&amp;s=extra2&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=extra2&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a>",
+	"LIST_TOP_EXTRA3" => "<a href=\"list.php?c=$c&amp;s=extra3&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=extra3&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a>",
+	"LIST_TOP_EXTRA4" => "<a href=\"list.php?c=$c&amp;s=extra4&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=extra4&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a>",
+	"LIST_TOP_EXTRA5" => "<a href=\"list.php?c=$c&amp;s=extra5&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=extra5&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a>",
+	"LIST_TOP_DATE" => "<a href=\"list.php?c=$c&amp;s=date&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=date&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a> ".$L['Date'],
+	"LIST_TOP_AUTHOR" => "<a href=\"list.php?c=$c&amp;s=author&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=author&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a> ".$L['Author'],
+	"LIST_TOP_OWNER" => "<a href=\"list.php?c=$c&amp;s=ownerid&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=ownerid&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a> ".$L['Owner'],
+	"LIST_TOP_COUNT" => "<a href=\"list.php?c=$c&amp;s=count&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=count&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a> ".$L['Hits'],
+	"LIST_TOP_FILECOUNT" => "<a href=\"list.php?c=$c&amp;s=filecount&amp;w=asc&amp;o=$o&amp;p=$p\">$sed_img_down</a>
+	<a href=\"list.php?c=$c&amp;s=filecount&amp;w=desc&amp;o=$o&amp;p=$p\">$sed_img_up</a> ".$L['Hits']
 	));
 }
 

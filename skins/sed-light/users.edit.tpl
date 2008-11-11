@@ -2,13 +2,13 @@
 
 	<div class="mboxHD">{USERS_EDIT_TITLE}</div>
 	<div class="mboxBody">
-	
+
 		<!-- BEGIN: USERS_EDIT_ERROR -->
 		<div class="error">{USERS_EDIT_ERROR_BODY}</div>
 		<!-- END: USERS_EDIT_ERROR -->
 
 		<form action="{USERS_EDIT_SEND}" method="post" name="useredit">
-			<input type="hidden" name="id" value="{USERS_EDIT_ID}">
+			<input type="hidden" name="id" value="{USERS_EDIT_ID}" />
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<tr>
@@ -126,7 +126,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
-					<input type="submit" value="{PHP.skinlang.usersedit.Update}"></td>
+					<input type="submit" value="{PHP.skinlang.usersedit.Update}" /></td>
 				</tr>
 			</table>
 			<div class="bCap"></div>
