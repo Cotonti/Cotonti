@@ -3,14 +3,14 @@
 	<!-- BEGIN: STANDALONE_HEADER -->
 	{PFS_STANDALONE_HEADER1}
 
-	<link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet">
+	<link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
 
 	{PFS_STANDALONE_HEADER2}
 	<!-- END: STANDALONE_HEADER -->
 
 	<div class="mboxHD">{PFS_TITLE}</div>
 	<div class="mboxBody">
-	
+
 		<div id="subtitle">{PFS_SUBTITLE}</div>
 
 		{PFS_BODY}

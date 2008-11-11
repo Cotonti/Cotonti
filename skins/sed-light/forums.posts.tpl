@@ -2,9 +2,9 @@
 
 	<div class="mboxHD">{FORUMS_POSTS_PAGETITLE}</div>
 	<div class="mboxBody">
-	
+
 		<div style="float:right;">{FORUMS_POSTS_JUMPBOX}</div>
-		
+
 		<div id="subtitle">{FORUMS_POSTS_SUBTITLE}</div>
 
 		<!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
@@ -82,7 +82,7 @@
 		<!-- BEGIN: FORUMS_POSTS_NEWPOST -->
 		<form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">
 			<div style="width:100%;">{FORUMS_POSTS_NEWPOST_TEXTBOXER}</div>
-			<div class="valid"><input type="submit" value="{PHP.skinlang.forumspost.Reply}"></div>
+			<div class="valid"><input type="submit" value="{PHP.skinlang.forumspost.Reply}" /></div>
 		</form>
 		<!-- END: FORUMS_POSTS_NEWPOST -->
 

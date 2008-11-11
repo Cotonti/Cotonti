@@ -2,9 +2,9 @@
 
 	<div class="mboxHD">{USERS_REGISTER_TITLE}</div>
 	<div class="mboxBody">
-	
+
 		<div id="subtitle">{USERS_REGISTER_SUBTITLE}</div>
-		
+
 		<!-- BEGIN: USERS_REGISTER_ERROR -->
 		<div class="error">{USERS_REGISTER_ERROR_BODY}</div>
 		<!-- END: USERS_REGISTER_ERROR -->
@@ -39,7 +39,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
-					<input type="submit" value="{PHP.skinlang.usersregister.Submit}"></td>
+					<input type="submit" value="{PHP.skinlang.usersregister.Submit}" /></td>
 				</tr>
 			</table>
 			<div class="bCap"></div>

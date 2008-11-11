@@ -2,7 +2,7 @@
 
 	<div class="mboxHD">{PAGEEDIT_PAGETITLE}</div>
 	<div class="mboxBody">
-	
+
 		<div id="subtitle">{PAGEEDIT_SUBTITLE}</div>
 
 		<!-- BEGIN: PAGEEDIT_ERROR -->
@@ -93,7 +93,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
-					<input type="submit" class="submit" value="{PHP.skinlang.pageedit.Update}">
+					<input type="submit" class="submit" value="{PHP.skinlang.pageedit.Update}" />
 					</td>
 				</tr>
 			</table>

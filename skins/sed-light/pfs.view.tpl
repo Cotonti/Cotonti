@@ -2,7 +2,7 @@
 
 {PFSVIEW_HEADER1}
 
-<link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet">
+<link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
 
 {PFSVIEW_HEADER2}
 

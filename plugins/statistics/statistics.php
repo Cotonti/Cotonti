@@ -158,7 +158,7 @@ if ($usr['id']>0)
 	$plugin_body .= "<tr><td>".$L['plu_comments']."</td><td style=\"text-align:right;\">".$user_comments."</td></tr>";
 	}
 else
-	{ $plugin_body .= $L['plu_notloggedin']; }
+	{ $plugin_body .= "<tr><td>".$L['plu_notloggedin']."</td></tr>"; }
 
 $plugin_body .= "</table>";
 
