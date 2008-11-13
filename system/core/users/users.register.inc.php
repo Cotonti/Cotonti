@@ -20,7 +20,7 @@ $v = sed_import('v','G','ALP');
 
 if ($cfg['disablereg'])
 	{
-	sed_redirect(sed_url('message', 'msg=117'));
+	sed_redirect(sed_url('message', 'msg=117', '', true));
 	exit;
 	}
 
