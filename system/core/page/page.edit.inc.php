@@ -109,6 +109,10 @@ if ($a=='update')
 				if ($cfg['trash_page'])
 				{ sed_trash_put('page', $L['Page']." #".$id." ".$row['page_title'], $id, $row); }
 
+				if ($row['page_state'] != 1)
+				{ $sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' "); }
+				
+				
 				$id2 = "p".$id;
 				$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
 				$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");

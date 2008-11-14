@@ -62,8 +62,8 @@ $join_ratings_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_rating
 
 if ($c=='all')
 {
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='0'");
-	$totallines = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure ");
+	$totallines = sed_sql_result($sql, 0, "SUM(structure_pagecount)");
 	$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
 	FROM $db_pages as p ".$join_ratings_condition."
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
@@ -72,8 +72,8 @@ if ($c=='all')
 }
 elseif (!empty($o) && !empty($p) && $p!='password')
 {
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_cat='$c' AND (page_state='0' OR page_state='2') AND page_$o='$p'");
-	$totallines = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_code='$c' ");
+	$totallines = sed_sql_result($sql, 0, "SUM(structure_pagecount)");
 	$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
 	FROM $db_pages as p ".$join_ratings_condition."
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
@@ -83,8 +83,8 @@ elseif (!empty($o) && !empty($p) && $p!='password')
 else
 {
 	sed_die(empty($sed_cat[$c]['title']) && !$usr['isadmin']);
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_cat='$c' AND (page_state='0' OR page_state='2') ");
-	$totallines = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_code='$c' ");
+	$totallines = sed_sql_result($sql, 0, "SUM(structure_pagecount)");
 	$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
 	FROM $db_pages as p ".$join_ratings_condition."
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
@@ -206,11 +206,9 @@ while (list($i,$x) = each($sed_cat))
 		}
 	elseif (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $kk<$cfg['maxrowsperpage'])
 		{
-			$sql4 = sed_sql_query("SELECT COUNT(*) FROM $db_pages p, $db_structure s
-			WHERE p.page_cat=s.structure_code
-			AND s.structure_path LIKE '".$sed_cat[$i]['rpath']."%'
-			AND page_state=0 ");
-			$sub_count = sed_sql_result($sql4,0,"COUNT(*)");
+			$sql4 = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure
+			WHERE structure_path LIKE '".$sed_cat[$i]['rpath']."%' ");
+			$sub_count = sed_sql_result($sql4,0,"SUM(structure_pagecount)");
 
 			$t-> assign(array(
 					"LIST_ROWCAT_URL" => "list.php?c=".$i,
