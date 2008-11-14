@@ -79,6 +79,19 @@ if ($n=='options')
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=structure', '', true));
 		exit;
 	}
+	
+	elseif ($a=='resync')
+	{
+		sed_check_xg();
+		
+		$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
+		$roww = sed_sql_fetcharray($sqql);
+		
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_cat='".$roww['structure_code']."' AND (page_state='0' OR page_state='2') ");
+		$num = sed_sql_result($sql,0,"COUNT(*)");
+		
+		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount='".$num."' WHERE structure_id='".$id."' ");
+	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
 	sed_die(sed_sql_numrows($sql)==0);
@@ -157,6 +170,8 @@ if ($n=='options')
 	$adminmain .= "</select><br/>";
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];
 	$adminmain .= "</td></tr>";
+	$adminmain .= "<tr><td>".$L['adm_postcounters']." :</td>";
+	$adminmain .= "<td><a href=\"".sed_url('admin', "m=page&s=structure&n=options&a=resync&id=".$structure_id."&".sed_xg())."\">".$L['Resync']."</a></td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table></form>";
 }
