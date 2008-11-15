@@ -123,8 +123,7 @@ if ($a=='update' && !empty($f))
 $row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone'] * 3600);
 $row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
 
-$body .= "<table class=\"cells\">";
-$body .= "<form id=\"editfolder\" action=\"".sed_url('pfs', "m=editfolder&a=update&f=".$pff_id.$more)."\" method=\"post\">";
+$body .= "<form id=\"editfolder\" action=\"".sed_url('pfs', "m=editfolder&a=update&f=".$pff_id.$more)."\" method=\"post\"><table class=\"cells\">";
 $body .= "<tr><td>".$L['Folder']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td>".$L['Description']." : </td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".sed_cc($pff_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td>".$L['Date']." : </td><td>".$row['pff_date']."</td></tr>";
@@ -148,7 +147,7 @@ else
 	$body .= "<input type=\"radio\" class=\"radio\" name=\"risgallery\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"risgallery\" value=\"0\" checked=\"checked\" />".$L['No'];
 	}
 $body .= "</td></tr><tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
-$body .= "</form></table>";
+$body .= "</table></form>";
 
 /* ============= */
 

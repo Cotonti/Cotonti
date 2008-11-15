@@ -23,9 +23,12 @@ $id = sed_import('id','G','INT');
 
 $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 
-$adminmain .= "<ul><li><a href=".sed_url('admin', 'm=config&n=edit&o=core&p=forums')."\>".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li><li>";
+$adminmain .= "<ul><li><a href=\"".sed_url('admin', 'm=config&n=edit&o=core&p=forums')."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li><li>";
 $adminmain .= sed_linkif(sed_url('admin', 'm=forums&s=structure'), $L['adm_forum_structure'], sed_auth('admin', 'a', 'A'));
 $adminmain .= "</li></ul>";
+
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
 
 if ($n=='edit')
 {
@@ -57,12 +60,12 @@ if ($n=='edit')
 		{
 			$sql1 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='$rmaster' ");
 			$row1 = sed_sql_fetcharray($sql1);
-			
+
 			$master = sed_sql_prep(sed_cc($row1['fs_title']));
-			
+
 			$sql = sed_sql_query("DELETE FROM $db_forum_subforums WHERE fm_id='$id' OR fm_masterid='$id' ");
 			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('$id', '$rmaster', '$mastername') ");
-		
+
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='".$rmaster."', fs_mastername='".$master."' WHERE fs_id='".$id."' ");
 		}
 
@@ -88,10 +91,10 @@ if ($n=='edit')
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_countposts='$rcountposts' WHERE fs_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ");
 		$sql = sed_sql_query("UPDATE $db_forum_subforums SET fm_title='".$mastername."' WHERE fm_id='$id' ");
-		
+
 		}
-		
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums', '', true));
+
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&d='.$d, '', true));
 		exit;
 	}
 	elseif ($a=='delete')
@@ -214,7 +217,7 @@ else
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='".$row_cur['fs_order']."' WHERE fs_id='".$row_oth['fs_id']."'");
 		}
 
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums', '', true));
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&d='.$d, '', true));
 		exit;
 	}
 	elseif ($a=='add')
@@ -229,20 +232,20 @@ else
 			{ $nextorder = $row1['fs_order']+1; }
 			else
 			{ $nextorder = 100; }
-			
+
 			if (!empty($nmaster))
 					{
 					$sql2 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='".$nmaster."' ");
 					$row2 = sed_sql_fetcharray($sql2);
-					
+
 					$mastername = sed_sql_prep(sed_cc($row2['fs_title']));
-					
+
 					}
 
 			$sql = sed_sql_query("INSERT INTO $db_forum_sections (fs_masterid, fs_mastername, fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('".(int)$nmaster."', '".$mastername."', '".(int)$nextorder."', '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($ncat)."', 'images/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
 
 			$forumid = sed_sql_insertid();
-			
+
 			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('".(int)$forumid."', '".(int)$nmaster."', '".sed_cc($ntitle)."') ");
 
 
@@ -277,12 +280,17 @@ else
 		}
 	}
 
+	$totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
+	$pagnav = sed_pagination(sed_url('admin','m=forums'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+
 	$sql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
-	ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC");
+	ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$adminmain .= "<form id=\"updateorder\" action=\"".sed_url('admin', 'm=forums&a=update')."\" method=\"post\">";
+	$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
+	$adminmain .= "<form id=\"updateorder\" action=\"".sed_url('admin', 'm=forums&a=update&d='.$d)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\"><tr>";
 	$adminmain .= "<td class=\"coltop\">".$L['Section']." ".$L['adm_clicktoedit']."</td>";
 	$adminmain .= "<td class=\"coltop\">".$L['Order']."</td>";
@@ -297,6 +305,8 @@ else
 	$prev_cat = '';
 	$line = 1;
 	$fcache = array();
+
+	$ii = 0;
 
 	while ($row = sed_sql_fetcharray($sql))
 	{
@@ -320,22 +330,27 @@ else
 				$adminmain .= " (".$row['fn_path'].")</a></strong></td></tr>";
 				$prev_cat = $fs_category;
 				$line = 1;
+
+				$ii++;
 			}
 
 			$adminmain .= "<tr>";
 			$adminmain .= "<td><a href=\"".sed_url('admin', "m=forums&n=edit&id=".$fs_id)."\">".sed_cc($fs_title)."</a></td>";
 			$adminmain .= "<td style=\"text-align:center;\">";
-			$adminmain .= "<a href=\"".sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=up")."\">".$sed_img_up."</a> ";
-			$adminmain .= "<a href=\"".sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=down")."\">".$sed_img_down."</a></td>";
+			$adminmain .= "<a href=\"".sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=up&d=".$d)."\">".$sed_img_up."</a> ";
+			$adminmain .= "<a href=\"".sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=down&d=".$d)."\">".$sed_img_down."</a></td>";
 
 			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$row['fs_allowprvtopics']]."</td>";
 			$adminmain .= "<td style=\"text-align:right;\">".$row['fs_topiccount']."</td>";
 			$adminmain .= "<td style=\"text-align:right;\">".$row['fs_postcount']."</td>";
 			$adminmain .= "<td style=\"text-align:right;\">".$row['fs_viewcount']."</td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=forums&io=".$row['fs_id'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\"></a></td>";
-			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=topics&s=".$fs_id)."\"><img src=\"images/admin/jumpto.gif\" alt=\"\"></a></a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=forums&io=".$row['fs_id'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
+			$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('forums', "m=topics&s=".$fs_id)."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
 			$adminmain .= "</tr>";
 			$line++;
+
+			$ii++;
+
 			if ($fcache[$fs_id])
 			{
 
@@ -350,9 +365,9 @@ else
 					$adminmain .= "<td style=\"text-align:right;\">".$value[1]."</td>";
 					$adminmain .= "<td style=\"text-align:right;\">".$value[2]."</td>";
 					$adminmain .= "<td style=\"text-align:right;\">".$value[3]."</td>";
-					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=forums&io=".$key)."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\"></a></td>";
-					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=topics&s=".$key)."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\"></a></a></td>";
-					$adminmain .= "</tr>";
+					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=forums&io=".$key)."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\" /></a></td>";
+					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('forums', "m=topics&s=".$key)."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a></td>";
+					$adminmain .= "</tr>";$ii++;
 				}
 
 			}
@@ -361,7 +376,9 @@ else
 	}
 
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
-	$adminmain .= "</table></form>";
+	$adminmain .= "<tr><td colspan=\"9\">&nbsp;</td></tr>";
+	$adminmain .= "<tr><td colspan=\"9\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
+	$adminmain .= "</form>";
 
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 	$adminmain .= "<form id=\"addsection\" action=\"".sed_url('admin', "m=forums&a=add")."\" method=\"post\">";
@@ -374,6 +391,7 @@ else
 		$cfs = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
 		$adminmain .= "<option value=\"".$rowa['fs_id']."\">".$cfs."</option>";
 	}
+	$adminmain .= "</select></td></tr>";
 	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"64\" maxlength=\"128\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"64\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\" /></td></tr>";

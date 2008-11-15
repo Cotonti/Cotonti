@@ -120,8 +120,7 @@ if ($a=='update' && !empty($id))
 	exit;
 	}
 
-$body .= "<table class=\"cells\">";
-$body .= "<form id=\"edit\" action=\"".sed_url('pfs', "m=edit&a=update&id=".$pfs_id.$more)."\" method=\"post\">";
+$body .= "<form id=\"edit\" action=\"".sed_url('pfs', "m=edit&a=update&id=".$pfs_id.$more)."\" method=\"post\"><table class=\"cells\">";
 $body .= "<tr><td>".$L['File']." : </td><td>".$pfs_file."</td></tr>";
 $body .= "<tr><td>".$L['Date']." : </td><td>".$pfs_date."</td></tr>";
 $body .= "<tr><td>".$L['Folder']." : </td><td>".sed_selectbox_folders($userid, "", $pfs_folderid)."</td></tr>";
@@ -129,7 +128,7 @@ $body .= "<tr><td>".$L['URL']." : </td><td><a href=\"".$ff."\">".$ff."</a></td><
 $body .= "<tr><td>".$L['Size']." : </td><td>".$pfs_size." ".$L['kb']."</td></tr>";
 $body .= "<tr><td>".$L['Description']." : </td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$pfs_desc."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
-$body .= "</form></table>";
+$body .= "</table></form>";
 
 /* ============= */
 
