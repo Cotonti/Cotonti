@@ -150,6 +150,8 @@ elseif (!empty($o))
 
 	/* ============= */
 
+	sed_sendheaders();
+
 	$mskin = sed_skinfile(array('popup', $o));
 	$t = new XTemplate($mskin);
 
@@ -202,6 +204,8 @@ elseif (!empty($h))
 	$popup_footer = "</body></html>";
 
 	/* ============= */
+
+	sed_sendheaders();
 
 	$mskin = sed_skinfile(array('popup', $h));
 	$t = new XTemplate($mskin);

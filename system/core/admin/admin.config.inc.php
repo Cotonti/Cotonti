@@ -123,7 +123,7 @@ switch ($n)
 					{
 					$x = trim($x);
 					$selected = ($x == $config_value) ? "selected=\"selected\"" : '';
-					$adminmain .= "<option value=\"".$x."\" $selected>".$x;
+					$adminmain .= "<option value=\"".$x."\" $selected>".$x."</option>";
 					}
 				$adminmain .= "</select>";
 				}

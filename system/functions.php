@@ -2726,7 +2726,7 @@ function sed_redirect($url)
 		$output = $cfg['doctype']."
 		<html>
 		<head>
-		<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\" />
+		<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
 		<meta http-equiv=\"refresh\" content=\"0; url=".SED_ABSOLUTE_URL . $url."\" />
 		<title>Redirecting...</title></head>
 		<body>Redirecting to <a href=\"". SED_ABSOLUTE_URL .$url."\">".$cfg['mainurl']."/".$url."</a>
