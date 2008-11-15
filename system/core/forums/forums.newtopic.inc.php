@@ -80,6 +80,7 @@ if ($a=='newtopic')
 	$newtopicdesc = sed_import('newtopicdesc','P','TXT', 64);
 	$newprvtopic = sed_import('newprvtopic','P','BOL');
 	$newmsg = sed_import('newmsg','P','HTM');
+	$newtopicpreview = mb_substr(sed_cc($newmsg), 0, 128);
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
 
 	if (strip_tags(mb_strlen($newtopictitle))>0 && mb_strlen($newmsg)>0)
@@ -94,6 +95,7 @@ if ($a=='newtopic')
 		ft_sectionid,
 		ft_title,
 		ft_desc,
+		ft_preview,
 		ft_creationdate,
 		ft_updated,
 		ft_postcount,
@@ -109,6 +111,7 @@ if ($a=='newtopic')
 			".(int)$s.",
 			'".sed_sql_prep($newtopictitle)."',
 			'".sed_sql_prep($newtopicdesc)."',
+			'".$newtopicpreview."',
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
 			1,
