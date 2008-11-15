@@ -45,4 +45,7 @@ CREATE TABLE `sed_pages_extra_fields` (
   `field_html` text NOT NULL,
   `field_variants` text NOT NULL,
   UNIQUE KEY `field_name` (`field_name`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
+
+/* r193 Some speed up for page listings */
+ALTER TABLE sed_structure ADD COLUMN structure_pagecount mediumint(8) NOT NULL default '0';
