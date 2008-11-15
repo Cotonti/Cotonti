@@ -145,6 +145,12 @@ if ($a=='update')
 			}
 		}
 	}
+	
+	if (!empty($rtopictitle) && !empty($rtext))
+	{
+	$rtopicpreview = mb_substr(sed_cc($rtext), 0, 128);	
+		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_preview='".$rtopicpreview."' WHERE ft_id='$q'");
+	}
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.editpost.update.done');

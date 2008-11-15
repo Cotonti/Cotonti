@@ -49,3 +49,6 @@ CREATE TABLE `sed_pages_extra_fields` (
 
 /* r193 Some speed up for page listings */
 ALTER TABLE sed_structure ADD COLUMN structure_pagecount mediumint(8) NOT NULL default '0';
+
+/* r143 t#105, Forum topic preview */
+ALTER TABLE sed_forum_topics ADD COLUMN ft_preview varchar(128) NOT NULL default '';
