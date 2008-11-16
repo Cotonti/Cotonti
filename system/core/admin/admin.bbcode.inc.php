@@ -97,10 +97,10 @@ $adminmain .= <<<HTM
 <div class="pagnav">$pagination_prev $pagnav $pagination_next</div>
 <table class="cells">
 <tr>
-	<td class="coltop">{$L['Name']}<br />{$L['adm_bbcodes_mode']} / {$L['Enabled']}</td>
-	<td class="coltop">{$L['adm_bbcodes_pattern']}<br />{$L['adm_bbcodes_priority']} / {$L['adm_bbcodes_container']}</td>
+	<td class="coltop">{$L['Name']}<br />{$L['adm_bbcodes_mode']} / {$L['Enabled']} / {$L['adm_bbcodes_container']}</td>
+	<td class="coltop">{$L['adm_bbcodes_pattern']}</td>
 	<td class="coltop">{$L['adm_bbcodes_replacement']}</td>
-	<td class="coltop">{$L['Plugin']}<br />{$L['adm_bbcodes_postrender']}</td>
+	<td class="coltop">{$L['Plugin']}<br />{$L['adm_bbcodes_priority']}<br />{$L['adm_bbcodes_postrender']}</td>
 	<td class="coltop">{$L['Update']}<br />{$L['Delete']}</td>
 </tr>
 HTM;
@@ -134,15 +134,16 @@ while($row = sed_sql_fetchassoc($res))
 <tr>
 	<td>
 		<input type="text" name="bbc_name" value="{$row['bbc_name']}" /><br />
-		<select name="bbc_mode">$mode</select> &nbsp; <input type="checkbox" name="bbc_enabled"$enabled />
+		<select name="bbc_mode">$mode</select> &nbsp;&nbsp; <input type="checkbox" name="bbc_enabled"$enabled /> &nbsp;
+		&nbsp;&nbsp; <input type="checkbox" name="bbc_container"$container />
 	</td>
 	<td>
-		<input type="text" name="bbc_pattern" value="{$row['bbc_pattern']}" /><br />
-		<select name="bbc_priority">$prio</select> &nbsp; <input type="checkbox" name="bbc_container"$container />
+		<textarea name="bbc_pattern" rows="2" cols="20">{$row['bbc_pattern']}</textarea>
 	</td>
 	<td><textarea name="bbc_replacement" rows="2" cols="20">{$row['bbc_replacement']}</textarea></td>
 	<td>
 		{$row['bbc_plug']}<br />
+		<select name="bbc_priority">$prio</select><br />
 		<input type="checkbox" name="bbc_postrender"$postrender />
 	</td>
 	<td>
