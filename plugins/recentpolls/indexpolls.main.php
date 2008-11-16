@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_SED]
-File=plugins/recentpolls/recentpolls.main.php
+File=plugins/indexpolls/indexpolls.main.php
 Version=125
 Updated=2008-aug-29
 Type=Plugin
@@ -10,9 +10,9 @@ Description=
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
-Code=recentpolls
-Part=polls
-File=recentpolls.main
+Code=indexpolls
+Part=indexpolls
+File=indexpolls.main
 Hooks=polls.main
 Tags=
 Minlevel=0
@@ -66,6 +66,8 @@ if ($mode=='ajax')
 		}
 
 	$result .= "</table>";
+
+	sed_sendheaders();
 
 	echo $result;
 
