@@ -19,7 +19,7 @@ Code=recentitems
 Part=main
 File=recentitems
 Hooks=index.tags
-Tags=index.tpl:{PLUGIN_LATESTPAGES},{PLUGIN_LATESTTOPICS},{PLUGIN_LATESTPOLL}
+Tags=index.tpl:{PLUGIN_LATESTPAGES},{PLUGIN_LATESTTOPICS}
 Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
@@ -34,10 +34,6 @@ $cfg['plu_mask_pages'] = "%1\$s"." ".$cfg['separator']." "."%2\$s"." (%3\$s)<br 
 // %1\$s = Link to the category
 // %2\$s = Link to the page
 // %3\$s = Date
-
-//See the inside of topics function to edit mask
-
-$cfg['plu_mask_polls'] =  "<div>%1\$s</div>";
 
 $plu_empty = $L['None']."<br />";
 
@@ -201,62 +197,6 @@ function sed_get_latesttopics($limit)
 
 /* ------------------ */
 
-function sed_get_latestpolls($limit, $mask)
-{
-	global $L, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
-
-
-
-	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by poll_creationdate DESC LIMIT $limit");
-
-	while ($row_p = sed_sql_fetcharray($sql_p))
-	{
-		unset($res);
-		$poll_id = $row_p['poll_id'];
-
-		if ($usr['id']>0)
-		{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$poll_id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
-		else
-		{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$poll_id' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
-
-		if (sed_sql_numrows($sql2)>0)
-		{
-			$alreadyvoted =1;
-			$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$poll_id'");
-			$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
-		}
-		else
-		{ $alreadyvoted =0; }
-
-		$res .= "<h5>".sed_parse(sed_cc($row_p['poll_text']), 1, 1, 1)."</h5>";
-
-		$sql = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$poll_id' ORDER by po_id ASC");
-
-		while ($row = sed_sql_fetcharray($sql))
-		{
-			if ($alreadyvoted)
-			{
-				$percentbar = floor(($row['po_count'] / $totalvotes) * 100);
-				$res .= sed_parse(sed_cc($row['po_text']), 1, 1, 1)." : $percentbar%<div style=\"width:95%;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div>";
-			}
-			else
-			{
-				$res .= "<a href=\"javascript:pollvote('".$poll_id."','".$row['po_id']."')\">";
-				$res .= sed_parse(sed_cc($row['po_text']), 1, 1, 1)."</a><br />";
-			}
-		}
-		$res .= "<p style=\"text-align:center;\"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a> &nbsp; ";
-		$res .= "<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></p>";
-		$res_all .= sprintf($mask, $res);
-	}
-
-	//		{ $res = $plu_empty; }
-
-	return($res_all);
-}
-
-/* ============= */
-
 if(empty($cfg['plugin']['recentitems']['redundancy']))
 {
 	$cfg['plugin']['recentitems']['redundancy'] = 2;
@@ -268,13 +208,9 @@ if ($cfg['plugin']['recentitems']['maxpages']>0 && !$cfg['disable_page'])
 if ($cfg['plugin']['recentitems']['maxtopics']>0 && !$cfg['disable_forums'])
 { $latesttopics = sed_get_latesttopics($cfg['plugin']['recentitems']['maxtopics']); }
 
-if ($cfg['plugin']['recentitems']['maxpolls']>0 && !$cfg['disable_polls'])
-{ $latestpoll = sed_get_latestpolls($cfg['plugin']['recentitems']['maxpolls'], $cfg['plu_mask_polls']); }
-
 $t-> assign(array(
 	"PLUGIN_LATESTPAGES" => $latestpages,
 	"PLUGIN_LATESTTOPICS" => $latesttopics,
-	"PLUGIN_LATESTPOLL" => $latestpoll,
 ));
 
 ?>

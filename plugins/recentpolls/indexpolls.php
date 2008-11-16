@@ -2,7 +2,7 @@
 
 /* ====================
 [BEGIN_SED]
-File=plugins/recentpolls/recentpolls.php
+File=plugins/indexpolls/indexpolls.php
 Version=125
 Updated=2008-aug-29
 Type=Plugin
@@ -11,11 +11,11 @@ Description=
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
-Code=recentpolls
+Code=indexpolls
 Part=main
-File=recentpolls
+File=indexpolls
 Hooks=index.tags
-Tags=index.tpl:{PLUGIN_RECENTPOLLS}
+Tags=index.tpl:{PLUGIN_INDEXPOLLS}
 Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
@@ -41,29 +41,34 @@ $plu_empty = $L['None']."<br />";
 /* ================== FUNCTIONS ================== */
 
 /**
- * Gets latest polls with AJAX
+ * Gets polls with AJAX
  *
  * @author oc
  * @param int $limit Number of polls
  * @param string $mask Output mask
  * @return string
  */
-function sed_get_recentpolls($limit, $mask)
+function sed_get_polls($limit, $mask)
 {
 	global $cfg, $L, $lang, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
 
-	if(file_exists($cfg['plugins_dir'].'/recentpolls/lang/recentpolls.'.$lang.'.lang.php'))
+	if(file_exists($cfg['plugins_dir'].'/indexpolls/lang/indexpolls.'.$lang.'.lang.php'))
 	{
-		require $cfg['plugins_dir'].'/recentpolls/lang/recentpolls.'.$lang.'.lang.php';
+		require $cfg['plugins_dir'].'/indexpolls/lang/indexpolls.'.$lang.'.lang.php';
 	}
 	else
 	{
-		require $cfg['plugins_dir'].'/recentpolls/lang/recentpolls.en.lang.php';
+		require $cfg['plugins_dir'].'/indexpolls/lang/indexpolls.en.lang.php';
 	}
 
+	if($cfg['plugin']['indexpolls']['mode']=='Recent polls')
+	{$sqlmode='poll_creationdate';}
+	else if($cfg['plugin']['indexpolls']['mode']=='Random polls')
+	{$sqlmode='RAND()';}
+
 	$ii = 0;
-	
-	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by poll_creationdate DESC LIMIT $limit");
+
+	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by $sqlmode DESC LIMIT $limit");
 	while ($row_p = sed_sql_fetcharray($sql_p))
 	{
 		unset($res);
@@ -105,7 +110,7 @@ function sed_get_recentpolls($limit, $mask)
 				$res .= "<input type='radio' name='v' value='".$row['po_id']."' />&nbsp;".stripslashes($row['po_text'])."<br />";
 			}
 		}
-		
+
 		if (!$alreadyvoted)
 		{ $res .= "<p style=\"text-align: center; \"><input type=\"submit\" onclick=\"vote(".$poll_id.");\" class=\"submit\" value=\"".$L_idx['voteit']."\" /></p>"; }
 
@@ -118,11 +123,11 @@ function sed_get_recentpolls($limit, $mask)
 
 		$res_all .= sprintf($mask, $res);
 	}
-	
+
 	$res_all .= ($ii) ? "
 <style type=\"text/css\">
 .loading {
-  background: url('{$cfg['plugins_dir']}/recentpolls/img/spinner_bigger.gif') no-repeat center center;
+  background: url('{$cfg['plugins_dir']}/indexpolls/img/spinner_bigger.gif') no-repeat center center;
 }
 </style>
 <script type=\"text/javascript\">
@@ -162,10 +167,10 @@ function vote(id)
 		return false;
 
 	}
-	
+
 function res(id,m)
 	{
-	
+
 	if (!m)
 		{
 
@@ -193,13 +198,13 @@ function res(id,m)
 		});
 
 		}
-	
+
 	if (m)
 		{
 		$('#p'+id).html($('#b'+id).html()).hide().stop().fadeIn('slow');
 		$('#a'+id).html('".$L['polls_viewresults']."</a>').attr('href', 'javascript: res('+id+',0);');
 		}
-		
+
 	}
 
 	</script>" : '';
@@ -212,9 +217,9 @@ function res(id,m)
 
 /* ============= */
 
-if ($cfg['plugin']['recentpolls']['maxpolls']>0 && !$cfg['disable_polls'])
-{ $latestpoll = sed_get_recentpolls($cfg['plugin']['recentpolls']['maxpolls'], $cfg['plu_mask_polls']); }
+if ($cfg['plugin']['indexpolls']['maxpolls']>0 && !$cfg['disable_polls'])
+{ $latestpoll = sed_get_polls($cfg['plugin']['indexpolls']['maxpolls'], $cfg['plu_mask_polls']); }
 
-$t->assign('PLUGIN_RECENTPOLLS', $latestpoll);
+$t->assign('PLUGIN_INDEXPOLLS', $latestpoll);
 
 ?>

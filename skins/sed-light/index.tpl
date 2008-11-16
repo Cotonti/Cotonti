@@ -14,7 +14,7 @@
 	<div class="rboxBody">{PHP.cfg.menu2}<br />{PHP.cfg.menu3}<br />{PHP.cfg.menu4}</div>
 	
 	<div class="rboxHD">{PHP.skinlang.index.Polls}</div>
-	<div class="rboxBody">{PLUGIN_LATESTPOLL}</div>
+	<div class="rboxBody">{PLUGIN_INDEXPOLLS}</div>
 	
 	<div class="rboxHD">{PHP.skinlang.index.Recentadditions}</div>
 	<div class="rboxBody">{PLUGIN_LATESTPAGES}</div>

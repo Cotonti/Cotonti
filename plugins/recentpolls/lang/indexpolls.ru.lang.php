@@ -1,6 +1,6 @@
 <?php
 /**
- * Russian language file for recentpolls
+ * Russian language file for indexpolls
  *
  * @package Seditio-N
  * @version 0.0.1

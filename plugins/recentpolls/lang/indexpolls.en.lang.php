@@ -1,6 +1,6 @@
 <?php
 /**
- * English language file for recentpolls
+ * English language file for indexpolls
  *
  * @package Seditio-N
  * @version 0.0.1
