@@ -86,6 +86,8 @@ $L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
 $L['cfg_cache'] = array('Internal cache', 'Keep it enabled for better performance');
 $L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
+$L['cfg_mtmode'] = array('Maintenance mode', 'Let only authorized personel access to site'); // N-0.0.2
+$L['cfg_mtres'] = array('Maintenance reason', 'Optional, should better be short'); // N-0.0.2
 $L['cfg_doctypeid'] = array('Document Type', '&lt;!DOCTYPE> of the HTML layout');
 $L['cfg_charset'] = array('HTML charset', '');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
@@ -366,6 +368,7 @@ $L['adm_rights_allow10'] = 'Allowed';
 $L['adm_rights_allow00'] = 'Denied';
 $L['adm_rights_allow11'] = 'Allowed and locked for security reasons';
 $L['adm_rights_allow01'] = 'Denied and locked for security reasons';
+$L['adm_rights_maintenance'] = 'Access to site when maintenance mode on'; // N-0.0.2
 
 /* ====== Plugins ====== */
 

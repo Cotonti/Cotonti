@@ -282,6 +282,22 @@ if (is_array($extp))
 /* ======================== */
 
 
+/* ======== Maintenance mode ======== */
+
+if ($cfg['mtmode'])
+	{
+	
+	$sqll = sed_sql_query("SELECT grp_maintenance FROM $db_groups WHERE grp_level='".$usr['level']."' ");
+	$roow = sed_sql_fetcharray($sqll);
+	
+	if (!$roow['grp_maintenance'] && !defined('SED_AUTH'))
+	{
+	header("Location: users.php?m=auth");
+	exit;
+	}
+	
+	}
+
 /* ======== Anti-XSS protection ======== */
 
 $xg = sed_import('x','G','ALP');

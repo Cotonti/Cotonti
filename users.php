@@ -19,6 +19,11 @@ define('SED_USERS', TRUE);
 $location = 'Users';
 $z = 'users';
 
+if ($m=="auth")
+{
+define('SED_AUTH', TRUE);
+}
+
 require_once './datas/config.php';
 require_once($cfg['system_dir'].'/functions.php');
 require_once($cfg['system_dir'].'/common.php');

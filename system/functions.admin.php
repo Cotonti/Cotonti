@@ -210,6 +210,8 @@ function sed_loadconfigmap()
 	$result[] = array ('main', '05', 'cache', 3, '1', '');
 	$result[] = array ('main', '06', 'gzip', 3, '1', '');
 	$result[] = array ('main', '07', 'devmode', 3, '0', '');
+	$result[] = array ('main', '07', 'mtmode', 3, '0', '');
+	$result[] = array ('main', '02', 'mtres', 1, '', '');
 	$result[] = array ('main', '10', 'cookiedomain', 1, '', '');
 	$result[] = array ('main', '10', 'cookiepath', 1, '', '');
 	$result[] = array ('main', '10', 'cookielifetime', 2, '5184000', array(1800,3600,7200,14400,28800,43200,86400,172800, 259200,604800,1296000,2592000,5184000));

@@ -116,6 +116,13 @@ if (is_array($extp))
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.auth'));
 
+
+if ($cfg['mtmode'])
+{
+	$t-> assign(array("USERS_AUTH_MAINTENANCERES" => $cfg['mtres']));
+	$t->parse("MAIN.USERS_AUTH_MAINTENANCE");
+}
+	
 $t->assign(array(
 	"USERS_AUTH_TITLE" => $L['aut_logintitle'],
 	"USERS_AUTH_SEND" => "users.php?m=auth&amp;a=check&amp;redirect=".$redirect,

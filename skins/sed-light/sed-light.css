@@ -128,6 +128,8 @@ form { margin:0; }
 .signature  { color:#3E606F; font-size:.9em; max-height:100px; overflow:auto; }
 .signature a	{ color:#3E606F; }
 
+.maintenance { margin:10px; padding:2px; border: 2px solid #ccc; background:#efeefe; font: normal 12px lucida console; }
+
 /* ============== Tables ============== */
 
 table td  { vertical-align:top; }
