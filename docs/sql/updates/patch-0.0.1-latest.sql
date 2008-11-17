@@ -47,7 +47,7 @@ CREATE TABLE `sed_pages_extra_fields` (
   UNIQUE KEY `field_name` (`field_name`)
 ) TYPE=MyISAM;
 
-/* r193 Some speed up for page listings */
+/* r139 Some speed up for page listings */
 ALTER TABLE sed_structure ADD COLUMN structure_pagecount mediumint(8) NOT NULL default '0';
 
 /* r143 t#105, Forum topic preview */
@@ -66,9 +66,40 @@ INSERT INTO `sed_auth` VALUES (581, 4, 'plug', 'indexpolls', 1, 254, 1);
 INSERT INTO `sed_auth` VALUES (577, 5, 'plug', 'indexpolls', 255, 255, 1);
 INSERT INTO `sed_auth` VALUES (578, 6, 'plug', 'indexpolls', 1, 254, 1);
 
-
 DELETE FROM `sed_config` WHERE `config_owner`='plug' AND `config_cat`='recentitems' AND `config_name`='maxpolls' LIMIT 1;
 INSERT INTO `sed_config` VALUES ('plug', 'recentitems', 5, 'redundancy', 2, '2', '1,2,3,4,5', 'Redundancy to come over "private topics" problem');
 
-
 UPDATE `sed_config` SET `config_value` = 'UTF-8' WHERE `config_cat` = 'skin' AND `config_name` = 'charset' LIMIT 1;
+
+/* r150 Adding markitup`s tags by default */
+INSERT INTO `sed_bbcode` (`bbc_id`, `bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacement`, `bbc_container`, `bbc_enabled`, `bbc_priority`, `bbc_plug`, `bbc_postrender`) VALUES
+(35, 'h1', 'str', '[h1]', '<h1>', 1, 1, 128, 'markitup', 0),
+(36, 'h1', 'str', '[/h1]', '</h1>', 1, 1, 128, 'markitup', 0),
+(37, 'h2', 'str', '[h2]', '<h2>', 1, 1, 128, 'markitup', 0),
+(38, 'h2', 'str', '[/h2]', '</h2>', 1, 1, 128, 'markitup', 0),
+(39, 'h3', 'str', '[h3]', '<h3>', 1, 1, 128, 'markitup', 0),
+(40, 'h3', 'str', '[/h3]', '</h3>', 1, 1, 128, 'markitup', 0),
+(41, 'h4', 'str', '[h4]', '<h4>', 1, 1, 128, 'markitup', 0),
+(42, 'h4', 'str', '[/h4]', '</h4>', 1, 1, 128, 'markitup', 0),
+(43, 'h5', 'str', '[h5]', '<h5>', 1, 1, 128, 'markitup', 0),
+(44, 'h5', 'str', '[/h5]', '</h5>', 1, 1, 128, 'markitup', 0),
+(45, 'h6', 'str', '[h6]', '<h6>', 1, 1, 128, 'markitup', 0),
+(46, 'h6', 'str', '[/h6]', '</h6>', 1, 1, 128, 'markitup', 0),
+(47, 'size', 'pcre', '\\[size=([1-2][0-9])\\](.+?)\\[/size\\]', '<span style="font-size:$1pt">$2</span>', 1, 1, 128, 'markitup', 0),
+(48, 'list', 'pcre', '\\[list\\](.+?)\\[/list\\]', '<ul>$1</ul>', 1, 1, 128, 'markitup', 0),
+(49, 'list', 'pcre', '\\[list=(\\w)\\](.+?)\\[/list\\]', '<ol type="$1">$2</ol>', 1, 1, 128, 'markitup', 0),
+(50, 'li', 'str', '[li]', '<li>', 1, 1, 128, 'markitup', 0),
+(51, 'li', 'str', '[/li]', '</li>', 1, 1, 128, 'markitup', 0),
+(52, 'table', 'str', '[table]', '<table>', 1, 1, 128, 'markitup', 0),
+(53, 'table', 'str', '[/table]', '</table>', 1, 1, 128, 'markitup', 0),
+(54, 'tr', 'str', '[tr]', '<tr>', 1, 1, 128, 'markitup', 0),
+(55, 'tr', 'str', '[/tr]', '</tr>', 1, 1, 128, 'markitup', 0),
+(56, 'th', 'str', '[th]', '<th>', 1, 1, 128, 'markitup', 0),
+(57, 'th', 'str', '[/th]', '</th>', 1, 1, 128, 'markitup', 0),
+(58, 'td', 'str', '[td]', '<td>', 1, 1, 128, 'markitup', 0),
+(59, 'td', 'str', '[/td]', '</td>', 1, 1, 128, 'markitup', 0),
+(60, 'hide', 'callback', '\\[hide\\](.+?)\\[/hide\\]', 'return $usr["id"] > 0 ? $input[1] : "<div class=\\"hidden\\">".$L["Hidden"]."</div>";', 1, 1, 150, 'markitup', 1),
+(61, 'spoiler', 'pcre', '\\[spoiler=([^\\]]+)\\](.+?)\\[/spoiler\\]', '<div style="margin:4px 0px 4px 0px"><input type="button" value="$1" onclick="if(this.parentNode.getElementsByTagName(''div'')[0].style.display != '''') { this.parentNode.getElementsByTagName(''div'')[0].style.display = ''''; } else { this.parentNode.getElementsByTagName(''div'')[0].style.display = ''none''; }" /><div style="display:none" class="spoiler">$2</div></div>', 1, 1, 130, 'markitup', 0),
+(62, 'thumb', 'pcre', '\\[thumb=(.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/thumb\\]', '<a href="datas/users/$2"><img src="$1" alt="$2" /></a>', 1, 1, 128, '', 0),
+(63, 'thumb', 'pcre', '\\[thumb\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/thumb\\]', '<a href="datas/users/$1"><img src="datas/thumbs/$1" /></a>', 1, 1, 128, '', 0),
+(64, 'pfs', 'pcre', '\\[pfs\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png|zip|rar|7z|pdf|txt))\\[/pfs\\]', '<strong><a href="$1">$1</a></strong>', 1, 1, 128, '', 0);
