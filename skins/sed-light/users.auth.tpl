@@ -2,7 +2,18 @@
 
 	<div class="mboxHD">{USERS_AUTH_TITLE}</div>
 	<div class="mboxBody">
+	
+	<!-- BEGIN: USERS_AUTH_MAINTENANCE -->
 
+	<div class="maintenance">
+	
+	{PHP.skinlang.usersauth.Maintenance}
+	<p> <span style="font-weight:bold;">{PHP.skinlang.usersauth.Maintenancereason}</span> {USERS_AUTH_MAINTENANCERES}</p>
+
+	</div>
+	
+	<!-- END: USERS_AUTH_MAINTENANCE -->
+	
 		<div style="padding:20px; text-align:center;">
 			<form name="login" action="{USERS_AUTH_SEND}" method="post">
 				<p>{PHP.skinlang.usersauth.Username} {USERS_AUTH_USER}</p>

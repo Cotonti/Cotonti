@@ -39,9 +39,10 @@ switch($n)
 	$ncopyrightsfrom = sed_import('ncopyrightsfrom','P','INT');
 	$ndisabled = sed_import('ndisabled','P','BOL');
 	$nhidden = sed_import('nhidden','P','BOL');
+	$nmtmode = sed_import('nmtmode','P','BOL');
 	//$ntitle = (empty($ntitle)) ? '???' : $ntitle;
 
-	$sql = (!empty($ntitle)) ? sed_sql_query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".sed_sql_prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.", '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
+	$sql = (!empty($ntitle)) ? sed_sql_query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden,  grp_maintenance, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".sed_sql_prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.",  ".(int)$nmtmode.", '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
 
 	$grp_id = sed_sql_insertid();
 
@@ -71,12 +72,13 @@ switch($n)
 		$rmaxtotal = sed_import('rmaxtotal','P','INT');
 		$rdisabled = ($g<6) ? 0 : sed_import('rdisabled','P','BOL');
 		$rhidden = ($g==4) ? 0 : sed_import('rhidden','P','BOL');
+		$rmtmode = sed_import('rmtmode','P','BOL');
 		$rtitle = sed_sql_prep($rtitle);
 	   	$rdesc = sed_sql_prep($rdesc);
 	   	$ricon = sed_sql_prep($ricon);
 	   	$ralias = sed_sql_prep($ralias);
 
-		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden' WHERE grp_id='$g'") : '';
+		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden', grp_maintenance='$rmtmode' WHERE grp_id='$g'") : '';
 
 		sed_cache_clear('sed_groups');
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=users', '', true));
@@ -155,6 +157,9 @@ switch($n)
 
 	$adminmain .= "<tr><td>".$L['Members']." :</td>";
 	$adminmain .= "<td><a href=\"".sed_url('users', "g=".$g)."\">".$row['grp_memberscount']."</a></td></tr>";
+	$adminmain .= "<tr><td>".$L['adm_rights_maintenance']." :</td><td>";
+	$adminmain .= ($row['grp_maintenance']) ? "<input type=\"radio\" class=\"radio\" name=\"rmtmode\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rmtmode\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rmtmode\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rmtmode\" value=\"0\" checked=\"checked\" />".$L['No'];
+	$adminmain .= "</td></tr>";
 	$adminmain .= "<tr><td>".$L['Rights']." :</td>";
 	$adminmain .= "<td><a href=\"".sed_url('admin', "m=rights&g=".$g)."\"><img src=\"images/admin/rights.gif\" alt=\"\" /></a></tr>";
 	
@@ -233,6 +238,11 @@ switch($n)
 	$adminmain .= "<tr><td>".$L['Hidden']." :</td><td>";
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"1\" /> ".$L['Yes'];
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"0\" checked=\"checked\" /> ".$L['No'];
+	$adminmain .= "</td></tr>";
+	
+	$adminmain .= "<tr><td>".$L['adm_rights_maintenance']." :</td><td>";
+	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nmtmode\" value=\"1\" /> ".$L['Yes'];
+	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nmtmode\" value=\"0\" checked=\"checked\" /> ".$L['No'];
 	$adminmain .= "</td></tr>";
 
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\" /></td></tr></table></form>";

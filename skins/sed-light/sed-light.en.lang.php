@@ -206,6 +206,8 @@ $skinlang['usersauth']['Rememberme'] = 'Remember me ?';
 $skinlang['usersauth']['Login'] = 'Login';
 $skinlang['usersauth']['Register'] = 'Click here to register';
 $skinlang['usersauth']['Lostpassword'] = 'Lost your password ?';
+$skinlang['usersauth']['Maintenance'] = 'Site is shut down at the moment. If you are authorized the logon, you can login below. '; // N-0.0.2
+$skinlang['usersauth']['Maintenancereason'] = 'Reason: '; // N-0.0.2
 
 //users.details.tpl
 $skinlang['usersdetails']['Sendprivatemessage'] = 'Send a private message:';
