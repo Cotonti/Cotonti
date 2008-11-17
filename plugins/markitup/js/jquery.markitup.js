@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 // markItUp! Universal MarkUp Engine, JQuery plugin
-// v 1.1.2 beta
+// v 1.1.3 beta
 // Dual licensed under the MIT and GPL licenses.
 // ----------------------------------------------------------------------------
 // Copyright (C) 2007-2008 Jay Salvat
@@ -461,7 +461,7 @@
 						url: options.previewParserPath,
 						data: options.previewParserVar+'='+encodeURIComponent($$.val()),
 						success: function(data) {
-							html = localize(data, 1); 
+							phtml = localize(data, 1); 
 						}
 					} );
 				} else {
@@ -474,9 +474,9 @@
 							}
 						} );
 					}
-					html = template.replace(/<!-- content -->/g, $$.val());
+					phtml = template.replace(/<!-- content -->/g, $$.val());
 				}
-				return html;
+				return phtml;
 			}
 			
 			// set keys pressed
