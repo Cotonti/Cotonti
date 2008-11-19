@@ -102,7 +102,7 @@ INSERT INTO `sed_bbcode` (`bbc_id`, `bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_
 (61, 'spoiler', 'pcre', '\\[spoiler=([^\\]]+)\\](.+?)\\[/spoiler\\]', '<div style="margin:4px 0px 4px 0px"><input type="button" value="$1" onclick="if(this.parentNode.getElementsByTagName(''div'')[0].style.display != '''') { this.parentNode.getElementsByTagName(''div'')[0].style.display = ''''; } else { this.parentNode.getElementsByTagName(''div'')[0].style.display = ''none''; }" /><div style="display:none" class="spoiler">$2</div></div>', 1, 1, 130, 'markitup', 0),
 (62, 'thumb', 'pcre', '\\[thumb=(.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/thumb\\]', '<a href="datas/users/$2"><img src="$1" alt="$2" /></a>', 1, 1, 128, '', 0),
 (63, 'thumb', 'pcre', '\\[thumb\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/thumb\\]', '<a href="datas/users/$1"><img src="datas/thumbs/$1" /></a>', 1, 1, 128, '', 0),
-(64, 'pfs', 'pcre', '\\[pfs\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png|zip|rar|7z|pdf|txt))\\[/pfs\\]', '<strong><a href="$1">$1</a></strong>', 1, 1, 128, '', 0);
+(64, 'pfs', 'pcre', '\\[pfs\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png|zip|rar|7z|pdf|txt))\\[/pfs\\]', '<strong><a href="datas/users/$1">$1</a></strong>', 1, 1, 128, '', 0);
 
 /* r153 Maintenance mode */
 INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'main', '07', 'mtmode', 3, '0');
@@ -112,3 +112,6 @@ ALTER TABLE sed_groups ADD COLUMN grp_maintenance tinyint(1) NOT NULL default '0
 
 UPDATE sed_groups SET grp_maintenance = '1' WHERE grp_alias = 'administrators';
 UPDATE sed_groups SET grp_maintenance = '1' WHERE grp_alias = 'moderators';
+
+/* r155 Fix pfs bbcode */
+UPDATE `sed_bbcode` SET `bbc_replacement` = '<strong><a href="datas/users/$1">$1</a></strong>' WHERE `bbc_id` =64
