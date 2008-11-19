@@ -30,9 +30,9 @@ if (is_array($extp))
 /* ===== */
 
 // Extra fields - getting
-$extrafields = array();
+$extrafields = array(); $number_of_extrafields = 0;
 $fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
-while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; }
 
 if ($a=='add')
 {
@@ -75,7 +75,7 @@ if ($a=='add')
 	$newpageexpire = ($newpageexpire<=$newpagebegin) ? $newpagebegin+31536000 : $newpageexpire;
 	
 	// Extra fields
-	if(count($extrafields)>0)
+	if($number_of_extrafields > 0)
 	foreach($extrafields as $row) 
 	{
 		$import = sed_import('newpage_my_'.$row['field_name'],'P','HTM');
@@ -119,7 +119,7 @@ if ($a=='add')
 		page_extra3,
 		page_extra4,
 		page_extra5,";
-		if(count($extrafields)>0) foreach($extrafields as $row) $ssql .= "page_my_".$row['field_name'].", "; // Extra fields		
+		if($number_of_extrafields > 0) foreach($extrafields as $row) $ssql .= "page_my_".$row['field_name'].", "; // Extra fields		
 $ssql.="page_title,
 		page_desc,
 		page_text,
@@ -143,7 +143,7 @@ $ssql.="page_title,
 			'".sed_sql_prep($newpageextra3)."',
 			'".sed_sql_prep($newpageextra4)."',
 			'".sed_sql_prep($newpageextra5)."',";
-			foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields		
+			if($number_of_extrafields > 0) foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields		
   	$ssql.="'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
 			'".sed_sql_prep($newpagetext)."',
