@@ -40,7 +40,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported)
 	$pfs_header1 = "<html><head>
 	<meta name=\"title' content=\"".$cfg['maintitle']."\" />
 	<meta name=\"description\" content=\"".$cfg['maintitle']."\" />
-	<meta name=\"generator\" content=\"Land Down Under Copyright Neocrome http://www.neocrome.net\" />
+	<meta name=\"generator\" content=\"Seditio-N based by http://www.neocrome.net\" />
 	<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
 	<meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
 	<meta http-equiv=\"pragma\" content\"=no-cache\" />

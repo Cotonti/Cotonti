@@ -400,7 +400,7 @@ while ($row = sed_sql_fetcharray($sqll))
 	$dotpos = mb_strrpos($pfs_file, ".")+1;
 	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
 	unset($add_thumbnail, $add_image);
-	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" alt=\"\" /></a>" : '';
+	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" title=\"Add as file url\" /></a>" : '';
 
 	if ($pfs_extension!=$pfs_realext);
 	{
@@ -419,11 +419,11 @@ while ($row = sed_sql_fetcharray($sqll))
 
 		if ($standalone)
 		{
-			$add_thumbnail .= "<a href=\"javascript:addthumb('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastethumb.gif\" alt=\"\" /></a>";
-			$add_image = "<a href=\"javascript:addpix('".$cfg['pfs_dir_user'].$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pasteimage.gif\" alt=\"\" /></a>";
+			$add_thumbnail .= "<a href=\"javascript:addthumb('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastethumb.gif\" title=\"Add thumbnail\" /></a>";
+			$add_image = "<a href=\"javascript:addpix('".$cfg['pfs_dir_user'].$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pasteimage.gif\" title=\"Add image\" /></a>";
 		}
 		if ($o=='thumbs')
-		{ $pfs_icon = "<a href=\"".$pfs_fullfile."\"><img src=\"".$cfg['th_dir_user'].$pfs_file."\" alt=\"".$pfs_file."\"></a>"; }
+		{ $pfs_icon = "<a href=\"".$pfs_fullfile."\"><img src=\"".$cfg['th_dir_user'].$pfs_file."\" title=\"".$pfs_file."\"></a>"; }
 	}
 
 	$list_files .= "<tr><td>[<a href=\"pfs.php?a=delete&amp;".sed_xg()."&amp;id=".$pfs_id.$more."&amp;o=".$o."\">x</a>]</td>";
@@ -577,13 +577,13 @@ if ($standalone)
 function help(rcode,c1,c2)
 	{ window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
 function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[thumb=".$cfg['th_dir_user']."'+gfile+']'+gfile+'[/thumb]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[thumb]'+gfile+'[/thumb]'; window.close();}
 function addpix(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; window.close();}
 function addfile(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[pfs]".$cfg['rel_dir_user']."'+gfile+'[/pfs]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[pfs]'+gfile+'[/pfs]'; window.close();}
 function addglink(id,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]'; window.close();}
 function comments(rcode)
 	{ window.open('comments.php?id='+rcode,'Comments','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=576,top=64'); }
 function picture(url,sx,sy)
