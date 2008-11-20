@@ -149,7 +149,7 @@ if ($a=='update')
 	if (!empty($rtopictitle) && !empty($rtext))
 	{
 	$rtopicpreview = mb_substr(sed_cc($rtext), 0, 128);	
-		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_preview='".$rtopicpreview."' WHERE ft_id='$q'");
+		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_preview='".sed_sql_prep($rtopicpreview)."' WHERE ft_id='$q'");
 	}
 
 	/* === Hook === */
