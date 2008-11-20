@@ -5,7 +5,7 @@ INSERT INTO `sed_plugins` VALUES (22, 'page.first', 'search', 'page', 'Search', 
 INSERT INTO `sed_plugins` VALUES (23, 'forums.posts.first', 'search', 'forums', 'Search', 'search.forums.posts.first', 10, 1); 
 
 /* r103 */
-DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'forums' AND `config_name` = 'antibumpforum' LIMIT 1;
+DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'forums' AND `config_name` = 'antibumpforums' LIMIT 1;
 
 /* r104 */
 ALTER TABLE `sed_forum_sections` ADD COLUMN `fs_mastername` varchar(128) NOT NULL;
