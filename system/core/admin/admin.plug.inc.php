@@ -116,76 +116,79 @@ switch ($a)
 			$adminmain .= "<td class=\"coltop\">".$L['Action']."</td>";
 			$adminmain .= "</tr>";
 
-			while( list($i,$x) = each($parts) )
+			if (is_array($parts))
 			{
-				$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
-				$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
-
-				if (!empty($info_file['Error']))
+				while( list($i,$x) = each($parts) )
 				{
-					$adminmain .= "<tr>";
-					$adminmain .= "<td colspan=\"3\">".$x."</td>";
-					$adminmain .= "<td colspan=\"5\">".$info_file['Error']."</td>";
-					$adminmain .= "</tr>";
-				}
-				else
-				{
-					$sql = sed_sql_query("SELECT pl_active, pl_id FROM $db_plugins WHERE pl_code='$pl' AND pl_part='".$info_file['Part']."' LIMIT 1");
+					$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
+					$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
-					if ($row = sed_sql_fetcharray($sql))
-					{ $info_file['Status'] = $row['pl_active']; }
-					else
-					{ $info_file['Status'] = 3; }
-
-					$adminmain .= "<tr>";
-					$adminmain .= "<td style=\"width:32px;\">#".($i+1)."</td>";
-					$adminmain .= "<td>".$info_file['Part']."</td>";
-					$adminmain .= "<td>".$info_file['File'].".php</td>";
-					$adminmain .= "<td>".$info_file['Hooks']."</td>";
-					$adminmain .= "<td style=\"text-align:center;\">".$info_file['Order']."</td>";
-					$adminmain .= "<td style=\"text-align:center;\">".$status[$info_file['Status']]."</td>";
-					$adminmain .= "<td style=\"text-align:center;\">";
-
-					if ($info_file['Status']==3)
-					{ $adminmain .= "-"; }
-					elseif ($row['pl_active']==1)
-					{ $adminmain .= "<a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$pl."&b=pausepart&part=".$row['pl_id'])."\">Pause</a>"; }
-					elseif ($row['pl_active']==0)
-					{ $adminmain .= "<a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$pl."&b=unpausepart&part=".$row['pl_id'])."\">Un-pause</a>"; }
-
-					$adminmain .= "</td></tr>";
-					$listtags .= "<tr><td style=\"width:32px;\">#".($i+1)."</td><td>".$info_file['Part']."</td><td>";
-
-					if (empty($info_file['Tags']))
+					if (!empty($info_file['Error']))
 					{
-						$listtags .= $L['None'];
+						$adminmain .= "<tr>";
+						$adminmain .= "<td colspan=\"3\">".$x."</td>";
+						$adminmain .= "<td colspan=\"5\">".$info_file['Error']."</td>";
+						$adminmain .= "</tr>";
 					}
 					else
 					{
-						$line = explode (":",$info_file['Tags']);
-						$line[0] = trim($line[0]);
-						$tags = explode (",",$line[1]);
-						$listtags .= $line[0]." :<br />";
-						foreach ($tags as $k => $v)
+						$sql = sed_sql_query("SELECT pl_active, pl_id FROM $db_plugins WHERE pl_code='$pl' AND pl_part='".$info_file['Part']."' LIMIT 1");
+
+						if ($row = sed_sql_fetcharray($sql))
+						{ $info_file['Status'] = $row['pl_active']; }
+						else
+						{ $info_file['Status'] = 3; }
+
+						$adminmain .= "<tr>";
+						$adminmain .= "<td style=\"width:32px;\">#".($i+1)."</td>";
+						$adminmain .= "<td>".$info_file['Part']."</td>";
+						$adminmain .= "<td>".$info_file['File'].".php</td>";
+						$adminmain .= "<td>".$info_file['Hooks']."</td>";
+						$adminmain .= "<td style=\"text-align:center;\">".$info_file['Order']."</td>";
+						$adminmain .= "<td style=\"text-align:center;\">".$status[$info_file['Status']]."</td>";
+						$adminmain .= "<td style=\"text-align:center;\">";
+
+						if ($info_file['Status']==3)
+						{ $adminmain .= "-"; }
+						elseif ($row['pl_active']==1)
+						{ $adminmain .= "<a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$pl."&b=pausepart&part=".$row['pl_id'])."\">Pause</a>"; }
+						elseif ($row['pl_active']==0)
+						{ $adminmain .= "<a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$pl."&b=unpausepart&part=".$row['pl_id'])."\">Un-pause</a>"; }
+
+						$adminmain .= "</td></tr>";
+						$listtags .= "<tr><td style=\"width:32px;\">#".($i+1)."</td><td>".$info_file['Part']."</td><td>";
+
+						if (empty($info_file['Tags']))
 						{
-							if (mb_substr(trim($v),0,1)=='{')
+							$listtags .= $L['None'];
+						}
+						else
+						{
+							$line = explode (":",$info_file['Tags']);
+							$line[0] = trim($line[0]);
+							$tags = explode (",",$line[1]);
+							$listtags .= $line[0]." :<br />";
+							foreach ($tags as $k => $v)
 							{
-								$listtags .= $v." : ";
-								$found = sed_stringinfile('skins/'.$cfg['defaultskin'].'/'.$line[0], trim($v));
-								$listtags .= $found_txt[$found];
-								$listtags .= "<br />";
-							}
-							else
-							{
-								$listtags .= $v."<br />";
+								if (mb_substr(trim($v),0,1)=='{')
+								{
+									$listtags .= $v." : ";
+									$found = sed_stringinfile('skins/'.$cfg['defaultskin'].'/'.$line[0], trim($v));
+									$listtags .= $found_txt[$found];
+									$listtags .= "<br />";
+								}
+								else
+								{
+									$listtags .= $v."<br />";
+								}
 							}
 						}
+
+						$listtags .= "</td></tr>";
+						$adminmain .= "</td></tr>";
 					}
 
-					$listtags .= "</td></tr>";
-					$adminmain .= "</td></tr>";
 				}
-
 			}
 			$adminmain .= "</table>";
 
@@ -241,6 +244,7 @@ switch ($a)
 					closedir($handle);
 
 					$adminmain .= "Installing the parts...<br />";
+					$firephp->log($parts,"parts");
 					while( list($i,$x) = each($parts) )
 					{
 						$adminmain .= "- Part ".$x." ...";
@@ -249,9 +253,9 @@ switch ($a)
 
 						if (empty($info_part['Error']))
 						{
-				 			$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('".$info_part['Hooks']."', '".$info_part['Code']."', '".sed_sql_prep($info_part['Part'])."', '".sed_sql_prep($info['Name'])."', '".$info_part['File']."',  ".(int)$info_part['Order'].", 1)");
+							$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('".$info_part['Hooks']."', '".$info_part['Code']."', '".sed_sql_prep($info_part['Part'])."', '".sed_sql_prep($info['Name'])."', '".$info_part['File']."',  ".(int)$info_part['Order'].", 1)");
 
-				  			$adminmain .= "Installed<br />";
+							$adminmain .= "Installed<br />";
 						}
 						else
 						{
@@ -371,224 +375,224 @@ switch ($a)
 
 				break;
 
-									case 'uninstall' :
-										$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
-										$adminmain .= "Deleting old installation of this plugin... ";
-										$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
-										$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
-										$adminmain .= "Deleting old configuration entries... ";
-										$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
-										$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$pl'");
-										$adminmain .= "Deleting any old rights about this plugin... ";
-										$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
-										$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
-										$adminmain .= "Resetting the auth column for all the users... ";
-										$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
-										sed_cache_clearall();
+			case 'uninstall' :
+				$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
+				$adminmain .= "Deleting old installation of this plugin... ";
+				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+				$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
+				$adminmain .= "Deleting old configuration entries... ";
+				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+				$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$pl'");
+				$adminmain .= "Deleting any old rights about this plugin... ";
+				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
+				$adminmain .= "Resetting the auth column for all the users... ";
+				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+				sed_cache_clearall();
 
-										$extplugin_uninstall = $cfg['plugins_dir']."/".$pl."/".$pl.".uninstall.php";
-										$adminmain .= "Looking for the optional PHP file : ".$extplugin_uninstall."... ";
-										if (file_exists($extplugin_uninstall))
-										{
-											$adminmain .= "Found, executing...<br />";
-											include_once($extplugin_uninstall);
-										}
-										else
-										{ $adminmain .= "Not found.<br />"; 	}
+				$extplugin_uninstall = $cfg['plugins_dir']."/".$pl."/".$pl.".uninstall.php";
+				$adminmain .= "Looking for the optional PHP file : ".$extplugin_uninstall."... ";
+				if (file_exists($extplugin_uninstall))
+				{
+					$adminmain .= "Found, executing...<br />";
+					include_once($extplugin_uninstall);
+				}
+				else
+				{ $adminmain .= "Not found.<br />"; 	}
 
-										$adminmain .= "<p>".$edit_log."</p>";
-										$adminmain .= "<a href=\"".sed_url('admin', "m=plug")."\">Click here to continue...</a>";
-										break;
+				$adminmain .= "<p>".$edit_log."</p>";
+				$adminmain .= "<a href=\"".sed_url('admin', "m=plug")."\">Click here to continue...</a>";
+				break;
 
-									case 'pause' :
-										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl'");
-										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
-										exit;
-										break;
+			case 'pause' :
+				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl'");
+				sed_cache_clearall();
+				header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
+				exit;
+				break;
 
-									case 'unpause' :
-										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
-										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
-										exit;
-										break;
+			case 'unpause' :
+				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
+				sed_cache_clearall();
+				header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
+				exit;
+				break;
 
-									case 'pausepart' :
-										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl' AND pl_id='$part'");
-										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
-										exit;
-										break;
+			case 'pausepart' :
+				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl' AND pl_id='$part'");
+				sed_cache_clearall();
+				header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
+				exit;
+				break;
 
-									case 'unpausepart' :
-										$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl' AND pl_id='$part'");
-										sed_cache_clearall();
-										header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
-										exit;
-										break;
+			case 'unpausepart' :
+				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl' AND pl_id='$part'");
+				sed_cache_clearall();
+				header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=plug&a=details&pl=".$pl));
+				exit;
+				break;
 
-									default:
-										sed_die();
-										break;
+			default:
+				sed_die();
+				break;
 		}
 
 		break;
 
-									default:
+	default:
 
-										$disp_plugins = "<table class=\"cells\">";
-										$disp_plugins .= "<tr>";
-										$disp_plugins .= "<td class=\"coltop\">".$L['Plugins']."</td>";
-										$disp_plugins .= "<td class=\"coltop\">".$L['Status']."</td>";
-										$disp_plugins .= "</tr>";
+		$disp_plugins = "<table class=\"cells\">";
+		$disp_plugins .= "<tr>";
+		$disp_plugins .= "<td class=\"coltop\">".$L['Plugins']."</td>";
+		$disp_plugins .= "<td class=\"coltop\">".$L['Status']."</td>";
+		$disp_plugins .= "</tr>";
 
-										$sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner='plug' GROUP BY config_cat");
-										while ($row = sed_sql_fetcharray($sql))
-										{ $cfgentries[$row['config_cat']] = $row['COUNT(*)']; }
+		$sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner='plug' GROUP BY config_cat");
+		while ($row = sed_sql_fetcharray($sql))
+		{ $cfgentries[$row['config_cat']] = $row['COUNT(*)']; }
 
-										$handle=opendir($cfg['plugins_dir']);
-										while ($f = readdir($handle))
-										{
-											if(is_dir($cfg['plugins_dir'].'/'.$f) && $f[0] !='.' && $f != 'code')
-											{
-												// Check for plugin .php files, otherwise it's inconsistent
-												$is_plug = false;
-												$dp = opendir($cfg['plugins_dir'].'/'.$f);
-												while($pf = readdir($dp))
-												{
-													if(preg_match('#^'.preg_quote($f).'.*\.php$#', $pf))
-													{
-														$is_plug = true;
-														break;
-													}
-												}
-												closedir($dp);
-												if($is_plug)
-												{
-													$extplugins[] = $f;
-												}
-											}
-										}
-										closedir($handle);
-										sort($extplugins);
-										$cnt_extp = count($extplugins);
-										$cnt_parts = 0;
+		$handle=opendir($cfg['plugins_dir']);
+		while ($f = readdir($handle))
+		{
+			if(is_dir($cfg['plugins_dir'].'/'.$f) && $f[0] !='.' && $f != 'code')
+			{
+				// Check for plugin .php files, otherwise it's inconsistent
+				$is_plug = false;
+				$dp = opendir($cfg['plugins_dir'].'/'.$f);
+				while($pf = readdir($dp))
+				{
+					if(preg_match('#^'.preg_quote($f).'.*\.php$#', $pf))
+					{
+						$is_plug = true;
+						break;
+					}
+				}
+				closedir($dp);
+				if($is_plug)
+				{
+					$extplugins[] = $f;
+				}
+			}
+		}
+		closedir($handle);
+		sort($extplugins);
+		$cnt_extp = count($extplugins);
+		$cnt_parts = 0;
 
-										$plg_standalone = array();
-										$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
-										while ($row3 = sed_sql_fetcharray($sql3))
-										{ $plg_standalone[$row3['pl_code']] = TRUE; }
+		$plg_standalone = array();
+		$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
+		while ($row3 = sed_sql_fetcharray($sql3))
+		{ $plg_standalone[$row3['pl_code']] = TRUE; }
 
-										$plg_tools = array();
-										$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='tools'");
-										while ($row3 = sed_sql_fetcharray($sql3))
-										{ $plg_tools[$row3['pl_code']] = TRUE; }
+		$plg_tools = array();
+		$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='tools'");
+		while ($row3 = sed_sql_fetcharray($sql3))
+		{ $plg_tools[$row3['pl_code']] = TRUE; }
 
-										$adminmain .= "<h4>".$L['Plugins']." (".$cnt_extp.") :</h4>";
-										$adminmain .= "<table class=\"cells\">";
-										$adminmain .= "<tr>";
-										$adminmain .= "<td class=\"coltop\">".$L['Plugins']." ".$L['adm_clicktoedit']."</td>";
-										$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
-										$adminmain .= "<td class=\"coltop\">".$L['Configuration']."</td>";
-										$adminmain .= "<td class=\"coltop\">".$L['Parts']."</td>";
-										$adminmain .= "<td class=\"coltop\">".$L['Status']."</td>";
-										$adminmain .= "<td class=\"coltop\" style=\"width:80px;\">".$L['Rights']."</td>";
-										$adminmain .= "<td class=\"coltop\" style=\"width:64px;\">".$L['Open']."</td>";
-										$adminmain .= "</tr>";
-
-
-										while( list($i,$x) = each($extplugins) )
-										{
-											$extplugin_info = $cfg['plugins_dir']."/".$x."/".$x.".setup.php";
-											if (file_exists($extplugin_info))
-											{
-												$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-
-												if (!empty($info['Error']))
-												{
-													$adminmain .= "<tr><td>".$x."</td><td colspan=\"7\">".$info['Error']."</td></tr>";
-												}
-												else
-												{
-													$sql1 = sed_sql_query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
-													$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
-													$totalactive = sed_sql_result($sql1, 0, "SUM(pl_active)");
-													$totalinstalled = sed_sql_result($sql2, 0, "COUNT(*)");
-													$cnt_parts += $totalinstalled;
-
-													if ($totalinstalled ==0)
-													{
-														$part_status = 3;
-														$info['Partscount'] = '?';
-													}
-													else
-													{
-														$info['Partscount'] = $totalinstalled;
-														if ($totalinstalled>$totalactive && $totalactive>0)
-														{ $part_status = 2; }
-														elseif ($totalactive==0)
-														{ $part_status = 0; }
-														else
-														{ $part_status = 1; }
-													}
+		$adminmain .= "<h4>".$L['Plugins']." (".$cnt_extp.") :</h4>";
+		$adminmain .= "<table class=\"cells\">";
+		$adminmain .= "<tr>";
+		$adminmain .= "<td class=\"coltop\">".$L['Plugins']." ".$L['adm_clicktoedit']."</td>";
+		$adminmain .= "<td class=\"coltop\">".$L['Code']."</td>";
+		$adminmain .= "<td class=\"coltop\">".$L['Configuration']."</td>";
+		$adminmain .= "<td class=\"coltop\">".$L['Parts']."</td>";
+		$adminmain .= "<td class=\"coltop\">".$L['Status']."</td>";
+		$adminmain .= "<td class=\"coltop\" style=\"width:80px;\">".$L['Rights']."</td>";
+		$adminmain .= "<td class=\"coltop\" style=\"width:64px;\">".$L['Open']."</td>";
+		$adminmain .= "</tr>";
 
 
-													$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&a=details&pl=".$info['Code'])."\">";
-													$adminmain .= ($plg_tools[$info['Code']]) ? "<img src=\"images/admin/tools.gif\" alt=\"\" />" : "<img src=\"images/admin/plug.gif\" alt=\"\" />";
+		while( list($i,$x) = each($extplugins) )
+		{
+			$extplugin_info = $cfg['plugins_dir']."/".$x."/".$x.".setup.php";
+			if (file_exists($extplugin_info))
+			{
+				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 
-													$adminmain .= " ".$info['Name']."</a></td><td>".$x."</td>";
+				if (!empty($info['Error']))
+				{
+					$adminmain .= "<tr><td>".$x."</td><td colspan=\"7\">".$info['Error']."</td></tr>";
+				}
+				else
+				{
+					$sql1 = sed_sql_query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
+					$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
+					$totalactive = sed_sql_result($sql1, 0, "SUM(pl_active)");
+					$totalinstalled = sed_sql_result($sql2, 0, "COUNT(*)");
+					$cnt_parts += $totalinstalled;
 
-													$adminmain .= "<td style=\"text-align:center;\">";
-													$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"".sed_url('admin', "m=config&n=edit&o=plug&p=".$info['Code'])."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
-													$adminmain .= "</td>";
-													$adminmain .= "<td style=\"text-align:center;\">".$info['Partscount']."</td>";
-													$adminmain .= "<td style=\"text-align:center;\">".$status[$part_status]."</td>";
-													$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
-													$adminmain .= "<td style=\"text-align:center;\">";
+					if ($totalinstalled ==0)
+					{
+						$part_status = 3;
+						$info['Partscount'] = '?';
+					}
+					else
+					{
+						$info['Partscount'] = $totalinstalled;
+						if ($totalinstalled>$totalactive && $totalactive>0)
+						{ $part_status = 2; }
+						elseif ($totalactive==0)
+						{ $part_status = 0; }
+						else
+						{ $part_status = 1; }
+					}
 
-													if ($plg_tools[$info['Code']])
-													{
-														$adminmain .= "<a href=\"".sed_url('admin', "m=tools&p=".$info['Code'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>";
-													}
-													else
-													{
-														$adminmain .= ($plg_standalone[$info['Code']]) ? "<a href=\"".sed_url('plug', "e=".$info['Code'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>" : '&nbsp;';
-													}
-													$adminmain .= "</td></tr>";
-												}
-											}
-											else
-											{
-												$disp_errors .= "<tr><td>plugins/".$x."</td><td colspan=\"7\">Error: Setup file is missing !</td></tr>";
-											}
-										}
-										$adminmain .= $disp_errors;
-										$adminmain .= "</table>";
 
-										if ($o=='code')
-										{ $sql = sed_sql_query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC"); }
-										else
-										{ $sql = sed_sql_query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC"); }
+					$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&a=details&pl=".$info['Code'])."\">";
+					$adminmain .= ($plg_tools[$info['Code']]) ? "<img src=\"images/admin/tools.gif\" alt=\"\" />" : "<img src=\"images/admin/plug.gif\" alt=\"\" />";
 
-										$adminmain .= "<h4>".$L['Hooks']." (".sed_sql_numrows($sql).") :</h4>";
-										$adminmain .= "<table class=\"cells\">";
-										$adminmain .= "<tr><td class=\"coltop\">".$L['Hooks']."</td><td class=\"coltop\">".$L['Plugin']."</td>";
-										$adminmain .= "<td class=\"coltop\" style=\"text-align:center;\">".$L['Order']."</td>";
-										$adminmain .= "<td class=\"coltop\" style=\"text-align:center;\">".$L['Active']."</td></tr>";
+					$adminmain .= " ".$info['Name']."</a></td><td>".$x."</td>";
 
-										while ($row = sed_sql_fetcharray($sql))
-										{
-											$adminmain .= "<tr>";
-											$adminmain .= "<td>".$row['pl_hook']."</td><td>".$row['pl_code']."</td>";
-											$adminmain .= "<td style=\"text-align:center;\">".$row['pl_order']."</td>";
-											$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$row['pl_active']]."</td>";
-											$adminmain .= "</tr>";
-										}
+					$adminmain .= "<td style=\"text-align:center;\">";
+					$adminmain .= ($cfgentries[$info['Code']]>0) ? "<a href=\"".sed_url('admin', "m=config&n=edit&o=plug&p=".$info['Code'])."\"><img src=\"images/admin/config.gif\" alt=\"\" /></a>" : '&nbsp;';
+					$adminmain .= "</td>";
+					$adminmain .= "<td style=\"text-align:center;\">".$info['Partscount']."</td>";
+					$adminmain .= "<td style=\"text-align:center;\">".$status[$part_status]."</td>";
+					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
+					$adminmain .= "<td style=\"text-align:center;\">";
 
-										$adminmain .= "</table>";
+					if ($plg_tools[$info['Code']])
+					{
+						$adminmain .= "<a href=\"".sed_url('admin', "m=tools&p=".$info['Code'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>";
+					}
+					else
+					{
+						$adminmain .= ($plg_standalone[$info['Code']]) ? "<a href=\"".sed_url('plug', "e=".$info['Code'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>" : '&nbsp;';
+					}
+					$adminmain .= "</td></tr>";
+				}
+			}
+			else
+			{
+				$disp_errors .= "<tr><td>plugins/".$x."</td><td colspan=\"7\">Error: Setup file is missing !</td></tr>";
+			}
+		}
+		$adminmain .= $disp_errors;
+		$adminmain .= "</table>";
 
-										break;
+		if ($o=='code')
+		{ $sql = sed_sql_query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC"); }
+		else
+		{ $sql = sed_sql_query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC"); }
+
+		$adminmain .= "<h4>".$L['Hooks']." (".sed_sql_numrows($sql).") :</h4>";
+		$adminmain .= "<table class=\"cells\">";
+		$adminmain .= "<tr><td class=\"coltop\">".$L['Hooks']."</td><td class=\"coltop\">".$L['Plugin']."</td>";
+		$adminmain .= "<td class=\"coltop\" style=\"text-align:center;\">".$L['Order']."</td>";
+		$adminmain .= "<td class=\"coltop\" style=\"text-align:center;\">".$L['Active']."</td></tr>";
+
+		while ($row = sed_sql_fetcharray($sql))
+		{
+			$adminmain .= "<tr>";
+			$adminmain .= "<td>".$row['pl_hook']."</td><td>".$row['pl_code']."</td>";
+			$adminmain .= "<td style=\"text-align:center;\">".$row['pl_order']."</td>";
+			$adminmain .= "<td style=\"text-align:center;\">".$sed_yesno[$row['pl_active']]."</td>";
+			$adminmain .= "</tr>";
+		}
+
+		$adminmain .= "</table>";
+
+		break;
 }
 
 ?>
