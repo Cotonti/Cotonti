@@ -111,7 +111,7 @@ if ($a=='newtopic')
 			".(int)$s.",
 			'".sed_sql_prep($newtopictitle)."',
 			'".sed_sql_prep($newtopicdesc)."',
-			'".$newtopicpreview."',
+			'".sed_sql_prep($newtopicpreview)."',
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
 			1,
