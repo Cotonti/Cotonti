@@ -244,7 +244,6 @@ switch ($a)
 					closedir($handle);
 
 					$adminmain .= "Installing the parts...<br />";
-					$firephp->log($parts,"parts");
 					while( list($i,$x) = each($parts) )
 					{
 						$adminmain .= "- Part ".$x." ...";

@@ -4095,7 +4095,7 @@ function sed_extrafield_update($oldname, $name, $type, $html, $variants="")
  */
 function sed_extrafield_remove($name)
 {
-	global $db_pages_extra_fields, $db_pages, $firephp;
+	global $db_pages_extra_fields, $db_pages;
 	$step1 = sed_sql_delete($db_pages_extra_fields, "field_name = '$name'") == 1;
 	$sql = "ALTER TABLE $db_pages DROP page_my_".$name;
 	$step2 = sed_sql_query($sql);
