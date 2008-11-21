@@ -19,10 +19,10 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 @clearstatcache();
 
 if ($usr['id']<1)
-	{
+{
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=100&".$sys['url_redirect'], '', true));
 	exit;
-	}
+}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['auth_write']);
@@ -45,7 +45,7 @@ $profile_form_photo = "<a name=\"photo\" id=\"photo\"></a>";
 $profile_form_signature = "<a name=\"signature\" id=\"signature\"></a>";
 
 switch ($a)
-	{
+{
 	/* ============= */
 	case 'avatardelete':
 	/* ============= */
@@ -145,103 +145,124 @@ switch ($a)
 		{ @clearstatcache(); }
 
 	if (!empty($uav_tmp_name) && $uav_size>0)
-		{
+	{
 		$dotpos = mb_strrpos($uav_name,".")+1;
 		$f_extension = mb_strtolower(mb_substr($uav_name, $dotpos, 5));
-
-		if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && $uav_size<=$cfg['av_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+		$fcheck = sed_file_check($uav_tmp_name, $uav_name, $f_extension);
+		if($fcheck)
+		{
+			if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && $uav_size<=$cfg['av_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
-			list($w, $h) = @getimagesize($uav_tmp_name);
-			if ($w<=$cfg['av_maxx'] && $h<=$cfg['av_maxy'] )
+				list($w, $h) = @getimagesize($uav_tmp_name);
+				if ($w<=$cfg['av_maxx'] && $h<=$cfg['av_maxy'] )
 				{
-				$avatar = $usr['id']."-avatar.gif";
-				$avatarpath = $cfg['av_dir'].$avatar;
+					$avatar = $usr['id']."-avatar.gif";
+					$avatarpath = $cfg['av_dir'].$avatar;
 
-				if (file_exists($avatarpath))
-					{ unlink($avatarpath); }
+					if (file_exists($avatarpath))
+						{ unlink($avatarpath); }
 
-				move_uploaded_file($uav_tmp_name, $avatarpath);
+					move_uploaded_file($uav_tmp_name, $avatarpath);
 
-				/* === Hook === */
-				$extp = sed_getextplugins('profile.update.avatar');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-				/* ===== */
+					/* === Hook === */
+					$extp = sed_getextplugins('profile.update.avatar');
+					if (is_array($extp))
+					{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+					/* ===== */
 
-				$uav_size = filesize($avatarpath);
-				$sql = sed_sql_query("UPDATE $db_users SET user_avatar='$avatarpath' WHERE user_id='".$usr['id']."'");
-				$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
-				$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$avatar', '$f_extension', -1, '', ".(int)$uav_size.", 0)");
-				@chmod($avatarpath, 0666);
+					$uav_size = filesize($avatarpath);
+					$sql = sed_sql_query("UPDATE $db_users SET user_avatar='$avatarpath' WHERE user_id='".$usr['id']."'");
+					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
+					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$avatar', '$f_extension', -1, '', ".(int)$uav_size.", 0)");
+					@chmod($avatarpath, 0666);
 				}
 			}
 		}
+		else
+		{
+			$error_string .= sprintf($L['pro_avatarnotvalid'], $f_extension);
+		}
+	}
 
 	if (!empty($uph_tmp_name) && $uph_size>0)
-		{
+	{
 		$dotpos = mb_strrpos($uph_name,".")+1;
 		$f_extension = mb_strtolower(mb_substr($uph_name, $dotpos, 5));
-
-		if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && $uph_size<=$cfg['ph_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+		$fcheck = sed_file_check($uph_tmp_name, $uph_name, $f_extension);
+		if($fcheck)
+		{
+			if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && $uph_size<=$cfg['ph_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
-			list($w, $h) = @getimagesize($uph_tmp_name);
-			if ($w<=$cfg['ph_maxx'] && $h<=$cfg['ph_maxy'] )
+				list($w, $h) = @getimagesize($uph_tmp_name);
+				if ($w<=$cfg['ph_maxx'] && $h<=$cfg['ph_maxy'] )
 				{
-				$photo = $usr['id']."-photo.gif";
-				$photopath = $cfg['photos_dir'].$photo;
+					$photo = $usr['id']."-photo.gif";
+					$photopath = $cfg['photos_dir'].$photo;
 
-				if (file_exists($photopath))
-					{ unlink($photopath); }
+					if (file_exists($photopath))
+						{ unlink($photopath); }
 
-				move_uploaded_file($uph_tmp_name, $photopath);
+					move_uploaded_file($uph_tmp_name, $photopath);
 
-				/* === Hook === */
-				$extp = sed_getextplugins('profile.update.photo');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-				/* ===== */
+					/* === Hook === */
+					$extp = sed_getextplugins('profile.update.photo');
+					if (is_array($extp))
+					{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+					/* ===== */
 
-				$uph_size = filesize($photopath);
-				$sql = sed_sql_query("UPDATE $db_users SET user_photo='$photopath' WHERE user_id='".$usr['id']."'");
-				$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
-				$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$photo', '$f_extension', -1, '', ".(int)$uph_size.", 0)");
-				@chmod($photopath, 0666);
+					$uph_size = filesize($photopath);
+					$sql = sed_sql_query("UPDATE $db_users SET user_photo='$photopath' WHERE user_id='".$usr['id']."'");
+					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
+					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$photo', '$f_extension', -1, '', ".(int)$uph_size.", 0)");
+					@chmod($photopath, 0666);
 				}
 			}
 		}
+		else
+		{
+			$error_string .= sprintf($L['pro_photonotvalid'], $f_extension);
+		}
+	}
 
 	if (!empty($usig_tmp_name) && $usig_size>0)
-		{
+	{
 		$dotpos = mb_strrpos($usig_name, ".")+1;
 		$f_extension = mb_strtolower(mb_substr($usig_name, $dotpos, 5));
-
-		if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && $usig_size<=$cfg['sig_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+		$fcheck = sed_file_check($usig_tmp_name, $usig_name, $f_extension);
+		if($fcheck)
+		{
+			if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && $usig_size<=$cfg['sig_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
-			list($w, $h) = @getimagesize($usig_tmp_name);
-			if ($w<=$cfg['sig_maxx'] && $h<=$cfg['sig_maxy'] )
+				list($w, $h) = @getimagesize($usig_tmp_name);
+				if ($w<=$cfg['sig_maxx'] && $h<=$cfg['sig_maxy'] )
 				{
-				$signature = $usr['id']."-signature.gif";
-				$signaturepath = $cfg['sig_dir'].$signature;
+					$signature = $usr['id']."-signature.gif";
+					$signaturepath = $cfg['sig_dir'].$signature;
 
-				if (file_exists($signaturepath))
-					{ unlink($signaturepath); }
+					if (file_exists($signaturepath))
+						{ unlink($signaturepath); }
 
-				move_uploaded_file($usig_tmp_name, $signaturepath);
+					move_uploaded_file($usig_tmp_name, $signaturepath);
 
-				/* === Hook === */
-				$extp = sed_getextplugins('profile.update.signature');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-				/* ===== */
+					/* === Hook === */
+					$extp = sed_getextplugins('profile.update.signature');
+					if (is_array($extp))
+					{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+					/* ===== */
 
-				$usig_size = filesize($signaturepath);
-				$sql = sed_sql_query("UPDATE $db_users SET user_signature='$signaturepath' WHERE user_id='".$usr['id']."'");
-				$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
-				$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$signature', '$f_extension', -1, '', ".(int)$usig_size.", 0)");
-				@chmod($signaturepath, 0666);
+					$usig_size = filesize($signaturepath);
+					$sql = sed_sql_query("UPDATE $db_users SET user_signature='$signaturepath' WHERE user_id='".$usr['id']."'");
+					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
+					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$signature', '$f_extension', -1, '', ".(int)$usig_size.", 0)");
+					@chmod($signaturepath, 0666);
 				}
 			}
 		}
+		else
+		{
+			$error_string .= sprintf($L['pro_signotvalid'], $f_extension);
+		}
+	}
 
 	$rusertext = sed_import('rusertext','P','TXT');
 	$rusercountry = sed_import('rusercountry','P','ALP');
@@ -294,7 +315,7 @@ switch ($a)
 	$rusertheme = ($ruserskin != $row['user_skin']) ? $ruserskin : $rusertheme;
 	
 	if (!empty($rnewpass1) && !empty($rnewpass2) && !empty($roldpass))
-		{
+	{
 		$roldpass = sed_import('roldpass','P','PSW');
 		$roldpass = md5($roldpass);
 		
@@ -309,25 +330,25 @@ switch ($a)
 		$error_string .= ($roldpass!=$row['user_password']) ? $L['pro_wrongpass']."<br />" : '';
 
 		if (empty($error_string))
-			{
+		{
 			$rnewpass = md5($rnewpass1);
 			$sql = sed_sql_query("UPDATE $db_users SET user_password='$rnewpass' WHERE user_id='".$usr['id']."'");
 
 			if ($cfg['authmode']==1 || $cfg['authmode']==3)
-				{
+			{
 				$u = base64_encode($usr['id'].":_:$rnewpass:_:".$ruserskin.":_:".$rusertheme);
 				sed_setcookie("SEDITIO", "$u", time()+63072000, $cfg['cookiepath'], $cfg['cookiedomain'], false, true);
-				}
+			}
 
 			if ($cfg['authmode']==2 || $cfg['authmode']==3)
-				{
+			{
 				$_SESSION['rseditiop'] = $rnewpass;
-				}
 			}
 		}
+	}
 
 	if (empty($error_string))
-		{
+	{
 		$ruserextra1 = ($cfg['extra1uchange'] && $ruserextra1_p) ? mb_substr($ruserextra1,0,$cfg['extra1tsetting']) : $urr['user_extra1'];
 		$ruserextra2 = ($cfg['extra2uchange'] && $ruserextra2_p) ? mb_substr($ruserextra2,0,$cfg['extra2tsetting']) : $urr['user_extra2'];
 		$ruserextra3 = ($cfg['extra3uchange'] && $ruserextra3_p) ? mb_substr($ruserextra3,0,$cfg['extra3tsetting']) : $urr['user_extra3'];
@@ -381,7 +402,7 @@ switch ($a)
 
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=113", '', true));
 		exit;
-		}
+	}
 	break;
 
 	/* ============= */
@@ -390,7 +411,7 @@ switch ($a)
 
 	break;
 
-	}
+}
 
 $profile_form_skins .= sed_selectbox_skin($urr['user_skin'], 'ruserskin');
 $profile_form_themes .= sed_selectbox_theme($urr['user_skin'], 'rusertheme', $urr['user_theme']);
@@ -400,10 +421,10 @@ $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '
 
 $profile_form_timezone = "<select name=\"rusertimezone\" size=\"1\">";
 while( list($i,$x) = each($timezonelist) )
-	{
+{
 	$selected = ($x==$urr['user_timezone']) ? "selected=\"selected\"" : '';
 	$profile_form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
-	}
+}
 $profile_form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
 
 $profile_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
@@ -427,17 +448,17 @@ $profile_form_signature .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=
 $profile_form_signature .= "<input name=\"usersig\" type=\"file\" class=\"file\" size=\"24\" /><br />";
 
 if ($a=='avatarchoose')
-	{
+{
 	sed_check_xg();
 	$profile_form_avatar .=  "<a name=\"list\" id=\"list\"></a><h4>".$L['pro_avatarschoose']." :</h4>";
 	$handle = opendir($cfg['defav_dir']);
 	while ($f = readdir($handle))
-		{
+	{
 		if ($f != "." && $f != "..")
 			{ $profile_form_avatar .= "<a href=\"users.php?m=profile&amp;a=avatarselect&amp;".sed_xg()."&amp;id=".urlencode($f)."#avatar\"><img src=\"".$cfg['defav_dir'].$f."\" alt=\"\" /></a> "; }
-		}
-	closedir($handle);
 	}
+	closedir($handle);
+}
 else
 	{ $profile_form_avatar .= "<a href=\"users.php?m=profile&amp;a=avatarchoose&amp;".sed_xg()."#list\">".$L['pro_avatarspreset']."</a>"; }
 
@@ -472,10 +493,10 @@ $mskin = sed_skinfile(array('users', 'profile'));
 $t = new XTemplate($mskin);
 
 if (!empty($error_string))
-	{
+{
 	$t->assign("USERS_PROFILE_ERROR_BODY",$error_string);
 	$t->parse("MAIN.USERS_PROFILE_ERROR");
-	}
+}
 
 $t->assign(array(
 	"USERS_PROFILE_TITLE" => "<a href=\"users.php?m=profile\">".$L['pro_title']."</a>",

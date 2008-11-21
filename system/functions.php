@@ -1861,6 +1861,69 @@ function sed_dieifdisabled($disabled)
 	return;
 }
 
+/**
+ * Checks a file to be sure it is valid
+ *
+ * @param string $path File path
+ * @param string $name File name
+ * @param string $ext File extension
+ * @return bool
+ */
+function sed_file_check($path, $name, $ext)
+{
+	global $L;
+	require($cfg['system_dir'].'./mimetype.php');
+	$fcheck = FALSE;
+	if(in_array($ext, array('jpg', 'jpeg', 'png', 'gif')))
+	{
+		switch($ext)
+		{
+			case 'gif':
+				$fcheck = imagecreatefromgif($path);
+			break;
+			case 'png':
+				$fcheck = imagecreatefrompng($path);
+			break;
+			default:
+				$fcheck = imagecreatefromjpeg($path);
+			break;
+		}
+		$fcheck = (!$fcheck) ? FALSE : TRUE;
+	}
+	else
+	{
+		if(!$empty($mime_type[$ext]))
+		{
+			foreach($mime_type[$ext] as $mime)
+			{
+				$f = ((substr(phpversion(),0, 3)>="5.1")) ? '' : fopen($path, "rb");
+				if(substr(phpversion(),0, 3) < "5.1") fseek($f, $mime[3]);
+				$ff = ((substr(phpversion(),0, 3)>="5.1")) ? '' : fread($f, $mime[4]);
+				$content = (substr(phpversion(),0, 3)>="5.1") ? file_get_contents($path,0,NULL,$mime[3],$mime[4]) : $ff ;
+				$content = ($mime[2]) ? bin2hex($content) : $content;
+				$mime[1] = ($mime[2]) ? strtolower($mime[1]) : $mime[1];
+				$i++;
+				if ($content == $mime[1])
+				{
+					$fcheck = TRUE;
+					break;
+				}
+			}
+			$fclose = ((substr(phpversion(),0, 3)>="5.1")) ? '' : fclose($f);
+		}
+		else
+		{
+			$fcheck = TRUE;
+			sed_log(sprintf($L['pfs_filechecknomime'], $ext, $name), 'sec');
+		}
+	}
+	if(!$fcheck)
+	{
+		sed_log(sprintf($L['pfs_filecheckfail'], $ext, $name), 'sec');
+	}
+	return($fcheck);
+}
+
 /*
  * ==================================== Forum Functions ==================================
  */
