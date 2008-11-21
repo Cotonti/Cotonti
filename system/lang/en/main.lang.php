@@ -577,6 +577,10 @@ $L['pfs_newfolder'] = 'Create a new folder :';
 $L['pfs_ispublic'] = 'Public ?';
 $L['pfs_isgallery'] = 'Gallery ?';
 $L['pfs_extallowed'] = 'Extensions allowed';
+$L['pfs_filechecknomime'] = 'Warning: No Mime Type data was found for the Extension: %1$s Filename - %2$s'; // N-0.0.2
+$L['pfs_filecheckfail'] = 'Warning: File Check Failed for Extension: %1$s Filename - %2$s'; // N-0.0.2
+$L['pfs_filenotvalid'] = "This is not a valid %1\$s file."; // N-0.0.2
+
 
 /* ====== Plug ====== */
 
@@ -664,5 +668,8 @@ $L['pro_photoupload'] = 'Upload a photography';
 $L['pro_avatarspreset'] = '...or click here to display a gallery of pre-loaded avatars';
 $L['pro_avatarschoose'] = 'Click an image below to set it as your own avatar';
 $L['pro_avataruploadfailed'] = 'The upload failed, delete the old avatar before to free the slot !';
+$L['pro_avatarnotvalid'] = "This avatar is not a valid %1\$s image."; // N-0.0.2
+$L['pro_photonotvalid'] = "This photo is not a valid %1\$s image."; // N-0.0.2
+$L['pro_sigotvalid'] = "This signature is not a valid %1\$s image."; // N-0.0.2
 
 ?>
