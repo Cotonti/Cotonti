@@ -293,6 +293,54 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 $fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
 while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('LIST_ROW_MY_'.strtoupper($row['field_name']), $pag['page_my_'.$row['field_name']]);
 
+	// Adding LIST_ROW_TEXT tag
+switch($pag['page_type'])
+{
+	case '1':
+		$t->assign("LIST_ROW_TEXT", $pag['page_text']);
+		break;
+
+	case '2':
+
+		if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
+		{
+			ob_start();
+			eval($pag['page_text']);
+			$t->assign("LIST_ROW_TEXT", ob_get_clean());
+		}
+		else
+		{
+			$t->assign("LIST_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
+		}
+		break;
+
+	default:
+		if($cfg['parser_cache'])
+		{
+			if(empty($pag['page_html']) && !empty($pag['page_text']))
+			{
+				$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+				sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
+			}
+			$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
+			$t->assign('LIST_ROW_TEXT', $html);
+		}
+		else
+		{
+			$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+			$text = sed_post_parse($text, 'pages');
+			$t->assign('LIST_ROW_TEXT', $text);
+		}
+		break;
+}
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
+	$t->parse("MAIN.LIST_ROW");
+}
 
 
 /* === Hook === */
