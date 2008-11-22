@@ -201,7 +201,8 @@ $mtchlvl = mb_substr_count($mtch,".");
 while (list($i,$x) = each($sed_cat))
 {
 	if(mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $mm<$dc)
-		{			$mm++;
+		{
+			$mm++;
 			$ii++;
 		}
 	elseif (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $kk<$cfg['maxrowsperpage'])
@@ -222,7 +223,8 @@ while (list($i,$x) = each($sed_cat))
 			$kk++;
 		}
 	elseif (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl)
-		{			$ii++;
+		{
+			$ii++;
 		}
 }
 
@@ -286,14 +288,11 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_ADMIN" => $pag['admin'],
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
 	));
+	
+	// Extra fields - adding LIST_ROW_MY_XXXXXXX tag
+$fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
+while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('LIST_ROW_MY_'.strtoupper($row['field_name']), $pag['page_my_'.$row['field_name']]);
 
-	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* ===== */
-
-	$t->parse("MAIN.LIST_ROW");
-}
 
 
 /* === Hook === */
