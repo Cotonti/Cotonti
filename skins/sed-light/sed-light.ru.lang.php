@@ -208,6 +208,8 @@ $skinlang['usersauth']['Rememberme'] = 'Запомнить?';
 $skinlang['usersauth']['Login'] = 'Вход';
 $skinlang['usersauth']['Register'] = 'Регистрация';
 $skinlang['usersauth']['Lostpassword'] = 'Запросить пароль';
+$skinlang['usersauth']['Maintenance'] = 'Сайт в данный момент закрыт. Если вам вход разрешен, вы можете авторизироваться ниже. '; // N-0.0.2
+$skinlang['usersauth']['Maintenancereason'] = 'Причина: '; // N-0.0.2
 
 //users.details.tpl
 $skinlang['usersdetails']['Sendprivatemessage'] = 'Послать личное сообщение:';

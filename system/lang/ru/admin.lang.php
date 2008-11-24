@@ -10,7 +10,7 @@ Language : Russian (code:ru)
 Localization done by : Antar ( http://subs.com.ru/page.php?al=Seditio_ru_Lang_Pack )
 -----------------------
 [BEGIN_SED]
-File=system/core/admin/lang/ru/admin.lang.php
+File=system/lang/ru/admin.lang.php
 Version=125
 Updated=2007-feb-20
 Type=Lang
@@ -86,6 +86,8 @@ $L['cfg_hostip'] = array('IP Сервера', 'IP Сервера, опциона
 $L['cfg_gzip'] = array('Gzip', 'Gzip компрессия при выводе HTML');
 $L['cfg_cache'] = array('Внутренний кэш', 'Оставьте включенным для лучшей производительности');
 $L['cfg_devmode'] = array('Режим отладки', 'Не включать на действующих сайтах');
+$L['cfg_mtmode'] = array('Режим обслуживания', 'Доступа к сайту разрешен лишь авторизированным пользователям'); // N-0.0.2
+$L['cfg_mtres'] = array('Причина режима обслуживания', 'Опционально, следует быть кратким'); // N-0.0.2
 $L['cfg_doctypeid'] = array('Тип документа', '&lt;!DOCTYPE> в шапке HTML');
 $L['cfg_charset'] = array('HTML кодировка', '');
 $L['cfg_cookiedomain'] = array('Домен для cookies', 'По умолчанию: пусто');
@@ -260,6 +262,7 @@ $L['adm_defstate'] = 'Состояние по умолчанию';	// New in v11
 $L['adm_defstate_0'] = 'Свёрнуто';	// New in v11
 $L['adm_defstate_1'] = 'Развёрнуто';	// New in v11
 $L['adm_forums_master'] = 'Родительская секция';  // New in N-0.0.1
+$L['adm_enableviewers'] = 'Включить отображение просматривающих раздел';  // N-0.0.2
 
 
 /* ====== IP search ====== */
@@ -366,6 +369,7 @@ $L['adm_rights_allow10'] = 'Разрешено';
 $L['adm_rights_allow00'] = 'Запрещено';
 $L['adm_rights_allow11'] = 'Разрешено и закрыто в целях безопасности';
 $L['adm_rights_allow01'] = 'Запрещено и закрыто в целях безопасности';
+$L['adm_rights_maintenance'] = 'Разрешен вход на сайт при включенном режиме обслуживания'; // N-0.0.2
 
 /* ====== Plugins ====== */
 

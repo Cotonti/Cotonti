@@ -6,7 +6,7 @@ Copyright Neocrome
 http://www.neocrome.net
 -----------------------
 Seditio language pack
-LANG : Russian (code:ru)
+Language : Russian (code:ru)
 Localization done by : Antar
 -----------------------
 [BEGIN_SED]
@@ -452,6 +452,7 @@ $L['bbcodes_ex_preview'] = 'Переключение режимов Редакт
 /* ====== Common ====== */
 
 $L['com_skinfail'] = 'Предупреждение: не удалось загрузить выбранный вами скин, проверьте настройки, установленные в профиле.';
+$L['com_themefail'] = 'Предупреждение: не удалось загрузить выбранную вами тему для выбранного скина, пожалуйста, проверьте свой профиль и установите тему.'; // N-0.0.2
 $L['com_members'] = 'пользователь(ей)';
 $L['com_guests'] = 'гость(ей)';
 

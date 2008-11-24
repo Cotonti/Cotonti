@@ -537,6 +537,7 @@ $L['com_nocommentsyet'] = 'No comments yet';
 $L['for_newtopic'] = 'New topic';
 $L['for_markallasread'] = 'Mark all posts as read';
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
+$L['for_antibump'] = 'Protection against spam is on. You can not add a few messages a row.';
 
 /* ====== List ====== */
 
@@ -558,6 +559,7 @@ $L['pagadd_title'] = 'New page submission form';
 $L['pagadd_subtitle'] = 'Submit a new page';
 $L['paged_title'] = 'Page properties';
 $L['paged_subtitle'] = 'Update values for this page';
+$L['pfs_resizeimages'] = 'to scale the image?'; // N-0.0.2
 $L['comm_on_page'] = 'on page'; // N-0.0.2
 
 /* ====== Personal file space ====== */
