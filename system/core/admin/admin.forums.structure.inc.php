@@ -99,7 +99,7 @@ if ($n=='options')
 
 	$adminpath[] = array (sed_url('admin', "m=forums&s=structure&n=options&id=".$id), sed_cc($fn_title));
 
-	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "forums&s=structure&n=options&a=update&id=".$fn_id)."\" method=\"post\">";
+	$adminmain .= "<form id=\"savestructure\" action=\"".sed_url('admin', "m=forums&s=structure&n=options&a=update&id=".$fn_id)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Code']." :</td>";
 	$adminmain .= "<td>".$fn_code."</td></tr>";
