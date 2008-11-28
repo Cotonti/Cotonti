@@ -23,6 +23,7 @@ $adminpath[] = array (sed_url('admin', 'm=plug'), $L['Plugins']);
 
 $pl = sed_import('pl','G','ALP');
 $part = sed_import('part','G','ALP');
+$ko = sed_import('ko','G','BOL');
 
 $status[0] = '<span style="color:#5882AC; font-weight:bold;">'.$L['adm_paused'].'</span>';
 $status[1] = '<span style="color:#739E48; font-weight:bold;">'.$L['adm_running'].'</span>';
@@ -62,6 +63,9 @@ switch ($a)
 			closedir($handle);
 			if (is_array($parts))
 			{ sort($parts); }
+			
+			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$pl' ");
+			$isinstalled = sed_sql_result($sql, 0, "COUNT(*)");
 
 			$sql = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
 			$totalconfig = sed_sql_result($sql, 0, "COUNT(*)");
@@ -96,12 +100,20 @@ switch ($a)
 
 			$adminmain .= "<h4>".$L['Options']." :</h4>";
 			$adminmain .= "<table class=\"cells\">";
+			
 			$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=install")."\">".$L['adm_opt_installall']."</a></td>";
-			$adminmain .= "<td>".$L['adm_opt_installall_explain']."</td></tr>";
+			$adminmain .= "<td>".$L['adm_opt_installall_explain'];
+			$adminmain .= (!$isinstalled && $totalconfig) ? "<br /><small><a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=install&ko=1")."\">".$L['adm_opt_setoption_warn']."</a></small>" : '' ;
+			$adminmain .= "</td></tr>";
+			
 			$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=uninstall")."\">".$L['adm_opt_uninstallall']."</a></td>";
-			$adminmain .= "<td>".$L['adm_opt_uninstallall_explain']."</td></tr>";
+			$adminmain .= "<td>".$L['adm_opt_uninstallall_explain'];
+			$adminmain .= ($isinstalled && $totalconfig) ? "<br /><small><a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=uninstall&ko=1")."\">".$L['adm_opt_uninstall_warn']."</a></small>" : '' ;
+			$adminmain .= "</td></tr>";
+			
 			$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=pause")."\">".$L['adm_opt_pauseall']."</a></td>";
 			$adminmain .= "<td>".$L['adm_opt_pauseall_explain']."</td></tr>";
+
 			$adminmain .= "<tr><td><a href=\"".sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=unpause")."\">".$L['adm_opt_unpauseall']."</a></td>";
 			$adminmain .= "<td>".$L['adm_opt_unpauseall_explain']."</td></tr>";
 			$adminmain .= "</table>";
@@ -216,11 +228,14 @@ switch ($a)
 				$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
 				$adminmain .= "Deleting old installation of this plugin... ";
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
-
+				
+				if (!$ko)
+					{
 				$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' and config_cat='$pl'");
 				$adminmain .= "Deleting old configuration entries... ";
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
-
+					}
+				
 				$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
 
 				$adminmain .= "Looking for the setup file... ";
@@ -294,8 +309,17 @@ switch ($a)
 										$line['Type'] = 0;
 										break;
 								}
-
-								$sql = sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".$line[3]."', '".$line[2]."', '".sed_sql_prep($line[4])."')");
+								
+								if (!$ko)
+									{ $sql = sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".$line[3]."', '".$line[2]."', '".sed_sql_prep($line[4])."')"); }
+								elseif ($ko)
+									{
+									$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$pl' AND config_name='".$line[0]."' ");
+									$if = sed_sql_result($sqltmp, 0, "COUNT(*)");
+									
+									$sql = (!$if) ? sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".$line[3]."', '".$line[2]."', '".sed_sql_prep($line[4])."')") : ''; 
+									}
+									
 								$adminmain .= "- Entry #$j $i (".$line[1].") Installed<br />";
 							}
 						}
@@ -309,10 +333,13 @@ switch ($a)
 				{
 					$adminmain .= "Not found ! Installation failed !<br />";
 				}
-
+				
+				if (!$ko)
+				{
 				$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$pl'");
 				$adminmain .= "Deleting any old rights about this plugin... ";
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+				}
 
 				$adminmain .= "Adding the rights for the groups of users...<br />";
 
@@ -349,8 +376,18 @@ switch ($a)
 						$ins_auth = sed_auth_getvalue($info['Auth_members']);
 						$ins_lock = sed_auth_getvalue($info['Lock_members']);
 					}
-
-					$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
+					
+					if (!$ko)
+						{ $sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")"); }
+					elseif (!$ko)
+						{
+						$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_auth WHERE auth_code='plug' AND auth_groupid='".(int)$v['id']."' AND auth_option='$pl' ");
+						$if = sed_sql_result($sqltmp, 0, "COUNT(*)");
+						
+						$sql = (!$if) ? sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")") : ''; 
+						}
+					
+					
 					$adminmain .= "Group #".$v['id'].", ".$sed_groups[$v['id']]['title']." : Auth=".sed_build_admrights($ins_auth)." / Lock=".sed_build_admrights($ins_lock).$comment."<br />";
 				}
 				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
@@ -378,12 +415,15 @@ switch ($a)
 				$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
 				$adminmain .= "Deleting old installation of this plugin... ";
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+				if (!$ko)
+				{
 				$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
 				$adminmain .= "Deleting old configuration entries... ";
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 				$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$pl'");
 				$adminmain .= "Deleting any old rights about this plugin... ";
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+				}
 				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
 				$adminmain .= "Resetting the auth column for all the users... ";
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";

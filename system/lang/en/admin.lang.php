@@ -389,6 +389,8 @@ $L['adm_opt_pauseall'] = 'Pause all';
 $L['adm_opt_pauseall_explain'] = 'This will pause (disable) all the parts of the plugin.';
 $L['adm_opt_unpauseall'] = 'Un-pause all';
 $L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the parts of the plugin.';
+$L['adm_opt_setoption_warn'] = 'Options found for this plugin. Would you like to install from kept options ?'; // N-0.0.2
+$L['adm_opt_uninstall_warn'] = 'You can delete this plugin without deleting old settings (rights and options). Click if you want to.'; // N-0.0.2
 
 /* ====== Private messages ====== */
 
