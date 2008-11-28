@@ -239,7 +239,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 			
 			if ($row['fm_lt_date']>$latestp)
 				{
-				$sql0 = sed_sql_query("SELECT fm_lt_id, fm_lt_title, fm_lt_postername FROM $db_forum_subforums WHERE fm_id='".$row['fm_id']."' ");
+				$sql0 = sed_sql_query("SELECT fm_lt_id, fm_lt_title, fm_lt_posterid, fm_lt_postername FROM $db_forum_subforums WHERE fm_id='".$row['fm_id']."' ");
 				$fsnn = sed_sql_fetcharray($sql0);
 				
 				$fsnn['fm_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fm_lt_date'] + $usr['timezone'] * 3600);
@@ -251,7 +251,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 				
 				$t-> assign(array(
 					"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsnn['fm_lt_date'],
-					"FORUMS_SECTIONS_ROW_LASTPOSTER" => $fsnn['fm_lt_postername'],
+					"FORUMS_SECTIONS_ROW_LASTPOSTER" => sed_build_user($fsnn['fm_lt_posterid'], sed_cc($fsnn['fm_lt_postername'])),
 					"FORUMS_SECTIONS_ROW_LASTPOST" => $fsnn['lastpost'],
 					"FORUMS_SECTIONS_ROW_TIMEAGO" => $fsnn['fs_timago']
 				));
@@ -264,12 +264,12 @@ while ($fsn = sed_sql_fetcharray($sql))
 				$ii++;
 					if ($ii%2!=0)
 						{
-						$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$row['fm_id'])."\">".$j.$row['fm_title']."</a>");
+						$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$row['fm_id'])."\">".$j.sed_cc($row['fm_title'])."</a>");
 						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESI");
 						}
 					else
 						{
-						$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$row['fm_id'])."\">".$j.$row['fm_title']."</a>");
+						$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$row['fm_id'])."\">".$j.sed_cc($row['fm_title'])."</a>");
 						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESII");
 						}
 			

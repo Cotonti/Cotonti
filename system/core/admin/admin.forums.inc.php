@@ -49,19 +49,19 @@ if ($n=='edit')
 		$rtitle = sed_sql_prep($rtitle);
 		$rdesc = sed_sql_prep($rdesc);
 		$rcat = sed_sql_prep($rcat);
-		$rmaster = sed_import('rmaster', 'P', 'INT', 5, TRUE);
-		$mastername = sed_cc($rtitle);
+		$rmaster = sed_import('rmaster', 'P', 'INT');
+		$mastername = $rtitle;
 
-		$sql = sed_sql_query("SELECT fs_id, fs_masterid, fs_order, fs_category FROM $db_forum_sections WHERE fs_id=$id");
+		$sql = sed_sql_query("SELECT fs_id, fs_masterid, fs_order, fs_category FROM $db_forum_sections WHERE fs_id=$id ");
 		sed_die(sed_sql_numrows($sql)==0);
 		$row_cur = sed_sql_fetcharray($sql);
-
-		if ($row_cur['fs_masterid'] != $rmaster)
+		
+		if ($rmaster!='' && $row_cur['fs_masterid']!=$rmaster)
 		{
 			$sql1 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='$rmaster' ");
 			$row1 = sed_sql_fetcharray($sql1);
 
-			$master = sed_sql_prep(sed_cc($row1['fs_title']));
+			$master = sed_sql_prep($row1['fs_title']);
 
 			$sql = sed_sql_query("DELETE FROM $db_forum_subforums WHERE fm_id='$id' OR fm_masterid='$id' ");
 			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('$id', '$rmaster', '$mastername') ");
@@ -238,7 +238,7 @@ else
 					$sql2 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='".$nmaster."' ");
 					$row2 = sed_sql_fetcharray($sql2);
 
-					$mastername = sed_sql_prep(sed_cc($row2['fs_title']));
+					$mastername = sed_sql_prep($row2['fs_title']);
 
 					}
 
