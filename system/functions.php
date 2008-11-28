@@ -985,7 +985,7 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 		}
 		if(is_array($master))
 		{
-			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.$master[1].'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.sed_cc($master[1]).'</a>';
 		}
 		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$sectionid).'">'.sed_cc($title).'</a>';
 	}
@@ -1509,7 +1509,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id.'&'.$user).'">'.$user.'</a>' : '?';
+		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id).'">'.$user.'</a>' : '?';
 	}
 }
 
