@@ -286,16 +286,16 @@ if (is_array($extp))
 
 if ($cfg['mtmode'])
 	{
-	
+
 	$sqll = sed_sql_query("SELECT grp_maintenance FROM $db_groups WHERE grp_level='".$usr['level']."' ");
 	$roow = sed_sql_fetcharray($sqll);
-	
+
 	if (!$roow['grp_maintenance'] && !defined('SED_AUTH'))
 	{
 	header("Location: users.php?m=auth");
 	exit;
 	}
-	
+
 	}
 
 /* ======== Anti-XSS protection ======== */
@@ -475,10 +475,10 @@ if (!$sed_forums_str && !$cfg['disable_forums'])
 
 /* ======== Various ======== */
 
-$out['img_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" />";
-$out['img_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" />";
-$out['img_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" />";
-$out['img_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" />";
+$out['img_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" border=\"0\" />";
+$out['img_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" border=\"0\" />";
+$out['img_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" border=\"0\" />";
+$out['img_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" border=\"0\" />";
 
 $sed_yesno[0] = $L['No'];
 $sed_yesno[1] = $L['Yes'];
