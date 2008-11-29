@@ -125,13 +125,8 @@ function sed_get_polls($limit, $mask)
 	}
 
 	$res_all .= ($ii) ? "
-<style type=\"text/css\">
-.loading {
-  background: url('{$cfg['plugins_dir']}/indexpolls/img/spinner_bigger.gif') no-repeat center center;
-}
-</style>
 <script type=\"text/javascript\">
-
+//<![CDATA[
 function vote(id)
 	{
 
@@ -187,7 +182,7 @@ function res(id,m)
 		success: function(msg){
 		$('#p'+id).removeClass('loading');
 		$('#p'+id).html(msg).hide().stop().fadeIn('slow');
-		$('#a'+id).html('".$L_idx['voteback']."</a>').attr('href', 'javascript: res('+id+',1);');
+		$('#a'+id).html('".$L_idx['voteback']."<\/a>').attr('href', 'javascript: res('+id+',1);');
 		anim();
 			},
 		error: function(msg){
@@ -202,11 +197,11 @@ function res(id,m)
 	if (m)
 		{
 		$('#p'+id).html($('#b'+id).html()).hide().stop().fadeIn('slow');
-		$('#a'+id).html('".$L['polls_viewresults']."</a>').attr('href', 'javascript: res('+id+',0);');
+		$('#a'+id).html('".$L['polls_viewresults']."<\/a>').attr('href', 'javascript: res('+id+',0);');
 		}
 
 	}
-
+//]]>
 	</script>" : '';
 
 	//		{ $res = $plu_empty; }
