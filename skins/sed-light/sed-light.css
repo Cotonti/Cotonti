@@ -26,14 +26,14 @@ a:focus { outline:none; font-weight:bold; }
 
 #content #lSide { float:left; width:550px; }
 #content #lSide .lboxHD { color:#3E606F; background: url(img/SED-Light_lBoxHD.gif) no-repeat; width:540px; height:35px; line-height:35px; vertical-align:middle; font-size:.90em; text-transform:uppercase; padding:0 0 0 10px; font-weight:bold; }
-#content #lSide .lboxBody { width:530px; background:#FFF url(img/SED-Light_lBoxFT.gif) no-repeat bottom; min-height:20px; padding:10px; margin-bottom:10px; } 
+#content #lSide .lboxBody { width:530px; background:#FFF url(img/SED-Light_lBoxFT.gif) no-repeat bottom; min-height:20px; padding:10px; margin-bottom:10px; }
 
 #content #rSide { float:right; width:240px; }
 #content #rSide .rboxHD { color:#3E606F; background: url(img/SED-Light_rBoxHD.gif) no-repeat; width:230px; height:35px; line-height:35px; vertical-align:middle; font-size:.90em; text-transform:uppercase; padding:0 0 0 10px; font-weight:bold; }
-#content #rSide .rboxBody { width:220px; background:#FFF url(img/SED-Light_rBoxFT.gif) no-repeat bottom; min-height:20px; padding:10px; margin-bottom:10px; } 
+#content #rSide .rboxBody { width:220px; background:#FFF url(img/SED-Light_rBoxFT.gif) no-repeat bottom; min-height:20px; padding:10px; margin-bottom:10px; }
 
 .mboxHD { color:#3E606F; background: url(img/SED-Light_mBoxHD.gif) no-repeat; width:790px; height:35px; line-height:35px; vertical-align:middle; font-size:.90em; text-transform:uppercase; padding:0 0 0 10px; font-weight:bold; }
-.mboxBody { width:780px; background:#FFF url(img/SED-Light_mBoxFT.gif) no-repeat bottom; min-height:20px; padding:10px; } 
+.mboxBody { width:780px; background:#FFF url(img/SED-Light_mBoxFT.gif) no-repeat bottom; min-height:20px; padding:10px; }
 .mboxBody img { vertical-align:middle; }
 
 #footer { background: url(img/SED-Light_FT.gif) no-repeat; width:800px; height:40px; padding:10px 0 0 0; clear:both; }
@@ -92,7 +92,7 @@ h6 	{ font-size:90%; margin:1em 1em 1em 0; }
 .bbstyle7	{  }
 .bbstyle8	{  }
 .bbstyle9	{  }
- 
+
 /* ============== Various ============== */
 
 .disp { padding:.8em; margin:0; }
@@ -147,3 +147,9 @@ table.list td  { padding:12px; }
 input { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; padding:2px; font-size:1em; margin:0; }
 select { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; padding:2px; font-size:1em; margin:0; }
 textarea { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; padding:2px; font-size:1em; font:1em/1.25em Lucida Grande, Arial, Verdana, Sans-Serif; margin:0; }
+
+/* ============== Plugins ============== */
+
+/* ============== Indexpolls ============== */
+
+.loading { background: url('/plugins/indexpolls/img/spinner_bigger.gif') no-repeat center center;}
