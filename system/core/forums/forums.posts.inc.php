@@ -667,6 +667,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_AGE" => $row['user_age'],
 		"FORUMS_POSTS_ROW_POSTCOUNT" => $row['user_postcount'],
 		"FORUMS_POSTS_ROW_ODDEVEN" => sed_build_oddeven($fp_num),
+		"FORUMS_POSTS_ROW_ORDER" => $fp_num,
 		"FORUMS_POSTS_ROW" => $row,
 	));
 
