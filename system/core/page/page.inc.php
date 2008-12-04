@@ -96,7 +96,7 @@ if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='d
 if(!$usr['isadmin'] || $cfg['count_admin'])
 {
 	$pag['page_count']++;
-	$sql = sed_sql_query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$pag['page_id']."'");
+	$sql = (!$cfg['disablehitstats']) ? sed_sql_query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$pag['page_id']."'") : '';
 }
 
 $pag['page_tabs'] = explode('[newpage]', $pag['page_text'], 99);
