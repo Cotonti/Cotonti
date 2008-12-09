@@ -147,7 +147,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 			"FORUMS_SECTIONS_ROW_CAT_DESC" => sed_parse_autourls($fsn['fn_desc']),
 			"FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => sed_cc($fsn['fn_defstate']),
 			"FORUMS_SECTIONS_ROW_CAT_TBODY" => $fsn['toggle_body'],
-			"FORUMS_SECTIONS_ROW_CAT_TBODY_END" => "FORUMS_SECTIONS_ROW_TBODY_END" => ($catnum != 1) ? '</tbody>' : '' ,
+			"FORUMS_SECTIONS_ROW_CAT_TBODY_END" => ($catnum != 1) ? '</tbody>' : '' ,
 			"FORUMS_SECTIONS_ROW_CAT_CODE" => $fsn['fs_category'],
 			));
 			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_CAT");
