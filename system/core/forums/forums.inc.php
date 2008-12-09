@@ -122,7 +122,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 		if ($pcat!=$fsn['fs_category'])
 		{
 			$pcat = $fsn['fs_category'];
-			$cattitle = "<a href=\"#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
+			$cattitle = "<a href=\"".sed_url('forums')."#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
 			$cattitle .= sed_cc($sed_forums_str[$fsn['fs_category']]['tpath']);
 			$cattitle .= "</a>";
 
@@ -147,6 +147,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 			"FORUMS_SECTIONS_ROW_CAT_DESC" => sed_parse_autourls($fsn['fn_desc']),
 			"FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => sed_cc($fsn['fn_defstate']),
 			"FORUMS_SECTIONS_ROW_CAT_TBODY" => $fsn['toggle_body'],
+			"FORUMS_SECTIONS_ROW_CAT_TBODY_END" => "FORUMS_SECTIONS_ROW_TBODY_END" => ($catnum != 1) ? '</tbody>' : '' ,
 			"FORUMS_SECTIONS_ROW_CAT_CODE" => $fsn['fs_category'],
 			));
 			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_CAT");
