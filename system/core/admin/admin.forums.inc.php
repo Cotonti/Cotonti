@@ -222,9 +222,11 @@ else
 	}
 	elseif ($a=='add')
 	{
-		$g = array ('nmaster', 'ntitle', 'ndesc', 'ncat');
-		foreach($g as $k => $x) $$x = $_POST[$x];
-
+		$nmaster = sed_import('nmaster', 'P', 'INT');
+		$ntitle = sed_import('ntitle', 'P', 'TXT');
+		$ndesc = sed_import('ndesc', 'P', 'TXT');
+		$ncat = sed_import('ncat', 'P', 'TXT');
+		
 		if (!empty($ntitle))
 		{
 			$sql1 = sed_sql_query("SELECT fs_order FROM $db_forum_sections WHERE fs_category='".sed_sql_prep($ncat)."' ORDER BY fs_order DESC LIMIT 1");
