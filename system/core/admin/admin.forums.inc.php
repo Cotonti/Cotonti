@@ -246,7 +246,7 @@ else
 
 			$forumid = sed_sql_insertid();
 
-			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('".(int)$forumid."', '".(int)$nmaster."', '".sed_cc($ntitle)."') ");
+			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('".(int)$forumid."', '".(int)$nmaster."', '".sed_sql_prep($ntitle)."') ");
 
 
 			foreach($sed_groups as $k => $v)
