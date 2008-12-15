@@ -88,3 +88,20 @@ var mySettings = {
 		{name: L.preview, className:"mPreview", call:'preview' }
 	]
 }
+
+var mini = {
+		previewParserVar: 'text',
+		previewPosition: 'before',
+		previewParserPath:	'preview.php', // path to your BBCode parser
+		onEnter: {keepDefault: false, replaceWith: '\n'},
+		markupSet: [
+		{name: L.bold, className:'mBold', key:'B', openWith:'[b]', closeWith:'[/b]'},
+		{name: L.italic, className:'mItalic', key:'I', openWith:'[i]', closeWith:'[/i]'},
+		{name: L.link, className: 'mLink', key:'L', openWith:'[url=[![URL:!:http://]!]]', closeWith:'[/url]', placeHolder: L.link_text},
+		{name: L.picture, className: 'mPicture', key:'P', replaceWith:'[img][![' + L.picture_url + ':!:http://]!][/img]'},
+		{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]'},
+		{name: L.preview, className:"mPreview", call:'preview' }
+		]
+}
+		
+		
