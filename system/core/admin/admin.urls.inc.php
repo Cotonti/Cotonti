@@ -101,14 +101,23 @@ if($a == 'save')
 	$path = preg_quote(SED_SITE_URI);
 	for($i = 0; $i < $count; $i++)
 	{
-		if(empty($ut_format[$i]))
+		if(empty($ut_format[$i]) || empty($ut_params[$i]))
 		{
+			// Ignore empty rules
 			continue;
 		}
+		// Write the rule to urltrans.dat
 		fputs($fp, $ut_area[$i] . "\t" . $ut_params[$i] . "\t" . $ut_format[$i] . "\n");
+		if($ut_area[$i] == '*' && $ut_params[$i] == '*' && $ut_format[$i] == '{$_area}.php')
+		{
+			// Default rule doesn't need any rewrite rules
+			continue;
+		}
+		// Set some defaults
 		$hta_line = $hta_rule . ' ' . $rb;
 		$format = $ut_format[$i];
 		$area = $ut_area[$i] == '*' ? $var_pattern : $ut_area[$i];
+		parse_str($ut_params[$i], $params);
 		$j = 0;
 		$k = 0;
 		$m_count = 0;
@@ -123,6 +132,7 @@ if($a == 'save')
 			$hta_host = preg_quote($rhost);
 			if(preg_match_all('#\{\$(\w+)\}#', $rhost, $mt, PREG_SET_ORDER))
 			{
+				// Perform domain submask substitutions
 				$mm_count = count($mt);
 				$jj = 0;
 				$kk = 0;
@@ -151,6 +161,7 @@ if($a == 'save')
 					{
 						$hta_host = str_replace(preg_quote($mt[$jj][0]), '('.$var_pattern.')', $hta_host);
 						$qs .= '&' . $key . '=%' . ($jj - $kk + 1);
+						unset($params[$key]);
 					}
 				}
 			}
@@ -160,8 +171,9 @@ if($a == 'save')
 		{
 			$pattern = preg_quote($format);
 		}
-		if(!empty($format) && preg_match_all('#\{\$(\w+)\}#', $format, $mt, PREG_SET_ORDER))
+		if(preg_match_all('#\{\$(\w+)\}#', $format, $mt, PREG_SET_ORDER))
 		{
+			// Perform substitutions for variables used in format
 			$m_count = count($mt);
 			for($j = 0; $j < $m_count; $j++)
 			{
@@ -198,9 +210,19 @@ if($a == 'save')
 				{
 					$pattern = str_replace(preg_quote($mt[$j][0]), '('.$var_pattern.')', $pattern);
 					$qs .= '&' . $key . '=$' . ($j - $k + 1);
+					unset($params[$key]);
 				}
 			}
 		}
+		// Complete the query string with paramaters set but not used in format
+		if(count($params) > 0)
+		{
+			foreach($params as $key => $val)
+			{
+				$qs .= '&' . $key . '=' . urlencode($val);
+			}
+		}
+		// Correct the query string
 		if(stristr($format, '?'))
 		{
 			if(empty($qs))
@@ -216,6 +238,7 @@ if($a == 'save')
 		{
 			$qs[0] = '?';
 		}
+		// Finalize the rewrite rule
 		$pattern .= '(.*)$';
 		$qs .= '$'. ($m_count - $k + 1);
 		$area = empty($area_sub) ? $area : $area_sub;
