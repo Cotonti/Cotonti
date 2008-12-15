@@ -52,6 +52,7 @@ $out['compopup'] .= '
 mySettings.previewAutorefresh = '.$autorefresh.';
 $(document).ready(function() {
 $("textarea.editor").markItUp(mySettings);
+$("textarea.minieditor").markItUp(mini);
 });
 </script>';
 
