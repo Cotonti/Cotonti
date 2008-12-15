@@ -3633,11 +3633,24 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
 	$spec['_path'] = SED_SITE_URI;
 	// Transform the data into URL
-	preg_match_all('#\{\$(\w+)\}#', $url, $matches, PREG_SET_ORDER);
-	foreach($matches as $m)
+	if(preg_match_all('#\{\$(\w+)\}#', $url, $matches, PREG_SET_ORDER))
 	{
-		$url = empty($spec[$m[1]]) ? str_replace($m[0], $args[$m[1]], $url) : str_replace($m[0], $spec[$m[1]], $url);
-		unset($args[$m[1]]);
+		foreach($matches as $m)
+		{
+			if(isset($spec[$m[1]]))
+			{
+				$url = str_replace($m[0], $spec[$m[1]], $url);
+			}
+			elseif(isset($args[$m[1]]))
+			{
+				$url = str_replace($m[0], $args[$m[1]], $url);
+				unset($args[$m[1]]);
+			}
+			else
+			{
+				$url = str_replace($m[0], $GLOBALS[$m[1]], $url);
+			}
+		}
 	}
 	// Append query string if needed
 	if(!empty($args))
