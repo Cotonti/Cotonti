@@ -1871,8 +1871,8 @@ function sed_dieifdisabled($disabled)
  */
 function sed_file_check($path, $name, $ext)
 {
-	global $L;
-	require($cfg['system_dir'].'./mimetype.php');
+	global $L,$cfg;
+	require($cfg['system_dir'].'/mimetype.php');
 	$fcheck = FALSE;
 	if(in_array($ext, array('jpg', 'jpeg', 'png', 'gif')))
 	{

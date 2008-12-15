@@ -140,19 +140,18 @@ if ($a=='upload')
 		if (!empty($u_name))
 		{
 			$disp_errors .= "<li>".$u_name." : ";
+			$u_name = mb_strtolower($u_name);
+			$dotpos = mb_strrpos($u_name,".")+1;
+			$f_extension = mb_substr($u_name, $dotpos, 5);
 			$f_extension_ok = 0;
 			$fcheck = sed_file_check($u_tmp_name, $u_name, $f_extension);
 			if($fcheck)
 			{
 				$desc = $ndesc[$ii];
-				$u_name = mb_strtolower($u_name);
 				$u_newname = $userid.'-'.$u_name;
 				$u_sqlname = sed_sql_prep($u_newname);
-				$dotpos = mb_strrpos($u_name,".")+1;
-				$f_extension = mb_substr($u_name, $dotpos, 5);
-				$f_extension_ok = 0;
 
-				if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4')
+				if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
 				{
 					foreach ($sed_extensions as $k => $line)
 					{
