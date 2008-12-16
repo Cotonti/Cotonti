@@ -113,7 +113,7 @@ elseif (!empty($e))
 		$plugin_title = (empty($plugin_title)) ? $L['plu_title'] : $plugin_title;
 
 		$t-> assign(array(
-			"PLUGIN_TITLE" => "<a href=\"plug.php?e=$e\">".$plugin_title."</a>",
+			"PLUGIN_TITLE" => '<a href="'.sed_url('plug', "e=$e").'">'.$plugin_title."</a>",
 			"PLUGIN_SUBTITLE" => $plugin_subtitle,
 			"PLUGIN_BODY" => $plugin_body
 		));
@@ -126,7 +126,6 @@ elseif (!empty($e))
 }
 
 elseif (!empty($o))
-
 {
 	$extp = array();
 	if (is_array($sed_plugins))
@@ -169,9 +168,7 @@ elseif (!empty($o))
 	$t->out("MAIN");
 
 }
-
 elseif (!empty($h))
-
 {
 	if ($h=='smilies')
 	{
@@ -219,11 +216,9 @@ elseif (!empty($h))
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
-
 }
 
 elseif (!empty($r))
-
 {
 	if (mb_eregi("\.",$r) || mb_eregi("/",$r))
 	{ sed_die(); }
@@ -235,9 +230,7 @@ elseif (!empty($r))
 	else
 	{ sed_die(); }
 }
-
 elseif ($m=='version')
-
 {
 	$plugin_title = "Seditio FrameWork - Version & copyrights";
 	$plugin_body = "<h1>Seditio build 120 / 2007-jun-16</h1><h4>Licence</h4>Important: Seditio is not an open source software product. You must follow the limitations in this software agreement. Technical support is available to those following this agreement with no charge on http://www.neocrome.net<br />Neocrome grants you a non-exclusive license to use Seditio if you follow all restrictions in all sections of this agreement.<h4>Copyrights</h4>Ownership rights and intellectual property rights in the Seditio software shall remain with Neocrome. This software is protected by copyright laws and treaties. Title and related rights in the content accessed through the software is the property of the applicable content owner and may be protected by applicable law. This license gives you no rights to such content.<br />Authorisation to remove copyright notices can be obtained from Neocrome for a one time fee. This fee authorises you to remove the output of copyright notices, it does not give you authorisation to remove any copyright notices in the script source header files nor any other rights.<h4>Scope of grant</h4>You may :<p>- Use the software on one or more computers.<br />- Customise the software's design to suit the needs of your own web site.<br />- Produce and distribute modification instructions, skin packs or language packs provided that they contain notification that it was originally created by Neocrome. The modifications instructions you personally create are not owned by Neocrome so long as they contain no proprietary coding from Seditio.</p>You may not :<p>- Use Seditio for illegal activities.<br />- Modify and/or remove the copyright notice in the footer and in the header of each script source file.<br />- Reverse engineer, disassemble, or create derivative works based on Seditio for distribution or usage outside your website.<br />- Distribute Seditio without written consent from Neocrome.<br />- Permit other individuals to use Seditio except under the terms listed above.</p><h4>Third party modifications</h4>Technical support will not be provided for third-party modifications to the software including modifications to code, Skin packs, and Language packs to any license holder. If Seditio is modified using a third-party modification instruction or otherwise, technical support may be refused to any license holder.<h4>Disclaimer of warranty</h4>The Software is provided on an 'as is' basis, without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose and non-infringement. The entire risk as to the quality and performance of this software is borne by you.<h4>Contacts</h4>You can contact Neocrome at <a href='http://www.neocrome.net'>http://www.neocrome.net</a> for questions.";
@@ -255,10 +248,9 @@ elseif ($m=='version')
 	$t->out("MAIN");
 
 	require_once $cfg['system_dir'] . '/footer.php';
-
 }
-
 else
-
-{ sed_die(); }
+{
+	sed_die();
+}
 ?>

@@ -3604,6 +3604,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$area = empty($sed_urltrans[$name]) ? '*' : $name;
 	// Find first matching rule
 	$url = $sed_urltrans['*'][0]['trans']; // default rule
+	$rule = array();
 	if(!empty($sed_urltrans[$area]))
 	{
 		foreach($sed_urltrans[$area] as $rule)
@@ -3660,7 +3661,12 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 		$sep_len = strlen($sep);
 		foreach($args as $key => $val)
 		{
-			$qs .= $key .'=' . $val . $sep;
+			// Exclude static parameters that are not used in format,
+			// they should be passed by rewrite rule (htaccess)
+			if($rule['params'][$key] == '*' || strstr($rule['params'][$key], '|'))
+			{
+				$qs .= $key .'=' . $val . $sep;
+			}
 		}
 		$qs = substr($qs, 0, -$sep_len);
 		$url .= $qs;
