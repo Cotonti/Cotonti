@@ -219,7 +219,10 @@ if($a == 'save')
 		{
 			foreach($params as $key => $val)
 			{
-				$qs .= '&' . $key . '=' . urlencode($val);
+				if($key != '*' && $val != '*' && !strstr($val, '|'))
+				{
+					$qs .= '&' . $key . '=' . urlencode($val);
+				}
 			}
 		}
 		// Correct the query string

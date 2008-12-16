@@ -41,7 +41,7 @@ if (empty($w)) { $w = 'asc'; }
 if (empty($f)) { $f = 'all'; }
 if (empty($d)) { $d = '0'; }
 
-$title = "<a href=\"users.php\">".$L['Users']."</a> ";
+$title = '<a href="'.sed_url('users').'">'.$L['Users'].'</a> ';
 $localskin = sed_skinfile('users');
 
 if (!empty($sq)) { $y = $sq; }
@@ -121,21 +121,21 @@ $currentpage= ceil ($d / $cfg['maxusersperpage'])+1;
 
 /*=========*/
 
-$countryfilters = "<form action=\"users.php?f=search\" method=\"post\">".$L['Filters'].": <a href=\"users.php\">".$L['All']."</a> ";
+$countryfilters = "<form action=\"".sed_url('users', 'f=search')."\" method=\"post\">".$L['Filters'].": <a href=\"".sed_url('users')."\">".$L['All']."</a> ";
 $countryfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"redirect(this)\">";
 
 foreach ($sed_countries as $i => $x)
 {
 	if ($i=='00')
 	{
-		$countryfilters .= "<option value=\"users.php\">".$L['Country']."...</option>";
+		$countryfilters .= "<option value=\"".sed_url('users')."\">".$L['Country']."...</option>";
 		$selected = ("country_00"==$f) ? "selected=\"selected\"" : '';
-		$countryfilters .= "<option value=\"users.php?f=country_00\" ".$selected.">".$L['None']."</option>";
+		$countryfilters .= "<option value=\"".sed_url('users', 'f=country_00')."\" ".$selected.">".$L['None']."</option>";
 	}
 	else
 	{
 		$selected = ("country_".$i==$f) ? "selected=\"selected\"" : '';
-		$countryfilters .= "<option value=\"users.php?f=country_".$i."\" ".$selected.">".sed_cutstring($x,23)."</option>";
+		$countryfilters .= "<option value=\"".sed_url('users', 'f=country_'.$i)."\" ".$selected.">".sed_cutstring($x,23)."</option>";
 	}
 }
 
@@ -145,7 +145,7 @@ $countryfilters .= "</select>";
 /*=========*/
 
 
-$maingrpfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"users.php\">".$L['Maingroup']."...</option>";
+$maingrpfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"".sed_url('users')."\">".$L['Maingroup']."...</option>";
 unset($grpms);
 foreach($sed_groups as $k => $i)
 {
@@ -153,15 +153,15 @@ foreach($sed_groups as $k => $i)
 	$selected1 = ($k==$gm) ? "selected=\"selected\"" : '';
 	if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
 	{
-		$maingrpfilters .= ($k>1) ? "<option value=\"users.php?g=".$k."\" $selected> ".$sed_groups[$k]['title']."</option>" : '';
+		$maingrpfilters .= ($k>1) ? "<option value=\"".sed_url('users', 'g='.$k)."\" $selected> ".$sed_groups[$k]['title']."</option>" : '';
 		$maingrpfilters .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-		$grpms .= ($k>1) ? "<option value=\"users.php?gm=".$k."\" $selected1> ".$sed_groups[$k]['title']."</option>" : '';
+		$grpms .= ($k>1) ? "<option value=\"".sed_url('users', 'gm='.$k)."\" $selected1> ".$sed_groups[$k]['title']."</option>" : '';
 		$grpms .= ($k>1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 	}
 }
 $maingrpfilters .= "</select>";
 
-$grpfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"users.php\">".$L['Group']."...</option>";
+$grpfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"".sed_url('users')."\">".$L['Group']."...</option>";
 $grpfilters .= $grpms."</select>";
 
 
@@ -175,9 +175,9 @@ $otherfilters .= "\n".$L['Byfirstletter'].":";
 for ($i = 1; $i <= 26; $i++)
 {
 	$j = chr($i+64);
-	$otherfilters .= " <a href=\"users.php?f=".$j."\">".$j."</a>";
+	$otherfilters .= " <a href=\"".sed_url('users','f='.$j)."\">".$j."</a>";
 }
-$otherfilters .= " <a href=\"users.php?f=_\">%</a>";
+$otherfilters .= " <a href=\"".sed_url('users','f=_')."\">%</a>";
 
 $title_tags[] = array('{USERS}');
 $title_tags[] = array('%1$s');
@@ -220,20 +220,20 @@ $t-> assign(array(
 ));
 
 $t->assign(array(
-	"USERS_TOP_USERID" => "<a href=\"users.php?f=$f&amp;s=id&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=id&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Userid'],
-	"USERS_TOP_NAME" => "<a href=\"users.php?f=$f&amp;s=name&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=name&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Username'],
-	"USERS_TOP_MAINGRP" => "<a href=\"users.php?f=$f&amp;s=maingrp&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=maingrp&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Maingroup'],
-	"USERS_TOP_COUNTRY" => "<a href=\"users.php?f=$f&amp;s=country&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=country&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Country'],
-	"USERS_TOP_TIMEZONE" => "<a href=\"users.php?f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Timezone'],
-	"USERS_TOP_EMAIL" => "<a href=\"users.php?f=$f&amp;s=email&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=email&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Email'],
-	"USERS_TOP_REGDATE" => "<a href=\"users.php?f=$f&amp;s=regdate&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=regdate&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Registered'],
-	"USERS_TOP_LASTLOGGED" => "<a href=\"users.php?f=$f&amp;s=lastlog&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=lastlog&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Lastlogged'],
-	"USERS_TOP_LOGCOUNT" => "<a href=\"users.php?f=$f&amp;s=logcount&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=logcount&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Count'],
-	"USERS_TOP_LOCATION" => "<a href=\"users.php?f=$f&amp;s=location&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=location&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Location'],
-	"USERS_TOP_OCCUPATION" => "<a href=\"users.php?f=$f&amp;s=occupation&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=occupation&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Occupation'],
-	"USERS_TOP_BIRTHDATE" => "<a href=\"users.php?f=$f&amp;s=birthdate&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=birthdate&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Birthdate'],
-	"USERS_TOP_GENDER" => "<a href=\"users.php?f=$f&amp;s=gender&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=gender&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Gender'],
-	"USERS_TOP_TIMEZONE" => "<a href=\"users.php?f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_down</a> <a href=\"users.php?f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq\">$sed_img_up</a> ".$L['Timezone']
+	"USERS_TOP_USERID" => "<a href=\"".sed_url('users', "f=$f&amp;s=id&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=id&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Userid'],
+	"USERS_TOP_NAME" => "<a href=\"".sed_url('users', "f=$f&amp;s=name&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "?f=$f&amp;s=name&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Username'],
+	"USERS_TOP_MAINGRP" => "<a href=\"".sed_url('users', "f=$f&amp;s=maingrp&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=maingrp&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Maingroup'],
+	"USERS_TOP_COUNTRY" => "<a href=\"".sed_url('users', "f=$f&amp;s=country&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=country&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Country'],
+	"USERS_TOP_TIMEZONE" => "<a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Timezone'],
+	"USERS_TOP_EMAIL" => "<a href=\"".sed_url('users', "f=$f&amp;s=email&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=email&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Email'],
+	"USERS_TOP_REGDATE" => "<a href=\"".sed_url('users', "f=$f&amp;s=regdate&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=regdate&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Registered'],
+	"USERS_TOP_LASTLOGGED" => "<a href=\"".sed_url('users', "f=$f&amp;s=lastlog&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=lastlog&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Lastlogged'],
+	"USERS_TOP_LOGCOUNT" => "<a href=\"".sed_url('users', "f=$f&amp;s=logcount&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=logcount&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Count'],
+	"USERS_TOP_LOCATION" => "<a href=\"".sed_url('users', "f=$f&amp;s=location&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=location&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Location'],
+	"USERS_TOP_OCCUPATION" => "<a href=\"".sed_url('users', "f=$f&amp;s=occupation&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=occupation&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Occupation'],
+	"USERS_TOP_BIRTHDATE" => "<a href=\"".sed_url('users', "f=$f&amp;s=birthdate&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=birthdate&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Birthdate'],
+	"USERS_TOP_GENDER" => "<a href=\"".sed_url('users', "f=$f&amp;s=gender&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=gender&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Gender'],
+	"USERS_TOP_TIMEZONE" => "<a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Timezone']
 ));
 
 if ($d>0)
@@ -242,14 +242,14 @@ if ($d>0)
 	if ($prevpage<0)
 	{ $prevpage=0; }
 	$t->assign("USERS_TOP_PAGEPREV",
-		"<a href=\"users.php?f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;d=$prevpage\">".$L['Previous']." $sed_img_left</a>");
+		"<a href=\"".sed_url('users', "f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;d=$prevpage")."\">".$L['Previous']." $sed_img_left</a>");
 }
 
 if (($d + $cfg['maxusersperpage'])<$totalusers)
 {
 	$nextpage = $d + $cfg['maxusersperpage'];
 	$t->assign("USERS_TOP_PAGENEXT",
-		"<a href=\"users.php?f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;d=$nextpage\">$sed_img_right ".$L['Next']."</a>");
+		"<a href=\"".sed_url('users', "f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;d=$nextpage")."\">$sed_img_right ".$L['Next']."</a>");
 }
 
 $jj=0;

@@ -213,7 +213,7 @@ if ($a=='add')
 			sed_mail ($ruseremail, $rsubject, $rbody);
 
 			$rsubject = $cfg['maintitle']." - ".$L['aut_regreqnoticetitle'];
-			$rinactive = $cfg['mainurl']."/users.php?gm=2&amp;s=regdate&amp;w=desc";
+			$rinactive = $cfg['mainurl'].'/'.sed_url('users', 'gm=2&s=regdate&w=desc');
 			$rbody = sprintf($L['aut_regreqnotice'], $rusername, $rinactive);
 			sed_mail ($cfg['adminemail'], $rsubject, $rbody);
 			sed_redirect(sed_url('message', 'msg=118'));
@@ -222,7 +222,7 @@ if ($a=='add')
 		else
 			{
 			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
-			$ractivate = $cfg['mainurl']."/users.php?m=register&a=validate&v=".$validationkey;
+			$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey);
 			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			sed_mail ($ruseremail, $rsubject, $rbody);
@@ -295,7 +295,7 @@ $t->assign(array(
 	"USERS_REGISTER_TITLE" => $L['aut_registertitle'],
 	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
 	"USERS_REGISTER_ADMINEMAIL" => "$sed_adminemail",
-	"USERS_REGISTER_SEND" => "users.php?m=register&amp;a=add",
+	"USERS_REGISTER_SEND" => sed_url('users', 'm=register&a=add'),
 	"USERS_REGISTER_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($rusername)."\" size=\"24\" maxlength=\"24\" />",
 	"USERS_REGISTER_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($ruseremail)."\" size=\"24\" maxlength=\"64\" />",
 	"USERS_REGISTER_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword1\" size=\"8\" maxlength=\"16\" />",

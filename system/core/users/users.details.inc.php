@@ -53,6 +53,7 @@ $urr['user_website'] = sed_build_url($urr['user_website']);
 $urr['user_age'] = ($urr['user_birthdate']!=0) ? sed_build_age($urr['user_birthdate']) : '';
 $urr['user_birthdate'] = ($urr['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $urr['user_birthdate']) : '';
 $urr['user_gender'] = ($urr['user_gender']=='' || $urr['user_gender']=='U') ?  '' : $L["Gender_".$urr['user_gender']];
+// FIXME LDU legacy?
 $urr['user_journal'] = ($urr['user_jrnpagescount']>0 && $urr['user_jrnupdated']>0) ? "<a href=\"journal.php?id=".$urr['user_id']."\"><img src=\"skins/$skin/img/system/icon-journal.gif\" alt=\"\" /></a> ".date($cfg['formatyearmonthday'], $urr['user_jrnupdated'] + $usr['timezone'] * 3600) : '';
 
 $title_tags[] = array('{USER}', '{NAME}');
@@ -72,7 +73,7 @@ $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
 
 $t->assign(array(
-	"USERS_DETAILS_TITLE" => "<a href=\"users.php\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
+	"USERS_DETAILS_TITLE" => "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
 	"USERS_DETAILS_SUBTITLE" => $L['use_subtitle'],
 	"USERS_DETAILS_ID" => $urr['user_id'],
 	"USERS_DETAILS_PM" => sed_build_pm($urr['user_id']),
@@ -137,7 +138,7 @@ if (is_array($extp))
 if ($usr['isadmin'])
 		{
 		$t-> assign(array(
-			"USERS_DETAILS_ADMIN_EDIT" => "<a href=\"users.php?m=edit&amp;id=".$urr['user_id']."\">".$L['Edit']."</a>"
+			"USERS_DETAILS_ADMIN_EDIT" => "<a href=\"".sed_url('users', 'm=edit&id='.$urr['user_id'])."\">".$L['Edit']."</a>"
 			));
 
 		$t->parse("MAIN.USERS_DETAILS_ADMIN");
