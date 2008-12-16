@@ -5,6 +5,7 @@ var mySettings = {
 	previewParserVar: 'text',
 	previewPosition: 'before',
 	previewParserPath:	'preview.php', // path to your BBCode parser
+	previewAutoRefresh: false,
 	onEnter: {keepDefault: false, replaceWith: '\n'},
 	markupSet: [
 		{name: L.bold, className:'mBold', key:'B', openWith:'[b]', closeWith:'[/b]'},
@@ -93,6 +94,7 @@ var mini = {
 		previewParserVar: 'text',
 		previewPosition: 'before',
 		previewParserPath:	'preview.php', // path to your BBCode parser
+		previewAutoRefresh: false,
 		onEnter: {keepDefault: false, replaceWith: '\n'},
 		markupSet: [
 		{name: L.bold, className:'mBold', key:'B', openWith:'[b]', closeWith:'[/b]'},
