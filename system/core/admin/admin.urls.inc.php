@@ -214,7 +214,7 @@ if($a == 'save')
 				}
 			}
 		}
-		// Complete the query string with paramaters set but not used in format
+		// Complete the query string with static paramaters set but not used in format
 		if(count($params) > 0)
 		{
 			foreach($params as $key => $val)
