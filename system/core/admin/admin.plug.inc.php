@@ -408,6 +408,7 @@ switch ($a)
 				break;
 
 			case 'uninstall' :
+				$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
 				$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
 				$adminmain .= "Deleting old installation of this plugin... ";
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
