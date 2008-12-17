@@ -28,4 +28,16 @@ Lock_members=12345A
 ==================== */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
+
+if($action == 'install')
+{
+	// Installing new bbcodes
+	sed_bbcode_remove(0, 'chili');
+	sed_bbcode_add('highlight', 'callback', '\[highlight=([\w\-]+)\](.*?)\[/highlight\]', 'return \'<div class="highlight"><pre class="\'.$input[1].\'">\'.sed_bbcode_cdata($input[2]).\'</pre></div>\';', true, 3, 'chili');
+}
+elseif($action == 'uninstall')
+{
+	// Remove plugin bbcodes
+	sed_bbcode_remove(0, 'chili');
+}
 ?>

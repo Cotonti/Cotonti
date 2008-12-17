@@ -51,11 +51,9 @@ switch ($a)
 
 			$handle=opendir($cfg['plugins_dir']."/".$pl);
 			$setupfile = $pl.'.setup.php';
-			$installfile = $pl.'.install.php';
-			$uninstallfile = $pl.'.uninstall.php';
 			while ($f = readdir($handle))
 			{
-				if ($f != "." && $f != ".." && $f!=$setupfile && $f != $installfile && $f != $uninstallfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.')+1, 4))=='php')
+				if ($f != "." && $f != ".." && $f!=$setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.')+1, 4))=='php')
 				{
 					$parts[] = $f;
 				}
@@ -230,11 +228,11 @@ switch ($a)
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 
 				if (!$ko)
-					{
-				$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' and config_cat='$pl'");
-				$adminmain .= "Deleting old configuration entries... ";
-				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
-					}
+				{
+					$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' and config_cat='$pl'");
+					$adminmain .= "Deleting old configuration entries... ";
+					$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+				}
 
 				$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
 
@@ -334,11 +332,11 @@ switch ($a)
 					$adminmain .= "Not found ! Installation failed !<br />";
 				}
 
-				if (!$ko)
+				if(!$ko)
 				{
-				$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$pl'");
-				$adminmain .= "Deleting any old rights about this plugin... ";
-				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+					$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$pl'");
+					$adminmain .= "Deleting any old rights about this plugin... ";
+					$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 				}
 
 				$adminmain .= "Adding the rights for the groups of users...<br />";
@@ -378,14 +376,16 @@ switch ($a)
 					}
 
 					if (!$ko)
-						{ $sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")"); }
+					{
+						$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
+					}
 					elseif (!$ko)
-						{
+					{
 						$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_auth WHERE auth_code='plug' AND auth_groupid='".(int)$v['id']."' AND auth_option='$pl' ");
 						$if = sed_sql_result($sqltmp, 0, "COUNT(*)");
 
 						$sql = (!$if) ? sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")") : '';
-						}
+					}
 
 
 					$adminmain .= "Group #".$v['id'].", ".$sed_groups[$v['id']]['title']." : Auth=".sed_build_admrights($ins_auth)." / Lock=".sed_build_admrights($ins_lock).$comment."<br />";
@@ -395,14 +395,10 @@ switch ($a)
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 
 				$extplugin_install = $cfg['plugins_dir']."/".$pl."/".$pl.".install.php";
-				$adminmain .= "Looking for the optional PHP file : ".$extplugin_install."... ";
-				if (file_exists($extplugin_install))
-				{
-					$adminmain .= "Found, executing...<br />";
-					include_once($extplugin_install);
-				}
-				else
-				{ $adminmain .= "Not found.<br />"; 	}
+				$adminmain .= "Running on-install part of the setup script ... ";
+				$action = 'install';
+				include_once($extplugin_info);
+				$adminmain .= "Done!<br />";
 
 				sed_auth_reorder();
 				sed_cache_clearall();
@@ -417,12 +413,12 @@ switch ($a)
 				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 				if (!$ko)
 				{
-				$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
-				$adminmain .= "Deleting old configuration entries... ";
-				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
-				$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$pl'");
-				$adminmain .= "Deleting any old rights about this plugin... ";
-				$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+					$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' AND config_cat='$pl'");
+					$adminmain .= "Deleting old configuration entries... ";
+					$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
+					$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$pl'");
+					$adminmain .= "Deleting any old rights about this plugin... ";
+					$adminmain .= "Found:".sed_sql_affectedrows()."<br />";
 				}
 				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
 				$adminmain .= "Resetting the auth column for all the users... ";
@@ -430,14 +426,10 @@ switch ($a)
 				sed_cache_clearall();
 
 				$extplugin_uninstall = $cfg['plugins_dir']."/".$pl."/".$pl.".uninstall.php";
-				$adminmain .= "Looking for the optional PHP file : ".$extplugin_uninstall."... ";
-				if (file_exists($extplugin_uninstall))
-				{
-					$adminmain .= "Found, executing...<br />";
-					include_once($extplugin_uninstall);
-				}
-				else
-				{ $adminmain .= "Not found.<br />"; 	}
+				$adminmain .= "Running on-install part of the setup script ... ";
+				$action = 'uninstall';
+				include_once($extplugin_info);
+				$adminmain .= "Done!<br />";
 
 				$adminmain .= "<p>".$edit_log."</p>";
 				$adminmain .= "<a href=\"".sed_url('admin', "m=plug")."\">Click here to continue...</a>";
