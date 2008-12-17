@@ -115,6 +115,8 @@ $db_referers 		= 'sed_referers';
 $db_smilies 		= 'sed_smilies';
 $db_stats 			= 'sed_stats';
 $db_structure 		= 'sed_structure';
+$db_tag_references	= 'sed_tag_references';
+$db_tags			= 'sed_tags';
 $db_trash	 		= 'sed_trash';
 $db_users 			= 'sed_users';
 
