@@ -82,7 +82,7 @@ switch ($a)
 			$adminmain .= "<tr><td>".$L['Version'].":</td><td>".$info['Version']."</td></tr>";
 			$adminmain .= "<tr><td>".$L['Date'].":</td><td>".$info['Date']."</td></tr>";
 			$adminmain .= "<tr><td>".$L['Configuration'].":</td><td>".$info['Config']."</td></tr>";
-			$adminmain .= "<tr><td>".$L['Rights'].":</td><td><a href=\"".sed_url('admin', "?m=rightsbyitem&ic=plug&io=".$info['Code'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td></tr>";
+			$adminmain .= "<tr><td>".$L['Rights'].":</td><td><a href=\"".sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td></tr>";
 			$adminmain .= "<tr><td>".$L['adm_defauth_guests'].":</td><td>".sed_build_admrights($info['Auth_guests']);
 			$adminmain .= " (".$info['Auth_guests'].")</td></tr>";
 			$adminmain .= "<tr><td>".$L['adm_deflock_guests'].":</td><td>".sed_build_admrights($info['Lock_guests']);

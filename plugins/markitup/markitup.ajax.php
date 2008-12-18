@@ -1,4 +1,24 @@
 <?php
+/* ====================
+[BEGIN_SED]
+File=plugins/markitup/markitup.ajax.php
+Version=121
+Updated=2008-aug-26
+Type=Plugin
+Author=Trustmaster
+Description=
+[END_SED]
+[BEGIN_SED_EXTPLUGIN]
+Code=markitup
+Part=preview
+File=markitup.ajax
+Hooks=ajax
+Tags=
+Minlevel=0
+Order=10
+[END_SED_EXTPLUGIN]
+==================== */
+
 /**
  * Simple AJAX previewer for MarkItUp!
  *
@@ -8,12 +28,7 @@
  * @copyright (c) 2008 Cotonti Team
  * @license BSD license
  */
-
-define('SED_CODE', true);
-require_once './datas/config.php';
-require_once $cfg['system_dir'].'/functions.php';
-define('SED_NO_ANTIXSS', true);
-require_once $cfg['system_dir'].'/common.php';
+if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 header('Content-type: text/html; charset='.$cfg['charset']);
 

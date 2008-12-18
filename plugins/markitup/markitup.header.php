@@ -29,6 +29,8 @@ Order=10
  * @license BSD license
  */
 
+if (!defined('SED_CODE')) { die('Wrong URL.'); }
+
 $mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
 if(!file_exists($mkup_lang))
 {

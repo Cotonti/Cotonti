@@ -2,8 +2,8 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/markitup/markitup.setup.php
-Version=0.0.1
-Updated=2008-aug-26
+Version=0.0.2
+Updated=2008-dec-18
 Type=Plugin
 Author=Trustmaster
 Description=
@@ -13,8 +13,8 @@ Description=
 Code=markitup
 Name=MarkItUp!
 Description=jQuery BBcode editor
-Version=0.0.1
-Date=2008-aug-26
+Version=0.0.2
+Date=2008-dec-18
 Author=Jay Salvat
 Copyright=
 Notes=
