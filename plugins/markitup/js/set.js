@@ -4,7 +4,7 @@
 var mySettings = {
 	previewParserVar: 'text',
 	previewPosition: 'before',
-	previewParserPath:	'preview.php', // path to your BBCode parser
+	previewParserPath:	'plug.php?r=markitup', // path to your BBCode parser
 	previewAutoRefresh: false,
 	onEnter: {keepDefault: false, replaceWith: '\n'},
 	markupSet: [
@@ -93,7 +93,7 @@ var mySettings = {
 var mini = {
 		previewParserVar: 'text',
 		previewPosition: 'before',
-		previewParserPath:	'preview.php', // path to your BBCode parser
+		previewParserPath:	'plug.php?r=markitup', // path to your BBCode parser
 		previewAutoRefresh: false,
 		onEnter: {keepDefault: false, replaceWith: '\n'},
 		markupSet: [

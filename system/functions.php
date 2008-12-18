@@ -3492,6 +3492,10 @@ function sed_stat_inc($name)
 	return;
 }
 
+/*
+ * =========================================================================================
+ */
+
 /**
  * Returns substring position in file
  *
@@ -3506,7 +3510,7 @@ function sed_stringinfile($file, $str, $maxsize=32768)
 	{
 		$data = fread($fp, $maxsize);
 		$pos = mb_strpos($data, $str);
-		$result = ($pos===FALSE) ? FALSE : TRUE;
+		$result = !($pos===FALSE);
 	}
 	else
 	{ $result = FALSE; }
@@ -3658,6 +3662,31 @@ function sed_tag_list($item, $area = 'pages')
 }
 
 /**
+ * Parses user input into array of valid and safe tags
+ *
+ * @param string $input Comma separated user input
+ * @return array
+ */
+function sed_tag_parse($input)
+{
+	$res = array();
+	$invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n");
+	$tags = explode(',', $input);
+	foreach($tags as $tag)
+	{
+		$tag = str_replace($invalid, ' ', $tag);
+		$tag = preg_replace('#\s\s+#', ' ', $tag);
+		$tag = trim($tag);
+		if(!empty($tag))
+		{
+			$res[] = sed_tag_prep($tag);
+		}
+	}
+	$res = array_unique($res);
+	return $res;
+}
+
+/**
  * Convert the tag to lowercase and prepare it for SQL operations. Please call this after sed_import()!
  *
  * @param string $tag The tag
@@ -3696,6 +3725,17 @@ function sed_tag_remove($tag, $item, $area = 'pages')
 		return true;
 	}
 	return false;
+}
+
+/**
+ * Converts a lowercase tag into title-case string (capitalizes first latters of the words)
+ *
+ * @param string $tag A tag
+ * @return string
+ */
+function sed_tag_title($tag)
+{
+	return mb_convert_case($tag, MB_CASE_TITLE);
 }
 
 /**
