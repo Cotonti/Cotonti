@@ -16,7 +16,7 @@ Description=Functions
 
 /**
  * @package Seditio-N
- * @version 0.0.2
+ * @version 0.0.1
  * @copyright Partial copyright (c) 2008 Cotonti Team
  * @license BSD License
  */
@@ -691,7 +691,6 @@ function sed_build_bbcodes_local($limit)
 function sed_build_catpath($cat, $mask)
 {
 	global $sed_cat, $cfg;
-	$mask = preg_replace('#%25(\d)%24s#', '%$1\$s', $mask);
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
 	foreach($pathcodes as $k => $x)
 	{
@@ -3653,7 +3652,7 @@ function sed_tag_list($item, $area = 'pages')
 {
 	global $db_tag_references;
 	$res = array();
-	$sql = sed_sql_query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area' ORDER BY `tag`");
+	$sql = sed_sql_query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
 	while($row = sed_sql_fetchassoc($sql))
 	{
 		$res[] = $row['tag'];
@@ -3671,7 +3670,7 @@ function sed_tag_list($item, $area = 'pages')
 function sed_tag_parse($input)
 {
 	$res = array();
-	$invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n", '<', '>');
+	$invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n");
 	$tags = explode(',', $input);
 	foreach($tags as $tag)
 	{
@@ -3904,7 +3903,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 		{
 			// Exclude static parameters that are not used in format,
 			// they should be passed by rewrite rule (htaccess)
-			if($rule['params'][$key] == '*' || strstr($rule['params'][$key], '|') || empty($rule['params'][$key]))
+			if($rule['params'][$key] != $val)
 			{
 				$qs .= $key .'=' . $val . $sep;
 			}
