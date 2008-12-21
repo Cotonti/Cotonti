@@ -30,6 +30,13 @@
 			{PAGE_MULTI_TABTITLES}
 		</div>
 		<!-- END: PAGE_MULTI -->
+		
+		<div class="block">
+		<strong>{PHP.L.Tags}:</strong>
+		<!-- BEGIN: PAGE_TAGS_ROW -->
+		<a href="{PAGE_TAGS_ROW_URL}">{PAGE_TAGS_ROW_TAG}</a>
+		<!-- END: PAGE_TAGS_ROW -->
+		</div>
 
 		<!-- BEGIN: PAGE_FILE -->
 		<br /><br /><hr />

@@ -31,7 +31,7 @@ if($cfg['plugin']['tags']['pages'])
 	{
 		$t->assign(array(
 		'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? sed_cc(sed_tag_title($tag)) : sed_cc($tag),
-		'PAGE_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages&t='. urlencode($tag))
+		'PAGE_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages&t='.urlencode($tag))
 		));
 		$t->parse('MAIN.PAGE_TAGS_ROW');
 	}
