@@ -57,6 +57,10 @@
 					<td>{PAGEEDIT_FORM_ALIAS}</td>
 				</tr>
 				<tr>
+					<td>{PAGEEDIT_TOP_TAGS}:</td>
+					<td>{PAGEEDIT_FORM_TAGS} ({PAGEEDIT_TOP_TAGS_HINT})</td>
+				</tr>
+				<tr>
 					<td>{PHP.skinlang.pageedit.Parsing}</td>
 					<td>{PAGEEDIT_FORM_TYPE}</td>
 				</tr>

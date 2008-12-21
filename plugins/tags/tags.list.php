@@ -49,10 +49,11 @@ if($cfg['plugin']['tags']['pages'])
 	$tc_html = '<ul id="tag_cloud">';
 	while($tc_row = sed_sql_fetchassoc($tc_res))
 	{
-		$tc_html .= '<li value="'.$tc_row['cnt'].'"><a href="'.sed_url('plug', 'e=tags&a=pages&t='.urlencode($tc_row['tag'])).'">'.$tc_row['tag'].'</a> </li>';
+		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tc_row['tag']) : $tc_row['tag'];
+		$tc_html .= '<li value="'.$tc_row['cnt'].'"><a href="'.sed_url('plug', 'e=tags&a=pages&t='.urlencode($tc_row['tag'])).'">'.sed_cc($tag_t).'</a> </li>';
 	}
 	sed_sql_freeresult($tc_res);
-	$tc_html .= '</ul><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.tagcloud.js"></script><script type="text/javascript">$("#tag_cloud").tagcloud({type:"list"})</script>';
+	$tc_html .= '</ul><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.tagcloud.js"></script><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/set.js"></script>';
 
 
 	$t->assign(array(

@@ -16,7 +16,7 @@ Code=tags
 Part=page.add.tags
 File=tags.page.add.tags
 Hooks=page.add.tags
-Tags=page.add.tpl:{PAGEADD_FORM_TAGS}
+Tags=page.add.tpl:{PAGEADD_FORM_TAGS},{PAGEADD_TOP_TAGS},{PAGEADD_TOP_TAGS_HINT}
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */

@@ -27,14 +27,16 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	$rtags = sed_import('rtags', 'P', 'TXT');
 	$tags = sed_tag_parse($rtags);
 	$old_tags = sed_tag_list($id);
+	$kept_tags = array();
 	$new_tags = array();
 	// Find new tags, count old tags that have been left
 	$cnt = 0;
 	foreach($tags as $tag)
 	{
-		if($p = array_search($tag, $old_tags) !== false)
+		$p = array_search($tag, $old_tags);
+		if($p !== false)
 		{
-			unset($old_tags[$p]);
+			$kept_tags[] = $old_tags[$p];
 			$cnt++;
 		}
 		else
@@ -43,7 +45,8 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 		}
 	}
 	// Remove old tags that have been removed
-	foreach($old_tags as $tag)
+	$rem_tags = array_diff($old_tags, $kept_tags);
+	foreach($rem_tags as $tag)
 	{
 		sed_tag_remove($tag, $id);
 	}
