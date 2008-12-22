@@ -103,6 +103,11 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_forum_prunetopics('single', $s, $q);
 			sed_log("Deleted topic #".$q, 'for');
 			sed_forum_sectionsetlast($s);
+			/* === Hook === */
+			$extp = sed_getextplugins('forums.topics.delete.done');
+			if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
 			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
 
@@ -297,7 +302,7 @@ $t = new XTemplate($mskin);
 
 if ($fs_allowviewers)
 	{
-	
+
 $v = 0;
 $sqlv = sed_sql_query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' and online_subloc='".sed_sql_prep($fs_title)."' ");
 while ($rowv = sed_sql_fetcharray($sqlv))
@@ -305,12 +310,12 @@ while ($rowv = sed_sql_fetcharray($sqlv))
 	if ($rowv['online_name'] != 'v')
 		{
 		$fs_viewers_names .= ($v>0) ? ', ' : '';
-		$fs_viewers_names .= sed_build_user($rowv['online_userid'], sed_cc($rowv['online_name'])); 
+		$fs_viewers_names .= sed_build_user($rowv['online_userid'], sed_cc($rowv['online_name']));
 		$v++;
 		}
 	}
 $fs_viewers = $v;
-	
+
 $t->assign(array(
 	"FORUMS_TOPICS_VIEWERS" => $fs_viewers,
 	"FORUMS_TOPICS_VIEWER_NAMES" => $fs_viewers_names

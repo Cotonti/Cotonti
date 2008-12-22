@@ -85,10 +85,10 @@ if ($a=='update')
 
 	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($rpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
-	
+
 	// Extra fields
 	if(count($extrafields)>0)
-	foreach($extrafields as $row) 
+	foreach($extrafields as $row)
 	{
 		$import = sed_import('rpage_my_'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
@@ -111,14 +111,19 @@ if ($a=='update')
 
 				if ($row['page_state'] != 1)
 				{ $sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' "); }
-				
-				
+
+
 				$id2 = "p".$id;
 				$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
 				$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
 				$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
 				$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 				sed_log("Deleted page #".$id,'adm');
+				/* === Hook === */
+				$extp = sed_getextplugins('page.edit.delete.done');
+				if (is_array($extp))
+				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				/* ===== */
 				header("Location: " . SED_ABSOLUTE_URL . sed_url('list', "c=".$row1['page_cat'], '', true));
 				exit;
 			}
@@ -313,7 +318,7 @@ foreach($extrafields as $i=>$row)
 	$t1 = "PAGEEDIT_FORM_MY_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {
-	case "input":	
+	case "input":
 		$t2 = str_replace('<input ','<input name="rpage_my_'.$row['field_name'].'" ', $t2);
 		$t2 = str_replace('<input ','<input value="'.$pag['page_my_'.$row['field_name']].'" ', $t2); break;
 	case "textarea":
@@ -323,12 +328,12 @@ foreach($extrafields as $i=>$row)
 		$t2 = str_replace('<select','<select name="rpage_my_'.$row['field_name'].'"', $t2);
 		$options = "";
 		$opt_array = explode(",",$row['field_variants']);
-		if(count($opt_array)!=0) 
-			foreach ($opt_array as $var) 
+		if(count($opt_array)!=0)
+			foreach ($opt_array as $var)
 			{
 				$sel = $var == $pag['page_my_'.$row['field_name']] ? ' selected="selected"' : '';
 				$options .= "<option value=\"$var\" $sel>$var</option>";
-				
+
 			}
 		$t2 = str_replace("</select>","$options</select>",$t2); break;
 	case "checkbox":

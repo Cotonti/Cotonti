@@ -3728,6 +3728,28 @@ function sed_tag_remove($tag, $item, $area = 'pages')
 }
 
 /**
+ * Removes all tags attached to an item, or all tags from area if item is set to 0.
+ * Returns number of tag references affected.
+ *
+ * @param int $item Item ID
+ * @param string $area Site area
+ * @return int
+ */
+function sed_tag_remove_all($item = 0, $area = 'pages')
+{
+	global $db_tag_references;
+	if($item == 0)
+	{
+		sed_sql_query("DELETE FROM $db_tag_references WHERE tag_area = '$area'");
+	}
+	else
+	{
+		sed_sql_query("DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
+	}
+	return sed_sql_affectedrows();
+}
+
+/**
  * Converts a lowercase tag into title-case string (capitalizes first latters of the words)
  *
  * @param string $tag A tag

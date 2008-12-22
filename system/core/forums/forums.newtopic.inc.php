@@ -53,7 +53,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_countposts = $row['fs_countposts'];
 	$fs_masterid = $row['fs_masterid'];
 	$fs_mastername = $row['fs_mastername'];
-	
+
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	sed_block($usr['auth_write']);
 }
@@ -154,6 +154,10 @@ if ($a=='newtopic')
 			'".sed_sql_prep($newmsg)."',
 		'$rhtml',
 		'".$usr['ip']."')");
+
+		$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
+		$row = sed_sql_fetcharray($sql);
+		$p = $row['fp_id'];
 
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET
 		fs_postcount=fs_postcount+1,

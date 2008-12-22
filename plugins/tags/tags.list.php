@@ -46,7 +46,7 @@ if($cfg['plugin']['tags']['pages'])
 		WHERE r.tag_area = 'pages' AND p.page_cat IN ($tc_cats)
 		GROUP BY r.tag
 		ORDER BY $order $limit");
-	$tc_html = '<ul id="tag_cloud">';
+	$tc_html = '<ul class="tag_cloud">';
 	while($tc_row = sed_sql_fetchassoc($tc_res))
 	{
 		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tc_row['tag']) : $tc_row['tag'];

@@ -1,4 +1,4 @@
-$("#tag_cloud").tagcloud({
+$(".tag_cloud").tagcloud({
 	height: null,
 	type: "list",
 	sizemax: 20,
