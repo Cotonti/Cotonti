@@ -3880,16 +3880,16 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 		{
 			if(isset($spec[$m[1]]))
 			{
-				$url = str_replace($m[0], $spec[$m[1]], $url);
+				$url = str_replace($m[0], urlencode($spec[$m[1]]), $url);
 			}
 			elseif(isset($args[$m[1]]))
 			{
-				$url = str_replace($m[0], $args[$m[1]], $url);
+				$url = str_replace($m[0], urlencode($args[$m[1]]), $url);
 				unset($args[$m[1]]);
 			}
 			else
 			{
-				$url = str_replace($m[0], $GLOBALS[$m[1]], $url);
+				$url = str_replace($m[0], urlencode($GLOBALS[$m[1]]), $url);
 			}
 		}
 	}
@@ -3905,7 +3905,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 			// they should be passed by rewrite rule (htaccess)
 			if($rule['params'][$key] != $val)
 			{
-				$qs .= $key .'=' . $val . $sep;
+				$qs .= $key .'=' . urlencode($val) . $sep;
 			}
 		}
 		$qs = substr($qs, 0, -$sep_len);
