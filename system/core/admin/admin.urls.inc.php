@@ -95,7 +95,7 @@ if($a == 'save')
 	// Process and write
 	$count = count($ut_area);
 	$hta = empty($hta_prefix) ? '' : $hta_prefix . "\n";
-	$var_pattern = '[a-zA-Z0-9\._\-]+';
+	$var_pattern = '[a-zA-Z0-9\._\-\%]+';
 	$mainurl = parse_url($cfg['mainurl']);
 	$host = preg_quote($mainurl['host']);
 	$path = preg_quote(SED_SITE_URI);
