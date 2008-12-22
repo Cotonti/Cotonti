@@ -16,7 +16,7 @@ Description=Forums
 
 /**
  * @package Seditio-N
- * @version 0.0.1
+ * @version 0.0.2
  * @copyright Partial copyright (c) 2008 Cotonti Team
  * @license BSD License
  */
@@ -131,6 +131,7 @@ if ($a=='update')
 		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_html = '$rhtml', fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."' WHERE fp_id='$p'");
 	}
 
+	$is_first_post = false;
 	if (!empty($rtopictitle))
 	{
 		$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
@@ -142,13 +143,14 @@ if ($a=='update')
 				if (mb_substr($rtopictitle, 0 ,1)=="#")
 				{ $rtopictitle = str_replace('#', '', $rtopictitle); }
 				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_title='".sed_sql_prep($rtopictitle)."', ft_desc='".sed_sql_prep($rtopicdesc)."' WHERE ft_id='$q'");
+				$is_first_post = true;
 			}
 		}
 	}
-	
+
 	if (!empty($rtopictitle) && !empty($rtext))
 	{
-	$rtopicpreview = mb_substr(sed_cc($rtext), 0, 128);	
+		$rtopicpreview = mb_substr(sed_cc($rtext), 0, 128);
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_preview='".sed_sql_prep($rtopicpreview)."' WHERE ft_id='$q'");
 	}
 
@@ -165,12 +167,17 @@ if ($a=='update')
 
 $sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
 
+$is_first_post = false;
 if ($row = sed_sql_fetcharray($sql))
 {
 	$fp_idp = $row['fp_id'];
 	if ($fp_idp==$p)
 	{
-		$edittopictitle = ($fp_idp==$p) ? $L['Topic'].": <input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"64\" /><br />".$L['Description'].": <input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"64\" /><br />" : '';
+		 if($fp_idp==$p)
+		 {
+		 	$edittopictitle = $L['Topic'].": <input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"64\" /><br />".$L['Description'].": <input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"64\" /><br />";
+		 	$is_first_post = true;
+		 }
 	}
 }
 

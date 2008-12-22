@@ -36,7 +36,7 @@ if($a == 'pages')
 	{
 		// Global tag cloud and search form
 		$tcloud = sed_tag_cloud('pages', $cfg['plugin']['tags']['order']);
-		$tc_html = '<ul id="tag_cloud">';
+		$tc_html = '<ul class="tag_cloud">';
 		foreach($tcloud as $tag => $cnt)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
@@ -98,7 +98,43 @@ list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=t
 }
 elseif($a == 'forums')
 {
-	// TODO forum search by tags
+	$t->assign(array(
+	'TAGS_ACTION' => sed_url('plug', 'e=tags&a=forums'),
+	'TAGS_HINT' => $L['Query_hint'],
+	'TAGS_QUERY' => sed_cc($qs)
+	));
+	if(empty($qs))
+	{
+		// Global tag cloud and search form
+		$tcloud = sed_tag_cloud('forums', $cfg['plugin']['tags']['order']);
+		$tc_html = '<ul class="tag_cloud">';
+		foreach($tcloud as $tag => $cnt)
+		{
+			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
+			$tc_html .= '<li value="'.$cnt.'"><a href="'.sed_url('plug', 'e=tags&a=forums&t='.urlencode($tag)).'">'.sed_cc($tag_t).'</a> </li>';
+		}
+		$tc_html .= '</ul><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.tagcloud.js"></script><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/set.js"></script>';
+		$t->assign('TAGS_CLOUD_BODY', $tc_html);
+		$t->parse('MAIN.TAGS_CLOUD');
+	}
+	else
+	{
+		// TODO Search results
+		$query = sed_tag_parse_query($qs);
+		$d = sed_import('d', 'G', 'INT');
+		if(empty($d))
+		{
+			$d = 0;
+		}
+		if(!empty($query))
+		{
+			$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
+			FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
+			ON r.tag_item = t.ft_id
+			WHERE r.tag_area = 'forums' AND ($query)"), 0, 0);
+			// TODO complete this
+		}
+	}
 }
 
 /**
