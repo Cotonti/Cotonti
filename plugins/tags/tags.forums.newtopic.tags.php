@@ -16,7 +16,7 @@ Code=tags
 Part=forums.newtopic.tags
 File=tags.forums.newtopic.tags
 Hooks=forums.newtopic.tags
-Tags=forums.newtopic.tpl:{NEWTOPIC_ATTACH_PERSURL},{NEWTOPIC_ATTACH_ROW_FILE},{NEWTOPIC_ATTACH_ROW_CAPTION},{NEWTOPIC_ATTACH_MAXFILESIZE},{NEWTOPIC_ATTACH_TOTALSPACE},{NEWTOPIC_ATTACH_USEDSPACE},{NEWTOPIC_ATTACH_LEFTSPACE}
+Tags=forums.newtopic.tpl:{FORUMS_NEWTOPIC_TOP_TAGS},{FORUMS_NEWTOPIC_TOP_TAGS_HINT},{FORUMS_NEWTOPIC_FORM_TAGS}
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
@@ -26,10 +26,10 @@ if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W'))
 {
 	file_exists($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") ? require_once($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") : require_once($cfg['plugins_dir'].'/tags/lang/tags.en.lang.php');
 	$t->assign(array(
-	'NEWTOPIC_TOP_TAGS' => $L['Tags'],
-	'NEWTOPIC_TOP_TAGS_HINT' => $L['comma_separated'],
-	'NEWTOPIC_FORM_TAGS' => '<input type="text" name="rtags" />'
+	'FORUMS_NEWTOPIC_TOP_TAGS' => $L['Tags'],
+	'FORUMS_NEWTOPIC_TOP_TAGS_HINT' => $L['comma_separated'],
+	'FORUMS_NEWTOPIC_FORM_TAGS' => '<input type="text" name="rtags" />'
 	));
-	$t->parse('MAIN.NEWTOPIC_TAGS');
+	$t->parse('MAIN.FORUMS_NEWTOPIC_TAGS');
 }
 ?>

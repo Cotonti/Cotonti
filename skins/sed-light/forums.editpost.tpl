@@ -15,6 +15,11 @@
 				<tr>
 					<td><div style="width:100%;">{FORUMS_EDITPOST_TEXTBOXER}</div></td>
 				</tr>
+				<!-- BEGIN: FORUMS_EDITPOST_TAGS -->
+				<tr>
+				<td>{FORUMS_EDITPOST_TOP_TAGS}: {FORUMS_EDITPOST_FORM_TAGS} ({FORUMS_EDITPOST_TOP_TAGS_HINT})</td>
+				</tr>
+				<!-- END: FORUMS_EDITPOST_TAGS -->
 				<tr>
 					<td class="valid"><input type="submit" value="{PHP.skinlang.forumseditpost.Update}" /></td>
 				</tr>
