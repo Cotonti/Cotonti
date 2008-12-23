@@ -672,6 +672,13 @@ $L['pro_avatarnotvalid'] = "Этот аватар не является дейс
 $L['pro_photonotvalid'] = "Эта фотография не является действительным %1\$s файлом."; // N-0.0.2
 $L['pro_sigotvalid'] = "Эта подпись не является действительным %1\$s файлом."; // N-0.0.2
 
+/* ====== Misc ====== */
+
+$L['pagenav_first'] = '&lt;&lt;';
+$L['pagenav_prev'] = '&lt;';
+$L['pagenav_next'] = '&gt;';
+$L['pagenav_last'] = '&gt;&gt;';
+
 /* ========== Countries ===============*/
 $sed_countries = array (
 '00' => '---',

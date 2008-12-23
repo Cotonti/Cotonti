@@ -674,6 +674,13 @@ $L['pro_avatarnotvalid'] = "This avatar is not a valid %1\$s image."; // N-0.0.2
 $L['pro_photonotvalid'] = "This photo is not a valid %1\$s image."; // N-0.0.2
 $L['pro_sigotvalid'] = "This signature is not a valid %1\$s image."; // N-0.0.2
 
+/* ====== Misc ====== */
+
+$L['pagenav_first'] = '&lt;&lt;';
+$L['pagenav_prev'] = '&lt;';
+$L['pagenav_next'] = '&gt;';
+$L['pagenav_last'] = '&gt;&gt;';
+
 /* ========== Countries ===============*/
 $sed_countries = array (
 '00' => '---',

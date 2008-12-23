@@ -103,7 +103,22 @@ h6 	{ font-size:90%; margin:1em 1em 1em 0; }
 .code { background-color:#FFF; border:1px solid #C8D9E2; overflow: auto; padding:2px; margin-bottom:5px; font-family:monospace; }
 .valid  { height:48px; text-align:center; vertical-align:middle; }
 .download { font-size:110%; text-align:center; background-color: #FFFFFF; padding:16px; margin-top:16px; }
-.paging { padding:6px; text-align:right; font-size:.90em; }
+.paging,.pagenav { padding:6px; text-align:right; font-size:.90em; }
+.pagenav_prev,.pagenav_next,.pagenav_first,.pagenav_last,.pagenav_pages
+{
+	padding: 2px 6px;
+	background: #F5F5F5;
+	margin: 1px;
+	border: 1px solid #C8D9E2;
+}
+.pagenav_current {
+	padding: 2px 6px;
+	font-weight: bold;
+	text-decoration: underline;
+	background: #dddddd;
+	margin: 1px;
+	border: 1px solid #c8c7c7;
+}
 .coltop { text-align:center; background-color:#c8d9e2!important; color:#3E606F; padding:5px 0; font-weight:bold; height:25px; vertical-align:middle; }
 .centerall { text-align:center; vertical-align:middle; }
 .desc { font-size:95%; padding:3px; color:#646464; }
