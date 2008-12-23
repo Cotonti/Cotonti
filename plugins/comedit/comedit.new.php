@@ -17,7 +17,7 @@ Description=
 [BEGIN_SED_EXTPLUGIN]
 Code=comedit
 Part=new
-File=comments.new
+File=comedit.new
 Hooks=comments.send.new
 Tags=
 Minlevel=0
@@ -28,13 +28,17 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-if (@file_exists($cfg['plugins_dir'].'/comedit/lang/comedit.'.$usr['lang'].'.lang.php')){
-  require($cfg['plugins_dir'].'/comedit/lang/comedit.'.$usr['lang'].'.lang.php');
-}else{
-  require($cfg['plugins_dir'].'/comedit/lang/comedit.en.lang.php');
+if (@file_exists($cfg['plugins_dir'].'/comedit/lang/comedit.'.$usr['lang'].'.lang.php'))
+{
+	require_once($cfg['plugins_dir'].'/comedit/lang/comedit.'.$usr['lang'].'.lang.php');
+}
+else
+{
+	require_once($cfg['plugins_dir'].'/comedit/lang/comedit.en.lang.php');
 }
 
-if (empty($error_string) && $cfg['plugin']['comedit']['mail']) {
+if (empty($error_string) && $cfg['plugin']['comedit']['mail'])
+{
 
 	$newcomm = sed_sql_insertid($sql);
 
@@ -42,10 +46,12 @@ if (empty($error_string) && $cfg['plugin']['comedit']['mail']) {
 
 	$email_title = $L['plu_comlive'].$cfg['main_url'];
 	$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive2'];
-	$email_body .= $cfg['mainurl']."/".$url."&comments=1#c".$newcomm."\n\n";
+	$sep = stristr($url, '?') ? '&' : '?';
+	$email_body .= $cfg['mainurl']."/".$url.$sep."comments=1#c".$newcomm."\n\n";
 
-	while ($adm = sed_sql_fetcharray($sql)) {
-	sed_mail($adm['user_email'], $email_title, $email_body);
+	while ($adm = sed_sql_fetcharray($sql))
+	{
+		sed_mail($adm['user_email'], $email_title, $email_body);
 	}
 
 }

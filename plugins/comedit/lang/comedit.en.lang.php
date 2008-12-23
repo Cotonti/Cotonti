@@ -5,7 +5,7 @@ Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
 [BEGIN_SED]
-File=plugins/comments/lang/comments.en.lang.php
+File=plugins/comedit/lang/comedit.en.lang.php
 Version=110
 Updated=2006-jun-05
 Type=Plugin.standalone
