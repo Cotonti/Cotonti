@@ -30,49 +30,53 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $m   = sed_import('m',   'G', 'ALP');
 $a   = sed_import('a',   'G', 'ALP');
-$cid = sed_import('cid', 'G', 'ALP');
+$cid = (int) sed_import('cid', 'G', 'INT');
 $pid = sed_import('pid', 'G', 'ALP');
 
 
 
 $plugin_title = $L['plu_title'];
 
-if ($a=='update') {
+if ($a=='update')
+{
 
 	sed_check_xg();
 
-	$sql1 = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$cid' AND com_code='$pid' LIMIT 1");
+	$sql1 = sed_sql_query("SELECT * FROM $db_com WHERE com_id=$cid AND com_code='$pid' LIMIT 1");
 	sed_die(sed_sql_numrows($sql1)==0);
 	$row = sed_sql_fetcharray($sql1);
 
-	$time_limit = ($sys['now_offset']<($row['com_date']+$cfg['plugin']['comments']['time']*60)) ? TRUE : FALSE;
+	$time_limit = ($sys['now_offset']<($row['com_date']+$cfg['plugin']['comedit']['time']*60)) ? TRUE : FALSE;
 	$usr['isowner'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
 	$usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 	sed_block($usr['allow_write']);
 
 	$comtext = sed_import('comtext', 'P', 'TXT');
 
-    $error_string .= (empty($comtext)) ? $L['plu_comtooshort']."<br />" : '';
+	$error_string .= (empty($comtext)) ? $L['plu_comtooshort']."<br />" : '';
 
-    if (empty($error_string)) {
-	$sql = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($comtext)."' WHERE com_id='$cid' AND  com_code='$pid'");
+	if (empty($error_string))
+	{
+		$sql = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($comtext)."' WHERE com_id='$cid' AND  com_code='$pid'");
 
-		if($cfg['plugin']['comedit']['mail']) {
-		$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_maingrp=5");
+		if($cfg['plugin']['comedit']['mail'])
+		{
+			$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
-		$email_title = $L['plu_comlive'].$cfg['main_url'];
-		$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive3'];
-		$email_body .= $cfg['mainurl'].'/'.sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid)."\n\n";
+			$email_title = $L['plu_comlive'].$cfg['main_url'];
+			$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive3'];
+			$email_body .= $cfg['mainurl'].'/'.sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid)."\n\n";
 
-			while ($adm = sed_sql_fetcharray($sql2)) {
-			sed_mail($adm['user_email'], $email_title, $email_body);
+			while ($adm = sed_sql_fetcharray($sql2))
+			{
+				sed_mail($adm['user_email'], $email_title, $email_body);
 			}
 		}
 
-	$com_grp = ($usr['isadmin']) ? "adm" : "usr";
-	sed_log("Edited comment #".$cid, $com_grp);
-	header('Location: ' . SED_ABSOLUTE_URL . sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid, true));
-	exit;
+		$com_grp = ($usr['isadmin']) ? "adm" : "usr";
+		sed_log("Edited comment #".$cid, $com_grp);
+		header('Location: ' . SED_ABSOLUTE_URL . sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid, true));
+		exit;
 	}
 }
 
@@ -81,7 +85,7 @@ $sql = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$cid' AND com_code='$p
 sed_die(sed_sql_numrows($sql)==0);
 $com = sed_sql_fetcharray($sql);
 
-$com_limit = ($sys['now_offset']<($com['com_date']+$cfg['plugin']['comments']['time']*60)) ? TRUE : FALSE;
+$com_limit = ($sys['now_offset']<($com['com_date']+$cfg['plugin']['comedit']['time']*60)) ? TRUE : FALSE;
 $usr['isowner'] = ($com['com_authorid'] == $usr['id'] && $com_limit);
 
 $usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);

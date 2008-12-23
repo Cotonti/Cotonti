@@ -28,10 +28,13 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-if (@file_exists($cfg['plugins_dir'].'/comedit/lang/comedit.'.$usr['lang'].'.lang.php')){
-  require($cfg['plugins_dir'].'/comedit/lang/comedit.'.$usr['lang'].'.lang.php');
-}else{
-  require($cfg['plugins_dir'].'/comedit/lang/comedit.ru.lang.php');
+if (@file_exists($cfg['plugins_dir'].'/comedit/lang/comedit.'.$usr['lang'].'.lang.php'))
+{
+	require_once($cfg['plugins_dir'].'/comedit/lang/comedit.'.$usr['lang'].'.lang.php');
+}
+else
+{
+	require_once($cfg['plugins_dir'].'/comedit/lang/comedit.en.lang.php');
 }
 
 $allowed_time = sed_build_timegap($sys['now_offset']-$cfg['plugin']['comedit']['time']*60,$sys['now_offset']);
@@ -39,5 +42,5 @@ $com_hint = sprintf($L['plu_comhint'], $allowed_time);
 
 $t->assign(array(
 	"COMMENTS_FORM_HINT" => $com_hint,
-		));
+));
 ?>

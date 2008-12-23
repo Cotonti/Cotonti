@@ -40,5 +40,5 @@ $com_edit = ($usr['isadmin_com'] || $usr['isowner_com']) ? "<a href=\"".sed_url(
 
 $t->assign(array(
 	"COMMENTS_ROW_EDIT" => $com_edit,
-		));
+));
 ?>
