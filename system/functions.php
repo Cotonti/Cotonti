@@ -1521,12 +1521,11 @@ function sed_build_user($id, $user)
  */
 function sed_build_userimage($image)
 {
-	// TODO this is quite useless function
-	if (!empty($image))
+	if(empty($image))
 	{
-		$result = "<img src=\"".$image."\" alt=\"\" class=\"avatar\" />";
+		$image = 'datas/defaultav/blank.png';
 	}
-	return($result);
+	return '<img src="'.$image.'" alt="" class="avatar" />';
 }
 
 /**
