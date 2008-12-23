@@ -2601,32 +2601,58 @@ function sed_outputfilters($output)
  * @param int $perpage Rows per page
  * @return string
  */
-function sed_pagination($url, $current, $entries, $perpage, $characters='d', $onclick='')
+function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $onclick = '')
 {
-	global $cfg;
-
-	if ($entries<=$perpage)
-	{ return (""); }
+	if($entries <= $perpage)
+	{
+		return '';
+	}
+	$each_side = 3; // Links each side
+	$address = strstr($url, '?') ? $url . '&amp;'.$characters.'=' : $url . '?'.$characters.'=';
 
 	$totalpages = ceil($entries / $perpage);
-	$currentpage = $current / $perpage;
+	$currentpage = floor($current / $perpage) + 1;
+	$cur_left = $currentpage - $each_side;
+	if($cur_left < 1) $cur_left = 1;
+	$cur_right = $currentpage + $each_side;
+	if($cur_right > $totalpages) $cur_right = $totalpages;
 
-	for ($i = 0; $i < $totalpages; $i++)
+	$before = '';
+	$pages = '';
+	$after = '';
+	$i = 1;
+	$n = 0;
+	while($i < $cur_left)
 	{
-		$j = $i * $perpage;
-
-		if(isset($onclick))
-		{
-			$onclickm="";
-			$onclickm=" OnClick='".$onclick."(".$j.");return false;'";
-		}
-
-		if ($i==$currentpage)
-		{ $res .= sprintf($cfg['pagination_cur'], "<a href=\"".$url."&amp;".$characters."=".$j."\"".$onclickm.">".($i+1)."</a>"); }
-		elseif (is_int(($i+1)/10) || $i<4 || ($totalpages-$i)<4 || abs($i-$currentpage)<4)
-		{ $res .= sprintf($cfg['pagination'], "<a href=\"".$url."&amp;".$characters."=".$j."\"".$onclickm.">".($i+1)."</a>"); }
+		$k = ($i - 1) * $perpage;
+		$event = empty($onclick) ? '' : ' onclick="return '.$onclick.'('.$k.')"';
+		$before .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.'>'.$i.'</a></span>';
+		$i *= ($n % 2) ? 2 : 5;
+		$n++;
 	}
-	return ($res);
+	for($j = $cur_left; $j <= $cur_right; $j++)
+	{
+		$k = ($j - 1) * $perpage;
+		$class = $j == $currentpage ? 'current' : 'pages';
+		$event = empty($onclick) ? '' : ' onclick="return '.$onclick.'('.$k.')"';
+		$pages .= '<span class="pagenav_'.$class.'"><a href="'.$address.$k.'"'.$event.'>'.$j.'</a></span>';
+	}
+	while($i <= $cur_right)
+	{
+		$i *= ($n % 2) ? 2 : 5;
+		$n++;
+	}
+	while($i < $totalpages)
+	{
+		$k = ($i - 1) * $perpage;
+		$event = empty($onclick) ? '' : ' onclick="return '.$onclick.'('.$k.')"';
+		$after .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.'>'.$i.'</a></span>';
+		$i *= ($n % 2) ? 5 : 2;
+		$n++;
+	}
+	$pages = $before . $pages . $after;
+
+	return $pages;
 }
 
 /**
@@ -2639,40 +2665,37 @@ function sed_pagination($url, $current, $entries, $perpage, $characters='d', $on
  * @param bool $res_array Return results as array
  * @return mixed
  */
-function sed_pagination_pn($url, $current, $entries, $perpage, $res_array=FALSE, $characters='d', $onclick='')
+function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALSE, $characters = 'd', $onclick = '')
 {
-	global $L, $sed_img_left, $sed_img_right;
+	global $L;
 
-	if ($current>0)
+	$address = strstr($url, '?') ? $url . '&amp;'.$characters.'=' : $url . '?'.$characters.'=';
+	$totalpages = ceil($entries / $perpage);
+	$currentpage = floor($current / $perpage) + 1;
+
+	if ($current > 0)
 	{
-		$prevpage = $current - $perpage;
-		if ($prevpage<0)
-		{ $prevpage = 0; }
-
-		if(isset($onclick))
-		{			$onclickm="";
-			$onclickm=" OnClick='".$onclick."(".$prevpage.");return false;'";
-		}
-
-		$res_l = "<a href=\"".$url."&amp;".$characters."=".$prevpage."\"".$onclickm.">".$L['Previous']." $sed_img_left</a>";
+		$prev_n = $current - $perpage;
+		if ($prev_n < 0) { $prev_n = 0; }
+		$event = empty($onclick) ? '' : ' onclick="return '.$onclick.'('.$prev_n.')"';
+		$prev = '<span class="pagenav_prev"><a href="'.$address.$prev_n.'"'.$event.'>'.$L['pagenav_prev'].'</a></span>';
+		$event = empty($onclick) ? '' : ' onclick="return '.$onclick.'(0)"';
+		$first = '<span class="pagenav_first"><a href="'.$address.'0"'.$event.'>'.$L['pagenav_first'].'</a></span>';
 	}
 
-	if (($current + $perpage)<$entries)
+	if (($current + $perpage) < $entries)
 	{
-		$nextpage = $current + $perpage;
-
-		if(isset($onclick))
-		{
-			$onclickm="";
-			$onclickm=" OnClick='".$onclick."(".$nextpage.");return false;'";
-		}
-
-		$res_r = "<a href=\"".$url."&amp;".$characters."=".$nextpage."\"".$onclickm.">$sed_img_right ".$L['Next']."</a>";
+		$next_n = $current + $perpage;
+		$event = empty($onclick) ? '' : ' onclick="return '.$onclick.'('.$next_n.')"';
+		$next = '<span class="pagenav_next"><a href="'.$address.$next_n.'"'.$event.'>'.$L['pagenav_next'].'</a></span>';
+		$last_n = ($totalpages - 1) * $perpage;
+		$event = empty($onclick) ? '' : ' onclick="return '.$onclick.'('.$last_n.')"';
+		$last = '<span class="pagenav_last"><a href="'.$address.$last_n.'"'.$event.'>'.$L['pagenav_last'].'</a></span>';
 	}
-	if ($res_array)
-	{ return (array($res_l, $res_r)); }
-	else
-	{ return ($res_l." ".$res_r); }
+
+	$res_l = $first . $prev;
+	$res_r = $next . $last;
+	return $res_array ? array($res_l, $res_r) : $res_l . ' ' . $res_r;
 }
 
 /**
