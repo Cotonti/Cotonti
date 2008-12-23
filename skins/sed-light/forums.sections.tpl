@@ -112,6 +112,11 @@
 			</tbody>
 		</table>
 		<div class="bCap"></div>
+		
+		<h4>{FORUMS_SECTIONS_TOP_TAG_CLOUD}</h4>
+		<div class="block">
+		{FORUMS_SECTIONS_TAG_CLOUD}
+		</div>
 	</div>
 
 <!-- END: MAIN -->

@@ -10,8 +10,8 @@
 </div>
 <div id="rSide">
 
-	<div class="rboxHD">{PHP.L.Menu} :</div>
-	<div class="rboxBody">{PHP.cfg.menu2}<br />{PHP.cfg.menu3}<br />{PHP.cfg.menu4}</div>
+	<div class="rboxHD">{INDEX_TOP_TAG_CLOUD} :</div>
+	<div class="rboxBody">{INDEX_TAG_CLOUD}</div>
 	
 	<div class="rboxHD">{PHP.skinlang.index.Polls}</div>
 	<div class="rboxBody">{PLUGIN_INDEXPOLLS}</div>

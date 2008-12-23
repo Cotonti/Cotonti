@@ -73,7 +73,8 @@ if($a == 'pages')
 				$tag_list = '';
 				foreach($tags as $tag)
 				{
-					$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.urlencode($tag)).'">'.sed_cc($tag).'</a> ';
+					$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
+					$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.urlencode($tag)).'">'.sed_cc($tag_t).'</a> ';
 				}
 				$t->assign(array(
 				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']),
@@ -119,7 +120,7 @@ elseif($a == 'forums')
 	}
 	else
 	{
-		// TODO Search results
+		// Search results
 		$query = sed_tag_parse_query($qs);
 		$d = sed_import('d', 'G', 'INT');
 		if(empty($d))
@@ -132,7 +133,41 @@ elseif($a == 'forums')
 			FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 			WHERE r.tag_area = 'forums' AND ($query)"), 0, 0);
-			// TODO complete this
+			$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
+			FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
+			ON r.tag_item = t.ft_id
+			LEFT JOIN $db_forum_sections AS s
+			ON t.ft_sectionid = s.fs_id
+			WHERE r.tag_area = 'forums' AND ($query)
+			LIMIT $d, {$cfg['maxrowsperpage']}");
+			$t->assign('TAGS_RESULT_TITLE', $L['Search_results']);
+			while($row = sed_sql_fetchassoc($sql))
+			{
+				$tags = sed_tag_list($row['ft_id'], 'forums');
+				$tag_list = '';
+				foreach($tags as $tag)
+				{
+					$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
+					$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.urlencode($tag)).'">'.sed_cc($tag_t).'</a> ';
+				}
+				$t->assign(array(
+				'TAGS_RESULT_ROW_URL' => sed_url('forums', 'm=topics&q='.$row['ft_id']),
+				'TAGS_RESULT_ROW_TITLE' => sed_cc($row['ft_title']),
+				'TAGS_RESULT_ROW_PATH' => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, array($row['fs_masterid'],$row['fs_mastername'])),
+				'TAGS_RESULT_ROW_TAGS' => $tag_list
+				));
+				$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
+			}
+			sed_sql_freeresult($sql);
+			$pagnav = sed_pagination(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+
+			$t->assign(array(
+			'TAGS_PAGEPREV' => $pagination_prev,
+			'TAGS_PAGENEXT' => $pagination_next,
+			'TAGS_PAGNAV' => $pagnav
+			));
+			$t->parse('MAIN.TAGS_RESULT');
 		}
 	}
 }

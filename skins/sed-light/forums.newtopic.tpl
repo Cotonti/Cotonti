@@ -33,6 +33,16 @@
 					<div style="width:100%;">{FORUMS_NEWTOPIC_TEXTBOXER}</div>
 					</td>
 				</tr>
+				
+				<!-- BEGIN: FORUMS_NEWTOPIC_TAGS -->
+				
+				<tr>
+					<td>
+						{FORUMS_NEWTOPIC_TOP_TAGS}: {FORUMS_NEWTOPIC_FORM_TAGS} ({FORUMS_NEWTOPIC_TOP_TAGS_HINT})
+					</td>
+				</tr>
+				
+				<!-- END: FORUMS_NEWTOPIC_TAGS -->
 
 				<tr>
 					<td style="text-align:center;">

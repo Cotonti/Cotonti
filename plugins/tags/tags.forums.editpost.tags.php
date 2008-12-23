@@ -16,7 +16,7 @@ Code=tags
 Part=forums.editpost.tags
 File=tags.forums.editpost.tags
 Hooks=forums.editpost.tags
-Tags=forums.editpost.tpl:{EDITPOST_FORM_TAGS},{EDITPOST_TOP_TAGS},{EDITPOST_TOP_TAGS_HINT}
+Tags=forums.editpost.tpl:{FORUMS_EDITPOST_FORM_TAGS},{FORUMS_EDITPOST_TOP_TAGS},{FORUMS_EDITPOST_TOP_TAGS_HINT}
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
@@ -28,10 +28,10 @@ if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_firs
 	$tags = sed_tag_list($q, 'forums');
 	$tags = implode(', ', $tags);
 	$t->assign(array(
-	'EDITPOST_TOP_TAGS' => $L['Tags'],
-	'EDITPOST_TOP_TAGS_HINT' => $L['comma_separated'],
-	'EDITPOST_FORM_TAGS' => '<input type="text" name="rtags" value="' . $tags . '" />'
+	'FORUMS_EDITPOST_TOP_TAGS' => $L['Tags'],
+	'FORUMS_EDITPOST_TOP_TAGS_HINT' => $L['comma_separated'],
+	'FORUMS_EDITPOST_FORM_TAGS' => '<input type="text" name="rtags" value="' . $tags . '" />'
 	));
-	$t->parse('MAIN.EDITPOST_TAGS');
+	$t->parse('MAIN.FORUMS_EDITPOST_TAGS');
 }
 ?>
