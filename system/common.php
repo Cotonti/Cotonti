@@ -251,6 +251,11 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 				}
 				unset($u);
 				unset($passhash);
+
+				if(empty($_SESSION['sourcekey']))
+				{
+					$_SESSION['sourcekey'] = mb_strtoupper(sed_unique(8));
+				}
 			}
 			else
 			{
@@ -322,7 +327,7 @@ if ($cfg['maintenance'])
 $xg = sed_import('x','G','ALP');
 $xp = sed_import('x','P','ALP');
 
-if(!defined('SED_NO_ANTIXSS') && !(defined('SED_PLUG') && defined('SED_AJAX')))
+if(!defined('SED_NO_ANTIXSS'))
 {
 	$xk = sed_check_xp();
 }
