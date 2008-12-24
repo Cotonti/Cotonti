@@ -1891,7 +1891,7 @@ function sed_file_check($path, $name, $ext)
 	}
 	else
 	{
-		if(!$empty($mime_type[$ext]))
+		if(!empty($mime_type[$ext]))
 		{
 			foreach($mime_type[$ext] as $mime)
 			{
