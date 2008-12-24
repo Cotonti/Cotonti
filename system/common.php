@@ -114,6 +114,8 @@ if (!$sed_plugins)
 	sed_cache_store('sed_plugins', $sed_plugins, 3300);
 }
 
+sed_load_urltrans();
+
 /* ======== Gzip and output filtering ======== */
 
 if ($cfg['gzip'])
@@ -302,10 +304,10 @@ if (is_array($extp))
 
 /* ======== Maintenance mode ======== */
 
-if ($cfg['mtmode'])
+if ($cfg['maintenance'])
 {
 
-	$sqll = sed_sql_query("SELECT grp_maintenance FROM $db_groups WHERE grp_level='".$usr['level']."' ");
+	$sqll = sed_sql_query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
 	$roow = sed_sql_fetcharray($sqll);
 
 	if (!$roow['grp_maintenance'] && !defined('SED_AUTH'))
@@ -534,6 +536,5 @@ if(!$cfg['parser_custom'])
 {
 	sed_bbcode_load();
 }
-sed_load_urltrans();
 
 ?>

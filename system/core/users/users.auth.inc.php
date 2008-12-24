@@ -117,9 +117,9 @@ require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.auth'));
 
 
-if ($cfg['mtmode'])
+if ($cfg['maintenance'])
 {
-	$t-> assign(array("USERS_AUTH_MAINTENANCERES" => $cfg['mtres']));
+	$t-> assign(array("USERS_AUTH_MAINTENANCERES" => $cfg['maintenancereason']));
 	$t->parse("MAIN.USERS_AUTH_MAINTENANCE");
 }
 
