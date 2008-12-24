@@ -605,6 +605,7 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['fp_text'] = sed_post_parse($row['fp_text'], 'forums');
 	}
 	$row['fp_useronline'] = (sed_userisonline($row['fp_posterid'])) ? "1" : "0";
+	$row['fp_useronlinetitle'] = ($row['fp_useronline']) ? $skinlang['forumspost']['Onlinestatus1'] : $skinlang['forumspost']['Onlinestatus0'];
 
 	if (!empty($row['fp_updater']))
 	{ $row['fp_updatedby'] = sprintf($L['for_updatedby'], sed_cc($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']); }
@@ -655,6 +656,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_USEREXTRA9" => sed_cc($row['user_extra9']),
 		"FORUMS_POSTS_ROW_POSTERIP" => $row['fp_posterip'],
 		"FORUMS_POSTS_ROW_USERONLINE" => $row['fp_useronline'],
+		"FORUMS_POSTS_ROW_USERONLINETITLE" => $row['fp_useronlinetitle'],
 		"FORUMS_POSTS_ROW_ADMIN" => $adminoptions,
 		"FORUMS_POSTS_ROW_COUNTRY" => $sed_countries[$row['user_country']],
 		"FORUMS_POSTS_ROW_COUNTRYFLAG" => sed_build_flag($row['user_country']),
