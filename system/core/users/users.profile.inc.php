@@ -332,17 +332,21 @@ switch ($a)
 		if (empty($error_string))
 		{
 			$rnewpass = md5($rnewpass1);
-			$sql = sed_sql_query("UPDATE $db_users SET user_password='$rnewpass' WHERE user_id='".$usr['id']."'");
 
-			if ($cfg['authmode']==1 || $cfg['authmode']==3)
+			$hashsalt = sed_unique(16);
+
+			sed_sql_query("UPDATE $db_users SET user_password='$rnewpass', user_hashsalt = '$hashsalt' WHERE user_id={$usr['id']}");
+
+			$passhash = md5($rnewpass.$hashsalt).sha1($rnewpass.$hashsalt);
+			$u = base64_encode($usr['id'].':_:'.$passhash.':_:'.md5($sys['now_offset']));
+
+			if(empty($_SESSION['COTONTI']))
 			{
-				$u = base64_encode($usr['id'].":_:$rnewpass:_:".$ruserskin.":_:".$rusertheme);
-				sed_setcookie("SEDITIO", "$u", time()+63072000, $cfg['cookiepath'], $cfg['cookiedomain'], false, true);
+				sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime']*86400, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 			}
-
-			if ($cfg['authmode']==2 || $cfg['authmode']==3)
+			else
 			{
-				$_SESSION['rseditiop'] = $rnewpass;
+				$_SESSION['COTONTI'] = $u;
 			}
 		}
 	}

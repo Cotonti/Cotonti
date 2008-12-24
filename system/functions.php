@@ -4064,15 +4064,15 @@ function sed_xp()
  */
 function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
 {
-if (PHP_VERSION >= '5.2.0')
-{ return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly); }
+	if (PHP_VERSION >= '5.2.0')
+	{ return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly); }
 
-if (!$httponly && (PHP_VERSION >= '4.0.4'))
-{ return setcookie($name, $value, $expire, $path, $domain, $secure); }
+	if (!$httponly && (PHP_VERSION >= '4.0.4'))
+	{ return setcookie($name, $value, $expire, $path, $domain, $secure); }
 
-if (trim($domain) != '')
-{ $domain .= ($secure ? '; secure' : '') . ($httponly ? '; httponly' : ''); }
-return setcookie($name, $value, $expire, $path, $domain);
+	if (trim($domain) != '')
+	{ $domain .= ($secure ? '; secure' : '') . ($httponly ? '; httponly' : ''); }
+	return setcookie($name, $value, $expire, $path, $domain);
 }
 
 /* ============== FLAGS AND COUNTRIES (ISO 3166) =============== */
