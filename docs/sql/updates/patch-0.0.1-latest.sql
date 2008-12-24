@@ -116,7 +116,7 @@ UPDATE sed_groups SET grp_maintenance = '1' WHERE grp_alias = 'moderators';
 /* r155 Fix pfs bbcode */
 UPDATE `sed_bbcode` SET `bbc_replacement` = '<strong><a href="datas/users/$1">$1</a></strong>' WHERE `bbc_id` = 64;
 
-/* r187 Universal tag system scheme */
+/* r188 Universal tag system scheme */
 
 -- Just tags alone, required for autocomplete
 CREATE TABLE `sed_tags` (
@@ -133,3 +133,6 @@ CREATE TABLE `sed_tag_references` (
 	KEY `tag_item`(`tag_item`),
 	KEY `tag_area`(`tag_area`)
 );
+
+/* r206 Hardened auth system */
+ALTER TABLE sed_users ADD user_hashsalt CHAR(16) NOT NULL DEFAULT '';

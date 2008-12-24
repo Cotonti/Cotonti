@@ -21,96 +21,96 @@ $v = sed_import('v','G','PSW');
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 if ($a=='check')
-	{
+{
 	sed_shield_protect();
 
 	/* === Hook for the plugins === */
 	$extp = sed_getextplugins('users.auth.check');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT', 24, TRUE);
 	$rpassword = sed_import('rpassword','P','PSW', 16, TRUE);
-	$rcookiettl = sed_import('rcookiettl','P','INT');
+	$rcookiettl = sed_import('rcookiettl', 'P', 'INT');
+	$rremember = sed_import('rremember', 'P', 'BOL');
+	if(empty($rremember) && $rcookiettl > 0) $rremember = true;
 	$rmdpass  = md5($rpassword);
 
 	$sql = sed_sql_query("SELECT user_id, user_maingrp, user_banexpire, user_skin, user_theme, user_lang FROM $db_users WHERE user_password='$rmdpass' AND user_name='".sed_sql_prep($rusername)."'");
 
 	if ($row = sed_sql_fetcharray($sql))
-		{
+	{
 		if ($row['user_maingrp']==2)
-			{
+		{
 			sed_log("Log in attempt, user inactive : ".$rusername, 'usr');
 			sed_redirect(sed_url('message', 'msg=152', '', true));
 			exit;
-			}
-	 	elseif ($row['user_maingrp']==3)
-			{
+		}
+		elseif ($row['user_maingrp']==3)
+		{
 			if ($sys['now'] > $row['user_banexpire'] && $row['user_banexpire']>0)
-				{
-				$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='4' WHERE user_id='".$row['user_id']."'");
-				}
-		    else
-		       	{
+			{
+				$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='4' WHERE user_id={$row['user_id']}");
+			}
+			else
+			{
 				sed_log("Log in attempt, user banned : ".$rusername, 'usr');
 				sed_redirect(sed_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
 				exit;
-				}
 			}
+		}
 
 		$ruserid = $row['user_id'];
 		$rdefskin = $row['user_skin'];
 		$rdeftheme = $row['user_theme'];
 
-		sed_sql_query("UPDATE $db_users SET user_lastip='".$usr['ip']."' WHERE user_id='".$row['user_id']."' LIMIT 1");
+		$hashsalt = sed_unique(16);
 
-		if ($rcookiettl>0 && ($cfg['authmode']==1 || $cfg['authmode']==3))
-			{
-			$rcookiettl = ($rcookiettl==0) ? 604800 : $rcookiettl;
-			$rcookiettl = ($rcookiettl > $cfg['cookielifetime']) ? $cfg['cookielifetime'] : $rcookiettl;
-			$u = base64_encode("$ruserid:_:$rmdpass:_:$rdefskin:_:$rdeftheme");
-			sed_setcookie("SEDITIO", "$u", time()+$rcookiettl, $cfg['cookiepath'], $cfg['cookiedomain'], false, true);
-			}
+		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_hashsalt = '$hashsalt' WHERE user_id={$row['user_id']}");
 
-		if ($cfg['authmode']==2 || $cfg['authmode']==3)
-			{
-			$_SESSION['rsedition'] = $ruserid;
-			$_SESSION['rseditiop'] = $rmdpass;
-			$_SESSION['rseditioq'] = $rdefskin;
-			$_SESSION['rseditiot'] = $rdeftheme;
-			}
+		$passhash = md5($rmdpass.$hashsalt).sha1($rmdpass.$hashsalt);
+		$u = base64_encode($ruserid.':_:'.$passhash.':_:'.md5($sys['now_offset']));
+
+		if($rremember)
+		{
+			sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime']*86400, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+		}
+		else
+		{
+			$_SESSION['COTONTI'] = $u;
+		}
 
 		/* === Hook === */
 		$extp = sed_getextplugins('users.auth.check.done');
 		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
 		sed_redirect(sed_url('message', 'msg=104&redirect='.$redirect, '', true));
 		exit;
-		}
+	}
 	else
-		{
+	{
 		sed_shield_update(7, "Log in");
 		sed_log("Log in failed, user : ".$rusername,'usr');
 		sed_redirect(sed_url('message', 'msg=151', '', true));
 		exit;
-		}
 	}
+}
 
 else
-	{ unset($redir); }
+{ unset($redir); }
 
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.main');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -129,12 +129,12 @@ $t->assign(array(
 	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />",
 	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />".$redir,
 	"USERS_AUTH_REGISTER" => sed_url('users', 'm=register')
-		));
+));
 
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.tags');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
 $t->parse("MAIN");

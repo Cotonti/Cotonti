@@ -16,7 +16,9 @@ Description=Common
 
 /**
  * @package Seditio-N
+ * @version 0.0.2
  * @copyright Partial copyright (c) Cotonti Team 2008
+ * @license BSD
  */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
@@ -56,7 +58,17 @@ $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 $online_timedout = $sys['now'] - $cfg['timedout'];
 $cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 $cfg['css'] = $cfg['defaultskin'];
-$usr['ip'] = ($cfg['clustermode']) ? $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'] : $_SERVER['REMOTE_ADDR'] ;
+if($cfg['clustermode'])
+{
+	if(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+	elseif(isset($_SERVER['HTTP_X_REAL_IP'])) $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
+	elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	else $usr['ip'] = $_SERVER['REMOTE_ADDR'];
+}
+else
+{
+	$usr['ip'] = $_SERVER['REMOTE_ADDR'];
+}
 $sys['unique'] = sed_unique(16);
 $sys['url'] = base64_encode($_SERVER['REQUEST_URI']);
 $sys['url_redirect'] = 'redirect='.$sys['url'];
@@ -69,6 +81,7 @@ if($cfg['mainurl'] == 'http://www.yourdomain.com')
 }
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
+$sys['secure'] = $url['scheme'] == 'https' ? true : false;
 $sys['site_uri'] = $url['path'];
 if($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('SED_SITE_URI', $sys['site_uri']);
@@ -176,98 +189,103 @@ $usr['timezone'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-if ($cfg['authmode']==2 || $cfg['authmode']==3)
-{ session_start(); }
+session_start();
 
-if (isset($_SESSION['rsedition']) && ($cfg['authmode']==2 || $cfg['authmode']==3))
+if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 {
-	$rsedition = $_SESSION['rsedition'];
-	$rseditiop = $_SESSION['rseditiop'];
-	$rseditios = $_SESSION['rseditios'];
-	$rseditiot = $_SESSION['rseditiot'];
-}
-elseif (isset($_COOKIE['SEDITIO']) && ($cfg['authmode']==1 || $cfg['authmode']==3))
-{
-	$u = base64_decode($_COOKIE['SEDITIO']);
-	$u = explode(':_:',$u);
-	$rsedition = sed_import($u[0],'D','INT');
-	$rseditiop = sed_import($u[1],'D','PSW');
-	$rseditios = sed_import($u[2],'D','ALP');
-	$rseditiot = sed_import($u[3],'D','ALP');
-}
-
-if ($rsedition>0 && $cfg['authmode']>0)
-{
-	if (mb_strlen($rseditiop)!=32 || strstr($rseditiop, "'") || strstr($rseditiop, '"'))
-	{ sed_diefatal('Wrong value for the password.'); }
-
-	if ($cfg['ipcheck'])
-	{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_password='$rseditiop' AND user_lastip='".$usr['ip']."'"); }
-	else
-	{ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$rsedition' AND user_password='$rseditiop'"); }
-
-	if ($row = sed_sql_fetcharray($sql))
+	$u = empty($_SESSION['COTONTI']) ? base64_decode($_COOKIE['COTONTI']) : base64_decode($_SESSION['COTONTI']);
+	$u = explode(':_:', $u);
+	$u_id = (int) sed_import($u[0], 'D', 'INT');
+	$u_passhash = sed_import($u[1], 'D', 'ALP');
+	$u_logstamp = sed_import($u[2], 'D', 'ALP');
+	if($u_id > 0)
 	{
-		if ($row['user_maingrp']>3)
+		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id");
+
+		if($row = sed_sql_fetcharray($sql))
 		{
-			$usr['id'] = $row['user_id'];
-			$usr['sessionid'] = ($cfg['authmode']==1) ? md5($row['user_lastvisit']) : session_id();
-			$usr['name'] = $row['user_name'];
-			$usr['maingrp'] = $row['user_maingrp'];
-			$usr['lastvisit'] = $row['user_lastvisit'];
-			$usr['lastlog'] = $row['user_lastlog'];
-			$usr['timezone'] = $row['user_timezone'];
-			$usr['skin'] = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $row['user_skin'];
-			$usr['theme'] = $row['user_theme'];
-			$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
-			$usr['newpm'] = $row['user_newpm'];
-			$usr['auth'] = unserialize($row['user_auth']);
-			$usr['level'] = $sed_groups[$usr['maingrp']]['level'];
-			$usr['profile'] = $row;
-
-			if ($usr['lastlog']+$cfg['timedout'] < $sys['now_offset'])
+			$passhash = md5($row['user_password'].$row['user_hashsalt']).sha1($row['user_password'].$row['user_hashsalt']);
+			if($u_passhash == $passhash && $row['user_maingrp'] > 3 && $u_logstamp == md5($row['user_lastlog']) && (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
 			{
-				$sys['comingback']= TRUE;
-				$usr['lastvisit'] = $usr['lastlog'];
-				$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
-			}
+				$usr['id'] = $row['user_id'];
+				$usr['sessionid'] = ($cfg['authmode']==1) ? md5($row['user_lastvisit']) : session_id();
+				$usr['name'] = $row['user_name'];
+				$usr['maingrp'] = $row['user_maingrp'];
+				$usr['lastvisit'] = $row['user_lastvisit'];
+				$usr['lastlog'] = $row['user_lastlog'];
+				$usr['timezone'] = $row['user_timezone'];
+				$usr['skin'] = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $row['user_skin'];
+				$usr['theme'] = $row['user_theme'];
+				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
+				$usr['newpm'] = $row['user_newpm'];
+				$usr['auth'] = unserialize($row['user_auth']);
+				$usr['level'] = $sed_groups[$usr['maingrp']]['level'];
+				$usr['profile'] = $row;
 
-			if (empty($row['user_auth']))
+				if ($usr['lastlog']+$cfg['timedout'] < $sys['now_offset'])
+				{
+					$sys['comingback']= TRUE;
+					$usr['lastvisit'] = $usr['lastlog'];
+					$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
+				}
+
+				if (!$cfg['authcache'] || empty($row['user_auth']))
+				{
+					$usr['auth'] = sed_auth_build($usr['id'], $usr['maingrp']);
+					if($cfg['authcache']) $sys['sql_update_auth'] = ", user_auth='".serialize($usr['auth'])."'";
+				}
+
+				$hashsalt = sed_unique(16);
+				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', user_hashsalt = '$hashsalt', user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
+				$passhash = md5($row['user_password'].$hashsalt).sha1($row['user_password'].$hashsalt);
+				$u = base64_encode($usr['id'].':_:'.$passhash.':_:'.md5($sys['now_offset']));
+				if(empty($_SESSION['COTONTI']))
+				{
+					sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime']*86400, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+				}
+				else
+				{
+					$_SESSION['COTONTI'] = $u;
+				}
+				unset($u);
+				unset($passhash);
+			}
+			else
 			{
-				$usr['auth'] = sed_auth_build($usr['id'], $usr['maingrp']);
-				$sys['sql_update_auth'] = ", user_auth='".serialize($usr['auth'])."'";
+				$login_incorrect = true;
 			}
-
-			$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
+		}
+		else
+		{
+			$login_incorrect = true;
+		}
+		if($login_incorrect)
+		{
+			if(empty($_SESSION['COTONTI']))
+			{
+				sed_setcookie('COTONTI', '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+			}
+			else
+			{
+				$_SESSION['COTONTI'] = '';
+			}
+			sed_diefatal('Login incorrect');
 		}
 	}
-}
-else
-{
-	if (empty($rseditios) && ($cfg['authmode']==1 || $cfg['authmode']==3))
-	{
-		$u = base64_encode('0:_:0:_:'.$cfg['defaultskin']);
-		setcookie('SEDITIO',$u,time()+($cfg['cookielifetime']*86400),$cfg['cookiepath'],$cfg['cookiedomain']);
-	}
-	elseif (empty($rseditiot) && ($cfg['authmode']==1 || $cfg['authmode']==3))
-	{
-		$u = base64_encode('0:_:0:_:'.$cfg['defaultskin'].':'.$cfg['defaulttheme']);
-		setcookie('SEDITIO',$u,time()+($cfg['cookielifetime']*86400),$cfg['cookiepath'],$cfg['cookiedomain']);
-	}
 	else
 	{
-		$skin = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $rseditios;
-		$theme = $rseditiot;
+		$usr['skin'] = sed_import($u[0], 'D', 'ALP');
+		$usr['theme'] = sed_import($u[1], 'D', 'ALP');
+		$usr['lang'] = sed_import($u[2], 'D', 'ALP');
 	}
-
 }
 
-if ($usr['id']==0)
+if($usr['id']==0)
 {
 	$usr['auth'] = sed_auth_build(0);
-	$usr['skin'] = (empty($usr['skin'])) ? $cfg['defaultskin'] : $usr['skin'];
-	$usr['theme'] = $cfg['defaulttheme'];
-	$usr['lang'] = $cfg['defaultlang'];
+	$usr['skin'] = empty($usr['skin']) ? $cfg['defaultskin'] : $usr['skin'];
+	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
+	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
 }
 
 /* === Hook === */
@@ -295,7 +313,6 @@ if ($cfg['mtmode'])
 		header('Location: ' . SED_ABSOLUTE_URL . sed_url('users', 'm=auth', '', true));
 		exit;
 	}
-
 }
 
 /* ======== Anti-XSS protection ======== */

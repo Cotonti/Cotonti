@@ -138,16 +138,7 @@ else
 	$out['guest_username'] = "<input type=\"text\" name=\"rusername\" size=\"12\" maxlength=\"32\" />";
 	$out['guest_password'] = "<input type=\"password\" name=\"rpassword\" size=\"12\" maxlength=\"32\" />";
 	$out['guest_register'] = "<a href=\"".sed_url('users', 'm=register')."\">".$L["Register"]."</a>";
-	$out['guest_cookiettl'] = "<select name=\"rcookiettl\" size=\"1\">";
-	$out['guest_cookiettl'] .= "<option value=\"0\" selected=\"selected\">".$L['No']."</option>";
-
-	$i =array (1800, 3600, 7200, 14400, 28800, 43200, 86400, 172800, 259200, 604800, 1296000, 2592000, 5184000);
-
-	foreach($i as $k => $x)
-	{
-		$out['guest_cookiettl'] .= ($x<=$cfg['cookielifetime']) ? "<option value=\"$x\">".sed_build_timegap($sys['now_offset'], $sys['now_offset']+$x)."</option>": '';
-	}
-	$out['guest_cookiettl'] .= "</select>";
+	$out['guest_cookiettl'] = '<input type="checkbox" name="rremember" />';
 
 	$t->assign(array (
 		"HEADER_GUEST_USERNAME" => $out['guest_username'],
