@@ -1655,7 +1655,7 @@ function sed_check_xg()
 {
 	global $xg, $cfg;
 
-	if ($xg!=sed_sourcekey())
+	if($xg!=sed_sourcekey())
 	{
 		sed_diefatal('Wrong parameter in the URL.');
 	}
@@ -1669,17 +1669,17 @@ function sed_check_xg()
  */
 function sed_check_xp()
 {
-	global $xp;
+	global $xp, $xg;
 
 	$sk = sed_sourcekey();
-	if($_SERVER["REQUEST_METHOD"]=='POST' && !defined('SED_AUTH'))
+	if($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_AUTH'))
 	{
-		if ( empty($xp) || $xp!=$sk)
+		if($xp != $sk && $xg != $sk)
 		{
 			sed_diefatal('Wrong parameter in the URL.');
 		}
 	}
-	return ($sk);
+	return $sk;
 }
 
 /**
@@ -3484,9 +3484,7 @@ function sed_smilies($res)
 function sed_sourcekey()
 {
 	global $usr;
-
-	$result = ($usr['id']>0) ? mb_strtoupper(mb_substr($usr['sessionid'], 0, 6)) : 'GUEST';
-	return ($result);
+	return $usr['id'] > 0 ? $_SESSION['sourcekey'] : 'GUEST';
 }
 
 /*

@@ -52,6 +52,7 @@ $autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
 $out['compopup'] .= '
 <script type="text/javascript" >
 mySettings.previewAutorefresh = '.$autorefresh.';
+mySettings.previewParserPath = "plug.php?r=markitup&'.sed_xg().'";
 $(document).ready(function() {
 $("textarea.editor").markItUp(mySettings);
 $("textarea.minieditor").markItUp(mini);
