@@ -32,7 +32,7 @@
 					<div style="padding:5px;">
 						{FORUMS_POSTS_ROW_MAINGRP}<br />
 						{FORUMS_POSTS_ROW_MAINGRPSTARS}<br />
-						<img src="skins/{PHP.skin}/img/online{FORUMS_POSTS_ROW_USERONLINE}.gif" alt="{PHP.skinlang.forumspost.Onlinestatus}" />
+						<img src="skins/{PHP.skin}/img/online{FORUMS_POSTS_ROW_USERONLINE}.gif" title="{PHP.skinlang.forumspost.Onlinestatus}: {FORUMS_POSTS_ROW_USERONLINETITLE}" alt="" />
 					</div>
 					<div style="padding:5px;">{FORUMS_POSTS_ROW_COUNTRYFLAG}</div>
 					<div style="padding:5px;">
