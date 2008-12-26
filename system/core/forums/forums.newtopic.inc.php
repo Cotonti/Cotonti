@@ -90,15 +90,17 @@ if ($a=='newtopic')
 	$newtopicpreview = mb_substr(sed_cc($newmsg), 0, 128);
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
 	
-	/*
-	BETA NOTE:
-	No error messages. I actually
-	would edit and add some while recoding forum poll system but 
-	some proper and not fast-and-loose writing would
-	be better I believe.
-	*/
+	$newtopicpoll = sed_import('newtopicpoll','P','TXT');
+	$po_src = explode("\n", $newtopicpoll);
+	
+	$po_req = count($po_src);
+	$po_req = (empty($newtopicpoll)) ? '0' : $po_req;
+	
+	$error_string .= ( strlen($newtopictitle) < 2) ? $L["for_titletooshort"]."<br />" : '';
+	$error_string .= ( strlen($newmsg) < 5) ? $L["for_messagetooshort"]."<br />" : '';
+	$error_string .= ( $po_req < 2 && $poll) ? $L["for_polltooshort"]."<br />" : '';
 
-	if (strip_tags(mb_strlen($newtopictitle))>0 && mb_strlen($newmsg)>0)
+	if (empty($error_string))
 	{
 		if (mb_substr($newtopictitle, 0 ,1)=="#")
 		{ $newtopictitle = str_replace('#', '', $newtopictitle); }
@@ -108,12 +110,6 @@ if ($a=='newtopic')
 	
 	if ($poll)
 	{
-	
-	$newtopicpoll = sed_import('newtopicpoll','P','TXT');
-	$po_src = explode("\n", $newtopicpoll);
-	
-	$po_req = count($po_src);
-	$po_req = (empty($newtopicpoll)) ? '0' : $po_req;
 	
 	if ($po_req>1)
 	{
@@ -267,6 +263,12 @@ require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('forums', 'newtopic', $fs_category, $s));
 $t = new XTemplate($mskin);
+
+if (!empty($error_string))
+{
+	$t->assign("FORUMS_NEWTOPIC_ERROR_BODY",$error_string);
+	$t->parse("MAIN.FORUMS_NEWTOPIC_ERROR");
+}
 
 $t->assign(array(
 
