@@ -73,10 +73,10 @@ if ($a=='add')
 	$newpagebegin = sed_mktime($newpagehour_beg, $newpageminute_beg, 0, $newpagemonth_beg, $newpageday_beg, $newpageyear_beg) - $usr['timezone'] * 3600;
 	$newpageexpire = sed_mktime($newpagehour_exp, $newpageminute_exp, 0, $newpagemonth_exp, $newpageday_exp, $newpageyear_exp) - $usr['timezone'] * 3600;
 	$newpageexpire = ($newpageexpire<=$newpagebegin) ? $newpagebegin+31536000 : $newpageexpire;
-	
+
 	// Extra fields
 	if($number_of_extrafields > 0)
-	foreach($extrafields as $row) 
+	foreach($extrafields as $row)
 	{
 		$import = sed_import('newpage_my_'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
@@ -102,7 +102,7 @@ if ($a=='add')
 
 		if($cfg['parser_cache'])
 		{
-			$newpagehtml = sed_parse(sed_cc($newpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+			$newpagehtml = sed_parse(sed_cc($newpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
 		}
 		else
 		{
@@ -119,7 +119,7 @@ if ($a=='add')
 		page_extra3,
 		page_extra4,
 		page_extra5,";
-		if($number_of_extrafields > 0) foreach($extrafields as $row) $ssql .= "page_my_".$row['field_name'].", "; // Extra fields		
+		if($number_of_extrafields > 0) foreach($extrafields as $row) $ssql .= "page_my_".$row['field_name'].", "; // Extra fields
 $ssql.="page_title,
 		page_desc,
 		page_text,
@@ -135,7 +135,7 @@ $ssql.="page_title,
 		page_alias)
 		VALUES
 		(1,
-		0, 
+		0,
 		'".sed_sql_prep($newpagecat)."',
 			'".sed_sql_prep($newpagekey)."',
 			'".sed_sql_prep($newpageextra1)."',
@@ -143,7 +143,7 @@ $ssql.="page_title,
 			'".sed_sql_prep($newpageextra3)."',
 			'".sed_sql_prep($newpageextra4)."',
 			'".sed_sql_prep($newpageextra5)."',";
-			if($number_of_extrafields > 0) foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields		
+			if($number_of_extrafields > 0) foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields
   	$ssql.="'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
 			'".sed_sql_prep($newpagetext)."',
@@ -158,7 +158,7 @@ $ssql.="page_title,
 			'".sed_sql_prep($newpagesize)."',
 			'".sed_sql_prep($newpagealias)."')";
   		$sql = sed_sql_query($ssql);
-		
+
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
 		if (is_array($extp))
@@ -266,7 +266,7 @@ foreach($extrafields as $i=>$row)
 	$t1 = "PAGEADD_FORM_MY_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {
-	case "input":	
+	case "input":
 		$t2 = str_replace('<input ','<input name="newpage_my_'.$row['field_name'].'" ', $t2);
 		break;
 	case "textarea":
@@ -276,7 +276,7 @@ foreach($extrafields as $i=>$row)
 		$t2 = str_replace('<select','<select name="newpage_my_'.$row['field_name'].'"', $t2);
 		$options = "";
 		$opt_array = explode(",",$row['field_variants']);
-		if(count($opt_array)!=0) 
+		if(count($opt_array)!=0)
 		{	foreach ($opt_array as $var) $options .= "<option value=\"$var\">$var</option>"; }
 		$t2 = str_replace("</select>","$options</select>",$t2); break;
 	case "checkbox":

@@ -82,7 +82,7 @@ if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='d
 		header("Location: page.php?id=".$pag['page_id']);
 		exit;
 		}
-		
+
 	unset($_SESSION['dl']);
 
 	$file_size = @filesize($row['page_url']);
@@ -98,47 +98,6 @@ if(!$usr['isadmin'] || $cfg['count_admin'])
 	$pag['page_count']++;
 	$sql = (!$cfg['disablehitstats']) ? sed_sql_query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$pag['page_id']."'") : '';
 }
-
-$pag['page_tabs'] = explode('[newpage]', $pag['page_text'], 99);
-$pag['page_totaltabs'] = count($pag['page_tabs']);
-
-if ($pag['page_totaltabs']>1)
-{
-	if (empty($pag['page_tabs'][0]))
-	{
-		$remove = array_shift($pag['page_tabs']);
-		$pag['page_totaltabs']--;
-	}
-	$pag['page_tab'] = ($pag['page_tab']>$pag['page_totaltabs']) ? 1 : $pag['page_tab'];
-	$pag['page_tabtitles'] = array();
-
-	for ($i = 0; $i < $pag['page_totaltabs']; $i++)
-	{
-		$p1 = mb_strpos($pag['page_tabs'][$i], '[title]');
-		$p2 = mb_strpos($pag['page_tabs'][$i], '[/title]');
-
-		if ($p2>$p1 && $p1<4)
-		{
-			$pag['page_tabtitle'][$i] = substr ($pag['page_tabs'][$i], $p1+7, ($p2-$p1)-7);
-			if ($i+1==$pag['page_tab'])
-			{
-				$pag['page_tabs'][$i] = trim(str_replace('[title]'.$pag['page_tabtitle'][$i].'[/title]', '', $pag['page_tabs'][$i]));
-			}
-		}
-		else
-		{ $pag['page_tabtitle'][$i] = ''; }
-
-		$pag['page_tabtitles'][] .= "<a href=\"".$pag['page_pageurl']."&amp;pg=".($i+1)."\">".($i+1).". ".$pag['page_tabtitle'][$i]."</a>";
-		$pag['page_tabnav'] .= ($i+1==$pag['page_tab']) ? '&gt; ' : '[';
-		$pag['page_tabnav'] .= "<a href=\"".$pag['page_pageurl']."&amp;pg=".($i+1)."\">".($i+1)."</a>";
-		$pag['page_tabnav'] .= ($i+1==$pag['page_tab']) ? ' &lt; ' : '] ';
-		$pag['page_tabs'][$i] = trim(str_replace('[newpage]', '', $pag['page_tabs'][$i]));
-	}
-
-	$pag['page_tabtitles'] = implode('<br />', $pag['page_tabtitles']);
-	$pag['page_text'] = $pag['page_tabs'][$pag['page_tab']-1];
-}
-
 
 $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"list.php?c=%1\$s\">%2\$s</a>");
 $pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
@@ -161,10 +120,18 @@ if (is_array($extp))
 /* ===== */
 
 if ($pag['page_file'])
-	{
+{
 	unset($_SESSION['dl']);
 	$_SESSION['dl'] = $pag['page_id'];
-	}
+}
+
+if(mb_strstr($pag['page_text'], '[newpage]'))
+{
+	$morejavascript .= '
+$(document).ready(function() {
+$("div.tabs > ul").tabs();
+});';
+}
 
 require_once $cfg['system_dir'] . '/header.php';
 
@@ -206,17 +173,6 @@ $t->assign(array(
 $fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
 while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('PAGE_MY_'.strtoupper($row['field_name']), $pag['page_my_'.$row['field_name']]);
 
-if($pag['page_totaltabs']>1)
-{
-	$t->assign(array(
-			"PAGE_MULTI_TABNAV" => $pag['page_tabnav'],
-			"PAGE_MULTI_TABTITLES" => $pag['page_tabtitles'],
-			"PAGE_MULTI_CURTAB" => $pag['page_tab'],
-			"PAGE_MULTI_MAXTAB" => $pag['page_totaltabs']
-	));
-	$t->parse("MAIN.PAGE_MULTI");
-}
-
 if ($usr['isadmin'])
 {
 	$t-> assign(array(
@@ -228,94 +184,94 @@ if ($usr['isadmin'])
 			$t->parse("MAIN.PAGE_ADMIN");
 }
 
-	if ($pag['page_begin_noformat']>$sys['now_offset'])
-		{
-		$pag['page_text'] = $L['pag_notavailable'].sed_build_timegap($sys['now_offset'], $pag['page_begin_noformat']);
-		$t->assign("PAGE_TEXT", $pag['page_text']);
-		}
-		
-	else
-		{
-
-switch($pag['page_type'])
+if ($pag['page_begin_noformat']>$sys['now_offset'])
 {
-	case '1':
-		$t->assign("PAGE_TEXT", $pag['page_text']);
-	break;
-
-	case '2':
-
-		if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-		{
-			ob_start();
-			eval($pag['page_text']);
-			$t->assign("PAGE_TEXT", ob_get_clean());
-		}
-		else
-		{
-			$t->assign("PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
-		}
-	break;
-
-	default:
-		if($cfg['parser_cache'])
-		{
-			if(empty($pag['page_html']) && !empty($pag['page_text']))
-			{
-				$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-				sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
-			}
-			$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
-			$t->assign('PAGE_TEXT', $html);
-		}
-		else
-		{
-			$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-			$text = sed_post_parse($text, 'pages');
-			$t->assign('PAGE_TEXT', $text);
-		}
-	break;
+	$pag['page_text'] = $L['pag_notavailable'].sed_build_timegap($sys['now_offset'], $pag['page_begin_noformat']);
+	$t->assign("PAGE_TEXT", $pag['page_text']);
 }
 
-		}
+else
+{
+
+	switch($pag['page_type'])
+	{
+		case '1':
+			$t->assign("PAGE_TEXT", $pag['page_text']);
+			break;
+
+		case '2':
+
+			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
+			{
+				ob_start();
+				eval($pag['page_text']);
+				$t->assign("PAGE_TEXT", ob_get_clean());
+			}
+			else
+			{
+				$t->assign("PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
+			}
+			break;
+
+		default:
+			if($cfg['parser_cache'])
+			{
+				if(empty($pag['page_html']) && !empty($pag['page_text']))
+				{
+					$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
+					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
+				}
+				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
+				$t->assign('PAGE_TEXT', $html);
+			}
+			else
+			{
+				$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
+				$text = sed_post_parse($text, 'pages');
+				$t->assign('PAGE_TEXT', $text);
+			}
+			break;
+	}
+
+}
 
 $pag['page_file'] = intval($pag['page_file']);
 if($pag['page_file'] > 0)
 {
 
 	if ($sys['now_offset']>$pag['page_begin_noformat'])
-		{
-
-	if (!empty($pag['page_url']))
 	{
-		$dotpos = mb_strrpos($pag['page_url'],".")+1;
-		$pag['page_fileicon'] = "images/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
-		if (!file_exists($pag['page_fileicon']))
-		{ $pag['page_fileicon'] = "images/admin/page.gif"; }
-		$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\">";
-	}
-	else
-	{ $pag['page_fileicon'] = ''; }
 
-	$t->assign(array(
+		if (!empty($pag['page_url']))
+		{
+			$dotpos = mb_strrpos($pag['page_url'],".")+1;
+			$pag['page_fileicon'] = "images/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
+			if (!file_exists($pag['page_fileicon']))
+			{ $pag['page_fileicon'] = "images/admin/page.gif"; }
+			$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\">";
+		}
+		else
+		{ $pag['page_fileicon'] = ''; }
+
+		$t->assign(array(
 			"PAGE_FILE_SIZE" => $pag['page_size'],
 			"PAGE_FILE_COUNT" => $pag['page_filecount'],
 			"PAGE_FILE_ICON" => $pag['page_fileicon'],
 			"PAGE_FILE_NAME" => basename($pag['page_url'])
-	));
-	if($pag['page_file'] === 2 && $usr['id'] == 0)
-	{
-		$t->assign('PAGE_SHORTTITLE', $L['Members_download']);
-	}
-	else
-	{
-		$t->assign('PAGE_FILE_URL', sed_url('page', "id=".$pag['page_id']."&a=dl"));
-	}
-	$t->parse("MAIN.PAGE_FILE");
-	$t->assign('PAGE_SHORTTITLE', $pag['page_title']);
-	
+		));
+		if($pag['page_file'] === 2 && $usr['id'] == 0)
+		{
+			$t->assign('PAGE_SHORTTITLE', $L['Members_download']);
 		}
-	
+		else
+		{
+			$t->assign('PAGE_FILE_URL', sed_url('page', "id=".$pag['page_id']."&a=dl"));
+		}
+		$t->parse("MAIN.PAGE_FILE");
+		$t->assign('PAGE_SHORTTITLE', $pag['page_title']);
+
+	}
+
 }
 
 

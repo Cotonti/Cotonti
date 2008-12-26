@@ -32,6 +32,8 @@ $skinlang['forumsnewtopic']['Title'] = 'Заголовок:';
 $skinlang['forumsnewtopic']['Desc'] = 'Short description (optional):';
 $skinlang['forumsnewtopic']['privatetopic'] = 'Отметьте это поле, если хотите создать "приватную" тему:';
 $skinlang['forumsnewtopic']['privatetopic2'] = 'Только модераторы форума и создатель темы (вы) смогут ее читать и отвечать в ней.';
+$skinlang['forumsnewtopic']['poll'] = 'Варианты ответа:';
+$skinlang['forumsnewtopic']['poll2'] = 'Каждый вариант с новой строки. Помните, что вы не сможете изменить их после публикации.';
 $skinlang['forumsnewtopic']['Submit'] = 'Готово';
 
 //forums.post.tpl
@@ -39,6 +41,8 @@ $skinlang['forumspost']['privatetopic'] = 'Это приватная тема, �
 $skinlang['forumspost']['Author'] = 'Автор';
 $skinlang['forumspost']['Message'] = 'Сообщение';
 $skinlang['forumspost']['Onlinestatus'] = 'Статус';
+$skinlang['forumspost']['Onlinestatus0'] = 'Не в сети'; // N-0.0.2
+$skinlang['forumspost']['Onlinestatus1'] = 'В сети'; // N-0.0
 $skinlang['forumspost']['posts'] = 'сообщений';
 $skinlang['forumspost']['Location'] = 'Где:';
 $skinlang['forumspost']['Occupation'] = 'Род занятий:';

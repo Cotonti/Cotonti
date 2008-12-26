@@ -263,7 +263,7 @@ $L['adm_defstate_0'] = 'Свёрнуто';	// New in v11
 $L['adm_defstate_1'] = 'Развёрнуто';	// New in v11
 $L['adm_forums_master'] = 'Родительская секция';  // New in N-0.0.1
 $L['adm_enableviewers'] = 'Включить отображение просматривающих раздел';  // N-0.0.2
-
+$L['adm_enablepolls'] = 'Включить голосования';  // N-0.0.2
 
 /* ====== IP search ====== */
 
