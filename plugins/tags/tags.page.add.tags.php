@@ -24,7 +24,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 {
-	file_exists($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") ? require_once($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") : require_once($cfg['plugins_dir'].'/tags/lang/tags.en.lang.php');
+	require_once(sed_langfile('tags'));
 	$t->assign(array(
 	'PAGEADD_TOP_TAGS' => $L['Tags'],
 	'PAGEADD_TOP_TAGS_HINT' => $L['comma_separated'],

@@ -24,7 +24,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['forums'])
 {
-	file_exists($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") ? require_once($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") : require_once($cfg['plugins_dir'].'/tags/lang/tags.en.lang.php');
+	require_once(sed_langfile('tags'));
 	$item_id = $row['ft_id'];
 	$tags = sed_tag_list($item_id, 'forums');
 	if(count($tags) > 0)
