@@ -383,6 +383,7 @@ function sed_bbcode_parse($text, $post = false)
 	{
 		return $text;
 	}
+
 	// BB auto-close
 	$bbc = array();
 	if(!$post && preg_match_all('#\[(/)?('.$sed_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
@@ -526,9 +527,10 @@ function sed_parse_pre($m)
  * @param bool $parse_bbcodes Enable bbcode parsing
  * @param bool $parse_smilies Enable emoticons
  * @param bool $parse_newlines Replace line breaks with <br />
+ * @param bool $parse_tabs Parse page into tabs by [newpage] codes
  * @return string
  */
-function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE)
+function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE, $parse_tabs = FALSE)
 {
 	global $cfg, $sys, $sed_smilies, $L, $usr;
 
@@ -538,6 +540,43 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 		if(function_exists('sed_custom_parse'))
 		{
 			return sed_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
+		}
+	}
+
+	if($parse_tabs)
+	{
+		$page_tabs = explode('[newpage]', $text, 20);
+		$totaltabs = count($page_tabs);
+		if($totaltabs > 1)
+		{
+			$tabs_html = '<div class="tabs">';
+			$head_html = '<ul class="tabs-head">';
+			$page_html = '';
+			$pag['page_tabtitles'] = array();
+			$tabs_id = sed_unique(8);
+
+			for($i = 0; $i < $totaltabs; $i++)
+			{
+				$p1 = mb_stripos($page_tabs[$i], '[title]');
+				$p2 = mb_stripos($page_tabs[$i], '[/title]');
+				$tab_id = $tabs_id . $i;
+				if($p2 > $p1 && $p1 < 4)
+				{
+					$tab_title = mb_substr($page_tabs[$i], $p1+7, ($p2-$p1)-7);
+					$page_tabs[$i] = trim(str_replace('[title]'.$tab_title.'[/title]', '', $page_tabs[$i]));
+				}
+				else
+				{
+					$tab_title = $i;
+				}
+
+				$head_html .= '<li><a href="#tabs-'.$tab_id.'">'.sed_cc($tab_title).'</a></li>';
+				$page_tabs[$i] = trim(str_replace('[newpage]', '', $page_tabs[$i]));
+				$page_html .= '<div id="tabs-'.$tab_id.'">'.sed_bbcode_parse($page_tabs[$i]).'</div>';
+			}
+
+			$tabs_html .= $head_html . '</ul>' . $page_html . '</div>';
+			return $tabs_html;
 		}
 	}
 
@@ -2324,10 +2363,12 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
  */
 function sed_javascript($more='')
 {
-	global $cfg;
+	global $cfg, $lang;
 	if($cfg['jquery'])
 	{
 		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
+		$result .= '<script type="text/javascript" src="js/jquery-ui.js"></script>';
+		$result .= file_exists("./js/ui/i18n/ui.datepicker-$lang.js") ? '<script type="text/javascript" src="js/ui/i18n/ui.datepicker-'.$lang.'.js"></script>' : '<script type="text/javascript" src="js//ui/i18n/ui.datepicker-en.js"></script>' ;
 	}
 	$result .= '<script type="text/javascript" src="js/base.js"></script>';
 	if(!empty($more))
@@ -2807,7 +2848,7 @@ function sed_pfs_thumbpath($userid)
  */
 function sed_readraw($file)
 {
-	if(file_exists($file))
+	if(!strstr($file, '..') && file_exists($file))
 	{
 		return file_get_contents($file);
 	}

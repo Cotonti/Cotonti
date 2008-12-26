@@ -145,7 +145,7 @@ if ($a=='update')
 
 			if($cfg['parser_cache'])
 			{
-				$rpagehtml = sed_parse(sed_cc($rpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+				$rpagehtml = sed_parse(sed_cc($rpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
 			}
 			else
 			{
