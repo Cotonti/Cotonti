@@ -24,7 +24,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_first_post)
 {
-	file_exists($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") ? require_once($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") : require_once($cfg['plugins_dir'].'/tags/lang/tags.en.lang.php');
+	require_once(sed_langfile('tags'));
 	$tags = sed_tag_list($q, 'forums');
 	$tags = implode(', ', $tags);
 	$t->assign(array(

@@ -2437,6 +2437,33 @@ function sed_load_structure()
 }
 
 /**
+ * Returns a language file path for a plugin or FALSE on error.
+ *
+ * @param string $name Plugin name
+ * @param bool $core Use core module rather than a plugin
+ * @return bool
+ */
+function sed_langfile($name, $core = false)
+{
+	global $cfg, $lang;
+	if($core)
+	{
+		 // For module support, comming in N-0.1.0
+		 if(@file_exists($cfg['system_dir']."/lang/$lang/$name.lang.php"))
+		 	return $cfg['system_dir']."/lang/$lang/$name.lang.php";
+		 else
+		 	return $cfg['system_dir']."/lang/en/$name.lang.php";
+	}
+	else
+	{
+		if(@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
+			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
+		else
+			return $cfg['plugins_dir']."/$name/lang/$name.en.lang.php";
+	}
+}
+
+/**
  * Loads complete forum structure into array
  *
  * @return array

@@ -24,7 +24,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'])
 {
-	file_exists($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") ? require_once($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") : require_once($cfg['plugins_dir'].'/tags/lang/tags.en.lang.php');
+	require_once(sed_langfile('tags'));
 	// Get all subcategories
 	$tc_cats = array("'$c'");
 	$tc_path = $sed_cat[$c]['path'] . '.';

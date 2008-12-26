@@ -25,7 +25,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'])
 {
-	file_exists($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") ? require_once($cfg['plugins_dir']."/tags/lang/tags.$lang.lang.php") : require_once($cfg['plugins_dir'].'/tags/lang/tags.en.lang.php');
+	require_once(sed_langfile('tags'));
 	$tcloud = sed_tag_cloud('pages', $cfg['plugin']['tags']['order']);
 	$tc_html = '<ul class="tag_cloud">';
 	foreach($tcloud as $tag => $cnt)
