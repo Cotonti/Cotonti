@@ -114,7 +114,7 @@ elseif ($id=='viewall')
 		{
 			$result .= "<tr>";
 			$result .= "<td style=\"width:128px;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600)."</td>";
-			$result .= "<td><a href=\"polls.php?id=".$row['poll_id']."\"><img src=\"images/admin/polls.gif\" alt=\"\" /></a></td>";
+			$result .= "<td><a href=\"".sed_url('polls', 'id='.$row['poll_id'])."\"><img src=\"images/admin/polls.gif\" alt=\"\" /></a></td>";
 			$result .= "<td>".sed_parse(sed_cc($row['poll_text']),1 ,1 ,1)."</td>";
 			$result .= "</tr>";
 		}
@@ -139,7 +139,7 @@ else
 		$percentbar = floor($percent * 2.24);
 
 		$result .= "<tr><td>";
-		$result .= ($alreadyvoted) ? sed_parse(sed_cc($row1['po_text']), 1, 1, 1) : "<a href=\"polls.php?a=send&amp;".sed_xg()."&amp;id=".$id."&amp;vote=".$po_id."\">".sed_parse(sed_cc($row1['po_text']), 1, 1, 1)."</a>";
+		$result .= ($alreadyvoted) ? sed_parse(sed_cc($row1['po_text']), 1, 1, 1) : "<a href=\"".sed_url('polls', "a=send&amp;".sed_xg()."&amp;id=".$id."&amp;vote=".$po_id)."\">".sed_parse(sed_cc($row1['po_text']), 1, 1, 1)."</a>";
 		$result .= "</td><td><div style=\"width:256px;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
 
 	}
@@ -147,7 +147,7 @@ else
 	$result .= "</table>";
 
 	$item_code = 'v'.$id;
-	list($comments_link, $comments_display) = sed_build_comments($item_code, "polls.php?id=".$id, $comments);
+	list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$id), $comments);
 
 	$t->assign(array(
 		"POLLS_VOTERS" => $totalvotes,
@@ -156,7 +156,7 @@ else
 		"POLLS_RESULTS" => $result,
 		"POLLS_COMMENTS" => $comments_link,
 		"POLLS_COMMENTS_DISPLAY" => $comments_display,
-		"POLLS_VIEWALL" => "<a href=\"polls.php?id=viewall\">".$L['polls_viewarchives']."</a>",
+		"POLLS_VIEWALL" => "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>",
 	));
 
 	$t->parse("MAIN.POLLS_VIEW");

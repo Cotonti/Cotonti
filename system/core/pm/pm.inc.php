@@ -60,13 +60,13 @@ if (!empty($id)) // -------------- Single mode
 	if ($row1['pm_touserid']==$usr['id'] && $row1['pm_state']==2)
 	{
 		$f = 'archives';
-		$title .= " <a href=\"pm.php?f=archives\">".$L['pm_archives']."</a>";
+		$title .= " <a href=\"".sed_url('pm', 'f=archives')."\">".$L['pm_archives']."</a>";
 		$subtitle = '';
 	}
 	elseif ($row1['pm_touserid']==$usr['id'] && $row1['pm_state']<2)
 	{
 		$f = 'inbox';
-		$title .= " <a href=\"pm.php?f=inbox\">".$L['pm_inbox']."</a>";
+		$title .= " <a href=\"".sed_url('pm', 'f=inbox')."\">".$L['pm_inbox']."</a>";
 		$subtitle = '';
 
 		if ($row1['pm_state']==0)
@@ -87,7 +87,7 @@ if (!empty($id)) // -------------- Single mode
 	elseif ($row1['pm_fromuserid']==$usr['id'] && ($row1['pm_state']==0 || $row1['pm_state']==3))
 	{
 		$f = 'sentbox';
-		$title .= " <a href=\"pm.php?f=sentbox\">".$L['pm_sentbox']."</a>";
+		$title .= " <a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>";
 		$subtitle = '';
 	}
 	else
@@ -95,7 +95,7 @@ if (!empty($id)) // -------------- Single mode
 		sed_die();
 	}
 
-	$title .= ' '.$cfg['separator']." <a href=\"pm.php?id=".$id."\">#".$id."</a>";
+	$title .= ' '.$cfg['separator']." <a href=\"".sed_url('pm', 'id='.$id)."\">#".$id."</a>";
 	$sql = sed_sql_query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id='".$id."'");
 }
 
@@ -112,7 +112,7 @@ else // --------------- List mode
 		$sql = sed_sql_query("SELECT * FROM $db_pm
 		WHERE pm_touserid='".$usr['id']."' AND pm_state=2
 		ORDER BY pm_date DESC LIMIT $d,".$cfg['maxrowsperpage']);
-		$title .= " <a href=\"pm.php?f=archives\">".$L['pm_archives']."</a>";
+		$title .= " <a href=\"".sed_url('pm', 'f=archives')."\">".$L['pm_archives']."</a>";
 		$subtitle = $L['pm_arcsubtitle'];
 	}
 	elseif ($f=='sentbox')
@@ -121,7 +121,7 @@ else // --------------- List mode
 		$sql = sed_sql_query("SELECT p.*, u.user_name FROM $db_pm p, $db_users u
 		WHERE p.pm_fromuserid='".$usr['id']."' AND (p.pm_state=0 OR p.pm_state=3) AND u.user_id=p.pm_touserid
 		ORDER BY pm_date DESC LIMIT $d,".$cfg['maxrowsperpage']);
-		$title .= " <a href=\"pm.php?f=sentbox\">".$L['pm_sentbox']."</a>";
+		$title .= " <a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>";
 		$subtitle = $L['pm_sentboxsubtitle'];
 	}
 	else
@@ -143,13 +143,13 @@ else // --------------- List mode
 		$prevpage = $d - $cfg['maxrowsperpage'];
 		if ($prevpage < 0)
 		{ $prevpage=0; }
-		$pm_pageprev = "<a href=\"pm.php?f=$f&amp;d=$prevpage\">".$L['Previous']." $sed_img_left</a>";
+		$pm_pageprev = "<a href=\"".sed_url('pm', "f=$f&amp;d=$prevpage")."\">".$L['Previous']." $sed_img_left</a>";
 	}
 
 	if (($d + $cfg['maxrowsperpage']) < $totallines)
 	{
 		$nextpage = $d + $cfg['maxrowsperpage'];
-		$pm_pagenext = "<a href=\"pm.php?f=$f&amp;d=$nextpage\">$sed_img_right ".$L['Next']."</a>";
+		$pm_pagenext = "<a href=\"".sed_url('pm', "f=$f&amp;d=$nextpage")."\">$sed_img_right ".$L['Next']."</a>";
 	}
 }
 
@@ -164,7 +164,7 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$pm_sendlink = ($usr['auth_write']) ? "<a href=\"pm.php?m=send\">".$L['pm_sendnew']."</a>" : '';
+$pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url('pm', 'm=send')."\">".$L['pm_sendnew']."</a>" : '';
 
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('pm'));
@@ -176,8 +176,8 @@ $t-> assign(array(
 	"PM_SUBTITLE" => $subtitle,
 	"PM_SENDNEWPM" => $pm_sendlink,
 	"PM_INBOX" => "<a href=\"".sed_url('pm')."\">".$L['pm_inbox']."</a>:".$totalinbox,
-	"PM_ARCHIVES" => "<a href=\"pm.php?f=archives\">".$L['pm_archives']."</a>:".$totalarchives,
-	"PM_SENTBOX" => "<a href=\"pm.php?f=sentbox\">".$L['pm_sentbox']."</a>:".$totalsentbox,
+	"PM_ARCHIVES" => "<a href=\"".sed_url('pm', 'f=archives')."\">".$L['pm_archives']."</a>:".$totalarchives,
+	"PM_SENTBOX" => "<a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
 	"PM_TOP_PAGEPREV" => $pm_pageprev,
 	"PM_TOP_PAGENEXT" => $pm_pagenext,
 	"PM_TOP_CURRENTPAGE" => $pm_currentpage,
@@ -193,7 +193,7 @@ $extp = sed_getextplugins('pm.loop');
 while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 {
 	$jj++;
-	$row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? "<a href=\"pm.php?id=".$row['pm_id']."\"><img src=\"skins/".$skin."/img/system/icon-pm-new.gif\" alt=\"\" /></a>" : "<a href=\"pm.php?id=".$row['pm_id']."\"><img src=\"skins/".$skin."/img/system/icon-pm.gif\" alt=\"\" /></a>";
+	$row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-new.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm.gif\" alt=\"\" /></a>";
 
 	if ($f=='sentbox')
 	{
@@ -202,12 +202,12 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 		$pm_touserid = $row['pm_touserid'];
 		$pm_touser = sed_cc($row['user_name']);
 		$pm_fromortouser = sed_build_user($pm_touserid, $pm_touser);
-		$row['pm_icon_action'] = "<a href=\"pm.php?m=edit&amp;a=delete&amp;".sed_xg()."&amp;id=".$row['pm_id']."&amp;f=".$f."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
+		$row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&amp;a=delete&amp;".sed_xg()."&amp;id=".$row['pm_id']."&amp;f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
 
 		if (!empty($id) && $row['pm_state'] == 0)
 		{
 			$pm_editbox = "<h4>".$L['Edit']." :</h4>";
-			$pm_editbox .= "<form id=\"newlink\" action=\"pm.php?m=edit&amp;a=update&amp;".sed_xg()."&amp;id=".$id."\" method=\"post\">";
+			$pm_editbox .= "<form id=\"newlink\" action=\"".sed_url('pm', "m=edit&amp;a=update&amp;".sed_xg()."&amp;id=".$id)."\" method=\"post\">";
 			$pm_editbox .= "<textarea class=\"editor\" name=\"newpmtext\" rows=\"8\" cols=\"56\">".sed_cc($row['pm_text'])."</textarea>";
 			$pm_editbox .= "<br />&nbsp;<br /><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></form>";
 		}
@@ -219,7 +219,7 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 		$pm_touserid = $usr['id'];
 		$pm_touser = sed_cc($usr['name']);
 		$pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-		$row['pm_icon_action'] = "<a href=\"pm.php?m=send&amp;to=".$row['pm_fromuserid']."&amp;q=".$row['pm_id']."\"><img src=\"skins/".$skin."/img/system/icon-pm-reply.gif\" alt=\"".$L['pm_replyto']."\" /></a> <a href=\"pm.php?m=edit&amp;a=delete&amp;".sed_xg()."&amp;id=".$row['pm_id']."&amp;f=".$f."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
+		$row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=send&amp;to=".$row['pm_fromuserid']."&amp;q=".$row['pm_id'])."\" title=\"".$L['pm_replyto']."\"><img src=\"skins/".$skin."/img/system/icon-pm-reply.gif\" alt=\"".$L['pm_replyto']."\" /></a> <a href=\"".sed_url('pm', "m=edit&amp;a=delete&amp;".sed_xg()."&amp;id=".$row['pm_id']."&amp;f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
 	}
 	else
 	{
@@ -228,8 +228,8 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 		$pm_touserid = $usr['id'];
 		$pm_touser = sed_cc($usr['name']);
 		$pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-		$row['pm_icon_action'] = "<a href=\"pm.php?m=send&amp;to=".$row['pm_fromuserid']."&amp;q=".$row['pm_id']."\"><img src=\"skins/".$skin."/img/system/icon-pm-reply.gif\" alt=\"".$L['pm_replyto']."\" /></a> <a href=\"pm.php?m=edit&amp;a=archive&amp;".sed_xg()."&amp;id=".$row['pm_id']."\"><img src=\"skins/".$skin."/img/system/icon-pm-archive.gif\" alt=\"".$L['pm_putinarchives']."\" /></a>";
-		$row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"pm.php?m=edit&amp;a=delete&amp;".sed_xg()."&amp;id=".$row['pm_id']."&amp;f=".$f."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>" : '';
+		$row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=send&amp;to=".$row['pm_fromuserid']."&amp;q=".$row['pm_id'])."\" title=\"".$L['pm_replyto']."\"><img src=\"skins/".$skin."/img/system/icon-pm-reply.gif\" alt=\"".$L['pm_replyto']."\" /></a> <a href=\"".sed_url('pm', "m=edit&amp;a=archive&amp;".sed_xg()."&amp;id=".$row['pm_id'])."\" title=\"".$L['pm_putinarchives']."\"><img src=\"skins/".$skin."/img/system/icon-pm-archive.gif\" alt=\"".$L['pm_putinarchives']."\" /></a>";
+		$row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"".sed_url('pm', "m=edit&amp;a=delete&amp;".sed_xg()."&amp;id=".$row['pm_id']."&amp;f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>" : '';
 	}
 
 	if($cfg['parser_cache'])
@@ -255,7 +255,7 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
 		"PM_ROW_FROMUSER" => sed_build_user($pm_fromuserid, $pm_fromuser),
 		"PM_ROW_TOUSERID" => $pm_touserid,
 		"PM_ROW_TOUSER" => sed_build_user($pm_touserid, $pm_touser),
-		"PM_ROW_TITLE" => "<a href=\"pm.php?id=".$row['pm_id']."\">".sed_cc($row['pm_title'])."</a>",
+		"PM_ROW_TITLE" => "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\">".sed_cc($row['pm_title'])."</a>",
 		"PM_ROW_TEXT" => $pm_data.$pm_editbox,
 		"PM_ROW_TEXTBOXER" => $pm_data.$pm_editbox,
 		"PM_ROW_FROMORTOUSER" => $pm_fromortouser,
