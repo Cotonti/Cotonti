@@ -997,8 +997,9 @@ function sed_build_email($email, $hide = false)
  */
 function sed_build_flag($flag)
 {
+	global $sed_countries;
 	$flag = (empty($flag)) ? '00' : $flag;
-	return '<a href="'.sed_url('users', 'f=country_'.$flag).'"><img src="images/flags/f-'.$flag.'.gif" alt="'.$flag.'" /></a>';
+	return '<a href="'.sed_url('users', 'f=country_'.$flag).'" title="'.$sed_countries[$flag].'"><img src="images/flags/f-'.$flag.'.gif" alt="'.$flag.'" /></a>';
 }
 
 /**
@@ -1205,8 +1206,8 @@ function sed_build_pfs($id, $c1, $c2, $title)
  */
 function sed_build_pm($user)
 {
-	global $usr;
-	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="" /></a>';
+	global $usr, $L;
+	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="'.$L['pm_sendnew'].'" /></a>';
 }
 
 /* ------------------ */

@@ -207,7 +207,7 @@ $bbcodes = ($cfg['parsebbcodecom']) ? sed_build_bbcodes('newlink', 'newpmtext', 
 $smilies = ($cfg['parsesmiliescom']) ? sed_build_smilies('newlink', 'newpmtext', $L['Smilies']) : '';
 $pfs = sed_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
-$pm_sendlink = ($usr['auth_write']) ? "<a href=\"pm.php?m=send\">".$L['pm_sendnew']."</a>" : '';
+$pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url('pm', 'm=send')."\">".$L['pm_sendnew']."</a>" : '';
 
 $title_tags[] = array('{PM}', '{SEND_NEW}');
 $title_tags[] = array('%1$s', '%2$s');
@@ -234,9 +234,9 @@ $t->assign(array(
 	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
 	"PMSEND_SENDNEWPM" => $pm_sendlink,
 	"PMSEND_INBOX" => "<a href=\"".sed_url('pm')."\">".$L['pm_inbox']."</a>:".$totalinbox,
-	"PMSEND_ARCHIVES" => "<a href=\"pm.php?f=archives\">".$L['pm_archives']."</a>:".$totalarchives,
-	"PMSEND_SENTBOX" => "<a href=\"pm.php?f=sentbox\">".$L['pm_sentbox']."</a>:".$totalsentbox,
-	"PMSEND_FORM_SEND" => "pm.php?m=send&amp;a=send&amp;to=".$to,
+	"PMSEND_ARCHIVES" => "<a href=\"".sed_url('pm', 'f=archives')."\">".$L['pm_archives']."</a>:".$totalarchives,
+	"PMSEND_SENTBOX" => "<a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
+	"PMSEND_FORM_SEND" => sed_url('pm', 'pm.php?m=send&amp;a=send&amp;to='.$to),
 	"PMSEND_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".sed_cc($newpmtitle)."\" size=\"56\" maxlength=\"64\" />",
 	"PMSEND_FORM_TEXT" =>  "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
 	"PMSEND_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
