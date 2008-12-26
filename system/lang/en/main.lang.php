@@ -538,6 +538,9 @@ $L['for_newtopic'] = 'New topic';
 $L['for_markallasread'] = 'Mark all posts as read';
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
 $L['for_antibump'] = 'Protection against spam is on. You can not add a few messages a row.';
+$L['for_titletooshort'] = 'Topic title is too short or missing'; // N-0.0.2
+$L['for_messagetooshort'] = 'Topic message is too short'; // N-0.0.2
+$L['for_polltooshort'] = 'Poll options must be equal, or greater than 2'; // N-0.0.2
 
 /* ====== List ====== */
 

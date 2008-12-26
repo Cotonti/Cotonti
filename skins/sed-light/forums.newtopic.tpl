@@ -4,6 +4,10 @@
 	<div class="mboxBody">
 
 		<div id="subtitle">{FORUMS_NEWTOPIC_SUBTITLE}</div>
+		
+		<!-- BEGIN: FORUMS_NEWTOPIC_ERROR -->
+		<div class="error">{FORUMS_NEWTOPIC_ERROR_BODY}</div>
+		<!-- END: FORUMS_NEWTOPIC_ERROR -->
 
 		<form action="{FORUMS_NEWTOPIC_SEND}" method="post" name="newtopic">
 			<div class="tCap2"></div>
