@@ -190,6 +190,7 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+$plug_head .= '<meta name="robots" content="noindex" />';
 require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
