@@ -31,6 +31,8 @@ $skinlang['forumseditpost']['Update'] = 'Update';
 $skinlang['forumsnewtopic']['Title'] = 'Title:';
 $skinlang['forumsnewtopic']['privatetopic'] = 'Check this box to mark this topic as "private":';
 $skinlang['forumsnewtopic']['privatetopic2'] = 'Only forums moderators and the starter of the topic (so you) will be allowed to read and reply.';
+$skinlang['forumsnewtopic']['poll'] = 'Poll options:';
+$skinlang['forumsnewtopic']['poll2'] = 'Seperate options with lines, remember you can\'t change options after posting.';
 $skinlang['forumsnewtopic']['Submit'] = 'Submit';
 
 //forums.post.tpl
