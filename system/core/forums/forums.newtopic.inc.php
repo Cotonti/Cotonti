@@ -50,6 +50,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_allowbbcodes = $row['fs_allowbbcodes'];
 	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_allowprvtopics = $row['fs_allowprvtopics'];
+	$fs_allowpolls = $row['fs_allowpolls'];
 	$fs_countposts = $row['fs_countposts'];
 	$fs_masterid = $row['fs_masterid'];
 	$fs_mastername = $row['fs_mastername'];
@@ -63,6 +64,12 @@ else
 if ($fs_state)
 {
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=602", '', true));
+	exit;
+}
+
+if (!$fs_allowpolls & $poll)
+{
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930", '', true));
 	exit;
 }
 
@@ -82,11 +89,49 @@ if ($a=='newtopic')
 	$newmsg = sed_import('newmsg','P','HTM');
 	$newtopicpreview = mb_substr(sed_cc($newmsg), 0, 128);
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
+	
+	/*
+	BETA NOTE:
+	No error messages. I actually
+	would edit and add some while recoding forum poll system but 
+	some proper and not fast-and-loose writing would
+	be better I believe.
+	*/
 
 	if (strip_tags(mb_strlen($newtopictitle))>0 && mb_strlen($newmsg)>0)
 	{
 		if (mb_substr($newtopictitle, 0 ,1)=="#")
 		{ $newtopictitle = str_replace('#', '', $newtopictitle); }
+		
+
+	/*Completely stolen from "forum poll starter" plugin*/
+	
+	if ($poll)
+	{
+	
+	$newtopicpoll = sed_import('newtopicpoll','P','TXT');
+	$po_src = explode("\n", $newtopicpoll);
+	
+	$po_req = count($po_src);
+	$po_req = (empty($newtopicpoll)) ? '0' : $po_req;
+	
+	if ($po_req>1)
+	{
+	
+	$sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text) VALUES ('1', ".(int)$s.", '".$sys['now_offset']."', '".sed_sql_prep($newtopictitle)."')");
+
+	$sqlp = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='1' AND poll_state='".$s."' LIMIT 1");
+	$gp = sed_sql_fetcharray($sqlp);
+	$p = $gp['poll_id'];
+
+		$sql = sed_sql_query("UPDATE $db_polls SET poll_state='0' WHERE poll_id='$p'");
+
+		foreach($po_src as $k => $po_text)
+			{ $sql = sed_sql_query("INSERT into $db_polls_options (po_pollid, po_text, po_count) VALUES (".(int)$p.", '".sed_sql_prep($po_text)."', '0' ) "); }
+
+	}
+	
+	}
 
 		$sql = sed_sql_query("INSERT into $db_forum_topics
 		(ft_state,
@@ -103,7 +148,8 @@ if ($a=='newtopic')
 		ft_firstposterid,
 		ft_firstpostername,
 		ft_lastposterid,
-		ft_lastpostername )
+		ft_lastpostername,
+		ft_poll )
 		VALUES
 		(0,
 			".(int)$newprvtopic.",
@@ -119,7 +165,8 @@ if ($a=='newtopic')
 			".(int)$usr['id'].",
 			'".sed_sql_prep($usr['name'])."',
 			".(int)$usr['id'].",
-			'".sed_sql_prep($usr['name'])."')");
+			'".sed_sql_prep($usr['name'])."', 
+			".(int)$gp['poll_id'].")");
 
 		$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE 1 ORDER BY ft_id DESC LIMIT 1");
 		$row = sed_sql_fetcharray($sql);
@@ -196,8 +243,11 @@ $bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbc
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
 $post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
 
+$newtopicurl = ($poll) ? sed_url('forums', "m=newtopic&a=newtopic&s=".$s."&poll=1") : sed_url('forums', "m=newtopic&a=newtopic&s=".$s);
+
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
+	
 $toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." <a href=\"".sed_url('forums', "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
@@ -222,18 +272,17 @@ $t->assign(array(
 
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_cc($fs_desc),
-	"FORUMS_NEWTOPIC_SEND" => sed_url('forums', "m=newtopic&a=newtopic&s=".$s),
+	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
 	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",
 	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"64\" />",
-	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />".$poll_form,
+	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />",
 	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
-	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />".$poll_form,
+	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />",
 	"FORUMS_NEWTOPIC_SMILIES" => $smilies,
 	"FORUMS_NEWTOPIC_BBCODES" => $bbcodes,
 	"FORUMS_NEWTOPIC_SMILIESLOCAL" => $smilies_local,
 	"FORUMS_NEWTOPIC_BBCODESLOCAL" => $bbcodes_local,
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
-	"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
 ));
 
 if ($fs_allowprvtopics)
@@ -246,6 +295,19 @@ if ($fs_allowprvtopics)
 	));
 	$t->parse("MAIN.PRIVATE");
 }
+
+
+if ($fs_allowpolls && $poll)
+	{
+	
+	$poll_form = "<textarea name=\"newtopicpoll\" rows=\"8\" cols=\"56\">".sed_cc($newtopicpoll)."</textarea>";
+
+	$t->assign(array(
+		"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
+	));
+	$t->parse("MAIN.POLL");
+	
+	}
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.tags');

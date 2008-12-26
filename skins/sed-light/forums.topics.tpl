@@ -55,6 +55,13 @@
 		
 		<div style="height:27px;">
 			<a href="{FORUMS_TOPICS_NEWTOPICURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /></a>
+			
+			<!-- BEGIN: FORUMS_SECTIONS_POLLS -->
+			
+			<a href="{FORUMS_TOPICS_NEWPOLLURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newpoll.gif" alt="" /></a>
+		
+			<!-- END: FORUMS_SECTIONS_POLLS -->
+		
 			<div class="paging">{FORUMS_TOPICS_PAGES} {FORUMS_TOPICS_PAGEPREV} {FORUMS_TOPICS_PAGENEXT}</div>
 		</div>
 

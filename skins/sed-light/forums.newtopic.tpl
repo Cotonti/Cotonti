@@ -27,6 +27,20 @@
 				</tr>
 
 				<!-- END: PRIVATE -->
+				
+				<!-- BEGIN: POLL -->
+				
+				<tr>
+					<td>
+					<div style="float: left; width: 250px; height: 50px;">
+					{PHP.skinlang.forumsnewtopic.poll}
+					<p style="font-size:x-small;">{PHP.skinlang.forumsnewtopic.poll2}</p></div>
+					<div style="width:100%;">{FORUMS_NEWTOPIC_POLLFORM}</div>
+					</td>
+				</tr>
+				
+				<!-- END: POLL -->
+
 
 				<tr>
 					<td>

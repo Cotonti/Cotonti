@@ -45,6 +45,7 @@ if ($n=='edit')
 		$rallowsmilies = sed_import('rallowsmilies', 'P', 'BOL');
 		$rallowprvtopics = sed_import('rallowprvtopics', 'P', 'BOL');
 		$rallowviewers = sed_import('rallowviewers', 'P', 'BOL');
+		$rallowpolls = sed_import('rallowpolls', 'P', 'BOL');
 		$rcountposts = sed_import('rcountposts', 'P', 'BOL');
 		$rtitle = sed_sql_prep($rtitle);
 		$rdesc = sed_sql_prep($rdesc);
@@ -88,7 +89,7 @@ if ($n=='edit')
 		if (!empty($rtitle))
 		{
 
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_countposts='$rcountposts' WHERE fs_id='$id'");
+		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_allowpolls='$rallowpolls', fs_countposts='$rcountposts' WHERE fs_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ");
 		$sql = sed_sql_query("UPDATE $db_forum_subforums SET fm_title='".$mastername."' WHERE fm_id='$id' ");
 
@@ -133,6 +134,7 @@ if ($n=='edit')
 	$fs_allowsmilies = $row['fs_allowsmilies'];
 	$fs_allowprvtopics = $row['fs_allowprvtopics'];
 	$fs_allowviewers = $row['fs_allowviewers'];
+	$fs_allowpolls = $row['fs_allowpolls'];
 	$fs_countposts = $row['fs_countposts'];
 
 	$form_state = ($fs_state) ? "<input type=\"radio\" class=\"radio\" name=\"rstate\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rstate\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rstate\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rstate\" value=\"0\" checked=\"checked\" />".$L['No'];
@@ -146,6 +148,8 @@ if ($n=='edit')
 	$form_allowprvtopics = ($fs_allowprvtopics) ? "<input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"0\" checked=\"checked\" />".$L['No'];
 
 	$form_allowviewers = ($fs_allowviewers) ? "<input type=\"radio\" class=\"radio\" name=\"rallowviewers\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowviewers\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowprvtopics\" value=\"0\" checked=\"checked\" />".$L['No'];
+
+	$form_allowpolls = ($fs_allowpolls) ? "<input type=\"radio\" class=\"radio\" name=\"rallowpolls\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowpolls\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rallowpolls\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowpolls\" value=\"0\" checked=\"checked\" />".$L['No'];
 
 	$form_countposts = ($fs_countposts) ? "<input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rcountposts\" value=\"0\" checked=\"checked\" />".$L['No'];
 
@@ -182,6 +186,7 @@ if ($n=='edit')
 	$adminmain .= "<tr><td>".$L['adm_enablesmilies']." :</td><td>".$form_allowsmilies."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_enableprvtopics']." :</td><td>".$form_allowprvtopics."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_enableviewers']." :</td><td>".$form_allowviewers."</td></tr>";
+	$adminmain .= "<tr><td>".$L['adm_enablepolls']." :</td><td>".$form_allowpolls."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_countposts']." :</td><td>".$form_countposts."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Locked']." :</td><td>".$form_state."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_autoprune']." :</td><td><input type=\"text\" class=\"text\" name=\"rautoprune\" value=\"".$fs_autoprune."\" size=\"3\" maxlength=\"7\" /></td></tr>";

@@ -136,3 +136,6 @@ CREATE TABLE `sed_tag_references` (
 
 /* r206 Hardened auth system */
 ALTER TABLE sed_users ADD user_hashsalt CHAR(16) NOT NULL DEFAULT '';
+
+/* r212 Forum poll enhancements */
+ALTER TABLE `sed_forum_sections` ADD COLUMN `fs_allowpolls` tinyint(1) NOT NULL default '0';
