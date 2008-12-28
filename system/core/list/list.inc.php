@@ -263,6 +263,8 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	$pag['page_comments'] = "<a href=\"".sed_url('page', $page_urlp.'&comments=1')."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
 	$pag['admin'] = $usr['isadmin'] ? "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a> &nbsp;<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a> " : '';
 
+	if(empty($pag['page_desc'])) $pag['page_desc'] = sed_cutpost($pag['page_text'], 200, false);
+
 	$t-> assign(array(
 		"LIST_ROW_URL" => $pag['page_pageurl'],
 		"LIST_ROW_ID" => $pag['page_id'],
