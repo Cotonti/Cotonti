@@ -294,6 +294,9 @@ function sed_loadconfigmap()
 	$result[] = array ('pm', '10', 'pm_maxsize', 2, '10000', array(200,500,1000,2000, 5000,10000,15000,20000,30000,50000,65000));
 	$result[] = array ('pm', '10', 'pm_allownotifications', 3, '1', '');
 	$result[] = array ('polls', '01', 'disable_polls', 3, '0', '');
+	$result[] = array ('polls', '02', 'ip_id_polls', 2, 'ip', array('ip','id'));
+	$result[] = array ('polls', '03', 'max_options_polls', 1, '100', '');
+	$result[] = array ('polls', '04', 'del_dup_options', 3, '0', '');
 	$result[] = array ('ratings', '01', 'disable_ratings', 3, '0', '');
 	$result[] = array ('trash', '01', 'trash_prunedelay', 2, '7', array(0,1,2,3,4,5,7,10,15,20,30,45,60,90,120));
 	$result[] = array ('trash', '10', 'trash_comment', 3, '1', '');
