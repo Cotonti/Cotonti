@@ -2919,6 +2919,27 @@ function sed_redirect($url)
 }
 
 /**
+ * Strips all unsafe characters from file base name and converts it to latin
+ *
+ * @param string $basename File base name
+ * @param bool $underscore Convert spaces to underscores
+ * @return string
+ */
+function sed_safename($basename, $underscore = false)
+{
+	global $lang, $sed_translit;
+	$fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
+	$ext = mb_substr($basename, mb_strrpos($basename, '.') + 1);
+	if($lang != 'en' && is_array($sed_translit))
+	{
+		$fname = strtr($fname, $sed_translit);
+	}
+	if($underscore) $fname = str_replace(' ', '_', $fname);
+	return preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname) . '.' . mb_strtolower($ext);
+}
+
+
+/**
  * Renders a dropdown
  *
  * @param string $check Seleced value
@@ -4046,6 +4067,43 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$url .= $tail;
 	$url = str_replace('&amp;amp;', '&amp;', $url);
 	return $url;
+}
+
+/**
+ * Encodes a string for use in URLs
+ *
+ * @param string $str Source string
+ * @param bool $translit Transliterate non-English characters
+ * @return string
+ */
+
+function sed_urlencode($str, $translit = false)
+{
+	global $lang, $sed_translit;
+	if($translit && $lang != 'en' && is_array($sed_translit))
+	{
+		// Apply transliteration
+		$str = strtr($str, $sed_translit);
+	}
+	return urlencode($str);
+}
+
+/**
+ * Decodes a string that has been previously encoded with sed_urlencode()
+ *
+ * @param string $str Encoded string
+ * @param bool $translit Transliteration of non-English characters was used
+ * @return string
+ */
+function sed_urldecode($str, $translit = false)
+{
+	global $lang, $sed_translitb;
+	if($translit && $lang != 'en' && is_array($sed_translitb))
+	{
+		// Apply transliteration
+		$str = strtr($str, $sed_translitb);
+	}
+	return urldecode($str);
 }
 
 /**
