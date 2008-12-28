@@ -1723,6 +1723,29 @@ function sed_check_xp()
 }
 
 /**
+ * Truncates a post and makes sure parsing is correct
+ *
+ * @param string $text Post text
+ * @param int $max_chars Max. length
+ * @param bool $parse_bbcodes Parse bbcodes
+ * @return unknown
+ */
+function sed_cutpost($text, $max_chars, $parse_bbcodes = true)
+{
+    $text = $max_chars == 0 ? $text : sed_cutstring(strip_tags($text), $max_chars);
+    // Fix partial cuttoff
+    $text = preg_replace('#\[[^\]]*?$#', '...', $text);
+    // Parse the BB-codes or skip them
+    if($parse_bbcodes)
+    {
+        // Parse it
+        $text = sed_parse($text);
+    }
+    else $text = preg_replace('#\[[^\]]+?\]#', '', $text);
+    return $text;
+}
+
+/**
  * Truncates a string
  *
  * @param string $res Source string
