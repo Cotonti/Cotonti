@@ -107,7 +107,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			
 			$ft_poll = $row['ft_poll'];
 			
-			if ($row['ft_poll']>0)
+			if ($ft_poll>0)
 			{
 			$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$ft_poll'");
 			$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$ft_poll'");

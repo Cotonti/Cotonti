@@ -297,6 +297,15 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			{ sed_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row); }
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
+			
+			$ft_poll = $row['ft_poll'];
+			
+			if ($ft_poll>0)
+			{
+			$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$ft_poll'");
+			$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$ft_poll'");
+			$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$ft_poll'");
+			}
 
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET
 			fs_topiccount=fs_topiccount-1,
@@ -499,7 +508,7 @@ $notlastpage = (($d + $cfg['maxtopicsperpage'])<$totalposts) ? TRUE : FALSE;
 $pages = sed_pagination("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage']); //trustmaster ... thou shalt edit this
 list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage'], TRUE); //and also this
 
-$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername FROM $db_forum_sections AS s LEFT JOIN
+$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername, s.fs_allowpolls FROM $db_forum_sections AS s LEFT JOIN
 $db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 
@@ -511,6 +520,10 @@ while ($row1 = sed_sql_fetcharray($sql1))
 {
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
 	{
+	
+	if ( ($ft_poll>0 && $row1['fs_allowpolls']) || ($ft_poll==0) )
+	{
+	
 		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
 
 		$cfs = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
@@ -519,6 +532,9 @@ while ($row1 = sed_sql_fetcharray($sql1))
 		{ $movebox .= "<option value=\"".$row1['fs_id']."\">".$cfs."</option>"; }
 		$selected = ($row1['fs_id']==$s) ? "selected=\"selected\"" : '';
 		$jumpbox .= "<option $selected value=\"".sed_url('forums', "m=topics&s=".$row1['fs_id'])."\">".$cfs."</option>";
+		
+	}
+	
 	}
 }
 
