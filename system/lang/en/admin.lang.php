@@ -218,6 +218,9 @@ $L['cfg_disable_comments'] = array('Disable the comments', '');
 $L['cfg_disable_forums'] = array('Disable the forums', '');
 $L['cfg_disable_pfs'] = array('Disable the PFS', '');
 $L['cfg_disable_polls'] = array('Disable the polls', '');
+$L['cfg_ip_id_polls'] = array('Vote counting method', ''); // N-0.0.2
+$L['cfg_max_options_polls'] = array('Max number of options', 'Options above this limit will be automatically removed'); // N-0.0.2
+$L['cfg_del_dup_options'] = array('Force duplicate option removal', ' Remove duplicate options even if it is already in the database'); // N-0.0.2
 $L['cfg_disable_pm'] = array('Disable the private messages', '');
 $L['cfg_disable_ratings'] = array('Disable the ratings', '');
 $L['cfg_disable_page'] = array('Disable the pages', '');
@@ -313,8 +316,12 @@ $L['adm_tpl_parent'] = 'Same as the parent category';	// New in v110
 $L['adm_polls_indexpolls'] = 'Index polls (recent at top) :'; // N-0.0.1
 $L['adm_polls_forumpolls'] = 'Polls from forums (recent at top) :'; // N-0.0.1
 $L['adm_polls_polltopic'] = 'Poll topic'; // N-0.0.1
-$L['adm_help_polls'] = 'Once you created a new poll topics, select \'Edit\' to add options (choices) for this poll.<br />\'Delete\' will delete the selected poll, the options, and all related votes.<br />\'Reset\' will delete all votes for the selected poll. It won\'t delete the poll itself or the options.<br />\'Bump\' will change the poll creation date to the current date, and so will make the poll \'current\', top of the list.';
+$L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.'; //N-0.0.2
 $L['adm_polls_on_page'] = 'on page'; // N-0.0.2
+$L['adm_polls_error_title'] = 'Poll name is too short or empty'; // N-0.0.2
+$L['adm_polls_error_count'] = 'A poll must have two or more options'; // N-0.0.2
+$L['adm_polls_created'] = 'The poll has been successfully created'; // N-0.0.2
+$L['adm_polls_updated'] = 'The poll has been successfully updated'; // N-0.0.2
 
 /* ====== Statistics ====== */
 
