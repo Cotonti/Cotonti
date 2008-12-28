@@ -23,7 +23,10 @@ Order=
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $qs = sed_import('t', 'G', 'TXT');
-$qs = empty($qs) ? sed_import('t', 'P', 'TXT') : $qs;
+if(empty($qs)) $qs = sed_import('t', 'P', 'TXT');
+
+$tl = sed_import('tl', 'G', 'BOL');
+if($tl) $qs = strtr($qs, $sed_translitb);
 
 if($a == 'pages')
 {
@@ -40,7 +43,9 @@ if($a == 'pages')
 		foreach($tcloud as $tag => $cnt)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
-			$tc_html .= '<li value="'.$cnt.'"><a href="'.sed_url('plug', 'e=tags&a=pages&t='.urlencode($tag)).'">'.sed_cc($tag_t).'</a> </li>';
+			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+			$tc_html .= '<li value="'.$cnt.'"><a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> </li>';
 		}
 		$tc_html .= '</ul><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.tagcloud.js"></script><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/set.js"></script>';
 		$t->assign('TAGS_CLOUD_BODY', $tc_html);
@@ -74,7 +79,9 @@ if($a == 'pages')
 				foreach($tags as $tag)
 				{
 					$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
-					$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.urlencode($tag)).'">'.sed_cc($tag_t).'</a> ';
+					$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+					$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+					$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> ';
 				}
 				$t->assign(array(
 				'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']),
@@ -112,7 +119,9 @@ elseif($a == 'forums')
 		foreach($tcloud as $tag => $cnt)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
-			$tc_html .= '<li value="'.$cnt.'"><a href="'.sed_url('plug', 'e=tags&a=forums&t='.urlencode($tag)).'">'.sed_cc($tag_t).'</a> </li>';
+			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+			$tc_html .= '<li value="'.$cnt.'"><a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> </li>';
 		}
 		$tc_html .= '</ul><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.tagcloud.js"></script><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/set.js"></script>';
 		$t->assign('TAGS_CLOUD_BODY', $tc_html);
@@ -148,7 +157,9 @@ elseif($a == 'forums')
 				foreach($tags as $tag)
 				{
 					$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
-					$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.urlencode($tag)).'">'.sed_cc($tag_t).'</a> ';
+					$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+					$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+					$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> ';
 				}
 				$t->assign(array(
 				'TAGS_RESULT_ROW_URL' => sed_url('forums', 'm=topics&q='.$row['ft_id']),
