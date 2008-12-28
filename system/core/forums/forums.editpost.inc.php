@@ -192,7 +192,7 @@ $post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.sed_cc
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
-$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." </a> <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
+$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." </a> <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
 $toptitle .= $cfg['separator']." <a href=\"".sed_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 

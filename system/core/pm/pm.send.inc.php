@@ -229,8 +229,10 @@ if (!empty($error_string))
 	$t->parse("MAIN.PMSEND_ERROR");
 }
 
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+
 $t->assign(array(
-	"PMSEND_TITLE" => "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
+	"PMSEND_TITLE" => $bhome . "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
 	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
 	"PMSEND_SENDNEWPM" => $pm_sendlink,
 	"PMSEND_INBOX" => "<a href=\"".sed_url('pm')."\">".$L['pm_inbox']."</a>:".$totalinbox,

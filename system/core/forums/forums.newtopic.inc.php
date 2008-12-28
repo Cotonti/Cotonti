@@ -89,13 +89,13 @@ if ($a=='newtopic')
 	$newmsg = sed_import('newmsg','P','HTM');
 	$newtopicpreview = mb_substr(sed_cc($newmsg), 0, 128);
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
-	
+
 	$newtopicpoll = sed_import('newtopicpoll','P','TXT');
 	$po_src = explode("\n", $newtopicpoll);
-	
+
 	$po_req = count($po_src);
 	$po_req = (empty($newtopicpoll)) ? '0' : $po_req;
-	
+
 	$error_string .= ( strlen($newtopictitle) < 2) ? $L["for_titletooshort"]."<br />" : '';
 	$error_string .= ( strlen($newmsg) < 5) ? $L["for_messagetooshort"]."<br />" : '';
 	$error_string .= ( $po_req < 2 && $poll) ? $L["for_polltooshort"]."<br />" : '';
@@ -104,16 +104,16 @@ if ($a=='newtopic')
 	{
 		if (mb_substr($newtopictitle, 0 ,1)=="#")
 		{ $newtopictitle = str_replace('#', '', $newtopictitle); }
-		
+
 
 	/*Completely stolen from "forum poll starter" plugin*/
-	
+
 	if ($poll)
 	{
-	
+
 	if ($po_req>1)
 	{
-	
+
 	$sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text) VALUES ('1', ".(int)$s.", '".$sys['now_offset']."', '".sed_sql_prep($newtopictitle)."')");
 
 	$sqlp = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='1' AND poll_state='".$s."' LIMIT 1");
@@ -126,7 +126,7 @@ if ($a=='newtopic')
 			{ $sql = sed_sql_query("INSERT into $db_polls_options (po_pollid, po_text, po_count) VALUES (".(int)$p.", '".sed_sql_prep($po_text)."', '0' ) "); }
 
 	}
-	
+
 	}
 
 		$sql = sed_sql_query("INSERT into $db_forum_topics
@@ -161,7 +161,7 @@ if ($a=='newtopic')
 			".(int)$usr['id'].",
 			'".sed_sql_prep($usr['name'])."',
 			".(int)$usr['id'].",
-			'".sed_sql_prep($usr['name'])."', 
+			'".sed_sql_prep($usr['name'])."',
 			".(int)$gp['poll_id'].")");
 
 		$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE 1 ORDER BY ft_id DESC LIMIT 1");
@@ -243,8 +243,8 @@ $newtopicurl = ($poll) ? sed_url('forums', "m=newtopic&a=newtopic&s=".$s."&poll=
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
-	
-$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." <a href=\"".sed_url('forums', "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
+
+$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." <a href=\"".sed_url('forums', "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;
@@ -301,14 +301,14 @@ if ($fs_allowprvtopics)
 
 if ($fs_allowpolls && $poll)
 	{
-	
+
 	$poll_form = "<textarea name=\"newtopicpoll\" rows=\"8\" cols=\"56\">".sed_cc($newtopicpoll)."</textarea>";
 
 	$t->assign(array(
 		"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
 	));
 	$t->parse("MAIN.POLL");
-	
+
 	}
 
 /* === Hook === */

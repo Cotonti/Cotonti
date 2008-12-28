@@ -166,6 +166,7 @@ $L['cfg_count_admin'] = array('Count Administrators\' hits', ''); // N-0.0.1
 $L['cfg_forcedefaultskin'] = array('Force the default skin for all users', '');
 $L['cfg_forcedefaultlang'] = array('Force the default language for all users', '');
 $L['cfg_separator'] = array('Generic separator', 'Default:>');
+$L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');
 $L['cfg_menu1'] = array('Menu slot #1<br />{PHP.cfg.menu1} in all tpl files', '');
 $L['cfg_menu2'] = array('Menu slot #2<br />{PHP.cfg.menu2} in all tpl files', '');
 $L['cfg_menu3'] = array('Menu slot #3<br />{PHP.cfg.menu3} in all tpl files', '');

@@ -112,8 +112,17 @@ elseif (!empty($e))
 	{
 		$plugin_title = (empty($plugin_title)) ? $L['plu_title'] : $plugin_title;
 
+		if($cfg['homebreadcrumb'])
+		{
+			$bhome = '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
+		}
+		else
+		{
+			$bhome = '';
+		}
+
 		$t-> assign(array(
-			"PLUGIN_TITLE" => '<a href="'.sed_url('plug', "e=$e").'">'.$plugin_title."</a>",
+			"PLUGIN_TITLE" => $bhome . '<a href="'.sed_url('plug', "e=$e").'">'.$plugin_title."</a>",
 			"PLUGIN_SUBTITLE" => $plugin_subtitle,
 			"PLUGIN_BODY" => $plugin_body
 		));
