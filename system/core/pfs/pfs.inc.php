@@ -142,12 +142,20 @@ if ($a=='upload')
 			$disp_errors .= "<li>".$u_name." : ";
 			$u_name = mb_strtolower($u_name);
 			$dotpos = mb_strrpos($u_name,".")+1;
-			$f_extension = mb_substr($u_name, $dotpos, 5);
+			$f_extension = mb_substr($u_name, $dotpos);
 			$f_extension_ok = 0;
 			$fcheck = sed_file_check($u_tmp_name, $u_name, $f_extension);
 			if($fcheck)
 			{
 				$desc = $ndesc[$ii];
+				if($cfg['pfstimename'])
+				{
+					$u_name = time() . '_' . sed_unique(6) . '.' . $f_extension;
+				}
+				else
+				{
+					$u_name = sed_safename($u_name);
+				}
 				$u_newname = $userid.'-'.$u_name;
 				$u_sqlname = sed_sql_prep($u_newname);
 

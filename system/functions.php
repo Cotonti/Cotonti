@@ -1910,7 +1910,7 @@ function sed_dieifdisabled($disabled)
  */
 function sed_file_check($path, $name, $ext)
 {
-	global $L,$cfg;
+	global $L, $cfg;
 	require($cfg['system_dir'].'/mimetype.php');
 	$fcheck = FALSE;
 	if(in_array($ext, array('jpg', 'jpeg', 'png', 'gif')))
@@ -1918,16 +1918,16 @@ function sed_file_check($path, $name, $ext)
 		switch($ext)
 		{
 			case 'gif':
-				$fcheck = imagecreatefromgif($path);
+				$fcheck = @imagecreatefromgif($path);
 			break;
 			case 'png':
-				$fcheck = imagecreatefrompng($path);
+				$fcheck = @imagecreatefrompng($path);
 			break;
 			default:
-				$fcheck = imagecreatefromjpeg($path);
+				$fcheck = @imagecreatefromjpeg($path);
 			break;
 		}
-		$fcheck = (!$fcheck) ? FALSE : TRUE;
+		$fcheck = $fcheck !== FALSE;
 	}
 	else
 	{
@@ -2925,7 +2925,7 @@ function sed_redirect($url)
  * @param bool $underscore Convert spaces to underscores
  * @return string
  */
-function sed_safename($basename, $underscore = false)
+function sed_safename($basename, $underscore = true)
 {
 	global $lang, $sed_translit;
 	$fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
@@ -2935,7 +2935,10 @@ function sed_safename($basename, $underscore = false)
 		$fname = strtr($fname, $sed_translit);
 	}
 	if($underscore) $fname = str_replace(' ', '_', $fname);
-	return preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname) . '.' . mb_strtolower($ext);
+	$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
+	$fname = str_replace('..', '.', $fname);
+	if(empty($fname)) $fname = sed_unique();
+	return $fname . '.' . mb_strtolower($ext);
 }
 
 
