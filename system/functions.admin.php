@@ -245,6 +245,7 @@ function sed_loadconfigmap()
 	$result[] = array ('skin', '15', 'disablesysinfos', 3, '0', '');
 	$result[] = array ('skin', '15', 'keepcrbottom', 3, '1', '');
 	$result[] = array ('skin', '15', 'showsqlstats', 3, '0', '');
+	$result[] = array ('skin', '20', 'homebreadcrumb', 3, '0', '');
 	$result[] = array ('lang', '10', 'forcedefaultlang', 3, '0',  '');
 	$result[] = array ('menus', '10', 'topline', 0, '', '');
 	$result[] = array ('menus', '10', 'banner', 0, '', '');

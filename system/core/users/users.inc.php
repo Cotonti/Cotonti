@@ -41,7 +41,9 @@ if (empty($w)) { $w = 'asc'; }
 if (empty($f)) { $f = 'all'; }
 if (empty($d)) { $d = '0'; }
 
-$title = '<a href="'.sed_url('users').'">'.$L['Users'].'</a> ';
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+
+$title = $bhome . '<a href="'.sed_url('users').'">'.$L['Users'].'</a> ';
 $localskin = sed_skinfile('users');
 
 if (!empty($sq)) { $y = $sq; }

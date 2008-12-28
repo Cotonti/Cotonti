@@ -730,6 +730,10 @@ function sed_build_bbcodes_local($limit)
 function sed_build_catpath($cat, $mask)
 {
 	global $sed_cat, $cfg;
+	if($cfg['homebreadcrumb'])
+	{
+		$tmp[] = '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a>';
+	}
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
 	foreach($pathcodes as $k => $x)
 	{
@@ -1014,11 +1018,16 @@ function sed_build_flag($flag)
  */
 function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master = false)
 {
-	global $sed_forums_str, $cfg, $db_forum_sections;
+	global $sed_forums_str, $cfg, $db_forum_sections, $L;
 	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
 
 	if($link)
 	{
+		if($cfg['homebreadcrumb'])
+		{
+			$tmp[] = '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a>';
+		}
+		$tmp[] = '<a href="'.sed_url('forums').'">'.$L['Forums'].'</a>';
 		foreach($pathcodes as $k => $x)
 		{
 			$tmp[] = '<a href="'.sed_url('forums', 'c='.$x.'#'.$x).'">'.sed_cc($sed_forums_str[$x]['title']).'</a>';

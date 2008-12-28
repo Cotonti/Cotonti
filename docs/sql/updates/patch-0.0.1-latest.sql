@@ -153,3 +153,6 @@ VALUES ('core', 'polls', '03', 'max_options_polls', '1', '100', '', '');
 
 /* r225 PFS file name conversion */
 INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `config_name` , `config_type` , `config_value` , `config_default` , `config_text` ) VALUES ('core', 'pfs', '03', 'pfstimename', '3', '0', '', '');
+
+/* r227 Option to display home link in breadcrumb */
+INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `config_name` , `config_type` , `config_value` , `config_default` , `config_text` ) VALUES ('core', 'skin', '03', 'homebreadcrumb', '3', '0', '', '');

@@ -72,8 +72,10 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
 
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+
 $t->assign(array(
-	"USERS_DETAILS_TITLE" => "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
+	"USERS_DETAILS_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
 	"USERS_DETAILS_SUBTITLE" => $L['use_subtitle'],
 	"USERS_DETAILS_ID" => $urr['user_id'],
 	"USERS_DETAILS_PM" => sed_build_pm($urr['user_id']),

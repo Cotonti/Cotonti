@@ -101,19 +101,19 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		case 'delete':
 
 			sed_check_xg();
-			
+
 			$sql = sed_sql_query("SELECT ft_poll FROM $db_forum_topics WHERE ft_id='".$q."' ");
 			$row = sed_sql_fetcharray($sql);
-			
+
 			$ft_poll = $row['ft_poll'];
-			
+
 			if ($ft_poll>0)
 			{
 			$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$ft_poll'");
 			$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$ft_poll'");
 			$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$ft_poll'");
 			}
-			
+
 			sed_forum_prunetopics('single', $s, $q);
 			sed_log("Deleted topic #".$q, 'for');
 			sed_forum_sectionsetlast($s);
@@ -343,7 +343,7 @@ list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=topics&amp;s=$s
 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
-$toptitle = "<a href=\"".sed_url('forums')."\">".$L['Forums']."</a> ".$cfg['separator']." ".sed_build_forums($s, $fs_title, $fs_category, true, $master);
+$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(
@@ -362,10 +362,10 @@ $t->assign(array(
 	"FORUMS_TOPICS_TITLE_STARTED" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=creationdate&w=".rev($w))."\">".$L['Started']." ".cursort($o=='creationdate', $w)."</a>",
 	"FORUMS_TOPICS_TITLE_LASTPOST" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=updated&w=".rev($w))."\">".$L['Lastpost']." ".cursort($o=='updated', $w)."</a>"
 	));
-	
+
 if ($fs_allowpolls)
 	{
-	
+
 $t->assign(array(
 	"FORUMS_TOPICS_NEWPOLLURL" => sed_url('forums', "m=newtopic&s=".$s."&poll=1"),
 	));
