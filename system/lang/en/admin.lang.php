@@ -142,6 +142,7 @@ $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics or posts per page', '');
 $L['cfg_antibumpforums'] = array('\'Anti-bamp\' protection', 'The ban on adding by an users after few messages in succession in the the same theme of forum');
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded to any PFS, it\'s too late to change this. It is not recommended to change this setting for now.');
+$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');
 $L['cfg_th_amode'] = array('Thumbnails generation', '');
 $L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
 $L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended : Width x 0.75');
