@@ -175,9 +175,18 @@ while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('PAGE_MY_'.strtoupper($r
 
 if ($usr['isadmin'])
 {
+
+	if($pag['page_state'] == 1)
+	{
+		$validation = "<a href=\"".sed_url('admin', "m=page&s=queue&a=validate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Validate']."</a>";
+	}
+	else
+	{
+		$validation = "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Putinvalidationqueue']."</a>";
+	}
 	$t-> assign(array(
 			"PAGE_ADMIN_COUNT" => $pag['page_count'],
-			"PAGE_ADMIN_UNVALIDATE" => "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Putinvalidationqueue']."</a>",
+			"PAGE_ADMIN_UNVALIDATE" => $validation,
 			"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>"
 			));
 
