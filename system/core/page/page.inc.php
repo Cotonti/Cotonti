@@ -52,7 +52,8 @@ $pag['page_expire'] = @date($cfg['dateformat'], $pag['page_expire'] + $usr['time
 $pag['page_tab'] = (empty($pg)) ? 1 : $pg;
 $pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', "id=".$pag['page_id']) : sed_url('page', "al=".$pag['page_alias']);
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin'], $usr['auth_download']) = sed_auth('page', $pag['page_cat'], 'RWA1');
+
 sed_block($usr['auth_read']);
 
 if ($pag['page_state']==1 && !$usr['isadmin'])
@@ -74,14 +75,14 @@ elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
 	$pag['page_text'] = sed_readraw('datas/html/'.trim(mb_substr($pag['page_text'], 8, 255)));
 }
 
-if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='dl')
+if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='dl' && $usr['auth_download'] && ($pag['page_file'] !== 2 || $usr['id'] > 0))
 {
 
 	if ($_SESSION['dl']!=$pag['page_id'])
-		{
-		header("Location: page.php?id=".$pag['page_id']);
+	{
+		header('Location: ' . SED_ABSOLUTE_URL . sed_url('page', 'id='.$pag['page_id']));
 		exit;
-		}
+	}
 
 	unset($_SESSION['dl']);
 
@@ -268,7 +269,7 @@ if($pag['page_file'] > 0)
 			"PAGE_FILE_ICON" => $pag['page_fileicon'],
 			"PAGE_FILE_NAME" => basename($pag['page_url'])
 		));
-		if($pag['page_file'] === 2 && $usr['id'] == 0)
+		if($pag['page_file'] === 2 && $usr['id'] == 0 || !$usr['auth_download'])
 		{
 			$t->assign('PAGE_SHORTTITLE', $L['Members_download']);
 		}

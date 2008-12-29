@@ -156,3 +156,12 @@ INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `con
 
 /* r227 Option to display home link in breadcrumb */
 INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `config_name` , `config_type` , `config_value` , `config_default` , `config_text` ) VALUES ('core', 'skin', '03', 'homebreadcrumb', '3', '0', '', '');
+
+/* r230 Set default file download permission masks for pages */
+UPDATE sed_auth SET auth_rights = auth_rights + 4
+WHERE auth_code = 'page' AND auth_groupid != 5 AND auth_groupid != 3 AND auth_groupid != 2
+AND NOT auth_rights & 4 = 4;
+
+UPDATE sed_auth SET auth_rights_lock = auth_rights_lock - 4
+WHERE auth_code = 'page' AND auth_groupid != 5 AND auth_groupid != 3 AND auth_groupid != 2 AND auth_groupid != 4
+AND auth_rights_lock & 4 = 4;
