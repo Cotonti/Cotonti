@@ -167,4 +167,4 @@ textarea { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; paddi
 
 /* ============== Indexpolls ============== */
 
-.loading { background: url('/plugins/indexpolls/img/spinner_bigger.gif') no-repeat center center;}
+.loading { background: url('img/system/spinner_bigger.gif') no-repeat center center;}
