@@ -152,6 +152,15 @@ if ($a=='update')
 				$rpagehtml = '';
 			}
 
+			if(empty($rpageurl))
+			{
+				$rpagefile = 0;
+			}
+			elseif($rpagefile == 0)
+			{
+				$rpagefile = 1;
+			}
+
 			$ssql = "UPDATE $db_pages SET
 			page_cat = '".sed_sql_prep($rpagecat)."',
 				page_type = '".sed_sql_prep($rpagetype)."',

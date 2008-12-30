@@ -109,6 +109,15 @@ if ($a=='add')
 			$newpagehtml = '';
 		}
 
+		if(empty($newpageurl))
+		{
+			$newpagefile = 0;
+		}
+		elseif($newpagefile == 0)
+		{
+			$newpagefile = 1;
+		}
+
 		$ssql = "INSERT into $db_pages
 		(page_state,
 		page_type,

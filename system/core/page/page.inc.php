@@ -101,8 +101,8 @@ if(!$usr['isadmin'] || $cfg['count_admin'])
 }
 
 $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"list.php?c=%1\$s\">%2\$s</a>");
-$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
-$pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']-1])) ? " (".$pag['page_tabtitle'][$pag['page_tab']-1].")" : '';
+$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".sed_cc($pag['page_title'])."</a>";
+$pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']-1])) ? " (".sed_cc($pag['page_tabtitle'][$pag['page_tab']-1]).")" : '';
 
 $item_code = 'p'.$pag['page_id'];
 
@@ -144,11 +144,11 @@ $t->assign(array(
 	"PAGE_STATE" => $pag['page_state'],
 	"PAGE_EXECUTE" => $pag['page_execute'],
 	"PAGE_TITLE" => $pag['page_fulltitle'],
-	"PAGE_SHORTTITLE" => $pag['page_title'],
+	"PAGE_SHORTTITLE" => sed_cc($pag['page_title']),
 	"PAGE_CAT" => $pag['page_cat'],
-	"PAGE_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
+	"PAGE_CATTITLE" => sed_cc($sed_cat[$pag['page_cat']]['title']),
 	"PAGE_CATPATH" => $catpath,
-	"PAGE_CATDESC" => $sed_cat[$pag['page_cat']]['desc'],
+	"PAGE_CATDESC" => sed_cc($sed_cat[$pag['page_cat']]['desc']),
 	"PAGE_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
 	"PAGE_KEY" => $pag['page_key'],
 	"PAGE_EXTRA1" => $pag['page_extra1'],
@@ -156,7 +156,7 @@ $t->assign(array(
 	"PAGE_EXTRA3" => $pag['page_extra3'],
 	"PAGE_EXTRA4" => $pag['page_extra4'],
 	"PAGE_EXTRA5" => $pag['page_extra5'],
-	"PAGE_DESC" => $pag['page_desc'],
+	"PAGE_DESC" => sed_cc($pag['page_desc']),
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
 	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar']),
@@ -246,7 +246,7 @@ else
 }
 
 $pag['page_file'] = intval($pag['page_file']);
-if($pag['page_file'] > 0)
+if($pag['page_file'] > 0 && !empty($pag['page_url']))
 {
 
 	if ($sys['now_offset']>$pag['page_begin_noformat'])
