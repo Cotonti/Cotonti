@@ -233,6 +233,10 @@
 .markItUp .mHide a	{
 	background-image:url(images/hide.png);
 }
+
+.markItUp .mSmilies a	{
+	background-image:url(images/emoticon.png);
+}
 	
 .markItUp .mClean a {
 	background-image:url(images/clean.png);

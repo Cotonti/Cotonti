@@ -1,6 +1,7 @@
 /**
  * MarkItUp! extended settings for Seditio
  */
+
 var mySettings = {
 	previewParserVar: 'text',
 	previewPosition: 'before',
@@ -78,17 +79,21 @@ var mySettings = {
 		{name: L.table_row, openWith:'[tr]', closeWith:'[/tr]', placeHolder:"[(!(td|!|th)!)][/(!(td|!|th)!)]", className:'mtable-row' },
 		{name: L.table_cell, openWith:'[(!(td|!|th)!)]', closeWith:'[/(!(td|!|th)!)]', className:'mtable-col' },
 		{separator:'---------------' },
-		{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]'},
+		{name: L.quote, className:'mQuote', dropMenu: [
+			{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]'},
+			{name: L.pre, className: 'mPre', openWith:'[pre]', closeWith:'[/pre]'},
+			{name: L.spoiler, className: 'mSpoiler', openWith:'[spoiler=[![' + L.spoiler_text + ']!]]', closeWith:'[/spoiler]'}
+		]},
 		{name: L.code, className: 'mCode', openWith:'[code]', closeWith:'[/code]'},
-		{name: L.pre, className: 'mPre', openWith:'[pre]', closeWith:'[/pre]'},
-		{name: L.spoiler, className: 'mSpoiler', openWith:'[spoiler=[![' + L.spoiler_text + ']!]]', closeWith:'[/spoiler]'},
 		{name: L.hide, className: 'mHide', openWith:'[hide]', closeWith:'[/hide]'}, 
+		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) { showSmilies(markitup) } },
 		{separator:'---------------' },
 		{name: L.clean, className:"mClean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
 		{name: L.preview, className:"mPreview", call:'preview' }
 	]
 }
 
+// Mini editor
 var mini = {
 		previewParserVar: 'text',
 		previewPosition: 'before',
@@ -100,8 +105,45 @@ var mini = {
 		{name: L.link, className: 'mLink', key:'L', openWith:'[url=[![URL:!:http://]!]]', closeWith:'[/url]', placeHolder: L.link_text},
 		{name: L.picture, className: 'mPicture', key:'P', replaceWith:'[img][![' + L.picture_url + ':!:http://]!][/img]'},
 		{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]'},
+		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) { showSmilies(markitup) } },
 		{name: L.preview, className:"mPreview", call:'preview' }
 		]
 }
-		
-		
+
+// Renders and displays smilies dialog
+function showSmilies(markitup) {
+	var perRow = smileBox.perRow;
+	if($('#smilies').length != 1) {
+		var smileHtml = '<table class="cells" cellpadding="0" style="width:160px">';
+		var code;
+		for(var i = 0; i < smileSet.length; i++) {
+			if(i % perRow == 0) {
+				if(i != 0) smileHtml += '</tr>';
+				smileHtml += '<tr>';
+			}
+			code = smileSet[i].code;
+			code = code.replace(/</g, '&lt;');
+			code = code.replace(/>/g, '&gt;');
+			code = code.replace('/"/g', '&quot;');
+			smileHtml += '<td><a href="#" name="'+code+'" title="'+smileSet[i].lang+'"><img src="./images/smilies/'+smileSet[i].file+'" alt="'+code+'" /></a></td>';
+		}
+		if(i % perRow > 0) {
+			for(var j = i % perRow; j < perRow; j++) {
+				smileHtml += '<td>&nbsp;</td>';
+			}
+		}
+		smileHtml += '</tr></table>';
+		$('body').append('<div id="smilies">' + smileHtml + '</div>');
+		$('#smilies').dialog({
+			title: L.smilies,
+			height: smileBox.height,
+			width: smileBox.width
+		});
+		$('#smilies a').click(function() {
+			emoticon = $(this).attr("name");
+			$.markItUp( { replaceWith: ' ' + emoticon + ' ' } );
+			return false;
+		});
+	}
+	$('#smilies').dialog('open');
+}

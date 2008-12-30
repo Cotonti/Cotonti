@@ -515,12 +515,7 @@ $sed_img_right = $out['img_right'];
 
 if (!$sed_smilies)
 {
-	$sql = sed_sql_query("SELECT * FROM $db_smilies ORDER by smilie_order ASC, smilie_id ASC");
-	if (sed_sql_numrows($sql)>0)
-	{
-		while ($row = sed_sql_fetcharray($sql))
-		{ $sed_smilies[] = $row; }
-	}
+	sed_load_smilies();
 	sed_cache_store('sed_smilies',$sed_smilies,3550);
 }
 
