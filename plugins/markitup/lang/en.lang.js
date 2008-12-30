@@ -40,6 +40,7 @@ var L = {
 	right:		'Right',
 	size:		'Font size',
 	size_pt:	'Font size in pt (10-29)',
+	smilies:	'Smilies',
 	spoiler:	'Spoiler',
 	spoiler_text:'Enter button text here',
 	strike:		'Strike-through',
@@ -50,5 +51,4 @@ var L = {
 	underline:	'Underline',
 	white:		'White',
 	yellow:		'Yellow'
-	
 }

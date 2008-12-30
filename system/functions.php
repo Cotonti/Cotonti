@@ -587,16 +587,19 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 
 	$text = sed_parse_autourls($text);
 
-	// TODO replace with new smiley system
-	if ($parse_smilies && is_array($sed_smilies))
+	if($parse_smilies && is_array($sed_smilies))
 	{
-		reset($sed_smilies);
-		while ((list($j,$dat) = each($sed_smilies)))
+		foreach($sed_smilies as $k => $v)
 		{
 			$ii++;
 			$key = '**'.$ii.$unique_seed.'**';
-			$code[$key]= "<img class=\"aux\" src=\"".$dat['smilie_image']."\" alt=\"\" />";
-			$text = str_replace($dat['smilie_code'], $key, $text);
+			$code[$key]= '<img class="aux smiley" src="./images/smilies/'.$v['file'].'" alt="'.sed_cc($v['code']).'" />';
+			$text = preg_replace('#(^|\s)'.preg_quote($v['code']).'(\s|$)#', '$1'.$key.'$2', $text);
+			if(sed_cc($v['code']) != $v['code'])
+			{
+				// Fix for cc inserts
+				$text = preg_replace('#(^|\s)'.preg_quote(sed_cc($v['code'])).'(\s|$)#', '$1'.$key.'$2', $text);
+			}
 		}
 	}
 
@@ -1401,29 +1404,32 @@ function sed_build_ratings($code, $url, $display)
 // TODO eliminate this function
 function sed_build_smilies($c1, $c2, $title)
 {
-	$result = "<a href=\"javascript:help('smilies','".$c1."','".$c2."')\">".$title."</a>";
-	return($result);
+	return '';
 }
 
 /* ------------------ */
-// TODO eliminate this function
+/**
+ * Builds local smiley selection box. Obsolete.
+ *
+ * @param int $limit Max number of smilies in the box.
+ * @return string
+ */
 function sed_build_smilies_local($limit)
 {
 	global $sed_smilies;
 
-	$result = '<div class=\"smilies\">';
+	$result = '<div class="smilies">';
 
 	if (is_array($sed_smilies))
 	{
-		reset ($sed_smilies);
-		while (list($i,$dat) = each($sed_smilies))
+		foreach($sed_smilies as $k => $v)
 		{
-			$result .= "<a href=\"javascript:addtxt('".$dat[1]."')\"><img src=\"".$dat['smilie_image']."\" alt=\"\" /></a> ";
+			$result .= "<a href=\"javascript:addtxt('".sed_cc($v['code'])."')\"><img src=\"./images/smilies/".$v['file']."\" alt=\"".sed_cc($v['code'])."\" /></a> ";
 		}
 	}
 
 	$result .= "</div>";
-	return($result);
+	return $result;
 }
 
 /**
@@ -2416,6 +2422,101 @@ function sed_javascript($more='')
 }
 
 /**
+ * Returns a language file path for a plugin or FALSE on error.
+ *
+ * @param string $name Plugin name
+ * @param bool $core Use core module rather than a plugin
+ * @return bool
+ */
+function sed_langfile($name, $core = false)
+{
+	global $cfg, $lang;
+	if($core)
+	{
+		 // For module support, comming in N-0.1.0
+		 if(@file_exists($cfg['system_dir']."/lang/$lang/$name.lang.php"))
+		 	return $cfg['system_dir']."/lang/$lang/$name.lang.php";
+		 else
+		 	return $cfg['system_dir']."/lang/en/$name.lang.php";
+	}
+	else
+	{
+		if(@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
+			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
+		else
+			return $cfg['plugins_dir']."/$name/lang/$name.en.lang.php";
+	}
+}
+
+/**
+ * Load smilies from current pack
+ */
+function sed_load_smilies()
+{
+	global $sed_smilies;
+	$sed_smilies = array();
+	if(!file_exists('./images/smilies/set.js')) return;
+
+	// A simple JSON parser and decoder
+	$json = '';
+	$started = false;
+	$fp = fopen('./images/smilies/set.js', 'r');
+	$i = -1;
+	$prio = array();
+	$code = array();
+	$file = array();
+	while(!feof($fp))
+	{
+		$line = fgets($fp);
+		if($line == '];') break;
+		if($started)
+		{
+			$line = trim($line, " \t\r\n");
+			if($line == '{')
+			{
+				$i++;
+			}
+			elseif($line != '},')
+			{
+				if(preg_match('#^(\w+)\s*:\s*"?(.+?)"?,?$#', $line, $m))
+				{
+					switch($m[1])
+					{
+						case 'prio':
+							$prio[$i] = intval($m[2]);
+							break;
+						case 'code':
+							$code[$i] = $m[2];
+							break;
+						case 'file':
+							$file[$i] = $m[2];
+							break;
+					}
+				}
+			}
+		}
+		elseif(strstr($line, 'smileSet'))
+		{
+			$started = true;
+		}
+	}
+	fclose($fp);
+
+	// Sort the result
+	array_multisort($prio, SORT_ASC, $code, $file);
+	$cnt = count($code);
+	for($i = 0; $i < $cnt; $i++)
+	{
+		$sed_smilies[$i] = array(
+		'code' => $code[$i],
+		'file' => $file[$i]
+		);
+	}
+}
+
+
+
+/**
  * Loads comlete category structure into array
  *
  * @return array
@@ -2467,33 +2568,6 @@ function sed_load_structure()
 	}
 
 	return($res);
-}
-
-/**
- * Returns a language file path for a plugin or FALSE on error.
- *
- * @param string $name Plugin name
- * @param bool $core Use core module rather than a plugin
- * @return bool
- */
-function sed_langfile($name, $core = false)
-{
-	global $cfg, $lang;
-	if($core)
-	{
-		 // For module support, comming in N-0.1.0
-		 if(@file_exists($cfg['system_dir']."/lang/$lang/$name.lang.php"))
-		 	return $cfg['system_dir']."/lang/$lang/$name.lang.php";
-		 else
-		 	return $cfg['system_dir']."/lang/en/$name.lang.php";
-	}
-	else
-	{
-		if(@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
-			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
-		else
-			return $cfg['plugins_dir']."/$name/lang/$name.en.lang.php";
-	}
 }
 
 /**
