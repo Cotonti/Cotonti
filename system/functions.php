@@ -2673,6 +2673,11 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 	{
 		$headers = (empty($headers)) ? "From: \"".$cfg['maintitle']."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n"."Content-Type: text/plain; charset=".$cfg['charset']."\n" : $headers;
 		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
+		if($cfg['charset'] != 'us-ascii')
+		{
+			$headers .= "Content-Transfer-Encoding: 8bit\n";
+			$subject = mb_encode_mimeheader($subject, $cfg['charset'], 'B', "\n");
+		}
 		mail($fmail, $subject, $body, $headers, $additional_parameters);
 		sed_stat_inc('totalmailsent');
 		return(TRUE);
