@@ -257,21 +257,24 @@ switch ($a)
 					closedir($handle);
 
 					$adminmain .= "Installing the parts...<br />";
-					while( list($i,$x) = each($parts) )
+					if(count($parts) > 0)
 					{
-						$adminmain .= "- Part ".$x." ...";
-						$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
-						$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
-
-						if (empty($info_part['Error']))
+						while( list($i,$x) = each($parts) )
 						{
-							$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('".$info_part['Hooks']."', '".$info_part['Code']."', '".sed_sql_prep($info_part['Part'])."', '".sed_sql_prep($info['Name'])."', '".$info_part['File']."',  ".(int)$info_part['Order'].", 1)");
+							$adminmain .= "- Part ".$x." ...";
+							$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
+							$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
-							$adminmain .= "Installed<br />";
-						}
-						else
-						{
-							$adminmain .= "Error !<br />";
+							if (empty($info_part['Error']))
+							{
+								$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('".$info_part['Hooks']."', '".$info_part['Code']."', '".sed_sql_prep($info_part['Part'])."', '".sed_sql_prep($info['Name'])."', '".$info_part['File']."',  ".(int)$info_part['Order'].", 1)");
+
+								$adminmain .= "Installed<br />";
+							}
+							else
+							{
+								$adminmain .= "Error !<br />";
+							}
 						}
 					}
 
