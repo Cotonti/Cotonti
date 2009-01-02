@@ -71,11 +71,6 @@ $adminmain .= "<tr>";
 $adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=urls"), "<img src=\"images/admin/info.gif\" alt=\"\" /> ".$L['adm_urls'], sed_auth('admin', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
 
-
-$adminmain .= "<tr>";
-$adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=smilies"), "<img src=\"images/admin/smilies.gif\" alt=\"\" /> ".$L['Smilies'], sed_auth('admin', 'a', 'A'))."</td>";
-$adminmain .= "</tr>";
-
 $adminmain .= "<tr>";
 $adminmain .= "<td colspan=\"3\">".sed_linkif(sed_url('admin', "m=banlist"), "<img src=\"images/admin/users.gif\" alt=\"\" /> ".$L['Banlist'], sed_auth('users', 'a', 'A'))."</td>";
 $adminmain .= "</tr>";
