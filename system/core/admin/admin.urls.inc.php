@@ -94,6 +94,15 @@ if($a == 'save')
 	$fp = fopen('./datas/urltrans.dat', 'w');
 	// Process and write
 	$count = count($ut_area);
+	// If the table is empty, restore the default rule
+	if($count == 0)
+	{
+		$ut_area = array('*');
+		$ut_params = array('*');
+		$ut_format = array('{$_area}.php');
+		$count = 1;
+	}
+	// Continue processing
 	$hta = empty($hta_prefix) ? '' : $hta_prefix . "\n";
 	$var_pattern = '[a-zA-Z0-9\._\-\%]+';
 	$mainurl = parse_url($cfg['mainurl']);
