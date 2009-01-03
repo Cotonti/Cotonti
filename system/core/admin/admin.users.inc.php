@@ -23,7 +23,11 @@ sed_block($usr['isadmin']);
 
 $adminpath[] = array (sed_url('admin', 'm=users'), $L['Users']);
 
-$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=users")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
+$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=users")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
+
+$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=users&s=extrafields'), $L['adm_extrafields_desc'], sed_auth('admin', 'a', 'A'))."</li>";
+
+$adminmain .= "</ul>";
 
 switch($n)
 	{

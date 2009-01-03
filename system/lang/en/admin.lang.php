@@ -487,8 +487,7 @@ algorithm looks up a rule for a link this way: first it fetches all rules define
 find <em>the first</em> rule that matches the parameter condition; if no matching rules found, it will try to
 fall back to * area and look for the first matching rule there. It is recommended that your default rule (with *
 area and * parameters) is the last of the *-area rules, or even last in the table.<br />
-You can change rule order by simply dragging the rows and dropping them at desired positions. It is recommended
-to save new rules before you can change their order with drag-and-drop.</li>
+You can change rule order by simply dragging the rows and dropping them at desired positions.</li>
 <li><strong>Query String</strong> is what you usually see in most links after the question mark. It is used
 to pass the rest of GET parameters that you have not used in the rest of the Format string and is appended
 automatically in that case.</li>
@@ -500,17 +499,21 @@ your .htaccess (if writable) and provide you with .htaccess/IsapiRewrite4.ini/ng
 /* ====== Extra Fields Admin ========*/
 
 $L['adm_extrafields'] = "Extra fields";
-$L['adm_extrafields_desc'] = "Add/Edit extra fields for pages";
+$L['adm_extrafields_desc'] = "Add/Edit extra fields";
 $L['adm_extrafield_added'] = "Successfully added new extra field.";
+$L['adm_extrafield_not_added'] = "Error! New extra field not added.";
 $L['adm_extrafield_updated'] = "Successfully updated extra field.";
+$L['adm_extrafield_not_updated'] = "Error! Extra field not updated.";
 $L['adm_extrafield_removed'] = "Successfully removed extra field.";
-$L['adm_extrafield_confirmdel'] = 'Really delete this extra field? All data on pages in this field will be lost!';
-$L['adm_extrafield_confirmupd'] = 'Really update this extra field? Some data on pages in this field may be lost!';
+$L['adm_extrafield_not_removed'] = "Error! Extra field not deleted.";
+$L['adm_extrafield_confirmdel'] = 'Really delete this extra field? All data in this field will be lost!';
+$L['adm_extrafield_confirmupd'] = 'Really update this extra field? Some data in this field may be lost!';
 
 $L['extf_Name'] = "Name";
 $L['extf_Type'] = "Type of field";
 $L['extf_Base HTML'] = "Base HTML";
 $L['extf_Page tags'] = "Tags";
+$L['extf_Description'] = "Description";
 
 $L['adm_extrafield_new'] = 'New extra field';
 $L['adm_extrafield_selectable_values'] = 'Options for select (comma sep.):';

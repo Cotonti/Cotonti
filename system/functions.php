@@ -4362,32 +4362,46 @@ require_once $cfg['system_dir'].'/xtemplate.class.php';
 /**
  * Add extra field for pages
  *
+ * @param string $sql_table Table for adding extrafield (without sed_)
  * @param string $name Field name (unique)
  * @param string $type Field type (input, textarea etc)
  * @param string $html HTML display of element without parameter "name="
  * @param string $variants Variants of values (for radiobuttons, selectors etc)
+ * @param string $description Description of field (optional, for admin)
  * @return bool
  *
  */
-function sed_extrafield_add($name, $type, $html, $variants="")
+function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $description="")
 {
-	global $db_pages_extra_fields, $db_pages;
-	$fieldsres = sed_sql_query("SELECT field_name FROM $db_pages_extra_fields");
+	global $db_extra_fields ;
+	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields");
 	while($row = sed_sql_fetchassoc($fieldsres)) $extrafieldsnames[] = $row['field_name'];
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
+	
+	// Check table sed_$sql_table - if field with same name exists - exit.
+	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
+	while ($i < mysql_num_fields($fieldsres)) {
+		$column = mysql_fetch_field($fieldsres, $i);
+		// get column prefix in this table
+		$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
+		if(strpos($column->name, "_$name")) return false; // No adding - fields already exist
+		$i++;
+	}
+	
+	$extf['location'] = $sql_table;
 	$extf['name'] = $name;
 	$extf['type'] = $type;
 	$extf['html'] = $html;
 	$extf['variants'] = $variants;
-	$step1 = sed_sql_insert($db_pages_extra_fields, $extf, 'field_') == 1;
+	$extf['description'] = $description;
+	$step1 = sed_sql_insert($db_extra_fields, $extf, 'field_') == 1;
 	switch($type)	{
 	case "input": $sqltype = "VARCHAR(255)"; break;
 	case "textarea": $sqltype = "TEXT"; break;
 	case "select": $sqltype = "VARCHAR(255)"; break;
 	case "checkbox": $sqltype = "BOOL"; break;
 	}
-	$sql = "ALTER TABLE $db_pages ADD page_my_$name $sqltype ";
-	//echo $sql; flush;
+	$sql = "ALTER TABLE sed_$sql_table ADD ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
 	return $step1&&$step2;
 }
@@ -4395,29 +4409,36 @@ function sed_extrafield_add($name, $type, $html, $variants="")
 /**
  * Update extra field for pages
  *
+ * @param string $sql_table Table contains extrafield (without sed_)
  * @param string $oldname Exist name of field
  * @param string $name Field name (unique)
  * @param string $type Field type (input, textarea etc)
  * @param string $html HTML display of element without parameter "name="
  * @param string $variants Variants of values (for radiobuttons, selectors etc)
+ * @param string $description Description of field (optional, for admin)
  * @return bool
  *
  */
-function sed_extrafield_update($oldname, $name, $type, $html, $variants="")
+function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $variants="", $description="")
 {
-	global $db_pages_extra_fields, $db_pages;
+	global $db_extra_fields;
+	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
+	$column = mysql_fetch_field($fieldsres, 0);
+	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
+	$extf['location'] = $sql_table;
 	$extf['name'] = $name;
 	$extf['type'] = $type;
 	$extf['html'] = $html;
 	$extf['variants'] = $variants;
-	$step1 = sed_sql_update($db_pages_extra_fields, "field_name = '$oldname'", $extf, 'field_') == 1;
+	$extf['description'] = $description;
+	$step1 = sed_sql_update($db_extra_fields, "field_name = '$oldname' AND field_location='$sql_table'", $extf, 'field_') == 1;
 	switch($type)	{
 	case "input": $sqltype = "VARCHAR(255)"; break;
 	case "textarea": $sqltype = "TEXT"; break;
 	case "select": $sqltype = "VARCHAR(255)"; break;
 	case "checkbox": $sqltype = "BOOL"; break;
 	}
-	$sql = "ALTER TABLE $db_pages CHANGE page_my_$oldname page_my_$name $sqltype ";
+	$sql = "ALTER TABLE sed_$sql_table CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
 	return $step1&&$step2;
 }
@@ -4425,17 +4446,22 @@ function sed_extrafield_update($oldname, $name, $type, $html, $variants="")
 /**
  * Delete extra field
  *
+ * @param string $sql_table Table contains extrafield (without sed_)
  * @param string $name Name of extra field
  * @return bool
  *
  */
-function sed_extrafield_remove($name)
+function sed_extrafield_remove($sql_table, $name)
 {
-	global $db_pages_extra_fields, $db_pages;
-	$step1 = sed_sql_delete($db_pages_extra_fields, "field_name = '$name'") == 1;
-	$sql = "ALTER TABLE $db_pages DROP page_my_".$name;
+	global $db_extra_fields;
+	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
+	$column = mysql_fetch_field($fieldsres, 0);
+	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
+	$step1 = sed_sql_delete($db_extra_fields, "field_name = '$name' AND field_location='$sql_table'") == 1;
+	$sql = "ALTER TABLE sed_$sql_table DROP ".$column_prefix."_".$name;
 	$step2 = sed_sql_query($sql);
 	return $step1&&$step2;
 }
+
 
 ?>

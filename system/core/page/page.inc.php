@@ -101,8 +101,8 @@ if(!$usr['isadmin'] || $cfg['count_admin'])
 }
 
 $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"list.php?c=%1\$s\">%2\$s</a>");
-$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".sed_cc($pag['page_title'])."</a>";
-$pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']-1])) ? " (".sed_cc($pag['page_tabtitle'][$pag['page_tab']-1]).")" : '';
+$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
+$pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']-1])) ? " (".$pag['page_tabtitle'][$pag['page_tab']-1].")" : '';
 
 $item_code = 'p'.$pag['page_id'];
 
@@ -110,8 +110,8 @@ list($comments_link, $comments_display, $comments_count) = sed_build_comments($i
 list($ratings_link, $ratings_display) = sed_build_ratings($item_code, $pag['page_pageurl'], $ratings);
 
 $title_tags[] = array('{TITLE}', '{CATEGORY}');
-$title_tags[] = array('%1$s', '%2$s');
-$title_data = array($pag['page_title'], $sed_cat[$pag['page_cat']]['title']);
+$title_tags[] = array('%1$s', '%1$s');
+$title_data = array($pag['page_title'], $sed_cat[$c]['title']);
 $out['subtitle'] = sed_title('title_page', $title_tags, $title_data);
 
 /* === Hook === */
@@ -144,19 +144,14 @@ $t->assign(array(
 	"PAGE_STATE" => $pag['page_state'],
 	"PAGE_EXECUTE" => $pag['page_execute'],
 	"PAGE_TITLE" => $pag['page_fulltitle'],
-	"PAGE_SHORTTITLE" => sed_cc($pag['page_title']),
+	"PAGE_SHORTTITLE" => $pag['page_title'],
 	"PAGE_CAT" => $pag['page_cat'],
-	"PAGE_CATTITLE" => sed_cc($sed_cat[$pag['page_cat']]['title']),
+	"PAGE_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
 	"PAGE_CATPATH" => $catpath,
-	"PAGE_CATDESC" => sed_cc($sed_cat[$pag['page_cat']]['desc']),
+	"PAGE_CATDESC" => $sed_cat[$pag['page_cat']]['desc'],
 	"PAGE_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
 	"PAGE_KEY" => $pag['page_key'],
-	"PAGE_EXTRA1" => $pag['page_extra1'],
-	"PAGE_EXTRA2" => $pag['page_extra2'],
-	"PAGE_EXTRA3" => $pag['page_extra3'],
-	"PAGE_EXTRA4" => $pag['page_extra4'],
-	"PAGE_EXTRA5" => $pag['page_extra5'],
-	"PAGE_DESC" => sed_cc($pag['page_desc']),
+	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
 	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar']),
@@ -171,8 +166,8 @@ $t->assign(array(
 ));
 
 // Extra fields
-$fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
-while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('PAGE_MY_'.strtoupper($row['field_name']), $pag['page_my_'.$row['field_name']]);
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
+while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('PAGE_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
 
 if ($usr['isadmin'])
 {
@@ -246,7 +241,7 @@ else
 }
 
 $pag['page_file'] = intval($pag['page_file']);
-if($pag['page_file'] > 0 && !empty($pag['page_url']))
+if($pag['page_file'] > 0)
 {
 
 	if ($sys['now_offset']>$pag['page_begin_noformat'])

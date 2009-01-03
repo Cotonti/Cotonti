@@ -1,6 +1,21 @@
-<?php
+<?PHP
+
+/* ====================
+Seditio - Website engine
+Copyright Neocrome
+http://www.neocrome.net
+[BEGIN_SED]
+File=admin.users.extrafields.inc.php
+Version=110
+Updated=2006-sep-12
+Type=Core.admin
+Author=Neocrome
+Description=Users
+[END_SED]
+==================== */
+
 /**
- * Extra fields editor.
+ * Extra fields for users editor.
  *
  * @package Seditio-N
  * @version 0.0.2
@@ -9,13 +24,13 @@
  * @license BSD License
  */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url('admin', 'm=page'), $L['Pages']);
-$adminpath[] = array (sed_url('admin', 'm=page&s=extrafields'), $L['adm_extrafields']);
+$adminpath[] = array (sed_url('admin', 'm=users'), $L['core_users']);
+$adminpath[] = array (sed_url('admin', 'm=users&s=extrafields'), $L['adm_extrafields']);
 $adminhelp = $L['adm_help_extrafield'];
 
 $a = sed_import('a', 'G', 'ALP');
@@ -35,7 +50,7 @@ if($a == 'add')
 	if(!empty($field['name']) && !empty($field['type']))
 	{
 		//if(sed_sql_insert($db_extra_fields, $field, 'field_'))	
-		if(sed_extrafield_add("pages", $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
+		if(sed_extrafield_add("users", $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
 		{
 			$adminmain .= <<<HTM
 <div class="error">
@@ -64,7 +79,7 @@ elseif($a == 'upd' && isset($n))
 	if($field['html']=="") $field['html'] = get_default_html_construction($field['type']);
 	if(!empty($field['name']) && !empty($field['type']))
 	{
-		if(sed_extrafield_update("pages", $n, $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
+		if(sed_extrafield_update("users", $n, $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
 		{
 			$adminmain .= <<<HTM
 <div class="error">
@@ -73,17 +88,13 @@ elseif($a == 'upd' && isset($n))
 HTM;
 		}
 		else {
-			$adminmain .= <<<HTM
-<div class="error">
-{$L['adm_extrafield_not_updated']}
-</div>
-HTM;
+
 		}
 	}
 }
 elseif($a == 'del' && isset($n))
 {
-	if(sed_extrafield_remove("pages", $n))
+	if(sed_extrafield_remove("users", $n))
 	{
 		$adminmain .= <<<HTM
 <div class="error">
@@ -101,7 +112,7 @@ HTM;
 }
 
 $totalitems = sed_sql_rowcount($db_extra_fields);
-$pagnav = sed_pagination('admin.php?s=extrafields', $d, $totalitems, $cfg['maxrowsperpage']); //this will be changed
+$pagnav = sed_pagination('admin.php?m=users&s=extrafields', $d, $totalitems, $cfg['maxrowsperpage']); //this will be changed
 
 $adminmain .= <<<HTM
 <div class="pagnav">
@@ -117,7 +128,7 @@ $pagnav
 HTM;
 
 $field_types = array('input', 'textarea', 'select', 'checkbox');
-$res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages' LIMIT $d, ".$cfg['maxrowsperpage']);
+$res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users' LIMIT $d, ".$cfg['maxrowsperpage']);
 while($row = sed_sql_fetchassoc($res))
 {
 	$type = '';
@@ -132,8 +143,8 @@ while($row = sed_sql_fetchassoc($res))
 	else{
 		$variants_style = 'style="display:none;';
 	}
-	$extrafield_update_url = sed_url('admin', 'm=page&s=extrafields&a=upd&name='.$row['field_name'].'&oldtype='.$row['field_type']);
-	$extrafield_delete_url = sed_url('admin', 'm=page&s=extrafields&a=del&name='.$row['field_name']);
+	$extrafield_update_url = sed_url('admin', 'm=users&s=extrafields&a=upd&name='.$row['field_name'].'&oldtype='.$row['field_type']);
+	$extrafield_delete_url = sed_url('admin', 'm=users&s=extrafields&a=del&name='.$row['field_name']);
 	
 	//$field_html_encoded = htmlspecialchars_encode($row['field_html']);
 	$field_html_encoded = htmlspecialchars($row['field_html']);
@@ -143,13 +154,13 @@ while($row = sed_sql_fetchassoc($res))
 <tr>
 	<td>
 		<input type="text" name="field_name" value="{$row['field_name']}" /><br>
-		<span style="font-size: 80%;">{$L['extf_Description']}</span><br>
+		<span style="font-size: 80%;">{$L['extf_Description']}</span>
 		<textarea name="field_description" rows="1" cols="20">{$row['field_description']}</textarea>
 	</td>
 	<td>
 		<select name="field_type" >$type</select>
 		<!-- <div class="variants_{$row['field_name']}" $variants_style > -->
-		<br><span style="font-size: 80%;">{$L['adm_extrafield_selectable_values']}</span><br>
+		<br><span style="font-size: 80%;">{$L['adm_extrafield_selectable_values']}</span>
 		<textarea name="field_variants" rows="1" cols="20">{$row['field_variants']}</textarea>
 		
 	</td>
@@ -159,7 +170,7 @@ while($row = sed_sql_fetchassoc($res))
 		<input type="button" value="{$L['Delete']}" onclick="if(confirm('{$L['adm_extrafield_confirmdel']}')) location.href='{$extrafield_delete_url}'" />
 	</td>
 </tr>
-<tr><td colspan="4"><b>{$L['extf_Page tags']}:</b>&nbsp;&nbsp;&nbsp; page.tpl: {PAGE_$bigname}&nbsp;&nbsp;&nbsp; page.add.tpl: {PAGEADD_FORM_$bigname}&nbsp;&nbsp;&nbsp; page.edit.tpl: {PAGEEDIT_FORM_$bigname} &nbsp;&nbsp;&nbsp; list.tpl: {LIST_ROW_$bigname}</td></tr>
+<tr><td colspan="4"><b>{$L['extf_Page tags']}:</b>&nbsp;&nbsp;&nbsp; users.profile.tpl: {USERS_PROFILE_$bigname}&nbsp;&nbsp;&nbsp; users.edit.tpl: {USERS_EDIT_$bigname}&nbsp;&nbsp;&nbsp; users.details.tpl:  {USERS_DETAILS_$bigname}</td></tr>
 <tr><td colspan="4"></td></tr>
 </form>
 HTM;
@@ -172,7 +183,7 @@ foreach($field_types as $val)
 	$sel = $val == 'input' ? ' selected="selected"' : '';
 	$type .= '<option'.$sel.'>'.$val.'</option>';
 }
-$form_action = sed_url('admin', 'm=page&s=extrafields&a=add');
+$form_action = sed_url('admin', 'm=users&s=extrafields&a=add');
 
 $adminmain .= <<<HTM
 <tr>
@@ -223,5 +234,11 @@ function get_default_html_construction($type)
 	}
 	return $html;
 }
+
+
+
+
+
+
 
 ?>

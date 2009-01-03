@@ -496,17 +496,21 @@ $L['adm_help_urls'] = 'На этой странице вы можете наст
 /* ====== Extra Fields Admin ========*/
 
 $L['adm_extrafields'] = "Дополнительные поля";
-$L['adm_extrafields_desc'] = "Дополнительные поля для страниц";
+$L['adm_extrafields_desc'] = "Добавление/редактировние дополнительных полей";
 $L['adm_extrafield_added'] = "Новое поле добавлено";
+$L['adm_extrafield_not_added'] = "Ошибка! Новое поле не добавлено";
 $L['adm_extrafield_updated'] = "Поле успешно отредактировано";
+$L['adm_extrafield_not_updated'] = "Ошибка! Поле не отредактировано";
 $L['adm_extrafield_removed'] = "Поле успешно удалено";
-$L['adm_extrafield_confirmdel'] = 'Вы действительно хотите удалить поле? Все данные в этих полях на страницах будут потеряны!';
-$L['adm_extrafield_confirmupd'] = 'Вы действительно хотите редактировать поле? Некоторые данные в этих полях на страницах могут быть потеряны.';
+$L['adm_extrafield_not_removed'] = "Ошибка! Поле не удалено";
+$L['adm_extrafield_confirmdel'] = 'Вы действительно хотите удалить поле? Все данные в этих полях будут потеряны!';
+$L['adm_extrafield_confirmupd'] = 'Вы действительно хотите редактировать поле? Некоторые данные в этих полях могут быть потеряны.';
 
 $L['extf_Name'] = "Название поля";
 $L['extf_Type'] = "Тип поля";
 $L['extf_Base HTML'] = "Базовый HTML";
 $L['extf_Page tags'] = "Тэги";
+$L['extf_Description'] = "Описание";
 
 $L['adm_extrafield_new'] = 'Новое поле';
 $L['adm_extrafield_selectable_values'] = 'Значения для select (через запятую):';

@@ -292,10 +292,6 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
 	));
 
-	// Extra fields - adding LIST_ROW_MY_X tag
-	$fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
-	while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('LIST_ROW_MY_'.strtoupper($row['field_name']), $pag['page_my_'.$row['field_name']]);
-
 	// Adding LIST_ROW_TEXT tag
 	switch($pag['page_type'])
 	{
@@ -336,6 +332,10 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 			}
 			break;
 	}
+	
+		// Extra fields - adding LIST_ROW_X tag
+	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
+	while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('LIST_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
