@@ -24,7 +24,7 @@ $c = sed_import('c','G','TXT');
 
 // Extra fields - getting
 $extrafields = array();
-$fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
 while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
 if ($a=='update')
@@ -44,11 +44,6 @@ if ($a=='update')
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
 	$rpagealias = sed_import('rpagealias','P','ALP');
-	$rpageextra1 = sed_import('rpageextra1','P','TXT');
-	$rpageextra2 = sed_import('rpageextra2','P','TXT');
-	$rpageextra3 = sed_import('rpageextra3','P','TXT');
-	$rpageextra4 = sed_import('rpageextra4','P','TXT');
-	$rpageextra5 = sed_import('rpageextra5','P','TXT');
 	$rpagetype = sed_import('rpagetype','P','INT');
 	$rpagetitle = sed_import('rpagetitle','P','TXT');
 	$rpagedesc = sed_import('rpagedesc','P','TXT');
@@ -90,7 +85,7 @@ if ($a=='update')
 	if(count($extrafields)>0)
 	foreach($extrafields as $row)
 	{
-		$import = sed_import('rpage_my_'.$row['field_name'],'P','HTM');
+		$import = sed_import('rpage_'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
 		{
 			if ($import == "0") $import = 1;
@@ -152,25 +147,11 @@ if ($a=='update')
 				$rpagehtml = '';
 			}
 
-			if(empty($rpageurl))
-			{
-				$rpagefile = 0;
-			}
-			elseif($rpagefile == 0)
-			{
-				$rpagefile = 1;
-			}
-
 			$ssql = "UPDATE $db_pages SET
 			page_cat = '".sed_sql_prep($rpagecat)."',
 				page_type = '".sed_sql_prep($rpagetype)."',
-				page_key = '".sed_sql_prep($rpagekey)."',
-				page_extra1 = '".sed_sql_prep($rpageextra1)."',
-				page_extra2 = '".sed_sql_prep($rpageextra2)."',
-				page_extra3 = '".sed_sql_prep($rpageextra3)."',
-				page_extra4 = '".sed_sql_prep($rpageextra4)."',
-				page_extra5 = '".sed_sql_prep($rpageextra5)."',";
-				if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "page_my_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',"; // Extra fields
+				page_key = '".sed_sql_prep($rpagekey)."',";
+				if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',"; // Extra fields
 		$ssql.="page_title = '".sed_sql_prep($rpagetitle)."',
 				page_desc = '".sed_sql_prep($rpagedesc)."',
 				page_text='".sed_sql_prep($rpagetext)."',
@@ -295,11 +276,6 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_CAT" => $page_form_categories,
 	"PAGEEDIT_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"rpagekey\" value=\"".sed_cc($pag['page_key'])."\" size=\"16\" maxlength=\"16\" />",
 	"PAGEEDIT_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"rpagealias\" value=\"".sed_cc($pag['page_alias'])."\" size=\"16\" maxlength=\"255\" />",
-	"PAGEEDIT_FORM_EXTRA1" => "<input type=\"text\" class=\"text\" name=\"rpageextra1\" value=\"".sed_cc($pag['page_extra1'])."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEEDIT_FORM_EXTRA2" => "<input type=\"text\" class=\"text\" name=\"rpageextra2\" value=\"".sed_cc($pag['page_extra2'])."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEEDIT_FORM_EXTRA3" => "<input type=\"text\" class=\"text\" name=\"rpageextra3\" value=\"".sed_cc($pag['page_extra3'])."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEEDIT_FORM_EXTRA4" => "<input type=\"text\" class=\"text\" name=\"rpageextra4\" value=\"".sed_cc($pag['page_extra4'])."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEEDIT_FORM_EXTRA5" => "<input type=\"text\" class=\"text\" name=\"rpageextra5\" value=\"".sed_cc($pag['page_extra5'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"rpagetitle\" value=\"".sed_cc($pag['page_title'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"rpagedesc\" value=\"".sed_cc($pag['page_desc'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"rpageauthor\" value=\"".sed_cc($pag['page_author'])."\" size=\"32\" maxlength=\"24\" />",
@@ -324,31 +300,31 @@ $pageedit_array = array(
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
-	$t1 = "PAGEEDIT_FORM_MY_".strtoupper($row['field_name']);
+	$t1 = "PAGEEDIT_FORM_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {
 	case "input":
-		$t2 = str_replace('<input ','<input name="rpage_my_'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('<input ','<input value="'.$pag['page_my_'.$row['field_name']].'" ', $t2); break;
+		$t2 = str_replace('<input ','<input name="rpage_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<input ','<input value="'.$pag['page_'.$row['field_name']].'" ', $t2); break;
 	case "textarea":
-		$t2 = str_replace('<textarea ','<textarea name="rpage_my_'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('</textarea>',$pag['page_my_'.$row['field_name']].'</textarea>', $t2); break;
+		$t2 = str_replace('<textarea ','<textarea name="rpage_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('</textarea>',$pag['page_'.$row['field_name']].'</textarea>', $t2); break;
 	case "select":
-		$t2 = str_replace('<select','<select name="rpage_my_'.$row['field_name'].'"', $t2);
+		$t2 = str_replace('<select','<select name="rpage_'.$row['field_name'].'"', $t2);
 		$options = "";
 		$opt_array = explode(",",$row['field_variants']);
 		if(count($opt_array)!=0)
 			foreach ($opt_array as $var)
 			{
-				$sel = $var == $pag['page_my_'.$row['field_name']] ? ' selected="selected"' : '';
+				$sel = $var == $pag['page_'.$row['field_name']] ? ' selected="selected"' : '';
 				$options .= "<option value=\"$var\" $sel>$var</option>";
 
 			}
 		$t2 = str_replace("</select>","$options</select>",$t2); break;
 	case "checkbox":
-		$t2 = str_replace('<input','<input name="rpage_my_'.$row['field_name'].'"', $t2);
-		$sel = $pag['page_my_'.$row['field_name']]==1 ? ' checked' : '';
-		$t2 = str_replace('<input ','<input value="'.$pag['page_my_'.$row['field_name']].'" '.$sel.' ', $t2); break;
+		$t2 = str_replace('<input','<input name="rpage_'.$row['field_name'].'"', $t2);
+		$sel = $pag['page_'.$row['field_name']]==1 ? ' checked' : '';
+		$t2 = str_replace('<input ','<input value="'.$pag['page_'.$row['field_name']].'" '.$sel.' ', $t2); break;
 	}
 	$pageedit_array[$t1] = $t2;
 }

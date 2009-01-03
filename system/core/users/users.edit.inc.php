@@ -55,6 +55,11 @@ if ($sys['protecttopadmin'])
 	exit;
 }
 
+// Extra fields - getting
+$extrafields = array();
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
+while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+
 if ($a=='update')
 {
 	sed_check_xg();
@@ -117,6 +122,19 @@ if ($a=='update')
 	$error_string .= (mb_strlen($rusername)<2 || mb_ereg(",", $rusername) || mb_ereg("'", $rusername)) ? $L['aut_usernametooshort']."<br />" : '';
 	$error_string .= (!empty($rusernewpass) && (mb_strlen($rusernewpass)<4 || sed_alphaonly($rusernewpass)!=$rusernewpass)) ? $L['aut_passwordtooshort']."<br />" : '';
 
+	// Extra fields
+	if(count($extrafields)>0)
+	foreach($extrafields as $row)
+	{
+		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
+		if($row['field_type']=="checkbox")
+		{
+			if ($import == "0") $import = 1;
+			if ($import == "") $import = 0;
+		}
+		$ruserextrafields[] = $import;
+	}
+	
 	if ($ruserdelete)
 	{
 		if ($sys['user_istopadmin'] && !$sys['edited_istopadmin'])
@@ -183,7 +201,7 @@ if ($a=='update')
 			$sql = sed_sql_query("UPDATE $db_pm SET pm_fromuser='$newname' WHERE pm_fromuser='$oldname'");
 		}
 
-		$sql = sed_sql_query("UPDATE $db_users SET
+		$ssql = "UPDATE $db_users SET
 			user_banexpire='$rbanexpire',
 			user_name='".sed_sql_prep($rusername)."',
 			user_password='".sed_sql_prep($ruserpassword)."',
@@ -215,9 +233,10 @@ if ($a=='update')
 			user_timezone='".sed_sql_prep($rusertimezone)."',
 			user_location='".sed_sql_prep($ruserlocation)."',
 			user_occupation='".sed_sql_prep($ruseroccupation)."',
-			user_auth=''
-			WHERE user_id='$id'"
-		);
+			";
+		if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',"; // Extra fields
+		$ssql .= " user_auth='' WHERE user_id='$id'";
+		$sql = sed_sql_query($ssql);
 
 		$rusermaingrp = ($rusermaingrp < SED_GROUP_MEMBERS && $id==1) ? SED_GROUP_TOPADMINS : $rusermaingrp;
 
@@ -314,7 +333,7 @@ if (!empty($error_string))
 
 $bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
-$t->assign(array(
+$useredit_array = array(
 	"USERS_EDIT_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name']))." ".$cfg['separator']." <a href=\"users.php?m=edit&amp;id=".$urr['user_id']."\">".$L['Edit']."</a>",
 	"USERS_EDIT_SUBTITLE" => $L['useed_subtitle'],
 	"USERS_EDIT_SEND" => sed_url('users', 'm=edit&a=update&'.sed_xg().'&id='.$urr['user_id']),
@@ -368,7 +387,41 @@ $t->assign(array(
 	"USERS_EDIT_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_EDIT_LASTIP" => $urr['user_lastip'],
 	"USERS_EDIT_DELETE" => $user_form_delete,
-));
+);
+
+// Extra fields
+if(count($extrafields)>0)
+foreach($extrafields as $i=>$row)
+{
+	$t1 = "USERS_EDIT_".strtoupper($row['field_name']);
+	$t2 = $row['field_html'];
+	switch($row['field_type']) {
+	case "input":
+		$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" ', $t2); break;
+	case "textarea":
+		$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('</textarea>',$urr['user_'.$row['field_name']].'</textarea>', $t2); break;
+	case "select":
+		$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
+		$options = "";
+		$opt_array = explode(",",$row['field_variants']);
+		if(count($opt_array)!=0)
+			foreach ($opt_array as $var)
+			{
+				$sel = $var == $urr['user_'.$row['field_name']] ? ' selected="selected"' : '';
+				$options .= "<option value=\"$var\" $sel>$var</option>";
+
+			}
+		$t2 = str_replace("</select>","$options</select>",$t2); break;
+	case "checkbox":
+		$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
+		$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
+		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" '.$sel.' ', $t2); break;
+	}
+	$useredit_array[$t1] = $t2;
+}
+$t->assign($useredit_array);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.tags');

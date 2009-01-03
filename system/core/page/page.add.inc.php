@@ -31,7 +31,7 @@ if (is_array($extp))
 
 // Extra fields - getting
 $extrafields = array(); $number_of_extrafields = 0;
-$fieldsres = sed_sql_query("SELECT * FROM $db_pages_extra_fields");
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
 while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; }
 
 if ($a=='add')
@@ -47,11 +47,6 @@ if ($a=='add')
 	$newpagecat = sed_import('newpagecat','P','TXT');
 	$newpagekey = sed_import('newpagekey','P','TXT');
 	$newpagealias = sed_import('newpagealias','P','ALP');
-	$newpageextra1 = sed_import('newpageextra1','P','TXT');
-	$newpageextra2 = sed_import('newpageextra2','P','TXT');
-	$newpageextra3 = sed_import('newpageextra3','P','TXT');
-	$newpageextra4 = sed_import('newpageextra4','P','TXT');
-	$newpageextra5 = sed_import('newpageextra5','P','TXT');
 	$newpagetitle = sed_import('newpagetitle','P','TXT');
 	$newpagedesc = sed_import('newpagedesc','P','TXT');
 	$newpagetext = sed_import('newpagetext','P','HTM');
@@ -78,7 +73,7 @@ if ($a=='add')
 	if($number_of_extrafields > 0)
 	foreach($extrafields as $row)
 	{
-		$import = sed_import('newpage_my_'.$row['field_name'],'P','HTM');
+		$import = sed_import('newpage_'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
 		{
 			if ($import == "0" OR $import == "on") $import = 1;
@@ -109,26 +104,12 @@ if ($a=='add')
 			$newpagehtml = '';
 		}
 
-		if(empty($newpageurl))
-		{
-			$newpagefile = 0;
-		}
-		elseif($newpagefile == 0)
-		{
-			$newpagefile = 1;
-		}
-
 		$ssql = "INSERT into $db_pages
 		(page_state,
 		page_type,
 		page_cat,
-		page_key,
-		page_extra1,
-		page_extra2,
-		page_extra3,
-		page_extra4,
-		page_extra5,";
-		if($number_of_extrafields > 0) foreach($extrafields as $row) $ssql .= "page_my_".$row['field_name'].", "; // Extra fields
+		page_key,";
+		if($number_of_extrafields > 0) foreach($extrafields as $row) $ssql .= "page_".$row['field_name'].", "; // Extra fields
 $ssql.="page_title,
 		page_desc,
 		page_text,
@@ -146,12 +127,7 @@ $ssql.="page_title,
 		(1,
 		0,
 		'".sed_sql_prep($newpagecat)."',
-			'".sed_sql_prep($newpagekey)."',
-			'".sed_sql_prep($newpageextra1)."',
-			'".sed_sql_prep($newpageextra2)."',
-			'".sed_sql_prep($newpageextra3)."',
-			'".sed_sql_prep($newpageextra4)."',
-			'".sed_sql_prep($newpageextra5)."',";
+			'".sed_sql_prep($newpagekey)."',";
 			if($number_of_extrafields > 0) foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields
   	$ssql.="'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
@@ -247,11 +223,6 @@ $pageadd_array = array(
 	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
 	"PAGEADD_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"newpagekey\" value=\"".sed_cc($newpagekey)."\" size=\"16\" maxlength=\"16\" />",
 	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".sed_cc($newpagealias)."\" size=\"16\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA1" => "<input type=\"text\" class=\"text\" name=\"newpageextra1\" value=\"".sed_cc($newpageextra1)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA2" => "<input type=\"text\" class=\"text\" name=\"newpageextra2\" value=\"".sed_cc($newpageextra2)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA3" => "<input type=\"text\" class=\"text\" name=\"newpageextra3\" value=\"".sed_cc($newpageextra3)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA4" => "<input type=\"text\" class=\"text\" name=\"newpageextra4\" value=\"".sed_cc($newpageextra4)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_EXTRA5" => "<input type=\"text\" class=\"text\" name=\"newpageextra5\" value=\"".sed_cc($newpageextra5)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpagetitle\" value=\"".sed_cc($newpagetitle)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"newpagedesc\" value=\"".sed_cc($newpagedesc)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"newpageauthor\" value=\"".sed_cc($newpageauthor)."\" size=\"16\" maxlength=\"24\" />",
@@ -272,24 +243,24 @@ $pageadd_array = array(
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
-	$t1 = "PAGEADD_FORM_MY_".strtoupper($row['field_name']);
+	$t1 = "PAGEADD_FORM_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {
 	case "input":
-		$t2 = str_replace('<input ','<input name="newpage_my_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<input ','<input name="newpage_'.$row['field_name'].'" ', $t2);
 		break;
 	case "textarea":
-		$t2 = str_replace('<textarea ','<textarea name="newpage_my_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<textarea ','<textarea name="newpage_'.$row['field_name'].'" ', $t2);
 		break;
 	case "select":
-		$t2 = str_replace('<select','<select name="newpage_my_'.$row['field_name'].'"', $t2);
+		$t2 = str_replace('<select','<select name="newpage_'.$row['field_name'].'"', $t2);
 		$options = "";
 		$opt_array = explode(",",$row['field_variants']);
 		if(count($opt_array)!=0)
 		{	foreach ($opt_array as $var) $options .= "<option value=\"$var\">$var</option>"; }
 		$t2 = str_replace("</select>","$options</select>",$t2); break;
 	case "checkbox":
-		$t2 = str_replace('<input','<input name="newpage_my_'.$row['field_name'].'"', $t2);
+		$t2 = str_replace('<input','<input name="newpage_'.$row['field_name'].'"', $t2);
 		break;
 	}
 	$pageadd_array[$t1] = $t2;

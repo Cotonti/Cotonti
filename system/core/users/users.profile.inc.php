@@ -44,6 +44,11 @@ $profile_form_avatar = "<a name=\"avatar\" id=\"avatar\"></a>";
 $profile_form_photo = "<a name=\"photo\" id=\"photo\"></a>";
 $profile_form_signature = "<a name=\"signature\" id=\"signature\"></a>";
 
+// Extra fields - getting
+$extrafields = array();
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
+while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+
 switch ($a)
 {
 	/* ============= */
@@ -308,6 +313,19 @@ switch ($a)
 	$rnewpass2 = sed_import('rnewpass2','P','TXT');
 
 	$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
+	
+	// Extra fields
+	if(count($extrafields)>0)
+	foreach($extrafields as $row)
+	{
+		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
+		if($row['field_type']=="checkbox")
+		{
+			if ($import == "0") $import = 1;
+			if ($import == "") $import = 0;
+		}
+		$ruserextrafields[] = $import;
+	}
 
 	$sql = sed_sql_query("SELECT user_skin FROM $db_users WHERE user_id='".$usr['id']."' ");
 	$row = sed_sql_fetcharray($sql);
@@ -368,7 +386,7 @@ switch ($a)
 		if (!$cfg['useremailchange'])
 			{ $ruseremail = $urr['user_email']; }
 
-		$sql = sed_sql_query("UPDATE $db_users SET
+		$ssql = "UPDATE $db_users SET
 			user_text='".sed_sql_prep($rusertext)."',
 			user_country='".sed_sql_prep($rusercountry)."',
 			user_skin='".sed_sql_prep($ruserskin)."',
@@ -394,9 +412,11 @@ switch ($a)
 			user_extra6='".sed_sql_prep($ruserextra6)."',
 			user_extra7='".sed_sql_prep($ruserextra7)."',
 			user_extra8='".sed_sql_prep($ruserextra8)."',
-			user_extra9='".sed_sql_prep($ruserextra9)."',
-			user_auth=''
-			WHERE user_id='".$usr['id']."'");
+			user_extra9='".sed_sql_prep($ruserextra9)."',";
+		if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',"; // Extra fields
+		$ssql .= " user_auth=''
+			WHERE user_id='".$usr['id']."'";
+		$sql = sed_sql_query($ssql);
 
 		/* === Hook === */
 		$extp = sed_getextplugins('profile.update.done');
@@ -502,7 +522,7 @@ if (!empty($error_string))
 	$t->parse("MAIN.USERS_PROFILE_ERROR");
 }
 
-$t->assign(array(
+$useredit_array = array(
 	"USERS_PROFILE_TITLE" => "<a href=\"".sed_url('users', 'm=profile')."\">".$L['pro_title']."</a>",
 	"USERS_PROFILE_SUBTITLE" => $L['pro_subtitle'],
 	"USERS_PROFILE_FORM_SEND" => sed_url('users', "m=profile&a=update&".sed_xg()),
@@ -556,7 +576,40 @@ $t->assign(array(
 	"USERS_PROFILE_OLDPASS" => "<input type=\"password\" class=\"password\" name=\"roldpass\" size=\"12\" maxlength=\"16\" autocomplete=\"off\" />",
 	"USERS_PROFILE_NEWPASS1" => "<input type=\"password\" class=\"password\" name=\"rnewpass1\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_NEWPASS2" => "<input type=\"password\" class=\"password\" name=\"rnewpass2\" size=\"12\" maxlength=\"16\" />",
-		));
+		);
+// Extra fields
+if(count($extrafields)>0)
+foreach($extrafields as $i=>$row)
+{
+	$t1 = "USERS_PROFILE_".strtoupper($row['field_name']);
+	$t2 = $row['field_html'];
+	switch($row['field_type']) {
+	case "input":
+		$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" ', $t2); break;
+	case "textarea":
+		$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('</textarea>',$urr['user_'.$row['field_name']].'</textarea>', $t2); break;
+	case "select":
+		$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
+		$options = "";
+		$opt_array = explode(",",$row['field_variants']);
+		if(count($opt_array)!=0)
+			foreach ($opt_array as $var)
+			{
+				$sel = $var == $urr['user_'.$row['field_name']] ? ' selected="selected"' : '';
+				$options .= "<option value=\"$var\" $sel>$var</option>";
+
+			}
+		$t2 = str_replace("</select>","$options</select>",$t2); break;
+	case "checkbox":
+		$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
+		$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
+		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" '.$sel.' ', $t2); break;
+	}
+	$useredit_array[$t1] = $t2;
+}
+$t->assign($useredit_array);
 
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');

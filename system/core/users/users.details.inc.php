@@ -131,6 +131,10 @@ $t->assign(array(
 	"USERS_DETAILS_LASTIP" => $urr['user_lastip']
 		));
 
+// Extra fields
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
+while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('USERS_DETAILS_'.strtoupper($row['field_name']), $urr['user_'.$row['field_name']]); 
+
 /* === Hook === */
 $extp = sed_getextplugins('users.details.tags');
 if (is_array($extp))
