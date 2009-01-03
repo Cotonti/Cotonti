@@ -24,7 +24,7 @@ Order=10
 
 /**
  * @package Seditio-N
- * @version 0.0.1
+ * @version 0.0.2
  * @copyright Partial copyright (c) 2008 Cotonti Team
  * @license BSD License
  */
@@ -68,7 +68,7 @@ function sed_get_polls($limit, $mask)
 
 	$ii = 0;
 
-	$sql_p = sed_sql_query("SELECT poll_id, poll_text FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by $sqlmode DESC LIMIT $limit");
+	$sql_p = sed_sql_query("SELECT poll_id, poll_text, poll_multiple FROM $db_polls WHERE 1 AND poll_state=0  AND poll_type=0 ORDER by $sqlmode DESC LIMIT $limit");
 	while ($row_p = sed_sql_fetcharray($sql_p))
 	{
 		unset($res);
@@ -102,12 +102,15 @@ function sed_get_polls($limit, $mask)
 		{
 			if ($alreadyvoted)
 			{
-				$percentbar = floor(($row['po_count'] / $totalvotes) * 100);
+				if(totalvotes !="0")
+				{$percentbar = floor(($row['po_count'] / $totalvotes) * 100);}
+				else { $percentbar =0;}
 				$res .= "<tr><td>".sed_parse(sed_cc($row['po_text']), 1, 1, 1)."</td><td width=\"100\"><div style=\"width:95%;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percentbar."%;\"></div></div></div></td><td>$percentbar%</td><td>(".$row['po_count'].")</td></tr>";
 			}
 			else
 			{
-				$res .= "<input type='radio' name='v' value='".$row['po_id']."' />&nbsp;".stripslashes($row['po_text'])."<br />";
+				$input_type=$row_p['poll_multiple'] ? "checkbox" : "radio";
+				$res .= "<input type='".$input_type."' name='v' value='".$row['po_id']."' />&nbsp;".stripslashes($row['po_text'])."<br />";
 			}
 		}
 
@@ -130,7 +133,12 @@ function sed_get_polls($limit, $mask)
 function vote(id)
 	{
 
-		var v = $('#p'+id+' > input[name=\"v\"]:checked').attr('value');
+		var v = $('#p'+id+' > input[name=\"v\"]:checked');
+		  var v2= '';
+    $.each(v, function(i, field){
+      v2 +=field.value + ' ';
+    });
+    v = v2;
 
 		$.ajax({
 		type: 'GET',
