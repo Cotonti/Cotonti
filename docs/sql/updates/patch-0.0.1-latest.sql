@@ -204,3 +204,8 @@ ALTER TABLE `sed_polls` ADD COLUMN `poll_multiple` tinyint(1) NOT NULL default '
 INSERT INTO `sed_config` VALUES ('plug', 'whosonline', '1', 'showavatars', 3, '1', '', 'Display avatars of users?');
 INSERT INTO `sed_config` VALUES ('plug', 'whosonline', '2', 'miniavatar_x', 1, '16', '', 'The size of a mini-avatars on the axis x, in pixels');
 INSERT INTO `sed_config` VALUES ('plug', 'whosonline', '3', 'miniavatar_y', 1, '16', '', 'The size of a mini-avatars on the axis y, in pixels');
+
+/* r243 Photo,avatar and signature resize optioning */
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '10', 'av_resize', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '10', 'ph_resize', 3, '0');
+INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, config_type, config_value) VALUES ('core', 'users', '10', 'sig_resize', 3, '0');
