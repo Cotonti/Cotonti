@@ -24,4 +24,4 @@ INSERT INTO `sed_extra_fields` (`field_location`, `field_name`, `field_type`, `f
 ('users', 'extra8', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', ''),
 ('users', 'extra9', 'textarea', '<textarea cols="80" rows="6" ></textarea>', '', '');
 
-DELETE  FROM sed_config WHERE config_owner = 'core' AND config_cat = 'users' AND config_name LIKE 'extra%' 
+DELETE  FROM sed_config WHERE config_owner = 'core' AND config_cat = 'users' AND config_name LIKE 'extra%';

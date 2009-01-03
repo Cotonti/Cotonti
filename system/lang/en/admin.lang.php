@@ -324,6 +324,7 @@ $L['adm_polls_error_title'] = 'Poll name is too short or empty'; // N-0.0.2
 $L['adm_polls_error_count'] = 'A poll must have two or more options'; // N-0.0.2
 $L['adm_polls_created'] = 'The poll has been successfully created'; // N-0.0.2
 $L['adm_polls_updated'] = 'The poll has been successfully updated'; // N-0.0.2
+$L['adm_polls_multiple'] = 'Allow multiple choice'; // N-0.0.2
 
 /* ====== Statistics ====== */
 
@@ -487,7 +488,8 @@ algorithm looks up a rule for a link this way: first it fetches all rules define
 find <em>the first</em> rule that matches the parameter condition; if no matching rules found, it will try to
 fall back to * area and look for the first matching rule there. It is recommended that your default rule (with *
 area and * parameters) is the last of the *-area rules, or even last in the table.<br />
-You can change rule order by simply dragging the rows and dropping them at desired positions.</li>
+You can change rule order by simply dragging the rows and dropping them at desired positions.
+It is recommended to save new rules before you can change their order with drag-and-drop.</li>
 <li><strong>Query String</strong> is what you usually see in most links after the question mark. It is used
 to pass the rest of GET parameters that you have not used in the rest of the Format string and is appended
 automatically in that case.</li>

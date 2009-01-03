@@ -15,10 +15,10 @@ Description=Administration panel
 ==================== */
 
 /**
- * URL Transformation Rules editor.
+ * Poll editor
  *
  * @package Seditio-N
- * @version 0.1.0
+ * @version 0.0.2
  * @author esclkm
  * @copyright Copyright (c) 2008 Cotonti Team
  * @license BSD License
@@ -80,6 +80,7 @@ if (!empty($poll_id))
 {
 	$ntext = sed_import('ntext','P','HTM');
 	$noption_id = sed_import('poll_option_id', 'P', 'ARR');
+	$multiple = sed_import('multiple', 'P', 'BOL');
 	$option_count = (count($noption_id) ? count($noption_id) : 0);
 	$noption_text = sed_import('poll_option', 'P', 'ARR');
 	$counter=0;
@@ -105,12 +106,12 @@ if (!empty($poll_id))
 	if (empty($error_string)){
 		if ($poll_id=='new')
 		{
-			$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."')");
+			$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text, poll_multiple) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."', $multiple.)");
 			$newpoll_id = sed_sql_insertid();
 		}
 		else
 		{
-			$sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($ntext)."' WHERE poll_id='$poll_id'");
+			$sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($ntext)."', poll_multiple='".$multiple."' WHERE poll_id='$poll_id'");
 			$newpoll_id = $poll_id;
 		}
 		// Dinamic adding polloptions
@@ -255,6 +256,7 @@ if ($n=='options')
 	$adminpath[] = array (sed_url('admin', 'm=polls&n=options&id=$poll_id'), $L['Options']." (#$id)");
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
 	$ntext=sed_cc($row["poll_text"]);
+	$multiple=($row["poll_multiple"]) ? "checked":"";
 	$send_button=$L['Update'];
 	$date=date($cfg['dateformat'], $row["poll_creationdate"])." GMT";
 	$counter=0;
@@ -279,6 +281,7 @@ elseif(!empty($error_string))
 	$send_button=$L['Create'];}
 	$counter=0;
 	$date="";
+	$multiple=($multiple) ? "checked":"";
 	for($count = 0; $count < $option_count; $count++)
 	{
 		if ($noption_text[($count)]!="" || ($noption_text[($count)]=="" && $noption_id[($count)]!='new'))
@@ -306,6 +309,7 @@ else
 				<br /></span>";
 	$send_button=$L['Create'];
 	$counter=2;
+	$multiple="";
 }
 
 
@@ -323,6 +327,8 @@ ansCC = ansCount;
 	<input class=\"delbutton\" name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns()\" type=\"button\">
 	";
 $adminmain .= "</td></tr>";
+$adminmain .= "<tr><td></td><td><input name=\"multiple\" type=\"checkbox\" value=\"1\" $multiple>".$L['adm_polls_multiple']."
+</td></tr>";
 $adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$send_button."\" /></td></tr></table></form>";
 
 ?>
