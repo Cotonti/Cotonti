@@ -316,13 +316,16 @@ function sed_loadconfigmap()
 	$result[] = array ('users', '12', 'av_maxsize', 2, '8000', '');
 	$result[] = array ('users', '12', 'av_maxx', 2, '64', '');
 	$result[] = array ('users', '12', 'av_maxy', 2, '64', '');
+	$result[] = array ('users', '12', 'av_resize', 3, '0', ''); // N-0.1.0
 	$result[] = array ('users', '12', 'usertextmax', 2, '300', '');
 	$result[] = array ('users', '13', 'sig_maxsize', 2, '32000', '');
 	$result[] = array ('users', '13', 'sig_maxx', 2, '550', '');
 	$result[] = array ('users', '13', 'sig_maxy', 2, '100', '');
+	$result[] = array ('users', '13', 'sig_resize', 3, '0', ''); // N-0.1.0
 	$result[] = array ('users', '14', 'ph_maxsize', 2, '32000', '');
 	$result[] = array ('users', '14', 'ph_maxx', 2, '128', '');
 	$result[] = array ('users', '14', 'ph_maxy', 2, '128', '');
+	$result[] = array ('users', '14', 'ph_resize', 3, '0', ''); // N-0.1.0
 	$result[] = array ('users', '20', 'extra1title', 1, 'Real name', '');
 	$result[] = array ('users', '20', 'extra2title', 1, 'Title', '');
 	$result[] = array ('users', '20', 'extra3title', 1, '', '');

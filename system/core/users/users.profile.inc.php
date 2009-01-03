@@ -156,10 +156,10 @@ switch ($a)
 		$fcheck = sed_file_check($uav_tmp_name, $uav_name, $f_extension);
 		if($fcheck)
 		{
-			if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && $uav_size<=$cfg['av_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+			if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && ($uav_size<=$cfg['av_maxsize'] || $cfg['av_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($uav_tmp_name);
-				if ($w<=$cfg['av_maxx'] && $h<=$cfg['av_maxy'] )
+				if ( ($w<=$cfg['av_maxx'] && $h<=$cfg['av_maxy']) || $cfg['av_resize'] )
 				{
 					$avatar = $usr['id']."-avatar.gif";
 					$avatarpath = $cfg['av_dir'].$avatar;
@@ -168,6 +168,16 @@ switch ($a)
 						{ unlink($avatarpath); }
 
 					move_uploaded_file($uav_tmp_name, $avatarpath);
+					
+					/*=== Photo/image resizing, not yet complete ===*/
+					
+					if ($w>$cfg['av_maxx'] || $h>$cfg['av_maxy'])
+					{
+					$prior = ($w>$h) ? 'Width' : 'Height';
+					$percentage = 100;
+
+					sed_createthumb($avatarpath, $avatarpath, $cfg['av_maxx'],$cfg['av_maxy'], 1, $f_extension, $avatar, 0, 0, 0, 0, 0, $percentage, $prior);
+					}
 
 					/* === Hook === */
 					$extp = sed_getextplugins('profile.update.avatar');
@@ -176,9 +186,14 @@ switch ($a)
 					/* ===== */
 
 					$uav_size = filesize($avatarpath);
+					if ($uav_size<=$cfg['av_maxsize'])
+					{
 					$sql = sed_sql_query("UPDATE $db_users SET user_avatar='$avatarpath' WHERE user_id='".$usr['id']."'");
 					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
 					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$avatar', '$f_extension', -1, '', ".(int)$uav_size.", 0)");
+					}
+					else
+						{ unlink($avatarpath); }
 					@chmod($avatarpath, 0666);
 				}
 			}
@@ -196,10 +211,10 @@ switch ($a)
 		$fcheck = sed_file_check($uph_tmp_name, $uph_name, $f_extension);
 		if($fcheck)
 		{
-			if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && $uph_size<=$cfg['ph_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+			if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && ($uph_size<=$cfg['ph_maxsize'] || $cfg['ph_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($uph_tmp_name);
-				if ($w<=$cfg['ph_maxx'] && $h<=$cfg['ph_maxy'] )
+				if ( ($w<=$cfg['ph_maxx'] && $h<=$cfg['ph_maxy']) || $cfg['ph_resize'] )
 				{
 					$photo = $usr['id']."-photo.gif";
 					$photopath = $cfg['photos_dir'].$photo;
@@ -208,6 +223,16 @@ switch ($a)
 						{ unlink($photopath); }
 
 					move_uploaded_file($uph_tmp_name, $photopath);
+					
+					/*=== Photo/image resizing, not yet complete ===*/
+					
+					if ($w>$cfg['ph_maxx'] || $h>$cfg['ph_maxy'])
+					{
+					$prior = ($w>$h) ? 'Width' : 'Height';
+					$percentage = 100;
+
+					sed_createthumb($photopath, $photopath, $cfg['ph_maxx'],$cfg['ph_maxy'], 1, $f_extension, $photo, 0, 0, 0, 0, 0, $percentage, $prior);
+					}
 
 					/* === Hook === */
 					$extp = sed_getextplugins('profile.update.photo');
@@ -216,9 +241,14 @@ switch ($a)
 					/* ===== */
 
 					$uph_size = filesize($photopath);
+					if ($uph_size<=$cfg['ph_maxsize'])
+					{
 					$sql = sed_sql_query("UPDATE $db_users SET user_photo='$photopath' WHERE user_id='".$usr['id']."'");
 					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
 					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$photo', '$f_extension', -1, '', ".(int)$uph_size.", 0)");
+					}
+					else
+						{ unlink($photopath); }
 					@chmod($photopath, 0666);
 				}
 			}
@@ -236,10 +266,10 @@ switch ($a)
 		$fcheck = sed_file_check($usig_tmp_name, $usig_name, $f_extension);
 		if($fcheck)
 		{
-			if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && $usig_size<=$cfg['sig_maxsize'] && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+			if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && ($usig_size<=$cfg['sig_maxsize'] || $cfg['sig_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($usig_tmp_name);
-				if ($w<=$cfg['sig_maxx'] && $h<=$cfg['sig_maxy'] )
+				if ( ($w<=$cfg['sig_maxx'] && $h<=$cfg['sig_maxy']) || $cfg['sig_resize'] )
 				{
 					$signature = $usr['id']."-signature.gif";
 					$signaturepath = $cfg['sig_dir'].$signature;
@@ -248,7 +278,17 @@ switch ($a)
 						{ unlink($signaturepath); }
 
 					move_uploaded_file($usig_tmp_name, $signaturepath);
+					
+					/*=== Photo/image resizing, not yet complete ===*/
+					
+					if ($w>$cfg['sig_maxx'] || $h>$cfg['sig_maxy'])
+					{
+					$prior = ($w>$h) ? 'Width' : 'Height';
+					$percentage = 100;
 
+					sed_createthumb($signaturepath, $signaturepath, $cfg['sig_maxx'],$cfg['sig_maxy'], 1, $f_extension, $photo, 0, 0, 0, 0, 0, $percentage, $prior);
+					}
+					
 					/* === Hook === */
 					$extp = sed_getextplugins('profile.update.signature');
 					if (is_array($extp))
@@ -256,9 +296,14 @@ switch ($a)
 					/* ===== */
 
 					$usig_size = filesize($signaturepath);
+					if ($usig_size<=$cfg['sig_maxsize'])
+					{
 					$sql = sed_sql_query("UPDATE $db_users SET user_signature='$signaturepath' WHERE user_id='".$usr['id']."'");
 					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
 					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$signature', '$f_extension', -1, '', ".(int)$usig_size.", 0)");
+					}
+					else
+						{ unlink($signaturepath); }
 					@chmod($signaturepath, 0666);
 				}
 			}
