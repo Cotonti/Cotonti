@@ -55,7 +55,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 		$jj++;
 		$catpath = sed_build_catpath($pag['page_cat'], "<a href=\"list.php?c=%1\$s\">%2\$s</a>");
 		$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', 'id='.$pag['page_id']) : sed_url('page', 'al='.$pag['page_alias']);
-		$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
+		$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".sed_cc($pag['page_title'])."</a>";
 
 		$item_code = 'p'.$pag['page_id'];
 		list($pag['page_comments'], $pag['page_comments_display']) = sed_build_comments($item_code, $pag['page_pageurl'], FALSE);
@@ -64,11 +64,11 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_URL" => $pag['page_pageurl'],
 			"PAGE_ROW_ID" => $pag['page_id'],
 			"PAGE_ROW_TITLE" => $pag['page_fulltitle'],
-			"PAGE_ROW_SHORTTITLE" => $pag['page_title'],
+			"PAGE_ROW_SHORTTITLE" => sed_cc($pag['page_title']),
 			"PAGE_ROW_CAT" => $pag['page_cat'],
-			"PAGE_ROW_CATTITLE" => $sed_cat[$pag['page_cat']]['title'],
+			"PAGE_ROW_CATTITLE" => sed_cc($sed_cat[$pag['page_cat']]['title']),
 			"PAGE_ROW_CATPATH" => $catpath,
-			"PAGE_ROW_CATDESC" => $sed_cat[$pag['page_cat']]['desc'],
+			"PAGE_ROW_CATDESC" => sed_cc($sed_cat[$pag['page_cat']]['desc']),
 			"PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
 			"PAGE_ROW_KEY" => sed_cc($pag['page_key']),
 			"PAGE_ROW_EXTRA1" => sed_cc($pag['page_extra1']),

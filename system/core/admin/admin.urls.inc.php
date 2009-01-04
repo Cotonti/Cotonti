@@ -304,7 +304,7 @@ $(document).ready(function() {
 
 var ruleCount = 0;
 function addRule() {
-	$('#rule_' + (ruleCount - 1)).after('<tr id="rule_' + ruleCount + '"><td>$areabox</td><td><input type="text" name="params[]" value="*" /></td><td><input type="text" name="format[]" value="" /></td><td><a href="#" onclick="$(\'#rule_' + ruleCount + '\').remove(); return false;">[X]</a></td></tr>');
+	$('#rules_top').after('<tr id="rule_' + ruleCount + '"><td>$areabox</td><td><input type="text" name="params[]" value="*" /></td><td><input type="text" name="format[]" value="" /></td><td><a href="#" onclick="$(\'#rule_' + ruleCount + '\').remove(); return false;">[X]</a></td></tr>');
 	ruleCount++;
 	return false;
 }
@@ -316,7 +316,7 @@ tr.tDnD_whileDrag td {
 </style>
 <form action="{$admin_urls_form}" method="post">
 <table id="rules" class="cells">
-<tr>
+<tr id="rules_top">
 	<td class="coltop">{$L['adm_urls_area']}</td>
 	<td class="coltop">{$L['adm_urls_parameters']}</td>
 	<td class="coltop">{$L['adm_urls_format']}</td>
