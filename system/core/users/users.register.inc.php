@@ -29,6 +29,11 @@ $extp = sed_getextplugins('users.register.first');
 if (is_array($extp))
 	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+	
+// Extra fields - getting
+$extrafields = array();
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
+while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
 if ($a=='add')
 	{
@@ -57,25 +62,20 @@ if ($a=='add')
 	$ruserirc = sed_import('ruserirc','P','TXT');
 	$rusermsn = sed_import('rusermsn','P','TXT');
 	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
-	$ruserextra1 = sed_import('ruserextra1','P','TXT');
-	$ruserextra2 = sed_import('ruserextra2','P','TXT');
-  	$ruserextra3 = sed_import('ruserextra3','P','TXT');
-  	$ruserextra4 = sed_import('ruserextra4','P','TXT');
-	$ruserextra5 = sed_import('ruserextra5','P','TXT');
-	$ruserextra6 = sed_import('ruserextra6','P','HTM');
-  	$ruserextra7 = sed_import('ruserextra7','P','HTM');
-	$ruserextra8 = sed_import('ruserextra8','P','HTM');
-	$ruserextra9 = sed_import('ruserextra9','P','HTM');
-	$ruserextra1_p = sed_import('ruserextra1_p','P','BOL');
-	$ruserextra2_p = sed_import('ruserextra2_p','P','BOL');
-  	$ruserextra3_p = sed_import('ruserextra3_p','P','BOL');
-  	$ruserextra4_p = sed_import('ruserextra4_p','P','BOL');
-	$ruserextra5_p = sed_import('ruserextra5_p','P','BOL');
-	$ruserextra6_p = sed_import('ruserextra6_p','P','BOL');
-  	$ruserextra7_p = sed_import('ruserextra7_p','P','BOL');
-	$ruserextra8_p = sed_import('ruserextra8_p','P','BOL');
-	$ruserextra9_p = sed_import('ruserextra9_p','P','BOL');
 	$ruseremail = mb_strtolower($ruseremail);
+	
+	// Extra fields
+	if(count($extrafields)>0)
+	foreach($extrafields as $row)
+	{
+		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
+		if($row['field_type']=="checkbox")
+		{
+			if ($import == "0") $import = 1;
+			if ($import == "") $import = 0;
+		}
+		$ruserextrafields[] = $import;
+	}
 
 	$sql = sed_sql_query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
 
@@ -108,20 +108,19 @@ if ($a=='add')
 
 		$mdpass = md5($rpassword1);
 		$ruserbirthdate = ($rmonth=='x' || $rday=='x' || $ryear=='x' || $rmonth==0 || $rday==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
-		$ruserextra1 = ($ruserextra1_p) ? mb_substr($ruserextra1,0,$cfg['extra1tsetting']) : '';
-		$ruserextra2 = ($ruserextra2_p) ? mb_substr($ruserextra2,0,$cfg['extra2tsetting']) : '';
-		$ruserextra3 = ($ruserextra3_p) ? mb_substr($ruserextra3,0,$cfg['extra3tsetting']) : '';
-		$ruserextra4 = ($ruserextra4_p) ? mb_substr($ruserextra4,0,$cfg['extra4tsetting']) : '';
-		$ruserextra5 = ($ruserextra5_p) ? mb_substr($ruserextra5,0,$cfg['extra5tsetting']) : '';
-		$ruserextra6 = ($ruserextra6_p) ? $ruserextra6 : '';
-		$ruserextra7 = ($ruserextra7_p) ? $ruserextra7 : '';
-		$ruserextra8 = ($ruserextra8_p) ? $ruserextra8 : '';
-		$ruserextra9 = ($ruserextra9_p) ? $ruserextra9 : '';
 
 		$validationkey = md5(microtime());
 		sed_shield_update(20, "Registration");
 
-		$sql = sed_sql_query("INSERT into $db_users
+		// Extra fields
+		$extra_columns = ""; $extra_values = "";
+		if(count($extrafields)>0) 
+			foreach($extrafields as $i=>$row)
+			{
+				$extra_columns .= "user_".$row['field_name'].", ";
+				$extra_values .= "'".sed_sql_prep($ruserextrafields[$i])."', ";
+			}
+		$ssql = "INSERT into $db_users
 			(user_name,
 			user_password,
 			user_maingrp,
@@ -145,16 +144,8 @@ if ($a=='add')
 			user_irc,
 			user_msn,
 			user_website,
-			user_extra1,
-			user_extra2,
-			user_extra3,
-			user_extra4,
-			user_extra5,
-			user_extra6,
-			user_extra7,
-			user_extra8,
-			user_extra9,
-			user_lastip)
+			$extra_columns
+			user_lastip) 
 			VALUES
 			('".sed_sql_prep($rusername)."',
 			'$mdpass',
@@ -179,17 +170,9 @@ if ($a=='add')
 			'".sed_sql_prep($ruserirc)."',
 			'".sed_sql_prep($rusermsn)."',
 			'".sed_sql_prep($ruserwebsite)."',
-			'".sed_sql_prep($ruserextra1)."',
-			'".sed_sql_prep($ruserextra2)."',
-			'".sed_sql_prep($ruserextra3)."',
-			'".sed_sql_prep($ruserextra4)."',
-			'".sed_sql_prep($ruserextra5)."',
-			'".sed_sql_prep($ruserextra6)."',
-			'".sed_sql_prep($ruserextra7)."',
-			'".sed_sql_prep($ruserextra8)."',
-			'".sed_sql_prep($ruserextra9)."',
-			'".$usr['ip']."')");
-
+			$extra_values 
+			'".$usr['ip']."')";
+		$sql = sed_sql_query($ssql);
 		$userid = sed_sql_insertid();
 		$sql = sed_sql_query("INSERT INTO $db_groups_users (gru_userid, gru_groupid) VALUES (".(int)$userid.", ".(int)$defgroup.")");
 
@@ -256,15 +239,6 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 
 $form_usergender = sed_selectbox_gender($rusergender,'rusergender');
 $form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short');
-$form_extra1 = "<input type=\"text\" class=\"text\" name=\"ruserextra1\" value=\"".sed_cc($ruserextra1)."\" size=\"32\" maxlength=\"".$cfg['extra1tsetting']."\" /><input type=\"hidden\" name=\"ruserextra1_p\" value=\"1\" />";
-$form_extra2 = "<input type=\"text\" class=\"text\" name=\"ruserextra2\" value=\"".sed_cc($ruserextra2)."\" size=\"32\" maxlength=\"".$cfg['extra2tsetting']."\" /><input type=\"hidden\" name=\"ruserextra2_p\" value=\"1\" />";
-$form_extra3 = "<input type=\"text\" class=\"text\" name=\"ruserextra3\" value=\"".sed_cc($ruserextra3)."\" size=\"32\" maxlength=\"".$cfg['extra3tsetting']."\" /><input type=\"hidden\" name=\"ruserextra3_p\" value=\"1\" />";
-$form_extra4 = "<input type=\"text\" class=\"text\" name=\"ruserextra4\" value=\"".sed_cc($ruserextra4)."\" size=\"32\" maxlength=\"".$cfg['extra4tsetting']."\" /><input type=\"hidden\" name=\"ruserextra4_p\" value=\"1\" />";
-$form_extra5 = "<input type=\"text\" class=\"text\" name=\"ruserextra5\" value=\"".sed_cc($ruserextra5)."\" size=\"32\" maxlength=\"".$cfg['extra5tsetting']."\" /><input type=\"hidden\" name=\"ruserextra5_p\" value=\"1\" />";
-$form_extra6 = sed_selectbox($ruserextra6,'ruserextra6',$cfg['extra6tsetting'])."<input type=\"hidden\" name=\"ruserextra6_p\" value=\"1\" />";
-$form_extra7 = sed_selectbox($ruserextra7,'ruserextra7',$cfg['extra7tsetting'])."<input type=\"hidden\" name=\"ruserextra7_p\" value=\"1\" />";
-$form_extra8 = sed_selectbox($ruserextra8,'ruserextra8',$cfg['extra8tsetting'])."<input type=\"hidden\" name=\"ruserextra8_p\" value=\"1\" />";
-$form_extra9 = "<textarea name=\"ruserextra9\" rows=\"4\" cols=\"56\">".sed_cc($ruserextra9)."</textarea><input type=\"hidden\" name=\"ruserextra9_p\" value=\"1\" />";
 
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
@@ -292,7 +266,7 @@ if (!empty($error_string))
 	$t->parse("MAIN.USERS_REGISTER_ERROR");
 	}
 
-$t->assign(array(
+$useredit_array = array(
 	"USERS_REGISTER_TITLE" => $L['aut_registertitle'],
 	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
 	"USERS_REGISTER_ADMINEMAIL" => "$sed_adminemail",
@@ -311,17 +285,40 @@ $t->assign(array(
 	"USERS_REGISTER_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".sed_cc($rusericq)."\" size=\"32\" maxlength=\"16\" />",
 	"USERS_REGISTER_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".sed_cc($ruserirc)."\" size=\"56\" maxlength=\"128\" />",
 	"USERS_REGISTER_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".sed_cc($rusermsn)."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_REGISTER_EXTRA1" => $form_extra1,
-	"USERS_REGISTER_EXTRA2" => $form_extra2,
-	"USERS_REGISTER_EXTRA3" => $form_extra3,
-	"USERS_REGISTER_EXTRA4" => $form_extra4,
-	"USERS_REGISTER_EXTRA5" => $form_extra5,
-	"USERS_REGISTER_EXTRA6" => $form_extra6,
-	"USERS_REGISTER_EXTRA7" => $form_extra7,
-	"USERS_REGISTER_EXTRA8" => $form_extra8,
-	"USERS_REGISTER_EXTRA9" => $form_extra9,
-		));
-
+		);
+// Extra fields
+if(count($extrafields)>0)
+foreach($extrafields as $i=>$row)
+{
+	$t1 = "USERS_REGISTER_".strtoupper($row['field_name']);
+	$t2 = $row['field_html'];
+	switch($row['field_type']) {
+	case "input":
+		$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" ', $t2); break;
+	case "textarea":
+		$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('</textarea>',$urr['user_'.$row['field_name']].'</textarea>', $t2); break;
+	case "select":
+		$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
+		$options = "";
+		$opt_array = explode(",",$row['field_variants']);
+		if(count($opt_array)!=0)
+			foreach ($opt_array as $var)
+			{
+				$sel = $var == $urr['user_'.$row['field_name']] ? ' selected="selected"' : '';
+				$options .= "<option value=\"$var\" $sel>$var</option>";
+			}
+		$t2 = str_replace("</select>","$options</select>",$t2); break;
+	case "checkbox":
+		$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
+		$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
+		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" '.$sel.' ', $t2); break;
+	}
+	$useredit_array[$t1] = $t2;
+}
+$t->assign($useredit_array);
+		
 /* === Hook === */
 $extp = sed_getextplugins('users.register.tags');
 if (is_array($extp))
