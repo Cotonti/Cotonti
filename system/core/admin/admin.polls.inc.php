@@ -222,12 +222,12 @@ var ansMax = {$cfg['max_options_polls']} + 1;
 var ansCC = 0;
 function removeAns(ii){
 	$('#ans_' + (ii) + ' input[name="poll_option[]"]').attr("value", "");
-	ansMax++;
-	ansCC--;
-	if (ansCC>2)
-	{ if ($('#ans_' + (ii) + ' input[name="poll_option_id[]"]').value !="new")
+	if (ansCC>3)
+	{ 	ansMax++; ansCC--;
+	if ($('#ans_' + (ii) + ' input[name="poll_option_id[]"]').value !="new")
 	{ $('#ans_' + (ii)).hide(); }
-	else { $('#ans_' + (ii)).remove(); }
+	else { $('#ans_' + (ii)).remove();
+	}
 	}
 
 	return false;
@@ -324,8 +324,16 @@ $adminmain .= $adminmain2;
 ansCount = $counter + 1;
 ansCC = ansCount;
 </script>
-	<input class=\"delbutton\" name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns()\" type=\"button\">
-	";
+<noscript>";
+for ($i=$counter+1; $i<=$cfg['max_options_polls'];$i++)
+{
+	$adminmain .= "<span id ='ans_no'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
+			<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' />
+			<br /></span>";
+}
+$adminmain .= "</noscript>
+<input class=\"delbutton\" name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns()\" type=\"button\">
+";
 $adminmain .= "</td></tr>";
 $adminmain .= "<tr><td></td><td><input name=\"multiple\" type=\"checkbox\" value=\"1\" $multiple>".$L['adm_polls_multiple']."
 </td></tr>";
