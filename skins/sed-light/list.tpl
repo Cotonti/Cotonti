@@ -1,6 +1,10 @@
 <!-- BEGIN: MAIN -->
 
-	<div class="mboxHD">{LIST_PAGETITLE}</div>
+	<div class="mboxHD">
+	<div class="rss-icon-title">
+	<a href="rss.php?c={LIST_ROW_CAT}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+	</div>
+	{LIST_PAGETITLE}</div>
 	<div class="mboxBody">
 
 		<div id="subtitle">{LIST_CATDESC}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{LIST_SUBMITNEWPAGE}</div>

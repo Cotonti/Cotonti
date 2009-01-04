@@ -270,11 +270,6 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_ID" => $pag['page_id'],
 		"LIST_ROW_CAT" => $pag['page_cat'],
 		"LIST_ROW_KEY" => sed_cc($pag['page_key']),
-		"LIST_ROW_EXTRA1" => sed_cc($pag['page_extra1']),
-		"LIST_ROW_EXTRA2" => sed_cc($pag['page_extra2']),
-		"LIST_ROW_EXTRA3" => sed_cc($pag['page_extra3']),
-		"LIST_ROW_EXTRA4" => sed_cc($pag['page_extra4']),
-		"LIST_ROW_EXTRA5" => sed_cc($pag['page_extra5']),
 		"LIST_ROW_TITLE" => sed_cc($pag['page_title']),
 		"LIST_ROW_DESC" => $pag['page_desc'],
 		"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
@@ -333,7 +328,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 			break;
 	}
 	
-		// Extra fields - adding LIST_ROW_X tag
+	// Extra fields 
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
 	while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('LIST_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
 

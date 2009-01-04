@@ -1012,4 +1012,10 @@ $sed_translit = array(
 
 // Обратное преобразование (backwards transition)
 $sed_translitb = array_flip($sed_translit);
+
+/* ====== RSS ====== */
+$L['rss_comments_item_desc'] = 'Лента комментариев страницы';
+$L['rss_comment'] = 'Коммент от';
+$L['rss_original'] = 'Комментируемая страница';
+
 ?>

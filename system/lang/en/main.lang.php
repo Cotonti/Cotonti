@@ -934,4 +934,10 @@ $sed_countries = array (
 'zw' => 'Zimbabwe'
 );
 
+/* ====== RSS ====== */
+$L['rss_comments_item_desc'] = 'Last comments on page';
+$L['rss_comment'] = 'Comment from';
+$L['rss_original'] = 'Original message';
+
+
 ?>

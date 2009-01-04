@@ -9,7 +9,11 @@
 			
 				<div id="subtitle">{PAGE_DESC}</div>
 		
-				<div style="float:right;text-align:right;">{PHP.skinlang.page.Comments} {PAGE_COMMENTS}<br />{PHP.skinlang.page.Ratings} {PAGE_RATINGS}</div>
+				<div style="float:right;text-align:right;">
+				<span class="rss-icon">
+				<a href="rss.php?c=comments{PAGE_ID}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+				</span>
+					{PHP.skinlang.page.Comments} {PAGE_COMMENTS}<br />{PHP.skinlang.page.Ratings} {PAGE_RATINGS}</div>
 					{PHP.skinlang.page.Author} {PAGE_AUTHOR}<br />
 					{PHP.skinlang.page.Submittedby} {PAGE_OWNER} &nbsp; {PHP.skinlang.page.Date} {PAGE_DATE}<br />
 
@@ -21,7 +25,7 @@
 			</div>
 		</div>
 
-		<div class="fmsg" style="padding:0 5px; width:770px; overflow-x:auto;">{PAGE_TEXT}</div>
+		<div class="fmsg" style="padding:0 5px; width:770px; overflow-x:auto;" curpos="0" maxpos="0" pageincrement="624" increment="10" disabled="true" collapsed="true">{PAGE_TEXT}</div>
 
 		<!-- BEGIN: PAGE_MULTI -->
 		<div class="paging">{PAGE_MULTI_TABNAV}</div>
