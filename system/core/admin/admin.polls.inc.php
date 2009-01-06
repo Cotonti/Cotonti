@@ -106,7 +106,7 @@ if (!empty($poll_id))
 	if (empty($error_string)){
 		if ($poll_id=='new')
 		{
-			$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text, poll_multiple) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."', $multiple.)");
+			$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text, poll_multiple) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."', '".$multiple."')");
 			$newpoll_id = sed_sql_insertid();
 		}
 		else
