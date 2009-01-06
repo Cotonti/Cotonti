@@ -6,7 +6,7 @@ Version=0.0.2
 Updated=2009-jan-03
 Type=Plugin
 Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -25,7 +25,7 @@ $showavatars = $cfg['plugin']['whosonline']['showavatars'];
 $miniavatar_x = $cfg['plugin']['whosonline']['miniavatar_x'];
 $miniavatar_y = $cfg['plugin']['whosonline']['miniavatar_y'];
 
-$sql1 = sed_sql_query("SELECT u.user_country, u.user_avatar, u.user_maingrp, o.* FROM $db_online AS o LEFT JOIN $db_users AS u ON u.user_id=o.online_userid WHERE online_name!='v' ORDER BY u.user_name ASC");
+$sql1 = sed_sql_query("SELECT u.*, o.* FROM $db_online AS o LEFT JOIN $db_users AS u ON u.user_id=o.online_userid WHERE online_name!='v' ORDER BY u.user_name ASC");
 $sql2 = sed_sql_query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_name LIKE 'v' ORDER BY online_lastseen DESC");
 $sql3 = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
 $total1 = sed_sql_numrows($sql1);
@@ -33,26 +33,11 @@ $total2 = sed_sql_numrows($sql2);
 $row = sed_sql_fetcharray($sql3);
 $maxusers = $row[0];
 $visitornum = 0;
-
-if($usr['isadmin'])
-{
-	$t->assign(array(
-		'WHOSONlINE_IN'=> $L['plu_in'],
-		'WHOSONlINE_IP'=> $L['Ip']
-	));
-	$t->parse('MAIN.IS_ADMIN');
-}
-
-$t->assign(array(
-	'WHOSONlINE_TITLE' => $L['plu_title'],
-	'WHOSONlINE_MAXUSERS' => $maxusers,
-	'WHOSONlINE_VISITORS' => $total2,
-	'WHOSONlINE_MEMBERS' => $total1,
-	'WHOSONlINE_USER_AVATAR' => ($showavatars) ? $L['plu_user_avatar'] : ''
-));
+$visituser = 0;
 
 while ($row = sed_sql_fetcharray($sql1))
 {
+	$visituser++;
     if($usr['isadmin'])
     {
     	$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator']." ".sed_cc($row['online_subloc']) : '';
@@ -60,7 +45,7 @@ while ($row = sed_sql_fetcharray($sql1))
 			'WHOSONlINE_ROW1_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
 			'WHOSONlINE_ROW1_USER_ONLINE_IP'=> $row['online_ip']
 		));
-		$t->parse('MAIN.WHOSONlINE_ROW1.WHOSONlINE_ROW1_IS_ADMIN');
+		$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW1.WHOSONlINE_ROW1_IS_ADMIN');
 	}
 
 	if ($showavatars)
@@ -69,15 +54,60 @@ while ($row = sed_sql_fetcharray($sql1))
 		$user_avatar .= (!empty($row['user_avatar'])) ? "<img src=\"".$row['user_avatar']."\" width=\"".$miniavatar_x."\" height=\"".$miniavatar_y."\" alt=\"\" /></a>" : "<img src=\"images/pixel.gif\" width=\"".$miniavatar_x."\" height=\"".$miniavatar_y."\" alt=\"\" /></a>";
 	}
 
+	$row['user_text'] = sed_build_usertext(sed_cc($row['user_text']));
+
 	$t->assign(array(
 		'WHOSONlINE_ROW1_SHOWAVATARS' => ($showavatars) ? $user_avatar : '',
+		'WHOSONlINE_ROW1_USER_AVATAR' => ($showavatars) ? sed_build_userimage($row['user_avatar']) : '',
+		'WHOSONlINE_ROW1_USER_PHOTO' => ($showavatars) ? sed_build_userimage($row['user_photo']) : '',
+		'WHOSONlINE_ROW1_USER_SIGNATURE' => ($showavatars) ? sed_build_userimage($row['user_signature']) : '',
+		'WHOSONlINE_ROW1_USER_ID' => $row['online_userid'],
 		'WHOSONlINE_ROW1_USER' => sed_build_user($row['online_userid'], sed_cc($row['online_name'])),
 		'WHOSONlINE_ROW1_USER_MAINGRP_URL' => sed_url('users', 'g='.$row['user_maingrp']),
 		'WHOSONlINE_ROW1_USER_MAINGRP_TITLE' => $sed_groups[$row['user_maingrp']]['title'],
-		'WHOSONlINE_ROW1_USER_COUNTRY'=> sed_build_flag($row['user_country']),
+		'WHOSONlINE_ROW1_USER_MAINGRP' => sed_build_group($row['user_maingrp']),
+		'WHOSONlINE_ROW1_USER_MAINGRPID' => $row['user_maingrp'],
+		'WHOSONlINE_ROW1_USER_MAINGRPSTARS' => sed_build_stars($sed_groups[$row['user_maingrp']]['level']),
+		'WHOSONlINE_ROW1_USER_MAINGRPICON' => sed_build_userimage($sed_groups[$row['user_maingrp']]['icon']),
+		'WHOSONlINE_ROW1_USER_GROUPS' => sed_build_groupsms($row['user_id'], FALSE, $row['user_maingrp']),
+		'WHOSONlINE_ROW1_USER_COUNTRY'=> sed_build_country($row['user_country']),
+		'WHOSONlINE_ROW1_USER_COUNTRYFLAG'=> sed_build_flag($row['user_country']),
 		'WHOSONlINE_ROW1_USER_ONLINE_LASTSEEN'=> sed_build_timegap($row['online_lastseen'],$sys['now']),
+		'WHOSONlINE_ROW1_USER_TEXT' => $cfg['parsebbcodeusertext'] ? sed_bbcode_parse($row['user_text'], true) : $row['user_text'],
+		'WHOSONlINE_ROW1_USER_REGDATE' => @date($cfg['dateformat'], $row['user_regdate'] + $row['timezone'] * 3600)." ".$row['timetext'],
+		'WHOSONlINE_ROW1_USER_LOCATION' => sed_cc($row['user_location']),
+		'WHOSONlINE_ROW1_USER_WEBSITE' => sed_build_url($row['user_website']),
+		'WHOSONlINE_ROW1_USER_IRC' => sed_cc($row['user_irc']),
+		'WHOSONlINE_ROW1_USER_ICQ' => sed_build_icq($row['user_icq']),
+		'WHOSONlINE_ROW1_USER_MSN' => sed_build_msn($row['user_msn']),
+		"WHOSONlINE_ROW1_USER_GENDER" => ($row['user_gender']=='' || $row['user_gender']=='U') ?  '' : $L["Gender_".$row['user_gender']],
+		"WHOSONlINE_ROW1_USER_AGE" => ($row['user_birthdate']!=0) ? sed_build_age($row['user_birthdate']) : '',
+		"WHOSONlINE_ROW1_USER_BIRTHDATE" => ($row['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $row['user_birthdate']) : '',
+		"WHOSONlINE_ROW1_USER_OCCUPATION" => sed_cc($row['user_occupation']),
+		"WHOSONlINE_ROW1_USER_EXTRA1" => sed_cc($row['user_extra1']),
+		"WHOSONlINE_ROW1_USER_EXTRA2" => sed_cc($row['user_extra2']),
+		"WHOSONlINE_ROW1_USER_EXTRA3" => sed_cc($row['user_extra3']),
+		"WHOSONlINE_ROW1_USER_EXTRA4" => sed_cc($row['user_extra4']),
+		"WHOSONlINE_ROW1_USER_EXTRA5" => sed_cc($row['user_extra5']),
+		"WHOSONlINE_ROW1_USER_EXTRA6" => sed_cc($row['user_extra6']),
+		"WHOSONlINE_ROW1_USER_EXTRA7" => sed_cc($row['user_extra7']),
+		"WHOSONlINE_ROW1_USER_EXTRA8" => sed_cc($row['user_extra8']),
+		"WHOSONlINE_ROW1_USER_EXTRA9" => sed_cc($row['user_extra9']),
+		"WHOSONlINE_ROW1_USER_EXTRA1_TITLE" => $cfg['extra1title'],
+		"WHOSONlINE_ROW1_USER_EXTRA2_TITLE" => $cfg['extra2title'],
+		"WHOSONlINE_ROW1_USER_EXTRA3_TITLE" => $cfg['extra3title'],
+		"WHOSONlINE_ROW1_USER_EXTRA4_TITLE" => $cfg['extra4title'],
+		"WHOSONlINE_ROW1_USER_EXTRA5_TITLE" => $cfg['extra5title'],
+		"WHOSONlINE_ROW1_USER_EXTRA6_TITLE" => $cfg['extra6title'],
+		"WHOSONlINE_ROW1_USER_EXTRA7_TITLE" => $cfg['extra7title'],
+		"WHOSONlINE_ROW1_USER_EXTRA8_TITLE" => $cfg['extra8title'],
+		"WHOSONlINE_ROW1_USER_EXTRA9_TITLE" => $cfg['extra9title']
 	));
-	$t->parse('MAIN.WHOSONlINE_ROW1');
+
+	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
+	while($ros = sed_sql_fetchassoc($fieldsres)) $t->assign('WHOSONlINE_ROW1_USER_'.strtoupper($ros['field_name']), $row['user_'.$ros['field_name']]);
+
+	$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW1');
 }
 
 while ($row = sed_sql_fetcharray($sql2))
@@ -92,15 +122,37 @@ while ($row = sed_sql_fetcharray($sql2))
 			'WHOSONlINE_ROW2_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
 			'WHOSONlINE_ROW2_USER_ONLINE_IP'=> $row['online_ip']
 		));
-		$t->parse('MAIN.WHOSONlINE_ROW2.WHOSONlINE_ROW2_IS_ADMIN');
+		$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW2.WHOSONlINE_ROW2_IS_ADMIN');
 	}
 
 	$t->assign(array(
 		'WHOSONlINE_ROW2_SHOWAVATARS' => ($showavatars) ? '&nbsp;' : '',
 		'WHOSONlINE_ROW2_USER' => $L['plu_visitor']." #".$visitornum,
 		'WHOSONlINE_ROW2_USER_ONLINE_LASTSEEN'=> sed_build_timegap($row['online_lastseen'],$sys['now']),
+
 	));
-	$t->parse('MAIN.WHOSONlINE_ROW2');
+	$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW2');
+}
+
+if($visitornum>0 OR $visituser>0)
+{
+	if($usr['isadmin'])
+	{
+		$t->assign(array(
+			'WHOSONlINE_IN'=> $L['plu_in'],
+			'WHOSONlINE_IP'=> $L['Ip']
+		));
+		$t->parse('MAIN.NOT_EMPTY.IS_ADMIN');
+	}
+
+	$t->assign(array(
+		'WHOSONlINE_TITLE' => $L['plu_title'],
+		'WHOSONlINE_MAXUSERS' => $maxusers,
+		'WHOSONlINE_VISITORS' => $total2,
+		'WHOSONlINE_MEMBERS' => $total1,
+		'WHOSONlINE_USER_AVATAR' => ($showavatars) ? $L['plu_user_avatar'] : ''
+	));
+	$t->parse('MAIN.NOT_EMPTY');
 }
 
 ?>
