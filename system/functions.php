@@ -2786,6 +2786,12 @@ function sed_outputfilters($output)
  */
 function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $onclick = '', $object='')
 {
+	if(function_exists('sed_pagination_custom'))
+	{
+		// For custom pagination functions in plugins
+		return sed_pagination_custom($url, $current, $entries, $perpage, $characters, $onclick, $object);
+	}
+
 	if($entries <= $perpage)
 	{
 		return '';
@@ -2859,6 +2865,12 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
  */
 function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALSE, $characters = 'd', $onclick = '', $object='')
 {
+	if(function_exists('sed_pagination_pn_custom'))
+	{
+		// For custom pagination functions in plugins
+		return sed_pagination_pn_custom($url, $current, $entries, $perpage, $res_array, $characters, $onclick, $object);
+	}
+
 	global $L;
 
 	$address = strstr($url, '?') ? $url . '&amp;'.$characters.'=' : $url . '?'.$characters.'=';
