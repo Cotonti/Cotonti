@@ -628,6 +628,12 @@ $L['polls_alreadyvoted'] = 'You\'ve already voted for this poll.';
 $L['polls_notyetvoted'] = 'You can vote by clicking a line above.';
 $L['polls_votecasted'] = 'Done, vote succesfully recorded';
 
+$L['polls_error_title'] = 'Poll name is too short or empty'; // N-0.0.2
+$L['polls_error_count'] = 'A poll must have two or more options'; // N-0.0.2
+$L['polls_created'] = 'The poll has been successfully created'; // N-0.0.2
+$L['polls_updated'] = 'The poll has been successfully updated'; // N-0.0.2
+$L['polls_multiple'] = 'Allow multiple choice'; // N-0.0.2
+
 /* ====== Ratings ====== */
 
 $L['rat_choice1'] = 'Very poor';

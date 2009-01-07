@@ -30,6 +30,8 @@ if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['isadmin']);
 
+require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+
 $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=polls'), $L['Polls']);
 $adminhelp = $L['adm_help_polls'];
@@ -76,73 +78,23 @@ if ($a=='bump')
 	exit;
 }
 $poll_id = sed_import('poll_id','P','TXT');
-if (!empty($poll_id))
-{
-	$ntext = sed_import('ntext','P','HTM');
-	$noption_id = sed_import('poll_option_id', 'P', 'ARR');
-	$multiple = sed_import('multiple', 'P', 'BOL');
-	$option_count = (count($noption_id) ? count($noption_id) : 0);
-	$noption_text = sed_import('poll_option', 'P', 'ARR');
-	$counter=0;
-	$error_string .= (mb_strlen($ntext)<4) ? $L['adm_polls_error_title']."<br/>" : '';
-
-	for($i = 0; $i<$option_count; $i++)
-	{
-		$noption_text[$i]=trim($noption_text[$i]);
-		if ($noption_text[$i] != "")
-		{
-			for ($j = $i+1; $j<$option_count; $j++)
-			{
-				$noption_text[$j]=trim($noption_text[$j]);
-				if($noption_text[$i] == $noption_text[$j]){
-					if ($noption_id[$j]=='new')		{ $noption_text[$j]=""; }
-					if ($cfg['del_dup_options'])   	{ $noption_text[$j]=""; }
-				}
-			}
-			$counter++;
-		}
-	}
-	$error_string .= ($counter<2) ? $L['adm_polls_error_count'] : '';
+$poll_text = sed_import('poll_text','P','HTM');
+$poll_option_id = sed_import('poll_option_id', 'P', 'ARR');
+$poll_multiple = sed_import('poll_multiple', 'P', 'BOL');
+$option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
+$poll_option_text = sed_import('poll_option', 'P', 'ARR');
+$error_string= '';
+sed_save_poll_check_errors();
+//	$error_string='!!!';
 	if (empty($error_string)){
-		if ($poll_id=='new')
-		{
-			$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text, poll_multiple) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($ntext)."', '".$multiple."')");
-			$newpoll_id = sed_sql_insertid();
-		}
-		else
-		{
-			$sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($ntext)."', poll_multiple='".$multiple."' WHERE poll_id='$poll_id'");
-			$newpoll_id = $poll_id;
-		}
-		// Dinamic adding polloptions
-		for($count = 0; $count < $option_count; $count++) {
-			//poll_option_id[] poll_option[] fac_extra1 fac_extra2
-			if ($noption_id[($count)]!="new")
-			{
-				if ($noption_text[($count)]=="")// drop
-				{
-					$sql2 = sed_sql_query("DELETE FROM $db_polls_options WHERE po_id='".$noption_id[($count)]."'");
-				}
-				else // edit
-				{
-					$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_text='".$noption_text[($count)]."' WHERE po_id='".$noption_id[($count)]."'");
-				}
-			}
-			else //insert
-			{
-				if ($noption_text[($count)]!="")// insert not empty
-				{
-					$sql2 = sed_sql_query("INSERT into $db_polls_options ( po_pollid, po_text, po_count) VALUES ('$newpoll_id', '".$noption_text[($count)]."', '0')");
-				}
-			}
-		}
+		$number=sed_save_poll();
 
-		if($poll_id=='new'){$adminmain .= "<h4>".$L['adm_polls_created']."</h4>";}
-		else {$adminmain .= "<h4>".$L['adm_polls_updated']."</h4>";}
+		if($poll_id=='new'){$adminmain .= "<h4>".$L['polls_created']."</h4>";}
+		elseif(!empty($poll_id)) {$adminmain .= "<h4>".$L['polls_updated']."</h4>";}
 	}
 	else
 	{$adminmain .="<div class=\"error\">".$error_string."</div>";}
-}
+
 
 $totalitems = sed_sql_rowcount($db_polls);
 $pagnav = sed_pagination(sed_url('admin','m=polls'), $d, $totalitems, $cfg['maxrowsperpage']);
@@ -213,62 +165,12 @@ while ($row = sed_sql_fetcharray($sql))
 }
 $adminmain .= "<tr><td colspan=\"8\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
 
-// Render rules table
-$adminmain .= <<<HTM
-<script type="text/javascript">
-
-var ansCount = 0;
-var ansMax = {$cfg['max_options_polls']} + 1;
-var ansCC = 0;
-function removeAns(ii){
-	$('#ans_' + (ii) + ' input[name="poll_option[]"]').attr("value", "");
-	if (ansCC>3)
-	{ 	ansMax++; ansCC--;
-	if ($('#ans_' + (ii) + ' input[name="poll_option_id[]"]').value !="new")
-	{ $('#ans_' + (ii)).hide(); }
-	else { $('#ans_' + (ii)).remove();
-	}
-	}
-
-	return false;
-}
-
-function addAns() {
-	if (ansCount<ansMax)
-	{
-	$('#ans_' + (ansCount - 1)).after('<span id="ans_' + ansCount + '"><input type="hidden" name="poll_option_id[]" value="new" /><input  class="tbox" type="text" name="poll_option[]" size="40" value="" maxlength="128" /> <input class="delbutton" name="addoption" value="x" onclick="removeAns('+ansCount+')" type="button"><br /></span>');
-	ansCount++;
-	ansCC++
-	}
-
-	return false;
-}
-
-</script>
-HTM;
-
 if ($n=='options')
 {
 	$poll_id = sed_import('id','G','TXT');
-	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$poll_id' ");
-	$sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid='$poll_id' ORDER by po_id ASC");
-	$row = sed_sql_fetcharray($sql);
 	$adminpath[] = array (sed_url('admin', 'm=polls&n=options&id=$poll_id'), $L['Options']." (#$id)");
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$ntext=sed_cc($row["poll_text"]);
-	$multiple=($row["poll_multiple"]) ? "checked":"";
 	$send_button=$L['Update'];
-	$date=date($cfg['dateformat'], $row["poll_creationdate"])." GMT";
-	$counter=0;
-	while ($row1 = sed_sql_fetcharray($sql1))
-	{
-		$counter++;
-		$adminmain2 .="<span id ='ans_".$counter."'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"".$row1['po_id']."\" />
-				<input  class='tbox' type='text' name='poll_option[]' size='40' value=\"".sed_cc($row1['po_text'])."\" maxlength='128' /> <input class=\"delbutton\" name=\"addoption\" value=\"x\" onclick=\"return removeAns(".$counter.")\" type=\"button\">
-
-				<br /></span>";
-
-	}
 }
 elseif(!empty($error_string))
 {
@@ -279,63 +181,22 @@ elseif(!empty($error_string))
 	else
 	{$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 	$send_button=$L['Create'];}
-	$counter=0;
-	$date="";
-	$multiple=($multiple) ? "checked":"";
-	for($count = 0; $count < $option_count; $count++)
-	{
-		if ($noption_text[($count)]!="" || ($noption_text[($count)]=="" && $noption_id[($count)]!='new'))
-		{
-			$counter++;
-			$adminmain2 .="<span id ='ans_".$counter."'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"".$noption_id[($count)]."\" />
-				<input  class='tbox' type='text' name='poll_option[]' size='40' value=\"".sed_cc($noption_text[($count)])."\" maxlength='128' /> <input class=\"delbutton\" name=\"addoption\" value=\"x\" onclick=\"return removeAns(".$counter.")\" type=\"button\">
-				<br /></span>";
-
-		}
-	}
-
 }
 else
 {
 	$poll_id='new';
-	$ntext='';
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$date='';
-	$adminmain2="<span id ='ans_1'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-				<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /> <input class=\"delbutton\" name=\"addoption\" value=\"x\" onclick=\"return removeAns(1)\" type=\"button\">
-				<br /></span>
-	<span id ='ans_2'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-				<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /> <input class=\"delbutton\" name=\"addoption\" value=\"x\" onclick=\"return removeAns(2)\" type=\"button\">
-				<br /></span>";
 	$send_button=$L['Create'];
-	$counter=2;
-	$multiple="";
 }
-
+list($poll_text, $poll_options, $poll_date, $poll_settings)=sed_create_poll($poll_id, 1);
 
 $adminmain .= "<form id=\"addpoll\" action=\"".sed_url('admin', "m=polls")."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\">";
-$adminmain .= "<tr><td>".$L['adm_polls_polltopic']."</td><td><input type=\"text\" class=\"text\" name=\"ntext\" value=\"".$ntext."\" size=\"64\" maxlength=\"255\" /><input type=\"hidden\" name=\"poll_id\" value=\"".$poll_id."\" /></td></tr>";
-$adminmain .= "<tr><td>".$L['Date']." : </td><td>".$date."</td></tr>";
-$adminmain .= "<tr><td>".$L['Options']."</td><td><span id=\"ans_0\"></span>";
-$adminmain .= $adminmain2;
-	$adminmain .="
-	<script type=\"text/javascript\">
-ansCount = $counter + 1;
-ansCC = ansCount;
-</script>
-<noscript>";
-for ($i=$counter+1; $i<=$cfg['max_options_polls'];$i++)
-{
-	$adminmain .= "<span id ='ans_no'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-			<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' />
-			<br /></span>";
-}
-$adminmain .= "</noscript>
-<input class=\"delbutton\" name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns()\" type=\"button\">
-";
-$adminmain .= "</td></tr>";
-$adminmain .= "<tr><td></td><td><input name=\"multiple\" type=\"checkbox\" value=\"1\" $multiple>".$L['adm_polls_multiple']."
+$adminmain .= "<tr><td>".$L['adm_polls_polltopic']."</td><td>".$poll_text."</td></tr>";
+$adminmain .= "<tr><td>".$L['Date']." : </td><td>".$poll_date."</td></tr>";
+$adminmain .= "<tr><td>".$L['Options']."</td><td>";
+$adminmain .= $poll_options."</td></tr>";
+$adminmain .= "<tr><td></td><td>".$poll_settings."
 </td></tr>";
 $adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$send_button."\" /></td></tr></table></form>";
 

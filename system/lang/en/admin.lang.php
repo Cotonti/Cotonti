@@ -323,11 +323,6 @@ $L['adm_polls_forumpolls'] = 'Polls from forums (recent at top) :'; // N-0.0.1
 $L['adm_polls_polltopic'] = 'Poll topic'; // N-0.0.1
 $L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.'; //N-0.0.2
 $L['adm_polls_on_page'] = 'on page'; // N-0.0.2
-$L['adm_polls_error_title'] = 'Poll name is too short or empty'; // N-0.0.2
-$L['adm_polls_error_count'] = 'A poll must have two or more options'; // N-0.0.2
-$L['adm_polls_created'] = 'The poll has been successfully created'; // N-0.0.2
-$L['adm_polls_updated'] = 'The poll has been successfully updated'; // N-0.0.2
-$L['adm_polls_multiple'] = 'Allow multiple choice'; // N-0.0.2
 
 /* ====== Statistics ====== */
 
