@@ -49,7 +49,7 @@ switch($serv_type)
 Options FollowSymLinks -Indexes
 RewriteEngine On
 # Server-relative path to seditio:
-RewriteBase $site_uri
+RewriteBase "$site_uri"
 END;
 		$hta_flags = '[NC,NE,L]';
 		$hta_rule = 'RewriteRule';
@@ -260,7 +260,17 @@ if($a == 'save')
 	fclose($fp);
 	if($htaccess)
 	{
-		file_put_contents('./.htaccess', $hta);
+		$htdata = file_get_contents('.htaccess');
+		if(mb_strstr($htdata, '### COTONTI URLTRANS ###'))
+		{
+			$htparts = explode('### COTONTI URLTRANS ###', $htdata);
+			$htdata = $htparts[0] . "\n### COTONTI URLTRANS ###\n$hta\n### COTONTI URLTRANS ###\n" . $htparts[2];
+		}
+		else
+		{
+			$htdata .= "\n### COTONTI URLTRANS ###\n$hta\n### COTONTI URLTRANS ###\n";
+		}
+		file_put_contents('.htaccess', $htdata);
 	}
 	$adminmain .= '<h4>' . $L['adm_urls_your'] . ' <em>' . $conf_name . '</em>' . '</h4>';
 	$adminmain .= '<pre class="code">' . $hta . '</pre>';
