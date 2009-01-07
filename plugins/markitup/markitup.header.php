@@ -31,18 +31,21 @@ Order=10
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-$mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
-if(!file_exists($mkup_lang))
+if(!defined('SED_INDEX') && !defined('SED_LIST') && !defined('SED_MESSAGE'))
 {
-	$mkup_lang = $cfg['plugins_dir'].'/markitup/lang/en.lang.js';
-}
-$smile_lang = "./images/smilies/lang/$lang.lang.js";
-if(!file_exists($smile_lang))
-{
-	$smile_lang = './images/smilies/lang/en.lang.js';
-}
 
-$out['compopup'] .= <<<HTM
+	$mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
+	if(!file_exists($mkup_lang))
+	{
+		$mkup_lang = $cfg['plugins_dir'].'/markitup/lang/en.lang.js';
+	}
+	$smile_lang = "./images/smilies/lang/$lang.lang.js";
+	if(!file_exists($smile_lang))
+	{
+		$smile_lang = './images/smilies/lang/en.lang.js';
+	}
+
+	$out['compopup'] .= <<<HTM
 <script type="text/javascript" src="$smile_lang"></script>
 <script type="text/javascript" src="./images/smilies/set.js"></script>
 <script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jquery.markitup.js"></script>
@@ -51,23 +54,25 @@ $out['compopup'] .= <<<HTM
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/markitup/style.css" />
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/style.css" />
 HTM;
-if($cfg['plugin']['markitup']['chili'])
-{
-	$out['compopup'] .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/markitup/js/chili.js"></script>';
-}
-$autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
-$out['compopup'] .= '
+	if($cfg['plugin']['markitup']['chili'])
+	{
+		$out['compopup'] .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/markitup/js/chili.js"></script>';
+	}
+	$autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
+	$out['compopup'] .= '
 <script type="text/javascript">
 //<![CDATA[
 mySettings.previewAutorefresh = '.$autorefresh.';
 mySettings.previewParserPath = "plug.php?r=markitup&'.sed_xg().'";
 mini.previewAutorefresh = '.$autorefresh.';
-mini.previewParserPath = "plug.php?r=markitup&'.sed_xg().'";
+mini.previewParserPath = mySettings.previewParserPath;
 $(document).ready(function() {
 $("textarea.editor").markItUp(mySettings);
 $("textarea.minieditor").markItUp(mini);
 });
 //]]>
 </script>';
+
+}
 
 ?>
