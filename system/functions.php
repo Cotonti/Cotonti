@@ -2413,9 +2413,9 @@ function sed_javascript($more='')
 	if(!empty($more))
 	{
 		$result .= '<script type="text/javascript">
-<!--
+//<![CDATA[
 '.$more.'
-//-->
+//]]>
 </script>';
 	}
 	return $result;
@@ -3390,32 +3390,34 @@ function sed_selectbox_sections($check, $name)
  */
 function sed_selectbox_skin($check, $name)
 {
-	$handle = opendir("skins/");
+	$handle = opendir('skins/');
 	while ($f = readdir($handle))
 	{
-		if (mb_strpos($f, '.')  === FALSE)
+		if (mb_strpos($f, '.') === FALSE && is_dir('skins/' . $f))
 		{ $skinlist[] = $f; }
 	}
 	closedir($handle);
 	sort($skinlist);
 
-	$result = "<select name=\"$name\" size=\"1\">";
+	$result = '<select name="'.$name.'" size="1">';
 	while(list($i,$x) = each($skinlist))
 	{
-		$selected = ($x==$check) ? "selected=\"selected\"" : '';
-		$skininfo = "skins/".$x."/".$x.".php";
+		$selected = ($x==$check) ? 'selected="selected"' : '';
+		$skininfo = "skins/$x/$x.php";
 		if (file_exists($skininfo))
 		{
 			$info = sed_infoget($skininfo);
-			$result .= (!empty($info['Error'])) ? "<option value=\"$x\" $selected>".$x." (".$info['Error'].")" : "<option value=\"$x\" $selected>".$info['Name'];
+			$result .= (!empty($info['Error'])) ? '<option value="'.$x.'" '.$selected.'>'.$x.' ('.$info['Error'].')' : '<option value="'.$x.'" '.$selected.'>'.$info['Name'];
 		}
 		else
-		{ $result .= "<option value=\"$x\" $selected>".$x; }
-		$result .= "</option>";
+		{
+			$result .= '<option value="'.$x.'" $selected>'.$x;
+		}
+		$result .= '</option>';
 	}
-	$result .= "</select>";
+	$result .= '</select>';
 
-	return($result);
+	return $result;
 }
 
 /**
@@ -3428,27 +3430,29 @@ function sed_selectbox_skin($check, $name)
  */
 function sed_selectbox_theme($skinname, $name, $theme)
 {
-	$handle = opendir("skins/$skinname");
-	while ($f = readdir($handle))
+	global $skin_themes;
+
+	if(empty($skin_themes))
 	{
-	$dotpos = mb_strrpos($f,".")+1;
-	$f_extension = mb_substr($f, $dotpos, 5);
-
-		if ($f_extension  == 'css' && !eregi('textboxer',$f))
-		{ $themelist[] = str_replace('.css', '', $f); }
+		if(file_exists("skins/$skinname/$skinname.css"))
+		{
+			$skin_themes = array($skinname => $skinname);
+		}
+		else
+		{
+			$skin_themes = array('style' => $skinname);
+		}
 	}
-	closedir($handle);
-	sort($themelist);
 
-	$result = "<select name=\"$name\" size=\"1\">";
-	while(list($i,$x) = each($themelist))
+	$result = '<select name="'.$name.'" size="1">';
+	foreach($skin_themes as $x => $tname)
 	{
-		$selected = ($x==$theme) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$x\" $selected>".$x."</option>";
+		$selected = ($x==$theme) ? 'selected="selected"' : '';
+		$result .= '<option value="'.$x.'" '.$selected.'>'.$tname.'</option>';
 	}
-	$result .= "</select>";
+	$result .= '</select>';
 
-	return($result);
+	return $result;
 }
 
 /**
@@ -4377,7 +4381,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields");
 	while($row = sed_sql_fetchassoc($fieldsres)) $extrafieldsnames[] = $row['field_name'];
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
-	
+
 	// Check table sed_$sql_table - if field with same name exists - exit.
 	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
 	while ($i < mysql_num_fields($fieldsres)) {
@@ -4387,7 +4391,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 		if(strpos($column->name, "_$name")) return false; // No adding - fields already exist
 		$i++;
 	}
-	
+
 	$extf['location'] = $sql_table;
 	$extf['name'] = $name;
 	$extf['type'] = $type;

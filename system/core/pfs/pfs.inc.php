@@ -72,7 +72,7 @@ if (!empty($c1) || !empty($c2))
 {
 	$morejavascript = "
 function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[thumb=".$cfg['th_dir_user']."'+gfile+']'+gfile+'[/thumb]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[img=".$cfg['pfs_dir_user']."'+gfile+']".$cfg['th_dir_user']."'+gfile+'[/img]'; }
 function addpix(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
 	";
@@ -585,27 +585,37 @@ $out['subtitle'] = sed_title('title_pfs', $title_tags, $title_data);
 
 if ($standalone)
 {
+	if($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
+	{
+		$addthumb = "'".$cfg['th_dir_user']."' + gfile";
+		$addpix = 'gfile';
+		$addfile = "'".$cfg['pfs_dir_user']."' + gfile";
+	}
+	else
+	{
+		$addthumb = "'[img=".$cfg['pfs_dir_user']."'+gfile+']".$cfg['th_dir_user']."'+gfile+'[/img]'";
+		$addpix = "'[img]'+gfile+'[/img]'";
+		$addfile = "'[url=".$cfg['pfs_dir_user']."'+gfile+']'+gfile+'[/url]'";
+	}
 	$pfs_header1 = $cfg['doctype']."<html><head>
 <title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
 <script type=\"text/javascript\">
-<!--
+//<![CDATA[
 function help(rcode,c1,c2)
 	{ window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
 function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[thumb]'+gfile+'[/thumb]'; window.close();}
+	{ opener.document.".$c1.".".$c2.".value += $addthumb; window.close();}
 function addpix(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; window.close();}
+	{ opener.document.".$c1.".".$c2.".value += $addpix; window.close();}
 function addfile(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[pfs]'+gfile+'[/pfs]'; window.close();}
-function addglink(id,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]'; window.close();}
+	{ opener.document.".$c1.".".$c2.".value += $addfile; window.close();}
 function comments(rcode)
 	{ window.open('comments.php?id='+rcode,'Comments','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=576,top=64'); }
 function picture(url,sx,sy)
 	{ window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0'); }
 function ratings(rcode)
 	{ window.open('ratings.php?id='+rcode,'Ratings','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=16,top=16'); }
-//-->
+//]]>
 </script>
 ";
 

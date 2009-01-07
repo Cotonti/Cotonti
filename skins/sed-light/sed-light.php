@@ -16,4 +16,8 @@ Description=Official skin
 [END_SED]
 ==================== */
 
+if (!defined('SED_CODE')) { die('Wrong URL.'); }
+
+// List of supported themes
+$skin_themes = array('sed-light' => 'Light');
 ?>
