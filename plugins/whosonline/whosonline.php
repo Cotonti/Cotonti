@@ -83,25 +83,7 @@ while ($row = sed_sql_fetcharray($sql1))
 		"WHOSONlINE_ROW1_USER_GENDER" => ($row['user_gender']=='' || $row['user_gender']=='U') ?  '' : $L["Gender_".$row['user_gender']],
 		"WHOSONlINE_ROW1_USER_AGE" => ($row['user_birthdate']!=0) ? sed_build_age($row['user_birthdate']) : '',
 		"WHOSONlINE_ROW1_USER_BIRTHDATE" => ($row['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $row['user_birthdate']) : '',
-		"WHOSONlINE_ROW1_USER_OCCUPATION" => sed_cc($row['user_occupation']),
-		"WHOSONlINE_ROW1_USER_EXTRA1" => sed_cc($row['user_extra1']),
-		"WHOSONlINE_ROW1_USER_EXTRA2" => sed_cc($row['user_extra2']),
-		"WHOSONlINE_ROW1_USER_EXTRA3" => sed_cc($row['user_extra3']),
-		"WHOSONlINE_ROW1_USER_EXTRA4" => sed_cc($row['user_extra4']),
-		"WHOSONlINE_ROW1_USER_EXTRA5" => sed_cc($row['user_extra5']),
-		"WHOSONlINE_ROW1_USER_EXTRA6" => sed_cc($row['user_extra6']),
-		"WHOSONlINE_ROW1_USER_EXTRA7" => sed_cc($row['user_extra7']),
-		"WHOSONlINE_ROW1_USER_EXTRA8" => sed_cc($row['user_extra8']),
-		"WHOSONlINE_ROW1_USER_EXTRA9" => sed_cc($row['user_extra9']),
-		"WHOSONlINE_ROW1_USER_EXTRA1_TITLE" => $cfg['extra1title'],
-		"WHOSONlINE_ROW1_USER_EXTRA2_TITLE" => $cfg['extra2title'],
-		"WHOSONlINE_ROW1_USER_EXTRA3_TITLE" => $cfg['extra3title'],
-		"WHOSONlINE_ROW1_USER_EXTRA4_TITLE" => $cfg['extra4title'],
-		"WHOSONlINE_ROW1_USER_EXTRA5_TITLE" => $cfg['extra5title'],
-		"WHOSONlINE_ROW1_USER_EXTRA6_TITLE" => $cfg['extra6title'],
-		"WHOSONlINE_ROW1_USER_EXTRA7_TITLE" => $cfg['extra7title'],
-		"WHOSONlINE_ROW1_USER_EXTRA8_TITLE" => $cfg['extra8title'],
-		"WHOSONlINE_ROW1_USER_EXTRA9_TITLE" => $cfg['extra9title']
+		"WHOSONlINE_ROW1_USER_OCCUPATION" => sed_cc($row['user_occupation'])
 	));
 
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
