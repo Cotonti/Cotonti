@@ -122,7 +122,7 @@ function sed_get_polls($limit, $mask)
 		$res .= "</div>";
 
 
-		$res .= ($alreadyvoted) ? "<p style=\"text-align: center; \"><a href=\"javascript:polls('".$poll_id."')\">".$L['polls_viewresults']."</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></p>" : "<p style=\"text-align: center; \"><a href=\"javascript:res(".$poll_id.",0)\" id=\"a".$poll_id."\">".$L['polls_viewresults']."</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"javascript:polls('viewall')\">".$L['polls_viewarchives']."</a></p>";
+		$res .= ($alreadyvoted) ? "<p style=\"text-align: center; \"><a href=\"".sed_url('polls', 'id='.$poll_id)."\">".$L['polls_viewresults']."</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a></p>" : "<p style=\"text-align: center; \"><a href=\"".sed_url('polls', 'id='.$poll_id)."\">".$L['polls_viewresults']."</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a></p>";
 
 		$res_all .= sprintf($mask, $res);
 	}
