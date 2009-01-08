@@ -43,49 +43,7 @@ if (empty($vote))
 $comments = sed_import('comments','G','BOL');
 $ratings = sed_import('ratings','G','BOL');
 
-if ($id=='viewall' || $id=='')
-{
-	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_state=0 AND poll_type=0 ORDER BY poll_id DESC");
-}
-else
-{
-	$id = sed_import($id,'D','INT');
-	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id' AND poll_state=0");
-
-	if ($row = sed_sql_fetcharray($sql))
-	{
-		$poll_state = $row['poll_state'];
-//		$poll_minlevel = $row['poll_minlevel'];
-
-		if ($usr['id']>0)
-		{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
-		else
-		{ $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
-
-		$alreadyvoted = (sed_sql_numrows($sql2)>0) ? 1 : 0;
-
-		if (!empty($vote) && !$alreadyvoted)
-		{
-				for($i = 0; $i<count($vote); $i++)
-			{$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$id' AND po_id='".$vote[$i]."'");}
-			if (sed_sql_affectedrows()==1)
-			{
-				$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
-				$votecasted = TRUE;
-				$alreadyvoted = TRUE;
-			}
-		}
-
-		$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
-		$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
-
-		$sql1 = sed_sql_query("SELECT po_id,po_text,po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
-		$error_string = (sed_sql_numrows($sql1)<1) ? $L['wrongURL'] : '';
-	}
-	else
-	{ $error_string = $L['wrongURL']; }
-
-}
+require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
 
 $out['subtitle'] = $L['Polls'];
 
@@ -110,6 +68,8 @@ if (!empty($error_string))
 }
 elseif ($id=='viewall' || $id=='')
 {
+		$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_state=0 AND poll_type=0 ORDER BY poll_id DESC");
+
 	$result = "<table class=\"cells\">";
 
 	if (sed_sql_numrows($sql)==0)
@@ -135,32 +95,29 @@ elseif ($id=='viewall' || $id=='')
 }
 else
 {
+		$id = sed_import($id,'D','INT');
+	list($polltext, $polldate, $totalvotes, $polloptions, $polloptions_bar, $polloptions_per, $polloptions_count, $pollbutton, $alreadyvoted)=sed_new_poll($id);
 		$result = (!$alreadyvoted) ? "<form action=\"".sed_url('polls', "id=".$id."")."\" method=\"post\">" :"";
 	$result .= "<table class=\"cells\">";
 
-
-	while ($row1 = sed_sql_fetcharray($sql1))
-	{
-		$po_id = $row1['po_id'];
-		$po_count = $row1['po_count'];
-		$percent = @round(100 * ($po_count / $totalvotes),1);
-		$percentbar = floor($percent * 2.24);
+	$option_count = (count($polloptions) ? count($polloptions) : 0);
+	
+	for($i = 0; $i < $option_count; $i++) {
 
 		$result .= "<tr><td>";
-		$input_type=$row['poll_multiple'] ? "checkbox" : "radio";
-		$result .= ($alreadyvoted) ? sed_parse(sed_cc($row1['po_text']), 1, 1, 1) : "<input type='".$input_type."' name='vote[]' value='".$po_id."' /><a href=\"".sed_url('polls', "a=send&amp;".sed_xg()."&amp;id=".$id."&amp;vote=".$po_id)."\">".sed_parse(sed_cc($row1['po_text']), 1, 1, 1)."</a>";
-		$result .= "</td><td><div style=\"width:256px;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
+		$result .= $polloptions[$i];
+		$result .= "</td><td>".$polloptions_bar[$i]."</td><td>".$polloptions_per[i]."</td><td>(".$polloptions_count[$i].")</td></tr>";
 
 	}
-	$result .= (!$alreadyvoted) ? "<tr><td colspan=\"4\"><input type=\"submit\" class=\"submit\" value=\"".$L['polls_Vote']."\" /></td></tr></table></form>" :"</table>";
+	$result .= (!$alreadyvoted) ? "<tr><td colspan=\"4\">".$pollbutton."</td></tr></table></form>" :"</table>";
 
 	$item_code = 'v'.$id;
 	list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$id), $comments);
 
 	$t->assign(array(
 		"POLLS_VOTERS" => $totalvotes,
-		"POLLS_SINCE" => date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
-		"POLLS_TITLE" => sed_parse(sed_cc($row['poll_text']), 1, 1, 1),
+		"POLLS_SINCE" => $polldate,
+		"POLLS_TITLE" => $polltext,
 		"POLLS_RESULTS" => $result,
 		"POLLS_COMMENTS" => $comments_link,
 		"POLLS_COMMENTS_DISPLAY" => $comments_display,
