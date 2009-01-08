@@ -32,18 +32,6 @@
 
 				<!-- END: PRIVATE -->
 				
-				<!-- BEGIN: POLL -->
-				
-				<tr>
-					<td>
-					<div style="float: left; width: 250px; height: 50px;">
-					{PHP.skinlang.forumsnewtopic.poll}
-					<p style="font-size:x-small;">{PHP.skinlang.forumsnewtopic.poll2}</p></div>
-					<div style="width:100%;">{FORUMS_NEWTOPIC_POLLFORM}</div>
-					</td>
-				</tr>
-				
-				<!-- END: POLL -->
 
 
 				<tr>
@@ -51,7 +39,20 @@
 					<div style="width:100%;">{FORUMS_NEWTOPIC_TEXTBOXER}</div>
 					</td>
 				</tr>
+								<!-- BEGIN: POLL -->
 				
+				<tr>
+					<td>
+<table class="cells">
+<tr><td>{PHP.L.Poll}</td><td>{FORUMS_NEWTOPIC_POLLTEXT}</td></tr>
+<tr><td>{PHP.skinlang.forumsnewtopic.poll}</td><td>{FORUMS_NEWTOPIC_POLLOPTIONS}</td></tr>
+<tr><td></td><td>{FORUMS_NEWTOPIC_POLLSETTINGS}</td></tr>
+</table>
+					</td>
+				</tr>
+				
+				<!-- END: POLL -->
+
 				<!-- BEGIN: FORUMS_NEWTOPIC_TAGS -->
 				
 				<tr>
