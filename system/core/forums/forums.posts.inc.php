@@ -437,68 +437,42 @@ $t = new XTemplate($mskin);
 
 if (!$cfg['disable_polls'] && $ft_poll>0)
 {
-	$sql5 = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$ft_poll' AND poll_state='0' AND poll_type='1' LIMIT 1");
+	require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+	list($polltext, $polldate, $totalvotes, $polloptions, $polloptions_bar, $polloptions_per, $polloptions_count, $pollbutton, $alreadyvoted)=sed_new_poll($ft_poll);
+		$result = (!$alreadyvoted) ? "<form action=\"".sed_url('forums', "m=posts&q=".$q)."\" method=\"post\">" :"";
+	$result .= "<table>";
 
-	sed_die(sed_sql_numrows($sql5)==0);
+	$option_count = (count($polloptions) ? count($polloptions) : 0);
+	
+	for($i = 0; $i < $option_count; $i++) {
 
-	if ($usr['id']>0)
-	{ $sql7 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$ft_poll' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1"); }
-	else
-	{ $sql7 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$ft_poll' AND pv_userip='".$usr['ip']."' LIMIT 1"); }
+		$result .= "<tr><td>";
+		$result .= $polloptions[$i];
+		$result .= "</td><td>".$polloptions_bar[$i]."</td><td>".$polloptions_per[i]."</td><td>(".$polloptions_count[$i].")</td></tr>";
 
-	$alreadyvoted = (sed_sql_numrows($sql7)>0) ? TRUE : FALSE;
-
-	if ($a=='send' && !$alreadyvoted && !$ft_state)
-	{
-		sed_check_xg();
-		$sql8 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$ft_poll' AND po_id='$vote'");
-		if (sed_sql_affectedrows()==1)
-		{
-			$sql8 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (".(int)$ft_poll.", ".(int)$usr['id'].", '".$usr['ip']."')");
-			$votecasted = TRUE;
-			$alreadyvoted = TRUE;
-		}
 	}
+	$result .= (!$alreadyvoted) ? "<tr><td colspan=\"4\">".$pollbutton."</td></tr></table></form>" :"</table>";
+	$t->assign(array(
+		"POLLS_VOTERS" => $totalvotes,
+		"POLLS_SINCE" => $polldate,
+		"POLLS_TITLE" => $polltext,
+		"POLLS_RESULTS" => $result,
+	));
 
-	$sql4 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$ft_poll'");
-	$totalvotes = sed_sql_result($sql4,0,"SUM(po_count)");
-
-	$row5 = sed_sql_fetcharray($sql5);
-	$poll_state = $row5['poll_state'];
-
-	$sql6 = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid='$ft_poll' ORDER by po_id ASC");
-	$sql9 = sed_sql_query("SELECT MAX(po_count) FROM $db_polls_options WHERE po_pollid='$ft_poll'");
-
-	$row9 = sed_sql_fetcharray($sql9);
-	$coef = ($row9['MAX(po_count)']<1) ? 0 : ($totalvotes / $row9['MAX(po_count)'])*2.56;
-
-	$poll_result = "<table>";
-	$ii=1;
-	while ($row6 = sed_sql_fetcharray($sql6))
-	{
-		$po_id = $row6['po_id'];
-		$po_count = $row6['po_count'];
-		$percent = @round(100 * ($po_count / $totalvotes),1);
-		$percentbar = floor($percent * $coef);
-
-		$poll_result .= "<tr><td>";
-
-		if ($alreadyvoted || $ft_state)
-		{ $poll_result .= $row6['po_text']; }
-		else
-		{ $poll_result .= "<a href=\"".sed_url('forums', "m=posts&q=$q&a=send&".sed_xg()."&poll=".$ft_poll."&vote=".$po_id)."\">".$row6['po_text']."</a>"; }
-
-		$poll_result .= "</td><td style=\"text-align:right;\">".$percent."%</td><td style=\"text-align:center; width:24px;\">(".$po_count.")</td>";
-		$poll_result .= "<td style=\"text-align:left;\"><img src=\"skins/$skin/img/system/poll-bar1.gif\" height=\"12\" alt=\"\" />";
-		$poll_result .= "<img src=\"skins/$skin/img/system/poll-bar2.gif\" width=\"$percentbar\" height=\"12\" alt=\"\" />";
-		$poll_result .= "<img src=\"skins/$skin/img/system/poll-bar3.gif\" height=\"12\" alt=\"\" /></td></tr>";
-	}
-	$poll_result .= "</table><br />";
+	$t->parse("MAIN.POLLS_VIEW");
 
 	if ($alreadyvoted)
-	{ $poll_result .= ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted']; }
+	{ $extra = ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted']; }
 	else
-	{ $poll_result .= $L['polls_notyetvoted']; }
+	{ $extra = $L['polls_notyetvoted']; }
+
+	$t->assign(array(
+		"POLLS_EXTRATEXT" => $extra,
+	));
+
+	$t->parse("MAIN.POLLS_EXTRA");
+
+
 }
 
 $nbpages = ceil($totalposts / $cfg['maxtopicsperpage']);

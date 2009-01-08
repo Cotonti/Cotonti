@@ -181,7 +181,7 @@ $poll_option_text = sed_import('poll_option', 'P', 'ARR');
 
 /* ------------------ */
 
-function sed_save_poll()
+function sed_save_poll($type='0', $state='0')
 {
 
 global $cfg, $L, $sys, $db_polls, $db_polls_options;
@@ -192,7 +192,7 @@ if (!empty($poll_id) && empty($error_string))
 {
 	$option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
 		if ($poll_id=='new') {
-			$sql = sed_sql_query("INSERT INTO $db_polls (poll_state, poll_creationdate, poll_text, poll_multiple) VALUES (0, ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".$poll_multiple."')");
+			$sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple) VALUES ('".$type."', ".(int)$state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".$poll_multiple."')");
 			$newpoll_id = sed_sql_insertid(); }
 		else {
 			$sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".$poll_multiple."' WHERE poll_id='$poll_id'");

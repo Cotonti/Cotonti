@@ -36,6 +36,10 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+
+
+
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
 if ($row = sed_sql_fetcharray($sql))
@@ -90,15 +94,13 @@ if ($a=='newtopic')
 	$newtopicpreview = mb_substr(sed_cc($newmsg), 0, 128);
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
 
-	$newtopicpoll = sed_import('newtopicpoll','P','TXT');
-	$po_src = explode("\n", $newtopicpoll);
-
-	$po_req = count($po_src);
-	$po_req = (empty($newtopicpoll)) ? '0' : $po_req;
 
 	$error_string .= ( strlen($newtopictitle) < 2) ? $L["for_titletooshort"]."<br />" : '';
 	$error_string .= ( strlen($newmsg) < 5) ? $L["for_messagetooshort"]."<br />" : '';
-	$error_string .= ( $po_req < 2 && $poll) ? $L["for_polltooshort"]."<br />" : '';
+	if($poll){
+	sed_save_poll_check_errors();
+	}
+	
 
 	if (empty($error_string))
 	{
@@ -110,23 +112,7 @@ if ($a=='newtopic')
 
 	if ($poll)
 	{
-
-	if ($po_req>1)
-	{
-
-	$sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text) VALUES ('1', ".(int)$s.", '".$sys['now_offset']."', '".sed_sql_prep($newtopictitle)."')");
-
-	$sqlp = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='1' AND poll_state='".$s."' LIMIT 1");
-	$gp = sed_sql_fetcharray($sqlp);
-	$p = $gp['poll_id'];
-
-		$sql = sed_sql_query("UPDATE $db_polls SET poll_state='0' WHERE poll_id='$p'");
-
-		foreach($po_src as $k => $po_text)
-			{ $sql = sed_sql_query("INSERT into $db_polls_options (po_pollid, po_text, po_count) VALUES (".(int)$p.", '".sed_sql_prep($po_text)."', '0' ) "); }
-
-	}
-
+		$poll_index=sed_save_poll(1, $s);
 	}
 
 		$sql = sed_sql_query("INSERT into $db_forum_topics
@@ -162,7 +148,7 @@ if ($a=='newtopic')
 			'".sed_sql_prep($usr['name'])."',
 			".(int)$usr['id'].",
 			'".sed_sql_prep($usr['name'])."',
-			".(int)$gp['poll_id'].")");
+			".$poll_index.")");
 
 		$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE 1 ORDER BY ft_id DESC LIMIT 1");
 		$row = sed_sql_fetcharray($sql);
@@ -302,10 +288,13 @@ if ($fs_allowprvtopics)
 if ($fs_allowpolls && $poll)
 	{
 
-	$poll_form = "<textarea name=\"newtopicpoll\" rows=\"8\" cols=\"56\">".sed_cc($newtopicpoll)."</textarea>";
+	list($poll_text, $poll_options, $poll_date, $poll_settings)=sed_create_poll("new", 1);
+
 
 	$t->assign(array(
-		"FORUMS_NEWTOPIC_POLLFORM" => $poll_form
+		"FORUMS_NEWTOPIC_POLLOPTIONS" => $poll_options,
+		"FORUMS_NEWTOPIC_POLLTEXT" => $poll_text,
+		"FORUMS_NEWTOPIC_POLLSETTINGS" => $poll_settings,
 	));
 	$t->parse("MAIN.POLL");
 

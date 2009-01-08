@@ -42,8 +42,19 @@
 		<!-- END: TRACINFO -->
 		<div class="paging">
 			{FORUMS_POSTS_PAGEPREV} {FORUMS_POSTS_PAGENEXT} {FORUMS_POSTS_PAGES}
-			<p>{FORUMS_POSTS_POLL}</p>
+
 		</div>
+
+	<!-- BEGIN: POLLS_VIEW -->
+	{POLLS_TITLE}
+
+		{POLLS_RESULTS}
+
+		<p>
+			{POLLS_VOTERS} {PHP.skinlang.polls.voterssince} {POLLS_SINCE}<br />
+		</p>
+
+	<!-- END: POLLS_VIEW -->
 
 		<div class="tCap"></div><table class="cells" border="0" cellspacing="1" cellpadding="2">
 			<tr>
