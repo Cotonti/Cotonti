@@ -56,8 +56,8 @@ if ($n=='edit')
 		$sql = sed_sql_query("SELECT fs_id, fs_masterid, fs_order, fs_category FROM $db_forum_sections WHERE fs_id=$id ");
 		sed_die(sed_sql_numrows($sql)==0);
 		$row_cur = sed_sql_fetcharray($sql);
-		
-		if ($rmaster!='' && $row_cur['fs_masterid']!=$rmaster)
+
+		if ($rmaster!='' && $row_cur['fs_masterid']!=$rmaster || empty($row_cur['fs_mastername']))
 		{
 			$sql1 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='$rmaster' ");
 			$row1 = sed_sql_fetcharray($sql1);
@@ -231,7 +231,7 @@ else
 		$ntitle = sed_import('ntitle', 'P', 'TXT');
 		$ndesc = sed_import('ndesc', 'P', 'TXT');
 		$ncat = sed_import('ncat', 'P', 'TXT');
-		
+
 		if (!empty($ntitle))
 		{
 			$sql1 = sed_sql_query("SELECT fs_order FROM $db_forum_sections WHERE fs_category='".sed_sql_prep($ncat)."' ORDER BY fs_order DESC LIMIT 1");
@@ -286,17 +286,17 @@ else
 			header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums', '', true));
 		}
 	}
-
+	/*
 	$totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
 	$pagnav = sed_pagination(sed_url('admin','m=forums'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-
+	*/
 	$sql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
-	ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+	ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC");
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
+	//$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
 	$adminmain .= "<form id=\"updateorder\" action=\"".sed_url('admin', 'm=forums&a=update&d='.$d)."\" method=\"post\">";
 	$adminmain .= "<table class=\"cells\"><tr>";
 	$adminmain .= "<td class=\"coltop\">".$L['Section']." ".$L['adm_clicktoedit']."</td>";
