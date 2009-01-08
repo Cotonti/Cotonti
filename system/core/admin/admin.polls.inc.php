@@ -38,7 +38,6 @@ $adminhelp = $L['adm_help_polls'];
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$error_string='';
 
 $adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=polls")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
 
@@ -77,15 +76,9 @@ if ($a=='bump')
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=102&num=1", '', true));
 	exit;
 }
-$poll_id = sed_import('poll_id','P','TXT');
-$poll_text = sed_import('poll_text','P','HTM');
-$poll_option_id = sed_import('poll_option_id', 'P', 'ARR');
-$poll_multiple = sed_import('poll_multiple', 'P', 'BOL');
-$option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
-$poll_option_text = sed_import('poll_option', 'P', 'ARR');
-$error_string= '';
+
 sed_save_poll_check_errors();
-//	$error_string='!!!';
+
 	if (empty($error_string)){
 		$number=sed_save_poll();
 
