@@ -27,11 +27,6 @@ if (is_array($extp))
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['auth_read']);
 
-$polls_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas();
-
-$polls_header2 = "</head><body>";
-$polls_footer = "</body></html>";
 
 $id = sed_import('id','G','ALP', 8);
 $vote = sed_import('vote','G','TXT');
@@ -53,13 +48,9 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$t = new XTemplate(sed_skinfile('polls'));
+require_once $cfg['system_dir'] . '/header.php';
 
-$t->assign(array(
-	"POLLS_HEADER1" => $polls_header1,
-	"POLLS_HEADER2" => $polls_header2,
-	"POLLS_FOOTER" => $polls_footer,
-));
+$t = new XTemplate(sed_skinfile('polls'));
 
 if (!empty($error_string))
 {
@@ -147,9 +138,7 @@ if (is_array($extp))
 
 $t->parse("MAIN");
 $t->out("MAIN");
+require_once $cfg['system_dir'] . '/footer.php';
 
-sed_sendheaders();
-@ob_end_flush();
-@ob_end_flush();
-
+//sed_sendheaders();
 ?>

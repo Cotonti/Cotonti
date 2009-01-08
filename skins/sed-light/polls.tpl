@@ -1,13 +1,7 @@
 <!-- BEGIN: MAIN -->
 
-	{POLLS_HEADER1}
-
-	<link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
-
-	{POLLS_HEADER2}
-
 	<!-- BEGIN: POLLS_VIEW -->
-	<div class="popupTitle">{POLLS_TITLE}</div>
+	<div class="mboxHD">{POLLS_TITLE}</div>
 	<div class="mboxBody">
 
 		{POLLS_RESULTS}
@@ -33,6 +27,5 @@
 	<div class="block">{POLLS_EXTRATEXT}<br />{POLLS_VIEWALL}</div>
 	<!-- END: POLLS_EXTRA -->
 
-{POLLS_FOOTER}
 
 <!-- END: MAIN -->
