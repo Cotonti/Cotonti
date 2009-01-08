@@ -32,7 +32,7 @@ if($a == 'pages')
 {
 	$t->assign(array(
 	'TAGS_ACTION' => sed_url('plug', 'e=tags&a=pages'),
-	'TAGS_HINT' => $L['Query_hint'],
+	'TAGS_HINT' => $L['tags_Query_hint'],
 	'TAGS_QUERY' => sed_cc($qs)
 	));
 	if(empty($qs))
@@ -181,6 +181,14 @@ list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=t
 			$t->parse('MAIN.TAGS_RESULT');
 		}
 	}
+}
+else
+{
+	/* == Hook for the plugins == */
+	$extp = sed_getextplugins('tags.search.custom');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 }
 
 /**

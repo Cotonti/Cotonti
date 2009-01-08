@@ -24,7 +24,7 @@ Version for IE using TextRanges.
    var r = document.body.createTextRange();
    r.moveToElementText(node);
    for (var i = 0; r.findText(te); i++) {
-    r.pasteHTML('<span class="highlight">' +  r.text + '<\/span>');
+    r.pasteHTML('<span class="searchhighlight">' +  r.text + '<\/span>');
     r.collapse(false);
    }
   }
@@ -41,7 +41,7 @@ Version for IE using TextRanges.
     pos = node.data.toUpperCase().indexOf(te);
     if (pos >= 0) {
      spannode = document.createElement('span');
-     spannode.className = 'highlight';
+     spannode.className = 'searchhighlight';
      middlebit = node.splitText(pos);
      endbit = middlebit.splitText(te.length);
      middleclone = middlebit.cloneNode(true);
@@ -62,7 +62,7 @@ Version for IE using TextRanges.
 });
 
 jQuery.fn.removeHighlight = function() {
- this.find("span.highlight").each(function() {
+ this.find("span.searchhighlight").each(function() {
   with (this.parentNode) {
    replaceChild(this.firstChild, this);
    normalize();

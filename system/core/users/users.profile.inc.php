@@ -154,7 +154,7 @@ switch ($a)
 		$dotpos = mb_strrpos($uav_name,".")+1;
 		$f_extension = mb_strtolower(mb_substr($uav_name, $dotpos, 5));
 		$fcheck = sed_file_check($uav_tmp_name, $uav_name, $f_extension);
-		if($fcheck)
+		if($fcheck == 1)
 		{
 			if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && ($uav_size<=$cfg['av_maxsize'] || $cfg['av_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
@@ -198,6 +198,10 @@ switch ($a)
 				}
 			}
 		}
+		elseif($fcheck == 2)
+		{
+			$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
+		}
 		else
 		{
 			$error_string .= sprintf($L['pro_avatarnotvalid'], $f_extension);
@@ -209,7 +213,7 @@ switch ($a)
 		$dotpos = mb_strrpos($uph_name,".")+1;
 		$f_extension = mb_strtolower(mb_substr($uph_name, $dotpos, 5));
 		$fcheck = sed_file_check($uph_tmp_name, $uph_name, $f_extension);
-		if($fcheck)
+		if($fcheck == 1)
 		{
 			if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && ($uph_size<=$cfg['ph_maxsize'] || $cfg['ph_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
@@ -253,6 +257,10 @@ switch ($a)
 				}
 			}
 		}
+		elseif($fcheck == 2)
+		{
+			$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
+		}
 		else
 		{
 			$error_string .= sprintf($L['pro_photonotvalid'], $f_extension);
@@ -264,7 +272,7 @@ switch ($a)
 		$dotpos = mb_strrpos($usig_name, ".")+1;
 		$f_extension = mb_strtolower(mb_substr($usig_name, $dotpos, 5));
 		$fcheck = sed_file_check($usig_tmp_name, $usig_name, $f_extension);
-		if($fcheck)
+		if($fcheck == 1)
 		{
 			if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && ($usig_size<=$cfg['sig_maxsize'] || $cfg['sig_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
@@ -307,6 +315,10 @@ switch ($a)
 					@chmod($signaturepath, 0666);
 				}
 			}
+		}
+		elseif($fcheck == 2)
+		{
+			$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
 		}
 		else
 		{

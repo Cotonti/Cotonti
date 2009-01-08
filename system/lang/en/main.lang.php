@@ -537,7 +537,7 @@ $L['com_nocommentsyet'] = 'No comments yet';
 $L['for_newtopic'] = 'New topic';
 $L['for_markallasread'] = 'Mark all posts as read';
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
-$L['for_antibump'] = 'Protection against spam is on. You can not add a few messages a row.';
+$L['for_antibump'] = 'Protection against spam is on. You can not add a few messages a row.'; // N-0.0.2
 $L['for_titletooshort'] = 'Topic title is too short or missing'; // N-0.0.2
 $L['for_messagetooshort'] = 'Topic message is too short'; // N-0.0.2
 $L['for_polltooshort'] = 'Poll options must be equal, or greater than 2'; // N-0.0.2
@@ -585,6 +585,7 @@ $L['pfs_extallowed'] = 'Extensions allowed';
 $L['pfs_filechecknomime'] = 'Warning: No Mime Type data was found for the Extension: %1$s Filename - %2$s'; // N-0.0.2
 $L['pfs_filecheckfail'] = 'Warning: File Check Failed for Extension: %1$s Filename - %2$s'; // N-0.0.2
 $L['pfs_filenotvalid'] = "This is not a valid %1\$s file."; // N-0.0.2
+$L['pfs_filemimemissing'] = "The mime type for %1\$s is missing. Upload Failed"; // N-0.0.2
 
 
 /* ====== Plug ====== */
@@ -684,7 +685,7 @@ $L['pro_photonotvalid'] = "This photo is not a valid %1\$s image."; // N-0.0.2
 $L['pro_sigotvalid'] = "This signature is not a valid %1\$s image."; // N-0.0.2
 
 /* ====== Misc ====== */
-
+// N-0.0.2
 $L['pagenav_first'] = '&lt;&lt;';
 $L['pagenav_prev'] = '&lt;';
 $L['pagenav_next'] = '&gt;';
@@ -941,6 +942,7 @@ $sed_countries = array (
 );
 
 /* ====== RSS ====== */
+// N-0.0.2
 $L['rss_comments_item_desc'] = 'Last comments on page';
 $L['rss_comment'] = 'Comment from';
 $L['rss_original'] = 'Original message';

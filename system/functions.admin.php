@@ -210,8 +210,8 @@ function sed_loadconfigmap()
 	$result[] = array ('main', '05', 'cache', 3, '1', '');
 	$result[] = array ('main', '06', 'gzip', 3, '1', '');
 	$result[] = array ('main', '07', 'devmode', 3, '0', '');
-	$result[] = array ('main', '07', 'maintenance', 3, '0', '');
-	$result[] = array ('main', '02', 'maintenancereason', 1, '', '');
+	$result[] = array ('main', '07', 'maintenance', 3, '0', ''); // N-0.0.2
+	$result[] = array ('main', '02', 'maintenancereason', 1, '', ''); // N-0.0.2
 	$result[] = array ('main', '10', 'cookiedomain', 1, '', '');
 	$result[] = array ('main', '10', 'cookiepath', 1, '', '');
 	$result[] = array ('main', '10', 'cookielifetime', 2, '5184000', array(1800,3600,7200,14400,28800,43200,86400,172800, 259200,604800,1296000,2592000,5184000));
@@ -245,7 +245,7 @@ function sed_loadconfigmap()
 	$result[] = array ('skin', '15', 'disablesysinfos', 3, '0', '');
 	$result[] = array ('skin', '15', 'keepcrbottom', 3, '1', '');
 	$result[] = array ('skin', '15', 'showsqlstats', 3, '0', '');
-	$result[] = array ('skin', '20', 'homebreadcrumb', 3, '0', '');
+	$result[] = array ('skin', '20', 'homebreadcrumb', 3, '0', ''); // N-0.0.2
 	$result[] = array ('lang', '10', 'forcedefaultlang', 3, '0',  '');
 	$result[] = array ('menus', '10', 'topline', 0, '', '');
 	$result[] = array ('menus', '10', 'banner', 0, '', '');
@@ -280,7 +280,9 @@ function sed_loadconfigmap()
 	$result[] = array ('page', '05', 'maxrowsperpage', 2, '15', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
 	$result[] = array ('pfs', '01', 'disable_pfs', 3, '0', '');
 	$result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');
-	$result[] = array ('pfs', '03', 'pfstimename', 3, '0', '');
+	$result[] = array ('pfs', '03', 'pfstimename', 3, '0', ''); // N-0.0.2
+	$result[] = array ('pfs', '04', 'pfsfilecheck', 3, '1', ''); // N-0.0.2
+	$result[] = array ('pfs', '05', 'pfsnomimepass', 3, '1', ''); // N-0.0.2
 	$result[] = array ('pfs', '10', 'th_amode', 2, 'GD2', array('Disabled','GD1','GD2'));
 	$result[] = array ('pfs', '10', 'th_x', 2, '112', '');
 	$result[] = array ('pfs', '10', 'th_y', 2, '84', '');
@@ -296,9 +298,9 @@ function sed_loadconfigmap()
 	$result[] = array ('pm', '10', 'pm_maxsize', 2, '10000', array(200,500,1000,2000, 5000,10000,15000,20000,30000,50000,65000));
 	$result[] = array ('pm', '10', 'pm_allownotifications', 3, '1', '');
 	$result[] = array ('polls', '01', 'disable_polls', 3, '0', '');
-	$result[] = array ('polls', '02', 'ip_id_polls', 2, 'ip', array('ip','id'));
-	$result[] = array ('polls', '03', 'max_options_polls', 1, '100', '');
-	$result[] = array ('polls', '04', 'del_dup_options', 3, '0', '');
+	$result[] = array ('polls', '02', 'ip_id_polls', 2, 'ip', array('ip','id')); // N-0.0.2
+	$result[] = array ('polls', '03', 'max_options_polls', 1, '100', ''); // N-0.0.2
+	$result[] = array ('polls', '04', 'del_dup_options', 3, '0', ''); // N-0.0.2
 	$result[] = array ('ratings', '01', 'disable_ratings', 3, '0', '');
 	$result[] = array ('trash', '01', 'trash_prunedelay', 2, '7', array(0,1,2,3,4,5,7,10,15,20,30,45,60,90,120));
 	$result[] = array ('trash', '10', 'trash_comment', 3, '1', '');
@@ -316,16 +318,16 @@ function sed_loadconfigmap()
 	$result[] = array ('users', '12', 'av_maxsize', 2, '8000', '');
 	$result[] = array ('users', '12', 'av_maxx', 2, '64', '');
 	$result[] = array ('users', '12', 'av_maxy', 2, '64', '');
-	$result[] = array ('users', '12', 'av_resize', 3, '0', ''); // N-0.1.0
+	$result[] = array ('users', '12', 'av_resize', 3, '0', ''); // N-0.0.2
 	$result[] = array ('users', '12', 'usertextmax', 2, '300', '');
 	$result[] = array ('users', '13', 'sig_maxsize', 2, '32000', '');
 	$result[] = array ('users', '13', 'sig_maxx', 2, '550', '');
 	$result[] = array ('users', '13', 'sig_maxy', 2, '100', '');
-	$result[] = array ('users', '13', 'sig_resize', 3, '0', ''); // N-0.1.0
+	$result[] = array ('users', '13', 'sig_resize', 3, '0', ''); // N-0.0.2
 	$result[] = array ('users', '14', 'ph_maxsize', 2, '32000', '');
 	$result[] = array ('users', '14', 'ph_maxx', 2, '128', '');
 	$result[] = array ('users', '14', 'ph_maxy', 2, '128', '');
-	$result[] = array ('users', '14', 'ph_resize', 3, '0', ''); // N-0.1.0
+	$result[] = array ('users', '14', 'ph_resize', 3, '0', ''); // N-0.0.2
 	$result[] = array ('users', '20', 'extra1title', 1, 'Real name', '');
 	$result[] = array ('users', '20', 'extra2title', 1, 'Title', '');
 	$result[] = array ('users', '20', 'extra3title', 1, '', '');
@@ -353,7 +355,7 @@ function sed_loadconfigmap()
 	$result[] = array ('users', '20', 'extra7uchange', 3, '0', '');
 	$result[] = array ('users', '20', 'extra8uchange', 3, '0', '');
 	$result[] = array ('users', '20', 'extra9uchange', 3, '0', '');
-	//N-0.0.2
+	// N-0.0.2
 	$result[] = array ('title', '01', 'maintitle', 1, 'Title of your site', '');
 	$result[] = array ('title', '02', 'subtitle', 1, 'Subtitle', '');
 	$result[] = array ('title', '03', 'title_forum_main', 1, '{FORUM}', '');

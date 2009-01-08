@@ -36,10 +36,12 @@
 					<td>{PHP.skinlang.pageadd.Alias}</td>
 					<td>{PAGEADD_FORM_ALIAS}</td>
 				</tr>
+				<!-- BEGIN: TAGS -->
 				<tr>
 					<td>{PAGEADD_TOP_TAGS}:</td>
 					<td>{PAGEADD_FORM_TAGS} ({PAGEADD_TOP_TAGS_HINT})</td>
 				</tr>
+				<!-- END: TAGS -->
 				<tr>
 					<td>{PHP.skinlang.pageadd.Owner}</td>
 					<td>{PAGEADD_FORM_OWNER}</td>
