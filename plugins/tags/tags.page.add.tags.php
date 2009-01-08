@@ -26,9 +26,10 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 {
 	require_once(sed_langfile('tags'));
 	$t->assign(array(
-	'PAGEADD_TOP_TAGS' => $L['Tags'],
-	'PAGEADD_TOP_TAGS_HINT' => $L['comma_separated'],
+	'PAGEADD_TOP_TAGS' => $L['tags_Tags'],
+	'PAGEADD_TOP_TAGS_HINT' => $L['tags_comma_separated'],
 	'PAGEADD_FORM_TAGS' => '<input type="text" name="rtags" />'
 	));
+	$t->parse('MAIN.TAGS');
 }
 ?>

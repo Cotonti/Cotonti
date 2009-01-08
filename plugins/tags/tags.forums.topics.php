@@ -29,7 +29,7 @@ if($cfg['plugin']['tags']['forums'])
 	$tags = sed_tag_list($item_id, 'forums');
 	if(count($tags) > 0)
 	{
-		$tc_html = $L['Tags'] . ':';
+		$tc_html = $L['tags_Tags'] . ':';
 		foreach($tags as $tag)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_cc(sed_tag_title($tag)) : sed_cc($tag);
@@ -41,7 +41,7 @@ if($cfg['plugin']['tags']['forums'])
 	}
 	else
 	{
-		$tc_html = '';
+		$tc_html = $L['tags_Tag_cloud_none'];
 	}
 	$t->assign('FORUMS_TOPICS_ROW_TAGS', $tc_html);
 }

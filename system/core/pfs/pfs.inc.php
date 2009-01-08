@@ -145,7 +145,7 @@ if ($a=='upload')
 			$f_extension = mb_substr($u_name, $dotpos);
 			$f_extension_ok = 0;
 			$fcheck = sed_file_check($u_tmp_name, $u_name, $f_extension);
-			if($fcheck)
+			if($fcheck == 1)
 			{
 				$desc = $ndesc[$ii];
 				if($cfg['pfstimename'])
@@ -237,6 +237,10 @@ if ($a=='upload')
 				{
 					$disp_errors .= $L['pfs_filetoobigorext'];
 				}
+			}
+			elseif($fcheck == 2)
+			{
+				$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
 			}
 			else
 			{

@@ -37,7 +37,7 @@ $L['core_polls'] = 'Polls';
 $L['core_ratings'] = 'Ratings';
 $L['core_trash'] = 'Trash can';
 $L['core_users'] = 'Users';
-$L['core_title'] = 'Titles';		//N-0.0.2
+$L['core_title'] = 'Titles';		// N-0.0.2
 
 /* ====== General ====== */
 
@@ -135,17 +135,19 @@ $L['cfg_sig_maxy'] = array('Signature, maximum height', 'Default: 60 pixels');
 $L['cfg_ph_maxsize'] = array('Photo, maximum file size', 'Default: 8000 bytes');
 $L['cfg_ph_maxx'] = array('Photo, maximum width', 'Default: 96 pixels');
 $L['cfg_ph_maxy'] = array('Photo, maximum height', 'Default: 96 pixels');
-$L['cfg_av_resize'] = array('Resize avatar ?', 'To resize the bigger dimension images automaticly'); // N-0.1.0
-$L['cfg_ph_resize'] = array('Resize photos ?', 'To resize the bigger dimension photos automaticly'); // N-0.1.0
-$L['cfg_sig_resize'] = array('Resize signature ?', 'To resize the bigger dimension signature images automaticly'); // N-0.1.0
+$L['cfg_av_resize'] = array('Resize avatar ?', 'To resize the bigger dimension images automaticly'); // N-0.0.2
+$L['cfg_ph_resize'] = array('Resize photos ?', 'To resize the bigger dimension photos automaticly'); // N-0.0.2
+$L['cfg_sig_resize'] = array('Resize signature ?', 'To resize the bigger dimension signature images automaticly'); // N-0.0.2
 $L['cfg_maxrowsperpage'] = array('Maximum lines in lists', '');
 $L['cfg_countcomments'] = array('Count comments', 'Display the count of comments near the icon');
 $L['cfg_hideprivateforums'] = array('Hide private forums', '');
 $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics or posts per page', '');
-$L['cfg_antibumpforums'] = array('\'Anti-bamp\' protection', 'The ban on adding by an users after few messages in succession in the the same theme of forum');
+$L['cfg_antibumpforums'] = array('\'Anti-bamp\' protection', 'The ban on adding by an users after few messages in succession in the the same theme of forum'); // N-0.0.2
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded to any PFS, it\'s too late to change this. It is not recommended to change this setting for now.');
-$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');
+$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.'); // N-0.0.2
+$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the PFS, or images through the profile. To insure they are valid files. \'Yes\' recommended, for security reasons'); // N-0.0.2
+$L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.'); // N-0.0.2
 $L['cfg_th_amode'] = array('Thumbnails generation', '');
 $L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
 $L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended : Width x 0.75');
@@ -169,7 +171,7 @@ $L['cfg_count_admin'] = array('Count Administrators\' hits', ''); // N-0.0.1
 $L['cfg_forcedefaultskin'] = array('Force the default skin for all users', '');
 $L['cfg_forcedefaultlang'] = array('Force the default language for all users', '');
 $L['cfg_separator'] = array('Generic separator', 'Default:>');
-$L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');
+$L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb'); // N-0.0.2
 $L['cfg_menu1'] = array('Menu slot #1<br />{PHP.cfg.menu1} in all tpl files', '');
 $L['cfg_menu2'] = array('Menu slot #2<br />{PHP.cfg.menu2} in all tpl files', '');
 $L['cfg_menu3'] = array('Menu slot #3<br />{PHP.cfg.menu3} in all tpl files', '');
@@ -236,7 +238,7 @@ $L['cfg_trash_forum'] = array('Use the trash can for the forums', '');		// New i
 $L['cfg_trash_page'] = array('Use the trash can for the pages', '');		// New in v110
 $L['cfg_trash_pm'] = array('Use the trash can for the private messages', '');		// New in v110
 $L['cfg_trash_user'] = array('Use the trash can for the users', '');		// New in v110
-//N-0.0.2
+// N-0.0.2
 $L['cfg_title_forum_main'] = array('Forum Main title', 'Options: {FORUM}');
 $L['cfg_title_forum_topics'] = array('Forum Topics title', 'Options: {FORUM}, {SECTION}');
 $L['cfg_title_forum_posts'] = array('Forum Posts title', 'Options: {FORUM}, {TITLE}');
@@ -321,7 +323,7 @@ $L['adm_tpl_parent'] = 'Same as the parent category';	// New in v110
 $L['adm_polls_indexpolls'] = 'Index polls (recent at top) :'; // N-0.0.1
 $L['adm_polls_forumpolls'] = 'Polls from forums (recent at top) :'; // N-0.0.1
 $L['adm_polls_polltopic'] = 'Poll topic'; // N-0.0.1
-$L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.'; //N-0.0.2
+$L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.'; // N-0.0.2
 $L['adm_polls_on_page'] = 'on page'; // N-0.0.2
 
 /* ====== Statistics ====== */
@@ -497,8 +499,8 @@ your .htaccess (if writable) and provide you with .htaccess/IsapiRewrite4.ini/ng
 </ol>';
 
 /* ====== Extra Fields Admin ========*/
-
-$L['adm_extrafields'] = "Extra fields";
+// N-0.0.2
+$L['adm_extrafields'] = "Extra fields"; 
 $L['adm_extrafields_desc'] = "Add/Edit extra fields";
 $L['adm_extrafield_added'] = "Successfully added new extra field.";
 $L['adm_extrafield_not_added'] = "Error! New extra field not added.";

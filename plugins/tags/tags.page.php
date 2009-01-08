@@ -27,15 +27,25 @@ if($cfg['plugin']['tags']['pages'])
 	require_once(sed_langfile('tags'));
 	$item_id = $pag['page_id'];
 	$tags = sed_tag_list($item_id);
-	foreach($tags as $tag)
+	if(count($tags) > 0)
 	{
-		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
-		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+		foreach($tags as $tag)
+		{
+			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+			$t->assign(array(
+			'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? sed_cc(sed_tag_title($tag)) : sed_cc($tag),
+			'PAGE_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl)
+			));
+			$t->parse('MAIN.PAGE_TAGS_ROW');
+		}
+	}
+	else
+	{
 		$t->assign(array(
-		'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? sed_cc(sed_tag_title($tag)) : sed_cc($tag),
-		'PAGE_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl)
-		));
-		$t->parse('MAIN.PAGE_TAGS_ROW');
+			'PAGE_NO_TAGS' => $L['tags_Tag_cloud_none'],
+				));
+		$t->parse('MAIN.PAGE_NO_TAGS');
 	}
 }
 ?>

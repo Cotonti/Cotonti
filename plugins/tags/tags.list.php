@@ -49,6 +49,7 @@ if($cfg['plugin']['tags']['pages'])
 	$tc_html = '<ul class="tag_cloud">';
 	while($tc_row = sed_sql_fetchassoc($tc_res))
 	{
+		$tag_count++;
 		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tc_row['tag']) : $tc_row['tag'];
 		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
@@ -56,10 +57,10 @@ if($cfg['plugin']['tags']['pages'])
 	}
 	sed_sql_freeresult($tc_res);
 	$tc_html .= '</ul><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.tagcloud.js"></script><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/set.js"></script>';
-
+	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 
 	$t->assign(array(
-	'LIST_TOP_TAG_CLOUD' => $L['Tag_cloud'],
+	'LIST_TOP_TAG_CLOUD' => $L['tags_Tag_cloud'],
 	'LIST_TAG_CLOUD' => $tc_html
 	));
 }
