@@ -1,16 +1,12 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
 [BEGIN_SED]
 File=admin.banlist.inc.php
-Version=122
-Updated=2007-nov-27
+Version=0.0.2
+Updated=2009-jan-03
 Type=Core.admin
-Author=Neocrome
-Description=Banlist
+Author=Neocrome & Cotonti Team
+Description=Banlist (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
 [END_SED]
 ==================== */
 
@@ -25,6 +21,11 @@ $adminhelp = $L['adm_help_banlist'];
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
+
+$t = new XTemplate(sed_skinfile('admin.banlist.inc'));
+$adminbanlist = '';
 
 if ($a=='update')
 {
@@ -33,8 +34,15 @@ if ($a=='update')
 	$rbanlistemail = sed_sql_prep(sed_import('rbanlistemail', 'P', 'TXT'));
 	$rbanlistreason = sed_sql_prep(sed_import('rbanlistreason', 'P', 'TXT'));
 	$sql = (!empty($rbanlistip) || !empty($rbanlistemail)) ? sed_sql_query("UPDATE $db_banlist SET banlist_ip='$rbanlistip', banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'") : '';
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist&d=".$d, '', true));
-	exit;
+	if($ajax AND $sql)
+	{
+		$adminbanlist .= $L['alreadyupdatednewentry'];
+	}
+	elseif($sql)
+	{		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist&d=".$d, '', true));
+		exit;	}
+	else
+	{		$adminbanlist .= $L['Error'];	}
 }
 elseif ($a=='add')
 {
@@ -49,74 +57,163 @@ elseif ($a=='add')
 	if ($nexpire>0)
 	{ $nexpire += $sys['now']; }
 	$sql = (!empty($nbanlistip) || !empty($nbanlistemail)) ? sed_sql_query("INSERT INTO $db_banlist (banlist_ip, banlist_email, banlist_reason, banlist_expire) VALUES ('$nbanlistip', '$nbanlistemail', '$nbanlistreason', ".(int)$nexpire.")") : '';
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist", '', true));
-	exit;
+	if($ajax AND $sql)
+	{
+		$adminbanlist .= $L['alreadyaddnewentry'];
+	}
+	elseif($sql)
+	{
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist&d=".$d, '', true));
+		exit;
+	}
+	else
+	{
+		$adminbanlist .= $L['Error']."<br>nbanlistip=".$nbanlistip."<br>nbanlistemail=".$nbanlistemail;
+	}
 }
-
 elseif ($a=='delete')
 {
 	sed_check_xg();
 	$id = sed_import('id', 'G', 'INT');
 	$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='$id'");
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist&d=".$d, '', true));
-	exit;
+	if($ajax AND $sql)
+	{
+		$adminbanlist .= $L['alreadydeletednewentry'];
+	}
+	elseif($sql)
+	{
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist", '', true));
+		exit;
+	}
+	else
+	{
+		$adminbanlist .= $L['Error'];
+	}
 }
 
+$closediv = '';
+$opendiv = '';
 $totalitems = sed_sql_rowcount($db_banlist);
-$pagnav = sed_pagination(sed_url('admin','m=banlist'), $d, $totalitems, $cfg['maxrowsperpage']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+if($cfg['jquery'])
+{	$opendiv = "
+<script type=\"text/javascript\">
+//<![CDATA[
+function gopage(list)
+	{
+		var d = list.d || 0;
+		var url = list.url || '';
+		var page = list.page || '';
+		var rowid = list.rowid || '';
+		if(page=='add')
+		{			var exp = document.addbanlist.nexpire.value;
+			var bip = document.addbanlist.nbanlistip.value;
+			var bem = document.addbanlist.nbanlistemail.value;
+			var brs = document.addbanlist.nbanlistreason.value;
+			var x = document.addbanlist.x.value;
+			$.post('admin.php?m=banlist&ajax=1&a=add&d='+d,
+					{nexpire: exp, nbanlistip: bip, nbanlistemail: bem, nbanlistreason: brs, x: x},
+					 function(data){
+						$('#pagtab').addClass('loading');
+						$('#pagtab').html(data).hide().stop().fadeIn('slow');
+						$('#pagtab').removeClass('loading');
+					}
+			);
+		}
+		else if(page=='update')
+		{			var bip = document.getElementById('savebanlist_'+rowid).rbanlistip.value;
+			var bem = document.getElementById('savebanlist_'+rowid).rbanlistemail.value;
+			var brs = document.getElementById('savebanlist_'+rowid).rbanlistreason.value;
+			var x = document.getElementById('savebanlist_'+rowid).x.value;			$.post('admin.php?m=banlist&ajax=1&a=update&id='+rowid+'&d='+d,
+					{rbanlistip: bip, rbanlistemail: bem, rbanlistreason: brs, x: x},
+					 function(data){
+						$('#pagtab').addClass('loading');
+						$('#pagtab').html(data).hide().stop().fadeIn('slow');
+						$('#pagtab').removeClass('loading');
+					}
+			);
+		}
+		else
+		{
+			$.ajax({
+			type: 'GET',
+			url: 'admin.php?',
+			data: '&m=banlist'+url+'&d='+d,
+			beforeSend: function(){
+				$('#pagtab').addClass('loading');
+			},
+			success: function(msg){
+			$('#pagtab').removeClass('loading');
+			$('#pagtab').html(msg).hide().stop().fadeIn('slow');
+				},
+			error: function(msg){
+			$('#pagtab').removeClass('loading');
+			alert('Error ajax reload page');
+				}
+			});
+		}
+		return false;
+	}
+//]]>
+</script>
+<div id=\"pagtab\">";
+	$closediv = '</div>';
+	$pagnav = sed_pagination(sed_url('admin','m=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'gopage', "url: '&amp;ajax=1'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'gopage', "url: '&amp;ajax=1'");
+}
+else
+{
+	$pagnav = sed_pagination(sed_url('admin','m=banlist'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+}
 
-$sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC LIMIT $d, ".$cfg['maxrowsperpage']);
-
-$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
-$adminmain .= "<table class=\"cells\"><tr>";
-$adminmain .= "<td class=\"coltop\">".$L['Delete']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Until']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['adm_ipmask']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['adm_emailmask']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Reason']."</td>";
-$adminmain .= "<td class=\"coltop\">".$L['Update']."</td>";
-$adminmain .= "</tr>";
+$sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 
 while ($row = sed_sql_fetcharray($sql))
 {
-	$banlist_id = $row['banlist_id'];
-	$banlist_ip = $row['banlist_ip'];
-	$banlist_email = $row['banlist_email'];
-	$banlist_reason = $row['banlist_reason'];
-	$banlist_expire = $row['banlist_expire'];
-	$adminmain .= "<form id=\"savebanlist_".$banlist_id."\" action=\"".sed_url('admin', 'm=banlist&a=update&id='.$banlist_id.'&d='.$d)."\" method=\"post\">";
-	$adminmain .= "<tr><td style=\"text-align:center;\">[<a href=\"".sed_url('admin', 'm=banlist&a=delete&id='.$banlist_id.'&d='.$d.'&'.sed_xg())."\">x</a>]</td>";
-
-	if ($banlist_expire>0)
-	{ $adminmain .= "<td style=\"text-align:center;\">".date($cfg['dateformat'],$banlist_expire)." GMT</td>"; }
-	else
-	{ $adminmain .= "<td style=\"text-align:center;\">".$L['adm_neverexpire']."</td>"; }
-
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rbanlistip\" value=\"".$banlist_ip."\" size=\"14\" maxlength=\"16\" /></td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rbanlistemail\" value=\"".$banlist_email."\" size=\"10\" maxlength=\"64\" /></td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rbanlistreason\" value=\"".$banlist_reason."\" size=\"18\" maxlength=\"64\" /></td>";
-	$adminmain .= "<td><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr></form>";
+	$t -> assign(array(
+		"ADMIN_BANLIST_ID_ROW" => $row['banlist_id'],
+		"ADMIN_BANLIST_URL" => sed_url('admin', 'm=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
+		"ADMIN_BANLIST_URL_AJAX" => ($cfg['jquery']) ? " OnSubmit=\"return gopage({d: ".$d.", page: 'update', rowid: ".$row['banlist_id']."});\"" : "",
+		"ADMIN_BANLIST_DELURL" => sed_url('admin', 'm=banlist&a=delete&id='.$row['banlist_id'].'&d='.$d.'&'.sed_xg()),
+		"ADMIN_BANLIST_DELURL_AJAX" => ($cfg['jquery']) ? " OnClick=\"return gopage({url: '&amp;ajax=1&amp;a=delete&amp;id=".$row['banlist_id']."&amp;".sed_xg()."'});\"" : "",
+		"ADMIN_BANLIST_EXPIRE" => ($row['banlist_expire']>0) ? date($cfg['dateformat'],$row['banlist_expire'])." GMT" : $L['adm_neverexpire'],
+		"ADMIN_BANLIST_IP" => $row['banlist_ip'],
+		"ADMIN_BANLIST_EMAIL" => $row['banlist_email'],
+		"ADMIN_BANLIST_REASON" => $row['banlist_reason']
+		));
+	$t -> parse("BANLIST.ADMIN_BANLIST_ROW");
 	$ii++;
 }
-$adminmain .= "<tr><td colspan=\"6\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
 
-$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-$adminmain .= "<form id=\"addbanlist\" action=\"".sed_url('admin', 'm=banlist&a=add')."\" method=\"post\">";
-$adminmain .= "<table class=\"cells\">";
-$adminmain .= "<tr><td>".$L['Duration']." :</td><td><select name=\"nexpire\" size=\"1\">";
-$adminmain .= "<option value=\"3600\">1 hour</option><option value=\"7200\">2 hours</option><option value=\"14400\">4 hours</option><option value=\"28800\">8 hours</option>";
-$adminmain .= "<option value=\"57600\">16 hours</option><option value=\"86400\">1 day</option><option value=\"172800\">2 days</option><option value=\"345600\">4 days</option>";
-$adminmain .= "<option value=\"604800\">1 week</option><option value=\"1209600\">2 weeks</option><option value=\"1814400\">3 weeks</option><option value=\"2592000\">1 month</option>";
-$adminmain .= "<option value=\"0\" selected=\"selected\">".$L['adm_neverexpire']."</option></select></td></tr>";
+if(!empty($adminbanlist))
+{
+	$t -> assign(array(
+		"ADMIN_BANLIST_MESAGE" => $adminbanlist
+		));
+	$t -> parse("BANLIST.MESAGE");
+}
 
-$adminmain .= "<tr><td>".$L['Ipmask']." :</td><td>";
-$adminmain .= "<input type=\"text\" class=\"text\" name=\"nbanlistip\" value=\"\" size=\"15\" maxlength=\"15\" /></td></tr>";
-$adminmain .= "<tr><td>".$L['Emailmask']." :</td><td><input type=\"text\" class=\"text\" name=\"nbanlistemail\" value=\"\" size=\"24\" maxlength=\"64\" /></td></tr>";
-$adminmain .= "<tr><td>".$L['Reason']." :</td><td><input type=\"text\" class=\"text\" name=\"nbanlistreason\" value=\"\" size=\"48\" maxlength=\"64\" /></td></tr>";
-$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\" /></td></tr></table></form>";
+$t -> assign(array(
+	"ADMIN_BANLIST_AJAX_OPENDIV" => $opendiv,
+	"ADMIN_BANLIST_PAGINATION_PREV" => $pagination_prev,
+	"ADMIN_BANLIST_PAGNAV" => $pagnav,
+	"ADMIN_BANLIST_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_BANLIST_TOTALITEMS" => $totalitems,
+	"ADMIN_BANLIST_COUNTER_ROW" => $ii,
+	"ADMIN_BANLIST_INC_URLFORMADD" => sed_url('admin', 'm=banlist&a=add&d='.$d),
+	"ADMIN_BANLIST_INC_URLFORMADD_AJAX" => ($cfg['jquery']) ? " OnSubmit=\"return gopage({d: ".$d.", page: 'add'});\"" : "",
+	"ADMIN_BANLIST_AJAX_CLOSEDIV" => $closediv
+	));
 
+$t -> parse("BANLIST");
+$adminmain = $t -> text("BANLIST");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 ?>
