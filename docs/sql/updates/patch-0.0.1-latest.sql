@@ -43,7 +43,7 @@ CREATE TABLE `sed_pages_extra_fields` (
   `field_html` text NOT NULL,
   `field_variants` text NOT NULL,
   UNIQUE KEY `field_name` (`field_name`)
-) ENGINE=MyISAM;
+) TYPE=MyISAM;
 
 /* r193 Some speed up for page listings */
 ALTER TABLE sed_structure ADD COLUMN structure_pagecount mediumint(8) NOT NULL default '0';
@@ -79,7 +79,7 @@ UPDATE `sed_bbcode` SET `bbc_replacement` = '<strong><a href="datas/users/$1">$1
 CREATE TABLE `sed_tags` (
 	`tag` VARCHAR(255) NOT NULL,
 	PRIMARY KEY(`tag`)
-);
+) TYPE=MyISAM;
 
 -- For tag references, search and other needs
 CREATE TABLE `sed_tag_references` (
@@ -89,7 +89,7 @@ CREATE TABLE `sed_tag_references` (
 	PRIMARY KEY (`tag`, `tag_area`, `tag_item`),
 	KEY `tag_item`(`tag_item`),
 	KEY `tag_area`(`tag_area`)
-);
+) TYPE=MyISAM;
 
 /* r206 Hardened auth system */
 ALTER TABLE sed_users ADD user_hashsalt CHAR(16) NOT NULL DEFAULT '';
