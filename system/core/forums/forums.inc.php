@@ -243,54 +243,54 @@ while ($fsn = sed_sql_fetcharray($sql))
 			));
 
 		$ii = 0;
-		$sql1 = sed_sql_query("SELECT fm_id, fm_title, fm_lt_date FROM $db_forum_subforums WHERE fm_masterid='".$fsn['fs_id']."' ");
+		$sql1 = sed_sql_query("SELECT fs_id, fs_title, fs_lt_date FROM $db_forum_sections WHERE fs_masterid='".$fsn['fs_id']."' ");
 		while ($row = sed_sql_fetcharray($sql1))
-			{
+		{
 
-			if ($row['fm_lt_date']>$latestp)
-				{
-				$sql0 = sed_sql_query("SELECT fm_lt_id, fm_lt_title, fm_lt_posterid, fm_lt_postername FROM $db_forum_subforums WHERE fm_id='".$row['fm_id']."' ");
+			if ($row['fs_lt_date']>$latestp)
+			{
+				$sql0 = sed_sql_query("SELECT fs_lt_id, fs_lt_title, fs_lt_posterid, fs_lt_postername FROM $db_forum_sections WHERE fs_id='".$row['fs_id']."' ");
 				$fsnn = sed_sql_fetcharray($sql0);
 
-				$fsnn['fm_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fm_lt_date'] + $usr['timezone'] * 3600);
+				$fsnn['fs_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fs_lt_date'] + $usr['timezone'] * 3600);
 
-				$fsnn['lastpost'] = "<a href=\"".sed_url('forums', "m=posts&q=".$fsnn['fm_lt_id']."&n=last", "#bottom")."\">";
-				$fsnn['lastpost'] .= sed_cutstring($fsnn['fm_lt_title'], 32)."</a>";
+				$fsnn['lastpost'] = "<a href=\"".sed_url('forums', "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom")."\">";
+				$fsnn['lastpost'] .= sed_cutstring($fsnn['fs_lt_title'], 32)."</a>";
 
-				$fsnn['fs_timago'] = sed_build_timegap($row['fm_lt_date'], $sys['now_offset']);
+				$fsnn['fs_timago'] = sed_build_timegap($row['fs_lt_date'], $sys['now_offset']);
 
 				$t-> assign(array(
-					"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsnn['fm_lt_date'],
-					"FORUMS_SECTIONS_ROW_LASTPOSTER" => sed_build_user($fsnn['fm_lt_posterid'], sed_cc($fsnn['fm_lt_postername'])),
+					"FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsnn['fs_lt_date'],
+					"FORUMS_SECTIONS_ROW_LASTPOSTER" => sed_build_user($fsnn['fs_lt_posterid'], sed_cc($fsnn['fs_lt_postername'])),
 					"FORUMS_SECTIONS_ROW_LASTPOST" => $fsnn['lastpost'],
 					"FORUMS_SECTIONS_ROW_TIMEAGO" => $fsnn['fs_timago']
 				));
 
-				$latestp = $row['fm_lt_date'];
-
-				}
-
-				$j = ($row['fm_lt_date']>$usr['lastvisit']) ? '+ ' : '';
-				$ii++;
-					if ($ii%2!=0)
-						{
-						$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$row['fm_id'])."\">".$j.sed_cc($row['fm_title'])."</a>");
-						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESI");
-						}
-					else
-						{
-						$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$row['fm_id'])."\">".$j.sed_cc($row['fm_title'])."</a>");
-						$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESII");
-						}
+				$latestp = $row['fs_lt_date'];
 
 			}
 
-			/* === Hook - Part2 : Include === */
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-			/* ===== */
+			$j = ($row['fs_lt_date']>$usr['lastvisit']) ? '+ ' : '';
+			$ii++;
+			if ($ii%2!=0)
+			{
+				$t->assign("FORUMS_SECTIONS_ROW_SLAVEI","<a href=\"".sed_url('forums', "m=topics&s=".$row['fs_id'])."\">".$j.sed_cc($row['fs_title'])."</a>");
+				$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESI");
+			}
+			else
+			{
+				$t->assign("FORUMS_SECTIONS_ROW_SLAVEII","<a href=\"".sed_url('forums', "m=topics&s=".$row['fs_id'])."\">".$j.sed_cc($row['fs_title'])."</a>");
+				$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVESII");
+			}
 
-			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION");
+		}
+
+		/* === Hook - Part2 : Include === */
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
+		$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION");
 		}
 
 		// Required to have all divs closed
