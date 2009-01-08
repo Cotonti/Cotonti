@@ -80,7 +80,52 @@ while (list($i,$dat) = each($tables))
 	$total_data_length += $dat['Data_length'];
 }
 
-$adminmain .= "<h4>".$L['plu_title']." :</h4>";
+$adminmain = <<<HTM
+	<h2>{$L['plu_title']}</h2>
+	<table style="margin:0 10px 20px 10px;">
+	<tr><td>
+	<b>{$L['plu_ql_b1_title']}</b>
+	<ul>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=main">{$L['plu_ql_b1_1']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=title">{$L['plu_ql_b1_2']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=skin">{$L['plu_ql_b1_3']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=menus">{$L['plu_ql_b1_4']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=lang">{$L['plu_ql_b1_5']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=time">{$L['plu_ql_b1_6']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=trash">{$L['plu_ql_b1_7']}</a></li>
+	</ul>
+	<b>{$L['plu_ql_b4_title']}</b>
+	<ul>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=forums">{$L['plu_ql_b4_1']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=forums">{$L['plu_ql_b4_2']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=comments">{$L['plu_ql_b4_3']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=polls">{$L['plu_ql_b4_4']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=ratings">{$L['plu_ql_b4_5']}</a></li>
+	</ul>
+	</td>
+	<td style="padding-left:20px;">
+	<b>{$L['plu_ql_b2_title']}</b>
+	<ul>
+	<li><a href="admin.php?m=page&s=structure">{$L['plu_ql_b2_1']}</a></li>
+	<li><a href="admin.php?m=page&s=extrafields">{$L['plu_ql_b2_2']}</a></li>
+	<li><a href="admin.php?m=page&s=catorder">{$L['plu_ql_b2_3']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=parser">{$L['plu_ql_b2_4']}</a></li>
+	</ul>
+	</td>
+	<td style="padding-left:20px;">
+	<b>{$L['plu_ql_b3_title']}</b>
+	<ul>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=users">{$L['plu_ql_b3_1']}</a></li>
+	<li><a href="admin.php?m=users&s=extrafields">{$L['plu_ql_b3_2']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=pfs">{$L['plu_ql_b3_3']}</a></li>
+	<li><a href="admin.php?m=users">{$L['plu_ql_b3_4']}</a></li>
+	<li><a href="admin.php?m=config&n=edit&o=core&p=pm">{$L['plu_ql_b3_5']}</a></li>
+	</ul>
+	</td>
+	</tr></table>
+HTM;
+
+$adminmain = $adminfavs.$adminmain;
 
 $adminmain .= "<table style=\"width:100%;\">";
 $adminmain .= "<tr><td style=\"width:50%; vertical-align:top; padding:8px;\">";

@@ -17,7 +17,7 @@ Description=
 [BEGIN_SED_EXTPLUGIN]
 Code=adminqv
 Name=Admin QuickView
-Description=Various statistics and informations for the home page of the administration panel
+Description=Quick links, various statistics and informations for the home page of the administration panel
 Version=100
 Date=2006-mar-10
 Author=Neocrome
