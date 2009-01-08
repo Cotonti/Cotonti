@@ -221,7 +221,7 @@ if (!empty($poll_id) && empty($error_string))
 
 function sed_new_poll($id, $showbefore=true)
 {
-	global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters;
+	global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 global $error_string;
 	
 	$vote = sed_import('vote','G','TXT');
@@ -237,12 +237,12 @@ if (empty($vote))
 		if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
 		{
 		$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userid='".$usr['id']."' LIMIT 1");
-		$alreadyvoted = (sed_sql_numrows($sql2)>0) ? 1 : 0;
+		$alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
 		}
 		elseif($cfg['ip_id_polls']=='ip')
 		{
 		$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1"); 
-		$alreadyvoted = (sed_sql_numrows($sql2)>0) ? 1 : 0;	
+		$alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;	
 		}
 		else
 		{
