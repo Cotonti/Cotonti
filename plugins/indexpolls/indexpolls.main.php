@@ -45,24 +45,16 @@ if ($mode=='ajax')
 
 	</script>';
 	$result .= "<table>";
+	
+		list($polltext, $polldate, $totalvotes, $polloptions, $polloptions_bar, $polloptions_per, $polloptions_count, $pollbutton, $alreadyvoted)=sed_new_poll($id, true, 100);
+//	$result .= "<table class=\"cells\">";
 
-	$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
-	$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
-
-	$sql1 = sed_sql_query("SELECT po_id,po_text,po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC ");
-
-	while ($row1 = sed_sql_fetcharray($sql1))
-	{
-		$po_id = $row1['po_id'];
-		$po_count = $row1['po_count'];
-		$percent = @round(100 * ($po_count / $totalvotes),1);
-		$percentbar = floor($percent * 2.24);
-
-		$row1['po_text'] = $row1['po_text'];
-
+	$option_count = (count($polloptions) ? count($polloptions) : 0);
+	
+	for($i = 0; $i < $option_count; $i++) {
 		$result .= "<tr><td>";
-		$result .= stripslashes($row1['po_text']);
-		$result .= "</td><td><div style=\"width:100px;\"><div class=\"bar_back\"><div class=\"bar_front\" id=\"$percent%\" style=\"width:0%;\"></div></div></div></td><td>$percent%</td><td>(".$po_count.")</td></tr>";
+		$result .= stripslashes($polloptions[$i]);
+		$result .= "</td><td><div style=\"width:100px;\"><div class=\"bar_back\"><div class=\"bar_front\" id=\"".$polloptions_per[$i]."%\" style=\"width:0%;\"></div></div></div></td><td>".$polloptions_per[$i]."%</td><td>(".$polloptions_count[$i].")</td></tr>";
 	}
 
 	$result .= "</table>";

@@ -97,7 +97,7 @@ else
 
 		$result .= "<tr><td>";
 		$result .= $polloptions[$i];
-		$result .= "</td><td>".$polloptions_bar[$i]."</td><td>".$polloptions_per[$i]."</td><td>(".$polloptions_count[$i].")</td></tr>";
+		$result .= "</td><td>".$polloptions_bar[$i]."</td><td>".$polloptions_per[$i]."%</td><td>(".$polloptions_count[$i].")</td></tr>";
 
 	}
 	$result .= (!$alreadyvoted) ? "<tr><td colspan=\"4\">".$pollbutton."</td></tr></table></form>" :"</table>";
