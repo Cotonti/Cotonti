@@ -1,13 +1,14 @@
 <?php
-/**
- * BBCode editor.
- *
- * @package Seditio-N
- * @version 0.0.1
- * @author Trustmaster
- * @copyright Copyright (c) 2008 Cotonti Team
- * @license BSD License
- */
+/* ====================
+[BEGIN_SED]
+File=admin.bbcode.inc.php
+Version=0.0.2
+Updated=2009-jan-03
+Type=Core.admin
+Author=Trustmaster
+Description=BBCode editor (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
+[END_SED]
+==================== */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
@@ -23,6 +24,8 @@ $id = (int) sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
+$t = new XTemplate(sed_skinfile('admin.bbcode.inc'));
+
 if($a == 'add')
 {
 	$bbc['name'] = sed_import('bbc_name', 'P', 'ALP');
@@ -34,14 +37,10 @@ if($a == 'add')
 	$bbc['postrender'] = sed_import('bbc_postrender', 'P', 'BOL');
 	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
-		if(sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender']))
-		{
-			$adminmain .= <<<HTM
-<div class="error">
-{$L['adm_bbcodes_added']}
-</div>
-HTM;
-		}
+		$adminbbcode = (sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])) ? $L['adm_bbcodes_added'] : $L['Error'];
+	}
+	else
+	{		$adminbbcode = $L['Error'];
 	}
 }
 elseif($a == 'upd' && $id > 0)
@@ -56,54 +55,27 @@ elseif($a == 'upd' && $id > 0)
 	$bbc['enabled'] = sed_import('bbc_enabled', 'P', 'BOL');
 	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
-		if(sed_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender']))
-		{
-			$adminmain .= <<<HTM
-<div class="error">
-{$L['adm_bbcodes_updated']}
-</div>
-HTM;
-		}
+		$adminbbcode = (sed_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])) ? $L['adm_bbcodes_updated'] : $L['Error'];
+	}
+	else
+	{		$adminbbcode = $L['Error'];
 	}
 }
 elseif($a == 'del' && $id > 0)
 {
-	if(sed_bbcode_remove($id))
-	{
-		$adminmain .= <<<HTM
-<div class="error">
-{$L['adm_bbcodes_removed']}
-</div>
-HTM;
-	}
+	$adminbbcode = (sed_bbcode_remove($id)) ? $L['adm_bbcodes_removed'] : $L['Error'];
 }
 elseif($a == 'clearcache')
 {
-	sed_sql_query("UPDATE $db_pages SET page_html = ''");
-	sed_sql_query("UPDATE $db_forum_posts SET fp_html = ''");
-	sed_sql_query("UPDATE $db_pm SET pm_html = ''");
-$adminmain .= <<<HTM
-<div class="error">
-{$L['adm_bbcodes_clearcache_done']}
-</div>
-HTM;
+	$sqlpag = sed_sql_query("UPDATE $db_pages SET page_html = ''");
+	$sqlfrm = sed_sql_query("UPDATE $db_forum_posts SET fp_html = ''");
+	$sqlpmg = sed_sql_query("UPDATE $db_pm SET pm_html = ''");
+	$adminbbcode = ($sqlpag && $sqlfrm && $sqlpmg) ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
 }
 
 $totalitems = sed_sql_rowcount($db_bbcode);
 $pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage']);
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-
-$adminmain .= <<<HTM
-<div class="pagnav">$pagination_prev $pagnav $pagination_next</div>
-<table class="cells">
-<tr>
-	<td class="coltop">{$L['Name']}<br />{$L['adm_bbcodes_mode']} / {$L['Enabled']} / {$L['adm_bbcodes_container']}</td>
-	<td class="coltop">{$L['adm_bbcodes_pattern']}</td>
-	<td class="coltop">{$L['adm_bbcodes_replacement']}</td>
-	<td class="coltop">{$L['Plugin']}<br />{$L['adm_bbcodes_priority']}<br />{$L['adm_bbcodes_postrender']}</td>
-	<td class="coltop">{$L['Update']}<br />{$L['Delete']}</td>
-</tr>
-HTM;
 
 $bbc_modes = array('str', 'ereg', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
@@ -112,94 +84,74 @@ $ii = 0;
 
 while($row = sed_sql_fetchassoc($res))
 {
-	$mode = '';
 	foreach($bbc_modes as $val)
 	{
-		$sel = $val == $row['bbc_mode'] ? ' selected="selected"' : '';
-		$mode .= '<option'.$sel.'>'.$val.'</option>';
+		$t -> assign(array(
+			"ADMIN_BBCODE_ROW_MODE_ITEM_SELECTED" => ($val == $row['bbc_mode']) ? ' selected="selected"' : '',
+			"ADMIN_BBCODE_ROW_MODE_ITEM" => $val
+			));
+		$t -> parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_MODE_ROW");
 	}
-	$prio = '';
 	for($i = 1; $i < 256; $i++)
 	{
-		$sel = $i == $row['bbc_priority'] ? ' selected="selected"' : '';
-		$prio .= '<option'.$sel.'>'.$i.'</option>';
+		$t -> assign(array(
+			"ADMIN_BBCODE_ROW_PRIO_ITEM_SELECTED" => ($i == $row['bbc_priority']) ? ' selected="selected"' : '',
+			"ADMIN_BBCODE_ROW_PRIO_ITEM" => $i
+			));
+		$t -> parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_PRIO_ROW");
 	}
-	$enabled = $row['bbc_enabled'] ? ' checked="checked"' : '';
-	$container = $row['bbc_container'] ? ' checked="checked"' : '';
-	$postrender = $row['bbc_postrender'] ? ' checked="checked"' : '';
-	$bbcode_update_url = sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id']);
-	$bbcode_delete_url = sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id']);
-	$adminmain .= <<<HTM
-<form action="{$bbcode_update_url}" method="post">
-<tr>
-	<td>
-		<input type="text" name="bbc_name" value="{$row['bbc_name']}" /><br />
-		<select name="bbc_mode">$mode</select> &nbsp;&nbsp; <input type="checkbox" name="bbc_enabled"$enabled /> &nbsp;
-		&nbsp;&nbsp; <input type="checkbox" name="bbc_container"$container />
-	</td>
-	<td>
-		<textarea name="bbc_pattern" rows="2" cols="20">{$row['bbc_pattern']}</textarea>
-	</td>
-	<td><textarea name="bbc_replacement" rows="2" cols="20">{$row['bbc_replacement']}</textarea></td>
-	<td>
-		{$row['bbc_plug']}<br />
-		<select name="bbc_priority">$prio</select><br />
-		<input type="checkbox" name="bbc_postrender"$postrender />
-	</td>
-	<td>
-		<input type="submit" value="{$L['Update']}" /><br />
-		<input type="button" value="{$L['Delete']}" onclick="if(confirm('{$L['adm_bbcodes_confirm']}')) location.href='{$bbcode_delete_url}'" />
-	</td>
-</tr>
-</form>
-HTM;
-
-$ii++;
+	$t -> assign(array(
+		"ADMIN_BBCODE_ROW_BBC_NAME" => $row['bbc_name'],
+		"ADMIN_BBCODE_ROW_ENABLED" => $row['bbc_enabled'] ? ' checked="checked"' : '',
+		"ADMIN_BBCODE_ROW_CONTAINER" => $row['bbc_container'] ? ' checked="checked"' : '',
+		"ADMIN_BBCODE_ROW_PATTERN" => $row['bbc_pattern'],
+		"ADMIN_BBCODE_ROW_REPLACEMENT" => $row['bbc_replacement'],
+		"ADMIN_BBCODE_ROW_PLUG" => $row['bbc_plug'],
+		"ADMIN_BBCODE_ROW_POSTRENDER" => $row['bbc_postrender'] ? ' checked="checked"' : '',
+		"ADMIN_BBCODE_ROW_UPDATE_URL" => sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id']),
+		"ADMIN_BBCODE_ROW_DELETE_URL" => sed_url('admin', 'm=bbcode&a=del&id='.$row['bbc_id'])
+		));
+	$t -> parse("BBCODE.ADMIN_BBCODE_ROW");
+	$ii++;
 }
 sed_sql_freeresult($res);
-$mode = '';
+
 foreach($bbc_modes as $val)
 {
-	$sel = $val == 'pcre' ? ' selected="selected"' : '';
-	$mode .= '<option'.$sel.'>'.$val.'</option>';
+	$t -> assign(array(
+		"ADMIN_BBCODE_MODE_ITEM_SELECTED" => ($val == 'pcre') ? ' selected="selected"' : '',
+		"ADMIN_BBCODE_MODE_ITEM" => $val
+		));
+	$t -> parse("BBCODE.ADMIN_BBCODE_MODE");
 }
-$prio = '';
 for($i = 1; $i < 256; $i++)
 {
-	$sel = $i == 128 ? ' selected="selected"' : '';
-	$prio .= '<option'.$sel.'>'.$i.'</option>';
+	$t -> assign(array(
+		"ADMIN_BBCODE_PRIO_ITEM_SELECTED" => ($i == 128) ? ' selected="selected"' : '',
+		"ADMIN_BBCODE_PRIO_ITEM" => $i
+		));
+	$t -> parse("BBCODE.ADMIN_BBCODE_PRIO");
 }
 $form_action = sed_url('admin', 'm=bbcode&a=add');
 $form_clear_cache = sed_url('admin', 'm=bbcode&a=clearcache');
-$adminmain .= <<<HTM
-<tr>
-<td colspan="5">{$L['Total']} : $totalitems, {$L['adm_polls_on_page']}: $ii</td>
-</tr>
-<tr>
-<td colspan="5"><br /></td>
-</tr>
-<tr>
-<td colspan="5"><strong>{$L['adm_bbcodes_new']}</strong></td>
-</tr>
-<form action="{$form_action}" method="post">
-<tr>
-	<td>
-		<input type="text" name="bbc_name" value="" /><br />
-		<select name="bbc_mode">$mode</select>
-	</td>
-	<td>
-		<input type="text" name="bbc_pattern" value="" /><br />
-		<select name="bbc_priority">$prio</select> &nbsp; <input type="checkbox" name="bbc_container" checked="checked" />
-	</td>
-	<td><textarea name="bbc_replacement" rows="2" cols="20"></textarea></td>
-	<td>
-		<input type="checkbox" name="bbc_postrender" />
-	</td>
-	<td><input type="submit" value="{$L['Add']}" /></td>
-</tr>
-</form>
-</table>
-<a href="{$form_clear_cache}" onclick="return confirm('{$L['adm_bbcodes_clearcache_confirm']}')">{$L['adm_bbcodes_clearcache']}</a>
-HTM;
+
+if(!empty($adminbbcode))
+{
+	$t -> assign(array("ADMIN_BBCODE_MESAGE" => $adminbbcode));
+	$t -> parse("BBCODE.MESAGE");
+}
+
+$t -> assign(array(
+	"ADMIN_BBCODE_PAGINATION_PREV" => $pagination_prev,
+	"ADMIN_BBCODE_PAGNAV" => $pagnav,
+	"ADMIN_BBCODE_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_BBCODE_TOTALITEMS" => $totalitems,
+	"ADMIN_BBCODE_COUNTER_ROW" => $ii,
+	"ADMIN_BBCODE_FORM_ACTION" => $form_action,
+	"ADMIN_BBCODE_URL_CLEAR_CACHE" => $form_clear_cache,
+	));
+
+$t -> parse("BBCODE");
+$adminmain = $t -> text("BBCODE");
 
 ?>

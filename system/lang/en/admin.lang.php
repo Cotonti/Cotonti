@@ -48,6 +48,8 @@ $L['alreadyaddnewentry'] = 'New entry added';		//N-0.0.2
 $L['alreadyupdatednewentry'] = 'Entry updated';		//N-0.0.2
 $L['alreadydeletednewentry'] = 'Entry deleted';		//N-0.0.2
 $L['adm_purgeall'] = 'Purge all';
+$L['adm_purgeall_done'] = 'Ñache cleared completely';		//N-0.0.2
+$L['adm_delcacheitem'] = 'Ñache item removed';		//N-0.0.2
 $L['adm_listisempty'] = 'List is empty';
 $L['adm_totalsize'] = 'Total size';
 $L['adm_showall'] = 'Show all';
@@ -503,7 +505,7 @@ your .htaccess (if writable) and provide you with .htaccess/IsapiRewrite4.ini/ng
 
 /* ====== Extra Fields Admin ========*/
 // N-0.0.2
-$L['adm_extrafields'] = "Extra fields"; 
+$L['adm_extrafields'] = "Extra fields";
 $L['adm_extrafields_desc'] = "Add/Edit extra fields";
 $L['adm_extrafield_added'] = "Successfully added new extra field.";
 $L['adm_extrafield_not_added'] = "Error! New extra field not added.";
