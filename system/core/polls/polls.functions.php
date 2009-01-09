@@ -219,7 +219,7 @@ function sed_save_poll($type='0', $state='0')
 
 /* ------------------ */
 
-function sed_new_poll($id, $showbefore=true)
+function sed_new_poll($id, $showbefore=true, $width='256px')
 {
 	global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 	global $error_string;
@@ -280,8 +280,8 @@ function sed_new_poll($id, $showbefore=true)
 		$input_type=$row['poll_multiple'] ? "checkbox" : "radio";
 		$polloptions[] = ($alreadyvoted) ? sed_parse(sed_cc($row1['po_text']), 1, 1, 1) : "<label><input type='".$input_type."' name='vote[]' value='".$po_id."' />".sed_parse(sed_cc($row1['po_text']), 1, 1, 1)."</label>";
 
-		$polloptions_bar[] = ($alreadyvoted  || $showbefore) ? "<div style=\"width:256px;\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div>" : "";
-		$polloptions_per[] = ($alreadyvoted  || $showbefore) ? $percent."%" : "";
+		$polloptions_bar[] = ($alreadyvoted  || $showbefore) ? "<div style=\"width:".$width.";\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div>" : "";
+		$polloptions_per[] = ($alreadyvoted  || $showbefore) ? $percent : "";
 		$polloptions_count[] =($alreadyvoted  || $showbefore) ? $po_count : "";
 	}
 
