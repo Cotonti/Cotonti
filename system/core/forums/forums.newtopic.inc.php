@@ -100,7 +100,7 @@ if ($a=='newtopic')
 	if($poll){
 	sed_save_poll_check_errors();
 	}
-	
+
 
 	if (empty($error_string))
 	{
@@ -110,10 +110,7 @@ if ($a=='newtopic')
 
 	/*Completely stolen from "forum poll starter" plugin*/
 
-	if ($poll)
-	{
-		$poll_index=sed_save_poll(1, $s);
-	}
+	$poll_index= $poll ? sed_save_poll(1, $s) : 0;
 
 		$sql = sed_sql_query("INSERT into $db_forum_topics
 		(ft_state,
