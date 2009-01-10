@@ -156,11 +156,10 @@ switch ($a)
 		$fcheck = sed_file_check($uav_tmp_name, $uav_name, $f_extension);
 		if($fcheck == 1)
 		{
-			if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && ($uav_size<=$cfg['av_maxsize'] || $cfg['av_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+			if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($uav_tmp_name);
-				if ( ($w<=$cfg['av_maxx'] && $h<=$cfg['av_maxy']) || $cfg['av_resize'] )
-				{
+				
 					$avatar = $usr['id']."-avatar.gif";
 					$avatarpath = $cfg['av_dir'].$avatar;
 
@@ -169,14 +168,21 @@ switch ($a)
 
 					move_uploaded_file($uav_tmp_name, $avatarpath);
 					
-					/*=== Photo/image resizing, not yet complete ===*/
-					
-					if ($w>$cfg['av_maxx'] || $h>$cfg['av_maxy'])
+					if ($w>$cfg['av_maxx'] || $h>$cfg['av_maxy'] || $uav_size>$cfg['av_maxsize'])
 					{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
 
 					sed_createthumb($avatarpath, $avatarpath, $cfg['av_maxx'],$cfg['av_maxy'], 1, $f_extension, $avatar, 0, 0, 0, 0, 0, $percentage, $prior);
+					
+					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($uav_size > $cfg['av_maxsize']))
+						{
+						$percentage -= 5;
+						sed_createthumb($avatarpath, $avatarpath, $cfg['av_maxx'],$cfg['av_maxy'], 1, $f_extension, $avatar, 0, 0, 0, 0, 0, $percentage, $prior);
+
+						clearstatcache();
+						$uav_size = filesize($avatarpath);
+						}
 					}
 
 					/* === Hook === */
@@ -195,7 +201,6 @@ switch ($a)
 					else
 						{ unlink($avatarpath); }
 					@chmod($avatarpath, 0666);
-				}
 			}
 		}
 		elseif($fcheck == 2)
@@ -215,11 +220,10 @@ switch ($a)
 		$fcheck = sed_file_check($uph_tmp_name, $uph_name, $f_extension);
 		if($fcheck == 1)
 		{
-			if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && ($uph_size<=$cfg['ph_maxsize'] || $cfg['ph_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+			if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($uph_tmp_name);
-				if ( ($w<=$cfg['ph_maxx'] && $h<=$cfg['ph_maxy']) || $cfg['ph_resize'] )
-				{
+				
 					$photo = $usr['id']."-photo.gif";
 					$photopath = $cfg['photos_dir'].$photo;
 
@@ -228,14 +232,21 @@ switch ($a)
 
 					move_uploaded_file($uph_tmp_name, $photopath);
 					
-					/*=== Photo/image resizing, not yet complete ===*/
-					
-					if ($w>$cfg['ph_maxx'] || $h>$cfg['ph_maxy'])
+					if ($w>$cfg['ph_maxx'] || $h>$cfg['ph_maxy'] || $uph_size>$cfg['ph_maxsize'])
 					{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
 
 					sed_createthumb($photopath, $photopath, $cfg['ph_maxx'],$cfg['ph_maxy'], 1, $f_extension, $photo, 0, 0, 0, 0, 0, $percentage, $prior);
+					
+					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($uph_size > $cfg['ph_maxsize']) )
+						{
+						$percentage -= 5;
+						sed_createthumb($photopath, $photopath, $cfg['ph_maxx'],$cfg['ph_maxy'], 1, $f_extension, $photo, 0, 0, 0, 0, 0, $percentage, $prior);
+
+						clearstatcache();
+						$uph_size = filesize($photopath);
+						}
 					}
 
 					/* === Hook === */
@@ -254,7 +265,6 @@ switch ($a)
 					else
 						{ unlink($photopath); }
 					@chmod($photopath, 0666);
-				}
 			}
 		}
 		elseif($fcheck == 2)
@@ -274,11 +284,10 @@ switch ($a)
 		$fcheck = sed_file_check($usig_tmp_name, $usig_name, $f_extension);
 		if($fcheck == 1)
 		{
-			if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && ($usig_size<=$cfg['sig_maxsize'] || $cfg['sig_resize']) && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
+			if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($usig_tmp_name);
-				if ( ($w<=$cfg['sig_maxx'] && $h<=$cfg['sig_maxy']) || $cfg['sig_resize'] )
-				{
+				
 					$signature = $usr['id']."-signature.gif";
 					$signaturepath = $cfg['sig_dir'].$signature;
 
@@ -287,14 +296,21 @@ switch ($a)
 
 					move_uploaded_file($usig_tmp_name, $signaturepath);
 					
-					/*=== Photo/image resizing, not yet complete ===*/
-					
-					if ($w>$cfg['sig_maxx'] || $h>$cfg['sig_maxy'])
+					if ($w>$cfg['sig_maxx'] || $h>$cfg['sig_maxy'] || $usig_size>$cfg['sig_maxsize'])
 					{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
+					
+					sed_createthumb($signaturepath, $signaturepath, $cfg['sig_maxx'],$cfg['sig_maxy'], 1, $f_extension, $signature, 0, 0, 0, 0, 0, $percentage, $prior);
+					
+					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($usig_size > $cfg['sig_maxsize']) )
+						{
+						$percentage -= 5;
+						sed_createthumb($signaturepath, $signaturepath, $cfg['sig_maxx'],$cfg['sig_maxy'], 1, $f_extension, $signature, 0, 0, 0, 0, 0, $percentage, $prior);
 
-					sed_createthumb($signaturepath, $signaturepath, $cfg['sig_maxx'],$cfg['sig_maxy'], 1, $f_extension, $photo, 0, 0, 0, 0, 0, $percentage, $prior);
+						clearstatcache();
+						$usig_size = filesize($signaturepath);
+						}
 					}
 					
 					/* === Hook === */
@@ -313,7 +329,6 @@ switch ($a)
 					else
 						{ unlink($signaturepath); }
 					@chmod($signaturepath, 0666);
-				}
 			}
 		}
 		elseif($fcheck == 2)
