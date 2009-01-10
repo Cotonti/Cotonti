@@ -64,9 +64,6 @@ if ($n=='edit')
 
 			$master = sed_sql_prep($row1['fs_title']);
 
-			$sql = sed_sql_query("DELETE FROM $db_forum_subforums WHERE fm_id='$id' OR fm_masterid='$id' ");
-			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('$id', '$rmaster', '$mastername') ");
-
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='".$rmaster."', fs_mastername='".$master."' WHERE fs_id='".$id."' ");
 		}
 
@@ -89,9 +86,8 @@ if ($n=='edit')
 		if (!empty($rtitle))
 		{
 
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_allowpolls='$rallowpolls', fs_countposts='$rcountposts' WHERE fs_id='$id'");
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ");
-		$sql = sed_sql_query("UPDATE $db_forum_subforums SET fm_title='".$mastername."' WHERE fm_id='$id' ");
+			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_allowpolls='$rallowpolls', fs_countposts='$rcountposts' WHERE fs_id='$id'");
+			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ");
 
 		}
 
@@ -104,9 +100,7 @@ if ($n=='edit')
 		sed_auth_clear('all');
 		$num = sed_forum_deletesection($id);
 		$sql1 = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='".$id."' ");
-		$sql2 = sed_sql_query("DELETE FROM $db_forum_subforums WHERE fm_id='$id' ");
-		$sql3 = sed_sql_query("UPDATE $db_forum_subforums SET fm_masterid='0' WHERE fm_masterid='$id' ");
-		$num += mysql_num_rows($sql1)+mysql_num_rows($sql2)+mysql_num_rows($sql3);
+		$num = sed_sql_numrows($sql1);
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=103&num=".$num, '', true));
 		exit;
 	}
@@ -160,23 +154,23 @@ if ($n=='edit')
 	$adminmain .= "<tr><td>".$L['Section']." :</td><td>".$fs_id."</td></tr>";
 	$sqlc = sed_sql_query("SELECT fs_id FROM $db_forum_sections WHERE fs_masterid='".$id."' ");
 	if (!mysql_num_rows($sqlc))
-		{
-	$adminmain .= "<tr><td>".$L['adm_forums_master']." :</td><td><select name=\"rmaster\"><option value=\"0\">--</option>";
-	$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='".$fs_category."' ORDER by fn_path ASC, fs_order ASC");
-	while ($rowa = sed_sql_fetchassoc($sqla))
 	{
-		$cfs = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
-		if ($fs_masterid==$rowa['fs_id'])
+		$adminmain .= "<tr><td>".$L['adm_forums_master']." :</td><td><select name=\"rmaster\"><option value=\"0\">--</option>";
+		$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='".$fs_category."' ORDER by fn_path ASC, fs_order ASC");
+		while ($rowa = sed_sql_fetchassoc($sqla))
 		{
-			$adminmain .= "<option value=\"".$rowa['fs_id']."\" selected=\"selected\">".$cfs."</option>";
+			$cfs = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
+			if ($fs_masterid==$rowa['fs_id'])
+			{
+				$adminmain .= "<option value=\"".$rowa['fs_id']."\" selected=\"selected\">".$cfs."</option>";
+			}
+			else
+			{
+				$adminmain .= "<option value=\"".$rowa['fs_id']."\">".$cfs."</option>";
+			}
 		}
-		else
-		{
-			$adminmain .= "<option value=\"".$rowa['fs_id']."\">".$cfs."</option>";
-		}
+		$adminmain .= "</select></td></tr>";
 	}
-	$adminmain .= "</select></td></tr>";
-		}
 	$adminmain .= "<tr><td>".$L['Category']." :</td><td>".sed_selectbox_forumcat($fs_category, 'rcat')."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($fs_title)."\" size=\"56\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".sed_cc($fs_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
@@ -241,20 +235,17 @@ else
 			{ $nextorder = 100; }
 
 			if (!empty($nmaster))
-					{
-					$sql2 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='".$nmaster."' ");
-					$row2 = sed_sql_fetcharray($sql2);
+			{
+				$sql2 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='".$nmaster."' ");
+				$row2 = sed_sql_fetcharray($sql2);
 
-					$mastername = sed_sql_prep($row2['fs_title']);
+				$mastername = sed_sql_prep($row2['fs_title']);
 
-					}
+			}
 
 			$sql = sed_sql_query("INSERT INTO $db_forum_sections (fs_masterid, fs_mastername, fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('".(int)$nmaster."', '".$mastername."', '".(int)$nextorder."', '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($ncat)."', 'images/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
 
 			$forumid = sed_sql_insertid();
-
-			$sql = sed_sql_query("INSERT INTO $db_forum_subforums (fm_id, fm_masterid, fm_title) VALUES ('".(int)$forumid."', '".(int)$nmaster."', '".sed_sql_prep($ntitle)."') ");
-
 
 			foreach($sed_groups as $k => $v)
 			{
@@ -287,10 +278,10 @@ else
 		}
 	}
 	/*
-	$totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
-	$pagnav = sed_pagination(sed_url('admin','m=forums'), $d, $totalitems, $cfg['maxrowsperpage']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-	*/
+	 $totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
+	 $pagnav = sed_pagination(sed_url('admin','m=forums'), $d, $totalitems, $cfg['maxrowsperpage']);
+	 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+	 */
 	$sql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
 	ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC");
