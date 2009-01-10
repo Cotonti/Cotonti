@@ -74,7 +74,7 @@ if ($a=='check')
 		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_hashsalt = '$hashsalt' WHERE user_id={$row['user_id']}");
 
 		$passhash = md5($rmdpass.$hashsalt).sha1($rmdpass.$hashsalt);
-		$u = base64_encode($ruserid.':_:'.$passhash.':_:'.md5($sys['now_offset']));
+		$u = base64_encode($ruserid.':_:'.$passhash);
 
 		if($rremember)
 		{
@@ -84,6 +84,8 @@ if ($a=='check')
 		{
 			$_SESSION['COTONTI'] = $u;
 		}
+
+		$_SESSION['saltstamp'] = $sys['now_offset'];
 
 		/* === Hook === */
 		$extp = sed_getextplugins('users.auth.check.done');

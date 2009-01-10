@@ -199,7 +199,6 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 	$u = explode(':_:', $u);
 	$u_id = (int) sed_import($u[0], 'D', 'INT');
 	$u_passhash = sed_import($u[1], 'D', 'ALP');
-	$u_logstamp = sed_import($u[2], 'D', 'ALP');
 	if($u_id > 0)
 	{
 		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id");
@@ -207,7 +206,7 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 		if($row = sed_sql_fetcharray($sql))
 		{
 			$passhash = md5($row['user_password'].$row['user_hashsalt']).sha1($row['user_password'].$row['user_hashsalt']);
-			if($u_passhash == $passhash && $row['user_maingrp'] > 3 && $u_logstamp == md5($row['user_lastlog']) && (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
+			if($u_passhash == $passhash && $row['user_maingrp'] > 3 && (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
 			{
 				$usr['id'] = $row['user_id'];
 				$usr['sessionid'] = ($cfg['authmode']==1) ? md5($row['user_lastvisit']) : session_id();
@@ -237,18 +236,25 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 					if($cfg['authcache']) $sys['sql_update_auth'] = ", user_auth='".serialize($usr['auth'])."'";
 				}
 
-				$hashsalt = sed_unique(16);
-				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', user_hashsalt = '$hashsalt', user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
-				$passhash = md5($row['user_password'].$hashsalt).sha1($row['user_password'].$hashsalt);
-				$u = base64_encode($usr['id'].':_:'.$passhash.':_:'.md5($sys['now_offset']));
-				if(empty($_SESSION['COTONTI']))
+				if(empty($_SESSION['saltstamp']) || $_SESSION['saltstamp'] + 60 < $sys['now_offset'])
 				{
-					sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime']*86400, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+					$_SESSION['saltstamp'] = $sys['now_offset'];
+					$hashsalt = sed_unique(16);
+					$passhash = md5($row['user_password'].$hashsalt).sha1($row['user_password'].$hashsalt);
+					$u = base64_encode($usr['id'].':_:'.$passhash);
+					if(empty($_SESSION['COTONTI']))
+					{
+						sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime']*86400, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+					}
+					else
+					{
+						$_SESSION['COTONTI'] = $u;
+					}
+					$sys['sql_update_hashsalt'] = "user_hashsalt = '$hashsalt',";
 				}
-				else
-				{
-					$_SESSION['COTONTI'] = $u;
-				}
+
+				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', ".$sys['sql_update_hashsalt']." user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
+
 				unset($u);
 				unset($passhash);
 
@@ -274,7 +280,7 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 			}
 			else
 			{
-				$_SESSION['COTONTI'] = '';
+				session_destroy();
 			}
 			sed_diefatal('Login incorrect');
 		}
