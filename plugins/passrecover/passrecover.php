@@ -98,7 +98,7 @@ elseif ($a=='auth' && mb_strlen($v)==32)
 		$rmdpass  = $row['user_password'];
 		$rusername = $row['user_name'];
 		$ruserid = $row['user_id'];
-		$rusermail = $row['user_mail'];
+		$rusermail = $row['user_email'];
 
 		if ($row['user_maingrp']==2)
 			{
