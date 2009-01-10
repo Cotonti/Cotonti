@@ -95,7 +95,6 @@ $db_config 			= 'sed_config';
 $db_forum_posts 	= 'sed_forum_posts';
 $db_forum_sections 	= 'sed_forum_sections';
 $db_forum_structure	= 'sed_forum_structure';
-$db_forum_subforums	= 'sed_forum_subforums';
 $db_forum_topics 	= 'sed_forum_topics';
 $db_groups 			= 'sed_groups';
 $db_groups_users 	= 'sed_groups_users';

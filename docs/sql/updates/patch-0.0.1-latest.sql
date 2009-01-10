@@ -24,18 +24,6 @@ UPDATE `sed_config` SET `config_order` = '07' WHERE `config_cat` = 'main' AND `c
 
 INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'title', '03', 'title_forum_main', '01', '{FORUM}'),('core', 'title', '04', 'title_forum_topics', '01', '{FORUM} - {SECTION}'),('core', 'title', '05', 'title_forum_posts', '01', '{FORUM} - {TITLE}'),('core', 'title', '06', 'title_forum_newtopic', '01', '{FORUM} - {SECTION}'),('core', 'title', '07', 'title_forum_editpost', '01', '{FORUM} - {SECTION}'),('core', 'title', '08', 'title_list', '01', '{TITLE}'),('core', 'title', '09', 'title_page', '01', '{TITLE}'),('core', 'title', '10', 'title_pfs', '01', '{PFS}'),('core', 'title', '11', 'title_pm_main', '01', '{PM}'),('core', 'title', '12', 'title_pm_send', '01', '{PM}'),('core', 'title', '13', 'title_users_main', '01', '{USERS}'),('core', 'title', '14', 'title_users_details', '01', '{USER} : {NAME}'),('core', 'title', '15', 'title_users_profile', '01', '{PROFILE}'),('core', 'title', '16', 'title_users_edit', '01', '{NAME}'),('core', 'title', '17', 'title_header', '01', '{MAINTITLE} - {SUBTITLE}'),('core', 'title', '18', 'title_header_index', '01', '{MAINTITLE} - {DESCRIPTION}');
 
-/* r124 Subforum enhancements */
-CREATE TABLE `sed_forum_subforums` (
-  `fm_id` smallint(5) NOT NULL default '0',
-  `fm_masterid` smallint(5) NOT NULL default '0',
-  `fm_title` varchar(128) NOT NULL,
-  `fm_lt_id` int(11) NOT NULL default '0',
-  `fm_lt_title` varchar(64) NOT NULL default '',
-  `fm_lt_date` int(11) NOT NULL default '0',
-  `fm_lt_posterid` int(11) NOT NULL default '-1',
-  `fm_lt_postername` varchar(24) NOT NULL default ''
-) TYPE=MyISAM;
-
 /* r128 page extra fields enhancment */
 CREATE TABLE `sed_pages_extra_fields` (
   `field_name` varchar(255) NOT NULL,
@@ -140,3 +128,6 @@ DELETE FROM `sed_plugins` WHERE `pl_code` = 'tags';
 INSERT INTO `sed_auth` (`auth_id`, `auth_groupid`, `auth_code`, `auth_option`, `auth_rights`, `auth_rights_lock`, `auth_setbyuserid`) VALUES (NULL, 5, 'plug', 'tags', 255, 255, 1),(NULL, 6, 'plug', 'tags', 3, 124, 1),(NULL, 2, 'plug', 'tags', 1, 254, 1),(NULL, 3, 'plug', 'tags', 0, 255, 1),(NULL, 4, 'plug', 'tags', 3, 124, 1),(NULL, 1, 'plug', 'tags', 1, 254, 1);
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'tags', '3', 'title', 3, '1', '', 'Capitalize first latters of keywords'),('plug', 'tags', '4', 'translit', 3, '0', '', 'Transliterate Tags in URLs'),('plug', 'tags', '6', 'order', 2, 'tag', 'tag,cnt', 'Cloud output order - alphabetical or descending frequency'),('plug', 'tags', '7', 'limit', 1, '0', '', 'Max. tags per items, 0 is unlimited'),('plug', 'tags', '8', 'lim_pages', 1, '0', '', 'Limit of tags in a cloud displayed for pages, 0 is unlimited'),('plug', 'tags', '1', 'pages', 3, '1', '', 'Enable Tags for Pages'),('plug', 'tags', '9', 'lim_forums', 1, '0', '', 'Limit of tags in a cloud displayed in forums, 0 is unlimited'),('plug', 'tags', '2', 'forums', 3, '1', '', 'Enable Tags for Forums');
 INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`, `pl_file`, `pl_order`, `pl_active`) VALUES (NULL, 'page.tags', 'tags', 'page', 'Tags', 'tags.page', 10, 1),(NULL, 'page.edit.tags', 'tags', 'page.edit.tags', 'Tags', 'tags.page.edit.tags', 10, 1),(NULL, 'page.edit.update.done', 'tags', 'page.edit', 'Tags', 'tags.page.edit', 10, 1),(NULL, 'page.edit.delete.done', 'tags', 'page.delete', 'Tags', 'tags.page.delete', 10, 1),(NULL, 'page.add.tags', 'tags', 'page.add.tags', 'Tags', 'tags.page.add.tags', 10, 1),(NULL, 'page.add.add.done', 'tags', 'page.add', 'Tags', 'tags.page.add', 10, 1),(NULL, 'index.tags', 'tags', 'index', 'Tags', 'tags.index', 10, 1),(NULL, 'list.tags', 'tags', 'list', 'Tags', 'tags.list', 10, 1),(NULL, 'forums.topics.loop', 'tags', 'forums.topics', 'Tags', 'tags.forums.topics', 10, 1),(NULL, 'forums.sections.tags', 'tags', 'forums', 'Tags', 'tags.forums', 10, 1),(NULL, 'forums.newtopic.tags', 'tags', 'forums.newtopic.tags', 'Tags', 'tags.forums.newtopic.tags', 10, 1),(NULL, 'forums.newtopic.newtopic.done', 'tags', 'forums.newtopic', 'Tags', 'tags.forums.newtopic', 10, 1),(NULL, 'forums.editpost.tags', 'tags', 'forums.editpost.tags', 'Tags', 'tags.forums.editpost.tags', 10, 1),(NULL, 'forums.editpost.update.done', 'tags', 'forums.editpost', 'Tags', 'tags.forums.editpost', 10, 1),(NULL, 'forums.topics.delete.done', 'tags', 'forums.delete', 'Tags', 'tags.forums.delete', 10, 1),(NULL, 'standalone', 'tags', 'search', 'Tags', 'tags', 0, 1);
+
+/* r272 subforums duplicate data removal */
+DROP TABLE IF EXISTS sed_forum_subforums;

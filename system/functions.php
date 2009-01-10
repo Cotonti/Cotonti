@@ -2103,13 +2103,10 @@ function sed_forum_prunetopics($mode, $section, $param)
  */
 function sed_forum_sectionsetlast($id)
 {
-	global $db_forum_topics, $db_forum_sections, $db_forum_subforums;
-	// FIXME probably this function produces overhead, because lastest post/topic ID should have been known
-	// by the time of its call
+	global $db_forum_topics, $db_forum_sections;
 	$sql = sed_sql_query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title, ft_poll FROM $db_forum_topics WHERE ft_sectionid='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
 	$row = sed_sql_fetcharray($sql);
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
-	$sql = sed_sql_query("UPDATE $db_forum_subforums SET fm_lt_id=".(int)$row['ft_id'].", fm_lt_title='".sed_sql_prep($row['ft_title'])."', fm_lt_date=".(int)$row['ft_updated'].", fm_lt_posterid=".(int)$row['ft_lastposterid'].", fm_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fm_id='$id'");
 	return;
 }
 
