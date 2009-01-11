@@ -33,6 +33,9 @@ $df = empty($df) ? 0 : (int) $df;
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['auth_read']);
 
+$pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
+$pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
+
 if (!$usr['isadmin'] || $userid=='')
 {
 	$userid = $usr['id'];
@@ -464,8 +467,8 @@ if ($files_count>0 || $folders_count>0)
 	if ($folders_count>0)
 	{
 		$totalitemsf = $folders_count;
-		$pagnavf = sed_pagination(sed_url('pfs', 'userid='.$userid), $df, $totalitemsf, $cfg['maxrowsperpage'], 'df');
-		list($pagination_prevf, $pagination_nextf) = sed_pagination_pn(sed_url('pfs', 'userid='.$userid), $df, $totalitemsf, $cfg['maxrowsperpage'], TRUE, 'df');
+		$pagnavf = sed_pagination(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2), $df, $totalitemsf, $cfg['maxrowsperpage'], 'df');
+		list($pagination_prevf, $pagination_nextf) = sed_pagination_pn(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2), $df, $totalitemsf, $cfg['maxrowsperpage'], TRUE, 'df');
 
 		$disp_main .= "<h4>".$folders_count." ".$L['Folders']." / ".$subfiles_count." ".$L['Files']."";
 		$disp_main .= " (".$L['comm_on_page'].": ".$iki." ".$L['Folders']." / ".$subfiles_count_on_page." ".$L['Files'].")</h4><div class=\"pagnav\">".$pagination_prevf." ".$pagnavf." ".$pagination_nextf."</div>";
@@ -484,8 +487,8 @@ if ($files_count>0 || $folders_count>0)
 	if ($files_count>0)
 	{
 		$totalitems = $files_count;
-		$pagnav = sed_pagination(sed_url('pfs', 'f='.$f.'&amp;userid='.$userid), $d, $totalitems, $cfg['maxrowsperpage']);
-		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('pfs', 'f='.$f.'&amp;userid='.$userid), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+		$pagnav = sed_pagination(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2), $d, $totalitems, $cfg['maxrowsperpage']);
+		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 		$disp_main .= "<h4>".$files_count." ";
 
