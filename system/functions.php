@@ -388,20 +388,34 @@ function sed_bbcode_parse($text, $post = false)
 	$bbc = array();
 	if(!$post && preg_match_all('#\[(/)?('.$sed_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
 	{
+		$cdata = '';
 		// Count all unclosed bbcode entries
 		for($i = 0, $cnt = count($mt); $i < $cnt; $i++)
 		{
+				$bb = mb_strtolower($mt[$i][2]);
 				if($mt[$i][1] == '/')
 				{
-					$bb = $mt[$i][2];
-					// Protect from "[/foo] [/bar][foo][bar]" trick
-					if($bbc[$bb] > 0) $bbc[$bb]--;
-					// else echo 'ERROR: invalid closing bbcode detected';
+					if(empty($cdata))
+					{
+						// Protect from "[/foo] [/bar][foo][bar]" trick
+						if($bbc[$bb] > 0) $bbc[$bb]--;
+						// else echo 'ERROR: invalid closing bbcode detected';
+					}
+					elseif($bb == $cdata)
+					{
+						$bbc[$bb]--;
+						$cdata = '';
+					}
 				}
-				else
+				elseif(empty($cdata))
 				{
 					// Count opening tag in
-					$bbc[$mt[$i][2]]++;
+					$bbc[$bb]++;
+					if($bb == 'code' || $bb == 'highlight')
+					{
+						// Ignore bbcodes in constant data
+						$cdata = $bb;
+					}
 				}
 		}
 		// Close all unclosed tags. Produces non XHTML-compliant output
