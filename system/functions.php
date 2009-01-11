@@ -2696,7 +2696,7 @@ function sed_htmlmetas()
         $result = "<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
 <meta name=\"description\" content=\"".$cfg['maintitle']." - ".$cfg['subtitle']."\" />
 <meta name=\"keywords\" content=\"".$cfg['metakeywords']."\" />
-<meta name=\"generator\" content=\"Seditio by Neocrome http://www.neocrome.net\" />
+<meta name=\"generator\" content=\"Cotonti http://www.cotonti.com\" />
 <meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
 <meta http-equiv=\"pragma\" content=\"no-cache\" />
 <meta http-equiv=\"cache-control\" content=\"no-cache\" />
