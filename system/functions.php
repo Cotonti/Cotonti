@@ -733,6 +733,8 @@ function sed_build_bbcodes_local($limit)
 function sed_build_catpath($cat, $mask)
 {
 	global $sed_cat, $cfg;
+	$mask = str_replace('%25', '%', $mask);
+	$mask = str_replace('%24', '$', $mask);
 	if($cfg['homebreadcrumb'])
 	{
 		$tmp[] = '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a>';

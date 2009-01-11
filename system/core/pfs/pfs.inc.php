@@ -20,8 +20,8 @@ $id = sed_import('id','G','TXT');
 $o = sed_import('o','G','TXT');
 $f = sed_import('f','G','INT');
 $v = sed_import('v','G','TXT');
-$c1 = sed_import('c1','G','TXT');
-$c2 = sed_import('c2','G','TXT');
+$c1 = sed_import('c1','G','ALP');
+$c2 = sed_import('c2','G','ALP');
 $userid = sed_import('userid','G','INT');
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
