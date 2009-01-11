@@ -50,6 +50,7 @@ $L['alreadydeletednewentry'] = 'Запись удалена';		//N-0.0.2
 $L['adm_purgeall'] = 'Очистить все';
 $L['adm_purgeall_done'] = 'Кеш очищен полностью';		//N-0.0.2
 $L['adm_delcacheitem'] = 'Кеш запись удалена';		//N-0.0.2
+$L['adm_comm_already_del'] = 'Комментарий удален';		//N-0.0.2
 $L['adm_listisempty'] = 'Список пуст';
 $L['adm_totalsize'] = 'Общий размер';
 $L['adm_showall'] = 'Показать все';

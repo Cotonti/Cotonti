@@ -50,6 +50,7 @@ $L['alreadydeletednewentry'] = 'Entry deleted';		//N-0.0.2
 $L['adm_purgeall'] = 'Purge all';
 $L['adm_purgeall_done'] = 'Ñache cleared completely';		//N-0.0.2
 $L['adm_delcacheitem'] = 'Ñache item removed';		//N-0.0.2
+$L['adm_comm_already_del'] = 'Comment deleted';		//N-0.0.2
 $L['adm_listisempty'] = 'List is empty';
 $L['adm_totalsize'] = 'Total size';
 $L['adm_showall'] = 'Show all';
