@@ -128,7 +128,7 @@ if ($a=='send')
 					$rusername = sed_cc($row['user_name']);
 					$remail = $row['user_email'];
 					$rsubject = $cfg['maintitle']." - ".$L['pm_notifytitle'];
-					$rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl']."/pm.php");
+					$rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl'].sed_url('pm', '', '', true));
 					sed_mail($remail, $rsubject, $rbody);
 					sed_stat_inc('totalmailpmnot');
 				}

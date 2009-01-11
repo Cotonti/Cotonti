@@ -9,7 +9,7 @@
                     <div class="topLink"><a href="#top" title="{PHP.L.Top}">{PHP.L.Top}</a></div>
                 </div>
             </div>
-            <div id="sedCopy"> <a href="http://www.neocrome.net" title="Visit Neocrome.Net for more information on Seditio">POWERED BY SEDITIO</a></div>
+            <div id="sedCopy"> <a href="http://www.cotonti.com" title="Cotonti Content Management System">POWERED BY COTONTI</a></div>
             <div id="copyBar"></div>
 			<div>{FOOTER_CREATIONTIME} {FOOTER_SQLSTATISTICS} {FOOTER_DEVMODE}</div><br />
         </div>

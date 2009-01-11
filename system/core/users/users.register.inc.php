@@ -29,7 +29,7 @@ $extp = sed_getextplugins('users.register.first');
 if (is_array($extp))
 	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
-	
+
 // Extra fields - getting
 $extrafields = array();
 $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
@@ -63,7 +63,7 @@ if ($a=='add')
 	$rusermsn = sed_import('rusermsn','P','TXT');
 	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
 	$ruseremail = mb_strtolower($ruseremail);
-	
+
 	// Extra fields
 	if(count($extrafields)>0)
 	foreach($extrafields as $row)
@@ -114,7 +114,7 @@ if ($a=='add')
 
 		// Extra fields
 		$extra_columns = ""; $extra_values = "";
-		if(count($extrafields)>0) 
+		if(count($extrafields)>0)
 			foreach($extrafields as $i=>$row)
 			{
 				$extra_columns .= "user_".$row['field_name'].", ";
@@ -145,7 +145,7 @@ if ($a=='add')
 			user_msn,
 			user_website,
 			$extra_columns
-			user_lastip) 
+			user_lastip)
 			VALUES
 			('".sed_sql_prep($rusername)."',
 			'$mdpass',
@@ -170,7 +170,7 @@ if ($a=='add')
 			'".sed_sql_prep($ruserirc)."',
 			'".sed_sql_prep($rusermsn)."',
 			'".sed_sql_prep($ruserwebsite)."',
-			$extra_values 
+			$extra_values
 			'".$usr['ip']."')";
 		$sql = sed_sql_query($ssql);
 		$userid = sed_sql_insertid();
@@ -196,7 +196,7 @@ if ($a=='add')
 			sed_mail ($ruseremail, $rsubject, $rbody);
 
 			$rsubject = $cfg['maintitle']." - ".$L['aut_regreqnoticetitle'];
-			$rinactive = $cfg['mainurl'].'/'.sed_url('users', 'gm=2&s=regdate&w=desc');
+			$rinactive = $cfg['mainurl'].'/'.sed_url('users', 'gm=2&s=regdate&w=desc', '', true);
 			$rbody = sprintf($L['aut_regreqnotice'], $rusername, $rinactive);
 			sed_mail ($cfg['adminemail'], $rsubject, $rbody);
 			sed_redirect(sed_url('message', 'msg=118'));
@@ -205,7 +205,7 @@ if ($a=='add')
 		else
 			{
 			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
-			$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey);
+			$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
 			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			sed_mail ($ruseremail, $rsubject, $rbody);
@@ -318,7 +318,7 @@ foreach($extrafields as $i=>$row)
 	$useredit_array[$t1] = $t2;
 }
 $t->assign($useredit_array);
-		
+
 /* === Hook === */
 $extp = sed_getextplugins('users.register.tags');
 if (is_array($extp))
