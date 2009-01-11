@@ -3206,7 +3206,7 @@ function sed_selectbox_date($utime, $mode, $ext='')
 	$p_monthes[] = array(11, $L['November']);
 	$p_monthes[] = array(12, $L['December']);
 
-	$result = "<select name=\"ryear".$ext."\">";
+	$result = "<select id=\"ryear\" name=\"ryear".$ext."\">";
 	for ($i = 1902; $i<2030; $i++)
 	{
 		$selected = ($i==$s_year) ? "selected=\"selected\"" : '';
@@ -3214,7 +3214,7 @@ function sed_selectbox_date($utime, $mode, $ext='')
 	}
 	$result .= ($utime==0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
 
-	$result .= "</select><select name=\"rmonth".$ext."\">";
+	$result .= "</select><select id=\"rmonth\" name=\"rmonth".$ext."\">";
 	reset($p_monthes);
 	foreach ($p_monthes as $k => $line)
 	{
@@ -3223,7 +3223,7 @@ function sed_selectbox_date($utime, $mode, $ext='')
 	}
 	$result .= ($utime==0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
 
-	$result .= "</select><select name=\"rday".$ext."\">";
+	$result .= "</select><select id=\"rday\" name=\"rday".$ext."\">";
 	for ($i = 1; $i<32; $i++)
 	{
 		$selected = ($i==$s_day) ? "selected=\"selected\"" : '';
