@@ -1,5 +1,61 @@
 <!-- BEGIN: MAIN -->
 
+<script type="text/javascript" src="js/date.js"></script>
+<script type="text/javascript" src="js/jquery.datePicker.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="skins/{PHP.skin}/datePicker.css">
+		
+<script type="text/javascript">
+$(function()
+{
+	
+	$('#date-pick')
+		.datePicker({
+		inline:true,
+		createButton:false,
+		startDate:'31/01/1902',
+		endDate:'31/12/2029'}).bind(
+			'dateSelected',
+			function(e, selectedDate, $td, state)
+			{
+				updateSelects(selectedDate);
+			}
+		).bind(
+			'dpClosed',
+			function(e, selected)
+			{
+				updateSelects(selected[0]);
+			}
+		);
+		
+	var updateSelects = function (selectedDate)
+	{
+		selectedDate = new Date(selectedDate);
+		var d = selectedDate.getDate();
+		var m = selectedDate.getMonth();
+		var y = selectedDate.getFullYear();
+		($('#rday')[0]).selectedIndex = d - 1;
+		($('#rmonth')[0]).selectedIndex = m;
+		($('#ryear')[0]).selectedIndex = y - 1902;
+	}
+
+	$('#rday, #rmonth, #ryear')
+		.bind(
+			'change',
+			function()
+			{
+				var d = new Date(
+							$('#ryear').val(),
+							$('#rmonth').val()-1,
+							$('#rday').val()
+						);
+				$('#date-pick').dpSetSelected(d.asString());
+			}
+		);
+
+	$('#rday').trigger('change');
+});
+</script>
+
 	<div class="mboxHD">{USERS_PROFILE_TITLE}</div>
 	<div class="mboxBody">
 
@@ -75,7 +131,8 @@
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Birthdate}</td>
-					<td>{USERS_PROFILE_BIRTHDATE}</td>
+					<td><div id="date-pick"></div>
+					{USERS_PROFILE_BIRTHDATE}</td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Occupation}</td>
