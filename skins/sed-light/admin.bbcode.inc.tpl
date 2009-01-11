@@ -62,10 +62,10 @@
 <h4>{PHP.L.adm_bbcodes_new} :</h4>
 <table class="cells">
 <tr>
-	<td class="coltop" style="width:25%;">{PHP.L.Name}<br />{PHP.L.adm_bbcodes_mode} / {PHP.L.Enabled} / {PHP.L.adm_bbcodes_container}</td>
-	<td class="coltop" style="width:20%;">{PHP.L.adm_bbcodes_pattern}</td>
+	<td class="coltop" style="width:25%;">{PHP.L.Name}<br />{PHP.L.adm_bbcodes_mode} / {PHP.L.Enabled}</td>
+	<td class="coltop" style="width:20%;">{PHP.L.adm_bbcodes_pattern} <br /> {PHP.L.adm_bbcodes_priority} / {PHP.L.adm_bbcodes_container}</td>
 	<td class="coltop" style="width:20%;">{PHP.L.adm_bbcodes_replacement}</td>
-	<td class="coltop" style="width:20%;">{PHP.L.Plugin}<br />{PHP.L.adm_bbcodes_priority}<br />{PHP.L.adm_bbcodes_postrender}</td>
+	<td class="coltop" style="width:20%;">{PHP.L.Plugin}<br />{PHP.L.adm_bbcodes_postrender}</td>
 	<td class="coltop" style="width:15%;">{PHP.L.Update}<br />{PHP.L.Delete}</td>
 </tr>
 </table>
