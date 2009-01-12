@@ -77,10 +77,10 @@ if ($a=='bump')
 	exit;
 }
 
-sed_save_poll_check_errors();
+sed_poll_check();
 
 	if (empty($error_string)){
-		$number=sed_save_poll();
+		$number=sed_poll_save();
 
 		if($poll_id=='new'){$adminmain .= "<h4>".$L['polls_created']."</h4>";}
 		elseif(!empty($poll_id)) {$adminmain .= "<h4>".$L['polls_updated']."</h4>";}
@@ -181,7 +181,7 @@ else
 	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
 	$send_button=$L['Create'];
 }
-list($poll_text, $poll_options, $poll_date, $poll_settings)=sed_create_poll($poll_id, 1);
+list($poll_text, $poll_options, $poll_date, $poll_settings)=sed_poll_edit_form($poll_id, 1);
 
 $adminmain .= "<form id=\"addpoll\" action=\"".sed_url('admin', "m=polls")."\" method=\"post\">";
 $adminmain .= "<table class=\"cells\">";

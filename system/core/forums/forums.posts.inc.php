@@ -438,25 +438,11 @@ $t = new XTemplate($mskin);
 if (!$cfg['disable_polls'] && $ft_poll>0)
 {
 	require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
-	list($polltext, $polldate, $totalvotes, $polloptions, $polloptions_bar, $polloptions_per, $polloptions_count, $pollbutton, $alreadyvoted)=sed_new_poll($ft_poll);
-		$result = (!$alreadyvoted) ? "<form action=\"".sed_url('forums', "m=posts&q=".$q)."\" method=\"post\">" :"";
-	$result .= "<table>";
-
-	$option_count = (count($polloptions) ? count($polloptions) : 0);
-	
-	for($i = 0; $i < $option_count; $i++) {
-
-		$result .= "<tr><td>";
-		$result .= $polloptions[$i];
-		$result .= "</td><td>".$polloptions_bar[$i]."</td><td>".$polloptions_per[$i]."%</td><td>(".$polloptions_count[$i].")</td></tr>";
-
-	}
-	$result .= (!$alreadyvoted) ? "<tr><td colspan=\"4\">".$pollbutton."</td></tr></table></form>" :"</table>";
+	sed_poll_vote($ft_poll);
+list($polltitle, $poll_form)=sed_poll_form($ft_poll, sed_url('forums', "m=posts&q=".$q));
 	$t->assign(array(
-		"POLLS_VOTERS" => $totalvotes,
-		"POLLS_SINCE" => $polldate,
-		"POLLS_TITLE" => $polltext,
-		"POLLS_RESULTS" => $result,
+		"POLLS_TITLE" => $polltitle,
+		"POLLS_FORM" => $poll_form,
 	));
 
 	$t->parse("MAIN.POLLS_VIEW");

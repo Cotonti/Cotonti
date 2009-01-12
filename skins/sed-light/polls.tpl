@@ -1,15 +1,40 @@
+<!-- BEGIN: POLL_VIEW -->
+{POLL_FORM_BEGIN}
+<table class="cells">
+<!-- BEGIN: POLLTABLE -->
+<tr><td><label>{POLL_INPUT}{POLL_OPTIONS}</label></td><td><div style="width:256px;"><div class="bar_back"><div class="bar_front" style="width:{POLL_PER}%;"></div></div></div></td><td>{POLL_PER}%</td><td>{POLL_COUNT}</td></tr>
+<!-- END: POLLTABLE -->
+<tr><td colspan="4">{POLL_FORM_BUTTON}</td></tr></table>
+{POLL_FORM_END}
+<p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
+<!-- END: POLL_VIEW -->
+
+<!-- BEGIN: POLL_VIEW_VOTED -->
+<table class="cells">
+<!-- BEGIN: POLLTABLE -->
+<tr><td>{POLL_OPTIONS}</td><td><div style="width:256px;"><div class="bar_back"><div class="bar_front" style="width:{POLL_PER}%;"></div></div></div></td><td>{POLL_PER}%</td><td>{POLL_COUNT}</td></tr>
+<!-- END: POLLTABLE -->
+<tr><td colspan="4">{PHP.L.polls_alreadyvoted}</td></tr></table>
+
+<p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
+<!-- END: POLL_VIEW_VOTED-->
+
+<!-- BEGIN: POLL_VIEW_DISABLED -->
+<table class="cells">
+<!-- BEGIN: POLLTABLE -->
+<tr><td>{POLL_OPTIONS}</td></tr>
+<!-- END: POLLTABLE -->
+<tr><td>{PHP.L.rat_registeredonly}</td></tr></table>
+<!-- END: POLL_VIEW_DISABLED-->
+
+
 <!-- BEGIN: MAIN -->
 
 	<!-- BEGIN: POLLS_VIEW -->
 	<div class="mboxHD">{POLLS_TITLE}</div>
 	<div class="mboxBody">
-
-		{POLLS_RESULTS}
-
-		<p>
-			{POLLS_VOTERS} {PHP.skinlang.polls.voterssince} {POLLS_SINCE}<br />
+{POLLS_FORM}
 			{PHP.skinlang.polls.Comments} {POLLS_COMMENTS}{POLLS_COMMENTS_DISPLAY}
-		</p>
 
 	</div>
 	<!-- END: POLLS_VIEW -->
