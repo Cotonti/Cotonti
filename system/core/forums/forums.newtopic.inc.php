@@ -98,7 +98,7 @@ if ($a=='newtopic')
 	$error_string .= ( strlen($newtopictitle) < 2) ? $L["for_titletooshort"]."<br />" : '';
 	$error_string .= ( strlen($newmsg) < 5) ? $L["for_messagetooshort"]."<br />" : '';
 	if($poll){
-	sed_save_poll_check_errors();
+	sed_poll_check();
 	}
 
 
@@ -110,7 +110,7 @@ if ($a=='newtopic')
 
 	/*Completely stolen from "forum poll starter" plugin*/
 
-	$poll_index= $poll ? sed_save_poll(1, $s) : 0;
+	$poll_index= $poll ? sed_poll_save(1, $s) : 0;
 
 		$sql = sed_sql_query("INSERT into $db_forum_topics
 		(ft_state,
@@ -285,7 +285,7 @@ if ($fs_allowprvtopics)
 if ($fs_allowpolls && $poll)
 	{
 
-	list($poll_text, $poll_options, $poll_date, $poll_settings)=sed_create_poll("new", 1);
+	list($poll_text, $poll_options, $poll_date, $poll_settings)=sed_poll_edit_form("new", 1);
 
 
 	$t->assign(array(

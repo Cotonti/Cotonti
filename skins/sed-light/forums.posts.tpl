@@ -47,13 +47,7 @@
 
 	<!-- BEGIN: POLLS_VIEW -->
 	{POLLS_TITLE}
-
-		{POLLS_RESULTS}
-
-		<p>
-			{POLLS_VOTERS} {PHP.skinlang.polls.voterssince} {POLLS_SINCE}<br />
-		</p>
-
+	{POLLS_FORM}
 	<!-- END: POLLS_VIEW -->
 
 		<div class="tCap"></div><table class="cells" border="0" cellspacing="1" cellpadding="2">

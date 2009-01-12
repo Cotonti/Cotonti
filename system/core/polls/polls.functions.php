@@ -16,7 +16,7 @@ Description=Functions
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-function sed_create_poll($id, $multiple=1)
+function sed_poll_edit_form($id, $multiple=1)
 {
 	global $cfg, $L, $db_polls, $db_polls_options;
 	global $error_string;
@@ -142,7 +142,7 @@ HTM;
 
 /* ------------------ */
 
-function sed_save_poll_check_errors()
+function sed_poll_check()
 {
 	global $cfg, $L;
 	global $error_string;
@@ -181,7 +181,7 @@ function sed_save_poll_check_errors()
 
 /* ------------------ */
 
-function sed_save_poll($type='0', $state='0')
+function sed_poll_save($type='0', $state='0')
 {
 
 	global $cfg, $L, $sys, $db_polls, $db_polls_options;
@@ -192,10 +192,10 @@ function sed_save_poll($type='0', $state='0')
 	{
 		$option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
 		if ($poll_id=='new') {
-			$sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple) VALUES ('".$type."', ".(int)$state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".$poll_multiple."')");
+			$sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple) VALUES ('".$type."', ".(int)$state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".(int)$poll_multiple."')");
 			$newpoll_id = sed_sql_insertid(); }
 			else {
-				$sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".$poll_multiple."' WHERE poll_id='$poll_id'");
+				$sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
 				$newpoll_id = $poll_id; }
 				// Dinamic adding polloptions
 				for($count = 0; $count < $option_count; $count++) {
@@ -219,16 +219,64 @@ function sed_save_poll($type='0', $state='0')
 
 /* ------------------ */
 
-function sed_new_poll($id, $showbefore=true, $width='256px')
+ 
+function sed_poll_vote()
 {
 	global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 	global $error_string;
-
+	global $vote;
+	
 	$vote = sed_import('vote','G','TXT');
+	$id= sed_import('poll_id','G','INT');
 	if (!empty($vote))
 	{$vote=explode(" ", $vote);}
 	if (empty($vote))
-	{$vote = sed_import('vote','P','ARR');}
+	{$vote = sed_import('vote','P','ARR');
+	$id= sed_import('poll_id','P','INT');}
+	
+	if (!empty($vote))
+	{
+	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id'");
+
+	if ($row = sed_sql_fetcharray($sql))
+	{
+		if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
+		{
+			$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userid='".$usr['id']."' LIMIT 1");
+			$alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
+		}
+		elseif($cfg['ip_id_polls']=='ip')
+		{
+			$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1");
+			$alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
+		}
+		else
+		{
+			$alreadyvoted = 0;
+		}
+
+		if (!empty($vote) && $alreadyvoted!=1)
+		{
+			for($i = 0; $i<count($vote); $i++)
+			{$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$id' AND po_id='".(int)$vote[$i]."'");}
+			if (sed_sql_affectedrows()>0)
+			{
+				$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
+			}
+		}
+	}
+	else
+	{ $error_string .= $L['wrongURL']; }
+	}
+}
+
+/*---------------*/
+ 
+function sed_poll_form($id, $formlink='', $skin='')
+{
+	global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters, $usr;
+	global $error_string;
+	$canvote = true;
 
 	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id'");
 
@@ -247,19 +295,7 @@ function sed_new_poll($id, $showbefore=true, $width='256px')
 		else
 		{
 			$alreadyvoted = 0;
-			$showbefore = false;
-		}
-
-
-		if (!empty($vote) && $alreadyvoted!=1)
-		{
-			for($i = 0; $i<count($vote); $i++)
-			{$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_count=po_count+1 WHERE po_pollid='$id' AND po_id='".$vote[$i]."'");}
-			if (sed_sql_affectedrows()>0)
-			{
-				$sql2 = sed_sql_query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
-				$alreadyvoted = TRUE;
-			}
+			$canvote	=false;
 		}
 
 		$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
@@ -271,6 +307,14 @@ function sed_new_poll($id, $showbefore=true, $width='256px')
 	else
 	{ $error_string .= $L['wrongURL']; }
 
+
+
+if (empty($skin)) {$skin=sed_skinfile('polls');}
+else			  {$skin=sed_skinfile($skin, true);}
+
+$poll_form = new XTemplate($skin);
+$poll_block = (!$alreadyvoted) ? "POLL_VIEW" : "POLL_VIEW_VOTED";
+if (!$canvote) $poll_block = "POLL_VIEW_DISABLED";
 	while ($row1 = sed_sql_fetcharray($sql1))
 	{
 		$po_id = $row1['po_id'];
@@ -278,18 +322,41 @@ function sed_new_poll($id, $showbefore=true, $width='256px')
 		$percent = @round(100 * ($po_count / $totalvotes),1);
 
 		$input_type=$row['poll_multiple'] ? "checkbox" : "radio";
-		$polloptions[] = ($alreadyvoted) ? sed_parse(sed_cc($row1['po_text']), 1, 1, 1) : "<label><input type='".$input_type."' name='vote[]' value='".$po_id."' />".sed_parse(sed_cc($row1['po_text']), 1, 1, 1)."</label>";
+		$polloptions_input = ($alreadyvoted || !$canvote) ? "" : "<input type='".$input_type."' name='vote[]' value='".$po_id."' />&nbsp;";
+		$polloptions = sed_parse(sed_cc($row1['po_text']), 1, 1, 1);
 
-		$polloptions_bar[] = ($alreadyvoted  || $showbefore) ? "<div style=\"width:".$width.";\"><div class=\"bar_back\"><div class=\"bar_front\" style=\"width:".$percent."%;\"></div></div></div>" : "";
-		$polloptions_per[] = ($alreadyvoted  || $showbefore) ? $percent : "";
-		$polloptions_count[] =($alreadyvoted  || $showbefore) ? $po_count : "";
+		$poll_form->assign(array(
+		"POLL_OPTIONS" => $polloptions,
+		"POLL_PER" => $percent,
+		"POLL_COUNT" => $po_count,
+		"POLL_INPUT" => $polloptions_input,
+		));
+
+	$poll_form->parse($poll_block.".POLLTABLE");
+
 	}
 
-
-
 	$polltext=sed_parse(sed_cc($row['poll_text']), 1, 1, 1);
-	$pollbutton=(!$alreadyvoted) ? "<input type=\"submit\" class=\"submit\" value=\"".$L['polls_Vote']."\" />" :"";
+	$pollbutton=(!$alreadyvoted || $canvote) ? "<input type=\"hidden\" name=\"poll_id\" value=\"$id\" /><input type=\"submit\" class=\"submit\" value=\"".$L['polls_Vote']."\" />" :"";
 	$polldate=date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600);
-	return(array($polltext, $polldate, $totalvotes, $polloptions, $polloptions_bar, $polloptions_per, $polloptions_count, $pollbutton, $alreadyvoted));
+ if (empty($formlink)) {$formlink=sed_url('polls', "id=".$id);}
+	$pollformbegin = "<form action=\"".$formlink."\" method=\"post\">";
+	$pollformend .= "</form>";
+
+	$poll_form->assign(array(
+		"POLL_VOTERS" => $totalvotes,
+		"POLL_SINCE" => $polldate,
+		"POLL_TITLE" => $polltext,
+		"POLL_FORM_BEGIN" => $pollformbegin,
+		"POLL_FORM_END" => $pollformend,
+		"POLL_FORM_BUTTON" => $pollbutton,
+		"POLL_RESULTS" => $result,
+	));
+
+	$poll_form->parse($poll_block);
+$pollform = array($polltext, $poll_form -> text($poll_block));
+
+
+	return($pollform);
 }
 ?>

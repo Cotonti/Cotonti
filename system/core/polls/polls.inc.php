@@ -27,6 +27,14 @@ if (is_array($extp))
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['auth_read']);
 
+$mode = sed_import('mode','G','ALP');
+
+if ($mode=='ajax')
+{
+	exit;
+
+}
+
 
 $id = sed_import('id','G','ALP', 8);
 $vote = sed_import('vote','G','TXT');
@@ -87,29 +95,13 @@ elseif ($id=='viewall' || $id=='')
 else
 {
 		$id = sed_import($id,'D','INT');
-	list($polltext, $polldate, $totalvotes, $polloptions, $polloptions_bar, $polloptions_per, $polloptions_count, $pollbutton, $alreadyvoted)=sed_new_poll($id);
-		$result = (!$alreadyvoted) ? "<form action=\"".sed_url('polls', "id=".$id."")."\" method=\"post\">" :"";
-	$result .= "<table class=\"cells\">";
-
-	$option_count = (count($polloptions) ? count($polloptions) : 0);
-	
-	for($i = 0; $i < $option_count; $i++) {
-
-		$result .= "<tr><td>";
-		$result .= $polloptions[$i];
-		$result .= "</td><td>".$polloptions_bar[$i]."</td><td>".$polloptions_per[$i]."%</td><td>(".$polloptions_count[$i].")</td></tr>";
-
-	}
-	$result .= (!$alreadyvoted) ? "<tr><td colspan=\"4\">".$pollbutton."</td></tr></table></form>" :"</table>";
-
+		sed_poll_vote($id);
+		list($polltitle, $poll_form)=sed_poll_form($id);
 	$item_code = 'v'.$id;
 	list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$id), $comments);
-
 	$t->assign(array(
-		"POLLS_VOTERS" => $totalvotes,
-		"POLLS_SINCE" => $polldate,
-		"POLLS_TITLE" => $polltext,
-		"POLLS_RESULTS" => $result,
+		"POLLS_TITLE" => $polltitle,
+		"POLLS_FORM" => $poll_form,
 		"POLLS_COMMENTS" => $comments_link,
 		"POLLS_COMMENTS_DISPLAY" => $comments_display,
 		"POLLS_VIEWALL" => "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>",
