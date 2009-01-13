@@ -142,4 +142,6 @@ ALTER TABLE `sed_users` CHANGE `user_name` `user_name` VARCHAR( 100 ) CHARACTER 
 
 /* r289 xhtml code removed from php for plug whosonline*/
 INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'page', '06', 'autovalidate', 3, '1');
- 
+
+/* r290 indexpolls*/
+DELETE FROM `sed_plugins` WHERE `pl_file` = 'indexpolls.main';
