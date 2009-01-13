@@ -197,7 +197,9 @@ if ($a=='newpost')
 		WHERE ft_id='$q'");
 
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+1 WHERE fs_id='$s'");
+		$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+1 WHERE fs_id='$fs_masterid'") : '';
 
+		
 		if ($fs_countposts)
 		{ $sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'"); }
 
@@ -313,6 +315,16 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			fs_postcount=fs_postcount-1,
 			fs_postcount_pruned=fs_postcount_pruned+1
 			WHERE fs_id='$s'");
+			
+			if ($fs_masterid>0)
+			{
+			$sql = sed_sql_query("UPDATE $db_forum_sections SET
+			fs_topiccount=fs_topiccount-1,
+			fs_topiccount_pruned=fs_topiccount_pruned+1,
+			fs_postcount=fs_postcount-1,
+			fs_postcount_pruned=fs_postcount_pruned+1
+			WHERE fs_id='$fs_masterid'");
+			}
 
 			/* === Hook === */
 			$extp = sed_getextplugins('forums.posts.emptytopicdel');
@@ -347,7 +359,15 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			fs_postcount=fs_postcount-1,
 			fs_postcount_pruned=fs_postcount_pruned+1
 			WHERE fs_id='$s'");
-
+			
+			if ($fs_masterid>0)
+			{
+			$sql = sed_sql_query("UPDATE $db_forum_sections SET
+			fs_postcount=fs_postcount-1,
+			fs_postcount_pruned=fs_postcount_pruned+1
+			WHERE fs_id='$fs_masterid'");
+			}
+			
 			sed_forum_sectionsetlast($s);
 
 			$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts
@@ -382,6 +402,7 @@ else
 
 $sql = sed_sql_query("UPDATE $db_forum_topics SET ft_viewcount=ft_viewcount+1 WHERE ft_id='$q'");
 $sql = sed_sql_query("UPDATE $db_forum_sections SET fs_viewcount=fs_viewcount+1 WHERE fs_id='$s'");
+$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_viewcount=fs_viewcount+1 WHERE fs_id='$fs_masterid'") : '';
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$q'");
 $totalposts = sed_sql_result($sql,0,"COUNT(*)");
 
