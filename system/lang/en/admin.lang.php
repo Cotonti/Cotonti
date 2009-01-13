@@ -48,8 +48,8 @@ $L['alreadyaddnewentry'] = 'New entry added';		//N-0.0.2
 $L['alreadyupdatednewentry'] = 'Entry updated';		//N-0.0.2
 $L['alreadydeletednewentry'] = 'Entry deleted';		//N-0.0.2
 $L['adm_purgeall'] = 'Purge all';
-$L['adm_purgeall_done'] = 'Ñache cleared completely';		//N-0.0.2
-$L['adm_delcacheitem'] = 'Ñache item removed';		//N-0.0.2
+$L['adm_purgeall_done'] = 'ache cleared completely';		//N-0.0.2
+$L['adm_delcacheitem'] = 'ache item removed';		//N-0.0.2
 $L['adm_comm_already_del'] = 'Comment deleted';		//N-0.0.2
 $L['adm_listisempty'] = 'List is empty';
 $L['adm_totalsize'] = 'Total size';
@@ -168,6 +168,7 @@ $L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from
 $L['cfg_disablewhosonline'] = array('Disable who\'s online', 'Automatically enabled if you turn on the Shield');
 $L['cfg_allowphp_pages'] = array('Allow the PHP page type', 'Execution of PHP code in pages, use with caution !');
 $L['cfg_count_admin'] = array('Count Administrators\' hits', ''); // N-0.0.1
+$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category'); // N-0.0.2
 
 
 

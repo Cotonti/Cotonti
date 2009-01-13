@@ -138,4 +138,8 @@ DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'ph_resize' LIMIT 1;
 
 /* r285 24 symbols for user name - not enough */ 
-ALTER TABLE `sed_users` CHANGE `user_name` `user_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  
+ALTER TABLE `sed_users` CHANGE `user_name` `user_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+
+/* r289 xhtml code removed from php for plug whosonline*/
+INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'page', '06', 'autovalidate', 3, '1');
+ 
