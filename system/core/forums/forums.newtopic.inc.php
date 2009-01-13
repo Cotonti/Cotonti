@@ -190,6 +190,12 @@ if ($a=='newtopic')
 		fs_topiccount=fs_topiccount+1
 		WHERE fs_id='$s'");
 
+		if ($fs_masterid>0)
+		{ $sql = sed_sql_query("UPDATE $db_forum_sections SET
+		fs_postcount=fs_postcount+1,
+		fs_topiccount=fs_topiccount+1
+		WHERE fs_id='$fs_masterid'"); }
+		
 		if ($fs_autoprune>0)
 		{ sed_forum_prunetopics('updated', $s, $fs_autoprune); }
 
