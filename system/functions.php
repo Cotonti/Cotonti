@@ -868,7 +868,7 @@ function sed_build_comments($code, $url, $display)
 			$smilies = ($cfg['parsesmiliescom']) ? sed_build_smilies("newcomment", "rtext", $L['Smilies']) : '';
 			$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
 			$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
-			$post_main = "<textarea class=\"minieditor\" name=\"rtext\" rows=\"4\" cols=\"80\">".$rtext."</textarea><br />".$bbcodes." ".$smilies." ".$pfs;
+			$post_main = "<textarea class=\"minieditor\" name=\"rtext\" rows=\"10\" cols=\"120\">".$rtext."</textarea><br />".$bbcodes." ".$smilies." ".$pfs;
 		}
 
 		$t->assign(array(
