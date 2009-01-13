@@ -83,6 +83,7 @@ if ($a=='add')
 	}
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
+	$page_state = ($usr['isadmin'] && $cfg['autovalidate']) ? "0" : "1";
 
 	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
@@ -124,7 +125,7 @@ $ssql.="page_title,
 		page_size,
 		page_alias)
 		VALUES
-		(1,
+		(".(int)$page_state.",
 		0,
 		'".sed_sql_prep($newpagecat)."',
 			'".sed_sql_prep($newpagekey)."',";
