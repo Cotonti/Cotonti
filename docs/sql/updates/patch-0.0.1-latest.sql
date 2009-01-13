@@ -136,3 +136,6 @@ DROP TABLE IF EXISTS sed_forum_subforums;
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'av_resize' LIMIT 1;
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'sig_resize' LIMIT 1;
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'ph_resize' LIMIT 1;
+
+/* r285 24 symbols for user name - not enough */ 
+ALTER TABLE `sed_users` CHANGE `user_name` `user_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  
