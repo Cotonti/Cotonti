@@ -146,7 +146,7 @@ INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_
 /* r290 indexpolls*/
 DELETE FROM `sed_plugins` WHERE `pl_file` = 'indexpolls.main';
 
-/* r292 Increase size of user_name and page category title (begins in r285)*/ 
+/* r293 Increase size of user_name and page category title (begins in r285)*/ 
 ALTER TABLE `sed_com` CHANGE `com_author` `com_author` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ; 
 ALTER TABLE `sed_forum_posts` CHANGE `fp_postername` `fp_postername` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
 ALTER TABLE `sed_forum_posts` CHANGE `fp_updater` `fp_updater` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
