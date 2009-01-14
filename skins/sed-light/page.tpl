@@ -20,8 +20,7 @@
 				<!-- BEGIN: PAGE_ADMIN -->
 				{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; ({PAGE_ADMIN_COUNT})<br />
 				<!-- END: PAGE_ADMIN -->
-
-				{PAGE_COMMENTS_DISPLAY}{PAGE_RATINGS_DISPLAY}
+				{PAGE_RATINGS_DISPLAY}
 			</div>
 		</div>
 
@@ -57,6 +56,13 @@
 			</div>
 		</div>
 		<!-- END: PAGE_FILE -->
+		
+		<div class="pageBody">
+			<div class="pageTop"></div>
+			<div class="pageText">
+				{PAGE_COMMENTS_DISPLAY}
+			</div>
+		</div>
 
 	</div>
 
