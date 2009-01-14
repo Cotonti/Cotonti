@@ -145,7 +145,7 @@ if ($n=='options')
 	$adminmain .= "<tr><td>".$L['Path']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$structure_path."\" size=\"16\" maxlength=\"16\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Title']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$structure_title."\" size=\"64\" maxlength=\"32\" /></td></tr>";
+	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$structure_title."\" size=\"64\" maxlength=\"100\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$structure_desc."\" size=\"64\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Icon']." :</td>";
@@ -287,7 +287,7 @@ else
 
 		$adminmain .= "<td style=\"text-align:center;\">".$structure_tpl_sym."</td>";
 
-		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$structure_id][rtitle]\" value=\"".$structure_title."\" size=\"24\" maxlength=\"32\" /></td>";
+		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$structure_id][rtitle]\" value=\"".$structure_title."\" size=\"24\" maxlength=\"100\" /></td>";
 		$checked = $structure_group ? "checked=\"checked\"" : '';
 		$adminmain .= "<td style=\"text-align:center;\"><input type=\"checkbox\" class=\"checkbox\" name=\"s[$structure_id][rgroup]\" $checked /></td>";
 		$adminmain .= "<td style=\"text-align:right;\">".$pagecount[$structure_code]." ";
@@ -307,7 +307,7 @@ else
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td style=\"width:160px;\">".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"255\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Path']." :</td><td><input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
-	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"32\" /> ".$L['adm_required']."</td></tr>";
+	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"100\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Icon']." :</td><td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Group']." :</td><td><input type=\"checkbox\" class=\"checkbox\" name=\"ngroup\" /></td></tr>";

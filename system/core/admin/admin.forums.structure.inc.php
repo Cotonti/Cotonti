@@ -106,7 +106,7 @@ if ($n=='options')
 	$adminmain .= "<tr><td>".$L['Path']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rpath\" value=\"".$fn_path."\" size=\"16\" maxlength=\"16\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Title']." :</td>";
-	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$fn_title."\" size=\"64\" maxlength=\"32\" /></td></tr>";
+	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".$fn_title."\" size=\"64\" maxlength=\"100\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td>";
 	$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".$fn_desc."\" size=\"64\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Icon']." :</td>";
@@ -236,7 +236,7 @@ else
 
 		$adminmain .= "<td style=\"text-align:center;\">".$fn_tpl_sym."</td>";
 
-		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$fn_id][rtitle]\" value=\"".$fn_title."\" size=\"24\" maxlength=\"32\" /></td>";
+		$adminmain .= "<td><input type=\"text\" class=\"text\" name=\"s[$fn_id][rtitle]\" value=\"".$fn_title."\" size=\"24\" maxlength=\"100\" /></td>";
 		$adminmain .= "<td style=\"text-align:right;\">".$sectioncount[$fn_code]." ";
 		$adminmain .= "<a href=\"".sed_url('admin', "c=".$fn_code)."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=forums&s=structure&n=options&id=".$fn_id."&".sed_xg())."\">".$L['Options']."</a></td>";
@@ -254,7 +254,7 @@ else
 	$adminmain .= "<tr><td style=\"width:160px;\">".$L['Code']." :</td><td><input type=\"text\" class=\"text\" name=\"ncode\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Path']." :</td><td><input type=\"text\" class=\"text\" name=\"npath\" value=\"\" size=\"16\" maxlength=\"16\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_defstate']." :</td><td><input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"1\" checked=\"checked\" />".$L['adm_defstate_1']." <input type=\"radio\" class=\"radio\" name=\"ndefstate\" value=\"0\" />".$L['adm_defstate_0']."</td></tr>";
-	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"32\" /> ".$L['adm_required']."</td></tr>";
+	$adminmain .= "<tr><td>".$L['Title']." :</td><td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"48\" maxlength=\"100\" /> ".$L['adm_required']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Icon']." :</td><td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\" /></td></tr></table></form>";
