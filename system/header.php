@@ -135,7 +135,7 @@ if ($usr['id']>0)
 }
 else
 {
-	$out['guest_username'] = "<input type=\"text\" name=\"rusername\" size=\"12\" maxlength=\"32\" />";
+	$out['guest_username'] = "<input type=\"text\" name=\"rusername\" size=\"12\" maxlength=\"100\" />";
 	$out['guest_password'] = "<input type=\"password\" name=\"rpassword\" size=\"12\" maxlength=\"32\" />";
 	$out['guest_register'] = "<a href=\"".sed_url('users', 'm=register')."\">".$L["Register"]."</a>";
 	$out['guest_cookiettl'] = '<input type="checkbox" name="rremember" />';
