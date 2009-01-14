@@ -1,5 +1,6 @@
 <!-- BEGIN: COMMENTS -->
 
+<a name="comments">&nbsp;</a>
 <hr />
 <!-- BEGIN: COMMENTS_ROW -->
 <span class="title">

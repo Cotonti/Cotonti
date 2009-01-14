@@ -24,7 +24,7 @@ $al = sed_import('al','G','ALP');
 $r = sed_import('r','G','ALP');
 $c = sed_import('c','G','TXT');
 $pg = sed_import('pg','G','INT');
-$comments = sed_import('comments','G','BOL');
+$comments = true;
 $ratings = sed_import('ratings','G','BOL');
 
 /* === Hook === */

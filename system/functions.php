@@ -763,7 +763,7 @@ function sed_build_catpath($cat, $mask)
 
 /* ------------------ */
 // TODO replace with new comments plugin
-function sed_build_comments($code, $url, $display)
+function sed_build_comments($code, $url, $display = true)
 {
 	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys;
 
@@ -772,6 +772,8 @@ function sed_build_comments($code, $url, $display)
 
 	if ($cfg['disable_comments'] || !$usr['auth_read_com'])
 	{ return (array('',''));  }
+
+	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
 
 	if ($display)
 	{
@@ -799,6 +801,8 @@ function sed_build_comments($code, $url, $display)
 			{
 				$sql = sed_sql_query("INSERT INTO $db_com (com_code, com_author, com_authorid, com_authorip, com_text, com_date) VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($usr['name'])."', ".(int)$usr['id'].", '".$usr['ip']."', '".sed_sql_prep($rtext)."', ".(int)$sys['now_offset'].")");
 
+				$id = sed_sql_insertid();
+
 				if (mb_substr($code, 0, 1) =='p')
 				{
 					$page_id = mb_substr($code, 1, 10);
@@ -812,7 +816,7 @@ function sed_build_comments($code, $url, $display)
 				/* ===== */
 
 				sed_shield_update(20, "New comment");
-				header("Location: " . SED_ABSOLUTE_URL . "$url&comments=1"); //needs trustmaster's attention
+				header("Location: " . SED_ABSOLUTE_URL . $url . '#c' . $id);
 				exit;
 			}
 		}
@@ -838,7 +842,7 @@ function sed_build_comments($code, $url, $display)
 				sed_log("Deleted comment #".$ind." in '".$code."'",'adm');
 			}
 
-			header("Location: " . SED_ABSOLUTE_URL . "".$url."&comments=1");
+			header("Location: " . SED_ABSOLUTE_URL . $url . '#comments');
 			exit;
 		}
 
@@ -873,7 +877,7 @@ function sed_build_comments($code, $url, $display)
 
 		$t->assign(array(
 			"COMMENTS_CODE" => $code,
-			"COMMENTS_FORM_SEND" => $url."&amp;comments=1&amp;ina=send",
+			"COMMENTS_FORM_SEND" => $url . $sep . 'ina=send',
 			"COMMENTS_FORM_AUTHOR" => $usr['name'],
 			"COMMENTS_FORM_AUTHORID" => $usr['id'],
 			"COMMENTS_FORM_TEXT" => $post_main,
@@ -909,13 +913,13 @@ function sed_build_comments($code, $url, $display)
 				$com_author = sed_cc($row['com_author']);
 				$com_text = sed_cc($row['com_text']);
 
-				$com_admin = ($usr['isadmin_com']) ? $L['Ip'].":".sed_build_ipsearch($row['com_authorip'])." &nbsp;".$L['Delete'].":[<a href=\"".$url."&amp;comments=1&amp;ina=delete&amp;ind=".$row['com_id']."&amp;".sed_xg()."\">x</a>]" : '' ;
+				$com_admin = ($usr['isadmin_com']) ? $L['Ip'].":".sed_build_ipsearch($row['com_authorip'])." &nbsp;".$L['Delete'].":[<a href=\"".$url. $sep . "ina=delete&amp;ind=".$row['com_id']."&amp;".sed_xg()."\">x</a>]" : '' ;
 				$com_authorlink = ($row['com_authorid']>0) ? "<a href=\"".sed_url('users', 'm=details&id='.$row['com_authorid'])."\">".$com_author."</a>" : $com_author ;
 
 				$t-> assign(array(
 					"COMMENTS_ROW_ID" => $row['com_id'],
 					"COMMENTS_ROW_ORDER" => $i,
-					"COMMENTS_ROW_URL" => $url."&amp;comments=1#c".$row['com_id'],
+					"COMMENTS_ROW_URL" => $url . '#c' . $row['com_id'],
 					"COMMENTS_ROW_AUTHOR" => $com_authorlink,
 					"COMMENTS_ROW_AUTHORID" => $row['com_authorid'],
 					"COMMENTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
@@ -933,8 +937,8 @@ function sed_build_comments($code, $url, $display)
 			}
 
 			$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'"), 0, 0);
-			$pagnav = sed_pagination($url."&amp;comments=1", $d, $totalitems, $cfg['maxrowsperpage']);
-			list($pagination_prev, $pagination_next) = sed_pagination_pn($url."&amp;comments=1", $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+			$pagnav = sed_pagination($url, $d, $totalitems, $cfg['maxrowsperpage']);
+			list($pagination_prev, $pagination_next) = sed_pagination_pn($url, $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 			$t->assign(array(
 				"COMMENTS_PAGES_INFO" => $L['Total']." : ".$totalitems.", ".$L['comm_on_page'].": ".($i-$d),
 				"COMMENTS_PAGES_PAGESPREV" => $pagination_prev,
@@ -966,7 +970,7 @@ function sed_build_comments($code, $url, $display)
 		$res_display = '';
 	}
 
-	$res = "<a href=\"".$url."&amp;comments=1\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" />";
+	$res = "<a href=\"$url#comments\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" />";
 
 	if ($cfg['countcomments'])
 	{
@@ -2107,12 +2111,12 @@ function sed_forum_prunetopics($mode, $section, $param)
 
 		$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num', fs_topiccount_pruned=fs_topiccount_pruned+'$num1', fs_postcount_pruned=fs_postcount_pruned+'$num' WHERE fs_id='$section'");
-		
+
 		$sql = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$section' ");
 		$row = sed_sql_fetcharray($sql);
-		
+
 		$fs_masterid = $row['fs_masterid'];
-		
+
 		$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num', fs_topiccount_pruned=fs_topiccount_pruned+'$num1', fs_postcount_pruned=fs_postcount_pruned+'$num' WHERE fs_id='$fs_masterid'") : '';
 	}
 	$num1 = ($num1=='') ? '0' : $num1;
@@ -2130,11 +2134,11 @@ function sed_forum_sectionsetlast($id)
 	$sql = sed_sql_query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title, ft_poll FROM $db_forum_topics WHERE ft_sectionid='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
 	$row = sed_sql_fetcharray($sql);
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
-	
+
 	$sqll = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$id' ");
 	$roww = sed_sql_fetcharray($sqll);
 	$fs_masterid = $roww['fs_masterid'];
-	
+
 	$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$fs_masterid'") : '';
 	return;
 }

@@ -263,26 +263,6 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 					$_SESSION['sourcekey'] = mb_strtoupper(sed_unique(8));
 				}
 			}
-			else
-			{
-				$login_incorrect = true;
-			}
-		}
-		else
-		{
-			$login_incorrect = true;
-		}
-		if($login_incorrect)
-		{
-			if(empty($_SESSION['COTONTI']))
-			{
-				sed_setcookie('COTONTI', '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
-			}
-			else
-			{
-				session_destroy();
-			}
-			sed_diefatal('Login incorrect');
 		}
 	}
 	else
