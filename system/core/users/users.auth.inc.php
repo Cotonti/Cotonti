@@ -34,7 +34,7 @@ if ($a=='check')
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$rusername = sed_import('rusername','P','TXT', 24, TRUE);
+	$rusername = sed_import('rusername','P','TXT', 100, TRUE);
 	$rpassword = sed_import('rpassword','P','PSW', 16, TRUE);
 	$rcookiettl = sed_import('rcookiettl', 'P', 'INT');
 	$rremember = sed_import('rremember', 'P', 'BOL');
