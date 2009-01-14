@@ -9,7 +9,7 @@ CREATE TABLE sed_auth (
   PRIMARY KEY (auth_id),
   KEY auth_groupid (auth_groupid),
   KEY auth_code (auth_code)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_banlist (
   banlist_id int(11) NOT NULL auto_increment,
@@ -19,7 +19,7 @@ CREATE TABLE sed_banlist (
   banlist_expire int(11) default '0',
   PRIMARY KEY  (banlist_id),
   KEY banlist_ip (banlist_ip)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_cache (
   c_name varchar(16) NOT NULL default '',
@@ -27,7 +27,7 @@ CREATE TABLE sed_cache (
   c_auto tinyint(1) NOT NULL default '1',
   c_value text,
   PRIMARY KEY  (c_name)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_com (
   com_id int(11) NOT NULL auto_increment,
@@ -41,7 +41,7 @@ CREATE TABLE sed_com (
   com_isspecial tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (com_id),
   KEY com_code (com_code)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_config (
   config_owner varchar(24) NOT NULL default 'core',
@@ -52,7 +52,7 @@ CREATE TABLE sed_config (
   config_value text NOT NULL,
   config_default varchar(255) NOT NULL default '',
   config_text varchar(255) NOT NULL default ''
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_core (
   ct_id mediumint(8) NOT NULL auto_increment,
@@ -63,7 +63,7 @@ CREATE TABLE sed_core (
   ct_lock tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY (ct_id),
   KEY ct_code (ct_code)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_forum_posts (
   fp_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -82,7 +82,7 @@ CREATE TABLE sed_forum_posts (
   KEY fp_updated (fp_creation),
   KEY fp_posterid (fp_posterid),
   KEY fp_sectionid (fp_sectionid)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 
 CREATE TABLE sed_forum_sections (
@@ -112,7 +112,7 @@ CREATE TABLE sed_forum_sections (
   fs_masterid smallint(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (fs_id),
   KEY fs_order (fs_order)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_forum_structure (
   fn_id mediumint(8) NOT NULL auto_increment,
@@ -124,7 +124,7 @@ CREATE TABLE sed_forum_structure (
   fn_icon varchar(128) NOT NULL default '',
   fn_defstate tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (fn_id)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_forum_topics (
   ft_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -152,7 +152,7 @@ CREATE TABLE sed_forum_topics (
   KEY ft_sticky (ft_sticky),
   KEY ft_sectionid (ft_sectionid),
   KEY ft_movedto (ft_movedto)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 
 CREATE TABLE sed_groups (
@@ -168,7 +168,7 @@ CREATE TABLE sed_groups (
   grp_pfs_maxtotal int(11) NOT NULL default '0',
   grp_ownerid int(11) NOT NULL default '0',
   PRIMARY KEY  (grp_id)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_groups_users (
   gru_userid int(11) NOT NULL default '0',
@@ -178,7 +178,7 @@ CREATE TABLE sed_groups_users (
   gru_extra2 varchar(255) NOT NULL default '',
   KEY gru_userid (gru_userid),
   UNIQUE KEY gru_groupid (gru_groupid,gru_userid)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_logger (
   log_id mediumint(11) NOT NULL auto_increment,
@@ -188,7 +188,7 @@ CREATE TABLE sed_logger (
   log_group varchar(4) NOT NULL default 'def',
   log_text varchar(255) NOT NULL default '',
   PRIMARY KEY  (log_id)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_online (
   online_id int(11) NOT NULL auto_increment,
@@ -205,7 +205,7 @@ CREATE TABLE sed_online (
   KEY online_lastseen (online_lastseen),
   KEY online_userid (online_userid),
   KEY online_name (online_name)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_pages (
   page_id int(11) unsigned NOT NULL auto_increment,
@@ -240,7 +240,7 @@ CREATE TABLE sed_pages (
   KEY page_alias (page_alias),
   KEY page_state (page_state),
   KEY page_date (page_date)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_pfs (
   pfs_id int(11) NOT NULL auto_increment,
@@ -254,7 +254,7 @@ CREATE TABLE sed_pfs (
   pfs_count int(11) NOT NULL default '0',
   PRIMARY KEY  (pfs_id),
   KEY pfs_userid (pfs_userid)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_pfs_folders (
   pff_id int(11) NOT NULL auto_increment,
@@ -268,7 +268,7 @@ CREATE TABLE sed_pfs_folders (
   pff_count int(11) NOT NULL default '0',
   PRIMARY KEY  (pff_id),
   KEY pff_userid (pff_userid)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_plugins (
   pl_id mediumint(8) NOT NULL auto_increment,
@@ -280,7 +280,7 @@ CREATE TABLE sed_plugins (
   pl_order tinyint(2) unsigned NOT NULL default '10',
   pl_active tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY (pl_id)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_pm (
   pm_id int(11) unsigned NOT NULL auto_increment,
@@ -295,7 +295,7 @@ CREATE TABLE sed_pm (
   PRIMARY KEY  (pm_id),
   KEY pm_fromuserid (pm_fromuserid),
   KEY pm_touserid (pm_touserid)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_polls (
   poll_id mediumint(8) NOT NULL auto_increment,
@@ -305,7 +305,7 @@ CREATE TABLE sed_polls (
   poll_text varchar(255) NOT NULL default '',
   PRIMARY KEY  (poll_id),
   KEY poll_creationdate (poll_creationdate)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_polls_options (
   po_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -314,7 +314,7 @@ CREATE TABLE sed_polls_options (
   po_count mediumint(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (po_id),
   KEY po_pollid (po_pollid)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_polls_voters (
   pv_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -323,7 +323,7 @@ CREATE TABLE sed_polls_voters (
   pv_userip varchar(15) NOT NULL default '',
   PRIMARY KEY  (pv_id),
   KEY pv_pollid (pv_pollid)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_rated (
   rated_id int(11) unsigned NOT NULL auto_increment,
@@ -332,7 +332,7 @@ CREATE TABLE sed_rated (
   rated_value tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (rated_id),
   KEY rated_code (rated_code)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_ratings (
   rating_id int(11) NOT NULL auto_increment,
@@ -343,14 +343,14 @@ CREATE TABLE sed_ratings (
   rating_text varchar(128) NOT NULL default '',
   PRIMARY KEY  (rating_id),
   KEY rating_code (rating_code)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_referers (
   ref_url varchar(255) NOT NULL default '',
   ref_date int(11) unsigned NOT NULL default '0',
   ref_count int(11) NOT NULL default '0',
   PRIMARY KEY  (ref_url)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_smilies (
   smilie_id int(11) NOT NULL auto_increment,
@@ -359,13 +359,13 @@ CREATE TABLE sed_smilies (
   smilie_text varchar(32) NOT NULL default '',
   smilie_order smallint(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (smilie_id)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_stats (
   stat_name varchar(32) NOT NULL default '',
   stat_value int(11) NOT NULL default '0',
   PRIMARY KEY  (stat_name)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_structure (
   structure_id mediumint(8) NOT NULL auto_increment,
@@ -379,7 +379,7 @@ CREATE TABLE sed_structure (
   structure_order varchar(16) NOT NULL default 'title.asc',
   PRIMARY KEY  (structure_id),
   KEY structure_path (structure_path)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_trash (
   tr_id int(11) NOT NULL auto_increment,
@@ -390,7 +390,7 @@ CREATE TABLE sed_trash (
   tr_trashedby int(11) NOT NULL default '0',
   tr_datas mediumblob,
   PRIMARY KEY  (tr_id)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 CREATE TABLE sed_users (
   user_id int(11) unsigned NOT NULL auto_increment,
@@ -442,7 +442,7 @@ CREATE TABLE sed_users (
   PRIMARY KEY (user_id),
   KEY user_password (user_password),
   KEY user_regdate (user_regdate)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 # --------------- BBCodes module
 /* This table is used by parser only, editor part is separate */
@@ -460,7 +460,7 @@ CREATE TABLE sed_bbcode (
 	PRIMARY KEY (bbc_id),
 	KEY (bbc_enabled),
 	KEY (bbc_priority)
-) TYPE=MyISAM;
+) DEFAULT CHARSET = utf8 COLLATE = utf8_unicode_ci TYPE=MyISAM;
 
 /* Basic bbcode package */
 INSERT INTO `sed_bbcode` VALUES (1,'b','str','[b]','<strong>',1,1,128,'',0),(2,'b','str','[/b]','</strong>',0,1,128,'',0),(3,'i','str','[i]','<em>',1,1,128,'',0),(4,'i','str','[/i]','</em>',1,1,128,'',0),(5,'u','str','[u]','<span style=\"text-decoration:underline\">',1,1,128,'',0),(6,'u','str','[/u]','</span>',1,1,128,'',0),(7,'s','str','[s]','<span style=\"text-decoration:line-through\">',1,1,128,'',0),(8,'s','str','[/s]','</span>',1,1,128,'',0),(9,'center','str','[center]','<div style=\"text-align:center\">',1,1,128,'',0),(10,'center','str','[/center]','</div>',1,1,128,'',0),(11,'left','str','[left]','<div style=\"text-align:left\">',1,1,128,'',0),(12,'left','str','[/left]','</div>',1,1,128,'',0),(13,'right','str','[right]','<div style=\"text-align:right\">',1,1,128,'',0),(14,'right','str','[/right]','</div>',1,1,128,'',0),(15,'justify','str','[justify]','<div style=\"text-align:justify\">',1,1,128,'',0),(16,'justify','str','[/justify]','</div>',1,1,128,'',0),(17,'pre','str','[pre]','<pre>',1,1,128,'',0),(18,'pre','str','[/pre]','</pre>',0,1,128,'',0),(19,'nbsp','str','[_]','&nbsp;',0,1,128,'',0),(31,'email','callback','\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]','return sed_obfuscate(\'<a href=\"mailto:\'.$input[1].\'\">\'.$input[2].\'</a>\');',1,1,128,'',0),(26,'quote','pcre','\\[quote=(.+?)\\](.+?)\\[/quote\\]','<blockquote><strong>$1:</strong><hr />$2</blockquote>',1,1,128,'',0),(24,'quote','pcre','\\[quote\\](.+?)\\[/quote\\]','<blockquote>$1</blockquote>',1,1,128,'',0),(23,'color','pcre','\\[color=(#?\\w+)\\](.+?)\\[/color\\]','<span style=\"color:$1\">$2</span>',1,1,128,'',0),(27,'img','pcre','\\[img\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?\\[]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<img src=\"$1\" alt=\"\" />',1,1,128,'',0),(28,'img','pcre','\\[img=((?:http://|https://|ftp://)?[^\\]\"\\\';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\"\\\';:\\?\\[]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]','<a href=\"$1\"><img src=\"$2\" alt=\"\" /></a>',1,1,128,'',0),(29,'url','pcre','\\[url=((?:http://|https://|ftp://)?[^\\s\"\\\':\\[]+)\\](.+?)\\[/url\\]','<a href=\"$1\">$2</a>',1,1,128,'',0),(30,'url','pcre','\\[url\\]((?:http://|https://|ftp://)?[^\\s\"\\\':]+)\\[/url\\]','<a href=\"$1\">$1</a>',1,1,128,'',0),(32,'code','callback','\\[code\\](.+?)\\[/code\\]','return \'<pre class=\"code\">\'.sed_bbcode_cdata($input[1]).\'</pre>\';',1,1,1,'',0);
