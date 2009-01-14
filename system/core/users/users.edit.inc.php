@@ -254,7 +254,7 @@ $user_form_pmnotify = ($urr['user_pmnotify']) ? "<input type=\"radio\" class=\"r
 
 $user_form_pass = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"text\" name=\"rusernewpass\" value=\"\" size=\"16\" maxlength=\"16\" disabled=\"disabled\" />" : "<input type=\"text\" class=\"text\" name=\"rusernewpass\" value=\"\" size=\"16\" maxlength=\"16\" />";
 
-$user_form_username = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($urr['user_name'])."\" size=\"32\" maxlength=\"24\"  disabled=\"disabled\" />" : "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($urr['user_name'])."\" size=\"32\" maxlength=\"24\" />";
+$user_form_username = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($urr['user_name'])."\" size=\"32\" maxlength=\"100\"  disabled=\"disabled\" />" : "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($urr['user_name'])."\" size=\"32\" maxlength=\"100\" />";
 
 $user_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
 $user_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
