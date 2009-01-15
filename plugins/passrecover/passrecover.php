@@ -1,16 +1,12 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
 [BEGIN_SED]
 File=plugins/passrecover/passrecover.php
-Version=122
-Updated=2007-nov-27
+Version=0.0.2
+Updated=2009-jan-03
 Type=Plugin
-Author=Neocrome
-Description=
+Author=Neocrome & Cotonti Team
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -30,6 +26,7 @@ $v = sed_import('v','G','TXT');
 $email = sed_import('email','P','TXT');
 
 $plugin_title = $L['plu_title'];
+$t->assign(array('PASSRECOVER_TITLE'=> $plugin_title));
 
 /**
 *Random password generator for password recovery plugin
@@ -76,14 +73,14 @@ if ($a=='request' && $email!='')
 		$ractivate = $cfg['mainurl'].'/'.sed_url('plug', 'e=passrecover&a=auth&v='.$validationkey, '', true);
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['plu_email1']."\n\n".$ractivate. "\n\n".$L['aut_contactadmin'];
 		sed_mail ($email, $rsubject, $rbody);
-		$plugin_body = $L['plu_mailsent'];
+		$t->parse('MAIN.REQUEST');
 	}
 	else
 	{
 		sed_shield_update(10,"Password recovery requested");
 
 		sed_log("Pass recovery failed, user : ".$rusername);
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', 'msg=151', '', true));
+		header("Location: ".SED_ABSOLUTE_URL.sed_url('message', 'msg=151', '', true));
 		exit;
 	}
 }
@@ -121,24 +118,19 @@ elseif ($a=='auth' && mb_strlen($v)==32)
 		$rsubject = $cfg['maintitle']." - ".$L['plu_title'];
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['plu_email2']."\n\n".$newpass. "\n\n".$L['aut_contactadmin'];
 		sed_mail($rusermail, $rsubject, $rbody);
-
-		$plugin_body .= $L['plu_mailsent2']."<br />";
+		$t->parse('MAIN.AUTH');
 	}
 	else
 	{
 		sed_shield_update(7,"Log in");
 		sed_log("Pass recovery failed, user : ".$rusername);
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', 'msg=151', '', true));
+		header("Location: ".SED_ABSOLUTE_URL.sed_url('message', 'msg=151', '', true));
 		exit;
 	}
 }
 else
 {
-	$plugin_body .= $L['plu_explain1']."<br />".$L['plu_explain2']."<br />".$L['plu_explain3']."<br />&nbsp;<br />";
-	$plugin_body .= "<form name=\"reqauth\" action=\"".sed_url('plug', 'e=passrecover&a=request')."\" method=\"post\">";
-	$plugin_body .= $L['plu_youremail']."<input type=\"text\" class=\"text\" name=\"email\" value=\"\" size=\"20\" maxlength=\"64\" />";
-	$plugin_body .= "<input type=\"submit\" class=\"submit\" value=\"".$L['plu_request']."\" /></form><br />&nbsp;<br />".$L['plu_explain4'];
-
+	$t->assign(array('PASSRECOVER_URL_FORM'=> sed_url('plug', 'e=passrecover&a=request')));
+	$t->parse('MAIN.PASSRECOVER');
 }
-
 ?>

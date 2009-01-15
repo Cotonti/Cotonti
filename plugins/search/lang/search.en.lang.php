@@ -1,16 +1,14 @@
 <?PHP
-
 /* ====================
 [BEGIN_SED]
 File=plugins/search/lang/search.en.lang.php
-Version=101
-Updated=2006-mar-15
-Type=
-Author=Neocrome
-Description=
+Version=0.0.2
+Updated=2009-jan-03
+Type=English language file
+Author=Neocrome & Cotonti Team
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 ==================== */
-
 
 $L['plu_title_frmtab'] = "Forums search";
 $L['plu_title_frmtab_s'] = "Search the forums..";
