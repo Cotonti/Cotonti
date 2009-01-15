@@ -279,7 +279,6 @@ $L['adm_forums_master'] = 'Master section';  // N-0.0.1
 $L['adm_enableviewers'] = 'Enable Viewers';  // N-0.0.2
 $L['adm_enablepolls'] = 'Enable Polls';  // N-0.0.2
 
-
 /* ====== IP search ====== */
 
 $L['adm_searchthisuser'] = 'Search for this IP in the user database';
@@ -304,7 +303,7 @@ $L['adm_help_check1'] = 'Not available';
 $L['adm_help_check2'] = 'Not available';
 $L['adm_help_pfsfiles'] = 'Not available';
 $L['adm_help_allpfs'] = 'Not available';
-$L['adm_nogd'] = 'The GD graphical library is not supported by this host, Seditio won\'t be able to create thumbnails for the PFS images. You must go into the configuration panel, tab \'Personal File Space\', and set Thumbnails generation = \'Disabled\'.';
+$L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotonti won\'t be able to create thumbnails for the PFS images. You must go into the configuration panel, tab \'Personal File Space\', and set Thumbnails generation = \'Disabled\'.';
 
 /* ====== Pages ====== */
 
@@ -339,9 +338,9 @@ $L['adm_os'] = 'Operating system';
 $L['adm_clocks'] = 'Clocks';
 $L['adm_time1'] = '#1 : Raw server time';
 $L['adm_time2'] = '#2 : GMT time returned by the server';
-$L['adm_time3'] = '#3 : GMT time + server offset (Seditio reference)';
+$L['adm_time3'] = '#3 : GMT time + server offset (Cotonti reference)';
 $L['adm_time4'] = '#4 : Your local time, adjusted from your profile';
-$L['adm_help_versions'] = 'Adjust the Server time zone <a href=\'admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time\'>here</a> to have the clock #3 properlly set.<br />Clock #4 depends of the timezone setting in your profile.<br />Clocks #1 and #2 are ignored by Seditio.';
+$L['adm_help_versions'] = 'Adjust the Server time zone <a href=\'admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time\'>here</a> to have the clock #3 properlly set.<br />Clock #4 depends of the timezone setting in your profile.<br />Clocks #1 and #2 are ignored by Cotonti.';
 $L['adm_log'] = 'System log';
 $L['adm_infos'] = 'Informations';
 $L['adm_versiondclocks'] = 'Versions and clocks';

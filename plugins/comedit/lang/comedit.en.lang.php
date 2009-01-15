@@ -1,18 +1,17 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
 [BEGIN_SED]
 File=plugins/comedit/lang/comedit.en.lang.php
-Version=110
-Updated=2006-jun-05
-Type=Plugin.standalone
-Author=Neocrome
-Description=
+Version=0.0.2
+Updated=2009-jan-03
+Type=English language file
+Author=Asmo
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 ==================== */
+
+$L['cfg_time'] = array("Comments editable timeout for users", "in minutes");
+$L['cfg_mail'] = array("Notify about new comments by email?");
 
 $L['plu_title'] = "Editing comment";
 

@@ -1,16 +1,14 @@
 <?PHP
-
 /* ====================
 [BEGIN_SED]
 File=plugins/search/lang/search.ru.lang.php
-Version=125
-Updated=2008-mar-17
-Type=
-Author=Neocrome, Translated by Antar
-Description=
+Version=0.0.2
+Updated=2009-jan-03
+Type=Russian language file
+Author=Antar
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 ==================== */
-
 
 $L['plu_title_frmtab'] = "Поиск в форумах";
 $L['plu_title_frmtab_s'] = "Искать в форумах...";

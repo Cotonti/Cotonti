@@ -2,11 +2,11 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/indexpolls/indexpolls.setup.php
-Version=110
-Updated=2006-jun-27
+Version=0.0.2
+Updated=2009-jan-03
 Type=Plugin
-Author=Neocrome
-Description=
+Author=Neocrome & Cotonti Team
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -16,8 +16,8 @@ Description=Polls (recent or random) on index with jQuery
 Version=0.0.2
 Date=2009-jan-03
 Author=Cotonti Team
-Copyright=
-Notes=
+Copyright=Partial copyright (c) 2008 Cotonti Team
+Notes=BSD License
 SQL=
 Auth_guests=R
 Lock_guests=W12345A

@@ -15,7 +15,7 @@ Name=Who's online
 Description=Lists the members online
 Version=0.0.2
 Date=2009-jan-03
-Author=Cotonti Team
+Author=Neocrome & Cotonti Team
 Copyright=Partial copyright (c) 2008 Cotonti Team
 Notes=BSD License
 SQL=
@@ -31,5 +31,5 @@ miniavatar_x=02:string::16:The size of a mini-avatars on the axis x, in pixels
 miniavatar_y=03:string::16:The size of a mini-avatars on the axis y, in pixels
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
-
+if (!defined('SED_CODE')) { die('Wrong URL.'); }
 ?>

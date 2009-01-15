@@ -1,21 +1,16 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-
 [BEGIN_SED]
 File=plugins/adminqv/lang/adminqv.en.lang.php
-Version=101
-Updated=2006-mar-15
-Type=Plugin
-Author=Neocrome
-Description=
+Version=0.0.2
+Updated=2009-jan-03
+Type=English language file
+Author=Neocrome & Cotonti Team
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+$L['plu_ql_header'] = "Administration panel";
 
 $L['plu_ql_b1_title'] = "Site properties";
 $L['plu_ql_b1_1'] = "Basic config";
