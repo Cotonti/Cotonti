@@ -153,13 +153,12 @@ if ($a=='upload')
 				$desc = $ndesc[$ii];
 				if($cfg['pfstimename'])
 				{
-					$u_name = time() . '_' . sed_unique(6) . '.' . $f_extension;
+					$u_newname = time() . '_' . sed_unique(6) . '_' . $userid . '.' . $f_extension;
 				}
 				else
 				{
-					$u_name = sed_safename($u_name);
+					$u_newname = sed_safename($u_name, true, '_' . $userid);
 				}
-				$u_newname = $userid.'-'.$u_name;
 				$u_sqlname = sed_sql_prep($u_newname);
 
 				if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
@@ -266,15 +265,18 @@ elseif ($a=='delete')
 		$f = $row['pfs_folderid'];
 		$ff = $cfg['pfs_dir_user'].$pfs_file;
 
-		if (file_exists($ff) && (mb_substr($pfs_file, 0, mb_strpos($pfs_file, "-"))==$userid || $usr['isadmin']))
+		if (file_exists($ff))
 		{
 			@unlink($ff);
 			if (file_exists($cfg['th_dir_user'].$pfs_file))
-			{ @unlink($cfg['th_dir_user'].$pfs_file); }
-			$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs',$more, '', true));
-			exit;
+			{
+				@unlink($cfg['th_dir_user'].$pfs_file);
+			}
 		}
+
+		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs',$more, '', true));
+		exit;
 	}
 	else
 	{ sed_die(); }

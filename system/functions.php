@@ -2958,38 +2958,30 @@ function sed_pfs_deleteall($userid)
 	global $db_pfs_folders, $db_pfs, $cfg;
 
 	if (!$userid)
-	{ return; }
+	{
+		return 0;
+	}
+	$sql = sed_sql_query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid'");
+
+	while($row = sed_sql_fetcharray($sql))
+	{
+		$pfs_file = $row['pfs_file'];
+		$f = $row['pfs_folderid'];
+		$ff = $cfg['pfs_dir_user'].$pfs_file;
+
+		if (file_exists($ff))
+		{
+			@unlink($ff);
+			if(file_exists($cfg['th_dir_user'].$pfs_file))
+			{
+				@unlink($cfg['th_dir_user'].$pfs_file);
+			}
+		}
+	}
 	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid'");
 	$num = $num + sed_sql_affectedrows();
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
 	$num = $num + sed_sql_affectedrows();
-
-	$cfg['pfs_dir_user'] = sed_pfs_path($userid);
-	$cfg['th_dir_user'] = sed_pfs_thumbpath($userid);
-
-	$bg = $userid.'-';
-	$bgl = mb_strlen($bg);
-
-	$handle = @opendir($cfg['pfs_dir_user']);
-	while ($f = @readdir($handle))
-	{
-		if ($cfg['pfsuserfolder'])
-		{ @unlink($cfg['pfs_dir_user'].$f);
-		}
-		elseif (mb_substr($f, 0, $bgl)==$bg)
-		{ @unlink($cfg['pfs_dir_user'].$f); }
-	}
-	@closedir($handle);
-
-	$handle = @opendir($cfg['th_dir_user']);
-	while ($f = @readdir($handle))
-	{
-		if ($cfg['pfsuserfolder'])
-		{ @unlink($cfg['th_dir_user'].$f); }
-		elseif (mb_substr($f, 0, $bgl)==$bg)
-		{ @unlink($cfg['th_dir_user'].$f); }
-	}
-	@closedir($handle);
 
 	if ($cfg['pfsuserfolder'] && $userid>0)
 	{
@@ -3103,9 +3095,10 @@ function sed_redirect($url)
  *
  * @param string $basename File base name
  * @param bool $underscore Convert spaces to underscores
+ * @param string $postfix Postfix appended to filename
  * @return string
  */
-function sed_safename($basename, $underscore = true)
+function sed_safename($basename, $underscore = true, $postfix = '')
 {
 	global $lang, $sed_translit;
 	$fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
@@ -3118,7 +3111,7 @@ function sed_safename($basename, $underscore = true)
 	$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
 	$fname = str_replace('..', '.', $fname);
 	if(empty($fname)) $fname = sed_unique();
-	return $fname . '.' . mb_strtolower($ext);
+	return $fname . $postfix . '.' . mb_strtolower($ext);
 }
 
 
