@@ -54,6 +54,7 @@ if($action == 'install')
 	sed_bbcode_add('list', 'pcre', '\[list=(\w)\](.+?)\[/list\]', '<ol type="$1">$2</ol>', true, 128, 'markitup');
 	sed_bbcode_add('li', 'str', '[li]', '<li>', true, 128, 'markitup');
 	sed_bbcode_add('li', 'str', '[/li]', '</li>', true, 128, 'markitup');
+	sed_bbcode_add('li_short', 'pcre', '\[\*\](.*?)\n', '<li>$1</li>', true, 128, 'markitup');
 	sed_bbcode_add('table', 'str', '[table]', '<table>', true, 128, 'markitup');
 	sed_bbcode_add('table', 'str', '[/table]', '</table>', true, 128, 'markitup');
 	sed_bbcode_add('tr', 'str', '[tr]', '<tr>', true, 128, 'markitup');
