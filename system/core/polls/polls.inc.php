@@ -95,7 +95,7 @@ elseif ($id=='viewall' || $id=='')
 else
 {
 		$id = sed_import($id,'D','INT');
-		sed_poll_vote($id);
+		sed_poll_vote();
 		list($polltitle, $poll_form)=sed_poll_form($id);
 	$item_code = 'v'.$id;
 	list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$id), $comments);

@@ -111,7 +111,7 @@ switch ($n)
 			$config_title = $L['cfg_'.$row['config_name']][0];
 			$config_text = sed_cc($row['config_text']);
 			$config_more = $L['cfg_'.$row['config_name']][1];
-			$config_more = (empty($L['cfg_'.$row['config_name']][1]) && !empty($config_more)) ? '&nbsp; &nbsp;('.$config_more.')' : $config_more;
+			$config_more = (!empty($config_more)) ? '<div class="adminconfigmore">'.$config_more.'</div>' : '';
 			$config_title = (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text)) ? $config_text : $config_title;
 
 			$adminmain .= "<tr><td style=\"width:25%;\">".$config_title." : </td><td style=\"width:68%;\">";
@@ -123,7 +123,6 @@ switch ($n)
 				if ($o=='plug' && !empty($row['config_default']))
 				{
 					$cfg_params[$config_name] = explode(",", $row['config_default']);
-					$config_more = "&nbsp;";
 				}
 
 				if (is_array($cfg_params[$config_name]))

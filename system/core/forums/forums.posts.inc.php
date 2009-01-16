@@ -459,7 +459,7 @@ $t = new XTemplate($mskin);
 if (!$cfg['disable_polls'] && $ft_poll>0)
 {
 	require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
-	sed_poll_vote($ft_poll);
+	sed_poll_vote();
 list($polltitle, $poll_form)=sed_poll_form($ft_poll, sed_url('forums', "m=posts&q=".$q));
 	$t->assign(array(
 		"POLLS_TITLE" => $polltitle,
