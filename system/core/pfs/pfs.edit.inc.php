@@ -137,7 +137,7 @@ if ($standalone)
 	$pfs_header1 = $cfg['doctype']."<html><head>
 <title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
 <script type=\"text/javascript\">
-<!--
+//<![CDATA[
 function help(rcode,c1,c2)
 	{ window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
 function addthumb(gfile,c1,c2)
@@ -146,13 +146,9 @@ function addpix(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
 function addglink(id,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += '[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]'; }
-function comments(rcode)
-	{ window.open('comments.php?id='+rcode,'Comments','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=576,top=64'); }
 function picture(url,sx,sy)
 	{ window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0'); }
-function ratings(rcode)
-	{ window.open('ratings.php?id='+rcode,'Ratings','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=16,top=16'); }
-//-->
+//]]>
 </script>
 ";
 
