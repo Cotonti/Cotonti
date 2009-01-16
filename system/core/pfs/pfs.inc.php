@@ -618,12 +618,8 @@ function addpix(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += $addpix; window.close();}
 function addfile(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += $addfile; window.close();}
-function comments(rcode)
-	{ window.open('comments.php?id='+rcode,'Comments','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=576,top=64'); }
 function picture(url,sx,sy)
 	{ window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0'); }
-function ratings(rcode)
-	{ window.open('ratings.php?id='+rcode,'Ratings','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=16,top=16'); }
 //]]>
 </script>
 ";
