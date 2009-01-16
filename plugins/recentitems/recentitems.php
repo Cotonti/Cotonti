@@ -30,18 +30,16 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 /* ============ MASKS FOR THE HTML OUTPUTS =========== */
 
-$cfg['plu_mask_pages'] = "%1\$s"." ".$cfg['separator']." "."%2\$s"." (%3\$s)<br />";
-// %1\$s = Link to the category
-// %2\$s = Link to the page
-// %3\$s = Date
+$skin = sed_skinfile('recentitems', true);
+$recentitems = new XTemplate($skin);
 
 $plu_empty = $L['None']."<br />";
 
 /* ================== FUNCTIONS ================== */
 
-function sed_get_latestpages($limit, $mask)
+function sed_get_latestpages($limit)
 {
-	global $L, $db_pages, $usr, $cfg, $sed_cat, $plu_empty;
+	global $L, $db_pages, $usr, $cfg, $sed_cat, $plu_empty, $recentitems;
 
 	$l = $limit * $cfg['plugin']['recentitems']['redundancy'];
 
@@ -53,14 +51,20 @@ function sed_get_latestpages($limit, $mask)
 		if (sed_auth('page', $row['page_cat'], 'R'))
 		{
 			$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
-			$res .= sprintf($mask,
-			"<a href=\"".sed_url('list', 'c='.$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
-			"<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
-			date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600)
-			);
+			
+			$recentitems -> assign(array(
+					"RI_DATE" => 			date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600),
+					"RI_CAT" => "<a href=\"".sed_url('list', 'c='.$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
+					"RI_NAME" => "<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
+						));
+				$recentitems -> parse("RECENTPAGES.RECENTPAGE");
 			$i++;
 		}
 	}
+	
+	$recentitems -> parse("RECENTPAGES");
+	$res = $recentitems -> text("RECENTPAGES");
+
 
 	$res = (empty($res)) ? $plu_empty : $res;
 
@@ -71,31 +75,9 @@ function sed_get_latestpages($limit, $mask)
 
 function sed_get_latesttopics($limit)
 {
-	global $L, $db_forum_topics, $db_forum_sections, $usr, $cfg, $skin, $plu_empty;
+	global $L, $db_forum_topics, $db_forum_sections, $usr, $cfg, $skin, $plu_empty, $recentitems;
 
 	$l = $limit * $cfg['plugin']['recentitems']['redundancy'];
-
-	if ($cfg['plugin']['recentitems']['fd']=='Just Topics')
-	{
-		$mask =  "%1\$s"." "."%2\$s"."<br />&nbsp; &nbsp; "."%3\$s"." ("."%4\$s".")<br />";
-		// %1\$s = "Follow" image
-		// %2\$s = Date
-		// %3\$s = Topic title
-		// %4\$s = Number of replies
-		//Only topics mask
-	}
-	else
-	{
-		$mask =  "%1\$s"." "."%2\$s"." "."%3\$s"."<br />&nbsp; &nbsp; "."%4\$s"." ("."%5\$s".")<br />";
-		// %1\$s = "Follow" image
-		// %2\$s = Date
-		// %3\$s = Section
-		// %4\$s = Topic title
-		// %5\$s = Number of replies
-		//Standard, parent only and master forum integrated mask
-	}
-
-	/*===Standard purposes, old Seditio style===*/
 
 	if ($cfg['plugin']['recentitems']['fd']=='Standard')
 	{
@@ -147,48 +129,35 @@ function sed_get_latesttopics($limit)
 			$img = ($usr['id']>0 && $row['ft_updated']>$usr['lastvisit']) ? "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=unread', '#unread')."\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom')."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ";
 
 			if ($cfg['plugin']['recentitems']['fd']=='Standard')
-			{
-				$res .= sprintf($mask,
-				$img,
-				date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
-				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16)),
-				"<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom').'">'.sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
-				$row['ft_postcount']-1
-				);
+			{	
+			$build_forum=sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16));
 			}
 			elseif ($cfg['plugin']['recentitems']['fd']=='Subforums with Master Forums')
 			{
-				$res .= sprintf($mask,
-				$img,
-				date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
-				sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, array($row['fs_masterid'],$row['fs_mastername'])),
-				"<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom').'">'.sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
-				$row['ft_postcount']-1
-				);
+			$build_forum=sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, array($row['fs_masterid'],$row['fs_mastername']));
 			}
 			elseif ($cfg['plugin']['recentitems']['fd']=='Parent only')
 			{
-				$res .= sprintf($mask,
-				$img,
-				date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
-				"<a href=\"".sed_url('forums', 'm=topics&s='.$row['fs_id']).'">'.sed_cc(sed_cutstring(stripslashes($row['fs_title']),16))."</a>",
-				"<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom')."\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
-				$row['ft_postcount']-1
-				);
+			$build_forum="<a href=\"".sed_url('forums', 'm=topics&s='.$row['fs_id']).'">'.sed_cc(sed_cutstring(stripslashes($row['fs_title']),16))."</a>";
 			}
 			else
 			{
-				$res .= sprintf($mask,
-				$img,
-				date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
-				"<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom')."\">".sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
-				$row['ft_postcount']-1
-				);
+			$build_forum="";
 			}
+					$recentitems -> assign(array(
+					"RI_DATE" => date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
+					"RI_IMG" => $img,
+					"RI_CAT" => $build_forum,
+					"RI_NAME" => "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom').'">'.sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
+					"RI_COUNT" => $row['ft_postcount']-1,
+						));
+				$recentitems -> parse("RECENTFORUMS.RECENTFORUM");
 
 			$i++;
 		}
 	}
+	$recentitems -> parse("RECENTFORUMS");
+	$res = $recentitems -> text("RECENTFORUMS");
 
 	$res = (empty($res)) ? $plu_empty : $res;
 
@@ -203,7 +172,7 @@ if(empty($cfg['plugin']['recentitems']['redundancy']))
 }
 
 if ($cfg['plugin']['recentitems']['maxpages']>0 && !$cfg['disable_page'])
-{ $latestpages = sed_get_latestpages($cfg['plugin']['recentitems']['maxpages'], $cfg['plu_mask_pages']); }
+{ $latestpages = sed_get_latestpages($cfg['plugin']['recentitems']['maxpages']); }
 
 if ($cfg['plugin']['recentitems']['maxtopics']>0 && !$cfg['disable_forums'])
 { $latesttopics = sed_get_latesttopics($cfg['plugin']['recentitems']['maxtopics']); }
