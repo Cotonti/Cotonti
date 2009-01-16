@@ -152,23 +152,23 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount+1 WHERE fs_id='$ns'");
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$s'");
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+'$num' WHERE fs_id='$ns'");
-			
+
 			if ($fs_masterid>0)
 			{
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-1 WHERE fs_id='$fs_masterid'");
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$fs_masterid'");
-			
+
 			$sqll = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$ns' ");
 			$roww = sed_sql_fetcharray($sqll);
-			
+
 			$ns_master = $roww['fs_masterid'];
-			
+
 			if ($ns_master>0)
-			{			
+			{
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount+1 WHERE fs_id='$ns_master'");
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+'$num' WHERE fs_id='$ns_master'");
 			}
-			
+
 			}
 
 
@@ -357,8 +357,8 @@ $t->assign(array(
 
 	}
 
-$pages = sed_pagination("forums.php?m=topics&amp;s=$s&amp;o=$o&amp;w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']); //omg, more pagination
-list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=topics&amp;s=$s&amp;o=$o&amp;w=$w", $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE); //someone please kill the pagination monkey
+$pages = sed_pagination(sed_url('forums', "m=topics&amp;s=$s&amp;o=$o&amp;w=$w"), $d, $totaltopics, $cfg['maxtopicsperpage']);
+list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('forums', "m=topics&amp;s=$s&amp;o=$o&amp;w=$w"), $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE);
 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
@@ -535,11 +535,7 @@ $t->assign(array(
 		if ($row['ft_postcount']>$cfg['maxtopicsperpage'])
 		{
 			$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
-			$row['ft_pages'] = $L['Pages'].":";
-			for ($a = 1; $a <= $row['ft_maxpages']; $a++)
-			{
-				$row['ft_pages'] .= (is_int($a/5) || $a<10 || $a==$row['ft_maxpages']) ? " <a href=\"".$row['ft_url']."&amp;d=".($a-1) * $cfg['maxtopicsperpage']."\">".$a."</a>" : '';
-			}
+			$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . sed_pagination($row['ft_url'], 0, $row['ft_postcount'], $cfg['maxtopicsperpage'], 'd') . '</span>';
 		}
 
 		$t-> assign(array(
