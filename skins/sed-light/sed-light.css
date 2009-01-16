@@ -22,7 +22,7 @@ a:focus { outline:none; font-weight:bold; }
 #top { background: url(img/SED-Light_BG.gif) repeat-x; width:100%; }
 #container { width:800px; margin:0px auto; }
 
-#header { background: url(img/SED-Light_HD.gif) no-repeat; width:800px; height:110px; }
+#header { background: url(img/SED-Light_HD.jpg) no-repeat; width:800px; height:110px; }
 #header #userBar { width:380px; height:70px; margin:0 0 0 400px; line-height:30px; vertical-align:middle; padding:0 0 0 10px; }
 #header #userBar a { text-decoration:none; }
 #header #userBar .userBarR { float:right; height:30px; line-height:30px; vertical-align:middle; margin:0 10px 0 0; }
