@@ -1,7 +1,7 @@
 <?PHP
 /* ====================
 [BEGIN_SED]
-File=plugins/lang/statistics.ru.lang.php
+File=plugins/statistics/lang/statistics.ru.lang.php
 Version=0.0.2
 Updated=2009-jan-03
 Type=Russian language file

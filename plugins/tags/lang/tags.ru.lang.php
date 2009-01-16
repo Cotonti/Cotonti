@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  * Russian language file for tags
  *
@@ -28,4 +28,5 @@ $L['tags_Tag'] = 'Тэг';
 $L['tags_Tag_cloud'] = 'Облако тэгов';
 $L['tags_Tag_cloud_none'] = 'Нет тегов';
 $L['tags_Tags'] = 'Тэги';
+
 ?>

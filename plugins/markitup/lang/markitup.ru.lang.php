@@ -1,8 +1,8 @@
-<?php
+<?PHP
 /**
- * Russian language file for indexpolls
+ * Russian language file for markitup
  *
- * @package Seditio-N
+ * @package Cotonti
  * @version 0.0.2
  * @author esclkm
  * @copyright (c) 2008 Cotonti Team
