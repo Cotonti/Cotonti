@@ -29,7 +29,7 @@ $L['plu_ql_b2_4'] = "Parser";
 
 $L['plu_ql_b3_title'] = "Users";
 $L['plu_ql_b3_1'] = "Basic config";
-$L['plu_ql_b3_2'] = "Exra fields for users";
+$L['plu_ql_b3_2'] = "Extra fields for users";
 $L['plu_ql_b3_3'] = "Personal file system";
 $L['plu_ql_b3_4'] = "Set permissions and PFS size";
 $L['plu_ql_b3_5'] = "Private messages";
