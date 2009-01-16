@@ -230,6 +230,7 @@ $t->assign(array(
 	"USERS_TOP_TIMEZONE" => "<a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Timezone']
 ));
 
+
 if ($d>0)
 {
 	$prevpage = $d - $cfg['maxusersperpage'];
@@ -293,7 +294,11 @@ while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 		"USERS_ROW_ODDEVEN" => sed_build_oddeven($jj),
 		"USERS_ROW" => $urr
 	));
-
+	
+	// Extra fields
+	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
+	while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('USERS_ROW_'.strtoupper($row['field_name']), $urr['user_'.$row['field_name']]); 
+	
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
