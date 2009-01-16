@@ -10,14 +10,6 @@ function help(rcode, c1, c2){
     window.open('plug.php?h=' + rcode + '&c1=' + c1 + '&c2=' + c2, 'Help', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16');
 }
 
-function comments(rcode){
-    window.open('comments.php?id=' + rcode, 'Comments', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=16,top=16');
-}
-
-function ratings(rcode){
-    window.open('ratings.php?id=' + rcode, 'Ratings', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=16,top=16');
-}
-
 function polls(rcode){
     window.open('polls.php?id=' + rcode, 'Polls', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=608,height=448,left=16,top=16');
 }
