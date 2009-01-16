@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  * English language file for indexpolls
  *
@@ -14,4 +14,5 @@ $L_idx['vote_failed'] = 'Vote failed';//If you have problems with submitting the
 $L_idx['vote_opt'] = 'You did not pick an option.';//If vote:checked false
 $L_idx['voteit'] = 'Vote it!';
 $L_idx['voteback'] = 'Vote screen';
+
 ?>

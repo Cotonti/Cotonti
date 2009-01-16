@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /* ====================
 [BEGIN_SED]
 File=plugins/comedit/lang/comedit.ru.lang.php

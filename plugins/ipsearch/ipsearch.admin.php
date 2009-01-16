@@ -1,17 +1,12 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-
 [BEGIN_SED]
 File=plugins/ipsearch/ipsearch.php
-Version=120
-Updated=2006-nov-24
+Version=0.0.2
+Updated=2009-jan-03
 Type=Plugin
-Author=Neocrome
-Description=
+Author=Neocrome & Cotonti Team
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -22,9 +17,7 @@ Hooks=tools
 Tags=
 Order=10
 [END_SED_EXTPLUGIN]
-
 ==================== */
-
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $plugin_title = "IP search";

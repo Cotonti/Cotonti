@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /* ====================
 [BEGIN_SED]
 File=plugins/markitup/markitup.setup.php
@@ -6,7 +6,7 @@ Version=0.0.2
 Updated=2008-dec-18
 Type=Plugin
 Author=Trustmaster
-Description=
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -30,7 +30,6 @@ autorefresh=01:radio::0:Enable preview auto-refresh
 chili=10:radio::0:Enable Chili tags
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
-
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($action == 'install')
@@ -71,4 +70,5 @@ elseif($action == 'uninstall')
 	// Remove plugin bbcodes
 	sed_bbcode_remove(0, 'markitup');
 }
+
 ?>

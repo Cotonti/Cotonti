@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /* ====================
 [BEGIN_SED]
 File=plugins/chili/chili.setup.php
@@ -6,7 +6,7 @@ Version=0.0.1
 Updated=2008-aug-30
 Type=Plugin
 Author=Trustmaster
-Description=
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -24,9 +24,7 @@ Lock_guests=W12345A
 Auth_members=RW
 Lock_members=12345A
 [END_SED_EXTPLUGIN]
-
 ==================== */
-
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($action == 'install')
@@ -40,4 +38,5 @@ elseif($action == 'uninstall')
 	// Remove plugin bbcodes
 	sed_bbcode_remove(0, 'chili');
 }
+
 ?>

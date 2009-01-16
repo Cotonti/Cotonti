@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  * Russian language file for indexpolls
  *
@@ -14,4 +14,5 @@ $L_idx['vote_failed'] = 'Невозможно проголосовать';
 $L_idx['vote_opt'] = 'Вы забыли указать точку зрения';
 $L_idx['voteit'] = 'Голосовать!';
 $L_idx['voteback'] = 'Экран опросов';
+
 ?>

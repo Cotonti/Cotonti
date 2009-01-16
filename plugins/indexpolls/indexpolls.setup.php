@@ -31,5 +31,4 @@ mode=02:select:Recent polls,Random polls:Recent polls:Mode polls displayed
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
 ?>

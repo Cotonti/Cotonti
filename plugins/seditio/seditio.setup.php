@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /* ====================
 [BEGIN_SED]
 File=plugins/seditio/seditio.setup.php
@@ -6,7 +6,7 @@ Version=0.0.2
 Updated=2009-jan-02
 Type=Plugin
 Author=Trustmaster
-Description=
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -16,8 +16,8 @@ Description=Seditio Compatibility Plugin
 Version=0.0.2
 Date=2008-jan-02
 Author=Trustmaster
-Copyright=
-Notes=
+Copyright=Partial copyright (c) 2008 Cotonti Team
+Notes=BSD License
 SQL=
 Auth_guests=R
 Lock_guests=W12345A
@@ -25,7 +25,6 @@ Auth_members=RW
 Lock_members=12345A
 [END_SED_EXTPLUGIN]
 ==================== */
-
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($action == 'install')
@@ -100,4 +99,5 @@ elseif($action == 'uninstall')
 	// Remove plugin bbcodes
 	sed_bbcode_remove(0, 'seditio');
 }
+
 ?>

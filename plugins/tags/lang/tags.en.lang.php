@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  * English language file for tags
  *
@@ -28,4 +28,5 @@ $L['tags_Tag'] = 'Tag';
 $L['tags_Tag_cloud'] = 'Tag Cloud';
 $L['tags_Tag_cloud_none'] = 'No tags';
 $L['tags_Tags'] = 'Tags';
+
 ?>

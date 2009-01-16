@@ -60,6 +60,4 @@ $L['plu_db_totalsize'] = "SQL database, total size (KB)";
 
 $L['plu_hitsmonth'] = "Hits for the past 15 days";
 
-
-
 ?>
