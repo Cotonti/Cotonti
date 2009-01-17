@@ -1,15 +1,11 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
 [BEGIN_SED]
 File=skins/sed-light/sed-light.en.lang.php
-Version=101
-Updated=2006-mar-16
-Type=Skin
-Name=SED-Light
+Version=0.0.2
+Updated=2009-jan-03
+Type=English language file for skin
+Name=sed-light
 Author=Xiode - XiodeStudios.Com
 Url=http://www.xiodestudios.com
 Description=Official skin
@@ -29,6 +25,7 @@ $skinlang['forumseditpost']['Update'] = 'Update';
 
 //forums.newtopic.tpl
 $skinlang['forumsnewtopic']['Title'] = 'Title:';
+$skinlang['forumsnewtopic']['Desc'] = 'Short description (optional):';
 $skinlang['forumsnewtopic']['privatetopic'] = 'Check this box to mark this topic as "private":';
 $skinlang['forumsnewtopic']['privatetopic2'] = 'Only forums moderators and the starter of the topic (so you) will be allowed to read and reply.';
 $skinlang['forumsnewtopic']['poll'] = 'Poll options:';
@@ -64,6 +61,7 @@ $skinlang['forumssections']['FoldAll'] = 'Fold all';
 $skinlang['forumssections']['UnfoldAll'] = 'Unfold all';
 
 //forums.topics.tpl
+$skinlang['forumstopics']['Newtopic'] = 'New topic'; // New in v125
 $skinlang['forumstopics']['Nonewposts'] = 'No new posts';
 $skinlang['forumstopics']['Newposts'] = 'New posts';
 $skinlang['forumstopics']['Sticky'] = 'Sticky';
