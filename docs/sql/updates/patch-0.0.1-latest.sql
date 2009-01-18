@@ -41,7 +41,7 @@ ALTER TABLE sed_forum_topics ADD COLUMN ft_preview varchar(128) NOT NULL default
 
 /* r145 for edited plugins - recentitems and  recentpolls->indexpolls */
 INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('plug', 'indexpolls', '2', 'mode', '2', 'Recent polls'),('plug', 'indexpolls', '1', 'maxpolls', '2', '1'), ('plug', 'recentitems', 5, 'redundancy', 2, '2');
-INSERT INTO `sed_plugins` VALUES (NULL, 'index.tags', 'indexpolls', 'main', 'Indexpolls', 'indexpolls', 10, 1), (NULL, 'polls.main', 'indexpolls', 'indexpolls', 'Indexpolls', 'indexpolls.main', 10, 1);
+INSERT INTO `sed_plugins` VALUES (NULL, 'index.tags', 'indexpolls', 'main', 'Indexpolls', 'indexpolls', 10, 1);
 INSERT INTO `sed_auth` VALUES (NULL, 1, 'plug', 'indexpolls', 1, 254, 1), (NULL, 2, 'plug', 'indexpolls', 1, 254, 1), (NULL, 3, 'plug', 'indexpolls', 0, 255, 1), (NULL, 4, 'plug', 'indexpolls', 1, 254, 1), (NULL, 5, 'plug', 'indexpolls', 255, 255, 1), (NULL, 6, 'plug', 'indexpolls', 1, 254, 1);
 DELETE FROM `sed_config` WHERE `config_owner`='plug' AND `config_cat`='recentitems' AND `config_name`='maxpolls' LIMIT 1;
 UPDATE `sed_config` SET `config_value` = 'UTF-8' WHERE `config_cat` = 'skin' AND `config_name` = 'charset' LIMIT 1;
@@ -114,7 +114,7 @@ DELETE  FROM sed_config WHERE config_owner = 'core' AND config_cat = 'users' AND
 /* r241 Multiple choice in polls */
 ALTER TABLE `sed_polls` ADD COLUMN `poll_multiple` tinyint(1) NOT NULL default '0';
 
-/* r242 xhtml code removed from php for plug whosonline*/
+/* r242 xhtml code removed from php for plug whosonline added avatar configs */
 INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('plug', 'whosonline', '1', 'showavatars', 3, '1'), ('plug', 'whosonline', '2', 'miniavatar_x', 1, '16'), ('plug', 'whosonline', '3', 'miniavatar_y', 1, '16');
 
 /* r243 Photo,avatar and signature resize optioning */
@@ -138,9 +138,9 @@ DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'users' AND `config_name` = 'ph_resize' LIMIT 1;
 
 /* r285 24 symbols for user name - not enough */ 
-ALTER TABLE `sed_users` CHANGE `user_name` `user_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+ALTER TABLE `sed_users` CHANGE `user_name` `user_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 
-/* r289 xhtml code removed from php for plug whosonline*/
+/* r289 added config option for autovalidate*/
 INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'page', '06', 'autovalidate', 3, '1');
 
 /* r290 indexpolls*/
@@ -157,4 +157,9 @@ ALTER TABLE `sed_logger` CHANGE `log_name` `log_name` VARCHAR( 100 ) CHARACTER S
 ALTER TABLE `sed_online` CHANGE `online_name` `online_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;  
 ALTER TABLE `sed_pages` CHANGE `page_author` `page_author` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
 ALTER TABLE `sed_pm` CHANGE `pm_fromuser` `pm_fromuser` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL  ;
-ALTER TABLE `sed_structure` CHANGE `structure_title` `structure_title` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;   
+ALTER TABLE `sed_structure` CHANGE `structure_title` `structure_title` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
+
+/* r372 Fix, adding new hook for MarkitUp!, add search url style config */ 
+DELETE FROM `sed_plugins` WHERE `pl_code` = 'markitup' AND `pl_file` = 'markitup.ajax';
+REPLACE INTO `sed_plugins` (`pl_id` ,`pl_hook` ,`pl_code` ,`pl_part` ,`pl_title` ,`pl_file` ,`pl_order` ,`pl_active`) VALUES (NULL , 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', '10', '1');
+INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'search', '1', 'searchurl', 2, 'Normal', 'Normal,Single', 'Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');

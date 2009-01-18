@@ -287,7 +287,7 @@ if (!empty($error_string))
 $bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
 $useredit_array = array(
-	"USERS_EDIT_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name']))." ".$cfg['separator']." <a href=\"users.php?m=edit&amp;id=".$urr['user_id']."\">".$L['Edit']."</a>",
+	"USERS_EDIT_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name']))." ".$cfg['separator']." <a href=\"".sed_url('users', 'm=edit&id='.$urr['user_id'])."\">".$L['Edit']."</a>",
 	"USERS_EDIT_SUBTITLE" => $L['useed_subtitle'],
 	"USERS_EDIT_SEND" => sed_url('users', 'm=edit&a=update&'.sed_xg().'&id='.$urr['user_id']),
 	"USERS_EDIT_ID" => $urr['user_id'],

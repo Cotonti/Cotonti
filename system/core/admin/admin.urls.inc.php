@@ -304,6 +304,7 @@ foreach($areas as $ar)
 $areabox .= '</select>';
 $admin_urls_form = sed_url('admin', "m=urls&a=save");
 // Render rules table
+//TODO Add Non JS Support for add rule
 $adminmain .= <<<HTM
 <h4>{$L['adm_urls_rules']}</h4>
 <script type="text/javascript" src="js/jquery.tablednd.js"></script>

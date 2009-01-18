@@ -94,7 +94,7 @@ else
 		{
 		$percentbar = floor(($hits / $hits_y_max) * 100);
 		$adminmain .= "<tr><td style=\"width:80px;text-align:center; padding:1px;\">";
-		$adminmain .= "<a href=\"".sed_url('admin', "")."?m=hits&f=year&v=$year\">".$year."</a></td>";
+		$adminmain .= "<a href=\"".sed_url('admin', 'm=hits&f=year&v='.$year)."\">".$year."</a></td>";
 		$adminmain .= "<td style=\"text-align:right; width:96px; padding:1px;\">".$hits." ".$L['Hits']."</td>";
 		$adminmain .= "<td style=\"text-align:right; width:40px; padding:1px;\">$percentbar%</td><td>";
 		$adminmain .= "<div style=\"width:320px;\"><div class=\"bar_back\">";
@@ -110,7 +110,7 @@ else
 		{
 		$percentbar = floor(($hits / $hits_m_max) * 100);
 		$adminmain .= "<tr><td style=\"width:80px; text-align:center; padding:1px;\">";
-		$adminmain .= "<a href=\"".sed_url('admin', "m=hits&f=month&v=$month")."\">".$month."</a></td>";
+		$adminmain .= "<a href=\"".sed_url('admin', 'm=hits&f=month&v='.$month)."\">".$month."</a></td>";
 		$adminmain .= "<td style=\"text-align:right; width:96px; padding:1px;\">".$hits." ".$L['Hits']."</td>";
 		$adminmain .= "<td style=\"text-align:right; width:40px; padding:1px;\">$percentbar%</td>";
 		$adminmain .= "<td style=\"padding:1px;\">";
