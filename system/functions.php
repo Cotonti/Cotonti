@@ -4517,5 +4517,4 @@ function sed_extrafield_remove($sql_table, $name)
 	return $step1&&$step2;
 }
 
-include('functions.custom.php');
 ?>
