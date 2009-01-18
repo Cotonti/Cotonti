@@ -756,7 +756,7 @@ function sed_build_catpath($cat, $mask)
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
 	foreach($pathcodes as $k => $x)
 	{
-		$tmp[]= sprintf($mask, $x, $sed_cat[$x]['title']);
+		$tmp[]= sprintf($mask, sed_url('list', 'c='.$x), $sed_cat[$x]['title']);
 	}
 	return implode(' '.$cfg['separator'].' ', $tmp);
 }
@@ -4205,6 +4205,14 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$spec['_host'] = $mainurl['host'];
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
 	$spec['_path'] = SED_SITE_URI;
+	// Looks for a callback and  runs it
+	if(preg_match_all('#\{(\w+)\(\)\}#', $url, $matches, PREG_SET_ORDER))
+	{
+		foreach($matches as $m)
+		{
+			$url = str_replace($m[0], $m[1]($args), $url);
+		}
+	}
 	// Transform the data into URL
 	if(preg_match_all('#\{\$(\w+)\}#', $url, $matches, PREG_SET_ORDER))
 	{
@@ -4509,5 +4517,5 @@ function sed_extrafield_remove($sql_table, $name)
 	return $step1&&$step2;
 }
 
-
+include('functions.custom.php');
 ?>

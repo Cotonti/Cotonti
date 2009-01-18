@@ -24,6 +24,9 @@ Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
 [END_SED_EXTPLUGIN]
+[BEGIN_SED_EXTPLUGIN_CONFIG]
+searchurl=01:select:Normal,Single:Normal:Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link
+[END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 ?>

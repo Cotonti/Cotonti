@@ -104,7 +104,7 @@ if (@file_exists($incl))
 if ($c=='all' || $c=='system')
 { $catpath = $sed_cat[$c]['title']; }
 else
-{ $catpath = sed_build_catpath($c, '<a href="'.sed_url('list', 'c=%1$s').'">%2$s</a>'); }
+{ $catpath = sed_build_catpath($c, '<a href="%1$s">%2$s</a>'); }
 
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;

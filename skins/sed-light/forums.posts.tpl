@@ -10,36 +10,6 @@
 		<!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
 		<div class="error">{PHP.skinlang.forumspost.privatetopic}</div>
 		<!-- END: FORUMS_POSTS_TOPICPRIVATE -->
-		<!-- BEGIN: TRACINFO -->
-		<div id="ticket_box">
-			<h1> {TRACINFO_TICKET}<span class="status">{TRACINFO_STATUS}</span></h1>
-			<div id="ticket">
-				<h2 class="summary">{TRACINFO_TITLE}</h2>
-				<table class="properties">
-					<tbody>
-						<tr>
-							<th>{TRACINFO_REPORTER_TEXT}</th>
-							<td>{TRACINFO_REPORTER}</td>
-							<th>{TRACINFO_OWNER_TEXT}</th>
-							<td>{TRACINFO_OWNER}</td>
-						</tr>
-						<tr>
-							<th>{TRACINFO_PRIORITY_TEXT}</th>
-							<td>{TRACINFO_PRIORITY}</td>
-							<th>{TRACINFO_MILESTONE_TEXT}</th>
-							<td>{TRACINFO_MILESTONE}</td>
-						</tr>
-						<tr>
-							<th>{TRACINFO_COMPONENT_TEXT}</th>
-							<td>{TRACINFO_COMPONENT}</td>
-							<th>{TRACINFO_VERSION_TEXT}</th>
-							<td>{TRACINFO_VERSION}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<!-- END: TRACINFO -->
 		<div class="paging">
 			{FORUMS_POSTS_PAGEPREV} {FORUMS_POSTS_PAGENEXT} {FORUMS_POSTS_PAGES}
 

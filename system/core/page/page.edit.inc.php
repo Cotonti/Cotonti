@@ -247,6 +247,10 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpa
 $pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';
 $pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'update', 'rpageurl', $L['SFS']) : '';
 
+$title_tags[] = array('{TITLE}', '{CATEGORY}');
+$title_tags[] = array('%1$s', '%1$s');
+$title_data = array($L['paged_title'], $sed_cat[$c]['title']);
+$out['subtitle'] = sed_title('title_page', $title_tags, $title_data);
 $sys['sublocation'] = $sed_cat[$c]['title'];
 
 /* === Hook === */

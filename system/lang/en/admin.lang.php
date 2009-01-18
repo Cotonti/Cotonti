@@ -48,8 +48,8 @@ $L['alreadyaddnewentry'] = 'New entry added';		//N-0.0.2
 $L['alreadyupdatednewentry'] = 'Entry updated';		//N-0.0.2
 $L['alreadydeletednewentry'] = 'Entry deleted';		//N-0.0.2
 $L['adm_purgeall'] = 'Purge all';
-$L['adm_purgeall_done'] = 'ache cleared completely';		//N-0.0.2
-$L['adm_delcacheitem'] = 'ache item removed';		//N-0.0.2
+$L['adm_purgeall_done'] = 'Cache cleared completely';		//N-0.0.2
+$L['adm_delcacheitem'] = 'Cache item removed';		//N-0.0.2
 $L['adm_comm_already_del'] = 'Comment deleted';		//N-0.0.2
 $L['adm_listisempty'] = 'List is empty';
 $L['adm_totalsize'] = 'Total size';
@@ -340,7 +340,7 @@ $L['adm_time1'] = '#1 : Raw server time';
 $L['adm_time2'] = '#2 : GMT time returned by the server';
 $L['adm_time3'] = '#3 : GMT time + server offset (Cotonti reference)';
 $L['adm_time4'] = '#4 : Your local time, adjusted from your profile';
-$L['adm_help_versions'] = 'Adjust the Server time zone <a href=\'admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time\'>here</a> to have the clock #3 properlly set.<br />Clock #4 depends of the timezone setting in your profile.<br />Clocks #1 and #2 are ignored by Cotonti.';
+$L['adm_help_versions'] = 'Adjust the Server time zone <a href="'.sed_url('admin', 'm=config&n=edit&o=core&p=time').'">here</a> to have the clock #3 properlly set.<br />Clock #4 depends of the timezone setting in your profile.<br />Clocks #1 and #2 are ignored by Cotonti.';
 $L['adm_log'] = 'System log';
 $L['adm_infos'] = 'Informations';
 $L['adm_versiondclocks'] = 'Versions and clocks';

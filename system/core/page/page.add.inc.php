@@ -104,7 +104,10 @@ if ($a=='add')
 		{
 			$newpagehtml = '';
 		}
-
+		if($page_state == 0)
+		{
+			sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' "); 
+		}
 		$ssql = "INSERT into $db_pages
 		(page_state,
 		page_type,
@@ -197,6 +200,10 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'ne
 $pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "newpage", "newpageurl", $L['Mypfs']) : '';
 $pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'newpage', 'newpageurl', $L['SFS']) : '';
 
+$title_tags[] = array('{TITLE}', '{CATEGORY}');
+$title_tags[] = array('%1$s', '%1$s');
+$title_data = array($L['pagadd_subtitle'], $sed_cat[$c]['title']);
+$out['subtitle'] = sed_title('title_page', $title_tags, $title_data);
 $sys['sublocation'] = $sed_cat[$c]['title'];
 
 /* === Hook === */

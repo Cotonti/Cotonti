@@ -34,7 +34,7 @@ Order=10
 
 		$highlight = explode(' ', $highlight);
 		foreach ($highlight as $key=>$value)
-			{ $out['compopup'] .= '$.highlight(this, \''.$value.'\');'; }
+			{ $out['compopup'] .= '$.highlight(this, \''.strtoupper($value).'\');'; }
 	
 		$out['compopup'] .= '});});</script>';
 		}

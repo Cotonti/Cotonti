@@ -389,8 +389,8 @@ else
 		else
 		{ $icon_f = "<img src=\"skins/$skin/img/system/icon-folder.gif\" alt=\"\" />"; }
 
-		$list_folders .= "<td><a href=\"pfs.php?f=".$pff_id.$more."\">".$icon_f."</a></td>";
-		$list_folders .= "<td><a href=\"pfs.php?f=".$pff_id.$more."\">".$pff_title."</a></td>";
+		$list_folders .= "<td><a href=\"".sed_url('pfs', 'f='.$pff_id.$more)."\">".$icon_f."</a></td>";
+		$list_folders .= "<td><a href=\"".sed_url('pfs', 'f='.$pff_id.$more)."\">".$pff_title."</a></td>";
 		$list_folders .= "<td style=\"text-align:right;\">".$pff_fcount."</td>";
 		$list_folders .= "<td style=\"text-align:right;\">".$pff_fsize." ".$L['kb']."</td>";
 		$list_folders .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row1['pff_updated'] + $usr['timezone'] * 3600)."</td>";
@@ -450,8 +450,8 @@ while ($row = sed_sql_fetcharray($sqll))
 		{ $pfs_icon = "<a href=\"".$pfs_fullfile."\"><img src=\"".$cfg['th_dir_user'].$pfs_file."\" title=\"".$pfs_file."\"></a>"; }
 	}
 
-	$list_files .= "<tr><td>[<a href=\"pfs.php?a=delete&amp;".sed_xg()."&amp;id=".$pfs_id.$more."&amp;o=".$o."\">x</a>]</td>";
-	$list_files .= "<td><a href=\"pfs.php?m=edit&amp;id=".$pfs_id.$more."\">".$L['Edit']."</a></td>";
+	$list_files .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.$more.'&o='.$o)."\">x</a>]</td>";
+	$list_files .= "<td><a href=\"".sed_url('pfs', 'm=edit&id='.$pfs_id.$more)."\">".$L['Edit']."</a></td>";
 	$list_files .= "<td>".$pfs_icon."</td>";
 	$list_files .= "<td><a href=\"".$pfs_fullfile."\">".$pfs_file."</a></td>";
 	$list_files .= "<td>".date($cfg['dateformat'], $pfs_date + $usr['timezone'] * 3600)."</td>";
@@ -522,7 +522,7 @@ $pfs_precentbar = @floor(100 * $pfs_totalsize / 1024 / $maxtotal);
 $disp_stats = $L['pfs_totalsize']." : ".floor($pfs_totalsize/1024).$L['kb']." / ".$maxtotal.$L['kb'];
 $disp_stats .= " (".@floor(100*$pfs_totalsize/1024/$maxtotal)."%) ";
 $disp_stats .= " &nbsp; ".$L['pfs_maxsize']." : ".$maxfile.$L['kb'];
-$disp_stats .= ($o!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? " &nbsp; <a href=\"pfs.php?f=".$f.$more."&amp;o=thumbs\">".$L['Thumbnails']."</a></p>" : '</p>';
+$disp_stats .= ($o!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? " &nbsp; <a href=\"".sed_url('pfs', 'f='.$f.$more.'&o=thumbs')."\">".$L['Thumbnails']."</a></p>" : '</p>';
 $disp_stats .= "<div style=\"width:200px; margin-top:0;\"><div class=\"bar_back\">";
 $disp_stats .= "<div class=\"bar_front\" style=\"width:".$pfs_precentbar."%;\"></div></div></div>";
 

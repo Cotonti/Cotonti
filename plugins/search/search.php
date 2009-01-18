@@ -67,7 +67,7 @@ if ($tab=='frm') {
 
 	$plugin_title = $L['plu_title_frmtab'];
 
-	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['plu_tabs_all']."</a> &nbsp; ".$L['plu_tabs_frm']." &nbsp; <a href=\"plug.php?e=search&amp;tab=pag\">".$L['plu_tabs_pag']."</a>";
+	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['plu_tabs_all']."</a> &nbsp; ".$L['plu_tabs_frm']." &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=pag')."\">".$L['plu_tabs_pag']."</a>";
 	$plugin_subtitle .= "<br />".$L['plu_title_frmtab_s'];
 
 	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&tab=frm&a=search')."\" method=\"post\">";
@@ -243,7 +243,8 @@ if ($tab=='frm') {
 				{
 					if (sed_auth('forums', $row['fs_id'], 'R'))
 					{
-						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"".sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl)."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
+						$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : sed_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
+						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"".$post_url."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
 					}
 				}
 				$plugin_body .= "</table>";
@@ -460,7 +461,7 @@ if ($tab=='frm') {
 					if (sed_auth('page', $row['page_cat'], 'R'))
 					{
 						$ownername = sed_sql_fetcharray(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
-						$plugin_body .= "<tr><td><a href=\"list.php?c=".$row['page_cat']."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
+						$plugin_body .= "<tr><td>".sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>')."</td>";
 						$plugin_body .= "<td><a href=\"".sed_url('page', 'id='.$row['page_id'].'&highlight='.$hl)."\">";
 						$plugin_body .= sed_cc($row['page_title'])."</a></td><td>".sed_build_user($row['page_ownerid'],$ownername['user_name'])."</td></tr>";
 					}
@@ -683,7 +684,7 @@ if ($tab=='frm') {
 					if (sed_auth('page', $row['page_cat'], 'R'))
 					{
 						$ownername = sed_sql_fetcharray(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
-						$plugin_body .= "<tr><td><a href=\"list.php?c=".$row['page_cat']."\">".$sed_cat[$row['page_cat']]['tpath']."</a></td>";
+						$plugin_body .= "<tr><td>".sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>')."</a></td>";
 						$plugin_body .= "<td><a href=\"".sed_url('page', 'id='.$row['page_id'].'&highlight='.$hl)."\">";
 						$plugin_body .= sed_cc($row['page_title'])."</a></td><td>".sed_build_user($row['page_ownerid'],$ownername['user_name'])."</td></tr>";
 					}
@@ -751,7 +752,8 @@ if ($tab=='frm') {
 				{
 					if (sed_auth('forums', $row['fs_id'], 'R'))
 					{
-						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"".sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl)."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
+						$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : sed_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
+						$plugin_body .= "<tr><td>".sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE)."</td><td><a href=\"".$post_url."\">".sed_cc($row['ft_title'])."</a></td><td>".sed_build_user($row['ft_firstposterid'],$row['ft_firstpostername'])."</td></tr>";
 					}
 				}
 				$plugin_body .= "</table>";
@@ -762,5 +764,3 @@ if ($tab=='frm') {
 	}
 }
 ?>
-
-
