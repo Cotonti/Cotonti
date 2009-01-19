@@ -20,67 +20,57 @@ $adminhelp = $L['adm_help_urls'];
 
 $a = sed_import('a', 'G', 'ALP');
 
+$site_uri = SED_SITE_URI;
+
 // Server type detection
 if(stristr($_SERVER['SERVER_SOFTWARE'], 'apache'))
 {
 	$serv_type = 'apache';
-}
-elseif(stristr($_SERVER['SERVER_SOFTWARE'], 'iis'))
-{
-	$serv_type = 'iis';
-}
-elseif(stristr($_SERVER['SERVER_SOFTWARE'], 'nginx'))
-{
-	$serv_type = 'nginx';
-}
-else
-{
-	$serv_type = 'unknown';
-}
-$site_uri = SED_SITE_URI;
-
-// Server-specific data
-switch($serv_type)
-{
-	case 'apache':
-		$conf_name = '.htaccess';
-		$hta_prefix = <<<END
+	$conf_name = '.htaccess';
+	$hta_prefix = <<<END
 # Rewrite engine options
 Options FollowSymLinks -Indexes
 RewriteEngine On
 # Server-relative path to seditio:
 RewriteBase "$site_uri"
 END;
-		$hta_flags = '[NC,NE,L]';
-		$hta_rule = 'RewriteRule';
-		$hta_postfix = '';
-		$rb = '^';
-		$re = '';
-		$loc = '';
-		$hta_error = 'ErrorDocument';
-	break;
-	case 'iis':
-		$conf_name = 'IsapiRewrite4.ini';
-		$hta_prefix = '';
-		$hta_flags = '[I,L]';
-		$hta_rule = 'RewriteRule';
-		$hta_postfix = '';
-		$rb = '^/';
-		$re = '';
-		$loc = '/';
-	break;
-	case 'nginx':
-		$conf_name = 'nginx.conf';
-		$loc = $site_uri;
-		if($site_uri[0] != '/') $loc = '/'.$loc;
-		if($site_uri[strlen($site_uri) - 1] != '/') $loc .= '/';
-		$hta_prefix = '';
-		$hta_flags = 'last;';
-		$hta_rule = 'rewrite';
-		$rb = '"^'.$loc;
-		$re = '"';
-		$hta_error = 'error_page';
-	break;
+	$hta_flags = '[NC,NE,L]';
+	$hta_rule = 'RewriteRule';
+	$hta_postfix = '';
+	$rb = '^';
+	$re = '';
+	$loc = '';
+	$hta_error = 'ErrorDocument';
+}
+elseif(stristr($_SERVER['SERVER_SOFTWARE'], 'iis'))
+{
+	$serv_type = 'iis';
+	$conf_name = 'IsapiRewrite4.ini';
+	$hta_prefix = '';
+	$hta_flags = '[I,L]';
+	$hta_rule = 'RewriteRule';
+	$hta_postfix = '';
+	$rb = '^/';
+	$re = '';
+	$loc = '/';
+}
+elseif(stristr($_SERVER['SERVER_SOFTWARE'], 'nginx'))
+{
+	$serv_type = 'nginx';
+	$conf_name = 'nginx.conf';
+	$loc = $site_uri;
+	if($site_uri[0] != '/') $loc = '/'.$loc;
+	if($site_uri[strlen($site_uri) - 1] != '/') $loc .= '/';
+	$hta_prefix = '';
+	$hta_flags = 'last;';
+	$hta_rule = 'rewrite';
+	$rb = '"^'.$loc;
+	$re = '"';
+	$hta_error = 'error_page';
+}
+else
+{
+	$serv_type = 'unknown';
 }
 
 if($a == 'save')
@@ -108,6 +98,8 @@ if($a == 'save')
 	$mainurl = parse_url($cfg['mainurl']);
 	$host = preg_quote($mainurl['host']);
 	$path = preg_quote(SED_SITE_URI);
+	// Pepend rules to fix static data when using dynamic categories
+	$hta .= $hta_rule . ' ' . $rb . '(datas|images|js|skins)/(.*)$' . $re . ' ' . $loc . '$1/$2' . ' ' . $hta_flags;
 	for($i = 0; $i < $count; $i++)
 	{
 		if(empty($ut_format[$i]) || empty($ut_params[$i]))
@@ -120,6 +112,12 @@ if($a == 'save')
 		if($ut_area[$i] == '*' && $ut_params[$i] == '*' && $ut_format[$i] == '{$_area}.php')
 		{
 			// Default rule doesn't need any rewrite rules
+			continue;
+		}
+		if(preg_match('#\{[\w_]+\(\)\}#', $ut_format[$i]))
+		{
+			// Rule with callback, requires custom rewrite
+			$error_string .= $L['adm_urls_callbacks'] . ': ' . sed_cc($ut_format[$i]) . '<br />';
 			continue;
 		}
 		// Set some defaults
@@ -274,6 +272,10 @@ if($a == 'save')
 	}
 	$adminmain .= '<h4>' . $L['adm_urls_your'] . ' <em>' . $conf_name . '</em>' . '</h4>';
 	$adminmain .= '<pre class="code">' . $hta . '</pre>';
+	if(!empty($error_string))
+	{
+		$adminmain .= '<div class="error">' . $error_string . $L['adm_urls_errors'] . '</div>';
+	}
 }
 
 // Check urltrans.dat
@@ -304,7 +306,6 @@ foreach($areas as $ar)
 $areabox .= '</select>';
 $admin_urls_form = sed_url('admin', "m=urls&a=save");
 // Render rules table
-//TODO Add Non JS Support for add rule
 $adminmain .= <<<HTM
 <h4>{$L['adm_urls_rules']}</h4>
 <script type="text/javascript" src="js/jquery.tablednd.js"></script>
@@ -370,6 +371,9 @@ ruleCount = $ii;
 <a href="#" onclick="return addRule()"><strong>{$L['adm_urls_new']}</strong></a>
 </td>
 </tr>
+<noscript>
+<tr><td>$areabox</td><td><input type="text" name="params[]" value="*" /></td><td><input type="text" name="format[]" value="" /></td><td>&nbsp;</td></tr>
+</noscript>
 </table>
 $htaccess<br /><input type="submit" value="{$L['adm_urls_save']}" />
 </form>
