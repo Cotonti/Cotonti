@@ -92,6 +92,23 @@ function sed_forum_deletesection($id)
 {
 	global $db_forum_topics, $db_forum_posts, $db_forum_sections, $db_auth;
 
+	$sql = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$id' ");
+	$row = sed_sql_fetcharray($sql);
+	
+	if ($row['fs_masterid']>0)
+	{
+	$sqql = sed_sql_query("SELECT fs_masterid, fs_topiccount, fs_postcount FROM $db_forum_sections WHERE fs_id='$id' ");
+	$roww = sed_sql_fetcharray($sqql);
+	
+	$sc_posts = $roww['fs_postcount'];
+	$sc_topics = $roww['fs_topiccount'];
+
+	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-".$sc_posts." WHERE fs_id='".$roww['fs_masterid']."' ");
+	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-".$sc_topics." WHERE fs_id='".$roww['fs_masterid']."' ");
+
+	sed_forum_sectionsetlast($row['fs_masterid']);
+	}
+	
 	$sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_sectionid='$id'");
 	$num = sed_sql_affectedrows();
 	$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_sectionid='$id'");
@@ -109,12 +126,33 @@ function sed_forum_resync($id)
 {
 	global $db_forum_topics, $db_forum_posts, $db_forum_sections;
 
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_masterid='$id' ");
+	$result = sed_sql_result($sql,0,"COUNT(*)");
+
+	if (!$result)
+	{
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$id'");
 	$num = sed_sql_result($sql,0,"COUNT(*)");
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount='$num' WHERE fs_id='$id'");
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$id'");
 	$num = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
+	}
+	
+	else
+	{
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$id'");
+	$num = sed_sql_result($sql,0,"COUNT(*)");
+	$sql = sed_sql_query("SELECT SUM(fs_topiccount) FROM $db_forum_sections WHERE fs_masterid='$id'");
+	$num = $num + sed_sql_result($sql,0,"SUM(fs_topiccount)");
+	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount='$num' WHERE fs_id='$id'");
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$id'");
+	$num = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = sed_sql_query("SELECT SUM(fs_postcount) FROM $db_forum_sections WHERE fs_masterid='$id'");
+	$num = $num + sed_sql_result($sql,0,"SUM(fs_postcount)");
+	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
+	}
+	
 	return;
 }
 
