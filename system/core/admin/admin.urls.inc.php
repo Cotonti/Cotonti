@@ -99,7 +99,10 @@ if($a == 'save')
 	$host = preg_quote($mainurl['host']);
 	$path = preg_quote(SED_SITE_URI);
 	// Pepend rules to fix static data when using dynamic categories
-	$hta .= $hta_rule . ' ' . $rb . '(datas|images|js|skins)/(.*)$' . $re . ' ' . $loc . '$1/$2' . ' ' . $hta_flags;
+	if($serv_type != 'nginx')
+	{
+		$hta .= $hta_rule . ' ' . $rb . '(datas|images|js|skins)/(.*)$' . $re . ' ' . $loc . '$1/$2' . ' ' . $hta_flags . "\n";
+	}
 	for($i = 0; $i < $count; $i++)
 	{
 		if(empty($ut_format[$i]) || empty($ut_params[$i]))
