@@ -1,2 +1,2 @@
 /* r290 xhtml code removed from php for plug whosonline*/
-DELETE FROM `sed_plugins` WHERE `pl_id` = 81 LIMIT 1;
+DELETE FROM `sed_plugins` WHERE `pl_file` = 'indexpolls.main';
