@@ -462,6 +462,8 @@ $L['adm_urls_parameters'] = 'Parameters';
 $L['adm_urls_rules'] = 'URL Transformation Rules';
 $L['adm_urls_save'] = 'Save';
 $L['adm_urls_your'] = 'Your';
+$L['adm_urls_callbacks'] = 'Rule contains callbacks';
+$L['adm_urls_errors'] = 'You will have to add rewrite options for them manually.';
 $L['adm_help_urls'] = 'On this page you can customize your URLs using simple URL Transformation Rules. Please make
 sure the rules are correct and there are no duplicates. Do not use spaces, tabs and other special characters in
 the rules. Sections and parameters are explained below.
