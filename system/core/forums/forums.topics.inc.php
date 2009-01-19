@@ -158,6 +158,8 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-1 WHERE fs_id='$fs_masterid'");
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$fs_masterid'");
 
+			}
+			
 			$sqll = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$ns' ");
 			$roww = sed_sql_fetcharray($sqll);
 
@@ -167,8 +169,6 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			{
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount+1 WHERE fs_id='$ns_master'");
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+'$num' WHERE fs_id='$ns_master'");
-			}
-
 			}
 
 
@@ -217,6 +217,14 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 
 			sed_forum_sectionsetlast($s);
 			sed_forum_sectionsetlast($ns);
+			 
+			$sqql = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$s' ");
+			$roww = sed_sql_fetcharray($sqql);
+			
+			if ($roww['fs_masterid']>0)
+				{ sed_forum_sectionsetlast($roww['fs_masterid']); }
+
+			
 			sed_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
 			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;

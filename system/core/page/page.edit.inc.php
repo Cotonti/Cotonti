@@ -146,7 +146,16 @@ if ($a=='update')
 			{
 				$rpagehtml = '';
 			}
-
+			
+			$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id' ");
+			$row = sed_sql_fetcharray($sql);
+			
+			if ($row['page_cat']!=$rpagecat && ($row['page_state'] == 0 || $row['page_state'] == 2))
+			{
+			$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+			$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$rpagecat."' ");
+			}
+			
 			$ssql = "UPDATE $db_pages SET
 			page_cat = '".sed_sql_prep($rpagecat)."',
 				page_type = '".sed_sql_prep($rpagetype)."',
