@@ -148,7 +148,7 @@ function sed_get_latesttopics($limit)
 					"RI_DATE" => date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
 					"RI_IMG" => $img,
 					"RI_CAT" => $build_forum,
-					"RI_NAME" => "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom').'">'.sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
+					"RI_NAME" => "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom').'" title=\''.sed_cc(stripslashes($row['ft_title'])).'\'>'.sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
 					"RI_COUNT" => $row['ft_postcount']-1,
 						));
 				$recentitems -> parse("RECENTFORUMS.RECENTFORUM");
