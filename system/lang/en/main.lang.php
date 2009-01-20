@@ -684,9 +684,12 @@ $L['pro_photoupload'] = 'Upload a photography';
 $L['pro_avatarspreset'] = '...or click here to display a gallery of pre-loaded avatars';
 $L['pro_avatarschoose'] = 'Click an image below to set it as your own avatar';
 $L['pro_avataruploadfailed'] = 'The upload failed, delete the old avatar before to free the slot !';
-$L['pro_avatarnotvalid'] = "This avatar is not a valid %1\$s image."; // N-0.0.2
-$L['pro_photonotvalid'] = "This photo is not a valid %1\$s image."; // N-0.0.2
-$L['pro_sigotvalid'] = "This signature is not a valid %1\$s image."; // N-0.0.2
+$L['pro_avatarnotvalid'] = 'This avatar is not a valid %1\$s image.'; // N-0.0.2
+$L['pro_photonotvalid'] = 'This photo is not a valid %1\$s image.'; // N-0.0.2
+$L['pro_sigotvalid'] = 'This signature is not a valid %1\$s image.'; // N-0.0.2
+$L['ajaxSenderror'] = 'The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the administrator and inform them of the time the error occurred, and anything you might have done that may have caused the error.'; // N-0.0.2
+
+
 
 /* ====== Misc ====== */
 // N-0.0.2

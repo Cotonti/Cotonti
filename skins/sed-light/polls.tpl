@@ -5,8 +5,8 @@
 <tr><td><label>{POLL_INPUT}{POLL_OPTIONS}</label></td><td><div style="width:256px;"><div class="bar_back"><div class="bar_front" style="width:{POLL_PER}%;"></div></div></div></td><td>{POLL_PER}%</td><td>{POLL_COUNT}</td></tr>
 <!-- END: POLLTABLE -->
 <tr><td colspan="4">{POLL_FORM_BUTTON}</td></tr></table>
-{POLL_FORM_END}
 <p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
+{POLL_FORM_END}
 <!-- END: POLL_VIEW -->
 
 <!-- BEGIN: POLL_VIEW_VOTED -->
