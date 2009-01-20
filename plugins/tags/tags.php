@@ -162,7 +162,7 @@ elseif($a == 'forums')
 					$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> ';
 				}
 				$t->assign(array(
-				'TAGS_RESULT_ROW_URL' => sed_url('forums', 'm=topics&q='.$row['ft_id']),
+				'TAGS_RESULT_ROW_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
 				'TAGS_RESULT_ROW_TITLE' => sed_cc($row['ft_title']),
 				'TAGS_RESULT_ROW_PATH' => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, array($row['fs_masterid'],$row['fs_mastername'])),
 				'TAGS_RESULT_ROW_TAGS' => $tag_list
