@@ -50,7 +50,8 @@ if($cfg['plugin']['tags']['pages'])
 	while($tc_row = sed_sql_fetchassoc($tc_res))
 	{
 		$tag_count++;
-		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tc_row['tag']) : $tc_row['tag'];
+		$tag = $tc_row['tag'];
+		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 		$tc_html .= '<li value="'.$tc_row['cnt'].'"><a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> </li>';
