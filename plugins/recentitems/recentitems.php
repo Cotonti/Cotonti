@@ -55,7 +55,7 @@ function sed_get_latestpages($limit)
 			$recentitems -> assign(array(
 					"RI_DATE" => 			date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600),
 					"RI_CAT" => "<a href=\"".sed_url('list', 'c='.$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
-					"RI_NAME" => "<a href=\"".$row['page_pageurl']."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
+					"RI_NAME" => "<a href=\"".$row['page_pageurl']."\" title=\"".sed_cc(stripslashes($row['page_title']))."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
 						));
 				$recentitems -> parse("RECENTPAGES.RECENTPAGE");
 			$i++;
