@@ -1,16 +1,13 @@
 <?PHP
 
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
 [BEGIN_SED]
 File=system/core/polls/polls.functions.php
-Version=r247
-Updated=2007-mar-03
+Version=0.0.2
+Updated=2009-jan-21
 Type=Core
-Author=esclkm
-Description=Functions
+Author=Neocrome & Cotonti Team
+Description=functions for polls (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
 [END_SED]
 ==================== */
 
@@ -24,6 +21,7 @@ function sed_poll_edit_form($id, $multiple=1)
 	if(!empty($error_string))
 	{
 		global $poll_id, $poll_option_text, $poll_option_id, $poll_multiple, $poll_text;
+		
 		$counter=0;
 		$date="";
 		$id=$poll_id;
@@ -35,7 +33,7 @@ function sed_poll_edit_form($id, $multiple=1)
 			{
 				$counter++;
 				$poll_options_x .="<div id ='ans_".$counter."'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"".$poll_option_id[$i]."\" />
-				<input  class='tbox' type='text' name='poll_option[]' size='40' value=\"".sed_cc($poll_option_text[$i])."\" maxlength='128' /> <input class=\"delbutton\" name=\"addoption\" value=\"x\" onclick=\"return removeAns(".$counter.")\" type=\"button\" /></div>";
+			<input  class='tbox' type='text' name='poll_option[]' size='40' value=\"".$poll_option_text[$i]."\" maxlength='128' /> <input  name=\"addoption\" value=\"x\" onclick=\"return removeAns(".$counter.")\" type=\"button\" /></div>";
 			}
 		}
 
@@ -53,7 +51,7 @@ function sed_poll_edit_form($id, $multiple=1)
 		{
 			$counter++;
 			$poll_options_x .="<div id ='ans_".$counter."'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"".$row1['po_id']."\" />
-				<input  class='tbox' type='text' name='poll_option[]' size='40' value=\"".sed_cc($row1['po_text'])."\" maxlength='128' /> <input class=\"delbutton\" name=\"addoption\" value=\"x\" onclick=\"return removeAns(".$counter.")\" type=\"button\" />
+				<input  class='tbox' type='text' name='poll_option[]' size='40' value=\"".sed_cc($row1['po_text'])."\" maxlength='128' /> <input  name=\"addoption\" value=\"x\" onclick=\"return removeAns(".$counter.")\" type=\"button\" />
 </div>";
 
 		}
@@ -69,14 +67,14 @@ function sed_poll_edit_form($id, $multiple=1)
 	if ($counter==0)
 	{
 		$poll_options_x="<div id ='ans_1'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-				<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /> <input class=\"delbutton\" name=\"addoption\" value=\"x\" onclick=\"return removeAns(1)\" type=\"button\" />
+				<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /> <input  name=\"addoption\" value=\"x\" onclick=\"return removeAns(1)\" type=\"button\" />
 				</div>";
 		$counter++;
 	}
 	if ($counter==1)
 	{
 		$poll_options_x.="<div id ='ans_2'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-				<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /> <input class=\"delbutton\" name=\"addoption\" value=\"x\" onclick=\"return removeAns(1)\" type=\"button\" />
+				<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /> <input  name=\"addoption\" value=\"x\" onclick=\"return removeAns(1)\" type=\"button\" />
 				</div>";
 		$counter++;
 	}
@@ -126,7 +124,7 @@ HTM;
 				<input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /></div></noscript>";
 	}
 	$poll_options .= "
-	<input class=\"delbutton\" name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns()\" type=\"button\" />
+	<input  name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns()\" type=\"button\" />
 ";
 
 	if ($multiple==1)
@@ -151,7 +149,7 @@ function sed_poll_check()
 
 	if (!empty($poll_id))
 	{
-		$poll_text = sed_import('poll_text','P','HTM');
+		$poll_text = trim(sed_import('poll_text','P','HTM'));
 		$poll_option_id = sed_import('poll_option_id', 'P', 'ARR');
 		$poll_multiple = sed_import('poll_multiple', 'P', 'BOL');
 		$option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
@@ -172,6 +170,7 @@ function sed_poll_check()
 					$poll_option_text[$j]=""; }
 			}
 			$counter++;
+			if (MQGPC) {$poll_option_text[$i]=stripcslashes($poll_option_text[$i]);}
 		}
 		}
 		$error_string .= ($counter<2) ? $L['polls_error_count']."<br/>" : '';
@@ -181,7 +180,7 @@ function sed_poll_check()
 
 /* ------------------ */
 
-function sed_poll_save($type='0', $state='0')
+function sed_poll_save($type='index', $state='0')
 {
 
 	global $cfg, $L, $sys, $db_polls, $db_polls_options;
@@ -202,14 +201,14 @@ function sed_poll_save($type='0', $state='0')
 					if ($poll_option_id[($count)]!="new")
 					{
 						if ($poll_option_text[($count)]=="")// drop
-						{ $sql2 = sed_sql_query("DELETE FROM $db_polls_options WHERE po_id='".$poll_option_id[($count)]."'"); }
+						{ $sql2 = sed_sql_query("DELETE FROM $db_polls_options WHERE po_id='".(int)$poll_option_id[($count)]."'"); }
 						else // edit
-						{ $sql2 = sed_sql_query("UPDATE $db_polls_options SET po_text='".$poll_option_text[($count)]."' WHERE po_id='".$poll_option_id[($count)]."'"); }
+						{ $sql2 = sed_sql_query("UPDATE $db_polls_options SET po_text='".sed_sql_prep($poll_option_text[($count)])."' WHERE po_id='".(int)$poll_option_id[($count)]."'"); }
 					}
 					else //insert
 					{
 						if ($poll_option_text[($count)]!="")// insert not empty
-						{ $sql2 = sed_sql_query("INSERT into $db_polls_options ( po_pollid, po_text, po_count) VALUES ('$newpoll_id', '".$poll_option_text[($count)]."', '0')"); }
+						{ $sql2 = sed_sql_query("INSERT into $db_polls_options ( po_pollid, po_text, po_count) VALUES ('$newpoll_id', '".sed_sql_prep($poll_option_text[($count)])."', '0')"); }
 					}
 				}
 				return($newpoll_id);
@@ -226,13 +225,8 @@ function sed_poll_vote()
 	global $error_string;
 	global $vote;
 	
-	$vote = sed_import('vote','G','TXT');
-	$id= sed_import('poll_id','G','INT');
-	if (!empty($vote))
-	{$vote=explode(" ", $vote);}
-	if (empty($vote))
-	{$vote = sed_import('vote','P','ARR');
-	$id= sed_import('poll_id','P','INT');}
+	$vote = sed_import('vote','P','ARR');
+	$id= sed_import('poll_id','P','INT');
 	
 	if (!empty($vote))
 	{
@@ -307,7 +301,7 @@ function sed_poll_form($id, $formlink='', $skin='')
 	else
 	{ $error_string .= $L['wrongURL']; }
 
-
+$skininput=$skin;
 
 if (empty($skin)) {$skin=sed_skinfile('polls');}
 else			  {$skin=sed_skinfile($skin, true);}
@@ -337,11 +331,13 @@ if (!$canvote) $poll_block = "POLL_VIEW_DISABLED";
 	}
 
 	$polltext=sed_parse(sed_cc($row['poll_text']), 1, 1, 1);
-	$pollbutton=(!$alreadyvoted || $canvote) ? "<input type=\"hidden\" name=\"poll_id\" value=\"$id\" /><input type=\"submit\" class=\"submit\" value=\"".$L['polls_Vote']."\" />" :"";
+	$pollbutton=(!$alreadyvoted || $canvote) ? "<input type=\"hidden\" name=\"poll_id\" value=\"$id\" /><input type=\"hidden\" name=\"poll_skin\" value=\"$skininput\" /><input type=\"submit\" class=\"submit\" value=\"".$L['polls_Vote']."\" />" :"";
 	$polldate=date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600);
  if (empty($formlink)) {$formlink=sed_url('polls', "id=".$id);}
-	$pollformbegin = "<form action=\"".$formlink."\" method=\"post\">";
-	$pollformend .= "</form>";
+ 
+  
+	$pollformbegin = "<div id='poll_".$id."'><form action=\"".$formlink."\" method=\"post\" id='poll_form_".$id."' OnSubmit=\"return ajaxSend({method: 'POST', formId: 'poll_form_".$id."', url: '".sed_url('polls', 'mode=ajax')."', divId: 'poll_".$id."', errMsg: '".$L['ajaxSenderror']."'});\">";
+	$pollformend .= "</form></div>";
 
 	$poll_form->assign(array(
 		"POLL_VOTERS" => $totalvotes,

@@ -166,3 +166,8 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 
 /* r387 Structure page count fix for news */ 
 UPDATE sed_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='news';
+
+/* r400 change poll type */ 
+ALTER TABLE sed_polls MODIFY poll_type VARCHAR(100) NOT NULL DEFAULT 'index';
+UPDATE sed_polls SET poll_type = 'index' WHERE poll_type = '0';
+UPDATE sed_polls SET poll_type = 'forum' WHERE poll_type = '1';

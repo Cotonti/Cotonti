@@ -1,17 +1,14 @@
 <?PHP
 
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
 
 [BEGIN_SED]
 File=polls.php
-Version=120
-Updated=2007-mar-03
+Version=0.0.2
+Updated=2009-jan-21
 Type=Core
-Author=Neocrome
-Description=Polls
+Author=Neocrome & Cotonti Team
+Description=polls (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
 [END_SED]
 
 ==================== */
@@ -28,13 +25,20 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls',
 sed_block($usr['auth_read']);
 
 $mode = sed_import('mode','G','ALP');
+require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
 
 if ($mode=='ajax')
 {
+$skin = sed_import('poll_skin','P','TXT');
+$id = sed_import('poll_id','P','INT');
+sed_sendheaders();
+		sed_poll_vote();
+		list($polltitle, $poll_form)=sed_poll_form($id, '', $skin);
+		echo $poll_form;
+	
 	exit;
 
 }
-
 
 $id = sed_import('id','G','ALP', 8);
 $vote = sed_import('vote','G','TXT');
@@ -45,8 +49,6 @@ if (empty($vote))
 
 $comments = sed_import('comments','G','BOL');
 $ratings = sed_import('ratings','G','BOL');
-
-require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
 
 $out['subtitle'] = $L['Polls'];
 
@@ -79,8 +81,8 @@ elseif ($id=='viewall' || $id=='')
 		{
 			$result .= "<tr>";
 			$result .= "<td style=\"width:128px;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600)."</td>";
-			$result .= "<td><a href=\"".sed_url('polls', 'id='.$row['poll_id'])."\"><img src=\"images/admin/polls.gif\" alt=\"\" /></a></td>";
-			$result .= "<td>".sed_parse(sed_cc($row['poll_text']),1 ,1 ,1)."</td>";
+			$result .= "<td><a href=\"".sed_url('polls', 'id='.$row['poll_id'])."\"><img src=\"images/admin/polls.gif\" alt=\"\" />";
+			$result .= sed_parse(sed_cc($row['poll_text']),1 ,1 ,1)."</a></td>";
 			$result .= "</tr>";
 		}
 	}

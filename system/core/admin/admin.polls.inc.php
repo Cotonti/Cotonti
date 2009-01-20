@@ -1,16 +1,13 @@
 <?PHP
 
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
 [BEGIN_SED]
 File=admin.polls.inc.php
-Version=101
-Updated=2006-mar-15
+Version=0.0.2
+Updated=2009-jan-21
 Type=Core.admin
-Author=Neocrome
-Description=Administration panel
+Author=Neocrome & Cotonti Team
+Description=polls (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
 [END_SED]
 ==================== */
 
@@ -109,7 +106,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$id = $row['poll_id'];
 	$type = $row['poll_type'];
 
-	if ($type==0 && $prev==-1)
+	if ($type=='index' && $prev==-1)
 	{
 		$prev = 0;
 		$adminmain .= "<tr><td colspan=\"8\">".$L['adm_polls_indexpolls']."</td></tr>";
@@ -122,7 +119,7 @@ while ($row = sed_sql_fetcharray($sql))
 		$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Open']."</td></tr>";
 	}
 
-	if ($type==1 && $prev==0)
+	if ($type=='forum' && $prev==0)
 	{
 		$prev = 1;
 		$adminmain .= "<tr><td colspan=\"8\">".$L['adm_polls_forumpolls']."</td></tr>";
@@ -148,7 +145,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "<td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=polls&a=bump&id=".$id."&".sed_xg())."\">B</a>]</td>";
 	$adminmain .= "<td style=\"text-align:center;\">";
 
-	if ($type==0)
+	if ($type=='index')
 	{ $adminmain .= "<a href=\"".sed_url('polls', "id=".$row['poll_id'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>"; }
 	else
 	{ $adminmain .= "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>"; }
