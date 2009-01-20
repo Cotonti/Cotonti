@@ -28,10 +28,13 @@
 
 			<!-- BEGIN: FORUMS_POSTS_ROW -->
 			<tr>
-				<td style="width:176px;" rowspan="3" class="{FORUMS_POSTS_ROW_ODDEVEN}">
+				<td style="width:240px;" rowspan="3" class="{FORUMS_POSTS_ROW_ODDEVEN}">
 
+			<table width="100%">
+				<tr>
+			<td width="100%" class="{FORUMS_POSTS_ROW_ODDEVEN}">
+				
 					<h2 style="margin:2px;">{FORUMS_POSTS_ROW_POSTERNAME}</h2>
-					{FORUMS_POSTS_ROW_AVATAR}
 
 					<div style="padding:5px;">
 						{FORUMS_POSTS_ROW_MAINGRP}<br />
@@ -47,6 +50,13 @@
 						{PHP.skinlang.forumspost.Age} {FORUMS_POSTS_ROW_AGE}
 					</div>
 
+			</td>
+			<td width="100%" class="{FORUMS_POSTS_ROW_ODDEVEN}">{FORUMS_POSTS_ROW_AVATAR}</td>
+				</tr>
+				
+			</table>
+					
+					
 				</td>
 
 		    	<td style="height:24px; max-height:40px; text-align:right;" class="{FORUMS_POSTS_ROW_ODDEVEN}">
