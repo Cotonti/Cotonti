@@ -130,6 +130,11 @@ if (is_array($extp))
 
 require_once $cfg['system_dir'] . '/header.php';
 
+// Extra field - getting
+$extrafields = array(); $number_of_extrafields = 0;
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
+while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; }
+
 if ($sed_cat[$c]['group'])
 { $mskin = sed_skinfile(array('list', 'group', $sed_cat[$c]['tpl'])); }
 else
@@ -167,16 +172,6 @@ if (!$sed_cat[$c]['group'])
 	<a href=\"".sed_url('list', "c=$c&amp;s=title&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a> ".$L['Title'],
 	"LIST_TOP_KEY" => "<a href=\"".sed_url('list', "c=$c&amp;s=key&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
 	<a href=\"".sed_url('list', "c=$c&amp;s=key&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a> ".$L['Key'],
-	"LIST_TOP_EXTRA1" => "<a href=\"".sed_url('list', "c=$c&amp;s=extra1&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
-	<a href=\"".sed_url('list', "c=$c&amp;s=extra1&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA2" => "<a href=\"".sed_url('list', "c=$c&amp;s=extra2&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
-	<a href=\"".sed_url('list', "c=$c&amp;s=extra2&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA3" => "<a href=\"".sed_url('list', "c=$c&amp;s=extra3&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
-	<a href=\"".sed_url('list', "c=$c&amp;s=extra3&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA4" => "<a href=\"".sed_url('list', "c=$c&amp;s=extra4&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
-	<a href=\"".sed_url('list', "c=$c&amp;s=extra4&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a>",
-	"LIST_TOP_EXTRA5" => "<a href=\"".sed_url('list', "c=$c&amp;s=extra5&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
-	<a href=\"".sed_url('list', "c=$c&amp;s=extra5&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a>",
 	"LIST_TOP_DATE" => "<a href=\"".sed_url('list', "c=$c&amp;s=date&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
 	<a href=\"".sed_url('list', "c=$c&amp;s=date&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a> ".$L['Date'],
 	"LIST_TOP_AUTHOR" => "<a href=\"".sed_url('list', "c=$c&amp;s=author&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
@@ -189,6 +184,10 @@ if (!$sed_cat[$c]['group'])
 	<a href=\"".sed_url('list', "c=$c&amp;s=filecount&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a> ".$L['Hits']
 	));
 }
+
+// Extra fields
+if($number_of_extrafields > 0) foreach($extrafields as $row) $t->assign('LIST_TOP_'.strtoupper($row['field_name']), "<a href=\"".sed_url('list', "c=$c&amp;s=".$row['field_name']."&amp;w=asc&amp;o=$o&amp;p=$p")."\">$sed_img_down</a>
+	<a href=\"".sed_url('list', "c=$c&amp;s=".$row['field_name']."&amp;w=desc&amp;o=$o&amp;p=$p")."\">$sed_img_up</a> ");
 
 $ii=0;
 $jj=1;
@@ -329,9 +328,8 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	}
 	
 	// Extra fields 
-	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-	while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('LIST_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
-
+	if($number_of_extrafields > 0) foreach($extrafields as $row) $t->assign('LIST_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
+	
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
