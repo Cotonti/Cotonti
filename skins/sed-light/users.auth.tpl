@@ -15,11 +15,11 @@
 	<!-- END: USERS_AUTH_MAINTENANCE -->
 	
 		<div style="padding:20px; text-align:center">
-			<form name="login" action="{USERS_AUTH_SEND}" method="post">
-				<p>{PHP.skinlang.usersauth.Username} {USERS_AUTH_USER}</p>
-				<p>{PHP.skinlang.usersauth.Password} {USERS_AUTH_PASSWORD}</p>
-				<p>{PHP.skinlang.usersauth.Rememberme} {PHP.out.guest_cookiettl} &nbsp;&nbsp;&nbsp;&nbsp; <input type="submit" value="{PHP.skinlang.usersauth.Login}" /></p>
-			</form>
+			 <form name="login" action="{USERS_AUTH_SEND}" method="post"><table align=center><tr>
+				<td>{PHP.skinlang.usersauth.Username}</td><td>{USERS_AUTH_USER}</td></tr><tr>
+				<td>{PHP.skinlang.usersauth.Password}</td><td>{USERS_AUTH_PASSWORD}</td></tr><tr>
+				<td>{PHP.skinlang.usersauth.Rememberme} </td><td>{PHP.out.guest_cookiettl} &nbsp; <input type="submit" value="{PHP.skinlang.usersauth.Login}"></td></tr></table>
+			 </form>
 		</div>
 		<hr />
 		<div style="padding:20px; text-align:center;">
