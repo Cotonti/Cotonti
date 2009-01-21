@@ -30,8 +30,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 /* ============ MASKS FOR THE HTML OUTPUTS =========== */
 
-$skin = sed_skinfile('recentitems', true);
-$recentitems = new XTemplate($skin);
+$recentitems = new XTemplate(sed_skinfile('recentitems', true));
 
 $plu_empty = $L['None']."<br />";
 
