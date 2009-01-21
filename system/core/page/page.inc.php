@@ -154,7 +154,7 @@ $t->assign(array(
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
-	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar']),
+	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
 	"PAGE_DATE" => $pag['page_date'],
 	"PAGE_BEGIN" => $pag['page_begin'],
 	"PAGE_EXPIRE" => $pag['page_expire'],

@@ -33,13 +33,16 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 $recentitems = new XTemplate(sed_skinfile('recentitems', true));
 
 $plu_empty = $L['None']."<br />";
+if(empty($cfg['plugin']['recentitems']['redundancy']))
+{
+	$cfg['plugin']['recentitems']['redundancy'] = 2;
+}
 
 /* ================== FUNCTIONS ================== */
 
-function sed_get_latestpages($limit)
+if ($cfg['plugin']['recentitems']['maxpages']>0 && !$cfg['disable_page'])
 {
-	global $L, $db_pages, $usr, $cfg, $sed_cat, $plu_empty, $recentitems;
-
+	$limit = $cfg['plugin']['recentitems']['maxpages'];
 	$l = $limit * $cfg['plugin']['recentitems']['redundancy'];
 
 	$sql = sed_sql_query("SELECT page_id, page_alias, page_cat, page_title, page_date FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER by page_date DESC LIMIT $l");
@@ -67,15 +70,14 @@ function sed_get_latestpages($limit)
 
 	$res = (empty($res)) ? $plu_empty : $res;
 
-	return($res);
+	$latestpages = $res;
 }
 
 /* ------------------ */
 
-function sed_get_latesttopics($limit)
+if ($cfg['plugin']['recentitems']['maxtopics']>0 && !$cfg['disable_forums'])
 {
-	global $L, $db_forum_topics, $db_forum_sections, $usr, $cfg, $skin, $plu_empty, $recentitems;
-
+	$limit = $cfg['plugin']['recentitems']['maxtopics'];
 	$l = $limit * $cfg['plugin']['recentitems']['redundancy'];
 
 	if ($cfg['plugin']['recentitems']['fd']=='Standard')
@@ -160,21 +162,10 @@ function sed_get_latesttopics($limit)
 
 	$res = (empty($res)) ? $plu_empty : $res;
 
-	return($res);
+	$latesttopics = $res;
 }
 
 /* ------------------ */
-
-if(empty($cfg['plugin']['recentitems']['redundancy']))
-{
-	$cfg['plugin']['recentitems']['redundancy'] = 2;
-}
-
-if ($cfg['plugin']['recentitems']['maxpages']>0 && !$cfg['disable_page'])
-{ $latestpages = sed_get_latestpages($cfg['plugin']['recentitems']['maxpages']); }
-
-if ($cfg['plugin']['recentitems']['maxtopics']>0 && !$cfg['disable_forums'])
-{ $latesttopics = sed_get_latesttopics($cfg['plugin']['recentitems']['maxtopics']); }
 
 $t-> assign(array(
 	"PLUGIN_LATESTPAGES" => $latestpages,
