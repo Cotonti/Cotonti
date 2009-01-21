@@ -922,7 +922,7 @@ function sed_build_comments($code, $url, $display = true)
 					"COMMENTS_ROW_URL" => $url . '#c' . $row['com_id'],
 					"COMMENTS_ROW_AUTHOR" => $com_authorlink,
 					"COMMENTS_ROW_AUTHORID" => $row['com_authorid'],
-					"COMMENTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar']),
+					"COMMENTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar'], 'avatar'),
 					"COMMENTS_ROW_TEXT" => sed_parse($com_text, $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1),
 					"COMMENTS_ROW_DATE" => @date($cfg['dateformat'], $row['com_date'] + $usr['timezone'] * 3600),
 					"COMMENTS_ROW_ADMIN" => $com_admin,
@@ -1594,13 +1594,38 @@ function sed_build_user($id, $user)
  * @param string $image Image src
  * @return string
  */
-function sed_build_userimage($image)
+function sed_build_userimage($image, $type='none')
 {
-	if(empty($image))
+	if($type == 'avatar')
 	{
-		$image = 'datas/defaultav/blank.png';
+		if(empty($image))
+		{
+			$image = 'datas/defaultav/blank.png';
+		}
+		return '<img src="'.$image.'" alt="" class="avatar" />';
 	}
-	return '<img src="'.$image.'" alt="" class="avatar" />';
+	elseif($type == 'photo')
+	{
+		if(!empty($image))
+		{
+			return '<img src="'.$image.'" alt="" class="photo" />';
+		}
+		
+	}
+	elseif($type == 'sig')
+	{
+		if(!empty($image))
+		{
+			return '<img src="'.$image.'" alt="" class="signature" />';
+		}
+	}
+	else
+	{
+		if(!empty($image))
+		{
+			return '<img src="'.$image.'" alt="" />';
+		}
+	}
 }
 
 /**

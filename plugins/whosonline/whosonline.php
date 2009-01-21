@@ -58,9 +58,9 @@ while ($row = sed_sql_fetcharray($sql1))
 
 	$t->assign(array(
 		'WHOSONlINE_ROW1_SHOWAVATARS' => ($showavatars) ? $user_avatar : '',
-		'WHOSONlINE_ROW1_USER_AVATAR' => ($showavatars) ? sed_build_userimage($row['user_avatar']) : '',
-		'WHOSONlINE_ROW1_USER_PHOTO' => ($showavatars) ? sed_build_userimage($row['user_photo']) : '',
-		'WHOSONlINE_ROW1_USER_SIGNATURE' => ($showavatars) ? sed_build_userimage($row['user_signature']) : '',
+		'WHOSONlINE_ROW1_USER_AVATAR' => ($showavatars) ? sed_build_userimage($row['user_avatar'], 'avatar') : '',
+		'WHOSONlINE_ROW1_USER_PHOTO' => ($showavatars) ? sed_build_userimage($row['user_photo'], 'photo') : '',
+		'WHOSONlINE_ROW1_USER_SIGNATURE' => ($showavatars) ? sed_build_userimage($row['user_signature'], 'sig') : '',
 		'WHOSONlINE_ROW1_USER_ID' => $row['online_userid'],
 		'WHOSONlINE_ROW1_USER' => sed_build_user($row['online_userid'], sed_cc($row['online_name'])),
 		'WHOSONlINE_ROW1_USER_MAINGRP_URL' => sed_url('users', 'g='.$row['user_maingrp']),
