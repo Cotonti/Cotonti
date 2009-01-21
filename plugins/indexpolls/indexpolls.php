@@ -73,7 +73,7 @@ function sed_get_polls($limit)
 
 		$res_all .= $res;
 	}
-if (!empty($res_all)
+if (!empty($res_all))
 	{
 	$res_all .= "<p style=\"text-align: center; \"><a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a></p>";
 	}
