@@ -56,6 +56,31 @@ function sed_alphaonly($text)
 	return(preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
 }
 
+// For compatibility with PHP < 5.2
+
+if(PHP_VERSION < '5.2.0')
+{
+	function mb_stripos($haystack, $needle, $offset = 0)
+	{
+		return stripos($haystack, $needle, $offset);
+	}
+
+	function mb_stristr($haystack, $needle)
+	{
+		return stristr($haystack, $needle);
+	}
+
+	function mb_strripos($haystack, $needle, $offset = 0)
+	{
+		return strripos($haystack, $needle, $offset);
+	}
+
+	function mb_strstr($haystack, $needle)
+	{
+		return strstr($haystack, $needle);
+	}
+}
+
 /*
  * ================================= Authorization Subsystem ==================================
  */
@@ -1610,7 +1635,7 @@ function sed_build_userimage($image, $type='none')
 		{
 			return '<img src="'.$image.'" alt="" class="photo" />';
 		}
-		
+
 	}
 	elseif($type == 'sig')
 	{
@@ -4171,7 +4196,7 @@ function sed_load_urltrans()
 		$parts = explode("\t", $line);
 		$rule = array();
 		$rule['trans'] = $parts[2];
-		$parts[1] == '*' ? $rule['params'] = array() : parse_str($parts[1], $rule['params']);
+		$parts[1] == '*' ? $rule['params'] = array() : mb_parse_str($parts[1], $rule['params']);
 		foreach($rule['params'] as $key => $val)
 		{
 			if(strstr($val, '|'))
@@ -4197,7 +4222,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 {
 	global $cfg, $sed_urltrans;
 	// Preprocess arguments
-	is_array($params) ? $args = $params : parse_str($params, $args);
+	is_array($params) ? $args = $params : mb_parse_str($params, $args);
 	$area = empty($sed_urltrans[$name]) ? '*' : $name;
 	// Find first matching rule
 	$url = $sed_urltrans['*'][0]['trans']; // default rule
@@ -4230,31 +4255,40 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$spec['_host'] = $mainurl['host'];
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
 	$spec['_path'] = SED_SITE_URI;
-	// Looks for a callback and  runs it
-	if(preg_match_all('#\{(\w+)\(\)\}#', $url, $matches, PREG_SET_ORDER))
-	{
-		foreach($matches as $m)
-		{
-			$url = str_replace($m[0], $m[1]($args), $url);
-		}
-	}
 	// Transform the data into URL
-	if(preg_match_all('#\{\$(\w+)\}#', $url, $matches, PREG_SET_ORDER))
+	if(preg_match_all('#\{(.+?)\}#', $url, $matches, PREG_SET_ORDER))
 	{
 		foreach($matches as $m)
 		{
-			if(isset($spec[$m[1]]))
+			if($p = mb_strpos($m[1], '('))
 			{
-				$url = str_replace($m[0], urlencode($spec[$m[1]]), $url);
+				// Callback
+				$func = mb_substr($m[1], 0, $p);
+				$url = str_replace($m[0], $func($args), $url);
 			}
-			elseif(isset($args[$m[1]]))
+			elseif(mb_strpos($m[1], '!$') === 0)
 			{
-				$url = str_replace($m[0], urlencode($args[$m[1]]), $url);
-				unset($args[$m[1]]);
+				// Unset
+				$var = mb_substr($m[1], 2);
+				unset($args[$var]);
 			}
 			else
 			{
-				$url = str_replace($m[0], urlencode($GLOBALS[$m[1]]), $url);
+				// Substitute
+				$var = mb_substr($m[1], 1);
+				if(isset($spec[$var]))
+				{
+					$url = str_replace($m[0], urlencode($spec[$var]), $url);
+				}
+				elseif(isset($args[$var]))
+				{
+					$url = str_replace($m[0], urlencode($args[$var]), $url);
+					unset($args[$var]);
+				}
+				else
+				{
+					$url = str_replace($m[0], urlencode($GLOBALS[$var]), $url);
+				}
 			}
 		}
 	}
