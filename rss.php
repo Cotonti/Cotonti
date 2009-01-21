@@ -49,7 +49,7 @@ while($row = sed_sql_fetcharray($sql_config)){
 }
 sed_bbcode_load();
 
-$c = sed_import('c', 'G', 'ALP');
+$c = sed_import('c', 'G', 'ALP'); if($c=="") $c = "news";
 header('Content-type: text/xml');
 $sys['now'] = time();
 $cache = sed_cache_get("rss_".$c);
