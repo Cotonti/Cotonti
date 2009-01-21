@@ -57,7 +57,7 @@ function sed_get_polls($limit)
 	else if($cfg['plugin']['indexpolls']['mode']=='Random polls')
 	{$sqlmode='RAND()';}
 
-	$sql_p = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type=0 ORDER by $sqlmode DESC LIMIT $limit");
+	$sql_p = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='index' ORDER by $sqlmode DESC LIMIT $limit");
 	while ($row_p = sed_sql_fetcharray($sql_p))
 	{
 		unset($res);
@@ -66,18 +66,17 @@ function sed_get_polls($limit)
 		list($polltitle, $poll_form)=sed_poll_form($poll_id, sed_url('index', ""), 'indexpolls');
 
 		$res .= "<h5>".$polltitle."</h5>";
-		$res .= "<div id='p".$poll_id."'>";
-
 
 		$res .= $poll_form;
-		$res .= "</div><hr />";
+		$res .= "<hr />";
 
 
 		$res_all .= $res;
 	}
-
+if (!empty($res_all)
+	{
 	$res_all .= "<p style=\"text-align: center; \"><a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a></p>";
-
+	}
 	return($res_all);
 }
 

@@ -92,44 +92,44 @@ list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm
 
 $sql = sed_sql_query("SELECT p.*, t.ft_id FROM $db_polls AS p
 LEFT JOIN $db_forum_topics AS t ON t.ft_poll = p.poll_id
-WHERE 1 ORDER BY p.poll_type ASC, p.poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+WHERE 1 ORDER BY p.poll_type DESC, p.poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
 $adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
 $adminmain .= "<table class=\"cells\">";
 
 $ii = 0;
-$prev = -1;
-
+$prev = false;
+$indexheader =false;
+$forumheader =false;
 while ($row = sed_sql_fetcharray($sql))
 {
-	$id = $row['poll_id'];
-	$type = $row['poll_type'];
-
-	if ($type=='index' && $prev==-1)
+	if (!$prev)
 	{
-		$prev = 0;
-		$adminmain .= "<tr><td colspan=\"8\">".$L['adm_polls_indexpolls']."</td></tr>";
 		$adminmain .= "<tr><td class=\"coltop\" style=\"width:128px;\">".$L['Date']."</td>";
+		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Type']."</td>";
 		$adminmain .= "<td class=\"coltop\">".$L['Poll']." ".$L['adm_clicktoedit']."</td>";
 		$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Votes']."</td>";
 		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
 		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Reset']."</td>";
 		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Bump']."</td>";
 		$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Open']."</td></tr>";
+	$prev=true;
 	}
 
-	if ($type=='forum' && $prev==0)
+	$id = $row['poll_id'];
+	$type = $row['poll_type'];
+
+	if ($type=='index' && !$indexheader)
 	{
-		$prev = 1;
-		$adminmain .= "<tr><td colspan=\"8\">".$L['adm_polls_forumpolls']."</td></tr>";
-		$adminmain .= "<tr><td class=\"coltop\" style=\"width:128px;\">".$L['Date']."</td>";
-		$adminmain .= "<td class=\"coltop\">".$L['Topic']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Votes']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Reset']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Bump']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Open']."</td></tr>";
+		$indexheader=true;
+		$adminmain .= "<tr><td colspan=\"9\">".$L['adm_polls_indexpolls']."</td></tr>";
+	}
+
+	if ($type=='forum' && !$forumheader)
+	{
+		$forumheader = true;
+		$adminmain .= "<tr><td colspan=\"9\">".$L['adm_polls_forumpolls']."</td></tr>";
 	}
 
 	$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
@@ -137,6 +137,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$adminmain .= "<tr><td style=\"text-align:center;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'])."</td>";
 
 
+	$adminmain .= "<td>".sed_cc($type)."</td>";
 	$adminmain .= "<td><a href=\"".sed_url('admin', "m=polls&n=options&id=".$row['poll_id'])."\">".sed_cc($row['poll_text'])."</a></td>";
 	$adminmain .= "<td style=\"text-align:center;\">".$totalvotes."</td>";
 
