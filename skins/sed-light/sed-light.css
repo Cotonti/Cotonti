@@ -185,3 +185,8 @@ textarea { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; paddi
 .rss-icon{
 	margin: 0px 5px 0px 5px;	
 }
+
+/* ============== Tag Cloud Fixes ============== */
+ul.tag_cloud li {
+	display: inline;
+}
