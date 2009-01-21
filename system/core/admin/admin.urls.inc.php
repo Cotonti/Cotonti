@@ -123,11 +123,13 @@ if($a == 'save')
 			$error_string .= $L['adm_urls_callbacks'] . ': ' . sed_cc($ut_format[$i]) . '<br />';
 			continue;
 		}
+		// Remove unsets
+		$ut_format[$i] = preg_replace('#\{\!\$.+?\}#', '', $ut_format[$i]);
 		// Set some defaults
 		$hta_line = $hta_rule . ' ' . $rb;
 		$format = $ut_format[$i];
 		$area = $ut_area[$i] == '*' ? $var_pattern : $ut_area[$i];
-		parse_str($ut_params[$i], $params);
+		mb_parse_str($ut_params[$i], $params);
 		$j = 0;
 		$k = 0;
 		$m_count = 0;
