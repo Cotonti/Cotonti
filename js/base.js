@@ -37,28 +37,28 @@ function toggleblock(id){
 }
 
 function ajaxSend(settings) {
- var method = settings.method || 'GET';
- var data = settings.data || '';
- if(method == 'POST') {
-  data += '&' + $('#' + settings.formId).serialize();
- }
- $.ajax({
-  type: method,
-  url: settings.url,
-  data: data,
-  beforeSend: function() {
-   $('#' + settings.divId).addClass('loading');
-  },
-  success: function(msg) {
-   $('#' + settings.divId).removeClass('loading');
-   $('#' + settings.divId).html(msg).hide().stop().fadeIn('slow');
-  },
-  error: function(msg) {
-   $('#' + settings.divId).removeClass('loading');
-   alert(settings.errMsg);
-  }
- });
- return false;
+	var method = settings.method || 'GET';
+	var data = settings.data || '';
+	if(method == 'POST') {
+		data += '&' + $('#' + settings.formId).serialize();
+	}
+	$.ajax({
+		type: method,
+		url: settings.url,
+		data: data,
+		beforeSend: function() {
+			$('#' + settings.divId).addClass('loading');
+		},
+		success: function(msg) {
+			$('#' + settings.divId).removeClass('loading');
+			$('#' + settings.divId).html(msg).hide().stop().fadeIn('slow');
+		},
+		error: function(msg) {
+			$('#' + settings.divId).removeClass('loading');
+			alert(settings.errMsg);
+		}
+	});
+	return false;
 }
 
 window.name = 'main';
