@@ -159,7 +159,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$fs_masterid'");
 
 			}
-			
+
 			$sqll = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$ns' ");
 			$roww = sed_sql_fetcharray($sqll);
 
@@ -217,14 +217,14 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 
 			sed_forum_sectionsetlast($s);
 			sed_forum_sectionsetlast($ns);
-			 
+
 			$sqql = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$s' ");
 			$roww = sed_sql_fetcharray($sqql);
-			
+
 			if ($roww['fs_masterid']>0)
 				{ sed_forum_sectionsetlast($roww['fs_masterid']); }
 
-			
+
 			sed_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
 			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
 			exit;
@@ -543,7 +543,17 @@ $t->assign(array(
 		if ($row['ft_postcount']>$cfg['maxtopicsperpage'])
 		{
 			$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
-			$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . sed_pagination($row['ft_url'], 0, $row['ft_postcount'], $cfg['maxtopicsperpage'], 'd') . '</span>';
+			if($row['ft_maxpages'] > 5)
+			{
+				$address = strstr($row['ft_url'], '?') ? $row['ft_url'] . '&amp;d=' : $row['ft_url'] . '?d=';
+				$last_n = ($row['ft_maxpages'] - 1) * $cfg['maxtopicsperpage'];
+				$last_page = '<span class="pagenav_last"><a href="'.$address.$last_n.'">'.$row['ft_maxpages'].'</a></span>';
+			}
+			else
+			{
+				$last_page = '';
+			}
+			$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . sed_pagination($row['ft_url'], 0, $row['ft_postcount'], $cfg['maxtopicsperpage'], 'd') . $last_page . '</span>';
 		}
 
 		$t-> assign(array(
