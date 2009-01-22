@@ -259,7 +259,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 	$item_code = 'p'.$pag['page_id'];
 	$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
-	$pag['page_comments'] = "<a href=\"".sed_url('page', $page_urlp.'&comments=1')."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
+	$pag['page_comments'] = "<a href=\"".sed_url('page', $page_urlp)."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
 	$pag['admin'] = $usr['isadmin'] ? "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a> &nbsp;<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a> " : '';
 
 	if(empty($pag['page_desc'])) $pag['page_desc'] = sed_cutpost($pag['page_text'], 200, false);
@@ -281,7 +281,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_FILECOUNT" => $pag['page_filecount'],
 		"LIST_ROW_JUMP" => sed_url('page', $page_urlp.'&a=dl'),
 		"LIST_ROW_COMMENTS" => $pag['page_comments'],
-		"LIST_ROW_RATINGS" => "<a href=\"".sed_url('page', $page_urlp.'&ratings=1')."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
+		"LIST_ROW_RATINGS" => "<a href=\"".sed_url('page', $page_urlp)."\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
 		"LIST_ROW_ADMIN" => $pag['admin'],
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
 	));
@@ -326,10 +326,10 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 			}
 			break;
 	}
-	
-	// Extra fields 
+
+	// Extra fields
 	if($number_of_extrafields > 0) foreach($extrafields as $row) $t->assign('LIST_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
-	
+
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
