@@ -76,8 +76,8 @@ hr { border: 1px solid; border-color: #c8d9e2 transparent transparent transparen
 
 /* ============== Overall ============== */
 
-h1 	{ font-size:250%; letter-spacing: -2px; font-weight:normal;}
-h2 	{ font-size:170%; letter-spacing: -2px; font-weight:normal; }
+h1 	{ font-size:250%; letter-spacing: -1px; font-weight:normal;}
+h2 	{ font-size:170%; letter-spacing: -1px; font-weight:normal; }
 h3 	{ font-size:140%; margin:1em 1em 1em 0; letter-spacing: -1px; font-weight:normal; }
 h4 	{ font-size:100%; font-weight:bold; margin:1.5em 1em 1em 0; }
 h5 	{ font-size:95%; margin:1em 1em 1em 0; }
