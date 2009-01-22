@@ -262,8 +262,6 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	$pag['page_comments'] = "<a href=\"".sed_url('page', $page_urlp)."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
 	$pag['admin'] = $usr['isadmin'] ? "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a> &nbsp;<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a> " : '';
 
-	if(empty($pag['page_desc'])) $pag['page_desc'] = sed_cutpost($pag['page_text'], 200, false);
-
 	$t-> assign(array(
 		"LIST_ROW_URL" => $pag['page_pageurl'],
 		"LIST_ROW_ID" => $pag['page_id'],
@@ -271,6 +269,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_KEY" => sed_cc($pag['page_key']),
 		"LIST_ROW_TITLE" => sed_cc($pag['page_title']),
 		"LIST_ROW_DESC" => $pag['page_desc'],
+		"LIST_ROW_DESC_OR_TEXT" => sed_cutpost($pag['page_text'], 200, false),
 		"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
 		"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
 		"LIST_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
