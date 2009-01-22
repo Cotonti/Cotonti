@@ -29,6 +29,7 @@
 		cancel: 'Cancel Rating',   // advisory title for the 'cancel' link
 		cancelValue: '',           // value to submit when user click the 'cancel' link
 		split: 0,                  // split the star into how many parts?
+		showDigits: false,			// display digits over stars?
 		
 		// Width of star image in case the plugin can't work it out. This can happen if
 		// the jQuery.dimensions plugin is not available OR the image is hidden at installation
@@ -131,8 +132,11 @@
 			}; // if (i == 0) (first element)
 			
 			// insert rating option right after preview element
-			//eStar = $('<div class="star"><a title="' + (this.title || this.value) + '">' + this.value + '</a></div>');
-			eStar = $('<div class="star"><a title="' + (this.title || this.value) + '" value="' + this.value + '">&nbsp;</a></div>');
+			if(settings.showDigits) {
+				eStar = $('<div class="star"><a title="' + (this.title || this.value) + '" value="' + this.value + '">' + this.value + '</a></div>');
+			} else {
+				eStar = $('<div class="star"><a title="' + (this.title || this.value) + '" value="' + this.value + '">&nbsp;</a></div>');
+			}
 			$(this).after(eStar);
 			
 			// Half-stars?

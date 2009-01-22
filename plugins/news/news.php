@@ -86,7 +86,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_COUNT" => $pag['page_count'],
 			"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
 			"PAGE_ROW_COMMENTS" => $pag['page_comments'],
-			"PAGE_ROW_RATINGS" => "<a href=\"".$pag['page_pageurl']."&amp;ratings=1\"><img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" /></a>",
+			"PAGE_ROW_RATINGS" => "<img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" />",
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
 		));
 
