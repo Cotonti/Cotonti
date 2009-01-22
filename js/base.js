@@ -39,12 +39,13 @@ function toggleblock(id){
 function ajaxSend(settings) {
 	var method = settings.method || 'GET';
 	var data = settings.data || '';
+	var url = settings.url || $('#' + settings.formId).attr('action');
 	if(method == 'POST') {
 		data += '&' + $('#' + settings.formId).serialize();
 	}
 	$.ajax({
 		type: method,
-		url: settings.url,
+		url: url,
 		data: data,
 		beforeSend: function() {
 			$('#' + settings.divId).addClass('loading');

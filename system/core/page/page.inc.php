@@ -24,8 +24,8 @@ $al = sed_import('al','G','ALP');
 $r = sed_import('r','G','ALP');
 $c = sed_import('c','G','TXT');
 $pg = sed_import('pg','G','INT');
-$comments = true;
-$ratings = sed_import('ratings','G','BOL');
+$comments = true; // TODO enable/disable comments on categories
+$ratings = true; // TODO enable/disable ratings on categories
 
 /* === Hook === */
 $extp = sed_getextplugins('page.first');
