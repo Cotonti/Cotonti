@@ -78,6 +78,13 @@ elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
 if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='dl' && $usr['auth_download'] && ($pag['page_file'] !== 2 || $usr['id'] > 0))
 {
 
+/* === Hook === */
+$extp = sed_getextplugins('page.download.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
+
 	if ($_SESSION['dl']!=$pag['page_id'])
 	{
 		header('Location: ' . SED_ABSOLUTE_URL . sed_url('page', 'id='.$pag['page_id']));
@@ -272,6 +279,13 @@ if($pag['page_file'] > 0)
 		{
 			$t->assign('PAGE_FILE_URL', sed_url('page', "id=".$pag['page_id']."&a=dl"));
 		}
+		
+		/* === Hook === */
+		$extp = sed_getextplugins('page.download.tags');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+		
 		$t->parse("MAIN.PAGE_FILE");
 		$t->assign('PAGE_SHORTTITLE', $pag['page_title']);
 
