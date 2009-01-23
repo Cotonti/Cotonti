@@ -206,7 +206,11 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 		if($row = sed_sql_fetcharray($sql))
 		{
 			$passhash = md5($row['user_password'].$row['user_hashsalt']).sha1($row['user_password'].$row['user_hashsalt']);
-			if($u_passhash == $passhash && $row['user_maingrp'] > 3 && (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
+			if(($u_passhash == $passhash
+					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 30
+						&& $u_passhash == $_SESSION['oldhash']))
+				&& $row['user_maingrp'] > 3
+				&& (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
 			{
 				$usr['id'] = $row['user_id'];
 				$usr['sessionid'] = ($cfg['authmode']==1) ? md5($row['user_lastvisit']) : session_id();
@@ -236,9 +240,10 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 					if($cfg['authcache']) $sys['sql_update_auth'] = ", user_auth='".serialize($usr['auth'])."'";
 				}
 
-				if(empty($_SESSION['saltstamp']) || $_SESSION['saltstamp'] + 60 < $sys['now_offset'])
+				if(empty($_SESSION['saltstamp']) || $sys['now_offset'] - $_SESSION['saltstamp'] > 60)
 				{
 					$_SESSION['saltstamp'] = $sys['now_offset'];
+					$_SESSION['oldhash'] = $u_passhash;
 					$hashsalt = sed_unique(16);
 					$passhash = md5($row['user_password'].$hashsalt).sha1($row['user_password'].$hashsalt);
 					$u = base64_encode($usr['id'].':_:'.$passhash);
