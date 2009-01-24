@@ -9,16 +9,18 @@
 			half: true,
 			callback: function(value, link) {
 				var val = link.getAttribute('value');
-				//if(val != '') {
+				var almsg = (val>'') ? 'You rate ('+val+') this item, are  you sure?' : 'You are deleting your rating, are you sure?';
+		
+				if (confirm(almsg))
+					{
 					ajaxSend({
 						method: 'POST',
 						formId: 'newrating',
 						divId: 'rloading',
 						data: 'newrate=' + val
 					});
-					$('.rating *').unbind();
 					$(this).unbind();
-				//}
+					}
 			}
 		});
 	});
