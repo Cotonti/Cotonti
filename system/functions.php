@@ -1335,7 +1335,7 @@ function sed_build_ratings($code, $url, $display)
 		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 		
-		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' ");
+		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='".sed_sql_prep($code)."' AND rated_userid='".$usr['id']."' ");
 
 		if (!$yetrated)
 		{
@@ -1347,7 +1347,7 @@ function sed_build_ratings($code, $url, $display)
 		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
 		if ($rating_voters>0)
 			{
-			$ratingnewaverage = ($rating_average * ($rating_voters - 1) + $newrate) / ( $rating_voters );
+			$ratingnewaverage = sed_sql_result(sed_sql_query("SELECT AVG(rated_value) FROM $db_rated WHERE rated_code='$code'"), 0, "AVG(rated_value)");
 			$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
 			}
 		else
