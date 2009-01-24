@@ -97,7 +97,7 @@ while ($row = sed_sql_fetcharray($sql))
 	//$adminmain .= $L['Extrafield']." #1 : ".sed_cc($row['page_extra1'])."<br />";
 	//$adminmain .= $L['Extrafield']." #2 : ".sed_cc($row['page_extra2'])."<br />";
 	//$adminmain .= $L['Extrafield']." #3 : ".sed_cc($row['page_extra3'])."<br />";
-	//$adminmain .= "<a href=\"".sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg())."\">".$L['Validate']."</a>";
+	$adminmain .= "<a href=\"".sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg())."\">".$L['Validate']."</a>";
 	$adminmain .= " &nbsp; <a href=\"".sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")."\">".$L['Edit']."</a></li><hr />";
 	$ii++;
 	}

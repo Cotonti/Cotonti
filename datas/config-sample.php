@@ -43,8 +43,6 @@ $cfg['defaulttheme'] = 'sed-light';	// Default theme, only name, not like skinna
 $cfg['defaultlang'] = 'en';		// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
-$cfg['pagination'] = ' [%s]';
-$cfg['pagination_cur'] = ' <strong>&gt; %s &lt;</strong>';
 
 // ========================
 // More settings

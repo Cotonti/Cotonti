@@ -50,8 +50,12 @@
 		<div class="pageBody">
 			<div class="pageTop"></div>
 			<div class="pageText">
-
+				<!-- BEGIN: MEMBERSONLY -->
+				{PAGE_SHORTTITLE}<br/>
+				<!-- END: MEMBERSONLY -->
+				<!-- BEGIN: DOWNLOAD -->
 				<a href="{PAGE_FILE_URL}">{PHP.L.Download} : {PAGE_SHORTTITLE} {PAGE_FILE_ICON}</a><br/>
+				<!-- END: DOWNLOAD -->
 				{PHP.L.Size}: {PAGE_FILE_SIZE}{PHP.L.kb}, {PHP.skinlang.page.downloaded} {PAGE_FILE_COUNT} {PHP.skinlang.page.times}
 			</div>
 		</div>
