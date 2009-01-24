@@ -1,6 +1,7 @@
 <!-- BEGIN: COMMENTS -->
 
 <a name="comments">&nbsp;</a>
+<div class="comments" style="display:{COMMENTS_DISPLAY}">
 <hr />
 <!-- BEGIN: COMMENTS_ROW -->
 <span class="title">
@@ -33,4 +34,5 @@
 </form>
 <!-- END: COMMENTS_NEWCOMMENT -->
 
+</div>
 <!-- END: COMMENTS -->

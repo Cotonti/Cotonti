@@ -171,3 +171,6 @@ UPDATE sed_structure SET structure_pagecount=structure_pagecount+1 WHERE structu
 ALTER TABLE sed_polls MODIFY poll_type VARCHAR(100) NOT NULL DEFAULT 'index';
 UPDATE sed_polls SET poll_type = 'index' WHERE poll_type = '0';
 UPDATE sed_polls SET poll_type = 'forum' WHERE poll_type = '1';
+
+/* r423 comments expand by default option */
+INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'comments', '03', 'expand_comments', 3, '1');

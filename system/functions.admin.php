@@ -4,15 +4,17 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=system/functions.admin.php
-Version=120
-Updated=2007-mar-03
-Type=Core
-Author=Neocrome
-Description=Functions
-[END_SED]
 ==================== */
+
+/**
+ * Admin function library.
+ *
+ * @package Cotonti
+ * @version 0.0.2
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
@@ -308,6 +310,7 @@ function sed_loadconfigmap()
 	$result[] = array ('menus', '20', 'freetext9', 0, '', '');
 	$result[] = array ('comments', '01', 'disable_comments', 3, '0', '');
 	$result[] = array ('comments', '10', 'countcomments', 3, '1', '');
+	$result[] = array ('comments', '03', 'expand_comments', 3, '1', '');
 	$result[] = array ('forums', '01', 'disable_forums', 3, '0', '');
 	$result[] = array ('forums', '10', 'hideprivateforums', 3, '0', '');
 	$result[] = array ('forums', '10', 'hottopictrigger', 2, '20', array(5,10,15,20,25,30,35,40,50));

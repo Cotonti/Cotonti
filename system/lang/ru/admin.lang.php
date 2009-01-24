@@ -4,20 +4,17 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
------------------------
-Seditio language pack
-Language : Russian (code:ru)
-Localization done by : Antar ( http://subs.com.ru/page.php?al=Seditio_ru_Lang_Pack )
------------------------
-[BEGIN_SED]
-File=system/lang/ru/admin.lang.php
-Version=125
-Updated=2007-feb-20
-Type=Lang
-Author=Neocrome
-Description=Admin panel
-[END_SED]
 ==================== */
+
+/**
+ * Russian language pack for Admin area.
+ *
+ * @package Cotonti
+ * @version 0.0.2
+ * @author Antar, Dayver, esclkm, Trustmaster and other Cotonti Team members
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 /* ====== Core ====== */
 
@@ -143,6 +140,7 @@ $L['cfg_ph_maxx'] = array('Фото, макс. ширина', 'По умолча
 $L['cfg_ph_maxy'] = array('Фото, макс. высота', 'По умолчанию: 96 пикселей');
 $L['cfg_maxrowsperpage'] = array('Максимальное кол-во строк в списках', '');
 $L['cfg_countcomments'] = array('Считать комментарии', 'Показывать общее число комментариев рядом с иконкой');
+$L['cfg_expand_comments'] = array('Раскрыть комментарии', 'Показывать комментарии раскрытыми по умолчанию');
 $L['cfg_hideprivateforums'] = array('Скрывать приватные разделы форума', '');
 $L['cfg_hottopictrigger'] = array('Сообщений в теме для присвоения ей статуса \'популярная\'', '');
 $L['cfg_maxtopicsperpage'] = array('Максимум тем или сообщений на страницу', '');
