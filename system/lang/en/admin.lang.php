@@ -4,20 +4,17 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
------------------------
-Seditio language pack
-Language : English (code:en)
-Localization done by : Neocrome
------------------------
-[BEGIN_SED]
-File=system/lang/en/admin.lang.php
-Version=120
-Updated=2007-feb-20
-Type=Lang
-Author=Neocrome
-Description=Admin panel
-[END_SED]
 ==================== */
+
+/**
+ * English language pack for Admin area.
+ *
+ * @package Cotonti
+ * @version 0.0.2
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 /* ====== Core ====== */
 
@@ -143,6 +140,7 @@ $L['cfg_ph_maxx'] = array('Photo, maximum width', 'Default: 96 pixels');
 $L['cfg_ph_maxy'] = array('Photo, maximum height', 'Default: 96 pixels');
 $L['cfg_maxrowsperpage'] = array('Maximum lines in lists', '');
 $L['cfg_countcomments'] = array('Count comments', 'Display the count of comments near the icon');
+$L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default');
 $L['cfg_hideprivateforums'] = array('Hide private forums', '');
 $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics or posts per page', '');

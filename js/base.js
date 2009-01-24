@@ -62,4 +62,18 @@ function ajaxSend(settings) {
 	return false;
 }
 
+$(document).ready(function() {
+	$('.comments_link').click(function() {
+		if($('.comments').css('display') == 'none') {
+			$('.comments').css('display', '');
+		} else {
+			$('.comments').css('display', 'none');
+		}
+	});
+
+	if(location.href.match(/#comments/)) {
+		$('.comments').css('display', '');
+	}
+});
+
 window.name = 'main';

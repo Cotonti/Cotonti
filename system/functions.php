@@ -4,20 +4,15 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=system/functions.php
-Version=125
-Updated=2008-may-26
-Type=Core
-Author=Neocrome
-Description=Functions
-[END_SED]
 ==================== */
 
 /**
- * @package Seditio-N
- * @version 0.0.1
- * @copyright Partial copyright (c) 2008 Cotonti Team
+ * Main function library.
+ *
+ * @package Cotonti
+ * @version 0.0.2
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
 
@@ -909,7 +904,8 @@ function sed_build_comments($code, $url, $display = true)
 			"COMMENTS_FORM_TEXTBOXER" => $post_main,
 			"COMMENTS_FORM_BBCODES" => $bbcodes,
 			"COMMENTS_FORM_SMILIES" => $smilies,
-			"COMMENTS_FORM_MYPFS" => $pfs
+			"COMMENTS_FORM_MYPFS" => $pfs,
+			'COMMENTS_DISPLAY' => $cfg['expand_comments'] ? '' : 'none'
 		));
 
 		if ($usr['auth_write_com'])
@@ -995,7 +991,7 @@ function sed_build_comments($code, $url, $display = true)
 		$res_display = '';
 	}
 
-	$res = "<a href=\"$url#comments\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" />";
+	$res = "<a href=\"$url#comments\" class=\"comments_link\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" />";
 
 	if ($cfg['countcomments'])
 	{
