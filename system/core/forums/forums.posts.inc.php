@@ -4,15 +4,17 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=forums.php
-Version=125
-Updated=2008-feb-27
-Type=Core
-Author=Neocrome
-Description=Forums
-[END_SED]
 ==================== */
+
+/**
+ * Forums posts display.
+ *
+ * @package Cotonti
+ * @version 0.0.2
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -64,10 +66,10 @@ elseif ($n=='unread' && !empty($q) && $usr['id']>0)
 		$fp_posterid = $row['fp_posterid'];
 	}
 }
-
-if (!empty($p))
+elseif (!empty($p))
 {
-	$sql = sed_sql_query("SELECT fp_topicid, fp_sectionid, fp_posterid FROM $db_forum_posts WHERE fp_id='$p' LIMIT 1");
+	$sql = sed_sql_query("SELECT fp_topicid, fp_sectionid, fp_posterid
+	FROM $db_forum_posts WHERE fp_id='$p' LIMIT 1");
 	if ($row = sed_sql_fetcharray($sql))
 	{
 		$q = $row['fp_topicid'];
@@ -82,6 +84,7 @@ elseif (!empty($id))
 	$sql = sed_sql_query("SELECT fp_topicid, fp_sectionid, fp_posterid FROM $db_forum_posts WHERE fp_id='$id' LIMIT 1");
 	if ($row = sed_sql_fetcharray($sql))
 	{
+		$p = $id;
 		$q = $row['fp_topicid'];
 		$s = $row['fp_sectionid'];
 		$fp_posterid = $row['fp_posterid'];
@@ -124,11 +127,6 @@ if ($row = sed_sql_fetcharray($sql))
 else
 { sed_die(); }
 
-$sql2 = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 2");
-
-while ($row2 = sed_sql_fetcharray($sql2))
-{ $post12[] = $row2['fp_id']; }
-
 if ($a=='newpost')
 {
 	sed_shield_protect();
@@ -139,7 +137,7 @@ if ($a=='newpost')
 	{
 		if ($row['ft_state'])
 		{ sed_die(); }
-	$merge = ($row['ft_lastposterid']==$usr['id']) ? TRUE : FALSE;
+		$merge = ($row['ft_lastposterid']==$usr['id']) ? TRUE : FALSE;
 	}
 	else
 	{ sed_die(); }
@@ -155,30 +153,30 @@ if ($a=='newpost')
 	if (empty($error_string) && !empty($newmsg) && !empty($s) && !empty($q))
 	{
 
-	if (!$merge)
+		if (!$merge)
 		{
-		if($cfg['parser_cache'])
-		{
-			$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
-		}
-		else
-		{
-			$rhtml = '';
-		}
+			if($cfg['parser_cache'])
+			{
+				$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+			}
+			else
+			{
+				$rhtml = '';
+			}
 
-		$sql = sed_sql_query("INSERT into $db_forum_posts
-		(fp_topicid,
-		fp_sectionid,
-		fp_posterid,
-		fp_postername,
-		fp_creation,
-		fp_updated,
-		fp_updater,
-		fp_text,
-		fp_html,
-		fp_posterip)
-		VALUES
-		(".(int)$q.",
+			$sql = sed_sql_query("INSERT into $db_forum_posts
+			(fp_topicid,
+			fp_sectionid,
+			fp_posterid,
+			fp_postername,
+			fp_creation,
+			fp_updated,
+			fp_updater,
+			fp_text,
+			fp_html,
+			fp_posterip)
+			VALUES
+			(".(int)$q.",
 			".(int)$s.",
 			".(int)$usr['id'].",
 			'".sed_sql_prep($usr['name'])."',
@@ -189,63 +187,63 @@ if ($a=='newpost')
 			'$rhtml',
 			'".$usr['ip']."')");
 
-		$sql = sed_sql_query("UPDATE $db_forum_topics SET
-		ft_postcount=ft_postcount+1,
-		ft_updated='".$sys['now_offset']."',
+			$sql = sed_sql_query("UPDATE $db_forum_topics SET
+			ft_postcount=ft_postcount+1,
+			ft_updated='".$sys['now_offset']."',
 			ft_lastposterid='".$usr['id']."',
 			ft_lastpostername='".sed_sql_prep($usr['name'])."'
-		WHERE ft_id='$q'");
+			WHERE ft_id='$q'");
 
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+1 WHERE fs_id='$s'");
-		$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+1 WHERE fs_id='$fs_masterid'") : '';
+			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+1 WHERE fs_id='$s'");
+			$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+1 WHERE fs_id='$fs_masterid'") : '';
 
-		
-		if ($fs_countposts)
-		{ $sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'"); }
 
-		/* === Hook === */
-		$extp = sed_getextplugins('forums.posts.newpost.done');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-		/* ===== */
+			if ($fs_countposts)
+			{ $sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'"); }
 
-		sed_forum_sectionsetlast($s);
-		sed_shield_update(30, "New post");
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
-		exit;
-		}
-	else
-		{
-		if($cfg['parser_cache'])
-		{
-			$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+			/* === Hook === */
+			$extp = sed_getextplugins('forums.posts.newpost.done');
+			if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
+
+			sed_forum_sectionsetlast($s);
+			sed_shield_update(30, "New post");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
+			exit;
 		}
 		else
 		{
-			$rhtml = '';
-		}
+			if($cfg['parser_cache'])
+			{
+				$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+			}
+			else
+			{
+				$rhtml = '';
+			}
 
-		$sql = sed_sql_query("SELECT fp_id, fp_text, fp_html FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
-		$row = sed_sql_fetcharray($sql);
+			$sql = sed_sql_query("SELECT fp_id, fp_text, fp_html FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
+			$row = sed_sql_fetcharray($sql);
 
-		$newmsg = sed_sql_prep($row['fp_text'])."\n\n".sed_sql_prep($newmsg);
-		$newhtml = ($cfg['parser_cache']) ? sed_sql_prep($row['fp_html'])."<br /><br />".$rhtml : '';
+			$newmsg = sed_sql_prep($row['fp_text'])."\n\n".sed_sql_prep($newmsg);
+			$newhtml = ($cfg['parser_cache']) ? sed_sql_prep($row['fp_html'])."<br /><br />".$rhtml : '';
 
-		$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) ) ? '' : $usr['name'];
+			$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) ) ? '' : $usr['name'];
 
-		$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."', fp_text='".$newmsg."', fp_html='".$newhtml."', fp_posterip='".$usr['ip']."' WHERE fp_id='".$row['fp_id']."' LIMIT 1");
-		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
+			$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."', fp_text='".$newmsg."', fp_html='".$newhtml."', fp_posterip='".$usr['ip']."' WHERE fp_id='".$row['fp_id']."' LIMIT 1");
+			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
 
-		/* === Hook === */
-		$extp = sed_getextplugins('forums.posts.newpost.done');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-		/* ===== */
+			/* === Hook === */
+			$extp = sed_getextplugins('forums.posts.newpost.done');
+			if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
 
-		sed_forum_sectionsetlast($s);
-		sed_shield_update(30, "New post");
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
-		exit;
+			sed_forum_sectionsetlast($s);
+			sed_shield_update(30, "New post");
+			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
+			exit;
 		}
 	}
 }
@@ -260,8 +258,16 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
+	$sql2 = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 2");
+
+	while ($row2 = sed_sql_fetcharray($sql2))
+	{
+		$post12[] = $row2['fp_id'];
+	}
 	if ($post12[0]==$p && $post12[1]>0)
-	{ sed_die(); }
+	{
+		sed_die();
+	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' AND fp_topicid='$q' AND fp_sectionid='$s'");
 
@@ -304,9 +310,9 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 			if ($ft_poll>0)
 			{
-			$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$ft_poll'");
-			$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$ft_poll'");
-			$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$ft_poll'");
+				$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$ft_poll'");
+				$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$ft_poll'");
+				$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$ft_poll'");
 			}
 
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET
@@ -315,15 +321,15 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			fs_postcount=fs_postcount-1,
 			fs_postcount_pruned=fs_postcount_pruned+1
 			WHERE fs_id='$s'");
-			
+
 			if ($fs_masterid>0)
 			{
-			$sql = sed_sql_query("UPDATE $db_forum_sections SET
-			fs_topiccount=fs_topiccount-1,
-			fs_topiccount_pruned=fs_topiccount_pruned+1,
-			fs_postcount=fs_postcount-1,
-			fs_postcount_pruned=fs_postcount_pruned+1
-			WHERE fs_id='$fs_masterid'");
+				$sql = sed_sql_query("UPDATE $db_forum_sections SET
+				fs_topiccount=fs_topiccount-1,
+				fs_topiccount_pruned=fs_topiccount_pruned+1,
+				fs_postcount=fs_postcount-1,
+				fs_postcount_pruned=fs_postcount_pruned+1
+				WHERE fs_id='$fs_masterid'");
 			}
 
 			/* === Hook === */
@@ -351,8 +357,8 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET
 			ft_postcount=ft_postcount-1,
 			ft_lastposterid='".(int)$row['fp_posterid']."',
-				ft_lastpostername='".sed_sql_prep($row['fp_postername'])."',
-				ft_updated='".(int)$row['fp_updated']."'
+			ft_lastpostername='".sed_sql_prep($row['fp_postername'])."',
+			ft_updated='".(int)$row['fp_updated']."'
 			WHERE ft_id='$q'");
 
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET
@@ -362,10 +368,10 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			
 			if ($fs_masterid>0)
 			{
-			$sql = sed_sql_query("UPDATE $db_forum_sections SET
-			fs_postcount=fs_postcount-1,
-			fs_postcount_pruned=fs_postcount_pruned+1
-			WHERE fs_id='$fs_masterid'");
+				$sql = sed_sql_query("UPDATE $db_forum_sections SET
+				fs_postcount=fs_postcount-1,
+				fs_postcount_pruned=fs_postcount_pruned+1
+				WHERE fs_id='$fs_masterid'");
 			}
 			
 			sed_forum_sectionsetlast($s);
@@ -408,8 +414,8 @@ $totalposts = sed_sql_result($sql,0,"COUNT(*)");
 
 if (!empty($p))
 {
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$q' and fp_id<'$p'");
-	$postsbefore = sed_sql_result($sql,0,"COUNT(*)");
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid = $q and fp_id < $p");
+	$postsbefore = sed_sql_result($sql, 0, 0);
 	$d = $cfg['maxtopicsperpage'] * floor($postsbefore / $cfg['maxtopicsperpage']);
 }
 
@@ -420,24 +426,24 @@ if ($usr['id']>0)
 { $morejavascript .= sed_build_addtxt('newpost', 'newmsg'); }
 
 if (!empty($id))
-	{
-$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
-u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
-u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
-u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
-FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
-WHERE fp_topicid='$q' AND fp_id='$id' ");
-	}
+{
+	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
+	u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
+	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
+	u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
+	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
+	WHERE fp_topicid='$q' AND fp_id='$id' ");
+}
 else
-	{
-$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
-u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
-u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
-u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
-FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
-WHERE fp_topicid='$q'
-ORDER BY fp_id LIMIT $d, ".$cfg['maxtopicsperpage']);
-	}
+{
+	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
+	u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
+	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
+	u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
+	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
+	WHERE fp_topicid='$q'
+	ORDER BY fp_id LIMIT $d, ".$cfg['maxtopicsperpage']);
+}
 
 $sys['sublocation'] = $fs_title;
 $title_tags[] = array('{FORUM}', '{TITLE}');
@@ -460,7 +466,7 @@ if (!$cfg['disable_polls'] && $ft_poll>0)
 {
 	require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
 	sed_poll_vote();
-list($polltitle, $poll_form)=sed_poll_form($ft_poll, sed_url('forums', "m=posts&q=".$q));
+	list($polltitle, $poll_form)=sed_poll_form($ft_poll, sed_url('forums', "m=posts&q=".$q));
 	$t->assign(array(
 		"POLLS_TITLE" => $polltitle,
 		"POLLS_FORM" => $poll_form,
@@ -502,19 +508,19 @@ while ($row1 = sed_sql_fetcharray($sql1))
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
 	{
 
-	if ( ($ft_poll>0 && $row1['fs_allowpolls']) || ($ft_poll==0) )
-	{
+		if ( ($ft_poll>0 && $row1['fs_allowpolls']) || ($ft_poll==0) )
+		{
 
-		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
+			$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
 
-		$cfs = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
+			$cfs = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
 
-		if ($row1['fs_id'] != $s && $usr['isadmin'])
-		{ $movebox .= "<option value=\"".$row1['fs_id']."\">".$cfs."</option>"; }
-		$selected = ($row1['fs_id']==$s) ? "selected=\"selected\"" : '';
-		$jumpbox .= "<option $selected value=\"".sed_url('forums', "m=topics&s=".$row1['fs_id'])."\">".$cfs."</option>";
+			if ($row1['fs_id'] != $s && $usr['isadmin'])
+			{ $movebox .= "<option value=\"".$row1['fs_id']."\">".$cfs."</option>"; }
+			$selected = ($row1['fs_id']==$s) ? "selected=\"selected\"" : '';
+			$jumpbox .= "<option $selected value=\"".sed_url('forums', "m=topics&s=".$row1['fs_id'])."\">".$cfs."</option>";
 
-	}
+		}
 
 	}
 }
