@@ -302,7 +302,10 @@ else
 {
 	$t->parse('MAIN.PAGE_FILE.DOWNLOAD');
 }
-$t->parse("MAIN.PAGE_FILE");
+if(!empty($pag['page_url']))
+{
+	$t->parse("MAIN.PAGE_FILE");
+}
 $t->parse("MAIN");
 $t->out("MAIN");
 
