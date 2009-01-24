@@ -374,6 +374,7 @@ $toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(
+	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
 	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
 	"FORUMS_TOPICS_NEWTOPICURL" => sed_url('forums', "m=newtopic&s=".$s),
