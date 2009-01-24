@@ -1,6 +1,8 @@
 <!-- BEGIN: MAIN -->
 
-	<div class="mboxHD">{FORUMS_SECTIONS_PAGETITLE}</div>
+	<div class="mboxHD"><div class="rss-icon-title">
+	<a href="rss.php?c=allforums"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+	</div>{FORUMS_SECTIONS_PAGETITLE}</div>
 	<div class="mboxBody">
 		
 		

@@ -1032,5 +1032,7 @@ $sed_translitb = array_flip($sed_translit);
 $L['rss_comments_item_desc'] = 'Лента комментариев страницы';
 $L['rss_comment'] = 'Коммент от';
 $L['rss_original'] = 'Комментируемая страница';
+$L['rss_topic_item_desc'] = 'Последние сообщения топика';
+$L['rss_allforums_item_title'] = "Последние сообщения на форуме"; 
 
 ?>

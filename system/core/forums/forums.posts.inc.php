@@ -548,6 +548,7 @@ $toptitle .= " ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&q=".
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(
+	"FORUMS_POSTS_ID" => $q,
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
 	"FORUMS_POSTS_TOPICDESC" => sed_cc($ft_desc),
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
