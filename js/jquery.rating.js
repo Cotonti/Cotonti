@@ -14,6 +14,8 @@
 	It thansform a set of radio type input elements to star rating type and remain the radio element name and value,
 	so could be integrated with your form. It acts as a normal radio button.
 	modified by : Logan Cai (cailongqun[at]yahoo.com.cn)
+
+	Modified by Trustmaster for use in Cotonti (http://www.cotonti.com)
 */
 
 /*# AVOID COLLISIONS #*/
