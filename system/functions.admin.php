@@ -345,6 +345,7 @@ function sed_loadconfigmap()
 	$result[] = array ('polls', '03', 'max_options_polls', 1, '100', ''); // N-0.0.2
 	$result[] = array ('polls', '04', 'del_dup_options', 3, '0', ''); // N-0.0.2
 	$result[] = array ('ratings', '01', 'disable_ratings', 3, '0', '');
+	$result[] = array ('ratings', '02', 'ratings_allowchange', 3, '0', ''); // N-0.0.2
 	$result[] = array ('trash', '01', 'trash_prunedelay', 2, '7', array(0,1,2,3,4,5,7,10,15,20,30,45,60,90,120));
 	$result[] = array ('trash', '10', 'trash_comment', 3, '1', '');
 	$result[] = array ('trash', '11', 'trash_forum', 3, '1', '');

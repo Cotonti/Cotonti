@@ -232,6 +232,7 @@ $L['cfg_max_options_polls'] = array('Max number of options', 'Options above this
 $L['cfg_del_dup_options'] = array('Force duplicate option removal', ' Remove duplicate options even if it is already in the database'); // N-0.0.2
 $L['cfg_disable_pm'] = array('Disable the private messages', '');
 $L['cfg_disable_ratings'] = array('Disable the ratings', '');
+$L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enabled it will allow users to change their rating.'); // N-0.0.2
 $L['cfg_disable_page'] = array('Disable the pages', '');
 $L['cfg_disable_plug'] = array('Disable the plugins', '');
 $L['cfg_trash_prunedelay'] = array('Remove the items from the trash can after * days (Zero to keep forever)', ''); 	// New in v110

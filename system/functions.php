@@ -1302,32 +1302,44 @@ function sed_build_ratings($code, $url, $display)
 		$rating_average = 0;
 		$rating_cntround = 0;
 	}
-
-
+	unset($rating_fancy);
+	for($i = 1; $i <= 10; $i++)
+	{
+		$checked = $i == $rating_cntround ? 'checked="checked"' : '';
+		$star_class = ($i <= $rating_cntround) ? 'star star_group_newrate star_readonly star_on' : 'star star_group_newrate star_readonly';
+		$star_margin = (in_array(($i/2), array(1,2,3,4,5))) ? '-8' : '0';
+		$rating_fancy .= '<div style="width: 8px;" class="'.$star_class.'"><a style="margin-left: '.$star_margin.'px;" value="'.$i.'" title="'.$L['rat_choice' . $i].'">&nbsp;</a></div>';
+	}
 	if(!$display)
 	{
-		return array('<img src="skins/'.$usr['skin'].'/img/system/vote'.$rating_cntround.'.gif" alt="'.$rating_cntround.'" />', '');
+		return array($rating_fancy, '');
 	}
-
+	if($_GET['ajax'])
+	{
+		ob_clean();
+		echo json_encode($rating_fancy);
+		ob_flush();
+		exit;
+	}
 	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
 
 	$t = new XTemplate(sed_skinfile('ratings'));
-
-	if(!$callled)
-	{
-		// Link JS and CSS
-		$t->parse('RATINGS.RATINGS_INCLUDES');
-		$called = true;
-	}
 
 	$inr = sed_import('inr','G','ALP');
 	$newrate = sed_import('newrate','P','INT');
 	
 	$newrate = (!empty($newrate)) ? $newrate : 0;
 
-	//$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
+	if(!$cfg['ratings_allowchange'])
+	{
+		$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
+	}
+	else
+	{
+		$alr_rated = 0;
+	}
 
-	if ($inr=='send' && $newrate>=0 && $newrate<=10 && $usr['auth_write_rat'] /*&& $alr_rated<=0*/)
+	if ($inr=='send' && $newrate>=0 && $newrate<=10 && $usr['auth_write_rat'] && $alr_rated<=0)
 	{
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.first');
@@ -1359,7 +1371,7 @@ function sed_build_ratings($code, $url, $display)
 		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		//header('Location: ' . SED_ABSOLUTE_URL . $url);
+		header('Location: ' . SED_ABSOLUTE_URL . $url);
 		exit;
 	}
 
@@ -1369,12 +1381,17 @@ function sed_build_ratings($code, $url, $display)
 
 		if ($row1 = sed_sql_fetcharray($sql1))
 		{
-			//$alreadyvoted = TRUE;
-			$alreadyvoted = FALSE;
+			$alreadyvoted = ($cfg['ratings_allowchange']) ? FALSE : TRUE;
 			$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
 		}
 	}
-
+	if(!$callled && $usr['id']>0 && !$alreadyvoted)
+	{
+		// Link JS and CSS
+		$t->assign('RATINGS_AJAX_REQUEST', $url.'&ajax=true');
+		$t->parse('RATINGS.RATINGS_INCLUDES');
+		$called = true;
+	}
 	/* == Hook for the plugins == */
 	$extp = sed_getextplugins('ratings.main');
 	if (is_array($extp))
@@ -1407,9 +1424,12 @@ function sed_build_ratings($code, $url, $display)
 
 	$t->assign(array(
 	"RATINGS_AVERAGE" => $rating_average,
+	"RATINGS_RATING" => $rating,
 	"RATINGS_AVERAGEIMG" => $rating_averageimg,
 	"RATINGS_VOTERS" => $rating_voters,
-	"RATINGS_SINCE" => $rating_since
+	"RATINGS_SINCE" => $rating_since,
+	"RATINGS_FANCYIMG" => $rating_fancy,
+	"RATINGS_USERVOTE" => $rating_uservote
 	));
 
 	/* == Hook for the plugins == */
@@ -1418,8 +1438,7 @@ function sed_build_ratings($code, $url, $display)
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$disabled = ($usr['id']>0 && !$alreadyvoted) ? '' : 'disabled="disabled"';
-
+	$vote_block = ($usr['id']>0 && !$alreadyvoted) ? 'NOTVOTED.' : 'VOTED.';
 	for($i = 1; $i <= 10; $i++)
 	{
 		$checked = $i == $rating_cntround ? 'checked="checked"' : '';
@@ -1427,19 +1446,18 @@ function sed_build_ratings($code, $url, $display)
 			'RATINGS_ROW_VALUE' => $i,
 			'RATINGS_ROW_TITLE' => $L['rat_choice' . $i],
 			'RATINGS_ROW_CHECKED' => $checked,
-			'RATINGS_ROW_DISABLED' => $disabled,
 		));
-		$t->parse('RATINGS.RATINGS_ROW');
+		$t->parse('RATINGS.'.$vote_block.'RATINGS_ROW');
 	}
-
-	if ($usr['id']>0 && !$alreadyvoted)
+	if($vote_block == 'NOTVOTED.')
 	{
-		$t->assign(array(
-			"RATINGS_FORM_SEND" => $url . $sep . 'inr=send'
-		));
-		$t->parse('RATINGS.RATINGS_SUBMIT');
+		$t->assign("RATINGS_FORM_SEND", $url . $sep . 'inr=send');
+		$t->parse('RATINGS.NOTVOTED');
 	}
-
+	else
+	{
+		$t->parse('RATINGS.VOTED');
+	}
 	$t->parse('RATINGS');
 	$res = $t->text('RATINGS');
 

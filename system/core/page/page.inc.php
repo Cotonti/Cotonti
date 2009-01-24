@@ -192,8 +192,6 @@ if ($usr['isadmin'])
 			"PAGE_ADMIN_UNVALIDATE" => $validation,
 			"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>"
 			));
-
-			$t->parse("MAIN.PAGE_ADMIN");
 }
 
 if ($pag['page_begin_noformat']>$sys['now_offset'])
@@ -277,30 +275,34 @@ if($pag['page_file'] > 0)
 		}
 		else
 		{
-			$t->assign('PAGE_FILE_URL', sed_url('page', "id=".$pag['page_id']."&a=dl"));
+			$t->assign(array(
+				'PAGE_SHORTTITLE' => $pag['page_title'],
+				'PAGE_FILE_URL' => sed_url('page', "id=".$pag['page_id']."&a=dl")
+				));
 		}
-		
-		/* === Hook === */
-		$extp = sed_getextplugins('page.download.tags');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-		/* ===== */
-		
-		$t->parse("MAIN.PAGE_FILE");
-		$t->assign('PAGE_SHORTTITLE', $pag['page_title']);
 
 	}
 
 }
-
-
 
 /* === Hook === */
 $extp = sed_getextplugins('page.tags');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
-
+if($usr['isadmin'])
+{
+	$t->parse("MAIN.PAGE_ADMIN");
+}
+if($pag['page_file'] === 2 && $usr['id'] == 0 || !$usr['auth_download'])
+{
+	$t->parse('MAIN.PAGE_FILE.MEMBERSONLY');
+}
+else
+{
+	$t->parse('MAIN.PAGE_FILE.DOWNLOAD');
+}
+$t->parse("MAIN.PAGE_FILE");
 $t->parse("MAIN");
 $t->out("MAIN");
 

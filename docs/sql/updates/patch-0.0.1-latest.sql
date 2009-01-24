@@ -174,3 +174,6 @@ UPDATE sed_polls SET poll_type = 'forum' WHERE poll_type = '1';
 
 /* r423 comments expand by default option */
 INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'comments', '03', 'expand_comments', 3, '1');
+
+/* r428 ratings allow rating change */
+INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'ratings', '02', 'ratings_allowchange', 3, '0');
