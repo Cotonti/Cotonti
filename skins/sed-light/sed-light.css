@@ -176,14 +176,14 @@ textarea { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; paddi
 
 /* ============== Indexpolls ============== */
 
-.loading { background: url('img/system/spinner_bigger.gif') no-repeat center center;}
+.loading { position:relative; left:45%; top:-50px; z-index:99; }
 
 .rss-icon-title{
 	margin: 10px 10px 0 5px;
 	float: right;
 }
 .rss-icon{
-	margin: 0px 5px 0px 5px;	
+	margin: 0px 5px 0px 5px;
 }
 
 /* ============== Tag Cloud Fixes ============== */

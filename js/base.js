@@ -48,10 +48,10 @@ function ajaxSend(settings) {
 		url: url,
 		data: data,
 		beforeSend: function() {
-			$('#' + settings.divId).addClass('loading');
+			$('#' + settings.divId).append('<div class="loading" id="loading"><img src="images/spinner_bigger.gif" alt="loading"/></div>');
 		},
 		success: function(msg) {
-			$('#' + settings.divId).removeClass('loading');
+			$('#loading').remove();
 			$('#' + settings.divId).html(msg).hide().stop().fadeIn('slow');
 		},
 		error: function(msg) {
