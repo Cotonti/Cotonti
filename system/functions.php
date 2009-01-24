@@ -1322,35 +1322,44 @@ function sed_build_ratings($code, $url, $display)
 
 	$inr = sed_import('inr','G','ALP');
 	$newrate = sed_import('newrate','P','INT');
+	
+	$newrate = (!empty($newrate)) ? $newrate : 0;
 
-	$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
+	//$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
 
-	if ($inr=='send' && $newrate>=1 && $newrate<=10 && $usr['auth_write_rat'] && $alr_rated<=0)
+	if ($inr=='send' && $newrate>=0 && $newrate<=10 && $usr['auth_write_rat'] /*&& $alr_rated<=0*/)
 	{
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.first');
 		if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
+		
+		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' ");
 
 		if (!$yetrated)
 		{
 			$sql = sed_sql_query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('".sed_sql_prep($code)."', 0, ".(int)$newrate.", ".(int)$sys['now_offset'].", '') ");
 		}
 
-		$sql = sed_sql_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".sed_sql_prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")");
+		$sql = ($newrate) ? sed_sql_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".sed_sql_prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")") : '';
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
 		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
-		$ratingnewaverage = ($rating_average * ($rating_voters - 1) + $newrate) / ( $rating_voters );
-		$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
-
+		if ($rating_voters>0)
+			{
+			$ratingnewaverage = ($rating_average * ($rating_voters - 1) + $newrate) / ( $rating_voters );
+			$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
+			}
+		else
+			{ $sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$code' "); }
+			
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.done');
 		if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		header('Location: ' . SED_ABSOLUTE_URL . $url);
+		//header('Location: ' . SED_ABSOLUTE_URL . $url);
 		exit;
 	}
 
@@ -1360,7 +1369,8 @@ function sed_build_ratings($code, $url, $display)
 
 		if ($row1 = sed_sql_fetcharray($sql1))
 		{
-			$alreadyvoted = TRUE;
+			//$alreadyvoted = TRUE;
+			$alreadyvoted = FALSE;
 			$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
 		}
 	}

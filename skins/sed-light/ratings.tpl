@@ -6,12 +6,10 @@
 	<script type="text/javascript">
 	$(function() {
 		$('.rstar').rating({
-			required: true,
-			split: 2,
-			showDigits: false,
+			half: true,
 			callback: function(value, link) {
 				var val = link.getAttribute('value');
-				if(val != '') {
+				//if(val != '') {
 					ajaxSend({
 						method: 'POST',
 						formId: 'newrating',
@@ -20,7 +18,7 @@
 					});
 					$('.rating *').unbind();
 					$(this).unbind();
-				}
+				//}
 			}
 		});
 	});
