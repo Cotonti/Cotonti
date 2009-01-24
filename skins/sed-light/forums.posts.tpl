@@ -1,6 +1,9 @@
 <!-- BEGIN: MAIN -->
 
-	<div class="mboxHD">{FORUMS_POSTS_PAGETITLE}</div>
+	<div class="mboxHD">
+	<div class="rss-icon-title">
+	<a href="rss.php?c=topic{FORUMS_POSTS_ID}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+	</div>{FORUMS_POSTS_PAGETITLE}</div>
 	<div class="mboxBody">
 
 		<div style="float:right;">{FORUMS_POSTS_JUMPBOX}</div>
@@ -57,7 +60,7 @@
 			<tr>
 				<td style="padding:8px; height:100%;" class="{FORUMS_POSTS_ROW_ODDEVEN}">
 
-				<div class="fmsg" style="width:550px; overflow-x:auto; overflow-y:visible; margin-bottom:8px;">
+				<div class="fmsg" style="width:550px; overflow-x:auto; overflow-y:visible; margin-bottom:8px;" curpos="0" maxpos="0" pageincrement="440" increment="10" disabled="true" collapsed="true">
 					{FORUMS_POSTS_ROW_TEXT}
 				</div>
 

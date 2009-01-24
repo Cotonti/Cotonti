@@ -953,6 +953,6 @@ $sed_countries = array (
 $L['rss_comments_item_desc'] = 'Last comments on page';
 $L['rss_comment'] = 'Comment from';
 $L['rss_original'] = 'Original message';
-
-
+$L['rss_topic_item_desc'] = 'Last posts in topic';
+$L['rss_allforums_item_title'] = "Last posts on forum"; 
 ?>
