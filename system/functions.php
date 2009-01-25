@@ -3787,6 +3787,14 @@ function sed_skinfile($base, $plug = false)
 		{
 			return $skinfile;
 		}
+		if($cfg['enablecustomhf'] && ($base[0] == 'header' || $base[0] == 'footer'))
+		{
+			$skinfile = 'skins/'.$usr['skin'].'/'.$base[0].'.tpl';
+			if(file_exists($skinfile))
+			{
+				return $skinfile;
+			}
+		}
 		$skinfile = 'skins/'.$cfg['defaultskin'].'/'.implode('.', $levels).'.tpl';
 		if(file_exists($skinfile))
 		{
