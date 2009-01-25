@@ -38,12 +38,12 @@ if($cfg['plugin']['tags']['forums'])
 			$tc_html .= ' <a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.$tag_t.'</a>,';
 		}
 		$tc_html = mb_substr($tc_html, 0, -1);
+		$t->assign('FORUMS_TOPICS_ROW_TAGS', $tc_html);
 	}
 	else
 	{
-		$tc_html = $L['tags_Tag_cloud_none'];
+		//$tc_html = $L['tags_Tag_cloud_none'];
 	}
-	$t->assign('FORUMS_TOPICS_ROW_TAGS', $tc_html);
 }
 
 // TODO tag cloud with subforums support

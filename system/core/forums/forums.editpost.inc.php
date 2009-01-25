@@ -96,8 +96,8 @@ if ($row = sed_sql_fetcharray($sql))
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=603", '', true));
 		exit;
 	}
-	$ft_title = sed_cc($row['ft_title']);
-	$ft_desc = sed_cc($row['ft_desc']);
+	$ft_title = $row['ft_title'];
+	$ft_desc = $row['ft_desc'];
 	$ft_fulltitle = ($row['ft_mode']==1) ? "# ".$ft_title : $ft_title;
 	$sys['sublocation'] = 'q'.$q;
 }
@@ -193,7 +193,7 @@ $post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.sed_cc
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
-$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." </a> <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".$ft_fulltitle."</a> ";
+$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." </a> <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".sed_cc($ft_fulltitle)."</a> ";
 $toptitle .= $cfg['separator']." <a href=\"".sed_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
