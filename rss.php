@@ -108,7 +108,8 @@ if (strpos($c, "comments")!==false)
 		$text = sed_parse(sed_cc($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
 		$text = sed_post_parse($text, 'pages');
 		$items[$i]['description'] = $text;
-		$items[$i]['link'] = $cfg['mainurl'].sed_url('pages', "id=$page_id#c".$row['com_id'], '', true);
+		//$items[$i]['link'] = $cfg['mainurl'].sed_url('pages', "id=$page_id#c".$row['com_id'], '', true);
+		$items[$i]['link'] = $cfg['mainurl']."/page.php?id=$page_id#c".$row['com_id'];
 		$items[$i]['pubDate'] = date('r', $row['com_date']);
 		$i++;
 	}
@@ -116,8 +117,10 @@ if (strpos($c, "comments")!==false)
 	$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
 	$row = mysql_fetch_assoc($sql);
 	$items[$i]['title'] = $L['rss_original'];
-	$items[$i]['description'] = sed_parse_page_text($row['page_text']);
-	$items[$i]['link'] = $cfg['mainurl'].sed_url('pages', "id=$page_id", '', true);
+	//$items[$i]['description'] = sed_parse_page_text($row['page_text']);
+	$items[$i]['description'] = $row['page_html'];
+	//$items[$i]['link'] = $cfg['mainurl'].sed_url('pages', "id=$page_id", '', true);
+	$items[$i]['link'] = $cfg['mainurl']."/page.php?id=$page_id";
 	$items[$i]['pubDate'] = date('r', $row['page_date']);
 
 }elseif (strpos($c, "topic")!==false)
@@ -155,7 +158,8 @@ if (strpos($c, "comments")!==false)
 		$post_id = $row['fp_id'];
 		$items[$i]['title'] = $row['fp_postername'];
 		$items[$i]['description'] = $row['fp_html'];
-		$items[$i]['link'] = $cfg['mainurl'].sed_url('forums', "m=posts&q=$post_id&n=last#bottom", '', true);
+		//$items[$i]['link'] = $cfg['mainurl'].sed_url('forums', "m=posts&q=$post_id&n=last#bottom", '', true);
+		$items[$i]['link'] = $cfg['mainurl']."/forums.php?m=posts&id=$post_id";
 		$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 		$i++;
 	}
@@ -211,7 +215,8 @@ if (strpos($c, "comments")!==false)
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 			$items[$i]['description'] = $row['fp_html'];
-			$items[$i]['link'] = $cfg['mainurl'].sed_url('forums', "m=posts&q=$post_id&n=last#bottom", '', true);
+			//$items[$i]['link'] = $cfg['mainurl'].sed_url('forums', "m=posts&q=$post_id&n=last#bottom", '', true);
+			$items[$i]['link'] = $cfg['mainurl']."/forums.php?m=posts&id=$post_id";
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 		}
 		$i++;
@@ -251,7 +256,8 @@ if (strpos($c, "comments")!==false)
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 			$items[$i]['description'] = $row['fp_html'];
-			$items[$i]['link'] = $cfg['mainurl'].sed_url('forums', "m=posts&q=$post_id&n=last#bottom", '', true);
+			//$items[$i]['link'] = $cfg['mainurl'].sed_url('forums', "m=posts&q=$post_id&n=last#bottom", '', true);
+			$items[$i]['link'] = $cfg['mainurl']."/forums.php?m=posts&id=$post_id";
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 		}
 		$i++;
@@ -287,7 +293,8 @@ if (strpos($c, "comments")!==false)
 	while($pag = mysql_fetch_assoc($res))
 	{
 		$items[$i]['title'] = $pag['page_title'];
-		$items[$i]['link'] = $cfg['mainurl'].sed_url('pages', "id=".$pag['page_id'], '', true);
+		//$items[$i]['link'] = $cfg['mainurl'].sed_url('page', "id=".$pag['page_id'], '', true);
+		$items[$i]['link'] = $cfg['mainurl']."/page.php?id=".$pag['page_id'];
 		$items[$i]['pubDate'] = date('r', $pag['page_date']);
 		$items[$i]['description'] = sed_parse_page_text($pag);
 		$i++;
