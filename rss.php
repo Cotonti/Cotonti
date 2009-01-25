@@ -55,7 +55,8 @@ while($row = sed_sql_fetcharray($sql_config))
 sed_bbcode_load();
 
 $c = sed_import('c', 'G', 'ALP');
-if ($c=="")	$c = "news";
+if ($c=="")
+	$c = "news";
 
 header('Content-type: text/xml');
 $sys['now'] = time();
@@ -74,11 +75,15 @@ $rss_description = $cfg['subtitle'];
 $parseurl = parse_url($cfg['mainurl']);
 $domain = $parseurl['host'];
 
-
 /* === Hook === */
 $extp = sed_getextplugins('rss');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach($extp as $k=>$pl)
+	{
+		include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if (strpos($c, "comments")!==false)
@@ -115,8 +120,7 @@ if (strpos($c, "comments")!==false)
 	$items[$i]['link'] = $cfg['mainurl'].sed_url('pages', "id=$page_id", '', true);
 	$items[$i]['pubDate'] = date('r', $row['page_date']);
 
-}
-elseif (strpos($c, "topic")!==false)
+}elseif (strpos($c, "topic")!==false)
 {
 	
 	// == All posts of topic == 
@@ -156,14 +160,14 @@ elseif (strpos($c, "topic")!==false)
 		$i++;
 	}
 
-}
-elseif (strpos($c, "section")!==false)
+}elseif (strpos($c, "section")!==false)
 {
 	// == All posts of section ==
 	$forum_id = intval(str_replace("section", "", $c));
 	
 	$sql = "SELECT * FROM $db_forum_sections WHERE fs_id = '$forum_id'";
-	$res = sed_sql_query($sql); $row = mysql_fetch_assoc($res); 
+	$res = sed_sql_query($sql);
+	$row = mysql_fetch_assoc($res);
 	$section_title = $row['fs_title'];
 	$section_desc = $row['fs_desc'];
 	
@@ -174,32 +178,34 @@ elseif (strpos($c, "section")!==false)
 	// get subsections
 	unset($subsections);
 	$sql = "SELECT fs_id FROM $db_forum_sections WHERE fs_mastername = '$section_title'";
-	$res = sed_sql_query($sql); 
+	$res = sed_sql_query($sql);
 	while($row = mysql_fetch_assoc($res))
 	{
-		 $where .= " OR fp_sectionid ='{$row['fs_id']}'"; 
+		$where .= " OR fp_sectionid ='{$row['fs_id']}'";
 	}
-		
+	
 	$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT $cfg_maxitems ";
 	$res = sed_sql_query($sql);
 	$i = 0;
 	
-while($row = mysql_fetch_assoc($res))
+	while($row = mysql_fetch_assoc($res))
 	{
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
-				
+		
 		$flag_private = 0;
 		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
 		$res2 = sed_sql_query($sql);
 		$row2 = mysql_fetch_assoc($res2);
 		$topic_title = $row2['ft_title'];
-		if ($row2['ft_mode']=='1') $flag_private = 1;
+		if ($row2['ft_mode']=='1')
+			$flag_private = 1;
 		
 		$sql = "SELECT auth_rights FROM $db_auth WHERE auth_code='forums' AND auth_groupid='1' AND auth_option='$forum_id'";
 		$res2 = sed_sql_query($sql);
 		$row2 = mysql_fetch_assoc($res2);
-		if ($row2['auth_rights']=='0') $flag_private = 1;
+		if ($row2['auth_rights']=='0')
+			$flag_private = 1;
 		
 		if (!$flag_private)
 		{
@@ -210,9 +216,8 @@ while($row = mysql_fetch_assoc($res))
 		}
 		$i++;
 	}
-	
-}
-elseif (strpos($c, "forum")!==false)
+
+}elseif (strpos($c, "forum")!==false)
 {
 	// == All posts on forums ==
 	$rss_title = $domain." : ".$L['rss_allforums_item_title'];
@@ -252,8 +257,7 @@ elseif (strpos($c, "forum")!==false)
 		$i++;
 	}
 
-}
-else
+}else
 {
 	
 	// == Category rss ==
@@ -299,14 +303,17 @@ $out .= "<link>".$rss_link."</link>\n";
 $out .= "<description>".$rss_description."</description>\n";
 $out .= "<generator>Cotonti CMS</generator>\n";
 $out .= "<pubDate>".date("r", time())."</pubDate>\n";
-foreach($items as $item)
+if (count($items)>0)
 {
-	$out .= "<item>\n";
-	$out .= "<title>".htmlspecialchars($item['title'])."</title>\n";
-	$out .= "<description><![CDATA[".$item['description']."]]></description>\n";
-	$out .= "<pubDate>".$item['pubDate']."</pubDate>\n";
-	$out .= "<link>".htmlspecialchars($item['link'])."</link>\n";
-	$out .= "</item>\n";
+	foreach($items as $item)
+	{
+		$out .= "<item>\n";
+		$out .= "<title>".htmlspecialchars($item['title'])."</title>\n";
+		$out .= "<description><![CDATA[".$item['description']."]]></description>\n";
+		$out .= "<pubDate>".$item['pubDate']."</pubDate>\n";
+		$out .= "<link>".htmlspecialchars($item['link'])."</link>\n";
+		$out .= "</item>\n";
+	}
 }
 $out .= "</channel>\n";
 $out .= "</rss>";
