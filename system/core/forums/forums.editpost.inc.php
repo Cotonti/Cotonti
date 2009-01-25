@@ -175,7 +175,8 @@ if ($row = sed_sql_fetcharray($sql))
 	{
 		 if($fp_idp==$p)
 		 {
-		 	$edittopictitle = $L['Topic'].": <input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"64\" /><br />".$L['Description'].": <input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"64\" /><br />";
+		 	$edittopictitle = "<input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"64\" />";
+		 	$topicdescription ="<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"64\" />";
 		 	$is_first_post = true;
 		 }
 	}
@@ -218,14 +219,22 @@ if (!empty($error_string))
 	$t->assign("FORUMS_POSTS_EDITPOST_ERROR_BODY",$error_string);
 	$t->parse("MAIN.FORUMS_EDITPOST_ERROR");
 }
+if ($is_first_post)
+{
+$t->assign(array(
+	"FORUMS_EDITPOST_TOPICTITTLE" => $edittopictitle,
+	"FORUMS_EDITPOST_TOPICDESCRIPTION" => $topicdescription,
+));
+	$t->parse("MAIN.FORUMS_EDITPOST_FIRSTPOST");
+}
 
 $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
 	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"FORUMS_EDITPOST_SEND" => sed_url('forums', "m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".sed_xg()),
-	"FORUMS_EDITPOST_TEXT" => $edittopictitle.$post_main."<br />".$bbcodes." ".$smilies." ".$pfs,
-	"FORUMS_EDITPOST_TEXTONLY" => $edittopictitle.$post_main,
-	"FORUMS_EDITPOST_TEXTBOXER" => $edittopictitle.$post_main."<br />".$smilies." ".$pfs,
+	"FORUMS_EDITPOST_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs,
+	"FORUMS_EDITPOST_TEXTONLY" => $post_main,
+	"FORUMS_EDITPOST_TEXTBOXER" => $post_main."<br />".$smilies." ".$pfs,
 	"FORUMS_EDITPOST_SMILIES" => $smilies,
 	"FORUMS_EDITPOST_BBCODES" => $bbcodes,
 	"FORUMS_EDITPOST_MYPFS" => $pfs,

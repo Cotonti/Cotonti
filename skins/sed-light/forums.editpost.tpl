@@ -13,7 +13,12 @@
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<tr>
-					<td><div style="width:100%;">{FORUMS_EDITPOST_TEXTBOXER}</div></td>
+					<td><div style="width:100%;">
+<!-- BEGIN: FORUMS_EDITPOST_FIRSTPOST -->
+{PHP.L.Topic}: {FORUMS_EDITPOST_TOPICTITTLE}<br/>
+{PHP.L.Description}: {FORUMS_EDITPOST_TOPICDESCRIPTION}<br />
+<!-- END: FORUMS_EDITPOST_FIRSTPOST -->
+{FORUMS_EDITPOST_TEXTBOXER}</div></td>
 				</tr>
 				<!-- BEGIN: FORUMS_EDITPOST_TAGS -->
 				<tr>
