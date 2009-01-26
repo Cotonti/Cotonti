@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 
 	<div class="mboxHD"><div class="rss-icon-title">
-	<a href="rss.php?c=section{FORUMS_TOPICS_PARENT_SECTION_ID}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+	<a href="{FORUMS_TOPICS_SECTION_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
 	</div>{FORUMS_TOPICS_PAGETITLE}</div>
 	<div class="mboxBody">
 		

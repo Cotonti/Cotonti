@@ -555,6 +555,7 @@ $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(
 	"FORUMS_POSTS_ID" => $q,
+	"FORUMS_POSTS_RSS" => sed_url("rss", "c=topic&id=$q", "", true),
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
 	"FORUMS_POSTS_TOPICDESC" => sed_cc($ft_desc),
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
@@ -638,6 +639,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_UPDATER" => sed_cc($row['fp_updater']),
 		"FORUMS_POSTS_ROW_UPDATEDBY" => $row['fp_updatedby'],
 		"FORUMS_POSTS_ROW_TEXT" => $row['fp_text'],
+		"FORUMS_POSTS_ROW_ANCHORLINK" => "<a name=\"post{$row['fp_id']}\" id=\"post{$row['fp_id']}\"></a>",
 		"FORUMS_POSTS_ROW_POSTERNAME" => sed_build_user($row['fp_posterid'], sed_cc($row['fp_postername'])),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
 		"FORUMS_POSTS_ROW_MAINGRP" => sed_build_group($row['user_maingrp']),
