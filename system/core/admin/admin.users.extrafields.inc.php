@@ -208,7 +208,7 @@ while($row = sed_sql_fetchassoc($res))
 		<input type="button" value="{$L['Delete']}" onclick="if(confirm('{$L['adm_extrafield_confirmdel']}')) location.href='{$extrafield_delete_url}'" />
 	</td>
 </tr>
-<tr><td colspan="4"><b>{$L['extf_Page tags']}:</b>&nbsp;&nbsp;&nbsp; users.profile.tpl: {USERS_PROFILE_$bigname}&nbsp;&nbsp;&nbsp; users.edit.tpl: {USERS_EDIT_$bigname}&nbsp;&nbsp;&nbsp; users.details.tpl:  {USERS_DETAILS_$bigname}</td></tr>
+<tr><td colspan="4"><b>{$L['extf_Page tags']}:</b>&nbsp;&nbsp;&nbsp; users.profile.tpl: {USERS_PROFILE_$bigname}&nbsp;&nbsp;&nbsp; users.edit.tpl: {USERS_EDIT_$bigname}&nbsp;&nbsp;&nbsp; users.details.tpl:  {USERS_DETAILS_$bigname}&nbsp;&nbsp;&nbsp; forums.posts.tpl: {FORUMS_POSTS_ROW_USER$bigname}</td></tr>
 </table>
 </form>
 HTM;
