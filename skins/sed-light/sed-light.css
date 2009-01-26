@@ -179,7 +179,7 @@ textarea { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; paddi
 .loading { position:relative; left:45%; top:-50px; z-index:99; }
 
 .rss-icon-title{
-	margin: 10px 10px 0 5px;
+	margin: 6px 10px 0 5px;
 	float: right;
 }
 .rss-icon{

@@ -2,7 +2,7 @@
 
 	<div class="mboxHD">
 	<div class="rss-icon-title">
-	<a href="rss.php?c=topic{FORUMS_POSTS_ID}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+	<a href="{FORUMS_POSTS_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
 	</div>{FORUMS_POSTS_PAGETITLE}</div>
 	<div class="mboxBody">
 
@@ -32,7 +32,7 @@
 			<!-- BEGIN: FORUMS_POSTS_ROW -->
 			<tr>
 				<td style="width:176px;" rowspan="3" class="{FORUMS_POSTS_ROW_ODDEVEN}">
-
+					{FORUMS_POSTS_ROW_ANCHORLINK}
 					<h2 style="margin:2px;">{FORUMS_POSTS_ROW_POSTERNAME}</h2>
 					{FORUMS_POSTS_ROW_AVATAR}
 

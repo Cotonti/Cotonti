@@ -2,7 +2,7 @@
 
 	<div class="mboxHD">
 	<div class="rss-icon-title">
-	<a href="rss.php?c={LIST_CAT}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+	<a href="{LIST_CAT_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
 	</div>
 	{LIST_PAGETITLE}</div>
 	<div class="mboxBody">
