@@ -100,6 +100,8 @@ else
 		sed_poll_vote();
 		list($polltitle, $poll_form)=sed_poll_form($id);
 	$item_code = 'v'.$id;
+	$comments = true; // TODO enable/disable comments on categories
+
 	list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$id), $comments);
 	$t->assign(array(
 		"POLLS_TITLE" => $polltitle,
