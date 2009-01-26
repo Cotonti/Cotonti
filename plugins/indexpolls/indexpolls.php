@@ -65,7 +65,15 @@ function sed_get_polls($limit)
 		
 		list($polltitle, $poll_form)=sed_poll_form($poll_id, sed_url('index', ""), 'indexpolls');
 
-		$res .= "<h5>".$polltitle."</h5>";
+		if($cfg['plugin']['indexpolls']['commentslink'])
+		{
+		$item_code = 'v'.$poll_id;
+		$comments = true; // TODO enable/disable comments on categories
+
+		list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$poll_id), $comments);
+		}
+		$polltitle="<a href=\"".sed_url('polls', 'id='.$poll_id)."\">".$polltitle."</a>";
+		$res .= "<h5>".$polltitle."&nbsp;".$comments_link."</h5>";
 
 		$res .= $poll_form;
 		$res .= "<hr />";

@@ -102,6 +102,7 @@ $ii = 0;
 $prev = false;
 $indexheader =false;
 $forumheader =false;
+
 while ($row = sed_sql_fetcharray($sql))
 {
 	if (!$prev)
