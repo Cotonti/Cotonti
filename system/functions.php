@@ -4513,18 +4513,23 @@ require_once $cfg['system_dir'].'/xtemplate.class.php';
  */
 function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $description="")
 {
-	global $db_extra_fields ;
-	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields");
-	while($row = sed_sql_fetchassoc($fieldsres)) $extrafieldsnames[] = $row['field_name'];
+	global $db_extra_fields;
+	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$sql_table'");
+	while($row = sed_sql_fetchassoc($fieldsres)) 
+	{
+		$extrafieldsnames[] = $row['field_name'];
+	}
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
 
 	// Check table sed_$sql_table - if field with same name exists - exit.
 	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
-	while ($i < mysql_num_fields($fieldsres)) {
+	while ($i < mysql_num_fields($fieldsres)) 
+	{
 		$column = mysql_fetch_field($fieldsres, $i);
 		// get column prefix in this table
 		$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
-		if(strpos($column->name, "_$name")) return false; // No adding - fields already exist
+		preg_match("#.*?_$name$#",$column->name,$match);
+		if($match[1]!="") return false; // No adding - fields already exist
 		$i++;
 	}
 
@@ -4535,7 +4540,8 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	$extf['variants'] = $variants;
 	$extf['description'] = $description;
 	$step1 = sed_sql_insert($db_extra_fields, $extf, 'field_') == 1;
-	switch($type)	{
+	switch($type)	
+	{
 	case "input": $sqltype = "VARCHAR(255)"; break;
 	case "textarea": $sqltype = "TEXT"; break;
 	case "select": $sqltype = "VARCHAR(255)"; break;
@@ -4580,6 +4586,7 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 	}
 	$sql = "ALTER TABLE sed_$sql_table CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
+
 	return $step1&&$step2;
 }
 

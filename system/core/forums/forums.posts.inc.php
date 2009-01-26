@@ -425,10 +425,20 @@ if (empty($d))
 if ($usr['id']>0)
 { $morejavascript .= sed_build_addtxt('newpost', 'newmsg'); }
 
+//Extra fields for users
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
+$user_extrafields = "";
+while($row = sed_sql_fetchassoc($fieldsres)) 
+{
+	$extrafields[] = $row; $number_of_extrafields++;
+	$user_extrafields .= "u.user_{$row['field_name']}, ";
+}
+	
+
 if (!empty($id))
 {
 	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
-	u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
+	$user_extrafields
 	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
 	u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
@@ -437,7 +447,7 @@ if (!empty($id))
 else
 {
 	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
-	u.user_extra1, u.user_extra2, u.user_extra3, u.user_extra4, u.user_extra5, u.user_extra6, u.user_extra7, u.user_extra8, u.user_extra9,
+	$user_extrafields
 	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
 	u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
@@ -651,15 +661,6 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_PHOTO" => sed_build_userimage($row['user_photo'], 'photo'),
 		"FORUMS_POSTS_ROW_SIGNATURE" => sed_build_userimage($row['user_signature'], 'sig'),
 		"FORUMS_POSTS_ROW_GENDER" => $row['user_gender'] = ($row['user_gender']=='' || $row['user_gender']=='U') ? '' : $L["Gender_".$row['user_gender']],
-		"FORUMS_POSTS_ROW_USEREXTRA1" => sed_cc($row['user_extra1']),
-		"FORUMS_POSTS_ROW_USEREXTRA2" => sed_cc($row['user_extra2']),
-		"FORUMS_POSTS_ROW_USEREXTRA3" => sed_cc($row['user_extra3']),
-		"FORUMS_POSTS_ROW_USEREXTRA4" => sed_cc($row['user_extra4']),
-		"FORUMS_POSTS_ROW_USEREXTRA5" => sed_cc($row['user_extra5']),
-		"FORUMS_POSTS_ROW_USEREXTRA6" => sed_cc($row['user_extra6']),
-		"FORUMS_POSTS_ROW_USEREXTRA7" => sed_cc($row['user_extra7']),
-		"FORUMS_POSTS_ROW_USEREXTRA8" => sed_cc($row['user_extra8']),
-		"FORUMS_POSTS_ROW_USEREXTRA9" => sed_cc($row['user_extra9']),
 		"FORUMS_POSTS_ROW_POSTERIP" => $row['fp_posterip'],
 		"FORUMS_POSTS_ROW_USERONLINE" => $row['fp_useronline'],
 		"FORUMS_POSTS_ROW_USERONLINETITLE" => $row['fp_useronlinetitle'],
@@ -678,7 +679,14 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_ORDER" => $fp_num,
 		"FORUMS_POSTS_ROW" => $row,
 	));
-
+	
+	// Extra fields for users
+	if(count($extrafields)>0)
+	foreach($extrafields as $i=>$extrafield)
+	{
+		$t->assign('FORUMS_POSTS_ROW_USER'.strtoupper($extrafield['field_name']), sed_cc($row['user_'.$extrafield['field_name']])); 
+	}
+		
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
