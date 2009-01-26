@@ -92,14 +92,14 @@ else
 	ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
 }
 
+/*
 $incl="datas/content/list.$c.txt";
-
 if (@file_exists($incl))
 {
 	$fd = @fopen ($incl, "r");
 	$extratext = fread ($fd, filesize ($incl));
 	fclose ($fd);
-}
+}*/
 
 if ($c=='all' || $c=='system')
 { $catpath = $sed_cat[$c]['title']; }
