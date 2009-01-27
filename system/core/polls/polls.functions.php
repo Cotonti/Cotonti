@@ -287,7 +287,11 @@ function sed_poll_form($id, $formlink='', $skin='')
 		}
 		elseif($cfg['ip_id_polls']=='ip')
 		{
-			$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1");
+			if ($usr['id']>0)
+			{$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1");}
+			else
+			{$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1");}
+
 			$alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
 		}
 		else
