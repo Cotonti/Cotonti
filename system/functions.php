@@ -37,8 +37,8 @@ $sys['starttime'] = $i[1] + $i[0];
 
 //unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount)
 
-$cfg['version'] = 'N-0.0.1';
-$cfg['dbversion'] = 'N-0.0.1';
+$cfg['version'] = '0.0.2';
+$cfg['dbversion'] = '0.0.2';
 
 /**
  * Strips everything but alphanumeric, hyphens and underscores
