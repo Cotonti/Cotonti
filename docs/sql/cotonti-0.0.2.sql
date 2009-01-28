@@ -311,7 +311,6 @@ CREATE TABLE `sed_config` (
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES 
 ('core', 'title', '01', 'maintitle', 1, 'Title of your site', '', ''),
 ('core', 'title', '02', 'subtitle', 1, 'Subtitle', '', ''),
-('core', 'main', '01', 'mainurl', 1, 'http://www.yourdomain.com', '', ''),
 ('core', 'main', '02', 'adminemail', 1, 'admin@mysite.com', '', ''),
 ('core', 'main', '05', 'clustermode', 3, '0', '', ''),
 ('core', 'main', '03', 'hostip', 1, '999.999.999.999', '', ''),

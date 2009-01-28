@@ -243,7 +243,6 @@ function sed_loadcharsets()
 function sed_loadconfigmap()
 {
 	$result = array();
-	$result[] = array ('main', '01', 'mainurl', 1, 'http://www.yourdomain.com', '');
 	$result[] = array ('main', '02', 'adminemail', 1, 'admin@mysite.com', '');
 	$result[] = array ('main', '03', 'clustermode', 3, '0', '');
 	$result[] = array ('main', '04', 'hostip', 1, '999.999.999.999', '');

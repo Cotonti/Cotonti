@@ -140,19 +140,8 @@ else // --------------- List mode
 	$pm_totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 	$pm_currentpage = ceil ($d / $cfg['maxrowsperpage'])+1;
 
-	if ($d>0)
-	{
-		$prevpage = $d - $cfg['maxrowsperpage'];
-		if ($prevpage < 0)
-		{ $prevpage=0; }
-		$pm_pageprev = "<a href=\"".sed_url('pm', "f=$f&amp;d=$prevpage")."\">".$L['Previous']." $sed_img_left</a>";
-	}
-
-	if (($d + $cfg['maxrowsperpage']) < $totallines)
-	{
-		$nextpage = $d + $cfg['maxrowsperpage'];
-		$pm_pagenext = "<a href=\"".sed_url('pm', "f=$f&amp;d=$nextpage")."\">$sed_img_right ".$L['Next']."</a>";
-	}
+	$pm_pagination = sed_pagination(sed_url('pm', "f=$f"), $d, $totallines, $cfg['maxrowsperpage'], 'd');
+	list($pm_pageprev, $pm_pagenext) = sed_pagination_pn(sed_url('pm', "f=$f"), $d, $totallines, $cfg['maxrowsperpage'], TRUE, 'd');
 }
 
 $title_tags[] = array('{PM}', '{INBOX}', '{ARCHIVES}', '{SENTBOX}');
@@ -182,6 +171,7 @@ $t-> assign(array(
 	"PM_SENTBOX" => "<a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
 	"PM_TOP_PAGEPREV" => $pm_pageprev,
 	"PM_TOP_PAGENEXT" => $pm_pagenext,
+	'PM_TOP_PAGES' => $pm_pagination,
 	"PM_TOP_CURRENTPAGE" => $pm_currentpage,
 	"PM_TOP_TOTALPAGES" => $pm_totalpages,
 ));
