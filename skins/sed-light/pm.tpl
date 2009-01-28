@@ -50,7 +50,7 @@
 		<div class="bCap"></div>
 
 		<!-- BEGIN: PM_FOOTER -->
-		<div class="paging">{PM_TOP_PAGEPREV} &nbsp; &nbsp; {PHP.skinlang.pm.Page} {PM_TOP_CURRENTPAGE}&nbsp;/&nbsp;{PM_TOP_TOTALPAGES} &nbsp; &nbsp; {PM_TOP_PAGENEXT}</div>
+		<div class="paging">{PM_TOP_PAGEPREV}&nbsp;{PM_TOP_PAGES}&nbsp;{PM_TOP_PAGENEXT}</div>
 		<!-- END: PM_FOOTER -->
 
 		<!-- BEGIN: PM_DETAILS -->

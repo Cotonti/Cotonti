@@ -4,20 +4,13 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=system/common.php
-Version=125
-Updated=2008-may-26
-Type=Core
-Author=Neocrome
-Description=Common
-[END_SED]
 ==================== */
 
 /**
  * @package Seditio-N
  * @version 0.0.2
- * @copyright Partial copyright (c) Cotonti Team 2008
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008
  * @license BSD
  */
 
@@ -74,11 +67,6 @@ $sys['url'] = base64_encode($_SERVER['REQUEST_URI']);
 $sys['url_redirect'] = 'redirect='.$sys['url'];
 $redirect = sed_import('redirect','G','SLU');
 
-// If main URL hasn't been configured properly, try to get it from config.php
-if($cfg['mainurl'] == 'http://www.yourdomain.com')
-{
-	$cfg['mainurl'] = $cfg['temp_url'];
-}
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
