@@ -55,7 +55,7 @@ function ajaxSend(settings) {
 			$('#' + settings.divId).html(msg).hide().stop().fadeIn('slow');
 		},
 		error: function(msg) {
-			$('#' + settings.divId).removeClass('loading');
+			$('#loading').remove();
 			alert(settings.errMsg);
 		}
 	});
