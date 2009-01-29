@@ -61,17 +61,11 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 	WHERE page_state=0 AND page_cat NOT LIKE 'system'
 	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
 	AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$sed_cat[$c]['order']." ".$sed_cat[$c]['way']." LIMIT $d,".$cfg['plugin']['news']['maxpages']);
-	$firephp->log("SELECT p.*, u.user_name, user_avatar FROM $db_pages AS p
-	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-	WHERE page_state=0 AND page_cat NOT LIKE 'system'
-	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
-	AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$sed_cat[$c]['order']." ".$sed_cat[$c]['way']." LIMIT $d,".$cfg['plugin']['news']['maxpages'],"sql");
 	
 	$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=0 
 	AND page_cat NOT LIKE 'system' 
 	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
 	AND page_cat IN ('".implode("','", $catsub)."')");
-	$firephp->log($sql2,"sql2");
 	
 	$totalnews = sed_sql_result($sql2,0,"COUNT(*)");
 
