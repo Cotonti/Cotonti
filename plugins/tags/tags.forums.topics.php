@@ -43,6 +43,7 @@ if($cfg['plugin']['tags']['forums'])
 	else
 	{
 		//$tc_html = $L['tags_Tag_cloud_none'];
+		$t->assign('FORUMS_TOPICS_ROW_TAGS', '');
 	}
 }
 
