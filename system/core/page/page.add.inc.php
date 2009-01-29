@@ -88,6 +88,11 @@ if ($a=='add')
 	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
 
+	if($newpagefile == 0 && !empty($newpageurl))
+	{
+		$newpagefile = 1;
+	}
+
 	if (empty($error_string))
 	{
 		if (!empty($newpagealias))
