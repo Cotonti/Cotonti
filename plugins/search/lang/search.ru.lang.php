@@ -10,6 +10,8 @@ Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotont
 [END_SED]
 ==================== */
 
+$L['cfg_searchurl'] = array('Вид ссылки на сообщение в форуме. Одиночная(Single) отображает только одно сообщение, в то время как Нормальная(Normal) использует традиционное отображение темы с переходом к сообщению.');
+
 $L['plu_title_frmtab'] = "Поиск в форумах";
 $L['plu_title_frmtab_s'] = "Искать в форумах...";
 $L['plu_title_pagtab'] = "Поиск в страницах";
