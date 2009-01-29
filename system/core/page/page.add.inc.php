@@ -153,6 +153,8 @@ $ssql.="page_title,
 			'".sed_sql_prep($newpagealias)."')";
   		$sql = sed_sql_query($ssql);
 
+		$id = sed_sql_insertid();
+
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
 		if (is_array($extp))

@@ -187,6 +187,8 @@ if ($a=='newpost')
 			'$rhtml',
 			'".$usr['ip']."')");
 
+			$p = sed_sql_insertid();
+
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET
 			ft_postcount=ft_postcount+1,
 			ft_updated='".$sys['now_offset']."',
