@@ -32,15 +32,15 @@ $d = sed_import('d','G','INT');
 $c = sed_import('c','G','TXT');
 
 if (empty($d))	{ $d = '0'; }
-if (empty($c))	
-	{ 
-		$c = $cfg['plugin']['news']['category']; 
-	}
+if (empty($c))
+{
+	$c = $cfg['plugin']['news']['category'];
+}
 else
-	{		
-		$checkin = strpos($sed_cat[$c]['path'], $sed_cat[$cfg['plugin']['news']['category']]['path']);
-		$c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
-	}
+{
+	$checkin = strpos($sed_cat[$c]['path'], $sed_cat[$cfg['plugin']['news']['category']]['path']);
+	$c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
+}
 
 if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 {
@@ -49,7 +49,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 	$mtchlen = mb_strlen($mtch);
 	$catsub = array();
 	$catsub[] = $c;
-	
+
 	foreach($sed_cat as $i => $x)
 	{
 		if (mb_substr($x['path'], 0, $mtchlen)==$mtch && sed_auth('page', $i, 'R'))
@@ -61,22 +61,30 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 	WHERE page_state=0 AND page_cat NOT LIKE 'system'
 	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
 	AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$sed_cat[$c]['order']." ".$sed_cat[$c]['way']." LIMIT $d,".$cfg['plugin']['news']['maxpages']);
-
-	$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=0 AND page_cat 
-	NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."')");
-	$totalnews = sed_sql_result($sql2,0,"COUNT(*)");
- 
-	$perpage = $cfg['plugin']['news']['maxpages'];
-	$totalitems = $totalnews;
-
-	$pagnav = sed_pagination(sed_url('index', "c=$c"), $d, $totalitems, $perpage);
-	list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('index', "c=$c"), $d, $totalitems, $perpage, TRUE);
+	$firephp->log("SELECT p.*, u.user_name, user_avatar FROM $db_pages AS p
+	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+	WHERE page_state=0 AND page_cat NOT LIKE 'system'
+	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
+	AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$sed_cat[$c]['order']." ".$sed_cat[$c]['way']." LIMIT $d,".$cfg['plugin']['news']['maxpages'],"sql");
 	
+	$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=0 
+	AND page_cat NOT LIKE 'system' 
+	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
+	AND page_cat IN ('".implode("','", $catsub)."')");
+	$firephp->log($sql2,"sql2");
+	
+	$totalnews = sed_sql_result($sql2,0,"COUNT(*)");
+
+	$perpage = $cfg['plugin']['news']['maxpages'];
+
+	$pagnav = sed_pagination(sed_url('index', "c=$c"), $d, $totalnews, $perpage);
+	list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('index', "c=$c"), $d, $totalnews, $perpage, TRUE);
+
 	// Extra field - getting
 	$extrafields = array(); $number_of_extrafields = 0;
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
 	while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; }
-	
+
 	$news = new XTemplate(sed_skinfile('news'));
 
 	while ($pag = sed_sql_fetcharray($sql))
@@ -92,32 +100,32 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 		list($pag['page_comments'], $pag['page_comments_display']) = sed_build_comments($item_code, $pag['page_pageurl'], FALSE);
 
 		$news-> assign(array(
-			"PAGE_ROW_URL" => $pag['page_pageurl'],
-			"PAGE_ROW_ID" => $pag['page_id'],
-			"PAGE_ROW_TITLE" => $pag['page_fulltitle'],
-			"PAGE_ROW_SHORTTITLE" => sed_cc($pag['page_title']),
-			"PAGE_ROW_CAT" => $pag['page_cat'],
-			"PAGE_ROW_CATTITLE" => sed_cc($sed_cat[$pag['page_cat']]['title']),
-			"PAGE_ROW_CATPATH" => $catpath,
-			"PAGE_ROW_CATDESC" => sed_cc($sed_cat[$pag['page_cat']]['desc']),
-			"PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
-			"PAGE_ROW_KEY" => sed_cc($pag['page_key']),
-			"PAGE_ROW_DESC" => sed_cc($pag['page_desc']),
-			"PAGE_ROW_AUTHOR" => sed_cc($pag['page_author']),
-			"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
-			"PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
-			"PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
-			"PAGE_ROW_FILEURL" => $pag['page_url'],
-			"PAGE_ROW_SIZE" => $pag['page_size'],
-			"PAGE_ROW_COUNT" => $pag['page_count'],
-			"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
-			"NEWS_PAGENAV" => $pagnav,
-			"NEWS_PAGEPREV" => $pages_prev,
-			"NEWS_PAGENEXT" => $pages_next,
-			"NEWS_SUBMITNEWPOST" => $submitnewpage,
-			"PAGE_ROW_COMMENTS" => $pag['page_comments'],
-			"PAGE_ROW_RATINGS" => "<img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" />",
-			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
+		"PAGE_ROW_URL" => $pag['page_pageurl'],
+		"PAGE_ROW_ID" => $pag['page_id'],
+		"PAGE_ROW_TITLE" => $pag['page_fulltitle'],
+		"PAGE_ROW_SHORTTITLE" => sed_cc($pag['page_title']),
+		"PAGE_ROW_CAT" => $pag['page_cat'],
+		"PAGE_ROW_CATTITLE" => sed_cc($sed_cat[$pag['page_cat']]['title']),
+		"PAGE_ROW_CATPATH" => $catpath,
+		"PAGE_ROW_CATDESC" => sed_cc($sed_cat[$pag['page_cat']]['desc']),
+		"PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
+		"PAGE_ROW_KEY" => sed_cc($pag['page_key']),
+		"PAGE_ROW_DESC" => sed_cc($pag['page_desc']),
+		"PAGE_ROW_AUTHOR" => sed_cc($pag['page_author']),
+		"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
+		"PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
+		"PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
+		"PAGE_ROW_FILEURL" => $pag['page_url'],
+		"PAGE_ROW_SIZE" => $pag['page_size'],
+		"PAGE_ROW_COUNT" => $pag['page_count'],
+		"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
+		"NEWS_PAGENAV" => $pagnav,
+		"NEWS_PAGEPREV" => $pages_prev,
+		"NEWS_PAGENEXT" => $pages_next,
+		"NEWS_SUBMITNEWPOST" => $submitnewpage,
+		"PAGE_ROW_COMMENTS" => $pag['page_comments'],
+		"PAGE_ROW_RATINGS" => "<img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" />",
+		"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
 		));
 
 		switch($pag['page_type'])
@@ -172,7 +180,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 				}
 				break;
 		}
-		
+
 		// Extra fields
 		if($number_of_extrafields > 0) foreach($extrafields as $row) $news->assign('PAGE_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
 
