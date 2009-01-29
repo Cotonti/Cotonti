@@ -2821,10 +2821,6 @@ function sed_htmlmetas()
  */
 function sed_mktime($hour = false, $minute = false, $second = false, $month = false, $date = false, $year = false)
 {
-	// Code from http://www.php.net/date
-	// Author rickenmeer at hotmail dot com
-	// 12-Jan-2004 12:30
-
 	if ($hour === false)  $hour  = Date ('G');
 	if ($minute === false) $minute = Date ('i');
 	if ($second === false) $second = Date ('s');
@@ -2832,28 +2828,7 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
 	if ($date === false)  $date  = Date ('j');
 	if ($year === false)  $year  = Date ('Y');
 
-	if ($year >= 1970) return mktime ($hour, $minute, $second, $month, $date, $year);
-
-	$m_days = Array (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-	if ($year % 4 == 0 && ($year % 100 > 0 || $year % 400 == 0))
-	{ $m_days[1] = 29;  }
-
-	$d_year = 1970 - $year;
-	$days = -1 - $d_year * 365;
-	$days -= floor ($d_year / 4);
-	$days += floor (($d_year - 70) / 100);
-	$days -= floor (($d_year - 370) / 400);
-
-	for ($i = 1; $i < $month; $i++)
-	{ $days += $m_days [$i - 1]; }
-	$days += $date - 1;
-
-	$stamp = $days * 86400;
-	$stamp += $hour * 3600;
-	$stamp += $minute * 60;
-	$stamp += $second;
-
-	return $stamp;
+	return mktime ($hour, $minute, $second, $month, $date, $year);
 }
 
 /**
