@@ -96,9 +96,9 @@ else
 $incl="datas/content/list.$c.txt";
 if (@file_exists($incl))
 {
-	$fd = @fopen ($incl, "r");
-	$extratext = fread ($fd, filesize ($incl));
-	fclose ($fd);
+$fd = @fopen ($incl, "r");
+$extratext = fread ($fd, filesize ($incl));
+fclose ($fd);
 }*/
 
 if ($c=='all' || $c=='system')
@@ -143,23 +143,23 @@ else
 $t = new XTemplate($mskin);
 
 $t->assign(array(
-	"LIST_PAGETITLE" => $catpath,
-	"LIST_CATEGORY" => '<a href="'.sed_url('list', "c=$c").'">'.$sed_cat[$c]['title'].'</a>',
-	"LIST_CAT" => $c,
-	"LIST_CAT_RSS" => sed_url("rss", "c=$c", "", true),
-	"LIST_CATTITLE" => $sed_cat[$c]['title'],
-	"LIST_CATPATH" => $catpath,
-	"LIST_CATDESC" => $sed_cat[$c]['desc'],
-	"LIST_CATICON" => $sed_cat[$c]['icon'],
-	"LIST_COMMENTS" => $list_comments,
-	"LIST_COMMENTS_DISPLAY" => $list_comments_display,
-	"LIST_RATINGS" => $list_ratings,
-	"LIST_RATINGS_DISPLAY" => $list_ratings_display,
-	"LIST_EXTRATEXT" => $extratext,
-	"LIST_SUBMITNEWPAGE" => $submitnewpage,
-	"LIST_TOP_PAGINATION" => $pagination,
-	"LIST_TOP_PAGEPREV" => $pageprev,
-	"LIST_TOP_PAGENEXT" => $pagenext
+"LIST_PAGETITLE" => $catpath,
+"LIST_CATEGORY" => '<a href="'.sed_url('list', "c=$c").'">'.$sed_cat[$c]['title'].'</a>',
+"LIST_CAT" => $c,
+"LIST_CAT_RSS" => sed_url("rss", "c=$c", "", true),
+"LIST_CATTITLE" => $sed_cat[$c]['title'],
+"LIST_CATPATH" => $catpath,
+"LIST_CATDESC" => $sed_cat[$c]['desc'],
+"LIST_CATICON" => $sed_cat[$c]['icon'],
+"LIST_COMMENTS" => $list_comments,
+"LIST_COMMENTS_DISPLAY" => $list_comments_display,
+"LIST_RATINGS" => $list_ratings,
+"LIST_RATINGS_DISPLAY" => $list_ratings_display,
+"LIST_EXTRATEXT" => $extratext,
+"LIST_SUBMITNEWPAGE" => $submitnewpage,
+"LIST_TOP_PAGINATION" => $pagination,
+"LIST_TOP_PAGEPREV" => $pageprev,
+"LIST_TOP_PAGENEXT" => $pagenext
 ));
 
 if (!$sed_cat[$c]['group'])
@@ -212,12 +212,12 @@ while (list($i,$x) = each($sed_cat))
 		$sub_count = sed_sql_result($sql4,0,"SUM(structure_pagecount)");
 
 		$t-> assign(array(
-					"LIST_ROWCAT_URL" => sed_url('list', 'c='.$i),
-					"LIST_ROWCAT_TITLE" => $x['title'],
-					"LIST_ROWCAT_DESC" => $x['desc'],
-					"LIST_ROWCAT_ICON" => $x['icon'],
-					"LIST_ROWCAT_COUNT" => $sub_count,
-					"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($kk)
+		"LIST_ROWCAT_URL" => sed_url('list', 'c='.$i),
+		"LIST_ROWCAT_TITLE" => $x['title'],
+		"LIST_ROWCAT_DESC" => $x['desc'],
+		"LIST_ROWCAT_ICON" => $x['icon'],
+		"LIST_ROWCAT_COUNT" => $sub_count,
+		"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($kk)
 		));
 		$t->parse("MAIN.LIST_ROWCAT");
 		$kk++;
@@ -233,9 +233,9 @@ $pagnav = sed_pagination(sed_url('list','c='.$c), $dc, $totalitems, $cfg['maxrow
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('list', 'c='.$c), $dc, $totalitems, $cfg['maxrowsperpage'], TRUE, $characters="dc");
 
 $t->assign(array(
-		"LISTCAT_PAGEPREV" => $pagination_prev,
-		"LISTCAT_PAGENEXT" => $pagination_next,
-		"LISTCAT_PAGNAV" => $pagnav)
+"LISTCAT_PAGEPREV" => $pagination_prev,
+"LISTCAT_PAGENEXT" => $pagination_next,
+"LISTCAT_PAGNAV" => $pagnav)
 );
 
 /* === Hook - Part1 : Set === */
@@ -264,26 +264,26 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	$pag['admin'] = $usr['isadmin'] ? "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a> &nbsp;<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a> " : '';
 	list($list_ratings, $list_ratings_display) = sed_build_ratings('p'.$pag['page_id'], '', $ratings);
 	$t-> assign(array(
-		"LIST_ROW_URL" => $pag['page_pageurl'],
-		"LIST_ROW_ID" => $pag['page_id'],
-		"LIST_ROW_CAT" => $pag['page_cat'],
-		"LIST_ROW_KEY" => sed_cc($pag['page_key']),
-		"LIST_ROW_TITLE" => sed_cc($pag['page_title']),
-		"LIST_ROW_DESC" => $pag['page_desc'],
-		"LIST_ROW_DESC_OR_TEXT" => sed_cutpost($pag['page_text'], 200, false),
-		"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
-		"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
-		"LIST_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
-		"LIST_ROW_FILEURL" => $pag['page_url'],
-		"LIST_ROW_SIZE" => $pag['page_size'],
-		"LIST_ROW_COUNT" => $pag['page_count'],
-		"LIST_ROW_FILEICON" => $pag['page_fileicon'],
-		"LIST_ROW_FILECOUNT" => $pag['page_filecount'],
-		"LIST_ROW_JUMP" => sed_url('page', $page_urlp.'&a=dl'),
-		"LIST_ROW_COMMENTS" => $pag['page_comments'],
-		"LIST_ROW_RATINGS" => $list_ratings,
-		"LIST_ROW_ADMIN" => $pag['admin'],
-		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
+	"LIST_ROW_URL" => $pag['page_pageurl'],
+	"LIST_ROW_ID" => $pag['page_id'],
+	"LIST_ROW_CAT" => $pag['page_cat'],
+	"LIST_ROW_KEY" => sed_cc($pag['page_key']),
+	"LIST_ROW_TITLE" => sed_cc($pag['page_title']),
+	"LIST_ROW_DESC" => $pag['page_desc'],
+	"LIST_ROW_DESC_OR_TEXT" => sed_cutpost($pag['page_text'], 200, false),
+	"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
+	"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
+	"LIST_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
+	"LIST_ROW_FILEURL" => $pag['page_url'],
+	"LIST_ROW_SIZE" => $pag['page_size'],
+	"LIST_ROW_COUNT" => $pag['page_count'],
+	"LIST_ROW_FILEICON" => $pag['page_fileicon'],
+	"LIST_ROW_FILECOUNT" => $pag['page_filecount'],
+	"LIST_ROW_JUMP" => sed_url('page', $page_urlp.'&a=dl'),
+	"LIST_ROW_COMMENTS" => $pag['page_comments'],
+	"LIST_ROW_RATINGS" => $list_ratings,
+	"LIST_ROW_ADMIN" => $pag['admin'],
+	"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj)
 	));
 
 	// Adding LIST_ROW_TEXT tag
@@ -315,13 +315,25 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 					$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
 				}
+				$readmore = mb_strpos($pag['page_html'], "<!--more-->");
+				if($readmore > 0)
+				{
+					$pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore);
+					$pag['page_html'] .= "<span class=\"more\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
+				}
 				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
 				$t->assign('LIST_ROW_TEXT', $html);
 			}
 			else
 			{
+				$readmore = mb_strpos($pag['page_text'], "[more]");
 				$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 				$text = sed_post_parse($text, 'pages');
+				if ($readmore>0)
+				{
+					$text = mb_substr($text, 0, $readmore);
+					$text .= "<span class=\"more\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
+				}
 				$t->assign('LIST_ROW_TEXT', $text);
 			}
 			break;
