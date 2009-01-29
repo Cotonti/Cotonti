@@ -121,6 +121,11 @@ elseif ($f=='all')
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage= ceil ($d / $cfg['maxusersperpage'])+1;
 
+$perpage= $cfg['maxusersperpage'];
+
+$pagnav = sed_pagination(sed_url('users', "f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;"), $d, $totalusers, $perpage);
+list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('users', "f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;"), $d, $totalusers, $perpage, TRUE);
+
 /*=========*/
 
 $countryfilters = "<form action=\"".sed_url('users', 'f=search')."\" method=\"post\">".$L['Filters'].": <a href=\"".sed_url('users')."\">".$L['All']."</a> ";
@@ -205,6 +210,9 @@ $t-> assign(array(
 	"USERS_TOP_TOTALPAGE" => $totalpage,
 	"USERS_TOP_MAXPERPAGE" => $cfg['maxusersperpage'],
 	"USERS_TOP_TOTALUSERS" => $totalusers,
+	"USERS_TOP_PAGNAV" => $pagnav,
+	"USERS_TOP_PAGEPREV" => $pages_prev,
+	"USERS_TOP_PAGENEXT" => $pages_next,
 	"USERS_TOP_FILTERS_COUNTRY" => $countryfilters,
 	"USERS_TOP_FILTERS_MAINGROUP" => $maingrpfilters,
 	"USERS_TOP_FILTERS_GROUP" => $grpfilters,
@@ -229,23 +237,6 @@ $t->assign(array(
 	"USERS_TOP_GENDER" => "<a href=\"".sed_url('users', "f=$f&amp;s=gender&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=gender&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Gender'],
 	"USERS_TOP_TIMEZONE" => "<a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Timezone']
 ));
-
-
-if ($d>0)
-{
-	$prevpage = $d - $cfg['maxusersperpage'];
-	if ($prevpage<0)
-	{ $prevpage=0; }
-	$t->assign("USERS_TOP_PAGEPREV",
-		"<a href=\"".sed_url('users', "f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;d=$prevpage")."\">".$L['Previous']." $sed_img_left</a>");
-}
-
-if (($d + $cfg['maxusersperpage'])<$totalusers)
-{
-	$nextpage = $d + $cfg['maxusersperpage'];
-	$t->assign("USERS_TOP_PAGENEXT",
-		"<a href=\"".sed_url('users', "f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;d=$nextpage")."\">$sed_img_right ".$L['Next']."</a>");
-}
 
 $jj=0;
 
@@ -294,11 +285,11 @@ while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 		"USERS_ROW_ODDEVEN" => sed_build_oddeven($jj),
 		"USERS_ROW" => $urr
 	));
-	
+
 	// Extra fields
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-	while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('USERS_ROW_'.strtoupper($row['field_name']), $urr['user_'.$row['field_name']]); 
-	
+	while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('USERS_ROW_'.strtoupper($row['field_name']), $urr['user_'.$row['field_name']]);
+
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
