@@ -311,4 +311,9 @@ $skinlang['users']['Page'] = 'Page';
 $skinlang['users']['usersperpage'] = 'users per page';
 $skinlang['users']['usersinthissection'] = 'users in this section';
 
+//pagination
+$L['pagenav_first'] = '&lt;&lt;';// N-0.0.2
+$L['pagenav_prev'] = '&lt;';// N-0.0.2
+$L['pagenav_next'] = '&gt;';// N-0.0.2
+$L['pagenav_last'] = '&gt;&gt;';// N-0.0.2
 ?>

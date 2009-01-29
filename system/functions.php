@@ -1327,7 +1327,7 @@ function sed_build_ratings($code, $url, $display)
 
 	$inr = sed_import('inr','G','ALP');
 	$newrate = sed_import('newrate','P','INT');
-	
+
 	$newrate = (!empty($newrate)) ? $newrate : 0;
 
 	if(!$cfg['ratings_allowchange'])
@@ -1346,7 +1346,7 @@ function sed_build_ratings($code, $url, $display)
 		if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
-		
+
 		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='".sed_sql_prep($code)."' AND rated_userid='".$usr['id']."' ");
 
 		if (!$yetrated)
@@ -1364,7 +1364,7 @@ function sed_build_ratings($code, $url, $display)
 			}
 		else
 			{ $sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$code' "); }
-			
+
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.done');
 		if (is_array($extp))
@@ -2920,7 +2920,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 	while($i < $cur_left)
 	{
 		$k = ($i - 1) * $perpage;
-		$listparam = empty($object) ? '' : 'var list = {'.$characters.': '.$k.', '.$object.'}; ';
+		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$k.'\', '.$object.'}; ';
 		$strlistparam = empty($object) ? $k : 'list';
 		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
 		$before .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.'>'.$i.'</a></span>';
@@ -2931,7 +2931,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 	{
 		$k = ($j - 1) * $perpage;
 		$class = $j == $currentpage ? 'current' : 'pages';
-		$listparam = empty($object) ? '' : 'var list = {'.$characters.': '.$k.', '.$object.'}; ';
+		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$k.'\', '.$object.'}; ';
 		$strlistparam = empty($object) ? $k : 'list';
 		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
 		$pages .= '<span class="pagenav_'.$class.'"><a href="'.$address.$k.'"'.$event.'>'.$j.'</a></span>';
@@ -2944,7 +2944,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 	while($i < $totalpages)
 	{
 		$k = ($i - 1) * $perpage;
-		$listparam = empty($object) ? '' : 'var list = {'.$characters.': '.$k.', '.$object.'}; ';
+		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$k.'\', '.$object.'}; ';
 		$strlistparam = empty($object) ? $k : 'list';
 		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
 		$after .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.'>'.$i.'</a></span>';
@@ -2987,11 +2987,11 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 	{
 		$prev_n = $current - $perpage;
 		if ($prev_n < 0) { $prev_n = 0; }
-		$listparam = empty($object) ? '' : 'var list = {'.$characters.': '.$prev_n.', '.$object.'}; ';
+		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$prev_n.'\', '.$object.'}; ';
 		$strlistparam = empty($object) ? $prev_n : 'list';
 		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
 		$prev = '<span class="pagenav_prev"><a href="'.$address.$prev_n.'"'.$event.'>'.$L['pagenav_prev'].'</a></span>';
-		$listparam = empty($object) ? '' : 'var list = {'.$characters.': 0, '.$object.'}; ';
+		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'=0\', '.$object.'}; ';
 		$strlistparam = empty($object) ? 0 : 'list';
 		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
 		$first = '<span class="pagenav_first"><a href="'.$address.'0"'.$event.'>'.$L['pagenav_first'].'</a></span>';
@@ -3000,12 +3000,12 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 	if (($current + $perpage) < $entries)
 	{
 		$next_n = $current + $perpage;
-		$listparam = empty($object) ? '' : 'var list = {'.$characters.': '.$next_n.', '.$object.'}; ';
+		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$next_n.'\', '.$object.'}; ';
 		$strlistparam = empty($object) ? $next_n : 'list';
 		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
 		$next = '<span class="pagenav_next"><a href="'.$address.$next_n.'"'.$event.'>'.$L['pagenav_next'].'</a></span>';
 		$last_n = ($totalpages - 1) * $perpage;
-		$listparam = empty($object) ? '' : 'var list = {'.$characters.': '.$last_n.', '.$object.'}; ';
+		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$last_n.'\', '.$object.'}; ';
 		$strlistparam = empty($object) ? $last_n : 'list';
 		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
 		$last = '<span class="pagenav_last"><a href="'.$address.$last_n.'"'.$event.'>'.$L['pagenav_last'].'</a></span>';
@@ -4515,7 +4515,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 {
 	global $db_extra_fields;
 	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$sql_table'");
-	while($row = sed_sql_fetchassoc($fieldsres)) 
+	while($row = sed_sql_fetchassoc($fieldsres))
 	{
 		$extrafieldsnames[] = $row['field_name'];
 	}
@@ -4523,7 +4523,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 
 	// Check table sed_$sql_table - if field with same name exists - exit.
 	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
-	while ($i < mysql_num_fields($fieldsres)) 
+	while ($i < mysql_num_fields($fieldsres))
 	{
 		$column = mysql_fetch_field($fieldsres, $i);
 		// get column prefix in this table
@@ -4540,7 +4540,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	$extf['variants'] = $variants;
 	$extf['description'] = $description;
 	$step1 = sed_sql_insert($db_extra_fields, $extf, 'field_') == 1;
-	switch($type)	
+	switch($type)
 	{
 	case "input": $sqltype = "VARCHAR(255)"; break;
 	case "textarea": $sqltype = "TEXT"; break;
