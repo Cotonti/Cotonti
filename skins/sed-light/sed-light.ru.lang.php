@@ -311,4 +311,9 @@ $skinlang['users']['Page'] = 'Страница';
 $skinlang['users']['usersperpage'] = 'пользователей на страницу';
 $skinlang['users']['usersinthissection'] = 'пользователей в этом разделе';
 
+//pagination
+$L['pagenav_first'] = '&lt;&lt;';// N-0.0.2
+$L['pagenav_prev'] = '&lt;';// N-0.0.2
+$L['pagenav_next'] = '&gt;';// N-0.0.2
+$L['pagenav_last'] = '&gt;&gt;';// N-0.0.2
 ?>
