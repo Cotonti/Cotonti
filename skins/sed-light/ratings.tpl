@@ -3,37 +3,26 @@
 <!-- BEGIN: RATINGS_INCLUDES -->
 	<script type="text/javascript" src="js/jquery.rating.js"></script>
 	<script type="text/javascript">
-	jQuery(
-		function($)
-		{
-			$('#rating_submit').click(
-				function()
-				{
-					$('.rating').remove();
-					$('.rating_average').addClass('rating').removeClass('rating_average').show();
-					ajaxSend({
-						method: 'POST',
-						formId: 'newrating',
-						divId: 'rloading',
-						data: 'newrate=' + ratingval
-					});
-					$.get("{RATINGS_AJAX_REQUEST}", 
-						function(data)
-						{
-							if (!data)
-								return;
-							var response;
-							eval ("response = " + data);
-							if (!response)
-								return;
-							$(".rating").replaceWith('<div class="rating">'+response+'</div>');
-						}
-					);
-				}
-			);
-		}
-	);
+	//<![CDATA[
 	$(function() {
+		$('#rating_submit').click(
+			function() {
+				$('.rating').remove();
+				$('.rating_average').addClass('rating').removeClass('rating_average').show();
+				ajaxSend({
+					method: 'POST',
+					formId: 'newrating',
+					divId: 'loading',
+					data: 'newrate=' + ratingval
+				});
+				$.get("{RATINGS_AJAX_REQUEST}",
+					function(data) {
+						if(data) {
+							$(".rating").replaceWith('<div class="rating">'+data+'</div>');
+						}
+					}
+				);
+		});
 		$('.rstar').rating({
 			half: true,
 			callback: function(value, link) {
@@ -42,6 +31,7 @@
 			}
 		});
 	});
+	//]]>
 	</script>
 <!-- END: RATINGS_INCLUDES -->
 <!-- BEGIN: NOTVOTED -->

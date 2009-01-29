@@ -1302,7 +1302,7 @@ function sed_build_ratings($code, $url, $display)
 		$rating_average = 0;
 		$rating_cntround = 0;
 	}
-	unset($rating_fancy);
+	$rating_fancy =  '';
 	for($i = 1; $i <= 10; $i++)
 	{
 		$checked = $i == $rating_cntround ? 'checked="checked"' : '';
@@ -1314,13 +1314,15 @@ function sed_build_ratings($code, $url, $display)
 	{
 		return array($rating_fancy, '');
 	}
+
 	if($_GET['ajax'])
 	{
 		ob_clean();
-		echo json_encode($rating_fancy);
+		echo $rating_fancy;
 		ob_flush();
 		exit;
 	}
+
 	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
 
 	$t = new XTemplate(sed_skinfile('ratings'));
@@ -1358,10 +1360,10 @@ function sed_build_ratings($code, $url, $display)
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
 		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
 		if ($rating_voters>0)
-			{
+		{
 			$ratingnewaverage = sed_sql_result(sed_sql_query("SELECT AVG(rated_value) FROM $db_rated WHERE rated_code='$code'"), 0, "AVG(rated_value)");
 			$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
-			}
+		}
 		else
 			{ $sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$code' "); }
 
@@ -1388,7 +1390,8 @@ function sed_build_ratings($code, $url, $display)
 	if(!$callled && $usr['id']>0 && !$alreadyvoted)
 	{
 		// Link JS and CSS
-		$t->assign('RATINGS_AJAX_REQUEST', $url.'&ajax=true');
+		$sep = mb_strstr($url, '?') ? '&' : '?';
+		$t->assign('RATINGS_AJAX_REQUEST', $url . $sep .'ajax=true');
 		$t->parse('RATINGS.RATINGS_INCLUDES');
 		$called = true;
 	}
