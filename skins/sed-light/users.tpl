@@ -8,7 +8,7 @@
 	{USERS_TOP_FILTERS_OTHERS}
 		</div>
 		
-		<div class="paging">{USERS_TOP_PAGEPREV} &nbsp; {USERS_TOP_PAGENEXT}  &nbsp; {PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
+		<div class="paging">{USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection} {USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</div>
 
 		<div class="tCap"></div>
 		<table class="cells" border="0" cellspacing="1" cellpadding="2">
@@ -34,7 +34,7 @@
 		</table>
 		<div class="bCap"></div>
 
-		<div class="paging">{USERS_TOP_PAGEPREV} &nbsp; {USERS_TOP_PAGENEXT}  &nbsp; {PHP.skinlang.users.Page} {USERS_TOP_CURRENTPAGE}/ {USERS_TOP_TOTALPAGE} - {USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection}</div>
+		<div class="paging">{USERS_TOP_MAXPERPAGE} {PHP.skinlang.users.usersperpage} - {USERS_TOP_TOTALUSERS} {PHP.skinlang.users.usersinthissection} {USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</div>
 	
 	</div>
 
