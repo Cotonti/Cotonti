@@ -4275,6 +4275,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 			{
 				// Unset
 				$var = mb_substr($m[1], 2);
+				$url = str_replace($m[0], '', $url);
 				unset($args[$var]);
 			}
 			else
