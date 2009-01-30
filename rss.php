@@ -28,7 +28,7 @@ define('SED_CODE', TRUE);
 $location = "RSS";
 
 // TODO move this to config
-$cfg_timetolive = 60; // refresh cache every N seconds
+$cfg_timetolive = 1; // refresh cache every N seconds
 $cfg_maxitems = 40; // max items in rss
 $cfg_charset = "UTF-8";
 
@@ -72,45 +72,48 @@ if ($c == "comments")
 {
 	// == Comments rss ==
 	$page_id = $id;
-	
+
 	$rss_title = "Comments for ".$cfg['maintitle'];
-	
+
 	$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
 	if (sed_sql_affectedrows()>0)
 	{
 		$row = mysql_fetch_assoc($sql);
-		$rss_title = $row['page_title'];
-		$rss_description = $L['rss_comments_item_desc'];
-		
-		$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code='p$page_id' ORDER BY com_date DESC LIMIT $cfg_maxitems");
-		$i = 0;
-		while($row = mysql_fetch_assoc($sql))
+		if(sed_auth('page', $row['page_cat'], 'R'))
 		{
-			$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row['com_authorid']."' LIMIT 1");
-			$row2 = mysql_fetch_assoc($sql2);
-			$items[$i]['title'] = $L['rss_comment']." ".$row2['user_name'];
-			$text = sed_parse(sed_cc($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
-			$text = sed_post_parse($text, 'pages');
-			$items[$i]['description'] = $text;
-			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=$page_id#c".$row['com_id'], '', true);
-			$items[$i]['pubDate'] = date('r', $row['com_date']);
-			$i++;
+			$rss_title = $row['page_title'];
+			$rss_description = $L['rss_comments_item_desc'];
+
+			$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code='p$page_id' ORDER BY com_date DESC LIMIT $cfg_maxitems");
+			$i = 0;
+			while($row = mysql_fetch_assoc($sql))
+			{
+				$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row['com_authorid']."' LIMIT 1");
+				$row2 = mysql_fetch_assoc($sql2);
+				$items[$i]['title'] = $L['rss_comment']." ".$row2['user_name'];
+				$text = sed_parse(sed_cc($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+				$text = sed_post_parse($text, 'pages');
+				$items[$i]['description'] = $text;
+				$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=$page_id", '#c'.$row['com_id'], true);
+				$items[$i]['pubDate'] = date('r', $row['com_date']);
+				$i++;
+			}
+			// Attach original page text as last item
+			$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
+			$row = mysql_fetch_assoc($sql);
+			$items[$i]['title'] = $L['rss_original'];
+			//$items[$i]['description'] = sed_parse_page_text($row['page_text']);
+			$items[$i]['description'] = $row['page_html']; // TODO page_text parse
+			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=$page_id", '', true);
+			$items[$i]['pubDate'] = date('r', $row['page_date']);
 		}
-		// Attach original page text as last item
-		$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
-		$row = mysql_fetch_assoc($sql);
-		$items[$i]['title'] = $L['rss_original'];
-		//$items[$i]['description'] = sed_parse_page_text($row['page_text']);
-		$items[$i]['description'] = $row['page_html']; // TODO page_text parse
-		$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=$page_id", '', true);
-		$items[$i]['pubDate'] = date('r', $row['page_date']);
 	}
 }
 elseif ($c == "topic")
 {
-	// == All posts of topic == 
+	// == All posts of topic ==
 	$topic_id = $id;
-	
+
 	// is topic private ?
 	$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
 	$res = sed_sql_query($sql);
@@ -118,25 +121,26 @@ elseif ($c == "topic")
 	{
 		$row = mysql_fetch_assoc($res);
 		if ($row['ft_mode']=='1')
-			exit(); // this topic is private
+		exit(); // this topic is private
 
 		$rss_title = $domain." : ".$row['ft_title'];
 		$rss_description = $L['rss_topic_item_desc'];
-		
+
 		// check forum read permission for guests
 		$forum_id = $row['ft_sectionid'];
 		$sql = "SELECT auth_rights FROM $db_auth WHERE auth_code='forums' AND auth_groupid='1' AND auth_option='$forum_id'";
 		//echo $sql;
 		$res = sed_sql_query($sql);
 		$row = mysql_fetch_assoc($res);
-		if ($row['auth_rights']=='0')
-			exit(); // forum not readable for guests
+		//if ($row['auth_rights']=='0') exit(); // forum not readable for guests
 		
-		// get number of posts in topic 
+		if(!sed_auth('forum', $forum_id)) exit("not readable for guests");
+		
+		// get number of posts in topic
 		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
 		$res = sed_sql_query($sql);
 		$totalposts = sed_sql_result($res,0,"COUNT(*)");
-		
+
 		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid='$topic_id' ORDER BY fp_creation DESC LIMIT $cfg_maxitems";
 		$res = sed_sql_query($sql);
 		$i = 0;
@@ -147,7 +151,7 @@ elseif ($c == "topic")
 
 			$post_id = $row['fp_id'];
 			$items[$i]['title'] = $row['fp_postername'];
-			$items[$i]['description'] = $row['fp_html']; 
+			$items[$i]['description'] = $row['fp_html'];
 			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('forums', "m=posts&q=$topic_id&d=$curpage", "#post$post_id", true);
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 			$i++;
@@ -158,7 +162,7 @@ elseif ($c == "section")
 {
 	// == All posts of section ==
 	$forum_id = $id;
-	
+
 	$sql = "SELECT * FROM $db_forum_sections WHERE fs_id = '$forum_id'";
 	$res = sed_sql_query($sql);
 	if (sed_sql_affectedrows()>0)
@@ -168,7 +172,7 @@ elseif ($c == "section")
 		$section_desc = $row['fs_desc'];
 		$rss_title = $section_title;
 		$rss_description = $section_desc;
-		
+
 		$where = "fp_sectionid = '$forum_id'";
 		// get subsections
 		unset($subsections);
@@ -178,11 +182,11 @@ elseif ($c == "section")
 		{
 			$where .= " OR fp_sectionid ='{$row['fs_id']}'";
 		}
-		
+
 		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT $cfg_maxitems ";
 		$res = sed_sql_query($sql);
 		$i = 0;
-		
+
 		while($row = mysql_fetch_assoc($res))
 		{
 			$post_id = $row['fp_id'];
@@ -194,14 +198,14 @@ elseif ($c == "section")
 			$row2 = mysql_fetch_assoc($res2);
 			$topic_title = $row2['ft_title'];
 			if ($row2['ft_mode']=='1')
-				$flag_private = 1;
-			
+			$flag_private = 1;
+
 			$sql = "SELECT auth_rights FROM $db_auth WHERE auth_code='forums' AND auth_groupid='1' AND auth_option='$forum_id'";
 			$res2 = sed_sql_query($sql);
 			$row2 = mysql_fetch_assoc($res2);
 			if ($row2['auth_rights']=='0')
-				$flag_private = 1;
-			
+			$flag_private = 1;
+
 			if (!$flag_private)
 			{
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
@@ -218,7 +222,7 @@ elseif ($c == "forums")
 	// == All posts on forums ==
 	$rss_title = $domain." : ".$L['rss_allforums_item_title'];
 	$rss_description = "";
-	
+
 	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC	LIMIT $cfg_maxitems ";
 	$res = sed_sql_query($sql);
 	$i = 0;
@@ -227,22 +231,22 @@ elseif ($c == "forums")
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
 		$forum_id = $row['fp_sectionid'];
-		
+
 		$flag_private = 0;
-		
+
 		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
 		$res2 = sed_sql_query($sql);
 		$row2 = mysql_fetch_assoc($res2);
 		$topic_title = $row2['ft_title'];
 		if ($row2['ft_mode']=='1')
-			$flag_private = 1;
-		
+		$flag_private = 1;
+
 		$sql = "SELECT auth_rights FROM $db_auth WHERE auth_code='forums' AND auth_groupid='1' AND auth_option='$forum_id'";
 		$res2 = sed_sql_query($sql);
 		$row2 = mysql_fetch_assoc($res2);
 		if ($row2['auth_rights']=='0')
-			$flag_private = 1;
-		
+		$flag_private = 1;
+
 		if (!$flag_private)
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
@@ -260,31 +264,33 @@ else
 	$res = sed_sql_query("SELECT * FROM $db_structure");
 	$flag = 0;
 	while($row = mysql_fetch_assoc($res))
-		if ($c==$row['structure_code'])
-		{
-			$flag = 1;
-			$category_path = $row['structure_path'];
-		}
-	if ($flag==0)
-		exit("requested category not found"); // requested category not found
-
-	// found subcategories
-	$where = "0";
-	$sql = "SELECT * FROM $db_structure WHERE structure_path LIKE '%$category_path%'";
-	$res = sed_sql_query($sql);
-	while($row = mysql_fetch_assoc($res)) $where .= " OR page_cat = '".$row['structure_code']."'";
-	
-	$sql = "SELECT * FROM $db_pages WHERE ($where) AND page_state = '0' ORDER BY page_date DESC LIMIT $cfg_maxitems";
-	$res = sed_sql_query($sql);
-	$i = 0;
-	while($pag = mysql_fetch_assoc($res))
+	if ($c==$row['structure_code'])
 	{
-		$items[$i]['title'] = $pag['page_title'];
-		$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=".$pag['page_id'], '', true);
-		//$items[$i]['link'] = $cfg['mainurl']."/page.php?id=".$pag['page_id'];
-		$items[$i]['pubDate'] = date('r', $pag['page_date']);
-		$items[$i]['description'] = sed_parse_page_text($pag);
-		$i++;
+		$flag = 1;
+		$category_path = $row['structure_path'];
+	}
+
+	if($flag!=0 AND sed_auth('page', $c, 'R'))
+	{
+
+		// found subcategories
+		$where = "0";
+		$sql = "SELECT * FROM $db_structure WHERE structure_path LIKE '%$category_path%'";
+		$res = sed_sql_query($sql);
+		while($row = mysql_fetch_assoc($res)) $where .= " OR page_cat = '".$row['structure_code']."'";
+
+		$sql = "SELECT * FROM $db_pages WHERE ($where) AND page_state = '0' ORDER BY page_date DESC LIMIT $cfg_maxitems";
+		$res = sed_sql_query($sql);
+		$i = 0;
+		while($pag = mysql_fetch_assoc($res))
+		{
+			$items[$i]['title'] = $pag['page_title'];
+			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=".$pag['page_id'], '', true);
+			//$items[$i]['link'] = $cfg['mainurl']."/page.php?id=".$pag['page_id'];
+			$items[$i]['pubDate'] = date('r', $pag['page_date']);
+			$items[$i]['description'] = sed_parse_page_text($pag);
+			$i++;
+		}
 	}
 }
 
