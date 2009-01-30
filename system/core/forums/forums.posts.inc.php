@@ -228,6 +228,8 @@ if ($a=='newpost')
 			$sql = sed_sql_query("SELECT fp_id, fp_text, fp_html FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
 			$row = sed_sql_fetcharray($sql);
 
+			$p = (int) $row['fp_id'];
+
 			$newmsg = sed_sql_prep($row['fp_text'])."\n\n".sed_sql_prep($newmsg);
 			$newhtml = ($cfg['parser_cache']) ? sed_sql_prep($row['fp_html'])."<br /><br />".$rhtml : '';
 
