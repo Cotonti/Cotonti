@@ -48,6 +48,11 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 	AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
 	AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$sed_cat[$cfg['plugin']['news']['category']]['order']." ".$sed_cat[$cfg['plugin']['news']['category']]['way']." LIMIT ".$cfg['plugin']['news']['maxpages']);
 
+	// Extra field - getting 
+	$extrafields = array(); $number_of_extrafields = 0; 
+	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'"); 
+	while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; } 
+	
 	$news = new XTemplate(sed_skinfile('news'));
 
 	while ($pag = sed_sql_fetcharray($sql))
@@ -71,11 +76,6 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 			"PAGE_ROW_CATDESC" => sed_cc($sed_cat[$pag['page_cat']]['desc']),
 			"PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
 			"PAGE_ROW_KEY" => sed_cc($pag['page_key']),
-			"PAGE_ROW_EXTRA1" => sed_cc($pag['page_extra1']),
-			"PAGE_ROW_EXTRA2" => sed_cc($pag['page_extra2']),
-			"PAGE_ROW_EXTRA3" => sed_cc($pag['page_extra3']),
-			"PAGE_ROW_EXTRA4" => sed_cc($pag['page_extra4']),
-			"PAGE_ROW_EXTRA5" => sed_cc($pag['page_extra5']),
 			"PAGE_ROW_DESC" => sed_cc($pag['page_desc']),
 			"PAGE_ROW_AUTHOR" => sed_cc($pag['page_author']),
 			"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
@@ -142,6 +142,10 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 				}
 				break;
 		}
+		
+		// Extra fields 
+		if($number_of_extrafields > 0) foreach($extrafields as $row) $news->assign('PAGE_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
+		
 		$news->parse("NEWS.PAGE_ROW");
 	}
 	$news->parse("NEWS");
