@@ -4,25 +4,27 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=users.register.inc.php
-Version=122
-Updated=2007-jul-16
-Type=Core
-Author=Neocrome
-Description=User auth
-[END_SED]
 ==================== */
+
+/**
+ * User registration script.
+ *
+ * @package Cotonti
+ * @version 0.0.2
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $v = sed_import('v','G','ALP');
 
 if ($cfg['disablereg'])
-	{
+{
 	sed_redirect(sed_url('message', 'msg=117', '', true));
 	exit;
-	}
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('users.register.first');
@@ -36,14 +38,14 @@ $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location=
 while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
 if ($a=='add')
-	{
+{
 	$bannedreason = FALSE;
 	sed_shield_protect();
 
 	/* === Hook for the plugins === */
 	$extp = sed_getextplugins('users.register.add.first');
 	if (is_array($extp))
-		{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT', 100, TRUE);
@@ -80,10 +82,10 @@ if ($a=='add')
 	$sql = sed_sql_query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
 
 	while ($row = sed_sql_fetcharray($sql))
-		{
+	{
 		if (mb_eregi($row['banlist_email'], $ruseremail))
-			{ $bannedreason = $row['banlist_reason']; }
-		}
+		{ $bannedreason = $row['banlist_reason']; }
+	}
 
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_name='".sed_sql_prep($rusername)."'");
 	$res1 = sed_sql_result($sql,0,"COUNT(*)");
@@ -100,11 +102,11 @@ if ($a=='add')
 	$error_string .= ($rpassword1!=$rpassword2) ? $L['aut_passwordmismatch']."<br />" : '';
 
 	if (empty($error_string))
-		{
+	{
 		if (sed_sql_rowcount($db_users)==0)
-			{ $defgroup = 5; }
+		{ $defgroup = 5; }
 		else
-			{ $defgroup = ($cfg['regnoactivation']) ? 4 : 2; }
+		{ $defgroup = ($cfg['regnoactivation']) ? 4 : 2; }
 
 		$mdpass = md5($rpassword1);
 		$ruserbirthdate = ($rmonth=='x' || $rday=='x' || $ryear=='x' || $rmonth==0 || $rday==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
@@ -115,11 +117,11 @@ if ($a=='add')
 		// Extra fields
 		$extra_columns = ""; $extra_values = "";
 		if(count($extrafields)>0)
-			foreach($extrafields as $i=>$row)
-			{
-				$extra_columns .= "user_".$row['field_name'].", ";
-				$extra_values .= "'".sed_sql_prep($ruserextrafields[$i])."', ";
-			}
+		foreach($extrafields as $i=>$row)
+		{
+			$extra_columns .= "user_".$row['field_name'].", ";
+			$extra_values .= "'".sed_sql_prep($ruserextrafields[$i])."', ";
+		}
 		$ssql = "INSERT into $db_users
 			(user_name,
 			user_password,
@@ -144,7 +146,7 @@ if ($a=='add')
 			user_irc,
 			user_msn,
 			user_website,
-			$extra_columns
+		$extra_columns
 			user_lastip)
 			VALUES
 			('".sed_sql_prep($rusername)."',
@@ -170,7 +172,7 @@ if ($a=='add')
 			'".sed_sql_prep($ruserirc)."',
 			'".sed_sql_prep($rusermsn)."',
 			'".sed_sql_prep($ruserwebsite)."',
-			$extra_values
+		$extra_values
 			'".$usr['ip']."')";
 		$sql = sed_sql_query($ssql);
 		$userid = sed_sql_insertid();
@@ -179,17 +181,17 @@ if ($a=='add')
 		/* === Hook for the plugins === */
 		$extp = sed_getextplugins('users.register.add.done');
 		if (is_array($extp))
-			{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
 		if ($cfg['regnoactivation'] || $defgroup==5)
-			{
+		{
 			sed_redirect(sed_url('message', 'msg=106'));
 			exit;
-			}
+		}
 
 		if ($cfg['regrequireadmin'])
-			{
+		{
 			$rsubject = $cfg['maintitle']." - ".$L['aut_regrequesttitle'];
 			$rbody = sprintf($L['aut_regrequest'], $rusername, $rpassword1);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
@@ -201,9 +203,9 @@ if ($a=='add')
 			sed_mail ($cfg['adminemail'], $rsubject, $rbody);
 			sed_redirect(sed_url('message', 'msg=118'));
 			exit;
-			}
+		}
 		else
-			{
+		{
 			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
 			$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
 			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate);
@@ -211,31 +213,31 @@ if ($a=='add')
 			sed_mail ($ruseremail, $rsubject, $rbody);
 			sed_redirect(sed_url('message', 'msg=105'));
 			exit;
-			}
 		}
 	}
+}
 
 elseif ($a=='validate' && mb_strlen($v)==32)
-	{
+{
 	sed_shield_protect();
 	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_lostpass='$v' AND user_maingrp=2");
 
 	if ($row = sed_sql_fetcharray($sql))
-		{
+	{
 		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp=4 WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
 		$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 		sed_auth_clear($row['user_id']);
 		sed_redirect(sed_url('message', 'msg=106'));
 		exit;
-		}
+	}
 	else
-		{
+	{
 		sed_shield_update(7, "Account validation");
 		sed_log("Wrong validation URL", 'sec');
 		sed_redirect(sed_url('message', 'msg=157'));
 		exit;
-		}
 	}
+}
 
 $form_usergender = sed_selectbox_gender($rusergender,'rusergender');
 $form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short');
@@ -244,10 +246,10 @@ $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '
 
 $form_timezone = "<select name=\"rtimezone\" size=\"1\">";
 while( list($i,$x) = each($timezonelist) )
-	{
+{
 	$selected = ($x==$rtimezone) ? "selected=\"selected\"" : '';
 	$form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
-	}
+}
 $form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
 
 /* === Hook === */
@@ -261,10 +263,10 @@ require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.register'));
 
 if (!empty($error_string))
-	{
+{
 	$t->assign("USERS_REGISTER_ERROR_BODY",$error_string);
 	$t->parse("MAIN.USERS_REGISTER_ERROR");
-	}
+}
 
 $useredit_array = array(
 	"USERS_REGISTER_TITLE" => $L['aut_registertitle'],
@@ -285,35 +287,40 @@ $useredit_array = array(
 	"USERS_REGISTER_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".sed_cc($rusericq)."\" size=\"32\" maxlength=\"16\" />",
 	"USERS_REGISTER_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".sed_cc($ruserirc)."\" size=\"56\" maxlength=\"128\" />",
 	"USERS_REGISTER_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".sed_cc($rusermsn)."\" size=\"32\" maxlength=\"64\" />",
-		);
+);
 // Extra fields
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
 	$t1 = "USERS_REGISTER_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
-	switch($row['field_type']) {
-	case "input":
-		$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" ', $t2); break;
-	case "textarea":
-		$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('</textarea>',$urr['user_'.$row['field_name']].'</textarea>', $t2); break;
-	case "select":
-		$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
-		$options = "";
-		$opt_array = explode(",",$row['field_variants']);
-		if(count($opt_array)!=0)
+	switch($row['field_type'])
+	{
+		case "input":
+			$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
+			$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" ', $t2);
+			break;
+		case "textarea":
+			$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
+			$t2 = str_replace('</textarea>',$urr['user_'.$row['field_name']].'</textarea>', $t2);
+			break;
+		case "select":
+			$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
+			$options = "";
+			$opt_array = explode(",",$row['field_variants']);
+			if(count($opt_array)!=0)
 			foreach ($opt_array as $var)
 			{
 				$sel = $var == $urr['user_'.$row['field_name']] ? ' selected="selected"' : '';
 				$options .= "<option value=\"$var\" $sel>$var</option>";
 			}
-		$t2 = str_replace("</select>","$options</select>",$t2); break;
-	case "checkbox":
-		$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
-		$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
-		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" '.$sel.' ', $t2); break;
+			$t2 = str_replace("</select>","$options</select>",$t2);
+			break;
+		case "checkbox":
+			$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
+			$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
+			$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" '.$sel.' ', $t2);
+			break;
 	}
 	$useredit_array[$t1] = $t2;
 }

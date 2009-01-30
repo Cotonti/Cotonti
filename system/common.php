@@ -375,7 +375,6 @@ require_once($mlang);
 /* ======== Who's online part 2 ======== */
 
 $out['whosonline'] = ($cfg['disablewhosonline']) ? '' : $sys['whosonline_reg_count'].' '.$L['com_members'].', '.$sys['whosonline_vis_count'].' '.$L['com_guests'];
-$out['copyright'] = "<a href=\"http://www.neocrome.net\">".$L['foo_poweredby']." Seditio</a>";
 
 /* ======== Skin ======== */
 
@@ -417,6 +416,8 @@ require_once('./skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
 
 $skin = $usr['skin'];
 $theme = $usr['theme'];
+
+$out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
 
 /* ======== Basic statistics ======== */
 

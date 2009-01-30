@@ -2831,7 +2831,7 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
 	if ($date === false)  $date  = Date ('j');
 	if ($year === false)  $year  = Date ('Y');
 
-	return mktime ($hour, $minute, $second, $month, $date, $year);
+	return mktime ((int) $hour, (int) $minute, (int) $second, (int) $month, (int) $date, (int) $year);
 }
 
 /**
