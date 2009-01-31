@@ -109,7 +109,7 @@ if ($c == "comments")
 		}
 	}
 }
-elseif ($c == "topic")
+elseif ($c == "topics")
 {
 	// == All posts of topic ==
 	$topic_id = $id;
