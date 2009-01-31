@@ -529,7 +529,7 @@ $L['aut_emailchange'] = 'Hi %1$s,
 
 You are receiving this email because you have changed your recent email address with another (this one) address on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.
 
-To use your account you need to activate it with this link :
+To change your recent email please use this activation link :
 
  %2$s
 '; // N-0.1.0
