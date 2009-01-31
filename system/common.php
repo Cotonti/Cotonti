@@ -395,16 +395,11 @@ if (!file_exists($mskin))
 	{ sed_diefatal('Default skin not found.'); }
 }
 
-$mtheme = 'skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
+$mtheme = sed_themefile();
 
-if (!file_exists($mtheme))
+if (!$mtheme)
 {
-	$out['notices'] .= $L['com_themefail'].'<br />';
-	$usr['theme'] = $cfg['defaulttheme'];
-	$mtheme = 'skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
-
-	if (!file_exists($mtheme))
-	{ sed_diefatal('Default theme not found.'); }
+	sed_diefatal('Default theme not found.');
 }
 
 $usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';

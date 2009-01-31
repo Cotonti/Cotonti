@@ -4140,14 +4140,83 @@ function sed_tag_unregister($tag)
  * ==========================================================================================
  */
 
+/**
+ * Tries to detect and fetch a user theme or returns FALSE on error.
+ * 
+ * @global array $usr User object
+ * @global array $cfg Configuration
+ * @global array $out Output vars
+ * @return mixed
+ */
+function sed_themefile()
+{
+	global $usr, $cfg, $out;
+
+	if(file_exists('skins/'.$usr['skin'].'/'.$usr['theme'].'.css'))
+	{
+		return 'skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
+	}
+	elseif(file_exists('skins/'.$usr['skin'].'/css/'))
+	{
+		if(file_exists('skins/'.$usr['skin'].'/css/'.$usr['theme'].'.css'))
+		{
+			return 'skins/'.$usr['skin'].'/css/'.$usr['theme'].'.css';
+		}
+		elseif(file_exists('skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css'))
+		{
+			$out['notices'] .= $L['com_themefail'].'<br />';
+			$usr['theme'] = $cfg['defaulttheme'];
+			return 'skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css';
+		}
+	}
+	elseif(file_exists('skins/'.$usr['skin']))
+	{
+		if(file_exists('skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css'))
+		{
+			$out['notices'] .= $L['com_themefail'].'<br />';
+			$usr['theme'] = $cfg['defaulttheme'];
+			return 'skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css';
+		}
+		elseif(file_exists('skins/'.$usr['skin'].'/'.$usr['skin'].'.css'))
+		{
+			$out['notices'] .= $L['com_themefail'].'<br />';
+			$usr['theme'] = $usr['skin'];
+			return 'skins/'.$usr['skin'].'/'.$usr['skin'].'.css';
+		}
+		elseif(file_exists('skins/'.$usr['skin'].'/style.css'))
+		{
+			$out['notices'] .= $L['com_themefail'].'<br />';
+			$usr['theme'] = 'style';
+			return 'skins/'.$usr['skin'].'/style.css';
+		}
+	}
+
+	$out['notices'] .= $L['com_themefail'].'<br />';
+	if(file_exists('skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css'))
+	{
+		$usr['skin'] = $cfg['defaultskin'];
+		$usr['theme'] = $cfg['defaulttheme'];
+		return 'skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css';
+	}
+	elseif(file_exists('skins/'.$cfg['defaultskin'].'/css/'.$cfg['defaulttheme'].'.css'))
+	{
+		$usr['skin'] = $cfg['defaultskin'];
+		$usr['theme'] = $cfg['defaulttheme'];
+		return 'skins/'.$cfg['defaultskin'].'/css/'.$cfg['defaulttheme'].'.css';
+	}
+	else
+	{
+		return false;
+	}
+}
 
 /**
  * Returns a String afterbeing processed by a sprintf mask for titles
  *
  * @param string $area Area maskname or actual mask
-* @param array $tags Tag Masks
+ * @param array $tags Tag Masks
  * @param array $data title options
-  * @return string
+ * @return string
  */
 function sed_title($mask, $tags, $data)
 {
