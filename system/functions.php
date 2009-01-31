@@ -1074,7 +1074,7 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 		$tmp[] = '<a href="'.sed_url('forums').'">'.$L['Forums'].'</a>';
 		foreach($pathcodes as $k => $x)
 		{
-			$tmp[] = '<a href="'.sed_url('forums', 'c='.$x.'#'.$x).'">'.sed_cc($sed_forums_str[$x]['title']).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'c='.$x, '#'.$x).'">'.sed_cc($sed_forums_str[$x]['title']).'</a>';
 		}
 		if(is_array($master))
 		{
