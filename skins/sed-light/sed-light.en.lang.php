@@ -274,8 +274,8 @@ $skinlang['usersprofile']['Registeredsince'] = 'Registered since:';
 $skinlang['usersprofile']['Email'] = 'Email:';
 $skinlang['usersprofile']['Emailnotes'] = 'To change your email: (If email transition is available) <ol>
 											<li>You are gonna have to re-activate by email to prove the email is valid.
-											<li>If you change your email, any other updates will not be accepted till you re-active your account (so don\'t update your information if you are changing)
-											<li>If you make any kind of mistake, do not get the email by system, you are going to have to contact with a moderator/administrator to solve this problem.
+											<li>Till you use the validation link, your email will remain safe.
+											<li>After clicking the link, your email address will immediately change.
 											</ol>'; // N-0.1.0
 $skinlang['usersprofile']['Hidetheemail'] = 'Always hide the email:';
 $skinlang['usersprofile']['PMnotify'] = 'PM notify:';
