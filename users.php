@@ -19,7 +19,7 @@ define('SED_USERS', TRUE);
 $location = 'Users';
 $z = 'users';
 
-if ($_POST['m']=="auth")
+if ($_GET['m']=="auth")
 {
 define('SED_AUTH', TRUE);
 }
