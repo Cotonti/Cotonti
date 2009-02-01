@@ -534,7 +534,7 @@ $profile_form_timezone = "<select name=\"rusertimezone\" size=\"1\">";
 while( list($i,$x) = each($timezonelist) )
 {
 	$selected = ($x==$urr['user_timezone']) ? "selected=\"selected\"" : '';
-	$profile_form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
+	$profile_form_timezone .= "<option value=\"$x\" $selected>GMT".$x.", ".date($cfg['dateformat'], $sys['now_offset'] + $x*3600)."</option>";
 }
 $profile_form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
 
