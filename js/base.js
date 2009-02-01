@@ -40,7 +40,7 @@ function ajaxSend(settings) {
 		url: url,
 		data: data,
 		beforeSend: function() {
-			$('#' + settings.divId).append('<div style="position:relative;left:' + ($('#' + settings.divId).width()/2 - 16) + 'px;top:-' + ($('#' + settings.divId).height()/2 - 16) + 'px;" class="loading" id="loading"><img src="images/spinner_bigger.gif" alt="loading"/></div>');
+			$('#' + settings.divId).append('<span style="position:relative;left:' + ($('#' + settings.divId).width()/2 - 16) + 'px;top:-' + ($('#' + settings.divId).height()/2 - 16) + 'px;" class="loading" id="loading"><img src="images/spinner_bigger.gif" alt="loading"/></span>');
 		},
 		success: function(msg) {
 			$('#loading').remove();
