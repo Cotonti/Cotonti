@@ -365,6 +365,7 @@ switch ($a)
 	$roldpass = sed_import('roldpass','P','TXT');
 	$rnewpass1 = sed_import('rnewpass1','P','TXT');
 	$rnewpass2 = sed_import('rnewpass2','P','TXT');
+	$rmailpass = sed_import('rmailpass','P','TXT');
 
 	$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
 	
@@ -422,15 +423,66 @@ switch ($a)
 			}
 		}
 	}
+	
+	if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
+		{
+		
+		$rmailpass = md5($rmailpass);
+		
+		$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_email='".sed_sql_prep($ruseremail)."'");
+		$res = sed_sql_result($sqltmp,0,"COUNT(*)");
+		
+		$error_string .= ($rmailpass!=$urr['user_password']) ? $L['pro_wrongpass']."<br />" : '';
+		//$error_string .= (mb_strlen($ruseremail)<4 || !mb_eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$",$ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
+		$error_string .= ($res>0) ? $L['aut_emailalreadyindb']."<br />" : '';
+
+		if (empty($error_string))
+			{
+
+		if (!$cfg['regnoactivation'])
+				{
+				
+				$validationkey = md5(microtime());
+				$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_email='".sed_sql_prep($ruseremail)."', user_maingrp='-1', user_sid='".sed_sql_prep($urr['user_maingrp'])."' WHERE user_id='".$usr['id']."' ");
+				
+				$rsubject = $cfg['maintitle']." - ".$L['aut_mailnoticetitle'];
+				$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
+				$rbody = sprintf($L['aut_emailchange'], $usr['name'], $ractivate);
+				$rbody .= "\n\n".$L['aut_contactadmin'];
+				sed_mail ($ruseremail, $rsubject, $rbody);
+				
+				if(!empty($_COOKIE['COTONTI']))
+				{
+					sed_setcookie('COTONTI', '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+				}
+
+				if (!empty($_SESSION['COTONTI']))
+				{
+					session_unset();
+					session_destroy();
+				}
+
+					$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
+					sed_redirect(sed_url('message', 'msg=102', '', true));
+					exit;
+				
+				}
+				
+			else
+				{ 
+				$sql = sed_sql_query("UPDATE $db_users SET user_email='".sed_sql_prep($ruseremail)."' WHERE user_id='".$usr['id']."' ");
+				}
+				
+			}
+				
+		}
+
 
 	if (empty($error_string))
 	{
 
 		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
-
-		if (!$cfg['useremailchange'])
-			{ $ruseremail = $urr['user_email']; }
-
+				
 		$ssql = "UPDATE $db_users SET
 			user_text='".sed_sql_prep($rusertext)."',
 			user_country='".sed_sql_prep($rusercountry)."',
@@ -446,7 +498,6 @@ switch ($a)
 			user_timezone='".sed_sql_prep($rusertimezone)."',
 			user_location='".sed_sql_prep($ruserlocation)."',
 			user_occupation='".sed_sql_prep($ruseroccupation)."',
-			user_email='".sed_sql_prep($ruseremail)."',
 			user_hideemail='$ruserhideemail',
 			user_pmnotify='$ruserpmnotify',";
 		if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',"; // Extra fields
@@ -490,7 +541,7 @@ $profile_form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateform
 $profile_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
 $profile_form_gender = sed_selectbox_gender($urr['user_gender'] ,'rusergender');
 $profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
-$profile_form_email = ($cfg['useremailchange']) ? "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />" : sed_cc($urr['user_email']);
+$profile_form_email = ($cfg['useremailchange']) ? "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />" : "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" disabled=\"disabled\" />";
 
 $profile_form_avatar .= (!empty($urr['user_avatar'])) ? "<img src=\"".$urr['user_avatar']."\" alt=\"\" /><br />".$L['Delete']." [<a href=\"" .sed_url('users', 'm=profile&a=avatardelete&'.sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
 $profile_form_avatar .= $L['pro_avatarsupload']." (".$cfg['av_maxx']."x".$cfg['av_maxy']."x".$cfg['av_maxsize'].$L['b'].")<br />";
@@ -563,6 +614,7 @@ $useredit_array = array(
 	"USERS_PROFILE_TEXT" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"8\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
 	"USERS_PROFILE_TEXTBOXER" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"8\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
 	"USERS_PROFILE_EMAIL" => $profile_form_email,
+	"USERS_PROFILE_EMAILPASS" => "<input type=\"password\" class=\"password\" name=\"rmailpass\" size=\"12\" maxlength=\"16\" autocomplete=\"off\" />",
 	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,
 	"USERS_PROFILE_PMNOTIFY" => $profile_form_pmnotify,
 	"USERS_PROFILE_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".$urr['user_website']."\" size=\"56\" maxlength=\"128\" />",

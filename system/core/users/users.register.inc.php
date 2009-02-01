@@ -19,6 +19,7 @@ http://www.neocrome.net
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $v = sed_import('v','G','ALP');
+$y = sed_import('y','G','INT');
 
 if ($cfg['disablereg'])
 {
@@ -96,7 +97,7 @@ if ($a=='add')
 	$error_string .= (!empty($bannedreason)) ? $L['aut_emailbanned'].$bannedreason."<br />" : '';
 	$error_string .= (mb_strlen($rusername)<2) ? $L['aut_usernametooshort']."<br />" : '';
 	$error_string .= (mb_strlen($rpassword1)<4 || sed_alphaonly($rpassword1)!=$rpassword1) ? $L['aut_passwordtooshort']."<br />" : '';
-	$error_string .= (mb_strlen($ruseremail)<4 || !mb_eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$",$ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
+	//$error_string .= (mb_strlen($ruseremail)<4 || !mb_eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$",$ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
 	$error_string .= ($res1>0) ? $L['aut_usernamealreadyindb']."<br />" : '';
 	$error_string .= ($res2>0) ? $L['aut_emailalreadyindb']."<br />" : '';
 	$error_string .= ($rpassword1!=$rpassword2) ? $L['aut_passwordmismatch']."<br />" : '';
@@ -207,8 +208,9 @@ if ($a=='add')
 		else
 		{
 			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
-			$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
-			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate);
+			$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey.'&y=1', '', true);
+			$rdeactivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey.'&y=0', '', true);
+			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate, $rdeactivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			sed_mail ($ruseremail, $rsubject, $rbody);
 			sed_redirect(sed_url('message', 'msg=105'));
@@ -220,15 +222,38 @@ if ($a=='add')
 elseif ($a=='validate' && mb_strlen($v)==32)
 {
 	sed_shield_protect();
-	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_lostpass='$v' AND user_maingrp=2");
+	$sql = sed_sql_query("SELECT user_id, user_maingrp, user_sid FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') ");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
+	
+	if ($row['user_maingrp'] == 2)
+		{
+		
+	if ($y==1)
+		{
 		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp=4 WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
 		$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 		sed_auth_clear($row['user_id']);
 		sed_redirect(sed_url('message', 'msg=106'));
 		exit;
+		}
+	elseif ($y==0)
+		{
+		$sql = sed_sql_query("DELETE FROM $db_users WHERE user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
+		$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='".$row['user_id']."'");
+		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='".$row['user_id']."'");
+		sed_redirect(sed_url('message', 'msg=109'));
+		exit;
+		}
+		
+		}
+	elseif ($row['user_maingrp']==-1)
+		{
+		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='".sed_sql_prep($row['user_sid'])."' WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
+		sed_redirect(sed_url('message', 'msg=106'));
+		exit;
+		}
 	}
 	else
 	{
