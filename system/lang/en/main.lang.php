@@ -496,8 +496,6 @@ $L['aut_contactadmin'] = 'If you have any difficulties please contact the board 
 $L['aut_regrequesttitle'] = 'Registration request';
 $L['aut_regrequest'] = 'Hi %1$s,
 
-You are receiving this email because you have (or someone pretending to be you has) registered a new account on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.
-
 Your account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. Then you will be able to login with :
 
 Username = %1$s
@@ -513,8 +511,6 @@ This user won\'t be able to login until you manually set the account as \'active
 
 $L['aut_emailreg'] = 'Hi %1$s,
 
-You are receiving this email because you have (or someone pretending to be you has) registered a new account on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.
-
 To use your account you need to activate it with this link :
 
  %3$s
@@ -522,12 +518,16 @@ To use your account you need to activate it with this link :
  Then you\'ll be able to login with :
 
 Username = %1$s
-Password = %2$s';
+Password = %2$s
+
+To cancel the recently inactive membership use this link :
+
+ %4$s
+
+';
 
 $L['aut_mailnoticetitle'] = 'Email transition'; // N-0.1.0
 $L['aut_emailchange'] = 'Hi %1$s,
-
-You are receiving this email because you have changed your recent email address with another (this one) address on our website. If you did not request this email then please ignore it, if you keep receiving it please contact the site administrator.
 
 To change your recent email please use this activation link :
 

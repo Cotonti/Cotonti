@@ -272,11 +272,16 @@ $skinlang['usersprofile']['Groupsmembership'] = 'Groups membership:';
 $skinlang['usersprofile']['Maingroup'] = 'Main group:';
 $skinlang['usersprofile']['Registeredsince'] = 'Registered since:';
 $skinlang['usersprofile']['Email'] = 'Email:';
-$skinlang['usersprofile']['Emailnotes'] = 'To change your email: (If email transition is available) <ol>
+$skinlang['usersprofile']['Emailpassword'] = 'Your present password';
+$skinlang['usersprofile']['Emailnotes'] = 'Email transition process (If email transition is available): <ol>
+											<li>You can\'t use preset email.
+											<li>You have to enter your present password because of the security precautions.
 											<li>You are gonna have to re-activate by email to prove the email is valid.
-											<li>Till you use the validation link, your email will remain safe.
-											<li>After clicking the link, your email address will immediately change.
-											</ol>'; // N-0.1.0
+											<li>Till you use the validation link, your account will be suspended.
+											<li>After clicking the link, your email account will be active immediately.
+											<li>Be careful typing your email, you won\'t have chance to recover it later.
+											<li>If, even though after precautions, you type wrong, please contact administrator.
+											</ol><br />All above is valid if the email validation is on, otherwise, your email will change immediately after process.'; // N-0.1.0
 $skinlang['usersprofile']['Hidetheemail'] = 'Always hide the email:';
 $skinlang['usersprofile']['PMnotify'] = 'PM notify:';
 $skinlang['usersprofile']['PMnotifyhint'] = '(Notify by email when there\'s a new private message)';
