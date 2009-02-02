@@ -1684,6 +1684,21 @@ function sed_build_userimage($image, $type='none')
 function sed_build_usertext($text)
 {
 	global $cfg;
+	if (!$cfg['usertextimg'])
+	{
+		$bbcodes_img = array(
+			'\\[img\\]([^\\[]*)\\[/img\\]' => '',
+			'\\[thumb=([^\\[]*)\\[/thumb\\]' => '',
+			'\\[t=([^\\[]*)\\[/t\\]' => '',
+			'\\[list\\]' => '',
+			'\\[style=([^\\[]*)\\]' => '',
+			'\\[quote' => '',
+			'\\[code' => ''
+				);
+
+		foreach($bbcodes_img as $bbcode => $bbcodehtml)
+			{ $text = eregi_replace($bbcode, $bbcodehtml, $text); }
+	}
 	return sed_parse($text, $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
 }
 

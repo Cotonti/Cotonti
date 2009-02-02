@@ -156,7 +156,7 @@ if ($n=='edit')
 	if (!mysql_num_rows($sqlc))
 	{
 		$adminmain .= "<tr><td>".$L['adm_forums_master']." :</td><td><select name=\"rmaster\"><option value=\"0\">--</option>";
-		$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='".$fs_category."' ORDER by fn_path ASC, fs_order ASC");
+		$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='".$fs_category."' ORDER by fn_path ASC, fs_order ASC");
 		while ($rowa = sed_sql_fetchassoc($sqla))
 		{
 			$cfs = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
@@ -383,7 +383,7 @@ else
 	$adminmain .= "<table class=\"cells\">";
 	$adminmain .= "<tr><td>".$L['Category']." :</td><td>".sed_selectbox_forumcat('', 'ncat')."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_forums_master']." :</td><td><select name=\"nmaster\"><option value=\"0\">--</option>";
-	$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN sed_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid<1 ORDER by fn_path ASC, fs_order ASC");
+	$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid<1 ORDER by fn_path ASC, fs_order ASC");
 	while ($rowa = sed_sql_fetchassoc($sqla))
 	{
 		$cfs = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
