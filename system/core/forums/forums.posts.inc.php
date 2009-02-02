@@ -631,7 +631,7 @@ while ($row = sed_sql_fetcharray($sql))
 
 	if (!$cache[$row['fp_posterid']]['cached'])
 	{
-		$row['user_text'] = sed_parse($row['user_text'], $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
+		$row['user_text'] = sed_build_usertext($row['user_text']);
 		$row['user_age'] = ($row['user_birthdate']!=0) ? sed_build_age($row['user_birthdate']) : '';
 		$cache[$row['fp_posterid']]['user_text'] = $row['user_text'];
 		$cache[$row['fp_posterid']]['user_age']= $row['user_age'];
@@ -660,7 +660,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_MAINGRPID" => $row['user_maingrp'],
 		"FORUMS_POSTS_ROW_MAINGRPSTARS" => sed_build_stars($sed_groups[$row['user_maingrp']]['level']),
 		"FORUMS_POSTS_ROW_MAINGRPICON" => sed_build_userimage($sed_groups[$row['user_maingrp']]['icon']),
-		"FORUMS_POSTS_ROW_USERTEXT" => $cfg['parsebbcodeusertext'] ? sed_bbcode_parse($row['user_text'], true) : $row['user_text'],
+		"FORUMS_POSTS_ROW_USERTEXT" => $row['user_text'],
 		"FORUMS_POSTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar'], 'avatar'),
 		"FORUMS_POSTS_ROW_PHOTO" => sed_build_userimage($row['user_photo'], 'photo'),
 		"FORUMS_POSTS_ROW_SIGNATURE" => sed_build_userimage($row['user_signature'], 'sig'),
