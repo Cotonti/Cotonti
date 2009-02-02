@@ -54,13 +54,12 @@ if ($n=='last' && !empty($q))
 }
 elseif ($n=='unread' && !empty($q) && $usr['id']>0)
 {
-echo "in this query";
 	$sql = sed_sql_query("SELECT fp_id, fp_topicid, fp_sectionid, fp_posterid
 	FROM $db_forum_posts
 	WHERE fp_topicid='$q' AND fp_creation>'".$usr['lastvisit']."'
 		ORDER by fp_id ASC LIMIT 1");
 	if ($row = sed_sql_fetcharray($sql))
-	{echo "is data";
+	{
 		$p = $row['fp_id'];
 		$q = $row['fp_topicid'];
 		$s = $row['fp_sectionid'];
@@ -126,7 +125,7 @@ if ($row = sed_sql_fetcharray($sql))
 	}
 }
 else
-{ echo 'KILL ME HERE';exit;sed_die(); }
+{ sed_die(); }
 
 if ($a=='newpost')
 {
