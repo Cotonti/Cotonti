@@ -15,7 +15,7 @@ Name=Comments Edit
 Description=Enhance comedit system
 Version=0.0.2
 Date=2009-jan-03
-Author=Asmo
+Author=Asmo (Edited by motor2hg)
 Copyright=asmo.org.ru
 Notes=
 SQL=
@@ -28,7 +28,8 @@ Lock_members=W12345A
 [BEGIN_SED_EXTPLUGIN_CONFIG]
 time=01:select:1,2,3,4,5,6,7,8,9,10,15,30,60,90,120,180:10:Comments editable timeout for users, minutes
 mail=02:radio:0,1:0:Notify about new comments by email?
+markitup=03:select:No,Yes:Yes:Use markitup?
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')) { die('Wrong URL.'); }
 ?>

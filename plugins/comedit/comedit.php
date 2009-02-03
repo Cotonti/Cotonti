@@ -1,17 +1,12 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-
 [BEGIN_SED]
 File=plugins/comedit/comedit.php
-Version=120
-Updated=2007-mar-01
+Version=0.0.2
+Updated=2009-jan-03
 Type=Plugin
-Author=Neocrome
-Description=
+Author=Asmo (Edited by motor2hg)
+Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
 [END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
@@ -20,33 +15,32 @@ Part=edit
 File=comedit
 Hooks=standalone
 Tags=
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
-
 ==================== */
+if(!defined('SED_CODE')) { die('Wrong URL.'); }
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
-
-$m   = sed_import('m',   'G', 'ALP');
-$a   = sed_import('a',   'G', 'ALP');
+$m	 = sed_import('m', 'G', 'ALP');
+$a	 = sed_import('a', 'G', 'ALP');
 $cid = (int) sed_import('cid', 'G', 'INT');
 $pid = sed_import('pid', 'G', 'ALP');
 
-
-
 $plugin_title = $L['plu_title'];
+$t -> assign(array(
+	"COMEDIT_TITLE" => $plugin_title,
+	"COMEDIT_TITLE_URL" => sed_url('plug', 'e=comedit')
+));
+$t -> parse("MAIN.COMEDIT_TITLE");
 
-if ($a=='update')
+if($a == 'update')
 {
-
 	sed_check_xg();
 
 	$sql1 = sed_sql_query("SELECT * FROM $db_com WHERE com_id=$cid AND com_code='$pid' LIMIT 1");
-	sed_die(sed_sql_numrows($sql1)==0);
+	sed_die(sed_sql_numrows($sql1) == 0);
 	$row = sed_sql_fetcharray($sql1);
 
-	$time_limit = ($sys['now_offset']<($row['com_date']+$cfg['plugin']['comedit']['time']*60)) ? TRUE : FALSE;
+	$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60)) ? TRUE : FALSE;
 	$usr['isowner'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
 	$usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 	sed_block($usr['allow_write']);
@@ -55,9 +49,15 @@ if ($a=='update')
 
 	$error_string .= (empty($comtext)) ? $L['plu_comtooshort']."<br />" : '';
 
-	if (empty($error_string))
+	if(isset($error_string))
 	{
-		$sql = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($comtext)."' WHERE com_id='$cid' AND  com_code='$pid'");
+		$t -> assign("COMEDIT_ERROR_BODY",$error_string);
+		$t -> parse("MAIN.COMEDIT_ERROR");
+	}
+
+	if(empty($error_string))
+	{
+		$sql = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($comtext)."' WHERE com_id=$cid AND com_code='$pid'");
 
 		if($cfg['plugin']['comedit']['mail'])
 		{
@@ -80,9 +80,8 @@ if ($a=='update')
 	}
 }
 
-
-$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_id='$cid' AND com_code='$pid' LIMIT 1");
-sed_die(sed_sql_numrows($sql)==0);
+$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_id=$cid AND com_code='$pid' LIMIT 1");
+sed_die(sed_sql_numrows($sql) == 0);
 $com = sed_sql_fetcharray($sql);
 
 $com_limit = ($sys['now_offset']<($com['com_date']+$cfg['plugin']['comedit']['time']*60)) ? TRUE : FALSE;
@@ -97,13 +96,25 @@ $smilies = ($cfg['parsesmiliescom']) ? sed_build_smilies("comedit", "comtext", $
 $pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "comedit", "comtext", $L['Mypfs']) : '';
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "comedit", "comtext", $L['SFS']) : '';
 
-$plugin_body .="<table class=\"cells\"><form id=\"comedit\" name=\"comedit\" action=\"".sed_url('plug', "e=comedit&amp;m=edit&amp;pid=".$com['com_code']."&amp;cid=".$com['com_id']."&amp;a=update&amp;".sed_xg())."\" method=\"POST\">";
-$plugin_body .="<tr><td>".$L['Poster'].":</td><td>".$com['com_author']."</td></tr>";
-$plugin_body .="<tr><td>".$L['Ip'].":</td><td>".$com['com_authorip']."</td></tr>";
-$plugin_body .="<tr><td>".$L['Date'].":</td><td>".$com_date."</td></tr>";
-$plugin_body .="<tr><td colspan=\"2\"><textarea rows=\"7\" cols=\"40\" style=\"width:99%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$bbcodes." ".$smilies." ".$pfs."</td></tr>";
-$plugin_body .="<tr><td colspan=\"2\" class=\"valid\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\"></td></tr>";
-$plugin_body .="</form></table>";
+$t -> assign(array(
+	"COMEDIT_FORM_POST" => sed_url('plug', "e=comedit&amp;m=edit&amp;pid=".$com['com_code']."&amp;cid=".$com['com_id']."&amp;a=update&amp;".sed_xg()),
+	"COMEDIT_POSTER_TITLE" => $L['Poster'],
+	"COMEDIT_POSTER" => $com['com_author'],
+	"COMEDIT_IP_TITLE" => $L['Ip'],
+	"COMEDIT_IP" => $com['com_authorip'],
+	"COMEDIT_DATE_TITLE" => $L['Date'],
+	"COMEDIT_DATE" => $com_date,
+	"COMEDIT_FORM_UPDATE_BUTTON" => $L['Update']
+));
 
+if($cfg['plugin']['comedit']['markitup'] == "No")
+{
+	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$bbcodes."&nbsp;&nbsp;".$smilies."&nbsp;&nbsp;".$pfs));
+}
+else if($cfg['plugin']['comedit']['markitup'] == "Yes")
+{
+	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea class=\"minieditor\" rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$bbcodes."&nbsp;&nbsp;".$smilies."&nbsp;&nbsp;".$pfs));
+}
 
+$t -> parse("MAIN.COMEDIT_FORM_EDIT");
 ?>
