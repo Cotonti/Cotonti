@@ -23,8 +23,8 @@ $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
 $cfg['mysqldb'] = 'sedition';			// Database name
 // Set this to your site charset if your default database charset is different
-$cfg['mysqlcharset'] = 'utf8';
-$cfg['mysqlcollate'] = 'utf8_unicode_ci';
+//$cfg['mysqlcharset'] = 'utf8';
+//$cfg['mysqlcollate'] = 'utf8_unicode_ci';
 
 // ========================
 // Main site URL without trailing slash.
