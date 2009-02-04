@@ -459,10 +459,10 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 
 	if (!empty($title) && !empty($code) && !empty($path) && $code!='all')
 	{
-		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='$code' LIMIT 1");
+		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='".sed_sql_prep($code)."' LIMIT 1");
 		if (sed_sql_numrows($sql)==0)
 		{
-			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group) VALUES ('$code', '$path', '$title', '$desc', '$icon', ".(int)$group.")");
+			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group) VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.")");
 
 			foreach($sed_groups as $k => $v)
 			{
@@ -486,7 +486,7 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 					$ins_auth = 3;
 					$ins_lock = ($k==4) ? 128 : 0;
 				}
-				$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'page', '$code', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
+				$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'page', '".sed_sql_prep($code)."', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
 				$res = TRUE;
 			}
 			sed_auth_reorder();
