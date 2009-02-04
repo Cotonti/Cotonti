@@ -6,12 +6,15 @@
 		<div id="subtitle">{PM_SUBTITLE}</div>
 
 		<div class="paging">{PM_INBOX} &nbsp; &nbsp; {PM_ARCHIVES} &nbsp; &nbsp; {PM_SENTBOX} &nbsp; &nbsp; {PM_SENDNEWPM}</div>
+		
+		<form action="{PM_FORM_UPDATE}" method="post" name="update">			
 
 		<div class="tCap"></div>
 		<table class="cells" border="0" cellspacing="1" cellpadding="2">
 
 			<!-- BEGIN: PM_TITLE -->
 			<tr>
+				<td class="coltop" style="width:16px;"> </td>
 				<td class="coltop" style="width:16px;">{PHP.skinlang.pm.State}</td>
 				<td class="coltop">{PHP.skinlang.pm.Sender}</td>
 				<td class="coltop">{PHP.skinlang.pm.Subject}</td>
@@ -22,6 +25,7 @@
 
 			<!-- BEGIN: PM_TITLE_SENTBOX -->
 			<tr>
+				<td class="coltop" style="width:16px;"> </td>
 				<td class="coltop" style="width:16px;">{PHP.skinlang.pm.State}</td>
 				<td class="coltop">{PHP.skinlang.pm.Recipient}</td>
 				<td class="coltop">{PHP.skinlang.pm.Subject}</td>
@@ -32,17 +36,18 @@
 
 			<!-- BEGIN: PM_ROW -->
 			<tr>
+				<td style="width:16px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_SELECT}</td>
 				<td style="width:16px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_STATUS}</td>
 				<td class="{PM_ROW_ODDEVEN}">{PM_ROW_FROMORTOUSER}</td>
 				<td class="{PM_ROW_ODDEVEN}">{PM_ROW_TITLE}</td>
 				<td style="width:112px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_DATE}</td>
 				<td style="width:112px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_ACTION}</td>
 			 </tr>
-			<!-- END: PM_ROW -->
-
+			<!-- END: PM_ROW -->			
+			
 			<!-- BEGIN: PM_ROW_EMPTY -->
 			<tr>
-				<td colspan="5" style="padding:16px;">{PHP.skinlang.pm.Nomessages}</td>
+				<td colspan="6" style="padding:16px;">{PHP.skinlang.pm.Nomessages}</td>
 			</tr>
 			<!-- END: PM_ROW_EMPTY -->
 
@@ -69,6 +74,10 @@
 
 		</div>
 		<!-- END: PM_DETAILS -->
+		
+		{PM_DELETE} {PM_ARCHIVE}
+		
+		</form>
 
 		<div class="paging">
 			<img src="skins/{PHP.skin}/img/system/icon-pm-new.gif" alt="" />: {PHP.skinlang.pm.Newmessage} &nbsp; &nbsp;

@@ -41,6 +41,8 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
+if ($a!='op')
+{
 $sql = sed_sql_query("SELECT * FROM $db_pm WHERE pm_id=$id");
 sed_die(sed_sql_numrows($sql)==0);
 
@@ -53,6 +55,7 @@ $pm_fromuser = $row['pm_fromuser'];
 $pm_touserid = $row['pm_touserid'];
 $pm_title = $row['pm_title'];
 $pm_text = $row['pm_text'];
+}
 
 if ($a=='archive')
 {
@@ -113,6 +116,40 @@ elseif ($a=='update')
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "id=".$id, '', true));
 	exit;
 }
+elseif ($a=='op')
+{
+
+	if (is_array($_POST['msg']))
+	{
+		$mask = array();
+		$msg = sed_import('msg', 'P', 'ARR');
+		$move = sed_import('move','P','TXT');
+		
+		foreach($msg as $k => $v)
+		{
+		
+		if ($move)
+		{
+		$sql = sed_sql_query("SELECT pm_state FROM $db_pm WHERE pm_id='".(int)$k."' (pm_touserid!='".$usr['id']."' OR pm_state>1) ");
+		if (sed_sql_numrows($sql)==0)
+			{ $sql = sed_sql_query("UPDATE $db_pm SET pm_state=2 WHERE pm_id='".(int)$k."'"); }
+		}
+		else
+		{
+		$sql = sed_sql_query("SELECT pm_state FROM $db_pm WHERE pm_id='".(int)$k."' AND ( (pm_state>0 AND pm_state<3 AND pm_touserid!='".$usr['id']."') OR ( (pm_state='0' OR pm_state='3') AND pm_fromuserid!='".$usr['id']."' ) ) ");
+		if (sed_sql_numrows($sql)==0)
+			{ $sql = sed_sql_query("DELETE FROM $db_pm WHERE pm_id='".(int)$k."'"); }
+		}
+		
+		}
+		
+	}
+	
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "f=".$f, '', true));
+	exit;
+	
+}
+
 
 sed_die();
 
