@@ -18,7 +18,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $v = sed_import('v','G','TXT');
 
-if (mb_eregi("\.", $v) || mb_eregi("/", $v))
+if (strstr($v, '.') || strstr($v, '/'))
 	{ die('Wrong URL.'); }
 
 $incl_html = "datas/html/".$v.".html";
