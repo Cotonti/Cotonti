@@ -208,7 +208,7 @@ while($row = sed_sql_fetchassoc($res))
 	</td>
 	<td style="width:45%;"><textarea name="field_html" rows="1" cols="60" >$field_html_encoded</textarea></td>
 	<td style="width:10%;">
-		<input type="submit" value="{$L['Update']}" onclick="if(confirm('{$L['adm_extrafield_confirmupd']}')) location.href='{$extrafield_update_url}'" /><br />
+		<input type="submit" value="{$L['Update']}" onclick="location.href='{$extrafield_update_url}'" /><br />
 		<input type="button" value="{$L['Delete']}" onclick="if(confirm('{$L['adm_extrafield_confirmdel']}')) location.href='{$extrafield_delete_url}'" />
 	</td>
 </tr>
