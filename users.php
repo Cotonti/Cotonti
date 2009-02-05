@@ -19,9 +19,9 @@ define('SED_USERS', TRUE);
 $location = 'Users';
 $z = 'users';
 
-if ($_GET['m']=="auth")
+if(isset($_GET['m']) && $_GET['m'] == 'auth')
 {
-define('SED_AUTH', TRUE);
+	define('SED_AUTH', TRUE);
 }
 
 require_once './datas/config.php';
