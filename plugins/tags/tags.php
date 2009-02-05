@@ -63,14 +63,14 @@ if($a == 'pages')
 		if(!empty($query))
 		{
 			$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
-			FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
-			ON r.tag_item = p.page_id
-			WHERE r.tag_area = 'pages' AND ($query)"), 0, 0);
+				FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
+				ON r.tag_item = p.page_id
+				WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0"), 0, 0);
 			$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
-			FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
-			ON r.tag_item = p.page_id
-			WHERE r.tag_area = 'pages' AND ($query)
-			LIMIT $d, {$cfg['maxrowsperpage']}");
+				FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
+				ON r.tag_item = p.page_id
+				WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0
+				LIMIT $d, {$cfg['maxrowsperpage']}");
 			$t->assign('TAGS_RESULT_TITLE', $L['Search_results']);
 			while($row = sed_sql_fetchassoc($sql))
 			{
@@ -139,16 +139,16 @@ elseif($a == 'forums')
 		if(!empty($query))
 		{
 			$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
-			FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
-			ON r.tag_item = t.ft_id
-			WHERE r.tag_area = 'forums' AND ($query)"), 0, 0);
+				FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
+				ON r.tag_item = t.ft_id
+				WHERE r.tag_area = 'forums' AND ($query)"), 0, 0);
 			$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
-			FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
-			ON r.tag_item = t.ft_id
-			LEFT JOIN $db_forum_sections AS s
-			ON t.ft_sectionid = s.fs_id
-			WHERE r.tag_area = 'forums' AND ($query)
-			LIMIT $d, {$cfg['maxrowsperpage']}");
+				FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
+				ON r.tag_item = t.ft_id
+				LEFT JOIN $db_forum_sections AS s
+				ON t.ft_sectionid = s.fs_id
+				WHERE r.tag_area = 'forums' AND ($query)
+				LIMIT $d, {$cfg['maxrowsperpage']}");
 			$t->assign('TAGS_RESULT_TITLE', $L['Search_results']);
 			while($row = sed_sql_fetchassoc($sql))
 			{
