@@ -270,7 +270,7 @@ if($pag['page_file'] > 0)
 			"PAGE_FILE_ICON" => $pag['page_fileicon'],
 			"PAGE_FILE_NAME" => basename($pag['page_url'])
 		));
-		if($pag['page_file'] === 2 && $usr['id'] == 0 || !$usr['auth_download'])
+		if(($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
 		{
 			$t->assign('PAGE_SHORTTITLE', $L['Members_download']);
 		}
@@ -295,7 +295,7 @@ if($usr['isadmin'])
 {
 	$t->parse("MAIN.PAGE_ADMIN");
 }
-if($pag['page_file'] === 2 && $usr['id'] == 0 || !$usr['auth_download'])
+if(($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
 {
 	$t->parse('MAIN.PAGE_FILE.MEMBERSONLY');
 }
