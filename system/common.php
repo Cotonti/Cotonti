@@ -27,10 +27,6 @@ error_reporting(E_ALL ^ E_NOTICE);
 require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
 $sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
-	if (!empty($cfg['mysqlcharset']))
-	{
-		sed_sql_query("SET NAMES '{$cfg['mysqlcharset']}' COLLATE '{$cfg['mysqlcollate']}'");
-	}
 
 /* ======== Configuration settings (from the DB) ======== */
 
