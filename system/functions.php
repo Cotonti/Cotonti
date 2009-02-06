@@ -2805,7 +2805,14 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 			$headers .= "Content-Transfer-Encoding: 8bit\n";
 			$subject = mb_encode_mimeheader($subject, $cfg['charset'], 'B', "\n");
 		}
-		mail($fmail, $subject, $body, $headers, $additional_parameters);
+		if(ini_get('safe_mode'))
+		{
+			mail($fmail, $subject, $body, $headers);
+		}
+		else
+		{
+			mail($fmail, $subject, $body, $headers, $additional_parameters);
+		}
 		sed_stat_inc('totalmailsent');
 		return(TRUE);
 	}

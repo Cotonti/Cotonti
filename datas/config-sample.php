@@ -22,7 +22,8 @@ $cfg['mysqlhost'] = 'localhost';	// Database host URL
 $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
 $cfg['mysqldb'] = 'sedition';			// Database name
-// Set this to your site charset if your default database charset is different
+// Set these to your site charset and collate if your default database charset is different
+// See the list of valid values here: http://dev.mysql.com/doc/refman/5.1/en/charset-charsets.html
 //$cfg['mysqlcharset'] = 'utf8';
 //$cfg['mysqlcollate'] = 'utf8_unicode_ci';
 
