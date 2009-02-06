@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /* ====================
 [BEGIN_SED]
 File=plugins/markitup/markitup.ajax.php
@@ -8,6 +8,7 @@ Type=Plugin
 Author=Trustmaster
 Description=
 [END_SED]
+
 [BEGIN_SED_EXTPLUGIN]
 Code=markitup
 Part=preview
@@ -18,7 +19,6 @@ Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
-
 /**
  * Simple AJAX previewer for MarkItUp!
  *
@@ -30,11 +30,10 @@ Order=10
  */
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-header('Content-type: text/html; charset='.$cfg['charset']);
-
 // Preview contents
 $text = sed_import('text', 'P', 'HTM');
 $style = '<link rel="stylesheet" type="text/css" href="skins/'.$skin.'/'.$skin.'.css" />'."\n";
+sed_sendheaders();
 echo $style.sed_post_parse(sed_parse($text));
 ob_end_flush();
 ?>

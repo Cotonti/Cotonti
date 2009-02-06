@@ -5,7 +5,7 @@
 <meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset={HEADER_META_CHARSET}" />
 <meta name="description" content="{HEADER_META_DESCRIPTION}" />
 <meta name="keywords" content="{HEADER_META_KEYWORDS}" />
-<meta name="generator" content="Seditio by Neocrome http://www.neocrome.net" />
+<meta name="generator" content="Cotonti http://www.cotonti.com" />
 <meta http-equiv="expires" content="Fri, Apr 01 1974 00:00:00 GMT" />
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />
@@ -15,7 +15,7 @@
 <link rel="shortcut icon" href="favicon.ico" />
     {HEADER_COMPOPUP}
     <title>{HEADER_TITLE}</title>
-    
+
     <link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
     <link href="skins/{PHP.skin}/jquery-ui.css" type="text/css" rel="stylesheet" />
 
@@ -27,12 +27,12 @@
         <div id="container">
             <div id="header">
                 <div id="userBar">
-                
+
 	                 <!-- BEGIN: GUEST -->
                     <div class="userBarR"><a href="users.php?m=auth">{PHP.skinlang.header.Login}</a>&nbsp;&#8226;&nbsp;<a href="users.php?m=register">{PHP.skinlang.header.Register}</a>&nbsp;&#8226;&nbsp;<a href="plug.php?e=passrecover">{PHP.skinlang.header.Lostyourpassword}</a></div>
                     <strong>{PHP.skinlang.header.Welcome}</strong>
 	                <!-- END: GUEST -->
-                
+
 	                <!-- BEGIN: USER -->
                     <div class="userBarR">{HEADER_USER_LOGINOUT}</div>
                     <b>{HEADER_LOGSTATUS}</b>
@@ -46,5 +46,5 @@
                 </div>
             </div>
             <div id="content">
-            
+
 <!-- END: HEADER -->
