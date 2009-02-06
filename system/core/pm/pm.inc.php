@@ -116,7 +116,7 @@ else // --------------- List mode
 		ORDER BY pm_date DESC LIMIT $d,".$cfg['maxrowsperpage']);
 		$title .= " <a href=\"".sed_url('pm', 'f=archives')."\">".$L['pm_archives']."</a>";
 		$subtitle = $L['pm_arcsubtitle'];
-		$delete = "<input type=\"submit\" name=\"delete\" value=\"".$L['Delete']."\" />";
+		$delete = ($totallines) ? "<input type=\"submit\" name=\"delete\" value=\"".$L['Delete']."\" />" : '';
 	}
 	elseif ($f=='sentbox')
 	{
@@ -126,7 +126,7 @@ else // --------------- List mode
 		ORDER BY pm_date DESC LIMIT $d,".$cfg['maxrowsperpage']);
 		$title .= " <a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>";
 		$subtitle = $L['pm_sentboxsubtitle'];
-		$delete = "<input type=\"submit\" name=\"delete\" value=\"".$L['Delete']."\" />";
+		$delete = ($totallines) ? "<input type=\"submit\" name=\"delete\" value=\"".$L['Delete']."\" />" : '';
 	}
 	else
 	{
@@ -137,8 +137,8 @@ else // --------------- List mode
 		ORDER BY pm_date DESC LIMIT  $d,".$cfg['maxrowsperpage']);
 		$title .= " <a href=\"".sed_url('pm')."\">".$L['pm_inbox']."</a>";
 		$subtitle = $L['pm_inboxsubtitle'];
-		$delete = "<input type=\"submit\" name=\"delete\" value=\"".$L['Delete']."\" />";
-		$archive = "<input type=\"submit\" name=\"move\" value=\"".$L['pm_putinarchives']."\" />";
+		$delete = ($totallines) ? "<input type=\"submit\" name=\"delete\" value=\"".$L['Delete']."\" />" : '';
+		$archive = ($totallines) ? "<input type=\"submit\" name=\"move\" value=\"".$L['pm_putinarchives']."\" />" : '';
 	}
 
 	$pm_totalpages = ceil($totallines / $cfg['maxrowsperpage']);
