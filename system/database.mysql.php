@@ -61,9 +61,14 @@ function sed_sql_connect($host, $user, $pass, $db)
 {
 	global $cfg;
 	$connection = @mysql_connect($host, $user, $pass) or sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
-	if (!empty($cfg['mysqlcharset']))
+	if (version_compare(mysql_get_server_info($connection), '4.1.0', '>=') && !empty($cfg['mysqlcharset']))
 	{
-		@mysql_query("SET NAMES {$cfg['mysqlcharset']}", $connection);
+		$collation_query = "SET NAMES '{$cfg['mysqlcharset']}'";
+		if (!empty($cfg['mysqlcollate']) )
+		{
+			$collation_query .= " COLLATE '{$cfg['mysqlcollate']}'";
+		}
+		@mysql_query($collation_query, $connection);
 	}
 	$select = @mysql_select_db($db, $connection) or sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
 	return $connection;
