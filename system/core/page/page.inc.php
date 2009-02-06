@@ -75,7 +75,7 @@ elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
 	$pag['page_text'] = sed_readraw('datas/html/'.trim(mb_substr($pag['page_text'], 8, 255)));
 }
 
-if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='dl' && $usr['auth_download'] && ($pag['page_file'] !== 2 || $usr['id'] > 0))
+if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='dl' && (($pag['page_file'] == 2 && $usr['auth_download']) || $pag['page_file'] == 1))
 {
 
 /* === Hook === */
