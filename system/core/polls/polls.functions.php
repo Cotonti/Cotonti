@@ -345,7 +345,7 @@ function sed_poll_form($id, $formlink='', $skin='')
     if (empty($formlink)) {$formlink=sed_url('polls', "id=".$id);}
 
 
-    $pollformbegin = "<div id='poll_".$id."'><form action=\"".$formlink."\" method=\"post\" id='poll_form_".$id."' OnSubmit=\"return ajaxSend({method: 'POST', formId: 'poll_form_".$id."', url: '".sed_url('polls', 'mode=ajax')."', divId: 'poll_".$id."', errMsg: '".$L['ajaxSenderror']."'});\">";
+    $pollformbegin = "<div id='poll_".$id."'><form action=\"".$formlink."\" method=\"post\" id='poll_form_".$id."' onsubmit=\"return ajaxSend({method: 'POST', formId: 'poll_form_".$id."', url: '".sed_url('polls', 'mode=ajax')."', divId: 'poll_".$id."', errMsg: '".$L['ajaxSenderror']."'});\">";
     $pollformend .= "</form></div>";
 
     $poll_form->assign(array(

@@ -36,5 +36,5 @@
 <div class="error">{IPOLLS_ERROR}</div>
 <!-- END: ERROR-->
 
-<p style="text-align: center;">{IPOLLS_ALL}</a></p>
+<p style="text-align: center;">{IPOLLS_ALL}</p>
 <!-- END: INDEXPOLLS-->

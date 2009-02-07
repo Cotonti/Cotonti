@@ -198,7 +198,7 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 30
 						&& $u_passhash == $_SESSION['oldhash']))
 				&& $row['user_maingrp'] > 3
-				&& (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
+				&& ($cfg['ipcheck']==FALSE || $row['user_lastip'] == $usr['ip']))
 			{
 				$usr['id'] = $row['user_id'];
 				$usr['sessionid'] = ($cfg['authmode']==1) ? md5($row['user_lastvisit']) : session_id();
