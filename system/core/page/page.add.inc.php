@@ -73,7 +73,7 @@ if ($a=='add')
 	if($number_of_extrafields > 0)
 	foreach($extrafields as $row)
 	{
-		$import = sed_import('newpage_'.$row['field_name'],'P','HTM');
+		$import = sed_import('newpage'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
 		{
 			if ($import == "0" OR $import == "on") $import = 1;
@@ -262,20 +262,20 @@ foreach($extrafields as $i=>$row)
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {
 	case "input":
-		$t2 = str_replace('<input ','<input name="newpage_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<input ','<input name="newpage'.$row['field_name'].'" ', $t2);
 		break;
 	case "textarea":
-		$t2 = str_replace('<textarea ','<textarea name="newpage_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<textarea ','<textarea name="newpage'.$row['field_name'].'" ', $t2);
 		break;
 	case "select":
-		$t2 = str_replace('<select','<select name="newpage_'.$row['field_name'].'"', $t2);
+		$t2 = str_replace('<select','<select name="newpage'.$row['field_name'].'"', $t2);
 		$options = "";
 		$opt_array = explode(",",$row['field_variants']);
 		if(count($opt_array)!=0)
 		{	foreach ($opt_array as $var) $options .= "<option value=\"$var\">$var</option>"; }
 		$t2 = str_replace("</select>","$options</select>",$t2); break;
 	case "checkbox":
-		$t2 = str_replace('<input','<input name="newpage_'.$row['field_name'].'"', $t2);
+		$t2 = str_replace('<input','<input name="newpage'.$row['field_name'].'"', $t2);
 		break;
 	}
 	$pageadd_array[$t1] = $t2;
