@@ -55,8 +55,8 @@
 					<td>{PAGEADD_FORM_EXPIRE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageadd.Bodyofthepage}</td>
-					<td><div style="width:100%;">{PAGEADD_FORM_TEXTBOXER}</div></td>
+					<td colspan="2">{PHP.skinlang.pageadd.Bodyofthepage}
+						<div style="width:100%;">{PAGEADD_FORM_TEXTBOXER}</div></td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.pageadd.File}<br />
