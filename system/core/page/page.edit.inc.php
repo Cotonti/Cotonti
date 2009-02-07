@@ -90,7 +90,7 @@ if ($a=='update')
 	if(count($extrafields)>0)
 	foreach($extrafields as $row)
 	{
-		$import = sed_import('rpage_'.$row['field_name'],'P','HTM');
+		$import = sed_import('rpage'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
 		{
 			if ($import == "0") $import = 1;
@@ -322,13 +322,13 @@ foreach($extrafields as $i=>$row)
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {
 	case "input":
-		$t2 = str_replace('<input ','<input name="rpage_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<input ','<input name="rpage'.$row['field_name'].'" ', $t2);
 		$t2 = str_replace('<input ','<input value="'.$pag['page_'.$row['field_name']].'" ', $t2); break;
 	case "textarea":
-		$t2 = str_replace('<textarea ','<textarea name="rpage_'.$row['field_name'].'" ', $t2);
+		$t2 = str_replace('<textarea ','<textarea name="rpage'.$row['field_name'].'" ', $t2);
 		$t2 = str_replace('</textarea>',$pag['page_'.$row['field_name']].'</textarea>', $t2); break;
 	case "select":
-		$t2 = str_replace('<select','<select name="rpage_'.$row['field_name'].'"', $t2);
+		$t2 = str_replace('<select','<select name="rpage'.$row['field_name'].'"', $t2);
 		$options = "";
 		$opt_array = explode(",",$row['field_variants']);
 		if(count($opt_array)!=0)
@@ -340,7 +340,7 @@ foreach($extrafields as $i=>$row)
 			}
 		$t2 = str_replace("</select>","$options</select>",$t2); break;
 	case "checkbox":
-		$t2 = str_replace('<input','<input name="rpage_'.$row['field_name'].'"', $t2);
+		$t2 = str_replace('<input','<input name="rpage'.$row['field_name'].'"', $t2);
 		$sel = $pag['page_'.$row['field_name']]==1 ? ' checked' : '';
 		$t2 = str_replace('<input ','<input value="'.$pag['page_'.$row['field_name']].'" '.$sel.' ', $t2); break;
 	}
