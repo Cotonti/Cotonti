@@ -9,12 +9,13 @@
 <!-- END: POLL_VIEW -->
 
 <!-- BEGIN: POLL_VIEW_VOTED -->
-<table>
+<table style="width:100%;">
 <!-- BEGIN: POLLTABLE -->
-<tr><td>{POLL_OPTIONS}</td><td><div style="width:100px;"><div class="bar_back"><div class="bar_front" style="width:{POLL_PER}%;"></div></div></div></td><td>{POLL_PER}%</td><td>{POLL_COUNT}</td></tr>
+<tr><td>{POLL_OPTIONS}</td><td align="right">{POLL_PER}% ({POLL_COUNT})</td></tr>
+<tr><td colspan="2" align="right"><div style="width:180px; "><div class="bar_back"><div class="bar_front" style="width:{POLL_PER}%;"></div></div></div></td></tr>
 <!-- END: POLLTABLE -->
 </table>
-<p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
+<div><div id="pfsBack">{PHP.skinlang.page.Date} {POLL_SINCE_SHORT}</div> {PHP.skinlang.ratings.Votes} {POLL_VOTERS} </div>
 <!-- END: POLL_VIEW_VOTED-->
 
 <!-- BEGIN: POLL_VIEW_DISABLED -->
@@ -24,4 +25,16 @@
 <!-- END: POLLTABLE -->
 <tr><td>{PHP.L.rat_registeredonly}</td></tr></table>
 <!-- END: POLL_VIEW_DISABLED-->
+<!-- BEGIN: INDEXPOLLS -->
+<!-- BEGIN: POLL -->
+<h5><a href="{IPOLLS_URL}">{IPOLLS_TITLE}</a></h5>
+{IPOLLS_FORM}
+<div style="text-align: right;">{PHP.skinlang.comments.Comment} {IPOLLS_COMMENTS}</div>
+<hr />
+<!-- END: POLL-->
+<!-- BEGIN: ERROR -->
+<div class="error">{IPOLLS_ERROR}</div>
+<!-- END: ERROR-->
 
+<p style="text-align: center;">{IPOLLS_ALL}</a></p>
+<!-- END: INDEXPOLLS-->

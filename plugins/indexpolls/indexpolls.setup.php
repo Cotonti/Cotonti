@@ -26,9 +26,8 @@ Lock_members=W12345A
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]
-maxpolls=01:select:0,1,2,3,4,5:1:Polls displayed
+maxpolls=01:select:1,2,3,4,5:1:Polls displayed
 mode=02:select:Recent polls,Random polls:Recent polls:Mode polls displayed
-commentslink=03:radio::1:Show comments link
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
