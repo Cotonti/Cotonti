@@ -67,7 +67,7 @@ function sed_get_polls($limit)
 
         list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$poll_id), $comments);
 
-        $pollurl=".sed_url('polls', 'id='.$poll_id).";
+        $pollurl=sed_url('polls', 'id='.$poll_id);
 
         $indexpolls -> assign(array(
             "IPOLLS_ID" => $poll_id,
