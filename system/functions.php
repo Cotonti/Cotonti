@@ -4683,4 +4683,33 @@ function sed_extrafield_remove($sql_table, $name)
 	return $step1&&$step2;
 }
 
+/**
+ * Function is intended for output of numerical results with the registration
+ * declinations of words, for example: "1 answer", "2 answers" etc.
+ */
+
+function declension($digit,$expr,$onlyword=false)
+{
+    if(is_array($expr))
+    {
+            if(empty($expr[2])) $expr[2]=$expr[1];
+            $i=preg_replace('/[^0-9]+/s','',$digit)%100;
+            if($onlyword) $digit='';
+            if($i>=5 && $i<=20) $res=$digit.' '.$expr[2];
+            else
+            {
+                    $i%=10;
+                    if($i==1) $res=$digit.' '.$expr[0];
+                    elseif($i>=2 && $i<=4) $res=$digit.' '.$expr[1];
+                    else $res=$digit.' '.$expr[2];
+            }
+    }
+    else
+    {
+    $res = $digit.' '.$expr;
+    }
+ 
+        return trim($res);
+}
+
 ?>
