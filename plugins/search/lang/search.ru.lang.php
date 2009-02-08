@@ -35,7 +35,7 @@ $L['plu_searchall2'] = "По умолчанию: искать <span style='font-
 $L['plu_querytooshort'] = "Слишком мало символов в запросе!";
 $L['plu_toomanywords'] = "Слишком много слов, ограничение:";
 $L['plu_found'] = "Найдено";
-$L['plu_match'] = "совпадений";
+$L['plu_match'] = array('совпадение','совпадения','совпадений');
 
 $L['plu_allsections'] = "Все секции";
 $L['plu_allcategories'] = "Все категории";
