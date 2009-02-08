@@ -154,7 +154,7 @@ $ssql.="page_title,
   		$sql = sed_sql_query($ssql);
 
 		$id = sed_sql_insertid();
-		$url = (!$page_state) ? sed_url('page', "id=".$id, '', true) : sed_url('message', "msg=300", '', true);
+		$r_url = (!$page_state) ? sed_url('page', "id=".$id, '', true) : sed_url('message', "msg=300", '', true);
 		
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
@@ -163,7 +163,7 @@ $ssql.="page_title,
 		/* ===== */
 
 		sed_shield_update(30, "New page");
-		header("Location: " . SED_ABSOLUTE_URL . $url);
+		header("Location: " . SED_ABSOLUTE_URL . $r_url);
 		exit;
 	}
 }
