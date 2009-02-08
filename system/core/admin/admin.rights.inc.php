@@ -117,11 +117,11 @@ ORDER BY auth_option ASC");
 
 $adminpath[] = array (sed_url('admin', "m=rights&g=".$g, $L['Rights'])." / ".sed_cc($sed_groups[$g]['title']));
 
-$adv_columns = ($advanced) ? 5 : 0;
+$adv_columns = ($advanced) ? 4 : 0;
 
 $legend = "<img src=\"images/admin/auth_r.gif\" alt=\"\" /> : ".$L['Read']."<br />";
 $legend .= "<img src=\"images/admin/auth_w.gif\" alt=\"\" /> : ".$L['Write']."<br />";
-$legend .= ($advanced) ? "<img src=\"images/admin/auth_1.gif\" alt=\"\" /> : ".$L['Custom']." #1<br />" : '';
+$legend .=  "<img src=\"images/admin/auth_1.gif\" alt=\"\" /> : ".$L['Download']."<br />";
 $legend .= ($advanced) ? "<img src=\"images/admin/auth_2.gif\" alt=\"\" /> : ".$L['Custom']." #2<br />" : '';
 $legend .= ($advanced) ? "<img src=\"images/admin/auth_3.gif\" alt=\"\" /> : ".$L['Custom']." #3<br />" : '';
 $legend .= ($advanced) ? "<img src=\"images/admin/auth_4.gif\" alt=\"\" /> : ".$L['Custom']." #4<br />" : '';
@@ -130,14 +130,14 @@ $legend .= "<img src=\"images/admin/auth_a.gif\" alt=\"\" /> : ".$L['Administrat
 
 $headcol .= "<td class=\"coltop\" rowspan=\"2\">".$L['Section']."</td>";
 $headcol .= "<td class=\"coltop\" style=\"width:128px;\" rowspan=\"2\">".$L['adm_rightspergroup']."</td>";
-$headcol .= "<td class=\"coltop\" style=\"width:80px;\" colspan=\"".(3+$adv_columns)."\">".$L['Rights']."</td>";
+$headcol .= "<td class=\"coltop\" style=\"width:80px;\" colspan=\"".(4+$adv_columns)."\">".$L['Rights']."</td>";
 $headcol .= "<td class=\"coltop\" style=\"width:80px;\" rowspan=\"2\">".$L['adm_setby']."</td>";
 $headcol .= "</tr>";
 
 $headcol .= "<tr>\n";
 $headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_r.gif\" alt=\"\" /></td>\n";
 $headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_w.gif\" alt=\"\" /></td>\n";
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_1.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_1.gif\" alt=\"\" /></td>\n";
 $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_2.gif\" alt=\"\" /></td>\n" : '';
 $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_3.gif\" alt=\"\" /></td>\n" : '';
 $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_4.gif\" alt=\"\" /></td>\n" : '';
@@ -150,7 +150,7 @@ $adminmain .= "<table class=\"cells\">";
 
 if ($g>5)
 {
-	$adminmain .= "<tr><td class=\"coltop\" colspan=\"".(6+$adv_columns)."\" style=\"text-align:right;\">";
+	$adminmain .= "<tr><td class=\"coltop\" colspan=\"".(7+$adv_columns)."\" style=\"text-align:right;\">";
 	$adminmain .= "<input type=\"checkbox\" class=\"checkbox\" name=\"ncopyrightsconf\" /> ";
 	$adminmain .= $L['adm_copyrightsfrom']." : ".sed_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g));
 	$adminmain .= " &nbsp; <input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
@@ -164,9 +164,10 @@ function sed_rights_parseline($row, $title, $link)
 	$mn['R'] = 1;
 	$mn['W'] = 2;
 
+	$mn['1'] = 4;
+
 	if ($advanced)
 	{
-		$mn['1'] = 4;
 		$mn['2'] = 8;
 		$mn['3'] = 16;
 		$mn['4'] = 32;
