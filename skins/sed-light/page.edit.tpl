@@ -67,8 +67,8 @@
 					<td>{PAGEEDIT_FORM_TYPE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Bodyofthepage}</td>
-					<td><div style="width:100%;">{PAGEEDIT_FORM_TEXTBOXER}</div></td>
+					<td colspan="2">{PHP.skinlang.pageedit.Bodyofthepage}
+					<div style="width:100%;">{PAGEEDIT_FORM_TEXTBOXER}</div></td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.pageedit.Filedownload}</td>
