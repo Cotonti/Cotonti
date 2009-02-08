@@ -96,10 +96,13 @@ if (is_array($extp))
 $adminpath[] = array(sed_url('admin', 'm=rightsbyitem&ic=$ic&io=$io'), $L['Rights']." / ".$L['adm_code'][$ic].$title);
 
 $adv_columns = ($advanced) ? 5 : 0;
+$adv_columns = (!$advanced && $ic == 'page') ? 1 : $adv_columns;
+
+$l_custom1 = $ic == 'page' ? $L['Download'] : $L['Custom'] . ' #1';
 
 $legend = "<img src=\"images/admin/auth_r.gif\" alt=\"\" /> : ".$L['Read']."<br />";
 $legend .= "<img src=\"images/admin/auth_w.gif\" alt=\"\" /> : ".$L['Write']."<br />";
-$legend .= ($advanced) ? "<img src=\"images/admin/auth_1.gif\" alt=\"\" /> : ".$L['Custom']." #1<br />" : '';
+$legend .= ($advanced || $ic == 'page') ? "<img src=\"images/admin/auth_1.gif\" alt=\"\" /> : $l_custom1<br />" : '';
 $legend .= ($advanced) ? "<img src=\"images/admin/auth_2.gif\" alt=\"\" /> : ".$L['Custom']." #2<br />" : '';
 $legend .= ($advanced) ? "<img src=\"images/admin/auth_3.gif\" alt=\"\" /> : ".$L['Custom']." #3<br />" : '';
 $legend .= ($advanced) ? "<img src=\"images/admin/auth_4.gif\" alt=\"\" /> : ".$L['Custom']." #4<br />" : '';
@@ -115,7 +118,7 @@ $headcol .= "</tr>";
 $headcol .= "<tr>\n";
 $headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_r.gif\" alt=\"\" /></td>\n";
 $headcol .= "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_w.gif\" alt=\"\" /></td>\n";
-$headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_1.gif\" alt=\"\" /></td>\n" : '';
+$headcol .= ($advanced || $ic == 'page') ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_1.gif\" alt=\"\" /></td>\n" : '';
 $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_2.gif\" alt=\"\" /></td>\n" : '';
 $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_3.gif\" alt=\"\" /></td>\n" : '';
 $headcol .= ($advanced) ? "<td style=\"width:24px;\" class=\"coltop\"><img src=\"images/admin/auth_4.gif\" alt=\"\" /></td>\n" : '';
@@ -133,9 +136,10 @@ function sed_rights_parseline($row, $title, $link)
 	$mn['R'] = 1;
 	$mn['W'] = 2;
 
+	$mn['1'] = 4;
+
 	if ($advanced)
 	{
-		$mn['1'] = 4;
 		$mn['2'] = 8;
 		$mn['3'] = 16;
 		$mn['4'] = 32;

@@ -466,7 +466,12 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 
 			foreach($sed_groups as $k => $v)
 			{
-				if ($v['id']==1 || $v['id']==2)
+				if ($v['id']==1)
+				{
+					$ins_auth = 5;
+					$ins_lock = 250;
+				}
+				elseif($v['id']==2)
 				{
 					$ins_auth = 1;
 					$ins_lock = 254;
@@ -483,8 +488,8 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
 				}
 				else
 				{
-					$ins_auth = 3;
-					$ins_lock = ($k==4) ? 128 : 0;
+					$ins_auth = 7;
+					$ins_lock = ($k == 4) ? 128 : 0;
 				}
 				$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'page', '".sed_sql_prep($code)."', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
 				$res = TRUE;
