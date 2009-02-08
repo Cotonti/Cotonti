@@ -111,7 +111,7 @@ if ($a=='add')
 		}
 		if($page_state == 0)
 		{
-			sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' "); 
+			sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' ");
 		}
 		$ssql = "INSERT into $db_pages
 		(page_state,
@@ -154,6 +154,7 @@ $ssql.="page_title,
   		$sql = sed_sql_query($ssql);
 
 		$id = sed_sql_insertid();
+		$r_url = (!$page_state) ? sed_url('page', "id=".$id, '', true) : sed_url('message', "msg=300", '', true);
 
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
@@ -162,7 +163,7 @@ $ssql.="page_title,
 		/* ===== */
 
 		sed_shield_update(30, "New page");
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=300", '', true));
+		header("Location: " . SED_ABSOLUTE_URL . $r_url);
 		exit;
 	}
 }
