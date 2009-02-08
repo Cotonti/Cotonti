@@ -235,7 +235,7 @@ if ($tab=='frm') {
 			}
 
 			if ($items!='0') {
-				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
+				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".declension($items,$L['plu_match'])."</h4>";
 				$hl = strtoupper($sq);
 
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_fs']."</td><td width=\"60%\">".$L['plu_ft']."</td><td width=\"10%\">".$L['plu_fo']."</td></tr>";
@@ -452,7 +452,7 @@ if ($tab=='frm') {
 					$items = mysql_num_rows($sql);
 				}
 
-				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
+				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".declension($items,$L['plu_match'])."</h4>";
 				$hl = strtoupper($sq);
 
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_ps']."</td><td width=\"60%\">".$L['plu_pt']."</td><td width=\"10%\">".$L['plu_po']."</td></tr>";
@@ -675,7 +675,7 @@ if ($tab=='frm') {
 				LIMIT $cfg_maxitems");
 				$items = mysql_num_rows($sql);
 
-				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
+				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".declension($items,$L['plu_match'])."</h4>";
 				$hl = strtoupper($sq);
 
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_ps']."</td><td width=\"60%\">".$L['plu_pt']."</td><td width=\"10%\">".$L['plu_po']."</td></tr>";
@@ -744,7 +744,7 @@ if ($tab=='frm') {
 			}
 
 			if ($items!='0') {
-				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".$items." ".$L['plu_match']."</h4>";
+				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".declension($items,$L['plu_match'])."</h4>";
 				$hl = strtoupper($sq);
 
 				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_fs']."</td><td width=\"60%\">".$L['plu_ft']."</td><td width=\"10%\">".$L['plu_fo']."</td></tr>";
