@@ -6,12 +6,12 @@
 		<div class="pageBody">
 			<div class="pageTop"></div>
 			<div class="pageText">
-			
+
 				<div id="subtitle">{PAGE_DESC}</div>
-		
+
 				<div style="float:right;text-align:right;">
 				<span class="rss-icon">
-				<a href="{PAGE_COMMENTS_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+				<a href="{PAGE_COMMENTS_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" alt="" /></a>
 				</span>
 					{PHP.skinlang.page.Comments} {PAGE_COMMENTS}<br />{PHP.skinlang.page.Ratings} {PAGE_RATINGS}</div>
 					{PHP.skinlang.page.Author} {PAGE_AUTHOR}<br />
@@ -33,7 +33,7 @@
 			{PAGE_MULTI_TABTITLES}
 		</div>
 		<!-- END: PAGE_MULTI -->
-		
+
 		<div class="block">
 		<strong>{PHP.L.Tags}:</strong>
 		<!-- BEGIN: PAGE_TAGS_ROW -->
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 		<!-- END: PAGE_FILE -->
-		
+
 		<div class="pageBody">
 			<div class="pageTop"></div>
 			<div class="pageText">

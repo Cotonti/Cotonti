@@ -1,11 +1,11 @@
 <!-- BEGIN: MAIN -->
 
 	<div class="mboxHD"><div class="rss-icon-title">
-	<a href="{FORUMS_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+	<a href="{FORUMS_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" alt="" /></a>
 	</div>{FORUMS_SECTIONS_PAGETITLE}</div>
 	<div class="mboxBody">
-		
-		
+
+
 		<div id="subtitle">
 			<a href="plug.php?e=search&amp;frm=1">{PHP.skinlang.forumssections.Searchinforums}</a> |
 			<a href="plug.php?e=forumstats">{PHP.skinlang.forumssections.Statistics}</a> |
@@ -51,33 +51,33 @@
 				<td>
 				<h3 style="margin:9px;"><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h3>
 				&nbsp; {FORUMS_SECTIONS_ROW_DESC}
-				
+
 				<table><tr>
-				
+
 				<td>
-				
+
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVESI -->
 
 				<br /><img src="skins/{PHP.skin}/img/system/icon-subforum.gif" alt="" /> &nbsp;{FORUMS_SECTIONS_ROW_SLAVEI}
 
 				<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVESI -->
-				
+
 				</td>
-				
+
 				<td>
-				
+
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVESII -->
 
 				<br /><img src="skins/{PHP.skin}/img/system/icon-subforum.gif" alt="" /> &nbsp;{FORUMS_SECTIONS_ROW_SLAVEII}
 
 				<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVESII -->
-				
+
 				</td>
-				
+
 				</tr></table>
-				
-				
-				
+
+
+
 				</td>
 
 				<td class="centerall">
@@ -114,7 +114,7 @@
 			</tbody>
 		</table>
 		<div class="bCap"></div>
-		
+
 		<h4>{FORUMS_SECTIONS_TOP_TAG_CLOUD}</h4>
 		<div class="block">
 		{FORUMS_SECTIONS_TAG_CLOUD}
