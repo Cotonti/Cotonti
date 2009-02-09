@@ -61,7 +61,12 @@ function sed_sql_connect($host, $user, $pass, $db)
 {
 	global $cfg;
 	$connection = @mysql_connect($host, $user, $pass) or sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
-	if (version_compare(mysql_get_server_info($connection), '4.1.0', '>=') && !empty($cfg['mysqlcharset']))
+	if (!version_compare(mysql_get_server_info($connection), '5.0.0', '>='))
+	{
+		sed_diefatal('Cotonti system requirements: MySQL 5.0 or above.');
+	}
+
+	if (!empty($cfg['mysqlcharset']))
 	{
 		$collation_query = "SET NAMES '{$cfg['mysqlcharset']}'";
 		if (!empty($cfg['mysqlcollate']) )

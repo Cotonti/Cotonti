@@ -16,6 +16,13 @@ http://www.neocrome.net
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
+// System requirements check
+// TODO remove this check after auto-installer is released
+(function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>='))
+	or die('Cotonti system requirements: PHP 5.1 or above.');
+extension_loaded('mbstring')
+	or die('Cotonti system requirements: mbstring PHP extension must be loaded.');
+
 /* ======== First... ======== */
 
 set_magic_quotes_runtime(0);
