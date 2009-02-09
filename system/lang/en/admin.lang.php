@@ -492,10 +492,28 @@ $L['extf_Name'] = "Name";
 $L['extf_Type'] = "Type of field";
 $L['extf_Base HTML'] = "Base HTML";
 $L['extf_Page tags'] = "Tags";
-$L['extf_Description'] = "Description";
+$L['extf_Description'] = "Description (_TITLE)";
 
 $L['adm_extrafield_new'] = 'New extra field';
 $L['adm_extrafield_selectable_values'] = 'Options for select (comma sep.):';
-$L['adm_help_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank';
+$L['adm_help_pages_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br>
+<br>
+<b>New tags in tpl files:</b><br>
+<br>
+page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE} <br><br>
+page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}    <br><br>
+page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}     <br><br>
+list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}<br><br>
+';
+$L['adm_help_users_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br>
+<br>
+<b>New tags in tpl files:</b><br>
+<br>
+users.profile.tpl: {USERS_PROFILE_XXXXX}, {USERS_PROFILE_XXXXX_TITLE} <br><br>   
+users.edit.tpl: {USERS_EDIT_XXXXX}, {USERS_EDIT_XXXXX_TITLE}  <br><br>  
+users.details.tpl: {USERS_DETAILS_XXXXX}, {USERS_DETAILS_XXXXX_TITLE}<br><br>
+user.register.tpl: {USERS_REGISTER_XXXXX}, {USERS_REGISTER_XXXXX_TITLE}<br><br>
+forums.posts.tpl: {FORUMS_POSTS_ROW_USERXXXXX}, {FORUMS_POSTS_ROW_USERXXXXX_TITLE}<br>
+';
 
 ?>

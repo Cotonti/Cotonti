@@ -111,7 +111,7 @@ if ($a=='add')
 		}
 		if($page_state == 0)
 		{
-			sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' ");
+			sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' "); 
 		}
 		$ssql = "INSERT into $db_pages
 		(page_state,
@@ -155,7 +155,7 @@ $ssql.="page_title,
 
 		$id = sed_sql_insertid();
 		$r_url = (!$page_state) ? sed_url('page', "id=".$id, '', true) : sed_url('message', "msg=300", '', true);
-
+		
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
 		if (is_array($extp))
@@ -259,6 +259,7 @@ $pageadd_array = array(
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
+	isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGEADD_FORM_'.strtoupper($row['field_name']).'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGEADD_FORM_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
 	$t1 = "PAGEADD_FORM_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {
