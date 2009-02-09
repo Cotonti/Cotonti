@@ -356,7 +356,7 @@ switch ($a)
 	$rday = sed_import('rday','P','INT');
 	$rhour = sed_import('rhour','P','INT');
 	$rminute = sed_import('rminute','P','INT');
-	$rusertimezone = sed_import('rusertimezone','P','TXT',5);
+	$rusertimezone = (float) sed_import('rusertimezone','P','TXT',5);
 	$ruserlocation = sed_import('ruserlocation','P','TXT');
 	$ruseroccupation = sed_import('ruseroccupation','P','TXT');
 	$ruseremail = sed_import('ruseremail','P','TXT');
@@ -531,10 +531,11 @@ $profile_form_langs .= sed_selectbox_lang($urr['user_lang'], 'ruserlang');
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
 $profile_form_timezone = "<select name=\"rusertimezone\" size=\"1\">";
-while( list($i,$x) = each($timezonelist) )
+foreach($timezonelist as $x) 
 {
+	$f = (float) $x; 
 	$selected = ($x==$urr['user_timezone']) ? "selected=\"selected\"" : '';
-	$profile_form_timezone .= "<option value=\"$x\" $selected>GMT".$x.", ".date($cfg['dateformat'], $sys['now_offset'] + $x*3600)."</option>";
+	$profile_form_timezone .= "<option value=\"$f\" $selected>GMT ".$x.", ".date($cfg['dateformat'], $sys['now_offset'] + $x*3600)."</option>";
 }
 $profile_form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
 
