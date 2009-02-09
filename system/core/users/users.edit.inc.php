@@ -93,7 +93,7 @@ if ($a=='update')
 	$rday = sed_import('rday','P','INT');
 	$rhour = sed_import('rhour','P','INT');
 	$rminute = sed_import('rminute','P','INT');
-	$rusertimezone = sed_import('rusertimezone','P','TXT');
+	$rusertimezone = (float) sed_import('rusertimezone','P','TXT');
 	$ruserlocation = sed_import('ruserlocation','P','TXT');
 	$ruseroccupation = sed_import('ruseroccupation','P','TXT');
 	$ruserdelete = sed_import('ruserdelete','P','BOL');
