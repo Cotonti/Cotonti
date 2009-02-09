@@ -259,6 +259,7 @@ $pageadd_array = array(
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
+	isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGEADD_FORM_'.strtoupper($row['field_name']).'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGEADD_FORM_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
 	$t1 = "PAGEADD_FORM_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {
