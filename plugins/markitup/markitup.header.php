@@ -51,7 +51,7 @@ if(!defined('SED_INDEX') && !defined('SED_LIST') && !defined('SED_MESSAGE'))
 <script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jquery.markitup.js"></script>
 <script type="text/javascript" src="$mkup_lang"></script>
 <script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/set.js"></script>
-<link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/markitup/style.css" />
+<link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/{$cfg['plugin']['markitup']['skin']}/style.css" />
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/style.css" />
 HTM;
 	if($cfg['plugin']['markitup']['chili'])
