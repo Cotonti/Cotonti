@@ -1,24 +1,24 @@
 <!-- BEGIN: MAIN -->
 
 	<div class="mboxHD"><div class="rss-icon-title">
-	<a href="{FORUMS_TOPICS_SECTION_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" /></a>
+	<a href="{FORUMS_TOPICS_SECTION_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" alt="" /></a>
 	</div>{FORUMS_TOPICS_PAGETITLE}</div>
 	<div class="mboxBody">
-		
+
 		<div style="float:right;">{FORUMS_TOPICS_JUMPBOX} </div>
-	
+
 		<div id="subtitle">
 			{FORUMS_TOPICS_SUBTITLE}<br />
-			
+
 			<!-- BEGIN: FORUMS_SECTIONS_VIEWERS -->
-			
+
 			{PHP.skinlang.forumstopics.Viewers} : {FORUMS_TOPICS_VIEWERS}
 			<p> {FORUMS_TOPICS_VIEWER_NAMES} </p>
-			
+
 			<!-- END: FORUMS_SECTIONS_VIEWERS -->
 
 		</div>
-		
+
 		<!-- BEGIN: FORUMS_SECTIONS -->
 
 <table class="cells" border="0" cellspacing="1" cellpadding="2">
@@ -39,7 +39,7 @@
 
 		<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
 		<br />
-		- {FORUMS_SECTIONS_ROW_SLAVE} 
+		- {FORUMS_SECTIONS_ROW_SLAVE}
 		<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
 
 		</td>
@@ -54,16 +54,16 @@
 </table>
 
 <!-- END: FORUMS_SECTIONS -->
-		
+
 		<div style="height:27px;">
 			<a href="{FORUMS_TOPICS_NEWTOPICURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /></a>
-			
+
 			<!-- BEGIN: FORUMS_SECTIONS_POLLS -->
-			
+
 			<a href="{FORUMS_TOPICS_NEWPOLLURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newpoll.gif" alt="" /></a>
-		
+
 			<!-- END: FORUMS_SECTIONS_POLLS -->
-		
+
 			<div class="paging">{FORUMS_TOPICS_PAGES} {FORUMS_TOPICS_PAGEPREV} {FORUMS_TOPICS_PAGENEXT}</div>
 		</div>
 
