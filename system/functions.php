@@ -1166,7 +1166,7 @@ function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
 			{
 				$res .= "<input type=\"radio\" class=\"radio\" name=\"rusermaingrp\" value=\"$k\" ".$checked_maingrp." ".$readonly_maingrp." /> \n";
 				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"rusergroupsms[$k]\" ".$checked." $readonly />\n";
-				$res .= ($k == SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"".sed_url('users', 'g='.$k)."\">".$sed_groups[$k]['title']."</a>";
+				$res .= ($k == SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"".sed_url('users', 'gm='.$k)."\">".$sed_groups[$k]['title']."</a>";
 				$res .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 				$res .= "<br />";
 			}
@@ -2082,10 +2082,7 @@ function sed_file_check($path, $name, $ext)
 			{
 				foreach($mime_type[$ext] as $mime)
 				{
-					$f = ((substr(phpversion(),0, 3)>="5.1")) ? '' : fopen($path, "rb");
-					if(substr(phpversion(),0, 3) < "5.1") fseek($f, $mime[3]);
-					$ff = ((substr(phpversion(),0, 3)>="5.1")) ? '' : fread($f, $mime[4]);
-					$content = (substr(phpversion(),0, 3)>="5.1") ? file_get_contents($path,0,NULL,$mime[3],$mime[4]) : $ff ;
+					$content = file_get_contents($path, 0, NULL, $mime[3], $mime[4]);
 					$content = ($mime[2]) ? bin2hex($content) : $content;
 					$mime[1] = ($mime[2]) ? strtolower($mime[1]) : $mime[1];
 					$i++;
@@ -2095,7 +2092,6 @@ function sed_file_check($path, $name, $ext)
 						break;
 					}
 				}
-				$fclose = ((substr(phpversion(),0, 3)>="5.1")) ? '' : fclose($f);
 			}
 			else
 			{
@@ -4533,10 +4529,10 @@ function sed_xp()
  */
 function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
 {
-	if (PHP_VERSION >= '5.2.0')
+	if (version_compare(PHP_VERSION, '5.2.0', '>='))
 	{ return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly); }
 
-	if (!$httponly && (PHP_VERSION >= '4.0.4'))
+	if (!$httponly)
 	{ return setcookie($name, $value, $expire, $path, $domain, $secure); }
 
 	if (trim($domain) != '')
