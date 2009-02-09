@@ -137,7 +137,7 @@ if(mb_strstr($pag['page_text'], '[newpage]'))
 {
 	$morejavascript .= '
 $(document).ready(function() {
-$("div.tabs > ul").tabs();
+$("ul.multi").accordion();
 });';
 }
 

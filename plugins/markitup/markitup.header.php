@@ -23,7 +23,7 @@ Order=10
  * MarkItUp! connector for Seditio
  *
  * @package Seditio-N
- * @version 0.0.1
+ * @version 0.0.3
  * @author Trustmaster
  * @copyright (c) 2008 Cotonti Team
  * @license BSD license
@@ -50,6 +50,7 @@ if(!defined('SED_INDEX') && !defined('SED_LIST') && !defined('SED_MESSAGE'))
 <script type="text/javascript" src="./images/smilies/set.js"></script>
 <script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jquery.markitup.js"></script>
 <script type="text/javascript" src="$mkup_lang"></script>
+<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jqModal.js"></script>
 <script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/set.js"></script>
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/{$cfg['plugin']['markitup']['skin']}/style.css" />
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/style.css" />

@@ -11,63 +11,63 @@ lang - internationalized tip
 var smileSet = [
 	{
 		name: "smile",
-		code: ":-)",
+		code: ":)",
 		file: "smile.gif",
 		prio: 60,
 		lang: smileL.smile
 	},
 	{
 		name: "happy",
-		code: ":-))",
+		code: ":))",
 		file: "happy.gif",
 		prio: 10,
 		lang: smileL.happy
 	},
 	{
 		name: "sad",
-		code: ":-(",
+		code: ":(",
 		file: "sad.gif",
 		prio: 60,
 		lang: smileL.sad
 	},
 	{
 		name: "wink",
-		code: ";-)",
+		code: ";)",
 		file: "wink.gif",
 		prio: 50,
 		lang: smileL.wink
 	},
 	{
 		name: "grin",
-		code: ":-D",
+		code: ":D",
 		file: "grin.gif",
 		prio: 50,
 		lang: smileL.grin
 	},
 	{
 		name: "surprised",
-		code: ":-O",
+		code: ":O",
 		file: "surprised.gif",
 		prio: 50,
 		lang: smileL.surprised
 	},
 	{
 		name: "tongue",
-		code: ":-P",
+		code: ":P",
 		file: "tongue.gif",
 		prio: 50,
 		lang: smileL.tongue
 	},
 	{
 		name: "confused",
-		code: ":-/",
+		code: ":/",
 		file: "confused.gif",
 		prio: 50,
 		lang: smileL.confused
 	},
 	{
 		name: "sunglasses",
-		code: "B-)",
+		code: "B)",
 		file: "sunglasses.gif",
 		prio: 50,
 		lang: smileL.sunglasses
@@ -125,7 +125,5 @@ var smileSet = [
 
 // Editor dialog display properties
 var smileBox = {
-	width: '210px',
-	height: '170px',
 	perRow: 4 // Smilies per row
 };

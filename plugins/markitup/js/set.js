@@ -111,6 +111,7 @@ var mini = {
 }
 
 // Renders and displays smilies dialog
+// Using jqModal, see http://dev.iceburg.net/jquery/jqModal/
 function showSmilies(markitup) {
 	var perRow = smileBox.perRow;
 	if($('#smilies').length != 1) {
@@ -133,17 +134,13 @@ function showSmilies(markitup) {
 			}
 		}
 		smileHtml += '</tr></table>';
-		$('body').append('<div id="smilies">' + smileHtml + '</div>');
-		$('#smilies').dialog({
-			title: L.smilies,
-			height: smileBox.height,
-			width: smileBox.width
-		});
+		$('body').append('<div id="smilies" class="jqmWindow"><h4><a href="#" class="jqmClose">[X]</a> ' + L.smilies + '</h4>' + smileHtml + '</div>');
 		$('#smilies a').click(function() {
 			emoticon = $(this).attr("name");
 			$.markItUp( { replaceWith: ' ' + emoticon + ' ' } );
 			return false;
 		});
+		$('#smilies').jqm();
 	}
-	$('#smilies').dialog('open');
+	$('#smilies').jqmShow();
 }

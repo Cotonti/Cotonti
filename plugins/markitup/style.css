@@ -1,7 +1,6 @@
-/* -------------------------------------------------------------------
-// markItUp!
-// By Jay Salvat - http://markitup.jaysalvat.com/
-// ------------------------------------------------------------------*/
+/*
+ * markItUp! Buttons and Menus
+ */
 .markItUp .mBold a	{
 	background-image:url(images/bold.png);
 }
@@ -243,4 +242,54 @@
 }
 .markItUp .mPreview a {
 	background-image:url(images/preview.png);
+}
+
+/**
+ * jqModal settings for smilies box
+ */
+
+/* The Window's CSS z-index value is respected (takes priority). If none is supplied,
+	the Window's z-index value will be set to 3000 by default (via jqModal.js). */
+
+.jqmWindow {
+    display: none;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    margin-left: -110px;
+	margin-top: -90px;
+    width: 220px;
+	height: 180px;
+	overflow: auto;
+
+    background-color: #EEE;
+    color: #333;
+    border: 3px solid #777;
+    padding-left: 7px;
+}
+
+.jqmWindow h4 {
+	border-bottom: 1px solid #777;
+}
+
+.jqmOverlay { background-color: #000; }
+
+/* Background iframe styling for IE6. Prevents ActiveX bleed-through (<select> form elements, etc.) */
+* iframe.jqm {
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+	width: expression(this.parentNode.offsetWidth+'px');
+	height: expression(this.parentNode.offsetHeight+'px');
+}
+
+/* Fixed posistioning emulation for IE6
+     Star selector used to hide definition from browsers other than IE6
+     For valid CSS, use a conditional include instead */
+* html .jqmWindow {
+     position: absolute;
+     top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
 }
