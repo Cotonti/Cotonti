@@ -93,7 +93,7 @@ if ($a=='update')
 	$rday = sed_import('rday','P','INT');
 	$rhour = sed_import('rhour','P','INT');
 	$rminute = sed_import('rminute','P','INT');
-	$rusertimezone = (float) sed_import('rusertimezone','P','TXT');
+	$rusertimezone = sed_import('rusertimezone','P','TXT');
 	$ruserlocation = sed_import('ruserlocation','P','TXT');
 	$ruseroccupation = sed_import('ruseroccupation','P','TXT');
 	$ruserdelete = sed_import('ruserdelete','P','BOL');
@@ -328,6 +328,8 @@ $useredit_array = array(
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
+	isset($L['user_'.$row['field_name'].'_title']) ? $t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', $L['user_'.$row['field_name'].'_title']) : $t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
+	
 	$t1 = "USERS_EDIT_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type']) {

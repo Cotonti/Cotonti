@@ -288,7 +288,13 @@ while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 
 	// Extra fields
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-	while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('USERS_ROW_'.strtoupper($row['field_name']), $urr['user_'.$row['field_name']]);
+	while($row = sed_sql_fetchassoc($fieldsres)) 
+	{ 
+		$uname = strtoupper($row['field_name']);
+		$t->assign('USERS_ROW_'.$uname, $urr['user_'.$row['field_name']]); 
+		isset($L['user_'.$row['field_name'].'_title']) ? $t->assign('USERS_ROW_'.$uname.'_TITLE', $L['user_'.$row['field_name'].'_title']) : $t->assign('USERS_ROW_'.$uname.'_TITLE', $row['field_description']);
+	}
+	
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))

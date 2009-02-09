@@ -19,6 +19,7 @@ http://www.neocrome.net
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $v = sed_import('v','G','ALP');
+$y = sed_import('y','G','INT');
 
 if ($cfg['disablereg'])
 {
@@ -54,7 +55,7 @@ if ($a=='add')
 	$rpassword2 = sed_import('rpassword2','P','TXT',16);
 	$rcountry = sed_import('rcountry','P','TXT');
 	$rlocation = sed_import('rlocation','P','TXT');
-	$rtimezone = (float) sed_import('rtimezone','P','TXT',5);
+	$rtimezone = sed_import('rtimezone','P','TXT',5);
 	$roccupation = sed_import('roccupation','P','TXT');
 	$rusergender = sed_import('rusergender','P','TXT');
 	$ryear = sed_import('ryear','P','INT');
@@ -207,8 +208,9 @@ if ($a=='add')
 		else
 		{
 			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
-			$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
-			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate);
+			$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey.'&y=1', '', true);
+			$rdeactivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey.'&y=0', '', true);
+			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate, $rdeactivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			sed_mail ($ruseremail, $rsubject, $rbody);
 			sed_redirect(sed_url('message', 'msg=105'));
@@ -220,15 +222,38 @@ if ($a=='add')
 elseif ($a=='validate' && mb_strlen($v)==32)
 {
 	sed_shield_protect();
-	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_lostpass='$v' AND user_maingrp=2");
+	$sql = sed_sql_query("SELECT user_id, user_maingrp, user_sid FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') ");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
+	
+	if ($row['user_maingrp'] == 2)
+		{
+		
+	if ($y==1)
+		{
 		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp=4 WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
 		$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 		sed_auth_clear($row['user_id']);
 		sed_redirect(sed_url('message', 'msg=106'));
 		exit;
+		}
+	elseif ($y==0)
+		{
+		$sql = sed_sql_query("DELETE FROM $db_users WHERE user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
+		$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='".$row['user_id']."'");
+		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='".$row['user_id']."'");
+		sed_redirect(sed_url('message', 'msg=109'));
+		exit;
+		}
+		
+		}
+	elseif ($row['user_maingrp']==-1)
+		{
+		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='".sed_sql_prep($row['user_sid'])."' WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
+		sed_redirect(sed_url('message', 'msg=106'));
+		exit;
+		}
 	}
 	else
 	{
@@ -245,11 +270,10 @@ $form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear)
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
 $form_timezone = "<select name=\"rtimezone\" size=\"1\">";
-foreach($timezonelist as $x)
+while( list($i,$x) = each($timezonelist) )
 {
-	$f = (float) $x;
-	$selected = ($f==$rtimezone) ? "selected=\"selected\"" : '';
-	$form_timezone .= "<option value=\"$f\" $selected>GMT ".$x."</option>";
+	$selected = ($x==$rtimezone) ? "selected=\"selected\"" : '';
+	$form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
 }
 $form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
 
@@ -293,6 +317,7 @@ $useredit_array = array(
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
+	isset($L['user_'.$row['field_name'].'_title']) ? $t->assign('USERS_REGISTER_'.strtoupper($row['field_name']).'_TITLE', $L['user_'.$row['field_name'].'_title']) : $t->assign('USERS_REGISTER_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
 	$t1 = "USERS_REGISTER_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type'])

@@ -187,8 +187,16 @@ if (!$sed_cat[$c]['group'])
 }
 
 // Extra fields
-if($number_of_extrafields > 0) foreach($extrafields as $row) $t->assign('LIST_TOP_'.strtoupper($row['field_name']), "<a href=\"".sed_url('list', "c=$c&s=".$row['field_name']."&w=asc&o=$o&p=$p")."\">$sed_img_down</a>
-	<a href=\"".sed_url('list', "c=$c&s=".$row['field_name']."&w=desc&o=$o&p=$p")."\">$sed_img_up</a> ");
+if($number_of_extrafields > 0) 
+{
+	foreach($extrafields as $row) 
+	{
+		$uname = strtoupper($row['field_name']);
+		isset($L['page_'.$row['field_name'].'_title']) ? $extratitle = $L['page_'.$row['field_name'].'_title'] : $extratitle = $row['field_description'];		
+		$t->assign('LIST_TOP_'.$uname, "<a href=\"".sed_url('list', "c=$c&s=".$row['field_name']."&w=asc&o=$o&p=$p")."\">$sed_img_down</a><a href=\"".sed_url('list', "c=$c&s=".$row['field_name']."&w=desc&o=$o&p=$p")."\">$sed_img_up</a> $extratitle");
+	}
+}
+	
 
 $ii=0;
 $jj=1;
@@ -328,7 +336,16 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	}
 
 	// Extra fields
-	if($number_of_extrafields > 0) foreach($extrafields as $row) $t->assign('LIST_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
+	if($number_of_extrafields > 0) 
+	{
+		foreach($extrafields as $row) 
+		{
+			$uname = strtoupper($row['field_name']);
+			$t->assign('LIST_ROW_'.$uname, $pag['page_'.$row['field_name']]);
+			isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('LIST_ROW_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('LIST_ROW_'.$uname.'_TITLE', $row['field_description']);
+		}
+	}
+	
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
