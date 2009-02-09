@@ -17,7 +17,6 @@
     <title>{HEADER_TITLE}</title>
 
     <link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
-    <link href="skins/{PHP.skin}/jquery-ui.css" type="text/css" rel="stylesheet" />
 
 </head>
 <!-- SED-Light / Designed By: Xiode - XiodeStudios.Com & Alx - AlxDesign.com / Programming By: Xiode - XiodeStudios.Com -->

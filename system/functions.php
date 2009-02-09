@@ -583,9 +583,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 		$totaltabs = count($page_tabs);
 		if($totaltabs > 1)
 		{
-			$tabs_html = '<div class="tabs">';
-			$head_html = '<ul class="tabs-head">';
-			$page_html = '';
+			$page_html = '<ul class="multi">';
 			$pag['page_tabtitles'] = array();
 			$tabs_id = sed_unique(8);
 
@@ -604,13 +602,14 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 					$tab_title = $i;
 				}
 
-				$head_html .= '<li><a href="#tabs-'.$tab_id.'">'.sed_cc($tab_title).'</a></li>';
+				$page_html .= '<li><a class="multi_header">'.sed_cc($tab_title).'</a>';
 				$page_tabs[$i] = trim(str_replace('[newpage]', '', $page_tabs[$i]));
-				$page_html .= '<div id="tabs-'.$tab_id.'">'.sed_bbcode_parse($page_tabs[$i]).'</div>';
+				$expanded = $i == 0 ? ' expanded' : '';
+				$page_html .= '<div class="multi_body'.$expanded.'" id="multi_'.$tab_id.'">'.sed_parse($page_tabs[$i], $parse_bbcodes, $parse_smilies, $parse_newlines).'</div></li>';
 			}
 
-			$tabs_html .= $head_html . '</ul>' . $page_html . '</div>';
-			return $tabs_html;
+			$page_html .=  '</ul>';
+			return $page_html;
 		}
 	}
 
@@ -2528,9 +2527,8 @@ function sed_javascript($more='')
 	global $cfg, $lang;
 	if($cfg['jquery'])
 	{
-		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
-		$result .= '<script type="text/javascript" src="js/jquery-ui.js"></script>';
-		$result .= file_exists("./js/ui/i18n/ui.datepicker-$lang.js") ? '<script type="text/javascript" src="js/ui/i18n/ui.datepicker-'.$lang.'.js"></script>' : '<script type="text/javascript" src="js/ui/i18n/ui.datepicker-en.js"></script>' ;
+		$result .= '<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery.accordion.js"></script>';
 	}
 	$result .= '<script type="text/javascript" src="js/base.js"></script>';
 	if(!empty($more))
