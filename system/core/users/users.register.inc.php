@@ -55,7 +55,7 @@ if ($a=='add')
 	$rpassword2 = sed_import('rpassword2','P','TXT',16);
 	$rcountry = sed_import('rcountry','P','TXT');
 	$rlocation = sed_import('rlocation','P','TXT');
-	$rtimezone = (float) sed_import('rtimezone','P','TXT',5);
+	$rtimezone = sed_import('rtimezone','P','TXT',5);
 	$roccupation = sed_import('roccupation','P','TXT');
 	$rusergender = sed_import('rusergender','P','TXT');
 	$ryear = sed_import('ryear','P','INT');
@@ -270,11 +270,10 @@ $form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear)
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
 $form_timezone = "<select name=\"rtimezone\" size=\"1\">";
-foreach($timezonelist as $x)
+while( list($i,$x) = each($timezonelist) )
 {
-	$f = (float) $x;
-	$selected = ($f==$rtimezone) ? "selected=\"selected\"" : '';
-	$form_timezone .= "<option value=\"$f\" $selected>GMT ".$x."</option>";
+	$selected = ($x==$rtimezone) ? "selected=\"selected\"" : '';
+	$form_timezone .= "<option value=\"$x\" $selected>GMT".$x."</option>";
 }
 $form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
 
@@ -318,6 +317,7 @@ $useredit_array = array(
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
+	isset($L['user_'.$row['field_name'].'_title']) ? $t->assign('USERS_REGISTER_'.strtoupper($row['field_name']).'_TITLE', $L['user_'.$row['field_name'].'_title']) : $t->assign('USERS_REGISTER_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
 	$t1 = "USERS_REGISTER_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];
 	switch($row['field_type'])

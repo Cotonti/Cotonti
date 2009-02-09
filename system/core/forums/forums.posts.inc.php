@@ -688,7 +688,9 @@ while ($row = sed_sql_fetcharray($sql))
 	if(count($extrafields)>0)
 	foreach($extrafields as $i=>$extrafield)
 	{
-		$t->assign('FORUMS_POSTS_ROW_USER'.strtoupper($extrafield['field_name']), sed_cc($row['user_'.$extrafield['field_name']])); 
+		$uname = strtoupper($extrafield['field_name']);
+		$t->assign('FORUMS_POSTS_ROW_USER'.$uname, sed_cc($row['user_'.$extrafield['field_name']])); 
+		isset($L['page_'.$extrafield['field_name'].'_title']) ? $t->assign('FORUMS_POSTS_ROW_USER'.$uname.'_TITLE', $L['page_'.$extrafield['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $extrafield['field_description']);
 	}
 		
 	/* === Hook - Part2 : Include === */

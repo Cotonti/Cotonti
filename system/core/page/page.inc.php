@@ -175,7 +175,12 @@ $t->assign(array(
 
 // Extra fields
 $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while($row = sed_sql_fetchassoc($fieldsres)) $t->assign('PAGE_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
+while($row = sed_sql_fetchassoc($fieldsres)) 
+{
+	$uname = strtoupper($row['field_name']);
+	$t->assign('PAGE_'.$uname, $pag['page_'.$row['field_name']]);
+	isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGE_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $row['field_description']);
+}
 
 if ($usr['isadmin'])
 {
