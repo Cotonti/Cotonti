@@ -28,7 +28,7 @@ define('SED_CODE', TRUE);
 $location = "RSS";
 
 // TODO move this to config
-$cfg_timetolive = 1; // refresh cache every N seconds
+$cfg_timetolive = 30; // refresh cache every N seconds
 $cfg_maxitems = 40; // max items in rss
 $cfg_charset = "UTF-8";
 
@@ -134,7 +134,7 @@ elseif ($c == "topics")
 		$row = mysql_fetch_assoc($res);
 		//if ($row['auth_rights']=='0') exit(); // forum not readable for guests
 		
-		if(!sed_auth('forum', $forum_id)) exit("not readable for guests");
+		if(!sed_auth('forum', $forum_id, 'R' )) exit("not readable for guests");
 		
 		// get number of posts in topic
 		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
