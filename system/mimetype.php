@@ -10,7 +10,8 @@
 //7 - Byte length - How many bytes to check from the start
 //8 - Is disabled? - True or False (0 or 1)
 $mime_type['rar'][]		= array('application/x-rar', 'Rar!', '0', '0', '4', '0');
-$mime_type['zip'][]		= array('application/zip', '504B03041400', '1', '0', '6', '0');
+$mime_type['zip'][0]	= array('application/zip', '504B03041400', '1', '0', '6', '0');
+$mime_type['zip'][1]	= array('application/zip', '504B03040A00', '1', '0', '6', '0');
 $mime_type['gz'][]		= array('application/x-gzip', '1F8B0800', '1', '0', '4', '0');
 $mime_type['tar.gz'][]	= array('application/x-gzip', '1F8B0808', '1', '0', '4', '0');
 $mime_type['pdf'][]		= array('application/pdf', '!<PDF>!', '0', '0', '7', '0');
