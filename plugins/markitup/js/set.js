@@ -34,35 +34,35 @@ var mySettings = {
 			{name: L.yellow,	openWith:'[color=#FCE94F]', closeWith: '[/color]',	className:"col1-1" },
 			{name: L.yellow,	openWith:'[color=#EDD400]', closeWith: '[/color]', 	className:"col1-2" },
 			{name: L.yellow, 	openWith:'[color=#C4A000]', closeWith: '[/color]', 	className:"col1-3" },
-				
+
 			{name: L.orange, 	openWith:'[color=#FCAF3E]', closeWith: '[/color]', 	className:"col2-1" },
 			{name: L.orange, 	openWith:'[color=#F57900]', closeWith: '[/color]', 	className:"col2-2" },
 			{name: L.orange,	openWith:'[color=#CE5C00]', closeWith: '[/color]', 	className:"col2-3" },
-				
+
 			{name: L.brown, 	openWith:'[color=#E9B96E]', closeWith: '[/color]', 	className:"col3-1" },
 			{name: L.brown, 	openWith:'[color=#C17D11]', closeWith: '[/color]', 	className:"col3-2" },
 			{name: L.brown,		openWith:'[color=#8F5902]',  closeWith: '[/color]',	className:"col3-3" },
-				
+
 			{name: L.green, 	openWith:'[color=#8AE234]', closeWith: '[/color]', 	className:"col4-1" },
 			{name: L.green, 	openWith:'[color=#73D216]',  closeWith: '[/color]',	className:"col4-2" },
 			{name: L.green,		openWith:'[color=#4E9A06]',  closeWith: '[/color]',	className:"col4-3" },
-				
+
 			{name: L.blue, 		openWith:'[color=#729FCF]',  closeWith: '[/color]',	className:"col5-1" },
 			{name: L.blue, 		openWith:'[color=#3465A4]',  closeWith: '[/color]',	className:"col5-2" },
 			{name: L.blue,		openWith:'[color=#204A87]',  closeWith: '[/color]',	className:"col5-3" },
-	
+
 			{name: L.purple, 	openWith:'[color=#AD7FA8]',  closeWith: '[/color]',	className:"col6-1" },
 			{name: L.purple, 	openWith:'[color=#75507B]',  closeWith: '[/color]',	className:"col6-2" },
 			{name: L.purple,	openWith:'[color=#5C3566]',  closeWith: '[/color]',	className:"col6-3" },
-				
+
 			{name: L.red, 		openWith:'[color=#EF2929]',  closeWith: '[/color]',	className:"col7-1" },
 			{name: L.red, 		openWith:'[color=#CC0000]',  closeWith: '[/color]',	className:"col7-2" },
 			{name: L.red,		openWith:'[color=#A40000]',  closeWith: '[/color]',	className:"col7-3" },
-				
+
 			{name: L.gray, 		openWith:'[color=#FFFFFF]',  closeWith: '[/color]',	className:"col8-1" },
 			{name: L.gray, 		openWith:'[color=#D3D7CF]',  closeWith: '[/color]',	className:"col8-2" },
 			{name: L.gray,		openWith:'[color=#BABDB6]',  closeWith: '[/color]',	className:"col8-3" },
-				
+
 			{name: L.gray, 		openWith:'[color=#888A85]',  closeWith: '[/color]',	className:"col9-1" },
 			{name: L.gray, 		openWith:'[color=#555753]',  closeWith: '[/color]',	className:"col9-2" },
 			{name: L.gray,		openWith:'[color=#000000]',  closeWith: '[/color]',	className:"col9-3" }
@@ -73,7 +73,7 @@ var mySettings = {
 		{name: L.email, className: 'mEmail', openWith:'[email=[![' + L.email_addr + ':!:john@doe.com]!]]', closeWith:'[/email]', placeHolder: L.email_text},
 		{separator:'---------------' },
 		{name: L.ul, className: 'mUl', openWith:'[list]\n', closeWith:'\n[/list]'},
-		{name: L.ol, className: 'mOl', openWith:'[list=1]\n', closeWith:'\n[/list]'}, 
+		{name: L.ol, className: 'mOl', openWith:'[list=1]\n', closeWith:'\n[/list]'},
 		{name: L.li, className: 'mLi', openWith:'[li]', key: 'M', closeWith: '[/li]'},
 		{name: L.table, openWith:'[table]\n', closeWith:'\n[/table]', placeHolder:"[tr][(!(td|!|th)!)][/(!(td|!|th)!)][/tr]", className:'mtable' },
 		{name: L.table_row, openWith:'[tr]', closeWith:'[/tr]', placeHolder:"[(!(td|!|th)!)][/(!(td|!|th)!)]", className:'mtable-row' },
@@ -85,7 +85,7 @@ var mySettings = {
 			{name: L.spoiler, className: 'mSpoiler', openWith:'[spoiler=[![' + L.spoiler_text + ']!]]', closeWith:'[/spoiler]'}
 		]},
 		{name: L.code, className: 'mCode', openWith:'[code]', closeWith:'[/code]'},
-		{name: L.hide, className: 'mHide', openWith:'[hide]', closeWith:'[/hide]'}, 
+		{name: L.hide, className: 'mHide', openWith:'[hide]', closeWith:'[/hide]'},
 		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) { showSmilies(markitup) } },
 		{separator:'---------------' },
 		{name: L.clean, className:"mClean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
@@ -115,7 +115,7 @@ var mini = {
 function showSmilies(markitup) {
 	var perRow = smileBox.perRow;
 	if($('#smilies').length != 1) {
-		var smileHtml = '<table class="cells" cellpadding="0" style="width:160px">';
+		var smileHtml = '<table class="cells" cellpadding="0">';
 		var code;
 		for(var i = 0; i < smileSet.length; i++) {
 			if(i % perRow == 0) {
@@ -134,7 +134,7 @@ function showSmilies(markitup) {
 			}
 		}
 		smileHtml += '</tr></table>';
-		$('body').append('<div id="smilies" class="jqmWindow"><h4><a href="#" class="jqmClose">[X]</a> ' + L.smilies + '</h4>' + smileHtml + '</div>');
+		$('body').append('<div id="smilies" class="jqmWindow"><h4>' + L.smilies + '</h4>' + smileHtml + '<p><a href="#" class="jqmClose">' + L.close + '</a></p></div>');
 		$('#smilies a').click(function() {
 			emoticon = $(this).attr("name");
 			$.markItUp( { replaceWith: ' ' + emoticon + ' ' } );
