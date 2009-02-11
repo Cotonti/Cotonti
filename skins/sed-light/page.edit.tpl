@@ -68,7 +68,9 @@
 				</tr>
 				<tr>
 					<td colspan="2">{PHP.skinlang.pageedit.Bodyofthepage}
-					<div style="width:100%;">{PAGEEDIT_FORM_TEXTBOXER}</div></td>
+					<div style="width:100%;">{PAGEEDIT_FORM_TEXT}
+					{PAGEEDIT_FORM_PFS_TEXT_USER}&nbsp;&nbsp; {PAGEEDIT_FORM_PFS_TEXT_SITE}
+					</div></td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.pageedit.Filedownload}</td>
@@ -77,7 +79,8 @@
 				<tr>
 					<td>{PHP.skinlang.pageedit.URL}<br />
 					{PHP.skinlang.pageedit.URLhint}</td>
-					<td>{PAGEEDIT_FORM_URL}</td>
+					<td>{PAGEEDIT_FORM_URL}<br>
+					{PAGEEDIT_FORM_PFS_URL_USER}&nbsp;&nbsp; {PAGEEDIT_FORM_PFS_URL_SITE}</td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.pageedit.Filesize}<br />

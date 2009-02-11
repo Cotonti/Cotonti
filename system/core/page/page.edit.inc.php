@@ -303,17 +303,40 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_BEGIN" => $pag['page_begin']." ".$usr['timetext'],
 	"PAGEEDIT_FORM_EXPIRE" => $pag['page_expire']." ".$usr['timetext'],
 	"PAGEEDIT_FORM_FILE" => $page_form_file,
-	"PAGEEDIT_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"rpageurl\" value=\"".sed_cc($pag['page_url'])."\" size=\"56\" maxlength=\"255\" /> ".$pfs_form_url_myfiles,
+	"PAGEEDIT_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"rpageurl\" value=\"".sed_cc($pag['page_url'])."\" size=\"56\" maxlength=\"255\" /> ",
 	"PAGEEDIT_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"rpagesize\" value=\"".sed_cc($pag['page_size'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_PAGECOUNT" => "<input type=\"text\" class=\"text\" name=\"rpagecount\" value=\"".$pag['page_count']."\" size=\"8\" maxlength=\"8\" />",
 	"PAGEEDIT_FORM_FILECOUNT" => "<input type=\"text\" class=\"text\" name=\"rpagefilecount\" value=\"".$pag['page_filecount']."\" size=\"8\" maxlength=\"8\" />",
-	"PAGEEDIT_FORM_TEXT" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".sed_cc($pag['page_text'])."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
-	"PAGEEDIT_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".sed_cc($pag['page_text'])."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
+	"PAGEEDIT_FORM_TEXT" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".sed_cc($pag['page_text'])."</textarea><br />".$bbcodes." ".$smilies,
+	"PAGEEDIT_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".sed_cc($pag['page_text'])."</textarea><br />".$bbcodes." ".$smilies,
 	"PAGEEDIT_FORM_BBCODES" => $bbcodes,
 	"PAGEEDIT_FORM_SMILIES" => $smilies,
 	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
 );
+
+// PFS tags
+$tplskin = file_get_contents($mskin);
+preg_match_all("#\{(PAGEEDIT_FORM_PFS_([^\}]*?)_USER)\}#", $tplskin, $match);
+$numtags = count($match[0]);
+for($i = 0; $i<$numtags; $i++)
+{
+	$tag = $match[1][$i];
+	$field = strtolower($match[2][$i]);
+	$pfs_js = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpage$field", $L['Mypfs']) : '';
+	$pageedit_array[$tag] = $pfs_js;
+}
+unset($match);
+preg_match_all("#\{(PAGEEDIT_FORM_PFS_([^\}]*?)_SITE)\}#", $tplskin, $match);
+$numtags = count($match[0]);
+for($i = 0; $i<$numtags; $i++)
+{
+	$tag = $match[1][$i];
+	$field = strtolower($match[2][$i]);
+	$pfs_js = (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, "update", "rpage$field", $L['SFS']) : '';
+	$pageedit_array[$tag] = $pfs_js;
+}
+
 // Extra fields
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
