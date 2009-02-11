@@ -6,6 +6,7 @@ var L = {
 	brown:		'Коричневый',
 	center:		'По центру',
 	clean:		'Очистить',
+	close:		'Закрыть',
 	code:		'Код',
 	color:		'Цвет',
 	email:		'Email',
