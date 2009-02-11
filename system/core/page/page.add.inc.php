@@ -201,8 +201,6 @@ $pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat');
 $newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600, 'long', '_beg');
 $newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600 + 31536000, 'long', '_exp');
 
-$bbcodes = ($cfg['parsebbcodepages']) ? sed_build_bbcodes('newpage', 'newpagetext',$L['BBcodes']) : '';
-$smilies = ($cfg['parsesmiliespages']) ? sed_build_smilies('newpage', 'newpagetext',$L['Smilies']) : '';
 $pfs = sed_build_pfs($usr['id'], 'newpage', 'newpagetext',$L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'newpagetext', $L['SFS']) : '';
 $pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "newpage", "newpageurl", $L['Mypfs']) : '';
@@ -247,18 +245,40 @@ $pageadd_array = array(
 	"PAGEADD_FORM_BEGIN" => $newpage_form_begin,
 	"PAGEADD_FORM_EXPIRE" => $newpage_form_expire,
 	"PAGEADD_FORM_FILE" => $pageadd_form_file,
-	"PAGEADD_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"newpageurl\" value=\"".sed_cc($newpageurl)."\" size=\"56\" maxlength=\"255\" /> ".$pfs_form_url_myfiles,
+	"PAGEADD_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"newpageurl\" value=\"".sed_cc($newpageurl)."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEADD_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"newpagesize\" value=\"".sed_cc($newpagesize)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_TEXT" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".sed_cc($newpagetext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
-	"PAGEADD_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".sed_cc($newpagetext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
-	"PAGEADD_FORM_BBCODES" => $bbcodes,
-	"PAGEADD_FORM_SMILIES" => $smilies,
+	"PAGEADD_FORM_TEXT" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".sed_cc($newpagetext)."</textarea>",
+	"PAGEADD_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".sed_cc($newpagetext)."</textarea>",
 	"PAGEADD_FORM_MYPFS" => $pfs
 );
+
+// PFS tags
+$tplskin = file_get_contents($mskin);
+preg_match_all("#\{(PAGEADD_FORM_PFS_([^\}]*?)_USER)\}#", $tplskin, $match);
+$numtags = count($match[0]);
+for($i = 0; $i<$numtags; $i++)
+{
+	$tag = $match[1][$i];
+	$field = strtolower($match[2][$i]);
+	$pfs_js = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "newpage", "newpage$field", $L['Mypfs']) : '';
+	$pageadd_array[$tag] = $pfs_js;
+}
+unset($match);
+preg_match_all("#\{(PAGEADD_FORM_PFS_([^\}]*?)_SITE)\}#", $tplskin, $match);
+$numtags = count($match[0]);
+for($i = 0; $i<$numtags; $i++)
+{
+	$tag = $match[1][$i];
+	$field = strtolower($match[2][$i]);
+	$pfs_js = (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, "newpage", "newpage$field", $L['SFS']) : '';
+	$pageadd_array[$tag] = $pfs_js;
+}
+	
 // Extra fields
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
+	// _TITLE tag
 	isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGEADD_FORM_'.strtoupper($row['field_name']).'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGEADD_FORM_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
 	$t1 = "PAGEADD_FORM_".strtoupper($row['field_name']);
 	$t2 = $row['field_html'];

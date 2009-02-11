@@ -56,7 +56,9 @@
 				</tr>
 				<tr>
 					<td colspan="2">{PHP.skinlang.pageadd.Bodyofthepage}
-						<div style="width:100%;">{PAGEADD_FORM_TEXTBOXER}</div></td>
+						<div style="width:100%;">{PAGEADD_FORM_TEXT}</div>
+						{PAGEADD_FORM_PFS_TEXT_USER}&nbsp;&nbsp; {PAGEADD_FORM_PFS_TEXT_SITE}
+					</td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.pageadd.File}<br />
@@ -66,7 +68,8 @@
 				<tr>
 					<td>{PHP.skinlang.pageadd.URL}<br />
 					{PHP.skinlang.pageadd.URLhint}</td>
-					<td>{PAGEADD_FORM_URL}</td>
+					<td>{PAGEADD_FORM_URL}<br>
+					{PAGEADD_FORM_PFS_URL_USER}&nbsp;&nbsp; {PAGEADD_FORM_PFS_URL_SITE}</td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.pageadd.Filesize}<br />
