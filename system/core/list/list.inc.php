@@ -26,7 +26,11 @@ $p = sed_import('p','G','ALP',16);
 
 $dc = sed_import('dc','G','INT');
 
-if ($c=='all' || $c=='system')
+if(!isset($sed_cat[$c]))
+{
+	sed_die(true);
+}
+elseif ($c=='all' || $c=='system')
 {
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 	sed_block($usr['isadmin']);
