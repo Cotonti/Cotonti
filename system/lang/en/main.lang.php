@@ -598,8 +598,9 @@ $L['pfs_isgallery'] = 'Gallery ?';
 $L['pfs_extallowed'] = 'Extensions allowed';
 $L['pfs_filechecknomime'] = 'Warning: No Mime Type data was found for the Extension: %1$s Filename - %2$s'; // N-0.0.2
 $L['pfs_filecheckfail'] = 'Warning: File Check Failed for Extension: %1$s Filename - %2$s'; // N-0.0.2
-$L['pfs_filenotvalid'] = "This is not a valid %1\$s file."; // N-0.0.2
-$L['pfs_filemimemissing'] = "The mime type for %1\$s is missing. Upload Failed"; // N-0.0.2
+$L['pfs_filenotmoved'] = 'The upload failed, temporary file cannot be moved.'; // 0.0.3
+$L['pfs_filenotvalid'] = 'This is not a valid %1$s file.'; // N-0.0.2
+$L['pfs_filemimemissing'] = 'The mime type for %1$s is missing. Upload Failed'; // N-0.0.2
 
 
 /* ====== Plug ====== */
