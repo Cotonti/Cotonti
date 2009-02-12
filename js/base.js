@@ -28,6 +28,42 @@ function toggleblock(id){
     }
 }
 
+// Inserts text into textarea at cursor position
+function insertText(docObj, formName, fieldName, value) {
+	var field = null;
+	if(!docObj)
+		docObj = document;
+	// Find the field in the docObj
+	for(var i = 0; i < docObj.forms.length; i++) {
+		if(docObj.forms[i].name == formName) {
+			for(var j = 0; j < docObj.forms[i].elements.length; j++) {
+				if(docObj.forms[i].elements[j].name == fieldName) {
+					field = docObj.forms[i].elements[j];
+					break;
+				}
+			}
+			break;
+		}
+	}
+	if(!field)
+		return false;
+	// Insert the text
+	if (docObj.selection) {
+		// MSIE and Opera
+		field.focus();
+		var sel = docObj.selection.createRange();
+		sel.text = value;
+	} else if (field.selectionStart || field.selectionStart == 0) {
+		// Mozilla
+		var startPos = field.selectionStart;
+		var endPos = field.selectionEnd;
+		field.value = field.value.substring(0, startPos) + value + field.value.substring(endPos, field.value.length);
+	} else {
+		field.value += value;
+	}
+	return true;
+}
+
 function ajaxSend(settings) {
 	var method = settings.method || 'GET';
 	var data = settings.data || '';

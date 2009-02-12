@@ -1,18 +1,19 @@
 <?PHP
-
 /* ====================
  Seditio - Website engine
  Copyright Neocrome
  http://www.neocrome.net
- [BEGIN_SED]
- File=pfs.php
- Version=122
- Updated=2007-jul-16
- Type=Core
- Author=Neocrome
- Description=PFS
- [END_SED]
  ==================== */
+
+/**
+ * Personal File Storage, main usage script.
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -74,13 +75,15 @@ if (($maxfile==0 || $maxtotal==0) && !$usr['isadmin'])
 if (!empty($c1) || !empty($c2))
 {
 	$morejavascript = "
-function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img=".$cfg['pfs_dir_user']."'+gfile+']".$cfg['th_dir_user']."'+gfile+'[/img]'; }
-function addpix(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
+function addthumb(gfile,c1,c2) {
+	insertText(opener.document, '$c1', '$c2', '[img=".$cfg['pfs_dir_user']."'+gfile+']".$cfg['th_dir_user']."'+gfile+'[/img]');
+}
+function addpix(gfile,c1,c2) {
+	insertText(opener.document, '$c1', '$c2', '[img]'+gfile+'[/img]');
+}
 	";
-	$more .= "&amp;c1=".$c1."&amp;c2=".$c2;
-	$more1 .= ($more1=='') ? "?c1=".$c1."&amp;c2=".$c2 : "&amp;c1=".$c1."&amp;c2=".$c2;
+	$more .= "&c1=".$c1."&c2=".$c2;
+	$more1 .= ($more1=='') ? "?c1=".$c1."&c2=".$c2 : "&c1=".$c1."&c2=".$c2;
 	$standalone = TRUE;
 }
 
@@ -617,19 +620,27 @@ if ($standalone)
 		$addfile = "'[url=".$cfg['pfs_dir_user']."'+gfile+']'+gfile+'[/url]'";
 	}
 	$pfs_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
+<title>".$cfg['maintitle']."</title>".sed_htmlmetas().sed_javascript()."
 <script type=\"text/javascript\">
 //<![CDATA[
-function help(rcode,c1,c2)
-	{ window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
-function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += $addthumb; window.close();}
-function addpix(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += $addpix; window.close();}
-function addfile(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += $addfile; window.close();}
-function picture(url,sx,sy)
-	{ window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0'); }
+function help(rcode,c1,c2) {
+	window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16');
+}
+function addthumb(gfile,c1,c2) {
+	insertText(opener.document, '$c1', '$c2', $addthumb);
+	window.close();
+}
+function addpix(gfile,c1,c2) {
+	insertText(opener.document, '$c1', '$c2', $addpix);
+	window.close();
+}
+function addfile(gfile,c1,c2) {
+	insertText(opener.document, '$c1', '$c2', $addfile);
+	window.close();
+}
+function picture(url,sx,sy) {
+	window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0');
+}
 //]]>
 </script>
 ";
