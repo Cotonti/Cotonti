@@ -685,10 +685,8 @@ function sed_post_parse($text, $area = '')
 function sed_build_addtxt($c1, $c2)
 {
 	$result = "
-	function addtxt(text)
-	{
-	document.".$c1.".".$c2.".value  += text;
-	document.".$c1.".".$c2.".focus();
+	function addtxt(text) {
+		insertText(document, '$c1', '$c2', text);;
 	}
 	";
 	return($result);
