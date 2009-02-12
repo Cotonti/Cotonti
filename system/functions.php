@@ -4678,32 +4678,58 @@ function sed_extrafield_remove($sql_table, $name)
 }
 
 /**
- * Function is intended for output of numerical results with the registration
- * declinations of words, for example: "1 answer", "2 answers" etc.
+ * Makes correct plural forms of words
+ * 
+ * @global string $lang Current language
+ * @param int $digit Numeric value
+ * @param string $expr Word or expression
+ * @param bool $onlyword Return only words, without numbers
+ * @return string 
  */
-
-function declension($digit,$expr,$onlyword=false)
+function sed_declension($digit, $expr, $onlyword = false)
 {
-    if(is_array($expr))
+    if (!is_array($expr))
     {
-            if(empty($expr[2])) $expr[2]=$expr[1];
-            $i=preg_replace('/[^0-9]+/s','',$digit)%100;
-            if($onlyword) $digit='';
-            if($i>=5 && $i<=20) $res=$digit.' '.$expr[2];
-            else
-            {
-                    $i%=10;
-                    if($i==1) $res=$digit.' '.$expr[0];
-                    elseif($i>=2 && $i<=4) $res=$digit.' '.$expr[1];
-                    else $res=$digit.' '.$expr[2];
-            }
-    }
-    else
-    {
-    $res = $digit.' '.$expr;
+        return trim(($onlyword ? '' : "$digit ") . $expr);
     }
  
-        return trim($res);
+    global $lang;
+ 
+    $i = preg_replace('#\D+#', '', $digit);
+    $plural = sed_get_plural($i, $lang);
+    $cnt = count($expr);
+    return trim(($onlyword ? '' : "$digit ") . (($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
+}
+
+/**
+ * Used in sed_declension to get rules for concrete languages
+ * 
+ * @param int $plural Numeric value
+ * @param string $lang Target language code
+ * @return int 
+ */
+function sed_get_plural($plural, $lang)
+{
+    switch ($lang)
+    {
+        case 'en':
+        case 'de':
+        case 'nl':
+        case 'se':
+            return ($plural == 1) ? 1 : 0;
+ 
+        case 'fr':
+        case 'uk':
+            return (($plural == 0) || ($plural == 1)) ? 1 : 0;
+ 
+        case 'ru':
+        case 'ua':
+            $plural %= 100;
+            return (5 <= $plural && $plural <= 20) ? 2 : ((1 == ($plural %= 10)) ? 0 : ((2 <= $plural && $plural <= 4) ? 1 : 2));
+
+        default:
+            return 0;
+    }
 }
 
 ?>

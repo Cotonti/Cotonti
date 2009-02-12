@@ -33,7 +33,7 @@ $L['plu_searchall2'] = "Default is: search <span style='font-size:large;'>any</s
 $L['plu_querytooshort'] = "The query string is too short !";
 $L['plu_toomanywords'] = "Too many words, limit is set to";
 $L['plu_found'] = "Found";
-$L['plu_match'] = array('match','matches');
+$L['plu_match'] = array('matches','match');
 
 $L['plu_allsections'] = "All sections";
 $L['plu_allcategories'] = "All categories";
