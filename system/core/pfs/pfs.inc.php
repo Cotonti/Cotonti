@@ -147,63 +147,67 @@ if ($a=='upload')
 			$dotpos = mb_strrpos($u_name,".")+1;
 			$f_extension = mb_substr($u_name, $dotpos);
 			$f_extension_ok = 0;
-			$fcheck = sed_file_check($u_tmp_name, $u_name, $f_extension);
-			if($fcheck == 1)
+			$desc = $ndesc[$ii];
+			if($cfg['pfstimename'])
 			{
-				$desc = $ndesc[$ii];
-				if($cfg['pfstimename'])
-				{
-					$u_newname = time() . '_' . sed_unique(6) . '_' . $userid . '.' . $f_extension;
-				}
-				else
-				{
-					$u_newname = sed_safename($u_name, true, '_' . $userid);
-				}
-				$u_sqlname = sed_sql_prep($u_newname);
+				$u_newname = time() . '_' . sed_unique(6) . '_' . $userid . '.' . $f_extension;
+			}
+			else
+			{
+				$u_newname = sed_safename($u_name, true, '_' . $userid);
+			}
+			$u_sqlname = sed_sql_prep($u_newname);
 
-				if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
+			if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
+			{
+				foreach ($sed_extensions as $k => $line)
 				{
-					foreach ($sed_extensions as $k => $line)
-					{
-						if (mb_strtolower($f_extension) == $line[0])
-						{ $f_extension_ok = 1; }
-					}
+					if (mb_strtolower($f_extension) == $line[0])
+					{ $f_extension_ok = 1; }
 				}
+			}
 
-				if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024   )
+			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024   )
+			{
+				$fcheck = sed_file_check($u_tmp_name, $u_name, $f_extension);
+				if($fcheck == 1)
 				{
 					if (!file_exists($cfg['pfs_dir_user'].$u_newname))
 					{
+						$is_moved = true;
+
 						if ($cfg['pfsuserfolder'])
 						{
 							if (!is_dir($cfg['pfs_dir_user']))
-							{ mkdir($cfg['pfs_dir_user'], 0666); }
+							{ $is_moved &= mkdir($cfg['pfs_dir_user'], 0755); }
 							if (!is_dir($cfg['th_dir_user']))
-							{ mkdir($cfg['th_dir_user'], 0666); }
+							{ $is_moved &= mkdir($cfg['th_dir_user'], 0755); }
 						}
 
-						move_uploaded_file($u_tmp_name, $cfg['pfs_dir_user'].$u_newname);
-						@chmod($cfg['pfs_dir_user'].$u_newname, 0766);
-
-						/* === Hook === */
-						$extp = sed_getextplugins('pfs.upload.moved');
-						if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-						/* ===== */
+						$is_moved &= move_uploaded_file($u_tmp_name, $cfg['pfs_dir_user'].$u_newname);
+						$is_moved &= chmod($cfg['pfs_dir_user'].$u_newname, 0644);
 
 						$u_size = filesize($cfg['pfs_dir_user'].$u_newname);
 
-						$sql = sed_sql_query("INSERT INTO $db_pfs
-						(pfs_userid,
-						pfs_date,
-						pfs_file,
-						pfs_extension,
-						pfs_folderid,
-						pfs_desc,
-						pfs_size,
-						pfs_count)
-						VALUES
-						(".(int)$userid.",
+						if ($is_moved && (int)$u_size > 0)
+						{
+							/* === Hook === */
+							$extp = sed_getextplugins('pfs.upload.moved');
+							if (is_array($extp))
+							{ foreach($extp as $k => $pl) { include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+							/* ===== */
+
+							$sql = sed_sql_query("INSERT INTO $db_pfs
+							(pfs_userid,
+							pfs_date,
+							pfs_file,
+							pfs_extension,
+							pfs_folderid,
+							pfs_desc,
+							pfs_size,
+							pfs_count)
+							VALUES
+							(".(int)$userid.",
 							".(int)$sys['now_offset'].",
 							'".sed_sql_prep($u_sqlname)."',
 							'".sed_sql_prep($f_extension)."',
@@ -212,22 +216,28 @@ if ($a=='upload')
 							".(int)$u_size.",
 							0) ");
 
-						$sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
-						$disp_errors .= $L['Yes'];
-						$pfs_totalsize += $u_size;
+							$sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
+							$disp_errors .= $L['Yes'];
+							$pfs_totalsize += $u_size;
 
-						/* === Hook === */
-						$extp = sed_getextplugins('pfs.upload.done');
-						if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-						/* ===== */
+							/* === Hook === */
+							$extp = sed_getextplugins('pfs.upload.done');
+							if (is_array($extp))
+							{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+							/* ===== */
 
-						if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled' && file_exists($cfg['pfs_dir_user'].$u_newname))
+							if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled' && file_exists($cfg['pfs_dir_user'].$u_newname))
+							{
+								@unlink($cfg['th_dir_user'].$u_newname);
+								$th_colortext = array(hexdec(substr($cfg['th_colortext'],0,2)), hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
+								$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)), hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
+								sed_createthumb($cfg['pfs_dir_user'].$u_newname, $cfg['th_dir_user'].$u_newname, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
+							}
+						}
+						else
 						{
-							@unlink($cfg['th_dir_user'].$u_newname);
-							$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
-							$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
-							sed_createthumb($cfg['pfs_dir_user'].$u_newname, $cfg['th_dir_user'].$u_newname, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
+							@unlink($cfg['pfs_dir_user'].$u_newname);
+							$disp_errors .= $L['pfs_filenotmoved'];
 						}
 					}
 					else
@@ -235,18 +245,18 @@ if ($a=='upload')
 						$disp_errors .= $L['pfs_fileexists'];
 					}
 				}
+				elseif($fcheck == 2)
+				{
+					$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
+				}
 				else
 				{
-					$disp_errors .= $L['pfs_filetoobigorext'];
+					$disp_errors .= sprintf($L['pfs_filenotvalid'], $f_extension);
 				}
-			}
-			elseif($fcheck == 2)
-			{
-				$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
 			}
 			else
 			{
-				$disp_errors .= sprintf($L['pfs_filenotvalid'], $f_extension);
+				$disp_errors .= $L['pfs_filetoobigorext'];
 			}
 			$disp_errors .= "</li>";
 		}
