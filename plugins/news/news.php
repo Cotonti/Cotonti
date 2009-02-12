@@ -153,8 +153,8 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 					$readmore = mb_strpos($pag['page_html'], "<!--more-->");
 					if($readmore > 0)
 					{
-						$pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore)."<br />";
-						$pag['page_html'] .= "<a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a>";
+						$pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore);
+						$pag['page_html'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
 					}
 
 					$cfg['parsebbcodepages'] ? $news->assign('PAGE_ROW_TEXT', sed_post_parse($pag['page_html'], 'pages'))
@@ -166,8 +166,8 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 					$pag['page_text'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 					if ($readmore>0)
 					{
-						$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore)."<br />";
-						$pag['page_text'] .= "<a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a>";
+						$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);
+						$pag['page_text'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
 					}
 					$pag['page_text'] = sed_post_parse($pag['page_text'], 'pages');
 					$news->assign('PAGE_ROW_TEXT', $pag['page_text']);
