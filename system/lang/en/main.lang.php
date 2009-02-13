@@ -555,6 +555,7 @@ $L['for_antibump'] = 'Protection against spam is on. You can not add a few messa
 $L['for_titletooshort'] = 'Topic title is too short or missing'; // N-0.0.2
 $L['for_messagetooshort'] = 'Topic message is too short'; // N-0.0.2
 $L['for_polltooshort'] = 'Poll options must be equal, or greater than 2'; // N-0.0.2
+$L['for_antibump'] = "The anti-bump protection is up, you cannot post twice in a row."; // N-0.1.0
 
 /* ====== List ====== */
 
