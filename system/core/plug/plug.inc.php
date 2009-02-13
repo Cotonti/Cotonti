@@ -1,18 +1,19 @@
 <?PHP
-
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=plug.php
-Version=125
-Updated=2008-mar-20
-Type=Core
-Author=Neocrome
-Description=Plugin loader
-[END_SED]
 ==================== */
+
+/**
+ * Plugin invokation module
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -152,7 +153,14 @@ elseif (!empty($o))
 		exit;
 	}
 
-	$popup_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."\n\n<script type=\"text/javascript\">\n<!--\nfunction add(text)\n	{\nopener.document.".$c1.".".$c2.".value += text; }\n//-->\n</script>\n";
+	$popup_header1 = $cfg['doctype'].'<html><head>'.sed_htmlmetas().sed_javascript().'
+<script type="text/javascript">
+//<![CDATA[
+function add(text) {
+	insertText(document, "'.$c1.'", "'.$c2.'", text);
+}
+//]]>
+</script>';
 	$popup_header2 = "</head><body>";
 	$popup_footer = "</body></html>";
 

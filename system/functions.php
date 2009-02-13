@@ -399,10 +399,6 @@ function sed_bbcode_load()
 function sed_bbcode_parse($text, $post = false)
 {
 	global $cfg, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
-	if($cfg['parser_custom'])
-	{
-		return $text;
-	}
 
 	// BB auto-close
 	$bbc = array();
@@ -561,10 +557,9 @@ function sed_parse_pre($m)
  * @param bool $parse_bbcodes Enable bbcode parsing
  * @param bool $parse_smilies Enable emoticons
  * @param bool $parse_newlines Replace line breaks with <br />
- * @param bool $parse_tabs Parse page into tabs by [newpage] codes
  * @return string
  */
-function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE, $parse_tabs = FALSE)
+function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE)
 {
 	global $cfg, $sys, $sed_smilies, $L, $usr;
 
@@ -573,90 +568,55 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 		include_once $cfg['system_dir'].'/parser.php';
 		if(function_exists('sed_custom_parse'))
 		{
-			return sed_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
+			$text = sed_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
 		}
 	}
 
-	if($parse_tabs)
+	if(!$cfg['parser_disable'])
 	{
-		$page_tabs = explode('[newpage]', $text, 20);
-		$totaltabs = count($page_tabs);
-		if($totaltabs > 1)
+		$code = array();
+		$unique_seed = $sys['unique'];
+		$ii = 10000;
+
+		$text = sed_parse_autourls($text);
+
+		if($parse_smilies && is_array($sed_smilies))
 		{
-			$page_html = '<ul class="multi">';
-			$pag['page_tabtitles'] = array();
-			$tabs_id = sed_unique(8);
-
-			for($i = 0; $i < $totaltabs; $i++)
+			foreach($sed_smilies as $k => $v)
 			{
-				$p1 = mb_stripos($page_tabs[$i], '[title]');
-				$p2 = mb_stripos($page_tabs[$i], '[/title]');
-				$tab_id = $tabs_id . $i;
-				if($p2 > $p1 && $p1 < 4)
+				$ii++;
+				$key = '**'.$ii.$unique_seed.'**';
+				$code[$key]= '<img class="aux smiley" src="./images/smilies/'.$v['file'].'" alt="'.sed_cc($v['code']).'" />';
+				$text = preg_replace('#(^|\s)'.preg_quote($v['code']).'(\s|$)#', '$1'.$key.'$2', $text);
+				if(sed_cc($v['code']) != $v['code'])
 				{
-					$tab_title = mb_substr($page_tabs[$i], $p1+7, ($p2-$p1)-7);
-					$page_tabs[$i] = trim(str_replace('[title]'.$tab_title.'[/title]', '', $page_tabs[$i]));
+					// Fix for cc inserts
+					$text = preg_replace('#(^|\s)'.preg_quote(sed_cc($v['code'])).'(\s|$)#', '$1'.$key.'$2', $text);
 				}
-				else
-				{
-					$tab_title = $i;
-				}
-
-				$page_html .= '<li><a class="multi_header">'.sed_cc($tab_title).'</a>';
-				$page_tabs[$i] = trim(str_replace('[newpage]', '', $page_tabs[$i]));
-				$expanded = $i == 0 ? ' expanded' : '';
-				$page_html .= '<div class="multi_body'.$expanded.'" id="multi_'.$tab_id.'">'.sed_parse($page_tabs[$i], $parse_bbcodes, $parse_smilies, $parse_newlines).'</div></li>';
-			}
-
-			$page_html .=  '</ul>';
-			return $page_html;
-		}
-	}
-
-	$text = ' '.$text;
-	$code = array();
-	$unique_seed = $sys['unique'];
-	$ii = 10000;
-
-	$text = sed_parse_autourls($text);
-
-	if($parse_smilies && is_array($sed_smilies))
-	{
-		foreach($sed_smilies as $k => $v)
-		{
-			$ii++;
-			$key = '**'.$ii.$unique_seed.'**';
-			$code[$key]= '<img class="aux smiley" src="./images/smilies/'.$v['file'].'" alt="'.sed_cc($v['code']).'" />';
-			$text = preg_replace('#(^|\s)'.preg_quote($v['code']).'(\s|$)#', '$1'.$key.'$2', $text);
-			if(sed_cc($v['code']) != $v['code'])
-			{
-				// Fix for cc inserts
-				$text = preg_replace('#(^|\s)'.preg_quote(sed_cc($v['code'])).'(\s|$)#', '$1'.$key.'$2', $text);
 			}
 		}
-	}
 
-	if($parse_bbcodes)
-	{
-		$text = sed_bbcode_parse($text);
-	}
+		if($parse_bbcodes)
+		{
+			$text = sed_bbcode_parse($text);
+		}
 
-	if ($parse_bbcodes || $parse_smilies)
-	{
-		foreach($code as $x => $y)
-		{ $text = str_replace($x, $y, $text); }
-	}
+		if ($parse_bbcodes || $parse_smilies)
+		{
+			foreach($code as $x => $y)
+			{ $text = str_replace($x, $y, $text); }
+		}
 
-	if ($parse_newlines)
-	{
-		$text = nl2br($text);
-		$text = str_replace("\r", '', $text);
-		// Strip extraneous breaks
-		$text = preg_replace('#<(/?)(p|hr|ul|ol|li|blockquote|table|tr|td|th)(.*?)>(\s*)<br />#', '<$1$2$3>', $text);
-		$text = preg_replace_callback('#<pre[^>]*>(.+?)</pre>#sm', 'sed_parse_pre', $text);
+		if ($parse_newlines)
+		{
+			$text = nl2br($text);
+			$text = str_replace("\r", '', $text);
+			// Strip extraneous breaks
+			$text = preg_replace('#<(/?)(p|hr|ul|ol|li|blockquote|table|tr|td|th)(.*?)>(\s*)<br />#', '<$1$2$3>', $text);
+			$text = preg_replace_callback('#<pre[^>]*>(.+?)</pre>#sm', 'sed_parse_pre', $text);
+		}
 	}
-
-	return mb_substr($text, 1);
+	return $text;
 }
 
 /**
@@ -669,9 +629,18 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 function sed_post_parse($text, $area = '')
 {
 	global $cfg;
-	if(!$cfg['parser_custom'] && (empty($area) || $cfg["parsebbcode$area"]))
+	if($cfg['parser_custom'])
 	{
-		return sed_bbcode_parse($text, true);
+		include_once $cfg['system_dir'].'/parser.php';
+		if(function_exists('sed_custom_post_parse'))
+		{
+			$text = sed_custom_post_parse($text, $area);
+		}
+	}
+
+	if(!$cfg['parser_disable'] && (empty($area) || $cfg["parsebbcode$area"]))
+	{
+		$text = sed_bbcode_parse($text, true);
 	}
 	return $text;
 }
@@ -681,12 +650,18 @@ function sed_post_parse($text, $area = '')
  */
 
 /* ------------------ */
-// TODO eliminate this function
+/**
+ * Builds a javascript function for text insertion
+ *
+ * @param string $c1 Form name
+ * @param string $c2 Field name
+ * @return string
+ */
 function sed_build_addtxt($c1, $c2)
 {
 	$result = "
 	function addtxt(text) {
-		insertText(document, '$c1', '$c2', text);;
+		insertText(document, '$c1', '$c2', text);
 	}
 	";
 	return($result);
@@ -932,7 +907,7 @@ function sed_build_comments($code, $url, $display = true)
 				$com_text = sed_cc($row['com_text']);
 
 				$com_admin = ($usr['isadmin_com']) ? $L['Ip'].":".sed_build_ipsearch($row['com_authorip'])." &nbsp;".$L['Delete'].":[<a href=\"".$url. $sep . "ina=delete&amp;ind=".$row['com_id']."&amp;".sed_xg()."\">x</a>]" : '' ;
-				$com_authorlink = ($row['com_authorid']>0) ? "<a href=\"".sed_url('users', 'm=details&id='.$row['com_authorid'])."\">".$com_author."</a>" : $com_author ;
+				$com_authorlink = sed_build_user($row['com_authorid'], $com_author);
 
 				$t-> assign(array(
 					"COMMENTS_ROW_ID" => $row['com_id'],
@@ -2525,8 +2500,7 @@ function sed_javascript($more='')
 	global $cfg, $lang;
 	if($cfg['jquery'])
 	{
-		$result .= '<script type="text/javascript" src="js/jquery.js"></script>
-		<script type="text/javascript" src="js/jquery.accordion.js"></script>';
+		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
 	}
 	$result .= '<script type="text/javascript" src="js/base.js"></script>';
 	if(!empty($more))

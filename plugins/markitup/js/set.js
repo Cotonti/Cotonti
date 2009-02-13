@@ -134,7 +134,8 @@ function showSmilies(markitup) {
 			}
 		}
 		smileHtml += '</tr></table>';
-		$('body').append('<div id="smilies" class="jqmWindow"><h4>' + L.smilies + '</h4>' + smileHtml + '<p><a href="#" class="jqmClose">' + L.close + '</a></p></div>');
+		var style = 'margin-left:-'+(smileBox.width/2)+'px;margin-top:-'+(smileBox.height/2)+'px;width:'+smileBox.width+'px;height:'+smileBox.height+'px';
+		$('body').append('<div id="smilies" class="jqmWindow" style="' + style + '"><h4>' + L.smilies + '</h4>' + smileHtml + '<p><a href="#" class="jqmClose">' + L.close + '</a></p></div>');
 		$('#smilies a').click(function() {
 			emoticon = $(this).attr("name");
 			$.markItUp( { replaceWith: ' ' + emoticon + ' ' } );

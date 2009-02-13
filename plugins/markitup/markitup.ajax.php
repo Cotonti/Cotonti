@@ -1,14 +1,5 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/markitup/markitup.ajax.php
-Version=121
-Updated=2008-aug-26
-Type=Plugin
-Author=Trustmaster
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=markitup
 Part=preview
@@ -23,7 +14,7 @@ Order=10
  * Simple AJAX previewer for MarkItUp!
  *
  * @package Seditio-N
- * @version 0.0.1
+ * @version 0.0.3
  * @author Trustmaster
  * @copyright (c) 2008 Cotonti Team
  * @license BSD license

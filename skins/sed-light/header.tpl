@@ -41,7 +41,7 @@
                 </div>
                 <div id="navBar">
                     <div class="text">{PHP.cfg.menu1}</div>
-                    <div class="homeLink"><a href="/index.php" title="{PHP.L.Home}">{PHP.L.Home}</a></div>
+                    <div class="homeLink"><a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">{PHP.L.Home}</a></div>
                 </div>
             </div>
             <div id="content">
