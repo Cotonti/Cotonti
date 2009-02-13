@@ -261,6 +261,7 @@ function sed_loadconfigmap()
 	$result[] = array ('main', '30', 'jquery', 3, '1', '');
 	$result[] = array ('parser', '10', 'parser_cache', 3, '1', '');
 	$result[] = array ('parser', '10', 'parser_custom', 3, '0', '');
+	$result[] = array ('parser', '10', 'parser_disable', 3, '0', '');
 	$result[] = array ('parser', '20', 'parsebbcodeusertext', 3, '1', '');
 	$result[] = array ('parser', '20', 'parsebbcodecom', 3, '1', '');
 	$result[] = array ('parser', '20', 'parsebbcodeforums', 3, '1', '');

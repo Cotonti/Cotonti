@@ -5,7 +5,7 @@
 <meta http-equiv="content-type" content="{HEADER_META_CONTENTTYPE}; charset={HEADER_META_CHARSET}" />
 <meta name="description" content="{HEADER_META_DESCRIPTION}" />
 <meta name="keywords" content="{HEADER_META_KEYWORDS}" />
-<meta name="generator" content="Seditio by Neocrome http://www.neocrome.net" />
+<meta name="generator" content="Cotonti http://www.cotonti.com" />
 <meta http-equiv="expires" content="Fri, Apr 01 1974 00:00:00 GMT" />
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />
@@ -17,7 +17,6 @@
     <title>{HEADER_TITLE}</title>
     
     <link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
-    <link href="skins/{PHP.skin}/jquery-ui.css" type="text/css" rel="stylesheet" />
 
 </head>
 <!-- SED-Light / Designed By: Xiode - XiodeStudios.Com & Alx - AlxDesign.com / Programming By: Xiode - XiodeStudios.Com -->
@@ -42,7 +41,7 @@
                 </div>
                 <div id="navBar">
                     <div class="text">{PHP.cfg.menu1}</div>
-                    <div class="homeLink"><a href="/index.php" title="{PHP.L.Home}">{PHP.L.Home}</a></div>
+                    <div class="homeLink"><a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">{PHP.L.Home}</a></div>
                 </div>
             </div>
             <div id="content">
