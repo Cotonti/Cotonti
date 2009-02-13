@@ -134,14 +134,6 @@ if ($pag['page_file'])
 	$_SESSION['dl'] = $pag['page_id'];
 }
 
-if(mb_strstr($pag['page_text'], '[newpage]'))
-{
-	$morejavascript .= '
-$(document).ready(function() {
-$("ul.multi").accordion();
-});';
-}
-
 require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('page', $sed_cat[$pag['page_cat']]['tpl']));
