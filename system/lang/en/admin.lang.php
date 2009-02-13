@@ -106,6 +106,7 @@ $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, t
 $L['cfg_jquery'] = array('Enable jQuery', ''); // N-0.0.1
 $L['cfg_parser_cache'] = array('Enable HTML cache', ''); // N-0.0.1
 $L['cfg_parser_custom'] = array('Enable custom parser', ''); // N-0.0.1
+$L['cfg_parser_disable'] = array('Disable default parser', ''); // 0.0.3
 $L['cfg_parser_vid'] = array('Allow BBcodes for the videos', '');		// New in v120
 $L['cfg_parser_vid_autolink'] = array('Auto-link URLs to known video sites', '');						// New in v120
 $L['cfg_parsebbcodecom'] = array('Parse BBcode in comments and private messages', '');

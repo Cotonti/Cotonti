@@ -1,13 +1,5 @@
 <?php
 /* ====================
-[BEGIN_SED]
-File=plugins/markitup/markitup.header.php
-Version=121
-Updated=2008-aug-26
-Type=Plugin
-Author=Trustmaster
-Description=
-[END_SED]
 [BEGIN_SED_EXTPLUGIN]
 Code=markitup
 Part=header

@@ -125,5 +125,7 @@ var smileSet = [
 
 // Editor dialog display properties
 var smileBox = {
+	width: 200, // Width in px
+	height: 160, // Height in px
 	perRow: 4 // Smilies per row
 };

@@ -257,11 +257,7 @@
     position: fixed;
     top: 50%;
     left: 50%;
-
-    margin-left: -110px;
-	margin-top: -90px;
-    width: 220px;
-	height: auto;
+	
 	overflow: auto;
 
     background-color: #EEE;
