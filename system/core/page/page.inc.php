@@ -1,18 +1,19 @@
 <?PHP
-
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=page.inc.php
-Version=122
-Updated=2007-oct-10
-Type=Core
-Author=Neocrome
-Description=Pages
-[END_SED]
 ==================== */
+
+/**
+ * Page display.
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -49,7 +50,7 @@ $pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone
 $pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_begin'] = @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600);
 $pag['page_expire'] = @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600);
-$pag['page_tab'] = (empty($pg)) ? 1 : $pg;
+$pag['page_tab'] = (empty($pg)) ? 0 : $pg;
 $pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', "id=".$pag['page_id']) : sed_url('page', "al=".$pag['page_alias']);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin'], $usr['auth_download']) = sed_auth('page', $pag['page_cat'], 'RWA1');
@@ -137,7 +138,7 @@ if(mb_strstr($pag['page_text'], '[newpage]'))
 {
 	$morejavascript .= '
 $(document).ready(function() {
-$("div.tabs > ul").tabs();
+$("ul.multi").accordion();
 });';
 }
 
@@ -175,7 +176,7 @@ $t->assign(array(
 
 // Extra fields
 $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while($row = sed_sql_fetchassoc($fieldsres)) 
+while($row = sed_sql_fetchassoc($fieldsres))
 {
 	$uname = strtoupper($row['field_name']);
 	$t->assign('PAGE_'.$uname, $pag['page_'.$row['field_name']]);
@@ -205,10 +206,8 @@ if ($pag['page_begin_noformat']>$sys['now_offset'])
 	$pag['page_text'] = $L['pag_notavailable'].sed_build_timegap($sys['now_offset'], $pag['page_begin_noformat']);
 	$t->assign("PAGE_TEXT", $pag['page_text']);
 }
-
 else
 {
-
 	switch($pag['page_type'])
 	{
 		case '1':
@@ -234,7 +233,7 @@ else
 			{
 				if(empty($pag['page_html']) && !empty($pag['page_text']))
 				{
-					$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
+					$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
 					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
 				}
 				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
@@ -242,7 +241,7 @@ else
 			}
 			else
 			{
-				$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
+				$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
 				$text = sed_post_parse($text, 'pages');
 				$t->assign('PAGE_TEXT', $text);
 			}
@@ -254,10 +253,8 @@ else
 $pag['page_file'] = intval($pag['page_file']);
 if($pag['page_file'] > 0)
 {
-
 	if ($sys['now_offset']>$pag['page_begin_noformat'])
 	{
-
 		if (!empty($pag['page_url']))
 		{
 			$dotpos = mb_strrpos($pag['page_url'],".")+1;
@@ -286,9 +283,64 @@ if($pag['page_file'] > 0)
 				'PAGE_FILE_URL' => sed_url('page', "id=".$pag['page_id']."&a=dl")
 				));
 		}
+	}
+}
 
+// Multi tabs
+$pag['page_tabs'] = explode('[newpage]', $t->vars['PAGE_TEXT'], 99);
+$pag['page_totaltabs'] = count($pag['page_tabs']);
+
+if ($pag['page_totaltabs'] > 1)
+{
+	if (empty($pag['page_tabs'][0]))
+	{
+		$remove = array_shift($pag['page_tabs']);
+		$pag['page_totaltabs']--;
+	}
+	$max_tab = $pag['page_totaltabs'] - 1;
+	$pag['page_tab'] = ($pag['page_tab'] > $max_tab) ? 0 : $pag['page_tab'];
+	$pag['page_tabtitles'] = array();
+
+	for ($i = 0; $i < $pag['page_totaltabs']; $i++)
+	{
+		if(mb_strpos($pag['page_tabs'][$i], '<br />') === 0)
+		{
+			$pag['page_tabs'][$i] = mb_substr($pag['page_tabs'][$i], 6);
+		}
+		$p1 = mb_strpos($pag['page_tabs'][$i], '[title]');
+		$p2 = mb_strpos($pag['page_tabs'][$i], '[/title]');
+
+		if ($p2 > $p1 && $p1 < 4)
+		{
+			$pag['page_tabtitle'][$i] = mb_substr($pag['page_tabs'][$i], $p1+7, ($p2-$p1)-7);
+			if ($i == $pag['page_tab'])
+			{
+				$pag['page_tabs'][$i] = trim(str_replace('[title]'.$pag['page_tabtitle'][$i].'[/title]', '', $pag['page_tabs'][$i]));
+			}
+		}
+		else
+		{
+			$pag['page_tabtitle'][$i] = '';
+		}
+		$tab_url = empty($pag['page_alias']) ? sed_url('page', 'id='.$pag['page_id'].'&pg='.$i) : sed_url('page', 'al='.$pag['page_alias'].'&pg='.$i);
+		$pag['page_tabtitles'][] .= '<a href="'.$tab_url.'">'.($i+1).'. '.$pag['page_tabtitle'][$i].'</a>';
+		$pag['page_tabnav'] = sed_pagination($pag['page_pageurl'], $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');
+		$pag['page_tabs'][$i] = str_replace('[newpage]', '', $pag['page_tabs'][$i]);
+		$pag['page_tabs'][$i] = preg_replace('#^(<br />)+#', '', $pag['page_tabs'][$i]);
+		$pag['page_tabs'][$i] = trim($pag['page_tabs'][$i]);
 	}
 
+	$pag['page_tabtitles'] = implode('<br />', $pag['page_tabtitles']);
+	$pag['page_text'] = $pag['page_tabs'][$pag['page_tab']];
+
+	$t->assign(array(
+		'PAGE_MULTI_TABNAV' => $pag['page_tabnav'],
+		'PAGE_MULTI_TABTITLES' => $pag['page_tabtitles'],
+		'PAGE_MULTI_CURTAB' => $pag['page_tab'] + 1,
+		'PAGE_MULTI_MAXTAB' => $pag['page_totaltabs'],
+		'PAGE_TEXT' => $pag['page_text']
+	));
+	$t->parse('MAIN.PAGE_MULTI');
 }
 
 /* === Hook === */

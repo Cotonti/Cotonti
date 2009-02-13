@@ -6,6 +6,7 @@ var L = {
 	brown:		'Brown',
 	center:		'Center',
 	clean:		'Clean',
+	close:		'Close',
 	code:		'Code',
 	color:		'Color',
 	email:		'Email',
