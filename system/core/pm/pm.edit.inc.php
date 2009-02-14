@@ -121,7 +121,6 @@ elseif ($a=='op')
 
 	if (is_array($_POST['msg']))
 	{
-		$mask = array();
 		$msg = sed_import('msg', 'P', 'ARR');
 		$move = sed_import('move','P','TXT');
 		
@@ -130,7 +129,7 @@ elseif ($a=='op')
 		
 		if ($move)
 		{
-		$sql = sed_sql_query("SELECT pm_state FROM $db_pm WHERE pm_id='".(int)$k."' (pm_touserid!='".$usr['id']."' OR pm_state>1) ");
+		$sql = sed_sql_query("SELECT pm_state FROM $db_pm WHERE pm_id='".(int)$k."' AND (pm_touserid!='".$usr['id']."' OR pm_state>1) ");
 		if (sed_sql_numrows($sql)==0)
 			{ $sql = sed_sql_query("UPDATE $db_pm SET pm_state=2 WHERE pm_id='".(int)$k."'"); }
 		}
