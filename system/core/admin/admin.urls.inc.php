@@ -2,8 +2,8 @@
 /**
  * URL Transformation Rules editor.
  *
- * @package Seditio-N
- * @version 0.0.2
+ * @package Cotonti
+ * @version 0.0.3
  * @author Trustmaster
  * @copyright Copyright (c) 2008 Cotonti Team
  * @license BSD License
@@ -34,7 +34,7 @@ RewriteEngine On
 # Server-relative path to seditio:
 RewriteBase "$site_uri"
 END;
-	$hta_flags = '[NC,NE,L]';
+	$hta_flags = '[QSA,NC,NE,L]';
 	$hta_rule = 'RewriteRule';
 	$hta_postfix = '';
 	$rb = '^';
@@ -94,7 +94,7 @@ if($a == 'save')
 	}
 	// Continue processing
 	$hta = empty($hta_prefix) ? '' : $hta_prefix . "\n";
-	$var_pattern = '[a-zA-Z0-9\._\-\%]+';
+	$var_pattern = '[^/&?#]+';
 	$mainurl = parse_url($cfg['mainurl']);
 	$host = preg_quote($mainurl['host']);
 	$path = preg_quote(SED_SITE_URI);

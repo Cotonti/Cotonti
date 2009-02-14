@@ -4,15 +4,18 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=message.php
-Version=122
-Updated=2007-sep-26
-Type=Core
-Author=Neocrome
-Description=Messages
-[END_SED]
 ==================== */
+
+/**
+ * Error message display and redirect
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008 Cotonti Team
+ * @license BSD License
+ */
+
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -115,8 +118,8 @@ switch( $msg )
 		if ($usr['id']==0)
 		{
 			$rd = 2;
-		$the_redirect = (!empty($redirect)) ? "&redirect=".$redirect : '';
-		$ru = sed_url('users', 'm=auth'.$the_redirect);
+			$the_redirect = (!empty($redirect)) ? "&redirect=".$redirect : '';
+			$ru = sed_url('users', 'm=auth'.$the_redirect);
 		}
 		break;
 }
@@ -142,12 +145,21 @@ if($rc!='')
 	$r['103'] = sed_url('admin', "m=forums");
 	$r['200'] = sed_url('users');
 
+	if(!strstr($r["$rc"], '://'))
+	{
+		$r["$rc"] = $cfg['mainurl'] . '/' . $r["$rc"];
+	}
+
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];
 }
 
 elseif ($rd!='')
 {
+	if(!strstr($ru, '://'))
+	{
+		$ru = $cfg['mainurl'] . '/' . $ru;
+	}
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];
 }
