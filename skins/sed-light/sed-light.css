@@ -207,19 +207,3 @@ div.star_readonly a,div.star_readonly a:hover{cursor:default !important}
 /* Partial Star CSS */
 div.star{background:transparent!important;overflow:hidden!important}
 /* END jQuery.Rating Plugin CSS */
-
-/* ============== Multi-tab Pages ============== */
-/* Accordion outline */
-ul.multi, ul.multi li {
-	display: block;
-}
-
-/* Header */
-ul.multi li a {
-	/* TODO complete this */
-}
-
-/* Page body */
-ul.multi li div {
-	/* TODO complete this */
-}
