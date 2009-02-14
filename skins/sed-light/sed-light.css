@@ -103,6 +103,7 @@ h6 	{ font-size:90%; margin:1em 1em 1em 0; }
 .code { background-color:#FFF; border:1px solid #C8D9E2; overflow: auto; padding:2px; margin-bottom:5px; font-family:monospace; }
 .valid  { height:48px; text-align:center; vertical-align:middle; }
 .download { font-size:110%; text-align:center; background-color: #FFFFFF; padding:16px; margin-top:16px; }
+.small { font-size:75%;}
 .paging, .pagenav
 {
 	padding:6px; text-align:right; font-size:.90em;
