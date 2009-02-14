@@ -1,14 +1,5 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/whosonline/whosonline.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=whosonline
 Part=main
@@ -19,14 +10,24 @@ Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
 
+/**
+ * Displays users who are currently online
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008
+ * @license BSD
+ */
+
 if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 
 $showavatars = $cfg['plugin']['whosonline']['showavatars'];
 $miniavatar_x = $cfg['plugin']['whosonline']['miniavatar_x'];
 $miniavatar_y = $cfg['plugin']['whosonline']['miniavatar_y'];
 
-$sql1 = sed_sql_query("SELECT u.*, o.* FROM $db_online AS o LEFT JOIN $db_users AS u ON u.user_id=o.online_userid WHERE online_name!='v' ORDER BY u.user_name ASC");
-$sql2 = sed_sql_query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_name LIKE 'v' ORDER BY online_lastseen DESC");
+$sql1 = sed_sql_query("SELECT DISTINCT u.*, o.* FROM $db_online AS o LEFT JOIN $db_users AS u ON u.user_id=o.online_userid WHERE online_name!='v' ORDER BY u.user_name ASC");
+$sql2 = sed_sql_query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_name = 'v' ORDER BY online_lastseen DESC");
 $sql3 = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
 $total1 = sed_sql_numrows($sql1);
 $total2 = sed_sql_numrows($sql2);
