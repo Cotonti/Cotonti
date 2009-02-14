@@ -126,7 +126,7 @@ function showSmilies(markitup) {
 			code = code.replace(/</g, '&lt;');
 			code = code.replace(/>/g, '&gt;');
 			code = code.replace('/"/g', '&quot;');
-			smileHtml += '<td><a href="#" name="'+code+'" title="'+smileSet[i].lang+'"><img src="./images/smilies/'+smileSet[i].file+'" alt="'+code+'" /></a></td>';
+			smileHtml += '<td><a class="smlink" href="#" name="'+code+'" title="'+smileSet[i].lang+'"><img src="./images/smilies/'+smileSet[i].file+'" alt="'+code+'" /></a></td>';
 		}
 		if(i % perRow > 0) {
 			for(var j = i % perRow; j < perRow; j++) {
@@ -136,7 +136,7 @@ function showSmilies(markitup) {
 		smileHtml += '</tr></table>';
 		var style = 'margin-left:-'+(smileBox.width/2)+'px;margin-top:-'+(smileBox.height/2)+'px;width:'+smileBox.width+'px;height:'+smileBox.height+'px';
 		$('body').append('<div id="smilies" class="jqmWindow" style="' + style + '"><h4>' + L.smilies + '</h4>' + smileHtml + '<p><a href="#" class="jqmClose">' + L.close + '</a></p></div>');
-		$('#smilies a').click(function() {
+		$('#smilies a.smlink').click(function() {
 			emoticon = $(this).attr("name");
 			$.markItUp( { replaceWith: ' ' + emoticon + ' ' } );
 			return false;
