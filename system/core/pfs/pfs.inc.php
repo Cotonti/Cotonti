@@ -63,7 +63,7 @@ $cfg['rel_dir_user'] = sed_pfs_relpath($userid);
 $sql = sed_sql_query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id='$maingroup'");
 if ($row = sed_sql_fetcharray($sql))
 {
-	$maxfile = $row['grp_pfs_maxfile'];
+	$maxfile = min($row['grp_pfs_maxfile'], sed_get_uploadmax());
 	$maxtotal = $row['grp_pfs_maxtotal'];
 }
 else

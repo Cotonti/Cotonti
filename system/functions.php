@@ -2249,6 +2249,25 @@ function sed_get_comcount($code)
 }
 
 /**
+ * Returns maximum size for uploaded file, in KB (allowed in php.ini, and may be allowed in .htaccess)
+ *
+ * @return int
+ */
+function sed_get_uploadmax()
+{
+	static $par_a = array('upload_max_filesize', 'post_max_size', 'memory_limit');
+	static $opt_a = array('G' => 1073741824, 'M' => 1048576, 'K' => 1024);
+	$val_a = array();
+	foreach ($par_a as $par)
+	{
+		$val = ini_get($par);
+		$opt = strtoupper($val[strlen($val) - 1]);
+		$val_a[] = isset($opt_a[$opt]) ? $val * $opt_a[$opt] : (int)$val;
+	}
+	return floor(min($val_a) / 1024); // KB
+}
+
+/**
  * Imports data from the outer world
  *
  * @param string $name Variable name
