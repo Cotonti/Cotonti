@@ -458,7 +458,7 @@ $L['com_guests'] = 'гость(ей)';
 
 /* ====== Header ====== */
 
-$L['hea_privatemessages'] = 'новых сообщений';
+$L['hea_privatemessages'] = array('новое сообщение','новых сообщения','новых сообщений');
 $L['hea_noprivatemessages'] = 'Личные сообщения';
 $L['hea_youareloggedas'] = 'Вы вошли как';
 $L['hea_youarenotlogged'] = 'Вы не вошли.';
