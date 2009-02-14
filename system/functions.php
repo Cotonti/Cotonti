@@ -1548,14 +1548,8 @@ function sed_build_timezone($tz)
 
 	$result = 'GMT';
 
-	if($tz==-1 OR $tz==1)
-	{
-		$result .= $tz.' '.$L['Hour'];
-	}
-	elseif($tz!=0)
-	{
-		$result .= $tz.' '.$L['Hours'];
-	}
+	$result .= sed_declension($tz,$L['Hours']);
+
 	return $result;
 }
 
