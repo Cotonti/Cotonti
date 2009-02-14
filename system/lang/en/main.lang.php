@@ -458,7 +458,7 @@ $L['com_guests'] = 'guest(s)';
 
 /* ====== Header ====== */
 
-$L['hea_privatemessages'] = 'new private message(s)';
+$L['hea_privatemessages'] = array('new private messages','new private message');
 $L['hea_noprivatemessages'] = 'No private messages';
 $L['hea_youareloggedas'] = 'Logged in as';
 $L['hea_youarenotlogged'] = 'You\'re not logged in.';
