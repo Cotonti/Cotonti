@@ -2,7 +2,7 @@
 <div class="mboxHD">{WHOSONlINE_TITLE}</div>
 <div class="mboxBody">
 	{PHP.L.plu_mostonline} {WHOSONlINE_MAXUSERS}.<br />
-	{PHP.L.plu_therescurrently} {WHOSONlINE_VISITORS} {PHP.L.plu_visitors} {WHOSONlINE_MEMBERS} {PHP.L.plu_members}<br />&nbsp;<br />
+	{PHP.L.plu_therescurrently} {WHOSONlINE_VISITORS} {WHOSONlINE_TEXTVISITORS} {WHOSONlINE_MEMBERS} {WHOSONlINE_TEXTMEMBERS}<br />&nbsp;<br />
 <!-- BEGIN: NOT_EMPTY -->
 	<table class="cells">
 	<tr>

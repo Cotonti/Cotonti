@@ -133,6 +133,8 @@ if($visitornum>0 OR $visituser>0)
 		'WHOSONlINE_MAXUSERS' => $maxusers,
 		'WHOSONlINE_VISITORS' => $total2,
 		'WHOSONlINE_MEMBERS' => $total1,
+		'WHOSONlINE_TEXTVISITORS' => sed_declension($total2,$L['plu_visitors'],$onlyword=true),
+		'WHOSONlINE_TEXTMEMBERS' => sed_declension($total1,$L['plu_members'],$onlyword=true),
 		'WHOSONlINE_USER_AVATAR' => ($showavatars) ? $L['plu_user_avatar'] : ''
 	));
 	$t->parse('MAIN.NOT_EMPTY');
