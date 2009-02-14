@@ -7,8 +7,8 @@ http://www.neocrome.net
 ==================== */
 
 /**
- * @package Seditio-N
- * @version 0.0.2
+ * @package Cotonti
+ * @version 0.0.3
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008
  * @license BSD
@@ -22,7 +22,6 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 	or die('Cotonti system requirements: PHP 5.1 or above.');
 extension_loaded('mbstring')
 	or die('Cotonti system requirements: mbstring PHP extension must be loaded.');
-
 
 /* ======== First... ======== */
 
@@ -206,9 +205,9 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 30
 						&& $u_passhash == $_SESSION['oldhash']))
 				&& $row['user_maingrp'] > 3
-				&& (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
+				&& ($cfg['ipcheck']==FALSE || $row['user_lastip'] == $usr['ip']))
 			{
-				$usr['id'] = $row['user_id'];
+				$usr['id'] = (int) $row['user_id'];
 				$usr['sessionid'] = ($cfg['authmode']==1) ? md5($row['user_lastvisit']) : session_id();
 				$usr['name'] = $row['user_name'];
 				$usr['maingrp'] = $row['user_maingrp'];
@@ -331,11 +330,54 @@ $b = sed_import('b','G','ALP',24);
 
 if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 {
+	if ($usr['id']>0)
+	{
+		$sql = sed_sql_query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
 
-	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_lastseen<'$online_timedout'");
+		if ($row = sed_sql_fetcharray($sql))
+		{
+			$online_count = 1;
+			if ($cfg['shieldenabled'])
+			{
+				$shield_limit = $row['online_shield'];
+				$shield_action = $row['online_action'];
+				$shield_hammer = sed_shield_hammer($row['online_hammer'],$shield_action,$row['online_lastseen']);
+			}
+			sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".sed_sql_prep($location)."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$shield_hammer." WHERE online_userid=".$usr['id']);
+		}
+		else
+		{
+			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer) VALUES ('".$usr['ip']."', '".sed_sql_prep($usr['name'])."', ".(int)$sys['now'].", '".sed_sql_prep($location)."',  '".sed_sql_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
+		}
+	}
+	else
+	{
+		$sql = sed_sql_query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
+		$online_count = sed_sql_numrows($sql);
+
+		if ($online_count>0)
+		{
+			if ($cfg['shieldenabled'])
+			{
+				if ($row = sed_sql_fetcharray($sql))
+				{
+					$shield_limit = $row['online_shield'];
+					$shield_action = $row['online_action'];
+					$shield_hammer = sed_shield_hammer($row['online_hammer'],$shield_action,$row['online_lastseen']);
+				}
+			}
+			sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$shield_hammer." WHERE online_ip='".$usr['ip']."'");
+		}
+		else
+		{
+			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer) VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".$location."', '".sed_sql_prep($sys['sublocation'])."', -1, 0, 0)");
+		}
+	}
+
+	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_lastseen<$online_timedout");
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'");
 	$sys['whosonline_vis_count'] = sed_sql_result($sql, 0, 'COUNT(*)');
-	$sql = sed_sql_query("SELECT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name NOT LIKE 'v' ORDER BY online_name ASC");
+	$sql = sed_sql_query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
 	$sys['whosonline_reg_count'] = sed_sql_numrows($sql);
 	$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
 
