@@ -38,7 +38,7 @@ switch($n)
 	$nicon = sed_import('nicon','P','TXT');
 	$nalias = sed_import('nalias','P','TXT');
 	$nlevel = sed_import('nlevel','P','LVL');
-	$nmaxsingle = sed_import('nmaxsingle','P','INT');
+	$nmaxsingle = min(sed_import('nmaxsingle','P','INT'), sed_get_uploadmax());
 	$nmaxtotal = sed_import('nmaxtotal','P','INT');
 	$ncopyrightsfrom = sed_import('ncopyrightsfrom','P','INT');
 	$ndisabled = sed_import('ndisabled','P','BOL');
@@ -72,7 +72,7 @@ switch($n)
 		$ricon = sed_import('ricon','P','TXT');
 		$ralias = sed_import('ralias','P','TXT');
 		$rlevel = sed_import('rlevel','P','LVL');
-		$rmaxfile = sed_import('rmaxfile','P','INT');
+		$rmaxfile = min(sed_import('rmaxfile','P','INT'), sed_get_uploadmax());
 		$rmaxtotal = sed_import('rmaxtotal','P','INT');
 		$rdisabled = ($g<6) ? 0 : sed_import('rdisabled','P','BOL');
 		$rhidden = ($g==4) ? 0 : sed_import('rhidden','P','BOL');
