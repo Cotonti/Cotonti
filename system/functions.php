@@ -2579,7 +2579,7 @@ function sed_load_smilies()
 							$prio[$i] = intval($m[2]);
 							break;
 						case 'code':
-							$code[$i] = $m[2];
+							$code[$i] = str_replace('\\\\', '\\', $m[2]);
 							break;
 						case 'file':
 							$file[$i] = $m[2];
