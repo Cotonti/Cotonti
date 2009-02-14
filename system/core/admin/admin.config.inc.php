@@ -43,9 +43,13 @@ switch ($n)
 				{
 					if ($line[0]==$p)
 					{
-		 			$cfg_name = $line[2];
-		 			$cfg_value = trim(sed_import($cfg_name, 'P', 'NOC'));
-		 			$sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$cfg_name."' AND config_owner='core'");
+						$cfg_name = $line[2];
+						$cfg_value = trim(sed_import($cfg_name, 'P', 'NOC'));
+						if ('users' == $p && ('av_maxsize' == $cfg_name || 'sig_maxsize' == $cfg_name || 'ph_maxsize' == $cfg_name))
+						{
+							$cfg_value = min($cfg_value, sed_get_uploadmax() * 1024);
+						}
+						$sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$cfg_name."' AND config_owner='core'");
 					}
 				}
 			}
