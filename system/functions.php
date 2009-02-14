@@ -1510,27 +1510,27 @@ function sed_build_timegap($t1,$t2)
 	}
 	elseif($gap<60)
 	{
-		$result  = $gap.' '.$L['Seconds'];
+		$result  = sed_declension($gap,$L['Seconds']);
 	}
 	elseif($gap<3600)
 	{
 		$gap = floor($gap/60);
-		$result = ($gap<2) ? '1 '.$L['Minute'] : $gap.' '.$L['Minutes'];
+		$result = sed_declension($gap,$L['Minutes']);
 	}
 	elseif($gap<86400)
 	{
 		$gap1 = floor($gap/3600);
 		$gap2 = floor(($gap-$gap1*3600)/60);
-		$result = ($gap1<2) ? '1 '.$L['Hour'].' ' : $gap1.' '.$L['Hours'].' ';
+		$result = sed_declension($gap1,$L['Hours']).' ';
 		if ($gap2>0)
 		{
-			$result .= ($gap2<2) ? '1 '.$L['Minute'] : $gap2.' '.$L['Minutes'];
+			$result .= sed_declension($gap2,$L['Minutes']);
 		}
 	}
 	else
 	{
 		$gap = floor($gap/86400);
-		$result = ($gap<2) ? '1 '.$L['Day'] : $gap.' '.$L['Days'];
+		$result = sed_declension($gap,$L['Days']);
 	}
 
 	return $result;
