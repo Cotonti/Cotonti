@@ -1363,7 +1363,7 @@ function sed_build_ratings($code, $url, $display)
 			$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
 		}
 	}
-	if(!$callled && $usr['id']>0 && !$alreadyvoted)
+	if(!$called && $usr['id']>0 && !$alreadyvoted)
 	{
 		// Link JS and CSS
 		$sep = mb_strstr($url, '?') ? '&' : '?';
