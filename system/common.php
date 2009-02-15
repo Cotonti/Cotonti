@@ -78,8 +78,12 @@ $redirect = sed_import('redirect','G','SLU');
 $url = parse_url($cfg['mainurl']);
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
 $sys['site_uri'] = $url['path'];
+$sys['domain'] = str_replace('www.', '', $url['host']);
+if(empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
+if($cfg['cookiedomain'] == 'localhost') $cfg['cookiedomain'] = ''; // FireFox bug fix
 if($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('SED_SITE_URI', $sys['site_uri']);
+if(empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
 $sys['abs_url'] = $url['scheme'] . '://' . $_SERVER['HTTP_HOST'] . $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
