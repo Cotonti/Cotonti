@@ -15,7 +15,7 @@
 
 <!-- BEGIN: PAGNAVIGATOR -->
 <div class="pagnav">{COMMENTS_PAGES_PAGESPREV} {COMMENTS_PAGES_PAGNAV} {COMMENTS_PAGES_PAGESNEXT}</div>
-{COMMENTS_PAGES_INFO}
+<p>{COMMENTS_PAGES_INFO}</p>
 <!-- END: PAGNAVIGATOR -->
 
 <!-- BEGIN: COMMENTS_EMPTY -->
@@ -33,6 +33,10 @@
 	<p><input type="submit" value="{PHP.skinlang.comments.Send}" /></p>
 </form>
 <!-- END: COMMENTS_NEWCOMMENT -->
+
+<!-- BEGIN: COMMENTS_CLOSED -->
+<div class="error">{COMMENTS_CLOSED}</div>
+<!-- END: COMMENTS_CLOSED -->
 
 </div>
 <!-- END: COMMENTS -->

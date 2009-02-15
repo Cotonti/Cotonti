@@ -542,6 +542,7 @@ $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commentadded'] = 'Done, comment added';
 $L['com_regonly'] = 'Only registered users can post new comments';
 $L['com_nocommentsyet'] = 'No comments yet';
+$L['com_closed'] = 'Adding comments has been disabled for this item.'; // N-0.1.0  
 
 /* ====== Forums ======= */
 

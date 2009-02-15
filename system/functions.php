@@ -755,6 +755,7 @@ function sed_build_catpath($cat, $mask)
 
 /* ------------------ */
 // TODO replace with new comments plugin
+// TODO I messed up this code, please see if I did huge mistakes and inform me (oc)
 function sed_build_comments($code, $url, $display = true)
 {
 	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys;
@@ -767,15 +768,13 @@ function sed_build_comments($code, $url, $display = true)
 
 	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
 
-	if ($display)
-	{
 		$ina = sed_import('ina','G','ALP');
 		$ind = sed_import('ind','G','INT');
 
 		$d = sed_import('d', 'G', 'INT');
 		$d = empty($d) ? 0 : (int) $d;
 
-		if ($ina=='send' && $usr['auth_write_com'])
+		if ($ina=='send' && $usr['auth_write_com'] && $display)
 		{
 			sed_shield_protect();
 			$rtext = sed_import('rtext','P','HTM');
@@ -858,7 +857,7 @@ function sed_build_comments($code, $url, $display = true)
 			$t->parse("COMMENTS.COMMENTS_ERROR");
 		}
 
-		if ($usr['auth_write_com'])
+		if ($usr['auth_write_com'] && $display)
 		{
 			$bbcodes = ($cfg['parsebbcodecom']) ? sed_build_bbcodes("newcomment", "rtext", $L['BBcodes']) : '';
 			$smilies = ($cfg['parsesmiliescom']) ? sed_build_smilies("newcomment", "rtext", $L['Smilies']) : '';
@@ -880,7 +879,7 @@ function sed_build_comments($code, $url, $display = true)
 			'COMMENTS_DISPLAY' => $cfg['expand_comments'] ? '' : 'none'
 		));
 
-		if ($usr['auth_write_com'])
+		if ($usr['auth_write_com'] && $display)
 		{
 
 			/* == Hook for the plugins == */
@@ -891,6 +890,13 @@ function sed_build_comments($code, $url, $display = true)
 
 			$t->parse("COMMENTS.COMMENTS_NEWCOMMENT");
 		}
+		
+		elseif (!$display)
+		{
+		$t->assign(array("COMMENTS_CLOSED" => $L['com_closed']));
+		$t->parse("COMMENTS.COMMENTS_CLOSED");
+		}
+		
 
 		if (sed_sql_numrows($sql)>0)
 		{
@@ -941,7 +947,7 @@ function sed_build_comments($code, $url, $display = true)
 			$t->parse("COMMENTS.PAGNAVIGATOR");
 
 		}
-		else
+		elseif (!sed_sql_numrows($sql) && $display)
 		{
 			$t-> assign(array(
 				"COMMENTS_EMPTYTEXT" => $L['com_nocommentsyet'],
@@ -957,11 +963,6 @@ function sed_build_comments($code, $url, $display = true)
 
 		$t->parse("COMMENTS");
 		$res_display = $t->text("COMMENTS");
-	}
-	else
-	{
-		$res_display = '';
-	}
 
 	$res = "<a href=\"$url#comments\" class=\"comments_link\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" />";
 
