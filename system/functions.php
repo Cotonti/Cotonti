@@ -4669,19 +4669,30 @@ function sed_extrafield_remove($sql_table, $name)
  * @param int $digit Numeric value
  * @param string $expr Word or expression
  * @param bool $onlyword Return only words, without numbers
+ * @param bool $canfrac - Numeric value can be Decimal Fraction
  * @return string 
  */
-function sed_declension($digit, $expr, $onlyword = false)
+function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
     if (!is_array($expr))
     {
         return trim(($onlyword ? '' : "$digit ") . $expr);
     }
- 
+
     global $lang;
- 
-    $i = preg_replace('#\D+#', '', $digit);
-    $plural = sed_get_plural($i, $lang);
+
+	if ($canfrac)
+	{
+	$is_frac = floor($digit) != $digit;
+	$i = $digit;
+	}
+	else
+	{
+	$is_frac = false;
+	$i = preg_replace('#\D+#', '', $digit);
+	}
+
+    $plural = sed_get_plural($i, $lang, $is_frac);
     $cnt = count($expr);
     return trim(($onlyword ? '' : "$digit ") . (($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
 }
@@ -4691,9 +4702,10 @@ function sed_declension($digit, $expr, $onlyword = false)
  * 
  * @param int $plural Numeric value
  * @param string $lang Target language code
+ * @param bool $is_frac true if numeric value is fraction, otherwise false
  * @return int 
  */
-function sed_get_plural($plural, $lang)
+function sed_get_plural($plural, $lang, $is_frac = false)
 {
     switch ($lang)
     {
@@ -4701,14 +4713,19 @@ function sed_get_plural($plural, $lang)
         case 'de':
         case 'nl':
         case 'se':
+		case 'us':
             return ($plural == 1) ? 1 : 0;
  
         case 'fr':
         case 'uk':
-            return (($plural == 0) || ($plural == 1)) ? 1 : 0;
+            return ($plural > 1) ? 0 : 1;
  
         case 'ru':
         case 'ua':
+			if ($is_frac)
+			{
+				return 1;
+			}
             $plural %= 100;
             return (5 <= $plural && $plural <= 20) ? 2 : ((1 == ($plural %= 10)) ? 0 : ((2 <= $plural && $plural <= 4) ? 1 : 2));
 
