@@ -95,8 +95,11 @@ if (is_array($extp))
 	unset($_SESSION['dl']);
 
 	$file_size = @filesize($row['page_url']);
-	$pag['page_filecount']++;
-	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
+	if(!$usr['isadmin'] || $cfg['count_admin'])
+	{
+		$pag['page_filecount']++;
+		$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$pag['page_id']);
+	}
 	header("Location: ".$pag['page_url']);
 	echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
 	exit;
