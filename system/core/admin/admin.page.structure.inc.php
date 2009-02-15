@@ -72,7 +72,9 @@ if ($n=='options')
 			structure_title='".sed_sql_prep($rtitle)."',
 			structure_desc='".sed_sql_prep($rdesc)."',
 			structure_icon='".sed_sql_prep($ricon)."',
-			structure_group='".$rgroup."'
+			structure_group='".$rgroup."',
+			structure_comments='".$rallowcomments."',
+			structure_ratings='".$rallowratings."'
 			WHERE structure_id='".$id."'");
 
 		sed_cache_clear('sed_cat');
@@ -119,7 +121,9 @@ if ($n=='options')
 	$structure_desc = $row['structure_desc'];
 	$structure_icon = $row['structure_icon'];
 	$structure_group = $row['structure_group'];
-
+	$structure_comments = $row['structure_comments'];
+	$structure_ratings = $row['structure_ratings'];
+	
 	if (empty($row['structure_tpl']))
 	{
 
@@ -170,6 +174,10 @@ if ($n=='options')
 	$adminmain .= "</select><br/>";
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"rtplmode\" value=\"3\" $check3 /> ".$L['adm_tpl_parent'];
 	$adminmain .= "</td></tr>";
+	$adminmain .= "<tr><td>".$L['adm_enablecomments']." :</td>";
+	$adminmain .= ($structure_comments) ? "<td><input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"0\" />".$L['No']."</td></tr>" : "<td><input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowcomments\" value=\"0\" checked=\"checked\" />".$L['No']."</td></tr>";
+	$adminmain .= "<tr><td>".$L['adm_enableratings']." :</td>";
+	$adminmain .= ($structure_ratings) ? "<td><input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"0\" />".$L['No']."</td></tr>" : "<td><input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rallowratings\" value=\"0\" checked=\"checked\" />".$L['No']."</td></tr>";
 	$adminmain .= "<tr><td>".$L['adm_postcounters']." :</td>";
 	$adminmain .= "<td><a href=\"".sed_url('admin', "m=page&s=structure&n=options&a=resync&id=".$structure_id."&".sed_xg())."\">".$L['Resync']."</a></td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";

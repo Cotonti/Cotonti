@@ -296,6 +296,9 @@ $L['adm_tpl_empty'] = 'Default';	// New in v110
 $L['adm_tpl_forced'] = 'Same as';	// New in v110
 $L['adm_tpl_parent'] = 'Same as the parent category';	// New in v110
 
+$L['adm_enablecomments'] = 'Enable comments ?'; // N-0.1.0
+$L['adm_enableratings'] = 'Enable ratings ?'; // N-0.1.0
+
 /* ====== Polls ====== */
 
 $L['adm_polls_indexpolls'] = 'Index polls (recent at top) :'; // N-0.0.1
