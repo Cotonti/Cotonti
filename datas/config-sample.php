@@ -56,7 +56,7 @@ $cfg['xmlclient'] = FALSE;  			// For testing-purposes only, else keep it off.
 $cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed
 $cfg['allowphp_override'] = FALSE; 		// General lock for execution of the PHP code by the core
 $cfg['pfsmaxuploads'] = 8;
-$cfg['authcache'] = TRUE;				// Auth cache in SQL tables. Set if FALSE if your huge database
+$cfg['authcache'] = TRUE;				// Auth cache in SQL tables. Set it FALSE if your huge database
 										// goes down because of that
 
 // ========================
