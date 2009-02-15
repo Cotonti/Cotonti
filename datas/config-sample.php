@@ -22,10 +22,10 @@ $cfg['mysqlhost'] = 'localhost';	// Database host URL
 $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
 $cfg['mysqldb'] = 'sedition';			// Database name
-// Set these to your site charset and collate if your default database charset is different
+// MySQL database charset and collate. Very useful when MySQL server uses different charset rather than site
 // See the list of valid values here: http://dev.mysql.com/doc/refman/5.1/en/charset-charsets.html
-//$cfg['mysqlcharset'] = 'utf8';
-//$cfg['mysqlcollate'] = 'utf8_unicode_ci';
+$cfg['mysqlcharset'] = 'utf8';
+$cfg['mysqlcollate'] = 'utf8_unicode_ci';
 
 // ========================
 // Main site URL without trailing slash.
