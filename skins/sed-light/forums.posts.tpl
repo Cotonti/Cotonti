@@ -60,7 +60,7 @@
 			<tr>
 				<td style="padding:8px; height:100%;" class="{FORUMS_POSTS_ROW_ODDEVEN}">
 
-				<div class="fmsg" style="width:550px; overflow-x:auto; overflow-y:visible; margin-bottom:8px;">
+				<div class="fmsg" style="width:550px; overflow-x:auto; overflow-y:visible; padding-bottom:1px;">
 					{FORUMS_POSTS_ROW_TEXT}
 				</div>
 
