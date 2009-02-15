@@ -468,7 +468,7 @@ $L['hea_valqueues'] = 'В очереди на утверждение : ';
 
 $L['foo_poweredby'] = 'Powered by';
 $L['foo_created'] = 'Страница сгенерирована за';
-$L['foo_seconds'] = 'секунд(ы)';
+$L['foo_seconds'] = array('секунду','секунды','секунд');
 $L['foo_sqlqueries'] = 'SQL запросов';
 $L['foo_sqltotal'] = 'SQL общее время';
 $L['foo_sqlaverage'] = 'Среднее время SQL';

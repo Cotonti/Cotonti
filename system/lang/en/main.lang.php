@@ -469,7 +469,7 @@ $L['hea_valqueues'] = 'In validation queues : ';
 
 $L['foo_poweredby'] = 'Powered by';
 $L['foo_created'] = 'Page created in';
-$L['foo_seconds'] = 'seconds';
+$L['foo_seconds'] = array('seconds','second');
 $L['foo_sqlqueries'] = 'SQL queries';
 $L['foo_sqltotal'] = 'SQL total time';
 $L['foo_sqlaverage'] = 'Average SQL time';
