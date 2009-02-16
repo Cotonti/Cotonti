@@ -24,7 +24,7 @@
 			</div>
 		</div>
 
-		<div class="fmsg" style="padding:0 5px; width:770px; overflow-x:auto;" curpos="0" maxpos="0" pageincrement="624" increment="10" disabled="true" collapsed="true">{PAGE_TEXT}</div>
+		<div class="fmsg" style="padding:0 5px; width:770px; overflow-x:auto;">{PAGE_TEXT}</div>
 
 		<!-- BEGIN: PAGE_MULTI -->
 		<div class="paging">{PAGE_MULTI_TABNAV}</div>
