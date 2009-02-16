@@ -1,0 +1,19 @@
+.tag_cloud {
+	display:block;
+	border:0;
+	padding:4px;
+	text-align: justify;
+}
+.tag_cloud li {display: inline;}
+.tag_cloud a {padding: 0 2px;}
+
+.tag_cloud a.xs {font-size:10pt;color:#c4c4c4;}
+.tag_cloud a.xs:hover {color:#000;}
+.tag_cloud a.s {font-size:12pt;color:#336699;}
+.tag_cloud a.s:hover {color:#000;}
+.tag_cloud a.m {font-size:14pt;color:#A0522D;}
+.tag_cloud a.m:hover {color:#000;}
+.tag_cloud a.l {font-size:16pt;color:#B0C4DE;}
+.tag_cloud a.l:hover {color:#000;}
+.tag_cloud a.xl {font-size:18pt;color:#aad815;}
+.tag_cloud a.xl:hover {color:#000;}

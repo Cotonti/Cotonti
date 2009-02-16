@@ -21,6 +21,7 @@ $io = sed_import('io','G','ALP');
 $advanced = sed_import('advanced','G','BOL');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
+$usr['isadmin'] &= sed_auth('admin', 'a', 'A');
 sed_block($usr['isadmin']);
 
 $L['adm_code']['admin'] = $L['Administration'];

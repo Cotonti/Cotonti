@@ -528,10 +528,10 @@ if (!$sed_forums_str && !$cfg['disable_forums'])
 
 /* ======== Various ======== */
 
-$out['img_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" border=\"0\" />";
-$out['img_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" border=\"0\" />";
-$out['img_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" border=\"0\" />";
-$out['img_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" border=\"0\" />";
+$out['img_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" style=\"border:none\" />";
+$out['img_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" style=\"border:none\" />";
+$out['img_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" style=\"border:none\" />";
+$out['img_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" style=\"border:none\" />";
 
 $sed_yesno[0] = $L['No'];
 $sed_yesno[1] = $L['Yes'];
@@ -539,14 +539,6 @@ $sed_img_up = $out['img_up'];
 $sed_img_down = $out['img_down'];
 $sed_img_left = $out['img_left'];
 $sed_img_right = $out['img_right'];
-
-/* ======== Smilies ======== */
-
-if (!$sed_smilies)
-{
-	sed_load_smilies();
-	sed_cache_store('sed_smilies',$sed_smilies,3550);
-}
 
 /* ======== Local/GMT time ======== */
 
@@ -561,8 +553,18 @@ if (is_array($extp))
 
 /* ======== Pre-loads ======== */
 
-if(!$cfg['parser_custom'])
+if($cfg['parser_custom'])
 {
+	include_once $cfg['system_dir'].'/parser.php';
+}
+
+if(!$cfg['parser_disable'])
+{
+	if (!$sed_smilies)
+	{
+		sed_load_smilies();
+		sed_cache_store('sed_smilies',$sed_smilies,3550);
+	}
 	sed_bbcode_load();
 }
 
