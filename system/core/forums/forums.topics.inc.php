@@ -4,15 +4,17 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=forums.php
-Version=125
-Updated=2008-feb-27
-Type=Core
-Author=Neocrome
-Description=Forums
-[END_SED]
 ==================== */
+
+/**
+ * Forums topics display.
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -375,7 +377,7 @@ $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(
 	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
-	"FORUMS_TOPICS_SECTION_RSS" => sed_url("rss", "c=section&id=$s", "", true),
+	"FORUMS_TOPICS_SECTION_RSS" => sed_url("rss", "c=section&id=$s"),
 	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
 	"FORUMS_TOPICS_NEWTOPICURL" => sed_url('forums', "m=newtopic&s=".$s),
@@ -599,4 +601,4 @@ $t->assign(array(
 
 	require_once $cfg['system_dir'] . '/footer.php';
 
-	?>
+?>
