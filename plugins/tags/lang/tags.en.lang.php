@@ -3,19 +3,20 @@
  * English language file for tags
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author Trustmaster
- * @copyright (c) 2008 Cotonti Team
+ * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
 $L['cfg_pages']= array('Enable Tags for Pages');
 $L['cfg_forums']= array('Enable Tags for Forums');
 $L['cfg_title']= array('Capitalize first latters of keywords');
 $L['cfg_translit']= array('Transliterate Tags in URLs');
-$L['cfg_order']= array('Cloud output order - alphabetical or descending frequency');
+$L['cfg_order']= array('Cloud output order - alphabetical, descending frequency or random');
 $L['cfg_limit']= array('Max. tags per items, 0 is unlimited');
 $L['cfg_lim_pages']= array('Limit of tags in a cloud displayed for pages, 0 is unlimited');
 $L['cfg_lim_forums']= array('Limit of tags in a cloud displayed in forums, 0 is unlimited');
+$L['cfg_lim_index']= array('Limit of tags in a cloud displayed on index, 0 is unlimited');
 $L['tags_comma_separated'] = 'comma separated';
 $L['tags_Keyword'] = 'Keyword';
 $L['tags_Keywords'] = 'Keywords';

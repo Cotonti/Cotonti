@@ -428,7 +428,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'tags', '1', 'pages', 3, '1', '', 'Enable Tags for Pages'),
 ('plug', 'tags', '8', 'lim_pages', 1, '0', '', 'Limit of tags in a cloud displayed for pages, 0 is unlimited'),
 ('plug', 'tags', '7', 'limit', 1, '0', '', 'Max. tags per items, 0 is unlimited'),
-('plug', 'tags', '6', 'order', 2, 'tag', 'tag,cnt', 'Cloud output order - alphabetical or descending frequency'),
+('plug', 'tags', '6', 'order', 2, 'Alphabetical', 'Alphabetical,Frequency,Random', 'Cloud output order - alphabetical, descending frequency or random'),
 ('plug', 'tags', '4', 'translit', 3, '0', '', 'Transliterate Tags in URLs'),
 ('plug', 'tags', '3', 'title', 3, '1', '', 'Capitalize first latters of keywords'),
 ('core', 'pfs', '05', 'pfsnomimepass', 3, '1', '', ''),
@@ -479,6 +479,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'skin', '03', 'homebreadcrumb', 3, '0', '', ''),
 ('plug', 'tags', '9', 'lim_forums', 1, '0', '', 'Limit of tags in a cloud displayed in forums, 0 is unlimited'),
 ('plug', 'tags', '2', 'forums', 3, '1', '', 'Enable Tags for Forums'),
+('plug', 'tags', '9', 'lim_index', 1, '0', '', ' Limit of tags in a cloud displayed on index, 0 is unlimited'),
 ('core', 'comments', '03', 'expand_comments', 3, '1', '', ''),
 ('core', 'ratings', '02', 'ratings_allowchange', 3, '0', '', '');
 
