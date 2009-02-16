@@ -1369,6 +1369,8 @@ function sed_build_ratings($code, $url, $display)
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
+	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
+
 	if ($yetrated)
 	{
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
@@ -4158,7 +4160,7 @@ function sed_tag_unregister($tag)
 
 /**
  * Tries to detect and fetch a user theme or returns FALSE on error.
- * 
+ *
  * @global array $usr User object
  * @global array $cfg Configuration
  * @global array $out Output vars

@@ -14,7 +14,7 @@
 		</ul>
 		<b>{PHP.L.plu_ql_b4_title}</b>
 		<ul>
-		<li><a href="admin.php?m=config&n=edit&o=core&p=plug">{PHP.L.plu_ql_b4_1}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=plug">{PHP.L.plu_ql_b4_1}</a></li>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=forums">{PHP.L.plu_ql_b4_2}</a></li>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=comments">{PHP.L.plu_ql_b4_3}</a></li>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=polls">{PHP.L.plu_ql_b4_4}</a></li>

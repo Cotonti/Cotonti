@@ -1,15 +1,20 @@
 <?PHP
 
 /* ====================
-[BEGIN_SED]
-File=system/core/polls/polls.functions.php
-Version=0.0.2
-Updated=2009-jan-21
-Type=Core
-Author=Neocrome & Cotonti Team
-Description=functions for polls (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
-[END_SED]
+Seditio - Website engine
+Copyright Neocrome
+http://www.neocrome.net
 ==================== */
+
+/**
+ * Polls functions.
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -21,7 +26,7 @@ function sed_poll_edit_form($id, $multiple=1)
 	if(!empty($error_string))
 	{
 		global $poll_id, $poll_option_text, $poll_option_id, $poll_multiple, $poll_text;
-		
+
 		$counter=0;
 		$date="";
 		$id=$poll_id;
@@ -218,16 +223,16 @@ function sed_poll_save($type='index', $state='0')
 
 /* ------------------ */
 
- 
+
 function sed_poll_vote()
 {
 	global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 	global $error_string;
 	global $vote;
-	
+
 	$vote = sed_import('vote','P','ARR');
 	$id= sed_import('poll_id','P','INT');
-	
+
 	if (!empty($vote))
 	{
 	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id'");
@@ -269,7 +274,7 @@ function sed_poll_vote()
 }
 
 /*---------------*/
- 
+
 function sed_poll_form($id, $formlink='', $skin='')
 {
 	global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters, $usr;
@@ -342,9 +347,9 @@ if (!$canvote) $poll_block = "POLL_VIEW_DISABLED";
 	$pollbutton=(!$alreadyvoted || $canvote) ? "<input type=\"hidden\" name=\"poll_id\" value=\"$id\" /><input type=\"hidden\" name=\"poll_skin\" value=\"$skininput\" /><input type=\"submit\" class=\"submit\" value=\"".$L['polls_Vote']."\" />" :"";
 	$polldate=date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600);
  if (empty($formlink)) {$formlink=sed_url('polls', "id=".$id);}
- 
-  
-	$pollformbegin = "<div id='poll_".$id."'><form action=\"".$formlink."\" method=\"post\" id='poll_form_".$id."' OnSubmit=\"return ajaxSend({method: 'POST', formId: 'poll_form_".$id."', url: '".sed_url('polls', 'mode=ajax')."', divId: 'poll_".$id."', errMsg: '".$L['ajaxSenderror']."'});\">";
+
+
+	$pollformbegin = "<div id='poll_".$id."'><form action=\"".$formlink."\" method=\"post\" id='poll_form_".$id."' onsubmit=\"return ajaxSend({method: 'POST', formId: 'poll_form_".$id."', url: '".sed_url('polls', 'mode=ajax')."', divId: 'poll_".$id."', errMsg: '".$L['ajaxSenderror']."'});\">";
 	$pollformend .= "</form></div>";
 
 	$poll_form->assign(array(
@@ -363,4 +368,5 @@ $pollform = array($polltext, $poll_form -> text($poll_block));
 
 	return($pollform);
 }
+
 ?>

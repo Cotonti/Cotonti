@@ -3,8 +3,20 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
-http://www.neocrome.net]
+http://www.neocrome.net
+==================== */
 
+/**
+ * Search standalone.
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Olivier C. & Spartan, oc
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
+
+/* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=search
 Part=main
@@ -14,14 +26,6 @@ Tags=
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
-
-/**
- * @package Cotonti
- * @version 0.0.3
- * @author Olivier C., Spartan, oc
- * @copyright Copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
- */
 
 if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 
@@ -56,7 +60,7 @@ if ($tab=='frm') {
 	$sea_frmsort2 = sed_sql_prep(sed_import('sea_frmsort2','P','TXT'));
 
 	$sq = (!empty($pre)) ? $pre : $sq;
-	$sachecked = ($searchall) ? ' checked ' : '';
+	$sachecked = ($searchall) ? ' checked="checked" ' : '';
 
 	$plugin_title = $L['plu_title_frmtab'];
 
@@ -261,7 +265,7 @@ if ($tab=='frm') {
 	$sea_pagsort2 = sed_sql_prep(sed_import('sea_pagsort2','P','TXT'));
 
 	$sq = (!empty($pre)) ? $pre : $sq;
-	$sachecked = ($searchall) ? ' checked ' : '';
+	$sachecked = ($searchall) ? ' checked="checked" ' : '';
 
 	$plugin_title = $L['plu_title_pagtab'];
 
@@ -476,7 +480,7 @@ if ($tab=='frm') {
 	$sea_pagtext = sed_import('sea_pagtext','P','INT');
 
 	$sq = (!empty($pre)) ? $pre : $sq;
-	$sachecked = ($searchall) ? ' checked ' : '';
+	$sachecked = ($searchall) ? ' checked="checked" ' : '';
 
 	$plugin_title = $L['plu_title_alltab'];
 
@@ -677,7 +681,7 @@ if ($tab=='frm') {
 					if (sed_auth('page', $row['page_cat'], 'R'))
 					{
 						$ownername = sed_sql_fetcharray(sed_sql_query("SELECT user_name FROM $db_users WHERE user_id='".$row['page_ownerid']."'"));
-						$plugin_body .= "<tr><td>".sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>')."</a></td>";
+						$plugin_body .= "<tr><td>".sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>')."</td>";
 						$plugin_body .= "<td><a href=\"".sed_url('page', 'id='.$row['page_id'].'&highlight='.$hl)."\">";
 						$plugin_body .= sed_cc($row['page_title'])."</a></td><td>".sed_build_user($row['page_ownerid'],$ownername['user_name'])."</td></tr>";
 					}
@@ -756,4 +760,5 @@ if ($tab=='frm') {
 
 	}
 }
+
 ?>
