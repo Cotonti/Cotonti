@@ -1,15 +1,6 @@
 <?PHP
 
 /* ====================
-[BEGIN_SED]
-File=plugins/indexpolls/indexpolls.php
-Version=125
-Updated=2008-aug-29
-Type=Plugin
-Author=Neocrome
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=indexpolls
 Part=main
@@ -19,14 +10,13 @@ Tags=index.tpl:{PLUGIN_INDEXPOLLS}
 Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
-
 ==================== */
 
 /**
- * @package Seditio-N
- * @version 0.0.2
- * @copyright Partial copyright (c) 2008 Cotonti Team
- * @license BSD License
+ * @package Cotonti
+ * @version 0.0.3
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD
  */
 
 

@@ -13,11 +13,11 @@ Order=10
 /**
  * Simple AJAX previewer for MarkItUp!
  *
- * @package Seditio-N
+ * @package Cotonti
  * @version 0.0.3
  * @author Trustmaster
- * @copyright (c) 2008 Cotonti Team
- * @license BSD license
+ * @copyright (c) 2008-2009 Cotonti Team
+ * @license BSD
  */
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
