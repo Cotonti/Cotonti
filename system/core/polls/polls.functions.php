@@ -1,15 +1,14 @@
 <?PHP
 
-/* ====================
-[BEGIN_SED]
-File=system/core/polls/polls.functions.php
-Version=0.0.2
-Updated=2009-jan-21
-Type=Core
-Author=Neocrome & Cotonti Team
-Description=functions for polls (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
-[END_SED]
-==================== */
+/**
+ * Polls functions.
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -365,4 +364,5 @@ function sed_poll_form($id, $formlink='', $skin='')
 
     return($pollform);
 }
+
 ?>

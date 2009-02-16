@@ -1,4 +1,5 @@
 <?PHP
+
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -172,12 +173,12 @@ $t->assign(array(
 	"PAGE_COMMENTS_COUNT" => $comments_count,
 	"PAGE_RATINGS" => $ratings_link,
 	"PAGE_RATINGS_DISPLAY" => $ratings_display,
-	"PAGE_COMMENTS_RSS" => sed_url("rss", "c=comments&id=".$pag['page_id'], "", true)
+	"PAGE_COMMENTS_RSS" => sed_url("rss", "c=comments&id=".$pag['page_id'])
 ));
 
 // Extra fields
 $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while($row = sed_sql_fetchassoc($fieldsres)) 
+while($row = sed_sql_fetchassoc($fieldsres))
 {
 	$uname = strtoupper($row['field_name']);
 	$t->assign('PAGE_'.$uname, $pag['page_'.$row['field_name']]);
