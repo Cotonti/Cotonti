@@ -159,7 +159,7 @@ switch ($a)
 			if (is_uploaded_file($uav_tmp_name) && $uav_size>0 && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($uav_tmp_name);
-				
+
 					$avatar = $usr['id']."-avatar.gif";
 					$avatarpath = $cfg['av_dir'].$avatar;
 
@@ -167,14 +167,14 @@ switch ($a)
 						{ unlink($avatarpath); }
 
 					move_uploaded_file($uav_tmp_name, $avatarpath);
-					
+
 					if ($w>$cfg['av_maxx'] || $h>$cfg['av_maxy'] || $uav_size>$cfg['av_maxsize'])
 					{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
 
 					sed_createthumb($avatarpath, $avatarpath, $cfg['av_maxx'],$cfg['av_maxy'], 1, $f_extension, $avatar, 0, 0, 0, 0, 0, $percentage, $prior);
-					
+
 					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($uav_size > $cfg['av_maxsize']))
 						{
 						$percentage -= 5;
@@ -223,7 +223,7 @@ switch ($a)
 			if (is_uploaded_file($uph_tmp_name) && $uph_size>0 && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($uph_tmp_name);
-				
+
 					$photo = $usr['id']."-photo.gif";
 					$photopath = $cfg['photos_dir'].$photo;
 
@@ -231,14 +231,14 @@ switch ($a)
 						{ unlink($photopath); }
 
 					move_uploaded_file($uph_tmp_name, $photopath);
-					
+
 					if ($w>$cfg['ph_maxx'] || $h>$cfg['ph_maxy'] || $uph_size>$cfg['ph_maxsize'])
 					{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
 
 					sed_createthumb($photopath, $photopath, $cfg['ph_maxx'],$cfg['ph_maxy'], 1, $f_extension, $photo, 0, 0, 0, 0, 0, $percentage, $prior);
-					
+
 					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($uph_size > $cfg['ph_maxsize']) )
 						{
 						$percentage -= 5;
@@ -287,7 +287,7 @@ switch ($a)
 			if (is_uploaded_file($usig_tmp_name) && $usig_size>0 && ($f_extension=='jpeg' || $f_extension=='jpg' || $f_extension=='gif' || $f_extension=='png'))
 			{
 				list($w, $h) = @getimagesize($usig_tmp_name);
-				
+
 					$signature = $usr['id']."-signature.gif";
 					$signaturepath = $cfg['sig_dir'].$signature;
 
@@ -295,14 +295,14 @@ switch ($a)
 						{ unlink($signaturepath); }
 
 					move_uploaded_file($usig_tmp_name, $signaturepath);
-					
+
 					if ($w>$cfg['sig_maxx'] || $h>$cfg['sig_maxy'] || $usig_size>$cfg['sig_maxsize'])
 					{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
-					
+
 					sed_createthumb($signaturepath, $signaturepath, $cfg['sig_maxx'],$cfg['sig_maxy'], 1, $f_extension, $signature, 0, 0, 0, 0, 0, $percentage, $prior);
-					
+
 					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($usig_size > $cfg['sig_maxsize']) )
 						{
 						$percentage -= 5;
@@ -312,7 +312,7 @@ switch ($a)
 						$usig_size = filesize($signaturepath);
 						}
 					}
-					
+
 					/* === Hook === */
 					$extp = sed_getextplugins('profile.update.signature');
 					if (is_array($extp))
@@ -368,7 +368,7 @@ switch ($a)
 	$rmailpass = sed_import('rmailpass','P','TXT');
 
 	$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
-	
+
 	// Extra fields
 	if(count($extrafields)>0)
 	foreach($extrafields as $row)
@@ -423,15 +423,15 @@ switch ($a)
 			}
 		}
 	}
-	
+
 	if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
 		{
-		
+
 		$rmailpass = md5($rmailpass);
-		
+
 		$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_email='".sed_sql_prep($ruseremail)."'");
 		$res = sed_sql_result($sqltmp,0,"COUNT(*)");
-		
+
 		$error_string .= ($rmailpass!=$urr['user_password']) ? $L['pro_wrongpass']."<br />" : '';
 		$error_string .= (mb_strlen($ruseremail)<4 || !eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$",$ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
 		$error_string .= ($res>0) ? $L['aut_emailalreadyindb']."<br />" : '';
@@ -441,16 +441,16 @@ switch ($a)
 
 		if (!$cfg['regnoactivation'])
 				{
-				
+
 				$validationkey = md5(microtime());
 				$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_email='".sed_sql_prep($ruseremail)."', user_maingrp='-1', user_sid='".sed_sql_prep($urr['user_maingrp'])."' WHERE user_id='".$usr['id']."' ");
-				
+
 				$rsubject = $cfg['maintitle']." - ".$L['aut_mailnoticetitle'];
 				$ractivate = $cfg['mainurl'].'/'.sed_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
 				$rbody = sprintf($L['aut_emailchange'], $usr['name'], $ractivate);
 				$rbody .= "\n\n".$L['aut_contactadmin'];
 				sed_mail ($ruseremail, $rsubject, $rbody);
-				
+
 				if(!empty($_COOKIE['COTONTI']))
 				{
 					sed_setcookie('COTONTI', '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
@@ -465,16 +465,16 @@ switch ($a)
 					$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
 					sed_redirect(sed_url('message', 'msg=102', '', true));
 					exit;
-				
+
 				}
-				
+
 			else
-				{ 
+				{
 				$sql = sed_sql_query("UPDATE $db_users SET user_email='".sed_sql_prep($ruseremail)."' WHERE user_id='".$usr['id']."' ");
 				}
-				
+
 			}
-				
+
 		}
 
 
@@ -482,7 +482,7 @@ switch ($a)
 	{
 
 		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
-				
+
 		$ssql = "UPDATE $db_users SET
 			user_text='".sed_sql_prep($rusertext)."',
 			user_country='".sed_sql_prep($rusercountry)."',
@@ -531,9 +531,9 @@ $profile_form_langs .= sed_selectbox_lang($urr['user_lang'], 'ruserlang');
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 
 $profile_form_timezone = "<select name=\"rusertimezone\" size=\"1\">";
-foreach($timezonelist as $x) 
+foreach($timezonelist as $x)
 {
-	$f = (float) $x; 
+	$f = (float) $x;
 	$selected = ($x==$urr['user_timezone']) ? "selected=\"selected\"" : '';
 	$profile_form_timezone .= "<option value=\"$f\" $selected>GMT ".$x.", ".date($cfg['dateformat'], $sys['now_offset'] + $x*3600)."</option>";
 }
@@ -615,7 +615,7 @@ $useredit_array = array(
 	"USERS_PROFILE_TEXT" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"8\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
 	"USERS_PROFILE_TEXTBOXER" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"8\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
 	"USERS_PROFILE_EMAIL" => $profile_form_email,
-	"USERS_PROFILE_EMAILPASS" => "<input type=\"password\" class=\"password\" name=\"rmailpass\" size=\"12\" maxlength=\"16\" autocomplete=\"off\" />",
+	"USERS_PROFILE_EMAILPASS" => "<input type=\"password\" class=\"password\" name=\"rmailpass\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,
 	"USERS_PROFILE_PMNOTIFY" => $profile_form_pmnotify,
 	"USERS_PROFILE_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".$urr['user_website']."\" size=\"56\" maxlength=\"128\" />",
@@ -634,7 +634,7 @@ $useredit_array = array(
 	"USERS_PROFILE_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_PROFILE_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_PROFILE_ADMINRIGHTS" => '',
-	"USERS_PROFILE_OLDPASS" => "<input type=\"password\" class=\"password\" name=\"roldpass\" size=\"12\" maxlength=\"16\" autocomplete=\"off\" />",
+	"USERS_PROFILE_OLDPASS" => "<input type=\"password\" class=\"password\" name=\"roldpass\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_NEWPASS1" => "<input type=\"password\" class=\"password\" name=\"rnewpass1\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_NEWPASS2" => "<input type=\"password\" class=\"password\" name=\"rnewpass2\" size=\"12\" maxlength=\"16\" />",
 		);
