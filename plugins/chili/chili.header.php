@@ -1,13 +1,5 @@
 <?php
 /* ====================
-[BEGIN_SED]
-File=plugins/chili/chili.header.php
-Version=121
-Updated=2008-aug-30
-Type=Plugin
-Author=Trustmaster
-Description=
-[END_SED]
 [BEGIN_SED_EXTPLUGIN]
 Code=chili
 Part=header
@@ -22,10 +14,10 @@ Order=10
 /**
  * chili connector for Seditio
  *
- * @package Seditio-N
+ * @package Cotonti
  * @version 0.0.1
  * @author Trustmaster
- * @copyright (c) 2008 Cotonti Team
+ * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD license
  */
 

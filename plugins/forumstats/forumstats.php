@@ -4,14 +4,6 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=plugins/forumstats/forumstats.php
-Version=110
-Updated=2006-sep-28
-Type=Plugin
-Author=Neocrome
-Description=
-[END_SED]
 
 [BEGIN_SED_EXTPLUGIN]
 Code=forumstats
@@ -24,10 +16,10 @@ Order=10
 ==================== */
 
 /**
- * @package Seditio-N
- * @version 0.0.1
- * @copyright Partial copyright (c) 2008 Cotonti Team
- * @license BSD License
+ * @package Cotonti
+ * @version 0.0.3
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD
  */
 
 

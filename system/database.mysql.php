@@ -4,21 +4,15 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=system/functions/database.lib.php
-Version=101
-Updated=2006-mar-15
-Type=Core
-Author=Neocrome
-Description=Functions
-[END_SED]
 ==================== */
 
 /**
- * @package Seditio-N
- * @version 0.0.1
- * @copyright Partial copyright (c) 2008 Cotonti Team
- * @license BSD License
+ * MySQL database driver
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD
  */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
