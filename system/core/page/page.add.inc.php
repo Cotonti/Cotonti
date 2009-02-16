@@ -4,15 +4,17 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=page.inc.php
-Version=110
-Updated=2006-jun-15
-Type=Core
-Author=Neocrome
-Description=Pages
-[END_SED]
 ==================== */
+
+/**
+ * Add page.
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -111,7 +113,7 @@ if ($a=='add')
 		}
 		if($page_state == 0)
 		{
-			sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' "); 
+			sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' ");
 		}
 		$ssql = "INSERT into $db_pages
 		(page_state,
@@ -155,7 +157,7 @@ $ssql.="page_title,
 
 		$id = sed_sql_insertid();
 		$r_url = (!$page_state) ? sed_url('page', "id=".$id, '', true) : sed_url('message', "msg=300", '', true);
-		
+
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
 		if (is_array($extp))

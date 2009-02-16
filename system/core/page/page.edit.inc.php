@@ -4,15 +4,17 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=page.inc.php
-Version=120
-Updated=2007-mar-04
-Type=Core
-Author=Neocrome
-Description=Pages
-[END_SED]
 ==================== */
+
+/**
+ * Edit page.
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -151,16 +153,16 @@ if ($a=='update')
 			{
 				$rpagehtml = '';
 			}
-			
+
 			$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id' ");
 			$row = sed_sql_fetcharray($sql);
-			
+
 			if ($row['page_cat']!=$rpagecat && ($row['page_state'] == 0 || $row['page_state'] == 2))
 			{
 				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$rpagecat."' ");
 			}
-			
+
 			$ssql = "UPDATE $db_pages SET
 			page_cat = '".sed_sql_prep($rpagecat)."',
 				page_type = '".sed_sql_prep($rpagetype)."',
