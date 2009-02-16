@@ -10,7 +10,7 @@ http://www.neocrome.net
  * Forums posts display.
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -139,7 +139,7 @@ if ($a=='newpost')
 		{ sed_die(); }
 		$merge = (!$cfg['antibumpforums'] && $cfg['mergeforumposts'] && $row['ft_lastposterid']==$usr['id']) ? true : false;
 	}
-	
+
 	$sql = sed_sql_query("SELECT fp_posterid, fp_posterip FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC LIMIT 1");
 
 	if ($row = sed_sql_fetcharray($sql))
@@ -377,7 +377,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			fs_postcount=fs_postcount-1,
 			fs_postcount_pruned=fs_postcount_pruned+1
 			WHERE fs_id='$s'");
-			
+
 			if ($fs_masterid>0)
 			{
 				$sql = sed_sql_query("UPDATE $db_forum_sections SET
@@ -385,7 +385,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 				fs_postcount_pruned=fs_postcount_pruned+1
 				WHERE fs_id='$fs_masterid'");
 			}
-			
+
 			sed_forum_sectionsetlast($s);
 
 			$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts
@@ -440,12 +440,12 @@ if ($usr['id']>0)
 //Extra fields for users
 $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
 $user_extrafields = "";
-while($row = sed_sql_fetchassoc($fieldsres)) 
+while($row = sed_sql_fetchassoc($fieldsres))
 {
 	$extrafields[] = $row; $number_of_extrafields++;
 	$user_extrafields .= "u.user_{$row['field_name']}, ";
 }
-	
+
 
 if (!empty($id))
 {
@@ -691,16 +691,16 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_ORDER" => $fp_num,
 		"FORUMS_POSTS_ROW" => $row,
 	));
-	
+
 	// Extra fields for users
 	if(count($extrafields)>0)
 	foreach($extrafields as $i=>$extrafield)
 	{
 		$uname = strtoupper($extrafield['field_name']);
-		$t->assign('FORUMS_POSTS_ROW_USER'.$uname, sed_cc($row['user_'.$extrafield['field_name']])); 
+		$t->assign('FORUMS_POSTS_ROW_USER'.$uname, sed_cc($row['user_'.$extrafield['field_name']]));
 		isset($L['page_'.$extrafield['field_name'].'_title']) ? $t->assign('FORUMS_POSTS_ROW_USER'.$uname.'_TITLE', $L['page_'.$extrafield['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $extrafield['field_description']);
 	}
-		
+
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }

@@ -882,13 +882,13 @@ function sed_build_comments($code, $url, $display = true)
 
 			$t->parse("COMMENTS.COMMENTS_NEWCOMMENT");
 		}
-		
+
 		elseif (!$display)
 		{
 		$t->assign(array("COMMENTS_CLOSED" => $L['com_closed']));
 		$t->parse("COMMENTS.COMMENTS_CLOSED");
 		}
-		
+
 
 		if (sed_sql_numrows($sql)>0)
 		{
@@ -1365,6 +1365,8 @@ function sed_build_ratings($code, $url, $display)
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
+
+	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
 
 	if ($yetrated)
 	{
@@ -4667,13 +4669,13 @@ function sed_extrafield_remove($sql_table, $name)
 
 /**
  * Makes correct plural forms of words
- * 
+ *
  * @global string $lang Current language
  * @param int $digit Numeric value
  * @param string $expr Word or expression
  * @param bool $onlyword Return only words, without numbers
  * @param bool $canfrac - Numeric value can be Decimal Fraction
- * @return string 
+ * @return string
  */
 function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
@@ -4702,11 +4704,11 @@ function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
 
 /**
  * Used in sed_declension to get rules for concrete languages
- * 
+ *
  * @param int $plural Numeric value
  * @param string $lang Target language code
  * @param bool $is_frac true if numeric value is fraction, otherwise false
- * @return int 
+ * @return int
  */
 function sed_get_plural($plural, $lang, $is_frac = false)
 {
@@ -4718,11 +4720,11 @@ function sed_get_plural($plural, $lang, $is_frac = false)
         case 'se':
 		case 'us':
             return ($plural == 1) ? 1 : 0;
- 
+
         case 'fr':
         case 'uk':
             return ($plural > 1) ? 0 : 1;
- 
+
         case 'ru':
         case 'ua':
 			if ($is_frac)
