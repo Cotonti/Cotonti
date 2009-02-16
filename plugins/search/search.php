@@ -3,15 +3,7 @@
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=plugins/search/search.php
-Version=125
-Date=2008-jun-04
-Type=Plugin
-Author=Olivier C. & Spartan
-Description=
-[END_SED]
+http://www.neocrome.net]
 
 [BEGIN_SED_EXTPLUGIN]
 Code=search
@@ -24,9 +16,10 @@ Order=10
 ==================== */
 
 /**
- * @package Seditio-N
- * @version 0.0.1
- * @copyright Partial copyright (c) 2008 Cotonti Team
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Olivier C., Spartan, oc
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
 

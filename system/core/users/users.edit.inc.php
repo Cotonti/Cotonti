@@ -4,20 +4,12 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=users.php
-Version=122
-Updated=2007-oct-10
-Type=Core
-Author=Neocrome
-Description=Users
-[END_SED]
 ==================== */
 
 /**
- * @package Seditio-N
- * @version 0.0.1
- * @copyright Partial copyright (c) 2008 Cotonti Team
+ * @package Cotonti
+ * @version 0.0.3
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
 

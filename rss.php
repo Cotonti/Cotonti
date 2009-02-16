@@ -1,15 +1,9 @@
 <?php
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
 /**
  * RSS output.
  *
- * @package Seditio-N
- * @version 0.0.2
+ * @package Cotonti
+ * @version 0.0.3
  * @author medar
  * @copyright Copyright (c) 2009 Cotonti Team
  * @license BSD License

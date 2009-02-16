@@ -1,23 +1,12 @@
 <?PHP
 
-/* ====================
-[BEGIN_SED]
-File=admin.polls.inc.php
-Version=0.0.2
-Updated=2009-jan-21
-Type=Core.admin
-Author=Neocrome & Cotonti Team
-Description=polls (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
-[END_SED]
-==================== */
-
 /**
  * Poll editor
  *
- * @package Seditio-N
- * @version 0.0.2
+ * @package Cotonti
+ * @version 0.0.3
  * @author esclkm
- * @copyright Copyright (c) 2008 Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
 
