@@ -25,18 +25,29 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'])
 {
-	require_once(sed_langfile('tags'));
-	$tcloud = sed_tag_cloud('pages', $cfg['plugin']['tags']['order']);
-	$tc_html = '<ul class="tag_cloud">';
+	require_once sed_langfile('tags');
+	require_once $cfg['plugins_dir'].'/tags/inc/config.php';
+	$limit = $cfg['plugin']['tags']['lim_index'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_index'];
+	$tcloud = sed_tag_cloud('pages', $cfg['plugin']['tags']['order'], $limit);
+	$tc_html = '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />
+		<div class="tag_cloud">';
 	foreach($tcloud as $tag => $cnt)
 	{
 		$tag_count++;
 		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-		$tc_html .= '<li value="'.$cnt.'"><a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> </li>';
+		foreach($tc_styles as $key => $val)
+		{
+			if($cnt <= $key)
+			{
+				$dim = $val;
+				break;
+			}
+		}
+		$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'" class="'.$dim.'">'.sed_cc($tag_t).'</a> ';
 	}
-	$tc_html .= '</ul><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.tagcloud.js"></script><script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/set.js"></script>';
+	$tc_html .= '</div>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 	$t->assign(array(
 	'INDEX_TAG_CLOUD' => $tc_html,
