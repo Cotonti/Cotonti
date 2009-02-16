@@ -10,7 +10,7 @@ http://www.neocrome.net
  * Main function library.
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -563,13 +563,9 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 {
 	global $cfg, $sys, $sed_smilies, $L, $usr;
 
-	if($cfg['parser_custom'])
+	if($cfg['parser_custom'] && function_exists('sed_custom_parse'))
 	{
-		include_once $cfg['system_dir'].'/parser.php';
-		if(function_exists('sed_custom_parse'))
-		{
-			$text = sed_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
-		}
+		$text = sed_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
 	}
 
 	if(!$cfg['parser_disable'])
@@ -629,13 +625,9 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 function sed_post_parse($text, $area = '')
 {
 	global $cfg;
-	if($cfg['parser_custom'])
+	if($cfg['parser_custom'] && function_exists('sed_custom_post_parse'))
 	{
-		include_once $cfg['system_dir'].'/parser.php';
-		if(function_exists('sed_custom_post_parse'))
-		{
-			$text = sed_custom_post_parse($text, $area);
-		}
+		$text = sed_custom_post_parse($text, $area);
 	}
 
 	if(!$cfg['parser_disable'] && (empty($area) || $cfg["parsebbcode$area"]))
@@ -3927,7 +3919,17 @@ function sed_tag_cloud($area = 'pages', $order = 'tag', $limit = null)
 	global $db_tag_references;
 	$res = array();
 	$limit = is_null($limit) ? '' : ' LIMIT ' . $limit;
-	$order = $order == 'tag' ? '`tag`' : '`cnt` DESC';
+	switch($order)
+	{
+		case 'Alphabetical':
+			$order = '`tag`';
+			break;
+		case 'Frequency':
+			$order = '`cnt` DESC';
+			break;
+		default:
+			$order = 'RAND()';
+	}
 	$sql = sed_sql_query("SELECT `tag`, COUNT(*) AS `cnt`
 		FROM $db_tag_references
 		WHERE tag_area = '$area'
@@ -4500,7 +4502,7 @@ function sed_xg()
  */
 function sed_xp()
 {
-	return ('<span><input type="hidden" name="x" value="'.sed_sourcekey().'" /></span>');
+	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="'.sed_sourcekey().'" /></div>';
 }
 
 /**
