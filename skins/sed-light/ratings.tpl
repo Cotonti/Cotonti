@@ -28,7 +28,7 @@
 		$('.rstar').rating({
 			half: true,
 			callback: function(value, link) {
-				ratingval = link.getAttribute('value');
+				ratingval = link.getAttribute('tabindex');
 				$('#rating_submit').show();
 			}
 		});
