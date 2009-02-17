@@ -1,43 +1,4 @@
 <!-- BEGIN: MAIN -->
-		
-<!-- <script type="text/javascript">
-$(function()
-{
-	$("#datepicker").datepicker({
-		showOn: 'button',
-		buttonImage: 'skins/{PHP.skin}/img/ui/calendar.gif',
-		buttonImageOnly: true,
-		changeMonth: true,
-		changeYear: true,
-		dateFormat: 'dd-mm-yy',
-		minDate: '-100Y',
-		maxDate: '0',
-		onSelect: function() {
-			var selDate = $('#datepicker').val().split(/\-/);
-			$('#rday').val(parseInt(selDate[0]));
-			$('#rmonth').val(parseInt(selDate[1]));
-			$('#ryear').val(parseInt(selDate[2]));
-		}
-	});
-
-	$('#rday, #rmonth, #ryear').bind(
-		'change',
-		function() {
-			var d = $('#rday').val();
-			var m = $('#rmonth').val();
-			var y = $('#ryear').val();
-			if(d > 0 && m > 0 && y > 0) {
-				$('#datepicker').val(d + '-' + m + '-' + y);
-			} else {
-				$('#datepicker').datepicker('getDate');
-			}
-		}
-	);
-
-	$('#rday, #rmonth, #ryear').trigger('change');
-});
-
-</script> -->
 
 <script type="text/javascript">
 
@@ -136,7 +97,6 @@ $("#emailtd").click(function(){$("#emailnotes").slideDown();});
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Birthdate}</td>
 					<td>{USERS_PROFILE_BIRTHDATE}
-					<!-- <input type="hidden" name="datepicker" id="datepicker" /> -->
 					</td>
 				</tr>
 				<tr>

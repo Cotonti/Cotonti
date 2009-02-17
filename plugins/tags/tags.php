@@ -81,7 +81,7 @@ if($a == 'pages')
 				ON r.tag_item = p.page_id
 				WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0
 				LIMIT $d, {$cfg['maxrowsperpage']}");
-			$t->assign('TAGS_RESULT_TITLE', $L['Search_results']);
+			$t->assign('TAGS_RESULT_TITLE', $L['tags_Search_results']);
 			while($row = sed_sql_fetchassoc($sql))
 			{
 				$tags = sed_tag_list($row['page_id']);
@@ -118,7 +118,7 @@ elseif($a == 'forums')
 {
 	$t->assign(array(
 	'TAGS_ACTION' => sed_url('plug', 'e=tags&a=forums'),
-	'TAGS_HINT' => $L['Query_hint'],
+	'TAGS_HINT' => $L['tags_Query_hint'],
 	'TAGS_QUERY' => sed_cc($qs)
 	));
 	if(empty($qs))
@@ -167,7 +167,7 @@ elseif($a == 'forums')
 				ON t.ft_sectionid = s.fs_id
 				WHERE r.tag_area = 'forums' AND ($query)
 				LIMIT $d, {$cfg['maxrowsperpage']}");
-			$t->assign('TAGS_RESULT_TITLE', $L['Search_results']);
+			$t->assign('TAGS_RESULT_TITLE', $L['tags_Search_results']);
 			while($row = sed_sql_fetchassoc($sql))
 			{
 				$tags = sed_tag_list($row['ft_id'], 'forums');
