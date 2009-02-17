@@ -29,6 +29,7 @@ limit=06:string::0:Max. tags per items, 0 is unlimited
 lim_pages=07:string::0:Limit of tags in a cloud displayed for pages, 0 is unlimited
 lim_forums=08:string::0:Limit of tags in a cloud displayed in forums, 0 is unlimited
 lim_index=09:string::0:Limit of tags in a cloud displayed on index, 0 is unlimited
+more=10:radio::1:Show 'All tags' link in tag clouds
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 

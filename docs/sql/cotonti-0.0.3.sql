@@ -11,7 +11,7 @@ CREATE TABLE `sed_auth` (
   KEY `auth_code` (`auth_code`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=175 ;
 
-INSERT INTO `sed_auth` (`auth_id`, `auth_groupid`, `auth_code`, `auth_option`, `auth_rights`, `auth_rights_lock`, `auth_setbyuserid`) VALUES 
+INSERT INTO `sed_auth` (`auth_id`, `auth_groupid`, `auth_code`, `auth_option`, `auth_rights`, `auth_rights_lock`, `auth_setbyuserid`) VALUES
 (1, 1, 'admin', 'a', 0, 255, 1),
 (2, 2, 'admin', 'a', 0, 255, 1),
 (3, 3, 'admin', 'a', 0, 255, 1),
@@ -213,7 +213,7 @@ CREATE TABLE `sed_bbcode` (
   KEY `bbc_priority` (`bbc_priority`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=65 ;
 
-INSERT INTO `sed_bbcode` (`bbc_id`, `bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacement`, `bbc_container`, `bbc_enabled`, `bbc_priority`, `bbc_plug`, `bbc_postrender`) VALUES 
+INSERT INTO `sed_bbcode` (`bbc_id`, `bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacement`, `bbc_container`, `bbc_enabled`, `bbc_priority`, `bbc_plug`, `bbc_postrender`) VALUES
 (1, 'b', 'str', '[b]', '<strong>', 1, 1, 128, '', 0),
 (2, 'b', 'str', '[/b]', '</strong>', 0, 1, 128, '', 0),
 (3, 'i', 'str', '[i]', '<em>', 1, 1, 128, '', 0),
@@ -308,7 +308,7 @@ CREATE TABLE `sed_config` (
   `config_text` varchar(255) collate utf8_unicode_ci NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES 
+INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES
 ('core', 'title', '01', 'maintitle', 1, 'Title of your site', '', ''),
 ('core', 'title', '02', 'subtitle', 1, 'Subtitle', '', ''),
 ('core', 'main', '02', 'adminemail', 1, 'admin@mysite.com', '', ''),
@@ -480,6 +480,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'tags', '9', 'lim_forums', 1, '0', '', 'Limit of tags in a cloud displayed in forums, 0 is unlimited'),
 ('plug', 'tags', '2', 'forums', 3, '1', '', 'Enable Tags for Forums'),
 ('plug', 'tags', '9', 'lim_index', 1, '0', '', ' Limit of tags in a cloud displayed on index, 0 is unlimited'),
+('plug', 'tags', '10', 'more', 3, '1', '', 'Show All Tags link in tag clouds'),
 ('core', 'comments', '03', 'expand_comments', 3, '1', '', ''),
 ('core', 'ratings', '02', 'ratings_allowchange', 3, '0', '', '');
 
@@ -494,7 +495,7 @@ CREATE TABLE `sed_core` (
   KEY `ct_code` (`ct_code`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
 
-INSERT INTO `sed_core` (`ct_id`, `ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES 
+INSERT INTO `sed_core` (`ct_id`, `ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
 (1, 'admin', 'Administration panel', '100', 1, 1),
 (2, 'comments', 'Comments', '100', 1, 0),
 (3, 'forums', 'Forums', '100', 1, 0),
@@ -520,7 +521,7 @@ CREATE TABLE `sed_extra_fields` (
   KEY `field_name` (`field_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_extra_fields` (`field_location`, `field_name`, `field_type`, `field_html`, `field_variants`, `field_description`) VALUES 
+INSERT INTO `sed_extra_fields` (`field_location`, `field_name`, `field_type`, `field_html`, `field_variants`, `field_description`) VALUES
 ('pages', 'extra1', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''),
 ('pages', 'extra2', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''),
 ('pages', 'extra3', 'input', '<input class="text" type="text" maxlength="255" size="56" />', '', ''),
@@ -587,7 +588,7 @@ CREATE TABLE `sed_forum_sections` (
   KEY `fs_order` (`fs_order`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
-INSERT INTO `sed_forum_sections` (`fs_id`, `fs_state`, `fs_order`, `fs_title`, `fs_category`, `fs_desc`, `fs_icon`, `fs_lt_id`, `fs_lt_title`, `fs_lt_date`, `fs_lt_posterid`, `fs_lt_postername`, `fs_autoprune`, `fs_allowusertext`, `fs_allowbbcodes`, `fs_allowsmilies`, `fs_allowprvtopics`, `fs_countposts`, `fs_topiccount`, `fs_topiccount_pruned`, `fs_postcount`, `fs_postcount_pruned`, `fs_viewcount`, `fs_masterid`, `fs_mastername`, `fs_allowviewers`, `fs_allowpolls`) VALUES 
+INSERT INTO `sed_forum_sections` (`fs_id`, `fs_state`, `fs_order`, `fs_title`, `fs_category`, `fs_desc`, `fs_icon`, `fs_lt_id`, `fs_lt_title`, `fs_lt_date`, `fs_lt_posterid`, `fs_lt_postername`, `fs_autoprune`, `fs_allowusertext`, `fs_allowbbcodes`, `fs_allowsmilies`, `fs_allowprvtopics`, `fs_countposts`, `fs_topiccount`, `fs_topiccount_pruned`, `fs_postcount`, `fs_postcount_pruned`, `fs_viewcount`, `fs_masterid`, `fs_mastername`, `fs_allowviewers`, `fs_allowpolls`) VALUES
 (1, 0, 100, 'General discussion', 'pub', 'General chat.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, '', 1, 0),
 (2, 0, 101, 'Off-topic', 'pub', 'Various and off-topic.', 'images/admin/forums.gif', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '', 1, 0);
 
@@ -603,7 +604,7 @@ CREATE TABLE `sed_forum_structure` (
   PRIMARY KEY  (`fn_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
-INSERT INTO `sed_forum_structure` (`fn_id`, `fn_path`, `fn_code`, `fn_tpl`, `fn_title`, `fn_desc`, `fn_icon`, `fn_defstate`) VALUES 
+INSERT INTO `sed_forum_structure` (`fn_id`, `fn_path`, `fn_code`, `fn_tpl`, `fn_title`, `fn_desc`, `fn_icon`, `fn_defstate`) VALUES
 (1, '1', 'pub', '', 'Public', '', '', 1);
 
 
@@ -653,7 +654,7 @@ CREATE TABLE `sed_groups` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 
-INSERT INTO `sed_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_hidden`, `grp_title`, `grp_desc`, `grp_icon`, `grp_pfs_maxfile`, `grp_pfs_maxtotal`, `grp_ownerid`, `grp_maintenance`) VALUES 
+INSERT INTO `sed_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_hidden`, `grp_title`, `grp_desc`, `grp_icon`, `grp_pfs_maxfile`, `grp_pfs_maxtotal`, `grp_ownerid`, `grp_maintenance`) VALUES
 (1, 'guests', 0, 0, 0, 'Guests', '', '', 0, 0, 1, 0),
 (2, 'inactive', 1, 0, 0, 'Inactive', '', '', 0, 0, 1, 0),
 (3, 'banned', 1, 0, 0, 'Banned', '', '', 0, 0, 1, 0),
@@ -734,7 +735,7 @@ CREATE TABLE `sed_pages` (
   KEY `page_date` (`page_date`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
-INSERT INTO `sed_pages` (`page_id`, `page_state`, `page_type`, `page_cat`, `page_key`, `page_extra1`, `page_extra2`, `page_extra3`, `page_extra4`, `page_extra5`, `page_title`, `page_desc`, `page_text`, `page_author`, `page_ownerid`, `page_date`, `page_begin`, `page_expire`, `page_file`, `page_url`, `page_size`, `page_count`, `page_rating`, `page_comcount`, `page_filecount`, `page_alias`, `page_html`) VALUES 
+INSERT INTO `sed_pages` (`page_id`, `page_state`, `page_type`, `page_cat`, `page_key`, `page_extra1`, `page_extra2`, `page_extra3`, `page_extra4`, `page_extra5`, `page_title`, `page_desc`, `page_text`, `page_author`, `page_ownerid`, `page_date`, `page_begin`, `page_expire`, `page_file`, `page_url`, `page_size`, `page_count`, `page_rating`, `page_comcount`, `page_filecount`, `page_alias`, `page_html`) VALUES
 (1, 0, 0, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !\r\n\r\nNow create your account, go [url=users.php?m=auth]there[/url], then log-in with the link at the top.\r\n\r\nNote that the first user to register is automatically activated and assigned to the group "Administrators". Then, by default, all the next visitors will have to validate their account by clicking a link in an email sent by Seditio.\r\n\r\nNext step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.', '', 1, 1232998830, 1232998830, 1262343600, 0, '', '', 27, '0.00', 0, 0, '', '');
 
 CREATE TABLE `sed_pfs` (
@@ -777,7 +778,7 @@ CREATE TABLE `sed_plugins` (
   PRIMARY KEY  (`pl_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=42 ;
 
-INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`, `pl_file`, `pl_order`, `pl_active`) VALUES 
+INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`, `pl_file`, `pl_order`, `pl_active`) VALUES
 (1, 'admin.home', 'adminqv', 'main', 'Admin QuickView', 'adminqv', 10, 1),
 (2, 'admin.home', 'cleaner', 'main', 'Cleaner', 'cleaner', 10, 1),
 (3, 'standalone', 'forumstats', 'main', 'Forum statistics', 'forumstats', 10, 1),
@@ -810,7 +811,8 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (38, 'forums.editpost.update.done', 'tags', 'forums.editpost', 'Tags', 'tags.forums.editpost', 10, 1),
 (39, 'forums.topics.delete.done', 'tags', 'forums.delete', 'Tags', 'tags.forums.delete', 10, 1),
 (40, 'standalone', 'tags', 'search', 'Tags', 'tags', 0, 1),
-(41, 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', 10, 1);
+(41, 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', 10, 1),
+(42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1);
 
 CREATE TABLE `sed_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,
@@ -889,7 +891,7 @@ CREATE TABLE `sed_stats` (
   PRIMARY KEY  (`stat_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_stats` (`stat_name`, `stat_value`) VALUES 
+INSERT INTO `sed_stats` (`stat_name`, `stat_value`) VALUES
 ('totalpages', 0),
 ('totalmailsent', 0),
 ('totalmailpmnot', 0),
@@ -913,7 +915,7 @@ CREATE TABLE `sed_structure` (
   KEY `structure_path` (`structure_path`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
-INSERT INTO `sed_structure` (`structure_id`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`, `structure_desc`, `structure_icon`, `structure_group`, `structure_order`, `structure_pagecount`) VALUES 
+INSERT INTO `sed_structure` (`structure_id`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`, `structure_desc`, `structure_icon`, `structure_group`, `structure_order`, `structure_pagecount`) VALUES
 (1, 'articles', '1', '', 'Articles', '', '', 0, 'title.asc', 0),
 (2, 'links', '2', '', 'Links', '', '', 0, 'title.asc', 0),
 (3, 'events', '3', '', 'Events', '', '', 0, 'date.asc', 0),
