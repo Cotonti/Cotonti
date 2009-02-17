@@ -20,7 +20,7 @@
 			 <tr>
 				<td>{PHP.skinlang.usersauth.Username}</td><td>{USERS_AUTH_USER}</td></tr><tr>
 				<td>{PHP.skinlang.usersauth.Password}</td><td>{USERS_AUTH_PASSWORD}</td></tr><tr>
-				<td>{PHP.skinlang.usersauth.Rememberme} </td><td>{PHP.out.guest_cookiettl} &nbsp; <input type="submit" value="{PHP.skinlang.usersauth.Login}"></td>
+				<td>{PHP.skinlang.usersauth.Rememberme} </td><td>{PHP.out.guest_cookiettl} &nbsp; <input type="submit" value="{PHP.skinlang.usersauth.Login}" /></td>
 			</tr>
 			</table>
 			 </form>
