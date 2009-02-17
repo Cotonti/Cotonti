@@ -480,6 +480,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'tags', '9', 'lim_forums', 1, '0', '', 'Limit of tags in a cloud displayed in forums, 0 is unlimited'),
 ('plug', 'tags', '2', 'forums', 3, '1', '', 'Enable Tags for Forums'),
 ('plug', 'tags', '9', 'lim_index', 1, '0', '', ' Limit of tags in a cloud displayed on index, 0 is unlimited'),
+('plug', 'tags', '10', 'more', 3, '1', '', 'Show All Tags link in tag clouds'),
 ('core', 'comments', '03', 'expand_comments', 3, '1', '', ''),
 ('core', 'ratings', '02', 'ratings_allowchange', 3, '0', '', '');
 
@@ -810,7 +811,8 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (38, 'forums.editpost.update.done', 'tags', 'forums.editpost', 'Tags', 'tags.forums.editpost', 10, 1),
 (39, 'forums.topics.delete.done', 'tags', 'forums.delete', 'Tags', 'tags.forums.delete', 10, 1),
 (40, 'standalone', 'tags', 'search', 'Tags', 'tags', 0, 1),
-(41, 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', 10, 1);
+(41, 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', 10, 1),
+(42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1);
 
 CREATE TABLE `sed_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,

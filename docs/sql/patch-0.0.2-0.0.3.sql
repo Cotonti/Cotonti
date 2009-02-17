@@ -26,3 +26,7 @@ UPDATE sed_auth SET auth_rights_lock = auth_rights_lock - 128 WHERE auth_option 
 /* r569 updated tags plugin */
 INSERT INTO sed_config (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'tags', '9', 'lim_index', 1, '0', '', ' Limit of tags in a cloud displayed on index, 0 is unlimited');
 UPDATE `sed_config` SET `config_default` = 'Alphabetical,Frequency,Random', `config_value` = 'Alphabetical' WHERE `config_cat` = 'tags' AND `config_name` = 'order';
+
+/* r577 Tags plugin update */
+INSERT INTO sed_config (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'tags', '10', 'more', 3, '1', '', 'Show All Tags link in tag clouds');
+INSERT INTO `sed_plugins` (`pl_hook`, `pl_code`, `pl_part`, `pl_title`, `pl_file`, `pl_order`, `pl_active`) VALUES ('header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1);
