@@ -295,6 +295,9 @@ $L['adm_tpl_empty'] = 'По умолчанию';	// New in v110
 $L['adm_tpl_forced'] = 'Такой же, как у';	// New in v110
 $L['adm_tpl_parent'] = 'Такой же, как у родительского раздела';	// New in v110
 
+$L['adm_enablecomments'] = 'Включить комментарии ?'; // N-0.1.0
+$L['adm_enableratings'] = 'Включить рейтинги ?'; // N-0.1.0
+
 /* ====== Polls ====== */
 
 $L['adm_polls_indexpolls'] = 'Опросы на главной (последние вверху) :'; // N-0.0.1
