@@ -37,8 +37,8 @@ $sys['starttime'] = $i[1] + $i[0];
 
 //unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount)
 
-$cfg['version'] = '0.0.2';
-$cfg['dbversion'] = '0.0.2';
+$cfg['version'] = '0.0.3';
+$cfg['dbversion'] = '0.0.3';
 
 /**
  * Strips everything but alphanumeric, hyphens and underscores
@@ -4182,7 +4182,7 @@ function sed_themefile()
 		}
 		elseif(file_exists('skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css'))
 		{
-			$out['notices'] .= $L['com_themefail'].'<br />';
+			$out['notices'] .= $L['com_themefail'];
 			$usr['theme'] = $cfg['defaulttheme'];
 			return 'skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css';
 		}
@@ -4191,25 +4191,25 @@ function sed_themefile()
 	{
 		if(file_exists('skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css'))
 		{
-			$out['notices'] .= $L['com_themefail'].'<br />';
+			$out['notices'] .= $L['com_themefail'];
 			$usr['theme'] = $cfg['defaulttheme'];
 			return 'skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css';
 		}
 		elseif(file_exists('skins/'.$usr['skin'].'/'.$usr['skin'].'.css'))
 		{
-			$out['notices'] .= $L['com_themefail'].'<br />';
+			$out['notices'] .= $L['com_themefail'];
 			$usr['theme'] = $usr['skin'];
 			return 'skins/'.$usr['skin'].'/'.$usr['skin'].'.css';
 		}
 		elseif(file_exists('skins/'.$usr['skin'].'/style.css'))
 		{
-			$out['notices'] .= $L['com_themefail'].'<br />';
+			$out['notices'] .= $L['com_themefail'];
 			$usr['theme'] = 'style';
 			return 'skins/'.$usr['skin'].'/style.css';
 		}
 	}
 
-	$out['notices'] .= $L['com_themefail'].'<br />';
+	$out['notices'] .= $L['com_themefail'];
 	if(file_exists('skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css'))
 	{
 		$usr['skin'] = $cfg['defaultskin'];
