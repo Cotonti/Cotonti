@@ -13,7 +13,7 @@
 			<!-- BEGIN: FORUMS_SECTIONS_VIEWERS -->
 
 			{PHP.skinlang.forumstopics.Viewers} : {FORUMS_TOPICS_VIEWERS}
-			<p> {FORUMS_TOPICS_VIEWER_NAMES} </p>
+			<p>{FORUMS_TOPICS_VIEWER_NAMES}&nbsp;</p>
 
 			<!-- END: FORUMS_SECTIONS_VIEWERS -->
 

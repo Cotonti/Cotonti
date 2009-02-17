@@ -1273,7 +1273,7 @@ function sed_build_ratings($code, $url, $display)
 		$checked = $i == $rating_cntround ? 'checked="checked"' : '';
 		$star_class = ($i <= $rating_cntround) ? 'star star_group_newrate star_readonly star_on' : 'star star_group_newrate star_readonly';
 		$star_margin = (in_array(($i/2), array(1,2,3,4,5))) ? '-8' : '0';
-		$rating_fancy .= '<div style="width: 8px;" class="'.$star_class.'"><a style="margin-left: '.$star_margin.'px;" value="'.$i.'" title="'.$L['rat_choice' . $i].'">&nbsp;</a></div>';
+		$rating_fancy .= '<div style="width: 8px;" class="'.$star_class.'"><a style="margin-left: '.$star_margin.'px;" tabindex="'.$i.'" title="'.$L['rat_choice' . $i].'">&nbsp;</a></div>';
 	}
 	if(!$display)
 	{

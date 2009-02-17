@@ -19,7 +19,7 @@
 				$.get("{RATINGS_AJAX_REQUEST}",
 					function(data) {
 						if(data) {
-							$(".rating").replaceWith('<div class="rating">'+data+'</div>');
+							$(".rating").replaceWith('<div class="rating">'+data+'<\/div>');
 						}
 					}
 				);
