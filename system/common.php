@@ -87,6 +87,8 @@ if(empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
 $sys['abs_url'] = $url['scheme'] . '://' . $_SERVER['HTTP_HOST'] . $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
+// Current url for templates
+$out['uri'] = str_replace('&', '&amp;', $_SERVER['REQUEST_URI']);
 
 /* ======== Internal cache ======== */
 

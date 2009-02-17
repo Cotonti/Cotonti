@@ -6,7 +6,7 @@
 				    <div class="text">
                         <a href="index.php">{PHP.L.Home}</a>
                     </div>
-                    <div class="topLink"><a href="{PHP._SERVER.REQUEST_URI}#top" title="{PHP.L.Top}">{PHP.L.Top}</a></div>
+                    <div class="topLink"><a href="{PHP.out.uri}#top" title="{PHP.L.Top}">{PHP.L.Top}</a></div>
                 </div>
             </div>
             <div id="sedCopy"> <a href="http://www.cotonti.com" title="Cotonti Content Management System">POWERED BY COTONTI</a></div>
