@@ -135,9 +135,9 @@
 			
 			// insert rating option right after preview element
 			if(settings.showDigits) {
-				eStar = $('<div class="star"><a title="' + (this.title || this.value) + '" value="' + this.value + '">' + this.value + '</a></div>');
+				eStar = $('<div class="star"><a title="' + (this.title || this.value) + '" tabindex="' + this.value + '">' + this.value + '</a></div>');
 			} else {
-				eStar = $('<div class="star"><a title="' + (this.title || this.value) + '" value="' + this.value + '">&nbsp;</a></div>');
+				eStar = $('<div class="star"><a title="' + (this.title || this.value) + '" tabindex="' + this.value + '">&nbsp;</a></div>');
 			}
 			$(this).after(eStar);
 			
