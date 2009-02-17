@@ -10,7 +10,7 @@ http://www.neocrome.net
  * English language pack for Admin area.
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -145,7 +145,6 @@ $L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by 
 $L['cfg_hideprivateforums'] = array('Hide private forums', '');
 $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics or posts per page', '');
-//$L['cfg_antibumpforums'] = array('\'Anti-bamp\' protection', 'The ban on adding by an users after few messages in succession in the the same theme of forum'); // N-0.0.2
 $L['cfg_antibumpforums'] = array("Anti-bump protection", "Will prevent users from posting twice in a row in the same topic"); // N-0.1.0
 $L['cfg_mergeforumposts'] = array("Post merge feature", "Will merge user's posts if they are sent consecutively, anti-bump must be off"); // N-0.1.0
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded to any PFS, it\'s too late to change this. It is not recommended to change this setting for now.');
@@ -502,6 +501,8 @@ $L['extf_Description'] = "Description (_TITLE)";
 
 $L['adm_extrafield_new'] = 'New extra field';
 $L['adm_extrafield_selectable_values'] = 'Options for select (comma sep.):';
+$L['adm_help_extrafield'] = '
+Hint: Field "Base HTML" is set to default automatically if you leave it blank and press Update.';
 $L['adm_help_pages_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br>
 <br>
 <b>New tags in tpl files:</b><br>

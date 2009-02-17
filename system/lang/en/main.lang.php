@@ -549,11 +549,10 @@ $L['com_closed'] = 'Adding comments has been disabled for this item.'; // N-0.1.
 $L['for_newtopic'] = 'New topic';
 $L['for_markallasread'] = 'Mark all posts as read';
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
-$L['for_antibump'] = 'Protection against spam is on. You can not add a few messages a row.'; // N-0.0.2
 $L['for_titletooshort'] = 'Topic title is too short or missing'; // N-0.0.2
 $L['for_messagetooshort'] = 'Topic message is too short'; // N-0.0.2
 $L['for_polltooshort'] = 'Poll options must be equal, or greater than 2'; // N-0.0.2
-$L['for_antibump'] = "The anti-bump protection is up, you cannot post twice in a row."; // N-0.1.0
+$L['for_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.'; // N-0.1.0
 
 /* ====== List ====== */
 
@@ -566,7 +565,6 @@ $L['lis_submitnew'] = 'Submit a new entry';
 /* ====== Pages ====== */
 
 $L['pag_notavailable'] = 'This page will be published in '; // N-0.0.2
-
 $L['pag_catmissing'] = 'The category code is missing';
 $L['pag_titletooshort'] = 'The title is too short or missing';
 $L['pag_desctooshort'] = 'The description is too short or missing';
