@@ -41,8 +41,7 @@ if($a == 'pages')
 	{
 		// Global tag cloud and search form
 		$tcloud = sed_tag_cloud('pages', $cfg['plugin']['tags']['order']);
-		$tc_html = '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />
-			<div class="tag_cloud">';
+		$tc_html = '<div class="tag_cloud">';
 		foreach($tcloud as $tag => $cnt)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
@@ -126,8 +125,7 @@ elseif($a == 'forums')
 	{
 		// Global tag cloud and search form
 		$tcloud = sed_tag_cloud('forums', $cfg['plugin']['tags']['order']);
-		$tc_html = '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />
-			<div class="tag_cloud">';
+		$tc_html = '<div class="tag_cloud">';
 		foreach($tcloud as $tag => $cnt)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
