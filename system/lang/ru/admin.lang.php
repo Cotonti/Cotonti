@@ -197,7 +197,6 @@ $L['cfg_freetext6'] = array('Свободный текст, слот #6<br />{PH
 $L['cfg_freetext7'] = array('Свободный текст, слот #7<br />{PHP.cfg.freetext7} во всех tpl файлах', '');
 $L['cfg_freetext8'] = array('Свободный текст, слот #8<br />{PHP.cfg.freetext8} во всех tpl файлах', '');
 $L['cfg_freetext9'] = array('Свободный текст, слот #9<br />{PHP.cfg.freetext9} во всех tpl файлах', '');
-
 $L['cfg_disable_comments'] = array('Отключить комментарии', '');
 $L['cfg_disable_forums'] = array('Отключить форум', '');
 $L['cfg_disable_pfs'] = array('Отключить Персональные Файловые Архивы', '');

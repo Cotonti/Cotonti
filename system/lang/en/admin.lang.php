@@ -497,6 +497,8 @@ $L['extf_Description'] = "Description (_TITLE)";
 
 $L['adm_extrafield_new'] = 'New extra field';
 $L['adm_extrafield_selectable_values'] = 'Options for select (comma sep.):';
+$L['adm_help_extrafield'] = '
+Hint: Field "Base HTML" is set to default automatically if you leave it blank and press Update.';
 $L['adm_help_pages_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br>
 <br>
 <b>New tags in tpl files:</b><br>
