@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=plugins/comedit/lang/comedit.en.lang.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=English language file
-Author=Asmo (Edited by motor2hg)
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-==================== */
+/**
+ * English language file
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Asmo (Edited by motor2hg), Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 $L['cfg_time'] = array("Comments editable timeout for users", "in minutes");
 $L['cfg_mail'] = array("Notify about new comments by email?");
@@ -24,4 +23,5 @@ $L['plu_comlive'] = "New comment on our site";// N-0.1.0
 $L['plu_comlive1'] = "Edited comment on the site";// N-0.1.0
 $L['plu_comlive2'] = "left a comment :";// N-0.1.0
 $L['plu_comlive3'] = "has edited the comment :";// N-0.1.0
+
 ?>

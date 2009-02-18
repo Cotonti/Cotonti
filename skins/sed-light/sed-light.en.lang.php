@@ -1,16 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=skins/sed-light/sed-light.en.lang.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=English language file for skin
-Name=sed-light
-Author=Xiode - XiodeStudios.Com
-Url=http://www.xiodestudios.com
-Description=Official skin
-[END_SED]
-==================== */
+/**
+ * English language file for official skin
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Xiode - XiodeStudios.Com http://www.xiodestudios.com , Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 //admin.tpl
 $skinlang['admin']['Help'] = 'Help:';
@@ -326,4 +323,5 @@ $L['pagenav_first'] = '&lt;&lt;';// N-0.0.2
 $L['pagenav_prev'] = '&lt;';// N-0.0.2
 $L['pagenav_next'] = '&gt;';// N-0.0.2
 $L['pagenav_last'] = '&gt;&gt;';// N-0.0.2
+
 ?>

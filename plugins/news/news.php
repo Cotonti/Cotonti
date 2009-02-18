@@ -1,30 +1,24 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-
-[BEGIN_SED]
-File=plugins/news/news.php
-Version=122
-Updated=2008-feb-18
-Type=Plugin
-Author=Neocrome
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=news
 Part=homepage
 File=news
 Hooks=index.tags
 Tags=index.tpl:{INDEX_NEWS}
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
-
 ==================== */
+
+/**
+ * Pick up pages from a category and display the newest in the home page
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -32,12 +26,12 @@ $d = sed_import('d','G','INT');
 $c = sed_import('c','G','TXT');
 
 if (empty($d))	{ $d = '0'; }
-if (empty($c))	
-	{ 
-		$c = $cfg['plugin']['news']['category']; 
+if (empty($c))
+	{
+		$c = $cfg['plugin']['news']['category'];
 	}
 else
-	{		
+	{
 		$checkin = strpos($sed_cat[$c]['path'], $sed_cat[$cfg['plugin']['news']['category']]['path']);
 		$c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
 	}
@@ -49,7 +43,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 	$mtchlen = mb_strlen($mtch);
 	$catsub = array();
 	$catsub[] = $c;
-	
+
 	foreach($sed_cat as $i => $x)
 	{
 		if (mb_substr($x['path'], 0, $mtchlen)==$mtch && sed_auth('page', $i, 'R'))
@@ -68,16 +62,16 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 	AND page_cat IN ('".implode("','", $catsub)."')");
 
 	$totalnews = sed_sql_result($sql2,0,"COUNT(*)");
- 
+
 	$perpage = $cfg['plugin']['news']['maxpages'];
 
 	$pagnav = sed_pagination(sed_url('index', "c=$c"), $d, $totalnews, $perpage);
 	list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('index', "c=$c"), $d, $totalnews, $perpage, TRUE);
 
-	// Extra field - getting 
-	$extrafields = array(); $number_of_extrafields = 0; 
-	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'"); 
-	while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; } 
+	// Extra field - getting
+	$extrafields = array(); $number_of_extrafields = 0;
+	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
+	while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; }
 
 	$news = new XTemplate(sed_skinfile('news'));
 
@@ -175,7 +169,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 				break;
 		}
 
-		// Extra fields 
+		// Extra fields
 		if($number_of_extrafields > 0) foreach($extrafields as $row) $news->assign('PAGE_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
 
 		$news->parse("NEWS.PAGE_ROW");

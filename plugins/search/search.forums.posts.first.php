@@ -1,9 +1,5 @@
-<?php
+<?PHP
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-
 [BEGIN_SED_EXTPLUGIN]
 Code=search
 Part=forums

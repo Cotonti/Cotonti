@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=plugins/passrecover/lang/passrecover.en.lang.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=English language file
-Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-==================== */
+/**
+ * English language file
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome & Cotonti Team
+ * @copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 $L['plu_title'] = "Password recovery";
 

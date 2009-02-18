@@ -1,5 +1,4 @@
 <?PHP
-
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=indexpolls
@@ -7,24 +6,23 @@ Part=main
 File=indexpolls
 Hooks=index.tags
 Tags=index.tpl:{PLUGIN_INDEXPOLLS}
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
 
 /**
+ * Polls (recent or random) on index with jQuery
+ *
  * @package Cotonti
  * @version 0.0.3
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-
 /* ================== FUNCTIONS ================== */
-
 /**
  * Gets polls with AJAX
  *
@@ -84,12 +82,10 @@ function sed_get_polls($limit)
     return($indexpolls -> text("INDEXPOLLS"));
 
 }
-
-
 /* ============= */
 
 if ($cfg['plugin']['indexpolls']['maxpolls']>0 && !$cfg['disable_polls'])
-{ 
+{
     require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
     sed_poll_vote();
     $latestpoll = sed_get_polls($cfg['plugin']['indexpolls']['maxpolls']); }

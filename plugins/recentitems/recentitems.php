@@ -1,30 +1,24 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-
-[BEGIN_SED]
-File=plugins/recentitems/recentitems.php
-Version=125
-Updated=2008-may-26
-Type=Plugin
-Author=Neocrome
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=recentitems
 Part=main
 File=recentitems
 Hooks=index.tags
 Tags=index.tpl:{PLUGIN_LATESTPAGES},{PLUGIN_LATESTTOPICS}
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
-
 ==================== */
+
+/**
+ * Recent pages and topics in forums
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -53,7 +47,7 @@ if ($cfg['plugin']['recentitems']['maxpages']>0 && !$cfg['disable_page'])
 		if (sed_auth('page', $row['page_cat'], 'R'))
 		{
 			$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
-			
+
 			$recentitems -> assign(array(
 					"RI_DATE" => 			date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600),
 					"RI_CAT" => "<a href=\"".sed_url('list', 'c='.$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
@@ -63,7 +57,7 @@ if ($cfg['plugin']['recentitems']['maxpages']>0 && !$cfg['disable_page'])
 			$i++;
 		}
 	}
-	
+
 	$recentitems -> parse("RECENTPAGES");
 	$res = $recentitems -> text("RECENTPAGES");
 
@@ -130,7 +124,7 @@ if ($cfg['plugin']['recentitems']['maxtopics']>0 && !$cfg['disable_forums'])
 			$img = ($usr['id']>0 && $row['ft_updated']>$usr['lastvisit']) ? "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=unread', '#unread')."\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom')."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ";
 
 			if ($cfg['plugin']['recentitems']['fd']=='Standard')
-			{	
+			{
 			$build_forum=sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16));
 			}
 			elseif ($cfg['plugin']['recentitems']['fd']=='Subforums with Master Forums')

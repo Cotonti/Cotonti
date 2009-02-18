@@ -1,22 +1,13 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/seditio/seditio.setup.php
-Version=0.0.2
-Updated=2009-jan-02
-Type=Plugin
-Author=Trustmaster
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=seditio
 Name=Seditio Compatibility
 Description=Seditio Compatibility Plugin
-Version=0.0.2
-Date=2008-jan-02
+Version=0.0.3
+Date=2009-jan-03
 Author=Trustmaster
-Copyright=Partial copyright (c) 2008 Cotonti Team
+Copyright=Partial copyright (c) 2008-2009 Cotonti Team
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -25,6 +16,17 @@ Auth_members=RW
 Lock_members=12345A
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Seditio Compatibility Plugin
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($action == 'install')

@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=pm.php
-Version=101
-Updated=2006-mar-15
-Type=Core
-Author=Neocrome
-Description=Private messages
-[END_SED]
-==================== */
+/**
+ * Private messages loader
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 define('SED_CODE', TRUE);
 define('SED_PM', TRUE);

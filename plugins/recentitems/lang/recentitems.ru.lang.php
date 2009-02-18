@@ -3,11 +3,12 @@
  * Russian language file for recentitems
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author esclkm
- * @copyright (c) 2008 Cotonti Team
+ * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
+
 $L['cfg_maxpages']= array('Отображать новых страниц (количество записей)');
 $L['cfg_maxtopics']= array('Отображать новых сообщений на форуме (количество записей)');
 $L['cfg_fd']= array('Отображение категории сообщения на форуме', 'Установите: <br />"Standart"- категория по умолчанию;<br />"Parent only"- только родительская категория;<br />"Subforums with Master Forums"- родительская категория и субфорум;<br />"Just Topics"- не отображать категорию;');

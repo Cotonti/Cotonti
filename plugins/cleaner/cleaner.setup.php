@@ -1,22 +1,13 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/cleaner/cleaner.setup.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=cleaner
 Name=Cleaner
 Description=Will clean various things...
-Version=0.0.2
+Version=0.0.3
 Date=2009-jan-03
 Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) 2008 Cotonti Team
+Copyright=Partial copyright (c) 2008-2009 Cotonti Team
 Notes=BSD License
 SQL=
 Auth_guests=0
@@ -35,5 +26,17 @@ pmnotarchived=06:select:0,15,30,60,120,180,365:180:Delete the private messages o
 pmold=07:select:0,15,30,60,120,180,365:365:Delete ALL the private messages older than * days (0 to disable).
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
+
+/**
+ * Will clean various things
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
 if ( !defined('SED_CODE') ) { die("Wrong URL."); }
+
 ?>

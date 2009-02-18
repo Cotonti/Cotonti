@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=system/config.extensions.php
-Version=101
-Updated=2006-mar-15
-Type=Core
-Author=Neocrome
-Description=PFS extensions
-[END_SED]
-==================== */
+/**
+ * PFS extensions
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 $sed_extensions = array();
 

@@ -1,16 +1,5 @@
-<?php
+<?PHP
 /* ====================
-Copyright (c) 2008, Vladimir Sibirov.
-All rights reserved. Distributed under BSD License.
-[BEGIN_SED]
-File=plugins/tags/tags.list.php
-Version=121
-Updated=2008-dec-19
-Type=Plugin
-Author=Trustmaster
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Part=list
@@ -20,6 +9,17 @@ Tags=list.tpl:{LIST_TAG_CLOUD},{LIST_TOP_TAG_CLOUD}
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Part of plug tags
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster - Vladimir Sibirov
+ * @copyright All rights reserved. 2008-2009
+ * @license BSD
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'])
@@ -90,4 +90,5 @@ if($cfg['plugin']['tags']['pages'])
 	'LIST_TAG_CLOUD' => $tc_html
 	));
 }
+
 ?>

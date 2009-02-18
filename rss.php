@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  * RSS output.
  *
@@ -127,9 +127,9 @@ elseif ($c == "topics")
 		$res = sed_sql_query($sql);
 		$row = mysql_fetch_assoc($res);
 		//if ($row['auth_rights']=='0') exit(); // forum not readable for guests
-		
+
 		if(!sed_auth('forum', $forum_id, 'R' )) exit("not readable for guests");
-		
+
 		// get number of posts in topic
 		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
 		$res = sed_sql_query($sql);

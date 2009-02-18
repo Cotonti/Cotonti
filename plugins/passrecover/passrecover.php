@@ -1,14 +1,5 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/passrecover/passrecover.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=passrecover
 Part=main
@@ -18,6 +9,16 @@ Tags=
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Sends emails to users so they can recovery their passwords
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 
@@ -68,7 +69,7 @@ if ($a=='request' && $email!='')
 		}
 
 		sed_shield_update(60,"Password recovery email sent");
-		
+
 		$rinfo = sprintf($L['plu_email1b'], $usr['ip'], date("Y-m-d H:i"));
 
 		$rsubject = $cfg['maintitle']." - ".$L['plu_title'];
@@ -135,4 +136,5 @@ else
 	$t->assign(array('PASSRECOVER_URL_FORM'=> sed_url('plug', 'e=passrecover&a=request')));
 	$t->parse('MAIN.PASSRECOVER');
 }
+
 ?>

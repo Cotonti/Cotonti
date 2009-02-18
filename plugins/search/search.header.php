@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=search
@@ -6,7 +6,6 @@ Part=header
 File=search.header
 Hooks=header.main
 Tags=header.tpl:{HEADER_COMPOPUP}
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
@@ -32,5 +31,5 @@ if (!empty($highlight))
 
 	$out['compopup'] .= '});});</script>';
 }
-		
+
 ?>

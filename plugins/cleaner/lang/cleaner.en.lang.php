@@ -3,11 +3,12 @@
  * English language file for cleaner
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author Neocrome & Cotonti Team
- * @copyright (c) 2008 Cotonti Team
+ * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
+
 $L['cfg_trashcan']= array('Remove the trashcan items after * days (0 to disable)', '');
 $L['cfg_userprune']= array('Delete the user accounts not activated within * days (0 to disable)', '');
 $L['cfg_logprune']= array('Delete the log entries older than * days (0 to disable)', '');

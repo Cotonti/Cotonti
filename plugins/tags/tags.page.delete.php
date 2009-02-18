@@ -1,16 +1,5 @@
-<?php
+<?PHP
 /* ====================
-Copyright (c) 2008, Vladimir Sibirov.
-All rights reserved. Distributed under BSD License.
-[BEGIN_SED]
-File=plugins/tags/tags.page.delete.php
-Version=0.0.2
-Updated=2008-dec-22
-Type=Plugin
-Author=Trustmaster
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Part=page.delete
@@ -20,10 +9,22 @@ Tags=
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Part of plug tags
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster - Vladimir Sibirov
+ * @copyright All rights reserved. 2008-2009
+ * @license BSD
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 {
 	sed_tag_remove_all($id);
 }
+
 ?>

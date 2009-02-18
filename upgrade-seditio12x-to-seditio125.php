@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=upgrade-seditio12x-to-seditio125.php
-Version=122
-Updated=2008-feb-20
-Type=Core
-Author=Neocrome
-Description=SQL upgrade tool
-[END_SED]
-==================== */
+/**
+ * SQL upgrade tool seditio12x-to-seditio125
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 define('SED_CODE', TRUE);
 
@@ -140,8 +135,6 @@ switch($step)
 	$next = sed_buildnxtstep(2);
 	break;
 
-
-
 	// ------------------------------
 	case '2':
 	// ------------------------------
@@ -154,8 +147,7 @@ switch($step)
 	$next = sed_buildnxtstep(3);
 	break;
 
-
-// ------------------------------
+	// ------------------------------
 	case '3':
 	// ------------------------------
 

@@ -3,11 +3,12 @@
  * Russian language file for cleaner
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author eclkm
- * @copyright (c) 2008 Cotonti Team
+ * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
+
 $L['cfg_trashcan']= array('Удаление объектов в корзине через * дней (0 - отлючить)', '');
 $L['cfg_userprune']= array('Удаление неактивированных пользователей через * дней (0 - отлючить)', '');
 $L['cfg_logprune']= array('Удаление событий лога через * дней (0 - отлючить)', '');

@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  * GZIP-compressed resource output and cache control utility
  * Usage: rc.php?uri=js/filename.js

@@ -1,16 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=skins/sed-light/sed-light.ru.lang.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Russian language file for skin
-Name=sed-light
-Author=Antar
-Url=http://subs.com.ru
-Description=Official skin
-[END_SED]
-==================== */
+/**
+ * Russian language file for official skin
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Antar http://subs.com.ru , Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 //admin.tpl
 $skinlang['admin']['Help'] = 'Помощь:';
@@ -326,4 +323,5 @@ $L['pagenav_first'] = '&lt;&lt;';// N-0.0.2
 $L['pagenav_prev'] = '&lt;';// N-0.0.2
 $L['pagenav_next'] = '&gt;';// N-0.0.2
 $L['pagenav_last'] = '&gt;&gt;';// N-0.0.2
+
 ?>

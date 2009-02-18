@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=datas/avatars/index.php
-Version=102
-Updated=2006-apr-18
-Type=Core
-Author=Neocrome
-Description=Directory blocker
-[END_SED]
-==================== */
+/**
+ * Directory blocker
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 /* ==== Directory blocker ==== */
 
