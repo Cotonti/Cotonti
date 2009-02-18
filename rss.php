@@ -14,7 +14,7 @@ Example of feeds:
 rss.php?c=news (or other category)
 rss.php?c=comments&id=XX
 rss.php?c=forums
-rss.php?c=topic&id=XX
+rss.php?c=topics&id=XX
 rss.php?c=section&id=XX (this and all subsections)
 */
 
