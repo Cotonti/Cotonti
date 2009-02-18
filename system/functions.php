@@ -2663,6 +2663,8 @@ function sed_load_structure()
 			'desc' => $row['structure_desc'],
 			'icon' => $row['structure_icon'],
 			'group' => $row['structure_group'],
+			'com' => $row['structure_comments'],
+			'ratings' => $row['structure_ratings'],
 			'order' => $order[0],
 			'way' => $order[1]
 		);

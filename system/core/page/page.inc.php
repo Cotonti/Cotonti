@@ -116,11 +116,8 @@ $catpath = sed_build_catpath($pag['page_cat'], '<a href="%1$s">%2$s</a>');
 $pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
 $pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']-1])) ? " (".$pag['page_tabtitle'][$pag['page_tab']-1].")" : '';
 
-$esql = sed_sql_query("SELECT structure_comments, structure_ratings FROM $db_structure WHERE structure_code='".$pag['page_cat']."' ");
-$e = sed_sql_fetcharray($esql);
-
-$comments = ($e['structure_comments']) ? true : false;
-$ratings = ($e['structure_ratings']) ? true : false;
+$comments = ($sed_cat[$pag['page_cat']]['com']) ? true : false;
+$ratings = ($sed_cat[$pag['page_cat']]['ratings']) ? true : false;
 
 $item_code = 'p'.$pag['page_id'];
 
