@@ -8,6 +8,7 @@
  * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
+
 $L['cfg_pages']= array('Enable Tags for Pages');
 $L['cfg_forums']= array('Enable Tags for Forums');
 $L['cfg_title']= array('Capitalize first latters of keywords');

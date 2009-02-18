@@ -1,9 +1,13 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
+[BEGIN_SED_EXTPLUGIN]
+Code=search
+Part=main
+File=search
+Hooks=standalone
+Tags=
+Order=10
+[END_SED_EXTPLUGIN]
 ==================== */
 
 /**
@@ -15,17 +19,6 @@ http://www.neocrome.net
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
-
-/* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=search
-Part=main
-File=search
-Hooks=standalone
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
-==================== */
 
 if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 

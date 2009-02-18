@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=plugins/search/lang/search.ru.lang.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Russian language file
-Author=Antar
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-==================== */
+/**
+ * Russian language file
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Antar, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 $L['cfg_searchurl'] = array('Вид ссылки на сообщение в форуме. Одиночная(Single) отображает только одно сообщение, в то время как Нормальная(Normal) использует традиционное отображение темы с переходом к сообщению.');
 

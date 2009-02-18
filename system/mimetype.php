@@ -1,4 +1,14 @@
 <?PHP
+/**
+ * MIMETYPE
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
 //Format is as follows
 //$mime_type[1][2] = array(3,4,5,6,7,8)
 //1 - Extension - File extension
@@ -30,4 +40,5 @@ $mime_type['mp3'][]		= array('audio/mpeg', 'ID3', '0', '0', '3', '0');
 $mime_type['wav'][0]	= array('audio/x-wav', 'WAVEfmt', '0', '8', '7', '0');
 $mime_type['wav'][1]	= array('audio/x-wav', 'RIFF', '0', '0', '4', '0');
 $mime_type['wmv'][]		= array('video/x-ms-wmv', '3026B2758E66CF11A6D900AA0062CE6C', '1', '0', '16', '0');
+
 ?>

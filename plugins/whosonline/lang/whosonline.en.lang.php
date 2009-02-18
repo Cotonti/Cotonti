@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=plugins/whosonline/lang/whosonline.en.lang.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=English language file
-Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-==================== */
+/**
+ * English language file
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 $L['cfg_showavatars'] = array("Display avatars of users?");
 $L['cfg_miniavatar_x'] = array("The size of a mini-avatars on the axis x","in pixels");

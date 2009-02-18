@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
@@ -6,7 +6,6 @@ Part=header
 File=tags.header
 Hooks=header.main
 Tags=header.tpl:{HEADER_COMPOPUP}
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
@@ -30,4 +29,5 @@ if($cfg['plugin']['tags']['pages']
 {
 	$out['compopup'] .= '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />';
 }
+
 ?>

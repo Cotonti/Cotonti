@@ -1,14 +1,5 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/comedit/comedit.new.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Asmo (Edited by motor2hg)
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=comedit
 Part=new
@@ -18,6 +9,17 @@ Tags=
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Comedit plug
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Asmo (Edited by motor2hg), Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
 if(!defined('SED_CODE')) { die('Wrong URL.'); }
 
 require_once(sed_langfile('comedit'));
@@ -41,4 +43,5 @@ if(empty($error_string) && $cfg['plugin']['comedit']['mail'])
 	}
 
 }
+
 ?>

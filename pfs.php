@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=pfs.php
-Version=101
-Updated=2006-mar-15
-Type=Core
-Author=Neocrome
-Description=PFS loader
-[END_SED]
-==================== */
+/**
+ * PFS loader
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 define('SED_CODE', true);
 define('SED_PFS', TRUE);
@@ -44,6 +39,5 @@ switch($m)
 	require_once($cfg['system_dir'].'/core/pfs/pfs.inc.php');
 	break;
 	}
-
 
 ?>

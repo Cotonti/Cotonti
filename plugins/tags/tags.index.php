@@ -1,26 +1,25 @@
-<?php
+<?PHP
 /* ====================
-Copyright (c) 2008, Vladimir Sibirov.
-All rights reserved. Distributed under BSD License.
-[BEGIN_SED]
-File=plugins/tags/tags.index.php
-Version=0.0.2
-Updated=2008-dec-23
-Type=Plugin
-Author=Trustmaster
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Part=index
 File=tags.index
 Hooks=index.tags
 Tags=index.tpl:{INDEX_TAG_CLOUD},{INDEX_TOP_TAG_CLOUD}
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Part of plug tags
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster - Vladimir Sibirov
+ * @copyright All rights reserved. 2008-2009
+ * @license BSD
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'])
@@ -57,4 +56,5 @@ if($cfg['plugin']['tags']['pages'])
 	'INDEX_TOP_TAG_CLOUD' => $L['tags_Tag_cloud']
 	));
 }
+
 ?>

@@ -1,14 +1,5 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/comedit/comedit.setup.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=comedit
 Name=Comments Edit
@@ -31,5 +22,17 @@ mail=02:radio:0,1:0:Notify about new comments by email?
 markitup=03:select:No,Yes:Yes:Use markitup?
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
+
+/**
+ * Enhance comedit system
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
 if(!defined('SED_CODE')) { die('Wrong URL.'); }
+
 ?>

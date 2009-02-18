@@ -1,16 +1,5 @@
-<?php
+<?PHP
 /* ====================
-Copyright (c) 2008, Vladimir Sibirov.
-All rights reserved. Distributed under BSD License.
-[BEGIN_SED]
-File=plugins/tags/tags.page.edit.tags.php
-Version=0.0.2
-Updated=2008-dec-19
-Type=Plugin
-Author=Trustmaster
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Part=page.edit.tags
@@ -20,6 +9,17 @@ Tags=page.edit.tpl:{PAGEEDIT_FORM_TAGS},{PAGEEDIT_TOP_TAGS},{PAGEEDIT_TOP_TAGS_H
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Part of plug tags
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster - Vladimir Sibirov
+ * @copyright All rights reserved. 2008-2009
+ * @license BSD
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
@@ -34,4 +34,5 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	));
 	$t->parse('MAIN.TAGS');
 }
+
 ?>

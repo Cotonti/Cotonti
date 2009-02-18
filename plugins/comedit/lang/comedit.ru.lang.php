@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=plugins/comedit/lang/comedit.ru.lang.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Russian language file
-Author=Asmo (Edited by motor2hg)
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-==================== */
+/**
+ * English language file
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Asmo (Edited by motor2hg), Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 $L['cfg_time'] = array("Пользователи могут редактировать комментарии на протяжении", "минут");
 $L['cfg_mail'] = array("Уведомлять администратора о новых комментариях по электронной почте?");
@@ -24,4 +23,5 @@ $L['plu_comlive'] = "Новый коментарий на сайте ";// N-0.1.
 $L['plu_comlive1'] = "Отредактирован коментарий на сайте ";// N-0.1.0
 $L['plu_comlive2'] = "оставил комментарий:";// N-0.1.0
 $L['plu_comlive3'] = "отредактировал свой комментарий:";// N-0.1.0
+
 ?>

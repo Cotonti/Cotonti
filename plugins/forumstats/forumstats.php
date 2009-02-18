@@ -1,10 +1,5 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-
 [BEGIN_SED_EXTPLUGIN]
 Code=forumstats
 Part=main
@@ -16,12 +11,14 @@ Order=10
 ==================== */
 
 /**
+ * Statistics for the forums
+ *
  * @package Cotonti
  * @version 0.0.3
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
-
 
 if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 
@@ -113,7 +110,6 @@ if (!$forumstats)
 
 	sed_cache_store('forumstats', $plugin_body, 600);
 }
-else
-{ $plugin_body = $forumstats; }
+else{ $plugin_body = $forumstats; }
 
 ?>

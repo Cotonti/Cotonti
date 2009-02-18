@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=plugins/whosonline/lang/whosonline.ru.lang.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Russian language file
-Author=Antar
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-==================== */
+/**
+ * Russian language file
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Antar, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 $L['cfg_showavatars'] = array("Включить отображение аватар пользователей?");
 $L['cfg_miniavatar_x'] = array("Размер мини-аватары по оси x","в пикселях");

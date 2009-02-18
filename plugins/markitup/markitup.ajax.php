@@ -6,10 +6,10 @@ Part=preview
 File=markitup.ajax
 Hooks=ajax
 Tags=
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
 /**
  * Simple AJAX previewer for MarkItUp!
  *
@@ -19,6 +19,7 @@ Order=10
  * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD
  */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 // Preview contents
@@ -27,4 +28,5 @@ $style = '<link rel="stylesheet" type="text/css" href="skins/'.$skin.'/'.$skin.'
 sed_sendheaders();
 echo $style.sed_post_parse(sed_parse($text));
 ob_end_flush();
+
 ?>

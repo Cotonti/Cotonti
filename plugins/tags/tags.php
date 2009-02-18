@@ -1,16 +1,5 @@
-<?php
+<?PHP
 /* ====================
-Copyright (c) 2008, Vladimir Sibirov.
-All rights reserved. Distributed under BSD License.
-[BEGIN_SED]
-File=plugins/tags/tags.php
-Version=0.0.2
-Updated=2008-dec-19
-Type=Plugin
-Author=Trustmaster
-Description=Tag search
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Part=search
@@ -20,7 +9,18 @@ Tags=
 Order=
 [END_SED_EXTPLUGIN]
 ==================== */
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+
+/**
+ * Tag search
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster - Vladimir Sibirov
+ * @copyright All rights reserved. 2008-2009
+ * @license BSD
+ */
+
+if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 
 $qs = sed_import('t', 'G', 'TXT');
 if(empty($qs)) $qs = sed_import('t', 'P', 'TXT');
@@ -248,4 +248,5 @@ function sed_tag_parse_query($qs)
 	$query = implode(' OR ', $tokens1);
 	return $query;
 }
+
 ?>

@@ -6,7 +6,6 @@ Part=header
 File=markitup.header
 Hooks=header.main
 Tags=header.tpl:{HEADER_COMPOPUP}
-Minlevel=0
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */

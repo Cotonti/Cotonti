@@ -1,14 +1,5 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/adminqv/adminqv.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=adminqv
 Part=main
@@ -18,6 +9,16 @@ Tags=
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Displays quick links for admin
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
@@ -119,4 +120,5 @@ $t -> assign(array(
 ));
 $t -> parse('ADMINQV');
 $adminmain = $t -> text("ADMINQV");
+
 ?>

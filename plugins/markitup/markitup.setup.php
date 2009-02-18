@@ -1,20 +1,11 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/markitup/markitup.setup.php
-Version=0.0.2
-Updated=2008-dec-18
-Type=Plugin
-Author=Trustmaster
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=markitup
 Name=MarkItUp!
 Description=jQuery BBcode editor
 Version=0.0.3
-Date=2009-feb-14
+Date=2009-jan-03
 Author=Jay Salvat
 Copyright=
 Notes=
@@ -31,6 +22,17 @@ autorefresh=02:radio::0:Enable preview auto-refresh
 chili=03:radio::0:Enable Chili tags
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
+
+/**
+ * jQuery BBcode editor
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($action == 'install')

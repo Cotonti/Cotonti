@@ -1,19 +1,5 @@
 <?PHP
-
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-
-[BEGIN_SED]
-File=plugins/cleaner/cleaner.php
-Version=110
-Updated=2006-sep-07
-Type=Plugin
-Author=Neocrome
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=cleaner
 Part=main
@@ -24,8 +10,17 @@ Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+/**
+ * Will clean various things
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
+if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if ($cfg['plugin']['cleaner']['userprune']>0)
 	{

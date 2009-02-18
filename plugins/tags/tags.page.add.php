@@ -1,16 +1,5 @@
-<?php
+<?PHP
 /* ====================
-Copyright (c) 2008, Vladimir Sibirov.
-All rights reserved. Distributed under BSD License.
-[BEGIN_SED]
-File=plugins/tags/tags.page.add.php
-Version=0.0.2
-Updated=2008-jan-07
-Type=Plugin
-Author=Trustmaster
-Description=
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Part=page.add
@@ -20,6 +9,17 @@ Tags=
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Part of plug tags
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster - Vladimir Sibirov
+ * @copyright All rights reserved. 2008-2009
+ * @license BSD
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
@@ -38,4 +38,5 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 		}
 	}
 }
+
 ?>

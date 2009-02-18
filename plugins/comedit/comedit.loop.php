@@ -1,14 +1,5 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/comedit/comedit.loop.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Asmo (Edited by motor2hg)
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=comedit
 Part=loop
@@ -18,6 +9,17 @@ Tags=comments.tpl:{COMMENTS_ROW_EDIT}
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
+
+/**
+ * Comedit plug
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Asmo (Edited by motor2hg), Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
 if(!defined('SED_CODE')) { die('Wrong URL.'); }
 
 $time_limit = ($sys['now_offset']<($row['com_date']+$cfg['plugin']['comedit']['time']*60)) ? TRUE : FALSE;
@@ -31,4 +33,5 @@ $allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? " - ".sed_build_time
 $com_edit = ($usr['isadmin_com'] || $usr['isowner_com']) ? "<a href=\"".sed_url('plug', "e=comedit&m=edit&amp;pid=".$code."&amp;cid=".$row['com_id'])."\">".$L['Edit']."</a>".$allowed_time : '' ;
 
 $t->assign(array("COMMENTS_ROW_EDIT" => $com_edit));
+
 ?>

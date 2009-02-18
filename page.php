@@ -1,19 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyrigh Neocrome
-http://www.neocrome.net
-
-[BEGIN_SED]
-File=page.php
-Version=101
-Updated=2006-mar-15
-Type=Core
-Author=Neocrome
-Description=Pages loader
-[END_SED]
-==================== */
+/**
+ * Pages loader
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 define('SED_CODE', TRUE);
 define('SED_PAGE', TRUE);

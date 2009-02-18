@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=datas/config.php
-Version=120
-Updated=2007-feb-21
-Type=Config
-Author=Neocrome
-Description=Configuration
-[END_SED]
-==================== */
+/**
+ * Configuration
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 // ========================
 // MySQL database parameters. Change to fit your host.

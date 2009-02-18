@@ -3,9 +3,9 @@
  * English language file for indexpolls
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author riptide
- * @copyright (c) 2008 Cotonti Team
+ * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
 $L['cfg_maxpolls']= array('Polls displayed');

@@ -1,22 +1,13 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/recentitems/recentitems.setup.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Neocrome & Cotonti Team
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=recentitems
 Name=Recent items
 Description=Recent pages and topics in forums
-Version=0.0.2
+Version=0.0.3
 Date=2009-jan-03
 Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) 2008 Cotonti Team
+Copyright=Partial copyright (c) 2008-2009 Cotonti Team
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -32,5 +23,17 @@ fd=03:select:Standard, Parent only, Subforums with Master Forums, Just Topics:St
 redundancy=05:select:1,2,3,4,5:2:Redundancy to come over "private topics" problem
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
+
+/**
+ * Recent pages and topics in forums
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
+
 ?>

@@ -1,14 +1,5 @@
 <?PHP
 /* ====================
-[BEGIN_SED]
-File=plugins/comedit/comedit.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Plugin
-Author=Asmo (Edited by motor2hg)
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=comedit
 Part=edit
@@ -18,7 +9,18 @@ Tags=
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
-if(!defined('SED_CODE')) { die('Wrong URL.'); }
+
+/**
+ * Comedit plug
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Asmo (Edited by motor2hg), Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
+if(!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 
 $m	 = sed_import('m', 'G', 'ALP');
 $a	 = sed_import('a', 'G', 'ALP');
@@ -117,4 +119,5 @@ else if($cfg['plugin']['comedit']['markitup'] == "Yes")
 }
 
 $t -> parse("MAIN.COMEDIT_FORM_EDIT");
+
 ?>
