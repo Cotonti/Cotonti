@@ -1,4 +1,10 @@
 <?PHP
+/* ====================
+[BEGIN_SED]
+Name=SED-Light
+[END_SED]
+==================== */
+
 /**
  * Official skin
  *

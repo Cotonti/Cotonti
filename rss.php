@@ -1,15 +1,9 @@
-<?php
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
+<?PHP
 /**
  * RSS output.
  *
- * @package Seditio-N
- * @version 0.0.2
+ * @package Cotonti
+ * @version 0.0.3
  * @author medar
  * @copyright Copyright (c) 2009 Cotonti Team
  * @license BSD License
@@ -129,7 +123,7 @@ elseif ($c == "topics")
 		// check forum read permission for guests
 		$forum_id = $row['ft_sectionid'];
 		if(!sed_auth('forums', $forum_id, 'R' )) exit("not readable for guests");
-		
+
 		// get number of posts in topic
 		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
 		$res = sed_sql_query($sql);
