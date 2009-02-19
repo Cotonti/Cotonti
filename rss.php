@@ -1,9 +1,15 @@
 <?php
+/* ====================
+Seditio - Website engine
+Copyright Neocrome
+http://www.neocrome.net
+==================== */
+
 /**
  * RSS output.
  *
- * @package Cotonti
- * @version 0.0.3
+ * @package Seditio-N
+ * @version 0.0.2
  * @author medar
  * @copyright Copyright (c) 2009 Cotonti Team
  * @license BSD License
@@ -122,13 +128,7 @@ elseif ($c == "topics")
 
 		// check forum read permission for guests
 		$forum_id = $row['ft_sectionid'];
-		$sql = "SELECT auth_rights FROM $db_auth WHERE auth_code='forums' AND auth_groupid='1' AND auth_option='$forum_id'";
-		//echo $sql;
-		$res = sed_sql_query($sql);
-		$row = mysql_fetch_assoc($res);
-		//if ($row['auth_rights']=='0') exit(); // forum not readable for guests
-		
-		if(!sed_auth('forum', $forum_id, 'R' )) exit("not readable for guests");
+		if(!sed_auth('forums', $forum_id, 'R' )) exit("not readable for guests");
 		
 		// get number of posts in topic
 		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
@@ -194,13 +194,7 @@ elseif ($c == "section")
 			if ($row2['ft_mode']=='1')
 			$flag_private = 1;
 
-			$sql = "SELECT auth_rights FROM $db_auth WHERE auth_code='forums' AND auth_groupid='1' AND auth_option='$forum_id'";
-			$res2 = sed_sql_query($sql);
-			$row2 = mysql_fetch_assoc($res2);
-			if ($row2['auth_rights']=='0')
-			$flag_private = 1;
-
-			if (!$flag_private)
+			if (!$flag_private AND sed_auth('forums', $forum_id, 'R'))
 			{
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 				$items[$i]['description'] = $row['fp_html'];
@@ -227,7 +221,6 @@ elseif ($c == "forums")
 		$forum_id = $row['fp_sectionid'];
 
 		$flag_private = 0;
-
 		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
 		$res2 = sed_sql_query($sql);
 		$row2 = mysql_fetch_assoc($res2);
@@ -235,13 +228,7 @@ elseif ($c == "forums")
 		if ($row2['ft_mode']=='1')
 		$flag_private = 1;
 
-		$sql = "SELECT auth_rights FROM $db_auth WHERE auth_code='forums' AND auth_groupid='1' AND auth_option='$forum_id'";
-		$res2 = sed_sql_query($sql);
-		$row2 = mysql_fetch_assoc($res2);
-		if ($row2['auth_rights']=='0')
-		$flag_private = 1;
-
-		if (!$flag_private)
+		if (!$flag_private AND sed_auth('forums', $forum_id, 'R'))
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 			$items[$i]['description'] = $row['fp_html'];
@@ -263,10 +250,8 @@ else
 		$flag = 1;
 		$category_path = $row['structure_path'];
 	}
-
 	if($flag!=0 AND sed_auth('page', $c, 'R'))
 	{
-
 		// found subcategories
 		$where = "0";
 		$sql = "SELECT * FROM $db_structure WHERE structure_path LIKE '%$category_path%'";
