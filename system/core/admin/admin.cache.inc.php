@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=admin.cache.inc.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Core.admin
-Author=Neocrome & Cotonti Team
-Description=Internal cache (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
-[END_SED]
-==================== */
+/**
+ * Administration panel - Internal cache
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
@@ -18,7 +17,7 @@ sed_block($usr['isadmin']);
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=cache'), $L['adm_internalcache']);
 
-$t = new XTemplate(sed_skinfile('admin.cache.inc'));
+$t = new XTemplate(sed_skinfile('admin.cache.inc', false, true));
 
 if ($a=='purge')
 {
@@ -64,4 +63,5 @@ $t -> assign(array(
 
 $t -> parse("CACHE");
 $adminmain = $t -> text("CACHE");
+
 ?>

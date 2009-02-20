@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=admin.comments.inc.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Core.admin
-Author=Neocrome & Cotonti Team
-Description=Manager of comments (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
-[END_SED]
-==================== */
+/**
+ * Administration panel - Manager of comments
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
@@ -22,7 +21,7 @@ $adminhelp = $L['adm_help_comments'];
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
-$t = new XTemplate(sed_skinfile('admin.comments.inc'));
+$t = new XTemplate(sed_skinfile('admin.comments.inc', false, true));
 
 if ($a=='delete')
 {
@@ -106,4 +105,5 @@ $t -> assign(array(
 
 $t -> parse("COMMENTS");
 $adminmain = $t -> text("COMMENTS");
+
 ?>

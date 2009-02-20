@@ -1,14 +1,13 @@
-<?php
-/* ====================
-[BEGIN_SED]
-File=admin.bbcode.inc.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Core.admin
-Author=Trustmaster
-Description=BBCode editor (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
-[END_SED]
-==================== */
+<?PHP
+/**
+ * Administration panel - BBCode editor
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Trustmaster, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
@@ -24,7 +23,7 @@ $id = (int) sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
-$t = new XTemplate(sed_skinfile('admin.bbcode.inc'));
+$t = new XTemplate(sed_skinfile('admin.bbcode.inc', false, true));
 
 if($a == 'add')
 {
@@ -40,7 +39,8 @@ if($a == 'add')
 		$adminbbcode = (sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])) ? $L['adm_bbcodes_added'] : $L['Error'];
 	}
 	else
-	{		$adminbbcode = $L['Error'];
+	{
+		$adminbbcode = $L['Error'];
 	}
 }
 elseif($a == 'upd' && $id > 0)
@@ -58,7 +58,8 @@ elseif($a == 'upd' && $id > 0)
 		$adminbbcode = (sed_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])) ? $L['adm_bbcodes_updated'] : $L['Error'];
 	}
 	else
-	{		$adminbbcode = $L['Error'];
+	{
+		$adminbbcode = $L['Error'];
 	}
 }
 elseif($a == 'del' && $id > 0)

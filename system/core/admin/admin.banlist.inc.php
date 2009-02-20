@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=admin.banlist.inc.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Core.admin
-Author=Neocrome & Cotonti Team
-Description=Banlist (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
-[END_SED]
-==================== */
+/**
+ * Administration panel - Banlist
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
@@ -24,7 +23,7 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
-$t = new XTemplate(sed_skinfile('admin.banlist.inc'));
+$t = new XTemplate(sed_skinfile('admin.banlist.inc', false, true));
 $adminbanlist = '';
 
 if ($a=='update')
@@ -39,10 +38,14 @@ if ($a=='update')
 		$adminbanlist .= $L['alreadyupdatednewentry'];
 	}
 	elseif($sql)
-	{		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist&d=".$d, '', true));
-		exit;	}
+	{
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=banlist&d=".$d, '', true));
+		exit;
+	}
 	else
-	{		$adminbanlist .= $L['Error'];	}
+	{
+		$adminbanlist .= $L['Error'];
+	}
 }
 elseif ($a=='add')
 {
@@ -95,7 +98,8 @@ $closediv = '';
 $opendiv = '';
 $totalitems = sed_sql_rowcount($db_banlist);
 if($cfg['jquery'])
-{	$opendiv = "
+{
+	$opendiv = "
 <script type=\"text/javascript\">
 //<![CDATA[
 function gopage(list)
@@ -105,7 +109,8 @@ function gopage(list)
 		var page = list.page || '';
 		var rowid = list.rowid || '';
 		if(page=='add')
-		{			var exp = document.addbanlist.nexpire.value;
+		{
+			var exp = document.addbanlist.nexpire.value;
 			var bip = document.addbanlist.nbanlistip.value;
 			var bem = document.addbanlist.nbanlistemail.value;
 			var brs = document.addbanlist.nbanlistreason.value;
@@ -120,10 +125,12 @@ function gopage(list)
 			);
 		}
 		else if(page=='update')
-		{			var bip = document.getElementById('savebanlist_'+rowid).rbanlistip.value;
+		{
+			var bip = document.getElementById('savebanlist_'+rowid).rbanlistip.value;
 			var bem = document.getElementById('savebanlist_'+rowid).rbanlistemail.value;
 			var brs = document.getElementById('savebanlist_'+rowid).rbanlistreason.value;
-			var x = document.getElementById('savebanlist_'+rowid).x.value;			$.post('admin.php?m=banlist&ajax=1&a=update&id='+rowid+'&d='+d,
+			var x = document.getElementById('savebanlist_'+rowid).x.value;
+			$.post('admin.php?m=banlist&ajax=1&a=update&id='+rowid+'&d='+d,
 					{rbanlistip: bip, rbanlistemail: bem, rbanlistreason: brs, x: x},
 					 function(data){
 						$('#pagtab').addClass('loading');
@@ -216,4 +223,5 @@ if($ajax)
 	echo $adminmain;
 	exit;
 }
+
 ?>

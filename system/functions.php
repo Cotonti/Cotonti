@@ -3713,7 +3713,7 @@ function sed_shield_update($shield_add, $shield_newaction)
  * @param string $base Item name
  * @return string
  */
-function sed_skinfile($base, $plug = false)
+function sed_skinfile($base, $plug = false, $admn = false)
 {
 	global $usr, $cfg;
 	if($plug)
@@ -3738,6 +3738,34 @@ function sed_skinfile($base, $plug = false)
 		elseif(file_exists($cfg['plugins_dir'].'/'.$bname.'/tpl/'.$base.'.tpl'))
 		{
 			return $cfg['plugins_dir'].'/'.$bname.'/tpl/'.$base.'.tpl';
+		}
+		else
+		{
+			return $cfg['plugins_dir'].'/'.$bname.'/'.$base.'.tpl';
+		}
+	}
+	if($admn)
+	{
+		$bname = strstr($base, '.') ? mb_substr($base, 0, mb_strpos($base, '.')) : $base;
+		if(file_exists('./skins/'.$usr['skin'].'/admin/'.$base.'.tpl'))
+		{
+			return './skins/'.$usr['skin'].'/admin/'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$cfg['defaultskin'].'/admin/'.$base.'.tpl'))
+		{
+			return './skins/'.$cfg['defaultskin'].'/admin/'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$usr['skin'].'/'.$base.'.tpl'))
+		{
+			return './skins/'.$usr['skin'].'/'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$cfg['defaultskin'].'/'.$base.'.tpl'))
+		{
+			return './skins/'.$cfg['defaultskin'].'/'.$base.'.tpl';
+		}
+		elseif(file_exists($cfg['plugins_dir'].'/'.$bname.'/tpl/admin/'.$base.'.tpl'))
+		{
+			return $cfg['plugins_dir'].'/'.$bname.'/tpl/admin/'.$base.'.tpl';
 		}
 		else
 		{
