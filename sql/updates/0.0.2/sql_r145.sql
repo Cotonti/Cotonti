@@ -1,0 +1,6 @@
+/* r145 for edited plugins - recentitems and  recentpolls->indexpolls */
+INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('plug', 'indexpolls', '2', 'mode', '2', 'Recent polls'),('plug', 'indexpolls', '1', 'maxpolls', '2', '1'), ('plug', 'recentitems', 5, 'redundancy', 2, '2');
+INSERT INTO `sed_plugins` VALUES (NULL, 'index.tags', 'indexpolls', 'main', 'Indexpolls', 'indexpolls', 10, 1), (NULL, 'polls.main', 'indexpolls', 'indexpolls', 'Indexpolls', 'indexpolls.main', 10, 1);
+INSERT INTO `sed_auth` VALUES (NULL, 1, 'plug', 'indexpolls', 1, 254, 1), (NULL, 2, 'plug', 'indexpolls', 1, 254, 1), (NULL, 3, 'plug', 'indexpolls', 0, 255, 1), (NULL, 4, 'plug', 'indexpolls', 1, 254, 1), (NULL, 5, 'plug', 'indexpolls', 255, 255, 1), (NULL, 6, 'plug', 'indexpolls', 1, 254, 1);
+DELETE FROM `sed_config` WHERE `config_owner`='plug' AND `config_cat`='recentitems' AND `config_name`='maxpolls' LIMIT 1;
+UPDATE `sed_config` SET `config_value` = 'UTF-8' WHERE `config_cat` = 'skin' AND `config_name` = 'charset' LIMIT 1;
