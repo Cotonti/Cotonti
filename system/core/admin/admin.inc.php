@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=admin.inc.php
-Version=110
-Updated=2006-sep-01
-Type=Core
-Author=Neocrome
-Description=Administration panel
-[END_SED]
-==================== */
+/**
+ * Administration panel
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
 
@@ -87,7 +82,7 @@ $out['subtitle'] = sed_title('{ADMIN}', $title_tags, $title_data);
 
 require_once($cfg['system_dir'].'/header.php');
 
-$t = new XTemplate(sed_skinfile('admin'));
+$t = new XTemplate(sed_skinfile('admin', false, true));
 
 $t->assign(array(
 	"ADMIN_TITLE" => sed_build_adminsection($adminpath),
