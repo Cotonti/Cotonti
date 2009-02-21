@@ -132,7 +132,10 @@ function sed_rights_parseline($row, $title, $link)
 	$mn['R'] = 1;
 	$mn['W'] = 2;
 
-	$mn['1'] = 4;
+	if ($advanced || $ic == 'page')
+	{
+		$mn['1'] = 4;
+	}
 
 	if ($advanced)
 	{
