@@ -13,11 +13,9 @@
 {HEADER_HEAD}
 {HEADER_BASEHREF}
 <link rel="shortcut icon" href="favicon.ico" />
-    {HEADER_COMPOPUP}
-    <title>{HEADER_TITLE}</title>
-    
-    <link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
-
+<link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
+{HEADER_COMPOPUP}
+<title>{HEADER_TITLE}</title>
 </head>
 <!-- SED-Light / Designed By: Xiode - XiodeStudios.Com & Alx - AlxDesign.com / Programming By: Xiode - XiodeStudios.Com -->
 <!-- Copyright (c) XiodeStudios.Com. All Rights Reserved. Please read included Readme for more information. -->
