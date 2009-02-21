@@ -24,7 +24,7 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
 require_once(sed_langfile('adminqv'));
 
-$t = new XTemplate(sed_skinfile('adminqv'));
+$t = new XTemplate(sed_skinfile('adminqv', true));
 
 $timeback = $sys['now_offset'] - (7 * 86400); // 7 days
 $timeback_stats = 15; // 15 days

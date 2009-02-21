@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=admin.structure.inc.php
-Version=120
-Updated=2007-mar-03
-Type=Core.admin
-Author=Neocrome
-Description=Administration panel
-[END_SED]
-==================== */
+/**
+ * Administration panel
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
@@ -81,17 +76,17 @@ if ($n=='options')
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=structure', '', true));
 		exit;
 	}
-	
+
 	elseif ($a=='resync')
 	{
 		sed_check_xg();
-		
+
 		$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
 		$roww = sed_sql_fetcharray($sqql);
-		
+
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_cat='".$roww['structure_code']."' AND (page_state='0' OR page_state='2') ");
 		$num = sed_sql_result($sql,0,"COUNT(*)");
-		
+
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount='".$num."' WHERE structure_id='".$id."' ");
 	}
 
@@ -123,7 +118,7 @@ if ($n=='options')
 	$structure_group = $row['structure_group'];
 	$structure_comments = $row['structure_comments'];
 	$structure_ratings = $row['structure_ratings'];
-	
+
 	if (empty($row['structure_tpl']))
 	{
 

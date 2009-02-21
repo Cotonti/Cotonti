@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  * Custom parser library
  *
@@ -37,4 +37,5 @@ function sed_custom_post_parse($text, $area = '')
 
 	return $text;
 }
+
 ?>

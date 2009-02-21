@@ -1,5 +1,4 @@
 <?PHP
-
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -381,4 +380,5 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '', $conn = nu
 	}
 	return 0;
 }
+
 ?>

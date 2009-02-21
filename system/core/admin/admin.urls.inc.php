@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /**
  * URL Transformation Rules editor.
  *
@@ -383,4 +383,5 @@ ruleCount = $ii;
 $htaccess<br /><input type="submit" value="{$L['adm_urls_save']}" />
 </form>
 HTM;
+
 ?>

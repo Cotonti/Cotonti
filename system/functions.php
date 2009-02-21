@@ -3719,13 +3719,29 @@ function sed_skinfile($base, $plug = false, $admn = false)
 	if($plug)
 	{
 		$bname = strstr($base, '.') ? mb_substr($base, 0, mb_strpos($base, '.')) : $base;
-		if(file_exists('./skins/'.$usr['skin'].'/plugin.standalone.'.$base.'.tpl'))
+		if(file_exists('./skins/'.$usr['skin'].'/plugins/plugin.standalone.'.$base.'.tpl'))
+		{
+			return './skins/'.$usr['skin'].'/plugins/plugin.standalone.'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$usr['skin'].'/plugins/'.$base.'.tpl'))
+		{
+			return './skins/'.$usr['skin'].'/plugins/'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$usr['skin'].'/plugin.standalone.'.$base.'.tpl'))
 		{
 			return './skins/'.$usr['skin'].'/plugin.standalone.'.$base.'.tpl';
 		}
 		elseif(file_exists('./skins/'.$usr['skin'].'/'.$base.'.tpl'))
 		{
 			return './skins/'.$usr['skin'].'/'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$cfg['defaultskin'].'/plugins/plugin.standalone.'.$base.'.tpl'))
+		{
+			return './skins/'.$cfg['defaultskin'].'/plugins/plugin.standalone.'.$base.'.tpl';
+		}
+		elseif(file_exists('skins/'.$cfg['defaultskin'].'/plugins/'.$base.'.tpl'))
+		{
+			return 'skins/'.$cfg['defaultskin'].'/plugins/'.$base.'.tpl';
 		}
 		elseif(file_exists('./skins/'.$cfg['defaultskin'].'/plugin.standalone.'.$base.'.tpl'))
 		{
@@ -3751,13 +3767,13 @@ function sed_skinfile($base, $plug = false, $admn = false)
 		{
 			return './skins/'.$usr['skin'].'/admin/'.$base.'.tpl';
 		}
-		elseif(file_exists('./skins/'.$cfg['defaultskin'].'/admin/'.$base.'.tpl'))
-		{
-			return './skins/'.$cfg['defaultskin'].'/admin/'.$base.'.tpl';
-		}
 		elseif(file_exists('./skins/'.$usr['skin'].'/'.$base.'.tpl'))
 		{
 			return './skins/'.$usr['skin'].'/'.$base.'.tpl';
+		}
+		elseif(file_exists('./skins/'.$cfg['defaultskin'].'/admin/'.$base.'.tpl'))
+		{
+			return './skins/'.$cfg['defaultskin'].'/admin/'.$base.'.tpl';
 		}
 		elseif(file_exists('./skins/'.$cfg['defaultskin'].'/'.$base.'.tpl'))
 		{
@@ -3766,6 +3782,10 @@ function sed_skinfile($base, $plug = false, $admn = false)
 		elseif(file_exists($cfg['plugins_dir'].'/'.$bname.'/tpl/admin/'.$base.'.tpl'))
 		{
 			return $cfg['plugins_dir'].'/'.$bname.'/tpl/admin/'.$base.'.tpl';
+		}
+		elseif(file_exists($cfg['plugins_dir'].'/'.$bname.'/tpl/'.$base.'.tpl'))
+		{
+			return $cfg['plugins_dir'].'/'.$bname.'/tpl/'.$base.'.tpl';
 		}
 		else
 		{

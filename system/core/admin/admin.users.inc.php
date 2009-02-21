@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=admin.users.inc.php
-Version=110
-Updated=2006-sep-12
-Type=Core.admin
-Author=Neocrome
-Description=Users
-[END_SED]
-==================== */
+/**
+ * Administration panel - Users
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
@@ -166,7 +161,7 @@ switch($n)
 	$adminmain .= "</td></tr>";
 	$adminmain .= "<tr><td>".$L['Rights']." :</td>";
 	$adminmain .= "<td><a href=\"".sed_url('admin', "m=rights&g=".$g)."\"><img src=\"images/admin/rights.gif\" alt=\"\" /></a></tr>";
-	
+
 	$adminmain .= ($g>5) ? "<tr><td>".$L['Delete']." :</td><td>[<a href=\"".sed_url('admin', "m=users&n=edit&a=delete&g=".$g."&".sed_xg())."\">x</a>]</td></tr>" : '';
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr></table></form>";
 
@@ -243,7 +238,7 @@ switch($n)
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"1\" /> ".$L['Yes'];
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nhidden\" value=\"0\" checked=\"checked\" /> ".$L['No'];
 	$adminmain .= "</td></tr>";
-	
+
 	$adminmain .= "<tr><td>".$L['adm_rights_maintenance']." :</td><td>";
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nmtmode\" value=\"1\" /> ".$L['Yes'];
 	$adminmain .= "<input type=\"radio\" class=\"radio\" name=\"nmtmode\" value=\"0\" checked=\"checked\" /> ".$L['No'];

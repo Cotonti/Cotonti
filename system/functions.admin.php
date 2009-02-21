@@ -1,5 +1,4 @@
 <?PHP
-
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -10,7 +9,7 @@ http://www.neocrome.net
  * Admin function library.
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -96,12 +95,12 @@ function sed_forum_deletesection($id)
 
 	$sql = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$id' ");
 	$row = sed_sql_fetcharray($sql);
-	
+
 	if ($row['fs_masterid']>0)
 	{
 	$sqql = sed_sql_query("SELECT fs_masterid, fs_topiccount, fs_postcount FROM $db_forum_sections WHERE fs_id='$id' ");
 	$roww = sed_sql_fetcharray($sqql);
-	
+
 	$sc_posts = $roww['fs_postcount'];
 	$sc_topics = $roww['fs_topiccount'];
 
@@ -110,7 +109,7 @@ function sed_forum_deletesection($id)
 
 	sed_forum_sectionsetlast($row['fs_masterid']);
 	}
-	
+
 	$sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_sectionid='$id'");
 	$num = sed_sql_affectedrows();
 	$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_sectionid='$id'");
@@ -140,7 +139,7 @@ function sed_forum_resync($id)
 	$num = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
 	}
-	
+
 	else
 	{
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$id'");
@@ -154,7 +153,7 @@ function sed_forum_resync($id)
 	$num = $num + sed_sql_result($sql,0,"SUM(fs_postcount)");
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
 	}
-	
+
 	return;
 }
 

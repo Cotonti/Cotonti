@@ -1,15 +1,13 @@
 <?PHP
-
 /**
- * Poll editor
+ * Administration panel - Poll editor
  *
  * @package Cotonti
  * @version 0.0.3
- * @author esclkm
- * @copyright Copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
+ * @author esclkm, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
-
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 

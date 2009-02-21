@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=admin.rights.inc.php
-Version=120
-Updated=2007-feb-20
-Type=Core.admin
-Author=Neocrome
-Description=Rights
-[END_SED]
-==================== */
+/**
+ * Administration panel - Rights
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
@@ -164,11 +159,11 @@ function sed_rights_parseline($row, $title, $link)
 
 	$mn['R'] = 1;
 	$mn['W'] = 2;
-	
+
 	$mn['1'] = 4;
 
 	if ($advanced)
-	{	
+	{
 		$mn['2'] = 8;
 		$mn['3'] = 16;
 		$mn['4'] = 32;
