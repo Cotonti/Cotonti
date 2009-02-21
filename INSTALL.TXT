@@ -1,0 +1,95 @@
+REQUIREMENTS
+------------
+
+To install Cotonti for the first time,
+you'll need to have the minimum following server software pre-installed:
+
+* WWW Server (Apache, nginx, etc)
+* PHP 5.1 or higher
+* MySQL 4.1 or higher
+
+
+SERVER CONFIGURATION
+--------------------
+
+You MUST ensure that PHP has been compiled with support for MySQL and Zlib
+in order to successfully run Cotonti.
+
+
+OPTIONAL COMPONENTS
+-------------------
+
+If you want support for SEF (Search Engine Friendly) URLs,
+you'll need mod_rewrite and the ability to use local .htaccess files.
+
+
+INSTALLATION
+------------
+
+1. Download the latest Cotonti distribution from the Cotonti website.
+   http://www.cotonti.com
+
+2. Unpack the downloaded file on your computer using Winrar or similar.
+
+3. Start your PHP Editor, and open config-simple.php,
+   which is located in the /datas directory.
+
+4. Update the config-simple.php file with the values you have recieved from your ISP.
+   The data that needs to be updated is:
+
+* Database host URL. If no host is received from your ISP, leave it to localhost
+* Database user
+* Database password
+* Database name
+
+5. After update rename config-simple.php to config.php
+
+6. Connect your FTP software to your site,
+   and start uploading the Cotonti distribution to your root directory.
+   You do not need to upload the /sql directory,
+   since it only contains documentation and database creation scripts.
+   Make sure you upload to the right directory. Most ISP?s web directory is /,
+   but a few might have /html or /home as thw web root directory.
+   This should however be mentioned in the information received from your ISP.
+   If nothing is mentioned, you assume it is /.
+
+7. There are a number of catalogs that you need to change the write access to (CHMOD).
+   This can easily be performed trough your FTP software.
+   The directories that needs to be changed is:
+
+/datas/defaultav/
+/datas/avatars/
+/datas/photos/
+/datas/signatures/
+/datas/thumbs/
+/datas/tmp/
+/datas/users/
+
+You can change the rights by right clicking on the catalogue name and select properties.
+Then you get the following screen, and can change the rights to 777.
+
+8. After uploading, we need to create the SQL database that Cotonti is using.
+   Connect with myPHPadmin or similar to your site,
+   using the username and password received from your ISP.
+
+9. Select Import from the menu when you are logged in.
+
+10. Browse and select the Cotonti-x.x.x.sql file located under /sql.
+    Then press GO to create the Cotonti database.
+
+11. Now the database is created and your Cotonti distribution is uploaded.
+    Time to access the site.
+	Direct your browser to your site,
+	and you should see your new Cotonti homepage.
+
+12. The final task is for you to register to the site.
+    The first register that registers automatically becomes admin,
+	so register straight away by selecting "Register" in the menu,
+	and fill out your information. After registration is completed,
+	log in to your new site.
+
+13. Congratulations! Your site is now up and running.
+
+
+Note that additional plugins and languages are
+available via http://www.cotonti.com
