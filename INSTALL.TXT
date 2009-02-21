@@ -6,13 +6,19 @@ you'll need to have the minimum following server software pre-installed:
 
 * WWW Server (Apache, nginx, etc)
 * PHP 5.1 or higher
-* MySQL 4.1 or higher
+* MySQL 5.0 or higher
 
 
 SERVER CONFIGURATION
 --------------------
 
-You MUST ensure that PHP has been compiled with support for MySQL and Zlib
+You MUST ensure that PHP has been compiled with support for:
+* GD
+* Mbstring
+* MySQL
+* PCRE
+* Sessions
+* Zlib
 in order to successfully run Cotonti.
 
 
@@ -29,18 +35,31 @@ INSTALLATION
 1. Download the latest Cotonti distribution from the Cotonti website.
    http://www.cotonti.com
 
-2. Unpack the downloaded file on your computer using Winrar or similar.
+2. Unpack the downloaded file on your computer.
 
-3. Start your PHP Editor, and open config-simple.php,
-   which is located in the /datas directory.
+3. Open config-simple.php with any PHP editor of your choice,
+   the file is located in the /datas directory.
 
-4. Update the config-simple.php file with the values you have recieved from your ISP.
-   The data that needs to be updated is:
+4. Update the config-simple.php file with the values you have recieved from your
+   HSP (Hosting Service Provider). The data that needs to be updated is:
 
-* Database host URL. If no host is received from your ISP, leave it to localhost
-* Database user
-* Database password
-* Database name
+$cfg['mysqlhost']
+* Database host URL. If no host is received from your ISP, leave it to
+  localhost.
+
+$cfg['mysqluser']
+* Database user name, as provided by your host
+
+$cfg['mysqlpassword']
+* Database user password
+
+$cfg['mysqldb']
+* Database name. The database must exist before you run Cotonti for the first
+time.
+
+$cfg['mainurl']
+* Site URL. Set this to your site URL. Examples: 'http://your_site.com',
+  'http://www.your_site/subfolder'.
 
 5. After update rename config-simple.php to config.php
 
@@ -48,9 +67,9 @@ INSTALLATION
    and start uploading the Cotonti distribution to your root directory.
    You do not need to upload the /sql directory,
    since it only contains documentation and database creation scripts.
-   Make sure you upload to the right directory. Most ISP?s web directory is /,
-   but a few might have /html or /home as thw web root directory.
-   This should however be mentioned in the information received from your ISP.
+   Make sure you upload to the right directory. Most HSPs' web directory is /,
+   but a few might have /html, /htdocs or /home as the web root directory.
+   This should however be mentioned in the information received from your HSP.
    If nothing is mentioned, you assume it is /.
 
 7. There are a number of catalogs that you need to change the write access to (CHMOD).
@@ -68,13 +87,28 @@ INSTALLATION
 You can change the rights by right clicking on the catalogue name and select properties.
 Then you get the following screen, and can change the rights to 777.
 
+8. If you want to use a custom skin for your site, you can get it from
+   http://www.cotonti.com/downloads/skins/ or elsewhere. Then you need to put
+   it to the /skins folder of your site.
+
+   The next step is to update your config.php:
+
+$cfg['defaultskin']
+* This should point to your skins's name. It's the name of the directory in
+/skins folder.
+
+$cfg['defaulttheme']
+* This should point to your skin's main CSS file. Usually it is the same as
+skin's name or 'style'. For more information about themes, visit
+http://www.cotonti.com/docs/en/skins/theme_support_in_skins
+
 8. After uploading, we need to create the SQL database that Cotonti is using.
    Connect with myPHPadmin or similar to your site,
-   using the username and password received from your ISP.
+   using the username and password received from your Hosting Service Provider.
 
 9. Select Import from the menu when you are logged in.
 
-10. Browse and select the Cotonti-x.x.x.sql file located under /sql.
+10. Browse and select the cotonti-x.x.x.sql file located under /sql.
     Then press GO to create the Cotonti database.
 
 11. Now the database is created and your Cotonti distribution is uploaded.
