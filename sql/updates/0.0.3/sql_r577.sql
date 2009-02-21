@@ -1,3 +1,0 @@
-/* r577 Tags plugin update */
-INSERT INTO sed_config (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'tags', '10', 'more', 3, '1', '', 'Show All Tags link in tag clouds');
-INSERT INTO `sed_plugins` (`pl_hook`, `pl_code`, `pl_part`, `pl_title`, `pl_file`, `pl_order`, `pl_active`) VALUES ('header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1);

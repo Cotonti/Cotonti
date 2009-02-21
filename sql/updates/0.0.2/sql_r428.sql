@@ -1,2 +1,0 @@
-/* r428 ratings allow rating change */
-INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'ratings', '02', 'ratings_allowchange', 3, '0');
