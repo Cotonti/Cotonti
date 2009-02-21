@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=system/header.php
-Version=102
-Updated=2006-apr-17
-Type=Core
-Author=Neocrome
-Description=Global header
-[END_SED]
-==================== */
+/**
+ * Global header
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 

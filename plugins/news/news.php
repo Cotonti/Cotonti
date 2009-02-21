@@ -73,7 +73,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
 	while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; }
 
-	$news = new XTemplate(sed_skinfile('news'));
+	$news = new XTemplate(sed_skinfile('news', true));
 
 	while ($pag = sed_sql_fetcharray($sql))
 	{

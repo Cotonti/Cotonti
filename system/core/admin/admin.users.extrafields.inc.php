@@ -1,14 +1,13 @@
 <?PHP
-/* ====================
-[BEGIN_SED]
-File=admin.users.extrafields.inc.php
-Version=0.0.2
-Updated=2009-jan-03
-Type=Core.admin
-Author=medar
-Description=Extra fields editor for users part (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
-[END_SED]
-==================== */
+/**
+ * Administration panel - Extra fields editor for users part
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author medar, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
@@ -287,4 +286,5 @@ function get_default_html_construction($type)
 	}
 	return $html;
 }
+
 ?>

@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=admin.statistics.hits.inc.php
-Version=110
-Updated=2006-jun-30
-Type=Core.admin
-Author=Neocrome
-Description=Administration panel
-[END_SED]
-==================== */
+/**
+ * Administration panel
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
@@ -64,7 +59,7 @@ else
 	$max_date = $rowmax['stat_name'];
 	$max_hits = $rowmax['stat_value'];
 
-	$L['adm_maxhits'] = (empty($L['adm_maxhits'])) ? "Maximum hitcount was reached %1\$s, %2\$s pages displayed this day." : $L['adm_maxhits']; 
+	$L['adm_maxhits'] = (empty($L['adm_maxhits'])) ? "Maximum hitcount was reached %1\$s, %2\$s pages displayed this day." : $L['adm_maxhits'];
 
 	$adminmain = sprintf($L['adm_maxhits'], $max_date, $max_hits);
 

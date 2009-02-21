@@ -1,18 +1,13 @@
 <?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=admin.rightsbyitem.inc.php
-Version=120
-Updated=2007-feb-20
-Type=Core.admin
-Author=Neocrome
-Description=Rights
-[END_SED]
-==================== */
+/**
+ * Administration panel - Rights
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
 
