@@ -1,4 +1,0 @@
-/* r372 Fix, adding new hook for MarkitUp!, add search url style config */ 
-DELETE FROM `sed_plugins` WHERE `pl_code` = 'markitup' AND `pl_file` = 'markitup.ajax';
-REPLACE INTO `sed_plugins` (`pl_id` ,`pl_hook` ,`pl_code` ,`pl_part` ,`pl_title` ,`pl_file` ,`pl_order` ,`pl_active`) VALUES (NULL , 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', '10', '1');
-INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('plug', 'search', '1', 'searchurl', 2, 'Normal', 'Normal,Single', 'Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
