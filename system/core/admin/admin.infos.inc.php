@@ -9,10 +9,12 @@
  * @license BSD
  */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['auth_read']);
+
+$t = new XTemplate(sed_skinfile('admin.infos.inc', false, true));
 
 $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=infos'), $L['adm_infos']);
@@ -20,20 +22,20 @@ $adminhelp = $L['adm_help_versions'];
 
 @error_reporting(0);
 
-$adminmain .= (function_exists('phpversion')) ? $L['adm_phpver']." : ".phpversion()."<br />" : '' ;
-$adminmain .= (function_exists('zend_version')) ? $L['adm_zendver']." : ".zend_version()."<br />" : '';
-$adminmain .= (function_exists('php_sapi_name')) ? $L['adm_interface']." : ".php_sapi_name()."<br />" : '';
-$adminmain .= (function_exists('php_uname')) ? $L['adm_os']." : ".php_uname() : '';
+$t -> assign(array(
+	"ADMIN_INFOS_PHPVER" => (function_exists('phpversion')) ? phpversion() : $L['adm_help_config'],
+	"ADMIN_INFOS_ZENDVER" => (function_exists('zend_version')) ? zend_version() : $L['adm_help_config'],
+	"ADMIN_INFOS_INTERFACE" => (function_exists('php_sapi_name')) ? php_sapi_name() : $L['adm_help_config'],
+	"ADMIN_INFOS_OS" => (function_exists('php_uname')) ? php_uname() : $L['adm_help_config'],
+	"ADMIN_INFOS_DATE" => date("Y-m-d H:i"),
+	"ADMIN_INFOS_GMDATE" => gmdate("Y-m-d H:i"),
+	"ADMIN_INFOS_GMTTIME" => $usr['gmttime'],
+	"ADMIN_INFOS_USRTIME" => date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone'] * 3600),
+	"ADMIN_INFOS_TIMETEXT" => $usr['timetext']
+));
 
-$adminmain .= "<h4>".$L['adm_clocks']." :</h4>";
-$adminmain .= "<table class=\"cells\">";
-$adminmain .= "<tr><td>".$L['adm_time1']."</td><td> ".date("Y-m-d H:i")." </td></tr>";
-$adminmain .= "<tr><td>".$L['adm_time2']."</td><td> ".gmdate("Y-m-d H:i")." GMT </td></tr>";
-$adminmain .= "<tr><td>".$L['adm_time3']."</td>";
-$adminmain .= "<td>".$usr['gmttime']." </td></tr>";
-$adminmain .= "<tr><td>".$L['adm_time4']." : </td>";
-$adminmain .= "<td>".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone'] * 3600)." ".$usr['timetext']." </td></tr>";
-$adminmain .= "</table>";
+$t -> parse("INFOS");
+$adminmain = $t -> text("INFOS");
 
 @error_reporting(7);
 

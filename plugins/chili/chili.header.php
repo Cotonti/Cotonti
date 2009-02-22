@@ -11,7 +11,7 @@ Order=10
 ==================== */
 
 /**
- * chili connector for Seditio
+ * chili connector for Cotonti
  *
  * @package Cotonti
  * @version 0.0.3

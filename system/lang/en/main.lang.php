@@ -1,23 +1,13 @@
-<?php
-
-/*  ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
------------------------
-Seditio language pack
-Language : English (code:en)
-Localization done by : Neocrome
------------------------
-[BEGIN_SED]
-File=system/lang/en/main.lang.php
-Version=120
-Updated=2007-mar-03
-Type=Lang
-Author=Neocrome
-Description=Language main
-[END_SED]
-==================== */
+<?PHP
+/**
+ * English language pack
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 /* ====== Overall ====== */
 
@@ -542,7 +532,7 @@ $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commentadded'] = 'Done, comment added';
 $L['com_regonly'] = 'Only registered users can post new comments';
 $L['com_nocommentsyet'] = 'No comments yet';
-$L['com_closed'] = 'Adding comments has been disabled for this item.'; // N-0.1.0  
+$L['com_closed'] = 'Adding comments has been disabled for this item.'; // N-0.1.0
 
 /* ====== Forums ======= */
 
@@ -962,5 +952,6 @@ $L['rss_comments_item_desc'] = 'Last comments on page';
 $L['rss_comment'] = 'Comment from';
 $L['rss_original'] = 'Original message';
 $L['rss_topic_item_desc'] = 'Last posts in topic';
-$L['rss_allforums_item_title'] = "Last posts on forum"; 
+$L['rss_allforums_item_title'] = "Last posts on forum";
+
 ?>

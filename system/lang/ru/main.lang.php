@@ -1,23 +1,13 @@
-<?php
-
-/*  ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
------------------------
-Seditio language pack
-Language : Russian (code:ru)
-Localization done by : Antar
------------------------
-[BEGIN_SED]
-File=system/lang/ru/main.lang.php
-Version=125 b2
-Updated=2008-aug-04
-Type=Lang
-Author=Neocrome
-Description=Language main
-[END_SED]
-==================== */
+<?PHP
+/**
+ * Russian language pack
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Antar, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 /* ====== Overall ====== */
 
@@ -1045,6 +1035,6 @@ $L['rss_comments_item_desc'] = 'Лента комментариев страни
 $L['rss_comment'] = 'Коммент от';
 $L['rss_original'] = 'Комментируемая страница';
 $L['rss_topic_item_desc'] = 'Последние сообщения топика';
-$L['rss_allforums_item_title'] = "Последние сообщения на форуме"; 
+$L['rss_allforums_item_title'] = "Последние сообщения на форуме";
 
 ?>

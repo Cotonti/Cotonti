@@ -1,5 +1,4 @@
-<?php
-
+<?PHP
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -10,7 +9,7 @@ http://www.neocrome.net
  * Russian language pack for Admin area.
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.3
  * @author Antar, Dayver, esclkm, Trustmaster and other Cotonti Team members
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -340,6 +339,7 @@ $L['adm_byweek'] = 'По неделям';
 
 $L['adm_ratings_totalitems'] = 'Всего оценённых страниц';
 $L['adm_ratings_totalvotes'] = 'Всего голосов';
+$L['adm_ratings_already_del'] = 'Рейтинг удалён';// 0.0.3
 $L['adm_help_ratings'] = 'Чтобы обнулить рейтинг, просто удалите его. Он будет воссоздан с первым новым голосом.';
 
 /* ====== Trash can ====== */
@@ -512,11 +512,16 @@ $L['adm_help_users_extrafield'] = 'Хинт: Поле "Базовый HTML" ус
 <br>
 <b>Новые тэги в tpl-файлах:</b><br>
 <br>
-users.profile.tpl: {USERS_PROFILE_XXXXX}, {USERS_PROFILE_XXXXX_TITLE} <br> <br>  
-users.edit.tpl: {USERS_EDIT_XXXXX}, {USERS_EDIT_XXXXX_TITLE}  <br><br>  
+users.profile.tpl: {USERS_PROFILE_XXXXX}, {USERS_PROFILE_XXXXX_TITLE} <br> <br>
+users.edit.tpl: {USERS_EDIT_XXXXX}, {USERS_EDIT_XXXXX_TITLE}  <br><br>
 users.details.tpl: {USERS_DETAILS_XXXXX}, {USERS_DETAILS_XXXXX_TITLE}<br><br>
 user.register.tpl: {USERS_REGISTER_XXXXX}, {USERS_REGISTER_XXXXX_TITLE}<br><br>
 forums.posts.tpl: {FORUMS_POSTS_ROW_USERXXXXX}, {FORUMS_POSTS_ROW_USERXXXXX_TITLE}<br>
 ';
+
+/* ====== Referers ========*/
+// 0.0.3
+$L['adm_ref_prune'] = "Очищено";
+$L['adm_ref_prunelowhits'] = "Записи с количеством просмотров меньше 5, успешно удалены";
 
 ?>

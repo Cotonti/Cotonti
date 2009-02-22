@@ -1,23 +1,13 @@
-<?php
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
------------------------
-Seditio language pack
-LANG : Russian (code:ru)
-Localization done by : Antar, http://subs.com.ru
------------------------
-[BEGIN_SED]
-File=system/lang/ru/message.lang.php
-Version=125 b2
-Updated=2008-aug-04
-Type=Lang
-Author=Neocrome
-Description=Language messages
-[END_SED]
-==================== */
+<?PHP
+/**
+ * Russian language pack
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Antar, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 $L['msg_Message'] = "Сообщение";
 $L['msg_Error'] = "Ошибка";

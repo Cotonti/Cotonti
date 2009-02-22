@@ -9,10 +9,12 @@
  * @license BSD
  */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['auth_read']);
+
+$t = new XTemplate(sed_skinfile('admin.referers.inc', false, true));
 
 $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=referers'), $L['Referers']);
@@ -21,47 +23,81 @@ $adminhelp = $L['adm_help_referers'];
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
-if ($a=='prune' && $usr['isadmin'])
-	{ $sql = sed_sql_query("TRUNCATE $db_referers"); }
-elseif ($a=='prunelowhits' && $usr['isadmin'])
-	{ $sql = sed_sql_query("DELETE FROM $db_referers WHERE ref_count<6"); }
+if($a=='prune' && $usr['isadmin'])
+{
+	$sql = sed_sql_query("TRUNCATE $db_referers");
+	$adminref = ($sql) ? $L['adm_ref_prune'] : $L['Error'];
+
+}
+elseif($a=='prunelowhits' && $usr['isadmin'])
+{
+	$sql = sed_sql_query("DELETE FROM $db_referers WHERE ref_count<6");
+	$adminref = ($sql) ? $L['adm_ref_prunelowhits'] : $L['Error'];
+}
+
+if(!empty($adminref))
+{
+	$t -> assign(array("ADMIN_REFERERS_MESAGE" => $adminref));
+	$t -> parse("REFERERS.MESAGE");
+}
 
 $totalitems = sed_sql_rowcount($db_referers);
 $pagnav = sed_pagination(sed_url('admin','m=referers'), $d, $totalitems, $cfg['maxrowsperpage']);
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=referers'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 $sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
-$adminmain .= ($usr['isadmin']) ? "<ul><li>".$L['adm_purgeall']." : [<a href=\"".sed_url('admin', "m=referers&a=prune&".sed_xg())."\">x</a>]</li><li>".$L['adm_ref_lowhits']." : [<a href=\"".sed_url('admin', "m=referers&a=prunelowhits&".sed_xg())."\">x</a>]</li></ul>" : '';
-$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
-$adminmain .= "<table class=\"cells\"><tr><td class=\"coltop\">".$L['Referer']."</td><td class=\"coltop\">".$L['Hits']."</td></tr>";
 
-if (sed_sql_numrows($sql)>0)
+if($usr['isadmin'])
+{
+	$t -> assign(array(
+		"ADMIN_REFERERS_URL_PRUNE" => sed_url('admin', "m=referers&a=prune&".sed_xg()),
+		"ADMIN_REFERERS_URL_PRUNELOWHITS" => sed_url('admin', "m=referers&a=prunelowhits&".sed_xg())
+	));
+	$t -> parse("REFERERS.REFERERS_IS_ADMIN");
+}
+
+if(sed_sql_numrows($sql)>0)
+{
+	while($row = mysql_fetch_array($sql))
 	{
-	while ($row = mysql_fetch_array($sql))
-		{
 		preg_match_all("|//([^/]+)/|", $row['ref_url'], $a);
 		$referers[$a[1][0]][$row['ref_url']] = $row['ref_count'];
-		}
+	}
 
 	$ii = 0;
 
 	foreach($referers as $referer => $url)
-		{
-		$referer = htmlspecialchars($referer);
-		$adminmain .= "<tr><td colspan=\"2\"><a href=http://".$referer.">".$referer."</a></td></tr>";
-		foreach ($url as $uri=>$count)
-			{
-			$uri1 = sed_cutstring($uri, 48);
-			$adminmain .= "<tr><td>&nbsp; &nbsp; <a href=\"".htmlspecialchars($uri)."\">".htmlspecialchars($uri1)."</a></td>";
-			$adminmain .= "<td style=\"text-align:right;\">".$count."</td></tr>";
-			}
-		$ii++;
-		}
-	$adminmain .= "<tr><td colspan=\"2\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr>";
-	}
-else
-	{ $adminmain .= "<tr><td colspan=\"2\">".$L['None']."</td></tr>"; }
+	{
 
-$adminmain .= "</table>";
+		$t -> assign(array("ADMIN_REFERERS_REFERER" => htmlspecialchars($referer)));
+		$t -> parse("REFERERS.REFERERS_NOT_EMPTY.REFERERS_ROW");
+
+		foreach($url as $uri=>$count)
+		{
+			$t -> assign(array(
+				"ADMIN_REFERERS_URI" => htmlspecialchars(sed_cutstring($uri, 48)),
+				"ADMIN_REFERERS_COUNT" => $count
+			));
+			$t -> parse("REFERERS.REFERERS_NOT_EMPTY.REFERERS_ROW.REFERERS_URI");
+		}
+		$ii++;
+	}
+
+	$t -> assign(array(
+		"ADMIN_REFERERS_PAGINATION_PREV" => $pagination_prev,
+		"ADMIN_REFERERS_PAGNAV" => $pagnav,
+		"ADMIN_REFERERS_PAGINATION_NEXT" => $pagination_next,
+		"ADMIN_REFERERS_TOTALITEMS" => $totalitems,
+		"ADMIN_REFERERS_ON_PAGE" => $ii
+	));
+	$t -> parse("REFERERS.REFERERS_NOT_EMPTY");
+}
+else
+{
+	$t -> parse("REFERERS.REFERERS_EMPTY");
+}
+
+$t -> parse("REFERERS");
+$adminmain = $t -> text("REFERERS");
 
 ?>

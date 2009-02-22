@@ -1,8 +1,6 @@
 <!-- BEGIN: MAIN -->
-
 	<div class="mboxHD">{PHP.L.Tags}</div>
 	<div class="mboxBody">
-
 		<div class="pageBody">
 			<div class="pageTop"></div>
 			<div class="pageText">
@@ -15,17 +13,14 @@
 		</div>
 
 		<div class="fmsg" style="padding:0 5px; width:770px; overflow-x:auto;">
-		
 		<!-- BEGIN: TAGS_CLOUD -->
 		<div class="block">
 			{TAGS_CLOUD_BODY}
 		</div>
 		<!-- END: TAGS_CLOUD -->
-		
-		<!-- BEGIN: TAGS_RESULT -->
 
+		<!-- BEGIN: TAGS_RESULT -->
 		<h3>{TAGS_RESULT_TITLE}</h3>
-		
 		<table class="cells" cellspacing="1" cellpadding="2">
 			<tr><td style="background:transparent;"><div class="pagnav">{TAGS_PAGEPREV} {TAGS_PAGNAV} {TAGS_PAGENEXT}</div></td></tr>
 			<!-- BEGIN: TAGS_RESULT_ROW -->
@@ -36,13 +31,9 @@
 				</td>
 			</tr>
 			<!-- END: TAGS_RESULT_ROW -->
-
 			<tr><td style="background:transparent;"><div class="pagnav">{TAGS_PAGEPREV} {TAGS_PAGNAV} {TAGS_PAGENEXT}</div></td></tr>
 		</table>
-		
 		<!-- END: TAGS_RESULT -->
-		
 		</div>
 	</div>
-
 <!-- END: MAIN -->

@@ -1,5 +1,4 @@
-<?php
-
+<?PHP
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -340,6 +339,7 @@ $L['adm_byweek'] = 'By week'; 		// New in v110
 
 $L['adm_ratings_totalitems'] = 'Total pages rated';
 $L['adm_ratings_totalvotes'] = 'Total votes';
+$L['adm_ratings_already_del'] = 'Rating removed';// 0.0.3
 $L['adm_help_ratings'] = 'To reset a rating, simply delete it. It will be re-created with the first new vote.';
 
 /* ====== Trash can ====== */
@@ -516,11 +516,16 @@ $L['adm_help_users_extrafield'] = '<b>Base HTML</b> set automaticaly if you leav
 <br>
 <b>New tags in tpl files:</b><br>
 <br>
-users.profile.tpl: {USERS_PROFILE_XXXXX}, {USERS_PROFILE_XXXXX_TITLE} <br><br>   
-users.edit.tpl: {USERS_EDIT_XXXXX}, {USERS_EDIT_XXXXX_TITLE}  <br><br>  
+users.profile.tpl: {USERS_PROFILE_XXXXX}, {USERS_PROFILE_XXXXX_TITLE} <br><br>
+users.edit.tpl: {USERS_EDIT_XXXXX}, {USERS_EDIT_XXXXX_TITLE}  <br><br>
 users.details.tpl: {USERS_DETAILS_XXXXX}, {USERS_DETAILS_XXXXX_TITLE}<br><br>
 user.register.tpl: {USERS_REGISTER_XXXXX}, {USERS_REGISTER_XXXXX_TITLE}<br><br>
 forums.posts.tpl: {FORUMS_POSTS_ROW_USERXXXXX}, {FORUMS_POSTS_ROW_USERXXXXX_TITLE}<br>
 ';
+
+/* ====== Referers ========*/
+// 0.0.3
+$L['adm_ref_prune'] = "Cleaned";
+$L['adm_ref_prunelowhits'] = "Referers with the number of visitors is less 5 successfully removed";
 
 ?>
