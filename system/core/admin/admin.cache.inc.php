@@ -9,21 +9,21 @@
  * @license BSD
  */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
+$t = new XTemplate(sed_skinfile('admin.cache.inc', false, true));
+
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=cache'), $L['adm_internalcache']);
 
-$t = new XTemplate(sed_skinfile('admin.cache.inc', false, true));
-
-if ($a=='purge')
+if($a == 'purge')
 {
 	$admincache = (sed_check_xg() && sed_cache_clearall()) ? $L['adm_purgeall_done'] : $L['Error'];
 }
-elseif ($a=='delete')
+elseif($a == 'delete')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='$id'");
@@ -33,7 +33,7 @@ elseif ($a=='delete')
 $sql = sed_sql_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
 $cachesize = 0;
 
-while ($row = sed_sql_fetcharray($sql))
+while($row = sed_sql_fetcharray($sql))
 {
 	$row['c_value'] = sed_cc($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);
@@ -44,7 +44,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"ADMIN_CACHE_EXPIRE" => ($row['c_expire']-$sys['now']),
 		"ADMIN_CACHE_SIZE" => $row['size'],
 		"ADMIN_CACHE_VALUE" => ($a=='showall') ? $row['c_value'] : sed_cutstring($row['c_value'], 80)
-		));
+	));
 	$t -> parse("CACHE.ADMIN_CACHE_ROW");
 }
 
@@ -59,7 +59,7 @@ $t -> assign(array(
 	"ADMIN_CACHE_URL_PURGE" => sed_url('admin', 'm=cache&a=purge&'.sed_xg()),
 	"ADMIN_CACHE_URL_SHOWALL" => sed_url('admin', 'm=cache&a=showall'),
 	"ADMIN_CACHE_CACHESIZE" => $cachesize
-	));
+));
 
 $t -> parse("CACHE");
 $adminmain = $t -> text("CACHE");

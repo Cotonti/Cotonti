@@ -1,18 +1,15 @@
 <!-- BEGIN: MAIN -->
-
 <!-- BEGIN: COMEDIT_TITLE -->
 <div id="title">
 	<a href="{COMEDIT_TITLE_URL}">{COMEDIT_TITLE}</a>
 </div>
 <!-- END: COMEDIT_TITLE -->
 
-
 <!-- BEGIN: COMEDIT_ERROR -->
 <div class="block">
 	<span style="color:red;">{COMEDIT_ERROR_BODY}</span>
 </div>
 <!-- END: COMEDIT_ERROR -->
-
 
 <!-- BEGIN: COMEDIT_FORM_EDIT -->
 <div class="block">
@@ -43,13 +40,10 @@
 </div>
 <!-- END: COMEDIT_FORM_EDIT -->
 
-
 <!-- BEGIN: COMEDIT_EMPTY -->
 <div class="block">
 	<b>{GUESTBOOK_EMPTYTEXT}</b>
 </div>
 <!-- END: COMEDIT_EMPTY -->
-
-
 <br />
 <!-- END: MAIN -->

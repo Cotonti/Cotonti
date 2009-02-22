@@ -9,37 +9,44 @@
  * @license BSD
  */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['isadmin']);
+
+$t = new XTemplate(sed_skinfile('admin.pfs.inc', false, true));
 
 $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=pfs'), $L['PFS']);
 $adminhelp = $L['adm_help_pfs'];
 
-$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=pfs")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
-$adminmain .= "<li><a href=\"".sed_url('admin', "m=pfs&s=allpfs")."\">".$L['adm_allpfs']."</a></li>";
-$adminmain .= "<li><a href=\"".sed_url('pfs', "userid=0")."\">".$L['SFS']."</a></li></ul>";
-
-
-$adminmain .= "<h4>".$L['adm_gd']." :</h4>";
-
-if (!function_exists('gd_info'))
-	{
-	$adminmain .= "<p>".$L['adm_nogd']."</p>";
-	}
-   else
-	{
+if(!function_exists('gd_info'))
+{
+	$t -> parse("PFS.MESAGE");
+}
+else
+{
 	$gd_datas = gd_info();
-	$adminmain .= "<p>";
-	foreach ($gd_datas as $k => $i)
+	foreach($gd_datas as $k => $i)
+	{
+		if(mb_strlen($i) < 2)
 		{
-		$adminmain .= $k." : ";
-		if (mb_strlen($i)<2) { $i = $sed_yesno[$i]; }
-		$adminmain .= $i."<br />";
+			$i = $sed_yesno[$i];
 		}
-	$adminmain .= "</p>";
+		$t -> assign(array(
+			"ADMIN_PFS_DATAS_NAME" => $k,
+			"ADMIN_PFS_DATAS_ENABLE_OR_DISABLE" => $i
+		));
+		$t -> parse("PFS.PFS_ROW");
 	}
+}
+
+$t -> assign(array(
+	"ADMIN_PFS_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=pfs"),
+	"ADMIN_PFS_URL_ALLPFS" => sed_url('admin', "m=pfs&s=allpfs"),
+	"ADMIN_PFS_URL_SFS" => sed_url('pfs', "userid=0")
+));
+$t -> parse("PFS");
+$adminmain = $t -> text("PFS");
 
 ?>

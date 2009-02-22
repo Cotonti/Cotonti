@@ -9,10 +9,12 @@
  * @license BSD
  */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('comments', 'a');
 sed_block($usr['isadmin']);
+
+$t = new XTemplate(sed_skinfile('admin.comments.inc', false, true));
 
 $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=comments'), $L['Comments']);
@@ -21,9 +23,7 @@ $adminhelp = $L['adm_help_comments'];
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
-$t = new XTemplate(sed_skinfile('admin.comments.inc', false, true));
-
-if ($a=='delete')
+if($a == 'delete')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
@@ -38,7 +38,7 @@ $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $
 
 $ii = 0;
 
-while ($row = sed_sql_fetcharray($sql))
+while($row = sed_sql_fetcharray($sql))
 {
 	$row['com_text'] = sed_cc(sed_cutstring($row['com_text'], 40));
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);
@@ -83,7 +83,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"ADMIN_COMMENTS_DATE" => date($cfg['dateformat'], $row['com_date']),
 		"ADMIN_COMMENTS_TEXT" => $row['com_text'],
 		"ADMIN_COMMENTS_URL" => $row['com_url']
-		));
+	));
 	$t -> parse("COMMENTS.ADMIN_COMMENTS_ROW");
 	$ii++;
 }
@@ -101,7 +101,7 @@ $t -> assign(array(
 	"ADMIN_COMMENTS_PAGINATION_NEXT" => $pagination_next,
 	"ADMIN_COMMENTS_TOTALITEMS" => $totalitems,
 	"ADMIN_COMMENTS_COUNTER_ROW" => $ii
-	));
+));
 
 $t -> parse("COMMENTS");
 $adminmain = $t -> text("COMMENTS");

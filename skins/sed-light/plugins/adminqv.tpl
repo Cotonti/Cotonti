@@ -63,7 +63,6 @@
 		</table>
 
 		<h4>Cotonti :</h4>
-
 		<table class="cells">
 		<tr><td>{PHP.L.Version} / {PHP.L.Database}</td>
 		<td style="text-align:right;">{ADMINQV_VERSION} / {ADMINQV_DB_VERSION}</td></tr>

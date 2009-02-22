@@ -20,14 +20,14 @@ Order=10
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')){die('Wrong URL.');}
 
 require_once(sed_langfile('adminqv'));
 
 $t = new XTemplate(sed_skinfile('adminqv', true));
 
-$timeback = $sys['now_offset'] - (7 * 86400); // 7 days
-$timeback_stats = 15; // 15 days
+$timeback = $sys['now_offset'] - (7 * 86400);// 7 days
+$timeback_stats = 15;// 15 days
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_regdate>'$timeback'");
 $newusers = sed_sql_result($sql, 0, "COUNT(*)");
@@ -48,7 +48,7 @@ $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
 $newpms = sed_sql_result($sql, 0, "COUNT(*)");
 
 $sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_stats);
-while ($row = sed_sql_fetcharray($sql))
+while($row = sed_sql_fetcharray($sql))
 {
 	$y = mb_substr($row['stat_name'], 0, 4);
 	$m = mb_substr($row['stat_name'], 5, 2);
@@ -61,7 +61,7 @@ $hits_d_max = max($hits_d);
 
 $sql = sed_sql_query("SHOW TABLES");
 
-while ($row = sed_sql_fetchrow($sql))
+while($row = sed_sql_fetchrow($sql))
 {
 	$table_name = $row[0];
 	$status = sed_sql_query("SHOW TABLE STATUS LIKE '$table_name'");
@@ -69,7 +69,7 @@ while ($row = sed_sql_fetchrow($sql))
 	$tables[] = $status1;
 }
 
-while (list($i,$dat) = each($tables))
+while(list($i,$dat) = each($tables))
 {
 	$table_length = $dat['Index_length']+$dat['Data_length'];
 	$total_length += $table_length;
@@ -86,7 +86,7 @@ $totalplugins = sed_sql_numrows($sql);
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_plugins");
 $totalhooks = sed_sql_result($sql, 0, "COUNT(*)");
 
-foreach ($hits_d as $day => $hits)
+foreach($hits_d as $day => $hits)
 {
 	$percentbar = floor(($hits / $hits_d_max) * 100);
 	$t -> assign(array(
@@ -119,6 +119,6 @@ $t -> assign(array(
 	'ADMINQV_MORE_HITS_URL'=> sed_url('admin', 'm=hits')
 ));
 $t -> parse('ADMINQV');
-$adminmain = $t -> text("ADMINQV");
+$adminmain .= $t -> text("ADMINQV");
 
 ?>

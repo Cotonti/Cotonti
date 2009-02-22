@@ -1,23 +1,13 @@
-<?php
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
------------------------
-Seditio language pack
-Language : English (code:en)
-Localization done by : Neocrome
------------------------
-[BEGIN_SED]
-File=system/lang/en/message.lang.php
-Version=110
-Updated=2006-aug-16
-Type=Lang
-Author=Neocrome
-Description=Language messages
-[END_SED]
-==================== */
+<?PHP
+/**
+ * English language pack
+ *
+ * @package Cotonti
+ * @version 0.0.3
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 $L['msg_Message'] = "Message";
 $L['msg_Error'] = "Error";
