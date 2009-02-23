@@ -27,14 +27,14 @@ $c = sed_import('c','G','TXT');
 
 if (empty($d))	{ $d = '0'; }
 if (empty($c))
-	{
-		$c = $cfg['plugin']['news']['category'];
-	}
+{
+	$c = $cfg['plugin']['news']['category'];
+}
 else
-	{
-		$checkin = strpos($sed_cat[$c]['path'], $sed_cat[$cfg['plugin']['news']['category']]['path']);
-		$c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
-	}
+{
+	$checkin = strpos($sed_cat[$c]['path'], $sed_cat[$cfg['plugin']['news']['category']]['path']);
+	$c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
+}
 
 if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 {
@@ -151,6 +151,8 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 						$pag['page_html'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
 					}
 
+					sed_news_strip_newpage($pag['page_html']);
+
 					$cfg['parsebbcodepages'] ? $news->assign('PAGE_ROW_TEXT', sed_post_parse($pag['page_html'], 'pages'))
 					: $news->assign('PAGE_ROW_TEXT', sed_cc($pag['page_text']));
 				}
@@ -163,6 +165,9 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 						$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);
 						$pag['page_text'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
 					}
+
+					sed_news_strip_newpage($pag['page_text']);
+
 					$pag['page_text'] = sed_post_parse($pag['page_text'], 'pages');
 					$news->assign('PAGE_ROW_TEXT', $pag['page_text']);
 				}
@@ -177,6 +182,22 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 	$news->parse("NEWS");
 	$t->assign("INDEX_NEWS", $news->text("NEWS"));
 
+}
+
+/**
+ * Cuts the news page after the first page (if multipage)
+ *
+ * @param string $html Page body
+ */
+function sed_news_strip_newpage(&$html)
+{
+	$newpage = mb_strpos($html, '[newpage]');
+
+	if ($newpage !== false)
+	{
+		$html = mb_substr($html, 0, $newpage);
+		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
+	}
 }
 
 ?>
