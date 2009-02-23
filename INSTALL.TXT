@@ -6,7 +6,7 @@ you'll need to have the minimum following server software pre-installed:
 
 * WWW Server (Apache, nginx, etc)
 * PHP 5.1 or higher
-* MySQL 5.0 or higher
+* MySQL 4.1 or higher
 
 
 SERVER CONFIGURATION
