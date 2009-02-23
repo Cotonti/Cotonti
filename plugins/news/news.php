@@ -125,6 +125,8 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 						$pag['page_html'] .= "<a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a>";
 					}
 
+					sed_news_strip_newpage($pag['page_html']);
+
 					$cfg['parsebbcodepages'] ? $news->assign('PAGE_ROW_TEXT', sed_post_parse($pag['page_html'], 'pages'))
 					: $news->assign('PAGE_ROW_TEXT', sed_cc($pag['page_text']));
 				}
@@ -137,6 +139,9 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 						$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore)."<br />";
 						$pag['page_text'] .= "<a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a>";
 					}
+
+					sed_news_strip_newpage($pag['page_text']);
+
 					$pag['page_text'] = sed_post_parse($pag['page_text'], 'pages');
 					$news->assign('PAGE_ROW_TEXT', $pag['page_text']);
 				}
@@ -151,6 +156,22 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 	$news->parse("NEWS");
 	$t->assign("INDEX_NEWS", $news->text("NEWS"));
 
+}
+
+/**
+ * Cuts the news page after the first page (if multipage)
+ * 
+ * @param string $html Page body
+ */
+function sed_news_strip_newpage(&$html)
+{
+	$newpage = mb_strpos($html, '[newpage]');
+
+	if ($newpage !== false)
+	{
+		$html = mb_substr($html, 0, $newpage);
+		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
+	}
 }
 
 ?>
