@@ -54,9 +54,9 @@ function sed_sql_connect($host, $user, $pass, $db)
 {
 	global $cfg;
 	$connection = @mysql_connect($host, $user, $pass) or sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
-	if (!version_compare(mysql_get_server_info($connection), '5.0.0', '>='))
+	if (!version_compare(mysql_get_server_info($connection), '4.1.0', '>='))
 	{
-		sed_diefatal('Cotonti system requirements: MySQL 5.0 or above.');
+		sed_diefatal('Cotonti system requirements: MySQL 4.1 or above.');
 	}
 
 	if (!empty($cfg['mysqlcharset']))
