@@ -257,7 +257,7 @@ if($pag['page_file'] > 0)
 			$pag['page_fileicon'] = "images/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
 			if (!file_exists($pag['page_fileicon']))
 			{ $pag['page_fileicon'] = "images/admin/page.gif"; }
-			$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\">";
+			$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\" />";
 		}
 		else
 		{ $pag['page_fileicon'] = ''; }
