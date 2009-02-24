@@ -36,13 +36,14 @@ if ($a=='update')
 	$row1 = sed_sql_fetcharray($sql1);
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row1['page_cat']);
-	sed_block($usr['isadmin']);
 
 	/* === Hook === */
 	$extp = sed_getextplugins('page.edit.update.first');
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
+	sed_block($usr['isadmin']);
+
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
 	$rpagealias = sed_import('rpagealias','P','ALP');
@@ -208,13 +209,14 @@ $pag['page_begin'] = sed_selectbox_date($pag['page_begin'] + $usr['timezone'] * 
 $pag['page_expire'] = sed_selectbox_date($pag['page_expire'] + $usr['timezone'] * 3600, 'long', '_exp');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
-sed_block($usr['isadmin']);
 
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.first');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+sed_block($usr['isadmin']);
+
 
 $page_form_delete = "<input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"0\" checked=\"checked\" />".$L['No'];
 $page_form_categories = sed_selectbox_categories($pag['page_cat'], 'rpagecat');

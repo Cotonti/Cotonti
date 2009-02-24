@@ -23,13 +23,14 @@ $r = sed_import('r','G','ALP');
 $c = sed_import('c','G','ALP');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
-sed_block($usr['auth_write']);
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.first');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+sed_block($usr['auth_write']);
+
 
 // Extra fields - getting
 $extrafields = array(); $number_of_extrafields = 0;
