@@ -2250,7 +2250,11 @@ function sed_get_uploadmax()
 	{
 		$val = ini_get($par);
 		$opt = strtoupper($val[strlen($val) - 1]);
-		$val_a[] = isset($opt_a[$opt]) ? $val * $opt_a[$opt] : (int)$val;
+		$val = isset($opt_a[$opt]) ? $val * $opt_a[$opt] : (int)$val;
+		if ($val > 0)
+		{
+			$val_a[] = $val;
+		}
 	}
 	return floor(min($val_a) / 1024); // KB
 }
