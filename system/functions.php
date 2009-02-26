@@ -1,11 +1,5 @@
 <?PHP
 
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
 /**
  * Main function library.
  *
@@ -2778,10 +2772,11 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 	}
 	else
 	{
-		$headers = (empty($headers)) ? "From: \"".$cfg['maintitle']."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n"."Content-Type: text/plain; charset=".$cfg['charset']."\n" : $headers;
+		$headers = (empty($headers)) ? "From: \"".$cfg['maintitle']."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
 		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
 		if($cfg['charset'] != 'us-ascii')
 		{
+			$headers .= "Content-Type: text/plain; charset=".$cfg['charset']."\n";
 			$headers .= "Content-Transfer-Encoding: 8bit\n";
 			$subject = mb_encode_mimeheader($subject, $cfg['charset'], 'B', "\n");
 		}
