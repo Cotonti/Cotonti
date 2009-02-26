@@ -190,9 +190,10 @@ elseif ($c == "section")
 
 			if (!$flag_private AND sed_auth('forums', $forum_id, 'R'))
 			{
+				$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? sed_url('forums', 'm=posts&id='.$post_id, "", true) : sed_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 				$items[$i]['description'] = $row['fp_html'];
-				$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('forums', "m=posts&id=$post_id", "", true);
+				$items[$i]['link'] = SED_ABSOLUTE_URL.$post_url;
 				$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 			}
 			$i++;
