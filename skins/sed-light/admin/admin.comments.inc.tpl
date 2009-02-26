@@ -1,10 +1,10 @@
 <!-- BEGIN: COMMENTS -->
+<ul><li><a href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li></ul>
 <!-- BEGIN: MESAGE -->
 <div class="error">
 {ADMIN_COMMENTS_MESAGE}
 </div>
 <!-- END: MESAGE -->
-<ul><li><a href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li></ul>
 <h4>{PHP.L.viewdeleteentries} :</h4>
 <table class="cells">
 <tr>

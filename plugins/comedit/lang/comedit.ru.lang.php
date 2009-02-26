@@ -1,6 +1,6 @@
 <?PHP
 /**
- * English language file
+ * Russian language file
  *
  * @package Cotonti
  * @version 0.0.3

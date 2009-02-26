@@ -63,6 +63,8 @@ $L['adm_warnings'] = 'Warnings';
 $L['adm_valqueue'] = 'Waiting for validation';
 $L['adm_required'] = '(Required)';
 $L['adm_clicktoedit'] = '(Click to edit)';
+$L['adm_queue_unvalidated'] = 'Unvalidated';// 0.0.3
+$L['adm_queue_validated'] = 'Validated';// 0.0.3
 
 /* ====== Banlist ====== */
 
@@ -304,6 +306,9 @@ $L['adm_polls_forumpolls'] = 'Polls from forums (recent at top) :'; // N-0.0.1
 $L['adm_polls_polltopic'] = 'Poll topic'; // N-0.0.1
 $L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.'; // N-0.0.2
 $L['adm_polls_on_page'] = 'on page'; // N-0.0.2
+$L['adm_polls_msg916_deleted'] = "Successfully deleted!";// 0.0.3
+$L['adm_polls_msg916_reset'] = "Successfully reset!";// 0.0.3
+$L['adm_polls_msg916_bump'] = "Successfully bumped!";// 0.0.3
 
 /* ====== Statistics ====== */
 

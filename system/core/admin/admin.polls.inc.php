@@ -9,12 +9,14 @@
  * @license BSD
  */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['isadmin']);
 
 require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+
+$t = new XTemplate(sed_skinfile('admin.polls.inc', false, true));
 
 $adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array (sed_url('admin', 'm=polls'), $L['Polls']);
@@ -23,9 +25,7 @@ $adminhelp = $L['adm_help_polls'];
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
-$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=polls")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
-
-if ($a=='delete')
+if($a == 'delete')
 {
 	sed_check_xg();
 	$id2 = "v".$id;
@@ -38,145 +38,157 @@ if ($a=='delete')
 	$num = $num + sed_sql_affectedrows();
 	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 	$num = $num + sed_sql_affectedrows();
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=102&num=".$num, '', true));
-	exit;
+	$adminpollsmsg = $L['adm_polls_msg916_deleted'];
 }
-
-elseif ($a=='reset')
+elseif($a == 'reset')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
 	$num = sed_sql_affectedrows();
 	$sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
 	$num = $num + sed_sql_affectedrows();
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=102&num=".$num, '', true));
-	exit;
+	$adminpollsmsg = $L['adm_polls_msg916_reset'];
 }
 
-if ($a=='bump')
+if($a == 'bump')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=916&rc=102&num=1", '', true));
-	exit;
+	$adminpollsmsg = $L['adm_polls_msg916_bump'];
 }
 
 sed_poll_check();
 
-	if (empty($error_string)){
-		$number=sed_poll_save();
+if(empty($error_string))
+{
+	$number=sed_poll_save();
 
-		if($poll_id=='new'){$adminmain .= "<h4>".$L['polls_created']."</h4>";}
-		elseif(!empty($poll_id)) {$adminmain .= "<h4>".$L['polls_updated']."</h4>";}
+	if($poll_id == 'new')
+	{
+		$adminpollsmsg = $L['polls_created'];
 	}
-	else
-	{$adminmain .="<div class=\"error\">".$error_string."</div>";}
+	elseif(!empty($poll_id))
+	{
+		$adminpollsmsg = $L['polls_updated'];
+	}
+}
+else
+{
+	$adminpollsmsg = $error_string;
+}
 
+if(!empty($adminpollsmsg))
+{
+	$t -> assign(array("ADMIN_POLLS_MESAGE" => $adminpollsmsg));
+	$t -> parse("POLLS.MESAGE");
+}
 
 $totalitems = sed_sql_rowcount($db_polls);
 $pagnav = sed_pagination(sed_url('admin','m=polls'), $d, $totalitems, $cfg['maxrowsperpage']);
 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=polls'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 $sql = sed_sql_query("SELECT p.*, t.ft_id FROM $db_polls AS p
-LEFT JOIN $db_forum_topics AS t ON t.ft_poll = p.poll_id
-WHERE 1 ORDER BY p.poll_type DESC, p.poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
-
-$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
-$adminmain .= "<table class=\"cells\">";
+					LEFT JOIN $db_forum_topics AS t ON t.ft_poll = p.poll_id
+					WHERE 1 ORDER BY p.poll_type DESC, p.poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
-$prev = false;
 $indexheader =false;
 $forumheader =false;
 
-while ($row = sed_sql_fetcharray($sql))
+while($row = sed_sql_fetcharray($sql))
 {
-	if (!$prev)
-	{
-		$adminmain .= "<tr><td class=\"coltop\" style=\"width:128px;\">".$L['Date']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Type']."</td>";
-		$adminmain .= "<td class=\"coltop\">".$L['Poll']." ".$L['adm_clicktoedit']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Votes']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Delete']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Reset']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:40px;\">".$L['Bump']."</td>";
-		$adminmain .= "<td class=\"coltop\" style=\"width:48px;\">".$L['Open']."</td></tr>";
-	$prev=true;
-	}
 
 	$id = $row['poll_id'];
 	$type = $row['poll_type'];
 
-	if ($type=='index' && !$indexheader)
+	if($type == 'index' && !$indexheader)
 	{
-		$indexheader=true;
-		$adminmain .= "<tr><td colspan=\"9\">".$L['adm_polls_indexpolls']."</td></tr>";
+		$indexheader = true;
+		$t -> assign(array("ADMIN_POLLS_TYPE_HEADER" => $L['adm_polls_indexpolls']));
+		$t -> parse("POLLS.POLLS_ROW.POLLS_ROW_TYPE");
 	}
 
-	if ($type=='forum' && !$forumheader)
+	if($type == 'forum' && !$forumheader)
 	{
 		$forumheader = true;
-		$adminmain .= "<tr><td colspan=\"9\">".$L['adm_polls_forumpolls']."</td></tr>";
+		$t -> assign(array("ADMIN_POLLS_TYPE_HEADER" => $L['adm_polls_forumpolls']));
+		$t -> parse("POLLS.POLLS_ROW.POLLS_ROW_TYPE");
 	}
 
 	$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
 	$totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
-	$adminmain .= "<tr><td style=\"text-align:center;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'])."</td>";
 
-
-	$adminmain .= "<td>".sed_cc($type)."</td>";
-	$adminmain .= "<td><a href=\"".sed_url('admin', "m=polls&n=options&id=".$row['poll_id'])."\">".sed_cc($row['poll_text'])."</a></td>";
-	$adminmain .= "<td style=\"text-align:center;\">".$totalvotes."</td>";
-
-	$adminmain .= "<td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=polls&a=delete&id=".$id."&".sed_xg())."\">x</a>]</td>";
-	$adminmain .= "<td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=polls&a=reset&id=".$id."&".sed_xg())."\">R</a>]</td>";
-	$adminmain .= "<td style=\"text-align:center;\">[<a href=\"".sed_url('admin', "m=polls&a=bump&id=".$id."&".sed_xg())."\">B</a>]</td>";
-	$adminmain .= "<td style=\"text-align:center;\">";
-
-	if ($type=='index')
-	{ $adminmain .= "<a href=\"".sed_url('polls', "id=".$row['poll_id'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>"; }
+	if($type == 'index')
+	{
+		$admtypepoll .= sed_url('polls', "id=".$row['poll_id']);
+	}
 	else
-	{ $adminmain .= "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id'])."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a>"; }
+	{
+		$admtypepoll .= sed_url('forums', "m=posts&q=".$row['ft_id']);
+	}
 
-	$adminmain .= "</td></tr>";
+	$t -> assign(array(
+		"ADMIN_POLLS_ROW_POLL_CREATIONDATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
+		"ADMIN_POLLS_ROW_POLL_TYPE" => sed_cc($type),
+		"ADMIN_POLLS_ROW_POLL_URL" => sed_url('admin', "m=polls&n=options&id=".$row['poll_id']),
+		"ADMIN_POLLS_ROW_POLL_TEXT" => sed_cc($row['poll_text']),
+		"ADMIN_POLLS_ROW_POLL_TOTALVOTES" => $totalvotes,
+		"ADMIN_POLLS_ROW_POLL_URL_DEL" => sed_url('admin', "m=polls&a=delete&id=".$id."&".sed_xg()),
+		"ADMIN_POLLS_ROW_POLL_URL_RES" => sed_url('admin', "m=polls&a=reset&id=".$id."&".sed_xg()),
+		"ADMIN_POLLS_ROW_POLL_URL_BMP" => sed_url('admin', "m=polls&a=bump&id=".$id."&".sed_xg()),
+		"ADMIN_POLLS_ROW_POLL_URL_OPN" => $admtypepoll
+	));
+	$t -> parse("POLLS.POLLS_ROW");
+
 	$ii++;
 }
-$adminmain .= "<tr><td colspan=\"8\">".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</td></tr></table>";
 
-if ($n=='options')
+if($n == 'options')
 {
 	$poll_id = sed_import('id','G','TXT');
 	$adminpath[] = array (sed_url('admin', 'm=polls&n=options&id=$poll_id'), $L['Options']." (#$id)");
-	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$send_button=$L['Update'];
+	$adminmain .= $L['editdeleteentries'];
+	$send_button = $L['Update'];
 }
 elseif(!empty($error_string))
 {
-	if ($poll_id!='new')
-	{$adminpath[] = array (sed_url('admin', 'm=polls&n=options&id=$poll_id'), $L['Options']." (#$id)");
-	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
-	$send_button=$L['Update'];}
+	if($poll_id != 'new')
+	{
+		$adminpath[] = array (sed_url('admin', 'm=polls&n=options&id=$poll_id'), $L['Options']." (#$id)");
+		$formname = $L['editdeleteentries'];
+		$send_button = $L['Update'];
+	}
 	else
-	{$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$send_button=$L['Create'];}
+	{
+		$formname = $L['addnewentry'];
+		$send_button = $L['Create'];
+	}
 }
 else
 {
 	$poll_id='new';
-	$adminmain .= "<h4>".$L['addnewentry']." :</h4>";
-	$send_button=$L['Create'];
+	$formname = $L['addnewentry'];
+	$send_button = $L['Create'];
 }
+
 list($poll_text, $poll_options, $poll_date, $poll_settings)=sed_poll_edit_form($poll_id, 1);
 
-$adminmain .= "<form id=\"addpoll\" action=\"".sed_url('admin', "m=polls")."\" method=\"post\">";
-$adminmain .= "<table class=\"cells\">";
-$adminmain .= "<tr><td>".$L['adm_polls_polltopic']."</td><td>".$poll_text."</td></tr>";
-$adminmain .= "<tr><td>".$L['Date']." : </td><td>".$poll_date."</td></tr>";
-$adminmain .= "<tr><td>".$L['Options']."</td><td>";
-$adminmain .= $poll_options."</td></tr>";
-$adminmain .= "<tr><td></td><td>".$poll_settings."
-</td></tr>";
-$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$send_button."\" /></td></tr></table></form>";
+$t -> assign(array(
+	"ADMIN_POLLS_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=polls"),
+	"ADMIN_POLLS_PAGINATION_PREV" => $pagination_prev,
+	"ADMIN_POLLS_PAGNAV" => $pagnav,
+	"ADMIN_POLLS_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_POLLS_TOTALITEMS" => $totalitems,
+	"ADMIN_POLLS_ON_PAGE" => $ii,
+	"ADMIN_POLLS_FORMNAME" => $formname,
+	"ADMIN_POLLS_FORM_URL" => sed_url('admin', "m=polls"),
+	"ADMIN_POLLS_POLL_TEXT" => $poll_text,
+	"ADMIN_POLLS_POLL_DATE" => $poll_date,
+	"ADMIN_POLLS_POLL_OPTIONS" => $poll_options,
+	"ADMIN_POLLS_POLL_SETTINGS" => $poll_settings,
+	"ADMIN_POLLS_SEND_BUTTON" => $send_button
+));
+$t -> parse("POLLS");
+$adminmain = $t -> text("POLLS");
 
 ?>

@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')){die('Wrong URL.');}
 
 /* ================== FUNCTIONS ================== */
 /**
@@ -32,18 +32,21 @@ if (!defined('SED_CODE')) { die('Wrong URL.'); }
  */
 function sed_get_polls($limit)
 {
-    global $cfg, $L, $lang, $db_polls, $db_polls_voters, $db_polls_options;
-    global $usr, $plu_empty;
+    global $cfg, $L, $lang, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
     require_once(sed_langfile('indexpolls'));
     $skin = sed_skinfile('indexpolls', true);
     $indexpolls = new XTemplate($skin);
-    if($cfg['plugin']['indexpolls']['mode']=='Recent polls')
-    {$sqlmode='poll_creationdate';}
-    else if($cfg['plugin']['indexpolls']['mode']=='Random polls')
-    {$sqlmode='RAND()';}
+    if($cfg['plugin']['indexpolls']['mode'] == 'Recent polls')
+    {
+    	$sqlmode = 'poll_creationdate';
+    }
+    elseif($cfg['plugin']['indexpolls']['mode'] == 'Random polls')
+    {
+    	$sqlmode = 'RAND()';
+    }
     $res=0;
     $sql_p = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='index' ORDER by $sqlmode DESC LIMIT $limit");
-    while ($row_p = sed_sql_fetcharray($sql_p))
+    while($row_p = sed_sql_fetcharray($sql_p))
     {
         $res++;
         $poll_id = $row_p['poll_id'];
@@ -55,7 +58,7 @@ function sed_get_polls($limit)
 
         list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$poll_id), $comments);
 
-        $pollurl=sed_url('polls', 'id='.$poll_id);
+        $pollurl = sed_url('polls', 'id='.$poll_id);
 
         $indexpolls -> assign(array(
             "IPOLLS_ID" => $poll_id,
@@ -63,14 +66,13 @@ function sed_get_polls($limit)
             "IPOLLS_URL" => $pollurl,
             "IPOLLS_COMMENTS" => $comments_link,
             "IPOLLS_FORM" => $poll_form,
-            ));
+        ));
         $indexpolls -> parse("INDEXPOLLS.POLL");
 
     }
-    if ($res)
+    if($res)
     {
-        $indexpolls -> assign("IPOLLS_ALL",
-            "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>");
+        $indexpolls -> assign("IPOLLS_ALL","<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>");
     }
     else
     {
@@ -84,7 +86,7 @@ function sed_get_polls($limit)
 }
 /* ============= */
 
-if ($cfg['plugin']['indexpolls']['maxpolls']>0 && !$cfg['disable_polls'])
+if($cfg['plugin']['indexpolls']['maxpolls'] > 0 && !$cfg['disable_polls'])
 {
     require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
     sed_poll_vote();

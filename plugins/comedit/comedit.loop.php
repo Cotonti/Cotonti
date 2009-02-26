@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if(!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')){die('Wrong URL.');}
 
 $time_limit = ($sys['now_offset']<($row['com_date']+$cfg['plugin']['comedit']['time']*60)) ? TRUE : FALSE;
 

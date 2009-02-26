@@ -9,10 +9,12 @@
  * @license BSD
  */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['isadmin']);
+
+$t = new XTemplate(sed_skinfile('admin.page.queue.inc', false, true));
 
 $adminpath[] = array (sed_url('admin', 'm=page'), $L['Page']);
 $adminpath[] = array (sed_url('admin', 'm=page&s=queue'), $L['adm_valqueue']);
@@ -23,43 +25,51 @@ $id = sed_import('id','G','INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
-if ($a=='validate')
-	{
+if($a == 'validate')
+{
 	sed_check_xg();
 
 	$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
-	if ($row = sed_sql_fetcharray($sql))
-		{
+	if($row = sed_sql_fetcharray($sql))
+	{
 		$usr['isadmin_local'] = sed_auth('page', $row['page_cat'], 'A');
 		sed_block($usr['isadmin_local']);
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 		sed_cache_clear('latestpages');
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=queue&d='.$d, '', true));
-		exit;
-		}
-	else
-		{ sed_die(); }
+		$adminpage_queue = '#'.$id.' - '.$L['adm_queue_validated'];
 	}
-
-if ($a=='unvalidate')
+	else
 	{
+		sed_die();
+	}
+}
+
+if($a == 'unvalidate')
+{
 	sed_check_xg();
 
 	$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
-	if ($row = sed_sql_fetcharray($sql))
-		{
+	if($row = sed_sql_fetcharray($sql))
+	{
 		$usr['isadmin_local'] = sed_auth('page', $row['page_cat'], 'A');
 		sed_block($usr['isadmin_local']);
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 		sed_cache_clear('latestpages');
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('list', "c=".$row['page_cat'], '', true));
-		exit;
-		}
-	else
-		{ sed_die(); }
+		$adminpage_queue = '#'.$id.' - '.$L['adm_queue_unvalidated'];
 	}
+	else
+	{
+		sed_die();
+	}
+}
+
+if(!empty($adminpage_queue))
+{
+	$t -> assign(array("ADMIN_PAGE_QUEUE_MESAGE" => $adminpage_queue));
+	$t -> parse("PAGE_QUEUE.MESAGE");
+}
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1"), 0, 0);
 $pagnav = sed_pagination(sed_url('admin','m=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage']);
@@ -70,34 +80,53 @@ $sql = sed_sql_query("SELECT p.*, u.user_name
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE page_state=1 ORDER by page_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 
-$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
-
 $ii = 0;
 
-$adminmain .= "<ul>";
-while ($row = sed_sql_fetcharray($sql))
-	{
-	$adminmain .= "<li><a href=\"".sed_url('page', "id=".$row['page_id'])."\">".sed_cc($row['page_title'])."</a><br />";
-	$adminmain .= "#".$row['page_id']."<br />";
-	$adminmain .= $L['Category']." : ".$sed_cat[$row['page_cat']]['title']." (".$row["page_cat"].")<br />";
-	$adminmain .= $L['Description']." : ".sed_cc($row['page_desc'])."<br />";
-	//$adminmain .= $L['Author']." : ".sed_cc($row['page_author'])."<br />";
-	$adminmain .= $L['Owner']." : ".sed_build_user($row['page_ownerid'], sed_cc($row['user_name']))."<br />";
-	$adminmain .= $L['Date']." : ".date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)."<br />";
-	//$adminmain .= $L['File']." : ".$sed_yesno[$row['page_file']]."<br />";
-	//$adminmain .= $L['URL']." : ".$row['page_url']."<br />";
-	//$adminmain .= $L['Size']." : ".$row['page_size']."<br />";
-	//$adminmain .= $L['Key']." : ".sed_cc($row['page_key'])."<br />";
-	//$adminmain .= $L['Alias']." : ".sed_cc($row['page_alias'])."<br />";
-	//$adminmain .= $L['Extrafield']." #1 : ".sed_cc($row['page_extra1'])."<br />";
-	//$adminmain .= $L['Extrafield']." #2 : ".sed_cc($row['page_extra2'])."<br />";
-	//$adminmain .= $L['Extrafield']." #3 : ".sed_cc($row['page_extra3'])."<br />";
-	$adminmain .= "<a href=\"".sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg())."\">".$L['Validate']."</a>";
-	$adminmain .= " &nbsp; <a href=\"".sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")."\">".$L['Edit']."</a></li><hr />";
+while($row = sed_sql_fetcharray($sql))
+{
+	$t -> assign(array(
+		"ADMIN_PAGE_QUEUE_PAGE_URL" => sed_url('page', "id=".$row['page_id']),
+		"ADMIN_PAGE_QUEUE_PAGE_TITLE" => sed_cc($row['page_title']),
+		"ADMIN_PAGE_QUEUE_PAGE_ID" => $row['page_id'],
+		"ADMIN_PAGE_QUEUE_PAGE_CAT_TITLE" => $sed_cat[$row['page_cat']]['title'],
+		"ADMIN_PAGE_QUEUE_PAGE_CAT" => $row["page_cat"],
+		"ADMIN_PAGE_QUEUE_PAGE_CATDESC" => $sed_cat[$row['page_cat']]['desc'],
+		"ADMIN_PAGE_QUEUE_PAGE_CATICON" => $sed_cat[$row['page_cat']]['icon'],
+		"ADMIN_PAGE_QUEUE_PAGE_DESC" => sed_cc($row['page_desc']),
+		"ADMIN_PAGE_QUEUE_PAGE_AUTHOR" => sed_cc($row['page_author']),
+		"ADMIN_PAGE_QUEUE_PAGE_OWNER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name'])),
+		"ADMIN_PAGE_QUEUE_PAGE_DATE" => date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
+		"ADMIN_PAGE_QUEUE_PAGE_BEGIN" => date($cfg['dateformat'], $row['page_begin'] + $usr['timezone'] * 3600),
+		"ADMIN_PAGE_QUEUE_PAGE_EXPIRE" => date($cfg['dateformat'], $row['page_expire'] + $usr['timezone'] * 3600),
+		"ADMIN_PAGE_QUEUE_PAGE_ADMIN_COUNT" => $row['page_count'],
+		"ADMIN_PAGE_QUEUE_PAGE_FILE" => $sed_yesno[$row['page_file']],
+		"ADMIN_PAGE_QUEUE_PAGE_FILE_URL" => $row['page_url'],
+		"ADMIN_PAGE_QUEUE_PAGE_FILE_NAME" => basename($row['page_url']),
+		"ADMIN_PAGE_QUEUE_PAGE_FILE_SIZE" => $row['page_size'],
+		"ADMIN_PAGE_QUEUE_PAGE_FILE_COUNT" => $row['page_filecount'],
+		"ADMIN_PAGE_QUEUE_PAGE_KEY" => sed_cc($row['page_key']),
+		"ADMIN_PAGE_QUEUE_PAGE_ALIAS" => sed_cc($row['page_alias']),
+		"ADMIN_PAGE_QUEUE_PAGE_URL_FOR_VALIDATED" => sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg()),
+		"ADMIN_PAGE_QUEUE_PAGE_URL_FOR_EDIT" => sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")
+	));
+	$t -> parse("PAGE_QUEUE.PAGE_QUEUE_ROW");
+
 	$ii++;
-	}
-$adminmain .= "</ul>";
-$adminmain .= "<div>".$L['Total']." : ".$totalitems.", ".$L['adm_polls_on_page'].": ".$ii."</div>";
-$adminmain .= (sed_sql_numrows($sql)==0) ? "<p>".$L['None']."</p>" : '';
+}
+
+if(sed_sql_numrows($sql)==0)
+{
+	$t -> parse("PAGE_QUEUE.PAGE_QUEUE_ROW_EMPTY");
+}
+
+$t -> assign(array(
+	"ADMIN_PAGE_QUEUE_PAGINATION_PREV" => $pagination_prev,
+	"ADMIN_PAGE_QUEUE_PAGNAV" => $pagnav,
+	"ADMIN_PAGE_QUEUE_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_PAGE_QUEUE_TOTALITEMS" => $totalitems,
+	"ADMIN_PAGE_QUEUE_ON_PAGE" => $ii
+));
+$t -> parse("PAGE_QUEUE");
+$adminmain = $t -> text("PAGE_QUEUE");
 
 ?>

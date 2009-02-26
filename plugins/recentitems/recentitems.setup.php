@@ -34,6 +34,6 @@ redundancy=05:select:1,2,3,4,5:2:Redundancy to come over "private topics" proble
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')){die('Wrong URL.');}
 
 ?>
