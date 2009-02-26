@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_PLUG')){die('Wrong URL.');}
 
 $m	 = sed_import('m', 'G', 'ALP');
 $a	 = sed_import('a', 'G', 'ALP');
@@ -69,7 +69,7 @@ if($a == 'update')
 			$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive3'];
 			$email_body .= $cfg['mainurl'].'/'.sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid)."\n\n";
 
-			while ($adm = sed_sql_fetcharray($sql2))
+			while($adm = sed_sql_fetcharray($sql2))
 			{
 				sed_mail($adm['user_email'], $email_title, $email_body);
 			}
@@ -113,7 +113,7 @@ if($cfg['plugin']['comedit']['markitup'] == "No")
 {
 	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$bbcodes."&nbsp;&nbsp;".$smilies."&nbsp;&nbsp;".$pfs));
 }
-else if($cfg['plugin']['comedit']['markitup'] == "Yes")
+elseif($cfg['plugin']['comedit']['markitup'] == "Yes")
 {
 	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea class=\"minieditor\" rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$bbcodes."&nbsp;&nbsp;".$smilies."&nbsp;&nbsp;".$pfs));
 }

@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_PLUG')){die('Wrong URL.');}
 
 $a = sed_import('a','G','TXT');
 $v = sed_import('v','G','TXT');
@@ -40,7 +40,7 @@ function sed_randompass()
 	$vars = $abc.strtoupper($abc)."0123456789";
 	srand((double)microtime()*1000000);
 	$i = 0;
-	while ($i <= 7)
+	while($i <= 7)
 	{
 		$num = rand() % 33;
 		$tmp = substr($vars, $num, 1);
@@ -50,18 +50,18 @@ function sed_randompass()
 	return $pass;
 }
 
-if ($a=='request' && $email!='')
+if($a == 'request' && $email != '')
 {
 	sed_shield_protect();
 	$sql = sed_sql_query("SELECT user_id, user_name, user_lostpass FROM $db_users WHERE user_email='".sed_sql_prep($email)."' ORDER BY user_id ASC LIMIT 1");
 
-	if ($row = sed_sql_fetcharray($sql))
+	if($row = sed_sql_fetcharray($sql))
 	{
 		$rusername = $row['user_name'];
 		$ruserid = $row['user_id'];
 		$validationkey = $row['user_lostpass'];
 
-		if (empty($validationkey) || $validationkey=="0")
+		if(empty($validationkey) || $validationkey == "0")
 		{
 			$validationkey = md5(microtime());
 			$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_lastip='".$usr['ip']."' WHERE user_id='$ruserid'");
@@ -87,27 +87,27 @@ if ($a=='request' && $email!='')
 		exit;
 	}
 }
-elseif ($a=='auth' && mb_strlen($v)==32)
+elseif($a == 'auth' && mb_strlen($v) == 32)
 {
 	sed_shield_protect();
 
 	$sql = sed_sql_query("SELECT user_name, user_id, user_email, user_password, user_maingrp, user_banexpire FROM $db_users WHERE user_lostpass='".sed_sql_prep($v)."'");
 
-	if ($row = sed_sql_fetcharray($sql))
+	if($row = sed_sql_fetcharray($sql))
 	{
 		$rmdpass  = $row['user_password'];
 		$rusername = $row['user_name'];
 		$ruserid = $row['user_id'];
 		$rusermail = $row['user_email'];
 
-		if ($row['user_maingrp']==2)
+		if($row['user_maingrp'] == 2)
 		{
 			sed_log("Password recovery failed, user inactive : ".$rusername);
 			header("Location: " . SED_ABSOLUTE_URL . sed_url('message', 'msg=152', '', true));
 			exit;
 		}
 
-		if ($row['user_maingrp']==3)
+		if($row['user_maingrp'] == 3)
 		{
 			sed_log("Password recovery failed, user banned : ".$rusername);
 			header("Location: " . SED_ABSOLUTE_URL . sed_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));

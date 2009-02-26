@@ -8,6 +8,7 @@
  * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
+
 $L['cfg_maxpolls']= array('Polls displayed');
 $L['cfg_mode']=array('Mode polls displayed');
 $L_idx['vote_failed'] = 'Vote failed';//If you have problems with submitting the vote

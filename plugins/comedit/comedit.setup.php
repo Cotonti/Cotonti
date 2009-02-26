@@ -33,6 +33,6 @@ markitup=03:select:No,Yes:Yes:Use markitup?
  * @license BSD
  */
 
-if(!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')){die('Wrong URL.');}
 
 ?>

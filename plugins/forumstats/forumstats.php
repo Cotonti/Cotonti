@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
+if(!defined('SED_CODE') || !defined('SED_PLUG')){die('Wrong URL.');}
 
 $plugin_title = $L['plu_title'];
 
@@ -46,7 +46,7 @@ ORDER BY ft_postcount DESC LIMIT 10");
 
 $ii=0;
 
-while ($row = sed_sql_fetcharray($sql))
+while($row = sed_sql_fetcharray($sql))
 {
 	if(sed_auth('forums', $row['fs_id'], 'R'))
 	{
@@ -84,7 +84,7 @@ ORDER BY ft_viewcount DESC LIMIT 10");
 
 $ii=0;
 
-while ($row = sed_sql_fetcharray($sql))
+while($row = sed_sql_fetcharray($sql))
 {
 	if(sed_auth('forums', $row['fs_id'], 'R'))
 	{
@@ -121,7 +121,7 @@ FROM $db_users
 WHERE 1 ORDER by user_postcount DESC
 LIMIT 10");
 
-while ($row = sed_sql_fetcharray($sql))
+while($row = sed_sql_fetcharray($sql))
 {
 	$ii++;
 	$t -> assign(array(

@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')){die('Wrong URL.');}
 
 // Preview contents
 $text = sed_import('text', 'P', 'HTM');

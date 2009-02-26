@@ -27,6 +27,6 @@ Lock_members=A
  * @license BSD
  */
 
-if ( !defined('SED_CODE') ) { die("Wrong URL."); }
+if(!defined('SED_CODE')){die("Wrong URL.");}
 
 ?>

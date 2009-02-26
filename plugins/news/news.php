@@ -20,13 +20,16 @@ Order=10
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')){die('Wrong URL.');}
 
 $d = sed_import('d','G','INT');
 $c = sed_import('c','G','TXT');
 
-if (empty($d))	{ $d = '0'; }
-if (empty($c))
+if(empty($d))
+{
+	$d = '0';
+}
+if(empty($c))
 {
 	$c = $cfg['plugin']['news']['category'];
 }
@@ -36,7 +39,7 @@ else
 	$c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
 }
 
-if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
+if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 {
 	$jj = 0;
 	$mtch = $sed_cat[$c]['path'].".";
@@ -46,8 +49,9 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 
 	foreach($sed_cat as $i => $x)
 	{
-		if (mb_substr($x['path'], 0, $mtchlen)==$mtch && sed_auth('page', $i, 'R'))
-		{ $catsub[] = $i; }
+		if(mb_substr($x['path'], 0, $mtchlen) == $mtch && sed_auth('page', $i, 'R')){
+			$catsub[] = $i;
+		}
 	}
 
 	$sql = sed_sql_query("SELECT p.*, u.user_name, user_avatar FROM $db_pages AS p
@@ -71,11 +75,11 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 	// Extra field - getting
 	$extrafields = array(); $number_of_extrafields = 0;
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-	while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; }
+	while($row = sed_sql_fetchassoc($fieldsres)){$extrafields[] = $row; $number_of_extrafields++;}
 
 	$news = new XTemplate(sed_skinfile('news', true));
 
-	while ($pag = sed_sql_fetcharray($sql))
+	while($pag = sed_sql_fetcharray($sql))
 	{
 		$jj++;
 		$catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
@@ -123,8 +127,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 				break;
 
 			case '2':
-
-				if ($cfg['allowphp_pages'])
+				if($cfg['allowphp_pages'])
 				{
 					ob_start();
 					eval($pag['page_text']);
@@ -160,7 +163,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($c))
 				{
 					$readmore = mb_strpos($pag['page_text'], "[more]");
 					$pag['page_text'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-					if ($readmore>0)
+					if($readmore>0)
 					{
 						$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);
 						$pag['page_text'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
@@ -193,7 +196,7 @@ function sed_news_strip_newpage(&$html)
 {
 	$newpage = mb_strpos($html, '[newpage]');
 
-	if ($newpage !== false)
+	if($newpage !== false)
 	{
 		$html = mb_substr($html, 0, $newpage);
 		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);

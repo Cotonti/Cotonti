@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+if(!defined('SED_CODE')){die('Wrong URL.');}
 
 $plugin_title = "IP search";
 
@@ -39,7 +39,7 @@ if($a == 'search')
 	else{$id = $id_p;}
 
 	$userip = explode(".", $id);
-	if (count($userip)!=4 || mb_strlen($userip[0])>3 || mb_strlen($userip[1])>3 || mb_strlen($userip[2])>3 || mb_strlen($userip[3])>3){sed_die() ;}
+	if(count($userip)!=4 || mb_strlen($userip[0])>3 || mb_strlen($userip[1])>3 || mb_strlen($userip[2])>3 || mb_strlen($userip[3])>3){sed_die() ;}
 
 	$ipmask1 = $userip[0].".".$userip[1].".".$userip[2].".".$userip[3];
 	$ipmask2 = $userip[0].".".$userip[1].".".$userip[2];
@@ -63,7 +63,7 @@ if($a == 'search')
 	$sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
 	$totalmatches2 = sed_sql_numrows($sql);
 
-	while ($row = sed_sql_fetcharray($sql))
+	while($row = sed_sql_fetcharray($sql))
 	{
 		$t -> assign(array(
 			'IPSEARCH_USER_IPMASK2' => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
@@ -75,7 +75,7 @@ if($a == 'search')
    	$sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
 	$totalmatches3 = sed_sql_numrows($sql);
 
-	while ($row = sed_sql_fetcharray($sql))
+	while($row = sed_sql_fetcharray($sql))
 	{
 		$t -> assign(array(
 			'IPSEARCH_USER_IPMASK3' => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
