@@ -31,22 +31,16 @@ if($a == 'delete')
 	$id2 = "v".$id;
 
 	$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$id'");
-	$num = sed_sql_affectedrows();
 	$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$id'");
-	$num = $num + sed_sql_affectedrows();
 	$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
-	$num = $num + sed_sql_affectedrows();
 	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
-	$num = $num + sed_sql_affectedrows();
 	$adminpollsmsg = $L['adm_polls_msg916_deleted'];
 }
 elseif($a == 'reset')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
-	$num = sed_sql_affectedrows();
 	$sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
-	$num = $num + sed_sql_affectedrows();
 	$adminpollsmsg = $L['adm_polls_msg916_reset'];
 }
 
