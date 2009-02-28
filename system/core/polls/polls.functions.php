@@ -179,7 +179,7 @@ function sed_poll_check()
 
 /* ------------------ */
 
-function sed_poll_save($type='index', $state='0')
+function sed_poll_save($type='index', $state='0', $code='')
 {
 
     global $cfg, $L, $sys, $db_polls, $db_polls_options;
@@ -190,7 +190,7 @@ function sed_poll_save($type='index', $state='0')
     {
         $option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
         if ($poll_id=='new') {
-            $sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple) VALUES ('".$type."', ".(int)$state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".(int)$poll_multiple."')");
+            $sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple, poll_code) VALUES ('".$type."', ".(int)$state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
             $newpoll_id = sed_sql_insertid(); }
         else {
             $sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
@@ -269,16 +269,19 @@ function sed_poll_vote()
 
 /*---------------*/
 
-function sed_poll_form($id, $formlink='', $skin='')
+function sed_poll_form($id, $formlink='', $skin='', $type='')
 {
     global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters, $usr;
     global $error_string;
     $canvote = true;
+    
+    $where=(!$type) ? "poll_id='$id'" : "poll_type='$type' AND poll_code='$id'" ;
 
-    $sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id'");
+    $sql = sed_sql_query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
 
     if ($row = sed_sql_fetcharray($sql))
     {
+    	$id=$row['poll_id'];
         if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
         {
             $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userid='".$usr['id']."' LIMIT 1");
@@ -363,6 +366,25 @@ function sed_poll_form($id, $formlink='', $skin='')
 
 
     return($pollform);
+}
+
+function sed_poll_delete($id, $type='')
+{
+	if($type)
+	{
+     	$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+	    if ($row = sed_sql_fetcharray($sql))
+  		{
+    		$id=$row['poll_id'];
+		}
+		else $id=0;
+	}
+	if($id!=0)
+	{
+	$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$id'");
+	$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$id'");
+	$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
+	}
 }
 
 ?>

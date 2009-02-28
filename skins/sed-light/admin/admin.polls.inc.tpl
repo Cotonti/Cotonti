@@ -6,6 +6,7 @@
 	</div>
 <!-- END: MESAGE -->
 <h4>{PHP.L.editdeleteentries} :</h4>
+{PHP.L.Filter} : {ADMIN_POLLS_FILTER}
 <table class="cells">
 	<tr>
 		<td class="coltop" style="width:128px;">{PHP.L.Date}</td>
@@ -18,11 +19,6 @@
 		<td class="coltop" style="width:48px;">{PHP.L.Open}</td>
 	</tr>
 <!-- BEGIN: POLLS_ROW -->
-<!-- BEGIN: POLLS_ROW_TYPE -->
-	<tr>
-		<td style="text-align:center;" colspan="8">{ADMIN_POLLS_TYPE_HEADER}</td>
-	</tr>
-<!-- END: POLLS_ROW_TYPE -->
 	<tr>
 		<td style="text-align:center;">{ADMIN_POLLS_ROW_POLL_CREATIONDATE}</td>
 		<td>{ADMIN_POLLS_ROW_POLL_TYPE}</td>
