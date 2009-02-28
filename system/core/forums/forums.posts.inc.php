@@ -30,6 +30,8 @@ $poll = sed_import('poll','G','INT');
 $vote = sed_import('vote','G','INT');
 $unread_done = FALSE;
 $fp_num = 0;
+if (!$cfg['disable_polls']) require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+
 unset ($notlastpage);
 
 /* === Hook === */
@@ -320,11 +322,9 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 			$ft_poll = $row['ft_poll'];
 
-			if ($ft_poll>0)
+			if (!$cfg['disable_polls'] && $ft_poll)
 			{
-				$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$ft_poll'");
-				$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$ft_poll'");
-				$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$ft_poll'");
+				sed_poll_delete($q, 'forum');
 			}
 
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET
@@ -401,7 +401,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	}
 }
 
-$sql = sed_sql_query("SELECT ft_title, ft_desc, ft_mode, ft_state, ft_poll, ft_firstposterid FROM $db_forum_topics WHERE ft_id='$q'");
+$sql = sed_sql_query("SELECT ft_id, ft_title, ft_desc, ft_mode, ft_state, ft_poll, ft_firstposterid FROM $db_forum_topics WHERE ft_id='$q'");
 
 if ($row = sed_sql_fetcharray($sql))
 {
@@ -484,11 +484,10 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'posts', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-if (!$cfg['disable_polls'] && $ft_poll>0)
+if (!$cfg['disable_polls'] && $ft_poll)
 {
-	require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
 	sed_poll_vote();
-	list($polltitle, $poll_form)=sed_poll_form($ft_poll, sed_url('forums', "m=posts&q=".$q));
+	list($polltitle, $poll_form)=sed_poll_form($q, sed_url('forums', "m=posts&q=".$q), '', 'forum');
 	$t->assign(array(
 		"POLLS_TITLE" => $polltitle,
 		"POLLS_FORM" => $poll_form,

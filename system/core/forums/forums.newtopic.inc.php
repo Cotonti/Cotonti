@@ -110,7 +110,7 @@ if ($a=='newtopic')
 
 	/*Completely stolen from "forum poll starter" plugin*/
 
-	$poll_index= $poll ? sed_poll_save('forum', $s) : 0;
+	$poll_index= $poll ? 1 : 0;
 
 		$sql = sed_sql_query("INSERT into $db_forum_topics
 		(ft_state,
@@ -147,9 +147,8 @@ if ($a=='newtopic')
 			'".sed_sql_prep($usr['name'])."',
 			".$poll_index.")");
 
-		$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE 1 ORDER BY ft_id DESC LIMIT 1");
-		$row = sed_sql_fetcharray($sql);
-		$q = $row['ft_id'];
+		$q = sed_sql_insertid();
+        if ($poll) sed_poll_save('forum', $s, $q);
 
 		if($cfg['parser_cache'])
 		{
