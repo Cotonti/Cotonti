@@ -213,7 +213,7 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 				&& ($cfg['ipcheck']==FALSE || $row['user_lastip'] == $usr['ip']))
 			{
 				$usr['id'] = (int) $row['user_id'];
-				$usr['sessionid'] = ($cfg['authmode']==1) ? md5($row['user_lastvisit']) : session_id();
+				$usr['sessionid'] = session_id();
 				$usr['name'] = $row['user_name'];
 				$usr['maingrp'] = $row['user_maingrp'];
 				$usr['lastvisit'] = $row['user_lastvisit'];
