@@ -274,7 +274,7 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
     global $cfg, $L, $db_polls, $db_polls_options, $db_polls_voters, $usr;
     global $error_string;
     $canvote = true;
-    
+
     $where=(!$type) ? "poll_id='$id'" : "poll_type='$type' AND poll_code='$id'" ;
 
     $sql = sed_sql_query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
@@ -370,6 +370,7 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
 
 function sed_poll_delete($id, $type='')
 {
+	global $db_polls, $db_polls_options, $db_polls_voters;
 	if($type)
 	{
      	$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
@@ -381,9 +382,9 @@ function sed_poll_delete($id, $type='')
 	}
 	if($id!=0)
 	{
-	$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$id'");
-	$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$id'");
-	$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
+		$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
+		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
+		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
 	}
 }
 

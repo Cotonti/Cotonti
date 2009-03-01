@@ -6,7 +6,14 @@
 	</div>
 <!-- END: MESAGE -->
 <h4>{PHP.L.editdeleteentries} :</h4>
-{PHP.L.Filter} : {ADMIN_POLLS_FILTER}
+{PHP.L.Filter} :
+<form id="jump">
+	<select name="jumpbox" size="1" onchange="redirect(this)">
+<!-- BEGIN: POLLS_ROW_FILTER -->
+		<option value="{ADMIN_POLLS_ROW_FILTER_VALUE}"{ADMIN_POLLS_ROW_FILTER_CHECKED}>{ADMIN_POLLS_ROW_FILTER_NAME}</option>
+<!-- END: POLLS_ROW_FILTER -->
+	</select>
+</form>
 <table class="cells">
 	<tr>
 		<td class="coltop" style="width:128px;">{PHP.L.Date}</td>
