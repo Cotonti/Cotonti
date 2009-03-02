@@ -170,8 +170,9 @@ function sed_news_strip_newpage(&$html)
 	if ($newpage !== false)
 	{
 		$html = mb_substr($html, 0, $newpage);
-		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
 	}
+
+	$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
 }
 
 ?>
