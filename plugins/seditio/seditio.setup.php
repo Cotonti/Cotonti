@@ -82,19 +82,9 @@ if($action == 'install')
 	sed_bbcode_add('ac', 'pcre', '\[ac=([^\[]+)\](.+?)\[/ac\]', '<acronym title="$1">$2</acronym>', true, 128, 'seditio');
 	sed_bbcode_add('c1c2c3', 'pcre', '\[c1\:([\d%]+)\](.*?)\[c2\:([\d%]+)\](.*?)\[c3\]', '<table style="margin:0; vertical-align:top; width:100%;"><tr><td style="padding:8px; vertical-align:top; width:$1%;">$2</td><td  style="padding:8px; vertical-align:top; width:$3%;">$4</td></tr></table>', true, 128, 'seditio');
 
-	if($cfg['parser_vid'])
-	{
-		sed_bbcode_add('youtube', 'pcre', '\[youtube=([^\s"\';&\?\(\[]+)\]', '<object width="425" height="350">
-<param name="movie" value="http://www.youtube.com/v/$1"></param>
-<embed src="http://www.youtube.com/v/$1" type="application/x-shockwave-flash" width="425" height="350"></embed>
-</object>', true, 128, 'seditio');
-		sed_bbcode_add('googlevideo', 'pcre', '\[googlevideo=([^\s"\';&\?\(\[]+)\]', '<embed style="width:425px; height:326px;" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docId=$1&hl=en-GB"> </embed>', true, 128, 'seditio');
-		sed_bbcode_add('metacafe', 'pcre', '\[metacafe=([^\s"\';&\?\(\[]+)\]', '<embed style="width:425px; height:345px;" src="http://www.metacafe.com/fplayer/$1" width="400" height="345" wmode="transparent" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>', true, 128, 'seditio');
-		sed_bbcode_add('flash', 'pcre', '\[flash\]([^\s"\';&\?\(\[]+\.swf)\[/flash\]', '<embed src="$1" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"></embed>', true, 128, 'seditio');
-		sed_bbcode_add('flash', 'pcre', '\[flash w=(\d+) h=(\d+)\]([^\s"\';&\?\(\[]+\.swf)\[/flash\]', '<embed src="$3" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="$1" height="$2"></embed>', true, 128, 'seditio');
-		sed_bbcode_add('divx', 'pcre', '\[divx\]([^\s"\';&\?\(\[]+\.divx)\[/divx\]', '<embed type="video/divx" src="$1" pluginspage="http://go.divx.com/plugin/download/" showpostplaybackad="false" custommode="Stage6"  object width="450" height="400"></embed>', true, 128, 'seditio');
-		sed_bbcode_add('divx', 'pcre', '\[divx w=(\d+) h=(\d+)\]([^\s"\';&\?\(\[]+\.divx)\[/divx\]', '<embed type="video/divx" src="$3" pluginspage="http://go.divx.com/plugin/download/" showpostplaybackad="false" custommode="Stage6"  object width="$1" height="$2"></embed>', true, 128, 'seditio');
-	}
+	sed_bbcode_add('youtube', 'pcre', '\[youtube=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.youtube.com/v/$1" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/$1" /><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+	sed_bbcode_add('googlevideo', 'pcre', '\[googlevideo=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" width="400" height="326"><param name="movie" value="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" /><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+	sed_bbcode_add('metacafe', 'pcre', '\[metacafe=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.metacafe.com/fplayer/$1" width="400" height="345"><param name="movie" value="http://www.metacafe.com/fplayer/$1" /><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
 }
 elseif($action == 'uninstall')
 {
