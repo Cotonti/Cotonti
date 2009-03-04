@@ -603,6 +603,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$lastposterid = $row['fp_posterid'];
 	$lastposterip = $row['fp_posterip'];
 	$fp_num++;
+	$i = $d + $fp_num;
 
 	$adminoptions = ($usr['id']>0) ? "<a href=\"".sed_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\">".$L['Quote']."</a>" : "&nbsp;";
 	$adminoptions .= (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? " &nbsp; <a href=\"".sed_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\">".$L['Edit']."</a>" : '';
@@ -687,7 +688,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_AGE" => $row['user_age'],
 		"FORUMS_POSTS_ROW_POSTCOUNT" => $row['user_postcount'],
 		"FORUMS_POSTS_ROW_ODDEVEN" => sed_build_oddeven($fp_num),
-		"FORUMS_POSTS_ROW_ORDER" => $fp_num,
+		"FORUMS_POSTS_ROW_ORDER" => $i,
 		"FORUMS_POSTS_ROW" => $row,
 	));
 
