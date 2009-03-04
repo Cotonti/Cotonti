@@ -19,7 +19,7 @@
 	<tr><td colspan="2"><a href="http://{ADMIN_REFERERS_REFERER}">{ADMIN_REFERERS_REFERER}</a></td></tr>
 <!-- BEGIN: REFERERS_URI -->
 	<tr>
-		<td>&nbsp; &nbsp; <a href="{ADMIN_REFERERS_URI}">{ADMIN_REFERERS_URI}</a></td>";
+		<td>&nbsp; &nbsp; <a href="{ADMIN_REFERERS_URI}">{ADMIN_REFERERS_URI}</a></td>
 		<td style="text-align:right;">{ADMIN_REFERERS_COUNT}</td>
 	</tr>
 <!-- END: REFERERS_URI -->
