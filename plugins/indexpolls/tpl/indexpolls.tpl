@@ -59,6 +59,27 @@
 </table>
 <!-- END: POLL_VIEW_DISABLED-->
 
+<!-- BEGIN: POLL_VIEW_LOCKED -->
+<table style="width:100%;">
+<!-- BEGIN: POLLTABLE -->
+<tr>
+	<td>{POLL_OPTIONS}</td>
+	<td align="right">{POLL_PER}% ({POLL_COUNT})</td>
+</tr>
+<tr>
+	<td colspan="2" align="right">
+		<div style="width:180px; ">
+			<div class="bar_back">
+				<div class="bar_front" style="width:{POLL_PER}%;"></div>
+			</div>
+		</div>
+	</td>
+</tr>
+<!-- END: POLLTABLE -->
+</table>
+<div><div id="pfsBack">{PHP.skinlang.page.Date} {POLL_SINCE_SHORT}</div> {PHP.skinlang.ratings.Votes} {POLL_VOTERS} </div>
+<!-- END: POLL_VIEW_LOCKED-->
+
 
 <!-- BEGIN: INDEXPOLLS -->
 <!-- BEGIN: POLL -->

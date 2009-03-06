@@ -45,7 +45,7 @@ function sed_get_polls($limit)
     	$sqlmode = 'RAND()';
     }
     $res=0;
-    $sql_p = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='index' ORDER by $sqlmode DESC LIMIT $limit");
+    $sql_p = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode DESC LIMIT $limit");
     while($row_p = sed_sql_fetcharray($sql_p))
     {
         $res++;
