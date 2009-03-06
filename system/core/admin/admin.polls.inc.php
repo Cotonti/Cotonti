@@ -53,8 +53,13 @@ if($a == 'delete')
 elseif($a == 'reset')
 {
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
-	$sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
+	sed_poll_reset($id);
+	$adminpollsmsg = $L['adm_polls_msg916_reset'];
+}
+elseif($a == 'lock')
+{
+	sed_check_xg();
+	sed_poll_lock($id, 3);
 	$adminpollsmsg = $L['adm_polls_msg916_reset'];
 }
 
@@ -132,14 +137,21 @@ while($row = sed_sql_fetcharray($sql))
 	{
 		$admtypepoll .= sed_url('forums', "m=posts&q=".$row['poll_id']);
 	}
+	
+	$poll_state = ($row['poll_state']) ? "[-] " : "";
+	
+    $sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'"); 
+    $totalvotes = sed_sql_result($sql2,0,"SUM(po_count)"); 
 
 	$t -> assign(array(
 		"ADMIN_POLLS_ROW_POLL_CREATIONDATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
-		"ADMIN_POLLS_ROW_POLL_TYPE" => sed_cc($type),
+		"ADMIN_POLLS_ROW_POLL_TYPE" => $variants[sed_cc($type)][0],
 		"ADMIN_POLLS_ROW_POLL_URL" => sed_url('admin', "m=polls".$poll_filter."&n=options&d=".$d."&id=".$row['poll_id']),
 		"ADMIN_POLLS_ROW_POLL_TEXT" => sed_cc($row['poll_text']),
 		"ADMIN_POLLS_ROW_POLL_TOTALVOTES" => $totalvotes,
+		"ADMIN_POLLS_ROW_POLL_CLOSED" => $poll_state,
 		"ADMIN_POLLS_ROW_POLL_URL_DEL" => sed_url('admin', "m=polls".$poll_filter."&a=delete&id=".$id."&".sed_xg()),
+		"ADMIN_POLLS_ROW_POLL_URL_LCK" => sed_url('admin', "m=polls".$poll_filter."&a=lock&id=".$id."&".sed_xg()),		
 		"ADMIN_POLLS_ROW_POLL_URL_RES" => sed_url('admin', "m=polls".$poll_filter."&a=reset&d=".$d."&id=".$id."&".sed_xg()),
 		"ADMIN_POLLS_ROW_POLL_URL_BMP" => sed_url('admin', "m=polls".$poll_filter."&a=bump&id=".$id."&".sed_xg()),
 		"ADMIN_POLLS_ROW_POLL_URL_OPN" => $admtypepoll

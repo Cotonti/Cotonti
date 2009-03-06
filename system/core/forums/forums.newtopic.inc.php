@@ -148,7 +148,7 @@ if ($a=='newtopic')
 			".$poll_index.")");
 
 		$q = sed_sql_insertid();
-        if ($poll) sed_poll_save('forum', $s, $q);
+        if ($poll) sed_poll_save('forum', '0', $q);
 
 		if($cfg['parser_cache'])
 		{

@@ -67,6 +67,28 @@
 <p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
 <!-- END: POLL_VIEW_VOTED-->
 
+<!-- BEGIN: POLL_VIEW_LOCKED -->
+<table class="cells">
+<!-- BEGIN: POLLTABLE -->
+<tr>
+	<td>{POLL_OPTIONS}</td>
+	<td>
+		<div style="width:256px;">
+			<div class="bar_back">
+				<div class="bar_front" style="width:{POLL_PER}%;"></div>
+			</div>
+		</div>
+	</td>
+	<td>{POLL_PER}%</td>
+	<td>{POLL_COUNT}</td>
+</tr>
+<!-- END: POLLTABLE -->
+<tr>
+	<td colspan="4">{PHP.L.polls_alreadyvoted}</td>
+</tr>
+</table>
+<p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
+<!-- END: POLL_VIEW_LOCKED-->
 
 <!-- BEGIN: POLL_VIEW_DISABLED -->
 <table class="cells">

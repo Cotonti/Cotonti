@@ -190,10 +190,11 @@ function sed_poll_save($type='index', $state='0', $code='')
     {
         $option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
         if ($poll_id=='new') {
-            $sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple, poll_code) VALUES ('".$type."', ".(int)$state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
+            $sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple, poll_code) VALUES ('".sed_sql_prep($type)."', ".(int)$state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
             $newpoll_id = sed_sql_insertid(); }
         else {
-            $sql = sed_sql_query("UPDATE $db_polls SET poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
+        	// TODO: CHECK if changed
+            $sql = sed_sql_query("UPDATE $db_polls SET poll_type='".sed_sql_prep($type)."', poll_state='".(int)$state."', poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
             $newpoll_id = $poll_id; }
         // Dinamic adding polloptions
         for($count = 0; $count < $option_count; $count++) {
@@ -282,7 +283,7 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
     if ($row = sed_sql_fetcharray($sql))
     {
     	$id=$row['poll_id'];
-        if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
+		if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
         {
             $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userid='".$usr['id']."' LIMIT 1");
             $alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
@@ -317,8 +318,12 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
     else			  {$skin=sed_skinfile($skin, true);}
 
     $poll_form = new XTemplate($skin);
-    $poll_block = (!$alreadyvoted) ? "POLL_VIEW" : "POLL_VIEW_VOTED";
-    if (!$canvote) $poll_block = "POLL_VIEW_DISABLED";
+    
+    if  ($alreadyvoted) $poll_block = "POLL_VIEW_VOTED";
+    elseif (!$canvote) $poll_block = "POLL_VIEW_DISABLED";
+    elseif ($row['poll_state']) $poll_block = "POLL_VIEW_LOCKED";
+    else $poll_block = "POLL_VIEW";
+    
     while ($row1 = sed_sql_fetcharray($sql1))
     {
         $po_id = $row1['po_id'];
@@ -385,6 +390,58 @@ function sed_poll_delete($id, $type='')
 		$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
 		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
 		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
+	}
+}
+
+function sed_poll_lock($id, $state, $type='')
+{
+		global $db_polls;
+	if($type)
+	{
+     	$sql = sed_sql_query("SELECT poll_id, poll_state FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+	    if ($row = sed_sql_fetcharray($sql))
+  		{
+    		$id=$row['poll_id'];
+    		$rstate = $row['poll_state'];
+		}
+		else $id=0;
+	}
+	if ($state=3)
+	{
+		if (!$type)
+		{
+			$sql = sed_sql_query("SELECT poll_state FROM $db_polls WHERE  poll_id='$id' LIMIT 1");
+			if ($row = sed_sql_fetcharray($sql))
+  			{
+    			$rstate = $row['poll_state'];
+			}
+			else $id=0;
+		}
+		if ($rstate) $state = 0;
+		else		 $state = 1;
+	}
+	if($id!=0)
+	{
+		$sql = sed_sql_query("UPDATE $db_polls SET poll_state='".(int)$state."' WHERE poll_id='$id'");
+	}
+}
+
+function sed_poll_reset($id, $type='')
+{
+	global $db_polls, $db_polls_options, $db_polls_voters;
+	if($type)
+	{
+     	$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+	    if ($row = sed_sql_fetcharray($sql))
+  		{
+    		$id=$row['poll_id'];
+		}
+		else $id=0;
+	}
+	if($id!=0)
+	{
+		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
+		$sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
 	}
 }
 

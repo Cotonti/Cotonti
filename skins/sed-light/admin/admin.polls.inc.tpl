@@ -20,6 +20,7 @@
 		<td class="coltop" style="width:40px;">{PHP.L.Type}</td>
 		<td class="coltop">{PHP.L.Poll} {PHP.L.adm_clicktoedit}</td>
 		<td class="coltop" style="width:48px;">{PHP.L.Votes}</td>
+		<td class="coltop" style="width:40px;">{PHP.L.Close}</td>
 		<td class="coltop" style="width:40px;">{PHP.L.Delete}</td>
 		<td class="coltop" style="width:40px;">{PHP.L.Reset}</td>
 		<td class="coltop" style="width:40px;">{PHP.L.Bump}</td>
@@ -29,16 +30,17 @@
 	<tr>
 		<td style="text-align:center;">{ADMIN_POLLS_ROW_POLL_CREATIONDATE}</td>
 		<td>{ADMIN_POLLS_ROW_POLL_TYPE}</td>
-		<td><a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
+		<td>{ADMIN_POLLS_ROW_POLL_CLOSED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
 		<td style="text-align:center;">{ADMIN_POLLS_ROW_POLL_TOTALVOTES}</td>
+<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">C</a>]</td>
 		<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_DEL}">x</a>]</td>
 		<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_RES}">R</a>]</td>
 		<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_BMP}">B</a>]</td>
 		<td style="text-align:center;"><a href="{ADMIN_POLLS_ROW_POLL_URL_OPN}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
 	</tr>
 <!-- END: POLLS_ROW -->
-<tr><td colspan="8"><div class="pagnav">{ADMIN_POLLS_PAGINATION_PREV} {ADMIN_POLLS_PAGNAV} {ADMIN_POLLS_PAGINATION_NEXT}</div></td></tr>
-<tr><td colspan="8">{PHP.L.Total} : {ADMIN_POLLS_TOTALITEMS}, {PHP.L.adm_polls_on_page} : {ADMIN_POLLS_ON_PAGE}</td></tr>
+<tr><td colspan="9"><div class="pagnav">{ADMIN_POLLS_PAGINATION_PREV} {ADMIN_POLLS_PAGNAV} {ADMIN_POLLS_PAGINATION_NEXT}</div></td></tr>
+<tr><td colspan="9">{PHP.L.Total} : {ADMIN_POLLS_TOTALITEMS}, {PHP.L.adm_polls_on_page} : {ADMIN_POLLS_ON_PAGE}</td></tr>
 </table>
 <h4>{ADMIN_POLLS_FORMNAME} :</h4>
 <form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
