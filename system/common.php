@@ -412,20 +412,19 @@ if (!$cfg['disablehitstats'])
 }
 
 /* ======== Language ======== */
+$dlang = $cfg['system_dir'].'/lang/en/main.lang.php';
+$mlang = $cfg['system_dir'].'/lang/'.$cfg['defaultlang'].'/main.lang.php';
+$ulang = $cfg['system_dir'].'/lang/'.$usr['lang'].'/main.lang.php';
 
-$mlang = $cfg['system_dir'].'/lang/'.$usr['lang'].'/main.lang.php';
-
-if (!file_exists($mlang))
-{
-	$usr['lang'] = $cfg['defaultlang'];
-	$mlang = $cfg['system_dir'].'/lang/'.$usr['lang'].'/main.lang.php';
-
-	if (!file_exists($mlang))
-	{ sed_diefatal('Main language file not found.'); }
-}
-
+if (file_exists($dlang)) 
+{ require_once($dlang); $dlangne = 1;}
+if (file_exists($ulang) && $usr['lang']!='en')
+{require_once($ulang);}
+elseif(file_exists($mlang) && $usr['lang'] != $cfg['defaultlang'] && $usr['lang']!='en')
+{require_once($mlang); $usr['lang'] = $cfg['defaultlang'];}
+elseif(!$dlangne)
+{ sed_diefatal('Main language file not found.'); }
 $lang = $usr['lang'];
-require_once($mlang);
 
 /* ======== Who's online part 2 ======== */
 
@@ -457,9 +456,15 @@ if (!$mtheme)
 	sed_diefatal('Default theme not found.');
 }
 
+$usr['def_skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.en.lang.php';
+
+if (@file_exists($usr['def_skin_lang']))
+{ require_once($usr['def_skin_lang']); }
+
+
 $usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
 
-if (@file_exists($usr['skin_lang']))
+if ($usr['skin_lang']!=$usr['def_skin_lang'] && @file_exists($usr['skin_lang']))
 { require_once($usr['skin_lang']); }
 
 require_once('./skins/'.$usr['skin'].'/'.$usr['skin'].'.php');

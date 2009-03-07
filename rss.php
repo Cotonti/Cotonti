@@ -30,7 +30,7 @@ require_once ('./datas/config.php');
 require_once ($cfg['system_dir'].'/functions.php');
 //require_once ($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
 require_once ($cfg['system_dir'].'/common.php');
-require_once ($cfg['system_dir'].'/lang/'.$cfg['defaultlang']."/main.lang.php");
+//require_once ($cfg['system_dir'].'/lang/'.$cfg['defaultlang']."/main.lang.php");
 
 $c = sed_import('c', 'G', 'ALP');
 $id = sed_import('id', 'G', 'INT');

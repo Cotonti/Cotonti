@@ -24,10 +24,10 @@ if (!empty($p))
 	$path_lang_def	= $cfg['plugins_dir']."/$p/lang/$p.en.lang.php";
 	$path_lang_alt	= $cfg['plugins_dir']."/$p/lang/$p.$lang.lang.php";
 
-	if (@file_exists($path_lang_alt))
-		{ require_once($path_lang_alt); }
-	elseif (@file_exists($path_lang_def))
+	if (@file_exists($path_lang_def))
 		{ require_once($path_lang_def); }
+	if (@file_exists($path_lang_alt) && $lang!='en')
+		{ require_once($path_lang_alt); }
 
 	$extp = array();
 
@@ -106,7 +106,9 @@ else
 				}
 			else
 				{
-				include_once($cfg['system_dir'].'/lang/'.$usr['lang']."/message.lang.php");
+				include_once($cfg['system_dir'].'/lang/en/message.lang.php');
+				if ($lang!='en')
+				{include_once($cfg['system_dir'].'/lang/$lang/message.lang.php');}
 				$info['Name'] = $x[0]." : ".$L['msg907_1'];
 				}
 

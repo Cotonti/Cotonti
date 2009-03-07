@@ -2527,20 +2527,24 @@ function sed_javascript($more='')
  * @param bool $core Use core module rather than a plugin
  * @return bool
  */
-function sed_langfile($name, $core = false)
+function sed_langfile($name, $core = false, $loadlang=false)
 {
 	global $cfg, $lang;
+	if($loadlang)
+	{
+		$lang = $loadlang;
+	}
 	if($core)
 	{
 		 // For module support, comming in N-0.1.0
-		 if(@file_exists($cfg['system_dir']."/lang/$lang/$name.lang.php"))
+		 if(@file_exists($cfg['system_dir']."/lang/$lang/$name.lang.php") && $loadlang!='en')
 		 	return $cfg['system_dir']."/lang/$lang/$name.lang.php";
 		 else
 		 	return $cfg['system_dir']."/lang/en/$name.lang.php";
 	}
 	else
 	{
-		if(@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
+		if(@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php") && $loadlang!='en')
 			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
 		else
 			return $cfg['plugins_dir']."/$name/lang/$name.en.lang.php";
