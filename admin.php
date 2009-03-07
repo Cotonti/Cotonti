@@ -18,7 +18,9 @@ require_once('./datas/config.php');
 require_once($cfg['system_dir'].'/functions.php');
 require_once($cfg['system_dir'].'/functions.admin.php');
 require_once($cfg['system_dir'].'/common.php');
-require_once($cfg['system_dir'].'/lang/'.$usr['lang'].'/admin.lang.php');
+require_once($cfg['system_dir'].'/lang/en/admin.lang.php');
+if ($usr['lang'] != 'en')
+{require_once($cfg['system_dir'].'/lang/'.$usr['lang'].'/admin.lang.php');}
 require_once($cfg['system_dir'].'/core/admin/admin.inc.php');
 
 ?>

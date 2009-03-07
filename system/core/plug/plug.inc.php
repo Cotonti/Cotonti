@@ -42,11 +42,11 @@ elseif (!empty($e))
 	$path_skin_def	= $cfg['plugins_dir']."/$e/$e.tpl";
 	$path_skin_alt	= sed_skinfile($e, true);
 
-	if (file_exists($path_lang_alt))
-	{ require_once($path_lang_alt); }
-	elseif (file_exists($path_lang_def))
+	if (file_exists($path_lang_def))
 	{ require_once($path_lang_def); }
-
+	if (file_exists($path_lang_alt) && $lang!='en')
+	{ require_once($path_lang_alt); }
+	
 	if (file_exists($path_skin_alt))
 	{
 		$path_skin= $path_skin_alt;

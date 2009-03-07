@@ -26,6 +26,8 @@ $num = sed_import('num','G','INT');
 $rc = sed_import('rc','G','INT');
 $redirect = sed_import('redirect','G','SLU');
 
+require_once($cfg['system_dir']."/lang/en/message.lang.php");
+if ($lang!='en')
 require_once($cfg['system_dir']."/lang/$lang/message.lang.php");
 
 unset ($r, $rd, $ru);
