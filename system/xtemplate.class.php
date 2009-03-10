@@ -615,14 +615,14 @@ class XTemplate {
 		} elseif (is_array($val) || is_object($val)) {
 
 			// Clear the existing values
-    		if ($reset_array) {
-    			$this->vars[$name] = array();
-    		}
+			if ($reset_array) {
+				$this->vars[$name] = array();
+			}
 
-        	foreach ($val as $k => $v) {
+			foreach ($val as $k => $v) {
 
-        		$this->vars[$name][$k] = $v;
-        	}
+				$this->vars[$name][$k] = $v;
+			}
 
 		} else {
 
@@ -649,6 +649,71 @@ class XTemplate {
 
 			$this->_assign_file_sub($name, $val);
 		}
+	}
+
+
+
+
+	public function get_vars_value($param)
+	{
+		$sub = explode('.', $param);
+		$var = $this->vars;
+
+		foreach ($sub as $v1) {
+
+			switch (true) {
+				case is_array($var):
+					if (!isset($var[$v1]) || (is_string($var[$v1]) && strlen($var[$v1]) == 0)) {
+
+						// Check for constant, when variable not assigned
+						if (defined($v1)) {
+
+							$var[$v1] = constant($v1);
+
+						} else {
+
+							$var[$v1] = null;
+						}
+					}
+					$var = $var[$v1];
+					break;
+
+				case is_object($var):
+					if (!isset($var->$v1) || (is_string($var->$v1) && strlen($var->$v1) == 0)) {
+						// Check for constant, when variable not assigned
+						if (defined($v1)) {
+
+							$var->$v1 = constant($v1);
+
+						} else {
+
+							$var->$v1 = null;
+						}
+					}
+					$var = $var->$v1;
+					break;
+			}
+		}
+
+		$nul = (!isset($this->_null_string[$v])) ? ($this->_null_string[""]) : ($this->_null_string[$v]);
+		$var = (!isset($var)) ? $nul : $var;
+
+		// Prevent cast to strings when arrays passed in
+		if (is_string($var)) {
+			if ($var === '') {
+				//$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . preg_quote($orig_v) . $this->tag_end_delim . $this->preg_delimiter . 'm', '', $copy);
+			} else {
+				//$var = trim($var);
+				// SF Bug no. 810773 - thanks anonymous
+				$var = str_replace('\\', '\\\\', $var);
+				// Ensure dollars in strings are not evaluated reported by SadGeezer 31/3/04
+				$var = str_replace('$', '\\$', $var);
+				// Replace str_replaces with preg_quote
+				//$var = preg_quote($var);
+				$var = str_replace('\\|', '|', $var);
+			}
+		}
+		return $var;
 	}
 
 	/**
@@ -690,12 +755,54 @@ class XTemplate {
 
 		$copy = preg_replace($this->filevar_delim_nl, '', $copy);
 
+		// === Cotonti: add logic ===
+		// ---------------------------------------------------------------------------------------------------------------------
+		if(strpos($copy, "<!-- IF"))
+		{
+			$copy = str_replace("\n","",$copy);
+			$ifs = array();
+			preg_match_all($this->preg_delimiter."<!-- IF (.*?) -->(.*?)<!-- ENDIF[: ]*?-->".$this->preg_delimiter, $copy, $ifs);
+			$c_ifs = count($ifs[0]);
+			for($i=0;$i<$c_ifs;$i++)
+			{
+				$full_tpl_block = $ifs[0][$i];
+				$short_tpl_block = $ifs[2][$i];
+				$if = $ifs[1][$i];
+				preg_match_all($this->preg_delimiter . $this->tag_start_delim . "(.*?)" . $this->tag_end_delim . $this->preg_delimiter, $if, $all_vars);
+				foreach($all_vars[1] as $j=>$av)
+				{
+					$av_value = $this->get_vars_value($av);
+					if(is_string($av_value)) $av_value = '"'.$av_value.'"';
+					$if = str_replace($all_vars[0][$j], $av_value, $if);
+				}
+
+				// Executing IF
+				$if_result = false;
+				eval('if('.$if.') $if_result = true; else $if_result = false; ');
+				if(!$if_result)
+				{
+					// delete this IF block with all content
+					$copy = str_replace($full_tpl_block, "", $copy);
+				}
+				else
+				{
+					// delete only IF construction
+					// ? delete or not - speed ?
+				}
+
+			}
+		}
+
+		// ---------------------------------------------------------------------------------------------------------------------
+
 		$var_array = array();
 
 		/* find & replace variables+blocks */
+		//$firephp->log($this->preg_delimiter . $this->tag_start_delim . '([A-Za-z0-9\._\x7f-\xff]+?' . $this->callback_preg . $this->comment_preg . ')' . $this->tag_end_delim . $this->preg_delimiter);
 		preg_match_all($this->preg_delimiter . $this->tag_start_delim . '([A-Za-z0-9\._\x7f-\xff]+?' . $this->callback_preg . $this->comment_preg . ')' . $this->tag_end_delim . $this->preg_delimiter, $copy, $var_array);
 
 		$var_array = $var_array[1];
+		//$firephp->log($var_array);
 
 		foreach ($var_array as $k => $v) {
 			// Use in regexes later
@@ -808,7 +915,7 @@ class XTemplate {
 							break;
 
 						case is_object($var):
-							 if (!isset($var->$v1) || (is_string($var->$v1) && strlen($var->$v1) == 0)) {
+							if (!isset($var->$v1) || (is_string($var->$v1) && strlen($var->$v1) == 0)) {
 								// Check for constant, when variable not assigned
 								if (defined($v1)) {
 
@@ -818,7 +925,7 @@ class XTemplate {
 
 									$var->$v1 = null;
 								}
-							 }
+							}
 							$var = $var->$v1;
 							break;
 					}
@@ -853,19 +960,19 @@ class XTemplate {
 									multiple word \w with look behind % for our %s followed
 									by comma or closing bracket
 									)|,?\s*?([\w(?<!\%)]+)[,|\)$]' . $this->preg_delimiter, $matches[1] . ')', $param_matches)) {
-									$parameters = $param_matches[0];
-								}
-
-								if (count($parameters)) {
-									array_walk($parameters, array($this, 'trim_callback'));
-									if (($key = array_search('%s', $parameters)) !== false) {
-										$parameters[$key] = $var;
-									} else {
-										array_unshift($parameters, $var);
+								$parameters = $param_matches[0];
 									}
-								} else {
-									unset($parameters);
-								}
+
+									if (count($parameters)) {
+										array_walk($parameters, array($this, 'trim_callback'));
+										if (($key = array_search('%s', $parameters)) !== false) {
+											$parameters[$key] = $var;
+										} else {
+											array_unshift($parameters, $var);
+										}
+									} else {
+										unset($parameters);
+									}
 							}
 
 							// Remove the parameters
@@ -1186,14 +1293,17 @@ class XTemplate {
 
 			switch ($k) {
 
+				case 't':
+					// Stop double Cotonti tpl object
+					break;
 				case 'GLOBALS':
 					// Stop Recursion
 					break;
 
 				case '_COOKIE': // Cloning means changes made after calling this method won't be available
 				case '_SESSION': // Cloning means changes made after calling this method won't be available
-					$GLOB[$k] = array_merge($GLOB[$k], $v);
-					break;
+				$GLOB[$k] = array_merge($GLOB[$k], $v);
+				break;
 
 				case '_ENV':
 				case '_FILES':
@@ -1206,13 +1316,10 @@ class XTemplate {
 					break;
 			}
 		}
-
-		/**
-		 * Access global variables as:
-		 * @example {PHP._SERVER.HTTP_HOST}
-		 * in your template!
-		 */
 		$this->assign('PHP', $GLOB);
+
+		
+		//$this->vars['PHP'] =& $GLOBALS;
 	}
 
 	/**
@@ -1276,9 +1383,10 @@ class XTemplate {
 		// JRC 06/04/2005 Added block comments (on BEGIN or END) <!-- BEGIN: block_name#Comments placed here -->
 		//$patt = "($this->block_start_word|$this->block_end_word)\s*(\w+)\s*$this->block_end_delim(.*)";
 		$patt = "(" . $this->block_start_word . "|" . $this->block_end_word . ")\s*(\w+)" . $this->comment_preg . "\s*" . $this->block_end_delim . "(.*)";
-
+		//global $firephp; $firephp->log ($patt);
 		foreach($con2 as $k => $v) {
 
+			//global $firephp; $firephp->log ($v);
 			$res = array();
 
 			if (preg_match_all($this->preg_delimiter . "$patt" . $this->preg_delimiter . 'ims', $v, $res, PREG_SET_ORDER)) {
