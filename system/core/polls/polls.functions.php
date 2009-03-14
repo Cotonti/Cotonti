@@ -12,19 +12,20 @@
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-function sed_poll_edit_form($id, $multiple=1)
+function sed_poll_edit_form($id, $skin='polls' )
 {
     global $cfg, $L, $db_polls, $db_polls_options;
     global $error_string;
     $poll_options ='';
     if(!empty($error_string))
     {
-        global $poll_id, $poll_option_text, $poll_option_id, $poll_multiple, $poll_text;
+        global $poll_id, $poll_option_text, $poll_option_id, $poll_multiple, $poll_state, $poll_text;
 
         $counter=0;
         $date="";
         $id=$poll_id;
         $poll_multiple=($poll_multiple) ? "checked='checked'":"";
+        $poll_state=($poll_state) ? "checked='checked'":"";
         $option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
         for($i = 0; $i < $option_count; $i++)
         {
@@ -44,6 +45,7 @@ function sed_poll_edit_form($id, $multiple=1)
         $row = sed_sql_fetcharray($sql);
         $poll_text=sed_cc($row["poll_text"]);
         $poll_multiple=($row["poll_multiple"]) ? "checked='checked'":"";
+        $poll_state=($row["poll_state"]) ? "checked='checked'":"";
         $date=date($cfg['dateformat'], $row["poll_creationdate"])." GMT";
         $counter=0;
         while ($row1 = sed_sql_fetcharray($sql1))
@@ -77,7 +79,6 @@ function sed_poll_edit_form($id, $multiple=1)
                 </div>";
         $counter++;
     }
-    $poll_text="<input type=\"text\" class=\"text\" name=\"poll_text\" value=\"".$poll_text."\" size=\"64\" maxlength=\"255\" /><input type=\"hidden\" name=\"poll_id\" value=\"".$id."\" />";
     $poll_date=$date."<input type=\"hidden\" name=\"poll_date\" value=\"".$date."\" />";
 
     // Render rules table
@@ -104,7 +105,7 @@ function removeAns(ii){
 function addAns() {
     if (ansCount<ansMax)
     {
-    $('#ans_' + (ansCount - 1)).after('<div id="ans_' + ansCount + '"><input type="hidden" name="poll_option_id[]" value="new" /><input  class="tbox" type="text" name="poll_option[]" size="40" value="" maxlength="128" /> <input class="delbutton" name="addoption" value="x" onclick="removeAns('+ansCount+')" type="button" /><\/div>');
+    $('#ans_' + (ansCount - 1)).after('<div id="ans_' + ansCount + '"><input type="hidden" name="poll_option_id[]" value="new" /><input  class="tbox" type="text" name="poll_option[]" size="40" value="" maxlength="255" /> <input class="delbutton" name="addoption" value="x" onclick="removeAns('+ansCount+')" type="button" /><\/div>');
     ansCount++;
     ansCC++
     }
@@ -115,26 +116,50 @@ function addAns() {
 </script>
 HTM;
 
-    $poll_options .= "<div id='ans_0'></div>";
+    $poll_options .= "<input type=\"hidden\" name=\"poll_id\" value=\"".$id."\" /><div id='ans_0'></div>";
     $poll_options .= $poll_options_x;
     if ($counter<$cfg['max_options_polls'])
     {
         $poll_options .= "<noscript><div id ='ans_no'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-                <input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /></div></noscript>";
+                <input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='255' /></div></noscript>";
     }
     $poll_options .= "
     <input  name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns()\" type=\"button\" />
 ";
 
-    if ($multiple==1)
-    {$poll_settings .= "<label><input name=\"poll_multiple\" type=\"checkbox\" value=\"1\" $poll_multiple />".$L['polls_multiple']."</label>";
-    }
-    elseif ($multiple==0)
-    {$poll_settings .= "<input type=\"hidden\" name=\"poll_multiple\" value=\"0\" />";
+    $poll_multiple = "<input name=\"poll_multiple\" type=\"checkbox\" value=\"1\" $poll_multiple />";
+
+    $poll_close = "<input name=\"poll_state\" type=\"checkbox\" value=\"1\" $poll_state />";
+    $poll_reset = "<input name=\"poll_reset\" type=\"checkbox\" value=\"1\" />";
+    $pol_delete = "<input name=\"poll_delete\" type=\"checkbox\" value=\"1\" />";
+
+    if (empty($skin)) {$skin=sed_skinfile('polls');}
+    else			  {$skin=sed_skinfile($skin, true);}
+
+    $poll_form = new XTemplate($skin);
+
+    if ($id!='new')
+    {
+        $poll_form->assign(array(
+        "EDIT_POLL_CLOSE" => $poll_close,
+        "EDIT_POLL_RESET" => $poll_reset,
+        "EDIT_POLL_DELETE" => $pol_delete,
+            ));
+
+        $poll_form->parse("POLL_EDIT_FORM.EDIT");
     }
 
+    $poll_form->assign(array(
+        "EDIT_POLL_TEXT" => $poll_text,
+        "EDIT_POLL_DATE" => $poll_date,
+        "EDIT_POLL_OPTIONS" => $poll_options,
+        "EDIT_POLL_MULTIPLE" => $poll_multiple
+        ));
 
-    return(array($poll_text, $poll_options, $poll_date, $poll_settings));
+    $poll_form->parse("POLL_EDIT_FORM");
+
+
+    return($poll_form -> text("POLL_EDIT_FORM"));
 }
 
 /* ------------------ */
@@ -143,14 +168,24 @@ function sed_poll_check()
 {
     global $cfg, $L;
     global $error_string;
-    global $poll_id, $poll_text, $poll_option_id, $poll_multiple, $poll_option_text;
+    global $poll_id, $poll_text, $poll_option_id, $poll_multiple, $poll_state, $poll_option_text;
     $poll_id = sed_import('poll_id','P','TXT');
+    $poll_delete = sed_import('poll_delete', 'P', 'BOL');
 
+    if ($poll_delete && !empty($poll_id))
+    {
+        sed_poll_delete($poll_id);
+        $poll_id = "";
+    }
     if (!empty($poll_id))
     {
+        $poll_reset = sed_import('poll_reset', 'P', 'BOL');
+        if ($poll_reset)
+        {sed_poll_reset($id);}
         $poll_text = trim(sed_import('poll_text','P','HTM'));
         $poll_option_id = sed_import('poll_option_id', 'P', 'ARR');
         $poll_multiple = sed_import('poll_multiple', 'P', 'BOL');
+        $poll_state = sed_import('poll_state', 'P', 'BOL');
         $option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
         $poll_option_text = sed_import('poll_option', 'P', 'ARR');
 
@@ -179,22 +214,22 @@ function sed_poll_check()
 
 /* ------------------ */
 
-function sed_poll_save($type='index', $state='0', $code='')
+function sed_poll_save($type='index', $code='')
 {
 
     global $cfg, $L, $sys, $db_polls, $db_polls_options;
     global $error_string;
-    global $poll_id, $poll_text, $poll_option_id, $poll_multiple, $poll_option_text;
+    global $poll_id, $poll_text, $poll_option_id, $poll_multiple, $poll_state, $poll_option_text;
 
     if (!empty($poll_id) && empty($error_string))
     {
         $option_count = (count($poll_option_id) ? count($poll_option_id) : 0);
         if ($poll_id=='new') {
-            $sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple, poll_code) VALUES ('".sed_sql_prep($type)."', ".(int)$state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
+            $sql = sed_sql_query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple, poll_code) VALUES ('".sed_sql_prep($type)."', ".(int)$poll_state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
             $newpoll_id = sed_sql_insertid(); }
         else {
-        	// TODO: CHECK if changed
-            $sql = sed_sql_query("UPDATE $db_polls SET poll_type='".sed_sql_prep($type)."', poll_state='".(int)$state."', poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
+            // TODO: CHECK if changed
+            $sql = sed_sql_query("UPDATE $db_polls SET poll_type='".sed_sql_prep($type)."', poll_state='".(int)$poll_state."', poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
             $newpoll_id = $poll_id; }
         // Dinamic adding polloptions
         for($count = 0; $count < $option_count; $count++) {
@@ -213,7 +248,7 @@ function sed_poll_save($type='index', $state='0', $code='')
         }
         return($newpoll_id);
     }
-    return 0;
+    return(false);
 }
 
 /* ------------------ */
@@ -282,8 +317,8 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
 
     if ($row = sed_sql_fetcharray($sql))
     {
-    	$id=$row['poll_id'];
-		if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
+        $id=$row['poll_id'];
+        if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
         {
             $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userid='".$usr['id']."' LIMIT 1");
             $alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
@@ -318,12 +353,12 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
     else			  {$skin=sed_skinfile($skin, true);}
 
     $poll_form = new XTemplate($skin);
-    
+
     if  ($alreadyvoted) $poll_block = "POLL_VIEW_VOTED";
     elseif (!$canvote) $poll_block = "POLL_VIEW_DISABLED";
     elseif ($row['poll_state']) $poll_block = "POLL_VIEW_LOCKED";
     else $poll_block = "POLL_VIEW";
-    
+
     while ($row1 = sed_sql_fetcharray($sql1))
     {
         $po_id = $row1['po_id'];
@@ -375,74 +410,76 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
 
 function sed_poll_delete($id, $type='')
 {
-	global $db_polls, $db_polls_options, $db_polls_voters;
-	if($type)
-	{
-     	$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
-	    if ($row = sed_sql_fetcharray($sql))
-  		{
-    		$id=$row['poll_id'];
-		}
-		else $id=0;
-	}
-	if($id!=0)
-	{
-		$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
-		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
-		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
-	}
+    global $db_polls, $db_polls_options, $db_polls_voters, $db_com;
+    if($type)
+    {
+        $sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+        if ($row = sed_sql_fetcharray($sql))
+        {
+            $id=$row['poll_id'];
+        }
+        else $id=0;
+    }
+    if($id!=0)
+    {
+        $sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
+        $sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
+        $sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
+        $id2 = "v".$poll_id;
+        $sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
+    }
 }
 
 function sed_poll_lock($id, $state, $type='')
 {
-		global $db_polls;
-	if($type)
-	{
-     	$sql = sed_sql_query("SELECT poll_id, poll_state FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
-	    if ($row = sed_sql_fetcharray($sql))
-  		{
-    		$id=$row['poll_id'];
-    		$rstate = $row['poll_state'];
-		}
-		else $id=0;
-	}
-	if ($state=3)
-	{
-		if (!$type)
-		{
-			$sql = sed_sql_query("SELECT poll_state FROM $db_polls WHERE  poll_id='$id' LIMIT 1");
-			if ($row = sed_sql_fetcharray($sql))
-  			{
-    			$rstate = $row['poll_state'];
-			}
-			else $id=0;
-		}
-		if ($rstate) $state = 0;
-		else		 $state = 1;
-	}
-	if($id!=0)
-	{
-		$sql = sed_sql_query("UPDATE $db_polls SET poll_state='".(int)$state."' WHERE poll_id='$id'");
-	}
+    global $db_polls;
+    if($type)
+    {
+        $sql = sed_sql_query("SELECT poll_id, poll_state FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+        if ($row = sed_sql_fetcharray($sql))
+        {
+            $id=$row['poll_id'];
+            $rstate = $row['poll_state'];
+        }
+        else $id=0;
+    }
+    if ($state=3)
+    {
+        if (!$type)
+        {
+            $sql = sed_sql_query("SELECT poll_state FROM $db_polls WHERE  poll_id='$id' LIMIT 1");
+            if ($row = sed_sql_fetcharray($sql))
+            {
+                $rstate = $row['poll_state'];
+            }
+            else $id=0;
+        }
+        if ($rstate) $state = 0;
+        else		 $state = 1;
+    }
+    if($id!=0)
+    {
+        $sql = sed_sql_query("UPDATE $db_polls SET poll_state='".(int)$state."' WHERE poll_id='$id'");
+    }
 }
 
 function sed_poll_reset($id, $type='')
 {
-	global $db_polls, $db_polls_options, $db_polls_voters;
-	if($type)
-	{
-     	$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
-	    if ($row = sed_sql_fetcharray($sql))
-  		{
-    		$id=$row['poll_id'];
-		}
-		else $id=0;
-	}
-	if($id!=0)
-	{
-		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
-		$sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
-	}
+    global $db_polls, $db_polls_options, $db_polls_voters;
+    if($type)
+    {
+        $sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+        if ($row = sed_sql_fetcharray($sql))
+        {
+            $id=$row['poll_id'];
+        }
+        else $id=0;
+    }
+    if($id!=0)
+    {
+        $sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
+        $sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
+    }
 }
 
 ?>

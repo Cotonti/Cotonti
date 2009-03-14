@@ -103,6 +103,19 @@
 </table>
 <!-- END: POLL_VIEW_DISABLED-->
 
+<!-- BEGIN: POLL_EDIT_FORM -->
+<tr><td>{PHP.L.adm_polls_polltopic}</td><td><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td></tr>
+
+<tr><td>{PHP.L.Options}</td><td>{EDIT_POLL_OPTIONS}</td></tr>
+<tr><td></td><td><label>{EDIT_POLL_MULTIPLE}{PHP.L.polls_multiple}</label>
+<!-- BEGIN: EDIT -->
+<br /><label>{EDIT_POLL_CLOSE}{PHP.L.Close}</label>
+<br /><label>{EDIT_POLL_RESET}{PHP.L.Reset}</label>
+<br /><label>{EDIT_POLL_DELETE}{PHP.L.Delete}</label>
+<!-- END: EDIT -->
+</td></tr>
+<!-- END: POLL_EDIT_FORM -->
+
 
 <!-- BEGIN: MAIN -->
 	<!-- BEGIN: POLLS_VIEW -->

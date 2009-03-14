@@ -148,7 +148,7 @@ if ($a=='newtopic')
 			".$poll_index.")");
 
 		$q = sed_sql_insertid();
-        if ($poll) sed_poll_save('forum', '0', $q);
+        if ($poll) sed_poll_save('forum', $q);
 
 		if($cfg['parser_cache'])
 		{
@@ -290,13 +290,11 @@ if ($fs_allowprvtopics)
 if ($fs_allowpolls && $poll)
 	{
 
-	list($poll_text, $poll_options, $poll_date, $poll_settings)=sed_poll_edit_form("new", 1);
+	$poll_text=sed_poll_edit_form("new");
 
 
 	$t->assign(array(
-		"FORUMS_NEWTOPIC_POLLOPTIONS" => $poll_options,
 		"FORUMS_NEWTOPIC_POLLTEXT" => $poll_text,
-		"FORUMS_NEWTOPIC_POLLSETTINGS" => $poll_settings,
 	));
 	$t->parse("MAIN.POLL");
 

@@ -45,9 +45,7 @@ if(is_array($extp))
 if($a == 'delete')
 {
 	sed_check_xg();
-	$id2 = "v".$id;
 	sed_poll_delete($id);
-	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 	$adminpollsmsg = $L['adm_polls_msg916_deleted'];
 }
 elseif($a == 'reset')
@@ -216,7 +214,7 @@ foreach($variants as $val)
 	$t -> parse("POLLS.POLLS_ROW_FILTER");
 }
 
-list($poll_text, $poll_options, $poll_date, $poll_settings) = sed_poll_edit_form($poll_id, 1);
+$poll_text = sed_poll_edit_form($poll_id);
 
 $t -> assign(array(
 	"ADMIN_POLLS_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=polls"),
@@ -227,10 +225,7 @@ $t -> assign(array(
 	"ADMIN_POLLS_ON_PAGE" => $ii,
 	"ADMIN_POLLS_FORMNAME" => $formname,
 	"ADMIN_POLLS_FORM_URL" => ($poll_id != 'new') ? sed_url('admin', "m=polls".$poll_filter."&d=".$d) : sed_url('admin', "m=polls"),
-	"ADMIN_POLLS_POLL_TEXT" => $poll_text,
-	"ADMIN_POLLS_POLL_DATE" => $poll_date,
-	"ADMIN_POLLS_POLL_OPTIONS" => $poll_options,
-	"ADMIN_POLLS_POLL_SETTINGS" => $poll_settings,
+	"ADMIN_POLLS_EDIT_FORM" => $poll_text,
 	"ADMIN_POLLS_SEND_BUTTON" => $send_button
 ));
 
