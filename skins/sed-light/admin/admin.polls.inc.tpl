@@ -45,10 +45,7 @@
 <h4>{ADMIN_POLLS_FORMNAME} :</h4>
 <form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
 <table class="cells">
-<tr><td>{PHP.L.adm_polls_polltopic}</td><td>{ADMIN_POLLS_POLL_TEXT}</td></tr>
-<tr><td>{PHP.L.Date} : </td><td>{ADMIN_POLLS_POLL_DATE}</td></tr>
-<tr><td>{PHP.L.Options}</td><td>{ADMIN_POLLS_POLL_OPTIONS}</td></tr>
-<tr><td></td><td>{ADMIN_POLLS_POLL_SETTINGS}</td></tr>
+{ADMIN_POLLS_EDIT_FORM}
 <tr><td colspan="2"><input type="submit" class="submit" value="{ADMIN_POLLS_SEND_BUTTON}" /></td></tr>
 </table>
 </form>

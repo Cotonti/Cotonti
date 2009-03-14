@@ -39,18 +39,14 @@
 					<div style="width:100%;">{FORUMS_NEWTOPIC_TEXTBOXER}</div>
 					</td>
 				</tr>
-								<!-- BEGIN: POLL -->
-				
-				<tr>
+				<!-- BEGIN: POLL -->
+                <tr>
 					<td>
-<table class="cells">
-<tr><td>{PHP.L.Poll}</td><td>{FORUMS_NEWTOPIC_POLLTEXT}</td></tr>
-<tr><td>{PHP.skinlang.forumsnewtopic.poll}</td><td>{FORUMS_NEWTOPIC_POLLOPTIONS}</td></tr>
-<tr><td></td><td>{FORUMS_NEWTOPIC_POLLSETTINGS}</td></tr>
-</table>
-					</td>
+                <table>
+                {FORUMS_NEWTOPIC_POLLTEXT}
+                </table>
+                    </td>
 				</tr>
-				
 				<!-- END: POLL -->
 
 				<!-- BEGIN: FORUMS_NEWTOPIC_TAGS -->
