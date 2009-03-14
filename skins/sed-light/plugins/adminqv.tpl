@@ -10,19 +10,19 @@
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=menus">{PHP.L.plu_ql_b1_4}</a></li>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=lang">{PHP.L.plu_ql_b1_5}</a></li>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time">{PHP.L.plu_ql_b1_6}</a></li>
-		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=trash">{PHP.L.plu_ql_b1_7}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=trash">{PHP.L.Trash}</a></li>
 		</ul>
 		<b>{PHP.L.plu_ql_b4_title}</b>
 		<ul>
-		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=plug">{PHP.L.plu_ql_b4_1}</a></li>
-		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=forums">{PHP.L.plu_ql_b4_2}</a></li>
-		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=comments">{PHP.L.plu_ql_b4_3}</a></li>
-		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=polls">{PHP.L.plu_ql_b4_4}</a></li>
-		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=ratings">{PHP.L.plu_ql_b4_5}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=plug">{PHP.L.Plugins}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=forums">{PHP.L.Forums}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=comments">{PHP.L.Comments}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=polls">{PHP.L.Polls}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=ratings">{PHP.L.Ratings}</a></li>
 		</ul>
 	</td>
 	<td style="padding-left:20px;">
-		<b>{PHP.L.plu_ql_b2_title}</b>
+		<b>{PHP.L.Pages}</b>
 		<ul>
 		<li><a href="admin.php?m=page&amp;s=structure">{PHP.L.plu_ql_b2_1}</a></li>
 		<li><a href="admin.php?m=page&amp;s=extrafields">{PHP.L.plu_ql_b2_2}</a></li>
@@ -31,17 +31,18 @@
 		</ul>
 	</td>
 	<td style="padding-left:20px;">
-		<b>{PHP.L.plu_ql_b3_title}</b>
+		<b>{PHP.L.Users}</b>
 		<ul>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=users">{PHP.L.plu_ql_b3_1}</a></li>
 		<li><a href="admin.php?m=users&amp;s=extrafields">{PHP.L.plu_ql_b3_2}</a></li>
-		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pfs">{PHP.L.plu_ql_b3_3}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pfs">{PHP.L.PFS}</a></li>
 		<li><a href="admin.php?m=users">{PHP.L.plu_ql_b3_4}</a></li>
-		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pm">{PHP.L.plu_ql_b3_5}</a></li>
+		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pm">{PHP.L.Private_Messages}</a></li>
 		</ul>
 	</td>
 </tr>
 </table>
+
 <h4>{PHP.L.plu_title}</h4>
 <table style="width:100%;">
 <tr>
@@ -85,8 +86,8 @@
 		<tr><td colspan="4" class="coltop">{PHP.L.plu_hitsmonth}</td></tr>
 		<!-- BEGIN: ADMINQV_ROW -->
 		<tr>
-			<td style="width:128px;">{ADMINQV_DAY}</td>
-			<td style="text-align:right; width:96px;">{ADMINQV_HITS} {PHP.L.Hits}</td>
+			<td style="width:96px;">{ADMINQV_DAY}</td>
+			<td style="text-align:right; width:128px;">{PHP.L.Hits}: {ADMINQV_HITS}</td>
 			<td style="text-align:right; width:40px;">{ADMINQV_PERCENTBAR}%</td>
 			<td><div style="width:128px;"><div class="bar_back"><div class="bar_front" style="width:{ADMINQV_PERCENTBAR}%;"></div></div></div></td>
 		</tr>
