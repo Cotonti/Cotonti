@@ -2828,12 +2828,12 @@ function sed_htmlmetas()
  */
 function sed_mktime($hour = false, $minute = false, $second = false, $month = false, $date = false, $year = false)
 {
-	if ($hour === false)  $hour  = Date ('G');
-	if ($minute === false) $minute = Date ('i');
-	if ($second === false) $second = Date ('s');
-	if ($month === false)  $month  = Date ('n');
-	if ($date === false)  $date  = Date ('j');
-	if ($year === false)  $year  = Date ('Y');
+	if ($hour === false)  $hour  = date ('G');
+	if ($minute === false) $minute = date ('i');
+	if ($second === false) $second = date ('s');
+	if ($month === false)  $month  = date ('n');
+	if ($date === false)  $date  = date ('j');
+	if ($year === false)  $year  = date ('Y');
 
 	return mktime ((int) $hour, (int) $minute, (int) $second, (int) $month, (int) $date, (int) $year);
 }
