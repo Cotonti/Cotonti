@@ -1,19 +1,28 @@
 <?PHP
 /**
- * English language file for indexpolls
+ * English Language File for IndexPolls Plugin
  *
  * @package Cotonti
- * @version 0.0.3
- * @author riptide
- * @copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
+ * @version 0.1.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
 
-$L['cfg_maxpolls']= array('Polls displayed');
-$L['cfg_mode']=array('Mode polls displayed');
-$L_idx['vote_failed'] = 'Vote failed';//If you have problems with submitting the vote
-$L_idx['vote_opt'] = 'You did not pick an option.';//If vote:checked false
-$L_idx['voteit'] = 'Vote it!';
+/**
+ * Plugin Body (Index)
+ */
+
 $L_idx['voteback'] = 'Vote screen';
+$L_idx['voteit'] = 'Vote!';
+$L_idx['vote_failed'] = 'Vote failed';
+$L_idx['vote_opt'] = 'You did not pick an option';
+
+/**
+ * Plugin Config
+ */
+
+$L['cfg_maxpolls']= array('Number of polls displayed');
+$L['cfg_mode']=array('Poll display mode', '"Recent polls" &mdash; display last poll(s)<br />"Random polls" &mdash; display random poll(s)');
 
 ?>

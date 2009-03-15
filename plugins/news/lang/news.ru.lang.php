@@ -1,15 +1,19 @@
 <?PHP
 /**
- * Russian language file for news
+ * Russian Language File for News Plugin
  *
  * @package Cotonti
- * @version 0.0.3
- * @author esclkm
- * @copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
+ * @version 0.1.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
+/**
+ * Plugin Config
  */
 
 $L['cfg_category']= array('Код родительской категории');
-$L['cfg_maxpages']= array('Отображать страниц');
+$L['cfg_maxpages']= array('Количество отображаемых страниц');
 
 ?>
