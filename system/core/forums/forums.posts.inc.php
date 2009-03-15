@@ -411,6 +411,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$ft_mode = $row['ft_mode'];
 	$ft_state = $row['ft_state'];
 	$ft_poll = $row;
+    $ft_poll_id = $row['poll_id'];
 	$ft_firstposterid = $row['ft_firstposterid'];
 
 	if ($ft_mode==1 && !($usr['isadmin'] || $ft_firstposterid==$usr['id']))
@@ -485,7 +486,7 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'posts', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-if (!$cfg['disable_polls'] && $ft_poll['poll_id'])
+if (!$cfg['disable_polls'] && $ft_poll_id)
 {
 	sed_poll_vote();
 	list($polltitle, $poll_form)=sed_poll_form($ft_poll, sed_url('forums', "m=posts&q=".$q), '', 'forum');
@@ -530,7 +531,7 @@ while ($row1 = sed_sql_fetcharray($sql1))
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
 	{
 
-		if ( ($ft_poll>0 && $row1['fs_allowpolls']) || ($ft_poll==0) )
+		if ( ($ft_poll_id>0 && $row1['fs_allowpolls']) || ($ft_poll_id==0) )
 		{
 
 			$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
@@ -564,7 +565,7 @@ if ($usr['isadmin'])
 else
 { $adminoptions = "&nbsp;"; }
 
-if ($ft_poll>0)
+if ($ft_poll_id>0)
 { $ft_title = $L['Poll'].": ".$ft_title; }
 
 $ft_title = ($ft_mode==1) ? "# ".sed_cc($ft_title) : sed_cc($ft_title);
@@ -572,6 +573,7 @@ $ft_title = ($ft_mode==1) ? "# ".sed_cc($ft_title) : sed_cc($ft_title);
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
 $toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master);
+$toppath  = $toptitle;
 $toptitle .= " ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&q=".$q)."\">".$ft_title."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
@@ -580,6 +582,8 @@ $t->assign(array(
 	"FORUMS_POSTS_RSS" => sed_url("rss", "c=topics&id=$q", "", true),
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
 	"FORUMS_POSTS_TOPICDESC" => sed_cc($ft_desc),
+    "FORUMS_POSTS_SHORTTITLE" => $ft_title,
+    "FORUMS_POSTS_PATH" => $toppath,
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
 	"FORUMS_POSTS_PAGES" => $pages,
 	"FORUMS_POSTS_PAGEPREV" => $pages_prev,
