@@ -1,22 +1,13 @@
-<?PHP
+<?php
 /* ====================
-[BEGIN_SED]
-File=plugins/seditio/seditio.setup.php
-Version=0.0.2
-Updated=2009-jan-02
-Type=Plugin
-Author=Trustmaster
-Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=seditio
 Name=Seditio Compatibility
 Description=Seditio Compatibility Plugin
-Version=0.0.2
-Date=2008-jan-02
-Author=Trustmaster
-Copyright=Partial copyright (c) 2008 Cotonti Team
+Version=0.0.4
+Date=2009-jan-02
+Author=Trustmaster, Cotonti Team
+Copyright=Partial copyright (c) 2009 Cotonti Team
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -25,9 +16,34 @@ Auth_members=RW
 Lock_members=12345A
 [END_SED_EXTPLUGIN]
 ==================== */
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-if($action == 'install')
+/**
+ * Seditio Compatibility: setup
+ *
+ * @package Cotonti
+ * @version 0.0.4
+ * @author Trustmaster, Cotonti Team
+ * @copyright Copyright (c) 2009 Cotonti Team
+ * @license BSD
+ */
+
+defined('SED_CODE') or die('Wrong URL.');
+
+/**
+ * Detects the existence of BBCode in db
+ *
+ * @global $db_bbcode
+ * @param string $name Name of BBCode
+ * @return bool
+ */
+function sedc_detect_bbcode($name)
+{
+	global $db_bbcode;
+
+	return sed_sql_numrows(sed_sql_query("SELECT bbc_name FROM $db_bbcode WHERE bbc_name = '$name' LIMIT 1")) > 0;
+}
+
+if ($action == 'install')
 {
 	// Installing new bbcodes
 	sed_bbcode_remove(0, 'seditio');
@@ -80,14 +96,22 @@ if($action == 'install')
 	sed_bbcode_add('ac', 'pcre', '\[ac=([^\[]+)\](.+?)\[/ac\]', '<acronym title="$1">$2</acronym>', true, 128, 'seditio');
 	sed_bbcode_add('c1c2c3', 'pcre', '\[c1\:([\d%]+)\](.*?)\[c2\:([\d%]+)\](.*?)\[c3\]', '<table style="margin:0; vertical-align:top; width:100%;"><tr><td style="padding:8px; vertical-align:top; width:$1%;">$2</td><td  style="padding:8px; vertical-align:top; width:$3%;">$4</td></tr></table>', true, 128, 'seditio');
 
-	sed_bbcode_add('youtube', 'pcre', '\[youtube=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.youtube.com/v/$1" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/$1" /><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
-	sed_bbcode_add('googlevideo', 'pcre', '\[googlevideo=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" width="400" height="326"><param name="movie" value="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" /><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
-	sed_bbcode_add('metacafe', 'pcre', '\[metacafe=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.metacafe.com/fplayer/$1" width="400" height="345"><param name="movie" value="http://www.metacafe.com/fplayer/$1" /><param name="allowfullscreen" value="true" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+	if (!sedc_detect_bbcode('youtube'))
+	{
+		sed_bbcode_add('youtube', 'pcre', '\[youtube=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.youtube.com/v/$1" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/$1" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+	}
+	if (!sedc_detect_bbcode('googlevideo'))
+	{
+		sed_bbcode_add('googlevideo', 'pcre', '\[googlevideo=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" width="400" height="326"><param name="movie" value="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+	}
+	if (!sedc_detect_bbcode('metacafe'))
+	{
+		sed_bbcode_add('metacafe', 'pcre', '\[metacafe=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.metacafe.com/fplayer/$1" width="400" height="345"><param name="movie" value="http://www.metacafe.com/fplayer/$1" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+	}
 }
-elseif($action == 'uninstall')
+elseif ($action == 'uninstall')
 {
 	// Remove plugin bbcodes
 	sed_bbcode_remove(0, 'seditio');
 }
-
 ?>
