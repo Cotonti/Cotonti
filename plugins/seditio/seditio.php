@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=seditio
@@ -11,17 +11,16 @@ Order=10
 ==================== */
 
 /**
- * Seditio Compatibility Plugin
+ * Seditio Compatibility: main
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.4
  * @author Trustmaster, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) 2009 Cotonti Team
  * @license BSD
  */
 
-if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
+(defined('SED_CODE') && defined('SED_PLUG')) or die('Wrong URL.');
 
 // Dummy standalone plugin, fill it with code you are missing from Seditio
-
 ?>
