@@ -1,20 +1,24 @@
 <?PHP
 /**
- * English language file for cleaner
+ * English Language File for Cleaner Plugin
  *
  * @package Cotonti
- * @version 0.0.3
- * @author Neocrome & Cotonti Team
- * @copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
+ * @version 0.1.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
 
-$L['cfg_trashcan']= array('Remove the trashcan items after * days (0 to disable)', '');
-$L['cfg_userprune']= array('Delete the user accounts not activated within * days (0 to disable)', '');
-$L['cfg_logprune']= array('Delete the log entries older than * days (0 to disable)', '');
-$L['cfg_refprune']= array('Delete the referer entries older than * days (0 to disable)', '');
-$L['cfg_pmnotread']= array('Delete the private messages older than * days and not read by the recipient (0 to disable)', '');
-$L['cfg_pmnotarchived']= array('Delete the private messages older than * days and not archived (0 to disable)', '');
-$L['cfg_pmold']= array('Delete ALL the private messages older than * days (0 to disable)', '');
+/**
+ * Plugin Config
+ */
+
+$L['cfg_logprune']= array('Delete log entries older than', 'days (0 - disable)');
+$L['cfg_pmnotarchived']= array('Delete not archived private messages older than', 'days (0 - disable)');
+$L['cfg_pmnotread']= array('Delete unread private messages older than', 'days (0 - disable)');
+$L['cfg_pmold']= array('Delete <strong>ALL</strong> private messages older than', 'days (0 - disable)');
+$L['cfg_refprune']= array('Delete referers older than', 'days (0 - disable)');
+$L['cfg_trashcan']= array('Delete Trashcan items older than', 'days (0 - disable)');
+$L['cfg_userprune']= array('Delete inactive user accounts older than', 'days (0 - disable)');
 
 ?>

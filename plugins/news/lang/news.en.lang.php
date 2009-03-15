@@ -1,15 +1,19 @@
 <?PHP
 /**
- * English language file for news
+ * English Language File for News Plugin
  *
  * @package Cotonti
- * @version 0.0.3
- * @author Neocrome & Cotonti Team
- * @copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
+ * @version 0.1.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
 
-$L['cfg_category']= array('Category code of the parent category');
-$L['cfg_maxpages']= array('Recent pages displayed');
+/**
+ * Plugin Config
+ */
+
+$L['cfg_category']= array('Parent category code');
+$L['cfg_maxpages']= array('Number of recent pages displayed');
 
 ?>
