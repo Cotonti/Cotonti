@@ -45,7 +45,16 @@
 <h4>{ADMIN_POLLS_FORMNAME} :</h4>
 <form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
 <table class="cells">
-{ADMIN_POLLS_EDIT_FORM}
+<tr><td>{PHP.L.adm_polls_polltopic}</td><td><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td></tr>
+
+<tr><td>{PHP.L.Options}</td><td>{EDIT_POLL_OPTIONS}</td></tr>
+<tr><td></td><td><label>{EDIT_POLL_MULTIPLE}{PHP.L.polls_multiple}</label>
+<!-- BEGIN: EDIT -->
+<br /><label>{EDIT_POLL_CLOSE}{PHP.L.Close}</label>
+<br /><label>{EDIT_POLL_RESET}{PHP.L.Reset}</label>
+<br /><label>{EDIT_POLL_DELETE}{PHP.L.Delete}</label>
+<!-- END: EDIT -->
+</td></tr>
 <tr><td colspan="2"><input type="submit" class="submit" value="{ADMIN_POLLS_SEND_BUTTON}" /></td></tr>
 </table>
 </form>

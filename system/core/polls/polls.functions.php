@@ -12,7 +12,7 @@
 
 if (!defined('SED_CODE')) { die('Wrong URL.'); }
 
-function sed_poll_edit_form($id, $skin='polls' )
+function sed_poll_edit_form($id, $t, $block='')
 {
     global $cfg, $L, $db_polls, $db_polls_options;
     global $error_string;
@@ -133,33 +133,29 @@ HTM;
     $poll_reset = "<input name=\"poll_reset\" type=\"checkbox\" value=\"1\" />";
     $pol_delete = "<input name=\"poll_delete\" type=\"checkbox\" value=\"1\" />";
 
-    if (empty($skin)) {$skin=sed_skinfile('polls');}
-    else			  {$skin=sed_skinfile($skin, true);}
+    // if (empty($skin)) {$skin=sed_skinfile('polls');}
+    // else			  {$skin=sed_skinfile($skin, true);}
 
-    $poll_form = new XTemplate($skin);
+    // $poll_form = new XTemplate($skin);
 
     if ($id!='new')
     {
-        $poll_form->assign(array(
+        $t->assign(array(
         "EDIT_POLL_CLOSE" => $poll_close,
         "EDIT_POLL_RESET" => $poll_reset,
         "EDIT_POLL_DELETE" => $pol_delete,
             ));
 
-        $poll_form->parse("POLL_EDIT_FORM.EDIT");
+        $t->parse($block.".EDIT");
     }
 
-    $poll_form->assign(array(
+    $t->assign(array(
         "EDIT_POLL_TEXT" => $poll_text,
         "EDIT_POLL_DATE" => $poll_date,
         "EDIT_POLL_OPTIONS" => $poll_options,
         "EDIT_POLL_MULTIPLE" => $poll_multiple
         ));
 
-    $poll_form->parse("POLL_EDIT_FORM");
-
-
-    return($poll_form -> text("POLL_EDIT_FORM"));
 }
 
 /* ------------------ */
@@ -311,41 +307,46 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
     global $error_string;
     $canvote = true;
 
-    $where=(!$type) ? "poll_id='$id'" : "poll_type='$type' AND poll_code='$id'" ;
-
-    $sql = sed_sql_query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
-
-    if ($row = sed_sql_fetcharray($sql))
+    if(!is_array($id))
     {
-        $id=$row['poll_id'];
-        if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
+        $where=(!$type) ? "poll_id='$id'" : "poll_type='$type' AND poll_code='$id'" ;
+        $sql = sed_sql_query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
+        if (!$row = sed_sql_fetcharray($sql))
         {
-            $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userid='".$usr['id']."' LIMIT 1");
-            $alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
+            $error_string .= $L['wrongURL'];
+            return($error_string);
         }
-        elseif($cfg['ip_id_polls']=='ip')
-        {
-            if ($usr['id']>0)
-            {$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1");}
-            else
-            {$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1");}
-
-            $alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
-        }
-        else
-        {
-            $alreadyvoted = 0;
-            $canvote	=false;
-        }
-
-        $sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
-        $totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
-
-        $sql1 = sed_sql_query("SELECT po_id,po_text,po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
-        $error_string .= (sed_sql_numrows($sql1)<1) ? $L['wrongURL'] : '';
     }
     else
-    { $error_string .= $L['wrongURL']; }
+    {
+        $row=$id;
+    }
+    $id=$row['poll_id'];
+    if ($cfg['ip_id_polls']=='id' && $usr['id']>0)
+    {
+        $sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userid='".$usr['id']."' LIMIT 1");
+        $alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
+    }
+    elseif($cfg['ip_id_polls']=='ip')
+    {
+        if ($usr['id']>0)
+        {$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND (pv_userid='".$usr['id']."' OR pv_userip='".$usr['ip']."') LIMIT 1");}
+        else
+        {$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid='$id' AND pv_userip='".$usr['ip']."' LIMIT 1");}
+
+        $alreadyvoted = (sed_sql_numrows($sql2)==1) ? 1 : 0;
+    }
+    else
+    {
+        $alreadyvoted = 0;
+        $canvote	=false;
+    }
+
+    $sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
+    $totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
+
+    $sql1 = sed_sql_query("SELECT po_id,po_text,po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
+    $error_string .= (sed_sql_numrows($sql1)<1) ? $L['wrongURL'] : '';
 
     $skininput=$skin;
 

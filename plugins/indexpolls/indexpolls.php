@@ -45,13 +45,13 @@ function sed_get_polls($limit)
     	$sqlmode = 'RAND()';
     }
     $res=0;
-    $sql_p = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode DESC LIMIT $limit");
+    $sql_p = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode DESC LIMIT $limit");
     while($row_p = sed_sql_fetcharray($sql_p))
     {
         $res++;
         $poll_id = $row_p['poll_id'];
 
-        list($polltitle, $poll_form)=sed_poll_form($poll_id, sed_url('index', ""), 'indexpolls');
+        list($polltitle, $poll_form)=sed_poll_form($row_p, sed_url('index', ""), 'indexpolls');
 
         $item_code = 'v'.$poll_id;
         $comments = true; // TODO enable/disable comments on categories

@@ -108,10 +108,6 @@ if ($a=='newtopic')
 		{ $newtopictitle = str_replace('#', '', $newtopictitle); }
 
 
-	/*Completely stolen from "forum poll starter" plugin*/
-
-	$poll_index= $poll ? 1 : 0;
-
 		$sql = sed_sql_query("INSERT into $db_forum_topics
 		(ft_state,
 		ft_mode,
@@ -127,8 +123,7 @@ if ($a=='newtopic')
 		ft_firstposterid,
 		ft_firstpostername,
 		ft_lastposterid,
-		ft_lastpostername,
-		ft_poll )
+		ft_lastpostername)
 		VALUES
 		(0,
 			".(int)$newprvtopic.",
@@ -144,8 +139,7 @@ if ($a=='newtopic')
 			".(int)$usr['id'].",
 			'".sed_sql_prep($usr['name'])."',
 			".(int)$usr['id'].",
-			'".sed_sql_prep($usr['name'])."',
-			".$poll_index.")");
+			'".sed_sql_prep($usr['name'])."')");
 
 		$q = sed_sql_insertid();
         if ($poll) sed_poll_save('forum', $q);
@@ -290,12 +284,7 @@ if ($fs_allowprvtopics)
 if ($fs_allowpolls && $poll)
 	{
 
-	$poll_text=sed_poll_edit_form("new");
-
-
-	$t->assign(array(
-		"FORUMS_NEWTOPIC_POLLTEXT" => $poll_text,
-	));
+    sed_poll_edit_form("new", $t, "MAIN.POLL");
 	$t->parse("MAIN.POLL");
 
 	}
