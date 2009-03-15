@@ -78,7 +78,7 @@ if ($a=='check')
 
 		if($rremember)
 		{
-			sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime']*86400, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+			sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 		}
 		else
 		{
