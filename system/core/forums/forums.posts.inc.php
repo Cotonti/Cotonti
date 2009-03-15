@@ -320,7 +320,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
 
-			$ft_poll = $row['ft_poll'];
+			$ft_poll = $row['poll_id'];
 
 			if (!$cfg['disable_polls'] && $ft_poll)
 			{
@@ -401,7 +401,8 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	}
 }
 
-$sql = sed_sql_query("SELECT ft_id, ft_title, ft_desc, ft_mode, ft_state, ft_poll, ft_firstposterid FROM $db_forum_topics WHERE ft_id='$q'");
+//$sql = sed_sql_query("SELECT ft_id, ft_title, ft_desc, ft_mode, ft_state, ft_poll, ft_firstposterid FROM $db_forum_topics WHERE ft_id='$q'");
+$sql = sed_sql_query("SELECT t.*, p.* FROM $db_forum_topics AS t LEFT JOIN $db_polls AS p ON t.ft_id=p.poll_code WHERE t.ft_id='$q' AND (p.poll_type='forum' OR p.poll_id IS NULL)");
 
 if ($row = sed_sql_fetcharray($sql))
 {
@@ -409,7 +410,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$ft_desc = $row['ft_desc'];
 	$ft_mode = $row['ft_mode'];
 	$ft_state = $row['ft_state'];
-	$ft_poll = $row['ft_poll'];
+	$ft_poll = $row;
 	$ft_firstposterid = $row['ft_firstposterid'];
 
 	if ($ft_mode==1 && !($usr['isadmin'] || $ft_firstposterid==$usr['id']))
@@ -484,10 +485,10 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'posts', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-if (!$cfg['disable_polls'] && $ft_poll)
+if (!$cfg['disable_polls'] && $ft_poll['poll_id'])
 {
 	sed_poll_vote();
-	list($polltitle, $poll_form)=sed_poll_form($q, sed_url('forums', "m=posts&q=".$q), '', 'forum');
+	list($polltitle, $poll_form)=sed_poll_form($ft_poll, sed_url('forums', "m=posts&q=".$q), '', 'forum');
 	$t->assign(array(
 		"POLLS_TITLE" => $polltitle,
 		"POLLS_FORM" => $poll_form,

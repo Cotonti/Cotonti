@@ -129,11 +129,11 @@ while($row = sed_sql_fetcharray($sql))
 
 	if($type == 'index')
 	{
-		$admtypepoll .= sed_url('polls', "id=".$row['poll_id']);
+		$admtypepoll = sed_url('polls', "id=".$row['poll_id']);
 	}
 	else
 	{
-		$admtypepoll .= sed_url('forums', "m=posts&q=".$row['poll_id']);
+		$admtypepoll = sed_url('forums', "m=posts&q=".$row['poll_id']);
 	}
 	
 	$poll_state = ($row['poll_state']) ? "[-] " : "";
@@ -214,7 +214,7 @@ foreach($variants as $val)
 	$t -> parse("POLLS.POLLS_ROW_FILTER");
 }
 
-$poll_text = sed_poll_edit_form($poll_id);
+sed_poll_edit_form($poll_id, $t, "POLLS");
 
 $t -> assign(array(
 	"ADMIN_POLLS_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=polls"),

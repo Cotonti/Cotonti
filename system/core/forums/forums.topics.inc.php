@@ -321,8 +321,9 @@ $sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='
 $prvtopics = sed_sql_result($sql, 0, "COUNT(*)");
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s'");
 $totaltopics = sed_sql_result($sql, 0, "COUNT(*)");
-$cond = ($usr['isadmin']) ? '' : "AND ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".$usr['id'].")";
-$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_sectionid='$s' $cond
+$cond = ($usr['isadmin']) ? '' : "AND t.ft_mode=0 OR (t.ft_mode=1 AND t.ft_firstposterid=".$usr['id'].")";
+$sql = sed_sql_query("SELECT t.*, p.poll_id FROM $db_forum_topics AS t LEFT JOIN
+$db_polls AS p ON t.ft_id=p.poll_code  WHERE t.ft_sectionid='$s' $cond AND (p.poll_type='forum' OR p.poll_id IS NULL)
 ORDER by ft_sticky DESC, ft_".$o." ".$w."
 LIMIT $d, ".$cfg['maxtopicsperpage']);
 
@@ -541,7 +542,7 @@ $t->assign(array(
 
 		$row['ft_firstpostername'] = sed_build_user($row['ft_firstposterid'], sed_cc($row['ft_firstpostername']));
 
-		if ($row['ft_poll']>0)
+		if ($row['poll_id']>0)
 		{ $row['ft_title'] = $L['Poll'].": ".$row['ft_title']; }
 
 		if ($row['ft_postcount']>$cfg['maxtopicsperpage'])
