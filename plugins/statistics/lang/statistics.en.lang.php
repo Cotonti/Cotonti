@@ -1,52 +1,53 @@
 <?PHP
 /**
- * English language file
+ * English Language File for Statistics Plugin
  *
  * @package Cotonti
- * @version 0.0.3
- * @author Neocrome, Cotonti Team
+ * @version 0.1.0
+ * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-$L['plu_title'] = "Statistics";
-$L['plu_totalpagessince'] = "Total pages displayed since";
-$L['plu_maxwasreached'] = "Maximum hitcount was reached";
-$L['plu_pagesdisplayedthisday'] = "pages were displayed this day.";
-$L['plu_totalmails'] = "Mails sent";
-$L['plu_totalpms'] = "Private messages sent";
-$L['plu_totalactivepms'] = "Active messages";
-$L['plu_totalarchivedpms'] = "Archived messages";
-$L['plu_dbpages'] = "Pages";
-$L['plu_dblinks'] = "Links";
-$L['plu_dbevents'] = "Events";
-$L['plu_dbcomments'] = "Comments";
-$L['plu_dbnews'] = "News topics";
-$L['plu_pruned'] = "Pruned";
-$L['plu_flag'] = "Flag";
-$L['plu_country'] = "Country";
-$L['plu_registeredusers'] = "Registered members";
-$L['plu_membersbycountry'] = "Registered members, by country";
-$L['plu_pm'] = "Private messages";
-$L['plu_pollsratings'] = "Polls and ratings";
-$L['plu_pfs'] = "Personal File Space";
-$L['plu_pfsspace'] = "Total files in all PFS";
-$L['plu_pfssize'] = "PFS total size";
-$L['plu_contributions'] = "Your contributions";
-$L['plu_notloggedin'] = "Not available, you're not logged in.";
-$L['plu_viewsforums'] = "Views in forums";
-$L['plu_postsforums'] = "Posts in forums";
-$L['plu_topicsforums'] = "Topics in forums";
-$L['plu_newtopicsforums'] = "New topics in forums";
-$L['plu_comments'] = "Comments";
+/**
+ * Plugin Title & Subtitle
+ */
 
-$L['plu_pagesrated'] = "Pages rated";
-$L['plu_votesratings'] = "Votes for ratings";
-$L['plu_polls'] = "Polls";
-$L['plu_votespolls'] = "Votes for polls";
+$L['plu_title'] = 'Statistics';
 
-$L['plu_usersfrom'] = "Members from this country";
-$L['plu_unknown'] = "Unknown or not set";
-$L['plu_total'] = "Total :";
+/**
+ * Plugin Body
+ */
+
+$L['plu_totalpagessince'] = 'Total pages displayed since';
+$L['plu_maxwasreached'] = 'Maximum hitcount was reached';
+$L['plu_pagesdisplayedthisday'] = 'pages were displayed this day';
+$L['plu_registeredusers'] = 'Registered members';
+$L['plu_totalmails'] = 'Emails sent';
+
+$L['plu_totalpms'] = 'Private messages sent';
+$L['plu_totalactivepms'] = 'Active private messages';
+$L['plu_totalarchivedpms'] = 'Archived private messages';
+
+$L['plu_viewsforums'] = 'Number of views';
+$L['plu_postsforums'] = 'Number of posts';
+$L['plu_topicsforums'] = 'Number of topics';
+$L['plu_pruned'] = 'of which pruned';
+
+$L['plu_pollsratings'] = 'Ratings and polls';
+$L['plu_pagesrated'] = 'Number of rated pages';
+$L['plu_votesratings'] = 'Votes for ratings';
+$L['plu_polls'] = 'Number of polls';
+$L['plu_votespolls'] = 'Votes for polls';
+
+$L['plu_pfsspace'] = 'Total files (all PFS)';
+$L['plu_pfssize'] = 'PFS total size';
+
+$L['plu_contributions'] = 'Your contributions';
+$L['plu_notloggedin'] = 'Not available: you\'re not <a href="users.php?m=auth">logged in</a>';
+
+$L['plu_membersbycountry'] = 'Registered members by countries';
+$L['plu_flag'] = 'Flag';
+$L['plu_unknown'] = 'Not set';
 
 ?>

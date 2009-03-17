@@ -12,7 +12,7 @@
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time">{PHP.L.plu_ql_b1_6}</a></li>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=trash">{PHP.L.Trash}</a></li>
 		</ul>
-		<b>{PHP.L.plu_ql_b4_title}</b>
+		<b>{PHP.L.Configuration}</b>
 		<ul>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=plug">{PHP.L.Plugins}</a></li>
 		<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=forums">{PHP.L.Forums}</a></li>

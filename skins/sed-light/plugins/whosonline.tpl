@@ -1,8 +1,8 @@
 <!-- BEGIN: MAIN -->
-<div class="mboxHD">{WHOSONlINE_TITLE}</div>
+<div class="mboxHD"><a href="plug.php?e=whosonline">{WHOSONlINE_TITLE}</a></div>
 <div class="mboxBody">
-	{PHP.L.plu_mostonline} {WHOSONlINE_MAXUSERS}.<br />
-	{PHP.L.plu_therescurrently} {WHOSONlINE_VISITORS} {WHOSONlINE_TEXTVISITORS} {WHOSONlINE_MEMBERS} {WHOSONlINE_TEXTMEMBERS}<br />&nbsp;<br />
+	{PHP.L.plu_mostonline}: {WHOSONlINE_MAXUSERS}<br />
+	{PHP.L.plu_therescurrently}: {WHOSONlINE_VISITORS} {WHOSONlINE_TEXTVISITORS} {WHOSONlINE_MEMBERS} {WHOSONlINE_TEXTMEMBERS}<br />&nbsp;<br />
 <!-- BEGIN: NOT_EMPTY -->
 	<table class="cells">
 	<tr>
@@ -10,11 +10,11 @@
 		<td class="coltop">{PHP.L.User}</td>
 		<td class="coltop">{PHP.L.Group}</td>
 		<td class="coltop">{PHP.L.Country}</td>
-		<td class="coltop">{PHP.skinlang.usersprofile.Location}</td>
-		<td class="coltop">{PHP.skinlang.usersdetails.ICQ}</td>
-		<td class="coltop">{PHP.skinlang.usersdetails.Age}</td>
-		<td class="coltop">{PHP.skinlang.usersdetails.Gender}</td>
-		<td class="coltop">{PHP.skinlang.usersdetails.Occupation}</td>
+		<td class="coltop">{PHP.L.Location}</td>
+		<td class="coltop">{PHP.L.ICQ}</td>
+		<td class="coltop">{PHP.L.Age}</td>
+		<td class="coltop">{PHP.L.Gender}</td>
+		<td class="coltop">{PHP.L.Occupation}</td>
 		<td class="coltop">{PHP.L.plu_lastseen1}</td>
 <!-- BEGIN: IS_ADMIN -->
 		<td class="coltop">{WHOSONlINE_IN}</td>

@@ -1,36 +1,43 @@
 <?PHP
 /**
- * English language file for tags
+ * English Language File for Tags Plugin
  *
  * @package Cotonti
- * @version 0.0.3
- * @author Trustmaster
- * @copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
+ * @version 0.1.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
 
-$L['cfg_pages']= array('Enable Tags for Pages');
-$L['cfg_forums']= array('Enable Tags for Forums');
-$L['cfg_title']= array('Capitalize first latters of keywords');
-$L['cfg_translit']= array('Transliterate Tags in URLs');
-$L['cfg_order']= array('Cloud output order - alphabetical, descending frequency or random');
-$L['cfg_limit']= array('Max. tags per items, 0 is unlimited');
-$L['cfg_lim_pages']= array('Limit of tags in a cloud displayed for pages, 0 is unlimited');
-$L['cfg_lim_forums']= array('Limit of tags in a cloud displayed in forums, 0 is unlimited');
-$L['cfg_lim_index']= array('Limit of tags in a cloud displayed on index, 0 is unlimited');
-$L['cfg_more'] = array('Show \'All tags\' link in tag clouds');
-$L['tags_comma_separated'] = 'comma separated';
+/**
+ * Plugin Body
+ */
+
+$L['tags_Tag'] = 'Tag';	// есть в main
+$L['tags_Tags'] = 'Tags';	// есть в main
+
 $L['tags_All'] = 'All tags';
+$L['tags_comma_separated'] = 'comma separated';
 $L['tags_Keyword'] = 'Keyword';
 $L['tags_Keywords'] = 'Keywords';
-$L['tags_Query_hint'] = 'Several tags separated with comma will be considered as logical AND between them.
-You can also use semicolon for logical OR. AND
-has a priority over OR and you cannot use parentheses
-for logical grouping. Asterisk (*) within a tag will be regarded as a mask for &quot;any string&quot;.';
+$L['tags_Query_hint'] = 'Several comma-separated tags will be considered as logical AND between them. You can also use semicolon for logical OR. AND has a priority over OR and you cannot use parentheses for logical grouping. Asterisk (*) within a tag will be regarded as a mask for &quot;any string&quot;.';
 $L['tags_Search_results'] = 'Search Results';
-$L['tags_Tag'] = 'Tag';
 $L['tags_Tag_cloud'] = 'Tag Cloud';
 $L['tags_Tag_cloud_none'] = 'No tags';
-$L['tags_Tags'] = 'Tags';
+
+/**
+ * Plugin Config
+ */
+
+$L['cfg_forums']= array('Enable tags in forums');
+$L['cfg_limit']= array('Max. tags per item, 0 for unlimited');
+$L['cfg_lim_forums']= array('Tag limit for forums tag cloud, 0 for unlimited');
+$L['cfg_lim_index']= array('Tag limit for index (homepage) tag cloud, 0 for unlimited');
+$L['cfg_lim_pages']= array('Tag limit for pages tag cloud, 0 for unlimited');
+$L['cfg_more'] = array('Show "All tags" link in tag clouds');
+$L['cfg_order']= array('Cloud output order &mdash; alphabetical, descending frequency or random');
+$L['cfg_pages']= array('Enable tags in pages');
+$L['cfg_title']= array('Capitalize first letters of keywords');
+$L['cfg_translit']= array('Transliterate tags in URLs');
 
 ?>
