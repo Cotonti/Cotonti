@@ -787,7 +787,7 @@ class XTemplate {
 				else
 				{
 					// delete only IF construction
-					// ? delete or not - speed ?
+					$copy = str_replace($full_tpl_block, $short_tpl_block, $copy);
 				}
 
 			}
