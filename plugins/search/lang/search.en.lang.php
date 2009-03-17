@@ -1,70 +1,81 @@
 <?PHP
 /**
- * English language file
+ * English Language File for Search Plugin
  *
  * @package Cotonti
- * @version 0.0.3
- * @author Neocrome, Cotonti Team
+ * @version 0.1.0
+ * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-$L['plu_title_frmtab'] = "Forums search";
-$L['plu_title_frmtab_s'] = "Search the forums..";
-$L['plu_title_pagtab'] = "Pages search";
-$L['plu_title_pagtab_s'] = "Search the pages..";
-$L['plu_title_usetab'] = "Users search";
-$L['plu_title_usetab_s'] = "Search the users";
-$L['plu_title_alltab'] = "Search";
-$L['plu_title_alltab_s'] = "Search the forums and pages";
+/**
+ * Plugin Body
+ */
 
-$L['plu_tabs_all'] = "All";
-$L['plu_tabs_frm'] = "Forums";
-$L['plu_tabs_pag'] = "Pages";
+$L['plu_tabs_all'] = 'All';	// есть в main
+$L['plu_tabs_frm'] = 'Forums';	// есть в main
+$L['plu_tabs_pag'] = 'Pages';	// есть в main
 
-$L['plu_searchin'] = "Search in";
+$L['plu_title_alltab'] = 'Search';	// есть в main
+$L['plu_title_alltab_s'] = 'Search forums and pages';
+$L['plu_title_frmtab'] = 'Forums Search';
+$L['plu_title_frmtab_s'] = 'Search forums...';
+$L['plu_title_pagtab'] = 'Page Search';
+$L['plu_title_pagtab_s'] = 'Search pages...';
+$L['plu_title_usetab'] = 'User Search';
+$L['plu_title_usetab_s'] = 'Search users...';
 
-$L['plu_searchin1'] = "Keyword(s)";
-$L['plu_searchin2'] = "";
-$L['plu_searchall'] = "Search all input entered"; // N-0.0.2
-$L['plu_searchall2'] = "Default is: search <span style='font-size:large;'>any</span> of the given"; // N-0.0.2
+$L['plu_searchin1'] = 'Keywords';
+$L['plu_searchin2'] = '';
+$L['plu_searchall'] = 'Search all words';	// New in N-0.0.2
+$L['plu_searchall2'] = 'By default: search <span style="font-size:large;">any</span> word';	// New in N-0.0.2
 
-$L['plu_querytooshort'] = "The query string is too short !";
-$L['plu_toomanywords'] = "Too many words, limit is set to";
-$L['plu_found'] = "Found";
+$L['plu_frm_hint'] = '';
+$L['plu_allsections'] = 'All sections';
+$L['plu_frm_rep'] = 'Only topics with replies';
+
+$L['plu_pag_hint'] = '';
+$L['plu_allcategories'] = 'All categories';
+$L['plu_pag_fil'] = 'Only pages with attached files';
+
+$L['plu_searchin'] = 'Search in';
+
+$L['Find results from'] = 'Search records published';
+$L['A day ago'] = 'one day ago';
+$L['A week ago'] = 'one week ago';
+$L['2 weeks ago'] = 'two weeks ago';
+$L['A month ago'] = 'one month ago';
+$L['3 months ago'] = 'three months ago';
+$L['6 months ago'] = '6 months ago';
+$L['A year ago'] = 'one year ago';
+$L['Any date'] = 'any time';
+$L['And newer'] = 'and later';
+$L['And older'] = 'and earlier';
+
+$L['Sort results by'] = 'Sort search results by';
+$L['Creation date'] = 'creation date';
+$L['Last updated'] = 'last update';
+$L['Number of replies'] = 'number of replies';
+$L['Number of views'] = 'number of views';
+
+$L['plu_ps'] = 'Category';	// есть в main
+$L['plu_pt'] = 'Title';	// есть в main
+$L['plu_po'] = 'Poster';	// есть в main
+
+$L['plu_fs'] = 'Section';	// есть в main
+$L['plu_ft'] = 'Topic';	// есть в main
+$L['plu_fo'] = 'Poster';	// есть в main
+
+$L['plu_querytooshort'] = 'Query string is too short!';
+$L['plu_toomanywords'] = 'Too many words, limit is set to';
+$L['plu_found'] = 'Found';
 $L['plu_match'] = array('matches','match');
 
-$L['plu_allsections'] = "All sections";
-$L['plu_allcategories'] = "All categories";
+/**
+ * Plugin Config
+ */
 
-$L['plu_ps'] = "Category";
-$L['plu_pt'] = "Title";
-$L['plu_po'] = "Submitter";
-$L['plu_fs'] = "Section";
-$L['plu_ft'] = "Topic";
-$L['plu_fo'] = "Original Poster";
-
-$L['plu_frm_hint'] = "";
-$L['plu_pag_hint'] = "";
-
-$L['plu_frm_rep'] = "Topics with replies only";
-$L['plu_pag_fil'] = "Pages with files only";
-
-$L['Find results from'] = 'Find results from';
-$L['A day ago'] = 'A day ago';
-$L['A week ago'] = 'A week ago';
-$L['2 weeks ago'] = '2 weeks ago';
-$L['A month ago'] = 'A month ago';
-$L['3 months ago'] = '3 months ago';
-$L['6 months ago'] = '6 months ago';
-$L['A year ago'] = 'A year ago';
-$L['Any date'] = 'Any date';
-$L['And newer'] = 'And newer';
-$L['And older'] = 'And older';
-$L['Sort results by'] = 'Sort results by';
-$L['Creation date'] = 'Creation date';
-$L['Last updated'] = 'Last updated';
-$L['Number of replies'] = 'Number of replies';
-$L['Number of views'] = 'Number of views';
+$L['cfg_searchurl'] = array('Type of forum post link','"Normal" &mdash; topics with the post link<br />"Single" &mdash; just the post');
 
 ?>

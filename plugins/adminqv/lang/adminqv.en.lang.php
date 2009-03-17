@@ -49,8 +49,6 @@ $L['plu_ql_b2_4'] = "Parser config";
 
 $L['plu_ql_b3_1'] = "Basic config";
 $L['plu_ql_b3_2'] = "Extra fields for users";
-$L['plu_ql_b3_4'] = "PFS permissions";
-
-$L['plu_ql_b4_title'] = "Core functional";
+$L['plu_ql_b3_4'] = "User rights";
 
 ?>
