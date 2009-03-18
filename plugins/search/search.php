@@ -708,9 +708,9 @@ if ($tab=='frm') {
 				$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
 		 	WHERE 1 AND ($sqlsearchx2)
-		 	AND p.fp_topicid=t.ft_id $frm_reply
+		 	AND p.fp_topicid=t.ft_id
 		 	AND p.fp_sectionid=s.fs_id $sqlsections $sqlsections2
-		 	GROUP BY t.ft_id ORDER BY $orderby
+		 	GROUP BY t.ft_id ORDER BY fp_id DESC
 		 	LIMIT $cfg_maxitems");
 		 	$items = mysql_num_rows($sql);
 			}
@@ -718,9 +718,9 @@ if ($tab=='frm') {
 				$sql = sed_sql_query("SELECT p.fp_id, t.ft_firstposterid, t.ft_firstpostername, t.ft_title, t.ft_id, s.fs_id, s.fs_title, s.fs_category
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
 		 	WHERE 1 AND ($sqlsearchx1)
-		 	AND p.fp_topicid=t.ft_id $frm_reply
+		 	AND p.fp_topicid=t.ft_id
 		 	AND p.fp_sectionid=s.fs_id $sqlsections $sqlsections2
-		 	GROUP BY t.ft_id ORDER BY $orderby
+		 	GROUP BY t.ft_id ORDER BY fp_id DESC
 		 	LIMIT $cfg_maxitems");
 		 	$items = mysql_num_rows($sql);
 			}
@@ -729,7 +729,7 @@ if ($tab=='frm') {
 		 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
 			WHERE 1 AND ( ($sqlsearchx1) OR ($sqlsearchx2) )
 			AND p.fp_topicid=t.ft_id
-			AND p.fp_sectionid=s.fs_id $sqlsections
+			AND p.fp_sectionid=s.fs_id $sqlsections $sqlsections2
 			GROUP BY t.ft_id ORDER BY fp_id DESC
 			LIMIT $cfg_maxitems");
 		 	$items = mysql_num_rows($sql);
