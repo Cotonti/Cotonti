@@ -165,6 +165,7 @@ $t->assign(array(
 	"PAGE_DATE" => $pag['page_date'],
 	"PAGE_BEGIN" => $pag['page_begin'],
 	"PAGE_EXPIRE" => $pag['page_expire'],
+	"PAGE_ALIAS" => $pag['page_alias'],
 	"PAGE_COMMENTS" => $comments_link,
 	"PAGE_COMMENTS_DISPLAY" => $comments_display,
 	"PAGE_COMMENTS_COUNT" => $comments_count,
