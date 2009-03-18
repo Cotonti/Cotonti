@@ -22,7 +22,7 @@ $s = sed_import('s','G','ALP',13);
 $w = sed_import('w','G','ALP',4);
 $d = sed_import('d','G','INT');
 $f = sed_import('f','G','TXT');
-$u = sed_import('u','G','ALP');
+$u = sed_import('u','G','TXT');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['auth_read']);
