@@ -14,7 +14,7 @@ Order=10
  * Displays statistics info
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -22,7 +22,7 @@ Order=10
 
 if(!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 
-$s = sed_import('s','G','TXT');
+$s = sed_import('s', 'G', 'TXT');
 
 $plugin_title = $L['plu_title'];
 
@@ -42,25 +42,25 @@ $totalmailsent = sed_stat_get('totalmailsent');
 $totalpmsent = sed_stat_get('totalpms');
 
 $totaldbviews = sed_sql_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
-$totaldbviews = sed_sql_result($totaldbviews,0,"SUM(fs_viewcount)");
+$totaldbviews = sed_sql_result($totaldbviews, 0, "SUM(fs_viewcount)");
 
 $sql = sed_sql_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
-$totaldbtopicspruned = sed_sql_result($sql,0,"SUM(fs_topiccount_pruned)");
+$totaldbtopicspruned = sed_sql_result($sql, 0, "SUM(fs_topiccount_pruned)");
 
 $sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
-$totaldbpostspruned = sed_sql_result($sql,0,"SUM(fs_postcount_pruned)");
+$totaldbpostspruned = sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
 
 $totaldbfilesize = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs");
-$totaldbfilesize = sed_sql_result($totaldbfilesize,0,"SUM(pfs_size)");
+$totaldbfilesize = sed_sql_result($totaldbfilesize, 0, "SUM(pfs_size)");
 
 $totalpmactive = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state<2");
-$totalpmactive = sed_sql_result($totalpmactive,0,"COUNT(*)");
+$totalpmactive = sed_sql_result($totalpmactive, 0, "COUNT(*)");
 
 $totalpmarchived = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state=2");
-$totalpmarchived = sed_sql_result($totalpmarchived,0,"COUNT(*)");
+$totalpmarchived = sed_sql_result($totalpmarchived, 0, "COUNT(*)");
 
 $totalpmold = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state=3");
-$totalpmold = sed_sql_result($totalpmold,0,"COUNT(*)");
+$totalpmold = sed_sql_result($totalpmold, 0, "COUNT(*)");
 
 $sql = sed_sql_query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");
 $row = sed_sql_fetcharray($sql);
@@ -71,14 +71,14 @@ $row = sed_sql_fetcharray($sql);
 $max_date = $row['stat_name'];
 $max_hits = $row['stat_value'];
 
-if($usr['id']>0)
+if($usr['id'] > 0)
 {
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='".$usr['id']."'");
-	$user_postscount = sed_sql_result($sql,0,"COUNT(*)");
+	$user_postscount = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='".$usr['id']."'");
-	$user_topicscount = sed_sql_result($sql,0,"COUNT(*)");
+	$user_topicscount = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='".$usr['id']."'");
-	$user_comments = sed_sql_result($sql,0,"COUNT(*)");
+	$user_comments = sed_sql_result($sql, 0, "COUNT(*)");
 
 	$t->assign(array(
 		'STATISTICS_USER_POSTSCOUNT' => $user_postscount,
@@ -105,7 +105,7 @@ else
 }
 
 $sqltotal = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
-$totalusers = sed_sql_result($sqltotal,0,"COUNT(*)");
+$totalusers = sed_sql_result($sqltotal, 0, "COUNT(*)");
 
 $ii = 0;
 
@@ -113,15 +113,13 @@ while($row = sed_sql_fetcharray($sql))
 {
 	$country_code = $row['user_country'];
 
-	if(!empty($country_code) && $country_code!='00')
+	if(!empty($country_code) && $country_code != '00')
 	{
-		$country_name = sed_build_country($country_code);
-		$country_flag = sed_build_flag($country_code);
 		$ii = $ii + $row['usercount'];
 		$t->assign(array(
-			'STATISTICS_COUNTRY_FLAG' => $country_flag,
-			'STATISTICS_COUNTRY_COUNT' => $country_count,
-			'STATISTICS_COUNTRY_NAME' => $country_name
+			'STATISTICS_COUNTRY_FLAG' => sed_build_flag($country_code),
+			'STATISTICS_COUNTRY_COUNT' => $row['usercount'],
+			'STATISTICS_COUNTRY_NAME' => sed_build_country($country_code)
 		));
 		$t->parse('MAIN.ROW_COUNTRY');
 	}
@@ -142,10 +140,10 @@ $t->assign(array(
 	'STATISTICS_TOTALPMACTIVE' => $totalpmactive,
 	'STATISTICS_TOTALPMARCHIVED' => $totalpmarchived,
 	'STATISTICS_TOTALDBVIEWS' => $totaldbviews,
-	'STATISTICS_TOTALDBPOSTS_AND_TOTALDBPOSTSPRUNED' => ($totaldbposts+$totaldbpostspruned),
+	'STATISTICS_TOTALDBPOSTS_AND_TOTALDBPOSTSPRUNED' => ($totaldbposts + $totaldbpostspruned),
 	'STATISTICS_TOTALDBPOSTS' => $totaldbposts,
 	'STATISTICS_TOTALDBPOSTSPRUNED' => $totaldbpostspruned,
-	'STATISTICS_TOTALDBTOPICS_AND_TOTALDBTOPICSPRUNED' => ($totaldbtopics+$totaldbtopicspruned),
+	'STATISTICS_TOTALDBTOPICS_AND_TOTALDBTOPICSPRUNED' => ($totaldbtopics + $totaldbtopicspruned),
 	'STATISTICS_TOTALDBTOPICS' => $totaldbtopics,
 	'STATISTICS_TOTALDBTOPICSPRUNED' => $totaldbtopicspruned,
 	'STATISTICS_TOTALDBRATINGS' => $totaldbratings,
@@ -153,9 +151,9 @@ $t->assign(array(
 	'STATISTICS_TOTALDBPOLLS' => $totaldbpolls,
 	'STATISTICS_TOTALDBPOLLSVOTES' => $totaldbpollsvotes,
 	'STATISTICS_TOTALDBFILES' => $totaldbfiles,
-	'STATISTICS_TOTALDBFILESIZE' => floor($totaldbfilesize/1024),
+	'STATISTICS_TOTALDBFILESIZE' => floor($totaldbfilesize / 1024),
 	'STATISTICS_UNKNOWN_COUNT' => $totalusers - $ii,
-	'STATISTICS_TOTALUSERS' => $row['stat_value']
+	'STATISTICS_TOTALUSERS' => $totalusers
 ));
 
 ?>
