@@ -489,6 +489,131 @@ function sed_bbcode_cdata($text)
 }
 
 /**
+ * Takes an UTF-8 string and returns an array of ints representing the
+ * Unicode characters. Astral planes are supported ie. the ints in the
+ * output can be > 0xFFFF. Occurrances of the BOM are ignored. Surrogates
+ * are not allowed.
+ *
+ * Returns false if the input string isn't a valid UTF-8 octet sequence.
+ *
+ * @author Henri Sivonen
+ * @license Mozilla Public License (MPL)
+ * @copyright (c) 2003 Henri Sivonen
+ * @param string $str Unicode string
+ * @return array
+ */
+function utf8ToUnicode(&$str)
+{
+	$mState = 0;     // cached expected number of octets after the current octet
+	// until the beginning of the next UTF8 character sequence
+	$mUcs4  = 0;     // cached Unicode character
+	$mBytes = 1;     // cached expected number of octets in the current sequence
+
+	$out = array();
+
+	$len = strlen($str);
+	for($i = 0; $i < $len; $i++) {
+		$in = ord($str{$i});
+		if (0 == $mState) {
+			// When mState is zero we expect either a US-ASCII character or a
+			// multi-octet sequence.
+			if (0 == (0x80 & ($in))) {
+				// US-ASCII, pass straight through.
+				$out[] = $in;
+				$mBytes = 1;
+			} else if (0xC0 == (0xE0 & ($in))) {
+				// First octet of 2 octet sequence
+				$mUcs4 = ($in);
+				$mUcs4 = ($mUcs4 & 0x1F) << 6;
+				$mState = 1;
+				$mBytes = 2;
+			} else if (0xE0 == (0xF0 & ($in))) {
+				// First octet of 3 octet sequence
+				$mUcs4 = ($in);
+				$mUcs4 = ($mUcs4 & 0x0F) << 12;
+				$mState = 2;
+				$mBytes = 3;
+			} else if (0xF0 == (0xF8 & ($in))) {
+				// First octet of 4 octet sequence
+				$mUcs4 = ($in);
+				$mUcs4 = ($mUcs4 & 0x07) << 18;
+				$mState = 3;
+				$mBytes = 4;
+			} else if (0xF8 == (0xFC & ($in))) {
+		/* First octet of 5 octet sequence.
+		 *
+		 * This is illegal because the encoded codepoint must be either
+		 * (a) not the shortest form or
+		 * (b) outside the Unicode range of 0-0x10FFFF.
+		 * Rather than trying to resynchronize, we will carry on until the end
+		 * of the sequence and let the later error handling code catch it.
+		 */
+				$mUcs4 = ($in);
+				$mUcs4 = ($mUcs4 & 0x03) << 24;
+				$mState = 4;
+				$mBytes = 5;
+			} else if (0xFC == (0xFE & ($in))) {
+				// First octet of 6 octet sequence, see comments for 5 octet sequence.
+				$mUcs4 = ($in);
+				$mUcs4 = ($mUcs4 & 1) << 30;
+				$mState = 5;
+				$mBytes = 6;
+			} else {
+		/* Current octet is neither in the US-ASCII range nor a legal first
+		 * octet of a multi-octet sequence.
+		 */
+				return false;
+			}
+		} else {
+			// When mState is non-zero, we expect a continuation of the multi-octet
+			// sequence
+			if (0x80 == (0xC0 & ($in))) {
+				// Legal continuation.
+				$shift = ($mState - 1) * 6;
+				$tmp = $in;
+				$tmp = ($tmp & 0x0000003F) << $shift;
+				$mUcs4 |= $tmp;
+
+				if (0 == --$mState) {
+		  /* End of the multi-octet sequence. mUcs4 now contains the final
+		   * Unicode codepoint to be output
+		   *
+		   * Check for illegal sequences and codepoints.
+		   */
+
+					// From Unicode 3.1, non-shortest form is illegal
+					if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
+						((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
+						((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
+						(4 < $mBytes) ||
+						// From Unicode 3.2, surrogate characters are illegal
+						(($mUcs4 & 0xFFFFF800) == 0xD800) ||
+						// Codepoints outside the Unicode range are illegal
+						($mUcs4 > 0x10FFFF)) {
+						return false;
+					}
+					if (0xFEFF != $mUcs4) {
+						// BOM is legal but we don't want to output it
+						$out[] = $mUcs4;
+					}
+					//initialize UTF8 cache
+					$mState = 0;
+					$mUcs4  = 0;
+					$mBytes = 1;
+				}
+			} else {
+		/* ((0xC0 & (*in) != 0x80) && (mState != 0))
+		 *
+		 * Incomplete multi-octet sequence.
+		 */
+				return false;
+			}
+		}
+	}
+	return $out;
+}
+
+/**
  * JavaScript HTML obfuscator to protect some parts (like email) from bots
  *
  * @param string $text Source text
@@ -496,21 +621,16 @@ function sed_bbcode_cdata($text)
  */
 function sed_obfuscate($text)
 {
-	static $calls = 0;
-	$enc_string = '';
-	$length = mb_strlen($text);
-	for ($i=0; $i < $length; $i++) {
-		$inter = ord($text[$i]) + 3;
-		$enc_char =  chr($inter);
-		$enc_string .= ($enc_char == '\\' ? '\\\\' : $enc_char);
+	$enc_string = '[';
+	$ut = utf8ToUnicode($text);
+	$length = count($ut);
+	for ($i=0; $i < $length; $i++)
+	{
+		$enc_string .= $ut[$i].',';
 	}
-	// get a random string to use as a function name
-	srand((float) microtime() * 10000000);
-	$letters = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	$rnd = $letters[array_rand($letters)] . md5(time());
-	// the actual js (in one line to confuse)
-	if($calls++ == 0) $var = 'var a,s,n;';
-	$script = "<script language=\"JavaScript\" type=\"text/javascript\">{$var}function $rnd(s){r='';for(i=0;i<s.length;i++){n=s.charCodeAt(i);if(n>=8364){n=128;}r+=String.fromCharCode(n-3);}return r;}a='".$enc_string."';document.write($rnd(a));</script>";
+	$enc_string = substr($enc_string, 0, -1).']';
+	$name = 'a'.sed_unique(8);
+	$script = '<script type="text/javascript">var '.$name.' = '.$enc_string.','.$name.'_d = ""; for(var i = 0; i < '.$name.'.length; i++) { var c = '.$name.'[i]; '.$name.'_d += String.fromCharCode(c); } document.write('.$name.'_d)</script>';
 	return $script;
 }
 
