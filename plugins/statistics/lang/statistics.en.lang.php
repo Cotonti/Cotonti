@@ -44,7 +44,7 @@ $L['plu_pfsspace'] = 'Total files (all PFS)';
 $L['plu_pfssize'] = 'PFS total size';
 
 $L['plu_contributions'] = 'Your contributions';
-$L['plu_notloggedin'] = 'Not available: you\'re not <a href="users.php?m=auth">logged in</a>';
+$L['plu_notloggedin'] = 'Not available: you\'re not logged in';
 
 $L['plu_membersbycountry'] = 'Registered members by countries';
 $L['plu_flag'] = 'Flag';
