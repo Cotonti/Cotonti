@@ -14,11 +14,11 @@
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 
 				<tr>
-					<td>{PHP.skinlang.forumsnewtopic.Title} {FORUMS_NEWTOPIC_TITLE}</td>
+					<td>{PHP.skinlang.forumsnewtopic.Title} <input type="text" class="text" name="newtopictitle" value="{FORUMS_NEWTOPIC_TITLE}" size="56" maxlength="64" /></td>
 				</tr>
 
 				<tr>
-					<td>{PHP.L.Description}: {FORUMS_NEWTOPIC_DESC}</td>
+					<td>{PHP.L.Description}: <input type="text" class="text" name="newtopicdesc" value="{FORUMS_NEWTOPIC_DESC}" size="56" maxlength="64" /></td>
 				</tr>
 
 				<!-- BEGIN: PRIVATE -->
@@ -36,7 +36,8 @@
 
 				<tr>
 					<td>
-					<div style="width:100%;">{FORUMS_NEWTOPIC_TEXTBOXER}</div>
+					<div style="width:100%;"><textarea class="editor" name="newmsg" rows="16" cols="56">
+{FORUMS_NEWTOPIC_TEXT}</textarea>{FORUMS_NEWTOPIC_MYPFS}</div>
 					</td>
 				</tr>
 				<!-- BEGIN: POLL -->

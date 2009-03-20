@@ -91,7 +91,9 @@
 
 		<!-- BEGIN: FORUMS_POSTS_NEWPOST -->
 		<form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">
-			<div style="width:100%;">{FORUMS_POSTS_NEWPOST_TEXTBOXER}</div>
+			<div style="width:100%;"><a name="np" id="np"></a>
+<textarea class="editor" name="newmsg" rows="16" cols="56">{FORUMS_POSTS_NEWPOST_TEXT}
+</textarea>{FORUMS_POSTS_NEWPOST_MYPFS}</div>
 			<div class="valid"><input type="submit" value="{PHP.skinlang.forumspost.Reply}" /></div>
 		</form>
 		<!-- END: FORUMS_POSTS_NEWPOST -->

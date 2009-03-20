@@ -28,7 +28,7 @@
 <!-- BEGIN: COMMENTS_NEWCOMMENT -->
 <form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
 	<h4>{PHP.skinlang.comments.Comment}</h4>
-	<div style="width:100%;">{COMMENTS_FORM_TEXTBOXER}<br />{COMMENTS_FORM_HINT}</div>
+	<div style="width:100%;"><textarea class="minieditor" name="rtext" rows="10" cols="120">{COMMENTS_FORM_TEXT}</textarea>{COMMENTS_FORM_MYPFS}<br />{COMMENTS_FORM_HINT}</div>
 	<p><input type="submit" value="{PHP.skinlang.comments.Send}" /></p>
 </form>
 <!-- END: COMMENTS_NEWCOMMENT -->

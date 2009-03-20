@@ -15,10 +15,10 @@
 				<tr>
 					<td><div style="width:100%;">
 <!-- BEGIN: FORUMS_EDITPOST_FIRSTPOST -->
-{PHP.L.Topic}: {FORUMS_EDITPOST_TOPICTITTLE}<br/>
-{PHP.L.Description}: {FORUMS_EDITPOST_TOPICDESCRIPTION}<br />
+{PHP.L.Topic}: <input type="text" class="text" name="rtopictitle" value="{FORUMS_EDITPOST_TOPICTITTLE}" size="56" maxlength="64" /><br/>
+{PHP.L.Description}: <input type="text" class="text" name="rtopicdesc" value="{FORUMS_EDITPOST_TOPICDESCRIPTION}" size="56" maxlength="64" /><br />
 <!-- END: FORUMS_EDITPOST_FIRSTPOST -->
-{FORUMS_EDITPOST_TEXTBOXER}</div></td>
+<textarea class="editor" name="rtext" rows="20" cols="56">{FORUMS_EDITPOST_TEXT}</textarea>{FORUMS_EDITPOST_MYPFS}</div></td>
 				</tr>
 				<!-- BEGIN: FORUMS_EDITPOST_TAGS -->
 				<tr>
