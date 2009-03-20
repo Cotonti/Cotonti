@@ -2230,7 +2230,7 @@ function sed_forum_info($id)
  */
 function sed_forum_prunetopics($mode, $section, $param)
 {
-	global $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_sections, $L;
+	global $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_sections, $db_polls, $L;
 
 	$num = 0;
 	$num1 = 0;
@@ -2274,6 +2274,16 @@ function sed_forum_prunetopics($mode, $section, $param)
 
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
 			$num1 += sed_sql_affectedrows();
+
+            $sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='forum' AND poll_code='$q' LIMIT 1");
+            if ($row = sed_sql_fetcharray($sql))
+            {
+                $id=$row['poll_id'];
+                global $db_polls_options, $db_polls_voters;
+                $sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
+                $sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
+                $sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
+            }
 		}
 
 		$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
