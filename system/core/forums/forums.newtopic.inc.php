@@ -23,9 +23,7 @@ $p = sed_import('p','G','INT');
 $d = sed_import('d','G','INT');
 $o = sed_import('o','G','ALP');
 $w = sed_import('w','G','ALP',4);
-$quote = sed_import('quote','G','INT');
 $poll = sed_import('poll','G','INT');
-$vote = sed_import('vote','G','INT');
 
 sed_blockguests();
 sed_die(empty($s));

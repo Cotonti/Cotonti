@@ -26,8 +26,6 @@ $d = sed_import('d','G','INT');
 $o = sed_import('o','G','ALP',16);
 $w = sed_import('w','G','ALP',4);
 $quote = sed_import('quote','G','INT');
-$poll = sed_import('poll','G','INT');
-$vote = sed_import('vote','G','INT');
 
 sed_die(empty($s));
 
@@ -103,18 +101,6 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		case 'delete':
 
 			sed_check_xg();
-
-			$sql = sed_sql_query("SELECT ft_poll FROM $db_forum_topics WHERE ft_id='".$q."' ");
-			$row = sed_sql_fetcharray($sql);
-
-			$ft_poll = $row['ft_poll'];
-
-			if ($ft_poll>0)
-			{
-			$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id='$ft_poll'");
-			$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid='$ft_poll'");
-			$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$ft_poll'");
-			}
 
 			sed_forum_prunetopics('single', $s, $q);
 			sed_log("Deleted topic #".$q, 'for');

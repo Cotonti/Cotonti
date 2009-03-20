@@ -23,8 +23,6 @@ $d = sed_import('d','G','INT');
 $o = sed_import('o','G','ALP');
 $w = sed_import('w','G','ALP',4);
 $quote = sed_import('quote','G','INT');
-$poll = sed_import('poll','G','INT');
-$vote = sed_import('vote','G','INT');
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.first');
@@ -79,7 +77,7 @@ if ($row = sed_sql_fetcharray($sql))
 else
 { sed_die(); }
 
-$sql = sed_sql_query("SELECT ft_state, ft_mode, ft_title, ft_desc, ft_poll FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
+$sql = sed_sql_query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
 
 if ($row = sed_sql_fetcharray($sql))
 {

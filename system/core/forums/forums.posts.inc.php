@@ -26,8 +26,6 @@ $d = sed_import('d','G','INT');
 $o = sed_import('o','G','ALP');
 $w = sed_import('w','G','ALP',4);
 $quote = sed_import('quote','G','INT');
-$poll = sed_import('poll','G','INT');
-$vote = sed_import('vote','G','INT');
 $unread_done = FALSE;
 $fp_num = 0;
 if (!$cfg['disable_polls']) require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
@@ -320,9 +318,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
 
-			$ft_poll = $row['poll_id'];
-
-			if (!$cfg['disable_polls'] && $ft_poll)
+			if (!$cfg['disable_polls'])
 			{
 				sed_poll_delete($q, 'forum');
 			}
