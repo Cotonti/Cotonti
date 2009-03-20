@@ -80,8 +80,9 @@ if (!empty($id)) // -------------- Single mode
 			$row1['pm_fromuser'] = sed_sql_prep($row1['pm_fromuser']);
 			$row1['pm_title'] = sed_sql_prep($row1['pm_title']);
 			$row1['pm_text'] = sed_sql_prep($row1['pm_text']);
-			sed_sql_query("INSERT INTO $db_pm (pm_state, pm_date, pm_fromuserid, pm_fromuser, pm_touserid, pm_title, pm_text)
-				VALUES(3, {$row1['pm_date']}, {$row1['pm_fromuserid']}, '{$row1['pm_fromuser']}', {$row1['pm_touserid']}, '{$row1['pm_title']}', '{$row1['pm_text']}')");
+			$row1['pm_html'] = sed_sql_prep($row1['pm_html']);
+			sed_sql_query("INSERT INTO $db_pm (pm_state, pm_date, pm_fromuserid, pm_fromuser, pm_touserid, pm_title, pm_text, pm_html)
+				VALUES(3, {$row1['pm_date']}, {$row1['pm_fromuserid']}, '{$row1['pm_fromuser']}', {$row1['pm_touserid']}, '{$row1['pm_title']}', '{$row1['pm_text']}', '{$row1['pm_html']}')");
 		}
 	}
 	elseif ($row1['pm_fromuserid']==$usr['id'] && ($row1['pm_state']==0 || $row1['pm_state']==3))
