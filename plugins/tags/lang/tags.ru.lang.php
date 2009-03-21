@@ -13,9 +13,6 @@
  * Plugin Body
  */
 
-$L['tags_Tag'] = 'Тэг';	// есть в main
-$L['tags_Tags'] = 'Тэги';	// есть в main
-
 $L['tags_All'] = 'Все тэги';
 $L['tags_comma_separated'] = 'разделяя запятой';
 $L['tags_Keyword'] = 'Ключевое слово';
