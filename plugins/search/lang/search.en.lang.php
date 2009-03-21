@@ -13,11 +13,6 @@
  * Plugin Body
  */
 
-$L['plu_tabs_all'] = 'All';	// есть в main
-$L['plu_tabs_frm'] = 'Forums';	// есть в main
-$L['plu_tabs_pag'] = 'Pages';	// есть в main
-
-$L['plu_title_alltab'] = 'Search';	// есть в main
 $L['plu_title_alltab_s'] = 'Search forums and pages';
 $L['plu_title_frmtab'] = 'Forums Search';
 $L['plu_title_frmtab_s'] = 'Search forums...';
@@ -58,14 +53,6 @@ $L['Creation date'] = 'creation date';
 $L['Last updated'] = 'last update';
 $L['Number of replies'] = 'number of replies';
 $L['Number of views'] = 'number of views';
-
-$L['plu_ps'] = 'Category';	// есть в main
-$L['plu_pt'] = 'Title';	// есть в main
-$L['plu_po'] = 'Poster';	// есть в main
-
-$L['plu_fs'] = 'Section';	// есть в main
-$L['plu_ft'] = 'Topic';	// есть в main
-$L['plu_fo'] = 'Poster';	// есть в main
 
 $L['plu_querytooshort'] = 'Query string is too short!';
 $L['plu_toomanywords'] = 'Too many words, limit is set to';
