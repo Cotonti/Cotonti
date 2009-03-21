@@ -217,7 +217,7 @@ $smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_sm
 $bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes('newtopic', 'newmsg', $L['BBcodes']): '';
 $bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
-$post_main = sed_cc($newmsg);
+$post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
 
 $newtopicurl = ($poll) ? sed_url('forums', "m=newtopic&a=newtopic&s=".$s."&poll=1") : sed_url('forums', "m=newtopic&a=newtopic&s=".$s);
 
@@ -255,9 +255,11 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_cc($fs_desc),
 	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
-	"FORUMS_NEWTOPIC_TITLE" => sed_cc($newtopictitle),
-	"FORUMS_NEWTOPIC_DESC" => sed_cc($newtopicdesc),
-	"FORUMS_NEWTOPIC_TEXT" => $post_main,
+	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",
+	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"64\" />",
+	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />",
+	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
+	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />",
 	"FORUMS_NEWTOPIC_SMILIES" => $smilies,
 	"FORUMS_NEWTOPIC_BBCODES" => $bbcodes,
 	"FORUMS_NEWTOPIC_SMILIESLOCAL" => $smilies_local,
