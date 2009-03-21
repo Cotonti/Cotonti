@@ -975,7 +975,7 @@ function sed_build_comments($code, $url, $display = true)
 			$smilies = ($cfg['parsesmiliescom']) ? sed_build_smilies("newcomment", "rtext", $L['Smilies']) : '';
 			$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
 			$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
-			$post_main = $rtext;
+			$post_main = "<textarea class=\"minieditor\" name=\"rtext\" rows=\"10\" cols=\"120\">".$rtext."</textarea><br />".$bbcodes." ".$smilies." ".$pfs;
 		}
 
 		$t->assign(array(
@@ -984,6 +984,7 @@ function sed_build_comments($code, $url, $display = true)
 			"COMMENTS_FORM_AUTHOR" => $usr['name'],
 			"COMMENTS_FORM_AUTHORID" => $usr['id'],
 			"COMMENTS_FORM_TEXT" => $post_main,
+			"COMMENTS_FORM_TEXTBOXER" => $post_main,
 			"COMMENTS_FORM_BBCODES" => $bbcodes,
 			"COMMENTS_FORM_SMILIES" => $smilies,
 			"COMMENTS_FORM_MYPFS" => $pfs,
