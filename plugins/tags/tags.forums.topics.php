@@ -29,7 +29,7 @@ if($cfg['plugin']['tags']['forums'])
 	$tags = sed_tag_list($item_id, 'forums');
 	if(count($tags) > 0)
 	{
-		$tc_html = $L['tags_Tags'] . ':';
+		$tc_html = $L['Tags'] . ':';
 		foreach($tags as $tag)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_cc(sed_tag_title($tag)) : sed_cc($tag);

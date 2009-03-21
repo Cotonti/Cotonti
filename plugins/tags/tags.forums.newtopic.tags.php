@@ -26,7 +26,7 @@ if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W'))
 {
 	require_once(sed_langfile('tags'));
 	$t->assign(array(
-	'FORUMS_NEWTOPIC_TOP_TAGS' => $L['tags_Tags'],
+	'FORUMS_NEWTOPIC_TOP_TAGS' => $L['Tags'],
 	'FORUMS_NEWTOPIC_TOP_TAGS_HINT' => $L['tags_comma_separated'],
 	'FORUMS_NEWTOPIC_FORM_TAGS' => '<input type="text" name="rtags" />'
 	));
