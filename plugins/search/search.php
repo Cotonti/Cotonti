@@ -57,7 +57,7 @@ if ($tab=='frm') {
 
 	$plugin_title = $L['plu_title_frmtab'];
 
-	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['plu_tabs_all']."</a> &nbsp; ".$L['plu_tabs_frm']." &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=pag')."\">".$L['plu_tabs_pag']."</a>";
+	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['All']."</a> &nbsp; ".$L['Forums']." &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=pag')."\">".$L['Pages']."</a>";
 	$plugin_subtitle .= "<br />".$L['plu_title_frmtab_s'];
 
 	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&tab=frm&a=search')."\" method=\"post\">";
@@ -225,10 +225,10 @@ if ($tab=='frm') {
 			}
 
 			if ($items!='0') {
-				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".sed_declension($items,$L['plu_match'])."</h4>";
+				$plugin_body .= "<h4>".$L['Forums']." : ".$L['Poster']." ".sed_declension($items,$L['plu_match'])."</h4>";
 				$hl = strtoupper($sq);
 
-				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_fs']."</td><td width=\"60%\">".$L['plu_ft']."</td><td width=\"10%\">".$L['plu_fo']."</td></tr>";
+				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['Section']."</td><td width=\"60%\">".$L['Topic']."</td><td width=\"10%\">".$L['Poster']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
 					if (sed_auth('forums', $row['fs_id'], 'R'))
@@ -262,7 +262,7 @@ if ($tab=='frm') {
 
 	$plugin_title = $L['plu_title_pagtab'];
 
-	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['plu_tabs_all']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['plu_tabs_frm']."</a> &nbsp; ".$L['plu_tabs_pag'];
+	$plugin_subtitle .= "<a href=\"".sed_url('plug', 'e=search')."\">".$L['All']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['Forums']."</a> &nbsp; ".$L['Pages'];
 	$plugin_subtitle .= "<br />".$L['plu_title_pagtab_s'];
 
 	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&tab=pag&a=search')."\" method=\"post\">";
@@ -442,10 +442,10 @@ if ($tab=='frm') {
 					$items = mysql_num_rows($sql);
 				}
 
-				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".sed_declension($items,$L['plu_match'])."</h4>";
+				$plugin_body .= "<h4>".$L['Pages']." : ".$L['Poster']." ".sed_declension($items,$L['plu_match'])."</h4>";
 				$hl = strtoupper($sq);
 
-				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_ps']."</td><td width=\"60%\">".$L['plu_pt']."</td><td width=\"10%\">".$L['plu_po']."</td></tr>";
+				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['Category']."</td><td width=\"60%\">".$L['Title']."</td><td width=\"10%\">".$L['Author']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
 					if (sed_auth('page', $row['page_cat'], 'R'))
@@ -475,9 +475,9 @@ if ($tab=='frm') {
 	$sq = (!empty($pre)) ? $pre : $sq;
 	$sachecked = ($searchall) ? ' checked="checked" ' : '';
 
-	$plugin_title = $L['plu_title_alltab'];
+	$plugin_title = $L['Search'];
 
-	$plugin_subtitle .= $L['plu_tabs_all']." &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['plu_tabs_frm']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=pag')."\">".$L['plu_tabs_pag']."</a>";
+	$plugin_subtitle .= $L['All']." &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=frm')."\">".$L['Forums']."</a> &nbsp; <a href=\"".sed_url('plug', 'e=search&tab=pag')."\">".$L['Pages']."</a>";
 	$plugin_subtitle .= "<br />".$L['plu_title_alltab_s'];
 
 	$plugin_body .= "<form id=\"search\" action=\"".sed_url('plug', 'e=search&a=search')."\" method=\"post\">";
@@ -665,10 +665,10 @@ if ($tab=='frm') {
 				LIMIT $cfg_maxitems");
 				$items = mysql_num_rows($sql);
 
-				$plugin_body .= "<h4>".$L['Pages']." : ".$L['plu_found']." ".sed_declension($items,$L['plu_match'])."</h4>";
+				$plugin_body .= "<h4>".$L['Pages']." : ".$L['Poster']." ".sed_declension($items,$L['plu_match'])."</h4>";
 				$hl = strtoupper($sq);
 
-				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_ps']."</td><td width=\"60%\">".$L['plu_pt']."</td><td width=\"10%\">".$L['plu_po']."</td></tr>";
+				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['Category']."</td><td width=\"60%\">".$L['Title']."</td><td width=\"10%\">".$L['Author']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
 					if (sed_auth('page', $row['page_cat'], 'R'))
@@ -734,10 +734,10 @@ if ($tab=='frm') {
 			}
 
 			if ($items!='0') {
-				$plugin_body .= "<h4>".$L['Forums']." : ".$L['plu_found']." ".sed_declension($items,$L['plu_match'])."</h4>";
+				$plugin_body .= "<h4>".$L['Forums']." : ".$L['Poster']." ".sed_declension($items,$L['plu_match'])."</h4>";
 				$hl = strtoupper($sq);
 
-				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['plu_fs']."</td><td width=\"60%\">".$L['plu_ft']."</td><td width=\"10%\">".$L['plu_fo']."</td></tr>";
+				$plugin_body .= "<table class=\"cells\" width=\"100%\"><tr><td width=\"30%\">".$L['Section']."</td><td width=\"60%\">".$L['Topic']."</td><td width=\"10%\">".$L['Poster']."</td></tr>";
 				while ($row = mysql_fetch_array($sql))
 				{
 					if (sed_auth('forums', $row['fs_id'], 'R'))

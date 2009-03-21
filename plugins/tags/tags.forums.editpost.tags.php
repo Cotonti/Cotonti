@@ -28,7 +28,7 @@ if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_firs
 	$tags = sed_tag_list($q, 'forums');
 	$tags = implode(', ', $tags);
 	$t->assign(array(
-	'FORUMS_EDITPOST_TOP_TAGS' => $L['tags_Tags'],
+	'FORUMS_EDITPOST_TOP_TAGS' => $L['Tags'],
 	'FORUMS_EDITPOST_TOP_TAGS_HINT' => $L['tags_comma_separated'],
 	'FORUMS_EDITPOST_FORM_TAGS' => '<input type="text" name="rtags" value="' . $tags . '" />'
 	));
