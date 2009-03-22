@@ -47,6 +47,7 @@ switch ($n)
 						$sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$cfg_name."' AND config_owner='core'");
 					}
 				}
+				header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=config&n=edit&o=core&p=".$p, '', true));
 			}
 			else
 			{
@@ -56,8 +57,9 @@ switch ($n)
 					$cfg_value = trim(sed_import($row['config_name'], 'P', 'NOC'));
 					$sql1 = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$row['config_name']."' AND config_owner='$o' AND config_cat='$p'");
 				}
+				header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=config&n=edit&o=plug&p=".$p, '', true));
 			}
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=config", '', true));
+			
 			exit;
 		}
 
@@ -81,7 +83,8 @@ switch ($n)
 		{ $adminpath[] = array (sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L["core_".$p]); }
 		else
 		{
-			$adminpath[] = array (sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['Plugin'].' ('.$o.':'.$p.')');
+			$adminpath[] = array (sed_url('admin', 'm=plug&a=details&pl='.$p), $L['Plugin'].' ('.$o.':'.$p.')');
+			$adminpath[] = array (sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['Edit']);
 		}
 
 		$adminmain .= "<form id=\"saveconfig\" action=\"".sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=update")."\" method=\"post\">";

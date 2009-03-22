@@ -28,8 +28,6 @@ $found_txt[0] = '<span style="color:#AC5866; font-weight:bold;">'.$L['adm_missin
 $found_txt[1] = '<span style="color:#739E48; font-weight:bold;">'.$L['adm_present'].'</span>';
 unset($disp_errors);
 
-$adminmain .= "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=plug")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>";
-
 switch ($a)
 {
 	/* =============== */
@@ -278,7 +276,6 @@ switch ($a)
 
 					if (empty($info_cfg['Error']))
 					{
-						$adminmain .= "Found at least 1<br/>";
 						$j = 0;
 						foreach($info_cfg as $i => $x)
 						{
@@ -316,9 +313,11 @@ switch ($a)
 									$sql = (!$if) ? sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".$line[3]."', '".$line[2]."', '".sed_sql_prep($line[4])."')") : '';
 									}
 
-								$adminmain .= "- Entry #$j $i (".$line[1].") Installed<br />";
+								$adminmain_config .= "- Entry #$j $i (".$line[1].") Installed<br />";
 							}
+							$totalconfig++;
 						}
+						$adminmain .= "Found ".$totalconfig."<br/>".$adminmain_config;
 					}
 					else
 					{
@@ -431,7 +430,7 @@ switch ($a)
 				$adminmain .= "Done!<br />";
 
 				$adminmain .= "<p>".$edit_log."</p>";
-				$adminmain .= "<a href=\"".sed_url('admin', "m=plug")."\">Click here to continue...</a>";
+				$adminmain .= "<a href=\"".sed_url('admin', "m=plug&a=details&pl=".$pl)."\">Click here to continue...</a>";
 				break;
 
 			case 'pause' :
@@ -625,4 +624,6 @@ switch ($a)
 		break;
 }
 
+$adminmain_url = (!empty($pl) && $b == 'install' && $totalconfig>0) ? "<ul><li><a href=\"".sed_url('admin', "m=config&n=edit&o=plug&p=".$pl)."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li></ul>" : '';
+$adminmain = $adminmain_url.$adminmain;
 ?>
