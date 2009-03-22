@@ -93,7 +93,7 @@ if ($a=='update')
 	$rusernewpass = sed_import('rusernewpass','P','TXT', 16);
 	$rusergroupsms = sed_import('rusergroupsms', 'P', 'ARR');
 
-	$error_string .= (mb_strlen($rusername)<2 || mb_ereg(",", $rusername) || mb_ereg("'", $rusername)) ? $L['aut_usernametooshort']."<br />" : '';
+	$error_string .= (mb_strlen($rusername)<2 || mb_strstr($rusername, ',') || mb_strstr($rusername, "'")) ? $L['aut_usernametooshort']."<br />" : '';
 	$error_string .= (!empty($rusernewpass) && (mb_strlen($rusernewpass)<4 || sed_alphaonly($rusernewpass)!=$rusernewpass)) ? $L['aut_passwordtooshort']."<br />" : '';
 
 	// Extra fields
