@@ -237,34 +237,31 @@ elseif ($c == "forums")
 else
 {
 	// == Category rss ==
-	$res = sed_sql_query("SELECT * FROM $db_structure");
-	$flag = 0;
-	while($row = mysql_fetch_assoc($res))
-	if ($c==$row['structure_code'])
-	{
-		$flag = 1;
-		$category_path = $row['structure_path'];
-	}
-	if($flag!=0 AND sed_auth('page', $c, 'R'))
-	{
-		// found subcategories
-		$where = "0";
-		$sql = "SELECT * FROM $db_structure WHERE structure_path LIKE '%$category_path%'";
-		$res = sed_sql_query($sql);
-		while($row = mysql_fetch_assoc($res)) $where .= " OR page_cat = '".$row['structure_code']."'";
+	$mtch = $sed_cat[$c]['path'].".";
+	$mtchlen = strlen($mtch);
+	$catsub = array();
+	$catsub[] = $c;
 
-		$sql = "SELECT * FROM $db_pages WHERE ($where) AND page_state = '0' ORDER BY page_date DESC LIMIT $cfg_maxitems";
-		$res = sed_sql_query($sql);
-		$i = 0;
-		while($pag = mysql_fetch_assoc($res))
-		{
-			$items[$i]['title'] = $pag['page_title'];
-			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=".$pag['page_id'], '', true);
-			//$items[$i]['link'] = $cfg['mainurl']."/page.php?id=".$pag['page_id'];
-			$items[$i]['pubDate'] = date('r', $pag['page_date']);
-			$items[$i]['description'] = sed_parse_page_text($pag);
-			$i++;
-		}
+	foreach($sed_cat as $i => $x)
+	{
+		if(substr($x['path'], 0, $mtchlen)==$mtch) { $catsub[] = $i; }
+	}
+
+	$sql = sed_sql_query("SELECT page_id, page_title, page_text, page_cat, page_date FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER by page_date DESC LIMIT ".$cfg_maxitems);
+	$i = 0;
+	while($row = mysql_fetch_assoc($sql))
+	{
+		$readmore = strpos($row['page_text'], "[more]");
+		if($readmore>0) { $row['page_text'] = substr($row['page_text'], 0, $readmore); }
+		$row['page_text'] = preg_replace("'[[^]]*?.*?]'si", "", $row['page_text']);
+		$row['page_text'] = htmlspecialchars($row['page_text']);
+		$row_page_url = SED_ABSOLUTE_URL.sed_url('page', "id=".$row['page_id'], '', true);
+		if($readmore>0) { $row['page_text'] .= " <a href=\"".$row_page_url."\">".$L['ReadMore']."</a>"; }
+		$items[$i]['title'] = $row['page_title'];
+		$items[$i]['link'] = $row_page_url;
+		$items[$i]['pubDate'] = date('r', $row['page_date']);
+		$items[$i]['description'] = $row['page_text'];
+		$i++;
 	}
 }
 
