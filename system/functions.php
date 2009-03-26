@@ -2126,7 +2126,6 @@ function sed_dieifdisabled($disabled)
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=940", '', true));
 		exit;
 	}
-	return;
 }
 
 /**
@@ -2317,7 +2316,6 @@ function sed_forum_sectionsetlast($id)
 	$fs_masterid = $roww['fs_masterid'];
 
 	$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$fs_masterid'") : '';
-	return;
 }
 
 /**
@@ -2873,7 +2871,6 @@ function sed_log($text, $group='def')
 	global $db_logger, $sys, $usr, $_SERVER;
 
 	$sql = sed_sql_query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (".(int)$sys['now_offset'].", '".$usr['ip']."', '".sed_sql_prep($usr['name'])."', '$group', '".sed_sql_prep($text.' - '.$_SERVER['REQUEST_URI'])."')");
-	return;
 }
 
 /**
@@ -2888,7 +2885,6 @@ function sed_log_sed_import($s, $e, $v, $o)
 {
 	$text = "A variable type check failed, expecting ".$s."/".$e." for '".$v."' : ".$o;
 	sed_log($text, 'sec');
-	return;
 }
 
 /**
@@ -3274,7 +3270,6 @@ function sed_redirect($url)
 		header("Location: " . SED_ABSOLUTE_URL . $url);
 		exit;
 	}
-	return;
 }
 
 /**
@@ -4014,7 +4009,6 @@ function sed_stat_create($name)
 	global $db_stats;
 
 	$sql = sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".sed_sql_prep($name)."', 1)");
-	return;
 }
 
 /**

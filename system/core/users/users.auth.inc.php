@@ -79,16 +79,16 @@ if ($a=='check')
 
 		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_hashsalt = '$hashsalt' WHERE user_id={$row['user_id']}");
 
-		$passhash = md5($rmdpass.$hashsalt).sha1($rmdpass.$hashsalt);
+		$passhash = md5($rmdpass.$hashsalt);
 		$u = base64_encode($ruserid.':_:'.$passhash);
 
 		if($rremember)
 		{
-			sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+			sed_setcookie($sys['site_id'], $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 		}
 		else
 		{
-			$_SESSION['COTONTI'] = $u;
+			$_SESSION[$sys['site_id']] = $u;
 		}
 
 		$_SESSION['saltstamp'] = $sys['now_offset'];

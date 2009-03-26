@@ -410,16 +410,16 @@ switch ($a)
 
 			sed_sql_query("UPDATE $db_users SET user_password='$rnewpass', user_hashsalt = '$hashsalt' WHERE user_id={$usr['id']}");
 
-			$passhash = md5($rnewpass.$hashsalt).sha1($rnewpass.$hashsalt);
-			$u = base64_encode($usr['id'].':_:'.$passhash.':_:'.md5($sys['now_offset']));
+			$passhash = md5($rnewpass.$hashsalt);
+			$u = base64_encode($usr['id'].':_:'.$passhash);
 
-			if(empty($_SESSION['COTONTI']))
+			if(empty($_SESSION[$sys['site_id']]))
 			{
-				sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+				sed_setcookie($sys['site_id'], $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 			}
 			else
 			{
-				$_SESSION['COTONTI'] = $u;
+				$_SESSION[$sys['site_id']] = $u;
 			}
 		}
 	}
@@ -451,12 +451,12 @@ switch ($a)
 				$rbody .= "\n\n".$L['aut_contactadmin'];
 				sed_mail ($ruseremail, $rsubject, $rbody);
 
-				if(!empty($_COOKIE['COTONTI']))
+				if(!empty($_COOKIE[$sys['site_id']]))
 				{
-					sed_setcookie('COTONTI', '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+					sed_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 				}
 
-				if (!empty($_SESSION['COTONTI']))
+				if (!empty($_SESSION[$sys['site_id']]))
 				{
 					session_unset();
 					session_destroy();
