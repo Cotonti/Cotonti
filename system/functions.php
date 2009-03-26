@@ -4530,7 +4530,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 			{
 				// Callback
 				$func = mb_substr($m[1], 0, $p);
-				$url = str_replace($m[0], $func($args), $url);
+				$url = str_replace($m[0], $func($args, $spec), $url);
 			}
 			elseif(mb_strpos($m[1], '!$') === 0)
 			{
