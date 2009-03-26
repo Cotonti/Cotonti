@@ -1,38 +1,50 @@
-<?PHP
+<?php
 /**
  * Administration panel - Manager of comments
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('comments', 'a');
 sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.comments.inc', false, true));
 
-$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array (sed_url('admin', 'm=comments'), $L['Comments']);
+$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(sed_url('admin', 'm=comments'), $L['Comments']);
 $adminhelp = $L['adm_help_comments'];
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 if($a == 'delete')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
-	$admincomments = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
+	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
 }
 
+$is_adminwarnings = isset($adminwarnings);
+
 $totalitems = sed_sql_rowcount($db_com);
-$pagnav = sed_pagination(sed_url('admin','m=comments'), $d, $totalitems, $cfg['maxrowsperpage']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=comments'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+if($cfg['jquery'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=comments'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=comments&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=comments'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=comments&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
+	$pagnav = sed_pagination(sed_url('admin','m=comments'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=comments'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+}
 
 $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 
@@ -88,14 +100,10 @@ while($row = sed_sql_fetcharray($sql))
 	$ii++;
 }
 
-if(!empty($admincomments))
-{
-	$t -> assign(array("ADMIN_COMMENTS_MESAGE" => $admincomments));
-	$t -> parse("COMMENTS.MESAGE");
-}
-
 $t -> assign(array(
+	"ADMIN_COMMENTS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_COMMENTS_CONFIG_URL" => sed_url('admin', 'm=config&n=edit&o=core&p=comments'),
+	"ADMIN_COMMENTS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_COMMENTS_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_COMMENTS_PAGNAV" => $pagnav,
 	"ADMIN_COMMENTS_PAGINATION_NEXT" => $pagination_next,
@@ -105,5 +113,12 @@ $t -> assign(array(
 
 $t -> parse("COMMENTS");
 $adminmain = $t -> text("COMMENTS");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

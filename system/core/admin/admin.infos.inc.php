@@ -1,23 +1,23 @@
-<?PHP
+<?php
 /**
  * Administration panel
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['auth_read']);
 
 $t = new XTemplate(sed_skinfile('admin.infos.inc', false, true));
 
-$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array (sed_url('admin', 'm=infos'), $L['adm_infos']);
+$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(sed_url('admin', 'm=infos'), $L['adm_infos']);
 $adminhelp = $L['adm_help_versions'];
 
 @error_reporting(0);

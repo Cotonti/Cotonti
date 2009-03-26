@@ -1,40 +1,52 @@
-<?PHP
+<?php
 /**
  * Administration panel
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('ratings', 'a');
 sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.ratings.inc', false, true));
 
-$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array (sed_url('admin', 'm=ratings'), $L['Ratings']);
+$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(sed_url('admin', 'm=ratings'), $L['Ratings']);
 $adminhelp = $L['adm_help_ratings'];
 
 $id = sed_import('id','G','TXT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 if($a == 'delete')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id' ");
 	$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id' ");
-	$t -> parse("RATINGS.MESAGE");
+	$adminwarnings = $L['adm_ratings_already_del'];
 }
 
+$is_adminwarnings = isset($adminwarnings);
+
 $totalitems = sed_sql_rowcount($db_ratings);
-$pagnav = sed_pagination(sed_url('admin','m=ratings'), $d, $totalitems, $cfg['maxrowsperpage']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=ratings'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+if($cfg['jquery'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=ratings'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=ratings&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=ratings'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=ratings&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
+	$pagnav = sed_pagination(sed_url('admin','m=ratings'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=ratings'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+}
 
 $sql = sed_sql_query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -69,12 +81,13 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_RATINGS_ROW_RAT_URL" => $rat_url
 	));
 	$t -> parse("RATINGS.RATINGS_ROW");
-
 	$ii++;
 	$jj = $jj + $votes;
 }
 
 $t -> assign(array(
+	"ADMIN_RATINGS_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_RATINGS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_RATINGS_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=ratings"),
 	"ADMIN_RATINGS_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_RATINGS_PAGNAV" => $pagnav,
@@ -85,5 +98,12 @@ $t -> assign(array(
 ));
 $t -> parse("RATINGS");
 $adminmain = $t -> text("RATINGS");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

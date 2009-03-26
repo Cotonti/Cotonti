@@ -1,15 +1,15 @@
-<?PHP
+<?php
 /**
  * Administration panel - BBCode editor
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Trustmaster, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
@@ -24,6 +24,8 @@ $a = sed_import('a', 'G', 'ALP');
 $id = (int) sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 if($a == 'add')
 {
@@ -36,11 +38,11 @@ if($a == 'add')
 	$bbc['postrender'] = sed_import('bbc_postrender', 'P', 'BOL');
 	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
-		$adminbbcode = (sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])) ? $L['adm_bbcodes_added'] : $L['Error'];
+		$adminwarnings = (sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])) ? $L['adm_bbcodes_added'] : $L['Error'];
 	}
 	else
 	{
-		$adminbbcode = $L['Error'];
+		$adminwarnings = $L['Error'];
 	}
 }
 elseif($a == 'upd' && $id > 0)
@@ -55,29 +57,38 @@ elseif($a == 'upd' && $id > 0)
 	$bbc['enabled'] = sed_import('bbc_enabled', 'P', 'BOL');
 	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
-		$adminbbcode = (sed_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])) ? $L['adm_bbcodes_updated'] : $L['Error'];
+		$adminwarnings = (sed_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])) ? $L['adm_bbcodes_updated'] : $L['Error'];
 	}
 	else
 	{
-		$adminbbcode = $L['Error'];
+		$adminwarnings = $L['Error'];
 	}
 }
 elseif($a == 'del' && $id > 0)
 {
-	$adminbbcode = (sed_bbcode_remove($id)) ? $L['adm_bbcodes_removed'] : $L['Error'];
+	$adminwarnings = (sed_bbcode_remove($id)) ? $L['adm_bbcodes_removed'] : $L['Error'];
 }
 elseif($a == 'clearcache')
 {
 	$sqlpag = sed_sql_query("UPDATE $db_pages SET page_html = ''");
 	$sqlfrm = sed_sql_query("UPDATE $db_forum_posts SET fp_html = ''");
 	$sqlpmg = sed_sql_query("UPDATE $db_pm SET pm_html = ''");
-	$adminbbcode = ($sqlpag && $sqlfrm && $sqlpmg) ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
+	$adminwarnings = ($sqlpag && $sqlfrm && $sqlpmg) ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
 }
 
-$totalitems = sed_sql_rowcount($db_bbcode);
-$pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+$is_adminwarnings = isset($adminwarnings);
 
+$totalitems = sed_sql_rowcount($db_bbcode);
+if($cfg['jquery'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=bbcode&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=bbcode&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
+	$pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+}
 $bbc_modes = array('str', 'ereg', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -109,7 +120,7 @@ while($row = sed_sql_fetchassoc($res))
 		"ADMIN_BBCODE_ROW_REPLACEMENT" => $row['bbc_replacement'],
 		"ADMIN_BBCODE_ROW_PLUG" => $row['bbc_plug'],
 		"ADMIN_BBCODE_ROW_POSTRENDER" => $row['bbc_postrender'] ? ' checked="checked"' : '',
-		"ADMIN_BBCODE_ROW_UPDATE_URL" => sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id']),
+		"ADMIN_BBCODE_ROW_UPDATE_URL" => sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id'].'&d='.$d),
 		"ADMIN_BBCODE_ROW_DELETE_URL" => sed_url('admin', 'm=bbcode&a=del&id='.$row['bbc_id'])
 	));
 	$t -> parse("BBCODE.ADMIN_BBCODE_ROW");
@@ -134,15 +145,11 @@ for($i = 1; $i < 256; $i++)
 	$t -> parse("BBCODE.ADMIN_BBCODE_PRIO");
 }
 $form_action = sed_url('admin', 'm=bbcode&a=add');
-$form_clear_cache = sed_url('admin', 'm=bbcode&a=clearcache');
-
-if(!empty($adminbbcode))
-{
-	$t -> assign(array("ADMIN_BBCODE_MESAGE" => $adminbbcode));
-	$t -> parse("BBCODE.MESAGE");
-}
+$form_clear_cache = sed_url('admin', 'm=bbcode&a=clearcache&d='.$d);
 
 $t -> assign(array(
+	"ADMIN_BBCODE_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_BBCODE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_BBCODE_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_BBCODE_PAGNAV" => $pagnav,
 	"ADMIN_BBCODE_PAGINATION_NEXT" => $pagination_next,
@@ -154,5 +161,12 @@ $t -> assign(array(
 
 $t -> parse("BBCODE");
 $adminmain = $t -> text("BBCODE");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

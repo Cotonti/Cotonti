@@ -1,23 +1,23 @@
-<?PHP
+<?php
 /**
  * Administration panel
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pm', 'a');
 sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.pm.inc', false, true));
 
-$adminpath[] = array (sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array (sed_url('admin', 'm=pm'), $L['Private_Messages']);
+$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(sed_url('admin', 'm=pm'), $L['Private_Messages']);
 $adminhelp = $L['adm_help_pm'];
 
 $totalpmdb = sed_sql_rowcount($db_pm);
