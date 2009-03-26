@@ -185,11 +185,14 @@ $usr['timezone'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
+$site_id = 'ct' . substr(md5($cfg['mainurl']), 0, 10);
+$sys['site_id'] = $site_id;
+
 session_start();
 
-if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
+if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
-	$u = empty($_SESSION['COTONTI']) ? base64_decode($_COOKIE['COTONTI']) : base64_decode($_SESSION['COTONTI']);
+	$u = empty($_SESSION[$site_id]) ? base64_decode($_COOKIE[$site_id]) : base64_decode($_SESSION[$site_id]);
 	$u = explode(':_:', $u);
 	$u_id = (int) sed_import($u[0], 'D', 'INT');
 	$u_passhash = sed_import($u[1], 'D', 'ALP');
@@ -199,9 +202,9 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 
 		if($row = sed_sql_fetcharray($sql))
 		{
-			$passhash = md5($row['user_password'].$row['user_hashsalt']).sha1($row['user_password'].$row['user_hashsalt']);
+			$passhash = md5($row['user_password'].$row['user_hashsalt']);
 			if(($u_passhash == $passhash
-					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 30
+					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 60
 						&& $u_passhash == $_SESSION['oldhash']))
 				&& $row['user_maingrp'] > 3
 				&& ($cfg['ipcheck']==FALSE || $row['user_lastip'] == $usr['ip']))
@@ -239,23 +242,24 @@ if(!empty($_COOKIE['COTONTI']) || !empty($_SESSION['COTONTI']))
 					$_SESSION['saltstamp'] = $sys['now_offset'];
 					$_SESSION['oldhash'] = $u_passhash;
 					$hashsalt = sed_unique(16);
-					$passhash = md5($row['user_password'].$hashsalt).sha1($row['user_password'].$hashsalt);
+					$passhash = md5($row['user_password'].$hashsalt);
 					$u = base64_encode($usr['id'].':_:'.$passhash);
-					if(empty($_SESSION['COTONTI']))
+					if(empty($_SESSION[$site_id]))
 					{
-						sed_setcookie('COTONTI', $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+						sed_setcookie($site_id, $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 					}
 					else
 					{
-						$_SESSION['COTONTI'] = $u;
+						$_SESSION[$site_id] = $u;
 					}
-					$sys['sql_update_hashsalt'] = "user_hashsalt = '$hashsalt',";
+					$update_hashsalt = "user_hashsalt = '$hashsalt',";
 				}
 
-				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', ".$sys['sql_update_hashsalt']." user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
+				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', $update_hashsalt user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
 
 				unset($u);
 				unset($passhash);
+				unset($update_hashsalt);
 
 				if(empty($_SESSION['sourcekey']))
 				{

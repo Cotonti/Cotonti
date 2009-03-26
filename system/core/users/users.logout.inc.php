@@ -24,12 +24,12 @@ if (is_array($extp))
 { foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-if(!empty($_COOKIE['COTONTI']))
+if(!empty($_COOKIE[$sys['site_id']]))
 {
-	sed_setcookie('COTONTI', '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+	sed_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 }
 
-if (!empty($_SESSION['COTONTI']))
+if (!empty($_SESSION[$sys['site_id']]))
 {
 	session_unset();
 	session_destroy();
