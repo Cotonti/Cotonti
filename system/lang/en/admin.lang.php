@@ -348,6 +348,9 @@ $L['adm_help_ratings'] = 'To reset a rating, simply delete it. It will be re-cre
 /* ====== Trash can ====== */
 
 $L['adm_help_trashcan'] = 'Here are listed the items recently deleted by the users and moderators.<br />Note that restoring a forum topic will also restore all the posts that belongs to the topic.<br />And restoring a post in a deleted topic will restore the whole topic (if available) and all the child posts.<br />&nbsp;<br />Wipe : Delete the item forever.<br />Restore : Put the item back in the live database.'; // New in v110
+$L['adm_trashcan_prune'] = 'Pruned';// 0.1.0
+$L['adm_trashcan_deleted'] = 'Record deleted';// 0.1.0
+$L['adm_trashcan_restored'] = 'Record restored';// 0.1.0
 
 /* ====== Users ====== */
 
@@ -498,8 +501,7 @@ $L['adm_extrafield_confirmupd'] = 'Really update this extra field? Some data in 
 
 $L['extf_Name'] = "Name";
 $L['extf_Type'] = "Type of field";
-$L['extf_Base HTML'] = "Base HTML";
-$L['extf_Page tags'] = "Tags";
+$L['extf_Base_HTML'] = "Base HTML";
 $L['extf_Description'] = "Description (_TITLE)";
 
 $L['adm_extrafield_new'] = 'New extra field';

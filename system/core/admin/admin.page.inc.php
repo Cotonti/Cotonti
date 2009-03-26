@@ -1,34 +1,43 @@
-<?PHP
+<?php
 /**
  * Administration panel
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url('admin', 'm=page'), $L['Pages']);
+$t = new XTemplate(sed_skinfile('admin.page.inc', false, true));
+
+$adminpath[] = array(sed_url('admin', 'm=page'), $L['Pages']);
 $adminhelp = $L['adm_help_page'];
 
 $totaldbpages = sed_sql_rowcount($db_pages);
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
-$sys['pagesqueued'] = sed_sql_result($sql,0,'COUNT(*)');
+$sys['pagesqueued'] = sed_sql_result($sql, 0, 'COUNT(*)');
 
-$adminmain .= "<ul>";
-$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=page")."\">".$L['Configuration']." : <img src=\"images/admin/config.gif\" alt=\"\" /></a></li>";
-$adminmain .= "<li>".sed_linkif(sed_url('page', 'm=add'), $L['addnewentry'], sed_auth('page', 'any', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=queue'), $L['adm_valqueue']." : ".$sys['pagesqueued'], sed_auth('page', 'any', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=structure'), $L['adm_structure'], sed_auth('admin', 'a', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=extrafields'), $L['adm_extrafields_desc'], sed_auth('admin', 'a', 'A'))."</li>";
-$adminmain .= "<li>".sed_linkif(sed_url('admin', 'm=page&s=catorder'), $L['adm_sortingorder'], sed_auth('admin', 'a', 'A'))."</li>";
-$adminmain .= "<li>".$L['Pages']." : ".$totaldbpages." (<a href=\"".sed_url('list', 'c=all')."\">".$L['adm_showall']."</a>)</li>";
-$adminmain .= "</ul>";
+$lincif_conf = sed_auth('admin', 'a', 'A');
+$lincif_page = sed_auth('page', 'any', 'A');
+
+$t -> assign(array(
+	"ADMIN_PAGE_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=page"),
+	"ADMIN_PAGE_URL_ADD" => sed_url('page', 'm=add'),
+	"ADMIN_PAGE_URL_QUEUE" => sed_url('admin', 'm=page&s=queue'),
+	"ADMIN_PAGE_QUEUE" => $sys['pagesqueued'],
+	"ADMIN_PAGE_URL_STRUCTURE" => sed_url('admin', 'm=page&s=structure'),
+	"ADMIN_PAGE_URL_EXTRAFIELDS" => sed_url('admin', 'm=page&s=extrafields'),
+	"ADMIN_PAGE_URL_CATORDER" => sed_url('admin', 'm=page&s=catorder'),
+	"ADMIN_PAGE_URL_LIST_ALL" => sed_url('list', 'c=all'),
+	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages
+));
+$t -> parse("PAGE");
+$adminmain = $t -> text("PAGE");
 
 ?>

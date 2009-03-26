@@ -1,29 +1,31 @@
-<?PHP
+<?php
 /**
  * Administration panel
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.page.queue.inc', false, true));
 
-$adminpath[] = array (sed_url('admin', 'm=page'), $L['Page']);
-$adminpath[] = array (sed_url('admin', 'm=page&s=queue'), $L['adm_valqueue']);
+$adminpath[] = array(sed_url('admin', 'm=page'), $L['Page']);
+$adminpath[] = array(sed_url('admin', 'm=page&s=queue'), $L['adm_valqueue']);
 $adminhelp = $L['adm_queues_page'];
 
 $id = sed_import('id','G','INT');
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 if($a == 'validate')
 {
@@ -37,7 +39,7 @@ if($a == 'validate')
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 		sed_cache_clear('latestpages');
-		$adminpage_queue = '#'.$id.' - '.$L['adm_queue_validated'];
+		$adminwarnings = '#'.$id.' - '.$L['adm_queue_validated'];
 	}
 	else
 	{
@@ -57,7 +59,7 @@ if($a == 'unvalidate')
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 		sed_cache_clear('latestpages');
-		$adminpage_queue = '#'.$id.' - '.$L['adm_queue_unvalidated'];
+		$adminwarnings = '#'.$id.' - '.$L['adm_queue_unvalidated'];
 	}
 	else
 	{
@@ -65,15 +67,19 @@ if($a == 'unvalidate')
 	}
 }
 
-if(!empty($adminpage_queue))
-{
-	$t -> assign(array("ADMIN_PAGE_QUEUE_MESAGE" => $adminpage_queue));
-	$t -> parse("PAGE_QUEUE.MESAGE");
-}
+$is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1"), 0, 0);
-$pagnav = sed_pagination(sed_url('admin','m=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+if($cfg['jquery'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=queue&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=queue&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
+	$pagnav = sed_pagination(sed_url('admin','m=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+}
 
 $sql = sed_sql_query("SELECT p.*, u.user_name
 	FROM $db_pages as p
@@ -110,16 +116,14 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_PAGE_QUEUE_PAGE_URL_FOR_EDIT" => sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")
 	));
 	$t -> parse("PAGE_QUEUE.PAGE_QUEUE_ROW");
-
 	$ii++;
 }
 
-if(sed_sql_numrows($sql)==0)
-{
-	$t -> parse("PAGE_QUEUE.PAGE_QUEUE_ROW_EMPTY");
-}
+$is_row_empty = (sed_sql_numrows($sql)==0) ? true : false ;
 
 $t -> assign(array(
+	"ADMIN_PAGE_QUEUE_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_PAGE_QUEUE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_PAGE_QUEUE_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_PAGE_QUEUE_PAGNAV" => $pagnav,
 	"ADMIN_PAGE_QUEUE_PAGINATION_NEXT" => $pagination_next,
@@ -128,5 +132,12 @@ $t -> assign(array(
 ));
 $t -> parse("PAGE_QUEUE");
 $adminmain = $t -> text("PAGE_QUEUE");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

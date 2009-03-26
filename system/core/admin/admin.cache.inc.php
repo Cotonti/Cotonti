@@ -1,15 +1,15 @@
-<?PHP
+<?php
 /**
  * Administration panel - Internal cache
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
@@ -17,18 +17,20 @@ sed_block($usr['isadmin']);
 $t = new XTemplate(sed_skinfile('admin.cache.inc', false, true));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array (sed_url('admin', 'm=cache'), $L['adm_internalcache']);
+$adminpath[] = array(sed_url('admin', 'm=cache'), $L['adm_internalcache']);
 
 if($a == 'purge')
 {
-	$admincache = (sed_check_xg() && sed_cache_clearall()) ? $L['adm_purgeall_done'] : $L['Error'];
+	$adminwarnings = (sed_check_xg() && sed_cache_clearall()) ? $L['adm_purgeall_done'] : $L['Error'];
 }
 elseif($a == 'delete')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='$id'");
-	$admincache = ($sql) ? $L['adm_delcacheitem'] : $L['Error'];
+	$adminwarnings = ($sql) ? $L['adm_delcacheitem'] : $L['Error'];
 }
+
+$is_adminwarnings = isset($adminwarnings);
 
 $sql = sed_sql_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
 $cachesize = 0;
@@ -48,13 +50,8 @@ while($row = sed_sql_fetcharray($sql))
 	$t -> parse("CACHE.ADMIN_CACHE_ROW");
 }
 
-if(!empty($admincache))
-{
-	$t -> assign(array("ADMIN_CACHE_MESAGE" => $admincache));
-	$t -> parse("CACHE.MESAGE");
-}
-
 $t -> assign(array(
+	"ADMIN_CACHE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_CACHE_URL_REFRESH" => sed_url('admin', 'm=cache'),
 	"ADMIN_CACHE_URL_PURGE" => sed_url('admin', 'm=cache&a=purge&'.sed_xg()),
 	"ADMIN_CACHE_URL_SHOWALL" => sed_url('admin', 'm=cache&a=showall'),

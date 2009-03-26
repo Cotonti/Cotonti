@@ -1,19 +1,19 @@
-<?PHP
+<?php
 /**
  * Administration panel
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_ADMIN')){die('Wrong URL.');}
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 $t = new XTemplate(sed_skinfile('admin.home.inc', false, true));
 
-$adminpath[] = array (sed_url('admin', 'm=home'), $L['Home']);
+$adminpath[] = array(sed_url('admin', 'm=home'), $L['Home']);
 
 $pagesqueued = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
 $pagesqueued = sed_sql_result($pagesqueued, 0, "COUNT(*)");
@@ -23,15 +23,10 @@ if(!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 	$adminwarnings .= $L['adm_nogd'];
 }
 
-if(!empty($adminwarnings))
-{
-	$t -> assign(array(
-		"ADMIN_HOME_MESAGE" => $adminwarnings
-	));
-	$t -> parse("HOME.MESAGE");
-}
+$is_adminwarnings = isset($adminwarnings);
 
 $t -> assign(array(
+	"ADMIN_HOME_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_HOME_URL" => sed_url('admin', "m=page&s=queue"),
 	"ADMIN_HOME_PAGESQUEUED" => $pagesqueued
 ));
