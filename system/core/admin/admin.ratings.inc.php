@@ -22,9 +22,8 @@ $adminhelp = $L['adm_help_ratings'];
 
 $id = sed_import('id','G','TXT');
 $d = sed_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
+if (empty($d))
+{ $d = '0'; }
 
 if($a == 'delete')
 {
@@ -37,16 +36,9 @@ if($a == 'delete')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_ratings);
-if($cfg['jquery'])
-{
-	$pagnav = sed_pagination(sed_url('admin','m=ratings'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=ratings&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=ratings'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=ratings&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-}
-else
-{
+
 	$pagnav = sed_pagination(sed_url('admin','m=ratings'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=ratings'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-}
 
 $sql = sed_sql_query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -86,7 +78,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_RATINGS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_RATINGS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_RATINGS_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=ratings"),
 	"ADMIN_RATINGS_PAGINATION_PREV" => $pagination_prev,
@@ -98,12 +89,5 @@ $t -> assign(array(
 ));
 $t -> parse("RATINGS");
 $adminmain = $t -> text("RATINGS");
-
-if($ajax)
-{
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
-}
 
 ?>

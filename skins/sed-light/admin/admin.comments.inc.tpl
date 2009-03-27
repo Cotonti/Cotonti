@@ -1,5 +1,5 @@
 <!-- BEGIN: COMMENTS -->
-		<div id="{ADMIN_COMMENTS_AJAX_OPENDIVID}">
+		<div>
 			<ul>
 				<li><a href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
 			</ul>

@@ -21,9 +21,8 @@ $adminpath[] = array(sed_url('admin', 'm=comments'), $L['Comments']);
 $adminhelp = $L['adm_help_comments'];
 
 $d = sed_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
+if (empty($d))
+{ $d = '0'; }
 
 if($a == 'delete')
 {
@@ -35,16 +34,10 @@ if($a == 'delete')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_com);
-if($cfg['jquery'])
-{
-	$pagnav = sed_pagination(sed_url('admin','m=comments'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=comments&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=comments'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=comments&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-}
-else
-{
+
 	$pagnav = sed_pagination(sed_url('admin','m=comments'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=comments'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-}
+	
 
 $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 
@@ -101,7 +94,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_COMMENTS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_COMMENTS_CONFIG_URL" => sed_url('admin', 'm=config&n=edit&o=core&p=comments'),
 	"ADMIN_COMMENTS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_COMMENTS_PAGINATION_PREV" => $pagination_prev,
@@ -113,12 +105,5 @@ $t -> assign(array(
 
 $t -> parse("COMMENTS");
 $adminmain = $t -> text("COMMENTS");
-
-if($ajax)
-{
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
-}
 
 ?>

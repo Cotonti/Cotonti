@@ -21,9 +21,8 @@ $adminpath[] = array(sed_url('admin', 'm=referers'), $L['Referers']);
 $adminhelp = $L['adm_help_referers'];
 
 $d = sed_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
+if (empty($d))
+{ $d = '0'; }
 
 if($a=='prune' && $usr['isadmin'])
 {
@@ -40,16 +39,9 @@ elseif($a=='prunelowhits' && $usr['isadmin'])
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_referers);
-if($cfg['jquery'])
-{
-	$pagnav = sed_pagination(sed_url('admin','m=referers'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=referers&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=referers'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=referers&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-}
-else
-{
+
 	$pagnav = sed_pagination(sed_url('admin','m=referers'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=referers'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-}
 
 $sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -87,7 +79,6 @@ else
 }
 
 $t -> assign(array(
-	"ADMIN_REFERERS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_REFERERS_URL_PRUNE" => sed_url('admin', "m=referers&a=prune&".sed_xg()),
 	"ADMIN_REFERERS_URL_PRUNELOWHITS" => sed_url('admin', "m=referers&a=prunelowhits&".sed_xg()),
 	"ADMIN_REFERERS_ADMINWARNINGS" => $adminwarnings,
@@ -99,12 +90,5 @@ $t -> assign(array(
 ));
 $t -> parse("REFERERS");
 $adminmain = $t -> text("REFERERS");
-
-if($ajax)
-{
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
-}
 
 ?>

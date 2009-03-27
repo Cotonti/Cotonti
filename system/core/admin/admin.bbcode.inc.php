@@ -23,9 +23,8 @@ $adminhelp = $L['adm_help_bbcodes'];
 $a = sed_import('a', 'G', 'ALP');
 $id = (int) sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
+if (empty($d))
+{ $d = '0'; }
 
 if($a == 'add')
 {
@@ -79,16 +78,10 @@ elseif($a == 'clearcache')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_bbcode);
-if($cfg['jquery'])
-{
-	$pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=bbcode&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=bbcode&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-}
-else
-{
+
 	$pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-}
+	
 $bbc_modes = array('str', 'ereg', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -148,7 +141,6 @@ $form_action = sed_url('admin', 'm=bbcode&a=add');
 $form_clear_cache = sed_url('admin', 'm=bbcode&a=clearcache&d='.$d);
 
 $t -> assign(array(
-	"ADMIN_BBCODE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_BBCODE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_BBCODE_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_BBCODE_PAGNAV" => $pagnav,
@@ -161,12 +153,5 @@ $t -> assign(array(
 
 $t -> parse("BBCODE");
 $adminmain = $t -> text("BBCODE");
-
-if($ajax)
-{
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
-}
 
 ?>
