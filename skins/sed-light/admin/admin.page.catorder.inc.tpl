@@ -1,5 +1,5 @@
 <!-- BEGIN: PAG_CATORDER -->
-		<div id="{ADMIN_PAG_CATORDER_AJAX_OPENDIVID}">
+		<div>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_PAG_CATORDER_ADMINWARNINGS}</div>
 <!-- ENDIF -->

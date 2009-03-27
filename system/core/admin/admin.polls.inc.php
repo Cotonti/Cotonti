@@ -23,10 +23,10 @@ $adminpath[] = array(sed_url('admin', 'm=polls'), $L['Polls']);
 $adminhelp = $L['adm_help_polls'];
 
 $d = sed_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 $filter = sed_import('filter', 'G', 'TXT');
+
+if (empty($d))
+{ $d = '0'; }
 
 //$variant[key]=array("Caption", "filter", "page", "page_get", "sql", "sqlfield")
 $variants[0] = array($L['All'], "");
@@ -104,16 +104,9 @@ else
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
 $totalitems = sed_sql_result($sql, 0, "COUNT(*)");
-if($cfg['jquery'])
-{
-	$pagnav = sed_pagination(sed_url('admin','m=polls'.$poll_filter), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=polls&ajax=1'.$poll_filter)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=polls'.$poll_filter), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=polls&ajax=1'.$poll_filter)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-}
-else
-{
+
 	$pagnav = sed_pagination(sed_url('admin','m=polls'.$poll_filter), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=polls'.$poll_filter), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-}
 
 $sql = sed_sql_query("SELECT * FROM $db_polls
 					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
@@ -221,7 +214,6 @@ foreach($variants as $val)
 sed_poll_edit_form($poll_id, $t, "POLLS");
 
 $t -> assign(array(
-	"ADMIN_POLLS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_POLLS_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=polls"),
 	"ADMIN_POLLS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_POLLS_PAGINATION_PREV" => $pagination_prev,
@@ -248,12 +240,5 @@ if(is_array($extp))
 
 $t -> parse("POLLS");
 $adminmain = $t -> text("POLLS");
-
-if($ajax)
-{
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
-}
 
 ?>

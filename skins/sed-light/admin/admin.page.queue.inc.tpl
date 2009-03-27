@@ -1,5 +1,5 @@
 <!-- BEGIN: PAGE_QUEUE -->
-		<div id="{ADMIN_PAGE_QUEUE_AJAX_OPENDIVID}">
+		<div>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_PAGE_QUEUE_ADMINWARNINGS}</div>
 <!-- ENDIF -->

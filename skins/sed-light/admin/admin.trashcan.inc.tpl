@@ -1,5 +1,5 @@
 <!-- BEGIN: TRASHCAN -->
-		<div id="{ADMIN_TRASHCAN_AJAX_OPENDIVID}">
+		<div>
 			<ul>
 				<li><a href="{ADMIN_TRASHCAN_CONF_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
 				<li>{PHP.L.Wipeall}: [<a href="{ADMIN_TRASHCAN_WIPEALL_URL}">x</a>]</li>

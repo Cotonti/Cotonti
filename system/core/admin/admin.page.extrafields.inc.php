@@ -24,9 +24,8 @@ $a = sed_import('a', 'G', 'ALP');
 $id = (int) sed_import('id', 'G', 'INT');
 $n = sed_import('name', 'G', 'ALP');
 $d = sed_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
+if (empty($d))
+{ $d = '0'; }
 
 if($a == 'add')
 {
@@ -94,16 +93,10 @@ elseif($a == 'del' && isset($n))
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location='pages'"), 0, 0);
-if($cfg['jquery'])
-{
-	$pagnav = sed_pagination(sed_url('admin','m=page&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=extrafields&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=extrafields&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-}
-else
-{
+
 	$pagnav = sed_pagination(sed_url('admin','m=page&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-}
+
 
 $field_types = array('input', 'textarea', 'select', 'checkbox');
 $res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages' LIMIT $d, ".$cfg['maxrowsperpage']);
@@ -145,7 +138,6 @@ foreach($field_types as $val)
 }
 
 $t -> assign(array(
-	"ADMIN_PAG_EXTRAFIELDS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PAG_EXTRAFIELDS_URL_FORM_ADD" => sed_url('admin', 'm=page&s=extrafields&a=add&d='.$d),
 	"ADMIN_PAG_EXTRAFIELDS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_PAG_EXTRAFIELDS_PAGINATION_PREV" => $pagination_prev,
@@ -156,13 +148,6 @@ $t -> assign(array(
 ));
 $t -> parse("PAG_EXTRAFIELDS");
 $adminmain = $t -> text("PAG_EXTRAFIELDS");
-
-if($ajax)
-{
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
-}
 
 /**
  * Extra fields - Return default base html-construction for various types of fields (without value= and name=)
