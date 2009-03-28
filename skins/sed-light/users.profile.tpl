@@ -1,14 +1,14 @@
 <!-- BEGIN: MAIN -->
 
 <script type="text/javascript">
-
+//<![CDATA[
 $(document).ready(function(){
 
 $("#emailnotes").hide();
 $("#emailtd").click(function(){$("#emailnotes").slideDown();});
 
 });
-
+//]]>
 </script>
 
 	<div class="mboxHD">{USERS_PROFILE_TITLE}</div>
@@ -20,7 +20,7 @@ $("#emailtd").click(function(){$("#emailnotes").slideDown();});
 		<div class="error">{USERS_PROFILE_ERROR_BODY}</div>
 		<!-- END: USERS_PROFILE_ERROR -->
 
-		<form action="{USERS_PROFILE_FORM_SEND}" method="post" enctype="multipart/form-data" name="profile" onsubmit="return mailtn();">
+		<form action="{USERS_PROFILE_FORM_SEND}" method="post" enctype="multipart/form-data" name="profile">
 			<input type="hidden" name="userid" value="{USERS_PROFILE_ID}" />
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">

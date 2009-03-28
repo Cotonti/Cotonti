@@ -2768,7 +2768,9 @@ function sed_load_structure()
 	while ($row = sed_sql_fetcharray($sql))
 	{
 		if (!empty($row['structure_icon']))
-		{ $row['structure_icon'] = "<img src=\"".$row['structure_icon']."\" alt=\"\" />"; }
+		{
+			$row['structure_icon'] = '<img src="'.$row['structure_icon'].'" alt="'.sed_cc($row['structure_title']).'" title="'.sed_cc($row['structure_title']).'" />';
+		}
 
 		$path2 = mb_strrpos($row['structure_path'], '.');
 
