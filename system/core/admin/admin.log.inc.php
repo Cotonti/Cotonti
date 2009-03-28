@@ -31,8 +31,9 @@ $log_groups = array(
 );
 
 $d = sed_import('d', 'G', 'INT');
-if (empty($d))
-{ $d = '0'; }
+$d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 if($a == 'purge' && $usr['isadmin'])
 {
@@ -62,10 +63,16 @@ foreach($log_groups as $grp_code => $grp_name)
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = ($n == 'all') ? $totaldblog : sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
-
+if($cfg['jquery'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=log&ajax=1&n='.$n)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=log&ajax=1&n='.$n)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
 	$pagnav = sed_pagination(sed_url('admin','m=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-
+}
 
 if($n=='all')
 {
@@ -95,6 +102,7 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
+	"ADMIN_LOG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_LOG_URL_PRUNE" => sed_url('admin', "m=log&a=purge&".sed_xg()),
 	"ADMIN_LOG_TOTALDBLOG" => $totaldblog,
 	"ADMIN_LOG_ADMINWARNINGS" => $adminwarnings,
@@ -106,5 +114,12 @@ $t -> assign(array(
 ));
 $t -> parse("LOG");
 $adminmain = $t -> text("LOG");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

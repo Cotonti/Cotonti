@@ -1,5 +1,5 @@
 <!-- BEGIN: BANLIST -->
-		<div>
+		<div id="{ADMIN_BANLIST_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_BANLIST_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -15,10 +15,10 @@
 			</tr>
 			</table>
 <!-- BEGIN: ADMIN_BANLIST_ROW -->
-			<form name="update" action="{ADMIN_BANLIST_URL}" method="post">
+			<form name="savebanlist_{ADMIN_BANLIST_ID_ROW}" id="savebanlist_{ADMIN_BANLIST_ID_ROW}" action="{ADMIN_BANLIST_URL}" method="post"{ADMIN_BANLIST_URL_AJAX}>
 				<table class="cells">
 				<tr>
-					<td style="width:10%;text-align:center;">[<a href="{ADMIN_BANLIST_DELURL}">x</a>]</td>
+					<td style="width:10%;text-align:center;">[<a href="{ADMIN_BANLIST_DELURL}"{ADMIN_BANLIST_DELURL_AJAX}>x</a>]</td>
 					<td style="width:20%;text-align:center;">{ADMIN_BANLIST_EXPIRE}</td>
 					<td style="width:20%;text-align:center;"><input type="text" class="text" name="rbanlistip" value="{ADMIN_BANLIST_IP}" size="18" maxlength="16" /></td>
 					<td style="width:15%;text-align:center;"><input type="text" class="text" name="rbanlistemail" value="{ADMIN_BANLIST_EMAIL}" size="10" maxlength="64" /></td>
@@ -39,7 +39,7 @@
 			</tr>
 			</table>
 			<h4>{PHP.L.addnewentry} :</h4>
-			<form name="add" action="{ADMIN_BANLIST_INC_URLFORMADD}" method="post">
+			<form name="addbanlist" id="addbanlist" action="{ADMIN_BANLIST_INC_URLFORMADD}" method="post"{ADMIN_BANLIST_INC_URLFORMADD_AJAX}>
 				<table class="cells">
 				<tr>
 					<td>{PHP.L.Duration} :</td>
