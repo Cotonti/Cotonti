@@ -1,5 +1,16 @@
 <!-- BEGIN: MAIN -->
 
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+
+$("#emailnotes").hide();
+$("#emailtd").click(function(){$("#emailnotes").slideDown();});
+
+});
+//]]>
+</script>
+
 	<div class="mboxHD">{USERS_PROFILE_TITLE}</div>
 	<div class="mboxBody">
 
@@ -10,7 +21,7 @@
 		<!-- END: USERS_PROFILE_ERROR -->
 
 		<form action="{USERS_PROFILE_FORM_SEND}" method="post" enctype="multipart/form-data" name="profile">
-			<input type="hidden" name="userid" value="{USERS_PROFILE_ID}" /><input type="hidden" name="curpassword" value="{USERS_PROFILE_PASSWORD}" />
+			<input type="hidden" name="userid" value="{USERS_PROFILE_ID}" />
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<tr>
@@ -27,7 +38,17 @@
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Email}</td>
-					<td>{USERS_PROFILE_EMAIL}</td>
+					<td id="emailtd">
+					<div style="width:168px; float:left;">
+					{PHP.skinlang.usersprofile.Emailpassword}
+					<br />{USERS_PROFILE_EMAILPASS}
+					</div>
+
+					<div>{PHP.skinlang.usersprofile.Email}
+					<br />{USERS_PROFILE_EMAIL}</div>
+					<br />
+					 <div class="small" id="emailnotes">{PHP.skinlang.usersprofile.Emailnotes}</div>
+					</td>
 				</tr>
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Hidetheemail}</td>
