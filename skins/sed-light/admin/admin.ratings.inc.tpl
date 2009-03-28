@@ -1,5 +1,5 @@
 <!-- BEGIN: RATINGS -->
-		<div>
+		<div id="{ADMIN_RATINGS_AJAX_OPENDIVID}">
 			<ul>
 				<li><a href="{ADMIN_RATINGS_URL_CONFIG}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
 			</ul>

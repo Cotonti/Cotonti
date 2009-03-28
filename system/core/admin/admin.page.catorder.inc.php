@@ -21,8 +21,9 @@ $adminpath[] = array(sed_url('admin', 'm=page&s=catorder'), $L['adm_sortingorder
 $adminhelp = $L['adm_help_catorder'];
 
 $d = sed_import('d', 'G', 'INT');
-if (empty($d))
-{ $d = '0'; }
+$d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $options_sort = array(
 	'id' => $L['Id'],
@@ -64,10 +65,16 @@ if($a == 'update')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_structure);
-
+if($cfg['jquery'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=page&s=catorder'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=catorder&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=catorder'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=catorder&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
 	$pagnav = sed_pagination(sed_url('admin','m=page&s=catorder'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=catorder'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-
+}
 
 $sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code LIMIT $d,".$cfg['maxrowsperpage']);
 
@@ -114,6 +121,7 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
+	"ADMIN_PAG_CATORDER_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PAG_CATORDER_URL_FORM" => sed_url('admin', "m=page&s=catorder&a=update&d=".$d),
 	"ADMIN_PAG_CATORDER_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_PAG_CATORDER_PAGINATION_PREV" => $pagination_prev,
@@ -124,5 +132,12 @@ $t -> assign(array(
 ));
 $t -> parse("PAG_CATORDER");
 $adminmain = $t -> text("PAG_CATORDER");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

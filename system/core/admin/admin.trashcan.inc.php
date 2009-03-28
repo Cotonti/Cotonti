@@ -21,8 +21,9 @@ $adminhelp = $L['adm_help_trashcan'];
 
 $id = sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
-if (empty($d))
-{ $d = '0'; }
+$d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 if($a == 'wipe')
 {
@@ -49,9 +50,16 @@ elseif($a == 'restore')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_trash);
-
+if($cfg['jquery'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=trashcan'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=trashcan&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=trashcan'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=trashcan&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
 	$pagnav = sed_pagination(sed_url('admin','m=trashcan'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=trashcan'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+}
 
 $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
@@ -113,6 +121,7 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
+	"ADMIN_TRASHCAN_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_TRASHCAN_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=trash"),
 	"ADMIN_TRASHCAN_WIPEALL_URL" => sed_url('admin', "m=trashcan&a=wipeall&".sed_xg()),
 	"ADMIN_TRASHCAN_ADMINWARNINGS" => $adminwarnings,
@@ -125,5 +134,12 @@ $t -> assign(array(
 ));
 $t -> parse("TRASHCAN");
 $adminmain = $t -> text("TRASHCAN");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

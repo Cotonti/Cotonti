@@ -1,5 +1,5 @@
 <!-- BEGIN: USER_EXTRAFIELDS -->
-		<div>
+		<div id="{ADMIN_USER_EXTRAFIELDS_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_USER_EXTRAFIELDS_ADMINWARNINGS}</div>
 <!-- ENDIF -->

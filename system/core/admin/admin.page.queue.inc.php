@@ -23,8 +23,9 @@ $adminhelp = $L['adm_queues_page'];
 $id = sed_import('id','G','INT');
 
 $d = sed_import('d', 'G', 'INT');
-if (empty($d))
-{ $d = '0'; }
+$d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 if($a == 'validate')
 {
@@ -69,10 +70,16 @@ if($a == 'unvalidate')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1"), 0, 0);
-
+if($cfg['jquery'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=queue&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=queue&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
 	$pagnav = sed_pagination(sed_url('admin','m=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=queue'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-
+}
 
 $sql = sed_sql_query("SELECT p.*, u.user_name
 	FROM $db_pages as p
@@ -115,6 +122,7 @@ while($row = sed_sql_fetcharray($sql))
 $is_row_empty = (sed_sql_numrows($sql)==0) ? true : false ;
 
 $t -> assign(array(
+	"ADMIN_PAGE_QUEUE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PAGE_QUEUE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_PAGE_QUEUE_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_PAGE_QUEUE_PAGNAV" => $pagnav,
@@ -124,5 +132,12 @@ $t -> assign(array(
 ));
 $t -> parse("PAGE_QUEUE");
 $adminmain = $t -> text("PAGE_QUEUE");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

@@ -1,5 +1,5 @@
 <!-- BEGIN: LOG -->
-		<div>
+		<div id="{ADMIN_LOG_AJAX_OPENDIVID}">
 <!-- IF {PHP.usr.isadmin} -->
 			<ul>
 				<li>{PHP.L.adm_purgeall} ({ADMIN_LOG_TOTALDBLOG}) : [<a href="{ADMIN_LOG_URL_PRUNE}">x</a>]</li>
