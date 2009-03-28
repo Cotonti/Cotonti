@@ -358,8 +358,8 @@ else
 					$adminmain .= "<td style=\"text-align:right;\">".$value[1]."</td>";
 					$adminmain .= "<td style=\"text-align:right;\">".$value[2]."</td>";
 					$adminmain .= "<td style=\"text-align:right;\">".$value[3]."</td>";
-					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=forums&io=".$key)."\"><img src=\"system/img/admin/rights2.gif\" alt=\"\" /></a></td>";
-					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('forums', "m=topics&s=".$key)."\"><img src=\"system/img/admin/jumpto.gif\" alt=\"\" /></a></td>";
+					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=rightsbyitem&ic=forums&io=".$key)."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td>";
+					$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('forums', "m=topics&s=".$key)."\"><img src=\"images/admin/jumpto.gif\" alt=\"\" /></a></td>";
 					$adminmain .= "</tr>";$ii++;
 				}
 
