@@ -951,7 +951,7 @@ CREATE TABLE `sed_users` (
   `user_banexpire` int(11) default '0',
   `user_name` varchar(100) collate utf8_unicode_ci NOT NULL,
   `user_password` varchar(32) collate utf8_unicode_ci NOT NULL default '',
-  `user_maingrp` int(11) unsigned NOT NULL default '4',
+  `user_maingrp` int(11) NOT NULL default '4',
   `user_country` char(2) collate utf8_unicode_ci NOT NULL default '',
   `user_text` text collate utf8_unicode_ci NOT NULL,
   `user_avatar` varchar(255) collate utf8_unicode_ci NOT NULL default '',

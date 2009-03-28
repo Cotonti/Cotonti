@@ -45,6 +45,12 @@ if ($a=='check')
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
+		if ($row['user_maingrp']==-1)
+		{
+			sed_log("Log in attempt, user inactive : ".$rusername, 'usr');
+			sed_redirect(sed_url('message', 'msg=152', '', true));
+			exit;
+		}
 		if ($row['user_maingrp']==2)
 		{
 			sed_log("Log in attempt, user inactive : ".$rusername, 'usr');
