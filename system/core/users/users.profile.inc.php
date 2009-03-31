@@ -200,7 +200,7 @@ switch ($a)
 					}
 					else
 						{ unlink($avatarpath); }
-					@chmod($avatarpath, 0666);
+					@chmod($avatarpath, $cfg['file_perms']);
 			}
 		}
 		elseif($fcheck == 2)
@@ -264,7 +264,7 @@ switch ($a)
 					}
 					else
 						{ unlink($photopath); }
-					@chmod($photopath, 0666);
+					@chmod($photopath, $cfg['file_perms']);
 			}
 		}
 		elseif($fcheck == 2)
@@ -328,7 +328,7 @@ switch ($a)
 					}
 					else
 						{ unlink($signaturepath); }
-					@chmod($signaturepath, 0666);
+					@chmod($signaturepath, $cfg['file_perms']);
 			}
 		}
 		elseif($fcheck == 2)
