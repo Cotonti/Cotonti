@@ -51,7 +51,16 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 		sed_tag_remove($tag, $id);
 	}
 	// Add new tags
-	$lim = $cfg['plugin']['tags']['limit'] > 0 ? $cfg['plugin']['tags']['limit'] - $cnt : count($new_tags);
+	$ncnt = count($new_tags);
+	if ($cfg['plugin']['tags']['limit'] > 0
+		&& $ncnt > $cfg['plugin']['tags']['limit'] - $cnt)
+	{
+		$lim = $cfg['plugin']['tags']['limit'] - $cnt;
+	}
+	else
+	{
+		$lim = $ncnt;
+	}
 	for($i = 0; $i < $lim; $i++)
 	{
 		sed_tag($new_tags[$i], $id);
