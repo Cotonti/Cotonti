@@ -181,13 +181,13 @@ if ($a=='upload')
 						if ($cfg['pfsuserfolder'])
 						{
 							if (!is_dir($cfg['pfs_dir_user']))
-							{ $is_moved &= mkdir($cfg['pfs_dir_user'], 0755); }
+							{ $is_moved &= mkdir($cfg['pfs_dir_user'], $cfg['dir_perms']); }
 							if (!is_dir($cfg['th_dir_user']))
-							{ $is_moved &= mkdir($cfg['th_dir_user'], 0755); }
+							{ $is_moved &= mkdir($cfg['th_dir_user'], $cfg['dir_perms']); }
 						}
 
 						$is_moved &= move_uploaded_file($u_tmp_name, $cfg['pfs_dir_user'].$u_newname);
-						$is_moved &= chmod($cfg['pfs_dir_user'].$u_newname, 0644);
+						$is_moved &= chmod($cfg['pfs_dir_user'].$u_newname, $cfg['file_perms']);
 
 						$u_size = filesize($cfg['pfs_dir_user'].$u_newname);
 
