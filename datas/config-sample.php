@@ -74,6 +74,15 @@ $cfg['defav_dir'] = 'datas/defaultav/';
 $cfg['th_dir'] = 'datas/thumbs/';
 
 // ========================
+// Directory and file permissions for uploaded files
+// and files created with scripts.
+// You can set it to values which deliver highest
+// security and comfort on your host.
+// ========================
+$cfg['dir_perms'] = 0777;
+$cfg['file_perms'] = 0664;
+
+// ========================
 // Name of MySQL tables
 // (OPTIONAL, if missing, Seditio will set default values)
 // Only change the "sed" part if you'd like to
