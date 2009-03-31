@@ -4907,7 +4907,6 @@ function sed_get_plural($plural, $lang, $is_frac = false)
             return ($plural == 1) ? 1 : 0;
 
         case 'fr':
-        case 'uk':
             return ($plural > 1) ? 0 : 1;
 
         case 'ru':
