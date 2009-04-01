@@ -22,7 +22,7 @@
 	{POLLS_TITLE}
 	{POLLS_FORM}
 	<!-- END: POLLS_VIEW -->
-{FORUMPLUSJS}
+
 		<div class="tCap"></div><table class="cells" border="0" cellspacing="1" cellpadding="2">
 			<tr>
 				<td class="coltop" style="width:128px;">{PHP.skinlang.forumspost.Author}</td>
@@ -33,7 +33,7 @@
 			<tr>
 				<td style="width:176px;" rowspan="3" class="{FORUMS_POSTS_ROW_ODDEVEN}">
 					{FORUMS_POSTS_ROW_ANCHORLINK}
-					<h2 style="margin:2px;">{FORUMS_POSTS_ROW_POSTERNAME_P}</h2>
+					<h2 style="margin:2px;">{FORUMS_POSTS_ROW_POSTERNAME}</h2>
 					{FORUMS_POSTS_ROW_AVATAR}
 
 					<div style="padding:5px;">
@@ -44,7 +44,7 @@
 					<div style="padding:5px;">{FORUMS_POSTS_ROW_COUNTRYFLAG}</div>
 					<div style="padding:5px;">
 						{FORUMS_POSTS_ROW_POSTCOUNT} {PHP.skinlang.forumspost.posts}<br />
-						{FORUMS_POSTS_ROW_WEBSITE_P}<br />
+						{FORUMS_POSTS_ROW_WEBSITE}<br />
 						{PHP.skinlang.forumspost.Location} {FORUMS_POSTS_ROW_COUNTRY} {FORUMS_POSTS_ROW_LOCATION}<br />
 						{PHP.skinlang.forumspost.Occupation} {FORUMS_POSTS_ROW_OCCUPATION}<br />
 						{PHP.skinlang.forumspost.Age} {FORUMS_POSTS_ROW_AGE}
@@ -54,20 +54,16 @@
 
 		    	<td style="height:24px; max-height:40px; text-align:right;" class="{FORUMS_POSTS_ROW_ODDEVEN}">
 		    	#{FORUMS_POSTS_ROW_IDURL} &nbsp;
-		    	{FORUMS_POSTS_ROW_CREATION} &nbsp; {FORUMS_POSTS_ROW_POSTERIP} &nbsp; {FORUMS_POSTS_ROW_ADMINQ_P}{FORUMS_POSTS_ROW_ADMINE_P}{FORUMS_POSTS_ROW_ADMIND_P}
+		    	{FORUMS_POSTS_ROW_CREATION} &nbsp; {FORUMS_POSTS_ROW_POSTERIP} &nbsp; {FORUMS_POSTS_ROW_ADMIN}
 		    	</td>
 		 	</tr>
 			<tr>
 				<td style="padding:8px; height:100%;" class="{FORUMS_POSTS_ROW_ODDEVEN}">
-				<div id="postm{FORUMS_POSTS_ROW_ID}" class="fmsg" style="width:550px; overflow-x:auto; overflow-y:visible; padding-bottom:1px;">
-				<div id="postdel{FORUMS_POSTS_ROW_ID}"></div>
+
+				<div class="fmsg" style="width:550px; overflow-x:auto; overflow-y:visible; padding-bottom:1px;">
 					{FORUMS_POSTS_ROW_TEXT}
-				
-<div>{FORUMS_POSTS_ROW_UPDATEDBY}</div>
 				</div>
-
-
-{FORUMS_POSTS_ROW_POSTERPROFILE_P}{FORUMS_POSTS_ROW_EMAIL_P}{FORUMS_POSTS_ROW_PM_P}
+					{FORUMS_POSTS_ROW_UPDATEDBY}
 				</td>
 			</tr>
 			<tr>
