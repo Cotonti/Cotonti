@@ -4765,7 +4765,7 @@ require_once $cfg['system_dir'].'/xtemplate.class.php';
  */
 function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $description="")
 {
-	global $db_extra_fields;
+	global $db_extra_fields, $db_x;
 	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$sql_table'");
 	while($row = sed_sql_fetchassoc($fieldsres))
 	{
@@ -4774,7 +4774,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
 
 	// Check table sed_$sql_table - if field with same name exists - exit.
-	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
+	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
 	while ($i < mysql_num_fields($fieldsres))
 	{
 		$column = mysql_fetch_field($fieldsres, $i);
@@ -4799,7 +4799,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	case "select": $sqltype = "VARCHAR(255)"; break;
 	case "checkbox": $sqltype = "BOOL"; break;
 	}
-	$sql = "ALTER TABLE sed_$sql_table ADD ".$column_prefix."_$name $sqltype ";
+	$sql = "ALTER TABLE $db_x$sql_table ADD ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
 	return $step1&&$step2;
 }
@@ -4819,8 +4819,8 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
  */
 function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $variants="", $description="")
 {
-	global $db_extra_fields;
-	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
+	global $db_extra_fields, $db_x;
+	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
 	$column = mysql_fetch_field($fieldsres, 0);
 	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
 	$extf['location'] = $sql_table;
@@ -4836,7 +4836,7 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 	case "select": $sqltype = "VARCHAR(255)"; break;
 	case "checkbox": $sqltype = "BOOL"; break;
 	}
-	$sql = "ALTER TABLE sed_$sql_table CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
+	$sql = "ALTER TABLE $db_x$sql_table CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
 
 	return $step1&&$step2;
@@ -4852,12 +4852,12 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
  */
 function sed_extrafield_remove($sql_table, $name)
 {
-	global $db_extra_fields;
-	$fieldsres = sed_sql_query("SELECT * FROM sed_$sql_table LIMIT 1");
+	global $db_extra_fields, $db_x;
+	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
 	$column = mysql_fetch_field($fieldsres, 0);
 	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
 	$step1 = sed_sql_delete($db_extra_fields, "field_name = '$name' AND field_location='$sql_table'") == 1;
-	$sql = "ALTER TABLE sed_$sql_table DROP ".$column_prefix."_".$name;
+	$sql = "ALTER TABLE $db_x$sql_table DROP ".$column_prefix."_".$name;
 	$step2 = sed_sql_query($sql);
 	return $step1&&$step2;
 }
