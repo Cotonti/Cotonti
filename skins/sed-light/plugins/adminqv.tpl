@@ -24,6 +24,7 @@
 	<td style="padding-left:20px;">
 		<b>{PHP.L.Pages}</b>
 		<ul>
+		<li><a href="page.php?m=add">{PHP.L.addnewentry}</a></li>
 		<li><a href="admin.php?m=page&amp;s=structure">{PHP.L.plu_ql_b2_1}</a></li>
 		<li><a href="admin.php?m=page&amp;s=extrafields">{PHP.L.plu_ql_b2_2}</a></li>
 		<li><a href="admin.php?m=page&amp;s=catorder">{PHP.L.plu_ql_b2_3}</a></li>
