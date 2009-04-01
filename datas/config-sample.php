@@ -121,4 +121,6 @@ $db_tags			= 'sed_tags';
 $db_trash	 		= 'sed_trash';
 $db_users 			= 'sed_users';
 
+$db_x				= 'sed_'; // Default: sed_, prefix for extra fields' table(s)
+
 ?>
