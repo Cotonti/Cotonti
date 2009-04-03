@@ -576,7 +576,7 @@ if ($f==0 && $usr['auth_write'])
 	$disp_newfolder = "<h4>".$L['pfs_newfolder']."</h4>";
 	$disp_newfolder .= "<form id=\"newfolder\" action=\"pfs.php?a=newfolder".$more."\" method=\"post\">";
 	$disp_newfolder .= "<table class=\"cells\"><tr><td>".$L['Title']."</td>";
-	$disp_newfolder .= "<td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"32\" maxlength=\"64\" /></td></tr>";
+	$disp_newfolder .= "<td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"32\" maxlength=\"255\" /></td></tr>";
 	$disp_newfolder .= "<tr><td>".$L['Description']."</td>";
 	$disp_newfolder .= "<td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"32\" maxlength=\"255\" /></td></tr>";
 	$disp_newfolder .= "<tr><td>".$L['pfs_ispublic']."</td>";

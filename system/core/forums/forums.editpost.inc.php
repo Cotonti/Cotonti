@@ -103,8 +103,8 @@ if ($a=='update')
 	/* ===== */
 
 	$rtext = sed_import('rtext','P','HTM');
-	$rtopictitle = sed_import('rtopictitle','P','TXT', 64);
-	$rtopicdesc = sed_import('rtopicdesc','P','TXT', 64);
+	$rtopictitle = sed_import('rtopictitle','P','TXT', 255);
+	$rtopicdesc = sed_import('rtopicdesc','P','TXT', 255);
 	$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
 
 	if(!empty($rtext))
@@ -165,8 +165,8 @@ if ($row = sed_sql_fetcharray($sql))
 	{
 		 if($fp_idp==$p)
 		 {
-		 	$edittopictitle = "<input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"64\" />";
-		 	$topicdescription ="<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"64\" />";
+		 	$edittopictitle = "<input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"255\" />";
+		 	$topicdescription ="<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"255\" />";
 		 	$is_first_post = true;
 		 }
 	}
