@@ -38,12 +38,12 @@ if (!empty($_SESSION[$sys['site_id']]))
 if ($usr['id']>0)
 {
 	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
-	sed_redirect(sed_url('message', 'msg=102', '', true));
+	sed_redirect(sed_url('index'));
 	exit;
 }
 else
 {
-	sed_redirect(sed_url('message', 'msg=101', '', true));
+	sed_redirect(sed_url('index'));
 	exit;
 }
 

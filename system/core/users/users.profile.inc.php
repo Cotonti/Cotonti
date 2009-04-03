@@ -511,7 +511,7 @@ switch ($a)
 			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=113", '', true));
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('users', 'm=profile'));
 		exit;
 	}
 	break;
