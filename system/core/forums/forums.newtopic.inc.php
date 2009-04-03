@@ -85,8 +85,8 @@ if ($a=='newtopic')
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$newtopictitle = sed_import('newtopictitle','P','TXT', 64);
-	$newtopicdesc = sed_import('newtopicdesc','P','TXT', 64);
+	$newtopictitle = sed_import('newtopictitle','P','TXT', 255);
+	$newtopicdesc = sed_import('newtopicdesc','P','TXT', 255);
 	$newprvtopic = sed_import('newprvtopic','P','BOL');
 	$newmsg = sed_import('newmsg','P','HTM');
 	$newtopicpreview = mb_substr(sed_cc($newmsg), 0, 128);
@@ -255,8 +255,8 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
 	"FORUMS_NEWTOPIC_SUBTITLE" => sed_cc($fs_desc),
 	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
-	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"64\" />",
-	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"64\" />",
+	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"255\" />",
+	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"255\" />",
 	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />",
 	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
 	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />",
