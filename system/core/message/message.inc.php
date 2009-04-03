@@ -53,21 +53,21 @@ switch( $msg )
 		$ru = sed_url('users', 'm=auth'.$redirect);
 		break;
 
-	case '102':
+	/*case '102':
 		$r = 1;
 		$rd = 2;
 		$ru = sed_url('index');
-		break;
+		break;*/
 
-	case '104':
+	/*case '104':
 		$rd = 2;
 		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		break;
+		break;*/
 
-	case '113':
+	/*case '113':
 		$rd = 2;
 		$ru = sed_url('users', 'm=profile');
-		break;
+		break;*/
 
 	case '153':
 		if ($num>0)
@@ -103,11 +103,11 @@ switch( $msg )
 
 		/* ======== Private messages ======== */
 
-	case '502':
+	/*case '502':
 		$body = $L['msg502_body']."<a href=\"".sed_url('pm')."\">".$L['msg502_body2']."</a>".$L['msg502_body3'];
 		$rd = 2;
 		$ru = sed_url('pm');
-		break;
+		break;*/
 
 
 	case '916':

@@ -27,11 +27,11 @@ $L['msg100_body'] = 'Only registered and logged users can display their profile!
 $L['msg101_title'] = 'User not logged';
 $L['msg101_body'] = 'No need, you\'re not logged.';
 
-$L['msg102_title'] = 'User logged out';
-$L['msg102_body'] = 'Done, you\'re logged out.';
+//$L['msg102_title'] = 'User logged out';
+//$L['msg102_body'] = 'Done, you\'re logged out.';
 
-$L['msg104_title'] = 'User logged';
-$L['msg104_body'] = 'Welcome back '.$usr['name'].', you\'re now logged in.';
+//$L['msg104_title'] = 'User logged';
+//$L['msg104_body'] = 'Welcome back '.$usr['name'].', you\'re now logged in.';
 
 $L['msg105_title'] = 'Registration done (1st step)';
 $L['msg105_body'] = 'Please check your mailbox in few minutes,<br />and please confirm the registration process<br />by clicking the URL in the body of the message...<br />Until this, your account is marked as &quot;Inactive&quot; in the user list.';
@@ -42,8 +42,8 @@ $L['msg106_body'] = 'Welcome, your account is now valid and activated.<br />You\
 $L['msg109_title'] = 'User deleted';
 $L['msg109_body'] = 'Done, user deleted.';
 
-$L['msg113_title'] = 'Profile updated';
-$L['msg113_body'] = 'Done, changes applied to your account.';
+//$L['msg113_title'] = 'Profile updated';
+//$L['msg113_body'] = 'Done, changes applied to your account.';
 
 $L['msg117_title'] = 'Registration disabled';
 $L['msg117_body'] = 'Registration for new users is disabled.';
@@ -97,10 +97,10 @@ $L['msg500_body'] = 'The server encountered an internal error or misconfiguratio
  * Private Messages
  */
 
-$L['msg502_title'] = 'Private message sent';
-$L['msg502_body'] = 'Done, your private message was successfully sent.<br />Click ';
-$L['msg502_body2'] = 'here';
-$L['msg502_body3'] = ' to go back to private messages or to send a new PM.';
+//$L['msg502_title'] = 'Private message sent';
+//$L['msg502_body'] = 'Done, your private message was successfully sent.<br />Click ';
+//$L['msg502_body2'] = 'here';
+//$L['msg502_body3'] = ' to go back to private messages or to send a new PM.';
 
 /**
  * Forum Messages
