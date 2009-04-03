@@ -122,6 +122,9 @@ while ($fsn = sed_sql_fetcharray($sql))
 		if ($pcat!=$fsn['fs_category'])
 		{
 			$pcat = $fsn['fs_category'];
+			$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat'");
+			$catnum2 = sed_sql_result($sql2, 0, "COUNT(*)");
+
 			$cattitle = "<a href=\"".sed_url('forums')."#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
 			$cattitle .= sed_cc($sed_forums_str[$fsn['fs_category']]['tpath']);
 			$cattitle .= "</a>";
@@ -285,7 +288,8 @@ while ($fsn = sed_sql_fetcharray($sql))
 		}
 
 		// Required to have all divs closed
-		if ($catnum != 1)
+		$catnum2 = $catnum2-1;
+		if (!$catnum2)
 		{
 			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_FOOTER");
 		}
