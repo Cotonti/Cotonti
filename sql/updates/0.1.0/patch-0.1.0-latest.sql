@@ -15,3 +15,6 @@ WHERE sed_polls.poll_id=sed_forum_topics.ft_poll;
 
 /* r629 Unlock all polls */
 UPDATE sed_polls SET poll_state='0';
+
+/* r629 Search pagination */
+INSERT INTO sed_config VALUES ('plug', 'search', '1', 'results', 2, '25', '5,10,15,20,25,50,100', 'Results listed in a single page');
