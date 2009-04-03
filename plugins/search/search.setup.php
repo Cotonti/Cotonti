@@ -18,6 +18,7 @@ Lock_members=W12345A
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]
 searchurl=01:select:Normal,Single:Normal:Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link
+results=01:select:5,10,15,20,25,50,100:25:Results listed in a single page
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 
