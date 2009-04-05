@@ -16,7 +16,7 @@ sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.users.extrafields.inc', false, true));
 
-$adminpath[] = array(sed_url('admin', 'm=users'), $L['core_users']);
+$adminpath[] = array(sed_url('admin', 'm=users'), $L['Users']);
 $adminpath[] = array(sed_url('admin', 'm=users&s=extrafields'), $L['adm_extrafields']);
 $adminhelp = $L['adm_help_users_extrafield'];
 
