@@ -1,6 +1,6 @@
 <?PHP
 /**
- * Russian Language File for Messages (message.lang.php)
+ * English Language File for Messages (message.lang.php)
  *
  * @package Cotonti
  * @version 0.1.0
