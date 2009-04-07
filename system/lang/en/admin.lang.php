@@ -11,18 +11,6 @@
 
 /**
  * Config Section
- */
-
-$L['core_lang'] = 'Languages';
-$L['core_main'] = 'Main setup';
-$L['core_menus'] = 'Menu slots';
-$L['core_parser'] = 'Parser';
-$L['core_skin'] = 'Skins';
-$L['core_time'] = 'Time and date';
-$L['core_title'] = 'Titles';	// New in N-0.0.2
-
-/**
- * Config Section
  * Comments Subsection
  */
 

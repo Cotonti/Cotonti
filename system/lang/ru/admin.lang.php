@@ -11,18 +11,6 @@
 
 /**
  * Config Section
- */
-
-$L['core_lang'] = 'Локализация (языки)';
-$L['core_main'] = 'Настройки сайта';
-$L['core_menus'] = 'Слоты для меню';
-$L['core_parser'] = 'Парсер';
-$L['core_skin'] = 'Внешний вид (скины)';
-$L['core_time'] = 'Время и дата';
-$L['core_title'] = 'Заголовки';	// New in N-0.0.2
-
-/**
- * Config Section
  * Comments Subsection
  */
 
