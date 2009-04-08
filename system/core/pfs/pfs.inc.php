@@ -499,10 +499,10 @@ if ($files_count>0 || $folders_count>0)
 	}
 
 	if ($files_count>0)
-	{
+	{		$thumbspagination = ($o == 'thumbs') ? '&o=thumbs' : '';
 		$totalitems = $files_count;
-		$pagnav = sed_pagination(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2), $d, $totalitems, $cfg['maxrowsperpage']);
-		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+		$pagnav = sed_pagination(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination), $d, $totalitems, $cfg['maxrowsperpage']);
+		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 		$disp_main .= "<h4>".$files_count." ";
 
