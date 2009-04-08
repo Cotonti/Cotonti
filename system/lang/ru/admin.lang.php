@@ -11,6 +11,28 @@
 
 /**
  * Config Section
+ */
+
+$L['core_comments'] = 'Комментарии';
+$L['core_forums'] = 'Форумы';
+$L['core_lang'] = 'Язык';
+$L['core_main'] = 'Настройки сайта';
+$L['core_menus'] = 'Слоты для меню';
+$L['core_page'] = 'Страницы';
+$L['core_parser'] = 'Парсер';
+$L['core_pfs'] = 'Мои файлы';
+$L['core_plug'] = 'Плагины';
+$L['core_pm'] = 'Личные сообщения';
+$L['core_polls'] = 'Опросы';
+$L['core_ratings'] = 'Рейтинги';
+$L['core_skin'] = 'Скины';
+$L['core_time'] = 'Время и дата';
+$L['core_title'] = 'Заголовки';
+$L['core_trash'] = 'Корзина';
+$L['core_users'] = 'Пользователи';
+
+/**
+ * Config Section
  * Comments Subsection
  */
 

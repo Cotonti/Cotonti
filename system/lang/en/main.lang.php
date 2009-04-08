@@ -123,7 +123,6 @@ $L['Journalpage'] = 'Weblog page';
 $L['Journals'] = 'Weblogs';
 $L['kb'] = 'KB';
 $L['Key'] = 'Key';
-$L['Lang'] = 'Languages';
 $L['Lastlogged'] = 'Last logged';
 $L['Lastpost'] = 'Last post';
 $L['Left']	= 'Left';
@@ -137,7 +136,6 @@ $L['Locked'] = 'Locked';
 $L['Log'] = 'Log';
 $L['Login'] = 'Login';
 $L['Logout'] = 'Logout';
-$L['Main'] = 'Main setup';
 $L['Main'] = 'Main';
 $L['Maingroup'] = 'Main group';
 $L['Makesticky'] = 'Sticky';
@@ -146,7 +144,6 @@ $L['Members'] = 'Members';
 $L['Members_download'] = 'This download is available for registered users only.'; // N-0.0.1
 $L['Members_only'] = 'Members only'; // N-0.0.1
 $L['Menu'] = 'Menu';
-$L['Menus'] = 'Menu slots';
 $L['Menus'] = 'Menus';
 $L['Message'] = 'Message';
 $L['Messages'] = 'Messages';
@@ -187,7 +184,6 @@ $L['Overview'] = 'Overview';
 $L['Owner'] = 'Owner';
 $L['Page'] = 'Page';
 $L['Pages'] = 'Pages';
-$L['Parser'] = 'Parser';
 $L['Part'] = 'Part';
 $L['Parts'] = 'Parts';
 $L['Password'] = 'Password';
@@ -259,10 +255,8 @@ $L['Tags'] = 'Tags';
 $L['Text'] = 'Text';
 $L['Thumbnail'] = 'Thumbnail';
 $L['Thumbnails'] = 'Thumbnails';
-$L['Time'] = 'Time and date';
 $L['Timezone'] = 'Timezone';
 $L['Title'] = 'Title';
-$L['Title'] = 'Titles';	// New in N-0.0.2
 $L['Tool'] = 'Tool';
 $L['Tools'] = 'Tools';
 $L['Topic'] = 'Topic';
@@ -322,10 +316,8 @@ $L['Gender_M'] = 'Male';
 $L['Gender_U'] = 'Unknown';
 
 /* ====== BBcodes and smilies popups ====== */
-
 $L['Smilies_explain'] = 'Click a smiley to insert in the text';
 $L['BBcodes_explain'] = 'Click a button to insert in the text';
-
 $L['bbcodes_bold'] = 'Bold';
 $L['bbcodes_underline'] = 'Underline';
 $L['bbcodes_italic'] = 'Italic';
@@ -446,15 +438,12 @@ $L['bbcodes_ex_style9'] = 'Style 9';
 $L['bbcodes_ex_preview'] = 'Toggle between edit and preview mode';
 
 /* ====== Common ====== */
-
 $L['com_skinfail'] = 'Warning, failed to load your prefered skin, check your profile.';
 $L['com_themefail'] = 'Warning, failed to load your prefered theme for the prefered skin, please check your profile and update values.'; // N-0.0.2
 $L['com_members'] = array('members','member');
 $L['com_guests'] = array('guests','guest');
 
-
 /* ====== Header ====== */
-
 $L['hea_privatemessages'] = array('new private messages','new private message');
 $L['hea_noprivatemessages'] = 'No private messages';
 $L['hea_youareloggedas'] = 'Logged in as';
@@ -462,7 +451,6 @@ $L['hea_youarenotlogged'] = 'You\'re not logged in.';
 $L['hea_valqueues'] = 'In validation queues : ';
 
 /* ====== Footer ====== */
-
 $L['foo_poweredby'] = 'Powered by';
 $L['foo_created'] = 'Page created in';
 $L['foo_seconds'] = array('seconds','second');
@@ -471,11 +459,9 @@ $L['foo_sqltotal'] = 'SQL total time';
 $L['foo_sqlaverage'] = 'Average SQL time';
 
 /* ====== Admin ====== */
-
 // See the file : admin.lang.php
 
 /* ====== Auth ====== */
-
 $L['aut_usernametooshort']= 'The user name must be at least 2 chars long';
 $L['aut_passwordtooshort'] = 'The password must be at least 4 chars long and must consist of alphanumerical characters and underscore only.';
 $L['aut_emailtooshort'] = 'The email is not valid.';
@@ -483,56 +469,34 @@ $L['aut_usernamealreadyindb'] = 'The user name you provided is already in the da
 $L['aut_emailalreadyindb'] = 'The email you provided is already in the database';
 $L['aut_passwordmismatch'] = 'The password fields do not match !';
 $L['aut_emailbanned'] = 'This email (or this host) is banned, reason is : ';
-
 $L['aut_contactadmin'] = 'If you have any difficulties please contact the board administrator';
-
 $L['aut_regrequesttitle'] = 'Registration request';
 $L['aut_regrequest'] = 'Hi %1$s,
-
 Your account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. Then you will be able to login with :
-
 Username = %1$s
 Password = %2$s';
-
 $L['aut_regreqnoticetitle'] = 'New account request';
 $L['aut_regreqnotice'] = 'Hi,
-
 You are receiving this email because %1$s requested a new account.
 This user won\'t be able to login until you manually set the account as \'active\', here :
-
- %2$s';
-
+%2$s';
 $L['aut_emailreg'] = 'Hi %1$s,
-
 To use your account you need to activate it with this link :
-
- %3$s
-
- Then you\'ll be able to login with :
-
+%3$s
+Then you\'ll be able to login with :
 Username = %1$s
 Password = %2$s
-
 To cancel the recently inactive membership use this link :
-
- %4$s
-
-';
-
+%4$s';
 $L['aut_mailnoticetitle'] = 'Email transition'; // N-0.1.0
 $L['aut_emailchange'] = 'Hi %1$s,
-
 To change your recent email please use this activation link :
-
- %2$s
-'; // N-0.1.0
-
+%2$s'; // N-0.1.0
 $L['aut_registertitle'] = 'Register a new member account';
 $L['aut_registersubtitle'] = '';
 $L['aut_logintitle'] = 'Login form';
 
 /* ====== Comments ====== */
-
 $L['com_commenttooshort'] = 'The comment is too short or missing';
 $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commentadded'] = 'Done, comment added';
@@ -541,7 +505,6 @@ $L['com_nocommentsyet'] = 'No comments yet';
 $L['com_closed'] = 'Adding comments has been disabled for this item.'; // N-0.1.0
 
 /* ====== Forums ======= */
-
 $L['for_newtopic'] = 'New topic';
 $L['for_markallasread'] = 'Mark all posts as read';
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
@@ -551,15 +514,12 @@ $L['for_polltooshort'] = 'Poll options must be equal, or greater than 2'; // N-0
 $L['for_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.'; // N-0.1.0
 
 /* ====== List ====== */
-
 $L['lis_submitnew'] = 'Submit a new entry';
 
 /* ====== Messages ====== */
-
 // It's in message.lang.php
 
 /* ====== Pages ====== */
-
 $L['pag_notavailable'] = 'This page will be published in '; // N-0.0.2
 $L['pag_catmissing'] = 'The category code is missing';
 $L['pag_titletooshort'] = 'The title is too short or missing';
@@ -573,7 +533,6 @@ $L['pfs_resizeimages'] = 'to scale the image?'; // N-0.0.2
 $L['comm_on_page'] = 'on page'; // N-0.0.2
 
 /* ====== Personal file space ====== */
-
 $L['pfs_title'] = 'My Personal File Space';
 $L['pfs_filetoobigorext'] = 'The upload failed, this file is too big maybe, or the extension is not allowed ?';
 $L['pfs_fileexists'] = 'The upload failed, there\'s already a file with this name ?';
@@ -595,13 +554,10 @@ $L['pfs_filenotmoved'] = 'The upload failed, temporary file cannot be moved.'; /
 $L['pfs_filenotvalid'] = 'This is not a valid %1$s file.'; // N-0.0.2
 $L['pfs_filemimemissing'] = 'The mime type for %1$s is missing. Upload Failed'; // N-0.0.2
 
-
 /* ====== Plug ====== */
-
 // Empty
 
 /* ====== Pm ====== */
-
 $L['pm_titletooshort'] = 'The title is too short or missing';
 $L['pm_bodytooshort'] = 'The body of the private message is too short or missing';
 $L['pm_bodytoolong'] = 'The body of the private message is too long, '.$cfg['pm_maxsize'].' chars maximum';
@@ -620,14 +576,12 @@ $L['pm_replyto'] = 'Reply to this user';
 $L['pm_putinarchives'] = 'Put in archives';
 $L['pm_notifytitle'] = 'New private message';
 $L['pm_notify'] = 'Hi %1$s,
-
 You are receiving this email because there is a new private message in your inbox.
 The sender is : %2$s
 Click this link to read it : %3$s';
 $L['pm_multiplerecipients'] = 'This private messages was also sent to %1$s other recipient(s).';
 
 /* ====== Polls ====== */
-
 $L['polls_viewresults'] = 'View results';
 $L['polls_viewarchives'] = 'View all polls';
 $L['polls_Vote'] = 'Vote';
@@ -636,7 +590,6 @@ $L['polls_since'] = 'since';
 $L['polls_alreadyvoted'] = 'You\'ve already voted for this poll.';
 $L['polls_notyetvoted'] = 'You can vote by clicking a line above.';
 $L['polls_votecasted'] = 'Done, vote succesfully recorded';
-
 $L['polls_error_title'] = 'Poll name is too short or empty'; // N-0.0.2
 $L['polls_error_count'] = 'A poll must have two or more options'; // N-0.0.2
 $L['polls_created'] = 'The poll has been successfully created'; // N-0.0.2
@@ -644,7 +597,6 @@ $L['polls_updated'] = 'The poll has been successfully updated'; // N-0.0.2
 $L['polls_multiple'] = 'Allow multiple choice'; // N-0.0.2
 
 /* ====== Ratings ====== */
-
 $L['rat_choice1'] = 'Very poor';
 $L['rat_choice2'] = 'Poor';
 $L['rat_choice3'] = 'Not that bad';
@@ -662,21 +614,17 @@ $L['rat_alreadyvoted'] = 'You\'ve already voted for this item.';
 $L['rat_registeredonly'] = 'Only registered users can rate items.';
 
 /* ====== Users ====== */
-
 $L['use_title'] = 'Users';
 $L['use_subtitle'] = 'Registered members';
 $L['useed_accountactivated'] = 'Account activated';
 $L['useed_email'] = 'You are receiving this email because an administrator activated your account.
-You may now login using the username and password you received in a previous email.
-
-';
+You may now login using the username and password you received in a previous email.';
 $L['useed_title'] = 'Edit';
 $L['useed_subtitle'] = '&nbsp;';
 $L['use_byfirstletter'] = 'Name starting by';
 $L['use_allusers'] = 'All users';
 $L['use_allbannedusers'] = 'Users banned';
 $L['use_allinactiveusers'] = 'Users inactive';
-
 $L['pro_title'] = 'Profile';
 $L['pro_subtitle'] = 'Your personal account';
 $L['pro_passtoshort'] = 'The password must be at least 4 chars long and must consist of alphanumerical characters and underscore only.';
@@ -692,8 +640,6 @@ $L['pro_avatarnotvalid'] = 'This avatar is not a valid %1$s image.'; // N-0.0.2
 $L['pro_photonotvalid'] = 'This photo is not a valid %1$s image.'; // N-0.0.2
 $L['pro_sigotvalid'] = 'This signature is not a valid %1$s image.'; // N-0.0.2
 $L['ajaxSenderror'] = 'The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the administrator and inform them of the time the error occurred, and anything you might have done that may have caused the error.'; // N-0.0.2
-
-
 
 /* ====== Misc ====== */
 // N-0.0.2
