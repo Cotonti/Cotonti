@@ -189,12 +189,11 @@ switch ($n)
 
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core' ORDER BY config_cat ASC");
 
-        while ($row = sed_sql_fetcharray($sql))
-        {
-            $code =ucfirst(strtolower($row['config_cat']));
-            $adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat'])."\">".$L[$code]."</a></li>";
-        }
-
+		while ($row = sed_sql_fetcharray($sql))
+		{
+			$code = "core_".$row['config_cat'];
+			$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat'])."\">".$L[$code]."</a></li>";
+		}
 
 		$adminmain .= "</ul>";
 
