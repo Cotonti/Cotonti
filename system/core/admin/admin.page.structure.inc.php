@@ -242,7 +242,7 @@ else
 	$pagnav = sed_pagination(sed_url('admin','m=page&s=structure'), $d, $totalitems, $cfg['maxrowsperpage']);
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
-	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path ASC, structure_code ASC LIMIT $d,".$cfg['maxrowsperpage']);
+	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path+0 ASC, structure_code ASC LIMIT $d,".$cfg['maxrowsperpage']);
 
 	$adminmain .= "<h4>".$L['editdeleteentries']." :</h4>";
 	$adminmain .= "<div class=\"pagnav\">".$pagination_prev." ".$pagnav." ".$pagination_next."</div>";
