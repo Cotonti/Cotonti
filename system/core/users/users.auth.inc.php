@@ -101,6 +101,8 @@ if ($a=='check')
 
 		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
 		$rurl = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
+		$rurl = (empty($redirect) && isset($_SESSION['s_redirect'])) ? base64_decode($_SESSION['s_redirect']) : $rurl;
+		session_unregister('s_redirect');
 		sed_redirect($rurl);
 		exit;
 	}
