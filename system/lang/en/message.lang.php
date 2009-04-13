@@ -9,6 +9,8 @@
  * @license BSD
  */
 
+defined('SED_CODE') or die('Wrong URL.');
+
 $L['msg_Message'] = 'Message';
 $L['msg_Error'] = 'Error';
 $L['msg_Warning'] = 'Warning';

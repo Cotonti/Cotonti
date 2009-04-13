@@ -8,7 +8,7 @@
 
 		<div id="subtitle">
 			<a href="plug.php?e=search&amp;frm=1">{PHP.skinlang.forumssections.Searchinforums}</a> |
-			<a href="plug.php?e=forumstats">{PHP.skinlang.forumssections.Statistics}</a> |
+			<a href="plug.php?e=forumstats">{PHP.L.Statistics}</a> |
 			<a href="forums.php?n=markall">{PHP.skinlang.forumssections.Markasread}</a> |
 			{FORUMS_SECTIONS_GMTTIME}
 		</div>
@@ -17,11 +17,11 @@
 		<table class="cells" border="0" cellspacing="1" cellpadding="2">
 		<thead>
 			<tr>
-				<td class="coltop" colspan="2">{PHP.skinlang.forumssections.Sections}  &nbsp;  &nbsp; <a href="forums.php?c=fold#top">{PHP.skinlang.forumssections.FoldAll}</a> / <a href="forums.php?c=unfold#top">{PHP.skinlang.forumssections.UnfoldAll}</a></td>
-				<td class="coltop" style="width:176px;">{PHP.skinlang.forumssections.Lastpost}</td>
-				<td class="coltop" style="width:48px;">{PHP.skinlang.forumssections.Topics}</td>
-				<td class="coltop" style="width:48px;">{PHP.skinlang.forumssections.Posts}</td>
-				<td class="coltop" style="width:48px;">{PHP.skinlang.forumssections.Views}</td>
+				<td class="coltop" colspan="2">{PHP.L.Sections}  &nbsp;  &nbsp; <a href="forums.php?c=fold#top">{PHP.skinlang.forumssections.FoldAll}</a> / <a href="forums.php?c=unfold#top">{PHP.skinlang.forumssections.UnfoldAll}</a></td>
+				<td class="coltop" style="width:176px;">{PHP.L.Lastpost}</td>
+				<td class="coltop" style="width:48px;">{PHP.L.Topics}</td>
+				<td class="coltop" style="width:48px;">{PHP.L.Posts}</td>
+				<td class="coltop" style="width:48px;">{PHP.L.Views}</td>
 				<td class="coltop" style="width:48px;">{PHP.skinlang.forumssections.Activity}</td>
 			</tr>
 		</thead>

@@ -13,33 +13,31 @@
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<tr>
-					<td style="width:176px;">{PHP.skinlang.usersregister.Username}</td>
+					<td style="width:176px;">{PHP.L.Username}:</td>
 					<td>{USERS_REGISTER_USER} *</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersregister.Validemail}</td>
+					<td>{PHP.skinlang.usersregister.Validemail}:</td>
 					<td>{USERS_REGISTER_EMAIL} *<br />
 					{PHP.skinlang.usersregister.Validemailhint}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersregister.Password}</td>
+					<td>{PHP.L.Password}:</td>
 					<td>{USERS_REGISTER_PASSWORD} *</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersregister.Confirmpassword}</td>
+					<td>{PHP.skinlang.usersregister.Confirmpassword}:</td>
 					<td>{USERS_REGISTER_PASSWORDREPEAT} *</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersregister.Country}</td>
+					<td>{PHP.L.Country}:</td>
 					<td>{USERS_REGISTER_COUNTRY}</td>
 				</tr>
 				<tr>
-					<td colspan="2">{PHP.skinlang.usersregister.Formhint}
-					</td>
+					<td colspan="2">{PHP.skinlang.usersregister.Formhint}</td>
 				</tr>
 				<tr>
-					<td colspan="2" class="valid">
-					<input type="submit" value="{PHP.skinlang.usersregister.Submit}" /></td>
+					<td colspan="2" class="valid"><input type="submit" value="{PHP.L.Submit}" /></td>
 				</tr>
 			</table>
 			<div class="bCap"></div>

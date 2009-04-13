@@ -42,7 +42,7 @@
 		<!-- BEGIN: RATINGS_ROW -->
 		<noscript>{RATINGS_ROW_VALUE}</noscript><input name="newrate" type="radio" class="rstar" value="{RATINGS_ROW_VALUE}" title="{RATINGS_ROW_TITLE}" {RATINGS_ROW_CHECKED} {RATINGS_ROW_DISABLED}/> 
 		<!-- END: RATINGS_ROW -->
-		<input type="submit" value="{PHP.skinlang.ratings.Rateit}" id="rating_submit" />
+		<input type="submit" value="{PHP.L.Submit}" id="rating_submit" />
 	</div>
 	<div style="display:inline;clear:none;margin:0;padding:0">
 		<div class="rating_average" style="display:none;">

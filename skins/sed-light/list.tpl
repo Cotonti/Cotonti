@@ -22,15 +22,15 @@
 			<tr><td style="background:transparent;"><div class="pagnav">{LISTCAT_PAGEPREV} {LISTCAT_PAGNAV} {LISTCAT_PAGENEXT}</div></td></tr>
 		</table>
 
-		<div class="paging">{LIST_TOP_PAGEPREV} {LIST_TOP_PAGINATION} {LIST_TOP_PAGENEXT} &nbsp; {PHP.skinlang.list.Page} {LIST_TOP_CURRENTPAGE}/ {LIST_TOP_TOTALPAGES} - {LIST_TOP_MAXPERPAGE} {PHP.skinlang.list.linesperpage} - {LIST_TOP_TOTALLINES} {PHP.skinlang.list.linesinthissection}</div>
+		<div class="paging">{LIST_TOP_PAGEPREV} {LIST_TOP_PAGINATION} {LIST_TOP_PAGENEXT} &nbsp; {PHP.L.Page} {LIST_TOP_CURRENTPAGE}/ {LIST_TOP_TOTALPAGES} - {LIST_TOP_MAXPERPAGE} {PHP.skinlang.list.linesperpage} - {LIST_TOP_TOTALLINES} {PHP.skinlang.list.linesinthissection}</div>
 
 
 		<div class="tCap"></div><table class="cells" border="0" cellspacing="1" cellpadding="2">
 
 			<tr>
 				<td class="coltop">{LIST_TOP_TITLE} {LIST_TOP_COUNT}</td>
-				<td class="coltop" style="width:96px;">{PHP.skinlang.list.Comments}</td>
-				<td class="coltop" style="width:96px;">{PHP.skinlang.list.Ratings}</td>
+				<td class="coltop" style="width:96px;">{PHP.L.Comments}</td>
+				<td class="coltop" style="width:96px;">{PHP.L.Ratings}</td>
 				<td class="coltop" style="width:96px;">{LIST_TOP_DATE}</td>
 				<td class="coltop" style="width:128px;">{LIST_TOP_AUTHOR}</td>
 			</tr>
@@ -50,7 +50,7 @@
 
 		</table><div class="bCap"></div>
 
-		<div class="paging">{LIST_TOP_PAGEPREV} {LIST_TOP_PAGINATION} {LIST_TOP_PAGENEXT} &nbsp; {PHP.skinlang.list.Page} {LIST_TOP_CURRENTPAGE}/ {LIST_TOP_TOTALPAGES} - {LIST_TOP_MAXPERPAGE} {PHP.skinlang.list.linesperpage} - {LIST_TOP_TOTALLINES} {PHP.skinlang.list.linesinthissection}</div>
+		<div class="paging">{LIST_TOP_PAGEPREV} {LIST_TOP_PAGINATION} {LIST_TOP_PAGENEXT} &nbsp; {PHP.L.Page} {LIST_TOP_CURRENTPAGE}/ {LIST_TOP_TOTALPAGES} - {LIST_TOP_MAXPERPAGE} {PHP.skinlang.list.linesperpage} - {LIST_TOP_TOTALLINES} {PHP.skinlang.list.linesinthissection}</div>
 
 		<h4>{LIST_TOP_TAG_CLOUD}</h4>
 		<div class="block">

@@ -13,47 +13,47 @@
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<tr>
-					<td style="width:176px;">{PHP.skinlang.pageedit.Category}</td>
+					<td style="width:176px;">{PHP.L.Category}:</td>
 					<td>{PAGEEDIT_FORM_CAT}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Title}</td>
+					<td>{PHP.L.Title}:</td>
 					<td>{PAGEEDIT_FORM_TITLE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Description}</td>
+					<td>{PHP.L.Description}:</td>
 					<td>{PAGEEDIT_FORM_DESC}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Author}</td>
+					<td>{PHP.L.Author}:</td>
 					<td>{PAGEEDIT_FORM_AUTHOR}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Owner}</td>
+					<td>{PHP.L.Owner}:</td>
 					<td>{PAGEEDIT_FORM_OWNERID}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Date}</td>
+					<td>{PHP.L.Date}:</td>
 					<td>{PAGEEDIT_FORM_DATE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Begin}</td>
+					<td>{PHP.L.Begin}:</td>
 					<td>{PAGEEDIT_FORM_BEGIN}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Expire}</td>
+					<td>{PHP.L.Expire}:</td>
 					<td>{PAGEEDIT_FORM_EXPIRE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Pagehitcount}</td>
+					<td>{PHP.L.Hits}:</td>
 					<td>{PAGEEDIT_FORM_PAGECOUNT}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Extrakey}</td>
+					<td>{PHP.skinlang.pageedit.Extrakey}:</td>
 					<td>{PAGEEDIT_FORM_KEY}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Alias}</td>
+					<td>{PHP.L.Alias}:</td>
 					<td>{PAGEEDIT_FORM_ALIAS}</td>
 				</tr>
 				<!-- BEGIN: TAGS -->
@@ -63,46 +63,47 @@
 				</tr>
 				<!-- END: TAGS -->
 				<tr>
-					<td>{PHP.skinlang.pageedit.Parsing}</td>
+					<td>{PHP.L.Parser}:</td>
 					<td>{PAGEEDIT_FORM_TYPE}</td>
 				</tr>
 				<tr>
-					<td colspan="2">{PHP.skinlang.pageedit.Bodyofthepage}
+					<td colspan="2">{PHP.L.Text}:
 					<div style="width:100%;">{PAGEEDIT_FORM_TEXT}
 					{PAGEEDIT_FORM_PFS_TEXT_USER}&nbsp;&nbsp; {PAGEEDIT_FORM_PFS_TEXT_SITE}
 					</div></td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Filedownload}</td>
+					<td>{PHP.skinlang.pageedit.File}:<br />
+					{PHP.skinlang.pageadd.Filehint}</td>
 					<td>{PAGEEDIT_FORM_FILE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.URL}<br />
+					<td>{PHP.skinlang.pageedit.URL}:<br />
 					{PHP.skinlang.pageedit.URLhint}</td>
 					<td>{PAGEEDIT_FORM_URL}<br>
 					{PAGEEDIT_FORM_PFS_URL_USER}&nbsp;&nbsp; {PAGEEDIT_FORM_PFS_URL_SITE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Filesize}<br />
+					<td>{PHP.skinlang.pageedit.Filesize}:<br />
 					{PHP.skinlang.pageedit.Filesizehint}</td>
 					<td>{PAGEEDIT_FORM_SIZE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Filehitcount}<br />
+					<td>{PHP.skinlang.pageedit.Filehitcount}:<br />
 					{PHP.skinlang.pageedit.Filehitcounthint}</td>
 					<td>{PAGEEDIT_FORM_FILECOUNT}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Pageid}</td>
+					<td>{PHP.skinlang.pageedit.Pageid}:</td>
 					<td>#{PAGEEDIT_FORM_ID}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Deletethispage}</td>
+					<td>{PHP.skinlang.pageedit.Deletethispage}:</td>
 					<td>{PAGEEDIT_FORM_DELETE}</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
-					<input type="submit" class="submit" value="{PHP.skinlang.pageedit.Update}" />
+					<input type="submit" class="submit" value="{PHP.L.Update}" />
 					</td>
 				</tr>
 			</table>

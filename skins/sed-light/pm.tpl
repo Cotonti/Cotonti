@@ -15,39 +15,39 @@
 			<!-- BEGIN: PM_TITLE -->
 			<tr>
 				<td class="coltop" style="width:16px;"> </td>
-				<td class="coltop" style="width:16px;">{PHP.skinlang.pm.State}</td>
+				<td class="coltop" style="width:16px;">{PHP.L.Status}</td>
 				<td class="coltop">{PHP.skinlang.pm.Sender}</td>
 				<td class="coltop">{PHP.skinlang.pm.Subject}</td>
-				<td class="coltop" style="width:176px;">{PHP.skinlang.pm.Date}</td>
-				<td class="coltop" style="width:72px;">{PHP.skinlang.pm.Action}</td>
+				<td class="coltop" style="width:176px;">{PHP.L.Date}</td>
+				<td class="coltop" style="width:72px;">{PHP.L.Action}</td>
 			</tr>
 			<!-- END: PM_TITLE -->
 
 			<!-- BEGIN: PM_TITLE_SENTBOX -->
 			<tr>
 				<td class="coltop" style="width:16px;"> </td>
-				<td class="coltop" style="width:16px;">{PHP.skinlang.pm.State}</td>
+				<td class="coltop" style="width:16px;">{PHP.L.Status}</td>
 				<td class="coltop">{PHP.skinlang.pm.Recipient}</td>
 				<td class="coltop">{PHP.skinlang.pm.Subject}</td>
-				<td class="coltop" style="width:176px; text-align:center;">{PHP.skinlang.pm.Date}</td>
-				<td class="coltop" style="width:72px; text-align:center;">{PHP.skinlang.pm.Action}</td>
+				<td class="coltop" style="width:176px; text-align:center;">{PHP.L.Date}</td>
+				<td class="coltop" style="width:72px; text-align:center;">{PHP.L.Action}</td>
 			</tr>
 			<!-- END: PM_TITLE_SENTBOX -->
 
 			<!-- BEGIN: PM_ROW -->
 			<tr>
-				<td style="width:16px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_SELECT}</td>
-				<td style="width:16px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_STATUS}</td>
+				<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_SELECT}</td>
+				<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_STATUS}</td>
 				<td class="{PM_ROW_ODDEVEN}">{PM_ROW_FROMORTOUSER}</td>
 				<td class="{PM_ROW_ODDEVEN}">{PM_ROW_TITLE}</td>
-				<td style="width:112px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_DATE}</td>
-				<td style="width:112px;" class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_ACTION}</td>
+				<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_DATE}</td>
+				<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_ACTION}</td>
 			 </tr>
 			<!-- END: PM_ROW -->			
 			
 			<!-- BEGIN: PM_ROW_EMPTY -->
 			<tr>
-				<td colspan="6" style="padding:16px;">{PHP.skinlang.pm.Nomessages}</td>
+				<td colspan="6" style="padding:16px;">{PHP.L.None}</td>
 			</tr>
 			<!-- END: PM_ROW_EMPTY -->
 
@@ -81,10 +81,10 @@
 
 		<div class="paging">
 			<img src="skins/{PHP.skin}/img/system/icon-pm-new.gif" alt="" />: {PHP.skinlang.pm.Newmessage} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm.gif" alt="" />: {PHP.skinlang.pm.Message} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm-reply.gif" alt="" />: {PHP.skinlang.pm.Reply} &nbsp; &nbsp;
+			<img src="skins/{PHP.skin}/img/system/icon-pm.gif" alt="" />: {PHP.L.Message} &nbsp; &nbsp;
+			<img src="skins/{PHP.skin}/img/system/icon-pm-reply.gif" alt="" />: {PHP.L.Reply} &nbsp; &nbsp;
 			<img src="skins/{PHP.skin}/img/system/icon-pm-archive.gif" alt="" />: {PHP.skinlang.pm.Sendtoarchives} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm-trashcan.gif" alt="" />: {PHP.skinlang.pm.Delete}
+			<img src="skins/{PHP.skin}/img/system/icon-pm-trashcan.gif" alt="" />: {PHP.L.Delete}
 		</div>
 
 	</div>

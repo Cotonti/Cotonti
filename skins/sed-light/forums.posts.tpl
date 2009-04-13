@@ -25,8 +25,8 @@
 
 		<div class="tCap"></div><table class="cells" border="0" cellspacing="1" cellpadding="2">
 			<tr>
-				<td class="coltop" style="width:128px;">{PHP.skinlang.forumspost.Author}</td>
-				<td class="coltop">{PHP.skinlang.forumspost.Message}</td>
+				<td class="coltop" style="width:128px;">{PHP.L.Author}</td>
+				<td class="coltop">{PHP.L.Message}</td>
 			</tr>
 
 			<!-- BEGIN: FORUMS_POSTS_ROW -->
@@ -43,11 +43,11 @@
 					</div>
 					<div style="padding:5px;">{FORUMS_POSTS_ROW_COUNTRYFLAG}</div>
 					<div style="padding:5px;">
-						{FORUMS_POSTS_ROW_POSTCOUNT} {PHP.skinlang.forumspost.posts}<br />
+						{PHP.L.Posts}: {FORUMS_POSTS_ROW_POSTCOUNT}<br />
 						{FORUMS_POSTS_ROW_WEBSITE}<br />
-						{PHP.skinlang.forumspost.Location} {FORUMS_POSTS_ROW_COUNTRY} {FORUMS_POSTS_ROW_LOCATION}<br />
-						{PHP.skinlang.forumspost.Occupation} {FORUMS_POSTS_ROW_OCCUPATION}<br />
-						{PHP.skinlang.forumspost.Age} {FORUMS_POSTS_ROW_AGE}
+						{PHP.L.Location}: {FORUMS_POSTS_ROW_COUNTRY} {FORUMS_POSTS_ROW_LOCATION}<br />
+						{PHP.L.Occupation}: {FORUMS_POSTS_ROW_OCCUPATION}<br />
+						{PHP.L.Age}: {FORUMS_POSTS_ROW_AGE}
 					</div>
 
 				</td>
@@ -88,7 +88,7 @@
 		<!-- BEGIN: FORUMS_POSTS_NEWPOST -->
 		<form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">
 			<div style="width:100%;">{FORUMS_POSTS_NEWPOST_TEXTBOXER}</div>
-			<div class="valid"><input type="submit" value="{PHP.skinlang.forumspost.Reply}" /></div>
+			<div class="valid"><input type="submit" value="{PHP.L.Reply}" /></div>
 		</form>
 		<!-- END: FORUMS_POSTS_NEWPOST -->
 

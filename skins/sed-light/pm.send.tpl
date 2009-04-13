@@ -13,19 +13,19 @@
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<tr>
-					<td style="width:176px;">{PHP.skinlang.pmsend.Sendmessageto}<br />{PHP.skinlang.pmsend.Sendmessagetohint}</td>
+					<td style="width:176px;">{PHP.skinlang.pmsend.Sendmessageto}:<br />{PHP.skinlang.pmsend.Sendmessagetohint}</td>
 					<td>{PMSEND_FORM_TOUSER}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pmsend.Subject}</td>
+					<td>{PHP.skinlang.pmsend.Subject}:</td>
 					<td>{PMSEND_FORM_TITLE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pmsend.Message}</td>
+					<td>{PHP.L.Message}:</td>
 					<td><div style="width:100%;">{PMSEND_FORM_TEXTBOXER}</div></td>
 				</tr>
 				<tr>
-					<td colspan="2" class="valid"><input type="submit" value="{PHP.skinlang.pmsend.Sendmessage}" /></td>
+					<td colspan="2" class="valid"><input type="submit" value="{PHP.L.Submit}" /></td>
 				</tr>
 			</table>
 			<div class="bCap"></div>
