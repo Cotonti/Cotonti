@@ -26,7 +26,7 @@
 				</tr>
 				<!-- END: FORUMS_EDITPOST_TAGS -->
 				<tr>
-					<td class="valid"><input type="submit" value="{PHP.skinlang.forumseditpost.Update}" /></td>
+					<td class="valid"><input type="submit" value="{PHP.L.Update}" /></td>
 				</tr>
 			</table><div class="bCap"></div>
 		</form>

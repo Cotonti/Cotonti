@@ -13,9 +13,9 @@
 				<span class="rss-icon">
 				<a href="{PAGE_COMMENTS_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" alt="" /></a>
 				</span>
-					{PHP.skinlang.page.Comments} {PAGE_COMMENTS}<br />{PHP.skinlang.page.Ratings} {PAGE_RATINGS}</div>
-					{PHP.skinlang.page.Author} {PAGE_AUTHOR}<br />
-					{PHP.skinlang.page.Submittedby} {PAGE_OWNER} &nbsp; {PHP.skinlang.page.Date} {PAGE_DATE}<br />
+					{PHP.L.Comments}: {PAGE_COMMENTS}<br />{PHP.L.Ratings}: {PAGE_RATINGS}</div>
+					{PHP.L.Author}: {PAGE_AUTHOR}<br />
+					{PHP.skinlang.page.Submittedby}: {PAGE_OWNER} &nbsp; {PHP.L.Date}: {PAGE_DATE}<br />
 
 				<!-- BEGIN: PAGE_ADMIN -->
 				{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; ({PAGE_ADMIN_COUNT})<br />
@@ -56,7 +56,7 @@
 				<!-- BEGIN: DOWNLOAD -->
 				{PAGE_FILE_ICON}<a href="{PAGE_FILE_URL}">{PHP.L.Download} : {PAGE_SHORTTITLE}</a><br/>
 				<!-- END: DOWNLOAD -->
-				{PHP.L.Size}: {PAGE_FILE_SIZE}{PHP.L.kb}, {PHP.skinlang.page.downloaded} {PAGE_FILE_COUNT} {PHP.skinlang.page.times}
+				{PHP.skinlang.page.Filesize}: {PAGE_FILE_SIZE}{PHP.L.kb}, {PHP.skinlang.page.downloaded} {PAGE_FILE_COUNT} {PHP.skinlang.page.times}
 			</div>
 		</div>
 		<!-- END: PAGE_FILE -->

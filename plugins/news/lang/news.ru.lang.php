@@ -9,6 +9,8 @@
  * @license BSD
  */
 
+defined('SED_CODE') or die('Wrong URL.');
+
 /**
  * Plugin Config
  */

@@ -14,7 +14,7 @@
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 
 				<tr>
-					<td>{PHP.skinlang.forumsnewtopic.Title} {FORUMS_NEWTOPIC_TITLE}</td>
+					<td>{PHP.skinlang.forumsnewtopic.Title}: {FORUMS_NEWTOPIC_TITLE}</td>
 				</tr>
 
 				<tr>
@@ -25,7 +25,7 @@
 
 				<tr>
 					<td>
-					{PHP.skinlang.forumsnewtopic.privatetopic} {FORUMS_NEWTOPIC_ISPRIVATE}<br />
+					{PHP.skinlang.forumsnewtopic.privatetopic1}: {FORUMS_NEWTOPIC_ISPRIVATE}<br />
 					{PHP.skinlang.forumsnewtopic.privatetopic2}
 					</td>
 				</tr>
@@ -43,9 +43,9 @@
                 <tr>
 					<td>
                 <table>
-<tr><td>{PHP.L.Poll}</td><td><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td></tr>
+<tr><td>{PHP.L.Poll}:</td><td><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td></tr>
 
-<tr><td>{PHP.L.Options}</td><td>{EDIT_POLL_OPTIONS}</td></tr>
+<tr><td>{PHP.L.Options}:</td><td>{EDIT_POLL_OPTIONS}</td></tr>
 <tr><td></td><td><label>{EDIT_POLL_MULTIPLE}{PHP.L.polls_multiple}</label>
 <!-- BEGIN: EDIT -->
 <br /><label>{EDIT_POLL_CLOSE}{PHP.L.Close}</label>
@@ -70,7 +70,7 @@
 
 				<tr>
 					<td style="text-align:center;">
-					<input type="submit" value="{PHP.skinlang.forumsnewtopic.Submit}" />
+					<input type="submit" value="{PHP.L.Submit}" />
 					</td>
 				</tr>
 			</table>

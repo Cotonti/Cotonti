@@ -108,7 +108,7 @@
 	<div class="mboxHD">{POLLS_TITLE}</div>
 	<div class="mboxBody">
 	{POLLS_FORM}
-			{PHP.skinlang.polls.Comments} {POLLS_COMMENTS}{POLLS_COMMENTS_DISPLAY}
+			{PHP.L.Comments}: {POLLS_COMMENTS}{POLLS_COMMENTS_DISPLAY}
 	</div>
 	<!-- END: POLLS_VIEW -->
 
