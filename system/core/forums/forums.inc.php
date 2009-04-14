@@ -113,7 +113,6 @@ $t->assign(array(
 $extp = sed_getextplugins('forums.sections.loop');
 /* ===== */
 
-$catnum = 1;
 
 while ($fsn = sed_sql_fetcharray($sql))
 {
@@ -123,7 +122,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 		{
 			$pcat = $fsn['fs_category'];
 			$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat'");
-			$catnum2 = sed_sql_result($sql2, 0, "COUNT(*)");
+			$catnum = sed_sql_result($sql2, 0, "COUNT(*)");
 
 			$cattitle = "<a href=\"".sed_url('forums')."#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
 			$cattitle .= sed_cc($sed_forums_str[$fsn['fs_category']]['tpath']);
@@ -150,7 +149,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 			"FORUMS_SECTIONS_ROW_CAT_DESC" => sed_parse_autourls($fsn['fn_desc']),
 			"FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => sed_cc($fsn['fn_defstate']),
 			"FORUMS_SECTIONS_ROW_CAT_TBODY" => $fsn['toggle_body'],
-			"FORUMS_SECTIONS_ROW_CAT_TBODY_END" => ($catnum != 1) ? '</tbody>' : '' ,
+			"FORUMS_SECTIONS_ROW_CAT_TBODY_END" => "</tbody>",
 			"FORUMS_SECTIONS_ROW_CAT_CODE" => $fsn['fs_category'],
 			));
 			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_CAT");
@@ -288,14 +287,13 @@ while ($fsn = sed_sql_fetcharray($sql))
 		}
 
 		// Required to have all divs closed
-		$catnum2 = $catnum2-1;
-		if (!$catnum2)
+		$catnum = $catnum-1;
+		if (!$catnum)
 		{
-			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_FOOTER");
+			$t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_CAT_FOOTER");
 		}
 
 		$t->parse("MAIN.FORUMS_SECTIONS_ROW");
-		$catnum++;
 
 }
 
