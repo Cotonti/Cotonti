@@ -28,7 +28,6 @@
 			<!-- BEGIN: FORUMS_SECTIONS_ROW -->
 
 			<!-- BEGIN: FORUMS_SECTIONS_ROW_CAT -->
-			{FORUMS_SECTIONS_ROW_CAT_TBODY_END}
 			<tbody id="{FORUMS_SECTIONS_ROW_CAT_CODE}">
 
 			<tr>
@@ -76,8 +75,6 @@
 
 				</tr></table>
 
-
-
 				</td>
 
 				<td class="centerall">
@@ -106,12 +103,14 @@
 
 			<!-- END: FORUMS_SECTIONS_ROW_SECTION -->
 
-			<!-- BEGIN: FORUMS_SECTIONS_FOOTER -->
+			<!-- BEGIN: FORUMS_SECTIONS_ROW_CAT_FOOTER -->
 
-			<!-- END: FORUMS_SECTIONS_FOOTER -->
+			{FORUMS_SECTIONS_ROW_CAT_TBODY_END}
+
+			<!-- END: FORUMS_SECTIONS_ROW_CAT_FOOTER -->
 
 			<!-- END: FORUMS_SECTIONS_ROW -->
-			</tbody>
+
 		</table>
 		<div class="bCap"></div>
 
