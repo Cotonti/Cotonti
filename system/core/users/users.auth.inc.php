@@ -100,10 +100,8 @@ if ($a=='check')
 		/* ===== */
 
 		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
-		$rurl = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		$rurl = (empty($redirect) && isset($_SESSION['s_redirect'])) ? base64_decode($_SESSION['s_redirect']) : $rurl;
-		session_unregister('s_redirect');
-		sed_redirect($rurl);
+		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
+		header("Location: " . $ru);
 		exit;
 	}
 	else
@@ -123,6 +121,12 @@ $extp = sed_getextplugins('users.auth.main');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+
+if (empty($redirect))
+ {
+	sed_redirect(sed_url('users', 'm=auth&redirect='. base64_encode($sys['referer']), '', true));
+	exit;
+ }
 
 $plug_head .= '<meta name="robots" content="noindex" />';
 require_once $cfg['system_dir'] . '/header.php';
