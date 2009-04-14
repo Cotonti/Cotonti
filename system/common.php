@@ -281,9 +281,6 @@ if($usr['id']==0)
 	$usr['skin'] = empty($usr['skin']) ? $cfg['defaultskin'] : $usr['skin'];
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
 	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
-	
-	if (!defined("SED_AUTH"))
-		{ $_SESSION['s_redirect'] = $sys['url']; }
 }
 
 /* === Hook === */
