@@ -111,9 +111,6 @@ if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 			"PAGE_ROW_SIZE" => $pag['page_size'],
 			"PAGE_ROW_COUNT" => $pag['page_count'],
 			"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
-			"PAGE_ROW_PAGENAV" => $pagnav,
-			"PAGE_ROW_PAGEPREV" => $pages_prev,
-			"PAGE_ROW_PAGENEXT" => $pages_next,
 			"PAGE_ROW_SUBMITNEWPOST" => $submitnewpage,
 			"PAGE_ROW_COMMENTS" => $pag['page_comments'],
 			"PAGE_ROW_RATINGS" => "<img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" />",
@@ -182,6 +179,13 @@ if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 
 		$news->parse("NEWS.PAGE_ROW");
 	}
+
+	$news-> assign(array(
+		"PAGE_PAGENAV" => $pagnav,
+		"PAGE_PAGEPREV" => $pages_prev,
+		"PAGE_PAGENEXT" => $pages_next
+	));
+
 	$news->parse("NEWS");
 	$t->assign("INDEX_NEWS", $news->text("NEWS"));
 

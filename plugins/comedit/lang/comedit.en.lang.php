@@ -1,6 +1,6 @@
 <?PHP
 /**
- * Russian Language File for ComEdit Plugin
+ * English Language File for ComEdit Plugin
  *
  * @package Cotonti
  * @version 0.1.0
