@@ -76,14 +76,14 @@ switch ($a)
 			$adminmain .= "<tr><td>".$L['Date'].":</td><td>".$info['Date']."</td></tr>";
 			$adminmain .= "<tr><td>".$L['Configuration'].":</td><td>".$info['Config']."</td></tr>";
 			$adminmain .= "<tr><td>".$L['Rights'].":</td><td><a href=\"".sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code'])."\"><img src=\"images/admin/rights2.gif\" alt=\"\" /></a></td></tr>";
-			$adminmain .= "<tr><td>".$L['adm_defauth_guests'].":</td><td>".sed_build_admrights($info['Auth_guests']);
+			/*$adminmain .= "<tr><td>".$L['adm_defauth_guests'].":</td><td>".sed_build_admrights($info['Auth_guests']);
 			$adminmain .= " (".$info['Auth_guests'].")</td></tr>";
 			$adminmain .= "<tr><td>".$L['adm_deflock_guests'].":</td><td>".sed_build_admrights($info['Lock_guests']);
 			$adminmain .= " (".$info['Lock_guests'].")</td></tr>";
 			$adminmain .= "<tr><td>".$L['adm_defauth_members'].":</td><td>".sed_build_admrights($info['Auth_members']);
 			$adminmain .= " (".$info['Auth_members'].")</td></tr>";
 			$adminmain .= "<tr><td>".$L['adm_deflock_members'].":</td><td>".sed_build_admrights($info['Lock_members']);
-			$adminmain .= " (".$info['Lock_members'].")</td></tr>";
+			$adminmain .= " (".$info['Lock_members'].")</td></tr>";*/
 			$adminmain .= "<tr><td>".$L['Author'].":</td><td>".$info['Author']."</td></tr>";
 			$adminmain .= "<tr><td>".$L['Copyright'].":</td><td>".$info['Copyright']."</td></tr>";
 			$adminmain .= "<tr><td>".$L['Notes'].":</td><td>".sed_parse($info['Notes'], 1, 0, 0)."</td></tr>";
