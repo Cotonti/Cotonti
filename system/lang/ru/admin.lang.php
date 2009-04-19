@@ -15,23 +15,23 @@ defined('SED_CODE') or die('Wrong URL.');
  * Config Section
  */
 
-$L['core_comments'] = 'Комментарии';
-$L['core_forums'] = 'Форумы';
+$L['core_comments'] = $L['Comments'];
+$L['core_forums'] = $L['Forums'];
 $L['core_lang'] = 'Язык';
 $L['core_main'] = 'Настройки сайта';
 $L['core_menus'] = 'Слоты для меню';
-$L['core_page'] = 'Страницы';
+$L['core_page'] = $L['Pages'];
 $L['core_parser'] = 'Парсер';
-$L['core_pfs'] = 'Мои файлы';
-$L['core_plug'] = 'Плагины';
-$L['core_pm'] = 'Личные сообщения';
-$L['core_polls'] = 'Опросы';
-$L['core_ratings'] = 'Рейтинги';
-$L['core_skin'] = 'Скины';
+$L['core_pfs'] = $L['PFS'];
+$L['core_plug'] = $L['Plugins'];
+$L['core_pm'] = $L['Private_Messages'];
+$L['core_polls'] = $L['Polls'];
+$L['core_ratings'] = $L['Ratings'];
+$L['core_skin'] = $L['Skins'];
 $L['core_time'] = 'Время и дата';
 $L['core_title'] = 'Заголовки';
-$L['core_trash'] = 'Корзина';
-$L['core_users'] = 'Пользователи';
+$L['core_trash'] = $L['Trashcan'];
+$L['core_users'] = $L['Users'];
 
 /**
  * Config Section
