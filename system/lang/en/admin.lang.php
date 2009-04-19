@@ -15,23 +15,23 @@ defined('SED_CODE') or die('Wrong URL.');
  * Config Section
  */
 
-$L['core_comments'] = 'Comments';
-$L['core_forums'] = 'Forums';
+$L['core_comments'] = $L['Comments'];
+$L['core_forums'] = $L['Forums'];
 $L['core_lang'] = 'Languages';
 $L['core_main'] = 'Main Settings';
 $L['core_menus'] = 'Menu Slots';
-$L['core_page'] = 'Pages';
+$L['core_page'] = $L['Pages'];
 $L['core_parser'] = 'Parser';
-$L['core_pfs'] = 'Personal File Space';
-$L['core_plug'] = 'Plugins';
-$L['core_pm'] = 'Private Messages';
-$L['core_polls'] = 'Polls';
-$L['core_ratings'] = 'Ratings';
-$L['core_skin'] = 'Skins';
+$L['core_pfs'] = $L['PFS'];
+$L['core_plug'] = $L['Plugins'];
+$L['core_pm'] = $L['Private_Messages'];
+$L['core_polls'] = $L['Polls'];
+$L['core_ratings'] = $L['Ratings'];
+$L['core_skin'] = $L['Skins'];
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles';
-$L['core_trash'] = 'Trash Can';
-$L['core_users'] = 'Users';
+$L['core_trash'] = $L['Trashcan'];
+$L['core_users'] = $L['Users'];
 
 /**
  * Config Section
