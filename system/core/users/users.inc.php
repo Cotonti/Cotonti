@@ -223,7 +223,7 @@ $t-> assign(array(
 
 $t->assign(array(
 	"USERS_TOP_USERID" => "<a href=\"".sed_url('users', "f=$f&amp;s=id&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=id&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Userid'],
-	"USERS_TOP_NAME" => "<a href=\"".sed_url('users', "f=$f&amp;s=name&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "?f=$f&amp;s=name&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Username'],
+	"USERS_TOP_NAME" => "<a href=\"".sed_url('users', "f=$f&amp;s=name&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=name&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Username'],
 	"USERS_TOP_MAINGRP" => "<a href=\"".sed_url('users', "f=$f&amp;s=maingrp&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=maingrp&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Maingroup'],
 	"USERS_TOP_COUNTRY" => "<a href=\"".sed_url('users', "f=$f&amp;s=country&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=country&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Country'],
 	"USERS_TOP_TIMEZONE" => "<a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Timezone'],
@@ -288,13 +288,13 @@ while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 
 	// Extra fields
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-	while($row = sed_sql_fetchassoc($fieldsres)) 
-	{ 
+	while($row = sed_sql_fetchassoc($fieldsres))
+	{
 		$uname = strtoupper($row['field_name']);
-		$t->assign('USERS_ROW_'.$uname, $urr['user_'.$row['field_name']]); 
+		$t->assign('USERS_ROW_'.$uname, $urr['user_'.$row['field_name']]);
 		isset($L['user_'.$row['field_name'].'_title']) ? $t->assign('USERS_ROW_'.$uname.'_TITLE', $L['user_'.$row['field_name'].'_title']) : $t->assign('USERS_ROW_'.$uname.'_TITLE', $row['field_description']);
 	}
-	
+
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
