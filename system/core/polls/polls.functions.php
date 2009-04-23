@@ -17,6 +17,13 @@ function sed_poll_edit_form($id, $t, $block='')
     global $cfg, $L, $db_polls, $db_polls_options;
     global $error_string;
     $poll_options ='';
+
+    $mask_edit_form ="<div %1\$s>
+        <input type='hidden' name='poll_option_id[]' value='%2\$s' />
+        <input  class='tbox' type='text' name='poll_option[]' size='40' value='%3\$s' maxlength='128' />
+        <input  name='addoption' value='x' onclick='removeAns(this)' type='button' /></div>";
+
+
     if(!empty($error_string))
     {
         global $poll_id, $poll_option_text, $poll_option_id, $poll_multiple, $poll_state, $poll_text;
@@ -32,8 +39,7 @@ function sed_poll_edit_form($id, $t, $block='')
             if ($poll_option_text[$i]!="" || ($poll_option_text[$i]=="" && $poll_option_id[$i]!='new'))
             {
                 $counter++;
-                $poll_options_x .="<div id ='ans_".$counter."'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"".$poll_option_id[$i]."\" />
-            <input  class='tbox' type='text' name='poll_option[]' size='40' value=\"".$poll_option_text[$i]."\" maxlength='128' /> <input  name=\"addoption\" value=\"x\" onclick=\"return removeAns(".$counter.")\" type=\"button\" /></div>";
+                $poll_options_x .=sprintf($mask_edit_form, 'block', $poll_option_id[$i], sed_cc($poll_option_text[$i]));
             }
         }
 
@@ -51,9 +57,7 @@ function sed_poll_edit_form($id, $t, $block='')
         while ($row1 = sed_sql_fetcharray($sql1))
         {
             $counter++;
-            $poll_options_x .="<div id ='ans_".$counter."'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"".$row1['po_id']."\" />
-                <input  class='tbox' type='text' name='poll_option[]' size='40' value=\"".sed_cc($row1['po_text'])."\" maxlength='128' /> <input  name=\"addoption\" value=\"x\" onclick=\"return removeAns(".$counter.")\" type=\"button\" />
-</div>";
+            $poll_options_x .=sprintf($mask_edit_form, 'block', $row1['po_id'], sed_cc($row1['po_text']));
 
         }
     }
@@ -67,16 +71,13 @@ function sed_poll_edit_form($id, $t, $block='')
     }
     if ($counter==0)
     {
-        $poll_options_x="<div id ='ans_1'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-                <input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /> <input  name=\"addoption\" value=\"x\" onclick=\"return removeAns(1)\" type=\"button\" />
-                </div>";
+
+        $poll_options_x=sprintf($mask_edit_form, 'block', 'new', '');
         $counter++;
     }
     if ($counter==1)
     {
-        $poll_options_x.="<div id ='ans_2'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-                <input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='128' /> <input  name=\"addoption\" value=\"x\" onclick=\"return removeAns(1)\" type=\"button\" />
-                </div>";
+        $poll_options_x.=sprintf($mask_edit_form, 'block', 'new', '');;
         $counter++;
     }
     $poll_date=$date."<input type=\"hidden\" name=\"poll_date\" value=\"".$date."\" />";
@@ -86,28 +87,31 @@ function sed_poll_edit_form($id, $t, $block='')
 <script type="text/javascript">
 //<![CDATA[
 
-var ansCount = $counter+1;
-var ansMax = {$cfg['max_options_polls']} + 1;
-var ansCC = ansCount;
-function removeAns(ii){
-    $('#ans_' + (ii) + ' input[name="poll_option[]"]').attr("value", "");
-    if (ansCC>3)
-    { 	ansMax++; ansCC--;
-    if ($('#ans_' + (ii) + ' input[name="poll_option_id[]"]').value !="new")
-    { $('#ans_' + (ii)).hide(); }
-    else { $('#ans_' + (ii)).remove();
-    }
+document.write('<style type="text/css">.noscript{display:none;} .script{display:inherit;} </style>');
+
+
+var ansCount = $counter;
+var ansMax = {$cfg['max_options_polls']};
+function removeAns(object)
+    {
+    $(object).parent().children('[name="poll_option[]"]').attr('value', '');
+    if (ansCount>2)
+    { 	ansCount--;
+    if ($(object).parent().children('[name="poll_option_id[]"]').value !="new")
+    { $(object).parent().hide(); }
+    else { $(object).parent().remove(); }
     }
 
     return false;
 }
 
-function addAns() {
+function addAns(object) {
+    
     if (ansCount<ansMax)
     {
-    $('#ans_' + (ansCount - 1)).after('<div id="ans_' + ansCount + '"><input type="hidden" name="poll_option_id[]" value="new" /><input  class="tbox" type="text" name="poll_option[]" size="40" value="" maxlength="255" /> <input class="delbutton" name="addoption" value="x" onclick="removeAns('+ansCount+')" type="button" /><\/div>');
+    var objectparent = $(object).parent();
+    $(object).parent().children('div').clone().insertBefore(objectparent).show();
     ansCount++;
-    ansCC++
     }
 
     return false;
@@ -116,27 +120,20 @@ function addAns() {
 </script>
 HTM;
 
-    $poll_options .= "<input type=\"hidden\" name=\"poll_id\" value=\"".$id."\" /><div id='ans_0'></div>";
+    $poll_options .= "<input type=\"hidden\" name=\"poll_id\" value=\"".$id."\" />";
     $poll_options .= $poll_options_x;
     if ($counter<$cfg['max_options_polls'])
     {
-        $poll_options .= "<noscript><div id ='ans_no'><input type=\"hidden\" name=\"poll_option_id[]\" value=\"new\" />
-                <input class='tbox' type='text' name='poll_option[]' size='40' value=\"\" maxlength='255' /></div></noscript>";
+        $poll_options .= "<div>".sprintf($mask_edit_form, 'class="noscript"', 'new', '')."";
     }
     $poll_options .= "
-    <input  name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns()\" type=\"button\" />
-";
+    <input  name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns(this)\" type=\"button\" /></div>";
 
     $poll_multiple = "<input name=\"poll_multiple\" type=\"checkbox\" value=\"1\" $poll_multiple />";
 
     $poll_close = "<input name=\"poll_state\" type=\"checkbox\" value=\"1\" $poll_state />";
     $poll_reset = "<input name=\"poll_reset\" type=\"checkbox\" value=\"1\" />";
     $pol_delete = "<input name=\"poll_delete\" type=\"checkbox\" value=\"1\" />";
-
-    // if (empty($skin)) {$skin=sed_skinfile('polls');}
-    // else			  {$skin=sed_skinfile($skin, true);}
-
-    // $poll_form = new XTemplate($skin);
 
     if ($id!='new')
     {
