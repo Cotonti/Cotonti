@@ -20,8 +20,8 @@
 					<td>{USERS_EDIT_NAME}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersedit.Groupsmembership}:</td>
-					<td>{PHP.skinlang.usersedit.Maingroup}:<br />&nbsp;{PHP.out.img_down}<br />{USERS_EDIT_GROUPS}</td>
+					<td>{PHP.L.Groupsmembership}:</td>
+					<td>{PHP.L.Maingroup}:<br />&nbsp;{PHP.out.img_down}<br />{USERS_EDIT_GROUPS}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Country}:</td>
@@ -40,19 +40,19 @@
 					<td>{USERS_EDIT_SKIN}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersedit.Language}:</td>
+					<td>{PHP.L.Language}:</td>
 					<td>{USERS_EDIT_LANG}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersedit.Avatar}:</td>
+					<td>{PHP.L.Avatar}:</td>
 					<td>{USERS_EDIT_AVATAR}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersedit.Signature}:</td>
+					<td>{PHP.L.Signature}:</td>
 					<td>{USERS_EDIT_SIGNATURE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersedit.Photo}:</td>
+					<td>{PHP.L.Photo}:</td>
 					<td>{USERS_EDIT_PHOTO}</td>
 				</tr>
 				<tr>
@@ -100,11 +100,11 @@
 					<td>{USERS_EDIT_GENDER}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersedit.Signature}:</td>
+					<td>{PHP.L.Signature}:</td>
 					<td><div style="width:100%;">{USERS_EDIT_TEXTBOXER}</div></td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersedit.Registeredsince}:</td>
+					<td>{PHP.L.Registered}:</td>
 					<td>{USERS_EDIT_REGDATE}</td>
 				</tr>
 				<tr>

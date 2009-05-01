@@ -20,9 +20,9 @@
 	<!-- BEGIN: STANDALONE_FOOTER -->
 
 	<div class="block">
-		<img src="skins/{PHP.skin}/img/system//icon-pastethumb.gif" alt="" /> : {PHP.skinlang.pfs.Insertasthumbnail} &nbsp; &nbsp;
-		<img src="skins/{PHP.skin}/img/system//icon-pasteimage.gif" alt="" /> : {PHP.skinlang.pfs.Insertasimage} &nbsp; &nbsp;
-		<img src="skins/{PHP.skin}/img/system//icon-pastefile.gif" alt="" /> : {PHP.skinlang.pfs.Insertaslink}
+		<img src="skins/{PHP.skin}/img/system//icon-pastethumb.gif" alt="" /> {PHP.skinlang.pfs.Insertasthumbnail} &nbsp; &nbsp;
+		<img src="skins/{PHP.skin}/img/system//icon-pasteimage.gif" alt="" /> {PHP.skinlang.pfs.Insertasimage} &nbsp; &nbsp;
+		<img src="skins/{PHP.skin}/img/system//icon-pastefile.gif" alt="" /> {PHP.skinlang.pfs.Insertaslink}
 	</div>
 
 	{PFS_STANDALONE_FOOTER}

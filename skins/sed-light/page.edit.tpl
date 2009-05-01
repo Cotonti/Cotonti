@@ -49,7 +49,7 @@
 					<td>{PAGEEDIT_FORM_PAGECOUNT}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.Extrakey}:</td>
+					<td>{PHP.L.Extrakey}:</td>
 					<td>{PAGEEDIT_FORM_KEY}</td>
 				</tr>
 				<tr>
@@ -78,7 +78,7 @@
 					<td>{PAGEEDIT_FORM_FILE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageedit.URL}:<br />
+					<td>{PHP.L.URL}:<br />
 					{PHP.skinlang.pageedit.URLhint}</td>
 					<td>{PAGEEDIT_FORM_URL}<br>
 					{PAGEEDIT_FORM_PFS_URL_USER}&nbsp;&nbsp; {PAGEEDIT_FORM_PFS_URL_SITE}</td>

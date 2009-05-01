@@ -18,7 +18,7 @@
 				<td>{USERS_DETAILS_MAINGRP}</td>
 			</tr>
 			<tr>
-				<td>{PHP.skinlang.usersdetails.Memberof}:</td>
+				<td>{PHP.L.Groupsmembership}:</td>
 				<td>{PHP.L.Maingroup}:<br />&nbsp;{PHP.out.img_down}<br />{USERS_DETAILS_GROUPS}</td>
 			</tr>
 			<tr>
@@ -70,7 +70,7 @@
 				<td>{USERS_DETAILS_GENDER}</td>
 			</tr>
 			<tr>
-				<td>{PHP.skinlang.usersdetails.Signature}:</td>
+				<td>{PHP.L.Signature}:</td>
 				<td>{USERS_DETAILS_TEXT}</td>
 			</tr>
 			<tr>
@@ -78,11 +78,11 @@
 				<td>{USERS_DETAILS_REGDATE}</td>
 			</tr>
 			<tr>
-				<td>{PHP.skinlang.usersdetails.Avatar}:</td>
+				<td>{PHP.L.Avatar}:</td>
 				<td>{USERS_DETAILS_AVATAR}</td>
 			</tr>
 			<tr>
-				<td>{PHP.skinlang.usersdetails.Photo}:</td>
+				<td>{PHP.L.Photo}:</td>
 				<td>{USERS_DETAILS_PHOTO}</td>
 			</tr>
 		</table>

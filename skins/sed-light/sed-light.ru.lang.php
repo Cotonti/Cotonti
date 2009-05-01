@@ -22,8 +22,7 @@ $skinlang['comments']['Postedby'] = 'Разместил';
  * forums.newtopic.tpl
  */
 
-$skinlang['forumsnewtopic']['Title'] = 'Заголовок';	// Problem
-$skinlang['forumsnewtopic']['privatetopic1'] = 'Создать &laquo;приватную&raquo; тему';
+$skinlang['forumsnewtopic']['privatetopic1'] = 'Создать &laquo;частную&raquo; тему';
 $skinlang['forumsnewtopic']['privatetopic2'] = 'Просмотр и ответы в теме будут доступны только модераторам форумов и вам как автору темы';
 
 /**
@@ -31,9 +30,8 @@ $skinlang['forumsnewtopic']['privatetopic2'] = 'Просмотр и ответы
  */
 
 $skinlang['forumspost']['privatetopic'] = 'Это частная тема: доступ к просмотру и ответам только для модераторов и автора темы.';
-$skinlang['forumspost']['Onlinestatus'] = 'Статус';
-$skinlang['forumspost']['Onlinestatus0'] = 'Не в сети'; // N-0.0.2
-$skinlang['forumspost']['Onlinestatus1'] = 'В сети'; // N-0.0
+$skinlang['forumspost']['Onlinestatus0'] = 'не в сети'; // N-0.0.2
+$skinlang['forumspost']['Onlinestatus1'] = 'в сети'; // N-0.0
 
 /**
  * forums.sections.tpl
@@ -61,7 +59,7 @@ $skinlang['forumstopics']['Newpostslocked'] = 'Тема закрыта (есть
 $skinlang['forumstopics']['Announcment'] = 'Обьявление';
 $skinlang['forumstopics']['Newannouncment'] = 'Новые обьявления';
 $skinlang['forumstopics']['Movedoutofthissection'] = 'Перенесена в другой раздел';
-$skinlang['forumstopics']['Viewers'] = 'Просматривают';	// New in v120
+$skinlang['forumstopics']['Viewers'] = 'Просматривают';
 
 /**
  * header.tpl
@@ -84,7 +82,7 @@ $skinlang['index']['Online'] = 'Онлайн';
 
 $skinlang['list']['linesperpage'] = 'записей на страницу';
 $skinlang['list']['linesinthissection'] = 'записей в разделе';
-$skinlang['list']['hits'] = 'просмотров';	// Кандидат
+$skinlang['list']['hits'] = 'просмотров';
 
 /**
  * page.tpl
@@ -93,19 +91,16 @@ $skinlang['list']['hits'] = 'просмотров';	// Кандидат
 $skinlang['page']['Submittedby'] = 'Опубликовал';
 $skinlang['page']['Summary'] = 'Содержание';
 $skinlang['page']['Filesize'] = 'Размер файла';
-$skinlang['page']['FilesizeKB'] = 'Кб';
 $skinlang['page']['downloaded'] = 'скачан';
 $skinlang['page']['times'] = 'раз';
-$skinlang['page']['Membersrating'] = 'Рейтинг';	// Кандидат
+$skinlang['page']['Membersrating'] = 'Рейтинг';	// Out?
 
 /**
  * page.add.tpl
  */
 
-$skinlang['pageadd']['Extrakey'] = 'Дополнительный ключ (необязательно)';
 $skinlang['pageadd']['File'] = 'Прикрепить файл';
 $skinlang['pageadd']['Filehint'] = '(при включении модуля загрузок заполните два поля ниже)';
-$skinlang['pageadd']['URL'] = 'Ссылка на файл';
 $skinlang['pageadd']['URLhint'] = '(если прикреплен файл)';
 $skinlang['pageadd']['Filesize'] = 'Размер файла (Кб)';
 $skinlang['pageadd']['Filesizehint'] = '(если прикреплен файл)';
@@ -115,10 +110,8 @@ $skinlang['pageadd']['Formhint'] = 'После заполнения формы �
  * page.edit.tpl
  */
 
-$skinlang['pageedit']['Extrakey'] = 'Дополнительный ключ (необязательно)';
 $skinlang['pageedit']['File'] = 'Прикрепить файл';
 $skinlang['pageedit']['Filehint'] = '(при включении модуля загрузок заполните два поля ниже)';
-$skinlang['pageedit']['URL'] = 'Ссылка на файл';
 $skinlang['pageedit']['URLhint'] = '(если прикреплен файл)';
 $skinlang['pageedit']['Filesize'] = 'Размер файла (Кб)';
 $skinlang['pageedit']['Filesizehint'] = '(если прикреплен файл)';
@@ -151,7 +144,6 @@ $skinlang['pmsend']['Subject'] = 'Тема';
 $skinlang['pm']['Sender'] = 'Отправитель';
 $skinlang['pm']['Subject'] = 'Тема (подробно)';
 $skinlang['pm']['Recipient'] = 'Получатель';
-$skinlang['pm']['Page'] = 'Страница';	// Кандидат
 $skinlang['pm']['Subject'] = 'Тема';
 $skinlang['pm']['Sender'] = 'Отправитель';
 $skinlang['pm']['Recipient'] = 'Получатель';
@@ -194,27 +186,17 @@ $skinlang['usersauth']['Maintenancereason'] = 'Причина'; // N-0.0.2
  */
 
 $skinlang['usersdetails']['Sendprivatemessage'] = 'Отправить личное сообщение';
-$skinlang['usersdetails']['Memberof'] = 'Участник группы';
-$skinlang['usersdetails']['Signature'] = 'Подпись';
-$skinlang['usersdetails']['Avatar'] = 'Аватар';
-$skinlang['usersdetails']['Photo'] = 'Фото';
 
 /**
  * users.edit.tpl
  */
 
 $skinlang['usersedit']['UserID'] = 'ID пользователя';
-$skinlang['usersedit']['Groupsmembership'] = 'Состоит в группах';
-$skinlang['usersedit']['Memberof'] = 'Участник группы';
-$skinlang['usersedit']['Language'] = 'Язык';
-$skinlang['usersedit']['Avatar'] = 'Аватар';
-$skinlang['usersedit']['Signature'] = 'Подпись';
-$skinlang['usersedit']['Photo'] = 'Фотография';
 $skinlang['usersedit']['Newpassword'] = 'Установить новый пароль';
 $skinlang['usersedit']['Newpasswordhint'] = '(оставьте пустым чтобы сохранить текущий)';
-$skinlang['usersedit']['Hidetheemail'] = 'Скрывать email';
+$skinlang['usersedit']['Hidetheemail'] = 'Скрывать E-mail';
 $skinlang['usersedit']['PMnotify'] = 'Уведомлять о новых личных сообщениях';
-$skinlang['usersedit']['PMnotifyhint'] = '(получать email-уведомление при получении нового личного сообщения)';
+$skinlang['usersedit']['PMnotifyhint'] = '(получать E-mail уведомление при получении нового личного сообщения)';
 $skinlang['usersedit']['LastIP'] = 'Последний IP';
 $skinlang['usersedit']['Logcounter'] = 'Всего авторизаций';
 $skinlang['usersedit']['Deletethisuser'] = '!Удалить пользователя!';
@@ -223,25 +205,19 @@ $skinlang['usersedit']['Deletethisuser'] = '!Удалить пользовате
  * users.profile.tpl
  */
 
-$skinlang['usersprofile']['Groupsmembership'] = 'Состоит в группах';
-$skinlang['usersprofile']['Registeredsince'] = 'Дата регистрации';
 $skinlang['usersprofile']['Emailpassword'] = 'Ваш текущий пароль';
-$skinlang['usersprofile']['Emailnotes'] = 'Смена e-mail адреса (если разрешена):<ol>
-											<li>Вы не можете использовать текущий email.</li>
+$skinlang['usersprofile']['Emailnotes'] = 'Смена E-mail адреса (если разрешена):<ol>
+											<li>Вы не можете использовать текущий E-mail.</li>
 											<li>Вам необходимо указать текущий пароль в целях безопасности.</li>
-											<li>Вам придется реактивировать аккаунт по электронной почте, чтобы доказать достоверность email адреса.</li>
+											<li>Вам придется реактивировать аккаунт по электронной почте, чтобы доказать достоверность адреса.</li>
 											<li>Ваш аккаунт будет заморожен до тех пор, пока вы не пройдете по ссылке валидации.</li>
 											<li>После перехода по ссылке, ваш аккаунт будет активирован.</li>
-											<li>Вводите свой e-mail адрес осторожно, у вас не будет возможности что-либо исправить.</li>
+											<li>Вводите свой E-mail адрес осторожно, у вас не будет возможности что-либо исправить.</li>
 											<li>Если несмотря на предупреждения вы ошиблись в адресе, обратитесь к администратору.</li>
 											</ol>Все это верно, если валидация адреса обязательна. В ином случае изменения вступают в силу немедленно.'; // N-0.1.0
-$skinlang['usersprofile']['Hidetheemail'] = 'Скрывать email адрес';
+$skinlang['usersprofile']['Hidetheemail'] = 'Скрывать E-mail';
 $skinlang['usersprofile']['PMnotify'] = 'Уведомлять о новых личных сообщениях';
-$skinlang['usersprofile']['PMnotifyhint'] = '(получать email-уведомление при получении нового личного сообщения)';
-$skinlang['usersprofile']['Language'] = 'Язык системы';
-$skinlang['usersprofile']['Avatar'] = 'Аватар';
-$skinlang['usersprofile']['Photo'] = 'Фотография';
-$skinlang['usersprofile']['Signature'] = 'Подпись';
+$skinlang['usersprofile']['PMnotifyhint'] = '(получать E-mail уведомление при получении нового личного сообщения)';
 $skinlang['usersprofile']['Newpassword'] = 'Установить новый пароль';
 $skinlang['usersprofile']['Newpasswordhint1'] = '(оставьте пустым чтобы сохранить текущий)';
 $skinlang['usersprofile']['Newpasswordhint2'] = '(введите новый пароль дважды)'; // N-0.0.2
@@ -251,7 +227,7 @@ $skinlang['usersprofile']['Oldpasswordhint'] = '(введите свой тек�
  * users.register.tpl
  */
 
-$skinlang['usersregister']['Validemail'] = 'Действующий email';
+$skinlang['usersregister']['Validemail'] = 'Действующий E-mail';
 $skinlang['usersregister']['Validemailhint'] = '(необходим для подтверждения регистрации!)';
 $skinlang['usersregister']['Confirmpassword'] = 'Подтвердить пароль';
 $skinlang['usersregister']['Formhint'] = 'После успешной регистрации и входа в систему рекомендуем отредактировать свою учетную запись, создав аватар, подпись, введя номер ICQ, домашнюю страницу, город, часовой пояс, и проч.';

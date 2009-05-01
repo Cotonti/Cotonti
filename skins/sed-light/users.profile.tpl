@@ -29,22 +29,22 @@ $("#emailtd").click(function(){$("#emailnotes").slideDown();});
 					<td>{USERS_PROFILE_NAME}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersprofile.Groupsmembership}:</td>
+					<td>{PHP.L.Groupsmembership}:</td>
 					<td>{PHP.L.Maingroup}:<br />&nbsp;{PHP.out.img_down}<br />{USERS_PROFILE_GROUPS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersprofile.Registeredsince}:</td>
+					<td>{PHP.L.Registered}:</td>
 					<td>{USERS_PROFILE_REGDATE}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Email}:</td>
 					<td id="emailtd">
 					<div style="width:168px; float:left;">
-					{PHP.skinlang.usersprofile.Emailpassword}
+					{PHP.skinlang.usersprofile.Emailpassword}:
 					<br />{USERS_PROFILE_EMAILPASS}
 					</div>
 					
-					<div>{PHP.skinlang.usersprofile.Email}
+					<div>{PHP.L.Email}:
 					<br />{USERS_PROFILE_EMAIL}</div>
 					<br />
 					 <div class="small" id="emailnotes">{PHP.skinlang.usersprofile.Emailnotes}</div>
@@ -63,7 +63,7 @@ $("#emailtd").click(function(){$("#emailnotes").slideDown();});
 					<td>{USERS_PROFILE_SKIN}{USERS_PROFILE_THEME}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersprofile.Language}:</td>
+					<td>{PHP.L.Language}:</td>
 					<td>{USERS_PROFILE_LANG}</td>
 				</tr>
 				<tr>
@@ -108,15 +108,15 @@ $("#emailtd").click(function(){$("#emailnotes").slideDown();});
 					<td>{USERS_PROFILE_GENDER}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersprofile.Avatar}:</td>
+					<td>{PHP.L.Avatar}:</td>
 					<td>{USERS_PROFILE_AVATAR}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersprofile.Photo}:</td>
+					<td>{PHP.L.Photo}:</td>
 					<td>{USERS_PROFILE_PHOTO}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.usersprofile.Signature}:</td>
+					<td>{PHP.L.Signature}:</td>
 					<td><div style="width:95%;">{USERS_PROFILE_TEXTBOXER}</div></td>
 				</tr>
 				<tr>

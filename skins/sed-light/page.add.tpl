@@ -29,7 +29,7 @@
 					<td>{PAGEADD_FORM_AUTHOR}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageadd.Extrakey}</td>
+					<td>{PHP.L.Extrakey}</td>
 					<td>{PAGEADD_FORM_KEY}</td>
 				</tr>
 				<tr>
@@ -66,7 +66,7 @@
 					<td>{PAGEADD_FORM_FILE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pageadd.URL}:<br />
+					<td>{PHP.L.URL}:<br />
 					{PHP.skinlang.pageadd.URLhint}</td>
 					<td>{PAGEADD_FORM_URL}<br>
 					{PAGEADD_FORM_PFS_URL_USER}&nbsp;&nbsp; {PAGEADD_FORM_PFS_URL_SITE}</td>

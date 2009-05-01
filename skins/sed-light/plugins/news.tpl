@@ -1,5 +1,5 @@
 <!-- BEGIN: NEWS -->
-	<div class="lboxHD">{PHP.L.News} :</div>
+	<div class="lboxHD">{PHP.L.News}:</div>
 	<div class="lboxBody">
 		<!-- BEGIN: PAGE_ROW -->
 	   	<div class="newsTitle">

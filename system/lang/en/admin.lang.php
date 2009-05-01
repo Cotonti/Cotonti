@@ -17,11 +17,11 @@ defined('SED_CODE') or die('Wrong URL.');
 
 $L['core_comments'] = $L['Comments'];
 $L['core_forums'] = $L['Forums'];
-$L['core_lang'] = 'Languages';
+$L['core_lang'] = $L['Language'];
 $L['core_main'] = 'Main Settings';
-$L['core_menus'] = 'Menu Slots';
+$L['core_menus'] = $L['Menus'];
 $L['core_page'] = $L['Pages'];
-$L['core_parser'] = 'Parser';
+$L['core_parser'] = $L['Parser'];
 $L['core_pfs'] = $L['PFS'];
 $L['core_plug'] = $L['Plugins'];
 $L['core_pm'] = $L['Private_Messages'];
@@ -29,7 +29,7 @@ $L['core_polls'] = $L['Polls'];
 $L['core_ratings'] = $L['Ratings'];
 $L['core_skin'] = $L['Skins'];
 $L['core_time'] = 'Time and Date';
-$L['core_title'] = 'Titles';
+$L['core_title'] = 'Titles (&lt;title&gt; tag)';
 $L['core_trash'] = $L['Trashcan'];
 $L['core_users'] = $L['Users'];
 
@@ -144,11 +144,11 @@ $L['cfg_parsesmiliesusertext'] = array('Parse smilies in user signature', '');
  * PFS Subsection
  */
 
-$L['cfg_disable_pfs'] = array('Disable the PFS', '');
-$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the PFS, or images through the profile. To insure they are valid files. \'Yes\' recommended, for security reasons');	// New in N-0.0.2
+$L['cfg_disable_pfs'] = array('Disable the '.$L['PFS'], '');
+$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');	// New in N-0.0.2
 $L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in N-0.0.2
 $L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in N-0.0.2
-$L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded to any PFS, it\'s too late to change this. It is not recommended to change this setting for now.');
+$L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this. It is not recommended to change this setting for now.');
 $L['cfg_th_amode'] = array('Thumbnails generation', '');
 $L['cfg_th_border'] = array('Thumbnails, border size', 'Default: 4 pixels');
 $L['cfg_th_colorbg'] = array('Thumbnails, border color', 'Default: 000000, hex color code');
@@ -238,7 +238,7 @@ $L['cfg_title_header'] = array('Header title', 'Options: {MAINTITLE}, {DESCRIPTI
 $L['cfg_title_header_index'] = array('Header Index title', 'Options: {MAINTITLE}, {DESCRIPTION}, {SUBTITLE}');
 $L['cfg_title_list'] = array('List title', 'Options: {TITLE}');
 $L['cfg_title_page'] = array('Page title', 'Options: {TITLE}, {CATEGORY}');
-$L['cfg_title_pfs'] = array('PFS title', 'Options: {PFS}');
+$L['cfg_title_pfs'] = array($L['PFS'].' title', 'Options: {PFS}');
 $L['cfg_title_pm_main'] = array('PM title', 'Options: {PM}, {INBOX}, {ARCHIVES}, {SENTBOX}');
 $L['cfg_title_pm_send'] = array('PM Send title', 'Options: {PM}, {SEND_NEW}');
 $L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {NAME}');
@@ -363,9 +363,8 @@ $L['adm_postcounters'] = 'Check the counters';
  */
 
 $L['adm_rightspergroup'] = 'Rights per group';
-
-$L['adm_maxsizesingle'] = 'PFS max size for a single file (KB)';
-$L['adm_maxsizeallpfs'] = 'Max size of all PFS files together (KB)';
+$L['adm_maxsizesingle'] = 'Max size for a single file in '.$L['PFS'].' (KB)';
+$L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KB)';
 $L['adm_copyrightsfrom'] = 'Set the same rights as the group';
 $L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';	// New in N-0.0.2
 
@@ -440,15 +439,15 @@ $L['adm_comm_already_del'] = 'Comment deleted';		// New in N-0.0.2
  */
 
 $L['adm_gd'] = 'GD graphical library';
-$L['adm_allpfs'] = 'All PFS';
+$L['adm_allpfs'] = 'All '.$L['PFS'];
 $L['adm_allfiles'] = 'All files';
 $L['adm_thumbnails'] = 'Thumbnails';
 $L['adm_orphandbentries'] = 'Orphan DB entries';
 $L['adm_orphanfiles'] = 'Orphan files';
 $L['adm_delallthumbs'] = 'Delete all thumbnails';
 $L['adm_rebuildallthumbs']= 'Delete and rebuild all thumbnails';
-$L['adm_help_allpfs'] = 'Not available';
-$L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotonti won\'t be able to create thumbnails for the PFS images. You must go into the configuration panel, tab &quot;Personal File Space&quot;, and set Thumbnails generation to &quot;Disabled&quot;.';
+$L['adm_help_allpfs'] = $L['PFS'].' of all registered users';
+$L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotonti won\'t be able to create thumbnails for images. Go for '.$L['Configuration'].' &gt; '.$L['PFS'].' and set &quot;Thumbnails generation&quot; to &quot;'.$L['Disabled'].'&quot;.';
 
 /**
  * Other Section
