@@ -12,7 +12,7 @@
 
 			<!-- BEGIN: FORUMS_SECTIONS_VIEWERS -->
 
-			{PHP.skinlang.forumstopics.Viewers} : {FORUMS_TOPICS_VIEWERS}
+			{PHP.skinlang.forumstopics.Viewers}: {FORUMS_TOPICS_VIEWERS}
 			<p>{FORUMS_TOPICS_VIEWER_NAMES}&nbsp;</p>
 
 			<!-- END: FORUMS_SECTIONS_VIEWERS -->
@@ -86,7 +86,7 @@
 
 				<td class="{FORUMS_TOPICS_ROW_ODDEVEN}">
 				<strong><a href="{FORUMS_TOPICS_ROW_URL}" title="{FORUMS_TOPICS_ROW_PREVIEW}">{FORUMS_TOPICS_ROW_TITLE}</a></strong><br />
-				{FORUMS_TOPICS_ROW_PAGES} &nbsp; {FORUMS_TOPICS_ROW_CREATIONDATE} : {FORUMS_TOPICS_ROW_FIRSTPOSTER}<br />
+				{FORUMS_TOPICS_ROW_PAGES} &nbsp; {FORUMS_TOPICS_ROW_CREATIONDATE}: {FORUMS_TOPICS_ROW_FIRSTPOSTER}<br />
 				{FORUMS_TOPICS_ROW_TAGS}
 				</td>
 
@@ -116,24 +116,24 @@
 		<table class="main">
 
 			<tr>
-				<td><img src="skins/{PHP.skin}/img/system/posts.gif" alt="" /> : {PHP.skinlang.forumstopics.Nonewposts}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new.gif" alt="" /> :{PHP.skinlang.forumstopics.Newposts}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_sticky.gif" alt="" /> : {PHP.skinlang.forumstopics.Sticky}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts.gif" alt="" /> {PHP.skinlang.forumstopics.Nonewposts}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_new.gif" alt="" /> {PHP.skinlang.forumstopics.Newposts}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_sticky.gif" alt="" /> {PHP.skinlang.forumstopics.Sticky}</td>
 			</tr>
 			<tr>
-				<td><img src="skins/{PHP.skin}/img/system/posts_hot.gif" alt="" /> : {PHP.skinlang.forumstopics.Nonewpostspopular}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new_hot.gif" alt="" /> :{PHP.skinlang.forumstopics.Newpostspopular}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new_sticky.gif" alt="" /> : {PHP.skinlang.forumstopics.Newpostssticky}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_hot.gif" alt="" /> {PHP.skinlang.forumstopics.Nonewpostspopular}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_new_hot.gif" alt="" /> {PHP.skinlang.forumstopics.Newpostspopular}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_new_sticky.gif" alt="" /> {PHP.skinlang.forumstopics.Newpostssticky}</td>
 			</tr>
 			<tr>
-				<td><img src="skins/{PHP.skin}/img/system/posts_locked.gif" alt="" /> : {PHP.skinlang.forumstopics.Locked}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new_locked.gif" alt="" /> : {PHP.skinlang.forumstopics.Newpostslocked}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_sticky_locked.gif" alt="" /> : {PHP.skinlang.forumstopics.Announcment}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_locked.gif" alt="" /> {PHP.skinlang.forumstopics.Locked}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_new_locked.gif" alt="" /> {PHP.skinlang.forumstopics.Newpostslocked}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_sticky_locked.gif" alt="" /> {PHP.skinlang.forumstopics.Announcment}</td>
 			</tr>
 			<tr>
 				<td colspan="2">
-				<img src="skins/{PHP.skin}/img/system/posts_moved.gif" alt="" /> : {PHP.skinlang.forumstopics.Movedoutofthissection}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new_sticky_locked.gif" alt="" /> : {PHP.skinlang.forumstopics.Newannouncment}</td>
+				<img src="skins/{PHP.skin}/img/system/posts_moved.gif" alt="" /> {PHP.skinlang.forumstopics.Movedoutofthissection}</td>
+				<td><img src="skins/{PHP.skin}/img/system/posts_new_sticky_locked.gif" alt="" /> {PHP.skinlang.forumstopics.Newannouncment}</td>
 			</tr>
 
 		</table>

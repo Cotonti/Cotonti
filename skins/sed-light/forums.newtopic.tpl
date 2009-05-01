@@ -14,7 +14,7 @@
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 
 				<tr>
-					<td>{PHP.skinlang.forumsnewtopic.Title}: {FORUMS_NEWTOPIC_TITLE}</td>
+					<td>{PHP.L.Title}: {FORUMS_NEWTOPIC_TITLE}</td>
 				</tr>
 
 				<tr>
