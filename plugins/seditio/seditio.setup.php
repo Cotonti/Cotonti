@@ -81,7 +81,7 @@ if ($action == 'install')
 	sed_bbcode_add('colright', 'str', '[colright]', '<div class="colright">', true, 128, 'seditio');
 	sed_bbcode_add('colright', 'str', '[/colright]', '</div>', true, 128, 'seditio');
 
-	sed_bbcode_add('thumb', 'pcre', '\[thumb=((?:http://|https://|ftp://)?[^"\';:\?]+\.(?:jpg|jpeg|gif|png))\]([^"\';:\?]+\.(?:jpg|jpeg|gif|png))\[/thumb\]','<a href="pfs.php?m=view&amp;v=$2"><img src="$1" alt="" /></a>', true, 128, 'seditio');
+	sed_bbcode_add('thumb', 'pcre', '\[thumb=((?:http://|https://|ftp://)?[^\]"\';:\?]+\.(?:jpg|jpeg|gif|png))\]([^\]"\';:\?]+\.(?:jpg|jpeg|gif|png))\[/thumb\]','<a href="pfs.php?m=view&amp;v=$2"><img src="$1" alt="" /></a>', true, 128, 'seditio');
 	sed_bbcode_add('t', 'pcre', '\[t=((?:http://|https://|ftp://)?[^"\';:\?]+\.(?:jpg|jpeg|gif|png))\]((?:http://|https://|ftp://)?[^"\';:\?]+\.(?:jpg|jpeg|gif|png))\[/t\]','<a href="$2"><img src="$1" alt="" /></a>', true, 128, 'seditio');
 	sed_bbcode_add('pfs', 'pcre', '\[pfs\]([^\s"\'&;\?\(\[]+)\[/pfs\]', '<a href="'.$cfg['pfs_dir'].'$1"><img src="images/admin/pfs.gif" alt="" /> $1</a>', true, 128, 'seditio');
 	sed_bbcode_add('style', 'pcre', '\[style=([1-9])\](.+?)\[/style\]', '<span class="bbstyle$1">$2</span>', true, 128, 'seditio');
