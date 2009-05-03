@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
@@ -24,9 +24,9 @@ $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 if ($n=='options')
-	{
+{
 	if ($a=='update')
-		{
+	{
 		$rpath = sed_import('rpath','P','TXT');
 		$rtitle = sed_import('rtitle','P','TXT');
 		$rtplmode = sed_import('rtplmode','P','INT');
@@ -34,12 +34,12 @@ if ($n=='options')
 		$ricon = sed_import('ricon','P','TXT');
 		$rdefstate = sed_import('rdefstate','P','BOL');
 
-	if ($rtplmode==1)
+		if ($rtplmode==1)
 		{ $rtpl = ''; }
-	elseif ($rtplmode==3)
+		elseif ($rtplmode==3)
 		{ $rtpl = 'same_as_parent'; }
-//	else
-//		{ $rtpl = sed_import('rtplforced','P','ALP'); }
+		//	else
+		//		{ $rtpl = sed_import('rtplforced','P','ALP'); }
 
 		$sql = sed_sql_query("UPDATE $db_forum_structure SET
 			fn_path='".sed_sql_prep($rpath)."',
@@ -53,7 +53,7 @@ if ($n=='options')
 		sed_cache_clear('sed_forums_str');
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure', '', true));
 		exit;
-		}
+	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure WHERE fn_id='$id' LIMIT 1");
 	sed_die(sed_sql_numrows($sql)==0);
@@ -62,10 +62,10 @@ if ($n=='options')
 	$allskinfiles = array();
 
 	while ($f = readdir($handle))
-		{
+	{
 		if (($f != ".") && ($f != "..") && mb_strtolower(mb_substr($f, mb_strrpos($f, '.')+1, 4))=='tpl')
-			{ $allskinfiles[] = $f; }
-		}
+		{ $allskinfiles[] = $f; }
+	}
 	closedir($handle);
 
 	$allskinfiles = implode (',', $allskinfiles);
@@ -81,15 +81,15 @@ if ($n=='options')
 	$fn_defstate = $row['fn_defstate'];
 
 	if ($row['fn_tpl']=='same_as_parent')
-		{
+	{
 		$fn_tpl_sym = "*";
 		$check3 = " checked=\"checked\"";
-		}
+	}
 	else
-		{
+	{
 		$fn_tpl_sym = "-";
 		$check1 = " checked=\"checked\"";
-		}
+	}
 
 
 	$adminpath[] = array (sed_url('admin', "m=forums&s=structure&n=options&id=".$id), sed_cc($fn_title));
@@ -121,56 +121,56 @@ if ($n=='options')
 	$adminmain .= "</td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "</table></form>";
-	}
+}
 else
-	{
+{
 
 	if ($a=='update')
-		{
+	{
 		$s = sed_import('s', 'P', 'ARR');
 
 		foreach($s as $i => $k)
-			{
+		{
 			$sql1 = sed_sql_query("UPDATE $db_forum_structure SET
 				fn_path='".$s[$i]['rpath']."',
 				fn_title='".$s[$i]['rtitle']."',
 				fn_defstate='".$s[$i]['rdefstate']."'
 				WHERE fn_id='".$i."'");
-			}
+		}
 		sed_cache_clear('sed_forums_str');
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure&d='.$d, '', true));
 		exit;
-		}
+	}
 	elseif ($a=='add')
-		{
+	{
 		$g = array ('ncode','npath', 'ntitle', 'ndesc', 'nicon', 'ndefstate');
 		foreach($g as $k => $x) $$x = $_POST[$x];
 
 		if (!empty($ntitle) && !empty($ncode) && !empty($npath) && $ncode!='all')
-			{
+		{
 			$sql = sed_sql_query("SELECT fn_code FROM $db_forum_structure WHERE fn_code='".sed_sql_prep($ncode)."' LIMIT 1");
 			$ncode .= (sed_sql_numrows($sql)>0) ? "_".rand(100,999) : '';
 
 			$sql = sed_sql_query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('$ncode', '$npath', '$ntitle', '$ndesc', '$nicon', ".(int)$ndefstate.")");
-			}
+		}
 
 		sed_cache_clear('sed_forums_str');
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure', '', true));
 		exit;
-		}
+	}
 	elseif ($a=='delete')
-		{
+	{
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 		sed_cache_clear('sed_forums_str');
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure&d='.$d, '', true));
 		exit;
-		}
+	}
 
 	$sql = sed_sql_query("SELECT DISTINCT(fs_category), COUNT(*) FROM $db_forum_sections WHERE 1 GROUP BY fs_category");
 
 	while ($row = sed_sql_fetcharray($sql))
-		{ $sectioncount[$row['fs_category']] = $row['COUNT(*)']; }
+	{ $sectioncount[$row['fs_category']] = $row['COUNT(*)']; }
 
 	$totalitems = sed_sql_rowcount($db_forum_structure);
 	$pagnav = sed_pagination(sed_url('admin','m=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage']);
@@ -195,7 +195,7 @@ else
 	$ii = 0;
 
 	while ($row = sed_sql_fetcharray($sql))
-		{
+	{
 		$jj++;
 		$fn_id = $row['fn_id'];
 		$fn_code = $row['fn_code'];
@@ -208,11 +208,11 @@ else
 		$sectioncount[$fn_code] = (!$sectioncount[$fn_code]) ? "0" : $sectioncount[$fn_code];
 
 		if (empty($row['fn_tpl']))
-			{ $fn_tpl_sym = "-"; }
+		{ $fn_tpl_sym = "-"; }
 		elseif ($row['fn_tpl']=='same_as_parent')
-			{ $fn_tpl_sym = "*"; }
+		{ $fn_tpl_sym = "*"; }
 		else
-			{ $fn_tpl_sym = "+"; }
+		{ $fn_tpl_sym = "+"; }
 
 		$adminmain .= "<tr><td style=\"text-align:center;\">";
 		$adminmain .= ($sectioncount[$fn_code]>0) ? '' : "[<a href=\"".sed_url('admin', "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&d=".$d."&".sed_xg())."\">x</a>]";
@@ -237,7 +237,7 @@ else
 		$adminmain .= "<td style=\"text-align:center;\"><a href=\"".sed_url('admin', "m=forums&s=structure&n=options&id=".$fn_id."&".sed_xg())."\">".$L['Options']."</a></td>";
 		$adminmain .= "</tr>";
 		$ii++;
-		}
+	}
 
 	$adminmain .= "<tr><td colspan=\"9\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
 	$adminmain .= "<tr><td colspan=\"9\">&nbsp;</td></tr>";
@@ -253,6 +253,6 @@ else
 	$adminmain .= "<tr><td>".$L['Description']." :</td><td><input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"48\" maxlength=\"255\" /></td></tr>";
 	$adminmain .= "<tr><td>".$L['Icon']." :</td><td><input type=\"text\" class=\"text\" name=\"nicon\" value=\"\" size=\"48\" maxlength=\"128\" /></td></tr>";
 	$adminmain .= "<tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Add']."\" /></td></tr></table></form>";
-	}
+}
 
 ?>

@@ -10,7 +10,7 @@
  * @license BSD License
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 // System requirements check
 (function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>='))

@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
 
 $ic = sed_import('ic','G','ALP');
 $io = sed_import('io','G','ALP');

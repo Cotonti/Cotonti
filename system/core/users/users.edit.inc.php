@@ -13,7 +13,7 @@ http://www.neocrome.net
  * @license BSD License
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 $y = sed_import('y','P','TXT');
 $id = sed_import('id','G','INT');

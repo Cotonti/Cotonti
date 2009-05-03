@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-if ( !defined('SED_CODE') || !defined('SED_ADMIN') ) { die('Wrong URL.'); }
+defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
 
 $g = sed_import('g','G','INT');
 $advanced = sed_import('advanced','G','BOL');

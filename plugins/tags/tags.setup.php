@@ -40,6 +40,6 @@ more=10:radio::1:Show 'All tags' link in tag clouds
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 // TODO AJAX autocomplete
 ?>

@@ -15,7 +15,7 @@ Name=SED-Light
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 // List of supported themes
 $skin_themes = array('sed-light' => 'Light');

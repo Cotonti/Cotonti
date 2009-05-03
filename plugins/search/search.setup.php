@@ -32,6 +32,6 @@ results=01:select:5,10,15,20,25,50,100:25:Results listed in a single page
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 ?>

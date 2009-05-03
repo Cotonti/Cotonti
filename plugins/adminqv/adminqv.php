@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if(!defined('SED_CODE')){die('Wrong URL.');}
+defined('SED_CODE') or die('Wrong URL');
 
 require_once(sed_langfile('adminqv'));
 
@@ -78,7 +78,7 @@ while(list($i,$dat) = each($tables))
 	$total_data_length += $dat['Data_length'];
 }
 
-//$adminmain = $adminfavs.$adminmain;//а зачем эта строка была вставлена?
+//$adminmain = $adminfavs.$adminmain;//пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?
 
 $sql = sed_sql_query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code");
 $totalplugins = sed_sql_numrows($sql);

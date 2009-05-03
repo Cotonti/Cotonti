@@ -13,7 +13,7 @@ Description=polls (Cotonti - Website engine http://www.cotonti.com Copyright (c)
 
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 /* === Hook === */
 $extp = sed_getextplugins('polls.first');

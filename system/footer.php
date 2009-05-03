@@ -13,7 +13,7 @@ http://www.neocrome.net
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 /* === Hook === */
 $extp = sed_getextplugins('footer.first');

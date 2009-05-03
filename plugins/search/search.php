@@ -20,7 +20,7 @@ Order=10
  * @license BSD License
  */
 
-if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
+defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
 /* === EDIT THE FOLLOWING === */
 

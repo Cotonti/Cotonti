@@ -9,7 +9,7 @@
  * @license BSD License
  */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);

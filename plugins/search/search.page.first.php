@@ -18,6 +18,8 @@ Order=10
  * @license BSD License
  */
 
+defined('SED_CODE') or die('Wrong URL');
+
 $highlight = sed_import('highlight','G','TXT');
 
 ?>
