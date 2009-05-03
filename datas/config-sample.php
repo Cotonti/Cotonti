@@ -78,6 +78,16 @@ $cfg['dir_perms'] = 0777;
 $cfg['file_perms'] = 0664;
 
 // ========================
+// Important constant switches
+// ========================
+
+/**
+ * Defines whether to display debugging information on critical errors.
+ * Comment it on production sites if you wish.
+ */
+define('SED_DEBUG', TRUE);
+
+// ========================
 // Name of MySQL tables
 // (OPTIONAL, if missing, Seditio will set default values)
 // Only change the "sed" part if you'd like to

@@ -203,8 +203,6 @@ if (!empty($q) && empty($newpmtext))
 	}
 }
 
-$bbcodes = ($cfg['parsebbcodecom']) ? sed_build_bbcodes('newlink', 'newpmtext', $L['BBcodes']) : '';
-$smilies = ($cfg['parsesmiliescom']) ? sed_build_smilies('newlink', 'newpmtext', $L['Smilies']) : '';
 $pfs = sed_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
 $pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url('pm', 'm=send')."\">".$L['pm_sendnew']."</a>" : '';
@@ -240,10 +238,8 @@ $t->assign(array(
 	"PMSEND_SENTBOX" => "<a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
 	"PMSEND_FORM_SEND" => sed_url('pm', 'm=send&amp;a=send&amp;to='.$to),
 	"PMSEND_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".sed_cc($newpmtitle)."\" size=\"56\" maxlength=\"255\" />",
-	"PMSEND_FORM_TEXT" =>  "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
-	"PMSEND_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$bbcodes." ".$smilies." ".$pfs,
-	"PMSEND_FORM_BBCODES" => $bbcodes,
-	"PMSEND_FORM_SMILIES" => $smilies,
+	"PMSEND_FORM_TEXT" =>  "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$pfs,
+	"PMSEND_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$pfs,
 	"PMSEND_FORM_MYPFS" => $pfs,
 	"PMSEND_FORM_TOUSER" => "<textarea name=\"newpmrecipient\" rows=\"3\" cols=\"56\">".$touser."</textarea>"
 	));

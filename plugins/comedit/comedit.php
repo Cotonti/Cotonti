@@ -93,8 +93,6 @@ $usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 sed_block($usr['allow_write']);
 
 $com_date = @date($cfg['dateformat'], $com['com_date'] + $usr['timezone'] * 3600);
-$bbcodes = ($cfg['parsebbcodecom']) ? sed_build_bbcodes("comedit", "comtext", $L['BBcodes']) : '';
-$smilies = ($cfg['parsesmiliescom']) ? sed_build_smilies("comedit", "comtext", $L['Smilies']) : '';
 $pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "comedit", "comtext", $L['Mypfs']) : '';
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "comedit", "comtext", $L['SFS']) : '';
 
@@ -111,11 +109,11 @@ $t -> assign(array(
 
 if($cfg['plugin']['comedit']['markitup'] == "No")
 {
-	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$bbcodes."&nbsp;&nbsp;".$smilies."&nbsp;&nbsp;".$pfs));
+	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$pfs));
 }
 elseif($cfg['plugin']['comedit']['markitup'] == "Yes")
 {
-	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea class=\"minieditor\" rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$bbcodes."&nbsp;&nbsp;".$smilies."&nbsp;&nbsp;".$pfs));
+	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea class=\"minieditor\" rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$pfs));
 }
 
 $t -> parse("MAIN.COMEDIT_FORM_EDIT");

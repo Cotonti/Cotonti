@@ -172,10 +172,6 @@ if ($row = sed_sql_fetcharray($sql))
 	}
 }
 
-$bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes('editpost', 'rtext', $L['BBcodes']) : '';
-$bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : '';
-$smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies('editpost', 'rtext', $L['Smilies']) : '';
-$smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies_local(20) : '';
 $pfs = sed_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rtext", $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('editpost', 'rtext');
@@ -222,14 +218,10 @@ $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
 	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"FORUMS_EDITPOST_SEND" => sed_url('forums', "m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".sed_xg()),
-	"FORUMS_EDITPOST_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs,
+	"FORUMS_EDITPOST_TEXT" => $post_main."<br />".$pfs,
 	"FORUMS_EDITPOST_TEXTONLY" => $post_main,
-	"FORUMS_EDITPOST_TEXTBOXER" => $post_main."<br />".$smilies." ".$pfs,
-	"FORUMS_EDITPOST_SMILIES" => $smilies,
-	"FORUMS_EDITPOST_BBCODES" => $bbcodes,
-	"FORUMS_EDITPOST_MYPFS" => $pfs,
-	"FORUMS_EDITPOST_SMILIESLOCAL" => $smilies_local,
-	"FORUMS_EDITPOST_BBCODESLOCAL" => $bbcodes_local
+	"FORUMS_EDITPOST_TEXTBOXER" => $post_main."<br />".$pfs,
+	"FORUMS_EDITPOST_MYPFS" => $pfs
 ));
 
 /* === Hook === */
