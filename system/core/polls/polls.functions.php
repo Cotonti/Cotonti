@@ -10,7 +10,7 @@
  * @license BSD License
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 function sed_poll_edit_form($id, $t, $block='')
 {

@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_PLUG')){die('Wrong URL.');}
+defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
 $plugin_title = $L['plu_title'];
 

@@ -14,7 +14,7 @@ Description=User authication
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 $v = sed_import('v','G','PSW');
 

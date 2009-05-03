@@ -14,7 +14,7 @@ Description=User profile
 [END_SED]
 ==================== */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 @clearstatcache();
 

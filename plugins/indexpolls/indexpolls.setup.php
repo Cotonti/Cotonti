@@ -32,6 +32,6 @@ mode=02:select:Recent polls,Random polls:Recent polls:Mode polls displayed
  * @license BSD
  */
 
-if(!defined('SED_CODE')){die('Wrong URL.');}
+defined('SED_CODE') or die('Wrong URL');
 
 ?>

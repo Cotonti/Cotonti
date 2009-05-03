@@ -20,6 +20,8 @@ Order=10
  * @license BSD license
  */
 
+defined('SED_CODE') or die('Wrong URL');
+
 if(!defined('SED_MESSAGE') && !defined('SED_PFS') && !defined('SED_POLLS') && !defined('SED_USERS'))
 {
 	$out['compopup'] .= <<<HTM

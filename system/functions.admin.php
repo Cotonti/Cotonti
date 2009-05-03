@@ -15,7 +15,7 @@ http://www.neocrome.net
  * @license BSD License
  */
 
-if (!defined('SED_CODE') || !defined('SED_ADMIN')) { die('Wrong URL.'); }
+defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
 
 /* ======== Defaulting the admin variables ========= */
 

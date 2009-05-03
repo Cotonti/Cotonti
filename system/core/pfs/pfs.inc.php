@@ -15,7 +15,7 @@
  * @license BSD License
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 $id = sed_import('id','G','INT');
 $o = sed_import('o','G','ALP');

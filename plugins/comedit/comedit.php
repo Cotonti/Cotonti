@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if(!defined('SED_CODE') || !defined('SED_PLUG')){die('Wrong URL.');}
+defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
 $m	 = sed_import('m', 'G', 'ALP');
 $a	 = sed_import('a', 'G', 'ALP');

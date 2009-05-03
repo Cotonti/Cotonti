@@ -20,7 +20,7 @@ Order=10
  * @license BSD
  */
 
-if(!defined('SED_CODE')){die('Wrong URL.');}
+defined('SED_CODE') or die('Wrong URL');
 
 if(!defined('SED_INDEX') && !defined('SED_LIST') && !defined('SED_MESSAGE'))
 {

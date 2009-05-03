@@ -18,6 +18,8 @@ Order=10
  * @license BSD license
  */
 
+defined('SED_CODE') or die('Wrong URL');
+
 if (!empty($highlight))
 {
 	$out['compopup'] .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/search/js/hl.js"></script>

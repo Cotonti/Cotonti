@@ -33,7 +33,7 @@ chili=03:radio::0:Enable Chili tags
  * @license BSD
  */
 
-if(!defined('SED_CODE')){die('Wrong URL.');}
+defined('SED_CODE') or die('Wrong URL');
 
 if($action == 'install')
 {

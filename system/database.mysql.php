@@ -14,7 +14,7 @@ http://www.neocrome.net
  * @license BSD
  */
 
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+defined('SED_CODE') or die('Wrong URL');
 
 /**
  * Returns number of rows affected by last query
