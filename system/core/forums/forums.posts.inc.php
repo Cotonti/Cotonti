@@ -747,23 +747,15 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 
 	$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
 	$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
-	$smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies("newpost", "newmsg", $L['Smilies']) : '';
-	$smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies_local(20) : '';
-	$bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes("newpost", "newmsg", $L['BBcodes']): '';
-	$bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : '';
 
 	$post_mark = "<a name=\"np\" id=\"np\"></a>";
 	$post_main = $post_mark.'<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => sed_url('forums', "m=posts&a=newpost&s=".$s."&q=".$q),
-		"FORUMS_POSTS_NEWPOST_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs,
+		"FORUMS_POSTS_NEWPOST_TEXT" => $post_main."<br />".$pfs,
 		"FORUMS_POSTS_NEWPOST_TEXTONLY" => $post_main,
-		"FORUMS_POSTS_NEWPOST_TEXTBOXER" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs,
-		"FORUMS_POSTS_NEWPOST_SMILIES" => $smilies,
-		"FORUMS_POSTS_NEWPOST_BBCODES" => $bbcodes,
-		"FORUMS_POSTS_NEWPOST_SMILIESLOCAL" => $smilies_local,
-		"FORUMS_POSTS_NEWPOST_BBCODESLOCAL" => $bbcodes_local,
+		"FORUMS_POSTS_NEWPOST_TEXTBOXER" => $post_main."<br />".$pfs,
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
 	));
 

@@ -4,7 +4,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -821,36 +821,6 @@ function sed_build_age($birth)
 	return ($age);
 }
 
-/* ------------------ */
-// TODO eliminate this function
-function sed_build_bbcodes($c1, $c2, $title)
-{
-	//$result = "<a href=\"javascript:help('bbcodes','".$c1."','".$c2."')\">".$title."</a>";
-	//return($result);
-	return '';
-}
-
-/* ------------------ */
-// TODO eliminate this function
-function sed_build_bbcodes_local($limit)
-{
-	/*global $sed_bbcodes;
-
-	reset ($sed_bbcodes);
-
-	$result = '<div class="bbcodes">';
-
-	while (list($i,$dat)=each($sed_bbcodes))
-	{
-		$kk = 'bbcodes_'.$dat[1];
-		$result .= "<a href=\"javascript:addtxt('".$dat[0]."')\"><img src=\"images/bbcodes/".$dat[1].".gif\" alt=\"\" /></a> ";
-	}
-
-	$result .= "</div>";
-	return($result);*/
-	return '';
-}
-
 /**
  * Builds category path
  *
@@ -981,11 +951,9 @@ function sed_build_comments($code, $url, $display = true)
 
 		if ($usr['auth_write_com'] && $display)
 		{
-			$bbcodes = ($cfg['parsebbcodecom']) ? sed_build_bbcodes("newcomment", "rtext", $L['BBcodes']) : '';
-			$smilies = ($cfg['parsesmiliescom']) ? sed_build_smilies("newcomment", "rtext", $L['Smilies']) : '';
 			$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newcomment", "rtext", $L['Mypfs']) : '';
 			$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newcomment", "rtext", $L['SFS']) : '';
-			$post_main = "<textarea class=\"minieditor\" name=\"rtext\" rows=\"10\" cols=\"120\">".$rtext."</textarea><br />".$bbcodes." ".$smilies." ".$pfs;
+			$post_main = "<textarea class=\"minieditor\" name=\"rtext\" rows=\"10\" cols=\"120\">".$rtext."</textarea><br />".$pfs;
 		}
 
 		$t->assign(array(
@@ -995,8 +963,6 @@ function sed_build_comments($code, $url, $display = true)
 			"COMMENTS_FORM_AUTHORID" => $usr['id'],
 			"COMMENTS_FORM_TEXT" => $post_main,
 			"COMMENTS_FORM_TEXTBOXER" => $post_main,
-			"COMMENTS_FORM_BBCODES" => $bbcodes,
-			"COMMENTS_FORM_SMILIES" => $smilies,
 			"COMMENTS_FORM_MYPFS" => $pfs,
 			'COMMENTS_DISPLAY' => $cfg['expand_comments'] ? '' : 'none'
 		));
@@ -1195,11 +1161,6 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 
 
 /* ------------------ */
-// TODO eliminate this function
-function sed_build_gallery($id, $c1, $c2, $title)
-{
-	return("<a href=\"javascript:gallery('".$id."','".$c1."','".$c2."')\">".$title."</a>");
-}
 
 /**
  * Returns group link (button)
@@ -1562,38 +1523,6 @@ function sed_build_ratings($code, $url, $display)
 	$res = $t->text('RATINGS');
 
 	return array($res, '');
-}
-
-/* ------------------ */
-// TODO eliminate this function
-function sed_build_smilies($c1, $c2, $title)
-{
-	return '';
-}
-
-/* ------------------ */
-/**
- * Builds local smiley selection box. Obsolete.
- *
- * @param int $limit Max number of smilies in the box.
- * @return string
- */
-function sed_build_smilies_local($limit)
-{
-	global $sed_smilies;
-
-	$result = '<div class="smilies">';
-
-	if (is_array($sed_smilies))
-	{
-		foreach($sed_smilies as $k => $v)
-		{
-			$result .= "<a href=\"javascript:addtxt('".sed_cc($v['code'])."')\"><img src=\"./images/smilies/".$v['file']."\" alt=\"".sed_cc($v['code'])."\" /></a> ";
-		}
-	}
-
-	$result .= "</div>";
-	return $result;
 }
 
 /**
@@ -2118,6 +2047,13 @@ function sed_die($cond=TRUE)
 function sed_diefatal($text='Reason is unknown.', $title='Fatal error')
 {
 	global $cfg;
+
+	if (defined('SED_DEBUG'))
+	{
+		echo '<br /><pre>';
+		debug_print_backtrace();
+		echo '</pre>';
+	}
 
 	$disp = "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br />";
 	$disp .= @date('Y-m-d H:i').'<br />'.$title.' : '.$text;
@@ -4933,4 +4869,59 @@ function sed_get_plural($plural, $lang, $is_frac = false)
     }
 }
 
+/*
+ * ================================ Debugging Facilities ================================
+ */
+
+
+/**
+ * Accepts several variables and prints their values in debug mode (var dump).
+ */
+function sed_assert()
+{
+	ob_end_clean();
+	$vars = func_get_args();
+	foreach ($vars as $name => $var)
+	{
+		var_dump($var);
+	}
+	die();
+}
+
+/**
+ * Prints program execution backtrace.
+ *
+ * @param bool $clear_screen If TRUE displays backtrace only. Otherwise it will be printed in normal flow.
+ */
+function sed_backtrace($clear_screen = TRUE)
+{
+	if ($clear_screen)
+	{
+		ob_end_clean();
+	}
+	debug_print_backtrace();
+	if ($clear_screen)
+	{
+		die();
+	}
+}
+
+/**
+ * Attempts to dump structure and contents of all global variables. Usually dumps just a part of them
+ * because there are too many variables assigned.
+ *
+ * @param bool $clear_screen If TRUE displays vardump only. Otherwise it will be printed in normal flow.
+ */
+function sed_vardump($clear_screen = TRUE)
+{
+	if ($clear_screen)
+	{
+		ob_end_clean();
+	}
+	var_dump($GLOBALS);
+	if ($clear_screen)
+	{
+		die();
+	}
+}
 ?>

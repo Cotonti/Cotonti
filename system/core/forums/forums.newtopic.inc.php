@@ -212,10 +212,6 @@ if ($a=='newtopic')
 
 $pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
-$smilies = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies('newtopic', 'newmsg', $L['Smilies']) : '';
-$smilies_local = ($cfg['parsesmiliesforums'] && $fs_allowsmilies) ? sed_build_smilies_local(20) : '';
-$bbcodes = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes('newtopic', 'newmsg', $L['BBcodes']): '';
-$bbcodes_local = ($cfg['parsebbcodeforums'] && $fs_allowbbcodes) ? sed_build_bbcodes_local(99) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
 $post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
 
@@ -257,13 +253,9 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
 	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"255\" />",
 	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"255\" />",
-	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />",
+	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$pfs."<br />&nbsp;<br />",
 	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
-	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$bbcodes." ".$smilies." ".$pfs."<br />&nbsp;<br />",
-	"FORUMS_NEWTOPIC_SMILIES" => $smilies,
-	"FORUMS_NEWTOPIC_BBCODES" => $bbcodes,
-	"FORUMS_NEWTOPIC_SMILIESLOCAL" => $smilies_local,
-	"FORUMS_NEWTOPIC_BBCODESLOCAL" => $bbcodes_local,
+	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$pfs."<br />&nbsp;<br />",
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
 ));
 

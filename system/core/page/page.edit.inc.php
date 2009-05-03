@@ -258,8 +258,6 @@ $page_form_file = <<<HTM
 </select>
 HTM;
 
-$bbcodes = ($cfg['parsebbcodepages']) ? sed_build_bbcodes('update', 'rpagetext', $L['BBcodes']) : '';
-$smilies = ($cfg['parsesmiliespages']) ? sed_build_smilies('update', 'rpagetext', $L['Smilies']) : '';
 $pfs = sed_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
 $pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';
@@ -311,10 +309,8 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"rpagesize\" value=\"".sed_cc($pag['page_size'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_PAGECOUNT" => "<input type=\"text\" class=\"text\" name=\"rpagecount\" value=\"".$pag['page_count']."\" size=\"8\" maxlength=\"8\" />",
 	"PAGEEDIT_FORM_FILECOUNT" => "<input type=\"text\" class=\"text\" name=\"rpagefilecount\" value=\"".$pag['page_filecount']."\" size=\"8\" maxlength=\"8\" />",
-	"PAGEEDIT_FORM_TEXT" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".sed_cc($pag['page_text'])."</textarea><br />".$bbcodes." ".$smilies,
-	"PAGEEDIT_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".sed_cc($pag['page_text'])."</textarea><br />".$bbcodes." ".$smilies,
-	"PAGEEDIT_FORM_BBCODES" => $bbcodes,
-	"PAGEEDIT_FORM_SMILIES" => $smilies,
+	"PAGEEDIT_FORM_TEXT" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".sed_cc($pag['page_text'])."</textarea><br />",
+	"PAGEEDIT_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".sed_cc($pag['page_text'])."</textarea><br />",
 	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
 );
