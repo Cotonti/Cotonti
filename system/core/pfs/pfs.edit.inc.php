@@ -58,7 +58,7 @@ if (!empty($c1) || !empty($c2))
 	{
 	$morejavascript = "
 function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[thumb=".$cfg['th_dir_user']."'+gfile+']'+gfile+'[/thumb]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[img='+gfile+']".$cfg['th_dir_user']."'+gfile+'[/img]'; }
 function addpix(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
 	";
@@ -140,11 +140,9 @@ if ($standalone)
 function help(rcode,c1,c2)
 	{ window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
 function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[thumb=".$cfg['th_dir_user']."'+gfile+']'+gfile+'[/thumb]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[img='+gfile+']".$cfg['th_dir_user']."'+gfile+'[/img]'; }
 function addpix(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
-function addglink(id,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[gallery='+id+']".$L["pfs_gallery"]." #'+id+'[/gallery]'; }
 function picture(url,sx,sy)
 	{ window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0'); }
 //]]>
