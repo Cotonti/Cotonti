@@ -51,7 +51,7 @@ $L['msg117_title'] = 'Registration disabled';
 $L['msg117_body'] = 'Registration for new users is disabled.';
 
 $L['msg118_title'] = 'Registration done (1st step)';
-$L['msg118_body'] = 'Your account is currently inactive,<br />the site administrator will need to activate it before you can log in.<br />You will receive another email when this has occured.';
+$L['msg118_body'] = 'Your account is currently inactive,<br />the site administrator will need to activate it before you can log in.<br />You will receive another e-mail when this has occured.';
 
 $L['msg151_title'] = 'Login failed (wrong name or password)';
 $L['msg151_body'] = 'Error, the user name you provided isn\'t in the database or the password do not match!';

@@ -13,11 +13,11 @@
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<tr>
-					<td style="width:176px;">{PHP.skinlang.pmsend.Sendmessageto}:<br />{PHP.skinlang.pmsend.Sendmessagetohint}</td>
+					<td style="width:176px;">{PHP.L.Recipients}:<br />{PHP.skinlang.pmsend.Sendmessagetohint}</td>
 					<td>{PMSEND_FORM_TOUSER}</td>
 				</tr>
 				<tr>
-					<td>{PHP.skinlang.pmsend.Subject}:</td>
+					<td>{PHP.L.Subject}:</td>
 					<td>{PMSEND_FORM_TITLE}</td>
 				</tr>
 				<tr>

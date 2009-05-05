@@ -36,6 +36,7 @@ $L['Archives'] = 'Archives';
 $L['Ascending'] = 'Ascending';
 $L['Author'] = 'Author';
 $L['Avatar'] = 'Avatar';	// New in N-0.1.0
+$L['Avatars'] = 'Avatars';	// New in N-0.1.0
 $L['Banlist'] = 'Banlist';
 $L['Banned'] = 'Banned';
 $L['BBcode'] = 'BBcode';
@@ -75,8 +76,8 @@ $L['Download'] = 'Download';
 $L['Duplicate'] = 'Duplicate';
 $L['Duration'] = 'Duration';
 $L['Edit'] = 'Edit';
-$L['Email'] = 'Email';
-$L['Emailmask'] = 'Email mask';
+$L['Email'] = 'E-mail';
+$L['Emailmask'] = 'E-mail mask';
 $L['Enabled'] = 'Enabled';
 $L['Error'] = 'Error';
 $L['Event'] = 'Event';
@@ -131,6 +132,7 @@ $L['Journals'] = 'Weblogs';
 $L['kb'] = 'KB';
 $L['Key'] = 'Key';
 $L['Language'] = 'Language';	// New in N-0.1.0
+$L['Languages'] = 'Languages';	// New in N-0.1.0
 $L['Lastlogged'] = 'Last logged';
 $L['Lastpost'] = 'Last post';
 $L['Left']	= 'Left';
@@ -199,6 +201,7 @@ $L['Password'] = 'Password';
 $L['Path'] = 'Path';
 $L['PFS'] = 'Personal File Space';
 $L['Photo'] = 'Photo';	// New in N-0.1.0
+$L['Photos'] = 'Photos';	// New in N-0.1.0
 $L['Picture'] = 'Picture';
 $L['Pictures'] = 'pictures';
 $L['Plugin'] = 'Plugin';
@@ -224,6 +227,8 @@ $L['Ratings'] = 'Ratings';
 $L['Read'] = 'Read';
 $L['ReadMore'] = 'read more...';
 $L['Reason'] = 'Reason';
+$L['Recipient'] = 'Recipient';	// New in N-0.1.0
+$L['Recipients'] = 'Recipients';	// New in N-0.1.0
 $L['Referer'] = 'Referer';
 $L['Referers'] = 'Referers';
 $L['Refresh'] = 'Refresh';
@@ -243,11 +248,14 @@ $L['Seconds'] = array('seconds','second');
 $L['Section'] = 'Section';
 $L['Sections'] = 'Sections';
 $L['Security'] = 'Security';
+$L['Sender'] = 'Sender';	// New in N-0.1.0
+$L['Senders'] = 'Senders';	// New in N-0.1.0
 $L['Set'] = 'Set';
 $L['Setup'] = 'Setup';
 $L['SFS'] = 'Site File Space';
 $L['Show'] = 'Show';
 $L['Signature'] = 'Signature';	// New in N-0.1.0
+$L['Signatures'] = 'Signatures';	// New in N-0.1.0
 $L['Size'] = 'Size';
 $L['Skin'] = 'Skin';
 $L['Skins'] = 'Skins';
@@ -259,6 +267,7 @@ $L['Statistics'] = 'Statistics';
 $L['StatsLogs'] = 'Statistics & logs';
 $L['Status'] = 'Status';
 $L['Structure'] = 'Structure';
+$L['Subject'] = 'Subject';	// New in N-0.1.0
 $L['Submit'] = 'Submit';
 $L['System'] = 'System';
 $L['Tag'] = 'Tag';
@@ -388,11 +397,11 @@ $L['bbcodes_ex_colleft'] = 'Make left column';
 $L['bbcodes_colright'] = 'Column right';
 $L['bbcodes_ex_colright'] = 'Make right column';
 
-$L['bbcodes_email'] = 'Email';
-$L['bbcodes_ex_email'] = 'Insert an Email';
+$L['bbcodes_email'] = 'E-mail';
+$L['bbcodes_ex_email'] = 'Insert an e-mail';
 
-$L['bbcodes_emailp'] = 'Email and text';
-$L['bbcodes_ex_emailp'] = 'Described Email';
+$L['bbcodes_emailp'] = 'E-mail and text';
+$L['bbcodes_ex_emailp'] = 'Described e-mail';
 
 $L['bbcodes_flag'] = 'Flag (code)';
 $L['bbcodes_ex_flag'] = 'Insert a country flag according to country code';
@@ -550,11 +559,11 @@ $L['foo_sqlaverage'] = 'Average SQL time';
  */
 
 $L['aut_contactadmin'] = 'If you have any difficulties please contact the board administrator';
-$L['aut_emailalreadyindb'] = 'The email you provided is already in the database';
-$L['aut_emailbanned'] = 'This email (or this host) is banned, reason is: ';
-$L['aut_emailtooshort'] = 'The email is not valid.';
+$L['aut_emailalreadyindb'] = 'The e-mail you provided is already in the database';
+$L['aut_emailbanned'] = 'This e-mail (or this host) is banned, reason is: ';
+$L['aut_emailtooshort'] = 'The e-mail is not valid!';
 $L['aut_logintitle'] = 'Login form';
-$L['aut_mailnoticetitle'] = 'Email transition';	// New in N-0.1.0
+$L['aut_mailnoticetitle'] = 'E-mail transition';	// New in N-0.1.0
 $L['aut_passwordmismatch'] = 'The password fields do not match!';
 $L['aut_passwordtooshort'] = 'The password must be at least 4 chars long and must consist of alphanumerical characters and underscore only.';
 $L['aut_registersubtitle'] = '';
@@ -569,11 +578,11 @@ $L['aut_usernametooshort']= 'The user name must be at least 2 chars long';
  */
 
 $L['aut_regrequest'] = 'Hi %1$s,
-Your account is currently inactive, an administrator will need to activate it before you can log in. You will receive another email when this has occured. Then you will be able to login with:
+Your account is currently inactive, an administrator will need to activate it before you can log in. You will receive another e-mail when this has occured. Then you will be able to login with:
 Username = %1$s
 Password = %2$s';
 
-$L['aut_regreqnotice'] = 'You are receiving this email because %1$s requested a new account.
+$L['aut_regreqnotice'] = 'You are receiving this e-mail because %1$s requested a new account.
 This user won\'t be able to login until you manually set the account as \'active\', here:
 %2$s';
 
@@ -587,14 +596,14 @@ To cancel the recently inactive membership use this link:
 %4$s';
 
 $L['aut_emailchange'] = 'Hi %1$s,
-To change your recent email please use this activation link:
+To change your recent e-mail please use this activation link:
 %2$s';	// New in N-0.1.0
 
 /**
  * Comments
  */
 
-$L['com_closed'] = 'Adding comments has been disabled for this item'; // N-0.1.0
+$L['com_closed'] = 'Adding comments has been disabled for this item'; //	New in N-0.1.0
 $L['com_commentadded'] = 'Done, comment added';
 $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commenttooshort'] = 'The comment is too short or missing';
@@ -643,9 +652,9 @@ $L['pfs_filecheckfail'] = 'Warning: File Check Failed for Extension: %1$s Filena
 $L['pfs_filechecknomime'] = 'Warning: No Mime Type data was found for the Extension: %1$s Filename - %2$s';	// New in N-0.0.2
 $L['pfs_fileexists'] = 'The upload failed, there\'s already a file with this name?';
 $L['pfs_filelistempty'] = 'List is empty.';
-$L['pfs_filemimemissing'] = 'The mime type for %1$s is missing. Upload Failed'; // N-0.0.2
-$L['pfs_filenotmoved'] = 'The upload failed, temporary file cannot be moved.'; // 0.0.3
-$L['pfs_filenotvalid'] = 'This is not a valid %1$s file.'; // N-0.0.2
+$L['pfs_filemimemissing'] = 'The mime type for %1$s is missing. Upload Failed';	// New in N-0.0.2
+$L['pfs_filenotmoved'] = 'The upload failed, temporary file cannot be moved.';	// New in 0.0.3
+$L['pfs_filenotvalid'] = 'This is not a valid %1$s file.';	// New in N-0.0.2
 $L['pfs_filesintheroot'] = 'File(s) in the root';
 $L['pfs_filesinthisfolder'] = 'File(s) in this folder';
 $L['pfs_filetoobigorext'] = 'The upload failed, this file is too big maybe, or the extension is not allowed?';
@@ -689,7 +698,7 @@ $L['pm_wrongname'] = 'At least one recipient was wrong, and so removed from the 
  */
 
 $L['pm_notify'] = 'Hi %1$s,
-You are receiving this email because there is a new private message in your inbox from %2$s
+You are receiving this e-mail because there is a new private message in your inbox from %2$s
 Click this link to read it: %3$s';
 
 /**
@@ -750,7 +759,7 @@ $L['pro_title'] = 'Profile';
 $L['pro_wrongpass'] = 'You didn\'t enter your present password, or it\'s wrong';
 
 $L['useed_accountactivated'] = 'Account activated';
-$L['useed_email'] = 'You are receiving this email because an administrator activated your account. You may now login using the username and password you received in a previous email.';
+$L['useed_email'] = 'You are receiving this e-mail because an administrator activated your account. You may now login using the username and password you received in a previous e-mail.';
 $L['useed_subtitle'] = '&nbsp;';
 $L['useed_title'] = 'Edit';
 
@@ -770,7 +779,7 @@ $L['pagenav_prev'] = '&lt;';	// New in N-0.0.2
 $L['pagenav_next'] = '&gt;';	// New in N-0.0.2
 $L['pagenav_last'] = '&gt;&gt;';	// New in N-0.0.2
 
-$L['ajaxSenderror'] = 'The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the administrator and inform them of the time the error occurred, and anything you might have done that may have caused the error.'; // N-0.0.2
+$L['ajaxSenderror'] = 'The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the administrator and inform them of the time the error occurred, and anything you might have done that may have caused the error.';	// New in N-0.0.2
 
 /**
  * Countries

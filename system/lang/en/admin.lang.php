@@ -66,7 +66,7 @@ $L['cfg_forcedefaultlang'] = array('Force the default language for all users', '
  * Main Subsection
  */
 
-$L['cfg_adminemail'] = array('Administrator\'s email', 'Required');
+$L['cfg_adminemail'] = array('Administrator\'s e-mail', 'Required');
 $L['cfg_cache'] = array('Internal cache', 'Keep it enabled for better performance');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
@@ -158,7 +158,7 @@ $L['cfg_th_jpeg_quality'] = array('Thumbnails, Jpeg quality', 'Default: 85');
 $L['cfg_th_keepratio'] = array('Thumbnail, keep ratio?', '');
 $L['cfg_th_textsize'] = array('Thumbnails, size of the text', '');
 $L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
-$L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended : Width x 0.75');
+$L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Width x 0.75');
 
 /**
  * Config Section
@@ -173,7 +173,7 @@ $L['cfg_disable_plug'] = array('Disable the plugins', '');
  */
 
 $L['cfg_disable_pm'] = array('Disable the private messages', '');
-$L['cfg_pm_allownotifications'] = array('Allow PM notifications by email', '');
+$L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
 $L['cfg_pm_maxsize'] = array('Maximum length for messages', 'Default: 10000 chars');
 
 /**
@@ -272,12 +272,12 @@ $L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
 $L['cfg_ph_maxsize'] = array('Photo, maximum file size', 'Default: 8000 bytes');
 $L['cfg_ph_maxx'] = array('Photo, maximum width', 'Default: 96 pixels');
 $L['cfg_ph_maxy'] = array('Photo, maximum height', 'Default: 96 pixels');
-$L['cfg_regnoactivation'] = array('Skip email check for new users', '\'No\'recommended, for security reasons');
+$L['cfg_regnoactivation'] = array('Skip e-mail check for new users', '\'No\'recommended, for security reasons');
 $L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '');
 $L['cfg_sig_maxsize'] = array('Signature, maximum file size', 'Default: 50000 bytes');
 $L['cfg_sig_maxx'] = array('Signature, maximum width', 'Default: 468 pixels');
 $L['cfg_sig_maxy'] = array('Signature, maximum height', 'Default: 60 pixels');
-$L['cfg_useremailchange'] = array('Allow users to change their email address', '\'No\' recommended, for security reasons');
+$L['cfg_useremailchange'] = array('Allow users to change their e-mail address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
 $L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300 chars');
 
@@ -455,8 +455,8 @@ $L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotont
  */
 
 $L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.';	// New in N-0.0.2
-$L['adm_polls_forumpolls'] = 'Polls from forums (recent at top) :';	// New in N-0.0.1
-$L['adm_polls_indexpolls'] = 'Index polls (recent at top) :';	// New in N-0.0.1
+$L['adm_polls_forumpolls'] = 'Polls from forums (recent at top):';	// New in N-0.0.1
+$L['adm_polls_indexpolls'] = 'Index polls (recent at top):';	// New in N-0.0.1
 $L['adm_polls_msg916_bump'] = 'Successfully bumped!';	// New in N-0.0.3
 $L['adm_polls_msg916_deleted'] = 'Successfully deleted!';	// New in N-0.0.3
 $L['adm_polls_msg916_reset'] = 'Successfully reset!';	// New in N-0.0.3
@@ -566,9 +566,9 @@ You can change rule order by simply dragging the rows and dropping them at desir
  */
 
 $L['adm_ipmask'] = 'IP mask';
-$L['adm_emailmask'] = 'Email mask';
+$L['adm_emailmask'] = 'E-mail mask';
 $L['adm_neverexpire'] = 'Never expire';
-$L['adm_help_banlist'] = 'Samples for IP masks :194.31.13.41 , 194.31.13.* , 194.31.*.* , 194.*.*.*<br />Samples for email masks : @hotmail.com, @yahoo (Wildcards are not supported)<br />A single entry can contain one IP mask or one email mask or both.<br />IPs are filtered for each and every page displayed, and email masks at user registration only.';
+$L['adm_help_banlist'] = 'Samples for IP masks: 194.31.13.41, 194.31.13.*, 194.31.*.*, 194.*.*.*<br />Samples for e-mail masks: @hotmail.com, @yahoo (Wildcards are not supported)<br />A single entry can contain one IP mask or one e-mail mask or both.<br />IPs are filtered for each and every page displayed, and e-mail masks at user registration only.';
 
 $L['adm_searchthisuser'] = 'Search for this IP in the user database';
 $L['adm_dnsrecord'] = 'DNS record for this address';
@@ -625,10 +625,10 @@ $L['adm_zendver'] = 'Zend engine version';
 $L['adm_interface'] = 'Interface between webserver and PHP';
 $L['adm_os'] = 'Operating system';
 $L['adm_clocks'] = 'Clocks';
-$L['adm_time1'] = '#1 : Raw server time';
-$L['adm_time2'] = '#2 : GMT time returned by the server';
-$L['adm_time3'] = '#3 : GMT time + server offset (Cotonti reference)';
-$L['adm_time4'] = '#4 : Your local time, adjusted from your profile';
+$L['adm_time1'] = '#1: Raw server time';
+$L['adm_time2'] = '#2: GMT time returned by the server';
+$L['adm_time3'] = '#3: GMT time + server offset (Cotonti reference)';
+$L['adm_time4'] = '#4: Your local time, adjusted from your profile';
 $L['adm_help_versions'] = 'Adjust the Server time zone to have the clock #3 properlly set.<br />
 Clock #4 depends of the timezone setting in your profile.<br />
 Clocks #1 and #2 are ignored by Cotonti.';
@@ -639,7 +639,7 @@ Clocks #1 and #2 are ignored by Cotonti.';
 
 $L['adm_area'] = 'Area';
 $L['adm_clicktoedit'] = '(Click to edit)';
-$L['adm_confirm'] = 'Press this button to confirm : ';
+$L['adm_confirm'] = 'Press this button to confirm: ';
 $L['adm_done'] = 'Done';
 $L['adm_failed'] = 'Failed';
 $L['adm_from'] = 'From';
