@@ -16,8 +16,8 @@
 			<tr>
 				<td class="coltop" style="width:16px;"> </td>
 				<td class="coltop" style="width:16px;">{PHP.L.Status}</td>
-				<td class="coltop">{PHP.skinlang.pm.Sender}</td>
-				<td class="coltop">{PHP.skinlang.pm.Subject}</td>
+				<td class="coltop">{PHP.L.Sender}</td>
+				<td class="coltop">{PHP.L.Subject}</td>
 				<td class="coltop" style="width:176px;">{PHP.L.Date}</td>
 				<td class="coltop" style="width:72px;">{PHP.L.Action}</td>
 			</tr>
@@ -27,8 +27,8 @@
 			<tr>
 				<td class="coltop" style="width:16px;"> </td>
 				<td class="coltop" style="width:16px;">{PHP.L.Status}</td>
-				<td class="coltop">{PHP.skinlang.pm.Recipient}</td>
-				<td class="coltop">{PHP.skinlang.pm.Subject}</td>
+				<td class="coltop">{PHP.L.Recipient}</td>
+				<td class="coltop">{PHP.L.Subject}</td>
 				<td class="coltop" style="width:176px; text-align:center;">{PHP.L.Date}</td>
 				<td class="coltop" style="width:72px; text-align:center;">{PHP.L.Action}</td>
 			</tr>
@@ -61,10 +61,10 @@
 		<!-- BEGIN: PM_DETAILS -->
 		<div>
 
-			{PHP.skinlang.pm.Subject} <strong>{PM_ROW_TITLE}</strong><br />
-			{PHP.skinlang.pm.Sender} {PM_ROW_FROMUSER}<br />
-			{PHP.skinlang.pm.Recipient} {PM_ROW_TOUSER}<br />
-			{PHP.skinlang.pm.Date} {PM_ROW_DATE}
+			{PHP.L.Subject}: <strong>{PM_ROW_TITLE}</strong><br />
+			{PHP.L.Sender}: {PM_ROW_FROMUSER}<br />
+			{PHP.L.Recipient}: {PM_ROW_TOUSER}<br />
+			{PHP.L.Date}: {PM_ROW_DATE}
 
 			<hr />
 
@@ -80,11 +80,11 @@
 		</form>
 
 		<div class="paging">
-			<img src="skins/{PHP.skin}/img/system/icon-pm-new.gif" alt="" />: {PHP.skinlang.pm.Newmessage} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm.gif" alt="" />: {PHP.L.Message} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm-reply.gif" alt="" />: {PHP.L.Reply} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm-archive.gif" alt="" />: {PHP.skinlang.pm.Sendtoarchives} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm-trashcan.gif" alt="" />: {PHP.L.Delete}
+			<img src="skins/{PHP.skin}/img/system/icon-pm-new.gif" alt="" /> {PHP.skinlang.pm.Newmessage} &nbsp; &nbsp;
+			<img src="skins/{PHP.skin}/img/system/icon-pm.gif" alt="" /> {PHP.L.Message} &nbsp; &nbsp;
+			<img src="skins/{PHP.skin}/img/system/icon-pm-reply.gif" alt="" /> {PHP.L.Reply} &nbsp; &nbsp;
+			<img src="skins/{PHP.skin}/img/system/icon-pm-archive.gif" alt="" /> {PHP.skinlang.pm.Sendtoarchives} &nbsp; &nbsp;
+			<img src="skins/{PHP.skin}/img/system/icon-pm-trashcan.gif" alt="" /> {PHP.L.Delete}
 		</div>
 
 	</div>

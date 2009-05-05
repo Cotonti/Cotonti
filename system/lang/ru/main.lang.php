@@ -36,6 +36,7 @@ $L['Archives'] = 'Архив';
 $L['Ascending'] = 'По возрастанию';
 $L['Author'] = 'Автор';
 $L['Avatar'] = 'Аватар';	// New in N-0.1.0
+$L['Avatars'] = 'Аватары';	// New in N-0.1.0
 $L['Banlist'] = 'Список заблокированных учетных записей';
 $L['Banned'] = 'Заблокированные';
 $L['BBcode'] = 'BBCode';
@@ -131,6 +132,7 @@ $L['Journals'] = 'Дневники';
 $L['kb'] = 'Кб';
 $L['Key'] = 'Код';
 $L['Language'] = 'Язык';	// New in N-0.1.0
+$L['Languages'] = 'Языки';	// New in N-0.1.0
 $L['Lastlogged'] = 'Последняя авторизация';
 $L['Lastpost'] = 'Последнее сообщение';
 $L['Left'] = 'По левому краю';
@@ -199,6 +201,7 @@ $L['Password'] = 'Пароль';
 $L['Path'] = 'Путь';
 $L['PFS'] = 'Мои файлы';
 $L['Photo'] = 'Фото';	// New in N-0.1.0
+$L['Photos'] = 'Фото';	// New in N-0.1.0
 $L['Picture'] = 'Изображение';
 $L['Pictures'] = 'изображений';
 $L['Plugin'] = 'Плагин';
@@ -224,6 +227,8 @@ $L['Ratings'] = 'Рейтинги';
 $L['Read'] = 'Чтение';
 $L['ReadMore'] = 'Подробно';
 $L['Reason'] = 'Причина';
+$L['Recipient'] = 'Получатель';	// New in N-0.1.0
+$L['Recipients'] = 'Получатели';	// New in N-0.1.0
 $L['Referer'] = 'Реферал';
 $L['Referers'] = 'Рефералы';
 $L['Refresh'] = 'Обновить';
@@ -243,11 +248,14 @@ $L['Seconds'] = array('секунда','секунды','секунд');
 $L['Section'] = 'Раздел';
 $L['Sections'] = 'Разделы';
 $L['Security'] = 'Безопасность';
+$L['Sender'] = 'Отправитель';
+$L['Senders'] = 'Отправители';
 $L['Set'] = 'Установить';
 $L['Setup'] = 'Настройка';
 $L['SFS'] = 'Файловый архив сайта';
 $L['Show'] = 'Показать';
 $L['Signature'] = 'Подпись';	// New in N-0.1.0
+$L['Signatures'] = 'Подписи';	// New in N-0.1.0
 $L['Size'] = 'Размер';
 $L['Skin'] = 'Скин';
 $L['Skins'] = 'Скины';
@@ -259,6 +267,7 @@ $L['Statistics'] = 'Статистика';
 $L['StatsLogs'] = 'Статистика и логи';
 $L['Status'] = 'Статус';
 $L['Structure'] = 'Структура';
+$L['Subject'] = 'Тема';	// New in N-0.1.0
 $L['Submit'] = 'Отправить';
 $L['System'] = 'Система';
 $L['Tag'] = 'Тег';
@@ -389,10 +398,10 @@ $L['bbcodes_colright'] = 'Правая колонка';
 $L['bbcodes_ex_colright'] = 'Правая колонка';
 
 $L['bbcodes_email'] = 'E-mail';
-$L['bbcodes_ex_email'] = 'Вставить E-mail';
+$L['bbcodes_ex_email'] = 'Вставить e-mail';
 
 $L['bbcodes_emailp'] = 'E-mail и текст';
-$L['bbcodes_ex_emailp'] = 'Вставить E-mail с описанием';
+$L['bbcodes_ex_emailp'] = 'Вставить e-mail с описанием';
 
 $L['bbcodes_flag'] = 'Флаг (код)';
 $L['bbcodes_ex_flag'] = 'Вставить флаг по коду страны (ru, en, ...)';
@@ -550,11 +559,11 @@ $L['foo_sqlaverage'] = 'Среднее время SQL';
  */
 
 $L['aut_contactadmin'] = 'В случае необходимости свяжитесь с администратором';
-$L['aut_emailalreadyindb'] = 'Такой E-mail уже существует в базе данных';
-$L['aut_emailbanned'] = 'Данный E-mail (или хост) заблокирован. Причина: ';
-$L['aut_emailtooshort'] = 'Ошибочный E-mail';
+$L['aut_emailalreadyindb'] = 'Такой e-mail уже существует в базе данных';
+$L['aut_emailbanned'] = 'Данный e-mail (или хост) заблокирован. Причина: ';
+$L['aut_emailtooshort'] = 'Ошибочный e-mail';
 $L['aut_logintitle'] = 'Авторизация';
-$L['aut_mailnoticetitle'] = 'Смена E-mail'; // N-0.1.0
+$L['aut_mailnoticetitle'] = 'Смена e-mail'; // N-0.1.0
 $L['aut_passwordmismatch'] = 'Введенные пароли не совпадают';
 $L['aut_passwordtooshort'] = 'Пароль должен состоять из 4 или более символов: букв, цифр и символа подчеркивания';
 $L['aut_registersubtitle'] = 'Заполните регистрационную форму в соответствии с указанными требованиями';
@@ -587,7 +596,7 @@ $L['aut_emailreg'] = 'Здравствуйте, %1$s,
 %4$s';
 
 $L['aut_emailchange'] = 'Здравствуйте, %1$s,
-Чтобы изменить ваш E-mail адрес воспользуйтесь следующей ссылкой:
+Чтобы изменить ваш e-mail адрес, воспользуйтесь следующей ссылкой:
 %2$s';	// New in N-0.1.0
 
 /**
