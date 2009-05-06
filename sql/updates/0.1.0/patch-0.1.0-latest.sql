@@ -1,6 +1,3 @@
-/* r482 Email transition enhancement */
-ALTER TABLE `sed_users` CHANGE `user_maingrp` `user_maingrp` int(11) NOT NULL default '4';
-
 /* r547 Anti bump enhancement */
 INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'forums', '12', 'antibumpforums', 3, '0'), ('core', 'forums', '12', 'mergeforumposts', 3, '1');
 
