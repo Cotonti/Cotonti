@@ -4984,7 +4984,6 @@ function sed_checkpoint()
 	$fp = fopen(SED_DEBUG_LOGFILE, 'a');
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[1]['file'] . ', ' . $btrace[1]['line'] . ":\n");
-	$vars = func_get_args();
 	foreach ($GLOBALS as $key => $val)
 	{
 		if ($key != 'GLOBALS')
@@ -5008,7 +5007,7 @@ define('SED_CHECKPOINT_LOCALS', '$debug_fp = fopen(SED_DEBUG_LOGFILE, "a");
 	$debug_vars = get_defined_vars();
 	foreach ($debug_vars as $debug_key => $debug_val)
 	{
-		if ($debug_key != "GLOBALS" && $debug_key != "debug_vars" && $debug_key != "debug_btrace")
+		if ($debug_key != "GLOBALS" && $debug_key != "debug_vars" && $debug_key != "debug_btrace" && $debug_key != "debug_fp")
 		{
 			fputs($debug_fp, "$debug_key = " .print_r($debug_val, TRUE) ."\n");
 		}
