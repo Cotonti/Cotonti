@@ -83,9 +83,17 @@ $cfg['file_perms'] = 0664;
 
 /**
  * Defines whether to display debugging information on critical errors.
- * Comment it on production sites if you wish.
+ * Set it TRUE when you experiment with something new.
+ * Set it FALSE on production sites.
  */
-define('SED_DEBUG', TRUE);
+define('SED_DEBUG', FALSE);
+/**
+ * Path to debug log file used by functions which dump debug data into it.
+ * This file MUST NOT be available to strangers (e.g. via HTTP) or it can
+ * compromise your website security. Protect it with .htaccess or use some
+ * path accessible to you only via FTP.
+ */
+define('SED_DEBUG_LOGFILE', '/tmp/cot_debug_'.date("Ymd_His").'.log');
 
 // ========================
 // Name of MySQL tables
