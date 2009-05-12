@@ -34,7 +34,7 @@
 				<td>{USERS_DETAILS_TIMEZONE}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.Journal}:</td>
+				<td>{PHP.L.Blog}:</td>
 				<td>{USERS_DETAILS_JOURNAL}</td>
 			</tr>
 			<tr>
