@@ -143,12 +143,16 @@ if ($a=='newpost')
 	$sql = sed_sql_query("SELECT fp_posterid, fp_posterip FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC LIMIT 1");
 
 	if ($row = sed_sql_fetcharray($sql))
-		{
+	{
 		if ($cfg['antibumpforums'] && ( ($usr['id']==0 && $row['fp_posterid']==0 && $row['fp_posterip']==$usr['ip']) || ($row['fp_posterid']>0 && $row['fp_posterid']==$usr['id']) ))
-			{ sed_die(); }
+		{
+			sed_die();
 		}
-		else
-	{ sed_die(); }
+	}
+	else
+	{
+		sed_die();
+	}
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.newpost.first');
@@ -775,13 +779,15 @@ elseif ($ft_state)
 }
 
 elseif(!$allowreplybox && !$notlastpage && !$ft_state && $usr['id']>0)
-	{
+{
 	$t->assign("FORUMS_POSTS_ANTIBUMP_BODY", $L['for_antibump']);
 	$t->parse("MAIN.FORUMS_POSTS_ANTIBUMP");
-	}
+}
 
 if ($ft_mode==1)
-{ $t->parse("MAIN.FORUMS_POSTS_TOPICPRIVATE"); }
+{
+	$t->parse("MAIN.FORUMS_POSTS_TOPICPRIVATE");
+}
 
 /* === Hook  === */
 $extp = sed_getextplugins('forums.posts.tags');
