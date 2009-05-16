@@ -379,6 +379,8 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'forums', '10', 'hideprivateforums', 3, '0', '', ''),
 ('core', 'forums', '10', 'hottopictrigger', 2, '20', '', ''),
 ('core', 'forums', '10', 'maxtopicsperpage', 2, '30', '', ''),
+('core', 'forums', '12', 'antibumpforums', 3, '0', '', ''),
+('core', 'forums', '12', 'mergeforumposts', 3, '1', '', ''),
 ('core', 'title', '03', 'title_forum_main', 1, '{FORUM}', '', ''),
 ('core', 'page', '01', 'disable_page', 3, '0', '', ''),
 ('core', 'page', '02', 'allowphp_pages', 3, '0', '', ''),
