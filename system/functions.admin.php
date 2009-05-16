@@ -315,6 +315,8 @@ function sed_loadconfigmap()
 	$result[] = array ('forums', '10', 'hideprivateforums', 3, '0', '');
 	$result[] = array ('forums', '10', 'hottopictrigger', 2, '20', array(5,10,15,20,25,30,35,40,50));
 	$result[] = array ('forums', '10', 'maxtopicsperpage', 2, '30', array(5,10,15,20,25,30,35,40,45,50,60,70,80,90));
+	$result[] = array ('forums', '12', 'antibumpforums', 3, '0', ''); // N-0.0.5
+	$result[] = array ('forums', '12', 'mergeforumposts', 3, '1', ''); // N-0.0.5
 	$result[] = array ('forums', '11', 'usesingleposturls', 3, '0', ''); // N-0.0.2
 	$result[] = array ('page', '01', 'disable_page', 3, '0', '');
 	$result[] = array ('page', '02', 'allowphp_pages', 3, '0', '');

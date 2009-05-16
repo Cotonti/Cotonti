@@ -10,7 +10,7 @@ http://www.neocrome.net
  * Forums posts display.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.5
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -137,10 +137,22 @@ if ($a=='newpost')
 	{
 		if ($row['ft_state'])
 		{ sed_die(); }
-		$merge = ($row['ft_lastposterid']==$usr['id']) ? TRUE : FALSE;
+		$merge = (!$cfg['antibumpforums'] && $cfg['mergeforumposts'] && $row['ft_lastposterid']==$usr['id']) ? true : false;
+	}
+
+	$sql = sed_sql_query("SELECT fp_posterid, fp_posterip FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC LIMIT 1");
+
+	if ($row = sed_sql_fetcharray($sql))
+	{
+		if ($cfg['antibumpforums'] && ( ($usr['id']==0 && $row['fp_posterid']==0 && $row['fp_posterip']==$usr['ip']) || ($row['fp_posterid']>0 && $row['fp_posterid']==$usr['id']) ))
+		{
+			sed_die();
+		}
 	}
 	else
-	{ sed_die(); }
+	{
+		sed_die();
+	}
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.newpost.first');
@@ -225,7 +237,7 @@ if ($a=='newpost')
 				$rhtml = '';
 			}
 
-			$sql = sed_sql_query("SELECT fp_id, fp_text, fp_html FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
+			$sql = sed_sql_query("SELECT fp_id, fp_text, fp_html, fp_posterid, fp_updated, fp_updater FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
 			$row = sed_sql_fetcharray($sql);
 
 			$p = (int) $row['fp_id'];
@@ -233,7 +245,7 @@ if ($a=='newpost')
 			$newmsg = sed_sql_prep($row['fp_text'])."\n\n".sed_sql_prep($newmsg);
 			$newhtml = ($cfg['parser_cache']) ? sed_sql_prep($row['fp_html'])."<br /><br />".$rhtml : '';
 
-			$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) ) ? '' : $usr['name'];
+			$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
 
 			$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_updated='".$sys['now_offset']."', fp_updater='".sed_sql_prep($rupdater)."', fp_text='".$newmsg."', fp_html='".$newhtml."', fp_posterip='".$usr['ip']."' WHERE fp_id='".$row['fp_id']."' LIMIT 1");
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
@@ -701,6 +713,9 @@ while ($row = sed_sql_fetcharray($sql))
 	$t->parse("MAIN.FORUMS_POSTS_ROW");
 }
 
+$allowreplybox = (!$cfg['antibumpforums']) ? TRUE : FALSE;
+$allowreplybox = ($cfg['antibumpforums'] && $lastposterid>0 && $lastposterid==$usr['id'] && $usr['auth_write']) ? FALSE : TRUE;
+
 // Nested quote stripper by Spartan
 function sed_stripquote($string) {
 	global $sys;
@@ -721,7 +736,7 @@ function sed_stripquote($string) {
 	return($string);
 }
 
-if (!$notlastpage && !$ft_state && $usr['id']>0 && $usr['auth_write'])
+if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_write'])
 {
 	if ($quote>0)
 	{
@@ -768,6 +783,12 @@ elseif ($ft_state)
 {
 	$t->assign("FORUMS_POSTS_TOPICLOCKED_BODY", $L['Topiclocked']);
 	$t->parse("MAIN.FORUMS_POSTS_TOPICLOCKED");
+}
+
+elseif(!$allowreplybox && !$notlastpage && !$ft_state && $usr['id']>0)
+{
+	$t->assign("FORUMS_POSTS_ANTIBUMP_BODY", $L['for_antibump']);
+	$t->parse("MAIN.FORUMS_POSTS_ANTIBUMP");
 }
 
 if ($ft_mode==1)

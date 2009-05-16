@@ -99,6 +99,12 @@ $t->assign(array (
 	"HEADER_HEAD" => $out['head_head'],
 ));
 
+/* === Hook === */
+$extp = sed_getextplugins('header.body');
+if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if ($usr['id']>0)
 {
 	$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"".sed_url('admin')."\">".$L['Administration']."</a>" : '';
