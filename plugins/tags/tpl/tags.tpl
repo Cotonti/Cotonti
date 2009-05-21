@@ -23,8 +23,9 @@
 </div>
 <!-- END: TAGS_RESULT_ROW -->
 
+<!-- END: TAGS_RESULT -->
+
 <div class="pagnav">{TAGS_PAGEPREV} {TAGS_PAGNAV} {TAGS_PAGENEXT}</div>
 
-<!-- END: TAGS_RESULT -->
 </div>
 <!-- END: MAIN -->
