@@ -380,6 +380,7 @@ switch ($a)
 			if ($import == "") $import = 0;
 		}
 		$ruserextrafields[] = $import;
+		$urr['user_'.$row[ 'field_name']] = $import;
 	}
 
 	$sql = sed_sql_query("SELECT user_skin FROM $db_users WHERE user_id='".$usr['id']."' ");
@@ -425,7 +426,7 @@ switch ($a)
 	}
 
 	if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
-		{
+	{
 
 		$rmailpass = md5($rmailpass);
 
@@ -437,10 +438,10 @@ switch ($a)
 		$error_string .= ($res>0) ? $L['aut_emailalreadyindb']."<br />" : '';
 
 		if (empty($error_string))
-			{
+		{
 
-		if (!$cfg['regnoactivation'])
-				{
+			if (!$cfg['regnoactivation'])
+			{
 
 				$validationkey = md5(microtime());
 				$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_email='".sed_sql_prep($ruseremail)."', user_maingrp='-1', user_sid='".sed_sql_prep($urr['user_maingrp'])."' WHERE user_id='".$usr['id']."' ");
@@ -462,20 +463,20 @@ switch ($a)
 					session_destroy();
 				}
 
-					$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
-					sed_redirect(sed_url('message', 'msg=102', '', true));
-					exit;
-
-				}
-
-			else
-				{
-				$sql = sed_sql_query("UPDATE $db_users SET user_email='".sed_sql_prep($ruseremail)."' WHERE user_id='".$usr['id']."' ");
-				}
+				$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
+				sed_redirect(sed_url('message', 'msg=102', '', true));
+				exit;
 
 			}
 
+			else
+			{
+				$sql = sed_sql_query("UPDATE $db_users SET user_email='".sed_sql_prep($ruseremail)."' WHERE user_id='".$usr['id']."' ");
+			}
+
 		}
+
+	}
 
 
 	if (empty($error_string))
@@ -648,10 +649,10 @@ foreach($extrafields as $i=>$row)
 	switch($row['field_type']) {
 	case "input":
 		$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" ', $t2); break;
+		$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" ', $t2); break;
 	case "textarea":
 		$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('</textarea>',$urr['user_'.$row['field_name']].'</textarea>', $t2); break;
+		$t2 = str_replace('</textarea>',sed_cc($urr['user_'.$row['field_name']]).'</textarea>', $t2); break;
 	case "select":
 		$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
 		$options = "";
@@ -667,7 +668,7 @@ foreach($extrafields as $i=>$row)
 	case "checkbox":
 		$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
 		$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
-		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" '.$sel.' ', $t2); break;
+		$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" '.$sel.' ', $t2); break;
 	}
 	$useredit_array[$t1] = $t2;
 }

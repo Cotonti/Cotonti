@@ -8,7 +8,7 @@ http://www.neocrome.net
 
 /**
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.5
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
@@ -107,6 +107,7 @@ if ($a=='update')
 			if ($import == "") $import = 0;
 		}
 		$ruserextrafields[] = $import;
+		$urr['user_'.$row[ 'field_name']] = $import;
 	}
 	
 	if ($ruserdelete)
@@ -327,10 +328,10 @@ foreach($extrafields as $i=>$row)
 	switch($row['field_type']) {
 	case "input":
 		$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" ', $t2); break;
+		$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" ', $t2); break;
 	case "textarea":
 		$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('</textarea>',$urr['user_'.$row['field_name']].'</textarea>', $t2); break;
+		$t2 = str_replace('</textarea>',sed_cc($urr['user_'.$row['field_name']]).'</textarea>', $t2); break;
 	case "select":
 		$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
 		$options = "";
@@ -345,7 +346,7 @@ foreach($extrafields as $i=>$row)
 	case "checkbox":
 		$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
 		$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
-		$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" '.$sel.' ', $t2); break;
+		$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" '.$sel.' ', $t2); break;
 	}
 	$useredit_array[$t1] = $t2;
 }
