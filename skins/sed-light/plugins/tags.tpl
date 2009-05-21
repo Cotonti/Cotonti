@@ -31,9 +31,9 @@
 				</td>
 			</tr>
 			<!-- END: TAGS_RESULT_ROW -->
-			<tr><td style="background:transparent;"><div class="pagnav">{TAGS_PAGEPREV} {TAGS_PAGNAV} {TAGS_PAGENEXT}</div></td></tr>
 		</table>
 		<!-- END: TAGS_RESULT -->
 		</div>
+		<div class="pagnav">{TAGS_PAGEPREV} {TAGS_PAGNAV} {TAGS_PAGENEXT}</div>
 	</div>
 <!-- END: MAIN -->
