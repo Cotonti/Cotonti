@@ -238,7 +238,7 @@ INSERT INTO `sed_bbcode` (`bbc_id`, `bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_
 (24, 'quote', 'pcre', '\\[quote\\](.+?)\\[/quote\\]', '<blockquote>$1</blockquote>', 1, 1, 128, '', 0),
 (23, 'color', 'pcre', '\\[color=(#?\\w+)\\](.+?)\\[/color\\]', '<span style="color:$1">$2</span>', 1, 1, 128, '', 0),
 (27, 'img', 'pcre', '\\[img\\]((?:http://|https://|ftp://)?[^"\\'';:\\?\\[]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]', '<img src="$1" alt="" />', 1, 1, 128, '', 0),
-(28, 'img', 'pcre', '\\[img=((?:http://|https://|ftp://)?[^\\]\"\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\\]\"\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]', '<a href="$1"><img src="$2" alt="" /></a>', 1, 1, 128, '', 0),
+(28, 'img', 'pcre', '\\[img=((?:http://|https://|ftp://)?[^\\]"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\\]"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]', '<a href="$1"><img src="$2" alt="" /></a>', 1, 1, 128, '', 0),
 (29, 'url', 'pcre', '\\[url=((?:http://|https://|ftp://)?[^\\s"\\'':\\[]+)\\](.+?)\\[/url\\]', '<a href="$1">$2</a>', 1, 1, 128, '', 0),
 (30, 'url', 'pcre', '\\[url\\]((?:http://|https://|ftp://)?[^\\s"\\'':]+)\\[/url\\]', '<a href="$1">$1</a>', 1, 1, 128, '', 0),
 (32, 'code', 'callback', '\\[code\\](.+?)\\[/code\\]', 'return ''<pre class="code">''.sed_bbcode_cdata($input[1]).''</pre>'';', 1, 1, 1, '', 0),
