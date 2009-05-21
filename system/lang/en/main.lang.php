@@ -687,6 +687,7 @@ $L['pro_avataruploadfailed'] = 'The upload failed, delete the old avatar before 
 $L['pro_avatarnotvalid'] = 'This avatar is not a valid %1$s image.'; // N-0.0.2
 $L['pro_photonotvalid'] = 'This photo is not a valid %1$s image.'; // N-0.0.2
 $L['pro_sigotvalid'] = 'This signature is not a valid %1$s image.'; // N-0.0.2
+$L['pro_emailandpass'] = 'You can not change both e-mail and password at a time'; // 0.0.5
 $L['ajaxSenderror'] = 'The server encountered an internal error or misconfiguration and was unable to complete your request. Please contact the administrator and inform them of the time the error occurred, and anything you might have done that may have caused the error.'; // N-0.0.2
 
 
