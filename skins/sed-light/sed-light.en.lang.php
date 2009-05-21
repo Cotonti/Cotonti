@@ -48,6 +48,8 @@ $skinlang['forumssections']['UnfoldAll'] = 'Unfold all';
  */
 
 $skinlang['forumstopics']['Newtopic'] = 'New topic';
+$skinlang['forumstopics']['Newpoll'] = 'New poll';
+$skinlang['forumstopics']['Viewers'] = 'Viewers';
 $skinlang['forumstopics']['Nonewposts'] = 'No new posts';
 $skinlang['forumstopics']['Newposts'] = 'New posts';
 $skinlang['forumstopics']['Nonewpostspopular'] = 'No new posts (popular)';
@@ -59,7 +61,6 @@ $skinlang['forumstopics']['Newpostslocked'] = 'New posts (locked)';
 $skinlang['forumstopics']['Announcment'] = 'Announcement';
 $skinlang['forumstopics']['Newannouncment'] = 'New announcement';
 $skinlang['forumstopics']['Movedoutofthissection'] = 'Moved out of this section';
-$skinlang['forumstopics']['Viewers'] = 'Viewers';
 
 /**
  * header.tpl

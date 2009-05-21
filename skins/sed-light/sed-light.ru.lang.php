@@ -48,6 +48,8 @@ $skinlang['forumssections']['UnfoldAll'] = 'Развернуть все';
  */
 
 $skinlang['forumstopics']['Newtopic'] = 'Новая тема';
+$skinlang['forumstopics']['Newpoll'] = 'Новый опрос';
+$skinlang['forumstopics']['Viewers'] = 'Просматривают';
 $skinlang['forumstopics']['Nonewposts'] = 'Нет новых сообщений';
 $skinlang['forumstopics']['Newposts'] = 'Есть новые сообщения';
 $skinlang['forumstopics']['Nonewpostspopular'] = 'Популярная (нет новых сообщений)';
@@ -59,7 +61,6 @@ $skinlang['forumstopics']['Newpostslocked'] = 'Тема закрыта (есть
 $skinlang['forumstopics']['Announcment'] = 'Обьявление';
 $skinlang['forumstopics']['Newannouncment'] = 'Новые обьявления';
 $skinlang['forumstopics']['Movedoutofthissection'] = 'Перенесена в другой раздел';
-$skinlang['forumstopics']['Viewers'] = 'Просматривают';
 
 /**
  * header.tpl
