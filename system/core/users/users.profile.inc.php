@@ -403,6 +403,11 @@ switch ($a)
 		$error_string .= (mb_strlen($rnewpass1)<4 || sed_alphaonly($rnewpass1)!=$rnewpass2) ? $L['pro_passtoshort']."<br />" : '';
 		$error_string .= ($roldpass!=$row['user_password']) ? $L['pro_wrongpass']."<br />" : '';
 
+		if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
+		{
+			$error_string .= $L['pro_emailandpass'].'<br />';
+		}
+
 		if (empty($error_string))
 		{
 			$rnewpass = md5($rnewpass1);
