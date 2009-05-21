@@ -10,7 +10,7 @@ http://www.neocrome.net
  * User registration script.
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.0.5
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -78,6 +78,7 @@ if ($a=='add')
 			if ($import == "") $import = 0;
 		}
 		$ruserextrafields[] = $import;
+		$urr['user_'.$row[ 'field_name']] = $import;
 	}
 
 	$sql = sed_sql_query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
@@ -325,11 +326,11 @@ foreach($extrafields as $i=>$row)
 	{
 		case "input":
 			$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
-			$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" ', $t2);
+			$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" ', $t2);
 			break;
 		case "textarea":
 			$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
-			$t2 = str_replace('</textarea>',$urr['user_'.$row['field_name']].'</textarea>', $t2);
+			$t2 = str_replace('</textarea>',sed_cc($urr['user_'.$row['field_name']]).'</textarea>', $t2);
 			break;
 		case "select":
 			$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
@@ -346,7 +347,7 @@ foreach($extrafields as $i=>$row)
 		case "checkbox":
 			$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
 			$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
-			$t2 = str_replace('<input ','<input value="'.$urr['user_'.$row['field_name']].'" '.$sel.' ', $t2);
+			$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" '.$sel.' ', $t2);
 			break;
 	}
 	$useredit_array[$t1] = $t2;
