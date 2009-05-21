@@ -2,8 +2,8 @@
 /* ====================
 [BEGIN_SED]
 File=plugins/markitup/markitup.setup.php
-Version=0.0.2
-Updated=2008-dec-18
+Version=0.0.5
+Updated=2009-may-21
 Type=Plugin
 Author=Trustmaster
 Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License
@@ -13,8 +13,8 @@ Description=Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotont
 Code=markitup
 Name=MarkItUp!
 Description=jQuery BBcode editor
-Version=0.0.3
-Date=2009-feb-14
+Version=0.0.5
+Date=2009-may-21
 Author=Jay Salvat
 Copyright=
 Notes=
@@ -64,6 +64,7 @@ if($action == 'install')
 	sed_bbcode_add('td', 'str', '[td]', '<td>', true, 128, 'markitup');
 	sed_bbcode_add('td', 'str', '[/td]', '</td>', true, 128, 'markitup');
 	sed_bbcode_add('hide', 'callback', '\[hide\](.+?)\[/hide\]', 'return $usr["id"] > 0 ? $input[1] : "<div class=\"hidden\">".$L["Hidden"]."</div>";', true, 150, 'markitup', true);
+	sed_bbcode_add('spoiler', 'pcre', '\[spoiler\](.+?)\[/spoiler\]', '<div style="margin:4px 0px 4px 0px"><input type="button" value="'.$L['Show'].'" onclick="if(this.parentNode.getElementsByTagName(\'div\')[0].style.display != \'\') { this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'\'; } else { this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\'; }" /><div style="display:none" class="spoiler">$1</div></div>', true, 130, 'markitup');
 	sed_bbcode_add('spoiler', 'pcre', '\[spoiler=([^\]]+)\](.+?)\[/spoiler\]', '<div style="margin:4px 0px 4px 0px"><input type="button" value="$1" onclick="if(this.parentNode.getElementsByTagName(\'div\')[0].style.display != \'\') { this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'\'; } else { this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\'; }" /><div style="display:none" class="spoiler">$2</div></div>', true, 130, 'markitup');
 }
 elseif($action == 'uninstall')

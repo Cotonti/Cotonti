@@ -1,17 +1,14 @@
-<?php
+<?PHP
 /* ====================
-Copyright (c) 2008-2009, Vladimir Sibirov.
-All rights reserved. Distributed under BSD License.
-
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Name=Tags
 Description=Basic Tags implementation
-Version=0.0.3
-Date=2008-feb-16
+Version=0.0.5
+Date=2009-may-21
 Author=Trustmaster
-Copyright=
-Notes=
+Copyright=All rights reserved (c) 2008-2009, Vladimir Sibirov.
+Notes=BSD License.
 SQL=
 Auth_guests=R
 Lock_guests=W12345A
@@ -30,8 +27,20 @@ lim_pages=07:string::0:Limit of tags in a cloud displayed for pages, 0 is unlimi
 lim_forums=08:string::0:Limit of tags in a cloud displayed in forums, 0 is unlimited
 lim_index=09:string::0:Limit of tags in a cloud displayed on index, 0 is unlimited
 more=10:radio::1:Show 'All tags' link in tag clouds
+perpage=11:string::0:Tags displayed per page in standalone cloud, 0 is all at once
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 
+/**
+ * Basic Tags implementation
+ *
+ * @package Cotonti
+ * @version 0.0.5
+ * @author Trustmaster, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
+defined('SED_CODE') or die('Wrong URL');
 // TODO AJAX autocomplete
 ?>

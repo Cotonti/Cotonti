@@ -1,16 +1,5 @@
-<?php
+<?PHP
 /* ====================
-Copyright (c) 2008, Vladimir Sibirov.
-All rights reserved. Distributed under BSD License.
-[BEGIN_SED]
-File=plugins/tags/tags.php
-Version=0.0.2
-Updated=2008-dec-19
-Type=Plugin
-Author=Trustmaster
-Description=Tag search
-[END_SED]
-
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Part=search
@@ -20,13 +9,27 @@ Tags=
 Order=
 [END_SED_EXTPLUGIN]
 ==================== */
-if (!defined('SED_CODE')) { die('Wrong URL.'); }
+
+/**
+ * Tag search
+ *
+ * @package Cotonti
+ * @version 0.0.5
+ * @author Trustmaster - Vladimir Sibirov
+ * @copyright All rights reserved. 2008-2009
+ * @license BSD
+ */
+
+defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
 $qs = sed_import('t', 'G', 'TXT');
 if(empty($qs)) $qs = sed_import('t', 'P', 'TXT');
 
 $tl = sed_import('tl', 'G', 'BOL');
 if($tl) $qs = strtr($qs, $sed_translitb);
+
+$d = (int) sed_import('d', 'G', 'INT');
+$perpage = $cfg['plugin']['tags']['perpage'];
 
 require_once $cfg['plugins_dir'].'/tags/inc/config.php';
 
@@ -40,7 +43,8 @@ if($a == 'pages')
 	if(empty($qs))
 	{
 		// Global tag cloud and search form
-		$tcloud = sed_tag_cloud('pages', $cfg['plugin']['tags']['order']);
+		$limit = ($perpage > 0) ? "$d, $perpage" : NULL;
+		$tcloud = sed_tag_cloud('pages', $cfg['plugin']['tags']['order'], $limit);
 		$tc_html = '<div class="tag_cloud">';
 		foreach($tcloud as $tag => $cnt)
 		{
@@ -60,16 +64,24 @@ if($a == 'pages')
 		$tc_html .= '</div>';
 		$t->assign('TAGS_CLOUD_BODY', $tc_html);
 		$t->parse('MAIN.TAGS_CLOUD');
+		if ($perpage > 0)
+		{
+			$sql = sed_sql_query("SELECT COUNT(DISTINCT `tag`) FROM $db_tag_references WHERE tag_area = 'pages'");
+			$totalitems = (int) sed_sql_result($sql, 0, 0);
+			$pagnav = sed_pagination(sed_url('plug','e=tags&a=pages'), $d, $totalitems, $perpage);
+			list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=pages'), $d, $totalitems, $perpage, TRUE);
+
+			$t->assign(array(
+			'TAGS_PAGEPREV' => $pagination_prev,
+			'TAGS_PAGENEXT' => $pagination_next,
+			'TAGS_PAGNAV' => $pagnav
+			));
+		}
 	}
 	else
 	{
 		// Search results
 		$query = sed_tag_parse_query($qs);
-		$d = sed_import('d', 'G', 'INT');
-		if(empty($d))
-		{
-			$d = 0;
-		}
 		if(!empty($query))
 		{
 			$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
@@ -103,7 +115,7 @@ if($a == 'pages')
 			}
 			sed_sql_freeresult($sql);
 			$pagnav = sed_pagination(sed_url('plug','e=tags&a=pages&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=pages&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+			list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=pages&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 			$t->assign(array(
 			'TAGS_PAGEPREV' => $pagination_prev,
@@ -124,7 +136,8 @@ elseif($a == 'forums')
 	if(empty($qs))
 	{
 		// Global tag cloud and search form
-		$tcloud = sed_tag_cloud('forums', $cfg['plugin']['tags']['order']);
+		$limit = ($perpage > 0) ? "$d, $perpage" : NULL;
+		$tcloud = sed_tag_cloud('forums', $cfg['plugin']['tags']['order'], $limit);
 		$tc_html = '<div class="tag_cloud">';
 		foreach($tcloud as $tag => $cnt)
 		{
@@ -144,16 +157,24 @@ elseif($a == 'forums')
 		$tc_html .= '</div>';
 		$t->assign('TAGS_CLOUD_BODY', $tc_html);
 		$t->parse('MAIN.TAGS_CLOUD');
+		if ($perpage > 0)
+		{
+			$sql = sed_sql_query("SELECT COUNT(DISTINCT `tag`) FROM $db_tag_references WHERE tag_area = 'forums'");
+			$totalitems = (int) sed_sql_result($sql, 0, 0);
+			$pagnav = sed_pagination(sed_url('plug','e=tags&a=forums'), $d, $totalitems, $perpage);
+			list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=forums'), $d, $totalitems, $perpage, TRUE);
+
+			$t->assign(array(
+			'TAGS_PAGEPREV' => $pagination_prev,
+			'TAGS_PAGENEXT' => $pagination_next,
+			'TAGS_PAGNAV' => $pagnav
+			));
+		}
 	}
 	else
 	{
 		// Search results
 		$query = sed_tag_parse_query($qs);
-		$d = sed_import('d', 'G', 'INT');
-		if(empty($d))
-		{
-			$d = 0;
-		}
 		if(!empty($query))
 		{
 			$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
@@ -189,7 +210,7 @@ elseif($a == 'forums')
 			}
 			sed_sql_freeresult($sql);
 			$pagnav = sed_pagination(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+			list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 
 			$t->assign(array(
 			'TAGS_PAGEPREV' => $pagination_prev,
@@ -248,4 +269,5 @@ function sed_tag_parse_query($qs)
 	$query = implode(' OR ', $tokens1);
 	return $query;
 }
+
 ?>
