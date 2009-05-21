@@ -24,10 +24,10 @@
 <table class="cells" border="0" cellspacing="1" cellpadding="2">
 
 	<tr>
-		<td class="coltop" style="width: auto;" colspan="2">{PHP.skinlang.forumssections.Sections}</td>
-		<td class="coltop" style="width: 50px; text-align: center;">{PHP.skinlang.forumssections.Topics}</td>
-		<td class="coltop" style="width: 75px; text-align: center;">{PHP.skinlang.forumssections.Posts}</td>
-		<td class="coltop" style="width: 300px;">{PHP.skinlang.forumssections.Lastpost}</td>
+		<td class="coltop" style="width: auto;" colspan="2">{PHP.L.Sections}</td>
+		<td class="coltop" style="width: 50px; text-align: center;">{PHP.L.Topics}</td>
+		<td class="coltop" style="width: 75px; text-align: center;">{PHP.L.Posts}</td>
+		<td class="coltop" style="width: 300px;">{PHP.L.Lastpost}</td>
 	</tr>
 
 	<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION -->
@@ -56,11 +56,11 @@
 <!-- END: FORUMS_SECTIONS -->
 
 		<div style="height:27px;">
-			<a href="{FORUMS_TOPICS_NEWTOPICURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="" /></a>
+			<a href="{FORUMS_TOPICS_NEWTOPICURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newtopic.gif" alt="{PHP.skinlang.forumstopics.Newtopic}" /></a>
 
 			<!-- BEGIN: FORUMS_SECTIONS_POLLS -->
 
-			<a href="{FORUMS_TOPICS_NEWPOLLURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newpoll.gif" alt="" /></a>
+			<a href="{FORUMS_TOPICS_NEWPOLLURL}" style="float:left;"><img src="skins/{PHP.skin}/img/system/newpoll.gif" alt="{PHP.skinlang.forumstopics.Newpoll}" /></a>
 
 			<!-- END: FORUMS_SECTIONS_POLLS -->
 
