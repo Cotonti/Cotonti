@@ -3,7 +3,7 @@
  * English language file for tags
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.5
  * @author Trustmaster
  * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -18,6 +18,7 @@ $L['cfg_lim_pages']= array('Limit of tags in a cloud displayed for pages, 0 is u
 $L['cfg_lim_forums']= array('Limit of tags in a cloud displayed in forums, 0 is unlimited');
 $L['cfg_lim_index']= array('Limit of tags in a cloud displayed on index, 0 is unlimited');
 $L['cfg_more'] = array('Show \'All tags\' link in tag clouds');
+$L['cfg_perpage'] = array('Tags displayed per page in standalone cloud, 0 is all at once');
 $L['tags_comma_separated'] = 'comma separated';
 $L['tags_All'] = 'All tags';
 $L['tags_Keyword'] = 'Keyword';
