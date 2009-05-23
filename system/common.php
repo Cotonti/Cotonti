@@ -70,7 +70,7 @@ $redirect = sed_import('redirect','G','SLU');
 $url = parse_url($cfg['mainurl']);
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
 $sys['site_uri'] = $url['path'];
-$sys['domain'] = str_replace('www.', '', $url['host']);
+$sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if(empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
 if($cfg['cookiedomain'] == 'localhost') $cfg['cookiedomain'] = ''; // FireFox bug fix
 if($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
@@ -476,40 +476,22 @@ $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." 
 if (!$cfg['disablehitstats'])
 {
 	sed_stat_inc('totalpages');
-	$hits_today = sed_stat_get($sys['day']);
-
-	if ($hits_today>0)
-	{ sed_stat_inc($sys['day']); }
-	else
-	{ sed_stat_create($sys['day']); }
+	sed_stat_update($sys['day']);
 
 	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
 
-	if (@!strstr($sys['referer'], $cfg['mainurl'])
-	&& @!strstr($sys['referer'], $cfg['hostip'])
-	&& @!strstr($sys['referer'], str_replace('www.', '', $cfg['mainurl']))
-	&& !empty($sys['referer']))
+	if (!empty($sys['referer'])
+		&& @!stristr($sys['referer'], $cfg['mainurl'])
+		&& @!stristr($sys['referer'], $cfg['hostip'])
+		&& @!stristr($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl']))
+		&& @!stristr(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']))
 	{
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_referers WHERE ref_url = '".sed_sql_prep($sys['referer'])."'");
-		$count = sed_sql_result($sql,0,"COUNT(*)");
-
-		if ($count>0)
-		{
-			$sql = sed_sql_query("UPDATE $db_referers SET ref_count=ref_count+1,
-			ref_date='".$sys['now_offset']."'
-				WHERE ref_url='".sed_sql_prep($sys['referer'])."'");
-		}
-		else
-		{
-			$sql = sed_sql_query("INSERT INTO $db_referers
-			(ref_url,
-			ref_count,
-			ref_date)
+		sed_sql_query("INSERT INTO $db_referers
+				(ref_url, ref_count, ref_date)
 			VALUES
-			('".sed_sql_prep($sys['referer'])."',
-				'1',
-				".(int)$sys['now_offset'].")");
-		}
+				('".sed_sql_prep($sys['referer'])."', 1, {$sys['now_offset']})
+			ON DUPLICATE KEY UPDATE
+				ref_count=ref_count+1, ref_date={$sys['now_offset']}");
 	}
 }
 

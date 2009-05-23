@@ -3956,7 +3956,7 @@ function sed_stat_create($name)
 {
 	global $db_stats;
 
-	$sql = sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".sed_sql_prep($name)."', 1)");
+	sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".sed_sql_prep($name)."', 1)");
 }
 
 /**
@@ -3970,8 +3970,7 @@ function sed_stat_get($name)
 	global $db_stats;
 
 	$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='$name' LIMIT 1");
-	$result = (sed_sql_numrows($sql)>0) ? sed_sql_result($sql, 0, 'stat_value') : FALSE;
-	return($result);
+	return (sed_sql_numrows($sql) > 0) ? (int) sed_sql_result($sql, 0, 'stat_value') : FALSE;
 }
 
 /**
@@ -3983,8 +3982,21 @@ function sed_stat_inc($name)
 {
 	global $db_stats;
 
-	$sql = sed_sql_query("UPDATE $db_stats SET stat_value=stat_value+1 WHERE stat_name='$name'");
-	return;
+	sed_sql_query("UPDATE $db_stats SET stat_value=stat_value+1 WHERE stat_name='$name'");
+}
+
+/**
+ * Inserts new stat or increments value if it already exists
+ *
+ * @param string $name Parameter name
+ */
+function sed_stat_update($name)
+{
+	global $db_stats;
+
+	sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value)
+	VALUES ('".sed_sql_prep($name)."', 1)
+	ON DUPLICATE KEY UPDATE stat_value=stat_value+1");
 }
 
 /*
