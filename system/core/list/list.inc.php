@@ -210,6 +210,10 @@ $mtch = $sed_cat[$c]['path'].".";
 $mtchlen = mb_strlen($mtch);
 $mtchlvl = mb_substr_count($mtch,".");
 
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('list.rowcat.loop');
+/* ===== */
+
 while (list($i,$x) = each($sed_cat))
 {
 	if(mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $mm<$dc)
@@ -231,6 +235,13 @@ while (list($i,$x) = each($sed_cat))
 		"LIST_ROWCAT_COUNT" => $sub_count,
 		"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($kk)
 		));
+
+		/* === Hook - Part2 : Include === */
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
+
 		$t->parse("MAIN.LIST_ROWCAT");
 		$kk++;
 	}
