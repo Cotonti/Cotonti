@@ -122,7 +122,7 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-if (empty($redirect))
+if (empty($redirect) && !empty($sys['referer']))
  {
 	sed_redirect(sed_url('users', 'm=auth&redirect='. base64_encode($sys['referer']), '', true));
 	exit;
