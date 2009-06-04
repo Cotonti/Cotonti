@@ -620,6 +620,7 @@ $L['for_newtopic'] = 'New topic';
 $L['for_polltooshort'] = 'Poll options must be equal, or greater than 2';	// New in N-0.0.2
 $L['for_titletooshort'] = 'Topic title is too short or missing';	// New in N-0.0.2
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
+$L['for_mergetime'] = 'Update, %1$s later:'; // New in N-0.1.0
 
 /**
  * Lists

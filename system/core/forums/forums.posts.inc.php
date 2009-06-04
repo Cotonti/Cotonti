@@ -131,13 +131,15 @@ if ($a=='newpost')
 {
 	sed_shield_protect();
 
-	$sql = sed_sql_query("SELECT ft_state, ft_lastposterid FROM $db_forum_topics WHERE ft_id='$q'");
+	$sql = sed_sql_query("SELECT ft_state, ft_lastposterid, ft_updated FROM $db_forum_topics WHERE ft_id='$q'");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
 		if ($row['ft_state'])
 		{ sed_die(); }
 		$merge = (!$cfg['antibumpforums'] && $cfg['mergeforumposts'] && $row['ft_lastposterid']==$usr['id']) ? true : false;
+		if ($merge && $cfg['mergetimeout']>0 && ( ($sys['now_offset']-$row['ft_updated'])>($cfg['mergetimeout']*3600) ) )
+			{ $merge = false; }
 	}
 
 	$sql = sed_sql_query("SELECT fp_posterid, fp_posterip FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC LIMIT 1");
@@ -237,13 +239,15 @@ if ($a=='newpost')
 				$rhtml = '';
 			}
 
-			$sql = sed_sql_query("SELECT fp_id, fp_text, fp_html, fp_posterid, fp_updated, fp_updater FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
+			$sql = sed_sql_query("SELECT fp_id, fp_text, fp_html, fp_posterid, fp_creation, fp_updated, fp_updater FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
 			$row = sed_sql_fetcharray($sql);
 
 			$p = (int) $row['fp_id'];
+			
+			$updated = sprintf($L['for_mergetime'], sed_build_timegap($row['fp_creation'], $sys['now_offset']));
 
-			$newmsg = sed_sql_prep($row['fp_text'])."\n\n".sed_sql_prep($newmsg);
-			$newhtml = ($cfg['parser_cache']) ? sed_sql_prep($row['fp_html'])."<br /><br />".$rhtml : '';
+			$newmsg = sed_sql_prep($row['fp_text'])."\n\n[b]".$updated."[/b]\n\n".sed_sql_prep($newmsg);
+			$newhtml = ($cfg['parser_cache']) ? sed_sql_prep($row['fp_html'])."<br /><br /><b>".$updated."</b><br /><br />".$rhtml : '';
 
 			$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
 
