@@ -183,6 +183,7 @@ $L['Normal'] = 'No';
 $L['Notes'] = 'Notes';
 $L['No_items'] = 'No items found';	// New in N-0.0.1
 $L['Occupation'] = 'Occupation';
+$L['Ontop'] = 'Top';	// New in N-0.0.1
 $L['Open'] = 'Open';
 $L['Option'] = 'Option';
 $L['Options'] = 'Options';
