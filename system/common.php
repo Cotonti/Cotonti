@@ -322,7 +322,7 @@ if(!defined('SED_NO_ANTIXSS'))
 
 /* ======== Zone variables ======== */
 
-$z = mb_strtolower(sed_import('z','G','ALP',32));
+$z = (!empty($_G['z'])) ? mb_strtolower(sed_import('z','G','ALP',32)) : $z;
 $m = sed_import('m','G','ALP',24);
 $n = sed_import('n','G','ALP',24);
 $a = sed_import('a','G','ALP',24);
