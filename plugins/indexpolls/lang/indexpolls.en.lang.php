@@ -24,7 +24,7 @@ $L_idx['vote_opt'] = 'You did not pick an option';
  * Plugin Config
  */
 
-$L['cfg_maxpolls']= array('Number of polls displayed');
-$L['cfg_mode']=array('Poll display mode', '"Recent polls" &mdash; display last poll(s)<br />"Random polls" &mdash; display random poll(s)');
+$L['cfg_maxpolls'] = array('Number of polls displayed');
+$L['cfg_mode'] = array('Poll display mode', '&quot;Recent polls&quot; displays last poll(s)<br />&quot;Random polls&quot; displays random poll(s)');
 
 ?>

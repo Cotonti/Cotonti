@@ -15,8 +15,8 @@ defined('SED_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
-$L['cfg_autorefresh']= array('Включить автообновление предпросмотра');
-$L['cfg_chili']= array('Включить тэги Chili');
+$L['cfg_autorefresh'] = array('Включить автообновление предпросмотра');
+$L['cfg_chili'] = array('Включить тэги Chili');
 $L['cfg_skin'] = array('Скин редактора (plugins/markitup/skins/ИМЯ_СКИНА)');
 
 ?>

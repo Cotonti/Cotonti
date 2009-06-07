@@ -28,16 +28,16 @@ $L['tags_Tag_cloud_none'] = 'No tags';
  * Plugin Config
  */
 
-$L['cfg_forums']= array('Enable tags in forums');
-$L['cfg_limit']= array('Max. tags per item, 0 for unlimited');
-$L['cfg_lim_forums']= array('Tag limit for forums tag cloud, 0 for unlimited');
-$L['cfg_lim_index']= array('Tag limit for index (homepage) tag cloud, 0 for unlimited');
-$L['cfg_lim_pages']= array('Tag limit for pages tag cloud, 0 for unlimited');
-$L['cfg_more'] = array('Show "All tags" link in tag clouds');
-$L['cfg_order']= array('Cloud output order &mdash; alphabetical, descending frequency or random');
-$L['cfg_pages']= array('Enable tags in pages');
+$L['cfg_forums'] = array('Enable tags in forums');
+$L['cfg_limit'] = array('Max. tags per item, 0 for unlimited');
+$L['cfg_lim_forums'] = array('Tag limit for forums tag cloud, 0 for unlimited');
+$L['cfg_lim_index'] = array('Tag limit for index (homepage) tag cloud, 0 for unlimited');
+$L['cfg_lim_pages'] = array('Tag limit for pages tag cloud, 0 for unlimited');
+$L['cfg_more'] = array('Show &quot;All tags&quot; link in tag clouds');
+$L['cfg_order'] = array('Cloud output order &mdash; alphabetical, descending frequency or random');
+$L['cfg_pages'] = array('Enable tags in pages');
 $L['cfg_perpage'] = array('Tags displayed per page in standalone cloud, 0 is all at once');
-$L['cfg_title']= array('Capitalize first letters of keywords');
-$L['cfg_translit']= array('Transliterate tags in URLs');
+$L['cfg_title'] = array('Capitalize first letters of keywords');
+$L['cfg_translit'] = array('Transliterate tags in URLs');
 
 ?>

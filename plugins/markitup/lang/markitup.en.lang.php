@@ -15,8 +15,8 @@ defined('SED_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
-$L['cfg_autorefresh']= array('Enable preview auto-refresh');
-$L['cfg_chili']= array('Enable Chili tags');
+$L['cfg_autorefresh'] = array('Enable preview auto-refresh');
+$L['cfg_chili'] = array('Enable Chili tags');
 $L['cfg_skin'] = array('Skin (plugins/markitup/skins/SKIN_NAME)');
 
 ?>
