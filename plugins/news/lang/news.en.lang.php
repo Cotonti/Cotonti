@@ -15,7 +15,7 @@ defined('SED_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
-$L['cfg_category']= array('Parent category code');
-$L['cfg_maxpages']= array('Number of recent pages displayed');
+$L['cfg_category'] = array('Parent category code');
+$L['cfg_maxpages'] = array('Number of recent pages displayed');
 
 ?>

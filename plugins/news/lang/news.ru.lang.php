@@ -15,7 +15,7 @@ defined('SED_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
-$L['cfg_category']= array('Код родительской категории');
-$L['cfg_maxpages']= array('Количество отображаемых страниц');
+$L['cfg_category'] = array('Код родительской категории');
+$L['cfg_maxpages'] = array('Количество отображаемых страниц');
 
 ?>

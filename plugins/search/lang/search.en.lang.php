@@ -65,6 +65,6 @@ $L['plu_match'] = array('matches','match');
  * Plugin Config
  */
 
-$L['cfg_searchurl'] = array('Type of forum post link','"Normal" &mdash; topics with the post link<br />"Single" &mdash; just the post');
+$L['cfg_searchurl'] = array('Type of forum post link','&quot;Normal&quot; &mdash; topics with the post link<br />&quot;Single&quot; &mdash; just the post');
 
 ?>

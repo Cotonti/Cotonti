@@ -24,7 +24,7 @@ $L_idx['vote_opt'] = 'Вы забыли указать точку зрения';
  * Plugin Config
  */
 
-$L['cfg_maxpolls']= array('Количество отображаемых опросов');
-$L['cfg_mode']=array('Режим отображения опросов', '"Recent polls" &mdash; отображение последнего опроса (опросов)<br />"Random polls" &mdash; отображение случайного опроса (опросов)');
+$L['cfg_maxpolls'] = array('Количество отображаемых опросов');
+$L['cfg_mode'] = array('Режим отображения опросов', '&laquo;Recent polls&raquo; &mdash; отображение последнего опроса (опросов)<br />&laquo;Random polls&raquo; &mdash; отображение случайного опроса (опросов)');
 
 ?>
