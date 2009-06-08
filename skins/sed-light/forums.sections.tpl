@@ -9,8 +9,7 @@
 		<div id="subtitle">
 			<a href="plug.php?e=search&amp;frm=1">{PHP.skinlang.forumssections.Searchinforums}</a> |
 			<a href="plug.php?e=forumstats">{PHP.L.Statistics}</a> |
-			<a href="forums.php?n=markall">{PHP.skinlang.forumssections.Markasread}</a> |
-			{FORUMS_SECTIONS_GMTTIME}
+			<a href="forums.php?n=markall">{PHP.skinlang.forumssections.Markasread}</a>
 		</div>
 
 		<div class="tCap"></div>
