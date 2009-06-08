@@ -605,9 +605,9 @@ $extp = sed_getextplugins('forums.posts.loop');
 while ($row = sed_sql_fetcharray($sql))
 {
 	$row['fp_text'] = sed_cc($row['fp_text']);
-	$row['fp_created'] = @date($cfg['dateformat'], $row['fp_creation'] + $usr['timezone'] * 3600)." ".$usr['timetext'];
+	$row['fp_created'] = @date($cfg['dateformat'], $row['fp_creation'] + $usr['timezone'] * 3600);
 	$row['fp_updated_ago'] = sed_build_timegap($row['fp_updated'], $sys['now_offset']);
-	$row['fp_updated'] = @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600)." ".$usr['timetext'];
+	$row['fp_updated'] = @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600);
 	$row['user_text'] = ($fs_allowusertext) ? $row['user_text'] : '';
 	$lastposterid = $row['fp_posterid'];
 	$lastposterip = $row['fp_posterip'];
