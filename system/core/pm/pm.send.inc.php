@@ -1,5 +1,4 @@
 <?PHP
-
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -19,13 +18,13 @@ defined('SED_CODE') or die('Wrong URL');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pm', 'a');
 sed_block($usr['auth_write']);
 
-$id = sed_import('id','G','INT');
-$f = sed_import('f','G','ALP');
-$to = sed_import('to','G','TXT');
-$q = sed_import('q','G','INT');
-$d = sed_import('d','G','INT');
+$id = sed_import('id', 'G', 'INT');
+$f = sed_import('f', 'G', 'ALP');
+$to = sed_import('to', 'G', 'TXT');
+$q = sed_import('q', 'G', 'INT');
+$d = sed_import('d', 'G', 'INT');
 
-unset ($touser);
+unset($touser);
 $totalrecipients = 0;
 $touser_all = array();
 $touser_sql = array();
@@ -34,8 +33,11 @@ $touser_names = array();
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{	foreach($extp as $k => $pl)
+	{		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=2");
@@ -45,28 +47,32 @@ $totalsentbox = sed_sql_result($sql, 0, "COUNT(*)");
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state<2");
 $totalinbox = sed_sql_result($sql, 0, "COUNT(*)");
 
-if ($a=='send')
+if($a=='send')
 {
 	/* === Hook === */
 	$extp = sed_getextplugins('pm.send.send.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	if(is_array($extp))
+	{		foreach($extp as $k => $pl)
+		{			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
 	sed_shield_protect();
-	$newpmtitle = sed_import('newpmtitle','P','TXT');
-	$newpmtext = sed_import('newpmtext','P','HTM');
-	$newpmrecipient = sed_import('newpmrecipient','P','TXT');
-	$userid = sed_import('userid','P','INT');
-	$touser_src = explode (",", $newpmrecipient);
+	$newpmtitle = sed_import('newpmtitle', 'P', 'TXT');
+	$newpmtext = sed_import('newpmtext', 'P', 'HTM');
+	$newpmrecipient = sed_import('newpmrecipient', 'P', 'TXT');
+	$userid = sed_import('userid', 'P', 'INT');
+	$touser_src = explode(",", $newpmrecipient);
 	$touser_req = count($touser_src);
 	foreach($touser_src as $k => $i)
-	{ $touser_sql[] = "'".sed_sql_prep(trim(sed_import($i, 'D', 'TXT')))."'";	}
-	$touser_sql = implode (',', $touser_sql);
+	{		$touser_sql[] = "'".sed_sql_prep(trim(sed_import($i, 'D', 'TXT')))."'";
+	}
+	$touser_sql = implode(',', $touser_sql);
 	$touser_sql = '('.$touser_sql.')';
 	$sql = sed_sql_query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
 	$totalrecipients = sed_sql_numrows($sql);
-	while ($row = sed_sql_fetcharray($sql))
+	while($row = sed_sql_fetcharray($sql))
 	{
 		$touser_ids[] = $row['user_id'];
 		$row['user_name'] = sed_cc($row['user_name']);
@@ -74,16 +80,16 @@ if ($a=='send')
 		$touser_usrlnk[] .= ($cfg['parsebbcodecom']) ? "[user=".$row['user_id']."]".$row['user_name']."[/user]" : $row['user_name'];
 	}
 
-	$touser = ($totalrecipients>0) ? implode (",", $touser_names) : '';
-	$error_string .= (mb_strlen($newpmtitle)<2) ? $L['pm_titletooshort']."<br />" : '';
-	$error_string .= (mb_strlen($newpmtext)<2) ? $L['pm_bodytooshort']."<br />" : '';
-	$error_string .= (mb_strlen($newpmtext)>$cfg['pm_maxsize']) ? $L['pm_bodytoolong']."<br />" : '';
-	$error_string .= ($totalrecipients<$touser_req ) ? $L['pm_wrongname']."<br />" : '';
-	$error_string .= ($totalrecipients>10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
+	$touser = ($totalrecipients>0) ? implode(",", $touser_names) : '';
+	$error_string .= (mb_strlen($newpmtitle) < 2) ? $L['pm_titletooshort']."<br />" : '';
+	$error_string .= (mb_strlen($newpmtext) < 2) ? $L['pm_bodytooshort']."<br />" : '';
+	$error_string .= (mb_strlen($newpmtext) > $cfg['pm_maxsize']) ? $L['pm_bodytoolong']."<br />" : '';
+	$error_string .= ($totalrecipients < $touser_req ) ? $L['pm_wrongname']."<br />" : '';
+	$error_string .= ($totalrecipients > 10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
 
-	if (empty($error_string))
+	if(empty($error_string))
 	{
-		$newpmtext .= ($totalrecipients>1) ? "\n\n".sprintf($L['pm_multiplerecipients'], $totalrecipients-1)."\n".implode(', ', $touser_usrlnk)  : '';
+		$newpmtext .= ($totalrecipients>1) ? "\n\n".sprintf($L['pm_multiplerecipients'], $totalrecipients-1)."\n".implode(', ', $touser_usrlnk) : '';
 
 		if($cfg['parser_cache'])
 		{
@@ -91,7 +97,7 @@ if ($a=='send')
 		}
 		else
 		{
-				$newpmhtml = '';
+			$newpmhtml = '';
 		}
 
 		foreach($touser_ids as $k => $userid)
@@ -117,19 +123,15 @@ if ($a=='send')
 
 			$sql = sed_sql_query("UPDATE $db_users SET user_newpm=1 WHERE user_id='".$userid."'");
 
-			if ($cfg['pm_allownotifications'])
+			if($cfg['pm_allownotifications'])
 			{
-				$sql = sed_sql_query("SELECT user_email, user_name
+				$sql = sed_sql_query("SELECT user_email, user_name, user_lang
 				FROM $db_users
 				WHERE user_id='$userid' AND user_pmnotify=1 AND user_maingrp>3");
 
-				if ($row = sed_sql_fetcharray($sql))
+				if($row = sed_sql_fetcharray($sql))
 				{
-					$rusername = sed_cc($row['user_name']);
-					$remail = $row['user_email'];
-					$rsubject = $cfg['maintitle']." - ".$L['pm_notifytitle'];
-					$rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl'].'/'.sed_url('pm', '', '', true));
-					sed_mail($remail, $rsubject, $rbody);
+					send_translated_mail($row['user_lang'], $row['user_email'], sed_cc($row['user_name']));
 					sed_stat_inc('totalmailpmnot');
 				}
 			}
@@ -137,8 +139,11 @@ if ($a=='send')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('pm.send.send.done');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{			foreach($extp as $k => $pl)
+			{				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 
 		sed_stat_inc('totalpms');
@@ -147,12 +152,12 @@ if ($a=='send')
 		exit;
 	}
 }
-elseif (!empty($to))
+elseif(!empty($to))
 {
-	if (mb_substr(mb_strtolower($to),0,1)=='g' && $usr['maingrp']==5)
+	if(mb_substr(mb_strtolower($to), 0, 1) == 'g' && $usr['maingrp'] == 5)
 	{
 		$group = sed_import(mb_substr($to, 1, 8), 'D', 'INT');
-		if ($group>1)
+		if($group > 1)
 		{
 			$sql = sed_sql_query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp='$group' ORDER BY user_name ASC");
 			$totalrecipients = sed_sql_numrows($sql);
@@ -160,42 +165,44 @@ elseif (!empty($to))
 	}
 	else
 	{
-		$touser_src = explode ('-', $to);
+		$touser_src = explode('-', $to);
 		$touser_req = count($touser_src);
 
 		foreach($touser_src as $k => $i)
 		{
 			$userid = sed_import($i, 'D', 'INT');
-			if ($userid > 0)
-			{ $touser_sql[] = "'".$userid."'"; }
+			if($userid > 0)
+			{
+				$touser_sql[] = "'".$userid."'";
+			}
 		}
-		if (count($touser_sql)>0)
+		if(count($touser_sql) > 0)
 		{
-			$touser_sql = implode (',', $touser_sql);
+			$touser_sql = implode(',', $touser_sql);
 			$touser_sql = '('.$touser_sql.')';
 			$sql = sed_sql_query("SELECT user_id, user_name FROM $db_users WHERE user_id IN $touser_sql");
 			$totalrecipients = sed_sql_numrows($sql);
 		}
 	}
 
-	if ($totalrecipients>0)
+	if($totalrecipients>0)
 	{
-		while ($row = sed_sql_fetcharray($sql))
+		while($row = sed_sql_fetcharray($sql))
 		{
 			$touser_ids[] = $row['user_id'];
 			$touser_names[] = sed_cc($row['user_name']);
 		}
-		$touser = implode (", ", $touser_names);
+		$touser = implode(", ", $touser_names);
 		$error_string .= ($totalrecipients<$touser_req) ? $L['pm_wrongname']."<br />" : '';
 		$error_string .= ($totalrecipients>10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
 	}
 }
 
-if (!empty($q) && empty($newpmtext))
+if(!empty($q) && empty($newpmtext))
 {
 	$sql = sed_sql_query("SELECT pm_date,pm_title,pm_text FROM $db_pm WHERE pm_id='$q' AND pm_touserid='".$usr['id']."' AND pm_state<3 ");
 
-	if ($row=sed_sql_fetcharray($sql))
+	if($row=sed_sql_fetcharray($sql))
 	{
 		$pm_date = @date($cfg['dateformat'], $row['pm_date']).' GMT';
 		$newpmtext = "\n\n\n-------- ".$L['Originalmessage']." --------\n".$L['Date']." : ".$pm_date."\n".$L['Title']." : ".$row['pm_title']."\n".$row['pm_text']."\n-------------\n";
@@ -214,22 +221,25 @@ $out['subtitle'] = sed_title('title_pm_send', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{	foreach($extp as $k => $pl)
+	{		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('pm.send'));
 
-if (!empty($error_string))
+if(!empty($error_string))
 {
-	$t->assign("PMSEND_ERROR_BODY",$error_string);
-	$t->parse("MAIN.PMSEND_ERROR");
+	$t -> assign("PMSEND_ERROR_BODY",$error_string);
+	$t -> parse("MAIN.PMSEND_ERROR");
 }
 
 $bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
-$t->assign(array(
+$t -> assign(array(
 	"PMSEND_TITLE" => $bhome . "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
 	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
 	"PMSEND_SENDNEWPM" => $pm_sendlink,
@@ -242,17 +252,54 @@ $t->assign(array(
 	"PMSEND_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$pfs,
 	"PMSEND_FORM_MYPFS" => $pfs,
 	"PMSEND_FORM_TOUSER" => "<textarea name=\"newpmrecipient\" rows=\"3\" cols=\"56\">".$touser."</textarea>"
-	));
+));
 
-	/* === Hook === */
-	$extp = sed_getextplugins('pm.send.tags');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-	/* ===== */
+/* === Hook === */
+$extp = sed_getextplugins('pm.send.tags');
+if(is_array($extp))
+{	foreach($extp as $k => $pl)
+	{		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
+/* ===== */
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
+$t->parse("MAIN");
+$t->out("MAIN");
 
-	require_once $cfg['system_dir'] . '/footer.php';
+require_once $cfg['system_dir'] . '/footer.php';
 
-	?>
+/* ======== Language PM for recipient ======== */
+function send_translated_mail($transtolang, $remail, $rusername)
+{
+	global $cfg, $usr;
+
+	$dlang = $cfg['system_dir'].'/lang/en/main.lang.php';
+	$mlang = $cfg['system_dir'].'/lang/'.$cfg['defaultlang'].'/main.lang.php';
+	$ulang = $cfg['system_dir'].'/lang/'.$transtolang.'/main.lang.php';
+
+	if(file_exists($dlang))
+	{
+		require($dlang);
+		$dlangne = 1;
+	}
+	if(file_exists($ulang) && $transtolang != 'en')
+	{
+		require($ulang);
+	}
+	elseif(file_exists($mlang) && $transtolang != $cfg['defaultlang'] && $transtolang != 'en')
+	{
+		require($mlang);
+		$transtolang = $cfg['defaultlang'];
+	}
+	elseif(!$dlangne)
+	{
+		sed_diefatal('Main language file not found.');
+	}
+
+	$rsubject = $cfg['maintitle']." - ".$L['pm_notifytitle'];
+	$rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl'].'/'.sed_url('pm', '', '', true));
+
+	sed_mail($remail, $rsubject, $rbody);
+}
+
+?>
