@@ -33,6 +33,8 @@ if (is_array($extp))
 sed_blockguests();
 sed_check_xg();
 
+if (!$cfg['disable_polls']) require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+
 $sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_sectionid='$s' LIMIT 1");
 
 if ($row = sed_sql_fetcharray($sql))
@@ -163,12 +165,9 @@ if ($row = sed_sql_fetcharray($sql))
 	$fp_idp = $row['fp_id'];
 	if ($fp_idp==$p)
 	{
-		 if($fp_idp==$p)
-		 {
-		 	$edittopictitle = "<input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"255\" />";
-		 	$topicdescription ="<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"255\" />";
-		 	$is_first_post = true;
-		 }
+	 	$edittopictitle = "<input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"255\" />";
+	 	$topicdescription ="<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"255\" />";
+	 	$is_first_post = true;
 	}
 }
 
@@ -212,6 +211,11 @@ $t->assign(array(
 	"FORUMS_EDITPOST_TOPICDESCRIPTION" => $topicdescription,
 ));
 	$t->parse("MAIN.FORUMS_EDITPOST_FIRSTPOST");
+}
+
+if ($is_first_post && $usr['isadmin'] && sed_poll_edit_form($q, $t, 'MAIN.POLL', 'forum'))
+{
+    	$t->parse("MAIN.POLL");
 }
 
 $t->assign(array(
