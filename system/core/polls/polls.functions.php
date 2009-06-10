@@ -12,7 +12,7 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-function sed_poll_edit_form($id, $t, $block='')
+function sed_poll_edit_form($id, $t, $block='', $type='')
 {
     global $cfg, $L, $db_polls, $db_polls_options;
     global $error_string;
@@ -46,19 +46,33 @@ function sed_poll_edit_form($id, $t, $block='')
     }
     elseif ($id!='new')
     {
-        $sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id' ");
-        $sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
-        $row = sed_sql_fetcharray($sql);
-        $poll_text=sed_cc($row["poll_text"]);
-        $poll_multiple=($row["poll_multiple"]) ? "checked='checked'":"";
-        $poll_state=($row["poll_state"]) ? "checked='checked'":"";
-        $date=date($cfg['dateformat'], $row["poll_creationdate"])." GMT";
-        $counter=0;
-        while ($row1 = sed_sql_fetcharray($sql1))
+        if(!$type)
         {
-            $counter++;
-            $poll_options_x .=sprintf($mask_edit_form, 'block', $row1['po_id'], sed_cc($row1['po_text']));
+            $sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id' ");
+        }
+        else
+        {
+            $sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+        }
 
+        if ($row = sed_sql_fetcharray($sql))
+        {
+            $id=$row["poll_id"];
+            $sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
+            $poll_text=sed_cc($row["poll_text"]);
+            $poll_multiple=($row["poll_multiple"]) ? "checked='checked'":"";
+            $poll_state=($row["poll_state"]) ? "checked='checked'":"";
+            $date=date($cfg['dateformat'], $row["poll_creationdate"])." GMT";
+            $counter=0;
+            while ($row1 = sed_sql_fetcharray($sql1))
+            {
+                $counter++;
+                $poll_options_x .=sprintf($mask_edit_form, 'block', $row1['po_id'], sed_cc($row1['po_text']));
+            }
+        }
+        else
+        {
+            return false;
         }
     }
     else
@@ -106,7 +120,7 @@ function removeAns(object)
 }
 
 function addAns(object) {
-    
+
     if (ansCount<ansMax)
     {
     var objectparent = $(object).parent();
@@ -153,6 +167,7 @@ HTM;
         "EDIT_POLL_MULTIPLE" => $poll_multiple
         ));
 
+    return true;
 }
 
 /* ------------------ */
@@ -291,8 +306,6 @@ function sed_poll_vote()
                 }
             }
         }
-        else
-        { $error_string .= $L['wrongURL']; }
     }
 }
 
@@ -310,8 +323,7 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
         $sql = sed_sql_query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
         if (!$row = sed_sql_fetcharray($sql))
         {
-            $error_string .= $L['wrongURL'];
-            return($error_string);
+            return false;
         }
     }
     else
@@ -343,7 +355,10 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
     $totalvotes = sed_sql_result($sql2,0,"SUM(po_count)");
 
     $sql1 = sed_sql_query("SELECT po_id,po_text,po_count FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
-    $error_string .= (sed_sql_numrows($sql1)<1) ? $L['wrongURL'] : '';
+    if (sed_sql_numrows($sql1)<1)
+    {
+        return false;
+    }
 
     $skininput=$skin;
 
@@ -478,6 +493,20 @@ function sed_poll_reset($id, $type='')
         $sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid='$id'");
         $sql = sed_sql_query("UPDATE $db_polls_options SET po_count=0 WHERE po_pollid='$id'");
     }
+}
+
+function sed_poll_exists($id, $type='')
+{
+    global $db_polls;
+    if(!$type)
+    {
+        $sql = sed_sql_query("SELECT COUNT(*)  FROM $db_polls WHERE poll_id='$id' ");
+    }
+    else
+    {
+        $sql = sed_sql_query("SELECT COUNT(*)  FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+    }
+    return (sed_sql_result($sql, 0, "COUNT(*)"));
 }
 
 ?>
