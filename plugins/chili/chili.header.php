@@ -36,6 +36,9 @@ ChiliBook.lineNumbers = true;
 ChiliBook.automaticSelector = ".highlight PRE";
 ChiliBook.Toolbar.Clipboard.Swf = "{$cfg['plugins_dir']}/chili/skins/jquery.chili.toolbar.swf";
 ChiliBook.Toolbar.Utils.PopUpTarget = "jd73kjd9";
+delete ChiliBook.Toolbar.Command.CopyToClipboard;
+delete ChiliBook.Toolbar.Command.PrintSource;
+delete ChiliBook.Toolbar.Command.About;
 //]]>
 </script>
 HTM;
