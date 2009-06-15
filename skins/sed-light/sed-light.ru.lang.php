@@ -22,8 +22,8 @@ $skinlang['comments']['Postedby'] = 'Разместил';
  * forums.newtopic.tpl
  */
 
-$skinlang['forumsnewtopic']['privatetopic1'] = 'Создать &laquo;частную&raquo; тему';
-$skinlang['forumsnewtopic']['privatetopic2'] = 'Просмотр и ответы в теме будут доступны только модераторам форумов и вам как автору темы';
+$skinlang['forumsnewtopic']['privatetopic1'] = '&laquo;Частная&raquo; тема';
+$skinlang['forumsnewtopic']['privatetopic2'] = 'просмотр и ответы в теме будут доступны только модераторам форумов и вам как автору темы';
 
 /**
  * forums.posts.tpl
@@ -81,8 +81,8 @@ $skinlang['index']['Online'] = 'Онлайн';
  * list.tpl
  */
 
-$skinlang['list']['linesperpage'] = 'записей на страницу';
-$skinlang['list']['linesinthissection'] = 'записей в разделе';
+$skinlang['list']['linesperpage'] = 'Записей на страницу';
+$skinlang['list']['linesinthissection'] = 'Записей в разделе';
 $skinlang['list']['hits'] = 'просмотров';
 
 /**
@@ -161,8 +161,8 @@ $skinlang['ratings']['Rate'] = 'Оценка';	// Out?
  * users.tpl
  */
 
-$skinlang['users']['usersperpage'] = 'пользователей на страницу';
-$skinlang['users']['usersinthissection'] = 'всего пользователей';
+$skinlang['users']['usersperpage'] = 'Пользователей на страницу';
+$skinlang['users']['usersinthissection'] = 'Всего пользователей';
 
 /**
  * users.auth.tpl
