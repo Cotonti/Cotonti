@@ -81,8 +81,8 @@ $skinlang['index']['Online'] = 'Online';
  * list.tpl
  */
 
-$skinlang['list']['linesperpage'] = 'lines per page';
-$skinlang['list']['linesinthissection'] = 'lines in this section';
+$skinlang['list']['linesperpage'] = 'Lines per page';
+$skinlang['list']['linesinthissection'] = 'Lines in this section';
 $skinlang['list']['hits'] = 'hits';
 
 /**
@@ -161,8 +161,8 @@ $skinlang['ratings']['Rate'] = 'Rate';	// Out?
  * users.tpl
  */
 
-$skinlang['users']['usersperpage'] = 'users per page';
-$skinlang['users']['usersinthissection'] = 'users in this section';
+$skinlang['users']['usersperpage'] = 'Users per page';
+$skinlang['users']['usersinthissection'] = 'Users in this section';
 
 /**
  * users.auth.tpl
