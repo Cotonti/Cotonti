@@ -415,10 +415,6 @@ function sed_bbcode_load()
 function sed_bbcode_parse($text, $post = false)
 {
 	global $cfg, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
-	if($cfg['parser_custom'])
-	{
-		return $text;
-	}
 
 	// BB auto-close
 	$bbc = array();
