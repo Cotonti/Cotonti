@@ -159,8 +159,8 @@ if ($a=='update')
 
 			if ($row['page_cat']!=$rpagecat && ($row['page_state'] == 0 || $row['page_state'] == 2))
 			{
-				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
-				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$rpagecat."' ");
+				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".sed_sql_prep($row['page_cat'])."' ");
+				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
 			}
 
 			$ssql = "UPDATE $db_pages SET
