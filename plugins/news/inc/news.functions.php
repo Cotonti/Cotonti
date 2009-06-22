@@ -11,7 +11,7 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS", $d=0, $limit=false, $order=false, $way=false)
+function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=false, $d=0, $order=false, $way=false)
 {
     global $sed_cat, $db_pages, $db_users, $db_extra_fields, $sys, $cfg, $L, $t;
     $jj = 0;
