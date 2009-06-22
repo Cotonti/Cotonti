@@ -35,7 +35,7 @@ if(empty($c))
 }
 else
 {
-    $checkin = strpos($sed_cat[$c]['path'], $sed_cat[$cfg['plugin']['news']['category']]['path']);
+    $checkin = isset($sed_cat[$c]);
     $c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
 }
 
@@ -45,7 +45,7 @@ if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 {
     $limit = $cfg['plugin']['news']['maxpages'];
 
-    sed_get_news($c, "news", "INDEX_NEWS", $d, $limit);
+    sed_get_news($c, "news", "INDEX_NEWS", $limit, $d);
 
     if ($cfg['plugin']['news']['othercat'])
     {
@@ -54,12 +54,12 @@ if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
         foreach($cats as $k => $v)
         {
             $v=trim($v);
-            $v = explode('|', $v);
-            $checkin = isset($sed_cat[$v[0]]);
-            if ($v[0]!=$cfg['plugin']['news']['category'] && $checkin);
+            list($v, $lim) = explode('|', $v);
+            $checkin = isset($sed_cat[$v]);
+            if ($v!=$cfg['plugin']['news']['category'] && $checkin)
             {
-                $lim = (!empty($v['1'])) ? $v['1'] : $limit;
-                sed_get_news($v[0], "news.".$v[0], "INDEX_NEWS.".strtoupper($v[0]), $lim);
+                $lim = (!empty($lim)) ? $lim : $limit;
+                sed_get_news($v, "news.".$v, "INDEX_NEWS_".strtoupper($v), $lim);
             }
         }
     }
