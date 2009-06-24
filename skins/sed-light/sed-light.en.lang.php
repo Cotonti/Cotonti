@@ -101,9 +101,9 @@ $skinlang['page']['times'] = 'times';	// New in N-0.0.1
 
 $skinlang['pageadd']['File'] = 'File download?';
 $skinlang['pageadd']['Filehint'] = '(Set &quot;Yes&quot; to enable the download module at bottom of the page, and fill up the 2 fields below)';
-$skinlang['pageadd']['URLhint'] = '(If File download = &quot;Yes&quot;, else leave empty)';
+$skinlang['pageadd']['URLhint'] = '(If File download = &quot;Yes&quot;)';
 $skinlang['pageadd']['Filesize'] = 'Filesize (KB)';
-$skinlang['pageadd']['Filesizehint'] = '(If File download = &quot;Yes&quot;, else leave empty)';
+$skinlang['pageadd']['Filesizehint'] = '(If File download = &quot;Yes&quot;)';
 $skinlang['pageadd']['Formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section.<br />Check all fields carefully, you won\'t be able to change it later.<br />If you really need to change something, ask a moderator or an administrator.';
 
 /**
@@ -114,9 +114,9 @@ $skinlang['pageedit']['File'] = 'File download?';
 $skinlang['pageedit']['Filehint'] = '(Set &quot;Yes&quot; to enable the download module at bottom of the page, and fill up the 2 fields below)';
 $skinlang['pageedit']['URLhint'] = '(If File download = &quot;Yes&quot;)';
 $skinlang['pageedit']['Filesize'] = 'Filesize (KB)';
-$skinlang['pageedit']['Filesizehint'] = '(If File download=Yes)';
+$skinlang['pageedit']['Filesizehint'] = '(If File download = &quot;Yes&quot;)';
 $skinlang['pageedit']['Filehitcount'] = 'File hit count';
-$skinlang['pageedit']['Filehitcounthint'] = '(If File download=Yes)';
+$skinlang['pageedit']['Filehitcounthint'] = '(If File download = &quot;Yes&quot;)';
 $skinlang['pageedit']['Pageid'] = 'Page ID';
 $skinlang['pageedit']['Deletethispage'] = '!Delete this page!';
 
@@ -213,9 +213,9 @@ $skinlang['usersprofile']['Hidetheemail'] = 'Always hide the e-mail';
 $skinlang['usersprofile']['PMnotify'] = 'PM notify';
 $skinlang['usersprofile']['PMnotifyhint'] = '(Notify by e-mail when there\'s a new private message)';
 $skinlang['usersprofile']['Newpassword'] = 'Set a new password';
-$skinlang['usersprofile']['Newpasswordhint1'] = '(Leave empty to keep<br />the current password)';	// New in N-0.0.2
-$skinlang['usersprofile']['Newpasswordhint2'] = '(To be sure, enter below your new password twice)';	// New in N-0.0.2
-$skinlang['usersprofile']['Oldpasswordhint'] = 'To set a new password enter your current one';
+$skinlang['usersprofile']['Newpasswordhint1'] = '(Leave empty to keep the current password)';	// New in N-0.0.2
+$skinlang['usersprofile']['Newpasswordhint2'] = '(Enter your new password twice)';	// New in N-0.0.2
+$skinlang['usersprofile']['Oldpasswordhint'] = '(To set a new password enter your current one)';
 
 /**
  * users.register.tpl

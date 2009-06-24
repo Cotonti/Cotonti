@@ -267,6 +267,8 @@ $L['Statistics'] = 'Statistics';
 $L['StatsLogs'] = 'Statistics & logs';
 $L['Status'] = 'Status';
 $L['Structure'] = 'Structure';
+$L['Subforum'] = 'Subforum';	// New in N-0.1.0
+$L['Subforums'] = 'Subforums';	// New in N-0.1.0
 $L['Subject'] = 'Subject';	// New in N-0.1.0
 $L['Submit'] = 'Submit';
 $L['System'] = 'System';
@@ -603,7 +605,7 @@ To change your recent e-mail please use this activation link:
  * Comments
  */
 
-$L['com_closed'] = 'Adding comments has been disabled for this item'; //	New in N-0.1.0
+$L['com_closed'] = 'Adding comments has been disabled for this item';	// New in N-0.1.0
 $L['com_commentadded'] = 'Done, comment added';
 $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commenttooshort'] = 'The comment is too short or missing';
@@ -749,7 +751,7 @@ $L['pro_avatarschoose'] = 'Click an image below to set it as your own avatar';
 $L['pro_avatarspreset'] = '...or click here to display a gallery of pre-loaded avatars';
 $L['pro_avatarsupload'] = 'Upload an avatar';
 $L['pro_avataruploadfailed'] = 'The upload failed, delete the old avatar before to free the slot!';
-$L['pro_emailandpass'] = 'You can not change both e-mail and password at a time'; // 0.0.5
+$L['pro_emailandpass'] = 'You can not change both e-mail and password at a time'; // New in N-0.0.5
 $L['pro_passdiffer'] = 'The 2 password fields do not match';
 $L['pro_passtoshort'] = 'The password must be at least 4 chars long and must consist of alphanumerical characters and underscore only.';
 $L['pro_photonotvalid'] = 'This photo is not a valid %1$s image.';	// New in N-0.0.2
