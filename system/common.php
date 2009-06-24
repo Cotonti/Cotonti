@@ -72,12 +72,12 @@ $sys['secure'] = $url['scheme'] == 'https' ? true : false;
 $sys['site_uri'] = $url['path'];
 $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if(empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
-if($cfg['cookiedomain'] == 'localhost') $cfg['cookiedomain'] = ''; // FireFox bug fix
 if($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('SED_SITE_URI', $sys['site_uri']);
 if(empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
-$sys['abs_url'] = $url['scheme'] . '://' . $_SERVER['HTTP_HOST'] . $sys['site_uri'];
+$sys['host'] = strstr($_SERVER['HTTP_HOST'], $sys['domain']) ? $_SERVER['HTTP_HOST'] : $sys['domain'];
+$sys['abs_url'] = $url['scheme'] . '://' . $sys['host']. $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
 // Current url for templates
 $out['uri'] = str_replace('&', '&amp;', $_SERVER['REQUEST_URI']);
