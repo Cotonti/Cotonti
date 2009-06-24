@@ -163,6 +163,7 @@ table.flat { width:100%; margin:0; padding:0; border-collapse:collapse; }
 table.flat td  { padding:0; margin:0}
 table.main { width:100%; margin:0; padding:4px; }
 table.main td  { padding:4px; }
+table.main td img	{ margin-right:6px; }
 table.cells { width:100%; border-spacing: 1px; margin:0; padding:0;}
 table.cells td { background-color:#e8edf1; padding:2px; }
 table.list { width:100%; margin:0; padding:5px; }

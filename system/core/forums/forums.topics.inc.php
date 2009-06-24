@@ -439,7 +439,7 @@ $t->assign(array(
 			$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
 			$fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
 
-			$fsn['fs_desc'] = (!empty($fsn['fs_desc'])) ? "<br />".$fsn['fs_desc'] : "";
+			$fsn['fs_desc'] = (!empty($fsn['fs_desc'])) ? $fsn['fs_desc'] : "";
 			$fsn['lastpost'] = (!empty($fsn['fs_postcount_all'])) ? $fsn['lastpost'] : $L['No_items'];
 
 			$t->assign(array(
