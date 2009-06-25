@@ -3939,8 +3939,24 @@ function sed_smilies($res)
  */
 function sed_sourcekey()
 {
-	global $usr;
-	return $usr['id'] > 0 ? $_SESSION['sourcekey'] : 'GUEST';
+	global $usr, $sys;
+	if ($usr['id'] > 0)
+	{
+		if (empty($sys['sourcekey']))
+		{
+			// Normal per-session key
+			return $_SESSION['sourcekey'];
+		}
+		else
+		{
+			// Use a key from previous session, or some form data will be lost
+			return $sys['sourcekey'];
+		}
+	}
+	else
+	{
+		return 'GUEST';
+	}
 }
 
 /*

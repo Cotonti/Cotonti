@@ -209,7 +209,6 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				&& ($cfg['ipcheck']==FALSE || $row['user_lastip'] == $usr['ip']))
 			{
 				$usr['id'] = (int) $row['user_id'];
-				$usr['sessionid'] = session_id();
 				$usr['name'] = $row['user_name'];
 				$usr['maingrp'] = $row['user_maingrp'];
 				$usr['lastvisit'] = $row['user_lastvisit'];
@@ -228,7 +227,9 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$sys['comingback']= TRUE;
 					$usr['lastvisit'] = $usr['lastlog'];
 					$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
+					$sys['sourcekey'] = $row['user_sid'];
 				}
+
 
 				if (!$cfg['authcache'] || empty($row['user_auth']))
 				{
@@ -254,16 +255,18 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$update_hashsalt = "user_hashsalt = '$hashsalt',";
 				}
 
+				if(empty($_SESSION['sourcekey']))
+				{
+					$_SESSION['sourcekey'] = mb_strtoupper(sed_unique(8));
+				}
+				$usr['sessionid'] = $_SESSION['sourcekey'];
+
 				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', $update_hashsalt user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
 
 				unset($u);
 				unset($passhash);
 				unset($update_hashsalt);
 
-				if(empty($_SESSION['sourcekey']))
-				{
-					$_SESSION['sourcekey'] = mb_strtoupper(sed_unique(8));
-				}
 			}
 		}
 	}
