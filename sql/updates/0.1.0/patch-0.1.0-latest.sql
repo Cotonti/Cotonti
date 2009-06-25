@@ -30,3 +30,12 @@ ALTER TABLE sed_pm CHANGE pm_title pm_title VARCHAR(255) CHARACTER SET utf8 COLL
 
 /* r733 Post merge timeout */
 INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'forums', '12', 'mergetimeout', 2, '0');
+
+/* r745 News plugin updates */
+INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `config_name` , `config_type` , `config_value` , `config_default` , `config_text` ) VALUES ('plug', 'news', '2', 'othetcat', '1', '', '', 'Extra category codes, comma separated');
+
+UPDATE `sed_config` SET `config_order` = '3' WHERE `config_owner` = 'plug' AND  `config_cat` = 'news' AND `config_name` = 'maxpages' LIMIT 1 ;
+
+/* r751 MEDIUMTEXT page text expansion */
+ALTER TABLE `sed_pages` MODIFY `page_text` MEDIUMTEXT collate utf8_unicode_ci;
+ALTER TABLE `sed_pages` MODIFY `page_html` MEDIUMTEXT collate utf8_unicode_ci;
