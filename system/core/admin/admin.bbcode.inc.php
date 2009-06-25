@@ -70,10 +70,7 @@ elseif($a == 'del' && $id > 0)
 }
 elseif($a == 'clearcache')
 {
-	$sqlpag = sed_sql_query("UPDATE $db_pages SET page_html = ''");
-	$sqlfrm = sed_sql_query("UPDATE $db_forum_posts SET fp_html = ''");
-	$sqlpmg = sed_sql_query("UPDATE $db_pm SET pm_html = ''");
-	$adminwarnings = ($sqlpag && $sqlfrm && $sqlpmg) ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
+	$adminwarnings = sed_cache_clearhtml() ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
 }
 
 $is_adminwarnings = isset($adminwarnings);
