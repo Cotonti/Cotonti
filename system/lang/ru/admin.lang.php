@@ -15,23 +15,23 @@ defined('SED_CODE') or die('Wrong URL.');
  * Config Section
  */
 
-$L['core_comments'] = $L['Comments'];
-$L['core_forums'] = $L['Forums'];
-$L['core_lang'] = $L['Language'];
+$L['core_comments'] = &$L['Comments'];
+$L['core_forums'] = &$L['Forums'];
+$L['core_lang'] = &$L['Language'];
 $L['core_main'] = 'Настройки сайта';
-$L['core_menus'] = $L['Menus'];
-$L['core_page'] = $L['Pages'];
-$L['core_parser'] = $L['Parser'];
-$L['core_pfs'] = $L['PFS'];
-$L['core_plug'] = $L['Plugins'];
-$L['core_pm'] = $L['Private_Messages'];
-$L['core_polls'] = $L['Polls'];
-$L['core_ratings'] = $L['Ratings'];
-$L['core_skin'] = $L['Skins'];
+$L['core_menus'] = &$L['Menus'];
+$L['core_page'] = &$L['Pages'];
+$L['core_parser'] = &$L['Parser'];
+$L['core_pfs'] = &$L['PFS'];
+$L['core_plug'] = &$L['Plugins'];
+$L['core_pm'] = &$L['Private_Messages'];
+$L['core_polls'] = &$L['Polls'];
+$L['core_ratings'] = &$L['Ratings'];
+$L['core_skin'] = &$L['Skins'];
 $L['core_time'] = 'Время и дата';
 $L['core_title'] = 'Заголовки (тэг &lt;title&gt;)';
-$L['core_trash'] = $L['Trashcan'];
-$L['core_users'] = $L['Users'];
+$L['core_trash'] = &$L['Trashcan'];
+$L['core_users'] = &$L['Users'];
 
 /**
  * Config Section
