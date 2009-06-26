@@ -37,6 +37,11 @@ $cfg['defaulttheme'] = 'sed-light';	// Default theme, only name, not like skinna
 $cfg['defaultlang'] = 'en';		// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
+// ========================
+// Default built-in time zone settings
+// See http://php.net/manual/en/timezones.php
+// ========================
+date_default_timezone_set('GMT');
 
 // ========================
 // More settings

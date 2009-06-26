@@ -439,7 +439,7 @@ switch ($a)
 		$res = sed_sql_result($sqltmp,0,"COUNT(*)");
 
 		$error_string .= ($rmailpass!=$urr['user_password']) ? $L['pro_wrongpass']."<br />" : '';
-		$error_string .= (mb_strlen($ruseremail)<4 || !eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$",$ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
+		$error_string .= (mb_strlen($ruseremail)<4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
 		$error_string .= ($res>0) ? $L['aut_emailalreadyindb']."<br />" : '';
 
 		if (empty($error_string))

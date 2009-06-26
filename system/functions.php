@@ -250,7 +250,7 @@ function sed_blockguests()
  *
  * @global $db_bbcode;
  * @param string $name BBcode name
- * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
+ * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
  * @param string $pattern Bbcode string or entire regular expression
  * @param string $replacement Replacement string or regular substitution or callback body
  * @param bool $container Whether bbcode is container (like [bbcode]Something here[/bbcode])
@@ -311,7 +311,7 @@ function sed_bbcode_remove($id = 0, $plug = '')
  * @param int $id BBCode ID
  * @param bool $enabled Enable the bbcode
  * @param string $name BBcode name
- * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
+ * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
  * @param string $pattern Bbcode string or entire regular expression
  * @param string $replacement Replacement string or regular substitution or callback body
  * @param bool $container Whether bbcode is container (like [bbcode]Something here[/bbcode])
@@ -463,10 +463,6 @@ function sed_bbcode_parse($text, $post = false)
 		{
 			case 'str':
 				$text = str_ireplace($bbcode['pattern'], $bbcode['replacement'], $text);
-			break;
-
-			case 'ereg':
-				$text = mb_eregi_replace($bbcode['pattern'], $bbcode['replacement'], $text);
 			break;
 
 			case 'pcre':
@@ -1707,17 +1703,19 @@ function sed_build_usertext($text)
 	if (!$cfg['usertextimg'])
 	{
 		$bbcodes_img = array(
-			'\\[img\\]([^\\[]*)\\[/img\\]' => '',
-			'\\[thumb=([^\\[]*)\\[/thumb\\]' => '',
-			'\\[t=([^\\[]*)\\[/t\\]' => '',
-			'\\[list\\]' => '',
-			'\\[style=([^\\[]*)\\]' => '',
-			'\\[quote' => '',
-			'\\[code' => ''
-				);
+			'\[img\]([^\[]*)\[/img\]' => '',
+			'\[thumb=([^\[]*)\[/thumb\]' => '',
+			'\[t=([^\[]*)\[/t\]' => '',
+			'\[list\]' => '',
+			'\[style=([^\[]*)\]' => '',
+			'\[quote' => '',
+			'\[code' => ''
+		);
 
 		foreach($bbcodes_img as $bbcode => $bbcodehtml)
-			{ $text = eregi_replace($bbcode, $bbcodehtml, $text); }
+		{
+			$text = preg_replace("#$bbcode#i", $bbcodehtml, $text);
+		}
 	}
 	return sed_parse($text, $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
 }
@@ -2386,10 +2384,10 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			break;
 	}
 
-	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') )
+	/*if (MQGPC && ($source=='G' || $source=='P' || $source=='C') )
 	{
 		$v = stripslashes($v);
-	}
+	}*/
 
 	if ($v=='')
 	{
