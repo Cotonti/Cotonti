@@ -53,7 +53,7 @@
 				</td>
 
 		    	<td style="height:24px; max-height:40px; text-align:right;" class="{FORUMS_POSTS_ROW_ODDEVEN}">
-		    	#{FORUMS_POSTS_ROW_IDURL} &nbsp;
+		    	<a id="{FORUMS_POSTS_ROW_POSTID}" href="{FORUMS_POSTS_ROW_IDURL}">#{FORUMS_POSTS_ROW_ORDER}</a> &nbsp;
 		    	{FORUMS_POSTS_ROW_CREATION} &nbsp; {FORUMS_POSTS_ROW_POSTERIP} &nbsp; {FORUMS_POSTS_ROW_ADMIN}
 		    	</td>
 		 	</tr>
