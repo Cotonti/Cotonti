@@ -458,7 +458,7 @@ if (!empty($id))
 	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
 	$user_extrafields
 	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
-	u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
+	u.user_postcount
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
 	WHERE fp_topicid='$q' AND fp_id='$id' ");
 }
@@ -467,7 +467,7 @@ else
 	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
 	$user_extrafields
 	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
-	u.user_jrnpagescount, u.user_jrnupdated, u.user_gallerycount, u.user_postcount
+	u.user_postcount
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
 	WHERE fp_topicid='$q'
 	ORDER BY fp_id LIMIT $d, ".$cfg['maxtopicsperpage']);
