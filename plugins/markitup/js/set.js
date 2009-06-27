@@ -73,14 +73,19 @@ var mySettings = {
 		{name: L.email, className: 'mEmail', openWith:'[email=[![' + L.email_addr + ':!:john@doe.com]!]]', closeWith:'[/email]', placeHolder: L.email_text},
 		{separator:'---------------' },
 		{name: L.ul, className: 'mUl', openWith:'[list]\n', closeWith:'\n[/list]'},
-		{name: L.ol, className: 'mOl', openWith:'[list=1]\n', closeWith:'\n[/list]'},
+		{name: L.ol, className: 'mOl', openWith:'[ol]\n', closeWith:'\n[/ol]'},
 		{name: L.li, className: 'mLi', openWith:'[li]', key: 'M', closeWith: '[/li]'},
 		{name: L.table, openWith:'[table]\n', closeWith:'\n[/table]', placeHolder:"[tr][(!(td|!|th)!)][/(!(td|!|th)!)][/tr]", className:'mtable' },
 		{name: L.table_row, openWith:'[tr]', closeWith:'[/tr]', placeHolder:"[(!(td|!|th)!)][/(!(td|!|th)!)]", className:'mtable-row' },
 		{name: L.table_cell, openWith:'[(!(td|!|th)!)]', closeWith:'[/(!(td|!|th)!)]', className:'mtable-col' },
 		{separator:'---------------' },
 		{name: L.quote, className:'mQuote', dropMenu: [
-			{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]'},
+			{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]',
+				afterInsert: function (h) {
+					var str = $(h.textarea).val();
+					if (str.indexOf('[quote=]') >= 0)
+						$(h.textarea).val(str.replace('[quote=]', '[quote]'));
+			}},
 			{name: L.pre, className: 'mPre', openWith:'[pre]', closeWith:'[/pre]'},
 			{name: L.spoiler, className: 'mSpoiler', openWith:'[spoiler=[![' + L.spoiler_text + ']!]]', closeWith:'[/spoiler]'}
 		]},
