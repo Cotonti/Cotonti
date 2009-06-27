@@ -57,3 +57,8 @@ VALUES
 	('li','str','[li]','<li>',1,1,128,'',0),
 	('li','str','[/li]','</li>',1,1,128,'',0),
 	('li_short','pcre','\\[\\*\\](.*?)\\n','<li>$1</li>',0,1,128,'',0);
+
+/* r758 LDU legacy removal */
+ALTER TABLE `sed_users` DROP `user_gallerycount`;
+ALTER TABLE `sed_users` DROP `user_jrnupdated`;
+ALTER TABLE `sed_users` DROP `user_jrnpagescount`;

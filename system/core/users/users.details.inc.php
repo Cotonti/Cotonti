@@ -53,8 +53,6 @@ $urr['user_website'] = sed_build_url($urr['user_website']);
 $urr['user_age'] = ($urr['user_birthdate']!=0) ? sed_build_age($urr['user_birthdate']) : '';
 $urr['user_birthdate'] = ($urr['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $urr['user_birthdate']) : '';
 $urr['user_gender'] = ($urr['user_gender']=='' || $urr['user_gender']=='U') ?  '' : $L["Gender_".$urr['user_gender']];
-// FIXME LDU legacy?
-$urr['user_journal'] = ($urr['user_jrnpagescount']>0 && $urr['user_jrnupdated']>0) ? "<a href=\"journal.php?id=".$urr['user_id']."\"><img src=\"skins/$skin/img/system/icon-journal.gif\" alt=\"\" /></a> ".date($cfg['formatyearmonthday'], $urr['user_jrnupdated'] + $usr['timezone'] * 3600) : '';
 
 $title_tags[] = array('{USER}', '{NAME}');
 $title_tags[] = array('%1$s', '%2$s');
