@@ -9,7 +9,7 @@
  * Personal File Storage, main usage script.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.6
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -666,6 +666,12 @@ function picture(url,sx,sy) {
 		"PFS_TITLE" => $title,
 		"PFS_BODY" => $body
 	));
+
+	/* === Hook === */
+	$extp = sed_getextplugins('pfs.standalone');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 	$t->parse("MAIN");
 	$t->out("MAIN");
