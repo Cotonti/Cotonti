@@ -34,8 +34,10 @@ $touser_names = array();
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.first');
 if(is_array($extp))
-{	foreach($extp as $k => $pl)
-	{		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
 }
 /* ===== */
@@ -52,8 +54,10 @@ if($a=='send')
 	/* === Hook === */
 	$extp = sed_getextplugins('pm.send.send.first');
 	if(is_array($extp))
-	{		foreach($extp as $k => $pl)
-		{			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	{
+		foreach($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 		}
 	}
 	/* ===== */
@@ -66,7 +70,8 @@ if($a=='send')
 	$touser_src = explode(",", $newpmrecipient);
 	$touser_req = count($touser_src);
 	foreach($touser_src as $k => $i)
-	{		$touser_sql[] = "'".sed_sql_prep(trim(sed_import($i, 'D', 'TXT')))."'";
+	{
+		$touser_sql[] = "'".sed_sql_prep(trim(sed_import($i, 'D', 'TXT')))."'";
 	}
 	$touser_sql = implode(',', $touser_sql);
 	$touser_sql = '('.$touser_sql.')';
@@ -140,8 +145,10 @@ if($a=='send')
 		/* === Hook === */
 		$extp = sed_getextplugins('pm.send.send.done');
 		if(is_array($extp))
-		{			foreach($extp as $k => $pl)
-			{				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			}
 		}
 		/* ===== */
@@ -206,7 +213,17 @@ if(!empty($q) && empty($newpmtext))
 	{
 		$pm_date = @date($cfg['dateformat'], $row['pm_date']).' GMT';
 		$newpmtext = "\n\n\n-------- ".$L['Originalmessage']." --------\n".$L['Date']." : ".$pm_date."\n".$L['Title']." : ".$row['pm_title']."\n".$row['pm_text']."\n-------------\n";
-		$newpmtitle = "Re: ".$row['pm_title'];
+        if(preg_match("/Re\s\(([0-9]+)\)\:(.+)|Re\:(.+)/i", $row['pm_title'], $matches))
+        {
+            $matches[1] = ($matches[1]) ? $matches[1]+1 : 2;
+            $matches[2] = ($matches[2]) ? $matches[2] : $matches[3];
+            $newpmtitle = "Re(".$matches[1]."): ".trim($matches[2]);
+        }
+        else
+        {
+            $newpmtitle ="Re: ".$row['pm_title'];
+        }
+
 	}
 }
 
@@ -222,8 +239,10 @@ $out['subtitle'] = sed_title('title_pm_send', $title_tags, $title_data);
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.main');
 if(is_array($extp))
-{	foreach($extp as $k => $pl)
-	{		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
 }
 /* ===== */
@@ -257,8 +276,10 @@ $t -> assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.tags');
 if(is_array($extp))
-{	foreach($extp as $k => $pl)
-	{		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
 }
 /* ===== */
