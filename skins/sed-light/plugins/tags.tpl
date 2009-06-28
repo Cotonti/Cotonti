@@ -6,7 +6,11 @@
 			<div class="pageText">
 				<form action="{TAGS_ACTION}" method="post">
 					<input type="text" name="t" value="{TAGS_QUERY}" />
-					<input type="submit" value="&gt;&gt;" /><br />
+					<input type="submit" value="&gt;&gt;" />
+					<select name="order">
+						<option value="">{PHP.L.tags_Orderby}</option><option value="">--</option>
+						{TAGS_ORDER}
+					</select><br />
 					<em>{TAGS_HINT}</em>
 				</form>
 			</div>
