@@ -143,6 +143,7 @@ else
 	$out['guest_cookiettl'] = '<input type="checkbox" name="rremember" />';
 
 	$t->assign(array (
+        "HEADER_GUEST_SEND" => sed_url('users', 'm=auth&a=check&redirect='.$sys['url']),
 		"HEADER_GUEST_USERNAME" => $out['guest_username'],
 		"HEADER_GUEST_PASSWORD" => $out['guest_password'],
 		"HEADER_GUEST_REGISTER" => $out['guest_register'],
