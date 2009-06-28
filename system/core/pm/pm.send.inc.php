@@ -1,17 +1,13 @@
 <?PHP
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=pm.send.inc.php
-Version=125
-Updated=2008-mar-20
-Type=Core
-Author=Neocrome
-Description=Private messages
-[END_SED]
-==================== */
+/**
+ * PM Send
+ *
+ * @package Cotonti
+ * @version 0.0.6
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
 
 defined('SED_CODE') or die('Wrong URL');
 
@@ -21,12 +17,10 @@ sed_block($usr['auth_write']);
 $id = sed_import('id', 'G', 'INT');
 $f = sed_import('f', 'G', 'ALP');
 $to = sed_import('to', 'G', 'TXT');
-$q = sed_import('q', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 
 unset($touser);
 $totalrecipients = 0;
-$touser_all = array();
 $touser_sql = array();
 $touser_ids = array();
 $touser_names = array();
@@ -66,7 +60,9 @@ if($a=='send')
     $newpmtitle = sed_import('newpmtitle', 'P', 'TXT');
     $newpmtext = sed_import('newpmtext', 'P', 'HTM');
     $newpmrecipient = sed_import('newpmrecipient', 'P', 'TXT');
-    $userid = sed_import('userid', 'P', 'INT');
+
+    if(!empty($newpmrecipient))
+    {
     $touser_src = explode(",", $newpmrecipient);
     $touser_req = count($touser_src);
     foreach($touser_src as $k => $i)
@@ -84,17 +80,25 @@ if($a=='send')
         $touser_names[] = $row['user_name'];
         $touser_usrlnk[] .= ($cfg['parsebbcodecom']) ? "[user=".$row['user_id']."]".$row['user_name']."[/user]" : $row['user_name'];
     }
-
+    $error_string .= ($totalrecipients < $touser_req ) ? $L['pm_wrongname']."<br />" : '';
+    $error_string .= (!$usr['isadmin'] && $totalrecipients > 10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
     $touser = ($totalrecipients>0) ? implode(",", $touser_names) : '';
+    }
+    else
+    {
+       $touser_ids[] = $to;
+       $touser = $to;
+       $totalrecipients = 1;
+    }
+    
     $error_string .= (mb_strlen($newpmtitle) < 2) ? $L['pm_titletooshort']."<br />" : '';
     $error_string .= (mb_strlen($newpmtext) < 2) ? $L['pm_bodytooshort']."<br />" : '';
     $error_string .= (mb_strlen($newpmtext) > $cfg['pm_maxsize']) ? $L['pm_bodytoolong']."<br />" : '';
-    $error_string .= ($totalrecipients < $touser_req ) ? $L['pm_wrongname']."<br />" : '';
-    $error_string .= ($totalrecipients > 10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
+
 
     if(empty($error_string))
     {
-        $newpmtext .= ($totalrecipients>1) ? "\n\n".sprintf($L['pm_multiplerecipients'], $totalrecipients-1)."\n".implode(', ', $touser_usrlnk) : '';
+        $newpmtext .= ($totalrecipients>1) ? "\n\n".sprintf($L['pm_multiplerecipients'], ($totalrecipients-1))."\n".implode(', ', $touser_usrlnk) : '';
 
         if($cfg['parser_cache'])
         {
@@ -201,29 +205,7 @@ elseif(!empty($to))
         }
         $touser = implode(", ", $touser_names);
         $error_string .= ($totalrecipients<$touser_req) ? $L['pm_wrongname']."<br />" : '';
-        $error_string .= ($totalrecipients>10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
-    }
-}
-
-if(!empty($q) && empty($newpmtext))
-{
-    $sql = sed_sql_query("SELECT pm_date,pm_title,pm_text FROM $db_pm WHERE pm_id='$q' AND pm_touserid='".$usr['id']."' AND pm_state<3 ");
-
-    if($row=sed_sql_fetcharray($sql))
-    {
-        $pm_date = @date($cfg['dateformat'], $row['pm_date']);
-        $newpmtext = "\n\n\n-------- ".$L['Originalmessage']." --------\n".$L['Date']." : ".$pm_date."\n".$L['Title']." : ".$row['pm_title']."\n".$row['pm_text']."\n-------------\n";
-        if(preg_match("/Re\(([0-9]+)\)\:(.+)|Re\:(.+)/i", $row['pm_title'], $matches))
-        {
-            $matches[1] = ($matches[1]) ? $matches[1]+1 : 2;
-            $matches[2] = ($matches[2]) ? $matches[2] : $matches[3];
-            $newpmtitle = "Re(".$matches[1]."): ".trim($matches[2]);
-        }
-        else
-        {
-            $newpmtitle ="Re: ".$row['pm_title'];
-        }
-        $message_is_answer=true;
+        $error_string .= (!$usr['isadmin'] && $totalrecipients>10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
     }
 }
 
@@ -257,33 +239,6 @@ if(!empty($error_string))
 }
 
 $bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
-
-if($message_is_answer)
-{
-    if($cfg['parser_cache'])
-	{
-		if(empty($row['pm_html']) && !empty($row['pm_text']))
-		{
-			$row['pm_html'] = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
-			sed_sql_query("UPDATE $db_pm SET pm_html = '".sed_sql_prep($row['pm_html'])."' WHERE pm_id = " . $q);
-		}
-		$pm_data = sed_post_parse($row['pm_html']);
-	}
-	else
-	{
-		$pm_data = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
-		$pm_data = sed_post_parse($pm_data);
-	}
-
-    $t -> assign(array(
-        "PMSEND_PREV_MESS_TEXT" => $pm_data,
-        "PMSEND_PREV_MESS_TITLE" => $row['pm_title'],
-        "PMSEND_PREV_MESS_AUTHOR" => sed_build_user($row['user_id'], $touser),
-        "PMSEMD_PREV_MESS_DATE" =>  @date($cfg['dateformat'], $row['pm_date']),
-        ));
-    $t -> parse("MAIN.PMSEND_PREV");
-
-}
 
 $t -> assign(array(
     "PMSEND_TITLE" => $bhome . "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],

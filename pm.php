@@ -3,7 +3,7 @@
  * Private messages loader
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.6
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -30,8 +30,12 @@ switch($m)
 	require_once($cfg['system_dir'].'/core/pm/pm.edit.inc.php');
 	break;
 
-	default:
+    case 'message':
 	require_once($cfg['system_dir'].'/core/pm/pm.inc.php');
+	break;
+
+	default:
+	require_once($cfg['system_dir'].'/core/pm/pm.list.inc.php');
 	break;
 	}
 
