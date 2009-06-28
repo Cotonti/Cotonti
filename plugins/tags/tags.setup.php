@@ -4,8 +4,8 @@
 Code=tags
 Name=Tags
 Description=Basic Tags implementation
-Version=0.0.5
-Date=2009-may-21
+Version=0.0.6
+Date=2009-jun-28
 Author=Trustmaster
 Copyright=All rights reserved (c) 2008-2009, Vladimir Sibirov.
 Notes=BSD License.
@@ -28,6 +28,7 @@ lim_forums=08:string::0:Limit of tags in a cloud displayed in forums, 0 is unlim
 lim_index=09:string::0:Limit of tags in a cloud displayed on index, 0 is unlimited
 more=10:radio::1:Show 'All tags' link in tag clouds
 perpage=11:string::0:Tags displayed per page in standalone cloud, 0 is all at once
+index=12:select:pages,forums,all:pages:Index page tag cloud area
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 
@@ -35,7 +36,7 @@ perpage=11:string::0:Tags displayed per page in standalone cloud, 0 is all at on
  * Basic Tags implementation
  *
  * @package Cotonti
- * @version 0.0.5
+ * @version 0.0.6
  * @author Trustmaster, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD

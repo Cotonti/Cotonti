@@ -4086,7 +4086,7 @@ function sed_tag($tag, $item, $area = 'pages')
  * @param int $limit Use this parameter to limit number of rows in the result set
  * @return array
  */
-function sed_tag_cloud($area = 'pages', $order = 'tag', $limit = null)
+function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
 	global $db_tag_references;
 	$res = array();
@@ -4102,9 +4102,10 @@ function sed_tag_cloud($area = 'pages', $order = 'tag', $limit = null)
 		default:
 			$order = 'RAND()';
 	}
+	$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
 	$sql = sed_sql_query("SELECT `tag`, COUNT(*) AS `cnt`
 		FROM $db_tag_references
-		WHERE tag_area = '$area'
+		$where
 		GROUP BY `tag`
 		ORDER BY $order $limit");
 	while($row = sed_sql_fetchassoc($sql))
