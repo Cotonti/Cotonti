@@ -101,15 +101,30 @@ function sed_tag_search_form($area = 'all')
  */
 function sed_tag_search_pages($query)
 {
-	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages;
+	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o;
 	$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0"), 0, 0);
+	switch ($o)
+	{
+		case 'title':
+			$order = 'ORDER BY `page_title`';
+			break;
+		case 'date':
+			$order = 'ORDER BY `page_date` DESC';
+			break;
+		case 'category':
+			$order = 'ORDER BY `page_cat`';
+			break;
+		default:
+			$order = '';
+	}
 	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0
+		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
 	while($row = sed_sql_fetchassoc($sql))
@@ -150,17 +165,32 @@ function sed_tag_search_pages($query)
  */
 function sed_tag_search_forums($query)
 {
-	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections;
+	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o;
 	$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 		WHERE r.tag_area = 'forums' AND ($query)"), 0, 0);
+	switch ($o)
+	{
+		case 'title':
+			$order = 'ORDER BY `ft_title`';
+			break;
+		case 'date':
+			$order = 'ORDER BY `ft_updated` DESC';
+			break;
+		case 'category':
+			$order = 'ORDER BY `ft_sectionid`';
+			break;
+		default:
+			$order = '';
+	}
 	$sql = sed_sql_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 		LEFT JOIN $db_forum_sections AS s
 			ON t.ft_sectionid = s.fs_id
 		WHERE r.tag_area = 'forums' AND ($query)
+		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
 	while($row = sed_sql_fetchassoc($sql))

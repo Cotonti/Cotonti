@@ -37,6 +37,17 @@ require_once $cfg['plugins_dir'].'/tags/inc/functions.php';
 // Array to register areas with tag functions provided
 $tag_areas = array('pages', 'forums');
 
+// Sorting order
+$o = sed_import('order', 'P', 'ALP');
+$tag_order = '';
+$tag_orders = array('Title', 'Date', 'Category');
+foreach ($tag_orders as $order)
+{
+	$ord = mb_strtolower($order);
+	$selected = $ord == $o ? 'selected="selected"' : '';
+	$tag_order .= '<option value="' . $ord . '" ' . $selected . '>' . $L[$order] . '</option>';
+}
+
 /* == Hook for the plugins == */
 $extp = sed_getextplugins('tags.first');
 if (is_array($extp))
@@ -46,7 +57,8 @@ if (is_array($extp))
 $t->assign(array(
 	'TAGS_ACTION' => sed_url('plug', 'e=tags&a=' . $a),
 	'TAGS_HINT' => $L['tags_Query_hint'],
-	'TAGS_QUERY' => sed_cc($qs)
+	'TAGS_QUERY' => sed_cc($qs),
+	'TAGS_ORDER' => $tag_order
 ));
 
 if ($a == 'pages')
