@@ -1,92 +1,37 @@
 <!-- BEGIN: MAIN -->
 
-	<div class="mboxHD">{PM_PAGETITLE}</div>
-	<div class="mboxBody">
-	
-		<div id="subtitle">{PM_SUBTITLE}</div>
+<div class="mboxHD">{PM_PAGETITLE}</div>
+<div class="mboxBody">
 
-		<div class="paging">{PM_INBOX} &nbsp; &nbsp; {PM_ARCHIVES} &nbsp; &nbsp; {PM_SENTBOX} &nbsp; &nbsp; {PM_SENDNEWPM}</div>
-		
-		<form action="{PM_FORM_UPDATE}" method="post" name="update">			
+    <div id="subtitle">{PM_SUBTITLE}</div>
 
-		<div class="tCap"></div>
-		<table class="cells" border="0" cellspacing="1" cellpadding="2">
+    <div class="paging">{PM_INBOX} &nbsp; &nbsp; {PM_ARCHIVES} &nbsp; &nbsp; {PM_SENTBOX} &nbsp; &nbsp; {PM_SENDNEWPM}</div>
 
-			<!-- BEGIN: PM_TITLE -->
-			<tr>
-				<td class="coltop" style="width:16px;"> </td>
-				<td class="coltop" style="width:16px;">{PHP.L.Status}</td>
-				<td class="coltop">{PHP.L.Sender}</td>
-				<td class="coltop">{PHP.L.Subject}</td>
-				<td class="coltop" style="width:176px;">{PHP.L.Date}</td>
-				<td class="coltop" style="width:72px;">{PHP.L.Action}</td>
-			</tr>
-			<!-- END: PM_TITLE -->
+    <div>
 
-			<!-- BEGIN: PM_TITLE_SENTBOX -->
-			<tr>
-				<td class="coltop" style="width:16px;"> </td>
-				<td class="coltop" style="width:16px;">{PHP.L.Status}</td>
-				<td class="coltop">{PHP.L.Recipient}</td>
-				<td class="coltop">{PHP.L.Subject}</td>
-				<td class="coltop" style="width:176px; text-align:center;">{PHP.L.Date}</td>
-				<td class="coltop" style="width:72px; text-align:center;">{PHP.L.Action}</td>
-			</tr>
-			<!-- END: PM_TITLE_SENTBOX -->
+        {PHP.L.Subject}: <strong>{PM_TITLE}</strong><br />
+        {PHP.L.Sender}: {PM_FROMUSER}<br />
+        {PHP.L.Recipient}: {PM_TOUSER}<br />
+        {PHP.L.Date}: {PM_DATE}
 
-			<!-- BEGIN: PM_ROW -->
-			<tr>
-				<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_SELECT}</td>
-				<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_STATUS}</td>
-				<td class="{PM_ROW_ODDEVEN}">{PM_ROW_FROMORTOUSER}</td>
-				<td class="{PM_ROW_ODDEVEN}">{PM_ROW_TITLE}</td>
-				<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_DATE}</td>
-				<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_ACTION}</td>
-			 </tr>
-			<!-- END: PM_ROW -->			
-			
-			<!-- BEGIN: PM_ROW_EMPTY -->
-			<tr>
-				<td colspan="6" style="padding:16px;">{PHP.L.None}</td>
-			</tr>
-			<!-- END: PM_ROW_EMPTY -->
+        <hr />
 
-		</table>
-		<div class="bCap"></div>
+        <p>{PM_TEXT}</p>
 
-		<!-- BEGIN: PM_FOOTER -->
-		<div class="paging">{PM_TOP_PAGEPREV}&nbsp;{PM_TOP_PAGES}&nbsp;{PM_TOP_PAGENEXT}</div>
-		<!-- END: PM_FOOTER -->
+        <div class="paging">{PM_QUOTE} {PM_ICON_ACTION}</div>
+<!-- BEGIN: REPLY -->
+        <hr />
+        {PHP.L.pm_replyto}
+        <form action="{PM_FORM_SEND}" method="post" name="newlink">
+            {PHP.L.Subject}: {PM_FORM_TITLE}
+            <div style="width:100%;text-align:center">{PM_FORM_TEXTBOXER}
+                <td colspan="2" class="valid"><input type="submit" value="{PHP.L.Reply}" />
+            </div>
+        </form>
+<!-- END: REPLY -->
+    </div>
 
-		<!-- BEGIN: PM_DETAILS -->
-		<div>
 
-			{PHP.L.Subject}: <strong>{PM_ROW_TITLE}</strong><br />
-			{PHP.L.Sender}: {PM_ROW_FROMUSER}<br />
-			{PHP.L.Recipient}: {PM_ROW_TOUSER}<br />
-			{PHP.L.Date}: {PM_ROW_DATE}
-
-			<hr />
-
-			<p>{PM_ROW_TEXT}</p>
-
-			<div class="paging">{PM_ROW_ICON_ACTION}</div>
-
-		</div>
-		<!-- END: PM_DETAILS -->
-		
-		{PM_DELETE} {PM_ARCHIVE}
-		
-		</form>
-
-		<div class="paging">
-			<img src="skins/{PHP.skin}/img/system/icon-pm-new.gif" alt="" /> {PHP.skinlang.pm.Newmessage} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm.gif" alt="" /> {PHP.L.Message} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm-reply.gif" alt="" /> {PHP.L.Reply} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm-archive.gif" alt="" /> {PHP.skinlang.pm.Sendtoarchives} &nbsp; &nbsp;
-			<img src="skins/{PHP.skin}/img/system/icon-pm-trashcan.gif" alt="" /> {PHP.L.Delete}
-		</div>
-
-	</div>
+</div>
 
 <!-- END: MAIN -->
