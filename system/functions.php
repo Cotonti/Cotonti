@@ -937,7 +937,7 @@ function sed_build_comments($code, $url, $display = true)
 
 		$sql = sed_sql_query("SELECT c.*, u.user_avatar FROM $db_com AS c
 		LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
-		WHERE com_code='$code' ORDER BY com_id ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+		WHERE com_code='$code' ORDER BY com_id ASC LIMIT $d, ".$cfg['maxcommentsperpage']);
 
 		if (!empty($error_string))
 		{
@@ -1020,8 +1020,8 @@ function sed_build_comments($code, $url, $display = true)
 			}
 
 			$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'"), 0, 0);
-			$pagnav = sed_pagination($url, $d, $totalitems, $cfg['maxrowsperpage']);
-			list($pagination_prev, $pagination_next) = sed_pagination_pn($url, $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+			$pagnav = sed_pagination($url, $d, $totalitems, $cfg['maxcommentsperpage']);
+			list($pagination_prev, $pagination_next) = sed_pagination_pn($url, $d, $totalitems, $cfg['maxcommentsperpage'], TRUE);
 			$t->assign(array(
 				"COMMENTS_PAGES_INFO" => $L['Total']." : ".$totalitems.", ".$L['comm_on_page'].": ".($i-$d),
 				"COMMENTS_PAGES_PAGESPREV" => $pagination_prev,

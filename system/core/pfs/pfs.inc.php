@@ -350,7 +350,7 @@ if ($f>0)
 		$pff_count = $row1['pff_count'];
 
 		$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
-		$sqll = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+		$sqll = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
 		$title .= " ".$cfg['separator']." <a href=\"".sed_url('pfs', "f=".$pff_id.$more)."\">".$pff_title."</a>";
 	}
 	else
@@ -360,9 +360,9 @@ if ($f>0)
 else
 {
 	$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC");
-	$sqll = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sqll = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
 	$sql1 = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC");
-	$sql1l = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['maxrowsperpage']);
+	$sql1l = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['maxpfsperpage']);
 	$sql3 = sed_sql_query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
 
 	while ($row3 = sed_sql_fetcharray($sql3))
@@ -481,8 +481,8 @@ if ($files_count>0 || $folders_count>0)
 	if ($folders_count>0)
 	{
 		$totalitemsf = $folders_count;
-		$pagnavf = sed_pagination(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2), $df, $totalitemsf, $cfg['maxrowsperpage'], 'df');
-		list($pagination_prevf, $pagination_nextf) = sed_pagination_pn(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2), $df, $totalitemsf, $cfg['maxrowsperpage'], TRUE, 'df');
+		$pagnavf = sed_pagination(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2), $df, $totalitemsf, $cfg['maxpfsperpage'], 'df');
+		list($pagination_prevf, $pagination_nextf) = sed_pagination_pn(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2), $df, $totalitemsf, $cfg['maxpfsperpage'], TRUE, 'df');
 
 		$disp_main .= "<h4>".$folders_count." ".$L['Folders']." / ".$subfiles_count." ".$L['Files']."";
 		$disp_main .= " (".$L['comm_on_page'].": ".$iki." ".$L['Folders']." / ".$subfiles_count_on_page." ".$L['Files'].")</h4><div class=\"pagnav\">".$pagination_prevf." ".$pagnavf." ".$pagination_nextf."</div>";
@@ -502,8 +502,8 @@ if ($files_count>0 || $folders_count>0)
 	{
 		$thumbspagination = ($o == 'thumbs') ? '&o=thumbs' : '';
 		$totalitems = $files_count;
-		$pagnav = sed_pagination(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination), $d, $totalitems, $cfg['maxrowsperpage']);
-		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+		$pagnav = sed_pagination(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination), $d, $totalitems, $cfg['maxpfsperpage']);
+		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination), $d, $totalitems, $cfg['maxpfsperpage'], TRUE);
 
 		$disp_main .= "<h4>".$files_count." ";
 

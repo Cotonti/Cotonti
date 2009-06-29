@@ -45,7 +45,7 @@ if ($f=='archives')
     $totallines = $totalarchives;
     $sql = sed_sql_query("SELECT * FROM $db_pm
         WHERE pm_touserid='".$usr['id']."' AND pm_state=2
-        ORDER BY pm_date DESC LIMIT $d,".$cfg['maxrowsperpage']);
+        ORDER BY pm_date DESC LIMIT $d,".$cfg['maxpmperpage']);
     $title .= " <a href=\"".sed_url('pm', 'f=archives')."\">".$L['pm_archives']."</a>";
     $subtitle = $L['pm_arcsubtitle'];
 }
@@ -54,7 +54,7 @@ elseif ($f=='sentbox')
     $totallines = $totalsentbox;
     $sql = sed_sql_query("SELECT p.*, u.user_name FROM $db_pm p, $db_users u
         WHERE p.pm_fromuserid='".$usr['id']."' AND (p.pm_state=0 OR p.pm_state=3) AND u.user_id=p.pm_touserid
-        ORDER BY pm_date DESC LIMIT $d,".$cfg['maxrowsperpage']);
+        ORDER BY pm_date DESC LIMIT $d,".$cfg['maxpmperpage']);
     $title .= " <a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>";
     $subtitle = $L['pm_sentboxsubtitle'];
 }
@@ -64,18 +64,18 @@ else
     $totallines = $totalinbox;
     $sql = sed_sql_query("SELECT * FROM $db_pm
         WHERE pm_touserid='".$usr['id']."' AND pm_state<2
-        ORDER BY pm_date DESC LIMIT  $d,".$cfg['maxrowsperpage']);
+        ORDER BY pm_date DESC LIMIT  $d,".$cfg['maxpmperpage']);
     $title .= " <a href=\"".sed_url('pm')."\">".$L['pm_inbox']."</a>";
     $subtitle = $L['pm_inboxsubtitle'];
     $archive = ($totallines) ? "<input type=\"submit\" name=\"move\" value=\"".$L['pm_putinarchives']."\" />" : '';
 }
 $delete = ($totallines) ? "<input type=\"submit\" name=\"delete\" value=\"".$L['Delete']."\" />" : '';
 
-$pm_totalpages = ceil($totallines / $cfg['maxrowsperpage']);
-$pm_currentpage = ceil ($d / $cfg['maxrowsperpage'])+1;
+$pm_totalpages = ceil($totallines / $cfg['maxpmperpage']);
+$pm_currentpage = ceil ($d / $cfg['maxpmperpage'])+1;
 
-$pm_pagination = sed_pagination(sed_url('pm', "f=$f"), $d, $totallines, $cfg['maxrowsperpage'], 'd');
-list($pm_pageprev, $pm_pagenext) = sed_pagination_pn(sed_url('pm', "f=$f"), $d, $totallines, $cfg['maxrowsperpage'], TRUE, 'd');
+$pm_pagination = sed_pagination(sed_url('pm', "f=$f"), $d, $totallines, $cfg['maxpmperpage'], 'd');
+list($pm_pageprev, $pm_pagenext) = sed_pagination_pn(sed_url('pm', "f=$f"), $d, $totallines, $cfg['maxpmperpage'], TRUE, 'd');
 
 
 $title_tags[] = array('{PM}', '{INBOX}', '{ARCHIVES}', '{SENTBOX}');
@@ -120,7 +120,7 @@ $jj=0;
 $extp = sed_getextplugins('pm.list.loop');
 /* ===== */
 
-while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxrowsperpage']))
+while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
 {
     $jj++;
     $row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-new.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm.gif\" alt=\"\" /></a>";

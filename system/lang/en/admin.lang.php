@@ -41,6 +41,7 @@ $L['core_users'] = &$L['Users'];
 $L['cfg_countcomments'] = array('Count comments', 'Display the count of comments near the icon');
 $L['cfg_disable_comments'] = array('Disable the comments', '');
 $L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default');	// New in N-0.0.2
+$L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' ');   // New in N-0.0.6
 
 /**
  * Config Section
@@ -51,9 +52,10 @@ $L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users fro
 $L['cfg_disable_forums'] = array('Disable the forums', '');
 $L['cfg_hideprivateforums'] = array('Hide private forums', '');
 $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
-$L['cfg_maxtopicsperpage'] = array('Maximum topics or posts per page', '');
+$L['cfg_maxtopicsperpage'] = array('Maximum topics per page', '');
 $L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');	// New in N-0.1.0
 $L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');	// New in N-0.1.0
+$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' '); // New in N-0.0.6
 
 /**
  * Config Section
@@ -122,6 +124,8 @@ $L['cfg_allowphp_pages'] = array('Allow the PHP page type', 'Execution of PHP co
 $L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');	// New in N-0.0.2
 $L['cfg_count_admin'] = array('Count Administrators\' hits', '');	// New in N-0.0.1
 $L['cfg_disable_page'] = array('Disable the pages', '');
+$L['cfg_maxrowsperpage'] = array('Max. lines in lists', ' ');
+$L['cfg_maxlistsperpage'] = array('Max. lists per page', ' '); // New in N-0.0.6
 
 /**
  * Config Section
@@ -160,6 +164,7 @@ $L['cfg_th_keepratio'] = array('Thumbnail, keep ratio?', '');
 $L['cfg_th_textsize'] = array('Thumbnails, size of the text', '');
 $L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
 $L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Width x 0.75');
+$L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');   // New in N-0.0.6
 
 /**
  * Config Section
@@ -176,6 +181,7 @@ $L['cfg_disable_plug'] = array('Disable the plugins', '');
 $L['cfg_disable_pm'] = array('Disable the private messages', '');
 $L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
 $L['cfg_pm_maxsize'] = array('Maximum length for messages', 'Default: 10000 chars');
+$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in N-0.0.6
 
 /**
  * Config Section
@@ -653,8 +659,6 @@ $L['adm_setby'] = 'Set by';
 $L['adm_to'] = 'To';
 $L['adm_totalsize'] = 'Total size';
 $L['adm_warnings'] = 'Warnings';
-
-$L['cfg_maxrowsperpage'] = array('Maximum lines in lists', ' ');
 
 $L['editdeleteentries'] = 'Edit or delete entries';
 $L['viewdeleteentries'] = 'View or delete entries';
