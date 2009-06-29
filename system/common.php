@@ -313,16 +313,6 @@ if ($cfg['maintenance'])
 	}
 }
 
-/* ======== Anti-XSS protection ======== */
-
-$xg = sed_import('x','G','ALP');
-$xp = sed_import('x','P','ALP');
-
-if(!defined('SED_NO_ANTIXSS'))
-{
-	$xk = sed_check_xp();
-}
-
 /* ======== Zone variables ======== */
 
 $z = (!empty($_G['z'])) ? mb_strtolower(sed_import('z','G','ALP',32)) : $z;
@@ -532,6 +522,20 @@ $sed_img_right = $out['img_right'];
 
 $usr['timetext'] = sed_build_timezone($usr['timezone']);
 $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
+
+/* ======== Anti-XSS protection ======== */
+
+$xg = sed_import('x','G','ALP');
+$xp = sed_import('x','P','ALP');
+$xk = sed_sourcekey();
+
+if(!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH'))
+{
+	if (!sed_check_xp())
+	{
+		$error_string .= $L['Session_expired'] . '<br />';
+	}
+}
 
 /* ======== Global hook ======== */
 

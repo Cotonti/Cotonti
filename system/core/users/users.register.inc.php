@@ -111,7 +111,7 @@ if ($a=='add')
 		{ $defgroup = ($cfg['regnoactivation']) ? 4 : 2; }
 
 		$mdpass = md5($rpassword1);
-		$ruserbirthdate = ($rmonth=='x' || $rday=='x' || $ryear=='x' || $rmonth==0 || $rday==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
+		$ruserbirthdate = ($rmonth=='x' || $rday=='x' || $ryear=='x' || $rmonth==0 || $rday==0 || $ryear==0) ? '' : sed_stamp2date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear));
 
 		$validationkey = md5(microtime());
 		sed_shield_update(20, "Registration");
@@ -169,7 +169,7 @@ if ($a=='add')
 			0,
 			'$validationkey',
 			'".sed_sql_prep($rusergender)."',
-			".(int)$ruserbirthdate.",
+			'".$ruserbirthdate."',
 			'".sed_sql_prep($rusericq)."',
 			'".sed_sql_prep($ruserirc)."',
 			'".sed_sql_prep($rusermsn)."',

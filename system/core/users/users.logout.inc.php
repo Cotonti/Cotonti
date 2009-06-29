@@ -16,7 +16,11 @@ Description=User authication
 
 defined('SED_CODE') or die('Wrong URL');
 
-sed_check_xg();
+if (!sed_check_xg())
+{
+	header('Location: ' . SED_ABSOLUTE_URL . sed_url('message', 'msg=951', '', TRUE));
+	exit;
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('users.logout');

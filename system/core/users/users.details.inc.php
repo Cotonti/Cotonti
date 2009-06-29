@@ -48,6 +48,8 @@ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
 sed_die(sed_sql_numrows($sql)==0);
 $urr = sed_sql_fetcharray($sql);
 
+$urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
+
 $urr['user_text'] = sed_build_usertext(sed_cc($urr['user_text']));
 $urr['user_website'] = sed_build_url($urr['user_website']);
 $urr['user_age'] = ($urr['user_birthdate']!=0) ? sed_build_age($urr['user_birthdate']) : '';

@@ -40,6 +40,8 @@ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIM
 sed_die(sed_sql_numrows($sql)==0);
 $urr = sed_sql_fetcharray($sql);
 
+$urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
+
 $profile_form_avatar = "<a name=\"avatar\" id=\"avatar\"></a>";
 $profile_form_photo = "<a name=\"photo\" id=\"photo\"></a>";
 $profile_form_signature = "<a name=\"signature\" id=\"signature\"></a>";
@@ -487,7 +489,7 @@ switch ($a)
 	if (empty($error_string))
 	{
 
-		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
+		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? '' : sed_stamp2date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear));
 
 		$ssql = "UPDATE $db_users SET
 			user_text='".sed_sql_prep($rusertext)."',

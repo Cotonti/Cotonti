@@ -964,7 +964,7 @@ CREATE TABLE `sed_users` (
   `user_occupation` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `user_location` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `user_timezone` decimal(2,1) NOT NULL default '0',
-  `user_birthdate` int(11) NOT NULL default '0',
+  `user_birthdate` DATE NOT NULL DEFAULT '1970-01-01',
   `user_gender` char(1) collate utf8_unicode_ci NOT NULL default 'U',
   `user_irc` varchar(128) collate utf8_unicode_ci NOT NULL default '',
   `user_msn` varchar(64) collate utf8_unicode_ci NOT NULL default '',

@@ -86,6 +86,13 @@
 		<!-- END: FORUMS_POSTS_ANTIBUMP -->
 
 		<!-- BEGIN: FORUMS_POSTS_NEWPOST -->
+
+		<!-- BEGIN: FORUMS_POSTS_NEWPOST_ERROR -->
+		<div class="error">
+			{FORUMS_POSTS_NEWPOST_ERROR_MSG}
+		</div>
+		<!-- END: FORUMS_POSTS_NEWPOST_ERROR -->
+
 		<form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">
 			<div style="width:100%;">{FORUMS_POSTS_NEWPOST_TEXTBOXER}</div>
 			<div class="valid"><input type="submit" value="{PHP.L.Reply}" /></div>

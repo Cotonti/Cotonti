@@ -57,6 +57,8 @@ while ($row = sed_sql_fetcharray($sql1))
 
 	$row['user_text'] = sed_build_usertext(sed_cc($row['user_text']));
 
+	$row['user_birthdate'] = sed_date2stamp($row['user_birthdate']);
+
 	$t->assign(array(
 		'WHOSONlINE_ROW1_SHOWAVATARS' => ($showavatars) ? $user_avatar : '',
 		'WHOSONlINE_ROW1_USER_AVATAR' => ($showavatars) ? sed_build_userimage($row['user_avatar'], 'avatar') : '',
