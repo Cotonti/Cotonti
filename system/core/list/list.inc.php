@@ -221,7 +221,7 @@ while (list($i,$x) = each($sed_cat))
 		$mm++;
 		$ii++;
 	}
-	elseif (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $kk<$cfg['maxrowsperpage'])
+	elseif (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $kk<$cfg['maxlistsperpage'])
 	{
 		$sql4 = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure
 		WHERE structure_path LIKE '".$sed_cat[$i]['rpath']."%' ");
@@ -252,8 +252,8 @@ while (list($i,$x) = each($sed_cat))
 }
 
 $totalitems = $ii + $kk;
-$pagnav = sed_pagination(sed_url('list','c='.$c), $dc, $totalitems, $cfg['maxrowsperpage'], $characters="dc");
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('list', 'c='.$c), $dc, $totalitems, $cfg['maxrowsperpage'], TRUE, $characters="dc");
+$pagnav = sed_pagination(sed_url('list','c='.$c), $dc, $totalitems, $cfg['maxlistsperpage'], $characters="dc");
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('list', 'c='.$c), $dc, $totalitems, $cfg['maxlistsperpage'], TRUE, $characters="dc");
 
 $t->assign(array(
 "LISTCAT_PAGEPREV" => $pagination_prev,

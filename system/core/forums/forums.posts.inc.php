@@ -434,7 +434,7 @@ if (!empty($p))
 {
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid = $q and fp_id < $p");
 	$postsbefore = sed_sql_result($sql, 0, 0);
-	$d = $cfg['maxtopicsperpage'] * floor($postsbefore / $cfg['maxtopicsperpage']);
+	$d = $cfg['maxpostsperpage'] * floor($postsbefore / $cfg['maxpostsperpage']);
 }
 
 if (empty($d))
@@ -470,7 +470,7 @@ else
 	u.user_postcount
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
 	WHERE fp_topicid='$q'
-	ORDER BY fp_id LIMIT $d, ".$cfg['maxtopicsperpage']);
+	ORDER BY fp_id LIMIT $d, ".$cfg['maxpostsperpage']);
 }
 
 $sys['sublocation'] = $fs_title;
@@ -515,12 +515,12 @@ if (!$cfg['disable_polls'] && $ft_poll_id)
 
 }
 
-$nbpages = ceil($totalposts / $cfg['maxtopicsperpage']);
-$curpage = $d / $cfg['maxtopicsperpage'];
-$notlastpage = (($d + $cfg['maxtopicsperpage'])<$totalposts) ? TRUE : FALSE;
+$nbpages = ceil($totalposts / $cfg['maxpostsperpage']);
+$curpage = $d / $cfg['maxpostsperpage'];
+$notlastpage = (($d + $cfg['maxpostsperpage'])<$totalposts) ? TRUE : FALSE;
 
-$pages = sed_pagination("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage']); //trustmaster ... thou shalt edit this
-list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxtopicsperpage'], TRUE); //and also this
+$pages = sed_pagination("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxpostsperpage']); //trustmaster ... thou shalt edit this
+list($pages_prev, $pages_next) = sed_pagination_pn("forums.php?m=posts&amp;q=$q", $d, $totalposts, $cfg['maxpostsperpage'], TRUE); //and also this
 
 $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername, s.fs_allowpolls FROM $db_forum_sections AS s LEFT JOIN
 $db_forum_structure AS n ON n.fn_code=s.fs_category
