@@ -250,6 +250,7 @@ $extp = sed_getextplugins('users.loop');
 while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 {
 	$jj++;
+	$urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
 	$urr['user_age'] = ($urr['user_birthdate']>0) ? sed_build_age($urr['user_birthdate']) : '';
 	$urr['user_birthdate'] = ($urr['user_birthdate']>0) ? @date($cfg['formatyearmonthday'], $urr['user_birthdate']) : '';
 	$urr['user_gender'] = ($urr['user_gender']=='' || $urr['user_gender']=='U') ?  '' : $L["Gender_".$urr['user_gender']];

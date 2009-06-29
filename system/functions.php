@@ -1849,33 +1849,28 @@ function sed_cc($text)
  */
 function sed_check_xg()
 {
-	global $xg, $cfg;
+	global $xg, $cfg, $xk;
 
-	if($xg!=sed_sourcekey())
-	{
-		sed_diefatal('Wrong parameter in the URL.');
-	}
-	return TRUE;
+	return $xg == $xk;
 }
 
 /**
  * Checks POST anti-XSS parameter
  *
- * @return string
+ * @return bool
  */
 function sed_check_xp()
 {
-	global $xp, $xg;
+	global $xp, $xg, $xk;
 
-	$sk = sed_sourcekey();
-	if($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_AUTH'))
+	if($_SERVER['REQUEST_METHOD'] == 'POST')
 	{
-		if($xp != $sk && $xg != $sk)
+		if($xp != $xk && $xg != $xk)
 		{
-			sed_diefatal('Wrong parameter in the URL.');
+			return FALSE;
 		}
 	}
-	return $sk;
+	return TRUE;
 }
 
 /**
@@ -2927,6 +2922,29 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
 	if ($year === false)  $year  = date ('Y');
 
 	return mktime ((int) $hour, (int) $minute, (int) $second, (int) $month, (int) $date, (int) $year);
+}
+
+/**
+ * Converts MySQL date into UNIX timestamp
+ *
+ * @param string $date Date in MySQL format
+ * @return int UNIX timestamp
+ */
+function sed_date2stamp($date)
+{
+	preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);
+	return mktime(0, 0, 0, (int) $m[2], (int) $m[3], (int) $m[1]);
+}
+
+/**
+ * Converts UNIX timestamp into MySQL date
+ *
+ * @param int $stamp UNIX timestamp
+ * @return string MySQL date
+ */
+function sed_stamp2date($stamp)
+{
+	return date('Y-m-d', $stamp);
 }
 
 /**

@@ -250,6 +250,7 @@ $L['Sections'] = 'Sections';
 $L['Security'] = 'Security';
 $L['Sender'] = 'Sender';	// New in N-0.1.0
 $L['Senders'] = 'Senders';	// New in N-0.1.0
+$L['Session_expired'] = 'Your session has expired. Please try again.';
 $L['Set'] = 'Set';
 $L['Setup'] = 'Setup';
 $L['SFS'] = 'Site File Space';

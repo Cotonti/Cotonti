@@ -36,6 +36,8 @@ $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
 sed_die(sed_sql_numrows($sql)==0);
 $urr = sed_sql_fetcharray($sql);
 
+$urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
+
 $sql1 = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$id' and gru_groupid='".SED_GROUP_TOPADMINS."'");
 $sys['edited_istopadmin'] = (sed_sql_numrows($sql1)>0) ? TRUE : FALSE;
 $sys['user_istopadmin'] = sed_auth('admin', 'a', 'A');
@@ -146,7 +148,7 @@ if ($a=='update')
 		if ($ruserpmnotify=='')
 		{ $ruserpmnotify = $urr['user_pmnotify']; }
 
-		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? 0 : sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
+		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? '' : sed_stamp2date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear));
 
 		if (!$ruserbanned)
 		{ $rbanexpire = 0; }

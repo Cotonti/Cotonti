@@ -145,4 +145,7 @@ $L['msg940_body'] = 'This section of the website is disabled.';
 $L['msg950_title'] = 'Error';
 $L['msg950_body'] = 'An error occured, maybe a wrong URL?';
 
+$L['msg951_title'] = 'Session expired';
+$L['msg951_body'] = 'Your session is no longer valid. Please try again.';
+
 ?>

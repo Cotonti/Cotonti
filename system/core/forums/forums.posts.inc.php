@@ -648,6 +648,7 @@ while ($row = sed_sql_fetcharray($sql))
 
 	if (!$cache[$row['fp_posterid']]['cached'])
 	{
+		$row['user_birthdate'] = sed_date2stamp($row['user_birthdate']);
 		$row['user_text'] = sed_build_usertext($row['user_text']);
 		$row['user_age'] = ($row['user_birthdate']!=0) ? sed_build_age($row['user_birthdate']) : '';
 		$cache[$row['fp_posterid']]['user_text'] = $row['user_text'];
@@ -767,6 +768,12 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		"FORUMS_POSTS_NEWPOST_TEXTBOXER" => $post_main."<br />".$pfs,
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
 	));
+
+	if (!empty($error_string))
+	{
+		$t->assign('FORUMS_POSTS_NEWPOST_ERROR_MSG', $error_string);
+		$t->parse('MAIN.FORUMS_POSTS_NEWPOST.FORUMS_POSTS_NEWPOST_ERROR');
+	}
 
 	/* === Hook  === */
 	$extp = sed_getextplugins('forums.posts.newpost.tags');
