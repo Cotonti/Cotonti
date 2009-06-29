@@ -30,7 +30,7 @@ $out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.sed_dec
 $out['bottomline'] = $cfg['bottomline'];
 $out['bottomline'] .= ($cfg['keepcrbottom']) ? '<br />'.$out['copyright'] : '';
 
-if ($cfg['devmode'])
+if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 {
 	$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Query</em></td></tr>";
 	$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
