@@ -4720,7 +4720,7 @@ function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
 		// Make sure www. is stripped and leading dot is added for subdomain support on some browsers
 		if (strtolower(substr($domain, 0, 4)) == 'www.')
 		{
-			$domain = substr(dDomain, 4);
+			$domain = substr($domain, 4);
 		}
 		if ($domain[0] != '.')
 		{

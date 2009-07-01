@@ -391,6 +391,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'pfs', '10', 'th_colorbg', 2, '000000', '', ''),
 ('core', 'pfs', '10', 'th_colortext', 2, 'FFFFFF', '', ''),
 ('core', 'pfs', '10', 'th_textsize', 2, '1', '', ''),
+('core', 'pfs', '11', 'pfs_winclose', 3, '0', '', '')
 ('core', 'plug', '01', 'disable_plug', 3, '0', '', ''),
 ('core', 'pm', '01', 'disable_pm', 3, '0', '', ''),
 ('core', 'pm', '10', 'pm_maxsize', 2, '10000', '', ''),
@@ -477,7 +478,12 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'tags', '9', 'lim_index', 1, '0', '', ' Limit of tags in a cloud displayed on index, 0 is unlimited'),
 ('plug', 'tags', '10', 'more', 3, '1', '', 'Show All Tags link in tag clouds'),
 ('core', 'comments', '03', 'expand_comments', 3, '1', '', ''),
-('core', 'ratings', '02', 'ratings_allowchange', 3, '0', '', '');
+('core', 'ratings', '02', 'ratings_allowchange', 3, '0', '', ''),
+('core', 'comments', '04', 'maxcommentsperpage', 2, '15', '', ''),
+('core', 'forums', '13', 'maxpostsperpage', 2, '15', '', ''),
+('core', 'page', '05', 'maxlistsperpage', 2, '15', '', ''),
+('core', 'pfs', '06', 'maxpfsperpage', 2, '15', '', ''),
+('core', 'pm', '11', 'maxpmperpage', 2, '15', '', '');
 
 CREATE TABLE `sed_core` (
   `ct_id` mediumint(8) NOT NULL auto_increment,

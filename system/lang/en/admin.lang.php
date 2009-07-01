@@ -150,10 +150,12 @@ $L['cfg_parsesmiliesusertext'] = array('Parse smilies in user signature', '');
  */
 
 $L['cfg_disable_pfs'] = array('Disable the '.$L['PFS'], '');
+$L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');
 $L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');	// New in N-0.0.2
 $L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in N-0.0.2
 $L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in N-0.0.2
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/... instead of prepending the USERID to the filename. Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this. It is not recommended to change this setting for now.');
+$L['cfg_pfs_winclose'] = array('Close popup window after bbcode insertion');
 $L['cfg_th_amode'] = array('Thumbnails generation', '');
 $L['cfg_th_border'] = array('Thumbnails, border size', 'Default: 4 pixels');
 $L['cfg_th_colorbg'] = array('Thumbnails, border color', 'Default: 000000, hex color code');
@@ -164,7 +166,6 @@ $L['cfg_th_keepratio'] = array('Thumbnail, keep ratio?', '');
 $L['cfg_th_textsize'] = array('Thumbnails, size of the text', '');
 $L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
 $L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Width x 0.75');
-$L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');   // New in N-0.0.6
 
 /**
  * Config Section
