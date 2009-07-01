@@ -597,6 +597,7 @@ $t->assign(array(
 ));
 
 $totalposts = sed_sql_numrows($sql);
+$fp_num=0;
 
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('forums.posts.loop');
@@ -614,10 +615,11 @@ while ($row = sed_sql_fetcharray($sql))
 	$fp_num++;
 	$i = $d + $fp_num;
 
-	$adminoptions = ($usr['id']>0) ? "<a href=\"".sed_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\">".$L['Quote']."</a>" : "&nbsp;";
-	$adminoptions .= (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? " &nbsp; <a href=\"".sed_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\">".$L['Edit']."</a>" : '';
-	$adminoptions .= ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? " &nbsp; ".$L['Delete'].":[<a href=\"".sed_url('forums', "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id'])."\">x</a>]" : '';
-	$adminoptions .= ($fp_num==$totalposts) ? "<a name=\"bottom\" id=\"bottom\"></a>" : '';
+	$rowquote  = ($usr['id']>0) ? "<a href=\"".sed_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\">".$L['Quote']."</a>" : "&nbsp;";
+	$rowedit   = (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? "<a href=\"".sed_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\">".$L['Edit']."</a>" : '';
+	$rowdelete = ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? $L['Delete'].":[<a href=\"".sed_url('forums', "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id'])."\">x</a>]" : '';
+	$rowdelete .= ($fp_num==$totalposts) ? "<a name=\"bottom\" id=\"bottom\"></a>" : '';
+    $adminoptions = $rowquote.' &nbsp; '.$rowedit.' &nbsp; '.$rowdelete;
 
 	if ($usr['id']>0 && $n=='unread' && !$unread_done && $row['fp_creation']>$usr['lastvisit'])
 	{
@@ -687,6 +689,9 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_POSTERIP" => $row['fp_posterip'],
 		"FORUMS_POSTS_ROW_USERONLINE" => $row['fp_useronline'],
 		"FORUMS_POSTS_ROW_USERONLINETITLE" => $row['fp_useronlinetitle'],
+        "FORUMS_POSTS_ROW_DELETE" => $rowdelete,
+        "FORUMS_POSTS_ROW_EDIT" => $rowedit,
+        "FORUMS_POSTS_ROW_QUOTE" => $rowquote,
 		"FORUMS_POSTS_ROW_ADMIN" => $adminoptions,
 		"FORUMS_POSTS_ROW_COUNTRY" => $sed_countries[$row['user_country']],
 		"FORUMS_POSTS_ROW_COUNTRYFLAG" => sed_build_flag($row['user_country']),
@@ -699,6 +704,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_AGE" => $row['user_age'],
 		"FORUMS_POSTS_ROW_POSTCOUNT" => $row['user_postcount'],
 		"FORUMS_POSTS_ROW_ODDEVEN" => sed_build_oddeven($fp_num),
+        "FORUMS_POSTS_ROW_NUM" => $fp_num,
 		"FORUMS_POSTS_ROW_ORDER" => $i,
 		"FORUMS_POSTS_ROW" => $row,
 	));

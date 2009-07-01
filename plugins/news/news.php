@@ -56,7 +56,7 @@ if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
             $v=trim($v);
             list($v, $lim) = explode('|', $v);
             $checkin = isset($sed_cat[$v]);
-            if ($v!=$cfg['plugin']['news']['category'] && $checkin)
+            if ($checkin)
             {
                 $lim = (!empty($lim)) ? $lim : $limit;
                 sed_get_news($v, "news.".$v, "INDEX_NEWS_".strtoupper($v), $lim);

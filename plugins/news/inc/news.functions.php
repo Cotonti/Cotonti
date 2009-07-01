@@ -94,7 +94,8 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
             "PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
             "PAGE_ROW_COMMENTS" => $pag['page_comments'],
             "PAGE_ROW_RATINGS" => "<img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" />",
-            "PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj)
+            "PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj),
+            "PAGE_ROW_NUM" => $jj,
             ));
 
         switch($pag['page_type'])

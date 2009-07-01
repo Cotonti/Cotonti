@@ -465,6 +465,7 @@ $t->assign(array(
 		"FORUMS_SECTIONS_ROW_ACTIVITYVALUE" => $secact_num,
 		"FORUMS_SECTIONS_ROW_NEWPOSTS" => $fsn['fs_newposts'],
 		"FORUMS_SECTIONS_ROW_ODDEVEN" => sed_build_oddeven($catnum),
+        "FORUMS_SECTIONS_ROW_NUM" => $catnum,
 		"FORUMS_SECTIONS_ROW" => $fsn
 			));
 			$t->parse("MAIN.FORUMS_SECTIONS.FORUMS_SECTIONS_ROW_SECTION");
@@ -567,6 +568,7 @@ $t->assign(array(
 		"FORUMS_TOPICS_ROW_PAGES" => $row['ft_pages'],
 		"FORUMS_TOPICS_ROW_MAXPAGES" => $row['ft_maxpages'],
 		"FORUMS_TOPICS_ROW_ODDEVEN" => sed_build_oddeven($ft_num),
+        "FORUMS_TOPICS_ROW_NUM" => $ft_num,
 		"FORUMS_TOPICS_ROW" => $row,
 		));
 
