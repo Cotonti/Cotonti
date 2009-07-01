@@ -315,7 +315,8 @@ if ($cfg['maintenance'])
 
 /* ======== Zone variables ======== */
 
-$z = (!empty($_G['z'])) ? mb_strtolower(sed_import('z','G','ALP',32)) : $z;
+$z_tmp = sed_import('z', 'G',' ALP', 32);
+$z = empty($z_tmp) ? $z : $z_tmp;
 $m = sed_import('m','G','ALP',24);
 $n = sed_import('n','G','ALP',24);
 $a = sed_import('a','G','ALP',24);
