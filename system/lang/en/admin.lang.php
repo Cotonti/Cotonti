@@ -339,6 +339,7 @@ $L['adm_filesize'] = 'File size';
  */
 
 $L['adm_forum_structure'] = 'Structure of the forums (categories)';
+$L['adm_forum_emptytitle'] = 'Error: title empty';	// New in N-0.1.0
 
 /**
   * Forums Section

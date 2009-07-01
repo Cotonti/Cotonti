@@ -57,7 +57,7 @@ if($a == 'update')
 	sed_auth_reorder();
 	sed_auth_clear('all');
 
-	$adminwarnings = 'updateed';
+	$adminwarnings = $L['Updated'];
 }
 
 $sql = sed_sql_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a

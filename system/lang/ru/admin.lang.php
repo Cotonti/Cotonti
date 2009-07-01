@@ -338,6 +338,7 @@ $L['adm_filesize'] = 'Размер файла';
  */
 
 $L['adm_forum_structure'] = 'Структура форумов (разделы)';
+$L['adm_forum_emptytitle'] = 'Ошибка: пустой заголовок';	// New in N-0.1.0
 
 /**
   * Forums Section

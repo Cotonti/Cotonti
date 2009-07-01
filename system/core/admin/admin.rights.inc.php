@@ -54,7 +54,7 @@ if($a == 'update')
 		sed_auth_reorder();
 		sed_auth_clear('all');
 
-		$adminwarnings = 'added';
+		$adminwarnings = $L['Added'];
 	}
 	elseif(is_array($_POST['auth']))
 	{
@@ -82,7 +82,7 @@ if($a == 'update')
 		sed_auth_reorder();
 		sed_auth_clear('all');
 
-		$adminwarnings = 'updated';
+		$adminwarnings = $L['Updated'];
 	}
 }
 
