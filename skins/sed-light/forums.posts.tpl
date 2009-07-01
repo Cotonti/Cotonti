@@ -54,7 +54,7 @@
 
 		    	<td style="height:24px; max-height:40px; text-align:right;" class="{FORUMS_POSTS_ROW_ODDEVEN}">
 		    	<a id="{FORUMS_POSTS_ROW_POSTID}" href="{FORUMS_POSTS_ROW_IDURL}">#{FORUMS_POSTS_ROW_ORDER}</a> &nbsp;
-		    	{FORUMS_POSTS_ROW_CREATION} &nbsp; {FORUMS_POSTS_ROW_POSTERIP} &nbsp; {FORUMS_POSTS_ROW_ADMIN}
+		    	{FORUMS_POSTS_ROW_CREATION} &nbsp; {FORUMS_POSTS_ROW_POSTERIP} &nbsp; {FORUMS_POSTS_ROW_QUOTE} &nbsp; {FORUMS_POSTS_ROW_EDIT} &nbsp; {FORUMS_POSTS_ROW_DELETE}
 		    	</td>
 		 	</tr>
 			<tr>

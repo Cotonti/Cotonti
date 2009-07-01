@@ -287,6 +287,7 @@ while ($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 		"USERS_ROW_LOGCOUNT" => $urr['user_logcount'],
 		"USERS_ROW_LASTIP" => $urr['user_lastip'],
 		"USERS_ROW_ODDEVEN" => sed_build_oddeven($jj),
+        "USERS_ROW_NUM" => $jj,
 		"USERS_ROW" => $urr
 	));
 

@@ -184,7 +184,8 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
         "PM_ROW_ICON_STATUS" => $row['pm_icon_status'],
         "PM_ROW_ICON_ACTION" => $row['pm_icon_action'],
         "PM_ROW_DESC" => sed_cutpost($pm_data, 100, false),
-        "PM_ROW_ODDEVEN" => sed_build_oddeven($jj)
+        "PM_ROW_ODDEVEN" => sed_build_oddeven($jj),
+        "PM_ROW_NUM" => $jj,
         ));
 
     /* === Hook - Part2 : Include === */
