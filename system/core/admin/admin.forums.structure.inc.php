@@ -136,7 +136,7 @@ else
 		}
 		sed_cache_clear('sed_forums_str');
 
-		$adminwarnings = 'updated';
+		$adminwarnings = $L['Updated'];
 	}
 	elseif($a == 'add')
 	{
@@ -156,7 +156,7 @@ else
 
 		sed_cache_clear('sed_forums_str');
 
-		$adminwarnings = 'added';
+		$adminwarnings = $L['Added'];
 	}
 	elseif($a == 'delete')
 	{
@@ -165,7 +165,7 @@ else
 
 		sed_cache_clear('sed_forums_str');
 
-		$adminwarnings = 'deleted';
+		$adminwarnings = $L['Deleted'];
 	}
 
 	$sql = sed_sql_query("SELECT DISTINCT(fs_category), COUNT(*) FROM $db_forum_sections WHERE 1 GROUP BY fs_category");

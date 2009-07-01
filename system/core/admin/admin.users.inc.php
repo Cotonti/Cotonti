@@ -48,7 +48,7 @@ if($n == 'add')
 	sed_auth_reorder();
 	sed_cache_clear('sed_groups');
 
-	$adminwarnings = 'added';
+	$adminwarnings = $L['Added'];
 }
 elseif($n == 'edit')
 {
@@ -74,7 +74,7 @@ elseif($n == 'edit')
 
 		sed_cache_clear('sed_groups');
 
-		$adminwarnings = 'updated';
+		$adminwarnings = $L['Updated'];
 	}
 	elseif($a == 'delete' && $g > 5)
 	{
@@ -85,7 +85,7 @@ elseif($n == 'edit')
 		sed_auth_clear('all');
 		sed_cache_clear('sed_groups');
 
-		$adminwarnings = 'deleted';
+		$adminwarnings = $L['Deleted'];
 	}
 	else
 	{

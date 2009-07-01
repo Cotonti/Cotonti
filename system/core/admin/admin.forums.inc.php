@@ -96,7 +96,7 @@ if($n == 'edit')
 		sed_check_xg();
 		sed_forum_resync($id);
 
-		$adminwarnings = 'resyncrezetedddded';
+		$adminwarnings = $L['Resynced'];
 	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
@@ -174,7 +174,7 @@ else
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='".$row_cur['fs_order']."' WHERE fs_id='".$row_oth['fs_id']."'");
 		}
 
-		$adminwarnings = 'ordered';
+		$adminwarnings = $L['Ordered'];
 	}
 	elseif($a == 'add')
 	{
@@ -235,11 +235,11 @@ else
 			sed_auth_reorder();
 			sed_auth_clear('all');
 
-			$adminwarnings = 'added';
+			$adminwarnings = $L['Added'];
 		}
 		else
 		{
-			$adminwarnings = 'not added - empty title';
+			$adminwarnings = $L['adm_forum_emptytitle'];
 		}
 	}
 	elseif($a == 'delete')
@@ -250,7 +250,7 @@ else
 		$sql1 = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='".$id."' ");
 		//$num = sed_sql_numrows($sql1);//Выдает варнинг
 
-		$adminwarnings = 'deleted';//сообщение такое же как бы мы перешли по адресу sed_url('message', "msg=916&rc=103&num=".$num, '', true))
+		$adminwarnings = $L['Deleted'];//сообщение такое же как бы мы перешли по адресу sed_url('message', "msg=916&rc=103&num=".$num, '', true))
 	}
 	/*
 	 $totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
