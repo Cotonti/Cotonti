@@ -619,6 +619,7 @@ if ($standalone)
 		$addpix = "'[img]'+gfile+'[/img]'";
 		$addfile = "'[url=".$cfg['pfs_dir_user']."'+gfile+']'+gfile+'[/url]'";
 	}
+	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
 	$pfs_header1 = $cfg['doctype']."<html><head>
 <title>".$cfg['maintitle']."</title>".sed_htmlmetas().sed_javascript()."
 <script type=\"text/javascript\">
@@ -627,16 +628,13 @@ function help(rcode,c1,c2) {
 	window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16');
 }
 function addthumb(gfile,c1,c2) {
-	insertText(opener.document, '$c1', '$c2', $addthumb);
-	window.close();
+	insertText(opener.document, '$c1', '$c2', $addthumb);$winclose
 }
 function addpix(gfile,c1,c2) {
-	insertText(opener.document, '$c1', '$c2', $addpix);
-	window.close();
+	insertText(opener.document, '$c1', '$c2', $addpix);$winclose
 }
 function addfile(gfile,c1,c2) {
-	insertText(opener.document, '$c1', '$c2', $addfile);
-	window.close();
+	insertText(opener.document, '$c1', '$c2', $addfile);$winclose
 }
 function picture(url,sx,sy) {
 	window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0');

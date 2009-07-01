@@ -342,7 +342,8 @@ function sed_loadconfigmap()
     $result[] = array ('pfs', '10', 'th_colortext', 2, 'FFFFFF', '');
     $result[] = array ('pfs', '10', 'th_textsize', 2, '1', array(0,1,2,3,4,5));
     $result[] = array ('pfs', '06', 'maxpfsperpage', 2, '15', array(5,10,15,20,25,30,40,50,60,70,100,200,500)); // N-0.0.6
-    $result[] = array ('plug', '01', 'disable_plug', 3, '0', '');
+    $result[] = array ('pfs', '11', 'pfs_winclose', 3, '0', '');
+	$result[] = array ('plug', '01', 'disable_plug', 3, '0', '');
     $result[] = array ('pm', '01', 'disable_pm', 3, '0', '');
     $result[] = array ('pm', '10', 'pm_maxsize', 2, '10000', array(200,500,1000,2000, 5000,10000,15000,20000,30000,50000,65000));
     $result[] = array ('pm', '10', 'pm_allownotifications', 3, '1', '');
