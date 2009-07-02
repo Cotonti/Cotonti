@@ -1,6 +1,6 @@
 <?php
 /**
- * Administration panel
+ * Administration panel - PFS
  *
  * @package Cotonti
  * @version 0.1.0

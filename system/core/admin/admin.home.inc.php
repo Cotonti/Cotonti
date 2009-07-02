@@ -1,6 +1,6 @@
 <?php
 /**
- * Administration panel
+ * Administration panel - Home page for administrators
  *
  * @package Cotonti
  * @version 0.1.0
@@ -20,13 +20,11 @@ $pagesqueued = sed_sql_result($pagesqueued, 0, "COUNT(*)");
 
 if(!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 {
-	$adminwarnings .= $L['adm_nogd'];
+	$is_adminwarnings = true;
 }
 
-$is_adminwarnings = isset($adminwarnings);
-
 $t -> assign(array(
-	"ADMIN_HOME_ADMINWARNINGS" => $adminwarnings,
+
 	"ADMIN_HOME_URL" => sed_url('admin', "m=page&s=queue"),
 	"ADMIN_HOME_PAGESQUEUED" => $pagesqueued
 ));

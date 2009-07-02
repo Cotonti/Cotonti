@@ -1,6 +1,6 @@
 <?php
 /**
- * Administration panel
+ * Administration panel - Manager of moduls
  *
  * @package Cotonti
  * @version 0.1.0

@@ -19,6 +19,8 @@ $t = new XTemplate(sed_skinfile('admin.rights.inc', false, true));
 
 $g = sed_import('g', 'G', 'INT');
 $advanced = sed_import('advanced', 'G', 'BOL');
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $L['adm_code']['admin'] = $L['Administration'];
 $L['adm_code']['comments'] = $L['Comments'];
@@ -209,9 +211,12 @@ if(is_array($extp))
 /* ===== */
 
 $is_adminwarnings = isset($adminwarnings);
+$adv_for_url = ($advanced) ? '&advanced=1' : '';
 
 $t -> assign(array(
-	"ADMIN_RIGHTS_FORM_URL" => ($advanced) ? sed_url('admin', 'm=rights&a=update&g='.$g.'&advanced=1') : sed_url('admin', "m=rights&a=update&g=".$g),
+	"ADMIN_RIGHTS_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_RIGHTS_FORM_URL" => sed_url('admin', "m=rights&a=update&g=".$g.$adv_for_url),
+	"ADMIN_RIGHTS_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saverights', url: '".sed_url('admin','m=rights&ajax=1&a=update&g='.$g.$adv_for_url)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_RIGHTS_ADVANCED_URL" => sed_url('admin', 'm=rights&g='.$g.'&advanced=1'),
 	"ADMIN_RIGHTS_SELECTBOX_GROUPS" => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
 	"ADMIN_RIGHTS_ADV_COLUMNS" => $adv_columns,
@@ -223,5 +228,12 @@ $adminmain = $t -> text("RIGHTS");
 
 $t -> parse("RIGHTS_HELP");
 $adminhelp = $t -> text("RIGHTS_HELP");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

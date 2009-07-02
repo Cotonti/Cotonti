@@ -1,6 +1,6 @@
 <?php
 /**
- * Administration panel
+ * Administration panel - PFS manager
  *
  * @package Cotonti
  * @version 0.1.0
@@ -26,7 +26,7 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
-unset ($disp_list);
+unset($disp_list);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid>=0"), 0, "COUNT(DISTINCT pfs_userid)");
 if($cfg['jquery'])
@@ -48,8 +48,8 @@ $ii = 0;
 
 while($row = sed_sql_fetcharray($sql))
 {
-	$row['user_name'] = ($row['user_id']==0) ? $L['SFS'] : $row['user_name'];
-	$row['user_id'] = ($row['user_id']==0) ? "0" : $row['user_id'];
+	$row['user_name'] = ($row['user_id'] == 0) ? $L['SFS'] : $row['user_name'];
+	$row['user_id'] = ($row['user_id'] == 0) ? "0" : $row['user_id'];
 
 	$t -> assign(array(
 		"ADMIN_ALLPFS_ROW_URL" => sed_url('pfs', "userid=".$row['user_id']),

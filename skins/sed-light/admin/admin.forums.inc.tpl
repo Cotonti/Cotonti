@@ -1,8 +1,5 @@
 <!-- BEGIN: FORUMS -->
 		<div id="{ADMIN_FORUMS_AJAX_OPENDIVID}">
-<!-- IF {PHP.is_adminwarnings} -->
-			<div class="error">{ADMIN_FORUMS_ADMINWARNINGS}</div>
-<!-- ENDIF -->
 			<ul>
 				<li><a href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
 <!-- IF {PHP.lincif_conf} -->
@@ -11,6 +8,9 @@
 				<li>{PHP.L.adm_forum_structure}</li>
 <!-- ENDIF -->
 			</ul>
+<!-- IF {PHP.is_adminwarnings} -->
+			<div class="error">{ADMIN_FORUMS_ADMINWARNINGS}</div>
+<!-- ENDIF -->
 <!-- BEGIN: EDIT -->
 			<form id="updatesection" action="{ADMIN_FORUMS_EDIT_FORM_URL}" method="post">
 				<table class="cells">

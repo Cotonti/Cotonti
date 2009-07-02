@@ -1,6 +1,6 @@
 <!-- BEGIN: HOME -->
 <!-- IF {PHP.is_adminwarnings} -->
-		<div class="error">{PHP.L.adm_warnings} : {ADMIN_HOME_ADMINWARNINGS}</div>
+		<div class="error">{PHP.L.adm_warnings} : {PHP.adm_nogd}</div>
 <!-- ENDIF -->
 		<h4>{PHP.L.adm_valqueue} :</h4>
 		<ul>
