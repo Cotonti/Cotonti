@@ -8,7 +8,7 @@
 		<hr />
 		{ADMIN_MAIN}
 		<hr />
-		<strong>{PHP.skinlang.admin.Help}</strong>
+		<strong>{PHP.skinlang.admin.Help}&nbsp;</strong>
 		<hr />
 		{ADMIN_HELP}
 	</div>

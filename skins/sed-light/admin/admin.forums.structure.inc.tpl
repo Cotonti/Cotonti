@@ -94,7 +94,7 @@
 					<td style="text-align:center;">{FORUMS_STRUCTURE_ROW_FN_TPL_SYM}</td>
 					<td><input type="text" class="text" name="{FORUMS_STRUCTURE_ROW_INPUT_TITLE_NAME}" value="{FORUMS_STRUCTURE_ROW_FN_TITLE}" size="24" maxlength="100" /></td>
 					<td style="text-align:right;">{FORUMS_STRUCTURE_ROW_SECTIONCOUNT} <a href="{FORUMS_STRUCTURE_ROW_JUMPTO_URL}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
-					<td style="text-align:center;"><a href="{FORUMS_STRUCTURE_ROW_OPTIONS_URL}"}>{PHP.L.Options}</a></td>
+					<td style="text-align:center;"><a href="{FORUMS_STRUCTURE_ROW_OPTIONS_URL}"{FORUMS_STRUCTURE_ROW_OPTIONS_URL_AJAX}>{PHP.L.Options}</a></td>
 				</tr>
 <!-- END: ROW -->
 				<tr>

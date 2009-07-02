@@ -20,6 +20,8 @@ $t = new XTemplate(sed_skinfile('admin.rightsbyitem.inc', false, true));
 $ic = sed_import('ic', 'G', 'ALP');
 $io = sed_import('io', 'G', 'ALP');
 $advanced = sed_import('advanced', 'G', 'BOL');
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $L['adm_code']['admin'] = $L['Administration'];
 $L['adm_code']['comments'] = $L['Comments'];
@@ -158,9 +160,12 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $is_adminwarnings = isset($adminwarnings);
+$adv_for_url = ($advanced) ? '&advanced=1' : '';
 
 $t -> assign(array(
-	"ADMIN_RIGHTSBYITEM_FORM_URL" => ($advanced) ? sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io.'&advanced=1') : sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io),
+	"ADMIN_RIGHTSBYITEM_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_RIGHTSBYITEM_FORM_URL" => sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io.$adv_for_url),
+	"ADMIN_RIGHTSBYITEM_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saverightsbyitem', url: '".sed_url('admin','m=rightsbyitem&ajax=1&a=update&ic='.$ic.'&io='.$io.$adv_for_url)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_RIGHTSBYITEM_ADVANCED_URL" => sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
 	"ADMIN_RIGHTSBYITEM_ADV_COLUMNS" => $adv_columns,
 	"ADMIN_RIGHTSBYITEM_3ADV_COLUMNS" => 3 + $adv_columns,
@@ -171,5 +176,12 @@ $adminmain = $t -> text("RIGHTSBYITEM");
 
 $t -> parse("RIGHTSBYITEM_HELP");
 $adminhelp = $t -> text("RIGHTSBYITEM_HELP");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>
