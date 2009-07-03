@@ -104,7 +104,7 @@ $skinlang['pageadd']['Filehint'] = '(Set &quot;Yes&quot; to enable the download 
 $skinlang['pageadd']['URLhint'] = '(If File download = &quot;Yes&quot;)';
 $skinlang['pageadd']['Filesize'] = 'Filesize (KB)';
 $skinlang['pageadd']['Filesizehint'] = '(If File download = &quot;Yes&quot;)';
-$skinlang['pageadd']['Formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section.<br />Check all fields carefully, you won\'t be able to change it later.<br />If you really need to change something, ask a moderator or an administrator.';
+$skinlang['pageadd']['Formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section.<br />Check all fields carefully.<br />If you need to change something, you will be able to do that later. But submitting changes puts a page into validation queue again.';
 
 /**
  * page.edit.tpl

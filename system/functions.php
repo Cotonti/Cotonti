@@ -4963,7 +4963,7 @@ function sed_get_plural($plural, $lang, $is_frac = false)
  * @example sed_assert($foo, $bar);
  * @see sed_watch(), sed_backtrace(), sed_vardump()
  */
-function sed_assert()
+function sed_print()
 {
 	ob_end_clean();
 	$vars = func_get_args();

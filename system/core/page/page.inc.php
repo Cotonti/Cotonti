@@ -58,7 +58,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin'], $usr['auth_download
 
 sed_block($usr['auth_read']);
 
-if ($pag['page_state']==1 && !$usr['isadmin'])
+if ($pag['page_state'] == 1 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 {
 	sed_log("Attempt to directly access an un-validated page", 'sec');
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930", '', true));
@@ -183,6 +183,12 @@ while($row = sed_sql_fetchassoc($fieldsres))
 	isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGE_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $row['field_description']);
 }
 
+if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])
+{
+	$t->assign("PAGE_ADMIN_EDIT",
+		"<a href=\"".sed_url('page', 'm=edit&id='.$pag['page_id'].'&r=list')."\">".$L['Edit'].'</a>');
+}
+
 if ($usr['isadmin'])
 {
 
@@ -194,11 +200,10 @@ if ($usr['isadmin'])
 	{
 		$validation = "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Putinvalidationqueue']."</a>";
 	}
-	$t-> assign(array(
-			"PAGE_ADMIN_COUNT" => $pag['page_count'],
-			"PAGE_ADMIN_UNVALIDATE" => $validation,
-			"PAGE_ADMIN_EDIT" => "<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a>"
-			));
+	$t->assign(array(
+		"PAGE_ADMIN_COUNT" => $pag['page_count'],
+		"PAGE_ADMIN_UNVALIDATE" => $validation
+	));
 }
 
 if ($pag['page_begin_noformat']>$sys['now_offset'])

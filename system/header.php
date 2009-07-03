@@ -58,6 +58,21 @@ if (sed_auth('page', 'any', 'A'))
 		{ $out['notices'] .= "<a href=\"".sed_url('admin', 'm=page&s=queue')."\">".$sys['pagesqueued']." ".$L['Pages']."</a> "; }
 	}
 }
+elseif ($usr['id'] > 0 && sed_auth('page', 'any', 'W'))
+{
+	$sqltmp2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1 AND page_ownerid = " . $usr['id']);
+	$sys['pagesqueued'] = sed_sql_result($sqltmp2,0,'COUNT(*)');
+
+	if ($sys['pagesqueued']>0)
+	{
+		$out['notices'] .= $L['hea_valqueues'];
+
+		if ($sys['pagesqueued']==1)
+		{ $out['notices'] .= "<a href=\"".sed_url('list', 'c=unvalidated')."\">"."1 ".$L['Page']."</a> "; }
+		elseif ($sys['pagesqueued']>1)
+		{ $out['notices'] .= "<a href=\"".sed_url('list', 'c=unvalidated')."\">".$sys['pagesqueued']." ".$L['Pages']."</a> "; }
+	}
+}
 
 sed_sendheaders();
 
