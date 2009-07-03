@@ -43,7 +43,7 @@ if (!$usr['isadmin'] || $userid=='')
 else
 {
 	$more1 = "?userid=".$userid;
-	$more = "&amp;userid=".$userid;
+	$more = "&userid=".$userid;
 }
 
 if ($userid!=$usr['id'])
@@ -287,7 +287,8 @@ elseif ($a=='delete')
 		}
 
 		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs',$more, '', true));
+		if ($more[0] == '&') $more = substr($more, 1, -1);
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
 		exit;
 	}
 	else
@@ -320,7 +321,7 @@ elseif ($a=='newfolder')
 		".(int)$nispublic.",
 		".(int)$nisgallery.",
 		0)");
-
+	$more1 = str_replace('?', '', $more1);
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more1, '', true));
 	exit;
 }
@@ -330,6 +331,7 @@ elseif ($a=='deletefolder')
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
 	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$f' ");
+	$more1 = str_replace('?', '', $more1);
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more1, '', true));
 	exit;
 }
