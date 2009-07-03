@@ -27,6 +27,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.bbcode.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'add')
 {
 	$bbc['name'] = sed_import('bbc_name', 'P', 'ALP');
@@ -90,7 +96,9 @@ $bbc_modes = array('str', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.banlist.loop');
+/* ===== */
 while($row = sed_sql_fetchassoc($res))
 {
 	foreach($bbc_modes as $val)
@@ -118,8 +126,14 @@ while($row = sed_sql_fetchassoc($res))
 		"ADMIN_BBCODE_ROW_PLUG" => $row['bbc_plug'],
 		"ADMIN_BBCODE_ROW_POSTRENDER" => $row['bbc_postrender'] ? ' checked="checked"' : '',
 		"ADMIN_BBCODE_ROW_UPDATE_URL" => sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id'].'&d='.$d),
-		"ADMIN_BBCODE_ROW_DELETE_URL" => sed_url('admin', 'm=bbcode&a=del&id='.$row['bbc_id'])
+		"ADMIN_BBCODE_ROW_DELETE_URL" => sed_url('admin', 'm=bbcode&a=del&id='.$row['bbc_id']),
+        "ADMIN_BBCODE_ROW_ODDEVEN" => sed_build_oddeven($ii),
 	));
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("BBCODE.ADMIN_BBCODE_ROW");
 	$ii++;
 }
@@ -155,6 +169,12 @@ $t -> assign(array(
 	"ADMIN_BBCODE_FORM_ACTION" => $form_action,
 	"ADMIN_BBCODE_URL_CLEAR_CACHE" => $form_clear_cache,
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.bbcode.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
 
 $t -> parse("BBCODE");
 $adminmain = $t -> text("BBCODE");

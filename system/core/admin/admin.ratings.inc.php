@@ -26,6 +26,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook  === */
+$extp = sed_getextplugins('admin.ratings.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'delete')
 {
 	sed_check_xg();
@@ -52,7 +58,9 @@ $sql = sed_sql_query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC 
 
 $ii=0;
 $jj=0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.ratings.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
 	$id2 = $row['rating_code'];
@@ -78,8 +86,13 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_RATINGS_ROW_CREATIONDATE" => date($cfg['dateformat'], $row['rating_creationdate']),
 		"ADMIN_RATINGS_ROW_VOTES" => $votes,
 		"ADMIN_RATINGS_ROW_RATING_AVERAGE" => $row['rating_average'],
-		"ADMIN_RATINGS_ROW_RAT_URL" => $rat_url
+		"ADMIN_RATINGS_ROW_RAT_URL" => $rat_url,
+        "ADMIN_RATINGS_ROW_ODDEVEN" => sed_build_oddeven($ii),
 	));
+    /* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("RATINGS.RATINGS_ROW");
 	$ii++;
 	$jj = $jj + $votes;
@@ -96,6 +109,13 @@ $t -> assign(array(
 	"ADMIN_RATINGS_ON_PAGE" => $ii,
 	"ADMIN_RATINGS_TOTALVOTES" => $jj
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.ratings.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("RATINGS");
 $adminmain = $t -> text("RATINGS");
 

@@ -36,12 +36,7 @@ $variants['forum'] = array($L['Forums'], "forum");
 /* === Hook === */
 $extp = sed_getextplugins('adim.polls.first');
 if(is_array($extp))
-{
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
-}
+{foreach($extp as $k => $pl){include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');}}
 /* ===== */
 
 if($a == 'delete')
@@ -156,7 +151,8 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_POLLS_ROW_POLL_URL_LCK" => sed_url('admin', "m=polls".$poll_filter."&a=lock&id=".$id."&".sed_xg()),
 		"ADMIN_POLLS_ROW_POLL_URL_RES" => sed_url('admin', "m=polls".$poll_filter."&a=reset&d=".$d."&id=".$id."&".sed_xg()),
 		"ADMIN_POLLS_ROW_POLL_URL_BMP" => sed_url('admin', "m=polls".$poll_filter."&a=bump&id=".$id."&".sed_xg()),
-		"ADMIN_POLLS_ROW_POLL_URL_OPN" => $admtypepoll
+		"ADMIN_POLLS_ROW_POLL_URL_OPN" => $admtypepoll,
+        "ADMIN_POLLS_ROW_POLL_ODDEVEN" => sed_build_oddeven($ii),
 	));
 
 	/* === Hook - Part2 : Include === */

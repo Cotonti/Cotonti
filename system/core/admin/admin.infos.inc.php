@@ -20,6 +20,12 @@ $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=infos'), $L['adm_infos']);
 $adminhelp = $L['adm_help_versions'];
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.infos.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 @error_reporting(0);
 
 $t -> assign(array(
@@ -33,6 +39,12 @@ $t -> assign(array(
 	"ADMIN_INFOS_USRTIME" => date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone'] * 3600),
 	"ADMIN_INFOS_TIMETEXT" => $usr['timetext']
 ));
+
+/* === Hook === */
+$extp = sed_getextplugins('admin.infos.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
 
 $t -> parse("INFOS");
 $adminmain = $t -> text("INFOS");
