@@ -29,10 +29,6 @@
 					<td>{PAGEEDIT_FORM_AUTHOR}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Owner}:</td>
-					<td>{PAGEEDIT_FORM_OWNERID}</td>
-				</tr>
-				<tr>
 					<td>{PHP.L.Date}:</td>
 					<td>{PAGEEDIT_FORM_DATE}</td>
 				</tr>
@@ -43,10 +39,6 @@
 				<tr>
 					<td>{PHP.L.Expire}:</td>
 					<td>{PAGEEDIT_FORM_EXPIRE}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.Hits}:</td>
-					<td>{PAGEEDIT_FORM_PAGECOUNT}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Extrakey}:</td>
@@ -62,10 +54,20 @@
 					<td>{PAGEEDIT_FORM_TAGS} ({PAGEEDIT_TOP_TAGS_HINT})</td>
 				</tr>
 				<!-- END: TAGS -->
+				<!-- BEGIN: ADMIN -->
+				<tr>
+					<td>{PHP.L.Owner}:</td>
+					<td>{PAGEEDIT_FORM_OWNERID}</td>
+				</tr>
 				<tr>
 					<td>{PHP.L.Parser}:</td>
 					<td>{PAGEEDIT_FORM_TYPE}</td>
 				</tr>
+				<tr>
+					<td>{PHP.L.Hits}:</td>
+					<td>{PAGEEDIT_FORM_PAGECOUNT}</td>
+				</tr>
+				<!-- END: ADMIN -->
 				<tr>
 					<td colspan="2">{PHP.L.Text}:
 					<div style="width:100%;">{PAGEEDIT_FORM_TEXT}
@@ -104,6 +106,10 @@
 				<tr>
 					<td colspan="2" class="valid">
 					<input type="submit" class="submit" value="{PHP.L.Update}" />
+					<!-- IF {PHP.usr_can_publish} -->
+					<input name="rpublish" type="submit" class="submit" value="{PHP.L.Publish}"
+						onclick="this.value='OK';return true" />
+					<!-- ENDIF -->
 					</td>
 				</tr>
 			</table>

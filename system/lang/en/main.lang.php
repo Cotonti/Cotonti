@@ -181,7 +181,7 @@ $L['Newsposts'] = 'News posts';
 $L['Next'] = 'Next page';
 $L['No'] = 'No';
 $L['None'] = 'None';
-$L['Normal'] = 'No';
+$L['Normal'] = 'Normal';
 $L['Notes'] = 'Notes';
 $L['No_items'] = 'No items found';	// New in N-0.0.1
 $L['Occupation'] = 'Occupation';
@@ -221,6 +221,7 @@ $L['Private_Messages'] = 'Private messages';
 $L['Profile'] = 'Profile';
 $L['Prune'] = 'Prune';
 $L['Public'] = 'Public';
+$L['Publish'] = 'Publish';
 $L['Putinvalidationqueue'] = 'Put in validation queue';
 $L['Quote'] = 'Quote';
 $L['Rank'] = 'Rank';
@@ -650,6 +651,8 @@ $L['pag_catmissing'] = 'The category code is missing';
 $L['pag_desctooshort'] = 'The description is too short or missing';
 $L['pag_notavailable'] = 'This page will be published in ';	// New in N-0.0.2
 $L['pag_titletooshort'] = 'The title is too short or missing';
+$L['pag_validation'] = 'Awaiting validation';
+$L['pag_validation_desc'] = 'Your pages which have not been validated by administrator yet';
 
 /**
  * PFS

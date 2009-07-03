@@ -26,10 +26,15 @@ $p = sed_import('p','G','ALP',16);
 
 $dc = sed_import('dc','G','INT');
 
-if ($c=='all' || $c=='system')
+if ($c == 'all' || $c == 'system')
 {
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 	sed_block($usr['isadmin']);
+}
+elseif ($c == 'unvalidated')
+{
+	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
+	sed_block($usr['auth_write']);
 }
 elseif(!isset($sed_cat[$c]))
 {
@@ -74,6 +79,19 @@ if ($c=='all')
 	WHERE page_state='0'
 	ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
 }
+elseif ($c == 'unvalidated')
+{
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
+		WHERE page_state = 1 AND page_ownerid = " . $usr['id']);
+	$totallines = sed_sql_result($sql, 0, 0);
+	$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
+		FROM $db_pages as p ".$join_ratings_condition."
+			LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		WHERE page_state = 1 AND page_ownerid = {$usr['id']}
+		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
+	$sed_cat[$c]['title'] = $L['pag_validation'];
+	$sed_cat[$c]['desc'] = $L['pag_validation_desc'];
+ }
 elseif (!empty($o) && !empty($p) && $p!='password')
 {
 	$sql = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_code='$c' ");
@@ -105,14 +123,19 @@ $extratext = fread ($fd, filesize ($incl));
 fclose ($fd);
 }*/
 
-if ($c=='all' || $c=='system')
-{ $catpath = $sed_cat[$c]['title']; }
+if ($c == 'all' || $c == 'system' || $c == 'unvalidated')
+{
+	$catpath = $sed_cat[$c]['title'];
+}
 else
-{ $catpath = sed_build_catpath($c, '<a href="%1$s">%2$s</a>'); }
+{
+	$catpath = sed_build_catpath($c, '<a href="%1$s">%2$s</a>');
+}
 
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
-$submitnewpage = ($usr['auth_write'] && $c!='all') ? "<a href=\"".sed_url('page', "m=add&c=".$c)."\">".$L['lis_submitnew']."</a>" : '';
+$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ?
+	"<a href=\"".sed_url('page', 'm=add&c='.$c)."\">".$L['lis_submitnew'].'</a>' : '';
 
 $pagination = sed_pagination(sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p"), $d, $totallines, $cfg['maxrowsperpage']);
 list($pageprev, $pagenext) = sed_pagination_pn(sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p"), $d, $totallines, $cfg['maxrowsperpage'], TRUE);

@@ -42,7 +42,7 @@ if ($a=='update')
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
-	sed_block($usr['isadmin']);
+	sed_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row1['page_ownerid']);
 
 
 	$rpagekey = sed_import('rpagekey','P','TXT');
@@ -164,27 +164,46 @@ if ($a=='update')
 				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
 			}
 
+			if ($usr['isadmin'] && $cfg['autovalidate'])
+			{
+				$rpublish = sed_import('rpublish', 'P', 'ALP');
+				if ($rpublish == 'OK' )
+				{
+					$page_state = 0;
+					sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
+				}
+				else
+				{
+					$page_state = 1;
+				}
+			}
+			else
+			{
+				$page_state = 1;
+			}
+
 			$ssql = "UPDATE $db_pages SET
-			page_cat = '".sed_sql_prep($rpagecat)."',
-				page_type = '".sed_sql_prep($rpagetype)."',
+				page_cat = '".sed_sql_prep($rpagecat)."',
 				page_key = '".sed_sql_prep($rpagekey)."',";
-				if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',"; // Extra fields
-		$ssql.="page_title = '".sed_sql_prep($rpagetitle)."',
+			if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',"; // Extra fields
+			$ssql.="page_title = '".sed_sql_prep($rpagetitle)."',
 				page_desc = '".sed_sql_prep($rpagedesc)."',
 				page_text='".sed_sql_prep($rpagetext)."',
 				page_html='".sed_sql_prep($rpagehtml)."',
-				page_author = '".sed_sql_prep($rpageauthor)."',
-			page_ownerid = '$rpageownerid',
-			page_date = '$rpagedate',
-			page_begin = '$rpagebegin',
-			page_expire = '$rpageexpire',
-			page_file = '".sed_sql_prep($rpagefile)."',
+				page_author = '".sed_sql_prep($rpageauthor)."',";
+			if ($usr['isadmin']) $ssql .= "page_type = '".sed_sql_prep($rpagetype)."',
+				page_ownerid = '$rpageownerid',
+				page_count = '$rpagecount',";
+			$ssql .= "page_date = '$rpagedate',
+				page_begin = '$rpagebegin',
+				page_expire = '$rpageexpire',
+				page_file = '".sed_sql_prep($rpagefile)."',
 				page_url = '".sed_sql_prep($rpageurl)."',
 				page_size = '".sed_sql_prep($rpagesize)."',
-			page_count = '$rpagecount',
-			page_filecount = '$rpagefilecount',
-			page_alias = '".sed_sql_prep($rpagealias)."'
-			WHERE page_id='$id'";
+				page_filecount = '$rpagefilecount',
+				page_alias = '".sed_sql_prep($rpagealias)."',
+				page_state = $page_state
+				WHERE page_id='$id'";
 			$sql = sed_sql_query($ssql);
 
 			/* === Hook === */
@@ -215,7 +234,7 @@ $extp = sed_getextplugins('page.edit.first');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
-sed_block($usr['isadmin']);
+sed_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);
 
 
 $page_form_delete = "<input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"0\" checked=\"checked\" />".$L['No'];
@@ -376,6 +395,12 @@ $extp = sed_getextplugins('page.edit.tags');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+
+if ($usr['isadmin'])
+{
+	if ($cfg['autovalidate']) $usr_can_publish = TRUE;
+	$t->parse('MAIN.ADMIN');
+}
 
 $t->parse("MAIN");
 $t->out("MAIN");

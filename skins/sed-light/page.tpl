@@ -17,8 +17,9 @@
 					{PHP.L.Author}: {PAGE_AUTHOR}<br />
 					{PHP.skinlang.page.Submittedby}: {PAGE_OWNER} &nbsp; {PHP.L.Date}: {PAGE_DATE}<br />
 
+				{PAGE_ADMIN_EDIT}
 				<!-- BEGIN: PAGE_ADMIN -->
-				{PAGE_ADMIN_UNVALIDATE} &nbsp; {PAGE_ADMIN_EDIT} &nbsp; ({PAGE_ADMIN_COUNT})<br />
+				{PAGE_ADMIN_UNVALIDATE} &nbsp; ({PAGE_ADMIN_COUNT})<br />
 				<!-- END: PAGE_ADMIN -->
 				{PAGE_RATINGS_DISPLAY}
 			</div>

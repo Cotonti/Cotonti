@@ -86,7 +86,6 @@ if ($a=='add')
 	}
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
-	$page_state = ($usr['isadmin'] && $cfg['autovalidate']) ? "0" : "1";
 
 	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing']."<br />" : '';
 	$error_string .= (mb_strlen($newpagetitle)<2) ? $L['pag_titletooshort']."<br />" : '';
@@ -112,10 +111,25 @@ if ($a=='add')
 		{
 			$newpagehtml = '';
 		}
-		if($page_state == 0)
+
+		if ($usr['isadmin'] && $cfg['autovalidate'])
 		{
-			sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' ");
+			$rpublish = sed_import('rpublish', 'P', 'ALP');
+			if ($rpublish == 'OK' )
+			{
+				$page_state = 0;
+				sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($newpagecat)."' ");
+			}
+			else
+			{
+				$page_state = 1;
+			}
 		}
+		else
+		{
+			$page_state = 1;
+		}
+
 		$ssql = "INSERT into $db_pages
 		(page_state,
 		page_type,
@@ -312,6 +326,12 @@ $extp = sed_getextplugins('page.add.tags');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+
+if ($usr['isadmin'])
+{
+	if ($cfg['autovalidate']) $usr_can_publish = TRUE;
+	$t->parse('MAIN.ADMIN');
+}
 
 $t->parse("MAIN");
 $t->out("MAIN");
