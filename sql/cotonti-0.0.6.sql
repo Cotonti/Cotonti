@@ -252,7 +252,7 @@ INSERT INTO `sed_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('ol','str','[/ol]','</ol>',1,1,128,'',0),
 ('li','str','[li]','<li>',1,1,128,'',0),
 ('li','str','[/li]','</li>',1,1,128,'',0),
-('li_short','pcre','\\[\\*\\](.*?)\\n','<li>$1</li>',0,1,128,'',0)
+('li_short','pcre','\\[\\*\\](.*?)\\n','<li>$1</li>',0,1,128,'',0),
 ('table', 'str', '[table]', '<table>', 1, 1, 128, 'markitup', 0),
 ('table', 'str', '[/table]', '</table>', 1, 1, 128, 'markitup', 0),
 ('tr', 'str', '[tr]', '<tr>', 1, 1, 128, 'markitup', 0),
@@ -391,7 +391,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'pfs', '10', 'th_colorbg', 2, '000000', '', ''),
 ('core', 'pfs', '10', 'th_colortext', 2, 'FFFFFF', '', ''),
 ('core', 'pfs', '10', 'th_textsize', 2, '1', '', ''),
-('core', 'pfs', '11', 'pfs_winclose', 3, '0', '', '')
+('core', 'pfs', '11', 'pfs_winclose', 3, '0', '', ''),
 ('core', 'plug', '01', 'disable_plug', 3, '0', '', ''),
 ('core', 'pm', '01', 'disable_pm', 3, '0', '', ''),
 ('core', 'pm', '10', 'pm_maxsize', 2, '10000', '', ''),
