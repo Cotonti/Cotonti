@@ -81,10 +81,12 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
-					<input type="submit" value="{PHP.L.Submit}" />
 					<!-- IF {PHP.usr_can_publish} -->
 					<input name="rpublish" type="submit" class="submit" value="{PHP.L.Publish}"
 						onclick="this.value='OK';return true" />
+					<input type="submit" value="{PHP.L.Putinvalidationqueue}" />
+					<!-- ELSE -->
+					<input type="submit" value="{PHP.L.Submit}" />
 					<!-- ENDIF -->
 					</td>
 				</tr>
