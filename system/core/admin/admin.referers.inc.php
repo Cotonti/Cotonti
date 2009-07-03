@@ -25,6 +25,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook  === */
+$extp = sed_getextplugins('admin.referers.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a=='prune' && $usr['isadmin'])
 {
 	$sql = sed_sql_query("TRUNCATE $db_referers");
@@ -62,7 +68,9 @@ if(sed_sql_numrows($sql)>0)
 	}
 
 	$ii = 0;
-
+    /* === Hook - Part1 : Set === */
+    $extp = sed_getextplugins('admin.referers.loop');
+    /* ===== */
 	foreach($referers as $referer => $url)
 	{
 
@@ -73,8 +81,13 @@ if(sed_sql_numrows($sql)>0)
 		{
 			$t -> assign(array(
 				"ADMIN_REFERERS_URI" => htmlspecialchars(sed_cutstring($uri, 48)),
-				"ADMIN_REFERERS_COUNT" => $count
+				"ADMIN_REFERERS_COUNT" => $count,
+                "ADMIN_REFERERS_ODDEVEN" => sed_build_oddeven($ii),
 			));
+            /* === Hook - Part2 : Include === */
+            if (is_array($extp))
+            { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+            /* ===== */
 			$t -> parse("REFERERS.REFERERS_ROW.REFERERS_URI");
 		}
 		$ii++;
@@ -97,6 +110,12 @@ $t -> assign(array(
 	"ADMIN_REFERERS_TOTALITEMS" => $totalitems,
 	"ADMIN_REFERERS_ON_PAGE" => $ii
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.referers.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
 $t -> parse("REFERERS");
 $adminmain = $t -> text("REFERERS");
 

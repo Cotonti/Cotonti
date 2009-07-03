@@ -25,6 +25,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.banlist.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'update')
 {
 	$id = sed_import('id', 'G', 'INT');
@@ -82,6 +88,10 @@ $sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, ba
 
 $ii = 0;
 
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.banlist.loop');
+/* ===== */
+
 while($row = sed_sql_fetcharray($sql))
 {
 	$t -> assign(array(
@@ -93,8 +103,15 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_BANLIST_EXPIRE" => ($row['banlist_expire']>0) ? date($cfg['dateformat'],$row['banlist_expire'])." GMT" : $L['adm_neverexpire'],
 		"ADMIN_BANLIST_IP" => $row['banlist_ip'],
 		"ADMIN_BANLIST_EMAIL" => $row['banlist_email'],
-		"ADMIN_BANLIST_REASON" => $row['banlist_reason']
+		"ADMIN_BANLIST_REASON" => $row['banlist_reason'],
+        "ADMIN_BANLIST_ODDEVEN" => sed_build_oddeven($ii),
 	));
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	$t -> parse("BANLIST.ADMIN_BANLIST_ROW");
 	$ii++;
 }
@@ -110,6 +127,13 @@ $t -> assign(array(
 	"ADMIN_BANLIST_INC_URLFORMADD" => sed_url('admin', 'm=banlist&a=add'),
 	"ADMIN_BANLIST_INC_URLFORMADD_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addbanlist', url: '".sed_url('admin','m=banlist&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.banlist.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("BANLIST");
 $adminmain = $t -> text("BANLIST");
 

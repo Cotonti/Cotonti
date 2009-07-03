@@ -19,6 +19,12 @@ $t = new XTemplate(sed_skinfile('admin.cache.inc', false, true));
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=cache'), $L['adm_internalcache']);
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.cache.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'purge')
 {
 	$adminwarnings = (sed_check_xg() && sed_cache_clearall()) ? $L['adm_purgeall_done'] : $L['Error'];
@@ -34,7 +40,11 @@ $is_adminwarnings = isset($adminwarnings);
 
 $sql = sed_sql_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
 $cachesize = 0;
+$ii=0;
 
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.cache.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
 	$row['c_value'] = sed_cc($row['c_value']);
@@ -45,9 +55,17 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_CACHE_ITEM_NAME" => $row['c_name'],
 		"ADMIN_CACHE_EXPIRE" => ($row['c_expire']-$sys['now']),
 		"ADMIN_CACHE_SIZE" => $row['size'],
-		"ADMIN_CACHE_VALUE" => ($a=='showall') ? $row['c_value'] : sed_cutstring($row['c_value'], 80)
+		"ADMIN_CACHE_VALUE" => ($a=='showall') ? $row['c_value'] : sed_cutstring($row['c_value'], 80),
+        "ADMIN_CACHE_ROW_ODDEVEN" => sed_build_oddeven($ii),
 	));
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+    
 	$t -> parse("CACHE.ADMIN_CACHE_ROW");
+    $ii++;
 }
 
 $t -> assign(array(
@@ -57,6 +75,12 @@ $t -> assign(array(
 	"ADMIN_CACHE_URL_SHOWALL" => sed_url('admin', 'm=cache&a=showall'),
 	"ADMIN_CACHE_CACHESIZE" => $cachesize
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.cache.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
 
 $t -> parse("CACHE");
 $adminmain = $t -> text("CACHE");

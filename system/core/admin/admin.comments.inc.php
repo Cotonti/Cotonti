@@ -25,6 +25,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook  === */
+$extp = sed_getextplugins('admin.comments.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'delete')
 {
 	sed_check_xg();
@@ -49,7 +55,9 @@ else
 $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 
 $ii = 0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.comments.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
 	$row['com_text'] = sed_cc(sed_cutstring($row['com_text'], 40));
@@ -94,8 +102,13 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_COMMENTS_AUTHOR" => $row['com_author'],
 		"ADMIN_COMMENTS_DATE" => date($cfg['dateformat'], $row['com_date']),
 		"ADMIN_COMMENTS_TEXT" => $row['com_text'],
-		"ADMIN_COMMENTS_URL" => $row['com_url']
+		"ADMIN_COMMENTS_URL" => $row['com_url'],
+        "ADMIN_COMMENTS_ODDEVEN" => sed_build_oddeven($ii),
 	));
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("COMMENTS.ADMIN_COMMENTS_ROW");
 	$ii++;
 }
@@ -110,6 +123,12 @@ $t -> assign(array(
 	"ADMIN_COMMENTS_TOTALITEMS" => $totalitems,
 	"ADMIN_COMMENTS_COUNTER_ROW" => $ii
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.comments.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
 
 $t -> parse("COMMENTS");
 $adminmain = $t -> text("COMMENTS");
