@@ -63,38 +63,38 @@ if($a=='send')
 
     if(!empty($newpmrecipient))
     {
-    $touser_src = explode(",", $newpmrecipient);
-    $touser_req = count($touser_src);
-    foreach($touser_src as $k => $i)
-    {
-        $touser_sql[] = "'".sed_sql_prep(trim(sed_import($i, 'D', 'TXT')))."'";
-    }
-    $touser_sql = implode(',', $touser_sql);
-    $touser_sql = '('.$touser_sql.')';
-    $sql = sed_sql_query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
-    $totalrecipients = sed_sql_numrows($sql);
-    while($row = sed_sql_fetcharray($sql))
-    {
-        $touser_ids[] = $row['user_id'];
-        $row['user_name'] = sed_cc($row['user_name']);
-        $touser_names[] = $row['user_name'];
-        $touser_usrlnk[] .= ($cfg['parsebbcodecom']) ? "[user=".$row['user_id']."]".$row['user_name']."[/user]" : $row['user_name'];
-    }
-    $error_string .= ($totalrecipients < $touser_req ) ? $L['pm_wrongname']."<br />" : '';
-    $error_string .= (!$usr['isadmin'] && $totalrecipients > 10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
-    $touser = ($totalrecipients>0) ? implode(",", $touser_names) : '';
+        $touser_src = explode(",", $newpmrecipient);
+        $touser_req = count($touser_src);
+        foreach($touser_src as $k => $i)
+        {
+            $touser_sql[] = "'".sed_sql_prep(trim(sed_import($i, 'D', 'TXT')))."'";
+        }
+        $touser_sql = implode(',', $touser_sql);
+        $touser_sql = '('.$touser_sql.')';
+        $sql = sed_sql_query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
+        $totalrecipients = sed_sql_numrows($sql);
+        while($row = sed_sql_fetcharray($sql))
+        {
+            $touser_ids[] = $row['user_id'];
+            $row['user_name'] = sed_cc($row['user_name']);
+            $touser_names[] = $row['user_name'];
+            $touser_usrlnk[] .= ($cfg['parsebbcodecom']) ? "[user=".$row['user_id']."]".$row['user_name']."[/user]" : $row['user_name'];
+        }
+        $error_string .= ($totalrecipients < $touser_req ) ? $L['pm_wrongname']."<br />" : '';
+        $error_string .= (!$usr['isadmin'] && $totalrecipients > 10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
+        $touser = ($totalrecipients>0) ? implode(",", $touser_names) : '';
     }
     else
     {
-       $touser_ids[] = $to;
-       $touser = $to;
-       $totalrecipients = 1;
+        $touser_ids[] = $to;
+        $touser = $to;
+        $totalrecipients = 1;
     }
-    
-    $error_string .= (mb_strlen($newpmtitle) < 2) ? $L['pm_titletooshort']."<br />" : '';
+
+
     $error_string .= (mb_strlen($newpmtext) < 2) ? $L['pm_bodytooshort']."<br />" : '';
     $error_string .= (mb_strlen($newpmtext) > $cfg['pm_maxsize']) ? $L['pm_bodytoolong']."<br />" : '';
-
+    $newpmtitle .= (mb_strlen($newpmtitle) < 2) ? " . . . " : '';
 
     if(empty($error_string))
     {

@@ -132,20 +132,19 @@ else
     $pm_data = sed_post_parse($pm_data);
 }
 
-if(preg_match("/Re\(([0-9]+)\)\:(.+)|Re\:(.+)/i", $row['pm_title'], $matches))
+if (preg_match("/Re(\(\d+\))?\:(.+)/", $row['pm_title'], $matches))
 {
-    $matches[1] = ($matches[1]) ? $matches[1]+1 : 2;
-    $matches[2] = ($matches[2]) ? $matches[2] : $matches[3];
-    $newpmtitle = "Re(".$matches[1]."): ".trim($matches[2]);
+    $matches[1] = empty($matches[1]) ? 2 : trim($matches[1], '()') + 1;
+    $newpmtitle = 'Re(' . $matches[1] . '): ' . trim($matches[2]);
 }
 else
 {
-    $newpmtitle ="Re: ".$row['pm_title'];
+    $newpmtitle = 'Re: ' . $row['pm_title'];
 }
 
 if(!empty($q))
 {
-   $newpmtext= "[qoute]".$row['pm_text']."[/quote]";
+    $newpmtext= "[quote]".$row['pm_text']."[/quote]";
 }
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -173,14 +172,14 @@ $t-> assign(array(
 
 if ($usr['auth_write'])
 {
-  $t-> assign(array(
+    $t-> assign(array(
         "PM_QUOTE" => '<a href="'.sed_url('pm', 'm=message&amp;id='.$id.'&amp;q=quote').'">'.$L[Quote].'</a>',
         "PM_FORM_SEND" => sed_url('pm', 'm=send&amp;a=send&amp;to='.$to),
         "PM_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".sed_cc($newpmtitle)."\" size=\"56\" maxlength=\"255\" />",
         "PM_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"8\" cols=\"56\">".sed_cc($newpmtext)."</textarea>".$pfs,
         "PM_FORM_MYPFS" => $pfs,
-    ));
-  $t->parse("MAIN.REPLY");
+        ));
+    $t->parse("MAIN.REPLY");
 }
 
 
