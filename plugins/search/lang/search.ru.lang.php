@@ -3,68 +3,93 @@
  * Russian Language File for Search Plugin
  *
  * @package Cotonti
- * @version 0.1.0
- * @author Cotonti Translators Team
+ * @version 0.0.6
+ * @author Neocrome, Spartan, Boss
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL.');
 
-/**
- * Plugin Body
- */
+// Настройки плагина.
+$L['cfg_maxwords']= array('Максимум поисковых слов');
+$L['cfg_maxsigns']= array('Максимум знаков в поиске');
+$L['cfg_maxitems']= array('Максимум результатов в обычном поиске');
+$L['cfg_maxitems_ext']= array('Максимум результатов в расширенном поиске');
+$L['cfg_showtext']= array('Отображение текста в результатах обычного поиска');
+$L['cfg_showtext_ext']= array('Отображение текста в результатах расширенного поиска');
 
-$L['plu_title_alltab_s'] = 'Искать в форумах и в страницах';
-$L['plu_title_frmtab'] = 'Поиск в форумах';
-$L['plu_title_frmtab_s'] = 'Искать в форумах...';
-$L['plu_title_pagtab'] = 'Поиск в страницах';
-$L['plu_title_pagtab_s'] = 'Искать в страницах...';
-$L['plu_title_usetab'] = 'Поиск пользователей';
-$L['plu_title_usetab_s'] = 'Искать пользователя...';
+// Общие - залоговок, инфо, запрос.
+$L['plu_title_all'] = "Поиск по сайту";
+$L['plu_subtitle_all'] = "Вы можете конкретизировать поиск, отметив ниже лишь необходимые разделы и параметры. Обратите внимание, что общий поиск предоставляет не полные возможности. Выберите поиск по форуму или публикациям, чтобы получить доступ к дополнительным параметрам.";
+$L['plu_search_req'] = "Запрос";
+$L['plu_search_key'] = "Найти";
+$L['plu_search_example'] = "Например, aver 307 vista";
 
-$L['plu_searchin1'] = 'Ключевые слова';
-$L['plu_searchin2'] = '';
-$L['plu_searchall'] = 'Искать все слова';	// New in N-0.0.2
-$L['plu_searchall2'] = 'По умолчанию: искать <span style="font-size:large;">любые</span> из слов в запросе';	// New in N-0.0.2
+// Дополнения в заголовок.
+$L['plu_title_frmtab'] = "Форум";
+$L['plu_title_pagtab'] = "Публикации";
+$L['plu_title_usetab'] = "Пользователи";
 
-$L['plu_frm_hint'] = '';
-$L['plu_allsections'] = 'Все разделы';
-$L['plu_frm_rep'] = 'Только в темах с ответами';
+// Переключатели режимов и заголовки результатов.
+$L['plu_tabs_all'] = "Общий поиск";
+$L['plu_tabs_frm'] = "Форум";
+$L['plu_tabs_pag'] = "Публикации";
 
-$L['plu_pag_hint'] = '';
-$L['plu_allcategories'] = 'Все категории';
-$L['plu_pag_fil'] = 'Только в страницах с прикрепленными файлами';
+// Параметры - Общие.
+$L['plu_ctrl_list'] = "Удерживайте CTRL, чтобы выделить несколько разделов.";
+$L['plu_allsections'] = "Все разделы";
+$L['plu_allcategories'] = "Все разделы";
+$L['plu_res_sort'] = "Сортировать результаты по";
+$L['plu_sort_desc'] = "Убывание";
+$L['plu_sort_asc'] = "Возрастание";
+$L['plu_other_opt'] = "Дополнительные параметры";
+$L['plu_other_date'] = "Учитывать дату";
 
-$L['plu_searchin'] = 'Искать в';
+// Параметры - Даты.
+$L['plu_any_date'] = 'Любая дата';
+$L['plu_last_2_weeks'] = 'Последние 2 недели';
+$L['plu_last_1_month'] = 'Последний месяц';
+$L['plu_last_3_month'] = 'Последние 3 месяца';
+$L['plu_last_1_year'] = 'Последний год';
+$L['plu_need_datas'] = 'Произвольный диапазон';
+$L['plu_need_dd'] = 'дд';
+$L['plu_need_mm'] = 'мм';
+$L['plu_need_yy'] = 'гггг';
 
-$L['Find results from'] = 'Искать в опубликованном';
-$L['A day ago'] = 'один день назад';
-$L['A week ago'] = 'одну неделю назад';
-$L['2 weeks ago'] = 'две недели назад';
-$L['A month ago'] = 'один месяц назад';
-$L['3 months ago'] = 'три месяца назад';
-$L['6 months ago'] = '6 месяцев назад';
-$L['A year ago'] = 'год назад';
-$L['Any date'] = 'в любое время';
-$L['And newer'] = 'и позднее';
-$L['And older'] = 'и ранее';
+// Параметры - Форум.
+$L['plu_frm_set_sec'] = "Выберите разделы форума";
+$L['plu_frm_res_sort1'] = "Дате обновления тем";
+$L['plu_frm_res_sort2'] = "Дате создания тем";
+$L['plu_frm_res_sort3'] = "Названию тем";
+$L['plu_frm_res_sort4'] = "Числу ответов";
+$L['plu_frm_res_sort5'] = "Числу просмотров";
+$L['plu_frm_search_names'] = "Поиск в названиях тем";
+$L['plu_frm_search_post'] = "Поиск в теле сообщений";
+$L['plu_frm_search_answ'] = "Только темы с ответами";
 
-$L['Sort results by'] = 'Сортировать результат поиска по';
-$L['Creation date'] = 'дате создания';
-$L['Last updated'] = 'последнему обновлению';
-$L['Number of replies'] = 'количеству ответов';
-$L['Number of views'] = 'количеству просмотров';
+// Параметры - Страницы.
+$L['plu_pag_set_sec'] = "Выберите разделы сайта";
+$L['plu_pag_res_sort1'] = "Дате публикации";
+$L['plu_pag_res_sort2'] = "Названию";
+$L['plu_pag_res_sort3'] = "Популярности";
+$L['plu_pag_search_names'] = "Поиск в названиях публикаций";
+$L['plu_pag_search_desc'] = "Поиск в описании публикаций";
+$L['plu_pag_search_text'] = "Поиск в самих публикациях";
+$L['plu_pag_search_file'] = "Публикации только с файлами";
 
-$L['plu_querytooshort'] = 'Слишком короткий запрос!';
-$L['plu_toomanywords'] = 'Слишком много слов, ограничение:';
-$L['plu_found'] = 'Найдено';
-$L['plu_match'] = array('совпадение','совпадения','совпадений');
+// Ошибки.
+$L['plu_querytooshort'] = "Поисковый запрос слишком короткий.";
+$L['plu_toomanywords'] = "Слишком много слов, должно быть не больше";
+$L['plu_notseltopmes'] = "Вы не выбрали область поиска для форума в дополнительных параметрах.";
+$L['plu_notseloption'] = "Вы не выбрали область поиска для публикаций в дополнительных параметрах.";
+$L['plu_noneresult'] = "Ничего не найдено, попробуйте упростить запрос.";
 
-/**
- * Plugin Config
- */
-
-$L['cfg_searchurl'] = array('Вид ссылки на сообщение в форуме','&laquo;Normal&raquo; (обычная) &mdash; традиционное отображение темы с переходом к сообщению<br />&laquo;Single&raquo; (одиночная) &mdash; только одно сообщение');
-
+// Результаты.
+$L['plu_result'] = "Результаты поиска";
+$L['plu_found'] = "Найдено";
+$L['plu_moreres'] = "более";
+$L['plu_match'] = "совпадений";
+$L['plu_section'] = "Раздел";
+$L['plu_last_date'] = "Дата обновления";
 ?>
