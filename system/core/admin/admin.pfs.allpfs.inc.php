@@ -26,6 +26,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.pfs.allpfs.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 unset($disp_list);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid>=0"), 0, "COUNT(DISTINCT pfs_userid)");
@@ -45,7 +51,9 @@ $sql = sed_sql_query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COUN
 	WHERE pfs_folderid>=0 GROUP BY p.pfs_userid ORDER BY u.user_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.pfs.allpfs.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
 	$row['user_name'] = ($row['user_id'] == 0) ? $L['SFS'] : $row['user_name'];
@@ -56,6 +64,11 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_ALLPFS_ROW_USER" => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
 		"ADMIN_ALLPFS_ROW_COUNT" => $row['COUNT(*)']
 	));
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("ALLPFS.ALLPFS_ROW");
 	$ii++;
 }
@@ -68,6 +81,13 @@ $t -> assign(array(
 	"ADMIN_ALLPFS_TOTALITEMS" => $totalitems,
 	"ADMIN_ALLPFS_ON_PAGE" => $ii
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.pfs.allpfs.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("ALLPFS");
 $adminmain = $t -> text("ALLPFS");
 

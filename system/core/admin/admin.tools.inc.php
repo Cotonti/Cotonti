@@ -21,6 +21,12 @@ $adminhelp = $L['adm_help_tools'];
 
 $p = sed_import('p', 'G', 'ALP');
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.tools.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if(!empty($p))
 {
 	$path_lang_def = $cfg['plugins_dir']."/$p/lang/$p.en.lang.php";
@@ -132,7 +138,11 @@ else
 			$t -> parse("TOOLS.ROW");
 		}
 	}
-
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.tools.tags');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("TOOLS");
 	$adminmain = $t -> text("TOOLS");
 }

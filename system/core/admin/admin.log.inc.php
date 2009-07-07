@@ -35,9 +35,20 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.log.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'purge' && $usr['isadmin'])
 {
 	sed_check_xg();
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.log.purge');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$sql = sed_sql_query("TRUNCATE $db_logger");
 
 	$adminwarnings = ($sql) ? $L['adm_ref_prune'] : $L['Error'];
@@ -57,8 +68,6 @@ foreach($log_groups as $grp_code => $grp_name)
 		"ADMIN_LOG_OPTION_SELECTED" => $selected
 	));
 	$t -> parse("LOG.GROUP_SELECT_OPTION");
-
-	$text = str_replace($bbcode, $bbcodehtml, $text);//непанятна зачем эта строка?
 }
 
 $is_adminwarnings = isset($adminwarnings);
@@ -85,7 +94,9 @@ else
 }
 
 $ii = 0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.log.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
 	$t -> assign(array(
@@ -99,6 +110,10 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_LOG_ROW_LOG_GROUP" => $log_groups[$row['log_group']],
 		"ADMIN_LOG_ROW_LOG_TEXT" => htmlspecialchars($row['log_text'])
 	));
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("LOG.LOG_ROW");
 	$ii++;
 }
@@ -115,6 +130,13 @@ $t -> assign(array(
 	"ADMIN_LOG_TOTALITEMS" => $totalitems,
 	"ADMIN_LOG_ON_PAGE" => $ii
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.log.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("LOG");
 $adminmain = $t -> text("LOG");
 

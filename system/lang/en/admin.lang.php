@@ -404,6 +404,7 @@ $L['adm_missing'] = 'Missing';
 $L['adm_paused'] = 'Paused';
 $L['adm_running'] = 'Running';
 $L['adm_partrunning'] = 'Partially running';
+$L['adm_partstopped'] = 'Partially stopped';
 $L['adm_notinstalled'] = 'Not installed';
 
 $L['adm_opt_installall'] = 'Install all';

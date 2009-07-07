@@ -26,6 +26,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.forums.structure.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($n == 'options')
 {
 	if($a == 'update')
@@ -36,6 +42,12 @@ if($n == 'options')
 		$rdesc = sed_import('rdesc', 'P', 'TXT');
 		$ricon = sed_import('ricon', 'P', 'TXT');
 		$rdefstate = sed_import('rdefstate', 'P', 'BOL');
+
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.forums.structure.options.update');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 
 		if($rtplmode == 1)
 		{
@@ -118,6 +130,13 @@ if($n == 'options')
 		"ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK1" => $check1,
 		"ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK3" => $check3
 	));
+
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.forums.structure.options');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	$t -> parse("FORUMS_STRUCTURE.OPTIONS");
 }
 else
@@ -191,7 +210,9 @@ else
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$ii = 0;
-
+	/* === Hook - Part1 : Set === */
+	$extp = sed_getextplugins('admin.forums.structure.loop');
+	/* ===== */
 	while($row = sed_sql_fetcharray($sql))
 	{
 		$jj++;
@@ -236,8 +257,12 @@ else
 			"FORUMS_STRUCTURE_ROW_OPTIONS_URL" => sed_url('admin', "m=forums&s=structure&n=options&id=".$fn_id."&d=".$d."&".sed_xg()),
 			"FORUMS_STRUCTURE_ROW_OPTIONS_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', "m=forums&s=structure&n=options&ajax=1&id=".$fn_id."&d=".$d."&".sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 		));
+		/* === Hook - Part2 : Include === */
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 		$t -> parse("FORUMS_STRUCTURE.DEFULT.ROW");
-
+		
 		$ii++;
 	}
 
@@ -261,6 +286,13 @@ $t -> assign(array(
 	"ADMIN_FORUMS_STRUCTURE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_FORUMS_STRUCTURE_ADMINWARNINGS" => $adminwarnings
 ));
+
+/* === Hook === */
+$extp = sed_getextplugins('admin.forums.structure.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("FORUMS_STRUCTURE");
 $adminmain = $t -> text("FORUMS_STRUCTURE");
 

@@ -27,6 +27,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.page.structure.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($n == 'options')
 {
 	if($a == 'update')
@@ -44,6 +50,12 @@ if($n == 'options')
 
 		$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
 		$roww = sed_sql_fetcharray($sqql);
+
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.page.structure.options.update');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 
 		if($roww['structure_code'] != $rcode)
 		{
@@ -178,6 +190,11 @@ if($n == 'options')
 		"ADMIN_PAGE_STRUCTURE_RESYNC" => sed_url('admin', "m=page&s=structure&n=options&a=resync&id=".$structure_id."&".sed_xg()),
 		"ADMIN_PAGE_STRUCTURE_RESYNC_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=page&s=structure&n=options&ajax=1&a=resync&id='.$structure_id.'&d='.$d.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 	));
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.page.structure.options.tags');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("PAGE_STRUCTURE.OPTIONS");
 }
 else
@@ -192,6 +209,12 @@ else
 
 			$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
 			$roww = sed_sql_fetcharray($sqql);
+
+			/* === Hook === */
+			$extp = sed_getextplugins('admin.page.structure.update');
+			if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
 
 			if($roww['structure_code'] != $s[$i]['rcode'])
 			{
@@ -225,6 +248,13 @@ else
 			$$x = $_POST[$x];
 		}
 		$ngroup = (isset($ngroup)) ? 1 : 0;
+
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.page.structure.add');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
 		sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
 
 		$adminwarnings = $L['Added'];
@@ -232,6 +262,13 @@ else
 	elseif($a == 'delete')
 	{
 		sed_check_xg();
+
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.page.structure.delete');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
 		sed_structure_delcat($id, $c);
 
 		$adminwarnings = $L['Deleted'];
@@ -259,7 +296,9 @@ else
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path+0 ASC, structure_code ASC LIMIT $d,".$cfg['maxrowsperpage']);
 
 	$ii = 0;
-
+	/* === Hook - Part1 : Set === */
+	$extp = sed_getextplugins('admin.page.structure.loop');
+	/* ===== */
 	while($row = sed_sql_fetcharray($sql))
 	{
 		$jj++;
@@ -305,6 +344,12 @@ else
 			"ADMIN_PAGE_STRUCTURE_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=page&io=".$structure_code),
 			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL" => sed_url('admin', "m=page&s=structure&n=options&id=".$structure_id."&".sed_xg())
 		));
+
+		/* === Hook - Part2 : Include === */
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
 		$t -> parse("PAGE_STRUCTURE.DEFULT.ROW");
 
 		$ii++;
@@ -330,6 +375,13 @@ $t -> assign(array(
 	"ADMIN_PAGE_STRUCTURE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PAGE_STRUCTURE_ADMINWARNINGS" => $adminwarnings
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.page.structure.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("PAGE_STRUCTURE");
 $adminmain = $t -> text("PAGE_STRUCTURE");
 

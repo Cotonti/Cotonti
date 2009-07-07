@@ -24,6 +24,12 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $lincif_extfld = sed_auth('admin', 'a', 'A');
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.users.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($n == 'add')
 {
 	$ntitle = sed_import('ntitle', 'P', 'TXT');
@@ -40,6 +46,12 @@ if($n == 'add')
 
 	$sql = (!empty($ntitle)) ? sed_sql_query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden,  grp_maintenance, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".sed_sql_prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.",  ".(int)$nmtmode.", '".sed_sql_prep($ntitle)."', '".sed_sql_prep($ndesc)."', '".sed_sql_prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
 	$grp_id = sed_sql_insertid();
+
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.users.add');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 	$sql = sed_sql_query("SELECT * FROM $db_auth WHERE auth_groupid='".$ncopyrightsfrom."' order by auth_code ASC, auth_option ASC");
 	while($row = sed_sql_fetcharray($sql))
@@ -67,6 +79,12 @@ elseif($n == 'edit')
 		$rhidden = ($g == 4) ? 0 : sed_import('rhidden', 'P', 'BOL');
 		$rmtmode = sed_import('rmtmode', 'P', 'BOL');
 
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.users.update');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
 		$rtitle = sed_sql_prep($rtitle);
 	   	$rdesc = sed_sql_prep($rdesc);
 	   	$ricon = sed_sql_prep($ricon);
@@ -84,6 +102,11 @@ elseif($n == 'edit')
 		$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_groupid='$g'");
 		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
 
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.users.delete');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 		sed_auth_clear('all');
 		sed_cache_clear('sed_groups');
 
@@ -128,6 +151,11 @@ elseif($n == 'edit')
 			"ADMIN_USERS_EDITFORM_DEL_URL" => sed_url('admin', "m=users&n=edit&a=delete&g=".$g."&".sed_xg()),
 			"ADMIN_USERS_EDITFORM_DEL_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'editlevel', url: '".sed_url('admin','m=users&ajax=1&n=edit&a=delete&g='.$g.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		));
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.users.edit.tags');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 		$t -> parse("USERS.ADMIN_USERS_EDIT");
 	}
 }
@@ -182,6 +210,13 @@ $t -> assign(array(
 	"ADMIN_USERS_EXTRAFIELDS_URL" => sed_url('admin', 'm=users&s=extrafields'),
 	"ADMIN_USERS_ADMINWARNINGS" => $adminwarnings
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.users.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("USERS");
 $adminmain = $t -> text("USERS");
 

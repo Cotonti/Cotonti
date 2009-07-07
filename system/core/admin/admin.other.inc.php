@@ -18,6 +18,12 @@ $t = new XTemplate(sed_skinfile('admin.other.inc', false, true));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.other.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner!='plug' GROUP BY config_cat");
 while($row = sed_sql_fetcharray($sql))
 {
@@ -32,13 +38,15 @@ while($row = sed_sql_fetcharray($sql))
 
 $sql = sed_sql_query("SELECT * FROM $db_core WHERE ct_code NOT IN ('admin', 'message', 'index', 'forums', 'users', 'plug', 'page', 'trash') ORDER BY ct_title ASC");
 $lines = array();
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.other.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
     $lincif_mode = (sed_auth($row['ct_code'], 'a', 'A') && $row['ct_code'] != 'admin' && $row['ct_code'] != 'index' && $row['ct_code'] != 'message') ? true : false;
     $lincif_confmode = ($cfgentries[$row['ct_code']] > 0) ? true : false;
     $lincif_rightsmode = ($authentries[$row['ct_code']] > 0) ? true : false;
-	$cfgcode = "disable_".$row['ct_code'];//непанятна зачем эта строка?
+	$cfgcode = "disable_".$row['ct_code'];//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ?
 
 	$t -> assign(array(
 		"ADMIN_OTHER_CT_CODE" => $row['ct_code'],
@@ -47,6 +55,10 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_OTHER_RIGHTS" => ($authentries[$row['ct_code']] > 0) ? sed_url('admin', "m=rightsbyitem&ic=".$row['ct_code']."&io=a") : '#',
 		"ADMIN_OTHER_CONFIG" => ($cfgentries[$row['ct_code']] > 0) ? sed_url('admin', "m=config&n=edit&o=core&p=".$row['ct_code']) : '#'
 	));
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("OTHER.OTHER_ROW");
 }
 
@@ -63,6 +75,13 @@ $t -> assign(array(
 	"ADMIN_OTHER_URL_LOG" => sed_url('admin', "m=log"),
 	"ADMIN_OTHER_URL_INFOS" => sed_url('admin', "m=infos")
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.other.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("OTHER");
 $adminmain = $t -> text("OTHER");
 
