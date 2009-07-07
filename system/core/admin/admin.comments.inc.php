@@ -27,14 +27,20 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.comments.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if($a == 'delete')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
+
 	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
 }
 
@@ -96,18 +102,24 @@ while($row = sed_sql_fetcharray($sql))
 	}
 
 	$t -> assign(array(
-		"ADMIN_COMMENTS_ITEM_DEL_URL" => sed_url('admin', "m=comments&a=delete&id=".$row['com_id']."&d=".$d."&".sed_xg()),
+		"ADMIN_COMMENTS_ITEM_DEL_URL" => sed_url('admin', "m=comments&a=delete&id=".$row['com_id']."&".sed_xg()),
+		"ADMIN_COMMENTS_ITEM_DEL_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=comments&a=delete&ajax=1&id='.$row['com_id'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_COMMENTS_ITEM_ID" => $row['com_id'],
 		"ADMIN_COMMENTS_CODE" => $row['com_code'],
 		"ADMIN_COMMENTS_AUTHOR" => $row['com_author'],
 		"ADMIN_COMMENTS_DATE" => date($cfg['dateformat'], $row['com_date']),
 		"ADMIN_COMMENTS_TEXT" => $row['com_text'],
 		"ADMIN_COMMENTS_URL" => $row['com_url'],
-        "ADMIN_COMMENTS_ODDEVEN" => sed_build_oddeven($ii),
+        "ADMIN_COMMENTS_ODDEVEN" => sed_build_oddeven($ii)
 	));
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	if(is_array($extp))
+	{
+		foreach($extp as $k => $pl)
+		{
+			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 	$t -> parse("COMMENTS.ADMIN_COMMENTS_ROW");
 	$ii++;
@@ -126,8 +138,13 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.comments.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("COMMENTS");

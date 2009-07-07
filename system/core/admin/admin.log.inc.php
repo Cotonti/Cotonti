@@ -1,6 +1,6 @@
 <?php
 /**
- * Administration panel
+ * Administration panel - Logs manager
  *
  * @package Cotonti
  * @version 0.1.0
@@ -39,6 +39,7 @@ if($a == 'purge' && $usr['isadmin'])
 {
 	sed_check_xg();
 	$sql = sed_sql_query("TRUNCATE $db_logger");
+
 	$adminwarnings = ($sql) ? $L['adm_ref_prune'] : $L['Error'];
 }
 
@@ -48,7 +49,7 @@ $n = (empty($n)) ? 'all' : $n;
 
 foreach($log_groups as $grp_code => $grp_name)
 {
-	$selected = ($grp_code==$n) ? " selected=\"selected\"" : "";
+	$selected = ($grp_code == $n) ? " selected=\"selected\"" : "";
 
 	$t -> assign(array(
 		"ADMIN_LOG_OPTION_VALUE_URL" => sed_url('admin', "m=log&n=".$grp_code),
@@ -74,7 +75,7 @@ else
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 }
 
-if($n=='all')
+if($n == 'all')
 {
 	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 }
@@ -94,6 +95,7 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_LOG_ROW_LOG_IP" => $row['log_ip'],
 		"ADMIN_LOG_ROW_LOG_NAME" => $row['log_name'],
 		"ADMIN_LOG_ROW_URL_LOG_GROUP" => sed_url('admin', "m=log&n=".$row['log_group']),
+		"ADMIN_LOG_ROW_URL_LOG_GROUP_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=log&ajax=1&n='.$row['log_group'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_LOG_ROW_LOG_GROUP" => $log_groups[$row['log_group']],
 		"ADMIN_LOG_ROW_LOG_TEXT" => htmlspecialchars($row['log_text'])
 	));
@@ -104,6 +106,7 @@ while($row = sed_sql_fetcharray($sql))
 $t -> assign(array(
 	"ADMIN_LOG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_LOG_URL_PRUNE" => sed_url('admin', "m=log&a=purge&".sed_xg()),
+	"ADMIN_LOG_URL_PRUNE_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=log&a=purge&ajax=1&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_LOG_TOTALDBLOG" => $totaldblog,
 	"ADMIN_LOG_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_LOG_PAGINATION_PREV" => $pagination_prev,

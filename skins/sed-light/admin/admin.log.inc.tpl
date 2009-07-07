@@ -2,7 +2,7 @@
 		<div id="{ADMIN_LOG_AJAX_OPENDIVID}">
 <!-- IF {PHP.usr.isadmin} -->
 			<ul>
-				<li>{PHP.L.adm_purgeall} ({ADMIN_LOG_TOTALDBLOG}) : [<a href="{ADMIN_LOG_URL_PRUNE}">x</a>]</li>
+				<li>{PHP.L.adm_purgeall} ({ADMIN_LOG_TOTALDBLOG}) : [<a href="{ADMIN_LOG_URL_PRUNE}"{ADMIN_LOG_URL_PRUNE_AJAX}>x</a>]</li>
 			</ul>
 <!-- ENDIF -->
 			<form action="">{PHP.L.Group} :
@@ -31,7 +31,7 @@
 				<td>{ADMIN_LOG_ROW_DATE}&nbsp;</td>
 				<td><a href="{ADMIN_LOG_ROW_URL_IP_SEARCH}">{ADMIN_LOG_ROW_LOG_IP}</a>&nbsp;</td>
 				<td>{ADMIN_LOG_ROW_LOG_NAME}&nbsp;</td>
-				<td><a href="{ADMIN_LOG_ROW_URL_LOG_GROUP}">{ADMIN_LOG_ROW_LOG_GROUP}</a>&nbsp;</td>
+				<td><a href="{ADMIN_LOG_ROW_URL_LOG_GROUP}"{ADMIN_LOG_ROW_URL_LOG_GROUP_AJAX}>{ADMIN_LOG_ROW_LOG_GROUP}</a>&nbsp;</td>
 				<td class="desc">{ADMIN_LOG_ROW_LOG_TEXT}</td>
 			</tr>
 <!-- END: LOG_ROW -->
