@@ -403,6 +403,7 @@ $L['adm_missing'] = 'Отсутствует';
 $L['adm_paused'] = 'Пауза';
 $L['adm_running'] = 'Запущен';
 $L['adm_partrunning'] = 'Запущен частично';
+$L['adm_partstopped'] = 'Частично остановлен';
 $L['adm_notinstalled'] = 'Не установлен';
 
 $L['adm_opt_installall'] = 'Установить';

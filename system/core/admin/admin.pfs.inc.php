@@ -20,6 +20,12 @@ $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=pfs'), $L['PFS']);
 $adminhelp = $L['adm_help_pfs'];
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.pfs.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if(!function_exists('gd_info'))
 {
 	$is_adminwarnings = true;
@@ -46,6 +52,13 @@ $t -> assign(array(
 	"ADMIN_PFS_URL_ALLPFS" => sed_url('admin', "m=pfs&s=allpfs"),
 	"ADMIN_PFS_URL_SFS" => sed_url('pfs', "userid=0")
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.pfs.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("PFS");
 $adminmain = $t -> text("PFS");
 
