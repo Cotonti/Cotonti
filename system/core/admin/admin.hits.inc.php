@@ -25,8 +25,13 @@ $v = sed_import('v', 'G', 'TXT');
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.hits.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if($f == 'year' || $f == 'month')
@@ -44,7 +49,7 @@ if($f == 'year' || $f == 'month')
     }
 
     $hits_d_max = max($hits_d);
-    $ii=0;
+    $ii = 0;
     /* === Hook - Part1 : Set === */
     $extp = sed_getextplugins('admin.hits.loop');
     /* ===== */
@@ -55,12 +60,17 @@ if($f == 'year' || $f == 'month')
             "ADMIN_HITS_ROW_DAY" => $day,
             "ADMIN_HITS_ROW_HITS" => $hits,
             "ADMIN_HITS_ROW_PERCENTBAR" => $percentbar,
-            "ADMIN_HITS_ROW_ODDEVEN" => sed_build_oddeven($ii),
+            "ADMIN_HITS_ROW_ODDEVEN" => sed_build_oddeven($ii)
             ));
-        
+
         /* === Hook - Part2 : Include === */
-        if (is_array($extp))
-        { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+        if(is_array($extp))
+        {
+        	foreach($extp as $k => $pl)
+        	{
+        		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+        	}
+        }
         /* ===== */
 
         $t -> parse("HITS.YEAR_OR_MONTH.ROW");
@@ -109,8 +119,13 @@ else
             "ADMIN_HITS_ROW_YEAR_PERCENTBAR" => $percentbar
             ));
         /* === Hook - Part2 : Include === */
-        if (is_array($extp))
-        { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+        if(is_array($extp))
+        {
+        	foreach($extp as $k => $pl)
+        	{
+        		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+        	}
+        }
         /* ===== */
         $t -> parse("HITS.DEFAULT.ROW_YEAR");
         $ii++;
@@ -126,8 +141,13 @@ else
             "ADMIN_HITS_ROW_MONTH_PERCENTBAR" => $percentbar
             ));
         /* === Hook - Part2 : Include === */
-        if (is_array($extp))
-        { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+        if(is_array($extp))
+        {
+        	foreach($extp as $k => $pl)
+        	{
+        		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+        	}
+        }
         /* ===== */
         $t -> parse("HITS.DEFAULT.ROW_MONTH");
         $ii++;
@@ -143,8 +163,13 @@ else
             "ADMIN_HITS_ROW_WEEK_PERCENTBAR" => $percentbar
             ));
         /* === Hook - Part2 : Include === */
-        if (is_array($extp))
-        { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+        if(is_array($extp))
+        {
+        	foreach($extp as $k => $pl)
+        	{
+        		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+        	}
+        }
         /* ===== */
         $t -> parse("HITS.DEFAULT.ROW_WEEK");
         $ii++;
@@ -158,8 +183,13 @@ else
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.hits.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("HITS");

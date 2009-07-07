@@ -21,7 +21,7 @@
 <!-- BEGIN: ADMIN_COMMENTS_ROW -->
 			<table class="cells">
 			<tr>
-				<td style="width:60px;text-align:center;">[<a href="{ADMIN_COMMENTS_ITEM_DEL_URL}">x</a>]</td>
+				<td style="width:60px;text-align:center;">[<a href="{ADMIN_COMMENTS_ITEM_DEL_URL}"{ADMIN_COMMENTS_ITEM_DEL_URL_AJAX}>x</a>]</td>
 				<td style="width:40px;text-align:center;">{ADMIN_COMMENTS_ITEM_ID}</td>
 				<td style="width:40px;text-align:center;">{ADMIN_COMMENTS_CODE}</td>
 				<td style="width:90px;">{ADMIN_COMMENTS_AUTHOR}</td>
