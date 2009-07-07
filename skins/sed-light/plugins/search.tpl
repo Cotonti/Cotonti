@@ -192,6 +192,7 @@
 				</div>
                   </div>
                   <!-- END: FORUMS_RESULTS -->
+		<div class="pagnav">{PLUGIN_PAGEPREV} {PLUGIN_PAGNAV} {PLUGIN_PAGENEXT}</div>
 	</div>
 <!-- END: MAIN -->
 

@@ -130,6 +130,17 @@ function sed_sql_fetchrow($res)
 }
 
 /**
+ * Returns number of records total for last query with SQL_CALC_FOUND_ROWS
+ *
+ * @param resource $conn Custom connection
+ * @return int
+ */
+function sed_sql_foundrows($conn = NULL)
+{
+	return (int) sed_sql_result(sed_sql_query('SELECT FOUND_ROWS()'), 0, 0);
+}
+
+/**
  * Frees result resources
  *
  * @param resource $res Query result
