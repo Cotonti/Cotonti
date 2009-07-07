@@ -16,6 +16,8 @@ $L['cfg_maxwords']= array('Max. words in search query');
 $L['cfg_maxsigns']= array('Max. latters in search query');
 $L['cfg_maxitems']= array('Max. entries in normal search results');
 $L['cfg_maxitems_ext']= array('Max. entries in advanced search results');
+$L['cfg_minsigns'] = array('Min. signs in query');
+$L['cfg_searchurl'] = array('Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
 $L['cfg_showtext']= array('Display text entries in normal search results');
 $L['cfg_showtext_ext']= array('Display text entries in advanced search results');
 

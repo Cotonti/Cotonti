@@ -38,14 +38,15 @@ $d = sed_import('d', 'G', 'INT');
 if (empty($d)) $d = 0;
 if ($frm) $tab='frm';
 if (!empty($pre)) $a = 'search';
+$hl = urlencode(mb_strtoupper($sq));
 
 // Search title
-$plugin_title  = "<a href='plug.php?e=search'>".$L['plu_title_all']."</a>";
+$plugin_title  = "<a href='".sed_url('plug', 'e=search')."'>".$L['plu_title_all']."</a>";
 $plugin_title .= ($tab=='frm' || $tab=='pag') ? " ".$cfg['separator']." " : "";
 if($tab=='frm')
-{ $plugin_title .= "<a href='plug.php?e=search&tab=frm'>".$L['plu_title_frmtab']."</a>"; }
+{ $plugin_title .= "<a href='".sed_url('plug', 'e=search&tab=frm')."'>".$L['plu_title_frmtab']."</a>"; }
 elseif($tab=='pag')
-{ $plugin_title .= "<a href='plug.php?e=search&tab=pag'>".$L['plu_title_pagtab']."</a>"; }
+{ $plugin_title .= "<a href='".sed_url('plug', 'e=search&tab=pag')."'>".$L['plu_title_pagtab']."</a>"; }
 
 // If advanced search
 if($tab=='frm' || $tab=='pag')
@@ -66,7 +67,7 @@ if($tab=='frm' || $tab=='pag')
 if($a=='search')
 {
 	// Query too short message
-	if(mb_strlen($sq) < 1)
+	if(mb_strlen($sq) < $cfg['plugin']['search']['minsigns'])
 	{
 		$error_string .= "<div>".$L['plu_querytooshort']."</div>";
 		unset($a);
@@ -308,15 +309,16 @@ if($tab=='frm' && !$cfg['disable_forums'])
 				if(sed_auth('forums', $row['fs_id'], 'R'))
 				{
 					if($row['ft_updated'] > 0)
-
-
+					{
+						$post_url = ($cfg['plugin']['search']['searchurl'] == 'Single') ? sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : sed_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 						$t->assign(array(
 							"PLUGIN_FR_CATEGORY" => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE),
-							"PLUGIN_FR_TITLE" => "<a href='forums.php?m=posts&amp;p=".$row['fp_id']."#".$row['fp_id']."'>".sed_cc($row['ft_title'])."</a>",
+							"PLUGIN_FR_TITLE" => "<a href='$post_url'>".sed_cc($row['ft_title'])."</a>",
 							"PLUGIN_FR_TEXT" => hw_clear_mark($row['fp_text'], 0, $words),
 							"PLUGIN_FR_TIME" => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600)
 						));
-					$t->parse("MAIN.FORUMS_RESULTS.ITEM");
+						$t->parse("MAIN.FORUMS_RESULTS.ITEM");
+					}
 				}
 			}
 
@@ -558,7 +560,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 			// Otherwise everything
 			else
 			{
-				$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS page_id, page_date, page_ownerid, page_title,
+				$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS page_id, page_alias, page_date, page_ownerid, page_title,
 						$text_from_sql page_cat from $db_pages p, $db_structure s
 					WHERE $pagsql
 					p.page_state='0'
@@ -579,9 +581,11 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 				// Display only what the user is allowed to see
 				if(sed_auth('page', $row['page_cat'], 'R'))
 				{
+					$page_url = empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id'].'&highlight='.$hl)
+						: sed_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 					$t->assign(array(
-						"PLUGIN_PR_CATEGORY" => "<a href='list.php?c=".$row['page_cat']."'>".$sed_cat[$row['page_cat']]['tpath']."</a>",
-						"PLUGIN_PR_TITLE" => "<a href='page.php?id=".$row['page_id']."'>".sed_cc($row['page_title'])."</a>",
+						"PLUGIN_PR_CATEGORY" => "<a href='".sed_url('list', 'c='.$row['page_cat'])."'>".$sed_cat[$row['page_cat']]['tpath']."</a>",
+						"PLUGIN_PR_TITLE" => "<a href='$page_url'>".sed_cc($row['page_title'])."</a>",
 						"PLUGIN_PR_TEXT" => hw_clear_mark($row['page_text'], $row['page_type'], $words),
 						"PLUGIN_PR_TIME" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)
 					));
@@ -875,9 +879,10 @@ else
 					// Check permissions
 					if(sed_auth('forums', $row['fs_id'], 'R'))
 					{
+						$post_url = ($cfg['plugin']['search']['searchurl'] == 'Single') ? sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : sed_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 						$t->assign(array(
 							"PLUGIN_FR_CATEGORY" => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE),
-							"PLUGIN_FR_TITLE" => "<a href='forums.php?m=posts&amp;p=".$row['fp_id']."#".$row['fp_id']."'>".sed_cc($row['ft_title'])."</a>",
+							"PLUGIN_FR_TITLE" => "<a href='$post_url'>".sed_cc($row['ft_title'])."</a>",
 							"PLUGIN_FR_TEXT" => hw_clear_mark($row['fp_text'], 0, $words),
 							"PLUGIN_FR_TIME" => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600)
 						));
@@ -983,9 +988,11 @@ else
 						// Apply permissions
 						if(sed_auth('page', $row['page_cat'], 'R'))
 						{
+							$page_url = empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id'].'&highlight='.$hl)
+								: sed_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 							$t->assign(array(
-								"PLUGIN_PR_CATEGORY" => "<a href='list.php?c=".$row['page_cat']."'>".$sed_cat[$row['page_cat']]['tpath']."</a>",
-								"PLUGIN_PR_TITLE" => "<a href='page.php?id=".$row['page_id']."'>".sed_cc($row['page_title'])."</a>",
+								"PLUGIN_PR_CATEGORY" => "<a href='".sed_url('list', 'c='.$row['page_cat'])."'>".$sed_cat[$row['page_cat']]['tpath']."</a>",
+								"PLUGIN_PR_TITLE" => "<a href='$page_url'>".sed_cc($row['page_title'])."</a>",
 								"PLUGIN_PR_TEXT" => hw_clear_mark($row['page_text'], $row['page_type'], $words),
 								"PLUGIN_PR_TIME" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)
 							));
