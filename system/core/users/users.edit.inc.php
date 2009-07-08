@@ -167,7 +167,17 @@ if ($a=='update')
 			$sql = sed_sql_query("UPDATE $db_online SET online_name='$newname' WHERE online_name='$oldname'");
 			$sql = sed_sql_query("UPDATE $db_pm SET pm_fromuser='$newname' WHERE pm_fromuser='$oldname'");
 		}
-
+		// Extra fields
+		if(count($extrafields)>0)
+		{
+			foreach($extrafields as $i=>$row)
+			{
+				if(!is_null($ruserextrafields[$i]))
+				{
+					$ssql_extra .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',";
+				}
+			}
+		}
 		$ssql = "UPDATE $db_users SET
 			user_banexpire='$rbanexpire',
 			user_name='".sed_sql_prep($rusername)."',
@@ -191,9 +201,9 @@ if ($a=='update')
 			user_timezone='".sed_sql_prep($rusertimezone)."',
 			user_location='".sed_sql_prep($ruserlocation)."',
 			user_occupation='".sed_sql_prep($ruseroccupation)."',
-			";
-		if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',"; // Extra fields
-		$ssql .= " user_auth='' WHERE user_id='$id'";
+			".$ssql_extra."
+			user_auth=''
+			WHERE user_id='$id'";
 		$sql = sed_sql_query($ssql);
 
 		$rusermaingrp = ($rusermaingrp < SED_GROUP_MEMBERS && $id==1) ? SED_GROUP_TOPADMINS : $rusermaingrp;
