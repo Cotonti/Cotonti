@@ -93,7 +93,7 @@
 					<td>{PHP.L.adm_opt_pauseall_explain}</td>
 				</tr>
 				<tr>
-					<td><a href="{ADMIN_PLUG_UNPAUSE_URL}"{ADMIN_PLUG_UNPAUSE_URL_AJAX}>{PHP.L.adm_opt_unpauseall}Возобновить</a></td>
+					<td><a href="{ADMIN_PLUG_UNPAUSE_URL}"{ADMIN_PLUG_UNPAUSE_URL_AJAX}>{PHP.L.adm_opt_unpauseall}</a></td>
 					<td>{PHP.L.adm_opt_unpauseall_explain}</td>
 				</tr>
 				</table>

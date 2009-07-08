@@ -99,7 +99,7 @@
 					<td style="text-align:center;"><input type="checkbox" class="checkbox" name="s[{ADMIN_PAGE_STRUCTURE_ID}][rgroup]"{ADMIN_PAGE_STRUCTURE_CHECKED} /></td>
 					<td style="text-align:right;">{ADMIN_PAGE_STRUCTURE_PAGECOUNT} <a href="{ADMIN_PAGE_STRUCTURE_JUMPTO_URL}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
 					<td style="text-align:center;"><a href="{ADMIN_PAGE_STRUCTURE_RIGHTS_URL}"><img src="images/admin/rights2.gif" alt="" /></a></td>
-					<td style="text-align:center;"><a href="{ADMIN_PAGE_STRUCTURE_OPTIONS_URL}">{PHP.L.Options}</a></td>
+					<td style="text-align:center;"><a href="{ADMIN_PAGE_STRUCTURE_OPTIONS_URL}"{ADMIN_PAGE_STRUCTURE_OPTIONS_URL_AJAX}>{PHP.L.Options}</a></td>
 				</tr>
 <!-- END: ROW -->
 				<tr>

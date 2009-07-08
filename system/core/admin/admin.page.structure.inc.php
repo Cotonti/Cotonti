@@ -342,7 +342,8 @@ else
 			"ADMIN_PAGE_STRUCTURE_PAGECOUNT" => $pagecount[$structure_code],
 			"ADMIN_PAGE_STRUCTURE_JUMPTO_URL" => sed_url('list', "c=".$structure_code),
 			"ADMIN_PAGE_STRUCTURE_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=page&io=".$structure_code),
-			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL" => sed_url('admin', "m=page&s=structure&n=options&id=".$structure_id."&".sed_xg())
+			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL" => sed_url('admin', "m=page&s=structure&n=options&id=".$structure_id."&".sed_xg()),
+			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=page&s=structure&n=options&ajax=1&id='.$structure_id.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 		));
 
 		/* === Hook - Part2 : Include === */

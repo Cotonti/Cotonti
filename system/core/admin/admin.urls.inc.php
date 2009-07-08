@@ -1,24 +1,28 @@
-<?PHP
+<?php
 /**
  * URL Transformation Rules editor.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Trustmaster
  * @copyright Copyright (c) 2008 Cotonti Team
  * @license BSD License
  */
 
-defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
+
+$t = new XTemplate(sed_skinfile('admin.urls.inc', false, true));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=urls'), $L['adm_urls']);
 $adminhelp = $L['adm_help_urls'];
 
 $a = sed_import('a', 'G', 'ALP');
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $site_uri = SED_SITE_URI;
 
@@ -275,18 +279,23 @@ if($a == 'save')
 		}
 		file_put_contents('.htaccess', $htdata);
 	}
-	$adminmain .= '<h4>' . $L['adm_urls_your'] . ' <em>' . $conf_name . '</em>' . '</h4>';
-	$adminmain .= '<pre class="code">' . $hta . '</pre>';
+
+	$t -> assign(array(
+		"ADMIN_URLS_CONF_NAME" => $conf_name,
+		"ADMIN_URLS_HTA" => $hta
+	));
+	$t -> parse("URLS.HTA");
+
 	if(!empty($error_string))
 	{
-		$adminmain .= '<div class="error">' . $error_string . $L['adm_urls_errors'] . '</div>';
+		$adminwarnings = $error_string . $L['adm_urls_errors'];
 	}
 }
 
 // Check urltrans.dat
 if(!is_writeable('./datas/urltrans.dat'))
 {
-	$adminmain .= '<div class="error">' . $L['adm_urls_error_dat'] . '</div>';
+	$adminwarnings .= $L['adm_urls_error_dat'];
 }
 
 // Get list of valid areas
@@ -303,43 +312,14 @@ closedir($dp);
 sort($areas);
 
 // New rule contents
-$areabox = '<select name="area[]">';
 foreach($areas as $ar)
 {
-	$areabox .= $ar == '*' ? '<option selected="selected">'.$ar.'</option>' : '<option>'.$ar.'</option>';
+	$t -> assign(array(
+		"ADMIN_URLS_AREABOX_SELECTED" => ($ar == '*') ? ' selected="selected"' : '',
+		"ADMIN_URLS_AREABOX_ITEM" => $ar
+	));
+	$t -> parse("URLS.AREABOX");
 }
-$areabox .= '</select>';
-$admin_urls_form = sed_url('admin', "m=urls&a=save");
-// Render rules table
-$adminmain .= <<<HTM
-<h4>{$L['adm_urls_rules']}</h4>
-<script type="text/javascript" src="js/jquery.tablednd.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    $("#rules").tableDnD({});
-});
-
-var ruleCount = 0;
-function addRule() {
-	$('#rules_top').after('<tr id="rule_' + ruleCount + '"><td>$areabox</td><td><input type="text" name="params[]" value="*" /></td><td><input type="text" name="format[]" value="" /></td><td><a href="#" onclick="$(\'#rule_' + ruleCount + '\').remove(); return false;">[X]</a></td></tr>');
-	ruleCount++;
-	return false;
-}
-</script>
-<style>
-tr.tDnD_whileDrag td {
-	background-color: yellow;
-}
-</style>
-<form action="{$admin_urls_form}" method="post">
-<table id="rules" class="cells">
-<tr id="rules_top">
-	<td class="coltop">{$L['adm_urls_area']}</td>
-	<td class="coltop">{$L['adm_urls_parameters']}</td>
-	<td class="coltop">{$L['adm_urls_format']}</td>
-	<td class="coltop">{$L['Delete']}</td>
-</tr>
-HTM;
 
 $fp = fopen('./datas/urltrans.dat', 'r');
 // Rules
@@ -347,41 +327,54 @@ $ii = 0;
 while($line = trim(fgets($fp), " \t\r\n"))
 {
 	$parts = explode("\t", $line);
-	$areabox = '<select name="area[]">';
+
+	$areabox = '<select name="area[]">
+';
 	foreach($areas as $ar)
 	{
-		$areabox .= $ar == $parts[0] ? '<option selected="selected">'.$ar.'</option>' : '<option>'.$ar.'</option>';
+		$areabox .= ($ar == $parts[0]) ? '	<option selected="selected">'.$ar.'</option>
+' : '	<option>'.$ar.'</option>
+';
+		$t -> assign(array(
+			"ADMIN_URLS_AREABOX_SELECTED" => ($ar == $parts[0]) ? ' selected="selected"' : '',
+			"ADMIN_URLS_AREABOX_ITEM" => $ar
+		));
+		$t -> parse("URLS.ROW.AREABOX2");
 	}
-	$areabox .= '</select>';
-	$oddeven = sed_build_oddeven($ii);
-	$adminmain .= <<<HTM
-	<tr id="rule_$ii">
-		<td>$areabox</td>
-		<td><input type="text" name="params[]" value="{$parts[1]}" /></td>
-		<td><input type="text" name="format[]" value="{$parts[2]}" /></td>
-		<td><a href="#" onclick="\$('#rule_$ii').remove(); return false;">[X]</a></td>
-	</tr>
-HTM;
+	$areabox .= '</select>
+';
+
+	$t -> assign(array(
+		"ADMIN_URLS_ROW_I" => $ii,
+		"ADMIN_URLS_ROW_PARTS1" => $parts[1],
+		"ADMIN_URLS_ROW_PARTS2" => $parts[2],
+		"ADMIN_URLS_ROW_ODDEVEN" => sed_build_oddeven($ii)
+	));
+	$t -> parse("URLS.ROW");
 	$ii++;
 }
 fclose($fp);
 
-$htaccess = $serv_type == 'apache' && is_writeable('./'.$conf_name) ? '<br /><input type="checkbox" name="htaccess" /> ' . $L['adm_urls_htaccess'] : '';
-$adminmain .= <<<HTM
-<tr>
-<td colspan="4">
-<script type="text/javascript">
-ruleCount = $ii;
-</script>
-<a href="#" onclick="return addRule()"><strong>{$L['adm_urls_new']}</strong></a>
-</td>
-</tr>
-<noscript>
-<tr><td>$areabox</td><td><input type="text" name="params[]" value="*" /></td><td><input type="text" name="format[]" value="" /></td><td>&nbsp;</td></tr>
-</noscript>
-</table>
-$htaccess<br /><input type="submit" value="{$L['adm_urls_save']}" />
-</form>
-HTM;
+$htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : false;
+
+$is_adminwarnings = isset($adminwarnings);
+
+$t -> assign(array(
+	"ADMIN_URLS_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_URLS_II" => $ii,
+	"ADMIN_URLS_FORM_URL" => sed_url('admin', "m=urls&a=save"),
+	"ADMIN_URLS_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'add_url', url: '".sed_url('admin','m=urls&a=save&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_URLS_AREABOX" => $areabox,
+	"ADMIN_URLS_ADMINWARNINGS" => $adminwarnings
+));
+$t -> parse("URLS");
+$adminmain = $t -> text("URLS");
+
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>
