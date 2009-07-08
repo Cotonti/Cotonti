@@ -24,6 +24,12 @@ $sed_select_doctypeid = sed_loaddoctypes();
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.config.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 switch($n)
 {
 	case 'edit':
@@ -108,6 +114,9 @@ switch($n)
 			}
 		}
 
+		/* === Hook - Part1 : Set === */
+		$extp = sed_getextplugins('admin.config.edit.loop');
+		/* ===== */
 		while($row = sed_sql_fetcharray($sql))
 		{
 			$config_owner = $row['config_owner'];
@@ -212,6 +221,10 @@ switch($n)
 				"ADMIN_CONFIG_ROW_CONFIG_MORE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=reset&ajax=1&v='.$config_name)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_CONFIG_ROW_CONFIG_MORE" => $config_more
 			));
+			/* === Hook - Part2 : Include === */
+			if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
 			$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW");
 		}
 
@@ -219,6 +232,11 @@ switch($n)
 			"ADMIN_CONFIG_FORM_URL" => sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=update"),
 			"ADMIN_CONFIG_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saveconfig', url: '".sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=update&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 		));
+		/* === Hook  === */
+		$extp = sed_getextplugins('admin.config.edit.tags');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 		$t -> parse("CONFIG.EDIT");
 	break;
 
@@ -243,6 +261,11 @@ switch($n)
 			));
 			$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_PLUG");
 		}
+		/* === Hook  === */
+		$extp = sed_getextplugins('admin.config.default.tags');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 		$t -> parse("CONFIG.DEFAULT");
 	break;
 }
@@ -251,6 +274,13 @@ $t -> assign(array(
 	"ADMIN_CONFIG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_CONFIG_ADMINWARNINGS" => $adminwarnings
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.config.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("CONFIG");
 $adminmain = $t -> text("CONFIG");
 
