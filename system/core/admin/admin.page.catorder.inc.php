@@ -25,6 +25,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.page.catorder.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $options_sort = array(
 	'id' => $L['Id'],
 	'type'	=> $L['Type'],
@@ -79,10 +85,12 @@ else
 $sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path, structure_code LIMIT $d,".$cfg['maxrowsperpage']);
 
 $ii = 0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.page.catorder.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
-	$structure_desc = $row['structure_desc'];//Непнятна а зачем?
+	$structure_desc = $row['structure_desc'];//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ?
 	$raw = explode('.', $row['structure_order']);
 	$sort = $raw[0];
 	$way = $raw[1];
@@ -116,6 +124,10 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_PAG_CATORDER_ROW_PATH" => $row['structure_path'],
 		"ADMIN_PAG_CATORDER_ROW_TITLE" => sed_cc($row['structure_title'])
 	));
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("PAG_CATORDER.PAG_CATORDER_ROW");
 	$ii++;
 }
@@ -130,6 +142,13 @@ $t -> assign(array(
 	"ADMIN_PAG_CATORDER_TOTALITEMS" => $totalitems,
 	"ADMIN_PAG_CATORDER_COUNTER_ROW" => $ii
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.page.catorder.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("PAG_CATORDER");
 $adminmain = $t -> text("PAG_CATORDER");
 

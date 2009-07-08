@@ -24,6 +24,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.forums.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($n == 'edit')
 {
 	if($a == 'update')
@@ -46,6 +52,12 @@ if($n == 'edit')
 		$rcat = sed_sql_prep($rcat);
 		$rmaster = sed_import('rmaster', 'P', 'INT');
 		$mastername = $rtitle;
+
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.forums.update');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 
 		$sql = sed_sql_query("SELECT fs_id, fs_masterid, fs_order, fs_category FROM $db_forum_sections WHERE fs_id=$id ");
 		sed_die(sed_sql_numrows($sql)==0);
@@ -147,6 +159,11 @@ if($n == 'edit')
 		"ADMIN_FORUMS_EDIT_FS_AUTOPRUNE" => $fs_autoprune,
 		"ADMIN_FORUMS_EDIT_RESYNC_URL" => sed_url('admin', "m=forums&n=edit&a=resync&id=".$fs_id."&".sed_xg())
 	));
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.forums.edit');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("FORUMS.EDIT");
 }
 else
@@ -158,6 +175,12 @@ else
 		$sql = sed_sql_query("SELECT fs_order, fs_category FROM $db_forum_sections WHERE fs_id='".$id."'");
 		sed_die(sed_sql_numrows($sql) == 0);
 		$row_cur = sed_sql_fetcharray($sql);
+
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.forums.order');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
 
 		if($w == 'up')
 		{
@@ -207,6 +230,12 @@ else
 
 			$forumid = sed_sql_insertid();
 
+			/* === Hook === */
+			$extp = sed_getextplugins('admin.forums.add');
+			if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
+
 			foreach($sed_groups as $k => $v)
 			{
 				if($k == 1 || $k == 2)
@@ -248,9 +277,13 @@ else
 		sed_auth_clear('all');
 		$num = sed_forum_deletesection($id);
 		$sql1 = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='".$id."' ");
-		//$num = sed_sql_numrows($sql1);//Выдает варнинг
-
-		$adminwarnings = $L['Deleted'];//сообщение такое же как бы мы перешли по адресу sed_url('message', "msg=916&rc=103&num=".$num, '', true))
+		//$num = sed_sql_numrows($sql1);//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.forums.delete');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+		$adminwarnings = $L['Deleted'];//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ sed_url('message', "msg=916&rc=103&num=".$num, '', true))
 	}
 	/*
 	 $totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
@@ -266,7 +299,9 @@ else
 	$fcache = array();
 
 	$ii = 0;
-
+	/* === Hook - Part1 : Set === */
+	$extp = sed_getextplugins('admin.forums.loop');
+	/* ===== */
 	while($row = sed_sql_fetcharray($sql))
 	{
 		if($row['fs_masterid'] > 0)
@@ -315,6 +350,10 @@ else
 						"ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=forums&io=".$key),
 						"ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL" => sed_url('forums', "m=topics&s=".$key)
 					));
+					/* === Hook - Part2 : Include === */
+					if (is_array($extp))
+					{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+					/* ===== */
 					$t -> parse("FORUMS.DEFULT.ROW.FCACHE");
 
 					$ii++;
@@ -341,6 +380,10 @@ else
 				"ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=forums&io=".$fs_id),
 				"ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL" => sed_url('forums', "m=topics&s=".$fs_id)
 			));
+			/* === Hook - Part2 : Include === */
+			if (is_array($extp))
+			{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			/* ===== */
 			$t -> parse("FORUMS.DEFULT.ROW");
 		}
 	}
@@ -357,8 +400,8 @@ else
 	}
 
 	$t -> assign(array(
-		"ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL" => sed_url('admin', 'm=forums&a=update&d='.$d),//Как бе не особо и нужна кнопка "обновление"
-		"ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=update&d='.$d.'ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",//Как бе не особо и нужна кнопка "обновление"
+		"ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL" => sed_url('admin', 'm=forums&a=update&d='.$d),//пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+		"ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=update&d='.$d.'ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",//пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 		//"ADMIN_FORUMS_PAGINATION_PREV" => $pagination_prev,
 		//"ADMIN_FORUMS_PAGNAV" => $pagnav,
 		//"ADMIN_FORUMS_PAGINATION_NEXT" => $pagination_next,
@@ -380,6 +423,13 @@ $t -> assign(array(
 	"ADMIN_FORUMS_CONF_STRUCTURE_URL" => sed_url('admin', 'm=forums&s=structure'),
 	"ADMIN_FORUMS_ADMINWARNINGS" => $adminwarnings
 ));
+
+/* === Hook === */
+$extp = sed_getextplugins('admin.forums.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("FORUMS");
 $adminmain = $t -> text("FORUMS");
 
