@@ -1,5 +1,8 @@
 <!-- BEGIN: CONFIG -->
 		<div id="{ADMIN_CONFIG_AJAX_OPENDIVID}">
+<!-- IF {PHP.is_adminwarnings} -->
+			<div class="error">{ADMIN_CONFIG_ADMINWARNINGS}</div>
+<!-- ENDIF -->
 <!-- BEGIN: EDIT -->
 			<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post"{ADMIN_CONFIG_FORM_URL_AJAX}>
 				<table class="cells">
