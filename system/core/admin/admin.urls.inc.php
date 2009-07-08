@@ -77,6 +77,12 @@ else
 	$serv_type = 'unknown';
 }
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.urls.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'save')
 {
 	// Fetch data
@@ -84,6 +90,13 @@ if($a == 'save')
 	$ut_params = sed_import('params', 'P', 'ARR');
 	$ut_format = sed_import('format', 'P', 'ARR');
 	$htaccess = sed_import('htaccess', 'P', 'BOL');
+
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.urls.save');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	// Write header
 	$fp = fopen('./datas/urltrans.dat', 'w');
 	// Process and write
@@ -324,6 +337,9 @@ foreach($areas as $ar)
 $fp = fopen('./datas/urltrans.dat', 'r');
 // Rules
 $ii = 0;
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.urls.loop');
+/* ===== */
 while($line = trim(fgets($fp), " \t\r\n"))
 {
 	$parts = explode("\t", $line);
@@ -350,6 +366,12 @@ while($line = trim(fgets($fp), " \t\r\n"))
 		"ADMIN_URLS_ROW_PARTS2" => $parts[2],
 		"ADMIN_URLS_ROW_ODDEVEN" => sed_build_oddeven($ii)
 	));
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	$t -> parse("URLS.ROW");
 	$ii++;
 }
@@ -367,6 +389,13 @@ $t -> assign(array(
 	"ADMIN_URLS_AREABOX" => $areabox,
 	"ADMIN_URLS_ADMINWARNINGS" => $adminwarnings
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.urls.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("URLS");
 $adminmain = $t -> text("URLS");
 

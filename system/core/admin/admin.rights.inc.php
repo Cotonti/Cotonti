@@ -35,10 +35,22 @@ $L['adm_code']['polls'] = $L['Polls'];
 $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.rights.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'update')
 {
 	$ncopyrightsconf = sed_import('ncopyrightsconf', 'P', 'BOL');
 	$ncopyrightsfrom = sed_import('ncopyrightsfrom', 'P', 'INT');
+
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.rights.update');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 	if($ncopyrightsconf && !empty($sed_groups[$ncopyrightsfrom]['title']) && $g > 5)
 	{
@@ -223,6 +235,13 @@ $t -> assign(array(
 	"ADMIN_RIGHTS_3ADV_COLUMNS" => 3 + $adv_columns,
 	"ADMIN_RIGHTS_ADMINWARNINGS" => $adminwarnings
 ));
+
+/* === Hook === */
+$extp = sed_getextplugins('admin.rights.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("RIGHTS");
 $adminmain = $t -> text("RIGHTS");
 
