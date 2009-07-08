@@ -2354,18 +2354,18 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	switch($source)
 	{
 		case 'G':
-			$v = $_GET[$name];
+			$v = (isset($_GET[$name])) ? $_GET[$name] : NULL;
 			$log = TRUE;
 			break;
 
 		case 'P':
-			$v = $_POST[$name];
+			$v = (isset($_POST[$name])) ? $_POST[$name] : NULL;
 			$log = TRUE;
 			if ($filter=='ARR') { return($v); }
 			break;
 
 		case 'C':
-			$v = $_COOKIE[$name];
+			$v = (isset($_COOKIE[$name])) ? $_COOKIE[$name] : NULL;
 			$log = TRUE;
 			break;
 
@@ -2384,9 +2384,9 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		$v = stripslashes($v);
 	}*/
 
-	if ($v=='')
+	if ($v=='' || $v == NULL)
 	{
-		return('');
+		return($v);
 	}
 
 	if ($maxlen>0)

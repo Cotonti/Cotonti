@@ -490,7 +490,17 @@ switch ($a)
 	{
 
 		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? '' : sed_stamp2date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear));
-
+		// Extra fields
+		if(count($extrafields)>0)
+		{
+			foreach($extrafields as $i=>$row)
+			{
+				if(!is_null($ruserextrafields[$i]))
+				{
+					$ssql_extra .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',";
+				}
+			}
+		}
 		$ssql = "UPDATE $db_users SET
 			user_text='".sed_sql_prep($rusertext)."',
 			user_country='".sed_sql_prep($rusercountry)."',
@@ -507,9 +517,9 @@ switch ($a)
 			user_location='".sed_sql_prep($ruserlocation)."',
 			user_occupation='".sed_sql_prep($ruseroccupation)."',
 			user_hideemail='$ruserhideemail',
-			user_pmnotify='$ruserpmnotify',";
-		if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',"; // Extra fields
-		$ssql .= " user_auth=''
+			user_pmnotify='$ruserpmnotify',
+			".$ssql_extra."
+			user_auth=''
 			WHERE user_id='".$usr['id']."'";
 		$sql = sed_sql_query($ssql);
 

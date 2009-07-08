@@ -181,20 +181,34 @@ if ($a=='update')
 			{
 				$page_state = 1;
 			}
-
+			// Extra fields
+			if(count($extrafields)>0)
+			{
+				foreach($extrafields as $i=>$row)
+				{
+					if(!is_null($rpageextrafields[$i]))
+					{
+						$ssql_extra .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',";
+					}
+				}
+			}
+			if ($usr['isadmin'])
+			{
+				$ssql_admin = "page_type = '".sed_sql_prep($rpagetype)."',
+				page_ownerid = '$rpageownerid',
+				page_count = '$rpagecount',";
+			}
 			$ssql = "UPDATE $db_pages SET
 				page_cat = '".sed_sql_prep($rpagecat)."',
-				page_key = '".sed_sql_prep($rpagekey)."',";
-			if(count($extrafields)>0) foreach($extrafields as $i=>$row) $ssql .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',"; // Extra fields
-			$ssql.="page_title = '".sed_sql_prep($rpagetitle)."',
+				page_key = '".sed_sql_prep($rpagekey)."',
+				".$ssql_extra."
+				page_title = '".sed_sql_prep($rpagetitle)."',
 				page_desc = '".sed_sql_prep($rpagedesc)."',
 				page_text='".sed_sql_prep($rpagetext)."',
 				page_html='".sed_sql_prep($rpagehtml)."',
-				page_author = '".sed_sql_prep($rpageauthor)."',";
-			if ($usr['isadmin']) $ssql .= "page_type = '".sed_sql_prep($rpagetype)."',
-				page_ownerid = '$rpageownerid',
-				page_count = '$rpagecount',";
-			$ssql .= "page_date = '$rpagedate',
+				page_author = '".sed_sql_prep($rpageauthor)."',
+				".$ssql_admin.
+				"page_date = '$rpagedate',
 				page_begin = '$rpagebegin',
 				page_expire = '$rpageexpire',
 				page_file = '".sed_sql_prep($rpagefile)."',
