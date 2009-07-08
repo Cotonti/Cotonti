@@ -102,6 +102,10 @@ $cfg['defaulttheme']
   skin's name or 'style'. For more information about themes, visit
   http://www.cotonti.com/docs/en/skins/theme_support_in_skins
 
+date_default_timezone_set('GMT');
+* This should contain your prefered timezone instead of GMT. You can find the list
+  of valid timezones on http://php.net/manual/en/timezones.php
+
 8. After uploading, we need to create the SQL database that Cotonti is using.
    Connect with phpMyAdmin or similar to your site,
    using the username and password received from your Hosting Service Provider.
