@@ -126,10 +126,10 @@
 						-
 <!-- ENDIF -->
 <!-- IF ({PHP.info_file.Status} != 3 && {PHP.row.pl_active} == 1) -->
-						<a href="{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL}"{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL_AJAX}>Пауза</a>
+						<a href="{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL}"{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL_AJAX}>{PHP.L.adm_opt_pauseall}</a>
 <!-- ENDIF -->
 <!-- IF ({PHP.info_file.Status} != 3 && {PHP.row.pl_active} == 0) -->
-						<a href="{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL}"{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL_AJAX}>Возобновить</a>
+						<a href="{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL}"{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL_AJAX}>{PHP.L.adm_opt_unpauseall}</a>
 <!-- ENDIF -->
 					</td>
 				</tr>
@@ -211,7 +211,7 @@
 <!-- BEGIN: ROW_ERROR -->
 				<tr>
 					<td>plugins/{ADMIN_PLUG_X}</td>
-					<td colspan="7">Ошибка: Отсутствует setup файл !</td>
+					<td colspan="7">{PHP.L.adm_opt_setup_missing}</td>
 				</tr>
 <!-- END: ROW_ERROR -->
 				</table>
@@ -235,68 +235,68 @@
 <!-- END: DEFAULT -->
 <!-- BEGIN: EDIT -->
 <!-- BEGIN: INSTALL -->
-				Deleting old installation of this plugin ...
-				Found: {ADMIN_PLUG_EDIT_AFFECTEDROWS1}<br />
+				{PHP.L.adm_pluginstall_msg01}
+				{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS1}<br />
 <!-- IF !{PHP.ko} -->
-				Deleting old configuration entries ...
-				Found: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}<br />
+				{PHP.L.adm_pluginstall_msg02}
+				{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}<br />
 <!-- ENDIF -->
-				Looking for the setup file ...
+				{PHP.L.adm_pluginstall_msg03}
 <!-- IF file_exists({PHP.extplugin_info}) -->
-				Found: 1<br />
-				Looking for parts ...<br />
+				{PHP.L.Found}: 1<br />
+				{PHP.L.adm_pluginstall_msg04}<br />
 <!-- BEGIN: ROW_PARTS_FOUND -->
-				- Found: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F}<br />
+				- {PHP.L.Found}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F}<br />
 <!-- END: ROW_PARTS_FOUND -->
-				Installing the parts ...<br />
+				{PHP.L.adm_pluginstall_msg05}<br />
 <!-- BEGIN: ROW_PARTS_INSTALLING -->
-				- Part: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_X} ... {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG}<br />
+				- {PHP.L.Part}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_X} ... {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG}<br />
 <!-- END: ROW_PARTS_INSTALLING -->
-				Looking for configuration entries in the setup file ...
+				{PHP.L.adm_pluginstall_msg06}
 <!-- BEGIN: ROW_PARTS_CFG -->
-				Found {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG}<br/>
+				{PHP.L.Found} {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG}<br/>
 <!-- BEGIN: ROW_PARTS_CFG_ENTRY -->
-				- Entry #{ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_J} {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_I} ({ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_LINE}) Installed<br />
+				- {PHP.L.Entry} #{ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_J} {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_I} ({ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_LINE}) {PHP.L.adm_installed}<br />
 <!-- END: ROW_PARTS_CFG_ENTRY -->
 <!-- END: ROW_PARTS_CFG -->
 <!-- BEGIN: ROW_PARTS_CFG_ERROR -->
-				None found<br />
+				{PHP.L.None}<br />
 <!-- END: ROW_PARTS_CFG_ERROR -->
 <!-- ELSE -->
-				Not found ! Installation failed !<br />
+				{PHP.L.adm_pluginstall_msg07}<br />
 <!-- ENDIF -->
 <!-- IF !{PHP.ko} -->
-				Deleting any old rights about this plugin ...
-				Found: {ADMIN_PLUG_EDIT_AFFECTEDROWS3}<br />
+				{PHP.L.adm_pluginstall_msg08}
+				{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS3}<br />
 <!-- ENDIF -->
-				Adding the rights for the groups of users ...<br />
+				{PHP.L.adm_pluginstall_msg09}<br />
 <!-- BEGIN: ROW_RIGHTS -->
-				- Group #{ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_ID}, {ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_TITLE} : Auth={ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH} / Lock={ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK}{ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_COMMENT}<br />
+				- {PHP.L.Group} #{ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_ID}, {ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_TITLE} : Auth={ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH} / Lock={ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK} ({ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_COMMENT})<br />
 <!-- END: ROW_RIGHTS -->
-				Resetting the auth column for all the users ...
-				Found: {ADMIN_PLUG_EDIT_AFFECTEDROWS4}<br />
-				Running on-install part of the setup script ...
+				{PHP.L.adm_pluginstall_msg10}
+				{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS4}<br />
+				{PHP.L.adm_pluginstall_msg11}
 				{ADMIN_PLUG_EDIT_EXTPLUGIN_INFO}<br />
-				Done!<br />
+				{PHP.L.Done}!<br />
 				<span>{ADMIN_PLUG_EDIT_LOG}&nbsp;</span>
-				<a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>Click here to continue ...</a>
+				<a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a>
 <!-- END: INSTALL -->
 <!-- BEGIN: UNINSTALL -->
-				Deleting old installation of this plugin ...
-				Found:{ADMIN_PLUG_EDIT_AFFECTEDROWS1}<br />
+				{PHP.L.adm_pluginstall_msg01}
+				{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS1}<br />
 <!-- IF !{PHP.ko} -->
-					Deleting old configuration entries ...
-					Found:{ADMIN_PLUG_EDIT_AFFECTEDROWS2}<br />
-					Deleting any old rights about this plugin ...
-					Found:{ADMIN_PLUG_EDIT_AFFECTEDROWS3}<br />
+					{PHP.L.adm_pluginstall_msg02}
+					{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}<br />
+					{PHP.L.adm_pluginstall_msg08}
+					{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS3}<br />
 <!-- ENDIF -->
-				Resetting the auth column for all the users ...
-				Found: {ADMIN_PLUG_EDIT_AFFECTEDROWS4}<br />
-				Running on-install part of the setup script ...
+				{PHP.L.adm_pluginstall_msg10}
+				{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS4}<br />
+				{PHP.L.adm_pluginstall_msg11}
 				{ADMIN_PLUG_EDIT_EXTPLUGIN_INFO}<br />
-				Done!<br />
+				{PHP.L.Done}!<br />
 				<span>{ADMIN_PLUG_EDIT_LOG}&nbsp;</span>
-				<a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>Click here to continue ...</a>
+				<a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a>
 <!-- END: UNINSTALL -->
 <!-- END: EDIT -->
 		</div>

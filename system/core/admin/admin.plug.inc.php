@@ -284,7 +284,7 @@ switch($a)
 							{
 								$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('".$info_part['Hooks']."', '".$info_part['Code']."', '".sed_sql_prep($info_part['Part'])."', '".sed_sql_prep($info['Name'])."', '".$info_part['File']."',  ".(int)$info_part['Order'].", 1)");
 
-								$msg = ($sql) ? "Installed" : $L['Error'];
+								$msg = ($sql) ? $L['adm_installed'] : $L['Error'];
 							}
 							else
 							{
@@ -368,7 +368,7 @@ switch($a)
 
 				foreach($sed_groups as $k => $v)
 				{
-					$comment = ' (Plugin setup)';
+					$comment = $L['adm_plugsetup'];
 
 					if($v['id'] == 1 || $v['id'] == 2)
 					{
@@ -379,20 +379,20 @@ switch($a)
 						{
 							$ins_auth = ($ins_auth > 127) ? $ins_auth - 128 : $ins_auth;
 							$ins_lock = 128;
-							$comment = ' (System override, guests and inactive are not allowed to admin)';
+							$comment = $L['adm_override_guests'];
 						}
 					}
 					elseif($v['id'] == 3)
 					{
 						$ins_auth = 0;
 						$ins_lock = 255;
-						$comment = ' (System override, Banned)';
+						$comment = $L['adm_override_banned'];
 					}
 					elseif($v['id'] == 5)
 					{
 						$ins_auth = 255;
 						$ins_lock = 255;
-						$comment = ' (System override, Administrators)';
+						$comment = $L['adm_override_admins'];
 					}
 					else
 					{
