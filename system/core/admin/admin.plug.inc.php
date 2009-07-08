@@ -208,7 +208,7 @@ switch($a)
 				"ADMIN_PLUG_LOCK_MEMBERS" => $info['Lock_members'],
 				"ADMIN_PLUG_AUTHOR" => $info['Author'],
 				"ADMIN_PLUG_COPYRIGHT" => $info['Copyright'],
-				"ADMIN_PLUG_NOTES" => sed_parse($info['Notes'], 0, 0, 0),
+				"ADMIN_PLUG_NOTES" => sed_parse($info['Notes'], 1, 0, 0),
 				"ADMIN_PLUG_INSTALL_URL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=install"),
 				"ADMIN_PLUG_INSTALL_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=edit&ajax=1&pl='.$info['Code'].'&b=install')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_PLUG_INSTALL_KO_URL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=install&ko=1"),

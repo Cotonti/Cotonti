@@ -27,9 +27,21 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook  === */
+$extp = sed_getextplugins('admin.page.queue.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'validate')
 {
 	sed_check_xg();
+
+	/* === Hook  === */
+	$extp = sed_getextplugins('admin.page.queue.validate');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 	$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
 	if($row = sed_sql_fetcharray($sql))
@@ -50,6 +62,12 @@ if($a == 'validate')
 if($a == 'unvalidate')
 {
 	sed_check_xg();
+
+	/* === Hook  === */
+	$extp = sed_getextplugins('admin.page.queue.unvalidate');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 	$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
 	if($row = sed_sql_fetcharray($sql))
@@ -87,7 +105,9 @@ $sql = sed_sql_query("SELECT p.*, u.user_name
 	WHERE page_state=1 ORDER by page_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 
 $ii = 0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.page.queue.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
 	$t -> assign(array(
@@ -115,6 +135,12 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_PAGE_QUEUE_PAGE_URL_FOR_VALIDATED" => sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg()),
 		"ADMIN_PAGE_QUEUE_PAGE_URL_FOR_EDIT" => sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")
 	));
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	$t -> parse("PAGE_QUEUE.PAGE_QUEUE_ROW");
 	$ii++;
 }
@@ -130,6 +156,13 @@ $t -> assign(array(
 	"ADMIN_PAGE_QUEUE_TOTALITEMS" => $totalitems,
 	"ADMIN_PAGE_QUEUE_ON_PAGE" => $ii
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.page.queue.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("PAGE_QUEUE");
 $adminmain = $t -> text("PAGE_QUEUE");
 

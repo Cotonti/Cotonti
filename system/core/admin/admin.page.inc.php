@@ -37,6 +37,13 @@ $t -> assign(array(
 	"ADMIN_PAGE_URL_LIST_ALL" => sed_url('list', 'c=all'),
 	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.page.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("PAGE");
 $adminmain = $t -> text("PAGE");
 

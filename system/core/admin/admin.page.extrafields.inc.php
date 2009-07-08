@@ -28,6 +28,12 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.page.extrafields.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'add')
 {
 	$field['name'] = sed_import('field_name', 'P', 'ALP');
@@ -39,6 +45,13 @@ if($a == 'add')
 	{
 		$field['html'] = get_default_html_construction($field['type']);
 	}
+
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.page.extrafields.add');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	if(!empty($field['name']) && !empty($field['type']))
 	{
 		if(sed_extrafield_add("pages", $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
@@ -67,6 +80,13 @@ elseif($a == 'upd' && isset($n))
 	{
 		$field['html'] = get_default_html_construction($field['type']);
 	}
+
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.page.extrafields.update');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	if(!empty($field['name']) && !empty($field['type']))
 	{
 		if(sed_extrafield_update("pages", $n, $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
@@ -81,6 +101,11 @@ elseif($a == 'upd' && isset($n))
 }
 elseif($a == 'del' && isset($n))
 {
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.page.extrafields.delete');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	if(sed_extrafield_remove("pages", $n))
 	{
 		$adminwarnings = $L['adm_extrafield_removed'];
@@ -109,7 +134,9 @@ $field_types = array('input', 'textarea', 'select', 'checkbox');
 $res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages' LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.page.extrafields.loop');
+/* ===== */
 while($row = sed_sql_fetchassoc($res))
 {
 	foreach($field_types as $val)
@@ -131,6 +158,10 @@ while($row = sed_sql_fetchassoc($res))
 		"ADMIN_PAG_EXTRAFIELDS_ROW_BIGNAME" => strtoupper($row['field_name']),
 		"ADMIN_PAG_EXTRAFIELDS_ROW_DEL_URL" => sed_url('admin', 'm=page&s=extrafields&a=del&name='.$row['field_name'])
 	));
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$t -> parse("PAG_EXTRAFIELDS.PAG_EXTRAFIELDS_ROW");
 	$ii++;
 }
@@ -154,6 +185,13 @@ $t -> assign(array(
 	"ADMIN_PAG_EXTRAFIELDS_TOTALITEMS" => $totalitems,
 	"ADMIN_PAG_EXTRAFIELDS_COUNTER_ROW" => $ii
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.page.extrafields.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("PAG_EXTRAFIELDS");
 $adminmain = $t -> text("PAG_EXTRAFIELDS");
 

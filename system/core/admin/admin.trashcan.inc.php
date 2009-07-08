@@ -25,21 +25,42 @@ $d = empty($d) ? 0 : (int) $d;
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.trashcan.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'wipe')
 {
 	sed_check_xg();
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.trashcan.wipe');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$sql = sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
 	$adminwarnings = $L['adm_trashcan_deleted'];
 }
 elseif($a == 'wipeall')
 {
 	sed_check_xg();
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.trashcan.wipeall');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	$sql = sed_sql_query("TRUNCATE $db_trash");
 	$adminwarnings = $L['adm_trashcan_prune'];
 }
 elseif($a == 'restore')
 {
 	sed_check_xg();
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.trashcan.restore');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 	if(sed_trash_restore($id))
 	{
 		sed_trash_delete($id);
@@ -66,7 +87,9 @@ $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	WHERE 1 ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
-
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.trashcan.loop');
+/* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
 	switch($row['tr_type'])
@@ -116,6 +139,12 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_TRASHCAN_ROW_WIPE_URL" => sed_url('admin', "m=trashcan&a=wipe&id=".$row['tr_id']."&d=".$d."&".sed_xg()),
 		"ADMIN_TRASHCAN_ROW_RESTORE_URL" => sed_url('admin', "m=trashcan&a=restore&id=".$row['tr_id']."&d=".$d."&".sed_xg())
 	));
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
 	$t -> parse("TRASHCAN.TRASHCAN_ROW");
 	$ii++;
 }
@@ -132,6 +161,13 @@ $t -> assign(array(
 	"ADMIN_TRASHCAN_COUNTER_ROW" => $ii,
 	"ADMIN_TRASHCAN_PAGESQUEUED" => $pagesqueued
 ));
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.trashcan.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("TRASHCAN");
 $adminmain = $t -> text("TRASHCAN");
 
