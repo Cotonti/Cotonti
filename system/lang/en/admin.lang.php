@@ -405,7 +405,13 @@ $L['adm_paused'] = 'Paused';
 $L['adm_running'] = 'Running';
 $L['adm_partrunning'] = 'Partially running';
 $L['adm_partstopped'] = 'Partially stopped';
+$L['adm_installed'] = 'Installed';	// New in N-0.6.0
 $L['adm_notinstalled'] = 'Not installed';
+
+$L['adm_plugsetup'] = 'Plugin Setup';	// New in N-0.6.0
+$L['adm_override_guests'] = 'System override, guests and inactive are not allowed to admin';	// New in N-0.6.0
+$L['adm_override_banned'] = 'System override, Banned';	// New in N-0.6.0
+$L['adm_override_admins'] = 'System override, Administrators';	// New in N-0.6.0
 
 $L['adm_opt_installall'] = 'Install all';
 $L['adm_opt_installall_explain'] = 'This will install or reset all the parts of the plugin.';
@@ -418,6 +424,19 @@ $L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the parts of
 
 $L['adm_opt_setoption_warn'] = 'Options found for this plugin. Would you like to install from kept options?';	// New in N-0.0.2
 $L['adm_opt_uninstall_warn'] = 'You can delete this plugin without deleting old settings (rights and options). Click if you want to.';	// New in N-0.0.2
+$L['adm_opt_setup_missing'] = 'Error: setup file missing!';	// New in N-0.0.6
+
+$L['adm_pluginstall_msg01'] = 'Deleting old installation of this plugin...';	// New in N-0.0.6
+$L['adm_pluginstall_msg02'] = 'Deleting old configuration entries...';	// New in N-0.0.6
+$L['adm_pluginstall_msg03'] = 'Looking for the setup file...';	// New in N-0.0.6
+$L['adm_pluginstall_msg04'] = 'Looking for parts...';	// New in N-0.0.6
+$L['adm_pluginstall_msg05'] = 'Installing the parts...';	// New in N-0.0.6
+$L['adm_pluginstall_msg06'] = 'Looking for configuration entries in the setup file...';	// New in N-0.0.6
+$L['adm_pluginstall_msg07'] = 'Not found! Installation failed!';	// New in N-0.0.6
+$L['adm_pluginstall_msg08'] = 'Deleting any old rights about this plugin...';	// New in N-0.0.6
+$L['adm_pluginstall_msg09'] = 'Adding the rights for the groups of users...';	// New in N-0.0.6
+$L['adm_pluginstall_msg10'] = 'Resetting the auth column for all the users...';	// New in N-0.0.6
+$L['adm_pluginstall_msg11'] = 'Running on-install part of the setup script...';	// New in N-0.0.6
 
 /**
  * Tools Section
