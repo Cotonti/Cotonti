@@ -1,6 +1,3 @@
-/* r547 Anti bump enhancement */
-INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value`) VALUES ('core', 'forums', '12', 'antibumpforums', 3, '0'), ('core', 'forums', '12', 'mergeforumposts', 3, '1');
-
 /* r568 Enable comments/ratings for structure */
 ALTER TABLE sed_structure ADD COLUMN structure_comments tinyint(1) NOT NULL default '1';
 ALTER TABLE sed_structure ADD COLUMN structure_ratings tinyint(1) NOT NULL default '1';
