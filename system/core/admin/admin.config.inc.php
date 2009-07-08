@@ -1,46 +1,50 @@
-<?PHP
+<?php
 /**
  * Administration panel - Configuration
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$adminpath[] = array (sed_url('admin', 'm=config'), $L['Configuration']);
+$t = new XTemplate(sed_skinfile('admin.config.inc', false, true));
+
+$adminpath[] = array(sed_url('admin', 'm=config'), $L['Configuration']);
 
 $sed_select_charset = sed_loadcharsets();
 $sed_select_doctypeid = sed_loaddoctypes();
 
-switch ($n)
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
+
+switch($n)
 {
 	case 'edit':
-
-		$o = sed_import('o','G','ALP');
-		$p = sed_import('p','G','ALP');
-		$v = sed_import('v','G','TXT');
+		$o = sed_import('o', 'G', 'ALP');
+		$p = sed_import('p', 'G', 'ALP');
+		$v = sed_import('v', 'G', 'TXT');
 		$o = (empty($o)) ? 'core' : $o;
 		$p = (empty($o)) ? 'global' : $p;
 
-		if ($a=='update' && !empty($n))
+		if($a == 'update' && !empty($n))
 		{
-			if ($o=='core')
+			if($o == 'core')
 			{
 				reset($cfgmap);
-				foreach ($cfgmap as $k => $line)
+				foreach($cfgmap as $k => $line)
 				{
-					if ($line[0]==$p)
+					if($line[0] == $p)
 					{
 						$cfg_name = $line[2];
 						$cfg_value = trim(sed_import($cfg_name, 'P', 'NOC'));
-						if ('users' == $p && ('av_maxsize' == $cfg_name || 'sig_maxsize' == $cfg_name || 'ph_maxsize' == $cfg_name))
+						if('users' == $p && ('av_maxsize' == $cfg_name || 'sig_maxsize' == $cfg_name || 'ph_maxsize' == $cfg_name))
 						{
 							$cfg_value = min($cfg_value, sed_get_uploadmax() * 1024);
 						}
@@ -52,58 +56,59 @@ switch ($n)
 			else
 			{
 				$sql = sed_sql_query("SELECT config_owner, config_name FROM $db_config WHERE config_owner='$o' AND config_cat='$p'");
-				while ($row = sed_sql_fetcharray($sql))
+				while($row = sed_sql_fetcharray($sql))
 				{
 					$cfg_value = trim(sed_import($row['config_name'], 'P', 'NOC'));
 					$sql1 = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$row['config_name']."' AND config_owner='$o' AND config_cat='$p'");
 				}
 				header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=config&n=edit&o=plug&p=".$p, '', true));
 			}
-			
 			exit;
 		}
-
-		elseif ($a=='reset' && $o=='core' && !empty($v))
-
+		elseif($a == 'reset' && $o == 'core' && !empty($v))
 		{
 			foreach($cfgmap as $i => $line)
 			{
-				if ($v==$line[2])
-				{ $sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($line[4])."' WHERE config_name='$v' AND config_owner='$o'"); }
+				if($v == $line[2])
+				{
+					$sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($line[4])."' WHERE config_name='$v' AND config_owner='$o'");
+				}
 			}
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
-		sed_die(sed_sql_numrows($sql)==0);
+		sed_die(sed_sql_numrows($sql) == 0);
 
-		foreach ($cfgmap as $k => $line)
-		{ $cfg_params[$line[2]] = $line[5]; }
+		foreach($cfgmap as $k => $line)
+		{
+			$cfg_params[$line[2]] = $line[5];
+		}
 
-		if ($o=='core')
-		{ $adminpath[] = array (sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L["core_".$p]); }
+		if($o == 'core')
+		{
+			$adminpath[] = array(sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L["core_".$p]);
+		}
 		else
 		{
-			$adminpath[] = array (sed_url('admin', 'm=plug&a=details&pl='.$p), $L['Plugin'].' ('.$o.':'.$p.')');
-			$adminpath[] = array (sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['Edit']);
+			$adminpath[] = array(sed_url('admin', 'm=plug&a=details&pl='.$p), $L['Plugin'].' ('.$o.':'.$p.')');
+			$adminpath[] = array(sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['Edit']);
 		}
 
-		$adminmain .= "<form id=\"saveconfig\" action=\"".sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=update")."\" method=\"post\">";
-		$adminmain .= "<table class=\"cells\">";
-		$adminmain .= "<tr><td  class=\"coltop\" colspan=\"2\">".$L['Configuration']."</td><td class=\"coltop\">".$L['Reset']."</td></tr>";
-
-		if ($o=='plug')
+		if($o == 'plug')
 		{
-			$path_lang_def	= $cfg['plugins_dir']."/$p/lang/$p.en.lang.php";
-			$path_lang_alt	= $cfg['plugins_dir']."/$p/lang/$p.$lang.lang.php";
-			if (file_exists($path_lang_def))
-			{ require_once($path_lang_def); }
-			if (file_exists($path_lang_alt) && $lang !='en')
-			{ require_once($path_lang_alt); }
-			
+			$path_lang_def = $cfg['plugins_dir']."/$p/lang/$p.en.lang.php";
+			$path_lang_alt = $cfg['plugins_dir']."/$p/lang/$p.$lang.lang.php";
+			if(file_exists($path_lang_def))
+			{
+				require_once($path_lang_def);
+			}
+			if(file_exists($path_lang_alt) && $lang !='en')
+			{
+				require_once($path_lang_alt);
+			}
 		}
 
-
-		while ($row = sed_sql_fetcharray($sql))
+		while($row = sed_sql_fetcharray($sql))
 		{
 			$config_owner = $row['config_owner'];
 			$config_cat = $row['config_cat'];
@@ -114,101 +119,146 @@ switch ($n)
 			$config_title = $L['cfg_'.$row['config_name']][0];
 			$config_text = sed_cc($row['config_text']);
 			$config_more = $L['cfg_'.$row['config_name']][1];
-			$config_more = (!empty($config_more)) ? '<div class="adminconfigmore">'.$config_more.'</div>' : '';
-			$config_title = (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text)) ? $config_text : $config_title;
+			$if_config_more = (!empty($config_more)) ? true : false;
 
-			$adminmain .= "<tr><td style=\"width:25%;\">".$config_title." : </td><td style=\"width:68%;\">";
-
-			if ($config_type == 1)
-			{ $adminmain .= "<input type=\"text\" class=\"text\" name=\"$config_name\" value=\"$config_value\" size=\"32\" maxlength=\"255\" />"; }
-			elseif ($config_type == 2)
+			if($config_type == 1)
 			{
-				if ($o=='plug' && !empty($row['config_default']))
+				$t -> assign(array(
+					"ADMIN_CONFIG_ROW_CONFIG_NAME" => $config_name,
+					"ADMIN_CONFIG_ROW_CONFIG_VALUE" => $config_value,
+				));
+				$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_1");
+			}
+			elseif($config_type == 2)
+			{
+				if($o=='plug' && !empty($row['config_default']))
 				{
 					$cfg_params[$config_name] = explode(",", $row['config_default']);
 				}
 
-				if (is_array($cfg_params[$config_name]))
+				if(is_array($cfg_params[$config_name]))
 				{
 					reset($cfg_params[$config_name]);
-					$adminmain .= "<select name=\"$config_name\" size=\"1\">";
 					while( list($i,$x) = each($cfg_params[$config_name]) )
 					{
 						$x = trim($x);
-						$selected = ($x == $config_value) ? "selected=\"selected\"" : '';
-						$adminmain .= "<option value=\"".$x."\" $selected>".$x."</option>";
+
+						$t -> assign(array(
+							"ADMIN_CONFIG_ROW_CONFIG_OPTION_VALUE" => $x,
+							"ADMIN_CONFIG_ROW_CONFIG_OPTION_SELECTED" => ($x == $config_value) ? " selected=\"selected\"" : '',
+							"ADMIN_CONFIG_ROW_CONFIG_OPTION_NAME" => $config_name
+						));
+						$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2.ADMIN_CONFIG_ROW_TYPE_2_SELECT.ADMIN_CONFIG_ROW_TYPE_2_OTP");
 					}
-					$adminmain .= "</select>";
+					$t -> assign(array(
+						"ADMIN_CONFIG_ROW_CONFIG_NAME" => $config_name
+					));
+					$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2.ADMIN_CONFIG_ROW_TYPE_2_SELECT");
 				}
-				elseif ($cfg_params[$config_name]=="userlevels")
+				elseif($cfg_params[$config_name] == "userlevels")
 				{
-					$adminmain .= sed_selectboxlevels(0, 99, $config_value, $config_name);
+					$t -> assign(array(
+						"ADMIN_CONFIG_ROW_CONFIG_OPTION" => sed_selectboxlevels(0, 99, $config_value, $config_name)
+					));
+					$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2.ADMIN_CONFIG_ROW_TYPE_2_SELECT");
 				}
 				else
 				{
-					$adminmain .= "<input type=\"text\" class=\"text\" name=\"$config_name\" value=\"$config_value\" size=\"8\" maxlength=\"11\" />";
+					$t -> assign(array(
+						"ADMIN_CONFIG_ROW_CONFIG_OPTION_VALUE" => $config_value,
+						"ADMIN_CONFIG_ROW_CONFIG_OPTION_NAME" => $config_name
+					));
+					$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2.ADMIN_CONFIG_ROW_TYPE_2_TEXT");
 				}
+				$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2");
 			}
-			elseif ($config_type == 3)
+			elseif($config_type == 3)
 			{
-				if ($config_value == 1)
-				{ $adminmain .= "<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"1\" checked=\"checked\" />".$L['Yes']."&nbsp;&nbsp;<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"0\" />".$L['No']; 	}
-				else
-				{ $adminmain .= "<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"1\" />".$L['Yes']."&nbsp;&nbsp;<input type=\"radio\" class=\"radio\" name=\"$config_name\" value=\"0\" checked=\"checked\" />".$L['No']; }
+				$t -> assign(array(
+					"ADMIN_CONFIG_ROW_CONFIG_NAME" => $config_name
+				));
+				$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_3");
 			}
-			elseif ($config_type == 4)
+			elseif($config_type == 4)
 			{
 				$varname = "sed_select_".$config_name;
-				$adminmain .= "<select name=\"".$config_name."\" size=\"1\">";
 				reset($$varname);
-				while ( list($i,$x) = each($$varname) )
+				while(list($i, $x) = each($$varname))
 				{
-					$selected = ($config_value==$x[0]) ? "selected=\"selected\"" : '';
-					$adminmain .= "<option value=\"".$x[0]."\" $selected>".$x[1]."</option>";
+					$t -> assign(array(
+						"ADMIN_CONFIG_ROW_CONFIG_OPTION_VALUE" => $x[0],
+						"ADMIN_CONFIG_ROW_CONFIG_OPTION_SELECTED" => ($config_value == $x[0]) ? " selected=\"selected\"" : '',
+						"ADMIN_CONFIG_ROW_CONFIG_OPTION_NAME" => $x[1]
+					));
+					$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_4.ADMIN_CONFIG_ROW_TYPE_4_OTP");
 				}
-				$adminmain .= "</select>";
+				$t -> assign(array(
+					"ADMIN_CONFIG_ROW_CONFIG_NAME" => $config_name,
+				));
+				$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_4");
 			}
 			else
 			{
-				$adminmain .= "<textarea name=\"$config_name\" rows=\"8\" cols=\"56\">".$config_value."</textarea>";
+				$t -> assign(array(
+					"ADMIN_CONFIG_ROW_CONFIG_NAME" => $config_name,
+					"ADMIN_CONFIG_ROW_CONFIG_VALUE" => $config_value
+				));
+				$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_5");
 			}
-			$adminmain .= " ".$config_more."</td>";
-			$adminmain .= "<td style=\"text-align:center; width:7%;\">";
-			$adminmain .= ($o=='core') ? "[<a href=\"".sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name)."\">R</a>]" : '&nbsp;';
-			$adminmain .= "</td>";
-			$adminmain .= "</tr>";
-		}
-		$adminmain .= "<tr><td colspan=\"3\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
-		$adminmain .= "</table></form>";
 
-		break;
+			$t -> assign(array(
+				"ADMIN_CONFIG_ROW_CONFIG_TITLE" => (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text)) ? $config_text : $config_title,
+				"ADMIN_CONFIG_ROW_CONFIG_MORE_URL" => sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name),
+				"ADMIN_CONFIG_ROW_CONFIG_MORE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=reset&ajax=1&v='.$config_name)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_CONFIG_ROW_CONFIG_MORE" => $config_more
+			));
+			$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW");
+		}
+
+		$t -> assign(array(
+			"ADMIN_CONFIG_FORM_URL" => sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=update"),
+			"ADMIN_CONFIG_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saveconfig', url: '".sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=update&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+		));
+		$t -> parse("CONFIG.EDIT");
+	break;
 
 	default:
-
-		$adminmain = "<h4>".$L['Core']." :</h4><ul>";
-
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core' ORDER BY config_cat ASC");
-
-		while ($row = sed_sql_fetcharray($sql))
+		while($row = sed_sql_fetcharray($sql))
 		{
-			$code = "core_".$row['config_cat'];
-			$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat'])."\">".$L[$code]."</a></li>";
+			$t -> assign(array(
+				"ADMIN_CONFIG_ROW_CORE_URL" => sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat']),
+				"ADMIN_CONFIG_ROW_CORE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=core&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_CONFIG_ROW_CORE_NAME" => $L[ucfirst(strtolower($row['config_cat']))]//"ADMIN_CONFIG_ROW_CORE_NAME" => $L["core_".$row['config_cat']]
+			));
+			$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_CORE");
 		}
-
-		$adminmain .= "</ul>";
-
-		$adminmain .= "<h4>".$L['Plugins']." :</h4><ul>";
-
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='plug' ORDER BY config_cat ASC");
-
-		while ($row = sed_sql_fetcharray($sql))
+		while($row = sed_sql_fetcharray($sql))
 		{
-			$adminmain .= "<li><a href=\"".sed_url('admin', "m=config&n=edit&o=plug&p=".$row['config_cat'])."\">".$row['config_cat']."</a></li>";
+			$t -> assign(array(
+				"ADMIN_CONFIG_ROW_PLUG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$row['config_cat']),
+				"ADMIN_CONFIG_ROW_PLUG_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=plug&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_CONFIG_ROW_PLUG_NAME" => $row['config_cat']
+			));
+			$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_PLUG");
 		}
+		$t -> parse("CONFIG.DEFAULT");
+	break;
+}
 
-		$adminmain .= "</ul>";
+$t -> assign(array(
+	"ADMIN_CONFIG_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_CONFIG_ADMINWARNINGS" => $adminwarnings
+));
+$t -> parse("CONFIG");
+$adminmain = $t -> text("CONFIG");
 
-		break;
+if($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
 }
 
 ?>
