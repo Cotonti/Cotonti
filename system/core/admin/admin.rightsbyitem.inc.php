@@ -109,7 +109,7 @@ $l_custom1 = ($ic == 'page') ? $L['Download'] : $L['Custom'].' #1';
 
 function sed_rights_parseline($row, $title, $link)
 {
-	global $L, $advanced, $t, $out;
+	global $L, $advanced, $t, $out, $ic;
 
 	$mn['R'] = 1;
 	$mn['W'] = 2;

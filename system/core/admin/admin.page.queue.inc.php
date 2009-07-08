@@ -1,6 +1,6 @@
 <?php
 /**
- * Administration panel
+ * Administration panel - Queue of pages
  *
  * @package Cotonti
  * @version 0.1.0
@@ -48,9 +48,12 @@ if($a == 'validate')
 	{
 		$usr['isadmin_local'] = sed_auth('page', $row['page_cat'], 'A');
 		sed_block($usr['isadmin_local']);
+
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+
 		sed_cache_clear('latestpages');
+
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_validated'];
 	}
 	else
@@ -74,9 +77,12 @@ if($a == 'unvalidate')
 	{
 		$usr['isadmin_local'] = sed_auth('page', $row['page_cat'], 'A');
 		sed_block($usr['isadmin_local']);
+
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+
 		sed_cache_clear('latestpages');
+
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_unvalidated'];
 	}
 	else
