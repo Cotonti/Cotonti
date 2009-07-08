@@ -544,7 +544,7 @@ $L['polls_since'] = 'с';
 $L['polls_updated'] = 'Опрос обновлен';	// New in N-0.0.2
 $L['polls_viewarchives'] = 'Все опросы';
 $L['polls_viewresults'] = 'Результаты';
-$L['polls_Vote'] = 'Голос';
+$L['polls_Vote'] = 'Голосовать';
 $L['polls_votecasted'] = 'Выполнено, ваш голос записан';
 $L['polls_votes'] = 'голосов';
 
