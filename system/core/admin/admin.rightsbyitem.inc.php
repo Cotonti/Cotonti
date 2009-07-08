@@ -36,10 +36,22 @@ $L['adm_code']['polls'] = $L['Polls'];
 $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 
+/* === Hook === */
+$extp = sed_getextplugins('admin.rightsbyitem.first');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 if($a == 'update')
 {
 	$mask = array();
 	$auth = sed_import('auth', 'P', 'ARR');
+
+	/* === Hook === */
+	$extp = sed_getextplugins('admin.rightsbyitem.update');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 	$sql = sed_sql_query("UPDATE $db_auth SET auth_rights=0 WHERE auth_code='$ic' AND auth_option='$io'");
 
@@ -171,6 +183,13 @@ $t -> assign(array(
 	"ADMIN_RIGHTSBYITEM_3ADV_COLUMNS" => 3 + $adv_columns,
 	"ADMIN_RIGHTSBYITEM_ADMINWARNINGS" => $adminwarnings
 ));
+
+/* === Hook === */
+$extp = sed_getextplugins('admin.rightsbyitem.tags');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
+
 $t -> parse("RIGHTSBYITEM");
 $adminmain = $t -> text("RIGHTSBYITEM");
 
