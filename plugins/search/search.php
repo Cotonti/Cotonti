@@ -87,6 +87,21 @@ if($a=='search')
 	// Making query string
 	$sqlsearch = implode("%", $words);
 	$sqlsearch = "%".$sqlsearch."%";
+	
+	// String query for addition pages fields.
+	$addfields = trim($cfg['plugin']['search']['addfields']);
+	if(strlen($addfields))
+	{
+            $addfields_sql = "";
+            foreach(explode(',', $addfields) as $addfields_el)
+            {
+                  $addfields_el = trim($addfields_el);
+                  if(strlen($addfields_el))
+                  {
+                        $addfields_sql .= " OR p.".$addfields_el." LIKE '".$sqlsearch."'";
+                  }
+            }
+      }
 }
 
 
@@ -482,37 +497,37 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 		// +TITLE -DESC -TEXT
 		if($sea_pagtitle == 1 && $sea_pagdesc != 1 && $sea_pagtext != 1)
 		{
-			$pagsql = "(p.page_title LIKE '".$sqlsearch."') AND ";
+			$pagsql = "(p.page_title LIKE '".$sqlsearch."'".$addfields_sql.") AND ";
 		}
 		// +TITLE +DESC -TEXT
 		elseif($sea_pagtitle == 1 && $sea_pagdesc == 1 && $sea_pagtext != 1)
 		{
-			$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".$sqlsearch."') AND ";
+			$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".$sqlsearch."'".$addfields_sql.") AND ";
 		}
 		// +TITLE -DESC +TEXT
 		elseif($sea_pagtitle == 1 && $sea_pagdesc != 1 && $sea_pagtext == 1)
 		{
-			$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+			$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."'".$addfields_sql.") AND ";
 		}
 		// -TITLE +DESC -TEXT
 		elseif($sea_pagtitle != 1 && $sea_pagdesc == 1 && $sea_pagtext != 1)
 		{
-			$pagsql = "(p.page_desc LIKE '".$sqlsearch."') AND ";
+			$pagsql = "(p.page_desc LIKE '".$sqlsearch."'".$addfields_sql.") AND ";
 		}
 		// -TITLE +DESC +TEXT
 		elseif($sea_pagtitle != 1 && $sea_pagdesc == 1 && $sea_pagtext == 1)
 		{
-			$pagsql = "(p.page_desc LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+			$pagsql = "(p.page_desc LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."'".$addfields_sql.") AND ";
 		}
 		// -TITLE -DESC +TEXT
 		elseif($sea_pagtitle != 1 && $sea_pagdesc != 1 && $sea_pagtext == 1)
 		{
-			$pagsql = "(p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+			$pagsql = "(p.page_text LIKE '".sed_sql_prep($sqlsearch)."'".$addfields_sql.") AND ";
 		}
 		// +TITLE +DESC +TEXT
 		elseif($sea_pagtitle == 1 && $sea_pagdesc == 1 && $sea_pagtext == 1)
 		{
-			$pagsql = "(p.page_text LIKE '".$sqlsearch."' OR p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+			$pagsql = "(p.page_text LIKE '".$sqlsearch."' OR p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".sed_sql_prep($sqlsearch)."'".$addfields_sql.") AND ";
 		}
 
 		// Otherwise error message
@@ -923,37 +938,37 @@ else
 			// +TITLE -DESC -TEXT
 			if($sea_pagtitle == 1 && $sea_pagdesc != 1 && $sea_pagtext != 1)
 			{
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."') AND ";
+				$pagsql = "(p.page_title LIKE '".$sqlsearch."'".$addfields_sql.") AND ";
 			}
 			// +TITLE +DESC -TEXT
 			elseif($sea_pagtitle == 1 && $sea_pagdesc == 1 && $sea_pagtext != 1)
 			{
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".$sqlsearch."') AND ";
+				$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".$sqlsearch."'".$addfields_sql.") AND ";
 			}
 			// +TITLE -DESC +TEXT
 			elseif($sea_pagtitle == 1 && $sea_pagdesc != 1 && $sea_pagtext == 1)
 			{
-				$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(p.page_title LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."'".$addfields_sql.") AND ";
 			}
 			// -TITLE +DESC -TEXT
 			elseif($sea_pagtitle != 1 && $sea_pagdesc == 1 && $sea_pagtext != 1)
 			{
-				$pagsql = "(p.page_desc LIKE '".$sqlsearch."') AND ";
+				$pagsql = "(p.page_desc LIKE '".$sqlsearch."'".$addfields_sql.") AND ";
 			}
 			// -TITLE +DESC +TEXT
 			elseif($sea_pagtitle != 1 && $sea_pagdesc == 1 && $sea_pagtext == 1)
 			{
-				$pagsql = "(p.page_desc LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(p.page_desc LIKE '".$sqlsearch."' OR p.page_text LIKE '".sed_sql_prep($sqlsearch)."'".$addfields_sql.") AND ";
 			}
 			// -TITLE -DESC +TEXT
 			elseif($sea_pagtitle != 1 && $sea_pagdesc != 1 && $sea_pagtext == 1)
 			{
-				$pagsql = "(p.page_text LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(p.page_text LIKE '".sed_sql_prep($sqlsearch)."'".$addfields_sql.") AND ";
 			}
 			// +TITLE +DESC +TEXT
 			elseif($sea_pagtitle == 1 && $sea_pagdesc == 1 && $sea_pagtext == 1)
 			{
-				$pagsql = "(p.page_text LIKE '".$sqlsearch."' OR p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".sed_sql_prep($sqlsearch)."') AND ";
+				$pagsql = "(p.page_text LIKE '".$sqlsearch."' OR p.page_title LIKE '".$sqlsearch."' OR p.page_desc LIKE '".sed_sql_prep($sqlsearch)."'".$addfields_sql.") AND ";
 			}
 
 			// Otherwise error message
