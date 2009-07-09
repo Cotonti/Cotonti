@@ -80,16 +80,16 @@ elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
 if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='dl' && (($pag['page_file'] == 2 && $usr['auth_download']) || $pag['page_file'] == 1))
 {
 
-/* === Hook === */
-$extp = sed_getextplugins('page.download.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
+	/* === Hook === */
+	$extp = sed_getextplugins('page.download.first');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 
 	if ($_SESSION['dl']!=$pag['page_id'])
 	{
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('page', 'id='.$pag['page_id']));
+		header('Location: ' . SED_ABSOLUTE_URL . $pag['page_pageurl']);
 		exit;
 	}
 
@@ -101,9 +101,18 @@ if (is_array($extp))
 		$pag['page_filecount']++;
 		$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$pag['page_id']);
 	}
-	header("Location: ".$pag['page_url']);
-	echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
-	exit;
+	if(preg_match('#^https?://#', $pag['page_url']))
+	{
+		header("Location: ".$pag['page_url']);
+		echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
+		exit;
+	}
+	else
+	{
+		header('Location: ' . SED_ABSOLUTE_URL . $pag['page_url']);
+		echo("<script type='text/javascript'>location.href='". SED_ABSOLUTE_URL . $pag['page_url']."';</script>Redirecting...");
+		exit;
+	}
 }
 
 if(!$usr['isadmin'] || $cfg['count_admin'])
