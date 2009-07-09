@@ -3,8 +3,8 @@
  * MIMETYPE
  *
  * @package Cotonti
- * @version 0.0.3
- * @author Neocrome, Cotonti Team
+ * @version 0.0.6
+ * @author Kilandor, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
@@ -24,7 +24,8 @@ $mime_type['zip'][0]	= array('application/zip', '504B03041400', '1', '0', '6', '
 $mime_type['zip'][1]	= array('application/zip', '504B03040A00', '1', '0', '6', '0');
 $mime_type['gz'][]		= array('application/x-gzip', '1F8B0800', '1', '0', '4', '0');
 $mime_type['tar.gz'][]	= array('application/x-gzip', '1F8B0808', '1', '0', '4', '0');
-$mime_type['pdf'][]		= array('application/pdf', '!<PDF>!', '0', '0', '7', '0');
+$mime_type['pdf'][1]	= array('application/pdf', '!<PDF>!', '0', '0', '7', '0');
+$mime_type['pdf'][2]	= array('application/pdf', 'PDF', '0', '1', '3', '0');
 $mime_type['avi'][0]	= array('video/avi', 'AVI', '0', '8', '3', '0');
 $mime_type['avi'][1]	= array('video/avi', 'RIFF', '0', '0', '4', '0');
 $mime_type['qt'][0]		= array('video/quicktime', 'ftypqt', '0', '4', '6', '0');
