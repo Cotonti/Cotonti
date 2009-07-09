@@ -1,17 +1,21 @@
 <?php
-/* 
- * This script is forced to patch user_datebirth in existing databases
+/**
+ * This script is forced to patch user_datebirth in existing databases.
+ * Copy it to your Cotonti root as patch.php and run in a web browser.
+ *
+ * @package Cotonti
+ * @version 0.0.6
+ * @author Trustmaster
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
 
 define('SED_CODE', TRUE);
+$location = 'Pages';
 
-chdir('..');
-
-require_once('datas/config.php');
+require_once('./datas/config.php');
 require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
-$sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
-unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+require_once($cfg['system_dir'].'/common.php');
 
 // Create temporary table and copy existing values
 $sql = <<<SQL
@@ -40,4 +44,5 @@ sed_sql_freeresult($res);
 sed_sql_query('DROP TABLE sed_tmp');
 
 echo 'Conversion completed';
+ob_end_flush();
 ?>

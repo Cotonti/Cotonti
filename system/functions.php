@@ -4,7 +4,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.0.6
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License

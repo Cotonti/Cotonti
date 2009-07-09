@@ -29,15 +29,14 @@ require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
 
 if ($mode=='ajax')
 {
-$skin = sed_import('poll_skin','P','TXT');
-$id = sed_import('poll_id','P','INT');
-sed_sendheaders();
-		sed_poll_vote();
-		list($polltitle, $poll_form)=sed_poll_form($id, '', $skin);
-		echo $poll_form;
-	
-	exit;
+	$skin = sed_import('poll_skin','P','TXT');
+	$id = sed_import('poll_id','P','INT');
+	sed_sendheaders();
+	sed_poll_vote();
+	list($polltitle, $poll_form)=sed_poll_form($id, '', $skin);
+	echo $poll_form;
 
+	exit;
 }
 
 $id = sed_import('id','G','ALP', 8);
@@ -96,9 +95,14 @@ elseif ($id=='viewall' || $id=='')
 }
 else
 {
-		$id = sed_import($id,'D','INT');
-		sed_poll_vote();
-		list($polltitle, $poll_form)=sed_poll_form($id);
+	$id = sed_import($id,'D','INT');
+	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id")) != 1)
+	{
+		header('Location: ' . SED_ABSOLUTE_URL . sed_url('message', 'msg=404', '', TRUE));
+		exit;
+	}
+	sed_poll_vote();
+	list($polltitle, $poll_form)=sed_poll_form($id);
 	$item_code = 'v'.$id;
 	$comments = true; // TODO enable/disable comments on categories
 
