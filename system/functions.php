@@ -4784,10 +4784,11 @@ require_once $cfg['system_dir'].'/xtemplate.class.php';
  * @param string $html HTML display of element without parameter "name="
  * @param string $variants Variants of values (for radiobuttons, selectors etc)
  * @param string $description Description of field (optional, for admin)
+ * @param bool $noalter Do not ALTER the table, just register the extra field
  * @return bool
  *
  */
-function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $description="")
+function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $description="", $noalter = FALSE)
 {
 	global $db_extra_fields, $db_x;
 	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$sql_table'");
@@ -4798,6 +4799,10 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
 
 	// Check table sed_$sql_table - if field with same name exists - exit.
+	if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table WHERE Field LIKE '%\_$name'")) > 0 && !$noalter)
+	{
+		return FALSE;
+	}
 	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
 	while ($i < mysql_num_fields($fieldsres))
 	{
@@ -4805,7 +4810,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 		// get column prefix in this table
 		$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
 		preg_match("#.*?_$name$#",$column->name,$match);
-		if($match[1]!="") return false; // No adding - fields already exist
+		if($match[1]!="" && !$noalter) return false; // No adding - fields already exist
 		$i++;
 	}
 
@@ -4816,12 +4821,16 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	$extf['variants'] = $variants;
 	$extf['description'] = $description;
 	$step1 = sed_sql_insert($db_extra_fields, $extf, 'field_') == 1;
+	if ($noalter)
+	{
+		return $step1;
+	}
 	switch($type)
 	{
-	case "input": $sqltype = "VARCHAR(255)"; break;
-	case "textarea": $sqltype = "TEXT"; break;
-	case "select": $sqltype = "VARCHAR(255)"; break;
-	case "checkbox": $sqltype = "BOOL"; break;
+		case "input": $sqltype = "VARCHAR(255)"; break;
+		case "textarea": $sqltype = "TEXT"; break;
+		case "select": $sqltype = "VARCHAR(255)"; break;
+		case "checkbox": $sqltype = "BOOL"; break;
 	}
 	$sql = "ALTER TABLE $db_x$sql_table ADD ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
@@ -4844,6 +4853,13 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $variants="", $description="")
 {
 	global $db_extra_fields, $db_x;
+	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields
+			WHERE field_name = '$oldname' AND field_location='$sql_table'"), 0, 0) <= 0
+		|| sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table WHERE Field LIKE '%\_$name'")) > 0)
+	{
+		// Attempt to edit non-extra field or override an existing field
+		return FALSE;
+	}
 	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
 	$column = mysql_fetch_field($fieldsres, 0);
 	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
@@ -4854,11 +4870,12 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 	$extf['variants'] = $variants;
 	$extf['description'] = $description;
 	$step1 = sed_sql_update($db_extra_fields, "field_name = '$oldname' AND field_location='$sql_table'", $extf, 'field_') == 1;
-	switch($type)	{
-	case "input": $sqltype = "VARCHAR(255)"; break;
-	case "textarea": $sqltype = "TEXT"; break;
-	case "select": $sqltype = "VARCHAR(255)"; break;
-	case "checkbox": $sqltype = "BOOL"; break;
+	switch ($type)
+	{
+		case "input": $sqltype = "VARCHAR(255)"; break;
+		case "textarea": $sqltype = "TEXT"; break;
+		case "select": $sqltype = "VARCHAR(255)"; break;
+		case "checkbox": $sqltype = "BOOL"; break;
 	}
 	$sql = "ALTER TABLE $db_x$sql_table CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
@@ -4877,6 +4894,12 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 function sed_extrafield_remove($sql_table, $name)
 {
 	global $db_extra_fields, $db_x;
+	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields
+		WHERE field_name = '$name' AND field_location='$sql_table'"), 0, 0) <= 0)
+	{
+		// Attempt to remove non-extra field
+		return FALSE;
+	}
 	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
 	$column = mysql_fetch_field($fieldsres, 0);
 	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));

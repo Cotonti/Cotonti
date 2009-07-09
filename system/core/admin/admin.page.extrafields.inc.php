@@ -41,6 +41,7 @@ if($a == 'add')
 	$field['html'] = str_replace("'", "\"", htmlspecialchars_decode(sed_import('field_html', 'P', 'HTM')));
 	$field['variants'] = sed_import('field_variants', 'P', 'HTM');
 	$field['description'] = sed_import('field_description', 'P', 'HTM');
+	$field['noalter'] = sed_import('field_noalter', 'P', 'BOL');
 	if($field['html'] == "")
 	{
 		$field['html'] = get_default_html_construction($field['type']);
@@ -54,7 +55,7 @@ if($a == 'add')
 
 	if(!empty($field['name']) && !empty($field['type']))
 	{
-		if(sed_extrafield_add("pages", $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
+		if (sed_extrafield_add('pages', $field['name'], $field['type'], $field['html'], $field['variants'], $field['description'], $field['noalter']))
 		{
 			$adminwarnings = $L['adm_extrafield_added'];
 		}
@@ -89,7 +90,7 @@ elseif($a == 'upd' && isset($n))
 
 	if(!empty($field['name']) && !empty($field['type']))
 	{
-		if(sed_extrafield_update("pages", $n, $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
+		if (sed_extrafield_update('pages', $n, $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
 		{
 			$adminwarnings = $L['adm_extrafield_updated'];
 		}
@@ -106,7 +107,7 @@ elseif($a == 'del' && isset($n))
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
-	if(sed_extrafield_remove("pages", $n))
+	if(sed_extrafield_remove('pages', $n))
 	{
 		$adminwarnings = $L['adm_extrafield_removed'];
 	}

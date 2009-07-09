@@ -700,11 +700,12 @@ $L['adm_extrafield_confirmupd'] = 'Вы действительно хотите 
 
 $L['extf_Name'] = 'Название поля';
 $L['extf_Type'] = 'Тип поля';
-$L['extf_Base HTML'] = 'HTML-код поля';
-$L['extf_Page tags'] = 'Тэги';
+$L['extf_Base_HTML'] = 'HTML-код поля';
+$L['extf_Page_tags'] = 'Тэги';
 $L['extf_Description'] = 'Описание поля (_TITLE)';
 
 $L['adm_extrafield_new'] = 'Новое поле';
+$L['adm_extrafield_noalter'] = 'Не добавлять новое поле в БД, только зарегистрировать как дополнительное';
 $L['adm_extrafield_selectable_values'] = 'Значения для select (через запятую):';
 $L['adm_help_extrafield'] = 'HTML-код поля устанавливается в значение по умолчанию автоматически, если его очистить и обновить';
 
