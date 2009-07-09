@@ -835,7 +835,7 @@ CREATE TABLE `sed_pm` (
 CREATE TABLE `sed_polls` (
   `poll_id` mediumint(8) NOT NULL auto_increment,
   `poll_type` varchar(100) collate utf8_unicode_ci NOT NULL default 'index',
-  `poll_code` varchar(16) NOT NULL default ''
+  `poll_code` varchar(16) NOT NULL default '',
   `poll_state` tinyint(1) NOT NULL default '0',
   `poll_creationdate` int(11) NOT NULL default '0',
   `poll_text` varchar(255) collate utf8_unicode_ci NOT NULL default '',
@@ -916,7 +916,7 @@ CREATE TABLE `sed_structure` (
   `structure_order` varchar(16) collate utf8_unicode_ci NOT NULL default 'title.asc',
   `structure_pagecount` mediumint(8) NOT NULL default '0',
   `structure_comments` tinyint(1) NOT NULL default 1,
-  `structure_ratings` tinyint(1) NOT NULL default 1
+  `structure_ratings` tinyint(1) NOT NULL default 1,
   PRIMARY KEY  (`structure_id`),
   KEY `structure_path` (`structure_path`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
