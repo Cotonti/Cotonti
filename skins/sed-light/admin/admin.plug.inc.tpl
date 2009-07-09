@@ -37,7 +37,11 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.Rights}:</td>
+<!-- IF {PHP.isinstalled} != 0 -->
 					<td><a href="{ADMIN_PLUG_RIGHTS}"><img src="images/admin/rights2.gif" alt="" /></a></td>
+<!-- ELSE -->
+					<td>{PHP.L.None}</td>
+<!-- ENDIF -->
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_defauth_guests}:</td>
@@ -196,7 +200,11 @@
 					</td>
 					<td style="text-align:center;">{ADMIN_PLUG_PARTSCOUNT}</td>
 					<td style="text-align:center;">{ADMIN_PLUG_STATUS}</td>
-					<td style="text-align:center;"><a href="{ADMIN_PLUG_RIGHTS_URL}"><img src="images/admin/rights2.gif" alt="" /></a></td>
+					<td style="text-align:center;">&nbsp;
+<!-- IF {PHP.part_status} != 3 -->
+						<a href="{ADMIN_PLUG_RIGHTS_URL}"><img src="images/admin/rights2.gif" alt="" /></a>
+<!-- ENDIF -->
+					</td>
 					<td style="text-align:center;">
 <!-- IF {PHP.ifthistools} -->
 						<a href="{ADMIN_PLUG_JUMPTO_URL_TOOLS}"><img src="images/admin/jumpto.gif" alt="" /></a>
