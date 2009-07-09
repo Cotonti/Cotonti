@@ -87,6 +87,7 @@
 					</td>
 					<td>
 						<textarea name="field_html" rows="2" cols="40"></textarea>
+						<span style="font-size: 80%;"><input type="checkbox" name="field_noalter" /> {PHP.L.adm_extrafield_noalter}</span>
 					</td>
 					<td>
 						<input type="submit" value="{PHP.L.Add}" />
