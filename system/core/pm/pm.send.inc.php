@@ -272,35 +272,33 @@ $t->out("MAIN");
 require_once $cfg['system_dir'] . '/footer.php';
 
 /* ======== Language PM for recipient ======== */
-function send_translated_mail($transtolang, $remail, $rusername)
+function send_translated_mail($rlang, $remail, $rusername)
 {
-    global $cfg, $usr;
+    global $cfg, $usr, $lang;
 
-    $dlang = $cfg['system_dir'].'/lang/en/main.lang.php';
-    $mlang = $cfg['system_dir'].'/lang/'.$cfg['defaultlang'].'/main.lang.php';
-    $ulang = $cfg['system_dir'].'/lang/'.$transtolang.'/main.lang.php';
-
-    if(file_exists($dlang))
+    $is_global = true;
+    $a = array($rlang, 'en', $cfg['defaultlang'],);
+    foreach ($a as $v)
     {
-        require($dlang);
-        $dlangne = 1;
+        if ($v == $lang)
+        {
+            break;
+        }
+        $r = "{$cfg['system_dir']}/lang/$v/main.lang.php";
+        if (file_exists($r))
+        {
+            require($r);
+            $is_global = false;
+            break;
+        }
     }
-    if(file_exists($ulang) && $transtolang != 'en')
+    if($is_global)
     {
-        require($ulang);
-    }
-    elseif(file_exists($mlang) && $transtolang != $cfg['defaultlang'] && $transtolang != 'en')
-    {
-        require($mlang);
-        $transtolang = $cfg['defaultlang'];
-    }
-    elseif(!$dlangne)
-    {
-        sed_diefatal('Main language file not found.');
+        global $L;
     }
 
-    $rsubject = $cfg['maintitle']." - ".$L['pm_notifytitle'];
-    $rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl'].'/'.sed_url('pm', '', '', true));
+    $rsubject = "{$cfg['maintitle']} - {$L['pm_notifytitle']}";
+    $rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl'] . '/' . sed_url('pm', '', '', true));
 
     sed_mail($remail, $rsubject, $rbody);
 }

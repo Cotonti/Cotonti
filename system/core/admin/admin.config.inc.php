@@ -26,8 +26,13 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.config.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 switch($n)
@@ -57,7 +62,6 @@ switch($n)
 						$sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$cfg_name."' AND config_owner='core'");
 					}
 				}
-				//header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=config&n=edit&o=core&p=".$p, '', true));
 			}
 			else
 			{
@@ -67,7 +71,6 @@ switch($n)
 					$cfg_value = trim(sed_import($row['config_name'], 'P', 'NOC'));
 					$sql1 = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$row['config_name']."' AND config_owner='$o' AND config_cat='$p'");
 				}
-				//header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', "m=config&n=edit&o=plug&p=".$p, '', true));
 			}
 
 			$adminwarnings = $L['Updated'];
@@ -223,8 +226,13 @@ switch($n)
 				"ADMIN_CONFIG_ROW_CONFIG_MORE" => $config_more
 			));
 			/* === Hook - Part2 : Include === */
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			if(is_array($extp))
+			{
+				foreach($extp as $k => $pl)
+				{
+					include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+				}
+			}
 			/* ===== */
 			$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW");
 		}
@@ -235,8 +243,13 @@ switch($n)
 		));
 		/* === Hook  === */
 		$extp = sed_getextplugins('admin.config.edit.tags');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 		$t -> parse("CONFIG.EDIT");
 	break;
@@ -248,7 +261,7 @@ switch($n)
 			$t -> assign(array(
 				"ADMIN_CONFIG_ROW_CORE_URL" => sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat']),
 				"ADMIN_CONFIG_ROW_CORE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=core&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-				"ADMIN_CONFIG_ROW_CORE_NAME" => $L[ucfirst(strtolower($row['config_cat']))]//"ADMIN_CONFIG_ROW_CORE_NAME" => $L["core_".$row['config_cat']]
+				"ADMIN_CONFIG_ROW_CORE_NAME" => $L["core_".$row['config_cat']]
 			));
 			$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_CORE");
 		}
@@ -264,8 +277,13 @@ switch($n)
 		}
 		/* === Hook  === */
 		$extp = sed_getextplugins('admin.config.default.tags');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 		$t -> parse("CONFIG.DEFAULT");
 	break;
@@ -280,8 +298,13 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.config.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("CONFIG");

@@ -163,7 +163,8 @@ switch($a)
 								"ADMIN_PLUG_DETAILS_ROW_I_1" => $i+1,
 								"ADMIN_PLUG_DETAILS_ROW_PART" => $info_file['Part'],
 								"ADMIN_PLUG_DETAILS_ROW_FILE" => $line[0]." :<br />",
-								"ADMIN_PLUG_DETAILS_ROW_LISTTAGS" => $listtags
+								"ADMIN_PLUG_DETAILS_ROW_LISTTAGS" => $listtags,
+								//"ADMIN_PLUG_DETAILS_ROW_TAGS_ODDEVEN" => sed_build_oddeven($ii)
 							));
 							$t -> parse("PLUG.DETAILS.ROW_TAGS");
 						}
@@ -178,11 +179,17 @@ switch($a)
 							"ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl."&b=pausepart&part=".$row['pl_id']),
 							"ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl.'&b=pausepart&part='.$row['pl_id'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 							"ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl."&b=unpausepart&part=".$row['pl_id']),
-							"ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl.'&b=unpausepart&part='.$row['pl_id'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+							"ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl.'&b=unpausepart&part='.$row['pl_id'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+							//"ADMIN_PLUG_DETAILS_ROW_PART_ODDEVEN" => sed_build_oddeven($ii)
 						));
 						/* === Hook - Part2 : Include === */
-						if (is_array($extp))
-						{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+						if(is_array($extp))
+						{
+							foreach($extp as $k => $pl)
+							{
+								include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+							}
+						}
 						/* ===== */
 						$t -> parse("PLUG.DETAILS.ROW_PART");
 					}
@@ -224,8 +231,13 @@ switch($a)
 			));
 			/* === Hook  === */
 			$extp = sed_getextplugins('admin.plug.details');
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			if(is_array($extp))
+			{
+				foreach($extp as $k => $pl)
+				{
+					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+				}
+			}
 			/* ===== */
 			$t -> parse("PLUG.DETAILS");
 		}
@@ -439,12 +451,17 @@ switch($a)
 					"ADMIN_PLUG_EDIT_EXTPLUGIN_INFO" => include_once($extplugin_info),
 					"ADMIN_PLUG_EDIT_LOG" => $edit_log,
 					"ADMIN_PLUG_EDIT_CONTINUE_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl),
-					"ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+					"ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 				));
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.plug.install.tags');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				if(is_array($extp))
+				{
+					foreach($extp as $k => $pl)
+					{
+						include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+					}
+				}
 				/* ===== */
 				$t -> parse("PLUG.EDIT.INSTALL");
 				$t -> parse("PLUG.EDIT");
@@ -480,12 +497,17 @@ switch($a)
 					"ADMIN_PLUG_EDIT_EXTPLUGIN_INFO" => include_once($extplugin_info),
 					"ADMIN_PLUG_EDIT_LOG" => $edit_log,
 					"ADMIN_PLUG_EDIT_CONTINUE_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl),
-					"ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+					"ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 				));
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.plug.uninstall.tags');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				if(is_array($extp))
+				{
+					foreach($extp as $k => $pl)
+					{
+						include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+					}
+				}
 				/* ===== */
 				$t -> parse("PLUG.EDIT.UNINSTALL");
 				$t -> parse("PLUG.EDIT");
@@ -605,11 +627,17 @@ switch($a)
 						"ADMIN_PLUG_STATUS" => $status[$part_status],
 						"ADMIN_PLUG_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code']),
 						"ADMIN_PLUG_JUMPTO_URL_TOOLS" => sed_url('admin', "m=tools&p=".$info['Code']),
-						"ADMIN_PLUG_JUMPTO_URL" => sed_url('plug', "e=".$info['Code'])
+						"ADMIN_PLUG_JUMPTO_URL" => sed_url('plug', "e=".$info['Code']),
+						"ADMIN_PLUG_ODDEVEN" => sed_build_oddeven($ii)
 					));
 					/* === Hook - Part2 : Include === */
-					if (is_array($extp))
-					{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+					if(is_array($extp))
+					{
+						foreach($extp as $k => $pl)
+						{
+							include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+						}
+					}
 					/* ===== */
 					$t -> parse("PLUG.DEFAULT.ROW");
 				}
@@ -651,7 +679,7 @@ switch($a)
 	break;
 }
 
-$if_conf_url = (!empty($pl) && $b == 'install' && $totalconfig>0) ? true : false;
+$if_conf_url = (!empty($pl) && $b == 'install' && $totalconfig > 0) ? true : false;
 $is_adminwarnings = isset($adminwarnings);
 
 $t -> assign(array(
@@ -662,8 +690,13 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.plug.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 $t -> parse("PLUG");
 $adminmain = $t -> text("PLUG");

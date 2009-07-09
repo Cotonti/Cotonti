@@ -49,7 +49,7 @@
 <!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_5 -->
 						<textarea name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" rows="8" cols="56">{ADMIN_CONFIG_ROW_CONFIG_VALUE}</textarea>
 <!-- END: ADMIN_CONFIG_ROW_TYPE_5 -->
-<!-- IF {PHP.if_config_more)} -->
+<!-- IF {PHP.if_config_more} -->
 						<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
 <!-- ENDIF -->
 					</td>
