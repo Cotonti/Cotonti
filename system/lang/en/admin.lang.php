@@ -405,13 +405,13 @@ $L['adm_paused'] = 'Paused';
 $L['adm_running'] = 'Running';
 $L['adm_partrunning'] = 'Partially running';
 $L['adm_partstopped'] = 'Partially stopped';
-$L['adm_installed'] = 'Installed';	// New in N-0.6.0
+$L['adm_installed'] = 'Installed';	// New in N-0.0.6
 $L['adm_notinstalled'] = 'Not installed';
 
-$L['adm_plugsetup'] = 'Plugin Setup';	// New in N-0.6.0
-$L['adm_override_guests'] = 'System override, guests and inactive are not allowed to admin';	// New in N-0.6.0
-$L['adm_override_banned'] = 'System override, Banned';	// New in N-0.6.0
-$L['adm_override_admins'] = 'System override, Administrators';	// New in N-0.6.0
+$L['adm_plugsetup'] = 'Plugin Setup';	// New in N-0.0.6
+$L['adm_override_guests'] = 'System override, guests and inactive are not allowed to admin';	// New in N-0.0.6
+$L['adm_override_banned'] = 'System override, Banned';	// New in N-0.0.6
+$L['adm_override_admins'] = 'System override, Administrators';	// New in N-0.0.6
 
 $L['adm_opt_installall'] = 'Install all';
 $L['adm_opt_installall_explain'] = 'This will install or reset all the parts of the plugin.';
