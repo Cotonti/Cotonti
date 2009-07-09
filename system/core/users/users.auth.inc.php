@@ -113,9 +113,6 @@ if ($a=='check')
 	}
 }
 
-else
-{ unset($redir); }
-
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.main');
 if (is_array($extp))
