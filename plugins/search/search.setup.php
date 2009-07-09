@@ -34,6 +34,7 @@ maxitems_ext=04:select:15,30,50,80,100,150,200,300:100:Maximum results lines for
 showtext=05:radio::1:Show text in result for general search
 showtext_ext=06:radio::1:Show text in result for extended search
 searchurl=07:select:Normal,Single:Normal:Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link
+addfields=08:string:::Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 

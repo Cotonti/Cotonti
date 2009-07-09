@@ -20,6 +20,7 @@ $L['cfg_minsigns'] = array('Min. signs in query');
 $L['cfg_searchurl'] = array('Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
 $L['cfg_showtext']= array('Display text entries in normal search results');
 $L['cfg_showtext_ext']= array('Display text entries in advanced search results');
+$L['cfg_addfields']= array('Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"');
 
 // Common - title, info, query
 $L['plu_title_all'] = 'Site search';
