@@ -40,6 +40,11 @@ $sys['starttime'] = $i[1] + $i[0];
 $cfg['version'] = '0.0.6';
 $cfg['dbversion'] = '0.0.6';
 
+if($cfg['customfuncs'])
+{
+	require_once($cfg['system_dir'].'/functions.custom.php');
+}
+
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
 {
@@ -1647,7 +1652,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id).'">'.$user.'</a>' : '?';
+		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id.'&u='.$user).'">'.$user.'</a>' : '?';
 	}
 }
 

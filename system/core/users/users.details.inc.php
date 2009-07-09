@@ -33,15 +33,23 @@ if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-if (!empty($u))
-	{
-	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_name='".sed_sql_prep($u)."' ");
+if(!empty($u) && !empty($id))
+{
+	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_name='".sed_sql_prep($u)."' AND user_id ='$id' LIMIT 1");
 	$u = sed_sql_fetcharray($sql);
 	$id = $u['user_id'];
-	}
+}
+elseif(!empty($u))
+{
 
-elseif (empty($id) && $usr['id']>0)
-   { $id = $usr['id']; }
+	$sql = sed_sql_query("SELECT user_id FROM $db_users WHERE user_name='".sed_sql_prep($u)."' LIMIT 1");
+	$u = sed_sql_fetcharray($sql);
+	$id = $u['user_id'];
+}
+elseif(empty($id) && $usr['id']>0)
+{
+	$id = $usr['id'];
+}
 
 
 $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");

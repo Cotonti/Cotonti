@@ -58,6 +58,7 @@ $cfg['allowphp_override'] = FALSE; 		// General lock for execution of the PHP co
 $cfg['pfsmaxuploads'] = 8;
 $cfg['authcache'] = TRUE;				// Auth cache in SQL tables. Set it FALSE if your huge database
 										// goes down because of that
+$cfg['customfuncs'] = FALSE;			// Includes file named functions.custom.php
 
 // ========================
 // Directory paths
