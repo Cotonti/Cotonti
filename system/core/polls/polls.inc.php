@@ -96,7 +96,7 @@ elseif ($id=='viewall' || $id=='')
 else
 {
 	$id = sed_import($id,'D','INT');
-	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id")) != 1)
+	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id"), 0, 0) != 1)
 	{
 		header('Location: ' . SED_ABSOLUTE_URL . sed_url('message', 'msg=404', '', TRUE));
 		exit;
