@@ -4771,7 +4771,7 @@ $sed_languages['jp']= '&#26085;&#26412;&#35486;';
 $sed_languages['kr']= '&#54620;&#44397;&#47568;';
 
 // XTemplate classes
-require_once $cfg['system_dir'].'/xtemplate.class.php';
+require_once $cfg['system_dir'].'/xtemplate.php';
 
 // =========== Extra fields for pages =====================
 
