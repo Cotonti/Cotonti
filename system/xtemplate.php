@@ -143,7 +143,11 @@ class XTemplate
 	public function restart($path)
 	{
 		global $cfg;
-		if (!file_exists($path)) return FALSE;
+		if (!file_exists($path))
+		{
+			throw new Exception("Template file not found: $path");
+			return FALSE;
+		}
 		$this->filename = $path;
 		$this->blocks = array();
 		$data = file_get_contents($path);

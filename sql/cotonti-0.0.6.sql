@@ -245,7 +245,7 @@ INSERT INTO `sed_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('more', 'str', '[more]', '<!--more-->', 1, 1, 128, '', 0),
 ('more', 'str', '[/more]', '&nbsp;', 1, 1, 128, '', 0),
 ('size', 'pcre', '\\[size=([1-2][0-9])\\](.+?)\\[/size\\]', '<span style="font-size:$1pt">$2</span>', 1, 1, 128, 'markitup', 0),
-('h','pcre','\\[h([1-6])\\](.+?)\\[/h$1\\]','<h$1>$2</h$1>',1,1,128,'',0),
+('h','pcre','\\[h([1-6])\\](.+?)\\[/h\\1\\]','<h$1>$2</h$1>',1,1,128,'',0),
 ('list','str','[list]','<ul>',1,1,128,'',0),
 ('list','str','[/list]','</ul>',1,1,128,'',0),
 ('ol','str','[ol]','<ol>',1,1,128,'',0),
