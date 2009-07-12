@@ -487,6 +487,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'tags', '2', 'forums', 3, '1', '', 'Enable Tags for Forums'),
 ('plug', 'tags', '9', 'lim_index', 1, '0', '', ' Limit of tags in a cloud displayed on index, 0 is unlimited'),
 ('plug', 'tags', '10', 'more', 3, '1', '', 'Show All Tags link in tag clouds'),
+('plug', 'tags', '12', 'index', 2, 'pages', 'pages,forums,all', 'Index page tag cloud area'),
 ('core', 'comments', '03', 'expand_comments', 3, '1', '', ''),
 ('core', 'ratings', '02', 'ratings_allowchange', 3, '0', '', ''),
 ('core', 'comments', '04', 'maxcommentsperpage', 2, '15', '', ''),
