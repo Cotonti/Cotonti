@@ -43,6 +43,10 @@ sed_sql_freeresult($res);
 
 sed_sql_query('DROP TABLE sed_tmp');
 
+// Clear the cache
+sed_cache_clearall();
+sed_cache_clearhtml();
+
 echo 'Conversion completed';
 ob_end_flush();
 ?>

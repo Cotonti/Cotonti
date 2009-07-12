@@ -82,3 +82,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'search', '2', 'maxsigns', 2, '40', '20,30,40,50,60,70,80', 'Maximum signs in query'),
 ('plug', 'search', '2', 'minsigns', 2, '3', '2,3,4,5', 'Min. signs in query'),
 ('plug', 'search', '3', 'maxitems', 2, '50', '15,30,50,80,100,150,200', 'Maximum results lines for general search');
+
+/* r813 add missing config for tags plugin (if updating from 0.0.5) */
+INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES
+('plug', 'tags', '12', 'index', 2, 'pages', 'pages,forums,all', 'Index page tag cloud area');
