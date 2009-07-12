@@ -77,7 +77,7 @@
 				<tr>
 					<td><a href="{ADMIN_PLUG_INSTALL_URL}"{ADMIN_PLUG_INSTALL_URL_AJAX}>{PHP.L.adm_opt_installall}</a></td>
 					<td>{PHP.L.adm_opt_installall_explain}
-<!-- IF {PHP.isinstalled} != 1 AND {PHP.totalconfig} -->
+<!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} -->
 						<br />
 						<small><a href="{ADMIN_PLUG_INSTALL_KO_URL}"{ADMIN_PLUG_INSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_setoption_warn}</a></small>
 <!-- ENDIF -->

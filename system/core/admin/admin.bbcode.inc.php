@@ -44,6 +44,7 @@ if($a == 'add')
 	$bbc['postrender'] = sed_import('bbc_postrender', 'P', 'BOL');
 	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
+		sed_bbcode_clearcache();
 		$adminwarnings = (sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])) ? $L['adm_bbcodes_added'] : $L['Error'];
 	}
 	else
@@ -63,6 +64,7 @@ elseif($a == 'upd' && $id > 0)
 	$bbc['enabled'] = sed_import('bbc_enabled', 'P', 'BOL');
 	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
+		sed_bbcode_clearcache();
 		$adminwarnings = (sed_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])) ? $L['adm_bbcodes_updated'] : $L['Error'];
 	}
 	else
@@ -72,10 +74,12 @@ elseif($a == 'upd' && $id > 0)
 }
 elseif($a == 'del' && $id > 0)
 {
+	sed_bbcode_clearcache();
 	$adminwarnings = (sed_bbcode_remove($id)) ? $L['adm_bbcodes_removed'] : $L['Error'];
 }
 elseif($a == 'clearcache')
 {
+	sed_bbcode_clearcache();
 	$adminwarnings = sed_cache_clearhtml() ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
 }
 

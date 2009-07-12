@@ -400,7 +400,20 @@ function sed_bbcode_load()
 		{
 			$sed_bbcode_containers = mb_substr($sed_bbcode_containers, 0, -1);
 		}
+		sed_cache_store('sed_bbcodes', $sed_bbcodes, 3550);
+		sed_cache_store('sed_bbcodes_post', $sed_bbcodes_post, 3550);
+		sed_cache_store('sed_bbcode_containers', $sed_bbcode_containers, 3550);
 	}
+}
+
+/**
+ * Clears bbcode cache
+ */
+function sed_bbcode_clearcache()
+{
+	sed_cache_clear('sed_bbcodes');
+	sed_cache_clear('sed_bbcodes_post');
+	sed_cache_clear('sed_bbcode_containers');
 }
 
 /**

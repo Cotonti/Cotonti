@@ -89,6 +89,7 @@ define('SED_ABSOLUTE_URL', $sys['abs_url']);
 // Current url for templates
 $out['uri'] = str_replace('&', '&amp;', $_SERVER['REQUEST_URI']);
 
+define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']));
 /* ======== Internal cache ======== */
 
 if ($cfg['cache'])

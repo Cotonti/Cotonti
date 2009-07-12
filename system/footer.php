@@ -59,44 +59,45 @@ $out['devmode']	 .= $out['devauth'];
 ========= DEBUG:END =========
 */
 
-/* === Hook === */
-$extp = sed_getextplugins('footer.main');
-if (is_array($extp))
+if (!SED_AJAX)
+{
+	/* === Hook === */
+	$extp = sed_getextplugins('footer.main');
+	if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+
+	if ($cfg['enablecustomhf'])
+	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location))); }
+	else
+	{ $mskin = "skins/".$usr['skin']."/footer.tpl"; }
+	$t = new XTemplate($mskin);
+
+	$t->assign(array (
+		"FOOTER_BOTTOMLINE" => $out['bottomline'],
+		"FOOTER_CREATIONTIME" => $out['creationtime'],
+		"FOOTER_COPYRIGHT" => $out['copyright'],
+		"FOOTER_SQLSTATISTICS" => $out['sqlstatistics'],
+		"FOOTER_LOGSTATUS" => $out['logstatus'],
+		"FOOTER_PMREMINDER" => $out['pmreminder'],
+		"FOOTER_ADMINPANEL" => $out['adminpanel'],
+		"FOOTER_DEVMODE" => $out['devmode']
+		));
+
+	/* === Hook === */
+	$extp = sed_getextplugins('footer.tags');
+	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
+	/* ===== */
 
-if ($cfg['enablecustomhf'])
-{ $mskin = sed_skinfile(array('footer', mb_strtolower($location))); }
-else
-{ $mskin = "skins/".$usr['skin']."/footer.tpl"; }
-$t = new XTemplate($mskin);
+	if ($usr['id']>0)
+	{ $t->parse("FOOTER.USER"); }
+	else
+	{ $t->parse("FOOTER.GUEST"); }
 
-$t->assign(array (
-	"FOOTER_BOTTOMLINE" => $out['bottomline'],
-	"FOOTER_CREATIONTIME" => $out['creationtime'],
-	"FOOTER_COPYRIGHT" => $out['copyright'],
-	"FOOTER_SQLSTATISTICS" => $out['sqlstatistics'],
-	"FOOTER_LOGSTATUS" => $out['logstatus'],
-	"FOOTER_PMREMINDER" => $out['pmreminder'],
-	"FOOTER_ADMINPANEL" => $out['adminpanel'],
-	"FOOTER_DEVMODE" => $out['devmode']
-	));
-
-/* === Hook === */
-$extp = sed_getextplugins('footer.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
-
-if ($usr['id']>0)
-{ $t->parse("FOOTER.USER"); }
-else
-{ $t->parse("FOOTER.GUEST"); }
-
-$t->parse("FOOTER");
-$t->out("FOOTER");
-
-@ob_end_flush();
+	$t->parse("FOOTER");
+	$t->out("FOOTER");
+}
 @ob_end_flush();
 
 sed_sql_close();
