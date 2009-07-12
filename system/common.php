@@ -17,8 +17,15 @@ defined('SED_CODE') or die('Wrong URL');
 
 /* ======== First... ======== */
 
-version_compare(PHP_VERSION, '5.3.0', '>=') || set_magic_quotes_runtime(0);
-//define('MQGPC', get_magic_quotes_gpc());
+if (version_compare(PHP_VERSION, '5.3.0', '>='))
+{
+	define('MQGPC', FALSE);
+}
+else
+{
+	set_magic_quotes_runtime(0);
+	define('MQGPC', get_magic_quotes_gpc());
+}
 error_reporting(E_ALL ^ E_NOTICE);
 
 /* ======== Connect to the SQL DB======== */

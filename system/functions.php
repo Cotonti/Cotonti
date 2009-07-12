@@ -2384,10 +2384,10 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			break;
 	}
 
-	/*if (MQGPC && ($source=='G' || $source=='P' || $source=='C') )
+	if (MQGPC && ($source=='G' || $source=='P' || $source=='C') )
 	{
 		$v = stripslashes($v);
-	}*/
+	}
 
 	if ($v=='' || $v == NULL)
 	{

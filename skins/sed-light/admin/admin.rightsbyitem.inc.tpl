@@ -30,11 +30,11 @@
 					<td style="padding:1px;"><img src="images/admin/groups.gif" alt="" /> <a href="{ADMIN_RIGHTSBYITEM_ROW_LINK}">{ADMIN_RIGHTSBYITEM_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_ITEMS -->
 					<td style="text-align:center; padding:2px;">
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && {PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
 						<input type="hidden" name="{ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME}" value="1" />
 						<img src="images/admin/discheck1.gif" alt="" />
 <!-- ENDIF -->
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && !{PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
 						<img src="images/admin/discheck0.gif" alt="" />
 <!-- ENDIF -->
 <!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
@@ -58,7 +58,7 @@
 <!-- BEGIN: RIGHTSBYITEM_HELP -->
 <img src="images/admin/auth_r.gif" alt="" /> : {PHP.L.Read}<br />
 <img src="images/admin/auth_w.gif" alt="" /> : {PHP.L.Write}<br />
-<!-- IF ({PHP.advanced} || {PHP.ic} == 'page') -->
+<!-- IF {PHP.advanced} OR {PHP.ic} == 'page' -->
 <img src="images/admin/auth_1.gif" alt="" /> : {PHP.l_custom1}<br />
 <!-- ENDIF -->
 <!-- IF {PHP.advanced} -->

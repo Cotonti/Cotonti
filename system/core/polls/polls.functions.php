@@ -212,7 +212,7 @@ function sed_poll_check()
                         $poll_option_text[$j]=""; }
                 }
                 $counter++;
-                $poll_option_text[$i]=stripcslashes($poll_option_text[$i]);
+                if (MQGPC) $poll_option_text[$i] = stripcslashes($poll_option_text[$i]);
             }
         }
         $error_string .= ($counter<2) ? $L['polls_error_count']."<br/>" : '';

@@ -266,6 +266,7 @@ switch($a)
 
 				if(file_exists($extplugin_info))
 				{
+					$extplugin_info_exists = TRUE;
 					$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 					$adminpath[] = array(sed_url('admin', 'm=plug&a=details&pl='.$pl), $info['Name']." ($pl)");
 

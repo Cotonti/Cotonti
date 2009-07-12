@@ -43,7 +43,7 @@
 	anim();
 </script>
 <div><div id="pfsBack">{PHP.skinlang.page.Date} {POLL_SINCE_SHORT}</div> {PHP.skinlang.ratings.Votes} {POLL_VOTERS} </div>
-<!-- END: POLL_VIEW_VOTED-->
+<!-- END: POLL_VIEW_VOTED -->
 
 
 <!-- BEGIN: POLL_VIEW_DISABLED -->
@@ -57,7 +57,7 @@
 	<td>{PHP.L.rat_registeredonly}</td>
 </tr>
 </table>
-<!-- END: POLL_VIEW_DISABLED-->
+<!-- END: POLL_VIEW_DISABLED -->
 
 <!-- BEGIN: POLL_VIEW_LOCKED -->
 <table style="width:100%;">
@@ -78,7 +78,7 @@
 <!-- END: POLLTABLE -->
 </table>
 <div><div id="pfsBack">{PHP.skinlang.page.Date} {POLL_SINCE_SHORT}</div> {PHP.skinlang.ratings.Votes} {POLL_VOTERS} </div>
-<!-- END: POLL_VIEW_LOCKED-->
+<!-- END: POLL_VIEW_LOCKED -->
 
 
 <!-- BEGIN: INDEXPOLLS -->
@@ -87,11 +87,11 @@
 {IPOLLS_FORM}
 <div style="text-align: right;">{PHP.skinlang.comments.Comment} {IPOLLS_COMMENTS}</div>
 <hr />
-<!-- END: POLL-->
+<!-- END: POLL -->
 
 <!-- BEGIN: ERROR -->
 <div class="error">{IPOLLS_ERROR}</div>
-<!-- END: ERROR-->
+<!-- END: ERROR -->
 
 <p style="text-align: center;">{IPOLLS_ALL}</p>
-<!-- END: INDEXPOLLS-->
+<!-- END: INDEXPOLLS -->
