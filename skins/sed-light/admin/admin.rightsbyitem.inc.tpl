@@ -14,7 +14,7 @@
 				<tr>
 					<td style="width:24px;" class="coltop"><img src="images/admin/auth_r.gif" alt="" /></td>
 					<td style="width:24px;" class="coltop"><img src="images/admin/auth_w.gif" alt="" /></td>
-<!-- IF ({PHP.advanced} || {PHP.ic} == 'page') -->
+<!-- IF {PHP.advanced} OR {PHP.ic} == 'page' -->
 					<td style="width:24px;" class="coltop"><img src="images/admin/auth_1.gif" alt="" /></td>
 <!-- ENDIF -->
 <!-- IF {PHP.advanced} -->
