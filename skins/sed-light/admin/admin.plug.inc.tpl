@@ -77,7 +77,7 @@
 				<tr>
 					<td><a href="{ADMIN_PLUG_INSTALL_URL}"{ADMIN_PLUG_INSTALL_URL_AJAX}>{PHP.L.adm_opt_installall}</a></td>
 					<td>{PHP.L.adm_opt_installall_explain}
-<!-- IF (!{PHP.isinstalled} && {PHP.totalconfig}) -->
+<!-- IF {PHP.isinstalled} != 1 AND {PHP.totalconfig} -->
 						<br />
 						<small><a href="{ADMIN_PLUG_INSTALL_KO_URL}"{ADMIN_PLUG_INSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_setoption_warn}</a></small>
 <!-- ENDIF -->
@@ -86,7 +86,7 @@
 				<tr>
 					<td><a href="{ADMIN_PLUG_UNINSTALL}"{ADMIN_PLUG_UNINSTALL_AJAX}>{PHP.L.adm_opt_uninstallall}</a></td>
 					<td>{PHP.L.adm_opt_uninstallall_explain}
-<!-- IF ({PHP.isinstalled} && {PHP.totalconfig}) -->
+<!-- IF {PHP.isinstalled} AND {PHP.totalconfig} -->
 						<br />
 						<small><a href="{ADMIN_PLUG_UNINSTALL_KO_URL}"{ADMIN_PLUG_UNINSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_uninstall_warn}</a></small>
 <!-- ENDIF -->
@@ -129,10 +129,10 @@
 <!-- IF {PHP.info_file.Status} == 3 -->
 						-
 <!-- ENDIF -->
-<!-- IF ({PHP.info_file.Status} != 3 && {PHP.row.pl_active} == 1) -->
+<!-- IF {PHP.info_file.Status} != 3 AND {PHP.row.pl_active} == 1 -->
 						<a href="{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL}"{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL_AJAX}>{PHP.L.adm_opt_pauseall}</a>
 <!-- ENDIF -->
-<!-- IF ({PHP.info_file.Status} != 3 && {PHP.row.pl_active} == 0) -->
+<!-- IF {PHP.info_file.Status} != 3 AND {PHP.row.pl_active} == 0 -->
 						<a href="{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL}"{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL_AJAX}>{PHP.L.adm_opt_unpauseall}</a>
 <!-- ENDIF -->
 					</td>
@@ -209,7 +209,7 @@
 <!-- IF {PHP.ifthistools} -->
 						<a href="{ADMIN_PLUG_JUMPTO_URL_TOOLS}"><img src="images/admin/jumpto.gif" alt="" /></a>
 <!-- ENDIF -->
-<!-- IF (!{PHP.ifthistools} && {PHP.if_plg_standalone}) -->
+<!-- IF {PHP.ifthistools} != 1 AND {PHP.if_plg_standalone} -->
 						<a href="{ADMIN_PLUG_JUMPTO_URL}"><img src="images/admin/jumpto.gif" alt="" /></a>
 <!-- ENDIF -->
 						&nbsp;
@@ -250,7 +250,7 @@
 				{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}<br />
 <!-- ENDIF -->
 				{PHP.L.adm_pluginstall_msg03}
-<!-- IF file_exists({PHP.extplugin_info}) -->
+<!-- IF {PHP.extplugin_info_exists} -->
 				{PHP.L.Found}: 1<br />
 				{PHP.L.adm_pluginstall_msg04}<br />
 <!-- BEGIN: ROW_PARTS_FOUND -->

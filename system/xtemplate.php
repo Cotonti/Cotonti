@@ -24,10 +24,6 @@ class XTemplate
 	 */
 	 public $blocks = array();
 	 /**
-	  * @var string Main block name
-	  */
-	 public $main = 'MAIN';
-	 /**
 	  * @var string Template file name
 	  */
 	 protected $filename = '';
@@ -40,7 +36,7 @@ class XTemplate
 	public function __construct($path = NULL)
 	{
 		$this->vars['PHP'] =& $GLOBALS;
-		if (is_string($path)) $this->load($path);
+		if (is_string($path)) $this->restart($path);
 	}
 
 	/**
@@ -79,12 +75,18 @@ class XTemplate
 			return $res;
 		}
 		// Get the first operand which must be a variable
+		if ($expr[0] == '!')
+		{
+			$inv = TRUE;
+			$expr = mb_substr($inv, 1);
+		}
+		else $inv = FALSE;
 		$p1 = mb_strpos($expr, '{');
 		$p2 = mb_strpos($expr, '}', $p2 + 1);
 		$name = mb_substr($expr, $p1 + 1, $p2 - $p1 - 1);
 		$val = $this->get_var($name);
 		$expr = trim(mb_substr($expr, $p2 + 1));
-		if (empty($expr)) return $val;
+		if (empty($expr)) return $inv ? !$val : $val;
 		// Get the operator and second operand
 		$p1 = mb_strpos($expr, ' ');
 		$op = mb_substr($expr, 0, $p1);
@@ -95,14 +97,15 @@ class XTemplate
 		// Apply operator
 		switch ($op)
 		{
-			case '==': return $val == $val2; break;
-			case '!=': return $val != $val2; break;
-			case '>': return $val > $val2; break;
-			case '<': return $val < $val2; break;
-			case '>=': return $val >= $val2; break;
-			case '<=': return $val <= $val2; break;
-			default: return FALSE;
+			case '==': $res = $val == $val2; break;
+			case '!=': $res = $val != $val2; break;
+			case '>': $res = $val > $val2; break;
+			case '<': $res = $val < $val2; break;
+			case '>=': $res = $val >= $val2; break;
+			case '<=': $res = $val <= $val2; break;
+			default: $res = FALSE;
 		}
+		return $inv ? !$res : $res;
 	}
 
 	/**
@@ -137,25 +140,29 @@ class XTemplate
 	 *
 	 * @param string $path Template file path
 	 */
-	public function load($path)
+	public function restart($path)
 	{
 		global $cfg;
 		if (!file_exists($path)) return FALSE;
 		$this->filename = $path;
+		$this->blocks = array();
 		$data = file_get_contents($path);
-		// Get the main block
-		$pos = mb_strpos($data, '<!-- BEGIN: ');
-		if ($pos === FALSE) return FALSE;
-		$pos2 = mb_strpos($data, ' -->', $pos + 13);
-		$name = mb_substr($data, $pos + 12, $pos2 - $pos - 12);
-		$begin = '<!-- BEGIN: ' . $name . ' -->';
-		$b_len = mb_strlen($begin);
-		$end = '<!-- END: ' . $name . ' -->';
-		$e_len = mb_strlen($end);
-		$data = trim(mb_substr($data, mb_strpos($data, $begin) + $b_len, mb_strpos($data, $end) - $b_len), " \r\n\t");
-		$this->main = $name;
-		$this->blocks['__MAIN__'] = $name; // for serialization
-		$this->blocks[$name] = new Xtpl_block($this, $data, $name);
+		// Remove BOM if present
+		if ($data[0] == chr(0xEF) && $data[1] == chr(0xBB) && $data[2] == chr(0xBF)) $data = mb_substr($data, 3);
+		// Get root-level blocks
+		while (($pos = mb_strpos($data, '<!-- BEGIN: ')) !== FALSE)
+		{
+			$pos2 = mb_strpos($data, ' -->', $pos + 13);
+			$name = mb_substr($data, $pos + 12, $pos2 - $pos - 12);
+			$begin = '<!-- BEGIN: ' . $name . ' -->';
+			$b_len = mb_strlen($begin);
+			$end = '<!-- END: ' . $name . ' -->';
+			$e_pos = mb_strpos($data, $end);
+			$e_len = mb_strlen($end);
+			$bdata = trim(mb_substr($data, $pos + $b_len, $e_pos - $pos - $b_len), " \r\n\t");
+			$this->blocks[$name] = new Xtpl_block($this, $bdata, $name);
+			$data = mb_substr($data, $e_pos + $e_len);
+		}
 	}
 
 	/**
@@ -163,7 +170,7 @@ class XTemplate
 	 *
 	 * @param string $block Block name
 	 */
-	public function out($block = '')
+	public function out($block = 'MAIN')
 	{
 		echo $this->text($block);
 	}
@@ -173,11 +180,20 @@ class XTemplate
 	 *
 	 * @param string $block Block name
 	 */
-	public function parse($block = '')
+	public function parse($block = 'MAIN')
 	{
-		if (empty($block)) $block = $this->main;
 		if (is_object($this->blocks[$block])) $this->blocks[$block]->parse();
 		//else throw new Exception("Block $block not found in " . $this->filename);
+	}
+
+	/**
+	 * Clears a parset block data
+	 *
+	 * @param string $block Block name
+	 */
+	public function reset($block = 'MAIN')
+	{
+		if (is_object($this->blocks[$block])) $this->blocks[$block]->reset();
 	}
 
 	/**
@@ -186,9 +202,8 @@ class XTemplate
 	 * @param string $block Block name
 	 * @return string
 	 */
-	public function text($block = '')
+	public function text($block = 'MAIN')
 	{
-		if (empty($block)) $block = $this->main;
 		if (is_object($this->blocks[$block])) return $this->blocks[$block]->text();
 		else
 		{
@@ -352,6 +367,14 @@ class Xtpl_block
 		foreach ($this->blocks as $block) $data .= $block->text();
 		$this->data[$this->ptr] = $data;
 		$this->ptr++;
+	}
+
+	/**
+	 * Clears parsed block data
+	 */
+	public function reset()
+	{
+		$this->data = array();
 	}
 
 	/**

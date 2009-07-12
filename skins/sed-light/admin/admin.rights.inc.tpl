@@ -41,7 +41,7 @@
 						<input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
 						<img src="images/admin/discheck1.gif" alt="" />
 <!-- ENDIF -->
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && !{PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
 						<img src="images/admin/discheck0.gif" alt="" />
 <!-- ENDIF -->
 <!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
@@ -79,11 +79,11 @@
 					<td style="text-align:center; padding:2px;"><a href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}"><img src="images/admin/rights2.gif" alt="" /></a></td>
 <!-- BEGIN: ROW_FORUMS_ITEMS -->
 					<td style="text-align:center; padding:2px;">
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && {PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
 						<input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
 						<img src="images/admin/discheck1.gif" alt="" />
 <!-- ENDIF -->
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && !{PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
 						<img src="images/admin/discheck0.gif" alt="" />
 <!-- ENDIF -->
 <!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
@@ -121,11 +121,11 @@
 					<td style="text-align:center; padding:2px;"><a href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}"><img src="images/admin/rights2.gif" alt="" /></a></td>
 <!-- BEGIN: ROW_PAGES_ITEMS -->
 					<td style="text-align:center; padding:2px;">
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && {PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
 						<input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
 						<img src="images/admin/discheck1.gif" alt="" />
 <!-- ENDIF -->
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && !{PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
 						<img src="images/admin/discheck0.gif" alt="" />
 <!-- ENDIF -->
 <!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
@@ -163,11 +163,11 @@
 					<td style="text-align:center; padding:2px;"><a href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}"><img src="images/admin/rights2.gif" alt="" /></a></td>
 <!-- BEGIN: ROW_PLUGINS_ITEMS -->
 					<td style="text-align:center; padding:2px;">
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && {PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
 						<input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
 						<img src="images/admin/discheck1.gif" alt="" />
 <!-- ENDIF -->
-<!-- IF ({PHP.out.tpl_rights_parseline_locked} && !{PHP.out.tpl_rights_parseline_state}) -->
+<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
 						<img src="images/admin/discheck0.gif" alt="" />
 <!-- ENDIF -->
 <!-- IF !{PHP.out.tpl_rights_parseline_locked} -->

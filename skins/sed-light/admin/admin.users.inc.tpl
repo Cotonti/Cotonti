@@ -130,10 +130,10 @@
 				<tr>
 					<td>{PHP.L.Enabled}:</td>
 					<td>
-<!-- IF ({PHP.g} > 5 && !{PHP.row.grp_disabled}) -->
+<!-- IF {PHP.g} > 5 AND !{PHP.row.grp_disabled} -->
 						<input type="radio" class="radio" name="rdisabled" value="0" checked="checked" />{PHP.L.Yes} <input type="radio" class="radio" name="rdisabled" value="1" />{PHP.L.No}
 <!-- ENDIF -->
-<!-- IF ({PHP.g} > 5 && {PHP.row.grp_disabled}) -->
+<!-- IF {PHP.g} > 5 AND {PHP.row.grp_disabled} -->
 						<input type="radio" class="radio" name="rdisabled" value="0" />{PHP.L.Yes} <input type="radio" class="radio" name="rdisabled" value="1" checked="checked" />{PHP.L.No}
 <!-- ENDIF -->
 <!-- IF {PHP.g} <= 5 -->
@@ -144,10 +144,10 @@
 				<tr>
 					<td>{PHP.L.Hidden}:</td>
 					<td>
-<!-- IF ({PHP.g} != 4 && {PHP.row.grp_disabled}) -->
+<!-- IF {PHP.g} != 4 AND {PHP.row.grp_disabled} -->
 						<input type="radio" class="radio" name="rhidden" value="1" checked="checked" />{PHP.L.Yes} <input type="radio" class="radio" name="rhidden" value="0" />{PHP.L.No}
 <!-- ENDIF -->
-<!-- IF ({PHP.g} != 4 && !{PHP.row.grp_disabled}) -->
+<!-- IF {PHP.g} != 4 AND !{PHP.row.grp_disabled} -->
 						<input type="radio" class="radio" name="rhidden" value="1" />{PHP.L.Yes} <input type="radio" class="radio" name="rhidden" value="0" checked="checked" />{PHP.L.No}
 <!-- ENDIF -->
 <!-- IF {PHP.g} == 4 -->

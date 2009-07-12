@@ -65,7 +65,7 @@
 	anim();
 </script>
 <p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
-<!-- END: POLL_VIEW_VOTED-->
+<!-- END: POLL_VIEW_VOTED -->
 
 <!-- BEGIN: POLL_VIEW_LOCKED -->
 <table class="cells">
@@ -88,7 +88,7 @@
 </tr>
 </table>
 <p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
-<!-- END: POLL_VIEW_LOCKED-->
+<!-- END: POLL_VIEW_LOCKED -->
 
 <!-- BEGIN: POLL_VIEW_DISABLED -->
 <table class="cells">
@@ -101,7 +101,7 @@
 	<td>{PHP.L.rat_registeredonly}</td>
 </tr>
 </table>
-<!-- END: POLL_VIEW_DISABLED-->
+<!-- END: POLL_VIEW_DISABLED -->
 
 <!-- BEGIN: MAIN -->
 	<!-- BEGIN: POLLS_VIEW -->
