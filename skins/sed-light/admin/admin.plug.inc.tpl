@@ -43,7 +43,7 @@
 					<td>{PHP.L.None}</td>
 <!-- ENDIF -->
 				</tr>
-				<tr>
+				<!--//<tr>
 					<td>{PHP.L.adm_defauth_guests}:</td>
 					<td>{ADMIN_PLUG_ADMRIGHTS_AUTH_GUESTS} ({ADMIN_PLUG_AUTH_GUESTS})</td>
 				</tr>
@@ -58,7 +58,7 @@
 				<tr>
 					<td>{PHP.L.adm_deflock_members}:</td>
 					<td>{ADMIN_PLUG_ADMRIGHTS_LOCK_MEMBERS} ({ADMIN_PLUG_LOCK_MEMBERS})</td>
-				</tr>
+				</tr>//-->
 				<tr>
 					<td>{PHP.L.Author}:</td>
 					<td>{ADMIN_PLUG_AUTHOR}</td>
@@ -83,13 +83,16 @@
 <!-- ENDIF -->
 					</td>
 				</tr>
+<!-- IF {PHP.isinstalled} -->
 				<tr>
 					<td><a href="{ADMIN_PLUG_UNINSTALL}"{ADMIN_PLUG_UNINSTALL_AJAX}>{PHP.L.adm_opt_uninstallall}</a></td>
 					<td>{PHP.L.adm_opt_uninstallall_explain}
+<!-- ENDIF -->
 <!-- IF {PHP.isinstalled} AND {PHP.totalconfig} -->
 						<br />
 						<small><a href="{ADMIN_PLUG_UNINSTALL_KO_URL}"{ADMIN_PLUG_UNINSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_uninstall_warn}</a></small>
 <!-- ENDIF -->
+<!-- IF {PHP.isinstalled} -->
 					</td>
 				</tr>
 				<tr>
@@ -100,6 +103,7 @@
 					<td><a href="{ADMIN_PLUG_UNPAUSE_URL}"{ADMIN_PLUG_UNPAUSE_URL_AJAX}>{PHP.L.adm_opt_unpauseall}</a></td>
 					<td>{PHP.L.adm_opt_unpauseall_explain}</td>
 				</tr>
+<!-- ENDIF -->
 				</table>
 				<h4>{PHP.L.Parts} :</h4>
 				<table class="cells">
