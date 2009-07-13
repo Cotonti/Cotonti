@@ -40,6 +40,7 @@ if($a == 'wipe')
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 	$sql = sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+
 	$adminwarnings = $L['adm_trashcan_deleted'];
 }
 elseif($a == 'wipeall')
@@ -51,6 +52,7 @@ elseif($a == 'wipeall')
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 	$sql = sed_sql_query("TRUNCATE $db_trash");
+
 	$adminwarnings = $L['adm_trashcan_prune'];
 }
 elseif($a == 'restore')
@@ -65,6 +67,7 @@ elseif($a == 'restore')
 	{
 		sed_trash_delete($id);
 	}
+
 	$adminwarnings = $L['adm_trashcan_restored'];
 }
 
@@ -95,38 +98,38 @@ while($row = sed_sql_fetcharray($sql))
 	switch($row['tr_type'])
 	{
 		case 'comment':
-		$icon = "comments.gif";
-		$typestr = $L['Comment'];
+			$icon = "comments.gif";
+			$typestr = $L['Comment'];
 		break;
 
 		case 'forumpost':
-		$icon = "forums.gif";
-		$typestr = $L['Post'];
+			$icon = "forums.gif";
+			$typestr = $L['Post'];
 		break;
 
 		case 'forumtopic':
-		$icon = "forums.gif";
-		$typestr = $L['Topic'];
+			$icon = "forums.gif";
+			$typestr = $L['Topic'];
 		break;
 
 		case 'page':
-		$icon = "page.gif";
-		$typestr = $L['Page'];
+			$icon = "page.gif";
+			$typestr = $L['Page'];
 		break;
 
 		case 'pm':
-		$icon = "pm.gif";
-		$typestr = $L['Private_Messages'];
+			$icon = "pm.gif";
+			$typestr = $L['Private_Messages'];
 		break;
 
 		case 'user':
-		$icon = "user.gif";
-		$typestr = $L['User'];
+			$icon = "user.gif";
+			$typestr = $L['User'];
 		break;
 
 		default:
-		$icon = "tools.gif";
-		$typestr = $row['tr_type'];
+			$icon = "tools.gif";
+			$typestr = $row['tr_type'];
 		break;
 	}
 

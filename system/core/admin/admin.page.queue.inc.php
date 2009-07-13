@@ -151,7 +151,7 @@ while($row = sed_sql_fetcharray($sql))
 	$ii++;
 }
 
-$is_row_empty = (sed_sql_numrows($sql)==0) ? true : false ;
+$is_row_empty = (sed_sql_numrows($sql) == 0) ? true : false ;
 
 $t -> assign(array(
 	"ADMIN_PAGE_QUEUE_AJAX_OPENDIVID" => 'pagtab',

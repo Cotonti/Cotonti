@@ -27,8 +27,13 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.referers.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if($a=='prune' && $usr['isadmin'])
@@ -59,7 +64,7 @@ else
 
 $sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
-if(sed_sql_numrows($sql)>0)
+if(sed_sql_numrows($sql) > 0)
 {
 	while($row = mysql_fetch_array($sql))
 	{
@@ -82,11 +87,16 @@ if(sed_sql_numrows($sql)>0)
 			$t -> assign(array(
 				"ADMIN_REFERERS_URI" => htmlspecialchars(sed_cutstring($uri, 48)),
 				"ADMIN_REFERERS_COUNT" => $count,
-                "ADMIN_REFERERS_ODDEVEN" => sed_build_oddeven($ii),
+                "ADMIN_REFERERS_ODDEVEN" => sed_build_oddeven($ii)
 			));
             /* === Hook - Part2 : Include === */
-            if (is_array($extp))
-            { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+            if(is_array($extp))
+            {
+            	foreach($extp as $k => $pl)
+            	{
+            		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+            	}
+            }
             /* ===== */
 			$t -> parse("REFERERS.REFERERS_ROW.REFERERS_URI");
 		}
@@ -113,8 +123,13 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.referers.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 $t -> parse("REFERERS");
 $adminmain = $t -> text("REFERERS");

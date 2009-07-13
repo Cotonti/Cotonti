@@ -217,19 +217,19 @@ function get_default_html_construction($type)
 	switch($type)
 	{
 		case "input":
-		$html = '<input class="text" type="text" maxlength="255" size="56" />';
+			$html = '<input class="text" type="text" maxlength="255" size="56" />';
 		break;
 
 		case "textarea":
-		$html = '<textarea cols="80" rows="6" ></textarea>';
+			$html = '<textarea cols="80" rows="6" ></textarea>';
 		break;
 
 		case "select":
-		$html = '<select></select>';
+			$html = '<select></select>';
 		break;
 
 		case "checkbox":
-		$html = '<input type=checkbox >';
+			$html = '<input type=checkbox >';
 		break;
 	}
 	return $html;
