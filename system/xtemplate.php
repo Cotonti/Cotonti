@@ -78,7 +78,7 @@ class XTemplate
 		if ($expr[0] == '!')
 		{
 			$inv = TRUE;
-			$expr = mb_substr($inv, 1);
+			$expr = mb_substr($expr, 1);
 		}
 		else $inv = FALSE;
 		$p1 = mb_strpos($expr, '{');

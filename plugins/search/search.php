@@ -126,12 +126,9 @@ if($tab=='frm' && !$cfg['disable_forums'])
 		$sea_frmsort2 = sed_sql_prep(sed_import('sea_frmsort2','P','TXT'));
 		$sea_frmsub = sed_import('sea_frmsub','P','ARR');
 
-		if (!empty($pre))
-		{
-			$sea_frmsub = array('all');
-			$sea_frmtitle = 1;
-			$sea_frmtext = 1;
-		}
+		if (count($sea_frmsub) == 0) $sea_frmsub = array('all');
+		if (empty($sea_frmtitle)) $sea_frmtitle = 1;
+		if (empty($sea_frmtext)) $sea_frmtext = 1;
 
 		$_SESSION['sea_frmtitle'] = $sea_frmtitle;
 		$_SESSION['sea_frmtext'] = $sea_frmtext;
@@ -397,13 +394,10 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 		$sea_pagsort2 = sed_sql_prep(sed_import('sea_pagsort2','P','TXT'));
 		$sea_pagsub = sed_import('sea_pagsub','P','ARR');
 
-		if (!empty($pre))
-		{
-			$sea_pagsub = array('all');
-			$sea_pagtitle = 1;
-			$sea_pagdesc = 1;
-			$sea_pagtext = 1;
-		}
+		if (count($sea_pagsub) == 0) $sea_pagsub = array('all');
+		if (empty($sea_pagtitle)) $sea_pagtitle = 1;
+		if (empty($sea_pagdesc)) $sea_pagdesc = 1;
+		if (empty($sea_pagtext)) $sea_pagtext = 1;
 		
 		$_SESSION['sea_pagtitle'] = $sea_pagtitle;
 		$_SESSION['sea_pagdesc'] = $sea_pagdesc;
@@ -676,12 +670,9 @@ else
 			$_SESSION['sea_frmsub'] = $sea_frmsub;
 		}
 
-		if (!empty($pre))
-		{
-			$sea_frmsub = array('all');
-			$sea_frmtitle = 1;
-			$sea_frmtext = 1;
-		}
+		if (count($sea_frmsub) == 0) $sea_frmsub = array('all');
+		if (empty($sea_frmtitle)) $sea_frmtitle = 1;
+		if (empty($sea_frmtext)) $sea_frmtext = 1;
 
 		$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
 			LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
@@ -745,13 +736,10 @@ else
 			$sea_pagsort2 = sed_sql_prep(sed_import('sea_pagsort2','P','TXT'));
 			$sea_pagsub = sed_import('sea_pagsub','P','ARR');
 
-			if (!empty($pre))
-			{
-				$sea_pagsub = array('all');
-				$sea_pagtitle = 1;
-				$sea_pagdesc = 1;
-				$sea_pagtext = 1;
-			}
+			if (count($sea_pagsub) == 0) $sea_pagsub = array('all');
+			if (empty($sea_pagtitle)) $sea_pagtitle = 1;
+			if (empty($sea_pagdesc)) $sea_pagdesc = 1;
+			if (empty($sea_pagtext)) $sea_pagtext = 1;
 
 			$_SESSION['sea_pagtitle'] = $sea_pagtitle;
 			$_SESSION['sea_pagdesc'] = $sea_pagdesc;
