@@ -212,7 +212,7 @@
 <!-- IF {PHP.ifthistools} -->
 						<a href="{ADMIN_PLUG_JUMPTO_URL_TOOLS}"><img src="images/admin/jumpto.gif" alt="" /></a>
 <!-- ENDIF -->
-<!-- IF {PHP.ifthistools} != 1 AND {PHP.if_plg_standalone} -->
+<!-- IF !{PHP.ifthistools} AND {PHP.if_plg_standalone} -->
 						<a href="{ADMIN_PLUG_JUMPTO_URL}"><img src="images/admin/jumpto.gif" alt="" /></a>
 <!-- ENDIF -->
 						&nbsp;
