@@ -14,6 +14,7 @@
 			<tr>
 				<td class="coltop">{PHP.L.Referer}</td><td class="coltop">{PHP.L.Hits}</td>
 			</tr>
+<!-- ENDIF -->
 <!-- BEGIN: REFERERS_ROW -->
 			<tr>
 				<td colspan="2"><a href="http://{ADMIN_REFERERS_REFERER}">{ADMIN_REFERERS_REFERER}</a></td>
@@ -25,6 +26,7 @@
 			</tr>
 <!-- END: REFERERS_URI -->
 <!-- END: REFERERS_ROW -->
+<!-- IF {PHP.is_ref_empty} -->
 			<tr>
 				<td colspan="2">
 					<div class="pagnav">{ADMIN_REFERERS_PAGINATION_PREV} {ADMIN_REFERERS_PAGNAV} {ADMIN_REFERERS_PAGINATION_NEXT}</div>

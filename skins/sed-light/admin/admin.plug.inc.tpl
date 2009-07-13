@@ -37,7 +37,7 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.Rights}:</td>
-<!-- IF {PHP.isinstalled} != 0 -->
+<!-- IF {PHP.isinstalled} -->
 					<td><a href="{ADMIN_PLUG_RIGHTS}"><img src="images/admin/rights2.gif" alt="" /></a></td>
 <!-- ELSE -->
 					<td>{PHP.L.None}</td>
@@ -137,7 +137,6 @@
 <!-- ENDIF -->
 					</td>
 				</tr>
-<!-- ENDIF -->
 <!-- END: ROW_PART -->
 				</table>
 				<h4>{PHP.L.Tags} :</h4>
@@ -253,14 +252,19 @@
 <!-- IF {PHP.extplugin_info_exists} -->
 				{PHP.L.Found}: 1<br />
 				{PHP.L.adm_pluginstall_msg04}<br />
+<!-- ENDIF -->
 <!-- BEGIN: ROW_PARTS_FOUND -->
 				- {PHP.L.Found}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F}<br />
 <!-- END: ROW_PARTS_FOUND -->
+<!-- IF {PHP.extplugin_info_exists} -->
 				{PHP.L.adm_pluginstall_msg05}<br />
+<!-- ENDIF -->
 <!-- BEGIN: ROW_PARTS_INSTALLING -->
 				- {PHP.L.Part}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_X} ... {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG}<br />
 <!-- END: ROW_PARTS_INSTALLING -->
+<!-- IF {PHP.extplugin_info_exists} -->
 				{PHP.L.adm_pluginstall_msg06}
+<!-- ENDIF -->
 <!-- BEGIN: ROW_PARTS_CFG -->
 				{PHP.L.Found} {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG}<br/>
 <!-- BEGIN: ROW_PARTS_CFG_ENTRY -->
@@ -270,7 +274,7 @@
 <!-- BEGIN: ROW_PARTS_CFG_ERROR -->
 				{PHP.L.None}<br />
 <!-- END: ROW_PARTS_CFG_ERROR -->
-<!-- ELSE -->
+<!-- IF !{PHP.extplugin_info_exists} -->
 				{PHP.L.adm_pluginstall_msg07}<br />
 <!-- ENDIF -->
 <!-- IF !{PHP.ko} -->
