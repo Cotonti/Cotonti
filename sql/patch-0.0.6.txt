@@ -43,6 +43,15 @@ sed_sql_freeresult($res);
 
 sed_sql_query('DROP TABLE sed_tmp');
 
+// Rename [list=1] to [ol]
+$res = sed_sql_query("SELECT page_id, page_text FROM $db_pages WHERE page_text LIKE '%[list=1]%'");
+while ($row = sed_sql_fetchassoc($res))
+{
+	$text = sed_sql_prep(preg_replace('#\[list=1\](.*?)\[/list\]#i', '[ol]$1[/ol]', $row['page_text']));
+	sed_sql_query("UPDATE $db_pages SET page_text='$text' WHERE page_id = " . $row['page_id']);
+}
+sed_sql_freeresult($res);
+
 // Clear the cache
 sed_cache_clearall();
 sed_cache_clearhtml();
