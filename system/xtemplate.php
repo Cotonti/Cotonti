@@ -22,11 +22,11 @@ class XTemplate
 	/**
 	 * @var array Blocks
 	 */
-	 public $blocks = array();
-	 /**
-	  * @var string Template file name
-	  */
-	 protected $filename = '';
+	public $blocks = array();
+	/**
+	 * @var string Template file name
+	 */
+	public $filename = '';
 
 	/**
 	 * Simplified constructor
@@ -82,13 +82,19 @@ class XTemplate
 		}
 		else $inv = FALSE;
 		$p1 = mb_strpos($expr, '{');
-		$p2 = mb_strpos($expr, '}', $p2 + 1);
+		if ($p1 === FALSE) throw new Exception('Invalid logical block ' . sed_cc($expr) . ' present in '
+			. $this->filename);
+		$p2 = mb_strpos($expr, '}', $p1 + 1);
+		if ($p2 === FALSE) throw new Exception('Variable tag is not closed in logical block ' . sed_cc($expr)
+			. ' present in ' . $this->filename);
 		$name = mb_substr($expr, $p1 + 1, $p2 - $p1 - 1);
 		$val = $this->get_var($name);
 		$expr = trim(mb_substr($expr, $p2 + 1));
 		if (empty($expr)) return $inv ? !$val : $val;
 		// Get the operator and second operand
 		$p1 = mb_strpos($expr, ' ');
+		if ($p1 === FALSE) throw new Exception('Missing spaces in logical block ' . sed_cc($expr) . ' in file '
+			. $this->filename);
 		$op = mb_substr($expr, 0, $p1);
 		$expr = trim(mb_substr($expr, $p1 + 1));
 		if ($expr[0] == '{') $val2 = $this->evaluate($expr);
@@ -152,7 +158,7 @@ class XTemplate
 		$this->blocks = array();
 		$data = file_get_contents($path);
 		// Remove BOM if present
-		if ($data[0] == chr(0xEF) && $data[1] == chr(0xBB) && $data[2] == chr(0xBF)) $data = mb_substr($data, 3);
+		if ($data[0] == chr(0xEF) && $data[1] == chr(0xBB) && $data[2] == chr(0xBF)) $data = mb_substr($data, 0);
 		// Get root-level blocks
 		while (($pos = mb_strpos($data, '<!-- BEGIN: ')) !== FALSE)
 		{
@@ -162,6 +168,7 @@ class XTemplate
 			$b_len = mb_strlen($begin);
 			$end = '<!-- END: ' . $name . ' -->';
 			$e_pos = mb_strpos($data, $end);
+			if ($e_pos === FALSE) throw new Exception("Block $name is not closed correctly in $path");
 			$e_len = mb_strlen($end);
 			$bdata = trim(mb_substr($data, $pos + $b_len, $e_pos - $pos - $b_len), " \r\n\t");
 			$this->blocks[$name] = new Xtpl_block($this, $bdata, $name);
@@ -187,7 +194,7 @@ class XTemplate
 	public function parse($block = 'MAIN')
 	{
 		if (is_object($this->blocks[$block])) $this->blocks[$block]->parse();
-		//else throw new Exception("Block $block not found in " . $this->filename);
+		//else throw new Exception("Block $block is not found in " . $this->filename);
 	}
 
 	/**
@@ -198,6 +205,7 @@ class XTemplate
 	public function reset($block = 'MAIN')
 	{
 		if (is_object($this->blocks[$block])) $this->blocks[$block]->reset();
+		//else throw new Exception("Block $block is not found in " . $this->filename);
 	}
 
 	/**
@@ -211,7 +219,7 @@ class XTemplate
 		if (is_object($this->blocks[$block])) return $this->blocks[$block]->text();
 		else
 		{
-			//throw new Exception("Block $block not found in " . $this->filename);
+			//throw new Exception("Block $block is not found in " . $this->filename);
 			return '';
 		}
 	}
@@ -269,6 +277,8 @@ class Xtpl_data
 			$p2 = mb_strpos($data, ' -->', $p1 + 8);
 			$expr = mb_substr($data, $p1 + 8, $p2 - $p1 - 8);
 			$p3 = mb_strpos($data, '<!-- ENDIF -->');
+			if ($p3 === FALSE) throw new Exception('Logical block '.sed_cc($expr).' is not closed correctly in '
+				. $this->xtpl->filename);
 			$bdata = mb_substr($data, $p2 + 4, $p3 - $p2 - 4);
 			if (($p4 = mb_strpos($bdata, '<!-- ELSE -->')) !== FALSE)
 			{
@@ -351,6 +361,8 @@ class Xtpl_block
 				$end = '<!-- END: ' . $name . ' -->';
 				$e_len = mb_strlen($end);
 				$e_pos = mb_strpos($data, $end, $pos2 + 4);
+				if ($e_pos === FALSE) throw new Exception("Block $name is not closed correctly in "
+					. $this->xtpl->filename);
 				$bdata = mb_substr($data, $pos2 + 4, $e_pos - $pos2 - 4);
 				// Create block object and link to it
 				$block = new Xtpl_block($xtpl, $bdata, $name, $path);
