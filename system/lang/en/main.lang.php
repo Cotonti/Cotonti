@@ -435,7 +435,7 @@ To change your recent e-mail please use this activation link:
  * Comments
  */
 
-$L['com_closed'] = 'Adding comments has been disabled for this item';	// New in N-0.1.0
+$L['com_closed'] = 'Adding comments has been disabled for this item';	// 0.0.6
 $L['com_commentadded'] = 'Done, comment added';
 $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commenttooshort'] = 'The comment is too short or missing';
@@ -446,14 +446,14 @@ $L['com_regonly'] = 'Only registered users can post new comments';
  * Forums
  */
 
-$L['for_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';	// New in N-0.1.0
+$L['for_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';	// 0.0.6
 $L['for_markallasread'] = 'Mark all posts as read';
-$L['for_messagetooshort'] = 'Topic message is too short';	// New in N-0.0.2
+$L['for_mergetime'] = 'Added %1$s later:'; // 0.0.6
+$L['for_messagetooshort'] = 'Topic message is too short';	// 0.0.2
 $L['for_newtopic'] = 'New topic';
-$L['for_polltooshort'] = 'Poll options must be equal, or greater than 2';	// New in N-0.0.2
-$L['for_titletooshort'] = 'Topic title is too short or missing';	// New in N-0.0.2
+$L['for_polltooshort'] = 'Poll options must be equal, or greater than 2';	// 0.0.2
+$L['for_titletooshort'] = 'Topic title is too short or missing';	// 0.0.2
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
-$L['for_mergetime'] = 'Update, %1$s later:'; // New in N-0.1.0
 
 /**
  * Lists

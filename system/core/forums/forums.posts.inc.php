@@ -10,7 +10,7 @@ http://www.neocrome.net
  * Forums posts display.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.6
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -243,8 +243,9 @@ if ($a=='newpost')
 			$row = sed_sql_fetcharray($sql);
 
 			$p = (int) $row['fp_id'];
-			
-			$updated = sprintf($L['for_mergetime'], sed_build_timegap($row['fp_creation'], $sys['now_offset']));
+
+			$gap_base = empty($row['fp_updated']) ? $row['fp_creation'] : $row['fp_updated'];
+			$updated = sprintf($L['for_mergetime'], sed_build_timegap($gap_base, $sys['now_offset']));
 
 			$newmsg = sed_sql_prep($row['fp_text'])."\n\n[b]".$updated."[/b]\n\n".sed_sql_prep($newmsg);
 			$newhtml = ($cfg['parser_cache']) ? sed_sql_prep($row['fp_html'])."<br /><br /><b>".$updated."</b><br /><br />".$rhtml : '';
@@ -613,7 +614,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$lastposterid = $row['fp_posterid'];
 	$lastposterip = $row['fp_posterip'];
 	$fp_num++;
-	$i = $d + $fp_num;
+	$i = empty($id) ? $d + $fp_num : $id;
 
 	$rowquote  = ($usr['id']>0) ? "<a href=\"".sed_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\">".$L['Quote']."</a>" : "&nbsp;";
 	$rowedit   = (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? "<a href=\"".sed_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\">".$L['Edit']."</a>" : '';
