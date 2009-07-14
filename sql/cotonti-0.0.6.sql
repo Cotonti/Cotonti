@@ -491,6 +491,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'comments', '03', 'expand_comments', 3, '1', '', ''),
 ('core', 'ratings', '02', 'ratings_allowchange', 3, '0', '', ''),
 ('core', 'comments', '04', 'maxcommentsperpage', 2, '15', '', ''),
+('core', 'comments', '05', 'commentsize', 2, '0', '', ''),
 ('core', 'forums', '13', 'maxpostsperpage', 2, '15', '', ''),
 ('core', 'page', '05', 'maxlistsperpage', 2, '15', '', ''),
 ('core', 'pfs', '06', 'maxpfsperpage', 2, '15', '', ''),

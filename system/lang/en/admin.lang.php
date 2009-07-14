@@ -42,6 +42,7 @@ $L['cfg_countcomments'] = array('Count comments', 'Display the count of comments
 $L['cfg_disable_comments'] = array('Disable the comments', '');
 $L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default');	// New in N-0.0.2
 $L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' ');   // New in N-0.0.6
+$L['cfg_commentsize'] = array('Max. size of comment', 'In bytes (Zero for unlimit size). Default: 0');   // New in N-0.0.6
 
 /**
  * Config Section

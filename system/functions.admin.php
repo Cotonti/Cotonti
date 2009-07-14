@@ -311,6 +311,7 @@ function sed_loadconfigmap()
     $result[] = array ('comments', '10', 'countcomments', 3, '1', '');
     $result[] = array ('comments', '03', 'expand_comments', 3, '1', '');
     $result[] = array ('comments', '04', 'maxcommentsperpage', 2, '15', array(5,10,15,20,25,30,40,50,60,70,100,200,500)); // N-0.0.6
+    $result[] = array ('comments', '05', 'commentsize', 2, '0', array(0,1024,2048,4096,8192,16384,32768,65536)); // N-0.0.6
     $result[] = array ('forums', '01', 'disable_forums', 3, '0', '');
     $result[] = array ('forums', '10', 'hideprivateforums', 3, '0', '');
     $result[] = array ('forums', '10', 'hottopictrigger', 2, '20', array(5,10,15,20,25,30,35,40,50));
