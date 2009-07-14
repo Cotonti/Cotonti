@@ -130,6 +130,12 @@ if ($a=='add')
 			$page_state = 1;
 		}
 
+		/* === Hook === */
+		$extp = sed_getextplugins('page.add.add.query');
+		if (is_array($extp))
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		/* ===== */
+
 		$ssql = "INSERT into $db_pages
 		(page_state,
 		page_type,

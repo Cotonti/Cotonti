@@ -69,49 +69,61 @@ $item_code = 'list_'.$c;
 $join_ratings_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
 $join_ratings_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_ratings as r ON r.rating_code=CONCAT('p',p.page_id)";
 
-if ($c=='all')
+/* === Hook === */
+$extp = sed_getextplugins('list.query');
+if (is_array($extp))
 {
-	$sql = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure ");
-	$totallines = sed_sql_result($sql, 0, "SUM(structure_pagecount)");
-	$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
-	FROM $db_pages as p ".$join_ratings_condition."
-	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-	WHERE page_state='0'
-	ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
+	foreach($extp as $k => $pl) include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 }
-elseif ($c == 'unvalidated')
-{
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
-		WHERE page_state = 1 AND page_ownerid = " . $usr['id']);
-	$totallines = sed_sql_result($sql, 0, 0);
-	$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
-		FROM $db_pages as p ".$join_ratings_condition."
-			LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE page_state = 1 AND page_ownerid = {$usr['id']}
-		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
-	$sed_cat[$c]['title'] = $L['pag_validation'];
-	$sed_cat[$c]['desc'] = $L['pag_validation_desc'];
- }
-elseif (!empty($o) && !empty($p) && $p!='password')
-{
-	$sql = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_code='$c' ");
-	$totallines = sed_sql_result($sql, 0, "SUM(structure_pagecount)");
-	$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
-	FROM $db_pages as p ".$join_ratings_condition."
-	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-	WHERE page_cat='$c' AND (page_state='0' OR page_state='2') AND page_$o='$p'
-	ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
-}
+/* ===== */
 else
 {
-	sed_die(empty($sed_cat[$c]['title']) && !$usr['isadmin']);
-	$sql = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_code='$c' ");
-	$totallines = sed_sql_result($sql, 0, "SUM(structure_pagecount)");
-	$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
-	FROM $db_pages as p ".$join_ratings_condition."
-	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-	WHERE page_cat='$c' AND (page_state='0' OR page_state='2')
-	ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
+	if ($c=='all')
+	{
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=0");
+		$totallines = sed_sql_result($sql, 0, 0);
+		$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
+		FROM $db_pages as p ".$join_ratings_condition."
+		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		WHERE page_state=0
+		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
+	}
+	elseif ($c == 'unvalidated')
+	{
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
+			WHERE page_state = 1 AND page_ownerid = " . $usr['id']);
+		$totallines = sed_sql_result($sql, 0, 0);
+		$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
+			FROM $db_pages as p ".$join_ratings_condition."
+				LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+			WHERE page_state = 1 AND page_ownerid = {$usr['id']}
+			ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
+		$sed_cat[$c]['title'] = $L['pag_validation'];
+		$sed_cat[$c]['desc'] = $L['pag_validation_desc'];
+	 }
+	elseif (!empty($o) && !empty($p) && $p!='password')
+	{
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
+			WHERE page_cat='$c' AND (page_state='0' OR page_state='2') AND page_$o='$p'");
+		$totallines = sed_sql_result($sql, 0, 0);
+		$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
+		FROM $db_pages as p ".$join_ratings_condition."
+		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		WHERE page_cat='$c' AND (page_state=0 OR page_state=2) AND page_$o='$p'
+		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
+	}
+	else
+	{
+		sed_die(empty($sed_cat[$c]['title']) && !$usr['isadmin']);
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
+			WHERE page_cat='$c' AND (page_state='0' OR page_state='2')");
+		$totallines = sed_sql_result($sql, 0, 0);
+		$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
+		FROM $db_pages as p ".$join_ratings_condition."
+		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		WHERE page_cat='$c' AND (page_state=0 OR page_state=2)
+		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
+	}
 }
 
 /*
