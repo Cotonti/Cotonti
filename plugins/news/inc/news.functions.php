@@ -14,6 +14,7 @@ defined('SED_CODE') or die('Wrong URL');
 function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=false, $d=0, $order=false, $way=false)
 {
     global $sed_cat, $db_pages, $db_users, $db_extra_fields, $sys, $cfg, $L, $t;
+    global $usr, $sed_dbc, $sed_urltrans;
     $jj = 0;
     $mtch = $sed_cat[$cat]['path'].".";
     $mtchlen = mb_strlen($mtch);
