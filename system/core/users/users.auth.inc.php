@@ -120,19 +120,18 @@ if (is_array($extp))
 /* ===== */
 
 if (empty($redirect) && !empty($sys['referer']))
- {
+{
 	sed_redirect(sed_url('users', 'm=auth&redirect='. base64_encode($sys['referer']), '', true));
 	exit;
- }
+}
 
 $plug_head .= '<meta name="robots" content="noindex" />';
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.auth'));
 
-
 if ($cfg['maintenance'])
 {
-	$t-> assign(array("USERS_AUTH_MAINTENANCERES" => $cfg['maintenancereason']));
+	$t->assign(array("USERS_AUTH_MAINTENANCERES" => $cfg['maintenancereason']));
 	$t->parse("MAIN.USERS_AUTH_MAINTENANCE");
 }
 
@@ -140,7 +139,7 @@ $t->assign(array(
 	"USERS_AUTH_TITLE" => $L['aut_logintitle'],
 	"USERS_AUTH_SEND" => sed_url('users', 'm=auth&a=check&redirect='.$redirect),
 	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />",
-	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />".$redir,
+	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />",
 	"USERS_AUTH_REGISTER" => sed_url('users', 'm=register')
 ));
 
