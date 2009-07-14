@@ -892,7 +892,7 @@ function sed_build_comments($code, $url, $display = true)
 			/* ===== */
 
 			$error_string .= (mb_strlen($rtext)<2) ? $L['com_commenttooshort']."<br />" : '';
-			$error_string .= (mb_strlen($rtext)>2000) ? $L['com_commenttoolong']."<br />" : '';
+			$error_string .= ($cfg['commentsize'] && mb_strlen($rtext) > $cfg['commentsize']) ? $L['com_commenttoolong']."<br />" : '';
 
 			if (empty($error_string))
 			{
