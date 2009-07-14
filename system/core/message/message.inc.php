@@ -49,7 +49,7 @@ switch( $msg )
 
 		$rd = 2;
 		$the_redirect = (!empty($redirect)) ? "&redirect=".$redirect : '';
-		$ru = sed_url('users', 'm=auth'.$redirect);
+		$ru = sed_url('users', 'm=auth'.$the_redirect);
 		break;
 
 	case '102':
@@ -147,7 +147,7 @@ if($rc!='')
 
 	if(!strstr($r["$rc"], '://'))
 	{
-		$r["$rc"] = $cfg['mainurl'] . '/' . $r["$rc"];
+		$r["$rc"] = SED_ABSOLUTE_URL . ltrim($r["$rc"], '/');
 	}
 
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
@@ -158,7 +158,7 @@ elseif ($rd!='')
 {
 	if(!strstr($ru, '://'))
 	{
-		$ru = $cfg['mainurl'] . '/' . $ru;
+		$ru = SED_ABSOLUTE_URL . ltrim($ru, '/');
 	}
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];

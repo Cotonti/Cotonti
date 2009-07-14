@@ -98,15 +98,15 @@ if ($action == 'install')
 
 	if (!sedc_detect_bbcode('youtube'))
 	{
-		sed_bbcode_add('youtube', 'pcre', '\[youtube=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.youtube.com/v/$1" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/$1" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+		sed_bbcode_add('youtube', 'pcre', '\[youtube=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.youtube.com/v/$1" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/$1" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /></object>', false, 128, 'seditio');
 	}
 	if (!sedc_detect_bbcode('googlevideo'))
 	{
-		sed_bbcode_add('googlevideo', 'pcre', '\[googlevideo=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" width="400" height="326"><param name="movie" value="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+		sed_bbcode_add('googlevideo', 'pcre', '\[googlevideo=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" width="400" height="326"><param name="movie" value="http://video.google.com/googleplayer.swf?docid=$1&amp;hl=en&amp;fs=true" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /></object>', false, 128, 'seditio');
 	}
 	if (!sedc_detect_bbcode('metacafe'))
 	{
-		sed_bbcode_add('metacafe', 'pcre', '\[metacafe=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.metacafe.com/fplayer/$1" width="400" height="345"><param name="movie" value="http://www.metacafe.com/fplayer/$1" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /></object>', false, 128, 'seditio');
+		sed_bbcode_add('metacafe', 'pcre', '\[metacafe=([^\s"\';&\?\(\[]+)\]', '<object type="application/x-shockwave-flash" data="http://www.metacafe.com/fplayer/$1" width="400" height="345"><param name="movie" value="http://www.metacafe.com/fplayer/$1" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /></object>', false, 128, 'seditio');
 	}
 }
 elseif ($action == 'uninstall')

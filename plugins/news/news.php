@@ -49,9 +49,9 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 	AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$sed_cat[$cfg['plugin']['news']['category']]['order']." ".$sed_cat[$cfg['plugin']['news']['category']]['way']." LIMIT ".$cfg['plugin']['news']['maxpages']);
 
 	// Extra field - getting 
-	$extrafields = array(); $number_of_extrafields = 0; 
+	$extrafields = array();
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'"); 
-	while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; } 
+	while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 	
 	$news = new XTemplate(sed_skinfile('news'));
 
@@ -97,8 +97,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 				break;
 
 			case '2':
-
-				if ($cfg['allowphp_pages'])
+				if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
 				{
 					ob_start();
 					eval($pag['page_text']);
@@ -132,8 +131,8 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 				}
 				else
 				{
-					$readmore = mb_strpos($pag['page_text'], "[more]");
 					$pag['page_text'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+					$readmore = mb_strpos($pag['page_text'], "<!--more-->");
 					if ($readmore>0)
 					{
 						$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore)."<br />";
@@ -149,7 +148,7 @@ if ($cfg['plugin']['news']['maxpages']>0 && !empty($cfg['plugin']['news']['categ
 		}
 		
 		// Extra fields 
-		if($number_of_extrafields > 0) foreach($extrafields as $row) $news->assign('PAGE_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
+		foreach($extrafields as $row) $news->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), sed_cc($pag['page_'.$row['field_name']]));
 		
 		$news->parse("NEWS.PAGE_ROW");
 	}
