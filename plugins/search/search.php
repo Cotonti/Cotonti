@@ -1054,6 +1054,7 @@ else
 // Output
 $t->assign(array(
 	"PLUGIN_TITLE" => $plugin_title,
+	"PLUGIN_SEARCH_ACTION" => empty($tab) ? sed_url('plug', 'e=search') : sed_url('plug', 'e=search&tab=' . $tab),
 	"PLUGIN_SEARCH_TEXT" => "<input type='text' name='sq' style='width:310px; padding:2px 0; margin:0' value='".sed_cc($sq)."' size='32' maxlength='".$cfg['plugin']['search']['maxsigns']."' />",
 	"PLUGIN_SEARCH_KEY" => "<input type='submit' value='".$L['plu_search_key']."' style='width:70px' />",
 	"PLUGIN_ERROR" => $error_string

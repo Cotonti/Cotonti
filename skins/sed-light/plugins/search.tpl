@@ -3,7 +3,7 @@
 	<div class="mboxBody">
 			<div class='main_all'>{PHP.L.plu_subtitle_all}</div>
 			<div class='main_all'>
-                        <form id='search' name='search' method='post'>
+                        <form id='search' name='search' action='{PLUGIN_SEARCH_ACTION}' method='post'>
                         <input type='hidden' name='a' value='search'>
                         <div style='padding:15px; background-color:#e1e2f7'>
                               <div>
