@@ -48,9 +48,9 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
     list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('index', "c=$cat"), $d, $totalnews, $perpage, TRUE);
 
     // Extra field - getting
-    $extrafields = array(); $number_of_extrafields = 0;
+    $extrafields = array();
     $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-    while($row = sed_sql_fetchassoc($fieldsres)){$extrafields[] = $row; $number_of_extrafields++;}
+    while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
     if(file_exists(sed_skinfile($skinfile, true)))
     {
         $news = new XTemplate(sed_skinfile($skinfile, true));
@@ -105,7 +105,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
                 break;
 
             case '2':
-                if($cfg['allowphp_pages'])
+				if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
                 {
                     ob_start();
                     eval($pag['page_text']);
@@ -139,8 +139,8 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
                 }
                 else
                 {
-                    $readmore = mb_strpos($pag['page_text'], "[more]");
                     $pag['page_text'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+                    $readmore = mb_strpos($pag['page_text'], "<!--more-->");
                     if($readmore>0)
                     {
                         $pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);
@@ -156,7 +156,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         }
 
         // Extra fields
-        if($number_of_extrafields > 0) foreach($extrafields as $row) $news->assign('PAGE_ROW_'.strtoupper($row['field_name']), $pag['page_'.$row['field_name']]);
+        foreach($extrafields as $row) $news->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), sed_cc($pag['page_'.$row['field_name']]));
 
         $news->parse("NEWS.PAGE_ROW");
     }
