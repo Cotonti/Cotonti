@@ -162,47 +162,49 @@ switch ($a)
 			{
 				list($w, $h) = @getimagesize($uav_tmp_name);
 
-					$avatar = $usr['id']."-avatar.gif";
-					$avatarpath = $cfg['av_dir'].$avatar;
+				$avatar = $usr['id']."-avatar.gif";
+				$avatarpath = $cfg['av_dir'].$avatar;
 
-					if (file_exists($avatarpath))
-						{ unlink($avatarpath); }
+				if (file_exists($avatarpath))
+					{ unlink($avatarpath); }
 
-					move_uploaded_file($uav_tmp_name, $avatarpath);
+				move_uploaded_file($uav_tmp_name, $avatarpath);
 
-					if ($w>$cfg['av_maxx'] || $h>$cfg['av_maxy'] || $uav_size>$cfg['av_maxsize'])
-					{
+				if ($w>$cfg['av_maxx'] || $h>$cfg['av_maxy'] || $uav_size>$cfg['av_maxsize'])
+				{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
 
 					sed_createthumb($avatarpath, $avatarpath, $cfg['av_maxx'],$cfg['av_maxy'], 1, $f_extension, $avatar, 0, 0, 0, 0, 0, $percentage, $prior);
 
 					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($uav_size > $cfg['av_maxsize']))
-						{
+					{
 						$percentage -= 5;
 						sed_createthumb($avatarpath, $avatarpath, $cfg['av_maxx'],$cfg['av_maxy'], 1, $f_extension, $avatar, 0, 0, 0, 0, 0, $percentage, $prior);
 
 						clearstatcache();
 						$uav_size = filesize($avatarpath);
-						}
 					}
+				}
 
-					/* === Hook === */
-					$extp = sed_getextplugins('profile.update.avatar');
-					if (is_array($extp))
-					{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-					/* ===== */
+				/* === Hook === */
+				$extp = sed_getextplugins('profile.update.avatar');
+				if (is_array($extp))
+				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				/* ===== */
 
-					$uav_size = filesize($avatarpath);
-					if ($uav_size<=$cfg['av_maxsize'])
-					{
+				$uav_size = filesize($avatarpath);
+				if ($uav_size<=$cfg['av_maxsize'])
+				{
 					$sql = sed_sql_query("UPDATE $db_users SET user_avatar='$avatarpath' WHERE user_id='".$usr['id']."'");
 					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
 					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$avatar', '$f_extension', -1, '', ".(int)$uav_size.", 0)");
-					}
-					else
-						{ unlink($avatarpath); }
-					@chmod($avatarpath, $cfg['file_perms']);
+				}
+				else
+				{
+					unlink($avatarpath);
+				}
+				@chmod($avatarpath, $cfg['file_perms']);
 			}
 		}
 		elseif($fcheck == 2)
@@ -226,47 +228,49 @@ switch ($a)
 			{
 				list($w, $h) = @getimagesize($uph_tmp_name);
 
-					$photo = $usr['id']."-photo.gif";
-					$photopath = $cfg['photos_dir'].$photo;
+				$photo = $usr['id']."-photo.gif";
+				$photopath = $cfg['photos_dir'].$photo;
 
-					if (file_exists($photopath))
-						{ unlink($photopath); }
+				if (file_exists($photopath))
+				{ unlink($photopath); }
 
-					move_uploaded_file($uph_tmp_name, $photopath);
+				move_uploaded_file($uph_tmp_name, $photopath);
 
-					if ($w>$cfg['ph_maxx'] || $h>$cfg['ph_maxy'] || $uph_size>$cfg['ph_maxsize'])
-					{
+				if ($w>$cfg['ph_maxx'] || $h>$cfg['ph_maxy'] || $uph_size>$cfg['ph_maxsize'])
+				{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
 
 					sed_createthumb($photopath, $photopath, $cfg['ph_maxx'],$cfg['ph_maxy'], 1, $f_extension, $photo, 0, 0, 0, 0, 0, $percentage, $prior);
 
 					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($uph_size > $cfg['ph_maxsize']) )
-						{
+					{
 						$percentage -= 5;
 						sed_createthumb($photopath, $photopath, $cfg['ph_maxx'],$cfg['ph_maxy'], 1, $f_extension, $photo, 0, 0, 0, 0, 0, $percentage, $prior);
 
 						clearstatcache();
 						$uph_size = filesize($photopath);
-						}
 					}
+				}
 
-					/* === Hook === */
-					$extp = sed_getextplugins('profile.update.photo');
-					if (is_array($extp))
-					{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-					/* ===== */
+				/* === Hook === */
+				$extp = sed_getextplugins('profile.update.photo');
+				if (is_array($extp))
+				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				/* ===== */
 
-					$uph_size = filesize($photopath);
-					if ($uph_size<=$cfg['ph_maxsize'])
-					{
+				$uph_size = filesize($photopath);
+				if ($uph_size<=$cfg['ph_maxsize'])
+				{
 					$sql = sed_sql_query("UPDATE $db_users SET user_photo='$photopath' WHERE user_id='".$usr['id']."'");
 					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
 					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$photo', '$f_extension', -1, '', ".(int)$uph_size.", 0)");
-					}
-					else
-						{ unlink($photopath); }
-					@chmod($photopath, $cfg['file_perms']);
+				}
+				else
+				{
+					unlink($photopath);
+				}
+				@chmod($photopath, $cfg['file_perms']);
 			}
 		}
 		elseif($fcheck == 2)
@@ -290,47 +294,47 @@ switch ($a)
 			{
 				list($w, $h) = @getimagesize($usig_tmp_name);
 
-					$signature = $usr['id']."-signature.gif";
-					$signaturepath = $cfg['sig_dir'].$signature;
+				$signature = $usr['id']."-signature.gif";
+				$signaturepath = $cfg['sig_dir'].$signature;
 
-					if (file_exists($signaturepath))
-						{ unlink($signaturepath); }
+				if (file_exists($signaturepath))
+				{ unlink($signaturepath); }
 
-					move_uploaded_file($usig_tmp_name, $signaturepath);
+				move_uploaded_file($usig_tmp_name, $signaturepath);
 
-					if ($w>$cfg['sig_maxx'] || $h>$cfg['sig_maxy'] || $usig_size>$cfg['sig_maxsize'])
-					{
+				if ($w>$cfg['sig_maxx'] || $h>$cfg['sig_maxy'] || $usig_size>$cfg['sig_maxsize'])
+				{
 					$prior = ($w>$h) ? 'Width' : 'Height';
 					$percentage = 100;
 
 					sed_createthumb($signaturepath, $signaturepath, $cfg['sig_maxx'],$cfg['sig_maxy'], 1, $f_extension, $signature, 0, 0, 0, 0, 0, $percentage, $prior);
 
 					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($usig_size > $cfg['sig_maxsize']) )
-						{
+					{
 						$percentage -= 5;
 						sed_createthumb($signaturepath, $signaturepath, $cfg['sig_maxx'],$cfg['sig_maxy'], 1, $f_extension, $signature, 0, 0, 0, 0, 0, $percentage, $prior);
 
 						clearstatcache();
 						$usig_size = filesize($signaturepath);
-						}
 					}
+				}
 
-					/* === Hook === */
-					$extp = sed_getextplugins('profile.update.signature');
-					if (is_array($extp))
-					{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-					/* ===== */
+				/* === Hook === */
+				$extp = sed_getextplugins('profile.update.signature');
+				if (is_array($extp))
+				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				/* ===== */
 
-					$usig_size = filesize($signaturepath);
-					if ($usig_size<=$cfg['sig_maxsize'])
-					{
+				$usig_size = filesize($signaturepath);
+				if ($usig_size<=$cfg['sig_maxsize'])
+				{
 					$sql = sed_sql_query("UPDATE $db_users SET user_signature='$signaturepath' WHERE user_id='".$usr['id']."'");
 					$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
 					$sql = sed_sql_query("INSERT INTO $db_pfs (pfs_userid, pfs_file, pfs_extension, pfs_folderid, pfs_desc, pfs_size, pfs_count) VALUES (".(int)$usr['id'].", '$signature', '$f_extension', -1, '', ".(int)$usig_size.", 0)");
-					}
-					else
-						{ unlink($signaturepath); }
-					@chmod($signaturepath, $cfg['file_perms']);
+				}
+				else
+				{ unlink($signaturepath); }
+				@chmod($signaturepath, $cfg['file_perms']);
 			}
 		}
 		elseif($fcheck == 2)
@@ -432,24 +436,26 @@ switch ($a)
 		}
 	}
 
-	if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
-		{
-
-		$rmailpass = md5($rmailpass);
+	if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['user_email_noprotection']) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
+	{
 
 		$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_email='".sed_sql_prep($ruseremail)."'");
 		$res = sed_sql_result($sqltmp,0,"COUNT(*)");
 
-		$error_string .= ($rmailpass!=$urr['user_password']) ? $L['pro_wrongpass']."<br />" : '';
+		if (!$cfg['user_email_noprotection'])
+		{
+			$rmailpass = md5($rmailpass);
+			$error_string .= ($rmailpass!=$urr['user_password']) ? $L['pro_wrongpass']."<br />" : '';
+		}
+		
 		$error_string .= (mb_strlen($ruseremail)<4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
 		$error_string .= ($res>0) ? $L['aut_emailalreadyindb']."<br />" : '';
 
 		if (empty($error_string))
+		{
+
+			if (!$cfg['user_email_noprotection'])
 			{
-
-		if (!$cfg['regnoactivation'])
-				{
-
 				$validationkey = md5(microtime());
 				$sql = sed_sql_query("UPDATE $db_users SET user_lostpass='$validationkey', user_email='".sed_sql_prep($ruseremail)."', user_maingrp='-1', user_sid='".sed_sql_prep($urr['user_maingrp'])."' WHERE user_id='".$usr['id']."' ");
 
@@ -470,20 +476,17 @@ switch ($a)
 					session_destroy();
 				}
 
-					$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
-					sed_redirect(sed_url('message', 'msg=102', '', true));
-					exit;
-
-				}
-
-			else
-				{
-				$sql = sed_sql_query("UPDATE $db_users SET user_email='".sed_sql_prep($ruseremail)."' WHERE user_id='".$usr['id']."' ");
-				}
+				$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
+				sed_redirect(sed_url('message', 'msg=102', '', true));
+				exit;
 
 			}
-
+			else
+			{
+				$sql = sed_sql_query("UPDATE $db_users SET user_email='".sed_sql_prep($ruseremail)."' WHERE user_id=".$usr['id']);
+			}
 		}
+	}
 
 
 	if (empty($error_string))
@@ -655,7 +658,7 @@ $useredit_array = array(
 	"USERS_PROFILE_OLDPASS" => "<input type=\"password\" class=\"password\" name=\"roldpass\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_NEWPASS1" => "<input type=\"password\" class=\"password\" name=\"rnewpass1\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_NEWPASS2" => "<input type=\"password\" class=\"password\" name=\"rnewpass2\" size=\"12\" maxlength=\"16\" />",
-		);
+);
 // Extra fields
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
@@ -696,6 +699,15 @@ $extp = sed_getextplugins('profile.tags');
 if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
+
+if ($cfg['useremailchange'])
+{
+	if (!$cfg['user_email_noprotection'])
+	{
+		$t->parse('MAIN.USERS_PROFILE_EMAILCHANGE.USERS_PROFILE_EMAILPROTECTION');
+	}
+	$t->parse('MAIN.USERS_PROFILE_EMAILCHANGE');
+}
 
 $t->parse("MAIN");
 $t->out("MAIN");

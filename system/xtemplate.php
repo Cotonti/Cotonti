@@ -99,7 +99,7 @@ class XTemplate
 		$expr = trim(mb_substr($expr, $p1 + 1));
 		if ($expr[0] == '{') $val2 = $this->evaluate($expr);
 		elseif (is_numeric($expr)) $val2 = $expr;
-		else $val2 = str_replace(array('"', "'"), '', $val2);
+		else $val2 = str_replace(array('"', "'"), '', $expr);
 		// Apply operator
 		switch ($op)
 		{

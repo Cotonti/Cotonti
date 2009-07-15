@@ -1,16 +1,5 @@
 <!-- BEGIN: MAIN -->
 
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-
-$("#emailnotes").hide();
-$("#emailtd").click(function(){$("#emailnotes").slideDown();});
-
-});
-//]]>
-</script>
-
 	<div class="mboxHD">{USERS_PROFILE_TITLE}</div>
 	<div class="mboxBody">
 
@@ -36,20 +25,33 @@ $("#emailtd").click(function(){$("#emailnotes").slideDown();});
 					<td>{PHP.L.Registered}:</td>
 					<td>{USERS_PROFILE_REGDATE}</td>
 				</tr>
+				<!-- BEGIN: USERS_PROFILE_EMAILCHANGE -->
 				<tr>
 					<td>{PHP.L.Email}:</td>
 					<td id="emailtd">
-					<div style="width:168px; float:left;">
+					<div style="width:350px;float:left">{PHP.L.Email}:
+					<br />{USERS_PROFILE_EMAIL}</div>
+					<!-- BEGIN: USERS_PROFILE_EMAILPROTECTION -->
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+
+$("#emailnotes").hide();
+$("#emailtd").click(function(){$("#emailnotes").slideDown();});
+
+});
+//]]>
+</script>
+					<div>
 					{PHP.skinlang.usersprofile.Emailpassword}:
 					<br />{USERS_PROFILE_EMAILPASS}
 					</div>
-					
-					<div>{PHP.L.Email}:
-					<br />{USERS_PROFILE_EMAIL}</div>
 					<br />
 					 <div class="small" id="emailnotes">{PHP.skinlang.usersprofile.Emailnotes}</div>
+					<!-- END: USERS_PROFILE_EMAILPROTECTION -->
 					</td>
 				</tr>
+				<!-- END: USERS_PROFILE_EMAILCHANGE -->
 				<tr>
 					<td>{PHP.skinlang.usersprofile.Hidetheemail}:</td>
 					<td>{USERS_PROFILE_HIDEEMAIL}</td>

@@ -45,14 +45,14 @@
 					<td>{PHP.L.Duration} :</td>
 					<td>
 						<select name="nexpire" size="1">
-							<option value="3600">1 {PHP.L.Hour}</option>
-							<option value="7200">2 {PHP.L.Hours}</option>
-							<option value="14400">4 {PHP.L.Hours}</option>
-							<option value="28800">8 {PHP.L.Hours}</option>
-							<option value="57600">16 {PHP.L.Hours}</option>
+							<option value="3600">1 {PHP.L.Hour.0}</option>
+							<option value="7200">2 {PHP.L.Hours.0}</option>
+							<option value="14400">4 {PHP.L.Hours.0}</option>
+							<option value="28800">8 {PHP.L.Hours.0}</option>
+							<option value="57600">16 {PHP.L.Hours.0}</option>
 							<option value="86400">1 {PHP.L.Day}</option>
-							<option value="172800">2 {PHP.L.Days}</option>
-							<option value="345600">4 {PHP.L.Days}</option>
+							<option value="172800">2 {PHP.L.Days.0}</option>
+							<option value="345600">4 {PHP.L.Days.0}</option>
 							<option value="604800">1 {PHP.L.Week}</option>
 							<option value="1209600">2 {PHP.L.Weeks}</option>
 							<option value="1814400">3 {PHP.L.Weeks}</option>
