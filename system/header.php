@@ -1,15 +1,17 @@
-<?PHP
+<?php
 /**
  * Global header
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.6
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL');
+
+sed_store_uriredir();
 
 /* === Hook === */
 $extp = sed_getextplugins('header.first');
@@ -159,7 +161,7 @@ if (!SED_AJAX)
 		$out['guest_cookiettl'] = '<input type="checkbox" name="rremember" />';
 
 		$t->assign(array (
-			"HEADER_GUEST_SEND" => sed_url('users', 'm=auth&a=check&redirect='.$sys['url']),
+			"HEADER_GUEST_SEND" => sed_url('users', 'm=auth&a=check&'.$sys['url_redirect']),
 			"HEADER_GUEST_USERNAME" => $out['guest_username'],
 			"HEADER_GUEST_PASSWORD" => $out['guest_password'],
 			"HEADER_GUEST_REGISTER" => $out['guest_register'],

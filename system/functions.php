@@ -1,5 +1,4 @@
-<?PHP
-
+<?php
 /**
  * Main function library.
  *
@@ -4642,6 +4641,45 @@ function sed_urldecode($str, $translit = false)
 		$str = strtr($str, $sed_translitb);
 	}
 	return urldecode($str);
+}
+
+/**
+ * Store URI-redir to session
+ *
+ * @global $sys
+ */
+function sed_store_uriredir()
+{
+	global $sys;
+
+	$script = basename($_SERVER['SCRIPT_NAME']);
+	parse_str($_SERVER['QUERY_STRING'], $query_a);
+
+	if (!empty($script)
+		&& $script != 'message.php' // not message location
+		&& ($script != 'users.php' // not login/logout location
+			|| empty($query_a['m'])
+			|| !in_array($query_a['m'], array('auth', 'logout', 'register'))
+			)
+		)
+	{
+		$_SESSION['s_uri_redir'] = $sys['uri_redir'];
+	}
+}
+
+/**
+ * Apply URI-redir that stored in session
+ *
+ * @global $redirect
+ */
+function sed_apply_uriredir()
+{
+	global $redirect;
+
+	if (empty($redirect) && !empty($_SESSION['s_uri_redir']))
+	{
+		$redirect = $_SESSION['s_uri_redir'];
+	}
 }
 
 /**
