@@ -1,6 +1,6 @@
 <?php
 /**
- * Administration panel
+ * Administration panel - Referers manager
  *
  * @package Cotonti
  * @version 0.1.0
@@ -36,22 +36,24 @@ if(is_array($extp))
 }
 /* ===== */
 
-if($a=='prune' && $usr['isadmin'])
+if($a == 'prune' && $usr['isadmin'])
 {
 	$sql = sed_sql_query("TRUNCATE $db_referers");
+
 	$adminwarnings = ($sql) ? $L['adm_ref_prune'] : $L['Error'];
 
 }
-elseif($a=='prunelowhits' && $usr['isadmin'])
+elseif($a == 'prunelowhits' && $usr['isadmin'])
 {
 	$sql = sed_sql_query("DELETE FROM $db_referers WHERE ref_count<6");
+
 	$adminwarnings = ($sql) ? $L['adm_ref_prunelowhits'] : $L['Error'];
 }
 
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_referers);
-if($cfg['jquery'])
+if($cfg['jquery'] AND $cfg['turnajax'])
 {
 	$pagnav = sed_pagination(sed_url('admin','m=referers'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=referers&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=referers'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=referers&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
@@ -73,31 +75,31 @@ if(sed_sql_numrows($sql) > 0)
 	}
 
 	$ii = 0;
-    /* === Hook - Part1 : Set === */
-    $extp = sed_getextplugins('admin.referers.loop');
-    /* ===== */
+	/* === Hook - Part1 : Set === */
+	$extp = sed_getextplugins('admin.referers.loop');
+	/* ===== */
 	foreach($referers as $referer => $url)
 	{
 
 		$t -> assign(array("ADMIN_REFERERS_REFERER" => htmlspecialchars($referer)));
 		$t -> parse("REFERERS.REFERERS_ROW");
 
-		foreach($url as $uri=>$count)
+		foreach($url as $uri => $count)
 		{
 			$t -> assign(array(
 				"ADMIN_REFERERS_URI" => htmlspecialchars(sed_cutstring($uri, 48)),
 				"ADMIN_REFERERS_COUNT" => $count,
-                "ADMIN_REFERERS_ODDEVEN" => sed_build_oddeven($ii)
+				"ADMIN_REFERERS_ODDEVEN" => sed_build_oddeven($ii)
 			));
-            /* === Hook - Part2 : Include === */
-            if(is_array($extp))
-            {
-            	foreach($extp as $k => $pl)
-            	{
-            		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-            	}
-            }
-            /* ===== */
+			/* === Hook - Part2 : Include === */
+			if(is_array($extp))
+			{
+				foreach($extp as $k => $pl)
+				{
+					include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+				}
+			}
+			/* ===== */
 			$t -> parse("REFERERS.REFERERS_ROW.REFERERS_URI");
 		}
 		$ii++;
@@ -131,6 +133,7 @@ if(is_array($extp))
 	}
 }
 /* ===== */
+
 $t -> parse("REFERERS");
 $adminmain = $t -> text("REFERERS");
 

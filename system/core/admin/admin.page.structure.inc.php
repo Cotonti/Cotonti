@@ -96,7 +96,7 @@ if($n == 'options')
 
 		sed_cache_clear('sed_cat');
 
-		//$additionsforurl = ($cfg['jquery']) ? '&ajax=1' : '';
+		//$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=page&s=structure&d='.$d.$additionsforurl, '', true));
 		exit;
 	}
@@ -177,7 +177,7 @@ if($n == 'options')
 
 	$t -> assign(array(
 		"ADMIN_PAGE_STRUCTURE_UPDATE_FORM_URL" => sed_url('admin', "m=page&s=structure&n=options&a=update&id=".$structure_id."&d=".$d."&".sed_xg()),
-		"ADMIN_PAGE_STRUCTURE_UPDATE_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', 'm=page&s=structure&n=options&ajax=1&a=update&id='.$structure_id.'&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_PAGE_STRUCTURE_UPDATE_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', 'm=page&s=structure&n=options&ajax=1&a=update&id='.$structure_id.'&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_PAGE_STRUCTURE_CODE" => $structure_code,
 		"ADMIN_PAGE_STRUCTURE_PATH" => $structure_path,
 		"ADMIN_PAGE_STRUCTURE_TITLE" => $structure_title,
@@ -188,7 +188,7 @@ if($n == 'options')
 		"ADMIN_PAGE_STRUCTURE_CHECK2" => $check2,
 		"ADMIN_PAGE_STRUCTURE_CHECK3" => $check3,
 		"ADMIN_PAGE_STRUCTURE_RESYNC" => sed_url('admin', "m=page&s=structure&n=options&a=resync&id=".$structure_id."&".sed_xg()),
-		"ADMIN_PAGE_STRUCTURE_RESYNC_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=page&s=structure&n=options&ajax=1&a=resync&id='.$structure_id.'&d='.$d.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+		"ADMIN_PAGE_STRUCTURE_RESYNC_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=page&s=structure&n=options&ajax=1&a=resync&id='.$structure_id.'&d='.$d.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 	));
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.page.structure.options.tags');
@@ -282,7 +282,7 @@ else
 	}
 
 	$totalitems = sed_sql_rowcount($db_structure);
-	if($cfg['jquery'])
+	if($cfg['jquery'] AND $cfg['turnajax'])
 	{
 		$pagnav = sed_pagination(sed_url('admin','m=page&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=structure&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
 		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=structure&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
@@ -330,7 +330,7 @@ else
 
 		$t -> assign(array(
 			"ADMIN_PAGE_STRUCTURE_UPDATE_DEL_URL" => sed_url('admin', "m=page&s=structure&a=update&d=".$d),
-			"ADMIN_PAGE_STRUCTURE_UPDATE_DEL_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin','m=page&s=structure&a=delete&ajax=1&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+			"ADMIN_PAGE_STRUCTURE_UPDATE_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin','m=page&s=structure&a=delete&ajax=1&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 			"ADMIN_PAGE_STRUCTURE_ID" => $structure_id,
 			"ADMIN_PAGE_STRUCTURE_CODE" => $structure_code,
 			"ADMIN_PAGE_STRUCTURE_PATHFIELDIMG" => $pathfieldimg,
@@ -343,7 +343,7 @@ else
 			"ADMIN_PAGE_STRUCTURE_JUMPTO_URL" => sed_url('list', "c=".$structure_code),
 			"ADMIN_PAGE_STRUCTURE_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=page&io=".$structure_code),
 			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL" => sed_url('admin', "m=page&s=structure&n=options&id=".$structure_id."&".sed_xg()),
-			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=page&s=structure&n=options&ajax=1&id='.$structure_id.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=page&s=structure&n=options&ajax=1&id='.$structure_id.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 		));
 
 		/* === Hook - Part2 : Include === */
@@ -358,14 +358,14 @@ else
 
 	$t -> assign(array(
 		"ADMIN_PAGE_STRUCTURE_UPDATE_FORM_URL" => sed_url('admin', "m=page&s=structure&a=update&d=".$d),
-		"ADMIN_PAGE_STRUCTURE_UPDATE_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin','m=page&s=structure&ajax=1&a=update&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_PAGE_STRUCTURE_UPDATE_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin','m=page&s=structure&ajax=1&a=update&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_PAGE_STRUCTURE_PAGINATION_PREV" => $pagination_prev,
 		"ADMIN_PAGE_STRUCTURE_PAGNAV" => $pagnav,
 		"ADMIN_PAGE_STRUCTURE_PAGINATION_NEXT" => $pagination_next,
 		"ADMIN_PAGE_STRUCTURE_TOTALITEMS" => $totalitems,
 		"ADMIN_PAGE_STRUCTURE_COUNTER_ROW" => $ii,
 		"ADMIN_PAGE_STRUCTURE_URL_FORM_ADD" => sed_url('admin', "m=page&s=structure&a=add"),
-		"ADMIN_PAGE_STRUCTURE_URL_FORM_ADD_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addstructure', url: '".sed_url('admin','m=page&s=structure&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+		"ADMIN_PAGE_STRUCTURE_URL_FORM_ADD_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addstructure', url: '".sed_url('admin','m=page&s=structure&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 	));
 	$t -> parse("PAGE_STRUCTURE.DEFULT");
 }

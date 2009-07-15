@@ -61,7 +61,7 @@ while($row = sed_sql_fetcharray($sql))
 	$cachesize += $row['size'];
 	$t -> assign(array(
 		"ADMIN_CACHE_ITEM_DEL_URL" => sed_url('admin', 'm=cache&a=delete&id='.$row['c_name'].'&'.sed_xg()),
-		"ADMIN_CACHE_ITEM_DEL_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=delete&ajax=1&id='.$row['c_name'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_CACHE_ITEM_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=delete&ajax=1&id='.$row['c_name'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_CACHE_ITEM_NAME" => $row['c_name'],
 		"ADMIN_CACHE_EXPIRE" => ($row['c_expire'] - $sys['now']),
 		"ADMIN_CACHE_SIZE" => $row['size'],
@@ -87,11 +87,11 @@ $t -> assign(array(
 	"ADMIN_CACHE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_CACHE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_CACHE_URL_REFRESH" => sed_url('admin', 'm=cache'),
-	"ADMIN_CACHE_URL_REFRESH_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_CACHE_URL_REFRESH_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_CACHE_URL_PURGE" => sed_url('admin', 'm=cache&a=purge&'.sed_xg()),
-	"ADMIN_CACHE_URL_PURGE_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=purge&ajax=1&id='.$row['c_name'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_CACHE_URL_PURGE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=purge&ajax=1&id='.$row['c_name'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_CACHE_URL_SHOWALL" => sed_url('admin', 'm=cache&a=showall'),
-	"ADMIN_CACHE_URL_SHOWALL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=showall&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_CACHE_URL_SHOWALL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=showall&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_CACHE_CACHESIZE" => $cachesize
 ));
 
