@@ -1,5 +1,4 @@
-<?PHP
-
+<?php
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -10,7 +9,7 @@ http://www.neocrome.net
  * Error message display and redirect
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.0.6
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008 Cotonti Team
  * @license BSD License
@@ -24,13 +23,10 @@ sed_block($usr['auth_read']);
 $msg = sed_import('msg','G','INT');
 $num = sed_import('num','G','INT');
 $rc = sed_import('rc','G','INT');
-$redirect = sed_import('redirect','G','SLU');
 
-require_once($cfg['system_dir']."/lang/en/message.lang.php");
-if ($lang!='en')
-require_once($cfg['system_dir']."/lang/$lang/message.lang.php");
+require_once(sed_langfile('message', true));
 
-unset ($r, $rd, $ru);
+unset($r, $rd, $ru);
 
 $title = $L['msg'.$msg.'_title'];
 $body = $L['msg'.$msg.'_body'];
@@ -43,8 +39,7 @@ if (is_array($extp))
 
 switch( $msg )
 {
-
-	/* ======== Users ======== */
+		/* ======== Users ======== */
 
 	case '100':
 
@@ -53,21 +48,11 @@ switch( $msg )
 		$ru = sed_url('users', 'm=auth'.$the_redirect);
 		break;
 
-	/*case '102':
+	case '102':
 		$r = 1;
 		$rd = 2;
 		$ru = sed_url('index');
-		break;*/
-
-	/*case '104':
-		$rd = 2;
-		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		break;*/
-
-	/*case '113':
-		$rd = 2;
-		$ru = sed_url('users', 'm=profile');
-		break;*/
+		break;
 
 	case '153':
 		if ($num>0)
@@ -101,14 +86,7 @@ switch( $msg )
 		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
 		break;
 
-		/* ======== Private messages ======== */
-
-	/*case '502':
-		$body = $L['msg502_body']."<a href=\"".sed_url('pm')."\">".$L['msg502_body2']."</a>".$L['msg502_body3'];
-		$rd = 2;
-		$ru = sed_url('pm');
-		break;*/
-
+		/* ======== System messages ======== */
 
 	case '916':
 		$rd = 2;
@@ -138,26 +116,46 @@ if(empty($rc) && empty($rd))
 	$ru = sed_url('index');
 }
 
-if($rc!='')
+switch ($rc)
 {
-	$r['100'] = sed_url('admin', "m=plug");
-	$r['101'] = sed_url('admin', "m=hitsperday");
-	$r['102'] = sed_url('admin', "m=polls");
-	$r['103'] = sed_url('admin', "m=forums");
-	$r['200'] = sed_url('users');
+	case '100':
+		$r['100'] = sed_url('admin', "m=plug");
+	break;
 
-	if(!strstr($r["$rc"], '://'))
+	case '101':
+		$r['101'] = sed_url('admin', "m=hitsperday");
+	break;
+
+	case '102':
+		$r['102'] = sed_url('admin', "m=polls");
+	break;
+
+	case '103':
+		$r['103'] = sed_url('admin', "m=forums");
+	break;
+
+	case '200':
+		$r['200'] = sed_url('users');
+	break;
+
+	default:
+		$rc = '';
+	break;
+}
+
+if ($rc != '')
+{
+	if (!strstr($r["$rc"], '://'))
 	{
-		$r["$rc"] = SED_ABSOLUTE_URL . ltrim($r["$rc"], '/');
+		$r["$rc"] = SED_ABSOLUTE_URL . $r["$rc"];
 	}
-
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];
 }
 
-elseif ($rd!='')
+elseif ($rd != '')
 {
-	if(!strstr($ru, '://'))
+	if (!strstr($ru, '://'))
 	{
 		$ru = SED_ABSOLUTE_URL . ltrim($ru, '/');
 	}
@@ -192,5 +190,4 @@ $t->parse("MAIN");
 $t->out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
-
 ?>

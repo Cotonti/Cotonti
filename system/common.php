@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -69,9 +69,6 @@ else
 	$usr['ip'] = $_SERVER['REMOTE_ADDR'];
 }
 $sys['unique'] = sed_unique(16);
-$sys['url'] = base64_encode($_SERVER['REQUEST_URI']);
-$sys['url_redirect'] = 'redirect='.$sys['url'];
-$redirect = sed_import('redirect','G','SLU');
 
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
@@ -86,10 +83,14 @@ if(empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 $sys['host'] = strstr($_SERVER['HTTP_HOST'], $sys['domain']) ? $_SERVER['HTTP_HOST'] : $sys['domain'];
 $sys['abs_url'] = $url['scheme'] . '://' . $sys['host']. $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
-// Current url for templates
-$out['uri'] = str_replace('&', '&amp;', $_SERVER['REQUEST_URI']);
+
+$sys['uri'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ? mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
+$sys['uri_redir'] = base64_encode($sys['uri']);
+$sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
+$redirect = sed_import('redirect','G','SLU');
 
 define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']));
+
 /* ======== Internal cache ======== */
 
 if ($cfg['cache'])
@@ -568,5 +569,4 @@ if(!$cfg['parser_disable'])
 	}
 	sed_bbcode_load();
 }
-
 ?>

@@ -1,5 +1,4 @@
-<?PHP
-
+<?php
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -100,8 +99,8 @@ if ($a=='check')
 		/* ===== */
 
 		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
-		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		header("Location: " . $ru);
+		sed_apply_uriredir();
+		sed_redirect(empty($redirect) ? sed_url('index') : base64_decode($redirect));
 		exit;
 	}
 	else
@@ -118,12 +117,6 @@ $extp = sed_getextplugins('users.auth.main');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
-
-if (empty($redirect) && !empty($sys['referer']))
-{
-	sed_redirect(sed_url('users', 'm=auth&redirect='. base64_encode($sys['referer']), '', true));
-	exit;
-}
 
 $plug_head .= '<meta name="robots" content="noindex" />';
 require_once $cfg['system_dir'] . '/header.php';
@@ -153,5 +146,4 @@ $t->parse("MAIN");
 $t->out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
-
 ?>
