@@ -66,12 +66,8 @@ elseif ($row['pm_touserid']==$usr['id'] && $row['pm_state']<2)
         if ($notread==0)
         { $sql = sed_sql_query("UPDATE $db_users SET user_newpm=0 WHERE user_id='".$usr['id']."'"); }
         // Leave a copy in sentbox
-        $row['pm_fromuser'] = sed_sql_prep($row['pm_fromuser']);
-        $row['pm_title'] = sed_sql_prep($row['pm_title']);
-        $row['pm_text'] = sed_sql_prep($row['pm_text']);
-        $row['pm_html'] = sed_sql_prep($row['pm_html']);
         sed_sql_query("INSERT INTO $db_pm (pm_state, pm_date, pm_fromuserid, pm_fromuser, pm_touserid, pm_title, pm_text, pm_html)
-        VALUES(3, {$row['pm_date']}, {$row['pm_fromuserid']}, '{$row['pm_fromuser']}', {$row['pm_touserid']}, '{$row['pm_title']}', '{$row['pm_text']}', '{$row['pm_html']}')");
+        VALUES(3, {$row['pm_date']}, {$row['pm_fromuserid']}, '".sed_sql_prep($row['pm_fromuser'])."', {$row['pm_touserid']}, '".sed_sql_prep($row['pm_title'])."', '".sed_sql_prep($row['pm_text'])."', '".sed_sql_prep($row['pm_html'])."')");
     }
 
     $pm_fromuserid = $row['pm_fromuserid'];

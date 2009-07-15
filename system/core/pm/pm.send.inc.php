@@ -86,6 +86,7 @@ if($a=='send')
     }
     else
     {
+		if (empty($to)) $error_string .= $L['pm_norecipient'].'<br />';
         $touser_ids[] = $to;
         $touser = $to;
         $totalrecipients = 1;
@@ -249,7 +250,7 @@ $t -> assign(array(
     "PMSEND_SENTBOX" => "<a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
     "PMSEND_FORM_SEND" => sed_url('pm', 'm=send&amp;a=send&amp;to='.$to),
     "PMSEND_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".sed_cc($newpmtitle)."\" size=\"56\" maxlength=\"255\" />",
-    "PMSEND_FORM_TEXT" =>  "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\"></textarea><br />".$pfs,
+    "PMSEND_FORM_TEXT" =>  "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$pfs,
     "PMSEND_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$pfs,
     "PMSEND_FORM_MYPFS" => $pfs,
     "PMSEND_FORM_TOUSER" => "<textarea name=\"newpmrecipient\" rows=\"3\" cols=\"56\">".$touser."</textarea>"

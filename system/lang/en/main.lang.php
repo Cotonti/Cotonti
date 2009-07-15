@@ -518,6 +518,7 @@ $L['pm_bodytooshort'] = 'The body of the private message is too short or missing
 $L['pm_inbox'] = 'Inbox';
 $L['pm_inboxsubtitle'] = 'Private messages, newest is at top';
 $L['pm_multiplerecipients'] = 'This private messages was also sent to %1$s other recipient(s).';
+$L['pm_norecipient'] = 'No recipient specified';
 $L['pm_notifytitle'] = 'New private message';
 $L['pm_putinarchives'] = 'Put in archives';
 $L['pm_replyto'] = 'Reply to this user';
