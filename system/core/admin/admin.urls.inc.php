@@ -385,15 +385,20 @@ $t -> assign(array(
 	"ADMIN_URLS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_URLS_II" => $ii,
 	"ADMIN_URLS_FORM_URL" => sed_url('admin', "m=urls&a=save"),
-	"ADMIN_URLS_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'add_url', url: '".sed_url('admin','m=urls&a=save&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_URLS_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'add_url', url: '".sed_url('admin','m=urls&a=save&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_URLS_AREABOX" => $areabox,
 	"ADMIN_URLS_ADMINWARNINGS" => $adminwarnings
 ));
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.urls.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("URLS");

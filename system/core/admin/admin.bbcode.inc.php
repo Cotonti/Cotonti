@@ -29,8 +29,13 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.bbcode.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if($a == 'add')
@@ -86,7 +91,7 @@ elseif($a == 'clearcache')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_bbcode);
-if($cfg['jquery'])
+if($cfg['jquery'] AND $cfg['turnajax'])
 {
 	$pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=bbcode&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=bbcode&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
@@ -131,12 +136,17 @@ while($row = sed_sql_fetchassoc($res))
 		"ADMIN_BBCODE_ROW_POSTRENDER" => $row['bbc_postrender'] ? ' checked="checked"' : '',
 		"ADMIN_BBCODE_ROW_UPDATE_URL" => sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id'].'&d='.$d),
 		"ADMIN_BBCODE_ROW_DELETE_URL" => sed_url('admin', 'm=bbcode&a=del&id='.$row['bbc_id']),
-        "ADMIN_BBCODE_ROW_ODDEVEN" => sed_build_oddeven($ii),
+		"ADMIN_BBCODE_ROW_ODDEVEN" => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	if(is_array($extp))
+	{
+		foreach($extp as $k => $pl)
+		{
+			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 	$t -> parse("BBCODE.ADMIN_BBCODE_ROW");
 	$ii++;
@@ -159,8 +169,6 @@ for($i = 1; $i < 256; $i++)
 	));
 	$t -> parse("BBCODE.ADMIN_BBCODE_PRIO");
 }
-$form_action = sed_url('admin', 'm=bbcode&a=add');
-$form_clear_cache = sed_url('admin', 'm=bbcode&a=clearcache&d='.$d);
 
 $t -> assign(array(
 	"ADMIN_BBCODE_AJAX_OPENDIVID" => 'pagtab',
@@ -170,14 +178,20 @@ $t -> assign(array(
 	"ADMIN_BBCODE_PAGINATION_NEXT" => $pagination_next,
 	"ADMIN_BBCODE_TOTALITEMS" => $totalitems,
 	"ADMIN_BBCODE_COUNTER_ROW" => $ii,
-	"ADMIN_BBCODE_FORM_ACTION" => $form_action,
-	"ADMIN_BBCODE_URL_CLEAR_CACHE" => $form_clear_cache,
+	"ADMIN_BBCODE_FORM_ACTION" => sed_url('admin', 'm=bbcode&a=add'),
+	"ADMIN_BBCODE_FORM_ACTION_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addbbcode', url: '".sed_url('admin','m=bbcode&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_BBCODE_URL_CLEAR_CACHE" => sed_url('admin', 'm=bbcode&a=clearcache&d='.$d),
 ));
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.bbcode.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("BBCODE");

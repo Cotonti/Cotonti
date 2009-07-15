@@ -78,7 +78,7 @@ elseif($a == 'delete')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_banlist);
-if($cfg['jquery'])
+if($cfg['jquery'] AND $cfg['turnajax'])
 {
 	$pagnav = sed_pagination(sed_url('admin','m=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=banlist&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=banlist&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
@@ -102,9 +102,9 @@ while($row = sed_sql_fetcharray($sql))
 	$t -> assign(array(
 		"ADMIN_BANLIST_ID_ROW" => $row['banlist_id'],
 		"ADMIN_BANLIST_URL" => sed_url('admin', 'm=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
-		"ADMIN_BANLIST_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savebanlist_".$row['banlist_id']."', url: '".sed_url('admin','m=banlist&a=update&ajax=1&id='.$row['banlist_id'].'&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_BANLIST_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savebanlist_".$row['banlist_id']."', url: '".sed_url('admin','m=banlist&a=update&ajax=1&id='.$row['banlist_id'].'&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_BANLIST_DELURL" => sed_url('admin', 'm=banlist&a=delete&id='.$row['banlist_id'].'&'.sed_xg()),
-		"ADMIN_BANLIST_DELURL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=banlist&ajax=1&a=delete&id='.$row['banlist_id'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_BANLIST_DELURL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=banlist&ajax=1&a=delete&id='.$row['banlist_id'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_BANLIST_EXPIRE" => ($row['banlist_expire']>0) ? date($cfg['dateformat'],$row['banlist_expire'])." GMT" : $L['adm_neverexpire'],
 		"ADMIN_BANLIST_IP" => $row['banlist_ip'],
 		"ADMIN_BANLIST_EMAIL" => $row['banlist_email'],
@@ -135,7 +135,7 @@ $t -> assign(array(
 	"ADMIN_BANLIST_TOTALITEMS" => $totalitems,
 	"ADMIN_BANLIST_COUNTER_ROW" => $ii,
 	"ADMIN_BANLIST_INC_URLFORMADD" => sed_url('admin', 'm=banlist&a=add'),
-	"ADMIN_BANLIST_INC_URLFORMADD_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addbanlist', url: '".sed_url('admin','m=banlist&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+	"ADMIN_BANLIST_INC_URLFORMADD_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addbanlist', url: '".sed_url('admin','m=banlist&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 ));
 
 /* === Hook  === */

@@ -222,7 +222,7 @@ switch($n)
 			$t -> assign(array(
 				"ADMIN_CONFIG_ROW_CONFIG_TITLE" => (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text)) ? $config_text : $config_title,
 				"ADMIN_CONFIG_ROW_CONFIG_MORE_URL" => sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name),
-				"ADMIN_CONFIG_ROW_CONFIG_MORE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=reset&ajax=1&v='.$config_name)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_CONFIG_ROW_CONFIG_MORE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=reset&ajax=1&v='.$config_name)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_CONFIG_ROW_CONFIG_MORE" => $config_more
 			));
 			/* === Hook - Part2 : Include === */
@@ -239,7 +239,7 @@ switch($n)
 
 		$t -> assign(array(
 			"ADMIN_CONFIG_FORM_URL" => sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=update"),
-			"ADMIN_CONFIG_FORM_URL_AJAX" => ($cfg['jquery']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saveconfig', url: '".sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=update&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+			"ADMIN_CONFIG_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saveconfig', url: '".sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=update&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 		));
 		/* === Hook  === */
 		$extp = sed_getextplugins('admin.config.edit.tags');
@@ -260,7 +260,7 @@ switch($n)
 		{
 			$t -> assign(array(
 				"ADMIN_CONFIG_ROW_CORE_URL" => sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat']),
-				"ADMIN_CONFIG_ROW_CORE_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=core&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_CONFIG_ROW_CORE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=core&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_CONFIG_ROW_CORE_NAME" => $L["core_".$row['config_cat']]
 			));
 			$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_CORE");
@@ -270,7 +270,7 @@ switch($n)
 		{
 			$t -> assign(array(
 				"ADMIN_CONFIG_ROW_PLUG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$row['config_cat']),
-				"ADMIN_CONFIG_ROW_PLUG_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=plug&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_CONFIG_ROW_PLUG_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=plug&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_CONFIG_ROW_PLUG_NAME" => $row['config_cat']
 			));
 			$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_PLUG");

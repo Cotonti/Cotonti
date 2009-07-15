@@ -47,7 +47,7 @@ if($a == 'delete')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_com);
-if($cfg['jquery'])
+if($cfg['jquery'] AND $cfg['turnajax'])
 {
 	$pagnav = sed_pagination(sed_url('admin','m=comments'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=comments&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=comments'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=comments&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
@@ -103,7 +103,7 @@ while($row = sed_sql_fetcharray($sql))
 
 	$t -> assign(array(
 		"ADMIN_COMMENTS_ITEM_DEL_URL" => sed_url('admin', "m=comments&a=delete&id=".$row['com_id']."&".sed_xg()),
-		"ADMIN_COMMENTS_ITEM_DEL_URL_AJAX" => ($cfg['jquery']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=comments&a=delete&ajax=1&id='.$row['com_id'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_COMMENTS_ITEM_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=comments&a=delete&ajax=1&id='.$row['com_id'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_COMMENTS_ITEM_ID" => $row['com_id'],
 		"ADMIN_COMMENTS_CODE" => $row['com_code'],
 		"ADMIN_COMMENTS_AUTHOR" => $row['com_author'],

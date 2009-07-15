@@ -71,6 +71,7 @@ $L['cfg_forcedefaultlang'] = array('Force the default language for all users', '
  */
 
 $L['cfg_adminemail'] = array('Administrator\'s e-mail', 'Required');
+$L['cfg_turnajax'] = array('Turn-off Ajax', 'Work only if jQuery Enabled');
 $L['cfg_cache'] = array('Internal cache', 'Keep it enabled for better performance');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
@@ -120,7 +121,7 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
  * Config Section
  * Page Subsection
  */
- 
+
 $L['cfg_allowphp_pages'] = array('Allow the PHP page type', 'Execution of PHP code in pages, use with caution!');
 $L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');	// New in N-0.0.2
 $L['cfg_count_admin'] = array('Count Administrators\' hits', '');	// New in N-0.0.1

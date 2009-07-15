@@ -36,31 +36,40 @@ $variants['forum'] = array($L['Forums'], "forum");
 /* === Hook === */
 $extp = sed_getextplugins('adim.polls.first');
 if(is_array($extp))
-{foreach($extp as $k => $pl){include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');}}
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if($a == 'delete')
 {
 	sed_check_xg();
 	sed_poll_delete($id);
+
 	$adminwarnings = $L['adm_polls_msg916_deleted'];
 }
 elseif($a == 'reset')
 {
 	sed_check_xg();
 	sed_poll_reset($id);
+
 	$adminwarnings = $L['adm_polls_msg916_reset'];
 }
 elseif($a == 'lock')
 {
 	sed_check_xg();
 	sed_poll_lock($id, 3);
+
 	$adminwarnings = $L['adm_polls_msg916_reset'];
 }
 elseif($a == 'bump')
 {
 	sed_check_xg();
 	$sql = sed_sql_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
+
 	$adminwarnings = $L['adm_polls_msg916_bump'];
 }
 
@@ -99,7 +108,7 @@ else
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
 $totalitems = sed_sql_result($sql, 0, "COUNT(*)");
-if($cfg['jquery'])
+if($cfg['jquery'] AND $cfg['turnajax'])
 {
 	$pagnav = sed_pagination(sed_url('admin','m=polls'.$poll_filter), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=polls&ajax=1'.$poll_filter)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=polls'.$poll_filter), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=polls&ajax=1'.$poll_filter)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
@@ -152,7 +161,7 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_POLLS_ROW_POLL_URL_RES" => sed_url('admin', "m=polls".$poll_filter."&a=reset&d=".$d."&id=".$id."&".sed_xg()),
 		"ADMIN_POLLS_ROW_POLL_URL_BMP" => sed_url('admin', "m=polls".$poll_filter."&a=bump&id=".$id."&".sed_xg()),
 		"ADMIN_POLLS_ROW_POLL_URL_OPN" => $admtypepoll,
-        "ADMIN_POLLS_ROW_POLL_ODDEVEN" => sed_build_oddeven($ii),
+		"ADMIN_POLLS_ROW_POLL_ODDEVEN" => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */

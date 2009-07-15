@@ -120,7 +120,7 @@ elseif($a == 'del' && isset($n))
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location='pages'"), 0, 0);
-if($cfg['jquery'])
+if($cfg['jquery'] AND $cfg['turnajax'])
 {
 	$pagnav = sed_pagination(sed_url('admin','m=page&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=extrafields&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&s=extrafields&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
