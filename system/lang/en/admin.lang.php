@@ -42,7 +42,7 @@ $L['cfg_countcomments'] = array('Count comments', 'Display the count of comments
 $L['cfg_disable_comments'] = array('Disable the comments', '');
 $L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default');	// New in N-0.0.2
 $L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' ');   // New in N-0.0.6
-$L['cfg_commentsize'] = array('Max. size of comment', 'In bytes (Zero for unlimit size). Default: 0');   // New in N-0.0.6
+$L['cfg_commentsize'] = array('Max. size of comment', 'In bytes (zero for unlimited size). Default: 0');   // New in N-0.0.6
 
 /**
  * Config Section
@@ -71,7 +71,7 @@ $L['cfg_forcedefaultlang'] = array('Force the default language for all users', '
  */
 
 $L['cfg_adminemail'] = array('Administrator\'s e-mail', 'Required');
-$L['cfg_turnajax'] = array('Turn-off Ajax', 'Work only if jQuery Enabled');
+$L['cfg_turnajax'] = array('Turn Ajax off', 'Works only if jQuery is enabled');
 $L['cfg_cache'] = array('Internal cache', 'Keep it enabled for better performance');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
@@ -287,6 +287,7 @@ $L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '
 $L['cfg_sig_maxsize'] = array('Signature, maximum file size', 'Default: 50000 bytes');
 $L['cfg_sig_maxx'] = array('Signature, maximum width', 'Default: 468 pixels');
 $L['cfg_sig_maxy'] = array('Signature, maximum height', 'Default: 60 pixels');
+$L['cfg_user_email_noprotection'] = array('Disable password protection of e-mail change', '\'No\' recommended, for security reasons');
 $L['cfg_useremailchange'] = array('Allow users to change their e-mail address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
 $L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300 chars');

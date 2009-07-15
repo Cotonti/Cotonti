@@ -368,7 +368,8 @@ function sed_loadconfigmap()
     $result[] = array ('users', '07', 'regrequireadmin', 3, '0',  '');
     $result[] = array ('users', '10', 'regnoactivation', 3, '0', '');
     $result[] = array ('users', '10', 'useremailchange', 3, '0', '');
-    $result[] = array ('users', '10', 'usertextimg', 3, '0', '');
+	$result[] = array ('users', '10', 'user_email_noprotection', 3, '0', '');
+    $result[] = array ('users', '11', 'usertextimg', 3, '0', '');
     $result[] = array ('users', '12', 'av_maxsize', 2, '8000', '');
     $result[] = array ('users', '12', 'av_maxx', 2, '64', '');
     $result[] = array ('users', '12', 'av_maxy', 2, '64', '');
