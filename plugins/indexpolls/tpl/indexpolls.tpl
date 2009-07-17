@@ -22,8 +22,8 @@
 	<td align="right">{POLL_PER}% ({POLL_COUNT})</td>
 </tr>
 <tr>
-	<td colspan="2" align="right">
-		<div style="width:180px; ">
+	<td colspan="2" align="left">
+		<div style="width:210px; ">
 			<div class="bar_back">
 				<div class="bar_front" id="pr_{POLL_PER}"></div>
 			</div>
