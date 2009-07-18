@@ -323,7 +323,7 @@ else
 		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 	}
 
-	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path+0 ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
