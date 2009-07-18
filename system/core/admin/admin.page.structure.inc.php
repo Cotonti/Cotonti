@@ -29,8 +29,13 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.page.structure.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if($n == 'options')
@@ -53,8 +58,13 @@ if($n == 'options')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.page.structure.options.update');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 
 		if($roww['structure_code'] != $rcode)
@@ -192,8 +202,13 @@ if($n == 'options')
 	));
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.page.structure.options.tags');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	if(is_array($extp))
+	{
+		foreach($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 	$t -> parse("PAGE_STRUCTURE.OPTIONS");
 }
@@ -212,8 +227,13 @@ else
 
 			/* === Hook === */
 			$extp = sed_getextplugins('admin.page.structure.update');
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			if(is_array($extp))
+			{
+				foreach($extp as $k => $pl)
+				{
+					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+				}
+			}
 			/* ===== */
 
 			if($roww['structure_code'] != $s[$i]['rcode'])
@@ -251,8 +271,13 @@ else
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.page.structure.add');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 
 		sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup);
@@ -265,8 +290,13 @@ else
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.page.structure.delete');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 
 		sed_structure_delcat($id, $c);
@@ -293,7 +323,7 @@ else
 		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 	}
 
-	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER by structure_path+0 ASC, structure_code ASC LIMIT $d,".$cfg['maxrowsperpage']);
+	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path+0 ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
@@ -343,12 +373,18 @@ else
 			"ADMIN_PAGE_STRUCTURE_JUMPTO_URL" => sed_url('list', "c=".$structure_code),
 			"ADMIN_PAGE_STRUCTURE_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=page&io=".$structure_code),
 			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL" => sed_url('admin', "m=page&s=structure&n=options&id=".$structure_id."&".sed_xg()),
-			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=page&s=structure&n=options&ajax=1&id='.$structure_id.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+			"ADMIN_PAGE_STRUCTURE_OPTIONS_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=page&s=structure&n=options&ajax=1&id='.$structure_id.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+			"ADMIN_PAGE_STRUCTURE_ODDEVEN" => sed_build_oddeven($ii)
 		));
 
 		/* === Hook - Part2 : Include === */
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 
 		$t -> parse("PAGE_STRUCTURE.DEFULT.ROW");
@@ -379,8 +415,13 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.page.structure.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("PAGE_STRUCTURE");
