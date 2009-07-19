@@ -3487,7 +3487,7 @@ function sed_selectbox_forumcat($check, $name)
 	global $usr, $sed_forums_str, $L;
 
 	$result =  "<select name=\"$name\" size=\"1\">";
-
+	if (is_array($sed_forums_str))
 	foreach($sed_forums_str as $i => $x)
 	{
 		$selected = ($i==$check) ? "selected=\"selected\"" : '';
