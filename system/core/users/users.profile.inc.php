@@ -621,6 +621,8 @@ if (!empty($error_string))
 	$t->parse("MAIN.USERS_PROFILE_ERROR");
 }
 
+$editor_class = $cfg['parsebbcodeusertext'] ? 'class="minieditor"' : '';
+
 $useredit_array = array(
 	"USERS_PROFILE_TITLE" => "<a href=\"".sed_url('users', 'm=profile')."\">".$L['pro_title']."</a>",
 	"USERS_PROFILE_SUBTITLE" => $L['pro_subtitle'],
@@ -633,8 +635,8 @@ $useredit_array = array(
 	"USERS_PROFILE_AVATAR" => $profile_form_avatar,
 	"USERS_PROFILE_PHOTO" => $profile_form_photo,
 	"USERS_PROFILE_SIGNATURE" => $profile_form_signature,
-	"USERS_PROFILE_TEXT" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"8\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
-	"USERS_PROFILE_TEXTBOXER" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"8\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
+	"USERS_PROFILE_TEXT" => "<textarea $editor_class name=\"rusertext\" rows=\"8\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
+	"USERS_PROFILE_TEXTBOXER" => "<textarea $editor_class name=\"rusertext\" rows=\"8\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
 	"USERS_PROFILE_EMAIL" => $profile_form_email,
 	"USERS_PROFILE_EMAILPASS" => "<input type=\"password\" class=\"password\" name=\"rmailpass\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,

@@ -101,7 +101,7 @@ if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='d
 		$pag['page_filecount']++;
 		$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$pag['page_id']);
 	}
-	if(preg_match('#^https?://#', $pag['page_url']))
+	if(preg_match('#^(http|ftp)s?://#', $pag['page_url']))
 	{
 		header("Location: ".$pag['page_url']);
 		echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
