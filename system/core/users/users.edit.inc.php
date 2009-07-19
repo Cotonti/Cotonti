@@ -148,7 +148,19 @@ if ($a=='update')
 		if ($ruserpmnotify=='')
 		{ $ruserpmnotify = $urr['user_pmnotify']; }
 
-		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? '' : sed_stamp2date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear));
+		if ($rmonth=='x' || $rday=='x' || $ryear=='x' || empty($rmonth) || empty($rday) || empty($ryear))
+		{
+			$ruserbirthdate = '';
+		}
+		else
+		{
+			$bdate = sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
+			if ($bdate > $sys['now_offset'])
+			{
+				$bdate = sed_mktime(1, 0, 0, $rmonth, $rday, date('Y', $sys['now_offset']) - 1);
+			}
+			$ruserbirthdate = sed_stamp2date($bdate);
+		}
 
 		if (!$ruserbanned)
 		{ $rbanexpire = 0; }
@@ -263,7 +275,7 @@ $user_form_username = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"te
 
 $user_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
 $user_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
-$user_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
+$user_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short', '', date('Y', $sys['now_offset']));
 $urr['user_lastip'] = sed_build_ipsearch($urr['user_lastip']);
 
 $title_tags[] = array('{EDIT}', '{NAME}');
