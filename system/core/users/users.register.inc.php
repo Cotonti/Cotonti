@@ -111,7 +111,19 @@ if ($a=='add')
 		{ $defgroup = ($cfg['regnoactivation']) ? 4 : 2; }
 
 		$mdpass = md5($rpassword1);
-		$ruserbirthdate = ($rmonth=='x' || $rday=='x' || $ryear=='x' || $rmonth==0 || $rday==0 || $ryear==0) ? '' : sed_stamp2date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear));
+		if ($rmonth=='x' || $rday=='x' || $ryear=='x' || empty($rmonth) || empty($rday) || empty($ryear))
+		{
+			$ruserbirthdate = '';
+		}
+		else
+		{
+			$bdate = sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
+			if ($bdate > $sys['now_offset'])
+			{
+				$bdate = sed_mktime(1, 0, 0, $rmonth, $rday, date('Y', $sys['now_offset']) - 1);
+			}
+			$ruserbirthdate = sed_stamp2date($bdate);
+		}
 
 		$validationkey = md5(microtime());
 		sed_shield_update(20, "Registration");
@@ -266,7 +278,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 }
 
 $form_usergender = sed_selectbox_gender($rusergender,'rusergender');
-$form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short');
+$form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']));
 
 $timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 

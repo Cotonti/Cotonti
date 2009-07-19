@@ -491,8 +491,19 @@ switch ($a)
 
 	if (empty($error_string))
 	{
-
-		$ruserbirthdate = ($rmonth==0 || $rday ==0 || $ryear==0) ? '' : sed_stamp2date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear));
+		if ($rmonth=='x' || $rday=='x' || $ryear=='x' || empty($rmonth) || empty($rday) || empty($ryear))
+		{
+			$ruserbirthdate = '';
+		}
+		else
+		{
+			$bdate = sed_mktime(1, 0, 0, $rmonth, $rday, $ryear);
+			if ($bdate > $sys['now_offset'])
+			{
+				$bdate = sed_mktime(1, 0, 0, $rmonth, $rday, date('Y', $sys['now_offset']) - 1);
+			}
+			$ruserbirthdate = sed_stamp2date($bdate);
+		}
 		// Extra fields
 		if(count($extrafields)>0)
 		{
@@ -562,7 +573,7 @@ $profile_form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateform
 
 $profile_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
 $profile_form_gender = sed_selectbox_gender($urr['user_gender'] ,'rusergender');
-$profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short');
+$profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short', '', date('Y', $sys['now_offset']));
 $profile_form_email = ($cfg['useremailchange']) ? "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />" : "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" disabled=\"disabled\" />";
 
 $profile_form_avatar .= (!empty($urr['user_avatar'])) ? "<img src=\"".$urr['user_avatar']."\" alt=\"\" /><br />".$L['Delete']." [<a href=\"" .sed_url('users', 'm=profile&a=avatardelete&'.sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
