@@ -35,7 +35,7 @@
 <script type="text/javascript">
 	function anim(){
 		$(".bar_front").each(function(){
-			var percentage = Math.floor(($(this).attr("id").replace('pr_','')*180)/100)+'px';
+			var percentage = Math.floor(($(this).attr("id").replace('pr_','')*210)/100)+'px';
 			if ($(this).attr("id")!=""){$(this).css({width:"0"}).animate({width: percentage}, "slow");}
 			$(this).attr("id","");
 		});
