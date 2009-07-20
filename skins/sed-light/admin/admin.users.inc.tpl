@@ -14,7 +14,8 @@
 <!-- BEGIN: ADMIN_USERS_DEFAULT -->
 			<table class="cells">
 			<tr>
-				<td  class="coltop">{PHP.L.Groups} {PHP.L.adm_clicktoedit}</td>
+				<td class="coltop">&nbsp;</td>
+				<td class="coltop">{PHP.L.Groups} {PHP.L.adm_clicktoedit}</td>
 				<td class="coltop">{PHP.L.Members}</td>
 				<td class="coltop" style="width:96px;">{PHP.L.Enabled}</td>
 				<td class="coltop" style="width:96px;">{PHP.L.Hidden}</td>
@@ -23,8 +24,9 @@
 			</tr>
 <!-- BEGIN: USERS_ROW -->
 			<tr>
-				<td><img src="images/admin/groups.gif" alt="" /><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}"{ADMIN_USERS_ROW_GRP_TITLE_URL_AJAX}>{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
 				<td style="text-align:center;">{ADMIN_USERS_ROW_GRP_ID}</td>
+				<td><img src="images/admin/groups.gif" alt="" /> <a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}"{ADMIN_USERS_ROW_GRP_TITLE_URL_AJAX}>{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
+				<td style="text-align:center;">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 				<td style="text-align:center;">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 				<td style="text-align:center;">{ADMIN_USERS_ROW_GRP_HIDDEN}</td>
 				<td style="text-align:center;"><a href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}"><img src="images/admin/rights.gif" alt="" /></a></td>
