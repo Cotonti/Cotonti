@@ -26,8 +26,13 @@ $lincif_extfld = sed_auth('admin', 'a', 'A');
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.users.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if($n == 'add')
@@ -49,8 +54,13 @@ if($n == 'add')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.users.add');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	if(is_array($extp))
+	{
+		foreach($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
 	$sql = sed_sql_query("SELECT * FROM $db_auth WHERE auth_groupid='".$ncopyrightsfrom."' order by auth_code ASC, auth_option ASC");
@@ -81,8 +91,13 @@ elseif($n == 'edit')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.users.update');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 
 		$rtitle = sed_sql_prep($rtitle);
@@ -104,8 +119,13 @@ elseif($n == 'edit')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.users.delete');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 		sed_auth_clear('all');
 		sed_cache_clear('sed_groups');
@@ -153,8 +173,13 @@ elseif($n == 'edit')
 		));
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.users.edit.tags');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		if(is_array($extp))
+		{
+			foreach($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 		$t -> parse("USERS.ADMIN_USERS_EDIT");
 	}
@@ -167,7 +192,9 @@ if(!isset($showdefault) OR $showdefault == true)
 	{
 		$members[$row['gru_groupid']] = $row['COUNT(*)'];
 	}
+
 	$sql = sed_sql_query("SELECT grp_id, grp_title, grp_disabled, grp_hidden FROM $db_groups WHERE 1 order by grp_level DESC, grp_id DESC");
+
 	if(sed_sql_numrows($sql) > 0)
 	{
 		while($row = sed_sql_fetcharray($sql))
@@ -178,7 +205,8 @@ if(!isset($showdefault) OR $showdefault == true)
 				"ADMIN_USERS_ROW_GRP_TITLE_URL" => sed_url('admin', "m=users&n=edit&g=".$row['grp_id']),
 				"ADMIN_USERS_ROW_GRP_TITLE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=users&ajax=1&n=edit&g='.$row['grp_id'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_USERS_ROW_GRP_TITLE" => sed_cc($row['grp_title']),
-				"ADMIN_USERS_ROW_GRP_ID" => $members[$row['grp_id']],
+				"ADMIN_USERS_ROW_GRP_ID" => $row['grp_id'],
+				"ADMIN_USERS_ROW_GRP_COUNT_MEMBERS" => $members[$row['grp_id']],
 				"ADMIN_USERS_ROW_GRP_DISABLED" => $sed_yesno[!$row['grp_disabled']],
 				"ADMIN_USERS_ROW_GRP_HIDDEN" => $sed_yesno[$row['grp_hidden']],
 				"ADMIN_USERS_ROW_GRP_RIGHTS_URL" => sed_url('admin', "m=rights&g=".$row['grp_id']),
@@ -187,6 +215,7 @@ if(!isset($showdefault) OR $showdefault == true)
 			$t -> parse("USERS.ADMIN_USERS_DEFAULT.USERS_ROW");
 		}
 	}
+
 	for($i = 1;$i < 100;$i++)
 	{
 		$t -> assign(array(
@@ -194,6 +223,7 @@ if(!isset($showdefault) OR $showdefault == true)
 		));
 		$t -> parse("USERS.ADMIN_USERS_DEFAULT.USERS_FORM_SELECT_NLEVEL");
 	}
+
 	$t -> assign(array(
 		"ADMIN_USERS_FORM_URL" => sed_url('admin', "m=users&n=add"),
 		"ADMIN_USERS_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addlevel', url: '".sed_url('admin','m=users&ajax=1&n=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
@@ -213,8 +243,13 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.users.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+if(is_array($extp))
+{
+	foreach($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("USERS");
