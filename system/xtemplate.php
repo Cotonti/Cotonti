@@ -159,7 +159,9 @@ class XTemplate
 				$this->blocks[$name] = new Xtpl_block($this->blocks, $bdata, $name);
 				$data = str_replace($mt[0], '', $data);
 			}
-			if (is_writeable($cache)) file_put_contents($cache, serialize($this->blocks));
+			if (is_writeable($cfg['cache_dir'] . '/skins/')) file_put_contents($cache, serialize($this->blocks));
+			else throw new Exception('Your <em>' . $cfg['cache_dir'] . '/skins/</em> is not writable');
+
 		}
 		else $this->blocks = unserialize(file_get_contents($cache));
 	}
@@ -224,7 +226,7 @@ class Xtpl_data
 	public $data = '';
 
 	/**
-	 * Block constructor, precompiler
+	 * Block constructor
 	 *
 	 * @param string $data TPL contents
 	 */
@@ -237,6 +239,7 @@ class Xtpl_data
 	/**
 	 * Returns parsed block contents
 	 *
+	 * @param XTemplate $xtpl Reference to XTemplate object
 	 * @return string Block data
 	 */
 	public function text($xtpl)
@@ -308,8 +311,10 @@ class Xtpl_block
 	/**
 	 * Block constructor
 	 *
-	 * @param XTemplate $xtpl XTemplate object reference
+	 * @param array $blk Reference to XTemplate blocks hashtable
 	 * @param string $data TPL contents
+	 * @param string $name Block name
+	 * @param string $path Block parent path
 	 */
 	public function __construct(&$blk, $data, $name, $path = '')
 	{
@@ -345,6 +350,8 @@ class Xtpl_block
 
 	/**
 	 * Parses block contents
+	 *
+	 * @param XTemplate $xtpl Reference to XTemplate object
 	 */
 	public function parse($xtpl)
 	{
