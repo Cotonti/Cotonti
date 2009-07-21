@@ -37,6 +37,7 @@ $cfg['defaulttheme'] = 'sed-light';	// Default theme, only name, not like skinna
 $cfg['defaultlang'] = 'en';		// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
+$cfg['xtpl_cache'] = TRUE;		// Enable XTemplate structure disk cache
 $cfg['html_cleanup'] = FALSE;	// Wipe extra spaces and breaks from HTML to get smaller footprint
 
 // ========================

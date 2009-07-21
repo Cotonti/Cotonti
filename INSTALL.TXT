@@ -76,6 +76,7 @@ $cfg['mainurl']
    This can easily be performed trough your FTP software.
    The directories that needs to be changed is:
 
+/datas/cache/ (and all its subfolders)
 /datas/defaultav/
 /datas/avatars/
 /datas/photos/

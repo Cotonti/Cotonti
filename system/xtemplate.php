@@ -144,8 +144,8 @@ class XTemplate
 			return FALSE;
 		}
 		$this->filename = $path;
-		$cache = $cfg['cache_dir'] . '/skins/' . str_replace('/', '_', $path);
-		if (!file_exists($cache) || filectime($path) > filectime($cache))
+		$cache = $cfg['cache_dir'] . '/skins/' . str_replace(array('./', '/'), '_', $path);
+		if (!$cfg['xtpl_cache'] || !file_exists($cache) || filemtime($path) > filemtime($cache))
 		{
 			$this->blocks = array();
 			$data = file_get_contents($path);
@@ -159,8 +159,13 @@ class XTemplate
 				$this->blocks[$name] = new Xtpl_block($this->blocks, $bdata, $name);
 				$data = str_replace($mt[0], '', $data);
 			}
-			if (is_writeable($cfg['cache_dir'] . '/skins/')) file_put_contents($cache, serialize($this->blocks));
-			else throw new Exception('Your <em>' . $cfg['cache_dir'] . '/skins/</em> is not writable');
+			if ($cfg['xtpl_cache'])
+			{
+				if (is_writeable($cfg['cache_dir'] . '/skins/'))
+					file_put_contents($cache, serialize($this->blocks));
+				else
+					throw new Exception('Your <em>' . $cfg['cache_dir'] . '/skins/</em> is not writable');
+			}
 
 		}
 		else $this->blocks = unserialize(file_get_contents($cache));
@@ -284,8 +289,11 @@ class Xtpl_data
 	 */
 	private function cleanup($html)
 	{
-		$html = preg_replace('#[\r\n\t ]+<#', '<', $html);
-		$html = preg_replace('#>[\r\n\t ]+#', '>', $html);
+		$html = preg_replace('#\n\s+#', "\n", $html);
+		$html = preg_replace('#[\r\n\t]+<#', '<', $html);
+		$html = preg_replace('# {2,}<#', '<', $html);
+		$html = preg_replace('#>[\r\n\t]+#', '>', $html);
+		$html = preg_replace('#> {2,}#', '>', $html);
 		return $html;
 	}
 }
