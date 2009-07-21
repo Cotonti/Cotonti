@@ -1,10 +1,10 @@
 <?php
 /**
- * XTemplate 2.0 class library. Fast and lightweight block template engine
+ * XTemplate 2.1 class library. Fast and lightweight block template engine
  * written specially for Cotonti.
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.0.7
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) 2009 Cotonti Team
  * @license BSD
@@ -75,43 +75,32 @@ class XTemplate
 			return $res;
 		}
 		// Get the first operand which must be a variable
-		if ($expr[0] == '!')
+		if (preg_match('`^(!?)\{([\w_\.]+)\}`', $expr, $m))
 		{
-			$inv = TRUE;
-			$expr = mb_substr($expr, 1);
+			$inv = $m[1] == '!';
+			$val = $this->get_var($m[2]);
+			if (preg_match('`'. preg_quote($m[0]) .'\s*(==|!=|>=|<=|>|<)\s*(.*)$`', $expr, $m2))
+			{
+				// Get the operator and second operand
+				$val2 = trim($m2[2]);
+				if (preg_match('`^\{([\w_\.]+)\}$`', $val2, $m3)) $val2 = $this->get_var($m3[1]);
+				elseif (preg_match('`^(\'|")(.*)\\1$`', $val2, $m3)) $val2 = $m3[2];
+				// Apply operator
+				switch ($m2[1])
+				{
+					case '==': $res = $val == $val2; break;
+					case '!=': $res = $val != $val2; break;
+					case '>': $res = $val > $val2; break;
+					case '<': $res = $val < $val2; break;
+					case '>=': $res = $val >= $val2; break;
+					case '<=': $res = $val <= $val2; break;
+					default: $res = FALSE;
+				}
+				return $inv ? !$res : $res;
+			}
+			else return $inv ? !$val : $val;
 		}
-		else $inv = FALSE;
-		$p1 = mb_strpos($expr, '{');
-		if ($p1 === FALSE) throw new Exception('Invalid logical block ' . sed_cc($expr) . ' present in '
-			. $this->filename);
-		$p2 = mb_strpos($expr, '}', $p1 + 1);
-		if ($p2 === FALSE) throw new Exception('Variable tag is not closed in logical block ' . sed_cc($expr)
-			. ' present in ' . $this->filename);
-		$name = mb_substr($expr, $p1 + 1, $p2 - $p1 - 1);
-		$val = $this->get_var($name);
-		$expr = trim(mb_substr($expr, $p2 + 1));
-		if (empty($expr)) return $inv ? !$val : $val;
-		// Get the operator and second operand
-		$p1 = mb_strpos($expr, ' ');
-		if ($p1 === FALSE) throw new Exception('Missing spaces in logical block ' . sed_cc($expr) . ' in file '
-			. $this->filename);
-		$op = mb_substr($expr, 0, $p1);
-		$expr = trim(mb_substr($expr, $p1 + 1));
-		if ($expr[0] == '{') $val2 = $this->evaluate($expr);
-		elseif (is_numeric($expr)) $val2 = $expr;
-		else $val2 = str_replace(array('"', "'"), '', $expr);
-		// Apply operator
-		switch ($op)
-		{
-			case '==': $res = $val == $val2; break;
-			case '!=': $res = $val != $val2; break;
-			case '>': $res = $val > $val2; break;
-			case '<': $res = $val < $val2; break;
-			case '>=': $res = $val >= $val2; break;
-			case '<=': $res = $val <= $val2; break;
-			default: $res = FALSE;
-		}
-		return $inv ? !$res : $res;
+		else return $expr;
 	}
 
 	/**
@@ -155,25 +144,24 @@ class XTemplate
 			return FALSE;
 		}
 		$this->filename = $path;
-		$this->blocks = array();
-		$data = file_get_contents($path);
-		// Remove BOM if present
-		if ($data[0] == chr(0xEF) && $data[1] == chr(0xBB) && $data[2] == chr(0xBF)) $data = mb_substr($data, 0);
-		// Get root-level blocks
-		while (($pos = mb_strpos($data, '<!-- BEGIN: ')) !== FALSE)
+		$cache = $cfg['cache_dir'] . '/skins/' . str_replace('/', '_', $path);
+		if (!file_exists($cache) || filectime($path) > filectime($cache))
 		{
-			$pos2 = mb_strpos($data, ' -->', $pos + 13);
-			$name = mb_substr($data, $pos + 12, $pos2 - $pos - 12);
-			$begin = '<!-- BEGIN: ' . $name . ' -->';
-			$b_len = mb_strlen($begin);
-			$end = '<!-- END: ' . $name . ' -->';
-			$e_pos = mb_strpos($data, $end);
-			if ($e_pos === FALSE) throw new Exception("Block $name is not closed correctly in $path");
-			$e_len = mb_strlen($end);
-			$bdata = trim(mb_substr($data, $pos + $b_len, $e_pos - $pos - $b_len), " \r\n\t");
-			$this->blocks[$name] = new Xtpl_block($this, $bdata, $name);
-			$data = mb_substr($data, $e_pos + $e_len);
+			$this->blocks = array();
+			$data = file_get_contents($path);
+			// Remove BOM if present
+			if ($data[0] == chr(0xEF) && $data[1] == chr(0xBB) && $data[2] == chr(0xBF)) $data = mb_substr($data, 0);
+			// Get root-level blocks
+			while (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\\1\s*-->`s', $data, $mt))
+			{
+				$name = $mt[1];
+				$bdata = trim($mt[2], " \r\n\t");
+				$this->blocks[$name] = new Xtpl_block($this->blocks, $bdata, $name);
+				$data = str_replace($mt[0], '', $data);
+			}
+			if (is_writeable($cache)) file_put_contents($cache, serialize($this->blocks));
 		}
+		else $this->blocks = unserialize(file_get_contents($cache));
 	}
 
 	/**
@@ -193,7 +181,7 @@ class XTemplate
 	 */
 	public function parse($block = 'MAIN')
 	{
-		if (is_object($this->blocks[$block])) $this->blocks[$block]->parse();
+		if (is_object($this->blocks[$block])) $this->blocks[$block]->parse($this);
 		//else throw new Exception("Block $block is not found in " . $this->filename);
 	}
 
@@ -231,36 +219,19 @@ class XTemplate
 class Xtpl_data
 {
 	/**
-	 * @var XTemplate Parent XTemplate object reference
-	 */
-	public $xtpl = NULL;
-	/**
-	 * @var string Block data (HTML/TPL)
+	 * @var array Block data (HTML/TPL)
 	 */
 	public $data = '';
 
 	/**
-	 * Block constructor
+	 * Block constructor, precompiler
 	 *
 	 * @param string $data TPL contents
 	 */
-	public function __construct($xtpl, $data)
+	public function __construct($data)
 	{
-		$this->xtpl = $xtpl;
-		$this->data = $data;
-	}
-
-	/**
-	 * Variable substitution callback
-	 * 
-	 * @param array $input Preg match array
-	 * @return string Variable value
-	 */
-	private function replace($input)
-	{
-		$val = $this->xtpl->get_var($input[1]);
-		if (is_null($val)) return ''; //$input[0];
-		else return $val;
+		global $cfg;
+		$this->data = $cfg['html_cleanup'] ? $this->cleanup($data) : $data;
 	}
 
 	/**
@@ -268,7 +239,7 @@ class Xtpl_data
 	 *
 	 * @return string Block data
 	 */
-	public function text()
+	public function text($xtpl)
 	{
 		$data = $this->data;
 		// Apply logical operators
@@ -278,27 +249,41 @@ class Xtpl_data
 			$expr = mb_substr($data, $p1 + 8, $p2 - $p1 - 8);
 			$p3 = mb_strpos($data, '<!-- ENDIF -->');
 			if ($p3 === FALSE) throw new Exception('Logical block '.sed_cc($expr).' is not closed correctly in '
-				. $this->xtpl->filename);
+				. $xtpl->filename);
 			$bdata = mb_substr($data, $p2 + 4, $p3 - $p2 - 4);
 			if (($p4 = mb_strpos($bdata, '<!-- ELSE -->')) !== FALSE)
 			{
 				$bdata1 = mb_substr($bdata, 0, $p4);
 				$bdata2 = mb_substr($bdata, $p4 + 13);
-				if ($this->xtpl->evaluate($expr))
+				if ($xtpl->evaluate($expr))
 					$data = mb_substr($data, 0, $p1) . $bdata1 . mb_substr($data, $p3 + 14);
 				else
 					$data = mb_substr($data, 0, $p1) . $bdata2 . mb_substr($data, $p3 + 14);
 			}
 			else
 			{
-				if ($this->xtpl->evaluate($expr))
+				if ($xtpl->evaluate($expr))
 					$data = mb_substr($data, 0, $p1) . $bdata . mb_substr($data, $p3 + 14);
 				else
 					$data = mb_substr($data, 0, $p1) . mb_substr($data, $p3 + 14);
 			}
 		}
-		// Parse variables
-		return preg_replace_callback('`{([\w_\.]+)}`', array($this, 'replace'), $data);
+		if(preg_match_all('`\{([\w_.]+)\}`', $data, $mt, PREG_SET_ORDER))
+			foreach ($mt as $m) $data = str_replace($m[0], $xtpl->get_var($m[1]), $data);
+		return $data;
+	}
+
+	/**
+	 * Trims spaces before and after tags
+	 *
+	 * @param string $html Source HTML
+	 * @return string Cleaned HTML
+	 */
+	private function cleanup($html)
+	{
+		$html = preg_replace('#[\r\n\t ]+<#', '<', $html);
+		$html = preg_replace('#>[\r\n\t ]+#', '>', $html);
+		return $html;
 	}
 }
 
@@ -312,17 +297,9 @@ class Xtpl_block
 	 */
 	public $name = '';
 	/**
-	 * @var XTemplate Parent XTemplate object reference
-	 */
-	public $xtpl = NULL;
-	/**
 	 * @var array Parsed block instances
 	 */
 	public $data = array();
-	/**
-	 * @var int Pointer to current parsed block instance
-	 */
-	public $ptr = 0;
 	/**
 	 * @var array<Xtpl_data> Contained blocks
 	 */
@@ -334,55 +311,45 @@ class Xtpl_block
 	 * @param XTemplate $xtpl XTemplate object reference
 	 * @param string $data TPL contents
 	 */
-	public function __construct($xtpl, $data, $name, $path = '')
+	public function __construct(&$blk, $data, $name, $path = '')
 	{
-		$this->xtpl = $xtpl;
 		$this->name = $name;
 		$path = empty($path) ? $name : $path . '.' . $name;
 		// Split the data into nested blocks
 		while (!empty($data))
 		{
-			$pos = mb_strpos($data, '<!-- BEGIN: ');
-			if ($pos === FALSE)
+			if (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\\1\s*-->`s',
+					$data, $mt, PREG_OFFSET_CAPTURE))
 			{
-				$this->blocks[] = new Xtpl_data($xtpl, $data);
-				$data = '';
+				// Save plain data
+				$chunk = trim(mb_substr($data, 0, $mt[0][1]), " \r\n\t");
+				if (!empty($chunk)) $this->blocks[] = new Xtpl_data($chunk);
+				// Get a nested block
+				$name = $mt[1][0];
+				$bdata = trim($mt[2][0], " \r\n\t");
+				// Create block object and link to it
+				$block = new Xtpl_block($blk, $bdata, $name, $path);
+				$blk[$path . '.' . $name] = $block;
+				$this->blocks[] = $block;
+				// Procceed with less data
+				$data = mb_substr($data, $mt[0][1] + mb_strlen($mt[0][0]));
+				$data = trim($data, " \r\n\t");
 			}
 			else
 			{
-				// Save plain data
-				$chunk = trim(mb_substr($data, 0, $pos), " \r\n\t");
-				if (!empty($chunk)) $this->blocks[] = new Xtpl_data($xtpl, $chunk);
-				// Get a nested block
-				$pos2 = mb_strpos($data, ' -->', $pos + 13);
-				$name = mb_substr($data, $pos + 12, $pos2 - $pos - 12);
-				$begin = '<!-- BEGIN: ' . $name . ' -->';
-				$b_len = mb_strlen($begin);
-				$end = '<!-- END: ' . $name . ' -->';
-				$e_len = mb_strlen($end);
-				$e_pos = mb_strpos($data, $end, $pos2 + 4);
-				if ($e_pos === FALSE) throw new Exception("Block $name is not closed correctly in "
-					. $this->xtpl->filename);
-				$bdata = mb_substr($data, $pos2 + 4, $e_pos - $pos2 - 4);
-				// Create block object and link to it
-				$block = new Xtpl_block($xtpl, $bdata, $name, $path);
-				$this->xtpl->blocks[$path . '.' . $name] = $block;
-				$this->blocks[] = $block;
-				// Procceed with less data
-				$data = mb_substr($data, $e_pos + $e_len);
+				$this->blocks[] = new Xtpl_data($data);
+				break;
 			}
-			$data = trim($data, " \r\n\t");
 		}
 	}
 
 	/**
 	 * Parses block contents
 	 */
-	public function parse()
+	public function parse($xtpl)
 	{
-		foreach ($this->blocks as $block) $data .= $block->text();
-		$this->data[$this->ptr] = $data;
-		$this->ptr++;
+		foreach ($this->blocks as $block) $data .= $block->text($xtpl);
+		$this->data[] = $data;
 	}
 
 	/**

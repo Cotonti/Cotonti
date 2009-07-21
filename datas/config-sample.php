@@ -37,6 +37,8 @@ $cfg['defaulttheme'] = 'sed-light';	// Default theme, only name, not like skinna
 $cfg['defaultlang'] = 'en';		// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
+$cfg['html_cleanup'] = FALSE;	// Wipe extra spaces and breaks from HTML to get smaller footprint
+
 // ========================
 // Default built-in time zone settings
 // See http://php.net/manual/en/timezones.php
@@ -65,13 +67,14 @@ $cfg['customfuncs'] = FALSE;			// Includes file named functions.custom.php
 // Set it to custom if you want to share
 // folders among different hosts.
 // ========================
-$cfg['plugins_dir'] = './plugins';
-$cfg['system_dir'] = './system';
-$cfg['pfs_dir'] = 'datas/users/';
-$cfg['av_dir'] = 'datas/avatars/';
-$cfg['photos_dir'] = 'datas/photos/';
-$cfg['sig_dir'] = 'datas/signatures/';
+$cfg['av_dir'] = '.datas/avatars/';
+$cfg['cache_dir'] = './datas/cache';
 $cfg['defav_dir'] = 'datas/defaultav/';
+$cfg['pfs_dir'] = 'datas/users/';
+$cfg['photos_dir'] = 'datas/photos/';
+$cfg['plugins_dir'] = './plugins';
+$cfg['sig_dir'] = 'datas/signatures/';
+$cfg['system_dir'] = './system';
 $cfg['th_dir'] = 'datas/thumbs/';
 
 // ========================
