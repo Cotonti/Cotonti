@@ -70,8 +70,9 @@ if(sed_sql_numrows($sql) > 0)
 {
 	while($row = mysql_fetch_array($sql))
 	{
-		preg_match_all("|//([^/]+)/|", $row['ref_url'], $a);
-		$referers[$a[1][0]][$row['ref_url']] = $row['ref_count'];
+		preg_match("#//([^/]+)/#", $row['ref_url'], $a);
+		$host = preg_replace('#^www.#i', '', $a[1]);
+		$referers[$host][$row['ref_url']] = $row['ref_count'];
 	}
 
 	$ii = 0;
@@ -81,13 +82,12 @@ if(sed_sql_numrows($sql) > 0)
 	foreach($referers as $referer => $url)
 	{
 
-		$t -> assign(array("ADMIN_REFERERS_REFERER" => htmlspecialchars($referer)));
-		$t -> parse("REFERERS.REFERERS_ROW");
-
+		$t->assign(array("ADMIN_REFERERS_REFERER" => htmlspecialchars($referer)));
+		
 		foreach($url as $uri => $count)
 		{
 			$t -> assign(array(
-				"ADMIN_REFERERS_URI" => htmlspecialchars(sed_cutstring($uri, 48)),
+				"ADMIN_REFERERS_URI" => htmlspecialchars(sed_cutstring($uri, 128)),
 				"ADMIN_REFERERS_COUNT" => $count,
 				"ADMIN_REFERERS_ODDEVEN" => sed_build_oddeven($ii)
 			));
@@ -102,6 +102,7 @@ if(sed_sql_numrows($sql) > 0)
 			/* ===== */
 			$t -> parse("REFERERS.REFERERS_ROW.REFERERS_URI");
 		}
+		$t->parse("REFERERS.REFERERS_ROW");
 		$ii++;
 	}
 	$is_ref_empty = true;
