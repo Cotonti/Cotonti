@@ -3845,6 +3845,8 @@ function sed_shield_update($shield_add, $shield_newaction)
 function sed_skinfile($base, $plug = false, $admn = false)
 {
 	global $usr, $cfg;
+	if (defined('SED_PLUG')) $plug = TRUE;
+	if (defined('SED_ADMIN')) $admn = TRUE;
 	if (strstr($base, '.')) $base = explode('.', $base);
 	if ($plug)
 	{
@@ -3916,8 +3918,8 @@ function sed_skinfile($base, $plug = false, $admn = false)
 			}
 		}
 	}
-	$skinfile = is_array($base) ? implode('.', $base) . '.tpl' : $base . '.tpl';
-	throw new Exception("Template file <em>$skinfile</em> was not found. Please check your skin!");
+	//$skinfile = is_array($base) ? implode('.', $base) . '.tpl' : $base . '.tpl';
+	//throw new Exception("Template file <em>$skinfile</em> was not found. Please check your skin!");
 	return '';
 }
 
