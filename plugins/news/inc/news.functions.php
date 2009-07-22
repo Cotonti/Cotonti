@@ -11,18 +11,18 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=false, $d=0, $order=false, $way=false)
+function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=false, $d=0)
 {
-    global $sed_cat, $db_pages, $db_users, $db_extra_fields, $sys, $cfg, $L, $t;
-    global $usr, $sed_dbc, $sed_urltrans;
+    global $sed_cat, $db_pages, $db_users, $db_extra_fields, $sys, $cfg, $L, $t,
+           $usr, $sed_dbc, $sed_urltrans;
     $jj = 0;
     $mtch = $sed_cat[$cat]['path'].".";
     $mtchlen = mb_strlen($mtch);
     $catsub = array();
     $catsub[] = $cat;
     if(!$limit){$limit=$cfg['maxrowsperpage'];}
-    if(!$order){$order=$sed_cat[$cat]['order'];}
-    if(!$way){$way=$sed_cat[$cat]['way'];}
+    $order=$sed_cat[$cat]['order'];
+    $way=$sed_cat[$cat]['way'];
     foreach($sed_cat as $i => $x)
     {
         if(mb_substr($x['path'], 0, $mtchlen) == $mtch && sed_auth('page', $i, 'R')){
@@ -106,7 +106,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
                 break;
 
             case '2':
-				if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
+                if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
                 {
                     ob_start();
                     eval($pag['page_text']);
@@ -161,11 +161,15 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
 
         $news->parse("NEWS.PAGE_ROW");
     }
-
-    $news-> assign(array(
+    if($deftag=="INDEX_NEWS")
+    {
+        $news-> assign(array(
         "PAGE_PAGENAV" => $pagnav,
         "PAGE_PAGEPREV" => $pages_prev,
         "PAGE_PAGENEXT" => $pages_next,
+            ));
+    }
+    $news-> assign(array(
         "PAGE_SUBMITNEWPOST" => $submitnewpage,
         "PAGE_CAT" => $cat,
         ));
