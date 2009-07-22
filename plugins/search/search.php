@@ -648,10 +648,21 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 // Otherwise use common search
 else
 {
-	// If forums are enabled
-	if(!$cfg['disable_forums'])
+	// Parameter import
+	if ($d > 0 && !empty($pre))
 	{
-		if ($d > 0 && !empty($pre))
+		if (!$cfg['disable_pages'])
+		{
+			$sea_pagtitle = $_SESSION['sea_pagtitle'];
+			$sea_pagdesc = $_SESSION['sea_pagdesc'];
+			$sea_pagtext = $_SESSION['sea_pagtext'];
+			$sea_pagfile = $_SESSION['sea_pagfile'];
+			$sea_pagsort = $_SESSION['sea_pagsort'];
+			$sea_pagsort2 = $_SESSION['sea_pagsort2'];
+			$sea_pagsub = $_SESSION['sea_pagsub'];
+		}
+
+		if (!$cfg['disable_forums'])
 		{
 			$sea_frmtitle = $_SESSION['sea_frmtitle'];
 			$sea_frmtext = $_SESSION['sea_frmtext'];
@@ -660,7 +671,22 @@ else
 			$sea_frmsort2 = $_SESSION['sea_frmsort2'];
 			$sea_frmsub = $_SESSION['sea_frmsub'];
 		}
-		else
+	}
+	else
+	{
+		if (!$cfg['disable_pages'])
+		{
+			$sea_pagtitle = sed_import('sea_pagtitle','P','INT');
+			$sea_pagdesc = sed_import('sea_pagdesc','P','INT');
+			$sea_pagtext = sed_import('sea_pagtext','P','INT');
+			$sea_pagfile = sed_import('sea_pagfile','P','INT');
+			$sea_pagsort = sed_import('sea_pagsort','P','INT');
+			$sea_pagsort2 = sed_sql_prep(sed_import('sea_pagsort2','P','TXT'));
+			$sea_pagsub = sed_import('sea_pagsub','P','ARR');
+			if (count($sea_pagsub) == 0) $sea_pagsub = array('all');
+		}
+
+		if (!$cfg['disable_forums'])
 		{
 			$sea_frmtitle = sed_import('sea_frmtitle','P','INT');
 			$sea_frmtext = sed_import('sea_frmtext','P','INT');
@@ -668,6 +694,32 @@ else
 			$sea_frmsort = sed_import('sea_frmsort','P','INT');
 			$sea_frmsort2 = sed_sql_prep(sed_import('sea_frmsort2','P','TXT'));
 			$sea_frmsub = sed_import('sea_frmsub','P','ARR');
+			if (count($sea_frmsub) == 0) $sea_frmsub = array('all');
+		}
+
+		if (empty($sea_pagtitle) && empty($sea_pagdesc) && empty($sea_pagtext)
+			&& empty($sea_frmtitle) && empty($sea_frmtext))
+		{
+			$sea_pagtitle = 1;
+			$sea_pagdesc = 1;
+			$sea_pagtext = 1;
+			$sea_frmtitle = 1;
+			$sea_frmtext = 1;
+		}
+
+		if (!$cfg['disable_pages'])
+		{
+			$_SESSION['sea_pagtitle'] = $sea_pagtitle;
+			$_SESSION['sea_pagdesc'] = $sea_pagdesc;
+			$_SESSION['sea_pagtext'] = $sea_pagtext;
+			$_SESSION['sea_pagfile'] = $sea_pagfile;
+			$_SESSION['sea_pagsort'] = $sea_pagsort;
+			$_SESSION['sea_pagsort2'] = $sea_pagsort2;
+			$_SESSION['sea_pagsub'] = $sea_pagsub;
+		}
+
+		if (!$cfg['disable_forums'])
+		{
 			$_SESSION['sea_frmtitle'] = $sea_frmtitle;
 			$_SESSION['sea_frmtext'] = $sea_frmtext;
 			$_SESSION['sea_frmreply'] = $sea_frmreply;
@@ -675,14 +727,11 @@ else
 			$_SESSION['sea_frmsort2'] = $sea_frmsort2;
 			$_SESSION['sea_frmsub'] = $sea_frmsub;
 		}
+	}
 
-		if (count($sea_frmsub) == 0) $sea_frmsub = array('all');
-		if (empty($sea_frmtitle) && empty($sea_frmtext))
-		{
-			$sea_frmtitle = 1;
-			$sea_frmtext = 1;
-		}
-
+	// If forums are enabled
+	if(!$cfg['disable_forums'])
+	{
 		$sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
 			LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
 			ORDER by fn_path ASC, fs_order ASC");
@@ -725,43 +774,6 @@ else
 	// If pages are enabled
 	if(!$cfg['disable_page'])
 	{
-		if ($d > 0 && !empty($pre))
-		{
-			$sea_pagtitle = $_SESSION['sea_pagtitle'];
-			$sea_pagdesc = $_SESSION['sea_pagdesc'];
-			$sea_pagtext = $_SESSION['sea_pagtext'];
-			$sea_pagfile = $_SESSION['sea_pagfile'];
-			$sea_pagsort = $_SESSION['sea_pagsort'];
-			$sea_pagsort2 = $_SESSION['sea_pagsort2'];
-			$sea_pagsub = $_SESSION['sea_pagsub'];
-		}
-		else
-		{
-			$sea_pagtitle = sed_import('sea_pagtitle','P','INT');
-			$sea_pagdesc = sed_import('sea_pagdesc','P','INT');
-			$sea_pagtext = sed_import('sea_pagtext','P','INT');
-			$sea_pagfile = sed_import('sea_pagfile','P','INT');
-			$sea_pagsort = sed_import('sea_pagsort','P','INT');
-			$sea_pagsort2 = sed_sql_prep(sed_import('sea_pagsort2','P','TXT'));
-			$sea_pagsub = sed_import('sea_pagsub','P','ARR');
-
-			if (count($sea_pagsub) == 0) $sea_pagsub = array('all');
-			if (empty($sea_pagtitle) && empty($sea_pagdesc) && empty($sea_pagtext))
-			{
-				$sea_pagtitle = 1;
-				$sea_pagdesc = 1;
-				$sea_pagtext = 1;
-			}
-
-			$_SESSION['sea_pagtitle'] = $sea_pagtitle;
-			$_SESSION['sea_pagdesc'] = $sea_pagdesc;
-			$_SESSION['sea_pagtext'] = $sea_pagtext;
-			$_SESSION['sea_pagfile'] = $sea_pagfile;
-			$_SESSION['sea_pagsort'] = $sea_pagsort;
-			$_SESSION['sea_pagsort2'] = $sea_pagsort2;
-			$_SESSION['sea_pagsub'] = $sea_pagsub;
-		}
-
 		// Category list
 		$plugin_page_sec_list  = "<select multiple name='sea_pagsub[]' size='6' style='width:385px'>";
 		$plugin_page_sec_list .= "<option value='all'".(($sea_pagsub[0]=='all' || count($sea_pagsub)==0)?" selected='selected'":"").">".$L['plu_allcategories']."</option>";
