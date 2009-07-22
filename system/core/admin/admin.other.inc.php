@@ -67,6 +67,7 @@ $lincif_user = sed_auth('users', 'a', 'A');
 
 $t -> assign(array(
 	"ADMIN_OTHER_URL_CACHE" => sed_url('admin', "m=cache"),
+	"ADMIN_OTHER_URL_DISKCACHE" => sed_url('admin', "m=cache&s=disk"),
 	"ADMIN_OTHER_URL_BBCODE" => sed_url('admin', "m=bbcode"),
 	"ADMIN_OTHER_URL_URLS" => sed_url('admin', "m=urls"),
 	"ADMIN_OTHER_URL_BANLIST" => sed_url('admin', "m=banlist"),

@@ -521,6 +521,7 @@ $L['adm_help_ratings'] = 'To reset a rating, simply delete it. It will be re-cre
 $L['adm_delcacheitem'] = 'Cache item removed';	// New in N-0.0.2
 $L['adm_internalcache'] = 'Internal cache';
 $L['adm_purgeall_done'] = 'Cache cleared completely';	// New in N-0.0.2
+$L['adm_diskcache'] = 'Disk cache';	// New in 0.0.7
 
 /**
  * Other Section
