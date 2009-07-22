@@ -1,0 +1,228 @@
+<?php
+/**
+ * Administration panel - Disk cache
+ *
+ * @package Cotonti
+ * @version 0.0.7
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
+(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
+sed_block($usr['isadmin']);
+
+$t = new XTemplate(sed_skinfile('admin.cache.disk.inc', false, true));
+
+$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(sed_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
+
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int)$ajax;
+
+/* === Hook === */
+$extp = sed_getextplugins('admin.cache.disk.first');
+if (is_array($extp))
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'] . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
+/* ===== */
+
+if ($a == 'purge')
+{
+	$adminwarnings = (sed_check_xg() && sed_diskcache_clearall()) ? $L['adm_purgeall_done'] : $L['Error'];
+}
+elseif ($a == 'delete')
+{
+	$is_id = mb_strpos($id, '/') === false && mb_strpos($id, '\\') === false && $id != '.' && $id != '..';
+	$adminwarnings = (sed_check_xg() && $is_id && sed_diskcache_clear($cfg['cache_dir'] . ($id != '*' ? "/$id" : ''), $id != '*')) ? $L['adm_delcacheitem'] : $L['Error'];
+}
+
+$is_adminwarnings = isset($adminwarnings);
+
+$row = sed_diskcache_list();
+$cachefiles = $cachesize = 0;
+$ii = 0;
+
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.cache.disk.loop');
+/* ===== */
+foreach ($row as $i => $x)
+{
+	$cachefiles += $x[0];
+	$cachesize += $x[1];
+	$t->assign(array(
+		'ADMIN_DISKCACHE_ITEM_DEL_URL' => sed_url('admin', 'm=cache&s=disk&a=delete&id=' . $i . '&' . sed_xg()),
+		'ADMIN_DISKCACHE_ITEM_DEL_URL_AJAX' => ($cfg['jquery'] && $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '" . sed_url('admin', 'm=cache&s=disk&a=delete&id=' . $i . '&ajax=1&' . sed_xg()) . "', divId: 'pagtab', errMsg: '" . $L['ajaxSenderror'] . "'});\"" : '',
+		'ADMIN_DISKCACHE_ITEM_NAME' => $i,
+		'ADMIN_DISKCACHE_FILES' => $x[0],
+		'ADMIN_DISKCACHE_SIZE' => $x[1],
+		'ADMIN_DISKCACHE_ROW_ODDEVEN' => sed_build_oddeven($ii)
+	));
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include($cfg['plugins_dir'] . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+		}
+	}
+	/* ===== */
+
+	$t->parse('DISKCACHE.ADMIN_DISKCACHE_ROW');
+	$ii++;
+}
+
+$t->assign(array(
+	'ADMIN_DISKCACHE_AJAX_OPENDIVID' => 'pagtab',
+	'ADMIN_DISKCACHE_URL_PURGE' => sed_url('admin', 'm=cache&s=disk&a=purge&' . sed_xg()),
+	'ADMIN_DISKCACHE_URL_PURGE_AJAX' => ($cfg['jquery'] && $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '" . sed_url('admin', 'm=cache&s=disk&a=purge&ajax=1&' . sed_xg()) . "', divId: 'pagtab', errMsg: '" . $L['ajaxSenderror'] . "'});\"" : '',
+	'ADMIN_DISKCACHE_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_DISKCACHE_CACHEFILES' => $cachefiles,
+	'ADMIN_DISKCACHE_CACHESIZE' => $cachesize
+));
+
+/* === Hook === */
+$extp = sed_getextplugins('admin.cache.disk.tags');
+if (is_array($extp))
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'] . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+	}
+}
+/* ===== */
+
+$t->parse('DISKCACHE');
+$adminmain = $t->text('DISKCACHE');
+
+if ($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
+
+return;
+
+/**
+ * Returns file counters for directory
+ * It's helper function for sed_diskcache_list()
+ *
+ * @param string $dir Directory name
+ * @param bool $do_subdir true when enter subdirectories, otherwise false
+ * @return array
+ */
+function sed_diskcache_counters($dir, $do_subdir = true)
+{
+	$cnt = $sz = 0;
+
+	foreach (glob("$dir/*") as $f)
+	{
+		if (is_file($f))
+		{
+			$cnt++;
+			$sz += @filesize($f);
+		}
+		elseif (is_dir($f) && $do_subdir)
+		{
+			$a = sed_diskcache_counters($f, $do_subdir);
+			$cnt += $a[0]/*files*/ + 1/*directory*/;
+			$sz += $a[1];
+		}
+	}
+
+	return array($cnt, $sz);
+}
+
+/**
+ * Returns list of non-empty subdirectories in disk cache directory
+ *
+ * @global $cfg
+ * @return array
+ */
+function sed_diskcache_list()
+{
+	global $cfg;
+
+	$dir_a = array();
+
+	$a = sed_diskcache_counters($cfg['cache_dir'], false);
+	if ($a[0])
+	{
+		$dir_a['*'] = $a;
+	}
+
+	$pos = mb_strlen($cfg['cache_dir']) + 1;
+	foreach (glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR) as $dir)
+	{
+		$a = sed_diskcache_counters($dir);
+		if ($a[0])
+		{
+			$dir_a[mb_substr($dir, $pos)] = $a;
+		}
+	}
+
+	return $dir_a;
+}
+
+/**
+ * Clears disk cache directory
+ *
+ * @param string $dir Directory name
+ * @param bool $do_subdir true when enter subdirectories, otherwise false
+ * @param bool $self_erase true when erase directory, otherwise false
+ * @return bool
+ */
+function sed_diskcache_clear($dir, $do_subdir = true, $self_erase = false)
+{
+	if (!is_dir($dir) || !is_writable($dir))
+	{
+		return false;
+	}
+
+	foreach (glob("$dir/*") as $f)
+	{
+		if (is_file($f))
+		{
+			@unlink($f);
+		}
+		elseif (is_dir($f) && $do_subdir)
+		{
+			sed_diskcache_clear($f, $do_subdir, true);
+		}
+	}
+
+	if ($self_erase)
+	{
+		@rmdir($dir);
+	}
+
+	return true;
+}
+
+/**
+ * Clears disk cache completely
+ *
+ * @global $cfg
+ * @return bool
+ */
+function sed_diskcache_clearall()
+{
+	global $cfg;
+
+	sed_diskcache_clear($cfg['cache_dir'], false);
+	foreach (glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR) as $dir)
+	{
+		sed_diskcache_clear($dir);
+	}
+
+	return true;
+}
+?>
