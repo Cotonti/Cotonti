@@ -164,7 +164,7 @@ class XTemplate
 				if (is_writeable($cfg['cache_dir'] . '/skins/'))
 					file_put_contents($cache, serialize($this->blocks));
 				else
-					throw new Exception('Your <em>' . $cfg['cache_dir'] . '/skins/</em> is not writable');
+					throw new Exception('Your "' . $cfg['cache_dir'] . '/skins/" is not writable');
 			}
 
 		}
@@ -256,7 +256,7 @@ class Xtpl_data
 			$p2 = mb_strpos($data, ' -->', $p1 + 8);
 			$expr = mb_substr($data, $p1 + 8, $p2 - $p1 - 8);
 			$p3 = mb_strpos($data, '<!-- ENDIF -->');
-			if ($p3 === FALSE) throw new Exception('Logical block '.sed_cc($expr).' is not closed correctly in '
+			if ($p3 === FALSE) throw new Exception('Logical block "'.sed_cc($expr).'" is not closed correctly in '
 				. $xtpl->filename);
 			$bdata = mb_substr($data, $p2 + 4, $p3 - $p2 - 4);
 			if (($p4 = mb_strpos($bdata, '<!-- ELSE -->')) !== FALSE)
@@ -291,9 +291,8 @@ class Xtpl_data
 	{
 		$html = preg_replace('#\n\s+#', "\n", $html);
 		$html = preg_replace('#[\r\n\t]+<#', '<', $html);
-		$html = preg_replace('# {2,}<#', '<', $html);
 		$html = preg_replace('#>[\r\n\t]+#', '>', $html);
-		$html = preg_replace('#> {2,}#', '>', $html);
+		$html = preg_replace('# {2,}#', ' ', $html);
 		return $html;
 	}
 }
