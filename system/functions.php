@@ -1378,6 +1378,15 @@ function sed_build_ratings($code, $url, $display)
 		$rating_average = 0;
 		$rating_cntround = 0;
 	}
+
+	if($ajax)
+	{
+		ob_clean();
+		echo $rating_cntround;
+		ob_flush();
+		exit;
+	}
+
 	$rating_fancy =  '';
 	for($i = 1; $i <= 10; $i++)
 	{
@@ -1390,17 +1399,7 @@ function sed_build_ratings($code, $url, $display)
 		return array($rating_fancy, '');
 	}
 
-	if($ajax)
-	{
-		ob_clean();
-		echo $rating_fancy;
-		ob_flush();
-		exit;
-	}
-
 	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
-
-	$t = new XTemplate(sed_skinfile('ratings'));
 
 	$inr = sed_import('inr','G','ALP');
 	$newrate = sed_import('rate_' . $code,'P','INT');
@@ -1464,6 +1463,9 @@ function sed_build_ratings($code, $url, $display)
 			$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
 		}
 	}
+
+	$t = new XTemplate(sed_skinfile('ratings'));
+
 	if (!$called && $usr['id'] > 0 && !$alreadyvoted)
 	{
 		// Link JS and CSS
