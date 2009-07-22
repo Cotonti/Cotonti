@@ -1353,6 +1353,13 @@ function sed_build_ratings($code, $url, $display)
 		return (array('',''));
 	}
 
+	$ajax = sed_import('ajax', 'G', 'BOL');
+	if ($ajax)
+	{
+		$rcode = sed_import('rcode', 'G', 'ALP');
+		if (!empty($rcode)) $code = $rcode;
+	}
+
 	$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
 
 	if($row = sed_sql_fetcharray($sql))
@@ -1374,17 +1381,16 @@ function sed_build_ratings($code, $url, $display)
 	$rating_fancy =  '';
 	for($i = 1; $i <= 10; $i++)
 	{
-		$checked = $i == $rating_cntround ? 'checked="checked"' : '';
-		$star_class = ($i <= $rating_cntround) ? 'star star_group_newrate star_readonly star_on' : 'star star_group_newrate star_readonly';
+		$star_class = ($i <= $rating_cntround) ? 'star-rating star-rating-on' : 'star-rating star-rating-readonly';
 		$star_margin = (in_array(($i/2), array(1,2,3,4,5))) ? '-8' : '0';
-		$rating_fancy .= '<div style="width: 8px;" class="'.$star_class.'"><a style="margin-left: '.$star_margin.'px;" tabindex="'.$i.'" title="'.$L['rat_choice' . $i].'">&nbsp;</a></div>';
+		$rating_fancy .= '<div style="width: 8px;" class="'.$star_class.'"><a style="margin-left: '.$star_margin.'px;" title="'.$L['rat_choice' . $i].'">'.$i.'</a></div>';
 	}
 	if(!$display)
 	{
 		return array($rating_fancy, '');
 	}
 
-	if($_GET['ajax'])
+	if($ajax)
 	{
 		ob_clean();
 		echo $rating_fancy;
@@ -1397,7 +1403,7 @@ function sed_build_ratings($code, $url, $display)
 	$t = new XTemplate(sed_skinfile('ratings'));
 
 	$inr = sed_import('inr','G','ALP');
-	$newrate = sed_import('newrate','P','INT');
+	$newrate = sed_import('rate_' . $code,'P','INT');
 
 	$newrate = (!empty($newrate)) ? $newrate : 0;
 
@@ -1410,7 +1416,7 @@ function sed_build_ratings($code, $url, $display)
 		$alr_rated = 0;
 	}
 
-	if ($inr=='send' && $newrate>=0 && $newrate<=10 && $usr['auth_write_rat'] && $alr_rated<=0)
+	if ($inr == 'send' && $newrate >= 0 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0)
 	{
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.first');
@@ -1434,7 +1440,9 @@ function sed_build_ratings($code, $url, $display)
 			$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
 		}
 		else
-			{ $sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$code' "); }
+		{
+			$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$code' ");
+		}
 
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.done');
@@ -1446,7 +1454,7 @@ function sed_build_ratings($code, $url, $display)
 		exit;
 	}
 
-	if ($usr['id']>0)
+	if ($usr['id'] > 0)
 	{
 		$sql1 = sed_sql_query("SELECT rated_value FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' LIMIT 1");
 
@@ -1456,11 +1464,11 @@ function sed_build_ratings($code, $url, $display)
 			$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
 		}
 	}
-	if(!$called && $usr['id']>0 && !$alreadyvoted)
+	if (!$called && $usr['id'] > 0 && !$alreadyvoted)
 	{
 		// Link JS and CSS
 		$sep = mb_strstr($url, '?') ? '&' : '?';
-		$t->assign('RATINGS_AJAX_REQUEST', $url . $sep .'ajax=true');
+		$t->assign('RATINGS_AJAX_REQUEST', $url . $sep .'ajax=1');
 		$t->parse('RATINGS.RATINGS_INCLUDES');
 		$called = true;
 	}
@@ -1497,13 +1505,14 @@ function sed_build_ratings($code, $url, $display)
 	}
 
 	$t->assign(array(
-	"RATINGS_AVERAGE" => $rating_average,
-	"RATINGS_RATING" => $rating,
-	"RATINGS_AVERAGEIMG" => $rating_averageimg,
-	"RATINGS_VOTERS" => $rating_voters,
-	"RATINGS_SINCE" => $rating_since,
-	"RATINGS_FANCYIMG" => $rating_fancy,
-	"RATINGS_USERVOTE" => $rating_uservote
+		'RATINGS_CODE' => $code,
+		'RATINGS_AVERAGE' => $rating_average,
+		'RATINGS_RATING' => $rating,
+		'RATINGS_AVERAGEIMG' => $rating_averageimg,
+		'RATINGS_VOTERS' => $rating_voters,
+		'RATINGS_SINCE' => $rating_since,
+		'RATINGS_FANCYIMG' => $rating_fancy,
+		'RATINGS_USERVOTE' => $rating_uservote
 	));
 
 	/* == Hook for the plugins == */

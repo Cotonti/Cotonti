@@ -152,8 +152,8 @@ $submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ?
 $pagination = sed_pagination(sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p"), $d, $totallines, $cfg['maxrowsperpage']);
 list($pageprev, $pagenext) = sed_pagination_pn(sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p"), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
 
-list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=$c'), $comments);
-list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=$c'), $ratings);
+list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=' . $c), $comments);
+list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=' . $c), $ratings);
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
 $title_tags[] = array('{TITLE}');
@@ -321,7 +321,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
 	$pag['page_comments'] = "<a href=\"".sed_url('page', $page_urlp, '#comments')."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
 	$pag['admin'] = $usr['isadmin'] ? "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a> &nbsp;<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a> " : '';
-	list($list_ratings, $list_ratings_display) = sed_build_ratings('p'.$pag['page_id'], '', $ratings);
+	list($list_ratings, $list_ratings_display) = sed_build_ratings('p'.$pag['page_id'], sed_url('page', 'id='.$pag['page_id']), $ratings);
 	$t-> assign(array(
 	"LIST_ROW_URL" => $pag['page_pageurl'],
 	"LIST_ROW_ID" => $pag['page_id'],
