@@ -166,10 +166,10 @@ class XTemplate
 			}
 			if ($cfg['xtpl_cache'])
 			{
-				if (is_writeable($cfg['cache_dir'] . '/skins/'))
+				if (is_writeable($cfg['cache_dir'] . '/templates/'))
 					file_put_contents($cache, serialize($this->blocks));
 				else
-					throw new Exception('Your "' . $cfg['cache_dir'] . '/skins/" is not writable');
+					throw new Exception('Your "' . $cfg['cache_dir'] . '/templates/" is not writable');
 			}
 
 		}
