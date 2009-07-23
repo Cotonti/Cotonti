@@ -4,7 +4,7 @@
  * written specially for Cotonti.
  *
  * @package Cotonti
- * @version 0.0.7
+ * @version 0.6.1
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) 2009 Cotonti Team
  * @license BSD
@@ -144,15 +144,20 @@ class XTemplate
 			return FALSE;
 		}
 		$this->filename = $path;
-		$cache = $cfg['cache_dir'] . '/skins/' . str_replace(array('./', '/'), '_', $path);
+		$cache = $cfg['cache_dir'] . '/templates/' . str_replace(array('./', '/'), '_', $path);
 		if (!$cfg['xtpl_cache'] || !file_exists($cache) || filemtime($path) > filemtime($cache))
 		{
 			$this->blocks = array();
 			$data = file_get_contents($path);
 			// Remove BOM if present
 			if ($data[0] == chr(0xEF) && $data[1] == chr(0xBB) && $data[2] == chr(0xBF)) $data = mb_substr($data, 0);
+			// FILE includes
+			if (preg_match_all('`\{FILE\s+("|\')?(.+?)\\1\}`', $data, $mt, PREG_SET_ORDER))
+				foreach ($mt as $m)
+					if (preg_match('`\.tpl$`i', $m[2]) && file_exists($m[2]))
+						$data = str_replace($m[0], file_get_contents($m[2]), $data);
 			// Get root-level blocks
-			while (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\\1\s*-->`s', $data, $mt))
+			while (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s', $data, $mt))
 			{
 				$name = $mt[1];
 				$bdata = trim($mt[2], " \r\n\t");
@@ -276,7 +281,7 @@ class Xtpl_data
 					$data = mb_substr($data, 0, $p1) . mb_substr($data, $p3 + 14);
 			}
 		}
-		if(preg_match_all('`\{([\w_.]+)\}`', $data, $mt, PREG_SET_ORDER))
+		if (preg_match_all('`\{([\w_.]+)\}`', $data, $mt, PREG_SET_ORDER))
 			foreach ($mt as $m) $data = str_replace($m[0], $xtpl->get_var($m[1]), $data);
 		return $data;
 	}
@@ -330,21 +335,22 @@ class Xtpl_block
 		// Split the data into nested blocks
 		while (!empty($data))
 		{
-			if (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\\1\s*-->`s',
-					$data, $mt, PREG_OFFSET_CAPTURE))
+			if (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s', $data, $mt))
 			{
 				// Save plain data
-				$chunk = trim(mb_substr($data, 0, $mt[0][1]), " \r\n\t");
+				$pos = mb_strpos($data, $mt[0]);
+				$chunk = trim(mb_substr($data, 0, $pos), " \r\n\t");
+				$data = mb_substr($data, $pos);
 				if (!empty($chunk)) $this->blocks[] = new Xtpl_data($chunk);
 				// Get a nested block
-				$name = $mt[1][0];
-				$bdata = trim($mt[2][0], " \r\n\t");
+				$name = $mt[1];
+				$bdata = trim($mt[2], " \r\n\t");
 				// Create block object and link to it
 				$block = new Xtpl_block($blk, $bdata, $name, $path);
 				$blk[$path . '.' . $name] = $block;
 				$this->blocks[] = $block;
 				// Procceed with less data
-				$data = mb_substr($data, $mt[0][1] + mb_strlen($mt[0][0]));
+				$data = str_replace($mt[0], '', $data);
 				$data = trim($data, " \r\n\t");
 			}
 			else
