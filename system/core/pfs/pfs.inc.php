@@ -440,7 +440,7 @@ while ($row = sed_sql_fetcharray($sqll))
 	unset($add_thumbnail, $add_image);
 	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" title=\"Add as file url\" /></a>" : '';
 
-	if ($pfs_extension!=$pfs_realext);
+	if ($pfs_extension!=$pfs_realext)
 	{
 		$sql1 = sed_sql_query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' " );
 		$pfs_extension = $pfs_realext;
