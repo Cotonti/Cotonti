@@ -496,7 +496,9 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'forums', '13', 'maxpostsperpage', 2, '15', '', ''),
 ('core', 'page', '05', 'maxlistsperpage', 2, '15', '', ''),
 ('core', 'pfs', '06', 'maxpfsperpage', 2, '15', '', ''),
-('core', 'pm', '11', 'maxpmperpage', 2, '15', '', '');
+('core', 'pm', '11', 'maxpmperpage', 2, '15', '', ''),
+('core', 'main', '29', 'redirbkonlogin', 3, '1', '', ''),
+('core', 'main', '29', 'redirbkonlogout', 3, '1', '', '');
 
 CREATE TABLE `sed_core` (
   `ct_id` mediumint(8) NOT NULL auto_increment,

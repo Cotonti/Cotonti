@@ -87,6 +87,8 @@ $L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should bett
 $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
 $L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
 $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
+$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');	// New in N-0.6.1
+$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');	// New in N-0.6.1
 
 /**
  * Config Section
@@ -521,7 +523,7 @@ $L['adm_help_ratings'] = 'To reset a rating, simply delete it. It will be re-cre
 $L['adm_delcacheitem'] = 'Cache item removed';	// New in N-0.0.2
 $L['adm_internalcache'] = 'Internal cache';
 $L['adm_purgeall_done'] = 'Cache cleared completely';	// New in N-0.0.2
-$L['adm_diskcache'] = 'Disk cache';	// New in 0.0.7
+$L['adm_diskcache'] = 'Disk cache';	// New in N-0.6.1
 
 /**
  * Other Section

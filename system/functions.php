@@ -4616,7 +4616,9 @@ function sed_store_uriredir()
 	$script = basename($_SERVER['SCRIPT_NAME']);
 	parse_str($_SERVER['QUERY_STRING'], $query_a);
 
-	if (!empty($script)
+	if ($_SERVER['REQUEST_METHOD'] != 'POST' // not form action/POST
+		&& empty($query_a['x']) // not xg, hence not form action/GET
+		&& !empty($script)
 		&& $script != 'message.php' // not message location
 		&& ($script != 'users.php' // not login/logout location
 			|| empty($query_a['m'])
@@ -4631,13 +4633,14 @@ function sed_store_uriredir()
 /**
  * Apply URI-redir that stored in session
  *
+ * @param bool $cfg_redir Configuration of redirect back
  * @global $redirect
  */
-function sed_apply_uriredir()
+function sed_apply_uriredir($cfg_redir = true)
 {
 	global $redirect;
 
-	if (empty($redirect) && !empty($_SESSION['s_uri_redir']))
+	if ($cfg_redir && empty($redirect) && !empty($_SESSION['s_uri_redir']))
 	{
 		$redirect = $_SESSION['s_uri_redir'];
 	}
