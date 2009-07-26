@@ -257,6 +257,8 @@ function sed_loadconfigmap()
     $result[] = array ('main', '20', 'shieldenabled', 3, '0', '');
     $result[] = array ('main', '20', 'shieldtadjust', 2, '100', array(10,25,50,75,100,125,150,200,300,400,600,800));
     $result[] = array ('main', '20', 'shieldzhammer', 2, '25', array(5,10,15,20,25,30,40,50,100));
+    $result[] = array ('main', '29', 'redirbkonlogin', 3, '1', ''); // N-0.6.1
+    $result[] = array ('main', '29', 'redirbkonlogout', 3, '1', ''); // N-0.6.1
     $result[] = array ('main', '30', 'jquery', 3, '1', '');
     $result[] = array ('main', '31', 'turnajax', 3, '1', '');
     $result[] = array ('parser', '10', 'parser_cache', 3, '1', '');

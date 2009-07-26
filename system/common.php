@@ -84,8 +84,8 @@ $sys['host'] = strstr($_SERVER['HTTP_HOST'], $sys['domain']) ? $_SERVER['HTTP_HO
 $sys['abs_url'] = $url['scheme'] . '://' . $sys['host']. $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
 
-$sys['uri'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ? mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
-$sys['uri_redir'] = base64_encode($sys['uri']);
+$sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ? mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
+$sys['uri_redir'] = base64_encode($sys['uri_curr']);
 $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
 $redirect = sed_import('redirect','G','SLU');
 
