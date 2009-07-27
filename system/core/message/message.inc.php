@@ -147,7 +147,7 @@ if($rc!='')
 
 	if(!strstr($r["$rc"], '://'))
 	{
-		$r["$rc"] = SED_ABSOLUTE_URL . ltrim($r["$rc"], '/');
+		$r["$rc"] = SED_ABSOLUTE_URL . $r["$rc"];
 	}
 
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
