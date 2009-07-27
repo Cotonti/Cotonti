@@ -4609,7 +4609,7 @@ function sed_urldecode($str, $translit = false)
  *
  * @global $sys
  */
-function sed_store_uriredir()
+function sed_uriredir_store()
 {
 	global $sys;
 
@@ -4636,7 +4636,7 @@ function sed_store_uriredir()
  * @param bool $cfg_redir Configuration of redirect back
  * @global $redirect
  */
-function sed_apply_uriredir($cfg_redir = true)
+function sed_uriredir_apply($cfg_redir = true)
 {
 	global $redirect;
 

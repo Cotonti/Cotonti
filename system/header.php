@@ -11,7 +11,7 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-sed_store_uriredir();
+sed_uriredir_store();
 
 /* === Hook === */
 $extp = sed_getextplugins('header.first');

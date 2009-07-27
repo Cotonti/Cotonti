@@ -3,13 +3,15 @@
  * Administration panel - Disk cache
  *
  * @package Cotonti
- * @version 0.0.7
+ * @version 0.6.1
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
 (defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+
+define('SED_DISKCACHE_ONLYFILES', '*files*');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
@@ -40,7 +42,8 @@ if ($a == 'purge')
 elseif ($a == 'delete')
 {
 	$is_id = mb_strpos($id, '/') === false && mb_strpos($id, '\\') === false && $id != '.' && $id != '..';
-	$adminwarnings = (sed_check_xg() && $is_id && sed_diskcache_clear($cfg['cache_dir'] . ($id != '*' ? "/$id" : ''), $id != '*')) ? $L['adm_delcacheitem'] : $L['Error'];
+	$is_onlyf = $id == SED_DISKCACHE_ONLYFILES;
+	$adminwarnings = (sed_check_xg() && $is_id && sed_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf)) ? $L['adm_delcacheitem'] : $L['Error'];
 }
 
 $is_adminwarnings = isset($adminwarnings);
@@ -112,14 +115,14 @@ if ($ajax)
 return;
 
 /**
- * Returns file counters for directory
+ * Calculates directory size
  * It's helper function for sed_diskcache_list()
  *
  * @param string $dir Directory name
- * @param bool $do_subdir true when enter subdirectories, otherwise false
+ * @param bool $do_subdirs true when enter subdirectories, otherwise false
  * @return array
  */
-function sed_diskcache_counters($dir, $do_subdir = true)
+function sed_diskcache_calc($dir, $do_subdirs = true)
 {
 	$cnt = $sz = 0;
 
@@ -130,9 +133,9 @@ function sed_diskcache_counters($dir, $do_subdir = true)
 			$cnt++;
 			$sz += @filesize($f);
 		}
-		elseif (is_dir($f) && $do_subdir)
+		elseif (is_dir($f) && $do_subdirs)
 		{
-			$a = sed_diskcache_counters($f, $do_subdir);
+			$a = sed_diskcache_calc($f);
 			$cnt += $a[0]/*files*/ + 1/*directory*/;
 			$sz += $a[1];
 		}
@@ -153,16 +156,16 @@ function sed_diskcache_list()
 
 	$dir_a = array();
 
-	$a = sed_diskcache_counters($cfg['cache_dir'], false);
+	$a = sed_diskcache_calc($cfg['cache_dir'], false);
 	if ($a[0])
 	{
-		$dir_a['*'] = $a;
+		$dir_a[SED_DISKCACHE_ONLYFILES] = $a;
 	}
 
 	$pos = mb_strlen($cfg['cache_dir']) + 1;
 	foreach (glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR) as $dir)
 	{
-		$a = sed_diskcache_counters($dir);
+		$a = sed_diskcache_calc($dir);
 		if ($a[0])
 		{
 			$dir_a[mb_substr($dir, $pos)] = $a;
@@ -176,11 +179,11 @@ function sed_diskcache_list()
  * Clears disk cache directory
  *
  * @param string $dir Directory name
- * @param bool $do_subdir true when enter subdirectories, otherwise false
- * @param bool $self_erase true when erase directory, otherwise false
+ * @param bool $do_subdirs true when enter subdirectories, otherwise false
+ * @param bool $rm_dir true when remove directory, otherwise false
  * @return bool
  */
-function sed_diskcache_clear($dir, $do_subdir = true, $self_erase = false)
+function sed_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
 {
 	if (!is_dir($dir) || !is_writable($dir))
 	{
@@ -193,13 +196,13 @@ function sed_diskcache_clear($dir, $do_subdir = true, $self_erase = false)
 		{
 			@unlink($f);
 		}
-		elseif (is_dir($f) && $do_subdir)
+		elseif (is_dir($f) && $do_subdirs)
 		{
-			sed_diskcache_clear($f, $do_subdir, true);
+			sed_diskcache_clear($f, true, true);
 		}
 	}
 
-	if ($self_erase)
+	if ($rm_dir)
 	{
 		@rmdir($dir);
 	}

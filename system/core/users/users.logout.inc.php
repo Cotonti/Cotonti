@@ -29,7 +29,7 @@ if (is_array($extp))
 
 if ($usr['id'] > 0)
 {
-	sed_apply_uriredir($cfg['redirbkonlogout']);
+	sed_uriredir_apply($cfg['redirbkonlogout']);
 }
 
 if(!empty($_COOKIE[$sys['site_id']]))
