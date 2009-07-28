@@ -15,8 +15,8 @@
 					{PHP.L.Key} : {ADMIN_PAGE_QUEUE_PAGE_KEY}<br />
 					{PHP.L.Alias} : {ADMIN_PAGE_QUEUE_PAGE_ALIAS}<br />
 					<a href="{ADMIN_PAGE_QUEUE_PAGE_URL_FOR_VALIDATED}">{PHP.L.Validate}</a> <a href="{ADMIN_PAGE_QUEUE_PAGE_URL_FOR_EDIT}">{PHP.L.Edit}</a>
-				</li>
 				<hr />
+                </li>
 <!-- END: PAGE_QUEUE_ROW -->
 <!-- IF {PHP.is_row_empty} -->
 				<li>{PHP.L.None}</li>

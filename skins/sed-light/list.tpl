@@ -19,7 +19,9 @@
 			<tr>
 				<td style="background:transparent;">
 					<strong><a href="{LIST_ROWCAT_URL}">{LIST_ROWCAT_TITLE} ...</a></strong><br />
+                    <!-- IF {LIST_ROWCAT_DESC} -->
 					<span class="desc">{LIST_ROWCAT_DESC}</span>
+                    <!-- ENDIF -->
 				</td>
 			</tr>
 			<!-- END: LIST_ROWCAT -->

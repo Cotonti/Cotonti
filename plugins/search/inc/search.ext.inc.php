@@ -49,7 +49,7 @@ if($within > 0)
 
 
 $html_code_java = <<<HTM
-<script language="javascript">
+<script type="text/javascript">
 
 function evaluateDates() {
 	var form = document.forms.search;
@@ -169,14 +169,14 @@ $html_code_date = "
 	<td><div style='padding-right:3px'><input style='width:20px' maxlength='2' size='2' type='text' name='from_day' value='".$from_day."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_day(this)' /></div><div class='cells_com'>".$L['plu_need_dd']."</div></td>
 	<td><div style='padding-right:3px'><input style='width:20px' maxlength='2' size='2' type='text' name='from_month' value='".$from_month."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_month(this)' /></div><div class='cells_com'>".$L['plu_need_mm']."</div></td>
 	<td><div><input style='width:34px' maxlength='4' size='4' type='text' name='from_year' value='".$from_year."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_year(this)' /></div><div class='cells_com'>".$L['plu_need_yy']."</div></td>
-	<td style='padding:0 6px 20px 6px'>&#151;</td>
+	<td style='padding:0 6px 20px 6px'></td>
 	<td><div style='padding-right:3px'><input style='width:20px' maxlength='2' size='2' type='text' name='to_day' value='".$to_day."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_day(this)' /></div><div class='cells_com'>".$L['plu_need_dd']."</div></td>
 	<td><div style='padding-right:3px'><input style='width:20px' maxlength='2' size='2' type='text' name='to_month' value='".$to_month."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_month(this)' /></div><div class='cells_com'>".$L['plu_need_mm']."</div></td>
 	<td><div><input style='width:34px' maxlength='4' size='4' type='text' name='to_year' value='".$to_year."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_year(this)' /></div><div class='cells_com'>".$L['plu_need_yy']."</div></td>
 </tr>
 </table>
 </div>
-<script language='JavaScript'>getdate();</script>
+<script type=\"text/javascript\">getdate();</script>
 
 ";
 ?>

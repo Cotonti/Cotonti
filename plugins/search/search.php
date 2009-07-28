@@ -178,8 +178,8 @@ if($tab=='frm' && !$cfg['disable_forums'])
 	$plugin_forum_res_sort .= "</select>";
 
 	// Ordering params
-	$plugin_forum_res_desc = "<input type='radio' name='sea_frmsort2' value='DESC' id='frmsort2_DESC'".($sea_frmsort2=='ASC'?"":" checked")."> <label for='frmsort2_DESC'>".$L['plu_sort_desc']."</label>";
-	$plugin_forum_res_asc = "<input type='radio' name='sea_frmsort2' value='ASC' id='frmsort2_ASC'".($sea_frmsort2=='ASC'?" checked":"")."> <label for='frmsort2_ASC'>".$L['plu_sort_asc']."</label>";
+	$plugin_forum_res_desc = "<input type='radio' name='sea_frmsort2' value='DESC' id='frmsort2_DESC'".($sea_frmsort2=='ASC'?"":" checked")." /> <label for='frmsort2_DESC'>".$L['plu_sort_desc']."</label>";
+	$plugin_forum_res_asc = "<input type='radio' name='sea_frmsort2' value='ASC' id='frmsort2_ASC'".($sea_frmsort2=='ASC'?" checked":"")." /> <label for='frmsort2_ASC'>".$L['plu_sort_asc']."</label>";
 
 	// Extra search options
 	$plugin_forum_search_names = "<input type='checkbox' name='sea_frmtitle' id='sea_frmtitle'".(($sea_frmtitle==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_frmtitle'>".$L['plu_frm_search_names']."</label>";
@@ -448,8 +448,8 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 	$plugin_page_res_sort .= "</select>";
 
 	// Result ordering param
-	$plugin_page_res_desc = "<input type='radio' name='sea_pagsort2' value='DESC' id='pagsort2_DESC'".($sea_pagsort2=='ASC'?"":" checked")."> <label for='pagsort2_DESC'>".$L['plu_sort_desc']."</label>";
-	$plugin_page_res_asc = "<input type='radio' name='sea_pagsort2' value='ASC' id='pagsort2_ASC'".($sea_pagsort2=='ASC'?" checked":"")."> <label for='pagsort2_ASC'>".$L['plu_sort_asc']."</label>";
+	$plugin_page_res_desc = "<input type='radio' name='sea_pagsort2' value='DESC' id='pagsort2_DESC'".($sea_pagsort2=='ASC'?"":" checked")." /> <label for='pagsort2_DESC'>".$L['plu_sort_desc']."</label>";
+	$plugin_page_res_asc = "<input type='radio' name='sea_pagsort2' value='ASC' id='pagsort2_ASC'".($sea_pagsort2=='ASC'?" checked":"")." /> <label for='pagsort2_ASC'>".$L['plu_sort_asc']."</label>";
 
 	// Extra search options
 	$plugin_page_search_names = "<input type='checkbox' name='sea_pagtitle' id='sea_pagtitle'".(($sea_pagtitle==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_pagtitle'>".$L['plu_pag_search_names']."</label>";

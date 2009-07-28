@@ -68,7 +68,7 @@
 				<tr>
 					<td>{PHP.L.URL}:<br />
 					{PHP.skinlang.pageadd.URLhint}</td>
-					<td>{PAGEADD_FORM_URL}<br>
+					<td>{PAGEADD_FORM_URL}<br />
 					{PAGEADD_FORM_PFS_URL_USER}&nbsp;&nbsp; {PAGEADD_FORM_PFS_URL_SITE}</td>
 				</tr>
 				<tr>

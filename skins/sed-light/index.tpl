@@ -3,7 +3,6 @@
 <div id="lSide">
 
 	{INDEX_NEWS}
-
 	<div class="lboxHD">{PHP.skinlang.index.Newinforums}:</div>
 	<div class="lboxBody">{PLUGIN_LATESTTOPICS}</div>
 	
