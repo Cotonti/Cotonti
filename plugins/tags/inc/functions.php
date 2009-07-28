@@ -101,7 +101,7 @@ function sed_tag_search_form($area = 'all')
  */
 function sed_tag_search_pages($query)
 {
-	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o;
+	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
 	$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
@@ -165,7 +165,7 @@ function sed_tag_search_pages($query)
  */
 function sed_tag_search_forums($query)
 {
-	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o;
+	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
 	$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
@@ -204,10 +204,11 @@ function sed_tag_search_forums($query)
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> ';
 		}
+		$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'],$row['fs_mastername']) : false;
 		$t->assign(array(
 			'TAGS_RESULT_ROW_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
 			'TAGS_RESULT_ROW_TITLE' => sed_cc($row['ft_title']),
-			'TAGS_RESULT_ROW_PATH' => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, array($row['fs_masterid'],$row['fs_mastername'])),
+			'TAGS_RESULT_ROW_PATH' => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, $master),
 			'TAGS_RESULT_ROW_TAGS' => $tag_list
 		));
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
