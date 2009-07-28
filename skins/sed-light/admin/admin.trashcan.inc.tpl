@@ -26,14 +26,14 @@
 				<td style="text-align:center;">[<a href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}">+</a>]</td>
 			</tr>
 <!-- END: TRASHCAN_ROW -->
-			</tr>
+			<tr>
 				<td colspan="6">
 					<div class="pagnav">{ADMIN_TRASHCAN_PAGINATION_PREV} {ADMIN_TRASHCAN_PAGNAV} {ADMIN_TRASHCAN_PAGINATION_NEXT}</div>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="6">{PHP.L.Total} : {ADMIN_TRASHCAN_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_TRASHCAN_COUNTER_ROW}</td>
-			<tr>
+			</tr>
 			</table>
 		</div>
 <!-- END: TRASHCAN -->

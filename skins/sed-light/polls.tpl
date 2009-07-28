@@ -7,7 +7,7 @@
 	<td>
 		<div style="width:256px;">
 			<div class="bar_back">
-				<div class="bar_front" id="pr_{POLL_PER}"></div>
+				<div class="bar_front" style="width:{POLL_PER}%;"></div>
 			</div>
 		</div>
 	</td>
@@ -22,9 +22,8 @@
 <script type="text/javascript">
 	function anim(){
 		$(".bar_front").each(function(){
-			var percentage = Math.floor(($(this).attr("id").replace('pr_','')*256)/100)+'px';
-			if ($(this).attr("id")!=""){$(this).css({width:"0"}).animate({width: percentage}, "slow");}
-			$(this).attr("id","");
+			var percentage = $(this).width();
+			if (percentage!=""){$(this).width(0).animate({width: percentage}, "slow");}
 		});
 	}
 	anim();
@@ -42,7 +41,7 @@
 	<td>
 		<div style="width:256px;">
 			<div class="bar_back">
-				<div class="bar_front" id="pr_{POLL_PER}"></div>
+				<div class="bar_front" style="width:{POLL_PER}%;"></div>
 			</div>
 		</div>
 	</td>
@@ -57,9 +56,8 @@
 <script type="text/javascript">
 	function anim(){
 		$(".bar_front").each(function(){
-			var percentage = Math.floor(($(this).attr("id").replace('pr_','')*256)/100)+'px';
-			if ($(this).attr("id")!=""){$(this).css({width:"0"}).animate({width: percentage}, "slow");}
-			$(this).attr("id","");
+			var percentage = $(this).width();
+			if (percentage!=""){$(this).width(0).animate({width: percentage}, "slow");}
 		});
 	}
 	anim();

@@ -544,7 +544,7 @@ $disp_stats .= "<div class=\"bar_front\" style=\"width:".$pfs_precentbar."%;\"><
 // ========== Upload =========
 
 $disp_upload = "<h4>".$L['pfs_newfile']."</h4>";
-$disp_upload .= "<form enctype=\"multipart/form-data\" action=\"pfs.php?a=upload".$more."\" method=\"post\">";
+$disp_upload .= "<form enctype=\"multipart/form-data\" action=\"".sed_url('pfs','a=upload'.$more)."\" method=\"post\">";
 $disp_upload .= "<table class=\"cells\"><tr><td colspan=\"3\">";
 $disp_upload .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($maxfile*1024)."\" />";
 $disp_upload .= $L['Folder']." : ".sed_selectbox_folders($userid, "", $f)."</td></tr>";
@@ -577,7 +577,7 @@ $disp_allowed .= "</table>";
 if ($f==0 && $usr['auth_write'])
 {
 	$disp_newfolder = "<h4>".$L['pfs_newfolder']."</h4>";
-	$disp_newfolder .= "<form id=\"newfolder\" action=\"pfs.php?a=newfolder".$more."\" method=\"post\">";
+	$disp_newfolder .= "<form id=\"newfolder\" action=\"".sed_url('pfs', 'a=newfolder'.$more)."\" method=\"post\">";
 	$disp_newfolder .= "<table class=\"cells\"><tr><td>".$L['Title']."</td>";
 	$disp_newfolder .= "<td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"32\" maxlength=\"255\" /></td></tr>";
 	$disp_newfolder .= "<tr><td>".$L['Description']."</td>";

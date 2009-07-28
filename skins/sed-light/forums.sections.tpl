@@ -45,8 +45,9 @@
             </td>
             <td>
                 <h3 style="margin-bottom:0;"><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h3>
-                {FORUMS_SECTIONS_ROW_DESC}
-                <div>
+                <!-- IF {FORUMS_SECTIONS_ROW_DESC} -->
+                <div class="desc">{FORUMS_SECTIONS_ROW_DESC}</div>
+                <!-- ENDIF -->
                     <!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
                     <div style="width: 50%; text-align:left; float:
                     <!-- IF {FORUMS_SECTIONS_ROW_SLAVE_ODDEVEN} == "odd" -->
@@ -55,10 +56,10 @@
                          right
                          <!-- ENDIF -->
                          ;">
-                         <img src="skins/{PHP.skin}/img/system/icon-subforum.gif" alt="" /> &nbsp;{FORUMS_SECTIONS_ROW_SLAVEI}
-                    </div>                
+                         <img src="skins/{PHP.skin}/img/system/icon-subforum.gif" alt="" /> &nbsp;{FORUMS_SECTIONS_ROW_SLAVEI}</div>
+               
                     <!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
-                </div>
+                
             </td>
             <td class="centerall">
                 {FORUMS_SECTIONS_ROW_LASTPOST}<br />
