@@ -126,11 +126,11 @@ switch($n)
 			$config_owner = $row['config_owner'];
 			$config_cat = $row['config_cat'];
 			$config_name = $row['config_name'];
-			$config_value = sed_cc($row['config_value']);
+			$config_value = htmlspecialchars($row['config_value']);
 			$config_default = $row['config_default'];
 			$config_type = $row['config_type'];
 			$config_title = $L['cfg_'.$row['config_name']][0];
-			$config_text = sed_cc($row['config_text']);
+			$config_text = htmlspecialchars($row['config_text']);
 			$config_more = $L['cfg_'.$row['config_name']][1];
 			$if_config_more = (!empty($config_more)) ? true : false;
 

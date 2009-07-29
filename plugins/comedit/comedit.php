@@ -109,11 +109,11 @@ $t -> assign(array(
 
 if($cfg['plugin']['comedit']['markitup'] == "No")
 {
-	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$pfs));
+	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".htmlspecialchars($com['com_text'])."</textarea><br />".$pfs));
 }
 elseif($cfg['plugin']['comedit']['markitup'] == "Yes")
 {
-	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea class=\"minieditor\" rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".sed_cc($com['com_text'])."</textarea><br />".$pfs));
+	$t -> assign(array("COMEDIT_FORM_TEXT" => "<textarea class=\"minieditor\" rows=\"8\" cols=\"64\" style=\"width:100%\" id=\"comtext\" name=\"comtext\">".htmlspecialchars($com['com_text'])."</textarea><br />".$pfs));
 }
 
 $t -> parse("MAIN.COMEDIT_FORM_EDIT");

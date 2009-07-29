@@ -471,7 +471,7 @@ while ($row = sed_sql_fetcharray($sqll))
 	$list_files .= "<td>".date($cfg['dateformat'], $pfs_date + $usr['timezone'] * 3600)."</td>";
 	$list_files .= "<td style=\"text-align:right;\">".$pfs_filesize.$L['kb']."</td>";
 	$list_files .= "<td style=\"text-align:right;\">".$row['pfs_count']."</td>";
-	$list_files .= "<td>".$filedesc[$pfs_extension]." / ".sed_cc($pfs_desc)."</td>";
+	$list_files .= "<td>".$filedesc[$pfs_extension]." / ".htmlspecialchars($pfs_desc)."</td>";
 	$list_files .= "<td>".$add_thumbnail.$add_image.$add_file."</td></tr>";
 	$pfs_foldersize = $pfs_foldersize + $pfs_filesize;
 

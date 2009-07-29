@@ -166,8 +166,8 @@ if (!$sed_groups )
    				'disabled' => $row['grp_disabled'],
    				'hidden' => $row['grp_hidden'],
 				'state' => $row['grp_state'],
-				'title' => sed_cc($row['grp_title']),
-				'desc' => sed_cc($row['grp_desc']),
+				'title' => htmlspecialchars($row['grp_title']),
+				'desc' => htmlspecialchars($row['grp_desc']),
 				'icon' => $row['grp_icon'],
 				'pfs_maxfile' => $row['grp_pfs_maxfile'],
 				'pfs_maxtotal' => $row['grp_pfs_maxtotal'],
@@ -390,7 +390,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 	while ($row = sed_sql_fetcharray($sql))
 	{
 		$out['whosonline_reg_list'] .= ($ii>0) ? ', ' : '';
-		$out['whosonline_reg_list'] .= sed_build_user($row['online_userid'], sed_cc($row['online_name']));
+		$out['whosonline_reg_list'] .= sed_build_user($row['online_userid'], htmlspecialchars($row['online_name']));
 		$sed_usersonline[] = $row['online_userid'];
 		$ii++;
 	}

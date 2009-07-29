@@ -58,7 +58,7 @@ $urr = sed_sql_fetcharray($sql);
 
 $urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
 
-$urr['user_text'] = sed_build_usertext(sed_cc($urr['user_text']));
+$urr['user_text'] = sed_build_usertext(htmlspecialchars($urr['user_text']));
 $urr['user_website'] = sed_build_url($urr['user_website']);
 $urr['user_age'] = ($urr['user_birthdate']!=0) ? sed_build_age($urr['user_birthdate']) : '';
 $urr['user_birthdate'] = ($urr['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $urr['user_birthdate']) : '';
@@ -66,7 +66,7 @@ $urr['user_gender'] = ($urr['user_gender']=='' || $urr['user_gender']=='U') ?  '
 
 $title_tags[] = array('{USER}', '{NAME}');
 $title_tags[] = array('%1$s', '%2$s');
-$title_data = array($L['User'], sed_cc($urr['user_name']));
+$title_data = array($L['User'], htmlspecialchars($urr['user_name']));
 $out['subtitle'] = sed_title('title_users_details', $title_tags, $title_data);
 
 /* === Hook === */
@@ -80,14 +80,14 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
 $t->assign(array(
-	"USERS_DETAILS_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
+	"USERS_DETAILS_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])),
 	"USERS_DETAILS_SUBTITLE" => $L['use_subtitle'],
 	"USERS_DETAILS_ID" => $urr['user_id'],
 	"USERS_DETAILS_PM" => sed_build_pm($urr['user_id']),
-	"USERS_DETAILS_NAME" => sed_cc($urr['user_name']),
+	"USERS_DETAILS_NAME" => htmlspecialchars($urr['user_name']),
 	"USERS_DETAILS_PASSWORD" => $urr['user_password'],
 	"USERS_DETAILS_MAINGRP" => sed_build_group($urr['user_maingrp']),
 	"USERS_DETAILS_MAINGRPID" => $urr['user_maingrp'],
@@ -107,13 +107,13 @@ $t->assign(array(
 	"USERS_DETAILS_JOURNAL" => $urr['user_journal'],
 	"USERS_DETAILS_ICQ" => sed_build_icq($urr['user_icq']),
 	"USERS_DETAILS_MSN" => sed_build_msn($urr['user_msn']),
-	"USERS_DETAILS_IRC" => sed_cc($urr['user_irc']),
+	"USERS_DETAILS_IRC" => htmlspecialchars($urr['user_irc']),
 	"USERS_DETAILS_GENDER" => $urr['user_gender'],
 	"USERS_DETAILS_BIRTHDATE" => $urr['user_birthdate'],
 	"USERS_DETAILS_AGE" => $urr['user_age'],
 	"USERS_DETAILS_TIMEZONE" => sed_build_timezone($urr['user_timezone']),
-	"USERS_DETAILS_LOCATION" => sed_cc($urr['user_location']),
-	"USERS_DETAILS_OCCUPATION" => sed_cc($urr['user_occupation']),
+	"USERS_DETAILS_LOCATION" => htmlspecialchars($urr['user_location']),
+	"USERS_DETAILS_OCCUPATION" => htmlspecialchars($urr['user_occupation']),
 	"USERS_DETAILS_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_DETAILS_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_DETAILS_LOGCOUNT" => $urr['user_logcount'],

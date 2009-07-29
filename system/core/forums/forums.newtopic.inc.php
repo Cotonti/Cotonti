@@ -89,7 +89,7 @@ if ($a=='newtopic')
 	$newtopicdesc = sed_import('newtopicdesc','P','TXT', 255);
 	$newprvtopic = sed_import('newprvtopic','P','BOL');
 	$newmsg = sed_import('newmsg','P','HTM');
-	$newtopicpreview = mb_substr(sed_cc($newmsg), 0, 128);
+	$newtopicpreview = mb_substr(htmlspecialchars($newmsg), 0, 128);
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
 
 
@@ -144,7 +144,7 @@ if ($a=='newtopic')
 
 		if($cfg['parser_cache'])
 		{
-			$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+			$rhtml = sed_sql_prep(sed_parse(htmlspecialchars($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
 		}
 		else
 		{
@@ -213,7 +213,7 @@ if ($a=='newtopic')
 $pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
-$post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
+$post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.htmlspecialchars($newmsg).'</textarea>';
 
 $newtopicurl = ($poll) ? sed_url('forums', "m=newtopic&a=newtopic&s=".$s."&poll=1") : sed_url('forums', "m=newtopic&a=newtopic&s=".$s);
 
@@ -249,10 +249,10 @@ if (!empty($error_string))
 $t->assign(array(
 
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
-	"FORUMS_NEWTOPIC_SUBTITLE" => sed_cc($fs_desc),
+	"FORUMS_NEWTOPIC_SUBTITLE" => htmlspecialchars($fs_desc),
 	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
-	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".sed_cc($newtopictitle)."\" size=\"56\" maxlength=\"255\" />",
-	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".sed_cc($newtopicdesc)."\" size=\"56\" maxlength=\"255\" />",
+	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".htmlspecialchars($newtopictitle)."\" size=\"56\" maxlength=\"255\" />",
+	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".htmlspecialchars($newtopicdesc)."\" size=\"56\" maxlength=\"255\" />",
 	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$pfs."<br />&nbsp;<br />",
 	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
 	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$pfs."<br />&nbsp;<br />",

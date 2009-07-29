@@ -328,7 +328,7 @@ if($tab=='frm' && !$cfg['disable_forums'])
 						$post_url = ($cfg['plugin']['search']['searchurl'] == 'Single') ? sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : sed_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 						$t->assign(array(
 							"PLUGIN_FR_CATEGORY" => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE),
-							"PLUGIN_FR_TITLE" => "<a href='$post_url'>".sed_cc($row['ft_title'])."</a>",
+							"PLUGIN_FR_TITLE" => "<a href='$post_url'>".htmlspecialchars($row['ft_title'])."</a>",
 							"PLUGIN_FR_TEXT" => hw_clear_mark($row['fp_text'], 0, $words),
 							"PLUGIN_FR_TIME" => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600)
 						));
@@ -600,7 +600,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 						: sed_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 					$t->assign(array(
 						"PLUGIN_PR_CATEGORY" => "<a href='".sed_url('list', 'c='.$row['page_cat'])."'>".$sed_cat[$row['page_cat']]['tpath']."</a>",
-						"PLUGIN_PR_TITLE" => "<a href='$page_url'>".sed_cc($row['page_title'])."</a>",
+						"PLUGIN_PR_TITLE" => "<a href='$page_url'>".htmlspecialchars($row['page_title'])."</a>",
 						"PLUGIN_PR_TEXT" => hw_clear_mark($row['page_text'], $row['page_type'], $words),
 						"PLUGIN_PR_TIME" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)
 					));
@@ -909,7 +909,7 @@ else
 						$post_url = ($cfg['plugin']['search']['searchurl'] == 'Single') ? sed_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : sed_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 						$t->assign(array(
 							"PLUGIN_FR_CATEGORY" => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE),
-							"PLUGIN_FR_TITLE" => "<a href='$post_url'>".sed_cc($row['ft_title'])."</a>",
+							"PLUGIN_FR_TITLE" => "<a href='$post_url'>".htmlspecialchars($row['ft_title'])."</a>",
 							"PLUGIN_FR_TEXT" => hw_clear_mark($row['fp_text'], 0, $words),
 							"PLUGIN_FR_TIME" => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600)
 						));
@@ -1019,7 +1019,7 @@ else
 								: sed_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 							$t->assign(array(
 								"PLUGIN_PR_CATEGORY" => "<a href='".sed_url('list', 'c='.$row['page_cat'])."'>".$sed_cat[$row['page_cat']]['tpath']."</a>",
-								"PLUGIN_PR_TITLE" => "<a href='$page_url'>".sed_cc($row['page_title'])."</a>",
+								"PLUGIN_PR_TITLE" => "<a href='$page_url'>".htmlspecialchars($row['page_title'])."</a>",
 								"PLUGIN_PR_TEXT" => hw_clear_mark($row['page_text'], $row['page_type'], $words),
 								"PLUGIN_PR_TIME" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)
 							));
@@ -1079,7 +1079,7 @@ else
 $t->assign(array(
 	"PLUGIN_TITLE" => $plugin_title,
 	"PLUGIN_SEARCH_ACTION" => empty($tab) ? sed_url('plug', 'e=search') : sed_url('plug', 'e=search&tab=' . $tab),
-	"PLUGIN_SEARCH_TEXT" => "<input type='text' name='sq' style='width:310px; padding:2px 0; margin:0' value='".sed_cc($sq)."' size='32' maxlength='".$cfg['plugin']['search']['maxsigns']."' />",
+	"PLUGIN_SEARCH_TEXT" => "<input type='text' name='sq' style='width:310px; padding:2px 0; margin:0' value='".htmlspecialchars($sq)."' size='32' maxlength='".$cfg['plugin']['search']['maxsigns']."' />",
 	"PLUGIN_SEARCH_KEY" => "<input type='submit' value='".$L['plu_search_key']."' style='width:70px' />",
 	"PLUGIN_ERROR" => $error_string
 ));

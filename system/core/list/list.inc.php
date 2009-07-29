@@ -304,7 +304,7 @@ $extp = sed_getextplugins('list.loop');
 while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 {
 	$jj++;
-	$pag['page_desc'] = sed_cc($pag['page_desc']);
+	$pag['page_desc'] = htmlspecialchars($pag['page_desc']);
 	$page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 	$pag['page_pageurl'] = sed_url('page', $page_urlp);
 
@@ -326,12 +326,12 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	"LIST_ROW_URL" => $pag['page_pageurl'],
 	"LIST_ROW_ID" => $pag['page_id'],
 	"LIST_ROW_CAT" => $pag['page_cat'],
-	"LIST_ROW_KEY" => sed_cc($pag['page_key']),
-	"LIST_ROW_TITLE" => sed_cc($pag['page_title']),
+	"LIST_ROW_KEY" => htmlspecialchars($pag['page_key']),
+	"LIST_ROW_TITLE" => htmlspecialchars($pag['page_title']),
 	"LIST_ROW_DESC" => $pag['page_desc'],
 	"LIST_ROW_DESC_OR_TEXT" => sed_cutpost($pag['page_text'], 200, false),
-	"LIST_ROW_AUTHOR" => sed_cc($pag['page_author']),
-	"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
+	"LIST_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
+	"LIST_ROW_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
 	"LIST_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
 	"LIST_ROW_FILEURL" => empty($pag['page_url']) ? '' : sed_url('page', 'id='.$pag['page_id'].'&a=dl'),
 	"LIST_ROW_SIZE" => $pag['page_size'],
@@ -372,7 +372,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 			{
 				if(empty($pag['page_html']) && !empty($pag['page_text']))
 				{
-					$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+					$pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
 				}
 				$readmore = mb_strpos($pag['page_html'], "<!--more-->");
@@ -381,13 +381,13 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 					$pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore);
 					$pag['page_html'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
 				}
-				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
+				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
 				$t->assign('LIST_ROW_TEXT', $html);
 			}
 			else
 			{
 				$readmore = mb_strpos($pag['page_text'], "[more]");
-				$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+				$text = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 				if ($readmore>0)
 				{
 					$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);

@@ -54,7 +54,7 @@ if(empty($d))
 	$d = '0';
 }
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
 $title = $bhome . '<a href="'.sed_url('users').'">'.$L['Users'].'</a> ';
 $localskin = sed_skinfile('users');
@@ -67,7 +67,7 @@ if(!empty($sq))
 if($f == 'search' && mb_strlen($y) > 1)
 {
 	$sq = $y;
-	$title .= $cfg['separator']." ". $L['Search']." '".sed_cc($y)."'";
+	$title .= $cfg['separator']." ". $L['Search']." '".htmlspecialchars($y)."'";
 	$sqlmask = ($s == 'maingrp') ? "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp WHERE u.user_name LIKE '%".sed_sql_prep($y)."%'" : "WHERE user_name LIKE '%".sed_sql_prep($y)."%'";
 }
 elseif($g > 1)
@@ -174,7 +174,7 @@ $grpfilters .= $grpms."</select>";
 
 /*=========*/
 
-$searchfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".sed_cc($y)."\" size=\"8\" maxlength=\"8\" /><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
+$searchfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".htmlspecialchars($y)."\" size=\"8\" maxlength=\"8\" /><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
 
 /*=========*/
 
@@ -270,7 +270,7 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 		"USERS_ROW_USERID" => $urr['user_id'],
 		"USERS_ROW_TAG" => $urr['user_tag'],
 		"USERS_ROW_PM" => sed_build_pm($urr['user_id']),
-		"USERS_ROW_NAME" => sed_build_user($urr['user_id'], sed_cc($urr['user_name'])),
+		"USERS_ROW_NAME" => sed_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])),
 		"USERS_ROW_MAINGRP" => sed_build_group($urr['user_maingrp']),
 		"USERS_ROW_MAINGRPID" => $urr['user_maingrp'],
 		"USERS_ROW_MAINGRPSTARS" => sed_build_stars($sed_groups[$urr['user_maingrp']]['level']),
@@ -281,13 +281,13 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 		"USERS_ROW_WEBSITE" => sed_build_url($urr['user_website']),
 		"USERS_ROW_ICQ" => sed_build_icq($urr['user_icq']),
 		"USERS_ROW_MSN" => sed_build_msn($urr['user_msn']),
-		"USERS_ROW_IRC" => sed_cc($urr['user_irc']),
+		"USERS_ROW_IRC" => htmlspecialchars($urr['user_irc']),
 		"USERS_ROW_GENDER" => $urr['user_gender'],
 		"USERS_ROW_BIRTHDATE" => $urr['user_birthdate'],
 		"USERS_ROW_AGE" => $urr['user_age'],
 		"USERS_ROW_TIMEZONE" => sed_build_timezone($urr['user_timezone']),
-		"USERS_ROW_LOCATION" => sed_cc($urr['user_location']),
-		"USERS_ROW_OCCUPATION" => sed_cc($urr['user_occupation']),
+		"USERS_ROW_LOCATION" => htmlspecialchars($urr['user_location']),
+		"USERS_ROW_OCCUPATION" => htmlspecialchars($urr['user_occupation']),
 		"USERS_ROW_AVATAR" => sed_build_userimage($urr['user_avatar'], 'avatar'),
 		"USERS_ROW_SIGNATURE" => sed_build_userimage($urr['user_signature'], 'sig'),
 		"USERS_ROW_PHOTO" => sed_build_userimage($urr['user_photo'], 'photo'),
@@ -308,7 +308,7 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 		foreach($extrafields as $i => $extrafield)
 		{
 			$uname = strtoupper($extrafield['field_name']);
-			$t -> assign('USERS_ROW_'.$uname, sed_cc($urr['user_'.$extrafield['field_name']]));
+			$t -> assign('USERS_ROW_'.$uname, htmlspecialchars($urr['user_'.$extrafield['field_name']]));
 			isset($L['user_'.$extrafield['field_name'].'_title']) ? $t -> assign('USERS_ROW_'.$uname.'_TITLE', $L['user_'.$extrafield['field_name'].'_title']) : $t -> assign('USERS_ROW_'.$uname.'_TITLE', $extrafield['field_description']);
 		}
 	}

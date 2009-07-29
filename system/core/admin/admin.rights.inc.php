@@ -136,7 +136,7 @@ LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 WHERE auth_groupid='$g' AND auth_code='plug'
 ORDER BY auth_option ASC");
 
-$adminpath[] = ($advanced) ? array(sed_url('admin', 'm=rights&g='.$g.'&advanced=1'), $L['Rights']." / ".sed_cc($sed_groups[$g]['title'])." (".$L['More'].")") : array(sed_url('admin', "m=rights&g=".$g), $L['Rights']." / ".sed_cc($sed_groups[$g]['title']));
+$adminpath[] = ($advanced) ? array(sed_url('admin', 'm=rights&g='.$g.'&advanced=1'), $L['Rights']." / ".htmlspecialchars($sed_groups[$g]['title'])." (".$L['More'].")") : array(sed_url('admin', "m=rights&g=".$g), $L['Rights']." / ".htmlspecialchars($sed_groups[$g]['title']));
 
 $adv_columns = ($advanced) ? 8 : 4;
 
@@ -178,7 +178,7 @@ function sed_rights_parseline($row, $title, $link, $name)
 		"ADMIN_RIGHTS_ROW_TITLE" => $title,
 		"ADMIN_RIGHTS_ROW_LINK" => $link,
 		"ADMIN_RIGHTS_ROW_RIGHTSBYITEM" => sed_url('admin', "m=rightsbyitem&ic=".$row['auth_code']."&io=".$row['auth_option']),
-		"ADMIN_RIGHTS_ROW_USER" => sed_build_user($row['auth_setbyuserid'], sed_cc($row['user_name'])),
+		"ADMIN_RIGHTS_ROW_USER" => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
 	));
 	$t -> parse("RIGHTS.RIGHTS_ROW".$name);
 }
@@ -193,7 +193,7 @@ while($row = sed_sql_fetcharray($sql1))
 while($row = sed_sql_fetcharray($sql2))
 {
 	$link = sed_url('admin', "m=forums&n=edit&id=".$row['auth_option']);
-	$title = sed_cc(sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],32), FALSE));
+	$title = htmlspecialchars(sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],32), FALSE));
 	sed_rights_parseline($row, $title, $link, '_FORUMS');
 }
 

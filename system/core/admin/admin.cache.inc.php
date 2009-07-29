@@ -56,7 +56,7 @@ $extp = sed_getextplugins('admin.cache.loop');
 /* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
-	$row['c_value'] = sed_cc($row['c_value']);
+	$row['c_value'] = htmlspecialchars($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);
 	$cachesize += $row['size'];
 	$t -> assign(array(

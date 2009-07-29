@@ -271,7 +271,7 @@ $user_form_pmnotify = ($urr['user_pmnotify']) ? "<input type=\"radio\" class=\"r
 
 $user_form_pass = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"text\" name=\"rusernewpass\" value=\"\" size=\"16\" maxlength=\"16\" disabled=\"disabled\" />" : "<input type=\"text\" class=\"text\" name=\"rusernewpass\" value=\"\" size=\"16\" maxlength=\"16\" />";
 
-$user_form_username = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($urr['user_name'])."\" size=\"32\" maxlength=\"100\"  disabled=\"disabled\" />" : "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($urr['user_name'])."\" size=\"32\" maxlength=\"100\" />";
+$user_form_username = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".htmlspecialchars($urr['user_name'])."\" size=\"32\" maxlength=\"100\"  disabled=\"disabled\" />" : "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".htmlspecialchars($urr['user_name'])."\" size=\"32\" maxlength=\"100\" />";
 
 $user_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
 $user_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
@@ -280,7 +280,7 @@ $urr['user_lastip'] = sed_build_ipsearch($urr['user_lastip']);
 
 $title_tags[] = array('{EDIT}', '{NAME}');
 $title_tags[] = array('%1$s', '%2$s');
-$title_data = array($L['Edit'], sed_cc($urr['user_name']));
+$title_data = array($L['Edit'], htmlspecialchars($urr['user_name']));
 $out['subtitle'] = sed_title('title_users_edit', $title_tags, $title_data);
 
 /* === Hook === */
@@ -301,10 +301,10 @@ if (!empty($error_string))
 	$t->parse("MAIN.USERS_EDIT_ERROR");
 }
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
 $useredit_array = array(
-	"USERS_EDIT_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], sed_cc($urr['user_name']))." ".$cfg['separator']." <a href=\"".sed_url('users', 'm=edit&id='.$urr['user_id'])."\">".$L['Edit']."</a>",
+	"USERS_EDIT_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], htmlspecialchars($urr['user_name']))." ".$cfg['separator']." <a href=\"".sed_url('users', 'm=edit&id='.$urr['user_id'])."\">".$L['Edit']."</a>",
 	"USERS_EDIT_SUBTITLE" => $L['useed_subtitle'],
 	"USERS_EDIT_SEND" => sed_url('users', 'm=edit&a=update&'.sed_xg().'&id='.$urr['user_id']),
 	"USERS_EDIT_ID" => $urr['user_id'],
@@ -317,23 +317,23 @@ $useredit_array = array(
 	"USERS_EDIT_MAINGRP" => sed_build_group($urr['user_maingrp']),
 	"USERS_EDIT_GROUPS" => sed_build_groupsms($urr['user_id'], $usr['isadmin'], $urr['user_maingrp']),
 	"USERS_EDIT_COUNTRY" => $user_form_countries,
-	"USERS_EDIT_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_EDIT_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".htmlspecialchars($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />",
 	"USERS_EDIT_HIDEEMAIL" => $user_form_hideemail,
 	"USERS_EDIT_PMNOTIFY" => $user_form_pmnotify,
-	"USERS_EDIT_TEXT" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"4\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
-	"USERS_EDIT_TEXTBOXER" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"4\" cols=\"56\">".sed_cc($urr['user_text'])."</textarea>",
-	"USERS_EDIT_AVATAR" => "<input type=\"text\" class=\"text\" name=\"ruseravatar\" value=\"".sed_cc($urr['user_avatar'])."\" size=\"32\" maxlength=\"255\" />",
-	"USERS_EDIT_PHOTO" => "<input type=\"text\" class=\"text\" name=\"ruserphoto\" value=\"".sed_cc($urr['user_photo'])."\" size=\"32\" maxlength=\"255\" />",
-	"USERS_EDIT_SIGNATURE" => "<input type=\"text\" class=\"text\" name=\"rusersignature\" value=\"".sed_cc($urr['user_signature'])."\" size=\"32\" maxlength=\"255\" />",
-	"USERS_EDIT_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".sed_cc($urr['user_website'])."\" size=\"56\" maxlength=\"128\" />",
-	"USERS_EDIT_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".sed_cc($urr['user_icq'])."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_EDIT_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".sed_cc($urr['user_msn'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_EDIT_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".sed_cc($urr['user_irc'])."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_EDIT_TEXT" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"4\" cols=\"56\">".htmlspecialchars($urr['user_text'])."</textarea>",
+	"USERS_EDIT_TEXTBOXER" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"4\" cols=\"56\">".htmlspecialchars($urr['user_text'])."</textarea>",
+	"USERS_EDIT_AVATAR" => "<input type=\"text\" class=\"text\" name=\"ruseravatar\" value=\"".htmlspecialchars($urr['user_avatar'])."\" size=\"32\" maxlength=\"255\" />",
+	"USERS_EDIT_PHOTO" => "<input type=\"text\" class=\"text\" name=\"ruserphoto\" value=\"".htmlspecialchars($urr['user_photo'])."\" size=\"32\" maxlength=\"255\" />",
+	"USERS_EDIT_SIGNATURE" => "<input type=\"text\" class=\"text\" name=\"rusersignature\" value=\"".htmlspecialchars($urr['user_signature'])."\" size=\"32\" maxlength=\"255\" />",
+	"USERS_EDIT_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".htmlspecialchars($urr['user_website'])."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_EDIT_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".htmlspecialchars($urr['user_icq'])."\" size=\"32\" maxlength=\"16\" />",
+	"USERS_EDIT_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".htmlspecialchars($urr['user_msn'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_EDIT_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".htmlspecialchars($urr['user_irc'])."\" size=\"56\" maxlength=\"128\" />",
 	"USERS_EDIT_GENDER" => $user_form_gender,
 	"USERS_EDIT_BIRTHDATE" => $user_form_birthdate,
-	"USERS_EDIT_TIMEZONE" => "<input type=\"text\" class=\"text\" name=\"rusertimezone\" value=\"".sed_cc($urr['user_timezone'])."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_EDIT_LOCATION" => "<input type=\"text\" class=\"text\" name=\"ruserlocation\" value=\"".sed_cc($urr['user_location'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_EDIT_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"ruseroccupation\" value=\"".sed_cc($urr['user_occupation'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_EDIT_TIMEZONE" => "<input type=\"text\" class=\"text\" name=\"rusertimezone\" value=\"".htmlspecialchars($urr['user_timezone'])."\" size=\"32\" maxlength=\"16\" />",
+	"USERS_EDIT_LOCATION" => "<input type=\"text\" class=\"text\" name=\"ruserlocation\" value=\"".htmlspecialchars($urr['user_location'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_EDIT_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"ruseroccupation\" value=\"".htmlspecialchars($urr['user_occupation'])."\" size=\"32\" maxlength=\"64\" />",
 	"USERS_EDIT_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_EDIT_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone']*3600)." ".$usr['timetext'],
 	"USERS_EDIT_LOGCOUNT" => $urr['user_logcount'],
@@ -352,10 +352,10 @@ foreach($extrafields as $i=>$row)
 	switch($row['field_type']) {
 	case "input":
 		$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" ', $t2); break;
+		$t2 = str_replace('<input ','<input value="'.htmlspecialchars($urr['user_'.$row['field_name']]).'" ', $t2); break;
 	case "textarea":
 		$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('</textarea>',sed_cc($urr['user_'.$row['field_name']]).'</textarea>', $t2); break;
+		$t2 = str_replace('</textarea>',htmlspecialchars($urr['user_'.$row['field_name']]).'</textarea>', $t2); break;
 	case "select":
 		$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
 		$options = "";
@@ -370,7 +370,7 @@ foreach($extrafields as $i=>$row)
 	case "checkbox":
 		$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
 		$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
-		$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" '.$sel.' ', $t2); break;
+		$t2 = str_replace('<input ','<input value="'.htmlspecialchars($urr['user_'.$row['field_name']]).'" '.$sel.' ', $t2); break;
 	}
 	$useredit_array[$t1] = $t2;
 }

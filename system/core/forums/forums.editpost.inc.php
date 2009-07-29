@@ -113,7 +113,7 @@ if ($a=='update')
 	{
 		if($cfg['parser_cache'])
 		{
-			$rhtml = sed_sql_prep(sed_parse(sed_cc($rtext), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+			$rhtml = sed_sql_prep(sed_parse(htmlspecialchars($rtext), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
 		}
 		else
 		{
@@ -142,7 +142,7 @@ if ($a=='update')
 
 	if (!empty($rtopictitle) && !empty($rtext))
 	{
-		$rtopicpreview = mb_substr(sed_cc($rtext), 0, 128);
+		$rtopicpreview = mb_substr(htmlspecialchars($rtext), 0, 128);
 		$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_preview='".sed_sql_prep($rtopicpreview)."' WHERE ft_id='$q'");
 	}
 
@@ -165,8 +165,8 @@ if ($row = sed_sql_fetcharray($sql))
 	$fp_idp = $row['fp_id'];
 	if ($fp_idp==$p)
 	{
-	 	$edittopictitle = "<input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".sed_cc($ft_title)."\" size=\"56\" maxlength=\"255\" />";
-	 	$topicdescription ="<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".sed_cc($ft_desc)."\" size=\"56\" maxlength=\"255\" />";
+	 	$edittopictitle = "<input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".htmlspecialchars($ft_title)."\" size=\"56\" maxlength=\"255\" />";
+	 	$topicdescription ="<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".htmlspecialchars($ft_desc)."\" size=\"56\" maxlength=\"255\" />";
 	 	$is_first_post = true;
 	}
 }
@@ -174,11 +174,11 @@ if ($row = sed_sql_fetcharray($sql))
 $pfs = sed_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rtext", $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('editpost', 'rtext');
-$post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.sed_cc($fp_text).'</textarea>';
+$post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.htmlspecialchars($fp_text).'</textarea>';
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
-$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." </a> <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".sed_cc($ft_fulltitle)."</a> ";
+$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." </a> <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".htmlspecialchars($ft_fulltitle)."</a> ";
 $toptitle .= $cfg['separator']." <a href=\"".sed_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 

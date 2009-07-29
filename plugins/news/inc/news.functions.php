@@ -66,7 +66,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         $jj++;
         $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
         $pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', 'id='.$pag['page_id']) : sed_url('page', 'al='.$pag['page_alias']);
-        $pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".sed_cc($pag['page_title'])."</a>";
+        $pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".htmlspecialchars($pag['page_title'])."</a>";
 
         $submitnewpage = (sed_auth('page', $cat, 'W')) ? "<a href=\"page.php?m=add&amp;c=$cat\">".$L['lis_submitnew']."</a>" : '';
 
@@ -77,16 +77,16 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
             "PAGE_ROW_URL" => $pag['page_pageurl'],
             "PAGE_ROW_ID" => $pag['page_id'],
             "PAGE_ROW_TITLE" => $pag['page_fulltitle'],
-            "PAGE_ROW_SHORTTITLE" => sed_cc($pag['page_title']),
+            "PAGE_ROW_SHORTTITLE" => htmlspecialchars($pag['page_title']),
             "PAGE_ROW_CAT" => $pag['page_cat'],
-            "PAGE_ROW_CATTITLE" => sed_cc($sed_cat[$pag['page_cat']]['title']),
+            "PAGE_ROW_CATTITLE" => htmlspecialchars($sed_cat[$pag['page_cat']]['title']),
             "PAGE_ROW_CATPATH" => $catpath,
-            "PAGE_ROW_CATDESC" => sed_cc($sed_cat[$pag['page_cat']]['desc']),
+            "PAGE_ROW_CATDESC" => htmlspecialchars($sed_cat[$pag['page_cat']]['desc']),
             "PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
-            "PAGE_ROW_KEY" => sed_cc($pag['page_key']),
-            "PAGE_ROW_DESC" => sed_cc($pag['page_desc']),
-            "PAGE_ROW_AUTHOR" => sed_cc($pag['page_author']),
-            "PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
+            "PAGE_ROW_KEY" => htmlspecialchars($pag['page_key']),
+            "PAGE_ROW_DESC" => htmlspecialchars($pag['page_desc']),
+            "PAGE_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
+            "PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
             "PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
             "PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
             "PAGE_ROW_FILEURL" => $pag['page_url'],
@@ -123,7 +123,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
                 {
                     if(empty($pag['page_html']))
                     {
-                        $pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+                        $pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
                         sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
                     }
                     $readmore = mb_strpos($pag['page_html'], "<!--more-->");
@@ -136,11 +136,11 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
                     sed_news_strip_newpage($pag['page_html']);
 
                     $cfg['parsebbcodepages'] ? $news->assign('PAGE_ROW_TEXT', sed_post_parse($pag['page_html'], 'pages'))
-                    : $news->assign('PAGE_ROW_TEXT', sed_cc($pag['page_text']));
+                    : $news->assign('PAGE_ROW_TEXT', htmlspecialchars($pag['page_text']));
                 }
                 else
                 {
-                    $pag['page_text'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+                    $pag['page_text'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
                     $readmore = mb_strpos($pag['page_text'], "<!--more-->");
                     if($readmore>0)
                     {
@@ -157,7 +157,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         }
 
         // Extra fields
-        foreach($extrafields as $row) $news->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), sed_cc($pag['page_'.$row['field_name']]));
+        foreach($extrafields as $row) $news->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), htmlspecialchars($pag['page_'.$row['field_name']]));
 
         $news->parse("NEWS.PAGE_ROW");
     }

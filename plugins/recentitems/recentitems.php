@@ -51,7 +51,7 @@ if($cfg['plugin']['recentitems']['maxpages'] > 0 && !$cfg['disable_page'])
 			$recentitems -> assign(array(
 					"RI_DATE" => date($cfg['formatyearmonthday'], $row['page_date'] + $usr['timezone'] * 3600),
 					"RI_CAT" => "<a href=\"".sed_url('list', 'c='.$row['page_cat'])."\">".$sed_cat[$row['page_cat']]['title']."</a>",
-					"RI_NAME" => "<a href=\"".$row['page_pageurl']."\" title=\"".sed_cc(stripslashes($row['page_title']))."\">".sed_cc(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
+					"RI_NAME" => "<a href=\"".$row['page_pageurl']."\" title=\"".htmlspecialchars(stripslashes($row['page_title']))."\">".htmlspecialchars(sed_cutstring(stripslashes($row['page_title']), 36))."</a>",
 			));
 			$recentitems -> parse("RECENTPAGES.RECENTPAGE");
 			$i++;
@@ -126,7 +126,7 @@ if($cfg['plugin']['recentitems']['maxtopics'] > 0 && !$cfg['disable_forums'])
 			}
 			elseif($cfg['plugin']['recentitems']['fd'] == 'Parent only')
 			{
-				$build_forum="<a href=\"".sed_url('forums', 'm=topics&s='.$row['fs_id']).'">'.sed_cc(sed_cutstring(stripslashes($row['fs_title']),16))."</a>";
+				$build_forum="<a href=\"".sed_url('forums', 'm=topics&s='.$row['fs_id']).'">'.htmlspecialchars(sed_cutstring(stripslashes($row['fs_title']),16))."</a>";
 			}
 			else
 			{
@@ -137,7 +137,7 @@ if($cfg['plugin']['recentitems']['maxtopics'] > 0 && !$cfg['disable_forums'])
 				"RI_DATE" => date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600),
 				"RI_IMG" => $img,
 				"RI_CAT" => $build_forum,
-				"RI_NAME" => "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom').'" title="'.sed_cc(stripslashes($row['ft_title'])).'">'.sed_cc(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
+				"RI_NAME" => "<a href=\"".sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom').'" title="'.htmlspecialchars(stripslashes($row['ft_title'])).'">'.htmlspecialchars(sed_cutstring(stripslashes($row['ft_title']),25))."</a>",
 				"RI_COUNT" => $row['ft_postcount']-1,
 			));
 			$recentitems -> parse("RECENTFORUMS.RECENTFORUM");

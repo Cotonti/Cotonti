@@ -92,7 +92,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$pff_ispublic = $row['pff_ispublic'];
 	$pff_isgallery = $row['pff_isgallery'];
 	$pff_count = $row['pff_count'];
-	$title .= " ".$cfg['separator']." ".sed_cc($pff_title);
+	$title .= " ".$cfg['separator']." ".htmlspecialchars($pff_title);
 }
 else
 { sed_die(); }
@@ -123,8 +123,8 @@ $row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone']
 $row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
 
 $body .= "<form id=\"editfolder\" action=\"".sed_url('pfs', "m=editfolder&a=update&f=".$pff_id.$more)."\" method=\"post\"><table class=\"cells\">";
-$body .= "<tr><td>".$L['Folder']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
-$body .= "<tr><td>".$L['Description']." : </td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".sed_cc($pff_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
+$body .= "<tr><td>".$L['Folder']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".htmlspecialchars($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
+$body .= "<tr><td>".$L['Description']." : </td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".htmlspecialchars($pff_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td>".$L['Date']." : </td><td>".$row['pff_date']."</td></tr>";
 $body .= "<tr><td>".$L['Updated']." : </td><td>".$row['pff_updated']."</td></tr>";
 $body .= "<tr><td>".$L['pfs_ispublic']." : </td><td>";

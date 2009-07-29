@@ -89,14 +89,14 @@ if ($row = sed_sql_fetcharray($sql))
 	$pfs_date = @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600);
 	$pfs_folderid = $row['pfs_folderid'];
 	$pfs_extension = $row['pfs_extension'];
-	$pfs_desc = sed_cc($row['pfs_desc']);
+	$pfs_desc = htmlspecialchars($row['pfs_desc']);
 	$pfs_size = floor($row['pfs_size']/1024);
 	$ff = $cfg['pfs_dir_user'].$pfs_file;
 	}
 	else
 	{ sed_die(); }
 
-$title .= " ".$cfg['separator']." ".sed_cc($pfs_file);
+$title .= " ".$cfg['separator']." ".htmlspecialchars($pfs_file);
 
 if ($a=='update' && !empty($id))
 	{

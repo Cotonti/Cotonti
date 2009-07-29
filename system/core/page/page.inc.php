@@ -169,7 +169,7 @@ $t->assign(array(
 	"PAGE_KEY" => $pag['page_key'],
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
-	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], sed_cc($pag['user_name'])),
+	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
 	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
 	"PAGE_DATE" => $pag['page_date'],
 	"PAGE_BEGIN" => $pag['page_begin'],
@@ -247,15 +247,15 @@ else
 			{
 				if(empty($pag['page_html']) && !empty($pag['page_text']))
 				{
-					$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
+					$pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
 					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
 				}
-				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
+				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
 				$t->assign('PAGE_TEXT', $html);
 			}
 			else
 			{
-				$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
+				$text = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
 				$text = sed_post_parse($text, 'pages');
 				$t->assign('PAGE_TEXT', $text);
 			}

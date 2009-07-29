@@ -725,12 +725,12 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 			{
 				$ii++;
 				$key = '**'.$ii.$unique_seed.'**';
-				$code[$key]= '<img class="aux smiley" src="./images/smilies/'.$v['file'].'" alt="'.sed_cc($v['code']).'" />';
+				$code[$key]= '<img class="aux smiley" src="./images/smilies/'.$v['file'].'" alt="'.htmlspecialchars($v['code']).'" />';
 				$text = preg_replace('#(^|\s)'.preg_quote($v['code']).'(\s|$)#', '$1'.$key.'$2', $text);
-				if(sed_cc($v['code']) != $v['code'])
+				if(htmlspecialchars($v['code']) != $v['code'])
 				{
 					// Fix for cc inserts
-					$text = preg_replace('#(^|\s)'.preg_quote(sed_cc($v['code'])).'(\s|$)#', '$1'.$key.'$2', $text);
+					$text = preg_replace('#(^|\s)'.preg_quote(htmlspecialchars($v['code'])).'(\s|$)#', '$1'.$key.'$2', $text);
 				}
 			}
 		}
@@ -848,7 +848,7 @@ function sed_build_catpath($cat, $mask)
 	$mask = str_replace('%24', '$', $mask);
 	if($cfg['homebreadcrumb'])
 	{
-		$tmp[] = '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a>';
+		$tmp[] = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a>';
 	}
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
 	foreach($pathcodes as $k => $x)
@@ -1010,8 +1010,8 @@ function sed_build_comments($code, $url, $display = true)
 			while ($row = sed_sql_fetcharray($sql))
 			{
 				$i++;
-				$com_author = sed_cc($row['com_author']);
-				$com_text = sed_cc($row['com_text']);
+				$com_author = htmlspecialchars($row['com_author']);
+				$com_text = htmlspecialchars($row['com_text']);
 
 				$com_admin = ($usr['isadmin_com']) ? $L['Ip'].":".sed_build_ipsearch($row['com_authorip'])." &nbsp;".$L['Delete'].":[<a href=\"".$url. $sep . "ina=delete&amp;ind=".$row['com_id']."&amp;".sed_xg()."\">x</a>]" : '' ;
 				$com_authorlink = sed_build_user($row['com_authorid'], $com_author);
@@ -1143,30 +1143,30 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 	{
 		if($cfg['homebreadcrumb'])
 		{
-			$tmp[] = '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a>';
+			$tmp[] = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a>';
 		}
 		$tmp[] = '<a href="'.sed_url('forums').'">'.$L['Forums'].'</a>';
 		foreach($pathcodes as $k => $x)
 		{
-			$tmp[] = '<a href="'.sed_url('forums', 'c='.$x, '#'.$x).'">'.sed_cc($sed_forums_str[$x]['title']).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'c='.$x, '#'.$x).'">'.htmlspecialchars($sed_forums_str[$x]['title']).'</a>';
 		}
 		if(is_array($master))
 		{
-			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.sed_cc($master[1]).'</a>';
+			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.htmlspecialchars($master[1]).'</a>';
 		}
-		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$sectionid).'">'.sed_cc($title).'</a>';
+		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$sectionid).'">'.htmlspecialchars($title).'</a>';
 	}
 	else
 	{
 		foreach($pathcodes as $k => $x)
 		{
-			$tmp[]= sed_cc($sed_forums_str[$x]['title']);
+			$tmp[]= htmlspecialchars($sed_forums_str[$x]['title']);
 		}
 		if(is_array($master))
 		{
 			$tmp[] = $master[1];
 		}
-		$tmp[] = sed_cc($title);
+		$tmp[] = htmlspecialchars($title);
 	}
 
 	return implode(' '.$cfg['separator'].' ', $tmp);
@@ -1648,7 +1648,7 @@ function sed_build_url($text, $maxlen=64)
 		{
 			$text='http://'. $text;
 		}
-		$text = sed_cc($text);
+		$text = htmlspecialchars($text);
 		$text = '<a href="'.$text.'">'.sed_cutstring($text, $maxlen).'</a>';
 	}
 	return $text;
@@ -1858,6 +1858,7 @@ function sed_cache_store($name,$value,$expire,$auto="1")
 /**
  * Makes HTML sequences safe
  *
+ * @deprecated
  * @param string $text Source string
  * @return string
  */
@@ -2749,7 +2750,7 @@ function sed_load_structure()
 	{
 		if (!empty($row['structure_icon']))
 		{
-			$row['structure_icon'] = '<img src="'.$row['structure_icon'].'" alt="'.sed_cc($row['structure_title']).'" title="'.sed_cc($row['structure_title']).'" />';
+			$row['structure_icon'] = '<img src="'.$row['structure_icon'].'" alt="'.htmlspecialchars($row['structure_title']).'" title="'.htmlspecialchars($row['structure_title']).'" />';
 		}
 
 		$path2 = mb_strrpos($row['structure_path'], '.');
@@ -3320,7 +3321,7 @@ function sed_selectbox($check, $name, $values)
 	{
 		$x = trim($x);
 		$selected = ($x == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$x\" $selected>".sed_cc($x)."</option>";
+		$result .= "<option value=\"$x\" $selected>".htmlspecialchars($x)."</option>";
 	}
 	$result .= "</select>";
 	return($result);
@@ -3480,7 +3481,7 @@ function sed_selectbox_folders($user, $skip, $check)
 		if ($skip!=$row['pff_id'])
 		{
 			$selected = ($row['pff_id']==$check) ? "selected=\"selected\"" : '';
-			$result .= "<option value=\"".$row['pff_id']."\" $selected>".sed_cc($row['pff_title'])."</option>";
+			$result .= "<option value=\"".$row['pff_id']."\" $selected>".htmlspecialchars($row['pff_title'])."</option>";
 		}
 	}
 	$result .= "</select>";
@@ -3604,8 +3605,8 @@ function sed_selectbox_sections($check, $name)
 	while ($row = sed_sql_fetcharray($sql))
 	{
 		$selected = ($row['fs_id'] == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"".$row['fs_id']."\" $selected>".sed_cc(sed_cutstring($row['fs_category'], 24));
-		$result .= ' '.$cfg['separator'].' '.sed_cc(sed_cutstring($row['fs_title'], 32));
+		$result .= "<option value=\"".$row['fs_id']."\" $selected>".htmlspecialchars(sed_cutstring($row['fs_category'], 24));
+		$result .= ' '.$cfg['separator'].' '.htmlspecialchars(sed_cutstring($row['fs_title'], 32));
 	}
 	$result .= "</select>";
 	return($result);
@@ -3700,7 +3701,7 @@ function sed_selectbox_users($to)
 	while ($row = sed_sql_fetcharray($sql))
 	{
 		$selected = ($row['user_id']==$to) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"".$row['user_id']."\" $selected>".sed_cc($row['user_name'])."</option>";
+		$result .= "<option value=\"".$row['user_id']."\" $selected>".htmlspecialchars($row['user_name'])."</option>";
 	}
 	$result .= "</select>";
 	return($result);

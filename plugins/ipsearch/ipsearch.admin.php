@@ -54,7 +54,7 @@ if($a == 'search')
 	while($row = sed_sql_fetcharray($sql))
 	{
 		$t -> assign(array(
-			'IPSEARCH_USER_IPMASK1' => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
+			'IPSEARCH_USER_IPMASK1' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
 			'IPSEARCH_USER_LASTIP_IPMASK1' => sed_build_ipsearch($row['user_lastip'])
 		));
 		$t -> parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK1');
@@ -66,7 +66,7 @@ if($a == 'search')
 	while($row = sed_sql_fetcharray($sql))
 	{
 		$t -> assign(array(
-			'IPSEARCH_USER_IPMASK2' => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
+			'IPSEARCH_USER_IPMASK2' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
 			'IPSEARCH_USER_LASTIP_IPMASK2' => sed_build_ipsearch($row['user_lastip'])
 		));
 		$t -> parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK2');
@@ -78,7 +78,7 @@ if($a == 'search')
 	while($row = sed_sql_fetcharray($sql))
 	{
 		$t -> assign(array(
-			'IPSEARCH_USER_IPMASK3' => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
+			'IPSEARCH_USER_IPMASK3' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
 			'IPSEARCH_USER_LASTIP_IPMASK3' => sed_build_ipsearch($row['user_lastip'])
 		));
 		$t -> parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK3');

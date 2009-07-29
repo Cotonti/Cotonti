@@ -46,9 +46,9 @@ if ($row['pm_touserid']==$usr['id'] && $row['pm_state']==2)
     $f = 'archives';
     $title .= " <a href=\"".sed_url('pm', 'f=archives')."\">".$L['pm_archives']."</a>";
     $pm_fromuserid = $row['pm_fromuserid'];
-    $pm_fromuser = sed_cc($row['pm_fromuser']);
+    $pm_fromuser = htmlspecialchars($row['pm_fromuser']);
     $pm_touserid = $usr['id'];
-    $pm_touser = sed_cc($usr['name']);
+    $pm_touser = htmlspecialchars($usr['name']);
     $pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
     $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
     $to = $row['pm_fromuserid'];
@@ -71,9 +71,9 @@ elseif ($row['pm_touserid']==$usr['id'] && $row['pm_state']<2)
     }
 
     $pm_fromuserid = $row['pm_fromuserid'];
-    $pm_fromuser = sed_cc($row['pm_fromuser']);
+    $pm_fromuser = htmlspecialchars($row['pm_fromuser']);
     $pm_touserid = $usr['id'];
-    $pm_touser = sed_cc($usr['name']);
+    $pm_touser = htmlspecialchars($usr['name']);
     $pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
     $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=archive&".sed_xg()."&id=".$row['pm_id'])."\" title=\"".$L['pm_putinarchives']."\"><img src=\"skins/".$skin."/img/system/icon-pm-archive.gif\" alt=\"".$L['pm_putinarchives']."\" /></a>";
     $row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>" : '';
@@ -86,9 +86,9 @@ elseif ($row['pm_fromuserid']==$usr['id'] && ($row['pm_state']==0 || $row['pm_st
     $f = 'sentbox';
     $title .= " <a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>";
     $pm_fromuserid = $usr['id'];
-    $pm_fromuser = sed_cc($usr['name']);
+    $pm_fromuser = htmlspecialchars($usr['name']);
     $pm_touserid = $row['pm_touserid'];
-    $pm_touser = sed_cc($row['user_name']);
+    $pm_touser = htmlspecialchars($row['user_name']);
     $pm_fromortouser = sed_build_user($pm_touserid, $pm_touser);
     $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
     $to = $row['pm_touserid'];
@@ -117,14 +117,14 @@ if($cfg['parser_cache'])
 {
     if(empty($row['pm_html']) && !empty($row['pm_text']))
     {
-        $row['pm_html'] = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+        $row['pm_html'] = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
         sed_sql_query("UPDATE $db_pm SET pm_html = '".sed_sql_prep($row['pm_html'])."' WHERE pm_id = " . $row['pm_id']);
     }
     $pm_data = sed_post_parse($row['pm_html']);
 }
 else
 {
-    $pm_data = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+    $pm_data = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
     $pm_data = sed_post_parse($pm_data);
 }
 
@@ -160,7 +160,7 @@ $t-> assign(array(
         "PM_FROMUSER" => sed_build_user($pm_fromuserid, $pm_fromuser),
         "PM_TOUSERID" => $pm_touserid,
         "PM_TOUSER" => sed_build_user($pm_touserid, $pm_touser),
-        "PM_TITLE" => "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\">".sed_cc($row['pm_title'])."</a>",
+        "PM_TITLE" => "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\">".htmlspecialchars($row['pm_title'])."</a>",
         "PM_TEXT" => $pm_data,
         "PM_FROMORTOUSER" => $pm_fromortouser,
         "PM_ICON_ACTION" => $row['pm_icon_action'],
@@ -171,8 +171,8 @@ if ($usr['auth_write'])
     $t-> assign(array(
         "PM_QUOTE" => '<a href="'.sed_url('pm', 'm=message&amp;id='.$id.'&amp;q=quote').'">'.$L[Quote].'</a>',
         "PM_FORM_SEND" => sed_url('pm', 'm=send&amp;a=send&amp;to='.$to),
-        "PM_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".sed_cc($newpmtitle)."\" size=\"56\" maxlength=\"255\" />",
-        "PM_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"8\" cols=\"56\">".sed_cc($newpmtext)."</textarea>".$pfs,
+        "PM_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".htmlspecialchars($newpmtitle)."\" size=\"56\" maxlength=\"255\" />",
+        "PM_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"8\" cols=\"56\">".htmlspecialchars($newpmtext)."</textarea>".$pfs,
         "PM_FORM_MYPFS" => $pfs,
         ));
     $t->parse("MAIN.REPLY");

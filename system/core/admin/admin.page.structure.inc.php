@@ -170,7 +170,7 @@ if($n == 'options')
 		$check2 = " checked=\"checked\"";
 	}
 
-	$adminpath[] = array (sed_url('admin', "m=page&s=structure&n=options&id=".$id), sed_cc($structure_title));
+	$adminpath[] = array (sed_url('admin', "m=page&s=structure&n=options&id=".$id), htmlspecialchars($structure_title));
 
 	foreach($sed_cat as $i => $x)
 	{

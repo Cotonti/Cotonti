@@ -36,7 +36,7 @@ unset($pageprev, $pagenext);
 
 
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
 $title = $bhome . "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator'];
 
@@ -128,27 +128,27 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
     if ($f=='sentbox')
     {
         $pm_fromuserid = $usr['id'];
-        $pm_fromuser = sed_cc($usr['name']);
+        $pm_fromuser = htmlspecialchars($usr['name']);
         $pm_touserid = $row['pm_touserid'];
-        $pm_touser = sed_cc($row['user_name']);
+        $pm_touser = htmlspecialchars($row['user_name']);
         $pm_fromortouser = sed_build_user($pm_touserid, $pm_touser);
         $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
     }
     elseif ($f=='archives')
     {
         $pm_fromuserid = $row['pm_fromuserid'];
-        $pm_fromuser = sed_cc($row['pm_fromuser']);
+        $pm_fromuser = htmlspecialchars($row['pm_fromuser']);
         $pm_touserid = $usr['id'];
-        $pm_touser = sed_cc($usr['name']);
+        $pm_touser = htmlspecialchars($usr['name']);
         $pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
         $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
     }
     else
     {
         $pm_fromuserid = $row['pm_fromuserid'];
-        $pm_fromuser = sed_cc($row['pm_fromuser']);
+        $pm_fromuser = htmlspecialchars($row['pm_fromuser']);
         $pm_touserid = $usr['id'];
-        $pm_touser = sed_cc($usr['name']);
+        $pm_touser = htmlspecialchars($usr['name']);
         $pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
         $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=archive&".sed_xg()."&id=".$row['pm_id'])."\" title=\"".$L['pm_putinarchives']."\"><img src=\"skins/".$skin."/img/system/icon-pm-archive.gif\" alt=\"".$L['pm_putinarchives']."\" /></a>";
         $row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>" : '';
@@ -158,14 +158,14 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
     {
         if(empty($row['pm_html']) && !empty($row['pm_text']))
         {
-            $row['pm_html'] = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+            $row['pm_html'] = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
             sed_sql_query("UPDATE $db_pm SET pm_html = '".sed_sql_prep($row['pm_html'])."' WHERE pm_id = " . $row['pm_id']);
         }
         $pm_data = sed_post_parse($row['pm_html']);
     }
     else
     {
-        $pm_data = sed_parse(sed_cc($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+        $pm_data = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
         $pm_data = sed_post_parse($pm_data);
     }
 
@@ -178,7 +178,7 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
         "PM_ROW_FROMUSER" => sed_build_user($pm_fromuserid, $pm_fromuser),
         "PM_ROW_TOUSERID" => $pm_touserid,
         "PM_ROW_TOUSER" => sed_build_user($pm_touserid, $pm_touser),
-        "PM_ROW_TITLE" => "<a href=\"".sed_url('pm', 'm=message&id='.$row['pm_id'])."\">".sed_cc($row['pm_title'])."</a>",
+        "PM_ROW_TITLE" => "<a href=\"".sed_url('pm', 'm=message&id='.$row['pm_id'])."\">".htmlspecialchars($row['pm_title'])."</a>",
         "PM_ROW_TEXT" => $pm_data,
         "PM_ROW_FROMORTOUSER" => $pm_fromortouser,
         "PM_ROW_ICON_STATUS" => $row['pm_icon_status'],

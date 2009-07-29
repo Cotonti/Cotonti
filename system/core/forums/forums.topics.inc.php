@@ -340,7 +340,7 @@ while ($rowv = sed_sql_fetcharray($sqlv))
 	if ($rowv['online_name'] != 'v')
 		{
 		$fs_viewers_names .= ($v>0) ? ', ' : '';
-		$fs_viewers_names .= sed_build_user($rowv['online_userid'], sed_cc($rowv['online_name']));
+		$fs_viewers_names .= sed_build_user($rowv['online_userid'], htmlspecialchars($rowv['online_name']));
 		$v++;
 		}
 	}
@@ -366,7 +366,7 @@ $t->assign(array(
 	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
 	"FORUMS_TOPICS_SECTION_RSS" => sed_url("rss", "c=section&id=$s", "", true),
 	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
-    "FORUMS_TOPICS_SHORTTITLE" => sed_cc($fs_title),
+    "FORUMS_TOPICS_SHORTTITLE" => htmlspecialchars($fs_title),
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
 	"FORUMS_TOPICS_NEWTOPICURL" => sed_url('forums', "m=newtopic&s=".$s),
 	"FORUMS_TOPICS_PAGES" => $pages,
@@ -409,7 +409,7 @@ $t->assign(array(
 		{
 			$fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
 			$fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
-			$fsn['fs_desc'] = sed_cc($fsn['fs_desc']);
+			$fsn['fs_desc'] = htmlspecialchars($fsn['fs_desc']);
 			$fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
 
 			if (!$fsn['fs_lt_id']) { sed_forum_sectionsetlast($fsn['fs_id']); }
@@ -437,7 +437,7 @@ $t->assign(array(
 
 			$fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? @date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date'] + $usr['timezone'] * 3600) : '';
 			$fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
-			$fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
+			$fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], htmlspecialchars($fsn['fs_lt_postername']));
 
 			$fsn['fs_desc'] = (!empty($fsn['fs_desc'])) ? $fsn['fs_desc'] : "";
 			$fsn['lastpost'] = (!empty($fsn['fs_postcount_all'])) ? $fsn['lastpost'] : $L['No_items'];
@@ -525,10 +525,10 @@ $t->assign(array(
 			}
 
 			$row['ft_icon'] = "<img src=\"skins/$skin/img/system/".$row['ft_icon'].".gif\" alt=\"\" />";
-			$row['ft_lastpostername'] = sed_build_user($row['ft_lastposterid'], sed_cc($row['ft_lastpostername']));
+			$row['ft_lastpostername'] = sed_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 		}
 
-		$row['ft_firstpostername'] = sed_build_user($row['ft_firstposterid'], sed_cc($row['ft_firstpostername']));
+		$row['ft_firstpostername'] = sed_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername']));
 
 		if ($row['poll_id']>0)
 		{ $row['ft_title'] = $L['Poll'].": ".$row['ft_title']; }
@@ -553,8 +553,8 @@ $t->assign(array(
 		"FORUMS_TOPICS_ROW_ID" => $row['ft_id'],
 		"FORUMS_TOPICS_ROW_STATE" => $row['ft_state'],
 		"FORUMS_TOPICS_ROW_ICON" => $row['ft_icon'],
-		"FORUMS_TOPICS_ROW_TITLE" => sed_cc($row['ft_title']),
-		"FORUMS_TOPICS_ROW_DESC" => sed_cc($row['ft_desc']),
+		"FORUMS_TOPICS_ROW_TITLE" => htmlspecialchars($row['ft_title']),
+		"FORUMS_TOPICS_ROW_DESC" => htmlspecialchars($row['ft_desc']),
 		"FORUMS_TOPICS_ROW_CREATIONDATE" => @date($cfg['formatmonthdayhourmin'], $row['ft_creationdate'] + $usr['timezone'] * 3600),
 		"FORUMS_TOPICS_ROW_UPDATED" => $row['ft_lastposturl'],
 		"FORUMS_TOPICS_ROW_TIMEAGO" => $row['ft_timago'],

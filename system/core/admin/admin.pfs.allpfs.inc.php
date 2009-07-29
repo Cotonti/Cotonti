@@ -61,7 +61,7 @@ while($row = sed_sql_fetcharray($sql))
 
 	$t -> assign(array(
 		"ADMIN_ALLPFS_ROW_URL" => sed_url('pfs', "userid=".$row['user_id']),
-		"ADMIN_ALLPFS_ROW_USER" => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
+		"ADMIN_ALLPFS_ROW_USER" => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
 		"ADMIN_ALLPFS_ROW_COUNT" => $row['COUNT(*)']
 	));
 

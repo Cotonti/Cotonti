@@ -312,20 +312,20 @@ $useredit_array = array(
 	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
 	"USERS_REGISTER_ADMINEMAIL" => "$sed_adminemail",
 	"USERS_REGISTER_SEND" => sed_url('users', 'm=register&a=add'),
-	"USERS_REGISTER_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".sed_cc($rusername)."\" size=\"24\" maxlength=\"100\" />",
-	"USERS_REGISTER_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".sed_cc($ruseremail)."\" size=\"24\" maxlength=\"64\" />",
+	"USERS_REGISTER_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".htmlspecialchars($rusername)."\" size=\"24\" maxlength=\"100\" />",
+	"USERS_REGISTER_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".htmlspecialchars($ruseremail)."\" size=\"24\" maxlength=\"64\" />",
 	"USERS_REGISTER_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword1\" size=\"8\" maxlength=\"16\" />",
 	"USERS_REGISTER_PASSWORDREPEAT" => "<input type=\"password\" class=\"password\" name=\"rpassword2\" size=\"8\" maxlength=\"16\" />",
 	"USERS_REGISTER_COUNTRY" => sed_selectbox_countries($rcountry, 'rcountry'),
-	"USERS_REGISTER_LOCATION" => "<input type=\"text\" class=\"text\" name=\"rlocation\" value=\"".sed_cc($rlocation)."\" size=\"24\" maxlength=\"64\" />",
+	"USERS_REGISTER_LOCATION" => "<input type=\"text\" class=\"text\" name=\"rlocation\" value=\"".htmlspecialchars($rlocation)."\" size=\"24\" maxlength=\"64\" />",
 	"USERS_REGISTER_TIMEZONE" => $form_timezone,
-	"USERS_REGISTER_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"roccupation\" value=\"".sed_cc($roccupation)."\" size=\"24\" maxlength=\"64\" />",
+	"USERS_REGISTER_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"roccupation\" value=\"".htmlspecialchars($roccupation)."\" size=\"24\" maxlength=\"64\" />",
 	"USERS_REGISTER_GENDER" => $form_usergender,
 	"USERS_REGISTER_BIRTHDATE" => $form_birthdate,
-	"USERS_REGISTER_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".sed_cc($ruserwebsite)."\" size=\"56\" maxlength=\"128\" />",
-	"USERS_REGISTER_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".sed_cc($rusericq)."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_REGISTER_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".sed_cc($ruserirc)."\" size=\"56\" maxlength=\"128\" />",
-	"USERS_REGISTER_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".sed_cc($rusermsn)."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_REGISTER_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".htmlspecialchars($ruserwebsite)."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_REGISTER_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".htmlspecialchars($rusericq)."\" size=\"32\" maxlength=\"16\" />",
+	"USERS_REGISTER_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".htmlspecialchars($ruserirc)."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_REGISTER_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".htmlspecialchars($rusermsn)."\" size=\"32\" maxlength=\"64\" />",
 );
 // Extra fields
 if(count($extrafields)>0)
@@ -338,11 +338,11 @@ foreach($extrafields as $i=>$row)
 	{
 		case "input":
 			$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
-			$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" ', $t2);
+			$t2 = str_replace('<input ','<input value="'.htmlspecialchars($urr['user_'.$row['field_name']]).'" ', $t2);
 			break;
 		case "textarea":
 			$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
-			$t2 = str_replace('</textarea>',sed_cc($urr['user_'.$row['field_name']]).'</textarea>', $t2);
+			$t2 = str_replace('</textarea>',htmlspecialchars($urr['user_'.$row['field_name']]).'</textarea>', $t2);
 			break;
 		case "select":
 			$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
@@ -359,7 +359,7 @@ foreach($extrafields as $i=>$row)
 		case "checkbox":
 			$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
 			$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
-			$t2 = str_replace('<input ','<input value="'.sed_cc($urr['user_'.$row['field_name']]).'" '.$sel.' ', $t2);
+			$t2 = str_replace('<input ','<input value="'.htmlspecialchars($urr['user_'.$row['field_name']]).'" '.$sel.' ', $t2);
 			break;
 	}
 	$useredit_array[$t1] = $t2;

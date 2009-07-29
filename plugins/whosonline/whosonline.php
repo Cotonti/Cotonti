@@ -41,7 +41,7 @@ while ($row = sed_sql_fetcharray($sql1))
 	$visituser++;
     if($usr['isadmin'])
     {
-    	$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator']." ".sed_cc($row['online_subloc']) : '';
+    	$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator']." ".htmlspecialchars($row['online_subloc']) : '';
 		$t->assign(array(
 			'WHOSONlINE_ROW1_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
 			'WHOSONlINE_ROW1_USER_ONLINE_IP'=> $row['online_ip']
@@ -55,7 +55,7 @@ while ($row = sed_sql_fetcharray($sql1))
 		$user_avatar .= (!empty($row['user_avatar'])) ? "<img src=\"".$row['user_avatar']."\" width=\"".$miniavatar_x."\" height=\"".$miniavatar_y."\" alt=\"\" /></a>" : "<img src=\"images/pixel.gif\" width=\"".$miniavatar_x."\" height=\"".$miniavatar_y."\" alt=\"\" /></a>";
 	}
 
-	$row['user_text'] = sed_build_usertext(sed_cc($row['user_text']));
+	$row['user_text'] = sed_build_usertext(htmlspecialchars($row['user_text']));
 
 	$row['user_birthdate'] = sed_date2stamp($row['user_birthdate']);
 
@@ -65,7 +65,7 @@ while ($row = sed_sql_fetcharray($sql1))
 		'WHOSONlINE_ROW1_USER_PHOTO' => ($showavatars) ? sed_build_userimage($row['user_photo'], 'photo') : '',
 		'WHOSONlINE_ROW1_USER_SIGNATURE' => ($showavatars) ? sed_build_userimage($row['user_signature'], 'sig') : '',
 		'WHOSONlINE_ROW1_USER_ID' => $row['online_userid'],
-		'WHOSONlINE_ROW1_USER' => sed_build_user($row['online_userid'], sed_cc($row['online_name'])),
+		'WHOSONlINE_ROW1_USER' => sed_build_user($row['online_userid'], htmlspecialchars($row['online_name'])),
 		'WHOSONlINE_ROW1_USER_MAINGRP_URL' => sed_url('users', 'g='.$row['user_maingrp']),
 		'WHOSONlINE_ROW1_USER_MAINGRP_TITLE' => $sed_groups[$row['user_maingrp']]['title'],
 		'WHOSONlINE_ROW1_USER_MAINGRP' => sed_build_group($row['user_maingrp']),
@@ -78,15 +78,15 @@ while ($row = sed_sql_fetcharray($sql1))
 		'WHOSONlINE_ROW1_USER_ONLINE_LASTSEEN'=> sed_build_timegap($row['online_lastseen'],$sys['now']),
 		'WHOSONlINE_ROW1_USER_TEXT' => $cfg['parsebbcodeusertext'] ? sed_bbcode_parse($row['user_text'], true) : $row['user_text'],
 		'WHOSONlINE_ROW1_USER_REGDATE' => @date($cfg['dateformat'], $row['user_regdate'] + $row['timezone'] * 3600)." ".$row['timetext'],
-		'WHOSONlINE_ROW1_USER_LOCATION' => sed_cc($row['user_location']),
+		'WHOSONlINE_ROW1_USER_LOCATION' => htmlspecialchars($row['user_location']),
 		'WHOSONlINE_ROW1_USER_WEBSITE' => sed_build_url($row['user_website']),
-		'WHOSONlINE_ROW1_USER_IRC' => sed_cc($row['user_irc']),
+		'WHOSONlINE_ROW1_USER_IRC' => htmlspecialchars($row['user_irc']),
 		'WHOSONlINE_ROW1_USER_ICQ' => sed_build_icq($row['user_icq']),
 		'WHOSONlINE_ROW1_USER_MSN' => sed_build_msn($row['user_msn']),
 		"WHOSONlINE_ROW1_USER_GENDER" => ($row['user_gender']=='' || $row['user_gender']=='U') ?  '' : $L["Gender_".$row['user_gender']],
 		"WHOSONlINE_ROW1_USER_AGE" => ($row['user_birthdate']!=0) ? sed_build_age($row['user_birthdate']) : '',
 		"WHOSONlINE_ROW1_USER_BIRTHDATE" => ($row['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $row['user_birthdate']) : '',
-		"WHOSONlINE_ROW1_USER_OCCUPATION" => sed_cc($row['user_occupation'])
+		"WHOSONlINE_ROW1_USER_OCCUPATION" => htmlspecialchars($row['user_occupation'])
 	));
 
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
@@ -102,7 +102,7 @@ while ($row = sed_sql_fetcharray($sql2))
 
     if($usr['isadmin'])
     {
-    	$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator']." ".sed_cc($row['online_subloc']) : '';
+    	$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator']." ".htmlspecialchars($row['online_subloc']) : '';
 		$t->assign(array(
 			'WHOSONlINE_ROW2_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
 			'WHOSONlINE_ROW2_USER_ONLINE_IP'=> $row['online_ip']

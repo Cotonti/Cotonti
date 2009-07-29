@@ -44,7 +44,7 @@ if($cfg['plugin']['tags']['pages'])
 			}
 		}
 		$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index'].'&t='.$tag_u.$tl)
-			.'" class="'.$dim.'">'.sed_cc($tag_t).'</a> ';
+			.'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a> ';
 	}
 	if($cfg['plugin']['tags']['more'] && $limit > 0)
 	{

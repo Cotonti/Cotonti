@@ -94,7 +94,7 @@ $t = new XTemplate(sed_skinfile('forums.sections'));
 
 if($cfg['homebreadcrumb'])
 {
-    $bhome = '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
+    $bhome = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
 }
 else
 {
@@ -124,7 +124,7 @@ while ($fsn = sed_sql_fetcharray($sql))
         $catnum = sed_sql_result($sql2, 0, "COUNT(*)");
 
         $cattitle = "<a href=\"".sed_url('forums')."#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
-        $cattitle .= sed_cc($sed_forums_str[$fsn['fs_category']]['tpath']);
+        $cattitle .= htmlspecialchars($sed_forums_str[$fsn['fs_category']]['tpath']);
         $cattitle .= "</a>";
 
         if ($c=='fold')
@@ -144,9 +144,9 @@ while ($fsn = sed_sql_fetcharray($sql))
         $t-> assign(array(
             "FORUMS_SECTIONS_ROW_CAT_TITLE" => $cattitle,
             "FORUMS_SECTIONS_ROW_CAT_ICON" => $fsn['fn_icon'],
-            "FORUMS_SECTIONS_ROW_CAT_SHORTTITLE" => sed_cc($fsn['fn_title']),
+            "FORUMS_SECTIONS_ROW_CAT_SHORTTITLE" => htmlspecialchars($fsn['fn_title']),
             "FORUMS_SECTIONS_ROW_CAT_DESC" => sed_parse_autourls($fsn['fn_desc']),
-            "FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => sed_cc($fsn['fn_defstate']),
+            "FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => htmlspecialchars($fsn['fn_defstate']),
             "FORUMS_SECTIONS_ROW_CAT_TBODY" => $fsn['toggle_body'],
             "FORUMS_SECTIONS_ROW_CAT_TBODY_END" => "</tbody>",
             "FORUMS_SECTIONS_ROW_CAT_CODE" => $fsn['fs_category'],
@@ -189,7 +189,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 
         $fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? @date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date'] + $usr['timezone'] * 3600) : '';
         $fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
-        $fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], sed_cc($fsn['fs_lt_postername']));
+        $fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], htmlspecialchars($fsn['fs_lt_postername']));
 
         if (!$secact_max)
         {
@@ -254,7 +254,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 
                 $t-> assign(array(
                     "FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsnn['fs_lt_date'],
-                    "FORUMS_SECTIONS_ROW_LASTPOSTER" => sed_build_user($fsnn['fs_lt_posterid'], sed_cc($fsnn['fs_lt_postername'])),
+                    "FORUMS_SECTIONS_ROW_LASTPOSTER" => sed_build_user($fsnn['fs_lt_posterid'], htmlspecialchars($fsnn['fs_lt_postername'])),
                     "FORUMS_SECTIONS_ROW_LASTPOST" => $fsnn['lastpost'],
                     "FORUMS_SECTIONS_ROW_TIMEAGO" => $fsnn['fs_timago']
                     ));
@@ -275,7 +275,7 @@ while ($fsn = sed_sql_fetcharray($sql))
                 "FORUMS_SECTIONS_ROW_SLAVE_ODDEVEN" => sed_build_oddeven($ii),
                 "FORUMS_SECTIONS_ROW_SLAVE_NUM" => $ii,
                 "FORUMS_SECTIONS_ROW_SLAVE" => $row,
-                "FORUMS_SECTIONS_ROW_SLAVEI" => "<a href=\"".sed_url('forums', "m=topics&s=".$row['fs_id'])."\">".$j.sed_cc($row['fs_title'])."</a>",
+                "FORUMS_SECTIONS_ROW_SLAVEI" => "<a href=\"".sed_url('forums', "m=topics&s=".$row['fs_id'])."\">".$j.htmlspecialchars($row['fs_title'])."</a>",
                 ));
 
             $t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVES");

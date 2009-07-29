@@ -137,8 +137,8 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_TRASHCAN_DATE" => date($cfg['dateformat'], $row['tr_date'] + $usr['timezone'] * 3600),
 		"ADMIN_TRASHCAN_TYPESTR_ICON" => $icon,
 		"ADMIN_TRASHCAN_TYPESTR" => $typestr,
-		"ADMIN_TRASHCAN_TITLE" => sed_cc($row['tr_title']),
-		"ADMIN_TRASHCAN_TRASHEDBY" => ($row['tr_trashedby'] == 0) ? $L['System'] : sed_build_user($row['tr_trashedby'], sed_cc($row['user_name'])),
+		"ADMIN_TRASHCAN_TITLE" => htmlspecialchars($row['tr_title']),
+		"ADMIN_TRASHCAN_TRASHEDBY" => ($row['tr_trashedby'] == 0) ? $L['System'] : sed_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
 		"ADMIN_TRASHCAN_ROW_WIPE_URL" => sed_url('admin', "m=trashcan&a=wipe&id=".$row['tr_id']."&d=".$d."&".sed_xg()),
 		"ADMIN_TRASHCAN_ROW_RESTORE_URL" => sed_url('admin', "m=trashcan&a=restore&id=".$row['tr_id']."&d=".$d."&".sed_xg())
 	));
