@@ -30,12 +30,12 @@ if(empty($error_string) && $cfg['plugin']['comedit']['mail'])
 
 	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
-	$email_title = $L['plu_comlive'].$cfg['main_url'];
-	$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive2'];
+	$email_title = $L['plu_comlive'] . $cfg['main_url'];
+	$email_body  = $L['User'] .' ' . $usr['name'] . ', ' . $L['plu_comlive2'];
 	$email_url = str_replace('&amp;amp;', '&', $url);
 	$email_url = str_replace('&amp;', '&', $email_url);
 	$sep = mb_strstr($email_url, '?') ? '&' : '?';
-	$email_body .= $cfg['mainurl']."/".$email_url.$sep."comments=1#c".$newcomm."\n\n";
+	$email_body .= $cfg['mainurl'] . '/' . $email_url . $sep . 'comments=1#c' . $newcomm . "\n\n";
 
 	while($adm = sed_sql_fetcharray($sql))
 	{

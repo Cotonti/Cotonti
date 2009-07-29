@@ -364,7 +364,7 @@ if (is_array($extp))
 /* ===== */
 if($usr['isadmin'])
 {
-	$t->parse("MAIN.PAGE_ADMIN");
+	$t->parse('MAIN.PAGE_ADMIN');
 }
 if(($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
 {
@@ -376,10 +376,10 @@ else
 }
 if(!empty($pag['page_url']))
 {
-	$t->parse("MAIN.PAGE_FILE");
+	$t->parse('MAIN.PAGE_FILE');
 }
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 
