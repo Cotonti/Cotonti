@@ -7,4 +7,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'main', '29', 'redirbkonlogout', 3, '1', '', '');
 
 /* r865 News plugin updates */
-INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `config_name` , `config_type` , `config_value` , `config_default` , `config_text` ) VALUES ('plug', 'news', '04', 'addpagination', 3, '0', '', 'Enable pagination for additional categoryes');
+INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `config_name` , `config_type` , `config_value` , `config_default` , `config_text` ) VALUES ('plug', 'news', '04', 'addpagination', 3, '0', '', 'Enable pagination for additional categories');
+
+/* r866 html-cache for comments */
+ALTER TABLE `sed_com` ADD `com_html` text collate utf8_unicode_ci;

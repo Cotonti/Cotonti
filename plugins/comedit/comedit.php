@@ -29,8 +29,8 @@ $pid = sed_import('pid', 'G', 'ALP');
 
 $plugin_title = $L['plu_title'];
 $t -> assign(array(
-	"COMEDIT_TITLE" => $plugin_title,
-	"COMEDIT_TITLE_URL" => sed_url('plug', 'e=comedit')
+	'COMEDIT_TITLE' => $plugin_title,
+	'COMEDIT_TITLE_URL' => sed_url('plug', 'e=comedit')
 ));
 $t -> parse("MAIN.COMEDIT_TITLE");
 
@@ -53,13 +53,16 @@ if($a == 'update')
 
 	if(isset($error_string))
 	{
-		$t -> assign("COMEDIT_ERROR_BODY",$error_string);
-		$t -> parse("MAIN.COMEDIT_ERROR");
+		$t -> assign('COMEDIT_ERROR_BODY', $error_string);
+		$t -> parse('MAIN.COMEDIT_ERROR');
 	}
 
 	if(empty($error_string))
 	{
-		$sql = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($comtext)."' WHERE com_id=$cid AND com_code='$pid'");
+		$comhtml = $cfg['parser_cache'] ?
+				sed_parse(htmlspecialchars($comtext), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true) : '';
+		$sql = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($comtext)."',
+			com_html = '".sed_sql_prep($comhtml)."' WHERE com_id=$cid AND com_code='$pid'");
 
 		if($cfg['plugin']['comedit']['mail'])
 		{
