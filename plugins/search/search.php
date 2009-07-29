@@ -318,6 +318,7 @@ if($tab=='frm' && !$cfg['disable_forums'])
 		// Display results if some were found
 		if($items > 0)
 		{
+            $jj=0;
 			while($row = mysql_fetch_array($sql))
 			{
 				// Display only what the user is allowed to see
@@ -330,10 +331,13 @@ if($tab=='frm' && !$cfg['disable_forums'])
 							"PLUGIN_FR_CATEGORY" => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE),
 							"PLUGIN_FR_TITLE" => "<a href='$post_url'>".htmlspecialchars($row['ft_title'])."</a>",
 							"PLUGIN_FR_TEXT" => hw_clear_mark($row['fp_text'], 0, $words),
-							"PLUGIN_FR_TIME" => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600)
-						));
+							"PLUGIN_FR_TIME" => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600),
+                            "PLUGIN_FR_ODDEVEN" => sed_build_oddeven($jj),
+                            "PLUGIN_FR_NUM" => $jj,
+                    ));
 						$t->parse("MAIN.FORUMS_RESULTS.ITEM");
 					}
+                    $jj++;
 				}
 			}
 
@@ -591,6 +595,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 		// Display results if something was found
 		if($items > 0)
 		{
+            $jj=0;
 			while($row = mysql_fetch_array($sql))
 			{
 				// Display only what the user is allowed to see
@@ -602,9 +607,12 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 						"PLUGIN_PR_CATEGORY" => "<a href='".sed_url('list', 'c='.$row['page_cat'])."'>".$sed_cat[$row['page_cat']]['tpath']."</a>",
 						"PLUGIN_PR_TITLE" => "<a href='$page_url'>".htmlspecialchars($row['page_title'])."</a>",
 						"PLUGIN_PR_TEXT" => hw_clear_mark($row['page_text'], $row['page_type'], $words),
-						"PLUGIN_PR_TIME" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)
+						"PLUGIN_PR_TIME" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
+                        "PLUGIN_PR_ODDEVEN" => sed_build_oddeven($jj),
+                        "PLUGIN_PR_NUM" => $jj,
 					));
 					$t->parse("MAIN.PAGES_RESULTS.ITEM");
+                    $jj++;
 				}
 			}
 
@@ -901,6 +909,7 @@ else
 			// Display results if something was found
 			if($items1 > 0)
 			{
+                $jj=0;
 				while($row = mysql_fetch_array($sql))
 				{
 					// Check permissions
@@ -911,9 +920,12 @@ else
 							"PLUGIN_FR_CATEGORY" => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE),
 							"PLUGIN_FR_TITLE" => "<a href='$post_url'>".htmlspecialchars($row['ft_title'])."</a>",
 							"PLUGIN_FR_TEXT" => hw_clear_mark($row['fp_text'], 0, $words),
-							"PLUGIN_FR_TIME" => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600)
-						));
+							"PLUGIN_FR_TIME" => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600),
+                            "PLUGIN_FR_ODDEVEN" => sed_build_oddeven($jj),
+                            "PLUGIN_FR_NUM" => $jj,
+                            ));
 						$t->parse("MAIN.EASY_FORUMS_RESULTS.ITEM");
+                        $jj++;
 					}
 				}
 
@@ -1010,6 +1022,7 @@ else
 				// Display results if something was found
 				if($items2 > 0)
 				{
+                    $jj=0;
 					while($row = mysql_fetch_array($sql))
 					{
 						// Apply permissions
@@ -1021,9 +1034,12 @@ else
 								"PLUGIN_PR_CATEGORY" => "<a href='".sed_url('list', 'c='.$row['page_cat'])."'>".$sed_cat[$row['page_cat']]['tpath']."</a>",
 								"PLUGIN_PR_TITLE" => "<a href='$page_url'>".htmlspecialchars($row['page_title'])."</a>",
 								"PLUGIN_PR_TEXT" => hw_clear_mark($row['page_text'], $row['page_type'], $words),
-								"PLUGIN_PR_TIME" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600)
+								"PLUGIN_PR_TIME" => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
+                                "PLUGIN_PR_ODDEVEN" => sed_build_oddeven($jj),
+                                "PLUGIN_PR_NUM" => $jj,
 							));
 							$t->parse("MAIN.EASY_PAGES_RESULTS.ITEM");
+                            $jj++;
 						}
 					}
 

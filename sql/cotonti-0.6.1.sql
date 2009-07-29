@@ -450,6 +450,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'markitup', '3', 'chili', 3, '0', '', 'Enable Chili tags'),
 ('plug', 'news', '01', 'category', 1, 'news', '', 'Category code of the parent category'),
 ('plug', 'news', '02', 'maxpages', 2, '10', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100', 'Recent pages displayed'),
+('plug', 'news', '03', 'addpagination', 3, '0', '', 'Enable pagination for additional categoryes'),
 ('plug', 'recentitems', '1', 'maxpages', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed'),
 ('core', 'main', '07', 'maintenance', 3, '0', '', ''),
 ('plug', 'recentitems', '4', 'maxtopics', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed'),

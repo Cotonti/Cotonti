@@ -141,6 +141,8 @@ $skinlang['pmsend']['Sendmessagetohint'] = '(до 10 адресатов, чер�
 
 $skinlang['pm']['Newmessage'] = 'Новое сообщение';
 $skinlang['pm']['Sendtoarchives'] = 'Переместить в архив';
+$skinlang['pm']['Selectall'] = 'Выделить все';
+$skinlang['pm']['Unselectall'] = 'Убрать выделение';
 
 /**
  * polls.tpl

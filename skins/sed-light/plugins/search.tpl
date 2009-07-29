@@ -124,54 +124,41 @@
     <div class="tCap"></div>
     <table class="cells">
         <tr>
-            <td colspan="3" class="coltop">{PHP.L.plu_result}: {PHP.L.plu_tabs_pag} ({PLUGIN_EASY_PAGE_FOUND})
+            <td colspan="2" class="coltop">{PHP.L.plu_result}: {PHP.L.plu_tabs_pag} ({PLUGIN_EASY_PAGE_FOUND})
             </td>
         </tr>
         <!-- BEGIN: ITEM -->
         <tr>
-            <td colspan="3" style="background-color:#fff;;height:5px;"></td>
+            <td colspan="2" class="{PLUGIN_PR_ODDEVEN}">{PLUGIN_PR_TITLE}</td>
         </tr>
         <tr>
-            <td colspan="3">{PLUGIN_PR_TITLE}</td>
+            <td colspan="2" class="{PLUGIN_PR_ODDEVEN}">{PLUGIN_PR_TEXT}</td>
         </tr>
         <tr>
-            <td style="width:4px;"> &nbsp; </td>
-            <td colspan="2">{PLUGIN_PR_TEXT}</td>
+            <td class="{PLUGIN_PR_ODDEVEN}"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_PR_TIME}</div></td>
+            <td class="{PLUGIN_PR_ODDEVEN}"><div class="desc">{PHP.L.plu_section}: {PLUGIN_PR_CATEGORY}</div></td>
         </tr>
-        <tr>
-            <td colspan="2"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_PR_TIME}</div></td>
-            <td style="width:50%;"><div class="desc">{PHP.L.plu_section}: {PLUGIN_PR_CATEGORY}</div></td>
-        </tr>
-    </table>
-
     <!-- END: ITEM -->
+    </table>
   <!-- END: EASY_PAGES_RESULTS -->
 
   <!-- BEGIN: EASY_FORUMS_RESULTS -->
     <table class="cells">
         <tr>
-            <td colspan="3" style="background-color:#fff;;height:5px;"></td>
-        </tr>
-        <tr>
-            <td colspan="3" class="coltop">{PHP.L.plu_result}: {PHP.L.plu_tabs_frm} ({PLUGIN_EASY_FORUM_FOUND})
+            <td colspan="2" class="coltop">{PHP.L.plu_result}: {PHP.L.plu_tabs_frm} ({PLUGIN_EASY_FORUM_FOUND})
             </td>
         </tr>
         <!-- BEGIN: ITEM -->
         <tr>
-            <td colspan="3" style="background-color:#fff;;height:5px;"></td>
+            <td colspan="2" class="{PLUGIN_FR_ODDEVEN}">{PLUGIN_FR_TITLE}</td>
         </tr>
         <tr>
-            <td colspan="3">{PLUGIN_FR_TITLE}</td>
+            <td colspan="2" class="{PLUGIN_FR_ODDEVEN}">{PLUGIN_FR_TEXT}</td>
         </tr>
         <tr>
-            <td style="width:4px;"> &nbsp; </td>
-            <td colspan="2">{PLUGIN_FR_TEXT}</td>
+            <td class="{PLUGIN_FR_ODDEVEN}"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_FR_TIME}</div></td>
+            <td class="{PLUGIN_FR_ODDEVEN}"><div class="desc">{PHP.L.plu_section}: {PLUGIN_FR_CATEGORY}</div></td>
         </tr>
-        <tr>
-            <td colspan="2"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_FR_TIME}</div></td>
-            <td style="width:50%;"><div class="desc">{PHP.L.plu_section}: {PLUGIN_FR_CATEGORY}</div></td>
-        </tr>
-
         <!-- END: ITEM -->
     </table>
     <div class="bCap"></div>
@@ -181,25 +168,20 @@
     <div class="tCap"></div>
     <table class="cells">
         <tr>
-            <td colspan="3" class="coltop">{PHP.L.plu_result}: {PHP.L.plu_tabs_pag}
+            <td colspan="2" class="coltop">{PHP.L.plu_result}: {PHP.L.plu_tabs_pag}
             </td>
         </tr>
         <!-- BEGIN: ITEM -->
         <tr>
-            <td colspan="3" style="background-color:#fff;;height:5px;"></td>
+            <td colspan="2" class="{PLUGIN_PR_ODDEVEN}">{PLUGIN_PR_TITLE}</td>
         </tr>
         <tr>
-            <td colspan="3">{PLUGIN_PR_TITLE}</td>
+            <td colspan="2" class="{PLUGIN_PR_ODDEVEN}">{PLUGIN_PR_TEXT}</td>
         </tr>
         <tr>
-            <td style="width:4px;"> &nbsp; </td>
-            <td colspan="2">{PLUGIN_PR_TEXT}</td>
+            <td class="{PLUGIN_PR_ODDEVEN}"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_PR_TIME}</div></td>
+            <td class="{PLUGIN_PR_ODDEVEN}"><div class="desc">{PHP.L.plu_section}: {PLUGIN_PR_CATEGORY}</div></td>
         </tr>
-        <tr>
-            <td colspan="2"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_PR_TIME}</div></td>
-            <td style="width:50%;"><div class="desc">{PHP.L.plu_section}: {PLUGIN_PR_CATEGORY}</div></td>
-        </tr>
-
         <!-- END: ITEM -->
     </table>
     <div class="bCap"></div>
@@ -210,25 +192,20 @@
     <div class="tCap"></div>
     <table class="cells">
         <tr>
-            <td colspan="3" class="coltop">{PHP.L.plu_result}: {PHP.L.plu_tabs_frm}
+            <td colspan="2" class="coltop">{PHP.L.plu_result}: {PHP.L.plu_tabs_frm}
             </td>
         </tr>
         <!-- BEGIN: ITEM -->
         <tr>
-            <td colspan="3" style="background-color:#fff;;height:5px;"></td>
+            <td colspan="2" class="{PLUGIN_FR_ODDEVEN}">{PLUGIN_FR_TITLE}</td>
         </tr>
         <tr>
-            <td colspan="3">{PLUGIN_FR_TITLE}</td>
+            <td colspan="2" class="{PLUGIN_FR_ODDEVEN}">{PLUGIN_FR_TEXT}</td>
         </tr>
         <tr>
-            <td style="width:4px;"> &nbsp; </td>
-            <td colspan="2">{PLUGIN_FR_TEXT}</td>
+            <td class="{PLUGIN_FR_ODDEVEN}"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_FR_TIME}</div></td>
+            <td class="{PLUGIN_FR_ODDEVEN}"><div class="desc">{PHP.L.plu_section}: {PLUGIN_FR_CATEGORY}</div></td>
         </tr>
-        <tr>
-            <td colspan="2"><div class="desc">{PHP.L.plu_last_date}: {PLUGIN_FR_TIME}</div></td>
-            <td style="width:50%;"><div class="desc">{PHP.L.plu_section}: {PLUGIN_FR_CATEGORY}</div></td>
-        </tr>
-
         <!-- END: ITEM -->
     </table>
     <div class="bCap"></div>

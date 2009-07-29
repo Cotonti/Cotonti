@@ -141,6 +141,8 @@ $skinlang['pmsend']['Sendmessagetohint'] = '(up to 10 recipients, separated by c
 
 $skinlang['pm']['Newmessage'] = 'New message';
 $skinlang['pm']['Sendtoarchives'] = 'Send to archives';
+$skinlang['pm']['Selectall'] = 'Select all';
+$skinlang['pm']['Unselectall'] = 'Unselect all';
 
 /**
  * polls.tpl
