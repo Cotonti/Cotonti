@@ -62,10 +62,11 @@ if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
     sed_get_news($c, "news", "INDEX_NEWS", $limit, $d);
     if(!empty($cats))
     {
+        $d=($cfg['plugin']['news']['addpagination']) ? $d : 0;
         foreach($cats as $k => $v)
         {
             $lim = (empty($v[1])) ? $limit : $v[1];
-            sed_get_news($v[0], "news.".$v[0], "INDEX_NEWS_".strtoupper($v[0]), $lim);
+            sed_get_news($v[0], "news.".$v[0], "INDEX_NEWS_".strtoupper($v[0]), $lim, $d);
         }
     }
 }

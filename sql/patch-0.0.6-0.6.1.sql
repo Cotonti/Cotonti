@@ -5,3 +5,6 @@ DELETE FROM `sed_config` WHERE `config_owner` = 'plug' AND `config_cat` = 'news'
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES
 ('core', 'main', '29', 'redirbkonlogin', 3, '1', '', ''),
 ('core', 'main', '29', 'redirbkonlogout', 3, '1', '', '');
+
+/* r865 News plugin updates */
+INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `config_name` , `config_type` , `config_value` , `config_default` , `config_text` ) VALUES ('plug', 'news', '04', 'addpagination', 3, '0', '', 'Enable pagination for additional categoryes');
