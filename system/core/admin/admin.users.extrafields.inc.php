@@ -3,7 +3,7 @@
  * Administration panel - Extra fields editor for users part
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.6.1
  * @author medar, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD

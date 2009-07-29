@@ -4868,23 +4868,40 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $variants="", $description="")
 {
 	global $db_extra_fields, $db_x;
-	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields
-			WHERE field_name = '$oldname' AND field_location='$sql_table'"), 0, 0) <= 0
-		|| sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table WHERE Field LIKE '%\_$name'")) > 0)
+	$fieldsres = sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields
+			WHERE field_name = '$oldname' AND field_location='$sql_table'");
+	if (sed_sql_numrows($fieldsres) <= 0
+		|| $name != $oldname
+			&& sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table WHERE Field LIKE '%\_$name'")) > 0)
 	{
 		// Attempt to edit non-extra field or override an existing field
 		return FALSE;
 	}
+	$field = sed_sql_fetchassoc($fieldsres);
 	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
 	$column = mysql_fetch_field($fieldsres, 0);
 	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
-	$extf['location'] = $sql_table;
-	$extf['name'] = $name;
-	$extf['type'] = $type;
-	$extf['html'] = $html;
-	$extf['variants'] = $variants;
-	$extf['description'] = $description;
+	$alter = FALSE;
+	if ($name != $field['field_name'])
+	{
+		$extf['name'] = $name;
+		$alter = TRUE;
+	}
+	if ($type != $field['field_type'])
+	{
+		$extf['type'] = $type;
+		$alter = TRUE;
+	}
+	if ($html != $field['field_html'])
+		$extf['html'] = $html;
+	if ($variants != $field['field_variants'])
+		$extf['variants'] = $variants;
+	if ($description != $field['field_description'])
+		$extf['description'] = $description;
 	$step1 = sed_sql_update($db_extra_fields, "field_name = '$oldname' AND field_location='$sql_table'", $extf, 'field_') == 1;
+	
+	if (!$alter) return $step1;
+
 	switch ($type)
 	{
 		case "input": $sqltype = "VARCHAR(255)"; break;
