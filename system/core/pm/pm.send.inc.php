@@ -76,7 +76,7 @@ if($a=='send')
         while($row = sed_sql_fetcharray($sql))
         {
             $touser_ids[] = $row['user_id'];
-            $row['user_name'] = sed_cc($row['user_name']);
+            $row['user_name'] = htmlspecialchars($row['user_name']);
             $touser_names[] = $row['user_name'];
             $touser_usrlnk[] .= ($cfg['parsebbcodecom']) ? "[user=".$row['user_id']."]".$row['user_name']."[/user]" : $row['user_name'];
         }
@@ -103,7 +103,7 @@ if($a=='send')
 
         if($cfg['parser_cache'])
         {
-            $newpmhtml = sed_sql_prep(sed_parse(sed_cc($newpmtext)));
+            $newpmhtml = sed_sql_prep(sed_parse(htmlspecialchars($newpmtext)));
         }
         else
         {
@@ -141,7 +141,7 @@ if($a=='send')
 
                 if($row = sed_sql_fetcharray($sql))
                 {
-                    send_translated_mail($row['user_lang'], $row['user_email'], sed_cc($row['user_name']));
+                    send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
                     sed_stat_inc('totalmailpmnot');
                 }
             }
@@ -202,7 +202,7 @@ elseif(!empty($to))
         while($row = sed_sql_fetcharray($sql))
         {
             $touser_ids[] = $row['user_id'];
-            $touser_names[] = sed_cc($row['user_name']);
+            $touser_names[] = htmlspecialchars($row['user_name']);
         }
         $touser = implode(", ", $touser_names);
         $error_string .= ($totalrecipients<$touser_req) ? $L['pm_wrongname']."<br />" : '';
@@ -239,7 +239,7 @@ if(!empty($error_string))
     $t -> parse("MAIN.PMSEND_ERROR");
 }
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 
 $t -> assign(array(
     "PMSEND_TITLE" => $bhome . "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a> ".$cfg['separator']." ".$L['pmsend_title'],
@@ -249,9 +249,9 @@ $t -> assign(array(
     "PMSEND_ARCHIVES" => "<a href=\"".sed_url('pm', 'f=archives')."\">".$L['pm_archives']."</a>:".$totalarchives,
     "PMSEND_SENTBOX" => "<a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
     "PMSEND_FORM_SEND" => sed_url('pm', 'm=send&amp;a=send&amp;to='.$to),
-    "PMSEND_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".sed_cc($newpmtitle)."\" size=\"56\" maxlength=\"255\" />",
-    "PMSEND_FORM_TEXT" =>  "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$pfs,
-    "PMSEND_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".sed_cc($newpmtext)."</textarea><br />".$pfs,
+    "PMSEND_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpmtitle\" value=\"".htmlspecialchars($newpmtitle)."\" size=\"56\" maxlength=\"255\" />",
+    "PMSEND_FORM_TEXT" =>  "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".htmlspecialchars($newpmtext)."</textarea><br />".$pfs,
+    "PMSEND_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpmtext\" rows=\"16\" cols=\"56\">".htmlspecialchars($newpmtext)."</textarea><br />".$pfs,
     "PMSEND_FORM_MYPFS" => $pfs,
     "PMSEND_FORM_TOUSER" => "<textarea name=\"newpmrecipient\" rows=\"3\" cols=\"56\">".$touser."</textarea>"
     ));
@@ -299,7 +299,7 @@ function send_translated_mail($rlang, $remail, $rusername)
     }
 
     $rsubject = "{$cfg['maintitle']} - {$L['pm_notifytitle']}";
-    $rbody = sprintf($L['pm_notify'], $rusername, sed_cc($usr['name']), $cfg['mainurl'] . '/' . sed_url('pm', '', '', true));
+    $rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), $cfg['mainurl'] . '/' . sed_url('pm', '', '', true));
 
     sed_mail($remail, $rsubject, $rbody);
 }

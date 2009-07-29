@@ -73,7 +73,7 @@ function sed_tag_search_form($area = 'all')
 				break;
 			}
 		}
-		$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a='.$area.'&t='.$tag_u.$tl).'" class="'.$dim.'">'.sed_cc($tag_t).'</a> ';
+		$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a='.$area.'&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a> ';
 	}
 	$tc_html .= '</div>';
 	$t->assign('TAGS_CLOUD_BODY', $tc_html);
@@ -136,11 +136,11 @@ function sed_tag_search_pages($query)
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> ';
+			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a> ';
 		}
 		$t->assign(array(
 			'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']),
-			'TAGS_RESULT_ROW_TITLE' => sed_cc($row['page_title']),
+			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
 			'TAGS_RESULT_ROW_PATH' => sed_build_catpath($row['page_cat'], '<a href="%1$s">%2$s</a>'),
 			'TAGS_RESULT_ROW_TAGS' => $tag_list
 		));
@@ -202,12 +202,12 @@ function sed_tag_search_forums($query)
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.sed_cc($tag_t).'</a> ';
+			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a> ';
 		}
 		$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'],$row['fs_mastername']) : false;
 		$t->assign(array(
 			'TAGS_RESULT_ROW_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
-			'TAGS_RESULT_ROW_TITLE' => sed_cc($row['ft_title']),
+			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 			'TAGS_RESULT_ROW_PATH' => sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'],24), sed_cutstring($row['fs_category'],16), true, $master),
 			'TAGS_RESULT_ROW_TAGS' => $tag_list
 		));

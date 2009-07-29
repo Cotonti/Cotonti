@@ -171,7 +171,7 @@ if ($a=='newpost')
 		{
 			if($cfg['parser_cache'])
 			{
-				$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+				$rhtml = sed_sql_prep(sed_parse(htmlspecialchars($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
 			}
 			else
 			{
@@ -232,7 +232,7 @@ if ($a=='newpost')
 		{
 			if($cfg['parser_cache'])
 			{
-				$rhtml = sed_sql_prep(sed_parse(sed_cc($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+				$rhtml = sed_sql_prep(sed_parse(htmlspecialchars($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
 			}
 			else
 			{
@@ -477,7 +477,7 @@ else
 $sys['sublocation'] = $fs_title;
 $title_tags[] = array('{FORUM}', '{TITLE}');
 $title_tags[] = array('%1$s', '%2$s');
-$title_data = array($L['Forums'], sed_cc($ft_title));
+$title_data = array($L['Forums'], htmlspecialchars($ft_title));
 $out['subtitle'] = sed_title('title_forum_posts', $title_tags, $title_data);
 
 /* === Hook === */
@@ -573,7 +573,7 @@ else
 if ($ft_poll_id>0)
 { $ft_title = $L['Poll'].": ".$ft_title; }
 
-$ft_title = ($ft_mode==1) ? "# ".sed_cc($ft_title) : sed_cc($ft_title);
+$ft_title = ($ft_mode==1) ? "# ".htmlspecialchars($ft_title) : htmlspecialchars($ft_title);
 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
@@ -586,7 +586,7 @@ $t->assign(array(
 	"FORUMS_POSTS_ID" => $q,
 	"FORUMS_POSTS_RSS" => sed_url("rss", "c=topics&id=$q", "", true),
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
-	"FORUMS_POSTS_TOPICDESC" => sed_cc($ft_desc),
+	"FORUMS_POSTS_TOPICDESC" => htmlspecialchars($ft_desc),
     "FORUMS_POSTS_SHORTTITLE" => $ft_title,
     "FORUMS_POSTS_PATH" => $toppath,
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
@@ -606,7 +606,7 @@ $extp = sed_getextplugins('forums.posts.loop');
 
 while ($row = sed_sql_fetcharray($sql))
 {
-	$row['fp_text'] = sed_cc($row['fp_text']);
+	$row['fp_text'] = htmlspecialchars($row['fp_text']);
 	$row['fp_created'] = @date($cfg['dateformat'], $row['fp_creation'] + $usr['timezone'] * 3600);
 	$row['fp_updated_ago'] = sed_build_timegap($row['fp_updated'], $sys['now_offset']);
 	$row['fp_updated'] = @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600);
@@ -647,7 +647,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$row['fp_useronlinetitle'] = ($row['fp_useronline']) ? $skinlang['forumspost']['Onlinestatus1'] : $skinlang['forumspost']['Onlinestatus0'];
 
 	if (!empty($row['fp_updater']))
-	{ $row['fp_updatedby'] = sprintf($L['for_updatedby'], sed_cc($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']); }
+	{ $row['fp_updatedby'] = sprintf($L['for_updatedby'], htmlspecialchars($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']); }
 
 	if (!$cache[$row['fp_posterid']]['cached'])
 	{
@@ -672,11 +672,11 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_URL" => sed_url('forums', "m=posts&p=".$row['fp_id'], "#".$row['fp_id']),
 		"FORUMS_POSTS_ROW_CREATION" => $row['fp_created'],
 		"FORUMS_POSTS_ROW_UPDATED" => $row['fp_updated'],
-		"FORUMS_POSTS_ROW_UPDATER" => sed_cc($row['fp_updater']),
+		"FORUMS_POSTS_ROW_UPDATER" => htmlspecialchars($row['fp_updater']),
 		"FORUMS_POSTS_ROW_UPDATEDBY" => $row['fp_updatedby'],
 		"FORUMS_POSTS_ROW_TEXT" => $row['fp_text'],
 		"FORUMS_POSTS_ROW_ANCHORLINK" => "<a name=\"post{$row['fp_id']}\" id=\"post{$row['fp_id']}\"></a>",
-		"FORUMS_POSTS_ROW_POSTERNAME" => sed_build_user($row['fp_posterid'], sed_cc($row['fp_postername'])),
+		"FORUMS_POSTS_ROW_POSTERNAME" => sed_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
 		"FORUMS_POSTS_ROW_MAINGRP" => sed_build_group($row['user_maingrp']),
 		"FORUMS_POSTS_ROW_MAINGRPID" => $row['user_maingrp'],
@@ -700,8 +700,8 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_WEBSITERAW" => $row['user_website'],
 		"FORUMS_POSTS_ROW_JOURNAL" => $row['user_journal'],
 		"FORUMS_POSTS_ROW_EMAIL" => sed_build_email($row['user_email'], $row['user_hideemail']),
-		"FORUMS_POSTS_ROW_LOCATION" => sed_cc($row['user_location']),
-		"FORUMS_POSTS_ROW_OCCUPATION" => sed_cc($row['user_occupation']),
+		"FORUMS_POSTS_ROW_LOCATION" => htmlspecialchars($row['user_location']),
+		"FORUMS_POSTS_ROW_OCCUPATION" => htmlspecialchars($row['user_occupation']),
 		"FORUMS_POSTS_ROW_AGE" => $row['user_age'],
 		"FORUMS_POSTS_ROW_POSTCOUNT" => $row['user_postcount'],
 		"FORUMS_POSTS_ROW_ODDEVEN" => sed_build_oddeven($fp_num),
@@ -715,7 +715,7 @@ while ($row = sed_sql_fetcharray($sql))
 	foreach($extrafields as $i=>$extrafield)
 	{
 		$uname = strtoupper($extrafield['field_name']);
-		$t->assign('FORUMS_POSTS_ROW_USER'.$uname, sed_cc($row['user_'.$extrafield['field_name']]));
+		$t->assign('FORUMS_POSTS_ROW_USER'.$uname, htmlspecialchars($row['user_'.$extrafield['field_name']]));
 		isset($L['page_'.$extrafield['field_name'].'_title']) ? $t->assign('FORUMS_POSTS_ROW_USER'.$uname.'_TITLE', $L['page_'.$extrafield['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $extrafield['field_description']);
 	}
 
@@ -766,7 +766,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 	$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
 
 	$post_mark = "<a name=\"np\" id=\"np\"></a>";
-	$post_main = $post_mark.'<textarea class="editor" name="newmsg" rows="16" cols="56">'.sed_cc($newmsg).'</textarea>';
+	$post_main = $post_mark.'<textarea class="editor" name="newmsg" rows="16" cols="56">'.htmlspecialchars($newmsg).'</textarea>';
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => sed_url('forums', "m=posts&a=newpost&s=".$s."&q=".$q),

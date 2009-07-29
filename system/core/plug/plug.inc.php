@@ -115,7 +115,7 @@ elseif (!empty($e))
 
 		if($cfg['homebreadcrumb'])
 		{
-			$bhome = '<a href="'.$cfg['mainurl'].'">'.sed_cc($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
+			$bhome = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
 		}
 		else
 		{
@@ -197,7 +197,7 @@ elseif (!empty($h))
 
 			while (list($i,$dat) = each($sed_smilies))
 			{
-				$popup_body .= "<tr><td style=\"text-align:right;\"><a href=\"javascript:add('".$dat['smilie_code']."')\"><img src=\"".$dat['smilie_image']."\"  alt=\"\" /></a></td><td>".$dat['smilie_code']."</td><td> ".sed_cc($dat['smilie_text'])."</td></tr>";
+				$popup_body .= "<tr><td style=\"text-align:right;\"><a href=\"javascript:add('".$dat['smilie_code']."')\"><img src=\"".$dat['smilie_image']."\"  alt=\"\" /></a></td><td>".$dat['smilie_code']."</td><td> ".htmlspecialchars($dat['smilie_text'])."</td></tr>";
 			}
 			$popup_body .= "</table></div></p>";
 		}

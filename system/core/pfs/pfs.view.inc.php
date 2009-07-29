@@ -57,7 +57,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported)
 	}
 	else
 	{
-		$pfs_owner = sed_build_user($row['pfs_userid'], sed_cc($row['user_name']));
+		$pfs_owner = sed_build_user($row['pfs_userid'], htmlspecialchars($row['user_name']));
 	}
 
 	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
@@ -78,7 +78,7 @@ $t->assign(array(
 	"PFSVIEW_FILE_ID" => $row['pfs_id'],
 	"PFSVIEW_FILE_USERID" => $row['pfs_userid'],
 	"PFSVIEW_FILE_USERNAME" => $pfs_owner,
-	"PFSVIEW_FILE_DESC" => sed_cc($row['pfs_desc']),
+	"PFSVIEW_FILE_DESC" => htmlspecialchars($row['pfs_desc']),
 	"PFSVIEW_FILE_COUNT" => $row['pfs_count'],
 	"PFSVIEW_FILE_SIZE" => floor($row['pfs_size']/1024),
 	"PFSVIEW_FILE_SIZEX" => $pfs_imgsize[0],

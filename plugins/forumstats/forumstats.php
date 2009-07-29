@@ -58,7 +58,7 @@ while($row = sed_sql_fetcharray($sql))
 			'FORUMSTATS_REPLIEDTOP_II' => $ii,
 			'FORUMSTATS_REPLIEDTOP_FORUMS' => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
 			'FORUMSTATS_REPLIEDTOP_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
-			'FORUMSTATS_REPLIEDTOP_TITLE' => sed_cc($ft_title),
+			'FORUMSTATS_REPLIEDTOP_TITLE' => htmlspecialchars($ft_title),
 			'FORUMSTATS_REPLIEDTOP_POSTCOUNT' => $row['ft_postcount']
 		));
 		$t -> parse('MAIN.FORUMSTATS_REPLIEDTOP_USER');
@@ -97,7 +97,7 @@ while($row = sed_sql_fetcharray($sql))
 			'FORUMSTATS_VIEWEDTOP_II' => $ii,
 			'FORUMSTATS_VIEWEDTOP_FORUMS' => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
 			'FORUMSTATS_VIEWEDTOP_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
-			'FORUMSTATS_VIEWEDTOP_TITLE' => sed_cc($ft_title),
+			'FORUMSTATS_VIEWEDTOP_TITLE' => htmlspecialchars($ft_title),
 			'FORUMSTATS_VIEWEDTOP_VIEWCOUNT' => $row['ft_viewcount']
 		));
 		$t -> parse('MAIN.FORUMSTATS_VIEWEDTOP_USER');
@@ -126,7 +126,7 @@ while($row = sed_sql_fetcharray($sql))
 	$ii++;
 	$t -> assign(array(
 		'FORUMSTATS_POSTERSTOP_II' => $ii,
-		'FORUMSTATS_POSTERSTOP_USER_NAME' => sed_build_user($row['user_id'], sed_cc($row['user_name'])),
+		'FORUMSTATS_POSTERSTOP_USER_NAME' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
 		'FORUMSTATS_POSTERSTOP_USER_POSTCOUNT' => $row["user_postcount"]
 	));
 	$t -> parse('MAIN.POSTERSTOP');

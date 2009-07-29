@@ -151,9 +151,9 @@ while($row = sed_sql_fetcharray($sql))
 
 	$t -> assign(array(
 		"ADMIN_POLLS_ROW_POLL_CREATIONDATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
-		"ADMIN_POLLS_ROW_POLL_TYPE" => $variants[sed_cc($type)][0],
+		"ADMIN_POLLS_ROW_POLL_TYPE" => $variants[htmlspecialchars($type)][0],
 		"ADMIN_POLLS_ROW_POLL_URL" => sed_url('admin', "m=polls".$poll_filter."&n=options&d=".$d."&id=".$row['poll_id']),
-		"ADMIN_POLLS_ROW_POLL_TEXT" => sed_cc($row['poll_text']),
+		"ADMIN_POLLS_ROW_POLL_TEXT" => htmlspecialchars($row['poll_text']),
 		"ADMIN_POLLS_ROW_POLL_TOTALVOTES" => $totalvotes,
 		"ADMIN_POLLS_ROW_POLL_CLOSED" => $poll_state,
 		"ADMIN_POLLS_ROW_POLL_URL_DEL" => sed_url('admin', "m=polls".$poll_filter."&a=delete&id=".$id."&".sed_xg()),

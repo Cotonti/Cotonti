@@ -66,7 +66,7 @@ $extp = sed_getextplugins('admin.comments.loop');
 /* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
-	$row['com_text'] = sed_cc(sed_cutstring($row['com_text'], 40));
+	$row['com_text'] = htmlspecialchars(sed_cutstring($row['com_text'], 40));
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);
 	$row['com_value'] = mb_substr($row['com_code'], 1);
 

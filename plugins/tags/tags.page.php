@@ -34,7 +34,7 @@ if($cfg['plugin']['tags']['pages'])
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 			$t->assign(array(
-			'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? sed_cc(sed_tag_title($tag)) : sed_cc($tag),
+			'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(sed_tag_title($tag)) : htmlspecialchars($tag),
 			'PAGE_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl)
 			));
 			$t->parse('MAIN.PAGE_TAGS_ROW');

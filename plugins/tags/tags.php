@@ -57,7 +57,7 @@ if (is_array($extp))
 $t->assign(array(
 	'TAGS_ACTION' => sed_url('plug', 'e=tags&a=' . $a),
 	'TAGS_HINT' => $L['tags_Query_hint'],
-	'TAGS_QUERY' => sed_cc($qs),
+	'TAGS_QUERY' => htmlspecialchars($qs),
 	'TAGS_ORDER' => $tag_order
 ));
 

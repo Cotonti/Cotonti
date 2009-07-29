@@ -39,7 +39,7 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
             if ($poll_option_text[$i]!="" || ($poll_option_text[$i]=="" && $poll_option_id[$i]!='new'))
             {
                 $counter++;
-                $poll_options_x .=sprintf($mask_edit_form, 'block', $poll_option_id[$i], sed_cc($poll_option_text[$i]));
+                $poll_options_x .=sprintf($mask_edit_form, 'block', $poll_option_id[$i], htmlspecialchars($poll_option_text[$i]));
             }
         }
 
@@ -59,7 +59,7 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
         {
             $id=$row["poll_id"];
             $sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid='$id' ORDER by po_id ASC");
-            $poll_text=sed_cc($row["poll_text"]);
+            $poll_text=htmlspecialchars($row["poll_text"]);
             $poll_multiple=($row["poll_multiple"]) ? "checked='checked'":"";
             $poll_state=($row["poll_state"]) ? "checked='checked'":"";
             $date=date($cfg['dateformat'], $row["poll_creationdate"])." GMT";
@@ -67,7 +67,7 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
             while ($row1 = sed_sql_fetcharray($sql1))
             {
                 $counter++;
-                $poll_options_x .=sprintf($mask_edit_form, 'block', $row1['po_id'], sed_cc($row1['po_text']));
+                $poll_options_x .=sprintf($mask_edit_form, 'block', $row1['po_id'], htmlspecialchars($row1['po_text']));
             }
         }
         else
@@ -380,7 +380,7 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
 
         $input_type=$row['poll_multiple'] ? "checkbox" : "radio";
         $polloptions_input = ($alreadyvoted || !$canvote) ? "" : "<input type='".$input_type."' name='vote[]' value='".$po_id."' />&nbsp;";
-        $polloptions = sed_parse(sed_cc($row1['po_text']), 1, 1, 1);
+        $polloptions = sed_parse(htmlspecialchars($row1['po_text']), 1, 1, 1);
 
         $poll_form->assign(array(
         "POLL_OPTIONS" => $polloptions,
@@ -393,7 +393,7 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
 
     }
 
-    $polltext=sed_parse(sed_cc($row['poll_text']), 1, 1, 1);
+    $polltext=sed_parse(htmlspecialchars($row['poll_text']), 1, 1, 1);
     $pollbutton=(!$alreadyvoted || $canvote) ? "<input type=\"hidden\" name=\"poll_id\" value=\"$id\" /><input type=\"hidden\" name=\"poll_skin\" value=\"$skininput\" /><input type=\"submit\" class=\"submit\" value=\"".$L['polls_Vote']."\" />" :"";
     $polldate=date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600);
     $polldate_short=date($cfg['formatmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600);

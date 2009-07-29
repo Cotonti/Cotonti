@@ -143,7 +143,7 @@ elseif($n == 'edit')
 		$sql1 = sed_sql_query("SELECT COUNT(*) FROM $db_groups_users WHERE gru_groupid='$g'");
 		$row['grp_memberscount'] = sed_sql_result($sql1, 0, "COUNT(*)");
 
-		$row['grp_title'] = sed_cc($row['grp_title']);
+		$row['grp_title'] = htmlspecialchars($row['grp_title']);
 
 		$adminpath[] = array (sed_url('admin', 'm=users&n=edit&g='.$g), $row['grp_title']);
 
@@ -160,11 +160,11 @@ elseif($n == 'edit')
 			"ADMIN_USERS_EDITFORM_URL" => sed_url('admin', "m=users&n=edit&a=update&g=".$g),
 			"ADMIN_USERS_EDITFORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'editlevel', url: '".sed_url('admin','m=users&ajax=1&n=edit&a=update&g='.$g)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 			"ADMIN_USERS_EDITFORM_GRP_TITLE" => $row['grp_title'],
-			"ADMIN_USERS_EDITFORM_GRP_DESC" => sed_cc($row['grp_desc']),
-			"ADMIN_USERS_EDITFORM_GRP_ICON" => sed_cc($row['grp_icon']),
-			"ADMIN_USERS_EDITFORM_GRP_ALIAS" => sed_cc($row['grp_alias']),
-			"ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE" => sed_cc($row['grp_pfs_maxfile']),
-			"ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL" => sed_cc($row['grp_pfs_maxtotal']),
+			"ADMIN_USERS_EDITFORM_GRP_DESC" => htmlspecialchars($row['grp_desc']),
+			"ADMIN_USERS_EDITFORM_GRP_ICON" => htmlspecialchars($row['grp_icon']),
+			"ADMIN_USERS_EDITFORM_GRP_ALIAS" => htmlspecialchars($row['grp_alias']),
+			"ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE" => htmlspecialchars($row['grp_pfs_maxfile']),
+			"ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL" => htmlspecialchars($row['grp_pfs_maxtotal']),
 			"ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT" => $row['grp_memberscount'],
 			"ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT_URL" => sed_url('users', "g=".$g),
 			"ADMIN_USERS_EDITFORM_RIGHT_URL" => sed_url('admin', "m=rights&g=".$g),
@@ -204,7 +204,7 @@ if(!isset($showdefault) OR $showdefault == true)
 			$t -> assign(array(
 				"ADMIN_USERS_ROW_GRP_TITLE_URL" => sed_url('admin', "m=users&n=edit&g=".$row['grp_id']),
 				"ADMIN_USERS_ROW_GRP_TITLE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=users&ajax=1&n=edit&g='.$row['grp_id'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-				"ADMIN_USERS_ROW_GRP_TITLE" => sed_cc($row['grp_title']),
+				"ADMIN_USERS_ROW_GRP_TITLE" => htmlspecialchars($row['grp_title']),
 				"ADMIN_USERS_ROW_GRP_ID" => $row['grp_id'],
 				"ADMIN_USERS_ROW_GRP_COUNT_MEMBERS" => $members[$row['grp_id']],
 				"ADMIN_USERS_ROW_GRP_DISABLED" => $sed_yesno[!$row['grp_disabled']],

@@ -105,7 +105,7 @@ if ($a=='add')
 
 		if($cfg['parser_cache'])
 		{
-			$newpagehtml = sed_parse(sed_cc($newpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
+			$newpagehtml = sed_parse(htmlspecialchars($newpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
 		}
 		else
 		{
@@ -258,20 +258,20 @@ $pageadd_array = array(
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
 	"PAGEADD_FORM_SEND" => sed_url('page', "m=add&a=add"),
 	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
-	"PAGEADD_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"newpagekey\" value=\"".sed_cc($newpagekey)."\" size=\"16\" maxlength=\"16\" />",
-	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".sed_cc($newpagealias)."\" size=\"16\" maxlength=\"255\" />",
-	"PAGEADD_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpagetitle\" value=\"".sed_cc($newpagetitle)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"newpagedesc\" value=\"".sed_cc($newpagedesc)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"newpageauthor\" value=\"".sed_cc($newpageauthor)."\" size=\"16\" maxlength=\"24\" />",
-	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], sed_cc($usr['name'])),
+	"PAGEADD_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"newpagekey\" value=\"".htmlspecialchars($newpagekey)."\" size=\"16\" maxlength=\"16\" />",
+	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".htmlspecialchars($newpagealias)."\" size=\"16\" maxlength=\"255\" />",
+	"PAGEADD_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpagetitle\" value=\"".htmlspecialchars($newpagetitle)."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEADD_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"newpagedesc\" value=\"".htmlspecialchars($newpagedesc)."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEADD_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"newpageauthor\" value=\"".htmlspecialchars($newpageauthor)."\" size=\"16\" maxlength=\"24\" />",
+	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], htmlspecialchars($usr['name'])),
 	"PAGEADD_FORM_OWNERID" => $usr['id'],
 	"PAGEADD_FORM_BEGIN" => $newpage_form_begin,
 	"PAGEADD_FORM_EXPIRE" => $newpage_form_expire,
 	"PAGEADD_FORM_FILE" => $pageadd_form_file,
-	"PAGEADD_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"newpageurl\" value=\"".sed_cc($newpageurl)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"newpagesize\" value=\"".sed_cc($newpagesize)."\" size=\"56\" maxlength=\"255\" />",
-	"PAGEADD_FORM_TEXT" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".sed_cc($newpagetext)."</textarea>",
-	"PAGEADD_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".sed_cc($newpagetext)."</textarea>",
+	"PAGEADD_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"newpageurl\" value=\"".htmlspecialchars($newpageurl)."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEADD_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"newpagesize\" value=\"".htmlspecialchars($newpagesize)."\" size=\"56\" maxlength=\"255\" />",
+	"PAGEADD_FORM_TEXT" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($newpagetext)."</textarea>",
+	"PAGEADD_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($newpagetext)."</textarea>",
 	"PAGEADD_FORM_MYPFS" => $pfs
 );
 

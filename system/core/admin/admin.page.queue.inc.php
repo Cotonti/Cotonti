@@ -118,15 +118,15 @@ while($row = sed_sql_fetcharray($sql))
 {
 	$t -> assign(array(
 		"ADMIN_PAGE_QUEUE_PAGE_URL" => sed_url('page', "id=".$row['page_id']),
-		"ADMIN_PAGE_QUEUE_PAGE_TITLE" => sed_cc($row['page_title']),
+		"ADMIN_PAGE_QUEUE_PAGE_TITLE" => htmlspecialchars($row['page_title']),
 		"ADMIN_PAGE_QUEUE_PAGE_ID" => $row['page_id'],
 		"ADMIN_PAGE_QUEUE_PAGE_CAT_TITLE" => $sed_cat[$row['page_cat']]['title'],
 		"ADMIN_PAGE_QUEUE_PAGE_CAT" => $row["page_cat"],
 		"ADMIN_PAGE_QUEUE_PAGE_CATDESC" => $sed_cat[$row['page_cat']]['desc'],
 		"ADMIN_PAGE_QUEUE_PAGE_CATICON" => $sed_cat[$row['page_cat']]['icon'],
-		"ADMIN_PAGE_QUEUE_PAGE_DESC" => sed_cc($row['page_desc']),
-		"ADMIN_PAGE_QUEUE_PAGE_AUTHOR" => sed_cc($row['page_author']),
-		"ADMIN_PAGE_QUEUE_PAGE_OWNER" => sed_build_user($row['page_ownerid'], sed_cc($row['user_name'])),
+		"ADMIN_PAGE_QUEUE_PAGE_DESC" => htmlspecialchars($row['page_desc']),
+		"ADMIN_PAGE_QUEUE_PAGE_AUTHOR" => htmlspecialchars($row['page_author']),
+		"ADMIN_PAGE_QUEUE_PAGE_OWNER" => sed_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
 		"ADMIN_PAGE_QUEUE_PAGE_DATE" => date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
 		"ADMIN_PAGE_QUEUE_PAGE_BEGIN" => date($cfg['dateformat'], $row['page_begin'] + $usr['timezone'] * 3600),
 		"ADMIN_PAGE_QUEUE_PAGE_EXPIRE" => date($cfg['dateformat'], $row['page_expire'] + $usr['timezone'] * 3600),
@@ -136,8 +136,8 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_PAGE_QUEUE_PAGE_FILE_NAME" => basename($row['page_url']),
 		"ADMIN_PAGE_QUEUE_PAGE_FILE_SIZE" => $row['page_size'],
 		"ADMIN_PAGE_QUEUE_PAGE_FILE_COUNT" => $row['page_filecount'],
-		"ADMIN_PAGE_QUEUE_PAGE_KEY" => sed_cc($row['page_key']),
-		"ADMIN_PAGE_QUEUE_PAGE_ALIAS" => sed_cc($row['page_alias']),
+		"ADMIN_PAGE_QUEUE_PAGE_KEY" => htmlspecialchars($row['page_key']),
+		"ADMIN_PAGE_QUEUE_PAGE_ALIAS" => htmlspecialchars($row['page_alias']),
 		"ADMIN_PAGE_QUEUE_PAGE_URL_FOR_VALIDATED" => sed_url('admin', "m=page&s=queue&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg()),
 		"ADMIN_PAGE_QUEUE_PAGE_URL_FOR_EDIT" => sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm")
 	));

@@ -137,7 +137,7 @@ if($a == 'save')
 		if(preg_match('#\{[\w_]+\(\)\}#', $ut_format[$i]))
 		{
 			// Rule with callback, requires custom rewrite
-			$error_string .= $L['adm_urls_callbacks'] . ': ' . sed_cc($ut_format[$i]) . '<br />';
+			$error_string .= $L['adm_urls_callbacks'] . ': ' . htmlspecialchars($ut_format[$i]) . '<br />';
 			continue;
 		}
 		// Remove unsets

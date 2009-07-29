@@ -40,7 +40,7 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 		$out['devmode'] .= "<tr><td>#".$i[0]." &nbsp;</td>";
 		$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",round($i[1]*1000, 3))." ms</td>";
 		$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",round($sys['devmode']['timeline'][$k]*1000, 3))." ms</td>";
-		$out['devmode'] .= "<td style=\"text-align:left;\">".sed_cc($i[2])."</td></tr>";
+		$out['devmode'] .= "<td style=\"text-align:left;\">".htmlspecialchars($i[2])."</td></tr>";
 	}
 	$out['devmode'] .= "<tr><td colspan=\"2\">END</td>";
 	$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",$sys['creationtime'])." ms</td><td>&nbsp;</td></tr>";

@@ -117,7 +117,7 @@ if($n == 'options')
 		$check1 = " checked=\"checked\"";
 	}
 
-	$adminpath[] = array(sed_url('admin', "m=forums&s=structure&n=options&id=".$id), sed_cc($fn_title));
+	$adminpath[] = array(sed_url('admin', "m=forums&s=structure&n=options&id=".$id), htmlspecialchars($fn_title));
 
 	$t -> assign(array(
 		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL" => sed_url('admin', "m=forums&s=structure&n=options&a=update&id=".$fn_id."&d=".$d),

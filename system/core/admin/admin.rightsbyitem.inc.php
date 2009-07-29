@@ -89,7 +89,7 @@ switch($ic)
 
 	case 'forums':
 		$forum = sed_forum_info($io);
-		$title = " : ".sed_cc($forum['fs_title'])." (#".$io.")";
+		$title = " : ".htmlspecialchars($forum['fs_title'])." (#".$io.")";
 	break;
 
 	case 'plug':
@@ -158,7 +158,7 @@ function sed_rights_parseline($row, $title, $link)
 	$t -> assign(array(
 		"ADMIN_RIGHTSBYITEM_ROW_TITLE" => $title,
 		"ADMIN_RIGHTSBYITEM_ROW_LINK" => $link,
-		"ADMIN_RIGHTSBYITEM_ROW_USER" => sed_build_user($row['auth_setbyuserid'], sed_cc($row['user_name'])),
+		"ADMIN_RIGHTSBYITEM_ROW_USER" => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
 		"ADMIN_RIGHTSBYITEM_ROW_JUMPTO" => sed_url('users', "g=".$row['auth_groupid']),
 	));
 	$t -> parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW");
@@ -167,7 +167,7 @@ function sed_rights_parseline($row, $title, $link)
 while($row = sed_sql_fetcharray($sql))
 {
 	$link = sed_url('admin', "m=rights&g=".$row['auth_groupid']);
-	$title = sed_cc($row['grp_title']);
+	$title = htmlspecialchars($row['grp_title']);
 	sed_rights_parseline($row, $title, $link);
 }
 

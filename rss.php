@@ -85,7 +85,7 @@ if ($c == "comments")
 				$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row['com_authorid']."' LIMIT 1");
 				$row2 = mysql_fetch_assoc($sql2);
 				$items[$i]['title'] = $L['rss_comment']." ".$row2['user_name'];
-				$text = sed_parse(sed_cc($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+				$text = sed_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
 				$text = sed_post_parse($text, 'pages');
 				$items[$i]['description'] = $text;
 				$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=$page_id", '#c'.$row['com_id'], true);
@@ -330,14 +330,14 @@ function sed_parse_page_text($pag)
 			{
 				if (empty($pag['page_html'])&&!empty($pag['page_text']))
 				{
-					$pag['page_html'] = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+					$pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = ".$pag['page_id']);
 				}
-				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : sed_cc($pag['page_text']);
+				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
 				$text = $html;
 			}else
 			{
-				$text = sed_parse(sed_cc($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+				$text = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 				$text = sed_post_parse($text, 'pages');
 			}
 			break;

@@ -122,7 +122,7 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_PAG_CATORDER_ROW_FORM_WAY_NAME" => "s[".$row['structure_id']."][way]",
 		"ADMIN_PAG_CATORDER_ROW_CODE" => $row['structure_code'],
 		"ADMIN_PAG_CATORDER_ROW_PATH" => $row['structure_path'],
-		"ADMIN_PAG_CATORDER_ROW_TITLE" => sed_cc($row['structure_title'])
+		"ADMIN_PAG_CATORDER_ROW_TITLE" => htmlspecialchars($row['structure_title'])
 	));
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))

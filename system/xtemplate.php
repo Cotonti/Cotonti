@@ -261,7 +261,7 @@ class Xtpl_data
 			$p2 = mb_strpos($data, ' -->', $p1 + 8);
 			$expr = mb_substr($data, $p1 + 8, $p2 - $p1 - 8);
 			$p3 = mb_strpos($data, '<!-- ENDIF -->');
-			if ($p3 === FALSE) throw new Exception('Logical block "'.sed_cc($expr).'" is not closed correctly in '
+			if ($p3 === FALSE) throw new Exception('Logical block "'.htmlspecialchars($expr).'" is not closed correctly in '
 				. $xtpl->filename);
 			$bdata = mb_substr($data, $p2 + 4, $p3 - $p2 - 4);
 			if (($p4 = mb_strpos($bdata, '<!-- ELSE -->')) !== FALSE)
