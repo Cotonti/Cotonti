@@ -345,34 +345,8 @@ $useredit_array = array(
 if(count($extrafields)>0)
 foreach($extrafields as $i=>$row)
 {
-	isset($L['user_'.$row['field_name'].'_title']) ? $t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', $L['user_'.$row['field_name'].'_title']) : $t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
-
-	$t1 = "USERS_EDIT_".strtoupper($row['field_name']);
-	$t2 = $row['field_html'];
-	switch($row['field_type']) {
-	case "input":
-		$t2 = str_replace('<input ','<input name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('<input ','<input value="'.htmlspecialchars($urr['user_'.$row['field_name']]).'" ', $t2); break;
-	case "textarea":
-		$t2 = str_replace('<textarea ','<textarea name="ruser'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('</textarea>',htmlspecialchars($urr['user_'.$row['field_name']]).'</textarea>', $t2); break;
-	case "select":
-		$t2 = str_replace('<select','<select name="ruser'.$row['field_name'].'"', $t2);
-		$options = "";
-		$opt_array = explode(",",$row['field_variants']);
-		if(count($opt_array)!=0)
-			foreach ($opt_array as $var)
-			{
-				$sel = $var == $urr['user_'.$row['field_name']] ? ' selected="selected"' : '';
-				$options .= "<option value=\"$var\" $sel>$var</option>";
-			}
-		$t2 = str_replace("</select>","$options</select>",$t2); break;
-	case "checkbox":
-		$t2 = str_replace('<input','<input name="ruser'.$row['field_name'].'"', $t2);
-		$sel = $urr['user_'.$row['field_name']]==1 ? ' checked' : '';
-		$t2 = str_replace('<input ','<input value="'.htmlspecialchars($urr['user_'.$row['field_name']]).'" '.$sel.' ', $t2); break;
-	}
-	$useredit_array[$t1] = $t2;
+	$extra_array = sed_build_extrafields('user', 'USERS_EDIT', $extrafields, $urr);
+	$useredit_array = $useredit_array + $extra_array;
 }
 $t->assign($useredit_array);
 

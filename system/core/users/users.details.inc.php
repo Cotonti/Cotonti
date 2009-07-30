@@ -125,7 +125,7 @@ $t->assign(array(
 $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
 while($row = sed_sql_fetchassoc($fieldsres)) 
 {
-	$t->assign('USERS_DETAILS_'.strtoupper($row['field_name']), $urr['user_'.$row['field_name']]); 
+	$t->assign('USERS_DETAILS_'.strtoupper($row['field_name']), sed_build_extrafields_data('user', $row['field_type'], $row['field_name'], $urr['user_'.$row['field_name']])); 
 	isset($L['user_'.$row['field_name'].'_title']) ? $t->assign('USERS_DETAILS_'.strtoupper($row['field_name']).'_TITLE', $L['user_'.$row['field_name'].'_title']) : $t->assign('USERS_DETAILS_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
 }
 

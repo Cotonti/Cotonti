@@ -299,31 +299,9 @@ for($i = 0; $i<$numtags; $i++)
 
 // Extra fields
 if(count($extrafields)>0)
-foreach($extrafields as $i=>$row)
 {
-	// _TITLE tag
-	isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGEADD_FORM_'.strtoupper($row['field_name']).'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGEADD_FORM_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
-	$t1 = "PAGEADD_FORM_".strtoupper($row['field_name']);
-	$t2 = $row['field_html'];
-	switch($row['field_type']) {
-	case "input":
-		$t2 = str_replace('<input ','<input name="newpage'.$row['field_name'].'" ', $t2);
-		break;
-	case "textarea":
-		$t2 = str_replace('<textarea ','<textarea name="newpage'.$row['field_name'].'" ', $t2);
-		break;
-	case "select":
-		$t2 = str_replace('<select','<select name="newpage'.$row['field_name'].'"', $t2);
-		$options = "";
-		$opt_array = explode(",",$row['field_variants']);
-		if(count($opt_array)!=0)
-		{	foreach ($opt_array as $var) $options .= "<option value=\"$var\">$var</option>"; }
-		$t2 = str_replace("</select>","$options</select>",$t2); break;
-	case "checkbox":
-		$t2 = str_replace('<input','<input name="newpage'.$row['field_name'].'"', $t2);
-		break;
-	}
-	$pageadd_array[$t1] = $t2;
+	$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $extrafields, '', true);
+	$pageadd_array= $pageadd_array + $extra_array;
 }
 $t->assign($pageadd_array);
 

@@ -131,7 +131,7 @@ else
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 }
 
-$field_types = array('input', 'textarea', 'select', 'checkbox');
+$field_types = array('input', 'textarea', 'select', 'checkbox', 'radio');
 $res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages' LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
@@ -230,6 +230,10 @@ function get_default_html_construction($type)
 
 		case "checkbox":
 			$html = '<input type=checkbox >';
+		break;
+
+		case "radio":
+			$html = '<input type="radio" />';
 		break;
 	}
 	return $html;
