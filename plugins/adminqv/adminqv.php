@@ -109,6 +109,7 @@ $t -> assign(array(
 	'ADMINQV_NEWCOMMENTS' => $newcomments,
 	'ADMINQV_NEWPMS' => $newpms,
 	'ADMINQV_VERSION' => $cfg['version'],
+	'ADMINQV_REVISION' => $cfg['revision'],
 	'ADMINQV_DB_VERSION' => $cfg['dbversion'],
 	'ADMINQV_DB_TOTAL_ROWS' => $total_rows,
 	'ADMINQV_DB_INDEXSIZE' => number_format(($total_index_length/1024),1,'.',' '),
