@@ -37,7 +37,7 @@ $sys['starttime'] = $i[1] + $i[0];
 //unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount)
 
 $cfg['revision'] = '$Rev$'; //DO NOT MODIFY this is set by SVN automatically
-preg_match('/^\$Rev$cfg['revision'], $revmatch);
+preg_match('/Rev: ([0-9]+)/', $cfg['revision'], $revmatch);
 $cfg['revision'] = $revmatch[1];
 unset($revmatch);
 $cfg['version'] = '0.6.1';
