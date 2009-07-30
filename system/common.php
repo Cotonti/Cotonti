@@ -88,6 +88,7 @@ $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0)
 $sys['uri_redir'] = base64_encode($sys['uri_curr']);
 $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
 $redirect = sed_import('redirect','G','SLU');
+$out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
 define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']));
 

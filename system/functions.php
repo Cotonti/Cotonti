@@ -38,7 +38,7 @@ $sys['starttime'] = $i[1] + $i[0];
 
 $cfg['revision'] = '$Rev$'; //DO NOT MODIFY this is set by SVN automatically
 preg_match('/Rev: ([0-9]+)/', $cfg['revision'], $revmatch);
-$cfg['revision'] = $revmatch[1];
+$cfg['revision'] = 'r' . $revmatch[1];
 unset($revmatch);
 $cfg['version'] = '0.6.1';
 $cfg['dbversion'] = '0.6.1';
