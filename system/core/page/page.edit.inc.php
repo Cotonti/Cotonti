@@ -372,36 +372,9 @@ for($i = 0; $i<$numtags; $i++)
 
 // Extra fields
 if(count($extrafields)>0)
-foreach($extrafields as $i=>$row)
 {
-	isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGEEDIT_FORM_'.strtoupper($row['field_name']).'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGEEDIT_FORM_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
-	$t1 = "PAGEEDIT_FORM_".strtoupper($row['field_name']);
-	$t2 = $row['field_html'];
-	switch($row['field_type']) {
-	case "input":
-		$t2 = str_replace('<input ','<input name="rpage'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('<input ','<input value="'.$pag['page_'.$row['field_name']].'" ', $t2); break;
-	case "textarea":
-		$t2 = str_replace('<textarea ','<textarea name="rpage'.$row['field_name'].'" ', $t2);
-		$t2 = str_replace('</textarea>',$pag['page_'.$row['field_name']].'</textarea>', $t2); break;
-	case "select":
-		$t2 = str_replace('<select','<select name="rpage'.$row['field_name'].'"', $t2);
-		$options = "";
-		$opt_array = explode(",",$row['field_variants']);
-		if(count($opt_array)!=0)
-			foreach ($opt_array as $var)
-			{
-				$sel = $var == $pag['page_'.$row['field_name']] ? ' selected="selected"' : '';
-				$options .= "<option value=\"$var\" $sel>$var</option>";
-
-			}
-		$t2 = str_replace("</select>","$options</select>",$t2); break;
-	case "checkbox":
-		$t2 = str_replace('<input','<input name="rpage'.$row['field_name'].'"', $t2);
-		$sel = $pag['page_'.$row['field_name']]==1 ? ' checked' : '';
-		$t2 = str_replace('<input ','<input value="'.$pag['page_'.$row['field_name']].'" '.$sel.' ', $t2); break;
-	}
-	$pageedit_array[$t1] = $t2;
+	$extra_array = sed_build_extrafields('page', 'PAGEEDIT_FORM', $extrafields, $pag);
+	$pageedit_array= $pageedit_array + $extra_array;
 }
 $t->assign($pageedit_array);
 /* === Hook === */

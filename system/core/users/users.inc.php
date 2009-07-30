@@ -308,7 +308,7 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 		foreach($extrafields as $i => $extrafield)
 		{
 			$uname = strtoupper($extrafield['field_name']);
-			$t -> assign('USERS_ROW_'.$uname, htmlspecialchars($urr['user_'.$extrafield['field_name']]));
+			$t -> assign('USERS_ROW_'.$uname, sed_build_extrafields_data('user', $row['field_type'], $row['field_name'], $urr['user_'.$row['field_name']])); 
 			isset($L['user_'.$extrafield['field_name'].'_title']) ? $t -> assign('USERS_ROW_'.$uname.'_TITLE', $L['user_'.$extrafield['field_name'].'_title']) : $t -> assign('USERS_ROW_'.$uname.'_TITLE', $extrafield['field_description']);
 		}
 	}

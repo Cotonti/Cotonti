@@ -405,7 +405,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 		foreach($extrafields as $row)
 		{
 			$uname = strtoupper($row['field_name']);
-			$t->assign('LIST_ROW_'.$uname, $pag['page_'.$row['field_name']]);
+			$t->assign('LIST_ROW_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag['page_'.$row['field_name']]));
 			isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('LIST_ROW_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('LIST_ROW_'.$uname.'_TITLE', $row['field_description']);
 		}
 	}
