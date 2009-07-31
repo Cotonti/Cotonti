@@ -103,7 +103,7 @@ if(PHP_VERSION < '5.2.0')
  * @param string $mask Access mask
  * @return mixed
  */
-function sed_auth($area, $option, $mask='RWA')
+function sed_auth($area, $option, $mask = 'RWA')
 {
 	global $sys, $usr;
 
@@ -123,30 +123,34 @@ function sed_auth($area, $option, $mask='RWA')
 	{
 		if(empty($mn[$ml]))
 		{
-			$sys['auth_log'][] = $area.".".$option.".".$ml."=0";
+			$sys['auth_log'][] = $area . '.' . $option . '.' . $ml . '=0';
 			$res[] = FALSE;
 		}
-		elseif ($option=='any')
+		elseif ($option == 'any')
 		{
 			$cnt = 0;
 
 			if(is_array($usr['auth'][$area]))
 			{
 				foreach($usr['auth'][$area] as $k => $g)
-				{ $cnt += (($g & $mn[$ml]) == $mn[$ml]); }
+				{
+					$cnt += (($g & $mn[$ml]) == $mn[$ml]);
+				}
 			}
-			$cnt = ($cnt==0 && $usr['auth']['admin']['a'] && $ml=='A') ? 1 : $cnt;
+			$cnt = ($cnt == 0 && $usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
 
-			$sys['auth_log'][] = ($cnt>0) ? $area.".".$option.".".$ml."=1" : $area.".".$option.".".$ml."=0";
-			$res[] = ($cnt>0) ? TRUE : FALSE;
+			$sys['auth_log'][] = ($cnt > 0) ? $area . '.' . $option . '.' . $ml . '=1'
+				: $area . '.' . $option . '.' . $ml . '=0';
+			$res[] = ($cnt > 0) ? TRUE : FALSE;
 		}
 		else
 		{
-			$sys['auth_log'][] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? $area.".".$option.".".$ml."=1" : $area.".".$option.".".$ml."=0";
+			$sys['auth_log'][] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ?
+				$area . '.' . $option . '.' . $ml . '=1' : $area . '.' . $option . '.' . $ml . '=0';
 			$res[] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
 		}
 	}
-	return (count($res) == 1) ? $res[0]: $res;
+	return (count($res) == 1) ? $res[0] : $res;
 }
 
 /**
