@@ -11,6 +11,16 @@
 
 (defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
+//Version Checking
+preg_match('/Rev: ([0-9]+)/', $cfg['svnrevision'], $revmatch);
+$cfg['svnrevision'] = $revmatch[1];
+unset($revmatch);
+if($cfg['svnrevision'] > $cfg['revision'])
+{
+	$cfg['revision'] = $cfg['svnrevision'];
+	sed_sql_query("UPDATE ".$db_config." SET `config_value`= ".(int)$cfg['svnrevision']." WHERE `config_owner` = 'core' AND `config_cat` = 'version' AND `config_name` = 'revision' LIMIT 1");
+}
+
 $t = new XTemplate(sed_skinfile('admin.home.inc', false, true));
 
 $adminpath[] = array(sed_url('admin', 'm=home'), $L['Home']);

@@ -1,4 +1,12 @@
 <!-- BEGIN: ADMINQV -->
+<!-- BEGIN: UPDATE -->
+<span style="color:#C00;font-weight:bold;">{PHP.L.adminqv_update_notice}:</span>
+<div class="odd" style="border:1px #000 solid;padding:5px;">
+{ADMINQV_UPDATE_REVISION}<br /><br />
+{ADMINQV_UPDATE_MESSAGE}
+</div>
+<br />
+<!-- END: UPDATE -->
 <table style="margin:0 10px 20px 10px;">
 <tr>
 	<td>
@@ -66,7 +74,7 @@
 
 		<h4>Cotonti:</h4>
 		<table class="cells">
-		<tr><td>{PHP.L.Version} / {PHP.L.Database}</td>
+		<tr><td>{PHP.L.Version} ({PHP.L.adminqv_rev_title}) / {PHP.L.Database}</td>
 		<td style="text-align:right;">{ADMINQV_VERSION}({ADMINQV_REVISION}) / {ADMINQV_DB_VERSION}</td></tr>
 		<tr><td>{PHP.L.plu_db_rows}</td>
 		<td style="text-align:right;">{ADMINQV_DB_TOTAL_ROWS}</td></tr>
