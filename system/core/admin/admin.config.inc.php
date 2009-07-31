@@ -28,7 +28,7 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 $extp = sed_getextplugins('admin.config.first');
 if(is_array($extp))
 {
-	foreach($extp as $k => $pl)
+	foreach($extp as $pl)
 	{
 		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
@@ -41,39 +41,48 @@ switch($n)
 		$o = sed_import('o', 'G', 'ALP');
 		$p = sed_import('p', 'G', 'ALP');
 		$v = sed_import('v', 'G', 'TXT');
-		$o = (empty($o)) ? 'core' : $o;
-		$p = (empty($o)) ? 'global' : $p;
+		$o = empty($o) ? 'core' : $o;
+		$p = empty($p) ? 'global' : $p;
 
-		if($a == 'update' && !empty($n))
+		if ($a == 'update')
 		{
-			if($o == 'core')
+			if ($o == 'core')
 			{
-				reset($cfgmap);
-				foreach($cfgmap as $k => $line)
+				foreach ($cfgmap as $line)
 				{
-					if($line[0] == $p)
+					if ($line[0] == $p)
 					{
 						$cfg_name = $line[2];
 						$cfg_value = trim(sed_import($cfg_name, 'P', 'NOC'));
-						if('users' == $p && ('av_maxsize' == $cfg_name || 'sig_maxsize' == $cfg_name || 'ph_maxsize' == $cfg_name))
+						if ($p == 'users' && ($cfg_name == 'av_maxsize' || $cfg_name == 'sig_maxsize' || $cfg_name == 'ph_maxsize'))
 						{
 							$cfg_value = min($cfg_value, sed_get_uploadmax() * 1024);
 						}
-						$sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$cfg_name."' AND config_owner='core'");
+						$sql = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($cfg_value) . "' WHERE config_name='" . $cfg_name . "' AND config_owner='core'");
 					}
 				}
 			}
 			else
 			{
-				$sql = sed_sql_query("SELECT config_owner, config_name FROM $db_config WHERE config_owner='$o' AND config_cat='$p'");
-				while($row = sed_sql_fetcharray($sql))
+				$sql = sed_sql_query("SELECT config_name FROM $db_config WHERE config_owner='$o' AND config_cat='$p'");
+				while ($row = sed_sql_fetcharray($sql))
 				{
 					$cfg_value = trim(sed_import($row['config_name'], 'P', 'NOC'));
-					$sql1 = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($cfg_value)."' WHERE config_name='".$row['config_name']."' AND config_owner='$o' AND config_cat='$p'");
+					$sql1 = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($cfg_value) . "' WHERE config_name='" . $row['config_name'] . "' AND config_owner='$o' AND config_cat='$p'");
 				}
 			}
 
 			$adminwarnings = $L['Updated'];
+
+			/* === Hook === */
+			$extp = sed_getextplugins('admin.config.updated');
+			if (is_array($extp))
+			{
+				foreach ($extp as $pl)
+				{
+					include_once($cfg['plugins_dir'] . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
+				}
+			}
 		}
 		elseif($a == 'reset' && $o == 'core' && !empty($v))
 		{
@@ -89,7 +98,7 @@ switch($n)
 		$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
 		sed_die(sed_sql_numrows($sql) == 0);
 
-		foreach($cfgmap as $k => $line)
+		foreach($cfgmap as $line)
 		{
 			$cfg_params[$line[2]] = $line[5];
 		}
@@ -228,9 +237,9 @@ switch($n)
 			/* === Hook - Part2 : Include === */
 			if(is_array($extp))
 			{
-				foreach($extp as $k => $pl)
+				foreach($extp as $pl)
 				{
-					include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 				}
 			}
 			/* ===== */
@@ -245,7 +254,7 @@ switch($n)
 		$extp = sed_getextplugins('admin.config.edit.tags');
 		if(is_array($extp))
 		{
-			foreach($extp as $k => $pl)
+			foreach($extp as $pl)
 			{
 				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			}
@@ -279,7 +288,7 @@ switch($n)
 		$extp = sed_getextplugins('admin.config.default.tags');
 		if(is_array($extp))
 		{
-			foreach($extp as $k => $pl)
+			foreach($extp as $pl)
 			{
 				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			}
@@ -300,7 +309,7 @@ $t -> assign(array(
 $extp = sed_getextplugins('admin.config.tags');
 if(is_array($extp))
 {
-	foreach($extp as $k => $pl)
+	foreach($extp as $pl)
 	{
 		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}

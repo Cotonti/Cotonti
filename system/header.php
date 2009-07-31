@@ -115,7 +115,7 @@ if (!SED_AJAX)
 	/* === Hook === */
 	$extp = sed_getextplugins('header.body');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include('plugins/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
 
