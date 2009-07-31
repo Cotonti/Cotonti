@@ -131,12 +131,15 @@ function sed_tag_search_pages($query)
 	{
 		$tags = sed_tag_list($row['page_id']);
 		$tag_list = '';
+		$tag_i = 0;
 		foreach($tags as $tag)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a> ';
+			if ($tag_i > 0) $tag_list .= ', ';
+			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a>';
+			$tag_i++;
 		}
 		$t->assign(array(
 			'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']),
@@ -197,12 +200,15 @@ function sed_tag_search_forums($query)
 	{
 		$tags = sed_tag_list($row['ft_id'], 'forums');
 		$tag_list = '';
+		$tag_i = 0;
 		foreach($tags as $tag)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a> ';
+			if ($tag_i > 0) $tag_list .= ', ';
+			$tag_list .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a>';
+			$tag_i++;
 		}
 		$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'],$row['fs_mastername']) : false;
 		$t->assign(array(
