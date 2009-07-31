@@ -73,24 +73,14 @@ switch($n)
 			}
 
 			$adminwarnings = $L['Updated'];
-
-			/* === Hook === */
-			$extp = sed_getextplugins('admin.config.updated');
-			if (is_array($extp))
-			{
-				foreach ($extp as $pl)
-				{
-					include_once($cfg['plugins_dir'] . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-				}
-			}
 		}
-		elseif($a == 'reset' && $o == 'core' && !empty($v))
+		elseif ($a == 'reset' && $o == 'core' && !empty($v))
 		{
-			foreach($cfgmap as $i => $line)
+			foreach ($cfgmap as $i => $line)
 			{
-				if($v == $line[2])
+				if ($v == $line[2])
 				{
-					$sql = sed_sql_query("UPDATE $db_config SET config_value='".sed_sql_prep($line[4])."' WHERE config_name='$v' AND config_owner='$o'");
+					$sql = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($line[4]) . "' WHERE config_name='$v' AND config_owner='$o'");
 				}
 			}
 		}
