@@ -11,3 +11,6 @@ INSERT INTO `sed_config` ( `config_owner` , `config_cat` , `config_order` , `con
 
 /* r866 html-cache for comments */
 ALTER TABLE `sed_com` ADD `com_html` text collate utf8_unicode_ci;
+
+/* r874 version checking addition */
+INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value` ,`config_default` ,`config_text`) VALUES ('core', 'version', '01', 'revision', '0', '', '', '');
