@@ -29,6 +29,7 @@ if($cfg['plugin']['tags']['pages'])
 	$tags = sed_tag_list($item_id);
 	if(count($tags) > 0)
 	{
+		$tag_i = 0;
 		foreach($tags as $tag)
 		{
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
@@ -38,6 +39,7 @@ if($cfg['plugin']['tags']['pages'])
 			'PAGE_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl)
 			));
 			$t->parse('MAIN.PAGE_TAGS_ROW');
+			$tag_i++;
 		}
 	}
 	else

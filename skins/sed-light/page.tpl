@@ -17,7 +17,7 @@
 					{PHP.L.Author}: {PAGE_AUTHOR}<br />
 					{PHP.skinlang.page.Submittedby}: {PAGE_OWNER} &nbsp; {PHP.L.Date}: {PAGE_DATE}<br />
 
-				{PAGE_ADMIN_EDIT}
+				{PAGE_ADMIN_EDIT}&nbsp;
 				<!-- BEGIN: PAGE_ADMIN -->
 				{PAGE_ADMIN_UNVALIDATE} &nbsp; ({PAGE_ADMIN_COUNT})<br />
 				<!-- END: PAGE_ADMIN -->
@@ -36,13 +36,13 @@
 		<!-- END: PAGE_MULTI -->
 
 		<div class="block">
-		<strong>{PHP.L.Tags}:</strong>
-		<!-- BEGIN: PAGE_TAGS_ROW -->
-		<a href="{PAGE_TAGS_ROW_URL}">{PAGE_TAGS_ROW_TAG}</a>
-		<!-- END: PAGE_TAGS_ROW -->
-		<!-- BEGIN: PAGE_NO_TAGS -->
-		{PAGE_NO_TAGS}
-		<!-- END: PAGE_NO_TAGS -->
+			<strong>{PHP.L.Tags}:</strong>&nbsp;
+			<!-- BEGIN: PAGE_TAGS_ROW -->
+				<!-- IF {PHP.tag_i} > 0 -->,&nbsp;<!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}">{PAGE_TAGS_ROW_TAG}</a>
+			<!-- END: PAGE_TAGS_ROW -->
+			<!-- BEGIN: PAGE_NO_TAGS -->
+				{PAGE_NO_TAGS}
+			<!-- END: PAGE_NO_TAGS -->
 		</div>
 
 		<!-- BEGIN: PAGE_FILE -->

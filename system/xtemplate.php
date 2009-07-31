@@ -294,7 +294,7 @@ class Xtpl_data
 	 */
 	private function cleanup($html)
 	{
-		$html = preg_replace('#\n\s+#', "\n", $html);
+		$html = preg_replace('#\n\s+#', ' ', $html);
 		$html = preg_replace('#[\r\n\t]+<#', '<', $html);
 		$html = preg_replace('#>[\r\n\t]+#', '>', $html);
 		$html = preg_replace('# {2,}#', ' ', $html);
