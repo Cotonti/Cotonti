@@ -125,7 +125,7 @@ if(!$update_info)
 if($update_info['update_rev'] > $cfg['revision'])
 {
 	$t->assign(array(
-		'ADMINQV_UPDATE_REVISION' => sprintf($L['adminqv_update_revision'], $cfg['version'], $cfg['revision'], $update_info['update_ver'], $update_info['update_rev']),
+		'ADMINQV_UPDATE_REVISION' => sprintf($L['adminqv_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
 		'ADMINQV_UPDATE_MESSAGE' => sed_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
 		));
 	$t->parse('ADMINQV.UPDATE');

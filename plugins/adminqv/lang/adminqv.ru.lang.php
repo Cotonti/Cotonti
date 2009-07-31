@@ -53,4 +53,8 @@ $L['plu_ql_b3_1'] = 'Настройка пользователей';
 $L['plu_ql_b3_2'] = 'Дополнительные поля для профиля';
 $L['plu_ql_b3_4'] = 'Права групп';
 
+$L['adminqv_rev_title'] = 'Редакция';
+$L['adminqv_rev'] = 'r';
+$L['adminqv_update_notice'] = 'Доступно обновление';
+$L['adminqv_update_revision'] = 'Текущая версия: <span style="color:#C00;font-weight:bold;">%1$s(r%2$s)</span><br />Новая версия: <span style="color:#4E9A06;font-weight:bold;">%3$s(r%4$s)</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
 ?>
