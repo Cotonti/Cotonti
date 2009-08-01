@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * English Language File (main.lang.php)
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -253,6 +253,7 @@ $L['Resync'] = 'Resync';
 $L['Resynced'] = 'Resynced';	// New in 0.1.0
 $L['Right'] = 'Right';
 $L['Rights'] = 'Rights';
+$L['Rss_feeds'] = 'RSS feeds'; // New in N-0.7.0
 $L['Search'] = 'Search';
 $L['Seconds'] = array('seconds','second');
 $L['Section'] = 'Section';
@@ -876,7 +877,8 @@ $sed_countries = array (
  */
 
 $L['rss_allforums_item_title'] = "Last posts on forum";	// New in N-0.0.2
-$L['rss_comment'] = 'Comment from';	// New in N-0.0.2
+$L['rss_comments'] = 'Comments for';	// New in N-0.7.0
+$L['rss_comment_of_user'] = 'Comment from';	// New in N-0.0.2
 $L['rss_comments_item_desc'] = 'Last comments on page';	// New in N-0.0.2
 $L['rss_original'] = 'Original message';	// New in N-0.0.2
 $L['rss_topic_item_desc'] = 'Last posts in topic';	// New in N-0.0.2

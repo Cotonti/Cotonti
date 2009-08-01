@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /**
  * GZIP-compressed resource output and cache control utility
  * Usage: rc.php?uri=js/filename.js
@@ -8,7 +8,7 @@
  * RewriteRule \.(js|css)$ rc.php?uri=%{REQUEST_FILENAME} [NC,L]
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Julien Lecomte, Cotonti Team
  * @link http://www.julienlecomte.net/blog/2007/08/13/
  * @license BSD
@@ -20,12 +20,12 @@
  */
 
 $known_content_types = array(
-    'js'   => 'text/javascript',
-    'css'  => 'text/css',
-    'gif'  => 'image/gif',
-    'jpg'  => 'image/jpeg',
-    'jpeg' => 'image/jpeg',
-    'png'  => 'image/png'
+	'js'   => 'text/javascript',
+	'css'  => 'text/css',
+	'gif'  => 'image/gif',
+	'jpg'  => 'image/jpeg',
+	'jpeg' => 'image/jpeg',
+	'png'  => 'image/png'
 );
 
 /*
@@ -34,9 +34,9 @@ $known_content_types = array(
 
 if (!isset($_GET['uri']))
 {
-    header('HTTP/1.1 400 Bad Request');
-    echo '<html><body><h1>HTTP 400 - Bad Request</h1></body></html>';
-    exit;
+	header('HTTP/1.1 400 Bad Request');
+	echo '<html><body><h1>HTTP 400 - Bad Request</h1></body></html>';
+	exit;
 }
 
 /*
@@ -48,10 +48,10 @@ $src_uri = $_GET['uri'];
 
 if (!file_exists($src_uri))
 {
-    /* The file does not exist */
-    header( 'HTTP/1.1 404 Not Found' );
-    echo( '<html><body><h1>HTTP 404 - Not Found</h1></body></html>' );
-    exit;
+	/* The file does not exist */
+	header('HTTP/1.1 404 Not Found');
+	echo '<html><body><h1>HTTP 404 - Not Found</h1></body></html>';
+	exit;
 }
 
 /*
@@ -60,12 +60,12 @@ if (!file_exists($src_uri))
  */
 
 $file_last_modified = filemtime($src_uri);
-header( 'Last-Modified: ' . date( 'r', $file_last_modified ) );
+header('Last-Modified: ' . date('r', $file_last_modified));
 
-$max_age = 300 * 24 * 60 * 60; // 300 days
+$max_age = 300 * 24 * 60 * 60;// 300 days
 
 $expires = $file_last_modified + $max_age;
-header('Expires: ' . date( 'r', $expires ));
+header('Expires: ' . date('r', $expires));
 
 $etag = dechex($file_last_modified);
 header('ETag: ' . $etag);
@@ -80,15 +80,15 @@ header('Cache-Control: ' . $cache_control);
 
 if (function_exists('http_match_etag') && function_exists('http_match_modified'))
 {
-    if (http_match_etag( $etag ) || http_match_modified( $file_last_modified ))
+	if (http_match_etag($etag) || http_match_modified($file_last_modified))
 	{
-        header('HTTP/1.1 304 Not Modified');
-        exit;
-    }
+		header('HTTP/1.1 304 Not Modified');
+		exit;
+	}
 }
 else
 {
-    error_log('The HTTP extensions to PHP does not seem to be installed...');
+	error_log('The HTTP extensions to PHP does not seem to be installed...');
 }
 
 /*
@@ -100,11 +100,11 @@ $uri_dir = '';
 $file_name = '';
 $content_type = '';
 
-$uri_parts = explode('/', $src_uri );
+$uri_parts = explode('/', $src_uri);
 
-for ($i = 0; $i < count($uri_parts) - 1; $i++)
+for ($i = 0;$i < count($uri_parts) - 1;$i++)
 {
-    $uri_dir .= $uri_parts[$i] . '/';
+	$uri_dir .= $uri_parts[$i] . '/';
 }
 
 $file_name = end($uri_parts);
@@ -112,21 +112,21 @@ $file_name = end($uri_parts);
 $file_parts = explode('.', $file_name);
 if (count($file_parts) > 1)
 {
-    $file_extension = end($file_parts);
-    $content_type = $known_content_types[$file_extension];
+	$file_extension = end($file_parts);
+	$content_type = $known_content_types[$file_extension];
 }
 
 /*
  * Verify the requested file has allowed extension for security reasons.
  */
 
-$doc_root = realpath( '.' );
+$doc_root = realpath('.');
 
 if (!isset($known_content_types[$file_extension]))
 {
-    header( 'HTTP/1.1 403 Forbidden' );
-    echo( '<html><body><h1>HTTP 403 - Forbidden</h1></body></html>' );
-    exit;
+	header('HTTP/1.1 403 Forbidden');
+	echo '<html><body><h1>HTTP 403 - Forbidden</h1></body></html>';
+	exit;
 }
 
 /*
@@ -153,7 +153,7 @@ $compress = $compress && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== f
 
 if ($compress)
 {
-    ob_start('ob_gzhandler');
+	ob_start('ob_gzhandler');
 }
 
 /*
@@ -162,15 +162,15 @@ if ($compress)
 
 if ($content_type)
 {
-    header('Content-Type: ' . $content_type);
+	header('Content-Type: ' . $content_type);
 }
 
-//header( 'Content-Length: ' . filesize( $dst_uri ) );
+//header('Content-Length: ' . filesize($dst_uri));
 readfile($dst_uri);
 
 if ($compress)
 {
-    ob_end_flush();
+	ob_end_flush();
 }
 
 ?>

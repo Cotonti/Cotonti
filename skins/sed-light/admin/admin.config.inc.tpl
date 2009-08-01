@@ -8,7 +8,9 @@
 				<table class="cells">
 				<tr>
 					<td class="coltop" colspan="2">{PHP.L.Configuration}</td>
+<!-- IF {PHP.o} == 'core' -->
 					<td class="coltop">{PHP.L.Reset}</td>
+<!-- ENDIF -->
 				</tr>
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 				<tr>
@@ -53,11 +55,11 @@
 						<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
 <!-- ENDIF -->
 					</td>
-					<td style="text-align:center; width:7%;">&nbsp;
 <!-- IF {PHP.o} == 'core' -->
+					<td style="text-align:center; width:7%;">&nbsp;
 						[<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}"{ADMIN_CONFIG_ROW_CONFIG_MORE_URL_AJAX}>R</a>]
-<!-- ENDIF -->
 					</td>
+<!-- ENDIF -->
 				</tr>
 <!-- END: ADMIN_CONFIG_ROW -->
 				<tr>

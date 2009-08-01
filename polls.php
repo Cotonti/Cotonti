@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * Polls loader
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -21,10 +21,10 @@ require_once($cfg['system_dir'].'/common.php');
 sed_dieifdisabled($cfg['disable_polls']);
 
 switch($m)
-	{
+{
 	default:
-	require_once($cfg['system_dir'].'/core/polls/polls.inc.php');
+		require_once($cfg['system_dir'].'/core/polls/polls.inc.php');
 	break;
-	}
+}
 
 ?>

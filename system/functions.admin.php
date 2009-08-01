@@ -1,15 +1,9 @@
-<?PHP
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
+<?php
 /**
  * Admin function library.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -39,10 +33,12 @@ function sed_auth_getvalue($mask)
 
     $masks = str_split($mask);
 
-    foreach($mn as $k => $v)
+    foreach ($mn as $k => $v)
     {
         if (in_array($k, $masks))
-        { $res += $mn[$k]; }
+        {
+        	$res += $mn[$k];
+        }
     }
     return($res);
 }
@@ -62,13 +58,13 @@ function sed_auth_reorder()
 function sed_build_admrights($rn)
 {
     $res = ($rn & 1) ? 'R' : '';
-    $res .= (($rn & 2)==2) ? 'W' : '';
-    $res .= (($rn & 4)==4) ? '1' : '';
-    $res .= (($rn & 8)==8) ? '2' : '';
-    $res .= (($rn & 16)==16) ? '3' : '';
-    $res .= (($rn & 32)==32) ? '4' : '';
-    $res .= (($rn & 64)==64) ? '5' : '';
-    $res .= (($rn & 128)==128) ? 'A' : '';
+    $res .= (($rn & 2) == 2) ? 'W' : '';
+    $res .= (($rn & 4) == 4) ? '1' : '';
+    $res .= (($rn & 8) == 8) ? '2' : '';
+    $res .= (($rn & 16) == 16) ? '3' : '';
+    $res .= (($rn & 32) == 32) ? '4' : '';
+    $res .= (($rn & 64) == 64) ? '5' : '';
+    $res .= (($rn & 128) == 128) ? 'A' : '';
     return($res);
 }
 
@@ -80,8 +76,10 @@ function sed_build_adminsection($adminpath)
 
     $result = array();
     $result[] = "<a href=\"".sed_url('admin')."\">".$L['Adminpanel']."</a>";
-    foreach($adminpath as $i => $k)
-    { $result[] = "<a href=\"".$k[0]."\">".$k[1]."</a>"; }
+    foreach ($adminpath as $i => $k)
+    {
+    	$result[] = "<a href=\"".$k[0]."\">".$k[1]."</a>";
+    }
     $result = implode(" ".$cfg['separator']." ", $result);
 
     return($result);
@@ -96,7 +94,7 @@ function sed_forum_deletesection($id)
     $sql = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$id' ");
     $row = sed_sql_fetcharray($sql);
 
-    if ($row['fs_masterid']>0)
+    if ($row['fs_masterid'] > 0)
     {
         $sqql = sed_sql_query("SELECT fs_masterid, fs_topiccount, fs_postcount FROM $db_forum_sections WHERE fs_id='$id' ");
         $roww = sed_sql_fetcharray($sqql);
@@ -128,7 +126,7 @@ function sed_forum_resync($id)
     global $db_forum_topics, $db_forum_posts, $db_forum_sections;
 
     $sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_masterid='$id' ");
-    $result = sed_sql_result($sql,0,"COUNT(*)");
+    $result = sed_sql_result($sql, 0, "COUNT(*)");
 
     if (!$result)
     {
@@ -139,18 +137,17 @@ function sed_forum_resync($id)
         $num = sed_sql_result($sql, 0, "COUNT(*)");
         $sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
     }
-
     else
     {
         $sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$id'");
-        $num = sed_sql_result($sql,0,"COUNT(*)");
+        $num = sed_sql_result($sql, 0, "COUNT(*)");
         $sql = sed_sql_query("SELECT SUM(fs_topiccount) FROM $db_forum_sections WHERE fs_masterid='$id'");
-        $num = $num + sed_sql_result($sql,0,"SUM(fs_topiccount)");
+        $num = $num + sed_sql_result($sql, 0, "SUM(fs_topiccount)");
         $sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount='$num' WHERE fs_id='$id'");
         $sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$id'");
         $num = sed_sql_result($sql, 0, "COUNT(*)");
         $sql = sed_sql_query("SELECT SUM(fs_postcount) FROM $db_forum_sections WHERE fs_masterid='$id'");
-        $num = $num + sed_sql_result($sql,0,"SUM(fs_postcount)");
+        $num = $num + sed_sql_result($sql, 0, "SUM(fs_postcount)");
         $sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
     }
 
@@ -174,8 +171,8 @@ function sed_forum_resynctopic($id)
 
     if ($row = sed_sql_fetcharray($sql))
     {
-        $sql = sed_sql_query("UPDATE $db_forum_topics SET
-        ft_lastposterid='".(int)$row['fp_posterid']."',
+        $sql = sed_sql_query("UPDATE $db_forum_topics
+        SET ft_lastposterid='".(int)$row['fp_posterid']."',
             ft_lastpostername='".sed_sql_prep($row['fp_last_postername'])."',
             ft_updated='".(int)$row['fp_last_updated']."'
         WHERE ft_id='$id'");
@@ -192,7 +189,9 @@ function sed_forum_resyncall()
 
     $sql = sed_sql_query("SELECT fs_id FROM $db_forum_sections");
     while ($row = sed_sql_fetcharray($sql))
-    { sed_forum_resync($row['fs_id']); }
+    {
+    	sed_forum_resync($row['fs_id']);
+    }
     return;
 }
 
@@ -201,9 +200,13 @@ function sed_forum_resyncall()
 function sed_linkif($url, $text, $cond)
 {
     if ($cond)
-    { $res = "<a href=\"".$url."\">".$text."</a>"; }
+    {
+    	$res = "<a href=\"".$url."\">".$text."</a>";
+    }
     else
-    { $res = $text; }
+    {
+    	$res = $text;
+    }
 
     return($res);
 }
@@ -214,7 +217,7 @@ function sed_loadcharsets()
 {
     $result = array();
     $result[] = array('ISO-10646-UTF-1', 'ISO-10646-UTF-1 / Universal Transfer Format');
-    $result[] = array('UTF-8','UTF-8 / Standard Unicode');
+    $result[] = array('UTF-8', 'UTF-8 / Standard Unicode');
     $result[] = array('ISO-8859-1', 'ISO-8859-1 / Western Europe');
     $result[] = array('ISO-8859-2', 'ISO-8859-2 / Middle Europe');
     $result[] = array('ISO-8859-3', 'ISO-8859-3 / Maltese');
@@ -281,7 +284,7 @@ function sed_loadconfigmap()
     $result[] = array ('time', '14', 'timedout', 2, '1200', array(30,60,120,300,600,900,1200,1800,2400,3600));
     $result[] = array ('skin', '02', 'forcedefaultskin', 3, '0', '');
     $result[] = array ('skin', '04', 'doctypeid', 4, '4', '');
-    $result[] = array ('skin', '06', 'charset', 4, 'ISO-8859-1', '');
+    $result[] = array ('skin', '06', 'charset', 4, 'UTF-8', '');
     $result[] = array ('skin', '08', 'metakeywords', 1, '', '');
     $result[] = array ('skin', '08', 'separator', 1, '/', '');
     $result[] = array ('skin', '15', 'disablesysinfos', 3, '0', '');
@@ -335,11 +338,11 @@ function sed_loadconfigmap()
     $result[] = array ('pfs', '03', 'pfstimename', 3, '0', ''); // N-0.0.2
     $result[] = array ('pfs', '04', 'pfsfilecheck', 3, '1', ''); // N-0.0.2
     $result[] = array ('pfs', '05', 'pfsnomimepass', 3, '1', ''); // N-0.0.2
-    $result[] = array ('pfs', '10', 'th_amode', 2, 'GD2', array('Disabled','GD1','GD2'));
+    $result[] = array ('pfs', '10', 'th_amode', 2, 'GD2', array('Disabled', 'GD1', 'GD2'));
     $result[] = array ('pfs', '10', 'th_x', 2, '112', '');
     $result[] = array ('pfs', '10', 'th_y', 2, '84', '');
     $result[] = array ('pfs', '10', 'th_border', 2, '4', '');
-    $result[] = array ('pfs', '10', 'th_dimpriority', 2, 'Width', array('Width','Height'));
+    $result[] = array ('pfs', '10', 'th_dimpriority', 2, 'Width', array('Width', 'Height'));
     $result[] = array ('pfs', '10', 'th_keepratio', 3, '1', '');
     $result[] = array ('pfs', '10', 'th_jpeg_quality', 2, '85', array(0,5,10,20,30,40,50,60,70,75,80,85,90,95,100));
     $result[] = array ('pfs', '10', 'th_colorbg', 2, '000000', '');
@@ -353,7 +356,7 @@ function sed_loadconfigmap()
     $result[] = array ('pm', '10', 'pm_allownotifications', 3, '1', '');
     $result[] = array ('pm', '11', 'maxpmperpage', 2, '15', array(5,10,15,20,25,30,40,50,60,70,100,200,500)); // N-0.0.6
     $result[] = array ('polls', '01', 'disable_polls', 3, '0', '');
-    $result[] = array ('polls', '02', 'ip_id_polls', 2, 'ip', array('ip','id')); // N-0.0.2
+    $result[] = array ('polls', '02', 'ip_id_polls', 2, 'ip', array('ip', 'id')); // N-0.0.2
     $result[] = array ('polls', '03', 'max_options_polls', 1, '100', ''); // N-0.0.2
     $result[] = array ('polls', '04', 'del_dup_options', 3, '0', ''); // N-0.0.2
     $result[] = array ('ratings', '01', 'disable_ratings', 3, '0', '');
@@ -428,6 +431,11 @@ function sed_loadconfigmap()
     $result[] = array ('title', '16', 'title_users_edit', 1, '{NAME}', '');
     $result[] = array ('title', '17', 'title_header', 1, '{MAINTITLE} - {SUBTITLE}', '');
     $result[] = array ('title', '18', 'title_header_index', 1, '{MAINTITLE} - {DESCRIPTION}', '');
+    // N-0.7
+    $result[] = array ('rss', '01', 'disable_rss', 3, '0', '');
+    $result[] = array ('rss', '02', 'rss_timetolive', 2, '30', array(0,10,20,30,40,50,60,120,180,140,200));
+    $result[] = array ('rss', '03', 'rss_maxitems', 2, '40', array(5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100,150,200));
+    $result[] = array ('rss', '04', 'rss_charset', 4, 'UTF-8', '');
 
     return($result);
 }
@@ -437,14 +445,14 @@ function sed_loadconfigmap()
 function sed_loaddoctypes()
 {
     $result = array();
-    $result[] = array(0,'HTML 4.01');
-    $result[] = array(1,'HTML 4.01 Transitional');
-    $result[] = array(2,'HTML 4.01 Frameset');
-    $result[] = array(3,'XHTML 1.0 Strict');
-    $result[] = array(4,'XHTML 1.0 Transitional');
-    $result[] = array(5,'XHTML 1.0 Frameset');
-    $result[] = array(6,'XHTML 1.1');
-    $result[] = array(7,'XHTML 2');
+    $result[] = array(0, 'HTML 4.01');
+    $result[] = array(1, 'HTML 4.01 Transitional');
+    $result[] = array(2, 'HTML 4.01 Frameset');
+    $result[] = array(3, 'XHTML 1.0 Strict');
+    $result[] = array(4, 'XHTML 1.0 Transitional');
+    $result[] = array(5, 'XHTML 1.0 Frameset');
+    $result[] = array(6, 'XHTML 1.1');
+    $result[] = array(7, 'XHTML 2');
     return($result);
 }
 
@@ -474,28 +482,28 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
     if (!empty($title) && !empty($code) && !empty($path) && $code!='all')
     {
         $sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='".sed_sql_prep($code)."' LIMIT 1");
-        if (sed_sql_numrows($sql)==0)
+        if (sed_sql_numrows($sql) == 0)
         {
             $sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group) VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.")");
 
-            foreach($sed_groups as $k => $v)
+            foreach ($sed_groups as $k => $v)
             {
-                if ($v['id']==1)
+                if ($v['id'] == 1)
                 {
                     $ins_auth = 5;
                     $ins_lock = 250;
                 }
-                elseif($v['id']==2)
+                elseif ($v['id'] == 2)
                 {
                     $ins_auth = 1;
                     $ins_lock = 254;
                 }
-                elseif ($v['id']==3)
+                elseif ($v['id'] == 3)
                 {
                     $ins_auth = 0;
                     $ins_lock = 255;
                 }
-                elseif ($v['id']==5)
+                elseif ($v['id'] == 5)
                 {
                     $ins_auth = 255;
                     $ins_lock = 255;
@@ -540,7 +548,9 @@ function sed_trash_get($id)
         return ($res);
     }
     else
-    { return (FALSE); }
+    {
+    	return (FALSE);
+    }
 }
 
 /* ------------------ */
@@ -574,7 +584,7 @@ function sed_trash_restore($id)
             sed_trash_insert($res['tr_datas'], $db_com);
             sed_log("Comment #".$res['tr_itemid']." restored from the trash can.", 'adm');
             return (TRUE);
-            break;
+        break;
 
         case 'forumpost':
             global $db_forum_posts;
@@ -598,8 +608,7 @@ function sed_trash_restore($id)
                     sed_trash_delete($row1['tr_id']);
                 }
             }
-
-            break;
+		break;
 
         case 'forumtopic':
             global $db_forum_topics;
@@ -620,7 +629,7 @@ function sed_trash_restore($id)
             sed_forum_sectionsetlast($res['tr_datas']['ft_sectionid']);
             sed_forum_resync($res['tr_datas']['ft_sectionid']);
             return (TRUE);
-            break;
+		break;
 
         case 'page':
             global $db_pages, $db_structure;
@@ -629,32 +638,68 @@ function sed_trash_restore($id)
             $sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='".$res['tr_itemid']."'");
             $row = sed_sql_fetcharray($sql);
             $sql = sed_sql_query("SELECT structure_id FROM $db_structure WHERE structure_code='".$row['page_cat']."'");
-            if (sed_sql_numrows($sql)==0)
+            if (sed_sql_numrows($sql) == 0)
             {
                 sed_structure_newcat('restored', 999, 'RESTORED', '', '', 0);
                 $sql = sed_sql_query("UPDATE $db_pages SET page_cat='restored' WHERE page_id='".$res['tr_itemid']."'");
             }
             return (TRUE);
-            break;
+		break;
 
         case 'pm':
             global $db_pm;
             sed_trash_insert($res['tr_datas'], $db_pm);
             sed_log("Private message #".$res['tr_itemid']." restored from the trash can.", 'adm');
             return (TRUE);
-            break;
+		break;
 
         case 'user':
             global $db_users;
             sed_trash_insert($res['tr_datas'], $db_users);
             sed_log("User #".$res['tr_itemid']." restored from the trash can.", 'adm');
             return (TRUE);
-            break;
+		break;
 
         default:
             return (FALSE);
-            break;
+		break;
     }
+}
+
+/**
+ * Extra fields - Return default base html-construction for various types of fields (without value= and name=)
+ *
+ * @access private
+ * @param string $type Type of field (input, textarea etc)
+ * @return string
+ *
+ */
+function get_default_html_construction($type)
+{
+	$html = "";
+	switch($type)
+	{
+		case "input":
+			$html = '<input class="text" type="text" maxlength="255" size="56" />';
+		break;
+
+		case "textarea":
+			$html = '<textarea cols="80" rows="6" ></textarea>';
+		break;
+
+		case "select":
+			$html = '<select></select>';
+		break;
+
+		case "checkbox":
+			$html = '<input type="checkbox" />';
+		break;
+
+		case "radio":
+			$html = '<input type="radio" />';
+		break;
+	}
+	return $html;
 }
 
 ?>
