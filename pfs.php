@@ -1,15 +1,15 @@
-<?PHP
+<?php
 /**
  * PFS loader
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
-define('SED_CODE', true);
+define('SED_CODE', TRUE);
 define('SED_PFS', TRUE);
 $location = 'PFS';
 $z = 'pfs';
@@ -22,22 +22,22 @@ require_once($cfg['system_dir'].'/common.php');
 sed_dieifdisabled($cfg['disable_pfs']);
 
 switch($m)
-	{
+{
 	case 'view':
-	require_once($cfg['system_dir'].'/core/pfs/pfs.view.inc.php');
+		require_once($cfg['system_dir'].'/core/pfs/pfs.view.inc.php');
 	break;
 
 	case 'edit':
-	require_once($cfg['system_dir'].'/core/pfs/pfs.edit.inc.php');
+		require_once($cfg['system_dir'].'/core/pfs/pfs.edit.inc.php');
 	break;
 
 	case 'editfolder':
-	require_once($cfg['system_dir'].'/core/pfs/pfs.editfolder.inc.php');
+		require_once($cfg['system_dir'].'/core/pfs/pfs.editfolder.inc.php');
 	break;
 
 	default:
-	require_once($cfg['system_dir'].'/core/pfs/pfs.inc.php');
+		require_once($cfg['system_dir'].'/core/pfs/pfs.inc.php');
 	break;
-	}
+}
 
 ?>

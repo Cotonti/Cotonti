@@ -3,7 +3,7 @@
  * Administration panel - Extra fields editor for users part
  *
  * @package Cotonti
- * @version 0.6.1
+ * @version 0.7.0
  * @author medar, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -31,10 +31,15 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 /* === Hook === */
 $extp = sed_getextplugins('admin.users.extrafields.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
-if($a == 'add')
+if ($a == 'add')
 {
 	$field['name'] = sed_import('field_name', 'P', 'ALP');
 	$field['type'] = sed_import('field_type', 'P', 'ALP');
@@ -42,7 +47,7 @@ if($a == 'add')
 	$field['variants'] = sed_import('field_variants', 'P', 'HTM');
 	$field['description'] = sed_import('field_description', 'P', 'HTM');
 	$field['noalter'] = sed_import('field_noalter', 'P', 'BOL');
-	if($field['html'] == "")
+	if ($field['html'] == "")
 	{
 		$field['html'] = get_default_html_construction($field['type']);
 	}
@@ -50,13 +55,17 @@ if($a == 'add')
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.users.extrafields.add');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
-	if(!empty($field['name']) && !empty($field['type']))
+	if (!empty($field['name']) && !empty($field['type']))
 	{
-		//if(sed_sql_insert($db_extra_fields, $field, 'field_'))
-		if( sed_extrafield_add('users', $field['name'], $field['type'], $field['html'], $field['variants'], $field['description'], $field['noalter']))
+		if ( sed_extrafield_add('users', $field['name'], $field['type'], $field['html'], $field['variants'], $field['description'], $field['noalter']))
 		{
 			$adminwarnings = $L['adm_extrafield_added'];
 		}
@@ -66,7 +75,7 @@ if($a == 'add')
 		}
 	}
 }
-elseif($a == 'upd' && isset($n))
+elseif ($a == 'upd' && isset($n))
 {
 	$oldtype = sed_import('oldtype', 'G', 'ALP');
 	$field['name'] = sed_import('field_name', 'P', 'ALP');
@@ -74,11 +83,11 @@ elseif($a == 'upd' && isset($n))
 	$field['html'] = str_replace("'", "\"", htmlspecialchars_decode(sed_import('field_html', 'P', 'HTM')));
 	$field['variants'] = sed_import('field_variants', 'P', 'HTM');
 	$field['description'] = sed_import('field_description', 'P', 'HTM');
-	if($field['type'] != $oldtype)
+	if ($field['type'] != $oldtype)
 	{
 		$field['html'] = "";
 	}
-	if($field['html'] == "")
+	if ($field['html'] == "")
 	{
 		$field['html'] = get_default_html_construction($field['type']);
 	}
@@ -86,12 +95,17 @@ elseif($a == 'upd' && isset($n))
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.users.extrafields.update');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
-	if(!empty($field['name']) && !empty($field['type']))
+	if (!empty($field['name']) && !empty($field['type']))
 	{
-		if(sed_extrafield_update("users", $n, $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
+		if (sed_extrafield_update("users", $n, $field['name'], $field['type'], $field['html'], $field['variants'], $field['description']))
 		{
 			$adminwarnings = $L['adm_extrafield_updated'];
 		}
@@ -101,13 +115,19 @@ elseif($a == 'upd' && isset($n))
 		}
 	}
 }
-elseif($a == 'del' && isset($n))
+elseif ($a == 'del' && isset($n))
 {
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.users.extrafields.delete');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
+
 	if (sed_extrafield_remove('users', $n))
 	{
 		$adminwarnings = $L['adm_extrafield_removed'];
@@ -121,7 +141,7 @@ elseif($a == 'del' && isset($n))
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location='users'"), 0, 0);
-if($cfg['jquery'] AND $cfg['turnajax'])
+if ($cfg['jquery'] AND $cfg['turnajax'])
 {
 	$pagnav = sed_pagination(sed_url('admin','m=users&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=users&s=extrafields&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
 	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=users&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=users&s=extrafields&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
@@ -139,9 +159,9 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('admin.users.extrafields.loop');
 /* ===== */
-while($row = sed_sql_fetchassoc($res))
+while ($row = sed_sql_fetchassoc($res))
 {
-	foreach($field_types as $val)
+	foreach ($field_types as $val)
 	{
 		$t -> assign(array(
 			"ADMIN_USER_EXTRAFIELDS_ROW_SELECT_SELECTED" => ($val == $row['field_type']) ? ' selected="selected"' : '',
@@ -158,19 +178,25 @@ while($row = sed_sql_fetchassoc($res))
 		"ADMIN_USER_EXTRAFIELDS_ROW_VARIANTS" => $row['field_variants'],
 		"ADMIN_USER_EXTRAFIELDS_ROW_FIELD_HTML_ENCODED" => htmlspecialchars($row['field_html']),
 		"ADMIN_USER_EXTRAFIELDS_ROW_BIGNAME" => strtoupper($row['field_name']),
-		"ADMIN_USER_EXTRAFIELDS_ROW_DEL_URL" => sed_url('admin', 'm=users&s=extrafields&a=del&name='.$row['field_name'])
+		"ADMIN_USER_EXTRAFIELDS_ROW_DEL_URL" => sed_url('admin', 'm=users&s=extrafields&a=del&name='.$row['field_name']),
+		"ADMIN_USER_EXTRAFIELDS_ROW_ODDEVEN" => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
 	$t -> parse("USER_EXTRAFIELDS.USER_EXTRAFIELDS_ROW");
 	$ii++;
 }
 
-foreach($field_types as $val)
+foreach ($field_types as $val)
 {
 	$t -> assign(array(
 		"ADMIN_USER_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION_SELECTED" => ($val == 'input') ? ' selected="selected"' : '',
@@ -193,53 +219,22 @@ $t -> assign(array(
 /* === Hook  === */
 $extp = sed_getextplugins('admin.users.extrafields.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("USER_EXTRAFIELDS");
 $adminmain = $t -> text("USER_EXTRAFIELDS");
 
-if($ajax)
+if ($ajax)
 {
 	sed_sendheaders();
 	echo $adminmain;
 	exit;
-}
-
-/**
- * Extra fields - Return default base html-construction for various types of fields (without value= and name=)
- *
- * @access private
- * @param string $type Type of field (input, textarea etc)
- * @return string
- *
- */
-function get_default_html_construction($type)
-{
-	$html = "";
-	switch($type)
-	{
-		case "input":
-			$html = '<input class="text" type="text" maxlength="255" size="56" />';
-		break;
-
-		case "textarea":
-			$html = '<textarea cols="80" rows="6" ></textarea>';
-		break;
-
-		case "select":
-			$html = '<select></select>';
-		break;
-
-		case "checkbox":
-			$html = '<input type=checkbox />';
-		break;
-		
-		case "radio":
-			$html = '<input type="radio" />';
-		break;
-	}
-	return $html;
 }
 
 ?>

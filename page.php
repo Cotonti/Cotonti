@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * Pages loader
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -21,18 +21,18 @@ require_once($cfg['system_dir'].'/common.php');
 sed_dieifdisabled($cfg['disable_page']);
 
 switch($m)
-	{
+{
 	case 'add':
-	require_once($cfg['system_dir'].'/core/page/page.add.inc.php');
+		require_once($cfg['system_dir'].'/core/page/page.add.inc.php');
 	break;
 
 	case 'edit':
-	require_once($cfg['system_dir'].'/core/page/page.edit.inc.php');
+		require_once($cfg['system_dir'].'/core/page/page.edit.inc.php');
 	break;
 
 	default:
-	require_once($cfg['system_dir'].'/core/page/page.inc.php');
+		require_once($cfg['system_dir'].'/core/page/page.inc.php');
 	break;
-	}
+}
 
 ?>

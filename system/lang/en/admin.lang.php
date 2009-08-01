@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * English Language File for Admin Area (admin.lang.php)
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -27,6 +27,7 @@ $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
 $L['core_ratings'] = &$L['Ratings'];
+$L['core_rss'] = &$L['Rss_feeds'];// New in N-0.7.0
 $L['core_skin'] = &$L['Skins'];
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles (&lt;title&gt; tag)';
@@ -205,6 +206,16 @@ $L['cfg_max_options_polls'] = array('Max number of options', 'Options above this
 
 $L['cfg_disable_ratings'] = array('Disable the ratings', '');
 $L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enabled it will allow users to change their rating.');	// New in N-0.0.2
+
+/**
+ * Config Section
+ * RSS Subsection
+ */
+
+$L['cfg_disable_rss'] = array('Disable the RSS feeds', '');
+$L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' '); // New in N-0.7.0
+$L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' '); // New in N-0.7.0
+$L['cfg_rss_charset'] = array('RSS charset', ' '); // New in N-0.7.0
 
 /**
  * Config Section

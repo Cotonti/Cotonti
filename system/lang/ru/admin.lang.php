@@ -3,7 +3,7 @@
  * Russian Language File for Admin Area (admin.lang.php)
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -27,6 +27,7 @@ $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
 $L['core_ratings'] = &$L['Ratings'];
+$L['core_rss'] = &$L['Rss_feeds'];// New in N-0.7.0
 $L['core_skin'] = &$L['Skins'];
 $L['core_time'] = 'Время и дата';
 $L['core_title'] = 'Заголовки (тэг &lt;title&gt;)';
@@ -204,6 +205,16 @@ $L['cfg_max_options_polls'] = array('Максимальное количеств
 
 $L['cfg_disable_ratings'] = array('Отключить рейтинги', ' ');
 $L['cfg_ratings_allowchange'] = array('Разрешить изменение рейтинга', 'Разрешить пользователям изменять ранее выставленный рейтинг');	// New in N-0.0.2
+
+/**
+ * Config Section
+ * RSS Subsection
+ */
+
+$L['cfg_disable_rss'] = array('Отключить RSS каналы', '');
+$L['cfg_rss_timetolive'] = array('Как часто обновлять RSS кеш', 'В секундах'); // New in N-0.7.0
+$L['cfg_rss_maxitems'] = array('Макс. количество элементов в RSS канале', ' '); // New in N-0.7.0
+$L['cfg_rss_charset'] = array('Кодировка RSS каналов', 'Набор символов (кодовая страница)'); // New in N-0.7.0
 
 /**
  * Config Section

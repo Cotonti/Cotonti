@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * Forums loader
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -21,26 +21,26 @@ require_once($cfg['system_dir'].'/common.php');
 sed_dieifdisabled($cfg['disable_forums']);
 
 switch($m)
-	{
+{
 	case 'topics':
-	require_once($cfg['system_dir'].'/core/forums/forums.topics.inc.php');
+		require_once($cfg['system_dir'].'/core/forums/forums.topics.inc.php');
 	break;
 
 	case 'posts':
-	require_once($cfg['system_dir'].'/core/forums/forums.posts.inc.php');
+		require_once($cfg['system_dir'].'/core/forums/forums.posts.inc.php');
 	break;
 
 	case 'editpost':
-	require_once($cfg['system_dir'].'/core/forums/forums.editpost.inc.php');
+		require_once($cfg['system_dir'].'/core/forums/forums.editpost.inc.php');
 	break;
 
 	case 'newtopic':
-	require_once($cfg['system_dir'].'/core/forums/forums.newtopic.inc.php');
+		require_once($cfg['system_dir'].'/core/forums/forums.newtopic.inc.php');
 	break;
 
 	default:
-	require_once($cfg['system_dir'].'/core/forums/forums.inc.php');
+		require_once($cfg['system_dir'].'/core/forums/forums.inc.php');
 	break;
-	}
+}
 
 ?>

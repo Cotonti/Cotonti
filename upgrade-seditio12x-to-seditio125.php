@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * SQL upgrade tool seditio12x-to-seditio125
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -11,12 +11,11 @@
 
 define('SED_CODE', TRUE);
 
-$dbprefix_sed = "sed_";
+$dbprefix_sed = 'sed_';
 
-require_once './datas/config.php';
+require_once('./datas/config.php');
 require_once($cfg['system_dir'].'/functions.php');
-$sqldb_file = $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
-require_once($sqldb_file);
+require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
 
 echo "<html>
 <head>
@@ -49,157 +48,139 @@ PHP/MySQL Website engines - <a href=\"http://www.neocrome.net/\">http://www.neoc
 ";
 
 if (!sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']))
-	{
-	echo("Fatal error, could not connect to the database !");
+{
+	echo "Fatal error, could not connect to the database !";
 	die();
-	}
+}
 
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($out, $title, $comments);
 $step = $_GET['step'];
-$step = ($step<1) ? 1 : $step;
+$step = ($step < 1) ? 1 : $step;
 $cnt_in = 0;
 $cnt_up = 0;
 
 
 function sed_check_die()
-	{
+{
 	echo "<br /><span class=\"fatal\"Fatal error, can't go on, existing.</style>";
 	die();
-	}
+}
 
 function sed_check_success($extra)
-	{
+{
 	$res = "<br />";
 	$res .= nl2br($extra)." &nbsp; ";
 	$res .= " &nbsp; <span class=\"success\">Success</span> ";
 	return ($res);
-	}
+}
 
 function sed_check_mixed($extra)
-	{
+{
 	$res = "<br />";
 	$res .= nl2br($extra)." &nbsp; ";
 	$res .= " &nbsp; <span class=\"mixed\">Success</span> ";
 	return ($res);
-	}
+}
 
 function sed_check_failed($extra)
-	{
+{
 	$res = "<br />";
 	$res .= nl2br($extra)." &nbsp; ";
 	$res .= " &nbsp; <span class=\"failure\">Failure !</span> ";
 	return ($res);
-	}
+}
 
 function sed_buildnxtstep($nxtstep)
-	{
+{
 	$res = "<form action=\"upgrade-seditio12x-to-seditio125.php?step=$nxtstep\" method=\"post\" name=\"nextstep\">";
 	$res .= "<input type=\"submit\" value=\"&nbsp; &nbsp; Next  step ! (".$nxtstep.")&nbsp; &nbsp;\"></form>";
 	return ($res);
-	}
+}
 
 function sed_query_chk($query)
-	{
+{
 	if ($sql = sed_sql_query($query))
-		{
+	{
 		$affected = sed_sql_affectedrows($sql);
-		if ($affected==0)
-			{
-			return (sed_check_mixed($query. " (".$affected.")"));
-			}
-		else
-			{
-			return (sed_check_success($query. " (".$affected.")"));
-			}
-		}
-	else
+		if ($affected == 0)
 		{
-		return (sed_check_failed($query));
+			return (sed_check_mixed($query." (".$affected.")"));
 		}
-
+		else
+		{
+			return (sed_check_success($query." (".$affected.")"));
+		}
 	}
-
+	else
+	{
+		return (sed_check_failed($query));
+	}
+}
 // ===========================
 
 switch($step)
-	{
-	// ------------------------------
+{
 	case '1':
-	// ------------------------------
-
-	$title = "Ready ?";
-	$comments = "This tool will handle the upgrade of the SQL database from Seditio version 120 or 121 to version 125.<br />";
-	$comments .= "The process is split into many steps, in case one is failling, roll back to your previous SQL backup, and ask for help in the Neocrome forums.<br />Give as much details as possible about the problem, you'll get help faster...<br />&nbsp;<br />NEVER run this upgrade tool more than once ! As soon as it fails, you must go back to a complete SQL backup !<br />&nbsp;<br />";
-	$comments .= "Make REALLY sure that you have a backup of your database with phpMyAdmin !";
-	$next = sed_buildnxtstep(2);
+		$title = "Ready ?";
+		$comments = "This tool will handle the upgrade of the SQL database from Seditio version 120 or 121 to version 125.<br />";
+		$comments .= "The process is split into many steps, in case one is failling, roll back to your previous SQL backup, and ask for help in the Neocrome forums.<br />Give as much details as possible about the problem, you'll get help faster...<br />&nbsp;<br />NEVER run this upgrade tool more than once ! As soon as it fails, you must go back to a complete SQL backup !<br />&nbsp;<br />";
+		$comments .= "Make REALLY sure that you have a backup of your database with phpMyAdmin !";
+		$next = sed_buildnxtstep(2);
 	break;
 
-	// ------------------------------
 	case '2':
-	// ------------------------------
+		$title = "Upgrading the forums";
+		$comments = "Adding a new colum ft_desc";
 
-	$title = "Upgrading the forums";
-	$comments = "Adding a new colum ft_desc";
+		$out .= sed_query_chk("ALTER TABLE ".$dbprefix_sed."forum_topics ADD COLUMN ft_desc varchar(64) NOT NULL default '' AFTER ft_title;");
 
-	$out .= sed_query_chk("ALTER TABLE ".$dbprefix_sed."forum_topics ADD COLUMN ft_desc varchar(64) NOT NULL default '' AFTER ft_title;");
-
-	$next = sed_buildnxtstep(3);
+		$next = sed_buildnxtstep(3);
 	break;
 
-	// ------------------------------
 	case '3':
-	// ------------------------------
+		$title = "Configuration";
+		$comments = "...";
 
-	$title = "Configuration";
-	$comments = "...";
+		$out .= sed_query_chk("INSERT INTO ".$dbprefix_sed."config (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('core', 'main', '05', 'clustermode', 3, 0, '', '')");
 
-	$out .= sed_query_chk("INSERT INTO ".$dbprefix_sed."config (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('core', 'main', '05', 'clustermode', 3, 0, '', '')");
-
-	$next = sed_buildnxtstep(4);
+		$next = sed_buildnxtstep(4);
 	break;
 
-	// ------------------------------
 	case '4':
-	// ------------------------------
+		$title = "Pages and lists";
+		$comments = "...";
 
-	$title = "Pages and lists";
-	$comments = "...";
+		$out .= sed_query_chk("ALTER TABLE ".$dbprefix_sed."pages ADD COLUMN page_comcount mediumint(8) unsigned default '0' AFTER page_rating;");
 
-	$out .= sed_query_chk("ALTER TABLE ".$dbprefix_sed."pages ADD COLUMN page_comcount mediumint(8) unsigned default '0' AFTER page_rating;");
+		$sql = sed_sql_query("SELECT DISTINCT com_code, COUNT(*) FROM ".$dbprefix_sed."com WHERE com_code LIKE 'p%' GROUP BY com_code ASC");
 
-	$sql = sed_sql_query("SELECT DISTINCT com_code, COUNT(*) FROM ".$dbprefix_sed."com WHERE com_code LIKE 'p%' GROUP BY com_code ASC");
-
-	while ($row = sed_sql_fetcharray($sql))
+		while($row = sed_sql_fetcharray($sql))
 		{
-		$row['page_id'] = mb_substr($row['com_code'], 1, 10);
-		$out .= sed_query_chk("UPDATE ".$dbprefix_sed."pages SET page_comcount=".$row['COUNT(*)']." WHERE page_id=".$row['page_id']);
+			$row['page_id'] = mb_substr($row['com_code'], 1, 10);
+			$out .= sed_query_chk("UPDATE ".$dbprefix_sed."pages SET page_comcount=".$row['COUNT(*)']." WHERE page_id=".$row['page_id']);
 		}
 
-	$next = sed_buildnxtstep(5);
+		$next = sed_buildnxtstep(5);
 	break;
 
-	// ------------------------------
 	case '5':
-	// ------------------------------
+		$title = "Setting the version number for Seditio";
+		$comments = "This is the last step of the SQL upgrade.";
 
-	$title = "Setting the version number for Seditio";
-	$comments = "This is the last step of the SQL upgrade.";
-
-	$out .= sed_query_chk("UPDATE ".$dbprefix_sed."stats SET stat_value='125' WHERE stat_name='version';");
-	$next = "<strong>Done !<br />&nbsp;<br /><strong><u>Now DELETE this upgrade tool from your web root to avoid security issues !</u></strong><br />&nbsp;<br /><a href=\"index.php\">Once done, click here to go to the home page...</a>";
+		$out .= sed_query_chk("UPDATE ".$dbprefix_sed."stats SET stat_value='125' WHERE stat_name='version';");
+		$next = "<strong>Done !<br />&nbsp;<br /><strong><u>Now DELETE this upgrade tool from your web root to avoid security issues !</u></strong><br />&nbsp;<br /><a href=\"index.php\">Once done, click here to go to the home page...</a>";
 	break;
 
 	default:
-	die ('Wrong URL !');
+		die ('Wrong URL !');
 	break;
+}
 
-	}
-
-echo("<h2>Step ".$step." : ".$title."</h2>");
-echo("<div style=\"padding:8px; font-size:90%; background-color:#4D4C52;\">".$comments."</div>");
-echo("<div style=\"padding:8px; font-size:90%;\">".$out."</div>");
-echo("<div style=\"padding:16px;\">".$next."</div>");
+echo "<h2>Step ".$step." : ".$title."</h2>";
+echo "<div style=\"padding:8px; font-size:90%; background-color:#4D4C52;\">".$comments."</div>";
+echo "<div style=\"padding:8px; font-size:90%;\">".$out."</div>";
+echo "<div style=\"padding:16px;\">".$next."</div>";
 
 @ob_end_flush();
 @ob_end_flush();

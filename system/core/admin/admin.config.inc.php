@@ -3,7 +3,7 @@
  * Administration panel - Configuration
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -20,15 +20,16 @@ $adminpath[] = array(sed_url('admin', 'm=config'), $L['Configuration']);
 
 $sed_select_charset = sed_loadcharsets();
 $sed_select_doctypeid = sed_loaddoctypes();
+$sed_select_rss_charset = sed_loadcharsets();
 
 $ajax = sed_import('ajax', 'G', 'INT');
 $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.config.first');
-if(is_array($extp))
+if (is_array($extp))
 {
-	foreach($extp as $pl)
+	foreach ($extp as $pl)
 	{
 		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
@@ -88,12 +89,12 @@ switch($n)
 		$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
 		sed_die(sed_sql_numrows($sql) == 0);
 
-		foreach($cfgmap as $line)
+		foreach ($cfgmap as $line)
 		{
 			$cfg_params[$line[2]] = $line[5];
 		}
 
-		if($o == 'core')
+		if ($o == 'core')
 		{
 			$adminpath[] = array(sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L["core_".$p]);
 		}
@@ -103,15 +104,15 @@ switch($n)
 			$adminpath[] = array(sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['Edit']);
 		}
 
-		if($o == 'plug')
+		if ($o == 'plug')
 		{
 			$path_lang_def = $cfg['plugins_dir']."/$p/lang/$p.en.lang.php";
 			$path_lang_alt = $cfg['plugins_dir']."/$p/lang/$p.$lang.lang.php";
-			if(file_exists($path_lang_def))
+			if (file_exists($path_lang_def))
 			{
 				require_once($path_lang_def);
 			}
-			if(file_exists($path_lang_alt) && $lang !='en')
+			if (file_exists($path_lang_alt) && $lang !='en')
 			{
 				require_once($path_lang_alt);
 			}
@@ -120,7 +121,7 @@ switch($n)
 		/* === Hook - Part1 : Set === */
 		$extp = sed_getextplugins('admin.config.edit.loop');
 		/* ===== */
-		while($row = sed_sql_fetcharray($sql))
+		while ($row = sed_sql_fetcharray($sql))
 		{
 			$config_owner = $row['config_owner'];
 			$config_cat = $row['config_cat'];
@@ -133,7 +134,7 @@ switch($n)
 			$config_more = $L['cfg_'.$row['config_name']][1];
 			$if_config_more = (!empty($config_more)) ? true : false;
 
-			if($config_type == 1)
+			if ($config_type == 1)
 			{
 				$t -> assign(array(
 					"ADMIN_CONFIG_ROW_CONFIG_NAME" => $config_name,
@@ -141,17 +142,17 @@ switch($n)
 				));
 				$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_1");
 			}
-			elseif($config_type == 2)
+			elseif ($config_type == 2)
 			{
-				if($o=='plug' && !empty($row['config_default']))
+				if ($o=='plug' && !empty($row['config_default']))
 				{
 					$cfg_params[$config_name] = explode(",", $row['config_default']);
 				}
 
-				if(is_array($cfg_params[$config_name]))
+				if (is_array($cfg_params[$config_name]))
 				{
 					reset($cfg_params[$config_name]);
-					while( list($i,$x) = each($cfg_params[$config_name]) )
+					while ( list($i,$x) = each($cfg_params[$config_name]) )
 					{
 						$x = trim($x);
 
@@ -167,7 +168,7 @@ switch($n)
 					));
 					$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2.ADMIN_CONFIG_ROW_TYPE_2_SELECT");
 				}
-				elseif($cfg_params[$config_name] == "userlevels")
+				elseif ($cfg_params[$config_name] == "userlevels")
 				{
 					$t -> assign(array(
 						"ADMIN_CONFIG_ROW_CONFIG_OPTION" => sed_selectboxlevels(0, 99, $config_value, $config_name)
@@ -184,18 +185,18 @@ switch($n)
 				}
 				$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2");
 			}
-			elseif($config_type == 3)
+			elseif ($config_type == 3)
 			{
 				$t -> assign(array(
 					"ADMIN_CONFIG_ROW_CONFIG_NAME" => $config_name
 				));
 				$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_3");
 			}
-			elseif($config_type == 4)
+			elseif ($config_type == 4)
 			{
 				$varname = "sed_select_".$config_name;
 				reset($$varname);
-				while(list($i, $x) = each($$varname))
+				while (list($i, $x) = each($$varname))
 				{
 					$t -> assign(array(
 						"ADMIN_CONFIG_ROW_CONFIG_OPTION_VALUE" => $x[0],
@@ -225,9 +226,9 @@ switch($n)
 				"ADMIN_CONFIG_ROW_CONFIG_MORE" => $config_more
 			));
 			/* === Hook - Part2 : Include === */
-			if(is_array($extp))
+			if (is_array($extp))
 			{
-				foreach($extp as $pl)
+				foreach ($extp as $pl)
 				{
 					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 				}
@@ -242,9 +243,9 @@ switch($n)
 		));
 		/* === Hook  === */
 		$extp = sed_getextplugins('admin.config.edit.tags');
-		if(is_array($extp))
+		if (is_array($extp))
 		{
-			foreach($extp as $pl)
+			foreach ($extp as $pl)
 			{
 				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			}
@@ -255,7 +256,7 @@ switch($n)
 
 	default:
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core' ORDER BY config_cat ASC");
-		while($row = sed_sql_fetcharray($sql))
+		while ($row = sed_sql_fetcharray($sql))
 		{
 			$t -> assign(array(
 				"ADMIN_CONFIG_ROW_CORE_URL" => sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat']),
@@ -265,7 +266,7 @@ switch($n)
 			$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_CORE");
 		}
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='plug' ORDER BY config_cat ASC");
-		while($row = sed_sql_fetcharray($sql))
+		while ($row = sed_sql_fetcharray($sql))
 		{
 			$t -> assign(array(
 				"ADMIN_CONFIG_ROW_PLUG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$row['config_cat']),
@@ -276,9 +277,9 @@ switch($n)
 		}
 		/* === Hook  === */
 		$extp = sed_getextplugins('admin.config.default.tags');
-		if(is_array($extp))
+		if (is_array($extp))
 		{
-			foreach($extp as $pl)
+			foreach ($extp as $pl)
 			{
 				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			}
@@ -297,9 +298,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.config.tags');
-if(is_array($extp))
+if (is_array($extp))
 {
-	foreach($extp as $pl)
+	foreach ($extp as $pl)
 	{
 		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
@@ -309,7 +310,7 @@ if(is_array($extp))
 $t -> parse("CONFIG");
 $adminmain = $t -> text("CONFIG");
 
-if($ajax)
+if ($ajax)
 {
 	sed_sendheaders();
 	echo $adminmain;
