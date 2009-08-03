@@ -45,9 +45,10 @@
         <!-- BEGIN: PM_FOOTER -->
         <div class="paging">{PM_TOP_PAGEPREV}&nbsp;{PM_TOP_PAGES}&nbsp;{PM_TOP_PAGENEXT}</div>
         <!-- END: PM_FOOTER -->
-        
+        <!-- IF {PHP.cfg.jquery} -->
         <input type="button" value="{PHP.skinlang.pm.Selectall}" onClick="$('.checkbox').attr('checked', 'checked');" />
         <input type="button" value="{PHP.skinlang.pm.Unselectall}" onClick="$('.checkbox').removeAttr('checked');" />
+	<!-- ENDIF -->
         {PM_DELETE} {PM_ARCHIVE}
 
     </form>
