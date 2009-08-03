@@ -149,7 +149,7 @@ $skinlang['pm']['Unselectall'] = 'Убрать выделение';
  */
 
 $skinlang['polls']['voterssince'] = 'проголосовавших с';
-$skinlang['polls']['Allpolls'] = 'Все голосования';
+$skinlang['polls']['Allpolls'] = 'Все опросы';
 
 /**
  * ratings.tpl
