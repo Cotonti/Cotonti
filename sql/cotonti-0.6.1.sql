@@ -501,7 +501,11 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'pm', '11', 'maxpmperpage', 2, '15', '', ''),
 ('core', 'main', '29', 'redirbkonlogin', 3, '1', '', ''),
 ('core', 'main', '29', 'redirbkonlogout', 3, '1', '', ''),
-('core', 'version', '01', 'revision', 0, '', '', '');
+('core', 'version', '01', 'revision', 0, '', '', ''),
+('core', 'rss', '01', 'disable_rss', 3, '0', '', 'Disable the RSS feeds'),
+('core', 'rss', '02', 'rss_timetolive', 2, '30', '', 'Refresh RSS cache every N seconds'),
+('core', 'rss', '03', 'rss_maxitems', 2, '40', '', 'Max. items in RSS feed'),
+('core', 'rss', '04', 'rss_charset', 4, 'UTF-8', '', 'RSS charset');
 
 CREATE TABLE `sed_core` (
   `ct_id` mediumint(8) NOT NULL auto_increment,
@@ -991,7 +995,7 @@ CREATE TABLE `sed_users` (
   `user_occupation` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `user_location` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `user_timezone` decimal(2,1) NOT NULL default '0',
-  `user_birthdate` DATE NOT NULL DEFAULT '1970-01-01',
+  `user_birthdate` DATE NOT NULL DEFAULT '0000-00-00',
   `user_gender` char(1) collate utf8_unicode_ci NOT NULL default 'U',
   `user_irc` varchar(128) collate utf8_unicode_ci NOT NULL default '',
   `user_msn` varchar(64) collate utf8_unicode_ci NOT NULL default '',
