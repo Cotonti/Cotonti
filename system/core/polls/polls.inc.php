@@ -68,7 +68,7 @@ if (!empty($error_string))
 }
 elseif ($id=='viewall' || $id=='')
 {
-		$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_state=0 AND poll_type=0 ORDER BY poll_id DESC");
+		$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_state=0 AND poll_type='index' ORDER BY poll_id DESC");
 
 	$result = "<table class=\"cells\">";
 
