@@ -111,6 +111,9 @@
 				<tr>
 					<td colspan="9"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 				</tr>
+				<tr>
+					<td colspan="9"><a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}"{ADMIN_PAGE_STRUCTURE_RESYNCALL_AJAX}>{PHP.L.Resync}</a></td>
+				</tr>
 				</table>
 			</form>
 			<h4>{PHP.L.addnewentry} :</h4>
