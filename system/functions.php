@@ -3085,6 +3085,7 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
  */
 function sed_date2stamp($date)
 {
+	if ($date == '0000-00-00') return 0;
 	preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);
 	return mktime(0, 0, 0, (int) $m[2], (int) $m[3], (int) $m[1]);
 }
