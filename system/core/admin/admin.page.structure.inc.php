@@ -114,15 +114,7 @@ if($n == 'options')
 	{
 		sed_check_xg();
 
-		$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
-		$roww = sed_sql_fetcharray($sqql);
-
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_cat='".$roww['structure_code']."' AND (page_state='0' OR page_state='2') ");
-		$num = sed_sql_result($sql,0,"COUNT(*)");
-
-		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount='".$num."' WHERE structure_id='".$id."' ");
-
-		$adminwarnings = ($sql) ? $L['Resynced'] : $L['Error'];
+		$adminwarnings = sed_structure_resync($id) ? $L['Resynced'] : $L['Error'];
 	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
@@ -303,6 +295,12 @@ else
 
 		$adminwarnings = $L['Deleted'];
 	}
+	elseif($a == 'resyncall')
+	{
+		sed_check_xg();
+
+		$adminwarnings = sed_structure_resyncall() ? $L['Resynced'] : $L['Error'];
+	}
 
 	$sql = sed_sql_query("SELECT DISTINCT(page_cat), COUNT(*) FROM $db_pages WHERE 1 GROUP BY page_cat");
 
@@ -401,7 +399,9 @@ else
 		"ADMIN_PAGE_STRUCTURE_TOTALITEMS" => $totalitems,
 		"ADMIN_PAGE_STRUCTURE_COUNTER_ROW" => $ii,
 		"ADMIN_PAGE_STRUCTURE_URL_FORM_ADD" => sed_url('admin', "m=page&s=structure&a=add"),
-		"ADMIN_PAGE_STRUCTURE_URL_FORM_ADD_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addstructure', url: '".sed_url('admin','m=page&s=structure&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+		"ADMIN_PAGE_STRUCTURE_URL_FORM_ADD_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addstructure', url: '".sed_url('admin','m=page&s=structure&ajax=1&a=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_PAGE_STRUCTURE_RESYNCALL" => sed_url('admin', "m=page&s=structure&a=resyncall&".sed_xg()),
+		"ADMIN_PAGE_STRUCTURE_RESYNCALL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=page&s=structure&a=resyncall&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 	));
 	$t -> parse("PAGE_STRUCTURE.DEFULT");
 }
