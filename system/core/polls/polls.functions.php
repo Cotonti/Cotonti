@@ -237,7 +237,7 @@ function sed_poll_save($type='index', $code='')
             $newpoll_id = sed_sql_insertid(); }
         else {
             // TODO: CHECK if changed
-            $sql = sed_sql_query("UPDATE $db_polls SET poll_type='".sed_sql_prep($type)."', poll_state='".(int)$poll_state."', poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
+            $sql = sed_sql_query("UPDATE $db_polls SET  poll_state='".(int)$poll_state."', poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
             $newpoll_id = $poll_id; }
         // Dinamic adding polloptions
         for($count = 0; $count < $option_count; $count++) {

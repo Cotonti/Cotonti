@@ -24,6 +24,7 @@ $o = sed_import('o','G','ALP');
 $w = sed_import('w','G','ALP',4);
 $quote = sed_import('quote','G','INT');
 
+
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.first');
 if (is_array($extp))
@@ -136,6 +137,16 @@ if ($a=='update')
 				{ $rtopictitle = str_replace('#', '', $rtopictitle); }
 				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_title='".sed_sql_prep($rtopictitle)."', ft_desc='".sed_sql_prep($rtopicdesc)."' WHERE ft_id='$q'");
 				$is_first_post = true;
+				
+				$poll_id = sed_import('poll_id','P','TXT');
+				if($poll_id)
+				{
+					sed_poll_check();
+					if(empty($error_string))
+					{
+					$number = sed_poll_save();
+					}
+				}
 			}
 		}
 	}
