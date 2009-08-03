@@ -516,6 +516,32 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
     return($res);
 }
 
+function sed_structure_resync($id)
+{
+	global $db_structure, $db_pages;
+
+	$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
+	$row = sed_sql_fetcharray($sql);
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
+		WHERE page_cat='".$row['structure_code']."' AND (page_state = 0 OR page_state=2)");
+	$num = (int) sed_sql_result($sql, 0, 0);
+	return (bool) sed_sql_query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
+}
+
+function sed_structure_resyncall()
+{
+	global $db_structure;
+
+	$res = TRUE;
+	$sql = sed_sql_query("SELECT structure_id FROM $db_structure");
+	while ($row = sed_sql_fetchassoc($sql))
+	{
+		$res &= sed_structure_resync($row['structure_id']);
+	}
+	sed_sql_freeresult($sql);
+	return $res;
+}
+
 
 /* ------------------ */
 

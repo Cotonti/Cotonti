@@ -155,13 +155,13 @@ if ($a=='update')
 				$rpagehtml = '';
 			}
 
-			$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id' ");
+			$sql = sed_sql_query("SELECT page_cat, page_state FROM $db_pages WHERE page_id='$id' ");
 			$row = sed_sql_fetcharray($sql);
 
-			if ($row['page_cat']!=$rpagecat && ($row['page_state'] == 0 || $row['page_state'] == 2))
+			if ($row['page_cat']!=$rpagecat /*&& ($row['page_state'] == 0 || $row['page_state'] == 2)*/)
 			{
 				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".sed_sql_prep($row['page_cat'])."' ");
-				$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
+				//$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
 			}
 
 			if ($usr['isadmin'] && $cfg['autovalidate'])
@@ -170,7 +170,10 @@ if ($a=='update')
 				if ($rpublish == 'OK' )
 				{
 					$page_state = 0;
-					sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
+					if ($row['page_state'] == 1)
+					{
+						sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
+					}
 				}
 				else
 				{
@@ -180,6 +183,10 @@ if ($a=='update')
 			else
 			{
 				$page_state = 1;
+			}
+			if ($page_state == 1 && $row['page_state'] != 1)
+			{
+				sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
 			}
 			// Extra fields
 			if(count($extrafields)>0)
