@@ -111,7 +111,7 @@
 	<!-- END: POLLS_VIEW -->
 
 	<!-- BEGIN: POLLS_VIEWALL -->
-	<div class="mboxHD">{PHP.skinlang.poll.Allpolls}</div>
+	<div class="mboxHD">{PHP.skinlang.polls.Allpolls}</div>
 	<div class="mboxBody">
 		{POLLS_LIST}
 	</div>
