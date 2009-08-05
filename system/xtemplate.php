@@ -1,10 +1,10 @@
 <?php
 /**
- * XTemplate 2.1 class library. Fast and lightweight block template engine
+ * XTemplate 2.2 class library. Fast and lightweight block template engine
  * written specially for Cotonti.
  *
  * @package Cotonti
- * @version 0.6.1
+ * @version 0.6.2
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) 2009 Cotonti Team
  * @license BSD
@@ -53,7 +53,7 @@ class XTemplate
 
 	/**
 	 * Evaluates logical expression
-	 * 
+	 *
 	 * @param string $expr Expression
 	 * @return mixed Evaluation result
 	 */
@@ -161,7 +161,7 @@ class XTemplate
 			{
 				$name = $mt[1];
 				$bdata = trim($mt[2], " \r\n\t");
-				$this->blocks[$name] = new Xtpl_block($this->blocks, $bdata, $name);
+				$this->blocks[$name] = new Xtpl_block($bdata);
 				$data = str_replace($mt[0], '', $data);
 			}
 			if ($cfg['xtpl_cache'])
@@ -171,7 +171,6 @@ class XTemplate
 				else
 					throw new Exception('Your "' . $cfg['cache_dir'] . '/templates/" is not writable');
 			}
-
 		}
 		else $this->blocks = unserialize(file_get_contents($cache));
 	}
@@ -193,7 +192,13 @@ class XTemplate
 	 */
 	public function parse($block = 'MAIN')
 	{
-		if (is_object($this->blocks[$block])) $this->blocks[$block]->parse($this);
+		if (mb_strstr($block, '.'))
+		{
+			$path = explode('.', $block);
+			$block = array_shift($path);
+		}
+		else $path = array();
+		if (is_object($this->blocks[$block])) $this->blocks[$block]->parse($this, $path);
 		//else throw new Exception("Block $block is not found in " . $this->filename);
 	}
 
@@ -204,7 +209,13 @@ class XTemplate
 	 */
 	public function reset($block = 'MAIN')
 	{
-		if (is_object($this->blocks[$block])) $this->blocks[$block]->reset();
+		if (mb_strstr($block, '.'))
+		{
+			$path = explode('.', $block);
+			$block = array_shift($path);
+		}
+		else $path = array();
+		if (is_object($this->blocks[$block])) $this->blocks[$block]->reset($path);
 		//else throw new Exception("Block $block is not found in " . $this->filename);
 	}
 
@@ -216,7 +227,13 @@ class XTemplate
 	 */
 	public function text($block = 'MAIN')
 	{
-		if (is_object($this->blocks[$block])) return $this->blocks[$block]->text();
+		if (mb_strstr($block, '.'))
+		{
+			$path = explode('.', $block);
+			$block = array_shift($path);
+		}
+		else $path = array();
+		if (is_object($this->blocks[$block])) return $this->blocks[$block]->text(0, $path);
 		else
 		{
 			//throw new Exception("Block $block is not found in " . $this->filename);
@@ -261,8 +278,8 @@ class Xtpl_data
 			$p2 = mb_strpos($data, ' -->', $p1 + 8);
 			$expr = mb_substr($data, $p1 + 8, $p2 - $p1 - 8);
 			$p3 = mb_strpos($data, '<!-- ENDIF -->');
-			if ($p3 === FALSE) throw new Exception('Logical block "'.htmlspecialchars($expr).'" is not closed correctly in '
-				. $xtpl->filename);
+			if ($p3 === FALSE) throw new Exception('Logical block "'.htmlspecialchars($expr)
+				.'" is not closed correctly in ' . $xtpl->filename);
 			$bdata = mb_substr($data, $p2 + 4, $p3 - $p2 - 4);
 			if (($p4 = mb_strpos($bdata, '<!-- ELSE -->')) !== FALSE)
 			{
@@ -308,10 +325,6 @@ class Xtpl_data
 class Xtpl_block
 {
 	/**
-	 * @var string Block name
-	 */
-	public $name = '';
-	/**
 	 * @var array Parsed block instances
 	 */
 	public $data = array();
@@ -326,12 +339,9 @@ class Xtpl_block
 	 * @param array $blk Reference to XTemplate blocks hashtable
 	 * @param string $data TPL contents
 	 * @param string $name Block name
-	 * @param string $path Block parent path
 	 */
-	public function __construct(&$blk, $data, $name, $path = '')
+	public function __construct($data)
 	{
-		$this->name = $name;
-		$path = empty($path) ? $name : $path . '.' . $name;
 		// Split the data into nested blocks
 		while (!empty($data))
 		{
@@ -346,9 +356,7 @@ class Xtpl_block
 				$name = $mt[1];
 				$bdata = trim($mt[2], " \r\n\t");
 				// Create block object and link to it
-				$block = new Xtpl_block($blk, $bdata, $name, $path);
-				$blk[$path . '.' . $name] = $block;
-				$this->blocks[] = $block;
+				$this->blocks[$name] = new Xtpl_block($bdata);
 				// Procceed with less data
 				$data = str_replace($mt[0], '', $data);
 				$data = trim($data, " \r\n\t");
@@ -365,31 +373,56 @@ class Xtpl_block
 	 * Parses block contents
 	 *
 	 * @param XTemplate $xtpl Reference to XTemplate object
+	 * @param array $path Recursive tree path
 	 */
-	public function parse($xtpl)
+	public function parse($xtpl, $path = array())
 	{
-		foreach ($this->blocks as $block) $data .= $block->text($xtpl);
-		$this->data[] = $data;
+		if (count($path) > 0)
+		{
+			$block = array_shift($path);
+			if (is_object($this->blocks[$block])) $this->blocks[$block]->parse($xtpl, $path);
+		}
+		else
+		{
+			foreach ($this->blocks as $block) $data .= $block->text($xtpl);
+			$this->data[] = $data;
+		}
 	}
 
 	/**
 	 * Clears parsed block data
+	 *
+	 * @param array $path Recursive tree path
 	 */
-	public function reset()
+	public function reset($path = array())
 	{
-		$this->data = array();
+		if (count($path) > 0)
+		{
+			$block = array_shift($path);
+			if (is_object($this->blocks[$block])) $this->blocks[$block]->reset($path);
+		}
+		else $this->data = array();
 	}
 
 	/**
 	 * Returns parsed block HTML
 	 *
+	 * @param array $path Recursive tree path
 	 * @return string
 	 */
-	public function text()
+	public function text($dummy, $path = array())
 	{
-		$text = implode('', $this->data);
-		$this->data = array();
-		return $text;
+		if (count($path) > 0)
+		{
+			$block = array_shift($path);
+			return is_object($this->blocks[$block]) ? $this->blocks[$block]->text(0, $path) : '';
+		}
+		else
+		{
+			$text = implode('', $this->data);
+			$this->data = array();
+			return $text;
+		}
 	}
 }
 ?>
