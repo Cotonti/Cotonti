@@ -4740,7 +4740,7 @@ function sed_uriredir_store()
 	global $sys;
 
 	$script = basename($_SERVER['SCRIPT_NAME']);
-	parse_str($_SERVER['QUERY_STRING'], $query_a);
+	mb_parse_str($_SERVER['QUERY_STRING'], $query_a);
 
 	if ($_SERVER['REQUEST_METHOD'] != 'POST' // not form action/POST
 		&& empty($query_a['x']) // not xg, hence not form action/GET
