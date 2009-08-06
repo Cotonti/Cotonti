@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /**
  * Pick up pages from a category and display the newest in the home page
  *
@@ -48,10 +48,11 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
     $pagnav = sed_pagination(sed_url('index', "c=$cat"), $d, $totalnews, $perpage);
     list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('index', "c=$cat"), $d, $totalnews, $perpage, TRUE);
 
-    // Extra field - getting
+    // get extra fields
     $extrafields = array();
-    $fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-    while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+    $fieldsres = sed_sql_query("SELECT field_name, field_type FROM $db_extra_fields WHERE field_location='pages'");
+    while ($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+
     if(file_exists(sed_skinfile($skinfile, true)))
     {
         $news = new XTemplate(sed_skinfile($skinfile, true));
@@ -60,6 +61,10 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
     {
         $news = new XTemplate(sed_skinfile('news', true));
     }
+
+    /* === Hook - Part1 : Set === */
+    $extp = sed_getextplugins('news.loop');
+    /* ===== */
 
     while($pag = sed_sql_fetcharray($sql))
     {
@@ -101,11 +106,12 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
 
         switch($pag['page_type'])
         {
-            case '1':
+            case 1:
+                sed_news_cut_more($pag['page_text'], $pag['page_pageurl']);
                 $news->assign("PAGE_ROW_TEXT", $pag['page_text']);
                 break;
 
-            case '2':
+            case 2:
                 if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
                 {
                     ob_start();
@@ -126,41 +132,43 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
                         $pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
                         sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
                     }
-                    $readmore = mb_strpos($pag['page_html'], "<!--more-->");
-                    if($readmore > 0)
-                    {
-                        $pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore);
-                        $pag['page_html'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
-                    }
-
+                    sed_news_cut_more($pag['page_html'], $pag['page_pageurl']);
                     sed_news_strip_newpage($pag['page_html']);
-
                     $cfg['parsebbcodepages'] ? $news->assign('PAGE_ROW_TEXT', sed_post_parse($pag['page_html'], 'pages'))
                     : $news->assign('PAGE_ROW_TEXT', htmlspecialchars($pag['page_text']));
                 }
                 else
                 {
                     $pag['page_text'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-                    $readmore = mb_strpos($pag['page_text'], "<!--more-->");
-                    if($readmore>0)
-                    {
-                        $pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);
-                        $pag['page_text'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>";
-                    }
-
+                    sed_news_cut_more($pag['page_text'], $pag['page_pageurl']);
                     sed_news_strip_newpage($pag['page_text']);
-
                     $pag['page_text'] = sed_post_parse($pag['page_text'], 'pages');
                     $news->assign('PAGE_ROW_TEXT', $pag['page_text']);
                 }
                 break;
         }
 
-        // Extra fields
-        foreach($extrafields as $row) $news->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), htmlspecialchars($pag['page_'.$row['field_name']]));
+        // data from extra fields
+        foreach ($extrafields as $row)
+        {
+            $news->assign('PAGE_ROW_' . mb_strtoupper($row['field_name']),
+                sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"])
+                );
+        }
+
+        /* === Hook - Part2 : Include === */
+        if (is_array($extp))
+        {
+            foreach ($extp as $pl)
+            {
+                include_once("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
+            }
+        }
+        /* ===== */
 
         $news->parse("NEWS.PAGE_ROW");
     }
+
     if($deftag=="INDEX_NEWS")
     {
         $news-> assign(array(
@@ -176,7 +184,25 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
 
     $news->parse("NEWS");
     $t->assign(strtoupper($deftag), $news->text("NEWS"));
+}
 
+/**
+ * Cuts the page after [more] tag
+ *
+ * @global $L
+ * @param string ptr $html Page body
+ * @param string $url Page URL
+ */
+function sed_news_cut_more(&$html, $url)
+{
+	global $L;
+
+	$mpos = mb_strpos($html, '<!--more-->');
+
+	if ($mpos !== false)
+	{
+		$html = mb_substr($html, 0, $mpos) . "<span class=\"readmore\"><a href=\"$url\">{$L['ReadMore']}</a></span>";
+	}
 }
 
 /**
@@ -195,5 +221,4 @@ function sed_news_strip_newpage(&$html)
 
     $html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
 }
-
 ?>
