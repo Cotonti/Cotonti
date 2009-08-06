@@ -357,7 +357,7 @@ else
 		$dozvil = ($pagecount[$structure_code] > 0) ? false : true;
 
 		$t -> assign(array(
-			"ADMIN_PAGE_STRUCTURE_UPDATE_DEL_URL" => sed_url('admin', "m=page&s=structure&a=update&d=".$d),
+			"ADMIN_PAGE_STRUCTURE_UPDATE_DEL_URL" => sed_url('admin', "m=page&s=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&d=".$d."&".sed_xg()),
 			"ADMIN_PAGE_STRUCTURE_UPDATE_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin','m=page&s=structure&a=delete&ajax=1&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 			"ADMIN_PAGE_STRUCTURE_ID" => $structure_id,
 			"ADMIN_PAGE_STRUCTURE_CODE" => $structure_code,
