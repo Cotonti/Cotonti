@@ -107,7 +107,10 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         switch($pag['page_type'])
         {
             case 1:
-                sed_news_cut_more($pag['page_text'], $pag['page_pageurl']);
+                if (!sed_news_cut_more($pag['page_text'], $pag['page_pageurl']))
+                {
+                    sed_news_cut_more($pag['page_text'], $pag['page_pageurl'], '[more]');
+                }
                 $news->assign("PAGE_ROW_TEXT", $pag['page_text']);
                 break;
 
@@ -187,22 +190,27 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
 }
 
 /**
- * Cuts the page after [more] tag
+ * Cuts the page after 'more' tag
  *
  * @global $L
  * @param string ptr $html Page body
  * @param string $url Page URL
+ * @param string $tag 'more' tag
+ * @return bool
  */
-function sed_news_cut_more(&$html, $url)
+function sed_news_cut_more(&$html, $url, $tag = '<!--more-->')
 {
-	global $L;
+    global $L;
 
-	$mpos = mb_strpos($html, '<!--more-->');
+    $mpos = mb_strpos($html, $tag);
 
-	if ($mpos !== false)
-	{
-		$html = mb_substr($html, 0, $mpos) . "<span class=\"readmore\"><a href=\"$url\">{$L['ReadMore']}</a></span>";
-	}
+    if ($mpos === false)
+    {
+        return false;
+    }
+
+    $html = mb_substr($html, 0, $mpos) . "<span class=\"readmore\"><a href=\"$url\">{$L['ReadMore']}</a></span>";
+    return true;
 }
 
 /**
