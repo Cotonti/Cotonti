@@ -3117,8 +3117,7 @@ function sed_outputfilters($output)
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ==== */
 
-	$output = str_replace('</FORM>', '</form>', $output);
-	$output = str_replace('</form>', sed_xp().'</form>', $output);
+	$output = str_ireplace('</form>', sed_xp().'</form>', $output);
 
 	return($output);
 }
@@ -4770,6 +4769,23 @@ function sed_uriredir_apply($cfg_redir = true)
 	{
 		$redirect = $_SESSION['s_uri_redir'];
 	}
+}
+
+/**
+ * Checks URI-redir for xg before redirect
+ *
+ * @param string $uri Target URI
+ */
+function sed_uriredir_redirect($uri)
+{
+	list(, $query) = explode('?', $uri);
+	mb_parse_str($query, $query_a);
+
+	if (!empty($query_a['x']))
+	{
+		$uri = sed_url('index'); // xg, not redirect to form action/GET
+	}
+	sed_redirect($uri);
 }
 
 /**
