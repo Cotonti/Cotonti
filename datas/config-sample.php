@@ -53,6 +53,8 @@ date_default_timezone_set('GMT');
 // TRUE = enabled / FALSE = disabled
 // ========================
 
+$cfg['check_updates'] = FALSE;			// Automatically check for updates, set it TRUE to enable
+
 $cfg['sqldb'] = 'mysql';  				// Type of the database engine.
 $cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['xmlclient'] = FALSE;  			// For testing-purposes only, else keep it off.

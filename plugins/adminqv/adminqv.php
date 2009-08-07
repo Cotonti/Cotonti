@@ -96,39 +96,42 @@ foreach($hits_d as $day => $hits)
 }
 
 //Version Checking
-$update_info = sed_cache_get('update_info');
-if(!$update_info)
+if ($cfg['check_updates'])
 {
-	if(ini_get('allow_url_fopen'))
+	$update_info = sed_cache_get('update_info');
+	if(!$update_info)
 	{
-		$update_info = file_get_contents('http://www.cotonti.com/update-check');
-		if($update_info)
+		if(ini_get('allow_url_fopen'))
 		{
-			$update_info = json_decode($update_info, TRUE);
-			sed_cache_store('update_info', $update_info, 86400, FALSE);
+			$update_info = file_get_contents('http://www.cotonti.com/update-check');
+			if($update_info)
+			{
+				$update_info = json_decode($update_info, TRUE);
+				sed_cache_store('update_info', $update_info, 86400, FALSE);
+			}
+		}
+		elseif(function_exists('curl_init'))
+		{
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, 'http://www.cotonti.com/update-check');
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+			$update_info = curl_exec($curl);
+			if($update_info)
+			{
+				$update_info = json_decode($update_info, TRUE);
+				sed_cache_store('update_info', $update_info, 86400, FALSE);
+			}
+			curl_close($curl);
 		}
 	}
-	elseif(function_exists('curl_init'))
+	if($update_info['update_rev'] > $cfg['revision'])
 	{
-		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL, 'http://www.cotonti.com/update-check');
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-		$update_info = curl_exec($curl);
-		if($update_info)
-		{
-			$update_info = json_decode($update_info, TRUE);
-			sed_cache_store('update_info', $update_info, 86400, FALSE);
-		}
-		curl_close($curl);
+		$t->assign(array(
+			'ADMINQV_UPDATE_REVISION' => sprintf($L['adminqv_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
+			'ADMINQV_UPDATE_MESSAGE' => sed_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
+			));
+		$t->parse('ADMINQV.UPDATE');
 	}
-}
-if($update_info['update_rev'] > $cfg['revision'])
-{
-	$t->assign(array(
-		'ADMINQV_UPDATE_REVISION' => sprintf($L['adminqv_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
-		'ADMINQV_UPDATE_MESSAGE' => sed_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
-		));
-	$t->parse('ADMINQV.UPDATE');
 }
 
 $t -> assign(array(
