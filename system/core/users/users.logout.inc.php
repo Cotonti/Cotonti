@@ -45,7 +45,9 @@ if (!empty($_SESSION[$sys['site_id']]))
 
 if ($usr['id'] > 0)
 {
-	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
+	$lastlog = $usr['lastlog'] - $cfg['timedout'];
+	sed_sql_query("UPDATE $db_users SET user_lastlog = $lastlog WHERE user_id = " . $usr['id']);
+	sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
 	sed_uriredir_redirect(empty($redirect) ? sed_url('index') : base64_decode($redirect));
 	exit;
 }
