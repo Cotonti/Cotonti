@@ -549,6 +549,7 @@ $L['polls_error_title'] = 'Название опроса слишком коро
 $L['polls_multiple'] = 'Разрешить выбор двух и более вариантов';	// New in N-0.0.2
 $L['polls_notyetvoted'] = 'Вы можете голосовать здесь';
 $L['polls_since'] = 'с';
+$L['polls_registeredonly'] = 'Only registered members can vote.';
 $L['polls_updated'] = 'Опрос обновлен';	// New in N-0.0.2
 $L['polls_viewarchives'] = 'Все опросы';
 $L['polls_viewresults'] = 'Результаты';
