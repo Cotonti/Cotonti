@@ -548,6 +548,7 @@ $L['polls_error_count'] = 'A poll must have two or more options';	// New in N-0.
 $L['polls_error_title'] = 'Poll name is too short or empty';	// New in N-0.0.2
 $L['polls_multiple'] = 'Allow multiple choice';	// New in N-0.0.2
 $L['polls_notyetvoted'] = 'You can vote by clicking a line above.';
+$L['polls_registeredonly'] = 'Only registered members can vote.';
 $L['polls_since'] = 'since';
 $L['polls_updated'] = 'The poll has been successfully updated';	// New in N-0.0.2
 $L['polls_viewarchives'] = 'View all polls';
