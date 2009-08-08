@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=news
@@ -14,7 +14,7 @@ Order=10
  * Pick up pages from a category and display the newest in the home page
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -25,34 +25,50 @@ defined('SED_CODE') or die('Wrong URL');
 $d = sed_import('d','G','INT');
 $c = sed_import('c','G','TXT');
 $categories = explode(',', $cfg['plugin']['news']['category']);
-$categories = array_unique($categories);
+$limit = $cfg['plugin']['news']['maxpages'];
 foreach($categories as $k => $v)
 {
     $v=trim($v);
     $v = explode('|', $v);
     $checkin = isset($sed_cat[$v[0]]);
     if($checkin)
-    $cats[$v[0]] = $v;
-    if($k==0)
-    $indexcat=$v[0];
-}
+    {
+        if($k==0)
+        {
+            $indexcat=$v[0];
+            $individual=$v[1];
+        }
+        else
+        {
+            $v[2] = sed_import($v[0].'d','G','INT');
+            $v[2] = (empty($v[2])) ? '0' : $v[2];
+            $v[1] = (empty($v[1])) ? $limit : $v[1];
+            $cats[$v[0]] = $v;
+        }
+    }
 
-if(empty($d))
-{
-    $d = '0';
 }
+$d = (empty($d)) ? '0' : $d;
+
 if(empty($c))
 {
     $c = $indexcat;
-    unset($cats[$indexcat]);
 }
 else
 {
     $checkin = isset($sed_cat[$c]);
-    $c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
-    if (isset($cats[$c]))
-    unset($cats[$c]);
+    $c = ($checkin === false) ? $indexcat :  $c ;
 }
+if(isset($cats[$c]) && !empty($individual)) unset($cats[$c]);
+ 
+ // get extra fields
+    $extrafields = array();
+    $fieldsres = sed_sql_query("SELECT field_name, field_type FROM $db_extra_fields WHERE field_location='pages'");
+    while ($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+
+    /* === Hook - Part1 : Set === */
+    $news_extp = sed_getextplugins('news.loop');
+    /* ===== */
 
 require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 
@@ -62,11 +78,10 @@ if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
     sed_get_news($c, "news", "INDEX_NEWS", $limit, $d);
     if(!empty($cats))
     {
-        $d=($cfg['plugin']['news']['addpagination']) ? $d : 0;
         foreach($cats as $k => $v)
         {
-            $lim = (empty($v[1])) ? $limit : $v[1];
-            sed_get_news($v[0], "news.".$v[0], "INDEX_NEWS_".strtoupper($v[0]), $lim, $d);
+            $dadd = ($cfg['plugin']['news']['syncpagination'])? $d : $v[2];
+            sed_get_news($v[0], "news.".$v[0], "INDEX_NEWS_".strtoupper($v[0]), $v[1], $dadd);
         }
     }
 }

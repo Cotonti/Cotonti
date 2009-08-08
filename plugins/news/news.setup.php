@@ -1,11 +1,11 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=news
 Name=News
 Description=Pick up pages from a category and display the newest in the home page
-Version=0.0.3
-Date=2009-jan-03
+Version=0.7.0
+Date=2009-aug-03
 Author=Neocrome & Cotonti Team
 Copyright=Partial copyright (c) 2008-2009 Cotonti Team
 Notes=BSD License
@@ -18,8 +18,8 @@ Lock_members=W12345A
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]
 category=01:string::news:News category codes, comma separated
-maxpages=03:select:0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100:10:Recent pages displayed
-addpagination=04:radio::0:Enable pagination for additional categories
+maxpages=03:select:1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100:10:Recent pages displayed
+syncpagination=04:radio::0:Enable pagination for additional categories
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 

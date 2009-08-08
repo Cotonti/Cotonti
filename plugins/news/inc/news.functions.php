@@ -3,7 +3,7 @@
  * Pick up pages from a category and display the newest in the home page
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -14,16 +14,18 @@ defined('SED_CODE') or die('Wrong URL');
 function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=false, $d=0)
 {
     global $sed_cat, $db_pages, $db_users, $db_extra_fields, $sys, $cfg, $L, $t, $pag,
-           $usr, $sed_dbc, $sed_urltrans;
+    $usr, $sed_dbc, $sed_urltrans, $c, $extrafields, $news_extp;
     $jj = 0;
     $mtch = $sed_cat[$cat]['path'].".";
     $mtchlen = mb_strlen($mtch);
     $catsub = array();
     $catsub[] = $cat;
     if(!$limit){$limit=$cfg['maxrowsperpage'];}
-    $order=$sed_cat[$cat]['order'];
-    $way=$sed_cat[$cat]['way'];
-    foreach($sed_cat as $i => $x)
+   // $order=$sed_cat[$cat]['order'];
+   // $way=$sed_cat[$cat]['way'];
+   $order = "date";
+   $way = "DESC";
+   foreach($sed_cat as $i => $x)
     {
         if(mb_substr($x['path'], 0, $mtchlen) == $mtch && sed_auth('page', $i, 'R')){
             $catsub[] = $i;
@@ -44,14 +46,12 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
     $totalnews = sed_sql_result($sql2,0,"COUNT(*)");
 
     $perpage = $cfg['plugin']['news']['maxpages'];
+    $newstag = ($deftag=='INDEX_NEWS') ? true : false;
+    $news_link=sed_news_link($cat, $newstag);
+    $catd  = (($deftag!="INDEX_NEWS" || $c != $cat) && !$cfg['plugin']['news']['syncpagination']) ? $cat."d" : "d";
 
-    $pagnav = sed_pagination(sed_url('index', "c=$cat"), $d, $totalnews, $perpage);
-    list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('index', "c=$cat"), $d, $totalnews, $perpage, TRUE);
-
-    // get extra fields
-    $extrafields = array();
-    $fieldsres = sed_sql_query("SELECT field_name, field_type FROM $db_extra_fields WHERE field_location='pages'");
-    while ($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
+    $pagnav = sed_pagination($news_link, $d, $totalnews, $perpage, $catd);
+    list($pages_prev, $pages_next) = sed_pagination_pn($news_link, $d, $totalnews, $perpage, TRUE, $catd);
 
     if(file_exists(sed_skinfile($skinfile, true)))
     {
@@ -61,10 +61,6 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
     {
         $news = new XTemplate(sed_skinfile('news', true));
     }
-
-    /* === Hook - Part1 : Set === */
-    $extp = sed_getextplugins('news.loop');
-    /* ===== */
 
     while($pag = sed_sql_fetcharray($sql))
     {
@@ -156,13 +152,13 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         {
             $news->assign('PAGE_ROW_' . mb_strtoupper($row['field_name']),
                 sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"])
-                );
+            );
         }
 
         /* === Hook - Part2 : Include === */
-        if (is_array($extp))
+        if (is_array($news_extp))
         {
-            foreach ($extp as $pl)
+            foreach ($news_extp as $pl)
             {
                 include_once("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
             }
@@ -172,16 +168,14 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         $news->parse("NEWS.PAGE_ROW");
     }
 
-    if($deftag=="INDEX_NEWS")
-    {
-        $news-> assign(array(
+    $catpath = sed_build_catpath($cat, "<a href=\"%1\$s\">%2\$s</a>");
+    $news-> assign(array(
         "PAGE_PAGENAV" => $pagnav,
         "PAGE_PAGEPREV" => $pages_prev,
         "PAGE_PAGENEXT" => $pages_next,
-            ));
-    }
-    $news-> assign(array(
         "PAGE_SUBMITNEWPOST" => $submitnewpage,
+        "PAGE_CATTITLE" =>$sed_cat[$cat]['title'],
+        "PAGE_CATPATH" =>$catpath,
         "PAGE_CAT" => $cat,
         ));
 
@@ -213,6 +207,31 @@ function sed_news_cut_more(&$html, $url, $tag = '<!--more-->')
     return true;
 }
 
+function sed_news_link($maincat, $tag)
+{
+    global $c, $cats, $indexcat, $d, $cfg;
+    if ($c != $indexcat)
+    {
+        $valtext = "c=".$c;
+    }
+    if (!$cfg['plugin']['news']['syncpagination'] && !empty($cats))
+    {
+
+        if (($c != $maincat || !$tag) && $d != 0)
+        {
+            $valtext .= "&d=".$d;
+        }
+        foreach($cats as $k => $v)
+        {
+            if (($k != $maincat || $tag) && $v[2]!=0)
+            {
+                $valtext .= "&".$k."d=".$v[2];
+            }
+        }
+    }
+    return sed_url('index', $valtext);
+}
+
 /**
  * Cuts the news page after the first page (if multipage)
  *
@@ -229,4 +248,5 @@ function sed_news_strip_newpage(&$html)
 
     $html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
 }
+
 ?>
