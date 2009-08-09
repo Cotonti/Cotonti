@@ -1395,10 +1395,10 @@ function sed_build_icq($text)
  */
 function sed_build_ipsearch($ip)
 {
-	global $xk;
+	global $sys;
 	if(!empty($ip))
 	{
-		return '<a href="'.sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$xk).'">'.$ip.'</a>';
+		return '<a href="'.sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']).'">'.$ip.'</a>';
 	}
 	return '';
 }
@@ -2002,9 +2002,7 @@ function sed_cc($text)
  */
 function sed_check_xg()
 {
-	global $xg, $cfg, $xk;
-
-	return $xg == $xk;
+	return isset($_GET['x']);
 }
 
 /**
@@ -2014,16 +2012,8 @@ function sed_check_xg()
  */
 function sed_check_xp()
 {
-	global $xp, $xg, $xk;
-
-	if($_SERVER['REQUEST_METHOD'] == 'POST')
-	{
-		if($xp != $xk && $xg != $xk)
-		{
-			return FALSE;
-		}
-	}
-	return TRUE;
+	return (defined('SED_NO_ANTIXSS') || defined('SED_AUTH')) ?
+		($_SERVER['REQUEST_METHOD'] == 'POST') : isset($_POST['x']);
 }
 
 /**
@@ -4071,24 +4061,7 @@ function sed_smilies($res)
  */
 function sed_sourcekey()
 {
-	global $usr, $sys;
-	if ($usr['id'] > 0)
-	{
-		if (empty($sys['sourcekey']))
-		{
-			// Normal per-session key
-			return $_SESSION['sourcekey'];
-		}
-		else
-		{
-			// Use a key from previous session, or some form data will be lost
-			return $sys['sourcekey'];
-		}
-	}
-	else
-	{
-		return 'GUEST';
-	}
+	return $sys['xk'];
 }
 
 /*
@@ -4845,7 +4818,8 @@ function sed_wraptext($str,$wrap=128)
  */
 function sed_xg()
 {
-	return ('x='.sed_sourcekey());
+	global $sys;
+	return ('x='.$sys['xk']);
 }
 
 /**
@@ -4855,7 +4829,8 @@ function sed_xg()
  */
 function sed_xp()
 {
-	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="'.sed_sourcekey().'" /></div>';
+	global $sys;
+	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="'.$sys['xk'].'" /></div>';
 }
 
 /**
