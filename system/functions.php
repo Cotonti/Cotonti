@@ -1169,10 +1169,10 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), 
 				$t2 = str_replace('<select','<select name="'.$importrowname.$row['field_name'].'"', $t2);
 				$options = "";
 				$opt_array = explode(",",$row['field_variants']);
-				$var_text = (!empty($L[$rowname.'_'.$row['field_name'].'_'.$var])) ? $L[$rowname.'_'.$row['field_name'].'_'.$var] : $var;
 				if(count($opt_array)!=0)
 					foreach ($opt_array as $var)
 					{
+						$var_text = (!empty($L[$rowname.'_'.$row['field_name'].'_'.$var])) ? $L[$rowname.'_'.$row['field_name'].'_'.$var] : $var;
 						$sel = ($var == $data[$rowname.'_'.$row['field_name']]) ? ' selected="selected"' : '';
 						$options .= "<option value=\"$var\" $sel>$var_text</option>";
 					}

@@ -60,14 +60,14 @@ class XTemplate
 	public function evaluate($expr)
 	{
 		// Apply logical operators
-		if (mb_strstr($expr, ' OR '))
+		if (mb_strpos($expr, ' OR ') !== FALSE)
 		{
 			$res = FALSE;
 			$subs = explode(' OR ', $expr);
 			foreach ($subs as $sub) $res |= $this->evaluate($sub);
 			return $res;
 		}
-		if (mb_strstr($expr, ' AND '))
+		if (mb_strpos($expr, ' AND ') !== FALSE)
 		{
 			$res = TRUE;
 			$subs = explode(' AND ', $expr);
@@ -192,7 +192,7 @@ class XTemplate
 	 */
 	public function parse($block = 'MAIN')
 	{
-		if (mb_strstr($block, '.'))
+		if (mb_strpos($block, '.') !== FALSE)
 		{
 			$path = explode('.', $block);
 			$block = array_shift($path);
@@ -209,7 +209,7 @@ class XTemplate
 	 */
 	public function reset($block = 'MAIN')
 	{
-		if (mb_strstr($block, '.'))
+		if (mb_strpos($block, '.') !== FALSE)
 		{
 			$path = explode('.', $block);
 			$block = array_shift($path);
@@ -227,7 +227,7 @@ class XTemplate
 	 */
 	public function text($block = 'MAIN')
 	{
-		if (mb_strstr($block, '.'))
+		if (mb_strpos($block, '.') !== FALSE)
 		{
 			$path = explode('.', $block);
 			$block = array_shift($path);
