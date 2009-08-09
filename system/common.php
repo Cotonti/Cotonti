@@ -235,7 +235,7 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now_offset'])
 				{
 					$sys['comingback']= TRUE;
-					$usr['lastvisit'] = $sys['now_offset'];
+					$usr['lastvisit'] = $usr['lastlog'];
 					$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
 					$sys['sourcekey'] = $row['user_sid'];
 				}

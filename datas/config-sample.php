@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * Configuration
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -16,7 +16,7 @@
 $cfg['mysqlhost'] = 'localhost';	// Database host URL
 $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
-$cfg['mysqldb'] = 'sedition';			// Database name
+$cfg['mysqldb'] = 'cotonti';			// Database name
 // MySQL database charset and collate. Very useful when MySQL server uses different charset rather than site
 // See the list of valid values here: http://dev.mysql.com/doc/refman/5.1/en/charset-charsets.html
 $cfg['mysqlcharset'] = 'utf8';
