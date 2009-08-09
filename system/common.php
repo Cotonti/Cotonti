@@ -7,7 +7,7 @@ http://www.neocrome.net
 
 /**
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.6.2
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -237,7 +237,7 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$sys['comingback']= TRUE;
 					$usr['lastvisit'] = $usr['lastlog'];
 					$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
-					$sys['sourcekey'] = $row['user_sid'];
+					$sys['xk'] = $row['user_sid']; // Use a key from previous session, or some form data will be lost
 				}
 
 
@@ -294,6 +294,7 @@ if($usr['id']==0)
 	$usr['skin'] = empty($usr['skin']) ? $cfg['defaultskin'] : $usr['skin'];
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
 	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
+	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['abs_url']))); // Site related key for guests
 }
 
 /* === Hook === */
@@ -536,16 +537,19 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
 
-$xg = sed_import('x','G','ALP');
-$xp = sed_import('x','P','ALP');
-$xk = sed_sourcekey();
-
-if(!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH'))
+if (empty($sys['xk']))
 {
-	if (!sed_check_xp())
-	{
-		$error_string .= $L['Session_expired'] . '<br />';
-	}
+	$sys['xk'] = $_SESSION['sourcekey']; // Normal per-session key
+}
+
+if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
+	&& ((isset($_GET['x']) && $_GET['x'] != $sys['xk'])
+		|| (isset($_POST['x']) && $_POST['x'] != $sys['xk'])
+		)
+	)
+{
+	sed_redirect(sed_url('message', 'msg=951', '', true));
+	exit;
 }
 
 /* ======== Global hook ======== */
