@@ -42,65 +42,56 @@ switch( $msg )
 		/* ======== Users ======== */
 
 	case '100':
-
 		$rd = 2;
-		$the_redirect = (!empty($redirect)) ? "&redirect=".$redirect : '';
-		$ru = sed_url('users', 'm=auth'.$the_redirect);
-		break;
+		$ru = sed_url('users', 'm=auth' . (empty($redirect) ? '' : "&redirect=$redirect"));
+	break;
 
 	case '102':
 		$r = 1;
 		$rd = 2;
 		$ru = sed_url('index');
-		break;
+	break;
 
 	case '153':
 		if ($num>0)
 		{ $body .= "<br />(-> ".date($cfg['dateformat'],$num)."GMT".")"; }
-		break;
+	break;
 
 		/* ======== Error Pages ========= */
 
 	case '400':
-		$rd = 5;
-		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		break;
-
 	case '401':
-		$rd = 5;
-		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		break;
-
 	case '403':
-		$rd = 5;
-		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		break;
-
 	case '404':
-		$rd = 5;
-		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		break;
-
 	case '500':
 		$rd = 5;
-		$ru = (empty($redirect)) ? sed_url('index') : base64_decode($redirect);
-		break;
+		$ru = empty($redirect) ? sed_url('index') : str_replace('&', '&amp;', base64_decode($redirect));
+	break;
 
 		/* ======== System messages ======== */
 
 	case '916':
 		$rd = 2;
 		$ru = sed_url('admin');
-		break;
+	break;
 
 	case '930':
-		if ($usr['id']==0)
+		if ($usr['id'] > 0)
 		{
-			$rd = 2;
-			$the_redirect = (!empty($redirect)) ? "&redirect=".$redirect : '';
-			$ru = sed_url('users', 'm=auth'.$the_redirect);
+	break;
 		}
-		break;
+		$rd = 2;
+		if (!empty($redirect))
+		{
+			$uri_redirect = base64_decode($redirect);
+			if (mb_strpos($uri_redirect, '&x=') !== false || mb_strpos($uri_redirect, '?x=') !== false)
+			{
+				$ru = sed_url('index'); // xg, not redirect to form action/GET or to command from GET
+	break;
+			}
+		}
+		$ru = sed_url('users', 'm=auth' . (empty($redirect) ? '' : "&redirect=$redirect"));
+	break;
 }
 
 /* ============= */
@@ -145,7 +136,7 @@ switch ($rc)
 
 if ($rc != '')
 {
-	if (!strstr($r["$rc"], '://'))
+	if (mb_strpos($r["$rc"], '://') === false)
 	{
 		$r["$rc"] = SED_ABSOLUTE_URL . $r["$rc"];
 	}
@@ -155,7 +146,7 @@ if ($rc != '')
 
 elseif ($rd != '')
 {
-	if (!strstr($ru, '://'))
+	if (mb_strpos($ru, '://') === false)
 	{
 		$ru = SED_ABSOLUTE_URL . ltrim($ru, '/');
 	}
