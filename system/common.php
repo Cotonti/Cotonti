@@ -544,7 +544,7 @@ if (empty($sys['xk']))
 
 if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
 	&& ((isset($_GET['x']) && $_GET['x'] != $sys['xk'])
-		|| (isset($_POST['x']) && $_POST['x'] != $sys['xk'])
+		|| ($_SERVER['REQUEST_METHOD'] == 'POST' && (empty($_POST['x']) || $_POST['x'] != $sys['xk']))
 		)
 	)
 {
