@@ -84,6 +84,8 @@ foreach ($row as $i => $x)
 
 $t->assign(array(
 	'ADMIN_DISKCACHE_AJAX_OPENDIVID' => 'pagtab',
+	'ADMIN_DISKCACHE_URL_REFRESH' => sed_url('admin', 'm=cache&s=disk'),
+	'ADMIN_DISKCACHE_URL_REFRESH_AJAX' => ($cfg['jquery'] && $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '" . sed_url('admin', 'm=cache&s=disk&ajax=1') . "', divId: 'pagtab', errMsg: '" . $L['ajaxSenderror'] . "'});\"" : '',
 	'ADMIN_DISKCACHE_URL_PURGE' => sed_url('admin', 'm=cache&s=disk&a=purge&' . sed_xg()),
 	'ADMIN_DISKCACHE_URL_PURGE_AJAX' => ($cfg['jquery'] && $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '" . sed_url('admin', 'm=cache&s=disk&a=purge&ajax=1&' . sed_xg()) . "', divId: 'pagtab', errMsg: '" . $L['ajaxSenderror'] . "'});\"" : '',
 	'ADMIN_DISKCACHE_ADMINWARNINGS' => $adminwarnings,
