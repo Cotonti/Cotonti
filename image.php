@@ -6,6 +6,7 @@
 // Created by: Joe Lencioni (http://shiftingpixel.com)
 // Date: August 6, 2008
 // Based on: http://veryraw.com/history/2005/03/image-resizing-with-php/
+// Modified for use with Cotonti (http://www.cotonti.com)
 
 /////////////////////
 // LICENSE
