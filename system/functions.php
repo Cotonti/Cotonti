@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.6.1
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -37,8 +37,8 @@ $sys['starttime'] = $i[1] + $i[0];
 //unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount)
 
 $cfg['svnrevision'] = '$Rev$'; //DO NOT MODIFY this is set by SVN automatically
-$cfg['version'] = '0.6.1';
-$cfg['dbversion'] = '0.6.1';
+$cfg['version'] = '0.7.0';
+$cfg['dbversion'] = '0.7.0';
 
 if($cfg['customfuncs'])
 {
@@ -2002,7 +2002,13 @@ function sed_cc($text)
  */
 function sed_check_xg()
 {
-	return isset($_GET['x']);
+	if (isset($_GET['x']))
+	{
+		return true;
+	}
+
+	sed_redirect(sed_url('message', 'msg=950', '', true));
+	exit; // like return NULL
 }
 
 /**
@@ -4061,6 +4067,7 @@ function sed_smilies($res)
  */
 function sed_sourcekey()
 {
+	global $sys;
 	return $sys['xk'];
 }
 
@@ -4712,15 +4719,14 @@ function sed_uriredir_store()
 	global $sys;
 
 	$script = basename($_SERVER['SCRIPT_NAME']);
-	mb_parse_str($_SERVER['QUERY_STRING'], $query_a);
 
 	if ($_SERVER['REQUEST_METHOD'] != 'POST' // not form action/POST
-		&& empty($query_a['x']) // not xg, hence not form action/GET
+		&& empty($_GET['x']) // not xg, hence not form action/GET and not command from GET
 		&& !empty($script)
 		&& $script != 'message.php' // not message location
 		&& ($script != 'users.php' // not login/logout location
-			|| empty($query_a['m'])
-			|| !in_array($query_a['m'], array('auth', 'logout', 'register'))
+			|| empty($_GET['m'])
+			|| !in_array($_GET['m'], array('auth', 'logout', 'register'))
 			)
 		)
 	{
@@ -4751,12 +4757,9 @@ function sed_uriredir_apply($cfg_redir = true)
  */
 function sed_uriredir_redirect($uri)
 {
-	list(, $query) = explode('?', $uri);
-	mb_parse_str($query, $query_a);
-
-	if (!empty($query_a['x']))
+	if (mb_strpos($uri, '&x=') !== false || mb_strpos($uri, '?x=') !== false)
 	{
-		$uri = sed_url('index'); // xg, not redirect to form action/GET
+		$uri = sed_url('index'); // xg, not redirect to form action/GET or to command from GET
 	}
 	sed_redirect($uri);
 }

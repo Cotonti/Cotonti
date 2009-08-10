@@ -200,7 +200,7 @@ if ($a=='add')
 
 		if ($cfg['regnoactivation'] || $defgroup==5)
 		{
-			sed_redirect(sed_url('message', 'msg=106'));
+			sed_redirect(sed_url('message', 'msg=106', '', true));
 			exit;
 		}
 
@@ -215,7 +215,7 @@ if ($a=='add')
 			$rinactive = $cfg['mainurl'].'/'.sed_url('users', 'gm=2&s=regdate&w=desc', '', true);
 			$rbody = sprintf($L['aut_regreqnotice'], $rusername, $rinactive);
 			sed_mail ($cfg['adminemail'], $rsubject, $rbody);
-			sed_redirect(sed_url('message', 'msg=118'));
+			sed_redirect(sed_url('message', 'msg=118', '', true));
 			exit;
 		}
 		else
@@ -226,7 +226,7 @@ if ($a=='add')
 			$rbody = sprintf($L['aut_emailreg'], $rusername, $rpassword1, $ractivate, $rdeactivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
 			sed_mail ($ruseremail, $rsubject, $rbody);
-			sed_redirect(sed_url('message', 'msg=105'));
+			sed_redirect(sed_url('message', 'msg=105', '', true));
 			exit;
 		}
 	}
@@ -248,7 +248,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp=4 WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
 		$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 		sed_auth_clear($row['user_id']);
-		sed_redirect(sed_url('message', 'msg=106'));
+		sed_redirect(sed_url('message', 'msg=106', '', true));
 		exit;
 		}
 	elseif ($y==0)
@@ -256,7 +256,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 		$sql = sed_sql_query("DELETE FROM $db_users WHERE user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
 		$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='".$row['user_id']."'");
 		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='".$row['user_id']."'");
-		sed_redirect(sed_url('message', 'msg=109'));
+		sed_redirect(sed_url('message', 'msg=109', '', true));
 		exit;
 		}
 		
@@ -264,7 +264,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 	elseif ($row['user_maingrp']==-1)
 		{
 		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='".sed_sql_prep($row['user_sid'])."' WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
-		sed_redirect(sed_url('message', 'msg=106'));
+		sed_redirect(sed_url('message', 'msg=106', '', true));
 		exit;
 		}
 	}
@@ -272,7 +272,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 	{
 		sed_shield_update(7, "Account validation");
 		sed_log("Wrong validation URL", 'sec');
-		sed_redirect(sed_url('message', 'msg=157'));
+		sed_redirect(sed_url('message', 'msg=157', '', true));
 		exit;
 	}
 }

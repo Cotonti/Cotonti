@@ -500,7 +500,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'pfs', '06', 'maxpfsperpage', 2, '15', '', ''),
 ('core', 'pm', '11', 'maxpmperpage', 2, '15', '', ''),
 ('core', 'main', '29', 'redirbkonlogin', 3, '1', '', ''),
-('core', 'main', '29', 'redirbkonlogout', 3, '1', '', ''),
+('core', 'main', '29', 'redirbkonlogout', 3, '0', '', ''),
 ('core', 'version', '01', 'revision', 0, '', '', ''),
 ('core', 'rss', '01', 'disable_rss', 3, '0', '', 'Disable the RSS feeds'),
 ('core', 'rss', '02', 'rss_timetolive', 2, '30', '', 'Refresh RSS cache every N seconds'),

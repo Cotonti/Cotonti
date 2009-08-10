@@ -130,7 +130,7 @@ if ($cfg['maintenance'])
 
 $t->assign(array(
 	"USERS_AUTH_TITLE" => $L['aut_logintitle'],
-	"USERS_AUTH_SEND" => sed_url('users', 'm=auth&a=check&redirect='.$redirect),
+	"USERS_AUTH_SEND" => sed_url('users', 'm=auth&a=check' . (empty($redirect) ? '' : "&redirect=$redirect")),
 	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />",
 	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />",
 	"USERS_AUTH_REGISTER" => sed_url('users', 'm=register')
