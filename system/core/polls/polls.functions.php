@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /**
  * Polls functions.
@@ -21,7 +21,7 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
     $mask_edit_form ="<div %1\$s>
         <input type='hidden' name='poll_option_id[]' value='%2\$s' />
         <input  class='tbox' type='text' name='poll_option[]' size='40' value='%3\$s' maxlength='128' />
-        <input  name='addoption' value='x' onclick='removeAns(this)' type='button' /></div>";
+        <input  name='addoption' value='x' onclick='removeAns(this)' type='button' class='deloption' style='display:none;' /></div>";
 
 
     if(!empty($error_string))
@@ -39,7 +39,7 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
             if ($poll_option_text[$i]!="" || ($poll_option_text[$i]=="" && $poll_option_id[$i]!='new'))
             {
                 $counter++;
-                $poll_options_x .=sprintf($mask_edit_form, 'block', $poll_option_id[$i], htmlspecialchars($poll_option_text[$i]));
+                $poll_options_x .=sprintf($mask_edit_form, '', $poll_option_id[$i], htmlspecialchars($poll_option_text[$i]));
             }
         }
 
@@ -67,7 +67,7 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
             while ($row1 = sed_sql_fetcharray($sql1))
             {
                 $counter++;
-                $poll_options_x .=sprintf($mask_edit_form, 'block', $row1['po_id'], htmlspecialchars($row1['po_text']));
+                $poll_options_x .=sprintf($mask_edit_form, '', $row1['po_id'], htmlspecialchars($row1['po_text']));
             }
         }
         else
@@ -86,28 +86,26 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
     if ($counter==0)
     {
 
-        $poll_options_x=sprintf($mask_edit_form, 'block', 'new', '');
+        $poll_options_x=sprintf($mask_edit_form, '', 'new', '');
         $counter++;
     }
     if ($counter==1)
     {
-        $poll_options_x.=sprintf($mask_edit_form, 'block', 'new', '');;
+        $poll_options_x.=sprintf($mask_edit_form, '', 'new', '');;
         $counter++;
     }
-    $poll_date=$date."<input type=\"hidden\" name=\"poll_date\" value=\"".$date."\" />";
-
-    // Render rules table
-    $poll_options .= <<<HTM
+    $poll_date=$date.'<input type="hidden" name="poll_date" value="'.$date.'" />';
+    if($cfg['jquery'])
+    {
+        // Render rules table
+        $poll_options .= <<<HTM
 <script type="text/javascript">
 //<![CDATA[
-
-document.write('<style type="text/css">.noscript{display:none;} .script{display:inherit;} </style>');
-
 
 var ansCount = $counter;
 var ansMax = {$cfg['max_options_polls']};
 function removeAns(object)
-    {
+{
     $(object).parent().children('[name="poll_option[]"]').attr('value', '');
     if (ansCount>2)
     { 	ansCount--;
@@ -119,35 +117,39 @@ function removeAns(object)
     return false;
 }
 
-function addAns(object) {
-
-    if (ansCount<ansMax)
-    {
-    var objectparent = $(object).parent();
-    $(object).parent().children('div').clone().insertBefore(objectparent).show();
-    ansCount++;
-    }
-
-    return false;
-}
+$(document).ready(function(){
+    $("#addoption").click(function () {
+        if (ansCount<ansMax)
+        {
+            $('#newanswer').clone().attr("id", '').insertBefore('#newanswer').show();
+            ansCount++;
+        }
+        return false;
+    });
+    $('#addoption').show();
+    $("#newanswer").hide();
+    $('.deloption').show();
+});
 //]]>
 </script>
 HTM;
-
-    $poll_options .= "<input type=\"hidden\" name=\"poll_id\" value=\"".$id."\" />";
-    $poll_options .= $poll_options_x;
-    if ($counter<$cfg['max_options_polls'])
-    {
-        $poll_options .= "<div>".sprintf($mask_edit_form, 'class="noscript"', 'new', '')."";
     }
+
+    $poll_options .= "<input type='hidden' name='poll_id' value='".$id."' />";
+    $poll_options .= $poll_options_x;
+    if ($counter>=$cfg['max_options_polls'])
+    {
+        $slylehide=" style='display:none;'";
+    }
+    $poll_options .= sprintf($mask_edit_form, 'id="newanswer"'.$slylehide, 'new', '');
     $poll_options .= "
-    <input  name=\"addoption\" value=\"".$L['Add']."\" onclick=\"return addAns(this)\" type=\"button\" /></div>";
+    <input id='addoption' name='addoption' value='".$L['Add']."' type='button' style='display:none;' />";
 
-    $poll_multiple = "<input name=\"poll_multiple\" type=\"checkbox\" value=\"1\" $poll_multiple />";
+    $poll_multiple = "<input name='poll_multiple' type='checkbox' value='1' $poll_multiple />";
 
-    $poll_close = "<input name=\"poll_state\" type=\"checkbox\" value=\"1\" $poll_state />";
-    $poll_reset = "<input name=\"poll_reset\" type=\"checkbox\" value=\"1\" />";
-    $pol_delete = "<input name=\"poll_delete\" type=\"checkbox\" value=\"1\" />";
+    $poll_close = "<input name='poll_state' type='checkbox' value='1' $poll_state />";
+    $poll_reset = "<input name='poll_reset' type='checkbox' value='1' />";
+    $pol_delete = "<input name='poll_delete' type='checkbox' value='1' />";
 
     if ($id!='new')
     {
