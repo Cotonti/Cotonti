@@ -26,13 +26,13 @@ $news_extp = sed_getextplugins('news.loop');
     /* ===== */
 
     /* === Hook - Part1 : Set === TAGS === */
-$news__tags_extp = sed_getextplugins('news.loop');
+$news_tags_extp = sed_getextplugins('news.loop');
     /* ===== */
 
 function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=false, $d=0)
 {
     global $sed_cat, $db_pages, $db_users, $db_extra_fields, $sys, $cfg, $L, $t, $pag,
-    $usr, $sed_dbc, $sed_urltrans, $c, $extrafields, $news_extp, $news__tags_extp, $news_first_extp;
+    $usr, $sed_dbc, $sed_urltrans, $c, $extrafields, $news_extp, $news_tags_extp, $news_first_extp;
     $jj = 0;
     $mtch = $sed_cat[$cat]['path'].".";
     $mtchlen = mb_strlen($mtch);
@@ -205,7 +205,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         /* === Hook - Part2 : Include === TAGS === */
     if (is_array($news_tags_extp))
     {
-        foreach ($news__tags_extp as $pl)
+        foreach ($news_tags_extp as $pl)
         {
             include_once("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
         }
