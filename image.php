@@ -56,6 +56,7 @@
 // CODE STARTS HERE
 /////////////////////
 
+define('SED_CODE', TRUE);
 require_once('datas/config.php');
 require_once('system/lang/'.$cfg['defaultlang'].'/main.lang.php');
 
