@@ -450,8 +450,8 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'markitup', '2', 'autorefresh', 3, '0', '', 'Enable preview auto-refresh'),
 ('plug', 'markitup', '3', 'chili', 3, '0', '', 'Enable Chili tags'),
 ('plug', 'news', '01', 'category', 1, 'news', '', 'Category code of the parent category'),
-('plug', 'news', '02', 'maxpages', 2, '10', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100', 'Recent pages displayed'),
-('plug', 'news', '03', 'addpagination', 3, '0', '', 'Enable pagination for additional categories'),
+('plug', 'news', '02', 'maxpages', 2, '10', '1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100', 'Recent pages displayed'),
+('plug', 'news', '03', 'syncpagination', 3, '0', '', 'Enable pagination for additional categories'),
 ('plug', 'recentitems', '1', 'maxpages', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed'),
 ('core', 'main', '07', 'maintenance', 3, '0', '', ''),
 ('plug', 'recentitems', '4', 'maxtopics', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed'),
@@ -835,7 +835,8 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (39, 'forums.topics.delete.done', 'tags', 'forums.delete', 'Tags', 'tags.forums.delete', 10, 1),
 (40, 'standalone', 'tags', 'search', 'Tags', 'tags', 0, 1),
 (41, 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', 10, 1),
-(42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1);
+(42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1),
+(43, 'admin.config.edit.loop', 'news', 'adminconfig', 'News', 'news.admin', 10, 1);
 
 CREATE TABLE `sed_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,

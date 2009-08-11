@@ -24,6 +24,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 $d = sed_import('d','G','INT');
 $c = sed_import('c','G','TXT');
+$one = sed_import('one','G','INT');
 $categories = explode(',', $cfg['plugin']['news']['category']);
 $limit = $cfg['plugin']['news']['maxpages'];
 foreach($categories as $k => $v)
@@ -61,22 +62,13 @@ else
 }
 if(isset($cats[$c]) && !empty($individual)) unset($cats[$c]);
  
- // get extra fields
-    $extrafields = array();
-    $fieldsres = sed_sql_query("SELECT field_name, field_type FROM $db_extra_fields WHERE field_location='pages'");
-    while ($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
-
-    /* === Hook - Part1 : Set === */
-    $news_extp = sed_getextplugins('news.loop');
-    /* ===== */
-
 require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 
 if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 {
     $limit = $cfg['plugin']['news']['maxpages'];
     sed_get_news($c, "news", "INDEX_NEWS", $limit, $d);
-    if(!empty($cats))
+    if(!empty($cats) && !$one)
     {
         foreach($cats as $k => $v)
         {
