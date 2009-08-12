@@ -4934,7 +4934,7 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
 
 	// Check table sed_$sql_table - if field with same name exists - exit.
-	if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table WHERE Field LIKE '%\_$name'")) > 0 && !$noalter)
+	if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table LIKE '%\_$name'")) > 0 && !$noalter)
 	{
 		return FALSE;
 	}
@@ -4993,7 +4993,7 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 			WHERE field_name = '$oldname' AND field_location='$sql_table'");
 	if (sed_sql_numrows($fieldsres) <= 0
 		|| $name != $oldname
-			&& sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table WHERE Field LIKE '%\_$name'")) > 0)
+			&& sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table LIKE '%\_$name'")) > 0)
 	{
 		// Attempt to edit non-extra field or override an existing field
 		return FALSE;
