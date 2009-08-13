@@ -44,8 +44,8 @@ $standalone = FALSE;
 $user_info = sed_userinfo($userid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
-$cfg['pfs_dir_user'] = sed_pfs_path($userid);
-$cfg['th_dir_user'] = sed_pfs_thumbpath($userid);
+$cfg['pfs_path'] = sed_pfs_path($userid);
+$cfg['pfs_thumbpath'] = sed_pfs_thumbpath($userid);
 
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
@@ -58,7 +58,7 @@ if (!empty($c1) || !empty($c2))
 	{
 	$morejavascript = "
 function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img='+gfile+']".$cfg['th_dir_user']."'+gfile+'[/img]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[img='+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'; }
 function addpix(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
 	";
@@ -80,7 +80,7 @@ if ($userid!=$usr['id'])
 
 $title .= " ".$cfg['separator']." ".$L['Edit'];
 
-$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
+$sql = sed_sql_query("SELECT pfs.*, pff.pff_path FROM $db_pfs AS pfs LEFT JOIN $db_pfs_folders AS pff ON pff.pff_id=pfs.pfs_folderid WHERE pfs.pfs_userid='$userid' AND pfs.pfs_id='$id' LIMIT 1");
 
 if ($row = sed_sql_fetcharray($sql))
 	{
@@ -88,36 +88,67 @@ if ($row = sed_sql_fetcharray($sql))
 	$pfs_file = $row['pfs_file'];
 	$pfs_date = @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600);
 	$pfs_folderid = $row['pfs_folderid'];
+	$pff_path = (empty($row['pff_path'])) ? '' : $row['pff_path'].'/';
 	$pfs_extension = $row['pfs_extension'];
-	$pfs_desc = htmlspecialchars($row['pfs_desc']);
+	$pfs_desc = sed_cc($row['pfs_desc']);
 	$pfs_size = floor($row['pfs_size']/1024);
-	$ff = $cfg['pfs_dir_user'].$pfs_file;
+	$ff = $cfg['pfs_path'].$pff_path.$pfs_file;
 	}
 	else
 	{ sed_die(); }
 
-$title .= " ".$cfg['separator']." ".htmlspecialchars($pfs_file);
+$title .= " ".$cfg['separator']." ".sed_cc($pfs_file);
 
 if ($a=='update' && !empty($id))
-	{
+{
 	$rdesc = sed_import('rdesc','P','TXT');
 	$folderid = sed_import('folderid','P','INT');
 	if ($folderid>0)
-		{
-		$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid'");
+	{
+		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid'");
 		sed_die(sed_sql_numrows($sql)==0);
+		if($row = sed_sql_fetcharray($sql)) 
+		{ 
+			$newpath = $userid.'/'.$row['pff_path'].'/';
 		}
+	}
 	else
-		{ $folderid = 0; }
-
-	$sql = sed_sql_query("UPDATE $db_pfs SET
+	{
+		$folderid = 0;
+		$newpath = $userid.'/';
+	}
+	if ($pfs_folderid>0)
+	{
+		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$pfs_folderid'");
+		sed_die(sed_sql_numrows($sql)==0);
+		if($row = sed_sql_fetcharray($sql)) 
+		{ 
+			$oldpath = $userid.'/'.$row['pff_path'].'/';
+		}
+	}
+	else
+	{
+		$oldpath = $userid.'/';
+	}
+	
+	if (file_exists('datas/users/'.$newpath.$pfs_file))
+	{
+		$error_string = 'Already a file with that name in target folder';
+	}
+	else
+	{
+		if ($cfg['pfsuserfolder'])
+		{
+			rename('datas/users/'.$oldpath.$pfs_file, 'datas/users/'.$newpath.$pfs_file);
+		}
+		$sql = sed_sql_query("UPDATE $db_pfs SET
 		pfs_desc='".sed_sql_prep($rdesc)."',
 		pfs_folderid='$folderid'
 		WHERE pfs_userid='$userid' AND pfs_id='$id'");
-
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', "f=$pfs_folderid".$more, '', true));
-	exit;
+		header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', "f=$pfs_folderid".$more, '', true));
 	}
+	if (empty($error_string)) exit;
+}
 
 $body .= "<form id=\"edit\" action=\"".sed_url('pfs', "m=edit&a=update&id=".$pfs_id.$more)."\" method=\"post\"><table class=\"cells\">";
 $body .= "<tr><td>".$L['File']." : </td><td>".$pfs_file."</td></tr>";
@@ -140,7 +171,7 @@ if ($standalone)
 function help(rcode,c1,c2)
 	{ window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
 function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img='+gfile+']".$cfg['th_dir_user']."'+gfile+'[/img]'; }
+	{ opener.document.".$c1.".".$c2.".value += '[img='+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'; }
 function addpix(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
 function picture(url,sx,sy)
@@ -152,7 +183,7 @@ function picture(url,sx,sy)
 	$pfs_header2 = "</head><body>";
 	$pfs_footer = "</body></html>";
 
-	$t = new XTemplate(sed_skinfile('pfs'));
+	$t = new XTemplate(sed_skinfile('pfs.edit'));
 
 	$t->assign(array(
 		"PFS_STANDALONE_HEADER1" => $pfs_header1,
@@ -175,10 +206,11 @@ else
 	{
 	require_once $cfg['system_dir'] . '/header.php';
 
-	$t = new XTemplate(sed_skinfile('pfs'));
+	$t = new XTemplate(sed_skinfile('pfs.edit'));
 
 	$t-> assign(array(
 		"PFS_TITLE" => $title,
+		"PFS_ERRORS" => $error_string,
 		"PFS_BODY" => $body
 		));
 
@@ -187,7 +219,5 @@ else
 
 	require_once $cfg['system_dir'] . '/footer.php';
 	}
-
-
 
 ?>
