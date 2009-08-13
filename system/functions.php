@@ -921,7 +921,7 @@ function sed_build_comments($code, $url, $display = true)
 			/* ===== */
 
 			sed_shield_update(20, 'New comment');
-			header('Location: ' . SED_ABSOLUTE_URL . $url . '#c' . $id);
+			header('Location: ' . SED_ABSOLUTE_URL . str_replace('&amp;', '&', $url) . '#c' . $id);
 			exit;
 		}
 	}
@@ -946,7 +946,7 @@ function sed_build_comments($code, $url, $display = true)
 			sed_log('Deleted comment #'.$ind.' in &quot;'.$code.'&quot;', 'adm');
 		}
 
-		header('Location: ' . SED_ABSOLUTE_URL . $url . '#comments');
+		header('Location: ' . SED_ABSOLUTE_URL . str_replace('&amp;', '&', $url) . '#comments');
 		exit;
 	}
 
