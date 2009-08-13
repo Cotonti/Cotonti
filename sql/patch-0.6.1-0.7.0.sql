@@ -8,3 +8,8 @@ INSERT INTO `sed_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_
 INSERT INTO `sed_plugins` (`pl_hook` , `pl_code` , `pl_part` , `pl_title` , `pl_file` , `pl_order` , `pl_active` ) VALUES ('admin.config.edit.loop', 'news', 'adminconfig', 'News', 'news.admin', 10, 1);
 UPDATE `sed_config` SET `config_default` = '1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100' WHERE `config_owner` = 'plug' AND `config_cat` = 'news' AND   `config_name` = 'maxpages' LIMIT 1 ;
 UPDATE `sed_config` SET `config_name` = 'syncpagination' WHERE `config_owner` = 'plug' AND `config_cat` = 'news' AND `config_name` = 'addpagination' LIMIT 1 ;
+
+/* r923 add columns and config option for new PFS system */
+ALTER TABLE sed_pfs_folders ADD pff_parentid INT(11) AFTER pff_id;
+ALTER TABLE sed_pfs_folders ADD pff_path VARCHAR(255) AFTER pff_desc;
+INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('core', 'pfs', '06', 'flashupload', 3, '0', '', '');
