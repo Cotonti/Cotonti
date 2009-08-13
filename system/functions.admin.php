@@ -338,6 +338,7 @@ function sed_loadconfigmap()
     $result[] = array ('pfs', '03', 'pfstimename', 3, '0', ''); // N-0.0.2
     $result[] = array ('pfs', '04', 'pfsfilecheck', 3, '1', ''); // N-0.0.2
     $result[] = array ('pfs', '05', 'pfsnomimepass', 3, '1', ''); // N-0.0.2
+	$result[] = array ('pfs', '06', 'flashupload', 3, '1', ''); // N-1.0.0
     $result[] = array ('pfs', '10', 'th_amode', 2, 'GD2', array('Disabled', 'GD1', 'GD2'));
     $result[] = array ('pfs', '10', 'th_x', 2, '112', '');
     $result[] = array ('pfs', '10', 'th_y', 2, '84', '');
