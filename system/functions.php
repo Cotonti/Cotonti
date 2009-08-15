@@ -175,19 +175,23 @@ function sed_auth_build($userid, $maingrp=0)
 	else
 	{
 		$groups[] = $maingrp;
-		$sql = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
+		$sql = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
 
 		while ($row = sed_sql_fetcharray($sql))
-		{ $groups[] = $row['gru_groupid']; }
+		{
+			$groups[] = $row['gru_groupid'];
+		}
 	}
 
 	$sql_groups = implode(',', $groups);
 	$sql = sed_sql_query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN (".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
 
 	while ($row = sed_sql_fetcharray($sql))
-	{ $authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights']; }
+	{
+		$authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights'];
+	}
 
-	return($authgrid);
+	return $authgrid;
 }
 
 /**
