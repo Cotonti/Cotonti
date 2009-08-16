@@ -542,11 +542,10 @@ if (empty($sys['xk']))
 	$sys['xk'] = $_SESSION['sourcekey']; // Normal per-session key
 }
 
+$x = empty($_POST['x']) ? $_GET['x'] : $_POST['x'];
 if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
-	&& ((isset($_GET['x']) && $_GET['x'] != $sys['xk'])
-		|| ($_SERVER['REQUEST_METHOD'] == 'POST' && (empty($_POST['x']) || $_POST['x'] != $sys['xk']))
-		)
-	)
+	&& ($_SERVER['REQUEST_METHOD'] == 'POST'&& $x != $sys['xk']
+		|| isset($_GET['x']) && $_GET['x'] != $sys['xk']))
 {
 	sed_redirect(sed_url('message', 'msg=951', '', true));
 	exit;
