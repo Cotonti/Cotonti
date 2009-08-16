@@ -226,7 +226,7 @@ function sed_block($allowed)
 	if(!$allowed)
 	{
 		global $sys;
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930&".$sys['url_redirect'], '', true));
+		sed_redirect(sed_url('message', 'msg=930&' . $sys['url_redirect'], '', true));
 		exit;
 	}
 	return FALSE;
