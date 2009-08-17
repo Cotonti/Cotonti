@@ -70,7 +70,7 @@
 				<!-- END: ADMIN -->
 				<tr>
 					<td colspan="2">{PHP.L.Text}:
-					<div style="width:100%;">{PAGEEDIT_FORM_TEXT}
+					<div style="width:100%;">{PAGEEDIT_FORM_TEXT}<br />
 					{PAGEEDIT_FORM_PFS_TEXT_USER}&nbsp;&nbsp; {PAGEEDIT_FORM_PFS_TEXT_SITE}
 					</div></td>
 				</tr>

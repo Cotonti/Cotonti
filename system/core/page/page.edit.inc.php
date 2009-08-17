@@ -349,8 +349,8 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"rpagesize\" value=\"".htmlspecialchars($pag['page_size'])."\" size=\"56\" maxlength=\"255\" />",
 	"PAGEEDIT_FORM_PAGECOUNT" => "<input type=\"text\" class=\"text\" name=\"rpagecount\" value=\"".$pag['page_count']."\" size=\"8\" maxlength=\"8\" />",
 	"PAGEEDIT_FORM_FILECOUNT" => "<input type=\"text\" class=\"text\" name=\"rpagefilecount\" value=\"".$pag['page_filecount']."\" size=\"8\" maxlength=\"8\" />",
-	"PAGEEDIT_FORM_TEXT" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($pag['page_text'])."</textarea><br />",
-	"PAGEEDIT_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($pag['page_text'])."</textarea><br />",
+	"PAGEEDIT_FORM_TEXT" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($pag['page_text'])."</textarea>",
+	"PAGEEDIT_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($pag['page_text'])."</textarea>",
 	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
 );
