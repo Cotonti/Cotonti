@@ -15,9 +15,41 @@ defined('SED_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
-$L['cfg_fd'] = array('Topic path display mode', '&quot;Standard&quot; &mdash; forum section by default<br />&quot;Parent only&quot; &mdash; parent section only<br />&quot;Subforums with Master Forums&quot; &mdash; parent section and subforum<br />&quot;Just Topics&quot; &mdash; topic only');
-$L['cfg_maxpages'] = array('Recent pages displayed');
-$L['cfg_maxtopics'] = array('Recent topics in forums displayed');
-$L['cfg_redundancy'] = array('Redundancy ratio', 'With this setting you increase the number of recent items (pages and topics) by the specified ratio. This setting handles the errors that may occur with a big number of pages with restricted access and &quot;private&quot; forum topics .<br />Recommended setting: no less than 2.<br />It is not adviseable to make this setting too high, as you may encounter slow-down problems.');
+$L['cfg_recentpages']=array('Recent pages on index');
+$L['cfg_maxpages']=array('Recent pages displayed');
+$L['cfg_recentforums']=array('Recent forums on index');
+$L['cfg_maxtopics']=array('Recent topics in forums displayed');
+$L['cfg_newpages']=array('Recent pages in standalone module');
+$L['cfg_newforums']=array('Recent forums in standalone module');
+$L['cfg_newadditional']=array('Additional modules in standalone module');
+$L['cfg_itemsperpage']=array('Elements per page in standalone module');
+$L['cfg_rightscan']=array('Enable prescanning category rights');
+
+/**
+ * Plugin Body
+ */
+
+$L['Recentitems'] = 'New on Site';
+$L['Rec_shownew'] = 'Show new';
+$L['Rec_from_lastvisit'] = 'from my last visit';
+$L['Rec_1day'] = 'for 1 day';
+$L['Rec_2days'] = 'for 2 days';
+$L['Rec_3days'] = 'for 3 days';
+$L['Rec_1week'] = 'for 1 week';
+$L['Rec_2weeks'] = 'for 2 weeks';
+$L['Rec_1month'] = 'for 1 month';
+$L['Rec_forum_nonew'] = "Nothing new for this period.";
+
+$L['Rec_posts']='No new posts';
+$L['Rec_posts_new']='New posts';
+$L['Rec_posts_hot']='No new posts (popular)';
+$L['Rec_posts_new_hot']='New posts (popular)';
+$L['Rec_posts_sticky']='Sticky';
+$L['Rec_posts_new_sticky']='New posts (sticky)';
+$L['Rec_posts_locked']='Locked';
+$L['Rec_posts_new_locked']='New posts (locked)';
+$L['Rec_posts_sticky_locked']='Announcement';
+$L['Rec_posts_new_sticky_locked']='New announcement';
+$L['Rec_posts_moved']='Moved out of this section';
 
 ?>

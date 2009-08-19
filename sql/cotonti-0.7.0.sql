@@ -452,10 +452,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'news', '01', 'category', 1, 'news', '', 'Category code of the parent category'),
 ('plug', 'news', '02', 'maxpages', 2, '10', '1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100', 'Recent pages displayed'),
 ('plug', 'news', '03', 'syncpagination', 3, '0', '', 'Enable pagination for additional categories'),
-('plug', 'recentitems', '1', 'maxpages', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed'),
 ('core', 'main', '07', 'maintenance', 3, '0', '', ''),
-('plug', 'recentitems', '4', 'maxtopics', 2, '5', '0,1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed'),
-('plug', 'recentitems', '5', 'fd', 2, 'Standard', 'Standard, Parent only, Subforums with Master Forums, Just Topics', 'Topic path display'),
 ('plug', 'cleaner', '1', 'userprune', 2, '2', '0,1,2,3,4,5,6,7', 'Delete the user accounts not activated within * days (0 to disable).'),
 ('plug', 'cleaner', '2', 'logprune', 2, '15', '0,1,2,3,7,15,30,60', 'Delete the log entries older than * days (0 to disable).'),
 ('plug', 'cleaner', '3', 'refprune', 2, '30', '0,15,30,60,120,180,365', 'Delete the referer entries older than * days (0 to disable).'),
@@ -479,7 +476,6 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'title', '18', 'title_header_index', 1, '{MAINTITLE} - {DESCRIPTION}', '', ''),
 ('plug', 'indexpolls', '2', 'mode', 2, 'Recent polls', 'Recent polls,Random polls', ''),
 ('plug', 'indexpolls', '1', 'maxpolls', 2, '1', '0,1,2,3,4,5', ''),
-('plug', 'recentitems', '5', 'redundancy', 2, '2', '', ''),
 ('core', 'main', '07', 'maintenancereason', 1, '', '', ''),
 ('core', 'polls', '02', 'ip_id_polls', 2, 'ip', '', ''),
 ('core', 'polls', '04', 'del_dup_options', 3, '1', '', ''),
@@ -505,7 +501,15 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'rss', '01', 'disable_rss', 3, '0', '', 'Disable the RSS feeds'),
 ('core', 'rss', '02', 'rss_timetolive', 2, '30', '', 'Refresh RSS cache every N seconds'),
 ('core', 'rss', '03', 'rss_maxitems', 2, '40', '', 'Max. items in RSS feed'),
-('core', 'rss', '04', 'rss_charset', 4, 'UTF-8', '', 'RSS charset');
+('core', 'rss', '04', 'rss_charset', 4, 'UTF-8', '', 'RSS charset'),
+('plug', 'recentitems', '3', 'recentforums', 3, '1', '', 'Recent forums on index'),
+('plug', 'recentitems', '4', 'maxtopics', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed'),
+('plug', 'recentitems', '7', 'itemsperpage', 2, '10', '1,2,3,5,10,20,30,50,100,150,200,300,500', 'Elements per page in standalone module'),
+('plug', 'recentitems', '6', 'newforums', 3, '1', '', 'Recent forums in standalone module'),
+('plug', 'recentitems', '5', 'newpages', 3, '1', '', 'Recent pages in standalone module'),
+('plug', 'recentitems', '2', 'maxpages', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed'),
+('plug', 'recentitems', '1', 'recentpages', 3, '1', '', 'Recent pages on index'),
+('plug', 'recentitems', '8', 'rightscan', 3, '1', '', 'Enable prescanning category rights'); 
 
 CREATE TABLE `sed_core` (
   `ct_id` mediumint(8) NOT NULL auto_increment,
@@ -812,7 +816,7 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (8, 'header.main', 'markitup', 'header', 'MarkItUp!', 'markitup.header', 10, 1),
 (17, 'standalone', 'whosonline', 'main', 'Who''s online', 'whosonline', 10, 1),
 (18, 'index.tags', 'news', 'homepage', 'News', 'news', 10, 1),
-(19, 'index.tags', 'recentitems', 'main', 'Recent items', 'recentitems', 10, 1),
+(19, 'index.tags', 'recentitems', 'recent.index', 'Recent items', 'recentitems.index', 10, 1),
 (20, 'tools', 'ipsearch', 'admin', 'IP search', 'ipsearch.admin', 10, 1),
 (21, 'header.main', 'search', 'header', 'Search', 'search.header', 10, 1),
 (22, 'page.first', 'search', 'page', 'Search', 'search.page.first', 10, 1),
@@ -836,7 +840,8 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (40, 'standalone', 'tags', 'search', 'Tags', 'tags', 0, 1),
 (41, 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', 10, 1),
 (42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1),
-(43, 'admin.config.edit.loop', 'news', 'adminconfig', 'News', 'news.admin', 10, 1);
+(43, 'admin.config.edit.loop', 'news', 'adminconfig', 'News', 'news.admin', 10, 1),
+(44, 'standalone', 'recentitems', 'main', 'Recent items', 'recentitems', 10, 1);
 
 CREATE TABLE `sed_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,
