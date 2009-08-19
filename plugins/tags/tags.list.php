@@ -31,7 +31,7 @@ if($cfg['plugin']['tags']['pages'])
 	$tc_path = $sed_cat[$c]['path'] . '.';
 	foreach($sed_cat as $key => $val)
 	{
-		if(mb_strstr($val['path'], $tc_path))
+		if (mb_strpos($val['path'], $tc_path) !== false)
 		{
 			$tc_cats[] = "'$key'";
 		}

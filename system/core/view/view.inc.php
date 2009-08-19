@@ -18,7 +18,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 $v = sed_import('v','G','TXT');
 
-if (strstr($v, '.') || strstr($v, '/'))
+if (mb_strpos($v, '.') !== false || mb_strpos($v, '/') !== false)
 	{ die('Wrong URL.'); }
 
 $incl_html = "datas/html/".$v.".html";
@@ -57,7 +57,7 @@ if (preg_match('@<body[^>]*?>(.*?)</body>@si', $vd, $ext_body)==1)
 
 $vt = '&nbsp;';
 
-if (mb_stristr($ext_head,'<meta name="sed_title"') !== false)
+if (mb_stripos($ext_head, '<meta name="sed_title"') !== false)
 	{
 	$vt = mb_stristr($ext_head, '<meta name="sed_title"');
 	$vt = mb_stristr($vt, 'content="');
