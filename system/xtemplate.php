@@ -111,7 +111,7 @@ class XTemplate
 	 */
 	public function get_var($name)
 	{
-		if (strstr($name, '.'))
+		if (mb_strpos($name, '.') !== false)
 		{
 			$sub = explode('.', $name);
 			$var =& $this->vars[$sub[0]];

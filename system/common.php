@@ -80,7 +80,7 @@ if($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .=
 define('SED_SITE_URI', $sys['site_uri']);
 if(empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
-$sys['host'] = strstr($_SERVER['HTTP_HOST'], $sys['domain']) ? $_SERVER['HTTP_HOST'] : $sys['domain'];
+$sys['host'] = (mb_stripos($_SERVER['HTTP_HOST'], $sys['domain']) !== false) ? $_SERVER['HTTP_HOST'] : $sys['domain'];
 $sys['abs_url'] = $url['scheme'] . '://' . $sys['host']. $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
 
@@ -486,10 +486,10 @@ if (!$cfg['disablehitstats'])
 	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
 
 	if (!empty($sys['referer'])
-		&& @!stristr($sys['referer'], $cfg['mainurl'])
-		&& @!stristr($sys['referer'], $cfg['hostip'])
-		&& @!stristr($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl']))
-		&& @!stristr(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']))
+		&& mb_stripos($sys['referer'], $cfg['mainurl']) === false
+		&& mb_stripos($sys['referer'], $cfg['hostip']) === false
+		&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === false
+		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === false)
 	{
 		sed_sql_query("INSERT INTO $db_referers
 				(ref_url, ref_count, ref_date)

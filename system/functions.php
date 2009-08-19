@@ -879,7 +879,7 @@ function sed_build_comments($code, $url, $display = true)
 
 	if ($cfg['disable_comments'] || !$usr['auth_read_com']) return (array('',''));
 
-	$sep = strstr($url, '?') ? '&amp;' : '?';
+	$sep = (mb_strpos($url, '?') !== false) ? '&amp;' : '?';
 
 	$ina = sed_import('ina','G','ALP');
 	$ind = sed_import('ind','G','INT');
@@ -1527,7 +1527,7 @@ function sed_build_ratings($code, $url, $display)
 		return array($rating_fancy, '');
 	}
 
-	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
+	$sep = (mb_strpos($url, '?') !== false) ? '&amp;' : '?';
 
 	$inr = sed_import('inr','G','ALP');
 	$newrate = sed_import('rate_' . $code,'P','INT');
@@ -1597,7 +1597,7 @@ function sed_build_ratings($code, $url, $display)
 	if (!$called && $usr['id'] > 0 && !$alreadyvoted)
 	{
 		// Link JS and CSS
-		$sep = mb_strstr($url, '?') ? '&' : '?';
+		$sep = (mb_strpos($url, '?') !== false) ? '&' : '?';
 		$t->assign('RATINGS_AJAX_REQUEST', $url . $sep .'ajax=1');
 		$t->parse('RATINGS.RATINGS_INCLUDES');
 		$called = true;
@@ -1608,7 +1608,7 @@ function sed_build_ratings($code, $url, $display)
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$sep = mb_strstr($url, '?') ? '&amp;' : '?';
+	$sep = (mb_strpos($url, '?') !== false) ? '&amp;' : '?';
 
 	if ($yetrated)
 	{
@@ -2837,7 +2837,7 @@ function sed_load_smilies()
 				}
 			}
 		}
-		elseif(strstr($line, 'smileSet'))
+		elseif (mb_strpos($line, 'smileSet') !== false)
 		{
 			$started = true;
 		}
@@ -3147,7 +3147,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 		return '';
 	}
 	$each_side = 3; // Links each side
-	$address = strstr($url, '?') ? $url . '&amp;'.$characters.'=' : $url . '?'.$characters.'=';
+	$address = $url . ((mb_strpos($url, '?') !== false) ? '&amp;' : '?') . $characters . '=';
 
 	$totalpages = ceil($entries / $perpage);
 	$currentpage = floor($current / $perpage) + 1;
@@ -3223,7 +3223,7 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 
 	global $L;
 
-	$address = strstr($url, '?') ? $url . '&amp;'.$characters.'=' : $url . '?'.$characters.'=';
+	$address = $url . ((mb_strpos($url, '?') !== false) ? '&amp;' : '?') . $characters . '=';
 	$totalpages = ceil($entries / $perpage);
 	$currentpage = floor($current / $perpage) + 1;
 
@@ -3361,14 +3361,7 @@ function sed_pfs_thumbpath($userid)
  */
 function sed_readraw($file)
 {
-	if(!strstr($file, '..') && file_exists($file))
-	{
-		return file_get_contents($file);
-	}
-	else
-	{
-		return 'File not found : '.$file;
-	}
+	return (mb_strpos($file, '..') === false && file_exists($file)) ? file_get_contents($file) : 'File not found : ' . $file;
 }
 
 /**
@@ -3981,7 +3974,7 @@ function sed_shield_update($shield_add, $shield_newaction)
 function sed_skinfile($base, $plug = false, $admn = false)
 {
 	global $usr, $cfg;
-	if (strstr($base, '.')) $base = explode('.', $base);
+	if (mb_strpos($base, '.') !== false) $base = explode('.', $base);
 	$bname = is_array($base) ? $base[0] : $base;
 	if($plug || !$admn)
 	{
@@ -4558,7 +4551,7 @@ function sed_load_urltrans()
 		$parts[1] == '*' ? $rule['params'] = array() : mb_parse_str($parts[1], $rule['params']);
 		foreach($rule['params'] as $key => $val)
 		{
-			if(strstr($val, '|'))
+			if (mb_strpos($val, '|') !== false)
 			{
 				$rule['params'][$key] = explode('|', $val);
 			}
