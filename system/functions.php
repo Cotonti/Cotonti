@@ -789,6 +789,40 @@ function sed_post_parse($text, $area = '')
 	return $text;
 }
 
+/**
+ * Cuts the page after 'more' tag or after the first page (if multipage)
+ *
+ * @global $L
+ * @param string ptr $html Page body
+ * @param string $url Page URL
+ * @return string
+ */
+function sed_cut_more($html, $url)
+{
+	global $L;
+    $mpos = mb_strpos($html, '<!--more-->');
+    if ($mpos === false)
+    {
+        $mpos = mb_strpos($html, '[more]');
+    }
+    if ($mpos !== false)
+    {
+        $html = mb_substr($html, 0, $mpos);
+        $html .= "<span class=\"readmore\"><a href=\"$url\">{$L['ReadMore']}</a></span>";
+    }
+    $mpos = mb_strpos($html, '[newpage]');
+    if ($mpos !== false)
+    {
+        $html = mb_substr($html, 0, $mpos);
+        $html .= "<span class=\"readmore\"><a href=\"$url\">{$L['ReadMore']}</a></span>";
+    }
+    if (mb_strpos($html, '[title]'))
+    {
+        $html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
+    }
+    return $html;
+}
+
 /*
  * =========================== Output forming functions ===========================
  */

@@ -34,7 +34,7 @@ foreach($categories as $k => $v)
     $checkin = isset($sed_cat[$v[0]]);
     if($checkin)
     {
-        if($k==0)
+        if(empty($indexcat))
         {
             $indexcat=$v[0];
             $individual=$v[1];
@@ -67,13 +67,13 @@ require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 {
     $limit = $cfg['plugin']['news']['maxpages'];
-    sed_get_news($c, "news", "INDEX_NEWS", $limit, $d);
+        $t->assign("INDEX_NEWS", sed_get_news($c, "news", $limit, $d, true));
     if(!empty($cats) && !$one)
     {
         foreach($cats as $k => $v)
         {
             $dadd = ($cfg['plugin']['news']['syncpagination'])? $d : $v[2];
-            sed_get_news($v[0], "news.".$v[0], "INDEX_NEWS_".strtoupper($v[0]), $v[1], $dadd);
+            $t->assign("INDEX_NEWS_".strtoupper($v[0]), sed_get_news($v[0], "news", $v[1], $dadd));
         }
     }
 }
