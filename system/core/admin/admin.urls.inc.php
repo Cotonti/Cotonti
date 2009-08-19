@@ -27,7 +27,7 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 $site_uri = SED_SITE_URI;
 
 // Server type detection
-if(stristr($_SERVER['SERVER_SOFTWARE'], 'apache'))
+if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'apache') !== false)
 {
 	$serv_type = 'apache';
 	$conf_name = '.htaccess';
@@ -46,7 +46,7 @@ END;
 	$loc = '';
 	$hta_error = 'ErrorDocument';
 }
-elseif(stristr($_SERVER['SERVER_SOFTWARE'], 'iis'))
+elseif (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'iis') !== false)
 {
 	$serv_type = 'iis';
 	$conf_name = 'IsapiRewrite4.ini';
@@ -58,7 +58,7 @@ elseif(stristr($_SERVER['SERVER_SOFTWARE'], 'iis'))
 	$re = '';
 	$loc = '/';
 }
-elseif(stristr($_SERVER['SERVER_SOFTWARE'], 'nginx'))
+elseif (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false)
 {
 	$serv_type = 'nginx';
 	$conf_name = 'nginx.conf';
@@ -248,14 +248,14 @@ if($a == 'save')
 		{
 			foreach($params as $key => $val)
 			{
-				if($key != '*' && $val != '*' && !strstr($val, '|'))
+				if ($key != '*' && $val != '*' && mb_strpos($val, '|') === false)
 				{
 					$qs .= '&' . $key . '=' . urlencode($val);
 				}
 			}
 		}
 		// Correct the query string
-		if(stristr($format, '?'))
+		if (mb_stripos($format, '?') !== false)
 		{
 			if(empty($qs))
 			{
@@ -281,7 +281,7 @@ if($a == 'save')
 	if($htaccess)
 	{
 		$htdata = file_get_contents('.htaccess');
-		if(mb_strstr($htdata, '### COTONTI URLTRANS ###'))
+		if (mb_strpos($htdata, '### COTONTI URLTRANS ###') !== false)
 		{
 			$htparts = explode('### COTONTI URLTRANS ###', $htdata);
 			$htdata = $htparts[0] . "\n### COTONTI URLTRANS ###\n$hta\n### COTONTI URLTRANS ###\n" . $htparts[2];

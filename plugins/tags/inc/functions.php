@@ -28,7 +28,7 @@ function sed_tag_parse_query($qs)
 			$tag = sed_tag_prep($tokens2[$j]);
 			if(!empty($tag))
 			{
-				if(mb_strstr($tag, '*'))
+				if (mb_strpos($tag, '*') !== false)
 				{
 					$tag = str_replace('*', '%', $tag);
 					$tokens2[$j] = "r.tag LIKE '$tag'";
