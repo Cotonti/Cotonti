@@ -538,7 +538,7 @@ $t->assign(array(
 			$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
 			if($row['ft_maxpages'] > 5)
 			{
-				$address = strstr($row['ft_url'], '?') ? $row['ft_url'] . '&amp;d=' : $row['ft_url'] . '?d=';
+				$address = $row['ft_url'] . ((mb_strpos($row['ft_url'], '?') !== false) ? '&amp;d=' : '?d=');
 				$last_n = ($row['ft_maxpages'] - 1) * $cfg['maxtopicsperpage'];
 				$last_page = '<span class="pagenav_last"><a href="'.$address.$last_n.'">'.$row['ft_maxpages'].'</a></span>';
 			}

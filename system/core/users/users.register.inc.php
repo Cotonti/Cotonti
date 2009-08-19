@@ -85,7 +85,7 @@ if ($a=='add')
 
 	while ($row = sed_sql_fetcharray($sql))
 	{
-		if (strstr($row['banlist_email'], $ruseremail))
+		if (mb_strpos($row['banlist_email'], $ruseremail) !== false)
 		{ $bannedreason = $row['banlist_reason']; }
 	}
 

@@ -34,7 +34,7 @@ if(empty($error_string) && $cfg['plugin']['comedit']['mail'])
 	$email_body  = $L['User'] .' ' . $usr['name'] . ', ' . $L['plu_comlive2'];
 	$email_url = str_replace('&amp;amp;', '&', $url);
 	$email_url = str_replace('&amp;', '&', $email_url);
-	$sep = mb_strstr($email_url, '?') ? '&' : '?';
+	$sep = (mb_strpos($email_url, '?') !== false) ? '&' : '?';
 	$email_body .= $cfg['mainurl'] . '/' . $email_url . $sep . 'comments=1#c' . $newcomm . "\n\n";
 
 	while($adm = sed_sql_fetcharray($sql))
