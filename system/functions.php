@@ -3968,13 +3968,16 @@ function sed_shield_update($shield_add, $shield_newaction)
 /**
  * Returns skin file path
  *
- * @param string $base Item name
+ * @param mixed $base Item name (string), or base names (array)
  * @return string
  */
 function sed_skinfile($base, $plug = false, $admn = false)
 {
 	global $usr, $cfg;
-	if (mb_strpos($base, '.') !== false) $base = explode('.', $base);
+	if (is_string($base) && mb_strpos($base, '.') !== false)
+	{
+		$base = explode('.', $base);
+	}
 	$bname = is_array($base) ? $base[0] : $base;
 	if($plug || !$admn)
 	{

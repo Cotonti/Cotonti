@@ -255,7 +255,7 @@ if($a == 'save')
 			}
 		}
 		// Correct the query string
-		if (mb_stripos($format, '?') !== false)
+		if (mb_strpos($format, '?') !== false)
 		{
 			if(empty($qs))
 			{
