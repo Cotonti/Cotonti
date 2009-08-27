@@ -30,7 +30,7 @@
 						</select>
 						<!-- <div class="variants_{ADMIN_PAG_EXTRAFIELDS_ROW_NAME}" {ADMIN_PAG_EXTRAFIELDS_ROW_VARIANTS_STYLE}> -->
 						<br />
-						<span style="font-size: 80%;">{PHP.L.adm_extrafield_selectable_values}</span>
+						<span style="font-size: 80%;">{PHP.L.adm_extrafield_selectable_values}:</span>
 						<br />
 						<textarea name="field_variants" rows="1" cols="20">{ADMIN_PAG_EXTRAFIELDS_ROW_VARIANTS}</textarea>
 					</td>
