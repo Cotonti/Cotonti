@@ -662,7 +662,7 @@ function sed_obfuscate($text)
 	}
 	$enc_string = substr($enc_string, 0, -1).']';
 	$name = 'a'.sed_unique(8);
-	$script = '<script type="text/javascript">var '.$name.' = '.$enc_string.','.$name.'_d = ""; for(var i = 0; i < '.$name.'.length; i++) { var c = '.$name.'[i]; '.$name.'_d += String.fromCharCode(c); } document.write('.$name.'_d)</script>';
+	$script = '<script type="text/javascript">var '.$name.' = '.$enc_string.','.$name.'_d = ""; for(var ii = 0; ii < '.$name.'.length; ii++) { var c = '.$name.'[ii]; '.$name.'_d += String.fromCharCode(c); } document.write('.$name.'_d)</script>';
 	return $script;
 }
 
