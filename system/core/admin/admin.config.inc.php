@@ -257,12 +257,15 @@ switch($n)
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core' ORDER BY config_cat ASC");
 		while($row = sed_sql_fetcharray($sql))
 		{
-			$t -> assign(array(
-				"ADMIN_CONFIG_ROW_CORE_URL" => sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat']),
-				"ADMIN_CONFIG_ROW_CORE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=core&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-				"ADMIN_CONFIG_ROW_CORE_NAME" => $L["core_".$row['config_cat']]
-			));
-			$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_CORE");
+			if($L["core_".$row['config_cat']])
+			{
+				$t -> assign(array(
+					"ADMIN_CONFIG_ROW_CORE_URL" => sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat']),
+					"ADMIN_CONFIG_ROW_CORE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=config&n=edit&ajax=1&o=core&p='.$row['config_cat'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+					"ADMIN_CONFIG_ROW_CORE_NAME" => $L["core_".$row['config_cat']]
+				));
+				$t -> parse("CONFIG.DEFAULT.ADMIN_CONFIG_ROW_CORE");
+			}
 		}
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='plug' ORDER BY config_cat ASC");
 		while($row = sed_sql_fetcharray($sql))
