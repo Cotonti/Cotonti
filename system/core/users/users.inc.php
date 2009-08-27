@@ -248,7 +248,7 @@ if(count($extrafields) > 0)
 		$uname = strtoupper($extrafield['field_name']);
 		$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title'] : $extrafield['field_description'];
 		$fieldtext = "<a href=\"".sed_url('users', "f=$f&amp;s=".$extrafield['field_name']."&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=".$extrafield['field_name']."&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$fieldtext;
-		$t -> assign('USERS_ROW_'.$uname, $fieldtext);
+		$t -> assign('USERS_TOP_'.$uname, $fieldtext);
 	}
 }
 
@@ -307,9 +307,8 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 	{
 		foreach($extrafields as $i => $extrafield)
 		{
-			$uname = strtoupper($extrafield['field_name']);
-			$t -> assign('USERS_ROW_'.$uname, sed_build_extrafields_data('user', $row['field_type'], $row['field_name'], $urr['user_'.$row['field_name']])); 
-			isset($L['user_'.$extrafield['field_name'].'_title']) ? $t -> assign('USERS_ROW_'.$uname.'_TITLE', $L['user_'.$extrafield['field_name'].'_title']) : $t -> assign('USERS_ROW_'.$uname.'_TITLE', $extrafield['field_description']);
+			$t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']), sed_build_extrafields_data('user', $extrafield['field_type'], $extrafield['field_name'], $urr['user_'.$extrafield['field_name']])); 
+			isset($L['user_'.$extrafield['field_name'].'_title']) ? $t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']).'_TITLE', $L['user_'.$extrafield['field_name'].'_title']) : $t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']).'_TITLE', $extrafield['field_description']);
 		}
 	}
 
