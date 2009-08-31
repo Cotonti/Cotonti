@@ -137,7 +137,7 @@ if ($a=='update')
 				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_title='".sed_sql_prep($rtopictitle)."', ft_desc='".sed_sql_prep($rtopicdesc)."' WHERE ft_id='$q'");
 				$is_first_post = true;
 				$poll_id = sed_import('poll_id','P','TXT');
-				if($poll_id)
+				if($poll_id && !$cfg['disable_polls'])
 				{
 					sed_poll_check();
 					if(empty($error_string))
@@ -222,7 +222,7 @@ $t->assign(array(
 	$t->parse("MAIN.FORUMS_EDITPOST_FIRSTPOST");
 }
 
-if ($is_first_post && $usr['isadmin'] && sed_poll_edit_form($q, $t, 'MAIN.POLL', 'forum'))
+if ($is_first_post && $usr['isadmin'] && !$cfg['disable_polls'] && sed_poll_edit_form($q, $t, 'MAIN.POLL', 'forum'))
 {
     	$t->parse("MAIN.POLL");
 }
