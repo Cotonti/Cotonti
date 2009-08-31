@@ -792,14 +792,12 @@ function sed_post_parse($text, $area = '')
 /**
  * Cuts the page after 'more' tag or after the first page (if multipage)
  *
- * @global $L
  * @param string ptr $html Page body
- * @param string $url Page URL
- * @return string
+ * @return bool
  */
-function sed_cut_more($html, $url)
+function sed_cut_more(&$html)
 {
-	global $L;
+	$cutted = false;
     $mpos = mb_strpos($html, '<!--more-->');
     if ($mpos === false)
     {
@@ -808,19 +806,158 @@ function sed_cut_more($html, $url)
     if ($mpos !== false)
     {
         $html = mb_substr($html, 0, $mpos);
-        $html .= "<span class=\"readmore\"><a href=\"$url\">{$L['ReadMore']}</a></span>";
+        $cutted = true;
     }
     $mpos = mb_strpos($html, '[newpage]');
     if ($mpos !== false)
     {
         $html = mb_substr($html, 0, $mpos);
-        $html .= "<span class=\"readmore\"><a href=\"$url\">{$L['ReadMore']}</a></span>";
+        $cutted = true;
     }
     if (mb_strpos($html, '[title]'))
     {
         $html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
     }
-    return $html;
+    return $cutted;
+}
+
+/**
+ * Truncates text.
+ *
+ * Cuts a string to the length of $length
+ *
+ * @param string  ptr $text String to truncate.
+ * @param integer $length Length of returned string, including ellipsis.
+ * @param boolean $considerhtml If true, HTML tags would be handled correctly * 
+ * @param boolean $exact If false, $text will not be cut mid-word
+ * @return boolean true if string is trimmed.
+ */
+function sed_string_truncate(&$html, $length = 100, $considerhtml = true, $exact = false)
+{
+    if ($considerhtml)
+    {
+        // if the plain text is shorter than the maximum length, return the whole text
+        if (mb_strlen(preg_replace('/<.*?>/', '', $html)) <= $length)
+        {
+            return false;
+        }
+        // splits all html-tags to scanable lines
+        preg_match_all('/(<.+?>)?([^<>]*)/s', $html, $lines, PREG_SET_ORDER);
+
+        $total_length = 0;
+        $open_tags = array();
+        $truncate = '';
+
+        foreach ($lines as $line_matchings)
+        {
+            // if there is any html-tag in this line, handle it and add it (uncounted) to the output
+            if (!empty($line_matchings[1]))
+            {
+                // if it's an "empty element" with or without xhtml-conform closing slash (f.e. <br/>)
+                if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1]))
+                {
+                    // do nothing
+                    // if tag is a closing tag (f.e. </b>)
+                }
+                elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings))
+                {
+                    // delete tag from $open_tags list
+                    $pos = array_search($tag_matchings[1], $open_tags);
+                    if ($pos !== false)
+                    {
+                        unset($open_tags[$pos]);
+                    }
+                    // if tag is an opening tag (f.e. <b>)
+                }
+                elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings))
+                {
+                    // add tag to the beginning of $open_tags list
+                    array_unshift($open_tags, mb_strtolower($tag_matchings[1]));
+                }
+                // add html-tag to $truncate'd text
+                $truncate .= $line_matchings[1];
+            }
+
+            // calculate the length of the plain text part of the line; handle entities as one character
+            $content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
+            if ($total_length+$content_length> $length)
+            {
+                // the number of characters which are left
+                $left = $length - $total_length;
+                $entities_length = 0;
+                // search for html entities
+                if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
+                {
+                    // calculate the real length of all entities in the legal range
+                    foreach ($entities[0] as $entity)
+                    {
+                        if ($entity[1]+1-$entities_length <= $left)
+                        {
+                            $left--;
+                            $entities_length += mb_strlen($entity[0]);
+                        }
+                        else
+                        {
+                            // no more characters left
+                            break;
+                        }
+                    }
+                }
+                $truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length);
+                // maximum lenght is reached, so get off the loop
+                break;
+            }
+            else
+            {
+                $truncate .= $line_matchings[2];
+                $total_length += $content_length;
+            }
+
+            // if the maximum length is reached, get off the loop
+            if($total_length >= $length)
+            {
+                break;
+            }
+        }
+    }
+    else
+    {
+        if (mb_strlen($html) <= $length)
+        {
+            return false;
+        }
+        else
+        {
+            $truncate = mb_substr($html, 0, $length);
+        }
+    }
+
+    if (!$exact)
+    {
+        // ...search the last occurance of a space...
+        if (mb_strrpos($truncate, ' ')>0)
+        {
+            $pos1 = mb_strrpos($truncate, ' ');
+            $pos2 = mb_strrpos($truncate, '>');
+            $spos = ($pos2 < $pos1) ? $pos1 : ($pos2+1);
+            if (isset($spos))
+            {
+                // ...and cut the text in this position
+                $truncate = mb_substr($truncate, 0, $spos);
+            }
+        }
+    }
+    if ($considerhtml)
+    {
+        // close all unclosed html-tags
+        foreach ($open_tags as $tag)
+        {
+            $truncate .= '</' . $tag . '>';
+        }
+    }
+    $html =  $truncate;
+    return true;
+
 }
 
 /*

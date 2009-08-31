@@ -36,13 +36,15 @@ foreach($categories as $k => $v)
     {
         if(empty($indexcat))
         {
-            $indexcat=$v[0];
-            $individual=$v[1];
+            $indexcat = $v[0];
+            $individual = $v[1];
+            $symblim = ((int)$v[2]>0) ? $v[2] : 0;
         }
         else
         {
-            $v[2] = sed_import($v[0].'d','G','INT');
-            $v[2] = (empty($v[2])) ? '0' : $v[2];
+            $v[3] = sed_import($v[0].'d','G','INT');
+            $v[3] = (empty($v[3])) ? 0 : $v[3];
+            $v[2] = ((int)$v[2]>0) ? $v[2] : 0;
             $v[1] = (empty($v[1])) ? $limit : $v[1];
             $cats[$v[0]] = $v;
         }
@@ -67,13 +69,14 @@ require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 {
     $limit = $cfg['plugin']['news']['maxpages'];
-        $t->assign("INDEX_NEWS", sed_get_news($c, "news", $limit, $d, true));
+   // echo $symblim;
+        $t->assign("INDEX_NEWS", sed_get_news($c, "news", $limit, $d, $symblim, true));
     if(!empty($cats) && !$one)
     {
         foreach($cats as $k => $v)
         {
-            $dadd = ($cfg['plugin']['news']['syncpagination'])? $d : $v[2];
-            $t->assign("INDEX_NEWS_".strtoupper($v[0]), sed_get_news($v[0], "news", $v[1], $dadd));
+            $dadd = ($cfg['plugin']['news']['syncpagination'])? $d : $v[3];
+            $t->assign("INDEX_NEWS_".strtoupper($v[0]), sed_get_news($v[0], "news.".$v[0], $v[1], $dadd, $v[2]));
         }
     }
 }

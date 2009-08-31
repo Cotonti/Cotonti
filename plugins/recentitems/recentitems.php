@@ -46,13 +46,13 @@ require_once $cfg['plugins_dir'].'/recentitems/inc/recentitems.functions.php';
 $totalrecent[]=0;
 if($cfg['plugin']['recentitems']['newpages'] && !$cfg['disable_page'] && (empty($mode) || $mode == 'pages'))
 {
-    $res = sed_build_recentpages('recentitems.pages', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $cfg['plugin']['recentitems']['rightscan']);
+    $res = sed_build_recentpages('recentitems.pages', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $pagetitlelimit, $cfg['plugin']['recentitems']['newpagestext'], $cfg['plugin']['recentitems']['rightscan']);
     $t-> assign("RECENT_PAGES", $res);
 }
 
 if($cfg['plugin']['recentitems']['newforums'] && !$cfg['disable_forums'] && (empty($mode) || $mode == 'forums'))
 {
-    $res = sed_build_recentforums('recentitems.forums', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $cfg['plugin']['recentitems']['rightscan']);
+    $res = sed_build_recentforums('recentitems.forums', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $forumtitlelimit, $cfg['plugin']['recentitems']['rightscan']);
     $t-> assign("RECENT_FORUMS", $res);
 }
 

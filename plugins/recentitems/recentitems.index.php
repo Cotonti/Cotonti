@@ -26,13 +26,13 @@ require_once(sed_langfile('recentitems'));
 
 if($cfg['plugin']['recentitems']['recentpages'] && !$cfg['disable_page'])
 {
-    $res = sed_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['rightscan']);
+    $res = sed_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
     $t-> assign("PLUGIN_LATESTPAGES", $res);
 }
 
 if($cfg['plugin']['recentitems']['recentforums'] && !$cfg['disable_forums'])
 {
-    $res = sed_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['rightscan']);
+    $res = sed_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
     $t-> assign("PLUGIN_LATESTTOPICS", $res);
 }
 

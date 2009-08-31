@@ -28,5 +28,7 @@ $L['Template']='Template';
 $L['Template_help']='If additional news category template does not exits in {YOUR_SKIN}/plugins folder, system will use main news template';
 $L['Newscat_exists']='This news category has already been chosen. Please choose another one or delete this category';
 $L['Unsetadd']= 'Do not use additional category if it is same as main category';
+$L['Newsautocut']='Post length limit';
+$L['Newsautocutdesc']='This will display only specified number characters with paragraphs from the beginning of news posts. By default the cutting option is disabled.';
 
 ?>

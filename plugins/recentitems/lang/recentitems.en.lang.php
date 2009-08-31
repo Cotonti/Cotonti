@@ -24,6 +24,11 @@ $L['cfg_newforums']=array('Recent forums in standalone module');
 $L['cfg_newadditional']=array('Additional modules in standalone module');
 $L['cfg_itemsperpage']=array('Elements per page in standalone module');
 $L['cfg_rightscan']=array('Enable prescanning category rights');
+$L['cfg_recentpagestitle']=array('Recent pages title length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
+$L['cfg_recentpagestext']=array('Recent pages text length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
+$L['cfg_recentforumstitle']=array('Recent forums title length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
+$L['cfg_newpagestext']=array('New pages text length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
+
 
 /**
  * Plugin Body
