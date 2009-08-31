@@ -40,14 +40,17 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
             {
                 $index=$v[0];
                 $indexd=(!empty($v[1])) ? 'checked=checked' : '';
+                $indexz=((int)$v[2]>0) ? $v[2] : '';
             }
             else
             {
                 $jj++;
+                $v[2]=((int)$v[2]>0) ? $v[2] : '';
                 $tt-> assign(array(
         "ADDNUM" => $jj,
         "ADDCATEGORY" => $v[0],
         "ADDCOUNT" => $v[1],
+        "ADDCUT" => $v[2],
                     ));
                 $tt->parse("ADMIN.ADDITIONAL");
             }
@@ -62,12 +65,14 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
         "ADDNUM" => 'new',
         "ADDCATEGORY" => '',
         "ADDCOUNT" => '',
+        "ADDCUT" => '',
         ));
     $tt->parse("ADMIN.ADDITIONAL");
 
     $tt-> assign(array(
     "MAINCATEGORY" => $newscat,
     "UNSETADD" => $indexd,
+    "MAINCUT"  => $indexz,
     "CATNUM" => $jj
         ));
     $tt->parse("ADMIN");

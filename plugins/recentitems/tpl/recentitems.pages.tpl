@@ -14,7 +14,7 @@
         {PHP.L.Owner}</td>
         <td class="coltop" style="width:56px;">
         {PHP.L.Comments}</td>
-        <td class="coltop" style="width:56px;">
+        <td class="coltop" style="width:86px;">
         {PHP.L.Ratings}</td>
 
     </tr>

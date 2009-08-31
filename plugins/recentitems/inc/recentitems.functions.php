@@ -9,7 +9,7 @@
  * @license BSD
  */
 if ( !defined('SED_CODE') ) { die("Wrong URL."); }
-function sed_build_recentforums($template, $mode='recent', $maxperpage='5', $d=0, $rightprescan=true)
+function sed_build_recentforums($template, $mode='recent', $maxperpage='5', $d=0, $titlelength=0, $rightprescan=true)
 {
     global $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $skin, $usr, $sys;
     $recentitems = new XTemplate(sed_skinfile($template, true));
@@ -56,6 +56,13 @@ ORDER by fs_masterid DESC, fs_order ASC");
         $row['ft_postisnew'] = FALSE;
         $row['ft_pages'] = '';
         $ft_num++;
+        if((int)$titlelength>0)
+        {
+            if(sed_string_truncate($row['ft_title'], $titlelength, false))
+            {
+                $row['ft_title'].="...";
+            }
+        }
         $build_forum=sed_build_forums($row['ft_sectionid'], sed_cutstring($forum_cats[$row['ft_sectionid']]['fs_title'],24), sed_cutstring($forum_cats[$row['ft_sectionid']]['fs_category'],16));
         $build_forum_full=sed_build_forums($row['ft_sectionid'], sed_cutstring($forum_cats[$row['ft_sectionid']]['fs_title'],24), sed_cutstring($forum_cats[$row['ft_sectionid']]['fs_category'],16), true, array($forum_cats[$row['ft_sectionid']]['fs_masterid'],$forum_cats[$row['ft_sectionid']]['fs_mastername']));
         $build_forum_short="<a href=\"".sed_url('forums', 'm=topics&s='.$row['ft_sectionid']).'">'.htmlspecialchars(sed_cutstring(stripslashes($forum_cats[$row['ft_sectionid']]['fs_title']),16))."</a>";
@@ -178,7 +185,7 @@ if (empty($extrafields_pag))
     /* ===== */
 }
 
-function sed_build_recentpages($template, $mode='recent', $maxperpage='5', $d=0, $rightprescan=true, $cat='')
+function sed_build_recentpages($template, $mode='recent', $maxperpage='5', $d=0, $titlelength=0, $textlength=0, $rightprescan=true, $cat='')
 {
     global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag,
     $usr, $extrafields_pag;
@@ -226,11 +233,63 @@ function sed_build_recentpages($template, $mode='recent', $maxperpage='5', $d=0,
     {
         $jj++;
         $catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
+        if((int)$titlelength>0)
+        {
+            if(sed_string_truncate($pag['page_title'], $titlelength, false))
+            {
+                $pag['page_title'].="...";
+            }
+        }
         $pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', 'id='.$pag['page_id']) : sed_url('page', 'al='.$pag['page_alias']);
         $pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".htmlspecialchars($pag['page_title'])."</a>";
 
         $item_code = 'p'.$pag['page_id'];
         list($pag['page_comments'], $pag['page_comments_display']) = sed_build_comments($item_code, $pag['page_pageurl'], FALSE);
+        list($pag['page_ratings'], $pag['page_ratings_display']) = sed_build_ratings($item_code, $pag['page_pageurl'], $ratings);
+
+        switch($pag['page_type'])
+        {
+            case 2:
+                if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
+                {
+                    ob_start();
+                    eval($pag['page_text']);
+                    $recentitems -> assign("PAGE_ROW_TEXT", ob_get_clean());
+                }
+                else
+                {
+                    $recentitems -> assign("PAGE_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
+                }
+                break;
+
+            case 1:
+                $pag_more = ((int)$textlength>0) ? sed_string_truncate($pag['page_text'], $textlength) : sed_cut_more($pag['page_text']);
+                $recentitems -> assign("PAGE_ROW_TEXT", $pag['page_text']);
+                break;
+
+            default:
+                if($cfg['parser_cache'])
+                {
+                    if(empty($pag['page_html']))
+                    {
+                        $pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+                        sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
+                    }
+                    $pag['page_html'] = ($cfg['parsebbcodepages']) ?  $pag['page_html'] : htmlspecialchars($pag['page_text']);
+                    $pag_more = ((int)$textlength>0) ? sed_string_truncate($pag['page_html'], $textlength) : sed_cut_more($pag['page_html']);
+                    $pag['page_html'] = sed_post_parse($pag['page_html'], 'pages');
+                    $recentitems -> assign('PAGE_ROW_TEXT', $pag['page_html']);
+                }
+                else
+                {
+                    $pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+                    $pag_more = ((int)$textlength>0) ? sed_string_truncate($pag['page_html'], $textlength) : sed_cut_more($pag['page_html']);
+                    $pag['page_html'] = sed_post_parse($pag['page_html'], 'pages');
+                    $recentitems -> assign('PAGE_ROW_TEXT', $pag['page_html']);
+                }
+                break;
+        }
+
 
         $recentitems -> assign(array(
             "PAGE_ROW_URL" => $pag['page_pageurl'],
@@ -245,6 +304,7 @@ function sed_build_recentpages($template, $mode='recent', $maxperpage='5', $d=0,
             "PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
             "PAGE_ROW_KEY" => htmlspecialchars($pag['page_key']),
             "PAGE_ROW_DESC" => htmlspecialchars($pag['page_desc']),
+            "PAGE_ROW_MORE" => ($pag_more) ? "<span class='readmore'><a href='".$pag['page_pageurl']."'>{$L['ReadMore']}</a></span>" : "",
             "PAGE_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
             "PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
             "PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
@@ -254,52 +314,10 @@ function sed_build_recentpages($template, $mode='recent', $maxperpage='5', $d=0,
             "PAGE_ROW_COUNT" => $pag['page_count'],
             "PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
             "PAGE_ROW_COMMENTS" => $pag['page_comments'],
-            "PAGE_ROW_RATINGS" => "<img src=\"skins/".$usr['skin']."/img/system/vote".round($pag['rating_average'],0).".gif\" alt=\"\" />",
+            "PAGE_ROW_RATINGS" => $pag['page_ratings'],
             "PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj),
             "PAGE_ROW_NUM" => $jj,
             ));
-
-        switch($pag['page_type'])
-        {
-            case 1:
-                $pag['page_text']=sed_cut_more($pag['page_text'], $pag['page_pageurl']);
-                $recentitems->assign("PAGE_ROW_TEXT", $pag['page_text']);
-                break;
-
-            case 2:
-                if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-                {
-                    ob_start();
-                    eval($pag['page_text']);
-                    $recentitems->assign("PAGE_ROW_TEXT", ob_get_clean());
-                }
-                else
-                {
-                    $recentitems->assign("PAGE_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
-                }
-                break;
-
-            default:
-                if($cfg['parser_cache'])
-                {
-                    if(empty($pag['page_html']))
-                    {
-                        $pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-                        sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
-                    }
-                    $pag['page_html']=sed_cut_more($pag['page_html'], $pag['page_pageurl']);
-                    $cfg['parsebbcodepages'] ? $recentitems->assign('PAGE_ROW_TEXT', sed_post_parse($pag['page_html'], 'pages'))
-                    : $recentitems->assign('PAGE_ROW_TEXT', htmlspecialchars($pag['page_text']));
-                }
-                else
-                {
-                    $pag['page_text'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-                    $pag['page_text'] = sed_cut_more($pag['page_text'], $pag['page_pageurl']);
-                    $pag['page_text'] = sed_post_parse($pag['page_text'], 'pages');
-                    $recentitems->assign('PAGE_ROW_TEXT', $pag['page_text']);
-                }
-                break;
-        }
         // data from extra fields
         foreach ($extrafields_pag as $row)
         {

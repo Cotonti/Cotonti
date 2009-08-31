@@ -502,14 +502,19 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'rss', '02', 'rss_timetolive', 2, '30', '', 'Refresh RSS cache every N seconds'),
 ('core', 'rss', '03', 'rss_maxitems', 2, '40', '', 'Max. items in RSS feed'),
 ('core', 'rss', '04', 'rss_charset', 4, 'UTF-8', '', 'RSS charset'),
-('plug', 'recentitems', '3', 'recentforums', 3, '1', '', 'Recent forums on index'),
-('plug', 'recentitems', '4', 'maxtopics', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed'),
-('plug', 'recentitems', '7', 'itemsperpage', 2, '10', '1,2,3,5,10,20,30,50,100,150,200,300,500', 'Elements per page in standalone module'),
-('plug', 'recentitems', '6', 'newforums', 3, '1', '', 'Recent forums in standalone module'),
-('plug', 'recentitems', '5', 'newpages', 3, '1', '', 'Recent pages in standalone module'),
-('plug', 'recentitems', '2', 'maxpages', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed'),
-('plug', 'recentitems', '1', 'recentpages', 3, '1', '', 'Recent pages on index'),
-('plug', 'recentitems', '8', 'rightscan', 3, '1', '', 'Enable prescanning category rights'); 
+('plug', 'recentitems', '23', 'rightscan', 3, '1', '', 'Enable prescanning category rights'),
+('plug', 'recentitems', '21', 'newadditional', 3, '0', '', 'Additional modules in standalone module'),
+('plug', 'recentitems', '22', 'itemsperpage', 2, '10', '1,2,3,5,10,20,30,50,100,150,200,300,500', 'Elements per page in standalone module'),
+('plug', 'recentitems', '17', 'recentforumstitle', 1, '', '', 'Recent forums title length limit'),
+('plug', 'recentitems', '18', 'newpages', 3, '1', '', 'Recent pages in standalone module'),
+('plug', 'recentitems', '19', 'newpagestext', 1, '', '', 'New pages text length limit'),
+('plug', 'recentitems', '20', 'newforums', 3, '1', '', 'Recent forums in standalone module'),
+('plug', 'recentitems', '16', 'maxtopics', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed'),
+('plug', 'recentitems', '15', 'recentforums', 3, '1', '', 'Recent forums on index'),
+('plug', 'recentitems', '14', 'recentpagestext', 1, '', '', 'Recent pages text length limit'),
+('plug', 'recentitems', '13', 'recentpagestitle', 1, '', '', 'Recent pages title length limit'),
+('plug', 'recentitems', '12', 'maxpages', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed'),
+('plug', 'recentitems', '11', 'recentpages', 3, '1', '', 'Recent pages on index');
 
 CREATE TABLE `sed_core` (
   `ct_id` mediumint(8) NOT NULL auto_increment,

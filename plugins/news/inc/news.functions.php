@@ -29,7 +29,7 @@ $news_extp = sed_getextplugins('news.loop');
 $news_tags_extp = sed_getextplugins('news.tags');
     /* ===== */
 
-function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $deftag=false)
+function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0, $deftag=false)
 {
     global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag,
     $usr, $sed_dbc, $sed_urltrans, $c, $extrafields_pag, $news_extp, $news_tags_extp, $news_first_extp;
@@ -60,7 +60,7 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $deftag=false)
     {
         foreach ($news_first_extp as $pl)
         {
-            include_once("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
+            include("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
         }
     }
     /* ===== */
@@ -101,6 +101,49 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $deftag=false)
         list($pag['page_comments'], $pag['page_comments_display']) = sed_build_comments($item_code, $pag['page_pageurl'], FALSE);
         list($pag['page_ratings'], $pag['page_ratings_display']) = sed_build_ratings($item_code, $pag['page_pageurl'], $ratings);
 
+        switch($pag['page_type'])
+        {
+            case 2:
+                if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
+                {
+                    ob_start();
+                    eval($pag['page_text']);
+                    $news->assign("PAGE_ROW_TEXT", ob_get_clean());
+                }
+                else
+                {
+                    $news->assign("PAGE_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
+                }
+                break;
+
+            case 1:
+                $pag_more = ((int)$textlength>0) ? sed_string_truncate($pag['page_text'], $textlength) : sed_cut_more($pag['page_text']);
+                $news->assign("PAGE_ROW_TEXT", $pag['page_text']);
+                break;
+
+            default:
+                if($cfg['parser_cache'])
+                {
+                    if(empty($pag['page_html']))
+                    {
+                        $pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+                        sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
+                    }
+                    $pag['page_html'] = ($cfg['parsebbcodepages']) ?  $pag['page_html'] : htmlspecialchars($pag['page_text']);
+                    $pag_more = ((int)$textlength>0) ? sed_string_truncate($pag['page_html'], $textlength) : sed_cut_more($pag['page_html']);
+                    $pag['page_html'] = sed_post_parse($pag['page_html'], 'pages');
+                    $news->assign('PAGE_ROW_TEXT', $pag['page_html']);
+                }
+                else
+                {
+                    $pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+                    $pag_more = ((int)$textlength>0) ? sed_string_truncate($pag['page_html'], $textlength) : sed_cut_more($pag['page_html']);
+                    $pag['page_html'] = sed_post_parse($pag['page_html'], 'pages');
+                    $news->assign('PAGE_ROW_TEXT', $pag['page_html']);
+                }
+                break;
+        }
+
         $news-> assign(array(
             "PAGE_ROW_URL" => $pag['page_pageurl'],
             "PAGE_ROW_ID" => $pag['page_id'],
@@ -115,6 +158,7 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $deftag=false)
             "PAGE_ROW_CATICON" => $sed_cat[$pag['page_cat']]['icon'],
             "PAGE_ROW_KEY" => htmlspecialchars($pag['page_key']),
             "PAGE_ROW_DESC" => htmlspecialchars($pag['page_desc']),
+            "PAGE_ROW_MORE" => ($pag_more) ? "<span class='readmore'><a href='".$pag['page_pageurl']."'>{$L['ReadMore']}</a></span>" : "",
             "PAGE_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
             "PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
             "PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
@@ -129,48 +173,6 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $deftag=false)
             "PAGE_ROW_NUM" => $jj,
             ));
 
-        switch($pag['page_type'])
-        {
-            case 1:
-                $pag['page_text']=sed_cut_more($pag['page_text'], $pag['page_pageurl']);
-                $news->assign("PAGE_ROW_TEXT", $pag['page_text']);
-                break;
-
-            case 2:
-                if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-                {
-                    ob_start();
-                    eval($pag['page_text']);
-                    $news->assign("PAGE_ROW_TEXT", ob_get_clean());
-                }
-                else
-                {
-                    $news->assign("PAGE_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
-                }
-                break;
-
-            default:
-                if($cfg['parser_cache'])
-                {
-                    if(empty($pag['page_html']))
-                    {
-                        $pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-                        sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
-                    }
-                    $pag['page_html']=sed_cut_more($pag['page_html'], $pag['page_pageurl']);
-                    $cfg['parsebbcodepages'] ? $news->assign('PAGE_ROW_TEXT', sed_post_parse($pag['page_html'], 'pages'))
-                    : $news->assign('PAGE_ROW_TEXT', htmlspecialchars($pag['page_text']));
-                }
-                else
-                {
-                    $pag['page_text'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-                    $pag['page_text'] = sed_cut_more($pag['page_text'], $pag['page_pageurl']);
-                    $pag['page_text'] = sed_post_parse($pag['page_text'], 'pages');
-                    $news->assign('PAGE_ROW_TEXT', $pag['page_text']);
-                }
-                break;
-        }
-
         // data from extra fields
         foreach ($extrafields_pag as $row)
         {
@@ -184,7 +186,7 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $deftag=false)
         {
             foreach ($news_extp as $pl)
             {
-                include_once("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
+                include("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
             }
         }
         /* ===== */
@@ -208,7 +210,7 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $deftag=false)
     {
         foreach ($news_tags_extp as $pl)
         {
-            include_once("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
+            include("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
         }
     }
         /* ===== */
