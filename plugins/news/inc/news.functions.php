@@ -164,7 +164,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         {
             foreach ($extp as $pl)
             {
-                include_once("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
+                include("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
             }
         }
         /* ===== */
