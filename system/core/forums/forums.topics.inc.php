@@ -382,7 +382,7 @@ $t->assign(array(
 	"FORUMS_TOPICS_TITLE_LASTPOST" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=updated&w=".rev($w))."\">".$L['Lastpost']." ".cursort($o=='updated', $w)."</a>"
 	));
 
-if ($fs_allowpolls)
+if ($fs_allowpolls && !$cfg['disable_polls'])
 	{
 
 $t->assign(array(
