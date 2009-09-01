@@ -103,7 +103,7 @@ if ($cfg['check_updates'])
 	{
 		if(ini_get('allow_url_fopen'))
 		{
-			$update_info = file_get_contents('http://www.cotonti.com/update-check');
+			$update_info = @file_get_contents('http://www.cotonti.com/update-check');
 			if($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
