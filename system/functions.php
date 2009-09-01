@@ -1887,27 +1887,27 @@ function sed_build_timegap($t1,$t2)
 	}
 	elseif($gap<60)
 	{
-		$result  = sed_declension($gap,$L['Seconds']);
+		$result  = sed_declension($gap,$Ls['Seconds']);
 	}
 	elseif($gap<3600)
 	{
 		$gap = floor($gap/60);
-		$result = sed_declension($gap,$L['Minutes']);
+		$result = sed_declension($gap,$Ls['Minutes']);
 	}
 	elseif($gap<86400)
 	{
 		$gap1 = floor($gap/3600);
 		$gap2 = floor(($gap-$gap1*3600)/60);
-		$result = sed_declension($gap1,$L['Hours']).' ';
+		$result = sed_declension($gap1,$Ls['Hours']).' ';
 		if ($gap2>0)
 		{
-			$result .= sed_declension($gap2,$L['Minutes']);
+			$result .= sed_declension($gap2,$Ls['Minutes']);
 		}
 	}
 	else
 	{
 		$gap = floor($gap/86400);
-		$result = sed_declension($gap,$L['Days']);
+		$result = sed_declension($gap,$Ls['Days']);
 	}
 
 	return $result;
@@ -1925,7 +1925,7 @@ function sed_build_timezone($tz)
 
 	$result = 'GMT';
 
-	$result .= sed_declension($tz,$L['Hours']);
+	$result .= sed_declension($tz,$Ls['Hours']);
 
 	return $result;
 }

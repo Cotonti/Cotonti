@@ -136,7 +136,7 @@ if (!SED_AJAX)
 				$usr['messages'] = sed_sql_result($sqlpm,0,'COUNT(*)');
 			}
 			$out['pmreminder'] = "<a href=\"".sed_url('pm')."\">";
-			$out['pmreminder'] .= ($usr['messages']>0) ? sed_declension($usr['messages'],$L['hea_privatemessages']) : $L['hea_noprivatemessages'];
+			$out['pmreminder'] .= ($usr['messages']>0) ? sed_declension($usr['messages'],$Ls['Privatemessages']) : $L['hea_noprivatemessages'];
 			$out['pmreminder'] .= "</a>";
 		}
 
