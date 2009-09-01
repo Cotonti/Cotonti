@@ -70,7 +70,7 @@ $L['Create'] = 'Create';
 $L['Custom'] = 'Custom';
 $L['Database'] = 'Database';
 $L['Date'] = 'Date';
-$L['Days'] = array('days','day');
+$L['Days'] = 'Days';
 $L['Default'] = 'Default';
 $L['Delete'] = 'Delete';
 $L['Deleted'] = 'Deleted';	// New in N-0.1.0
@@ -122,7 +122,7 @@ $L['Hits'] = 'Hits';
 $L['Home'] = 'Home';
 $L['Hook'] = 'Hook';
 $L['Hooks'] = 'Hooks';
-$L['Hours'] = array('hours','hour');
+$L['Hours'] = 'Hours';
 $L['Icon'] = 'Icon (URL)';
 $L['ICQ'] = 'ICQ Number';
 $L['Id'] = 'ID';
@@ -164,7 +164,7 @@ $L['Menus'] = 'Menu Slots';
 $L['Message'] = 'Message';
 $L['Messages'] = 'Messages';
 $L['Minlevel'] = 'Min.level';
-$L['Minutes'] = array('minutes','minute');
+$L['Minutes'] = 'Minutes';
 $L['Moderators'] = 'Moderators';
 $L['Module'] = 'Module';
 $L['Modules'] = 'Modules';
@@ -255,7 +255,7 @@ $L['Right'] = 'Right';
 $L['Rights'] = 'Rights';
 $L['Rss_feeds'] = 'RSS feeds'; // New in N-0.7.0
 $L['Search'] = 'Search';
-$L['Seconds'] = array('seconds','second');
+$L['Seconds'] = 'Seconds';
 $L['Section'] = 'Section';
 $L['Sections'] = 'Sections';
 $L['Security'] = 'Security';
@@ -333,6 +333,20 @@ $L['Yes'] = 'Yes';
 $L['YIM'] = 'Yahoo Messenger';
 
 /**
+ * sed_declension arrays
+ */
+
+$Ls['Days'] = array('days','day');
+$Ls['Hours'] = array('hours','hour');
+$Ls['Minutes'] = array('minutes','minute');
+$Ls['Seconds'] = array('seconds','second');
+
+$Ls['Guests'] = array('guests','guest');
+$Ls['Members'] = array('members','member');
+
+$Ls['Pprivatemessages'] = array('new private messages','new private message');
+
+/**
  * Months
  */
 
@@ -361,8 +375,6 @@ $L['Gender_U'] = 'Unknown';
  * Common Entries
  */
 
-$L['com_guests'] = array('guests','guest');
-$L['com_members'] = array('members','member');
 $L['com_skinfail'] = 'Warning, failed to load your prefered skin, check your profile';
 $L['com_themefail'] = 'Warning, failed to load your prefered theme for the prefered skin, please check your profile and update values';	// New in N-0.0.2
 
@@ -371,7 +383,6 @@ $L['com_themefail'] = 'Warning, failed to load your prefered theme for the prefe
  */
 
 $L['hea_noprivatemessages'] = 'No private messages';
-$L['hea_privatemessages'] = array('new private messages','new private message');
 $L['hea_valqueues'] = 'In validation queues: ';
 $L['hea_youareloggedas'] = 'Logged in as';
 $L['hea_youarenotlogged'] = 'You\'re not logged in.';
@@ -382,7 +393,6 @@ $L['hea_youarenotlogged'] = 'You\'re not logged in.';
 
 $L['foo_poweredby'] = 'Powered by';
 $L['foo_created'] = 'Page created in';
-$L['foo_seconds'] = array('seconds','second');
 $L['foo_sqlqueries'] = 'SQL queries';
 $L['foo_sqltotal'] = 'SQL total time';
 $L['foo_sqlaverage'] = 'Average SQL time';

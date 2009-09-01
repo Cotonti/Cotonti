@@ -430,7 +430,7 @@ $lang = $usr['lang'];
 
 /* ======== Who's online part 2 ======== */
 
-$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['whosonline_reg_count'],$L['com_members']).', '.sed_declension($sys['whosonline_vis_count'],$L['com_guests']);
+$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['whosonline_reg_count'],$Ls['Members']).', '.sed_declension($sys['whosonline_vis_count'],$Ls['Guests']);
 
 /* ======== Skin ======== */
 
