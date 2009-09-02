@@ -828,7 +828,7 @@ function sed_cut_more(&$html)
  *
  * @param string  ptr $text String to truncate.
  * @param integer $length Length of returned string, including ellipsis.
- * @param boolean $considerhtml If true, HTML tags would be handled correctly * 
+ * @param boolean $considerhtml If true, HTML tags would be handled correctly *
  * @param boolean $exact If false, $text will not be cut mid-word
  * @return boolean true if string is trimmed.
  */
@@ -1330,7 +1330,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), 
 		isset($L[$rowname.'_'.$row['field_name'].'_title']) ? $t->assign($tpl_tag.'_'.strtoupper($row['field_name']).'_TITLE', $L[$rowname.'_'.$row['field_name'].'_title']) : $t->assign($tpl_tag.'_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
 		$t1 = $tpl_tag.'_'.strtoupper($row['field_name']);
 		$t2 = $row['field_html'];
-		switch($row['field_type']) 
+		switch($row['field_type'])
 		{
 			case "input":
 				$t2 = str_replace('<input ','<input name="'.$importrowname.$row['field_name'].'" ', $t2);
@@ -1367,10 +1367,10 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), 
 					{
 						$var_text = (!empty($L[$rowname.'_'.$row['field_name'].'_'.$var])) ? $L[$rowname.'_'.$row['field_name'].'_'.$var] : $var;
 						$sel = ($var == $data[$rowname.'_'.$row['field_name']]) ? ' checked="checked"' : '';
-						$buttons .= str_replace('/>', 'value="'.$var.'"'.$sel.' />'.$var_text.'&nbsp;&nbsp;', $t2);	
+						$buttons .= str_replace('/>', 'value="'.$var.'"'.$sel.' />'.$var_text.'&nbsp;&nbsp;', $t2);
 					}
 				$t2 = $buttons;
-			break;		
+			break;
 		}
 		$return_arr[$t1] = $t2;
 	}
@@ -5191,7 +5191,7 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 	if ($description != $field['field_description'])
 		$extf['description'] = $description;
 	$step1 = sed_sql_update($db_extra_fields, "field_name = '$oldname' AND field_location='$sql_table'", $extf, 'field_') == 1;
-	
+
 	if (!$alter) return $step1;
 
 	switch ($type)
