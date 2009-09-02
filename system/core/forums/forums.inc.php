@@ -16,6 +16,11 @@
 defined('SED_CODE') or die('Wrong URL');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', 'any');
+/* === Hook === */
+$extp = sed_getextplugins('forums.sections.rights');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
 sed_block($usr['auth_read']);
 
 $id = sed_import('id','G','INT');

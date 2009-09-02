@@ -30,6 +30,11 @@ $quote = sed_import('quote','G','INT');
 sed_die(empty($s));
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
+/* === Hook === */
+$extp = sed_getextplugins('forums.topics.rights');
+if (is_array($extp))
+{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+/* ===== */
 sed_block($usr['auth_read']);
 
 function rev($sway)

@@ -48,6 +48,12 @@ if ($row = sed_sql_fetcharray($sql))
 	$fp_updater = $row['fp_updater'];
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
+	
+	/* === Hook === */
+	$extp = sed_getextplugins('forums.editpost.rights');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
 
 	if (!$usr['isadmin'] && $fp_posterid!=$usr['id'])
 	{
