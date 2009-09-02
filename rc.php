@@ -14,6 +14,9 @@
  * @license BSD
  */
 
+// Required for PHP 5.3
+require_once './datas/config.php';
+
 /*
  * List of known content types based on file extension.
  * Note: These must be built-in somewhere...
