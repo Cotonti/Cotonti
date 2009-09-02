@@ -7,7 +7,7 @@ http://www.neocrome.net
 
 /**
  * @package Cotonti
- * @version 0.6.2
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -34,18 +34,49 @@ require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
 $sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
-/* ======== Configuration settings (from the DB) ======== */
-
-$sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
-
-while ($row = sed_sql_fetcharray($sql_config))
+/* ======== Cache Subsystem ======== */
+require_once $cfg['system_dir'] . '/cache.php';
+// Enable cache storages that are always available
+$cot_file_cache = new File_cache();
+$cot_query_cache = new Query_cache();
+// Select the default cache driver
+$cnt = count($cache_drivers);
+if ($cnt > 0)
 {
-	if ($row['config_owner']=='core')
-	{ $cfg[$row['config_name']] = $row['config_value']; }
-	else
-	{ $cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value']; }
+	$driver_name = $cache_drivers[$cnt - 1];
+	$cot_cache = new $driver_name();
+}
+else
+{
+	$cot_cache = $cot_query_cache;
 }
 
+/* ======== Configuration settings ======== */
+
+if ($cfg['cache'] && $cot_file_cache->exists('cfg', 'system'))
+{
+	$cfg = array_merge($cot_file_cache->get('cfg', 'system'), $cfg);
+}
+else
+{
+	$sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
+
+	while ($row = sed_sql_fetcharray($sql_config))
+	{
+		if ($row['config_owner'] == 'core')
+		{
+			$cfg[$row['config_name']] = $row['config_value'];
+		}
+		else
+		{
+			$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
+		}
+	}
+	$cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
+	$cfg['css'] = $cfg['defaultskin'];
+
+	$cfg['cache'] && $cot_file_cache->store('cfg', $cfg, 'system');
+}
 // Mbstring options
 mb_internal_encoding($cfg['charset']);
 
@@ -55,8 +86,6 @@ $sys['day'] = @date('Y-m-d');
 $sys['now'] = time();
 $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 $online_timedout = $sys['now'] - $cfg['timedout'];
-$cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
-$cfg['css'] = $cfg['defaultskin'];
 if($cfg['clustermode'])
 {
 	if(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
