@@ -7,7 +7,7 @@ http://www.neocrome.net
 
 /**
  * @package Cotonti
- * @version 0.6.2
+ * @version 0.6.3
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -17,15 +17,19 @@ defined('SED_CODE') or die('Wrong URL');
 
 /* ======== First... ======== */
 
-if (version_compare(PHP_VERSION, '5.3.0', '>='))
+if (version_compare(PHP_VERSION, '6.0.0', '<='))
 {
-	define('MQGPC', FALSE);
+	if (get_magic_quotes_gpc())
+	{
+		function sed_disable_mqgpc(&$value, $key)
+		{
+			$value = stripslashes($value);
+		}
+		$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
+		array_walk_recursive($gpc, 'sed_disable_mqgpc');
+	}
 }
-else
-{
-	set_magic_quotes_runtime(0);
-	define('MQGPC', get_magic_quotes_gpc());
-}
+define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
 
 /* ======== Connect to the SQL DB======== */
@@ -418,7 +422,7 @@ $dlang = $cfg['system_dir'].'/lang/en/main.lang.php';
 $mlang = $cfg['system_dir'].'/lang/'.$cfg['defaultlang'].'/main.lang.php';
 $ulang = $cfg['system_dir'].'/lang/'.$usr['lang'].'/main.lang.php';
 
-if (file_exists($dlang)) 
+if (file_exists($dlang))
 { require_once($dlang); $dlangne = 1;}
 if (file_exists($ulang) && $usr['lang']!='en')
 {require_once($ulang);}
@@ -537,10 +541,7 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
 
-if (empty($sys['xk']))
-{
-	$sys['xk'] = $_SESSION['sourcekey']; // Normal per-session key
-}
+$sys['xk'] = empty($_SESSION['sourcekey']) ? $usr['user_sid'] : $_SESSION['sourcekey'];
 
 $x = empty($_POST['x']) ? $_GET['x'] : $_POST['x'];
 if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
