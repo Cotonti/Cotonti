@@ -542,7 +542,7 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 if ($usr['id'] > 0)
 {
 	$sys['xk'] = empty($_SESSION['sourcekey']) ?
-		$usr['user_sid'] // Use a key from previous session, or some form data will be lost
+		$usr['profile']['user_sid'] // Use a key from previous session, or some form data will be lost
 		:
 		$_SESSION['sourcekey'] // Normal per-session key
 		;
