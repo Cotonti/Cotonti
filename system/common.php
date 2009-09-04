@@ -243,7 +243,6 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
 				}
 
-
 				if (!$cfg['authcache'] || empty($row['user_auth']))
 				{
 					$usr['auth'] = sed_auth_build($usr['id'], $usr['maingrp']);
@@ -281,6 +280,11 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				unset($update_hashsalt);
 
 			}
+			sys['xk'] = empty($_SESSION['sourcekey']) ?
+				$row['user_sid'] // Use a key from previous session, or some form data will be lost
+				:
+				$_SESSION['sourcekey'] // Normal per-session key
+				;
 		}
 	}
 	else
@@ -539,15 +543,7 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
 
-if ($usr['id'] > 0)
-{
-	$sys['xk'] = empty($_SESSION['sourcekey']) ?
-		$usr['profile']['user_sid'] // Use a key from previous session, or some form data will be lost
-		:
-		$_SESSION['sourcekey'] // Normal per-session key
-		;
-}
-else
+if (empty($sys['xk'])
 {
 	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['abs_url']))); // Site related key for guests
 }
