@@ -241,7 +241,9 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$sys['comingback']= TRUE;
 					$usr['lastvisit'] = $usr['lastlog'];
 					$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
+					$sys['xk'] = $row['user_sid']; // Use a key from previous session, or some form data will be lost
 				}
+
 
 				if (!$cfg['authcache'] || empty($row['user_auth']))
 				{
@@ -280,11 +282,6 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				unset($update_hashsalt);
 
 			}
-			sys['xk'] = empty($_SESSION['sourcekey']) ?
-				$row['user_sid'] // Use a key from previous session, or some form data will be lost
-				:
-				$_SESSION['sourcekey'] // Normal per-session key
-				;
 		}
 	}
 	else
@@ -301,6 +298,7 @@ if($usr['id']==0)
 	$usr['skin'] = empty($usr['skin']) ? $cfg['defaultskin'] : $usr['skin'];
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
 	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
+	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['abs_url']))); // Site related key for guests
 }
 
 /* === Hook === */
@@ -543,17 +541,14 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
 
-if (empty($sys['xk'])
-{
-	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['abs_url']))); // Site related key for guests
-}
+$sys['xk'] = empty($_SESSION['sourcekey']) ? $usr['user_sid'] : $_SESSION['sourcekey'];
 
 $x = empty($_POST['x']) ? $_GET['x'] : $_POST['x'];
 if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
 	&& ($_SERVER['REQUEST_METHOD'] == 'POST'&& $x != $sys['xk']
 		|| isset($_GET['x']) && $_GET['x'] != $sys['xk']))
 {
-	sed_redirect(sed_url('message', 'msg=950', '', true));
+	sed_redirect(sed_url('message', 'msg=951', '', true));
 	exit;
 }
 
