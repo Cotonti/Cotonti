@@ -241,7 +241,6 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$sys['comingback']= TRUE;
 					$usr['lastvisit'] = $usr['lastlog'];
 					$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
-					$sys['xk'] = $row['user_sid']; // Use a key from previous session, or some form data will be lost
 				}
 
 
@@ -269,18 +268,24 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$update_hashsalt = "user_hashsalt = '$hashsalt',";
 				}
 
-				if(empty($_SESSION['sourcekey']))
+				if(empty($_COOKIE['sourcekey']))
 				{
-					$_SESSION['sourcekey'] = mb_strtoupper(sed_unique(8));
+					$sys['xk'] = mb_strtoupper(sed_unique(8));
+					$update_sid = "user_sid = '{$sys['xk']}',";
+					sed_setcookie('sourcekey', $sys['xk'], time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 				}
-				$usr['sessionid'] = $_SESSION['sourcekey'];
+				else
+				{
+					$sys['xk'] = $_COOKIE['sourcekey'];
+					$update_sid = '';
+				}
 
-				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', user_lastip='".$usr['ip']."', user_sid='".$usr['sessionid']."', $update_hashsalt user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
+				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', $update_sid $update_hashsalt user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
 
 				unset($u);
 				unset($passhash);
 				unset($update_hashsalt);
-
+				unset($update_sid);
 			}
 		}
 	}
@@ -540,8 +545,6 @@ $usr['timetext'] = sed_build_timezone($usr['timezone']);
 $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
-
-$sys['xk'] = empty($_SESSION['sourcekey']) ? $usr['user_sid'] : $_SESSION['sourcekey'];
 
 $x = empty($_POST['x']) ? $_GET['x'] : $_POST['x'];
 if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
