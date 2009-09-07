@@ -91,6 +91,9 @@ function ajaxSend(settings) {
 }
 
 $(document).ready(function() {
+	if (location.hash == '#comments' || location.hash.match(/#c\d+/)) {
+		$('.comments').css('display', '');
+	}
 	$('.comments_link').click(function() {
 		if($('.comments').css('display') == 'none') {
 			$('.comments').css('display', '');
