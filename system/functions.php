@@ -1185,7 +1185,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), 
 			case "checkbox":
 				$t2 = str_replace('<input','<input name="'.$importrowname.$row['field_name'].'"', $t2);
 				$sel = ($data[$rowname.'_'.$row['field_name']] == 1) ? ' checked' : '';
-				$t2 = str_replace('<input ','<input value="'.htmlspecialchars($data[$rowname.'_'.$row['field_name']]).'" '.$sel.' ', $t2);
+				$t2 = str_replace('<input ','<input value="on" '.$sel.' ', $t2);
 			break;
 			case "radio":
 				$t2 = str_replace('<input','<input name="'.$importrowname.$row['field_name'].'"', $t2);

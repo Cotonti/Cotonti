@@ -79,8 +79,7 @@ if ($a=='add')
 		$import = sed_import('newpage'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
 		{
-			if ($import == "0" OR $import == "on") $import = 1;
-			else $import = 0;
+			$import = $import != '';
 		}
 		$newpageextrafields[] = $import;
 	}
