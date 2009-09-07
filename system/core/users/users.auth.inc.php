@@ -76,7 +76,7 @@ if ($a=='check')
 
 		$hashsalt = sed_unique(16);
 
-		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_hashsalt = '$hashsalt' WHERE user_id={$row['user_id']}");
+		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_hashsalt = '$hashsalt' WHERE user_id={$row['user_id']}");
 
 		$passhash = md5($rmdpass.$hashsalt);
 		$u = base64_encode($ruserid.':_:'.$passhash);
