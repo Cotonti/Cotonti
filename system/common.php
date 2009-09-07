@@ -239,15 +239,18 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now_offset'])
 				{
 					$sys['comingback']= TRUE;
-					$usr['lastvisit'] = $usr['lastlog'];
-					$sys['sql_update_lastvisit'] = ", user_lastvisit='".$usr['lastvisit']."'";
+					if ($usr['lastlog'] > $usr['lastvisit'])
+					{
+						$usr['lastvisit'] = $usr['lastlog'];
+						$update_lastvisit = ", user_lastvisit = " . $usr['lastvisit'];
+					}
 				}
 
 
 				if (!$cfg['authcache'] || empty($row['user_auth']))
 				{
 					$usr['auth'] = sed_auth_build($usr['id'], $usr['maingrp']);
-					if($cfg['authcache']) $sys['sql_update_auth'] = ", user_auth='".serialize($usr['auth'])."'";
+					if($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
 				}
 
 				if(empty($_SESSION['saltstamp']) || $sys['now_offset'] - $_SESSION['saltstamp'] > 60)
@@ -259,20 +262,22 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$u = base64_encode($usr['id'].':_:'.$passhash);
 					if(empty($_SESSION[$site_id]))
 					{
-						sed_setcookie($site_id, $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+						sed_setcookie($site_id, $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'],
+							$cfg['cookiedomain'], $sys['secure'], true);
 					}
 					else
 					{
 						$_SESSION[$site_id] = $u;
 					}
-					$update_hashsalt = "user_hashsalt = '$hashsalt',";
+					$update_hashsalt = ", user_hashsalt = '$hashsalt',";
 				}
 
 				if(empty($_COOKIE['sourcekey']))
 				{
 					$sys['xk'] = mb_strtoupper(sed_unique(8));
-					$update_sid = "user_sid = '{$sys['xk']}',";
-					sed_setcookie('sourcekey', $sys['xk'], time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+					$update_sid = ", user_sid = '{$sys['xk']}',";
+					sed_setcookie('sourcekey', $sys['xk'], time()+$cfg['cookielifetime'], $cfg['cookiepath'],
+						$cfg['cookiedomain'], $sys['secure'], true);
 				}
 				else
 				{
@@ -280,12 +285,11 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$update_sid = '';
 				}
 
-				$sql = sed_sql_query("UPDATE $db_users SET user_lastlog='".$sys['now_offset']."', $update_sid $update_hashsalt user_logcount=user_logcount+1 ".$sys['sql_update_lastvisit']." ".$sys['sql_update_auth']." WHERE user_id='".$usr['id']."'");
+				sed_sql_query("UPDATE $db_users
+					SET user_lastlog = {$sys['now_offset']} $update_lastvisit $update_sid $update_hashsalt $update_auth
+					WHERE user_id='{$usr['id']}'");
 
-				unset($u);
-				unset($passhash);
-				unset($update_hashsalt);
-				unset($update_sid);
+				unset($u, $passhash, $update_auth, $update_hashsalt, $update_lastvisit, $update_sid);
 			}
 		}
 	}
