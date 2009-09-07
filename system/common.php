@@ -552,10 +552,10 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 
 $x = empty($_POST['x']) ? $_GET['x'] : $_POST['x'];
 if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
-	&& ($_SERVER['REQUEST_METHOD'] == 'POST'&& $x != $sys['xk']
+	&& ($_SERVER['REQUEST_METHOD'] == 'POST' && $x != $sys['xk']
 		|| isset($_GET['x']) && $_GET['x'] != $sys['xk']))
 {
-	sed_redirect(sed_url('message', 'msg=951', '', true));
+	sed_redirect(sed_url('message', 'msg=950', '', true));
 	exit;
 }
 
