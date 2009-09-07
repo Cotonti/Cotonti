@@ -304,7 +304,7 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				if(empty($_COOKIE['sourcekey']))
 				{
 					$sys['xk'] = mb_strtoupper(sed_unique(8));
-					$update_sid = ", user_sid = '{$sys['xk']}',";
+					$update_sid = ", user_sid = '{$sys['xk']}'";
 					sed_setcookie('sourcekey', $sys['xk'], time()+$cfg['cookielifetime'], $cfg['cookiepath'],
 						$cfg['cookiedomain'], $sys['secure'], true);
 				}
