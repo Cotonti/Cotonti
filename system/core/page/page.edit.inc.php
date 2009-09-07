@@ -96,8 +96,7 @@ if ($a=='update')
 		$import = sed_import('rpage'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
 		{
-			if ($import == "0") $import = 1;
-			if ($import == "") $import = 0;
+			$import = $import != '';
 		}
 		$rpageextrafields[] = $import;
 	}
