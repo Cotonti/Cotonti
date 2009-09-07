@@ -298,7 +298,7 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					{
 						$_SESSION[$site_id] = $u;
 					}
-					$update_hashsalt = ", user_hashsalt = '$hashsalt',";
+					$update_hashsalt = ", user_hashsalt = '$hashsalt'";
 				}
 
 				if(empty($_COOKIE['sourcekey']))
