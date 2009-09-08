@@ -63,7 +63,7 @@ elseif($a == 'lock')
 	sed_check_xg();
 	sed_poll_lock($id, 3);
 
-	$adminwarnings = $L['adm_polls_msg916_reset'];
+	$adminwarnings = $L['Locked'];
 }
 elseif($a == 'bump')
 {
