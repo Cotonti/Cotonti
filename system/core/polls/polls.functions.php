@@ -401,8 +401,12 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
     $polldate_short=date($cfg['formatmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600);
     if (empty($formlink)) {$formlink=sed_url('polls', "id=".$id);}
 
+	if($cfg['jquery'] AND $cfg['turnajax'])
+	{
+		$onsubmit="onsubmit=\"return ajaxSend({method: 'POST', formId: 'poll_form_".$id."', url: '".sed_url('polls', 'mode=ajax')."', divId: 'poll_".$id."', errMsg: '".$L['ajaxSenderror']."'});\"";
+	}
 
-    $pollformbegin = "<div id='poll_".$id."'><form action=\"".$formlink."\" method=\"post\" id='poll_form_".$id."' onsubmit=\"return ajaxSend({method: 'POST', formId: 'poll_form_".$id."', url: '".sed_url('polls', 'mode=ajax')."', divId: 'poll_".$id."', errMsg: '".$L['ajaxSenderror']."'});\">";
+    $pollformbegin = "<div id='poll_".$id."'><form action=\"".$formlink."\" method=\"post\" id='poll_form_".$id."' ".$onsubmit.">";
     $pollformend .= "</form></div>";
 
     $poll_form->assign(array(
