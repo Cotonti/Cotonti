@@ -4,15 +4,17 @@
 Seditio - Website engine
 Copyright Neocrome
 http://www.neocrome.net
-[BEGIN_SED]
-File=pfs.view.inc.php
-Version=122
-Updated=2007-oct-10
-Type=Core
-Author=Neocrome
-Description=PFS
-[END_SED]
 ==================== */
+
+/**
+ * Personal File Storage, image display
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @license BSD License
+ */
 
 defined('SED_CODE') or die('Wrong URL');
 
@@ -37,16 +39,9 @@ $f_extension = strtolower(mb_substr($imgpath, $dotpos,4));
 
 if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported) )
 {
-	$pfs_header1 = "<html><head>
-	<meta name=\"title' content=\"".$cfg['maintitle']."\" />
-	<meta name=\"description\" content=\"".$cfg['maintitle']."\" />
-	<meta name=\"generator\" content=\"Seditio-N based by http://www.neocrome.net\" />
-	<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
-	<meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
-	<meta http-equiv=\"pragma\" content\"=no-cache\" />
-	<meta http-equiv=\"cache-control\" content=\"no-cache\" />";
-	$pfs_header2 = "</head><body>";
-	$pfs_footer = "</body></html>";
+	$pfs_header1 = sed_out_pfs_header();
+	$pfs_header2 = $out['pfs_header_end'];
+	$pfs_footer = $out['pfs_footer'];
 	$pfs_img = "<img src=\"".$imgpath."\" alt=\"\" />";
 	$pfs_imgsize = @getimagesize($imgpath);
 
@@ -70,23 +65,23 @@ else
 $t = new XTemplate(sed_skinfile('pfs.view'));
 
 $t->assign(array(
-	"PFSVIEW_HEADER1" => $pfs_header1,
-	"PFSVIEW_HEADER2" => $pfs_header2,
-	"PFSVIEW_FOOTER" => $pfs_footer,
-	"PFSVIEW_FILE_NAME" => $id,
-	"PFSVIEW_FILE_DATE" => @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600),
-	"PFSVIEW_FILE_ID" => $row['pfs_id'],
-	"PFSVIEW_FILE_USERID" => $row['pfs_userid'],
-	"PFSVIEW_FILE_USERNAME" => $pfs_owner,
-	"PFSVIEW_FILE_DESC" => htmlspecialchars($row['pfs_desc']),
-	"PFSVIEW_FILE_COUNT" => $row['pfs_count'],
-	"PFSVIEW_FILE_SIZE" => floor($row['pfs_size']/1024),
-	"PFSVIEW_FILE_SIZEX" => $pfs_imgsize[0],
-	"PFSVIEW_FILE_SIZEY" => $pfs_imgsize[1],
-	"PFSVIEW_FILE_IMAGE" => $pfs_img
+	'PFSVIEW_HEADER1' => $pfs_header1,
+	'PFSVIEW_HEADER2' => $pfs_header2,
+	'PFSVIEW_FOOTER' => $pfs_footer,
+	'PFSVIEW_FILE_NAME' => $id,
+	'PFSVIEW_FILE_DATE' => @date($cfg['dateformat'], $row['pfs_date'] + $usr['timezone'] * 3600),
+	'PFSVIEW_FILE_ID' => $row['pfs_id'],
+	'PFSVIEW_FILE_USERID' => $row['pfs_userid'],
+	'PFSVIEW_FILE_USERNAME' => $pfs_owner,
+	'PFSVIEW_FILE_DESC' => htmlspecialchars($row['pfs_desc']),
+	'PFSVIEW_FILE_COUNT' => $row['pfs_count'],
+	'PFSVIEW_FILE_SIZE' => floor($row['pfs_size']/1024),
+	'PFSVIEW_FILE_SIZEX' => $pfs_imgsize[0],
+	'PFSVIEW_FILE_SIZEY' => $pfs_imgsize[1],
+	'PFSVIEW_FILE_IMAGE' => $pfs_img
 ));
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 ?>

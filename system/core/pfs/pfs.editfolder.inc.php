@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
  Seditio - Website engine
  Copyright Neocrome
@@ -9,7 +9,7 @@
  * Personal File Storage, edit folder.
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -34,8 +34,8 @@ if (!$usr['isadmin'] || $userid=='')
 }
 else
 {
-	$more1 = "?userid=".$userid;
-	$more = "&amp;userid=".$userid;
+	$more1 = '?userid='.$userid;
+	$more = '&amp;userid='.$userid;
 }
 
 if ($userid!=$usr['id'])
@@ -51,35 +51,30 @@ $cfg['pfs_thumbpath'] = sed_pfs_thumbpath($userid);
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
 {
-	$icon[$line[0]] = "<img src=\"images/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
+	$icon[$line[0]] = sprintf($out['pfs_type_icon'], $line[2], $line[1]);
 	$filedesc[$line[0]] = $line[1];
 }
 
 if (!empty($c1) || !empty($c2))
 {
-	$morejavascript = "
-function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img='+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'; }
-function addpix(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
-	";
-	$more .= "&amp;c1=".$c1."&amp;c2=".$c2;
-	$more1 .= ($more1=='') ? "?c1=".$c1."&amp;c2=".$c2 : "&amp;c1=".$c1."&amp;c2=".$c2;
+	$morejavascript = sprintf($out['pfs_header_javascript'], $c1, $c2);
+	$more .= '&amp;c1='.$c1.'&amp;c2='.$c2;
+	$more1 .= ($more1=='') ? '?c1='.$c1.'&amp;c2='.$c2 : '&amp;c1='.$c1.'&amp;c2='.$c2;
 	$standalone = TRUE;
 }
 
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"pfs.php".$more1."\">".$L['pfs_title']."</a>";
+$title =' "<a href="pfs.php'.$more1.'">'.$L['pfs_title'].'</a>';
 
 if ($userid!=$usr['id'])
 {
 	sed_block($usr['isadmin']);
-	$title .= ($userid==0) ? '' : " (".sed_build_user($user_info['user_id'], $user_info['user_name']).")";
+	$title .= ($userid==0) ? '' : ' ('.sed_build_user($user_info['user_id'], $user_info['user_name']).')';
 }
 
-$title .= " ".$cfg['separator']." ".$L['Edit'];
+$title .= ' '.$cfg['separator'].' '.$L['Edit'];
 
 $sql = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
 
@@ -95,7 +90,7 @@ if ($row = sed_sql_fetcharray($sql))
 	$pff_ispublic = $row['pff_ispublic'];
 	$pff_isgallery = $row['pff_isgallery'];
 	$pff_count = $row['pff_count'];
-	$title .= " ".$cfg['separator']." ".sed_cc($pff_title);
+	$title .= ' '.$cfg['separator'].' '.sed_cc($pff_title);
 }
 else
 { sed_die(); }
@@ -159,6 +154,7 @@ while ($row2 = sed_sql_fetcharray($sql2)) {
 }
 $folderoptions .= '</select>';
 
+// TODO templatize this!
 $body .= "<form id=\"editfolder\" action=\"".sed_url('pfs', "m=editfolder&a=update&f=".$pff_id.$more)."\" method=\"post\"><table class=\"cells\">";
 $body .= "<tr><td>".$L['pfs_parentfolder'].": </td><td>$folderoptions</td></tr>";
 $body .= "<tr><td>".$L['Folder'].": </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
@@ -190,43 +186,42 @@ $body .= "</table></form>";
 
 if ($standalone)
 {
-	$pfs_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
-<script type=\"text/javascript\">
-//<![CDATA[
-function help(rcode,c1,c2)
-	{ window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16'); }
-function addthumb(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img='+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'; }
-function addpix(gfile,c1,c2)
-	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
-function picture(url,sx,sy)
-	{ window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0'); }
-//]]>
-</script>
-";
+	if($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
+	{
+		$addthumb = "'".$cfg['pfs_thumbpath']."' + gfile";
+		$addpix = 'gfile';
+		$addfile = "'".$cfg['pfs_path']."' + gfile";
+	}
+	else
+	{
+		$addthumb = "'[img=".$cfg['pfs_path']."'+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'";
+		$addpix = "'[img]'+gfile+'[/img]'";
+		$addfile = "'[url=".$cfg['pfs_path']."'+gfile+']'+gfile+'[/url]'";
+	}
+	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
+	$pfs_header1 = sed_out_pfs_header($c1, $c2, $winclose, $addthumb, $addpix, $addfile);
 
-	$pfs_header2 = "</head><body>";
-	$pfs_footer = "</body></html>";
+	$pfs_header2 = $out['pfs_header_end'];
+	$pfs_footer = $out['pfs_footer'];
 
 	$t = new XTemplate(sed_skinfile('pfs.editfolder'));
 
 	$t->assign(array(
-		"PFS_STANDALONE_HEADER1" => $pfs_header1,
-		"PFS_STANDALONE_HEADER2" => $pfs_header2,
-		"PFS_STANDALONE_FOOTER" => $pfs_footer,
+		'PFS_STANDALONE_HEADER1' => $pfs_header1,
+		'PFS_STANDALONE_HEADER2' => $pfs_header2,
+		'PFS_STANDALONE_FOOTER' => $pfs_footer,
 	));
 
-	$t->parse("MAIN.STANDALONE_HEADER");
-	$t->parse("MAIN.STANDALONE_FOOTER");
+	$t->parse('MAIN.STANDALONE_HEADER');
+	$t->parse('MAIN.STANDALONE_FOOTER');
 
 	$t-> assign(array(
-		"PFS_TITLE" => $title,
-		"PFS_BODY" => $body
+		'PFS_TITLE' => $title,
+		'PFS_BODY' => $body
 	));
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
+	$t->parse('MAIN');
+	$t->out('MAIN');
 }
 else
 {
@@ -235,13 +230,13 @@ else
 	$t = new XTemplate(sed_skinfile('pfs.editfolder'));
 
 	$t-> assign(array(
-		"PFS_TITLE" => $title,
-		"PFS_ERRORS" => $error_string,
-		"PFS_BODY" => $body
+		'PFS_TITLE' => $title,
+		'PFS_ERRORS' => $error_string,
+		'PFS_BODY' => $body
 	));
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
+	$t->parse('MAIN');
+	$t->out('MAIN');
 
 	require_once $cfg['system_dir'] . '/footer.php';
 }

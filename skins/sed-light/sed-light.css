@@ -142,6 +142,7 @@ h6 	{ font-size:90%; margin:1em 1em 1em 0; }
 li { margin:2px; }
 
 img { border-width:0; }
+img.icon { border: none; }
 ul { list-style-type:square; }
 form { margin:0; }
 .colleft { float:left; margin:0px 4px 0px 4px; }
