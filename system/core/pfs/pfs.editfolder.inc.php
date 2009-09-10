@@ -66,7 +66,7 @@ if (!empty($c1) || !empty($c2))
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title =' "<a href="pfs.php'.$more1.'">'.$L['pfs_title'].'</a>';
+$title = '<a href="pfs.php'.$more1.'">'.$L['pfs_title'].'</a>';
 
 if ($userid!=$usr['id'])
 {
