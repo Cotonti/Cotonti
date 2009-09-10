@@ -1043,7 +1043,7 @@ function sed_build_catpath($cat, $mask)
 // TODO I messed up this code, please see if I did huge mistakes and inform me (oc)
 function sed_build_comments($code, $url, $display = true)
 {
-	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys;
+	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys, $out;
 
 	list($usr['auth_read_com'], $usr['auth_write_com'], $usr['isadmin_com']) = sed_auth('comments', 'a');
 	sed_block($usr['auth_read_com']);
@@ -1263,8 +1263,7 @@ function sed_build_comments($code, $url, $display = true)
 	$t->parse('COMMENTS');
 	$res_display = $t->text('COMMENTS');
 
-	$res = '<a href="' . $url . '#comments" class="comments_link"><img src="skins/' . $usr['skin']
-		. '/img/system/icon-comment.gif" alt="" />';
+	$res = '<a href="' . $url . '#comments" class="comments_link" alt="'.$L['Comments'].'">' . $out['icon_comments'];
 
 	if ($cfg['countcomments'])
 	{
@@ -1420,7 +1419,7 @@ function sed_build_flag($flag)
 {
 	global $sed_countries;
 	$flag = (empty($flag)) ? '00' : $flag;
-	return '<a href="'.sed_url('users', 'f=country_'.$flag).'" title="'.$sed_countries[$flag].'"><img src="images/flags/f-'.$flag.'.gif" alt="'.$flag.'" /></a>';
+	return '<a href="'.sed_url('users', 'f=country_'.$flag).'" title="'.$sed_countries[$flag].'"><img class="flag" src="images/flags/f-'.$flag.'.gif" alt="'.$flag.'" /></a>';
 }
 
 /**
@@ -1627,8 +1626,8 @@ function sed_build_pfs($id, $c1, $c2, $title)
  */
 function sed_build_pm($user)
 {
-	global $usr, $L;
-	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'"><img src="skins/'.$usr['skin'].'/img/system/icon-pm.gif"  alt="'.$L['pm_sendnew'].'" /></a>';
+	global $usr, $L, $out;
+	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'">'.$out['icon_pm'].'</a>';
 }
 
 /* ------------------ */
@@ -1642,7 +1641,7 @@ function sed_build_pm($user)
  */
 function sed_build_ratings($code, $url, $display)
 {
-	global $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L;
+	global $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L, $out;
 	static $called = false;
 
 	list($usr['auth_read_rat'], $usr['auth_write_rat'], $usr['isadmin_rat']) = sed_auth('ratings', 'a');
@@ -1793,7 +1792,7 @@ function sed_build_ratings($code, $url, $display)
 		{ $rating_average = 10; }
 
 		$rating = round($rating_average,0);
-		$rating_averageimg = "<img src=\"skins/".$usr['skin']."/img/system/vote".$rating.".gif\" alt=\"\" />";
+		$rating_averageimg = $out['ratings_vote'][$rating];
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
 		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
 	}
@@ -1856,11 +1855,12 @@ function sed_build_ratings($code, $url, $display)
  */
 function sed_build_stars($level)
 {
-	global $skin;
+	global $skin, $out;
 
 	if($level>0 and $level<100)
 	{
-		return '<img src="skins/'.$skin.'/img/system/stars'.(floor($level/10)+1).'.gif" alt="" />';
+		$stars = floor($level / 10) + 1;
+		return $out['stars'][$stars];
 	}
 	else
 	{

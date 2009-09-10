@@ -9,7 +9,7 @@
  * Personal File Storage, main usage script.
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -42,8 +42,8 @@ if (!$usr['isadmin'] || empty($userid))
 }
 else
 {
-	$more1 = "?userid=".$userid;
-	$more = "&userid=".$userid;
+	$more1 = '?userid='.$userid;
+	$more = '&userid='.$userid;
 }
 
 if ($userid!=$usr['id'])
@@ -72,29 +72,22 @@ if ($maxfile==0 || $maxtotal==0) { sed_block($usr['isadmin']); }
 
 if (!empty($c1) || !empty($c2))
 {
-	$morejavascript = "
-function addthumb(gfile,c1,c2) {
-	insertText(opener.document, '$c1', '$c2', '[img=".$cfg['pfs_path']."'+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]');
-}
-function addpix(gfile,c1,c2) {
-	insertText(opener.document, '$c1', '$c2', '[img]'+gfile+'[/img]');
-}
-	";
-	$more .= "&c1=".$c1."&c2=".$c2;
-	$more1 .= ($more1=='') ? "?c1=".$c1."&c2=".$c2 : "&c1=".$c1."&c2=".$c2;
+	$morejavascript = $out['pfs_header_javascript'];
+	$more .= '&c1='.$c1.'&c2='.$c2;
+	$more1 .= ($more1=='') ? '?c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
 
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
 {
-	$icon[$line[0]] = "<img src=\"images/pfs/".$line[2].".gif\" alt=\"".$line[1]."\" />";
+	$icon[$line[0]] = sprintf($out['pfs_type_icon'], $line[2], $line[1]);
 	$filedesc[$line[0]] = $line[1];
 }
 
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"".sed_url('pfs', $more1)."\">".$L['pfs_title']."</a>";
+$title = '<a href="'.sed_url('pfs', $more1).'">'.$L['pfs_title'].'</a>';
 
 if ($userid!=$usr['id'])
 {
@@ -159,7 +152,7 @@ case 'upload':
 		sed_die(sed_sql_numrows($sql)==0);
 	}
 
-	$disp_errors = "<ul>";
+	$disp_errors = '<ul>';
 
 	for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
 	{
@@ -291,10 +284,10 @@ case 'upload':
 			{
 				$disp_errors .= $L['pfs_filetoobigorext'];
 			}
-			$disp_errors .= "</li>";
+			$disp_errors .= '</li>';
 		}
 	}
-	$disp_errors .= "</ul>";
+	$disp_errors .= '</ul>';
 break;
 
 case 'uploadify':
@@ -474,7 +467,7 @@ case 'deletefolder':
 	}
 
 	$urlparams = ($fparentid>0) ? 'f='.$fparentid.$more : $more1;
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $urlparams, '', true));
+	header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $urlparams, '', true));
 	exit;
 break;
 }
@@ -520,25 +513,25 @@ while ($row1 = sed_sql_fetcharray($sql1l))
 	$pff_fsize = floor($pff_filessize[$pff_id]/1024);
 	$pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
 	$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
-	$icon_f = ($pff_isgallery) ? "<img src=\"skins/$skin/img/system/icon-gallery.gif\" alt=\"\" />" : "<img src=\"skins/$skin/img/system/icon-folder.gif\" alt=\"\" />";
+	$icon_f = ($pff_isgallery) ? $out['icon_gallery'] : $out['icon_folder'];
 	
 	$t-> assign(array(
-	"PFF_ROW_ID" => $pff_id,
-	"PFF_ROW_TITLE" => $pff_title,
-	"PFF_ROW_COUNT" => $pff_count,
-	"PFF_ROW_FCOUNT" => $pff_fcount,
-	"PFF_ROW_FSIZE" => $pff_fssize,
-	"PFF_ROW_DELETE_URL" => sed_url('pfs', "a=deletefolder&".sed_xg()."&f=".$pff_id.$more),
-	"PFF_ROW_EDIT_URL" => sed_url('pfs', "m=editfolder&f=".$pff_id.$more),
-	"PFF_ROW_URL" => sed_url('pfs', 'f='.$pff_id.$more),
-	"PFF_ROW_ICON" => $icon_f,
-	"PFF_ROW_UPDATED" => date($cfg['dateformat'], $row1['pff_updated'] + $usr['timezone'] * 3600),
-	"PFF_ROW_ISPUBLIC" => $sed_yesno[$pff_ispublic],
-	"PFF_ROW_DESC" => sed_cutstring($pff_desc,32),
-	"PFF_ROW_SELECT" => '<input type="checkbox" name="folderid['.$pff_id.']" />'
+		'PFF_ROW_ID' => $pff_id,
+		'PFF_ROW_TITLE' => $pff_title,
+		'PFF_ROW_COUNT' => $pff_count,
+		'PFF_ROW_FCOUNT' => $pff_fcount,
+		'PFF_ROW_FSIZE' => $pff_fssize,
+		'PFF_ROW_DELETE_URL' => sed_url('pfs', 'a=deletefolder&'.sed_xg().'&f='.$pff_id.$more),
+		'PFF_ROW_EDIT_URL' => sed_url('pfs', "m=editfolder&f=".$pff_id.$more),
+		'PFF_ROW_URL' => sed_url('pfs', 'f='.$pff_id.$more),
+		'PFF_ROW_ICON' => $icon_f,
+		'PFF_ROW_UPDATED' => date($cfg['dateformat'], $row1['pff_updated'] + $usr['timezone'] * 3600),
+		'PFF_ROW_ISPUBLIC' => $sed_yesno[$pff_ispublic],
+		'PFF_ROW_DESC' => sed_cutstring($pff_desc,32),
+		'PFF_ROW_SELECT' => '<input type="checkbox" name="folderid['.$pff_id.']" />'
 	));
 	
-	$t->parse("MAIN.PFF_ROW");
+	$t->parse('MAIN.PFF_ROW');
 	
 	$iki++;
 	$subfiles_count_on_page+=$pff_fcount;
@@ -546,7 +539,7 @@ while ($row1 = sed_sql_fetcharray($sql1l))
 
 $files_count = sed_sql_numrows($sql);
 
-$movebox = (empty($f)) ? sed_selectbox_folders($userid,"/","") : sed_selectbox_folders($userid,"$f","");
+$movebox = (empty($f)) ? sed_selectbox_folders($userid,'/','') : sed_selectbox_folders($userid,$f,'');
 $th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
 $th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
 $iji=0;
@@ -575,7 +568,7 @@ while ($row = sed_sql_fetcharray($sqll))
 	$dotpos = mb_strrpos($pfs_file, ".")+1;
 	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
 	unset($add_thumbnail, $add_image);
-	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastefile.gif\" title=\"Add as file url\" /></a>" : '';
+	$add_file = ($standalone) ? "<a href=\"javascript:addfile('".$pfs_file."','".$c1."','".$c2."')\">{$out['icon_pastefile']}</a>" : '';
 
 	if ($pfs_extension!=$pfs_realext)
 	{
@@ -594,31 +587,31 @@ while ($row = sed_sql_fetcharray($sqll))
 
 		if ($standalone)
 		{
-			$add_thumbnail .= "<a href=\"javascript:addthumb('".$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pastethumb.gif\" title=\"Add thumbnail\" /></a>";
-			$add_image = "<a href=\"javascript:addpix('".$cfg['pfs_path'].$pfs_file."','".$c1."','".$c2."')\"><img src=\"skins/".$skin."/img/system/icon-pasteimage.gif\" title=\"Add image\" /></a>";
+			$add_thumbnail .= "<a href=\"javascript:addthumb('".$pfs_file."','".$c1."','".$c2."')\">{$out['icon_pastethumb']}</a>";
+			$add_image = "<a href=\"javascript:addpix('".$cfg['pfs_path'].$pfs_file."','".$c1."','".$c2."')\">{$out['icon_pasteimage']}</a>";
 		}
 		if ($o=='thumbs')
 		{ $pfs_icon = "<a href=\"".$pfs_fullfile."\"><img src=\"".$cfg['pfs_thumbpath'].$pfs_file."\" title=\"".$pfs_file."\"></a>"; }
 	}
 	
 	$t-> assign(array(
-	"PFS_ROW_ID" => $pfs_id,
-	"PFS_ROW_FILE" => $pfs_file,
-	"PFS_ROW_DATE" => date($cfg['dateformat'], $pfs_date + $usr['timezone'] * 3600),
-	"PFS_ROW_EXT" => $pfs_extension,
-	"PFS_ROW_DESC" => htmlspecialchars($pfs_desc),
-	"PFS_ROW_TYPE" => $filedesc[$pfs_extension],
-	"PFS_ROW_FILE_URL" => $pfs_fullfile,
-	"PFS_ROW_SIZE" => $pfs_filesize,
-	"PFS_ROW_ICON" => $pfs_icon,
-	"PFS_ROW_DELETE_URL" => sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.$more.'&o='.$o),
-	"PFS_ROW_EDIT_URL" => sed_url('pfs', 'm=edit&id='.$pfs_id.$more),
-	"PFS_ROW_COUNT" => $row['pfs_count'],
-	"PFS_ROW_INSERT" => $add_thumbnail.$add_image.$add_file,
-	"PFS_ROW_SELECT" => '<input type="checkbox" name="fileid['.$pfs_id.']" />'
+		'PFS_ROW_ID' => $pfs_id,
+		'PFS_ROW_FILE' => $pfs_file,
+		'PFS_ROW_DATE' => date($cfg['dateformat'], $pfs_date + $usr['timezone'] * 3600),
+		'PFS_ROW_EXT' => $pfs_extension,
+		'PFS_ROW_DESC' => htmlspecialchars($pfs_desc),
+		'PFS_ROW_TYPE' => $filedesc[$pfs_extension],
+		'PFS_ROW_FILE_URL' => $pfs_fullfile,
+		'PFS_ROW_SIZE' => $pfs_filesize,
+		'PFS_ROW_ICON' => $pfs_icon,
+		'PFS_ROW_DELETE_URL' => sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.$more.'&o='.$o),
+		'PFS_ROW_EDIT_URL' => sed_url('pfs', 'm=edit&id='.$pfs_id.$more),
+		'PFS_ROW_COUNT' => $row['pfs_count'],
+		'PFS_ROW_INSERT' => $add_thumbnail.$add_image.$add_file,
+		'PFS_ROW_SELECT' => '<input type="checkbox" name="fileid['.$pfs_id.']" />'
 	));
 	
-	$t->parse("MAIN.PFS_ROW");
+	$t->parse('MAIN.PFS_ROW');
 	
 	$pfs_foldersize = $pfs_foldersize + $pfs_filesize;
 	$iji++;
@@ -643,9 +636,7 @@ while(!empty($parentpath)) {
 	}
 	else { $parentpath = ''; }
 }
-$t->assign(array(
-"PFS_PATH" => $path
-));
+$t->assign('PFS_PATH', $path);
 
 if ($folders_count>0)
 {
@@ -654,13 +645,13 @@ if ($folders_count>0)
 	list($pagination_prevf, $pagination_nextf) = sed_pagination_pn(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2), $df, $totalitemsf, $cfg['maxpfsperpage'], TRUE, 'df');
 	
 	$t->assign(array(
-	"PFF_FOLDERCOUNT" => $folders_count,
-	"PFF_FILESCOUNT" => $subfiles_count,
-	"PFF_ONPAGE_FOLDERS" => $iki,
-	"PFF_ONPAGE_FILES" => $subfiles_count_on_page,
-	"PFF_PAGING_PREV" => $pagination_prevf,
-	"PFF_PAGING_CURRENT" => $pagnavf,
-	"PFF_PAGING_NEXT" => $pagination_nextf,
+		'PFF_FOLDERCOUNT' => $folders_count,
+		'PFF_FILESCOUNT' => $subfiles_count,
+		'PFF_ONPAGE_FOLDERS' => $iki,
+		'PFF_ONPAGE_FILES' => $subfiles_count_on_page,
+		'PFF_PAGING_PREV' => $pagination_prevf,
+		'PFF_PAGING_CURRENT' => $pagnavf,
+		'PFF_PAGING_NEXT' => $pagination_nextf,
 	));
 }
 
@@ -674,12 +665,12 @@ if ($files_count>0)
 	$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];
 	
 	$t->assign(array(
-	"PFS_FILESCOUNT" => $files_count,
-	"PFS_INTHISFOLDER" => $filesinfolder,
-	"PFS_ONPAGE_FILES" => $iji,
-	"PFS_PAGING_PREV" => $pagination_prev,
-	"PFS_PAGING_CURRENT" => $pagnav,
-	"PFS_PAGING_NEXT" => $pagination_next,
+		'PFS_FILESCOUNT' => $files_count,
+		'PFS_INTHISFOLDER' => $filesinfolder,
+		'PFS_ONPAGE_FILES' => $iji,
+		'PFS_PAGING_PREV' => $pagination_prev,
+		'PFS_PAGING_CURRENT' => $pagnav,
+		'PFS_PAGING_NEXT' => $pagination_next,
 	));
 }
 
@@ -688,15 +679,16 @@ if ($files_count>0)
 $showthumbs .= ($o!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? "<a href=\"".sed_url('pfs', 'f='.$f.$more.'&o=thumbs')."\">".$L['Thumbnails']."</a>" : '';
 
 $t->assign(array(
-"PFS_TOTALSIZE" => floor($pfs_totalsize/1024).$L['kb'],
-"PFS_MAXTOTAL" => $maxtotal.$L['kb'],
-"PFS_PERCENTAGE" => @floor(100*$pfs_totalsize/1024/$maxtotal),
-"PFS_MAXFILESIZE" => $maxfile.$L['kb'],
-"PFS_SHOWTHUMBS" => $showthumbs
+	'PFS_TOTALSIZE' => floor($pfs_totalsize/1024).$L['kb'],
+	'PFS_MAXTOTAL' => $maxtotal.$L['kb'],
+	'PFS_PERCENTAGE' => @floor(100*$pfs_totalsize/1024/$maxtotal),
+	'PFS_MAXFILESIZE' => $maxfile.$L['kb'],
+	'PFS_SHOWTHUMBS' => $showthumbs
 ));
 
 // ========== Upload =========
 
+// TODO templatize this!
 if($cfg['flashupload'])
 {
 	$disp_upload .= '<style type="text/css">
@@ -761,9 +753,7 @@ else
 	$disp_upload .= "<input type=\"submit\" class=\"submit\" value=\"".$L['Upload']."\" /></td></tr></table></form>";
 }
 
-$t->assign(array(
-"PFS_UPLOADFORM" => $disp_upload
-));
+$t->assign('PFS_UPLOADFORM', $disp_upload);
 
 // ========== Allowed =========
 
@@ -772,11 +762,11 @@ sort($sed_extensions);
 foreach ($sed_extensions as $k => $line)
 {
 	$t->assign(array(
-	"ALLOWED_ROW_ICON" => $icon[$line[0]],
-	"ALLOWED_ROW_EXT" => $line[0],
-	"ALLOWED_ROW_DESC" => $filedesc[$line[0]]
+		'ALLOWED_ROW_ICON' => $icon[$line[0]],
+		'ALLOWED_ROW_EXT' => $line[0],
+		'ALLOWED_ROW_DESC' => $filedesc[$line[0]]
 	));
-	$t->parse("MAIN.ALLOWED_ROW");
+	$t->parse('MAIN.ALLOWED_ROW');
 }
 
 // ========== Create a new folder =========
@@ -794,12 +784,12 @@ if ($usr['auth_write'])
 	$folderoptions .= '</select>';
 	
 	$t->assign(array(
-	"NEWFOLDER_FORM_ACTION" => "pfs.php?a=newfolder".$more,
-	"NEWFOLDER_FORM_INPUT_TITLE" => "<input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"32\" maxlength=\"64\" />",
-	"NEWFOLDER_FORM_INPUT_DESC" => "<input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"32\" maxlength=\"255\" />",
-	"NEWFOLDER_FORM_INPUT_PARENT" => $folderoptions,
-	"NEWFOLDER_FORM_INPUT_ISPUBLIC" => "<input type=\"radio\" class=\"radio\" name=\"nispublic\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"nispublic\" value=\"0\" checked=\"checked\" />".$L['No'],
-	"NEWFOLDER_FORM_INPUT_ISGALLERY" => "<input type=\"radio\" class=\"radio\" name=\"nisgallery\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"nisgallery\" value=\"0\" checked=\"checked\" />".$L['No']	
+		'NEWFOLDER_FORM_ACTION' => "pfs.php?a=newfolder".$more,
+		'NEWFOLDER_FORM_INPUT_TITLE' => "<input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"32\" maxlength=\"64\" />",
+		'NEWFOLDER_FORM_INPUT_DESC' => "<input type=\"text\" class=\"text\" name=\"ndesc\" value=\"\" size=\"32\" maxlength=\"255\" />",
+		'NEWFOLDER_FORM_INPUT_PARENT' => $folderoptions,
+		'NEWFOLDER_FORM_INPUT_ISPUBLIC' => "<input type=\"radio\" class=\"radio\" name=\"nispublic\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"nispublic\" value=\"0\" checked=\"checked\" />".$L['No'],
+		'NEWFOLDER_FORM_INPUT_ISGALLERY' => "<input type=\"radio\" class=\"radio\" name=\"nisgallery\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"nisgallery\" value=\"0\" checked=\"checked\" />".$L['No']
 	));
 }
 
@@ -827,46 +817,23 @@ if ($standalone)
 		$addfile = "'[url=".$cfg['pfs_path']."'+gfile+']'+gfile+'[/url]'";
 	}
 	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
-	$pfs_header1 = $cfg['doctype']."<html><head>
-<title>".$cfg['maintitle']."</title>".sed_htmlmetas().sed_javascript()."
-<script type=\"text/javascript\">
-//<![CDATA[
-function help(rcode,c1,c2) {
-	window.open('plug.php?h='+rcode+'&amp;c1='+c1+'&amp;c2='+c2,'Help','toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16');
-}
-function addthumb(gfile,c1,c2) {
-	insertText(opener.document, '$c1', '$c2', $addthumb);$winclose
-}
-function addpix(gfile,c1,c2) {
-	insertText(opener.document, '$c1', '$c2', $addpix);$winclose
-}
-function addfile(gfile,c1,c2) {
-	insertText(opener.document, '$c1', '$c2', $addfile);$winclose
-}
-function picture(url,sx,sy) {
-	window.open('pfs.php?m=view&amp;id='+url,'Picture','toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width='+sx+',height='+sy+',left=0,top=0');
-}
-//]]>
-</script>
-";
+	$pfs_header1 = sed_out_pfs_header($c1, $c2, $winclose, $addthumb, $addpix, $addfile);
 
-	$pfs_header2 = "</head><body>";
-	$pfs_footer = "</body></html>";
+	$pfs_header2 = $out['pfs_header_end'];
+	$pfs_footer = $out['pfs_footer'];
 
 	sed_sendheaders();
 
 	$t->assign(array(
-		"PFS_STANDALONE_HEADER1" => $pfs_header1,
-		"PFS_STANDALONE_HEADER2" => $pfs_header2,
-		"PFS_STANDALONE_FOOTER" => $pfs_footer,
+		'PFS_STANDALONE_HEADER1' => $pfs_header1,
+		'PFS_STANDALONE_HEADER2' => $pfs_header2,
+		'PFS_STANDALONE_FOOTER' => $pfs_footer,
 	));
 
-	$t->parse("MAIN.STANDALONE_HEADER");
-	$t->parse("MAIN.STANDALONE_FOOTER");
+	$t->parse('MAIN.STANDALONE_HEADER');
+	$t->parse('MAIN.STANDALONE_FOOTER');
 
-	$t-> assign(array(
-		"PFS_TITLE" => $title
-	));
+	$t->assign('PFS_TITLE', $title);
 
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.standalone');
@@ -874,15 +841,15 @@ function picture(url,sx,sy) {
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
+	$t->parse('MAIN');
+	$t->out('MAIN');
 }
 else
 {
 
-	$t-> assign(array(
-		"PFS_TITLE" => $title,
-		"PFS_ERRORS" => $disp_errors
+	$t->assign(array(
+		'PFS_TITLE' => $title,
+		'PFS_ERRORS' => $disp_errors
 	));
 
 	/* === Hook === */
@@ -891,8 +858,8 @@ else
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
+	$t->parse('MAIN');
+	$t->out('MAIN');
 
 	require_once $cfg['system_dir'] . '/footer.php';
 }

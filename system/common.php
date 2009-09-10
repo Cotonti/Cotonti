@@ -511,10 +511,13 @@ $usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'
 if ($usr['skin_lang']!=$usr['def_skin_lang'] && @file_exists($usr['skin_lang']))
 { require_once($usr['skin_lang']); }
 
-require_once('./skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
-
 $skin = $usr['skin'];
 $theme = $usr['theme'];
+
+// Resource strings
+require_once $cfg['system_dir'] . '/resources.php';
+// Skin resources
+require_once('./skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
 
 $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
 
@@ -559,11 +562,6 @@ if (!$sed_forums_str && !$cfg['disable_forums'])
 }
 
 /* ======== Various ======== */
-
-$out['img_up'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-up.gif\" alt=\"\" style=\"border:none\" />";
-$out['img_down'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-down.gif\" alt=\"\" style=\"border:none\" />";
-$out['img_left'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-left.gif\" alt=\"\" style=\"border:none\" />";
-$out['img_right'] = "<img src=\"skins/".$usr['skin']."/img/system/arrow-right.gif\" alt=\"\" style=\"border:none\" />";
 
 $sed_yesno[0] = $L['No'];
 $sed_yesno[1] = $L['Yes'];
