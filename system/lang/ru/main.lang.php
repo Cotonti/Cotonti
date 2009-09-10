@@ -338,7 +338,7 @@ $L['YIM'] = 'Yahoo Messenger';
 
 $Ls['Days'] = array('день','дня','дней');
 $Ls['Hours'] = array('час','часа','часов');
-$Ls['Minutes'] = array('Минута','Минуты','Минут');
+$Ls['Minutes'] = array('минута','минуты','минут');
 $Ls['Seconds'] = array('секунда','секунды','секунд');
 
 $Ls['Guests'] = array('гость','гостя','гостей');
