@@ -344,7 +344,7 @@ $Ls['Seconds'] = array('seconds','second');
 $Ls['Guests'] = array('guests','guest');
 $Ls['Members'] = array('members','member');
 
-$Ls['Pprivatemessages'] = array('new private messages','new private message');
+$Ls['Privatemessages'] = array('new private messages','new private message');
 
 /**
  * Months
