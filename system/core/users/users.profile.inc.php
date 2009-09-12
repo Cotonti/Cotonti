@@ -493,7 +493,7 @@ switch ($a)
 	{
 		if ($rmonth=='x' || $rday=='x' || $ryear=='x' || empty($rmonth) || empty($rday) || empty($ryear))
 		{
-			$ruserbirthdate = '';
+			$ruserbirthdate = '0000-00-00';
 		}
 		else
 		{
