@@ -269,7 +269,7 @@ INSERT INTO `sed_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('pfs', 'pcre', '\\[pfs\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png|zip|rar|7z|pdf|txt))\\[/pfs\\]', '<strong><a href="datas/users/$1">$1</a></strong>', 1, 1, 128, '', 0);
 
 CREATE TABLE `sed_cache` (
-  `c_name` varchar(16) collate utf8_unicode_ci NOT NULL default '',
+  `c_name` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `c_expire` int(11) NOT NULL default '0',
   `c_auto` tinyint(1) NOT NULL default '1',
   `c_value` text collate utf8_unicode_ci,
