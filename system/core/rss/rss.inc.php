@@ -64,7 +64,8 @@ if (is_array($extp))
 if ($c == "comments")
 {
 	if ($id == 'all')
-	{		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
+	{
+		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 		$rss_description = $L['rss_comments_item_desc'];
 
 		$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code LIKE 'p%' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
@@ -239,7 +240,8 @@ elseif ($c == "section")
 
 			if (!$flag_private AND sed_auth('forums', $forum_id, 'R'))
 			{
-				$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? sed_url('forums', 'm=posts&id='.$post_id, "", true) : sed_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
+				//$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? sed_url('forums', 'm=posts&id='.$post_id, "", true) : sed_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
+				$post_url = sed_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 				$items[$i]['description'] = sed_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
 				$items[$i]['link'] = SED_ABSOLUTE_URL.$post_url;
@@ -278,7 +280,7 @@ elseif ($c == "forums")
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 			$items[$i]['description'] = sed_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
-			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('forums', "m=posts&id=$post_id", "", true);
+			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('forums', "m=posts&p=$post_id", "#$post_id", true);
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 		}
 
@@ -305,7 +307,8 @@ else
 		$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	else
-	{		$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+	{
+		$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	$i = 0;
 	while ($row = mysql_fetch_assoc($sql))
