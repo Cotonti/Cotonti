@@ -32,7 +32,7 @@
 			</tr>
 		</table>
 
-		<div class="paging">{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT} &nbsp; {PHP.L.Page}: {LIST_TOP_CURRENTPAGE}/{LIST_TOP_TOTALPAGES} {PHP.cfg.separator} {PHP.skinlang.list.linesperpage}: {LIST_TOP_MAXPERPAGE} {PHP.cfg.separator} {PHP.skinlang.list.linesinthissection}: {LIST_TOP_TOTALLINES}</div>
+		<div class="paging">{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT} &nbsp; {PHP.L.Page}: {LIST_TOP_CURRENTPAGE} {PHP.L.Of} {LIST_TOP_TOTALPAGES} {PHP.cfg.separator} {PHP.skinlang.list.linesperpage}: {LIST_TOP_MAXPERPAGE} {PHP.cfg.separator} {PHP.skinlang.list.linesinthissection}: {LIST_TOP_TOTALLINES}</div>
 
 		<div class="tCap"></div>
 		<table class="cells">
@@ -49,7 +49,7 @@
 			<tr>
 				<td>
 					<strong><a href="{LIST_ROW_URL}">{LIST_ROW_TITLE}</a></strong> {LIST_ROW_FILEICON}<br />
-					<span class="desc">{LIST_ROW_DESC} ({LIST_ROW_COUNT} {PHP.skinlang.list.hits})</span>
+					<span class="desc">{LIST_ROW_DESC} ({PHP.L.Hits}: {LIST_ROW_COUNT})</span>
 				</td>
 				<td class="centerall">{LIST_ROW_COMMENTS}</td>
 				<td class="centerall">{LIST_ROW_RATINGS}</td>
