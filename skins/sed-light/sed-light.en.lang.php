@@ -83,7 +83,6 @@ $skinlang['index']['Online'] = 'Online';
 
 $skinlang['list']['linesperpage'] = 'Lines per page';
 $skinlang['list']['linesinthissection'] = 'Lines in this section';
-$skinlang['list']['hits'] = 'hits';
 
 /**
  * page.tpl

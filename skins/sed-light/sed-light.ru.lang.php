@@ -83,7 +83,6 @@ $skinlang['index']['Online'] = 'Онлайн';
 
 $skinlang['list']['linesperpage'] = 'Записей на страницу';
 $skinlang['list']['linesinthissection'] = 'Записей в разделе';
-$skinlang['list']['hits'] = 'просмотров';
 
 /**
  * page.tpl
