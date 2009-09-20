@@ -39,9 +39,9 @@ $f_extension = strtolower(mb_substr($imgpath, $dotpos,4));
 
 if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported) )
 {
-	$pfs_header1 = sed_out_pfs_header();
-	$pfs_header2 = $out['pfs_header_end'];
-	$pfs_footer = $out['pfs_footer'];
+	$pfs_header1 = sed_rc('code_pfs_header', array('metas' => sed_htmlmetas()));
+	$pfs_header2 = $R['code_pfs_header_end'];
+	$pfs_footer = $R['code_pfs_footer'];
 	$pfs_img = "<img src=\"".$imgpath."\" alt=\"\" />";
 	$pfs_imgsize = @getimagesize($imgpath);
 
