@@ -51,13 +51,13 @@ $cfg['pfs_thumbpath'] = sed_pfs_thumbpath($userid);
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
 {
-	$icon[$line[0]] = sprintf($out['pfs_type_icon'], $line[2], $line[1]);
+	$icon[$line[0]] = sed_rc('pfs_icon_type', array('type' => $line[2], 'name' => $line[1]));
 	$filedesc[$line[0]] = $line[1];
 }
 
 if (!empty($c1) || !empty($c2))
 {
-	$morejavascript = sprintf($out['pfs_header_javascript'], $c1, $c2);
+	$morejavascript = sed_rc('pfs_code_header_javascript');
 	$more .= '&amp;c1='.$c1.'&amp;c2='.$c2;
 	$more1 .= ($more1=='') ? '?c1='.$c1.'&amp;c2='.$c2 : '&amp;c1='.$c1.'&amp;c2='.$c2;
 	$standalone = TRUE;
@@ -66,7 +66,7 @@ if (!empty($c1) || !empty($c2))
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = '<a href="pfs.php'.$more1.'">'.$L['pfs_title'].'</a>';
+$title = sed_rc_link(sed_url('pfs', $more1), $L['pfs_title']);
 
 if ($userid!=$usr['id'])
 {
@@ -118,7 +118,7 @@ if ($a=='update' && !empty($f))
 	
 	if (file_exists('datas/users/'.$newpath))
 	{
-		$error_string = "Already a folder with that name in target folder.<br />Oldpath: $oldpath<br />Newpath: $newpath";
+		$error_string = sprintf($L['pfs_direxists'], $oldpath, $newpath);
 	}
 	else
 	{
@@ -127,15 +127,15 @@ if ($a=='update' && !empty($f))
 			rename('datas/users/'.$oldpath, 'datas/users/'.$newpath);
 		}
 		$sql = sed_sql_query("UPDATE $db_pfs_folders SET
-		pff_parentid='".(int)$rparentid."',
-		pff_title='".sed_sql_prep($rtitle)."',
-		pff_updated='".$sys['now']."',
-		pff_desc='".sed_sql_prep($rdesc)."',
-		pff_path='".sed_sql_prep($rpath)."',
-		pff_ispublic='$rispublic',
-		pff_isgallery='$risgallery'
-		WHERE pff_userid='$userid' AND pff_id='$f' " );
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more1, '', true));
+			pff_parentid='".(int)$rparentid."',
+			pff_title='".sed_sql_prep($rtitle)."',
+			pff_updated='".$sys['now']."',
+			pff_desc='".sed_sql_prep($rdesc)."',
+			pff_path='".sed_sql_prep($rpath)."',
+			pff_ispublic='$rispublic',
+			pff_isgallery='$risgallery'
+			WHERE pff_userid='$userid' AND pff_id='$f' " );
+		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $more1, '', true));
 	}
 	if (empty($error_string)) exit;
 }
@@ -143,46 +143,14 @@ if ($a=='update' && !empty($f))
 $row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone'] * 3600);
 $row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
 
-$folderoptions = '<select name="rparentid">';
-$folderoptions .= '<option value="0">(root)</option>';
-$sql2 = sed_sql_query("SELECT * FROM $db_pfs_folders");
-while ($row2 = sed_sql_fetcharray($sql2)) {
-	if(strpos($row2['pff_path'],$row['pff_path'])===FALSE) {
-		$selected = ($row2['pff_id'] == $row['pff_parentid']) ? ' selected="selected"' : '';
-		$folderoptions .= '<option value="'.$row2['pff_id'].'"'.$selected.'>'.$row2['pff_title'].'</option>';
-	}
-}
-$folderoptions .= '</select>';
-
-// TODO templatize this!
-$body .= "<form id=\"editfolder\" action=\"".sed_url('pfs', "m=editfolder&a=update&f=".$pff_id.$more)."\" method=\"post\"><table class=\"cells\">";
-$body .= "<tr><td>".$L['pfs_parentfolder'].": </td><td>$folderoptions</td></tr>";
-$body .= "<tr><td>".$L['Folder'].": </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".sed_cc($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
-$body .= "<tr><td>".$L['Description'].": </td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".sed_cc($pff_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
-$body .= "<tr><td>".$L['Date'].": </td><td>".$row['pff_date']."</td></tr>";
-$body .= "<tr><td>".$L['Updated'].": </td><td>".$row['pff_updated']."</td></tr>";
-$body .= "<tr><td>".$L['pfs_ispublic'].": </td><td>";
-if ($pff_ispublic)
-{
-	$body .= "<input type=\"radio\" class=\"radio\" name=\"rispublic\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rispublic\" value=\"0\" />".$L['No'];
-}
-else
-{
-	$body .= "<input type=\"radio\" class=\"radio\" name=\"rispublic\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rispublic\" value=\"0\" checked=\"checked\" />".$L['No'];
-}
-$body .= "</td></tr><tr><td>".$L['pfs_isgallery']." : </td><td>";
-if ($pff_isgallery)
-{
-	$body .= "<input type=\"radio\" class=\"radio\" name=\"risgallery\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"risgallery\" value=\"0\" />".$L['No'];
-}
-else
-{
-	$body .= "<input type=\"radio\" class=\"radio\" name=\"risgallery\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"risgallery\" value=\"0\" checked=\"checked\" />".$L['No'];
-}
-$body .= "</td></tr><tr><td colspan=\"2\"><input type=\"submit\" class=\"submit\" value=\"".$L['Update']."\" /></td></tr>";
-$body .= "</table></form>";
-
 /* ============= */
+
+if (!$standalone)
+{
+	require_once $cfg['system_dir'] . '/header.php';
+}
+
+$t = new XTemplate(sed_skinfile('pfs.editfolder'));
 
 if ($standalone)
 {
@@ -199,45 +167,39 @@ if ($standalone)
 		$addfile = "'[url=".$cfg['pfs_path']."'+gfile+']'+gfile+'[/url]'";
 	}
 	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
-	$pfs_header1 = sed_out_pfs_header($c1, $c2, $winclose, $addthumb, $addpix, $addfile);
-
-	$pfs_header2 = $out['pfs_header_end'];
-	$pfs_footer = $out['pfs_footer'];
-
-	$t = new XTemplate(sed_skinfile('pfs.editfolder'));
 
 	$t->assign(array(
-		'PFS_STANDALONE_HEADER1' => $pfs_header1,
-		'PFS_STANDALONE_HEADER2' => $pfs_header2,
-		'PFS_STANDALONE_FOOTER' => $pfs_footer,
+		'PFS_DOCTYPE' => $cfg['doctype'],
+		'PFS_METAS' => sed_htmlmetas(),
+		'PFS_JAVASCRIPT' => sed_javascript(),
+		'PFS_C1' => $c1,
+		'PFS_C2' => $c2,
+		'PFS_ADDTHUMB' => $addthumb,
+		'PFS_ADDPIX' => $addpix,
+		'PFS_ADDFILE' => $addfile,
+		'PFS_WINCLOSE' => $winclose
 	));
 
 	$t->parse('MAIN.STANDALONE_HEADER');
 	$t->parse('MAIN.STANDALONE_FOOTER');
-
-	$t-> assign(array(
-		'PFS_TITLE' => $title,
-		'PFS_BODY' => $body
-	));
-
-	$t->parse('MAIN');
-	$t->out('MAIN');
 }
-else
+
+$t->assign(array(
+	'PFS_TITLE' => $title,
+	'PFS_ERRORS' => $error_string,
+	'PFS_ACTION' => sed_url('pfs', 'm=editfolder&a=update&f=' . $pff_id . $more),
+	'PFF_FOLDER' => sed_selectbox_folders($userid, '', $row['pff_parentid'], 'rparentid'),
+	'PFF_TITLE' => sed_cc($pff_title),
+	'PFF_DESC' => sed_cc($pff_desc),
+	'PFF_DATE' => $row['pff_date'],
+	'PFF_UPDATED' => $row['pff_updated']
+));
+
+$t->parse('MAIN');
+$t->out('MAIN');
+
+if (!$standalone)
 {
-	require_once $cfg['system_dir'] . '/header.php';
-	
-	$t = new XTemplate(sed_skinfile('pfs.editfolder'));
-
-	$t-> assign(array(
-		'PFS_TITLE' => $title,
-		'PFS_ERRORS' => $error_string,
-		'PFS_BODY' => $body
-	));
-
-	$t->parse('MAIN');
-	$t->out('MAIN');
-
 	require_once $cfg['system_dir'] . '/footer.php';
 }
 ?>

@@ -565,10 +565,10 @@ if (!$sed_forums_str && !$cfg['disable_forums'])
 
 $sed_yesno[0] = $L['No'];
 $sed_yesno[1] = $L['Yes'];
-$sed_img_up = $out['img_up'];
-$sed_img_down = $out['img_down'];
-$sed_img_left = $out['img_left'];
-$sed_img_right = $out['img_right'];
+$sed_img_up = $R['icon_up'];
+$sed_img_down = $R['icon_down'];
+$sed_img_left = $R['icon_left'];
+$sed_img_right = $R['icon_right'];
 
 /* ======== Local/GMT time ======== */
 

@@ -1043,7 +1043,7 @@ function sed_build_catpath($cat, $mask)
 // TODO I messed up this code, please see if I did huge mistakes and inform me (oc)
 function sed_build_comments($code, $url, $display = true)
 {
-	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys, $out;
+	global $db_com, $db_users, $db_pages, $cfg, $usr, $L, $sys, $R;
 
 	list($usr['auth_read_com'], $usr['auth_write_com'], $usr['isadmin_com']) = sed_auth('comments', 'a');
 	sed_block($usr['auth_read_com']);
@@ -1263,7 +1263,7 @@ function sed_build_comments($code, $url, $display = true)
 	$t->parse('COMMENTS');
 	$res_display = $t->text('COMMENTS');
 
-	$res = '<a href="' . $url . '#comments" class="comments_link" alt="'.$L['Comments'].'">' . $out['icon_comments'];
+	$res = '<a href="' . $url . '#comments" class="comments_link" alt="'.$L['Comments'].'">' . $R['icon_comments'];
 
 	if ($cfg['countcomments'])
 	{
@@ -1626,8 +1626,8 @@ function sed_build_pfs($id, $c1, $c2, $title)
  */
 function sed_build_pm($user)
 {
-	global $usr, $L, $out;
-	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'">'.$out['icon_pm'].'</a>';
+	global $usr, $L, $R;
+	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'">'.$R['icon_pm'].'</a>';
 }
 
 /* ------------------ */
@@ -1641,7 +1641,7 @@ function sed_build_pm($user)
  */
 function sed_build_ratings($code, $url, $display)
 {
-	global $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L, $out;
+	global $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L, $R;
 	static $called = false;
 
 	list($usr['auth_read_rat'], $usr['auth_write_rat'], $usr['isadmin_rat']) = sed_auth('ratings', 'a');
@@ -1792,7 +1792,7 @@ function sed_build_ratings($code, $url, $display)
 		{ $rating_average = 10; }
 
 		$rating = round($rating_average,0);
-		$rating_averageimg = $out['ratings_vote'][$rating];
+		$rating_averageimg = sed_rc('icon_rating_stars', array('val' => $rating));
 		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
 		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
 	}
@@ -1855,12 +1855,12 @@ function sed_build_ratings($code, $url, $display)
  */
 function sed_build_stars($level)
 {
-	global $skin, $out;
+	global $skin, $R;
 
 	if($level>0 and $level<100)
 	{
 		$stars = floor($level / 10) + 1;
-		return $out['stars'][$stars];
+		return sed_rc('icon_stars', array('val' => $stars));
 	}
 	else
 	{
@@ -3525,6 +3525,53 @@ function sed_pfs_thumbpath($userid)
 }
 
 /**
+ * Resource string formatter function. Takes a string with predefined variable substitution, e.g.
+ * 'My {$pet} likes {$food}. And {$pet} is hungry!' and an assotiative array of substitution values, e.g.
+ * array('pet' => 'rabbit', 'food' => 'carrots') and assembles a formatted result. If {$var} cannot be found
+ * in $args, it will be taken from global scope.
+ *
+ * @global array $R Resource strings
+ * @param string $name Name of the $R item or a resource string itself
+ * @param array $args Associative array of arguments
+ * @return string Assembled resource string
+ */
+function sed_rc($name, $args = array())
+{
+	global $R;
+	$res = isset($R[$name]) ? $R[$name] : $name;
+	if(preg_match_all('#\{\$(.+?)\}#', $res, $matches, PREG_SET_ORDER))
+	{
+		foreach($matches as $m)
+		{
+			$var = $m[1];
+			$res = str_replace($m[0], (isset($args[$var]) ? $args[$var] : $GLOBALS[$var]), $res);
+		}
+	}
+	return $res;
+}
+
+/**
+ * Quick link resource pattern
+ *
+ * @param string $url Link href
+ * @param string $title Tag contents
+ * @param mixed $attrs Additional attributes as a string or an associative array
+ * @return string HTML link
+ */
+function sed_rc_link($url, $title, $attrs = '')
+{
+	if (is_array($attrs))
+	{
+		foreach ($attrs as $key => $val)
+		{
+			$link_attrs .= ' ' . $key . '="' . $val . '"';
+		}
+	}
+	else $link_attrs = $attrs;
+	return '<a href="' . $url . '"' . $link_attrs . '>' . $title . '</a>';
+}
+
+/**
  * Reads raw data from file
  *
  * @param string $file File path
@@ -3748,15 +3795,16 @@ function sed_selectbox_date($utime, $mode, $ext='', $max_year = 2030)
  * @param int $user User ID
  * @param int $skip Skip folder
  * @param int $check Checked folder
+ * @param string $name Input name
  * @return string
  */
-function sed_selectbox_folders($user, $skip, $check)
+function sed_selectbox_folders($user, $skip, $check, $name = 'folderid')
 {
 	global $db_pfs_folders;
 
 	$sql = sed_sql_query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
 
-	$result =  "<select name=\"folderid\" size=\"1\">";
+	$result =  '<select name="' . $name . '" size="1">';
 
 	if ($skip!="/" && $skip!="0")
 	{
