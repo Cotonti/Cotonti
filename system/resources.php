@@ -9,14 +9,25 @@
  * @license BSD
  */
 
-/* Comments */
-$R['icon_comments'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-comment.gif" alt="'.$L['Comments'].'" />';
-
 /* Common */
+$R['icon_comments'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-comment.gif" alt="'.$L['Comments'].'" />';
+$R['icon_comments_cnt'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-comment.gif" alt="'.$L['Comments'].'" /> ({$cnt})';
+$R['icon_rating_stars'] = '<img class="icon" src="skins/'.$skin.'/img/system/vote{$val}.gif" alt="{$val}" />';
+$R['icon_stars'] = '<img class="icon" src="skins/'.$skin.'/img/system/stars{$val}.gif" alt="{$val}" />';
 $R['icon_up'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-up.gif" alt="" />';
 $R['icon_down'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-down.gif" alt="" />';
 $R['icon_left'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-left.gif" alt="" />';
 $R['icon_right'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-right.gif" alt="" />';
+$R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt="" />';
+
+/* Administration */
+$R['admin_icon_pfs'] = '<img src="images/admin/pfs.gif" alt="" />';
+$R['admin_icon_polls'] = '<img src="images/admin/polls.gif" alt="" />';
+
+/* Page */
+$R['page_icon_file'] = '<img src="{$icon}" alt="" />';
+$R['page_icon_file_default'] = 'images/admin/page.gif';
+$R['page_icon_file_path'] = 'images/pfs/{$type}.gif';
 
 /* PFS */
 $R['pfs_code_header_javascript'] = '
@@ -40,9 +51,9 @@ $R['pfs_link_addthumb'] = '<a href="javascript:addthumb(\'{$pfs_file}\',\'{$c1}\
 $R['pfs_link_thumbnail'] = '<a href="{$pfs_fullfile}"><img src="{$thumbpath}{$pfs_file}" title="{$pfs_file}"></a>';
 
 /* Private messages */
-$R['icon_pm'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-pm.gif"  alt="'.$L['pm_sendnew'].'" />';
+$R['pm_icon'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-pm.gif"  alt="'.$L['pm_sendnew'].'" />';
+$R['pm_icon_archive'] = '<img src="skins/'.$skin.'/img/system/icon-pm-archive.gif" alt="'.$L['pm_putinarchives'].'" />';
+$R['pm_icon_new'] = '<img src="skins/'.$skin.'/img/system/icon-pm-new.gif" alt="" />';
+$R['pm_icon_trashcan'] = '<img src="skins/'.$skin.'/img/system/icon-pm-trashcan.gif" alt="'.$L['Delete'].'" />';
 
-/* Ratings and Stars */
-$R['icon_rating_stars'] = '<img class="icon" src="skins/'.$skin.'/img/system/vote{$val}.gif" alt="{$val}" />';
-$R['icon_stars'] = '<img class="icon" src="skins/'.$skin.'/img/system/stars{$val}.gif" alt="{$val}" />';
 ?>
