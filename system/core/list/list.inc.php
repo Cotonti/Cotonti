@@ -311,15 +311,20 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	if (!empty($pag['page_url']) && $pag['page_file'])
 	{
 		$dotpos = mb_strrpos($pag['page_url'],".")+1;
-		$pag['page_fileicon'] = (mb_strlen($pag['page_url'])-$dotpos>4) ? "images/admin/page.gif" : "images/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
-		$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\" />";
+		$type = mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
+		$pag['page_fileicon'] = sed_rc('page_icon_file_path');
+		if (!file_exists($pag['page_fileicon']))
+		{
+			$pag['page_fileicon'] = sed_rc('page_icon_file_default');
+		}
+		$pag['page_fileicon'] = sed_rc('page_icon_file', array('icon' => $pag['page_fileicon']));
 	}
 	else
 	{ $pag['page_fileicon'] = ''; }
 
 	$item_code = 'p'.$pag['page_id'];
 	$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
-	$pag['page_comments'] = "<a href=\"".sed_url('page', $page_urlp, '#comments')."\"><img src=\"skins/".$usr['skin']."/img/system/icon-comment.gif\" alt=\"\" /> (".$pag['page_comcount'].")</a>";
+	$pag['page_comments'] = sed_rc_link(sed_url('page', $page_urlp, '#comments'), sed_rc('icon_comments_cnt', array('cnt' => $pag['page_comcount'])));
 	$pag['admin'] = $usr['isadmin'] ? "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a> &nbsp;<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a> " : '';
 	list($list_ratings, $list_ratings_display) = sed_build_ratings('p'.$pag['page_id'], sed_url('page', 'id='.$pag['page_id']), $ratings);
 	$t-> assign(array(

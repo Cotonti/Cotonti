@@ -83,7 +83,7 @@ if ($action == 'install')
 
 	sed_bbcode_add('thumb', 'pcre', '\[thumb=((?:http://|https://|ftp://)?[^\]"\';:\?]+\.(?:jpg|jpeg|gif|png))\]([^\]"\';:\?]+\.(?:jpg|jpeg|gif|png))\[/thumb\]','<a href="pfs.php?m=view&amp;v=$2"><img src="$1" alt="" /></a>', true, 128, 'seditio');
 	sed_bbcode_add('t', 'pcre', '\[t=((?:http://|https://|ftp://)?[^"\';:\?]+\.(?:jpg|jpeg|gif|png))\]((?:http://|https://|ftp://)?[^"\';:\?]+\.(?:jpg|jpeg|gif|png))\[/t\]','<a href="$2"><img src="$1" alt="" /></a>', true, 128, 'seditio');
-	sed_bbcode_add('pfs', 'pcre', '\[pfs\]([^\s"\'&;\?\(\[]+)\[/pfs\]', '<a href="'.$cfg['pfs_dir'].'$1"><img src="images/admin/pfs.gif" alt="" /> $1</a>', true, 128, 'seditio');
+	sed_bbcode_add('pfs', 'pcre', '\[pfs\]([^\s"\'&;\?\(\[]+)\[/pfs\]', '<a href="'.$cfg['pfs_dir'].'$1">' . $R['admin_icon_pfs'] . ' $1</a>', true, 128, 'seditio');
 	sed_bbcode_add('style', 'pcre', '\[style=([1-9])\](.+?)\[/style\]', '<span class="bbstyle$1">$2</span>', true, 128, 'seditio');
 	sed_bbcode_add('user', 'pcre', '\[user=(\d+)\](.+?)\[/user\]', '<a href="users.php?m=details&id=$1">$2</a>', true, 128, 'seditio');
 	sed_bbcode_add('page', 'pcre', '\[page=(\d+)\](.+?)\[/page\]', '<a href="page.php?id=$1">$2</a>', true, 128, 'seditio');
@@ -91,7 +91,7 @@ if ($action == 'install')
 	sed_bbcode_add('group', 'pcre', '\[group=(\d+)\](.+?)\[/group\]', '<a href="users.php?g=$1">$2</a>', true, 128, 'seditio');
 	sed_bbcode_add('topic', 'pcre', '\[topic\](\d+)\[/topic\]', '<a href="forums.php?m=posts&q=$1">'.$L['Topic'].' #$1</a>', true, 128, 'seditio');
 	sed_bbcode_add('post', 'pcre', '\[post\](\d+)\[/post\]', '<a href="forums.php?m=posts&p=$1#$1">'.$L['Post'].' #$1</a>', true, 128, 'seditio');
-	sed_bbcode_add('pm', 'pcre', '\[pm\](\d+)\[/pm\]', '<a href="pm.php?m=send&to=$1"><img src="skins/'.$skin.'/img/system/icon-pm.png" alt=""></a>', true, 128, 'seditio');
+	sed_bbcode_add('pm', 'pcre', '\[pm\](\d+)\[/pm\]', '<a href="pm.php?m=send&to=$1">' . $R['pm_icon'] . '</a>', true, 128, 'seditio');
 	sed_bbcode_add('flag', 'pcre', '\[f\]([a-z][a-z])\[/f\]', '<a href="users.php?f=country_$1"><img src="images/flags/f-$1.gif" alt="" /></a>', true, 128, 'seditio');
 	sed_bbcode_add('ac', 'pcre', '\[ac=([^\[]+)\](.+?)\[/ac\]', '<acronym title="$1">$2</acronym>', true, 128, 'seditio');
 	sed_bbcode_add('c1c2c3', 'pcre', '\[c1\:([\d%]+)\](.*?)\[c2\:([\d%]+)\](.*?)\[c3\]', '<table style="margin:0; vertical-align:top; width:100%;"><tr><td style="padding:8px; vertical-align:top; width:$1%;">$2</td><td  style="padding:8px; vertical-align:top; width:$3%;">$4</td></tr></table>', true, 128, 'seditio');

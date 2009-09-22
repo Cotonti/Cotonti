@@ -1627,7 +1627,7 @@ function sed_build_pfs($id, $c1, $c2, $title)
 function sed_build_pm($user)
 {
 	global $usr, $L, $R;
-	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'">'.$R['icon_pm'].'</a>';
+	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'">'.$R['pm_icon'].'</a>';
 }
 
 /* ------------------ */
@@ -3554,11 +3554,11 @@ function sed_rc($name, $args = array())
  * Quick link resource pattern
  *
  * @param string $url Link href
- * @param string $title Tag contents
+ * @param string $text Tag contents
  * @param mixed $attrs Additional attributes as a string or an associative array
  * @return string HTML link
  */
-function sed_rc_link($url, $title, $attrs = '')
+function sed_rc_link($url, $text, $attrs = '')
 {
 	if (is_array($attrs))
 	{
@@ -3568,7 +3568,7 @@ function sed_rc_link($url, $title, $attrs = '')
 		}
 	}
 	else $link_attrs = $attrs;
-	return '<a href="' . $url . '"' . $link_attrs . '>' . $title . '</a>';
+	return '<a href="' . $url . '"' . $link_attrs . '>' . $text . '</a>';
 }
 
 /**

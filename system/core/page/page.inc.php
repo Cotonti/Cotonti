@@ -272,10 +272,13 @@ if($pag['page_file'] > 0)
 		if (!empty($pag['page_url']))
 		{
 			$dotpos = mb_strrpos($pag['page_url'],".")+1;
-			$pag['page_fileicon'] = "images/pfs/".mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5)).".gif";
+			$type = mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
+			$pag['page_fileicon'] = sed_rc('page_icon_file_path');
 			if (!file_exists($pag['page_fileicon']))
-			{ $pag['page_fileicon'] = "images/admin/page.gif"; }
-			$pag['page_fileicon'] = "<img src=\"".$pag['page_fileicon']."\" alt=\"\" />";
+			{
+				$pag['page_fileicon'] = sed_rc('page_icon_file_default');
+			}
+			$pag['page_fileicon'] = sed_rc('page_icon_file', array('icon' => $pag['page_fileicon']));
 		}
 		else
 		{ $pag['page_fileicon'] = ''; }

@@ -123,7 +123,7 @@ $extp = sed_getextplugins('pm.list.loop');
 while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
 {
     $jj++;
-    $row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-new.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm.gif\" alt=\"\" /></a>";
+    $row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? sed_rc_link(sed_url('pm', 'id='.$row['pm_id']), $R['pm_icon_new']) : sed_rc_link(sed_url('pm', 'id='.$row['pm_id']), $R['pm_icon']);
 
     if ($f=='sentbox')
     {
@@ -132,7 +132,7 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
         $pm_touserid = $row['pm_touserid'];
         $pm_touser = htmlspecialchars($row['user_name']);
         $pm_fromortouser = sed_build_user($pm_touserid, $pm_touser);
-        $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
+        $row['pm_icon_action'] = sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row['pm_id'].'&f='.$f), $R['pm_icon_trashcan'], array('title' => $L['Delete']));
     }
     elseif ($f=='archives')
     {
@@ -141,7 +141,7 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
         $pm_touserid = $usr['id'];
         $pm_touser = htmlspecialchars($usr['name']);
         $pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-        $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>";
+        $row['pm_icon_action'] = sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row['pm_id'].'&f='.$f), $R['pm_icon_trashcan'], array('title' => $L['Delete']));
     }
     else
     {
@@ -150,8 +150,8 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
         $pm_touserid = $usr['id'];
         $pm_touser = htmlspecialchars($usr['name']);
         $pm_fromortouser = sed_build_user($pm_fromuserid, $pm_fromuser);
-        $row['pm_icon_action'] = "<a href=\"".sed_url('pm', "m=edit&a=archive&".sed_xg()."&id=".$row['pm_id'])."\" title=\"".$L['pm_putinarchives']."\"><img src=\"skins/".$skin."/img/system/icon-pm-archive.gif\" alt=\"".$L['pm_putinarchives']."\" /></a>";
-        $row['pm_icon_action'] .= ($row['pm_state']>0) ? " <a href=\"".sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$row['pm_id']."&f=".$f)."\" title=\"".$L['Delete']."\"><img src=\"skins/".$skin."/img/system/icon-pm-trashcan.gif\" alt=\"".$L['Delete']."\" /></a>" : '';
+        $row['pm_icon_action'] = sed_rc_link(sed_url('pm', 'm=edit&a=archive&'.sed_xg().'&id='.$row['pm_id']), $R['pm_icon_archive'], array('title' => $L['pm_putinarchives']));
+        $row['pm_icon_action'] .= ($row['pm_state']>0) ? ' ' . sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row['pm_id'].'&f='.$f), $R['pm_icon_trashcan'], array('title' => $L['Delete'])) : '';
     }
 
     if($cfg['parser_cache'])

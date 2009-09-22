@@ -80,7 +80,7 @@ elseif ($id=='viewall' || $id=='')
 		{
 			$result .= "<tr>";
 			$result .= "<td style=\"width:128px;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600)."</td>";
-			$result .= "<td><a href=\"".sed_url('polls', 'id='.$row['poll_id'])."\"><img src=\"images/admin/polls.gif\" alt=\"\" />";
+			$result .= "<td><a href=\"".sed_url('polls', 'id='.$row['poll_id'])."\">" . $R['admin_icon_polls'];
 			$result .= sed_parse(htmlspecialchars($row['poll_text']),1 ,1 ,1)."</a></td>";
 			$result .= "</tr>";
 		}
