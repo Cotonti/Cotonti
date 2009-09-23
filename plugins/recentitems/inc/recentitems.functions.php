@@ -76,20 +76,20 @@ ORDER by fs_masterid DESC, fs_order ASC");
         if ($row['ft_movedto']>0)
         {
             $row['ft_url'] = "forums.php?m=posts&amp;q=".$row['ft_movedto'];
-            $row['ft_icon'] = "<img src=\"skins/$skin/img/system/posts_moved.gif\" alt=\"\" />";
+            $row['ft_icon'] = $R['frm_icon_posts_moved'];
             $row['ft_title']= $L['Moved'].": ".$row['ft_title'];
             $row['ft_lastpostername'] = "&nbsp;";
             $row['ft_postcount'] = "&nbsp;";
             $row['ft_replycount'] = "&nbsp;";
             $row['ft_viewcount'] = "&nbsp;";
             $row['ft_lastpostername'] = "&nbsp;";
-            $row['ft_lastposturl'] = "<a href=\"forums.php?m=posts&amp;q=".$row['ft_movedto']."&amp;n=last#bottom\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ".$L['Moved'];
+            $row['ft_lastposturl'] = "<a href=\"forums.php?m=posts&amp;q=".$row['ft_movedto']."&amp;n=last#bottom\">{$R['icon_follow']}</a> ".$L['Moved'];
             $row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
         }
         else
         {
             $row['ft_url'] = "forums.php?m=posts&amp;q=".$row['ft_id'];
-            $row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=unread#unread\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a>";
+            $row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=unread#unread\">{$R['icon_unread']}</a>" : "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\">{$R['icon_follow']}</a>";
             $row['ft_lastposturl'] .= @date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
             $row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
             $row['ft_replycount'] = $row['ft_postcount'] - 1;
@@ -117,7 +117,7 @@ ORDER by fs_masterid DESC, fs_order ASC");
                 }
             }
 
-            $row['ft_icon'] = "<img src='skins/$skin/img/system/".$row['ft_icon'].".gif' alt='' title='".$L['Rec_'.$row['ft_icon']]."' />";
+            $row['ft_icon'] = sed_rc('frm_icon_topic_t', array('icon' => $row['ft_icon'], 'title' => $L['Rec_'.$row['ft_icon']]));
             $row['ft_lastpostername'] = sed_build_user($row['ft_lastposterid'], sed_cc($row['ft_lastpostername']));
         }
 
