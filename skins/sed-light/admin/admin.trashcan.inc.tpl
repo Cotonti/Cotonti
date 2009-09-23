@@ -19,7 +19,7 @@
 <!-- BEGIN: TRASHCAN_ROW -->
 			<tr>
 				<td style="text-align:center;">{ADMIN_TRASHCAN_DATE}</td>
-				<td><img src="images/admin/{ADMIN_TRASHCAN_TYPESTR_ICON}" alt="{ADMIN_TRASHCAN_TYPESTR}" />{ADMIN_TRASHCAN_TYPESTR}</td>
+				<td>{ADMIN_TRASHCAN_TYPESTR_ICON} {ADMIN_TRASHCAN_TYPESTR}</td>
 				<td>{ADMIN_TRASHCAN_TITLE}</td>
 				<td style="text-align:center;">{ADMIN_TRASHCAN_TRASHEDBY}</td>
 				<td style="text-align:center;">[<a href="{ADMIN_TRASHCAN_ROW_WIPE_URL}">-</a>]</td>
