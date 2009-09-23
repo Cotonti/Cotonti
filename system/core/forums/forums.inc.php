@@ -8,7 +8,7 @@
 
 /**
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD
  */
@@ -207,7 +207,7 @@ while ($fsn = sed_sql_fetcharray($sql))
             $secact_num = round(6.25 * $sed_sections_act[$fsn['fs_id']] / $secact_max);
             if ($secact_num>5) { $secact_num = 5; }
             if (!$secact_num && $sed_sections_act[$fsn['fs_id']]>1) { $secact_num = 1; }
-            $section_activity_img = "<img src=\"skins/".$skin."/img/system/activity".$secact_num.".gif\" alt=\"\" />";
+            $section_activity_img = sed_rc('frm_icon_section_activity');
         }
 
         $fs_num++;

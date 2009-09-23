@@ -422,9 +422,9 @@ $t->assign(array(
 			$fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
 
 			if ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id'])
-			{ $fsn['fs_newposts'] = 'skins/'.$skin."/img/system/posts_new.gif"; }
+			{ $fsn['fs_newposts'] = $R['frm_icon_posts_new_path']; }
 
-			else { $fsn['fs_newposts'] = 'skins/'.$skin."/img/system/posts.gif"; }
+			else { $fsn['fs_newposts'] = $R['frm_icon_posts_path']; }
 
 
 			if ($fsn['fs_lt_id']>0)
@@ -494,20 +494,20 @@ $t->assign(array(
 		if ($row['ft_movedto']>0)
 		{
 			$row['ft_url'] = sed_url('forums', "m=posts&q=".$row['ft_movedto']);
-			$row['ft_icon'] = "<img src=\"skins/$skin/img/system/posts_moved.gif\" alt=\"\" />";
+			$row['ft_icon'] = $R['frm_icon_posts_moved'];
 			$row['ft_title']= $L['Moved'].": ".$row['ft_title'];
 			$row['ft_lastpostername'] = "&nbsp;";
 			$row['ft_postcount'] = "&nbsp;";
 			$row['ft_replycount'] = "&nbsp;";
 			$row['ft_viewcount'] = "&nbsp;";
 			$row['ft_lastpostername'] = "&nbsp;";
-			$row['ft_lastposturl'] = "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom")."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a> ".$L['Moved'];
+			$row['ft_lastposturl'] = "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom")."\">{$R['icon_follow']}</a> ".$L['Moved'];
 			$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 		}
 		else
 		{
 			$row['ft_url'] = sed_url('forums', "m=posts&q=".$row['ft_id']);
-			$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\"><img src=\"skins/$skin/img/system/arrow-unread.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\"><img src=\"skins/$skin/img/system/arrow-follow.gif\" alt=\"\" /></a>";
+			$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\">{$R['icon_unread']}</a>" : "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">{$R['icon_follow']}</a>";
 			$row['ft_lastposturl'] .= @date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
 			$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;
@@ -529,7 +529,7 @@ $t->assign(array(
 				{ $row['ft_icon'] .= '_locked'; }
 			}
 
-			$row['ft_icon'] = "<img src=\"skins/$skin/img/system/".$row['ft_icon'].".gif\" alt=\"\" />";
+			$row['ft_icon'] = sed_rc('frm_icon_topic', array('icon' => $row['ft_icon']));
 			$row['ft_lastpostername'] = sed_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 		}
 
