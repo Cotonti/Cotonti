@@ -84,8 +84,8 @@ $R['frm_icon_posts_moved'] = '<img class="icon" src="skins/'.$skin.'/img/system/
 $R['frm_icon_posts_new_path'] = 'skins/'.$skin.'/img/system/posts_new.gif';
 $R['frm_icon_posts_path'] = 'skins/'.$skin.'/img/system/posts.gif';
 $R['frm_icon_section_activity'] = '<img class="icon" src="skins/'.$skin.'/img/system/activity{$secact_num}.gif" alt="" />';
-$R['frm_icon_topic'] = '<img class="icon" src="skins/$skin/img/system/{$icon}.gif" alt="" />';
-$R['frm_icon_topic_t'] = '<img class="icon" src="skins/$skin/img/system/{$icon}.gif" alt="" title="{$title}" />';
+$R['frm_icon_topic'] = '<img class="icon" src="skins/'.$skin.'/img/system/{$icon}.gif" alt="" />';
+$R['frm_icon_topic_t'] = '<img class="icon" src="skins/'.$skin.'/img/system/{$icon}.gif" alt="" title="{$title}" />';
 
 /* Page */
 $R['page_icon_file'] = '<img class="icon" src="{$icon}" alt="" />';
