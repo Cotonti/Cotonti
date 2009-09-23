@@ -338,7 +338,7 @@ else
 		$structure_icon = $row['structure_icon'];
 		$structure_group = $row['structure_group'];
 		$pathfieldlen = (mb_strpos($structure_path, ".") == 0) ? 3 : 9;
-		$pathfieldimg = (mb_strpos($structure_path, ".") == 0) ? '' : "<img src=\"images/admin/join2.gif\" alt=\"\" /> ";
+		$pathfieldimg = (mb_strpos($structure_path, ".") == 0) ? '' : $R['admin_icon_join2'];
 		$pagecount[$structure_code] = (!$pagecount[$structure_code]) ? "0" : $pagecount[$structure_code];
 
 		if(empty($row['structure_tpl']))

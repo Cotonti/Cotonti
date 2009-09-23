@@ -98,37 +98,37 @@ while($row = sed_sql_fetcharray($sql))
 	switch($row['tr_type'])
 	{
 		case 'comment':
-			$icon = "comments.gif";
+			$icon = $R['admin_icon_comments'];
 			$typestr = $L['Comment'];
 		break;
 
 		case 'forumpost':
-			$icon = "forums.gif";
+			$icon = $R['admin_icon_forums_posts'];
 			$typestr = $L['Post'];
 		break;
 
 		case 'forumtopic':
-			$icon = "forums.gif";
+			$icon = $R['admin_icon_forums_topics'];
 			$typestr = $L['Topic'];
 		break;
 
 		case 'page':
-			$icon = "page.gif";
+			$icon = $R['admin_icon_page'];
 			$typestr = $L['Page'];
 		break;
 
 		case 'pm':
-			$icon = "pm.gif";
+			$icon = $R['admin_icon_pm'];
 			$typestr = $L['Private_Messages'];
 		break;
 
 		case 'user':
-			$icon = "user.gif";
+			$icon = $R['admin_icon_user'];
 			$typestr = $L['User'];
 		break;
 
 		default:
-			$icon = "tools.gif";
+			$icon = $R['admin_icon_tools'];
 			$typestr = $row['tr_type'];
 		break;
 	}
