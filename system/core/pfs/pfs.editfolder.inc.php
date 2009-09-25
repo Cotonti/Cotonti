@@ -34,8 +34,7 @@ if (!$usr['isadmin'] || $userid=='')
 }
 else
 {
-	$more1 = '?userid='.$userid;
-	$more = '&amp;userid='.$userid;
+	$more = 'userid='.$userid;
 }
 
 if ($userid!=$usr['id'])
@@ -58,15 +57,14 @@ foreach ($sed_extensions as $k => $line)
 if (!empty($c1) || !empty($c2))
 {
 	$morejavascript = sed_rc('pfs_code_header_javascript');
-	$more .= '&amp;c1='.$c1.'&amp;c2='.$c2;
-	$more1 .= ($more1=='') ? '?c1='.$c1.'&amp;c2='.$c2 : '&amp;c1='.$c1.'&amp;c2='.$c2;
+	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
 
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = sed_rc_link(sed_url('pfs', $more1), $L['pfs_title']);
+$title = sed_rc_link(sed_url('pfs', $more), $L['pfs_title']);
 
 if ($userid!=$usr['id'])
 {
@@ -135,7 +133,7 @@ if ($a=='update' && !empty($f))
 			pff_ispublic='$rispublic',
 			pff_isgallery='$risgallery'
 			WHERE pff_userid='$userid' AND pff_id='$f' " );
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $more1, '', true));
+		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
 	}
 	if (empty($error_string)) exit;
 }
@@ -187,7 +185,7 @@ if ($standalone)
 $t->assign(array(
 	'PFS_TITLE' => $title,
 	'PFS_ERRORS' => $error_string,
-	'PFS_ACTION' => sed_url('pfs', 'm=editfolder&a=update&f=' . $pff_id . $more),
+	'PFS_ACTION' => sed_url('pfs', 'm=editfolder&a=update&f=' . $pff_id . '&' . $more),
 	'PFF_FOLDER' => sed_selectbox_folders($userid, '', $row['pff_parentid'], 'rparentid'),
 	'PFF_TITLE' => sed_cc($pff_title),
 	'PFF_DESC' => sed_cc($pff_desc),
