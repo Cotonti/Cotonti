@@ -34,8 +34,7 @@ if (!$usr['isadmin'] || $userid=='')
 }
 else
 {
-	$more1 = '?userid='.$userid;
-	$more = '&amp;userid='.$userid;
+	$more = 'userid='.$userid;
 }
 
 if ($userid!=$usr['id'])
@@ -58,15 +57,14 @@ foreach ($sed_extensions as $k => $line)
 if (!empty($c1) || !empty($c2))
 {
 	$morejavascript = sed_rc('pfs_code_header_javascript');
-	$more .= '&amp;c1='.$c1.'&amp;c2='.$c2;
-	$more1 .= ($more1=='') ? '?c1='.$c1.'&amp;c2='.$c2 : '&amp;c1='.$c1.'&amp;c2='.$c2;
+	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
 
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = sed_rc_link(sed_url('pfs', $more1), $L['pfs_title']);
+$title = sed_rc_link(sed_url('pfs', $more), $L['pfs_title']);
 
 if ($userid!=$usr['id'])
 {
@@ -76,7 +74,9 @@ if ($userid!=$usr['id'])
 
 $title .= ' '.$cfg['separator'].' '.$L['Edit'];
 
-$sql = sed_sql_query("SELECT pfs.*, pff.pff_path FROM $db_pfs AS pfs LEFT JOIN $db_pfs_folders AS pff ON pff.pff_id=pfs.pfs_folderid WHERE pfs.pfs_userid='$userid' AND pfs.pfs_id='$id' LIMIT 1");
+$sql = sed_sql_query("SELECT pfs.*, pff.pff_path FROM $db_pfs AS pfs
+	LEFT JOIN $db_pfs_folders AS pff ON pff.pff_id=pfs.pfs_folderid
+	WHERE pfs.pfs_userid='$userid' AND pfs.pfs_id='$id' LIMIT 1");
 
 if ($row = sed_sql_fetcharray($sql))
 {
@@ -101,7 +101,8 @@ if ($a=='update' && !empty($id))
 	$folderid = sed_import('folderid','P','INT');
 	if ($folderid>0)
 	{
-		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid'");
+		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders
+			WHERE pff_userid='$userid' AND pff_id='$folderid'");
 		sed_die(sed_sql_numrows($sql)==0);
 		if($row = sed_sql_fetcharray($sql))
 		{
@@ -115,7 +116,8 @@ if ($a=='update' && !empty($id))
 	}
 	if ($pfs_folderid>0)
 	{
-		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$pfs_folderid'");
+		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders
+			WHERE pff_userid='$userid' AND pff_id='$pfs_folderid'");
 		sed_die(sed_sql_numrows($sql)==0);
 		if($row = sed_sql_fetcharray($sql))
 		{
@@ -141,7 +143,7 @@ if ($a=='update' && !empty($id))
 			pfs_desc='".sed_sql_prep($rdesc)."',
 			pfs_folderid='$folderid'
 			WHERE pfs_userid='$userid' AND pfs_id='$id'");
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', "f=$pfs_folderid".$more, '', true));
+		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', "f=$pfs_folderid&".$more, '', true));
 	}
 	if (empty($error_string)) exit;
 }
@@ -190,7 +192,7 @@ if ($standalone)
 $t-> assign(array(
 	'PFS_TITLE' => $title,
 	'PFS_ERRORS' => $error_string,
-	'PFS_ACTION'=> sed_url('pfs', 'm=edit&a=update&id='.$pfs_id.$more),
+	'PFS_ACTION'=> sed_url('pfs', 'm=edit&a=update&id='.$pfs_id.'&'.$more),
 	'PFS_FILE' => $pfs_file,
 	'PFS_DATE' => $pfs_date,
 	'PFS_FOLDER' => sed_selectbox_folders($userid, '', $pfs_folderid),
