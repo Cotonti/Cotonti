@@ -14,7 +14,7 @@ Order=10
  * Part of plug tags
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.6.4
  * @author Trustmaster - Vladimir Sibirov
  * @copyright All rights reserved. 2008-2009
  * @license BSD
@@ -40,7 +40,6 @@ if($cfg['plugin']['tags']['forums'])
 			$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.$tag_t.'</a>';
 			$tag_i++;
 		}
-		$tc_html = mb_substr($tc_html, 0, -1);
 		$t->assign('FORUMS_TOPICS_ROW_TAGS', $tc_html);
 	}
 	else

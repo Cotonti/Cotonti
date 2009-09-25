@@ -33,8 +33,7 @@ if (!$usr['isadmin'] || $userid=='')
 }
 else
 {
-	$more1 = "?userid=".$userid;
-	$more = "&amp;userid=".$userid;
+	$more = 'userid='.$userid;
 }
 
 if ($userid!=$usr['id'])
@@ -62,15 +61,14 @@ function addthumb(gfile,c1,c2)
 function addpix(gfile,c1,c2)
 	{ opener.document.".$c1.".".$c2.".value += '[img]'+gfile+'[/img]'; }
 	";
-	$more .= "&amp;c1=".$c1."&amp;c2=".$c2;
-	$more1 .= ($more1=='') ? "?c1=".$c1."&amp;c2=".$c2 : "&amp;c1=".$c1."&amp;c2=".$c2;
+	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
 
 /* ============= */
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = "<a href=\"pfs.php".$more1."\">".$L['pfs_title']."</a>";
+$title = "<a href=\"".sed_url('pfs', $more)."\">".$L['pfs_title']."</a>";
 
 if ($userid!=$usr['id'])
 {
@@ -115,14 +113,14 @@ if ($a=='update' && !empty($f))
 		pff_isgallery='$risgallery'
 		WHERE pff_userid='$userid' AND pff_id='$f' " );
 
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more1, '', true));
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
 	exit;
 }
 
 $row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone'] * 3600);
 $row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
 
-$body .= "<form id=\"editfolder\" action=\"".sed_url('pfs', "m=editfolder&a=update&f=".$pff_id.$more)."\" method=\"post\"><table class=\"cells\">";
+$body .= "<form id=\"editfolder\" action=\"".sed_url('pfs', "m=editfolder&a=update&f=".$pff_id.'&'.$more)."\" method=\"post\"><table class=\"cells\">";
 $body .= "<tr><td>".$L['Folder']." : </td><td><input type=\"text\" class=\"text\" name=\"rtitle\" value=\"".htmlspecialchars($pff_title)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td>".$L['Description']." : </td><td><input type=\"text\" class=\"text\" name=\"rdesc\" value=\"".htmlspecialchars($pff_desc)."\" size=\"56\" maxlength=\"255\" /></td></tr>";
 $body .= "<tr><td>".$L['Date']." : </td><td>".$row['pff_date']."</td></tr>";
