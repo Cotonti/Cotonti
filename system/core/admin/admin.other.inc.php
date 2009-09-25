@@ -46,10 +46,11 @@ while($row = sed_sql_fetcharray($sql))
     $lincif_mode = (sed_auth($row['ct_code'], 'a', 'A') && $row['ct_code'] != 'admin' && $row['ct_code'] != 'index' && $row['ct_code'] != 'message') ? true : false;
     $lincif_confmode = ($cfgentries[$row['ct_code']] > 0) ? true : false;
     $lincif_rightsmode = ($authentries[$row['ct_code']] > 0) ? true : false;
-	$cfgcode = "disable_".$row['ct_code'];//��������� ����� ��� ������?
+	$cfgcode = "disable_".$row['ct_code'];
 
 	$t -> assign(array(
 		"ADMIN_OTHER_CT_CODE" => $row['ct_code'],
+		"ADMIN_OTHER_CT_ICON" => sed_rc('admin_icon_ct', array('code' => $row['ct_code'])),
 		"ADMIN_OTHER_CT_TITLE_LOC" => (empty($L["core_".$row['ct_code']])) ? $row['ct_title'] : $L["core_".$row['ct_code']],
 		"ADMIN_OTHER_CT_CODE_URL" => sed_url('admin', "m=".$row['ct_code']),
 		"ADMIN_OTHER_RIGHTS" => ($authentries[$row['ct_code']] > 0) ? sed_url('admin', "m=rightsbyitem&ic=".$row['ct_code']."&io=a") : '#',
