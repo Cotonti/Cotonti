@@ -43,7 +43,7 @@ $L['Rec_3days'] = 'for 3 days';
 $L['Rec_1week'] = 'for 1 week';
 $L['Rec_2weeks'] = 'for 2 weeks';
 $L['Rec_1month'] = 'for 1 month';
-$L['Rec_forum_nonew'] = "Nothing new for this period.";
+$L['Rec_forum_nonew'] = "Nothing new for this period";
 
 $L['Rec_posts']='No new posts';
 $L['Rec_posts_new']='New posts';
