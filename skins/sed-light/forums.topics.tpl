@@ -99,21 +99,21 @@
 
 		<table class="main small">
 			<tr>
-				<td><img src="skins/{PHP.skin}/img/system/posts.gif" alt="" />{PHP.skinlang.forumstopics.Nonewposts}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new.gif" alt="" />{PHP.skinlang.forumstopics.Newposts}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_hot.gif" alt="" />{PHP.skinlang.forumstopics.Nonewpostspopular}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new_hot.gif" alt="" />{PHP.skinlang.forumstopics.Newpostspopular}</td>
+				<td>{PHP.R.frm_icon_posts} {PHP.skinlang.forumstopics.Nonewposts}</td>
+				<td>{PHP.R.frm_icon_posts_new} {PHP.skinlang.forumstopics.Newposts}</td>
+				<td>{PHP.R.frm_icon_posts_hot} {PHP.skinlang.forumstopics.Nonewpostspopular}</td>
+				<td>{PHP.R.frm_icon_posts_new_hot} {PHP.skinlang.forumstopics.Newpostspopular}</td>
 			</tr>
 			<tr>
-				<td><img src="skins/{PHP.skin}/img/system/posts_sticky.gif" alt="" />{PHP.skinlang.forumstopics.Sticky}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new_sticky.gif" alt="" />{PHP.skinlang.forumstopics.Newpostssticky}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_locked.gif" alt="" />{PHP.skinlang.forumstopics.Locked}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new_locked.gif" alt="" />{PHP.skinlang.forumstopics.Newpostslocked}</td>
+				<td>{PHP.R.frm_icon_posts_sticky} {PHP.skinlang.forumstopics.Sticky}</td>
+				<td>{PHP.R.frm_icon_posts_new_sticky} {PHP.skinlang.forumstopics.Newpostssticky}</td>
+				<td>{PHP.R.frm_icon_posts_locked} {PHP.skinlang.forumstopics.Locked}</td>
+				<td>{PHP.R.frm_icon_posts_new_locked} {PHP.skinlang.forumstopics.Newpostslocked}</td>
 			</tr>
 			<tr>
-				<td><img src="skins/{PHP.skin}/img/system/posts_sticky_locked.gif" alt="" />{PHP.skinlang.forumstopics.Announcment}</td>
-				<td><img src="skins/{PHP.skin}/img/system/posts_new_sticky_locked.gif" alt="" />{PHP.skinlang.forumstopics.Newannouncment}</td>	
-				<td colspan="2"><img class="forum-icon" src="skins/{PHP.skin}/img/system/posts_moved.gif" alt="" />{PHP.skinlang.forumstopics.Movedoutofthissection}</td>
+				<td>{PHP.R.frm_icon_posts_sticky_locked} {PHP.skinlang.forumstopics.Announcment}</td>
+				<td>{PHP.R.frm_icon_posts_new_sticky_locked} {PHP.skinlang.forumstopics.Newannouncment}</td>	
+				<td colspan="2">{PHP.R.frm_icon_posts_moved} {PHP.skinlang.forumstopics.Movedoutofthissection}</td>
 			</tr>
 		</table>
 
