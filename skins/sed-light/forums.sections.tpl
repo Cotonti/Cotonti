@@ -2,7 +2,7 @@
 
 <div class="mboxHD">
     <div class="rss-icon-title">
-        <a href="{FORUMS_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" alt="" /></a>
+        <a href="{FORUMS_RSS}">{PHP.R.icon_rss}</a>
     </div>
     {FORUMS_SECTIONS_PAGETITLE}
 </div>
