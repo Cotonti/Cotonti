@@ -17,6 +17,7 @@ $R['icon_follow'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-fol
 $R['icon_left'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-left.gif" alt="" />';
 $R['icon_rating_stars'] = '<img class="icon" src="skins/'.$skin.'/img/system/vote{$val}.gif" alt="{$val}" />';
 $R['icon_right'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-right.gif" alt="" />';
+$R['icon_rss'] = '<img class="icon" src="skins/'.$skin.'/img/system/rss.gif" alt="" />';
 $R['icon_stars'] = '<img class="icon" src="skins/'.$skin.'/img/system/stars{$val}.gif" alt="{$val}" />';
 $R['icon_unread'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-unread.gif" alt="" />';
 $R['icon_up'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-up.gif" alt="" />';

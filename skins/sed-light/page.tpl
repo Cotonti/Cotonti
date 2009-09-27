@@ -11,7 +11,7 @@
 
 				<div style="float:right;text-align:right;">
 				<span class="rss-icon">
-				<a href="{PAGE_COMMENTS_RSS}"><img src="skins/{PHP.skin}/img/rss-icon.png" border="0" alt="" /></a>
+				<a href="{PAGE_COMMENTS_RSS}">{PHP.R.icon_rss}</a>
 				</span>
 					{PHP.L.Comments}: {PAGE_COMMENTS}<br />{PHP.L.Ratings}: {PAGE_RATINGS}</div>
 					{PHP.L.Author}: {PAGE_AUTHOR}<br />
