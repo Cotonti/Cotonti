@@ -98,7 +98,7 @@ class XTemplate
 						$res = (is_string($val) && is_string($val2) && strpos($val, $val2) !== FALSE) ? TRUE : FALSE;
 					break;
 					case 'HAS': 
-						$res = (is_array($val) && is_string($val2) && in_array($val2, $val)) ? TRUE : FALSE;
+						$res = (is_array($val) && is_string($val2) && array_search($val2, $val) !== FALSE) ? TRUE : FALSE;
 					break;
 					default: $res = FALSE;
 				}
