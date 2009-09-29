@@ -79,7 +79,7 @@ class XTemplate
 		{
 			$inv = $m[1] == '!';
 			$val = $this->get_var($m[2]);
-			if (preg_match('`'. preg_quote($m[0]) .'\s*(==|!=|>=|<=|>|<)\s*(.*)$`', $expr, $m2))
+			if (preg_match('`'. preg_quote($m[0]) .'\s*(==|!=|>=|<=|>|<|HAS|CONTAINS)\s*(.*)$`', $expr, $m2))
 			{
 				// Get the operator and second operand
 				$val2 = trim($m2[2]);
@@ -94,6 +94,12 @@ class XTemplate
 					case '<': $res = $val < $val2; break;
 					case '>=': $res = $val >= $val2; break;
 					case '<=': $res = $val <= $val2; break;
+					case 'CONTAINS': 
+						$res = (is_string($val) && is_string($val2) && strpos($val, $val2) !== FALSE) ? TRUE : FALSE;
+					break;
+					case 'HAS': 
+						$res = (is_array($val) && is_string($val2) && in_array($val2, $val)) ? TRUE : FALSE;
+					break;
 					default: $res = FALSE;
 				}
 				return $inv ? !$res : $res;
