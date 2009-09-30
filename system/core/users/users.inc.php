@@ -37,7 +37,7 @@ if(is_array($extp))
 }
 /* ===== */
 
-if(empty($s))
+if (empty($s) || mb_strtolower($s) == 'password')
 {
 	$s = 'name';
 }
