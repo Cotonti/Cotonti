@@ -14,7 +14,8 @@
 			<tr>
 				<td class="coltop" style="width:20px;">{USERS_TOP_PM}</td>
 				<td class="coltop">{USERS_TOP_NAME}</td>
-				<td class="coltop" style="width:224px;" colspan="2">{USERS_TOP_MAINGRP}</td>
+				<td class="coltop" style="width:112px;">{USERS_TOP_MAINGRP}</td>
+				<td class="coltop" style="width:112px;">{USERS_TOP_LEVEL}</td>
 				<td class="coltop" style="width:128px;">{USERS_TOP_COUNTRY}</td>
 				<td class="coltop" style="width:112px;">{USERS_TOP_REGDATE}</td>
 			</tr>
