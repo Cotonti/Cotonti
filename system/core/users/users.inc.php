@@ -37,7 +37,7 @@ if(is_array($extp))
 }
 /* ===== */
 
-if (empty($s) || mb_strtolower($s) == 'password')
+if (empty($s) || !in_array($s, array('country', 'name', 'regdate', 'glevel', 'gtitle',)))
 {
 	$s = 'name';
 }
@@ -51,7 +51,7 @@ if(empty($f))
 }
 if(empty($d))
 {
-	$d = '0';
+	$d = 0;
 }
 
 $bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
@@ -64,35 +64,44 @@ if(!empty($sq))
 	$y = $sq;
 }
 
+if ($s == 'glevel' || $s == 'gtitle')
+{
+	$sqljoin = "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp ";
+	$sqlu = "u.";
+}
+else
+{
+	$sqljoin = $sqlu = '';
+}
+
 if($f == 'search' && mb_strlen($y) > 1)
 {
 	$sq = $y;
 	$title .= $cfg['separator']." ". $L['Search']." '".htmlspecialchars($y)."'";
-	$sqlmask = ($s == 'maingrp') ? "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp WHERE u.user_name LIKE '%".sed_sql_prep($y)."%'" : "WHERE user_name LIKE '%".sed_sql_prep($y)."%'";
+	$sqlmask = "{$sqljoin}WHERE {$sqlu}user_name LIKE '%".sed_sql_prep($y)."%'";
 }
 elseif($g > 1)
 {
 	$title .= $cfg['separator']." ".$L['Maingroup']." = ".sed_build_group($g);
-	$sqlmask = "WHERE user_maingrp='$g'";
+	$sqlmask = "{$sqljoin}WHERE {$sqlu}user_maingrp=$g";
 }
 elseif($gm > 1)
 {
 	$title .= $cfg['separator']." ".$L['Group']." = ".sed_build_group($gm);
-    $sqlmask = "as u LEFT JOIN ".$db_groups_users." as g ON g.gru_userid=u.user_id WHERE g.gru_groupid='$gm'";
+	$sqlmask = "as u ".(empty($sqljoin) ? '' : "LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp ")."LEFT JOIN $db_groups_users as m ON m.gru_userid=u.user_id WHERE m.gru_groupid=$gm";
 }
 elseif(mb_strlen($f) == 1)
 {
 	if($f == "_")
 	{
 		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '%'";
-		$sqlmask = ($s == 'maingrp') ? "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp WHERE u.user_name NOT REGEXP(\"^[a-zA-Z]\")" : "WHERE user_name NOT REGEXP(\"^[a-zA-Z]\")";
+		$sqlmask = "{$sqljoin}WHERE {$sqlu}user_name NOT REGEXP(\"^[a-zA-Z]\")";
 	}
 	else
 	{
 		$f = mb_strtoupper($f);
 		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '".$f."'";
-		$i = $f."%";
-		$sqlmask = ($s == 'maingrp') ? "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp WHERE u.user_name LIKE '$i'" : "WHERE user_name LIKE '$i'";
+		$sqlmask = "{$sqljoin}WHERE {$sqlu}user_name LIKE '$f%'";
 	}
 }
 elseif(mb_substr($f, 0, 8) == 'country_')
@@ -100,17 +109,29 @@ elseif(mb_substr($f, 0, 8) == 'country_')
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
 	$title .= $cfg['separator']." ".$L['Country']." '";
 	$title .= ($cn == '00') ? $L['None']."'" : $sed_countries[$cn]."'";
-	$sqlmask = ($s == 'maingrp') ? "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp WHERE u.user_country='$cn'" : "WHERE user_country='$cn'";
+	$sqlmask = "{$sqljoin}WHERE {$sqlu}user_country='$cn'";
 }
-elseif($f == 'all')
+else//if($f == 'all')
 {
-	$sqlmask = ($s == 'maingrp') ? "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp WHERE 1" : "WHERE 1";
+	$sqlmask = "{$sqljoin}WHERE 1";
 }
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users ".$sqlmask);
+if ($s == 'glevel')
+{
+	$sqlorder = "ORDER BY g.grp_level $w";
+}
+elseif ($s == 'gtitle')
+{
+	$sqlorder = "ORDER BY g.grp_title $w";
+}
+else
+{
+	$sqlorder = "ORDER BY user_$s $w";
+}
+
+$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users $sqlmask");
 $totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-$sqlorder = ($s == 'maingrp') ? "ORDER BY g.grp_level $w" : "ORDER BY user_$s $w";
-$sql = sed_sql_query("SELECT * FROM $db_users ".$sqlmask." ".$sqlorder." LIMIT $d,".$cfg['maxusersperpage']);
+$sql = sed_sql_query("SELECT * FROM $db_users $sqlmask $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
@@ -226,7 +247,8 @@ $t -> assign(array(
 	"USERS_TOP_PM" => "PM",
 	"USERS_TOP_USERID" => "<a href=\"".sed_url('users', "f=$f&amp;s=id&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=id&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Userid'],
 	"USERS_TOP_NAME" => "<a href=\"".sed_url('users', "f=$f&amp;s=name&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=name&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Username'],
-	"USERS_TOP_MAINGRP" => "<a href=\"".sed_url('users', "f=$f&amp;s=maingrp&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=maingrp&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Maingroup'],
+	"USERS_TOP_MAINGRP" => "<a href=\"".sed_url('users', "f=$f&amp;s=gtitle&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=gtitle&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Maingroup'],
+	"USERS_TOP_LEVEL" => "<a href=\"".sed_url('users', "f=$f&amp;s=glevel&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=glevel&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Level'],
 	"USERS_TOP_COUNTRY" => "<a href=\"".sed_url('users', "f=$f&amp;s=country&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=country&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Country'],
 	"USERS_TOP_TIMEZONE" => "<a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Timezone'],
 	"USERS_TOP_EMAIL" => "<a href=\"".sed_url('users', "f=$f&amp;s=email&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=email&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Email'],
