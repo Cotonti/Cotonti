@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Users list
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.6.4
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -26,6 +25,29 @@ unset($localskin, $grpms);
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['auth_read']);
 
+$users_sorting_lock = array();
+
+$users_sorting_tags = array(
+	// columns in $db_users table
+	'id' => array('USERS_TOP_USERID', &$L['Userid'],),
+	'name' => array('USERS_TOP_NAME', &$L['Username'],),
+	'maingrp' => array('USERS_TOP_MAINGRP', &$L['Maingroup'],),
+	'country' => array('USERS_TOP_COUNTRY', &$L['Country'],),
+	'occupation' => array('USERS_TOP_OCCUPATION', &$L['Occupation'],),
+	'location' => array('USERS_TOP_LOCATION', &$L['Location'],),
+	'timezone' => array('USERS_TOP_TIMEZONE', &$L['Timezone'],),
+	'birthdate' => array('USERS_TOP_BIRTHDATE', &$L['Birthdate'],),
+	'gender' => array('USERS_TOP_GENDER', &$L['Gender'],),
+	'email' => array('USERS_TOP_EMAIL', &$L['Email'],),
+	'regdate' => array('USERS_TOP_REGDATE', &$L['Registered'],),
+	'lastlog' => array('USERS_TOP_LASTLOGGED', &$L['Lastlogged'],),
+	'logcount' => array('USERS_TOP_LOGCOUNT', &$L['Count'],),
+	'postcount' => array('USERS_TOP_POSTCOUNT', &$L['Posts'],),
+	// like columns in $db_groups table
+	'grplevel' => array('USERS_TOP_GRPLEVEL', &$L['Level'],),
+	'grptitle' => array('USERS_TOP_GRPTITLE', &$L['Maingroup'],),
+);
+
 /* === Hook === */
 $extp = sed_getextplugins('users.first');
 if(is_array($extp))
@@ -37,7 +59,10 @@ if(is_array($extp))
 }
 /* ===== */
 
-if (empty($s) || !in_array($s, array('country', 'name', 'regdate', 'glevel', 'gtitle',)))
+if (empty($s)
+	|| in_array($s, array('password', 'lastip', 'sid', 'lostpass', 'auth', 'hashsalt',))
+	|| (is_array($users_sorting_lock) && in_array($s, $users_sorting_lock))
+	)
 {
 	$s = 'name';
 }
@@ -64,10 +89,10 @@ if(!empty($sq))
 	$y = $sq;
 }
 
-if ($s == 'glevel' || $s == 'gtitle')
+if ($s == 'grplevel' || $s == 'grptitle')
 {
-	$sqljoin = "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp ";
-	$sqlu = "u.";
+	$sqljoin = "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp";
+	$sqlu = 'u.';
 }
 else
 {
@@ -78,12 +103,12 @@ if($f == 'search' && mb_strlen($y) > 1)
 {
 	$sq = $y;
 	$title .= $cfg['separator']." ". $L['Search']." '".htmlspecialchars($y)."'";
-	$sqlmask = "{$sqljoin}WHERE {$sqlu}user_name LIKE '%".sed_sql_prep($y)."%'";
+	$sqlmask = "$sqljoin WHERE {$sqlu}user_name LIKE '%".sed_sql_prep($y)."%'";
 }
 elseif($g > 1)
 {
 	$title .= $cfg['separator']." ".$L['Maingroup']." = ".sed_build_group($g);
-	$sqlmask = "{$sqljoin}WHERE {$sqlu}user_maingrp=$g";
+	$sqlmask = "$sqljoin WHERE {$sqlu}user_maingrp=$g";
 }
 elseif($gm > 1)
 {
@@ -95,13 +120,13 @@ elseif(mb_strlen($f) == 1)
 	if($f == "_")
 	{
 		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '%'";
-		$sqlmask = "{$sqljoin}WHERE {$sqlu}user_name NOT REGEXP(\"^[a-zA-Z]\")";
+		$sqlmask = "$sqljoin WHERE {$sqlu}user_name NOT REGEXP(\"^[a-zA-Z]\")";
 	}
 	else
 	{
 		$f = mb_strtoupper($f);
 		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '".$f."'";
-		$sqlmask = "{$sqljoin}WHERE {$sqlu}user_name LIKE '$f%'";
+		$sqlmask = "$sqljoin WHERE {$sqlu}user_name LIKE '$f%'";
 	}
 }
 elseif(mb_substr($f, 0, 8) == 'country_')
@@ -109,24 +134,24 @@ elseif(mb_substr($f, 0, 8) == 'country_')
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
 	$title .= $cfg['separator']." ".$L['Country']." '";
 	$title .= ($cn == '00') ? $L['None']."'" : $sed_countries[$cn]."'";
-	$sqlmask = "{$sqljoin}WHERE {$sqlu}user_country='$cn'";
+	$sqlmask = "$sqljoin WHERE {$sqlu}user_country='$cn'";
 }
 else//if($f == 'all')
 {
-	$sqlmask = "{$sqljoin}WHERE 1";
+	$sqlmask = "$sqljoin WHERE 1";
 }
 
-if ($s == 'glevel')
+switch ($s)
 {
-	$sqlorder = "ORDER BY g.grp_level $w";
-}
-elseif ($s == 'gtitle')
-{
-	$sqlorder = "ORDER BY g.grp_title $w";
-}
-else
-{
-	$sqlorder = "ORDER BY user_$s $w";
+	case 'grplevel':
+		$sqlorder = "ORDER BY g.grp_level $w";
+	break;
+	case 'grptitle':
+		$sqlorder = "ORDER BY g.grp_title $w";
+	break;
+	default:
+		$sqlorder = "ORDER BY user_$s $w";
+	break;
 }
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_users $sqlmask");
@@ -245,22 +270,15 @@ $t -> assign(array(
 	"USERS_TOP_FILTERS_SEARCH" => $searchfilters,
 	"USERS_TOP_FILTERS_OTHERS" => $otherfilters,
 	"USERS_TOP_PM" => "PM",
-	"USERS_TOP_USERID" => "<a href=\"".sed_url('users', "f=$f&amp;s=id&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=id&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Userid'],
-	"USERS_TOP_NAME" => "<a href=\"".sed_url('users', "f=$f&amp;s=name&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=name&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Username'],
-	"USERS_TOP_MAINGRP" => "<a href=\"".sed_url('users', "f=$f&amp;s=gtitle&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=gtitle&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Maingroup'],
-	"USERS_TOP_LEVEL" => "<a href=\"".sed_url('users', "f=$f&amp;s=glevel&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=glevel&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Level'],
-	"USERS_TOP_COUNTRY" => "<a href=\"".sed_url('users', "f=$f&amp;s=country&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=country&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Country'],
-	"USERS_TOP_TIMEZONE" => "<a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=timezone&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Timezone'],
-	"USERS_TOP_EMAIL" => "<a href=\"".sed_url('users', "f=$f&amp;s=email&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=email&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Email'],
-	"USERS_TOP_REGDATE" => "<a href=\"".sed_url('users', "f=$f&amp;s=regdate&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=regdate&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Registered'],
-	"USERS_TOP_LASTLOGGED" => "<a href=\"".sed_url('users', "f=$f&amp;s=lastlog&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=lastlog&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Lastlogged'],
-	"USERS_TOP_LOGCOUNT" => "<a href=\"".sed_url('users', "f=$f&amp;s=logcount&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=logcount&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Count'],
-	"USERS_TOP_LOCATION" => "<a href=\"".sed_url('users', "f=$f&amp;s=location&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=location&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Location'],
-	"USERS_TOP_OCCUPATION" => "<a href=\"".sed_url('users', "f=$f&amp;s=occupation&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=occupation&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Occupation'],
-	"USERS_TOP_BIRTHDATE" => "<a href=\"".sed_url('users', "f=$f&amp;s=birthdate&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=birthdate&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Birthdate'],
-	"USERS_TOP_GENDER" => "<a href=\"".sed_url('users', "f=$f&amp;s=gender&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=gender&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Gender'],
-	"USERS_TOP_POSTCOUNT" => "<a href=\"".sed_url('users', "f=$f&amp;s=postcount&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=postcount&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$L['Posts'],
 ));
+
+$k = '_.+._';
+$asc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
+$desc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
+foreach ($users_sorting_tags as $k => $x)
+{
+	$t -> assign($x[0], '<a href="'.implode($k, $asc).'">'.$sed_img_down.'</a> <a href="'.implode($k, $desc).'">'.$sed_img_up.'</a> '.$x[1]);
+}
 
 // Extra fields for users
 if(count($extrafields) > 0)
@@ -329,7 +347,7 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 	{
 		foreach($extrafields as $i => $extrafield)
 		{
-			$t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']), sed_build_extrafields_data('user', $extrafield['field_type'], $extrafield['field_name'], $urr['user_'.$extrafield['field_name']])); 
+			$t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']), sed_build_extrafields_data('user', $extrafield['field_type'], $extrafield['field_name'], $urr['user_'.$extrafield['field_name']]));
 			isset($L['user_'.$extrafield['field_name'].'_title']) ? $t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']).'_TITLE', $L['user_'.$extrafield['field_name'].'_title']) : $t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']).'_TITLE', $extrafield['field_description']);
 		}
 	}
@@ -362,5 +380,4 @@ $t -> parse("MAIN");
 $t -> out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
-
 ?>
