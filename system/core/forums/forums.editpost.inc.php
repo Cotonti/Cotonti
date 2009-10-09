@@ -189,7 +189,7 @@ $post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.htmlsp
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
-$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." <a href=\"".sed_url('forums', "m=topics&s=".$s)."\">  ".$cfg['separator']." </a> <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".htmlspecialchars($ft_fulltitle)."</a> ";
+$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)."  ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".htmlspecialchars($ft_fulltitle)."</a> ";
 $toptitle .= $cfg['separator']." <a href=\"".sed_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
