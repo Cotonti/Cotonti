@@ -30,7 +30,7 @@ if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_firs
 	$t->assign(array(
 	'FORUMS_EDITPOST_TOP_TAGS' => $L['Tags'],
 	'FORUMS_EDITPOST_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-	'FORUMS_EDITPOST_FORM_TAGS' => '<input type="text" name="rtags" value="' . $tags . '" />'
+	'FORUMS_EDITPOST_FORM_TAGS' => '<input class="tags_input" type="text" name="rtags" value="' . $tags . '" />'
 	));
 	$t->parse('MAIN.FORUMS_EDITPOST_TAGS');
 }

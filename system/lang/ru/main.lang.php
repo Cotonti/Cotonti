@@ -878,6 +878,7 @@ $sed_countries = array (
 
 $L['rss_allforums_item_title'] = "Последние сообщения на форуме";	// New in N-0.0.2
 $L['rss_comment'] = 'Комментарий пользователя';	// New in N-0.0.2
+$L['rss_comments'] = 'Комментарии для';	// 0.6.4
 $L['rss_comments_item_desc'] = 'Лента комментариев страницы';	// New in N-0.0.2
 $L['rss_original'] = 'Комментируемая страница';	// New in N-0.0.2
 $L['rss_topic_item_desc'] = 'Последние сообщения в теме';	// New in N-0.0.2
