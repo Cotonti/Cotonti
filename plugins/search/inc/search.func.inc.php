@@ -40,7 +40,10 @@ function hw_clear_mark($text, $type=0, $words)
 		$text = preg_replace("'.\t'", " ", $text);
 		$text = preg_replace("' +'", " ", $text);
 		$text = trim($text);
-		$text = htmlspecialchars($text);
+		if ($type != 1)
+		{
+			$text = htmlspecialchars($text);
+		}
 
 		// .
 		foreach($words as $i => $w)

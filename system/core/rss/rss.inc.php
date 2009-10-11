@@ -112,23 +112,23 @@ if ($c == "comments")
 
 				$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code='p$page_id' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
 				$i = 0;
-				while ($row = mysql_fetch_assoc($sql))
+				while ($row1 = mysql_fetch_assoc($sql))
 				{
-					$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row['com_authorid']."' LIMIT 1");
+					$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row1['com_authorid']."' LIMIT 1");
 					$row2 = mysql_fetch_assoc($sql2);
 					$items[$i]['title'] = $L['rss_comment_of_user']." ".$row2['user_name'];
 					if ($cfg['parser_cache'])
 					{
-						if (empty($row['com_html']) && !empty($row['com_text']))
+						if (empty($row1['com_html']) && !empty($row1['com_text']))
 						{
-							$row['com_html'] = sed_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
-							sed_sql_query("UPDATE $db_com SET com_html = '".sed_sql_prep($row['com_html'])."' WHERE com_id = ".$row['com_id']);
+							$row1['com_html'] = sed_parse(htmlspecialchars($row1['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
+							sed_sql_query("UPDATE $db_com SET com_html = '".sed_sql_prep($row1['com_html'])."' WHERE com_id = ".$row1['com_id']);
 						}
-						$text = $cfg['parsebbcodepages'] ? sed_post_parse($row['com_html']) : htmlspecialchars($row['com_text']);
+						$text = $cfg['parsebbcodepages'] ? sed_post_parse($row1['com_html']) : htmlspecialchars($row1['com_text']);
 					}
 					else
 					{
-						$text = sed_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
+						$text = sed_parse(htmlspecialchars($row1['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
 						$text = sed_post_parse($com_text, 'pages');
 					}
 					$items[$i]['description'] = $text;
@@ -137,8 +137,6 @@ if ($c == "comments")
 					$i++;
 				}
 				// Attach original page text as last item
-				$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
-				$row = mysql_fetch_assoc($sql);
 		        $row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
 				$items[$i]['title'] = $L['rss_original'];
 				$items[$i]['description'] = sed_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
