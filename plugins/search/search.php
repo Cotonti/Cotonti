@@ -564,7 +564,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 			// Only pages with files
 			if($sea_pagfile==1)
 			{
-				$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS page_id, page_date, page_ownerid, page_title,
+				$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS page_id, page_date, page_ownerid, page_title, page_type,
 						$text_from_sql page_cat FROM $db_pages p, $db_structure s
 		   	 		WHERE $pagsql
 					p.page_file='1'
@@ -579,7 +579,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 			// Otherwise everything
 			else
 			{
-				$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS page_id, page_alias, page_date, page_ownerid, page_title,
+				$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS page_id, page_alias, page_date, page_ownerid, page_title, page_type,
 						$text_from_sql page_cat from $db_pages p, $db_structure s
 					WHERE $pagsql
 					p.page_state='0'
@@ -1008,7 +1008,7 @@ else
 				// Display text in results
 				$text_from_sql = $cfg['plugin']['search']['showtext'] == 1 ? "page_text, page_type," : "";
 
-				$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS page_id, page_date, page_ownerid, page_title,
+				$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS page_id, page_date, page_ownerid, page_title, page_type,
 						$text_from_sql page_cat from $db_pages p, $db_structure s
 					WHERE $pagsql
 					p.page_state='0'
