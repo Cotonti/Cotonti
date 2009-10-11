@@ -25,9 +25,7 @@ unset($localskin, $grpms);
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['auth_read']);
 
-$users_sorting_lock = array();
-
-$users_sorting_tags = array(
+$users_sort_tags = array(
 	// columns in $db_users table
 	'id' => array('USERS_TOP_USERID', &$L['Userid'],),
 	'name' => array('USERS_TOP_NAME', &$L['Username'],),
@@ -38,7 +36,6 @@ $users_sorting_tags = array(
 	'timezone' => array('USERS_TOP_TIMEZONE', &$L['Timezone'],),
 	'birthdate' => array('USERS_TOP_BIRTHDATE', &$L['Birthdate'],),
 	'gender' => array('USERS_TOP_GENDER', &$L['Gender'],),
-	'email' => array('USERS_TOP_EMAIL', &$L['Email'],),
 	'regdate' => array('USERS_TOP_REGDATE', &$L['Registered'],),
 	'lastlog' => array('USERS_TOP_LASTLOGGED', &$L['Lastlogged'],),
 	'logcount' => array('USERS_TOP_LOGCOUNT', &$L['Count'],),
@@ -47,6 +44,8 @@ $users_sorting_tags = array(
 	'grplevel' => array('USERS_TOP_GRPLEVEL', &$L['Level'],),
 	'grptitle' => array('USERS_TOP_GRPTITLE', &$L['Maingroup'],),
 );
+
+$users_sort_blacklist = array('email', 'lastip',);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.first');
@@ -59,10 +58,7 @@ if(is_array($extp))
 }
 /* ===== */
 
-if (empty($s)
-	|| in_array($s, array('password', 'lastip', 'sid', 'lostpass', 'auth', 'hashsalt',))
-	|| (is_array($users_sorting_lock) && in_array($s, $users_sorting_lock))
-	)
+if (empty($s) || in_array(mb_strtolower($s), array('password', 'sid', 'lostpass', 'auth', 'hashsalt',)) || in_array(mb_strtolower($s), $users_sort_blacklist))
 {
 	$s = 'name';
 }
@@ -275,7 +271,7 @@ $t -> assign(array(
 $k = '_.+._';
 $asc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
 $desc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
-foreach ($users_sorting_tags as $k => $x)
+foreach ($users_sort_tags as $k => $x)
 {
 	$t -> assign($x[0], '<a href="'.implode($k, $asc).'">'.$sed_img_down.'</a> <a href="'.implode($k, $desc).'">'.$sed_img_up.'</a> '.$x[1]);
 }
