@@ -30,7 +30,7 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	$t->assign(array(
 	'PAGEEDIT_TOP_TAGS' => $L['Tags'],
 	'PAGEEDIT_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-	'PAGEEDIT_FORM_TAGS' => '<input type="text" name="rtags" value="' . $tags . '" />'
+	'PAGEEDIT_FORM_TAGS' => '<input class="tags_input" type="text" name="rtags" value="' . $tags . '" />'
 	));
 	$t->parse('MAIN.TAGS');
 }

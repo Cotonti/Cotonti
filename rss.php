@@ -67,37 +67,47 @@ if ($c == "comments")
 	// == Comments rss ==
 	$page_id = $id;
 
-	$rss_title = "Comments for ".$cfg['maintitle'];
+	$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 
 	$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
-	if (sed_sql_affectedrows()>0)
+	if (sed_sql_affectedrows() > 0)
 	{
 		$row = mysql_fetch_assoc($sql);
-		if(sed_auth('page', $row['page_cat'], 'R'))
+		if (sed_auth('page', $row['page_cat'], 'R'))
 		{
 			$rss_title = $row['page_title'];
 			$rss_description = $L['rss_comments_item_desc'];
 
-			$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code='p$page_id' ORDER BY com_date DESC LIMIT $cfg_maxitems");
+			$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code='p$page_id' ORDER BY com_date DESC LIMIT ".$cfg_maxitems);
 			$i = 0;
-			while($row = mysql_fetch_assoc($sql))
+			while ($row1 = mysql_fetch_assoc($sql))
 			{
-				$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row['com_authorid']."' LIMIT 1");
+				$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row1['com_authorid']."' LIMIT 1");
 				$row2 = mysql_fetch_assoc($sql2);
-				$items[$i]['title'] = $L['rss_comment']." ".$row2['user_name'];
-				$text = sed_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
-				$text = sed_post_parse($text, 'pages');
+				$items[$i]['title'] = $L['rss_comment_of_user']." ".$row2['user_name'];
+				if ($cfg['parser_cache'])
+				{
+					if (empty($row1['com_html']) && !empty($row1['com_text']))
+					{
+						$row1['com_html'] = sed_parse(htmlspecialchars($row1['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
+						sed_sql_query("UPDATE $db_com SET com_html = '".sed_sql_prep($row1['com_html'])."' WHERE com_id = ".$row1['com_id']);
+					}
+					$text = $cfg['parsebbcodepages'] ? sed_post_parse($row1['com_html']) : htmlspecialchars($row1['com_text']);
+				}
+				else
+				{
+					$text = sed_parse(htmlspecialchars($row1['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
+					$text = sed_post_parse($com_text, 'pages');
+				}
 				$items[$i]['description'] = $text;
 				$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=$page_id", '#c'.$row['com_id'], true);
 				$items[$i]['pubDate'] = date('r', $row['com_date']);
 				$i++;
 			}
 			// Attach original page text as last item
-			$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
-			$row = mysql_fetch_assoc($sql);
+			$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
 			$items[$i]['title'] = $L['rss_original'];
-			//$items[$i]['description'] = sed_parse_page_text($row['page_text']);
-			$items[$i]['description'] = $row['page_html']; // TODO page_text parse
+			$items[$i]['description'] = sed_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
 			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=$page_id", '', true);
 			$items[$i]['pubDate'] = date('r', $row['page_date']);
 		}
@@ -250,18 +260,15 @@ else
 
 	$sql = sed_sql_query("SELECT page_id, page_title, page_text, page_cat, page_date FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER by page_date DESC LIMIT ".$cfg_maxitems);
 	$i = 0;
-	while($row = mysql_fetch_assoc($sql))
+	while ($row = mysql_fetch_assoc($sql))
 	{
-		$readmore = strpos($row['page_text'], "[more]");
-		if($readmore>0) { $row['page_text'] = substr($row['page_text'], 0, $readmore); }
-		$row['page_text'] = preg_replace("'[[^]]*?.*?]'si", "", $row['page_text']);
-		$row['page_text'] = htmlspecialchars($row['page_text']);
-		$row_page_url = SED_ABSOLUTE_URL.sed_url('page', "id=".$row['page_id'], '', true);
-		if($readmore>0) { $row['page_text'] .= " <a href=\"".$row_page_url."\">".$L['ReadMore']."</a>"; }
+        $row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
+
 		$items[$i]['title'] = $row['page_title'];
-		$items[$i]['link'] = $row_page_url;
+		$items[$i]['link'] = $row['page_pageurl'];
 		$items[$i]['pubDate'] = date('r', $row['page_date']);
-		$items[$i]['description'] = $row['page_text'];
+		$items[$i]['description'] = sed_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
+
 		$i++;
 	}
 }
@@ -307,41 +314,77 @@ echo $out;
 // ---------------------------------------------------------------------------------------------
 
 
-function sed_parse_page_text($pag)
+function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_pageurl)
 {
-	global $cfg, $db_pages;
-	switch($pag['page_type'])
+	global $cfg, $db_pages, $usr;
+	switch($pag_type)
 	{
 		case '1':
-			$text = $pag['page_text'];
-			break;
+			$text = $pag_text;
+		break;
+
 		case '2':
-			if ($cfg['allowphp_pages']&&$cfg['allowphp_override'])
+			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
 			{
 				ob_start();
-				eval($pag['page_text']);
+				eval($pag_text);
 				$text = ob_get_clean();
-			}else
+			}
+			else
 			{
 				$text = "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".";
 			}
-			break;
+		break;
+
 		default:
 			if ($cfg['parser_cache'])
 			{
-				if (empty($pag['page_html'])&&!empty($pag['page_text']))
+				if (empty($pag_html))
 				{
-					$pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = ".$pag['page_id']);
+					$pag_html = sed_parse(htmlspecialchars($pag_text), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag_html)."' WHERE page_id = ".$pag_id);
 				}
-				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
-				$text = $html;
-			}else
-			{
-				$text = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-				$text = sed_post_parse($text, 'pages');
+				$readmore = mb_strpos($pag_html, "<!--more-->");
+				if ($readmore > 0)
+				{
+					$pag_html = mb_substr($pag_html, 0, $readmore);
+					$pag_html .= " <span class=\"readmore\"><a href=\"".$pag_pageurl."\">".$L['ReadMore']."</a></span>";
+				}
+
+			    $newpage = mb_strpos($pag_html, '[newpage]');
+
+			    if ($newpage !== false)
+			    {
+			        $pag_html = mb_substr($pag_html, 0, $newpage);
+			    }
+
+			    $pag_html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_html);
+
+				$cfg['parsebbcodepages'] ? $text = sed_post_parse($pag_html, 'pages') : $text = htmlspecialchars($pag_text);
 			}
-			break;
+			else
+			{
+				$pag_text = sed_parse(htmlspecialchars($pag_text), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+				$readmore = mb_strpos($pag_text, "<!--more-->");
+				if ($readmore>0)
+				{
+					$pag_text = mb_substr($pag_text, 0, $readmore);
+					$pag_text .= " <span class=\"readmore\"><a href=\"".$pag_pageurl."\">".$L['ReadMore']."</a></span>";
+				}
+
+			    $newpage = mb_strpos($pag_html, '[newpage]');
+
+			    if ($newpage !== false)
+			    {
+			        $pag_html = mb_substr($pag_html, 0, $newpage);
+			    }
+
+			    $pag_html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_html);
+
+				$pag_text = sed_post_parse($pag_text, 'pages');
+				$text = $pag_text;
+			}
+		break;
 	}
 	return $text;
 }

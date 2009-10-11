@@ -145,7 +145,7 @@ if ($a=='update')
 				$rpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $rpagealias;
 			}
 
-			if($cfg['parser_cache'])
+			if($cfg['parser_cache'] && $rpagetype != 1)
 			{
 				$rpagehtml = sed_parse(htmlspecialchars($rpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
 			}
