@@ -158,7 +158,6 @@ $t = new XTemplate($mskin);
 $t->assign(array(
 	"PAGE_ID" => $pag['page_id'],
 	"PAGE_STATE" => $pag['page_state'],
-	"PAGE_EXECUTE" => $pag['page_execute'],
 	"PAGE_TITLE" => $pag['page_fulltitle'],
 	"PAGE_SHORTTITLE" => $pag['page_title'],
 	"PAGE_CAT" => $pag['page_cat'],
