@@ -2517,6 +2517,11 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			if ($filter=='ARR') { return($v); }
 			break;
 
+		case 'R':
+			$v = (isset($_REQUEST[$name])) ? $_REQUEST[$name] : NULL;
+			$log = TRUE;
+			break;
+
 		case 'C':
 			$v = (isset($_COOKIE[$name])) ? $_COOKIE[$name] : NULL;
 			$log = TRUE;
