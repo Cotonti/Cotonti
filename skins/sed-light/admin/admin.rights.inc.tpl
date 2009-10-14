@@ -49,7 +49,7 @@
 <!-- ENDIF -->
 					</td>
 <!-- END: ROW_CORE_ITEMS -->
-					<td style="text-align:center; padding:2px;">{ADMIN_RIGHTS_ROW_USER}</td>
+					<td style="text-align:center; padding:2px;">{ADMIN_RIGHTS_ROW_USER}{ADMIN_RIGHTS_ROW_PRESERVE}</td>
 				</tr>
 <!-- END: RIGHTS_ROW_CORE -->
 				</table>
@@ -91,7 +91,7 @@
 <!-- ENDIF -->
 					</td>
 <!-- END: ROW_FORUMS_ITEMS -->
-					<td style="text-align:center; padding:2px;">{ADMIN_RIGHTS_ROW_USER}</td>
+					<td style="text-align:center; padding:2px;">{ADMIN_RIGHTS_ROW_USER}{ADMIN_RIGHTS_ROW_PRESERVE}</td>
 				</tr>
 <!-- END: RIGHTS_ROW_FORUMS -->
 				</table>
@@ -133,7 +133,7 @@
 <!-- ENDIF -->
 					</td>
 <!-- END: ROW_PAGES_ITEMS -->
-					<td style="text-align:center; padding:2px;">{ADMIN_RIGHTS_ROW_USER}</td>
+					<td style="text-align:center; padding:2px;">{ADMIN_RIGHTS_ROW_USER}{ADMIN_RIGHTS_ROW_PRESERVE}</td>
 				</tr>
 <!-- END: RIGHTS_ROW_PAGES -->
 				</table>
@@ -175,7 +175,7 @@
 <!-- ENDIF -->
 					</td>
 <!-- END: ROW_PLUGINS_ITEMS -->
-					<td style="text-align:center; padding:2px;">{ADMIN_RIGHTS_ROW_USER}</td>
+					<td style="text-align:center; padding:2px;">{ADMIN_RIGHTS_ROW_USER}{ADMIN_RIGHTS_ROW_PRESERVE}</td>
 				</tr>
 <!-- END: RIGHTS_ROW_PLUGINS -->
 				<tr>
