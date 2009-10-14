@@ -42,7 +42,7 @@
 <!-- ENDIF -->
 					</td>
 <!-- END: ROW_ITEMS -->
-					<td style="text-align:center;padding:2px;">{ADMIN_RIGHTSBYITEM_ROW_USER}</td>
+					<td style="text-align:center;padding:2px;">{ADMIN_RIGHTSBYITEM_ROW_USER}{ADMIN_RIGHTSBYITEM_ROW_PRESERVE}</td>
 					<td style="text-align:center;"><a href="{ADMIN_RIGHTSBYITEM_ROW_JUMPTO}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
 				</tr>
 <!-- END: RIGHTSBYITEM_ROW -->
