@@ -130,6 +130,10 @@ function sed_rights_parseline($row, $title, $link)
 	{
 		$mn['1'] = 4;
 	}
+	else
+	{
+		$rv['1'] = 4;
+	}
 
 	if($advanced)
 	{
@@ -137,6 +141,13 @@ function sed_rights_parseline($row, $title, $link)
 		$mn['3'] = 16;
 		$mn['4'] = 32;
 		$mn['5'] = 64;
+	}
+	else
+	{
+		$rv['2'] = 8;
+		$rv['3'] = 16;
+		$rv['4'] = 32;
+		$rv['5'] = 64;
 	}
 	$mn['A'] = 128;
 
@@ -153,6 +164,19 @@ function sed_rights_parseline($row, $title, $link)
 			"ADMIN_RIGHTSBYITEM_ROW_ITEMS_DISABLED" => ($locked[$code]) ? " disabled=\"disabled\"" : ''
 		));
 		$t -> parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW.ROW_ITEMS");
+	}
+
+	if (!$advanced)
+	{
+		$preserve = '';
+		foreach($rv as $code => $value)
+		{
+			if (($row['auth_rights'] & $value) == $value)
+			{
+				$preserve .= '<input type="hidden" name="auth['.$row['auth_groupid'].']['.$code.']" value="1" />';
+			}
+		}
+		$t->assign('ADMIN_RIGHTSBYITEM_ROW_PRESERVE', $preserve);
 	}
 
 	$t -> assign(array(
