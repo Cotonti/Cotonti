@@ -225,6 +225,6 @@ $skinlang['usersprofile']['Oldpasswordhint'] = '(To set a new password enter you
 $skinlang['usersregister']['Validemail'] = 'Valid e-mail';
 $skinlang['usersregister']['Validemailhint'] = 'A valid e-mail is required to complete the registration process !';
 $skinlang['usersregister']['Confirmpassword'] = 'Confirm password';
-$skinlang['usersregister']['Formhint'] = 'Once you\'re registered and logged in, have a look in your profile to set<br />your avatar, signature, ICQ, website, location, timezone, etc.';
+$skinlang['usersregister']['Formhint'] = 'Once you\'re registered and logged in, have a look in your profile to set your avatar, signature, ICQ, website, location, timezone, etc.';
 
 ?>
