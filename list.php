@@ -3,7 +3,7 @@
  * List loader
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.6.5
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -11,8 +11,8 @@
 
 define('SED_CODE', TRUE);
 define('SED_LIST', TRUE);
-$location = 'Pages';
-$z = 'page';
+$location = 'List';
+$z = 'list';
 
 require_once('./datas/config.php');
 require_once($cfg['system_dir'].'/functions.php');

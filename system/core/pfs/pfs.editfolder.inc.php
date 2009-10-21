@@ -1,5 +1,4 @@
-<?PHP
-
+<?php
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -150,6 +149,8 @@ $body .= "</table></form>";
 
 if ($standalone)
 {
+	sed_sendheaders();
+
 	$pfs_header1 = $cfg['doctype']."<html><head>
 <title>".$cfg['maintitle']."</title>".sed_htmlmetas()."
 <script type=\"text/javascript\">
@@ -204,4 +205,5 @@ else
 
 	require_once $cfg['system_dir'] . '/footer.php';
 }
+
 ?>
