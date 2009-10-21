@@ -103,6 +103,7 @@ $R['frm_icon_posts_sticky_locked'] = '<img class="icon" src="skins/'.$skin.'/img
 $R['frm_icon_section_activity'] = '<img class="icon" src="skins/'.$skin.'/img/system/activity{$secact_num}.gif" alt="" />';
 $R['frm_icon_topic'] = '<img class="icon" src="skins/'.$skin.'/img/system/{$icon}.png" alt="" />';
 $R['frm_icon_topic_t'] = '<img class="icon" src="skins/'.$skin.'/img/system/{$icon}.png" alt="" title="{$title}" />';
+$R['frm_rowquote'] = '<a href="{$url}">'.$L['Quote'].'</a>';
 
 /* Page */
 $R['page_icon_file'] = '<img class="icon" src="{$icon}" alt="" />';

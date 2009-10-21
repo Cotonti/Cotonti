@@ -623,7 +623,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$fp_num++;
 	$i = empty($id) ? $d + $fp_num : $id;
 
-	$rowquote  = ($usr['id']>0) ? "<a href=\"".sed_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np")."\">".$L['Quote']."</a>" : "&nbsp;";
+	$rowquote  = ($usr['id']>0) ? sed_rc('frm_rowquote', array('url' => sed_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np"))) : '';
 	$rowedit   = (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? "<a href=\"".sed_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg())."\">".$L['Edit']."</a>" : '';
 	$rowdelete = ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? $L['Delete'].":[<a href=\"".sed_url('forums', "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id'])."\">x</a>]" : '';
 	$rowdelete .= ($fp_num==$totalposts) ? "<a name=\"bottom\" id=\"bottom\"></a>" : '';
