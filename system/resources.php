@@ -104,6 +104,8 @@ $R['frm_icon_section_activity'] = '<img class="icon" src="skins/'.$skin.'/img/sy
 $R['frm_icon_topic'] = '<img class="icon" src="skins/'.$skin.'/img/system/{$icon}.png" alt="" />';
 $R['frm_icon_topic_t'] = '<img class="icon" src="skins/'.$skin.'/img/system/{$icon}.png" alt="" title="{$title}" />';
 $R['frm_rowquote'] = '<a href="{$url}">'.$L['Quote'].'</a>';
+$R['frm_rowedit'] = '<a href="{$url}">'.$L['Edit'].'</a>';
+$R['frm_rowdelete'] = $L['Delete'].':[<a href="{$url}">x</a>]';
 
 /* Page */
 $R['page_icon_file'] = '<img class="icon" src="{$icon}" alt="" />';
