@@ -1,9 +1,9 @@
 <?php
 /* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
+ Seditio - Website engine
+ Copyright Neocrome
+ http://www.neocrome.net
+ ==================== */
 
 /**
  * Personal File Storage, edit
@@ -17,18 +17,19 @@ http://www.neocrome.net
 
 defined('SED_CODE') or die('Wrong URL');
 
-$id = sed_import('id','G','INT');
-$o = sed_import('o','G','ALP');
-$f = sed_import('f','G','INT');
-$c1 = sed_import('c1','G','ALP');
-$c2 = sed_import('c2','G','ALP');
-$userid = sed_import('userid','G','INT');
+$id = sed_import('id', 'G', 'INT');
+$o = sed_import('o', 'G', 'ALP');
+$f = sed_import('f', 'G', 'INT');
+$c1 = sed_import('c1', 'G', 'ALP');
+$c2 = sed_import('c2', 'G', 'ALP');
+$userid = sed_import('userid', 'G', 'INT');
+
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['auth_write']);
 
-if (!$usr['isadmin'] || $userid=='')
+if (!$usr['isadmin'] || $userid == '')
 {
 	$userid = $usr['id'];
 }
@@ -37,12 +38,14 @@ else
 	$more = 'userid='.$userid;
 }
 
-if ($userid!=$usr['id'])
-{ sed_block($usr['isadmin']); }
+if ($userid != $usr['id'])
+{
+	sed_block($usr['isadmin']);
+}
 
 $standalone = FALSE;
 $user_info = sed_userinfo($userid);
-$maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
+$maingroup = ($userid == 0) ? 5 : $user_info['user_maingrp'];
 
 $cfg['pfs_path'] = sed_pfs_path($userid);
 $cfg['pfs_thumbpath'] = sed_pfs_thumbpath($userid);
@@ -62,11 +65,10 @@ if (!empty($c1) || !empty($c2))
 }
 
 /* ============= */
-
-$L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
+$L['pfs_title'] = ($userid == 0) ? $L['SFS'] : $L['pfs_title'];
 $title = sed_rc_link(sed_url('pfs', $more), $L['pfs_title']);
 
-if ($userid!=$usr['id'])
+if ($userid != $usr['id'])
 {
 	sed_block($usr['isadmin']);
 	$title .= ($userid==0) ? '' : ' ('.sed_build_user($user_info['user_id'], $user_info['user_name']).')';
@@ -87,24 +89,26 @@ if ($row = sed_sql_fetcharray($sql))
 	$pff_path = (empty($row['pff_path'])) ? '' : $row['pff_path'].'/';
 	$pfs_extension = $row['pfs_extension'];
 	$pfs_desc = sed_cc($row['pfs_desc']);
-	$pfs_size = floor($row['pfs_size']/1024);
+	$pfs_size = floor($row['pfs_size'] / 1024);
 	$ff = $cfg['pfs_path'].$pff_path.$pfs_file;
 }
 else
-{ sed_die(); }
+{
+	sed_die();
+}
 
 $title .= ' '.$cfg['separator'].' '.sed_cc($pfs_file);
 
-if ($a=='update' && !empty($id))
+if ($a == 'update' && !empty($id))
 {
-	$rdesc = sed_import('rdesc','P','TXT');
-	$folderid = sed_import('folderid','P','INT');
-	if ($folderid>0)
+	$rdesc = sed_import('rdesc', 'P', 'TXT');
+	$folderid = sed_import('folderid', 'P', 'INT');
+	if ($folderid > 0)
 	{
 		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders
 			WHERE pff_userid='$userid' AND pff_id='$folderid'");
-		sed_die(sed_sql_numrows($sql)==0);
-		if($row = sed_sql_fetcharray($sql))
+		sed_die(sed_sql_numrows($sql) == 0);
+		if ($row = sed_sql_fetcharray($sql))
 		{
 			$newpath = $userid.'/'.$row['pff_path'].'/';
 		}
@@ -114,12 +118,12 @@ if ($a=='update' && !empty($id))
 		$folderid = 0;
 		$newpath = $userid.'/';
 	}
-	if ($pfs_folderid>0)
+	if ($pfs_folderid > 0)
 	{
 		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders
 			WHERE pff_userid='$userid' AND pff_id='$pfs_folderid'");
-		sed_die(sed_sql_numrows($sql)==0);
-		if($row = sed_sql_fetcharray($sql))
+		sed_die(sed_sql_numrows($sql) == 0);
+		if ($row = sed_sql_fetcharray($sql))
 		{
 			$oldpath = $userid.'/'.$row['pff_path'].'/';
 		}
@@ -145,21 +149,25 @@ if ($a=='update' && !empty($id))
 			WHERE pfs_userid='$userid' AND pfs_id='$id'");
 		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', "f=$pfs_folderid&".$more, '', true));
 	}
-	if (empty($error_string)) exit;
+	if (empty($error_string))
+	{
+		exit;
+	}
 }
-
 /* ============= */
 
 if (!$standalone)
 {
-	require_once $cfg['system_dir'] . '/header.php';
+	require_once $cfg['system_dir'].'/header.php';
 }
 
 $t = new XTemplate(sed_skinfile('pfs.edit'));
 
 if ($standalone)
 {
-	if($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
+	sed_sendheaders();
+
+	if ($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
 	{
 		$addthumb = "'".$cfg['pfs_thumbpath']."' + gfile";
 		$addpix = 'gfile';
@@ -172,7 +180,7 @@ if ($standalone)
 		$addfile = "'[url=".$cfg['pfs_path']."'+gfile+']'+gfile+'[/url]'";
 	}
 	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
-	
+
 	$t->assign(array(
 		'PFS_DOCTYPE' => $cfg['doctype'],
 		'PFS_METAS' => sed_htmlmetas(),
@@ -205,7 +213,7 @@ $t->out('MAIN');
 
 if (!$standalone)
 {
-	require_once $cfg['system_dir'] . '/footer.php';
+	require_once $cfg['system_dir'].'/footer.php';
 }
 
 ?>

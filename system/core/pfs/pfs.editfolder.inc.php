@@ -17,12 +17,13 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-$id = sed_import('id','G','INT');
-$o = sed_import('o','G','ALP');
-$f = sed_import('f','G','INT');
-$c1 = sed_import('c1','G','ALP');
-$c2 = sed_import('c2','G','ALP');
-$userid = sed_import('userid','G','INT');
+$id = sed_import('id', 'G', 'INT');
+$o = sed_import('o', 'G', 'ALP');
+$f = sed_import('f', 'G', 'INT');
+$c1 = sed_import('c1', 'G', 'ALP');
+$c2 = sed_import('c2', 'G', 'ALP');
+$userid = sed_import('userid', 'G', 'INT');
+
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
@@ -38,11 +39,13 @@ else
 }
 
 if ($userid!=$usr['id'])
-{ sed_block($usr['isadmin']); }
+{
+	sed_block($usr['isadmin']);
+}
 
 $standalone = FALSE;
 $user_info = sed_userinfo($userid);
-$maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
+$maingroup = ($userid == 0) ? 5 : $user_info['user_maingrp'];
 
 $cfg['pfs_path'] = sed_pfs_path($userid);
 $cfg['pfs_thumbpath'] = sed_pfs_thumbpath($userid);
@@ -62,14 +65,13 @@ if (!empty($c1) || !empty($c2))
 }
 
 /* ============= */
-
-$L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
+$L['pfs_title'] = ($userid == 0) ? $L['SFS'] : $L['pfs_title'];
 $title = sed_rc_link(sed_url('pfs', $more), $L['pfs_title']);
 
-if ($userid!=$usr['id'])
+if ($userid != $usr['id'])
 {
 	sed_block($usr['isadmin']);
-	$title .= ($userid==0) ? '' : ' ('.sed_build_user($user_info['user_id'], $user_info['user_name']).')';
+	$title .= ($userid == 0) ? '' : ' ('.sed_build_user($user_info['user_id'], $user_info['user_name']).')';
 }
 
 $title .= ' '.$cfg['separator'].' '.$L['Edit'];
@@ -91,29 +93,31 @@ if ($row = sed_sql_fetcharray($sql))
 	$title .= ' '.$cfg['separator'].' '.sed_cc($pff_title);
 }
 else
-{ sed_die(); }
-
-if ($a=='update' && !empty($f))
 {
-	$rtitle = sed_import('rtitle','P','TXT');
-	$rdesc = sed_import('rdesc','P','TXT');
-	$folderid = sed_import('folderid','P','INT');
-	$rparentid = sed_import('rparentid','P','INT');
-	$rispublic = sed_import('rispublic','P','BOL');
-	$risgallery = sed_import('risgallery','P','BOL');
+	sed_die();
+}
+
+if ($a == 'update' && !empty($f))
+{
+	$rtitle = sed_import('rtitle', 'P', 'TXT');
+	$rdesc = sed_import('rdesc', 'P', 'TXT');
+	$folderid = sed_import('folderid', 'P', 'INT');
+	$rparentid = sed_import('rparentid', 'P', 'INT');
+	$rispublic = sed_import('rispublic', 'P', 'BOL');
+	$risgallery = sed_import('risgallery', 'P', 'BOL');
 	$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
-	sed_die(sed_sql_numrows($sql)==0);
-	
+	sed_die(sed_sql_numrows($sql) == 0);
+
 	$sql = sed_sql_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id='".(int)$rparentid."'");
 	if ($row = sed_sql_fetcharray($sql))
 	{
 		$rpath = $row['pff_path'];
 	}
-	
-	$pathname = substr($pff_path,strrpos($pff_path, '/')+1);
+
+	$pathname = substr($pff_path, strrpos($pff_path, '/') + 1);
 	$oldpath = $userid.'/'.$pff_path;
 	$newpath = $userid.'/'.$rpath.'/'.$pathname;
-	
+
 	if (file_exists('datas/users/'.$newpath))
 	{
 		$error_string = sprintf($L['pfs_direxists'], $oldpath, $newpath);
@@ -135,24 +139,28 @@ if ($a=='update' && !empty($f))
 			WHERE pff_userid='$userid' AND pff_id='$f' " );
 		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
 	}
-	if (empty($error_string)) exit;
+	if (empty($error_string))
+	{
+		exit;
+	}
 }
 
 $row['pff_date'] = @date($cfg['dateformat'], $row['pff_date'] + $usr['timezone'] * 3600);
 $row['pff_updated'] = @date($cfg['dateformat'], $row['pff_updated'] + $usr['timezone'] * 3600);
-
 /* ============= */
 
 if (!$standalone)
 {
-	require_once $cfg['system_dir'] . '/header.php';
+	require_once $cfg['system_dir'].'/header.php';
 }
 
 $t = new XTemplate(sed_skinfile('pfs.editfolder'));
 
 if ($standalone)
 {
-	if($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
+	sed_sendheaders();
+
+	if ($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
 	{
 		$addthumb = "'".$cfg['pfs_thumbpath']."' + gfile";
 		$addpix = 'gfile';
@@ -198,6 +206,6 @@ $t->out('MAIN');
 
 if (!$standalone)
 {
-	require_once $cfg['system_dir'] . '/footer.php';
+	require_once $cfg['system_dir'].'/footer.php';
 }
 ?>

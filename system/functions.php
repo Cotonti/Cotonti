@@ -40,11 +40,6 @@ $cfg['svnrevision'] = '$Rev$'; //DO NOT MODIFY this is set by SVN automatically
 $cfg['version'] = '0.7.0';
 $cfg['dbversion'] = '0.7.0';
 
-if($cfg['customfuncs'])
-{
-	require_once($cfg['system_dir'].'/functions.custom.php');
-}
-
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))
 {
@@ -3191,7 +3186,16 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 	}
 	else
 	{
-		$headers = (empty($headers)) ? "From: \"".$cfg['maintitle']."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
+		if($cfg['charset'] != 'us-ascii')
+		{
+			$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], $cfg['charset'], 'B', "\n");
+		}
+		else
+		{			$sitemaintitle = $cfg['maintitle'];		}
+
+		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
+		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
+
 		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
 		if($cfg['charset'] != 'us-ascii')
 		{
@@ -5358,10 +5362,14 @@ function sed_get_plural($plural, $lang, $is_frac = false)
     }
 }
 
+if ($cfg['customfuncs'])
+{
+	require_once($cfg['system_dir'].'/functions.custom.php');
+}
+
 /*
  * ================================ Debugging Facilities ================================
  */
-
 
 /**
  * Accepts several variables and prints their values in debug mode (var dump).
@@ -5504,4 +5512,5 @@ define('SED_CHECKPOINT_LOCALS', '$debug_fp = fopen(SED_DEBUG_LOGFILE, "a");
 	fputs($debug_fp, "----------------\n");
 	fclose($debug_fp);'
 );
+
 ?>
