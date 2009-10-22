@@ -1,13 +1,7 @@
-<?PHP
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
+<?php
 /**
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -18,7 +12,12 @@ defined('SED_CODE') or die('Wrong URL');
 /* === Hook === */
 $extp = sed_getextplugins('footer.first');
 if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $i = explode(' ', microtime());
@@ -38,19 +37,21 @@ if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 	foreach ($sys['devmode']['queries'] as $k => $i)
 	{
 		$out['devmode'] .= "<tr><td>#".$i[0]." &nbsp;</td>";
-		$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",round($i[1]*1000, 3))." ms</td>";
-		$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",round($sys['devmode']['timeline'][$k]*1000, 3))." ms</td>";
+		$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", round($i[1] * 1000, 3))." ms</td>";
+		$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", round($sys['devmode']['timeline'][$k] * 1000, 3))." ms</td>";
 		$out['devmode'] .= "<td style=\"text-align:left;\">".htmlspecialchars($i[2])."</td></tr>";
 	}
 	$out['devmode'] .= "<tr><td colspan=\"2\">END</td>";
-	$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f",$sys['creationtime'])." ms</td><td>&nbsp;</td></tr>";
-	$out['devmode'] .= "</table><br />Total:".round($sys['tcount'],4)."s - Queries:".$sys['qcount']. " - Average:".round(($sys['tcount']/$sys['qcount']),5)."s/q";
+	$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", $sys['creationtime'])." ms</td><td>&nbsp;</td></tr>";
+	$out['devmode'] .= "</table><br />Total:".round($sys['tcount'], 4)."s - Queries:".$sys['qcount']. " - Average:".round(($sys['tcount'] / $sys['qcount']), 5)."s/q";
 }
 
 /*
 ========= DEBUG:START =========
 if (is_array($sys['auth_log']))
-	{ $out['devauth'] .= "AUTHLOG: ".implode(', ',$sys['auth_log']); }
+{
+	$out['devauth'] .= "AUTHLOG: ".implode(', ',$sys['auth_log']);
+}
 $txt_r = ($usr['auth_read']) ? '1' : '0';
 $txt_w = ($usr['auth_write']) ? '1' : '0';
 $txt_a = ($usr['isadmin']) ? '1' : '0';
@@ -64,13 +65,48 @@ if (!SED_AJAX)
 	/* === Hook === */
 	$extp = sed_getextplugins('footer.main');
 	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
 	if ($cfg['enablecustomhf'])
-	{ $mskin = sed_skinfile(array('footer', mb_strtolower($location))); }
+	{
+		if ($location == 'Administration')
+		{
+			if (file_exists('./skins/'.$usr['skin'].'/admin/footer.tpl'))
+			{
+				$mskin = './skins/'.$usr['skin'].'/admin/footer.tpl';
+			}
+			elseif (file_exists('./skins/'.$cfg['defaultskin'].'/admin/footer.tpl'))
+			{
+				$mskin = './skins/'.$cfg['defaultskin'].'/admin/footer.tpl';
+			}
+			elseif (file_exists('./skins/'.$usr['skin'].'/footer.Administration.tpl'))
+			{
+				$mskin = './skins/'.$usr['skin'].'/footer.Administration.tpl';
+			}
+			elseif (file_exists('./skins/'.$cfg['defaultskin'].'/footer.Administration.tpl'))
+			{
+				$mskin = './skins/'.$cfg['defaultskin'].'/footer.Administration.tpl';
+			}
+			else
+			{
+				$mskin = "skins/".$usr['skin']."/footer.tpl";
+			}
+		}
+		else
+		{
+			$mskin = sed_skinfile(array('footer', mb_strtolower($location)));
+		}
+	}
 	else
-	{ $mskin = "skins/".$usr['skin']."/footer.tpl"; }
+	{
+		$mskin = "skins/".$usr['skin']."/footer.tpl";
+	}
 	$t = new XTemplate($mskin);
 
 	$t->assign(array (
@@ -82,18 +118,27 @@ if (!SED_AJAX)
 		"FOOTER_PMREMINDER" => $out['pmreminder'],
 		"FOOTER_ADMINPANEL" => $out['adminpanel'],
 		"FOOTER_DEVMODE" => $out['devmode']
-		));
+	));
 
 	/* === Hook === */
 	$extp = sed_getextplugins('footer.tags');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
-	if ($usr['id']>0)
-	{ $t->parse("FOOTER.USER"); }
+	if ($usr['id'] > 0)
+	{
+		$t->parse("FOOTER.USER");
+	}
 	else
-	{ $t->parse("FOOTER.GUEST"); }
+	{
+		$t->parse("FOOTER.GUEST");
+	}
 
 	$t->parse("FOOTER");
 	$t->out("FOOTER");
@@ -105,6 +150,12 @@ sed_sql_close();
 /* === Hook === */
 $extp = sed_getextplugins('footer.last');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
+
 ?>
