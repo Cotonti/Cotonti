@@ -52,6 +52,7 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
         }
         else
         {
+			$id = (int) $id;
             $sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
         }
 
