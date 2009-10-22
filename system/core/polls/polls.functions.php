@@ -46,13 +46,14 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
     }
     elseif ($id!='new')
     {
+		$id = (int) $id;
         if(!$type)
         {
             $sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id='$id' ");
         }
         else
         {
-            $sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+            $sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='".sed_sql_prep($type)."' AND poll_code='$id' LIMIT 1");
         }
 
         if ($row = sed_sql_fetcharray($sql))
@@ -239,6 +240,7 @@ function sed_poll_save($type='index', $code='')
             $newpoll_id = sed_sql_insertid(); }
         else {
             // TODO: CHECK if changed
+			$poll_id = (int) $poll_id;
             $sql = sed_sql_query("UPDATE $db_polls SET  poll_state='".(int)$poll_state."', poll_text='".sed_sql_prep($poll_text)."', poll_multiple='".(int)$poll_multiple."' WHERE poll_id='$poll_id'");
             $newpoll_id = $poll_id; }
         // Dinamic adding polloptions
@@ -271,7 +273,7 @@ function sed_poll_vote()
     global $vote;
 
     $vote = sed_import('vote','P','ARR');
-    $id= sed_import('poll_id','P','INT');
+    $id = (int) sed_import('poll_id','P','INT');
 
     if (!empty($vote))
     {
@@ -321,7 +323,8 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
 
     if(!is_array($id))
     {
-        $where=(!$type) ? "poll_id='$id'" : "poll_type='$type' AND poll_code='$id'" ;
+		$id = (int) $id;
+        $where=(!$type) ? "poll_id='$id'" : "poll_type='".sed_sql_prep($type)."' AND poll_code='$id'" ;
         $sql = sed_sql_query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
         if (!$row = sed_sql_fetcharray($sql))
         {
@@ -430,9 +433,10 @@ function sed_poll_form($id, $formlink='', $skin='', $type='')
 function sed_poll_delete($id, $type='')
 {
     global $db_polls, $db_polls_options, $db_polls_voters, $db_com;
+	$id = (int) $id;
     if($type)
     {
-        $sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+        $sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='".sed_sql_prep($type)."' AND poll_code='$id' LIMIT 1");
         if ($row = sed_sql_fetcharray($sql))
         {
             $id=$row['poll_id'];
@@ -452,9 +456,10 @@ function sed_poll_delete($id, $type='')
 function sed_poll_lock($id, $state, $type='')
 {
     global $db_polls;
+	$id = (int) $id;
     if($type)
     {
-        $sql = sed_sql_query("SELECT poll_id, poll_state FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+        $sql = sed_sql_query("SELECT poll_id, poll_state FROM $db_polls WHERE poll_type='".sed_sql_prep($type)."' AND poll_code='$id' LIMIT 1");
         if ($row = sed_sql_fetcharray($sql))
         {
             $id=$row['poll_id'];
@@ -485,9 +490,10 @@ function sed_poll_lock($id, $state, $type='')
 function sed_poll_reset($id, $type='')
 {
     global $db_polls, $db_polls_options, $db_polls_voters;
+	$id = (int) $id;
     if($type)
     {
-        $sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+        $sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='".sed_sql_prep($type)."' AND poll_code='$id' LIMIT 1");
         if ($row = sed_sql_fetcharray($sql))
         {
             $id=$row['poll_id'];
@@ -504,13 +510,14 @@ function sed_poll_reset($id, $type='')
 function sed_poll_exists($id, $type='')
 {
     global $db_polls;
+	$id = (int) $id;
     if(!$type)
     {
         $sql = sed_sql_query("SELECT COUNT(*)  FROM $db_polls WHERE poll_id='$id' ");
     }
     else
     {
-        $sql = sed_sql_query("SELECT COUNT(*)  FROM $db_polls WHERE poll_type='$type' AND poll_code='$id' LIMIT 1");
+        $sql = sed_sql_query("SELECT COUNT(*)  FROM $db_polls WHERE poll_type='".sed_sql_prep($type)."' AND poll_code='$id' LIMIT 1");
     }
     return (sed_sql_result($sql, 0, "COUNT(*)"));
 }
