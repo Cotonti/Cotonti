@@ -258,7 +258,7 @@ else
 		if(substr($x['path'], 0, $mtchlen)==$mtch) { $catsub[] = $i; }
 	}
 
-	$sql = sed_sql_query("SELECT page_id, page_title, page_text, page_cat, page_date FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER by page_date DESC LIMIT ".$cfg_maxitems);
+	$sql = sed_sql_query("SELECT page_id, page_type, page_title, page_text, page_cat, page_date FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER by page_date DESC LIMIT ".$cfg_maxitems);
 	$i = 0;
 	while ($row = mysql_fetch_assoc($sql))
 	{
@@ -268,7 +268,7 @@ else
 		$items[$i]['link'] = $row['page_pageurl'];
 		$items[$i]['pubDate'] = date('r', $row['page_date']);
 		$items[$i]['description'] = sed_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
-
+	
 		$i++;
 	}
 }
