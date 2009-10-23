@@ -20,6 +20,7 @@ defined('SED_CODE') or die('Wrong URL');
 $id = sed_import('id','G','INT');
 $o = sed_import('o','G','ALP');
 $f = sed_import('f','G','INT');
+$userid = sed_import('userid','G','INT');
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 $d = sed_import('d', 'G', 'INT');
@@ -80,7 +81,7 @@ if ($userid!=$usr['id'])
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('pfs.first');
+$extp = sed_getextplugins('pfs.admin.first');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
@@ -127,7 +128,7 @@ case 'upload':
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('pfs.upload.first');
+	$extp = sed_getextplugins('pfs.admin.upload.first');
 	if (is_array($extp))
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
@@ -204,7 +205,7 @@ case 'upload':
 						if ($is_moved && (int)$u_size > 0)
 						{
 							/* === Hook === */
-							$extp = sed_getextplugins('pfs.upload.moved');
+							$extp = sed_getextplugins('pfs.admin.upload.moved');
 							if (is_array($extp))
 							{ foreach($extp as $k => $pl)
 								{ include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
@@ -235,7 +236,7 @@ case 'upload':
 							$pfs_totalsize += $u_size;
 
 							/* === Hook === */
-							$extp = sed_getextplugins('pfs.upload.done');
+							$extp = sed_getextplugins('pfs.admin.upload.done');
 							if (is_array($extp))
 							{ foreach($extp as $k => $pl)
 								{ include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
@@ -282,6 +283,30 @@ case 'upload':
 			}
 			$err_msg[] = $disp_errors;
 		}
+	}
+break;
+
+case 'uploadify':
+	if (!empty($_FILES)) {
+		$tempFile = $_FILES['Filedata']['tmp_name'];
+		$targetPath = $_SERVER['DOCUMENT_ROOT'] . $_REQUEST['folder'] . '/';
+		$targetFile =  str_replace('//','/',$targetPath) . $_FILES['Filedata']['name'];
+		
+		// $fileTypes  = str_replace('*.','',$_REQUEST['fileext']);
+		// $fileTypes  = str_replace(';','|',$fileTypes);
+		// $typesArray = split('\|',$fileTypes);
+		$fileParts  = pathinfo($_FILES['Filedata']['name']);
+		$ext = $fileParts['extension'];
+		
+		// if (in_array($fileParts['extension'],$typesArray)) {
+		// Uncomment the following line if you want to make the directory if it doesn't exist
+		// mkdir(str_replace('//','/',$targetPath), 0755, true);
+			
+		move_uploaded_file($tempFile,$targetFile);
+		
+		sed_sql_query("INSERT INTO $db_pfs (pfs_date, pfs_file, pfs_extension, pfs_folderid, pfs_size)
+			VALUES ('".time()."', '".$_FILES['Filedata']['name']."', '$ext', '0', '0')");
+	
 	}
 break;
 
@@ -466,11 +491,12 @@ while ($row3 = sed_sql_fetcharray($sql3))
 }
 
 $folders_count = sed_sql_numrows($sql1);
+$movebox = sed_selectbox_folders($userid,"/","");
 $sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_folderid>0 AND pfs_userid='$userid'");
 $subfiles_count = sed_sql_result($sql2,0,"COUNT(*)");
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(sed_skinfile('pfs'));
+$t = new XTemplate(sed_skinfile(array('pfs', 'admin')));
 
 $iki=0;
 $subfiles_count_on_page=0;
@@ -513,6 +539,7 @@ while ($row1 = sed_sql_fetcharray($sql1l))
 
 $files_count = sed_sql_numrows($sql);
 
+$movebox = (empty($f)) ? sed_selectbox_folders($userid,'/','') : sed_selectbox_folders($userid,$f,'');
 $th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)),
 	hexdec(mb_substr($cfg['th_colortext'],4,2)));
 $th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)),
@@ -731,7 +758,7 @@ $out['subtitle'] = sed_title('title_pfs', $title_tags, $title_data);
 $t->assign('PFS_TITLE', $title);
 
 /* === Hook === */
-$extp = sed_getextplugins('pfs.tags');
+$extp = sed_getextplugins('pfs.admin.tags');
 if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */

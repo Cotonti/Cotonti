@@ -23,6 +23,10 @@ sed_dieifdisabled($cfg['disable_pfs']);
 
 switch($m)
 {
+	case 'admin':
+		require_once($cfg['system_dir'].'/core/pfs/pfs.admin.inc.php');
+	break;
+	
 	case 'view':
 		require_once($cfg['system_dir'].'/core/pfs/pfs.view.inc.php');
 	break;
@@ -33,6 +37,10 @@ switch($m)
 
 	case 'editfolder':
 		require_once($cfg['system_dir'].'/core/pfs/pfs.editfolder.inc.php');
+	break;
+	
+	case 'system':
+		require_once($cfg['system_dir'].'/core/pfs/pfs.system.inc.php');
 	break;
 
 	default:

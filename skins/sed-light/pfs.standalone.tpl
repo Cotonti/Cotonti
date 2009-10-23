@@ -1,6 +1,5 @@
 <!-- BEGIN: MAIN -->
 
-<!-- BEGIN: STANDALONE_HEADER -->
 {PFS_DOCTYPE}
 <html><head><title>{PHP.cfg.maintitle}</title>
 {PFS_METAS}{PFS_JAVASCRIPT}
@@ -25,7 +24,6 @@ function picture(url,sx,sy) {
 </script>
 <link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
 </head><body>
-<!-- END: STANDALONE_HEADER -->
 
 	<div class="mboxHD">{PFS_TITLE} {PFS_PATH}</div>
 		<div class="mboxBody">
@@ -79,6 +77,7 @@ function picture(url,sx,sy) {
 			<td class="coltop">{PHP.L.Size}</td>
 			<td class="coltop">{PHP.L.Hits}</td>
 			<td class="coltop">{PHP.L.Description}</td>
+			<td class="coltop">&nbsp;</td>
 		</tr>
 		<!-- BEGIN: PFS_ROW -->
 		<tr>
@@ -90,6 +89,7 @@ function picture(url,sx,sy) {
 			<td style="text-align:right;">{PFS_ROW_SIZE}</td>
 			<td style="text-align:right;">{PFS_ROW_COUNT}</td>
 			<td>{PFS_ROW_TYPE} / {PFS_ROW_DESC}</td>
+			<td>{PFS_ROW_INSERT}</td>
 		</tr>
 		<!-- END: PFS_ROW -->
 		</table>
@@ -208,11 +208,9 @@ function picture(url,sx,sy) {
 
 	</div>
 
-<!-- BEGIN: STANDALONE_FOOTER -->
 <div class="block">
 <img src="skins/{PHP.skin}/img/system/icon-pastethumb.gif" alt="{PHP.L.pfs_pastethumb}" /> {PHP.L.pfs_pastethumb} &nbsp;&nbsp;&nbsp;<img src="skins/{PHP.skin}/img/system/icon-pasteimage.gif" alt="{PHP.L.pfs_pasteimage}" /> {PHP.L.pfs_pasteimage} &nbsp;&nbsp;&nbsp;<img src="skins/{PHP.skin}/img/system/icon-pastefile.gif" alt="{PHP.L.pfs_pastefile}" /> {PHP.L.pfs_pastefile}
 </div>
 </body></html>
-<!-- END: STANDALONE_FOOTER -->
 
 <!-- END: MAIN -->
