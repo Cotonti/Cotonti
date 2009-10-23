@@ -3191,7 +3191,9 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 			$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], $cfg['charset'], 'B', "\n");
 		}
 		else
-		{			$sitemaintitle = $cfg['maintitle'];		}
+		{
+			$sitemaintitle = $cfg['maintitle'];
+		}
 
 		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
 		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
@@ -3483,6 +3485,35 @@ function sed_pfs_deleteall($userid)
 	}
 
 	return($num);
+}
+
+/**
+ * Create a new directory
+ *
+ * @param string $path Path relative to site root
+ * $param boolean $feedback Prevent endless loop
+ * @return boolean
+ */
+function sed_pfs_mkdir($path, $feedback=FALSE)
+{
+	global $cfg;
+	
+	if(substr($path, 0, 2) == './')
+	{
+		$path = substr($path, 2);
+	}
+	if(!$feedback && !file_exists($cfg['pfs_path']))
+	{
+		sed_pfs_mkdir($cfg['pfs_path'], TRUE);
+	}
+	if(@mkdir($path, $cfg['dir_perms']))
+	{
+		return(TRUE);
+	}
+	else
+	{
+		return(FALSE);
+	}
 }
 
 /**

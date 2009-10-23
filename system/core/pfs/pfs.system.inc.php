@@ -20,6 +20,9 @@ defined('SED_CODE') or die('Wrong URL');
 $id = sed_import('id','G','INT');
 $o = sed_import('o','G','ALP');
 $f = sed_import('f','G','INT');
+$c1 = sed_import('c1','G','ALP');
+$c2 = sed_import('c2','G','ALP');
+$userid = sed_import('userid','G','INT');
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 $d = sed_import('d', 'G', 'INT');
@@ -29,6 +32,9 @@ $df = empty($df) ? 0 : (int) $df;
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['auth_read']);
+
+$pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
+$pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
 
 if (!$usr['isadmin'] || empty($userid)) 
 {
@@ -44,6 +50,7 @@ if ($userid!=$usr['id'])
 
 $files_count = 0;
 $folders_count = 0;
+$standalone = FALSE;
 $user_info = sed_userinfo($userid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
@@ -61,6 +68,13 @@ else
 { sed_die(); }
 
 if ($maxfile==0 || $maxtotal==0) { sed_block($usr['isadmin']); }
+
+if (!empty($c1) || !empty($c2))
+{
+	$morejavascript = sed_rc('pfs_code_header_javascript');
+	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
+	$standalone = TRUE;
+}
 
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
@@ -285,6 +299,30 @@ case 'upload':
 	}
 break;
 
+case 'uploadify':
+	if (!empty($_FILES)) {
+		$tempFile = $_FILES['Filedata']['tmp_name'];
+		$targetPath = $_SERVER['DOCUMENT_ROOT'] . $_REQUEST['folder'] . '/';
+		$targetFile =  str_replace('//','/',$targetPath) . $_FILES['Filedata']['name'];
+		
+		// $fileTypes  = str_replace('*.','',$_REQUEST['fileext']);
+		// $fileTypes  = str_replace(';','|',$fileTypes);
+		// $typesArray = split('\|',$fileTypes);
+		$fileParts  = pathinfo($_FILES['Filedata']['name']);
+		$ext = $fileParts['extension'];
+		
+		// if (in_array($fileParts['extension'],$typesArray)) {
+		// Uncomment the following line if you want to make the directory if it doesn't exist
+		// mkdir(str_replace('//','/',$targetPath), 0755, true);
+			
+		move_uploaded_file($tempFile,$targetFile);
+		
+		sed_sql_query("INSERT INTO $db_pfs (pfs_date, pfs_file, pfs_extension, pfs_folderid, pfs_size)
+			VALUES ('".time()."', '".$_FILES['Filedata']['name']."', '$ext', '0', '0')");
+	
+	}
+break;
+
 case 'delete':
 	sed_block($usr['auth_write']);
 	sed_check_xg();
@@ -466,11 +504,13 @@ while ($row3 = sed_sql_fetcharray($sql3))
 }
 
 $folders_count = sed_sql_numrows($sql1);
+$movebox = sed_selectbox_folders($userid,"/","");
 $sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_folderid>0 AND pfs_userid='$userid'");
 $subfiles_count = sed_sql_result($sql2,0,"COUNT(*)");
 
-require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(sed_skinfile('pfs'));
+if (!$standalone) require_once $cfg['system_dir'] . '/header.php';
+$mskin = ($standalone) ? sed_skinfile(array('pfs', 'standalone')) : sed_skinfile('pfs');
+$t = new XTemplate($mskin);
 
 $iki=0;
 $subfiles_count_on_page=0;
@@ -513,6 +553,7 @@ while ($row1 = sed_sql_fetcharray($sql1l))
 
 $files_count = sed_sql_numrows($sql);
 
+$movebox = (empty($f)) ? sed_selectbox_folders($userid,'/','') : sed_selectbox_folders($userid,$f,'');
 $th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)),
 	hexdec(mb_substr($cfg['th_colortext'],4,2)));
 $th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)),
@@ -542,6 +583,8 @@ while ($row = sed_sql_fetcharray($sqll))
 
 	$dotpos = mb_strrpos($pfs_file, ".")+1;
 	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
+	unset($add_thumbnail, $add_image);
+	$add_file = ($standalone) ? sed_rc('link_pfs_addfile') : '';
 
 	if ($pfs_extension!=$pfs_realext)
 	{
@@ -562,6 +605,11 @@ while ($row = sed_sql_fetcharray($sqll))
 				$th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
 		}
 
+		if ($standalone)
+		{
+			$add_thumbnail .= sed_rc('link_pfs_addthumb');
+			$add_image = sed_rc('link_pfs_addpix');
+		}
 		if ($o=='thumbs')
 		{
 			$thumbpath = $cfg['pfs_thumbpath'];
@@ -581,7 +629,8 @@ while ($row = sed_sql_fetcharray($sqll))
 		'PFS_ROW_ICON' => $pfs_icon,
 		'PFS_ROW_DELETE_URL' => sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.'&'.$more.'&o='.$o),
 		'PFS_ROW_EDIT_URL' => sed_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
-		'PFS_ROW_COUNT' => $row['pfs_count']
+		'PFS_ROW_COUNT' => $row['pfs_count'],
+		'PFS_ROW_INSERT' => $add_thumbnail.$add_image.$add_file
 	));
 	
 	$t->parse('MAIN.PFS_ROW');
@@ -730,11 +779,53 @@ $out['subtitle'] = sed_title('title_pfs', $title_tags, $title_data);
 
 $t->assign('PFS_TITLE', $title);
 
-/* === Hook === */
-$extp = sed_getextplugins('pfs.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
+if ($standalone)
+{
+	if($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
+	{
+		$addthumb = "'".$cfg['pfs_thumbpath']."' + gfile";
+		$addpix = 'gfile';
+		$addfile = "'".$cfg['pfs_path']."' + gfile";
+	}
+	else
+	{
+		$addthumb = "'[img=".$cfg['pfs_path']."'+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'";
+		$addpix = "'[img]'+gfile+'[/img]'";
+		$addfile = "'[url=".$cfg['pfs_path']."'+gfile+']'+gfile+'[/url]'";
+	}
+	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
+
+	sed_sendheaders();
+
+	$t->assign(array(
+		'PFS_DOCTYPE' => $cfg['doctype'],
+		'PFS_METAS' => sed_htmlmetas(),
+		'PFS_JAVASCRIPT' => sed_javascript(),
+		'PFS_C1' => $c1,
+		'PFS_C2' => $c2,
+		'PFS_ADDTHUMB' => $addthumb,
+		'PFS_ADDPIX' => $addpix,
+		'PFS_ADDFILE' => $addfile,
+		'PFS_WINCLOSE' => $winclose
+	));
+
+	$t->parse('MAIN.STANDALONE_HEADER');
+	$t->parse('MAIN.STANDALONE_FOOTER');
+
+	/* === Hook === */
+	$extp = sed_getextplugins('pfs.standalone');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+}
+else
+{
+	/* === Hook === */
+	$extp = sed_getextplugins('pfs.tags');
+	if (is_array($extp))
+	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	/* ===== */
+}
 
 if (count($err_msg) > 0)
 {
@@ -749,6 +840,9 @@ if (count($err_msg) > 0)
 $t->parse('MAIN');
 $t->out('MAIN');
 
-require_once $cfg['system_dir'] . '/footer.php';
+if(!$standalone)
+{
+	require_once $cfg['system_dir'] . '/footer.php';
+}
 
 ?>

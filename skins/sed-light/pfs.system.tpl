@@ -1,32 +1,5 @@
 <!-- BEGIN: MAIN -->
 
-<!-- BEGIN: STANDALONE_HEADER -->
-{PFS_DOCTYPE}
-<html><head><title>{PHP.cfg.maintitle}</title>
-{PFS_METAS}{PFS_JAVASCRIPT}
-<script type="text/javascript">
-//<![CDATA[
-function help(rcode,c1,c2) {
-	window.open("plug.php?h="+rcode+"&amp;c1="+c1+"&amp;c2="+c2,"Help","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16");
-}
-function addthumb(gfile,c1,c2) {
-	insertText(opener.document, "{PFS_C1}", "{PFS_C2}", {PFS_ADDTHUMB});{PFS_WINCLOSE}
-}
-function addpix(gfile,c1,c2) {
-	insertText(opener.document, "{PFS_C1}", "{PFS_C2}", {PFS_ADDPIX});{PFS_WINCLOSE}
-}
-function addfile(gfile,c1,c2) {
-	insertText(opener.document, "{PFS_C1}", "{PFS_C2}", {PFS_ADDFILE});{PFS_WINCLOSE}
-}
-function picture(url,sx,sy) {
-	window.open("pfs.php?m=view&amp;id="+url,"Picture","toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width="+sx+",height="+sy+",left=0,top=0");
-}
-//]]>
-</script>
-<link href="skins/{PHP.skin}/{PHP.theme}.css" type="text/css" rel="stylesheet" />
-</head><body>
-<!-- END: STANDALONE_HEADER -->
-
 	<div class="mboxHD">{PFS_TITLE} {PFS_PATH}</div>
 		<div class="mboxBody">
 		<div id="subtitle">{PFS_SUBTITLE}
@@ -207,12 +180,5 @@ function picture(url,sx,sy) {
 		<br style="clear:left;" />
 
 	</div>
-
-<!-- BEGIN: STANDALONE_FOOTER -->
-<div class="block">
-<img src="skins/{PHP.skin}/img/system/icon-pastethumb.gif" alt="{PHP.L.pfs_pastethumb}" /> {PHP.L.pfs_pastethumb} &nbsp;&nbsp;&nbsp;<img src="skins/{PHP.skin}/img/system/icon-pasteimage.gif" alt="{PHP.L.pfs_pasteimage}" /> {PHP.L.pfs_pasteimage} &nbsp;&nbsp;&nbsp;<img src="skins/{PHP.skin}/img/system/icon-pastefile.gif" alt="{PHP.L.pfs_pastefile}" /> {PHP.L.pfs_pastefile}
-</div>
-</body></html>
-<!-- END: STANDALONE_FOOTER -->
 
 <!-- END: MAIN -->
