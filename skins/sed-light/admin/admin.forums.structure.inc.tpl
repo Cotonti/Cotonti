@@ -71,13 +71,13 @@
 				<tr>
 					<td style="text-align:center;">
 <!-- IF {PHP.del_url} -->
-						[<a href="{FORUMS_STRUCTURE_ROW_DEL_URL}"{FORUMS_STRUCTURE_ROW_DEL_URL_AJAX}>x</a>]
+						<a title="{PHP.L.Delete}" href="{FORUMS_STRUCTURE_ROW_DEL_URL}"{FORUMS_STRUCTURE_ROW_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a>
 <!-- ENDIF -->
 					</td>
 					<td>{FORUMS_STRUCTURE_ROW_FN_CODE}</td>
 					<td>
 <!-- IF {PHP.pathfieldimg} -->
-						<img src="images/admin/join2.gif" alt="" />
+						{PHP.R.admin_icon_join2}
 <!-- ENDIF -->
 						<input type="text" class="text" name="{FORUMS_STRUCTURE_ROW_INPUT_PATH_NAME}" value="{FORUMS_STRUCTURE_ROW_FN_PATH}" size="{FORUMS_STRUCTURE_ROW_PATHFIELDLEN}" maxlength="24" /></td>
 					<td style="text-align:center;">
@@ -93,7 +93,7 @@
 					</td>
 					<td style="text-align:center;">{FORUMS_STRUCTURE_ROW_FN_TPL_SYM}</td>
 					<td><input type="text" class="text" name="{FORUMS_STRUCTURE_ROW_INPUT_TITLE_NAME}" value="{FORUMS_STRUCTURE_ROW_FN_TITLE}" size="24" maxlength="100" /></td>
-					<td style="text-align:right;">{FORUMS_STRUCTURE_ROW_SECTIONCOUNT} <a href="{FORUMS_STRUCTURE_ROW_JUMPTO_URL}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
+					<td style="text-align:right;">{FORUMS_STRUCTURE_ROW_SECTIONCOUNT} <a href="{FORUMS_STRUCTURE_ROW_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a></td>
 					<td style="text-align:center;"><a href="{FORUMS_STRUCTURE_ROW_OPTIONS_URL}"{FORUMS_STRUCTURE_ROW_OPTIONS_URL_AJAX}>{PHP.L.Options}</a></td>
 				</tr>
 <!-- END: ROW -->

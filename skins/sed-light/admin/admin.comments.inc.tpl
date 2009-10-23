@@ -1,7 +1,7 @@
 <!-- BEGIN: COMMENTS -->
 		<div id="{ADMIN_COMMENTS_AJAX_OPENDIVID}">
 			<ul>
-				<li><a href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
 			</ul>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_COMMENTS_ADMINWARNINGS}</div>
@@ -21,13 +21,13 @@
 <!-- BEGIN: ADMIN_COMMENTS_ROW -->
 			<table class="cells">
 			<tr>
-				<td style="width:60px;text-align:center;">[<a href="{ADMIN_COMMENTS_ITEM_DEL_URL}"{ADMIN_COMMENTS_ITEM_DEL_URL_AJAX}>x</a>]</td>
+				<td style="width:60px;text-align:center;"><a title="{PHP.L.Delete}" href="{ADMIN_COMMENTS_ITEM_DEL_URL}"{ADMIN_COMMENTS_ITEM_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a></td>
 				<td style="width:40px;text-align:center;">{ADMIN_COMMENTS_ITEM_ID}</td>
 				<td style="width:40px;text-align:center;">{ADMIN_COMMENTS_CODE}</td>
 				<td style="width:90px;">{ADMIN_COMMENTS_AUTHOR}</td>
 				<td style="width:128px;text-align:center;">{ADMIN_COMMENTS_DATE}</td>
 				<td>{ADMIN_COMMENTS_TEXT}</td>
-				<td style="width:64px;text-align:center;"><a href="{ADMIN_COMMENTS_URL}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
+				<td style="width:64px;text-align:center;"><a title="{PHP.L.Open}" href="{ADMIN_COMMENTS_URL}">{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
 			</table>
 <!-- END: ADMIN_COMMENTS_ROW -->

@@ -1,6 +1,6 @@
 <!-- BEGIN: PM -->
 		<ul>
-			<li><a href="{ADMIN_PM_URL_CONFIG}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
+			<li><a title="{PHP.L.Configuration}" href="{ADMIN_PM_URL_CONFIG}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
 		</ul>
 		<table class="cells">
 		<tr>

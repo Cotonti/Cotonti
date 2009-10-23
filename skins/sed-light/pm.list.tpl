@@ -8,20 +8,20 @@
     <div class="paging">{PM_INBOX} &nbsp; &nbsp; {PM_ARCHIVES} &nbsp; &nbsp; {PM_SENTBOX} &nbsp; &nbsp; {PM_SENDNEWPM}</div>
 
     <form action="{PM_FORM_UPDATE}" method="post" name="update">
-
         <div class="tCap"></div>
         <table class="cells" border="0" cellspacing="1" cellpadding="2">
-
-
             <tr>
-                <td class="coltop" style="width:16px;"> </td>
+                <td class="coltop" style="width:16px;">
+<!-- IF {PHP.cfg.jquery} -->
+			        <input class="checkbox" type="checkbox" value="{PHP.skinlang.pm.Selectall}/{PHP.skinlang.pm.Unselectall}" onclick="$('.checkbox').attr('checked', this.checked);" />
+<!-- ENDIF -->
+                </td>
                 <td class="coltop" style="width:16px;">{PHP.L.Status}</td>
                 <td class="coltop">{PM_TOP_SENTBOX}</td>
                 <td class="coltop">{PHP.L.Subject}</td>
                 <td class="coltop" style="width:176px;">{PHP.L.Date}</td>
                 <td class="coltop" style="width:72px;">{PHP.L.Action}</td>
             </tr>
-
             <!-- BEGIN: PM_ROW -->
             <tr>
                 <td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_SELECT}</td>
@@ -32,25 +32,18 @@
                 <td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_ACTION}</td>
             </tr>
             <!-- END: PM_ROW -->
-
             <!-- BEGIN: PM_ROW_EMPTY -->
             <tr>
                 <td colspan="6" style="padding:16px;">{PHP.L.None}</td>
             </tr>
             <!-- END: PM_ROW_EMPTY -->
-
         </table>
         <div class="bCap"></div>
 
         <!-- BEGIN: PM_FOOTER -->
         <div class="paging">{PM_TOP_PAGEPREV}&nbsp;{PM_TOP_PAGES}&nbsp;{PM_TOP_PAGENEXT}</div>
         <!-- END: PM_FOOTER -->
-        <!-- IF {PHP.cfg.jquery} -->
-        <input type="button" value="{PHP.skinlang.pm.Selectall}" onClick="$('.checkbox').attr('checked', 'checked');" />
-        <input type="button" value="{PHP.skinlang.pm.Unselectall}" onClick="$('.checkbox').removeAttr('checked');" />
-	<!-- ENDIF -->
         {PM_DELETE} {PM_ARCHIVE}
-
     </form>
 
     <div class="paging">

@@ -2,7 +2,7 @@
 		<div id="{ADMIN_PLUG_AJAX_OPENDIVID}">
 <!-- IF {PHP.if_conf_url} -->
 			<ul>
-				<li><a href="{ADMIN_PLUG_CONFIG_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
 			</ul>
 <!-- ENDIF -->
 <!-- IF {PHP.is_adminwarnings} -->
@@ -30,7 +30,7 @@
 				<tr>
 					<td>{PHP.L.Configuration}:</td>
 <!-- IF {ADMIN_PLUG_TOTALCONFIG} > 0 -->
-					<td><a href="{ADMIN_PLUG_CONFIG_URL}"><img src="images/admin/config.gif" alt="" /> ({ADMIN_PLUG_TOTALCONFIG}) {PHP.L.Edit}</a></td>
+					<td><a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.R.admin_icon_config} ({ADMIN_PLUG_TOTALCONFIG}) {PHP.L.Edit}</a></td>
 <!-- ELSE -->
 					<td>{PHP.L.None}</td>
 <!-- ENDIF -->
@@ -38,7 +38,7 @@
 				<tr>
 					<td>{PHP.L.Rights}:</td>
 <!-- IF {PHP.isinstalled} -->
-					<td><a href="{ADMIN_PLUG_RIGHTS}"><img src="images/admin/rights2.gif" alt="" /></a></td>
+					<td><a title="{PHP.L.Rights}" href="{ADMIN_PLUG_RIGHTS}">{PHP.R.admin_icon_rights2}</a></td>
 <!-- ELSE -->
 					<td>{PHP.L.None}</td>
 <!-- ENDIF -->
@@ -188,16 +188,16 @@
 					<td>
 						<a href="{ADMIN_PLUG_DETAILS_URL}">
 <!-- IF {PHP.ifthistools} -->
-						<img src="images/admin/tools.gif" alt="" />
+						{PHP.R.admin_icon_tools}
 <!-- ELSE -->
-						<img src="images/admin/plug.gif" alt="" />
+						{PHP.R.admin_icon_plug}
 <!-- ENDIF -->
 						{ADMIN_PLUG_NAME}</a>
 					</td>
 				 	<td>{ADMIN_PLUG_CODE_X}</td>
 					<td style="text-align:center;">
 <!-- IF {PHP.ent_code} > 0 -->
-						<a href="{ADMIN_PLUG_EDIT_URL}"><img src="images/admin/config.gif" alt="" /></a>
+						<a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_EDIT_URL}">{PHP.R.admin_icon_config}</a>
 <!-- ENDIF -->
 						&nbsp;
 					</td>
@@ -205,15 +205,15 @@
 					<td style="text-align:center;">{ADMIN_PLUG_STATUS}</td>
 					<td style="text-align:center;">&nbsp;
 <!-- IF {PHP.part_status} != 3 -->
-						<a href="{ADMIN_PLUG_RIGHTS_URL}"><img src="images/admin/rights2.gif" alt="" /></a>
+						<a title="{PHP.L.Rights}" href="{ADMIN_PLUG_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
 <!-- ENDIF -->
 					</td>
 					<td style="text-align:center;">
 <!-- IF {PHP.ifthistools} -->
-						<a href="{ADMIN_PLUG_JUMPTO_URL_TOOLS}"><img src="images/admin/jumpto.gif" alt="" /></a>
+						<a title="{PHP.L.Open}" href="{ADMIN_PLUG_JUMPTO_URL_TOOLS}">{PHP.R.admin_icon_jumpto}</a>
 <!-- ENDIF -->
 <!-- IF !{PHP.ifthistools} AND {PHP.if_plg_standalone} -->
-						<a href="{ADMIN_PLUG_JUMPTO_URL}"><img src="images/admin/jumpto.gif" alt="" /></a>
+						<a title="{PHP.L.Open}" href="{ADMIN_PLUG_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a>
 <!-- ENDIF -->
 						&nbsp;
 					</td>

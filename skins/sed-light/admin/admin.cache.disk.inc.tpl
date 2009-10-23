@@ -16,7 +16,7 @@
 			</tr>
 <!-- BEGIN: ADMIN_DISKCACHE_ROW -->
 			<tr>
-				<td style="text-align:center;">[<a href="{ADMIN_DISKCACHE_ITEM_DEL_URL}"{ADMIN_DISKCACHE_ITEM_DEL_URL_AJAX}>x</a>]</td>
+				<td style="text-align:center;"><a title="{PHP.L.Delete}" href="{ADMIN_DISKCACHE_ITEM_DEL_URL}"{ADMIN_DISKCACHE_ITEM_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a></td>
 				<td>{ADMIN_DISKCACHE_ITEM_NAME}</td>
 				<td style="text-align:right;">{ADMIN_DISKCACHE_FILES}</td>
 				<td style="text-align:right;">{ADMIN_DISKCACHE_SIZE}</td>

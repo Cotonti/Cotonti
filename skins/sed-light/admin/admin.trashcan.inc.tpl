@@ -1,8 +1,8 @@
 <!-- BEGIN: TRASHCAN -->
 		<div id="{ADMIN_TRASHCAN_AJAX_OPENDIVID}">
 			<ul>
-				<li><a href="{ADMIN_TRASHCAN_CONF_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
-				<li>{PHP.L.Wipeall}: [<a href="{ADMIN_TRASHCAN_WIPEALL_URL}">x</a>]</li>
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>
+				<li>{PHP.L.Wipeall}: <a title="{PHP.L.Wipeall}" href="{ADMIN_TRASHCAN_WIPEALL_URL}">{PHP.R.admin_icon_delete}</a></li>
 			</ul>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_TRASHCAN_ADMINWARNINGS}</div>
@@ -22,8 +22,8 @@
 				<td>{ADMIN_TRASHCAN_TYPESTR_ICON} {ADMIN_TRASHCAN_TYPESTR}</td>
 				<td>{ADMIN_TRASHCAN_TITLE}</td>
 				<td style="text-align:center;">{ADMIN_TRASHCAN_TRASHEDBY}</td>
-				<td style="text-align:center;">[<a href="{ADMIN_TRASHCAN_ROW_WIPE_URL}">-</a>]</td>
-				<td style="text-align:center;">[<a href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}">+</a>]</td>
+				<td style="text-align:center;"><a title="{PHP.L.Wipe}" href="{ADMIN_TRASHCAN_ROW_WIPE_URL}">{PHP.R.admin_icon_delete}</a></td>
+				<td style="text-align:center;"><a title="{PHP.L.Restore}" href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}">{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
 <!-- END: TRASHCAN_ROW -->
 			<tr>

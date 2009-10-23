@@ -1,7 +1,7 @@
 <!-- BEGIN: RATINGS -->
 		<div id="{ADMIN_RATINGS_AJAX_OPENDIVID}">
 			<ul>
-				<li><a href="{ADMIN_RATINGS_URL_CONFIG}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_RATINGS_URL_CONFIG}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
 			</ul>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_RATINGS_ADMINWARNINGS}</div>
@@ -17,12 +17,12 @@
 			</tr>
 <!-- BEGIN: RATINGS_ROW -->
 			<tr>
-				<td style="text-align:center;">[<a href="{ADMIN_RATINGS_ROW_URL_DEL}">x</a>]</td>
+				<td style="text-align:center;"><a title="{PHP.L.Delete}" href="{ADMIN_RATINGS_ROW_URL_DEL}">{PHP.R.admin_icon_delete}</a></td>
 				<td style="text-align:center;">{ADMIN_RATINGS_ROW_RATING_CODE}</td>
 				<td style="text-align:center;">{ADMIN_RATINGS_ROW_CREATIONDATE}</td>
 				<td style="text-align:center;">{ADMIN_RATINGS_ROW_VOTES}</td>
 				<td style="text-align:center;">{ADMIN_RATINGS_ROW_RATING_AVERAGE}</td>
-				<td style="text-align:center;"><a href="{ADMIN_RATINGS_ROW_RAT_URL}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
+				<td style="text-align:center;"><a title="{PHP.L.Open}" href="{ADMIN_RATINGS_ROW_RAT_URL}">{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
 <!-- END: RATINGS_ROW -->
 			<tr>
