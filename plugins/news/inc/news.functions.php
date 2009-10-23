@@ -191,6 +191,37 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0,
         }
         /* ===== */
 
+if($cfg['plugin']['tags']['pages'])
+{
+    require_once(sed_langfile('tags'));
+    $item_id = $pag['page_id'];
+    $tags = sed_tag_list($item_id);
+    if(count($tags) > 0)
+    {
+        $tag_ii = 0;
+        foreach($tags as $tag)
+        {
+            $tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+            $tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
+            $news->assign(array(
+            'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(sed_tag_title($tag)) : htmlspecialchars($tag),
+            'PAGE_TAGS_ROW_TAG_COUNT' => $tag_ii,
+            'PAGE_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl)
+            ));
+            $news->parse('NEWS.PAGE_ROW.PAGE_TAGS.PAGE_TAGS_ROW');
+            $tag_ii++;
+        }
+        $news->parse('NEWS.PAGE_ROW.PAGE_TAGS');
+    }
+    else
+    {
+        $news->assign(array(
+            'PAGE_NO_TAGS' => $L['tags_Tag_cloud_none'],
+                ));
+        $news->parse('NEWS.PAGE_ROW.PAGE_NO_TAGS');
+    }
+}
+
         $news->parse("NEWS.PAGE_ROW");
     }
 
