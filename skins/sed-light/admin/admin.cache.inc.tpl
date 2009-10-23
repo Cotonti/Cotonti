@@ -18,7 +18,7 @@
 			</tr>
 <!-- BEGIN: ADMIN_CACHE_ROW -->
 			<tr>
-				<td style="text-align:center;">[<a href="{ADMIN_CACHE_ITEM_DEL_URL}"{ADMIN_CACHE_ITEM_DEL_URL_AJAX}>x</a>]</td>
+				<td style="text-align:center;"><a title="{PHP.L.Delete}" href="{ADMIN_CACHE_ITEM_DEL_URL}"{ADMIN_CACHE_ITEM_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a></td>
 				<td>{ADMIN_CACHE_ITEM_NAME}</td>
 				<td style="text-align:right;">{ADMIN_CACHE_EXPIRE}</td>
 				<td style="text-align:right;">{ADMIN_CACHE_SIZE}</td>

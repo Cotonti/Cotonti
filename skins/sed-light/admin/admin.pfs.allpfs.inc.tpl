@@ -8,7 +8,7 @@
 			</tr>
 <!-- BEGIN: ALLPFS_ROW -->
 			<tr>
-				<td>[<a href="{ADMIN_ALLPFS_ROW_URL}">e</a>]</td>
+				<td style="text-align:center;"><a title="{PHP.L.Edit}" href="{ADMIN_ALLPFS_ROW_URL}">{PHP.R.admin_icon_manual}</a></td>
 				<td>{ADMIN_ALLPFS_ROW_USER}</td>
 		 		<td>{ADMIN_ALLPFS_ROW_COUNT}</td>
 			</tr>

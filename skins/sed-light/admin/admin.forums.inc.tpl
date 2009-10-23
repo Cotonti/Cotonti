@@ -1,7 +1,7 @@
 <!-- BEGIN: FORUMS -->
 		<div id="{ADMIN_FORUMS_AJAX_OPENDIVID}">
 			<ul>
-				<li><a href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
 <!-- IF {PHP.lincif_conf} -->
 				<li><a href="{ADMIN_FORUMS_CONF_STRUCTURE_URL}">{PHP.L.adm_forum_structure}</a></li>
 <!-- ELSE -->
@@ -169,17 +169,17 @@
 				<tr>
 					<td>&nbsp;
 <!-- IF {PHP.usr.isadmin} -->
-						[<a href="{ADMIN_FORUMS_DEFULT_ROW_DELETE_URL}"{ADMIN_FORUMS_DEFULT_ROW_DELETE_URL_AJAX}>x</a>]
+						<a title="{PHP.L.Delete}" href="{ADMIN_FORUMS_DEFULT_ROW_DELETE_URL}"{ADMIN_FORUMS_DEFULT_ROW_DELETE_URL_AJAX}>{PHP.R.admin_icon_delete}</a>
 <!-- ENDIF -->
 					</td>
 					<td><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFULT_ROW_FS_TITLE}</a></td>
-					<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL_AJAX}>{PHP.sed_img_up}</a> <a href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL_AJAX}>{PHP.sed_img_down}</a></td>
+					<td style="text-align:center;"><a title="{PHP.L.Up}" href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL_AJAX}>{PHP.sed_img_up}</a> <a title="{PHP.L.Down}" href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL_AJAX}>{PHP.sed_img_down}</a></td>
 					<td style="text-align:center;">{ADMIN_FORUMS_DEFULT_ROW_FS_ALLOWPRVTOPICS}</td>
 					<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICCOUNT}</td>
 					<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_POSTCOUNT}</td>
 					<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_VIEWCOUNT}</td>
-					<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL}"><img src="images/admin/rights2.gif" alt="" /></a></td>
-					<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
+					<td style="text-align:center;"><a title="{PHP.L.Rights}" href="{ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a></td>
+					<td style="text-align:center;"><a title="{PHP.L.Open}" href="{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL}">{PHP.R.admin_icon_jumpto}</a></td>
 				</tr>
 <!-- BEGIN: FCACHE -->
 				<tr>
@@ -194,8 +194,8 @@
 					<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICCOUNT}</td>
 					<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_POSTCOUNT}</td>
 					<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_VIEWCOUNT}</td>
-					<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL}"><img src="images/admin/rights2.gif" alt="" /></a></td>
-					<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
+					<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a></td>
+					<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL}">{PHP.R.admin_icon_jumpto}</a></td>
 				</tr>
 <!-- END: FCACHE -->
 <!-- END: ROW -->

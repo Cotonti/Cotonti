@@ -2,7 +2,7 @@
 		<div id="{ADMIN_LOG_AJAX_OPENDIVID}">
 <!-- IF {PHP.usr.isadmin} -->
 			<ul>
-				<li>{PHP.L.adm_purgeall} ({ADMIN_LOG_TOTALDBLOG}) : [<a href="{ADMIN_LOG_URL_PRUNE}"{ADMIN_LOG_URL_PRUNE_AJAX}>x</a>]</li>
+				<li>{PHP.L.adm_purgeall} ({ADMIN_LOG_TOTALDBLOG}) : <a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}"{ADMIN_LOG_URL_PRUNE_AJAX}>{PHP.R.admin_icon_delete}</a></li>
 			</ul>
 <!-- ENDIF -->
 			<form action="">{PHP.L.Group} :

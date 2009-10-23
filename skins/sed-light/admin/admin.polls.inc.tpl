@@ -1,7 +1,7 @@
 <!-- BEGIN: POLLS -->
 		<div id="{ADMIN_POLLS_AJAX_OPENDIVID}">
 			<ul>
-				<li><a href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
 			</ul>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_POLLS_ADMINWARNINGS}</div>
@@ -34,10 +34,10 @@
 				<td>{ADMIN_POLLS_ROW_POLL_CLOSED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
 				<td style="text-align:center;">{ADMIN_POLLS_ROW_POLL_TOTALVOTES}</td>
 				<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">C</a>]</td>
-				<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_DEL}">x</a>]</td>
+				<td style="text-align:center;"><a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_URL_DEL}">{PHP.R.admin_icon_delete}</a></td>
 				<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_RES}">R</a>]</td>
-				<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_BMP}">B</a>]</td>
-				<td style="text-align:center;"><a href="{ADMIN_POLLS_ROW_POLL_URL_OPN}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
+				<td style="text-align:center;"><a title="{PHP.L.Bump}" href="{ADMIN_POLLS_ROW_POLL_URL_BMP}">{PHP.R.icon_up}</a></td>
+				<td style="text-align:center;"><a title="{PHP.L.Open}" href="{ADMIN_POLLS_ROW_POLL_URL_OPN}">{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
 <!-- END: POLLS_ROW -->
 			<tr>

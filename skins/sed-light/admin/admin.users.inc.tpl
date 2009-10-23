@@ -1,7 +1,7 @@
 <!-- BEGIN: USERS -->
 		<div id="{ADMIN_USERS_AJAX_OPENDIVID}">
 			<ul>
-				<li><a href="{ADMIN_USERS_URL}">{PHP.L.Configuration}: <img src="images/admin/config.gif" alt="" /></a></li>
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_USERS_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>
 <!-- IF {PHP.lincif_extfld} -->
 				<li><a href="{ADMIN_USERS_EXTRAFIELDS_URL}">{PHP.L.adm_extrafields_desc}</a></li>
 <!-- ELSE -->
@@ -25,12 +25,12 @@
 <!-- BEGIN: USERS_ROW -->
 			<tr>
 				<td style="text-align:center;">{ADMIN_USERS_ROW_GRP_ID}</td>
-				<td><img src="images/admin/groups.gif" alt="" /> <a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}"{ADMIN_USERS_ROW_GRP_TITLE_URL_AJAX}>{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
+				<td>{PHP.R.admin_icon_groups} <a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}"{ADMIN_USERS_ROW_GRP_TITLE_URL_AJAX}>{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
 				<td style="text-align:center;">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 				<td style="text-align:center;">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 				<td style="text-align:center;">{ADMIN_USERS_ROW_GRP_HIDDEN}</td>
-				<td style="text-align:center;"><a href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}"><img src="images/admin/rights.gif" alt="" /></a></td>
-				<td style="text-align:center;"><a href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
+				<td style="text-align:center;"><a title="{PHP.L.Rights}" href="{ADMIN_USERS_ROW_GRP_RIGHTS_URL}">{PHP.R.admin_icon_rights}</a></td>
+				<td style="text-align:center;"><a title="{PHP.L.Open}" href="{ADMIN_USERS_ROW_GRP_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
 <!-- END: USERS_ROW -->
 			</table>
@@ -183,7 +183,7 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.Rights} :</td>
-					<td><a href="{ADMIN_USERS_EDITFORM_RIGHT_URL}"><img src="images/admin/rights.gif" alt="" /></a></td>
+					<td><a href="{ADMIN_USERS_EDITFORM_RIGHT_URL}">{PHP.R.admin_icon_rights}</a></td>
 				</tr>
 <!-- IF {PHP.g} > 5 -->
 				<tr>

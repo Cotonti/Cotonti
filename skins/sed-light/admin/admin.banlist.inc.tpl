@@ -18,7 +18,7 @@
 			<form name="savebanlist_{ADMIN_BANLIST_ID_ROW}" id="savebanlist_{ADMIN_BANLIST_ID_ROW}" action="{ADMIN_BANLIST_URL}" method="post"{ADMIN_BANLIST_URL_AJAX}>
 				<table class="cells">
 				<tr>
-					<td style="width:10%;text-align:center;">[<a href="{ADMIN_BANLIST_DELURL}"{ADMIN_BANLIST_DELURL_AJAX}>x</a>]</td>
+					<td style="width:10%;text-align:center;"><a title="{PHP.L.Delete}" href="{ADMIN_BANLIST_DELURL}"{ADMIN_BANLIST_DELURL_AJAX}>{PHP.R.admin_icon_delete}</a></td>
 					<td style="width:20%;text-align:center;">{ADMIN_BANLIST_EXPIRE}</td>
 					<td style="width:20%;text-align:center;"><input type="text" class="text" name="rbanlistip" value="{ADMIN_BANLIST_IP}" size="18" maxlength="16" /></td>
 					<td style="width:15%;text-align:center;"><input type="text" class="text" name="rbanlistemail" value="{ADMIN_BANLIST_EMAIL}" size="10" maxlength="64" /></td>

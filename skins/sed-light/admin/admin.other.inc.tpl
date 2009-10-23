@@ -16,13 +16,13 @@
 			</td>
 			<td style="text-align:center;">
 <!-- IF {PHP.lincif_rightsmode} -->
-				<a href="{ADMIN_OTHER_RIGHTS}">{PHP.R.admin_icon_rights2}</a>
+				<a title="{PHP.L.Rights}" href="{ADMIN_OTHER_RIGHTS}">{PHP.R.admin_icon_rights2}</a>
 <!-- ENDIF -->
 				&nbsp;
 			</td>
 			<td style="text-align:center;">
 <!-- IF {PHP.lincif_confmode} -->
-				<a href="{ADMIN_OTHER_CONFIG}">{PHP.R.admin_icon_config}</a>
+				<a title="{PHP.L.Configuration}" href="{ADMIN_OTHER_CONFIG}">{PHP.R.admin_icon_config}</a>
 <!-- ENDIF -->
 				&nbsp;
 			</td>

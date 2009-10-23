@@ -45,7 +45,7 @@
                 </td>
                 <td><input type="text" name="params[]" value="{ADMIN_URLS_ROW_PARTS1}" /></td>
                 <td><input type="text" name="format[]" value="{ADMIN_URLS_ROW_PARTS2}" /></td>
-                <td><a href="#" onclick="$(this).parent().parent().remove();return false;">[X]</a></td>
+                <td style="text-align:center;"><a title="{PHP.L.Delete}" href="#" onclick="$(this).parent().parent().remove();return false;">{PHP.R.admin_icon_delete}</a></td>
             </tr>
             <!-- END: ROW -->
 
