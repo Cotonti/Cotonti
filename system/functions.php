@@ -3443,6 +3443,65 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 }
 
 /**
+ * Create a new PFS folder
+ *
+ * @param string $title Folder title
+ * @param int $ownerid Owners user ID
+ * @param string $desc Folder description
+ * @param int $parentid Parent folder ID
+ * @param boolean $ispublic Public?
+ * @param boolean $isgallery Gallery?
+ * @return boolean
+ */
+function sed_pfs_createfolder($title, $ownerid, $desc='', $parentid=0, $ispublic=FALSE, $isgallery=FALSE)
+{
+	global $db_pfs_folders, $cfg, $sys, $L, $err_msg;
+	
+	if(empty($title))
+	{
+		$err_msg[] = $L['pfs_foldertitlemissing'];
+		return FALSE;
+	}
+	
+	$newpath = sed_urlencode(strtolower($title));
+	if ($parentid > 0)
+	{
+		$newpath = sed_pfs_folderpath($parentid, TRUE).$newpath;
+	}
+	if ($cfg['pfsuserfolder'])
+	{
+		sed_pfs_mkdir($cfg['pfs_path'].$newpath) or sed_redirect(sed_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
+		sed_pfs_mkdir($cfg['pfs_thumbpath'].$newpath) or sed_redirect(sed_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
+	}
+
+	$sql = sed_sql_query("INSERT INTO $db_pfs_folders
+		(pff_parentid,
+		pff_userid,
+		pff_title,
+		pff_date,
+		pff_updated,
+		pff_desc,
+		pff_path,
+		pff_ispublic,
+		pff_isgallery,
+		pff_count)
+		VALUES
+		(".(int)$parentid.",
+		".(int)$ownerid.",
+		'".sed_sql_prep($title)."',
+		".(int)$sys['now'].",
+		".(int)$sys['now'].",
+		'".sed_sql_prep($desc)."',
+		'".sed_sql_prep($newpath)."',
+		".(int)$ispublic.",
+		".(int)$isgallery.",
+		0)");
+	
+	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', 'f='.$parentid, '', true));
+	exit;
+}
+
+/**
  * Delete a PFS file
  *
  * @param int $id File ID
@@ -3585,13 +3644,16 @@ function sed_pfs_filepath($id)
  * Returns path to folder relative from user's/system directory
  *
  * @param int $id Folder ID
+ * @param boolean $fullpath Return full path like in Folder Storage Mode ?
  * @return mixed
  */
-function sed_pfs_folderpath($folderid)
+function sed_pfs_folderpath($folderid, $fullpath='')
 {
 	global $db_pfs_folders, $cfg;
-
-	if($cfg['pfsuserfolder'] && $folderid>0)
+	
+	if($fullpath==='') $fullpath = $cfg['pfsuserfolder'];
+	
+	if($fullpath && $folderid>0)
 	{
 		$sql = sed_sql_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid);
 		if(sed_sql_numrows($sql)==0)
