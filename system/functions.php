@@ -3443,6 +3443,78 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 }
 
 /**
+ * Delete a PFS file
+ *
+ * @param int $id File ID
+ * @return boolean
+ */
+function sed_pfs_deletefile($id)
+{
+	global $db_pfs, $cfg;
+	
+	$fpath = sed_pfs_filepath($id);
+	
+	if (file_exists($cfg['pfs_thumbpath'].$fpath))
+	{
+		@unlink($cfg['pfs_thumbpath'].$fpath);
+	}
+	if (file_exists($cfg['pfs_path'].$fpath))
+	{
+		@unlink($cfg['pfs_path'].$fpath);
+	}
+	else {
+		return FALSE;
+	}
+	
+	sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id=".(int)$id);
+	return TRUE;
+}
+
+/**
+ * Delete a PFS folder
+ *
+ * @param int $id Folder ID
+ * @return boolean
+ */
+function sed_pfs_deletefolder($folderid)
+{
+	global $db_pfs_folders, $db_pfs, $cfg;
+	
+	$sql = sed_sql_query("SELECT pff_userid, pff_parentid, pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid." LIMIT 1");
+	$fuserid = sed_sql_result($sql, 0, 'pff_userid');
+	$fparentid = sed_sql_result($sql, 0, 'pff_parentid');
+	$fpath = sed_sql_result($sql, 0, 'pff_path');
+	
+	// Remove files
+	$sql = sed_sql_query("SELECT pfs_id FROM $db_pfs WHERE pfs_folderid IN (SELECT pff_id FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%')");
+	while($row = sed_sql_fetcharray($sql))
+	{
+		sed_pfs_deletefile($row['pfs_id']);
+	}
+	
+	// Remove folders
+	$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%' ORDER BY CHAR_LENGTH(pff_path) DESC");
+	while($row = sed_sql_fetcharray($sql))
+	{
+		if($cfg['pfsuserfolder'])
+		{
+			@rmdir($cfg['pfs_path'].$row['pff_path']);
+			@rmdir($cfg['pfs_thumbpath'].$row['pff_path']);
+		}
+		sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_id=".(int)$row['pff_id']);
+	}
+	if(sed_sql_numrows($sql)>0)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
+
+/**
  * Delete all PFS files for a specific user. Returns number of items removed.
  *
  * @param int $userid User ID
@@ -3487,6 +3559,56 @@ function sed_pfs_deleteall($userid)
 	return($num);
 }
 
+
+/**
+ * Returns path to file relative from user's/system directory
+ *
+ * @param string $id File ID
+ * @return string
+ */
+function sed_pfs_filepath($id)
+{
+	global $db_pfs_folders, $db_pfs, $cfg;
+	
+	$sql = sed_sql_query("SELECT p.pfs_file AS file, f.pff_path AS path FROM $db_pfs AS p LEFT JOIN $db_pfs_folders AS f ON p.pfs_folderid=f.pff_id WHERE p.pfs_id=".(int)$id." LIMIT 1");
+	if($row = sed_sql_fetcharray($sql))
+	{
+		return ($cfg['pfsuserfolder'] && $row['path']!='') ? $row['path'].'/'.$row['file'] : $row['file'];
+	}
+	else
+	{
+		return '';
+	}
+}
+
+/**
+ * Returns path to folder relative from user's/system directory
+ *
+ * @param int $id Folder ID
+ * @return mixed
+ */
+function sed_pfs_folderpath($folderid)
+{
+	global $db_pfs_folders, $cfg;
+
+	if($cfg['pfsuserfolder'] && $folderid>0)
+	{
+		$sql = sed_sql_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid);
+		if(sed_sql_numrows($sql)==0)
+		{
+			return FALSE;
+		}
+		else
+		{
+			return sed_sql_result($sql, 0, 'pff_path').'/';
+		}
+	}
+	else
+	{
+		return '';
+	}
+}
+
 /**
  * Create a new directory
  *
@@ -3508,11 +3630,11 @@ function sed_pfs_mkdir($path, $feedback=FALSE)
 	}
 	if(@mkdir($path, $cfg['dir_perms']))
 	{
-		return(TRUE);
+		return TRUE;
 	}
 	else
 	{
-		return(FALSE);
+		return FALSE;
 	}
 }
 
