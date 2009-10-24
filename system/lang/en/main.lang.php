@@ -508,6 +508,7 @@ $L['pfs_filesintheroot'] = 'File(s) in the root';
 $L['pfs_filesinthisfolder'] = 'File(s) in this folder';
 $L['pfs_filetoobigorext'] = 'The upload failed, this file is too big maybe, or the extension is not allowed?';
 $L['pfs_folderistempty'] = 'This folder is empty.';
+$L['pfs_foldertitlemissing'] = 'A folder title is required.';
 $L['pfs_isgallery'] = 'Gallery?';
 $L['pfs_ispublic'] = 'Public?';
 $L['pfs_maxsize'] = 'Maximum size for a file';

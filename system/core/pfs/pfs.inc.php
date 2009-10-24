@@ -259,66 +259,19 @@ switch($a)
 			sed_pfs_deletefile($row['pfs_id']);
 		}
 		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
+		exit;
 	break;
 	
 	case 'newfolder':
 		sed_block($usr['auth_write']);
+		
 		$ntitle = sed_import('ntitle','P','TXT');
 		$ndesc = sed_import('ndesc','P','TXT');
 		$nparentid = sed_import('nparentid','P','INT');
 		$nispublic = sed_import('nispublic','P','BOL');
 		$nisgallery = sed_import('nisgallery','P','BOL');
-		$ntitle = (empty($ntitle)) ? '???' : $ntitle;
 		
-		if ($cfg['pfsuserfolder'])
-		{
-			if ($nparentid > 0) 
-			{
-				$parentpath = sed_pfs_folderpath($nparentid);
-				$npath = $parentpath.sed_urlencode(strtolower($ntitle));
-			}
-			else 
-			{
-				$npath = sed_urlencode(strtolower($ntitle));
-			}
-		}
-		else 
-		{
-			$npath = '';
-		}
-		
-		if ($cfg['pfsuserfolder'])
-		{
-			sed_pfs_mkdir($cfg['pfs_path'].$npath) or sed_redirect(sed_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
-			sed_pfs_mkdir($cfg['pfs_thumbpath'].$npath) or sed_redirect(sed_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
-		}
-	
-		$sql = sed_sql_query("INSERT INTO $db_pfs_folders
-			(pff_parentid,
-			pff_userid,
-			pff_title,
-			pff_date,
-			pff_updated,
-			pff_desc,
-			pff_path,
-			pff_ispublic,
-			pff_isgallery,
-			pff_count)
-			VALUES
-			(".(int)$nparentid.",
-			".(int)$usr['id'].",
-			'".sed_sql_prep($ntitle)."',
-			".(int)$sys['now'].",
-			".(int)$sys['now'].",
-			'".sed_sql_prep($ndesc)."',
-			'".sed_sql_prep($npath)."',
-			".(int)$nispublic.",
-			".(int)$nisgallery.",
-			0)");
-		$nid = sed_sql_insertid();
-		
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', 'f='.$nparentid.'&'.$more, '', true));
-		exit;
+		sed_pfs_createfolder($ntitle, $usr['id'], $ndesc, $nparentid, $nispublic, $nisgallery);
 	break;
 	
 	case 'deletefolder':

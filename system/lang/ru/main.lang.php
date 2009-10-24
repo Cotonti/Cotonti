@@ -509,6 +509,7 @@ $L['pfs_filesintheroot'] = 'Файлов в корневом каталоге';
 $L['pfs_filesinthisfolder'] = 'Файлов в текущем каталоге';
 $L['pfs_filetoobigorext'] = 'Ошибка загрузки: файл слишком велик или недопустимое расширение';
 $L['pfs_folderistempty'] = 'Каталог пуст';
+$L['pfs_foldertitlemissing'] = 'A folder title is required.';
 $L['pfs_isgallery'] = 'Галерея?';
 $L['pfs_ispublic'] = 'Открытый доступ?';
 $L['pfs_maxsize'] = 'Максимальный размер файла';
