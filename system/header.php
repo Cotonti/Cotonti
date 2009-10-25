@@ -103,40 +103,7 @@ if (!SED_AJAX)
 	}
 	/* ===== */
 
-	if ($cfg['enablecustomhf'])
-	{
-		if ($location == 'Administration')
-		{
-			if (file_exists('./skins/'.$usr['skin'].'/admin/header.tpl'))
-			{
-				$mskin = './skins/'.$usr['skin'].'/admin/header.tpl';
-			}
-			elseif (file_exists('./skins/'.$cfg['defaultskin'].'/admin/header.tpl'))
-			{
-				$mskin = './skins/'.$cfg['defaultskin'].'/admin/header.tpl';
-			}
-			elseif (file_exists('./skins/'.$usr['skin'].'/header.Administration.tpl'))
-			{
-				$mskin = './skins/'.$usr['skin'].'/header.Administration.tpl';
-			}
-			elseif (file_exists('./skins/'.$cfg['defaultskin'].'/header.Administration.tpl'))
-			{
-				$mskin = './skins/'.$cfg['defaultskin'].'/header.Administration.tpl';
-			}
-			else
-			{
-				$mskin = "skins/".$usr['skin']."/header.tpl";
-			}
-		}
-		else
-		{
-			$mskin = sed_skinfile(array('header', mb_strtolower($location)));
-		}
-	}
-	else
-	{
-		$mskin = "skins/".$usr['skin']."/header.tpl";
-	}
+	$mskin = sed_skinfile($cfg['enablecustomhf'] ? array('header', mb_strtolower($location)) : 'header', defined('SED_PLUG'), defined('SED_ADMIN'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(

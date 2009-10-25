@@ -1,9 +1,9 @@
 <?php
 /**
- * Administration panel - Pages manager
+ * Administration panel - Pages manager & Queue of pages
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -19,6 +19,469 @@ $t = new XTemplate(sed_skinfile('admin.page.inc', false, true));
 $adminpath[] = array(sed_url('admin', 'm=page'), $L['Pages']);
 $adminhelp = $L['adm_help_page'];
 
+$id = sed_import('id', 'G', 'INT');
+
+$d = sed_import('d', 'G', 'INT');
+$d = empty($d) ? 0 : (int) $d;
+$ajax = sed_import('ajax', 'G', 'INT');
+$ajax = empty($ajax) ? 0 : (int) $ajax;
+
+/* === Hook  === */
+$extp = sed_getextplugins('admin.page.first');
+if (is_array($extp))
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
+/* ===== */
+
+if ($a == 'validate')
+{
+	sed_check_xg();
+
+	/* === Hook  === */
+	$extp = sed_getextplugins('admin.page.validate');
+	if (is_array($extp))
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
+	/* ===== */
+
+	$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
+	if ($row = sed_sql_fetcharray($sql))
+	{
+		$usr['isadmin_local'] = sed_auth('page', $row['page_cat'], 'A');
+		sed_block($usr['isadmin_local']);
+
+		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
+		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+
+		sed_log($L['Page']." #".$id." - ".$L['adm_queue_validated'], 'adm');
+		sed_cache_clear('latestpages');
+
+		$adminwarnings = '#'.$id.' - '.$L['adm_queue_validated'];
+	}
+	else
+	{
+		sed_die();
+	}
+}
+elseif ($a == 'unvalidate')
+{
+	sed_check_xg();
+
+	/* === Hook  === */
+	$extp = sed_getextplugins('admin.page.unvalidate');
+	if (is_array($extp))
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
+	/* ===== */
+
+	$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
+	if ($row = sed_sql_fetcharray($sql))
+	{
+		$usr['isadmin_local'] = sed_auth('page', $row['page_cat'], 'A');
+		sed_block($usr['isadmin_local']);
+
+		$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
+		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+
+		sed_log($L['Page']." #".$id." - ".$L['adm_queue_unvalidated'], 'adm');
+		sed_cache_clear('latestpages');
+
+		$adminwarnings = '#'.$id.' - '.$L['adm_queue_unvalidated'];
+	}
+	else
+	{
+		sed_die();
+	}
+}
+elseif ($a == 'delete')
+{
+	sed_check_xg();
+
+	/* === Hook  === */
+	$extp = sed_getextplugins('admin.page.delete');
+	if (is_array($extp))
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
+	/* ===== */
+
+	$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	if ($row = sed_sql_fetchassoc($sql))
+	{
+		if ($cfg['trash_page'])
+		{
+			sed_trash_put('page', $L['Page']." #".$id." ".$row['page_title'], $id, $row);
+		}
+		if ($row['page_state'] != 1)
+		{
+			$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+		}
+
+		$id2 = "p".$id;
+		$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
+		$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
+		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
+		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
+
+		sed_log($L['Page']." #".$id." - ".$L['Deleted'], 'adm');
+
+		/* === Hook === */
+		$extp = sed_getextplugins('admin.page.delete.done');
+		if (is_array($extp))
+		{
+			foreach ($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
+		/* ===== */
+
+		sed_cache_clear('latestpages');
+
+		$adminwarnings = '#'.$id.' - '.$L['adm_queue_deleted'];
+	}
+	else
+	{
+		sed_die();
+	}
+}
+elseif ($a == 'update_cheked')
+{
+	$paction = sed_import('paction', 'P', 'TXT');
+
+	if ($paction == $L['Validate'] && is_array($_POST['s']))
+	{
+		sed_check_xp();
+		$s = sed_import('s', 'P', 'ARR');
+
+		$perelik = '';
+		$notfoundet = '';
+		foreach ($s as $i => $k)
+		{
+			if ($s[$i] == '1' || $s[$i] == 'on')
+			{
+				/* === Hook  === */
+				$extp = sed_getextplugins('admin.page.cheked_validate');
+				if (is_array($extp))
+				{
+					foreach ($extp as $k => $pl)
+					{
+						include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+					}
+				}
+				/* ===== */
+
+				$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='".$i."'");
+				if ($row = sed_sql_fetcharray($sql))
+				{
+					$id = $row['page_id'];
+					$usr['isadmin_local'] = sed_auth('page', $row['page_cat'], 'A');
+					sed_block($usr['isadmin_local']);
+
+					$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='".$id."'");
+					$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+
+					sed_log($L['Page']." #".$id." - ".$L['adm_queue_validated'], 'adm');
+					$perelik .= '#'.$id.', ';
+				}
+				else
+				{
+					$notfoundet .= '#'.$id.' - '.$L['Error'].'<br  />';
+				}
+			}
+		}
+
+		sed_cache_clear('latestpages');
+
+		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_validated'] : NULL;
+	}
+	elseif ($paction == $L['Delete'] && is_array($_POST['s']))
+	{
+		sed_check_xp();
+		$s = sed_import('s', 'P', 'ARR');
+
+		$perelik = '';
+		$notfoundet = '';
+		foreach ($s as $i => $k)
+		{
+			if ($s[$i] == '1' || $s[$i] == 'on')
+			{
+				/* === Hook  === */
+				$extp = sed_getextplugins('admin.page.cheked_delete');
+				if (is_array($extp))
+				{
+					foreach ($extp as $k => $pl)
+					{
+						include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+					}
+				}
+				/* ===== */
+
+				$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='".$i."' LIMIT 1");
+				if ($row = sed_sql_fetchassoc($sql))
+				{
+					$id = $row['page_id'];
+					if ($cfg['trash_page'])
+					{
+						sed_trash_put('page', $L['Page']." #".$id." ".$row['page_title'], $id, $row);
+					}
+					if ($row['page_state'] != 1)
+					{
+						$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+					}
+
+					$id2 = "p".$id;
+					$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
+					$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
+					$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
+					$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
+
+					sed_log($L['Page']." #".$id." - ".$L['Deleted'],'adm');
+
+					/* === Hook === */
+					$extp = sed_getextplugins('admin.page.delete.done');
+					if (is_array($extp))
+					{
+						foreach ($extp as $k => $pl)
+						{
+							include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+						}
+					}
+					/* ===== */
+					$perelik .= '#'.$id.', ';
+				}
+				else
+				{
+					$notfoundet .= '#'.$id.' - '.$L['Error'].'<br  />';
+				}
+			}
+		}
+
+		sed_cache_clear('latestpages');
+
+		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_deleted'] : NULL;
+	}
+}
+
+$is_adminwarnings = isset($adminwarnings);
+
+$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1"), 0, 0);
+if ($cfg['jquery'] AND $cfg['turnajax'])
+{
+	$pagnav = sed_pagination(sed_url('admin','m=page'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
+}
+else
+{
+	$pagnav = sed_pagination(sed_url('admin','m=page'), $d, $totalitems, $cfg['maxrowsperpage']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+}
+
+$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar
+	FROM $db_pages as p
+	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+	WHERE page_state=1
+		ORDER by page_id DESC
+		LIMIT $d,".$cfg['maxrowsperpage']);
+
+/*// Extra fields for 'structure'
+$extrafields_c = array();
+$number_of_extrafields_c = 0;
+$fieldsres_c = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='structure'");
+while ($row_c = sed_sql_fetchassoc($fieldsres_c))
+{
+	$extrafields_c[] = $row_c;
+	$number_of_extrafields_c++;
+}
+// Extra fields for 'pages'
+$extrafields_p = array();
+$number_of_extrafields_p = 0;
+$fieldsres_p = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
+while ($row_p = sed_sql_fetchassoc($fieldsres_p))
+{
+	$extrafields_p[] = $row_p;
+	$number_of_extrafields_p++;
+}*/
+
+$ii = 0;
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('admin.page.loop');
+/* ===== */
+while ($row = sed_sql_fetcharray($sql))
+{
+	if ($row['page_type'] == 0)
+	{
+		$page_type = 'BBcode';
+	}
+	elseif ($row['page_type'] == 1)
+	{
+		$page_type = 'HTML';
+	}
+	elseif ($row['page_type'] == 2)
+	{
+		$page_type = 'PHP';
+	}
+	$page_urlp = empty($row['page_alias']) ? 'id='.$row['page_id'] : 'al='.$row['page_alias'];
+	$row['page_begin_noformat'] = $row['page_begin'];
+	$row['page_pageurl'] = sed_url('page', $page_urlp);
+	$catpath = sed_build_catpath($row["page_cat"], '<a href="%1$s">%2$s</a>');
+	$row['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$row['page_pageurl']."\">".htmlspecialchars($row['page_title'])."</a>";
+	$sql4 = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$sed_cat[$row["page_cat"]]['rpath']."%' ");
+	$sub_count = sed_sql_result($sql4, 0, "SUM(structure_pagecount)");
+	$row['page_file'] = intval($row['page_file']);
+	if (!empty($row['page_url']) && $row['page_file'] > 0)
+	{
+		$dotpos = mb_strrpos($row['page_url'],".") + 1;
+		$fileex = mb_strtolower(mb_substr($row['page_url'], $dotpos, 5));
+		$row['page_fileicon'] = "images/pfs/".$fileex.".gif";
+		if (!file_exists($row['page_fileicon']))
+		{
+			$row['page_fileicon'] = "images/admin/page.gif";
+		}
+		$row['page_fileicon'] = "<img src=\"".$row['page_fileicon']."\" alt=\"".$fileex."\" />";
+	}
+	else
+	{
+		$row['page_fileicon'] = '';
+	}
+
+	$t -> assign(array(
+		"ADMIN_PAGE_ID" => $row['page_id'],
+		"ADMIN_PAGE_ID_URL" => sed_url('page', "id=".$row['page_id']),
+		"ADMIN_PAGE_URL" => $row['page_pageurl'],
+		"ADMIN_PAGE_TITLE" => $row['page_fulltitle'],
+		"ADMIN_PAGE_SHORTTITLE" => htmlspecialchars($row['page_title']),
+		"ADMIN_PAGE_TYPE" => $page_type,
+		"ADMIN_PAGE_DESC" => htmlspecialchars($row['page_desc']),
+		"ADMIN_PAGE_AUTHOR" => htmlspecialchars($row['page_author']),
+		"ADMIN_PAGE_OWNER" => sed_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
+		"ADMIN_PAGE_OWNER_AVATAR" => sed_build_userimage($row['user_avatar'], 'avatar'),
+		"ADMIN_PAGE_DATE" => date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
+		"ADMIN_PAGE_BEGIN" => date($cfg['dateformat'], $row['page_begin'] + $usr['timezone'] * 3600),
+		"ADMIN_PAGE_EXPIRE" => date($cfg['dateformat'], $row['page_expire'] + $usr['timezone'] * 3600),
+		"ADMIN_PAGE_ADMIN_COUNT" => $row['page_count'],
+		"ADMIN_PAGE_KEY" => htmlspecialchars($row['page_key']),
+		"ADMIN_PAGE_ALIAS" => htmlspecialchars($row['page_alias']),
+		"ADMIN_PAGE_FILE" => $sed_yesno[$row['page_file']],
+		"ADMIN_PAGE_FILE_BOOL" => $row['page_file'],
+		"ADMIN_PAGE_FILE_URL" => $row['page_url'],
+		"ADMIN_PAGE_FILE_URL_FOR_DOWNLOAD" => sed_url('page', "id=".$row['page_id']."&a=dl"),
+		"ADMIN_PAGE_FILE_NAME" => basename($row['page_url']),
+		"ADMIN_PAGE_FILE_SIZE" => $row['page_size'],
+		"ADMIN_PAGE_FILE_COUNT" => $row['page_filecount'],
+		"ADMIN_PAGE_FILE_ICON" => $row['page_fileicon'],
+		"ADMIN_PAGE_URL_FOR_VALIDATED" => sed_url('admin', "m=page&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg()),
+		"ADMIN_PAGE_URL_FOR_VALIDATED_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', "m=page&a=validate&ajax=1&id=".$row['page_id']."&d=".$d."&".sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_PAGE_URL_FOR_DELETED" => sed_url('admin', "m=page&a=delete&id=".$row['page_id']."&d=".$d."&".sed_xg()),
+		"ADMIN_PAGE_URL_FOR_DELETED_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', "m=page&a=delete&ajax=1&id=".$row['page_id']."&d=".$d."&".sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_PAGE_URL_FOR_EDIT" => sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm"),
+		"ADMIN_PAGE_ODDEVEN" => sed_build_oddeven($ii),
+		"ADMIN_PAGE_CAT_URL" => sed_url('list', 'c='.$row["page_cat"]),
+		"ADMIN_PAGE_CAT" => $row["page_cat"],
+		"ADMIN_PAGE_CAT_TITLE" => $sed_cat[$row['page_cat']]['title'],
+		"ADMIN_PAGE_CATPATH" => $catpath,
+		"ADMIN_PAGE_CATDESC" => $sed_cat[$row['page_cat']]['desc'],
+		"ADMIN_PAGE_CATICON" => $sed_cat[$row['page_cat']]['icon'],
+		"ADMIN_PAGE_CAT_COUNT" => $sub_count
+	));
+
+	/*// Extra fields for 'structure'
+	if ($number_of_extrafields_c > 0)
+	{
+		$extra_array_c = sed_build_extrafields_data('structure', 'ADMIN_PAGE_CAT', $extrafields_c, $row);
+		$t->assign('ADMIN_PAGE_CAT_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $row['page_'.$row['field_name']]));
+	}
+	//$t -> assign($extra_array_c);
+	// Extra fields for 'page'
+	if ($number_of_extrafields_p > 0)
+	{
+		$extra_array_p = sed_build_extrafields_data('page', 'ADMIN_PAGE', $extrafields_p, $row);
+		$t->assign('ADMIN_PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $row['page_'.$row['field_name']]));
+	}
+	//	$t -> assign($extra_array_p);
+	// Extra fields
+	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
+	while ($row = sed_sql_fetchassoc($fieldsres))
+	{
+		$uname = strtoupper($row['field_name']);
+		$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $row['page_'.$row['field_name']]));
+		isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGE_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $row['field_description']);
+	}*/
+
+	switch($row['page_type'])
+	{
+		case 2:
+			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
+			{
+				ob_start();
+				eval($row['page_text']);
+				$t -> assign("ADMIN_PAGE_TEXT", ob_get_clean());
+			}
+			else
+			{
+				$t -> assign("ADMIN_PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
+			}
+		break;
+
+		case 1:
+			$row_more = ((int)$textlength>0) ? sed_string_truncate($row['page_text'], $textlength) : sed_cut_more($row['page_text']);
+			$t -> assign("ADMIN_PAGE_TEXT", $row['page_text']);
+		break;
+
+		default:
+			if($cfg['parser_cache'])
+			{
+				if(empty($row['page_html']))
+				{
+					$row['page_html'] = sed_parse(htmlspecialchars($row['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($row['page_html'])."' WHERE page_id = " . $row['page_id']);
+				}
+				$row['page_html'] = ($cfg['parsebbcodepages']) ?  $row['page_html'] : htmlspecialchars($row['page_text']);
+				$row_more = ((int)$textlength>0) ? sed_string_truncate($row['page_html'], $textlength) : sed_cut_more($row['page_html']);
+				$row['page_html'] = sed_post_parse($row['page_html'], 'pages');
+				$t -> assign('ADMIN_PAGE_TEXT', $row['page_html']);
+			}
+			else
+			{
+				$row['page_html'] = sed_parse(htmlspecialchars($row['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+				$row_more = ((int)$textlength>0) ? sed_string_truncate($row['page_html'], $textlength) : sed_cut_more($row['page_html']);
+				$row['page_html'] = sed_post_parse($row['page_html'], 'pages');
+				$t -> assign('ADMIN_PAGE_TEXT', $row['page_html']);
+			}
+		break;
+	}
+
+	/* === Hook - Part2 : Include === */
+	if (is_array($extp))
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
+	/* ===== */
+
+	$t -> parse("PAGE.PAGE_ROW");
+	$ii++;
+}
+
+$is_row_empty = (sed_sql_numrows($sql) == 0) ? true : false ;
+
 $totaldbpages = sed_sql_rowcount($db_pages);
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 $sys['pagesqueued'] = sed_sql_result($sql, 0, 'COUNT(*)');
@@ -29,22 +492,40 @@ $lincif_page = sed_auth('page', 'any', 'A');
 $t -> assign(array(
 	"ADMIN_PAGE_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=page"),
 	"ADMIN_PAGE_URL_ADD" => sed_url('page', 'm=add'),
-	"ADMIN_PAGE_URL_QUEUE" => sed_url('admin', 'm=page&s=queue'),
-	"ADMIN_PAGE_QUEUE" => $sys['pagesqueued'],
-	"ADMIN_PAGE_URL_STRUCTURE" => sed_url('admin', 'm=page&s=structure'),
 	"ADMIN_PAGE_URL_EXTRAFIELDS" => sed_url('admin', 'm=page&s=extrafields'),
-	"ADMIN_PAGE_URL_CATORDER" => sed_url('admin', 'm=page&s=catorder'),
 	"ADMIN_PAGE_URL_LIST_ALL" => sed_url('list', 'c=all'),
-	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages
+	"ADMIN_PAGE_FORM_URL" => sed_url('admin', "m=page&a=update_cheked&d=".$d),
+	"ADMIN_PAGE_FORM_VALIDATE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'form_valqueue', url: '".sed_url('admin','m=page&a=update_cheked&ajax=1&d='.$d)."&paction='+this.value, divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_PAGE_FORM_DELETE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'form_valqueue', url: '".sed_url('admin','m=page&a=update_cheked&ajax=1&d='.$d)."&paction='+this.value, divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages,
+	"ADMIN_PAGE_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_PAGE_ADMINWARNINGS" => $adminwarnings,
+	"ADMIN_PAGE_PAGINATION_PREV" => $pagination_prev,
+	"ADMIN_PAGE_PAGNAV" => $pagnav,
+	"ADMIN_PAGE_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_PAGE_TOTALITEMS" => $totalitems,
+	"ADMIN_PAGE_ON_PAGE" => $ii
 ));
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.page.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("PAGE");
 $adminmain = $t -> text("PAGE");
+
+if ($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
 
 ?>

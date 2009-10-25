@@ -3459,13 +3459,13 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 function sed_pfs_createfolder($title, $ownerid, $desc='', $parentid=0, $ispublic=FALSE, $isgallery=FALSE)
 {
 	global $db_pfs_folders, $cfg, $sys, $L, $err_msg;
-	
+
 	if(empty($title))
 	{
 		$err_msg[] = $L['pfs_foldertitlemissing'];
 		return FALSE;
 	}
-	
+
 	$newpath = sed_urlencode(strtolower($title));
 	if ($parentid > 0)
 	{
@@ -3499,7 +3499,7 @@ function sed_pfs_createfolder($title, $ownerid, $desc='', $parentid=0, $ispublic
 		".(int)$ispublic.",
 		".(int)$isgallery.",
 		0)");
-	
+
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', 'f='.$parentid, '', true));
 	exit;
 }
@@ -3513,9 +3513,9 @@ function sed_pfs_createfolder($title, $ownerid, $desc='', $parentid=0, $ispublic
 function sed_pfs_deletefile($id)
 {
 	global $db_pfs, $cfg;
-	
+
 	$fpath = sed_pfs_filepath($id);
-	
+
 	if (file_exists($cfg['pfs_thumbpath'].$fpath))
 	{
 		@unlink($cfg['pfs_thumbpath'].$fpath);
@@ -3527,7 +3527,7 @@ function sed_pfs_deletefile($id)
 	else {
 		return FALSE;
 	}
-	
+
 	sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id=".(int)$id);
 	return TRUE;
 }
@@ -3541,19 +3541,19 @@ function sed_pfs_deletefile($id)
 function sed_pfs_deletefolder($folderid)
 {
 	global $db_pfs_folders, $db_pfs, $cfg;
-	
+
 	$sql = sed_sql_query("SELECT pff_userid, pff_parentid, pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid." LIMIT 1");
 	$fuserid = sed_sql_result($sql, 0, 'pff_userid');
 	$fparentid = sed_sql_result($sql, 0, 'pff_parentid');
 	$fpath = sed_sql_result($sql, 0, 'pff_path');
-	
+
 	// Remove files
 	$sql = sed_sql_query("SELECT pfs_id FROM $db_pfs WHERE pfs_folderid IN (SELECT pff_id FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%')");
 	while($row = sed_sql_fetcharray($sql))
 	{
 		sed_pfs_deletefile($row['pfs_id']);
 	}
-	
+
 	// Remove folders
 	$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%' ORDER BY CHAR_LENGTH(pff_path) DESC");
 	while($row = sed_sql_fetcharray($sql))
@@ -3631,7 +3631,7 @@ function sed_pfs_deleteall($userid)
 function sed_pfs_filepath($id)
 {
 	global $db_pfs_folders, $db_pfs, $cfg;
-	
+
 	$sql = sed_sql_query("SELECT p.pfs_file AS file, f.pff_path AS path FROM $db_pfs AS p LEFT JOIN $db_pfs_folders AS f ON p.pfs_folderid=f.pff_id WHERE p.pfs_id=".(int)$id." LIMIT 1");
 	if($row = sed_sql_fetcharray($sql))
 	{
@@ -3653,9 +3653,9 @@ function sed_pfs_filepath($id)
 function sed_pfs_folderpath($folderid, $fullpath='')
 {
 	global $db_pfs_folders, $cfg;
-	
+
 	if($fullpath==='') $fullpath = $cfg['pfsuserfolder'];
-	
+
 	if($fullpath && $folderid>0)
 	{
 		$sql = sed_sql_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid);
@@ -3684,7 +3684,7 @@ function sed_pfs_folderpath($folderid, $fullpath='')
 function sed_pfs_mkdir($path, $feedback=FALSE)
 {
 	global $cfg;
-	
+
 	if(substr($path, 0, 2) == './')
 	{
 		$path = substr($path, 2);
@@ -4425,18 +4425,6 @@ function sed_skinfile($base, $plug = false, $admn = false)
 		$base = explode('.', $base);
 	}
 	$bname = is_array($base) ? $base[0] : $base;
-	if($plug || !$admn)
-	{
-		$scan_prefix[] = './skins/'.$usr['skin'].'/plugins/';
-		$scan_prefix[] = './skins/'.$usr['skin'].'/plugin.standalone.';
-		if ($usr['skin'] != $cfg['defaultskin'])
-		{
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugins/';
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugin.standalone.';
-		}
-		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname.'/tpl/';
-		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname .'/';
-	}
 	if($admn)
 	{
 		$scan_prefix[] = './skins/'.$usr['skin'].'/admin/';
@@ -4448,6 +4436,18 @@ function sed_skinfile($base, $plug = false, $admn = false)
 		{
 			$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname.'/tpl/admin/';
 		}
+	}
+	elseif($plug)
+	{
+		$scan_prefix[] = './skins/'.$usr['skin'].'/plugins/';
+		$scan_prefix[] = './skins/'.$usr['skin'].'/plugin.standalone.';
+		if ($usr['skin'] != $cfg['defaultskin'])
+		{
+			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugins/';
+			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugin.standalone.';
+		}
+		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname.'/tpl/';
+		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname .'/';
 	}
 	$scan_prefix[] = 'skins/'.$usr['skin'].'/';
 	if ($usr['skin'] != $cfg['defaultskin'])

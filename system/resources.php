@@ -25,6 +25,8 @@ $R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt=""
 
 /* Administration */
 $R['admin_icon_admin'] = '<img class="icon" src="images/admin/admin.gif" alt="" />';
+$R['admin_icon_allow'] = '<img class="icon" src="images/admin/allow.gif" alt="" />';
+$R['admin_icon_allow_locked'] = '<img class="icon" src="images/admin/allow_locked.gif" alt="" />';
 $R['admin_icon_auth_1'] = '<img class="icon" src="images/admin/auth_1.gif" alt="" />';
 $R['admin_icon_auth_2'] = '<img class="icon" src="images/admin/auth_2.gif" alt="" />';
 $R['admin_icon_auth_3'] = '<img class="icon" src="images/admin/auth_3.gif" alt="" />';
@@ -40,6 +42,8 @@ $R['admin_icon_comments'] = '<img class="icon" src="images/admin/comments.gif" a
 $R['admin_icon_config'] = '<img class="icon" src="images/admin/config.gif" alt="" />';
 $R['admin_icon_ct'] = '<img class="icon" src="images/admin/{$code}.gif" alt="" />';
 $R['admin_icon_delete'] = '<img class="icon" src="images/admin/delete.gif" alt="" />';
+$R['admin_icon_deny'] = '<img class="icon" src="images/admin/deny.gif" alt="" />';
+$R['admin_icon_deny_locked'] = '<img class="icon" src="images/admin/deny_locked.gif" alt="" />';
 $R['admin_icon_discheck0'] = '<img class="icon" src="images/admin/discheck0.gif" alt="" />';
 $R['admin_icon_discheck1'] = '<img class="icon" src="images/admin/discheck1.gif" alt="" />';
 $R['admin_icon_diskcache'] = '<img class="icon" src="images/admin/folder.gif" alt="" />';
@@ -80,7 +84,7 @@ $R['admin_icon_rights2'] = '<img class="icon" src="images/admin/rights2.gif" alt
 $R['admin_icon_skins'] = '<img class="icon" src="images/admin/skins.gif" alt="" />';
 $R['admin_icon_smilies'] = '<img class="icon" src="images/admin/smilies.gif" alt="" />';
 $R['admin_icon_statistics'] = '<im class="icon"g src="images/admin/statistics.gif" alt="" />';
-$R['admin_icon_structure'] = '<img class="icon" src="images/admin/.gif" alt="" />';
+$R['admin_icon_structure'] = '<img class="icon" src="images/admin/structure.gif" alt="" />';
 $R['admin_icon_tools'] = '<img class="icon" src="images/admin/tools.gif" alt="" />';
 $R['admin_icon_trash'] = '<img class="icon" src="images/admin/trash.gif" alt="" />';
 $R['admin_icon_urls'] = '<img class="icon" src="images/admin/info.gif" alt="" />';

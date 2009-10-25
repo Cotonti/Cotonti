@@ -330,8 +330,8 @@ function sed_loadconfigmap()
     $result[] = array ('page', '01', 'disable_page', 3, '0', '');
     $result[] = array ('page', '02', 'allowphp_pages', 3, '0', '');
     $result[] = array ('page', '03', 'count_admin', 3, '0', '');
-    $result[] = array ('page', '05', 'maxrowsperpage', 2, '15', array(5,10,15,20,25,30,40,50,60,70,100,200,500)); // N-0.0.6
-    $result[] = array ('page', '05', 'maxlistsperpage', 2, '15', array(5,10,15,20,25,30,40,50,60,70,100,200,500)); // N-0.0.6
+    $result[] = array ('structure', '05', 'maxrowsperpage', 2, '15', array(5,10,15,20,25,30,40,50,60,70,100,200,500)); // N-0.0.6
+    $result[] = array ('structure', '05', 'maxlistsperpage', 2, '15', array(5,10,15,20,25,30,40,50,60,70,100,200,500)); // N-0.0.6
     $result[] = array ('page', '06', 'autovalidate', 3, '1', ''); //N-0.0.2
     $result[] = array ('pfs', '01', 'disable_pfs', 3, '0', '');
     $result[] = array ('pfs', '02', 'pfsuserfolder', 3, '0', '');
@@ -474,18 +474,28 @@ function sed_structure_delcat($id, $c)
 
 /* ------------------ */
 
-function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
+function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order, $way, $extra_array = array())
 {
     global $db_structure, $db_auth, $sed_groups, $usr;
 
     $res = FALSE;
 
-    if (!empty($title) && !empty($code) && !empty($path) && $code!='all')
+    if (!empty($title) && !empty($code) && !empty($path) && $code != 'all')
     {
         $sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='".sed_sql_prep($code)."' LIMIT 1");
         if (sed_sql_numrows($sql) == 0)
         {
-            $sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group) VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.")");
+			$colname = '';
+			$colvalue = '';
+			if (is_array($extra_array))
+			{
+				while (list($i, $x) = each($extra_array))
+				{
+					$colname .= ", structure_".$i;
+					$colvalue .= ", '".sed_sql_prep($x)."'";
+				}
+			}
+            $sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order".$colname.") VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.", '".sed_sql_prep($order.'.'.$way)."'".$colvalue.")");
 
             foreach ($sed_groups as $k => $v)
             {
@@ -514,7 +524,7 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group)
                     $ins_auth = 7;
                     $ins_lock = ($k == 4) ? 128 : 0;
                 }
-                $sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'page', '".sed_sql_prep($code)."', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
+                $sql = sed_sql_query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'page', '".sed_sql_prep($code)."', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
                 $res = TRUE;
             }
             sed_auth_reorder();
