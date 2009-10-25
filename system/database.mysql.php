@@ -53,10 +53,19 @@ function sed_sql_close($conn = null)
 function sed_sql_connect($host, $user, $pass, $db)
 {
 	global $cfg;
-	$connection = @mysql_connect($host, $user, $pass) or sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
-	if (!version_compare(mysql_get_server_info($connection), '4.1.0', '>='))
+	$connection = @mysql_connect($host, $user, $pass);
+	if(!$connection && !defined('SED_INSTALL'))
 	{
-		sed_diefatal('Cotonti system requirements: MySQL 4.1 or above.');
+		sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
+		if (!version_compare(mysql_get_server_info($connection), '4.1.0', '>='))
+		{
+			sed_diefatal('Cotonti system requirements: MySQL 4.1 or above.');
+		}
+	}
+	elseif(!$connection)
+	{
+		// Used by installer to identify where the problem was
+		return 1;
 	}
 
 	if (!empty($cfg['mysqlcharset']))
@@ -68,7 +77,16 @@ function sed_sql_connect($host, $user, $pass, $db)
 		}
 		@mysql_query($collation_query, $connection);
 	}
-	$select = @mysql_select_db($db, $connection) or sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
+	$select = @mysql_select_db($db, $connection);
+	if(!$select && !defined('SED_INSTALL'))
+	{
+		sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
+	}
+	elseif(!$select)
+	{
+		// Used by installer to identify where the problem was
+		return 2;
+	}
 	return $connection;
 }
 

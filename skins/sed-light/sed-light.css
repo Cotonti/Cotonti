@@ -208,3 +208,7 @@ div.star-rating-readonly a{cursor:default !important}
 /* Partial Star CSS */
 div.star-rating{background:transparent!important;overflow:hidden!important}
 /* END jQuery.Rating Plugin CSS */
+
+/* ============== Install ============== */
+.install_valid { color:#4E9A06; font-weight:bold; }
+.install_invalid { color:#CC1212; font-weight:bold; }

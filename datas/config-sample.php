@@ -64,6 +64,8 @@ $cfg['pfsmaxuploads'] = 8;
 $cfg['authcache'] = TRUE;				// Auth cache in SQL tables. Set it FALSE if your huge database
 										// goes down because of that
 $cfg['customfuncs'] = FALSE;			// Includes file named functions.custom.php
+$cfg['new_install'] = TRUE;				// This setting denotes a new install and redirects you to the install page
+										// If you already have Cotonti installed then set it to FALSE
 
 // ========================
 // Directory paths
@@ -116,41 +118,41 @@ define('SED_DEBUG_LOGFILE', '/tmp/cot_debug_'.date("Ymd_His").'.log');
 // Else do not change.
 // ========================
 
-$db_auth			= 'sed_auth';
-$db_banlist 		= 'sed_banlist';
-$db_bbcode			= 'sed_bbcode';
-$db_cache 			= 'sed_cache';
-$db_com 			= 'sed_com';
-$db_core			= 'sed_core';
-$db_config 			= 'sed_config';
-$db_forum_posts 	= 'sed_forum_posts';
-$db_forum_sections 	= 'sed_forum_sections';
-$db_forum_structure	= 'sed_forum_structure';
-$db_forum_topics 	= 'sed_forum_topics';
-$db_groups 			= 'sed_groups';
-$db_groups_users 	= 'sed_groups_users';
-$db_logger 			= 'sed_logger';
-$db_online 			= 'sed_online';
-$db_pages 			= 'sed_pages';
-$db_extra_fields	= 'sed_extra_fields';
-$db_pfs 			= 'sed_pfs';
-$db_pfs_folders 	= 'sed_pfs_folders';
-$db_plugins 		= 'sed_plugins';
-$db_pm 				= 'sed_pm';
-$db_polls 			= 'sed_polls';
-$db_polls_options 	= 'sed_polls_options';
-$db_polls_voters 	= 'sed_polls_voters';
-$db_rated 			= 'sed_rated';
-$db_ratings 		= 'sed_ratings';
-$db_referers 		= 'sed_referers';
-$db_smilies 		= 'sed_smilies';
-$db_stats 			= 'sed_stats';
-$db_structure 		= 'sed_structure';
-$db_tag_references	= 'sed_tag_references';
-$db_tags			= 'sed_tags';
-$db_trash	 		= 'sed_trash';
-$db_users 			= 'sed_users';
-
 $db_x				= 'sed_'; // Default: sed_, prefix for extra fields' table(s)
+
+$db_auth			= $db_x.'auth';
+$db_banlist 		= $db_x.'banlist';
+$db_bbcode			= $db_x.'bbcode';
+$db_cache 			= $db_x.'cache';
+$db_com 			= $db_x.'com';
+$db_core			= $db_x.'core';
+$db_config 			= $db_x.'config';
+$db_forum_posts 	= $db_x.'forum_posts';
+$db_forum_sections 	= $db_x.'forum_sections';
+$db_forum_structure	= $db_x.'forum_structure';
+$db_forum_topics 	= $db_x.'forum_topics';
+$db_groups 			= $db_x.'groups';
+$db_groups_users 	= $db_x.'groups_users';
+$db_logger 			= $db_x.'logger';
+$db_online 			= $db_x.'online';
+$db_pages 			= $db_x.'pages';
+$db_extra_fields	= $db_x.'extra_fields';
+$db_pfs 			= $db_x.'pfs';
+$db_pfs_folders 	= $db_x.'pfs_folders';
+$db_plugins 		= $db_x.'plugins';
+$db_pm 				= $db_x.'pm';
+$db_polls 			= $db_x.'polls';
+$db_polls_options 	= $db_x.'polls_options';
+$db_polls_voters 	= $db_x.'polls_voters';
+$db_rated 			= $db_x.'rated';
+$db_ratings 		= $db_x.'ratings';
+$db_referers 		= $db_x.'referers';
+$db_smilies 		= $db_x.'smilies';
+$db_stats 			= $db_x.'stats';
+$db_structure 		= $db_x.'structure';
+$db_tag_references	= $db_x.'tag_references';
+$db_tags			= $db_x.'tags';
+$db_trash	 		= $db_x.'trash';
+$db_users 			= $db_x.'users';
 
 ?>
