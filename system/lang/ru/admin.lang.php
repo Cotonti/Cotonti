@@ -29,6 +29,7 @@ $L['core_polls'] = &$L['Polls'];
 $L['core_ratings'] = &$L['Ratings'];
 $L['core_rss'] = &$L['Rss_feeds'];// New in N-0.7.0
 $L['core_skin'] = &$L['Skins'];
+$L['core_structure'] = &$L['Categories'];// New in N-0.7.0
 $L['core_time'] = 'Время и дата';
 $L['core_title'] = 'Заголовки (тэг &lt;title&gt;)';
 $L['core_trash'] = &$L['Trashcan'];
@@ -310,24 +311,17 @@ $L['cfg_usertextmax'] = array('Максимальная длина подпис�
  */
 
 $L['addnewentry'] = 'Добавить новую запись';
+$L['adm_queue_deleted'] = 'Страница удалена в корзину';
 $L['adm_valqueue'] = 'В очереди на утверждение';
 $L['adm_structure'] = 'Структура страниц (категории)';
 $L['adm_extrafields_desc'] = 'Создание / правка дополнительных полей';
-$L['adm_sortingorder'] = 'Порядок сортировки по умолчанию в категориях';
+$L['adm_sortingorder'] = 'Порядок сортировки по умолчанию в категории';
 $L['adm_showall'] = 'Показать все';
-$L['adm_help_page'] = 'Страницы категории &laquo;Системные&raquo; не отображаются в списках страниц и являются отдельными, самостоятельными страницами';
-
-/**
-  * Page Section
-  * Structure Subsection
- */
-
-$L['adm_tpl_mode'] = 'Установка шаблона';
-$L['adm_tpl_empty'] = 'По умолчанию';
-$L['adm_tpl_forced'] = 'Как';
-$L['adm_tpl_parent'] = 'Как родительская категория';
-$L['adm_enablecomments'] = 'Включить комментарии';	// New in N-0.1.0
-$L['adm_enableratings'] = 'Включить рейтинги';	// New in N-0.1.0
+$L['adm_help_page'] = 'Страницы категории &laquo;system&raquo; не отображаются в списках страниц и являются отдельными, самостоятельными страницами'; // Edit in N-0.7.0 	Пожалуйста не нужно переводить слово "system" в этой строке (Dayver)
+$L['adm_fileyesno'] = 'Файл (да/нет)';
+$L['adm_fileurl'] = 'URL файла';
+$L['adm_filecount'] = 'Количество загрузок';
+$L['adm_filesize'] = 'Размер файла';
 
 /**
  * Page Section
@@ -336,20 +330,38 @@ $L['adm_enableratings'] = 'Включить рейтинги';	// New in N-0.1.0
 
 $L['adm_help_pages_extrafield'] = 'HTML-код поля установится в значение по умолчанию автоматически, если его очистить и обновить<br /><br />
 <b>Новые тэги в tpl-файлах:</b><br /><br />
-page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}<br />
-page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}<br />
-page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}<br />
+page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}<br /><br />
+page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}<br /><br />
+page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}<br /><br />
 list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}<br />';
 
 /**
-  * Page Section
-  * CatOrder Subsection
+  * Structure Section
  */
 
-$L['adm_fileyesno'] = 'Файл (да/нет)';
-$L['adm_fileurl'] = 'URL файла';
-$L['adm_filecount'] = 'Количество загрузок';
-$L['adm_filesize'] = 'Размер файла';
+$L['adm_tpl_mode'] = 'Установка шаблона';
+$L['adm_tpl_empty'] = 'По умолчанию';
+$L['adm_tpl_forced'] = 'Как';
+$L['adm_tpl_parent'] = 'Как родительская категория';
+$L['adm_enablecomments'] = 'Включить комментарии';	// New in N-0.1.0
+$L['adm_enableratings'] = 'Включить рейтинги';	// New in N-0.1.0
+$L['adm_help_structure'] = 'Страницы категории &laquo;system&raquo; не отображаются в списках страниц и являются отдельными, самостоятельными страницами'; // Added in N-0.7.0 	Пожалуйста не нужно переводить слово "system" в этой строке (Dayver)
+
+/**
+ * Structure Section
+ * Extrafields Subsection
+ */
+
+$L['adm_help_structure_extrafield'] = 'HTML-код поля установится в значение по умолчанию автоматически, если его очистить и обновить<br /><br />
+<b>Новые тэги в tpl-файлах:</b><br /><br />
+<u>list.tpl:</u><br /><br />
+&nbsp;&nbsp;&nbsp;{LIST_XXXXX}, {LIST_XXXXX_TITLE}<br /><br />
+<u>list.group.tpl:</u><br /><br />
+&nbsp;&nbsp;&nbsp;{LIST_XXXXX}, {LIST_XXXXX_TITLE}<br /><br />
+<u>admin.structure.inc.tpl :</u><br /><br />
+&nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: OPTIONS --&gt; {ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE} &lt;!-- END: OPTIONS --&gt;<br /><br />
+&nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: DEFULT --&gt; {ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE} &lt;!-- END: DEFULT --&gt;<br /><br />
+<br />';
 
 /**
  * Forums Section

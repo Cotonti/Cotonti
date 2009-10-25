@@ -73,43 +73,10 @@ if (!SED_AJAX)
 	}
 	/* ===== */
 
-	if ($cfg['enablecustomhf'])
-	{
-		if ($location == 'Administration')
-		{
-			if (file_exists('./skins/'.$usr['skin'].'/admin/footer.tpl'))
-			{
-				$mskin = './skins/'.$usr['skin'].'/admin/footer.tpl';
-			}
-			elseif (file_exists('./skins/'.$cfg['defaultskin'].'/admin/footer.tpl'))
-			{
-				$mskin = './skins/'.$cfg['defaultskin'].'/admin/footer.tpl';
-			}
-			elseif (file_exists('./skins/'.$usr['skin'].'/footer.Administration.tpl'))
-			{
-				$mskin = './skins/'.$usr['skin'].'/footer.Administration.tpl';
-			}
-			elseif (file_exists('./skins/'.$cfg['defaultskin'].'/footer.Administration.tpl'))
-			{
-				$mskin = './skins/'.$cfg['defaultskin'].'/footer.Administration.tpl';
-			}
-			else
-			{
-				$mskin = "skins/".$usr['skin']."/footer.tpl";
-			}
-		}
-		else
-		{
-			$mskin = sed_skinfile(array('footer', mb_strtolower($location)));
-		}
-	}
-	else
-	{
-		$mskin = "skins/".$usr['skin']."/footer.tpl";
-	}
+	$mskin = sed_skinfile($cfg['enablecustomhf'] ? array('footer', mb_strtolower($location)) : 'footer', defined('SED_PLUG'), defined('SED_ADMIN'));
 	$t = new XTemplate($mskin);
 
-	$t->assign(array (
+	$t->assign(array(
 		"FOOTER_BOTTOMLINE" => $out['bottomline'],
 		"FOOTER_CREATIONTIME" => $out['creationtime'],
 		"FOOTER_COPYRIGHT" => $out['copyright'],

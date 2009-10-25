@@ -46,10 +46,10 @@ if (!file_exists($sys['inc']))
 	sed_die();
 }
 
-$allow_img['0']['0'] = "<img src=\"images/admin/deny.gif\" alt=\"\" />";
-$allow_img['1']['0'] = "<img src=\"images/admin/allow.gif\" alt=\"\" />";
-$allow_img['0']['1'] = "<img src=\"images/admin/deny_locked.gif\" alt=\"\" />";
-$allow_img['1']['1'] = "<img src=\"images/admin/allow_locked.gif\" alt=\"\" />";
+$allow_img['0']['0'] = $R['admin_icon_deny'];
+$allow_img['1']['0'] = $R['admin_icon_allow'];
+$allow_img['0']['1'] = $R['admin_icon_deny_locked'];
+$allow_img['1']['1'] = $R['admin_icon_allow_locked'];
 
 $lincif_conf = sed_auth('admin', 'a', 'A');
 $lincif_page = sed_auth('page', 'any', 'A');
@@ -75,6 +75,7 @@ $t->assign(array(
 	"ADMINMENU_URL" => sed_url('admin'),
 	"ADMINMENU_CONF_URL" => sed_url('admin', "m=config"),
 	"ADMINMENU_PAGE_URL" => sed_url('admin', "m=page"),
+	"ADMINMENU_STRUCTURE_URL" => sed_url('admin', "m=structure"),
 	"ADMINMENU_FORUMS_URL" => sed_url('admin', "m=forums"),
 	"ADMINMENU_USERS_URL" => sed_url('admin', "m=users"),
 	"ADMINMENU_PLUG_URL" => sed_url('admin', "m=plug"),

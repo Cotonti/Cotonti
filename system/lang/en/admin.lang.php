@@ -29,6 +29,7 @@ $L['core_polls'] = &$L['Polls'];
 $L['core_ratings'] = &$L['Ratings'];
 $L['core_rss'] = &$L['Rss_feeds'];// New in N-0.7.0
 $L['core_skin'] = &$L['Skins'];
+$L['core_structure'] = &$L['Categories'];// New in N-0.7.0
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles (&lt;title&gt; tag)';
 $L['core_trash'] = &$L['Trashcan'];
@@ -311,24 +312,17 @@ $L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300
  */
 
 $L['addnewentry'] = 'Add a new entry';
+$L['adm_queue_deleted'] = 'Page was deleted in to trash can';
 $L['adm_valqueue'] = 'Waiting for validation';
 $L['adm_structure'] = 'Structure of the pages (categories)';
 $L['adm_extrafields_desc'] = 'Add/Edit extra fields';
 $L['adm_sortingorder'] = 'Set a default sorting order for the categories';
 $L['adm_showall'] = 'Show all';
 $L['adm_help_page'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.';
-
-/**
-  * Page Section
-  * Structure Subsection
- */
-
-$L['adm_tpl_mode'] = 'Template mode';
-$L['adm_tpl_empty'] = 'Default';
-$L['adm_tpl_forced'] = 'Same as';
-$L['adm_tpl_parent'] = 'Same as the parent category';
-$L['adm_enablecomments'] = 'Enable comments';	// New in N-0.1.0
-$L['adm_enableratings'] = 'Enable ratings';	// New in N-0.1.0
+$L['adm_fileyesno'] = 'File (yes/no)';
+$L['adm_fileurl'] = 'File URL';
+$L['adm_filecount'] = 'File hit count';
+$L['adm_filesize'] = 'File size';
 
 /**
  * Page Section
@@ -343,14 +337,32 @@ page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}<br /><br />
 list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}<br />';
 
 /**
-  * Page Section
-  * CatOrder Subsection
+  * Structure Section
  */
 
-$L['adm_fileyesno'] = 'File (yes/no)';
-$L['adm_fileurl'] = 'File URL';
-$L['adm_filecount'] = 'File hit count';
-$L['adm_filesize'] = 'File size';
+$L['adm_tpl_mode'] = 'Template mode';
+$L['adm_tpl_empty'] = 'Default';
+$L['adm_tpl_forced'] = 'Same as';
+$L['adm_tpl_parent'] = 'Same as the parent category';
+$L['adm_enablecomments'] = 'Enable comments';	// New in N-0.1.0
+$L['adm_enableratings'] = 'Enable ratings';	// New in N-0.1.0
+$L['adm_help_structure'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.'; // Added in N-0.7.0
+
+/**
+ * Structure Section
+ * Extrafields Subsection
+ */
+
+$L['adm_help_structure_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br /><br />
+<b>New tags in tpl files:</b><br /><br />
+<u>list.tpl:</u><br /><br />
+&nbsp;&nbsp;&nbsp;{LIST_XXXXX}, {LIST_XXXXX_TITLE}<br /><br />
+<u>list.group.tpl:</u><br /><br />
+&nbsp;&nbsp;&nbsp;{LIST_XXXXX}, {LIST_XXXXX_TITLE}<br /><br />
+<u>admin.structure.inc.tpl :</u><br /><br />
+&nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: OPTIONS --&gt; {ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE} &lt;!-- END: OPTIONS --&gt;<br /><br />
+&nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: DEFULT --&gt; {ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE} &lt;!-- END: DEFULT --&gt;<br /><br />
+<br />';
 
 /**
  * Forums Section
