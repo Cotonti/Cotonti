@@ -12,10 +12,13 @@
 defined('SED_CODE') or die('Wrong URL');
 
 // System requirements check
-(function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>='))
-	or die('Cotonti system requirements: PHP 5.1 or above.');
-extension_loaded('mbstring')
-	or die('Cotonti system requirements: mbstring PHP extension must be loaded.');
+if(!defined('SED_INSTALL'))
+{
+	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>='))
+		or die('Cotonti system requirements: PHP 5.1 or above.');
+	extension_loaded('mbstring')
+		or die('Cotonti system requirements: mbstring PHP extension must be loaded.');
+}
 
 // Group constants
 define('SED_GROUP_GUESTS', 1);

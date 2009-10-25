@@ -36,6 +36,7 @@ $L['Anonymous'] = 'Anonymous';
 $L['Archives'] = 'Archives';
 $L['Ascending'] = 'Ascending';
 $L['Author'] = 'Author';
+$L['Available'] = 'Available';	// New in 0.7.0
 $L['Avatar'] = 'Avatar';	// New in N-0.1.0
 $L['Avatars'] = 'Avatars';	// New in N-0.1.0
 $L['Banlist'] = 'Banlist';
@@ -177,6 +178,7 @@ $L['MSN'] = 'MSN Messenger';
 $L['Myjournal'] = 'My weblog';
 $L['Mypfs'] = 'My files';
 $L['na'] = 'Not available';
+$L['nf'] = 'Not found';	// New in 0.7.0
 $L['Name'] = 'Name';
 $L['Names'] = 'Names';
 $L['New'] = 'New';
@@ -288,6 +290,7 @@ $L['System'] = 'System';
 $L['Tag'] = 'Tag';
 $L['Tags'] = 'Tags';
 $L['Text'] = 'Text';
+$L['Theme'] = 'Theme';	// New in 0.7.0
 $L['Thumbnail'] = 'Thumbnail';
 $L['Thumbnails'] = 'Thumbnails';
 $L['Timezone'] = 'Timezone';
@@ -914,4 +917,28 @@ $L['sir_notaccepted'] = "Error: requested file is not an accepted type: ";
 $L['sir_cachenotreadable'] = "Error: the cache directory is not readable";
 $L['sir_cachenotwritable'] = "Error: the cache directory is not writable";
 
+/**
+ * Installer (install.php)
+ */
+
+$L['install_title'] = 'Cotonti Web Installer';
+$L['install_body_title'] = 'Welcome to the Cotonti Web Installer';
+$L['install_body_message'] = '
+This script will setup the basic install and configuration of Cotonti for you.
+You must have already created the database with your host, this script will not beable to create it for you.
+<br /><br />
+The following will tell you basic infomation about your current setup.';
+$L['install_writable'] = 'Writable';
+$L['install_chmod_value'] = 'CHMOD %1$s'; // %1 - CHMOD Value
+$L['install_ver_valid'] = '%1$s - Valid'; // %1 - Version
+$L['install_ver_invalid'] = '%1$s - Invalid'; // %1 - Version
+$L['install_db'] = 'MySQL Database settings';
+$L['install_db_host'] = 'Database Host';
+$L['install_db_user'] = 'Database User';
+$L['install_db_pass'] = 'Database Password';
+$L['install_db_name'] = 'Database Name';
+$L['install_db_x'] = 'Database Prefix';
+$L['install_skinlang'] = 'Skin & Language settings';
+$L['install_error_sql'] = 'Unable to connect to MySQL Database. Please check your settings.';
+$L['install_error_sql_db'] = 'Unable to select the MySQL Database. Please check your settings.';
 ?>

@@ -15,6 +15,13 @@ $location = 'Home';
 $z = 'index';
 
 require_once('./datas/config.php');
+
+if($cfg['new_install'])
+{
+	header('Location: install.php');
+	exit;
+}
+
 require_once($cfg['system_dir'].'/functions.php');
 require_once($cfg['system_dir'].'/common.php');
 require_once($cfg['system_dir'].'/core/index/index.inc.php');
