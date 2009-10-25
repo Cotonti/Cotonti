@@ -846,7 +846,8 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (41, 'ajax', 'markitup', 'preview', 'MarkItUp!', 'markitup.ajax', 10, 1),
 (42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1),
 (43, 'admin.config.edit.loop', 'news', 'adminconfig', 'News', 'news.admin', 10, 1),
-(44, 'standalone', 'recentitems', 'main', 'Recent items', 'recentitems', 10, 1);
+(44, 'standalone', 'recentitems', 'main', 'Recent items', 'recentitems', 10, 1),
+(45, 'admin.page.loop', 'tags', 'admin', 'Tags', 'tags.admin', 10, 1);
 
 CREATE TABLE `sed_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,
