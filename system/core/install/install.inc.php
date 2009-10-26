@@ -1,5 +1,4 @@
-<?PHP
-
+<?php
 /**
  * @package Cotonti
  * @version 0.7.0
@@ -17,6 +16,8 @@ $out['meta_lastmod'] = gmdate("D, d M Y H:i:s");
 $file['config'] = './datas/config.php';
 $file['config_sample'] = './datas/config-sample.php';
 $file['sql'] = './sql/cotonti-'.$cfg['dbversion'].'.sql';
+
+sed_sendheaders();
 
 $mskin = sed_skinfile('install');
 $t = new XTemplate($mskin);
@@ -134,7 +135,7 @@ $t->assign(array(
 	'INSTALL_SQL_FILE' => $status['sql_file'],
 	'INSTALL_PHP_VER' => $status['php_ver'],
 	'INSTALL_MBSTRING' => $status['mbstring'],
-	'INSTALL_MYSQL' => $status['mysql'], 
+	'INSTALL_MYSQL' => $status['mysql'],
 	'INSTALL_MYSQL_VER' => $status['mysql_ver'],
 	'INSTALL_DB_HOST' => $cfg['mysqlhost'],
 	'INSTALL_DB_USER' => $cfg['mysqluser'],
