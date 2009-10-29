@@ -91,8 +91,8 @@ $skinlang['list']['linesinthissection'] = 'Записей в разделе';
 $skinlang['page']['Submittedby'] = 'Опубликовано';
 $skinlang['page']['Summary'] = 'Содержание';
 $skinlang['page']['Filesize'] = 'Размер файла';
-$skinlang['page']['downloaded'] = 'скачан';	// New in N-0.0.1
-$skinlang['page']['times'] = 'раз';	// New in N-0.0.1
+$skinlang['page']['downloaded'] = 'Загружен';	// New in N-0.0.1
+$skinlang['page']['times'] = 'раз(а)';	// New in N-0.0.1
 
 /**
  * page.add.tpl
