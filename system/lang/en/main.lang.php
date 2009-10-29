@@ -938,7 +938,16 @@ $L['install_db_user'] = 'Database User';
 $L['install_db_pass'] = 'Database Password';
 $L['install_db_name'] = 'Database Name';
 $L['install_db_x'] = 'Database Prefix';
-$L['install_skinlang'] = 'Skin & Language settings';
+$L['install_misc'] = 'Miscellaneous settings';
+$L['install_mainurl'] = 'Main site URL (without a trailing slash)';
+$L['install_adminacc'] = 'Administrator Account';
 $L['install_error_sql'] = 'Unable to connect to MySQL Database. Please check your settings.';
 $L['install_error_sql_db'] = 'Unable to select the MySQL Database. Please check your settings.';
+$L['install_error_mainurl'] = 'You must supply the Main URL for your site.';
+$L['install_error_missing_file'] = 'Missing %1$s please upload this file again to continue.'; // %1 - File
+$L['install_error_php_ver'] = 'Cotonti Requires PHP version 5.1.0 or greater. Your Version is %1$s'; // %1 - Version
+$L['install_error_mbstring'] = 'Cotonti Requires PHP extension mbstring to be loaded';
+$L['install_error_sql_ext'] = 'Cotonti Requires PHP extension mysql to be loaded';
+$L['install_error_sql_ver'] = 'Cotonti Requires MySQL version 4.1.0 or greater. Your Version is %1$s'; // %1 - Version
+
 ?>

@@ -28,23 +28,97 @@ if($_POST['submit'])
 	$cfg['mysqluser'] = sed_import('db_user', 'P', 'TXT');
 	$cfg['mysqlpassword'] = sed_import('db_pass', 'P', 'TXT');
 	$cfg['mysqldb'] = sed_import('db_name', 'P', 'TXT');
+	$cfg['mainurl'] = sed_import('mainurl', 'P', 'TXT');
+	$user['name'] = sed_import('user_name', 'P', 'TXT', 100, TRUE);
+	$user['pass'] = sed_import('user_pass', 'P', 'TXT', 16);
+	$user['pass2'] = sed_import('user_pass2', 'P', 'TXT', 16);
+	$user['email'] = sed_import('user_email', 'P', 'TXT', 64, TRUE);
+	$user['country'] = sed_import('user_country', 'P', 'TXT');
 	$db_x = sed_import('db_x', 'P', 'TXT');
 	$rskin = sed_import('skin', 'P', 'TXT');
-	$rtheme = sed_import('theme', 'P', 'TXT');
-	$rtheme = ($skin == $rtheme && $rskin != $rtheme) ? $rskin : $rtheme;
+	//$rtheme = sed_import('theme', 'P', 'TXT');
+	//$rtheme = ($skin == $rtheme && $rskin != $rtheme) ? $rskin : $rtheme;
 	$rlang = sed_import('lang', 'P', 'TXT');
 
-	$connection = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
-	$error .= ($connection == 1) ? $L['install_error_sql'].'<br />' : '';
-	$error .= ($connection == 2) ? $L['install_error_sql_db'].'<br />' : '';
+	$sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
+	$error .= ($sed_dbc == 1) ? $L['install_error_sql'].'<br />' : '';
+	$error .= ($sed_dbc == 2) ? $L['install_error_sql_db'].'<br />' : '';
+	$error .= (empty($cfg['mainurl'])) ? $L['install_error_mainurl'].'<br />' : '';
+	$error .= ($user['pass']!=$user['pass2']) ? $L['aut_passwordmismatch']."<br />" : '';
+	$error .= (mb_strlen($user['name'])<2) ? $L['aut_usernametooshort']."<br />" : '';
+	$error .= (mb_strlen($user['pass'])<4 || sed_alphaonly($user['pass'])!=$user['pass']) ? $L['aut_passwordtooshort']."<br />" : '';
+	$error .= (mb_strlen($user['email'])<4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $user['email'])) ? $L['aut_emailtooshort']."<br />" : '';
+	$error .= (!file_exists($file['config_sample'])) ? sprintf($L['install_error_missing_file'], $file['config_sample']).'<br />' : '';
+	$error .= (!file_exists($file['sql'])) ? sprintf($L['install_error_missing_file'], $file['sql']).'<br />' : '';
+	$error .= (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.1.0', '>=')) ? sprintf($L['install_error_php_ver'], PHP_VERSION).'<br />' : '';
+	$error .= (!extension_loaded('mbstring')) ? $L['install_error_mbstring'].'<br />' : '';
+	$error .= (!extension_loaded('mysql')) ? $L['install_error_mysql_ext'].'<br />' : '';
+	$error .= ($sed_dbc != 1 && $sed_dbc != 2 && function_exists('version_compare') && !version_compare(@mysql_get_server_info($sed_dbc), '4.1.0', '>=')) ? sprintf($L['install_error_mysql_ver'], @mysql_get_server_info($sed_dbc)).'<br />' : '';
 
 	if(!$error)
 	{
+		
 		$sql_file = file_get_contents($file['sql']);
 		$sql_queries = preg_split('/;\r?\n/', $sql_file);
 		foreach($sql_queries as $sql_query)
 		{
-			$sql_query = str_replace('`sed_', '`'.$db_x, $sql_query);
+			if($db_x != 'sed_')
+			{
+				$sql_query = str_replace('`sed_', '`'.$db_x, $sql_query);
+			}
+			$result = sed_sql_query($sql_query);
+			if(!$result)
+			{
+				$error .= sed_sql_error().'<br />';
+				break;
+			}
+		}
+		
+		if(!$error)
+		{
+			$file_contents = file_get_contents($file['config_sample'], NULL, NULL, 5, filesize($file['config_sample']));
+
+			$file_contents = preg_replace('/^\$cfg\[\'defaultlang\'\]\s*=\s*\'.*?\';/m', '$cfg[\'defaultlang\'] = \''.$rlang.'\';', $file_contents);
+			$file_contents = preg_replace('/^\$cfg\[\'defaultskin\'\]\s*=\s*\'.*?\';/m', '$cfg[\'defaultskin\'] = \''.$rskin.'\';', $file_contents);
+			$file_contents = preg_replace('/^\$cfg\[\'defaulttheme\'\]\s*=\s*\'.*?\';/m', '$cfg[\'defaulttheme\'] = \''.$rskin.'\';', $file_contents);
+			$file_contents = preg_replace('/^\$cfg\[\'mysqlhost\'\]\s*=\s*\'.*?\';/m', '$cfg[\'mysqlhost\'] = \''.$cfg['mysqlhost'].'\';', $file_contents);
+			$file_contents = preg_replace('/^\$cfg\[\'mysqluser\'\\]\s*=\s*\'.*?\';/m', '$cfg[\'mysqluser\'] = \''.$cfg['mysqluser'].'\';', $file_contents);
+			$file_contents = preg_replace('/^\$cfg\[\'mysqlpassword\'\]\s*=\s*\'.*?\';/m', '$cfg[\'mysqlpassword\'] = \''.$cfg['mysqlpassword'].'\';', $file_contents);
+			$file_contents = preg_replace('/^\$cfg\[\'mysqldb\'\]\s*=\s*\'.*?\';/m', '$cfg[\'mysqldb\'] = \''.$cfg['mysqldb'].'\';', $file_contents);
+			$file_contents = preg_replace('/^\$db_x\s*=\s*\'.*?\';/m', '$db_x				= \''.$db_x.'\';', $file_contents);
+			$file_contents = preg_replace('/^\$cfg\[\'mainurl\'\]\s*=\s*\'.*?\';/m', '$cfg[\'mainurl\'] = \''.$cfg['mainurl'].'\';', $file_contents);
+			$file_contents = preg_replace('/^\$cfg\[\'new_install\'\]\s*=\s*.*?;/m', '$cfg[\'new_install\'] = FALSE;', $file_contents);
+
+			//echo"<pre>".$file_contents."</pre>";
+			file_put_contents($file['config'], "<?PHP".$file_contents);
+			
+			$sql_user = "INSERT into ".$db_x."users
+			(user_name,
+			user_password,
+			user_maingrp,
+			user_country,
+			user_email,
+			user_skin,
+			user_theme,
+			user_lang,
+			user_regdate,
+			user_lastip)
+			VALUES
+			('".sed_sql_prep($user['name'])."',
+			'".md5($user['pass'])."',
+			5,
+			'".sed_sql_prep($user['country'])."',
+			'".sed_sql_prep($user['email'])."',
+			'".$rskin."',
+			'".$rskin."',
+			'".$rlang."',
+			".time().",
+			'".$_SERVER['REMOTE_ADDR']."')";
+			sed_sql_query($sql_user);
+			$user['id'] = sed_sql_insertid();
+			sed_sql_query("INSERT INTO ".$db_x."groups_users (gru_userid, gru_groupid) VALUES (".(int)$user['id'].", 5)");
+			header('Location: '.$cfg['mainurl']);
+			exit;
 		}
 	}
 }
@@ -109,7 +183,7 @@ $status['mysql'] = (extension_loaded('mysql')) ? '<span class="install_valid">'.
 
 if($_POST['submit'])
 {
-	$status['mysql_ver'] = ($connection && function_exists('version_compare') && version_compare(@mysql_get_server_info($connection), '4.1.0', '>=')) ? '<span class="install_valid">'.sprintf($L['install_ver_valid'],  mysql_get_server_info($connection)).'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
+	$status['mysql_ver'] = ($sed_dbc && function_exists('version_compare') && version_compare(@mysql_get_server_info($sed_dbc), '4.1.0', '>=')) ? '<span class="install_valid">'.sprintf($L['install_ver_valid'],  mysql_get_server_info($sed_dbc)).'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
 }
 else
 {
@@ -142,26 +216,10 @@ $t->assign(array(
 	'INSTALL_DB_NAME' => $cfg['mysqldb'],
 	'INSTALL_DB_X' => $db_x,
 	'INSTALL_SKIN_SELECT' => sed_selectbox_skin($rskin, 'skin'),
-	'INSTALL_THEME_SELECT' => sed_selectbox_theme($rskin, 'theme', $theme),
+	//'INSTALL_THEME_SELECT' => sed_selectbox_theme($rskin, 'theme', $theme),
 	'INSTALL_LANG_SELECT' => sed_selectbox_lang($rlang, 'lang'),
+	'INSTALL_COUNTRY_SELECT' => sed_selectbox_countries($user['country'], 'user_country'),
 	));
-
-if($a == "1")
-{
-	$file_contents = file_get_contents('config-sample.php', NULL, NULL, 5, filesize('config-sample.php'));
-
-	$file_contents = eregi_replace('\$cfg[\'defaultlang\'] = \'en\';', '$cfg[\'defaultlang\'] = \''.$value.'\';', $file_contents);
-	$file_contents = eregi_replace('\$cfg[\'defaultskin\'] = \'en\';', '$cfg[\'defaultskin\'] = \''.$value.'\';', $file_contents);
-	$file_contents = eregi_replace('\$cfg[\'defaulttheme\'] = \'en\';', '$cfg[\'defaulttheme\'] = \''.$value.'\';', $file_contents);
-	$file_contents = eregi_replace('\$cfg\[\'mysqlhost\'\] = \'localhost\';', '$cfg[\'mysqlhost\'] = \''.$value[0].'\';', $file_contents);
-	$file_contents = eregi_replace('\$cfg\[\'mysqluser\'\] = \'root\';', '$cfg[\'mysqluser\'] = \''.$value[1].'\';', $file_contents);
-	$file_contents = eregi_replace('\$cfg\[\'mysqlpassword\'\] = \'\';', '$cfg[\'mysqlpassword\'] = \''.$value[2].'\';', $file_contents);
-	$file_contents = eregi_replace('\$cfg\[\'mysqldb\'\] = \'cotonti\';', '$cfg[\'mysqldb\'] = \''.$value[3].'\';', $file_contents);
-	$file_contents = eregi_replace('\$db_x\ = \'sed_\';', '$db_x				= \''.$value[4].'\';', $file_contents);
-
-	//echo"<pre>".$file_contents."</pre>";
-	file_put_contents('config.php', "<?PHP".$file_contents);
-}
 
 $t->parse("MAIN");
 $t->out("MAIN");
