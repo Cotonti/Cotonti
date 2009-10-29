@@ -25,7 +25,8 @@ else
 
 if(!$cfg['new_install'])
 {
-	die('Cotonti configuration is not set to do a new install.');
+	header('Location: '.$cfg['mainurl']);
+	exit;
 }
 
 //A Few basics from common.php

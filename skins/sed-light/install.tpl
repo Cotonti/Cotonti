@@ -1,5 +1,5 @@
 <!-- BEGIN: MAIN -->
-{HEADER_DOCTYPE}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -119,19 +119,45 @@
 						</tr>
 					</table>
 
-					<h2><strong>{PHP.L.install_skinlang}</strong></h2>
+					<h2><strong>{PHP.L.install_misc}</strong></h2>
 					<table>
 						<tr>
 							<td>{PHP.L.Default} {PHP.L.Skin}: </td>
 							<td>{INSTALL_SKIN_SELECT}</td>
 						</tr>
+						<!--
 						<tr>
 							<td>{PHP.L.Default} {PHP.L.Theme}: </td>
 							<td>{INSTALL_THEME_SELECT}</td>
 						</tr>
+						-->
 						<tr>
 							<td>{PHP.L.Default} {PHP.L.Language}: </td>
 							<td>{INSTALL_LANG_SELECT}</td>
+						</tr>
+						<tr>
+							<td>{PHP.L.install_mainurl}: </td>
+							<td><input type="text" name="mainurl" value="{PHP.cfg.mainurl}" size="32" /></td>
+						</tr>
+					</table>
+
+					<h2><strong>{PHP.L.install_adminacc}</strong></h2>
+					<table>
+						<tr>
+							<td>{PHP.L.Username}: </td>
+							<td><input type="text" name="user_name" value="{PHP.user.name}" size="32" /></td>
+						</tr>
+						<tr>
+							<td>{PHP.L.Password}: </td>
+							<td><input type="password" name="user_pass" size="32" /><input type="password" name="user_pass2" size="32" /></td>
+						</tr>
+						<tr>
+							<td>{PHP.L.Email}: </td>
+							<td><input type="text" name="user_email" value="{PHP.user.email}" size="32" /></td>
+						</tr>
+						<tr>
+							<td>{PHP.L.Country}: </td>
+							<td>{INSTALL_COUNTRY_SELECT}</td>
 						</tr>
 					</table>
 					<div class="centerall"><input type="submit" name="submit" class="submit" value="{PHP.L.Submit}" /></div>
@@ -148,7 +174,6 @@
 			</div>
 			<div id="sedCopy"><a href="http://www.cotonti.com" title="Cotonti Content Management System">POWERED BY COTONTI</a></div>
 			<div id="copyBar"></div>
-			<div>{FOOTER_CREATIONTIME} {FOOTER_SQLSTATISTICS} {FOOTER_DEVMODE}</div><br />
 		</div>
 	</div>
 </body>

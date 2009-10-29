@@ -234,7 +234,15 @@ function sed_sql_query($query, $conn = null)
 	$conn = is_null($conn) ? $sed_dbc : $conn;
 	$sys['qcount']++;
 	$xtime = microtime();
-	$result = mysql_query($query, $conn) OR sed_diefatal('SQL error : '.sed_sql_error($conn));
+	$result = mysql_query($query, $conn);
+	if(!$result && !defined('SED_INSTALL'))
+	{
+		sed_diefatal('SQL error : '.sed_sql_error($conn));
+	}
+	elseif(!$result)
+	{
+		return;
+	}
 	$ytime = microtime();
 	$xtime = explode(' ',$xtime);
 	$ytime = explode(' ',$ytime);
