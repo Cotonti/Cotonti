@@ -925,7 +925,7 @@ $L['install_title'] = 'Cotonti Web Installer';
 $L['install_body_title'] = 'Welcome to the Cotonti Web Installer';
 $L['install_body_message'] = '
 This script will setup the basic install and configuration of Cotonti for you.
-You must have already created the database with your host, this script will not beable to create it for you.
+You must have already created the database with your host, this script will not be able to create it for you.
 <br /><br />
 The following will tell you basic infomation about your current setup.';
 $L['install_writable'] = 'Writable';
