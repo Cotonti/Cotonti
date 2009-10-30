@@ -3039,7 +3039,16 @@ function sed_load_smilies()
  */
 function sed_load_structure()
 {
-	global $db_structure, $cfg, $L;
+	global $db_structure, $db_extra_fields, $cfg, $L;
+
+	$extrafields_p = array();
+	$counter_of_extrafields_c = 0;
+	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='structure'");
+	while ($row_c = sed_sql_fetchassoc($fieldsres))
+	{
+		$extrafields_c[] = $row_c;
+		$counter_of_extrafields_c++;
+	}
 
 	$res = array();
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
@@ -3055,12 +3064,12 @@ function sed_load_structure()
 
 		$row['structure_tpl'] = (empty($row['structure_tpl'])) ? $row['structure_code'] : $row['structure_tpl'];
 
-		if ($path2>0)
+		if ($path2 > 0)
 		{
-			$path1 = mb_substr($row['structure_path'],0,($path2));
+			$path1 = mb_substr($row['structure_path'], 0, ($path2));
 			$path[$row['structure_path']] = $path[$path1].'.'.$row['structure_code'];
 			$tpath[$row['structure_path']] = $tpath[$path1].' '.$cfg['separator'].' '.$row['structure_title'];
-			$row['structure_tpl'] = ($row['structure_tpl']=='same_as_parent') ? $parent_tpl : $row['structure_tpl'];
+			$row['structure_tpl'] = ($row['structure_tpl'] == 'same_as_parent') ? $parent_tpl : $row['structure_tpl'];
 		}
 		else
 		{
@@ -3068,10 +3077,10 @@ function sed_load_structure()
 			$tpath[$row['structure_path']] = $row['structure_title'];
 		}
 
-		$order = explode('.',$row['structure_order']);
+		$order = explode('.', $row['structure_order']);
 		$parent_tpl = $row['structure_tpl'];
 
-		$res[$row['structure_code']] = array (
+		$res[$row['structure_code']] = array(
 			'path' => $path[$row['structure_path']],
 			'tpath' => $tpath[$row['structure_path']],
 			'rpath' => $row['structure_path'],
@@ -3085,6 +3094,14 @@ function sed_load_structure()
 			'order' => $order[0],
 			'way' => $order[1]
 		);
+
+		if ($counter_of_extrafields_c > 0)
+		{
+			foreach ($extrafields_c as $row_c)
+			{
+				$res[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
+			}
+		}
 	}
 
 	return($res);
