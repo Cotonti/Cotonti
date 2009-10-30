@@ -73,7 +73,7 @@ if (!SED_AJAX)
 	}
 	/* ===== */
 
-	$mskin = sed_skinfile($cfg['enablecustomhf'] ? array('footer', mb_strtolower($location)) : 'footer', defined('SED_PLUG'), defined('SED_ADMIN'));
+	$mskin = sed_skinfile($cfg['enablecustomhf'] ? array('footer', mb_strtolower($location)) : 'footer', false, defined('SED_ADMIN'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(
