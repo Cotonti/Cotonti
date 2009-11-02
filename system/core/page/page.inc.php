@@ -1,16 +1,9 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
+<?php
 /**
  * Page display.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -21,30 +14,39 @@ defined('SED_CODE') or die('Wrong URL');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['auth_read']);
 
-$id = sed_import('id','G','INT');
-$al = sed_import('al','G','ALP');
-$r = sed_import('r','G','ALP');
-$c = sed_import('c','G','TXT');
-$pg = sed_import('pg','G','INT');
+$id = sed_import('id', 'G', 'INT');
+$al = sed_import('al', 'G', 'ALP');
+$r = sed_import('r', 'G', 'ALP');
+$c = sed_import('c', 'G', 'TXT');
+$pg = sed_import('pg', 'G', 'INT');
 $comments = true; // TODO enable/disable comments on categories
 $ratings = true; // TODO enable/disable ratings on categories
 
 /* === Hook === */
 $extp = sed_getextplugins('page.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if (!empty($al))
-{ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar FROM $db_pages AS p
-LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-WHERE page_alias='$al' LIMIT 1"); }
+{
+	$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar FROM $db_pages AS p
+		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		WHERE page_alias='$al' LIMIT 1");
+}
 else
-{ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar FROM $db_pages AS p
-LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-WHERE page_id='$id'"); }
+{
+	$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar FROM $db_pages AS p
+		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
+		WHERE page_id='$id'");
+}
 
-sed_die(sed_sql_numrows($sql)==0);
+sed_die(sed_sql_numrows($sql) == 0);
 $pag = sed_sql_fetcharray($sql);
 
 $pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600);
@@ -64,30 +66,31 @@ if ($pag['page_state'] == 1 && !$usr['isadmin'] && $usr['id'] != $pag['page_owne
 	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930", '', true));
 	exit;
 }
-
-if (mb_substr($pag['page_text'], 0, 6)=='redir:')
+if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 {
 	$redir = str_replace('redir:', '', trim($pag['page_text']));
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
 	header("Location: " . SED_ABSOLUTE_URL . $redir);
 	exit;
 }
-elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
+elseif (mb_substr($pag['page_text'], 0, 8) == 'include:')
 {
 	$pag['page_text'] = sed_readraw('datas/html/'.trim(mb_substr($pag['page_text'], 8, 255)));
 }
-
-if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='dl' && (($pag['page_file'] == 2 && $usr['auth_download']) || $pag['page_file'] == 1))
+if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_download']) || $pag['page_file'] == 1))
 {
-
 	/* === Hook === */
 	$extp = sed_getextplugins('page.download.first');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
-
-	if ($_SESSION['dl']!=$pag['page_id'])
+	if ($_SESSION['dl'] != $pag['page_id'])
 	{
 		header('Location: ' . SED_ABSOLUTE_URL . $pag['page_pageurl']);
 		exit;
@@ -96,26 +99,25 @@ if($pag['page_file'] && $sys['now_offset']>$pag['page_begin_noformat'] && $a=='d
 	unset($_SESSION['dl']);
 
 	$file_size = @filesize($row['page_url']);
-	if(!$usr['isadmin'] || $cfg['count_admin'])
+	if (!$usr['isadmin'] || $cfg['count_admin'])
 	{
 		$pag['page_filecount']++;
 		$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$pag['page_id']);
 	}
-	if(preg_match('#^(http|ftp)s?://#', $pag['page_url']))
+	if (preg_match('#^(http|ftp)s?://#', $pag['page_url']))
 	{
 		header("Location: ".$pag['page_url']);
-		echo("<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...");
+		echo "<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...";
 		exit;
 	}
 	else
 	{
 		header('Location: ' . SED_ABSOLUTE_URL . $pag['page_url']);
-		echo("<script type='text/javascript'>location.href='". SED_ABSOLUTE_URL . $pag['page_url']."';</script>Redirecting...");
+		echo "<script type='text/javascript'>location.href='". SED_ABSOLUTE_URL . $pag['page_url']."';</script>Redirecting...";
 		exit;
 	}
 }
-
-if(!$usr['isadmin'] || $cfg['count_admin'])
+if (!$usr['isadmin'] || $cfg['count_admin'])
 {
 	$pag['page_count']++;
 	$sql = (!$cfg['disablehitstats']) ? sed_sql_query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$pag['page_id']."'") : '';
@@ -123,7 +125,7 @@ if(!$usr['isadmin'] || $cfg['count_admin'])
 
 $catpath = sed_build_catpath($pag['page_cat'], '<a href="%1$s">%2$s</a>');
 $pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".$pag['page_title']."</a>";
-$pag['page_fulltitle'] .= ($pag['page_totaltabs']>1 && !empty($pag['page_tabtitle'][$pag['page_tab']-1])) ? " (".$pag['page_tabtitle'][$pag['page_tab']-1].")" : '';
+$pag['page_fulltitle'] .= ($pag['page_totaltabs'] > 1 && !empty($pag['page_tabtitle'][$pag['page_tab'] - 1])) ? " (".$pag['page_tabtitle'][$pag['page_tab'] - 1].")" : '';// page_totaltabs - Not found befor this line bur after .... see
 
 $comments = ($sed_cat[$pag['page_cat']]['com']) ? true : false;
 $ratings = ($sed_cat[$pag['page_cat']]['ratings']) ? true : false;
@@ -135,13 +137,18 @@ list($ratings_link, $ratings_display) = sed_build_ratings($item_code, $pag['page
 
 $title_tags[] = array('{TITLE}', '{CATEGORY}');
 $title_tags[] = array('%1$s', '%2$s');
-$title_data = array($pag['page_title'], $sed_cat[$c]['title']);
+$title_data = array($pag['page_title'], $sed_cat[$pag['page_cat']]['title']);
 $out['subtitle'] = sed_title('title_page', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 if ($pag['page_file'])
@@ -182,39 +189,48 @@ $t->assign(array(
 	"PAGE_COMMENTS_RSS" => sed_url("rss", "c=comments&id=".$pag['page_id'])
 ));
 
-// Extra fields
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while($row = sed_sql_fetchassoc($fieldsres))
+// Extra fields page
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages' OR field_location='structure'");
+while ($row = sed_sql_fetchassoc($fieldsres))
 {
-	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag['page_'.$row['field_name']]));
-	isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGE_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $row['field_description']);
+	if ($row['field_location'] == 'pages')
+	{
+		$uname = strtoupper($row['field_name']);
+		$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag['page_'.$row['field_name']]));
+		isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGE_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $row['field_description']);
+	}
+	elseif ($row['field_location'] == 'structure')
+	{
+		$uname = strtoupper($row['field_name']);
+		$t->assign('PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row['field_type'], $row['field_name'], $sed_cat[$pag['page_cat']][$row['field_name']]));
+		isset($L['structure_'.$row['field_name'].'_title']) ? $t->assign('PAGE_CAT_'.$uname.'_TITLE', $L['structure_'.$row['field_name'].'_title']) : $t->assign('PAGE_CAT_'.$uname.'_TITLE', $row['field_description']);
+	}
 }
 
 if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])
 {
-	$t->assign("PAGE_ADMIN_EDIT",
-		"<a href=\"".sed_url('page', 'm=edit&id='.$pag['page_id'].'&r=list')."\">".$L['Edit'].'</a>');
+	$t->assign("PAGE_ADMIN_EDIT", "<a href=\"".sed_url('page', 'm=edit&id='.$pag['page_id'].'&r=list')."\">".$L['Edit'].'</a>');
 }
 
 if ($usr['isadmin'])
 {
 
-	if($pag['page_state'] == 1)
+	if ($pag['page_state'] == 1)
 	{
-		$validation = "<a href=\"".sed_url('admin', "m=page&s=queue&a=validate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Validate']."</a>";
+		$validation = "<a href=\"".sed_url('admin', "m=page&a=validate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Validate']."</a>";
 	}
 	else
 	{
-		$validation = "<a href=\"".sed_url('admin', "m=page&s=queue&a=unvalidate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Putinvalidationqueue']."</a>";
+		$validation = "<a href=\"".sed_url('admin', "m=page&a=unvalidate&id=".$pag['page_id']."&amp;".sed_xg())."\">".$L['Putinvalidationqueue']."</a>";
 	}
+
 	$t->assign(array(
 		"PAGE_ADMIN_COUNT" => $pag['page_count'],
 		"PAGE_ADMIN_UNVALIDATE" => $validation
 	));
 }
 
-if ($pag['page_begin_noformat']>$sys['now_offset'])
+if ($pag['page_begin_noformat'] > $sys['now_offset'])
 {
 	$pag['page_text'] = $L['pag_notavailable'].sed_build_timegap($sys['now_offset'], $pag['page_begin_noformat']);
 	$t->assign("PAGE_TEXT", $pag['page_text']);
@@ -225,10 +241,9 @@ else
 	{
 		case '1':
 			$t->assign("PAGE_TEXT", $pag['page_text']);
-			break;
+		break;
 
 		case '2':
-
 			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
 			{
 				ob_start();
@@ -239,12 +254,12 @@ else
 			{
 				$t->assign("PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
 			}
-			break;
+		break;
 
 		default:
-			if($cfg['parser_cache'])
+			if ($cfg['parser_cache'])
 			{
-				if(empty($pag['page_html']) && !empty($pag['page_text']))
+				if (empty($pag['page_html']) && !empty($pag['page_text']))
 				{
 					$pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
 					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
@@ -258,19 +273,19 @@ else
 				$text = sed_post_parse($text, 'pages');
 				$t->assign('PAGE_TEXT', $text);
 			}
-			break;
+		break;
 	}
 
 }
 
 $pag['page_file'] = intval($pag['page_file']);
-if($pag['page_file'] > 0)
+if ($pag['page_file'] > 0)
 {
-	if ($sys['now_offset']>$pag['page_begin_noformat'])
+	if ($sys['now_offset'] > $pag['page_begin_noformat'])
 	{
 		if (!empty($pag['page_url']))
 		{
-			$dotpos = mb_strrpos($pag['page_url'],".")+1;
+			$dotpos = mb_strrpos($pag['page_url'], ".") + 1;
 			$type = mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
 			$pag['page_fileicon'] = sed_rc('page_icon_file_path');
 			if (!file_exists($pag['page_fileicon']))
@@ -280,7 +295,9 @@ if($pag['page_file'] > 0)
 			$pag['page_fileicon'] = sed_rc('page_icon_file', array('icon' => $pag['page_fileicon']));
 		}
 		else
-		{ $pag['page_fileicon'] = ''; }
+		{
+			$pag['page_fileicon'] = '';
+		}
 
 		$t->assign(array(
 			"PAGE_FILE_SIZE" => $pag['page_size'],
@@ -288,7 +305,8 @@ if($pag['page_file'] > 0)
 			"PAGE_FILE_ICON" => $pag['page_fileicon'],
 			"PAGE_FILE_NAME" => basename($pag['page_url'])
 		));
-		if(($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
+
+		if (($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
 		{
 			$t->assign('PAGE_SHORTTITLE', $L['Members_download']);
 		}
@@ -297,7 +315,7 @@ if($pag['page_file'] > 0)
 			$t->assign(array(
 				'PAGE_SHORTTITLE' => $pag['page_title'],
 				'PAGE_FILE_URL' => sed_url('page', "id=".$pag['page_id']."&a=dl")
-				));
+			));
 		}
 	}
 }
@@ -319,16 +337,17 @@ if ($pag['page_totaltabs'] > 1)
 
 	for ($i = 0; $i < $pag['page_totaltabs']; $i++)
 	{
-		if(mb_strpos($pag['page_tabs'][$i], '<br />') === 0)
+		if (mb_strpos($pag['page_tabs'][$i], '<br />') === 0)
 		{
 			$pag['page_tabs'][$i] = mb_substr($pag['page_tabs'][$i], 6);
 		}
+
 		$p1 = mb_strpos($pag['page_tabs'][$i], '[title]');
 		$p2 = mb_strpos($pag['page_tabs'][$i], '[/title]');
 
 		if ($p2 > $p1 && $p1 < 4)
 		{
-			$pag['page_tabtitle'][$i] = mb_substr($pag['page_tabs'][$i], $p1+7, ($p2-$p1)-7);
+			$pag['page_tabtitle'][$i] = mb_substr($pag['page_tabs'][$i], $p1 + 7, ($p2 - $p1) - 7);
 			if ($i == $pag['page_tab'])
 			{
 				$pag['page_tabs'][$i] = trim(str_replace('[title]'.$pag['page_tabtitle'][$i].'[/title]', '', $pag['page_tabs'][$i]));
@@ -362,13 +381,18 @@ if ($pag['page_totaltabs'] > 1)
 /* === Hook === */
 $extp = sed_getextplugins('page.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
-if($usr['isadmin'])
+if ($usr['isadmin'])
 {
 	$t->parse('MAIN.PAGE_ADMIN');
 }
-if(($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
+if (($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
 {
 	$t->parse('MAIN.PAGE_FILE.MEMBERSONLY');
 }
@@ -376,7 +400,7 @@ else
 {
 	$t->parse('MAIN.PAGE_FILE.DOWNLOAD');
 }
-if(!empty($pag['page_url']))
+if (!empty($pag['page_url']))
 {
 	$t->parse('MAIN.PAGE_FILE');
 }
