@@ -1002,4 +1002,48 @@ $sed_translit = array(
 
 $sed_translitb = array_flip($sed_translit);
 
+/**
+ * Smart Image Resizer (image.php)
+ */
+
+$L['sir_noimage'] = "Error: no image was specified";
+$L['sir_malformed'] = "Error: malformed image path. Image paths must begin with /";
+$L['sir_doesnotexist'] = "Error: image does not exist: ";
+$L['sir_notaccepted'] = "Error: requested file is not an accepted type: ";
+$L['sir_cachenotreadable'] = "Error: the cache directory is not readable";
+$L['sir_cachenotwritable'] = "Error: the cache directory is not writable";
+
+/**
+ * Installer (install.php)
+ */
+
+$L['install_title'] = 'Инсталлятор Cotonti';
+$L['install_body_title'] = 'Вас приветствует инсталлятор Cotonti';
+$L['install_body_message'] = 'Сейчас будет произведена базовая установка и конфигурирование среды управления сайтом Cotonti. Для исполнения сценария вам необходимо самостоятельно создать базу данных на сервере.<br /> Ознакомьтесь с информацией о текущих настройках:';
+$L['install_ver'] = 'Информация о сервере';
+$L['install_ver_valid'] = '%1$s &mdash; устраивает';	// %1 - Version
+$L['install_ver_invalid'] = '%1$s &mdash; не устраивает';	// %1 - Version
+$L['install_permissions'] = 'Разрешения на файлы/каталоги';
+$L['install_writable'] = 'Запись разрешена';
+$L['install_chmod_value'] = 'CHMOD %1$s';	// %1 - CHMOD Value
+$L['install_db'] = 'Установки БД MySQL';
+$L['install_db_host'] = 'Сервер БД';
+$L['install_db_user'] = 'Пользователь БД';
+$L['install_db_pass'] = 'Пароль доступа к БД';
+$L['install_db_name'] = 'Имя БД';
+$L['install_db_x'] = 'Префикс таблиц';
+$L['install_misc'] = 'Дополнительные установки';
+$L['install_misc_skin'] = 'Скин по умолчанию';
+$L['install_misc_lng'] = 'Язык по умолчанию';
+$L['install_misc_url'] = 'URL сайта (без концевого слэша)';
+$L['install_adminacc'] = 'Учетная запись администратора';
+$L['install_error_sql'] = 'Unable to connect to MySQL Database. Please check your settings.';
+$L['install_error_sql_db'] = 'Unable to select the MySQL Database. Please check your settings.';
+$L['install_error_mainurl'] = 'You must supply the Main URL for your site.';
+$L['install_error_missing_file'] = 'Missing %1$s please upload this file again to continue.'; // %1 - File
+$L['install_error_php_ver'] = 'Cotonti Requires PHP version 5.1.0 or greater. Your Version is %1$s'; // %1 - Version
+$L['install_error_mbstring'] = 'Cotonti Requires PHP extension mbstring to be loaded';
+$L['install_error_sql_ext'] = 'Cotonti Requires PHP extension mysql to be loaded';
+$L['install_error_sql_ver'] = 'Cotonti Requires MySQL version 4.1.0 or greater. Your Version is %1$s'; // %1 - Version
+
 ?>
