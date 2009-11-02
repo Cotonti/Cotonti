@@ -919,27 +919,28 @@ $L['sir_cachenotwritable'] = "Error: the cache directory is not writable";
 
 /**
  * Installer (install.php)
+ * New in N-0.7.0
  */
 
 $L['install_title'] = 'Cotonti Web Installer';
 $L['install_body_title'] = 'Welcome to the Cotonti Web Installer';
-$L['install_body_message'] = '
-This script will setup the basic install and configuration of Cotonti for you.
-You must have already created the database with your host, this script will not be able to create it for you.
-<br /><br />
-The following will tell you basic infomation about your current setup.';
+$L['install_body_message'] = 'This script will setup the basic install and configuration of Cotonti for you. You must have already created the database with your host, this script will not be able to create it for you.<br /> The following will tell you basic infomation about your current setup:';
+$L['install_ver'] = 'Server Info';
+$L['install_ver_valid'] = '%1$s &mdash; valid!'; // %1 - Version
+$L['install_ver_invalid'] = '%1$s &mdash; invalid'; // %1 - Version
+$L['install_permissions'] = 'File/Folder Permissions';
 $L['install_writable'] = 'Writable';
 $L['install_chmod_value'] = 'CHMOD %1$s'; // %1 - CHMOD Value
-$L['install_ver_valid'] = '%1$s - Valid'; // %1 - Version
-$L['install_ver_invalid'] = '%1$s - Invalid'; // %1 - Version
-$L['install_db'] = 'MySQL Database settings';
+$L['install_db'] = 'MySQL Database Settings';
 $L['install_db_host'] = 'Database Host';
 $L['install_db_user'] = 'Database User';
 $L['install_db_pass'] = 'Database Password';
 $L['install_db_name'] = 'Database Name';
 $L['install_db_x'] = 'Database Prefix';
-$L['install_misc'] = 'Miscellaneous settings';
-$L['install_mainurl'] = 'Main site URL (without a trailing slash)';
+$L['install_misc'] = 'Miscellaneous Settings';
+$L['install_misc_skin'] = 'Default Skin';
+$L['install_misc_lng'] = 'Default Language';
+$L['install_misc_url'] = 'Main site URL (without a trailing slash)';
 $L['install_adminacc'] = 'Administrator Account';
 $L['install_error_sql'] = 'Unable to connect to MySQL Database. Please check your settings.';
 $L['install_error_sql_db'] = 'Unable to select the MySQL Database. Please check your settings.';
