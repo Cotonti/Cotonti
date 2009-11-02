@@ -175,24 +175,24 @@ if (is_array($extp))
 
 require_once $cfg['system_dir'] . '/header.php';
 
-// Extra field for pages - getting
+// Extra field - getting
 $extrafields_p = array();
-$number_of_extrafields_p = 0;
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while ($row_p = sed_sql_fetchassoc($fieldsres))
-{
-	$extrafields_p[] = $row_p;
-	$number_of_extrafields_p++;
-}
-
-// Extra field for structure - getting
 $extrafields_c = array();
+$number_of_extrafields_p = 0;
 $number_of_extrafields_c = 0;
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='structure'");
-while ($row_c = sed_sql_fetchassoc($fieldsres))
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages' OR field_location='structure'");
+while ($row = sed_sql_fetchassoc($fieldsres))
 {
-	$extrafields_c[] = $row_c;
-	$number_of_extrafields_c++;
+	if ($row['field_location'] == 'pages')
+	{
+		$extrafields_p[] = $row;
+		$number_of_extrafields_p++;
+	}
+	elseif ($row['field_location'] == 'structure')
+	{
+		$extrafields_c[] = $row;
+		$number_of_extrafields_c++;
+	}
 }
 
 if ($sed_cat[$c]['group'])
@@ -233,7 +233,7 @@ if ($number_of_extrafields_c > 0)
 	{
 		$uname = strtoupper($row_c['field_name']);
 		isset($L['structure_'.$row_c['field_name'].'_title']) ? $t -> assign('LIST_CAT_'.$uname.'_TITLE', $L['structure_'.$row_c['field_name'].'_title']) : $t -> assign('LIST_CAT_'.$uname.'_TITLE', $row_c['field_description']);
-		$t -> assign('LIST_CAT_'.$uname, $sed_cat[$c][$row_c['field_name']]);
+		$t -> assign('LIST_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $sed_cat[$c][$row_c['field_name']]));
 	}
 }
 
@@ -306,7 +306,7 @@ while (list($i,$x) = each($sed_cat))
 			{
 				$uname = strtoupper($row_c['field_name']);
 				isset($L['structure_'.$row_c['field_name'].'_title']) ? $t -> assign('LIST_ROWCAT_'.$uname.'_TITLE', $L['structure_'.$row_c['field_name'].'_title']) : $t -> assign('LIST_ROWCAT_'.$uname.'_TITLE', $row_c['field_description']);
-				$t -> assign('LIST_ROWCAT_'.$uname, $x[$row_c['field_name']]);
+				$t -> assign('LIST_ROWCAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $x[$row_c['field_name']]));
 			}
 		}
 
@@ -453,8 +453,8 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 		foreach ($extrafields_p as $row_p)
 		{
 			$uname = strtoupper($row_p['field_name']);
-			$t -> assign('LIST_ROW_'.$uname, sed_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $pag['page_'.$row_p['field_name']]));
 			isset($L['page_'.$row_p['field_name'].'_title']) ? $t -> assign('LIST_ROW_'.$uname.'_TITLE', $L['page_'.$row_p['field_name'].'_title']) : $t -> assign('LIST_ROW_'.$uname.'_TITLE', $row_p['field_description']);
+			$t -> assign('LIST_ROW_'.$uname, sed_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $pag['page_'.$row_p['field_name']]));
 		}
 	}
 

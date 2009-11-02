@@ -299,24 +299,25 @@ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar
 		ORDER by page_id DESC
 		LIMIT $d,".$cfg['maxrowsperpage']);
 
-/*// Extra fields for 'structure'
+// Extra fields
 $extrafields_c = array();
-$number_of_extrafields_c = 0;
-$fieldsres_c = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='structure'");
-while ($row_c = sed_sql_fetchassoc($fieldsres_c))
-{
-	$extrafields_c[] = $row_c;
-	$number_of_extrafields_c++;
-}
-// Extra fields for 'pages'
 $extrafields_p = array();
+$number_of_extrafields_c = 0;
 $number_of_extrafields_p = 0;
-$fieldsres_p = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while ($row_p = sed_sql_fetchassoc($fieldsres_p))
+$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='structure' OR field_location='pages'");
+while ($row = sed_sql_fetchassoc($fieldsres))
 {
-	$extrafields_p[] = $row_p;
-	$number_of_extrafields_p++;
-}*/
+	if ($row['field_location'] == 'structure')
+	{
+		$extrafields_c[] = $row;
+		$number_of_extrafields_c++;
+	}
+	elseif ($row['field_location'] == 'pages')
+	{
+		$extrafields_p[] = $row;
+		$number_of_extrafields_p++;
+	}
+}
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
@@ -400,28 +401,27 @@ while ($row = sed_sql_fetcharray($sql))
 		"ADMIN_PAGE_CAT_COUNT" => $sub_count
 	));
 
-	/*// Extra fields for 'structure'
+	// Extra fields for structure
 	if ($number_of_extrafields_c > 0)
 	{
-		$extra_array_c = sed_build_extrafields_data('structure', 'ADMIN_PAGE_CAT', $extrafields_c, $row);
-		$t->assign('ADMIN_PAGE_CAT_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $row['page_'.$row['field_name']]));
+		foreach ($extrafields_c as $row_c)
+		{
+			$uname = strtoupper($row_c['field_name']);
+			isset($L['structure_'.$row_c['field_name'].'_title']) ? $t -> assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', $L['structure_'.$row_c['field_name'].'_title']) : $t -> assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', $row_c['field_description']);
+			$t -> assign('ADMIN_PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $sed_cat[$row['page_cat']][$row_c['field_name']]));
+		}
 	}
-	//$t -> assign($extra_array_c);
-	// Extra fields for 'page'
+
+	// Extra fields for pages
 	if ($number_of_extrafields_p > 0)
 	{
-		$extra_array_p = sed_build_extrafields_data('page', 'ADMIN_PAGE', $extrafields_p, $row);
-		$t->assign('ADMIN_PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $row['page_'.$row['field_name']]));
+		foreach ($extrafields_p as $row_p)
+		{
+			$uname = strtoupper($row_p['field_name']);
+			isset($L['page_'.$row_p['field_name'].'_title']) ? $t -> assign('ADMIN_PAGE_'.$uname.'_TITLE', $L['page_'.$row_p['field_name'].'_title']) : $t -> assign('ADMIN_PAGE_'.$uname.'_TITLE', $row_p['field_description']);
+			$t -> assign('ADMIN_PAGE_'.$uname, sed_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $row['page_'.$row_p['field_name']]));
+		}
 	}
-	//	$t -> assign($extra_array_p);
-	// Extra fields
-	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-	while ($row = sed_sql_fetchassoc($fieldsres))
-	{
-		$uname = strtoupper($row['field_name']);
-		$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $row['page_'.$row['field_name']]));
-		isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGE_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $row['field_description']);
-	}*/
 
 	switch($row['page_type'])
 	{
