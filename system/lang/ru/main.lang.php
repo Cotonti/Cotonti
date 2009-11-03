@@ -495,7 +495,7 @@ $L['pag_validation_desc'] = 'Ваши страницы, которые не бы
  * PFS
  */
 
-$L['pfs_cancelall'] = 'Отменить все'; /// 0.7.0
+$L['pfs_cancelall'] = 'Отменить все'; // New in N-0.7.0
 $L['pfs_direxists'] = 'Такой каталог уже существует.<br />Старый путь: %1$s<br />Новый путь: %2$s';
 $L['pfs_extallowed'] = 'Разрешенные расширения';
 $L['pfs_filecheckfail'] = 'Внимание: ошибка расширения файла 2$s.%1$s';	// New in N-0.0.2
@@ -516,14 +516,14 @@ $L['pfs_maxsize'] = 'Максимальный размер файла';
 $L['pfs_maxspace'] = 'Максимальный разрешенный объем';
 $L['pfs_newfile'] = 'Загрузить файл:';
 $L['pfs_newfolder'] = 'Создать новый каталог:';
-$L['pfs_parentfolder'] = 'Родительский каталог'; // 0.7.0
-$L['pfs_pastefile'] = 'Вставить как ссылку на файл'; // 0.7.0
-$L['pfs_pasteimage'] = 'Вставить как изображение'; // 0.7.0
-$L['pfs_pastethumb'] = 'Вставить миниатюру'; // 0.7.0
+$L['pfs_parentfolder'] = 'Родительский каталог'; // New in N-0.7.0
+$L['pfs_pastefile'] = 'Вставить как ссылку на файл'; // New in N-0.7.0
+$L['pfs_pasteimage'] = 'Вставить как изображение'; // New in N-0.7.0
+$L['pfs_pastethumb'] = 'Вставить миниатюру'; // New in N-0.7.0
 $L['pfs_resizeimages'] = 'масштабировать изображение?';	// New in N-0.0.2
 $L['pfs_title'] = 'Мои файлы';
 $L['pfs_totalsize'] = 'Общий объем';
-$L['pfs_uploadfiles'] = 'Закачать файлы'; // 0.7.0
+$L['pfs_uploadfiles'] = 'Загрузить файлы'; // New in N-0.7.0
 
 /**
  * Private messages
@@ -908,12 +908,12 @@ $L['rss_topic_item_desc'] = 'Последние сообщения в теме';
  * Smart Image Resizer (image.php)
  */
 
-$L['sir_noimage'] = "Error: no image was specified";
-$L['sir_malformed'] = "Error: malformed image path. Image paths must begin with /";
-$L['sir_doesnotexist'] = "Error: image does not exist: ";
-$L['sir_notaccepted'] = "Error: requested file is not an accepted type: ";
-$L['sir_cachenotreadable'] = "Error: the cache directory is not readable";
-$L['sir_cachenotwritable'] = "Error: the cache directory is not writable";
+$L['sir_noimage'] = "Ошибка: изображение не указано";
+$L['sir_malformed'] = "Ошибка: неправильный путь (должен начинаться с /)";
+$L['sir_doesnotexist'] = "Ошибка: изображение не существует: ";
+$L['sir_notaccepted'] = "Ошибка: неизвестный тип запрошенного файла: ";
+$L['sir_cachenotreadable'] = "Ошибка: отсутствуют права на чтение каталога кэша";
+$L['sir_cachenotwritable'] = "Ошибка: отсутствуют права на запись в каталог кэша";
 
 /**
  * Таблица транслитерации ГОСТ 7.79-2000 / ISO-9, система Б
@@ -1003,17 +1003,6 @@ $sed_translit = array(
 $sed_translitb = array_flip($sed_translit);
 
 /**
- * Smart Image Resizer (image.php)
- */
-
-$L['sir_noimage'] = "Error: no image was specified";
-$L['sir_malformed'] = "Error: malformed image path. Image paths must begin with /";
-$L['sir_doesnotexist'] = "Error: image does not exist: ";
-$L['sir_notaccepted'] = "Error: requested file is not an accepted type: ";
-$L['sir_cachenotreadable'] = "Error: the cache directory is not readable";
-$L['sir_cachenotwritable'] = "Error: the cache directory is not writable";
-
-/**
  * Installer (install.php)
  */
 
@@ -1037,13 +1026,13 @@ $L['install_misc_skin'] = 'Скин по умолчанию';
 $L['install_misc_lng'] = 'Язык по умолчанию';
 $L['install_misc_url'] = 'URL сайта (без концевого слэша)';
 $L['install_adminacc'] = 'Учетная запись администратора';
-$L['install_error_sql'] = 'Unable to connect to MySQL Database. Please check your settings.';
-$L['install_error_sql_db'] = 'Unable to select the MySQL Database. Please check your settings.';
-$L['install_error_mainurl'] = 'You must supply the Main URL for your site.';
-$L['install_error_missing_file'] = 'Missing %1$s please upload this file again to continue.'; // %1 - File
-$L['install_error_php_ver'] = 'Cotonti Requires PHP version 5.1.0 or greater. Your Version is %1$s'; // %1 - Version
-$L['install_error_mbstring'] = 'Cotonti Requires PHP extension mbstring to be loaded';
-$L['install_error_sql_ext'] = 'Cotonti Requires PHP extension mysql to be loaded';
-$L['install_error_sql_ver'] = 'Cotonti Requires MySQL version 4.1.0 or greater. Your Version is %1$s'; // %1 - Version
+$L['install_error_sql'] = 'Не могу соединиться с базой данных MySQL. Проверьте установки.';
+$L['install_error_sql_db'] = 'Не могу выбрать базу данных MySQL. Проверьте установки.';
+$L['install_error_mainurl'] = 'Основной URL сайта не указан.';
+$L['install_error_missing_file'] = 'Отсутствует %1$s. Загрузите данный файл для продолжения.'; // %1 - File
+$L['install_error_php_ver'] = 'Cotonti требуется PHP версии 5.1.0 или новее. У вас %1$s'; // %1 - Version
+$L['install_error_mbstring'] = 'Cotonti требуется загруженное PHP-расширение mbstring';
+$L['install_error_sql_ext'] = 'Cotonti требуется загруженное PHP-расширение mysql';
+$L['install_error_sql_ver'] = 'Cotonti требуется БД MySQL версии 4.1.0 или новее. У вас %1$s'; // %1 - Version
 
 ?>
