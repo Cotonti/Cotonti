@@ -29,6 +29,10 @@ switch($m)
 		require_once($cfg['system_dir'].'/core/users/users.register.inc.php');
 	break;
 
+	case 'passrecover':
+		require_once($cfg['system_dir'].'/core/users/users.passrecover.inc.php');
+	break;
+
 	case 'auth':
 		require_once($cfg['system_dir'].'/core/users/users.auth.inc.php');
 	break;

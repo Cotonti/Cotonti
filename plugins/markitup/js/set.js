@@ -81,11 +81,15 @@ var mySettings = {
 		{separator:'---------------' },
 		{name: L.quote, className:'mQuote', dropMenu: [
 			{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]',
-				afterInsert: function (h) {
+				afterInsert: function (h)
+				{
 					var str = $(h.textarea).val();
 					if (str.indexOf('[quote=]') >= 0)
+					{
 						$(h.textarea).val(str.replace('[quote=]', '[quote]'));
-			}},
+					}
+				}
+			},
 			{name: L.pre, className: 'mPre', openWith:'[pre]', closeWith:'[/pre]'},
 			{name: L.spoiler, className: 'mSpoiler', openWith:'[spoiler=[![' + L.spoiler_text + ']!]]', closeWith:'[/spoiler]'}
 		]},
@@ -105,13 +109,22 @@ var mini = {
 		previewAutoRefresh: false,
 		onEnter: {keepDefault: false, replaceWith: '\n'},
 		markupSet: [
-		{name: L.bold, className:'mBold', key:'B', openWith:'[b]', closeWith:'[/b]'},
-		{name: L.italic, className:'mItalic', key:'I', openWith:'[i]', closeWith:'[/i]'},
-		{name: L.link, className: 'mLink', key:'L', openWith:'[url=[![URL:!:http://]!]]', closeWith:'[/url]', placeHolder: L.link_text},
-		{name: L.picture, className: 'mPicture', key:'P', replaceWith:'[img][![' + L.picture_url + ':!:http://]!][/img]'},
-		{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]'},
-		{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) { showSmilies(markitup) } },
-		{name: L.preview, className:"mPreview", call:'preview' }
+			{name: L.bold, className:'mBold', key:'B', openWith:'[b]', closeWith:'[/b]'},
+			{name: L.italic, className:'mItalic', key:'I', openWith:'[i]', closeWith:'[/i]'},
+			{name: L.link, className: 'mLink', key:'L', openWith:'[url=[![URL:!:http://]!]]', closeWith:'[/url]', placeHolder: L.link_text},
+			{name: L.picture, className: 'mPicture', key:'P', replaceWith:'[img][![' + L.picture_url + ':!:http://]!][/img]'},
+			{name: L.quote, className: 'mQuote', openWith:'[quote=[![' + L.quote_from + ']!]]', closeWith:'[/quote]',
+					afterInsert: function (h)
+					{
+						var str = $(h.textarea).val();
+						if (str.indexOf('[quote=]') >= 0)
+						{
+							$(h.textarea).val(str.replace('[quote=]', '[quote]'));
+						}
+					}
+			},
+			{name: L.smilies, className: "mSmilies", replaceWith: function(markitup) { showSmilies(markitup) } },
+			{name: L.preview, className:"mPreview", call:'preview' }
 		]
 }
 

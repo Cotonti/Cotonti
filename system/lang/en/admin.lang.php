@@ -15,6 +15,7 @@ defined('SED_CODE') or die('Wrong URL.');
  * Config Section
  */
 
+$L['core_email'] = 'E-mail Settings';// New in N-0.7.0
 $L['core_comments'] = &$L['Comments'];
 $L['core_forums'] = &$L['Forums'];
 $L['core_lang'] = &$L['Language'];
@@ -34,6 +35,18 @@ $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles (&lt;title&gt; tag)';
 $L['core_trash'] = &$L['Trashcan'];
 $L['core_users'] = &$L['Users'];
+
+/**
+ * Config Section
+ * E-mail Subsection
+ */
+
+$L['cfg_email_type'] = array('Type of sending E-mail', ''); // New in N-0.7.0
+$L['cfg_smtp_address'] = array('Address smtp server', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
+$L['cfg_smtp_port'] = array('Port smtp server', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
+$L['cfg_smtp_login'] = array('Login', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
+$L['cfg_smtp_password'] = array('Password', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
+$L['cfg_smtp_uses_ssl'] = array('Use SSL', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
 
 /**
  * Config Section
