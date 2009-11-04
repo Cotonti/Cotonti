@@ -438,6 +438,13 @@ function sed_loadconfigmap()
     $result[] = array ('rss', '03', 'rss_maxitems', 2, '40', array(5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100,150,200));
     $result[] = array ('rss', '04', 'rss_charset', 4, 'UTF-8', '');
 
+    $result[] = array ('email', '01', 'email_type', 2, 'mail(Standart)', array('mail(Standart)', 'smtp'));
+    $result[] = array ('email', '02', 'smtp_address', 2, '', '');
+    $result[] = array ('email', '03', 'smtp_port', 2, '25', '');
+    $result[] = array ('email', '04', 'smtp_login', 2, '', '');
+    $result[] = array ('email', '05', 'smtp_password', 2, '', '');
+    $result[] = array ('email', '06', 'smtp_uses_ssl', 3, '0', '');
+
     return($result);
 }
 

@@ -15,6 +15,7 @@ defined('SED_CODE') or die('Wrong URL.');
  * Config Section
  */
 
+$L['core_email'] = 'Настройки E-mail';// New in N-0.7.0
 $L['core_comments'] = &$L['Comments'];
 $L['core_forums'] = &$L['Forums'];
 $L['core_lang'] = &$L['Language'];
@@ -34,6 +35,18 @@ $L['core_time'] = 'Время и дата';
 $L['core_title'] = 'Заголовки (тэг &lt;title&gt;)';
 $L['core_trash'] = &$L['Trashcan'];
 $L['core_users'] = &$L['Users'];
+
+/**
+ * Config Section
+ * E-mail Subsection
+ */
+
+$L['cfg_email_type'] = array('Тип отправки E-mail', ''); // New in N-0.7.0
+$L['cfg_smtp_address'] = array('Адрес smtp сервера', 'Укажите если тип отправки E-mail выбран smtp'); // New in N-0.7.0
+$L['cfg_smtp_port'] = array('Порт smtp сервера', 'Укажите если тип отправки E-mail выбран smtp'); // New in N-0.7.0
+$L['cfg_smtp_login'] = array('Логин', 'Укажите если тип отправки E-mail выбран smtp'); // New in N-0.7.0
+$L['cfg_smtp_password'] = array('Пароль', 'Укажите если тип отправки E-mail выбран smtp'); // New in N-0.7.0
+$L['cfg_smtp_uses_ssl'] = array('Использовать SSL', 'Укажите если тип отправки E-mail выбран smtp'); // New in N-0.7.0
 
 /**
  * Config Section
@@ -213,7 +226,7 @@ $L['cfg_ratings_allowchange'] = array('Разрешить изменение р�
  * RSS Subsection
  */
 
-$L['cfg_disable_rss'] = array('Отключить RSS каналы', '');
+$L['cfg_disable_rss'] = array('Отключить RSS каналы', ''); // New in N-0.7.0
 $L['cfg_rss_timetolive'] = array('Как часто обновлять RSS кеш', 'В секундах'); // New in N-0.7.0
 $L['cfg_rss_maxitems'] = array('Макс. количество элементов в RSS канале', ' '); // New in N-0.7.0
 $L['cfg_rss_charset'] = array('Кодировка RSS каналов', 'Набор символов (кодовая страница)'); // New in N-0.7.0
