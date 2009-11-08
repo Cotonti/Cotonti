@@ -1,7 +1,8 @@
 <!-- BEGIN: FORUMS -->
 		<div id="{ADMIN_FORUMS_AJAX_OPENDIVID}">
-			<ul>
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
+			<h2>{PHP.L.Forums}</h2>
+			<ul class="follow">
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>
 <!-- IF {PHP.lincif_conf} -->
 				<li><a href="{ADMIN_FORUMS_CONF_STRUCTURE_URL}">{PHP.L.adm_forum_structure}</a></li>
 <!-- ELSE -->
@@ -145,7 +146,7 @@
 			</form>
 <!-- END: EDIT -->
 <!-- BEGIN: DEFULT -->
-			<h4>{PHP.L.editdeleteentries} :</h4>
+			<h3>{PHP.L.editdeleteentries}:</h3>
 			<form name="updateorder" id="updateorder" action="{ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL}" method="post"{ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL_AJAX}>
 				<table class="cells">
 				<tr>
@@ -210,7 +211,7 @@
 				</tr>//-->
 				</table>
 			</form>
-			<h4>{PHP.L.addnewentry} :</h4>
+			<h3>{PHP.L.addnewentry}:</h3>
 			<form name="addsection" id="addsection" action="{ADMIN_FORUMS_DEFULT_FORM_ADD_URL}" method="post"{ADMIN_FORUMS_DEFULT_FORM_ADD_URL_AJAX}>
 				<table class="cells">
 				<tr>

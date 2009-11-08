@@ -1,6 +1,7 @@
 <!-- BEGIN: TRASHCAN -->
 		<div id="{ADMIN_TRASHCAN_AJAX_OPENDIVID}">
-			<ul>
+			<h2>{PHP.L.Trashcan}</h2>
+			<ul class="follow">
 				<li><a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>
 				<li>{PHP.L.Wipeall}: <a title="{PHP.L.Wipeall}" href="{ADMIN_TRASHCAN_WIPEALL_URL}">{PHP.R.admin_icon_delete}</a></li>
 			</ul>

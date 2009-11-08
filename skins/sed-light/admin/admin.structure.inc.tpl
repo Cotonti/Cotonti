@@ -1,8 +1,9 @@
 <!-- BEGIN: STRUCTURE -->
 		<div id="{ADMIN_STRUCTURE_AJAX_OPENDIVID}">
-			<ul>
+			<h2>{PHP.L.Structure}</h2>
+			<ul class="follow">
 				<li>
-					<a title="{PHP.L.Configuration}" href="{ADMIN_STRUCTURE_URL_CONFIG}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a>
+					<a title="{PHP.L.Configuration}" href="{ADMIN_STRUCTURE_URL_CONFIG}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a>
 				</li>
 				<li>
 <!-- IF {PHP.lincif_conf} -->
@@ -19,31 +20,31 @@
 			<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post">
 				<table class="cells">
 				<tr>
-					<td>{PHP.L.Path} :</td>
+					<td>{PHP.L.Path}:</td>
 					<td><input type="text" class="text" name="rpath" value="{ADMIN_STRUCTURE_PATH}" size="16" maxlength="16" /></td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Code} :</td>
+					<td>{PHP.L.Code}:</td>
 					<td><input type="text" class="text" name="rcode" value="{ADMIN_STRUCTURE_CODE}" size="16" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Title} :</td>
+					<td>{PHP.L.Title}:</td>
 					<td><input type="text" class="text" name="rtitle" value="{ADMIN_STRUCTURE_TITLE}" size="64" maxlength="100" /></td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Description} :</td>
+					<td>{PHP.L.Description}:</td>
 					<td><input type="text" class="text" name="rdesc" value="{ADMIN_STRUCTURE_DESC}" size="64" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Icon} :</td>
+					<td>{PHP.L.Icon}:</td>
 					<td><input type="text" class="text" name="ricon" value="{ADMIN_STRUCTURE_ICON}" size="64" maxlength="128" /></td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Group} :</td>
+					<td>{PHP.L.Group}:</td>
 					<td><input type="checkbox" class="checkbox" name="rgroup"{ADMIN_STRUCTURE_CHECK} /></td>
 				</tr>
 				<tr>
-					<td>{PHP.L.adm_tpl_mode} :</td>
+					<td>{PHP.L.adm_tpl_mode}:</td>
 					<td>
 						<input type="radio" class="radio" name="rtplmode" value="1"{ADMIN_STRUCTURE_CHECK1} /> {PHP.L.adm_tpl_empty}<br/>
 						<input type="radio" class="radio" name="rtplmode" value="2"{ADMIN_STRUCTURE_CHECK2} /> {PHP.L.adm_tpl_forced}
@@ -57,7 +58,7 @@
 					</td>
 				</tr>
 				<tr>
-				<td>{PHP.L.adm_sortingorder} :</td>
+				<td>{PHP.L.adm_sortingorder}:</td>
 				<td class="{ADMIN_STRUCTURE_ODDEVEN}">
 					<select name="rorder" size="1">
 <!-- BEGIN: STRUCTURE_CATORDER_SELECT_SORT -->
