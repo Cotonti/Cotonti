@@ -1,80 +1,77 @@
 <!-- BEGIN: MAIN -->
-	<div class="mboxHD">{ADMIN_TITLE}</div>
-	<div class="mboxBody">
-		<div id="subtitle">{ADMIN_SUBTITLE}</div>
-		<div id="adminmenu">
-			<table style="width:100%;">
-			<tr>
-				<td style="width:10%; text-align:center;">
-					<a href="{ADMINMENU_URL}">{PHP.R.admin_icon_home}<br />{PHP.L.Home}</a>
-				</td>
-				<td style="width:12%; text-align:center;">
+
+	<ul id="adminmenu" class="small">
+		<li id="am01"><a href="{ADMINMENU_URL}">{PHP.L.Home}</a></li>
+		<li id="am02">
 <!-- IF {PHP.lincif_conf} -->
-					<a href="{ADMINMENU_CONF_URL}">{PHP.R.admin_icon_config}<br />{PHP.L.Configuration}</a>
+			<a href="{ADMINMENU_CONF_URL}">{PHP.L.Configuration}</a>
 <!-- ELSE -->
-					{PHP.R.admin_icon_config}<br />{PHP.L.Configuration}
+			<span>{PHP.L.Configuration}</span>
 <!-- ENDIF -->
-				</td>
-				<td style="width:10%; text-align:center;">
+		</li>
+		<li id="am03">
 <!-- IF {PHP.lincif_page} -->
-					<a href="{ADMINMENU_PAGE_URL}">{PHP.R.admin_icon_pages}<br />{PHP.L.Pages}</a>
+			<a href="{ADMINMENU_PAGE_URL}">{PHP.L.Pages}</a>
 <!-- ELSE -->
-					{PHP.R.admin_icon_pages}<br />{PHP.L.Pages}
+			<span>{PHP.L.Pages}</span>
 <!-- ENDIF -->
-				</td>
-				<td style="width:10%; text-align:center;">
+		</li>
+		<li id="am04">
 <!-- IF {PHP.lincif_page} -->
-					<a href="{ADMINMENU_STRUCTURE_URL}">{PHP.R.admin_icon_structure}<br />{PHP.L.Categories}</a>
+			<a href="{ADMINMENU_STRUCTURE_URL}">{PHP.L.Categories}</a>
 <!-- ELSE -->
-					{PHP.R.admin_icon_structure}<br />{PHP.L.Categories}
+			<span>{PHP.L.Categories}</span>
 <!-- ENDIF -->
-				</td>
-				<td style="width:10%; text-align:center;">
+		</li>
+		<li id="am05">
 <!-- IF {PHP.lincif_user} -->
-					<a href="{ADMINMENU_USERS_URL}">{PHP.R.admin_icon_users}<br />{PHP.L.Users}</a>
+			<a href="{ADMINMENU_USERS_URL}">{PHP.L.Users}</a>
 <!-- ELSE -->
-					{PHP.R.admin_icon_users}<br />{PHP.L.Users}
+			<span>{PHP.L.Users}</span>
 <!-- ENDIF -->
-				</td>
-				<td style="width:10%; text-align:center;">
+		</li>
+		<li id="am06">
 <!-- IF {PHP.lincif_conf} -->
-					<a href="{ADMINMENU_FORUMS_URL}">{PHP.R.admin_icon_forums}<br />{PHP.L.Forums}</a>
+			<a href="{ADMINMENU_FORUMS_URL}">{PHP.L.Forums}</a>
 <!-- ELSE -->
-					{PHP.R.admin_icon_forums}<br />{PHP.L.Forums}
+			<span>{PHP.L.Forums}</span>
 <!-- ENDIF -->
-				</td>
-				<td style="width:10%; text-align:center;">
+		</li>
+		<li id="am07">
 <!-- IF {PHP.lincif_conf} -->
-					<a href="{ADMINMENU_PLUG_URL}">{PHP.R.admin_icon_plugins}<br />{PHP.L.Plugins}</a>
+			<a href="{ADMINMENU_PLUG_URL}">{PHP.L.Plugins}</a>
 <!-- ELSE -->
-					{PHP.R.admin_icon_plugins}<br />{PHP.L.Plugins}
+			<span>{PHP.L.Plugins}</span>
 <!-- ENDIF -->
-				</td>
-				<td style="width:10%; text-align:center;">
+		</li>
+		<li id="am08">
 <!-- IF {PHP.lincif_conf} -->
-					<a href="{ADMINMENU_TOOLS_URL}">{PHP.R.admin_icon_tools}<br />{PHP.L.Tools}</a>
+			<a href="{ADMINMENU_TOOLS_URL}">{PHP.L.Tools}</a>
 <!-- ELSE -->
-					{PHP.R.admin_icon_tools}<br />{PHP.L.Tools}
+			<span>{PHP.L.Tools}</span>
 <!-- ENDIF -->
-				</td>
-				<td style="width:10%; text-align:center;">
+		</li>
+		<li id="am09">
 <!-- IF {PHP.lincif_conf} -->
-					<a href="{ADMINMENU_TRASHCAN_URL}">{PHP.R.admin_icon_trash}<br />{PHP.L.Trashcan}</a>
+			<a href="{ADMINMENU_TRASHCAN_URL}">{PHP.L.Trashcan}</a>
 <!-- ELSE -->
-					{PHP.R.admin_icon_trash}<br />{PHP.L.Trashcan}
+			<span>{PHP.L.Trashcan}</span>
 <!-- ENDIF -->
-				</td>
-				<td style="width:10%; text-align:center;">
-					<a href="{ADMINMENU_OTHER_URL}">{PHP.R.admin_icon_other}<br />{PHP.L.Other}</a>
-				</td>
-			</tr>
-			</table>
-		</div>
-		<hr />
+		</li>
+		<li id="am10"><a href="{ADMINMENU_OTHER_URL}">{PHP.L.Other}</a></li>
+		<li id="am11"><a href="admin.php">{PHP.L.Help}</a></li>
+		<li id="am12">{PHP.out.loginout}</li>
+	</ul>
+
+	<h1>You're here: {ADMIN_TITLE}</h1>
+
+	<div id="main" class="clear">
 		{ADMIN_MAIN}
-		<hr />
-		<strong>{PHP.skinlang.admin.Help}&nbsp;</strong>
-		<hr />
-		{ADMIN_HELP}
 	</div>
+
+	<div class="help">
+		<h4>{PHP.L.Help}:</h4>
+		<p>{ADMIN_HELP}</p>
+	</div>
+
 <!-- END: MAIN -->

@@ -1,4 +1,5 @@
 <!-- BEGIN: OTHER -->
+		<h2>{PHP.L.Modules}</h2>
 		<table class="cells">
 		<tr>
 			<td class="coltop">{PHP.L.Modules} {PHP.L.adm_clicktoedit}</td>

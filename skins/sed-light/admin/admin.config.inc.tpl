@@ -1,21 +1,25 @@
 <!-- BEGIN: CONFIG -->
-		<div id="{ADMIN_CONFIG_AJAX_OPENDIVID}">
+	<div id="{ADMIN_CONFIG_AJAX_OPENDIVID}">
+		<h2>{PHP.L.Configuration}</h2>
+
 <!-- IF {PHP.is_adminwarnings} -->
-			<div class="error">{ADMIN_CONFIG_ADMINWARNINGS}</div>
+		<div class="error">{ADMIN_CONFIG_ADMINWARNINGS}</div>
 <!-- ENDIF -->
+
 <!-- BEGIN: EDIT -->
-			<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post"{ADMIN_CONFIG_FORM_URL_AJAX}>
-				<table class="cells">
+		<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post"{ADMIN_CONFIG_FORM_URL_AJAX}>
+			<table class="cells">
 				<tr>
-					<td class="coltop" colspan="2">{PHP.L.Configuration}</td>
+					<td class="coltop">{PHP.L.Parameter}</td>
+					<td class="coltop">{PHP.L.Value}</td>
 <!-- IF {PHP.o} == 'core' -->
 					<td class="coltop">{PHP.L.Reset}</td>
 <!-- ENDIF -->
 				</tr>
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 				<tr>
-					<td style="width:25%;">{ADMIN_CONFIG_ROW_CONFIG_TITLE} : </td>
-					<td style="width:68%;">
+					<td style="width:25%;">{ADMIN_CONFIG_ROW_CONFIG_TITLE}:</td>
+					<td style="width:65%;">
 <!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_1 -->
 						<input type="text" class="text" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="{ADMIN_CONFIG_ROW_CONFIG_VALUE}" size="32" maxlength="255" />
 <!-- END: ADMIN_CONFIG_ROW_TYPE_1 -->
@@ -36,9 +40,11 @@
 <!-- END: ADMIN_CONFIG_ROW_TYPE_2 -->
 <!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_3 -->
 <!-- IF {PHP.config_value} == 1 -->
-						<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="1" checked="checked" />{PHP.L.Yes}&nbsp;&nbsp;<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="0" />{PHP.L.No}
+						<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="1" checked="checked" />{PHP.L.Yes}&nbsp;
+						<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="0" />{PHP.L.No}
 <!-- ELSE -->
-						<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="1" />{PHP.L.Yes}&nbsp;&nbsp;<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="0" checked="checked" />{PHP.L.No}
+						<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="1" />{PHP.L.Yes}&nbsp;
+						<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="0" checked="checked" />{PHP.L.No}
 <!-- ENDIF -->
 <!-- END: ADMIN_CONFIG_ROW_TYPE_3 -->
 <!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_4 -->
@@ -56,31 +62,46 @@
 <!-- ENDIF -->
 					</td>
 <!-- IF {PHP.o} == 'core' -->
-					<td style="text-align:center; width:7%;">&nbsp;
-						[<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}"{ADMIN_CONFIG_ROW_CONFIG_MORE_URL_AJAX}>R</a>]
+					<td class="centerall" style="width:10%;">
+						<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}"{ADMIN_CONFIG_ROW_CONFIG_MORE_URL_AJAX}>
+							{PHP.R.admin_icon_reset}
+						</a>
 					</td>
 <!-- ENDIF -->
 				</tr>
 <!-- END: ADMIN_CONFIG_ROW -->
 				<tr>
-					<td colspan="3"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
+					<td class="valid" colspan="3">
+						<input type="submit" class="submit" value="{PHP.L.Update}" />
+					</td>
 				</tr>
 				</table>
 			</form>
 <!-- END: EDIT -->
 <!-- BEGIN: DEFAULT -->
-			<h4>{PHP.L.Core} :</h4>
-			<ul>
+	<table class="cells">
+		<tr>
+			<td class="coltop">{PHP.L.Core}</td>
+			<td class="coltop">{PHP.L.Plugins}</td>
+		</tr>
+		<tr>
+			<td style="width:50%;">
+				<ul class="follow">
 <!-- BEGIN: ADMIN_CONFIG_ROW_CORE -->
-				<li><a href="{ADMIN_CONFIG_ROW_CORE_URL}"{ADMIN_CONFIG_ROW_CORE_URL_AJAX}>{ADMIN_CONFIG_ROW_CORE_NAME}</a></li>
+					<li><a href="{ADMIN_CONFIG_ROW_CORE_URL}"{ADMIN_CONFIG_ROW_CORE_URL_AJAX}>
+					{ADMIN_CONFIG_ROW_CORE_NAME}</a></li>
 <!-- END: ADMIN_CONFIG_ROW_CORE -->
-			</ul>
-			<h4>{PHP.L.Plugins} :</h4>
-			<ul>
+				</ul>
+			</td>
+			<td style="width:50%;">
+				<ul class="follow">
 <!-- BEGIN: ADMIN_CONFIG_ROW_PLUG -->
-				<li><a href="{ADMIN_CONFIG_ROW_PLUG_URL}"{ADMIN_CONFIG_ROW_PLUG_URL_AJAX}>{ADMIN_CONFIG_ROW_PLUG_NAME}</a></li>
+					<li><a href="{ADMIN_CONFIG_ROW_PLUG_URL}"{ADMIN_CONFIG_ROW_PLUG_URL_AJAX}>{ADMIN_CONFIG_ROW_PLUG_NAME}</a></li>
 <!-- END: ADMIN_CONFIG_ROW_PLUG -->
-			</ul>
+				</ul>
+			</td>
+		</tr>
+	</table>
 <!-- END: DEFAULT -->
-		</div>
+	</div>
 <!-- END: CONFIG -->

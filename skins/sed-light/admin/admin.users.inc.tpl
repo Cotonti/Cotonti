@@ -1,6 +1,7 @@
 <!-- BEGIN: USERS -->
 		<div id="{ADMIN_USERS_AJAX_OPENDIVID}">
-			<ul>
+			<h2>{PHP.L.Users}</h2>
+			<ul class="follow">
 				<li><a title="{PHP.L.Configuration}" href="{ADMIN_USERS_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>
 <!-- IF {PHP.lincif_extfld} -->
 				<li><a href="{ADMIN_USERS_EXTRAFIELDS_URL}">{PHP.L.adm_extrafields_desc}</a></li>
@@ -34,7 +35,7 @@
 			</tr>
 <!-- END: USERS_ROW -->
 			</table>
-			<h4>{PHP.L.addnewentry} :</h4>
+			<h3>{PHP.L.addnewentry}:</h3>
 			<form name="addlevel" id="addlevel" action="{ADMIN_USERS_FORM_URL}" method="post"{ADMIN_USERS_FORM_URL_AJAX}>
 				<table class="cells">
 				<tr>
