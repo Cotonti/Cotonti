@@ -1,43 +1,54 @@
 <!-- BEGIN: PLUG -->
 	<div id="{ADMIN_PLUG_AJAX_OPENDIVID}">
+<!-- IF {PHP.is_adminwarnings} -->
+			<div class="error">
+				<h4>{PHP.L.Message}</h4>
+				<p>{ADMIN_PLUG_ADMINWARNINGS}</p>
+			</div>
+<!-- ENDIF -->
 <!-- IF {PHP.if_conf_url} -->
 	<ul>
 		<li><a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
 	</ul>
 <!-- ENDIF -->
-<!-- IF {PHP.is_adminwarnings} -->
-	<div class="error">{ADMIN_PLUG_ADMINWARNINGS}</div>
-<!-- ENDIF -->
 <!-- BEGIN: DETAILS -->
 	<h2>{PHP.L.Plugin} {ADMIN_PLUG_NAME}:</h2>
 	<table class="cells">
 		<tr>
-			<td style="width:20%;">{PHP.L.Code}:</td><td style="width:80%;">{ADMIN_PLUG_CODE}</td>
+			<td style="width:20%;">{PHP.L.Code}:</td>
+			<td style="width:80%;">{ADMIN_PLUG_CODE}</td>
 		</tr>
 		<tr>
-			<td>{PHP.L.Description}:</td><td>{ADMIN_PLUG_DESCRIPTION}</td>
+			<td>{PHP.L.Description}:</td>
+			<td>{ADMIN_PLUG_DESCRIPTION}</td>
 		</tr>
 		<tr>
-			<td>{PHP.L.Version}:</td><td>{ADMIN_PLUG_VERSION}</td>
+			<td>{PHP.L.Version}:</td>
+			<td>{ADMIN_PLUG_VERSION}</td>
 		</tr>
 		<tr>
-			<td>{PHP.L.Date}:</td><td>{ADMIN_PLUG_DATE}</td>
+			<td>{PHP.L.Date}:</td>
+			<td>{ADMIN_PLUG_DATE}</td>
 		</tr>
 		<tr>
 			<td>{PHP.L.Configuration}:</td>
+			<td>
 <!-- IF {ADMIN_PLUG_TOTALCONFIG} > 0 -->
-			<td><a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.R.admin_icon_config} ({ADMIN_PLUG_TOTALCONFIG}) {PHP.L.Edit}</a></td>
+				<a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.R.admin_icon_config} ({ADMIN_PLUG_TOTALCONFIG}) {PHP.L.Edit}</a>
 <!-- ELSE -->
-			<td>{PHP.L.None}</td>
+				{PHP.L.None}
 <!-- ENDIF -->
+			</td>
 		</tr>
 		<tr>
 			<td>{PHP.L.Rights}:</td>
+			<td>
 <!-- IF {PHP.isinstalled} -->
-			<td><a title="{PHP.L.Rights}" href="{ADMIN_PLUG_RIGHTS}">{PHP.R.admin_icon_rights2}</a></td>
+				<a title="{PHP.L.Rights}" href="{ADMIN_PLUG_RIGHTS}">{PHP.R.admin_icon_rights2}</a>
 <!-- ELSE -->
-			<td>{PHP.L.None}</td>
+				{PHP.L.None}
 <!-- ENDIF -->
+			</td>
 		</tr>
 		<!--//<tr>
 			<td>{PHP.L.adm_defauth_guests}:</td>
@@ -68,43 +79,55 @@
 			<td>{ADMIN_PLUG_NOTES}</td>
 		</tr>
 	</table>
-	<h2>{PHP.L.Options}:</h2>
+	<h3>{PHP.L.Options}:</h3>
 	<table class="cells">
 		<tr>
-			<td style="width:20%;"><a href="{ADMIN_PLUG_INSTALL_URL}"{ADMIN_PLUG_INSTALL_URL_AJAX}>{PHP.L.adm_opt_installall}</a></td>
-			<td style="width:80%;">{PHP.L.adm_opt_installall_explain}
+			<td style="width:20%;">
+				<a href="{ADMIN_PLUG_INSTALL_URL}"{ADMIN_PLUG_INSTALL_URL_AJAX}>{PHP.L.adm_opt_installall}</a>
+			</td>
+			<td style="width:80%;">
+				{PHP.L.adm_opt_installall_explain}
 <!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} -->
-				<br />
-				<small><a href="{ADMIN_PLUG_INSTALL_KO_URL}"{ADMIN_PLUG_INSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_setoption_warn}</a></small>
+				<p class="small"><a href="{ADMIN_PLUG_INSTALL_KO_URL}"{ADMIN_PLUG_INSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_setoption_warn}</a></p>
 <!-- ENDIF -->
 			</td>
 		</tr>
 <!-- IF {PHP.isinstalled} -->
 		<tr>
-			<td><a href="{ADMIN_PLUG_UNINSTALL}"{ADMIN_PLUG_UNINSTALL_AJAX}>{PHP.L.adm_opt_uninstallall}</a></td>
-			<td>{PHP.L.adm_opt_uninstallall_explain}
+			<td>
+				<a href="{ADMIN_PLUG_UNINSTALL}"{ADMIN_PLUG_UNINSTALL_AJAX}>{PHP.L.adm_opt_uninstallall}</a>
+			</td>
+			<td>
+				{PHP.L.adm_opt_uninstallall_explain}
 <!-- ENDIF -->
 <!-- IF {PHP.isinstalled} AND {PHP.totalconfig} -->
-				<br />
-				<small><a href="{ADMIN_PLUG_UNINSTALL_KO_URL}"{ADMIN_PLUG_UNINSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_uninstall_warn}</a></small>
+				<p class="small"><a href="{ADMIN_PLUG_UNINSTALL_KO_URL}"{ADMIN_PLUG_UNINSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_uninstall_warn}</a></p>
 <!-- ENDIF -->
 <!-- IF {PHP.isinstalled} -->
 			</td>
 		</tr>
 		<tr>
-			<td><a href="{ADMIN_PLUG_PAUSE_URL}"{ADMIN_PLUG_PAUSE_URL_AJAX}>{PHP.L.adm_opt_pauseall}</a></td>
-			<td>{PHP.L.adm_opt_pauseall_explain}</td>
+			<td>
+				<a href="{ADMIN_PLUG_PAUSE_URL}"{ADMIN_PLUG_PAUSE_URL_AJAX}>{PHP.L.adm_opt_pauseall}</a>
+			</td>
+			<td>
+				{PHP.L.adm_opt_pauseall_explain}
+			</td>
 		</tr>
 		<tr>
-			<td><a href="{ADMIN_PLUG_UNPAUSE_URL}"{ADMIN_PLUG_UNPAUSE_URL_AJAX}>{PHP.L.adm_opt_unpauseall}</a></td>
-			<td>{PHP.L.adm_opt_unpauseall_explain}</td>
+			<td>
+				<a href="{ADMIN_PLUG_UNPAUSE_URL}"{ADMIN_PLUG_UNPAUSE_URL_AJAX}>{PHP.L.adm_opt_unpauseall}</a>
+			</td>
+			<td>
+				{PHP.L.adm_opt_unpauseall_explain}
+			</td>
 		</tr>
 <!-- ENDIF -->
 	</table>
-	<h2>{PHP.L.Parts}:</h2>
+	<h3>{PHP.L.Parts}:</h3>
 	<table class="cells">
 		<tr>
-			<td class="coltop" style="width:5%;">&nbsp;</td>
+			<td class="coltop" style="width:5%;">#</td>
 			<td class="coltop" style="width:15%;">{PHP.L.Part}</td>
 			<td class="coltop" style="width:20%;">{PHP.L.File}</td>
 			<td class="coltop" style="width:15%;">{PHP.L.Hooks}</td>
@@ -120,13 +143,13 @@
 <!-- END: ROW_ERROR_PART -->
 <!-- BEGIN: ROW_PART -->
 		<tr>
-			<td>#{ADMIN_PLUG_DETAILS_ROW_I_1}</td>
-			<td>{ADMIN_PLUG_DETAILS_ROW_PART}</td>
-			<td>{ADMIN_PLUG_DETAILS_ROW_FILE}.php</td>
-			<td>{ADMIN_PLUG_DETAILS_ROW_HOOKS}</td>
-			<td>{ADMIN_PLUG_DETAILS_ROW_ORDER}</td>
-			<td>{ADMIN_PLUG_DETAILS_ROW_STATUS}</td>
-			<td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_I_1}</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_PART}</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_FILE}.php</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_HOOKS}</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_ORDER}</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_STATUS}</td>
+			<td class="centerall">
 <!-- IF {PHP.info_file.Status} == 3 -->
 				&ndash;
 <!-- ENDIF -->
@@ -140,24 +163,24 @@
 		</tr>
 <!-- END: ROW_PART -->
 	</table>
-	<h2>{PHP.L.Tags}:</h2>
+	<h3>{PHP.L.Tags}:</h3>
 	<table class="cells">
 		<tr>
-			<td class="coltop" style="width:5%;">&nbsp;</td>
+			<td class="coltop" style="width:5%;">#</td>
 			<td class="coltop" style="width:15%;">{PHP.L.Part}</td>
 			<td class="coltop" style="width:80%;">{PHP.L.Files} / {PHP.L.Tags}</td>
 		</tr>
 <!-- BEGIN: ROW_ERROR_TAGS -->
 		<tr>
-			<td>#{ADMIN_PLUG_DETAILS_ROW_I_1}</td>
-			<td>{ADMIN_PLUG_DETAILS_ROW_PART}</td>
-			<td>{PHP.L.None}</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_I_1}</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_PART}</td>
+			<td class="centerall">{PHP.L.None}</td>
 		</tr>
 <!-- END: ROW_ERROR_TAGS -->
 <!-- BEGIN: ROW_TAGS -->
 		<tr>
-			<td>#{ADMIN_PLUG_DETAILS_ROW_I_1}</td>
-			<td>{ADMIN_PLUG_DETAILS_ROW_PART}</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_I_1}</td>
+			<td class="centerall">{ADMIN_PLUG_DETAILS_ROW_PART}</td>
 			<td>{ADMIN_PLUG_DETAILS_ROW_LISTTAGS}</td>
 		</tr>
 <!-- END: ROW_TAGS -->
@@ -191,8 +214,8 @@
 			</td>
 			<td><a href="{ADMIN_PLUG_DETAILS_URL}">{ADMIN_PLUG_NAME}</a></td>
 			<td>{ADMIN_PLUG_CODE_X}</td>
-			<td>{ADMIN_PLUG_PARTSCOUNT}</td>
-			<td>{ADMIN_PLUG_STATUS}</td>
+			<td class="centerall">{ADMIN_PLUG_PARTSCOUNT}</td>
+			<td class="centerall">{ADMIN_PLUG_STATUS}</td>
 			<td class="centerall action">
 <!-- IF {PHP.ent_code} > 0 -->
 				<a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_EDIT_URL}">{PHP.R.admin_icon_config}</a>
@@ -219,90 +242,95 @@
 	<h2>{PHP.L.Hooks} ({ADMIN_PLUG_CNT_HOOK}):</h2>
 	<table class="cells">
 		<tr>
-			<td class="coltop">{PHP.L.Hooks}</td>
-			<td class="coltop">{PHP.L.Plugin}</td>
-			<td class="coltop">{PHP.L.Order}</td>
-			<td class="coltop">{PHP.L.Active}</td>
+			<td class="coltop" style="width:45%;">{PHP.L.Hooks}</td>
+			<td class="coltop" style="width:20%;">{PHP.L.Plugin}</td>
+			<td class="coltop" style="width:20%;">{PHP.L.Order}</td>
+			<td class="coltop" style="width:15%;">{PHP.L.Active}</td>
 		</tr>
 <!-- BEGIN: HOOKS -->
 		<tr>
 			<td>{ADMIN_PLUG_HOOK}</td>
 			<td>{ADMIN_PLUG_CODE}</td>
-			<td>{ADMIN_PLUG_ORDER}</td>
-			<td>{ADMIN_PLUG_ACTIVE}</td>
+			<td class="centerall">{ADMIN_PLUG_ORDER}</td>
+			<td class="centerall">{ADMIN_PLUG_ACTIVE}</td>
 		</tr>
 <!-- END: HOOKS -->
 	</table>
 <!-- END: DEFAULT -->
 <!-- BEGIN: EDIT -->
 <!-- BEGIN: INSTALL -->
-	{PHP.L.adm_pluginstall_msg01}
-	{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS1}<br />
+		<h2>{PHP.L.adm_pluginstall_msg01}</h2>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS1}</p>
 <!-- IF !{PHP.ko} -->
-	{PHP.L.adm_pluginstall_msg02}
-	{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}<br />
+		<h3>{PHP.L.adm_pluginstall_msg02}</h3>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}</p>
 <!-- ENDIF -->
-	{PHP.L.adm_pluginstall_msg03}
+		<h3>{PHP.L.adm_pluginstall_msg03}</h3>
 <!-- IF {PHP.extplugin_info_exists} -->
-	{PHP.L.Found}: 1<br />
-	{PHP.L.adm_pluginstall_msg04}<br />
+		<p>{PHP.L.Found}: 1</p>
+		<h3>{PHP.L.adm_pluginstall_msg04}</h3>
 <!-- ENDIF -->
 <!-- BEGIN: ROW_PARTS_FOUND -->
-	&ndash; {PHP.L.Found}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F}<br />
+		<p>&ndash; {PHP.L.Found}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F}</p>
 <!-- END: ROW_PARTS_FOUND -->
 <!-- IF {PHP.extplugin_info_exists} -->
-	{PHP.L.adm_pluginstall_msg05}<br />
+		<h3>{PHP.L.adm_pluginstall_msg05}</h3>
 <!-- ENDIF -->
 <!-- BEGIN: ROW_PARTS_INSTALLING -->
-	&ndash; {PHP.L.Part}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_X} ... {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG}<br />
+		<p>&ndash; {PHP.L.Part}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_X} ...<br />
+		{ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG}</p>
 <!-- END: ROW_PARTS_INSTALLING -->
 <!-- IF {PHP.extplugin_info_exists} -->
-	{PHP.L.adm_pluginstall_msg06}
+		<h3>{PHP.L.adm_pluginstall_msg06}</h3>
 <!-- ENDIF -->
 <!-- BEGIN: ROW_PARTS_CFG -->
-	{PHP.L.Found} {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG}<br/>
+		<p>&ndash; {PHP.L.Found}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG}</p>
 <!-- BEGIN: ROW_PARTS_CFG_ENTRY -->
-	&ndash; {PHP.L.Entry} #{ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_J} {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_I} ({ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_LINE}) {PHP.L.adm_installed}<br />
+		<p>&ndash; {PHP.L.Entry} #{ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_J} {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_I} ({ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_LINE}) {PHP.L.adm_installed}</p>
 <!-- END: ROW_PARTS_CFG_ENTRY -->
 <!-- END: ROW_PARTS_CFG -->
 <!-- BEGIN: ROW_PARTS_CFG_ERROR -->
-	{PHP.L.None}<br />
+		<p>{PHP.L.None}</p>
 <!-- END: ROW_PARTS_CFG_ERROR -->
 <!-- IF !{PHP.extplugin_info_exists} -->
-	{PHP.L.adm_pluginstall_msg07}<br />
+		<h3>{PHP.L.adm_pluginstall_msg07}</h3>
 <!-- ENDIF -->
 <!-- IF !{PHP.ko} -->
-	{PHP.L.adm_pluginstall_msg08}
-	{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS3}<br />
+		<h3>{PHP.L.adm_pluginstall_msg08}</h3>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS3}</p>
 <!-- ENDIF -->
-	{PHP.L.adm_pluginstall_msg09}<br />
+		<h3>{PHP.L.adm_pluginstall_msg09}</h3>
 <!-- BEGIN: ROW_RIGHTS -->
-	&ndash; {PHP.L.Group} #{ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_ID}, {ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_TITLE} : Auth={ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH} / Lock={ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK} ({ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_COMMENT})<br />
+		<p>&ndash; {PHP.L.Group} #{ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_ID}, {ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_TITLE} : Auth={ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH} / Lock={ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK} ({ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_COMMENT})</p>
 <!-- END: ROW_RIGHTS -->
-	{PHP.L.adm_pluginstall_msg10}
-	{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS4}<br />
-	{PHP.L.adm_pluginstall_msg11}
-	{ADMIN_PLUG_EDIT_EXTPLUGIN_INFO}<br />
-	{PHP.L.Done}!<br />
-	<span>{ADMIN_PLUG_EDIT_LOG}&nbsp;</span>
-	<a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a>
+		<h3>{PHP.L.adm_pluginstall_msg10}</h3>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS4}</p>
+		<h3>{PHP.L.adm_pluginstall_msg11}</h3>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_EXTPLUGIN_INFO}</p>
+		<h3>{PHP.L.Done}!</h3>
+		<span>{ADMIN_PLUG_EDIT_LOG}</span>
+		<ul class="follow">
+			<li><a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a></li>
+		</ul>
 <!-- END: INSTALL -->
 <!-- BEGIN: UNINSTALL -->
-	{PHP.L.adm_pluginstall_msg01}
-	{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS1}<br />
+	<h2>{PHP.L.adm_pluginstall_msg01}</h2>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS1}</p>
 <!-- IF !{PHP.ko} -->
-	{PHP.L.adm_pluginstall_msg02}
-	{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}<br />
-	{PHP.L.adm_pluginstall_msg08}
-	{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS3}<br />
+		<h3>{PHP.L.adm_pluginstall_msg02}</h3>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}</p>
+		<h3>{PHP.L.adm_pluginstall_msg08}</h3>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS3}</p>
 <!-- ENDIF -->
-	{PHP.L.adm_pluginstall_msg10}
-	{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS4}<br />
-	{PHP.L.adm_pluginstall_msg11}
-	{ADMIN_PLUG_EDIT_EXTPLUGIN_INFO}<br />
-	{PHP.L.Done}!<br />
-	<span>{ADMIN_PLUG_EDIT_LOG}&nbsp;</span>
-	<a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a>
+		<h3>{PHP.L.adm_pluginstall_msg10}</h3>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS4}</p>
+		<h3>{PHP.L.adm_pluginstall_msg11}</h3>
+		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_EXTPLUGIN_INFO}</p>
+		<h3>{PHP.L.Done}</h3>
+		<span>{ADMIN_PLUG_EDIT_LOG}</span>
+		<ul class="follow">
+			<li><a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a></li>
+		</ul>
 <!-- END: UNINSTALL -->
 <!-- END: EDIT -->
 	</div>

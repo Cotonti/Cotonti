@@ -1,14 +1,12 @@
 <!-- BEGIN: ADMINQV -->
 
-<!-- BEGIN: UPDATE -->
-<span style="color:#C00; font-weight:bold;">{PHP.L.adminqv_update_notice}:</span>
-<div class="odd" style="border:1px #000 solid;padding:5px;">
-{ADMINQV_UPDATE_REVISION}<br /><br />
-{ADMINQV_UPDATE_MESSAGE}
-</div>
-<!-- END: UPDATE -->
-
 	<div id="center" class="column">
+		<!-- BEGIN: UPDATE -->
+		<div class="block">
+			<h3>{PHP.L.adminqv_update_notice}:</h3>
+			<p>{ADMINQV_UPDATE_REVISION} {ADMINQV_UPDATE_MESSAGE}</p>
+		</div>
+		<!-- END: UPDATE -->
 		<div class="block">
 			<h3>{PHP.L.plu_hitsmonth}</h3>
 			<table class="cells">

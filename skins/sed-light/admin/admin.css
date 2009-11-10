@@ -13,8 +13,10 @@ ul.follow img	{ vertical-align:-3px; }
 
 a			{ color:#172973; text-decoration:none; }
 a:hover		{ text-decoration:underline; }
-
 a img		{ border:0; }
+
+hr		{ margin:4px 0 1px; border: 1px solid; border-color:#ddd transparent transparent transparent; }
+* html hr	{ margin:4px 0 1px; border: 1px solid #ddd; }
 
 /* 2. Structure
 -------------------------------------------------- */
@@ -45,24 +47,32 @@ h4		{ font-weight:bold; }
 /* 4. Misc
 -------------------------------------------------- */
 
-.small	{ font-size:.9em; }
+.small	{ font-size:.9em; line-height:1.4em; }
 .clear	{ clear:both; }
+.strong	{ font-weight:bold; }
 
 .textleft		{ text-align:left; }
 .textcenter		{ text-align:center; }
 .textright		{ text-align:right; }
 .textjustify	{ text-align:justify; }
 
-.help			{ margin:20px 0; padding:10px 20px 10px 60px; background:#fdf0cd url(img/help.png) no-repeat 15px 15px; border:1px solid #ecc635; }
-.help p			{ line-height:1.5em; }
+.error			{ color:#444; margin:20px 0; padding:10px 20px 10px 60px; background:#f9e4e3 url(img/error.png) no-repeat 15px 15px; border:1px solid #e89e9d; }
+.error p			{ line-height:1.6em; }
+
+.help			{ color:#444; margin:20px 0; padding:10px 20px 10px 60px; background:#cdfcd2 url(img/help.png) no-repeat 15px 15px; border:1px solid #60a400; }
+.help p			{ line-height:1.6em; }
+.help img		{ vertical-align:-3px; }
+
+.warning		{ color:#444; margin:20px 0; padding:10px 20px 10px 60px; background:#fdf0cd url(img/warning.png) no-repeat 15px 15px; border:1px solid #ecc635; }
+.warning p		{ line-height:1.6em; }
 
 /* 5. Admin Menu
 -------------------------------------------------- */
 
 #adminmenu		{ height:160px; padding:15px 40px; background:url(img/adminmenu.png) no-repeat 0 0; }
 #adminmenu li		{ margin-right:5px; width:120px; float:left; background-repeat:no-repeat; background-position:0 0; }
-#adminmenu li a	{ text-align:center; padding-top:50px; display:block; height:30px; }
-#adminmenu li span	{ text-align:center; padding-top:50px; display:block; height:30px; }
+#adminmenu li a	{ text-align:center; padding-top:54px; display:block; height:26px; }
+#adminmenu li span	{ text-align:center; padding-top:54px; display:block; height:26px; }
 #am01			{ background-image:url(img/adminmenu/home.png); }
 #am02			{ background-image:url(img/adminmenu/config.png); }
 #am03			{ background-image:url(img/adminmenu/pages.png); }
@@ -84,6 +94,9 @@ table td 	{ vertical-align:top; }
 table.cells 	{ border-collapse:collapse; width:100%; }
 table.cells td	{ padding:4px 8px; border:1px solid #a4b6c8; }
 
+table.flat 	{ border-collapse:collapse; width:100%; }
+table.flat td	{ padding:0; border:0; }
+
 .action a	{ margin:0 2px; }
 .coltop		{ text-align:center; line-height:1.4em; vertical-align:middle; font-size:.9em; background-color:#4f789f!important; color:#fff; }
 .coltop img	{ vertical-align:middle; }
@@ -102,3 +115,19 @@ table.cells td	{ padding:4px 8px; border:1px solid #a4b6c8; }
 form					{ }
 input, select, textarea	{ font:normal 1em Tahoma; }
 input, select			{ padding:2px; }
+
+/* 9. Pagination
+-------------------------------------------------- */
+
+.paging		{ margin:10px 0 20px 0; text-align:center; font-size:.9em; }
+.paging img	{ vertical-align:-3px; }
+.paging span.a1	{ border:1px dashed #7f7772; padding:2px 8px; margin:1px; }
+.paging span.a1 a	{  }
+
+.pagenav_prev, .pagenav_next, .pagenav_first, .pagenav_last, .pagenav_pages, .pagenav_current { padding:2px 6px; margin:1px; border:1px dashed #7f7772; }
+.pagenav_prev a, .pagenav_next a, .pagenav_first a, .pagenav_last a, .pagenav_pages a	{ color:#555; }
+.pagenav_current	{ font-weight:bold; color:#fff; background:none!important; border:none!important; }
+.pagenav_current a	{ color:#555; }
+.pagenav_small		{ text-align:right; font-size:.9em; }
+
+.spaced				{ margin:0 8px; }

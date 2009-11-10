@@ -1,45 +1,39 @@
 <!-- BEGIN: COMMENTS -->
-		<div id="{ADMIN_COMMENTS_AJAX_OPENDIVID}">
-			<ul>
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
-			</ul>
+	<div id="{ADMIN_COMMENTS_AJAX_OPENDIVID}">
+		<h2>{PHP.L.Comments}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
-			<div class="error">{ADMIN_COMMENTS_ADMINWARNINGS}</div>
+			<div class="error">
+				<h4>{PHP.L.Message}</h4>
+				<p>{ADMIN_COMMENTS_ADMINWARNINGS}</p>
+			</div>
 <!-- ENDIF -->
-			<h4>{PHP.L.viewdeleteentries} :</h4>
+			<ul class="follow">
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration}</a></li>
+			</ul>
+			<h3>{PHP.L.viewdeleteentries}:</h3>
 			<table class="cells">
-			<tr>
-				<td class="coltop" style="width:60px;">{PHP.L.Delete}</td>
-				<td class="coltop" style="width:40px;">#</td>
-				<td class="coltop" style="width:40px;">{PHP.L.Code}</td>
-				<td class="coltop" style="width:90px;">{PHP.L.Author}</td>
-				<td class="coltop" style="width:128px;">{PHP.L.Date}</td>
-				<td class="coltop">{PHP.L.Comment}</td>
-				<td class="coltop" style="width:64px;">{PHP.L.Open}</td>
-			</tr>
-			</table>
+				<tr>
+					<td class="coltop" style="width:5%;">#</td>
+					<td class="coltop" style="width:10%;">{PHP.L.Code}</td>
+					<td class="coltop" style="width:15%;">{PHP.L.Author}</td>
+					<td class="coltop" style="width:15%;">{PHP.L.Date}</td>
+					<td class="coltop" style="width:35%;">{PHP.L.Comment}</td>
+					<td class="coltop" style="width:20%;">{PHP.L.Action}</td>
+				</tr>
 <!-- BEGIN: ADMIN_COMMENTS_ROW -->
-			<table class="cells">
-			<tr>
-				<td style="width:60px;text-align:center;"><a title="{PHP.L.Delete}" href="{ADMIN_COMMENTS_ITEM_DEL_URL}"{ADMIN_COMMENTS_ITEM_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a></td>
-				<td style="width:40px;text-align:center;">{ADMIN_COMMENTS_ITEM_ID}</td>
-				<td style="width:40px;text-align:center;">{ADMIN_COMMENTS_CODE}</td>
-				<td style="width:90px;">{ADMIN_COMMENTS_AUTHOR}</td>
-				<td style="width:128px;text-align:center;">{ADMIN_COMMENTS_DATE}</td>
-				<td>{ADMIN_COMMENTS_TEXT}</td>
-				<td style="width:64px;text-align:center;"><a title="{PHP.L.Open}" href="{ADMIN_COMMENTS_URL}">{PHP.R.admin_icon_jumpto}</a></td>
-			</tr>
-			</table>
+				<tr>
+					<td class="textcenter">{ADMIN_COMMENTS_ITEM_ID}</td>
+					<td class="textcenter">{ADMIN_COMMENTS_CODE}</td>
+					<td class="textcenter">{ADMIN_COMMENTS_AUTHOR}</td>
+					<td class="textcenter">{ADMIN_COMMENTS_DATE}</td>
+					<td>{ADMIN_COMMENTS_TEXT}</td>
+					<td class="centerall action">
+						<a title="{PHP.L.Delete}" href="{ADMIN_COMMENTS_ITEM_DEL_URL}"{ADMIN_COMMENTS_ITEM_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a>
+						<a title="{PHP.L.Open}" href="{ADMIN_COMMENTS_URL}">{PHP.R.admin_icon_jumpto}</a>
+					</td>
+				</tr>
 <!-- END: ADMIN_COMMENTS_ROW -->
-			<table class="cells">
-			<tr>
-				<td>
-					<div class="pagnav">{ADMIN_COMMENTS_PAGINATION_PREV} {ADMIN_COMMENTS_PAGNAV} {ADMIN_COMMENTS_PAGINATION_NEXT}</div>
-				</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Total} : {ADMIN_COMMENTS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_COMMENTS_COUNTER_ROW}</td>
-			</tr>
 			</table>
-		</div>
+			<p class="paging">{ADMIN_COMMENTS_PAGINATION_PREV}{ADMIN_COMMENTS_PAGNAV}{ADMIN_COMMENTS_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_COMMENTS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_COMMENTS_COUNTER_ROW}</span></p>
+	</div>
 <!-- END: COMMENTS -->

@@ -467,7 +467,7 @@ $L['adm_opt_setoption_warn'] = 'Найти настройки для этого 
 $L['adm_opt_uninstall_warn'] = 'Удалить плагин с сохранением существующих настроек и прав доступа';	// New in N-0.0.2
 $L['adm_opt_setup_missing'] = 'Ошибка: отсутствует файл настроек!';	// New in N-0.0.6
 
-$L['adm_pluginstall_msg01'] = 'Деинсталляция плагина...';	// New in N-0.0.6
+$L['adm_pluginstall_msg01'] = 'Настройка плагина...';	// New in N-0.0.6
 $L['adm_pluginstall_msg02'] = 'Удаление настроек плагина...';	// New in N-0.0.6
 $L['adm_pluginstall_msg03'] = 'Поиск файла конфигурации...';	// New in N-0.0.6
 $L['adm_pluginstall_msg04'] = 'Поиск частей...';	// New in N-0.0.6
