@@ -1,14 +1,18 @@
 <!-- BEGIN: POLLS -->
-		<div id="{ADMIN_POLLS_AJAX_OPENDIVID}">
-			<ul>
-				<li><a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
-			</ul>
+	<div id="{ADMIN_POLLS_AJAX_OPENDIVID}">
+		<h2>{PHP.L.Polls}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
-			<div class="error">{ADMIN_POLLS_ADMINWARNINGS}</div>
+			<div class="error">
+				<h4>{PHP.L.Message}</h4>
+				<p>{ADMIN_POLLS_ADMINWARNINGS}</p>
+			</div>
 <!-- ENDIF -->
-			<h4>{PHP.L.editdeleteentries} :</h4>
-			{PHP.L.Filter} :
-			<form id="jump">
+			<ul class="follow">
+				<li><a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration}</a></li>
+			</ul>
+			<h3>{PHP.L.editdeleteentries}:</h3>
+			{PHP.L.Filter}:
+			<form style="display:inline!important;" id="jump">
 				<select name="jumpbox" size="1" onchange="redirect(this)">
 <!-- BEGIN: POLLS_ROW_FILTER -->
 					<option value="{ADMIN_POLLS_ROW_FILTER_VALUE}"{ADMIN_POLLS_ROW_FILTER_CHECKED}>{ADMIN_POLLS_ROW_FILTER_NAME}</option>
@@ -16,68 +20,59 @@
 				</select>
 			</form>
 			<table class="cells">
-			<tr>
-				<td class="coltop" style="width:128px;">{PHP.L.Date}</td>
-				<td class="coltop" style="width:40px;">{PHP.L.Type}</td>
-				<td class="coltop">{PHP.L.Poll} {PHP.L.adm_clicktoedit}</td>
-				<td class="coltop" style="width:48px;">{PHP.L.Votes}</td>
-				<td class="coltop" style="width:40px;">{PHP.L.Close}</td>
-				<td class="coltop" style="width:40px;">{PHP.L.Delete}</td>
-				<td class="coltop" style="width:40px;">{PHP.L.Reset}</td>
-				<td class="coltop" style="width:40px;">{PHP.L.Bump}</td>
-				<td class="coltop" style="width:48px;">{PHP.L.Open}</td>
-			</tr>
-<!-- BEGIN: POLLS_ROW -->
-			<tr>
-				<td style="text-align:center;">{ADMIN_POLLS_ROW_POLL_CREATIONDATE}</td>
-				<td>{ADMIN_POLLS_ROW_POLL_TYPE}</td>
-				<td>{ADMIN_POLLS_ROW_POLL_CLOSED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
-				<td style="text-align:center;">{ADMIN_POLLS_ROW_POLL_TOTALVOTES}</td>
-				<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">C</a>]</td>
-				<td style="text-align:center;"><a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_URL_DEL}">{PHP.R.admin_icon_delete}</a></td>
-				<td style="text-align:center;">[<a href="{ADMIN_POLLS_ROW_POLL_URL_RES}">R</a>]</td>
-				<td style="text-align:center;"><a title="{PHP.L.Bump}" href="{ADMIN_POLLS_ROW_POLL_URL_BMP}">{PHP.R.icon_up}</a></td>
-				<td style="text-align:center;"><a title="{PHP.L.Open}" href="{ADMIN_POLLS_ROW_POLL_URL_OPN}">{PHP.R.admin_icon_jumpto}</a></td>
-			</tr>
-<!-- END: POLLS_ROW -->
-			<tr>
-				<td colspan="9">
-					<div class="pagnav">{ADMIN_POLLS_PAGINATION_PREV} {ADMIN_POLLS_PAGNAV} {ADMIN_POLLS_PAGINATION_NEXT}</div>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="9">{PHP.L.Total} : {ADMIN_POLLS_TOTALITEMS}, {PHP.L.adm_polls_on_page} : {ADMIN_POLLS_ON_PAGE}</td>
-			</tr>
-			</table>
-			<h4>{ADMIN_POLLS_FORMNAME} :</h4>
-			<form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
-				<table class="cells">
 				<tr>
-					<td>{PHP.L.adm_polls_polltopic}</td>
-					<td><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td>
+					<td class="coltop" style="width:15%;">{PHP.L.Date}</td>
+					<td class="coltop" style="width:15%;">{PHP.L.Type}</td>
+					<td class="coltop" style="width:30%;">{PHP.L.Poll} {PHP.L.adm_clicktoedit}</td>
+					<td class="coltop" style="width:15%;">{PHP.L.Votes}</td>
+					<td class="coltop" style="width:25%;">{PHP.L.Action}</td>
+				</tr>
+<!-- BEGIN: POLLS_ROW -->
+				<tr>
+					<td class="textcenter">{ADMIN_POLLS_ROW_POLL_CREATIONDATE}</td>
+					<td class="textcenter">{ADMIN_POLLS_ROW_POLL_TYPE}</td>
+					<td class="textcenter">{ADMIN_POLLS_ROW_POLL_CLOSED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
+					<td class="textcenter">{ADMIN_POLLS_ROW_POLL_TOTALVOTES}</td>
+					<td class="centerall action">
+						<a title="{PHP.L.Lock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.admin_icon_lock}</a>
+						<a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_URL_DEL}">{PHP.R.admin_icon_delete}</a>
+						<a title="{PHP.L.Reset}" href="{ADMIN_POLLS_ROW_POLL_URL_RES}">{PHP.R.admin_icon_reset}</a>
+						<a title="{PHP.L.Bump}" href="{ADMIN_POLLS_ROW_POLL_URL_BMP}">{PHP.R.icon_up}</a>
+						<a title="{PHP.L.Open}" href="{ADMIN_POLLS_ROW_POLL_URL_OPN}">{PHP.R.admin_icon_jumpto}</a>
+					</td>
+				</tr>
+<!-- END: POLLS_ROW -->
+			</table>
+			<p class="paging">{ADMIN_POLLS_PAGINATION_PREV}{ADMIN_POLLS_PAGNAV}{ADMIN_POLLS_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_POLLS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_POLLS_ON_PAGE}</span></p>
+			<h3>{ADMIN_POLLS_FORMNAME}:</h3>
+			<form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
+			<table class="cells">
+				<tr>
+					<td style="width:15%;">{PHP.L.adm_polls_polltopic}:</td>
+					<td style="width:85%;"><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Options}</td>
+					<td>{PHP.L.Options}:</td>
 					<td>{EDIT_POLL_OPTIONS}</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
-						<label>{EDIT_POLL_MULTIPLE}{PHP.L.polls_multiple}</label>
+						<label>{EDIT_POLL_MULTIPLE} {PHP.L.polls_multiple}</label>
 <!-- BEGIN: EDIT -->
 						<br />
-						<label>{EDIT_POLL_CLOSE}{PHP.L.Close}</label>
+						<label>{EDIT_POLL_CLOSE} {PHP.L.Close}</label>
 						<br />
-						<label>{EDIT_POLL_RESET}{PHP.L.Reset}</label>
+						<label>{EDIT_POLL_RESET} {PHP.L.Reset}</label>
 						<br />
-						<label>{EDIT_POLL_DELETE}{PHP.L.Delete}</label>
+						<label>{EDIT_POLL_DELETE} {PHP.L.Delete}</label>
 <!-- END: EDIT -->
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="submit" class="submit" value="{ADMIN_POLLS_SEND_BUTTON}" /></td>
+					<td class="valid" colspan="2"><input type="submit" class="submit" value="{ADMIN_POLLS_SEND_BUTTON}" /></td>
 				</tr>
-				</table>
+			</table>
 			</form>
-		</div>
+	</div>
 <!-- END: POLLS -->
