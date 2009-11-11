@@ -70,21 +70,25 @@ h4		{ font-weight:bold; }
 -------------------------------------------------- */
 
 #adminmenu		{ height:160px; padding:15px 40px; background:url(img/adminmenu.png) no-repeat 0 0; }
-#adminmenu li		{ margin-right:5px; width:120px; float:left; background-repeat:no-repeat; background-position:0 0; }
-#adminmenu li a	{ text-align:center; padding-top:54px; display:block; height:26px; }
-#adminmenu li span	{ text-align:center; padding-top:54px; display:block; height:26px; }
-#am01			{ background-image:url(img/adminmenu/home.png); }
-#am02			{ background-image:url(img/adminmenu/config.png); }
-#am03			{ background-image:url(img/adminmenu/pages.png); }
-#am04			{ background-image:url(img/adminmenu/folder.png); }
-#am05			{ background-image:url(img/adminmenu/users.png); }
-#am06			{ background-image:url(img/adminmenu/forums.png); margin:0!important; }
-#am07			{ background-image:url(img/adminmenu/plugins.png); }
-#am08			{ background-image:url(img/adminmenu/tools.png); }
-#am09			{ background-image:url(img/adminmenu/trash.png); }
-#am10			{ background-image:url(img/adminmenu/folder.png); }
-#am11			{ background-image:url(img/adminmenu/info.png); }
-#am12			{ background-image:url(img/adminmenu/logout.png); margin:0!important; }
+#adminmenu li		{ margin-right:5px; width:120px; float:left; }
+li#am06, li#am12	{ margin:0!important; }
+#adminmenu li a, #adminmenu li span	{ text-align:center; padding-top:54px; display:block; height:26px; background-repeat:no-repeat; background-position:0 -80px; }
+#adminmenu li span	{ color:#999; background-position:0 0; }
+#adminmenu li a	{ background-position:0 -80px; }
+#adminmenu li a:hover, #adminmenu li a.sel	{ font-weight:bold; text-decoration:none; background-position:0 -160px; }
+#am01 a, #am01 span	{ background-image:url(img/adminmenu/home.png); }
+#am02 a, #am02 span	{ background-image:url(img/adminmenu/config.png); }
+#am03 a, #am03 span	{ background-image:url(img/adminmenu/pages.png); }
+#am04 a, #am04 span	{ background-image:url(img/adminmenu/folder.png); }
+#am05 a, #am05 span	{ background-image:url(img/adminmenu/users.png); }
+#am06 a, #am06 span	{ background-image:url(img/adminmenu/forums.png); }
+#am07 a, #am07 span	{ background-image:url(img/adminmenu/plugins.png); }
+#am08 a, #am08 span	{ background-image:url(img/adminmenu/tools.png); }
+#am09 a, #am09 span	{ background-image:url(img/adminmenu/trash.png); }
+#am10 a, #am10 span	{ background-image:url(img/adminmenu/folder.png); }
+#am11 a, #am11 span	{ background-image:url(img/adminmenu/info.png); }
+#am12 a, #am12 span	{ background-image:url(img/adminmenu/logout.png); }
+
 
 /* 6. Tables
 -------------------------------------------------- */
