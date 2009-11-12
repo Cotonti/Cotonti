@@ -27,7 +27,7 @@
 		</div>
 		<hr />
 		<div style="padding:20px; text-align:center;">
-			<a href="{USERS_AUTH_REGISTER}">{PHP.L.Register}</a> / <a href="plug.php?e=passrecover">{PHP.skinlang.usersauth.Lostpassword}</a>
+			<a href="{USERS_AUTH_REGISTER}">{PHP.L.Register}</a> / <a href="users.php?m=passrecover">{PHP.skinlang.usersauth.Lostpassword}</a>
 		</div>
 
 	</div>

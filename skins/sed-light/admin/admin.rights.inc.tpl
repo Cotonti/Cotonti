@@ -1,20 +1,16 @@
 <!-- BEGIN: RIGHTS -->
 	<div id="{ADMIN_RIGHTS_AJAX_OPENDIVID}">
 		<h2>{PHP.L.Rights}</h2>
-<!-- IF {PHP.is_adminwarnings} -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{ADMIN_RIGHTS_ADMINWARNINGS}</p>
-			</div>
-<!-- ENDIF -->
-			<form name="saverights" id="saverights" action="{ADMIN_RIGHTS_FORM_URL}" method="post"{ADMIN_RIGHTS_FORM_URL_AJAX}>
-<!-- IF {PHP.g} > 5 -->
-			<table class="cells">
+		<!-- IF {PHP.is_adminwarnings} --><div class="error">
+			<h4>{PHP.L.Message}</h4>
+			<p>{ADMIN_RIGHTS_ADMINWARNINGS}</p>
+		</div><!-- ENDIF -->
+		<form name="saverights" id="saverights" action="{ADMIN_RIGHTS_FORM_URL}" method="post"{ADMIN_RIGHTS_FORM_URL_AJAX}>
+			<!-- IF {PHP.g} > 5 --><table class="cells">
 				<tr>
 					<td><input type="checkbox" class="checkbox" name="ncopyrightsconf" />{PHP.L.adm_copyrightsfrom}: {ADMIN_RIGHTS_SELECTBOX_GROUPS}&nbsp; <input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 				</tr>
-			</table>
-<!-- ENDIF -->
+			</table><!-- ENDIF -->
 			<h3>{PHP.L.Core}:</h3>
 			<table class="cells">
 				<tr>
@@ -28,8 +24,7 @@
 					<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_w}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_1}</td>
-<!-- IF {PHP.advanced} -->
-					<td class="coltop">{PHP.R.admin_icon_auth_2}</td>
+					<!-- IF {PHP.advanced} --><td class="coltop">{PHP.R.admin_icon_auth_2}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_3}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_4}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_5}</td>
@@ -42,16 +37,10 @@
 					<td> <a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_CORE_ITEMS -->
 					<td class="centerall">
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
-						<input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
-						{PHP.R.admin_icon_discheck1}
-<!-- ENDIF -->
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
-						{PHP.R.admin_icon_discheck0}
-<!-- ENDIF -->
-<!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
-						<input type="checkbox" class="checkbox" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}"{ADMIN_RIGHTS_ROW_ITEMS_CHECKED}{ADMIN_RIGHTS_ROW_ITEMS_DISABLED} />
-<!-- ENDIF -->
+						<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} --><input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
+						{PHP.R.admin_icon_discheck1}<!-- ENDIF -->
+						<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->{PHP.R.admin_icon_discheck0}<!-- ENDIF -->
+						<!-- IF !{PHP.out.tpl_rights_parseline_locked} --><input type="checkbox" class="checkbox" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}"{ADMIN_RIGHTS_ROW_ITEMS_CHECKED}{ADMIN_RIGHTS_ROW_ITEMS_DISABLED} /><!-- ENDIF -->
 					</td>
 <!-- END: ROW_CORE_ITEMS -->
 					<td class="centerall"><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}">{PHP.R.admin_icon_rights2}</a></td>
@@ -72,12 +61,10 @@
 					<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_w}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_1}</td>
-<!-- IF {PHP.advanced} -->
-					<td class="coltop">{PHP.R.admin_icon_auth_2}</td>
+					<!-- IF {PHP.advanced} --><td class="coltop">{PHP.R.admin_icon_auth_2}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_3}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_4}</td>
-					<td class="coltop">{PHP.R.admin_icon_auth_5}</td>
-<!-- ENDIF -->
+					<td class="coltop">{PHP.R.admin_icon_auth_5}</td><!-- ENDIF -->
 					<td class="coltop">{PHP.R.admin_icon_auth_a}</td>
 				</tr>
 <!-- BEGIN: RIGHTS_ROW_FORUMS -->
@@ -86,16 +73,10 @@
 					<td><a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_FORUMS_ITEMS -->
 					<td class="centerall">
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
-						<input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
-						{PHP.R.admin_icon_discheck1}
-<!-- ENDIF -->
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
-						{PHP.R.admin_icon_discheck0}
-<!-- ENDIF -->
-<!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
-						<input type="checkbox" class="checkbox" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}"{ADMIN_RIGHTS_ROW_ITEMS_CHECKED}{ADMIN_RIGHTS_ROW_ITEMS_DISABLED} />
-<!-- ENDIF -->
+						<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} --><input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
+						{PHP.R.admin_icon_discheck1}<!-- ENDIF -->
+						<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->{PHP.R.admin_icon_discheck0}<!-- ENDIF -->
+						<!-- IF !{PHP.out.tpl_rights_parseline_locked} --><input type="checkbox" class="checkbox" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}"{ADMIN_RIGHTS_ROW_ITEMS_CHECKED}{ADMIN_RIGHTS_ROW_ITEMS_DISABLED} /><!-- ENDIF -->
 					</td>
 <!-- END: ROW_FORUMS_ITEMS -->
 					<td class="centerall"><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}">{PHP.R.admin_icon_rights2}</a></td>
@@ -116,12 +97,10 @@
 					<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_w}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_1}</td>
-<!-- IF {PHP.advanced} -->
-					<td class="coltop">{PHP.R.admin_icon_auth_2}</td>
+					<!-- IF {PHP.advanced} --><td class="coltop">{PHP.R.admin_icon_auth_2}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_3}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_4}</td>
-					<td class="coltop">{PHP.R.admin_icon_auth_5}</td>
-<!-- ENDIF -->
+					<td class="coltop">{PHP.R.admin_icon_auth_5}</td><!-- ENDIF -->
 					<td class="coltop">{PHP.R.admin_icon_auth_a}</td>
 				</tr>
 <!-- BEGIN: RIGHTS_ROW_PAGES -->
@@ -130,16 +109,10 @@
 					<td><a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_PAGES_ITEMS -->
 					<td class="centerall">
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
-						<input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
-						{PHP.R.admin_icon_discheck1}
-<!-- ENDIF -->
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
-						{PHP.R.admin_icon_discheck0}
-<!-- ENDIF -->
-<!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
-						<input type="checkbox" class="checkbox" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}"{ADMIN_RIGHTS_ROW_ITEMS_CHECKED}{ADMIN_RIGHTS_ROW_ITEMS_DISABLED} />
-<!-- ENDIF -->
+						<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} --><input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
+						{PHP.R.admin_icon_discheck1}<!-- ENDIF -->
+						<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->{PHP.R.admin_icon_discheck0}<!-- ENDIF -->
+						<!-- IF !{PHP.out.tpl_rights_parseline_locked} --><input type="checkbox" class="checkbox" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}"{ADMIN_RIGHTS_ROW_ITEMS_CHECKED}{ADMIN_RIGHTS_ROW_ITEMS_DISABLED} /><!-- ENDIF -->
 					</td>
 <!-- END: ROW_PAGES_ITEMS -->
 					<td class="centerall"><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}">{PHP.R.admin_icon_rights2}</a></td>
@@ -160,12 +133,10 @@
 					<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_w}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_1}</td>
-<!-- IF {PHP.advanced} -->
-					<td class="coltop">{PHP.R.admin_icon_auth_2}</td>
+					<!-- IF {PHP.advanced} --><td class="coltop">{PHP.R.admin_icon_auth_2}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_3}</td>
 					<td class="coltop">{PHP.R.admin_icon_auth_4}</td>
-					<td class="coltop">{PHP.R.admin_icon_auth_5}</td>
-<!-- ENDIF -->
+					<td class="coltop">{PHP.R.admin_icon_auth_5}</td><!-- ENDIF -->
 					<td class="coltop">{PHP.R.admin_icon_auth_a}</td>
 				</tr>
 <!-- BEGIN: RIGHTS_ROW_PLUGINS -->
@@ -174,16 +145,10 @@
 					<td><a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_PLUGINS_ITEMS -->
 					<td class="centerall">
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
-						<input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
-						{PHP.R.admin_icon_discheck1}
-<!-- ENDIF -->
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
-						{PHP.R.admin_icon_discheck0}
-<!-- ENDIF -->
-<!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
-						<input type="checkbox" class="checkbox" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}"{ADMIN_RIGHTS_ROW_ITEMS_CHECKED}{ADMIN_RIGHTS_ROW_ITEMS_DISABLED} />
-<!-- ENDIF -->
+						<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} --><input type="hidden" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}" value="1" />
+						{PHP.R.admin_icon_discheck1}<!-- ENDIF -->
+						<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->{PHP.R.admin_icon_discheck0}<!-- ENDIF -->
+						<!-- IF !{PHP.out.tpl_rights_parseline_locked} --><input type="checkbox" class="checkbox" name="{ADMIN_RIGHTS_ROW_ITEMS_NAME}"{ADMIN_RIGHTS_ROW_ITEMS_CHECKED}{ADMIN_RIGHTS_ROW_ITEMS_DISABLED} /><!-- ENDIF -->
 					</td>
 <!-- END: ROW_PLUGINS_ITEMS -->
 					<td class="centerall"><a title="{PHP.L.Rights}" href="{ADMIN_RIGHTS_ROW_RIGHTSBYITEM}">{PHP.R.admin_icon_rights2}</a></td>
@@ -191,10 +156,10 @@
 				</tr>
 <!-- END: RIGHTS_ROW_PLUGINS -->
 				<tr>
-					<td class="textcenter" colspan="{ADMIN_RIGHTS_3ADV_COLUMNS}"><a href="{ADMIN_RIGHTS_ADVANCED_URL}">{PHP.L.More}</a></td>
+					<td class="textcenter" colspan="{ADMIN_RIGHTS_4ADV_COLUMNS}"><a href="{ADMIN_RIGHTS_ADVANCED_URL}">{PHP.L.More}</a></td>
 				</tr>
 				<tr>
-					<td class="valid" colspan="{ADMIN_RIGHTS_3ADV_COLUMNS}" style="text-align:center;"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
+					<td class="valid" colspan="{ADMIN_RIGHTS_4ADV_COLUMNS}" style="text-align:center;"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 				</tr>
 			</table>
 			</form>
@@ -202,14 +167,12 @@
 <!-- END: RIGHTS -->
 
 <!-- BEGIN: RIGHTS_HELP -->
-<p>{PHP.R.admin_icon_auth_r}&nbsp; {PHP.L.Read}</p>
-<p>{PHP.R.admin_icon_auth_w}&nbsp; {PHP.L.Write}</p>
-<p>{PHP.R.admin_icon_auth_1}&nbsp; {PHP.L.Custom} #1</p>
-<!-- IF {PHP.advanced} -->
-<p>{PHP.R.admin_icon_auth_2}&nbsp; {PHP.L.Custom} #2</p>
-<p>{PHP.R.admin_icon_auth_3}&nbsp; {PHP.L.Custom} #3</p>
-<p>{PHP.R.admin_icon_auth_4}&nbsp; {PHP.L.Custom} #4</p>
-<p>{PHP.R.admin_icon_auth_5}&nbsp; {PHP.L.Custom} #5</p>
-<!-- ENDIF -->
-<p>{PHP.R.admin_icon_auth_a}&nbsp; {PHP.L.Administration}</p>
+		<p>{PHP.R.admin_icon_auth_r}&nbsp; {PHP.L.Read}</p>
+		<p>{PHP.R.admin_icon_auth_w}&nbsp; {PHP.L.Write}</p>
+		<p>{PHP.R.admin_icon_auth_1}&nbsp; {PHP.L.Custom} #1</p>
+		<!-- IF {PHP.advanced} --><p>{PHP.R.admin_icon_auth_2}&nbsp; {PHP.L.Custom} #2</p>
+		<p>{PHP.R.admin_icon_auth_3}&nbsp; {PHP.L.Custom} #3</p>
+		<p>{PHP.R.admin_icon_auth_4}&nbsp; {PHP.L.Custom} #4</p>
+		<p>{PHP.R.admin_icon_auth_5}&nbsp; {PHP.L.Custom} #5</p><!-- ENDIF -->
+		<p>{PHP.R.admin_icon_auth_a}&nbsp; {PHP.L.Administration}</p>
 <!-- END: RIGHTS_HELP -->

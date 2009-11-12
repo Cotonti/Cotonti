@@ -3,7 +3,7 @@
  * Administration panel - Forums & categories
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -27,12 +27,17 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 /* === Hook === */
 $extp = sed_getextplugins('admin.forums.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
-if($n == 'edit')
+if ($n == 'edit')
 {
-	if($a == 'update')
+	if ($a == 'update')
 	{
 		$rstate = sed_import('rstate', 'P', 'BOL');
 		$rtitle = sed_import('rtitle', 'P', 'TXT');
@@ -56,14 +61,19 @@ if($n == 'edit')
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.forums.update');
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{
+			foreach ($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 
 		$sql = sed_sql_query("SELECT fs_id, fs_masterid, fs_order, fs_category FROM $db_forum_sections WHERE fs_id=$id ");
-		sed_die(sed_sql_numrows($sql)==0);
+		sed_die(sed_sql_numrows($sql) == 0);
 		$row_cur = sed_sql_fetcharray($sql);
 
-		if($rmaster != '' && $row_cur['fs_masterid'] != $rmaster || empty($row_cur['fs_mastername']))
+		if ($rmaster != '' && $row_cur['fs_masterid'] != $rmaster || empty($row_cur['fs_mastername']))
 		{
 			$sql1 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='$rmaster' ");
 			$row1 = sed_sql_fetcharray($sql1);
@@ -73,11 +83,11 @@ if($n == 'edit')
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='".$rmaster."', fs_mastername='".$master."' WHERE fs_id='".$id."' ");
 		}
 
-		if($row_cur['fs_category'] != $rcat)
+		if ($row_cur['fs_category'] != $rcat)
 		{
 			$sql = sed_sql_query("SELECT fs_order FROM $db_forum_sections WHERE fs_category='".$rcat."' ORDER BY fs_order DESC LIMIT 1");
 
-			if(sed_sql_numrows($sql) > 0)
+			if (sed_sql_numrows($sql) > 0)
 			{
 				$row_oth = sed_sql_fetcharray($sql);
 				$rorder = $row_oth['fs_order'] + 1;
@@ -91,19 +101,17 @@ if($n == 'edit')
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='$rorder' WHERE fs_id='$id'");
 		}
 
-		if(!empty($rtitle))
+		if (!empty($rtitle))
 		{
-
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_allowpolls='$rallowpolls', fs_countposts='$rcountposts' WHERE fs_id='$id'");
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ");
-
 		}
 
 		//$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
 		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&d='.$d.$additionsforurl, '', true));
 		exit;
 	}
-	elseif($a == 'resync')
+	elseif ($a == 'resync')
 	{
 		sed_check_xg();
 		sed_forum_resync($id);
@@ -135,15 +143,13 @@ if($n == 'edit')
 	$adminpath[] = array (sed_url('admin', 'm=forums&n=edit&id='.$id), htmlspecialchars($fs_title));
 
 	$sqlc = sed_sql_query("SELECT fs_id FROM $db_forum_sections WHERE fs_masterid='".$id."' ");
-	if(!sed_sql_numrows($sqlc))
+	if (!sed_sql_numrows($sqlc))
 	{
 		$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='".$fs_category."' ORDER by fn_path ASC, fs_order ASC");
-		while($rowa = sed_sql_fetchassoc($sqla))
+		while ($rowa = sed_sql_fetchassoc($sqla))
 		{
 			$ifmaster = ($fs_masterid == $rowa['fs_id']) ? true : false;
-			$t -> assign(array(
-				"ADMIN_FORUMS_EDIT_FORUMS_MASTER_ROW_CFS" => sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE)
-			));
+			$t -> assign("ADMIN_FORUMS_EDIT_FORUMS_MASTER_ROW_CFS", sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE));
 			$t -> parse("FORUMS.EDIT.EDIT_FORUMS_MASTER.EDIT_FORUMS_MASTER_ROW");
 		}
 		$t -> parse("FORUMS.EDIT.EDIT_FORUMS_MASTER");
@@ -162,13 +168,18 @@ if($n == 'edit')
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.forums.edit');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 	$t -> parse("FORUMS.EDIT");
 }
 else
 {
-	if($a == 'order')
+	if ($a == 'order')
 	{
 		$w = sed_import('w', 'G', 'ALP', 4);
 
@@ -179,10 +190,15 @@ else
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.forums.order');
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{
+			foreach ($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
 
-		if($w == 'up')
+		if ($w == 'up')
 		{
 			$sql = sed_sql_query("SELECT fs_id, fs_order FROM $db_forum_sections WHERE fs_category='".$row_cur['fs_category']."' AND fs_order<'".$row_cur['fs_order']."' ORDER BY fs_order DESC LIMIT 1");
 		}
@@ -190,7 +206,7 @@ else
 		{
 			$sql = sed_sql_query("SELECT fs_id, fs_order FROM $db_forum_sections WHERE fs_category='".$row_cur['fs_category']."' AND fs_order>'".$row_cur['fs_order']."' ORDER BY fs_order ASC LIMIT 1");
 		}
-		if(sed_sql_numrows($sql) > 0)
+		if (sed_sql_numrows($sql) > 0)
 		{
 			$row_oth = sed_sql_fetcharray($sql);
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='".$row_oth['fs_order']."' WHERE fs_id='".$id."'");
@@ -199,17 +215,17 @@ else
 
 		$adminwarnings = $L['Ordered'];
 	}
-	elseif($a == 'add')
+	elseif ($a == 'add')
 	{
 		$nmaster = sed_import('nmaster', 'P', 'INT');
 		$ntitle = sed_import('ntitle', 'P', 'TXT');
 		$ndesc = sed_import('ndesc', 'P', 'TXT');
 		$ncat = sed_import('ncat', 'P', 'TXT');
 
-		if(!empty($ntitle))
+		if (!empty($ntitle))
 		{
 			$sql1 = sed_sql_query("SELECT fs_order FROM $db_forum_sections WHERE fs_category='".sed_sql_prep($ncat)."' ORDER BY fs_order DESC LIMIT 1");
-			if($row1 = sed_sql_fetcharray($sql1))
+			if ($row1 = sed_sql_fetcharray($sql1))
 			{
 				$nextorder = $row1['fs_order'] + 1;
 			}
@@ -218,7 +234,7 @@ else
 				$nextorder = 100;
 			}
 
-			if(!empty($nmaster))
+			if (!empty($nmaster))
 			{
 				$sql2 = sed_sql_query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='".$nmaster."' ");
 				$row2 = sed_sql_fetcharray($sql2);
@@ -233,22 +249,27 @@ else
 			/* === Hook === */
 			$extp = sed_getextplugins('admin.forums.add');
 			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{
+				foreach ($extp as $k => $pl)
+				{
+					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+				}
+			}
 			/* ===== */
 
-			foreach($sed_groups as $k => $v)
+			foreach ($sed_groups as $k => $v)
 			{
-				if($k == 1 || $k == 2)
+				if ($k == 1 || $k == 2)
 				{
 					$ins_auth = 1;
 					$ins_lock = 254;
 				}
-				elseif($k == 3)
+				elseif ($k == 3)
 				{
 					$ins_auth = 0;
 					$ins_lock = 255;
 				}
-				elseif($k == 5)
+				elseif ($k == 5)
 				{
 					$ins_auth = 255;
 					$ins_lock = 255;
@@ -271,28 +292,34 @@ else
 			$adminwarnings = $L['adm_forum_emptytitle'];
 		}
 	}
-	elseif($a == 'delete')
+	elseif ($a == 'delete')
 	{
 		sed_check_xg();
 		sed_auth_clear('all');
 		$num = sed_forum_deletesection($id);
 		$sql1 = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='".$id."' ");
-		//$num = sed_sql_numrows($sql1);//������ �������
+		//$num = sed_sql_numrows($sql1);
+
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.forums.delete');
 		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		{
+			foreach ($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			}
+		}
 		/* ===== */
-		$adminwarnings = $L['Deleted'];//��������� ����� �� ��� �� �� ������� �� ������ sed_url('message', "msg=916&rc=103&num=".$num, '', true))
+		$adminwarnings = $L['Deleted'];
 	}
 	/*
 	 $totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
 	 $pagnav = sed_pagination(sed_url('admin','m=forums'), $d, $totalitems, $cfg['maxrowsperpage']);
 	 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
 	 */
-	$sql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
-	$db_forum_structure AS n ON n.fn_code=s.fs_category
-	ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC");
+	$sql = sed_sql_query("SELECT s.*, n.*
+		FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
+		ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC");
 
 	$prev_cat = '';
 	$line = 1;
@@ -302,9 +329,9 @@ else
 	/* === Hook - Part1 : Set === */
 	$extp = sed_getextplugins('admin.forums.loop');
 	/* ===== */
-	while($row = sed_sql_fetcharray($sql))
+	while ($row = sed_sql_fetcharray($sql))
 	{
-		if($row['fs_masterid'] > 0)
+		if ($row['fs_masterid'] > 0)
 		{
 			$fcache[$row['fs_masterid']][$row['fs_id']] = array($row['fs_title'], $row['fs_topiccount'], $row['fs_postcount'], $row['fs_viewcount'], $row['fs_allowprvtopics']);
 		}
@@ -318,7 +345,7 @@ else
 			$fs_category = $row['fs_category'];
 			$show_fn = ($fs_category != $prev_cat) ? true : false;
 
-			if($fs_category != $prev_cat)
+			if ($fs_category != $prev_cat)
 			{
 				$prev_cat = $fs_category;
 				$line = 1;
@@ -329,31 +356,38 @@ else
 			$line++;
 			$ii++;
 
-			if($fcache[$fs_id])
+			if ($fcache[$fs_id])
 			{
-				foreach($fcache[$fs_id] as $key => $value)
+				foreach ($fcache[$fs_id] as $key => $value)
 				{
 					$t -> assign(array(
-						"ADMIN_FORUMS_DEFULT_ROW_DELETE_URL" => sed_url('admin', "m=forums&a=delete&id=".$key."&".sed_xg()),
-						"ADMIN_FORUMS_DEFULT_ROW_DELETE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=delete&id='.$key.'&'.sed_xg().'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-						"ADMIN_FORUMS_DEFULT_ROW_FS_EDIT_URL" => sed_url('admin', "m=forums&n=edit&id=".$key),
-						"ADMIN_FORUMS_DEFULT_ROW_FS_EDIT_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&n=edit&id='.$key.'&ajax=1&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-						"ADMIN_FORUMS_DEFULT_ROW_FS_TITLE" => htmlspecialchars($value[0]),
-						"ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL" => sed_url('admin', "m=forums&id=".$key."&a=order&w=up&d=".$d),
-						"ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=order&w=up&d='.$d.'&id='.$key.'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-						"ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL" => sed_url('admin', "m=forums&id=".$key."&a=order&w=down&d=".$d),
-						"ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=order&w=down&d='.$d.'&id='.$key.'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-						"ADMIN_FORUMS_DEFULT_ROW_FS_ALLOWPRVTOPICS" => $sed_yesno[$value[4]],
-						"ADMIN_FORUMS_DEFULT_ROW_FS_TOPICCOUNT" => $value[1],
-						"ADMIN_FORUMS_DEFULT_ROW_FS_POSTCOUNT" => $value[2],
-						"ADMIN_FORUMS_DEFULT_ROW_FS_VIEWCOUNT" =>$value[3],
-						"ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=forums&io=".$key),
-						"ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL" => sed_url('forums', "m=topics&s=".$key)
+						"ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL" => sed_url('admin', "m=forums&a=delete&id=".$key."&".sed_xg()),
+						"ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=delete&id='.$key.'&'.sed_xg().'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL" => sed_url('admin', "m=forums&n=edit&id=".$key),
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&n=edit&id='.$key.'&ajax=1&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE" => htmlspecialchars($value[0]),
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL" => sed_url('admin', "m=forums&id=".$key."&a=order&w=up&d=".$d),
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=order&w=up&d='.$d.'&id='.$key.'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL" => sed_url('admin', "m=forums&id=".$key."&a=order&w=down&d=".$d),
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=order&w=down&d='.$d.'&id='.$key.'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS" => $sed_yesno[$value[4]],
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT" => $value[1],
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT" => $value[2],
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_VIEWCOUNT" =>$value[3],
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=forums&io=".$key),
+						"ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL" => sed_url('forums', "m=topics&s=".$key)
 					));
+
 					/* === Hook - Part2 : Include === */
 					if (is_array($extp))
-					{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+					{
+						foreach ($extp as $k => $pl)
+						{
+							include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+						}
+					}
 					/* ===== */
+
 					$t -> parse("FORUMS.DEFULT.ROW.FCACHE");
 
 					$ii++;
@@ -361,55 +395,62 @@ else
 			}
 
 			$t -> assign(array(
-				"ADMIN_FORUMS_DEFULT_ROW_FN_URL" => sed_url('admin', "m=forums&s=structure&n=options&id=".$row['fn_id']),
-				"ADMIN_FORUMS_DEFULT_ROW_FN_TITLE" => htmlspecialchars($row['fn_title']),
-				"ADMIN_FORUMS_DEFULT_ROW_FN_PATH" => $row['fn_path'],
-				"ADMIN_FORUMS_DEFULT_ROW_DELETE_URL" => sed_url('admin', "m=forums&a=delete&id=".$fs_id."&".sed_xg()),
-				"ADMIN_FORUMS_DEFULT_ROW_DELETE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=delete&id='.$fs_id.'&'.sed_xg().'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-				"ADMIN_FORUMS_DEFULT_ROW_FS_EDIT_URL" => sed_url('admin', "m=forums&n=edit&id=".$fs_id),
-				"ADMIN_FORUMS_DEFULT_ROW_FS_EDIT_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&n=edit&id='.$fs_id.'&ajax=1&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-				"ADMIN_FORUMS_DEFULT_ROW_FS_TITLE" => htmlspecialchars($fs_title),
-				"ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL" => sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=up&d=".$d),
-				"ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=order&w=up&d='.$d.'&id='.$fs_id.'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-				"ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL" => sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=down&d=".$d),
-				"ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=order&w=down&d='.$d.'&id='.$fs_id.'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-				"ADMIN_FORUMS_DEFULT_ROW_FS_ALLOWPRVTOPICS" => $sed_yesno[$row['fs_allowprvtopics']],
-				"ADMIN_FORUMS_DEFULT_ROW_FS_TOPICCOUNT" => $row['fs_topiccount'],
-				"ADMIN_FORUMS_DEFULT_ROW_FS_POSTCOUNT" => $row['fs_postcount'],
-				"ADMIN_FORUMS_DEFULT_ROW_FS_VIEWCOUNT" => $row['fs_viewcount'],
-				"ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=forums&io=".$fs_id),
-				"ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL" => sed_url('forums', "m=topics&s=".$fs_id)
+				"ADMIN_FORUMS_DEFAULT_ROW_FN_URL" => sed_url('admin', "m=forums&s=structure&n=options&id=".$row['fn_id']),
+				"ADMIN_FORUMS_DEFAULT_ROW_FN_TITLE" => htmlspecialchars($row['fn_title']),
+				"ADMIN_FORUMS_DEFAULT_ROW_FN_PATH" => $row['fn_path'],
+				"ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL" => sed_url('admin', "m=forums&a=delete&id=".$fs_id."&".sed_xg()),
+				"ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=delete&id='.$fs_id.'&'.sed_xg().'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL" => sed_url('admin', "m=forums&n=edit&id=".$fs_id),
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&n=edit&id='.$fs_id.'&ajax=1&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE" => htmlspecialchars($fs_title),
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL" => sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=up&d=".$d),
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=order&w=up&d='.$d.'&id='.$fs_id.'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL" => sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=down&d=".$d),
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=order&w=down&d='.$d.'&id='.$fs_id.'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS" => $sed_yesno[$row['fs_allowprvtopics']],
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT" => $row['fs_topiccount'],
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT" => $row['fs_postcount'],
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_VIEWCOUNT" => $row['fs_viewcount'],
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=forums&io=".$fs_id),
+				"ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL" => sed_url('forums', "m=topics&s=".$fs_id)
 			));
+
 			/* === Hook - Part2 : Include === */
 			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			{
+				foreach ($extp as $k => $pl)
+				{
+					include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+				}
+			}
 			/* ===== */
+
 			$t -> parse("FORUMS.DEFULT.ROW");
 		}
 	}
 
 	$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid<1 ORDER by fn_path ASC, fs_order ASC");
 
-	while($rowa = sed_sql_fetchassoc($sqla))
+	while ($rowa = sed_sql_fetchassoc($sqla))
 	{
 		$t -> assign(array(
-			"ADMIN_FORUMS_DEFULT_FORM_ADD_OPTION_CFS" => sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE),
-			"ADMIN_FORUMS_DEFULT_FORM_ADD_OPTION_FS_ID" => $rowa['fs_id']
+			"ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_CFS" => sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE),
+			"ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_FS_ID" => $rowa['fs_id']
 		));
 		$t -> parse("FORUMS.DEFULT.FORMADDSELECT");
 	}
 
 	$t -> assign(array(
-		"ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL" => sed_url('admin', 'm=forums&a=update&d='.$d),//��� �� �� ����� � ����� ������ "����������"
-		"ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=update&d='.$d.'ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",//��� �� �� ����� � ����� ������ "����������"
+		"ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL" => sed_url('admin', 'm=forums&a=update&d='.$d),
+		"ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=update&d='.$d.'ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",//��� �� �� ����� � ����� ������ "����������"
 		//"ADMIN_FORUMS_PAGINATION_PREV" => $pagination_prev,
 		//"ADMIN_FORUMS_PAGNAV" => $pagnav,
 		//"ADMIN_FORUMS_PAGINATION_NEXT" => $pagination_next,
 		"ADMIN_FORUMS_TOTALITEMS" => $totalitems,
 		"ADMIN_FORUMS_COUNTER_ROW" => $ii,
-		"ADMIN_FORUMS_DEFULT_FORM_ADD_URL" => sed_url('admin', "m=forums&a=add"),
-		"ADMIN_FORUMS_DEFULT_FORM_ADD_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addsection', url: '".sed_url('admin', 'm=forums&a=add&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-		"ADMIN_FORUMS_DEFULT_FORM_ADD_SELECTBOX_FORUMCAT" => sed_selectbox_forumcat('', 'ncat')
+		"ADMIN_FORUMS_DEFAULT_FORM_ADD_URL" => sed_url('admin', "m=forums&a=add"),
+		"ADMIN_FORUMS_DEFAULT_FORM_ADD_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addsection', url: '".sed_url('admin', 'm=forums&a=add&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+		"ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT" => sed_selectbox_forumcat('', 'ncat')
 	));
 	$t -> parse("FORUMS.DEFULT");
 }
@@ -427,13 +468,18 @@ $t -> assign(array(
 /* === Hook === */
 $extp = sed_getextplugins('admin.forums.tags');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
 $t -> parse("FORUMS");
 $adminmain = $t -> text("FORUMS");
 
-if($ajax)
+if ($ajax)
 {
 	sed_sendheaders();
 	echo $adminmain;

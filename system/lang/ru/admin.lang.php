@@ -12,6 +12,47 @@
 defined('SED_CODE') or die('Wrong URL.');
 
 /**
+ * Home Section
+ */
+
+$L['home_hitsmonth'] = 'Хиты за последние 15 дней';
+$L['home_pastdays'] = 'Активность за последние 7 дней';
+
+$L['home_newusers'] = 'Новые пользователи';
+$L['home_newpages'] = 'Новые страницы';
+$L['home_newtopics'] = 'Новые темы';
+$L['home_newposts'] = 'Новые сообщения на форуме';
+$L['home_newcomments'] = 'Новые комментарии';
+$L['home_newpms'] = 'Новые личные сообщения';
+
+$L['home_db_rows'] = 'БД SQL, строк';
+$L['home_db_indexsize'] = 'БД SQL, размер индекса (KB)';
+$L['home_db_datassize'] = 'БД SQL, размер данных (KB)';
+$L['home_db_totalsize'] = 'БД SQL, общий размер (KB)';
+
+$L['home_ql_b1_title'] = 'Настройки сайта';
+$L['home_ql_b1_1'] = 'Основные настройки системы';
+$L['home_ql_b1_2'] = 'Заголовки (тэг &lt;title&gt;)';
+$L['home_ql_b1_3'] = 'Скины и кодировка';
+$L['home_ql_b1_4'] = 'Слоты для меню в tpl-файлах';
+$L['home_ql_b1_5'] = 'Язык сайта ';
+$L['home_ql_b1_6'] = 'Время и дата';
+
+$L['home_ql_b2_1'] = 'Структура страниц и категорий';
+$L['home_ql_b2_2'] = 'Дополнительные поля для страниц';
+$L['home_ql_b2_3'] = 'Дополнительные поля для категорий';
+$L['home_ql_b2_4'] = 'Настройки парсинга';
+
+$L['home_ql_b3_1'] = 'Настройка пользователей';
+$L['home_ql_b3_2'] = 'Дополнительные поля для профиля';
+$L['home_ql_b3_4'] = 'Права групп';
+
+$L['home_rev_title'] = 'редакция';
+$L['home_rev'] = 'r';
+$L['home_update_notice'] = 'Доступно обновление';
+$L['home_update_revision'] = 'Текущая версия: <span style="color:#C00;font-weight:bold;">%1$s(r%2$s)</span><br />Новая версия: <span style="color:#4E9A06;font-weight:bold;">%3$s(r%4$s)</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
+
+/**
  * Config Section
  */
 
@@ -94,6 +135,8 @@ $L['cfg_cookielifetime'] = array('Срок действия cookies', 'В сек
 $L['cfg_cookiepath'] = array('Путь для cookies', 'По умолчанию пусто');
 $L['cfg_devmode'] = array('Режим отладки', 'Только для отладки под localhost');
 $L['cfg_disablehitstats'] = array('Отключить статистику', 'Рефереры и хиты за день');
+$L['cfg_disableactivitystats'] = array('Не отображать статистику активности', 'Активность за последние 7 дней<br />Отображается на главной странице управления сайтом');
+$L['cfg_disabledbstats'] = array('Не отображать статистику базы данных', 'Отображается на главной странице управления сайтом');
 $L['cfg_gzip'] = array('Gzip', 'Gzip-сжатие для исходящего HTML-кода');
 $L['cfg_hostip'] = array('IP-адрес сервера', 'Необязательно');
 $L['cfg_jquery'] = array('Включить jQuery', ' ');	// New in N-0.0.1
@@ -728,7 +771,7 @@ $L['editdeleteentries'] = 'Правка / удаление';
 $L['viewdeleteentries'] = 'Просмотр / удаление';
 
 /**
- * Extra Fields (Common Entries for Pages & Users)
+ * Extra Fields (Common Entries for Pages & Structure & Users)
  */
 
 $L['adm_extrafields'] = 'Дополнительные поля';
