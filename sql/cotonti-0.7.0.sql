@@ -87,11 +87,6 @@ INSERT INTO `sed_auth` (`auth_id`, `auth_groupid`, `auth_code`, `auth_option`, `
 (73, 3, 'page', 'news', 0, 255, 1),
 (74, 4, 'page', 'news', 7, 252, 1),
 (75, 5, 'page', 'news', 255, 255, 1),
-(76, 1, 'plug', 'adminqv', 0, 255, 1),
-(77, 2, 'plug', 'adminqv', 0, 255, 1),
-(78, 3, 'plug', 'adminqv', 0, 255, 1),
-(79, 4, 'plug', 'adminqv', 1, 254, 1),
-(80, 5, 'plug', 'adminqv', 255, 255, 1),
 (81, 1, 'plug', 'cleaner', 0, 255, 1),
 (82, 2, 'plug', 'cleaner', 0, 255, 1),
 (83, 3, 'plug', 'cleaner', 0, 255, 1),
@@ -137,7 +132,6 @@ INSERT INTO `sed_auth` (`auth_id`, `auth_groupid`, `auth_code`, `auth_option`, `
 (128, 6, 'page', 'events', 135, 0, 1),
 (129, 6, 'page', 'links', 135, 0, 1),
 (130, 6, 'page', 'news', 135, 0, 1),
-(131, 6, 'plug', 'adminqv', 1, 0, 1),
 (132, 6, 'plug', 'cleaner', 128, 255, 1),
 (133, 6, 'plug', 'forumstats', 1, 254, 1),
 (134, 6, 'plug', 'massmovetopics', 0, 255, 1),
@@ -179,7 +173,13 @@ INSERT INTO `sed_auth` (`auth_id`, `auth_groupid`, `auth_code`, `auth_option`, `
 (171, 2, 'plug', 'tags', 1, 254, 1),
 (172, 3, 'plug', 'tags', 0, 255, 1),
 (173, 4, 'plug', 'tags', 3, 124, 1),
-(174, 1, 'plug', 'tags', 1, 254, 1);
+(174, 1, 'plug', 'tags', 1, 254, 1),
+(175, 1, 'structure', 'a', 0, 255, 1),
+(176, 2, 'structure', 'a', 0, 255, 1),
+(177, 3, 'structure', 'a', 0, 255, 1),
+(178, 4, 'structure', 'a', 0, 255, 1),
+(179, 5, 'structure', 'a', 255, 255, 1),
+(180, 6, 'structure', 'a', 1, 0, 1);
 
 CREATE TABLE `sed_banlist` (
   `banlist_id` int(11) NOT NULL auto_increment,
@@ -309,6 +309,8 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'main', '10', 'cookiepath', 1, '', '', ''),
 ('core', 'main', '10', 'cookielifetime', 2, '5184000', '', ''),
 ('core', 'main', '12', 'disablehitstats', 3, '0', '', ''),
+('core', 'main', '13', 'disableactivitystats', 3, '0', '', ''),
+('core', 'main', '14', 'disabledbstats', 3, '0', '', ''),
 ('core', 'main', '20', 'shieldenabled', 3, '0', '', ''),
 ('core', 'main', '20', 'shieldtadjust', 2, '100', '', ''),
 ('core', 'main', '20', 'shieldzhammer', 2, '25', '', ''),
@@ -811,7 +813,6 @@ CREATE TABLE `sed_plugins` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=42 ;
 
 INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`, `pl_file`, `pl_order`, `pl_active`) VALUES
-(1, 'admin.home', 'adminqv', 'main', 'Admin QuickView', 'adminqv', 10, 1),
 (2, 'admin.home', 'cleaner', 'main', 'Cleaner', 'cleaner', 10, 1),
 (3, 'standalone', 'forumstats', 'main', 'Forum statistics', 'forumstats', 10, 1),
 (4, 'tools', 'massmovetopics', 'admin', 'Mass-move topics in forums', 'massmovetopics.admin', 10, 1),

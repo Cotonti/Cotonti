@@ -257,6 +257,8 @@ function sed_loadconfigmap()
     $result[] = array ('main', '10', 'cookiepath', 1, '', '');
     $result[] = array ('main', '10', 'cookielifetime', 2, '5184000', array(1800,3600,7200,14400,28800,43200,86400,172800, 259200,604800,1296000,2592000,5184000));
     $result[] = array ('main', '12', 'disablehitstats', 3, '0', '');
+    $result[] = array ('main', '13', 'disableactivitystats', 3, '0', '');// N-0.7
+    $result[] = array ('main', '14', 'disabledbstats', 3, '0', '');// N-0.7
     $result[] = array ('main', '20', 'shieldenabled', 3, '0', '');
     $result[] = array ('main', '20', 'shieldtadjust', 2, '100', array(10,25,50,75,100,125,150,200,300,400,600,800));
     $result[] = array ('main', '20', 'shieldzhammer', 2, '25', array(5,10,15,20,25,30,40,50,100));
@@ -437,7 +439,6 @@ function sed_loadconfigmap()
     $result[] = array ('rss', '02', 'rss_timetolive', 2, '30', array(0,10,20,30,40,50,60,120,180,140,200));
     $result[] = array ('rss', '03', 'rss_maxitems', 2, '40', array(5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100,150,200));
     $result[] = array ('rss', '04', 'rss_charset', 4, 'UTF-8', '');
-
     $result[] = array ('email', '01', 'email_type', 2, 'mail(Standart)', array('mail(Standart)', 'smtp'));
     $result[] = array ('email', '02', 'smtp_address', 2, '', '');
     $result[] = array ('email', '03', 'smtp_port', 2, '25', '');

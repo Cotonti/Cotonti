@@ -53,6 +53,7 @@ $allow_img['1']['1'] = $R['admin_icon_allow_locked'];
 
 $lincif_conf = sed_auth('admin', 'a', 'A');
 $lincif_page = sed_auth('page', 'any', 'A');
+$lincif_strc = sed_auth('structure', 'a', 'A');
 $lincif_user = sed_auth('users', 'a', 'A');
 
 require_once($sys['inc']);

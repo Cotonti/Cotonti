@@ -3,7 +3,7 @@
  * Administration panel - Rights by item editor
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -39,10 +39,15 @@ $L['adm_code']['users'] = $L['Users'];
 /* === Hook === */
 $extp = sed_getextplugins('admin.rightsbyitem.first');
 if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
 /* ===== */
 
-if($a == 'update')
+if ($a == 'update')
 {
 	$mask = array();
 	$auth = sed_import('auth', 'P', 'ARR');
@@ -50,17 +55,22 @@ if($a == 'update')
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.rightsbyitem.update');
 	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		}
+	}
 	/* ===== */
 
 	$sql = sed_sql_query("UPDATE $db_auth SET auth_rights=0 WHERE auth_code='$ic' AND auth_option='$io'");
 
-	foreach($auth as $i => $j)
+	foreach ($auth as $i => $j)
 	{
-		if(is_array($j))
+		if (is_array($j))
 		{
 			$mask = 0;
-			foreach($j as $l => $m)
+			foreach ($j as $l => $m)
 			{
 				$mask += sed_auth_getvalue($l);
 			}
@@ -75,9 +85,9 @@ if($a == 'update')
 }
 
 $sql = sed_sql_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
-LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
-WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC");
+	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
+	LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
+	WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC");
 
 sed_die(sed_sql_numrows($sql) == 0);
 
@@ -103,9 +113,9 @@ switch($ic)
 
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rightsbyitem.case');
-if(is_array($extp))
+if (is_array($extp))
 {
-	foreach($extp as $k => $pl)
+	foreach ($extp as $k => $pl)
 	{
 		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
@@ -119,6 +129,50 @@ $adv_columns = (!$advanced && $ic == 'page') ? 4 : $adv_columns;
 
 $l_custom1 = ($ic == 'page') ? $L['Download'] : $L['Custom'].' #1';
 
+while ($row = sed_sql_fetcharray($sql))
+{
+	$link = sed_url('admin', "m=rights&g=".$row['auth_groupid']);
+	$title = htmlspecialchars($row['grp_title']);
+	sed_rights_parseline($row, $title, $link);
+}
+
+$is_adminwarnings = isset($adminwarnings);
+$adv_for_url = ($advanced) ? '&advanced=1' : '';
+
+$t -> assign(array(
+	"ADMIN_RIGHTSBYITEM_AJAX_OPENDIVID" => 'pagtab',
+	"ADMIN_RIGHTSBYITEM_FORM_URL" => sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io.$adv_for_url),
+	"ADMIN_RIGHTSBYITEM_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saverightsbyitem', url: '".sed_url('admin','m=rightsbyitem&ajax=1&a=update&ic='.$ic.'&io='.$io.$adv_for_url)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_RIGHTSBYITEM_ADVANCED_URL" => sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
+	"ADMIN_RIGHTSBYITEM_ADV_COLUMNS" => $adv_columns,
+	"ADMIN_RIGHTSBYITEM_4ADV_COLUMNS" => 4 + $adv_columns,
+	"ADMIN_RIGHTSBYITEM_ADMINWARNINGS" => $adminwarnings
+));
+
+/* === Hook === */
+$extp = sed_getextplugins('admin.rightsbyitem.tags');
+if (is_array($extp))
+{
+	foreach ($extp as $k => $pl)
+	{
+		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	}
+}
+/* ===== */
+
+$t -> parse("RIGHTSBYITEM");
+$adminmain = $t -> text("RIGHTSBYITEM");
+
+$t -> parse("RIGHTSBYITEM_HELP");
+$adminhelp = $t -> text("RIGHTSBYITEM_HELP");
+
+if ($ajax)
+{
+	sed_sendheaders();
+	echo $adminmain;
+	exit;
+}
+
 function sed_rights_parseline($row, $title, $link)
 {
 	global $L, $advanced, $t, $out, $ic;
@@ -126,7 +180,7 @@ function sed_rights_parseline($row, $title, $link)
 	$mn['R'] = 1;
 	$mn['W'] = 2;
 
-	if($advanced || $ic == 'page')
+	if ($advanced || $ic == 'page')
 	{
 		$mn['1'] = 4;
 	}
@@ -135,7 +189,7 @@ function sed_rights_parseline($row, $title, $link)
 		$rv['1'] = 4;
 	}
 
-	if($advanced)
+	if ($advanced)
 	{
 		$mn['2'] = 8;
 		$mn['3'] = 16;
@@ -151,7 +205,7 @@ function sed_rights_parseline($row, $title, $link)
 	}
 	$mn['A'] = 128;
 
-	foreach($mn as $code => $value)
+	foreach ($mn as $code => $value)
 	{
 		$state[$code] = (($row['auth_rights'] & $value) == $value) ? TRUE : FALSE;
 		$locked[$code] = (($row['auth_rights_lock'] & $value) == $value) ? TRUE : FALSE;
@@ -169,7 +223,7 @@ function sed_rights_parseline($row, $title, $link)
 	if (!$advanced)
 	{
 		$preserve = '';
-		foreach($rv as $code => $value)
+		foreach ($rv as $code => $value)
 		{
 			if (($row['auth_rights'] & $value) == $value)
 			{
@@ -186,45 +240,6 @@ function sed_rights_parseline($row, $title, $link)
 		"ADMIN_RIGHTSBYITEM_ROW_JUMPTO" => sed_url('users', "g=".$row['auth_groupid']),
 	));
 	$t -> parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW");
-}
-
-while($row = sed_sql_fetcharray($sql))
-{
-	$link = sed_url('admin', "m=rights&g=".$row['auth_groupid']);
-	$title = htmlspecialchars($row['grp_title']);
-	sed_rights_parseline($row, $title, $link);
-}
-
-$is_adminwarnings = isset($adminwarnings);
-$adv_for_url = ($advanced) ? '&advanced=1' : '';
-
-$t -> assign(array(
-	"ADMIN_RIGHTSBYITEM_AJAX_OPENDIVID" => 'pagtab',
-	"ADMIN_RIGHTSBYITEM_FORM_URL" => sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io.$adv_for_url),
-	"ADMIN_RIGHTSBYITEM_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saverightsbyitem', url: '".sed_url('admin','m=rightsbyitem&ajax=1&a=update&ic='.$ic.'&io='.$io.$adv_for_url)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-	"ADMIN_RIGHTSBYITEM_ADVANCED_URL" => sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
-	"ADMIN_RIGHTSBYITEM_ADV_COLUMNS" => $adv_columns,
-	"ADMIN_RIGHTSBYITEM_3ADV_COLUMNS" => 3 + $adv_columns,
-	"ADMIN_RIGHTSBYITEM_ADMINWARNINGS" => $adminwarnings
-));
-
-/* === Hook === */
-$extp = sed_getextplugins('admin.rightsbyitem.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-/* ===== */
-
-$t -> parse("RIGHTSBYITEM");
-$adminmain = $t -> text("RIGHTSBYITEM");
-
-$t -> parse("RIGHTSBYITEM_HELP");
-$adminhelp = $t -> text("RIGHTSBYITEM_HELP");
-
-if($ajax)
-{
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
 }
 
 ?>

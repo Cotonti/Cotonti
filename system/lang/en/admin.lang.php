@@ -12,6 +12,47 @@
 defined('SED_CODE') or die('Wrong URL.');
 
 /**
+ * Home Section
+ */
+
+$L['home_hitsmonth'] = 'Hits for the past 15 days';
+$L['home_pastdays'] = 'Activity for the past 7 days';
+
+$L['home_newusers'] = 'New members';
+$L['home_newpages'] = 'New pages';
+$L['home_newtopics'] = 'New topics';
+$L['home_newposts'] = 'New posts';
+$L['home_newcomments'] = 'New comments';
+$L['home_newpms'] = 'New private messages';
+
+$L['home_db_rows'] = 'SQL database, number of rows';
+$L['home_db_indexsize'] = 'SQL database, index size (KB)';
+$L['home_db_datassize'] = 'SQL database, datas size (KB)';
+$L['home_db_totalsize'] = 'SQL database, total size (KB)';
+
+$L['home_ql_b1_title'] = 'Site properties';
+$L['home_ql_b1_1'] = 'Basic config';
+$L['home_ql_b1_2'] = 'Titles';
+$L['home_ql_b1_3'] = 'Skin and charset';
+$L['home_ql_b1_4'] = 'Menu slots in tpl-files';
+$L['home_ql_b1_5'] = 'Language';
+$L['home_ql_b1_6'] = 'Time and date';
+
+$L['home_ql_b2_1'] = 'Structure of the pages (categories)';
+$L['home_ql_b2_2'] = 'Extra fields for pages';
+$L['home_ql_b2_3'] = 'Extra fields for categories';
+$L['home_ql_b2_4'] = 'Parser config';
+
+$L['home_ql_b3_1'] = 'Basic config';
+$L['home_ql_b3_2'] = 'Extra fields for users';
+$L['home_ql_b3_4'] = 'User rights';
+
+$L['home_rev_title'] = 'Revision';
+$L['home_rev'] = 'r';
+$L['home_update_notice'] = 'Update Avaliable';
+$L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weight:bold;">%1$s(r%2$s)</span><br />New Version: <span style="color:#4E9A06;font-weight:bold;">%3$s(r%4$s)</span>'; // %1/%2 Current Version/Revision %3/%4 Updated Version/Revision
+
+/**
  * Config Section
  */
 
@@ -94,6 +135,8 @@ $L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
 $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
 $L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
 $L['cfg_disablehitstats'] = array('Disable hit statistics', 'Referers and hits per day');
+$L['cfg_disableactivitystats'] = array('Do not display statistics of activity', 'Activity for the last 7 days<br />Displayed on the home page administration panel');
+$L['cfg_disabledbstats'] = array('Do not display database statistics', 'Displayed on the home page administration panel');
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
 $L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
 $L['cfg_jquery'] = array('Enable jQuery', '');	// New in N-0.0.1
@@ -729,7 +772,7 @@ $L['editdeleteentries'] = 'Edit or delete entries';
 $L['viewdeleteentries'] = 'View or delete entries';
 
 /**
- * Extra Fields (Common Entries for Pages & Users)
+ * Extra Fields (Common Entries for Pages & Structure & Users)
  */
 
 $L['adm_extrafields'] = 'Extra fields';
