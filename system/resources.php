@@ -49,6 +49,7 @@ $R['admin_icon_discheck1'] = '<img class="icon" src="images/admin/discheck1.png"
 $R['admin_icon_diskcache'] = '<img class="icon" src="images/admin/folder.png" alt="" />';
 $R['admin_icon_events'] = '<img class="icon" src="images/admin/events.png" alt="" />';
 $R['admin_icon_folder'] = '<img class="icon" src="images/admin/folder.png" alt="" />';
+$R['admin_icon_subfolder'] = '<img class="icon" src="images/admin/subfolder.png" alt="" />';
 $R['admin_icon_forums'] = '<img class="icon" src="images/admin/forums.png" alt="" />';
 $R['admin_icon_forums_posts'] = '<img class="icon" src="images/admin/forums.png" alt="" />';
 $R['admin_icon_forums_topics'] = '<img class="icon" src="images/admin/forums.png" alt="" />';
