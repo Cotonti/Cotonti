@@ -153,7 +153,8 @@
 		<form name="updateorder" id="updateorder" action="{ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL}" method="post"{ADMIN_FORUMS_DEFULT_FORM_UPDATEORDER_URL_AJAX}>
 		<table class="cells">
 			<tr>
-				<td class="coltop" style="width:30%;">{PHP.L.Section} {PHP.L.adm_clicktoedit}</td>
+				<td class="coltop" style="width:5%;"></td>
+				<td class="coltop" style="width:25%;">{PHP.L.Section} {PHP.L.adm_clicktoedit}</td>
 				<td class="coltop" style="width:10%;">{PHP.L.Order}</td>
 				<td class="coltop" style="width:15%;">{PHP.L.adm_enableprvtopics}</td>
 				<td class="coltop" style="width:10%;">{PHP.L.Topics}</td>
@@ -164,10 +165,11 @@
 <!-- BEGIN: ROW -->
 <!-- IF {PHP.show_fn} -->
 			<tr>
-				<td class="strong" colspan="7"><a href="{ADMIN_FORUMS_DEFULT_ROW_FN_URL}">{ADMIN_FORUMS_DEFULT_ROW_FN_TITLE} ({ADMIN_FORUMS_DEFULT_ROW_FN_PATH})</a></td>
+				<td class="strong" colspan="8"><a href="{ADMIN_FORUMS_DEFULT_ROW_FN_URL}">{ADMIN_FORUMS_DEFULT_ROW_FN_TITLE} ({ADMIN_FORUMS_DEFULT_ROW_FN_PATH})</a></td>
 			</tr>
 <!-- ENDIF -->
 			<tr>
+				<td class="centerall">{PHP.R.admin_icon_folder}</td>
 				<td><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFULT_ROW_FS_TITLE}</a></td>
 				<td class="centerall"><a title="{PHP.L.Up}" href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL_AJAX}>{PHP.sed_img_up}</a> <a title="{PHP.L.Down}" href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL_AJAX}>{PHP.sed_img_down}</a></td>
 				<td class="centerall">{ADMIN_FORUMS_DEFULT_ROW_FS_ALLOWPRVTOPICS}</td>
@@ -182,19 +184,18 @@
 			</tr>
 <!-- BEGIN: FCACHE -->
 			<tr>
-				<td>
-<!-- IF {PHP.usr.isadmin} -->
-					[<a href="{ADMIN_FORUMS_DEFULT_ROW_DELETE_URL}"{ADMIN_FORUMS_DEFULT_ROW_DELETE_URL_AJAX}>x</a>]
-<!-- ENDIF -->
+				<td class="centerall">{PHP.R.admin_icon_subfolder}</td>
+				<td><span class="spaced">&ndash;</span><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFULT_ROW_FS_TITLE}</a></td>
+				<td class="centerall"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL_AJAX}>{PHP.sed_img_up}</a> <a href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL_AJAX}>{PHP.sed_img_down}</a></td>
+				<td class="centerall">{ADMIN_FORUMS_DEFULT_ROW_FS_ALLOWPRVTOPICS}</td>
+				<td class="centerall">{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICCOUNT}</td>
+				<td class="centerall">{ADMIN_FORUMS_DEFULT_ROW_FS_POSTCOUNT}</td>
+				<td class="centerall">{ADMIN_FORUMS_DEFULT_ROW_FS_VIEWCOUNT}</td>
+				<td class="centerall action">
+					<a href="{ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
+					<a href="{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL}">{PHP.R.admin_icon_jumpto}</a>
+					<!-- IF {PHP.usr.isadmin} --><a href="{ADMIN_FORUMS_DEFULT_ROW_DELETE_URL}"{ADMIN_FORUMS_DEFULT_ROW_DELETE_URL_AJAX}>{PHP.R.admin_icon_delete}</a><!-- ENDIF -->
 				</td>
-				<td><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFULT_ROW_FS_TITLE}</a></td>
-				<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_UP_URL_AJAX}>{PHP.sed_img_up}</a> <a href="{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL}"{ADMIN_FORUMS_DEFULT_ROW_FS_ORDER_DOWN_URL_AJAX}>{PHP.sed_img_down}</a></td>
-				<td style="text-align:center;">{ADMIN_FORUMS_DEFULT_ROW_FS_ALLOWPRVTOPICS}</td>
-				<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICCOUNT}</td>
-				<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_POSTCOUNT}</td>
-				<td style="text-align:right;">{ADMIN_FORUMS_DEFULT_ROW_FS_VIEWCOUNT}</td>
-				<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a></td>
-				<td style="text-align:center;"><a href="{ADMIN_FORUMS_DEFULT_ROW_FS_TOPICS_URL}">{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
 <!-- END: FCACHE -->
 <!-- END: ROW -->
