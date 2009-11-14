@@ -326,6 +326,7 @@ $L['cfg_title_users_details'] = array('Users Details title', 'Options: {USER}, {
 $L['cfg_title_users_edit'] = array('Users Edit title', 'Options: {EDIT}, {NAME}');
 $L['cfg_title_users_main'] = array('Users Main title', 'Options: {USERS}');
 $L['cfg_title_users_profile'] = array('Users Profile title', 'Options: {PROFILE}, {NAME}');
+$L['cfg_title_users_pasrec'] = array('Users - password Recoveryÿ', 'Options: {PASSRECOVER}');
 
 /**
  * Config Section

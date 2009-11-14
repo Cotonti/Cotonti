@@ -325,6 +325,7 @@ $L['cfg_title_users_details'] = array('Пользователи - просмот
 $L['cfg_title_users_edit'] = array('Пользователи - редактирование пользователя', 'Опции: {EDIT}, {NAME}');
 $L['cfg_title_users_main'] = array('Пользователи - главная', 'Опции: {USERS}');
 $L['cfg_title_users_profile'] = array('Пользователи - редактирование профиля', 'Опции: {PROFILE}, {NAME}');
+$L['cfg_title_users_pasrec'] = array('Пользователи - восстановление пароля', 'Опции: {PASSRECOVER}');
 
 /**
  * Config Section

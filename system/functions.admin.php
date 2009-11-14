@@ -432,8 +432,9 @@ function sed_loadconfigmap()
     $result[] = array ('title', '14', 'title_users_details', 1, '{USER} - {NAME}', '');
     $result[] = array ('title', '15', 'title_users_profile', 1, '{PROFILE}', '');
     $result[] = array ('title', '16', 'title_users_edit', 1, '{NAME}', '');
-    $result[] = array ('title', '17', 'title_header', 1, '{MAINTITLE} - {SUBTITLE}', '');
-    $result[] = array ('title', '18', 'title_header_index', 1, '{MAINTITLE} - {DESCRIPTION}', '');
+    $result[] = array ('title', '17', 'title_users_pasrec', 1, '{PASSRECOVER}', '');
+    $result[] = array ('title', '18', 'title_header', 1, '{MAINTITLE} - {SUBTITLE}', '');
+    $result[] = array ('title', '19', 'title_header_index', 1, '{MAINTITLE} - {DESCRIPTION}', '');
     // N-0.7
     $result[] = array ('rss', '01', 'disable_rss', 3, '0', '');
     $result[] = array ('rss', '02', 'rss_timetolive', 2, '30', array(0,10,20,30,40,50,60,120,180,140,200));
