@@ -512,7 +512,7 @@ $L['adm_opt_setoption_warn'] = 'Options found for this plugin. Would you like to
 $L['adm_opt_uninstall_warn'] = 'You can delete this plugin without deleting old settings (rights and options). Click if you want to.';	// New in N-0.0.2
 $L['adm_opt_setup_missing'] = 'Error: setup file missing!';	// New in N-0.0.6
 
-$L['adm_pluginstall_msg01'] = 'Deleting old installation of this plugin...';	// New in N-0.0.6
+$L['adm_pluginstall_msg01'] = 'Configuring plugin...';	// New in N-0.0.6
 $L['adm_pluginstall_msg02'] = 'Deleting old configuration entries...';	// New in N-0.0.6
 $L['adm_pluginstall_msg03'] = 'Looking for the setup file...';	// New in N-0.0.6
 $L['adm_pluginstall_msg04'] = 'Looking for parts...';	// New in N-0.0.6

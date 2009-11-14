@@ -26,8 +26,8 @@
                 <div id="userBar">
 
 	                 <!-- BEGIN: GUEST -->
-                    <div class="userBarR"><a href="users.php?m=auth">{PHP.L.Login}</a>&nbsp;&#8226;&nbsp;<a href="users.php?m=register">{PHP.L.Register}</a>&nbsp;&#8226;&nbsp;<a href="users.php?m=passrecover">{PHP.skinlang.header.Lostyourpassword}</a></div>
-                    <strong>{PHP.skinlang.header.Welcome}</strong>
+                    <div class="userBarR"><a href="users.php?m=auth">{PHP.L.Login}</a>&nbsp;&#8226;&nbsp;<a href="users.php?m=register">{PHP.L.Register}</a>&nbsp;&#8226;&nbsp;<a href="users.php?m=passrecover">{PHP.L.hea_lostpass}</a></div>
+                    <strong>{PHP.L.hea_welcome}!</strong>
 	                <!-- END: GUEST -->
 
 	                <!-- BEGIN: USER -->

@@ -63,13 +63,6 @@ $skinlang['forumstopics']['Newannouncment'] = 'New announcement';
 $skinlang['forumstopics']['Movedoutofthissection'] = 'Moved out of this section';
 
 /**
- * header.tpl
- */
-
-$skinlang['header']['Lostyourpassword'] = 'Lost your password?';
-$skinlang['header']['Welcome'] = 'Welcome!';	// New in N-0.0.1
-
-/**
  * index.tpl
  */
 
