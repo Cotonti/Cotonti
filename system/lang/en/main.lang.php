@@ -30,7 +30,6 @@ $L['Alias'] = 'Alias';
 $L['All'] = 'All';
 $L['Allcategories'] = 'All categories';
 $L['Allpages'] = 'All pages';
-//$L['Alltimesare'] = 'All times are'; // Deprecated in N-0.1.0
 $L['Announcement'] = 'Announcement';
 $L['Anonymous'] = 'Anonymous';
 $L['Archives'] = 'Archives';
@@ -68,6 +67,7 @@ $L['Core'] = 'Core';
 $L['Count'] = 'Count';
 $L['Country'] = 'Country';
 $L['Create'] = 'Create';
+$L['Crumbs'] = 'You\'re here';	// New in 0.7.0
 $L['Custom'] = 'Custom';
 $L['Database'] = 'Database';
 $L['Date'] = 'Date';
@@ -344,10 +344,8 @@ $Ls['Days'] = array('days','day');
 $Ls['Hours'] = array('hours','hour');
 $Ls['Minutes'] = array('minutes','minute');
 $Ls['Seconds'] = array('seconds','second');
-
 $Ls['Guests'] = array('guests','guest');
 $Ls['Members'] = array('members','member');
-
 $Ls['Privatemessages'] = array('new private messages','new private message');
 
 /**
@@ -386,8 +384,11 @@ $L['com_themefail'] = 'Warning, failed to load your prefered theme for the prefe
  * Header
  */
 
+$L['hea_lostpass'] = 'Lost your password?';
 $L['hea_noprivatemessages'] = 'No private messages';
 $L['hea_valqueues'] = 'In validation queues: ';
+$L['hea_viewsite'] = 'View Website';	// New in 0.7.0
+$L['hea_welcome'] = 'Welcome';
 $L['hea_youareloggedas'] = 'Logged in as';
 $L['hea_youarenotlogged'] = 'You\'re not logged in.';
 
@@ -450,7 +451,7 @@ To change your recent e-mail please use this activation link:
  * Comments
  */
 
-$L['com_closed'] = 'Adding comments has been disabled for this item';	// 0.0.6
+$L['com_closed'] = 'Adding comments has been disabled for this item';	// New in 0.1.0
 $L['com_commentadded'] = 'Done, comment added';
 $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commenttooshort'] = 'The comment is too short or missing';

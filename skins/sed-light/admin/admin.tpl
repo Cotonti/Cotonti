@@ -14,7 +14,7 @@
 		<li id="am12">{PHP.out.loginout}</li>
 	</ul>
 
-	<h1>You're here: {ADMIN_TITLE}</h1>
+	<h1>{PHP.L.Crumbs}: {ADMIN_TITLE}</h1>
 
 	<div id="main" class="clear">
 		{ADMIN_MAIN}

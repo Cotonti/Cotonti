@@ -22,8 +22,8 @@
 <div id="container">
 
 	<ul id="user">
-		<li id="hi">Welcome, <a href="users.php?m=profile">{PHP.usr.name}</a> &nbsp; | &nbsp; {HEADER_USER_PMREMINDER}</li>
-		<li><a href="{PHP.cfg.mainurl}">View Website</a></li>
+		<li id="hi">{PHP.L.hea_welcome}, <a href="users.php?m=profile">{PHP.usr.name}</a> &nbsp; | &nbsp; {HEADER_USER_PMREMINDER}</li>
+		<li><a href="{PHP.cfg.mainurl}">{PHP.L.hea_viewsite}</a></li>
 	</ul>
 
 <!-- END: HEADER -->

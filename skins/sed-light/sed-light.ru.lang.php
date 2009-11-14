@@ -63,13 +63,6 @@ $skinlang['forumstopics']['Newannouncment'] = 'Новые обьявления';
 $skinlang['forumstopics']['Movedoutofthissection'] = 'Перенесена в другой раздел';
 
 /**
- * header.tpl
- */
-
-$skinlang['header']['Lostyourpassword'] = 'Восстановить пароль';
-$skinlang['header']['Welcome'] = 'Добро пожаловать!';
-
-/**
  * index.tpl
  */
 
