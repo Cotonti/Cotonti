@@ -232,6 +232,11 @@ $sys['site_id'] = $site_id;
 
 session_start();
 
+if (!defined('SED_MESSAGE'))
+{
+	$_SESSION['s_run_admin'] = defined('SED_ADMIN');
+}
+
 if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
 	$u = empty($_SESSION[$site_id]) ? base64_decode($_COOKIE[$site_id]) : base64_decode($_SESSION[$site_id]);

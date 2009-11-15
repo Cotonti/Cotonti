@@ -4450,75 +4450,94 @@ function sed_shield_update($shield_add, $shield_newaction)
  * Returns skin file path
  *
  * @param mixed $base Item name (string), or base names (array)
+ * @param mixed $plug Plugin flag (bool), or '+' (string) to probe plugin
+ * @param bool $admn Admin flag
  * @return string
  */
 function sed_skinfile($base, $plug = false, $admn = false)
 {
 	global $usr, $cfg;
+
 	if (is_string($base) && mb_strpos($base, '.') !== false)
 	{
 		$base = explode('.', $base);
 	}
-	$bname = is_array($base) ? $base[0] : $base;
-	if($admn)
+	if (!is_array($base))
 	{
-		$scan_prefix[] = './skins/'.$usr['skin'].'/admin/';
-		if ($usr['skin'] != $cfg['defaultskin'])
-		{
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/admin/';
-		}
-		if ($plug)
-		{
-			$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname.'/tpl/admin/';
-		}
-	}
-	elseif($plug)
-	{
-		$scan_prefix[] = './skins/'.$usr['skin'].'/plugins/';
-		$scan_prefix[] = './skins/'.$usr['skin'].'/plugin.standalone.';
-		if ($usr['skin'] != $cfg['defaultskin'])
-		{
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugins/';
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugin.standalone.';
-		}
-		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname.'/tpl/';
-		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname .'/';
-	}
-	$scan_prefix[] = 'skins/'.$usr['skin'].'/';
-	if ($usr['skin'] != $cfg['defaultskin'])
-	{
-		$scan_prefix[] = 'skins/'.$cfg['defaultskin'].'/';
+		$base = array($base);
 	}
 
-
-	if (is_array($base))
+	if (defined('SED_MESSAGE') && $_SESSION['s_run_admin'])
 	{
-		$base_depth = count($base);
-		for ($i = $base_depth; $i > 0; $i--)
+		$plug = false;
+		$admn = true;
+	}
+
+	if ($plug === '+')
+	{
+		$plug = false;
+		if (defined('SED_PLUG'))
 		{
-			$levels = array_slice($base, 0, $i);
-			$skinfile = implode('.', $levels).'.tpl';
-			foreach ($scan_prefix as $pfx)
+			global $e;
+
+			if (!empty($e))
 			{
-				if (file_exists($pfx . $skinfile))
+				$plug = true;
+				$pluname = $e;
+				if ($cfg['enablecustomhf'])
 				{
-					return $pfx . $skinfile;
+					$base[] = $e;
 				}
 			}
 		}
 	}
-	else
+	elseif ($plug === true)
 	{
+		$pluname = $base[0];
+	}
+
+	if ($admn)
+	{
+		$scan_prefix[] = './skins/' . $usr['skin'] . '/admin/';
+		if ($usr['skin'] != $cfg['defaultskin'])
+		{
+			$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/admin/';
+		}
+		if ($plug)
+		{
+			$scan_prefix[] = $cfg['plugins_dir'] . '/' . $pluname . '/tpl/admin/';
+		}
+	}
+	elseif ($plug)
+	{
+		$scan_prefix[] = './skins/' . $usr['skin'] . '/plugins/';
+		if ($usr['skin'] != $cfg['defaultskin'])
+		{
+			$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/plugins/';
+		}
+		$scan_prefix[] = $cfg['plugins_dir'] . '/' . $pluname . '/tpl/';
+	}
+	$scan_prefix[] = './skins/' . $usr['skin'] . '/';
+	if ($usr['skin'] != $cfg['defaultskin'])
+	{
+		$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/';
+	}
+
+	$base_depth = count($base);
+	for ($i = $base_depth; $i > 0; $i--)
+	{
+		$levels = array_slice($base, 0, $i);
+		$skinfile = implode('.', $levels) . '.tpl';
 		foreach ($scan_prefix as $pfx)
 		{
-			if (file_exists($pfx . $base . '.tpl'))
+			if (file_exists($pfx . $skinfile))
 			{
-				return $pfx . $base . '.tpl';
+				return $pfx . $skinfile;
 			}
 		}
 	}
-	//$skinfile = is_array($base) ? implode('.', $base) . '.tpl' : $base . '.tpl';
-	//throw new Exception("Template file <em>$skinfile</em> was not found. Please check your skin!");
+
+//	throw new Exception('Template file <em>' . implode('.', $base) . '.tpl</em> was not found. Please check your skin.');
 	return '';
 }
 
