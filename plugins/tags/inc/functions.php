@@ -123,7 +123,7 @@ function sed_tag_search_pages($query)
 	$sql = sed_sql_query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
-		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0
+		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
@@ -192,7 +192,7 @@ function sed_tag_search_forums($query)
 			ON r.tag_item = t.ft_id
 		LEFT JOIN $db_forum_sections AS s
 			ON t.ft_sectionid = s.fs_id
-		WHERE r.tag_area = 'forums' AND ($query)
+		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
