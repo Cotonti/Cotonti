@@ -1654,7 +1654,8 @@ function sed_build_ratings($code, $url, $display)
 	{
 		$rcode = sed_import('rcode', 'G', 'ALP');
 		if (!empty($rcode))
-		{			$code = $rcode;
+		{
+			$code = $rcode;
 		}
 	}
 
@@ -1665,10 +1666,12 @@ function sed_build_ratings($code, $url, $display)
 		$rating_average = $row['rating_average'];
 		$yetrated = TRUE;
 		if($rating_average<1)
-		{			$rating_average = 1;
+		{
+			$rating_average = 1;
 		}
 		elseif ($rating_average>10)
-		{			$rating_average = 10;
+		{
+			$rating_average = 10;
 		}
 		$rating_cntround = round($rating_average, 0);
 	}
@@ -1720,8 +1723,10 @@ function sed_build_ratings($code, $url, $display)
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.first');
 		if (is_array($extp))
-		{			foreach ($extp as $k => $pl)
-			{				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		{
+			foreach ($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			}
 		}
 		/* ===== */
@@ -1749,8 +1754,10 @@ function sed_build_ratings($code, $url, $display)
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.done');
 		if (is_array($extp))
-		{			foreach ($extp as $k => $pl)
-			{				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+		{
+			foreach ($extp as $k => $pl)
+			{
+				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 			}
 		}
 		/* ===== */
@@ -1783,8 +1790,10 @@ function sed_build_ratings($code, $url, $display)
 	/* == Hook for the plugins == */
 	$extp = sed_getextplugins('ratings.main');
 	if (is_array($extp))
-	{		foreach ($extp as $k => $pl)
-		{			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 		}
 	}
 	/* ===== */
@@ -1798,10 +1807,12 @@ function sed_build_ratings($code, $url, $display)
 		$rating_average = $row['rating_average'];
 		$rating_since = $L['rat_since']." ".date($cfg['dateformat'], $row['rating_creationdate'] + $usr['timezone'] * 3600);
 		if ($rating_average<1)
-		{			$rating_average = 1;
+		{
+			$rating_average = 1;
 		}
 		elseif ($ratingaverage > 10)
-		{			$rating_average = 10;
+		{
+			$rating_average = 10;
 		}
 
 		$rating = round($rating_average,0);
@@ -1831,8 +1842,10 @@ function sed_build_ratings($code, $url, $display)
 	/* == Hook for the plugins == */
 	$extp = sed_getextplugins('ratings.tags');
 	if (is_array($extp))
-	{		foreach ($extp as $k => $pl)
-		{			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+	{
+		foreach ($extp as $k => $pl)
+		{
+			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 		}
 	}
 	/* ===== */
@@ -5784,5 +5797,4 @@ define('SED_CHECKPOINT_LOCALS', '$debug_fp = fopen(SED_DEBUG_LOGFILE, "a");
 	fputs($debug_fp, "----------------\n");
 	fclose($debug_fp);'
 );
-
 ?>
