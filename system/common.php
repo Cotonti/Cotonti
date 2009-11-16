@@ -483,38 +483,40 @@ $out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['who
 
 $usr['skin_raw'] = $usr['skin'];
 
-if (@file_exists('skins/'.$usr['skin'].'.'.$usr['lang'].'/header.tpl'))
-{ $usr['skin'] = $usr['skin'].'.'.$usr['lang']; }
+if (@file_exists('./skins/'.$usr['skin'].'.'.$usr['lang'].'/header.tpl'))
+{
+	$usr['skin'] = $usr['skin'].'.'.$usr['lang'];
+}
 
-$mskin = 'skins/'.$usr['skin'].'/header.tpl';
-
+$mskin = './skins/'.$usr['skin'].'/header.tpl';
 if (!file_exists($mskin))
 {
 	$out['notices'] .= $L['com_skinfail'].'<br />';
 	$usr['skin'] = $cfg['defaultskin'];
-	$mskin = 'skins/'.$usr['skin'].'/header.tpl';
-
+	$mskin = './skins/'.$usr['skin'].'/header.tpl';
 	if (!file_exists($mskin))
-	{ sed_diefatal('Default skin not found.'); }
+	{
+		sed_diefatal('Default skin not found.');
+	}
 }
 
 $mtheme = sed_themefile();
-
 if (!$mtheme)
 {
 	sed_diefatal('Default theme not found.');
 }
 
 $usr['def_skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.en.lang.php';
-
 if (@file_exists($usr['def_skin_lang']))
-{ require_once($usr['def_skin_lang']); }
-
+{
+	require_once($usr['def_skin_lang']);
+}
 
 $usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
-
-if ($usr['skin_lang']!=$usr['def_skin_lang'] && @file_exists($usr['skin_lang']))
-{ require_once($usr['skin_lang']); }
+if ($usr['skin_lang'] != $usr['def_skin_lang'] && @file_exists($usr['skin_lang']))
+{
+	require_once($usr['skin_lang']);
+}
 
 $skin = $usr['skin'];
 $theme = $usr['theme'];
