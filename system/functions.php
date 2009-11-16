@@ -4232,10 +4232,10 @@ function sed_selectbox_sections($check, $name)
  */
 function sed_selectbox_skin($check, $name)
 {
-	$handle = opendir('skins/');
+	$handle = opendir('./skins/');
 	while ($f = readdir($handle))
 	{
-		if (mb_strpos($f, '.') === FALSE && is_dir('skins/' . $f))
+		if (mb_strpos($f, '.') === FALSE && is_dir('./skins/' . $f))
 		{ $skinlist[] = $f; }
 	}
 	closedir($handle);
@@ -4245,7 +4245,7 @@ function sed_selectbox_skin($check, $name)
 	while(list($i,$x) = each($skinlist))
 	{
 		$selected = ($x==$check) ? 'selected="selected"' : '';
-		$skininfo = "skins/$x/$x.php";
+		$skininfo = "./skins/$x/$x.php";
 		if (file_exists($skininfo))
 		{
 			$info = sed_infoget($skininfo);
@@ -4276,7 +4276,7 @@ function sed_selectbox_theme($skinname, $name, $theme)
 
 	if(empty($skin_themes))
 	{
-		if(file_exists("skins/$skinname/$skinname.css"))
+		if(file_exists("./skins/$skinname/$skinname.css"))
 		{
 			$skin_themes = array($skinname => $skinname);
 		}
@@ -4946,57 +4946,57 @@ function sed_themefile()
 {
 	global $usr, $cfg, $out;
 
-	if(file_exists('skins/'.$usr['skin'].'/'.$usr['theme'].'.css'))
+	if (file_exists('./skins/'.$usr['skin'].'/'.$usr['theme'].'.css'))
 	{
-		return 'skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
+		return './skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
 	}
-	elseif(file_exists('skins/'.$usr['skin'].'/css/'))
+	elseif (file_exists('./skins/'.$usr['skin'].'/css/'))
 	{
-		if(file_exists('skins/'.$usr['skin'].'/css/'.$usr['theme'].'.css'))
+		if (file_exists('./skins/'.$usr['skin'].'/css/'.$usr['theme'].'.css'))
 		{
-			return 'skins/'.$usr['skin'].'/css/'.$usr['theme'].'.css';
+			return './skins/'.$usr['skin'].'/css/'.$usr['theme'].'.css';
 		}
-		elseif(file_exists('skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css'))
+		elseif (file_exists('./skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css'))
 		{
 			$out['notices'] .= $L['com_themefail'];
 			$usr['theme'] = $cfg['defaulttheme'];
-			return 'skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css';
+			return './skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css';
 		}
 	}
-	elseif(file_exists('skins/'.$usr['skin']))
+	elseif (file_exists('./skins/'.$usr['skin']))
 	{
-		if(file_exists('skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css'))
+		if (file_exists('./skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css'))
 		{
 			$out['notices'] .= $L['com_themefail'];
 			$usr['theme'] = $cfg['defaulttheme'];
-			return 'skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css';
+			return './skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css';
 		}
-		elseif(file_exists('skins/'.$usr['skin'].'/'.$usr['skin'].'.css'))
+		elseif (file_exists('./skins/'.$usr['skin'].'/'.$usr['skin'].'.css'))
 		{
 			$out['notices'] .= $L['com_themefail'];
 			$usr['theme'] = $usr['skin'];
-			return 'skins/'.$usr['skin'].'/'.$usr['skin'].'.css';
+			return './skins/'.$usr['skin'].'/'.$usr['skin'].'.css';
 		}
-		elseif(file_exists('skins/'.$usr['skin'].'/style.css'))
+		elseif (file_exists('./skins/'.$usr['skin'].'/style.css'))
 		{
 			$out['notices'] .= $L['com_themefail'];
 			$usr['theme'] = 'style';
-			return 'skins/'.$usr['skin'].'/style.css';
+			return './skins/'.$usr['skin'].'/style.css';
 		}
 	}
 
 	$out['notices'] .= $L['com_themefail'];
-	if(file_exists('skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css'))
+	if (file_exists('./skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css'))
 	{
 		$usr['skin'] = $cfg['defaultskin'];
 		$usr['theme'] = $cfg['defaulttheme'];
-		return 'skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css';
+		return './skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css';
 	}
-	elseif(file_exists('skins/'.$cfg['defaultskin'].'/css/'.$cfg['defaulttheme'].'.css'))
+	elseif (file_exists('./skins/'.$cfg['defaultskin'].'/css/'.$cfg['defaulttheme'].'.css'))
 	{
 		$usr['skin'] = $cfg['defaultskin'];
 		$usr['theme'] = $cfg['defaulttheme'];
-		return 'skins/'.$cfg['defaultskin'].'/css/'.$cfg['defaulttheme'].'.css';
+		return './skins/'.$cfg['defaultskin'].'/css/'.$cfg['defaulttheme'].'.css';
 	}
 	else
 	{

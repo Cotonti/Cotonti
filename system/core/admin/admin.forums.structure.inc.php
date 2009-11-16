@@ -81,7 +81,7 @@ if($n == 'options')
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure WHERE fn_id='$id' LIMIT 1");
 	sed_die(sed_sql_numrows($sql) == 0);
 
-	$handle = opendir("skins/".$cfg['defaultskin']."/");
+	$handle = opendir('./skins/'.$cfg['defaultskin'].'/');
 	$allskinfiles = array();
 
 	while($f = readdir($handle))
