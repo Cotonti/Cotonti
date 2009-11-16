@@ -314,7 +314,7 @@ else
         $row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
 
 		$items[$i]['title'] = $row['page_title'];
-		$items[$i]['link'] = $row['page_pageurl'];
+		$items[$i]['link'] = SED_ABSOLUTE_URL . $row['page_pageurl'];
 		$items[$i]['pubDate'] = date('r', $row['page_date']);
 		$items[$i]['description'] = sed_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
 
