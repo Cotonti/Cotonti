@@ -14,6 +14,12 @@ define('SED_INDEX', TRUE);
 $location = 'Home';
 $z = 'index';
 
+if(!file_exists('./datas/config.php'))
+{
+	header('Location: install.php');
+	exit;
+}
+
 require_once('./datas/config.php');
 
 if($cfg['new_install'])
