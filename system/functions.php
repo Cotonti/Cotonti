@@ -3984,18 +3984,6 @@ function sed_skinfile($base, $plug = false, $admn = false)
 		$base = explode('.', $base);
 	}
 	$bname = is_array($base) ? $base[0] : $base;
-	if($plug || !$admn)
-	{
-		$scan_prefix[] = './skins/'.$usr['skin'].'/plugins/';
-		$scan_prefix[] = './skins/'.$usr['skin'].'/plugin.standalone.';
-		if ($usr['skin'] != $cfg['defaultskin'])
-		{
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugins/';
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugin.standalone.';
-		}
-		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname.'/tpl/';
-		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname .'/';
-	}
 	if($admn)
 	{
 		$scan_prefix[] = './skins/'.$usr['skin'].'/admin/';
@@ -4007,6 +3995,18 @@ function sed_skinfile($base, $plug = false, $admn = false)
 		{
 			$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname.'/tpl/admin/';
 		}
+	}
+	elseif($plug)
+	{
+		$scan_prefix[] = './skins/'.$usr['skin'].'/plugins/';
+		$scan_prefix[] = './skins/'.$usr['skin'].'/plugin.standalone.';
+		if ($usr['skin'] != $cfg['defaultskin'])
+		{
+			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugins/';
+			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugin.standalone.';
+		}
+		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname.'/tpl/';
+		$scan_prefix[] = $cfg['plugins_dir'].'/'.$bname .'/';
 	}
 	$scan_prefix[] = 'skins/'.$usr['skin'].'/';
 	if ($usr['skin'] != $cfg['defaultskin'])
