@@ -192,8 +192,7 @@ if ($n == 'options')
 		sed_cache_clear('sed_cat');
 
 		//$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=structure&d='.$d.$additionsforurl, '', true));
-		exit;
+		sed_redirect(sed_url('admin', 'm=structure&d='.$d.$additionsforurl, '', true));
 	}
 	elseif ($a == 'resync')
 	{

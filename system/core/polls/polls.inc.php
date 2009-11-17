@@ -98,8 +98,7 @@ else
 	$id = sed_import($id,'D','INT');
 	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index' "), 0, 0) != 1)
 	{
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('message', 'msg=404', '', TRUE));
-		exit;
+		sed_redirect(sed_url('message', 'msg=404', '', TRUE));
 	}
 	sed_poll_vote();
 	list($polltitle, $poll_form)=sed_poll_form($id);

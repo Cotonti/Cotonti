@@ -127,8 +127,7 @@ if ($row = sed_sql_fetcharray($sql))
 
 	if ($fs_state)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=602", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=602", '', true));
 	}
 }
 else
@@ -232,8 +231,7 @@ if ($a=='newpost')
 
 			sed_forum_sectionsetlast($s);
 			sed_shield_update(30, "New post");
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
 		}
 		else
 		{
@@ -270,8 +268,7 @@ if ($a=='newpost')
 
 			sed_forum_sectionsetlast($s);
 			sed_shield_update(30, "New post");
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
 		}
 	}
 }
@@ -365,8 +362,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			sed_log("Delete topic #".$q." (no post left)",'for');
 			sed_forum_sectionsetlast($s);
 		}
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-		exit;
+		sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 	}
 	else
 	{
@@ -406,8 +402,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 			if ($row = sed_sql_fetcharray($sql))
 			{
-				header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&p=".$row['fp_id'], '#'.$row['fp_id'], true));
-				exit;
+				sed_redirect(sed_url('forums', "m=posts&p=".$row['fp_id'], '#'.$row['fp_id'], true));
 			}
 		}
 	}

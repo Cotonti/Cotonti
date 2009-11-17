@@ -63,8 +63,7 @@ sed_block($usr['auth_read']);
 if ($pag['page_state'] == 1 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 {
 	sed_log("Attempt to directly access an un-validated page", 'sec');
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930", '', true));
-	exit;
+	sed_redirect(sed_url('message', "msg=930", '', true));
 }
 if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 {
@@ -92,8 +91,7 @@ if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a 
 
 	if ($_SESSION['dl'] != $pag['page_id'])
 	{
-		header('Location: ' . SED_ABSOLUTE_URL . $pag['page_pageurl']);
-		exit;
+		sed_redirect($pag['page_pageurl']);
 	}
 
 	unset($_SESSION['dl']);
@@ -104,18 +102,10 @@ if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a 
 		$pag['page_filecount']++;
 		$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$pag['page_id']);
 	}
-	if (preg_match('#^(http|ftp)s?://#', $pag['page_url']))
-	{
-		header("Location: ".$pag['page_url']);
-		echo "<script type='text/javascript'>location.href='".$pag['page_url']."';</script>Redirecting...";
-		exit;
-	}
-	else
-	{
-		header('Location: ' . SED_ABSOLUTE_URL . $pag['page_url']);
-		echo "<script type='text/javascript'>location.href='". SED_ABSOLUTE_URL . $pag['page_url']."';</script>Redirecting...";
-		exit;
-	}
+	$redir = (preg_match('#^(http|ftp)s?://#', $pag['page_url']) ? '' : SED_ABSOLUTE_URL) . $pag['page_url'];
+	header('Location: ' . $redir);
+	echo "<script type='text/javascript'>location.href='" . $redir . "';</script>Redirecting...";
+	exit;
 }
 if (!$usr['isadmin'] || $cfg['count_admin'])
 {

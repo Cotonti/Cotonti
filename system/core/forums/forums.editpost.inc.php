@@ -71,8 +71,7 @@ if ($row = sed_sql_fetcharray($sql))
 {
 	if ($row['fs_state'])
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=602", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=602", '', true));
 	}
 
 	$fs_title = $row['fs_title'];
@@ -91,8 +90,7 @@ if ($row = sed_sql_fetcharray($sql))
 {
 	if ($row['ft_state'] && !$usr['isadmin'])
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=603", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=603", '', true));
 	}
 	$ft_title = $row['ft_title'];
 	$ft_desc = $row['ft_desc'];
@@ -168,8 +166,7 @@ if ($a=='update')
 	/* ===== */
 
 	sed_forum_sectionsetlast($fp_sectionid);
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&p=".$p, '#'.$p, true));
-	exit;
+	sed_redirect(sed_url('forums', "m=posts&p=".$p, '#'.$p, true));
 }
 
 $sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");

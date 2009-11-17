@@ -64,8 +64,7 @@ elseif (!empty($e))
 	}
 	else
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=907", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', $e);
@@ -102,8 +101,7 @@ elseif (!empty($e))
 
 	if (count($extp)==0)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=907", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
 	if (is_array($extp))
@@ -149,8 +147,7 @@ elseif (!empty($o))
 
 	if (count($extp)==0)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=907", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
 	$popup_header1 = $cfg['doctype'].'<html><head>'.sed_htmlmetas().sed_javascript().'
@@ -249,8 +246,7 @@ elseif (!empty($r) && defined('SED_AJAX'))
 
 	if (count($extp)==0)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=907", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
 	if (is_array($extp))

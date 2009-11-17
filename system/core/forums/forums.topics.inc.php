@@ -89,8 +89,7 @@ sed_block($usr['auth_read']);
 
 if ($fs_state)
 {
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=602", '', true));
-	exit;
+	sed_redirect(sed_url('message', "msg=602", '', true));
 }
 
 /* === Hook === */
@@ -115,9 +114,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			if (is_array($extp))
 			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 			/* ===== */
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-			exit;
-
+			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'move':
@@ -219,8 +216,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 
 
 			sed_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'lock':
@@ -228,8 +224,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_state=1, ft_sticky=0 WHERE ft_id='$q'");
 			sed_log("Locked topic #".$q, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'sticky':
@@ -237,8 +232,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=0 WHERE ft_id='$q'");
 			sed_log("Pinned topic #".$q, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'announcement':
@@ -246,8 +240,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=1 WHERE ft_id='$q'");
 			sed_log("Announcement topic #".$q, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'bump':
@@ -256,8 +249,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
 			sed_forum_sectionsetlast($s);
 			sed_log("Bumped topic #".$q, 'for');
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'private':
@@ -265,8 +257,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			sed_log("Made topic #".$q." private", 'for');
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_mode='1' WHERE ft_id='$q'");
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'clear':
@@ -274,8 +265,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_check_xg();
 			sed_log("Resetted topic #".$q, 'for');
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_sticky=0, ft_state=0, ft_mode=0 WHERE ft_id='$q'");
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=topics&s=".$s, '', true));
-			exit;
+			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		default:

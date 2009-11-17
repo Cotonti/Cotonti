@@ -108,8 +108,7 @@ if ($n == 'edit')
 		}
 
 		//$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&d='.$d.$additionsforurl, '', true));
-		exit;
+		sed_redirect(sed_url('admin', 'm=forums&d='.$d.$additionsforurl, '', true));
 	}
 	elseif ($a == 'resync')
 	{

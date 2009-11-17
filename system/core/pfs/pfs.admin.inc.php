@@ -342,8 +342,7 @@ case 'delete':
 		}
 
 		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
-		exit;
+		sed_redirect(sed_url('pfs', $more, '', true));
 	}
 	else
 	{ sed_die(); }
@@ -406,8 +405,7 @@ case 'newfolder':
 		0)");
 	$nid = sed_sql_insertid();
 	
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', 'f='.$nid.'&'.$more, '', true));
-	exit;
+	sed_redirect(sed_url('pfs', 'f='.$nid.'&'.$more, '', true));
 break;
 
 case 'deletefolder':
@@ -465,8 +463,7 @@ case 'deletefolder':
 	}
 
 	$urlparams = ($fparentid>0) ? 'f='.$fparentid.'&'.$more : $more;
-	header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $urlparams, '', true));
-	exit;
+	sed_redirect(sed_url('pfs', $urlparams, '', true));
 break;
 }
 

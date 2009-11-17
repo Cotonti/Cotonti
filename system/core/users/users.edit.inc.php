@@ -45,8 +45,7 @@ $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
 
 if ($sys['protecttopadmin'])
 {
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930", '', true));
-	exit;
+	sed_redirect(sed_url('message', "msg=930", '', true));
 }
 
 // Extra fields - getting
@@ -126,14 +125,12 @@ if ($a=='update')
 				$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id'");
 				if ($ruserdelpfs) { sed_pfs_deleteall($id); }
 				sed_log("Deleted user #".$id,'adm');
-				header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=109&rc=200&id=".$id, '', true));
-				exit;
+				sed_redirect(sed_url('message', "msg=109&rc=200&id=".$id, '', true));
 			}
 		}
 		else
 		{
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930", '', true));
-			exit;
+			sed_redirect(sed_url('message', "msg=930", '', true));
 		}
 	}
 
@@ -258,8 +255,7 @@ if ($a=='update')
 
 		sed_auth_clear($id);
 		sed_log("Edited user #".$id,'adm');
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('users', "m=edit&id=".$id, '', true));
-		exit;
+		sed_redirect(sed_url('users', "m=edit&id=".$id, '', true));
 	}
 }
 

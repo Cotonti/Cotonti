@@ -61,19 +61,16 @@ if ($a=='archive')
 {
     if ($pm_touserid!=$usr['id'] || $pm_state>1)
     {
-        header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=550", '', true));
-        exit;
+        sed_redirect(sed_url('message', "msg=550", '', true));
     }
     $sql = sed_sql_query("UPDATE $db_pm SET pm_state=2 WHERE pm_id='$id'");
-    header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "", '', true));
-    exit;
+    sed_redirect(sed_url('pm', "", '', true));
 }
 elseif ($a=='delete')
 {
     if (($pm_state>0 && $pm_state < 3 && $pm_touserid!=$usr['id']) || (($pm_state==0 || $pm_state == 3) && $pm_fromuserid!=$usr['id']))
     {
-        header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=950", '', true));
-        exit;
+        sed_redirect(sed_url('message', "msg=950", '', true));
     }
     $sql = sed_sql_query("SELECT * FROM $db_pm WHERE pm_id='$id' LIMIT 1");
 
@@ -85,15 +82,13 @@ elseif ($a=='delete')
         }
         $sql = sed_sql_query("DELETE FROM $db_pm WHERE pm_id='$id'");
     }
-    header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "f=".$f, '', true));
-    exit;
+    sed_redirect(sed_url('pm', "f=".$f, '', true));
 }
 elseif ($a=='update')
 {
     if (($pm_state>0 && $pm_touserid!=$usr['id']) || ($pm_state==0 && $pm_fromuserid!=$usr['id']))
     {
-        header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=950", '', true));
-        exit;
+        sed_redirect(sed_url('message', "msg=950", '', true));
     }
 
     $newpmtext = sed_import('newpmtext','P','HTM');
@@ -108,13 +103,11 @@ elseif ($a=='update')
 
     if (empty($newpmtext))
     {
-        header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$id."&f=".$f, '', true));
-        exit;
+        sed_redirect(sed_url('pm', "m=edit&a=delete&".sed_xg()."&id=".$id."&f=".$f, '', true));
     }
 
     $sql = sed_sql_query("UPDATE $db_pm SET pm_text='".sed_sql_prep($newpmtext)."', pm_html = '$newpmhtml', pm_date='".$sys['now_offset']."' WHERE pm_id='$id'");
-    header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "id=".$id, '', true));
-    exit;
+    sed_redirect(sed_url('pm', "id=".$id, '', true));
 }
 elseif ($a=='op')
 {
@@ -144,8 +137,7 @@ elseif ($a=='op')
 
     }
 
-    header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', "f=".$f, '', true));
-    exit;
+    sed_redirect(sed_url('pm', "f=".$f, '', true));
     
 }
 

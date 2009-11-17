@@ -160,8 +160,7 @@ if($a=='send')
 
         sed_stat_inc('totalpms');
         sed_shield_update(30, "New private message (".$totalrecipients.")");
-        header("Location: " . SED_ABSOLUTE_URL . sed_url('pm', 'f=sentbox'));
-        exit;
+        sed_redirect(sed_url('pm', 'f=sentbox'));
     }
 }
 elseif(!empty($to))
