@@ -1417,7 +1417,7 @@ function sed_build_flag($flag)
 {
 	global $sed_countries;
 	$flag = (empty($flag)) ? '00' : $flag;
-	return '<a href="'.sed_url('users', 'f=country_'.$flag).'" title="'.$sed_countries[$flag].'"><img class="flag" src="images/flags/f-'.$flag.'.gif" alt="'.$flag.'" /></a>';
+	return '<a href="'.sed_url('users', 'f=country_'.$flag).'" title="'.$sed_countries[$flag].'"><img class="flag" src="images/flags/'.$flag.'.png" alt="'.$flag.'" /></a>';
 }
 
 /**
