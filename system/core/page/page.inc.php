@@ -69,7 +69,7 @@ if (mb_substr($pag['page_text'], 0, 6)=='redir:')
 {
 	$redir = str_replace('redir:', '', trim($pag['page_text']));
 	$sql = sed_sql_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$pag['page_id']."'");
-	header("Location: " . SED_ABSOLUTE_URL . $redir);
+	header('Location: ' . $redir);
 	exit;
 }
 elseif (mb_substr($pag['page_text'], 0, 8)=='include:')
