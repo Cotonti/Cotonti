@@ -126,8 +126,7 @@ if ($a=='update')
 				if (is_array($extp))
 				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 				/* ===== */
-				header("Location: " . SED_ABSOLUTE_URL . sed_url('list', "c=".$row1['page_cat'], '', true));
-				exit;
+				sed_redirect(sed_url('list', "c=".$row1['page_cat'], '', true));
 			}
 		}
 		else
@@ -233,8 +232,7 @@ if ($a=='update')
 			/* ===== */
 
 			sed_log("Edited page #".$id,'adm');
-			header("Location: " . SED_ABSOLUTE_URL . sed_url('page', "id=".$id, '', true));
-			exit;
+			sed_redirect(sed_url('page', "id=".$id, '', true));
 		}
 	}
 }

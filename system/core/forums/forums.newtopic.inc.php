@@ -70,14 +70,12 @@ else
 
 if ($fs_state)
 {
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=602", '', true));
-	exit;
+	sed_redirect(sed_url('message', "msg=602", '', true));
 }
 
 if (!$fs_allowpolls & $poll)
 {
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930", '', true));
-	exit;
+	sed_redirect(sed_url('message', "msg=930", '', true));
 }
 
 if ($a=='newtopic')
@@ -210,8 +208,7 @@ if ($a=='newtopic')
 		/* ===== */
 
 		sed_shield_update(45, "New topic");
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
-		exit;
+		sed_redirect(sed_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 }
 

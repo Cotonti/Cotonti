@@ -366,8 +366,7 @@ if ($cfg['maintenance'])
 
 	if (!$roow['grp_maintenance'] && !defined('SED_AUTH'))
 	{
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('users', 'm=auth', '', true));
-		exit;
+		sed_redirect(sed_url('users', 'm=auth', '', true));
 	}
 }
 
@@ -590,7 +589,6 @@ if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
 		|| isset($_GET['x']) && $_GET['x'] != $sys['xk']))
 {
 	sed_redirect(sed_url('message', 'msg=950', '', true));
-	exit;
 }
 
 /* ======== Global hook ======== */

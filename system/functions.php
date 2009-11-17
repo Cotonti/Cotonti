@@ -225,7 +225,6 @@ function sed_block($allowed)
 	{
 		global $sys;
 		sed_redirect(sed_url('message', 'msg=930&' . $sys['url_redirect'], '', true));
-		exit;
 	}
 	return FALSE;
 }
@@ -242,8 +241,7 @@ function sed_blockguests()
 
 	if ($usr['id']<1)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930&".$sys['url_redirect'], '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=930&".$sys['url_redirect'], '', true));
 	}
 	return FALSE;
 }
@@ -1094,8 +1092,7 @@ function sed_build_comments($code, $url, $display = true)
 			/* ===== */
 
 			sed_shield_update(20, 'New comment');
-			header('Location: ' . SED_ABSOLUTE_URL . str_replace('&amp;', '&', $url) . '#c' . $id);
-			exit;
+			sed_redirect(str_replace('&amp;', '&', $url) . '#c' . $id);
 		}
 	}
 
@@ -1119,8 +1116,7 @@ function sed_build_comments($code, $url, $display = true)
 			sed_log('Deleted comment #'.$ind.' in &quot;'.$code.'&quot;', 'adm');
 		}
 
-		header('Location: ' . SED_ABSOLUTE_URL . str_replace('&amp;', '&', $url) . '#comments');
-		exit;
+		sed_redirect(str_replace('&amp;', '&', $url) . '#comments');
 	}
 
 	$error_string .= ($ina == 'added') ? $L['com_commentadded'].'<br />' : '';
@@ -1762,8 +1758,7 @@ function sed_build_ratings($code, $url, $display)
 		}
 		/* ===== */
 
-		header('Location: ' . SED_ABSOLUTE_URL . $url);
-		exit;
+		sed_redirect($url);
 	}
 
 	if ($usr['id'] > 0)
@@ -2212,7 +2207,6 @@ function sed_check_xg()
 	}
 
 	sed_redirect(sed_url('message', 'msg=950', '', true));
-	exit; // like return NULL
 }
 
 /**
@@ -2391,8 +2385,7 @@ function sed_die($cond=TRUE)
 {
 	if ($cond)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=950", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=950", '', true));
 	}
 	return FALSE;
 }
@@ -2428,8 +2421,7 @@ function sed_dieifdisabled($disabled)
 {
 	if ($disabled)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=940", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=940", '', true));
 	}
 }
 
@@ -3548,8 +3540,7 @@ function sed_pfs_createfolder($title, $ownerid, $desc='', $parentid=0, $ispublic
 		".(int)$isgallery.",
 		0)");
 
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', 'f='.$parentid, '', true));
-	exit;
+	sed_redirect(sed_url('pfs', 'f='.$parentid, '', true));
 }
 
 /**
@@ -3883,7 +3874,7 @@ function sed_redirect($url)
 	}
 	else
 	{
-		header("Location: " . SED_ABSOLUTE_URL . $url);
+		header('Location: ' . SED_ABSOLUTE_URL . $url);
 		exit;
 	}
 }

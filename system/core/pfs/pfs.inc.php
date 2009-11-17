@@ -258,8 +258,7 @@ switch($a)
 			$fpath = sed_pfs_filepath($row['pfs_id']);
 			sed_pfs_deletefile($row['pfs_id']);
 		}
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
-		exit;
+		sed_redirect(sed_url('pfs', $more, '', true));
 	break;
 	
 	case 'newfolder':
@@ -280,8 +279,7 @@ switch($a)
 	
 		sed_pfs_deletefolder($f);
 	
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('pfs', '', '', true));
-		exit;
+		sed_redirect(sed_url('pfs', '', '', true));
 	break;
 }
 

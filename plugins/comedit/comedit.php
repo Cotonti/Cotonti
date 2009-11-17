@@ -80,8 +80,7 @@ if($a == 'update')
 
 		$com_grp = ($usr['isadmin']) ? "adm" : "usr";
 		sed_log("Edited comment #".$cid, $com_grp);
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid, true));
-		exit;
+		sed_redirect(sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid, true));
 	}
 }
 

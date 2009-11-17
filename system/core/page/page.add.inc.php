@@ -185,8 +185,7 @@ $ssql.="page_title,
 		/* ===== */
 
 		sed_shield_update(30, "New page");
-		header("Location: " . SED_ABSOLUTE_URL . $r_url);
-		exit;
+		sed_redirect($r_url);
 	}
 }
 

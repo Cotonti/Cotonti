@@ -56,8 +56,7 @@ if(!empty($p))
 
 	if(count($extp) == 0)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=907", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
 	$extplugin_info = $cfg['plugins_dir']."/".$p."/".$p.".setup.php";
@@ -68,8 +67,7 @@ if(!empty($p))
 	}
 	else
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=907", '', true));
-		exit;
+		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
 	if(is_array($extp))

@@ -20,8 +20,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($usr['id']<1)
 {
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=100&".$sys['url_redirect'], '', true));
-	exit;
+	sed_redirect(sed_url('message', "msg=100&".$sys['url_redirect'], '', true));
 }
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
@@ -66,9 +65,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$avatar'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_avatar='' WHERE user_id='".$usr['id']."'");
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('users', "m=profile", '#avatar', true));
-	exit;
-
+	sed_redirect(sed_url('users', "m=profile", '#avatar', true));
 	break;
 
 	/* ============= */
@@ -84,9 +81,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$photo'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_photo='' WHERE user_id='".$usr['id']."'");
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('users', "m=profile", '#photo', true));
-	exit;
-
+	sed_redirect(sed_url('users', "m=profile", '#photo', true));
 	break;
 
 	/* ============= */
@@ -102,9 +97,7 @@ switch ($a)
 
 	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_file='$signature'");
 	$sql = sed_sql_query("UPDATE $db_users SET user_signature='' WHERE user_id='".$usr['id']."'");
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('users', "m=profile", '#signature', true));
-	exit;
-
+	sed_redirect(sed_url('users', "m=profile", '#signature', true));
 	break;
 
 	/* ============= */
@@ -116,9 +109,7 @@ switch ($a)
 	$avatar = str_replace(array("'", ",", chr(0x00)), "", $avatar);
 	if (file_exists($avatar))
 		{ $sql = sed_sql_query("UPDATE $db_users SET user_avatar='".sed_sql_prep($avatar)."' WHERE user_id='".$usr['id']."'"); }
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('users', "m=profile", '#avatar', true));
-	exit;
-
+	sed_redirect(sed_url('users', "m=profile", '#avatar', true));
 	break;
 
 	/* ============= */
@@ -478,8 +469,6 @@ switch ($a)
 
 				$sql = sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
 				sed_redirect(sed_url('message', 'msg=102', '', true));
-				exit;
-
 			}
 			else
 			{
@@ -543,8 +532,7 @@ switch ($a)
 			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
 
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('users', 'm=profile'));
-		exit;
+		sed_redirect(sed_url('users', 'm=profile'));
 	}
 	break;
 

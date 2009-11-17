@@ -61,8 +61,7 @@ if ($a == 'request' && $email != '')
 		sed_shield_update(10, "Password recovery requested");
 
 		sed_log("Pass recovery failed, user : ".$rusername);
-		header("Location: ".SED_ABSOLUTE_URL.sed_url('message', 'msg=151', '', true));
-		exit;
+		sed_redirect(sed_url('message', 'msg=151', '', true));
 	}
 }
 elseif ($a == 'auth' && mb_strlen($v) == 32)
@@ -81,15 +80,13 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 		if ($row['user_maingrp'] == 2)
 		{
 			sed_log("Password recovery failed, user inactive : ".$rusername);
-			header("Location: ".SED_ABSOLUTE_URL.sed_url('message', 'msg=152', '', true));
-			exit;
+			sed_redirect(sed_url('message', 'msg=152', '', true));
 		}
 
 		if ($row['user_maingrp'] == 3)
 		{
 			sed_log("Password recovery failed, user banned : ".$rusername);
-			header("Location: ".SED_ABSOLUTE_URL.sed_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
-			exit;
+			sed_redirect(sed_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
 		}
 
 		$validationkey = md5(microtime());
@@ -106,8 +103,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 	{
 		sed_shield_update(7, "Log in");
 		sed_log("Pass recovery failed, user : ".$rusername);
-		header("Location: ".SED_ABSOLUTE_URL.sed_url('message', 'msg=151', '', true));
-		exit;
+		sed_redirect(sed_url('message', 'msg=151', '', true));
 	}
 }
 

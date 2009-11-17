@@ -74,8 +74,7 @@ if($n == 'options')
 		sed_cache_clear('sed_forums_str');
 
         //$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
-		exit;
+		sed_redirect(sed_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
 	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure WHERE fn_id='$id' LIMIT 1");

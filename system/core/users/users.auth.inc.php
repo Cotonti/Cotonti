@@ -48,13 +48,11 @@ if ($a=='check')
 		{
 			sed_log("Log in attempt, user inactive : ".$rusername, 'usr');
 			sed_redirect(sed_url('message', 'msg=152', '', true));
-			exit;
 		}
 		if ($row['user_maingrp']==2)
 		{
 			sed_log("Log in attempt, user inactive : ".$rusername, 'usr');
 			sed_redirect(sed_url('message', 'msg=152', '', true));
-			exit;
 		}
 		elseif ($row['user_maingrp']==3)
 		{
@@ -66,7 +64,6 @@ if ($a=='check')
 			{
 				sed_log("Log in attempt, user banned : ".$rusername, 'usr');
 				sed_redirect(sed_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
-				exit;
 			}
 		}
 
@@ -101,14 +98,12 @@ if ($a=='check')
 		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
 		sed_uriredir_apply($cfg['redirbkonlogin']);
 		sed_uriredir_redirect(empty($redirect) ? sed_url('index') : base64_decode($redirect));
-		exit;
 	}
 	else
 	{
 		sed_shield_update(7, "Log in");
 		sed_log("Log in failed, user : ".$rusername,'usr');
 		sed_redirect(sed_url('message', 'msg=151', '', true));
-		exit;
 	}
 }
 
