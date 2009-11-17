@@ -534,10 +534,10 @@ function sed_bbcode_cdata($text)
  */
 function utf8ToUnicode(&$str)
 {
-	$mState = 0;     // cached expected number of octets after the current octet
+	$mState = 0;	 // cached expected number of octets after the current octet
 	// until the beginning of the next UTF8 character sequence
-	$mUcs4  = 0;     // cached Unicode character
-	$mBytes = 1;     // cached expected number of octets in the current sequence
+	$mUcs4  = 0;	 // cached Unicode character
+	$mBytes = 1;	 // cached expected number of octets in the current sequence
 
 	$out = array();
 
@@ -796,27 +796,27 @@ function sed_post_parse($text, $area = '')
 function sed_cut_more(&$html)
 {
 	$cutted = false;
-    $mpos = mb_strpos($html, '<!--more-->');
-    if ($mpos === false)
-    {
-        $mpos = mb_strpos($html, '[more]');
-    }
-    if ($mpos !== false)
-    {
-        $html = mb_substr($html, 0, $mpos);
-        $cutted = true;
-    }
-    $mpos = mb_strpos($html, '[newpage]');
-    if ($mpos !== false)
-    {
-        $html = mb_substr($html, 0, $mpos);
-        $cutted = true;
-    }
-    if (mb_strpos($html, '[title]'))
-    {
-        $html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
-    }
-    return $cutted;
+	$mpos = mb_strpos($html, '<!--more-->');
+	if ($mpos === false)
+	{
+		$mpos = mb_strpos($html, '[more]');
+	}
+	if ($mpos !== false)
+	{
+		$html = mb_substr($html, 0, $mpos);
+		$cutted = true;
+	}
+	$mpos = mb_strpos($html, '[newpage]');
+	if ($mpos !== false)
+	{
+		$html = mb_substr($html, 0, $mpos);
+		$cutted = true;
+	}
+	if (mb_strpos($html, '[title]'))
+	{
+		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
+	}
+	return $cutted;
 }
 
 /**
@@ -832,129 +832,129 @@ function sed_cut_more(&$html)
  */
 function sed_string_truncate(&$html, $length = 100, $considerhtml = true, $exact = false)
 {
-    if ($considerhtml)
-    {
-        // if the plain text is shorter than the maximum length, return the whole text
-        if (mb_strlen(preg_replace('/<.*?>/', '', $html)) <= $length)
-        {
-            return false;
-        }
-        // splits all html-tags to scanable lines
-        preg_match_all('/(<.+?>)?([^<>]*)/s', $html, $lines, PREG_SET_ORDER);
+	if ($considerhtml)
+	{
+		// if the plain text is shorter than the maximum length, return the whole text
+		if (mb_strlen(preg_replace('/<.*?>/', '', $html)) <= $length)
+		{
+			return false;
+		}
+		// splits all html-tags to scanable lines
+		preg_match_all('/(<.+?>)?([^<>]*)/s', $html, $lines, PREG_SET_ORDER);
 
-        $total_length = 0;
-        $open_tags = array();
-        $truncate = '';
+		$total_length = 0;
+		$open_tags = array();
+		$truncate = '';
 
-        foreach ($lines as $line_matchings)
-        {
-            // if there is any html-tag in this line, handle it and add it (uncounted) to the output
-            if (!empty($line_matchings[1]))
-            {
-                // if it's an "empty element" with or without xhtml-conform closing slash (f.e. <br/>)
-                if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1]))
-                {
-                    // do nothing
-                    // if tag is a closing tag (f.e. </b>)
-                }
-                elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings))
-                {
-                    // delete tag from $open_tags list
-                    $pos = array_search($tag_matchings[1], $open_tags);
-                    if ($pos !== false)
-                    {
-                        unset($open_tags[$pos]);
-                    }
-                    // if tag is an opening tag (f.e. <b>)
-                }
-                elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings))
-                {
-                    // add tag to the beginning of $open_tags list
-                    array_unshift($open_tags, mb_strtolower($tag_matchings[1]));
-                }
-                // add html-tag to $truncate'd text
-                $truncate .= $line_matchings[1];
-            }
+		foreach ($lines as $line_matchings)
+		{
+			// if there is any html-tag in this line, handle it and add it (uncounted) to the output
+			if (!empty($line_matchings[1]))
+			{
+				// if it's an "empty element" with or without xhtml-conform closing slash (f.e. <br/>)
+				if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1]))
+				{
+					// do nothing
+					// if tag is a closing tag (f.e. </b>)
+				}
+				elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings))
+				{
+					// delete tag from $open_tags list
+					$pos = array_search($tag_matchings[1], $open_tags);
+					if ($pos !== false)
+					{
+						unset($open_tags[$pos]);
+					}
+					// if tag is an opening tag (f.e. <b>)
+				}
+				elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings))
+				{
+					// add tag to the beginning of $open_tags list
+					array_unshift($open_tags, mb_strtolower($tag_matchings[1]));
+				}
+				// add html-tag to $truncate'd text
+				$truncate .= $line_matchings[1];
+			}
 
-            // calculate the length of the plain text part of the line; handle entities as one character
-            $content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
-            if ($total_length+$content_length> $length)
-            {
-                // the number of characters which are left
-                $left = $length - $total_length;
-                $entities_length = 0;
-                // search for html entities
-                if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
-                {
-                    // calculate the real length of all entities in the legal range
-                    foreach ($entities[0] as $entity)
-                    {
-                        if ($entity[1]+1-$entities_length <= $left)
-                        {
-                            $left--;
-                            $entities_length += mb_strlen($entity[0]);
-                        }
-                        else
-                        {
-                            // no more characters left
-                            break;
-                        }
-                    }
-                }
-                $truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length);
-                // maximum lenght is reached, so get off the loop
-                break;
-            }
-            else
-            {
-                $truncate .= $line_matchings[2];
-                $total_length += $content_length;
-            }
+			// calculate the length of the plain text part of the line; handle entities as one character
+			$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
+			if ($total_length+$content_length> $length)
+			{
+				// the number of characters which are left
+				$left = $length - $total_length;
+				$entities_length = 0;
+				// search for html entities
+				if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
+				{
+					// calculate the real length of all entities in the legal range
+					foreach ($entities[0] as $entity)
+					{
+						if ($entity[1]+1-$entities_length <= $left)
+						{
+							$left--;
+							$entities_length += mb_strlen($entity[0]);
+						}
+						else
+						{
+							// no more characters left
+							break;
+						}
+					}
+				}
+				$truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length);
+				// maximum lenght is reached, so get off the loop
+				break;
+			}
+			else
+			{
+				$truncate .= $line_matchings[2];
+				$total_length += $content_length;
+			}
 
-            // if the maximum length is reached, get off the loop
-            if($total_length >= $length)
-            {
-                break;
-            }
-        }
-    }
-    else
-    {
-        if (mb_strlen($html) <= $length)
-        {
-            return false;
-        }
-        else
-        {
-            $truncate = mb_substr($html, 0, $length);
-        }
-    }
+			// if the maximum length is reached, get off the loop
+			if($total_length >= $length)
+			{
+				break;
+			}
+		}
+	}
+	else
+	{
+		if (mb_strlen($html) <= $length)
+		{
+			return false;
+		}
+		else
+		{
+			$truncate = mb_substr($html, 0, $length);
+		}
+	}
 
-    if (!$exact)
-    {
-        // ...search the last occurance of a space...
-        if (mb_strrpos($truncate, ' ')>0)
-        {
-            $pos1 = mb_strrpos($truncate, ' ');
-            $pos2 = mb_strrpos($truncate, '>');
-            $spos = ($pos2 < $pos1) ? $pos1 : ($pos2+1);
-            if (isset($spos))
-            {
-                // ...and cut the text in this position
-                $truncate = mb_substr($truncate, 0, $spos);
-            }
-        }
-    }
-    if ($considerhtml)
-    {
-        // close all unclosed html-tags
-        foreach ($open_tags as $tag)
-        {
-            $truncate .= '</' . $tag . '>';
-        }
-    }
-    $html =  $truncate;
-    return true;
+	if (!$exact)
+	{
+		// ...search the last occurance of a space...
+		if (mb_strrpos($truncate, ' ')>0)
+		{
+			$pos1 = mb_strrpos($truncate, ' ');
+			$pos2 = mb_strrpos($truncate, '>');
+			$spos = ($pos2 < $pos1) ? $pos1 : ($pos2+1);
+			if (isset($spos))
+			{
+				// ...and cut the text in this position
+				$truncate = mb_substr($truncate, 0, $spos);
+			}
+		}
+	}
+	if ($considerhtml)
+	{
+		// close all unclosed html-tags
+		foreach ($open_tags as $tag)
+		{
+			$truncate .= '</' . $tag . '>';
+		}
+	}
+	$html =  $truncate;
+	return true;
 
 }
 
@@ -1906,7 +1906,7 @@ function sed_build_stars($level)
  */
 function sed_build_timegap($t1,$t2)
 {
-	global $L;
+	global $Ls;
 
 	$gap = $t2 - $t1;
 
@@ -1916,7 +1916,7 @@ function sed_build_timegap($t1,$t2)
 	}
 	elseif($gap<60)
 	{
-		$result  = sed_declension($gap,$Ls['Seconds']);
+		$result = sed_declension($gap,$Ls['Seconds']);
 	}
 	elseif($gap<3600)
 	{
@@ -2236,17 +2236,17 @@ function sed_check_xp()
  */
 function sed_cutpost($text, $max_chars, $parse_bbcodes = true)
 {
-    $text = $max_chars == 0 ? $text : sed_cutstring(strip_tags($text), $max_chars);
-    // Fix partial cuttoff
-    $text = preg_replace('#\[[^\]]*?$#', '...', $text);
-    // Parse the BB-codes or skip them
-    if($parse_bbcodes)
-    {
-        // Parse it
-        $text = sed_parse($text);
-    }
-    else $text = preg_replace('#\[[^\]]+?\]#', '', $text);
-    return $text;
+	$text = $max_chars == 0 ? $text : sed_cutstring(strip_tags($text), $max_chars);
+	// Fix partial cuttoff
+	$text = preg_replace('#\[[^\]]*?$#', '...', $text);
+	// Parse the BB-codes or skip them
+	if($parse_bbcodes)
+	{
+		// Parse it
+		$text = sed_parse($text);
+	}
+	else $text = preg_replace('#\[[^\]]+?\]#', '', $text);
+	return $text;
 }
 
 /**
@@ -2579,15 +2579,15 @@ function sed_forum_prunetopics($mode, $section, $param)
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
 			$num1 += sed_sql_affectedrows();
 
-            $sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='forum' AND poll_code='$q' LIMIT 1");
-            if ($row = sed_sql_fetcharray($sql))
-            {
-                $id=$row['poll_id'];
-                global $db_polls_options, $db_polls_voters;
-                $sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
-                $sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
-                $sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
-            }
+			$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='forum' AND poll_code='$q' LIMIT 1");
+			if ($row = sed_sql_fetcharray($sql))
+			{
+				$id=$row['poll_id'];
+				global $db_polls_options, $db_polls_voters;
+				$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
+				$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
+				$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
+			}
 		}
 
 		$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
@@ -3272,9 +3272,9 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 // FIXME this function is obsolete, or meta/title generation must be reworked
 function sed_htmlmetas()
 {
-        global $cfg;
-        $contenttype = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
-        $result = "<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
+		global $cfg;
+		$contenttype = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
+		$result = "<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
 <meta name=\"description\" content=\"".$cfg['maintitle']." - ".$cfg['subtitle']."\" />
 <meta name=\"keywords\" content=\"".$cfg['metakeywords']."\" />
 <meta name=\"generator\" content=\"Cotonti http://www.cotonti.com\" />
@@ -3284,7 +3284,7 @@ function sed_htmlmetas()
 <meta http-equiv=\"last-modified\" content=\"".gmdate("D, d M Y H:i:s")." GMT\" />
 <link rel=\"shortcut icon\" href=\"favicon.ico\" />
 ";
-        return ($result);
+		return ($result);
 }
 
 /**
@@ -5588,27 +5588,27 @@ function sed_extrafield_remove($sql_table, $name)
  */
 function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
-    if (!is_array($expr))
-    {
-        return trim(($onlyword ? '' : "$digit ") . $expr);
-    }
+	global $lang;
 
-    global $lang;
+	if (!is_array($expr))
+	{
+		return trim(($onlyword ? '' : "$digit ") . $expr);
+	}
 
 	if ($canfrac)
 	{
-	$is_frac = floor($digit) != $digit;
-	$i = $digit;
+		$is_frac = floor($digit) != $digit;
+		$i = $digit;
 	}
 	else
 	{
-	$is_frac = false;
-	$i = preg_replace('#\D+#', '', $digit);
+		$is_frac = false;
+		$i = preg_replace('#\D+#', '', $digit);
 	}
 
-    $plural = sed_get_plural($i, $lang, $is_frac);
-    $cnt = count($expr);
-    return trim(($onlyword ? '' : "$digit ") . (($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
+	$plural = sed_get_plural($i, $lang, $is_frac);
+	$cnt = count($expr);
+	return trim(($onlyword ? '' : "$digit ") . (($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
 }
 
 /**
@@ -5621,30 +5621,30 @@ function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
  */
 function sed_get_plural($plural, $lang, $is_frac = false)
 {
-    switch ($lang)
-    {
-        case 'en':
-        case 'de':
-        case 'nl':
-        case 'se':
+	switch ($lang)
+	{
+		case 'en':
+		case 'de':
+		case 'nl':
+		case 'se':
 		case 'us':
-            return ($plural == 1) ? 1 : 0;
+			return ($plural == 1) ? 1 : 0;
 
-        case 'fr':
-            return ($plural > 1) ? 0 : 1;
+		case 'fr':
+			return ($plural > 1) ? 0 : 1;
 
-        case 'ru':
-        case 'ua':
+		case 'ru':
+		case 'ua':
 			if ($is_frac)
 			{
 				return 1;
 			}
-            $plural %= 100;
-            return (5 <= $plural && $plural <= 20) ? 2 : ((1 == ($plural %= 10)) ? 0 : ((2 <= $plural && $plural <= 4) ? 1 : 2));
+			$plural %= 100;
+			return (5 <= $plural && $plural <= 20) ? 2 : ((1 == ($plural %= 10)) ? 0 : ((2 <= $plural && $plural <= 4) ? 1 : 2));
 
-        default:
-            return 0;
-    }
+		default:
+			return 0;
+	}
 }
 
 if ($cfg['customfuncs'])
