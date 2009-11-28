@@ -356,6 +356,7 @@ case 'delete':
 
 		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
 		sed_redirect(sed_url('pfs', $more, '', true));
+		exit;
 	}
 	else
 	{ sed_die(); }
@@ -419,6 +420,7 @@ case 'newfolder':
 	$nid = sed_sql_insertid();
 	
 	sed_redirect(sed_url('pfs', 'f='.$nid.'&'.$more, '', true));
+	exit;
 break;
 
 case 'deletefolder':
@@ -477,6 +479,7 @@ case 'deletefolder':
 
 	$urlparams = ($fparentid>0) ? 'f='.$fparentid.'&'.$more : $more;
 	sed_redirect(sed_url('pfs', $urlparams, '', true));
+	exit;
 break;
 }
 
