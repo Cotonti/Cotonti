@@ -20,6 +20,7 @@ defined('SED_CODE') or die('Wrong URL');
 $id = sed_import('id','G','INT');
 $o = sed_import('o','G','ALP');
 $f = sed_import('f','G','INT');
+$f = (empty($f)) ? '0' : $f;
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 $d = sed_import('d', 'G', 'INT');
@@ -30,21 +31,15 @@ $df = empty($df) ? 0 : (int) $df;
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['auth_read']);
 
-$files_count = 0;
-$folders_count = 0;
-
 $cfg['pfs_path'] = sed_pfs_path($usr['id']);
 $cfg['pfs_thumbpath'] = sed_pfs_thumbpath($usr['id']);
 $cfg['pfs_relpath'] = sed_pfs_relpath($usr['id']);
 
-$sql = sed_sql_query("SELECT MAX(grp_pfs_maxfile) AS maxfile, MAX(grp_pfs_maxtotal) AS maxtotal 
-FROM $db_groups	WHERE grp_id IN (SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=".(int)$usr['id'].")");
-if ($row = sed_sql_fetcharray($sql))
-{
-	$maxfile = min($row['maxfile'], sed_get_uploadmax());
-	$maxtotal = $row['maxtotal'];
-}
-if (!$maxfile>0 || !$maxtotal>0) { sed_block($usr['isadmin']); }
+list($maxfile, $maxtotal) = sed_pfs_limits($usr['id']);
+$maxfile>0 && $maxtotal>0 or sed_block();
+
+$sql = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid=".(int)$usr['id']);
+$pfs_totalsize = sed_sql_result($sql,0,"SUM(pfs_size)");
 
 reset($sed_extensions);
 foreach ($sed_extensions as $k => $line)
@@ -61,14 +56,26 @@ if (is_array($extp))
 { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 /* ===== */
 
-$u_totalsize=0;
-$sql = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid=".(int)$usr['id']);
-$pfs_totalsize = sed_sql_result($sql,0,"SUM(pfs_size)");
-
-$err_msg = array();
-
 switch($a)
 {
+	case 'delete':
+		sed_block($usr['auth_write']);
+		sed_check_xg();
+		sed_pfs_deletefile($usr['id'], $id);
+	break;
+	
+	case 'deletefolder':
+		sed_block($usr['auth_write']);
+		sed_check_xg();
+		sed_pfs_deletefolder($usr['id'], $f);
+	break;
+	
+	case 'newfolder':
+		sed_block($usr['auth_write']);
+		sed_check_xp();
+		sed_pfs_createfolder($usr['id']);
+	break;
+	
 	case 'update':
 		sed_block($usr['auth_write']);
 		$do = sed_import('do','G','ALP');
@@ -89,203 +96,14 @@ switch($a)
 	
 	case 'upload':
 		sed_block($usr['auth_write']);
-		$folderid = sed_import('folderid','P','INT');
-		$ndesc = sed_import('ndesc','P','ARR');
-		$npath = sed_pfs_folderpath($folderid);
-		
-		/* === Hook === */
-		$extp = sed_getextplugins('pfs.upload.first');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-		/* ===== */
-		
-		sed_die($npath===FALSE);
-	
-		for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
-		{
-			$disp_errors = '';
-			$u_tmp_name = $_FILES['userfile']['tmp_name'][$ii];
-			$u_type = $_FILES['userfile']['type'][$ii];
-			$u_name = $_FILES['userfile']['name'][$ii];
-			$u_size = $_FILES['userfile']['size'][$ii];
-			$u_name  = str_replace("\'",'',$u_name );
-			$u_name  = trim(str_replace("\"",'',$u_name ));
-	
-			if (!empty($u_name))
-			{
-				$disp_errors .= $u_name . ' : ';
-				$u_name = mb_strtolower($u_name);
-				$dotpos = mb_strrpos($u_name,".")+1;
-				$f_extension = mb_substr($u_name, $dotpos);
-				$f_extension_ok = 0;
-				$desc = $ndesc[$ii];
-	
-				if($cfg['pfstimename'])
-				{
-					$u_name = time().'_'.$u_name;
-				}
-				if(!$cfg['pfsuserfolder'])
-				{
-					$u_name = $usr['id'].'_'.$u_name;
-				}
-	
-				$u_newname = sed_safename($u_name, true);
-				$u_sqlname = sed_sql_prep($u_newname);
-	
-				if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
-				{
-					foreach ($sed_extensions as $k => $line)
-					{
-						if (mb_strtolower($f_extension) == $line[0])
-						{ $f_extension_ok = 1; }
-					}
-				}
-	
-				if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok
-					&& ($pfs_totalsize+$u_size)<$maxtotal*1024   )
-				{
-					$fcheck = sed_file_check($u_tmp_name, $u_name, $f_extension);
-					if($fcheck == 1)
-					{
-						if (!file_exists($cfg['pfs_path'].$npath.$u_newname))
-						{
-							$is_moved = true;
-	
-							if ($cfg['pfsuserfolder'])
-							{
-								if (!is_dir($cfg['pfs_path']))
-								{ $is_moved &= mkdir($cfg['pfs_path'], $cfg['dir_perms']); }
-								if (!is_dir($cfg['pfs_thumbpath']))
-								{ $is_moved &= mkdir($cfg['pfs_thumbpath'], $cfg['dir_perms']); }
-							}
-	
-							$is_moved &= move_uploaded_file($u_tmp_name, $cfg['pfs_path'].$npath.$u_newname);
-							$is_moved &= chmod($cfg['pfs_path'].$npath.$u_newname, $cfg['file_perms']);
-	
-							$u_size = filesize($cfg['pfs_path'].$npath.$u_newname);
-	
-							if ($is_moved && (int)$u_size > 0)
-							{
-								/* === Hook === */
-								$extp = sed_getextplugins('pfs.upload.moved');
-								if (is_array($extp))
-								{ foreach($extp as $k => $pl)
-									{ include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-								/* ===== */
-	
-								$sql = sed_sql_query("INSERT INTO $db_pfs
-								(pfs_userid,
-								pfs_date,
-								pfs_file,
-								pfs_extension,
-								pfs_folderid,
-								pfs_desc,
-								pfs_size,
-								pfs_count)
-								VALUES
-								(".(int)$usr['id'].",
-								".(int)$sys['now_offset'].",
-								'".sed_sql_prep($u_sqlname)."',
-								'".sed_sql_prep($f_extension)."',
-								".(int)$folderid.",
-								'".sed_sql_prep($desc)."',
-								".(int)$u_size.",
-								0) ");
-	
-								$sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."'
-									WHERE pff_id='$folderid'");
-								$disp_errors .= $L['Yes'];
-								$pfs_totalsize += $u_size;
-	
-								/* === Hook === */
-								$extp = sed_getextplugins('pfs.upload.done');
-								if (is_array($extp))
-								{ foreach($extp as $k => $pl)
-									{ include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
-								/* ===== */
-	
-								if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled'
-									&& file_exists($cfg['pfs_path'].$u_newname))
-								{
-									@unlink($cfg['pfs_thumbpath'].$npath.$u_newname);
-									$th_colortext = array(hexdec(substr($cfg['th_colortext'],0,2)),
-										hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
-									$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)),
-										hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
-									sed_createthumb($cfg['pfs_path'].$npath.$u_newname,
-										$cfg['pfs_thumbpath'].$npath.$u_newname, $cfg['th_x'],$cfg['th_y'],
-										$cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext,
-										$cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'],
-										$cfg['th_dimpriority']);
-								}
-							}
-							else
-							{
-								@unlink($cfg['pfs_path'].$npath.$u_newname);
-								$disp_errors .= $L['pfs_filenotmoved'];
-							}
-						}
-						else
-						{
-							$disp_errors .= $L['pfs_fileexists'];
-						}
-					}
-					elseif($fcheck == 2)
-					{
-						$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
-					}
-					else
-					{
-						$disp_errors .= sprintf($L['pfs_filenotvalid'], $f_extension);
-					}
-				}
-				else
-				{
-					$disp_errors .= $L['pfs_filetoobigorext'];
-				}
-				$err_msg[] = $disp_errors;
-			}
-		}
-	break;
-	
-	case 'delete':
-		sed_block($usr['auth_write']);
-		sed_check_xg();
-		$sql = sed_sql_query("SELECT pfs_id FROM $db_pfs WHERE pfs_userid=".(int)$usr['id']." AND pfs_id=".(int)$id." LIMIT 1");
-	
-		if ($row = sed_sql_fetcharray($sql))
-		{
-			$fpath = sed_pfs_filepath($row['pfs_id']);
-			sed_pfs_deletefile($row['pfs_id']);
-		}
-		sed_redirect(sed_url('pfs', $more, '', true));
-	break;
-	
-	case 'newfolder':
-		sed_block($usr['auth_write']);
-		
-		$ntitle = sed_import('ntitle','P','TXT');
-		$ndesc = sed_import('ndesc','P','TXT');
-		$nparentid = sed_import('nparentid','P','INT');
-		$nispublic = sed_import('nispublic','P','BOL');
-		$nisgallery = sed_import('nisgallery','P','BOL');
-		
-		sed_pfs_createfolder($ntitle, $usr['id'], $ndesc, $nparentid, $nispublic, $nisgallery);
-	break;
-	
-	case 'deletefolder':
-		sed_block($usr['auth_write']);
-		sed_check_xg();
-	
-		sed_pfs_deletefolder($f);
-	
-		sed_redirect(sed_url('pfs', '', '', true));
+		sed_check_xp();
+		$uploadfolder = sed_pfs_upload($usr['id']);
+		sed_redirect(sed_url('pfs', 'f='.$uploadfolder, '', true));
+		exit;
 	break;
 }
 
 /*   General logic   */
-
-$f = (empty($f)) ? '0' : $f;
 
 $sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid=".(int)$usr['id']." AND pfs_folderid=$f ORDER BY pfs_file ASC");
 $sqll = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid=".(int)$usr['id']." AND pfs_folderid=$f
