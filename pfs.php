@@ -16,7 +16,7 @@ $z = 'pfs';
 
 require_once('./datas/config.php');
 require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/functions.pfs.php');
+require_once($cfg['system_dir'].'/core/pfs/functions.pfs.php');
 require_once('./datas/extensions.php');
 require_once($cfg['system_dir'].'/common.php');
 
