@@ -15,61 +15,15 @@
 $cache_drivers = array();
 
 /**
- * An interface provided by all cache drivers
+ * This interface is realized by cache drivers with manual Garbage Collection (GC) support
  * @author trustmaster
  */
-interface Cache_interface
+interface Cache_gc
 {
 	/**
-	 * Clears all cache entries served by current driver
-	 * @param $realm string Cache realm name, to clear specific realm only
-	 * @return void
+	 * Manual garbage collection procedure
 	 */
-	public function clear($realm = 'cot');
-
-	/**
-	 * Checks if an object is stored in cache
-	 * @param $id string Object identifier
-	 * @param $realm string Cache realm
-	 * @return bool
-	 */
-	public function exists($id, $realm = 'cot');
-
-	/**
-	 * Returns value of cached image
-	 * @param $id string Object identifier
-	 * @param $realm string Realm name
-	 * @return mixed
-	 */
-	public function get($id, $realm = 'cot');
-
-	/**
-	 * Removes object image from cache
-	 * @param $id string Object identifier
-	 * @param $realm string Realm name
-	 * @return bool
-	 */
-	public function remove($id, $realm = 'cot');
-
-	/**
-	 * Stores data as object image in cache
-	 * @param $id string Object identifier
-	 * @param $data mixed Object value
-	 * @param $realm string Realm name
-	 * @return bool
-	 */
-	public function store($id, $data, $realm = 'cot');
-
-	/**
-	 * Standard event trigger function. It is called when some data has been changed
-	 * and the cache image needs to be refreshed. It calls an event handler (if exists),
-	 * a callback function, and updates the cache with its return value.
-	 * @param $event string Event name, used as a part of callback name
-	 * @param $id int Object identifier
-	 * @param $realm string Cache realm
-	 * @return void
-	 */
-	public function trigger($event, $id = 0, $realm = 'cot');
+	public function gc();
 }
 
 /**
@@ -78,6 +32,75 @@ interface Cache_interface
  */
 abstract class Cache_driver
 {
+	/**
+	 * Automatically gets item value even if it has to trigger an update event
+	 * and use a callback data provider for that. Returns NULL if nothing could be found.
+	 * @param string $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return mixed
+	 */
+	public function autoget($id, $realm = 'cot')
+	{
+		if ($this->exists($id))
+		{
+			return $this->get($id, $realm);
+		}
+		else
+		{
+			return $this->trigger('update', $id, $realm);
+		}
+	}
+
+	/**
+	 * Clears all cache entries served by current driver
+	 * @param string $realm Cache realm name, to clear specific realm only
+	 * @return bool
+	 */
+	abstract public function clear($realm = 'cot');
+
+	/**
+	 * Checks if an object is stored in cache
+	 * @param string $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return bool
+	 */
+	abstract public function exists($id, $realm = 'cot');
+
+	/**
+	 * Returns value of cached image
+	 * @param string $id Object identifier
+	 * @param string $realm Realm name
+	 * @return mixed
+	 */
+	abstract public function get($id, $realm = 'cot');
+
+	/**
+	 * Removes object image from cache
+	 * @param string $id Object identifier
+	 * @param string $realm Realm name
+	 * @return bool
+	 */
+	abstract public function remove($id, $realm = 'cot');
+
+	/**
+	 * Stores data as object image in cache
+	 * @param string $id Object identifier
+	 * @param mixed $data Object value
+	 * @param string $realm Realm name
+	 * @param int $ttl Time to live, 0 for unlimited
+	 * @return bool
+	 */
+	abstract public function store($id, $data, $realm = 'cot', $ttl = 0);
+
+	/**
+	 * Standard event trigger function. It is called when some data has been changed
+	 * and the cache image needs to be refreshed. It calls an event handler (if exists),
+	 * a callback function, and updates the cache with its return value.
+	 * @param string $event Event name, used as a part of callback name
+	 * @param int $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return mixed NULL if the item was not found or removed, item value otherwise
+	 */
 	public function trigger($event, $id = 0, $realm = 'cot')
 	{
 		$func = $realm . '_' . $event;
@@ -92,6 +115,11 @@ abstract class Cache_driver
 			{
 				$this->store($id, $data, $realm);
 			}
+			return $data;
+		}
+		else
+		{
+			return NULL;
 		}
 	}
 }
@@ -101,7 +129,7 @@ abstract class Cache_driver
  * Normally you don't need to use it, because direct array access is faster.
  * @author trustmaster
  */
-class Array_cache extends Cache_driver implements Cache_interface
+class Array_cache extends Cache_driver
 {
 	/**
 	 * An associative array containing all the cache data
@@ -109,6 +137,9 @@ class Array_cache extends Cache_driver implements Cache_interface
 	 */
 	private $data = array();
 
+	/**
+	 * @see Cache_driver::clear()
+	 */
 	public function clear($realm = 'cot')
 	{
 		if (empty($realm))
@@ -123,25 +154,39 @@ class Array_cache extends Cache_driver implements Cache_interface
 		{
 			$this->data[$realm] = array();
 		}
+		return TRUE;
 	}
 
+	/**
+	 * @see Cache_driver::exists()
+	 */
 	public function exists($id, $realm = 'cot')
 	{
 		return isset($this->data[$realm][$id]);
 	}
 
+	/**
+	 * @see Cache_driver::get()
+	 */
 	public function get($id, $realm = 'cot')
 	{
 		return $this->data[$realm][$id];
 	}
 
+	/**
+	 * @see Cache_driver::remove()
+	 */
 	public function remove($id, $realm = 'cot')
 	{
 		unset($this->data[$realm][$id]);
 		return true;
 	}
 
-	public function store($id, $data, $realm = 'cot')
+	/**
+	 * @param int $ttl Unsupported by this driver
+	 * @see Cache_driver::store()
+	 */
+	public function store($id, $data, $realm = 'cot', $ttl = 0)
 	{
 		$this->data[$realm][$id] = $data;
 		return true;
@@ -154,7 +199,7 @@ class Array_cache extends Cache_driver implements Cache_interface
  * But normally it is very fast reads.
  * @author trustmaster
  */
-class File_cache extends Cache_driver implements Cache_interface
+class File_cache extends Cache_driver
 {
 	/**
 	 * Cache root directory
@@ -164,7 +209,7 @@ class File_cache extends Cache_driver implements Cache_interface
 
 	/**
 	 * Cache storage object constructor
-	 * @param $dir Cache root directory. System default will be used if empty.
+	 * @param string $dir Cache root directory. System default will be used if empty.
 	 * @return File_cache
 	 */
 	public function __construct($dir = '')
@@ -182,6 +227,9 @@ class File_cache extends Cache_driver implements Cache_interface
 		}
 	}
 
+	/**
+	 * @see Cache_driver::clear()
+	 */
 	public function clear($realm = 'cot')
 	{
 		if (empty($realm))
@@ -210,13 +258,20 @@ class File_cache extends Cache_driver implements Cache_interface
 			}
 			closedir($dp);
 		}
+		return TRUE;
 	}
 
+	/**
+	 * @see Cache_driver::exists()
+	 */
 	public function exists($id, $realm = 'cot')
 	{
 		return file_exists($this->dir . '/' . $realm . '/' . $id);
 	}
 
+	/**
+	 * @see Cache_driver::get()
+	 */
 	public function get($id, $realm = 'cot')
 	{
 		if ($this->exists($id, $realm))
@@ -229,6 +284,9 @@ class File_cache extends Cache_driver implements Cache_interface
 		}
 	}
 
+	/**
+	 * @see Cache_driver::remove()
+	 */
 	public function remove($id, $realm = 'cot')
 	{
 		if ($this->exists($id, $realm))
@@ -239,7 +297,11 @@ class File_cache extends Cache_driver implements Cache_interface
 		else return false;
 	}
 
-	public function store($id, $data, $realm = 'cot')
+	/**
+	 * @param int $ttl Unsupported by this driver
+	 * @see Cache_driver::store()
+	 */
+	public function store($id, $data, $realm = 'cot', $ttl = 0)
 	{
 		if (!file_exists($this->dir . '/' . $realm))
 		{
@@ -255,8 +317,11 @@ class File_cache extends Cache_driver implements Cache_interface
  * File_cache but may be considered more reliable.
  * @author trustmaster
  */
-class Query_cache extends Cache_driver implements Cache_interface
+class Query_cache extends Cache_driver implements Cache_gc
 {
+	/**
+	 * @see Cache_driver::clear()
+	 */
 	public function clear($realm = 'cot')
 	{
 		global $db_cache;
@@ -268,8 +333,12 @@ class Query_cache extends Cache_driver implements Cache_interface
 		{
 			sed_sql_query("DELETE FROM $db_cache WHERE c_realm = '$realm'");
 		}
+		return TRUE;
 	}
 
+	/**
+	 * @see Cache_driver::exists()
+	 */
 	public function exists($id, $realm = 'cot')
 	{
 		global $db_cache;
@@ -280,6 +349,7 @@ class Query_cache extends Cache_driver implements Cache_interface
 	/**
 	 * Garbage collector function. Removes cache entries which are not valid anymore.
 	 * @return int Number of entries removed
+	 * @see Cache_gc::gc()
 	 */
 	public function gc()
 	{
@@ -288,6 +358,9 @@ class Query_cache extends Cache_driver implements Cache_interface
 		return sed_sql_affectedrows();
 	}
 
+	/**
+	 * @see Cache_driver::get()
+	 */
 	public function get($id, $realm = 'cot')
 	{
 		global $db_cache;
@@ -295,6 +368,9 @@ class Query_cache extends Cache_driver implements Cache_interface
 		return unserialize(sed_sql_result($res, 0, 0));
 	}
 
+	/**
+	 * @see Cache_driver::remove()
+	 */
 	public function remove($id, $realm = 'cot')
 	{
 		global $db_cache;
@@ -302,6 +378,9 @@ class Query_cache extends Cache_driver implements Cache_interface
 		return sed_sql_affectedrows() == 1;
 	}
 
+	/**
+	 * @see Cache_driver::store()
+	 */
 	public function store($id, $data, $realm = 'cot', $ttl = 0)
 	{
 		global $db_cache;
@@ -324,7 +403,7 @@ if (extension_loaded('memcache'))
 	 * keeping in mind that File_cache might be still faster.
 	 * @author trustmaster
 	 */
-	class Mem_cache extends Cache_driver implements Cache_interface
+	class Mem_cache extends Cache_driver
 	{
 		/**
 		 * PHP Memcache instance
@@ -345,6 +424,9 @@ if (extension_loaded('memcache'))
 			$this->memcache->addServer($host, $port, $persistent);
 		}
 
+		/**
+		 * @see Cache_driver::clear()
+		 */
 		public function clear($realm = 'cot')
 		{
 			if (empty($realm))
@@ -354,24 +436,37 @@ if (extension_loaded('memcache'))
 			else
 			{
 			// TODO implement exact realm cleanup
+				return FALSE;
 			}
 		}
 
+		/**
+		 * @see Cache_driver::exists()
+		 */
 		public function exists($id, $realm = 'cot')
 		{
 			return $this->memcache->get($realm . '/' . $id, MEMCACHE_COMPRESSED) !== FALSE;
 		}
 
+		/**
+		 * @see Cache_driver::get()
+		 */
 		public function get($id, $realm = 'cot')
 		{
 			return $this->memcache->get($realm . '/' . $id, MEMCACHE_COMPRESSED);
 		}
 
+		/**
+		 * @see Cache_driver::remove()
+		 */
 		public function remove($id, $realm = 'cot')
 		{
 			return $this->memcache->delete($realm . '/' . $id);
 		}
 
+		/**
+		 * @see Cache_driver::store()
+		 */
 		public function store($id, $data, $realm = 'cot', $ttl = 0)
 		{
 			return $this->memcache->add($realm . '/' . $id, $data, MEMCACHE_COMPRESSED, $ttl);
@@ -388,8 +483,11 @@ if (extension_loaded('apc'))
 	 * on APC-enabled hosts.
 	 * @author trustmaster
 	 */
-	class APC_cache extends Cache_driver implements Cache_interface
+	class APC_cache extends Cache_driver
 	{
+		/**
+		 * @see Cache_driver::clear()
+		 */
 		public function clear($realm = 'cot')
 		{
 			if (empty($realm))
@@ -399,24 +497,37 @@ if (extension_loaded('apc'))
 			else
 			{
 			// TODO implement exact realm cleanup
+				return FALSE;
 			}
 		}
 
+		/**
+		 * @see Cache_driver::exists()
+		 */
 		public function exists($id, $realm = 'cot')
 		{
 			return apc_fetch($realm . '/' . $id) !== FALSE;
 		}
 
+		/**
+		 * @see Cache_driver::get()
+		 */
 		public function get($id, $realm = 'cot')
 		{
 			return apc_fetch($realm . '/' . $id);
 		}
 
+		/**
+		 * @see Cache_driver::remove()
+		 */
 		public function remove($id, $realm = 'cot')
 		{
 			return apc_delete($realm . '/' . $id);
 		}
 
+		/**
+		 * @see Cache_driver::store()
+		 */
 		public function store($id, $data, $realm = 'cot', $ttl = 0)
 		{
 			return apc_store($realm . '/' . $id, $data, $ttl);
@@ -433,37 +544,52 @@ if (extension_loaded('eaccelerator'))
 	 * on hosts providing eAccelerator.
 	 * @author trustmaster
 	 */
-	class eAccelerator_cache extends Cache_driver implements Cache_interface
+	class eAccelerator_cache extends Cache_driver
 	{
-	// TODO page cache support
-
+		/**
+		 * @see Cache_driver::clear()
+		 */
 		public function clear($realm = 'cot')
 		{
 			if (empty($realm))
 			{
 				eaccelerator_clear();
+				return TRUE;
 			}
 			else
 			{
 			// TODO implement exact realm cleanup
+				return FALSE;
 			}
 		}
 
+		/**
+		 * @see Cache_driver::exists()
+		 */
 		public function exists($id, $realm = 'cot')
 		{
 			return !is_null(eaccelerator_get($realm . '/' . $id));
 		}
 
+		/**
+		 * @see Cache_driver::get()
+		 */
 		public function get($id, $realm = 'cot')
 		{
 			return eaccelerator_get($realm . '/' . $id);
 		}
 
+		/**
+		 * @see Cache_driver::remove()
+		 */
 		public function remove($id, $realm = 'cot')
 		{
 			return eaccelerator_rm($realm . '/' . $id);
 		}
 
+		/**
+		 * @see Cache_driver::store()
+		 */
 		public function store($id, $data, $realm = 'cot', $ttl = 0)
 		{
 			return eaccelerator_put($realm . '/' . $id, $data, $ttl);
@@ -480,35 +606,51 @@ if (extension_loaded('xcache'))
 	 * PHP acceleration and variable cache.
 	 * @author trustmaster
 	 */
-	class X_cache extends Cache_driver implements Cache_interface
+	class X_cache extends Cache_driver
 	{
+		/**
+		 * @see Cache_driver::clear()
+		 */
 		public function clear($realm = 'cot')
 		{
 			if (empty($realm))
 			{
-				xcache_clear_cache();
+				xcache_clear_cache(XC_TYPE_VAR); // FIXME may not work
+				return TRUE;
 			}
 			else
 			{
-			// TODO implement exact realm cleanup
+				return xcache_unset_by_prefix($realm . '/');
 			}
 		}
 
+		/**
+		 * @see Cache_driver::exists()
+		 */
 		public function exists($id, $realm = 'cot')
 		{
 			return xcache_isset($realm . '/' . $id);
 		}
 
+		/**
+		 * @see Cache_driver::get()
+		 */
 		public function get($id, $realm = 'cot')
 		{
 			return xcache_get($realm . '/' . $id);
 		}
 
+		/**
+		 * @see Cache_driver::remove()
+		 */
 		public function remove($id, $realm = 'cot')
 		{
 			return xcache_unset($realm . '/' . $id);
 		}
 
+		/**
+		 * @see Cache_driver::store()
+		 */
 		public function store($id, $data, $realm = 'cot', $ttl = 0)
 		{
 			return xcache_set($realm . '/' . $id, $data, $ttl);
