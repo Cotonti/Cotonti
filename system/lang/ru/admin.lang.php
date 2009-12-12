@@ -274,6 +274,9 @@ $L['cfg_disable_rss'] = array('Отключить RSS каналы', ''); // New
 $L['cfg_rss_timetolive'] = array('Как часто обновлять RSS кеш', 'В секундах'); // New in N-0.7.0
 $L['cfg_rss_maxitems'] = array('Макс. количество элементов в RSS канале', ' '); // New in N-0.7.0
 $L['cfg_rss_charset'] = array('Кодировка RSS каналов', 'Набор символов (кодовая страница)'); // New in N-0.7.0
+$L['cfg_rss_pagemaxsymbols'] = array('Макс. количество символов для страниц', 'По умолчанию отключено'); // New in N-0.7.0
+$L['cfg_rss_commentmaxsymbols'] = array('Макс. количество символов для комментариев', 'По умолчанию отключено'); // New in N-0.7.0
+$L['cfg_rss_postmaxsymbols'] = array('Макс. количество символов для сообщений форума', 'По умолчанию отключено'); // New in N-0.7.0
 
 /**
  * Config Section

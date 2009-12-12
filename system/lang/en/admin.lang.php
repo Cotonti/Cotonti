@@ -274,6 +274,10 @@ $L['cfg_disable_rss'] = array('Disable the RSS feeds', '');
 $L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' '); // New in N-0.7.0
 $L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' '); // New in N-0.7.0
 $L['cfg_rss_charset'] = array('RSS charset', ' '); // New in N-0.7.0
+$L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
+$L['cfg_rss_commentmaxsymbols'] = array('Comments. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
+$L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
+
 
 /**
  * Config Section
