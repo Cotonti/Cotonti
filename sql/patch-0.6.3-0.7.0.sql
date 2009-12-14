@@ -35,4 +35,7 @@ INSERT INTO sed_config (config_owner, config_cat, config_order, config_name, con
 ('plug', 'recentitems', '14', 'recentpagestext', 1, '', '', 'Recent pages text length limit'),
 ('plug', 'recentitems', '13', 'recentpagestitle', 1, '', '', 'Recent pages title length limit'),
 ('plug', 'recentitems', '12', 'maxpages', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed'),
-('plug', 'recentitems', '11', 'recentpages', 3, '1', '', 'Recent pages on index');
+('plug', 'recentitems', '11', 'recentpages', 3, '1', '', 'Recent pages on index'),
+('core', 'rss', '05', 'rss_pagemaxsymbols', 1, '', '', 'Pages. Cut element description longer than N symbols'),
+('core', 'rss', '06', 'rss_commentmaxsymbols', 1, '', '', 'Comments. Cut element description longer than N symbols'),
+('core', 'rss', '07', 'rss_postmaxsymbols', 1, '', '', 'Posts. Cut element description longer than N symbols');
