@@ -1,11 +1,11 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
 Name=Tags
 Description=Basic Tags implementation
-Version=0.0.6
-Date=2009-jun-28
+Version=0.7.0
+Date=2009-dec-15
 Author=Trustmaster
 Copyright=All rights reserved (c) 2008-2009, Vladimir Sibirov.
 Notes=BSD License.
@@ -36,12 +36,11 @@ index=12:select:pages,forums,all:pages:Index page tag cloud area
  * Basic Tags implementation
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Trustmaster, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL');
-// TODO AJAX autocomplete
 ?>

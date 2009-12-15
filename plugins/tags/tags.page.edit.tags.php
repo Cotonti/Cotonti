@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
@@ -14,7 +14,7 @@ Order=10
  * Part of plug tags
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
  * @copyright All rights reserved. 2008-2009
  * @license BSD
@@ -24,13 +24,25 @@ defined('SED_CODE') or die('Wrong URL');
 
 if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 {
+	if($cfg['jquery'] && $cfg['turnajax'])
+	{
+		$autocomplete = '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.autocomplete.js"></script>
+		<script type="text/javascript">
+		//<![CDATA[
+		$(document).ready(function(){
+		$(".tags").autocomplete("plug.php?r=tags", {multiple: true, minChars: 3});
+		});
+		//]]>
+		</script>';
+	}
+
 	require_once(sed_langfile('tags'));
 	$tags = sed_tag_list($id);
 	$tags = implode(', ', $tags);
 	$t->assign(array(
 	'PAGEEDIT_TOP_TAGS' => $L['Tags'],
 	'PAGEEDIT_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-	'PAGEEDIT_FORM_TAGS' => '<input type="text" name="rtags" value="' . $tags . '" />'
+	'PAGEEDIT_FORM_TAGS' => $autocomplete.'<input type="text" name="rtags" value="' . $tags . '"  size="56" class="tags" />'
 	));
 	$t->parse('MAIN.TAGS');
 }
