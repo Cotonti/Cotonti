@@ -6,8 +6,8 @@ Name=News
 Description=Pick up pages from a category and display the newest in the home page
 Version=0.7.0
 Date=2009-aug-03
-Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) 2008-2009 Cotonti Team
+Author=Cotonti Team
+Copyright=(c) 2008-2009 Cotonti Team
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -28,7 +28,7 @@ syncpagination=04:radio::0:Enable pagination for additional categories
  *
  * @package Cotonti
  * @version 0.0.3
- * @author Neocrome, Cotonti Team
+ * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */

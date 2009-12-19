@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * Russian Language File for Tags Plugin
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -43,5 +43,6 @@ $L['cfg_pages'] = array('Включить теги для страниц');
 $L['cfg_perpage'] = array('Тегов на странице в облаке всех тегов, 0 - все теги сразу');
 $L['cfg_title'] = array('Первые буквы тегов прописными');
 $L['cfg_translit'] = array('Транслитерировать теги в URL-адресах');
+$L['cfg_autocomplete'] = array('Мин. символов для автодополнения', '0 - отключает автодополнение');
 
 ?>

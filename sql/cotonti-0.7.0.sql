@@ -485,6 +485,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug', 'tags', '9', 'lim_index', 1, '0', '', ' Limit of tags in a cloud displayed on index, 0 is unlimited'),
 ('plug', 'tags', '10', 'more', 3, '1', '', 'Show All Tags link in tag clouds'),
 ('plug', 'tags', '12', 'index', 2, 'pages', 'pages,forums,all', 'Index page tag cloud area'),
+('plug', 'tags', '13', 'autocomplete', 2, '3', '0,1,2,3,4,5,6', 'Min. chars for aucomplete'),
 ('core', 'comments', '03', 'expand_comments', 3, '1', '', ''),
 ('core', 'ratings', '02', 'ratings_allowchange', 3, '0', '', ''),
 ('core', 'comments', '04', 'maxcommentsperpage', 2, '15', '', ''),
@@ -854,7 +855,8 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (42, 'header.main', 'tags', 'header', 'Tags', 'tags.header', 10, 1),
 (43, 'admin.config.edit.loop', 'news', 'adminconfig', 'News', 'news.admin', 10, 1),
 (44, 'standalone', 'recentitems', 'main', 'Recent items', 'recentitems', 10, 1),
-(45, 'admin.page.loop', 'tags', 'admin', 'Tags', 'tags.admin', 10, 1);
+(45, 'admin.page.loop', 'tags', 'admin', 'Tags', 'tags.admin', 10, 1),
+(46, 'ajax', 'tags', 'ajax', 'Tags', 'tags.ajax', 10, 1);
 
 CREATE TABLE `sed_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,

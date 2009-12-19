@@ -24,13 +24,13 @@ defined('SED_CODE') or die('Wrong URL');
 
 if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_first_post)
 {
-	if($cfg['jquery'] && $cfg['turnajax'])
+	if($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['tags']['autocomplete']>0)
 	{
 		$autocomplete = '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.autocomplete.js"></script>
 		<script type="text/javascript">
 		//<![CDATA[
 		$(document).ready(function(){
-		$(".tags").autocomplete("plug.php?r=tags", {multiple: true, minChars: 3});
+		$(".autotags").autocomplete("plug.php?r=tags", {multiple: true, minChars: '.$cfg['plugin']['tags']['autocomplete'].'});
 		});
 		//]]>
 		</script>';
@@ -42,7 +42,7 @@ if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_firs
 	$t->assign(array(
 	'FORUMS_EDITPOST_TOP_TAGS' => $L['Tags'],
 	'FORUMS_EDITPOST_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-	'FORUMS_EDITPOST_FORM_TAGS' => $autocomplete.'<input type="text" name="rtags" size="56" class="tags" value="' . $tags . '" />'
+	'FORUMS_EDITPOST_FORM_TAGS' => $autocomplete.'<input type="text" name="rtags" size="56" class="autotags" value="' . $tags . '" />'
 	));
 	$t->parse('MAIN.FORUMS_EDITPOST_TAGS');
 }

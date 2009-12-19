@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
@@ -14,7 +14,7 @@ Order=
  * Tag search
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Trustmaster (Vladimir Sibirov)
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
