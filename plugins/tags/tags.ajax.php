@@ -21,23 +21,16 @@ Order=10
  */
 
 defined('SED_CODE') or die('Wrong URL');
-function sed_geturldecode($str)
-{
-	$str = explode('%u', $str);
-	$out = '';
-	for ($i = 0; $i < count($str); $i++)
-	{
-		$out .= pack('H*', $str[$i]);
-	}
-	$out = mb_convert_encoding($out, 'UTF-8', 'UTF-16');
-	return $out;
-}
 
-$q = sed_geturldecode((strtolower(sed_import('q', 'G', 'TXT'))));
+
+$q = strtolower(sed_import('q', 'G', 'TXT'));
+$q = sed_sql_prep(urldecode($q));
 if (!$q) return;
-$tagslist=sed_tag_complete($q);
+$tagslist=sed_tag_complete($q, $cfg['plugin']['tags']['autocomplete']);
 if(is_array($tagslist))
+{
 	$tagstring=implode("\n", $tagslist);
+}
 sed_sendheaders();
 
 echo $tagstring;

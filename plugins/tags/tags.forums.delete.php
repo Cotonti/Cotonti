@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
@@ -14,7 +14,7 @@ Order=10
  * Part of plug tags
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
  * @copyright All rights reserved. 2008-2009
  * @license BSD

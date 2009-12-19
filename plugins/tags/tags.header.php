@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=tags
@@ -14,7 +14,7 @@ Order=10
  * Tags: supplimentary files connection
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Trustmaster
  * @copyright (c) 2008-2009 Cotonti Team
  * @license BSD

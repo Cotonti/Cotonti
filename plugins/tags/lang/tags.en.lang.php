@@ -1,9 +1,9 @@
-<?PHP
+<?php
 /**
  * English Language File for Tags Plugin
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -43,5 +43,7 @@ $L['cfg_pages'] = array('Enable tags in pages');
 $L['cfg_perpage'] = array('Tags displayed per page in standalone cloud, 0 is all at once');
 $L['cfg_title'] = array('Capitalize first letters of keywords');
 $L['cfg_translit'] = array('Transliterate tags in URLs');
+$L['cfg_autocomplete'] = array('Min. chars for autocomplete', '0 - disable autocompete');
+
 
 ?>
