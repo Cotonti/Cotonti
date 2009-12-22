@@ -70,6 +70,9 @@ if(!empty($p))
 		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
+	$adminpath[] = array(sed_url('admin', "m=tools&p=".$p), htmlspecialchars($info['Name']));
+	$adminhelp = $L['Description']." : ".$info['Description']."<br />".$L['Version']." : ".$info['Version']."<br />".$L['Date']." : ".$info['Date']."<br />".$L['Author']." : ".$info['Author']."<br />".$L['Copyright']." : ".$info['Copyright']."<br />".$L['Notes']." : ".$info['Notes'];
+
 	if(is_array($extp))
 	{
 		foreach($extp as $k => $pl)
@@ -78,9 +81,6 @@ if(!empty($p))
 			$adminmain .= $plugin_body;
 		}
 	}
-
-	$adminpath[] = array(sed_url('admin', "m=tools&p=".$p), htmlspecialchars($info['Name']));
-	$adminhelp = $L['Description']." : ".$info['Description']."<br />".$L['Version']." : ".$info['Version']."<br />".$L['Date']." : ".$info['Date']."<br />".$L['Author']." : ".$info['Author']."<br />".$L['Copyright']." : ".$info['Copyright']."<br />".$L['Notes']." : ".$info['Notes'];
 
 }
 else
