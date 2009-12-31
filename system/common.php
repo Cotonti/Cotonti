@@ -42,18 +42,8 @@ unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 require_once $cfg['system_dir'] . '/cache.php';
 // Enable cache storages that are always available
 $cot_file_cache = new File_cache();
-$cot_query_cache = new Query_cache();
 // Select the default cache driver
-$cnt = count($cache_drivers);
-if ($cnt > 0)
-{
-	$driver_name = $cache_drivers[$cnt - 1];
-	$cot_cache = new $driver_name();
-}
-else
-{
-	$cot_cache = $cot_query_cache;
-}
+$cache = new Cache();
 
 /* ======== Configuration settings ======== */
 
