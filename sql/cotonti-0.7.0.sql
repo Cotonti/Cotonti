@@ -263,8 +263,8 @@ INSERT INTO `sed_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('pfs', 'pcre', '\\[pfs\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png|zip|rar|7z|pdf|txt))\\[/pfs\\]', '<strong><a href="datas/users/$1">$1</a></strong>', 1, 1, 128, '', 0);
 
 CREATE TABLE `sed_cache` (
-  `c_name` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `c_realm` varchar(255) collate utf8_unicode_ci NOT NULL default 'cot',
+  `c_name` varchar(120) collate utf8_unicode_ci NOT NULL,
+  `c_realm` varchar(80) collate utf8_unicode_ci NOT NULL default 'cot',
   `c_expire` int(11) NOT NULL default '0',
   `c_auto` tinyint(1) NOT NULL default '0',
   `c_value` text collate utf8_unicode_ci,
@@ -275,9 +275,9 @@ CREATE TABLE `sed_cache` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `sed_cache_bindings` (
-  `c_event` VARCHAR(255) collate utf8_unicode_ci NOT NULL,
-  `c_id` VARCHAR(255) collate utf8_unicode_ci NOT NULL,
-  `c_realm` collate utf8_unicode_ci NOT NULL DEFAULT 'cot',
+  `c_event` VARCHAR(80) collate utf8_unicode_ci NOT NULL,
+  `c_id` VARCHAR(120) collate utf8_unicode_ci NOT NULL,
+  `c_realm` VARCHAR(80) collate utf8_unicode_ci NOT NULL DEFAULT 'cot',
   PRIMARY KEY (`c_event`, `c_id`, `c_realm`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

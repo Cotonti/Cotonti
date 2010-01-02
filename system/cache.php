@@ -15,40 +15,6 @@
 $cache_drivers = array();
 
 /**
- * This interface is realized by cache drivers with manual Garbage Collection (GC) support
- */
-interface Cache_gc
-{
-	/**
-	 * Manual garbage collection procedure
-	 */
-	public function gc();
-}
-
-/**
- * Fast increment/decrement operations for counters provided by some cache engines
- */
-interface Cache_inc
-{
-	/**
-	 * Increments counter value
-	 * @param string $id Counter identifier
-	 * @param string $realm Realm name
-	 * @param int $value Increment value
-	 * return int Result value
-	 */
-	public function inc($id, $realm = 'cot', $value = 1);
-	/**
-	 * Decrements counter value
-	 * @param string $id Counter identifier
-	 * @param string $realm Realm name
-	 * @param int $value Increment value
-	 * return int Result value
-	 */
-	public function dec($id, $realm = 'cot', $value = 1);
-}
-
-/**
  * Abstract class containing code common for all cache drivers
  * @author trustmaster
  */
@@ -135,20 +101,34 @@ abstract class Writeback_cache_driver extends Cache_driver
 abstract class Temporary_cache_driver extends Cache_driver
 {
 	/**
-	 * Returns number of bytes available
-	 * @return int
+	 * Increments counter value
+	 * @param string $id Counter identifier
+	 * @param string $realm Realm name
+	 * @param int $value Increment value
+	 * return int Result value
 	 */
-	abstract protected function get_available_size();
+	public function inc($id, $realm = 'cot', $value = 1)
+	{
+		$res = $this->get($id, $realm);
+		$res += $value;
+		$this->store($id, $res, $realm);
+		return $res;
+	}
+
 	/**
-	 * Returns number of bytes occupied
-	 * @return int
+	 * Decrements counter value
+	 * @param string $id Counter identifier
+	 * @param string $realm Realm name
+	 * @param int $value Increment value
+	 * return int Result value
 	 */
-	abstract protected function get_occupied_size();
-	/**
-	 * Returns maximum variable cache capacity
-	 * @return int
-	 */
-	abstract protected function get_max_size();
+	public function dec($id, $realm = 'cot', $value = 1)
+	{
+		$res = $this->get($id, $realm);
+		$res -= $value;
+		$this->store($id, $res, $realm);
+		return $res;
+	}
 
 	/**
 	 * Gets a size limit from php.ini
@@ -174,75 +154,6 @@ abstract class Temporary_cache_driver extends Cache_driver
 			default:
 				return (int) $ini;
 		}
-	}
-}
-
-/**
- * A non-prersistent cache implementation (example) using PHP arrays.
- * Normally you don't need to use it, because direct array access is faster.
- * @author trustmaster
- */
-class Array_cache extends Cache_driver
-{
-	/**
-	 * An associative array containing all the cache data
-	 * @var array
-	 */
-	private $data = array();
-
-	/**
-	 * @see Cache_driver::clear()
-	 */
-	public function clear($realm = 'cot')
-	{
-		if (empty($realm))
-		{
-			$realms = array_keys($this->data);
-			foreach ($realms as $realm)
-			{
-				$this->data[$realm] = array();
-			}
-		}
-		else
-		{
-			$this->data[$realm] = array();
-		}
-		return TRUE;
-	}
-
-	/**
-	 * @see Cache_driver::exists()
-	 */
-	public function exists($id, $realm = 'cot')
-	{
-		return isset($this->data[$realm][$id]);
-	}
-
-	/**
-	 * @see Cache_driver::get()
-	 */
-	public function get($id, $realm = 'cot')
-	{
-		return $this->data[$realm][$id];
-	}
-
-	/**
-	 * @see Cache_driver::remove()
-	 */
-	public function remove($id, $realm = 'cot')
-	{
-		unset($this->data[$realm][$id]);
-		return true;
-	}
-
-	/**
-	 * @param int $ttl Unsupported by this driver
-	 * @see Cache_driver::store()
-	 */
-	public function store($id, $data, $realm = 'cot', $ttl = 0)
-	{
-		$this->data[$realm][$id] = $data;
-		return true;
 	}
 }
 
@@ -371,13 +282,22 @@ $cache_drivers[] = 'MySQL_cache';
  * File_cache but may be considered more reliable.
  * @author trustmaster
  */
-class MySQL_cache extends Writeback_cache_driver implements Cache_gc
+class MySQL_cache extends Writeback_cache_driver
 {
 	/**
 	 * Prefetched data to avoid duplicate queries
 	 * @var array
 	 */
 	private $buffer = array();
+
+	/**
+	 * Performs pre-load actions
+	 */
+	public function __construct()
+	{
+		// TODO use probability
+		$this->gc();
+	}
 
 	/**
 	 * Saves all modified data with one query
@@ -452,9 +372,8 @@ class MySQL_cache extends Writeback_cache_driver implements Cache_gc
 	/**
 	 * Garbage collector function. Removes cache entries which are not valid anymore.
 	 * @return int Number of entries removed
-	 * @see Cache_gc::gc()
 	 */
-	public function gc()
+	private function gc()
 	{
 		global $db_cache, $sys;
 		sed_sql_query("DELETE FROM $db_cache WHERE c_expire > 0 AND c_expire < " . $sys['now']);
@@ -565,7 +484,7 @@ if (extension_loaded('memcache'))
 			}
 			else
 			{
-			// TODO implement exact realm cleanup
+				// TODO implement exact realm cleanup
 				return FALSE;
 			}
 		}
@@ -603,16 +522,13 @@ if (extension_loaded('memcache'))
 		}
 
 		/**
-		 * @see Cache_inc::inc()
+		 * @see Temporary_cache_driver::inc()
 		 */
 		public function inc($id, $realm = 'cot', $value = 1)
 		{
 			if ($this->compressed == MEMCACHE_COMPRESSED)
 			{
-				$res = $this->get($id, $realm);
-				$res += $value;
-				$this->store($id, $res, $realm);
-				return $res;
+				return parent::inc($id, $realm, $value);
 			}
 			else
 			{
@@ -621,16 +537,13 @@ if (extension_loaded('memcache'))
 		}
 
 		/**
-		 * @see Cache_inc::dec()
+		 * @see Temporary_cache_driver::dec()
 		 */
 		public function dec($id, $realm = 'cot', $value = 1)
 		{
 			if ($this->compressed == MEMCACHE_COMPRESSED)
 			{
-				$res = $this->get($id, $realm);
-				$res -= $value;
-				$this->store($id, $res, $realm);
-				return $res;
+				return parent::dec($id, $realm, $value);
 			}
 			else
 			{
@@ -639,7 +552,8 @@ if (extension_loaded('memcache'))
 		}
 
 		/**
-		 * @see Temporary_cache_driver::get_available_size()
+		 * Returns number of bytes available
+		 * @return int
 		 */
 		protected function get_available_size()
 		{
@@ -648,7 +562,8 @@ if (extension_loaded('memcache'))
 		}
 
 		/**
-		 * @see Temporary_cache_driver::get_occupied_size()
+		 * Returns number of bytes occupied
+		 * @return int
 		 */
 		protected function get_occupied_size()
 		{
@@ -657,7 +572,8 @@ if (extension_loaded('memcache'))
 		}
 
 		/**
-		 * @see Temporary_cache_driver::get_max_size()
+		 * Returns maximum variable cache capacity
+		 * @return int
 		 */
 		protected function get_max_size()
 		{
@@ -727,7 +643,8 @@ if (extension_loaded('apc'))
 		}
 
 		/**
-		 * @see Temporary_cache_driver::get_available_size()
+		 * Returns number of bytes available
+		 * @return int
 		 */
 		protected function get_available_size()
 		{
@@ -736,7 +653,8 @@ if (extension_loaded('apc'))
 		}
 
 		/**
-		 * @see Temporary_cache_driver::get_occupied_size()
+		 * Returns number of bytes occupied
+		 * @return int
 		 */
 		protected function get_occupied_size()
 		{
@@ -745,7 +663,8 @@ if (extension_loaded('apc'))
 		}
 
 		/**
-		 * @see Temporary_cache_driver::get_max_size()
+		 * Returns maximum variable cache capacity
+		 * @return int
 		 */
 		protected function get_max_size()
 		{
@@ -816,11 +735,38 @@ if (extension_loaded('eaccelerator'))
 		}
 
 		/**
-		 * @see Temporary_cache_driver::get_max_size()
+		 * Returns number of bytes available
+		 * @return int
+		 */
+		protected function get_available_size()
+		{
+			$info = eaccelerator_info();
+			return $info['memorySize'] - $info['memoryAllocated'];
+		}
+
+		/**
+		 * Returns number of bytes occupied
+		 * @return int
+		 */
+		protected function get_occupied_size()
+		{
+			$info = eaccelerator_info();
+			return $info['memoryAllocated'];
+		}
+
+		/**
+		 * Returns maximum variable cache capacity
+		 * @return int
 		 */
 		protected function get_max_size()
 		{
-			return $this->get_ini_size('xcache.var_size');
+			$info = eaccelerator_info();
+			return $info['memorySize'];
+		}
+
+		protected function get_keys()
+		{
+			return eaccelerator_list_keys();
 		}
 	}
 }
@@ -834,7 +780,7 @@ if (extension_loaded('xcache'))
 	 * PHP acceleration and variable cache.
 	 * @author trustmaster
 	 */
-	class Xcache_driver extends Temporary_cache_driver implements Cache_inc
+	class Xcache_driver extends Temporary_cache_driver
 	{
 		/**
 		 * @see Cache_driver::clear()
@@ -884,7 +830,7 @@ if (extension_loaded('xcache'))
 		}
 
 		/**
-		 * @see Cache_inc::inc()
+		 * @see Temporary_cache_driver::inc()
 		 */
 		public function inc($id, $realm = 'cot', $value = 1)
 		{
@@ -892,25 +838,16 @@ if (extension_loaded('xcache'))
 		}
 
 		/**
-		 * @see Cache_inc::dec()
+		 * @see Temporary_cache_driver::dec()
 		 */
 		public function dec($id, $realm = 'cot', $value = 1)
 		{
 			return xcache_dec($realm . '/' . $id, $value);
 		}
 
-		protected function get_available_size()
-		{
-			return null; // unaccessible
-		}
-
-		protected function get_occupied_size()
-		{
-			return null; // unaccessible
-		}
-
 		/**
-		 * @see Temporary_cache_driver::get_max_size()
+		 * Returns maximum variable cache capacity
+		 * @return int
 		 */
 		protected function get_max_size()
 		{
@@ -928,17 +865,12 @@ class Cache
 	 * Persistent cache underlayer driver
 	 * @var Cache_driver
 	 */
-	private $persistent;
+	private $disk;
 	/**
 	 * Intermediate shared (memory) driver
 	 * @var Cache_driver
 	 */
 	private $shared;
-	/**
-	 * Shared memory size limit
-	 * @var int
-	 */
-	private $shared_limit;
 	/**
 	 * Event bindings
 	 * @var array
@@ -951,11 +883,18 @@ class Cache
 	public function  __construct()
 	{
 		global $cfg, $cache_drivers;
-		$this->shared = in_array($cfg['cache']['shared_drv'], $cache_drivers) ?
-				new $cache_drivers[$cfg['cache']['shared_drv']]() : new MySQL_cache();
-		$this->persistent = in_array($cfg['cache']['persistent_drv'], $cache_drivers) ?
-				new $cache_drivers[$cfg['cache']['persistent_drv']]() : new File_cache($cfg['cache_dir']);
-		$this->shared_limit = (int) $cfg['cache']['shared_limit'];
+		$selected = count($cache_drivers) == 2 ? $cache_drivers[1] : $cfg['cache']['shared_drv'];
+		$this->shared = in_array($selected, $cache_drivers) ?
+				new $selected() : new MySQL_cache();
+		$this->disk = new File_cache($cfg['cache_dir']);
+		if ($this->disk->exists('cache_bindings', 'system'))
+		{
+			$this->bindings = $this->disk->get('cache_bindings', 'system');
+		}
+		else
+		{
+			$this->resync_bindings();
+		}
 	}
 
 	/**
@@ -967,14 +906,93 @@ class Cache
 	}
 
 	/**
+	 * Rereads bindings from database
+	 */
+	private function resync_bindings()
+	{
+		global $db_cache_bindings;
+		$this->bindings = array();
+		$sql = sed_sql_query("SELECT * FROM `$db_cache_bindings`");
+		while ($row = sed_sql_fetchassoc($sql))
+		{
+			$this->bindings[$row['c_event']][] = array('id' => $row['c_id'], 'realm' => $row['c_realm']);
+		}
+		sed_sql_freeresult($sql);
+		$this->disk->store('cache_bindings', $this->bindings, 'system');
+	}
+
+	/**
 	 * Binds an event to automatic cache field invalidation
 	 * @param string $event Event name
 	 * @param string $id Cache entry id
 	 * @param string $realm Cache realm name
+	 * @return bool TRUE on success, FALSE on error
 	 */
-	function bind($event, $id, $realm = 'cot')
+	public function bind($event, $id, $realm = 'cot')
 	{
-		$this->bindings[$event][] = array('id' => $id, 'realm' => $realm);
+		global $db_cache_bindings;
+		$c_event = sed_sql_prep($event);
+		$c_id = sed_sql_prep($id);
+		$c_realm = sed_sql_prep($realm);
+		sed_sql_query("INSERT INTO `$db_cache_bindings` (c_event, c_id, c_realm)
+			VALUES ('$c_event', '$c_id', '$c_realm')");
+		$res = sed_sql_affectedrows() == 1;
+		if ($res)
+		{
+			$this->resync_bindings();
+		}
+		return $res;
+	}
+
+	/**
+	 * Binds multiple cache fields to events, all represented as an associative array
+	 *
+	 * @param array $bindings An indexed array of bindings.
+	 * Each binding is an associative array with keys: event, realm, id.
+	 * @return int Number of bindings added
+	 */
+	public function bind_array($bindings)
+	{
+		global $db_cache_bindings;
+		$q = "INSERT INTO `$db_cache_bindings` (c_event, c_id, c_realm) VALUES ";
+		$i = 0;
+		foreach ($bindings as $entry)
+		{
+			$c_event = sed_sql_prep($entry['event']);
+			$c_id = sed_sql_prep($entry['id']);
+			$c_realm = sed_sql_prep($entry['realm']);
+			$comma = $i == 0 ? '' : ',';
+			$q .= $comma . "('$c_event', '$c_id', '$c_realm')";
+		}
+		sed_sql_query($q);
+		$res = sed_sql_affectedrows();
+		if ($res > 0)
+		{
+			$this->resync_bindings();
+		}
+		return $res;
+	}
+
+	/**
+	 * Checks if an object is stored in cache
+	 * @param string $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return bool
+	 */
+	public function exists($id, $realm = 'cot')
+	{
+		return $this->shared->exists($id, $realm);
+	}
+
+	/**
+	 * Checks if an object is stored in disk cache
+	 * @param string $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return bool
+	 */
+	public function exists_disk($id, $realm = 'cot')
+	{
+		return $this->disk->exists($id, $realm);
 	}
 
 	/**
@@ -987,19 +1005,7 @@ class Cache
 	 */
 	public function get($id, $realm = 'cot')
 	{
-		$value = null;
-		if ($this->shared->exists($id, $realm))
-		{
-			// TODO apply LRU + TTL here
-			$value = $this->shared->get($id, $realm);
-		}
-		elseif ($this->persistent->exists($id, $realm))
-		{
-			// TODO apply LRU + TTL here
-			$value = $this->persistent->get($id, $realm);
-			$this->shared->store($id, $value, $realm);
-		}
-		return $value;
+		return $this->shared->get($id, $realm);
 	}
 
 	/**
@@ -1010,7 +1016,7 @@ class Cache
 	 */
 	public function get_disk($id, $realm = 'cot')
 	{
-		return $this->persistent->get($id, $realm);
+		return $this->disk->get($id, $realm);
 	}
 
 	/**
@@ -1023,11 +1029,7 @@ class Cache
 	 */
 	public function set($id, $data, $realm = 'cot', $ttl = 0)
 	{
-		// TODO apply LRU here
-		$res = true;
-		$res &= $this->shared->store($id, $data, $realm, $ttl);
-		$res &= $this->persistent->store($id, $data, $realm, $ttl);
-		return $res;
+		return $this->shared->store($id, $data, $realm, $ttl);
 	}
 
 	/**
@@ -1040,7 +1042,7 @@ class Cache
 	 */
 	public function set_disk($id, $data, $realm = 'cot')
 	{
-		return $this->persistent->store($id, $data, $realm);
+		return $this->disk->store($id, $data, $realm);
 	}
 
 	/**
@@ -1067,8 +1069,41 @@ class Cache
 	public function remove($id, $realm = 'cot')
 	{
 		$this->shared->remove($id, $realm);
-		$this->persistent->remove($id, $realm);
+	}
+
+	/**
+	 * Removes disk cache image of the object.
+	 * @param string $id Object identifier
+	 * @param string $realm Realm name
+	 */
+	public function remove_disk($id, $realm = 'cot')
+	{
+		$this->disk->remove($id, $realm);
+	}
+
+	/**
+	 * Removes event/cache bindings
+	 * @param string $realm Realm name (required)
+	 * @param string $id Object identifier. Optional, if not specified, all bindings from the realm are removed.
+	 * @return int Number of bindings removed
+	 */
+	public function unbind($realm, $id = '')
+	{
+		global $db_cache_bindings;
+		$c_realm = sed_sql_prep($realm);
+		$q = "DELETE FROM `$db_cache_bindings` WHERE c_realm = '$c_realm'";
+		if (!empty($id))
+		{
+			$c_id = sed_sql_prep($id);
+			$q .= " AND c_id = '$c_id'";
+		}
+		sed_sql_query($q);
+		$res = sed_sql_affectedrows();
+		if ($res > 0)
+		{
+			$this->resync_bindings();
+		}
+		return $res;
 	}
 }
-
 ?>

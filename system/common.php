@@ -40,16 +40,14 @@ unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 /* ======== Cache Subsystem ======== */
 require_once $cfg['system_dir'] . '/cache.php';
-// Enable cache storages that are always available
-$cot_file_cache = new File_cache();
 // Select the default cache driver
-$cache = new Cache();
+$cot_cache = new Cache();
 
 /* ======== Configuration settings ======== */
 
-if ($cfg['cache'] && $cot_file_cache->exists('cfg', 'system'))
+if ($cfg['cache'] && $cot_cache->exists_disk('cfg', 'system'))
 {
-	$cfg = array_merge($cot_file_cache->get('cfg', 'system'), $cfg);
+	$cfg = array_merge($cot_cache->get_disk('cfg', 'system'), $cfg);
 }
 else
 {
@@ -69,7 +67,7 @@ else
 	$cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 	$cfg['css'] = $cfg['defaultskin'];
 
-	$cfg['cache'] && $cot_file_cache->store('cfg', $cfg, 'system');
+	$cfg['cache'] && $cot_cache->set_disk('cfg', $cfg, 'system');
 }
 // Mbstring options
 mb_internal_encoding($cfg['charset']);

@@ -124,6 +124,7 @@ $db_auth			= $db_x.'auth';
 $db_banlist 		= $db_x.'banlist';
 $db_bbcode			= $db_x.'bbcode';
 $db_cache 			= $db_x.'cache';
+$db_cache_bindings	= $db_x.'cache_bindings';
 $db_com 			= $db_x.'com';
 $db_core			= $db_x.'core';
 $db_config 			= $db_x.'config';
