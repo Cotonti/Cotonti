@@ -73,7 +73,7 @@ switch($n)
 				}
 			}
 
-			$cfg['cache'] && $cot_file_cache->remove('cfg', 'system');
+			$cfg['cache'] && $cot_cache->remove_disk('cfg', 'system');
 			$adminwarnings = $L['Updated'];
 		}
 		elseif ($a == 'reset' && $o == 'core' && !empty($v))
@@ -85,7 +85,7 @@ switch($n)
 					$sql = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($line[4]) . "' WHERE config_name='$v' AND config_owner='$o'");
 				}
 			}
-			$cfg['cache'] && $cot_file_cache->remove('cfg', 'system');
+			$cfg['cache'] && $cot_cache->remove_disk('cfg', 'system');
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
