@@ -32,6 +32,9 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
 
+$sys['day'] = @date('Y-m-d');
+$sys['now'] = time();
+$sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 /* ======== Connect to the SQL DB======== */
 
 require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
@@ -74,9 +77,6 @@ mb_internal_encoding($cfg['charset']);
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 
-$sys['day'] = @date('Y-m-d');
-$sys['now'] = time();
-$sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 $online_timedout = $sys['now'] - $cfg['timedout'];
 if($cfg['clustermode'])
 {
