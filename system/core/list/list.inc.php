@@ -11,14 +11,13 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-$id = sed_import('id', 'G', 'INT');
-$s = sed_import('s', 'G', 'ALP');
-$d = sed_import('d', 'G', 'INT');
-$c = sed_import('c', 'G', 'TXT');
-$w = sed_import('w', 'G', 'ALP', 4);
-$o = sed_import('o', 'G', 'ALP', 16);
-$p = sed_import('p', 'G', 'ALP', 16);
-$dc = sed_import('dc', 'G', 'INT');
+$s = sed_import('s', 'G', 'ALP'); // order field name without "page_"
+$w = sed_import('w', 'G', 'ALP', 4); // order way (asc, desc)
+$c = sed_import('c', 'G', 'TXT'); // cat code
+$o = sed_import('o', 'G', 'ALP', 16); // sort field name without "page_"
+$p = sed_import('p', 'G', 'ALP', 16); // sort way (asc, desc)
+$d = sed_import('d', 'G', 'INT'); //page number for pages list
+$dc = sed_import('dc', 'G', 'INT');// page number for cats list
 
 if ($c == 'all' || $c == 'system')
 {
@@ -67,6 +66,22 @@ $item_code = 'list_'.$c;
 $join_ratings_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
 $join_ratings_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_ratings as r ON r.rating_code=CONCAT('p',p.page_id)";
 
+$where = "(page_state=0 OR page_state=2) ";
+if ($c == 'unvalidated')
+{
+	$where = "page_state = 1 AND page_ownerid = " . $usr['id'];
+	$sed_cat[$c]['title'] = $L['pag_validation'];
+	$sed_cat[$c]['desc'] = $L['pag_validation_desc'];
+}
+elseif ($c != 'all')
+{
+	$where .= "page_cat='$c'";
+}
+if (!empty($o) && !empty($p) && $p != 'password')
+{
+	$where .= " AND page_$o='$p'";
+}
+$list_url = sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p");
 /* === Hook === */
 $extp = sed_getextplugins('list.query');
 if (is_array($extp))
@@ -75,57 +90,20 @@ if (is_array($extp))
 	{
 		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
 	}
-}
-/* ===== */
-else
+}/*
+ *  ===== */
+if(empty($sql_string))
 {
-	if ($c == 'all')
-	{
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=0");
-		$totallines = sed_sql_result($sql, 0, 0);
-		$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
+	$sql_count = "SELECT COUNT(*) FROM $db_pages WHERE $where";
+	$sql_string = "SELECT p.*, u.user_name ".$join_ratings_columns."
 		FROM $db_pages as p ".$join_ratings_condition."
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE page_state=0
-		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
-	}
-	elseif ($c == 'unvalidated')
-	{
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
-			WHERE page_state = 1 AND page_ownerid = " . $usr['id']);
-		$totallines = sed_sql_result($sql, 0, 0);
-		$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
-			FROM $db_pages as p ".$join_ratings_condition."
-				LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-			WHERE page_state = 1 AND page_ownerid = {$usr['id']}
-			ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
-		$sed_cat[$c]['title'] = $L['pag_validation'];
-		$sed_cat[$c]['desc'] = $L['pag_validation_desc'];
-	}
-	elseif (!empty($o) && !empty($p) && $p != 'password')
-	{
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
-			WHERE page_cat='$c' AND (page_state='0' OR page_state='2') AND page_$o='$p'");
-		$totallines = sed_sql_result($sql, 0, 0);
-		$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
-		FROM $db_pages as p ".$join_ratings_condition."
-		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE page_cat='$c' AND (page_state=0 OR page_state=2) AND page_$o='$p'
-		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
-	}
-	else
-	{
-		sed_die(empty($sed_cat[$c]['title']) && !$usr['isadmin']);
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
-			WHERE page_cat='$c' AND (page_state='0' OR page_state='2')");
-		$totallines = sed_sql_result($sql, 0, 0);
-		$sql = sed_sql_query("SELECT p.*, u.user_name ".$join_ratings_columns."
-		FROM $db_pages as p ".$join_ratings_condition."
-		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE page_cat='$c' AND (page_state=0 OR page_state=2)
-		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage']);
-	}
+		WHERE $where
+		ORDER BY page_$s $w LIMIT $d,".$cfg['maxrowsperpage'];
 }
+$sql = sed_sql_query($sql_count);
+$totallines = sed_sql_result($sql, 0, 0);
+$sql = sed_sql_query($sql_string);
 
 /*
 $incl = "datas/content/list.$c.txt";
@@ -150,8 +128,8 @@ $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
 $submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? "<a href=\"".sed_url('page', 'm=add&c='.$c)."\">".$L['lis_submitnew'].'</a>' : '';
 
-$pagination = sed_pagination(sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p"), $d, $totallines, $cfg['maxrowsperpage']);
-list($pageprev, $pagenext) = sed_pagination_pn(sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p"), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
+$pagination = sed_pagination($list_url, $d, $totallines, $cfg['maxrowsperpage']);
+list($pageprev, $pagenext) = sed_pagination_pn($list_url, $d, $totallines, $cfg['maxrowsperpage'], TRUE);
 
 list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=' . $c), $comments);
 list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=' . $c), $ratings);
@@ -392,7 +370,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 		"LIST_ROW_RATINGS" => $list_ratings,
 		"LIST_ROW_ADMIN" => $pag['admin'],
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj),
-	    "LIST_ROW_NUM" => $jj
+		"LIST_ROW_NUM" => $jj
 	));
 
 	// Adding LIST_ROW_TEXT tag
@@ -400,7 +378,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	{
 		case 1:
 			$t -> assign("LIST_ROW_TEXT", $pag['page_text']);
-		break;
+			break;
 
 		case 2:
 			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
@@ -413,7 +391,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 			{
 				$t -> assign("LIST_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
 			}
-		break;
+			break;
 
 		default:
 			if ($cfg['parser_cache'])
@@ -444,7 +422,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 				$text = sed_post_parse($text, 'pages');
 				$t -> assign('LIST_ROW_TEXT', $text);
 			}
-		break;
+			break;
 	}
 
 	// Extra fields for pages
