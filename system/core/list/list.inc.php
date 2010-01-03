@@ -75,7 +75,7 @@ if ($c == 'unvalidated')
 }
 elseif ($c != 'all')
 {
-	$where .= "page_cat='$c'";
+	$where .= " AND page_cat='$c'";
 }
 if (!empty($o) && !empty($p) && $p != 'password')
 {
