@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author medar, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009
+ * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
  */
 
@@ -37,7 +37,7 @@ $id = empty($id) ? "all" : $id;
 
 header('Content-type: text/xml');
 $sys['now'] = time();
-$cache = sed_cache_get("sed_rss_".$c.$id);
+$cache = $cot_cache->mem_get($c . $id, 'rss');
 if ($cache)
 {
     echo $cache;
@@ -369,7 +369,7 @@ if (is_array($extp))
 $t -> parse("MAIN");
 $out_rss = $t -> out("MAIN");
 
-sed_cache_store("sed_rss_".$c.$id, $out_rss, $cfg['rss_timetolive']);
+$cot_cache->mem_set($c . $id, $out_rss, 'rss', $cfg['rss_timetolive']);
 echo $out_rss;
 
 function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_pageurl)

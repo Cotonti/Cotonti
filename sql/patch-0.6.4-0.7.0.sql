@@ -39,10 +39,9 @@ UPDATE `sed_users` SET `user_country` = '00' WHERE `user_country` IN ('eu', 'yi'
 UPDATE `sed_users` SET `user_country` = 'rs' WHERE `user_country` = 'kv';
 UPDATE `sed_users` SET `user_country` = 'cd' WHERE `user_country` = 'zr';
 
-/* r1062 Cache tables update */
+/* r1062-1065 Cache tables update */
 ALTER TABLE `sed_cache` MODIFY `c_name` varchar(120) collate utf8_unicode_ci NOT NULL;
 ALTER TABLE `sed_cache` ADD COLUMN `c_realm` varchar(80) collate utf8_unicode_ci NOT NULL default 'cot';
-ALTER TABLE `sed_cache` MODIFY `c_auto` tinyint(1) NOT NULL default '0';
 ALTER TABLE `sed_cache` DROP PRIMARY KEY;
 ALTER TABLE `sed_cache` ADD PRIMARY KEY (`c_name`, `c_realm`);
 ALTER TABLE `sed_cache` ADD KEY (`c_realm`);
@@ -53,5 +52,6 @@ CREATE TABLE `sed_cache_bindings` (
   `c_event` VARCHAR(80) collate utf8_unicode_ci NOT NULL,
   `c_id` VARCHAR(120) collate utf8_unicode_ci NOT NULL,
   `c_realm` VARCHAR(80) collate utf8_unicode_ci NOT NULL DEFAULT 'cot',
+  `c_type` TINYINT NOT NULL DEFAULT '0',
   PRIMARY KEY (`c_event`, `c_id`, `c_realm`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

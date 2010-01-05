@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -36,7 +36,7 @@ if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 //Version Checking
 if ($cfg['check_updates'])
 {
-	$update_info = sed_cache_get('update_info');
+	$update_info = $cot_cache->db_get('update_info', 'admin');
 	if (!$update_info)
 	{
 		if (ini_get('allow_url_fopen'))
@@ -45,7 +45,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				sed_cache_store('update_info', $update_info, 86400, FALSE);
+				$cot_cache->db_set('update_info', $update_info, 'admin', 86400);
 			}
 		}
 		elseif (function_exists('curl_init'))
@@ -57,7 +57,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				sed_cache_store('update_info', $update_info, 86400, FALSE);
+				$cot_cache->db_set('update_info', $update_info, 'admin', 86400);
 			}
 			curl_close($curl);
 		}

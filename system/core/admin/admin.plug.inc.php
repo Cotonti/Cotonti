@@ -3,9 +3,9 @@
  * Administration panel
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -48,22 +48,22 @@ switch($a)
 		{
 			case 'pause':
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl'");
-				sed_cache_clearall();
+				$cot_cache->db_remove('sed_plugins', 'system');
 				$adminwarnings = $L['adm_paused'];
 			break;
 			case 'unpause':
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
-				sed_cache_clearall();
+				$cot_cache->db_remove('sed_plugins', 'system');
 				$adminwarnings = $L['adm_running'];
 			break;
 			case 'pausepart':
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl' AND pl_id='$part'");
-				sed_cache_clearall();
+				$cot_cache->db_remove('sed_plugins', 'system');
 				$adminwarnings = $L['adm_partstopped'];
 			break;
 			case 'unpausepart':
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl' AND pl_id='$part'");
-				sed_cache_clearall();
+				$cot_cache->db_remove('sed_plugins', 'system');
 				$adminwarnings = $L['adm_partrunning'];
 			break;
 		}
@@ -442,7 +442,7 @@ switch($a)
 				include_once($extplugin_info);
 
 				sed_auth_reorder();
-				sed_cache_clearall();
+				$cot_cache->db_remove('sed_plugins', 'system');
 
 				$t -> assign(array(
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS1" => $show_sql_affectedrows1,
@@ -484,7 +484,7 @@ switch($a)
 
 				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
 				$show_sql_affectedrows4 = sed_sql_affectedrows();
-				sed_cache_clearall();
+				$cot_cache->db_remove('sed_plugins', 'system');
 
 				$extplugin_uninstall = $cfg['plugins_dir']."/".$pl."/".$pl.".uninstall.php";
 				$action = 'uninstall';
