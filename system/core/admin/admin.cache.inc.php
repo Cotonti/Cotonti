@@ -3,9 +3,9 @@
  * Administration panel - Internal cache
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -35,7 +35,7 @@ if(is_array($extp))
 
 if($a == 'purge')
 {
-	$adminwarnings = (sed_check_xg() && sed_cache_clearall()) ? $L['adm_purgeall_done'] : $L['Error'];
+	$adminwarnings = (sed_check_xg() && $cot_cache->clear()) ? $L['adm_purgeall_done'] : $L['Error'];
 }
 elseif($a == 'delete')
 {

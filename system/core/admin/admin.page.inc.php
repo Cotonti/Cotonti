@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -62,7 +62,7 @@ if ($a == 'validate')
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
 		sed_log($L['Page']." #".$id." - ".$L['adm_queue_validated'], 'adm');
-		sed_cache_clear('latestpages');
+		$cot_cache->db_remove('latestpages');
 
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_validated'];
 	}
@@ -96,7 +96,7 @@ elseif ($a == 'unvalidate')
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 
 		sed_log($L['Page']." #".$id." - ".$L['adm_queue_unvalidated'], 'adm');
-		sed_cache_clear('latestpages');
+		$cot_cache->db_remove('latestpages');
 
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_unvalidated'];
 	}
@@ -151,7 +151,7 @@ elseif ($a == 'delete')
 		}
 		/* ===== */
 
-		sed_cache_clear('latestpages');
+		$cot_cache->db_remove('latestpages');
 
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_deleted'];
 	}
@@ -206,7 +206,7 @@ elseif ($a == 'update_cheked')
 			}
 		}
 
-		sed_cache_clear('latestpages');
+		$cot_cache->db_remove('latestpages');
 
 		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_validated'] : NULL;
 	}
@@ -272,7 +272,7 @@ elseif ($a == 'update_cheked')
 			}
 		}
 
-		sed_cache_clear('latestpages');
+		$cot_cache->db_remove('latestpages');
 
 		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_deleted'] : NULL;
 	}

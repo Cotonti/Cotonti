@@ -3,9 +3,9 @@
  * Administration panel - Forums & categories
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -71,7 +71,7 @@ if($n == 'options')
 			fn_defstate='".$rdefstate."'
 			WHERE fn_id='".$id."'");
 
-		sed_cache_clear('sed_forums_str');
+		$cot_cache->db_remove('sed_forums_str', 'system');
 
         //$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
 		sed_redirect(sed_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
@@ -152,7 +152,7 @@ else
 				fn_defstate='".$s[$i]['rdefstate']."'
 				WHERE fn_id='".$i."'");
 		}
-		sed_cache_clear('sed_forums_str');
+		$cot_cache->db_remove('sed_forums_str', 'system');
 
 		$adminwarnings = $L['Updated'];
 	}
@@ -172,7 +172,7 @@ else
 			$sql = sed_sql_query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('$ncode', '$npath', '$ntitle', '$ndesc', '$nicon', ".(int)$ndefstate.")");
 		}
 
-		sed_cache_clear('sed_forums_str');
+		$cot_cache->db_remove('sed_forums_str', 'system');
 
 		$adminwarnings = $L['Added'];
 	}
@@ -181,7 +181,7 @@ else
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 
-		sed_cache_clear('sed_forums_str');
+		$cot_cache->db_remove('sed_forums_str', 'system');
 
 		$adminwarnings = $L['Deleted'];
 	}

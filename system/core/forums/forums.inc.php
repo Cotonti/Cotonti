@@ -9,7 +9,7 @@
 /**
  * @package Cotonti
  * @version 0.7.0
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD
  */
 
@@ -64,9 +64,10 @@ if (!$sed_sections_act)
         $sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_creation>'$timeback' AND fp_sectionid='$section'");
         $sed_sections_act[$section] = sed_sql_result($sqltmp, 0, "COUNT(*)");
     }
-    sed_cache_store('sed_sections_act', $sed_sections_act, 600);
+    $cfg['cache'] && $cot_cache->db_set('sed_sections_act', $sed_sections_act, 'system', 600);
 }
 
+$sed_sections_vw = $cot_cache->mem_get('sections_wv', 'forums');
 if (!$sed_sections_vw)
 {
     $sqltmp = sed_sql_query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
@@ -75,7 +76,7 @@ if (!$sed_sections_vw)
     {
         $sed_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
     }
-    sed_cache_store('sed_sections_vw', $sed_sections_vw, 120);
+    $cfg['cache'] &&$cot_cache->mem_set('sections_vw', $sed_sections_vw, 'forums', 120);
 }
 
 unset($pcat);

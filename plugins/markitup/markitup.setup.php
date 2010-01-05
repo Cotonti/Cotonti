@@ -54,11 +54,13 @@ if($action == 'install')
 	sed_bbcode_add('spoiler', 'pcre', '\[spoiler=([^\]]+)\](.+?)\[/spoiler\]', '<div style="margin:4px 0px 4px 0px"><input type="button" value="$1" onclick="if(this.parentNode.getElementsByTagName(\'div\')[0].style.display != \'\') { this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'\'; } else { this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\'; }" /><div style="display:none" class="spoiler">$2</div></div>', true, 130, 'markitup');
 
 	sed_cache_clearhtml();
+	sed_bbcode_clearcache();
 }
 elseif($action == 'uninstall')
 {
 	// Remove plugin bbcodes
 	sed_bbcode_remove(0, 'markitup');
+	sed_bbcode_clearcache();
 }
 
 ?>

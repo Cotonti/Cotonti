@@ -9,7 +9,7 @@ http://www.neocrome.net
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -48,9 +48,10 @@ $cot_cache = new Cache();
 
 /* ======== Configuration settings ======== */
 
-if ($cfg['cache'] && $cot_cache->exists_disk('cfg', 'system'))
+if ($cfg['cache'] && $cot_cfg)
 {
-	$cfg = array_merge($cot_cache->get_disk('cfg', 'system'), $cfg);
+	$cfg = array_merge($cot_cfg, $cfg);
+	unset($cot_cfg);
 }
 else
 {
@@ -70,7 +71,7 @@ else
 	$cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 	$cfg['css'] = $cfg['defaultskin'];
 
-	$cfg['cache'] && $cot_cache->set_disk('cfg', $cfg, 'system');
+	$cfg['cache'] && $cot_cache->db_set('cot_cfg', $cfg, 'system');
 }
 // Mbstring options
 mb_internal_encoding($cfg['charset']);
@@ -113,18 +114,6 @@ $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
 define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']));
 
-/* ======== Internal cache ======== */
-
-if ($cfg['cache'])
-{
-	$sql = sed_cache_getall();
-	if ($sql)
-	{
-		while ($row = sed_sql_fetcharray($sql))
-		{ $$row['c_name'] = unserialize($row['c_value']); }
-	}
-}
-
 /* ======== Plugins ======== */
 
 if (!$sed_plugins)
@@ -135,10 +124,14 @@ if (!$sed_plugins)
 		while ($row = sed_sql_fetcharray($sql))
 		{ $sed_plugins[] = $row; }
 	}
-	sed_cache_store('sed_plugins', $sed_plugins, 3300);
+	$cfg['cache'] && $cot_cache->db_set('sed_plugins', $sed_plugins, 'system');
 }
 
-sed_load_urltrans();
+if (!is_array($sed_urltrans))
+{
+	sed_load_urltrans();
+	$cfg['cache'] && $cot_cache->db_set('sed_urltrans', $sed_urltrans, 'system', 1200);
+}
 
 /* ======== Gzip and output filtering ======== */
 
@@ -200,7 +193,7 @@ if (!$sed_groups )
 	else
 	{ sed_diefatal('No groups found.'); }
 
-	sed_cache_store('sed_groups',$sed_groups,3600);
+	$cfg['cache'] && $cot_cache->db_set('sed_groups', $sed_groups, 'system');
 }
 
 /* ======== User/Guest ======== */
@@ -543,16 +536,16 @@ if (!$cfg['disablehitstats'])
 
 if (!$sed_cat && !$cfg['disable_page'])
 {
-	$sed_cat = sed_load_structure();
-	sed_cache_store('sed_cat', $sed_cat, 3600);
+	sed_load_structure();
+	$cfg['cache'] && $cot_cache->db_set('sed_cat', $sed_cat, 'system');
 }
 
 /* ======== Forums ======== */
 
 if (!$sed_forums_str && !$cfg['disable_forums'])
 {
-	$sed_forums_str = sed_load_forum_structure();
-	sed_cache_store('sed_forums_str', $sed_forums_str, 3600);
+	sed_load_forum_structure();
+	$cfg['cache'] && $cot_cache->db_set('sed_forums_str', $sed_forums_str, 'system');
 }
 
 /* ======== Various ======== */
@@ -594,11 +587,20 @@ if($cfg['parser_custom'])
 
 if(!$cfg['parser_disable'])
 {
-	if (!$sed_smilies)
+	if (!is_array($sed_smilies))
 	{
 		sed_load_smilies();
-		sed_cache_store('sed_smilies',$sed_smilies,3550);
+		$cfg['cache'] && $cot_cache->db_set('sed_smilies', $sed_smilies, 'system');
 	}
-	sed_bbcode_load();
+	if (!is_array($sed_bbcodes))
+	{
+		sed_bbcode_load();
+		if ($cfg['cache'])
+		{
+			$cot_cache->db_set('sed_bbcodes', $sed_bbcodes, 'system');
+			$cot_cache->db_set('sed_bbcodes_post', $sed_bbcodes_post, 'system');
+			$cot_cache->db_set('sed_bbcode_containers', $sed_bbcode_containers, 'system');
+		}
+	}
 }
 ?>

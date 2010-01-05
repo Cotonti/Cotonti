@@ -111,7 +111,7 @@ if (!SED_AJAX)
 	$t->out("FOOTER");
 }
 @ob_end_flush();
-
+$cot_cache = null; // Need to destroy before DB connection is lost
 sed_sql_close();
 
 /* === Hook === */

@@ -3,9 +3,9 @@
  * Administration panel - Users
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -70,7 +70,7 @@ if($n == 'add')
 	}
 
 	sed_auth_reorder();
-	sed_cache_clear('sed_groups');
+	$cot_cache->db_clear('sed_groups', 'system');
 
 	$adminwarnings = $L['Added'];
 }
@@ -107,7 +107,7 @@ elseif($n == 'edit')
 
 		$sql = (!empty($rtitle)) ? sed_sql_query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden', grp_maintenance='$rmtmode' WHERE grp_id='$g'") : '';
 
-		sed_cache_clear('sed_groups');
+		$cot_cache->db_remove('sed_groups', 'system');
 
 		$adminwarnings = $L['Updated'];
 	}
@@ -128,7 +128,7 @@ elseif($n == 'edit')
 		}
 		/* ===== */
 		sed_auth_clear('all');
-		sed_cache_clear('sed_groups');
+		$cot_cache->db_remove('sed_groups', 'system');
 
 		$adminwarnings = $L['Deleted'];
 	}

@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */
 
@@ -366,47 +366,41 @@ function sed_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
 function sed_bbcode_load()
 {
 	global $db_bbcode, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
-	if(!is_array($sed_bbcodes))
+	$sed_bbcodes = array();
+	$sed_bbcodes_post = array();
+	$sed_bbcode_containers = ''; // required for auto-close
+	$bbc_cntr = array();
+	$i = 0;
+	$j = 0;
+	$res = sed_sql_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
+	while($row = sed_sql_fetchassoc($res))
 	{
-		$sed_bbcodes = array();
-		$sed_bbcodes_post = array();
-		$sed_bbcode_containers = ''; // required for auto-close
-		$bbc_cntr = array();
-		$i = 0;
-		$j = 0;
-		$res = sed_sql_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
-		while($row = sed_sql_fetchassoc($res))
+		if($row['bbc_postrender'] == 1)
 		{
-			if($row['bbc_postrender'] == 1)
+			foreach($row as $key => $val)
 			{
-				foreach($row as $key => $val)
-				{
-					$sed_bbcodes_post[$j][str_replace('bbc_', '', $key)] = $val;
-				}
-				$j++;
+				$sed_bbcodes_post[$j][str_replace('bbc_', '', $key)] = $val;
 			}
-			else
-			{
-				foreach($row as $key => $val)
-				{
-					$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
-				}
-				$i++;
-			}
-			if($row['bbc_container'] == 1 && !isset($bbc_cntr[$row['bbc_name']]))
-			{
-				$sed_bbcode_containers .= $row['bbc_name'] . '|';
-				$bbc_cntr[$row['bbc_name']] = 1;
-			}
+			$j++;
 		}
-		sed_sql_freeresult($res);
-		if(!empty($sed_bbcode_containers))
+		else
 		{
-			$sed_bbcode_containers = mb_substr($sed_bbcode_containers, 0, -1);
+			foreach($row as $key => $val)
+			{
+				$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
+			}
+			$i++;
 		}
-		sed_cache_store('sed_bbcodes', $sed_bbcodes, 3550);
-		sed_cache_store('sed_bbcodes_post', $sed_bbcodes_post, 3550);
-		sed_cache_store('sed_bbcode_containers', $sed_bbcode_containers, 3550);
+		if($row['bbc_container'] == 1 && !isset($bbc_cntr[$row['bbc_name']]))
+		{
+			$sed_bbcode_containers .= $row['bbc_name'] . '|';
+			$bbc_cntr[$row['bbc_name']] = 1;
+		}
+	}
+	sed_sql_freeresult($res);
+	if(!empty($sed_bbcode_containers))
+	{
+		$sed_bbcode_containers = mb_substr($sed_bbcode_containers, 0, -1);
 	}
 }
 
@@ -415,9 +409,10 @@ function sed_bbcode_load()
  */
 function sed_bbcode_clearcache()
 {
-	sed_cache_clear('sed_bbcodes');
-	sed_cache_clear('sed_bbcodes_post');
-	sed_cache_clear('sed_bbcode_containers');
+	global $cot_cache;
+	$cot_cache->db_remove('sed_bbcodes', 'system');
+	$cot_cache->db_remove('sed_bbcodes_post', 'system');
+	$cot_cache->db_remove('sed_bbcode_containers', 'system');
 }
 
 /**
@@ -2078,7 +2073,7 @@ function sed_build_usertext($text)
 
 /**
  * Clears cache item
- *
+ * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
  * @param string $name Item name
  * @return bool
  */
@@ -2092,7 +2087,7 @@ function sed_cache_clear($name)
 
 /**
  * Clears cache completely
- *
+ * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
  * @return bool
  */
 function sed_cache_clearall()
@@ -2120,7 +2115,7 @@ function sed_cache_clearhtml()
 
 /**
  * Fetches cache value
- *
+ * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
  * @param string $name Item name
  * @return mixed
  */
@@ -2139,7 +2134,7 @@ function sed_cache_get($name)
 
 /**
  * Get all cache data and import it into global scope
- *
+ * @deprecated Deprecated since 0.7.0
  * @param int $auto Only with autoload flag
  * @return mixed
  */
@@ -2161,7 +2156,7 @@ function sed_cache_getall($auto = 1)
 
 /**
  * Puts an item into cache
- *
+ * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
  * @param string $name Item name
  * @param mixed $value Item value
  * @param int $expire Expires in seconds
@@ -3047,8 +3042,8 @@ function sed_load_smilies()
 	for($i = 0; $i < $cnt; $i++)
 	{
 		$sed_smilies[$i] = array(
-		'code' => $code[$i],
-		'file' => $file[$i]
+				'code' => $code[$i],
+				'file' => $file[$i]
 		);
 	}
 }
@@ -3057,12 +3052,10 @@ function sed_load_smilies()
 
 /**
  * Loads comlete category structure into array
- *
- * @return array
  */
 function sed_load_structure()
 {
-	global $db_structure, $db_extra_fields, $cfg, $L;
+	global $db_structure, $db_extra_fields, $cfg, $L, $sed_cat;
 
 	$extrafields_p = array();
 	$counter_of_extrafields_c = 0;
@@ -3073,7 +3066,7 @@ function sed_load_structure()
 		$counter_of_extrafields_c++;
 	}
 
-	$res = array();
+	$sed_cat = array();
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
 
 	while ($row = sed_sql_fetcharray($sql))
@@ -3103,7 +3096,7 @@ function sed_load_structure()
 		$order = explode('.', $row['structure_order']);
 		$parent_tpl = $row['structure_tpl'];
 
-		$res[$row['structure_code']] = array(
+		$sed_cat[$row['structure_code']] = array(
 			'path' => $path[$row['structure_path']],
 			'tpath' => $tpath[$row['structure_path']],
 			'rpath' => $row['structure_path'],
@@ -3122,24 +3115,20 @@ function sed_load_structure()
 		{
 			foreach ($extrafields_c as $row_c)
 			{
-				$res[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
+				$sed_cat[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
 			}
 		}
 	}
-
-	return($res);
 }
 
 /**
  * Loads complete forum structure into array
- *
- * @return array
  */
 function sed_load_forum_structure()
 {
-	global $db_forum_structure, $cfg, $L;
+	global $db_forum_structure, $cfg, $L, $sed_forums_str;
 
-	$res = array();
+	$sed_forums_str = array();
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER BY fn_path ASC");
 
 	while ($row = sed_sql_fetcharray($sql))
@@ -3166,7 +3155,7 @@ function sed_load_forum_structure()
 
 		$parent_tpl = $row['fn_tpl'];
 
-		$res[$row['fn_code']] = array (
+		$sed_forums_str[$row['fn_code']] = array (
 			'path' => $path[$row['fn_path']],
 			'tpath' => $tpath[$row['fn_path']],
 			'rpath' => $row['fn_path'],
@@ -3177,8 +3166,6 @@ function sed_load_forum_structure()
 			'defstate' => $row['fn_defstate']
 		);
 	}
-
-	return($res);
 }
 
 /**
@@ -4737,7 +4724,6 @@ function sed_unique($l=16)
 
 /**
  * Loads URL Transformation Rules
- *
  */
 function sed_load_urltrans()
 {

@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */
 
@@ -474,13 +474,12 @@ function sed_loaddoctypes()
 
 function sed_structure_delcat($id, $c)
 {
-    global $db_structure, $db_auth;
+    global $db_structure, $db_auth, $cfg, $cot_cache;
 
     $sql = sed_sql_query("DELETE FROM $db_structure WHERE structure_id='$id'");
     $sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page' AND auth_option='$c'");
     sed_auth_clear('all');
-    sed_cache_clear('sed_cat');
-    return($res);
+    $cfg['cache'] && $cot_cache->db_remove('sed_cat', 'system');
 }
 
 /* ------------------ */
@@ -489,7 +488,7 @@ function sed_structure_delcat($id, $c)
 
 function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order, $way, $extra_array = array())
 {
-    global $db_structure, $db_auth, $sed_groups, $usr;
+    global $db_structure, $db_auth, $sed_groups, $usr, $cfg, $cot_cache;
 
     $res = FALSE;
 
@@ -542,10 +541,10 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
             }
             sed_auth_reorder();
             sed_auth_clear('all');
-            sed_cache_clear('sed_cat');
+            $cfg['cache'] && $cot_cache->db_remove('sed_cat', 'system');
         }
     }
-    return($res);
+    return $res;
 }
 
 function sed_structure_resync($id)

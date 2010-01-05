@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -146,7 +146,7 @@ if ($n == 'options')
 
 			sed_auth_reorder();
 			sed_auth_clear('all');
-			sed_cache_clear('sed_cat');
+			$cot_cache->db_remove('sed_cat', 'system');
 		}
 
 		if ($rtplmode == 1)
@@ -189,7 +189,7 @@ if ($n == 'options')
 			WHERE structure_id='".$id."'";
 		$sql = sed_sql_query($sqltxt);
 
-		sed_cache_clear('sed_cat');
+		$cot_cache->db_remove('sed_cat', 'system');
 
 		//$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
 		sed_redirect(sed_url('admin', 'm=structure&d='.$d.$additionsforurl, '', true));
@@ -374,7 +374,7 @@ else
 
 				sed_auth_reorder();
 				sed_auth_clear('all');
-				sed_cache_clear('sed_cat');
+				$cot_cache->db_remove('sed_cat', 'system');
 			}
 
 			$sql1text = "UPDATE $db_structure
@@ -402,7 +402,7 @@ else
 		}
 
 		sed_auth_clear('all');
-		sed_cache_clear('sed_cat');
+		$cot_cache->db_remove('sed_cat', 'system');
 
 		$adminwarnings = $L['Updated'];
 	}
