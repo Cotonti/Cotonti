@@ -20,8 +20,10 @@ $d = sed_import('d','G','INT');
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.list.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=2");
@@ -85,8 +87,10 @@ $out['subtitle'] = sed_title('title_pm_main', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.list.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url('pm', 'm=send')."\">".$L['pm_sendnew']."</a>" : '';
@@ -189,8 +193,10 @@ while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
         ));
 
     /* === Hook - Part2 : Include === */
-    if (is_array($extp))
-    { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+    foreach ($extp as $pl)
+    {
+    	include $pl;
+    }
     /* ===== */
 
     $t->parse("MAIN.PM_ROW");
@@ -206,8 +212,10 @@ $t->parse("MAIN.PM_FOOTER");
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.list.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

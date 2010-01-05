@@ -60,8 +60,10 @@ if($cfg['plugin']['recentitems']['newadditional'] && ($mode  != 'pages' || $mode
 {
 /* === Hook === */
     $extp = sed_getextplugins('recentitems.tags');
-    if (is_array($extp))
-    { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+    foreach ($extp as $pl)
+    {
+    	include $pl;
+    }
 /* ===== */
 }
 

@@ -28,8 +28,10 @@ sed_block($usr['auth_write']);
 
 /* === Hook === */
 $extp = sed_getextplugins('profile.first');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $id = sed_import('id','G','TXT');
@@ -120,8 +122,10 @@ switch ($a)
 
 	/* === Hook === */
 	$extp = sed_getextplugins('profile.update.first');
-	if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$uav_tmp_name = $_FILES['userfile']['tmp_name'];
@@ -180,8 +184,10 @@ switch ($a)
 
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.avatar');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				foreach ($extp as $pl)
+				{
+					include $pl;
+				}
 				/* ===== */
 
 				$uav_size = filesize($avatarpath);
@@ -246,8 +252,10 @@ switch ($a)
 
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.photo');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				foreach ($extp as $pl)
+				{
+					include $pl;
+				}
 				/* ===== */
 
 				$uph_size = filesize($photopath);
@@ -312,8 +320,10 @@ switch ($a)
 
 				/* === Hook === */
 				$extp = sed_getextplugins('profile.update.signature');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				foreach ($extp as $pl)
+				{
+					include $pl;
+				}
 				/* ===== */
 
 				$usig_size = filesize($signaturepath);
@@ -528,8 +538,10 @@ switch ($a)
 
 		/* === Hook === */
 		$extp = sed_getextplugins('profile.update.done');
-		if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		sed_redirect(sed_url('users', 'm=profile'));
@@ -605,8 +617,10 @@ $out['subtitle'] = sed_title('title_users_profile', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('profile.main');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -669,8 +683,10 @@ if(count($extrafields)>0)
 $t->assign($useredit_array);
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($cfg['useremailchange'])

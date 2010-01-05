@@ -28,12 +28,9 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.ratings.first');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -96,12 +93,9 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_RATINGS_ROW_ODDEVEN" => sed_build_oddeven($ii)
 	));
 	/* === Hook - Part2 : Include === */
-	if(is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach($extp as $k => $pl)
-		{
-			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 	$t -> parse("RATINGS.RATINGS_ROW");
@@ -123,12 +117,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.ratings.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

@@ -24,12 +24,9 @@ $ratings = true; // TODO enable/disable ratings on categories
 
 /* === Hook === */
 $extp = sed_getextplugins('page.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -80,12 +77,9 @@ if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a 
 {
 	/* === Hook === */
 	$extp = sed_getextplugins('page.download.first');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -132,12 +126,9 @@ $out['subtitle'] = sed_title('title_page', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -370,12 +361,9 @@ if ($pag['page_totaltabs'] > 1)
 
 /* === Hook === */
 $extp = sed_getextplugins('page.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 if ($usr['isadmin'])

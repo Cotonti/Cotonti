@@ -28,12 +28,9 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.structure.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -127,12 +124,9 @@ if ($n == 'options')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.structure.options.update');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -311,12 +305,9 @@ if ($n == 'options')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.structure.options.tags');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 	$t -> parse("STRUCTURE.OPTIONS");
@@ -356,12 +347,9 @@ else
 
 			/* === Hook === */
 			$extp = sed_getextplugins('admin.structure.update');
-			if (is_array($extp))
+			foreach ($extp as $pl)
 			{
-				foreach ($extp as $k => $pl)
-				{
-					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-				}
+				include $pl;
 			}
 			/* ===== */
 
@@ -438,12 +426,9 @@ else
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.structure.add');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -455,12 +440,9 @@ else
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.structure.delete');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -581,12 +563,9 @@ else
 		$t -> assign($extra_array);*/
 
 		/* === Hook - Part2 : Include === */
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -653,12 +632,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.structure.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

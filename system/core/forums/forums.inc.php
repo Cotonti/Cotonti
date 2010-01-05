@@ -18,8 +18,10 @@ defined('SED_CODE') or die('Wrong URL');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', 'any');
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.rights');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 sed_block($usr['auth_read']);
 
@@ -39,8 +41,10 @@ $sys['sublocation'] = $L['Home'];
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($n=='markall' && $usr['id']>0)
@@ -90,8 +94,10 @@ $out['subtitle'] = sed_title('title_forum_main', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -288,8 +294,10 @@ while ($fsn = sed_sql_fetcharray($sql))
         }
 
         /* === Hook - Part2 : Include === */
-        if (is_array($extp))
-        { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+        foreach ($extp as $pl)
+        {
+        	include $pl;
+        }
         /* ===== */
 
         $t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION");
@@ -308,8 +316,10 @@ while ($fsn = sed_sql_fetcharray($sql))
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

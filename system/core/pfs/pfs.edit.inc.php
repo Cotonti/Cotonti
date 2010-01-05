@@ -34,8 +34,10 @@ $title = sed_rc_link(sed_url('pfs', $more), $L['pfs_title']);
 
 /* === Hook === */
 $extp = sed_getextplugins('pfs.edit.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $title .= ' '.$cfg['separator'].' '.$L['Edit'];
@@ -144,8 +146,10 @@ $t-> assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('pfs.edit.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse('MAIN');

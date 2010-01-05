@@ -1,0 +1,55 @@
+<?php
+/**
+ * Ticket #427 - Simplified hooks -  patcher script.
+ * http://trac.cotonti.com/ticket/427
+ * This script can help you to patch existing hooks for Siena.
+ * Just save it into the folder containing your module/plugin
+ * as a .php file and run via web interface.
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Trustmaster
+ * @copyright Copyright (c) Cotonti Team 2010
+ * @license BSD
+ */
+
+$src_pattern = '#([\t ]*)if\s*\(is_array\(\$extp\)\)\s*\{\s*foreach\s*\(\s*\$extp\s*as\s*(\$k\s*=>\s*)?\$pl\s*\)\s*\{\s*include(_once)?\s*\(?\s*\$cfg\[\'plugins_dir\'\]\s*\.\s*\'/\'\s*\.\s*\$pl\[\'pl_code\'\]\s*\.\s*\'/\'\s*\.\s*\$pl\[\'pl_file\'\]\s*\.\s*\'\.php\'\s*\)?;\s*\}\s*\}#si';
+$cnt = 0;
+
+function inc_callback($matches)
+{
+	global $cnt;
+	$offset = $matches[1];
+	$cnt++;
+	return <<<END
+{$offset}foreach (\$extp as \$pl)
+{$offset}{
+{$offset}	include \$pl;
+{$offset}}
+END;
+}
+
+function patch_r($path)
+{
+	global $src_pattern;
+	$dp = opendir($path);
+	while ($f = readdir($dp))
+	{
+		$p = $path . '/' . $f;
+		if (is_dir($p) && $f[0] != '.')
+		{
+			patch_r($p);
+		}
+		elseif (preg_match('#\.php$#', $f))
+		{
+			echo 'Patching ' . $p . '<br />';
+			$data = file_get_contents($p);
+			$data = preg_replace_callback($src_pattern, 'inc_callback', $data);
+			file_put_contents($p, $data);
+		}
+	}
+}
+
+patch_r('.');
+echo 'Done, ' . $cnt . ' hooks patched';
+?>

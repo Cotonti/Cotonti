@@ -34,8 +34,10 @@ unset ($notlastpage);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.posts.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($n=='last' && !empty($q))
@@ -119,8 +121,10 @@ if ($row = sed_sql_fetcharray($sql))
 	
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.rights');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	
 	sed_block($usr['auth_read']);
@@ -164,8 +168,10 @@ if ($a=='newpost')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.newpost.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$newmsg = sed_import('newmsg','P','HTM');
@@ -225,8 +231,10 @@ if ($a=='newpost')
 
 			/* === Hook === */
 			$extp = sed_getextplugins('forums.posts.newpost.done');
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
 			/* ===== */
 
 			sed_forum_sectionsetlast($s);
@@ -262,8 +270,10 @@ if ($a=='newpost')
 
 			/* === Hook === */
 			$extp = sed_getextplugins('forums.posts.newpost.done');
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
 			/* ===== */
 
 			sed_forum_sectionsetlast($s);
@@ -279,8 +289,10 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.delete.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$sql2 = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 2");
@@ -313,8 +325,10 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.posts.delete.done');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$q'");
@@ -355,8 +369,10 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 			/* === Hook === */
 			$extp = sed_getextplugins('forums.posts.emptytopicdel');
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
 			/* ===== */
 
 			sed_log("Delete topic #".$q." (no post left)",'for');
@@ -484,8 +500,10 @@ $out['subtitle'] = sed_title('title_forum_posts', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.posts.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -722,8 +740,10 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$t->parse("MAIN.FORUMS_POSTS_ROW");
@@ -786,8 +806,10 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 
 	/* === Hook  === */
 	$extp = sed_getextplugins('forums.posts.newpost.tags');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$t->parse("MAIN.FORUMS_POSTS_NEWPOST");
@@ -812,8 +834,10 @@ if ($ft_mode==1)
 
 /* === Hook  === */
 $extp = sed_getextplugins('forums.posts.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

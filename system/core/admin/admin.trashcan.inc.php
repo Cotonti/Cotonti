@@ -27,8 +27,10 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.trashcan.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if($a == 'wipe')
@@ -36,8 +38,10 @@ if($a == 'wipe')
 	sed_check_xg();
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.trashcan.wipe');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	$sql = sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
 
@@ -48,8 +52,10 @@ elseif($a == 'wipeall')
 	sed_check_xg();
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.trashcan.wipeall');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	$sql = sed_sql_query("TRUNCATE $db_trash");
 
@@ -60,8 +66,10 @@ elseif($a == 'restore')
 	sed_check_xg();
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.trashcan.restore');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	if(sed_trash_restore($id))
 	{
@@ -144,8 +152,10 @@ while($row = sed_sql_fetcharray($sql))
 	));
 
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$t -> parse("TRASHCAN.TRASHCAN_ROW");
@@ -167,8 +177,10 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.trashcan.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t -> parse("TRASHCAN");

@@ -37,8 +37,10 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.log.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if($a == 'purge' && $usr['isadmin'])
@@ -46,8 +48,10 @@ if($a == 'purge' && $usr['isadmin'])
 	sed_check_xg();
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.log.purge');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	$sql = sed_sql_query("TRUNCATE $db_logger");
 
@@ -111,8 +115,10 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_LOG_ROW_LOG_TEXT" => htmlspecialchars($row['log_text'])
 	));
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	$t -> parse("LOG.LOG_ROW");
 	$ii++;
@@ -133,8 +139,10 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.log.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t -> parse("LOG");

@@ -19,8 +19,10 @@ $v = sed_import('v','G','PSW');
 
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($a=='check')
@@ -29,8 +31,10 @@ if ($a=='check')
 
 	/* === Hook for the plugins === */
 	$extp = sed_getextplugins('users.auth.check');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT', 100, TRUE);
@@ -91,8 +95,10 @@ if ($a=='check')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('users.auth.check.done');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		$sql = sed_sql_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
@@ -109,8 +115,10 @@ if ($a=='check')
 
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $plug_head .= '<meta name="robots" content="noindex" />';
@@ -133,8 +141,10 @@ $t->assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('users.auth.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

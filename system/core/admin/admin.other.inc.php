@@ -20,8 +20,10 @@ $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.other.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner!='plug' GROUP BY config_cat");
@@ -57,8 +59,10 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_OTHER_CONFIG" => ($cfgentries[$row['ct_code']] > 0) ? sed_url('admin', "m=config&n=edit&o=core&p=".$row['ct_code']) : '#'
 	));
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	$t -> parse("OTHER.OTHER_ROW");
 }
@@ -80,8 +84,10 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.other.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t -> parse("OTHER");

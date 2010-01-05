@@ -28,8 +28,10 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.forums.structure.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if($n == 'options')
@@ -45,8 +47,10 @@ if($n == 'options')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.forums.structure.options.update');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		if($rtplmode == 1)
@@ -132,8 +136,10 @@ if($n == 'options')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.forums.structure.options');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$t -> parse("FORUMS_STRUCTURE.OPTIONS");
@@ -257,8 +263,10 @@ else
 			"FORUMS_STRUCTURE_ROW_OPTIONS_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', "m=forums&s=structure&n=options&ajax=1&id=".$fn_id."&d=".$d."&".sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
 		));
 		/* === Hook - Part2 : Include === */
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 		$t -> parse("FORUMS_STRUCTURE.DEFULT.ROW");
 
@@ -288,8 +296,10 @@ $t -> assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.forums.structure.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t -> parse("FORUMS_STRUCTURE");

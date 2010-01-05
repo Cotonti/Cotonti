@@ -27,12 +27,9 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.config.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -228,12 +225,9 @@ switch($n)
 				"ADMIN_CONFIG_ROW_CONFIG_MORE" => $config_more
 			));
 			/* === Hook - Part2 : Include === */
-			if (is_array($extp))
+			foreach ($extp as $pl)
 			{
-				foreach ($extp as $pl)
-				{
-					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-				}
+				include $pl;
 			}
 			/* ===== */
 			$t -> parse("CONFIG.EDIT.ADMIN_CONFIG_ROW");
@@ -245,12 +239,9 @@ switch($n)
 		));
 		/* === Hook  === */
 		$extp = sed_getextplugins('admin.config.edit.tags');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 		$t -> parse("CONFIG.EDIT");
@@ -282,12 +273,9 @@ switch($n)
 		}
 		/* === Hook  === */
 		$extp = sed_getextplugins('admin.config.default.tags');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 		$t -> parse("CONFIG.DEFAULT");
@@ -303,12 +291,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.config.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

@@ -49,12 +49,9 @@ $users_sort_blacklist = array('email', 'lastip',);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.first');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -235,12 +232,9 @@ $out['subtitle'] = sed_title('title_users_main', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.main');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -349,12 +343,9 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 	}
 
 	/* === Hook - Part2 : Include === */
-	if(is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach($extp as $k => $pl)
-		{
-			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -363,12 +354,9 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 
 /* === Hook === */
 $extp = sed_getextplugins('users.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

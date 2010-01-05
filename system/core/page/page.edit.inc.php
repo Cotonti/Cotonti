@@ -39,8 +39,10 @@ if ($a=='update')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('page.edit.update.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	sed_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row1['page_ownerid']);
 
@@ -123,8 +125,10 @@ if ($a=='update')
 				sed_log("Deleted page #".$id,'adm');
 				/* === Hook === */
 				$extp = sed_getextplugins('page.edit.delete.done');
-				if (is_array($extp))
-				{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+				foreach ($extp as $pl)
+				{
+					include $pl;
+				}
 				/* ===== */
 				sed_redirect(sed_url('list', "c=".$row1['page_cat'], '', true));
 			}
@@ -227,8 +231,10 @@ if ($a=='update')
 
 			/* === Hook === */
 			$extp = sed_getextplugins('page.edit.update.done');
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
 			/* ===== */
 
 			sed_log("Edited page #".$id,'adm');
@@ -249,8 +255,10 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 
 
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 sed_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);
 
@@ -308,8 +316,10 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -383,8 +393,10 @@ if(count($extrafields)>0)
 $t->assign($pageedit_array);
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($usr['isadmin'])

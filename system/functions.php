@@ -200,11 +200,12 @@ function sed_auth_build($userid, $maingrp=0)
  */
 function sed_auth_clear($id='all')
 {
-	global $db_users;
+	global $db_users, $cfg, $cot_cache;
 
 	if($id=='all')
 	{
 		$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
+		$cot_cache->db_remove('sed_guest_auth', 'system');
 	}
 	else
 	{
@@ -1056,7 +1057,10 @@ function sed_build_comments($code, $url, $display = true)
 
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('comments.send.first');
-		if (is_array($extp)) { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		$error_string .= (mb_strlen($rtext)<2) ? $L['com_commenttooshort']."<br />" : '';
@@ -1083,7 +1087,10 @@ function sed_build_comments($code, $url, $display = true)
 
 			/* == Hook for the plugins == */
 			$extp = sed_getextplugins('comments.send.new');
-			if (is_array($extp)) { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
 			/* ===== */
 
 			sed_shield_update(20, 'New comment');
@@ -1120,7 +1127,10 @@ function sed_build_comments($code, $url, $display = true)
 
 	/* == Hook for the plugins == */
 	$extp = sed_getextplugins('comments.main');
-	if (is_array($extp)) { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$sql = sed_sql_query("SELECT c.*, u.user_avatar FROM $db_com AS c
@@ -1155,7 +1165,10 @@ function sed_build_comments($code, $url, $display = true)
 	{
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('comments.newcomment.tags');
-		if (is_array($extp)) { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		$t->parse('COMMENTS.COMMENTS_NEWCOMMENT');
@@ -1218,7 +1231,10 @@ function sed_build_comments($code, $url, $display = true)
 			));
 
 			/* === Hook - Part2 : Include === */
-			if (is_array($extp)) { foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
 			/* ===== */
 
 			$t->parse('COMMENTS.COMMENTS_ROW');
@@ -1246,7 +1262,10 @@ function sed_build_comments($code, $url, $display = true)
 
 	/* == Hook for the plugins == */
 	$extp = sed_getextplugins('comments.tags');
-	if (is_array($extp)) { foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$t->parse('COMMENTS');
@@ -1713,12 +1732,9 @@ function sed_build_ratings($code, $url, $display)
 	{
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.first');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -1744,12 +1760,9 @@ function sed_build_ratings($code, $url, $display)
 
 		/* == Hook for the plugins == */
 		$extp = sed_getextplugins('ratings.send.done');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -1779,12 +1792,9 @@ function sed_build_ratings($code, $url, $display)
 	}
 	/* == Hook for the plugins == */
 	$extp = sed_getextplugins('ratings.main');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -1831,12 +1841,9 @@ function sed_build_ratings($code, $url, $display)
 
 	/* == Hook for the plugins == */
 	$extp = sed_getextplugins('ratings.tags');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -2619,18 +2626,24 @@ function sed_forum_sectionsetlast($id)
  */
 function sed_getextplugins($hook, $cond='R')
 {
-	global $sed_plugins, $usr;
+	global $sed_plugins, $usr, $cfg, $cot_cache;
 
-	if (is_array($sed_plugins))
+	$extplugins = array();
+
+	if (is_array($sed_plugins[$hook]))
 	{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins[$hook] as $k)
 		{
-			if($k['pl_hook']==$hook && sed_auth('plug', $k['pl_code'], $cond))
+			if(sed_auth('plug', $k['pl_code'], $cond))
 			{
-				$extplugins[$i] = $k;
+				$extplugins[] = $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
 			}
 		}
 	}
+	
+	// Trigger cache handlers
+	$cot_cache->trigger($hook);
+
 	return $extplugins;
 }
 
@@ -3325,8 +3338,10 @@ function sed_outputfilters($output)
 
 	/* === Hook === */
 	$extp = sed_getextplugins('output');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ==== */
 
 	$output = str_ireplace('</form>', sed_xp().'</form>', $output);

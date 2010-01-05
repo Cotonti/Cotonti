@@ -18,16 +18,20 @@ defined('SED_CODE') or die('Wrong URL');
 
 /* === Hook === */
 $extp = sed_getextplugins('index.first');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('index', 'a');
 
 /* === Hook === */
 $extp = sed_getextplugins('index.main');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 
@@ -40,8 +44,10 @@ $t = new XTemplate($mskin);
 
 /* === Hook === */
 $extp = sed_getextplugins('index.tags');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

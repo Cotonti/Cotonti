@@ -41,12 +41,9 @@ else
 
 /* === Hook === */
 $extp = sed_getextplugins('list.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -84,12 +81,9 @@ if (!empty($o) && !empty($p) && $p != 'password')
 $list_url = sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p");
 /* === Hook === */
 $extp = sed_getextplugins('list.query');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }/*
  *  ===== */
 if(empty($sql_string))
@@ -142,12 +136,9 @@ $out['subtitle'] = sed_title('title_list', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('list.main');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -289,12 +280,9 @@ while (list($i,$x) = each($sed_cat))
 		}
 
 		/* === Hook - Part2 : Include === */
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -437,12 +425,9 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	}
 
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 	$t -> parse("MAIN.LIST_ROW");
@@ -450,12 +435,9 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 
 /* === Hook === */
 $extp = sed_getextplugins('list.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

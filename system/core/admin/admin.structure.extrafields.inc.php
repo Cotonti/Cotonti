@@ -30,12 +30,9 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.structure.extrafields.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -54,12 +51,9 @@ if ($a == 'add')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.structure.extrafields.add');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -94,12 +88,9 @@ elseif ($a == 'upd' && isset($n))
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.structure.extrafields.update');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -119,12 +110,9 @@ elseif ($a == 'del' && isset($n))
 {
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.structure.extrafields.delete');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -181,12 +169,9 @@ while ($row = sed_sql_fetchassoc($res))
 		"ADMIN_STRUCTURE_EXTRAFIELDS_ROW_DEL_URL" => sed_url('admin', 'm=structure&s=extrafields&a=del&name='.$row['field_name'])
 	));
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 	$t -> parse("STRUCTURE_EXTRAFIELDS.STRUCTURE_EXTRAFIELDS_ROW");
@@ -215,12 +200,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.structure.extrafields.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

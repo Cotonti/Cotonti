@@ -381,8 +381,10 @@ function sed_pfs_upload($userid, $folderid='')
 	
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.upload.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	
 	sed_die($npath===FALSE);
@@ -454,9 +456,10 @@ function sed_pfs_upload($userid, $folderid='')
 						{
 							/* === Hook === */
 							$extp = sed_getextplugins('pfs.upload.moved');
-							if (is_array($extp))
-							{ foreach($extp as $k => $pl)
-								{ include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+							foreach ($extp as $pl)
+							{
+								include $pl;
+							}
 							/* ===== */
 
 							$sql = sed_sql_query("INSERT INTO $db_pfs
@@ -485,9 +488,10 @@ function sed_pfs_upload($userid, $folderid='')
 
 							/* === Hook === */
 							$extp = sed_getextplugins('pfs.upload.done');
-							if (is_array($extp))
-							{ foreach($extp as $k => $pl)
-								{ include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+							foreach ($extp as $pl)
+							{
+								include $pl;
+							}
 							/* ===== */
 
 							if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled'
