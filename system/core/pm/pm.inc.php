@@ -24,8 +24,10 @@ if(empty($id))
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=2");
@@ -107,8 +109,10 @@ $out['subtitle'] = sed_title('title_pm_main', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $pm_sendlink = ($usr['auth_write']) ? "<a href=\"".sed_url('pm', 'm=send')."\">".$L['pm_sendnew']."</a>" : '';
@@ -182,8 +186,10 @@ if ($usr['auth_write'])
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

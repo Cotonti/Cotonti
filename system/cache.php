@@ -434,7 +434,7 @@ class MySQL_cache extends Db_cache_driver
 	/**
 	 * @see Cache_driver::clear()
 	 */
-	public function clear($realm = COT_DEFAULT_REALM)
+	public function clear($realm = '')
 	{
 		global $db_cache;
 		if (empty($realm))
@@ -585,7 +585,7 @@ if (extension_loaded('memcache'))
 		/**
 		 * @see Cache_driver::clear()
 		 */
-		public function clear($realm = COT_DEFAULT_REALM)
+		public function clear($realm = '')
 		{
 			if (empty($realm))
 			{
@@ -689,7 +689,7 @@ if (extension_loaded('apc'))
 		/**
 		 * @see Cache_driver::clear()
 		 */
-		public function clear($realm = COT_DEFAULT_REALM)
+		public function clear($realm = '')
 		{
 			if (empty($realm))
 			{
@@ -765,7 +765,7 @@ if (extension_loaded('eaccelerator'))
 		/**
 		 * @see Cache_driver::clear()
 		 */
-		public function clear($realm = COT_DEFAULT_REALM)
+		public function clear($realm = '')
 		{
 			if (empty($realm))
 			{
@@ -846,7 +846,7 @@ if (extension_loaded('xcache'))
 		/**
 		 * @see Cache_driver::clear()
 		 */
-		public function clear($realm = COT_DEFAULT_REALM)
+		public function clear($realm = '')
 		{
 			if (empty($realm))
 			{
@@ -1244,25 +1244,28 @@ class Cache
 	public function trigger($event)
 	{
 		$cnt = 0;
-		foreach ($this->bindings[$event] as $cell)
+		if (count($this->bindings[$event]) > 0)
 		{
-			switch ($cell['type'])
+			foreach ($this->bindings[$event] as $cell)
 			{
-				case COT_CACHE_TYPE_DISK:
-					$this->disk->remove($cell['id'], $cell['realm']);
-				break;
-				case COT_CACHE_TYPE_DB:
-					$this->db->remove($cell['id'], $cell['realm']);
-				break;
-				case COT_CACHE_TYPE_MEMORY:
-					$this->mem->remove($cell['id'], $cell['realm']);
-				break;
-				default:
-					$this->mem->remove($cell['id'], $cell['realm']);
-					$this->disk->remove($cell['id'], $cell['realm']);
-					$this->db->remove($cell['id'], $cell['realm']);
+				switch ($cell['type'])
+				{
+					case COT_CACHE_TYPE_DISK:
+						$this->disk->remove($cell['id'], $cell['realm']);
+					break;
+					case COT_CACHE_TYPE_DB:
+						$this->db->remove($cell['id'], $cell['realm']);
+					break;
+					case COT_CACHE_TYPE_MEMORY:
+						$this->mem->remove($cell['id'], $cell['realm']);
+					break;
+					default:
+						$this->mem->remove($cell['id'], $cell['realm']);
+						$this->disk->remove($cell['id'], $cell['realm']);
+						$this->db->remove($cell['id'], $cell['realm']);
+				}
+				$cnt++;
 			}
-			$cnt++;
 		}
 		return $cnt;
 	}

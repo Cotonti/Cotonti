@@ -29,12 +29,9 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.bbcode.first');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -140,12 +137,9 @@ while($row = sed_sql_fetchassoc($res))
 	));
 
 	/* === Hook - Part2 : Include === */
-	if(is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach($extp as $k => $pl)
-		{
-			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 	$t -> parse("BBCODE.ADMIN_BBCODE_ROW");
@@ -185,12 +179,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.bbcode.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

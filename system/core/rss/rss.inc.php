@@ -52,12 +52,9 @@ $domain = str_replace("http://", "", $cfg['mainurl']);//type of domains may by "
 
 /* === Hook === */
 $extp = sed_getextplugins('rss.create');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-    foreach ($extp as $k=>$pl)
-    {
-        include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-    }
+	include $pl;
 }
 /* ===== */
 
@@ -357,12 +354,9 @@ if (count($items) > 0)
 
 /* === Hook === */
 $extp = sed_getextplugins('rss.output');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-    foreach ($extp as $k=>$pl)
-    {
-        include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-    }
+	include $pl;
 }
 /* ===== */
 

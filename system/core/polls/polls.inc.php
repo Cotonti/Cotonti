@@ -17,8 +17,10 @@ defined('SED_CODE') or die('Wrong URL');
 
 /* === Hook === */
 $extp = sed_getextplugins('polls.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
@@ -53,8 +55,10 @@ $out['subtitle'] = $L['Polls'];
 
 /* === Hook === */
 $extp = sed_getextplugins('polls.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -131,8 +135,10 @@ else
 
 /* === Hook === */
 $extp = sed_getextplugins('polls.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

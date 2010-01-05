@@ -28,8 +28,10 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.pfs.allpfs.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 unset($disp_list);
@@ -66,8 +68,10 @@ while($row = sed_sql_fetcharray($sql))
 	));
 
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	$t -> parse("ALLPFS.ALLPFS_ROW");
 	$ii++;
@@ -84,8 +88,10 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.pfs.allpfs.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t -> parse("ALLPFS");

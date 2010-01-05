@@ -33,8 +33,10 @@ $body = $L['msg'.$msg.'_body'];
 
 /* === Hook === */
 $extp = sed_getextplugins('message.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 switch( $msg )
@@ -156,8 +158,10 @@ elseif ($rd != '')
 
 /* === Hook === */
 $extp = sed_getextplugins('message.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $plug_head .= '<meta name="robots" content="noindex" />';
@@ -173,8 +177,10 @@ $t->assign("MESSAGE_BODY", $body);
 
 /* === Hook === */
 $extp = sed_getextplugins('message.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

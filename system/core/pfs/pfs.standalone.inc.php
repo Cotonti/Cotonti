@@ -95,8 +95,10 @@ if ($userid!=$usr['id'])
 
 /* === Hook === */
 $extp = sed_getextplugins('pfs.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $u_totalsize=0;
@@ -142,8 +144,10 @@ case 'upload':
 
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.upload.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	if ($folderid!=0)
@@ -219,9 +223,10 @@ case 'upload':
 						{
 							/* === Hook === */
 							$extp = sed_getextplugins('pfs.upload.moved');
-							if (is_array($extp))
-							{ foreach($extp as $k => $pl)
-								{ include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+							foreach ($extp as $pl)
+							{
+								include $pl;
+							}
 							/* ===== */
 
 							$sql = sed_sql_query("INSERT INTO $db_pfs
@@ -250,9 +255,10 @@ case 'upload':
 
 							/* === Hook === */
 							$extp = sed_getextplugins('pfs.upload.done');
-							if (is_array($extp))
-							{ foreach($extp as $k => $pl)
-								{ include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+							foreach ($extp as $pl)
+							{
+								include $pl;
+							}
 							/* ===== */
 
 							if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled'
@@ -814,16 +820,20 @@ if ($standalone)
 
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.standalone');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 }
 else
 {
 	/* === Hook === */
 	$extp = sed_getextplugins('pfs.tags');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 }
 

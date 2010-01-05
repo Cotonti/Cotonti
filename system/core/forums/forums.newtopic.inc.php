@@ -30,8 +30,10 @@ sed_die(empty($s));
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
@@ -60,8 +62,10 @@ if ($row = sed_sql_fetcharray($sql))
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.newtopic.rights');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	sed_block($usr['auth_write']);
 }
@@ -84,8 +88,10 @@ if ($a=='newtopic')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.newtopic.newtopic.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$newtopictitle = sed_import('newtopictitle','P','TXT', 255);
@@ -203,8 +209,10 @@ if ($a=='newtopic')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('forums.newtopic.newtopic.done');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		sed_shield_update(45, "New topic");
@@ -233,8 +241,10 @@ $out['subtitle'] = sed_title('title_forum_newtopic', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -283,8 +293,10 @@ if ($fs_allowpolls && $poll)
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.newtopic.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

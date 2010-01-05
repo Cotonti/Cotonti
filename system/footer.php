@@ -11,12 +11,9 @@ defined('SED_CODE') or die('Wrong URL');
 
 /* === Hook === */
 $extp = sed_getextplugins('footer.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -64,12 +61,9 @@ if (!SED_AJAX)
 {
 	/* === Hook === */
 	$extp = sed_getextplugins('footer.main');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -89,12 +83,9 @@ if (!SED_AJAX)
 
 	/* === Hook === */
 	$extp = sed_getextplugins('footer.tags');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -110,18 +101,18 @@ if (!SED_AJAX)
 	$t->parse("FOOTER");
 	$t->out("FOOTER");
 }
-@ob_end_flush();
+while (ob_get_level() > 0)
+{
+    ob_end_flush();
+}
 $cot_cache = null; // Need to destroy before DB connection is lost
 sed_sql_close();
 
 /* === Hook === */
 $extp = sed_getextplugins('footer.last');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

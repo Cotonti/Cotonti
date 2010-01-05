@@ -32,8 +32,10 @@ sed_die(empty($s));
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 /* === Hook === */
 $extp = sed_getextplugins('forums.topics.rights');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 sed_block($usr['auth_read']);
 
@@ -94,8 +96,10 @@ if ($fs_state)
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.topics.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($usr['isadmin'] && !empty($q) && !empty($a))
@@ -111,8 +115,10 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_forum_sectionsetlast($s);
 			/* === Hook === */
 			$extp = sed_getextplugins('forums.topics.delete.done');
-			if (is_array($extp))
-			{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
 			/* ===== */
 			sed_redirect(sed_url('forums', "m=topics&s=".$s, '', true));
 			break;
@@ -316,8 +322,10 @@ $out['subtitle'] = sed_title('title_forum_topics', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.topics.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -568,8 +576,10 @@ $t->assign(array(
 		));
 
 		/* === Hook - Part2 : Include === */
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		$t->parse("MAIN.FORUMS_TOPICS_ROW");
@@ -577,8 +587,10 @@ $t->assign(array(
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.topics.tags');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$t->parse("MAIN");

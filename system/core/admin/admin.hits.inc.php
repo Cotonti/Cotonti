@@ -25,12 +25,9 @@ $v = sed_import('v', 'G', 'TXT');
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.hits.first');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -64,12 +61,9 @@ if($f == 'year' || $f == 'month')
             ));
 
         /* === Hook - Part2 : Include === */
-        if(is_array($extp))
+        foreach ($extp as $pl)
         {
-        	foreach($extp as $k => $pl)
-        	{
-        		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-        	}
+        	include $pl;
         }
         /* ===== */
 
@@ -119,12 +113,9 @@ else
             "ADMIN_HITS_ROW_YEAR_PERCENTBAR" => $percentbar
             ));
         /* === Hook - Part2 : Include === */
-        if(is_array($extp))
+        foreach ($extp as $pl)
         {
-        	foreach($extp as $k => $pl)
-        	{
-        		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-        	}
+        	include $pl;
         }
         /* ===== */
         $t -> parse("HITS.DEFAULT.ROW_YEAR");
@@ -141,12 +132,9 @@ else
             "ADMIN_HITS_ROW_MONTH_PERCENTBAR" => $percentbar
             ));
         /* === Hook - Part2 : Include === */
-        if(is_array($extp))
+        foreach ($extp as $pl)
         {
-        	foreach($extp as $k => $pl)
-        	{
-        		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-        	}
+        	include $pl;
         }
         /* ===== */
         $t -> parse("HITS.DEFAULT.ROW_MONTH");
@@ -163,12 +151,9 @@ else
             "ADMIN_HITS_ROW_WEEK_PERCENTBAR" => $percentbar
             ));
         /* === Hook - Part2 : Include === */
-        if(is_array($extp))
+        foreach ($extp as $pl)
         {
-        	foreach($extp as $k => $pl)
-        	{
-        		include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-        	}
+        	include $pl;
         }
         /* ===== */
         $t -> parse("HITS.DEFAULT.ROW_WEEK");
@@ -183,12 +168,9 @@ else
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.hits.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

@@ -15,12 +15,9 @@ sed_uriredir_store();
 
 /* === Hook === */
 $extp = sed_getextplugins('header.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -94,12 +91,9 @@ if (!SED_AJAX)
 
 	/* === Hook === */
 	$extp = sed_getextplugins('header.main');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -129,12 +123,9 @@ if (!SED_AJAX)
 
 	/* === Hook === */
 	$extp = sed_getextplugins('header.body');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -193,12 +184,9 @@ if (!SED_AJAX)
 
 	/* === Hook === */
 	$extp = sed_getextplugins('header.tags');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 

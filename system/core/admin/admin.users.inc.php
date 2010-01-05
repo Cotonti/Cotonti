@@ -26,12 +26,9 @@ $lincif_extfld = sed_auth('admin', 'a', 'A');
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.users.first');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -54,12 +51,9 @@ if($n == 'add')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.users.add');
-	if(is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -91,12 +85,9 @@ elseif($n == 'edit')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.users.update');
-		if(is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -119,12 +110,9 @@ elseif($n == 'edit')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.users.delete');
-		if(is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 		sed_auth_clear('all');
@@ -173,12 +161,9 @@ elseif($n == 'edit')
 		));
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.users.edit.tags');
-		if(is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 		$t -> parse("USERS.ADMIN_USERS_EDIT");
@@ -243,12 +228,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.users.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

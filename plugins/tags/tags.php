@@ -50,8 +50,10 @@ foreach ($tag_orders as $order)
 
 /* == Hook for the plugins == */
 $extp = sed_getextplugins('tags.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->assign(array(
@@ -123,8 +125,10 @@ else
 {
 	/* == Hook for the plugins == */
 	$extp = sed_getextplugins('tags.search.custom');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 }
 

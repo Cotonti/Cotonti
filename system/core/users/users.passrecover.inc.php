@@ -16,12 +16,9 @@ $email = sed_import('email', 'P', 'TXT');
 
 /* === Hook === */
 $extp = sed_getextplugins('users.passrecover.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -128,12 +125,9 @@ $t->assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('users.passrecover.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

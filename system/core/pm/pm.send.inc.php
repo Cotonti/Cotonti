@@ -27,12 +27,9 @@ $touser_names = array();
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.first');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-    foreach($extp as $k => $pl)
-    {
-        include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-    }
+	include $pl;
 }
 /* ===== */
 
@@ -47,12 +44,9 @@ if($a=='send')
 {
     /* === Hook === */
     $extp = sed_getextplugins('pm.send.send.first');
-    if(is_array($extp))
+    foreach ($extp as $pl)
     {
-        foreach($extp as $k => $pl)
-        {
-            include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-        }
+    	include $pl;
     }
     /* ===== */
 
@@ -149,12 +143,9 @@ if($a=='send')
 
         /* === Hook === */
         $extp = sed_getextplugins('pm.send.send.done');
-        if(is_array($extp))
+        foreach ($extp as $pl)
         {
-            foreach($extp as $k => $pl)
-            {
-                include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-            }
+        	include $pl;
         }
         /* ===== */
 
@@ -220,12 +211,9 @@ $out['subtitle'] = sed_title('title_pm_send', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.main');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-    foreach($extp as $k => $pl)
-    {
-        include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-    }
+	include $pl;
 }
 /* ===== */
 
@@ -257,12 +245,9 @@ $t -> assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-    foreach($extp as $k => $pl)
-    {
-        include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-    }
+	include $pl;
 }
 /* ===== */
 

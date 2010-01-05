@@ -29,12 +29,9 @@ $s = sed_import('s', 'G', 'ALP', 24);
 
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.main');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 
 $sys['inc'] = (empty($m)) ? 'admin.home' : "admin.$m";
@@ -87,12 +84,9 @@ $t->assign(array(
 
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

@@ -26,12 +26,9 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.forums.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -60,12 +57,9 @@ if ($n == 'edit')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.forums.update');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -166,12 +160,9 @@ if ($n == 'edit')
 	));
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.forums.edit');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 	$t -> parse("FORUMS.EDIT");
@@ -188,12 +179,9 @@ else
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.forums.order');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -247,12 +235,9 @@ else
 
 			/* === Hook === */
 			$extp = sed_getextplugins('admin.forums.add');
-			if (is_array($extp))
+			foreach ($extp as $pl)
 			{
-				foreach ($extp as $k => $pl)
-				{
-					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-				}
+				include $pl;
 			}
 			/* ===== */
 
@@ -301,12 +286,9 @@ else
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.forums.delete');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 		$adminwarnings = $L['Deleted'];
@@ -378,12 +360,9 @@ else
 					));
 
 					/* === Hook - Part2 : Include === */
-					if (is_array($extp))
+					foreach ($extp as $pl)
 					{
-						foreach ($extp as $k => $pl)
-						{
-							include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-						}
+						include $pl;
 					}
 					/* ===== */
 
@@ -415,12 +394,9 @@ else
 			));
 
 			/* === Hook - Part2 : Include === */
-			if (is_array($extp))
+			foreach ($extp as $pl)
 			{
-				foreach ($extp as $k => $pl)
-				{
-					include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-				}
+				include $pl;
 			}
 			/* ===== */
 
@@ -466,12 +442,9 @@ $t -> assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.forums.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

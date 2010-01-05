@@ -35,12 +35,9 @@ $variants['forum'] = array($L['Forums'], "forum");
 
 /* === Hook === */
 $extp = sed_getextplugins('adim.polls.first');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -165,12 +162,9 @@ while($row = sed_sql_fetcharray($sql))
 	));
 
 	/* === Hook - Part2 : Include === */
-	if(is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach($extp as $k => $pl)
-		{
-			 include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -242,12 +236,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.polls.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

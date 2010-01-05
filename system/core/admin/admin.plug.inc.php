@@ -34,8 +34,10 @@ unset($disp_errors);
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.plug.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 switch($a)
@@ -183,12 +185,9 @@ switch($a)
 							//"ADMIN_PLUG_DETAILS_ROW_PART_ODDEVEN" => sed_build_oddeven($ii)
 						));
 						/* === Hook - Part2 : Include === */
-						if(is_array($extp))
+						foreach ($extp as $pl)
 						{
-							foreach($extp as $k => $pl)
-							{
-								include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-							}
+							include $pl;
 						}
 						/* ===== */
 						$t -> parse("PLUG.DETAILS.ROW_PART");
@@ -231,12 +230,9 @@ switch($a)
 			));
 			/* === Hook  === */
 			$extp = sed_getextplugins('admin.plug.details');
-			if(is_array($extp))
+			foreach ($extp as $pl)
 			{
-				foreach($extp as $k => $pl)
-				{
-					include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-				}
+				include $pl;
 			}
 			/* ===== */
 			$t -> parse("PLUG.DETAILS");
@@ -456,12 +452,9 @@ switch($a)
 				));
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.plug.install.tags');
-				if(is_array($extp))
+				foreach ($extp as $pl)
 				{
-					foreach($extp as $k => $pl)
-					{
-						include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-					}
+					include $pl;
 				}
 				/* ===== */
 				$t -> parse("PLUG.EDIT.INSTALL");
@@ -502,12 +495,9 @@ switch($a)
 				));
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.plug.uninstall.tags');
-				if(is_array($extp))
+				foreach ($extp as $pl)
 				{
-					foreach($extp as $k => $pl)
-					{
-						include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-					}
+					include $pl;
 				}
 				/* ===== */
 				$t -> parse("PLUG.EDIT.UNINSTALL");
@@ -632,12 +622,9 @@ switch($a)
 						"ADMIN_PLUG_ODDEVEN" => sed_build_oddeven($ii)
 					));
 					/* === Hook - Part2 : Include === */
-					if(is_array($extp))
+					foreach ($extp as $pl)
 					{
-						foreach($extp as $k => $pl)
-						{
-							include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-						}
+						include $pl;
 					}
 					/* ===== */
 					$t -> parse("PLUG.DEFAULT.ROW");
@@ -691,12 +678,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.plug.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 $t -> parse("PLUG");

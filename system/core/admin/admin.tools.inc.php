@@ -23,8 +23,10 @@ $p = sed_import('p', 'G', 'ALP');
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.tools.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if(!empty($p))
@@ -138,8 +140,10 @@ else
 	}
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.tools.tags');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 	$t -> parse("TOOLS");
 	$adminmain = $t -> text("TOOLS");

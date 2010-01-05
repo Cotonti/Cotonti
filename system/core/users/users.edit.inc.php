@@ -28,8 +28,10 @@ sed_block($usr['isadmin']);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
@@ -59,8 +61,10 @@ if ($a=='update')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('users.edit.update.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT');
@@ -249,8 +253,10 @@ if ($a=='update')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('users.edit.update.done');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		sed_auth_clear($id);
@@ -281,8 +287,10 @@ $out['subtitle'] = sed_title('title_users_edit', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 
@@ -348,8 +356,10 @@ $t->assign($useredit_array);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 

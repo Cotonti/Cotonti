@@ -26,12 +26,9 @@ $ajax = empty($ajax) ? 0 : (int)$ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.cache.disk.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'] . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -69,12 +66,9 @@ foreach ($row as $i => $x)
 	));
 
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include($cfg['plugins_dir'] . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -95,12 +89,9 @@ $t->assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.cache.disk.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'] . '/' . $pl['pl_code'] . '/' . $pl['pl_file'] . '.php');
-	}
+	include $pl;
 }
 /* ===== */
 

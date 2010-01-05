@@ -43,7 +43,6 @@ unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 /* ======== Cache Subsystem ======== */
 require_once $cfg['system_dir'] . '/cache.php';
-// Select the default cache driver
 $cot_cache = new Cache();
 
 /* ======== Configuration settings ======== */
@@ -118,11 +117,14 @@ define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']));
 
 if (!$sed_plugins)
 {
-	$sql = sed_sql_query("SELECT * FROM $db_plugins WHERE pl_active=1 ORDER BY pl_hook ASC, pl_order ASC");
+	$sql = sed_sql_query("SELECT pl_code, pl_file, pl_hook FROM $db_plugins
+		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 	if (sed_sql_numrows($sql)>0)
 	{
 		while ($row = sed_sql_fetcharray($sql))
-		{ $sed_plugins[] = $row; }
+		{
+			$sed_plugins[$row['pl_hook']][] = $row;
+		}
 	}
 	$cfg['cache'] && $cot_cache->db_set('sed_plugins', $sed_plugins, 'system');
 }
@@ -136,30 +138,35 @@ if (!is_array($sed_urltrans))
 /* ======== Gzip and output filtering ======== */
 
 if ($cfg['gzip'])
-{ @ob_start('ob_gzhandler'); }
+{
+	@ob_start('ob_gzhandler');
+}
 else
-{ ob_start(); }
+{
+	ob_start();
+}
 
 ob_start('sed_outputfilters');
 
 /* ======== Check the banlist ======== */
 
 $userip = explode('.', $usr['ip']);
-$ipmasks = "('".$userip[0].".".$userip[1].".".$userip[2].".".$userip[3]."','".$userip[0].".".$userip[1].".".$userip[2].".*','".$userip[0].".".$userip[1].".*.*','".$userip[0].".*.*.*')";
+$ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";
 
 $sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
 
-If (sed_sql_numrows($sql)>0)
+if (sed_sql_numrows($sql) > 0)
 {
 	$row=sed_sql_fetcharray($sql);
-	if ($sys['now']>$row['banlist_expire'] && $row['banlist_expire']>0)
+	if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
 	{
 		$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
 	}
 	else
 	{
-		$disp = "Your IP is banned.<br />Reason: ".$row['banlist_reason']."<br />Until: ";
-		$disp .= ($row['banlist_expire']>0) ? @date($cfg['dateformat'], $row['banlist_expire'])." GMT" : "Never expire.";
+		// TODO internationalize this
+		$disp = 'Your IP is banned.<br />Reason: ' . $row['banlist_reason'] . '<br />Until: ';
+		$disp .= ($row['banlist_expire']>0) ? @date($cfg['dateformat'], $row['banlist_expire']) . ' GMT' : 'Never expire.';
 		sed_diefatal($disp);
 	}
 }
@@ -191,7 +198,9 @@ if (!$sed_groups )
 		}
 	}
 	else
-	{ sed_diefatal('No groups found.'); }
+	{
+		sed_diefatal('No groups found.');
+	}
 
 	$cfg['cache'] && $cot_cache->db_set('sed_groups', $sed_groups, 'system');
 }
@@ -235,7 +244,7 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 60
 						&& $u_passhash == $_SESSION['oldhash']))
 				&& $row['user_maingrp'] > 3
-				&& ($cfg['ipcheck']==FALSE || $row['user_lastip'] == $usr['ip']))
+				&& (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
 			{
 				$usr['id'] = (int) $row['user_id'];
 				$usr['name'] = $row['user_name'];
@@ -318,7 +327,13 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 
 if($usr['id']==0)
 {
+	if (!$sed_guest_auth)
+	{
+		$sed_guest_auth = sed_auth_build(0);
+		$cfg['cache'] && $cot_cache->db_set('sed_guest_auth', $sed_guest_auth, 'system');
+	}
 	$usr['auth'] = sed_auth_build(0);
+	unset($sed_guest_auth);
 	$usr['skin'] = empty($usr['skin']) ? $cfg['defaultskin'] : $usr['skin'];
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
 	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
@@ -327,12 +342,9 @@ if($usr['id']==0)
 
 /* === Hook === */
 $extp = sed_getextplugins('input');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ======================== */
 
@@ -575,8 +587,10 @@ if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
 /* ======== Global hook ======== */
 
 $extp = sed_getextplugins('global');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 
 /* ======== Pre-loads ======== */
 

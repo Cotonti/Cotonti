@@ -104,8 +104,10 @@ elseif (!empty($e))
 		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 
 	if ($autoassigntags)
 	{
@@ -168,8 +170,10 @@ function add(text) {
 	$mskin = sed_skinfile(array('popup', $o));
 	$t = new XTemplate($mskin);
 
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 
 	$t->assign(array(
 		"POPUP_HEADER1" => $popup_header1,
@@ -249,8 +253,10 @@ elseif (!empty($r) && defined('SED_AJAX'))
 		sed_redirect(sed_url('message', "msg=907", '', true));
 	}
 
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 }
 else
 {

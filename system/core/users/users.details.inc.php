@@ -29,8 +29,10 @@ sed_block($usr['auth_read']);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.details.first');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if(!empty($u) && !empty($id))
@@ -71,8 +73,10 @@ $out['subtitle'] = sed_title('title_users_details', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.details.main');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -131,8 +135,10 @@ while($row = sed_sql_fetchassoc($fieldsres))
 
 /* === Hook === */
 $extp = sed_getextplugins('users.details.tags');
-if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($usr['isadmin'])

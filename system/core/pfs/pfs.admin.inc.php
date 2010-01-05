@@ -60,8 +60,10 @@ foreach ($sed_extensions as $k => $line)
 
 /* === Hook === */
 $extp = sed_getextplugins('pfs.admin.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 switch($a)
@@ -396,8 +398,10 @@ $t->assign('PFS_TITLE', $title);
 
 /* === Hook === */
 $extp = sed_getextplugins('pfs.admin.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if (count($err_msg) > 0)

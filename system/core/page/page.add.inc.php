@@ -26,8 +26,10 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 sed_block($usr['auth_write']);
 
@@ -43,8 +45,10 @@ if ($a=='add')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('page.add.add.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$newpagecat = sed_import('newpagecat','P','TXT');
@@ -131,8 +135,10 @@ if ($a=='add')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.query');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		$ssql = "INSERT into $db_pages
@@ -180,8 +186,10 @@ $ssql.="page_title,
 
 		/* === Hook === */
 		$extp = sed_getextplugins('page.add.add.done');
-		if (is_array($extp))
-		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		sed_shield_update(30, "New page");
@@ -235,8 +243,10 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -305,8 +315,10 @@ $t->assign($pageadd_array);
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($usr['isadmin'])

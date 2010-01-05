@@ -191,12 +191,9 @@ $adminmain = $t -> text("HOME");
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.home', 'R');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

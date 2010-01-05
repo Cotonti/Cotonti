@@ -28,12 +28,9 @@ $ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.page.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -43,12 +40,9 @@ if ($a == 'validate')
 
 	/* === Hook  === */
 	$extp = sed_getextplugins('admin.page.validate');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -77,12 +71,9 @@ elseif ($a == 'unvalidate')
 
 	/* === Hook  === */
 	$extp = sed_getextplugins('admin.page.unvalidate');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -111,12 +102,9 @@ elseif ($a == 'delete')
 
 	/* === Hook  === */
 	$extp = sed_getextplugins('admin.page.delete');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -142,12 +130,9 @@ elseif ($a == 'delete')
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.page.delete.done');
-		if (is_array($extp))
+		foreach ($extp as $pl)
 		{
-			foreach ($extp as $k => $pl)
-			{
-				include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-			}
+			include $pl;
 		}
 		/* ===== */
 
@@ -177,12 +162,9 @@ elseif ($a == 'update_cheked')
 			{
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.page.cheked_validate');
-				if (is_array($extp))
+				foreach ($extp as $pl)
 				{
-					foreach ($extp as $k => $pl)
-					{
-						include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-					}
+					include $pl;
 				}
 				/* ===== */
 
@@ -223,12 +205,9 @@ elseif ($a == 'update_cheked')
 			{
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.page.cheked_delete');
-				if (is_array($extp))
+				foreach ($extp as $pl)
 				{
-					foreach ($extp as $k => $pl)
-					{
-						include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-					}
+					include $pl;
 				}
 				/* ===== */
 
@@ -255,12 +234,9 @@ elseif ($a == 'update_cheked')
 
 					/* === Hook === */
 					$extp = sed_getextplugins('admin.page.delete.done');
-					if (is_array($extp))
+					foreach ($extp as $pl)
 					{
-						foreach ($extp as $k => $pl)
-						{
-							include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-						}
+						include $pl;
 					}
 					/* ===== */
 					$perelik .= '#'.$id.', ';
@@ -467,12 +443,9 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 
 	/* === Hook - Part2 : Include === */
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -509,12 +482,9 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.page.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

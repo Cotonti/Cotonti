@@ -22,8 +22,10 @@ $adminhelp = $L['adm_help_pfs'];
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.pfs.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if(!function_exists('gd_info'))
@@ -55,8 +57,10 @@ $t -> assign(array(
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.pfs.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t -> parse("PFS");

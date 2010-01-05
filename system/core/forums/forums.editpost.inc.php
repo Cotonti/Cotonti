@@ -26,8 +26,10 @@ $quote = sed_import('quote','G','INT');
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.first');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 sed_blockguests();
@@ -51,8 +53,10 @@ if ($row = sed_sql_fetcharray($sql))
 	
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.editpost.rights');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	if (!$usr['isadmin'] && $fp_posterid!=$usr['id'])
@@ -104,8 +108,10 @@ if ($a=='update')
 {
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.editpost.update.first');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$rtext = sed_import('rtext','P','HTM');
@@ -161,8 +167,10 @@ if ($a=='update')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('forums.editpost.update.done');
-	if (is_array($extp))
-	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	sed_forum_sectionsetlast($fp_sectionid);
@@ -202,8 +210,10 @@ $out['subtitle'] = sed_title('title_forum_editpost', $title_tags, $title_data);
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.main');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
@@ -242,8 +252,10 @@ $t->assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.tags');
-if (is_array($extp))
-{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

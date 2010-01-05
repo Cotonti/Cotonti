@@ -38,12 +38,9 @@ $L['adm_code']['users'] = $L['Users'];
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.rightsbyitem.first');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -54,12 +51,9 @@ if ($a == 'update')
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.rightsbyitem.update');
-	if (is_array($extp))
+	foreach ($extp as $pl)
 	{
-		foreach ($extp as $k => $pl)
-		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-		}
+		include $pl;
 	}
 	/* ===== */
 
@@ -113,12 +107,9 @@ switch($ic)
 
 /* === Hook for the plugins === */
 $extp = sed_getextplugins('admin.rightsbyitem.case');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -151,12 +142,9 @@ $t -> assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.rightsbyitem.tags');
-if (is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach ($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 

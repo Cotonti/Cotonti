@@ -22,12 +22,9 @@ $adminhelp = $L['adm_help_versions'];
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.infos.first');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
@@ -47,12 +44,9 @@ $t -> assign(array(
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.infos.tags');
-if(is_array($extp))
+foreach ($extp as $pl)
 {
-	foreach($extp as $k => $pl)
-	{
-		include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
-	}
+	include $pl;
 }
 /* ===== */
 
