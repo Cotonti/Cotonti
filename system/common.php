@@ -332,7 +332,7 @@ if($usr['id']==0)
 		$sed_guest_auth = sed_auth_build(0);
 		$cfg['cache'] && $cot_cache->db_set('sed_guest_auth', $sed_guest_auth, 'system');
 	}
-	$usr['auth'] = sed_auth_build(0);
+	$usr['auth'] = $sed_guest_auth;
 	unset($sed_guest_auth);
 	$usr['skin'] = empty($usr['skin']) ? $cfg['defaultskin'] : $usr['skin'];
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
@@ -353,7 +353,6 @@ foreach ($extp as $pl)
 
 if ($cfg['maintenance'])
 {
-
 	$sqll = sed_sql_query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
 	$roow = sed_sql_fetcharray($sqll);
 
@@ -441,15 +440,22 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 if (!$cfg['disablehitstats'])
 {
-	$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-
-	if ($row = sed_sql_fetcharray($sql))
-	{ $maxusers = $row[0]; }
+	if ($cot_cache->mem_available && $cot_cache->mem_isset('maxusers', 'system'))
+	{
+		$maxusers = $cot_cache->mem_get('maxusers', 'system');
+	}
 	else
-	{ $sql = sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('maxusers', 1)"); }
+	{
+		$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
+		$maxusers = (int) sed_sql_result($sql, 0, 0);
+		$cot_cache->mem_available && $cot_cache->mem_set('maxusers', $maxusers, 'system', 0);
+	}
 
-	if ($maxusers<$sys['whosonline_all_count'])
-	{ $sql = sed_sql_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."' WHERE stat_name='maxusers'"); }
+	if ($maxusers < $sys['whosonline_all_count'])
+	{
+		$sql = sed_sql_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
+			WHERE stat_name='maxusers'");
+	}
 }
 
 /* ======== Language ======== */
@@ -469,7 +475,9 @@ $lang = $usr['lang'];
 
 /* ======== Who's online part 2 ======== */
 
-$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['whosonline_reg_count'],$Ls['Members']).', '.sed_declension($sys['whosonline_vis_count'],$Ls['Guests']);
+$out['whosonline'] = ($cfg['disablewhosonline']) ? ''
+: sed_declension($sys['whosonline_reg_count'], $Ls['Members']) . ', '
+	. sed_declension($sys['whosonline_vis_count'], $Ls['Guests']);
 
 /* ======== Skin ======== */
 
@@ -524,8 +532,20 @@ $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." 
 
 if (!$cfg['disablehitstats'])
 {
-	sed_stat_inc('totalpages');
-	sed_stat_update($sys['day']);
+	if ($cot_cache->mem_available)
+	{
+		$hits = $cot_cache->mem_inc('hits', 'system');
+		if ($hits % 100 == 0)
+		{
+			sed_stat_inc('totalpages', 100);
+			sed_stat_inc($sys['day'], 100);
+		}
+	}
+	else
+	{
+		sed_stat_inc('totalpages');
+		sed_stat_update($sys['day']);
+	}
 
 	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
 

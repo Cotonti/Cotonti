@@ -922,6 +922,8 @@ if (extension_loaded('xcache'))
 
 /**
  * Multi-layer universal cache controller for Cotonti
+ *
+ * @property-read bool $mem_available Memory storage availability flag
  */
 class Cache
 {
@@ -950,6 +952,11 @@ class Cache
 	 * @var bool
 	 */
 	private $resync_on_exit = false;
+	/**
+	 * A flag of memory driver availability
+	 * @var bool
+	 */
+	private $mem_avail = false;
 
 	/**
 	 * Initializes controller components
@@ -960,9 +967,17 @@ class Cache
 		$this->disk = new File_cache($cfg['cache_dir']);
 		$this->db = new MySQL_cache();
 		$this->db->get_all(array('system', 'cot'));
-		$selected = count($cache_drivers) == 1 ? $cache_drivers[1] : $cfg['cache']['shared_drv'];
-		$this->mem = in_array($selected, $cache_drivers) ?
-			new $selected() : $this->db;
+		$selected = count($cache_drivers) == 1 ? $cache_drivers[0] : $cfg['cache']['shared_drv'];
+		if (in_array($selected, $cache_drivers))
+		{
+			$this->mem = new $selected;
+			$this->mem_avail = true;
+		}
+		else
+		{
+			$this->mem = $this->db;
+			$this->mem_avail = false;
+		}
 		if (!$cot_cache_bindings)
 		{
 			$this->resync_bindings();
@@ -981,6 +996,24 @@ class Cache
 		if ($this->resync_on_exit)
 		{
 			$this->resync_bindings();
+		}
+	}
+
+	/**
+	 * Property handler
+	 * @param string $name Property name
+	 * @return mixed Property value
+	 */
+	public function __get($name)
+	{
+		switch ($name)
+		{
+			case 'mem_available':
+				return $this->mem_avail;
+			break;
+			default:
+				return null;
+			break;
 		}
 	}
 
@@ -1109,7 +1142,7 @@ class Cache
 				$this->disk->clear($realm);
 		}
 	}
-	
+
 	/**
 	 * Gets the object from database cache. It is recommended to use memory cache
 	 * for particular objects rather than DB cache.
@@ -1130,7 +1163,7 @@ class Cache
 	 * @param int $ttl Time to live, 0 for unlimited
 	 * @return bool
 	 */
-	public function db_set($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
+	public function db_set($id, $data, $realm = COT_DEFAULT_REALM, $ttl = 0)
 	{
 		return $this->db->store($id, $data, $realm, $ttl);
 	}
@@ -1146,17 +1179,6 @@ class Cache
 	}
 
 	/**
-	 * Checks if an object is stored in disk cache
-	 * @param string $id Object identifier
-	 * @param string $realm Cache realm
-	 * @return bool
-	 */
-	public function disk_isset($id, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->disk->exists($id, $realm);
-	}
-	
-	/**
 	 * Gets an object directly from disk, avoiding the shared memory.
 	 * @param string $id Object identifier
 	 * @param string $realm Realm name
@@ -1165,6 +1187,17 @@ class Cache
 	public function disk_get($id, $realm = COT_DEFAULT_REALM)
 	{
 		return $this->disk->get($id, $realm);
+	}
+
+	/**
+	 * Checks if an object is stored in disk cache
+	 * @param string $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return bool
+	 */
+	public function disk_isset($id, $realm = COT_DEFAULT_REALM)
+	{
+		return $this->disk->exists($id, $realm);
 	}
 	
 	/**
@@ -1191,17 +1224,6 @@ class Cache
 	}
 
 	/**
-	 * Checks if an object is stored in shared memory cache
-	 * @param string $id Object identifier
-	 * @param string $realm Cache realm
-	 * @return bool
-	 */
-	public function mem_isset($id, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->mem->exists($id, $realm);
-	}
-
-	/**
 	 * Gets the object from shared memory cache
 	 * @param string $id Object identifier
 	 * @param string $realm Realm name
@@ -1211,6 +1233,29 @@ class Cache
 	public function mem_get($id, $realm = COT_DEFAULT_REALM)
 	{
 		return $this->mem->get($id, $realm);
+	}
+
+	/**
+	 * Increments counter value
+	 * @param string $id Counter identifier
+	 * @param string $realm Realm name
+	 * @param int $value Increment value
+	 * return int Result value
+	 */
+	public function mem_inc($id, $realm = COT_DEFAULT_REALM, $value = 1)
+	{
+		return $this->mem->inc($id, $realm, $value);
+	}
+
+	/**
+	 * Checks if an object is stored in shared memory cache
+	 * @param string $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return bool
+	 */
+	public function mem_isset($id, $realm = COT_DEFAULT_REALM)
+	{
+		return $this->mem->exists($id, $realm);
 	}
 
 	/**

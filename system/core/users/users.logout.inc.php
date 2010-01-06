@@ -19,8 +19,10 @@ sed_check_xg();
 
 /* === Hook === */
 $extp = sed_getextplugins('users.logout');
-if (is_array($extp))
-{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 if ($usr['id'] > 0)
