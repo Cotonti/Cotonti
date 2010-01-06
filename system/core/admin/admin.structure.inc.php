@@ -140,7 +140,7 @@ if ($n == 'options')
 
 			sed_auth_reorder();
 			sed_auth_clear('all');
-			$cot_cache->db_remove('sed_cat', 'system');
+			$cot_cache->db_unset('sed_cat', 'system');
 		}
 
 		if ($rtplmode == 1)
@@ -183,7 +183,7 @@ if ($n == 'options')
 			WHERE structure_id='".$id."'";
 		$sql = sed_sql_query($sqltxt);
 
-		$cot_cache->db_remove('sed_cat', 'system');
+		$cot_cache->db_unset('sed_cat', 'system');
 
 		//$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
 		sed_redirect(sed_url('admin', 'm=structure&d='.$d.$additionsforurl, '', true));
@@ -362,7 +362,7 @@ else
 
 				sed_auth_reorder();
 				sed_auth_clear('all');
-				$cot_cache->db_remove('sed_cat', 'system');
+				$cot_cache->db_unset('sed_cat', 'system');
 			}
 
 			$sql1text = "UPDATE $db_structure
@@ -390,7 +390,7 @@ else
 		}
 
 		sed_auth_clear('all');
-		$cot_cache->db_remove('sed_cat', 'system');
+		$cot_cache->db_unset('sed_cat', 'system');
 
 		$adminwarnings = $L['Updated'];
 	}

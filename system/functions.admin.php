@@ -479,7 +479,7 @@ function sed_structure_delcat($id, $c)
     $sql = sed_sql_query("DELETE FROM $db_structure WHERE structure_id='$id'");
     $sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page' AND auth_option='$c'");
     sed_auth_clear('all');
-    $cfg['cache'] && $cot_cache->db_remove('sed_cat', 'system');
+    $cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
 }
 
 /* ------------------ */
@@ -541,7 +541,7 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
             }
             sed_auth_reorder();
             sed_auth_clear('all');
-            $cfg['cache'] && $cot_cache->db_remove('sed_cat', 'system');
+            $cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
         }
     }
     return $res;

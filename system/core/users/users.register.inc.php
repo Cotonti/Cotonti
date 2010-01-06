@@ -28,8 +28,10 @@ if ($cfg['disablereg'])
 
 /* === Hook === */
 $extp = sed_getextplugins('users.register.first');
-if (is_array($extp))
-	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 // Extra fields - getting
@@ -44,8 +46,10 @@ if ($a=='add')
 
 	/* === Hook for the plugins === */
 	$extp = sed_getextplugins('users.register.add.first');
-	if (is_array($extp))
-	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
 	/* ===== */
 
 	$rusername = sed_import('rusername','P','TXT', 100, TRUE);
@@ -193,8 +197,10 @@ if ($a=='add')
 
 		/* === Hook for the plugins === */
 		$extp = sed_getextplugins('users.register.add.done');
-		if (is_array($extp))
-		{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
 		/* ===== */
 
 		if ($cfg['regnoactivation'] || $defgroup==5)
@@ -285,8 +291,10 @@ $form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $s
 
 /* === Hook === */
 $extp = sed_getextplugins('users.register.main');
-if (is_array($extp))
-	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $plug_head .= '<meta name="robots" content="noindex" />';
@@ -329,8 +337,10 @@ $t->assign($useredit_array);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.register.tags');
-if (is_array($extp))
-	{ foreach ($extp as $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+foreach ($extp as $pl)
+{
+	include $pl;
+}
 /* ===== */
 
 $t->parse("MAIN");

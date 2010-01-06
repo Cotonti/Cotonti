@@ -205,7 +205,7 @@ function sed_auth_clear($id='all')
 	if($id=='all')
 	{
 		$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
-		$cot_cache->db_remove('sed_guest_auth', 'system');
+		$cot_cache->db_unset('sed_guest_auth', 'system');
 	}
 	else
 	{
@@ -411,9 +411,9 @@ function sed_bbcode_load()
 function sed_bbcode_clearcache()
 {
 	global $cot_cache;
-	$cot_cache->db_remove('sed_bbcodes', 'system');
-	$cot_cache->db_remove('sed_bbcodes_post', 'system');
-	$cot_cache->db_remove('sed_bbcode_containers', 'system');
+	$cot_cache->db_unset('sed_bbcodes', 'system');
+	$cot_cache->db_unset('sed_bbcodes_post', 'system');
+	$cot_cache->db_unset('sed_bbcode_containers', 'system');
 }
 
 /**
@@ -4306,26 +4306,26 @@ function sed_stat_get($name)
  * Increments stats
  *
  * @param string $name Parameter name
+ * @param int $value Increment step
  */
-function sed_stat_inc($name)
+function sed_stat_inc($name, $value = 1)
 {
 	global $db_stats;
-
-	sed_sql_query("UPDATE $db_stats SET stat_value=stat_value+1 WHERE stat_name='$name'");
+	sed_sql_query("UPDATE $db_stats SET stat_value=stat_value+$value WHERE stat_name='$name'");
 }
 
 /**
  * Inserts new stat or increments value if it already exists
  *
  * @param string $name Parameter name
+ * @param int $value Increment step
  */
-function sed_stat_update($name)
+function sed_stat_update($name, $value = 1)
 {
 	global $db_stats;
-
 	sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value)
-	VALUES ('".sed_sql_prep($name)."', 1)
-	ON DUPLICATE KEY UPDATE stat_value=stat_value+1");
+		VALUES ('".sed_sql_prep($name)."', 1)
+		ON DUPLICATE KEY UPDATE stat_value=stat_value+$value");
 }
 
 /*
