@@ -22,8 +22,6 @@ $adminhelp = $L['adm_help_comments'];
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.comments.first');
@@ -98,7 +96,7 @@ while($row = sed_sql_fetcharray($sql))
 		break;
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_COMMENTS_ITEM_DEL_URL" => sed_url('admin', "m=comments&a=delete&id=".$row['com_id']."&".sed_xg()),
 		"ADMIN_COMMENTS_ITEM_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=comments&a=delete&ajax=1&id='.$row['com_id'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_COMMENTS_ITEM_ID" => $row['com_id'],
@@ -115,11 +113,11 @@ while($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("COMMENTS.ADMIN_COMMENTS_ROW");
+	$t->parse("COMMENTS.ADMIN_COMMENTS_ROW");
 	$ii++;
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_COMMENTS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_COMMENTS_CONFIG_URL" => sed_url('admin', 'm=config&n=edit&o=core&p=comments'),
 	"ADMIN_COMMENTS_ADMINWARNINGS" => $adminwarnings,
@@ -138,14 +136,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("COMMENTS");
-$adminmain = $t -> text("COMMENTS");
-
-if($ajax)
+$t->parse('COMMENTS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('COMMENTS');
+}
+else
+{
+	$adminmain = $t->text('COMMENTS');
 }
 
 ?>

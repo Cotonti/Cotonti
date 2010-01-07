@@ -20,8 +20,6 @@ $t = new XTemplate(sed_skinfile('admin.rightsbyitem.inc', false, true));
 $ic = sed_import('ic', 'G', 'ALP');
 $io = sed_import('io', 'G', 'ALP');
 $advanced = sed_import('advanced', 'G', 'BOL');
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $L['adm_code']['admin'] = $L['Administration'];
 $L['adm_code']['comments'] = $L['Comments'];
@@ -130,7 +128,7 @@ while ($row = sed_sql_fetcharray($sql))
 $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_RIGHTSBYITEM_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_RIGHTSBYITEM_FORM_URL" => sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io.$adv_for_url),
 	"ADMIN_RIGHTSBYITEM_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saverightsbyitem', url: '".sed_url('admin','m=rightsbyitem&ajax=1&a=update&ic='.$ic.'&io='.$io.$adv_for_url)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
@@ -148,18 +146,18 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("RIGHTSBYITEM");
-$adminmain = $t -> text("RIGHTSBYITEM");
-
-$t -> parse("RIGHTSBYITEM_HELP");
-$adminhelp = $t -> text("RIGHTSBYITEM_HELP");
-
-if ($ajax)
+$t->parse('RIGHTSBYITEM');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('RIGHTSBYITEM');
 }
+else
+{
+	$adminmain = $t->text('RIGHTSBYITEM');
+}
+
+$t->parse("RIGHTSBYITEM_HELP");
+$adminhelp = $t->text("RIGHTSBYITEM_HELP");
 
 function sed_rights_parseline($row, $title, $link)
 {
@@ -200,12 +198,12 @@ function sed_rights_parseline($row, $title, $link)
 		$out['tpl_rights_parseline_locked'] = $locked[$code];
 		$out['tpl_rights_parseline_state'] = $state[$code];
 
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME" => "auth[".$row['auth_groupid']."][".$code."]",
 			"ADMIN_RIGHTSBYITEM_ROW_ITEMS_CHECKED" => ($state[$code]) ? " checked=\"checked\"" : '',
 			"ADMIN_RIGHTSBYITEM_ROW_ITEMS_DISABLED" => ($locked[$code]) ? " disabled=\"disabled\"" : ''
 		));
-		$t -> parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW.ROW_ITEMS");
+		$t->parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW.ROW_ITEMS");
 	}
 
 	if (!$advanced)
@@ -221,13 +219,13 @@ function sed_rights_parseline($row, $title, $link)
 		$t->assign('ADMIN_RIGHTSBYITEM_ROW_PRESERVE', $preserve);
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_RIGHTSBYITEM_ROW_TITLE" => $title,
 		"ADMIN_RIGHTSBYITEM_ROW_LINK" => $link,
 		"ADMIN_RIGHTSBYITEM_ROW_USER" => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
 		"ADMIN_RIGHTSBYITEM_ROW_JUMPTO" => sed_url('users', "g=".$row['auth_groupid']),
 	));
-	$t -> parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW");
+	$t->parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW");
 }
 
 ?>

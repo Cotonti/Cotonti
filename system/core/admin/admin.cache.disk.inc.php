@@ -21,9 +21,6 @@ $t = new XTemplate(sed_skinfile('admin.cache.disk.inc', false, true));
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
 
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int)$ajax;
-
 /* === Hook === */
 $extp = sed_getextplugins('admin.cache.disk.first');
 foreach ($extp as $pl)
@@ -96,16 +93,14 @@ foreach ($extp as $pl)
 /* ===== */
 
 $t->parse('DISKCACHE');
-$adminmain = $t->text('DISKCACHE');
-
-if ($ajax)
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('DISKCACHE');
 }
-
-return;
+else
+{
+	$adminmain = $t->text('DISKCACHE');
+}
 
 /**
  * Calculates directory size

@@ -3,9 +3,9 @@
  * Administration panel - Banlist manager
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -22,8 +22,6 @@ $adminhelp = $L['adm_help_banlist'];
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.banlist.first');
@@ -96,7 +94,7 @@ $extp = sed_getextplugins('admin.banlist.loop');
 
 while($row = sed_sql_fetcharray($sql))
 {
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_BANLIST_ID_ROW" => $row['banlist_id'],
 		"ADMIN_BANLIST_URL" => sed_url('admin', 'm=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
 		"ADMIN_BANLIST_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savebanlist_".$row['banlist_id']."', url: '".sed_url('admin','m=banlist&a=update&ajax=1&id='.$row['banlist_id'].'&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
@@ -116,11 +114,11 @@ while($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t -> parse("BANLIST.ADMIN_BANLIST_ROW");
+	$t->parse("BANLIST.ADMIN_BANLIST_ROW");
 	$ii++;
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_BANLIST_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_BANLIST_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_BANLIST_PAGINATION_PREV" => $pagination_prev,
@@ -140,14 +138,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("BANLIST");
-$adminmain = $t -> text("BANLIST");
-
-if($ajax)
+$t->parse('BANLIST');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('BANLIST');
+}
+else
+{
+	$adminmain = $t->text('BANLIST');
 }
 
 ?>

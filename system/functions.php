@@ -1659,8 +1659,7 @@ function sed_build_ratings($code, $url, $display)
 		return (array('', ''));
 	}
 
-	$ajax = sed_import('ajax', 'G', 'BOL');
-	if ($ajax)
+	if (SED_AJAX)
 	{
 		$rcode = sed_import('rcode', 'G', 'ALP');
 		if (!empty($rcode))
@@ -1692,7 +1691,7 @@ function sed_build_ratings($code, $url, $display)
 		$rating_cntround = 0;
 	}
 
-	if ($ajax)
+	if (SED_AJAX && !empty($rcode))
 	{
 		ob_clean();
 		echo $rating_cntround;

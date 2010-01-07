@@ -23,7 +23,7 @@ $adminhelp = $L['adm_help_pm'];
 $totalpmdb = sed_sql_rowcount($db_pm);
 $totalpmsent = sed_stat_get('totalpms');
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_PM_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=pm"),
 	"ADMIN_PM_TOTALPMDB" => $totalpmdb,
 	"ADMIN_PM_TOTALPMSENT" => $totalpmsent
@@ -37,7 +37,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("PM");
-$adminmain = $t -> text("PM");
+$t->parse('PM');
+if (SED_AJAX)
+{
+	$t->out('PM');
+}
+else
+{
+	$adminmain = $t->text('PM');
+}
 
 ?>

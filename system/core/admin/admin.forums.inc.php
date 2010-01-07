@@ -21,8 +21,6 @@ $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 $id = sed_import('id','G','INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.forums.first');
@@ -142,13 +140,13 @@ if ($n == 'edit')
 		while ($rowa = sed_sql_fetchassoc($sqla))
 		{
 			$ifmaster = ($fs_masterid == $rowa['fs_id']) ? true : false;
-			$t -> assign("ADMIN_FORUMS_EDIT_FORUMS_MASTER_ROW_CFS", sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE));
-			$t -> parse("FORUMS.EDIT.EDIT_FORUMS_MASTER.EDIT_FORUMS_MASTER_ROW");
+			$t->assign("ADMIN_FORUMS_EDIT_FORUMS_MASTER_ROW_CFS", sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE));
+			$t->parse("FORUMS.EDIT.EDIT_FORUMS_MASTER.EDIT_FORUMS_MASTER_ROW");
 		}
-		$t -> parse("FORUMS.EDIT.EDIT_FORUMS_MASTER");
+		$t->parse("FORUMS.EDIT.EDIT_FORUMS_MASTER");
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_FORUMS_EDIT_FORM_URL" => sed_url('admin', "m=forums&n=edit&a=update&id=".$fs_id),
 		"ADMIN_FORUMS_EDIT_FS_ID" => $fs_id,
 		"ADMIN_FORUMS_EDIT_SELECTBOX_FORUMCAT" => sed_selectbox_forumcat($fs_category, 'rcat'),
@@ -165,7 +163,7 @@ if ($n == 'edit')
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("FORUMS.EDIT");
+	$t->parse("FORUMS.EDIT");
 }
 else
 {
@@ -341,7 +339,7 @@ else
 			{
 				foreach ($fcache[$fs_id] as $key => $value)
 				{
-					$t -> assign(array(
+					$t->assign(array(
 						"ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL" => sed_url('admin', "m=forums&a=delete&id=".$key."&".sed_xg()),
 						"ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=delete&id='.$key.'&'.sed_xg().'&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 						"ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL" => sed_url('admin', "m=forums&n=edit&id=".$key),
@@ -366,13 +364,13 @@ else
 					}
 					/* ===== */
 
-					$t -> parse("FORUMS.DEFULT.ROW.FCACHE");
+					$t->parse("FORUMS.DEFULT.ROW.FCACHE");
 
 					$ii++;
 				}
 			}
 
-			$t -> assign(array(
+			$t->assign(array(
 				"ADMIN_FORUMS_DEFAULT_ROW_FN_URL" => sed_url('admin', "m=forums&s=structure&n=options&id=".$row['fn_id']),
 				"ADMIN_FORUMS_DEFAULT_ROW_FN_TITLE" => htmlspecialchars($row['fn_title']),
 				"ADMIN_FORUMS_DEFAULT_ROW_FN_PATH" => $row['fn_path'],
@@ -400,7 +398,7 @@ else
 			}
 			/* ===== */
 
-			$t -> parse("FORUMS.DEFULT.ROW");
+			$t->parse("FORUMS.DEFULT.ROW");
 		}
 	}
 
@@ -408,14 +406,14 @@ else
 
 	while ($rowa = sed_sql_fetchassoc($sqla))
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_CFS" => sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE),
 			"ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_FS_ID" => $rowa['fs_id']
 		));
-		$t -> parse("FORUMS.DEFULT.FORMADDSELECT");
+		$t->parse("FORUMS.DEFULT.FORMADDSELECT");
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL" => sed_url('admin', 'm=forums&a=update&d='.$d),
 		"ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'updateorder', url: '".sed_url('admin', 'm=forums&a=update&d='.$d.'ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",//��� �� �� ����� � ����� ������ "����������"
 		//"ADMIN_FORUMS_PAGINATION_PREV" => $pagination_prev,
@@ -427,13 +425,13 @@ else
 		"ADMIN_FORUMS_DEFAULT_FORM_ADD_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addsection', url: '".sed_url('admin', 'm=forums&a=add&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT" => sed_selectbox_forumcat('', 'ncat')
 	));
-	$t -> parse("FORUMS.DEFULT");
+	$t->parse("FORUMS.DEFULT");
 }
 
 $is_adminwarnings = isset($adminwarnings);
 $lincif_conf = sed_auth('admin', 'a', 'A');
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_FORUMS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_FORUMS_CONF_URL" => sed_url('admin', 'm=config&n=edit&o=core&p=forums'),
 	"ADMIN_FORUMS_CONF_STRUCTURE_URL" => sed_url('admin', 'm=forums&s=structure'),
@@ -448,14 +446,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("FORUMS");
-$adminmain = $t -> text("FORUMS");
-
-if ($ajax)
+$t->parse('FORUMS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('FORUMS');
+}
+else
+{
+	$adminmain = $t->text('FORUMS');
 }
 
 ?>

@@ -21,8 +21,6 @@ $adminpath[] = array (sed_url('admin', 'm=plug'), $L['Plugins']);
 $pl = sed_import('pl', 'G', 'ALP');
 $part = sed_import('part', 'G', 'ALP');
 $ko = sed_import('ko', 'G', 'BOL');
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $status[0] = '<span style="color:#5882AC;font-weight:bold;">'.$L['adm_paused'].'</span>';
 $status[1] = '<span style="color:#739E48;font-weight:bold;">'.$L['adm_running'].'</span>';
@@ -114,11 +112,11 @@ switch($a)
 
 					if(!empty($info_file['Error']))
 					{
-						$t -> assign(array(
+						$t->assign(array(
 							"ADMIN_PLUG_DETAILS_ROW_X" => $x,
 							"ADMIN_PLUG_DETAILS_ROW_ERROR" => $info_file['Error']
 						));
-						$t -> parse("PLUG.DETAILS.ROW_ERROR_PART");
+						$t->parse("PLUG.DETAILS.ROW_ERROR_PART");
 					}
 					else
 					{
@@ -135,11 +133,11 @@ switch($a)
 
 						if(empty($info_file['Tags']))
 						{
-							$t -> assign(array(
+							$t->assign(array(
 								"ADMIN_PLUG_DETAILS_ROW_I_1" => $i+1,
 								"ADMIN_PLUG_DETAILS_ROW_PART" => $info_file['Part']
 							));
-							$t -> parse("PLUG.DETAILS.ROW_ERROR_TAGS");
+							$t->parse("PLUG.DETAILS.ROW_ERROR_TAGS");
 						}
 						else
 						{
@@ -161,17 +159,17 @@ switch($a)
 								}
 							}
 
-							$t -> assign(array(
+							$t->assign(array(
 								"ADMIN_PLUG_DETAILS_ROW_I_1" => $i+1,
 								"ADMIN_PLUG_DETAILS_ROW_PART" => $info_file['Part'],
 								"ADMIN_PLUG_DETAILS_ROW_FILE" => $line[0]." :<br />",
 								"ADMIN_PLUG_DETAILS_ROW_LISTTAGS" => $listtags,
 								//"ADMIN_PLUG_DETAILS_ROW_TAGS_ODDEVEN" => sed_build_oddeven($ii)
 							));
-							$t -> parse("PLUG.DETAILS.ROW_TAGS");
+							$t->parse("PLUG.DETAILS.ROW_TAGS");
 						}
 
-						$t -> assign(array(
+						$t->assign(array(
 							"ADMIN_PLUG_DETAILS_ROW_I_1" => $i+1,
 							"ADMIN_PLUG_DETAILS_ROW_PART" => $info_file['Part'],
 							"ADMIN_PLUG_DETAILS_ROW_FILE" => $info_file['File'],
@@ -190,12 +188,12 @@ switch($a)
 							include $pl;
 						}
 						/* ===== */
-						$t -> parse("PLUG.DETAILS.ROW_PART");
+						$t->parse("PLUG.DETAILS.ROW_PART");
 					}
 				}
 			}
 
-			$t -> assign(array(
+			$t->assign(array(
 				"ADMIN_PLUG_NAME" => $info['Name'],
 				"ADMIN_PLUG_CODE" => $info['Code'],
 				"ADMIN_PLUG_DESCRIPTION" => $info['Description'],
@@ -235,7 +233,7 @@ switch($a)
 				include $pl;
 			}
 			/* ===== */
-			$t -> parse("PLUG.DETAILS");
+			$t->parse("PLUG.DETAILS");
 		}
 		else
 		{
@@ -274,10 +272,10 @@ switch($a)
 						{
 							$parts[] = $f;
 
-							$t -> assign(array(
+							$t->assign(array(
 								"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F" => $f
 							));
-							$t -> parse("PLUG.EDIT.INSTALL.ROW_PARTS_FOUND");
+							$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_FOUND");
 						}
 					}
 					closedir($handle);
@@ -300,11 +298,11 @@ switch($a)
 								$msg = $L['Error'];
 							}
 
-							$t -> assign(array(
+							$t->assign(array(
 								"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_X" => $x,
 								"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG" => $msg
 							));
-							$t -> parse("PLUG.EDIT.INSTALL.ROW_PARTS_INSTALLING");
+							$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_INSTALLING");
 						}
 					}
 
@@ -348,24 +346,24 @@ switch($a)
 									$sql = (!$if) ? sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".$line[3]."', '".$line[2]."', '".sed_sql_prep($line[4])."')") : '';
 								}
 
-								$t -> assign(array(
+								$t->assign(array(
 									"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_J" => $j,
 									"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_I" => $i,
 									"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_LINE" => $line[1]
 								));
-								$t -> parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG.ROW_PARTS_CFG_ENTRY");
+								$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG.ROW_PARTS_CFG_ENTRY");
 							}
 							$totalconfig++;
 						}
 
-						$t -> assign(array(
+						$t->assign(array(
 							"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG" => $totalconfig
 						));
-						$t -> parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG");
+						$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG");
 					}
 					else
 					{
-						$t -> parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG_ERROR");
+						$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG_ERROR");
 					}
 				}
 
@@ -421,14 +419,14 @@ switch($a)
 						$sql = (!$if) ? sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")") : '';
 					}
 
-					$t -> assign(array(
+					$t->assign(array(
 						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_ID" => $v['id'],
 						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_TITLE" => $sed_groups[$v['id']]['title'],
 						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH" => sed_build_admrights($ins_auth),
 						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK" => sed_build_admrights($ins_lock),
 						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_COMMENT" => $comment
 					));
-					$t -> parse("PLUG.EDIT.INSTALL.ROW_RIGHTS");
+					$t->parse("PLUG.EDIT.INSTALL.ROW_RIGHTS");
 				}
 				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
 				$show_sql_affectedrows4 = sed_sql_affectedrows();
@@ -440,7 +438,7 @@ switch($a)
 				sed_auth_reorder();
 				$cot_cache->db_unset('sed_plugins', 'system');
 
-				$t -> assign(array(
+				$t->assign(array(
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS1" => $show_sql_affectedrows1,
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS2" => $show_sql_affectedrows2,
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS3" => $show_sql_affectedrows3,
@@ -457,8 +455,8 @@ switch($a)
 					include $pl;
 				}
 				/* ===== */
-				$t -> parse("PLUG.EDIT.INSTALL");
-				$t -> parse("PLUG.EDIT");
+				$t->parse("PLUG.EDIT.INSTALL");
+				$t->parse("PLUG.EDIT");
 			break;
 			case 'uninstall':
 				$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
@@ -483,7 +481,7 @@ switch($a)
 				$action = 'uninstall';
 				include_once($extplugin_info);
 
-				$t -> assign(array(
+				$t->assign(array(
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS1" => $show_sql_affectedrows1,
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS2" => $show_sql_affectedrows2,
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS3" => $show_sql_affectedrows3,
@@ -500,8 +498,8 @@ switch($a)
 					include $pl;
 				}
 				/* ===== */
-				$t -> parse("PLUG.EDIT.UNINSTALL");
-				$t -> parse("PLUG.EDIT");
+				$t->parse("PLUG.EDIT.UNINSTALL");
+				$t->parse("PLUG.EDIT");
 			break;
 			default:
 				sed_die();
@@ -568,12 +566,12 @@ switch($a)
 
 				if(!empty($info['Error']))
 				{
-					$t -> assign(array(
+					$t->assign(array(
 						"ADMIN_PLUG_X_ERR" => $x,
 						"ADMIN_PLUG_ERROR_MSG" => $info['Error']
 					));
-					$t -> parse("PLUG.DEFAULT.ROW.ROW_ERROR_PLUG");
-					$t -> parse("PLUG.DEFAULT.ROW");
+					$t->parse("PLUG.DEFAULT.ROW.ROW_ERROR_PLUG");
+					$t->parse("PLUG.DEFAULT.ROW");
 				}
 				else
 				{
@@ -609,7 +607,7 @@ switch($a)
 					$ent_code = $cfgentries[$info['Code']];
 					$if_plg_standalone = $plg_standalone[$info['Code']];
 
-					$t -> assign(array(
+					$t->assign(array(
 						"ADMIN_PLUG_DETAILS_URL" => sed_url('admin', "m=plug&a=details&pl=".$info['Code']),
 						"ADMIN_PLUG_NAME" => $info['Name'],
 						"ADMIN_PLUG_CODE_X" => $x,
@@ -627,15 +625,15 @@ switch($a)
 						include $pl;
 					}
 					/* ===== */
-					$t -> parse("PLUG.DEFAULT.ROW");
+					$t->parse("PLUG.DEFAULT.ROW");
 				}
 			}
 			else
 			{
-				$t -> assign(array(
+				$t->assign(array(
 					"ADMIN_PLUG_X" => $x
 				));
-				$t -> parse("PLUG.DEFAULT.ROW_ERROR");
+				$t->parse("PLUG.DEFAULT.ROW_ERROR");
 			}
 		}
 
@@ -650,27 +648,27 @@ switch($a)
 
 		while($row = sed_sql_fetcharray($sql))
 		{
-			$t -> assign(array(
+			$t->assign(array(
 				"ADMIN_PLUG_HOOK" => $row['pl_hook'],
 				"ADMIN_PLUG_CODE" => $row['pl_code'],
 				"ADMIN_PLUG_ORDER" => $row['pl_order'],
 				"ADMIN_PLUG_ACTIVE" => $sed_yesno[$row['pl_active']]
 			));
-			$t -> parse("PLUG.DEFAULT.HOOKS");
+			$t->parse("PLUG.DEFAULT.HOOKS");
 		}
 
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_PLUG_CNT_EXTP" => $cnt_extp,
 			"ADMIN_PLUG_CNT_HOOK" => sed_sql_numrows($sql)
 		));
-		$t -> parse("PLUG.DEFAULT");
+		$t->parse("PLUG.DEFAULT");
 	break;
 }
 
 $if_conf_url = (!empty($pl) && $b == 'install' && $totalconfig > 0) ? true : false;
 $is_adminwarnings = isset($adminwarnings);
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_PLUG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PLUG_CONFIG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$pl),
 	"ADMIN_PLUG_ADMINWARNINGS" => $adminwarnings
@@ -683,14 +681,14 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
-$t -> parse("PLUG");
-$adminmain = $t -> text("PLUG");
-
-if($ajax)
+$t->parse('PLUG');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('PLUG');
+}
+else
+{
+	$adminmain = $t->text('PLUG');
 }
 
 ?>

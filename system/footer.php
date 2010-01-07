@@ -3,7 +3,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -105,8 +105,6 @@ while (ob_get_level() > 0)
 {
     ob_end_flush();
 }
-$cot_cache = null; // Need to destroy before DB connection is lost
-sed_sql_close();
 
 /* === Hook === */
 $extp = sed_getextplugins('footer.last');
@@ -116,4 +114,6 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
+$cot_cache = null; // Need to destroy before DB connection is lost
+sed_sql_close();
 ?>

@@ -23,8 +23,6 @@ $adminhelp = $L['adm_help_ratings'];
 $id = sed_import('id','G','TXT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.ratings.first');
@@ -83,7 +81,7 @@ while($row = sed_sql_fetcharray($sql))
 		break;
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_RATINGS_ROW_URL_DEL" => sed_url('admin', "m=ratings&a=delete&id=".$row['rating_code']."&d=".$d."&".sed_xg()),
 		"ADMIN_RATINGS_ROW_RATING_CODE" => $row['rating_code'],
 		"ADMIN_RATINGS_ROW_CREATIONDATE" => date($cfg['dateformat'], $row['rating_creationdate']),
@@ -98,12 +96,12 @@ while($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("RATINGS.RATINGS_ROW");
+	$t->parse("RATINGS.RATINGS_ROW");
 	$ii++;
 	$jj = $jj + $votes;
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_RATINGS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_RATINGS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_RATINGS_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=ratings"),
@@ -123,14 +121,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("RATINGS");
-$adminmain = $t -> text("RATINGS");
-
-if($ajax)
+$t->parse('RATINGS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('RATINGS');
+}
+else
+{
+	$adminmain = $t->text('RATINGS');
 }
 
 ?>

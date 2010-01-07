@@ -92,15 +92,15 @@ if (!$cfg['disablehitstats'])
 	foreach ($hits_d as $day => $hits)
 	{
 		$percentbar = floor(($hits / $hits_d_max) * 100);
-		$t -> assign(array(
+		$t->assign(array(
 			'ADMIN_HOME_DAY' => $day,
 			'ADMIN_HOME_HITS' => $hits,
 			'ADMIN_HOME_PERCENTBAR' => $percentbar
 		));
-		$t -> parse('HOME.ADMIN_HOME_ROW');
+		$t->parse('HOME.ADMIN_HOME_ROW');
 	}
 
-	$t -> assign('ADMIN_HOME_MORE_HITS_URL', sed_url('admin', 'm=hits'));
+	$t->assign('ADMIN_HOME_MORE_HITS_URL', sed_url('admin', 'm=hits'));
 }
 
 //Show activity stats
@@ -126,7 +126,7 @@ if (!$cfg['disableactivitystats'])
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
 	$newpms = sed_sql_result($sql, 0, "COUNT(*)");
 
-	$t -> assign(array(
+	$t->assign(array(
 		'ADMIN_HOME_NEWUSERS_URL' => sed_url('users', 'f=all&s=regdate&w=desc'),
 		'ADMIN_HOME_NEWUSERS' => $newusers,
 		'ADMIN_HOME_NEWPAGES_URL' => sed_url('admin', 'm=page'),
@@ -169,7 +169,7 @@ if (!$cfg['disabledbstats'])
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_plugins");
 	$totalhooks = sed_sql_result($sql, 0, "COUNT(*)");
 
-	$t -> assign(array(
+	$t->assign(array(
 		'ADMIN_HOME_DB_TOTAL_ROWS' => $total_rows,
 		'ADMIN_HOME_DB_INDEXSIZE' => number_format(($total_index_length / 1024), 1, '.', ' '),
 		'ADMIN_HOME_DB_DATASSIZE' => number_format(($total_data_length / 1024), 1, '.', ' '),
@@ -179,15 +179,22 @@ if (!$cfg['disabledbstats'])
 	));
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_HOME_URL" => sed_url('admin', "m=page"),
 	"ADMIN_HOME_PAGESQUEUED" => $pagesqueued,
 	'ADMIN_HOME_VERSION' => $cfg['version'],
 	'ADMIN_HOME_REVISION' => $L['home_rev'].$cfg['revision'],
 	'ADMIN_HOME_DB_VERSION' => $cfg['dbversion']
 ));
-$t -> parse("HOME");
-$adminmain = $t -> text("HOME");
+$t->parse('HOME');
+if (SED_AJAX)
+{
+	$t->out('HOME');
+}
+else
+{
+	$adminmain = $t->text('HOME');
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.home', 'R');

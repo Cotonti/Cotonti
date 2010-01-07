@@ -19,8 +19,6 @@ $t = new XTemplate(sed_skinfile('admin.rights.inc', false, true));
 
 $g = sed_import('g', 'G', 'INT');
 $advanced = sed_import('advanced', 'G', 'BOL');
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $L['adm_code']['admin'] = $L['Administration'];
 $L['adm_code']['comments'] = $L['Comments'];
@@ -192,7 +190,7 @@ foreach ($extp as $pl)
 $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_RIGHTS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_RIGHTS_FORM_URL" => sed_url('admin', "m=rights&a=update&g=".$g.$adv_for_url),
 	"ADMIN_RIGHTS_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saverights', url: '".sed_url('admin','m=rights&ajax=1&a=update&g='.$g.$adv_for_url)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
@@ -211,18 +209,18 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("RIGHTS");
-$adminmain = $t -> text("RIGHTS");
-
-$t -> parse("RIGHTS_HELP");
-$adminhelp = $t -> text("RIGHTS_HELP");
-
-if ($ajax)
+$t->parse('RIGHTS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('RIGHTS');
 }
+else
+{
+	$adminmain = $t->text('RIGHTS');
+}
+
+$t->parse("RIGHTS_HELP");
+$adminhelp = $t->text("RIGHTS_HELP");
 
 function sed_rights_parseline($row, $title, $link, $name)
 {
@@ -256,12 +254,12 @@ function sed_rights_parseline($row, $title, $link, $name)
 		$out['tpl_rights_parseline_locked'] = $locked[$code];
 		$out['tpl_rights_parseline_state'] = $state[$code];
 
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_RIGHTS_ROW_ITEMS_NAME" => "auth[".$row['auth_code']."][".$row['auth_option']."][".$code."]",
 			"ADMIN_RIGHTS_ROW_ITEMS_CHECKED" => ($state[$code]) ? " checked=\"checked\"" : '',
 			"ADMIN_RIGHTS_ROW_ITEMS_DISABLED" => ($locked[$code]) ? " disabled=\"disabled\"" : ''
 		));
-		$t -> parse("RIGHTS.RIGHTS_ROW".$name.".ROW".$name."_ITEMS");
+		$t->parse("RIGHTS.RIGHTS_ROW".$name.".ROW".$name."_ITEMS");
 	}
 
 	if (!$advanced)
@@ -277,14 +275,14 @@ function sed_rights_parseline($row, $title, $link, $name)
 		$t->assign('ADMIN_RIGHTS_ROW_PRESERVE', $preserve);
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_RIGHTS_ROW_AUTH_CODE" => $row['auth_code'],
 		"ADMIN_RIGHTS_ROW_TITLE" => $title,
 		"ADMIN_RIGHTS_ROW_LINK" => $link,
 		"ADMIN_RIGHTS_ROW_RIGHTSBYITEM" => sed_url('admin', "m=rightsbyitem&ic=".$row['auth_code']."&io=".$row['auth_option']),
 		"ADMIN_RIGHTS_ROW_USER" => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
 	));
-	$t -> parse("RIGHTS.RIGHTS_ROW".$name);
+	$t->parse("RIGHTS.RIGHTS_ROW".$name);
 }
 
 ?>

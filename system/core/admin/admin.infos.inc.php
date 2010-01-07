@@ -30,7 +30,7 @@ foreach ($extp as $pl)
 
 @error_reporting(0);
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_INFOS_PHPVER" => (function_exists('phpversion')) ? phpversion() : $L['adm_help_config'],
 	"ADMIN_INFOS_ZENDVER" => (function_exists('zend_version')) ? zend_version() : $L['adm_help_config'],
 	"ADMIN_INFOS_INTERFACE" => (function_exists('php_sapi_name')) ? php_sapi_name() : $L['adm_help_config'],
@@ -50,8 +50,15 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("INFOS");
-$adminmain = $t -> text("INFOS");
+$t->parse('INFOS');
+if (SED_AJAX)
+{
+	$t->out('INFOS');
+}
+else
+{
+	$adminmain = $t->text('INFOS');
+}
 
 @error_reporting(7);
 

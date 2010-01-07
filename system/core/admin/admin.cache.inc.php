@@ -19,9 +19,6 @@ $t = new XTemplate(sed_skinfile('admin.cache.inc', false, true));
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=cache'), $L['adm_internalcache']);
 
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
-
 /* === Hook === */
 $extp = sed_getextplugins('admin.cache.first');
 foreach ($extp as $pl)
@@ -44,6 +41,22 @@ elseif($a == 'delete')
 
 $is_adminwarnings = isset($adminwarnings);
 
+if ($cot_cache->mem_available)
+{
+	$info = $cot_cache->get_info();
+	if ($info['available'] < 0)
+	{
+		$info['available'] = '?';
+	}
+	$t->assign(array(
+		'ADMIN_CACHE_MEMORY_DRIVER' => str_replace('_driver', '', $cot_cache->mem_driver),
+		'ADMIN_CACHE_MEMORY_PERCENTBAR' => ceil(($info['occupied'] / $info['max']) * 100),
+		'ADMIN_CACHE_MEMORY_AVAILABLE' => $info['available'],
+		'ADMIN_CACHE_MEMORY_MAX' => $info['max']
+	));
+	$t->parse('CACHE.ADMIN_CACHE_MEMORY');
+}
+
 $sql = sed_sql_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
 $cachesize = 0;
 $ii = 0;
@@ -56,7 +69,7 @@ while($row = sed_sql_fetcharray($sql))
 	$row['c_value'] = htmlspecialchars($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);
 	$cachesize += $row['size'];
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_CACHE_ITEM_DEL_URL" => sed_url('admin', 'm=cache&a=delete&id='.$row['c_name'].'&'.sed_xg()),
 		"ADMIN_CACHE_ITEM_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=delete&ajax=1&id='.$row['c_name'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_CACHE_ITEM_NAME" => $row['c_name'],
@@ -73,11 +86,11 @@ while($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t -> parse("CACHE.ADMIN_CACHE_ROW");
+	$t->parse("CACHE.ADMIN_CACHE_ROW");
     $ii++;
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_CACHE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_CACHE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_CACHE_URL_REFRESH" => sed_url('admin', 'm=cache'),
@@ -97,14 +110,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("CACHE");
-$adminmain = $t -> text("CACHE");
-
-if($ajax)
+$t->parse('CACHE');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('CACHE');
+}
+else
+{
+	$adminmain = $t->text('CACHE');
 }
 
 ?>

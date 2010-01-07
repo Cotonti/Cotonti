@@ -23,8 +23,6 @@ $id = sed_import('id', 'G', 'INT');
 $c = sed_import('c', 'G', 'TXT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.structure.first');
@@ -232,21 +230,21 @@ if ($n == 'options')
 
 	while (list($i, $x) = each($options_sort))
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_SELECTED" => ($i == $sort) ? ' selected="selected"' : '',
 			"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_NAME" => $x,
 			"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_VALUE" => $i
 		));
-		$t -> parse("STRUCTURE.OPTIONS.STRUCTURE_CATORDER_SELECT_SORT");
+		$t->parse("STRUCTURE.OPTIONS.STRUCTURE_CATORDER_SELECT_SORT");
 	}
 	while (list($i, $x) = each($options_way))
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_SELECTED" => ($i == $way) ? ' selected="selected"' : '',
 			"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_NAME" => $x,
 			"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_VALUE" => $i
 		));
-		$t -> parse("STRUCTURE.OPTIONS.STRUCTURE_CATORDER_SELECT_WAY");
+		$t->parse("STRUCTURE.OPTIONS.STRUCTURE_CATORDER_SELECT_WAY");
 	}
 
 	if (empty($row['structure_tpl']))
@@ -271,16 +269,16 @@ if ($n == 'options')
 	{
 		if ($i != 'all')
 		{
-			$t -> assign(array(
+			$t->assign(array(
 				"ADMIN_STRUCTURE_OPTION_SELECTED" => ($i == $row['structure_tpl']) ? " selected=\"selected\"" : '',
 				"ADMIN_STRUCTURE_OPTION_I" => $i,
 				"ADMIN_STRUCTURE_OPTION_TPATH" => $x['tpath']
 			));
-			$t -> parse("STRUCTURE.OPTIONS.SELECT");
+			$t->parse("STRUCTURE.OPTIONS.SELECT");
 		}
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_STRUCTURE_UPDATE_FORM_URL" => sed_url('admin', "m=structure&n=options&a=update&id=".$structure_id."&d=".$d."&".sed_xg()),
 		"ADMIN_STRUCTURE_UPDATE_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', 'm=structure&n=options&ajax=1&a=update&id='.$structure_id.'&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_STRUCTURE_CODE" => $structure_code,
@@ -301,7 +299,7 @@ if ($n == 'options')
 	{
 		$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE', $extrafields, $row);
 	}
-	$t -> assign($extra_array);
+	$t->assign($extra_array);
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.structure.options.tags');
@@ -310,7 +308,7 @@ if ($n == 'options')
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("STRUCTURE.OPTIONS");
+	$t->parse("STRUCTURE.OPTIONS");
 }
 else
 {
@@ -504,21 +502,21 @@ else
 
 		while (list($i, $x) = each($options_sort))
 		{
-			$t -> assign(array(
+			$t->assign(array(
 				"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_SELECTED" => ($i == $sort) ? ' selected="selected"' : '',
 				"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_NAME" => $x,
 				"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_VALUE" => $i
 			));
-			$t -> parse("STRUCTURE.DEFULT.ROW.STRUCTURE_CATORDER_SELECT_SORT");
+			$t->parse("STRUCTURE.DEFULT.ROW.STRUCTURE_CATORDER_SELECT_SORT");
 		}
 		while (list($i, $x) = each($options_way))
 		{
-			$t -> assign(array(
+			$t->assign(array(
 				"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_SELECTED" => ($i == $way) ? ' selected="selected"' : '',
 				"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_NAME" => $x,
 				"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_VALUE" => $i
 			));
-			$t -> parse("STRUCTURE.DEFULT.ROW.STRUCTURE_CATORDER_SELECT_WAY");
+			$t->parse("STRUCTURE.DEFULT.ROW.STRUCTURE_CATORDER_SELECT_WAY");
 		}
 
 		if (empty($row['structure_tpl']))
@@ -536,7 +534,7 @@ else
 
 		$dozvil = ($pagecount[$structure_code] > 0) ? false : true;
 
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_STRUCTURE_UPDATE_DEL_URL" => sed_url('admin', "m=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&d=".$d."&".sed_xg()),
 			"ADMIN_STRUCTURE_UPDATE_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin','m=structure&a=delete&ajax=1&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 			"ADMIN_STRUCTURE_ID" => $structure_id,
@@ -560,7 +558,7 @@ else
 		{
 			$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE', $extrafields, $row, false);
 		}
-		$t -> assign($extra_array);*/
+		$t->assign($extra_array);*/
 
 		/* === Hook - Part2 : Include === */
 		foreach ($extp as $pl)
@@ -569,7 +567,7 @@ else
 		}
 		/* ===== */
 
-		$t -> parse("STRUCTURE.DEFULT.ROW");
+		$t->parse("STRUCTURE.DEFULT.ROW");
 
 		$ii++;
 	}
@@ -579,24 +577,24 @@ else
 
 	while (list($i, $x) = each($options_sort))
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_STRUCTURE_CATORDER_SORT_SELECTED" => ($i == 'title') ? ' selected="selected"' : '',
 			"ADMIN_STRUCTURE_CATORDER_SORT_NAME" => $x,
 			"ADMIN_STRUCTURE_CATORDER_SORT_VALUE" => $i
 		));
-		$t -> parse("STRUCTURE.DEFULT.STRUCTURE_CATORDER_SORT");
+		$t->parse("STRUCTURE.DEFULT.STRUCTURE_CATORDER_SORT");
 	}
 	while (list($i, $x) = each($options_way))
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_STRUCTURE_CATORDER_WAY_SELECTED" => ($i == 'asc') ? ' selected="selected"' : '',
 			"ADMIN_STRUCTURE_CATORDER_WAY_NAME" => $x,
 			"ADMIN_STRUCTURE_CATORDER_WAY_VALUE" => $i
 		));
-		$t -> parse("STRUCTURE.DEFULT.STRUCTURE_CATORDER_WAY");
+		$t->parse("STRUCTURE.DEFULT.STRUCTURE_CATORDER_WAY");
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_STRUCTURE_UPDATE_FORM_URL" => sed_url('admin', "m=structure&a=update&d=".$d),
 		"ADMIN_STRUCTURE_UPDATE_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin','m=structure&ajax=1&a=update&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_STRUCTURE_PAGINATION_PREV" => $pagination_prev,
@@ -615,15 +613,15 @@ else
 	{
 		$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE_FORMADD', $extrafields, '', true);
 	}
-	$t -> assign($extra_array);
+	$t->assign($extra_array);
 
-	$t -> parse("STRUCTURE.DEFULT");
+	$t->parse("STRUCTURE.DEFULT");
 }
 
 $lincif_conf = sed_auth('admin', 'a', 'A');
 $is_adminwarnings = isset($adminwarnings);
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_STRUCTURE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_STRUCTURE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_STRUCTURE_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=structure"),
@@ -638,14 +636,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("STRUCTURE");
-$adminmain = $t -> text("STRUCTURE");
-
-if ($ajax)
+$t->parse('STRUCTURE');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('STRUCTURE');
+}
+else
+{
+	$adminmain = $t->text('STRUCTURE');
 }
 
 ?>

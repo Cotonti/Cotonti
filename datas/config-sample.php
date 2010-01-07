@@ -37,6 +37,13 @@ $cfg['defaulttheme'] = 'sed-light';	// Default theme, only name, not like skinna
 $cfg['defaultlang'] = 'en';		// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
+// ========================
+// Performance-related settings
+// ========================
+
+$cfg['cache'] = TRUE;			// Enable data caching
+$cfg['cache_drv'] = '';			// Cache driver name to use on your server (if available)
+								// Possible values: APC, eAccelerator, Memcache, Xcache
 $cfg['xtpl_cache'] = TRUE;		// Enable XTemplate structure disk cache
 $cfg['html_cleanup'] = FALSE;	// Wipe extra spaces and breaks from HTML to get smaller footprint
 
@@ -44,6 +51,7 @@ $cfg['html_cleanup'] = FALSE;	// Wipe extra spaces and breaks from HTML to get s
 // Default built-in time zone settings
 // See http://php.net/manual/en/timezones.php
 // ========================
+(function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>=')) &&
 date_default_timezone_set('GMT');
 
 // ========================

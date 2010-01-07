@@ -32,8 +32,6 @@ $log_groups = array(
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.log.first');
@@ -66,12 +64,12 @@ foreach($log_groups as $grp_code => $grp_name)
 {
 	$selected = ($grp_code == $n) ? " selected=\"selected\"" : "";
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_LOG_OPTION_VALUE_URL" => sed_url('admin', "m=log&n=".$grp_code),
 		"ADMIN_LOG_OPTION_GRP_NAME" => $grp_name,
 		"ADMIN_LOG_OPTION_SELECTED" => $selected
 	));
-	$t -> parse("LOG.GROUP_SELECT_OPTION");
+	$t->parse("LOG.GROUP_SELECT_OPTION");
 }
 
 $is_adminwarnings = isset($adminwarnings);
@@ -103,7 +101,7 @@ $extp = sed_getextplugins('admin.log.loop');
 /* ===== */
 while($row = sed_sql_fetcharray($sql))
 {
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_LOG_ROW_LOG_ID" => $row['log_id'],
 		"ADMIN_LOG_ROW_DATE" => date($cfg['dateformat'], $row['log_date']),
 		"ADMIN_LOG_ROW_URL_IP_SEARCH" => sed_url('admin', "m=tools&p=ipsearch&a=search&id=".$row['log_ip']."&".sed_xg()),
@@ -120,11 +118,11 @@ while($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("LOG.LOG_ROW");
+	$t->parse("LOG.LOG_ROW");
 	$ii++;
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_LOG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_LOG_URL_PRUNE" => sed_url('admin', "m=log&a=purge&".sed_xg()),
 	"ADMIN_LOG_URL_PRUNE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=log&a=purge&ajax=1&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
@@ -145,14 +143,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("LOG");
-$adminmain = $t -> text("LOG");
-
-if($ajax)
+$t->parse('LOG');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('LOG');
+}
+else
+{
+	$adminmain = $t->text('LOG');
 }
 
 ?>

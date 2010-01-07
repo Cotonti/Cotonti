@@ -22,8 +22,6 @@ $adminhelp = $L['adm_help_referers'];
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.referers.first');
@@ -83,7 +81,7 @@ if(sed_sql_numrows($sql) > 0)
 		
 		foreach($url as $uri => $count)
 		{
-			$t -> assign(array(
+			$t->assign(array(
 				"ADMIN_REFERERS_URI" => htmlspecialchars(sed_cutstring($uri, 128)),
 				"ADMIN_REFERERS_COUNT" => $count,
 				"ADMIN_REFERERS_ODDEVEN" => sed_build_oddeven($ii)
@@ -94,7 +92,7 @@ if(sed_sql_numrows($sql) > 0)
 				include $pl;
 			}
 			/* ===== */
-			$t -> parse("REFERERS.REFERERS_ROW.REFERERS_URI");
+			$t->parse("REFERERS.REFERERS_ROW.REFERERS_URI");
 		}
 		$t->parse("REFERERS.REFERERS_ROW");
 		$ii++;
@@ -106,7 +104,7 @@ else
 	$is_ref_empty = false;
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_REFERERS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_REFERERS_URL_PRUNE" => sed_url('admin', "m=referers&a=prune&".sed_xg()),
 	"ADMIN_REFERERS_URL_PRUNELOWHITS" => sed_url('admin', "m=referers&a=prunelowhits&".sed_xg()),
@@ -126,14 +124,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("REFERERS");
-$adminmain = $t -> text("REFERERS");
-
-if($ajax)
+$t->parse('REFERERS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('REFERERS');
+}
+else
+{
+	$adminmain = $t->text('REFERERS');
 }
 
 ?>

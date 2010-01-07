@@ -12,7 +12,7 @@
  * Stores the list of advanced cachers provided by the host
  * @var array
  */
-$cache_drivers = array();
+$cot_cache_drivers = array();
 
 /**
  * Default cache realm
@@ -545,7 +545,7 @@ class MySQL_cache extends Db_cache_driver
 
 if (extension_loaded('memcache'))
 {
-	$cache_drivers[] = 'Memcache_driver';
+	$cot_cache_drivers[] = 'Memcache_driver';
 
 	/**
 	 * Memcache distributed persistent cache driver implementation. Give it a higher priority
@@ -677,7 +677,7 @@ if (extension_loaded('memcache'))
 
 if (extension_loaded('apc'))
 {
-	$cache_drivers[] = 'APC_driver';
+	$cot_cache_drivers[] = 'APC_driver';
 
 	/**
 	 * Accelerated PHP Cache driver implementation. This should be used as default cacher
@@ -724,8 +724,8 @@ if (extension_loaded('apc'))
 		public function get_info()
 		{
 			$info = apc_sma_info();
-			$max = ini_get('apc.shm_segments') * ini_get('apc.shm_size'); //unreliable
-			$occupied = $max_size - $info['avail_mem'];
+			$max = ini_get('apc.shm_segments') * ini_get('apc.shm_size') * 1024 * 1024;
+			$occupied = $max - $info['avail_mem'];
 			return array(
 				'available' => $info['avail_mem'],
 				'max' => $max,
@@ -751,9 +751,9 @@ if (extension_loaded('apc'))
 	}
 }
 
-if (extension_loaded('eaccelerator'))
+if (extension_loaded('eaccelerator') && function_exists('eaccelerator_get'))
 {
-	$cache_drivers[] = 'eAccelerator_driver';
+	$cot_cache_drivers[] = 'eAccelerator_driver';
 
 	/**
 	 * eAccelerator driver implementation. This should be used as default cacher
@@ -834,7 +834,7 @@ if (extension_loaded('eaccelerator'))
 
 if (extension_loaded('xcache'))
 {
-	$cache_drivers[] = 'Xcache_driver';
+	$cot_cache_drivers[] = 'Xcache_driver';
 
 	/**
 	 * XCache variable cache driver. It should be used on hosts that use XCache for
@@ -957,21 +957,35 @@ class Cache
 	 * @var bool
 	 */
 	private $mem_avail = false;
+	/**
+	 * Selected memory driver
+	 * @var string
+	 */
+	private $selected_drv = '';
 
 	/**
 	 * Initializes controller components
 	 */
 	public function  __construct()
 	{
-		global $cfg, $cache_drivers, $cot_cache_bindings;
+		global $cfg, $cot_cache_drivers, $cot_cache_bindings;
 		$this->disk = new File_cache($cfg['cache_dir']);
 		$this->db = new MySQL_cache();
 		$this->db->get_all(array('system', 'cot'));
-		$selected = count($cache_drivers) == 1 ? $cache_drivers[0] : $cfg['cache']['shared_drv'];
-		if (in_array($selected, $cache_drivers))
+		$cfg['cache_drv'] .= '_driver';
+		if (in_array($cfg['cache_drv'], $cot_cache_drivers))
 		{
-			$this->mem = new $selected;
+			$selected = $cfg['cache_drv'];
+		}
+		elseif (count($cot_cache_drivers) > 0)
+		{
+			$selected = $cot_cache_drivers[0];
+		}
+		if (!empty($selected))
+		{
+			$this->mem = new $selected();
 			$this->mem_avail = true;
+			$this->selected_drv = $selected;
 		}
 		else
 		{
@@ -1010,6 +1024,9 @@ class Cache
 		{
 			case 'mem_available':
 				return $this->mem_avail;
+			break;
+			case 'mem_driver':
+				return $this->selected_drv;
 			break;
 			default:
 				return null;
@@ -1221,6 +1238,15 @@ class Cache
 	public function disk_unset($id, $realm = COT_DEFAULT_REALM)
 	{
 		$this->disk->remove($id, $realm);
+	}
+
+	/**
+	 * Returns information about memory driver usage
+	 * @return array Usage information
+	 */
+	public function get_info()
+	{
+		return $this->mem->get_info();
 	}
 
 	/**
