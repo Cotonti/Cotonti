@@ -25,8 +25,6 @@ $id = (int) sed_import('id', 'G', 'INT');
 $n = sed_import('name', 'G', 'ALP');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.structure.extrafields.first');
@@ -151,14 +149,14 @@ while ($row = sed_sql_fetchassoc($res))
 {
 	foreach ($field_types as $val)
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_STRUCTURE_EXTRAFIELDS_ROW_SELECT_SELECTED" => ($val == $row['field_type']) ? ' selected="selected"' : '',
 			"ADMIN_STRUCTURE_EXTRAFIELDS_ROW_SELECT_OPTION" => $val
 		));
-		$t -> parse("STRUCTURE_EXTRAFIELDS.STRUCTURE_EXTRAFIELDS_ROW.STRUCTURE_EXTRAFIELDS_ROW_SELECT");
+		$t->parse("STRUCTURE_EXTRAFIELDS.STRUCTURE_EXTRAFIELDS_ROW.STRUCTURE_EXTRAFIELDS_ROW_SELECT");
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_STRUCTURE_EXTRAFIELDS_ROW_FORM_URL" => sed_url('admin', 'm=structure&s=extrafields&a=upd&name='.$row['field_name'].'&oldtype='.$row['field_type'].'&d='.$d),
 		"ADMIN_STRUCTURE_EXTRAFIELDS_ROW_NAME" => $row['field_name'],
 		"ADMIN_STRUCTURE_EXTRAFIELDS_ROW_DESCRIPTION" => $row['field_description'],
@@ -174,20 +172,20 @@ while ($row = sed_sql_fetchassoc($res))
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("STRUCTURE_EXTRAFIELDS.STRUCTURE_EXTRAFIELDS_ROW");
+	$t->parse("STRUCTURE_EXTRAFIELDS.STRUCTURE_EXTRAFIELDS_ROW");
 	$ii++;
 }
 
 foreach ($field_types as $val)
 {
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_STRUCTURE_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION_SELECTED" => ($val == 'input') ? ' selected="selected"' : '',
 		"ADMIN_STRUCTURE_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION" => $val
 	));
-	$t -> parse("STRUCTURE_EXTRAFIELDS.STRUCTURE_EXTRAFIELDS_FORM_ADD_SELECT_FIELD_TYPE");
+	$t->parse("STRUCTURE_EXTRAFIELDS.STRUCTURE_EXTRAFIELDS_FORM_ADD_SELECT_FIELD_TYPE");
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_STRUCTURE_EXTRAFIELDS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_STRUCTURE_EXTRAFIELDS_URL_FORM_ADD" => sed_url('admin', 'm=structure&s=extrafields&a=add&d='.$d),
 	"ADMIN_STRUCTURE_EXTRAFIELDS_ADMINWARNINGS" => $adminwarnings,
@@ -206,14 +204,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("STRUCTURE_EXTRAFIELDS");
-$adminmain = $t -> text("STRUCTURE_EXTRAFIELDS");
-
-if ($ajax)
+$t->parse('STRUCTURE_EXTRAFIELDS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('STRUCTURE_EXTRAFIELDS');
+}
+else
+{
+	$adminmain = $t->text('STRUCTURE_EXTRAFIELDS');
 }
 
 ?>

@@ -131,11 +131,11 @@ else
 
 			$plugin_icon = (empty($x[1])) ? 'plugins' : $x[1];
 
-			$t -> assign(array(
+			$t->assign(array(
 				"ADMIN_TOOLS_PLUG_URL" => sed_url('admin', "m=tools&p=".$x[0]),
 				"ADMIN_TOOLS_PLUG_NAME" => $info['Name']
 			));
-			$t -> parse("TOOLS.ROW");
+			$t->parse("TOOLS.ROW");
 		}
 	}
 	/* === Hook === */
@@ -145,8 +145,8 @@ else
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("TOOLS");
-	$adminmain = $t -> text("TOOLS");
+	$t->parse("TOOLS");
+	$adminmain = $t->text("TOOLS");
 }
 
 ?>

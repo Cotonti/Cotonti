@@ -24,8 +24,6 @@ $adminhelp = $L['adm_help_polls'];
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 $filter = sed_import('filter', 'G', 'TXT');
 
 //$variant[key]=array("Caption", "filter", "page", "page_get", "sql", "sqlfield")
@@ -146,7 +144,7 @@ while($row = sed_sql_fetcharray($sql))
     $sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
     $totalvotes = sed_sql_result($sql2, 0, "SUM(po_count)");
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_POLLS_ROW_POLL_CREATIONDATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
 		"ADMIN_POLLS_ROW_POLL_TYPE" => $variants[htmlspecialchars($type)][0],
 		"ADMIN_POLLS_ROW_POLL_URL" => sed_url('admin', "m=polls".$poll_filter."&n=options&d=".$d."&id=".$row['poll_id']),
@@ -168,7 +166,7 @@ while($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t -> parse("POLLS.POLLS_ROW");
+	$t->parse("POLLS.POLLS_ROW");
 
 	$ii++;
 }
@@ -209,17 +207,17 @@ foreach($variants as $val)
 		$val[1] = "&filter=".$val[1];
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_POLLS_ROW_FILTER_VALUE" => sed_url('admin', "m=polls".$val[1]),
 		"ADMIN_POLLS_ROW_FILTER_CHECKED" => $checked,
 		"ADMIN_POLLS_ROW_FILTER_NAME" => $val[0]
 	));
-	$t -> parse("POLLS.POLLS_ROW_FILTER");
+	$t->parse("POLLS.POLLS_ROW_FILTER");
 }
 
 sed_poll_edit_form($poll_id, $t, "POLLS");
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_POLLS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_POLLS_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=polls"),
 	"ADMIN_POLLS_ADMINWARNINGS" => $adminwarnings,
@@ -242,14 +240,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("POLLS");
-$adminmain = $t -> text("POLLS");
-
-if($ajax)
+$t->parse('POLLS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('POLLS');
+}
+else
+{
+	$adminmain = $t->text('POLLS');
 }
 
 ?>

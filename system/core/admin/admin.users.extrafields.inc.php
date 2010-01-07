@@ -25,8 +25,6 @@ $n = sed_import('name', 'G', 'ALP');
 $id = (int) sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.users.extrafields.first');
@@ -151,14 +149,14 @@ while ($row = sed_sql_fetchassoc($res))
 {
 	foreach ($field_types as $val)
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_USER_EXTRAFIELDS_ROW_SELECT_SELECTED" => ($val == $row['field_type']) ? ' selected="selected"' : '',
 			"ADMIN_USER_EXTRAFIELDS_ROW_SELECT_OPTION" => $val
 		));
-		$t -> parse("USER_EXTRAFIELDS.USER_EXTRAFIELDS_ROW.USER_EXTRAFIELDS_ROW_SELECT");
+		$t->parse("USER_EXTRAFIELDS.USER_EXTRAFIELDS_ROW.USER_EXTRAFIELDS_ROW_SELECT");
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_USER_EXTRAFIELDS_ROW_FORM_URL" => sed_url('admin', 'm=users&s=extrafields&a=upd&name='.$row['field_name'].'&oldtype='.$row['field_type'].'&d='.$d),
 		"ADMIN_USER_EXTRAFIELDS_ROW_NAME" => $row['field_name'],
 		"ADMIN_USER_EXTRAFIELDS_ROW_DESCRIPTION" => $row['field_description'],
@@ -177,20 +175,20 @@ while ($row = sed_sql_fetchassoc($res))
 	}
 	/* ===== */
 
-	$t -> parse("USER_EXTRAFIELDS.USER_EXTRAFIELDS_ROW");
+	$t->parse("USER_EXTRAFIELDS.USER_EXTRAFIELDS_ROW");
 	$ii++;
 }
 
 foreach ($field_types as $val)
 {
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_USER_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION_SELECTED" => ($val == 'input') ? ' selected="selected"' : '',
 		"ADMIN_USER_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION" => $val
 	));
-	$t -> parse("USER_EXTRAFIELDS.USER_EXTRAFIELDS_FORM_ADD_SELECT_FIELD_TYPE");
+	$t->parse("USER_EXTRAFIELDS.USER_EXTRAFIELDS_FORM_ADD_SELECT_FIELD_TYPE");
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_USER_EXTRAFIELDS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_USER_EXTRAFIELDS_URL_FORM_ADD" => sed_url('admin', 'm=users&s=extrafields&a=add&d='.$d),
 	"ADMIN_USER_EXTRAFIELDS_ADMINWARNINGS" => $adminwarnings,
@@ -209,14 +207,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("USER_EXTRAFIELDS");
-$adminmain = $t -> text("USER_EXTRAFIELDS");
-
-if ($ajax)
+$t->parse('USER_EXTRAFIELDS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('USER_EXTRAFIELDS');
+}
+else
+{
+	$adminmain = $t->text('USER_EXTRAFIELDS');
 }
 
 ?>

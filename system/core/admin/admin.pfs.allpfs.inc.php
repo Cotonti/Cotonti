@@ -23,8 +23,6 @@ $adminhelp = $L['adm_help_allpfs'];
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.pfs.allpfs.first');
@@ -61,7 +59,7 @@ while($row = sed_sql_fetcharray($sql))
 	$row['user_name'] = ($row['user_id'] == 0) ? $L['SFS'] : $row['user_name'];
 	$row['user_id'] = ($row['user_id'] == 0) ? "0" : $row['user_id'];
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_ALLPFS_ROW_URL" => sed_url('pfs', "userid=".$row['user_id']),
 		"ADMIN_ALLPFS_ROW_USER" => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
 		"ADMIN_ALLPFS_ROW_COUNT" => $row['COUNT(*)']
@@ -73,11 +71,11 @@ while($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("ALLPFS.ALLPFS_ROW");
+	$t->parse("ALLPFS.ALLPFS_ROW");
 	$ii++;
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_ALLPFS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_ALLPFS_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_ALLPFS_PAGNAV" => $pagnav,
@@ -94,14 +92,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("ALLPFS");
-$adminmain = $t -> text("ALLPFS");
-
-if($ajax)
+$t->parse('ALLPFS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('ALLPFS');
+}
+else
+{
+	$adminmain = $t->text('ALLPFS');
 }
 
 ?>

@@ -56,14 +56,15 @@ $L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weig
  * Config Section
  */
 
-$L['core_email'] = 'E-mail Settings';// New in N-0.7.0
 $L['core_comments'] = &$L['Comments'];
+$L['core_email'] = 'E-mail Settings'; // 0.7.0
 $L['core_forums'] = &$L['Forums'];
 $L['core_lang'] = &$L['Language'];
 $L['core_main'] = 'Main Settings';
 $L['core_menus'] = &$L['Menus'];
 $L['core_page'] = &$L['Pages'];
 $L['core_parser'] = &$L['Parser'];
+$L['core_performance'] = 'Performance'; // 0.7.0
 $L['core_pfs'] = &$L['PFS'];
 $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
@@ -127,26 +128,21 @@ $L['cfg_forcedefaultlang'] = array('Force the default language for all users', '
  */
 
 $L['cfg_adminemail'] = array('Administrator\'s e-mail', 'Required');
-$L['cfg_turnajax'] = array('Turn Ajax off', 'Works only if jQuery is enabled');
-$L['cfg_cache'] = array('Internal cache', 'Keep it enabled for better performance');
 $L['cfg_clustermode'] = array('Cluster of servers', 'Set to yes if it\'s a load balanced setup.');
 $L['cfg_cookiedomain'] = array('Domain for cookies', 'Default: empty');
 $L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
 $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
 $L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
-$L['cfg_disablehitstats'] = array('Disable hit statistics', 'Referers and hits per day');
-$L['cfg_disableactivitystats'] = array('Do not display statistics of activity', 'Activity for the last 7 days<br />Displayed on the home page administration panel');
-$L['cfg_disabledbstats'] = array('Do not display database statistics', 'Displayed on the home page administration panel');
-$L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
 $L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
 $L['cfg_jquery'] = array('Enable jQuery', '');	// New in N-0.0.1
 $L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');	// New in N-0.0.2
 $L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');	// New in N-0.0.2
+$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');	// New in N-0.6.1
+$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');	// New in N-0.6.1
 $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
 $L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
 $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
-$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');	// New in N-0.6.1
-$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');	// New in N-0.6.1
+$L['cfg_turnajax'] = array('Turn Ajax On', 'Works only if jQuery is enabled');
 
 /**
  * Config Section
@@ -205,6 +201,19 @@ $L['cfg_parsesmiliescom'] = array('Parse smilies in comments and private message
 $L['cfg_parsesmiliesforums'] = array('Parse smilies in forums', '');
 $L['cfg_parsesmiliespages'] = array('Parse smilies in pages', '');
 $L['cfg_parsesmiliesusertext'] = array('Parse smilies in user signature', '');
+
+/**
+ * Config Section
+ * Performance Subsection
+ */
+
+$L['cfg_disablehitstats'] = array('Disable hit statistics', 'Referers and hits per day');
+$L['cfg_disableactivitystats'] = array('Do not display statistics of activity', 'Activity for the last 7 days<br />Displayed on the home page administration panel');
+$L['cfg_disabledbstats'] = array('Do not display database statistics', 'Displayed on the home page administration panel');
+$L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
+$L['cfg_hit_percision'] = array('Optimized hit counter precision', '');  // 0.7.0
+$L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // 0.7.0
+
 
 /**
  * Config Section

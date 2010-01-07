@@ -41,15 +41,15 @@ else
 		{
 			$i = $sed_yesno[$i];
 		}
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_PFS_DATAS_NAME" => $k,
 			"ADMIN_PFS_DATAS_ENABLE_OR_DISABLE" => $i
 		));
-		$t -> parse("PFS.PFS_ROW");
+		$t->parse("PFS.PFS_ROW");
 	}
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_PFS_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=pfs"),
 	"ADMIN_PFS_URL_ALLPFS" => sed_url('admin', "m=pfs&s=allpfs"),
 	"ADMIN_PFS_URL_SFS" => sed_url('pfs', "userid=0")
@@ -63,7 +63,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("PFS");
-$adminmain = $t -> text("PFS");
+$t->parse('PFS');
+if (SED_AJAX)
+{
+	$t->out('PFS');
+}
+else
+{
+	$adminmain = $t->text('PFS');
+}
 
 ?>

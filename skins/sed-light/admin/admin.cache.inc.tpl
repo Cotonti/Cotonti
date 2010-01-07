@@ -1,6 +1,6 @@
 <!-- BEGIN: CACHE -->
 	<div id="{ADMIN_CACHE_AJAX_OPENDIVID}">
-		<h2>Cache</h2>
+		<h2>{PHP.L.adm_internalcache}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
 				<h4>{PHP.L.Message}</h4>
@@ -12,6 +12,16 @@
 				<li><a href="{ADMIN_CACHE_URL_PURGE}"{ADMIN_CACHE_URL_PURGE_AJAX}>{PHP.L.adm_purgeall}</a></li>
 				<li><a href="{ADMIN_CACHE_URL_SHOWALL}"{ADMIN_CACHE_URL_SHOWALL_AJAX}>{PHP.L.adm_showall}</a></li>
 			</ul>
+			<!-- BEGIN: ADMIN_CACHE_MEMORY -->
+			<h3>{ADMIN_CACHE_MEMORY_DRIVER}</h3>
+			<p>
+				<div class="bar_back">
+					<div class="bar_front" style="width:{ADMIN_CACHE_MEMORY_PERCENTBAR}%;"></div>
+				</div>
+				{PHP.L.Available}: {ADMIN_CACHE_MEMORY_AVAILABLE} / {ADMIN_CACHE_MEMORY_MAX} {PHP.L.bytes}
+			</p>
+			<!-- END: ADMIN_CACHE_MEMORY -->
+			<h3>{PHP.L.Database}</h3>
 			<table class="cells">
 				<tr>
 					<td class="coltop" style="width:20%;">{PHP.L.Item}</td>

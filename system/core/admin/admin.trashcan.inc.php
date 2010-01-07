@@ -22,8 +22,6 @@ $adminhelp = $L['adm_help_trashcan'];
 $id = sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.trashcan.first');
@@ -141,7 +139,7 @@ while($row = sed_sql_fetcharray($sql))
 		break;
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_TRASHCAN_DATE" => date($cfg['dateformat'], $row['tr_date'] + $usr['timezone'] * 3600),
 		"ADMIN_TRASHCAN_TYPESTR_ICON" => $icon,
 		"ADMIN_TRASHCAN_TYPESTR" => $typestr,
@@ -158,11 +156,11 @@ while($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t -> parse("TRASHCAN.TRASHCAN_ROW");
+	$t->parse("TRASHCAN.TRASHCAN_ROW");
 	$ii++;
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_TRASHCAN_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_TRASHCAN_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=trash"),
 	"ADMIN_TRASHCAN_WIPEALL_URL" => sed_url('admin', "m=trashcan&a=wipeall&".sed_xg()),
@@ -183,14 +181,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("TRASHCAN");
-$adminmain = $t -> text("TRASHCAN");
-
-if($ajax)
+$t->parse('TRASHCAN');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('TRASHCAN');
+}
+else
+{
+	$adminmain = $t->text('TRASHCAN');
 }
 
 ?>

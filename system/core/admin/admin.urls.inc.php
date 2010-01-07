@@ -21,8 +21,6 @@ $adminpath[] = array(sed_url('admin', 'm=urls'), $L['adm_urls']);
 $adminhelp = $L['adm_help_urls'];
 
 $a = sed_import('a', 'G', 'ALP');
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 $site_uri = SED_SITE_URI;
 
@@ -297,11 +295,11 @@ if($a == 'save')
 		file_put_contents('.htaccess', $htdata);
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_URLS_CONF_NAME" => $conf_name,
 		"ADMIN_URLS_HTA" => $hta
 	));
-	$t -> parse("URLS.HTA");
+	$t->parse("URLS.HTA");
 
 	if(!empty($error_string))
 	{
@@ -331,11 +329,11 @@ sort($areas);
 // New rule contents
 foreach($areas as $ar)
 {
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_URLS_AREABOX_SELECTED" => ($ar == '*') ? ' selected="selected"' : '',
 		"ADMIN_URLS_AREABOX_ITEM" => $ar
 	));
-	$t -> parse("URLS.AREABOX");
+	$t->parse("URLS.AREABOX");
 }
 
 $fp = fopen('./datas/urltrans.dat', 'r');
@@ -355,16 +353,16 @@ while($line = trim(fgets($fp), " \t\r\n"))
 		$areabox .= ($ar == $parts[0]) ? '	<option selected="selected">'.$ar.'</option>
 ' : '	<option>'.$ar.'</option>
 ';
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_URLS_AREABOX_SELECTED" => ($ar == $parts[0]) ? ' selected="selected"' : '',
 			"ADMIN_URLS_AREABOX_ITEM" => $ar
 		));
-		$t -> parse("URLS.ROW.AREABOX2");
+		$t->parse("URLS.ROW.AREABOX2");
 	}
 	$areabox .= '</select>
 ';
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_URLS_ROW_I" => $ii,
 		"ADMIN_URLS_ROW_PARTS1" => $parts[1],
 		"ADMIN_URLS_ROW_PARTS2" => $parts[2],
@@ -378,7 +376,7 @@ while($line = trim(fgets($fp), " \t\r\n"))
 	}
 	/* ===== */
 
-	$t -> parse("URLS.ROW");
+	$t->parse("URLS.ROW");
 	$ii++;
 }
 fclose($fp);
@@ -387,7 +385,7 @@ $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : f
 
 $is_adminwarnings = isset($adminwarnings);
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_URLS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_URLS_II" => $ii,
 	"ADMIN_URLS_FORM_URL" => sed_url('admin', "m=urls&a=save"),
@@ -404,14 +402,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("URLS");
-$adminmain = $t -> text("URLS");
-
-if($ajax)
+$t->parse('URLS');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('URLS');
+}
+else
+{
+	$adminmain = $t->text('URLS');
 }
 
 ?>

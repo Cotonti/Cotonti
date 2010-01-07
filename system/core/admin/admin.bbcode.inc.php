@@ -24,8 +24,6 @@ $a = sed_import('a', 'G', 'ALP');
 $id = (int) sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.bbcode.first');
@@ -109,21 +107,21 @@ while($row = sed_sql_fetchassoc($res))
 {
 	foreach($bbc_modes as $val)
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_BBCODE_ROW_MODE_ITEM_SELECTED" => ($val == $row['bbc_mode']) ? ' selected="selected"' : '',
 			"ADMIN_BBCODE_ROW_MODE_ITEM" => $val
 		));
-		$t -> parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_MODE_ROW");
+		$t->parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_MODE_ROW");
 	}
 	for($i = 1; $i < 256; $i++)
 	{
-		$t -> assign(array(
+		$t->assign(array(
 			"ADMIN_BBCODE_ROW_PRIO_ITEM_SELECTED" => ($i == $row['bbc_priority']) ? ' selected="selected"' : '',
 			"ADMIN_BBCODE_ROW_PRIO_ITEM" => $i
 		));
-		$t -> parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_PRIO_ROW");
+		$t->parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_PRIO_ROW");
 	}
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_BBCODE_ROW_BBC_NAME" => $row['bbc_name'],
 		"ADMIN_BBCODE_ROW_ENABLED" => $row['bbc_enabled'] ? ' checked="checked"' : '',
 		"ADMIN_BBCODE_ROW_CONTAINER" => $row['bbc_container'] ? ' checked="checked"' : '',
@@ -142,29 +140,29 @@ while($row = sed_sql_fetchassoc($res))
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("BBCODE.ADMIN_BBCODE_ROW");
+	$t->parse("BBCODE.ADMIN_BBCODE_ROW");
 	$ii++;
 }
 sed_sql_freeresult($res);
 
 foreach($bbc_modes as $val)
 {
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_BBCODE_MODE_ITEM_SELECTED" => ($val == 'pcre') ? ' selected="selected"' : '',
 		"ADMIN_BBCODE_MODE_ITEM" => $val
 	));
-	$t -> parse("BBCODE.ADMIN_BBCODE_MODE");
+	$t->parse("BBCODE.ADMIN_BBCODE_MODE");
 }
 for($i = 1; $i < 256; $i++)
 {
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_BBCODE_PRIO_ITEM_SELECTED" => ($i == 128) ? ' selected="selected"' : '',
 		"ADMIN_BBCODE_PRIO_ITEM" => $i
 	));
-	$t -> parse("BBCODE.ADMIN_BBCODE_PRIO");
+	$t->parse("BBCODE.ADMIN_BBCODE_PRIO");
 }
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_BBCODE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_BBCODE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_BBCODE_PAGINATION_PREV" => $pagination_prev,
@@ -185,14 +183,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("BBCODE");
-$adminmain = $t -> text("BBCODE");
-
-if($ajax)
+$t->parse('BBCODE');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('BBCODE');
+}
+else
+{
+	$adminmain = $t->text('BBCODE');
 }
 
 ?>

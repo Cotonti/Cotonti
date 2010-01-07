@@ -50,7 +50,7 @@ while($row = sed_sql_fetcharray($sql))
     $lincif_rightsmode = ($authentries[$row['ct_code']] > 0) ? true : false;
 	$cfgcode = "disable_".$row['ct_code'];
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_OTHER_CT_CODE" => $row['ct_code'],
 		"ADMIN_OTHER_CT_ICON" => sed_rc('admin_icon_ct', array('code' => $row['ct_code'])),
 		"ADMIN_OTHER_CT_TITLE_LOC" => (empty($L["core_".$row['ct_code']])) ? $row['ct_title'] : $L["core_".$row['ct_code']],
@@ -64,13 +64,13 @@ while($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t -> parse("OTHER.OTHER_ROW");
+	$t->parse("OTHER.OTHER_ROW");
 }
 
 $lincif_conf = sed_auth('admin', 'a', 'A');
 $lincif_user = sed_auth('users', 'a', 'A');
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_OTHER_URL_CACHE" => sed_url('admin', "m=cache"),
 	"ADMIN_OTHER_URL_DISKCACHE" => sed_url('admin', "m=cache&s=disk"),
 	"ADMIN_OTHER_URL_BBCODE" => sed_url('admin', "m=bbcode"),
@@ -90,7 +90,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("OTHER");
-$adminmain = $t -> text("OTHER");
+$t->parse('OTHER');
+if (SED_AJAX)
+{
+	$t->out('OTHER');
+}
+else
+{
+	$adminmain = $t->text('OTHER');
+}
 
 ?>

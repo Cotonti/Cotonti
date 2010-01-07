@@ -23,8 +23,6 @@ $id = sed_import('id', 'G', 'INT');
 
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$ajax = sed_import('ajax', 'G', 'INT');
-$ajax = empty($ajax) ? 0 : (int) $ajax;
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.page.first');
@@ -337,7 +335,7 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['page_fileicon'] = '';
 	}
 
-	$t -> assign(array(
+	$t->assign(array(
 		"ADMIN_PAGE_ID" => $row['page_id'],
 		"ADMIN_PAGE_ID_URL" => sed_url('page', "id=".$row['page_id']),
 		"ADMIN_PAGE_URL" => $row['page_pageurl'],
@@ -383,8 +381,8 @@ while ($row = sed_sql_fetcharray($sql))
 		foreach ($extrafields_c as $row_c)
 		{
 			$uname = strtoupper($row_c['field_name']);
-			isset($L['structure_'.$row_c['field_name'].'_title']) ? $t -> assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', $L['structure_'.$row_c['field_name'].'_title']) : $t -> assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', $row_c['field_description']);
-			$t -> assign('ADMIN_PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $sed_cat[$row['page_cat']][$row_c['field_name']]));
+			isset($L['structure_'.$row_c['field_name'].'_title']) ? $t->assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', $L['structure_'.$row_c['field_name'].'_title']) : $t->assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', $row_c['field_description']);
+			$t->assign('ADMIN_PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $sed_cat[$row['page_cat']][$row_c['field_name']]));
 		}
 	}
 
@@ -394,8 +392,8 @@ while ($row = sed_sql_fetcharray($sql))
 		foreach ($extrafields_p as $row_p)
 		{
 			$uname = strtoupper($row_p['field_name']);
-			isset($L['page_'.$row_p['field_name'].'_title']) ? $t -> assign('ADMIN_PAGE_'.$uname.'_TITLE', $L['page_'.$row_p['field_name'].'_title']) : $t -> assign('ADMIN_PAGE_'.$uname.'_TITLE', $row_p['field_description']);
-			$t -> assign('ADMIN_PAGE_'.$uname, sed_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $row['page_'.$row_p['field_name']]));
+			isset($L['page_'.$row_p['field_name'].'_title']) ? $t->assign('ADMIN_PAGE_'.$uname.'_TITLE', $L['page_'.$row_p['field_name'].'_title']) : $t->assign('ADMIN_PAGE_'.$uname.'_TITLE', $row_p['field_description']);
+			$t->assign('ADMIN_PAGE_'.$uname, sed_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $row['page_'.$row_p['field_name']]));
 		}
 	}
 
@@ -406,17 +404,17 @@ while ($row = sed_sql_fetcharray($sql))
 			{
 				ob_start();
 				eval($row['page_text']);
-				$t -> assign("ADMIN_PAGE_TEXT", ob_get_clean());
+				$t->assign("ADMIN_PAGE_TEXT", ob_get_clean());
 			}
 			else
 			{
-				$t -> assign("ADMIN_PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
+				$t->assign("ADMIN_PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
 			}
 		break;
 
 		case 1:
 			$row_more = ((int)$textlength>0) ? sed_string_truncate($row['page_text'], $textlength) : sed_cut_more($row['page_text']);
-			$t -> assign("ADMIN_PAGE_TEXT", $row['page_text']);
+			$t->assign("ADMIN_PAGE_TEXT", $row['page_text']);
 		break;
 
 		default:
@@ -430,14 +428,14 @@ while ($row = sed_sql_fetcharray($sql))
 				$row['page_html'] = ($cfg['parsebbcodepages']) ?  $row['page_html'] : htmlspecialchars($row['page_text']);
 				$row_more = ((int)$textlength>0) ? sed_string_truncate($row['page_html'], $textlength) : sed_cut_more($row['page_html']);
 				$row['page_html'] = sed_post_parse($row['page_html'], 'pages');
-				$t -> assign('ADMIN_PAGE_TEXT', $row['page_html']);
+				$t->assign('ADMIN_PAGE_TEXT', $row['page_html']);
 			}
 			else
 			{
 				$row['page_html'] = sed_parse(htmlspecialchars($row['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 				$row_more = ((int)$textlength>0) ? sed_string_truncate($row['page_html'], $textlength) : sed_cut_more($row['page_html']);
 				$row['page_html'] = sed_post_parse($row['page_html'], 'pages');
-				$t -> assign('ADMIN_PAGE_TEXT', $row['page_html']);
+				$t->assign('ADMIN_PAGE_TEXT', $row['page_html']);
 			}
 		break;
 	}
@@ -449,7 +447,7 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t -> parse("PAGE.PAGE_ROW");
+	$t->parse("PAGE.PAGE_ROW");
 	$ii++;
 }
 
@@ -462,7 +460,7 @@ $sys['pagesqueued'] = sed_sql_result($sql, 0, 'COUNT(*)');
 $lincif_conf = sed_auth('admin', 'a', 'A');
 $lincif_page = sed_auth('page', 'any', 'A');
 
-$t -> assign(array(
+$t->assign(array(
 	"ADMIN_PAGE_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=page"),
 	"ADMIN_PAGE_URL_ADD" => sed_url('page', 'm=add'),
 	"ADMIN_PAGE_URL_EXTRAFIELDS" => sed_url('admin', 'm=page&s=extrafields'),
@@ -488,14 +486,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("PAGE");
-$adminmain = $t -> text("PAGE");
-
-if ($ajax)
+$t->parse('PAGE');
+if (SED_AJAX)
 {
-	sed_sendheaders();
-	echo $adminmain;
-	exit;
+	$t->out('PAGE');
+}
+else
+{
+	$adminmain = $t->text('PAGE');
 }
 
 ?>

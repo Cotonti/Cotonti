@@ -111,7 +111,7 @@ $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
 $redirect = sed_import('redirect','G','SLU');
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
-define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']));
+define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER['X-Requested-With']));
 
 /* ======== Plugins ======== */
 
@@ -535,10 +535,11 @@ if (!$cfg['disablehitstats'])
 	if ($cot_cache->mem_available)
 	{
 		$hits = $cot_cache->mem_inc('hits', 'system');
-		if ($hits % 100 == 0)
+		$cfg['hit_precision'] > 0 || $cfg['hit_precision'] = 100;
+		if ($hits % $cfg['hit_precision'] == 0)
 		{
-			sed_stat_inc('totalpages', 100);
-			sed_stat_inc($sys['day'], 100);
+			sed_stat_inc('totalpages', $cfg['hit_precision']);
+			sed_stat_inc($sys['day'], $cfg['hit_precision']);
 		}
 	}
 	else

@@ -53,7 +53,7 @@ if($f == 'year' || $f == 'month')
     foreach($hits_d as $day => $hits)
     {
         $percentbar = floor(($hits / $hits_d_max) * 100);
-        $t -> assign(array(
+        $t->assign(array(
             "ADMIN_HITS_ROW_DAY" => $day,
             "ADMIN_HITS_ROW_HITS" => $hits,
             "ADMIN_HITS_ROW_PERCENTBAR" => $percentbar,
@@ -67,11 +67,11 @@ if($f == 'year' || $f == 'month')
         }
         /* ===== */
 
-        $t -> parse("HITS.YEAR_OR_MONTH.ROW");
+        $t->parse("HITS.YEAR_OR_MONTH.ROW");
         $ii++;
     }
 
-    $t -> parse("HITS.YEAR_OR_MONTH");
+    $t->parse("HITS.YEAR_OR_MONTH");
 }
 else
 {
@@ -106,7 +106,7 @@ else
     foreach($hits_y as $year => $hits)
     {
         $percentbar = floor(($hits / $hits_y_max) * 100);
-        $t -> assign(array(
+        $t->assign(array(
             "ADMIN_HITS_ROW_YEAR_URL" => sed_url('admin', 'm=hits&f=year&v='.$year),
             "ADMIN_HITS_ROW_YEAR" => $year,
             "ADMIN_HITS_ROW_YEAR_HITS" => $hits,
@@ -118,14 +118,14 @@ else
         	include $pl;
         }
         /* ===== */
-        $t -> parse("HITS.DEFAULT.ROW_YEAR");
+        $t->parse("HITS.DEFAULT.ROW_YEAR");
         $ii++;
     }
     $ii=0;
     foreach($hits_m as $month => $hits)
     {
         $percentbar = floor(($hits / $hits_m_max) * 100);
-        $t -> assign(array(
+        $t->assign(array(
             "ADMIN_HITS_ROW_MONTH_URL" => sed_url('admin', 'm=hits&f=month&v='.$month),
             "ADMIN_HITS_ROW_MONTH" => $month,
             "ADMIN_HITS_ROW_MONTH_HITS" => $hits,
@@ -137,7 +137,7 @@ else
         	include $pl;
         }
         /* ===== */
-        $t -> parse("HITS.DEFAULT.ROW_MONTH");
+        $t->parse("HITS.DEFAULT.ROW_MONTH");
         $ii++;
     }
     $ii=0;
@@ -145,7 +145,7 @@ else
     {
         $ex = explode("-W", $week);
         $percentbar = floor(($hits / $hits_w_max) * 100);
-        $t -> assign(array(
+        $t->assign(array(
             "ADMIN_HITS_ROW_WEEK" => $week,
             "ADMIN_HITS_ROW_WEEK_HITS" => $hits,
             "ADMIN_HITS_ROW_WEEK_PERCENTBAR" => $percentbar
@@ -156,14 +156,14 @@ else
         	include $pl;
         }
         /* ===== */
-        $t -> parse("HITS.DEFAULT.ROW_WEEK");
+        $t->parse("HITS.DEFAULT.ROW_WEEK");
         $ii++;
     }
 
-    $t -> assign(array(
+    $t->assign(array(
         "ADMIN_HITS_MAXHITS" => sprintf($L['adm_maxhits'], $max_date, $max_hits)
         ));
-    $t -> parse("HITS.DEFAULT");
+    $t->parse("HITS.DEFAULT");
 }
 
 /* === Hook  === */
@@ -174,7 +174,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t -> parse("HITS");
-$adminmain = $t -> text("HITS");
+$t->parse('HITS');
+if (SED_AJAX)
+{
+	$t->out('HITS');
+}
+else
+{
+	$adminmain = $t->text('HITS');
+}
 
 ?>
