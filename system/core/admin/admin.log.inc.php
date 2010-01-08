@@ -75,16 +75,8 @@ foreach($log_groups as $grp_code => $grp_name)
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = ($n == 'all') ? $totaldblog : sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
-if($cfg['jquery'] AND $cfg['turnajax'])
-{
-	$pagnav = sed_pagination(sed_url('admin','m=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=log&ajax=1&n='.$n)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=log&ajax=1&n='.$n)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-}
-else
-{
-	$pagnav = sed_pagination(sed_url('admin','m=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-}
+$pagnav = sed_pagination(sed_url('admin','m=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 if($n == 'all')
 {
@@ -108,7 +100,6 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_LOG_ROW_LOG_IP" => $row['log_ip'],
 		"ADMIN_LOG_ROW_LOG_NAME" => $row['log_name'],
 		"ADMIN_LOG_ROW_URL_LOG_GROUP" => sed_url('admin', "m=log&n=".$row['log_group']),
-		"ADMIN_LOG_ROW_URL_LOG_GROUP_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=log&ajax=1&n='.$row['log_group'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_LOG_ROW_LOG_GROUP" => $log_groups[$row['log_group']],
 		"ADMIN_LOG_ROW_LOG_TEXT" => htmlspecialchars($row['log_text'])
 	));
@@ -123,9 +114,7 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t->assign(array(
-	"ADMIN_LOG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_LOG_URL_PRUNE" => sed_url('admin', "m=log&a=purge&".sed_xg()),
-	"ADMIN_LOG_URL_PRUNE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=log&a=purge&ajax=1&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_LOG_TOTALDBLOG" => $totaldblog,
 	"ADMIN_LOG_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_LOG_PAGINATION_PREV" => $pagination_prev,

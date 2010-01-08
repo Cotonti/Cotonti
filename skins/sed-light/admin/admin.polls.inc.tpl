@@ -1,5 +1,5 @@
 <!-- BEGIN: POLLS -->
-	<div id="{ADMIN_POLLS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Polls}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

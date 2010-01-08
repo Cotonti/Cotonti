@@ -1,5 +1,5 @@
 <!-- BEGIN: STRUCTURE_EXTRAFIELDS -->
-	<div id="{ADMIN_STRUCTURE_EXTRAFIELDS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Structure}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

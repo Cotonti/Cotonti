@@ -1,5 +1,5 @@
 <!-- BEGIN: BANLIST -->
-	<div id="{ADMIN_BANLIST_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Banlist}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -18,13 +18,13 @@
 					<td class="coltop" style="width:10%;">{PHP.L.Update}</td>
 				</tr>
 <!-- BEGIN: ADMIN_BANLIST_ROW -->
-				<form name="savebanlist_{ADMIN_BANLIST_ID_ROW}" id="savebanlist_{ADMIN_BANLIST_ID_ROW}" action="{ADMIN_BANLIST_URL}" method="post"{ADMIN_BANLIST_URL_AJAX}>
+				<form name="savebanlist_{ADMIN_BANLIST_ID_ROW}" id="savebanlist_{ADMIN_BANLIST_ID_ROW}" action="{ADMIN_BANLIST_URL}" method="post" class="ajax">
 				<tr>
 					<td class="centerall"><input type="text" class="text" name="rbanlistip" value="{ADMIN_BANLIST_IP}" size="18" maxlength="16" /></td>
 					<td class="centerall"><input type="text" class="text" name="rbanlistemail" value="{ADMIN_BANLIST_EMAIL}" size="10" maxlength="64" /></td>
 					<td class="centerall"><input type="text" class="text" name="rbanlistreason" value="{ADMIN_BANLIST_REASON}" size="22" maxlength="64" /></td>
 					<td class="textcenter">{ADMIN_BANLIST_EXPIRE}</td>
-					<td class="centerall"><a title="{PHP.L.Delete}" href="{ADMIN_BANLIST_DELURL}"{ADMIN_BANLIST_DELURL_AJAX}>{PHP.R.admin_icon_delete}</a></td>
+					<td class="centerall"><a title="{PHP.L.Delete}" href="{ADMIN_BANLIST_DELURL}" class="ajax">{PHP.R.admin_icon_delete}</a></td>
 					<td class="centerall"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 				</tr>
 				</form>
@@ -32,7 +32,7 @@
 			</table>
 			<p class="paging">{ADMIN_BANLIST_PAGINATION_PREV} {ADMIN_BANLIST_PAGNAV} {ADMIN_BANLIST_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_BANLIST_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_BANLIST_COUNTER_ROW}</span></p>
 			<h3>{PHP.L.addnewentry}:</h3>
-			<form name="addbanlist" id="addbanlist" action="{ADMIN_BANLIST_INC_URLFORMADD}" method="post"{ADMIN_BANLIST_INC_URLFORMADD_AJAX}>
+			<form name="addbanlist" id="addbanlist" action="{ADMIN_BANLIST_INC_URLFORMADD}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
 					<td style="width:20%;">{PHP.L.Ipmask}:</td>

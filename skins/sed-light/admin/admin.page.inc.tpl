@@ -10,7 +10,7 @@
 			});
 		});
 	</script>
-	<div id="{ADMIN_PAGE_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Pages} ({ADMIN_PAGE_TOTALDBPAGES})</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -84,8 +84,8 @@
 					</div>
 				</td>
 				<td class="centerall action {ADMIN_PAGE_ODDEVEN}">
-					<a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}"{ADMIN_PAGE_URL_FOR_VALIDATED_AJAX}>{PHP.R.admin_icon_discheck1}</a>
-					<a title="{PHP.L.Delete}" href="{ADMIN_PAGE_URL_FOR_DELETED}"{ADMIN_PAGE_URL_FOR_DELETED_AJAX}>{PHP.R.admin_icon_discheck0}</a>
+					<a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}" class="ajax">{PHP.R.admin_icon_discheck1}</a>
+					<a title="{PHP.L.Delete}" href="{ADMIN_PAGE_URL_FOR_DELETED}" class="ajax">{PHP.R.admin_icon_discheck0}</a>
 					<a title="{PHP.L.Open}" href="{ADMIN_PAGE_ID_URL}">{PHP.R.admin_icon_jumpto}</a>
 					<a title="{PHP.L.Edit}" href="{ADMIN_PAGE_URL_FOR_EDIT}">{PHP.R.admin_icon_config}</a>
 				</td>
@@ -98,8 +98,8 @@
 <!-- ENDIF -->
 			<tr>
 				<td class="valid" colspan="4">
-					<input name="paction" type="submit" value="{PHP.L.Validate}"{ADMIN_PAGE_FORM_VALIDATE_AJAX} />
-					<input name="paction" type="submit" value="{PHP.L.Delete}"{ADMIN_PAGE_FORM_DELETE_AJAX} />
+					<input name="paction" type="submit" value="{PHP.L.Validate}" class="ajax" />
+					<input name="paction" type="submit" value="{PHP.L.Delete}" class="ajax" />
 				</td>
 			</tr>
 			</table>

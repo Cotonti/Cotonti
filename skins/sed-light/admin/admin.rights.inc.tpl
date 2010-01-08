@@ -1,11 +1,11 @@
 <!-- BEGIN: RIGHTS -->
-	<div id="{ADMIN_RIGHTS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Rights}</h2>
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">
 			<h4>{PHP.L.Message}</h4>
 			<p>{ADMIN_RIGHTS_ADMINWARNINGS}</p>
 		</div><!-- ENDIF -->
-		<form name="saverights" id="saverights" action="{ADMIN_RIGHTS_FORM_URL}" method="post"{ADMIN_RIGHTS_FORM_URL_AJAX}>
+		<form name="saverights" id="saverights" action="{ADMIN_RIGHTS_FORM_URL}" method="post" class="ajax">
 			<!-- IF {PHP.g} > 5 --><table class="cells">
 				<tr>
 					<td><input type="checkbox" class="checkbox" name="ncopyrightsconf" />{PHP.L.adm_copyrightsfrom}: {ADMIN_RIGHTS_SELECTBOX_GROUPS}&nbsp; <input type="submit" class="submit" value="{PHP.L.Update}" /></td>

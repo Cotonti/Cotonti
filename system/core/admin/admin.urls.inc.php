@@ -386,10 +386,8 @@ $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : f
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_URLS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_URLS_II" => $ii,
 	"ADMIN_URLS_FORM_URL" => sed_url('admin', "m=urls&a=save"),
-	"ADMIN_URLS_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'add_url', url: '".sed_url('admin','m=urls&a=save&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_URLS_AREABOX" => $areabox,
 	"ADMIN_URLS_ADMINWARNINGS" => $adminwarnings
 ));

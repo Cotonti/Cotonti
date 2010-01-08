@@ -1,11 +1,11 @@
 <!-- BEGIN: RIGHTSBYITEM -->
-	<div id="{ADMIN_RIGHTSBYITEM_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Rights}</h2>
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">
 			<h4>{PHP.L.Message}</h4>
 			<p>{ADMIN_RIGHTSBYITEM_ADMINWARNINGS}</p>
 		</div><!-- ENDIF -->
-			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post"{ADMIN_RIGHTSBYITEM_FORM_URL_AJAX}>
+			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post" class="ajax">
 				<table class="cells">
 					<tr>
 						<td class="coltop" style="width:5%;" rowspan="2"></td>

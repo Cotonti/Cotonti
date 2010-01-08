@@ -177,9 +177,7 @@ switch($a)
 							"ADMIN_PLUG_DETAILS_ROW_ORDER" => $info_file['Order'],
 							"ADMIN_PLUG_DETAILS_ROW_STATUS" => $status[$info_file['Status']],
 							"ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl."&b=pausepart&part=".$row['pl_id']),
-							"ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl.'&b=pausepart&part='.$row['pl_id'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 							"ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl."&b=unpausepart&part=".$row['pl_id']),
-							"ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl.'&b=unpausepart&part='.$row['pl_id'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 							//"ADMIN_PLUG_DETAILS_ROW_PART_ODDEVEN" => sed_build_oddeven($ii)
 						));
 						/* === Hook - Part2 : Include === */
@@ -214,17 +212,11 @@ switch($a)
 				"ADMIN_PLUG_COPYRIGHT" => $info['Copyright'],
 				"ADMIN_PLUG_NOTES" => sed_parse($info['Notes'], 1, 0, 0),
 				"ADMIN_PLUG_INSTALL_URL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=install"),
-				"ADMIN_PLUG_INSTALL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=edit&ajax=1&pl='.$info['Code'].'&b=install')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_PLUG_INSTALL_KO_URL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=install&ko=1"),
-				"ADMIN_PLUG_INSTALL_KO_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=edit&ajax=1&pl='.$info['Code'].'&b=install&ko=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_PLUG_UNINSTALL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=uninstall"),
-				"ADMIN_PLUG_UNINSTALL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=edit&ajax=1&pl='.$info['Code'].'&b=uninstall')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_PLUG_UNINSTALL_KO_URL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=uninstall&ko=1"),
-				"ADMIN_PLUG_UNINSTALL_KO_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=edit&ajax=1&pl='.$info['Code'].'&b=uninstall&ko=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_PLUG_PAUSE_URL" => sed_url('admin', "m=plug&a=details&pl=".$info['Code']."&b=pause"),
-				"ADMIN_PLUG_PAUSE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$info['Code'].'&b=pause')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-				"ADMIN_PLUG_UNPAUSE_URL" => sed_url('admin', "m=plug&a=details&pl=".$info['Code']."&b=unpause"),
-				"ADMIN_PLUG_UNPAUSE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$info['Code'].'&b=unpause')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+				"ADMIN_PLUG_UNPAUSE_URL" => sed_url('admin', "m=plug&a=details&pl=".$info['Code']."&b=unpause")
 			));
 			/* === Hook  === */
 			$extp = sed_getextplugins('admin.plug.details');
@@ -445,8 +437,7 @@ switch($a)
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS4" => $show_sql_affectedrows4,
 					"ADMIN_PLUG_EDIT_EXTPLUGIN_INFO" => include_once($extplugin_info),
 					"ADMIN_PLUG_EDIT_LOG" => $edit_log,
-					"ADMIN_PLUG_EDIT_CONTINUE_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl),
-					"ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+					"ADMIN_PLUG_EDIT_CONTINUE_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl)
 				));
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.plug.install.tags');
@@ -488,8 +479,7 @@ switch($a)
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS4" => $show_sql_affectedrows4,
 					"ADMIN_PLUG_EDIT_EXTPLUGIN_INFO" => include_once($extplugin_info),
 					"ADMIN_PLUG_EDIT_LOG" => $edit_log,
-					"ADMIN_PLUG_EDIT_CONTINUE_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl),
-					"ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=plug&a=details&ajax=1&pl='.$pl)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+					"ADMIN_PLUG_EDIT_CONTINUE_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl)
 				));
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.plug.uninstall.tags');
@@ -669,7 +659,6 @@ $if_conf_url = (!empty($pl) && $b == 'install' && $totalconfig > 0) ? true : fal
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_PLUG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PLUG_CONFIG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$pl),
 	"ADMIN_PLUG_ADMINWARNINGS" => $adminwarnings
 ));

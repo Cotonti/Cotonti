@@ -1,5 +1,5 @@
 <!-- BEGIN: STRUCTURE -->
-	<div id="{ADMIN_STRUCTURE_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Structure}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -93,7 +93,7 @@
 			</tr>
 			<tr>
 				<td>{PHP.L.adm_postcounters} :</td>
-				<td><a href="{ADMIN_STRUCTURE_RESYNC}"{ADMIN_STRUCTURE_RESYNC_AJAX}>{PHP.L.Resync}</a></td>
+				<td><a href="{ADMIN_STRUCTURE_RESYNC}" class="ajax">{PHP.L.Resync}</a></td>
 			</tr>
 			<tr>
 				<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
@@ -103,7 +103,7 @@
 <!-- END: OPTIONS -->
 <!-- BEGIN: DEFULT -->
 		<h3>{PHP.L.editdeleteentries}:</h3>
-		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post"{ADMIN_STRUCTURE_UPDATE_FORM_URL_AJAX}>
+		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
 				<td class="coltop" style="width:10%;">{PHP.L.Path}</td>
@@ -136,11 +136,11 @@
 				</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PAGECOUNT}</td>
 				<td class="centerall action {ADMIN_STRUCTURE_ODDEVEN}">
-					<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a><a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}"{ADMIN_STRUCTURE_OPTIONS_URL_AJAX}>{PHP.R.admin_icon_config}</a><!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}"{ADMIN_STRUCTURE_UPDATE_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a><!-- ENDIF --><a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" >{PHP.R.admin_icon_jumpto}</a></td>
+					<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a><a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax">{PHP.R.admin_icon_config}</a><!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF --><a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" >{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
 <!-- END: ROW -->
 			<tr>
-				<td class="valid" colspan="8"><input type="submit" class="submit" value="{PHP.L.Update}" /> <a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}"{ADMIN_PAGE_STRUCTURE_RESYNCALL_AJAX}>{PHP.L.Resync}</a></td>
+				<td class="valid" colspan="8"><input type="submit" class="submit" value="{PHP.L.Update}" /> <a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax">{PHP.L.Resync}</a></td>
 			</tr>
 		</table>
 		</form>
@@ -149,7 +149,7 @@
 		</p>
 
 		<h3>{PHP.L.addnewentry}:</h3>
-		<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post"{ADMIN_STRUCTURE_URL_FORM_ADD_AJAX}>
+		<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
 				<td style="width:20%;">{PHP.L.Path}:</td>

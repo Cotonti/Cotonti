@@ -1,5 +1,5 @@
 <!-- BEGIN: URLS -->
-	<div id="{ADMIN_URLS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.adm_urls_rules}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -29,7 +29,7 @@
 		}
 	</script>
 	<style type="text/css">tr.tDnD_whileDrag td{background-color:yellow;}</style>
-	<form name="add_url" id="add_url" action="{ADMIN_URLS_FORM_URL}" method="post"{ADMIN_URLS_FORM_URL_AJAX}>
+	<form name="add_url" id="add_url" action="{ADMIN_URLS_FORM_URL}" method="post" class="ajax">
 		<table id="rules" class="cells">
 			<tr id="rules_top" class="nodrop nodrag">
 				<td class="coltop" style="width:35%;">{PHP.L.adm_urls_area}</td>

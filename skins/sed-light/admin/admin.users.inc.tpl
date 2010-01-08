@@ -1,5 +1,5 @@
 <!-- BEGIN: USERS -->
-	<div id="{ADMIN_USERS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Users}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -28,7 +28,7 @@
 <!-- BEGIN: USERS_ROW -->
 			<tr>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_ID}</td>
-				<td>{PHP.R.admin_icon_groups} <a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}"{ADMIN_USERS_ROW_GRP_TITLE_URL_AJAX}>{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
+				<td>{PHP.R.admin_icon_groups} <a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax">{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_HIDDEN}</td>
@@ -40,7 +40,7 @@
 <!-- END: USERS_ROW -->
 		</table>
 		<h3>{PHP.L.addnewentry}:</h3>
-		<form name="addlevel" id="addlevel" action="{ADMIN_USERS_FORM_URL}" method="post"{ADMIN_USERS_FORM_URL_AJAX}>
+		<form name="addlevel" id="addlevel" action="{ADMIN_USERS_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
 				<td style="width:30%;">{PHP.L.Group}:</td>
@@ -108,7 +108,7 @@
 			</form>
 <!-- END: ADMIN_USERS_DEFAULT -->
 <!-- BEGIN: ADMIN_USERS_EDIT -->
-			<form name="editlevel" id="editlevel" action="{ADMIN_USERS_EDITFORM_URL}" method="post"{ADMIN_USERS_EDITFORM_URL_AJAX}>
+			<form name="editlevel" id="editlevel" action="{ADMIN_USERS_EDITFORM_URL}" method="post" class="ajax">
 				<table class="cells">
 					<tr>
 						<td style="width:30%;">{PHP.L.Group}:</td>
@@ -193,7 +193,7 @@
 <!-- IF {PHP.g} > 5 -->
 					<tr>
 						<td>{PHP.L.Delete}:</td>
-						<td><a href="{ADMIN_USERS_EDITFORM_DEL_URL}"{ADMIN_USERS_EDITFORM_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a></td>
+						<td><a href="{ADMIN_USERS_EDITFORM_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a></td>
 					</tr>
 <!-- ENDIF -->
 					<tr>

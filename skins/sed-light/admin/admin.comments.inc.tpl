@@ -1,5 +1,5 @@
 <!-- BEGIN: COMMENTS -->
-	<div id="{ADMIN_COMMENTS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Comments}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -28,7 +28,7 @@
 					<td class="textcenter">{ADMIN_COMMENTS_DATE}</td>
 					<td>{ADMIN_COMMENTS_TEXT}</td>
 					<td class="centerall action">
-						<a title="{PHP.L.Delete}" href="{ADMIN_COMMENTS_ITEM_DEL_URL}"{ADMIN_COMMENTS_ITEM_DEL_URL_AJAX}>{PHP.R.admin_icon_delete}</a>
+						<a title="{PHP.L.Delete}" href="{ADMIN_COMMENTS_ITEM_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a>
 						<a title="{PHP.L.Open}" href="{ADMIN_COMMENTS_URL}">{PHP.R.admin_icon_jumpto}</a>
 					</td>
 				</tr>

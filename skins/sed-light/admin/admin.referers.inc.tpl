@@ -1,5 +1,5 @@
 <!-- BEGIN: REFERERS -->
-	<div id="{ADMIN_REFERERS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Referers}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

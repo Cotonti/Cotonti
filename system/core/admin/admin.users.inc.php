@@ -144,7 +144,6 @@ elseif($n == 'edit')
 
 		$t->assign(array(
 			"ADMIN_USERS_EDITFORM_URL" => sed_url('admin', "m=users&n=edit&a=update&g=".$g),
-			"ADMIN_USERS_EDITFORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'editlevel', url: '".sed_url('admin','m=users&ajax=1&n=edit&a=update&g='.$g)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 			"ADMIN_USERS_EDITFORM_GRP_TITLE" => $row['grp_title'],
 			"ADMIN_USERS_EDITFORM_GRP_DESC" => htmlspecialchars($row['grp_desc']),
 			"ADMIN_USERS_EDITFORM_GRP_ICON" => htmlspecialchars($row['grp_icon']),
@@ -155,7 +154,6 @@ elseif($n == 'edit')
 			"ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT_URL" => sed_url('users', "g=".$g),
 			"ADMIN_USERS_EDITFORM_RIGHT_URL" => sed_url('admin', "m=rights&g=".$g),
 			"ADMIN_USERS_EDITFORM_DEL_URL" => sed_url('admin', "m=users&n=edit&a=delete&g=".$g."&".sed_xg()),
-			"ADMIN_USERS_EDITFORM_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'editlevel', url: '".sed_url('admin','m=users&ajax=1&n=edit&a=delete&g='.$g.'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		));
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.users.edit.tags');
@@ -186,7 +184,6 @@ if(!isset($showdefault) OR $showdefault == true)
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
 			$t->assign(array(
 				"ADMIN_USERS_ROW_GRP_TITLE_URL" => sed_url('admin', "m=users&n=edit&g=".$row['grp_id']),
-				"ADMIN_USERS_ROW_GRP_TITLE_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin','m=users&ajax=1&n=edit&g='.$row['grp_id'])."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 				"ADMIN_USERS_ROW_GRP_TITLE" => htmlspecialchars($row['grp_title']),
 				"ADMIN_USERS_ROW_GRP_ID" => $row['grp_id'],
 				"ADMIN_USERS_ROW_GRP_COUNT_MEMBERS" => $members[$row['grp_id']],
@@ -209,7 +206,6 @@ if(!isset($showdefault) OR $showdefault == true)
 
 	$t->assign(array(
 		"ADMIN_USERS_FORM_URL" => sed_url('admin', "m=users&n=add"),
-		"ADMIN_USERS_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addlevel', url: '".sed_url('admin','m=users&ajax=1&n=add')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_USERS_FORM_SELECTBOX_GROUPS" => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5'))
 	));
 	$t->parse("USERS.ADMIN_USERS_DEFAULT");
@@ -218,7 +214,6 @@ if(!isset($showdefault) OR $showdefault == true)
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_USERS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_USERS_URL" => sed_url('admin', "m=config&n=edit&o=core&p=users"),
 	"ADMIN_USERS_EXTRAFIELDS_URL" => sed_url('admin', 'm=users&s=extrafields'),
 	"ADMIN_USERS_ADMINWARNINGS" => $adminwarnings

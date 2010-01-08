@@ -1,5 +1,5 @@
 <!-- BEGIN: LOG -->
-	<div id="{ADMIN_LOG_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Log} ({ADMIN_LOG_TOTALDBLOG})</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -9,7 +9,7 @@
 <!-- ENDIF -->
 <!-- IF {PHP.usr.isadmin} -->
 			<ul class="follow">
-				<li><a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}"{ADMIN_LOG_URL_PRUNE_AJAX}>{PHP.L.adm_purgeall}</a></li>
+				<li><a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax">{PHP.L.adm_purgeall}</a></li>
 			</ul>
 <!-- ENDIF -->
 			<form action="">{PHP.L.Group}:
@@ -34,7 +34,7 @@
 					<td class="textcenter">{ADMIN_LOG_ROW_DATE}</td>
 					<td class="textcenter"><a href="{ADMIN_LOG_ROW_URL_IP_SEARCH}">{ADMIN_LOG_ROW_LOG_IP}</a></td>
 					<td class="textcenter">{ADMIN_LOG_ROW_LOG_NAME}&nbsp;</td>
-					<td class="textcenter"><a href="{ADMIN_LOG_ROW_URL_LOG_GROUP}"{ADMIN_LOG_ROW_URL_LOG_GROUP_AJAX}>{ADMIN_LOG_ROW_LOG_GROUP}</a></td>
+					<td class="textcenter"><a href="{ADMIN_LOG_ROW_URL_LOG_GROUP}" class="ajax">{ADMIN_LOG_ROW_LOG_GROUP}</a></td>
 					<td>{ADMIN_LOG_ROW_LOG_TEXT}</td>
 				</tr>
 <!-- END: LOG_ROW -->

@@ -1,5 +1,5 @@
 <!-- BEGIN: FORUMS -->
-	<div id="{ADMIN_FORUMS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Forums}</h2>
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">
 			<h4>{PHP.L.Message}</h4>
@@ -92,7 +92,7 @@
 <!-- END: EDIT -->
 <!-- BEGIN: DEFULT -->
 		<h3>{PHP.L.editdeleteentries}:</h3>
-		<form name="updateorder" id="updateorder" action="{ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL}" method="post"{ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL_AJAX}>
+		<form name="updateorder" id="updateorder" action="{ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
 					<td class="coltop" style="width:5%;"></td>
@@ -111,7 +111,7 @@
 				<tr>
 					<td class="centerall">{PHP.R.admin_icon_folder}</td>
 					<td><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a></td>
-					<td class="centerall"><a title="{PHP.L.Up}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL}"{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL_AJAX}>{PHP.sed_img_up}</a> <a title="{PHP.L.Down}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL}"{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL_AJAX}>{PHP.sed_img_down}</a></td>
+					<td class="centerall"><a title="{PHP.L.Up}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL}" class="ajax">{PHP.sed_img_up}</a> <a title="{PHP.L.Down}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL}" class="ajax">{PHP.sed_img_down}</a></td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS}</td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT}</td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT}</td>
@@ -119,14 +119,14 @@
 					<td class="centerall action">
 						<a title="{PHP.L.Rights}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
 						<a title="{PHP.L.Open}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL}">{PHP.R.admin_icon_jumpto}</a>
-						<!-- IF {PHP.usr.isadmin} --><a title="{PHP.L.Delete}" href="{ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL}"{ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL_AJAX}>{PHP.R.admin_icon_delete}</a><!-- ENDIF -->
+						<!-- IF {PHP.usr.isadmin} --><a title="{PHP.L.Delete}" href="{ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF -->
 					</td>
 				</tr>
 <!-- BEGIN: FCACHE -->
 				<tr>
 					<td class="centerall">{PHP.R.admin_icon_subfolder}</td>
 					<td><span class="spaced">&ndash;</span><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a></td>
-					<td class="centerall"><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL}"{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL_AJAX}>{PHP.sed_img_up}</a> <a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL}"{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL_AJAX}>{PHP.sed_img_down}</a></td>
+					<td class="centerall"><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL}" class="ajax">{PHP.sed_img_up}</a> <a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL}" class="ajax">{PHP.sed_img_down}</a></td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS}</td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT}</td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT}</td>
@@ -134,7 +134,7 @@
 					<td class="centerall action">
 						<a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
 						<a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL}">{PHP.R.admin_icon_jumpto}</a>
-						<!-- IF {PHP.usr.isadmin} --><a href="{ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL}"{ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL_AJAX}>{PHP.R.admin_icon_delete}</a><!-- ENDIF -->
+						<!-- IF {PHP.usr.isadmin} --><a href="{ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF -->
 					</td>
 				</tr>
 <!-- END: FCACHE -->
@@ -149,7 +149,7 @@
 		</form>
 		<p class="paging"><span class="a1"><!--//{PHP.L.Total}: {ADMIN_FORUMS_TOTALITEMS}, //-->{PHP.L.adm_polls_on_page}: {ADMIN_FORUMS_COUNTER_ROW}</span></p>
 		<h3>{PHP.L.addnewentry}:</h3>
-		<form name="addsection" id="addsection" action="{ADMIN_FORUMS_DEFAULT_FORM_ADD_URL}" method="post"{ADMIN_FORUMS_DEFAULT_FORM_ADD_URL_AJAX}>
+		<form name="addsection" id="addsection" action="{ADMIN_FORUMS_DEFAULT_FORM_ADD_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
 					<td style="width:30%;">{PHP.L.Category}:</td>

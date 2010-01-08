@@ -2952,14 +2952,12 @@ function sed_javascript($more='')
 		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
 	}
 	$result .= '<script type="text/javascript" src="js/base.js"></script>';
-	if(!empty($more))
-	{
-		$result .= '<script type="text/javascript">
+	$result .= '<script type="text/javascript">
 //<![CDATA[
+var ajax_enabled = ' . (int) ($cfg['turnajax'] && $cfg['jquery']) .';
 '.$more.'
 //]]>
 </script>';
-	}
 	return $result;
 }
 
@@ -3356,11 +3354,11 @@ function sed_outputfilters($output)
  * @param int $entries Total rows
  * @param int $perpage Rows per page
  * @param string $characters It is symbol for parametre which transfer pagination
- * @param string $onclick Name of JavaScript function which it will be specified in parametre OnClick of the link
- * @param string $object List of pairs parametre:value through a comma. Use when it is necessary to pass in function $onclick not only value of number of page
+ * @param bool $ajax Add AJAX support
+ * @param string $target_div Target div ID if $ajax is true
  * @return string
  */
-function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $onclick = '', $object='')
+function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $ajax = false, $target_div = '')
 {
 	if(function_exists('sed_pagination_custom'))
 	{
@@ -3382,6 +3380,9 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 	$cur_right = $currentpage + $each_side;
 	if($cur_right > $totalpages) $cur_right = $totalpages;
 
+	$event = $ajax ? ' class="ajax"' : '';
+	$name = $ajax && !empty($target_div) ? ' name="'.$taget_div.'"' : '';
+
 	$before = '';
 	$pages = '';
 	$after = '';
@@ -3390,10 +3391,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 	while($i < $cur_left)
 	{
 		$k = ($i - 1) * $perpage;
-		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$k.'\', '.$object.'}; ';
-		$strlistparam = empty($object) ? $k : 'list';
-		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
-		$before .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.'>'.$i.'</a></span>';
+		$before .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.$name.'>'.$i.'</a></span>';
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
@@ -3401,10 +3399,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 	{
 		$k = ($j - 1) * $perpage;
 		$class = $j == $currentpage ? 'current' : 'pages';
-		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$k.'\', '.$object.'}; ';
-		$strlistparam = empty($object) ? $k : 'list';
-		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
-		$pages .= '<span class="pagenav_'.$class.'"><a href="'.$address.$k.'"'.$event.'>'.$j.'</a></span>';
+		$pages .= '<span class="pagenav_'.$class.'"><a href="'.$address.$k.'"'.$event.$name.'>'.$j.'</a></span>';
 	}
 	while($i <= $cur_right)
 	{
@@ -3414,10 +3409,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 	while($i < $totalpages)
 	{
 		$k = ($i - 1) * $perpage;
-		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$k.'\', '.$object.'}; ';
-		$strlistparam = empty($object) ? $k : 'list';
-		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
-		$after .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.'>'.$i.'</a></span>';
+		$after .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.$name.'>'.$i.'</a></span>';
 		$i *= ($n % 2) ? 5 : 2;
 		$n++;
 	}
@@ -3435,11 +3427,11 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
  * @param int $perpage Rows per page
  * @param bool $res_array Return results as array
  * @param string $characters It is symbol for parametre which transfer pagination
- * @param string $onclick Name of JavaScript function which it will be specified in parametre OnClick of the link
- * @param string $object List of pairs parametre:value through a comma. Use when it is necessary to pass in function $onclick not only value of number of page
+ * @param bool $ajax Add AJAX support
+ * @param string $target_div Target div ID if $ajax is true
  * @return mixed
  */
-function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALSE, $characters = 'd', $onclick = '', $object='')
+function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALSE, $characters = 'd', $ajax = false, $target_div = '')
 {
 	if(function_exists('sed_pagination_pn_custom'))
 	{
@@ -3453,32 +3445,23 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 	$totalpages = ceil($entries / $perpage);
 	$currentpage = floor($current / $perpage) + 1;
 
+	$event = $ajax ? ' class="ajax"' : '';
+	$name = $ajax && !empty($target_div) ? ' name="'.$taget_div.'"' : '';
+
 	if ($current > 0)
 	{
 		$prev_n = $current - $perpage;
 		if ($prev_n < 0) { $prev_n = 0; }
-		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$prev_n.'\', '.$object.'}; ';
-		$strlistparam = empty($object) ? $prev_n : 'list';
-		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
-		$prev = '<span class="pagenav_prev"><a href="'.$address.$prev_n.'"'.$event.'>'.$L['pagenav_prev'].'</a></span>';
-		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'=0\', '.$object.'}; ';
-		$strlistparam = empty($object) ? 0 : 'list';
-		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
-		$first = '<span class="pagenav_first"><a href="'.$address.'0"'.$event.'>'.$L['pagenav_first'].'</a></span>';
+		$prev = '<span class="pagenav_prev"><a href="'.$address.$prev_n.'"'.$event.$name.'>'.$L['pagenav_prev'].'</a></span>';
+		$first = '<span class="pagenav_first"><a href="'.$address.'0"'.$event.$name.'>'.$L['pagenav_first'].'</a></span>';
 	}
 
 	if (($current + $perpage) < $entries)
 	{
 		$next_n = $current + $perpage;
-		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$next_n.'\', '.$object.'}; ';
-		$strlistparam = empty($object) ? $next_n : 'list';
-		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
-		$next = '<span class="pagenav_next"><a href="'.$address.$next_n.'"'.$event.'>'.$L['pagenav_next'].'</a></span>';
+		$next = '<span class="pagenav_next"><a href="'.$address.$next_n.'"'.$event.$name.'>'.$L['pagenav_next'].'</a></span>';
 		$last_n = ($totalpages - 1) * $perpage;
-		$listparam = empty($object) ? '' : 'var list = {data: \'&'.$characters.'='.$last_n.'\', '.$object.'}; ';
-		$strlistparam = empty($object) ? $last_n : 'list';
-		$event = empty($onclick) ? '' : ' onclick="'.$listparam.'return '.$onclick.'('.$strlistparam.');"';
-		$last = '<span class="pagenav_last"><a href="'.$address.$last_n.'"'.$event.'>'.$L['pagenav_last'].'</a></span>';
+		$last = '<span class="pagenav_last"><a href="'.$address.$last_n.'"'.$event.$name.'>'.$L['pagenav_last'].'</a></span>';
 	}
 
 	$res_l = $first . $prev;

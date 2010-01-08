@@ -1,5 +1,5 @@
 <!-- BEGIN: BBCODE -->
-	<div id="{ADMIN_BBCODE_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>BBCodes</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

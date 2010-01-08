@@ -255,16 +255,8 @@ elseif ($a == 'update_cheked')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1"), 0, 0);
-if ($cfg['jquery'] AND $cfg['turnajax'])
-{
-	$pagnav = sed_pagination(sed_url('admin','m=page'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=page&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-}
-else
-{
-	$pagnav = sed_pagination(sed_url('admin','m=page'), $d, $totalitems, $cfg['maxrowsperpage']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-}
+$pagnav = sed_pagination(sed_url('admin','m=page'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar
 	FROM $db_pages as p
@@ -361,9 +353,7 @@ while ($row = sed_sql_fetcharray($sql))
 		"ADMIN_PAGE_FILE_COUNT" => $row['page_filecount'],
 		"ADMIN_PAGE_FILE_ICON" => $row['page_fileicon'],
 		"ADMIN_PAGE_URL_FOR_VALIDATED" => sed_url('admin', "m=page&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg()),
-		"ADMIN_PAGE_URL_FOR_VALIDATED_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', "m=page&a=validate&ajax=1&id=".$row['page_id']."&d=".$d."&".sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_PAGE_URL_FOR_DELETED" => sed_url('admin', "m=page&a=delete&id=".$row['page_id']."&d=".$d."&".sed_xg()),
-		"ADMIN_PAGE_URL_FOR_DELETED_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', "m=page&a=delete&ajax=1&id=".$row['page_id']."&d=".$d."&".sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_PAGE_URL_FOR_EDIT" => sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm"),
 		"ADMIN_PAGE_ODDEVEN" => sed_build_oddeven($ii),
 		"ADMIN_PAGE_CAT_URL" => sed_url('list', 'c='.$row["page_cat"]),
@@ -466,10 +456,10 @@ $t->assign(array(
 	"ADMIN_PAGE_URL_EXTRAFIELDS" => sed_url('admin', 'm=page&s=extrafields'),
 	"ADMIN_PAGE_URL_LIST_ALL" => sed_url('list', 'c=all'),
 	"ADMIN_PAGE_FORM_URL" => sed_url('admin', "m=page&a=update_cheked&d=".$d),
+	// TODO check and fix this
 	"ADMIN_PAGE_FORM_VALIDATE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'form_valqueue', url: '".sed_url('admin','m=page&a=update_cheked&ajax=1&d='.$d)."&paction='+this.value, divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_PAGE_FORM_DELETE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'form_valqueue', url: '".sed_url('admin','m=page&a=update_cheked&ajax=1&d='.$d)."&paction='+this.value, divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages,
-	"ADMIN_PAGE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PAGE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_PAGE_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_PAGE_PAGNAV" => $pagnav,

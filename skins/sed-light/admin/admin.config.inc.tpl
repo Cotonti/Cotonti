@@ -1,5 +1,5 @@
 <!-- BEGIN: CONFIG -->
-	<div id="{ADMIN_CONFIG_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Configuration}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -8,7 +8,7 @@
 			</div>
 <!-- ENDIF -->
 <!-- BEGIN: EDIT -->
-		<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post"{ADMIN_CONFIG_FORM_URL_AJAX}>
+		<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
 				<td class="coltop" style="width:30%;">{PHP.L.Parameter}</td>
@@ -64,7 +64,7 @@
 				</td>
 <!-- IF {PHP.o} == 'core' -->
 				<td class="centerall">
-					<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}"{ADMIN_CONFIG_ROW_CONFIG_MORE_URL_AJAX}>
+					<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax">
 						{PHP.R.admin_icon_reset}
 					</a>
 				</td>
@@ -89,7 +89,7 @@
 				<td>
 					<ul class="follow">
 <!-- BEGIN: ADMIN_CONFIG_ROW_CORE -->
-						<li><a href="{ADMIN_CONFIG_ROW_CORE_URL}"{ADMIN_CONFIG_ROW_CORE_URL_AJAX}>
+						<li><a href="{ADMIN_CONFIG_ROW_CORE_URL}" class="ajax">
 					{ADMIN_CONFIG_ROW_CORE_NAME}</a></li>
 <!-- END: ADMIN_CONFIG_ROW_CORE -->
 					</ul>
@@ -97,7 +97,7 @@
 				<td>
 					<ul class="follow">
 <!-- BEGIN: ADMIN_CONFIG_ROW_PLUG -->
-						<li><a href="{ADMIN_CONFIG_ROW_PLUG_URL}"{ADMIN_CONFIG_ROW_PLUG_URL_AJAX}>{ADMIN_CONFIG_ROW_PLUG_NAME}</a></li>
+						<li><a href="{ADMIN_CONFIG_ROW_PLUG_URL}" class="ajax">{ADMIN_CONFIG_ROW_PLUG_NAME}</a></li>
 <!-- END: ADMIN_CONFIG_ROW_PLUG -->
 					</ul>
 				</td>
