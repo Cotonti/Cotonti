@@ -492,12 +492,27 @@ class MySQL_cache extends Db_cache_driver
 	}
 
 	/**
-	 * @see Query_cache_driver::get_all()
+	 * @see Db_cache_driver::get_all()
 	 */
-	public function get_all($realm = COT_DEFAULT_REALM)
+	public function get_all($realms = COT_DEFAULT_REALM)
 	{
 		global $db_cache;
-		$r_where = is_array($realm) ? "c_realm IN('" . implode("','", $realm) ."')" : "c_realm = '$realm'";
+		if (is_array($realms))
+		{
+			$r_where = "c_realm IN(";
+			$i = 0;
+			foreach ($realms as $realm)
+			{
+				$glue = $i == 0 ? "'" : "',";
+				$r_where .= $glue . sed_sql_prep($realm) . "'";
+				$i++;
+			}
+			$r_where .= ')';
+		}
+		else
+		{
+			$r_where = "c_realm = '" . sed_sql_prep($realms) . "'";
+		}
 		$sql = sed_sql_query("SELECT c_name, c_value FROM `$db_cache` WHERE c_auto=1 AND $r_where");
 		$i = 0;
 		while ($row = sed_sql_fetchassoc($sql))
@@ -968,10 +983,13 @@ class Cache
 	 */
 	public function  __construct()
 	{
-		global $cfg, $cot_cache_drivers, $cot_cache_bindings;
+		global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $z;
 		$this->disk = new File_cache($cfg['cache_dir']);
 		$this->db = new MySQL_cache();
-		$this->db->get_all(array('system', 'cot'));
+		$cot_cache_autoload = is_array($cot_cache_autoload)
+			? array_merge(array('system', 'cot', $z), $cot_cache_autoload)
+				: array('system', 'cot', $z);
+		$this->db->get_all($cot_cache_autoload);
 		$cfg['cache_drv'] .= '_driver';
 		if (in_array($cfg['cache_drv'], $cot_cache_drivers))
 		{
@@ -1170,6 +1188,27 @@ class Cache
 	public function db_get($id, $realm = COT_DEFAULT_REALM)
 	{
 		return $this->db->get($id, $realm);
+	}
+
+	/**
+	 * Checks if an object is stored in database cache
+	 * @param string $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return bool
+	 */
+	public function db_isset($id, $realm = COT_DEFAULT_REALM)
+	{
+		return $this->db->exists($id, $realm);
+	}
+
+	/**
+	 * Loads all variables from a specified realm(s) into the global scope
+	 * @param mixed $realm Realm name or array of realm names
+	 * @return int Number of items loaded
+	 */
+	public function db_load($realm)
+	{
+		return $this->db->get_all($realm);
 	}
 
 	/**
