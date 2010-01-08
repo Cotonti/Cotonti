@@ -1,5 +1,5 @@
 <!-- BEGIN: TRASHCAN -->
-	<div id="{ADMIN_TRASHCAN_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Trashcan}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

@@ -129,9 +129,7 @@ $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
 $t->assign(array(
-	"ADMIN_RIGHTSBYITEM_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_RIGHTSBYITEM_FORM_URL" => sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io.$adv_for_url),
-	"ADMIN_RIGHTSBYITEM_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saverightsbyitem', url: '".sed_url('admin','m=rightsbyitem&ajax=1&a=update&ic='.$ic.'&io='.$io.$adv_for_url)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_RIGHTSBYITEM_ADVANCED_URL" => sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
 	"ADMIN_RIGHTSBYITEM_ADV_COLUMNS" => $adv_columns,
 	"ADMIN_RIGHTSBYITEM_4ADV_COLUMNS" => 4 + $adv_columns,

@@ -75,7 +75,6 @@ if($n == 'options')
 
 		$cot_cache->db_unset('sed_forums_str', 'system');
 
-        //$additionsforurl = ($cfg['jquery'] AND $cfg['turnajax']) ? '&ajax=1' : '';
 		sed_redirect(sed_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
 	}
 
@@ -122,7 +121,6 @@ if($n == 'options')
 
 	$t->assign(array(
 		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL" => sed_url('admin', "m=forums&s=structure&n=options&a=update&id=".$fn_id."&d=".$d),
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', 'm=forums&s=structure&n=options&a=update&ajax=1&id='.$fn_id.'&d='.$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_CODE" => $fn_code,
 		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH" => $fn_path,
 		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE" => $fn_title,
@@ -199,16 +197,8 @@ else
 
 	$totalitems = sed_sql_rowcount($db_forum_structure);
 
-	if($cfg['jquery'] AND $cfg['turnajax'])
-	{
-		$pagnav = sed_pagination(sed_url('admin','m=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', 'ajaxSend', "url: '".sed_url('admin','m=forums&s=structure&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', 'ajaxSend', "url: '".sed_url('admin','m=forums&s=structure&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'");
-	}
-	else
-	{
-		$pagnav = sed_pagination(sed_url('admin','m=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage']);
-		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-	}
+	$pagnav = sed_pagination(sed_url('admin','m=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -246,7 +236,6 @@ else
 
 		$t->assign(array(
 			"FORUMS_STRUCTURE_ROW_DEL_URL" => sed_url('admin', "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&d=".$d."&".sed_xg()),
-			"FORUMS_STRUCTURE_ROW_DEL_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', "m=forums&s=structure&ajax=1&a=delete&id=".$fn_id."&c=".$row['fn_code']."&".sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 			"FORUMS_STRUCTURE_ROW_FN_CODE" => $fn_code,
 			"FORUMS_STRUCTURE_ROW_INPUT_PATH_NAME" => "s[".$fn_id."][rpath]",
 			"FORUMS_STRUCTURE_ROW_FN_PATH" => $fn_path,
@@ -257,8 +246,7 @@ else
 			"FORUMS_STRUCTURE_ROW_FN_TITLE" => $fn_title,
 			"FORUMS_STRUCTURE_ROW_SECTIONCOUNT" => $sectioncount[$fn_code],
 			"FORUMS_STRUCTURE_ROW_JUMPTO_URL" => sed_url('forums', "c=".$fn_code),
-			"FORUMS_STRUCTURE_ROW_OPTIONS_URL" => sed_url('admin', "m=forums&s=structure&n=options&id=".$fn_id."&d=".$d."&".sed_xg()),
-			"FORUMS_STRUCTURE_ROW_OPTIONS_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', "m=forums&s=structure&n=options&ajax=1&id=".$fn_id."&d=".$d."&".sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+			"FORUMS_STRUCTURE_ROW_OPTIONS_URL" => sed_url('admin', "m=forums&s=structure&n=options&id=".$fn_id."&d=".$d."&".sed_xg())
 		));
 		/* === Hook - Part2 : Include === */
 		foreach ($extp as $pl)
@@ -273,14 +261,12 @@ else
 
 	$t->assign(array(
 		"ADMIN_FORUMS_STRUCTURE_FORM_URL" => sed_url('admin', "m=forums&s=structure&a=update&d=".$d),
-		"ADMIN_FORUMS_STRUCTURE_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'savestructure', url: '".sed_url('admin', "m=forums&s=structure&a=update&ajax=1&d=".$d)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 		"ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV" => $pagination_prev,
 		"ADMIN_FORUMS_STRUCTURE_PAGNAV" => $pagnav,
 		"ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT" => $pagination_next,
 		"ADMIN_FORUMS_STRUCTURE_TOTALITEMS" => $totalitems,
 		"ADMIN_FORUMS_STRUCTURE_COUNTER_ROW" => $ii,
-		"ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD" => sed_url('admin', "m=forums&s=structure&a=add"),
-		"ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'addstructure', url: '".sed_url('admin', 'm=forums&s=structure&a=add&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : ""
+		"ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD" => sed_url('admin', "m=forums&s=structure&a=add")
 	));
 	$t->parse("FORUMS_STRUCTURE.DEFULT");
 }
@@ -288,7 +274,6 @@ else
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_FORUMS_STRUCTURE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_FORUMS_STRUCTURE_ADMINWARNINGS" => $adminwarnings
 ));
 

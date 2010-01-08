@@ -55,7 +55,6 @@ foreach ($row as $i => $x)
 	$cachesize += $x[1];
 	$t->assign(array(
 		'ADMIN_DISKCACHE_ITEM_DEL_URL' => sed_url('admin', 'm=cache&s=disk&a=delete&id=' . $i . '&' . sed_xg()),
-		'ADMIN_DISKCACHE_ITEM_DEL_URL_AJAX' => ($cfg['jquery'] && $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '" . sed_url('admin', 'm=cache&s=disk&a=delete&id=' . $i . '&ajax=1&' . sed_xg()) . "', divId: 'pagtab', errMsg: '" . $L['ajaxSenderror'] . "'});\"" : '',
 		'ADMIN_DISKCACHE_ITEM_NAME' => $i,
 		'ADMIN_DISKCACHE_FILES' => $x[0],
 		'ADMIN_DISKCACHE_SIZE' => $x[1],
@@ -74,11 +73,8 @@ foreach ($row as $i => $x)
 }
 
 $t->assign(array(
-	'ADMIN_DISKCACHE_AJAX_OPENDIVID' => 'pagtab',
 	'ADMIN_DISKCACHE_URL_REFRESH' => sed_url('admin', 'm=cache&s=disk'),
-	'ADMIN_DISKCACHE_URL_REFRESH_AJAX' => ($cfg['jquery'] && $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '" . sed_url('admin', 'm=cache&s=disk&ajax=1') . "', divId: 'pagtab', errMsg: '" . $L['ajaxSenderror'] . "'});\"" : '',
 	'ADMIN_DISKCACHE_URL_PURGE' => sed_url('admin', 'm=cache&s=disk&a=purge&' . sed_xg()),
-	'ADMIN_DISKCACHE_URL_PURGE_AJAX' => ($cfg['jquery'] && $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '" . sed_url('admin', 'm=cache&s=disk&a=purge&ajax=1&' . sed_xg()) . "', divId: 'pagtab', errMsg: '" . $L['ajaxSenderror'] . "'});\"" : '',
 	'ADMIN_DISKCACHE_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_DISKCACHE_CACHEFILES' => $cachefiles,
 	'ADMIN_DISKCACHE_CACHESIZE' => $cachesize

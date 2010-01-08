@@ -1,5 +1,5 @@
 <!-- BEGIN: PLUG -->
-	<div id="{ADMIN_PLUG_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
 				<h4>{PHP.L.Message}</h4>
@@ -83,32 +83,32 @@
 	<table class="cells">
 		<tr>
 			<td style="width:20%;">
-				<a href="{ADMIN_PLUG_INSTALL_URL}"{ADMIN_PLUG_INSTALL_URL_AJAX}>{PHP.L.adm_opt_installall}</a>
+				<a href="{ADMIN_PLUG_INSTALL_URL}" class="ajax">{PHP.L.adm_opt_installall}</a>
 			</td>
 			<td style="width:80%;">
 				{PHP.L.adm_opt_installall_explain}
 <!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} -->
-				<p class="small"><a href="{ADMIN_PLUG_INSTALL_KO_URL}"{ADMIN_PLUG_INSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_setoption_warn}</a></p>
+				<p class="small"><a href="{ADMIN_PLUG_INSTALL_KO_URL}" class="ajax">{PHP.L.adm_opt_setoption_warn}</a></p>
 <!-- ENDIF -->
 			</td>
 		</tr>
 <!-- IF {PHP.isinstalled} -->
 		<tr>
 			<td>
-				<a href="{ADMIN_PLUG_UNINSTALL}"{ADMIN_PLUG_UNINSTALL_AJAX}>{PHP.L.adm_opt_uninstallall}</a>
+				<a href="{ADMIN_PLUG_UNINSTALL}" class="ajax">{PHP.L.adm_opt_uninstallall}</a>
 			</td>
 			<td>
 				{PHP.L.adm_opt_uninstallall_explain}
 <!-- ENDIF -->
 <!-- IF {PHP.isinstalled} AND {PHP.totalconfig} -->
-				<p class="small"><a href="{ADMIN_PLUG_UNINSTALL_KO_URL}"{ADMIN_PLUG_UNINSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_uninstall_warn}</a></p>
+				<p class="small"><a href="{ADMIN_PLUG_UNINSTALL_KO_URL}" class="ajax">{PHP.L.adm_opt_uninstall_warn}</a></p>
 <!-- ENDIF -->
 <!-- IF {PHP.isinstalled} -->
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<a href="{ADMIN_PLUG_PAUSE_URL}"{ADMIN_PLUG_PAUSE_URL_AJAX}>{PHP.L.adm_opt_pauseall}</a>
+				<a href="{ADMIN_PLUG_PAUSE_URL}" class="ajax">{PHP.L.adm_opt_pauseall}</a>
 			</td>
 			<td>
 				{PHP.L.adm_opt_pauseall_explain}
@@ -116,7 +116,7 @@
 		</tr>
 		<tr>
 			<td>
-				<a href="{ADMIN_PLUG_UNPAUSE_URL}"{ADMIN_PLUG_UNPAUSE_URL_AJAX}>{PHP.L.adm_opt_unpauseall}</a>
+				<a href="{ADMIN_PLUG_UNPAUSE_URL}" class="ajax">{PHP.L.adm_opt_unpauseall}</a>
 			</td>
 			<td>
 				{PHP.L.adm_opt_unpauseall_explain}
@@ -154,10 +154,10 @@
 				&ndash;
 <!-- ENDIF -->
 <!-- IF {PHP.info_file.Status} != 3 AND {PHP.row.pl_active} == 1 -->
-				<a href="{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL}"{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL_AJAX}>{PHP.L.adm_opt_pauseall}</a>
+				<a href="{ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL}" class="ajax">{PHP.L.adm_opt_pauseall}</a>
 <!-- ENDIF -->
 <!-- IF {PHP.info_file.Status} != 3 AND {PHP.row.pl_active} == 0 -->
-				<a href="{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL}"{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL_AJAX}>{PHP.L.adm_opt_unpauseall}</a>
+				<a href="{ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL}" class="ajax">{PHP.L.adm_opt_unpauseall}</a>
 <!-- ENDIF -->
 			</td>
 		</tr>
@@ -310,7 +310,7 @@
 		<h3>{PHP.L.Done}!</h3>
 		<span>{ADMIN_PLUG_EDIT_LOG}</span>
 		<ul class="follow">
-			<li><a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a></li>
+			<li><a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}" class="ajax">{PHP.L.Clickhere}</a></li>
 		</ul>
 <!-- END: INSTALL -->
 <!-- BEGIN: UNINSTALL -->
@@ -329,7 +329,7 @@
 		<h3>{PHP.L.Done}</h3>
 		<span>{ADMIN_PLUG_EDIT_LOG}</span>
 		<ul class="follow">
-			<li><a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a></li>
+			<li><a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}" class="ajax">{PHP.L.Clickhere}</a></li>
 		</ul>
 <!-- END: UNINSTALL -->
 <!-- END: EDIT -->

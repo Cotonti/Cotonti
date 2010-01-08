@@ -1,5 +1,5 @@
 <!-- BEGIN: RATINGS -->
-	<div id="{ADMIN_RATINGS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Ratings}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

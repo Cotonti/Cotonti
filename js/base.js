@@ -84,7 +84,7 @@ function ajaxSend(settings) {
 		},
 		error: function(msg) {
 			$('#loading').remove();
-			alert(settings.errMsg);
+			alert('AJAX error: ' + msg);
 		}
 	});
 	return false;
@@ -104,6 +104,24 @@ $(document).ready(function() {
 
 	if(location.href.match(/#comments/)) {
 		$('.comments').css('display', '');
+	}
+
+	if (ajax_enabled) {
+		// AJAX auto-handling
+		$('form.ajax').submit(function() {
+			return ajaxSend({
+				method: 'POST',
+				formId: $(this).attr('id'),
+				url: $(this).attr('action'),
+				divId: $(this).attr('title') ? $(this).attr('title') : 'ajax_tab'
+			});
+		});
+		$('a.ajax').click(function() {
+			return ajaxSend({
+				url: $(this).attr('href'),
+				divId: $(this).attr('name') ? $(this).attr('name') : 'ajax_tab'
+			});
+		});
 	}
 });
 

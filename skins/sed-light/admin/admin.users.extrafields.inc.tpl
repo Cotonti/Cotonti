@@ -1,5 +1,5 @@
 <!-- BEGIN: USER_EXTRAFIELDS -->
-	<div id="{ADMIN_USER_EXTRAFIELDS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Users}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

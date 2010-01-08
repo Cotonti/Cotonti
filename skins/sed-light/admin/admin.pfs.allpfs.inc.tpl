@@ -1,5 +1,5 @@
 <!-- BEGIN: ALLPFS -->
-	<div id="{ADMIN_ALLPFS_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<table class="cells">
 			<tr>
 				<td class="coltop">{PHP.L.User}</td>

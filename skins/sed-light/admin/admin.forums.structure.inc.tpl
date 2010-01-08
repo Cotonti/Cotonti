@@ -1,5 +1,5 @@
 <!-- BEGIN: FORUMS_STRUCTURE -->
-	<div id="{ADMIN_FORUMS_STRUCTURE_AJAX_OPENDIVID}">
+	<div id="ajax_tab">
 		<h2>{PHP.L.Forums}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -67,7 +67,7 @@
 <!-- END: OPTIONS -->
 <!-- BEGIN: DEFULT -->
 			<h3>{PHP.L.editdeleteentries}:</h3>
-			<form name="savestructure" id="savestructure" action="{ADMIN_FORUMS_STRUCTURE_FORM_URL}" method="post"{ADMIN_FORUMS_STRUCTURE_FORM_URL_AJAX}>
+			<form name="savestructure" id="savestructure" action="{ADMIN_FORUMS_STRUCTURE_FORM_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
 					<td class="coltop" style="width:25%;">{PHP.L.Title}</td>
@@ -123,7 +123,7 @@
 			</form>
 			<p class="paging">{ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV}{ADMIN_FORUMS_STRUCTURE_PAGNAV}{ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_FORUMS_STRUCTURE_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_FORUMS_STRUCTURE_COUNTER_ROW}</span></p>
 			<h3>{PHP.L.addnewentry}:</h3>
-			<form name="addstructure" id="addstructure" action="{ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD}" method="post"{ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD_AJAX}>
+			<form name="addstructure" id="addstructure" action="{ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
 					<td style="width:20%;">{PHP.L.Code}:</td>
