@@ -456,9 +456,6 @@ $t->assign(array(
 	"ADMIN_PAGE_URL_EXTRAFIELDS" => sed_url('admin', 'm=page&s=extrafields'),
 	"ADMIN_PAGE_URL_LIST_ALL" => sed_url('list', 'c=all'),
 	"ADMIN_PAGE_FORM_URL" => sed_url('admin', "m=page&a=update_cheked&d=".$d),
-	// TODO check and fix this
-	"ADMIN_PAGE_FORM_VALIDATE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'form_valqueue', url: '".sed_url('admin','m=page&a=update_cheked&ajax=1&d='.$d)."&paction='+this.value, divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
-	"ADMIN_PAGE_FORM_DELETE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'form_valqueue', url: '".sed_url('admin','m=page&a=update_cheked&ajax=1&d='.$d)."&paction='+this.value, divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages,
 	"ADMIN_PAGE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_PAGE_PAGINATION_PREV" => $pagination_prev,

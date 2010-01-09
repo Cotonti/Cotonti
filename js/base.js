@@ -64,6 +64,12 @@ function insertText(docObj, formName, fieldName, value) {
 	return true;
 }
 
+// Array of ajax error handlers
+// Example of use:
+// ajaxErrorHandlers.push({divId: 'ajax_tab', func: myErrorHandler});
+var ajaxErrorHandlers = new Array();
+
+// AJAX helper function
 function ajaxSend(settings) {
 	var method = settings.method || 'GET';
 	var data = settings.data || '';
@@ -81,16 +87,25 @@ function ajaxSend(settings) {
 		success: function(msg) {
 			$('#loading').remove();
 			$('#' + settings.divId).html(msg).hide().stop().fadeIn('slow');
+			bindHandlers();
 		},
 		error: function(msg) {
 			$('#loading').remove();
-			alert('AJAX error: ' + msg);
+			if (ajaxErrorHandlers.length > 0) {
+				for (var i = 0; i < ajaxErrorHandlers.length; i++) {
+					if (ajaxErrorHandlers[i].divId == settings.divId)
+						ajaxErrorHandlers[i].func(msg);
+				}
+			} else {
+				alert('AJAX error: ' + msg);
+			}
 		}
 	});
 	return false;
 }
 
-$(document).ready(function() {
+// Standard event bindings
+function bindHandlers() {
 	if (location.hash == '#comments' || location.hash.match(/#c\d+/)) {
 		$('.comments').css('display', '');
 	}
@@ -123,6 +138,10 @@ $(document).ready(function() {
 			});
 		});
 	}
+}
+
+$(document).ready(function() {
+	bindHandlers();
 });
 
 window.name = 'main';
