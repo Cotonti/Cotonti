@@ -98,8 +98,9 @@
 <!-- ENDIF -->
 			<tr>
 				<td class="valid" colspan="4">
-					<input name="paction" type="submit" value="{PHP.L.Validate}" class="ajax" />
-					<input name="paction" type="submit" value="{PHP.L.Delete}" class="ajax" />
+					<input type="hidden" name="paction" value="" />
+					<input name="paction" type="submit" value="{PHP.L.Validate}" onclick="this.form.paction.value=this.value" />
+					<input name="paction" type="submit" value="{PHP.L.Delete}" onclick="this.form.paction.value=this.value" />
 				</td>
 			</tr>
 			</table>
