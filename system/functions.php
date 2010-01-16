@@ -2947,17 +2947,24 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 function sed_javascript($more='')
 {
 	global $cfg, $lang;
-	if($cfg['jquery'])
+	if ($cfg['jquery'])
 	{
 		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
+		if ($cfg['turnajax'])
+		{
+			$result .= '<script type="text/javascript" src="js/jquery.history.js"></script>';
+			$more .= empty($more) ? 'ajaxEnabled = true;' : "\najaxEnabled = true;";
+		}
 	}
 	$result .= '<script type="text/javascript" src="js/base.js"></script>';
+	if (!empty($more))
+	{
 	$result .= '<script type="text/javascript">
 //<![CDATA[
-var ajax_enabled = ' . (int) ($cfg['turnajax'] && $cfg['jquery']) .';
 '.$more.'
 //]]>
 </script>';
+	}
 	return $result;
 }
 
