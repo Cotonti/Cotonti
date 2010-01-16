@@ -1,5 +1,5 @@
 /**
- * MarkItUp! extended settings for Seditio
+ * MarkItUp! extended settings for Cotonti
  */
 
 var mySettings = {

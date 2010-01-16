@@ -90,12 +90,14 @@ elseif (!empty($e))
 
 	$extp = array();
 
-	if (is_array($sed_plugins))
+	if (is_array($sed_plugins['standalone']))
 	{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['standalone'] as $k)
 		{
-			if ($k['pl_hook']=='standalone' && $k['pl_code']==$e)
-			{ $extp[$i] = $k; }
+			if ($k['pl_code'] == $e)
+			{
+				$extp[] = $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
+			}
 		}
 	}
 
@@ -239,12 +241,14 @@ elseif (!empty($h))
 elseif (!empty($r) && defined('SED_AJAX'))
 {
 	$extp = array();
-	if (is_array($sed_plugins))
+	if (is_array($sed_plugins['ajax']))
 	{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['ajax'] as $k)
 		{
-			if ($k['pl_hook']=='ajax' && $k['pl_code']==$r)
-			{ $extp[$i] = $k; }
+			if ($k['pl_code'] == $r)
+			{
+				$extp[] = $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
+			}
 		}
 	}
 

@@ -68,6 +68,10 @@ function insertText(docObj, formName, fieldName, value) {
 // Example of use:
 // ajaxErrorHandlers.push({divId: 'ajax_tab', func: myErrorHandler});
 var ajaxErrorHandlers = new Array();
+// AJAX enablement defaults to false
+var ajaxEnabled = false;
+// Required to calculate paths
+var ajaxCurrentBase = location.href.replace($('base').eq(0).attr('href'), '').replace(/\?.*$/, '').replace(/#.*$/, '');
 
 // AJAX helper function
 function ajaxSend(settings) {
@@ -87,7 +91,6 @@ function ajaxSend(settings) {
 		success: function(msg) {
 			$('#loading').remove();
 			$('#' + settings.divId).html(msg).hide().stop().fadeIn('slow');
-			bindHandlers();
 		},
 		error: function(msg) {
 			$('#loading').remove();
@@ -102,6 +105,43 @@ function ajaxSend(settings) {
 		}
 	});
 	return false;
+}
+
+// AJAX subpage loader with history support
+function ajaxPageLoad(hash) {
+	var m = hash.match(/^(get)(-.*?)?;(.*)$/);
+	if (m) {
+		// ajax bookmark
+		var url = m[3].indexOf(';') > 0 ? m[3].replace(';', '?') : ajaxCurrentBase + '?' + m[3];
+		return ajaxSend({
+			method: m[1],
+			url: url,
+			divId: m[2] ? m[2].substr(1) : 'ajax_tab'
+		});
+	} else if (hash == '') {
+		// ajax home
+		return ajaxSend ({
+			url: location.href.replace(/#.*$/, ''),
+			divId: 'ajax_tab'
+		});
+	}
+	return true;
+}
+
+// Constructs ajaxable hash string
+function ajaxMakeHash(method, href, divId) {
+	var hash = method;
+	hash += divId ? '-' + divId + ';' : ';';
+	var hrefBase, params;
+	if (href.indexOf('?') > 0) {
+		hrefBase = href.substr(0, href.indexOf('?'));
+		params = href.substr(href.indexOf('?') + 1);
+	} else {
+		hrefBase = href;
+		params = '';
+	}
+	hash += hrefBase == ajaxCurrentBase ? params : hrefBase + ';' + params;
+	return hash;
 }
 
 // Standard event bindings
@@ -121,9 +161,9 @@ function bindHandlers() {
 		$('.comments').css('display', '');
 	}
 
-	if (ajax_enabled) {
+	if (ajaxEnabled) {
 		// AJAX auto-handling
-		$('form.ajax').submit(function() {
+		$('form.ajax').live('submit', function() {
 			return ajaxSend({
 				method: 'POST',
 				formId: $(this).attr('id'),
@@ -131,17 +171,18 @@ function bindHandlers() {
 				divId: $(this).attr('title') ? $(this).attr('title') : 'ajax_tab'
 			});
 		});
-		$('a.ajax').click(function() {
-			return ajaxSend({
-				url: $(this).attr('href'),
-				divId: $(this).attr('name') ? $(this).attr('name') : 'ajax_tab'
-			});
+		$('a.ajax').live('click', function() {
+			$.historyLoad(ajaxMakeHash('get', $(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
+			return false;
 		});
 	}
 }
 
 $(document).ready(function() {
 	bindHandlers();
+	if (ajaxEnabled) {
+		$.historyInit(ajaxPageLoad, location.hash);
+	}
 });
 
 window.name = 'main';
