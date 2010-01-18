@@ -4,8 +4,8 @@
 Code=comedit
 Name=Comments Edit
 Description=Enhance comedit system
-Version=0.0.2
-Date=2009-jan-03
+Version=0.6.6
+Date=2010-jan-18
 Author=Asmo (Edited by motor2hg)
 Copyright=asmo.org.ru
 Notes=
@@ -27,9 +27,9 @@ markitup=03:select:No,Yes:Yes:Use markitup?
  * Enhance comedit system
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.6.6
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

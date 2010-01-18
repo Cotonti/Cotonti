@@ -152,8 +152,8 @@ $submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ?
 $pagination = sed_pagination(sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p"), $d, $totallines, $cfg['maxrowsperpage']);
 list($pageprev, $pagenext) = sed_pagination_pn(sed_url('list', "c=$c&s=$s&w=$w&o=$o&p=$p"), $d, $totallines, $cfg['maxrowsperpage'], TRUE);
 
-list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=' . $c), $comments);
-list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=' . $c), $ratings);
+list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=' . $c), $sed_cat[$c]['com']);
+list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=' . $c), $sed_cat[$c]['ratings']);
 
 $sys['sublocation'] = $sed_cat[$c]['title'];
 $title_tags[] = array('{TITLE}');
