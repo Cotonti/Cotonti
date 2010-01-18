@@ -123,7 +123,7 @@ $extp = sed_getextplugins('pm.list.loop');
 while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
 {
     $jj++;
-    $row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-new.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm.gif\" alt=\"\" /></a>";
+    $row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? "<a href=\"".sed_url('pm', 'm=message&id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm-new.gif\" alt=\"\" /></a>" : "<a href=\"".sed_url('pm', 'm=message&id='.$row['pm_id'])."\"><img src=\"skins/".$skin."/img/system/icon-pm.gif\" alt=\"\" /></a>";
 
     if ($f=='sentbox')
     {
