@@ -127,7 +127,7 @@ $extp = sed_getextplugins('pm.list.loop');
 while ($row = sed_sql_fetcharray($sql) and ($jj<$cfg['maxpmperpage']))
 {
     $jj++;
-    $row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? sed_rc_link(sed_url('pm', 'id='.$row['pm_id']), $R['pm_icon_new']) : sed_rc_link(sed_url('pm', 'id='.$row['pm_id']), $R['pm_icon']);
+    $row['pm_icon_status'] = ($row['pm_state']=='0' && $f!='sentbox') ? sed_rc_link(sed_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon_new']) : sed_rc_link(sed_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon']);
 
     if ($f=='sentbox')
     {

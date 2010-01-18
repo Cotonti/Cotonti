@@ -14,9 +14,9 @@ Order=10
  * Comedit plug
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.6.6
  * @author Asmo (Edited by motor2hg), Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -43,7 +43,8 @@ if($a == 'update')
 	$row = sed_sql_fetcharray($sql1);
 
 	$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60)) ? TRUE : FALSE;
-	$usr['isowner'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
+	$usr['isowner'] = $time_limit && ($usr['id'] > 0 && $row['com_authorid'] == $usr['id']
+			|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
 	$usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 	sed_block($usr['allow_write']);
 
@@ -89,7 +90,8 @@ sed_die(sed_sql_numrows($sql) == 0);
 $com = sed_sql_fetcharray($sql);
 
 $com_limit = ($sys['now_offset']<($com['com_date']+$cfg['plugin']['comedit']['time']*60)) ? TRUE : FALSE;
-$usr['isowner'] = ($com['com_authorid'] == $usr['id'] && $com_limit);
+$usr['isowner'] = $com_limit && ($usr['id'] > 0 && $com['com_authorid'] == $usr['id']
+		|| $usr['id'] == 0 && $usr['ip'] == $com['com_authorip']);
 
 $usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 sed_block($usr['allow_write']);

@@ -14,9 +14,9 @@ Order=10
  * Comedit plug
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.6.6
  * @author Asmo (Edited by motor2hg), Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -24,7 +24,8 @@ defined('SED_CODE') or die('Wrong URL');
 
 $time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60)) ? TRUE : FALSE;
 
-$usr['isowner_com'] = ($row['com_authorid'] == $usr['id'] && $time_limit);
+$usr['isowner_com'] = $time_limit && ($usr['id'] > 0 && $row['com_authorid'] == $usr['id']
+		|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
 
 $com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60);
 

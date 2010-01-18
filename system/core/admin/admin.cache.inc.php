@@ -34,7 +34,8 @@ if($a == 'purge')
 elseif($a == 'delete')
 {
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='$id'");
+	$name = sed_sql_prep(sed_import('name', 'G', 'TXT'));
+	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
 
 	$adminwarnings = ($sql) ? $L['adm_delcacheitem'] : $L['Error'];
 }
@@ -70,7 +71,7 @@ while($row = sed_sql_fetcharray($sql))
 	$row['size'] = mb_strlen($row['c_value']);
 	$cachesize += $row['size'];
 	$t->assign(array(
-		"ADMIN_CACHE_ITEM_DEL_URL" => sed_url('admin', 'm=cache&a=delete&id='.$row['c_name'].'&'.sed_xg()),
+		"ADMIN_CACHE_ITEM_DEL_URL" => sed_url('admin', 'm=cache&a=delete&name='.$row['c_name'].'&'.sed_xg()),
 		"ADMIN_CACHE_ITEM_NAME" => $row['c_name'],
 		"ADMIN_CACHE_EXPIRE" => ($row['c_expire'] - $sys['now']),
 		"ADMIN_CACHE_SIZE" => $row['size'],
