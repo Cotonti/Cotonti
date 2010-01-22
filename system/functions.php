@@ -3480,17 +3480,19 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
  * Resource string formatter function. Takes a string with predefined variable substitution, e.g.
  * 'My {$pet} likes {$food}. And {$pet} is hungry!' and an assotiative array of substitution values, e.g.
  * array('pet' => 'rabbit', 'food' => 'carrots') and assembles a formatted result. If {$var} cannot be found
- * in $args, it will be taken from global scope.
+ * in $args, it will be taken from global scope. You can also use parameter strings instead of arrays, e.g.
+ * 'pet=rabbit&food=carrots'. Or omit the second parameter in case all substitutions are globals.
  *
  * @global array $R Resource strings
  * @param string $name Name of the $R item or a resource string itself
- * @param array $args Associative array of arguments
+ * @param array $params Associative array of arguments or a parameter string
  * @return string Assembled resource string
  */
-function sed_rc($name, $args = array())
+function sed_rc($name, $params = array())
 {
 	global $R;
 	$res = isset($R[$name]) ? $R[$name] : $name;
+	is_array($params) ? $args = $params : mb_parse_str($params, $args);
 	if(preg_match_all('#\{\$(.+?)\}#', $res, $matches, PREG_SET_ORDER))
 	{
 		foreach($matches as $m)
@@ -3563,6 +3565,20 @@ function sed_redirect($url)
 		header('Location: ' . SED_ABSOLUTE_URL . $url);
 		exit;
 	}
+}
+
+/**
+ * Performs actions required right before shutdown
+ */
+function sed_shutdown()
+{
+	global $cot_cache;
+	while (ob_get_level() > 0)
+	{
+		ob_end_flush();
+	}
+	$cot_cache = null; // Need to destroy before DB connection is lost
+	sed_sql_close();
 }
 
 /**

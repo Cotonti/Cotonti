@@ -11,12 +11,12 @@ Order=10
 ==================== */
 
 /**
- * Part of plug tags
+ * Forum post tags output
  *
  * @package Cotonti
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
- * @copyright All rights reserved. 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -24,7 +24,8 @@ defined('SED_CODE') or die('Wrong URL');
 
 if($cfg['plugin']['tags']['forums'])
 {
-	require_once(sed_langfile('tags'));
+	require_once sed_langfile('tags');
+	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
 	$tags = sed_tag_list($q, 'forums');
 	if(count($tags) > 0)
 	{
@@ -36,7 +37,10 @@ if($cfg['plugin']['tags']['forums'])
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 			if ($tag_i > 0) $tc_html .= ', ';
-			$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.$tag_t.'</a>';
+			$tc_html .= sed_rc('tags_link_tag', array(
+				'url' => sed_url('plug', 'e=tags&a=forums' . $tl . '&t=' . $tag_u),
+				'tag_title' => $tag_t
+			));
 			$tag_i++;
 		}
 		$t->assign('FORUMS_POSTS_TAGS', $tc_html);

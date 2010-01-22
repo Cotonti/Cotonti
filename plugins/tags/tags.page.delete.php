@@ -11,12 +11,12 @@ Order=10
 ==================== */
 
 /**
- * Part of plug tags
+ * Removes tags when removing a page
  *
  * @package Cotonti
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
- * @copyright All rights reserved. 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

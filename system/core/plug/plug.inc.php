@@ -9,9 +9,9 @@ http://www.neocrome.net
  * Plugin invokation module
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */
 
@@ -28,13 +28,7 @@ $c2 = sed_import('c2','G','ALP');
 
 unset ($plugin_title, $plugin_body);
 
-if (!empty($p))
-{
-
-	die('Seditio do NOT supports the LDU standard plugins.');
-
-}
-elseif (!empty($e))
+if (!empty($e))
 {
 	$path_lang_def	= $cfg['plugins_dir']."/$e/lang/$e.en.lang.php";
 	$path_lang_alt	= $cfg['plugins_dir']."/$e/lang/$e.$lang.lang.php";
@@ -43,9 +37,13 @@ elseif (!empty($e))
 	$path_skin_alt	= sed_skinfile($e, true);
 
 	if (file_exists($path_lang_def))
-	{ require_once($path_lang_def); }
+	{
+		require_once($path_lang_def);
+	}
 	if (file_exists($path_lang_alt) && $lang!='en')
-	{ require_once($path_lang_alt); }
+	{
+		require_once($path_lang_alt);
+	}
 	
 	if (file_exists($path_skin_alt))
 	{
@@ -64,7 +62,7 @@ elseif (!empty($e))
 	}
 	else
 	{
-		sed_redirect(sed_url('message', "msg=907", '', true));
+		sed_redirect(sed_url('message', 'msg=907', '', true));
 	}
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', $e);
@@ -72,10 +70,12 @@ elseif (!empty($e))
 
 	if (is_array($sed_plugins))
 	{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['standalone'] as $k)
 		{
-			if ($k['pl_hook']=='standalone' && $k['pl_code']==$e)
-			{ $out['subtitle'] = $k['pl_title']; }
+			if ($k['pl_code'] == $e)
+			{
+				$out['subtitle'] = $k['pl_title'];
+			}
 		}
 	}
 
@@ -88,7 +88,7 @@ elseif (!empty($e))
 
 	$t = new XTemplate($path_skin);
 
-	$extp = array();
+	$empty = true;
 
 	if (is_array($sed_plugins['standalone']))
 	{
@@ -96,19 +96,15 @@ elseif (!empty($e))
 		{
 			if ($k['pl_code'] == $e)
 			{
-				$extp[] = $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
+				include $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
+				$empty = false;
 			}
 		}
 	}
 
-	if (count($extp)==0)
+	if ($empty)
 	{
-		sed_redirect(sed_url('message', "msg=907", '', true));
-	}
-
-	foreach ($extp as $pl)
-	{
-		include $pl;
+		sed_redirect(sed_url('message', 'msg=907', '', true));
 	}
 
 	if ($autoassigntags)
@@ -117,7 +113,7 @@ elseif (!empty($e))
 
 		if($cfg['homebreadcrumb'])
 		{
-			$bhome = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
+			$bhome = $R['plug_code_homebreadcrumb'];
 		}
 		else
 		{
@@ -125,14 +121,14 @@ elseif (!empty($e))
 		}
 
 		$t-> assign(array(
-			"PLUGIN_TITLE" => $bhome . '<a href="'.sed_url('plug', "e=$e").'">'.$plugin_title."</a>",
-			"PLUGIN_SUBTITLE" => $plugin_subtitle,
-			"PLUGIN_BODY" => $plugin_body
+			'PLUGIN_TITLE' => sed_rc('plug_code_title', array('url' => sed_url('plug', "e=$e"))),
+			'PLUGIN_SUBTITLE' => $plugin_subtitle,
+			'PLUGIN_BODY' => $plugin_body
 		));
 	}
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
+	$t->parse('MAIN');
+	$t->out('MAIN');
 
 	require_once $cfg['system_dir'] . '/footer.php';
 }
@@ -142,28 +138,19 @@ elseif (!empty($o))
 	$extp = array();
 	if (is_array($sed_plugins))
 	{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['popup'] as $k)
 		{
-			if ($k['pl_hook']=='popup' && $k['pl_code']==$o)
-			{ $extp[$i] = $k; }
+			if ($k['pl_code']==$o)
+			{
+				$extp[$i] = $k;
+			}
 		}
 	}
 
 	if (count($extp)==0)
 	{
-		sed_redirect(sed_url('message', "msg=907", '', true));
+		sed_redirect(sed_url('message', 'msg=907', '', true));
 	}
-
-	$popup_header1 = $cfg['doctype'].'<html><head>'.sed_htmlmetas().sed_javascript().'
-<script type="text/javascript">
-//<![CDATA[
-function add(text) {
-	insertText(document, "'.$c1.'", "'.$c2.'", text);
-}
-//]]>
-</script>';
-	$popup_header2 = "</head><body>";
-	$popup_footer = "</body></html>";
 
 	/* ============= */
 
@@ -178,88 +165,34 @@ function add(text) {
 	}
 
 	$t->assign(array(
-		"POPUP_HEADER1" => $popup_header1,
-		"POPUP_HEADER2" => $popup_header2,
-		"POPUP_FOOTER" => $popup_footer,
-		"POPUP_BODY" => $popup_body,
+		'POPUP_METAS' => sed_htmlmetas(),
+		'POPUP_JAVASCRIPT' => sed_javascript(),
+		'POPUP_C1' => $c1,
+		'POPUP_C2' => $c2,
+		'POPUP_BODY' => $popup_body,
 	));
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
-
+	$t->parse('MAIN');
+	$t->out('MAIN');
 }
-elseif (!empty($h))
-{
-	if ($h=='smilies')
-	{
-		if (is_array($sed_smilies))
-		{
-			$popup_body = $L['Smilies']." (".$L['Smilies_explain'].") :<p>";
-			$popup_body .= "<div class=\"smilies\"><table>";
-			reset ($sed_smilies);
-
-			while (list($i,$dat) = each($sed_smilies))
-			{
-				$popup_body .= "<tr><td style=\"text-align:right;\"><a href=\"javascript:add('".$dat['smilie_code']."')\"><img src=\"".$dat['smilie_image']."\"  alt=\"\" /></a></td><td>".$dat['smilie_code']."</td><td> ".htmlspecialchars($dat['smilie_text'])."</td></tr>";
-			}
-			$popup_body .= "</table></div></p>";
-		}
-		else
-		{ $popup_body = $L['None']; }
-
-	}
-	else
-	{
-		$incl = $cfg['system_dir']."/help/$h.txt";
-		$fd = @fopen($incl, "r") or die("Couldn't find a file : ".$incl);
-		$popup_body = fread($fd, filesize($incl));
-		fclose($fd);
-	}
-
-	$popup_header1 = $cfg['doctype']."<html><head>".sed_htmlmetas()."\n\n<script type=\"text/javascript\">\n<!--\nfunction add(text)\n	{\nopener.document.".$c1.".".$c2.".value += text; }\n//-->\n</script>\n";
-	$popup_header2 = "</head><body>";
-	$popup_footer = "</body></html>";
-
-	/* ============= */
-
-	sed_sendheaders();
-
-	$mskin = sed_skinfile(array('popup', $h));
-	$t = new XTemplate($mskin);
-
-	$t->assign(array(
-		"POPUP_HEADER1" => $popup_header1,
-		"POPUP_HEADER2" => $popup_header2,
-		"POPUP_FOOTER" => $popup_footer,
-		"POPUP_BODY" => $popup_body,
-	));
-
-	$t->parse("MAIN");
-	$t->out("MAIN");
-}
-
 elseif (!empty($r) && defined('SED_AJAX'))
 {
-	$extp = array();
+	$empty = true;
 	if (is_array($sed_plugins['ajax']))
 	{
 		foreach($sed_plugins['ajax'] as $k)
 		{
 			if ($k['pl_code'] == $r)
 			{
-				$extp[] = $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
+				include $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
+				$empty = false;
 			}
 		}
 	}
 
-	if (count($extp)==0)
+	if ($empty)
 	{
-		sed_redirect(sed_url('message', "msg=907", '', true));
-	}
-
-	foreach ($extp as $pl)
-	{
-		include $pl;
+		sed_redirect(sed_url('message', 'msg=907', '', true));
 	}
 }
 else

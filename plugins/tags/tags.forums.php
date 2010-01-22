@@ -11,12 +11,12 @@ Order=10
 ==================== */
 
 /**
- * Part of plug tags
+ * Forum tag cloud
  *
  * @package Cotonti
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
- * @copyright All rights reserved. 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -24,12 +24,13 @@ defined('SED_CODE') or die('Wrong URL');
 
 if($cfg['plugin']['tags']['forums'])
 {
-	require_once(sed_langfile('tags'));
+	require_once sed_langfile('tags');
 	require_once $cfg['plugins_dir'].'/tags/inc/config.php';
+	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
 	// Get all subcategories
 	$limit = $cfg['plugin']['tags']['lim_forums'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_forums'];
 	$tcloud = sed_tag_cloud('forums', $cfg['plugin']['tags']['order'], $limit);
-	$tc_html = '<div class="tag_cloud">';
+	$tc_html = $R['tags_code_cloud_open'];
 	foreach($tcloud as $tag => $cnt)
 	{
 		$tag_count++;
@@ -44,17 +45,21 @@ if($cfg['plugin']['tags']['forums'])
 				break;
 			}
 		}
-		$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a> ';
+		$tc_html .= sed_rc('tags_link_cloud_tag', array(
+			'url' => sed_url('plug', 'e=tags&a=forums' . $tl . '&t=' . $tag_u),
+			'tag_title' => htmlspecialchars($tag_t),
+			'dim' => $dim
+		));
 	}
 	if($cfg['plugin']['tags']['more'] && $limit > 0)
 	{
-		$tc_html .= '<hr /><a class="more" href="'.sed_url('plug', 'e=tags&a=forums').'">'.$L['tags_All'].'</a>';
+		$tc_html .= sed_rc('tags_code_cloud_more', array('url' => sed_url('plug', 'e=tags&a=forums')));
 	}
-	$tc_html .= '</div>';
+	$tc_html .= $R['tags_code_cloud_close'];
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 	$t->assign(array(
-	'FORUMS_SECTIONS_TOP_TAG_CLOUD' => $L['tags_Tag_cloud'],
-	'FORUMS_SECTIONS_TAG_CLOUD' => $tc_html
+		'FORUMS_SECTIONS_TOP_TAG_CLOUD' => $L['tags_Tag_cloud'],
+		'FORUMS_SECTIONS_TAG_CLOUD' => $tc_html
 	));
 }
 

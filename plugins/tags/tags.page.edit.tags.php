@@ -11,12 +11,12 @@ Order=10
 ==================== */
 
 /**
- * Part of plug tags
+ * Generates tags input when editing a page
  *
  * @package Cotonti
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
- * @copyright All rights reserved. 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -24,25 +24,14 @@ defined('SED_CODE') or die('Wrong URL');
 
 if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 {
-	if($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['tags']['autocomplete']>0)
-	{
-		$autocomplete = '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/tags/js/jquery.autocomplete.js"></script>
-		<script type="text/javascript">
-		//<![CDATA[
-		$(document).ready(function(){
-		$(".autotags").autocomplete("plug.php?r=tags", {multiple: true, minChars: '.$cfg['plugin']['tags']['autocomplete'].'});
-		});
-		//]]>
-		</script>';
-	}
-
-	require_once(sed_langfile('tags'));
+	require_once sed_langfile('tags');
+	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
 	$tags = sed_tag_list($id);
 	$tags = implode(', ', $tags);
 	$t->assign(array(
-	'PAGEEDIT_TOP_TAGS' => $L['Tags'],
-	'PAGEEDIT_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-	'PAGEEDIT_FORM_TAGS' => $autocomplete.'<input type="text" name="rtags" value="' . $tags . '"  size="56" class="autotags" />'
+		'PAGEEDIT_TOP_TAGS' => $L['Tags'],
+		'PAGEEDIT_TOP_TAGS_HINT' => $L['tags_comma_separated'],
+		'PAGEEDIT_FORM_TAGS' => sed_rc('tags_input_editpage')
 	));
 	$t->parse('MAIN.TAGS');
 }

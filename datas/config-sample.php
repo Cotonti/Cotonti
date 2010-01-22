@@ -116,6 +116,11 @@ define('SED_DEBUG', FALSE);
  * path accessible to you only via FTP.
  */
 define('SED_DEBUG_LOGFILE', '/tmp/cot_debug_'.date("Ymd_His").'.log');
+/**
+ * The shield is disabled for administrators by default. But if you are testing
+ * it with your admin account, you can enable it by setting this TRUE.
+ */
+define('SED_SHIELD_FORCE', FALSE);
 
 // ========================
 // Name of MySQL tables
