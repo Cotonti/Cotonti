@@ -1,5 +1,5 @@
 <!-- BEGIN: FORUMS_STRUCTURE -->
-	<div id="ajax_tab">
+	<div id="ajaxBlock">
 		<h2>{PHP.L.Forums}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

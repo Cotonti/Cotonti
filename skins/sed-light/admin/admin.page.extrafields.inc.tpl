@@ -1,5 +1,5 @@
 <!-- BEGIN: PAG_EXTRAFIELDS -->
-	<div id="ajax_tab">
+	<div id="ajaxBlock">
 		<h2>{PHP.L.Pages}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

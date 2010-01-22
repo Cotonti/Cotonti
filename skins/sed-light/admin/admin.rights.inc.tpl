@@ -1,5 +1,5 @@
 <!-- BEGIN: RIGHTS -->
-	<div id="ajax_tab">
+	<div id="ajaxBlock">
 		<h2>{PHP.L.Rights}</h2>
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">
 			<h4>{PHP.L.Message}</h4>
