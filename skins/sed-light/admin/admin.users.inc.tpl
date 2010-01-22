@@ -1,5 +1,5 @@
 <!-- BEGIN: USERS -->
-	<div id="ajax_tab">
+	<div id="ajaxBlock">
 		<h2>{PHP.L.Users}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">

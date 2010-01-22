@@ -7,7 +7,7 @@ function pfs(id, c1, c2){
 }
 
 function help(rcode, c1, c2){
-    window.open('plug.php?h=' + rcode + '&c1=' + c1 + '&c2=' + c2, 'Help', 'toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=32,top=16');
+    // deprecated
 }
 
 function picture(url, sx, sy){
@@ -66,12 +66,15 @@ function insertText(docObj, formName, fieldName, value) {
 
 // Array of ajax error handlers
 // Example of use:
-// ajaxErrorHandlers.push({divId: 'ajax_tab', func: myErrorHandler});
+// ajaxErrorHandlers.push({divId: 'ajaxBlock', func: myErrorHandler});
 var ajaxErrorHandlers = new Array();
 // AJAX enablement defaults to false
 var ajaxEnabled = false;
 // Required to calculate paths
 var ajaxCurrentBase = location.href.replace($('base').eq(0).attr('href'), '').replace(/\?.*$/, '').replace(/#.*$/, '');
+// This flag indicates that AJAX+history has been used on this page
+// It means that "#" or home link should be loaded via ajax too
+var ajaxUsed = false;
 
 // AJAX helper function
 function ajaxSend(settings) {
@@ -113,16 +116,17 @@ function ajaxPageLoad(hash) {
 	if (m) {
 		// ajax bookmark
 		var url = m[3].indexOf(';') > 0 ? m[3].replace(';', '?') : ajaxCurrentBase + '?' + m[3];
+		ajaxUsed = true;
 		return ajaxSend({
 			method: m[1],
 			url: url,
-			divId: m[2] ? m[2].substr(1) : 'ajax_tab'
+			divId: m[2] ? m[2].substr(1) : 'ajaxBlock'
 		});
-	} else if (hash == '') {
+	} else if (hash == '' && ajaxUsed) {
 		// ajax home
 		return ajaxSend ({
 			url: location.href.replace(/#.*$/, ''),
-			divId: 'ajax_tab'
+			divId: 'ajaxBlock'
 		});
 	}
 	return true;
@@ -168,7 +172,7 @@ function bindHandlers() {
 				method: 'POST',
 				formId: $(this).attr('id'),
 				url: $(this).attr('action'),
-				divId: $(this).attr('title') ? $(this).attr('title') : 'ajax_tab'
+				divId: $(this).attr('title') ? $(this).attr('title') : 'ajaxBlock'
 			});
 		});
 		$('a.ajax').live('click', function() {
