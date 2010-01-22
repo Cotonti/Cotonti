@@ -5,9 +5,9 @@ Code=tags
 Name=Tags
 Description=Basic Tags implementation
 Version=0.7.0
-Date=2009-dec-15
+Date=2010-jan-22
 Author=Trustmaster
-Copyright=All rights reserved (c) 2008-2009, Vladimir Sibirov.
+Copyright=All rights reserved (c) 2008-2010, Vladimir Sibirov.
 Notes=BSD License.
 SQL=
 Auth_guests=R
@@ -39,7 +39,7 @@ autocomplete=23:select:0,1,2,3,4,5,6:3:Min. chars for autocomplete
  * @package Cotonti
  * @version 0.7.0
  * @author Trustmaster, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

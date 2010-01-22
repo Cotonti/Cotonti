@@ -140,6 +140,11 @@ $R['pfs_link_addpix'] = '<a href="javascript:addpix(\''.$cfg['pfs_path'].'{$pfs_
 $R['pfs_link_addthumb'] = '<a href="javascript:addthumb(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\')">'.$R['pfs_icon_pastethumb'].'</a>';
 $R['pfs_link_thumbnail'] = '<a href="{$pfs_fullfile}"><img src="{$thumbpath}{$pfs_file}" title="{$pfs_file}"></a>';
 
+/* Plug */
+$R['plug_code_homebreadcrumb'] = '<a href="'.$cfg['mainurl'].'">' . htmlspecialchars($cfg['maintitle']) . '</a> '
+	. $cfg['separator'] . ' ';
+$R['plug_code_title'] = '{$bhome}<a href="{$url}">{$plugin_title}</a>';
+
 /* Private messages */
 $R['pm_icon'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-pm.gif"  alt="'.$L['pm_sendnew'].'" />';
 $R['pm_icon_archive'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-pm-archive.gif" alt="'.$L['pm_putinarchives'].'" />';

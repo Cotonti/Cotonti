@@ -16,7 +16,7 @@ Order=10
  * @package Cotonti
  * @version 0.7.0
  * @author Trustmaster
- * @copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -27,7 +27,22 @@ if($cfg['plugin']['tags']['pages']
 	|| $cfg['plugin']['tags']['forums'] && defined('SED_FORUMS')
 	|| defined('SED_PLUG'))
 {
-	$out['compopup'] .= '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />';
+	require_once sed_langfile('tags');
+	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
+	$out['compopup'] .= $R['tags_code_style'];
+	if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['tags']['autocomplete'] > 0
+		&& in_array($m, array('edit', 'editpost', 'posts', 'newtopic'))
+		&& sed_auth('plug', 'tags', 'W'))
+	{
+		$out['compopup'] .= '<script type="text/javascript" src="' . $cfg['plugins_dir'] . '/tags/js/jquery.autocomplete.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+$(".autotags").autocomplete("'.sed_url('plug', 'r=tags').'", {multiple: true, minChars: '.$cfg['plugin']['tags']['autocomplete'].'});
+});
+//]]>
+</script>';
+	}
 }
 
 ?>

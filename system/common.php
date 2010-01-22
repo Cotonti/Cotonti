@@ -32,6 +32,8 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
 
+register_shutdown_function('sed_shutdown');
+
 $sys['day'] = @date('Y-m-d');
 $sys['now'] = time();
 $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
@@ -382,7 +384,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 		if ($row = sed_sql_fetcharray($sql))
 		{
 			$online_count = 1;
-			if ($cfg['shieldenabled'])
+			if ($cfg['shieldenabled'] && (!sed_auth('admin', 'a', 'A') || SED_SHIELD_FORCE))
 			{
 				$shield_limit = $row['online_shield'];
 				$shield_action = $row['online_action'];
@@ -402,7 +404,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 		if ($online_count>0)
 		{
-			if ($cfg['shieldenabled'])
+			if ($cfg['shieldenabled'] && (!sed_auth('admin', 'a', 'A') || SED_SHIELD_FORCE))
 			{
 				if ($row = sed_sql_fetcharray($sql))
 				{

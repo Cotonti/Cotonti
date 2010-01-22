@@ -11,12 +11,12 @@ Order=10
 ==================== */
 
 /**
- * Part of plug tags
+ * AJAX handler for autocompletion
  *
  * @package Cotonti
  * @version 0.7.0
  * @author esclkm - Pavel Mikulik
- * @copyright All rights reserved. 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -34,6 +34,4 @@ if(is_array($tagslist))
 sed_sendheaders();
 
 echo $tagstring;
-ob_end_flush();
-
 ?>

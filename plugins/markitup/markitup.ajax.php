@@ -14,9 +14,9 @@ Order=10
  * Simple AJAX previewer for MarkItUp!
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Trustmaster
- * @copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -27,6 +27,4 @@ $text = sed_import('text', 'P', 'HTM');
 $style = '<link rel="stylesheet" type="text/css" href="skins/'.$skin.'/'.$skin.'.css" />'."\n";
 sed_sendheaders();
 echo $style.sed_post_parse(sed_parse($text));
-ob_end_flush();
-
 ?>

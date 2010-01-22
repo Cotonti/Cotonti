@@ -113,7 +113,4 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
-
-$cot_cache = null; // Need to destroy before DB connection is lost
-sed_sql_close();
 ?>
