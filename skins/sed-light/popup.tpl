@@ -1,8 +1,9 @@
 <!-- BEGIN: MAIN -->
-{POPUP_DOCTYPE}
+{PHP.cfg.doctype}
 <html>
 <head>
 {POPUP_METAS}
+<base href="{PHP.cfg.mainurl}/" />
 {POPUP_JAVASCRIPT}
 <script type="text/javascript">
 //<![CDATA[
