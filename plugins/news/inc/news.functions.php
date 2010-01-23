@@ -75,7 +75,7 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0,
 	$totalnews = sed_sql_result($sql2,0,"COUNT(*)");
 	$news_link=sed_news_link($cat, $deftag);
 	$catd  = ((!$deftag || $c != $cat) && !$cfg['plugin']['news']['syncpagination']) ? $cat."d" : "d";
-
+	// TODO use sed_pagenav()
 	$pagnav = sed_pagination($news_link, $d, $totalnews, $limit, $catd);
 	list($pages_prev, $pages_next) = sed_pagination_pn($news_link, $d, $totalnews, $limit, TRUE, $catd);
 

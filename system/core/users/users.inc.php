@@ -165,8 +165,7 @@ while($row = sed_sql_fetchassoc($fieldsres))
 
 $perpage= $cfg['maxusersperpage'];
 
-$pagnav = sed_pagination(sed_url('users', "f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;"), $d, $totalusers, $perpage);
-list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('users', "f=$f&amp;g=$g&amp;gm=$gm&amp;s=$s&amp;w=$w&amp;sq=$sq&amp;"), $d, $totalusers, $perpage, TRUE);
+$pagenav = sed_pagenav('users', "f=$f&g=$g&gm=$gm&s=$s&w=$w&sq=$sq", $d, $totalusers, $perpage);
 
 /*=========*/
 
@@ -251,9 +250,9 @@ $t -> assign(array(
 	"USERS_TOP_TOTALPAGE" => $totalpage,
 	"USERS_TOP_MAXPERPAGE" => $cfg['maxusersperpage'],
 	"USERS_TOP_TOTALUSERS" => $totalusers,
-	"USERS_TOP_PAGNAV" => $pagnav,
-	"USERS_TOP_PAGEPREV" => $pages_prev,
-	"USERS_TOP_PAGENEXT" => $pages_next,
+	"USERS_TOP_PAGNAV" => $pagenav['main'],
+	"USERS_TOP_PAGEPREV" => $pagenav['prev'],
+	"USERS_TOP_PAGENEXT" => $pagenav['next'],
 	"USERS_TOP_FILTERS_COUNTRY" => $countryfilters,
 	"USERS_TOP_FILTERS_MAINGROUP" => $maingrpfilters,
 	"USERS_TOP_FILTERS_GROUP" => $grpfilters,

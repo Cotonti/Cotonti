@@ -292,8 +292,7 @@ else
 	}
 	/*
 	 $totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
-	 $pagnav = sed_pagination(sed_url('admin','m=forums'), $d, $totalitems, $cfg['maxrowsperpage']);
-	 list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
+	 $pagenav = sed_pagenav('admin','m=forums', $d, $totalitems, $cfg['maxrowsperpage']);
 	 */
 	$sql = sed_sql_query("SELECT s.*, n.*
 		FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
@@ -406,9 +405,9 @@ else
 
 	$t->assign(array(
 		"ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL" => sed_url('admin', 'm=forums&a=update&d='.$d),
-		//"ADMIN_FORUMS_PAGINATION_PREV" => $pagination_prev,
-		//"ADMIN_FORUMS_PAGNAV" => $pagnav,
-		//"ADMIN_FORUMS_PAGINATION_NEXT" => $pagination_next,
+		//"ADMIN_FORUMS_PAGINATION_PREV" => $pagenav['prev'],
+		//"ADMIN_FORUMS_PAGNAV" => $pagenav['main'],
+		//"ADMIN_FORUMS_PAGINATION_NEXT" => $pagenav['next'],
 		"ADMIN_FORUMS_TOTALITEMS" => $totalitems,
 		"ADMIN_FORUMS_COUNTER_ROW" => $ii,
 		"ADMIN_FORUMS_DEFAULT_FORM_ADD_URL" => sed_url('admin', "m=forums&a=add"),

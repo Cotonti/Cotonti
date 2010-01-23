@@ -80,8 +80,7 @@ elseif($a == 'restore')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_trash);
-$pagnav = sed_pagination(sed_url('admin','m=trashcan'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=trashcan'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
@@ -156,9 +155,9 @@ $t->assign(array(
 	"ADMIN_TRASHCAN_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=trash"),
 	"ADMIN_TRASHCAN_WIPEALL_URL" => sed_url('admin', "m=trashcan&a=wipeall&".sed_xg()),
 	"ADMIN_TRASHCAN_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_TRASHCAN_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_TRASHCAN_PAGNAV" => $pagnav,
-	"ADMIN_TRASHCAN_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_TRASHCAN_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_TRASHCAN_PAGNAV" => $pagenav['main'],
+	"ADMIN_TRASHCAN_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_TRASHCAN_TOTALITEMS" => $totalitems,
 	"ADMIN_TRASHCAN_COUNTER_ROW" => $ii,
 	"ADMIN_TRASHCAN_PAGESQUEUED" => $pagesqueued

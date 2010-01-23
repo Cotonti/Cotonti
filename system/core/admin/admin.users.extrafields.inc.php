@@ -127,8 +127,7 @@ elseif ($a == 'del' && isset($n))
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location='users'"), 0, 0);
-$pagnav = sed_pagination(sed_url('admin','m=users&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=users&s=extrafields'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=users&s=extrafields', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $field_types = array('input', 'textarea', 'select', 'checkbox', 'radio');
 $res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users' LIMIT $d, ".$cfg['maxrowsperpage']);
@@ -183,9 +182,9 @@ foreach ($field_types as $val)
 $t->assign(array(
 	"ADMIN_USER_EXTRAFIELDS_URL_FORM_ADD" => sed_url('admin', 'm=users&s=extrafields&a=add&d='.$d),
 	"ADMIN_USER_EXTRAFIELDS_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_USER_EXTRAFIELDS_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_USER_EXTRAFIELDS_PAGNAV" => $pagnav,
-	"ADMIN_USER_EXTRAFIELDS_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_USER_EXTRAFIELDS_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_USER_EXTRAFIELDS_PAGNAV" => $pagenav['main'],
+	"ADMIN_USER_EXTRAFIELDS_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_USER_EXTRAFIELDS_TOTALITEMS" => $totalitems,
 	"ADMIN_USER_EXTRAFIELDS_COUNTER_ROW" => $ii
 ));

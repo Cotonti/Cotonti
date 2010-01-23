@@ -87,8 +87,7 @@ $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_bbcode);
 
-$pagnav = sed_pagination(sed_url('admin','m=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=bbcode'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $bbc_modes = array('str', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
@@ -158,9 +157,9 @@ for($i = 1; $i < 256; $i++)
 
 $t->assign(array(
 	"ADMIN_BBCODE_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_BBCODE_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_BBCODE_PAGNAV" => $pagnav,
-	"ADMIN_BBCODE_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_BBCODE_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_BBCODE_PAGNAV" => $pagenav['main'],
+	"ADMIN_BBCODE_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_BBCODE_TOTALITEMS" => $totalitems,
 	"ADMIN_BBCODE_COUNTER_ROW" => $ii,
 	"ADMIN_BBCODE_FORM_ACTION" => sed_url('admin', 'm=bbcode&a=add'),

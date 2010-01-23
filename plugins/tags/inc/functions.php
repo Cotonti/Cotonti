@@ -83,13 +83,11 @@ function sed_tag_search_form($area = 'all')
 		$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
 		$sql = sed_sql_query("SELECT COUNT(DISTINCT `tag`) FROM $db_tag_references $where");
 		$totalitems = (int) sed_sql_result($sql, 0, 0);
-		$pagnav = sed_pagination(sed_url('plug','e=tags&a='.$area), $d, $totalitems, $perpage);
-		list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a='.$area), $d, $totalitems, $perpage, TRUE);
-
+		$pagenav = sed_pagenav('plug','e=tags&a=' . $area, $d, $totalitems, $perpage);
 		$t->assign(array(
-			'TAGS_PAGEPREV' => $pagination_prev,
-			'TAGS_PAGENEXT' => $pagination_next,
-			'TAGS_PAGNAV' => $pagnav
+			'TAGS_PAGEPREV' => $pagenav['prev'],
+			'TAGS_PAGENEXT' => $pagenav['next'],
+			'TAGS_PAGNAV' => $pagenav['main']
 		));
 	}
 }
@@ -150,13 +148,11 @@ function sed_tag_search_pages($query)
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 	}
 	sed_sql_freeresult($sql);
-	$pagnav = sed_pagination(sed_url('plug','e=tags&a=pages&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=pages&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-
+	$pagenav = sed_pagenav('plug','e=tags&a=pages&t=' . urlencode($qs), $d, $totalitems, $cfg['maxrowsperpage']);
 	$t->assign(array(
-		'TAGS_PAGEPREV' => $pagination_prev,
-		'TAGS_PAGENEXT' => $pagination_next,
-		'TAGS_PAGNAV' => $pagnav
+		'TAGS_PAGEPREV' => $pagenav['prev'],
+		'TAGS_PAGENEXT' => $pagenav['next'],
+		'TAGS_PAGNAV' => $pagenav['main']
 	));
 	$t->parse('MAIN.TAGS_RESULT');
 }
@@ -220,13 +216,11 @@ function sed_tag_search_forums($query)
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 	}
 	sed_sql_freeresult($sql);
-	$pagnav = sed_pagination(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug','e=tags&a=forums&t='.urlencode($qs)), $d, $totalitems, $cfg['maxrowsperpage'], TRUE);
-
+	$pagenav = sed_pagenav('plug','e=tags&a=forums&t='.urlencode($qs), $d, $totalitems, $cfg['maxrowsperpage']);
 	$t->assign(array(
-		'TAGS_PAGEPREV' => $pagination_prev,
-		'TAGS_PAGENEXT' => $pagination_next,
-		'TAGS_PAGNAV' => $pagnav
+		'TAGS_PAGEPREV' => $pagenav['prev'],
+		'TAGS_PAGENEXT' => $pagenav['next'],
+		'TAGS_PAGNAV' => $pagenav['main']
 	));
 	$t->parse('MAIN.TAGS_RESULT');
 }

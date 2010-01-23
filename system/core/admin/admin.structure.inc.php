@@ -460,8 +460,7 @@ else
 	}
 
 	$totalitems = sed_sql_rowcount($db_structure);
-	$pagnav = sed_pagination(sed_url('admin', 'm=structure'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+	$pagenav = sed_pagenav('admin', 'm=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -583,9 +582,9 @@ else
 
 	$t->assign(array(
 		"ADMIN_STRUCTURE_UPDATE_FORM_URL" => sed_url('admin', "m=structure&a=update&d=".$d),
-		"ADMIN_STRUCTURE_PAGINATION_PREV" => $pagination_prev,
-		"ADMIN_STRUCTURE_PAGNAV" => $pagnav,
-		"ADMIN_STRUCTURE_PAGINATION_NEXT" => $pagination_next,
+		"ADMIN_STRUCTURE_PAGINATION_PREV" => $pagenav['prev'],
+		"ADMIN_STRUCTURE_PAGNAV" => $pagenav['main'],
+		"ADMIN_STRUCTURE_PAGINATION_NEXT" => $pagenav['next'],
 		"ADMIN_STRUCTURE_TOTALITEMS" => $totalitems,
 		"ADMIN_STRUCTURE_COUNTER_ROW" => $ii,
 		"ADMIN_STRUCTURE_URL_FORM_ADD" => sed_url('admin', "m=structure&a=add"),

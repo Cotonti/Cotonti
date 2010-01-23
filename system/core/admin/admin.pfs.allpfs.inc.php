@@ -35,8 +35,7 @@ foreach ($extp as $pl)
 unset($disp_list);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid>=0"), 0, "COUNT(DISTINCT pfs_userid)");
-$pagnav = sed_pagination(sed_url('admin','m=pfs&s=allpfs'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=pfs&s=allpfs'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=pfs&s=allpfs', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COUNT(*) FROM $db_pfs AS p
 	LEFT JOIN $db_users AS u ON p.pfs_userid=u.user_id
@@ -68,9 +67,9 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t->assign(array(
-	"ADMIN_ALLPFS_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_ALLPFS_PAGNAV" => $pagnav,
-	"ADMIN_ALLPFS_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_ALLPFS_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_ALLPFS_PAGNAV" => $pagenav['main'],
+	"ADMIN_ALLPFS_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_ALLPFS_TOTALITEMS" => $totalitems,
 	"ADMIN_ALLPFS_ON_PAGE" => $ii
 ));

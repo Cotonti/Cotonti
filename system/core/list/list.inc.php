@@ -122,8 +122,7 @@ $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
 $submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? "<a href=\"".sed_url('page', 'm=add&c='.$c)."\">".$L['lis_submitnew'].'</a>' : '';
 
-$pagination = sed_pagination($list_url, $d, $totallines, $cfg['maxrowsperpage']);
-list($pageprev, $pagenext) = sed_pagination_pn($list_url, $d, $totallines, $cfg['maxrowsperpage'], TRUE);
+$pagenav = sed_pagenav('list', "c=$c&s=$s&w=$w&o=$o&p=$p", $d, $totallines, $cfg['maxrowsperpage']);
 
 list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=' . $c), $sed_cat[$c]['com']);
 list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=' . $c), $sed_cat[$c]['ratings']);
@@ -190,9 +189,9 @@ $t -> assign(array(
 	"LIST_RATINGS_DISPLAY" => $list_ratings_display,
 	"LIST_EXTRATEXT" => $extratext,
 	"LIST_SUBMITNEWPAGE" => $submitnewpage,
-	"LIST_TOP_PAGINATION" => $pagination,
-	"LIST_TOP_PAGEPREV" => $pageprev,
-	"LIST_TOP_PAGENEXT" => $pagenext
+	"LIST_TOP_PAGINATION" => $pagenav['main'],
+	"LIST_TOP_PAGEPREV" => $pagenav['prev'],
+	"LIST_TOP_PAGENEXT" => $pagenav['next']
 ));
 
 // Extra fields for structure
@@ -296,13 +295,12 @@ while (list($i,$x) = each($sed_cat))
 }
 
 $totalitems = $ii + $kk;
-$pagnav = sed_pagination(sed_url('list', 'c='.$c), $dc, $totalitems, $cfg['maxlistsperpage'], $characters = "dc");
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('list', 'c='.$c), $dc, $totalitems, $cfg['maxlistsperpage'], TRUE, $characters = "dc");
+$pagenav = sed_pagenav('list', 'c='.$c, $dc, $totalitems, $cfg['maxlistsperpage'], 'dc');
 
 $t -> assign(array(
-	"LISTCAT_PAGEPREV" => $pagination_prev,
-	"LISTCAT_PAGENEXT" => $pagination_next,
-	"LISTCAT_PAGNAV" => $pagnav
+	"LISTCAT_PAGEPREV" => $pagenav['prev'],
+	"LISTCAT_PAGENEXT" => $pagenav['next'],
+	"LISTCAT_PAGNAV" => $pagenav['main']
 ));
 
 /* === Hook - Part1 : Set === */

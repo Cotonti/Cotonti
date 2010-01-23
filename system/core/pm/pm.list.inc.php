@@ -76,8 +76,7 @@ $delete = ($totallines) ? "<input type=\"submit\" name=\"delete\" value=\"".$L['
 $pm_totalpages = ceil($totallines / $cfg['maxpmperpage']);
 $pm_currentpage = ceil ($d / $cfg['maxpmperpage'])+1;
 
-$pm_pagination = sed_pagination(sed_url('pm', "f=$f"), $d, $totallines, $cfg['maxpmperpage'], 'd');
-list($pm_pageprev, $pm_pagenext) = sed_pagination_pn(sed_url('pm', "f=$f"), $d, $totallines, $cfg['maxpmperpage'], TRUE, 'd');
+$pagenav = sed_pagenav('pm', "f=$f", $d, $totallines, $cfg['maxpmperpage'], 'd');
 
 
 $title_tags[] = array('{PM}', '{INBOX}', '{ARCHIVES}', '{SENTBOX}');
@@ -110,9 +109,9 @@ $t-> assign(array(
     "PM_SENTBOX" => "<a href=\"".sed_url('pm', 'f=sentbox')."\">".$L['pm_sentbox']."</a>:".$totalsentbox,
     "PM_DELETE" => $delete,
     "PM_ARCHIVE" => $archive,
-    "PM_TOP_PAGEPREV" => $pm_pageprev,
-    "PM_TOP_PAGENEXT" => $pm_pagenext,
-    'PM_TOP_PAGES' => $pm_pagination,
+    "PM_TOP_PAGEPREV" => $pagenav['prev'],
+    "PM_TOP_PAGENEXT" => $pagenav['next'],
+    'PM_TOP_PAGES' => $pagenav['main'],
     "PM_TOP_CURRENTPAGE" => $pm_currentpage,
     "PM_TOP_TOTALPAGES" => $pm_totalpages,
     "PM_TOP_SENTBOX" => ($f=='sentbox') ? $L['Recipient'] : $L['Sender'],

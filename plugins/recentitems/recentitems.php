@@ -70,14 +70,11 @@ if($cfg['plugin']['recentitems']['newadditional'] && ($mode  != 'pages' || $mode
 $totalpages = max($totalrecent);
 $days=($days>0) ? "&amp;days=".$days : "";
 $mode=(!empty($mode)) ? "&amp;mode=".$mode : "";
-$news_link=sed_url('plug', 'e=recentitems'.$days.$mode);
-$pagnav = sed_pagination($news_link, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage']);
-list($pages_prev, $pages_next) = sed_pagination_pn($news_link, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage'], TRUE);
-
-$t-> assign(array(
-    "PAGE_PAGENAV" => $pagnav,
-    "PAGE_PAGEPREV" => $pages_prev,
-    "PAGE_PAGENEXT" => $pages_next,
-    ));
+$pagenav = sed_pagenav('plug', 'e=recentitems'.$days.$mode, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage']);
+$t->assign(array(
+    "PAGE_PAGENAV" => $pagenav['main'],
+    "PAGE_PAGEPREV" => $pagenav['prev'],
+    "PAGE_PAGENEXT" => $pagenav['next'],
+));
 
 ?>

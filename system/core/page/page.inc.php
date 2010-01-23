@@ -338,7 +338,8 @@ if ($pag['page_totaltabs'] > 1)
 		}
 		$tab_url = empty($pag['page_alias']) ? sed_url('page', 'id='.$pag['page_id'].'&pg='.$i) : sed_url('page', 'al='.$pag['page_alias'].'&pg='.$i);
 		$pag['page_tabtitles'][] .= '<a href="'.$tab_url.'">'.($i+1).'. '.$pag['page_tabtitle'][$i].'</a>';
-		$pag['page_tabnav'] = sed_pagination($pag['page_pageurl'], $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');
+		$pn = sed_pagenav('page', (empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias']), $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');
+		$pag['page_tabnav'] = $pn['main'];
 		$pag['page_tabs'][$i] = str_replace('[newpage]', '', $pag['page_tabs'][$i]);
 		$pag['page_tabs'][$i] = preg_replace('#^(<br />)+#', '', $pag['page_tabs'][$i]);
 		$pag['page_tabs'][$i] = trim($pag['page_tabs'][$i]);
