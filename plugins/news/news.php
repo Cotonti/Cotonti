@@ -14,8 +14,8 @@ Order=10
  * Pick up pages from a category and display the newest in the home page
  *
  * @package Cotonti
- * @version 0.0.3
- * @author Neocrome, Cotonti Team
+ * @version 0.6.6
+ * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */
@@ -30,29 +30,20 @@ foreach($categories as $k => $v)
 {
     $v=trim($v);
     $v = explode('|', $v);
-    $checkin = isset($sed_cat[$v[0]]);
-    if($checkin)
-    $cats[$v[0]] = $v;
-    if($k==0)
-    $indexcat=$v[0];
+    if(isset($sed_cat[$v[0]]))
+    {	
+    	$cats[$v[0]] = $v;
+    	if($k==0)
+    	$indexcat=$v[0];
+    }
 }
 
 if(empty($d))
 {
     $d = '0';
 }
-if(empty($c))
-{
-    $c = $indexcat;
-    unset($cats[$indexcat]);
-}
-else
-{
-    $checkin = isset($sed_cat[$c]);
-    $c = ($checkin === false) ? $cfg['plugin']['news']['category'] :  $c ;
-    if (isset($cats[$c]))
-    unset($cats[$c]);
-}
+$c=(empty($c)||!isset($sed_cat[$c])) ? $indexcat : $c;
+unset($cats[$c]);
 
 require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 
