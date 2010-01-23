@@ -75,8 +75,7 @@ foreach($log_groups as $grp_code => $grp_name)
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = ($n == 'all') ? $totaldblog : sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
-$pagnav = sed_pagination(sed_url('admin','m=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=log&n='.$n), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 if($n == 'all')
 {
@@ -117,9 +116,9 @@ $t->assign(array(
 	"ADMIN_LOG_URL_PRUNE" => sed_url('admin', "m=log&a=purge&".sed_xg()),
 	"ADMIN_LOG_TOTALDBLOG" => $totaldblog,
 	"ADMIN_LOG_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_LOG_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_LOG_PAGNAV" => $pagnav,
-	"ADMIN_LOG_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_LOG_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_LOG_PAGNAV" => $pagenav['main'],
+	"ADMIN_LOG_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_LOG_TOTALITEMS" => $totalitems,
 	"ADMIN_LOG_ON_PAGE" => $ii
 ));

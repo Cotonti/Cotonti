@@ -197,8 +197,7 @@ else
 
 	$totalitems = sed_sql_rowcount($db_forum_structure);
 
-	$pagnav = sed_pagination(sed_url('admin','m=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=forums&s=structure'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+	$pagenav = sed_pagenav('admin', 'm=forums&s=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -261,9 +260,9 @@ else
 
 	$t->assign(array(
 		"ADMIN_FORUMS_STRUCTURE_FORM_URL" => sed_url('admin', "m=forums&s=structure&a=update&d=".$d),
-		"ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV" => $pagination_prev,
-		"ADMIN_FORUMS_STRUCTURE_PAGNAV" => $pagnav,
-		"ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT" => $pagination_next,
+		"ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV" => $pagenav['prev'],
+		"ADMIN_FORUMS_STRUCTURE_PAGNAV" => $pagenav['main'],
+		"ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT" => $pagenav['next'],
 		"ADMIN_FORUMS_STRUCTURE_TOTALITEMS" => $totalitems,
 		"ADMIN_FORUMS_STRUCTURE_COUNTER_ROW" => $ii,
 		"ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD" => sed_url('admin', "m=forums&s=structure&a=add")

@@ -357,8 +357,7 @@ $t->assign(array(
 
 	}
 
-$pages = sed_pagination(sed_url('forums', "m=topics&amp;s=$s&amp;o=$o&amp;w=$w"), $d, $totaltopics, $cfg['maxtopicsperpage']);
-list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('forums', "m=topics&amp;s=$s&amp;o=$o&amp;w=$w"), $d, $totaltopics, $cfg['maxtopicsperpage'], TRUE);
+$pagenav = sed_pagenav('forums', "m=topics&s=$s&o=$o&w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']);
 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
@@ -372,9 +371,9 @@ $t->assign(array(
     "FORUMS_TOPICS_SHORTTITLE" => htmlspecialchars($fs_title),
 	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
 	"FORUMS_TOPICS_NEWTOPICURL" => sed_url('forums', "m=newtopic&s=".$s),
-	"FORUMS_TOPICS_PAGES" => $pages,
-	"FORUMS_TOPICS_PAGEPREV" => $pages_prev,
-	"FORUMS_TOPICS_PAGENEXT" => $pages_next,
+	"FORUMS_TOPICS_PAGES" => $pagenav['main'],
+	"FORUMS_TOPICS_PAGEPREV" => $pagenav['prev'],
+	"FORUMS_TOPICS_PAGENEXT" => $pagenav['next'],
 	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
 	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
 	"FORUMS_TOPICS_TITLE_TOPICS" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=title&w=".rev($w))."\">".$L['Topics']." ".cursort($o=='title', $w)."</a>",
@@ -538,7 +537,7 @@ $t->assign(array(
 
 		if ($row['ft_postcount']>$cfg['maxtopicsperpage'])
 		{
-			$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
+			/*$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
 			if($row['ft_maxpages'] > 5)
 			{
 				$address = $row['ft_url'] . ((mb_strpos($row['ft_url'], '?') !== false) ? '&amp;d=' : '?d=');
@@ -548,8 +547,10 @@ $t->assign(array(
 			else
 			{
 				$last_page = '';
-			}
-			$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . sed_pagination($row['ft_url'], 0, $row['ft_postcount'], $cfg['maxtopicsperpage'], 'd') . $last_page . '</span>';
+			}*/
+			$pn_q = $row['ft_movedto'] > 0 ? $row['ft_movedto'] : $row['ft_id'];
+			$pn = sed_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['maxtopicsperpage'], 'd');
+			$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . $pn['main'] . $pn['last'] . '</span>';
 		}
 
 		$t-> assign(array(

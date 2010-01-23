@@ -255,8 +255,7 @@ elseif ($a == 'update_cheked')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1"), 0, 0);
-$pagnav = sed_pagination(sed_url('admin','m=page'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=page'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=page', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar
 	FROM $db_pages as p
@@ -458,9 +457,9 @@ $t->assign(array(
 	"ADMIN_PAGE_FORM_URL" => sed_url('admin', "m=page&a=update_cheked&d=".$d),
 	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages,
 	"ADMIN_PAGE_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_PAGE_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_PAGE_PAGNAV" => $pagnav,
-	"ADMIN_PAGE_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_PAGE_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_PAGE_PAGNAV" => $pagenav['main'],
+	"ADMIN_PAGE_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_PAGE_TOTALITEMS" => $totalitems,
 	"ADMIN_PAGE_ON_PAGE" => $ii
 ));

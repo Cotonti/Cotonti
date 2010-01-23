@@ -43,8 +43,7 @@ $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_com);
 
-$pagnav = sed_pagination(sed_url('admin','m=comments'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=comments'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d,".$cfg['maxrowsperpage']);
 
@@ -112,9 +111,9 @@ while($row = sed_sql_fetcharray($sql))
 $t->assign(array(
 	"ADMIN_COMMENTS_CONFIG_URL" => sed_url('admin', 'm=config&n=edit&o=core&p=comments'),
 	"ADMIN_COMMENTS_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_COMMENTS_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_COMMENTS_PAGNAV" => $pagnav,
-	"ADMIN_COMMENTS_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_COMMENTS_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_COMMENTS_PAGNAV" => $pagenav['main'],
+	"ADMIN_COMMENTS_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_COMMENTS_TOTALITEMS" => $totalitems,
 	"ADMIN_COMMENTS_COUNTER_ROW" => $ii
 ));

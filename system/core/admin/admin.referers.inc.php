@@ -48,8 +48,7 @@ elseif($a == 'prunelowhits' && $usr['isadmin'])
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_referers);
-$pagnav = sed_pagination(sed_url('admin','m=referers'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=referers'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -100,9 +99,9 @@ $t->assign(array(
 	"ADMIN_REFERERS_URL_PRUNE" => sed_url('admin', "m=referers&a=prune&".sed_xg()),
 	"ADMIN_REFERERS_URL_PRUNELOWHITS" => sed_url('admin', "m=referers&a=prunelowhits&".sed_xg()),
 	"ADMIN_REFERERS_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_REFERERS_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_REFERERS_PAGNAV" => $pagnav,
-	"ADMIN_REFERERS_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_REFERERS_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_REFERERS_PAGNAV" => $pagenav['main'],
+	"ADMIN_REFERERS_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_REFERERS_TOTALITEMS" => $totalitems,
 	"ADMIN_REFERERS_ON_PAGE" => $ii
 ));

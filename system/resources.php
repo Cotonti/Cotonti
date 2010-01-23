@@ -22,6 +22,12 @@ $R['icon_stars'] = '<img class="icon" src="skins/'.$skin.'/img/system/stars{$val
 $R['icon_unread'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-unread.gif" alt="" />';
 $R['icon_up'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-up.png" alt="" />';
 $R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt="" />';
+$R['link_pagenav_current'] = '<span class="pagenav_current"><a href="{$url}"{$event}{$rel}>{$num}</a></span>';
+$R['link_pagenav_first'] = '<span class="pagenav_first"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_first'].'</a></span>';
+$R['link_pagenav_last'] = '<span class="pagenav_last"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_last'].'</a></span>';
+$R['link_pagenav_main'] = '<span class="pagenav_pages"><a href="{$url}"{$event}{$rel}>{$num}</a></span>';
+$R['link_pagenav_next'] = '<span class="pagenav_next"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_next'].'</a></span>';
+$R['link_pagenav_prev'] = '<span class="pagenav_prev"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_prev'].'</a></span>';
 
 /* Administration */
 $R['admin_icon_admin'] = '<img class="icon" src="images/admin/admin.png" alt="" />';

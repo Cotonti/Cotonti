@@ -671,19 +671,16 @@ $t->assign('PFS_PATH', $path);
 if ($folders_count>0)
 {
 	$totalitemsf = $folders_count;
-	$pagnavf = sed_pagination(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2), $df, $totalitemsf, $cfg['maxpfsperpage'],
-		'df');
-	list($pagination_prevf, $pagination_nextf) = sed_pagination_pn(sed_url('pfs', 'userid='.$userid.$pn_c1.$pn_c2),
-		$df, $totalitemsf, $cfg['maxpfsperpage'], TRUE, 'df');
+	$pagenav = sed_pagenav('pfs', 'userid='.$userid.$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['maxpfsperpage'], 'df');
 	
 	$t->assign(array(
 		'PFF_FOLDERCOUNT' => $folders_count,
 		'PFF_FILESCOUNT' => $subfiles_count,
 		'PFF_ONPAGE_FOLDERS' => $iki,
 		'PFF_ONPAGE_FILES' => $subfiles_count_on_page,
-		'PFF_PAGING_PREV' => $pagination_prevf,
-		'PFF_PAGING_CURRENT' => $pagnavf,
-		'PFF_PAGING_NEXT' => $pagination_nextf,
+		'PFF_PAGING_PREV' => $pagenav['prev'],
+		'PFF_PAGING_CURRENT' => $pagenav['main'],
+		'PFF_PAGING_NEXT' => $pagenav['next']
 	));
 }
 
@@ -691,10 +688,8 @@ if ($files_count>0)
 {
 	$thumbspagination = ($o == 'thumbs') ? '&o=thumbs' : '';
 	$totalitems = $files_count;
-	$pagnav = sed_pagination(sed_url('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination), $d,
+	$pagenav = sed_pagenav('pfs', 'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination, $d,
 		$totalitems, $cfg['maxpfsperpage']);
-	list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('pfs',
-			'f='.$f.'&userid='.$userid.$pn_c1.$pn_c2.$thumbspagination), $d, $totalitems, $cfg['maxpfsperpage'], TRUE);
 	
 	$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];
 	
@@ -702,9 +697,9 @@ if ($files_count>0)
 		'PFS_FILESCOUNT' => $files_count,
 		'PFS_INTHISFOLDER' => $filesinfolder,
 		'PFS_ONPAGE_FILES' => $iji,
-		'PFS_PAGING_PREV' => $pagination_prev,
-		'PFS_PAGING_CURRENT' => $pagnav,
-		'PFS_PAGING_NEXT' => $pagination_next,
+		'PFS_PAGING_PREV' => $pagenav['prev'],
+		'PFS_PAGING_CURRENT' => $pagenav['main'],
+		'PFS_PAGING_NEXT' => $pagenav['next']
 	));
 }
 

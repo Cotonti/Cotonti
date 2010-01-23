@@ -540,8 +540,7 @@ $nbpages = ceil($totalposts / $cfg['maxpostsperpage']);
 $curpage = $d / $cfg['maxpostsperpage'];
 $notlastpage = (($d + $cfg['maxpostsperpage'])<$totalposts) ? TRUE : FALSE;
 
-$pages = sed_pagination(sed_url('forums', "m=posts&q=$q"), $d, $totalposts, $cfg['maxpostsperpage']);
-list($pages_prev, $pages_next) = sed_pagination_pn(sed_url('forums', "m=posts&q=$q"), $d, $totalposts, $cfg['maxpostsperpage'], TRUE);
+$pagenav = sed_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['maxpostsperpage']);
 
 $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername, s.fs_allowpolls FROM $db_forum_sections AS s LEFT JOIN
 $db_forum_structure AS n ON n.fn_code=s.fs_category
@@ -610,9 +609,9 @@ $t->assign(array(
     "FORUMS_POSTS_SHORTTITLE" => $ft_title,
     "FORUMS_POSTS_PATH" => $toppath,
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
-	"FORUMS_POSTS_PAGES" => $pages,
-	"FORUMS_POSTS_PAGEPREV" => $pages_prev,
-	"FORUMS_POSTS_PAGENEXT" => $pages_next,
+	"FORUMS_POSTS_PAGES" => $pagenav['main'],
+	"FORUMS_POSTS_PAGEPREV" => $pagenav['prev'],
+	"FORUMS_POSTS_PAGENEXT" => $pagenav['next'],
 	"FORUMS_POSTS_POLL" => $poll_result,
 	"FORUMS_POSTS_JUMPBOX" => $jumpbox,
 ));

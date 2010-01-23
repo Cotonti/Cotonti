@@ -352,12 +352,11 @@ if($tab=='frm' && !$cfg['disable_forums'])
 			// Pagination
 			if ($items < $totalitems)
 			{
-				$pagnav = sed_pagination(sed_url('plug', array('e' => 'search', 'pre' => $sq, 'tab' => 'frm')), $d, $totalitems, $cfg['plugin']['search']['maxitems_ext']);
-				list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug', array('e' => 'search', 'pre' => $sq, 'tab' => 'frm')), $d, $totalitems, $cfg['plugin']['search']['maxitems_ext'], TRUE);
+				$pagenav = sed_pagenav('plug', array('e' => 'search', 'pre' => $sq, 'tab' => 'frm'), $d, $totalitems, $cfg['plugin']['search']['maxitems_ext']);
 				$t->assign(array(
-					'PLUGIN_PAGEPREV' => $pagination_prev,
-					'PLUGIN_PAGENEXT' => $pagination_next,
-					'PLUGIN_PAGNAV' => $pagnav
+					'PLUGIN_PAGEPREV' => $pagenav['prev'],
+					'PLUGIN_PAGENEXT' => $pagenav['next'],
+					'PLUGIN_PAGNAV' => $pagenav['main']
 				));
 			}
 			else
@@ -627,12 +626,11 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 			// Pagination
 			if ($items < $totalitems)
 			{
-				$pagnav = sed_pagination(sed_url('plug', array('e' => 'search', 'pre' => $sq, 'tab' => 'pag')), $d, $totalitems, $cfg['plugin']['search']['maxitems_ext']);
-				list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug', array('e' => 'search', 'pre' => $sq, 'tab' => 'pag')), $d, $totalitems, $cfg['plugin']['search']['maxitems_ext'], TRUE);
+				$pagenav = sed_pagenav('plug', array('e' => 'search', 'pre' => $sq, 'tab' => 'pag'), $d, $totalitems, $cfg['plugin']['search']['maxitems_ext']);
 				$t->assign(array(
-					'PLUGIN_PAGEPREV' => $pagination_prev,
-					'PLUGIN_PAGENEXT' => $pagination_next,
-					'PLUGIN_PAGNAV' => $pagnav
+					'PLUGIN_PAGEPREV' => $pagenav['prev'],
+					'PLUGIN_PAGENEXT' => $pagenav['next'],
+					'PLUGIN_PAGNAV' => $pagenav['main']
 				));
 			}
 			else
@@ -1071,12 +1069,11 @@ else
 			// Pagination
 			if ($items < $totalitems)
 			{
-				$pagnav = sed_pagination(sed_url('plug', array('e' => 'search', 'pre' => $sq)), $d, $totalitems, $cfg['plugin']['search']['maxitems']);
-				list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('plug', array('e' => 'search', 'pre' => $sq)), $d, $totalitems, $cfg['plugin']['search']['maxitems'], TRUE);
+				$pagenav = sed_pagenav('plug', array('e' => 'search', 'pre' => $sq), $d, $totalitems, $cfg['plugin']['search']['maxitems']);
 				$t->assign(array(
-					'PLUGIN_PAGEPREV' => $pagination_prev,
-					'PLUGIN_PAGENEXT' => $pagination_next,
-					'PLUGIN_PAGNAV' => $pagnav
+					'PLUGIN_PAGEPREV' => $pagenav['prev'],
+					'PLUGIN_PAGENEXT' => $pagenav['next'],
+					'PLUGIN_PAGNAV' => $pagenav['main']
 				));
 			}
 			else

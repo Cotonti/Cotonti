@@ -1241,6 +1241,7 @@ function sed_build_comments($code, $url, $display = true)
 		}
 
 		$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'"), 0, 0);
+		// TODO use sed_pagenav()
 		$pagnav = sed_pagination($url, $d, $totalitems, $cfg['maxcommentsperpage']);
 		list($pagination_prev, $pagination_next) = sed_pagination_pn($url, $d, $totalitems, $cfg['maxcommentsperpage'], TRUE);
 		$t->assign(array(
@@ -3354,8 +3355,162 @@ function sed_outputfilters($output)
 }
 
 /**
+ * Page navigation (pagination) builder. Uses URL transformation and resource strings,
+ * returns an associative array, containing:
+ * ['prev'] - first and previous page buttons
+ * ['main'] - buttons with page numbers, including current
+ * ['next'] - next and last page buttons
+ * ['last'] - last page with number
+ *
+ * @param string $module Site area or script name
+ * @param mixed $params URL parameters as array or parameter string
+ * @param int $current Current page number
+ * @param int $entries Total rows
+ * @param int $perpage Rows per page
+ * @param string $characters It is symbol for parametre which transfer pagination
+ * @param bool $ajax Add AJAX support
+ * @param string $target_div Target div ID if $ajax is true
+ * @return array
+ */
+function sed_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd', $ajax = false, $target_div = '')
+{
+	if(function_exists('sed_pagenav_custom'))
+	{
+		// For custom pagination functions in plugins
+		return sed_pagenav_custom($module, $params, $current, $entries, $perpage, $characters, $ajax, $target_div);
+	}
+
+	if($entries <= $perpage)
+	{
+		return '';
+	}
+	
+	global $L;
+	
+	$each_side = 3; // Links each side
+
+	is_array($params) ? $args = $params : parse_str($params, $args);
+
+	$totalpages = ceil($entries / $perpage);
+	$currentpage = floor($current / $perpage) + 1;
+	$cur_left = $currentpage - $each_side;
+	if($cur_left < 1) $cur_left = 1;
+	$cur_right = $currentpage + $each_side;
+	if($cur_right > $totalpages) $cur_right = $totalpages;
+
+	$event = $ajax ? ' class="ajax"' : '';
+	$rel = $ajax && !empty($target_div) ? ' rel="'.$taget_div.'"' : '';
+
+	// Main block
+
+	$before = '';
+	$pages = '';
+	$after = '';
+	$i = 1;
+	$n = 0;
+	while($i < $cur_left)
+	{
+		$args[$characters] = ($i - 1) * $perpage;
+		$before .= sed_rc('link_pagenav_main', array(
+			'url' => sed_url($module, $args),
+			'event' => $event,
+			'rel' => $rel,
+			'num' => $i
+		));
+		$i *= ($n % 2) ? 2 : 5;
+		$n++;
+	}
+	for($j = $cur_left; $j <= $cur_right; $j++)
+	{
+		$args[$characters] = ($j - 1) * $perpage;
+		$rc = $j == $currentpage ? 'current' : 'main';
+		$pages .= sed_rc('link_pagenav_' . $rc, array(
+			'url' => sed_url($module, $args),
+			'event' => $event,
+			'rel' => $rel,
+			'num' => $j
+		));
+	}
+	while($i <= $cur_right)
+	{
+		$i *= ($n % 2) ? 2 : 5;
+		$n++;
+	}
+	while($i < $totalpages)
+	{
+		$args[$characters] = ($i - 1) * $perpage;
+		$before .= sed_rc('link_pagenav_main', array(
+			'url' => sed_url($module, $args),
+			'event' => $event,
+			'rel' => $rel,
+			'num' => $i
+		));
+		$i *= ($n % 2) ? 5 : 2;
+		$n++;
+	}
+	$pages = $before . $pages . $after;
+	
+	// Previous/next
+	
+	if ($current > 0)
+	{
+		$prev_n = $current - $perpage;
+		if ($prev_n < 0) { $prev_n = 0; }
+		$args[$characters] = $prev_n;
+		$prev = sed_rc('link_pagenav_prev', array(
+			'url' => sed_url($module, $args),
+			'event' => $event,
+			'rel' => $rel,
+			'num' => $prev_n + 1
+		));
+		$args[$characters] = 0;
+		$first = sed_rc('link_pagenav_first', array(
+			'url' => sed_url($module, $args),
+			'event' => $event,
+			'rel' => $rel,
+			'num' => 1
+		));
+	}
+
+	if (($current + $perpage) < $entries)
+	{
+		$next_n = $current + $perpage;
+		$args[$characters] = $next_n;
+		$next = sed_rc('link_pagenav_next', array(
+			'url' => sed_url($module, $args),
+			'event' => $event,
+			'rel' => $rel,
+			'num' => $next_n + 1
+		));
+		$last_n = ($totalpages - 1) * $perpage;
+		$args[$characters] = $last_n;
+		$last = sed_rc('link_pagenav_last', array(
+			'url' => sed_url($module, $args),
+			'event' => $event,
+			'rel' => $rel,
+			'num' => $last_n + 1
+		));
+		$lastn = sed_rc('link_pagenav_main', array(
+			'url' => sed_url($module, $args),
+			'event' => $event,
+			'rel' => $rel,
+			'num' => $last_n + 1
+		));
+	}
+
+	return array(
+		'prev' => $first . $prev,
+		'main' => $pages,
+		'next' => $next . $last,
+		'last' => $lastn
+	);
+}
+
+/**
  * Renders page navigation bar
  *
+ * @deprecated Siena 0.7.0 - 23.01.2010, use sed_pagenav() instead
+ * @see sed_pagenav
  * @param string $url Basic URL
  * @param int $current Current page number
  * @param int $entries Total rows
@@ -3428,6 +3583,8 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 /**
  * Renders page navigation previous/next buttons
  *
+ * @deprecated Siena 0.7.0 - 23.01.2010, use sed_pagenav() instead
+ * @see sed_pagenav()
  * @param string $url Basic URL
  * @param int $current Current page number
  * @param int $entries Total rows

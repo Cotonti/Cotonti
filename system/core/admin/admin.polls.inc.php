@@ -103,8 +103,7 @@ else
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
 $totalitems = sed_sql_result($sql, 0, "COUNT(*)");
-$pagnav = sed_pagination(sed_url('admin','m=polls'.$poll_filter), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=polls'.$poll_filter), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT * FROM $db_polls
 					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
@@ -212,9 +211,9 @@ sed_poll_edit_form($poll_id, $t, "POLLS");
 $t->assign(array(
 	"ADMIN_POLLS_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=polls"),
 	"ADMIN_POLLS_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_POLLS_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_POLLS_PAGNAV" => $pagnav,
-	"ADMIN_POLLS_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_POLLS_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_POLLS_PAGNAV" => $pagenav['main'],
+	"ADMIN_POLLS_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_POLLS_TOTALITEMS" => $totalitems,
 	"ADMIN_POLLS_ON_PAGE" => $ii,
 	"ADMIN_POLLS_FORMNAME" => $formname,

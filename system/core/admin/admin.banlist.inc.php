@@ -74,8 +74,7 @@ $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_banlist);
 
-$pagnav = sed_pagination(sed_url('admin','m=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
-list($pagination_prev, $pagination_next) = sed_pagination_pn(sed_url('admin', 'm=banlist'), $d, $totalitems, $cfg['maxrowsperpage'], TRUE, 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=banlist', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -111,9 +110,9 @@ while($row = sed_sql_fetcharray($sql))
 
 $t->assign(array(
 	"ADMIN_BANLIST_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_BANLIST_PAGINATION_PREV" => $pagination_prev,
-	"ADMIN_BANLIST_PAGNAV" => $pagnav,
-	"ADMIN_BANLIST_PAGINATION_NEXT" => $pagination_next,
+	"ADMIN_BANLIST_PAGINATION_PREV" => $pagenav['prev'],
+	"ADMIN_BANLIST_PAGNAV" => $pagenav['main'],
+	"ADMIN_BANLIST_PAGINATION_NEXT" => $pagenav['next'],
 	"ADMIN_BANLIST_TOTALITEMS" => $totalitems,
 	"ADMIN_BANLIST_COUNTER_ROW" => $ii,
 	"ADMIN_BANLIST_INC_URLFORMADD" => sed_url('admin', 'm=banlist&a=add')
