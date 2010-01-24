@@ -26,7 +26,7 @@ defined('SED_CODE') or die('Wrong URL');
 $text = sed_import('text', 'P', 'HTM');
 $style = '<link rel="stylesheet" type="text/css" href="skins/'.$skin.'/'.$skin.'.css" />'."\n";
 sed_sendheaders();
-echo $style.sed_post_parse(sed_parse($text));
+echo $style . '<body class="preview">' . sed_post_parse(sed_parse($text)) . '</body>';
 ob_end_flush();
 
 ?>

@@ -1067,6 +1067,13 @@ function sed_build_comments($code, $url, $display = true)
 		$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'"), 0, 0);
 		$pagnav = sed_pagination($url, $d, $totalitems, $cfg['maxcommentsperpage']);
 		list($pagination_prev, $pagination_next) = sed_pagination_pn($url, $d, $totalitems, $cfg['maxcommentsperpage'], TRUE);
+		if (!$cfg['expand_comments'])
+		{
+			// A dirty fix for pagination anchors
+			$pagnav = preg_replace('/href="(.+?)"/', 'href="$1#comments"', $pagnav);
+			$pagination_prev = preg_replace('/href="(.+?)"/', 'href="$1#comments"', $pagination_prev);
+			$pagination_next = preg_replace('/href="(.+?)"/', 'href="$1#comments"', $pagination_next);
+		}
 		$t->assign(array(
 			'COMMENTS_PAGES_INFO' => $L['Total'] . ' : ' . $totalitems . ', ' . $L['comm_on_page'] . ': ' . ($i - $d),
 			'COMMENTS_PAGES_PAGESPREV' => $pagination_prev,
@@ -4509,6 +4516,7 @@ function sed_title($mask, $tags, $data)
 	global $cfg;
 	$mask = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
 	$mask = str_replace($tags[0], $tags[1], $mask);
+	$data = array_map('htmlspecialchars', $data);
 	$title = vsprintf($mask, $data);
 	return $title;
 }

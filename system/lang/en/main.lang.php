@@ -395,6 +395,7 @@ $L['aut_contactadmin'] = 'If you have any difficulties please contact the board 
 $L['aut_emailalreadyindb'] = 'The e-mail you provided is already in the database';
 $L['aut_emailbanned'] = 'This e-mail (or this host) is banned, reason is: ';
 $L['aut_emailtooshort'] = 'The e-mail is not valid!';
+$L['aut_invalidloginchars'] = 'The login contains invalid characters'; // 0.6.6
 $L['aut_logintitle'] = 'Login form';
 $L['aut_mailnoticetitle'] = 'E-mail transition';	// New in N-0.1.0
 $L['aut_passwordmismatch'] = 'The password fields do not match!';
@@ -448,6 +449,7 @@ $L['com_regonly'] = 'Only registered users can post new comments';
  */
 
 $L['for_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';	// 0.0.6
+$L['for_keepmovedlink'] = 'Keep a Moved Topic link'; // 0.6.6
 $L['for_markallasread'] = 'Mark all posts as read';
 $L['for_mergetime'] = 'Added %1$s later:'; // 0.0.6
 $L['for_messagetooshort'] = 'Topic message is too short';	// 0.0.2
