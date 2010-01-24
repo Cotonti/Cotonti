@@ -287,12 +287,12 @@ if ($pag['page_file'] > 0)
 
 		if (($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
 		{
-			$t->assign('PAGE_SHORTTITLE', $L['Members_download']);
+			$t->assign('PAGE_FILETITLE', $L['Members_download']);
 		}
 		else
 		{
 			$t->assign(array(
-				'PAGE_SHORTTITLE' => $pag['page_title'],
+				'PAGE_FILETITLE' => $pag['page_title'],
 				'PAGE_FILE_URL' => sed_url('page', "id=".$pag['page_id']."&a=dl")
 			));
 		}
