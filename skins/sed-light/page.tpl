@@ -55,7 +55,7 @@
 				{PAGE_FILE_ICON} {PAGE_SHORTTITLE}<br/>
 				<!-- END: MEMBERSONLY -->
 				<!-- BEGIN: DOWNLOAD -->
-				{PAGE_FILE_ICON}<a href="{PAGE_FILE_URL}">{PHP.L.Download}: {PAGE_SHORTTITLE}</a><br/>
+				{PAGE_FILE_ICON}<a href="{PAGE_FILE_URL}">{PHP.L.Download}: {PAGE_FILETITLE}</a><br/>
 				<!-- END: DOWNLOAD -->
 				{PHP.skinlang.page.Filesize}: {PAGE_FILE_SIZE}{PHP.L.kb}, {PHP.skinlang.page.downloaded} {PAGE_FILE_COUNT} {PHP.skinlang.page.times}
 			</div>

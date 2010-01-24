@@ -42,8 +42,10 @@ if (!$usr['isadmin'] || $userid=='')
 }
 else
 {
-	$more = 'userid='.$userid;
+	$more = '&userid='.$userid;
 }
+
+$more2.='&f='.$f.'&d='.$d.'&df='.$df;
 
 if ($userid!=$usr['id'])
 { sed_block($usr['isadmin']); }
@@ -80,7 +82,7 @@ function addpix(gfile,c1,c2) {
 	insertText(opener.document, '$c1', '$c2', '[img]'+gfile+'[/img]');
 }
 	";
-	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
+	$more .= '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
 
@@ -348,7 +350,7 @@ if ($f>0)
 
 		$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
 		$sqll = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
-		$title .= " ".$cfg['separator']." <a href=\"".sed_url('pfs', 'f='.$pff_id.'&'.$more)."\">".$pff_title."</a>";
+		$title .= " ".$cfg['separator']." <a href=\"".sed_url('pfs', 'f='.$pff_id.$more)."\">".$pff_title."</a>";
 	}
 	else
 	{ sed_die(); }
@@ -390,16 +392,16 @@ else
 		$pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
 		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 
-		$list_folders .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=deletefolder&'.sed_xg().'&f='.$pff_id.'&'.$more)."\">x</a>]</td>";
-		$list_folders .= "<td><a href=\"".sed_url('pfs', 'm=editfolder&f='.$pff_id.'&'.$more)."\">".$L['Edit']."</a></td>";
+		$list_folders .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=deletefolder&'.sed_xg().'&f='.$pff_id.$more)."\">x</a>]</td>";
+		$list_folders .= "<td><a href=\"".sed_url('pfs', 'm=editfolder&f='.$pff_id.$more)."\">".$L['Edit']."</a></td>";
 
 		if ($pff_isgallery)
 		{ $icon_f = "<img src=\"skins/$skin/img/system/icon-gallery.gif\" alt=\"\" />"; }
 		else
 		{ $icon_f = "<img src=\"skins/$skin/img/system/icon-folder.gif\" alt=\"\" />"; }
 
-		$list_folders .= "<td><a href=\"".sed_url('pfs', 'f='.$pff_id.'&'.$more)."\">".$icon_f."</a></td>";
-		$list_folders .= "<td><a href=\"".sed_url('pfs', 'f='.$pff_id.'&'.$more)."\">".$pff_title."</a></td>";
+		$list_folders .= "<td><a href=\"".sed_url('pfs', 'f='.$pff_id.$more)."\">".$icon_f."</a></td>";
+		$list_folders .= "<td><a href=\"".sed_url('pfs', 'f='.$pff_id.$more)."\">".$pff_title."</a></td>";
 		$list_folders .= "<td style=\"text-align:right;\">".$pff_fcount."</td>";
 		$list_folders .= "<td style=\"text-align:right;\">".$pff_fsize." ".$L['kb']."</td>";
 		$list_folders .= "<td style=\"text-align:center;\">".date($cfg['dateformat'], $row1['pff_updated'] + $usr['timezone'] * 3600)."</td>";
@@ -459,8 +461,8 @@ while ($row = sed_sql_fetcharray($sqll))
 		{ $pfs_icon = "<a href=\"".$pfs_fullfile."\"><img src=\"".$cfg['th_dir_user'].$pfs_file."\" title=\"".$pfs_file."\"></a>"; }
 	}
 
-	$list_files .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.'&'.$more.'&o='.$o)."\">x</a>]</td>";
-	$list_files .= "<td><a href=\"".sed_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more)."\">".$L['Edit']."</a></td>";
+	$list_files .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.$more.'&o='.$o)."\">x</a>]</td>";
+	$list_files .= "<td><a href=\"".sed_url('pfs', 'm=edit&id='.$pfs_id.$more)."\">".$L['Edit']."</a></td>";
 	$list_files .= "<td>".$pfs_icon."</td>";
 	$list_files .= "<td><a href=\"".$pfs_fullfile."\">".$pfs_file."</a></td>";
 	$list_files .= "<td>".date($cfg['dateformat'], $pfs_date + $usr['timezone'] * 3600)."</td>";
@@ -532,14 +534,14 @@ $pfs_precentbar = @floor(100 * $pfs_totalsize / 1024 / $maxtotal);
 $disp_stats = $L['pfs_totalsize']." : ".floor($pfs_totalsize/1024).$L['kb']." / ".$maxtotal.$L['kb'];
 $disp_stats .= " (".@floor(100*$pfs_totalsize/1024/$maxtotal)."%) ";
 $disp_stats .= " &nbsp; ".$L['pfs_maxsize']." : ".$maxfile.$L['kb'];
-$disp_stats .= ($o!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? " &nbsp; <a href=\"".sed_url('pfs', 'f='.$f.'&'.$more.'&o=thumbs')."\">".$L['Thumbnails']."</a></p>" : '</p>';
+$disp_stats .= ($o!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? " &nbsp; <a href=\"".sed_url('pfs', 'f='.$f.$more.'&o=thumbs')."\">".$L['Thumbnails']."</a></p>" : '</p>';
 $disp_stats .= "<div style=\"width:200px; margin-top:0;\"><div class=\"bar_back\">";
 $disp_stats .= "<div class=\"bar_front\" style=\"width:".$pfs_precentbar."%;\"></div></div></div>";
 
 // ========== Upload =========
 
 $disp_upload = "<h4>".$L['pfs_newfile']."</h4>";
-$disp_upload .= "<form enctype=\"multipart/form-data\" action=\"".sed_url('pfs','a=upload'.'&'.$more)."\" method=\"post\">";
+$disp_upload .= "<form enctype=\"multipart/form-data\" action=\"".sed_url('pfs','a=upload'.$more.$more2)."\" method=\"post\">";
 $disp_upload .= "<table class=\"cells\"><tr><td colspan=\"3\">";
 $disp_upload .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($maxfile*1024)."\" />";
 $disp_upload .= $L['Folder']." : ".sed_selectbox_folders($userid, "", $f)."</td></tr>";
@@ -572,7 +574,7 @@ $disp_allowed .= "</table>";
 if ($f==0 && $usr['auth_write'])
 {
 	$disp_newfolder = "<h4>".$L['pfs_newfolder']."</h4>";
-	$disp_newfolder .= "<form id=\"newfolder\" action=\"".sed_url('pfs', 'a=newfolder'.'&'.$more)."\" method=\"post\">";
+	$disp_newfolder .= "<form id=\"newfolder\" action=\"".sed_url('pfs', 'a=newfolder'.$more.$more2)."\" method=\"post\">";
 	$disp_newfolder .= "<table class=\"cells\"><tr><td>".$L['Title']."</td>";
 	$disp_newfolder .= "<td><input type=\"text\" class=\"text\" name=\"ntitle\" value=\"\" size=\"32\" maxlength=\"255\" /></td></tr>";
 	$disp_newfolder .= "<tr><td>".$L['Description']."</td>";

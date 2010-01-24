@@ -23,6 +23,6 @@
 	</div>
     <!-- END: PAGE_ROW -->
 
-    <div class="pagnav">{PAGE_PAGEPREV} {PAGE_PAGNAV} {PAGE_PAGENEXT}</div>
+    <div class="paging">{PAGE_PAGEPREV} {PAGE_PAGENAV} {PAGE_PAGENEXT}</div>
 </div>
 <!-- END: NEWS -->
