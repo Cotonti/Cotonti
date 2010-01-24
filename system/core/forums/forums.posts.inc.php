@@ -58,7 +58,7 @@ elseif ($n=='unread' && !empty($q) && $usr['id']>0)
 {
 	$sql = sed_sql_query("SELECT fp_id, fp_topicid, fp_sectionid, fp_posterid
 	FROM $db_forum_posts
-	WHERE fp_topicid='$q' AND fp_creation>'".$usr['lastvisit']."'
+	WHERE fp_topicid='$q' AND fp_updated > ". $usr['lastvisit']."
 		ORDER by fp_id ASC LIMIT 1");
 	if ($row = sed_sql_fetcharray($sql))
 	{
@@ -572,7 +572,7 @@ while ($row1 = sed_sql_fetcharray($sql1))
 	}
 }
 
-$movebox .= "</select> ".$L['Ghost']."<input type=\"checkbox\" class=\"checkbox\" name=\"ghost\" checked=\"checked\" />";
+$movebox .= "</select> ".$L['for_keepmovedlink']." <input type=\"checkbox\" class=\"checkbox\" name=\"ghost\" />";
 $jumpbox .= "</select>";
 
 if ($usr['isadmin'])

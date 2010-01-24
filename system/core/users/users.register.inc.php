@@ -97,7 +97,8 @@ if ($a=='add')
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_email='".sed_sql_prep($ruseremail)."'");
 	$res2 = sed_sql_result($sql,0,"COUNT(*)");
 
-	$rusername = str_replace('&#160;', '', $rusername);
+	$error_string .= (preg_match('/&#\d+;/', $rusername) || preg_match('/[<>#\'"\/]/', $rusername)) ?
+		$L['aut_invalidloginchars'] . '<br />' : '';
 	$error_string .= (!empty($bannedreason)) ? $L['aut_emailbanned'].$bannedreason."<br />" : '';
 	$error_string .= (mb_strlen($rusername)<2) ? $L['aut_usernametooshort']."<br />" : '';
 	$error_string .= (mb_strlen($rpassword1)<4 || sed_alphaonly($rpassword1)!=$rpassword1) ? $L['aut_passwordtooshort']."<br />" : '';
