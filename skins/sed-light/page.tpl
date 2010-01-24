@@ -38,7 +38,7 @@
 		<div class="block">
 			<strong>{PHP.L.Tags}:</strong>&nbsp;
 			<!-- BEGIN: PAGE_TAGS_ROW -->
-				<!-- IF {PHP.tag_i} > 0 -->,&nbsp;<!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}">{PAGE_TAGS_ROW_TAG}</a>
+				<!-- IF {PHP.tag_i} > 0 -->, &nbsp;<!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}">{PAGE_TAGS_ROW_TAG}</a>
 			<!-- END: PAGE_TAGS_ROW -->
 			<!-- BEGIN: PAGE_NO_TAGS -->
 				{PAGE_NO_TAGS}
