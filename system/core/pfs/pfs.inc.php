@@ -9,7 +9,7 @@
  * Personal File Storage, main usage script.
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.6.6
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -17,18 +17,21 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-$id = sed_import('id','G','INT');
-$o = sed_import('o','G','ALP');
-$f = sed_import('f','G','INT');
-$c1 = sed_import('c1','G','ALP');
-$c2 = sed_import('c2','G','ALP');
-$userid = sed_import('userid','G','INT');
+$id = sed_import('id','G','INT');                     // id (delete file(folder) id
+$o = sed_import('o','G','ALP');                       //
+$f = sed_import('f','G','INT');                       // folder id
+$c1 = sed_import('c1','G','ALP');					  //
+$c2 = sed_import('c2','G','ALP');					  //
+$userid = sed_import('userid','G','INT');			  // User ID or 0
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
-$d = sed_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
-$df = sed_import('df', 'G', 'INT');
+$d = sed_import('d', 'G', 'INT');					   // Page number files
+$df = sed_import('df', 'G', 'INT');					   // page number folders
+	
+$more2.='&f='.$f.'&d='.$d.'&df='.$df;
+
 $df = empty($df) ? 0 : (int) $df;
+$d = empty($d) ? 0 : (int) $d;
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
 sed_block($usr['auth_read']);
@@ -44,11 +47,6 @@ else
 {
 	$more = '&userid='.$userid;
 }
-
-$more2.='&f='.$f.'&d='.$d.'&df='.$df;
-
-if ($userid!=$usr['id'])
-{ sed_block($usr['isadmin']); }
 
 $files_count = 0;
 $folders_count = 0;
@@ -99,7 +97,6 @@ $title = "<a href=\"".sed_url('pfs', $more)."\">".$L['pfs_title']."</a>";
 
 if ($userid!=$usr['id'])
 {
-	sed_block($usr['isadmin']);
 	$title .= ($userid==0) ? '' : " (".sed_build_user($user_info['user_id'], $user_info['user_name']).")";
 }
 
@@ -125,7 +122,7 @@ if ($a=='upload')
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	if ($folder_id!=0)
+	if ($folderid!==FALSE)
 	{
 		$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid' ");
 		sed_die(sed_sql_numrows($sql)==0);
@@ -287,11 +284,7 @@ elseif ($a=='delete')
 		}
 
 		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
-		exit;
 	}
-	else
-	{ sed_die(); }
 }
 elseif ($a=='newfolder')
 {
@@ -327,10 +320,8 @@ elseif ($a=='deletefolder')
 {
 	sed_block($usr['auth_write']);
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
-	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$f' ");
-	header("Location: " . SED_ABSOLUTE_URL . sed_url('pfs', $more, '', true));
-	exit;
+	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$id' ");
+	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$id' ");
 }
 
 $f = (empty($f)) ? '0' : $f;
@@ -392,7 +383,7 @@ else
 		$pff_fcount = (empty($pff_fcount)) ? "0" : $pff_fcount;
 		$pff_fssize = (empty($pff_fsize)) ? "0" : $pff_fsize;
 
-		$list_folders .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=deletefolder&'.sed_xg().'&f='.$pff_id.$more)."\">x</a>]</td>";
+		$list_folders .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=deletefolder&'.sed_xg().'&id='.$pff_id.$more.$more2)."\">x</a>]</td>";
 		$list_folders .= "<td><a href=\"".sed_url('pfs', 'm=editfolder&f='.$pff_id.$more)."\">".$L['Edit']."</a></td>";
 
 		if ($pff_isgallery)
@@ -461,7 +452,7 @@ while ($row = sed_sql_fetcharray($sqll))
 		{ $pfs_icon = "<a href=\"".$pfs_fullfile."\"><img src=\"".$cfg['th_dir_user'].$pfs_file."\" title=\"".$pfs_file."\"></a>"; }
 	}
 
-	$list_files .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.$more.'&o='.$o)."\">x</a>]</td>";
+	$list_files .= "<tr><td>[<a href=\"".sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.$more.$more2.'&o='.$o)."\">x</a>]</td>";
 	$list_files .= "<td><a href=\"".sed_url('pfs', 'm=edit&id='.$pfs_id.$more)."\">".$L['Edit']."</a></td>";
 	$list_files .= "<td>".$pfs_icon."</td>";
 	$list_files .= "<td><a href=\"".$pfs_fullfile."\">".$pfs_file."</a></td>";
