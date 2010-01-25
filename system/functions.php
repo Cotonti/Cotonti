@@ -3377,9 +3377,11 @@ function sed_outputfilters($output)
  * @param string $characters It is symbol for parametre which transfer pagination
  * @param bool $ajax Add AJAX support
  * @param string $target_div Target div ID if $ajax is true
+ * @param string $hash Hash part of the url (including #)
  * @return array
  */
-function sed_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd', $ajax = false, $target_div = '')
+function sed_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd',
+		$ajax = false, $target_div = '', $hash = '')
 {
 	if(function_exists('sed_pagenav_custom'))
 	{
@@ -3392,7 +3394,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		return '';
 	}
 	
-	global $L;
+	global $L, $R;
 	
 	$each_side = 3; // Links each side
 
@@ -3419,11 +3421,25 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	{
 		$args[$characters] = ($i - 1) * $perpage;
 		$before .= sed_rc('link_pagenav_main', array(
-			'url' => sed_url($module, $args),
+			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $i
 		));
+		if ($i < $cur_left - 2)
+		{
+			$before .= $R['link_pagenav_gap'];
+		}
+		elseif ($i == $cur_left - 2)
+		{
+			$args[$characters] = $i * $perpage;
+			$before .= sed_rc('link_pagenav_main', array(
+					'url' => sed_url($module, $args, $hash),
+					'event' => $event,
+					'rel' => $rel,
+					'num' => $i + 1
+			));
+		}
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
@@ -3432,7 +3448,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$args[$characters] = ($j - 1) * $perpage;
 		$rc = $j == $currentpage ? 'current' : 'main';
 		$pages .= sed_rc('link_pagenav_' . $rc, array(
-			'url' => sed_url($module, $args),
+			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $j
@@ -3445,14 +3461,28 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	}
 	while($i < $totalpages)
 	{
+		if ($i > $cur_right + 2)
+		{
+			$after .= $R['link_pagenav_gap'];
+		}
+		elseif ($i == $cur_right + 2)
+		{
+			$args[$characters] = ($i - 2 ) * $perpage;
+			$after .= sed_rc('link_pagenav_main', array(
+					'url' => sed_url($module, $args, $hash),
+					'event' => $event,
+					'rel' => $rel,
+					'num' => $i - 1
+			));
+		}
 		$args[$characters] = ($i - 1) * $perpage;
-		$before .= sed_rc('link_pagenav_main', array(
-			'url' => sed_url($module, $args),
+		$after .= sed_rc('link_pagenav_main', array(
+			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $i
 		));
-		$i *= ($n % 2) ? 5 : 2;
+		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
 	$pages = $before . $pages . $after;
@@ -3465,14 +3495,14 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($prev_n < 0) { $prev_n = 0; }
 		$args[$characters] = $prev_n;
 		$prev = sed_rc('link_pagenav_prev', array(
-			'url' => sed_url($module, $args),
+			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $prev_n + 1
 		));
 		$args[$characters] = 0;
 		$first = sed_rc('link_pagenav_first', array(
-			'url' => sed_url($module, $args),
+			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => 1
@@ -3484,7 +3514,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$next_n = $current + $perpage;
 		$args[$characters] = $next_n;
 		$next = sed_rc('link_pagenav_next', array(
-			'url' => sed_url($module, $args),
+			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $next_n + 1
@@ -3492,13 +3522,13 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$last_n = ($totalpages - 1) * $perpage;
 		$args[$characters] = $last_n;
 		$last = sed_rc('link_pagenav_last', array(
-			'url' => sed_url($module, $args),
+			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $last_n + 1
 		));
 		$lastn = sed_rc('link_pagenav_main', array(
-			'url' => sed_url($module, $args),
+			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $last_n + 1
