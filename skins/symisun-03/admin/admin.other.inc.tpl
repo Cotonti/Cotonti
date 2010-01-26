@@ -1,109 +1,116 @@
 <!-- BEGIN: OTHER -->
-		<table class="cells">
+	<h2>{PHP.L.Modules}</h2>
+	<table class="cells">
 		<tr>
-			<td class="coltop">{PHP.L.Modules} {PHP.L.adm_clicktoedit}</td>
-			<td class="coltop" style="width:80px;">{PHP.L.Rights}</td>
-			<td class="coltop" style="width:128px;">{PHP.L.Configuration}</td>
+			<td class="coltop" style="width:5%;"></td>
+			<td class="coltop" style="width:80%;">{PHP.L.Modules} {PHP.L.adm_clicktoedit}</td>
+			<td class="coltop" style="width:15%;">{PHP.L.Action}</td>
 		</tr>
 <!-- BEGIN: OTHER_ROW -->
 		<tr>
+			<td class="centerall">{ADMIN_OTHER_CT_ICON}</td>
 			<td>
 <!-- IF {PHP.lincif_mode} -->
-				<a href="{ADMIN_OTHER_CT_CODE_URL}"><img src="images/admin/{ADMIN_OTHER_CT_CODE}.gif" alt="" /> {ADMIN_OTHER_CT_TITLE_LOC}</a>
+				<a href="{ADMIN_OTHER_CT_CODE_URL}">{ADMIN_OTHER_CT_TITLE_LOC}</a>
 <!-- ELSE -->
-				<img src="images/admin/{ADMIN_OTHER_CT_CODE}.gif" alt="" /> {ADMIN_OTHER_CT_TITLE_LOC}
+				{ADMIN_OTHER_CT_TITLE_LOC}
 <!-- ENDIF -->
 			</td>
-			<td style="text-align:center;">
+			<td class="centerall action">
 <!-- IF {PHP.lincif_rightsmode} -->
-				<a href="{ADMIN_OTHER_RIGHTS}"><img src="images/admin/rights2.gif" alt="" /></a>
+				<a title="{PHP.L.Rights}" href="{ADMIN_OTHER_RIGHTS}">{PHP.R.admin_icon_rights2}</a>
 <!-- ENDIF -->
-				&nbsp;
-			</td>
-			<td style="text-align:center;">
 <!-- IF {PHP.lincif_confmode} -->
-				<a href="{ADMIN_OTHER_CONFIG}"><img src="images/admin/config.gif" alt="" /></a>
+				<a title="{PHP.L.Configuration}" href="{ADMIN_OTHER_CONFIG}">{PHP.R.admin_icon_config}</a>
 <!-- ENDIF -->
-				&nbsp;
 			</td>
 		</tr>
 <!-- END: OTHER_ROW -->
 		<tr>
+			<td class="centerall">{PHP.R.admin_icon_cache}</td>
 			<td colspan="3">
 <!-- IF {PHP.lincif_conf} -->
-				<a href="{ADMIN_OTHER_URL_CACHE}"><img src="images/admin/config.gif" alt="" /> {PHP.L.adm_internalcache}</a>
+				<a href="{ADMIN_OTHER_URL_CACHE}">{PHP.L.adm_internalcache}</a>
 <!-- ELSE -->
-				<img src="images/admin/config.gif" alt="" /> {PHP.L.adm_internalcache}
+				{PHP.L.adm_internalcache}
 <!-- ENDIF -->
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td class="centerall">{PHP.R.admin_icon_diskcache}</td>
+			<td colspan="2">
 <!-- IF {PHP.lincif_conf} -->
-				<a href="{ADMIN_OTHER_URL_DISKCACHE}"><img src="images/admin/folder.gif" alt="" /> {PHP.L.adm_diskcache}</a>
+				<a href="{ADMIN_OTHER_URL_DISKCACHE}">{PHP.L.adm_diskcache}</a>
 <!-- ELSE -->
-				<img src="images/admin/config.gif" alt="" /> {PHP.L.adm_diskcache}
+				{PHP.L.adm_diskcache}
 <!-- ENDIF -->
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td class="centerall">{PHP.R.admin_icon_bbcodes}</td>
+			<td colspan="2">
 <!-- IF {PHP.lincif_conf} -->
-				<a href="{ADMIN_OTHER_URL_BBCODE}"><img src="images/admin/page.gif" alt="" /> {PHP.L.adm_bbcodes}</a>
+				<a href="{ADMIN_OTHER_URL_BBCODE}">{PHP.L.adm_bbcodes}</a>
 <!-- ELSE -->
-				<img src="images/admin/page.gif" alt="" /> {PHP.L.adm_bbcodes}
+				{PHP.L.adm_bbcodes}
 <!-- ENDIF -->
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td class="centerall">{PHP.R.admin_icon_urls}</td>
+			<td colspan="2">
 <!-- IF {PHP.lincif_conf} -->
-				<a href="{ADMIN_OTHER_URL_URLS}"><img src="images/admin/info.gif" alt="" /> {PHP.L.adm_urls}</a>
+				<a href="{ADMIN_OTHER_URL_URLS}">{PHP.L.adm_urls}</a>
 <!-- ELSE -->
-				<img src="images/admin/info.gif" alt="" /> {PHP.L.adm_urls}
+				{PHP.L.adm_urls}
 <!-- ENDIF -->
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td class="centerall">{PHP.R.admin_icon_banlist}</td>
+			<td colspan="2">
 <!-- IF {PHP.lincif_user} -->
-				<a href="{ADMIN_OTHER_URL_BANLIST}"><img src="images/admin/users.gif" alt="" /> {PHP.L.Banlist}</a>
+				<a href="{ADMIN_OTHER_URL_BANLIST}">{PHP.L.Banlist}</a>
 <!-- ELSE -->
-				<img src="images/admin/users.gif" alt="" /> {PHP.L.Banlist}
+				{PHP.L.Banlist}
 <!-- ENDIF -->
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3">
-				<a href="{ADMIN_OTHER_URL_HITS}"><img src="images/admin/statistics.gif" alt="" /> {PHP.L.Hits}</a>
+			<td class="centerall">{PHP.R.admin_icon_hits}</td>
+			<td colspan="2">
+				<a href="{ADMIN_OTHER_URL_HITS}">{PHP.L.Hits}</a>
 			</td>
 		</tr>
 		<tr>
+			<td class="centerall">{PHP.R.admin_icon_referers}</td>
+			<td colspan="2">
+<!-- IF {PHP.lincif_conf} -->
+				<a href="{ADMIN_OTHER_URL_REFERS}">{PHP.L.Referers}</a>
+<!-- ELSE -->
+				{PHP.L.Referers}
+<!-- ENDIF -->
+			</td>
+		</tr>
+		<tr>
+			<td class="centerall">{PHP.R.admin_icon_log}</td>
+			<td colspan="2">
+<!-- IF {PHP.lincif_conf} -->
+				<a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a>
+<!-- ELSE -->
+				{PHP.L.adm_log}
+<!-- ENDIF -->
+			</td>
+		</tr>
+		<tr>
+			<td class="centerall">{PHP.R.admin_icon_info}</td>
 			<td colspan="3">
 <!-- IF {PHP.lincif_conf} -->
-				<a href="{ADMIN_OTHER_URL_REFERS}"><img src="images/admin/info.gif" alt="" /> {PHP.L.Referers}</a>
+				<a href="{ADMIN_OTHER_URL_INFOS}">{PHP.L.adm_infos}</a>
 <!-- ELSE -->
-				<img src="images/admin/info.gif" alt="" /> {PHP.L.Referers}
+				{PHP.L.adm_infos}
 <!-- ENDIF -->
 			</td>
 		</tr>
-		<tr>
-			<td colspan="3">
-<!-- IF {PHP.lincif_conf} -->
-				<a href="{ADMIN_OTHER_URL_LOG}"><img src="images/admin/page.gif" alt="" /> {PHP.L.adm_log}</a>
-<!-- ELSE -->
-				<img src="images/admin/page.gif" alt="" /> {PHP.L.adm_log}
-<!-- ENDIF -->
-			</td>
-		</tr>
-		<tr>
-			<td colspan="3">
-<!-- IF {PHP.lincif_conf} -->
-				<a href="{ADMIN_OTHER_URL_INFOS}"><img src="images/admin/info.gif" alt="" /> {PHP.L.adm_infos}</a>
-<!-- ELSE -->
-				<img src="images/admin/info.gif" alt="" /> {PHP.L.adm_infos}
-<!-- ENDIF -->
-			</td>
-		</tr>
-		</table>
+	</table>
 <!-- END: OTHER -->
