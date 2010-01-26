@@ -3408,7 +3408,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	if($cur_right > $totalpages) $cur_right = $totalpages;
 
 	$event = $ajax ? ' class="ajax"' : '';
-	$rel = $ajax && !empty($target_div) ? ' rel="'.$taget_div.'"' : '';
+	$rel = $ajax && !empty($target_div) ? ' rel="'.$target_div.'"' : '';
 
 	// Main block
 

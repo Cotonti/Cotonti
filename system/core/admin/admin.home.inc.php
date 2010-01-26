@@ -87,19 +87,21 @@ if (!$cfg['disablehitstats'])
 		$hits_d[$dat] = $row['stat_value'];
 	}
 
-	$hits_d_max = max($hits_d);
-
-	foreach ($hits_d as $day => $hits)
+	if (is_array($hits_d))
 	{
-		$percentbar = floor(($hits / $hits_d_max) * 100);
-		$t->assign(array(
-			'ADMIN_HOME_DAY' => $day,
-			'ADMIN_HOME_HITS' => $hits,
-			'ADMIN_HOME_PERCENTBAR' => $percentbar
-		));
-		$t->parse('HOME.ADMIN_HOME_ROW');
-	}
+		$hits_d_max = max($hits_d);
 
+		foreach ($hits_d as $day => $hits)
+		{
+			$percentbar = floor(($hits / $hits_d_max) * 100);
+			$t->assign(array(
+				'ADMIN_HOME_DAY' => $day,
+				'ADMIN_HOME_HITS' => $hits,
+				'ADMIN_HOME_PERCENTBAR' => $percentbar
+			));
+			$t->parse('HOME.ADMIN_HOME_ROW');
+		}
+	}
 	$t->assign('ADMIN_HOME_MORE_HITS_URL', sed_url('admin', 'm=hits'));
 }
 
