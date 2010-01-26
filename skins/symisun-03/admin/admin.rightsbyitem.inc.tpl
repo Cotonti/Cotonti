@@ -1,71 +1,67 @@
 <!-- BEGIN: RIGHTSBYITEM -->
-		<div id="{ADMIN_RIGHTSBYITEM_AJAX_OPENDIVID}">
-<!-- IF {PHP.is_adminwarnings} -->
-			<div class="error">{ADMIN_RIGHTSBYITEM_ADMINWARNINGS}</div>
-<!-- ENDIF -->
-			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post"{ADMIN_RIGHTSBYITEM_FORM_URL_AJAX}>
+	<div id="ajaxBlock">
+		<h2>{PHP.L.Rights}</h2>
+		<!-- IF {PHP.is_adminwarnings} --><div class="error">
+			<h4>{PHP.L.Message}</h4>
+			<p>{ADMIN_RIGHTSBYITEM_ADMINWARNINGS}</p>
+		</div><!-- ENDIF -->
+			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post" class="ajax">
 				<table class="cells">
-				<tr>
-					<td class="coltop" rowspan="2">{PHP.L.Groups}</td>
-					<td class="coltop" colspan="{ADMIN_RIGHTSBYITEM_ADV_COLUMNS}">{PHP.L.Rights}</td>
-					<td class="coltop" rowspan="2" style="width:128px;">{PHP.L.adm_setby}</td>
-					<td class="coltop" rowspan="2" style="width:64px;">{PHP.L.Open}</td>
-				</tr>
-				<tr>
-					<td style="width:24px;" class="coltop"><img src="images/admin/auth_r.gif" alt="" /></td>
-					<td style="width:24px;" class="coltop"><img src="images/admin/auth_w.gif" alt="" /></td>
-<!-- IF {PHP.advanced} OR {PHP.ic} == 'page' -->
-					<td style="width:24px;" class="coltop"><img src="images/admin/auth_1.gif" alt="" /></td>
-<!-- ENDIF -->
-<!-- IF {PHP.advanced} -->
-					<td style="width:24px;" class="coltop"><img src="images/admin/auth_2.gif" alt="" /></td>
-					<td style="width:24px;" class="coltop"><img src="images/admin/auth_3.gif" alt="" /></td>
-					<td style="width:24px;" class="coltop"><img src="images/admin/auth_4.gif" alt="" /></td>
-					<td style="width:24px;" class="coltop"><img src="images/admin/auth_5.gif" alt="" /></td>
-<!-- ENDIF -->
-					<td style="width:24px;" class="coltop"><img src="images/admin/auth_a.gif" alt="" /></td>
-				</tr>
+					<tr>
+						<td class="coltop" style="width:5%;" rowspan="2"></td>
+						<td class="coltop" style="width:25%;" rowspan="2">{PHP.L.Groups}</td>
+						<td class="coltop" style="width:40%;" colspan="{ADMIN_RIGHTSBYITEM_ADV_COLUMNS}">{PHP.L.Rights}</td>
+						<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.adm_setby}</td>
+						<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.Open}</td>
+					</tr>
+					<tr>
+						<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
+						<td class="coltop">{PHP.R.admin_icon_auth_w}</td>
+						<!-- IF {PHP.advanced} OR {PHP.ic} == 'page' --><td class="coltop">{PHP.R.admin_icon_auth_1}</td><!-- ENDIF -->
+						<!-- IF {PHP.advanced} --><td class="coltop">{PHP.R.admin_icon_auth_2}</td>
+						<td class="coltop">{PHP.R.admin_icon_auth_3}</td>
+						<td class="coltop">{PHP.R.admin_icon_auth_4}</td>
+						<td class="coltop">{PHP.R.admin_icon_auth_5}</td><!-- ENDIF -->
+						<td class="coltop">{PHP.R.admin_icon_auth_a}</td>
+					</tr>
 <!-- BEGIN: RIGHTSBYITEM_ROW -->
-				<tr>
-					<td style="padding:1px;"><img src="images/admin/groups.gif" alt="" /> <a href="{ADMIN_RIGHTSBYITEM_ROW_LINK}">{ADMIN_RIGHTSBYITEM_ROW_TITLE}</a></td>
+					<tr>
+						<td class="centerall">{PHP.R.admin_icon_groups}</td>
+						<td><a href="{ADMIN_RIGHTSBYITEM_ROW_LINK}">{ADMIN_RIGHTSBYITEM_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_ITEMS -->
-					<td style="text-align:center; padding:2px;">
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} -->
-						<input type="hidden" name="{ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME}" value="1" />
-						<img src="images/admin/discheck1.gif" alt="" />
-<!-- ENDIF -->
-<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->
-						<img src="images/admin/discheck0.gif" alt="" />
-<!-- ENDIF -->
-<!-- IF !{PHP.out.tpl_rights_parseline_locked} -->
-						<input type="checkbox" class="checkbox" name="{ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME}"{ADMIN_RIGHTSBYITEM_ROW_ITEMS_CHECKED}{ADMIN_RIGHTSBYITEM_ROW_ITEMS_DISABLED} />
-<!-- ENDIF -->
-					</td>
+						<td class="centerall">
+							<!-- IF {PHP.out.tpl_rights_parseline_locked} AND {PHP.out.tpl_rights_parseline_state} --><input type="hidden" name="{ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME}" value="1" />
+							{PHP.R.admin_icon_discheck1}<!-- ENDIF -->
+							<!-- IF {PHP.out.tpl_rights_parseline_locked} AND !{PHP.out.tpl_rights_parseline_state} -->{PHP.R.admin_icon_discheck0}<!-- ENDIF -->
+							<!-- IF !{PHP.out.tpl_rights_parseline_locked} --><input type="checkbox" class="checkbox" name="{ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME}"{ADMIN_RIGHTSBYITEM_ROW_ITEMS_CHECKED}{ADMIN_RIGHTSBYITEM_ROW_ITEMS_DISABLED} /><!-- ENDIF -->
+						</td>
 <!-- END: ROW_ITEMS -->
-					<td style="text-align:center;padding:2px;">{ADMIN_RIGHTSBYITEM_ROW_USER}</td>
-					<td style="text-align:center;"><a href="{ADMIN_RIGHTSBYITEM_ROW_JUMPTO}"><img src="images/admin/jumpto.gif" alt="" /></a></td>
-				</tr>
+						<td class="textcenter">{ADMIN_RIGHTSBYITEM_ROW_USER}{ADMIN_RIGHTSBYITEM_ROW_PRESERVE}</td>
+						<td class="centerall"><a title="{PHP.L.Open}" href="{ADMIN_RIGHTSBYITEM_ROW_JUMPTO}">{PHP.R.admin_icon_jumpto}</a></td>
+					</tr>
 <!-- END: RIGHTSBYITEM_ROW -->
-				<tr>
-					<td colspan="{ADMIN_RIGHTSBYITEM_3ADV_COLUMNS}" style="text-align:center;"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
-				</tr>
+					<tr>
+						<td class="textcenter" colspan="{ADMIN_RIGHTSBYITEM_4ADV_COLUMNS}">
+							<a href="{ADMIN_RIGHTSBYITEM_ADVANCED_URL}">{PHP.L.More}</a>
+						</td>
+					</tr>
+					<tr>
+						<td class="valid" colspan="{ADMIN_RIGHTSBYITEM_4ADV_COLUMNS}">
+							<input type="submit" class="submit" value="{PHP.L.Update}" />
+						</td>
+					</tr>
 				</table>
 			</form>
-			<a href="{ADMIN_RIGHTSBYITEM_ADVANCED_URL}">{PHP.L.More}</a>
-		</div>
+	</div>
 <!-- END: RIGHTSBYITEM -->
 
 <!-- BEGIN: RIGHTSBYITEM_HELP -->
-<img src="images/admin/auth_r.gif" alt="" /> : {PHP.L.Read}<br />
-<img src="images/admin/auth_w.gif" alt="" /> : {PHP.L.Write}<br />
-<!-- IF {PHP.advanced} OR {PHP.ic} == 'page' -->
-<img src="images/admin/auth_1.gif" alt="" /> : {PHP.l_custom1}<br />
-<!-- ENDIF -->
-<!-- IF {PHP.advanced} -->
-<img src="images/admin/auth_2.gif" alt="" /> : {PHP.L.Custom} #2<br />
-<img src="images/admin/auth_3.gif" alt="" /> : {PHP.L.Custom} #3<br />
-<img src="images/admin/auth_4.gif" alt="" /> : {PHP.L.Custom} #4<br />
-<img src="images/admin/auth_5.gif" alt="" /> : {PHP.L.Custom} #5<br />
-<!-- ENDIF -->
-<img src="images/admin/auth_a.gif" alt="" /> : {PHP.L.Administration}
+		<p>{PHP.R.admin_icon_auth_r}&nbsp; {PHP.L.Read}</p>
+		<p>{PHP.R.admin_icon_auth_w}&nbsp; {PHP.L.Write}</p>
+		<!-- IF {PHP.advanced} OR {PHP.ic} == 'page' --><p>{PHP.R.admin_icon_auth_1}&nbsp; {PHP.l_custom1}</p><!-- ENDIF -->
+		<!-- IF {PHP.advanced} --><p>{PHP.R.admin_icon_auth_2}&nbsp; {PHP.L.Custom} #2</p>
+		<p>{PHP.R.admin_icon_auth_3}&nbsp; {PHP.L.Custom} #3</p>
+		<p>{PHP.R.admin_icon_auth_4}&nbsp; {PHP.L.Custom} #4</p>
+		<p>{PHP.R.admin_icon_auth_5}&nbsp; {PHP.L.Custom} #5</p><!-- ENDIF -->
+		<p>{PHP.R.admin_icon_auth_a}&nbsp; {PHP.L.Administration}</p>
 <!-- END: RIGHTSBYITEM_HELP -->
