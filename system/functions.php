@@ -3375,18 +3375,21 @@ function sed_outputfilters($output)
  * @param int $entries Total rows
  * @param int $perpage Rows per page
  * @param string $characters It is symbol for parametre which transfer pagination
+ * @param string $hash Hash part of the url (including #)
  * @param bool $ajax Add AJAX support
  * @param string $target_div Target div ID if $ajax is true
- * @param string $hash Hash part of the url (including #)
+ * @param string $ajax_module Site area name for ajax if different from $module
+ * @param string $ajax_params URL parameters for ajax if $ajax_module is not empty
  * @return array
  */
-function sed_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd',
-		$ajax = false, $target_div = '', $hash = '')
+function sed_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd', $hash = '',
+	$ajax = false, $target_div = '', $ajax_module = '', $ajax_params = array())
 {
 	if(function_exists('sed_pagenav_custom'))
 	{
 		// For custom pagination functions in plugins
-		return sed_pagenav_custom($module, $params, $current, $entries, $perpage, $characters, $ajax, $target_div);
+		return sed_pagenav_custom($module, $params, $current, $entries, $perpage, $characters, $hash,
+			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
 	if($entries <= $perpage)
@@ -3399,6 +3402,26 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	$each_side = 3; // Links each side
 
 	is_array($params) ? $args = $params : parse_str($params, $args);
+	if ($ajax)
+	{
+		$ajax_rel = !empty($ajax_module);
+		$ajax_rel && is_string($ajax_params) ? parse_str($ajax_params, $ajax_args) : $ajax_args = $ajax_params;
+		$event = ' class="ajax"';
+		if (empty($target_div))
+		{
+			$base_rel = $ajax_rel ? ' rel="get;' : '';
+		}
+		else
+		{
+			$base_rel = $ajax_rel ? ' rel="get-'.$target_div.';' : ' rel="get-'.$target_div.'"';
+		}
+	}
+	else
+	{
+		$ajax_rel = false;
+		$event = '';
+	}
+	$rel = '';
 
 	$totalpages = ceil($entries / $perpage);
 	$currentpage = floor($current / $perpage) + 1;
@@ -3406,9 +3429,6 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	if($cur_left < 1) $cur_left = 1;
 	$cur_right = $currentpage + $each_side;
 	if($cur_right > $totalpages) $cur_right = $totalpages;
-
-	$event = $ajax ? ' class="ajax"' : '';
-	$rel = $ajax && !empty($target_div) ? ' rel="'.$target_div.'"' : '';
 
 	// Main block
 
@@ -3420,6 +3440,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	while($i < $cur_left)
 	{
 		$args[$characters] = ($i - 1) * $perpage;
+		if ($ajax_rel)
+		{
+			$ajax_args[$characters] = $args[$characters];
+			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+		}
+		else
+		{
+			$rel = $base_rel;
+		}
 		$before .= sed_rc('link_pagenav_main', array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
@@ -3433,6 +3462,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		elseif ($i == $cur_left - 2)
 		{
 			$args[$characters] = $i * $perpage;
+			if ($ajax_rel)
+			{
+				$ajax_args[$characters] = $args[$characters];
+				$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			}
+			else
+			{
+				$rel = $base_rel;
+			}
 			$before .= sed_rc('link_pagenav_main', array(
 					'url' => sed_url($module, $args, $hash),
 					'event' => $event,
@@ -3446,6 +3484,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	for($j = $cur_left; $j <= $cur_right; $j++)
 	{
 		$args[$characters] = ($j - 1) * $perpage;
+		if ($ajax_rel)
+		{
+			$ajax_args[$characters] = $args[$characters];
+			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+		}
+		else
+		{
+			$rel = $base_rel;
+		}
 		$rc = $j == $currentpage ? 'current' : 'main';
 		$pages .= sed_rc('link_pagenav_' . $rc, array(
 			'url' => sed_url($module, $args, $hash),
@@ -3468,6 +3515,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		elseif ($i == $cur_right + 2)
 		{
 			$args[$characters] = ($i - 2 ) * $perpage;
+			if ($ajax_rel)
+			{
+				$ajax_args[$characters] = $args[$characters];
+				$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			}
+			else
+			{
+				$rel = $base_rel;
+			}
 			$after .= sed_rc('link_pagenav_main', array(
 					'url' => sed_url($module, $args, $hash),
 					'event' => $event,
@@ -3476,6 +3532,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 			));
 		}
 		$args[$characters] = ($i - 1) * $perpage;
+		if ($ajax_rel)
+		{
+			$ajax_args[$characters] = $args[$characters];
+			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+		}
+		else
+		{
+			$rel = $base_rel;
+		}
 		$after .= sed_rc('link_pagenav_main', array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
@@ -3494,6 +3559,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$prev_n = $current - $perpage;
 		if ($prev_n < 0) { $prev_n = 0; }
 		$args[$characters] = $prev_n;
+		if ($ajax_rel)
+		{
+			$ajax_args[$characters] = $args[$characters];
+			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+		}
+		else
+		{
+			$rel = $base_rel;
+		}
 		$prev = sed_rc('link_pagenav_prev', array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
@@ -3501,6 +3575,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'num' => $prev_n + 1
 		));
 		$args[$characters] = 0;
+		if ($ajax_rel)
+		{
+			$ajax_args[$characters] = $args[$characters];
+			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+		}
+		else
+		{
+			$rel = $base_rel;
+		}
 		$first = sed_rc('link_pagenav_first', array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
@@ -3513,6 +3596,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	{
 		$next_n = $current + $perpage;
 		$args[$characters] = $next_n;
+		if ($ajax_rel)
+		{
+			$ajax_args[$characters] = $args[$characters];
+			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+		}
+		else
+		{
+			$rel = $base_rel;
+		}
 		$next = sed_rc('link_pagenav_next', array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
@@ -3521,6 +3613,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		));
 		$last_n = ($totalpages - 1) * $perpage;
 		$args[$characters] = $last_n;
+		if ($ajax_rel)
+		{
+			$ajax_args[$characters] = $args[$characters];
+			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+		}
+		else
+		{
+			$rel = $base_rel;
+		}
 		$last = sed_rc('link_pagenav_last', array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,

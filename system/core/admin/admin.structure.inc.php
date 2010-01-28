@@ -460,7 +460,7 @@ else
 	}
 
 	$totalitems = sed_sql_rowcount($db_structure);
-	$pagenav = sed_pagenav('admin', 'm=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+	$pagenav = sed_pagenav('admin', 'm=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
