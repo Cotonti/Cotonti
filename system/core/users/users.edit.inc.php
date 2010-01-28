@@ -105,8 +105,7 @@ if ($a=='update')
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
 		{
-			if ($import == "0") $import = 1;
-			if ($import == "") $import = 0;
+			$import = $import != '';
 		}
 		$ruserextrafields[] = $import;
 		$urr['user_'.$row[ 'field_name']] = $import;
