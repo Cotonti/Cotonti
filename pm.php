@@ -25,11 +25,7 @@ switch($m)
 	case 'send':
 		require_once($cfg['system_dir'].'/core/pm/pm.send.inc.php');
 	break;
-
-	case 'edit':
-		require_once($cfg['system_dir'].'/core/pm/pm.edit.inc.php');
-	break;
-
+	
     case 'message':
 		require_once($cfg['system_dir'].'/core/pm/pm.inc.php');
 	break;

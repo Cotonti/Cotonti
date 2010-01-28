@@ -10,15 +10,18 @@
       <!-- END: PMSEND_ERROR -->
       &nbsp;
       <form action="{PMSEND_FORM_SEND}" method="post">
+	<!-- BEGIN: PMSEND_USERLIST -->
         <p><strong>{PHP.L.Recipients}</strong></p>
-        <p>{PMSEND_FORM_TOUSER}</p>
+        <p><textarea name="newpmrecipient" rows="3" cols="56">{PMSEND_FORM_TOUSER}</textarea></p>
         <p class="hint"> &nbsp; {PHP.skinlang.pmsend.Sendmessagetohint}</p>
         &nbsp;
+	<!-- END: PMSEND_USERLIST -->
         <p><strong>{PHP.L.Subject}</strong></p>
-        <p class="whitee">{PMSEND_FORM_TITLE}</p>
+        <p class="whitee"><input type="text" class="text" name="newpmtitle" value="{PMSEND_FORM_TITLE}" size="56" maxlength="255" /></p>
         &nbsp;
         <p><strong>{PHP.L.Message}</strong></p>
-        <div class="pageadd mini"> {PMSEND_FORM_TEXT}
+        <div class="pageadd mini"> <textarea class="editor" name="newpmtext" rows="16" cols="56">{PMSEND_FORM_TEXT}</textarea><br />{PMSEND_FORM_PFS}
+	  <input type="checkbox" class="checkbox"  name="fromstate" value="3" /> {PHP.L.pm_notmovetosentbox}
           <div class="clear"></div>
           <input type="submit" value="{PHP.L.Submit}" class="submit" />
         </div>

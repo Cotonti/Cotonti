@@ -53,14 +53,11 @@ $totaldbpostspruned = sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
 $totaldbfilesize = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs");
 $totaldbfilesize = sed_sql_result($totaldbfilesize, 0, "SUM(pfs_size)");
 
-$totalpmactive = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state<2");
+$totalpmactive = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate<2");
 $totalpmactive = sed_sql_result($totalpmactive, 0, "COUNT(*)");
 
-$totalpmarchived = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state=2");
+$totalpmarchived = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate=2");
 $totalpmarchived = sed_sql_result($totalpmarchived, 0, "COUNT(*)");
-
-$totalpmold = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_state=3");
-$totalpmold = sed_sql_result($totalpmold, 0, "COUNT(*)");
 
 $sql = sed_sql_query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");
 $row = sed_sql_fetcharray($sql);
