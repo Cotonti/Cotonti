@@ -197,7 +197,7 @@ else
 
 	$totalitems = sed_sql_rowcount($db_forum_structure);
 
-	$pagenav = sed_pagenav('admin', 'm=forums&s=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+	$pagenav = sed_pagenav('admin', 'm=forums&s=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 

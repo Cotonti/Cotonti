@@ -87,7 +87,10 @@ $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_bbcode);
 
-$pagenav = sed_pagenav('admin', 'm=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+// FIXME AJAX-based pagination doesn't work because of some strange PHP bug
+// Xtpl_block->text() returns 'str' instead of a long string which it has in $text
+//$pagenav = sed_pagenav('admin', 'm=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd');
 
 $bbc_modes = array('str', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);

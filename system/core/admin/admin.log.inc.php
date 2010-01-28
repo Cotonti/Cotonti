@@ -75,7 +75,7 @@ foreach($log_groups as $grp_code => $grp_name)
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = ($n == 'all') ? $totaldblog : sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
-$pagenav = sed_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 if($n == 'all')
 {

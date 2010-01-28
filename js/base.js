@@ -112,15 +112,15 @@ function ajaxSend(settings) {
 
 // AJAX subpage loader with history support
 function ajaxPageLoad(hash) {
-	var m = hash.match(/^(get)(-.*?)?;(.*)$/);
+	var m = hash.match(/^get(-.*?)?;(.*)$/);
 	if (m) {
 		// ajax bookmark
-		var url = m[3].indexOf(';') > 0 ? m[3].replace(';', '?') : ajaxCurrentBase + '?' + m[3];
+		var url = m[2].indexOf(';') > 0 ? m[2].replace(';', '?') : ajaxCurrentBase + '?' + m[2];
 		ajaxUsed = true;
 		return ajaxSend({
-			method: m[1],
+			method: 'GET',
 			url: url,
-			divId: m[2] ? m[2].substr(1) : 'ajaxBlock'
+			divId: m[1] ? m[1].substr(1) : 'ajaxBlock'
 		});
 	} else if (hash == '' && ajaxUsed) {
 		// ajax home
@@ -133,13 +133,24 @@ function ajaxPageLoad(hash) {
 }
 
 // Constructs ajaxable hash string
-function ajaxMakeHash(method, href, divId) {
-	var hash = method;
-	hash += divId ? '-' + divId + ';' : ';';
+function ajaxMakeHash(href, rel) {
+	var hash = 'get';
 	var hrefBase, params;
-	if (href.indexOf('?') > 0) {
-		hrefBase = href.substr(0, href.indexOf('?'));
-		params = href.substr(href.indexOf('?') + 1);
+	var sep = '?';
+	var m = rel.match(/get(-[^ ;]+)?(;\S*)?$/);
+	if (m) {
+		if (m[1]) {
+			hash += m[1];
+		}
+		if (m[2]) {
+			href = m[2].substr(1);
+			sep  = ';';
+		}
+	}
+	hash += ';'
+	if (href.indexOf(sep) > 0) {
+		hrefBase = href.substr(0, href.indexOf(sep));
+		params = href.substr(href.indexOf(sep) + 1);
 	} else {
 		hrefBase = href;
 		params = '';
@@ -176,7 +187,7 @@ function bindHandlers() {
 			});
 		});
 		$('a.ajax').live('click', function() {
-			$.historyLoad(ajaxMakeHash('get', $(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
+			$.historyLoad(ajaxMakeHash($(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
 			return false;
 		});
 	}

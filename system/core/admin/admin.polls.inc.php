@@ -103,7 +103,7 @@ else
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
 $totalitems = sed_sql_result($sql, 0, "COUNT(*)");
-$pagenav = sed_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT * FROM $db_polls
 					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);

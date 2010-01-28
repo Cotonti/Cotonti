@@ -80,7 +80,7 @@ elseif($a == 'restore')
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_trash);
-$pagenav = sed_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id

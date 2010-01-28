@@ -74,7 +74,7 @@ $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_banlist);
 
-$pagenav = sed_pagenav('admin', 'm=banlist', $d, $totalitems, $cfg['maxrowsperpage'], 'd', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=banlist', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$cfg['maxrowsperpage']);
 
