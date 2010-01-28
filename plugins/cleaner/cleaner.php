@@ -67,7 +67,7 @@ if($cfg['plugin']['cleaner']['refprune'] > 0)
 if($cfg['plugin']['cleaner']['pmnotread'] > 0)
 {
 	$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmnotread'] * 86400);
-	$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago AND pm_state=0");
+	$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago AND pm_tostate=0");
 
 	$deleted = mysql_affected_rows();
 	if($deleted > 0)
@@ -79,7 +79,7 @@ if($cfg['plugin']['cleaner']['pmnotread'] > 0)
 if($cfg['plugin']['cleaner']['pmnotarchived'] > 0)
 {
 	$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmnotarchived'] * 86400);
-	$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago AND pm_state=1");
+	$sqltmp = sed_sql_query("DELETE FROM $db_pm WHERE pm_date<$timeago AND pm_tostate=1");
 
 	$deleted = mysql_affected_rows();
 	if($deleted > 0)

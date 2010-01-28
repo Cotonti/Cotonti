@@ -9,19 +9,17 @@
       <form action="{PM_FORM_UPDATE}" method="post">
         <p style="border-bottom:1px solid #ececec">&nbsp;</p>
         <!-- BEGIN: PM_ROW -->
-        <div class="{PM_ROW_ODDEVEN} nou padding5 toprow"> {PM_ROW_SELECT} {PM_ROW_ICON_STATUS} &nbsp;
+        <div class="{PM_ROW_ODDEVEN} nou padding5 toprow"> <input type="checkbox" class="checkbox"  name="msg[{PM_ROW_ID}]" /> {PM_ROW_ICON_STATUS} &nbsp;
           <h4 style="display:inline">{PM_ROW_TITLE}</h4>
           &nbsp; {PHP.skinlang.index.by} {PM_ROW_FROMORTOUSER} 
-          &nbsp; {PM_ROW_DATE} <span class="colright">{PM_ROW_ICON_ACTION}</span> </div>
+          &nbsp; {PM_ROW_DATE} <span class="colright">{PM_ROW_ICON_EDIT} {PM_ROW_ICON_ARCHIVE} {PM_ROW_ICON_DELETE}</span> </div>
         <!-- END: PM_ROW -->
         <!-- BEGIN: PM_ROW_EMPTY -->
         <p class="red">{PHP.skinlang.list.none}</p>
         <!-- END: PM_ROW_EMPTY -->
-        <!-- BEGIN: PM_FOOTER -->
-        <!-- IF {PM_TOP_PAGES} -->
-        <div class="paging">{PM_TOP_PAGEPREV}&nbsp;{PM_TOP_PAGES}&nbsp;{PM_TOP_PAGENEXT}</div>
+        <!-- IF {PM_PAGES} -->
+        <div class="paging">{PM_PAGEPREV}&nbsp;{PM_PAGES}&nbsp;{PM_PAGENEXT}</div>
         <!-- ENDIF -->
-        <!-- END: PM_FOOTER -->
         <p class="point">
           <!-- IF {PHP.cfg.jquery} AND {PM_ARCHIVE} -->
           <img src="skins/{PHP.skin}/img/icon-this.gif" alt="{PHP.L.Options}" />

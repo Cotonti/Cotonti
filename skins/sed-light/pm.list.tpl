@@ -17,19 +17,19 @@
 <!-- ENDIF -->
                 </td>
                 <td class="coltop" style="width:16px;">{PHP.L.Status}</td>
-                <td class="coltop">{PM_TOP_SENTBOX}</td>
-                <td class="coltop">{PHP.L.Subject}</td>
-                <td class="coltop" style="width:176px;">{PHP.L.Date}</td>
+                <td class="coltop" style="width:276px;">{PHP.L.Subject}</td>
+                <td class="coltop">{PM_SENT_TYPE}</td>
+                <td class="coltop" style="width:126px;">{PHP.L.Date}</td>
                 <td class="coltop" style="width:72px;">{PHP.L.Action}</td>
             </tr>
             <!-- BEGIN: PM_ROW -->
             <tr>
-                <td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_SELECT}</td>
+                <td class="centerall {PM_ROW_ODDEVEN}"><input type="checkbox" class="checkbox"  name="msg[{PM_ROW_ID}]" /></td>
                 <td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_STATUS}</td>
-                <td class="{PM_ROW_ODDEVEN}">{PM_ROW_FROMORTOUSER}</td>
                 <td class="{PM_ROW_ODDEVEN}">{PM_ROW_TITLE}</td>
+		<td class="{PM_ROW_ODDEVEN}">{PM_ROW_FROMORTOUSER}</td>
                 <td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_DATE}</td>
-                <td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_ACTION}</td>
+                <td class="centerall {PM_ROW_ODDEVEN}">{PM_ICON_EDIT} {PM_ICON_ARCHIVE} {PM_ICON_DELETE}</td>
             </tr>
             <!-- END: PM_ROW -->
             <!-- BEGIN: PM_ROW_EMPTY -->
@@ -40,9 +40,7 @@
         </table>
         <div class="bCap"></div>
 
-        <!-- BEGIN: PM_FOOTER -->
-        <div class="paging">{PM_TOP_PAGEPREV}&nbsp;{PM_TOP_PAGES}&nbsp;{PM_TOP_PAGENEXT}</div>
-        <!-- END: PM_FOOTER -->
+        <div class="paging">{PM_PAGEPREV}&nbsp;{PM_PAGES}&nbsp;{PM_PAGENEXT}</div>
         {PM_DELETE} {PM_ARCHIVE}
     </form>
 

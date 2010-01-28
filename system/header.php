@@ -143,7 +143,7 @@ if (!SED_AJAX)
 		{
 			if ($usr['newpm'])
 			{
-				$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_state=0");
+				$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0");
 				$usr['messages'] = sed_sql_result($sqlpm, 0, 'COUNT(*)');
 			}
 			$out['pmreminder'] = "<a href=\"".sed_url('pm')."\">";
