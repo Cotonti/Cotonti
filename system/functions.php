@@ -3080,16 +3080,7 @@ function sed_load_smilies()
  */
 function sed_load_structure()
 {
-	global $db_structure, $db_extra_fields, $cfg, $L, $sed_cat;
-
-	$extrafields_p = array();
-	$counter_of_extrafields_c = 0;
-	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='structure'");
-	while ($row_c = sed_sql_fetchassoc($fieldsres))
-	{
-		$extrafields_c[] = $row_c;
-		$counter_of_extrafields_c++;
-	}
+	global $db_structure, $db_extra_fields, $cfg, $L, $sed_cat, $sed_extrafields;
 
 	$sed_cat = array();
 	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
@@ -3136,13 +3127,11 @@ function sed_load_structure()
 			'way' => $order[1]
 		);
 
-		if ($counter_of_extrafields_c > 0)
+		foreach ($sed_extrafields['structure'] as $row_c)
 		{
-			foreach ($extrafields_c as $row_c)
-			{
-				$sed_cat[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
-			}
+			$sed_cat[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
 		}
+
 	}
 }
 

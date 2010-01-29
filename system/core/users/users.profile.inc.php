@@ -1,18 +1,14 @@
-<?PHP
+<?php
 
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=users.profile.inc.php
-Version=125
-Updated=2008-mar-20
-Type=Core
-Author=Neocrome
-Description=User profile
-[END_SED]
-==================== */
+/**
+ * User Profile
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
 
 defined('SED_CODE') or die('Wrong URL');
 
@@ -46,11 +42,6 @@ $urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
 $profile_form_avatar = "<a name=\"avatar\" id=\"avatar\"></a>";
 $profile_form_photo = "<a name=\"photo\" id=\"photo\"></a>";
 $profile_form_signature = "<a name=\"signature\" id=\"signature\"></a>";
-
-// Extra fields - getting
-$extrafields = array();
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
 switch ($a)
 {
@@ -377,8 +368,7 @@ switch ($a)
 	$rusertext = mb_substr($rusertext, 0, $cfg['usertextmax']);
 
 	// Extra fields
-	if(count($extrafields)>0)
-	foreach($extrafields as $row)
+	foreach($sed_extrafields['users'] as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
@@ -503,16 +493,14 @@ switch ($a)
 			$ruserbirthdate = sed_stamp2date($bdate);
 		}
 		// Extra fields
-		if(count($extrafields)>0)
+		foreach($sed_extrafields['users'] as $i=>$row)
 		{
-			foreach($extrafields as $i=>$row)
+			if(!is_null($ruserextrafields[$i]))
 			{
-				if(!is_null($ruserextrafields[$i]))
-				{
-					$ssql_extra .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',";
-				}
+				$ssql_extra .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',";
 			}
 		}
+
 		$ssql = "UPDATE $db_users SET
 			user_text='".sed_sql_prep($rusertext)."',
 			user_country='".sed_sql_prep($rusercountry)."',
@@ -674,11 +662,9 @@ $useredit_array = array(
 	"USERS_PROFILE_NEWPASS2" => "<input type=\"password\" class=\"password\" name=\"rnewpass2\" size=\"12\" maxlength=\"16\" />",
 );
 // Extra fields
-if(count($extrafields)>0)
-{
-	$extra_array = sed_build_extrafields('user', 'USERS_PROFILE', $extrafields, $urr);
-	$useredit_array = $useredit_array + $extra_array;
-}
+$extra_array = sed_build_extrafields('user', 'USERS_PROFILE', $sed_extrafields['users'], $urr);
+$useredit_array = $useredit_array + $extra_array;
+
 $t->assign($useredit_array);
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');

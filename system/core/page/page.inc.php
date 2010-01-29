@@ -168,22 +168,20 @@ $t->assign(array(
 	"PAGE_COMMENTS_RSS" => sed_url("rss", "c=comments&id=".$pag['page_id'])
 ));
 
-// Extra fields page
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages' OR field_location='structure'");
-while ($row = sed_sql_fetchassoc($fieldsres))
+// Extra fields for pages
+foreach($sed_extrafields['pages'] as $i => $row)
 {
-	if ($row['field_location'] == 'pages')
-	{
-		$uname = strtoupper($row['field_name']);
-		$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag['page_'.$row['field_name']]));
-		isset($L['page_'.$row['field_name'].'_title']) ? $t->assign('PAGE_'.$uname.'_TITLE', $L['page_'.$row['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $row['field_description']);
-	}
-	elseif ($row['field_location'] == 'structure')
-	{
-		$uname = strtoupper($row['field_name']);
-		$t->assign('PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row['field_type'], $row['field_name'], $sed_cat[$pag['page_cat']][$row['field_name']]));
-		isset($L['structure_'.$row['field_name'].'_title']) ? $t->assign('PAGE_CAT_'.$uname.'_TITLE', $L['structure_'.$row['field_name'].'_title']) : $t->assign('PAGE_CAT_'.$uname.'_TITLE', $row['field_description']);
-	}
+	$uname = strtoupper($row['field_name']);
+	$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag['page_'.$row['field_name']]));
+	$t->assign('PAGE_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+}
+
+// Extra fields for structure
+foreach($sed_extrafields['structure'] as $i => $row)
+{
+	$uname = strtoupper($row['field_name']);
+	$t->assign('PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row['field_type'], $row['field_name'], $sed_cat[$pag['page_cat']][$row['field_name']]));
+	$t->assign('PAGE_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 
 if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])

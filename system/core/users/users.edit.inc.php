@@ -1,16 +1,12 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
+<?php
 /**
+ * Edit User Profile
+ *
  * @package Cotonti
- * @version 0.0.3
- * @copyright Copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL');
@@ -49,11 +45,6 @@ if ($sys['protecttopadmin'])
 {
 	sed_redirect(sed_url('message', "msg=930", '', true));
 }
-
-// Extra fields - getting
-$extrafields = array();
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
 if ($a=='update')
 {
@@ -102,8 +93,7 @@ if ($a=='update')
 	$error_string .= (!empty($rusernewpass) && (mb_strlen($rusernewpass) < 4 || sed_alphaonly($rusernewpass) != $rusernewpass)) ? $L['aut_passwordtooshort'] . '<br />' : '';
 
 	// Extra fields
-	if(count($extrafields)>0)
-	foreach($extrafields as $row)
+	foreach($sed_extrafields['users'] as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
@@ -180,16 +170,14 @@ if ($a=='update')
 			$sql = sed_sql_query("UPDATE $db_pm SET pm_fromuser='$newname' WHERE pm_fromuser='$oldname'");
 		}
 		// Extra fields
-		if(count($extrafields)>0)
+		foreach($sed_extrafields['users'] as $i=>$row)
 		{
-			foreach($extrafields as $i=>$row)
+			if(!is_null($ruserextrafields[$i]))
 			{
-				if(!is_null($ruserextrafields[$i]))
-				{
-					$ssql_extra .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',";
-				}
+				$ssql_extra .= "user_".$row['field_name']." = '".sed_sql_prep($ruserextrafields[$i])."',";
 			}
 		}
+
 		$ssql = "UPDATE $db_users SET
 			user_banexpire='$rbanexpire',
 			user_name='".sed_sql_prep($rusername)."',
@@ -345,12 +333,9 @@ $useredit_array = array(
 );
 
 // Extra fields
-if(count($extrafields)>0)
-foreach($extrafields as $i=>$row)
-{
-	$extra_array = sed_build_extrafields('user', 'USERS_EDIT', $extrafields, $urr);
-	$useredit_array = $useredit_array + $extra_array;
-}
+$extra_array = sed_build_extrafields('user', 'USERS_EDIT', $sed_extrafields['users'], $urr);
+$useredit_array = $useredit_array + $extra_array;
+
 $t->assign($useredit_array);
 
 /* === Hook === */

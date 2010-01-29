@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=whosonline
@@ -14,9 +14,9 @@ Order=10
  * Displays users who are currently online
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -89,8 +89,10 @@ while ($row = sed_sql_fetcharray($sql1))
 		"WHOSONlINE_ROW1_USER_OCCUPATION" => htmlspecialchars($row['user_occupation'])
 	));
 
-	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-	while($ros = sed_sql_fetchassoc($fieldsres)) $t->assign('WHOSONlINE_ROW1_USER_'.strtoupper($ros['field_name']), $row['user_'.$ros['field_name']]);
+	foreach($sed_extrafields['users'] as $i => $ros)
+	{
+		$t->assign('WHOSONlINE_ROW1_USER_'.strtoupper($ros['field_name']), $row['user_'.$ros['field_name']]);
+	}
 
 	$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW1');
 }

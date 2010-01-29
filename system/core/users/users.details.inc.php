@@ -1,18 +1,13 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=users.php
-Version=120
-Updated=2007-feb-20
-Type=Core
-Author=Neocrome
-Description=Users
-[END_SED]
-==================== */
+<?php
+/**
+ * User Details
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
 
 defined('SED_CODE') or die('Wrong URL');
 
@@ -125,13 +120,13 @@ $t->assign(array(
 	"USERS_DETAILS_LASTIP" => $urr['user_lastip']
 		));
 
-// Extra fields
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-while($row = sed_sql_fetchassoc($fieldsres)) 
+// Extra fields for users
+foreach($sed_extrafields['users'] as $i => $row)
 {
-	$t->assign('USERS_DETAILS_'.strtoupper($row['field_name']), sed_build_extrafields_data('user', $row['field_type'], $row['field_name'], $urr['user_'.$row['field_name']])); 
-	isset($L['user_'.$row['field_name'].'_title']) ? $t->assign('USERS_DETAILS_'.strtoupper($row['field_name']).'_TITLE', $L['user_'.$row['field_name'].'_title']) : $t->assign('USERS_DETAILS_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
+	$t->assign('USERS_DETAILS_'.strtoupper($row['field_name']), sed_build_extrafields_data('user', $row['field_type'], $row['field_name'], $urr['user_'.$row['field_name']]));
+	$t->assign('USERS_DETAILS_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
 }
+
 
 /* === Hook === */
 $extp = sed_getextplugins('users.details.tags');

@@ -5,34 +5,25 @@
  * @package Cotonti
  * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL');
 
-    /*  === get extra fields === */
-$extrafields_pag = array();
-$fieldsres = sed_sql_query("SELECT field_name, field_type FROM $db_extra_fields WHERE field_location='pages'");
-while ($row = sed_sql_fetchassoc($fieldsres)) $extrafields_pag[] = $row;
-    /* ===== */
 
-    /*  === Hook - Part1 : Set === FIRST === */
+    /* === Hook - Part1 : Set === FIRST === */
 $news_first_extp = sed_getextplugins('news.first');
-    /* ===== */
-
     /* === Hook - Part1 : Set === LOOP === */
 $news_extp = sed_getextplugins('news.loop');
-    /* ===== */
-
     /* === Hook - Part1 : Set === TAGS === */
 $news_tags_extp = sed_getextplugins('news.tags');
     /* ===== */
 
 function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0, $deftag=false)
 {
-	global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag,
-	$usr, $sed_dbc, $sed_urltrans, $c, $extrafields_pag, $news_extp, $news_tags_extp, $news_first_extp;
+	global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $sed_extrafields,
+	$usr, $sed_dbc, $sed_urltrans, $c, $news_extp, $news_tags_extp, $news_first_extp;
 	$jj = 0;
 	$mtch = $sed_cat[$cat]['path'].".";
 	$mtchlen = mb_strlen($mtch);
@@ -56,12 +47,9 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0,
 	$where ="page_state=0 AND page_cat <> 'system' AND page_begin<'".$sys['now_offset']."'
             AND page_expire>'".$sys['now_offset']."' AND page_cat IN ('".implode("','", $catsub)."')";
     /* === Hook - Part2 : Include === FIRST === */
-	if (is_array($news_first_extp))
+	foreach ($news_first_extp as $pl)
 	{
-		foreach ($news_first_extp as $pl)
-		{
-			include("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
-		}
+		include $pl;
 	}
     /* ===== */
 	$sql = sed_sql_query("SELECT p.*, u.user_name, user_avatar FROM $db_pages AS p
@@ -175,21 +163,19 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0,
 			"PAGE_ROW_NUM" => $jj,
 		));
 
-		// data from extra fields
-		foreach ($extrafields_pag as $row)
+		// Extrafields
+		foreach ($sed_extrafields['pages'] as $row)
 		{
+			$news -> assign('PAGE_ROW_'.strtoupper($row_p['field_name']).'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
 			$news->assign('PAGE_ROW_' . mb_strtoupper($row['field_name']),
-				sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"])
-			);
+				sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"]));
 		}
+	
 
         /* === Hook - Part2 : Include === LOOP === */
-		if (is_array($news_extp))
+		foreach ($news_extp as $pl)
 		{
-			foreach ($news_extp as $pl)
-			{
-				include("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
-			}
+			include $pl;
 		}
         /* ===== */
 		if($cfg['plugin']['tags']['pages'])
@@ -238,13 +224,10 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0,
 	));
 
         /* === Hook - Part2 : Include === TAGS === */
-	if (is_array($news_tags_extp))
-	{
 		foreach ($news_tags_extp as $pl)
 		{
-			include("{$cfg['plugins_dir']}/{$pl['pl_code']}/{$pl['pl_file']}.php");
+			include $pl;
 		}
-	}
         /* ===== */
 
 	$news->parse("NEWS");

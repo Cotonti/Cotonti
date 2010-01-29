@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -154,15 +154,6 @@ $sql = sed_sql_query("SELECT * FROM $db_users $sqlmask $sqlorder LIMIT $d,{$cfg[
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
 
-//Extra fields for users
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-$user_extrafields = "";
-while($row = sed_sql_fetchassoc($fieldsres))
-{
-	$extrafields[] = $row;
-	$number_of_extrafields++;
-}
-
 $perpage= $cfg['maxusersperpage'];
 
 $pagenav = sed_pagenav('users', "f=$f&g=$g&gm=$gm&s=$s&w=$w&sq=$sq", $d, $totalusers, $perpage);
@@ -270,15 +261,12 @@ foreach ($users_sort_tags as $k => $x)
 }
 
 // Extra fields for users
-if(count($extrafields) > 0)
+foreach($sed_extrafields['users'] as $i => $extrafield)
 {
-	foreach($extrafields as $i => $extrafield)
-	{
-		$uname = strtoupper($extrafield['field_name']);
-		$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title'] : $extrafield['field_description'];
-		$fieldtext = "<a href=\"".sed_url('users', "f=$f&amp;s=".$extrafield['field_name']."&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=".$extrafield['field_name']."&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$fieldtext;
-		$t -> assign('USERS_TOP_'.$uname, $fieldtext);
-	}
+	$uname = strtoupper($extrafield['field_name']);
+	$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title'] : $extrafield['field_description'];
+	$fieldtext = "<a href=\"".sed_url('users', "f=$f&amp;s=".$extrafield['field_name']."&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=".$extrafield['field_name']."&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$fieldtext;
+	$t -> assign('USERS_TOP_'.$uname, $fieldtext);
 }
 
 $jj=0;
@@ -332,13 +320,10 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 	));
 
 	// Extra fields for users
-	if(count($extrafields) > 0)
+	foreach($sed_extrafields['users'] as $i => $extrafield)
 	{
-		foreach($extrafields as $i => $extrafield)
-		{
-			$t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']), sed_build_extrafields_data('user', $extrafield['field_type'], $extrafield['field_name'], $urr['user_'.$extrafield['field_name']]));
-			isset($L['user_'.$extrafield['field_name'].'_title']) ? $t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']).'_TITLE', $L['user_'.$extrafield['field_name'].'_title']) : $t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']).'_TITLE', $extrafield['field_description']);
-		}
+		$t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']), sed_build_extrafields_data('user', $extrafield['field_type'], $extrafield['field_name'], $urr['user_'.$extrafield['field_name']]));
+		$t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']).'_TITLE', isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title'] : $extrafield['field_description']);
 	}
 
 	/* === Hook - Part2 : Include === */

@@ -567,6 +567,22 @@ if (!$cfg['disablehitstats'])
 	}
 }
 
+/* ======== Extrafields ======== */
+
+if (!$sed_extrafields)
+{
+	$sed_extrafields = array();
+	$sed_extrafields['structure'] =array();
+	$sed_extrafields['pages'] =array();
+	$sed_extrafields['users'] =array();
+	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE 1");
+	while($row = sed_sql_fetchassoc($fieldsres))
+	{
+		$sed_extrafields[$row['field_location']][] = $row;
+	}
+	$cfg['cache'] && $cot_cache->db_set('sed_extrafields', $sed_extrafields, 'system');
+}
+
 /* ======== Categories ======== */
 
 if (!$sed_cat && !$cfg['disable_page'])

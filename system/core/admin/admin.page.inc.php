@@ -264,26 +264,6 @@ $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar
 		ORDER by page_id DESC
 		LIMIT $d,".$cfg['maxrowsperpage']);
 
-// Extra fields
-$extrafields_c = array();
-$extrafields_p = array();
-$number_of_extrafields_c = 0;
-$number_of_extrafields_p = 0;
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='structure' OR field_location='pages'");
-while ($row = sed_sql_fetchassoc($fieldsres))
-{
-	if ($row['field_location'] == 'structure')
-	{
-		$extrafields_c[] = $row;
-		$number_of_extrafields_c++;
-	}
-	elseif ($row['field_location'] == 'pages')
-	{
-		$extrafields_p[] = $row;
-		$number_of_extrafields_p++;
-	}
-}
-
 $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('admin.page.loop');
@@ -365,25 +345,19 @@ while ($row = sed_sql_fetcharray($sql))
 	));
 
 	// Extra fields for structure
-	if ($number_of_extrafields_c > 0)
+	foreach ($sed_extrafields['structure'] as $row_c)
 	{
-		foreach ($extrafields_c as $row_c)
-		{
-			$uname = strtoupper($row_c['field_name']);
-			isset($L['structure_'.$row_c['field_name'].'_title']) ? $t->assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', $L['structure_'.$row_c['field_name'].'_title']) : $t->assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', $row_c['field_description']);
-			$t->assign('ADMIN_PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $sed_cat[$row['page_cat']][$row_c['field_name']]));
-		}
+		$uname = strtoupper($row_c['field_name']);
+		$t->assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
+		$t->assign('ADMIN_PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $sed_cat[$row['page_cat']][$row_c['field_name']]));
 	}
 
 	// Extra fields for pages
-	if ($number_of_extrafields_p > 0)
+	foreach ($sed_extrafields['pages'] as $row_p)
 	{
-		foreach ($extrafields_p as $row_p)
-		{
-			$uname = strtoupper($row_p['field_name']);
-			isset($L['page_'.$row_p['field_name'].'_title']) ? $t->assign('ADMIN_PAGE_'.$uname.'_TITLE', $L['page_'.$row_p['field_name'].'_title']) : $t->assign('ADMIN_PAGE_'.$uname.'_TITLE', $row_p['field_description']);
-			$t->assign('ADMIN_PAGE_'.$uname, sed_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $row['page_'.$row_p['field_name']]));
-		}
+		$uname = strtoupper($row_p['field_name']);
+		$t->assign('ADMIN_PAGE_'.$uname.'_TITLE', isset($L['page_'.$row_p['field_name'].'_title']) ?  $L['page_'.$row_p['field_name'].'_title'] : $row_p['field_description']);
+		$t->assign('ADMIN_PAGE_'.$uname, sed_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $row['page_'.$row_p['field_name']]));
 	}
 
 	switch($row['page_type'])

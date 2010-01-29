@@ -1,18 +1,11 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
+<?php
 /**
  * Add page.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */
 
@@ -32,12 +25,6 @@ foreach ($extp as $pl)
 }
 /* ===== */
 sed_block($usr['auth_write']);
-
-
-// Extra fields - getting
-$extrafields = array(); $number_of_extrafields = 0;
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while($row = sed_sql_fetchassoc($fieldsres)) { $extrafields[] = $row; $number_of_extrafields++; }
 
 if ($a=='add')
 {
@@ -77,8 +64,7 @@ if ($a=='add')
 	$newpageexpire = ($newpageexpire<=$newpagebegin) ? $newpagebegin+31536000 : $newpageexpire;
 
 	// Extra fields
-	if($number_of_extrafields > 0)
-	foreach($extrafields as $row)
+	foreach($sed_extrafields['pages'] as $row)
 	{
 		$import = sed_import('newpage'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
@@ -87,6 +73,7 @@ if ($a=='add')
 		}
 		$newpageextrafields[] = $import;
 	}
+
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
 
@@ -146,7 +133,7 @@ if ($a=='add')
 		page_type,
 		page_cat,
 		page_key,";
-		if($number_of_extrafields > 0) foreach($extrafields as $row) $ssql .= "page_".$row['field_name'].", "; // Extra fields
+		foreach($sed_extrafields['pages'] as $row) $ssql .= "page_".$row['field_name'].", "; // Extra fields
 $ssql.="page_title,
 		page_desc,
 		page_text,
@@ -165,7 +152,7 @@ $ssql.="page_title,
 		0,
 		'".sed_sql_prep($newpagecat)."',
 			'".sed_sql_prep($newpagekey)."',";
-			if($number_of_extrafields > 0) foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields
+			foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields
   	$ssql.="'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
 			'".sed_sql_prep($newpagetext)."',
@@ -306,11 +293,9 @@ for($i = 0; $i<$numtags; $i++)
 }
 
 // Extra fields
-if(count($extrafields)>0)
-{
-	$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $extrafields, '', true);
-	$pageadd_array= $pageadd_array + $extra_array;
-}
+$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $sed_extrafields['pages'], '', true);
+$pageadd_array= $pageadd_array + $extra_array;
+
 $t->assign($pageadd_array);
 
 /* === Hook === */
