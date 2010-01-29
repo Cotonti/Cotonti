@@ -1,19 +1,13 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
+<?php
 
 /**
- * User registration script.
+ * User Registration Script
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
- * @license BSD License
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL');
@@ -33,11 +27,6 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
-
-// Extra fields - getting
-$extrafields = array();
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
-while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
 if ($a=='add')
 {
@@ -71,8 +60,7 @@ if ($a=='add')
 	$ruseremail = mb_strtolower($ruseremail);
 
 	// Extra fields
-	if(count($extrafields)>0)
-	foreach($extrafields as $row)
+	foreach($sed_extrafields['users'] as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
@@ -133,8 +121,7 @@ if ($a=='add')
 
 		// Extra fields
 		$extra_columns = ""; $extra_values = "";
-		if(count($extrafields)>0)
-		foreach($extrafields as $i=>$row)
+		foreach($sed_extrafields['users'] as $i=>$row)
 		{
 			$extra_columns .= "user_".$row['field_name'].", ";
 			$extra_values .= "'".sed_sql_prep($ruserextrafields[$i])."', ";
@@ -163,7 +150,7 @@ if ($a=='add')
 			user_irc,
 			user_msn,
 			user_website,
-		$extra_columns
+			$extra_columns
 			user_lastip)
 			VALUES
 			('".sed_sql_prep($rusername)."',
@@ -189,7 +176,7 @@ if ($a=='add')
 			'".sed_sql_prep($ruserirc)."',
 			'".sed_sql_prep($rusermsn)."',
 			'".sed_sql_prep($ruserwebsite)."',
-		$extra_values
+			$extra_values
 			'".$usr['ip']."')";
 		$sql = sed_sql_query($ssql);
 		$userid = sed_sql_insertid();
@@ -328,11 +315,9 @@ $useredit_array = array(
 	"USERS_REGISTER_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".htmlspecialchars($rusermsn)."\" size=\"32\" maxlength=\"64\" />",
 );
 // Extra fields
-if(count($extrafields)>0)
-{
-	$extra_array = sed_build_extrafields('user', 'USERS_REGISTER', $extrafields, $urr);
-	$useredit_array = $useredit_array + $extra_array;
-}
+$extra_array = sed_build_extrafields('user', 'USERS_REGISTER', $sed_extrafields['users'], $urr);
+$useredit_array = $useredit_array + $extra_array;
+
 $t->assign($useredit_array);
 
 /* === Hook === */

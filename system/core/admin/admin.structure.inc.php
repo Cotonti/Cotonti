@@ -55,12 +55,9 @@ $options_sort = array(
 
 // Extra fields pages
 $extrafields = array();
-$number_of_extrafields = 0;
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while ($row = sed_sql_fetchassoc($fieldsres))
+foreach($sed_extrafields['pages'] as $i => $row)
 {
-	$extrafields[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
-	$number_of_extrafields++;
+	$$extrafields[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
 }
 $options_sort = ($options_sort + $extrafields);
 
@@ -68,16 +65,6 @@ $options_way = array(
 	'asc' => $L['Ascending'],
 	'desc' => $L['Descending']
 );
-
-// Extra fields structure
-$extrafields = array();
-$number_of_extrafields = 0;
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='structure'");
-while ($row = sed_sql_fetchassoc($fieldsres))
-{
-	$extrafields[] = $row;
-	$number_of_extrafields++;
-}
 
 if ($n == 'options')
 {
@@ -97,24 +84,14 @@ if ($n == 'options')
 		$rallowratings = sed_import('rallowratings', 'P', 'BOL');
 
 		// Extra fields
-		if ($number_of_extrafields > 0)
+		foreach ($sed_extrafields['structure'] as $row)
 		{
-			foreach ($extrafields as $row)
+			$import = sed_import('rstructure'.$row['field_name'], 'P', 'HTM');
+			if ($row['field_type'] == "checkbox")
 			{
-				$import = sed_import('rstructure'.$row['field_name'], 'P', 'HTM');
-				if ($row['field_type'] == "checkbox")
-				{
-					if ($import == "0" OR $import == "on")
-					{
-						$import = 1;
-					}
-					else
-					{
-						$import = 0;
-					}
-				}
-				$rstructureextrafields[] = $import;
+				$import = $import != '';
 			}
+			$rstructureextrafields[] = $import;
 		}
 
 		$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
@@ -164,14 +141,11 @@ if ($n == 'options')
 				structure_order='".sed_sql_prep($rorder.".".$rway)."',";
 
 		// Extra fields
-		if ($number_of_extrafields > 0)
+		foreach ($sed_extrafields['structure'] as $i => $fildname)
 		{
-			foreach ($extrafields as $i => $fildname)
+			if (!is_null($rstructureextrafields[$i]))
 			{
-				if (!is_null($rstructureextrafields[$i]))
-				{
-					$sqltxt .= "structure_".sed_sql_prep($fildname['field_name'])."='".sed_sql_prep($rstructureextrafields[$i])."',";
-				}
+				$sqltxt .= "structure_".sed_sql_prep($fildname['field_name'])."='".sed_sql_prep($rstructureextrafields[$i])."',";
 			}
 		}
 
@@ -292,10 +266,7 @@ if ($n == 'options')
 	));
 
 	// Extra fields
-	if ($number_of_extrafields > 0)
-	{
-		$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE', $extrafields, $row);
-	}
+	$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE', $sed_extrafields['structure'], $row);
 	$t->assign($extra_array);
 
 	/* === Hook === */
@@ -317,25 +288,16 @@ else
 		{
 			$s[$i]['rgroup'] = (isset($s[$i]['rgroup'])) ? 1 : 0;
 			// Extra fields
-			if ($number_of_extrafields > 0)
+			foreach ($sed_extrafields['structure'] as $row)
 			{
-				foreach ($extrafields as $row)
+				$import = $s[$i]['rstructure'.$row['field_name']];
+				if ($row['field_type'] == "checkbox")
 				{
-					$import = $s[$i]['rstructure'.$row['field_name']];
-					if ($row['field_type'] == "checkbox")
-					{
-						if ($import == "0" OR $import == "on")
-						{
-							$import = 1;
-						}
-						else
-						{
-							$import = 0;
-						}
-					}
-					$rstructureextrafields[] = $import;
+					$import = $import != '';
 				}
+				$rstructureextrafields[] = $import;
 			}
+
 
 			$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
 			$roww = sed_sql_fetcharray($sqql);
@@ -364,14 +326,11 @@ else
 				SET ";
 
 			// Extra fields
-			if ($number_of_extrafields > 0)
+			foreach ($sed_extrafields['structure'] as $j => $fildname)
 			{
-				foreach ($extrafields as $j => $fildname)
+				if (!is_null($rstructureextrafields[$j]))
 				{
-					if (!is_null($rstructureextrafields[$j]))
-					{
-						$sql1text .= "structure_".sed_sql_prep($fildname['field_name'])."='".sed_sql_prep($rstructureextrafields[$j])."',";
-					}
+					$sql1text .= "structure_".sed_sql_prep($fildname['field_name'])."='".sed_sql_prep($rstructureextrafields[$j])."',";
 				}
 			}
 
@@ -399,24 +358,14 @@ else
 		$ngroup = (isset($ngroup)) ? 1 : 0;
 
 		// Extra fields
-		if ($number_of_extrafields > 0)
+		foreach ($sed_extrafields['structure'] as $row)
 		{
-			foreach ($extrafields as $row)
+			$import = sed_import('newstructure'.$row['field_name'], 'P', 'HTM');
+			if ($row['field_type'] == "checkbox")
 			{
-				$import = sed_import('newstructure'.$row['field_name'], 'P', 'HTM');
-				if ($row['field_type'] == "checkbox")
-				{
-					if ($import == "0" OR $import == "on")
-					{
-						$import = 1;
-					}
-					else
-					{
-						$import = 0;
-					}
-				}
-				$rstructureextrafields[$row['field_name']] = $import;
+				$import = $import != '';
 			}
+			$rstructureextrafields[$row['field_name']] = $import;
 		}
 
 		/* === Hook === */
@@ -540,10 +489,7 @@ else
 		));
 
 		// Extra fields
-		/*if ($number_of_extrafields > 0)
-		{
-			$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE', $extrafields, $row, false);
-		}
+		/* $extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE', $sed_extrafields['structure'], $row, false);
 		$t->assign($extra_array);*/
 
 		/* === Hook - Part2 : Include === */
@@ -592,10 +538,7 @@ else
 	));
 
 	// Extra fields
-	if ($number_of_extrafields > 0)
-	{
-		$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE_FORMADD', $extrafields, '', true);
-	}
+	$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE_FORMADD', $sed_extrafields['structure'], '', true);
 	$t->assign($extra_array);
 
 	$t->parse("STRUCTURE.DEFULT");

@@ -5,10 +5,10 @@
  * @package Cotonti
  * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
-if ( !defined('SED_CODE') ) { die("Wrong URL."); }
+defined('SED_CODE') or die("Wrong URL.");
 function sed_build_recentforums($template, $mode='recent', $maxperpage='5', $d=0, $titlelength=0, $rightprescan=true)
 {
 	global $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $skin, $usr, $sys;
@@ -176,19 +176,9 @@ ORDER by fs_masterid DESC, fs_order ASC");
 	return $res;
 }
 
-if (empty($extrafields_pag))
-{
-	/*  === get extra fields === */
-	$extrafields_pag = array();
-	$fieldsres = sed_sql_query("SELECT field_name, field_type FROM $db_extra_fields WHERE field_location='pages'");
-	while ($row = sed_sql_fetchassoc($fieldsres)) $extrafields_pag[] = $row;
-	/* ===== */
-}
-
 function sed_build_recentpages($template, $mode='recent', $maxperpage='5', $d=0, $titlelength=0, $textlength=0, $rightprescan=true, $cat='')
 {
-	global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag,
-	$usr, $extrafields_pag;
+	global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $sed_extrafields, $usr;
 	$recentitems = new XTemplate(sed_skinfile($template, true));
 
 	if($rightprescan || $cat)
@@ -318,13 +308,14 @@ function sed_build_recentpages($template, $mode='recent', $maxperpage='5', $d=0,
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj),
 			"PAGE_ROW_NUM" => $jj,
 			));
-		// data from extra fields
-		foreach ($extrafields_pag as $row)
+		//extrafields
+		foreach ($sed_extrafields['pages'] as $row)
 		{
+			$recentitems->assign('PAGE_ROW_'.strtoupper($row_p['field_name']).'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
 			$recentitems->assign('PAGE_ROW_' . mb_strtoupper($row['field_name']),
-				sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"])
-			);
+				sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"]));
 		}
+
 		$recentitems->parse("MAIN.PAGE_ROW");
 	}
 

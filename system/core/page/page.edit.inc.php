@@ -1,18 +1,12 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
+<?php
 
 /**
  * Edit page.
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */
 
@@ -23,11 +17,6 @@ sed_block($usr['auth_read']);
 
 $id = sed_import('id','G','INT');
 $c = sed_import('c','G','TXT');
-
-// Extra fields - getting
-$extrafields = array();
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='pages'");
-while($row = sed_sql_fetchassoc($fieldsres)) $extrafields[] = $row;
 
 if ($a=='update')
 {
@@ -92,8 +81,7 @@ if ($a=='update')
 	}
 
 	// Extra fields
-	if(count($extrafields)>0)
-	foreach($extrafields as $row)
+	foreach($sed_extrafields['pages'] as $row)
 	{
 		$import = sed_import('rpage'.$row['field_name'],'P','HTM');
 		if($row['field_type']=="checkbox")
@@ -191,16 +179,14 @@ if ($a=='update')
 				sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".sed_sql_prep($rpagecat)."' ");
 			}
 			// Extra fields
-			if(count($extrafields)>0)
+			foreach($sed_extrafields['pages'] as $i=>$row)
 			{
-				foreach($extrafields as $i=>$row)
+				if(!is_null($rpageextrafields[$i]))
 				{
-					if(!is_null($rpageextrafields[$i]))
-					{
-						$ssql_extra .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',";
-					}
+					$ssql_extra .= "page_".$row['field_name']." = '".sed_sql_prep($rpageextrafields[$i])."',";
 				}
 			}
+
 			if ($usr['isadmin'])
 			{
 				$ssql_admin = "page_type = '".sed_sql_prep($rpagetype)."',
@@ -385,11 +371,9 @@ for($i = 0; $i<$numtags; $i++)
 }
 
 // Extra fields
-if(count($extrafields)>0)
-{
-	$extra_array = sed_build_extrafields('page', 'PAGEEDIT_FORM', $extrafields, $pag);
-	$pageedit_array= $pageedit_array + $extra_array;
-}
+$extra_array = sed_build_extrafields('page', 'PAGEEDIT_FORM', $sed_extrafields['pages'], $pag);
+$pageedit_array= $pageedit_array + $extra_array;
+
 $t->assign($pageedit_array);
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.tags');

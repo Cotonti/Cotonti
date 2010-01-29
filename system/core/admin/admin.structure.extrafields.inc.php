@@ -123,7 +123,7 @@ elseif ($a == 'del' && isset($n))
 		$adminwarnings = $L['adm_extrafield_not_removed'];
 	}
 }
-
+$cot_cache->db_unset('sed_extrafields', 'system');
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location='structure'"), 0, 0);

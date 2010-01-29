@@ -1,18 +1,12 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
+<?php
 
 /**
  * Forums posts display.
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */
 
@@ -462,12 +456,10 @@ if (empty($d))
 if ($usr['id']>0)
 { $morejavascript .= sed_build_addtxt('newpost', 'newmsg'); }
 
-//Extra fields for users
-$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users'");
 $user_extrafields = "";
-while($row = sed_sql_fetchassoc($fieldsres))
+//Extra fields for users
+foreach($sed_extrafields['users'] as $i => $row)
 {
-	$extrafields[] = $row; $number_of_extrafields++;
 	$user_extrafields .= "u.user_{$row['field_name']}, ";
 }
 
@@ -730,12 +722,11 @@ while ($row = sed_sql_fetcharray($sql))
 	));
 
 	// Extra fields for users
-	if(count($extrafields)>0)
-	foreach($extrafields as $i=>$extrafield)
+	foreach($sed_extrafields['users'] as $i=>$extrafield)
 	{
 		$uname = strtoupper($extrafield['field_name']);
 		$t->assign('FORUMS_POSTS_ROW_USER'.$uname, htmlspecialchars($row['user_'.$extrafield['field_name']]));
-		isset($L['page_'.$extrafield['field_name'].'_title']) ? $t->assign('FORUMS_POSTS_ROW_USER'.$uname.'_TITLE', $L['page_'.$extrafield['field_name'].'_title']) : $t->assign('PAGE_'.$uname.'_TITLE', $extrafield['field_description']);
+		$t->assign('FORUMS_POSTS_ROW_USER'.$uname.'_TITLE', isset($L['page_'.$extrafield['field_name'].'_title']) ?  $L['page_'.$extrafield['field_name'].'_title'] : $extrafield['field_description']);
 	}
 
 	/* === Hook - Part2 : Include === */
