@@ -332,7 +332,7 @@ if ($pag['page_totaltabs'] > 1)
 		}
 		else
 		{
-			$pag['page_tabtitle'][$i] = '';
+			$pag['page_tabtitle'][$i] = $i == 1 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
 		}
 		$tab_url = empty($pag['page_alias']) ? sed_url('page', 'id='.$pag['page_id'].'&pg='.$i) : sed_url('page', 'al='.$pag['page_alias'].'&pg='.$i);
 		$pag['page_tabtitles'][] .= '<a href="'.$tab_url.'">'.($i+1).'. '.$pag['page_tabtitle'][$i].'</a>';
