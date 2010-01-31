@@ -426,7 +426,7 @@ $lincif_page = sed_auth('page', 'any', 'A');
 $t->assign(array(
 	"ADMIN_PAGE_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=page"),
 	"ADMIN_PAGE_URL_ADD" => sed_url('page', 'm=add'),
-	"ADMIN_PAGE_URL_EXTRAFIELDS" => sed_url('admin', 'm=page&s=extrafields'),
+	"ADMIN_PAGE_URL_EXTRAFIELDS" => sed_url('admin', 'm=extrafields&n=pages'),
 	"ADMIN_PAGE_URL_LIST_ALL" => sed_url('list', 'c=all'),
 	"ADMIN_PAGE_FORM_URL" => sed_url('admin', "m=page&a=update_cheked&d=".$d),
 	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages,

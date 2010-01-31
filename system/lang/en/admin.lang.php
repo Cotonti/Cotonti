@@ -792,8 +792,8 @@ $L['viewdeleteentries'] = 'View or delete entries';
 $L['adm_extrafields'] = 'Extra fields';
 $L['adm_extrafield_added'] = 'Successfully added new extra field.';
 $L['adm_extrafield_not_added'] = 'Error! New extra field not added.';
-$L['adm_extrafield_updated'] = 'Successfully updated extra field.';
-$L['adm_extrafield_not_updated'] = 'Error! Extra field not updated.';
+$L['adm_extrafield_updated'] = 'Successfully updated extra field \'%1$s\'.';
+$L['adm_extrafield_not_updated'] = 'Error! Extra field \'%1$s\' not updated.';
 $L['adm_extrafield_removed'] = 'Successfully removed extra field.';
 $L['adm_extrafield_not_removed'] = 'Error! Extra field not deleted.';
 $L['adm_extrafield_confirmdel'] = 'Really delete this extra field? All data in this field will be lost!';
@@ -807,7 +807,7 @@ $L['extf_Description'] = 'Description (_TITLE)';
 
 $L['adm_extrafield_new'] = 'New extra field';
 $L['adm_extrafield_noalter'] = 'Do not add actual field in DB, just register it as extra';
-$L['adm_extrafield_selectable_values'] = 'Options for select (comma sep.)';
+$L['adm_extrafield_selectable_values'] = 'Options for select and radio (comma sep.)';
 $L['adm_help_extrafield'] = 'Hint: Field &quot;Base HTML&quot; is set to default automatically if you leave it blank and press Update.';
 
 /**
