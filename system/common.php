@@ -578,7 +578,7 @@ if (!$sed_extrafields)
 	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE 1");
 	while($row = sed_sql_fetchassoc($fieldsres))
 	{
-		$sed_extrafields[$row['field_location']][] = $row;
+		$sed_extrafields[$row['field_location']][$row['field_name']] = $row;
 	}
 	$cfg['cache'] && $cot_cache->db_set('sed_extrafields', $sed_extrafields, 'system');
 }

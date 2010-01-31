@@ -791,8 +791,8 @@ $L['viewdeleteentries'] = 'Просмотр / удаление';
 $L['adm_extrafields'] = 'Дополнительные поля';
 $L['adm_extrafield_added'] = 'Новое поле добавлено';
 $L['adm_extrafield_not_added'] = 'Ошибка! Новое поле не добавлено';
-$L['adm_extrafield_updated'] = 'Поле отредактировано';
-$L['adm_extrafield_not_updated'] = 'Ошибка! Поле не отредактировано';
+$L['adm_extrafield_updated'] = 'Поле "%1$s" отредактировано';
+$L['adm_extrafield_not_updated'] = 'Ошибка! Поле "%1$s" не отредактировано';
 $L['adm_extrafield_removed'] = 'Поле удалено';
 $L['adm_extrafield_not_removed'] = 'Ошибка! Поле не удалено';
 $L['adm_extrafield_confirmdel'] = 'Вы действительно хотите удалить поле? Все данные этого поля будут потеряны!';
@@ -806,7 +806,7 @@ $L['extf_Description'] = 'Описание поля (_TITLE)';
 
 $L['adm_extrafield_new'] = 'Новое поле';
 $L['adm_extrafield_noalter'] = 'Не добавлять новое поле в БД, только зарегистрировать как дополнительное';
-$L['adm_extrafield_selectable_values'] = 'Значения для select (через запятую)';
+$L['adm_extrafield_selectable_values'] = 'Значения для select и radio (через запятую)';
 $L['adm_help_extrafield'] = 'HTML-код поля устанавливается в значение по умолчанию автоматически, если его очистить и обновить';
 
 /**

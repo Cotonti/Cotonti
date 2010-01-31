@@ -16,7 +16,7 @@ $z = 'admin';
 
 require_once('./datas/config.php');
 require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/functions.admin.php');
+require_once($cfg['system_dir'].'/core/admin/admin.functions.php');
 require_once($cfg['system_dir'].'/common.php');
 
 require_once($cfg['system_dir'].'/lang/en/admin.lang.php');

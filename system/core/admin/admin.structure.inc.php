@@ -550,7 +550,7 @@ $is_adminwarnings = isset($adminwarnings);
 $t->assign(array(
 	"ADMIN_STRUCTURE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_STRUCTURE_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=structure"),
-	"ADMIN_STRUCTURE_URL_EXTRAFIELDS" => sed_url('admin', 'm=structure&s=extrafields')
+	"ADMIN_STRUCTURE_URL_EXTRAFIELDS" => sed_url('admin', 'm=extrafields&n=structure')
 ));
 
 /* === Hook  === */
