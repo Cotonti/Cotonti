@@ -244,7 +244,7 @@ function sed_blockguests()
 
 	if ($usr['id']<1)
 	{
-		header("Location: " . SED_ABSOLUTE_URL . sed_url('message', "msg=930&".$sys['url_redirect'], '', true));
+		header('Location: ' . SED_ABSOLUTE_URL . sed_url('message', 'msg=930&' . $sys['url_redirect'], '', true));
 		exit;
 	}
 	return FALSE;
