@@ -122,7 +122,7 @@ if ($a=='upload')
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ===== */
 
-	if ($folderid!==FALSE)
+	if (!empty($folderid))
 	{
 		$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid' ");
 		sed_die(sed_sql_numrows($sql)==0);
