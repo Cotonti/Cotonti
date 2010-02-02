@@ -75,6 +75,8 @@ var ajaxCurrentBase = location.href.replace($('base').eq(0).attr('href'), '').re
 // This flag indicates that AJAX+history has been used on this page
 // It means that "#" or home link should be loaded via ajax too
 var ajaxUsed = false;
+// Global flag to let everybody know that AJAX has failed
+var ajaxError = false;
 
 // AJAX helper function
 function ajaxSend(settings) {
@@ -104,6 +106,7 @@ function ajaxSend(settings) {
 				}
 			} else {
 				alert('AJAX error: ' + msg);
+				ajaxError = true;
 			}
 		}
 	});
@@ -188,7 +191,7 @@ function bindHandlers() {
 		});
 		$('a.ajax').live('click', function() {
 			$.historyLoad(ajaxMakeHash($(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
-			return false;
+			return ajaxError;
 		});
 	}
 }
