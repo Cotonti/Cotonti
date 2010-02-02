@@ -13,9 +13,7 @@
 			<tr>
 				<td class="coltop" style="width:30%;">{PHP.L.Parameter}</td>
 				<td class="coltop" style="width:60%;">{PHP.L.Value}</td>
-<!-- IF {PHP.o} == 'core' -->
 				<td class="coltop" style="width:10%;">{PHP.L.Reset}</td>
-<!-- ENDIF -->
 			</tr>
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 			<tr>
@@ -62,13 +60,11 @@
 					<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
 <!-- ENDIF -->
 				</td>
-<!-- IF {PHP.o} == 'core' -->
 				<td class="centerall">
 					<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax">
 						{PHP.R.admin_icon_reset}
 					</a>
 				</td>
-<!-- ENDIF -->
 			</tr>
 <!-- END: ADMIN_CONFIG_ROW -->
 			<tr>

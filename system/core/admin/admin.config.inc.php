@@ -35,60 +35,38 @@ switch($n)
 	case 'edit':
 		$o = sed_import('o', 'G', 'ALP');
 		$p = sed_import('p', 'G', 'ALP');
-		$v = sed_import('v', 'G', 'TXT');
+		$v = sed_import('v', 'G', 'ALP');
 		$o = empty($o) ? 'core' : $o;
 		$p = empty($p) ? 'global' : $p;
 
 		if ($a == 'update')
 		{
-			if ($o == 'core')
+			
+			$sql = sed_sql_query("SELECT config_name FROM $db_config
+				WHERE config_owner='$o' AND config_cat='$p'");
+			while ($row = sed_sql_fetcharray($sql))
 			{
-				foreach ($cfgmap as $line)
+				$cfg_value = trim(sed_import($row['config_name'], 'P', 'NOC'));
+				if ($o == 'core' && $p == 'users'
+					&& ($cfg_name == 'av_maxsize' || $cfg_name == 'sig_maxsize' || $cfg_name == 'ph_maxsize'))
 				{
-					if ($line[0] == $p)
-					{
-						$cfg_name = $line[2];
-						$cfg_value = trim(sed_import($cfg_name, 'P', 'NOC'));
-						if ($p == 'users' && ($cfg_name == 'av_maxsize' || $cfg_name == 'sig_maxsize' || $cfg_name == 'ph_maxsize'))
-						{
-							$cfg_value = min($cfg_value, sed_get_uploadmax() * 1024);
-						}
-						$sql = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($cfg_value) . "' WHERE config_name='" . $cfg_name . "' AND config_owner='core'");
-					}
+						$cfg_value = min($cfg_value, sed_get_uploadmax() * 1024);
 				}
-			}
-			else
-			{
-				$sql = sed_sql_query("SELECT config_name FROM $db_config WHERE config_owner='$o' AND config_cat='$p'");
-				while ($row = sed_sql_fetcharray($sql))
-				{
-					$cfg_value = trim(sed_import($row['config_name'], 'P', 'NOC'));
-					$sql1 = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($cfg_value) . "' WHERE config_name='" . $row['config_name'] . "' AND config_owner='$o' AND config_cat='$p'");
-				}
+				sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($cfg_value) . "'
+					WHERE config_name='" . $row['config_name'] . "' AND config_owner='$o' AND config_cat='$p'");
 			}
 
 			$cfg['cache'] && $cot_cache->db_unset('cot_cfg', 'system');
 			$adminwarnings = $L['Updated'];
 		}
-		elseif ($a == 'reset' && $o == 'core' && !empty($v))
+		elseif ($a == 'reset' && !empty($v))
 		{
-			foreach ($cfgmap as $i => $line)
-			{
-				if ($v == $line[2])
-				{
-					$sql = sed_sql_query("UPDATE $db_config SET config_value='" . sed_sql_prep($line[4]) . "' WHERE config_name='$v' AND config_owner='$o'");
-				}
-			}
+			sed_sql_query("UPDATE $db_config SET config_value=config_default WHERE config_name='$v' AND config_owner='$o'");
 			$cfg['cache'] && $cot_cache->db_unset('cot_cfg', 'system');
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
 		sed_die(sed_sql_numrows($sql) == 0);
-
-		foreach ($cfgmap as $line)
-		{
-			$cfg_params[$line[2]] = $line[5];
-		}
 
 		if ($o == 'core')
 		{
@@ -140,15 +118,14 @@ switch($n)
 			}
 			elseif ($config_type == 2)
 			{
-				if ($o=='plug' && !empty($row['config_default']))
+				if (!empty($row['config_variants']))
 				{
-					$cfg_params[$config_name] = explode(",", $row['config_default']);
+					$cfg_params = explode(',', $row['config_variants']);
 				}
 
-				if (is_array($cfg_params[$config_name]))
+				if (is_array($cfg_params))
 				{
-					reset($cfg_params[$config_name]);
-					while ( list($i,$x) = each($cfg_params[$config_name]) )
+					foreach ($cfg_params as $x)
 					{
 						$x = trim($x);
 
@@ -164,13 +141,14 @@ switch($n)
 					));
 					$t->parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2.ADMIN_CONFIG_ROW_TYPE_2_SELECT");
 				}
-				elseif ($cfg_params[$config_name] == "userlevels")
+				// FIXME seems like obsolete code
+				/*elseif ($cfg_params == "userlevels")
 				{
 					$t->assign(array(
 						"ADMIN_CONFIG_ROW_CONFIG_OPTION" => sed_selectboxlevels(0, 99, $config_value, $config_name)
 					));
 					$t->parse("CONFIG.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_TYPE_2.ADMIN_CONFIG_ROW_TYPE_2_SELECT");
-				}
+				}*/
 				else
 				{
 					$t->assign(array(
