@@ -449,7 +449,7 @@ if (!$cfg['disablehitstats'])
 	else
 	{
 		$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-		$maxusers = (int) sed_sql_result($sql, 0, 0);
+		$maxusers = (int) @sed_sql_result($sql, 0, 0);
 		$cot_cache->mem_available && $cot_cache->mem_set('maxusers', $maxusers, 'system', 0);
 	}
 
