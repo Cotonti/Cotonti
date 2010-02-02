@@ -328,14 +328,16 @@ switch($a)
 
 								if(!$ko)
 								{
-									$sql = sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".$line[3]."', '".$line[2]."', '".sed_sql_prep($line[4])."')");
+									$sql = sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_variants, config_text)
+										VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".sed_sql_prep($line[3])."', '".sed_sql_prep($line[3])."', '".sed_sql_prep($line[2])."', '".sed_sql_prep($line[4])."')");
 								}
 								elseif ($ko)
 								{
 									$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$pl' AND config_name='".$line[0]."' ");
 									$if = sed_sql_result($sqltmp, 0, "COUNT(*)");
 
-									$sql = (!$if) ? sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".$line[3]."', '".$line[2]."', '".sed_sql_prep($line[4])."')") : '';
+									$sql = (!$if) ? sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_variants, config_text)
+										VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".sed_sql_prep($line[3])."', '".sed_sql_prep($line[3])."', '".sed_sql_prep($line[2])."', '".sed_sql_prep($line[4])."')") : '';
 								}
 
 								$t->assign(array(
