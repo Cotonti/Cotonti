@@ -3,9 +3,9 @@
  * RSS output.
  *
  * @package Cotonti
- * @version 0.6.5
- * @author medar
- * @copyright Copyright (c) 2009 Cotonti Team
+ * @version 0.6.7
+ * @author medar, Cotonti Team
+ * @copyright Copyright (c) 2009-2010 Cotonti Team
  * @license BSD License
  */
 
@@ -288,7 +288,7 @@ if (count($items)>0)
 	{
 		$out .= "<item>\n";
 		$out .= "<title>".htmlspecialchars($item['title'])."</title>\n";
-		$out .= "<description><![CDATA[".$item['description']."]]></description>\n";
+		$out .= "<description><![CDATA[".sed_convert_relative_urls($item['description'])."]]></description>\n";
 		$out .= "<pubDate>".$item['pubDate']."</pubDate>\n";
 		$out .= "<link><![CDATA[".$item['link']."]]></link>\n";
 		$out .= "</item>\n";
@@ -386,6 +386,36 @@ function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_page
 			}
 		break;
 	}
+	return $text;
+}
+
+function sed_relative2absolute($matches)
+{
+	global $sys;
+	$res = $matches[1] . $matches[2] . '=' . $matches[3];
+	if (preg_match('#^(http|https|ftp)://#', $matches[4]))
+	{
+		$res .= $matches[4];
+	}
+	else
+	{
+		if ($matches[4][0] == '/')
+		{
+			$scheme = $sys['secure'] ? 'https' : 'http';
+			$res .= $scheme . '://' . $sys['host'] . $matches[4];
+		}
+		else
+		{
+			$res .= SED_ABSOLUTE_URL . $matches[4];
+		}
+	}
+	$res .= $matches[5];
+	return $res;
+}
+
+function sed_convert_relative_urls($text)
+{
+	$text = preg_replace_callback('#(\s)(href|src)=("|\')?([^"\'\s>]+)(["\'\s>])#', 'sed_relative2absolute', $text);
 	return $text;
 }
 
