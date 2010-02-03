@@ -15,7 +15,7 @@ $theme = $cfg['defaulttheme'];
 $out['meta_lastmod'] = gmdate("D, d M Y H:i:s");
 $file['config'] = './datas/config.php';
 $file['config_sample'] = './datas/config-sample.php';
-$file['sql'] = './sql/cotonti-'.$cfg['dbversion'].'.sql';
+$file['sql'] = './sql/install.sql';
 
 sed_sendheaders();
 
