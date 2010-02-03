@@ -957,7 +957,7 @@ INSERT INTO `sed_stats` (`stat_name`, `stat_value`) VALUES
 ('totalpms', 0),
 ('totalantihammer', 0),
 ('textboxerprev', 0),
-('version', 120);
+('version', 999);
 
 CREATE TABLE `sed_structure` (
   `structure_id` mediumint(8) NOT NULL auto_increment,
@@ -1006,6 +1006,14 @@ CREATE TABLE `sed_trash` (
   `tr_datas` mediumblob,
   PRIMARY KEY  (`tr_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+CREATE TABLE `sed_updates` (
+  `upd_param` VARCHAR(255) NOT NULL,
+  `upd_value` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`upd_param`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT INTO `sed_updates` (`upd_param`, `upd_value`)
+	VALUES ('revision', '$Rev$');
 
 CREATE TABLE `sed_users` (
   `user_id` int(11) unsigned NOT NULL auto_increment,

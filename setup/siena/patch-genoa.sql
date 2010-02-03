@@ -335,3 +335,12 @@ UPDATE sed_config SET config_default = '0', config_variants = '' WHERE config_ow
 UPDATE sed_config SET config_default = '0', config_variants = '' WHERE config_owner = 'core' AND config_name = 'extra9uchange';
 
 UPDATE sed_config SET config_variants = config_default, config_default = config_value WHERE config_owner = 'plug';
+
+/* r1105 New versioning for automatic updater */
+CREATE TABLE `sed_updates` (
+  `upd_param` VARCHAR(255) NOT NULL,
+  `upd_value` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`upd_param`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT INTO `sed_updates` (`upd_param`, `upd_value`)
+	VALUES ('revision', '$Rev$');
