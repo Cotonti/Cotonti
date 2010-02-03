@@ -127,9 +127,9 @@
 				<h3>{PHP.L.Pages}</h3>
 				<ul class="follow">
 					<li><a href="page.php?m=add">{PHP.L.addnewentry}</a></li>
-					<li><a href="admin.php?m=page&amp;s=structure">{PHP.L.home_ql_b2_1}</a></li>
-					<li><a href="admin.php?m=page&amp;s=extrafields">{PHP.L.home_ql_b2_2}</a></li>
-					<li><a href="admin.php?m=structure&amp;s=extrafields">{PHP.L.home_ql_b2_3}</a></li>
+					<li><a href="admin.php?m=structure">{PHP.L.home_ql_b2_1}</a></li>
+					<li><a href="admin.php?m=extrafields&amp;n=pages">{PHP.L.home_ql_b2_2}</a></li>
+					<li><a href="admin.php?m=extrafields&amp;n=structure">{PHP.L.home_ql_b2_3}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=parser">{PHP.L.home_ql_b2_4}</a></li>
 				</ul>
 			</div>
@@ -137,7 +137,7 @@
 				<h3>{PHP.L.Users}</h3>
 				<ul class="follow">
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=users">{PHP.L.home_ql_b3_1}</a></li>
-					<li><a href="admin.php?m=users&amp;s=extrafields">{PHP.L.home_ql_b3_2}</a></li>
+					<li><a href="admin.php?m=extrafields&amp;n=users">{PHP.L.home_ql_b3_2}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pfs">{PHP.L.PFS}</a></li>
 					<li><a href="admin.php?m=users">{PHP.L.home_ql_b3_4}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=pm">{PHP.L.Private_Messages}</a></li>
