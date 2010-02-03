@@ -344,7 +344,7 @@ if (count($items) > 0)
     {
         $t -> assign(array(
             "RSS_ROW_TITLE" => htmlspecialchars($item['title']),
-            "RSS_ROW_DESCRIPTION" => $item['description'],
+            "RSS_ROW_DESCRIPTION" => sed_convert_relative_urls($item['description']),
             "RSS_ROW_DATE" => $item['pubDate'],
             "RSS_ROW_LINK" => $item['link']
         ));
@@ -467,6 +467,36 @@ function sed_parse_post_text($post_id, $post_text, $post_html)
         $post_text .= (sed_string_truncate($text, $cfg['rss_postmaxsymbols'])) ? '...' : '';
     }
     return $post_text;
+}
+
+function sed_relative2absolute($matches)
+{
+	global $sys;
+	$res = $matches[1] . $matches[2] . '=' . $matches[3];
+	if (preg_match('#^(http|https|ftp)://#', $matches[4]))
+	{
+		$res .= $matches[4];
+	}
+	else
+	{
+		if ($matches[4][0] == '/')
+		{
+			$scheme = $sys['secure'] ? 'https' : 'http';
+			$res .= $scheme . '://' . $sys['host'] . $matches[4];
+		}
+		else
+		{
+			$res .= SED_ABSOLUTE_URL . $matches[4];
+		}
+	}
+	$res .= $matches[5];
+	return $res;
+}
+
+function sed_convert_relative_urls($text)
+{
+	$text = preg_replace_callback('#(\s)(href|src)=("|\')?([^"\'\s>]+)(["\'\s>])#', 'sed_relative2absolute', $text);
+	return $text;
 }
 
 ?>
