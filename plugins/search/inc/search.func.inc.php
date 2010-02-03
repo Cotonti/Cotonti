@@ -135,7 +135,7 @@ function hw_clear_mark($text, $type=0, $words)
 		// .
 		foreach($words as $k => $i)
 		{
-			$text_result = str_ireplace($i, "<b>".$i."</b>", $text_result);
+			$text_result = str_ireplace($i, "<span class=\"search-hl\">".$i."</span>", $text_result);
 		}
 
 		return($text_result);
