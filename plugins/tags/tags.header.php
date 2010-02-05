@@ -34,7 +34,7 @@ if($cfg['plugin']['tags']['pages']
 		&& in_array($m, array('edit', 'editpost', 'posts', 'newtopic'))
 		&& sed_auth('plug', 'tags', 'W'))
 	{
-		$out['compopup'] .= '<script type="text/javascript" src="' . $cfg['plugins_dir'] . '/tags/js/jquery.autocomplete.js"></script>
+		$out['compopup'] .= '<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
