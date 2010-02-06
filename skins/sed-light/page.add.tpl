@@ -46,6 +46,12 @@
 					<td>{PHP.L.Owner}:</td>
 					<td>{PAGEADD_FORM_OWNER}</td>
 				</tr>
+				<!-- BEGIN: ADMIN -->
+				<tr>
+					<td>{PHP.L.Parser}:</td>
+					<td>{PAGEADD_FORM_TYPE}</td>
+				</tr>
+				<!-- END: ADMIN -->
 				<tr>
 					<td>{PHP.L.Begin}:</td>
 					<td>{PAGEADD_FORM_BEGIN}</td>
