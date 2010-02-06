@@ -14,20 +14,16 @@ define('SED_INSTALL', TRUE);
 $location = 'Install';
 $z = 'install';
 
-if(file_exists('./datas/config.php'))
+if (file_exists('./datas/config.php'))
 {
-	require_once('./datas/config.php');
+	require_once './datas/config.php';
 }
 else
 {
-	require_once('./datas/config-sample.php');
+	require_once './datas/config-sample.php';
 }
-
-if(!$cfg['new_install'])
-{
-	header('Location: '.$cfg['mainurl']);
-	exit;
-}
+require_once($cfg['system_dir'].'/functions.php');
+require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
 
 //A Few basics from common.php
 if (version_compare(PHP_VERSION, '6.0.0', '<='))
@@ -45,18 +41,27 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
 
-$mlang = $cfg['system_dir'].'/lang/'.$cfg['defaultlang'].'/main.lang.php';
-if(file_exists($mlang))
+$mlang = $cfg['system_dir'] . '/lang/' . $cfg['defaultlang'] . '/main.lang.php';
+if (file_exists($mlang))
 {
-	require_once($mlang);
+	require_once $mlang;
 }
 else
 {
 	sed_diefatal('Main language file not found.');
 }
 
-require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
-require_once($cfg['system_dir'].'/core/install/install.inc.php');
-
+if ($_GET['m'] == 'update')
+{
+	require_once $cfg['system_dir'] . '/core/install/update.inc.php';
+}
+else
+{
+	if(!$cfg['new_install'])
+	{
+		header('Location: ' . $cfg['mainurl']);
+		exit;
+	}
+	require_once $cfg['system_dir'] . '/core/install/install.inc.php';
+}
 ?>

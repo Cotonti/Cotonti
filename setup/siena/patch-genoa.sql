@@ -344,3 +344,7 @@ CREATE TABLE `sed_updates` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 INSERT INTO `sed_updates` (`upd_param`, `upd_value`)
 	VALUES ('revision', '$Rev$');
+
+/* r1112 More updater requirements */
+INSERT INTO `sed_updates` (`upd_param`, `upd_value`)
+	VALUES ('branch', 'siena');

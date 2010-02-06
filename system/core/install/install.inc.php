@@ -15,7 +15,7 @@ $theme = $cfg['defaulttheme'];
 $out['meta_lastmod'] = gmdate("D, d M Y H:i:s");
 $file['config'] = './datas/config.php';
 $file['config_sample'] = './datas/config-sample.php';
-$file['sql'] = './sql/install.sql';
+$file['sql'] = './setup/install.sql';
 
 sed_sendheaders();
 
@@ -183,12 +183,12 @@ $status['mysql'] = (extension_loaded('mysql')) ? '<span class="install_valid">'.
 
 if($_POST['submit'])
 {
-	$status['mysql_ver'] = ($sed_dbc && function_exists('version_compare') && version_compare(@mysql_get_server_info($sed_dbc), '4.1.0', '>=')) ? '<span class="install_valid">'.sprintf($L['install_ver_valid'],  mysql_get_server_info($sed_dbc)).'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
+	$status['mysql_ver'] = '/ ' . ($sed_dbc && function_exists('version_compare') && version_compare(@mysql_get_server_info($sed_dbc), '4.1.0', '>=')) ? '<span class="install_valid">'.sprintf($L['install_ver_valid'],  mysql_get_server_info($sed_dbc)).'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
 }
-else
+/*else
 {
 	$status['mysql_ver'] = '<span class="install_invalid">'.$L['na'].'</span>';
-}
+}*/
 if($error)
 {
 	$t->assign(array(

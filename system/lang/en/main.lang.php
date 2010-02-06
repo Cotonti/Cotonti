@@ -969,5 +969,14 @@ $L['install_error_php_ver'] = 'Cotonti requires PHP version 5.1.0 or greater. Yo
 $L['install_error_mbstring'] = 'Cotonti requires PHP extension mbstring to be loaded';
 $L['install_error_sql_ext'] = 'Cotonti requires PHP extension mysql to be loaded';
 $L['install_error_sql_ver'] = 'Cotonti requires MySQL version 4.1.0 or greater. Your version is %1$s'; // %1 - Version
+$L['install_update'] = 'Updating Cotonti';
+$L['install_update_config_error'] = 'Could not rewrite datas/config.php';
+$L['install_update_config_success'] = 'Successfully updated datas/config.php';
+$L['install_update_error'] = 'Update Failed';
+$L['install_update_nothing'] = 'Nothing to update';
+$L['install_update_patches'] = 'Applied patches:';
+$L['install_update_success'] = 'Successfully updated to revision ';
+$L['install_upgrade_error'] = 'Failed upgrading Cotonti to ';
+$L['install_upgrade_success'] = 'Successfully upgraded Cotonti to ';
 
 ?>
