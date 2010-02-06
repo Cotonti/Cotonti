@@ -48,8 +48,12 @@ if ($a=='add')
 	/* ===== */
 
 	$newpagecat = sed_import('newpagecat','P','TXT');
+	
+	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
+	
 	$newpagekey = sed_import('newpagekey','P','TXT');
 	$newpagealias = sed_import('newpagealias','P','ALP');
+	$newpagetype = $usr['isadmin'] ? sed_import('newpagetype','P','INT') : 0;
 	$newpagetitle = sed_import('newpagetitle','P','TXT');
 	$newpagedesc = sed_import('newpagedesc','P','TXT');
 	$newpagetext = sed_import('newpagetext','P','HTM');
@@ -101,8 +105,10 @@ if ($a=='add')
 			$sql = sed_sql_query("SELECT page_id FROM $db_pages WHERE page_alias='".sed_sql_prep($newpagealias)."'");
 			$newpagealias = (sed_sql_numrows($sql)>0) ? "alias".rand(1000,9999) : $newpagealias;
 		}
+		
+		$newpagetype = ($usr['maingrp'] != 5 && $newpagetype == 2) ? 0 : $newpagetype;
 
-		if($cfg['parser_cache'])
+		if($cfg['parser_cache'] && $newpagetype != 1)
 		{
 			$newpagehtml = sed_parse(htmlspecialchars($newpagetext), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true);
 		}
@@ -134,7 +140,7 @@ if ($a=='add')
 		if (is_array($extp))
 		{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 		/* ===== */
-
+		
 		$ssql = "INSERT into $db_pages
 		(page_state,
 		page_type,
@@ -156,7 +162,7 @@ $ssql.="page_title,
 		page_alias)
 		VALUES
 		(".(int)$page_state.",
-		0,
+		".(int)$newpagetype.",
 		'".sed_sql_prep($newpagecat)."',
 			'".sed_sql_prep($newpagekey)."',";
 			if($number_of_extrafields > 0) foreach($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields
@@ -218,7 +224,12 @@ $pageadd_form_file = <<<HTM
 </select>
 HTM;
 
-$newpagecat = (empty($newpagecat)) ? $c : $newpagecat;
+if (empty($newpagecat))
+{
+	$newpagecat = $c;
+	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
+}
+
 $pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat');
 $newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600, 'long', '_beg');
 $newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone']*3600 + 31536000, 'long', '_exp');
@@ -273,6 +284,19 @@ $pageadd_array = array(
 	"PAGEADD_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($newpagetext)."</textarea>",
 	"PAGEADD_FORM_MYPFS" => $pfs
 );
+
+if ($usr['isadmin'])
+{
+	$page_form_type = "<select name=\"newpagetype\" size=\"1\">";
+	$selected0 = ($newpagetype==0) ? "selected=\"selected\"" : '';
+	$selected1 = ($newpagetype==1) ? "selected=\"selected\"" : '';
+	$selected2 = ($newpagetype==2 && $usr['maingrp']==5) ? "selected=\"selected\"" : '';
+	$page_form_type .= "<option value=\"0\" $selected0>".$L['Default']."</option>";
+	$page_form_type .= "<option value=\"1\" $selected1>HTML</option>";
+	$page_form_type .= ($usr['maingrp']==5 && $cfg['allowphp_pages'] && $cfg['allowphp_override']) ? "<option value=\"2\" $selected2>PHP</option>" : '';
+	$page_form_type .= "</select>";
+	$pageadd_array['PAGEADD_FORM_TYPE'] = $page_form_type;
+}
 
 // PFS tags
 $tplskin = file_get_contents($mskin);
