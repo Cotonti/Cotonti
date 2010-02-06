@@ -1012,8 +1012,9 @@ CREATE TABLE `sed_updates` (
   `upd_value` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-INSERT INTO `sed_updates` (`upd_param`, `upd_value`)
-	VALUES ('revision', '$Rev$');
+INSERT INTO `sed_updates` (`upd_param`, `upd_value`) VALUES
+('revision', '$Rev$'),
+('branch', 'siena');
 
 CREATE TABLE `sed_users` (
   `user_id` int(11) unsigned NOT NULL auto_increment,

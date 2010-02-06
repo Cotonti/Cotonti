@@ -55,7 +55,7 @@ hr			{ border:1px solid; border-color:#ddd transparent transparent transparent; 
 		</tr>
 		<tr>
 			<td>MySQL:</td>
-			<td class="textright">{INSTALL_MYSQL} / {INSTALL_MYSQL_VER}</td>
+			<td class="textright">{INSTALL_MYSQL} {INSTALL_MYSQL_VER}</td>
 		</tr>
 	</table>
 
