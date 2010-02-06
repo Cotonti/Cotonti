@@ -49,6 +49,10 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 		{
 			if (!isset($old_cfg[$key]))
 			{
+				if ($key == 'new_install')
+				{
+					$val = false;
+				}
 				if (is_bool($val))
 				{
 					$val = $val ? 'TRUE' : 'FALSE';
