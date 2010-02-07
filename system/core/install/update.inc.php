@@ -27,7 +27,7 @@ if (!file_exists("./setup/$branch"))
 	sed_diefatal('Setup directory not found');
 }
 
-require_once $file['config'];
+include $file['config'];
 
 $mskin = sed_skinfile('update');
 if (!file_exists($mskin))
@@ -39,39 +39,54 @@ $t = new XTemplate($mskin);
 // Check for new config options
 if (is_writable($file['config']) && file_exists($file['config_sample']))
 {
-	$old_cfg = cot_get_config($file['config']);
-	$new_cfg = cot_get_config($file['config_sample']);
-	if (count($new_cfg) > count($old_cfg))
+	list($old_cfg, $old_db) = cot_get_config($file['config']);
+	list($new_cfg, $new_db) = cot_get_config($file['config_sample']);
+	if (count($new_cfg) > count($old_cfg) || count($new_db) > count($old_db))
 	{
 		// Add new config options
 		$delta = '';
-		foreach ($new_cfg as $key => $val)
+		if (count($new_cfg) > count($old_cfg))
 		{
-			if (!isset($old_cfg[$key]))
+			foreach ($new_cfg as $key => $val)
 			{
-				if ($key == 'new_install')
+				if (!isset($old_cfg[$key]))
 				{
-					$val = false;
+					if ($key == 'new_install')
+					{
+						$val = false;
+					}
+					if (is_bool($val))
+					{
+						$val = $val ? 'TRUE' : 'FALSE';
+					}
+					elseif (is_int($val) || is_float($val))
+					{
+						$val = (string) $val;
+					}
+					else
+					{
+						$val = "'$val'";
+					}
+					$delta .= "\$cfg['$key'] = $val;\n";
 				}
-				if (is_bool($val))
+			}
+		}
+		if (count($new_db) > count($old_db))
+		{
+			foreach ($new_db as $key => $val)
+			{
+				if (!isset($old_db[$key]))
 				{
-					$val = $val ? 'TRUE' : 'FALSE';
+					$val = str_replace("sed_", "\$db_x.'", $val);
+					$delta .= "\${$key} = $val';\n";
 				}
-				elseif (is_int($val) || is_float($val))
-				{
-					$val = (string) $val;
-				}
-				else
-				{
-					$val = "'$val'";
-				}
-				$delta .= "\$cfg['$key'] = $val;\n";
 			}
 		}
 		$config_contents = file_get_contents($file['config']);
 		$config_contents = str_replace('?>', $delta . '?>', $config_contents);
 		file_put_contents($file['config'], $config_contents);
 		$msg_string .= $L['install_update_config_success'] . '<br />';
+		include $file['config'];
 	}
 }
 else
@@ -205,7 +220,16 @@ $t->out('MAIN');
 function cot_get_config($file)
 {
 	include $file;
-	return $cfg;
+	$db_vars = array();
+	$vars = get_defined_vars();
+	foreach ($vars as $key => $val)
+	{
+		if (preg_match('#^db_#', $key))
+		{
+			$db_vars[$key] = $val;
+		}
+	}
+	return array($cfg, $db_vars);
 }
 
 function cot_run_script($text)
