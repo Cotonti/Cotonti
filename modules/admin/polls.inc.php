@@ -14,9 +14,9 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['isadmin']);
 
-require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+require_once $cfg['modules_dir'] . '/polls/functions.php';
 
-$t = new XTemplate(sed_skinfile('admin.polls.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.polls.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=polls'), $L['Polls']);

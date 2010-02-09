@@ -25,6 +25,7 @@ require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/xtemplate.php';
 
 require_once $cfg['modules_dir'] . '/users/functions.php';
+require_once $cfg['modules_dir'] . '/users/resources.php';
 require_once sed_langfile('users', 'module');
 
 require_once $cfg['system_dir'] . '/email.php';

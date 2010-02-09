@@ -13,7 +13,7 @@
 {HEADER_HEAD}
 {HEADER_BASEHREF}
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="skins/{PHP.skin}/admin/admin.css" type="text/css" rel="stylesheet" />
+<link href="{PHP.cfg.modules_dir}/admin/tpl/admin.css" type="text/css" rel="stylesheet" />
 {HEADER_COMPOPUP}
 <title>{HEADER_TITLE}</title>
 </head>

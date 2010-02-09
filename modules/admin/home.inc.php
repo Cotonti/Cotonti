@@ -21,7 +21,7 @@ if ($cfg['svnrevision'] > $cfg['revision'])
 	sed_sql_query("UPDATE ".$db_config." SET `config_value`= ".(int)$cfg['svnrevision']." WHERE `config_owner` = 'core' AND `config_cat` = 'version' AND `config_name` = 'revision' LIMIT 1");
 }
 
-$t = new XTemplate(sed_skinfile('admin.home.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.home.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=home'), $L['Home']);
 

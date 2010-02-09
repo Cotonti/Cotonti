@@ -22,6 +22,7 @@ require_once $cfg['system_dir'] . '/xtemplate.php';
 sed_dieifdisabled($cfg['disable_forums']);
 
 require_once $cfg['modules_dir'] . '/forums/functions.php';
+require_once $cfg['modules_dir'] . '/forums/resources.php';
 require_once sed_langfile('forums', 'module');
 
 require_once $cfg['system_dir'] . '/extrafields.php';

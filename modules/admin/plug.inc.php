@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.plug.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.plug.inc'));
 
 $adminpath[] = array (sed_url('admin', 'm=plug'), $L['Plugins']);
 

@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.page.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.page.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=page'), $L['Pages']);
 $adminhelp = $L['adm_help_page'];

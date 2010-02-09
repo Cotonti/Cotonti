@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.trashcan.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.trashcan.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=trashcan'), $L['Trashcan']);
 $adminhelp = $L['adm_help_trashcan'];

@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.tools.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.tools.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=tools'), $L['Tools']);
 $adminhelp = $L['adm_help_tools'];
@@ -45,13 +45,13 @@ if(!empty($p))
 
 	$extp = array();
 
-	if(is_array($sed_plugins))
+	if(is_array($sed_plugins['tools']))
 	{
-		foreach($sed_plugins as $i => $k)
+		foreach($sed_plugins['tools'] as $k)
 		{
-			if($k['pl_hook'] == 'tools' && $k['pl_code'] == $p)
+			if($k['pl_code'] == $p)
 			{
-				$extp[$i] = $k;
+				$extp[] = $k;
 			}
 		}
 	}
@@ -89,31 +89,25 @@ else
 {
 	$plugins = array();
 
-	function cmp($a, $b, $k = 1)
+	function cot_admin_tools_cmp($pl_a, $pl_b)
 	{
-		if($a[$k] == $b[$k])
+		if($pl_a['pl_code'] == $pl_b['pl_code'])
 		{
 			return 0;
 		}
-		return($a[$k] < $b[$k]) ? -1 : 1;
+		return ($pl_a['pl_code'] < $pl_b['pl_code']) ? -1 : 1;
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('tools');
 
-	$list_present = is_array($extp);
-	if($list_present)
+	if (is_array($sed_plugins['tools']))
 	{
-		foreach($extp as $k => $pl)
+		$list_present = true;
+		$plugins = $sed_plugins['tools'];
+		usort($plugins, 'cot_admin_tools_cmp');
+		foreach ($plugins as $pl)
 		{
-			$plugins[] = array($pl['pl_code'], $pl['pl_title']);
-		}
-
-		usort($plugins, "cmp");
-
-		while(list($i, $x) = each($plugins))
-		{
-			$extplugin_info = $cfg['plugins_dir']."/".$x[0]."/".$x[0].".setup.php";
+			$extplugin_info = $cfg['plugins_dir'] .'/' . $pl['pl_code'] .'/' . $pl['pl_code'] . '.setup.php';
 
 			if(file_exists($extplugin_info))
 			{
@@ -121,18 +115,14 @@ else
 			}
 			else
 			{
-				include_once($cfg['system_dir'].'/lang/en/message.lang.php');
-				if($lang!='en')
-				{
-					include_once($cfg['system_dir'].'/lang/$lang/message.lang.php');
-				}
-				$info['Name'] = $x[0]." : ".$L['msg907_1'];
+				include_once sed_langfile('message', 'module');
+				$info['Name'] = $pl['pl_code'] . ' : '. $L['msg907_1'];
 			}
 
-			$plugin_icon = (empty($x[1])) ? 'plugins' : $x[1];
+			$plugin_icon = (empty($pl['pl_title'])) ? 'plugins' : $pl['pl_title'];
 
 			$t->assign(array(
-				"ADMIN_TOOLS_PLUG_URL" => sed_url('admin', "m=tools&p=".$x[0]),
+				"ADMIN_TOOLS_PLUG_URL" => sed_url('admin', 'm=tools&p=' . $pl['pl_code']),
 				"ADMIN_TOOLS_PLUG_NAME" => $info['Name']
 			));
 			$t->parse("TOOLS.ROW");

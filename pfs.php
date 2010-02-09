@@ -22,6 +22,7 @@ require_once $cfg['system_dir'] . '/xtemplate.php';
 sed_dieifdisabled($cfg['disable_pfs']);
 
 require_once $cfg['modules_dir'] . '/pfs/functions.php';
+require_once $cfg['modules_dir'] . '/pfs/resources.php';
 require_once sed_langfile('pfs', 'module');
 require_once './datas/extensions.php';
 

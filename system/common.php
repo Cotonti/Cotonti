@@ -31,6 +31,7 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 }
 define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
+if (SED_DEBUG) require_once $cfg['system_dir'] . '/debug.php';
 
 register_shutdown_function('sed_shutdown');
 
