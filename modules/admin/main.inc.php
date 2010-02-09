@@ -34,9 +34,9 @@ foreach ($extp as $pl)
 	include $pl;
 }
 
-$sys['inc'] = (empty($m)) ? 'admin.home' : "admin.$m";
+$sys['inc'] = (empty($m)) ? 'home' : $m;
 $sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'].".$s";
-$sys['inc'] = $cfg['system_dir'].'/core/admin/'.$sys['inc'].'.inc.php';
+$sys['inc'] = $cfg['modules_dir'] . '/admin/'.$sys['inc'].'.inc.php';
 
 if (!file_exists($sys['inc']))
 {
@@ -64,7 +64,7 @@ $out['subtitle'] = sed_title('{ADMIN}', $title_tags, $title_data);
 require_once($cfg['system_dir'].'/header.php');
 if (!SED_AJAX)
 {
-	$t = new XTemplate(sed_skinfile('admin', false, true));
+	$t = new XTemplate(sed_skinfile('admin'));
 
 	$t->assign(array(
 		"ADMIN_TITLE" => sed_build_adminsection($adminpath),

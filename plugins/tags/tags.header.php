@@ -27,7 +27,6 @@ if($cfg['plugin']['tags']['pages']
 	|| $cfg['plugin']['tags']['forums'] && defined('SED_FORUMS')
 	|| defined('SED_PLUG'))
 {
-	require_once $cfg['system_dir'] . '/tags.php';
 	require_once sed_langfile('tags');
 	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
 	$out['compopup'] .= $R['tags_code_style'];

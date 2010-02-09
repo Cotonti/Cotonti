@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.structure.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.structure.inc'));
 
 $adminpath[] = array (sed_url('admin', 'm=structure'), $L['Categories']);
 $adminhelp = $L['adm_help_structure'];

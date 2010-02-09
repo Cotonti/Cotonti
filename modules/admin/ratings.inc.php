@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('ratings', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.ratings.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.ratings.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=ratings'), $L['Ratings']);

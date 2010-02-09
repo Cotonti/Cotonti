@@ -21,6 +21,7 @@ require_once $cfg['system_dir'] . '/xtemplate.php';
 
 sed_dieifdisabled($cfg['disable_pm']);
 
+require_once $cfg['modules_dir'] . '/pm/resources.php';
 require_once sed_langfile('pm', 'module');
 
 switch($m)

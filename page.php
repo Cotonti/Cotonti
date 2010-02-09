@@ -22,6 +22,7 @@ require_once $cfg['system_dir'] . '/xtemplate.php';
 sed_dieifdisabled($cfg['disable_page']);
 
 require_once $cfg['modules_dir'] . '/page/functions.php';
+require_once $cfg['modules_dir'] . '/page/resources.php';
 require_once sed_langfile('page', 'module');
 
 require_once $cfg['system_dir'] . '/extrafields.php';

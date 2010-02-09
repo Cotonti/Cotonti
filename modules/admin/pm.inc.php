@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pm', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.pm.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.pm.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=pm'), $L['Private_Messages']);

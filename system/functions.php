@@ -3294,10 +3294,9 @@ function sed_shield_update($shield_add, $shield_newaction)
  *
  * @param mixed $base Item name (string), or base names (array)
  * @param mixed $plug Plugin flag (bool), or '+' (string) to probe plugin
- * @param bool $admn Admin flag
  * @return string
  */
-function sed_skinfile($base, $plug = false, $admn = false)
+function sed_skinfile($base, $plug = false)
 {
 	global $usr, $cfg;
 
@@ -3310,9 +3309,12 @@ function sed_skinfile($base, $plug = false, $admn = false)
 		$base = array($base);
 	}
 
-	if (defined('SED_MESSAGE') && $_SESSION['s_run_admin'])
+	$basename = $base[0];
+
+	if ((defined('SED_ADMIN')
+		|| defined('SED_MESSAGE') && $_SESSION['s_run_admin'])
+			&& ($basename == 'header' || $basename == 'footer'))
 	{
-		$plug = false;
 		$admn = true;
 	}
 
@@ -3326,7 +3328,7 @@ function sed_skinfile($base, $plug = false, $admn = false)
 			if (!empty($e))
 			{
 				$plug = true;
-				$pluname = $e;
+				$basename = $e;
 				if ($cfg['enablecustomhf'])
 				{
 					$base[] = $e;
@@ -3334,31 +3336,25 @@ function sed_skinfile($base, $plug = false, $admn = false)
 			}
 		}
 	}
-	elseif ($plug === true)
-	{
-		$pluname = $base[0];
-	}
 
-	if ($admn)
-	{
-		$scan_prefix[] = './skins/' . $usr['skin'] . '/admin/';
-		if ($usr['skin'] != $cfg['defaultskin'])
-		{
-			$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/admin/';
-		}
-		if ($plug)
-		{
-			$scan_prefix[] = $cfg['plugins_dir'] . '/' . $pluname . '/tpl/admin/';
-		}
-	}
-	elseif ($plug)
+	if ($plug)
 	{
 		$scan_prefix[] = './skins/' . $usr['skin'] . '/plugins/';
 		if ($usr['skin'] != $cfg['defaultskin'])
 		{
 			$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/plugins/';
 		}
-		$scan_prefix[] = $cfg['plugins_dir'] . '/' . $pluname . '/tpl/';
+		$scan_prefix[] = $cfg['plugins_dir'] . '/' . $basename . '/tpl/';
+	}
+	else
+	{
+		if ($admn) $scan_prefix[] = $cfg['modules_dir'] . '/admin/tpl/';
+		$scan_prefix[] = './skins/' . $usr['skin'] . '/' . $basename . '/';
+		if ($usr['skin'] != $cfg['defaultskin'])
+		{
+			$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/' . $basename . '/';
+		}
+		$scan_prefix[] = $cfg['modules_dir'] . '/' . $basename . '/tpl/';
 	}
 	$scan_prefix[] = './skins/' . $usr['skin'] . '/';
 	if ($usr['skin'] != $cfg['defaultskin'])

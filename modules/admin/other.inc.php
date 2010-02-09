@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['auth_read']);
 
-$t = new XTemplate(sed_skinfile('admin.other.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.other.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 

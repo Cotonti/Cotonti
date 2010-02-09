@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.forums.structure.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.forums.structure.inc'));
 
 $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 $adminpath[] = array (sed_url('admin', 'm=forums&s=structure'), $L['Structure']);

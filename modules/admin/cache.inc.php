@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.cache.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.cache.inc'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=cache'), $L['adm_internalcache']);
@@ -27,7 +27,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-if($a == 'purge')
+if($a == 'purge' && $cfg['cache'])
 {
 	$adminwarnings = (sed_check_xg() && $cot_cache->clear()) ? $L['adm_purgeall_done'] : $L['Error'];
 }
@@ -42,7 +42,7 @@ elseif($a == 'delete')
 
 $is_adminwarnings = isset($adminwarnings);
 
-if ($cot_cache->mem_available)
+if ($cfg['cache'] && $cot_cache->mem_available)
 {
 	$info = $cot_cache->get_info();
 	if ($info['available'] < 0)

@@ -31,6 +31,7 @@ if($tl) $qs = strtr($qs, $sed_translitb);
 $d = (int) sed_import('d', 'G', 'INT');
 $perpage = $cfg['plugin']['tags']['perpage'];
 
+require_once $cfg['system_dir'] . '/tags.php';
 require_once $cfg['plugins_dir'].'/tags/inc/config.php';
 require_once $cfg['plugins_dir'].'/tags/inc/functions.php';
 

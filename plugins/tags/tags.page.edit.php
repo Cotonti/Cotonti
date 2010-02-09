@@ -24,6 +24,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 {
+	require_once $cfg['system_dir'] . '/tags.php';
 	$rtags = sed_import('rtags', 'P', 'TXT');
 	$tags = sed_tag_parse($rtags);
 	$old_tags = sed_tag_list($id);

@@ -14,7 +14,9 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.forums.inc', false, true));
+require_once $cfg['modules_dir'] . '/forums/functions.php';
+
+$t = new XTemplate(sed_skinfile('admin.forums.inc'));
 
 $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 

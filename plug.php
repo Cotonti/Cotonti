@@ -26,6 +26,8 @@ require_once $cfg['system_dir'] . '/xtemplate.php';
 
 sed_dieifdisabled($cfg['disable_plug']);
 
+require_once $cfg['modules_dir'] . '/plug/resources.php';
+
 require_once $cfg['modules_dir'] . '/plug/main.inc.php';
 
 ?>

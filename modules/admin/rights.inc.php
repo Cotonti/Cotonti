@@ -15,7 +15,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 $usr['isadmin'] &= sed_auth('admin', 'a', 'A');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.rights.inc', false, true));
+$t = new XTemplate(sed_skinfile('admin.rights.inc'));
 
 $g = sed_import('g', 'G', 'INT');
 $advanced = sed_import('advanced', 'G', 'BOL');

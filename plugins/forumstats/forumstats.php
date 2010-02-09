@@ -22,6 +22,8 @@ Order=10
 
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
+require_once $cfg['modules_dir'] . '/forums/functions.php';
+
 $plugin_title = $L['plu_title'];
 
 $totalsections = sed_sql_rowcount($db_forum_sections);

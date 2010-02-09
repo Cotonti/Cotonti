@@ -13,6 +13,7 @@ defined('SED_CODE') or die("Wrong URL.");
 require_once $cfg['system_dir'] . '/extrafields.php';
 require_once $cfg['modules_dir'] . '/page/functions.php';
 require_once $cfg['modules_dir'] . '/forums/functions.php';
+require_once $cfg['modules_dir'] . '/forums/resources.php';
 
 function sed_build_recentforums($template, $mode='recent', $maxperpage='5', $d=0, $titlelength=0, $rightprescan=true)
 {
