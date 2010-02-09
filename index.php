@@ -14,22 +14,24 @@ define('SED_INDEX', TRUE);
 $location = 'Home';
 $z = 'index';
 
-if(!file_exists('./datas/config.php'))
+if (!file_exists('./datas/config.php'))
 {
 	header('Location: install.php');
 	exit;
 }
 
-require_once('./datas/config.php');
+require_once './datas/config.php';
 
-if($cfg['new_install'])
+if ($cfg['new_install'])
 {
 	header('Location: install.php');
 	exit;
 }
 
-require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/common.php');
-require_once($cfg['system_dir'].'/core/index/index.inc.php');
+require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'] . '/common.php';
+require_once $cfg['system_dir'] . '/xtemplate.php';
+
+require_once $cfg['modules_dir'] . '/index/main.inc.php';
 
 ?>

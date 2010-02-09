@@ -14,15 +14,11 @@ define('SED_VIEW', TRUE);
 $location = 'Views';
 $z = 'view';
 
-require_once('./datas/config.php');
-require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/common.php');
+require_once './datas/config.php';
+require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'] . '/common.php';
+require_once $cfg['system_dir'] . '/xtemplate.php';
 
-switch($m)
-{
-	default:
-		require_once($cfg['system_dir'].'/core/view/view.inc.php');
-	break;
-}
+require_once $cfg['modules_dir'] . '/view/main.inc.php';
 
 ?>

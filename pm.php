@@ -14,24 +14,27 @@ define('SED_PM', TRUE);
 $location = 'Private_Messages';
 $z = 'pm';
 
-require_once('./datas/config.php');
-require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/common.php');
+require_once './datas/config.php';
+require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'] . '/common.php';
+require_once $cfg['system_dir'] . '/xtemplate.php';
 
 sed_dieifdisabled($cfg['disable_pm']);
+
+require_once sed_langfile('pm', 'module');
 
 switch($m)
 {
 	case 'send':
-		require_once($cfg['system_dir'].'/core/pm/pm.send.inc.php');
+		require_once $cfg['modules_dir'] . '/pm/send.inc.php';
 	break;
 	
     case 'message':
-		require_once($cfg['system_dir'].'/core/pm/pm.inc.php');
+		require_once $cfg['modules_dir'] . '/pm/message.inc.php';
 	break;
 
 	default:
-		require_once($cfg['system_dir'].'/core/pm/pm.list.inc.php');
+		require_once $cfg['modules_dir'] . '/pm/list.inc.php';
 	break;
 }
 

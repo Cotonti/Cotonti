@@ -88,7 +88,7 @@ function sed_get_polls($limit)
 
 if($cfg['plugin']['indexpolls']['maxpolls'] > 0 && !$cfg['disable_polls'])
 {
-    require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+    require_once $cfg['modules_dir'] .'/polls/functions.php';
     sed_poll_vote();
     $latestpoll = sed_get_polls($cfg['plugin']['indexpolls']['maxpolls']);
 }

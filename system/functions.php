@@ -53,17 +53,6 @@ if (!isset($cfg['dir_perms']))
 	$cfg['dir_perms'] = 0777;
 }
 
-/**
- * Strips everything but alphanumeric, hyphens and underscores
- *
- * @param string $text Input
- * @return string
- */
-function sed_alphaonly($text)
-{
-	return(preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
-}
-
 // For compatibility with PHP < 5.2
 
 if(PHP_VERSION < '5.2.0')
@@ -87,6 +76,17 @@ if(PHP_VERSION < '5.2.0')
 	{
 		return strstr($haystack, $needle);
 	}
+}
+
+/**
+ * Strips everything but alphanumeric, hyphens and underscores
+ *
+ * @param string $text Input
+ * @return string
+ */
+function sed_alphaonly($text)
+{
+	return(preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
 }
 
 /*
@@ -957,54 +957,6 @@ function sed_string_truncate(&$html, $length = 100, $considerhtml = true, $exact
  */
 
 /* ------------------ */
-/**
- * Builds a javascript function for text insertion
- *
- * @param string $c1 Form name
- * @param string $c2 Field name
- * @return string
- */
-function sed_build_addtxt($c1, $c2)
-{
-	$result = "
-	function addtxt(text) {
-		insertText(document, '$c1', '$c2', text);
-	}
-	";
-	return($result);
-}
-
-/**
- * Calculates age out of D.O.B.
- *
- * @param int $birth Date of birth as UNIX timestamp
- * @return int
- */
-function sed_build_age($birth)
-{
-	global $sys;
-
-	if ($birth==1)
-	{ return ('?'); }
-
-	$day1 = @date('d', $birth);
-	$month1 = @date('m', $birth);
-	$year1 = @date('Y', $birth);
-
-	$day2 = @date('d', $sys['now_offset']);
-	$month2 = @date('m', $sys['now_offset']);
-	$year2 = @date('Y', $sys['now_offset']);
-
-	$age = ($year2-$year1)-1;
-
-	if ($month1<$month2 || ($month1==$month2 && $day1<=$day2))
-	{ $age++; }
-
-	if($age < 0)
-	{ $age += 136; }
-
-	return ($age);
-}
 
 /**
  * Builds category path
@@ -1293,6 +1245,28 @@ function sed_build_comments($code, $url, $display = true)
 }
 
 /**
+ * Returns number of comments for item
+ *
+ * @param string $code Item code
+ * @return int
+ */
+function sed_get_comcount($code)
+{
+	global $db_com;
+
+	$sql = sed_sql_query("SELECT DISTINCT com_code, COUNT(*) FROM $db_com WHERE com_code='$code' GROUP BY com_code");
+
+	if ($row = sed_sql_fetcharray($sql))
+	{
+		return (int) $row['COUNT(*)'];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
  * Returns country text button
  *
  * @param string $flag Country code
@@ -1327,105 +1301,6 @@ function sed_build_email($email, $hide = false)
 }
 
 /**
- * Returns Extra fields edit fields
- *
- * @param string $rowname Post/SQL/Lang row
- * @param string $tpl_tag Template tag area
- * @param array $extrafields Extra fields data
- * @param array $data Existing data for fields
- * @param bool $importnew Import type new
- * @return array
- */
-function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), $importnew=FALSE)
-{
-	global $L, $t, $global;
-	$importrowname = ($importnew) ? 'new'.$rowname : 'r'.$rowname;
-	foreach($extrafields as $i=>$row)
-	{
-		isset($L[$rowname.'_'.$row['field_name'].'_title']) ? $t->assign($tpl_tag.'_'.strtoupper($row['field_name']).'_TITLE', $L[$rowname.'_'.$row['field_name'].'_title']) : $t->assign($tpl_tag.'_'.strtoupper($row['field_name']).'_TITLE', $row['field_description']);
-		$t1 = $tpl_tag.'_'.strtoupper($row['field_name']);
-		$t2 = $row['field_html'];
-		switch($row['field_type'])
-		{
-			case "input":
-				$t2 = str_replace('<input ','<input name="'.$importrowname.$row['field_name'].'" ', $t2);
-				$t2 = str_replace('<input ','<input value="'.htmlspecialchars($data[$rowname.'_'.$row['field_name']]).'" ', $t2);
-			break;
-			case "textarea":
-				$t2 = str_replace('<textarea ','<textarea name="'.$importrowname.$row['field_name'].'" ', $t2);
-				$t2 = str_replace('</textarea>',htmlspecialchars($data[$rowname.'_'.$row['field_name']]).'</textarea>', $t2);
-			break;
-			case "select":
-				$t2 = str_replace('<select','<select name="'.$importrowname.$row['field_name'].'"', $t2);
-				$options = "";
-				$opt_array = explode(",",$row['field_variants']);
-				if(count($opt_array)!=0)
-					foreach ($opt_array as $var)
-					{
-						$var_text = (!empty($L[$rowname.'_'.$row['field_name'].'_'.$var])) ? $L[$rowname.'_'.$row['field_name'].'_'.$var] : $var;
-						$sel = ($var == $data[$rowname.'_'.$row['field_name']]) ? ' selected="selected"' : '';
-						$options .= "<option value=\"$var\" $sel>$var_text</option>";
-					}
-				$t2 = str_replace("</select>","$options</select>",$t2);
-			break;
-			case "checkbox":
-				$t2 = str_replace('<input','<input name="'.$importrowname.$row['field_name'].'"', $t2);
-				$sel = ($data[$rowname.'_'.$row['field_name']] == 1) ? ' checked' : '';
-				$t2 = str_replace('<input ','<input value="on" '.$sel.' ', $t2);
-			break;
-			case "radio":
-				$t2 = str_replace('<input','<input name="'.$importrowname.$row['field_name'].'"', $t2);
-				$options = "";
-				$opt_array = explode(",",$row['field_variants']);
-				if(count($opt_array)!=0)
-					foreach ($opt_array as $var)
-					{
-						$var_text = (!empty($L[$rowname.'_'.$row['field_name'].'_'.$var])) ? $L[$rowname.'_'.$row['field_name'].'_'.$var] : $var;
-						$sel = ($var == $data[$rowname.'_'.$row['field_name']]) ? ' checked="checked"' : '';
-						$buttons .= str_replace('/>', 'value="'.$var.'"'.$sel.' />'.$var_text.'&nbsp;&nbsp;', $t2);
-					}
-				$t2 = $buttons;
-			break;
-		}
-		$return_arr[$t1] = $t2;
-	}
-	return $return_arr;
-}
-
-/**
- * Returns Extra fields date
- *
- * @param string $rowname Lang row
- * @param string $type Extra field type
- * @param string $field_name Extra field name
- * @param string $value Existing user value
- * @return string
- */
-function sed_build_extrafields_data($rowname, $type, $field_name, $value)
-{
-	global $L;
-	$value = htmlspecialchars($value);
-	switch($type)
-	{
-		case "input":
-			return $value;
-		break;
-		case "textarea":
-			return $value;
-		break;
-		case "select":
-			return (!empty($L[$rowname.'_'.$field_name.'_'.$value])) ? $L[$rowname.'_'.$field_name.'_'.$value] : $value;
-		break;
-		case "checkbox":
-			return $value;
-		break;
-		case "radio":
-			return (!empty($L[$rowname.'_'.$field_name.'_'.$value])) ? $L[$rowname.'_'.$field_name.'_'.$value] : $value;
-		break;
-	}
-}
-
-/**
  * Returns country flag button
  *
  * @param string $flag Country code
@@ -1438,144 +1313,7 @@ function sed_build_flag($flag)
 	return '<a href="'.sed_url('users', 'f=country_'.$flag).'" title="'.$sed_countries[$flag].'"><img class="flag" src="images/flags/'.$flag.'.png" alt="'.$flag.'" /></a>';
 }
 
-/**
- * Returns forum thread path
- *
- * @param int $sectionid Section ID
- * @param string $title Thread title
- * @param string $category Category code
- * @param string $link Display as links
- * @param mixed $master Master section
- * @return string
- */
-function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master = false)
-{
-	global $sed_forums_str, $cfg, $db_forum_sections, $L;
-	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
-
-	if($link)
-	{
-		if($cfg['homebreadcrumb'])
-		{
-			$tmp[] = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a>';
-		}
-		$tmp[] = '<a href="'.sed_url('forums').'">'.$L['Forums'].'</a>';
-		foreach($pathcodes as $k => $x)
-		{
-			$tmp[] = '<a href="'.sed_url('forums', 'c='.$x, '#'.$x).'">'.htmlspecialchars($sed_forums_str[$x]['title']).'</a>';
-		}
-		if(is_array($master))
-		{
-			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.htmlspecialchars($master[1]).'</a>';
-		}
-		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$sectionid).'">'.htmlspecialchars($title).'</a>';
-	}
-	else
-	{
-		foreach($pathcodes as $k => $x)
-		{
-			$tmp[]= htmlspecialchars($sed_forums_str[$x]['title']);
-		}
-		if(is_array($master))
-		{
-			$tmp[] = $master[1];
-		}
-		$tmp[] = htmlspecialchars($title);
-	}
-
-	return implode(' '.$cfg['separator'].' ', $tmp);
-}
-
-
 /* ------------------ */
-
-/**
- * Returns group link (button)
- *
- * @param int $grpid Group ID
- * @return string
- */
-function sed_build_group($grpid)
-{
-	if(empty($grpid)) return '';
-	global $sed_groups, $L;
-
-	if($sed_groups[$grpid]['hidden'])
-	{
-		if(sed_auth('users', 'a', 'A'))
-		{
-			return '<a href="'.sed_url('users', 'gm='.$grpid).'">'.$sed_groups[$grpid]['title'].'</a> ('.$L['Hidden'].')';
-		}
-		else
-		{
-			return $L['Hidden'];
-		}
-	}
-	else
-	{
-		return '<a href="'.sed_url('users', 'gm='.$grpid).'">'.$sed_groups[$grpid]['title'].'</a>';
-	}
-}
-
-/**
- * Builds "edit group" option group for "user edit" part
- *
- * @param int $userid Edited user ID
- * @param bool $edit Permission
- * @param int $maingrp User main group
- * @return string
- */
-function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
-{
-	global $db_groups_users, $sed_groups, $L, $usr;
-
-	$sql = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
-
-	while ($row = sed_sql_fetcharray($sql))
-	{
-		$member[$row['gru_groupid']] = TRUE;
-	}
-
-	foreach($sed_groups as $k => $i)
-	{
-		$checked = ($member[$k]) ? "checked=\"checked\"" : '';
-		$checked_maingrp = ($maingrp==$k) ? "checked=\"checked\"" : '';
-		$readonly = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==SED_GROUP_GUESTS || $k==SED_GROUP_INACTIVE || $k==SED_GROUP_BANNED || ($k==SED_GROUP_TOPADMINS && $userid==1)) ? "disabled=\"disabled\"" : '';
-		$readonly_maingrp = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==SED_GROUP_GUESTS || ($k==SED_GROUP_INACTIVE && $userid==1) || ($k==SED_GROUP_BANNED && $userid==1)) ? "disabled=\"disabled\"" : '';
-
-		if ($member[$k] || $edit)
-		{
-			if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
-			{
-				$res .= "<input type=\"radio\" class=\"radio\" name=\"rusermaingrp\" value=\"$k\" ".$checked_maingrp." ".$readonly_maingrp." /> \n";
-				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"rusergroupsms[$k]\" ".$checked." $readonly />\n";
-				$res .= ($k == SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"".sed_url('users', 'gm='.$k)."\">".$sed_groups[$k]['title']."</a>";
-				$res .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-				$res .= "<br />";
-			}
-		}
-	}
-
-	return $res;
-}
-
-/**
- * Returns user ICQ pager link
- *
- * @param int $text ICQ number
- * @return string
- */
-function sed_build_icq($text)
-{
-	global $cfg;
-
-	$text = (int) $text;
-	if($text > 0)
-	{
-		return $text.' <a href="http://www.icq.com/'.$text.'#pager"><img src="http://web.icq.com/whitepages/online?icq='.$text.'&amp;img=5" alt="" /></a>';
-	}
-	return '';
-}
 
 /**
  * Returns IP Search link
@@ -1591,17 +1329,6 @@ function sed_build_ipsearch($ip)
 		return '<a href="'.sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']).'">'.$ip.'</a>';
 	}
 	return '';
-}
-
-/**
- * Returns MSN link as e-mail link
- *
- * @param string $msn MSN address
- * @return string
- */
-function sed_build_msn($msn)
-{
-	return sed_build_email($msn);
 }
 
 /**
@@ -1632,18 +1359,6 @@ function sed_build_pfs($id, $c1, $c2, $title)
 		{ $res = ''; }
 	}
 	return($res);
-}
-
-/**
- * Returns user PM link
- *
- * @param int $user User ID
- * @return string
- */
-function sed_build_pm($user)
-{
-	global $usr, $L, $R;
-	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'">'.$R['pm_icon'].'</a>';
 }
 
 /* ------------------ */
@@ -1881,27 +1596,6 @@ function sed_build_ratings($code, $url, $display)
 }
 
 /**
- * Returns stars image for user level
- *
- * @param int $level User level
- * @return unknown
- */
-function sed_build_stars($level)
-{
-	global $skin, $R;
-
-	if($level>0 and $level<100)
-	{
-		$stars = floor($level / 10) + 1;
-		return sed_rc('icon_stars', array('val' => $stars));
-	}
-	else
-	{
-		return '';
-	}
-}
-
-/**
  * Returns time gap between 2 dates
  *
  * @param int $t1 Stamp 1
@@ -2049,142 +1743,6 @@ function sed_build_userimage($image, $type='none')
 			return '<img src="'.$image.'" alt="" />';
 		}
 	}
-}
-
-/**
- * Renders user signature text
- *
- * @param string $text Signature text
- * @return string
- */
-function sed_build_usertext($text)
-{
-	global $cfg;
-	if (!$cfg['usertextimg'])
-	{
-		$bbcodes_img = array(
-			'\[img\]([^\[]*)\[/img\]' => '',
-			'\[thumb=([^\[]*)\[/thumb\]' => '',
-			'\[t=([^\[]*)\[/t\]' => '',
-			'\[list\]' => '',
-			'\[style=([^\[]*)\]' => '',
-			'\[quote' => '',
-			'\[code' => ''
-		);
-
-		foreach($bbcodes_img as $bbcode => $bbcodehtml)
-		{
-			$text = preg_replace("#$bbcode#i", $bbcodehtml, $text);
-		}
-	}
-	return sed_parse($text, $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
-}
-
-/*
- * ================================ Cache Subsystem ================================
- */
-// TODO scheduled for complete removal and replacement with new cache system
-
-/**
- * Clears cache item
- * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
- * @param string $name Item name
- * @return bool
- */
-function sed_cache_clear($name)
-{
-	global $db_cache;
-
-	sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
-	return(TRUE);
-}
-
-/**
- * Clears cache completely
- * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
- * @return bool
- */
-function sed_cache_clearall()
-{
-	global $db_cache;
-	sed_sql_query("DELETE FROM $db_cache");
-	return TRUE;
-}
-
-/**
- * Clears HTML-cache
- *
- * @todo Add trigger support here to clean non-standard html fields
- * @return bool
- */
-function sed_cache_clearhtml()
-{
-	global $db_pages, $db_forum_posts, $db_pm;
-	$res = TRUE;
-	$res &= sed_sql_query("UPDATE $db_pages SET page_html=''");
-	$res &= sed_sql_query("UPDATE $db_forum_posts SET fp_html=''");
-	$res &= sed_sql_query("UPDATE $db_pm SET pm_html = ''");
-	return $res;
-}
-
-/**
- * Fetches cache value
- * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
- * @param string $name Item name
- * @return mixed
- */
-function sed_cache_get($name)
-{
-	global $cfg, $sys, $db_cache;
-
-	if (!$cfg['cache'])
-	{ return FALSE; }
-	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
-	if ($row = sed_sql_fetcharray($sql))
-	{ return(unserialize($row['c_value'])); }
-	else
-	{ return(FALSE); }
-}
-
-/**
- * Get all cache data and import it into global scope
- * @deprecated Deprecated since 0.7.0
- * @param int $auto Only with autoload flag
- * @return mixed
- */
-function sed_cache_getall($auto = 1)
-{
-	global $cfg, $sys, $db_cache;
-	if (!$cfg['cache'])
-	{ return FALSE; }
-	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
-	if ($auto)
-	{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1"); }
-	else
-	{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache"); }
-	if (sed_sql_numrows($sql)>0)
-	{ return($sql); }
-	else
-	{ return(FALSE); }
-}
-
-/**
- * Puts an item into cache
- * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
- * @param string $name Item name
- * @param mixed $value Item value
- * @param int $expire Expires in seconds
- * @param int $auto Autload flag
- * @return bool
- */
-function sed_cache_store($name,$value,$expire,$auto="1")
-{
-	global $db_cache, $sys, $cfg;
-
-	if (!$cfg['cache'])
-	{ return(FALSE); }
-	$sql = sed_sql_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".sed_sql_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
-	return(TRUE);
 }
 
 /**
@@ -2435,196 +1993,6 @@ function sed_dieifdisabled($disabled)
 }
 
 /**
- * Checks a file to be sure it is valid
- *
- * @param string $path File path
- * @param string $name File name
- * @param string $ext File extension
- * @return bool
- */
-function sed_file_check($path, $name, $ext)
-{
-	global $L, $cfg;
-	if($cfg['pfsfilecheck'])
-	{
-		require('./datas/mimetype.php');
-		$fcheck = FALSE;
-		if(in_array($ext, array('jpg', 'jpeg', 'png', 'gif')))
-		{
-			switch($ext)
-			{
-				case 'gif':
-					$fcheck = @imagecreatefromgif($path);
-				break;
-				case 'png':
-					$fcheck = @imagecreatefrompng($path);
-				break;
-				default:
-					$fcheck = @imagecreatefromjpeg($path);
-				break;
-			}
-			$fcheck = $fcheck !== FALSE;
-		}
-		else
-		{
-			if(!empty($mime_type[$ext]))
-			{
-				foreach($mime_type[$ext] as $mime)
-				{
-					$content = file_get_contents($path, 0, NULL, $mime[3], $mime[4]);
-					$content = ($mime[2]) ? bin2hex($content) : $content;
-					$mime[1] = ($mime[2]) ? strtolower($mime[1]) : $mime[1];
-					$i++;
-					if ($content == $mime[1])
-					{
-						$fcheck = TRUE;
-						break;
-					}
-				}
-			}
-			else
-			{
-				$fcheck = ($cfg['pfsnomimepass']) ? 1 : 2;
-				sed_log(sprintf($L['pfs_filechecknomime'], $ext, $name), 'sec');
-			}
-		}
-		if(!$fcheck)
-		{
-			sed_log(sprintf($L['pfs_filecheckfail'], $ext, $name), 'sec');
-		}
-	}
-	else
-	{
-		$fcheck = true;
-	}
-	return($fcheck);
-}
-
-/*
- * ==================================== Forum Functions ==================================
- */
-
-/**
- * Gets details for forum section
- *
- * @param int $id Section ID
- * @return mixed
- */
-function sed_forum_info($id)
-{
-	global $db_forum_sections;
-
-	$sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
-	if($res = sed_sql_fetcharray($sql))
-	{
-		return ($res);
-	}
-	else
-	{
-		return ('');
-	}
-}
-
-/**
- * Moves outdated topics to trash
- *
- * @param string $mode Selection criteria
- * @param int $section Section
- * @param int $param Selection parameter value
- * @return int
- */
-function sed_forum_prunetopics($mode, $section, $param)
-{
-	global $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_sections, $db_polls, $L;
-
-	$num = 0;
-	$num1 = 0;
-
-	switch ($mode)
-	{
-		case 'updated':
-			$limit = $sys['now'] - ($param*86400);
-			$sql1 = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_sectionid='$section' AND ft_updated<'$limit' AND ft_sticky='0'");
-			break;
-
-		case 'single':
-			$sql1 = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_sectionid='$section' AND ft_id='$param'");
-			break;
-	}
-
-	if (sed_sql_numrows($sql1)>0)
-	{
-		while ($row1 = sed_sql_fetchassoc($sql1))
-		{
-			$q = $row1['ft_id'];
-
-			if ($cfg['trash_forum'])
-			{
-				$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC");
-
-				while ($row = sed_sql_fetchassoc($sql))
-				{ sed_trash_put('forumpost', $L['Post']." #".$row['fp_id']." from topic #".$q, "p".$row['fp_id']."-q".$q, $row); }
-			}
-
-			$sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_topicid='$q'");
-			$num += sed_sql_affectedrows();
-
-			if ($cfg['trash_forum'])
-			{
-				$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
-
-				while ($row = sed_sql_fetchassoc($sql))
-				{ sed_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row); }
-			}
-
-			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
-			$num1 += sed_sql_affectedrows();
-
-			$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='forum' AND poll_code='$q' LIMIT 1");
-			if ($row = sed_sql_fetcharray($sql))
-			{
-				$id=$row['poll_id'];
-				global $db_polls_options, $db_polls_voters;
-				$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
-				$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
-				$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
-			}
-		}
-
-		$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num', fs_topiccount_pruned=fs_topiccount_pruned+'$num1', fs_postcount_pruned=fs_postcount_pruned+'$num' WHERE fs_id='$section'");
-
-		$sql = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$section' ");
-		$row = sed_sql_fetcharray($sql);
-
-		$fs_masterid = $row['fs_masterid'];
-
-		$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num', fs_topiccount_pruned=fs_topiccount_pruned+'$num1', fs_postcount_pruned=fs_postcount_pruned+'$num' WHERE fs_id='$fs_masterid'") : '';
-	}
-	$num1 = ($num1=='') ? '0' : $num1;
-	return($num1);
-}
-
-/**
- * Changes last message for the section
- *
- * @param int $id Section ID
- */
-function sed_forum_sectionsetlast($id)
-{
-	global $db_forum_topics, $db_forum_sections;
-	$sql = sed_sql_query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title, ft_poll FROM $db_forum_topics WHERE ft_sectionid='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
-	$row = sed_sql_fetcharray($sql);
-	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
-
-	$sqll = sed_sql_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$id' ");
-	$roww = sed_sql_fetcharray($sqll);
-	$fs_masterid = $roww['fs_masterid'];
-
-	$sql = ($fs_masterid>0) ? sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$fs_masterid'") : '';
-}
-
-/**
  * Returns a list of plugins registered for a hook
  *
  * @param string $hook Hook name
@@ -2649,54 +2017,9 @@ function sed_getextplugins($hook, $cond='R')
 	}
 	
 	// Trigger cache handlers
-	$cot_cache->trigger($hook);
+	$cfg['cache'] && $cot_cache->trigger($hook);
 
 	return $extplugins;
-}
-
-/**
- * Returns number of comments for item
- *
- * @param string $code Item code
- * @return int
- */
-function sed_get_comcount($code)
-{
-	global $db_com;
-
-	$sql = sed_sql_query("SELECT DISTINCT com_code, COUNT(*) FROM $db_com WHERE com_code='$code' GROUP BY com_code");
-
-	if ($row = sed_sql_fetcharray($sql))
-	{
-		return (int) $row['COUNT(*)'];
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-/**
- * Returns maximum size for uploaded file, in KB (allowed in php.ini, and may be allowed in .htaccess)
- *
- * @return int
- */
-function sed_get_uploadmax()
-{
-	static $par_a = array('upload_max_filesize', 'post_max_size', 'memory_limit');
-	static $opt_a = array('G' => 1073741824, 'M' => 1048576, 'K' => 1024);
-	$val_a = array();
-	foreach ($par_a as $par)
-	{
-		$val = ini_get($par);
-		$opt = strtoupper($val[strlen($val) - 1]);
-		$val = isset($opt_a[$opt]) ? $val * $opt_a[$opt] : (int)$val;
-		if ($val > 0)
-		{
-			$val_a[] = $val;
-		}
-	}
-	return floor(min($val_a) / 1024); // KB
 }
 
 /**
@@ -2900,52 +2223,6 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	}
 }
 
-
-/**
- * Extract info from SED file headers
- *
- * @param string $file File path
- * @param string $limiter Tag name
- * @param int $maxsize Max header size
- * @return array
- */
-function sed_infoget($file, $limiter='SED', $maxsize=32768)
-{
-	$result = array();
-
-	if($fp = @fopen($file, 'r'))
-	{
-		$limiter_begin = "[BEGIN_".$limiter."]";
-		$limiter_end = "[END_".$limiter."]";
-		$data = fread($fp, $maxsize);
-		$begin = mb_strpos($data, $limiter_begin);
-		$end = mb_strpos($data, $limiter_end);
-
-		if ($end>$begin && $begin>0)
-		{
-			$lines = mb_substr($data, $begin+8+mb_strlen($limiter), $end-$begin-mb_strlen($limiter)-8);
-			$lines = explode ("\n",$lines);
-
-			foreach ($lines as $k => $line)
-			{
-				$linex = explode ("=", $line);
-				$ii=1;
-				while (!empty($linex[$ii]))
-				{
-					$result[$linex[0]] .= trim($linex[$ii]);
-					$ii++;
-				}
-			}
-		}
-		else
-		{ $result['Error'] = 'Warning: No tags found in '.$file; }
-	}
-	else
-	{ $result['Error'] = 'Error: File '.$file.' is missing!'; }
-	@fclose($fp);
-	return ($result);
-}
-
 /**
  * Outputs standard javascript
  *
@@ -2980,30 +2257,45 @@ function sed_javascript($more='')
  * Returns a language file path for a plugin or FALSE on error.
  *
  * @param string $name Plugin name
- * @param bool $core Use core module rather than a plugin
+ * @param bool $type Langfile type: 'plug', 'module' or 'core'
+ * @param mixed $default Default (fallback) language code
  * @return bool
  */
-function sed_langfile($name, $core = false, $loadlang=false)
+function sed_langfile($name, $type = 'plug', $default = 'en')
 {
 	global $cfg, $lang;
-	if($loadlang)
+	if ($type == 'module')
 	{
-		$lang = $loadlang;
+		if(@file_exists($cfg['modules_dir'] . "/$name/$lang.lang.php"))
+		{
+			return $cfg['modules_dir'] . "/$name/lang/$lang.lang.php";
+		}
+		else
+		{
+			return $cfg['modules_dir'] . "/$name/lang/$default.lang.php";
+		}
 	}
-	if($core)
+	elseif ($type == 'core')
 	{
-		 // For module support, comming in N-0.1.0
-		 if(@file_exists($cfg['system_dir']."/lang/$lang/$name.lang.php") && $loadlang!='en')
-		 	return $cfg['system_dir']."/lang/$lang/$name.lang.php";
-		 else
-		 	return $cfg['system_dir']."/lang/en/$name.lang.php";
+		if(@file_exists($cfg['lang_dir'] . "/$lang/$name.lang.php"))
+		{
+			return $cfg['lang_dir'] . "/$lang/$name.lang.php";
+		}
+		else
+		{
+			return $cfg['lang_dir'] . "/$default/$name.lang.php";
+		}
 	}
 	else
 	{
-		if(@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php") && $loadlang!='en')
-			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
+		if(@file_exists($cfg['plugins_dir'] . "/$name/lang/$name.$lang.lang.php"))
+		{
+			return $cfg['plugins_dir'] . "/$name/lang/$name.$lang.lang.php";
+		}
 		else
-			return $cfg['plugins_dir']."/$name/lang/$name.en.lang.php";
+		{
+			return $$cfg['plugins_dir'] . "/$name/lang/$name.$default.lang.php";
+		}
 	}
 }
 
@@ -3136,53 +2428,6 @@ function sed_load_structure()
 }
 
 /**
- * Loads complete forum structure into array
- */
-function sed_load_forum_structure()
-{
-	global $db_forum_structure, $cfg, $L, $sed_forums_str;
-
-	$sed_forums_str = array();
-	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER BY fn_path ASC");
-
-	while ($row = sed_sql_fetcharray($sql))
-	{
-		if (!empty($row['fn_icon']))
-		{ $row['fn_icon'] = "<img src=\"".$row['fn_icon']."\" alt=\"\" />"; }
-
-		$path2 = mb_strrpos($row['fn_path'], '.');
-
-		$row['fn_tpl'] = (empty($row['fn_tpl'])) ? $row['fn_code'] : $row['fn_tpl'];
-
-		if ($path2>0)
-		{
-			$path1 = mb_substr($row['fn_path'],0,($path2));
-			$path[$row['fn_path']] = $path[$path1].'.'.$row['fn_code'];
-			$tpath[$row['fn_path']] = $tpath[$path1].' '.$cfg['separator'].' '.$row['fn_title'];
-			$row['fn_tpl'] = ($row['fn_tpl']=='same_as_parent') ? $parent_tpl : $row['fn_tpl'];
-		}
-		else
-		{
-			$path[$row['fn_path']] = $row['fn_code'];
-			$tpath[$row['fn_path']] = $row['fn_title'];
-		}
-
-		$parent_tpl = $row['fn_tpl'];
-
-		$sed_forums_str[$row['fn_code']] = array (
-			'path' => $path[$row['fn_path']],
-			'tpath' => $tpath[$row['fn_path']],
-			'rpath' => $row['fn_path'],
-			'tpl' => $row['fn_tpl'],
-			'title' => $row['fn_title'],
-			'desc' => $row['fn_desc'],
-			'icon' => $row['fn_icon'],
-			'defstate' => $row['fn_defstate']
-		);
-	}
-}
-
-/**
  * Logs an event
  *
  * @param string $text Event description
@@ -3209,58 +2454,6 @@ function sed_log_sed_import($s, $e, $v, $o)
 	sed_log($text, 'sec');
 }
 
-/**
- * Sends mail with standard PHP mail()
- *
- * @global $cfg
- * @param string $fmail Recipient
- * @param string $subject Subject
- * @param string $body Message body
- * @param string $headers Message headers
- * @param string $additional_parameters Additional parameters passed to sendmail
- * @return bool
- */
-function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
-{
-	global $cfg;
-
-	if(empty($fmail))
-	{
-		return(FALSE);
-	}
-	else
-	{
-		if($cfg['charset'] != 'us-ascii')
-		{
-			$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], $cfg['charset'], 'B', "\n");
-		}
-		else
-		{
-			$sitemaintitle = $cfg['maintitle'];
-		}
-
-		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
-		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
-
-		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
-		if($cfg['charset'] != 'us-ascii')
-		{
-			$headers .= "Content-Type: text/plain; charset=".$cfg['charset']."\n";
-			$headers .= "Content-Transfer-Encoding: 8bit\n";
-			$subject = mb_encode_mimeheader($subject, $cfg['charset'], 'B', "\n");
-		}
-		if(ini_get('safe_mode'))
-		{
-			mail($fmail, $subject, $body, $headers);
-		}
-		else
-		{
-			mail($fmail, $subject, $body, $headers, $additional_parameters);
-		}
-		sed_stat_inc('totalmailsent');
-		return(TRUE);
-	}
-}
 /* ------------------ */
 // FIXME this function is obsolete, or meta/title generation must be reworked
 function sed_htmlmetas()
@@ -3810,17 +3003,6 @@ function sed_rc_link($url, $text, $attrs = '')
 }
 
 /**
- * Reads raw data from file
- *
- * @param string $file File path
- * @return string
- */
-function sed_readraw($file)
-{
-	return (mb_strpos($file, '..') === false && file_exists($file)) ? file_get_contents($file) : 'File not found : ' . $file;
-}
-
-/**
  * Displays redirect page
  *
  * @param string $url Target URI
@@ -3865,30 +3047,6 @@ function sed_shutdown()
 	sed_sql_close();
 }
 
-/**
- * Strips all unsafe characters from file base name and converts it to latin
- *
- * @param string $basename File base name
- * @param bool $underscore Convert spaces to underscores
- * @param string $postfix Postfix appended to filename
- * @return string
- */
-function sed_safename($basename, $underscore = true, $postfix = '')
-{
-	global $lang, $sed_translit;
-	$fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
-	$ext = mb_substr($basename, mb_strrpos($basename, '.') + 1);
-	if($lang != 'en' && is_array($sed_translit))
-	{
-		$fname = strtr($fname, $sed_translit);
-	}
-	if($underscore) $fname = str_replace(' ', '_', $fname);
-	$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
-	$fname = str_replace('..', '.', $fname);
-	if(empty($fname)) $fname = sed_unique();
-	return $fname . $postfix . '.' . mb_strtolower($ext);
-}
-
 
 /**
  * Renders a dropdown
@@ -3911,57 +3069,6 @@ function sed_selectbox($check, $name, $values)
 		$result .= "<option value=\"$x\" $selected>".htmlspecialchars($x)."</option>";
 	}
 	$result .= "</select>";
-	return($result);
-}
-
-/**
- * Renders category dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @param bool $hideprivate Hide private categories
- * @return string
- */
-function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
-{
-	global $db_structure, $usr, $sed_cat, $L;
-
-	$result =  "<select name=\"$name\" size=\"1\">";
-
-	foreach($sed_cat as $i => $x)
-	{
-		$display = ($hideprivate) ? sed_auth('page', $i, 'W') : TRUE;
-
-		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
-		{
-			$selected = ($i==$check) ? "selected=\"selected\"" : '';
-			$result .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
-		}
-	}
-	$result .= "</select>";
-	return($result);
-}
-
-/**
- * Renders country dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @return string
- */
-function sed_selectbox_countries($check,$name)
-{
-	global $sed_countries;
-
-	$selected = (empty($check) || $check=='00') ? "selected=\"selected\"" : '';
-	$result =  "<select name=\"$name\" size=\"1\">";
-	foreach($sed_countries as $i => $x)
-	{
-		$selected = ($i==$check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$i\" $selected>".$x."</option>";
-	}
-	$result .= "</select>";
-
 	return($result);
 }
 
@@ -4039,260 +3146,6 @@ function sed_selectbox_date($utime, $mode, $ext='', $max_year = 2030)
 	$result .= "</select>";
 
 	return ($result);
-}
-
-/**
- * Renders PFS folder selection dropdown
- *
- * @param int $user User ID
- * @param int $skip Skip folder
- * @param int $check Checked folder
- * @param string $name Input name
- * @return string
- */
-function sed_selectbox_folders($user, $skip, $check, $name = 'folderid')
-{
-	global $db_pfs_folders;
-
-	$sql = sed_sql_query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
-
-	$result =  '<select name="' . $name . '" size="1">';
-
-	if ($skip!="/" && $skip!="0")
-	{
-		$selected = (empty($check) || $check=="/") ? "selected=\"selected\"" : '';
-		$result .=  "<option value=\"0\" $selected>/ &nbsp; &nbsp;</option>";
-	}
-
-	while ($row = sed_sql_fetcharray($sql))
-	{
-		if ($skip!=$row['pff_id'])
-		{
-			$selected = ($row['pff_id']==$check) ? "selected=\"selected\"" : '';
-			$result .= "<option value=\"".$row['pff_id']."\" $selected>".htmlspecialchars($row['pff_title'])."</option>";
-		}
-	}
-	$result .= "</select>";
-	return ($result);
-}
-
-/**
- * Returns forum category dropdown code
- *
- * @param int $check Selected category
- * @param string $name Dropdown name
- * @return string
- */
-function sed_selectbox_forumcat($check, $name)
-{
-	global $usr, $sed_forums_str, $L;
-
-	$result =  "<select name=\"$name\" size=\"1\">";
-	if (is_array($sed_forums_str))
-	foreach($sed_forums_str as $i => $x)
-	{
-		$selected = ($i==$check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
-	}
-	$result .= "</select>";
-	return($result);
-}
-
-
-/**
- * Generates gender dropdown
- *
- * @param string $check Checked gender
- * @param string $name Input name
- * @return string
- */
-function sed_selectbox_gender($check,$name)
-{
-	global $L;
-
-	$genlist = array ('U', 'M', 'F');
-	$result =  "<select name=\"$name\" size=\"1\">";
-	foreach(array ('U', 'M', 'F') as $i)
-	{
-		$selected = ($i==$check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$i\" $selected>".$L['Gender_'.$i]."</option>";
-	}
-	$result .= "</select>";
-	return($result);
-}
-
-/**
- * Returns group selection dropdown code
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @param array $skip Hidden groups
- * @return string
- */
-function sed_selectbox_groups($check, $name, $skip=array(0))
-{
-	global $sed_groups;
-
-	$res = "<select name=\"$name\" size=\"1\">";
-
-	foreach($sed_groups as $k => $i)
-	{
-		$selected = ($k==$check) ? "selected=\"selected\"" : '';
-		$res .= (in_array($k, $skip)) ? '' : "<option value=\"$k\" $selected>".$sed_groups[$k]['title']."</option>";
-	}
-	$res .= "</select>";
-
-	return($res);
-}
-
-/**
- * Returns language selection dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @return string
- */
-function sed_selectbox_lang($check, $name)
-{
-	global $sed_languages, $sed_countries, $cfg;
-
-	$handle = opendir($cfg['system_dir'].'/lang/');
-	while ($f = readdir($handle))
-	{
-		if ($f[0] != '.')
-		{ $langlist[] = $f; }
-	}
-	closedir($handle);
-	sort($langlist);
-
-	$result = "<select name=\"$name\" size=\"1\">";
-	while(list($i,$x) = each($langlist))
-	{
-		$selected = ($x==$check) ? "selected=\"selected\"" : '';
-		$lng = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];
-		$result .= "<option value=\"$x\" $selected>".$lng." (".$x.")</option>";
-	}
-	$result .= "</select>";
-
-	return($result);
-}
-
-/**
- * Renders forum section selection dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @return string
- */
-function sed_selectbox_sections($check, $name)
-{
-	global $db_forum_sections, $cfg;
-
-	$sql = sed_sql_query("SELECT fs_id, fs_title, fs_category FROM $db_forum_sections WHERE 1 ORDER by fs_order ASC");
-	$result = "<select name=\"$name\" size=\"1\">";
-	while ($row = sed_sql_fetcharray($sql))
-	{
-		$selected = ($row['fs_id'] == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"".$row['fs_id']."\" $selected>".htmlspecialchars(sed_cutstring($row['fs_category'], 24));
-		$result .= ' '.$cfg['separator'].' '.htmlspecialchars(sed_cutstring($row['fs_title'], 32));
-	}
-	$result .= "</select>";
-	return($result);
-}
-
-/**
- * Returns skin selection dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @return string
- */
-function sed_selectbox_skin($check, $name)
-{
-	$handle = opendir('./skins/');
-	while ($f = readdir($handle))
-	{
-		if (mb_strpos($f, '.') === FALSE && is_dir('./skins/' . $f))
-		{ $skinlist[] = $f; }
-	}
-	closedir($handle);
-	sort($skinlist);
-
-	$result = '<select name="'.$name.'" size="1">';
-	while(list($i,$x) = each($skinlist))
-	{
-		$selected = ($x==$check) ? 'selected="selected"' : '';
-		$skininfo = "./skins/$x/$x.php";
-		if (file_exists($skininfo))
-		{
-			$info = sed_infoget($skininfo);
-			$result .= (!empty($info['Error'])) ? '<option value="'.$x.'" '.$selected.'>'.$x.' ('.$info['Error'].')' : '<option value="'.$x.'" '.$selected.'>'.$info['Name'];
-		}
-		else
-		{
-			$result .= '<option value="'.$x.'" $selected>'.$x;
-		}
-		$result .= '</option>';
-	}
-	$result .= '</select>';
-
-	return $result;
-}
-
-/**
- * Returns skin selection dropdown
- *
- * @param string $skinname Skin name
- * @param string $name Dropdown name
- * @param string $theme Selected theme
- * @return string
- */
-function sed_selectbox_theme($skinname, $name, $theme)
-{
-	global $skin_themes;
-
-	if(empty($skin_themes))
-	{
-		if(file_exists("./skins/$skinname/$skinname.css"))
-		{
-			$skin_themes = array($skinname => $skinname);
-		}
-		else
-		{
-			$skin_themes = array('style' => $skinname);
-		}
-	}
-
-	$result = '<select name="'.$name.'" size="1">';
-	foreach($skin_themes as $x => $tname)
-	{
-		$selected = ($x==$theme) ? 'selected="selected"' : '';
-		$result .= '<option value="'.$x.'" '.$selected.'>'.$tname.'</option>';
-	}
-	$result .= '</select>';
-
-	return $result;
-}
-
-/**
- * Gets huge user selection box
- *
- * @param int $to Selected user ID
- * @return string
- */
-function sed_selectbox_users($to)
-{
-	global $db_users;
-
-	$result = "<select name=\"userid\">";
-	$sql = sed_sql_query("SELECT user_id, user_name FROM $db_users ORDER BY user_name ASC");
-	while ($row = sed_sql_fetcharray($sql))
-	{
-		$selected = ($row['user_id']==$to) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"".$row['user_id']."\" $selected>".htmlspecialchars($row['user_name'])."</option>";
-	}
-	$result .= "</select>";
-	return($result);
 }
 
 /**
@@ -4615,296 +3468,6 @@ function sed_stat_update($name, $value = 1)
 	sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value)
 		VALUES ('".sed_sql_prep($name)."', 1)
 		ON DUPLICATE KEY UPDATE stat_value=stat_value+$value");
-}
-
-/*
- * =========================================================================================
- */
-
-/**
- * Returns substring position in file
- *
- * @param string $file File path
- * @param string $str Needle
- * @param int $maxsize Search limit
- * @return int
- */
-function sed_stringinfile($file, $str, $maxsize=32768)
-{
-	if ($fp = @fopen($file, 'r'))
-	{
-		$data = fread($fp, $maxsize);
-		$pos = mb_strpos($data, $str);
-		$result = !($pos===FALSE);
-	}
-	else
-	{ $result = FALSE; }
-	@fclose($fp);
-	return ($result);
-}
-
-/*
- * ===================================== Tags API ==========================================
- */
-
-/**
- * Tags a given item from a specific area with a keyword
- *
- * @param string $tag The tag (keyword)
- * @param int $item Item ID
- * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
- * @return bool
- */
-function sed_tag($tag, $item, $area = 'pages')
-{
-	global $db_tag_references;
-	$item = (int) $item;
-	if(sed_tag_isset($tag, $item, $area))
-	{
-		return false;
-	}
-	sed_sql_query("INSERT INTO $db_tag_references VALUES('$tag', $item, '$area')");
-	sed_tag_register($tag);
-	return true;
-}
-
-/**
- * Collects data for a tag cloud in some area. The result is an associative array with
- * tags as keys and count of entries as values.
- *
- * @param string $area Site area
- * @param string $order Should be 'tag' to order the result set by tag (alphabetical) or 'cnt' to order it by item count (descending)
- * @param int $limit Use this parameter to limit number of rows in the result set
- * @return array
- */
-function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
-{
-	global $db_tag_references;
-	$res = array();
-	$limit = is_null($limit) ? '' : ' LIMIT ' . $limit;
-	switch($order)
-	{
-		case 'Alphabetical':
-			$order = '`tag`';
-			break;
-		case 'Frequency':
-			$order = '`cnt` DESC';
-			break;
-		default:
-			$order = 'RAND()';
-	}
-	$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
-	$sql = sed_sql_query("SELECT `tag`, COUNT(*) AS `cnt`
-		FROM $db_tag_references
-		$where
-		GROUP BY `tag`
-		ORDER BY $order $limit");
-	while($row = sed_sql_fetchassoc($sql))
-	{
-		$res[$row['tag']] = $row['cnt'];
-	}
-	sed_sql_freeresult($sql);
-	return $res;
-}
-
-/**
- * Gets an array of autocomplete options for a given tag
- *
- * @param string $tag Beginning of a tag
- * @param int $min_length Minimal length of the beginning
- * @return array
- */
-function sed_tag_complete($tag, $min_length = 3)
-{
-	global $db_tags;
-	if(mb_strlen($tag) < $min_length)
-	{
-		return false;
-	}
-	$res = array();
-	$sql = sed_sql_query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE '$tag%'");
-	while($row = sed_sql_fetchassoc($sql))
-	{
-		$res[] = $row['tag'];
-	}
-	sed_sql_freeresult($sql);
-	return $res;
-}
-
-/**
- * Returns number of items tagged with a specific keyword
- *
- * @param string $tag The tag (keyword)
- * @param string $area Site area or empty to count in all areas
- * @return int
- */
-function sed_tag_count($tag, $area = '')
-{
-	global $db_tag_references;
-	$query = "SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag'";
-	if(!empty($area))
-	{
-		$query .= " AND tag_area = '$area'";
-	}
-	return (int) sed_sql_result(sed_sql_query($query), 0, 0);
-}
-
-/**
- * Checks whether the tag has already been registered in the dictionary
- *
- * @param string $tag The tag
- * @return bool
- */
-function sed_tag_exists($tag)
-{
-	global $db_tags;
-	return sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_tags WHERE `tag` = '$tag'"), 0, 0) == 1;
-}
-
-/**
- * Checks whether a tag has been already set on a specific item
- *
- * @param string $tag The tag (keyword)
- * @param int $item Item ID
- * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
- * @return bool
- */
-function sed_tag_isset($tag, $item, $area = 'pages')
-{
-	global $db_tag_references;
-	$item = (int) $item;
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
-	return sed_sql_result($sql, 0, 0) == 1;
-}
-
-/**
- * Returns an array containing tags which have been set on an item
- *
- * @param int $item Item ID
- * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
- * @return array
- */
-function sed_tag_list($item, $area = 'pages')
-{
-	global $db_tag_references;
-	$res = array();
-	$sql = sed_sql_query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
-	while($row = sed_sql_fetchassoc($sql))
-	{
-		$res[] = $row['tag'];
-	}
-	sed_sql_freeresult($sql);
-	return $res;
-}
-
-/**
- * Parses user input into array of valid and safe tags
- *
- * @param string $input Comma separated user input
- * @return array
- */
-function sed_tag_parse($input)
-{
-	$res = array();
-	$invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n");
-	$tags = explode(',', $input);
-	foreach($tags as $tag)
-	{
-		$tag = str_replace($invalid, ' ', $tag);
-		$tag = preg_replace('#\s\s+#', ' ', $tag);
-		$tag = trim($tag);
-		if(!empty($tag))
-		{
-			$res[] = sed_tag_prep($tag);
-		}
-	}
-	$res = array_unique($res);
-	return $res;
-}
-
-/**
- * Convert the tag to lowercase and prepare it for SQL operations. Please call this after sed_import()!
- *
- * @param string $tag The tag
- * @return string
- */
-function sed_tag_prep($tag)
-{
-	return sed_sql_prep(mb_strtolower($tag));
-}
-
-/**
- * Attempts to register a tag in the dictionary. Duplicate entries are just ignored.
- *
- * @param string $tag The tag
- */
-function sed_tag_register($tag)
-{
-	global $db_tags;
-	sed_sql_query("INSERT IGNORE INTO $db_tags VALUES('$tag')");
-}
-
-/**
- * Removes tag reference from a specific item
- *
- * @param string $tag The tag (keyword)
- * @param int $item Item ID
- * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
- * @return bool
- */
-function sed_tag_remove($tag, $item, $area = 'pages')
-{
-	global $db_tag_references;
-	if(sed_tag_isset($tag, $item, $area))
-	{
-		sed_sql_query("DELETE FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
-		return true;
-	}
-	return false;
-}
-
-/**
- * Removes all tags attached to an item, or all tags from area if item is set to 0.
- * Returns number of tag references affected.
- *
- * @param int $item Item ID
- * @param string $area Site area
- * @return int
- */
-function sed_tag_remove_all($item = 0, $area = 'pages')
-{
-	global $db_tag_references;
-	if($item == 0)
-	{
-		sed_sql_query("DELETE FROM $db_tag_references WHERE tag_area = '$area'");
-	}
-	else
-	{
-		sed_sql_query("DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
-	}
-	return sed_sql_affectedrows();
-}
-
-/**
- * Converts a lowercase tag into title-case string (capitalizes first latters of the words)
- *
- * @param string $tag A tag
- * @return string
- */
-function sed_tag_title($tag)
-{
-	return mb_convert_case($tag, MB_CASE_TITLE);
-}
-
-/**
- * Unregisters a tag from the dictionary
- *
- * @param string $tag The tag
- */
-function sed_tag_unregister($tag)
-{
-	global $db_tags;
-	sed_sql_query("DELETE FROM $db_tags WHERE `tag` = '$tag'");
 }
 
 /*
@@ -5255,42 +3818,6 @@ function sed_uriredir_redirect($uri)
 }
 
 /**
- * Fetches user entry from DB
- *
- * @param int $id User ID
- * @return array
- */
-function sed_userinfo($id)
-{
-	global $db_users;
-
-	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id'");
-	if ($res = sed_sql_fetcharray($sql))
-	{ return ($res); }
-	else
-	{
-		$res['user_name'] = '?';
-		return ($res);
-	}
-}
-
-/**
- * Checks whether user is online
- *
- * @param int $id User ID
- * @return bool
- */
-function sed_userisonline($id)
-{
-	global $sed_usersonline;
-
-	$res = FALSE;
-	if (is_array($sed_usersonline))
-	{ $res = (in_array($id,$sed_usersonline)) ? TRUE : FALSE; }
-	return ($res);
-}
-
-/**
  * Wraps text
  *
  * @param string $str Source text
@@ -5395,9 +3922,6 @@ $sed_languages['hu']= 'Hungarian';
 $sed_languages['jp']= '&#26085;&#26412;&#35486;';
 $sed_languages['kr']= '&#54620;&#44397;&#47568;';
 
-// XTemplate classes
-require_once $cfg['system_dir'].'/xtemplate.php';
-
 /**
  * Makes correct plural forms of words
  *
@@ -5474,149 +3998,4 @@ if ($cfg['customfuncs'])
 	require_once($cfg['system_dir'].'/functions.custom.php');
 }
 
-/*
- * ================================ Debugging Facilities ================================
- */
-
-/**
- * Accepts several variables and prints their values in debug mode (var dump).
- *
- * @example sed_assert($foo, $bar);
- * @see sed_watch(), sed_backtrace(), sed_vardump()
- */
-function sed_print()
-{
-	ob_end_clean();
-	$vars = func_get_args();
-	foreach ($vars as $name => $var)
-	{
-		var_dump($var);
-	}
-	die();
-}
-
-/**
- * Dumps current state of its arguments to debug log file and continues normal script execution.
- *
- * @example sed_watch($foo, $bar);
- * @see sed_assert(), sed_checkpoint(), SED_DEBUG_LOGFILE
- */
-function sed_watch()
-{
-	$fp = fopen(SED_DEBUG_LOGFILE, 'a');
-	$btrace = debug_backtrace();
-	fputs($fp, $btrace[1]['file'] . ', ' . $btrace[1]['line'] . ":\n");
-	$vars = func_get_args();
-	foreach ($vars as $name => $var)
-	{
-		fputs($fp, "arg #$name = " .print_r($var, TRUE) ."\n");
-	}
-	fputs($fp, "----------------\n");
-	fclose($fp);
-}
-
-/**
- * Prints program execution backtrace.
- *
- * @param bool $clear_screen If TRUE displays backtrace only. Otherwise it will be printed in normal flow.
- * @see sed_assert(), sed_vardump()
- */
-function sed_backtrace($clear_screen = TRUE)
-{
-	if ($clear_screen)
-	{
-		ob_end_clean();
-	}
-	debug_print_backtrace();
-	if ($clear_screen)
-	{
-		die();
-	}
-}
-
-/**
- * Prints structure and contents of all global variables currently assigned.
- *
- * @param bool $clear_screen If TRUE displays vardump only. Otherwise it will be printed in normal flow.
- * @see SED_VARDUMP_LOCALS, sed_assert(), sed_backtrace()
- */
-function sed_vardump($clear_screen = TRUE)
-{
-	if ($clear_screen)
-	{
-		ob_end_clean();
-	}
-	foreach ($GLOBALS as $key => $val)
-	{
-		if ($key != 'GLOBALS')
-		{
-			echo "<br /><em>$key</em><br />";
-			var_dump($val);
-		}
-	}
-	if ($clear_screen)
-	{
-		die();
-	}
-}
-
-/**
- * Local vardump macro. Prints structure and contents of all variables in the local scope.
- *
- * @example eval(SED_VARDUMP_LOCALS);
- * @see sed_vardump(), sed_watch()
- */
-define('SED_VARDUMP_LOCALS', 'ob_end_clean();
-$debug_vars = get_defined_vars();
-foreach ($debug_vars as $debug_key => $debug_val)
-{
-	if ($debug_key != "GLOBALS" && $debug_key != "debug_vars")
-	{
-		echo "<br /><em>$debug_key</em><br />";
-		var_dump($debug_val);
-	}
-}
-die();');
-
-/**
- * Dumps current state of global variables into debug log file and continues normal script execution.
- *
- * @see SED_CHECKPOINT_LOCALS, SED_DEBUG_LOGFILE, sed_watch(), sed_vardump()
- */
-function sed_checkpoint()
-{
-	$fp = fopen(SED_DEBUG_LOGFILE, 'a');
-	$btrace = debug_backtrace();
-	fputs($fp, $btrace[1]['file'] . ', ' . $btrace[1]['line'] . ":\n");
-	foreach ($GLOBALS as $key => $val)
-	{
-		if ($key != 'GLOBALS')
-		{
-			fputs($fp, "$key = " .print_r($val, TRUE) ."\n");
-		}
-	}
-	fputs($fp, "----------------\n");
-	fclose($fp);
-}
-
-/**
- * Dumps variables in local scope into debug log file and continues normal script execution.
- *
- * @example eval(SED_CHECKPOINT_LOCALS);
- * @see sed_checkpoint(), SED_DEBUG_LOGFILE, sed_watch(), SED_VARDUMP_LOCALS
- */
-define('SED_CHECKPOINT_LOCALS', '$debug_fp = fopen(SED_DEBUG_LOGFILE, "a");
-	$debug_btrace = debug_backtrace();
-	fputs($debug_fp, $debug_btrace[0]["file"] . ", " . $debug_btrace[1]["line"] . ":\n");
-	$debug_vars = get_defined_vars();
-	foreach ($debug_vars as $debug_key => $debug_val)
-	{
-		if ($debug_key != "GLOBALS" && $debug_key != "debug_vars" && $debug_key != "debug_btrace" && $debug_key != "debug_fp")
-		{
-			fputs($debug_fp, "$debug_key = " .print_r($debug_val, TRUE) ."\n");
-		}
-	}
-	fputs($debug_fp, "----------------\n");
-	fclose($debug_fp);'
-);
 ?>

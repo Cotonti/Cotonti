@@ -14,17 +14,16 @@ define('SED_POLLS', TRUE);
 $location = 'Polls';
 $z = 'polls';
 
-require_once('./datas/config.php');
-require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/common.php');
+require_once './datas/config.php';
+require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'] . '/common.php';
+require_once $cfg['system_dir'] . '/xtemplate.php';
 
 sed_dieifdisabled($cfg['disable_polls']);
 
-switch($m)
-{
-	default:
-		require_once($cfg['system_dir'].'/core/polls/polls.inc.php');
-	break;
-}
+require_once $cfg['modules_dir'] . '/polls/functions.php';
+require_once sed_langfile('polls', 'module');
+
+require_once $cfg['modules_dir'] . '/polls/main.inc.php';
 
 ?>

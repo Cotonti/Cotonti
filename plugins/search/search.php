@@ -23,6 +23,8 @@ Order=10
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
 // Include functions
+require_once $cfg['modules_dir'] . '/page/functions.php';
+require_once $cfg['modules_dir'] . '/forums/functions.php';
 require_once("plugins/search/inc/search.func.inc.php");
 
 // Read GET/POST params

@@ -1,0 +1,148 @@
+<?PHP
+
+/* ====================
+
+[BEGIN_SED]
+File=polls.php
+Version=0.0.2
+Updated=2009-jan-21
+Type=Core
+Author=Neocrome & Cotonti Team
+Description=polls (Cotonti - Website engine http://www.cotonti.com Copyright (c) Cotonti Team 2009 BSD License)
+[END_SED]
+
+==================== */
+
+defined('SED_CODE') or die('Wrong URL');
+
+/* === Hook === */
+$extp = sed_getextplugins('polls.first');
+foreach ($extp as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
+sed_block($usr['auth_read']);
+
+$mode = sed_import('mode','G','ALP');
+
+if ($mode=='ajax')
+{
+	$skin = sed_import('poll_skin','P','TXT');
+	$id = sed_import('poll_id','P','INT');
+	sed_sendheaders();
+	sed_poll_vote();
+	list($polltitle, $poll_form)=sed_poll_form($id, '', $skin);
+	echo $poll_form;
+
+	exit;
+}
+
+$id = sed_import('id','G','ALP', 8);
+$vote = sed_import('vote','G','TXT');
+if (!empty($vote))
+{$vote=explode(" ", $vote);}
+if (empty($vote))
+{$vote = sed_import('vote','P','ARR');}
+
+$comments = sed_import('comments','G','BOL');
+$ratings = sed_import('ratings','G','BOL');
+
+$out['subtitle'] = $L['Polls'];
+
+/* === Hook === */
+$extp = sed_getextplugins('polls.main');
+foreach ($extp as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
+require_once $cfg['system_dir'] . '/header.php';
+
+$t = new XTemplate(sed_skinfile('polls'));
+
+if (!empty($error_string))
+{
+	$t->assign("POLLS_EXTRATEXT",$error_string);
+	$t->parse("MAIN.POLLS_EXTRA");
+}
+elseif ($id=='viewall' || $id=='')
+{
+		$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_state=0 AND poll_type='index' ORDER BY poll_id DESC");
+
+	$result = "<table class=\"cells\">";
+
+	if (sed_sql_numrows($sql)==0)
+	{ $result .= "<tr><td>".$L['None']."</td></tr>"; }
+	else
+	{
+		while ($row = sed_sql_fetcharray($sql))
+		{
+			$result .= "<tr>";
+			$result .= "<td style=\"width:128px;\">".date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600)."</td>";
+			$result .= "<td><a href=\"".sed_url('polls', 'id='.$row['poll_id'])."\">" . $R['admin_icon_polls'];
+			$result .= sed_parse(htmlspecialchars($row['poll_text']),1 ,1 ,1)."</a></td>";
+			$result .= "</tr>";
+		}
+	}
+	$result .= "</table>";
+
+	$t->assign(array(
+		"POLLS_LIST" => $result,
+	));
+
+	$t->parse("MAIN.POLLS_VIEWALL");
+}
+else
+{
+	$id = sed_import($id,'D','INT');
+	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index' "), 0, 0) != 1)
+	{
+		sed_redirect(sed_url('message', 'msg=404', '', TRUE));
+	}
+	sed_poll_vote();
+	list($polltitle, $poll_form)=sed_poll_form($id);
+	$item_code = 'v'.$id;
+	$comments = true; // TODO enable/disable comments on categories
+
+	list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$id), $comments);
+	$t->assign(array(
+		"POLLS_TITLE" => $polltitle,
+		"POLLS_FORM" => $poll_form,
+		"POLLS_COMMENTS" => $comments_link,
+		"POLLS_COMMENTS_DISPLAY" => $comments_display,
+		"POLLS_VIEWALL" => "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>",
+	));
+
+	$t->parse("MAIN.POLLS_VIEW");
+
+	if ($alreadyvoted)
+	{ $extra = ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted']; }
+	else
+	{ $extra = $L['polls_notyetvoted']; }
+
+	$t->assign(array(
+		"POLLS_EXTRATEXT" => $extra,
+	));
+
+	$t->parse("MAIN.POLLS_EXTRA");
+
+}
+
+/* === Hook === */
+$extp = sed_getextplugins('polls.tags');
+foreach ($extp as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
+$t->parse("MAIN");
+$t->out("MAIN");
+require_once $cfg['system_dir'] . '/footer.php';
+
+//sed_sendheaders();
+?>
