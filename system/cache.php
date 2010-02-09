@@ -503,7 +503,7 @@ class MySQL_cache extends Db_cache_driver
 			$i = 0;
 			foreach ($realms as $realm)
 			{
-				$glue = $i == 0 ? "'" : "',";
+				$glue = $i == 0 ? "'" : ",'";
 				$r_where .= $glue . sed_sql_prep($realm) . "'";
 				$i++;
 			}
@@ -1404,5 +1404,112 @@ class Cache
 		}
 		return $res;
 	}
+}
+
+/*
+ * ================================ Old Cache Subsystem ================================
+ */
+// TODO scheduled for complete removal and replacement with new cache system
+
+/**
+ * Clears cache item
+ * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
+ * @param string $name Item name
+ * @return bool
+ */
+function sed_cache_clear($name)
+{
+	global $db_cache;
+
+	sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
+	return(TRUE);
+}
+
+/**
+ * Clears cache completely
+ * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
+ * @return bool
+ */
+function sed_cache_clearall()
+{
+	global $db_cache;
+	sed_sql_query("DELETE FROM $db_cache");
+	return TRUE;
+}
+
+/**
+ * Clears HTML-cache
+ *
+ * @todo Add trigger support here to clean non-standard html fields
+ * @return bool
+ */
+function sed_cache_clearhtml()
+{
+	global $db_pages, $db_forum_posts, $db_pm;
+	$res = TRUE;
+	$res &= sed_sql_query("UPDATE $db_pages SET page_html=''");
+	$res &= sed_sql_query("UPDATE $db_forum_posts SET fp_html=''");
+	$res &= sed_sql_query("UPDATE $db_pm SET pm_html = ''");
+	return $res;
+}
+
+/**
+ * Fetches cache value
+ * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
+ * @param string $name Item name
+ * @return mixed
+ */
+function sed_cache_get($name)
+{
+	global $cfg, $sys, $db_cache;
+
+	if (!$cfg['cache'])
+	{ return FALSE; }
+	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
+	if ($row = sed_sql_fetcharray($sql))
+	{ return(unserialize($row['c_value'])); }
+	else
+	{ return(FALSE); }
+}
+
+/**
+ * Get all cache data and import it into global scope
+ * @deprecated Deprecated since 0.7.0
+ * @param int $auto Only with autoload flag
+ * @return mixed
+ */
+function sed_cache_getall($auto = 1)
+{
+	global $cfg, $sys, $db_cache;
+	if (!$cfg['cache'])
+	{ return FALSE; }
+	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
+	if ($auto)
+	{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1"); }
+	else
+	{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache"); }
+	if (sed_sql_numrows($sql)>0)
+	{ return($sql); }
+	else
+	{ return(FALSE); }
+}
+
+/**
+ * Puts an item into cache
+ * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
+ * @param string $name Item name
+ * @param mixed $value Item value
+ * @param int $expire Expires in seconds
+ * @param int $auto Autload flag
+ * @return bool
+ */
+function sed_cache_store($name,$value,$expire,$auto="1")
+{
+	global $db_cache, $sys, $cfg;
+
+	if (!$cfg['cache'])
+	{ return(FALSE); }
+	$sql = sed_sql_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".sed_sql_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
+	return(TRUE);
 }
 ?>

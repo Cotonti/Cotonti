@@ -19,42 +19,50 @@ if (isset($_GET['m']) && $_GET['m'] == 'auth')
 	define('SED_AUTH', TRUE);
 }
 
-require_once('./datas/config.php');
-require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/common.php');
+require_once './datas/config.php';
+require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'] . '/common.php';
+require_once $cfg['system_dir'] . '/xtemplate.php';
+
+require_once $cfg['modules_dir'] . '/users/functions.php';
+require_once sed_langfile('users', 'module');
+
+require_once $cfg['system_dir'] . '/email.php';
+require_once $cfg['system_dir'] . '/extrafields.php';
+require_once $cfg['system_dir'] . '/uploads.php';
 
 switch($m)
 {
 	case 'register':
-		require_once($cfg['system_dir'].'/core/users/users.register.inc.php');
+		require_once $cfg['modules_dir'] . '/users/register.inc.php';
 	break;
 
 	case 'passrecover':
-		require_once($cfg['system_dir'].'/core/users/users.passrecover.inc.php');
+		require_once $cfg['modules_dir'] . '/users/passrecover.inc.php';
 	break;
 
 	case 'auth':
-		require_once($cfg['system_dir'].'/core/users/users.auth.inc.php');
+		require_once $cfg['modules_dir'] . '/users/auth.inc.php';
 	break;
 
 	case 'details':
-		require_once($cfg['system_dir'].'/core/users/users.details.inc.php');
+		require_once $cfg['modules_dir'] . '/users/details.inc.php';
 	break;
 
 	case 'edit':
-		require_once($cfg['system_dir'].'/core/users/users.edit.inc.php');
+		require_once $cfg['modules_dir'] . '/users/edit.inc.php';
 	break;
 
 	case 'logout':
-		require_once($cfg['system_dir'].'/core/users/users.logout.inc.php');
+		require_once $cfg['modules_dir'] . '/users/logout.inc.php';
 	break;
 
 	case 'profile':
-		require_once($cfg['system_dir'].'/core/users/users.profile.inc.php');
+		require_once $cfg['modules_dir'] . '/users/profile.inc.php';
 	break;
 
 	default:
-		require_once($cfg['system_dir'].'/core/users/users.inc.php');
+		require_once $cfg['modules_dir'] . '/users/main.inc.php';
 	break;
 }
 

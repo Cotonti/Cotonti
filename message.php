@@ -14,15 +14,13 @@ define('SED_MESSAGE', TRUE);
 $location = 'Messages';
 $z = 'message';
 
-require_once('./datas/config.php');
-require_once($cfg['system_dir'].'/functions.php');
-require_once($cfg['system_dir'].'/common.php');
+require_once './datas/config.php';
+require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'] . '/common.php';
+require_once $cfg['system_dir'] . '/xtemplate.php';
 
-switch($m)
-{
-	default:
-		require_once($cfg['system_dir'].'/core/message/message.inc.php');
-	break;
-}
+require_once sed_langfile('message', 'module');
+
+require_once $cfg['modules_dir'] . '/message/main.inc.php';
 
 ?>

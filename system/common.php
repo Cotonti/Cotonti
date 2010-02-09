@@ -44,8 +44,15 @@ $sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpass
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 /* ======== Cache Subsystem ======== */
-require_once $cfg['system_dir'] . '/cache.php';
-$cot_cache = new Cache();
+if ($cfg['cache'])
+{
+	require_once $cfg['system_dir'] . '/cache.php';
+	$cot_cache = new Cache();
+}
+else
+{
+	$cot_cache = false;
+}
 
 /* ======== Configuration settings ======== */
 
@@ -461,18 +468,8 @@ if (!$cfg['disablehitstats'])
 }
 
 /* ======== Language ======== */
-$dlang = $cfg['system_dir'].'/lang/en/main.lang.php';
-$mlang = $cfg['system_dir'].'/lang/'.$cfg['defaultlang'].'/main.lang.php';
-$ulang = $cfg['system_dir'].'/lang/'.$usr['lang'].'/main.lang.php';
+require_once sed_langfile('main', 'core');
 
-if (file_exists($dlang))
-{ require_once($dlang); $dlangne = 1;}
-if (file_exists($ulang) && $usr['lang']!='en')
-{require_once($ulang);}
-elseif(file_exists($mlang) && $usr['lang'] != $cfg['defaultlang'] && $usr['lang']!='en')
-{require_once($mlang); $usr['lang'] = $cfg['defaultlang'];}
-elseif(!$dlangne)
-{ sed_diefatal('Main language file not found.'); }
 $lang = $usr['lang'];
 
 /* ======== Who's online part 2 ======== */
@@ -508,16 +505,17 @@ if (!$mtheme)
 	sed_diefatal('Default theme not found.');
 }
 
-$usr['def_skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.en.lang.php';
-if (@file_exists($usr['def_skin_lang']))
-{
-	require_once($usr['def_skin_lang']);
-}
+require_once sed_langfile('skin', 'core');
 
+$usr['def_skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.en.lang.php';
 $usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
 if ($usr['skin_lang'] != $usr['def_skin_lang'] && @file_exists($usr['skin_lang']))
 {
 	require_once($usr['skin_lang']);
+}
+elseif (@file_exists($usr['def_skin_lang']))
+{
+	require_once($usr['def_skin_lang']);
 }
 
 $skin = $usr['skin'];
@@ -567,36 +565,12 @@ if (!$cfg['disablehitstats'])
 	}
 }
 
-/* ======== Extrafields ======== */
-
-if (!$sed_extrafields)
-{
-	$sed_extrafields = array();
-	$sed_extrafields['structure'] =array();
-	$sed_extrafields['pages'] =array();
-	$sed_extrafields['users'] =array();
-	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE 1");
-	while($row = sed_sql_fetchassoc($fieldsres))
-	{
-		$sed_extrafields[$row['field_location']][$row['field_name']] = $row;
-	}
-	$cfg['cache'] && $cot_cache->db_set('sed_extrafields', $sed_extrafields, 'system');
-}
-
 /* ======== Categories ======== */
 
 if (!$sed_cat && !$cfg['disable_page'])
 {
 	sed_load_structure();
 	$cfg['cache'] && $cot_cache->db_set('sed_cat', $sed_cat, 'system');
-}
-
-/* ======== Forums ======== */
-
-if (!$sed_forums_str && !$cfg['disable_forums'])
-{
-	sed_load_forum_structure();
-	$cfg['cache'] && $cot_cache->db_set('sed_forums_str', $sed_forums_str, 'system');
 }
 
 /* ======== Various ======== */
