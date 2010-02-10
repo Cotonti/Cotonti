@@ -1,7 +1,15 @@
 <?php
 /**
- * Pages
+ * Russian Language File for the Page Module (page.ru.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 $L['comm_on_page'] = 'на странице'; // New in N-0.0.2
 $L['pagadd_subtitle'] = 'Форма для создания новой страницы';

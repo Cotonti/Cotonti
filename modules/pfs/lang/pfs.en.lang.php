@@ -1,7 +1,15 @@
 <?php
 /**
- * PFS
+ * English Language File for the PFS Module (pfs.en.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 $L['pfs_cancelall'] = 'Cancel All'; /// 0.7.0
 $L['pfs_direxists'] = 'Such a folder already exists.<br />Old path: %1$s<br />New path: %2$s'; // 0.7.0

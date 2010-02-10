@@ -120,7 +120,7 @@ else
 
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil ($d / $cfg['maxrowsperpage'])+1;
-$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? "<a href=\"".sed_url('page', 'm=add&c='.$c)."\">".$L['lis_submitnew'].'</a>' : '';
+$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? "<a href=\"".sed_url('page', 'm=add&c='.$c)."\">".$L['Submitnew'].'</a>' : '';
 
 $pagenav = sed_pagenav('list', "c=$c&s=$s&w=$w&o=$o&p=$p", $d, $totallines, $cfg['maxrowsperpage']);
 

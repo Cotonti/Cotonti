@@ -1,7 +1,15 @@
 <?php
 /**
- * Polls
+ * Russian Language File for the Polls Module (polls.ru.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 $L['polls_alreadyvoted'] = 'Вы уже проголосовали в этом опросе';
 $L['polls_created'] = 'Опрос создан';	// New in N-0.0.2

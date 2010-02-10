@@ -286,6 +286,7 @@ $L['Subforum'] = 'Подфорум';	// New in N-0.1.0
 $L['Subforums'] = 'Подфорумы';	// New in N-0.1.0
 $L['Subject'] = 'Тема';	// New in N-0.1.0
 $L['Submit'] = 'Отправить';
+$L['Submitnew'] = 'Создать новую страницу';
 $L['System'] = 'Система';
 $L['Tag'] = 'Тег';
 $L['Tags'] = 'Теги';

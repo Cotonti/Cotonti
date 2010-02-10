@@ -1,7 +1,15 @@
 <?php
 /**
- * Forums
+ * Russian Language File for the Forums Module (forums.ru.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 $L['for_antibump'] = 'Активирована система защиты от поднятия тем: вы не можете создавать несколько сообщений подряд';	// 0.0.2
 $L['for_keepmovedlink'] = 'Оставить ссылку в старом разделе'; // 0.6.6

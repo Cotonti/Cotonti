@@ -1,7 +1,15 @@
 <?php
 /**
- * Private messages
+ * Russian Language File for the PM Module (pm.ru.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 $L['pmsend_subtitle'] = 'Форма для создания нового сообщения';
 $L['pmsend_title'] = 'Новое личное сообщение';

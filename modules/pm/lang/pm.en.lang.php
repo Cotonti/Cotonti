@@ -1,7 +1,15 @@
 <?php
 /**
- * Private messages
+ * English Language File for the PM Module (pm.en.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 $L['pmsend_subtitle'] = 'New private message submission form';
 $L['pmsend_title'] = 'Send a new private message';
@@ -26,6 +34,7 @@ $L['pm_toomanyrecipients'] = '%1$s recipients maximum please';
 $L['pm_wrongname'] = 'At least one recipient was wrong, and so removed from the list';
 $L['pm_messageshistory'] = 'Messages history'; // New in N-0.7.0
 $L['pm_notmovetosentbox'] = 'Do not move to "Sentbox"'; // New in N-0.7.0
+
 /**
  * Private messages: notification
  */

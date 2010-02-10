@@ -21,8 +21,6 @@ require_once $cfg['system_dir'] . '/xtemplate.php';
 
 sed_dieifdisabled($cfg['disable_page']);
 
-require_once sed_langfile('list', 'module');
-
 require_once $cfg['system_dir'] . '/extrafields.php';
 
 require_once $cfg['modules_dir'] . '/list/list.inc.php';

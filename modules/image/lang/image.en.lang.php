@@ -1,6 +1,18 @@
 <?php
 /**
- * Smart Image Resizer (image.php)
+ * English Language File for the Image Module (image.en.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
+defined('SED_CODE') or die('Wrong URL.');
+
+/**
+ * Smart Image Resizer
  */
 
 $L['sir_noimage'] = "Error: no image was specified";
