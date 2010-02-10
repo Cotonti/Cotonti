@@ -54,13 +54,13 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 require_once sed_langfile('main', 'core');
 
-require_once $cfg['system_dir'] . '/xtemplate.php';
+require_once sed_incfile('xtemplate');
 require_once sed_langfile('install', 'module');
-require_once $cfg['modules_dir'] . '/admin/functions.php';
+require_once sed_incfile('functions', 'admin');
 
 if ($_GET['m'] == 'update')
 {
-	require_once $cfg['modules_dir'] . '/install/update.inc.php';
+	require_once sed_incfile('update', 'install');
 }
 else
 {
@@ -69,6 +69,6 @@ else
 		header('Location: ' . $cfg['mainurl']);
 		exit;
 	}
-	require_once $cfg['modules_dir'] . '/install/install.inc.php';
+	require_once sed_incfile('main', 'install');
 }
 ?>

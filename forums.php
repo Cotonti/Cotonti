@@ -16,37 +16,37 @@ $z = 'forums';
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/common.php';
-require_once $cfg['system_dir'] . '/xtemplate.php';
+require_once sed_incfile('common');
+require_once sed_incfile('xtemplate');
 
 sed_dieifdisabled($cfg['disable_forums']);
 
-require_once $cfg['modules_dir'] . '/forums/functions.php';
-require_once $cfg['modules_dir'] . '/forums/resources.php';
+require_once sed_incfile('functions', 'forums');
+require_once sed_incfile('resources', 'forums');
 require_once sed_langfile('forums', 'module');
 
-require_once $cfg['system_dir'] . '/extrafields.php';
+require_once sed_incfile('extrafields');
 
 switch($m)
 {
 	case 'topics':
-		require_once $cfg['modules_dir'] . '/forums/topics.inc.php';
+		require_once sed_incfile($m, 'forums');
 	break;
 
 	case 'posts':
-		require_once $cfg['modules_dir'] . '/forums/posts.inc.php';
+		require_once sed_incfile($m, 'forums');
 	break;
 
 	case 'editpost':
-		require_once $cfg['modules_dir'] . '/forums/editpost.inc.php';
+		require_once sed_incfile($m, 'forums');
 	break;
 
 	case 'newtopic':
-		require_once $cfg['modules_dir'] . '/forums/newtopic.inc.php';
+		require_once sed_incfile($m, 'forums');
 	break;
 
 	default:
-		require_once $cfg['modules_dir'] . '/forums/sections.inc.php';
+		require_once sed_incfile('main', 'forums');
 	break;
 }
 

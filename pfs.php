@@ -16,42 +16,42 @@ $z = 'pfs';
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/common.php';
-require_once $cfg['system_dir'] . '/xtemplate.php';
+require_once sed_incfile('common');
+require_once sed_incfile('xtemplate');
 
 sed_dieifdisabled($cfg['disable_pfs']);
 
-require_once $cfg['modules_dir'] . '/pfs/functions.php';
-require_once $cfg['modules_dir'] . '/pfs/resources.php';
+require_once sed_incfile('functions', 'pfs');
+require_once sed_incfile('resources', 'pfs');
 require_once sed_langfile('pfs', 'module');
 require_once './datas/extensions.php';
 
-require_once $cfg['system_dir'] . '/uploads.php';
+require_once sed_incfile('uploads');
 
 switch($m)
 {
 	case 'admin':
-		require_once $cfg['modules_dir'] . '/pfs/admin.inc.php';
+		require_once sed_incfile($m, 'pfs');
 	break;
 	
 	case 'view':
-		require_once $cfg['modules_dir'] . '/pfs/view.inc.php';
+		require_once sed_incfile($m, 'pfs');
 	break;
 
 	case 'edit':
-		require_once $cfg['modules_dir'] . '/pfs/edit.inc.php';
+		require_once sed_incfile($m, 'pfs');
 	break;
 
 	case 'editfolder':
-		require_once $cfg['modules_dir'] . '/pfs/editfolder.inc.php';
+		require_once sed_incfile($m, 'pfs');
 	break;
 	
 	case 'system':
-		require_once $cfg['modules_dir'] . '/pfs/system.inc.php';
+		require_once sed_incfile($m, 'pfs');
 	break;
 
 	default:
-		require_once $cfg['modules_dir'] . '/pfs/pfs.inc.php';
+		require_once sed_incfile('main', 'pfs');
 	break;
 }
 

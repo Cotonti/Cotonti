@@ -22,7 +22,7 @@ Order=10
 
 if (!defined('SED_CODE') || !defined('SED_PLUG')) { die('Wrong URL.'); }
 
-require_once $cfg['modules_dir'] . '/users/functions.php';
+require_once sed_incfile('functions', 'users');
 
 $showavatars = $cfg['plugin']['whosonline']['showavatars'];
 $miniavatar_x = $cfg['plugin']['whosonline']['miniavatar_x'];
