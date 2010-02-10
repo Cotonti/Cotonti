@@ -25,6 +25,6 @@ require_once sed_langfile('list', 'module');
 
 require_once $cfg['system_dir'] . '/extrafields.php';
 
-require_once $cfg['modules_dir'] . '/list/main.inc.php';
+require_once $cfg['modules_dir'] . '/list/list.inc.php';
 
 ?>

@@ -46,7 +46,7 @@ switch($m)
 	break;
 
 	default:
-		require_once $cfg['modules_dir'] . '/forums/main.inc.php';
+		require_once $cfg['modules_dir'] . '/forums/sections.inc.php';
 	break;
 }
 

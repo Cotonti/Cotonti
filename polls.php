@@ -24,6 +24,6 @@ sed_dieifdisabled($cfg['disable_polls']);
 require_once $cfg['modules_dir'] . '/polls/functions.php';
 require_once sed_langfile('polls', 'module');
 
-require_once $cfg['modules_dir'] . '/polls/main.inc.php';
+require_once $cfg['modules_dir'] . '/polls/polls.inc.php';
 
 ?>

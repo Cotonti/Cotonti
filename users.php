@@ -63,7 +63,7 @@ switch($m)
 	break;
 
 	default:
-		require_once $cfg['modules_dir'] . '/users/main.inc.php';
+		require_once $cfg['modules_dir'] . '/users/users.inc.php';
 	break;
 }
 

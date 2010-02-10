@@ -51,7 +51,7 @@ switch($m)
 	break;
 
 	default:
-		require_once $cfg['modules_dir'] . '/pfs/main.inc.php';
+		require_once $cfg['modules_dir'] . '/pfs/pfs.inc.php';
 	break;
 }
 

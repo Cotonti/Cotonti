@@ -23,6 +23,6 @@ sed_dieifdisabled($cfg['disable_rss']);
 
 require_once sed_langfile('rss', 'module');
 
-require_once $cfg['modules_dir'] . '/rss/main.inc.php';
+require_once $cfg['modules_dir'] . '/rss/rss.inc.php';
 
 ?>

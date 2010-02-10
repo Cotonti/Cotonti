@@ -21,6 +21,6 @@ require_once $cfg['system_dir'] . '/xtemplate.php';
 
 require_once sed_langfile('message', 'module');
 
-require_once $cfg['modules_dir'] . '/message/main.inc.php';
+require_once $cfg['modules_dir'] . '/message/message.inc.php';
 
 ?>
