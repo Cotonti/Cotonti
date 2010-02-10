@@ -23,6 +23,6 @@ require_once $cfg['modules_dir'] . '/admin/functions.php';
 require_once $cfg['modules_dir'] . '/admin/resources.php';
 require_once sed_langfile('admin', 'module');
 
-require_once $cfg['modules_dir'] . '/admin/main.inc.php';
+require_once $cfg['modules_dir'] . '/admin/admin.inc.php';
 
 ?>

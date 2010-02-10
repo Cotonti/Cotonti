@@ -2266,13 +2266,13 @@ function sed_langfile($name, $type = 'plug', $default = 'en')
 	global $cfg, $lang;
 	if ($type == 'module')
 	{
-		if(@file_exists($cfg['modules_dir'] . "/$name/$lang.lang.php"))
+		if(@file_exists($cfg['modules_dir'] . "/$name/lang/$name.$lang.lang.php"))
 		{
-			return $cfg['modules_dir'] . "/$name/lang/$lang.lang.php";
+			return $cfg['modules_dir'] . "/$name/lang/$name.$lang.lang.php";
 		}
 		else
 		{
-			return $cfg['modules_dir'] . "/$name/lang/$default.lang.php";
+			return $cfg['modules_dir'] . "/$name/lang/$name.$default.lang.php";
 		}
 	}
 	elseif ($type == 'core')
@@ -2294,7 +2294,7 @@ function sed_langfile($name, $type = 'plug', $default = 'en')
 		}
 		else
 		{
-			return $$cfg['plugins_dir'] . "/$name/lang/$name.$default.lang.php";
+			return $cfg['plugins_dir'] . "/$name/lang/$name.$default.lang.php";
 		}
 	}
 }
