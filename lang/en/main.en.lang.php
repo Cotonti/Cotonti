@@ -286,6 +286,7 @@ $L['Subforum'] = 'Subforum';	// New in N-0.1.0
 $L['Subforums'] = 'Subforums';	// New in N-0.1.0
 $L['Subject'] = 'Subject';	// New in N-0.1.0
 $L['Submit'] = 'Submit';
+$L['Submitnew'] = 'Submit new page';
 $L['System'] = 'System';
 $L['Tag'] = 'Tag';
 $L['Tags'] = 'Tags';

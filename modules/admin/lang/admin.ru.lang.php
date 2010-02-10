@@ -1,6 +1,6 @@
 <?php
 /**
- * Russian Language File for Admin Area (admin.lang.php)
+ * Russian Language File for the Admin Module (admin.ru.lang.php)
  *
  * @package Cotonti
  * @version 0.7.0

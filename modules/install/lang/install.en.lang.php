@@ -1,8 +1,15 @@
 <?php
 /**
- * Installer (install.php)
- * New in N-0.7.0
+ * English Language File for the Install Module (install.en.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 $L['install_title'] = 'Cotonti Web Installer';
 $L['install_body_title'] = 'Welcome to the Cotonti Web Installer';

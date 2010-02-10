@@ -10,7 +10,7 @@
       <!-- ELSE -->
       <div class="red">{PHP.skinlang.list.none}</div>
       <!-- IF {PHP.usr.id} == 0 -->
-      <a href="users.php?m=auth">{PHP.L.Login} {PHP.skinlang.forumspost.to} {PHP.L.lis_submitnew}</a>
+      <a href="users.php?m=auth">{PHP.L.Login} {PHP.skinlang.forumspost.to} {PHP.L.Submitnew}</a>
       <!-- ELSE -->
       {LIST_SUBMITNEWPAGE}
       <!-- ENDIF -->

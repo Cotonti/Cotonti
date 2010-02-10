@@ -1,6 +1,6 @@
 <?php
 /**
- * English Language File for Admin Area (admin.lang.php)
+ * English Language File for the Admin Module (admin.en.lang.php)
  *
  * @package Cotonti
  * @version 0.7.0

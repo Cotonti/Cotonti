@@ -1,9 +1,9 @@
 <?php
 /**
- * Russian Language File for Messages (message.lang.php)
+ * Russian Language File for the Message Module (message.ru.lang.php)
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD

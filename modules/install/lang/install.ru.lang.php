@@ -1,8 +1,15 @@
 <?php
 /**
- * Installer (install.php)
- * New in N-0.7.0
+ * Russian Language File for the Install Module (install.ru.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 $L['install_title'] = 'Инсталлятор Cotonti';
 $L['install_body_title'] = 'Вас приветствует инсталлятор Cotonti';

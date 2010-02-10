@@ -1,4 +1,15 @@
 <?php
+/**
+ * English Language File for the Users Module (users.en.lang.php)
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @license BSD
+ */
+
+defined('SED_CODE') or die('Wrong URL.');
 
 /**
  * User registration
@@ -90,4 +101,5 @@ $L['pasrec_mailsent'] = 'Done, please check your mailbox in few minutes, and cli
 $L['pasrec_mailsent2'] = 'Password reset. Please check your mailbox in few minutes to gather your new password.'; // New in N-0.0.2
 $L['pasrec_request'] = 'Request';
 $L['pasrec_youremail'] = 'Your email: ';
+
 ?>
