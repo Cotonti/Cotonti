@@ -2224,6 +2224,71 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 }
 
 /**
+ * Returns path to include file
+ *
+ * @param string $name Name of the API or the part
+ * @param mixed $module Module name or FALSE if it is a core API file
+ * @return string File path
+ */
+function sed_incfile($name, $module = false)
+{
+	global $cfg;
+	if ($module)
+	{
+		return $cfg['modules_dir'] . "/$module/$module.$name.php";
+	}
+	else
+	{
+		return $cfg['system_dir'] . "/$name.php";
+	}
+}
+
+/**
+ * Extract info from SED file headers
+ *
+ * @param string $file File path
+ * @param string $limiter Tag name
+ * @param int $maxsize Max header size
+ * @return array
+ */
+function sed_infoget($file, $limiter='SED', $maxsize=32768)
+{
+	$result = array();
+
+	if($fp = @fopen($file, 'r'))
+	{
+		$limiter_begin = "[BEGIN_".$limiter."]";
+		$limiter_end = "[END_".$limiter."]";
+		$data = fread($fp, $maxsize);
+		$begin = mb_strpos($data, $limiter_begin);
+		$end = mb_strpos($data, $limiter_end);
+
+		if ($end>$begin && $begin>0)
+		{
+			$lines = mb_substr($data, $begin+8+mb_strlen($limiter), $end-$begin-mb_strlen($limiter)-8);
+			$lines = explode ("\n",$lines);
+
+			foreach ($lines as $k => $line)
+			{
+				$linex = explode ("=", $line);
+				$ii=1;
+				while (!empty($linex[$ii]))
+				{
+					$result[$linex[0]] .= trim($linex[$ii]);
+					$ii++;
+				}
+			}
+		}
+		else
+		{ $result['Error'] = 'Warning: No tags found in '.$file; }
+	}
+	else
+	{ $result['Error'] = 'Error: File '.$file.' is missing!'; }
+	@fclose($fp);
+	return ($result);
+}
+
+/**
  * Outputs standard javascript
  *
  * @param string $more Extra javascript

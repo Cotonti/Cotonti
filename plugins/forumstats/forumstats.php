@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
-require_once $cfg['modules_dir'] . '/forums/functions.php';
+require_once sed_incfile('functions', 'forums');
 
 $plugin_title = $L['plu_title'];
 

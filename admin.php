@@ -16,13 +16,13 @@ $z = 'admin';
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/common.php';
-require_once $cfg['system_dir'] . '/xtemplate.php';
+require_once sed_incfile('common');
+require_once sed_incfile('xtemplate');
 
-require_once $cfg['modules_dir'] . '/admin/functions.php';
-require_once $cfg['modules_dir'] . '/admin/resources.php';
+require_once sed_incfile('functions', 'admin');
+require_once sed_incfile('resources', 'admin');
 require_once sed_langfile('admin', 'module');
 
-require_once $cfg['modules_dir'] . '/admin/admin.inc.php';
+require_once sed_incfile('main', 'admin');
 
 ?>

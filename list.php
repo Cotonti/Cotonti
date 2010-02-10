@@ -16,13 +16,13 @@ $z = 'list';
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/common.php';
-require_once $cfg['system_dir'] . '/xtemplate.php';
+require_once sed_incfile('common');
+require_once sed_incfile('xtemplate');
 
 sed_dieifdisabled($cfg['disable_page']);
 
-require_once $cfg['system_dir'] . '/extrafields.php';
+require_once sed_incfile('extrafields');
 
-require_once $cfg['modules_dir'] . '/list/list.inc.php';
+require_once sed_incfile('main', 'list');
 
 ?>

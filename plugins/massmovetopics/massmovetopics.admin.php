@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once $cfg['modules_dir'] . '/forums/functions.php';
+require_oncesed_incfile('functions', 'forums');
 
 $plugin_title = "Mass-move topics in forums";
 
