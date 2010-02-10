@@ -2277,13 +2277,13 @@ function sed_langfile($name, $type = 'plug', $default = 'en')
 	}
 	elseif ($type == 'core')
 	{
-		if(@file_exists($cfg['lang_dir'] . "/$lang/$name.lang.php"))
+		if(@file_exists($cfg['lang_dir'] . "/$lang/$name.$lang.lang.php"))
 		{
-			return $cfg['lang_dir'] . "/$lang/$name.lang.php";
+			return $cfg['lang_dir'] . "/$lang/$name.$lang.lang.php";
 		}
 		else
 		{
-			return $cfg['lang_dir'] . "/$default/$name.lang.php";
+			return $cfg['lang_dir'] . "/$default/$name.$default.lang.php";
 		}
 	}
 	else
