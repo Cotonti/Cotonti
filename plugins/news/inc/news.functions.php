@@ -11,6 +11,7 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
+require_once $cfg['system_dir'] . '/tags.php';
 
     /* === Hook - Part1 : Set === FIRST === */
 $news_first_extp = sed_getextplugins('news.first');

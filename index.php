@@ -32,6 +32,8 @@ require_once $cfg['system_dir'] . '/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/xtemplate.php';
 
+require_once $cfg['system_dir'] . '/extrafields.php';
+
 require_once $cfg['modules_dir'] . '/index/index.inc.php';
 
 ?>

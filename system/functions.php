@@ -2419,11 +2419,13 @@ function sed_load_structure()
 			'way' => $order[1]
 		);
 
-		foreach ($sed_extrafields['structure'] as $row_c)
+		if (is_array($sed_extrafields['structure']))
 		{
-			$sed_cat[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
+			foreach ($sed_extrafields['structure'] as $row_c)
+			{
+				$sed_cat[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
+			}
 		}
-
 	}
 }
 
@@ -3073,6 +3075,31 @@ function sed_selectbox($check, $name, $values)
 }
 
 /**
+ * Renders country dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @return string
+ */
+function sed_selectbox_countries($check,$name)
+{
+	global $sed_countries;
+
+	if (!$sed_countries) include_once sed_langfile('countries', 'core');
+
+	$selected = (empty($check) || $check=='00') ? "selected=\"selected\"" : '';
+	$result =  "<select name=\"$name\" size=\"1\">";
+	foreach($sed_countries as $i => $x)
+	{
+		$selected = ($i==$check) ? "selected=\"selected\"" : '';
+		$result .= "<option value=\"$i\" $selected>".$x."</option>";
+	}
+	$result .= "</select>";
+
+	return($result);
+}
+
+/**
  * Generates date part dropdown
  *
  * @param int $utime Selected timestamp
@@ -3146,6 +3173,112 @@ function sed_selectbox_date($utime, $mode, $ext='', $max_year = 2030)
 	$result .= "</select>";
 
 	return ($result);
+}
+
+/**
+ * Returns language selection dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @return string
+ */
+function sed_selectbox_lang($check, $name)
+{
+	global $sed_languages, $sed_countries, $cfg;
+
+	$handle = opendir($cfg['lang_dir'].'/');
+	while ($f = readdir($handle))
+	{
+		if ($f[0] != '.')
+		{ $langlist[] = $f; }
+	}
+	closedir($handle);
+	sort($langlist);
+
+	$result = "<select name=\"$name\" size=\"1\">";
+	while(list($i,$x) = each($langlist))
+	{
+		$selected = ($x==$check) ? "selected=\"selected\"" : '';
+		$lng = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];
+		$result .= "<option value=\"$x\" $selected>".$lng." (".$x.")</option>";
+	}
+	$result .= "</select>";
+
+	return($result);
+}
+
+/**
+ * Returns skin selection dropdown
+ *
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @return string
+ */
+function sed_selectbox_skin($check, $name)
+{
+	$handle = opendir('./skins/');
+	while ($f = readdir($handle))
+	{
+		if (mb_strpos($f, '.') === FALSE && is_dir('./skins/' . $f))
+		{ $skinlist[] = $f; }
+	}
+	closedir($handle);
+	sort($skinlist);
+
+	$result = '<select name="'.$name.'" size="1">';
+	while(list($i,$x) = each($skinlist))
+	{
+		$selected = ($x==$check) ? 'selected="selected"' : '';
+		$skininfo = "./skins/$x/$x.php";
+		if (file_exists($skininfo))
+		{
+			$info = sed_infoget($skininfo);
+			$result .= (!empty($info['Error'])) ? '<option value="'.$x.'" '.$selected.'>'.$x.' ('.$info['Error'].')' : '<option value="'.$x.'" '.$selected.'>'.$info['Name'];
+		}
+		else
+		{
+			$result .= '<option value="'.$x.'" $selected>'.$x;
+		}
+		$result .= '</option>';
+	}
+	$result .= '</select>';
+
+	return $result;
+}
+
+/**
+ * Returns skin selection dropdown
+ *
+ * @param string $skinname Skin name
+ * @param string $name Dropdown name
+ * @param string $theme Selected theme
+ * @return string
+ */
+function sed_selectbox_theme($skinname, $name, $theme)
+{
+	global $skin_themes;
+
+	if(empty($skin_themes))
+	{
+		if(file_exists("./skins/$skinname/$skinname.css"))
+		{
+			$skin_themes = array($skinname => $skinname);
+		}
+		else
+		{
+			$skin_themes = array('style' => $skinname);
+		}
+	}
+
+	$result = '<select name="'.$name.'" size="1">';
+	foreach($skin_themes as $x => $tname)
+	{
+		$selected = ($x==$theme) ? 'selected="selected"' : '';
+		$result .= '<option value="'.$x.'" '.$selected.'>'.$tname.'</option>';
+	}
+	$result .= '</select>';
+
+	return $result;
 }
 
 /**

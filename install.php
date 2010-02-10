@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_INSTALL', TRUE);
+define('SED_ADMIN', TRUE);
 $location = 'Install';
 $z = 'install';
 
@@ -55,6 +56,7 @@ require_once sed_langfile('main', 'core');
 
 require_once $cfg['system_dir'] . '/xtemplate.php';
 require_once sed_langfile('install', 'module');
+require_once $cfg['modules_dir'] . '/admin/functions.php';
 
 if ($_GET['m'] == 'update')
 {
