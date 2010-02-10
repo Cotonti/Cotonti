@@ -35,6 +35,15 @@ $L['pm_wrongname'] = 'At least one recipient was wrong, and so removed from the 
 $L['pm_messageshistory'] = 'Messages history'; // New in N-0.7.0
 $L['pm_notmovetosentbox'] = 'Do not move to "Sentbox"'; // New in N-0.7.0
 
+$L['pm_filter'] = 'Filter'; // New in N-0.7.0
+$L['pm_all'] = 'View all'; // New in N-0.7.0
+$L['pm_starred'] = 'Starred'; // New in N-0.7.0
+$L['pm_unread'] = 'Unread'; // New in N-0.7.0
+$L['pm_deletefromstarred'] = 'Delete from Starred'; // New in N-0.7.0
+$L['pm_putinstarred'] = 'Add to Starred'; // New in N-0.7.0
+$L['pm_read'] = 'Read'; // New in N-0.7.0
+$L['pm_selected'] = 'Selected'; // New in N-0.7.0
+	
 /**
  * Private messages: notification
  */
