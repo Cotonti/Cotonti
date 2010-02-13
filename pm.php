@@ -25,6 +25,9 @@ require_once sed_incfile('functions', 'pm');
 require_once sed_incfile('resources', 'pm');
 require_once sed_langfile('pm', 'module');
 
+require_once sed_incfile('extrafields');
+require_once sed_incfile('functions', 'users');
+
 switch($m)
 {
 	case 'send':
