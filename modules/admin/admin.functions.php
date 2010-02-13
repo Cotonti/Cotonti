@@ -16,8 +16,12 @@ defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
 unset($adminmain, $adminhelp, $admin_icon, $plugin_body, $plugin_title, $plugin_help);
 $adminpath = array();
 
-/* ------------------ */
-
+/**
+ * Converts an access character mask into a permission byte
+ *
+ * @param string $mask Access character mask, e.g. 'RW1A'
+ * @return int
+ */
 function sed_auth_getvalue($mask)
 {
     $mn['0'] = 0;
@@ -42,8 +46,11 @@ function sed_auth_getvalue($mask)
     return($res);
 }
 
-/* ------------------ */
-
+/**
+ * Optimizes auth table by sorting its rows
+ * 
+ * @return bool
+ */
 function sed_auth_reorder()
 {
     global $db_auth;
@@ -52,8 +59,12 @@ function sed_auth_reorder()
     return(TRUE);
 }
 
-/* ------------------ */
-
+/**
+ * Returns an access character mask for a given access byte
+ *
+ * @param int $rn Permission byte
+ * @return string
+ */
 function sed_build_admrights($rn)
 {
     $res = ($rn & 1) ? 'R' : '';
@@ -67,8 +78,12 @@ function sed_build_admrights($rn)
     return($res);
 }
 
-/* ------------------ */
-
+/**
+ * Builds administration breadcrumbs (path)
+ *
+ * @param array $adminpath Path links
+ * @return string
+ */
 function sed_build_adminsection($adminpath)
 {
     global $cfg, $L;
@@ -84,8 +99,12 @@ function sed_build_adminsection($adminpath)
     return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Removes a forum section and all its contents
+ *
+ * @param int $id Section ID
+ * @return int Total number of records removed
+ */
 function sed_forum_deletesection($id)
 {
     global $db_forum_topics, $db_forum_posts, $db_forum_sections, $db_auth;
@@ -118,8 +137,11 @@ function sed_forum_deletesection($id)
     return($num);
 }
 
-/* ------------------ */
-
+/**
+ * Recounts all counters for a given section
+ *
+ * @param int $id Section ID
+ */
 function sed_forum_resync($id)
 {
     global $db_forum_topics, $db_forum_posts, $db_forum_sections;
@@ -149,12 +171,13 @@ function sed_forum_resync($id)
         $num = $num + sed_sql_result($sql, 0, "SUM(fs_postcount)");
         $sql = sed_sql_query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
     }
-
-    return;
 }
 
-/* ------------------ */
-
+/**
+ * Recounts posts in a given topic
+ *
+ * @param int $id Topic ID
+ */
 function sed_forum_resynctopic($id)
 {
     global $db_forum_topics, $db_forum_posts;
@@ -177,11 +200,11 @@ function sed_forum_resynctopic($id)
         WHERE ft_id='$id'");
 
     }
-    return;
 }
 
-/* ------------------ */
-
+/**
+ * Recalculates all counters in forums
+ */
 function sed_forum_resyncall()
 {
     global $db_forum_sections;
@@ -191,11 +214,15 @@ function sed_forum_resyncall()
     {
     	sed_forum_resync($row['fs_id']);
     }
-    return;
 }
 
-/* ------------------ */
-
+/**
+ * Returns $url as an HTML link if $cond is TRUE or just plain $text otherwise
+ * @param string $url Link URL
+ * @param string $text Link text
+ * @param bool $cond Condition
+ * @return string
+ */
 function sed_linkif($url, $text, $cond)
 {
     if ($cond)
@@ -210,10 +237,14 @@ function sed_linkif($url, $text, $cond)
     return($res);
 }
 
-/* ------------------ */
-
+/**
+ * Returns a list of possible charsets
+ *
+ * @return array
+ */
 function sed_loadcharsets()
 {
+	// FIXME this function is obviously obsolete
     $result = array();
     $result[] = array('ISO-10646-UTF-1', 'ISO-10646-UTF-1 / Universal Transfer Format');
     $result[] = array('UTF-8', 'UTF-8 / Standard Unicode');
@@ -239,8 +270,11 @@ function sed_loadcharsets()
     return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Returns a list of possible DOCTYPEs
+ *
+ * @return array
+ */
 function sed_loaddoctypes()
 {
     $result = array();
@@ -255,8 +289,12 @@ function sed_loaddoctypes()
     return($result);
 }
 
-/* ------------------ */
-
+/**
+ * Removes a category
+ *
+ * @param int $id Category ID
+ * @param string $c Category code
+ */
 function sed_structure_delcat($id, $c)
 {
     global $db_structure, $db_auth, $cfg, $cot_cache;
@@ -267,10 +305,20 @@ function sed_structure_delcat($id, $c)
     $cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
 }
 
-/* ------------------ */
-
-/* ------------------ */
-
+/**
+ * Adds a new category
+ *
+ * @param string $code Category code
+ * @param string $path Path string, dot-separated
+ * @param string $title Category title
+ * @param string $desc Description
+ * @param string $icon Icon URL
+ * @param bool $group Is group of categories
+ * @param string $order Order by field
+ * @param string $way Sorting direction
+ * @param array $extra_array Extra fields: names => values
+ * @return bool Operation status
+ */
 function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order, $way, $extra_array = array())
 {
     global $db_structure, $db_auth, $sed_groups, $usr, $cfg, $cot_cache;
@@ -332,6 +380,12 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
     return $res;
 }
 
+/**
+ * Recalculates category counters
+ *
+ * @param int $id Category ID
+ * @return bool
+ */
 function sed_structure_resync($id)
 {
 	global $db_structure, $db_pages;
@@ -344,6 +398,12 @@ function sed_structure_resync($id)
 	return (bool) sed_sql_query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
 }
 
+/**
+ * Recalculates counters
+ *
+ * @param int $id Category ID
+ * @return bool
+ */
 function sed_structure_resyncall()
 {
 	global $db_structure;
@@ -358,8 +418,12 @@ function sed_structure_resyncall()
 	return $res;
 }
 
-/* ------------------ */
-
+/**
+ * Removes a trash item
+ *
+ * @param int $id Item ID
+ * @return int Number of rows affected
+ */
 function sed_trash_delete($id)
 {
     global $db_trash;
@@ -368,8 +432,12 @@ function sed_trash_delete($id)
     return (sed_sql_affectedrows());
 }
 
-/* ------------------ */
-
+/**
+ * Fetches a trash item
+ *
+ * @param int $id
+ * @return array
+ */
 function sed_trash_get($id)
 {
     global $db_trash;
@@ -386,8 +454,13 @@ function sed_trash_get($id)
     }
 }
 
-/* ------------------ */
-
+/**
+ * Inserts an item into trash
+ *
+ * @param array $dat Trash record(s)
+ * @param string $db Table name
+ * @return bool
+ */
 function sed_trash_insert($dat, $db)
 {
     foreach ($dat as $k => $v)
@@ -399,8 +472,12 @@ function sed_trash_insert($dat, $db)
     return (TRUE);
 }
 
-/* ------------------ */
-
+/**
+ * Restores a trash item
+ *
+ * @param int $id Trash item ID
+ * @return bool Operation success or failure
+ */
 function sed_trash_restore($id)
 {
     global $db_forum_topics, $db_forum_posts, $db_trash;
