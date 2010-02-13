@@ -249,12 +249,11 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 
 		if($row = sed_sql_fetcharray($sql))
 		{
-			$passhash = md5($row['user_password'].$row['user_hashsalt']);
-			if(($u_passhash == $passhash
+			if (($u_passhash == md5($row['user_password'].$row['user_hashsalt'])
 					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 60
 						&& $u_passhash == $_SESSION['oldhash']))
 				&& $row['user_maingrp'] > 3
-				&& (!$cfg['ipcheck'] || $row['user_lastip'] == $usr['ip']))
+				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip']))
 			{
 				$usr['id'] = (int) $row['user_id'];
 				$usr['name'] = $row['user_name'];
@@ -269,6 +268,8 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				$usr['auth'] = unserialize($row['user_auth']);
 				$usr['level'] = $sed_groups[$usr['maingrp']]['level'];
 				$usr['profile'] = $row;
+
+				$_SESSION['user_id'] = $usr['id'];
 
 				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now_offset'])
 				{

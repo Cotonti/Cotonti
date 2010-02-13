@@ -290,50 +290,78 @@ function sed_sql_rowcount($table, $conn = null)
  * You can use special values in the array:
  * - PHP NULL => SQL NULL
  * - 'NOW()' => SQL NOW()
- * The number of affected records is returned.
+ * Performs single row INSERT if $data is an associative array,
+ * performs multi-row INSERT if $data is a 2D array (numeric => assoc)
  *
  * @param string $table_name Table name
- * @param array $data Associative array containing data for insertion.
+ * @param array $data Associative or 2D array containing data for insertion.
  * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key.
  * @param resource $conn Custom connection handle
- * @return int
+ * @return int The number of affected records
  */
 function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
 {
 	global $sed_dbc;
 	$conn = is_null($conn) ? $sed_dbc : $conn;
-	if(!is_array($data))
+	if (!is_array($data))
 	{
 		return 0;
 	}
 	$keys = '';
 	$vals = '';
-	foreach($data as $key => $val)
+	// Check the array type
+	$arr_keys = array_keys($data);
+	$multiline = is_numeric($arr_keys[0]);
+	// Build the query
+	if ($multiline)
 	{
-		$keys .= "`{$prefix}$key`,";
-		if(is_null($val))
+		$rowset = &$data;
+	}
+	else
+	{
+		$rowset = array($data);
+	}
+	$keys_built = false;
+	$cnt = count($rowset);
+	for ($i = 0; $i < $cnt; $i++)
+	{
+		$vals .= ($i > 0) ? ',(' : '(';
+		$j = 0;
+		if (is_array($rowset[$i]))
 		{
-			$vals .= 'NULL,';
+			foreach ($rowset[$i] as $key => $val)
+			{
+				if ($j > 0) $vals .= ',';
+				if (!$keys_built)
+				{
+					if ($j > 0) $keys .= ',';
+					$keys .= "`{$prefix}$key`";
+				}
+				if(is_null($val))
+				{
+					$vals .= 'NULL';
+				}
+				elseif($val === 'NOW()')
+				{
+					$vals .= 'NOW()';
+				}
+				elseif(is_int($val) || is_float($val))
+				{
+					$vals .= $val;
+				}
+				else
+				{
+					$vals .= "'".mysql_real_escape_string($val, $conn)."'";
+				}
+				$j++;
+			}
 		}
-		elseif($val === 'NOW()')
-		{
-			$vals .= 'NOW(),';
-		}
-		elseif(is_int($val) || is_float($val))
-		{
-			$vals .= $val.',';
-		}
-		else
-		{
-			$vals .= "'".mysql_real_escape_string($val, $conn)."',";
-		}
-
+		$vals .= ')';
+		$keys_built = true;
 	}
 	if(!empty($keys) && !empty($vals))
 	{
-		$keys = mb_substr($keys, 0, -1);
-		$vals = mb_substr($vals, 0, -1);
-		sed_sql_query("INSERT INTO `$table_name` ($keys) VALUES ($vals)", $conn);
+		sed_sql_query("INSERT INTO `$table_name` ($keys) VALUES $vals", $conn);
 		return sed_sql_affectedrows($conn);
 	}
 	return 0;
@@ -369,14 +397,13 @@ function sed_sql_delete($table_name, $condition = '', $conn = null)
  * You can use special values in the array:
  * - PHP NULL => SQL NULL
  * - 'NOW()' => SQL NOW()
- * The number of affected records is returned.
  *
  * @param string $table_name Table name
  * @param string $condition Body of SQL WHERE clause
  * @param array $data Associative array containing data for insertion.
  * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key.
  * @param resource $conn Custom connection handle
- * @return int
+ * @return int The number of affected records
  */
 function sed_sql_update($table_name, $condition, $data, $prefix = '', $conn = null)
 {
