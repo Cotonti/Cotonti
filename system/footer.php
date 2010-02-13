@@ -24,7 +24,7 @@ $sys['creationtime'] = round(($sys['endtime'] - $sys['starttime']), 3);
 $out['creationtime'] = (!$cfg['disablesysinfos']) ? $L['foo_created'].' '.sed_declension($sys['creationtime'],$Ls['Seconds'],$onlyword = false,$canfrac = true) : '';
 $out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.sed_declension(round($sys['tcount'], 3),$Ls['Seconds'],$onlyword = false,$canfrac = true).' - '.$L['foo_sqlqueries'].': '.$sys['qcount']. ' - '.$L['foo_sqlaverage'].': '.sed_declension(round(($sys['tcount']/$sys['qcount']), 5),$Ls['Seconds'],$onlyword = false,$canfrac = true) : '';
 $out['bottomline'] = $cfg['bottomline'];
-$out['bottomline'] .= ($cfg['keepcrbottom']) ? '<br />'.$out['copyright'] : '';
+$out['bottomline'] .= ($cfg['keepcrbottom']) ? ''.$out['copyright'] : '';
 
 if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
 {
