@@ -19,7 +19,6 @@ $to = sed_import('to', 'G', 'TXT');
 $a = sed_import('a','G','TXT');
 $id = sed_import('id','G','INT');
 
-
 $totalrecipients = 0;
 $touser_sql = array();
 $touser_ids = array();
@@ -33,7 +32,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 if ($a == 'getusers')
-{echo $a."\nпривет";
+{
 	$q = strtolower(sed_import('q', 'G', 'TXT'));
 	$q = sed_sql_prep(urldecode($q));
 	if (!empty($q))
@@ -99,7 +98,15 @@ elseif ($a == 'send')
 			$touser_req = count($touser_src);
 			foreach($touser_src as $k => $i)
 			{
-				$touser_sql[] = "'".sed_sql_prep(trim(sed_import($i, 'D', 'TXT')))."'";
+				$user_name=trim(sed_import($i, 'D', 'TXT'));
+				if(!empty($user_name))
+				{
+					$touser_sql[] = "'".sed_sql_prep($user_name)."'";
+				}
+				else
+				{
+					$touser_req--;
+				}
 			}
 			$touser_sql = '('.implode(',', $touser_sql).')';
 			$sql = sed_sql_query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
@@ -263,11 +270,9 @@ $title .= (!$id) ? $L['pmsend_title'] : $L['Edit'].' #'.$id;
 if (!$id)
 {
 	$t->assign(array(
-		"PMSEND_FORM_TOUSER" => $touser,
-		"PMSEND_FORM_TOUSER_AC_URL" => sed_url('pm', 'm=send&a=getusers')
-		));
+			"PMSEND_FORM_TOUSER" => $touser,
+	));
 	$t->parse("MAIN.PMSEND_USERLIST");
-	
 }
 
 $t->assign(array(

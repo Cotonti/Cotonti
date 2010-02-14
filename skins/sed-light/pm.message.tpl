@@ -16,7 +16,7 @@
 
 			<p>{PM_TEXT}</p>
 
-			<div class="paging">{PM_QUOTE} &nbsp; {PM_ICON_EDIT} &nbsp; {PM_ICON_DELETE} &nbsp; {PM_HISTORY}</div>
+			<div class="paging">{PM_QUOTE} &nbsp; {PM_EDIT} &nbsp; {PM_DELETE} &nbsp; {PM_HISTORY}</div>
 			<!-- BEGIN: REPLY -->
 			<hr />
 		{PHP.L.pm_replyto}
