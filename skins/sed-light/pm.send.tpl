@@ -12,7 +12,7 @@
 		<div class="error">{PMSEND_ERROR_BODY}</div>
 		<!-- END: PMSEND_ERROR -->
 
-		<form action="{PMSEND_FORM_SEND}" method="post" name="newlink">
+		<form action="{PMSEND_FORM_SEND}" method="post" name="newmessage" id="mewmessage">
 			<div class="tCap2"></div>
 			<table class="cells" border="0" cellspacing="1" cellpadding="2">
 				<!-- BEGIN: PMSEND_USERLIST -->
@@ -44,10 +44,10 @@
 	<script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-$("#newpmrecipient").autocomplete("{PMSEND_FORM_TOUSER_AC_URL}", {multiple: true, minChars: 3});
+$("#newpmrecipient").autocomplete("pm.php?a=getusers&m=send", {multiple: true, minChars: 3});
 });
 //]]>
-</script>';
+</script>
 	<!-- IF {PMSEND_AJAX_MARKITUP} -->
 	<script type="text/javascript">
 		//<![CDATA[

@@ -107,7 +107,7 @@ else
 }
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(sed_skinfile('pm'));
+$t = new XTemplate(sed_skinfile('pm.message'));
 
 if ($history)
 {	
@@ -237,9 +237,10 @@ if (!SED_AJAX)
 	$t->parse("MAIN.BEFORE_AJAX");
 	$t->parse("MAIN.AFTER_AJAX");
 }
-$pm_user = sed_generate_usertags($row_user, "PM_ROW_USER");
+
+$pm_username=sed_build_user($row_user['user_id'], htmlspecialchars($row_user['user_name']));
 $t->assign(array(
-		"PM_PAGETITLE" => $title.' '.$cfg['separator'].' '.$pm_fromortouser.' '.$cfg['separator'].' '.sed_rc_link(sed_url('pm', 'id='.$id),htmlspecialchars($row['pm_title'])),
+		"PM_PAGETITLE" => $title.' '.$cfg['separator'].' '.$pm_username.' '.$cfg['separator'].' '.sed_rc_link(sed_url('pm', 'm=message&id='.$id),htmlspecialchars($row['pm_title'])),
 		"PM_SENDNEWPM" => ($usr['auth_write']) ? sed_rc_link(sed_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
 		"PM_INBOX" => sed_rc_link(sed_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
 		"PM_INBOX_COUNT" => $totalinbox,
@@ -249,15 +250,15 @@ $t->assign(array(
 		"PM_STATE" => $row['pm_tostate'],
 		"PM_STAR" => $star,
 		"PM_DATE" => @date($cfg['dateformat'], $row['pm_date'] + $usr['timezone'] * 3600),
-		"PM_TITLE" => sed_rc_link(sed_url('pm', 'id='.$row['pm_id']), htmlspecialchars($row['pm_title'])),
+		"PM_TITLE" => htmlspecialchars($row['pm_title']),
 		"PM_TEXT" => '<div id="pm_text">'.$pm_maindata.'</div>',
 		"PM_ICON_STARRED" => $row['pm_icon_starred'],
-		"PM_ICON_DELETE" => sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
-		"PM_ICON_EDIT" => $row['pm_icon_edit'],
+		"PM_DELETE" => sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
+		"PM_EDIT" => $row['pm_icon_edit'],
 		"PM_HISTORY" => sed_rc_link(sed_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
 		"PM_SENT_TYPE" => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
 		));
-$t->assign(sed_generate_usertags($pm_user, "PM_USER"));
+$t->assign(sed_generate_usertags($row_user, "PM_USER"));
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.tags');
@@ -267,7 +268,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
+
 
 if (SED_AJAX && $history)
 {
@@ -275,6 +276,7 @@ if (SED_AJAX && $history)
 }
 else
 {
+	$t->parse("MAIN");
 	$t->out("MAIN");
 }
 require_once $cfg['system_dir'] . '/footer.php';
