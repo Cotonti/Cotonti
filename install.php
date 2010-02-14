@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -33,8 +33,8 @@ if (empty($cfg['lang_dir']))
 	$cfg['lang_dir'] = './lang';
 }
 
-require_once $cfg['system_dir'] . '/functions.php';
-require_once $cfg['system_dir'] . '/database.' . $cfg['sqldb'] . '.php';
+require_once $cfg['system_dir'].'/functions.php';
+require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
 
 //A Few basics from common.php
 if (version_compare(PHP_VERSION, '6.0.0', '<='))
@@ -64,11 +64,12 @@ if ($_GET['m'] == 'update')
 }
 else
 {
-	if(!$cfg['new_install'])
+	if (!$cfg['new_install'])
 	{
-		header('Location: ' . $cfg['mainurl']);
+		header('Location: '.$cfg['mainurl']);
 		exit;
 	}
 	require_once sed_incfile('main', 'install');
 }
+
 ?>

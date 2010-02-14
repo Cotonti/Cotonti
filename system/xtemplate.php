@@ -4,9 +4,9 @@
  * written specially for Cotonti.
  *
  * @package Cotonti
- * @version 0.6.2
+ * @version 0.7.0
  * @author Vladimir Sibirov a.k.a. Trustmaster
- * @copyright Copyright (c) 2009 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
  */
 
@@ -94,10 +94,10 @@ class XTemplate
 					case '<': $res = $val < $val2; break;
 					case '>=': $res = $val >= $val2; break;
 					case '<=': $res = $val <= $val2; break;
-					case 'CONTAINS': 
+					case 'CONTAINS':
 						$res = (is_string($val) && is_string($val2) && strpos($val, $val2) !== FALSE) ? TRUE : FALSE;
 					break;
-					case 'HAS': 
+					case 'HAS':
 						$res = (is_array($val) && is_string($val2) && array_search($val2, $val) !== FALSE) ? TRUE : FALSE;
 					break;
 					default: $res = FALSE;
@@ -431,4 +431,5 @@ class Xtpl_block
 		}
 	}
 }
+
 ?>

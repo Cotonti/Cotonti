@@ -1,17 +1,11 @@
 <?php
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
 /**
  * Error message display and redirect
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD License
  */
 
@@ -20,9 +14,9 @@ defined('SED_CODE') or die('Wrong URL');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('message', 'a');
 sed_block($usr['auth_read']);
 
-$msg = sed_import('msg','G','INT');
-$num = sed_import('num','G','INT');
-$rc = sed_import('rc','G','INT');
+$msg = sed_import('msg', 'G', 'INT');
+$num = sed_import('num', 'G', 'INT');
+$rc = sed_import('rc', 'G', 'INT');
 
 require_once(sed_langfile('message', true));
 
@@ -41,11 +35,11 @@ foreach ($extp as $pl)
 
 switch( $msg )
 {
-		/* ======== Users ======== */
+	/* ======== Users ======== */
 
 	case '100':
 		$rd = 2;
-		$ru = sed_url('users', 'm=auth' . (empty($redirect) ? '' : "&redirect=$redirect"));
+		$ru = sed_url('users', 'm=auth'.(empty($redirect) ? '' : "&redirect=$redirect"));
 	break;
 
 	case '102':
@@ -55,11 +49,13 @@ switch( $msg )
 	break;
 
 	case '153':
-		if ($num>0)
-		{ $body .= "<br />(-> ".date($cfg['dateformat'],$num)."GMT".")"; }
+		if ($num > 0)
+		{
+			$body .= "<br />(-> ".date($cfg['dateformat'], $num)."GMT".")";
+		}
 	break;
 
-		/* ======== Error Pages ========= */
+	/* ======== Error Pages ========= */
 
 	case '400':
 	case '401':
@@ -70,7 +66,7 @@ switch( $msg )
 		$ru = empty($redirect) ? sed_url('index') : str_replace('&', '&amp;', base64_decode($redirect));
 	break;
 
-		/* ======== System messages ======== */
+	/* ======== System messages ======== */
 
 	case '916':
 		$rd = 2;
@@ -80,7 +76,7 @@ switch( $msg )
 	case '930':
 		if ($usr['id'] > 0)
 		{
-	break;
+			break;
 		}
 		$rd = 2;
 		if (!empty($redirect))
@@ -89,21 +85,21 @@ switch( $msg )
 			if (mb_strpos($uri_redirect, '&x=') !== false || mb_strpos($uri_redirect, '?x=') !== false)
 			{
 				$ru = sed_url('index'); // xg, not redirect to form action/GET or to command from GET
-	break;
+				break;
 			}
 		}
-		$ru = sed_url('users', 'm=auth' . (empty($redirect) ? '' : "&redirect=$redirect"));
+		$ru = sed_url('users', 'm=auth'.(empty($redirect) ? '' : "&redirect=$redirect"));
 	break;
 }
 
 /* ============= */
-if(empty($title) || empty($body))
+if (empty($title) || empty($body))
 {
 	$title = $L['msg950_title'];
 	$body = $L['msg950_body'];
 	unset($rc, $rd);
 }
-if(empty($rc) && empty($rd))
+if (empty($rc) && empty($rd))
 {
 	$rd = '5';
 	$ru = sed_url('index');
@@ -142,7 +138,7 @@ if ($rc != '')
 	{
 		$r["$rc"] = SED_ABSOLUTE_URL . $r["$rc"];
 	}
-	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />";
+	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />"; // TODO: in resources
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];
 }
 
@@ -150,9 +146,9 @@ elseif ($rd != '')
 {
 	if (mb_strpos($ru, '://') === false)
 	{
-		$ru = SED_ABSOLUTE_URL . ltrim($ru, '/');
+		$ru = SED_ABSOLUTE_URL.ltrim($ru, '/');
 	}
-	$plug_head .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />";
+	$plug_head .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />"; // TODO: in resources
 	$body .= "<br />&nbsp;<br />".$L['msgredir'];
 }
 
@@ -164,9 +160,9 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$plug_head .= '<meta name="robots" content="noindex" />';
+$plug_head .= '<meta name="robots" content="noindex" />'; // TODO: in resources
 $plug_title = $title." - ";
-require_once $cfg['system_dir'] . '/header.php';
+require_once $cfg['system_dir'].'/header.php';
 $t = new XTemplate(sed_skinfile('message'));
 
 $errmsg = $title;
@@ -186,5 +182,6 @@ foreach ($extp as $pl)
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once $cfg['system_dir'] . '/footer.php';
+require_once $cfg['system_dir'].'/footer.php';
+
 ?>

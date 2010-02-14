@@ -1,10 +1,10 @@
-<?PHP
+<?php
 /**
  * Custom parser library
  *
  * @package Cotonti
- * @version 0.0.3
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @version 0.7.0
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD License
  */
 

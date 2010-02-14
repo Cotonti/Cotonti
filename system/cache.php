@@ -154,7 +154,7 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 	{
 		$this->writeback_data[] = array('id' => $id, 'data' => $data, 'realm' =>  $realm, 'ttl' => $ttl);
 	}
-	
+
 	/**
 	 * Writes item to cache immediately, avoiding writeback.
 	 * @param string $id Object identifier
@@ -282,7 +282,7 @@ class File_cache extends Static_cache_driver
 		}
 		else
 		{
-			throw new Exception('Cache directory ' . $dir . ' is not writeable!');
+			throw new Exception('Cache directory '.$dir.' is not writeable!'); // TODO: Need translate
 		}
 	}
 
@@ -296,7 +296,7 @@ class File_cache extends Static_cache_driver
 			$dp = opendir($this->dir);
 			while ($f = readdir($dp))
 			{
-				$dname = $this->dir . '/' . $f;
+				$dname = $this->dir.'/'.$f;
 				if ($f[0] != '.' && is_dir($dname))
 				{
 					$this->clear($f);
@@ -306,10 +306,10 @@ class File_cache extends Static_cache_driver
 		}
 		else
 		{
-			$dp = opendir($this->dir . '/' . $realm);
+			$dp = opendir($this->dir.'/'.$realm);
 			while ($f = readdir($dp))
 			{
-				$fname = $this->dir . '/' . $realm . '/' . $f;
+				$fname = $this->dir.'/'.$realm.'/'.$f;
 				if (is_file($fname))
 				{
 					unlink($fname);
@@ -325,7 +325,7 @@ class File_cache extends Static_cache_driver
 	 */
 	public function exists($id, $realm = COT_DEFAULT_REALM)
 	{
-		return file_exists($this->dir . '/' . $realm . '/' . $id);
+		return file_exists($this->dir.'/'.$realm.'/'.$id);
 	}
 
 	/**
@@ -335,7 +335,7 @@ class File_cache extends Static_cache_driver
 	{
 		if ($this->exists($id, $realm))
 		{
-			return unserialize(file_get_contents($this->dir . '/' . $realm . '/' . $id));
+			return unserialize(file_get_contents($this->dir.'/'.$realm.'/'.$id));
 		}
 		else
 		{
@@ -350,7 +350,7 @@ class File_cache extends Static_cache_driver
 	{
 		if ($this->exists($id, $realm))
 		{
-			unlink($this->dir . '/' . $realm . '/' . $id);
+			unlink($this->dir.'/'.$realm.'/'.$id);
 			return true;
 		}
 		else return false;
@@ -361,11 +361,11 @@ class File_cache extends Static_cache_driver
 	 */
 	public function store($id, $data, $realm = COT_DEFAULT_REALM)
 	{
-		if (!file_exists($this->dir . '/' . $realm))
+		if (!file_exists($this->dir.'/'.$realm))
 		{
-			mkdir($this->dir . '/' . $realm);
+			mkdir($this->dir.'/'.$realm);
 		}
-		file_put_contents($this->dir . '/' . $realm . '/' . $id, serialize($data));
+		file_put_contents($this->dir.'/'.$realm.'/'.$id, serialize($data));
 		return true;
 	}
 }
@@ -407,7 +407,7 @@ class MySQL_cache extends Db_cache_driver
 				$c_name = sed_sql_prep($entry['id']);
 				$c_realm = sed_sql_prep($entry['realm']);
 				$or = $i == 0 ? '' : ' OR';
-				$q .= $or . " (c_name = '$c_name' AND c_realm = '$c_realm')";
+				$q .= $or." (c_name = '$c_name' AND c_realm = '$c_realm')";
 				$i++;
 			}
 			sed_sql_query($q);
@@ -423,7 +423,7 @@ class MySQL_cache extends Db_cache_driver
 				$c_expire = $entry['ttl'] > 0 ? $sys['now'] + $entry['ttl'] : 0;
 				$c_value = sed_sql_prep(serialize($entry['data']));
 				$comma = $i == 0 ? '' : ',';
-				$q .= $comma . "('$c_name', '$c_realm', $c_expire, '$c_value')";
+				$q .= $comma."('$c_name', '$c_realm', $c_expire, '$c_value')";
 				$i++;
 			}
 			$q .= " ON DUPLICATE KEY UPDATE c_value=VALUES(c_value), c_expire=VALUES(c_expire)";
@@ -471,7 +471,7 @@ class MySQL_cache extends Db_cache_driver
 	private function gc()
 	{
 		global $db_cache, $sys;
-		sed_sql_query("DELETE FROM $db_cache WHERE c_expire > 0 AND c_expire < " . $sys['now']);
+		sed_sql_query("DELETE FROM $db_cache WHERE c_expire > 0 AND c_expire < ".$sys['now']);
 		return sed_sql_affectedrows();
 	}
 
@@ -504,14 +504,14 @@ class MySQL_cache extends Db_cache_driver
 			foreach ($realms as $realm)
 			{
 				$glue = $i == 0 ? "'" : ",'";
-				$r_where .= $glue . sed_sql_prep($realm) . "'";
+				$r_where .= $glue.sed_sql_prep($realm)."'";
 				$i++;
 			}
 			$r_where .= ')';
 		}
 		else
 		{
-			$r_where = "c_realm = '" . sed_sql_prep($realms) . "'";
+			$r_where = "c_realm = '".sed_sql_prep($realms)."'";
 		}
 		$sql = sed_sql_query("SELECT c_name, c_value FROM `$db_cache` WHERE c_auto=1 AND $r_where");
 		$i = 0;
@@ -624,7 +624,7 @@ if (extension_loaded('memcache'))
 			}
 			else
 			{
-				return $this->memcache->decrement($realm . '/' . $id, $value);
+				return $this->memcache->decrement($realm.'/'.$id, $value);
 			}
 		}
 
@@ -633,7 +633,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function exists($id, $realm = COT_DEFAULT_REALM)
 		{
-			return $this->memcache->get($realm . '/' . $id, $this->compressed) !== FALSE;
+			return $this->memcache->get($realm.'/'.$id, $this->compressed) !== FALSE;
 		}
 
 		/**
@@ -641,7 +641,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
-			return $this->memcache->get($realm . '/' . $id, $this->compressed);
+			return $this->memcache->get($realm.'/'.$id, $this->compressed);
 		}
 
 		/**
@@ -668,7 +668,7 @@ if (extension_loaded('memcache'))
 			}
 			else
 			{
-				return $this->memcache->increment($realm . '/' . $id, $value);
+				return $this->memcache->increment($realm.'/'.$id, $value);
 			}
 		}
 
@@ -677,7 +677,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function remove($id, $realm = COT_DEFAULT_REALM)
 		{
-			return $this->memcache->delete($realm . '/' . $id);
+			return $this->memcache->delete($realm.'/'.$id);
 		}
 
 		/**
@@ -685,7 +685,7 @@ if (extension_loaded('memcache'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
-			return $this->memcache->set($realm . '/' . $id, $data, $this->compressed, $ttl);
+			return $this->memcache->set($realm.'/'.$id, $data, $this->compressed, $ttl);
 		}
 	}
 }
@@ -722,7 +722,7 @@ if (extension_loaded('apc'))
 		 */
 		public function exists($id, $realm = COT_DEFAULT_REALM)
 		{
-			return apc_fetch($realm . '/' . $id) !== FALSE;
+			return apc_fetch($realm.'/'.$id) !== FALSE;
 		}
 
 		/**
@@ -730,7 +730,7 @@ if (extension_loaded('apc'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
-			return unserialize(apc_fetch($realm . '/' . $id));
+			return unserialize(apc_fetch($realm.'/'.$id));
 		}
 
 		/**
@@ -753,7 +753,7 @@ if (extension_loaded('apc'))
 		 */
 		public function remove($id, $realm = COT_DEFAULT_REALM)
 		{
-			return apc_delete($realm . '/' . $id);
+			return apc_delete($realm.'/'.$id);
 		}
 
 		/**
@@ -761,7 +761,7 @@ if (extension_loaded('apc'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
-			return apc_store($realm . '/' . $id, serialize($data), $ttl);
+			return apc_store($realm.'/'.$id, serialize($data), $ttl);
 		}
 	}
 }
@@ -800,7 +800,7 @@ if (extension_loaded('eaccelerator') && function_exists('eaccelerator_get'))
 		 */
 		public function exists($id, $realm = COT_DEFAULT_REALM)
 		{
-			return !is_null(eaccelerator_get($realm . '/' . $id));
+			return !is_null(eaccelerator_get($realm.'/'.$id));
 		}
 
 		/**
@@ -808,7 +808,7 @@ if (extension_loaded('eaccelerator') && function_exists('eaccelerator_get'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
-			return eaccelerator_get($realm . '/' . $id);
+			return eaccelerator_get($realm.'/'.$id);
 		}
 
 		/**
@@ -829,7 +829,7 @@ if (extension_loaded('eaccelerator') && function_exists('eaccelerator_get'))
 		 */
 		public function remove($id, $realm = COT_DEFAULT_REALM)
 		{
-			return eaccelerator_rm($realm . '/' . $id);
+			return eaccelerator_rm($realm.'/'.$id);
 		}
 
 		/**
@@ -837,7 +837,7 @@ if (extension_loaded('eaccelerator') && function_exists('eaccelerator_get'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
-			return eaccelerator_put($realm . '/' . $id, $data, $ttl);
+			return eaccelerator_put($realm.'/'.$id, $data, $ttl);
 		}
 
 		private function get_keys()
@@ -869,7 +869,7 @@ if (extension_loaded('xcache'))
 			}
 			else
 			{
-				return xcache_unset_by_prefix($realm . '/');
+				return xcache_unset_by_prefix($realm.'/');
 			}
 		}
 
@@ -878,7 +878,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function exists($id, $realm = COT_DEFAULT_REALM)
 		{
-			return xcache_isset($realm . '/' . $id);
+			return xcache_isset($realm.'/'.$id);
 		}
 
 		/**
@@ -886,7 +886,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function dec($id, $realm = COT_DEFAULT_REALM, $value = 1)
 		{
-			return xcache_dec($realm . '/' . $id, $value);
+			return xcache_dec($realm.'/'.$id, $value);
 		}
 
 		/**
@@ -894,7 +894,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function get($id, $realm = COT_DEFAULT_REALM)
 		{
-			return xcache_get($realm . '/' . $id);
+			return xcache_get($realm.'/'.$id);
 		}
 
 		/**
@@ -914,7 +914,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function inc($id, $realm = COT_DEFAULT_REALM, $value = 1)
 		{
-			return xcache_inc($realm . '/' . $id, $value);
+			return xcache_inc($realm.'/'.$id, $value);
 		}
 
 		/**
@@ -922,7 +922,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function remove($id, $realm = COT_DEFAULT_REALM)
 		{
-			return xcache_unset($realm . '/' . $id);
+			return xcache_unset($realm.'/'.$id);
 		}
 
 		/**
@@ -930,7 +930,7 @@ if (extension_loaded('xcache'))
 		 */
 		public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 		{
-			return xcache_set($realm . '/' . $id, $data, $ttl);
+			return xcache_set($realm.'/'.$id, $data, $ttl);
 		}
 	}
 }
@@ -1043,9 +1043,11 @@ class Cache
 			case 'mem_available':
 				return $this->mem_avail;
 			break;
+
 			case 'mem_driver':
 				return $this->selected_drv;
 			break;
+
 			default:
 				return null;
 			break;
@@ -1116,7 +1118,7 @@ class Cache
 			$c_realm = sed_sql_prep($entry['realm']);
 			$c_type = (int) $entry['type'];
 			$comma = $i == 0 ? '' : ',';
-			$q .= $comma . "('$c_event', '$c_id', '$c_realm', $c_type)";
+			$q .= $comma."('$c_event', '$c_id', '$c_realm', $c_type)";
 		}
 		sed_sql_query($q);
 		$res = sed_sql_affectedrows();
@@ -1139,12 +1141,15 @@ class Cache
 			case COT_CACHE_TYPE_DB:
 				$this->db->clear();
 			break;
+
 			case COT_CACHE_TYPE_DISK:
 				$this->disk->clear();
 			break;
+
 			case COT_CACHE_TYPE_MEMORY:
 				$this->mem->clear();
 			break;
+
 			default:
 				$this->mem->clear();
 				$this->db->clear();
@@ -1165,12 +1170,15 @@ class Cache
 			case COT_CACHE_TYPE_DB:
 				$this->db->clear($realm);
 			break;
+
 			case COT_CACHE_TYPE_DISK:
 				$this->disk->clear($realm);
 			break;
+
 			case COT_CACHE_TYPE_MEMORY:
 				$this->mem->clear($realm);
 			break;
+
 			default:
 				$this->mem->clear($realm);
 				$this->db->clear($realm);
@@ -1255,7 +1263,7 @@ class Cache
 	{
 		return $this->disk->exists($id, $realm);
 	}
-	
+
 	/**
 	 * Stores disk-only cache entry. Use it for large objects, which you don't want to put
 	 * into memory cache.
@@ -1268,7 +1276,7 @@ class Cache
 	{
 		return $this->disk->store($id, $data, $realm);
 	}
-	
+
 	/**
 	 * Removes cache image of the object from disk
 	 * @param string $id Object identifier
@@ -1363,12 +1371,15 @@ class Cache
 					case COT_CACHE_TYPE_DISK:
 						$this->disk->remove($cell['id'], $cell['realm']);
 					break;
+
 					case COT_CACHE_TYPE_DB:
 						$this->db->remove($cell['id'], $cell['realm']);
 					break;
+
 					case COT_CACHE_TYPE_MEMORY:
 						$this->mem->remove($cell['id'], $cell['realm']);
 					break;
+
 					default:
 						$this->mem->remove($cell['id'], $cell['realm']);
 						$this->disk->remove($cell['id'], $cell['realm']);
@@ -1463,13 +1474,16 @@ function sed_cache_get($name)
 {
 	global $cfg, $sys, $db_cache;
 
-	if (!$cfg['cache'])
-	{ return FALSE; }
+	if (!$cfg['cache']) return FALSE;
 	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
 	if ($row = sed_sql_fetcharray($sql))
-	{ return(unserialize($row['c_value'])); }
+	{
+		return(unserialize($row['c_value']));
+	}
 	else
-	{ return(FALSE); }
+	{
+		return(FALSE);
+	}
 }
 
 /**
@@ -1481,17 +1495,24 @@ function sed_cache_get($name)
 function sed_cache_getall($auto = 1)
 {
 	global $cfg, $sys, $db_cache;
-	if (!$cfg['cache'])
-	{ return FALSE; }
+	if (!$cfg['cache']) return FALSE;
 	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
 	if ($auto)
-	{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1"); }
+	{
+		$sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1");
+	}
 	else
-	{ $sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache"); }
-	if (sed_sql_numrows($sql)>0)
-	{ return($sql); }
+	{
+		$sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache");
+	}
+	if (sed_sql_numrows($sql) > 0)
+	{
+		return($sql);
+	}
 	else
-	{ return(FALSE); }
+	{
+		return(FALSE);
+	}
 }
 
 /**
@@ -1503,13 +1524,13 @@ function sed_cache_getall($auto = 1)
  * @param int $auto Autload flag
  * @return bool
  */
-function sed_cache_store($name,$value,$expire,$auto="1")
+function sed_cache_store($name, $value, $expire, $auto = "1")
 {
 	global $db_cache, $sys, $cfg;
 
-	if (!$cfg['cache'])
-	{ return(FALSE); }
+	if (!$cfg['cache']) return(FALSE);
 	$sql = sed_sql_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".sed_sql_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
 	return(TRUE);
 }
+
 ?>

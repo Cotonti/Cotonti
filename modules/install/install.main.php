@@ -2,8 +2,8 @@
 /**
  * @package Cotonti
  * @version 0.7.0
- * @author Kilandor
- * @copyright Copyright (c) Cotonti Team 2009
+ * @author Kilandor, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
  */
 
@@ -22,7 +22,7 @@ sed_sendheaders();
 $mskin = sed_skinfile('install');
 $t = new XTemplate($mskin);
 
-if($_POST['submit'])
+if ($_POST['submit'])
 {
 	$cfg['mysqlhost'] = sed_import('db_host', 'P', 'TXT');
 	$cfg['mysqluser'] = sed_import('db_user', 'P', 'TXT');
@@ -45,9 +45,9 @@ if($_POST['submit'])
 	$error .= ($sed_dbc == 2) ? $L['install_error_sql_db'].'<br />' : '';
 	$error .= (empty($cfg['mainurl'])) ? $L['install_error_mainurl'].'<br />' : '';
 	$error .= ($user['pass']!=$user['pass2']) ? $L['aut_passwordmismatch']."<br />" : '';
-	$error .= (mb_strlen($user['name'])<2) ? $L['aut_usernametooshort']."<br />" : '';
-	$error .= (mb_strlen($user['pass'])<4 || sed_alphaonly($user['pass'])!=$user['pass']) ? $L['aut_passwordtooshort']."<br />" : '';
-	$error .= (mb_strlen($user['email'])<4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $user['email'])) ? $L['aut_emailtooshort']."<br />" : '';
+	$error .= (mb_strlen($user['name']) < 2) ? $L['aut_usernametooshort']."<br />" : '';
+	$error .= (mb_strlen($user['pass']) < 4 || sed_alphaonly($user['pass'])!=$user['pass']) ? $L['aut_passwordtooshort']."<br />" : '';
+	$error .= (mb_strlen($user['email']) < 4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $user['email'])) ? $L['aut_emailtooshort']."<br />" : '';
 	$error .= (!file_exists($file['config_sample'])) ? sprintf($L['install_error_missing_file'], $file['config_sample']).'<br />' : '';
 	$error .= (!file_exists($file['sql'])) ? sprintf($L['install_error_missing_file'], $file['sql']).'<br />' : '';
 	$error .= (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.1.0', '>=')) ? sprintf($L['install_error_php_ver'], PHP_VERSION).'<br />' : '';
@@ -55,26 +55,26 @@ if($_POST['submit'])
 	$error .= (!extension_loaded('mysql')) ? $L['install_error_mysql_ext'].'<br />' : '';
 	$error .= ($sed_dbc != 1 && $sed_dbc != 2 && function_exists('version_compare') && !version_compare(@mysql_get_server_info($sed_dbc), '4.1.0', '>=')) ? sprintf($L['install_error_mysql_ver'], @mysql_get_server_info($sed_dbc)).'<br />' : '';
 
-	if(!$error)
+	if (!$error)
 	{
-		
+
 		$sql_file = file_get_contents($file['sql']);
 		$sql_queries = preg_split('/;\r?\n/', $sql_file);
-		foreach($sql_queries as $sql_query)
+		foreach ($sql_queries as $sql_query)
 		{
-			if($db_x != 'sed_')
+			if ($db_x != 'sed_')
 			{
 				$sql_query = str_replace('`sed_', '`'.$db_x, $sql_query);
 			}
 			$result = sed_sql_query($sql_query);
-			if(!$result)
+			if (!$result)
 			{
 				$error .= sed_sql_error().'<br />';
 				break;
 			}
 		}
-		
-		if(!$error)
+
+		if (!$error)
 		{
 			$file_contents = file_get_contents($file['config_sample'], NULL, NULL, 5, filesize($file['config_sample']));
 
@@ -91,7 +91,7 @@ if($_POST['submit'])
 
 			//echo"<pre>".$file_contents."</pre>";
 			file_put_contents($file['config'], "<?PHP".$file_contents);
-			
+
 			$sql_user = "INSERT into ".$db_x."users
 			(user_name,
 			user_password,
@@ -132,56 +132,91 @@ else
 //Build CHMOD/Exists/Version data
 clearstatcache();
 
-if(is_dir($cfg['av_dir']))
+if (is_dir($cfg['av_dir']))
+{
 	$status['av_dir'] = (substr(decoct(fileperms($cfg['av_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['av_dir'])), -4)).'</span>';
+}
 else
+{
 	$status['av_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+}
 /* ------------------- */
-if(is_dir($cfg['cache_dir']))
+if (is_dir($cfg['cache_dir']))
+{
 	$status['cache_dir'] = (substr(decoct(fileperms($cfg['cache_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['cache_dir'])), -4)).'</span>';
+}
 else
+{
 	$status['cache_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+}
 /* ------------------- */
-if(is_dir($cfg['pfs_dir']))
+if (is_dir($cfg['pfs_dir']))
+{
 	$status['pfs_dir'] = (substr(decoct(fileperms($cfg['pfs_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['pfs_dir'])), -4)).'</span>';
+}
 else
+{
 	$status['pfs_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+}
 /* ------------------- */
-if(is_dir($cfg['photos_dir']))
+if (is_dir($cfg['photos_dir']))
+{
 	$status['photos_dir'] = (substr(decoct(fileperms($cfg['photos_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['photos_dir'])), -4)).'</span>';
+}
 else
+{
 	$status['photos_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+}
 /* ------------------- */
-if(is_dir($cfg['sig_dir']))
+if (is_dir($cfg['sig_dir']))
+{
 	$status['sig_dir'] = (substr(decoct(fileperms($cfg['sig_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['sig_dir'])), -4)).'</span>';
+}
 else
+{
 	$status['sig_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+}
 /* ------------------- */
-if(is_dir($cfg['th_dir']))
+if (is_dir($cfg['th_dir']))
+{
 	$status['th_dir'] = (substr(decoct(fileperms($cfg['th_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['th_dir'])), -4)).'</span>';
+}
 else
+{
 	$status['th_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+}
 /* ------------------- */
-if(file_exists($file['config']))
+if (file_exists($file['config']))
+{
 	$status['config'] = (substr(decoct(fileperms($file['config'])), -4) >= $cfg['file_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($file['config'])), -4)).'</span>';
+}
 else
+{
 	$status['config'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+}
 /* ------------------- */
-if(file_exists($file['config_sample']))
+if (file_exists($file['config_sample']))
+{
 	$status['config_sample'] = '<span class="install_valid">'.$L['Found'].'</span>';
+}
 else
+{
 	$status['config_sample'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+}
 /* ------------------- */
-if(file_exists($file['sql']))
+if (file_exists($file['sql']))
+{
 	$status['sql_file'] = '<span class="install_valid">'.$L['Found'].'</span>';
+}
 else
+{
 	$status['sql_file'] = '<span class="install_invalid">'.$L['nf'].'</span>';
-
+}
 $status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>=')) ? '<span class="install_valid">'.sprintf($L['install_ver_valid'],  PHP_VERSION).'</span>' : '<span class="install_invalid">'.sprintf($L['install_ver_invalid'],  PHP_VERSION).'</span>';
 $status['mbstring'] = (extension_loaded('mbstring')) ? '<span class="install_valid">'.$L['Available'].'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
 $status['mysql'] = (extension_loaded('mysql')) ? '<span class="install_valid">'.$L['Available'].'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
 
-if($_POST['submit'])
+if ($_POST['submit'])
 {
 	$status['mysql_ver'] = '/ ' . ($sed_dbc && function_exists('version_compare') && version_compare(@mysql_get_server_info($sed_dbc), '4.1.0', '>=')) ? '<span class="install_valid">'.sprintf($L['install_ver_valid'],  mysql_get_server_info($sed_dbc)).'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
 }
@@ -189,11 +224,11 @@ if($_POST['submit'])
 {
 	$status['mysql_ver'] = '<span class="install_invalid">'.$L['na'].'</span>';
 }*/
-if($error)
+if ($error)
 {
 	$t->assign(array(
 		'INSTALL_ERROR' => $error
-		));
+	));
 	$t->parse('MAIN.ERROR');
 }
 
@@ -218,8 +253,8 @@ $t->assign(array(
 	'INSTALL_SKIN_SELECT' => sed_selectbox_skin($rskin, 'skin'),
 	//'INSTALL_THEME_SELECT' => sed_selectbox_theme($rskin, 'theme', $theme),
 	'INSTALL_LANG_SELECT' => sed_selectbox_lang($rlang, 'lang'),
-	'INSTALL_COUNTRY_SELECT' => sed_selectbox_countries($user['country'], 'user_country'),
-	));
+	'INSTALL_COUNTRY_SELECT' => sed_selectbox_countries($user['country'], 'user_country')
+));
 
 $t->parse("MAIN");
 $t->out("MAIN");

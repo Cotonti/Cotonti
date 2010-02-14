@@ -5,19 +5,17 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD License
  */
 
 defined('SED_CODE') or die('Wrong URL');
 
 // System requirements check
-if(!defined('SED_INSTALL'))
+if (!defined('SED_INSTALL'))
 {
-	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>='))
-		or die('Cotonti system requirements: PHP 5.1 or above.');
-	extension_loaded('mbstring')
-		or die('Cotonti system requirements: mbstring PHP extension must be loaded.');
+	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>=')) or die('Cotonti system requirements: PHP 5.1 or above.'); // TODO: Need translate
+	extension_loaded('mbstring') or die('Cotonti system requirements: mbstring PHP extension must be loaded.'); // TODO: Need translate
 }
 
 // Group constants
@@ -55,7 +53,7 @@ if (!isset($cfg['dir_perms']))
 
 // For compatibility with PHP < 5.2
 
-if(PHP_VERSION < '5.2.0')
+if (PHP_VERSION < '5.2.0')
 {
 	function mb_stripos($haystack, $needle, $offset = 0)
 	{
@@ -117,34 +115,32 @@ function sed_auth($area, $option, $mask = 'RWA')
 	$masks = str_split($mask);
 	$res = array();
 
-	foreach($masks as $k => $ml)
+	foreach ($masks as $k => $ml)
 	{
-		if(empty($mn[$ml]))
+		if (empty($mn[$ml]))
 		{
-			$sys['auth_log'][] = $area . '.' . $option . '.' . $ml . '=0';
+			$sys['auth_log'][] = $area.'.'.$option.'.'.$ml.'=0';
 			$res[] = FALSE;
 		}
 		elseif ($option == 'any')
 		{
 			$cnt = 0;
 
-			if(is_array($usr['auth'][$area]))
+			if (is_array($usr['auth'][$area]))
 			{
-				foreach($usr['auth'][$area] as $k => $g)
+				foreach ($usr['auth'][$area] as $k => $g)
 				{
 					$cnt += (($g & $mn[$ml]) == $mn[$ml]);
 				}
 			}
 			$cnt = ($cnt == 0 && $usr['auth']['admin']['a'] && $ml == 'A') ? 1 : $cnt;
 
-			$sys['auth_log'][] = ($cnt > 0) ? $area . '.' . $option . '.' . $ml . '=1'
-				: $area . '.' . $option . '.' . $ml . '=0';
+			$sys['auth_log'][] = ($cnt > 0) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
 			$res[] = ($cnt > 0) ? TRUE : FALSE;
 		}
 		else
 		{
-			$sys['auth_log'][] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ?
-				$area . '.' . $option . '.' . $ml . '=1' : $area . '.' . $option . '.' . $ml . '=0';
+			$sys['auth_log'][] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? $area.'.'.$option.'.'.$ml.'=1' : $area.'.'.$option.'.'.$ml.'=0';
 			$res[] = (($usr['auth'][$area][$option] & $mn[$ml]) == $mn[$ml]) ? TRUE : FALSE;
 		}
 	}
@@ -158,7 +154,7 @@ function sed_auth($area, $option, $mask = 'RWA')
  * @param int $maingrp User main group
  * @return array
  */
-function sed_auth_build($userid, $maingrp=0)
+function sed_auth_build($userid, $maingrp = 0)
 {
 	global $db_auth, $db_groups_users;
 
@@ -166,7 +162,7 @@ function sed_auth_build($userid, $maingrp=0)
 	$authgrid = array();
 	$tmpgrid = array();
 
-	if ($userid==0 || $maingrp==0)
+	if ($userid == 0 || $maingrp == 0)
 	{
 		$groups[] = 1;
 	}
@@ -198,11 +194,11 @@ function sed_auth_build($userid, $maingrp=0)
  * @param mixed $id User ID or 'all'
  * @return int
  */
-function sed_auth_clear($id='all')
+function sed_auth_clear($id = 'all')
 {
 	global $db_users, $cfg, $cot_cache;
 
-	if($id=='all')
+	if ($id == 'all')
 	{
 		$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
 		$cot_cache->db_unset('sed_guest_auth', 'system');
@@ -222,10 +218,10 @@ function sed_auth_clear($id='all')
  */
 function sed_block($allowed)
 {
-	if(!$allowed)
+	if (!$allowed)
 	{
 		global $sys;
-		sed_redirect(sed_url('message', 'msg=930&' . $sys['url_redirect'], '', true));
+		sed_redirect(sed_url('message', 'msg=930&'.$sys['url_redirect'], '', true));
 	}
 	return FALSE;
 }
@@ -240,7 +236,7 @@ function sed_blockguests()
 {
 	global $usr, $sys;
 
-	if ($usr['id']<1)
+	if ($usr['id'] < 1)
 	{
 		sed_redirect(sed_url('message', "msg=930&".$sys['url_redirect'], '', true));
 	}
@@ -277,11 +273,11 @@ function sed_bbcode_add($name, $mode, $pattern, $replacement, $container = true,
 	$bbc['pattern'] = $pattern;
 	$bbc['replacement'] = $replacement;
 	$bbc['container'] = empty($container) ? 0 : 1;
-	if($priority >= 0 && $priority < 256)
+	if ($priority >= 0 && $priority < 256)
 	{
 		$bbc['priority'] = (int) $priority;
 	}
-	if(!empty($plug))
+	if (!empty($plug))
 	{
 		$bbc['plug'] = $plug;
 	}
@@ -300,13 +296,13 @@ function sed_bbcode_add($name, $mode, $pattern, $replacement, $container = true,
 function sed_bbcode_remove($id = 0, $plug = '')
 {
 	global $db_bbcode;
-	if($id > 0)
+	if ($id > 0)
 	{
 		return sed_sql_delete($db_bbcode, "bbc_id = $id") == 1;
 	}
-	elseif(!empty($plug))
+	elseif (!empty($plug))
 	{
-		return sed_sql_delete($db_bbcode, "bbc_plug = '" . sed_sql_prep($plug) . "'");
+		return sed_sql_delete($db_bbcode, "bbc_plug = '".sed_sql_prep($plug)."'");
 	}
 	else
 	{
@@ -333,23 +329,23 @@ function sed_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
 {
 	global $db_bbcode;
 	$bbc['enabled'] = empty($enabled) ? 0 : 1;
-	if(!empty($name))
+	if (!empty($name))
 	{
 		$bbc['name'] = $name;
 	}
-	if(!empty($mode))
+	if (!empty($mode))
 	{
 		$bbc['mode'] = $mode;
 	}
-	if(!empty($pattern))
+	if (!empty($pattern))
 	{
 		$bbc['pattern'] = $pattern;
 	}
-	if(!empty($replacement))
+	if (!empty($replacement))
 	{
 		$bbc['replacement'] = $replacement;
 	}
-	if($priority >= 0 && $priority < 256)
+	if ($priority >= 0 && $priority < 256)
 	{
 		$bbc['priority'] = $priority;
 	}
@@ -374,11 +370,11 @@ function sed_bbcode_load()
 	$i = 0;
 	$j = 0;
 	$res = sed_sql_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
-	while($row = sed_sql_fetchassoc($res))
+	while ($row = sed_sql_fetchassoc($res))
 	{
-		if($row['bbc_postrender'] == 1)
+		if ($row['bbc_postrender'] == 1)
 		{
-			foreach($row as $key => $val)
+			foreach ($row as $key => $val)
 			{
 				$sed_bbcodes_post[$j][str_replace('bbc_', '', $key)] = $val;
 			}
@@ -386,20 +382,20 @@ function sed_bbcode_load()
 		}
 		else
 		{
-			foreach($row as $key => $val)
+			foreach ($row as $key => $val)
 			{
 				$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
 			}
 			$i++;
 		}
-		if($row['bbc_container'] == 1 && !isset($bbc_cntr[$row['bbc_name']]))
+		if ($row['bbc_container'] == 1 && !isset($bbc_cntr[$row['bbc_name']]))
 		{
-			$sed_bbcode_containers .= $row['bbc_name'] . '|';
+			$sed_bbcode_containers .= $row['bbc_name'].'|';
 			$bbc_cntr[$row['bbc_name']] = 1;
 		}
 	}
 	sed_sql_freeresult($res);
-	if(!empty($sed_bbcode_containers))
+	if (!empty($sed_bbcode_containers))
 	{
 		$sed_bbcode_containers = mb_substr($sed_bbcode_containers, 0, -1);
 	}
@@ -430,32 +426,32 @@ function sed_bbcode_parse($text, $post = false)
 
 	// BB auto-close
 	$bbc = array();
-	if(!$post && preg_match_all('#\[(/)?('.$sed_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
+	if (!$post && preg_match_all('#\[(/)?('.$sed_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
 	{
 		$cdata = '';
 		// Count all unclosed bbcode entries
-		for($i = 0, $cnt = count($mt); $i < $cnt; $i++)
+		for ($i = 0, $cnt = count($mt); $i < $cnt; $i++)
 		{
 				$bb = mb_strtolower($mt[$i][2]);
-				if($mt[$i][1] == '/')
+				if ($mt[$i][1] == '/')
 				{
-					if(empty($cdata))
+					if (empty($cdata))
 					{
 						// Protect from "[/foo] [/bar][foo][bar]" trick
-						if($bbc[$bb] > 0) $bbc[$bb]--;
+						if ($bbc[$bb] > 0) $bbc[$bb]--;
 						// else echo 'ERROR: invalid closing bbcode detected';
 					}
-					elseif($bb == $cdata)
+					elseif ($bb == $cdata)
 					{
 						$bbc[$bb]--;
 						$cdata = '';
 					}
 				}
-				elseif(empty($cdata))
+				elseif (empty($cdata))
 				{
 					// Count opening tag in
 					$bbc[$bb]++;
-					if($bb == 'code' || $bb == 'highlight')
+					if ($bb == 'code' || $bb == 'highlight')
 					{
 						// Ignore bbcodes in constant data
 						$cdata = $bb;
@@ -464,7 +460,7 @@ function sed_bbcode_parse($text, $post = false)
 		}
 		// Close all unclosed tags. Produces non XHTML-compliant output
 		// (doesn't take tag order and semantics into account) but fixes the layout
-		if(count($bbc) > 0)
+		if (count($bbc) > 0)
 		{
 			foreach($bbc as $bb => $c)
 			{
@@ -474,7 +470,7 @@ function sed_bbcode_parse($text, $post = false)
 	}
 	// Done, ready to parse bbcodes
 	$cnt = $post ? count($sed_bbcodes_post) : count($sed_bbcodes);
-	for($i = 0; $i < $cnt; $i++)
+	for ($i = 0; $i < $cnt; $i++)
 	{
 		$bbcode = ($post) ? $sed_bbcodes_post[$i] : $sed_bbcodes[$i];
 		switch($bbcode['mode'])
@@ -488,7 +484,7 @@ function sed_bbcode_parse($text, $post = false)
 			break;
 
 			case 'callback':
-				$code = 'global $cfg, $sys, $usr, $L, $skin, $sed_groups;' . $bbcode['replacement'];
+				$code = 'global $cfg, $sys, $usr, $L, $skin, $sed_groups;'.$bbcode['replacement'];
 				$text = preg_replace_callback('`'.$bbcode['pattern'].'`mis', create_function('$input', $code), $text);
 			break;
 		}
@@ -528,82 +524,101 @@ function sed_bbcode_cdata($text)
  */
 function utf8ToUnicode(&$str)
 {
-	$mState = 0;	 // cached expected number of octets after the current octet
+	$mState = 0; // cached expected number of octets after the current octet
 	// until the beginning of the next UTF8 character sequence
-	$mUcs4  = 0;	 // cached Unicode character
-	$mBytes = 1;	 // cached expected number of octets in the current sequence
+	$mUcs4  = 0; // cached Unicode character
+	$mBytes = 1; // cached expected number of octets in the current sequence
 
 	$out = array();
 
 	$len = strlen($str);
-	for($i = 0; $i < $len; $i++) {
+	for ($i = 0; $i < $len; $i++)
+	{
 		$in = ord($str{$i});
-		if (0 == $mState) {
+		if (0 == $mState)
+		{
 			// When mState is zero we expect either a US-ASCII character or a
 			// multi-octet sequence.
-			if (0 == (0x80 & ($in))) {
+			if (0 == (0x80 & ($in)))
+			{
 				// US-ASCII, pass straight through.
 				$out[] = $in;
 				$mBytes = 1;
-			} else if (0xC0 == (0xE0 & ($in))) {
+			}
+			elseif (0xC0 == (0xE0 & ($in)))
+			{
 				// First octet of 2 octet sequence
 				$mUcs4 = ($in);
 				$mUcs4 = ($mUcs4 & 0x1F) << 6;
 				$mState = 1;
 				$mBytes = 2;
-			} else if (0xE0 == (0xF0 & ($in))) {
+			}
+			elseif (0xE0 == (0xF0 & ($in)))
+			{
 				// First octet of 3 octet sequence
 				$mUcs4 = ($in);
 				$mUcs4 = ($mUcs4 & 0x0F) << 12;
 				$mState = 2;
 				$mBytes = 3;
-			} else if (0xF0 == (0xF8 & ($in))) {
+			}
+			elseif (0xF0 == (0xF8 & ($in)))
+			{
 				// First octet of 4 octet sequence
 				$mUcs4 = ($in);
 				$mUcs4 = ($mUcs4 & 0x07) << 18;
 				$mState = 3;
 				$mBytes = 4;
-			} else if (0xF8 == (0xFC & ($in))) {
-		/* First octet of 5 octet sequence.
-		 *
-		 * This is illegal because the encoded codepoint must be either
-		 * (a) not the shortest form or
-		 * (b) outside the Unicode range of 0-0x10FFFF.
-		 * Rather than trying to resynchronize, we will carry on until the end
-		 * of the sequence and let the later error handling code catch it.
-		 */
+			}
+			elseif (0xF8 == (0xFC & ($in)))
+			{
+				/* First octet of 5 octet sequence.
+				 *
+				 * This is illegal because the encoded codepoint must be either
+				 * (a) not the shortest form or
+				 * (b) outside the Unicode range of 0-0x10FFFF.
+				 * Rather than trying to resynchronize, we will carry on until the end
+				 * of the sequence and let the later error handling code catch it.
+				 */
 				$mUcs4 = ($in);
 				$mUcs4 = ($mUcs4 & 0x03) << 24;
 				$mState = 4;
 				$mBytes = 5;
-			} else if (0xFC == (0xFE & ($in))) {
+			}
+			elseif (0xFC == (0xFE & ($in)))
+			{
 				// First octet of 6 octet sequence, see comments for 5 octet sequence.
 				$mUcs4 = ($in);
 				$mUcs4 = ($mUcs4 & 1) << 30;
 				$mState = 5;
 				$mBytes = 6;
-			} else {
-		/* Current octet is neither in the US-ASCII range nor a legal first
-		 * octet of a multi-octet sequence.
-		 */
+			}
+			else
+			{
+				/* Current octet is neither in the US-ASCII range nor a legal first
+				 * octet of a multi-octet sequence.
+				 */
 				return false;
 			}
-		} else {
+		}
+		else
+		{
 			// When mState is non-zero, we expect a continuation of the multi-octet
 			// sequence
-			if (0x80 == (0xC0 & ($in))) {
+			if (0x80 == (0xC0 & ($in)))
+			{
 				// Legal continuation.
 				$shift = ($mState - 1) * 6;
 				$tmp = $in;
 				$tmp = ($tmp & 0x0000003F) << $shift;
 				$mUcs4 |= $tmp;
 
-				if (0 == --$mState) {
-		  /* End of the multi-octet sequence. mUcs4 now contains the final
-		   * Unicode codepoint to be output
-		   *
-		   * Check for illegal sequences and codepoints.
-		   */
+				if (0 == --$mState)
+				{
+					/* End of the multi-octet sequence. mUcs4 now contains the final
+					 * Unicode codepoint to be output
+					 *
+					 * Check for illegal sequences and codepoints.
+					 */
 
 					// From Unicode 3.1, non-shortest form is illegal
 					if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
@@ -613,10 +628,12 @@ function utf8ToUnicode(&$str)
 						// From Unicode 3.2, surrogate characters are illegal
 						(($mUcs4 & 0xFFFFF800) == 0xD800) ||
 						// Codepoints outside the Unicode range are illegal
-						($mUcs4 > 0x10FFFF)) {
+						($mUcs4 > 0x10FFFF))
+					{
 						return false;
 					}
-					if (0xFEFF != $mUcs4) {
+					if (0xFEFF != $mUcs4)
+					{
 						// BOM is legal but we don't want to output it
 						$out[] = $mUcs4;
 					}
@@ -625,11 +642,13 @@ function utf8ToUnicode(&$str)
 					$mUcs4  = 0;
 					$mBytes = 1;
 				}
-			} else {
-		/* ((0xC0 & (*in) != 0x80) && (mState != 0))
-		 *
-		 * Incomplete multi-octet sequence.
-		 */
+			}
+			else
+			{
+				/* ((0xC0 & (*in) != 0x80) && (mState != 0))
+				 *
+				 * Incomplete multi-octet sequence.
+				 */
 				return false;
 			}
 		}
@@ -648,13 +667,13 @@ function sed_obfuscate($text)
 	$enc_string = '[';
 	$ut = utf8ToUnicode($text);
 	$length = count($ut);
-	for ($i=0; $i < $length; $i++)
+	for ($i = 0; $i < $length; $i++)
 	{
 		$enc_string .= $ut[$i].',';
 	}
 	$enc_string = substr($enc_string, 0, -1).']';
 	$name = 'a'.sed_unique(8);
-	$script = '<script type="text/javascript">var '.$name.' = '.$enc_string.','.$name.'_d = ""; for(var ii = 0; ii < '.$name.'.length; ii++) { var c = '.$name.'[ii]; '.$name.'_d += String.fromCharCode(c); } document.write('.$name.'_d)</script>';
+	$script = '<script type="text/javascript">var '.$name.' = '.$enc_string.','.$name.'_d = ""; for (var ii = 0; ii < '.$name.'.length; ii++) { var c = '.$name.'[ii]; '.$name.'_d += String.fromCharCode(c); } document.write('.$name.'_d)</script>';
 	return $script;
 }
 
@@ -707,12 +726,12 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 {
 	global $cfg, $sys, $sed_smilies, $L, $usr;
 
-	if($cfg['parser_custom'] && function_exists('sed_custom_parse'))
+	if ($cfg['parser_custom'] && function_exists('sed_custom_parse'))
 	{
 		$text = sed_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
 	}
 
-	if(!$cfg['parser_disable'])
+	if (!$cfg['parser_disable'])
 	{
 		$code = array();
 		$unique_seed = $sys['unique'];
@@ -720,7 +739,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 
 		$text = sed_parse_autourls($text);
 
-		if($parse_smilies && is_array($sed_smilies))
+		if ($parse_smilies && is_array($sed_smilies))
 		{
 			foreach($sed_smilies as $k => $v)
 			{
@@ -728,7 +747,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 				$key = '**'.$ii.$unique_seed.'**';
 				$code[$key]= '<img class="aux smiley" src="./images/smilies/'.$v['file'].'" alt="'.htmlspecialchars($v['code']).'" />';
 				$text = preg_replace('#(^|\s)'.preg_quote($v['code']).'(\s|$)#', '$1'.$key.'$2', $text);
-				if(htmlspecialchars($v['code']) != $v['code'])
+				if (htmlspecialchars($v['code']) != $v['code'])
 				{
 					// Fix for cc inserts
 					$text = preg_replace('#(^|\s)'.preg_quote(htmlspecialchars($v['code'])).'(\s|$)#', '$1'.$key.'$2', $text);
@@ -736,7 +755,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 			}
 		}
 
-		if($parse_bbcodes)
+		if ($parse_bbcodes)
 		{
 			$text = sed_bbcode_parse($text);
 		}
@@ -769,12 +788,12 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 function sed_post_parse($text, $area = '')
 {
 	global $cfg;
-	if($cfg['parser_custom'] && function_exists('sed_custom_post_parse'))
+	if ($cfg['parser_custom'] && function_exists('sed_custom_post_parse'))
 	{
 		$text = sed_custom_post_parse($text, $area);
 	}
 
-	if(!$cfg['parser_disable'] && (empty($area) || $cfg["parsebbcode$area"]))
+	if (!$cfg['parser_disable'] && (empty($area) || $cfg["parsebbcode$area"]))
 	{
 		$text = sed_bbcode_parse($text, true);
 	}
@@ -906,7 +925,7 @@ function sed_string_truncate(&$html, $length = 100, $considerhtml = true, $exact
 			}
 
 			// if the maximum length is reached, get off the loop
-			if($total_length >= $length)
+			if ($total_length >= $length)
 			{
 				break;
 			}
@@ -944,7 +963,7 @@ function sed_string_truncate(&$html, $length = 100, $considerhtml = true, $exact
 		// close all unclosed html-tags
 		foreach ($open_tags as $tag)
 		{
-			$truncate .= '</' . $tag . '>';
+			$truncate .= '</'.$tag.'>';
 		}
 	}
 	$html =  $truncate;
@@ -970,7 +989,7 @@ function sed_build_catpath($cat, $mask)
 	global $sed_cat, $cfg;
 	$mask = str_replace('%25', '%', $mask);
 	$mask = str_replace('%24', '$', $mask);
-	if($cfg['homebreadcrumb'])
+	if ($cfg['homebreadcrumb'])
 	{
 		$tmp[] = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a>';
 	}
@@ -1046,7 +1065,7 @@ function sed_build_comments($code, $url, $display = true)
 			/* ===== */
 
 			sed_shield_update(20, 'New comment');
-			sed_redirect(str_replace('&amp;', '&', $url) . '#c' . $id);
+			sed_redirect(str_replace('&amp;', '&', $url).'#c'.$id);
 		}
 	}
 
@@ -1070,7 +1089,7 @@ function sed_build_comments($code, $url, $display = true)
 			sed_log('Deleted comment #'.$ind.' in &quot;'.$code.'&quot;', 'adm');
 		}
 
-		sed_redirect(str_replace('&amp;', '&', $url) . '#comments');
+		sed_redirect(str_replace('&amp;', '&', $url).'#comments');
 	}
 
 	$error_string .= ($ina == 'added') ? $L['com_commentadded'].'<br />' : '';
@@ -1104,7 +1123,7 @@ function sed_build_comments($code, $url, $display = true)
 
 	$t->assign(array(
 		'COMMENTS_CODE' => $code,
-		'COMMENTS_FORM_SEND' => $url . $sep . 'ina=send',
+		'COMMENTS_FORM_SEND' => $url.$sep.'ina=send',
 		'COMMENTS_FORM_AUTHOR' => $usr['name'],
 		"COMMENTS_FORM_AUTHORID" => $usr['id'],
 		'COMMENTS_FORM_TEXT' => $post_main,
@@ -1146,19 +1165,17 @@ function sed_build_comments($code, $url, $display = true)
 			$i++;
 			$com_author = htmlspecialchars($row['com_author']);
 
-			$com_admin = ($usr['isadmin_com']) ? $L['Ip'] . ':' . sed_build_ipsearch($row['com_authorip'])
-				. ' &nbsp;' . $L['Delete'] . ':[<a href="' . $url . $sep . 'ina=delete&amp;ind=' . $row['com_id']
-				. '&amp;' .sed_xg().'">x</a>]' : '' ;
+			$com_admin = ($usr['isadmin_com']) ? $L['Ip'].':'.sed_build_ipsearch($row['com_authorip']).' &nbsp;'.$L['Delete'].':[<a href="'.$url.$sep.'ina=delete&amp;ind='.$row['com_id'].'&amp;'.sed_xg().'">x</a>]' : '';
 			$com_authorlink = sed_build_user($row['com_authorid'], $com_author);
 
-			if($cfg['parser_cache'])
+			if ($cfg['parser_cache'])
 			{
-				if(empty($row['com_html']) && !empty($row['com_text']))
+				if (empty($row['com_html']) && !empty($row['com_text']))
 				{
 					$row['com_html'] = sed_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'],
 						$cfg['parsesmiliescom'], true);
 					sed_sql_query("UPDATE $db_com SET com_html = '".sed_sql_prep($row['com_html'])."'
-						 WHERE com_id = " . $row['com_id']);
+						 WHERE com_id = ".$row['com_id']);
 				}
 				$com_text = $cfg['parsebbcodepages'] ? sed_post_parse($row['com_html'])
 					: htmlspecialchars($row['com_text']);
@@ -1173,7 +1190,7 @@ function sed_build_comments($code, $url, $display = true)
 			$t-> assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => $i,
-				'COMMENTS_ROW_URL' => $url . '#c' . $row['com_id'],
+				'COMMENTS_ROW_URL' => $url.'#c'.$row['com_id'],
 				'COMMENTS_ROW_AUTHOR' => $com_authorlink,
 				'COMMENTS_ROW_AUTHORID' => $row['com_authorid'],
 				'COMMENTS_ROW_AVATAR' => sed_build_userimage($row['user_avatar'], 'avatar'),
@@ -1204,7 +1221,7 @@ function sed_build_comments($code, $url, $display = true)
 			$pagination_next = preg_replace('/href="(.+?)"/', 'href="$1#comments"', $pagination_next);
 		}
 		$t->assign(array(
-			'COMMENTS_PAGES_INFO' => $L['Total'] . ' : ' . $totalitems . ', ' . $L['comm_on_page'] . ': ' . ($i - $d),
+			'COMMENTS_PAGES_INFO' => $L['Total'].' : '.$totalitems.', '.$L['comm_on_page'].': '.($i - $d),
 			'COMMENTS_PAGES_PAGESPREV' => $pagination_prev,
 			'COMMENTS_PAGES_PAGNAV' => $pagnav,
 			'COMMENTS_PAGES_PAGESNEXT' => $pagination_next
@@ -1231,13 +1248,13 @@ function sed_build_comments($code, $url, $display = true)
 	$t->parse('COMMENTS');
 	$res_display = $t->text('COMMENTS');
 
-	$res = '<a href="' . $url . '#comments" class="comments_link" alt="'.$L['Comments'].'">' . $R['icon_comments'];
+	$res = '<a href="'.$url.'#comments" class="comments_link" alt="'.$L['Comments'].'">'.$R['icon_comments'];
 
 	if ($cfg['countcomments'])
 	{
 		if (isset($totalitems)) $nbcomment = $totalitems;
 		else $nbcomment = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com where com_code='$code'"), 0, 0);
-		$res .= ' (' . $nbcomment . ')';
+		$res .= ' ('.$nbcomment.')';
 	}
 	$res .= '</a>';
 
@@ -1290,11 +1307,11 @@ function sed_build_country($flag)
 function sed_build_email($email, $hide = false)
 {
 	global $L;
-	if($hide)
+	if ($hide)
 	{
 		return $L['Hidden'];
 	}
-	elseif(!empty($email) && preg_match('#^\w[\._\w\-]+@[\w\.\-]+\.[a-z]+$#', $email))
+	elseif (!empty($email) && preg_match('#^\w[\._\w\-]+@[\w\.\-]+\.[a-z]+$#', $email))
 	{
 		return sed_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
 	}
@@ -1324,7 +1341,7 @@ function sed_build_flag($flag)
 function sed_build_ipsearch($ip)
 {
 	global $sys;
-	if(!empty($ip))
+	if (!empty($ip))
 	{
 		return '<a href="'.sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']).'">'.$ip.'</a>';
 	}
@@ -1397,7 +1414,7 @@ function sed_build_ratings($code, $url, $display)
 	{
 		$rating_average = $row['rating_average'];
 		$yetrated = TRUE;
-		if($rating_average<1)
+		if ($rating_average<1)
 		{
 			$rating_average = 1;
 		}
@@ -1427,7 +1444,7 @@ function sed_build_ratings($code, $url, $display)
 	{
 		$star_class = ($i <= $rating_cntround) ? 'star-rating star-rating-on' : 'star-rating star-rating-readonly';
 		$star_margin = (in_array(($i / 2), array(1, 2, 3, 4, 5))) ? '-8' : '0';
-		$rating_fancy .= '<div style="width: 8px;" class="'.$star_class.'"><a style="margin-left: '.$star_margin.'px;" title="'.$L['rat_choice' . $i].'">'.$i.'</a></div>';
+		$rating_fancy .= '<div style="width: 8px;" class="'.$star_class.'"><a style="margin-left: '.$star_margin.'px;" title="'.$L['rat_choice'.$i].'">'.$i.'</a></div>';
 	}
 	if (!$display)
 	{
@@ -1575,7 +1592,7 @@ function sed_build_ratings($code, $url, $display)
 		$checked = ($i == $rating_cntround) ? 'checked="checked"' : '';
 		$t->assign(array(
 			'RATINGS_ROW_VALUE' => $i,
-			'RATINGS_ROW_TITLE' => $L['rat_choice' . $i],
+			'RATINGS_ROW_TITLE' => $L['rat_choice'.$i],
 			'RATINGS_ROW_CHECKED' => $checked,
 		));
 		$t->parse('RATINGS.'.$vote_block.'RATINGS_ROW');
@@ -1608,20 +1625,20 @@ function sed_build_timegap($t1,$t2)
 
 	$gap = $t2 - $t1;
 
-	if($gap<=0 || !$t2 || $gap>94608000)
+	if ($gap<=0 || !$t2 || $gap>94608000)
 	{
 		$result = '';
 	}
-	elseif($gap<60)
+	elseif ($gap<60)
 	{
 		$result = sed_declension($gap,$Ls['Seconds']);
 	}
-	elseif($gap<3600)
+	elseif ($gap<3600)
 	{
 		$gap = floor($gap/60);
 		$result = sed_declension($gap,$Ls['Minutes']);
 	}
-	elseif($gap<86400)
+	elseif ($gap<86400)
 	{
 		$gap1 = floor($gap/3600);
 		$gap2 = floor(($gap-$gap1*3600)/60);
@@ -1668,9 +1685,9 @@ function sed_build_url($text, $maxlen=64)
 {
 	global $cfg;
 
-	if(!empty($text))
+	if (!empty($text))
 	{
-		if(mb_strpos($text, 'http://') !== 0)
+		if (mb_strpos($text, 'http://') !== 0)
 		{
 			$text='http://'. $text;
 		}
@@ -1691,11 +1708,11 @@ function sed_build_user($id, $user)
 {
 	global $cfg;
 
-	if($id == 0 && !empty($user))
+	if ($id == 0 && !empty($user))
 	{
 		return $user;
 	}
-	elseif($id == 0)
+	elseif ($id == 0)
 	{
 		return '';
 	}
@@ -1713,32 +1730,32 @@ function sed_build_user($id, $user)
  */
 function sed_build_userimage($image, $type='none')
 {
-	if($type == 'avatar')
+	if ($type == 'avatar')
 	{
-		if(empty($image))
+		if (empty($image))
 		{
 			$image = 'datas/defaultav/blank.png';
 		}
 		return '<img src="'.$image.'" alt="" class="avatar" />';
 	}
-	elseif($type == 'photo')
+	elseif ($type == 'photo')
 	{
-		if(!empty($image))
+		if (!empty($image))
 		{
 			return '<img src="'.$image.'" alt="" class="photo" />';
 		}
 
 	}
-	elseif($type == 'sig')
+	elseif ($type == 'sig')
 	{
-		if(!empty($image))
+		if (!empty($image))
 		{
 			return '<img src="'.$image.'" alt="" class="signature" />';
 		}
 	}
 	else
 	{
-		if(!empty($image))
+		if (!empty($image))
 		{
 			return '<img src="'.$image.'" alt="" />';
 		}
@@ -1801,7 +1818,7 @@ function sed_cutpost($text, $max_chars, $parse_bbcodes = true)
 	// Fix partial cuttoff
 	$text = preg_replace('#\[[^\]]*?$#', '...', $text);
 	// Parse the BB-codes or skip them
-	if($parse_bbcodes)
+	if ($parse_bbcodes)
 	{
 		// Parse it
 		$text = sed_parse($text);
@@ -1820,7 +1837,7 @@ function sed_cutpost($text, $max_chars, $parse_bbcodes = true)
 function sed_cutstring($res, $l)
 {
 	global $cfg;
-	if(mb_strlen($res)>$l)
+	if (mb_strlen($res)>$l)
 	{
 		$res = mb_substr($res, 0, ($l-3)).'...';
 	}
@@ -1857,7 +1874,7 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 	switch($extension)
 	{
 		case 'gif':
-			$source = imagecreatefromgif($img_big);
+			$source = imagecreatefromgif ($img_big);
 			break;
 
 		case 'png':
@@ -2009,13 +2026,13 @@ function sed_getextplugins($hook, $cond='R')
 	{
 		foreach($sed_plugins[$hook] as $k)
 		{
-			if(sed_auth('plug', $k['pl_code'], $cond))
+			if (sed_auth('plug', $k['pl_code'], $cond))
 			{
 				$extplugins[] = $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
 			}
 		}
 	}
-	
+
 	// Trigger cache handlers
 	$cfg['cache'] && $cot_cache->trigger($hook);
 
@@ -2096,7 +2113,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		break;
 
 		case 'NUM':
-			if(is_numeric($v))
+			if (is_numeric($v))
 			{
 				$pass = TRUE;
 			}
@@ -2117,7 +2134,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		case 'SLU':
 			$v = trim($v);
 			$f = preg_replace('/[^a-zA-Z0-9_=\/]/', '', $v);
-			if($v == $f)
+			if ($v == $f)
 			{
 				$pass = TRUE;
 			}
@@ -2130,7 +2147,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		case 'ALP':
 			$v = trim($v);
 			$f = sed_alphaonly($v);
-			if($v == $f)
+			if ($v == $f)
 			{
 				$pass = TRUE;
 			}
@@ -2165,12 +2182,12 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		break;
 
 		case 'BOL':
-			if($v == '1' || $v == 'on')
+			if ($v == '1' || $v == 'on')
 			{
 				$pass = TRUE;
 				$v = '1';
 			}
-			elseif($v=='0' || $v=='off')
+			elseif ($v=='0' || $v=='off')
 			{
 				$pass = TRUE;
 				$v = '0';
@@ -2182,7 +2199,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			break;
 
 		case 'LVL':
-			if(is_numeric($v) && $v >= 0 && $v <= 100 && floor($v)==$v)
+			if (is_numeric($v) && $v >= 0 && $v <= 100 && floor($v)==$v)
 			{
 				$pass = TRUE;
 			}
@@ -2202,17 +2219,17 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	}
 
 	$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
-	if($pass)
+	if ($pass)
 	{
 		return($v);
 	}
 	else
 	{
-		if($log)
+		if ($log)
 		{
 			sed_log_sed_import($source, $filter, $name, $v);
 		}
-		if($dieonerror)
+		if ($dieonerror)
 		{
 			sed_diefatal('Wrong input.');
 		}
@@ -2235,11 +2252,11 @@ function sed_incfile($name, $module = false)
 	global $cfg;
 	if ($module)
 	{
-		return $cfg['modules_dir'] . "/$module/$module.$name.php";
+		return $cfg['modules_dir']."/$module/$module.$name.php";
 	}
 	else
 	{
-		return $cfg['system_dir'] . "/$name.php";
+		return $cfg['system_dir']."/$name.php";
 	}
 }
 
@@ -2255,7 +2272,7 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 {
 	$result = array();
 
-	if($fp = @fopen($file, 'r'))
+	if ($fp = @fopen($file, 'r'))
 	{
 		$limiter_begin = "[BEGIN_".$limiter."]";
 		$limiter_end = "[END_".$limiter."]";
@@ -2331,35 +2348,35 @@ function sed_langfile($name, $type = 'plug', $default = 'en')
 	global $cfg, $lang;
 	if ($type == 'module')
 	{
-		if(@file_exists($cfg['modules_dir'] . "/$name/lang/$name.$lang.lang.php"))
+		if (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
-			return $cfg['modules_dir'] . "/$name/lang/$name.$lang.lang.php";
+			return $cfg['modules_dir']."/$name/lang/$name.$lang.lang.php";
 		}
 		else
 		{
-			return $cfg['modules_dir'] . "/$name/lang/$name.$default.lang.php";
+			return $cfg['modules_dir']."/$name/lang/$name.$default.lang.php";
 		}
 	}
 	elseif ($type == 'core')
 	{
-		if(@file_exists($cfg['lang_dir'] . "/$lang/$name.$lang.lang.php"))
+		if (@file_exists($cfg['lang_dir']."/$lang/$name.$lang.lang.php"))
 		{
-			return $cfg['lang_dir'] . "/$lang/$name.$lang.lang.php";
+			return $cfg['lang_dir']."/$lang/$name.$lang.lang.php";
 		}
 		else
 		{
-			return $cfg['lang_dir'] . "/$default/$name.$default.lang.php";
+			return $cfg['lang_dir']."/$default/$name.$default.lang.php";
 		}
 	}
 	else
 	{
-		if(@file_exists($cfg['plugins_dir'] . "/$name/lang/$name.$lang.lang.php"))
+		if (@file_exists($cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php"))
 		{
-			return $cfg['plugins_dir'] . "/$name/lang/$name.$lang.lang.php";
+			return $cfg['plugins_dir']."/$name/lang/$name.$lang.lang.php";
 		}
 		else
 		{
-			return $cfg['plugins_dir'] . "/$name/lang/$name.$default.lang.php";
+			return $cfg['plugins_dir']."/$name/lang/$name.$default.lang.php";
 		}
 	}
 }
@@ -2371,7 +2388,7 @@ function sed_load_smilies()
 {
 	global $sed_smilies;
 	$sed_smilies = array();
-	if(!file_exists('./images/smilies/set.js')) return;
+	if (!file_exists('./images/smilies/set.js')) return;
 
 	// A simple JSON parser and decoder
 	$json = '';
@@ -2381,20 +2398,20 @@ function sed_load_smilies()
 	$prio = array();
 	$code = array();
 	$file = array();
-	while(!feof($fp))
+	while (!feof($fp))
 	{
 		$line = fgets($fp);
-		if($line == '];') break;
-		if($started)
+		if ($line == '];') break;
+		if ($started)
 		{
 			$line = trim($line, " \t\r\n");
-			if($line == '{')
+			if ($line == '{')
 			{
 				$i++;
 			}
-			elseif($line != '},')
+			elseif ($line != '},')
 			{
-				if(preg_match('#^(\w+)\s*:\s*"?(.+?)"?,?$#', $line, $m))
+				if (preg_match('#^(\w+)\s*:\s*"?(.+?)"?,?$#', $line, $m))
 				{
 					switch($m[1])
 					{
@@ -2421,7 +2438,7 @@ function sed_load_smilies()
 	// Sort the result
 	array_multisort($prio, SORT_ASC, $code, $file);
 	$cnt = count($code);
-	for($i = 0; $i < $cnt; $i++)
+	for ($i = 0; $i < $cnt; $i++)
 	{
 		$sed_smilies[$i] = array(
 				'code' => $code[$i],
@@ -2634,20 +2651,20 @@ function sed_outputfilters($output)
 function sed_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd', $hash = '',
 	$ajax = false, $target_div = '', $ajax_module = '', $ajax_params = array())
 {
-	if(function_exists('sed_pagenav_custom'))
+	if (function_exists('sed_pagenav_custom'))
 	{
 		// For custom pagination functions in plugins
 		return sed_pagenav_custom($module, $params, $current, $entries, $perpage, $characters, $hash,
 			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
-	if($entries <= $perpage)
+	if ($entries <= $perpage)
 	{
 		return '';
 	}
-	
+
 	global $L, $R;
-	
+
 	$each_side = 3; // Links each side
 
 	is_array($params) ? $args = $params : parse_str($params, $args);
@@ -2675,9 +2692,9 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	$totalpages = ceil($entries / $perpage);
 	$currentpage = floor($current / $perpage) + 1;
 	$cur_left = $currentpage - $each_side;
-	if($cur_left < 1) $cur_left = 1;
+	if ($cur_left < 1) $cur_left = 1;
 	$cur_right = $currentpage + $each_side;
-	if($cur_right > $totalpages) $cur_right = $totalpages;
+	if ($cur_right > $totalpages) $cur_right = $totalpages;
 
 	// Main block
 
@@ -2686,13 +2703,13 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	$after = '';
 	$i = 1;
 	$n = 0;
-	while($i < $cur_left)
+	while ($i < $cur_left)
 	{
 		$args[$characters] = ($i - 1) * $perpage;
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
@@ -2714,7 +2731,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 			if ($ajax_rel)
 			{
 				$ajax_args[$characters] = $args[$characters];
-				$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+				$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 			}
 			else
 			{
@@ -2730,32 +2747,32 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
-	for($j = $cur_left; $j <= $cur_right; $j++)
+	for ($j = $cur_left; $j <= $cur_right; $j++)
 	{
 		$args[$characters] = ($j - 1) * $perpage;
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
 			$rel = $base_rel;
 		}
 		$rc = $j == $currentpage ? 'current' : 'main';
-		$pages .= sed_rc('link_pagenav_' . $rc, array(
+		$pages .= sed_rc('link_pagenav_'.$rc, array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $j
 		));
 	}
-	while($i <= $cur_right)
+	while ($i <= $cur_right)
 	{
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
-	while($i < $totalpages)
+	while ($i < $totalpages)
 	{
 		if ($i > $cur_right + 2)
 		{
@@ -2767,7 +2784,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 			if ($ajax_rel)
 			{
 				$ajax_args[$characters] = $args[$characters];
-				$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+				$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 			}
 			else
 			{
@@ -2784,7 +2801,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
@@ -2799,10 +2816,10 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
-	$pages = $before . $pages . $after;
-	
+	$pages = $before.$pages.$after;
+
 	// Previous/next
-	
+
 	if ($current > 0)
 	{
 		$prev_n = $current - $perpage;
@@ -2811,7 +2828,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
@@ -2827,7 +2844,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
@@ -2848,7 +2865,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
@@ -2865,7 +2882,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel . str_replace('?', ';', sed_url($ajax_module, $ajax_args)) . '"';
+			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
@@ -2886,9 +2903,9 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	}
 
 	return array(
-		'prev' => $first . $prev,
+		'prev' => $first.$prev,
 		'main' => $pages,
-		'next' => $next . $last,
+		'next' => $next.$last,
 		'last' => $lastn
 	);
 }
@@ -2909,25 +2926,25 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
  */
 function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $ajax = false, $target_div = '')
 {
-	if(function_exists('sed_pagination_custom'))
+	if (function_exists('sed_pagination_custom'))
 	{
 		// For custom pagination functions in plugins
 		return sed_pagination_custom($url, $current, $entries, $perpage, $characters, $onclick, $object);
 	}
 
-	if($entries <= $perpage)
+	if ($entries <= $perpage)
 	{
 		return '';
 	}
 	$each_side = 3; // Links each side
-	$address = $url . ((mb_strpos($url, '?') !== false) ? '&amp;' : '?') . $characters . '=';
+	$address = $url.((mb_strpos($url, '?') !== false) ? '&amp;' : '?').$characters.'=';
 
 	$totalpages = ceil($entries / $perpage);
 	$currentpage = floor($current / $perpage) + 1;
 	$cur_left = $currentpage - $each_side;
-	if($cur_left < 1) $cur_left = 1;
+	if ($cur_left < 1) $cur_left = 1;
 	$cur_right = $currentpage + $each_side;
-	if($cur_right > $totalpages) $cur_right = $totalpages;
+	if ($cur_right > $totalpages) $cur_right = $totalpages;
 
 	$event = $ajax ? ' class="ajax"' : '';
 	$name = $ajax && !empty($target_div) ? ' name="'.$taget_div.'"' : '';
@@ -2937,32 +2954,32 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 	$after = '';
 	$i = 1;
 	$n = 0;
-	while($i < $cur_left)
+	while ($i < $cur_left)
 	{
 		$k = ($i - 1) * $perpage;
 		$before .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.$name.'>'.$i.'</a></span>';
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
-	for($j = $cur_left; $j <= $cur_right; $j++)
+	for ($j = $cur_left; $j <= $cur_right; $j++)
 	{
 		$k = ($j - 1) * $perpage;
 		$class = $j == $currentpage ? 'current' : 'pages';
 		$pages .= '<span class="pagenav_'.$class.'"><a href="'.$address.$k.'"'.$event.$name.'>'.$j.'</a></span>';
 	}
-	while($i <= $cur_right)
+	while ($i <= $cur_right)
 	{
 		$i *= ($n % 2) ? 2 : 5;
 		$n++;
 	}
-	while($i < $totalpages)
+	while ($i < $totalpages)
 	{
 		$k = ($i - 1) * $perpage;
 		$after .= '<span class="pagenav_pages"><a href="'.$address.$k.'"'.$event.$name.'>'.$i.'</a></span>';
 		$i *= ($n % 2) ? 5 : 2;
 		$n++;
 	}
-	$pages = $before . $pages . $after;
+	$pages = $before.$pages.$after;
 
 	return $pages;
 }
@@ -2984,7 +3001,7 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
  */
 function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALSE, $characters = 'd', $ajax = false, $target_div = '')
 {
-	if(function_exists('sed_pagination_pn_custom'))
+	if (function_exists('sed_pagination_pn_custom'))
 	{
 		// For custom pagination functions in plugins
 		return sed_pagination_pn_custom($url, $current, $entries, $perpage, $res_array, $characters, $onclick, $object);
@@ -2992,7 +3009,7 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 
 	global $L;
 
-	$address = $url . ((mb_strpos($url, '?') !== false) ? '&amp;' : '?') . $characters . '=';
+	$address = $url.((mb_strpos($url, '?') !== false) ? '&amp;' : '?').$characters.'=';
 	$totalpages = ceil($entries / $perpage);
 	$currentpage = floor($current / $perpage) + 1;
 
@@ -3015,9 +3032,9 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 		$last = '<span class="pagenav_last"><a href="'.$address.$last_n.'"'.$event.$name.'>'.$L['pagenav_last'].'</a></span>';
 	}
 
-	$res_l = $first . $prev;
-	$res_r = $next . $last;
-	return $res_array ? array($res_l, $res_r) : $res_l . ' ' . $res_r;
+	$res_l = $first.$prev;
+	$res_r = $next.$last;
+	return $res_array ? array($res_l, $res_r) : $res_l.' '.$res_r;
 }
 
 /**
@@ -3037,7 +3054,7 @@ function sed_rc($name, $params = array())
 	global $R;
 	$res = isset($R[$name]) ? $R[$name] : $name;
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
-	if(preg_match_all('#\{\$(.+?)\}#', $res, $matches, PREG_SET_ORDER))
+	if (preg_match_all('#\{\$(.+?)\}#', $res, $matches, PREG_SET_ORDER))
 	{
 		foreach($matches as $m)
 		{
@@ -3062,11 +3079,11 @@ function sed_rc_link($url, $text, $attrs = '')
 	{
 		foreach ($attrs as $key => $val)
 		{
-			$link_attrs .= ' ' . $key . '="' . $val . '"';
+			$link_attrs .= ' '.$key.'="'.$val.'"';
 		}
 	}
 	else $link_attrs = $attrs;
-	return '<a href="' . $url . '"' . $link_attrs . '>' . $text . '</a>';
+	return '<a href="'.$url.'"'.$link_attrs.'>'.$text.'</a>';
 }
 
 /**
@@ -3084,7 +3101,7 @@ function sed_redirect($url)
 		<html>
 		<head>
 		<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
-		<meta http-equiv=\"refresh\" content=\"0; url=".SED_ABSOLUTE_URL . $url."\" />
+		<meta http-equiv=\"refresh\" content=\"0; url=".SED_ABSOLUTE_URL.$url."\" />
 		<title>Redirecting...</title></head>
 		<body>Redirecting to <a href=\"". SED_ABSOLUTE_URL .$url."\">".$cfg['mainurl']."/".$url."</a>
 		</body>
@@ -3095,7 +3112,7 @@ function sed_redirect($url)
 	}
 	else
 	{
-		header('Location: ' . SED_ABSOLUTE_URL . $url);
+		header('Location: '.SED_ABSOLUTE_URL.$url);
 		exit;
 	}
 }
@@ -3261,7 +3278,7 @@ function sed_selectbox_lang($check, $name)
 	sort($langlist);
 
 	$result = "<select name=\"$name\" size=\"1\">";
-	while(list($i,$x) = each($langlist))
+	while (list($i,$x) = each($langlist))
 	{
 		$selected = ($x==$check) ? "selected=\"selected\"" : '';
 		$lng = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];
@@ -3284,14 +3301,14 @@ function sed_selectbox_skin($check, $name)
 	$handle = opendir('./skins/');
 	while ($f = readdir($handle))
 	{
-		if (mb_strpos($f, '.') === FALSE && is_dir('./skins/' . $f))
+		if (mb_strpos($f, '.') === FALSE && is_dir('./skins/'.$f))
 		{ $skinlist[] = $f; }
 	}
 	closedir($handle);
 	sort($skinlist);
 
 	$result = '<select name="'.$name.'" size="1">';
-	while(list($i,$x) = each($skinlist))
+	while (list($i,$x) = each($skinlist))
 	{
 		$selected = ($x==$check) ? 'selected="selected"' : '';
 		$skininfo = "./skins/$x/$x.php";
@@ -3323,9 +3340,9 @@ function sed_selectbox_theme($skinname, $name, $theme)
 {
 	global $skin_themes;
 
-	if(empty($skin_themes))
+	if (empty($skin_themes))
 	{
-		if(file_exists("./skins/$skinname/$skinname.css"))
+		if (file_exists("./skins/$skinname/$skinname.css"))
 		{
 			$skin_themes = array($skinname => $skinname);
 		}
@@ -3442,7 +3459,7 @@ function sed_shield_hammer($hammer,$action, $lastseen)
 	if (($sys['now']-$lastseen)<4)
 	{
 		$hammer++;
-		if($hammer>$cfg['shieldzhammer'])
+		if ($hammer>$cfg['shieldzhammer'])
 		{
 			sed_shield_update(180, 'Hammering');
 			sed_log('IP banned 3 mins, was hammering', 'sec');
@@ -3537,44 +3554,44 @@ function sed_skinfile($base, $plug = false)
 
 	if ($plug)
 	{
-		$scan_prefix[] = './skins/' . $usr['skin'] . '/plugins/';
+		$scan_prefix[] = './skins/'.$usr['skin'].'/plugins/';
 		if ($usr['skin'] != $cfg['defaultskin'])
 		{
-			$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/plugins/';
+			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugins/';
 		}
-		$scan_prefix[] = $cfg['plugins_dir'] . '/' . $basename . '/tpl/';
+		$scan_prefix[] = $cfg['plugins_dir'].'/'.$basename.'/tpl/';
 	}
 	else
 	{
-		if ($admn) $scan_prefix[] = $cfg['modules_dir'] . '/admin/tpl/';
-		$scan_prefix[] = './skins/' . $usr['skin'] . '/' . $basename . '/';
+		if ($admn) $scan_prefix[] = $cfg['modules_dir'].'/admin/tpl/';
+		$scan_prefix[] = './skins/'.$usr['skin'].'/'.$basename.'/';
 		if ($usr['skin'] != $cfg['defaultskin'])
 		{
-			$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/' . $basename . '/';
+			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/'.$basename.'/';
 		}
-		$scan_prefix[] = $cfg['modules_dir'] . '/' . $basename . '/tpl/';
+		$scan_prefix[] = $cfg['modules_dir'].'/'.$basename.'/tpl/';
 	}
-	$scan_prefix[] = './skins/' . $usr['skin'] . '/';
+	$scan_prefix[] = './skins/'.$usr['skin'].'/';
 	if ($usr['skin'] != $cfg['defaultskin'])
 	{
-		$scan_prefix[] = './skins/' . $cfg['defaultskin'] . '/';
+		$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/';
 	}
 
 	$base_depth = count($base);
 	for ($i = $base_depth; $i > 0; $i--)
 	{
 		$levels = array_slice($base, 0, $i);
-		$skinfile = implode('.', $levels) . '.tpl';
+		$skinfile = implode('.', $levels).'.tpl';
 		foreach ($scan_prefix as $pfx)
 		{
-			if (file_exists($pfx . $skinfile))
+			if (file_exists($pfx.$skinfile))
 			{
-				return $pfx . $skinfile;
+				return $pfx.$skinfile;
 			}
 		}
 	}
 
-//	throw new Exception('Template file <em>' . implode('.', $base) . '.tpl</em> was not found. Please check your skin.');
+//	throw new Exception('Template file <em>'.implode('.', $base).'.tpl</em> was not found. Please check your skin.');
 	return '';
 }
 
@@ -3793,7 +3810,7 @@ function sed_load_urltrans()
 	$sed_urltrans = array();
 	$fp = fopen('./datas/urltrans.dat', 'r');
 	// Rules
-	while($line = trim(fgets($fp), " \t\r\n"))
+	while ($line = trim(fgets($fp), " \t\r\n"))
 	{
 		$parts = explode("\t", $line);
 		$rule = array();
@@ -3829,14 +3846,14 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	// Find first matching rule
 	$url = $sed_urltrans['*'][0]['trans']; // default rule
 	$rule = array();
-	if(!empty($sed_urltrans[$area]))
+	if (!empty($sed_urltrans[$area]))
 	{
 		foreach($sed_urltrans[$area] as $rule)
 		{
 			$matched = true;
 			foreach($rule['params'] as $key => $val)
 			{
-				if(empty($args[$key])
+				if (empty($args[$key])
 					|| (is_array($val) && !in_array($args[$key], $val))
 					|| ($val != '*' && $args[$key] != $val))
 				{
@@ -3844,7 +3861,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 					break;
 				}
 			}
-			if($matched)
+			if ($matched)
 			{
 				$url = $rule['trans'];
 				break;
@@ -3858,17 +3875,17 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
 	$spec['_path'] = SED_SITE_URI;
 	// Transform the data into URL
-	if(preg_match_all('#\{(.+?)\}#', $url, $matches, PREG_SET_ORDER))
+	if (preg_match_all('#\{(.+?)\}#', $url, $matches, PREG_SET_ORDER))
 	{
 		foreach($matches as $m)
 		{
-			if($p = mb_strpos($m[1], '('))
+			if ($p = mb_strpos($m[1], '('))
 			{
 				// Callback
 				$func = mb_substr($m[1], 0, $p);
 				$url = str_replace($m[0], $func($args, $spec), $url);
 			}
-			elseif(mb_strpos($m[1], '!$') === 0)
+			elseif (mb_strpos($m[1], '!$') === 0)
 			{
 				// Unset
 				$var = mb_substr($m[1], 2);
@@ -3879,11 +3896,11 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 			{
 				// Substitute
 				$var = mb_substr($m[1], 1);
-				if(isset($spec[$var]))
+				if (isset($spec[$var]))
 				{
 					$url = str_replace($m[0], urlencode($spec[$var]), $url);
 				}
-				elseif(isset($args[$var]))
+				elseif (isset($args[$var]))
 				{
 					$url = str_replace($m[0], urlencode($args[$var]), $url);
 					unset($args[$var]);
@@ -3896,7 +3913,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 		}
 	}
 	// Append query string if needed
-	if(!empty($args))
+	if (!empty($args))
 	{
 		$qs = '?';
 		$sep = $header ? '&' : '&amp;';
@@ -3905,9 +3922,9 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 		{
 			// Exclude static parameters that are not used in format,
 			// they should be passed by rewrite rule (htaccess)
-			if($rule['params'][$key] != $val)
+			if ($rule['params'][$key] != $val)
 			{
-				$qs .= $key .'=' . urlencode($val) . $sep;
+				$qs .= $key .'='.urlencode($val).$sep;
 			}
 		}
 		$qs = substr($qs, 0, -$sep_len);
@@ -3930,7 +3947,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 function sed_urlencode($str, $translit = false)
 {
 	global $lang, $sed_translit;
-	if($translit && $lang != 'en' && is_array($sed_translit))
+	if ($translit && $lang != 'en' && is_array($sed_translit))
 	{
 		// Apply transliteration
 		$str = strtr($str, $sed_translit);
@@ -3948,7 +3965,7 @@ function sed_urlencode($str, $translit = false)
 function sed_urldecode($str, $translit = false)
 {
 	global $lang, $sed_translitb;
-	if($translit && $lang != 'en' && is_array($sed_translitb))
+	if ($translit && $lang != 'en' && is_array($sed_translitb))
 	{
 		// Apply transliteration
 		$str = strtr($str, $sed_translitb);
@@ -4075,7 +4092,7 @@ function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
 		}
 		if ($domain[0] != '.')
 		{
-			$domain = '.' . $domain;
+			$domain = '.'.$domain;
 		}
 	}
 
@@ -4091,7 +4108,7 @@ function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
 
 	if (trim($domain) != '')
 	{
-		$domain .= ($secure ? '; secure' : '') . ($httponly ? '; httponly' : '');
+		$domain .= ($secure ? '; secure' : '').($httponly ? '; httponly' : '');
 	}
 	return setcookie($name, $value, $expire, $path, $domain);
 }
@@ -4132,7 +4149,7 @@ function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
 
 	if (!is_array($expr))
 	{
-		return trim(($onlyword ? '' : "$digit ") . $expr);
+		return trim(($onlyword ? '' : "$digit ").$expr);
 	}
 
 	if ($canfrac)
@@ -4148,7 +4165,7 @@ function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
 
 	$plural = sed_get_plural($i, $lang, $is_frac);
 	$cnt = count($expr);
-	return trim(($onlyword ? '' : "$digit ") . (($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
+	return trim(($onlyword ? '' : "$digit ").(($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
 }
 
 /**

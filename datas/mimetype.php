@@ -1,16 +1,16 @@
-<?PHP
+<?php
 /**
  * MIMETYPE
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Kilandor, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
 //Format is as follows
-//$mime_type[1][2] = array(3,4,5,6,7,8)
+//$mime_type[1][2] = array(3, 4, 5, 6, 7, 8)
 //1 - Extension - File extension
 //2 - Order - If more than 1 of the same ext, the order to be executed in  (if no need for a specific order leave empty)
 //3 - Mime Type - Associated mime type

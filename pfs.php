@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -15,7 +15,7 @@ $location = 'PFS';
 $z = 'pfs';
 
 require_once './datas/config.php';
-require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
 require_once sed_incfile('xtemplate');
 
@@ -33,7 +33,7 @@ switch($m)
 	case 'admin':
 		require_once sed_incfile($m, 'pfs');
 	break;
-	
+
 	case 'view':
 		require_once sed_incfile($m, 'pfs');
 	break;
@@ -45,7 +45,7 @@ switch($m)
 	case 'editfolder':
 		require_once sed_incfile($m, 'pfs');
 	break;
-	
+
 	case 'system':
 		require_once sed_incfile($m, 'pfs');
 	break;

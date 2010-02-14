@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -16,7 +16,7 @@
 $cfg['mysqlhost'] = 'localhost';	// Database host URL
 $cfg['mysqluser'] = 'root';			// Database user
 $cfg['mysqlpassword'] = '';			// Database password
-$cfg['mysqldb'] = 'cotonti';			// Database name
+$cfg['mysqldb'] = 'cotonti';		// Database name
 // MySQL database charset and collate. Very useful when MySQL server uses different charset rather than site
 // See the list of valid values here: http://dev.mysql.com/doc/refman/5.1/en/charset-charsets.html
 $cfg['mysqlcharset'] = 'utf8';
@@ -34,7 +34,7 @@ $cfg['mainurl'] = 'http://localhost';
 
 $cfg['defaultskin'] = 'sed-light';	// Default skin code. Be SURE it's pointing to a valid folder in ./skins/... !!
 $cfg['defaulttheme'] = 'sed-light';	// Default theme, only name, not like skinname.css. Be SURE it's pointing to a valid folder in ./skins/defaultskin/... !!
-$cfg['defaultlang'] = 'en';		// Default language code
+$cfg['defaultlang'] = 'en';			// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
 // ========================
@@ -51,6 +51,7 @@ $cfg['html_cleanup'] = FALSE;	// Wipe extra spaces and breaks from HTML to get s
 // Default built-in time zone settings
 // See http://php.net/manual/en/timezones.php
 // ========================
+
 (function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>=')) &&
 date_default_timezone_set('GMT');
 
@@ -80,6 +81,7 @@ $cfg['new_install'] = TRUE;				// This setting denotes a new install and redirec
 // Set it to custom if you want to share
 // folders among different hosts.
 // ========================
+
 $cfg['av_dir'] = './datas/avatars/';
 $cfg['cache_dir'] = './datas/cache';
 $cfg['defav_dir'] = './datas/defaultav/';
@@ -98,6 +100,7 @@ $cfg['th_dir'] = './datas/thumbs/';
 // You can set it to values which deliver highest
 // security and comfort on your host.
 // ========================
+
 $cfg['dir_perms'] = 0777;
 $cfg['file_perms'] = 0664;
 
@@ -110,18 +113,23 @@ $cfg['file_perms'] = 0664;
  * Set it TRUE when you experiment with something new.
  * Set it FALSE on production sites.
  */
+
 define('SED_DEBUG', FALSE);
+
 /**
  * Path to debug log file used by functions which dump debug data into it.
  * This file MUST NOT be available to strangers (e.g. via HTTP) or it can
  * compromise your website security. Protect it with .htaccess or use some
  * path accessible to you only via FTP.
  */
+
 define('SED_DEBUG_LOGFILE', '/tmp/cot_debug_'.date("Ymd_His").'.log');
+
 /**
  * The shield is disabled for administrators by default. But if you are testing
  * it with your admin account, you can enable it by setting this TRUE.
  */
+
 define('SED_SHIELD_FORCE', FALSE);
 
 // ========================

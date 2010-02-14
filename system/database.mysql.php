@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 Seditio - Website engine
 Copyright Neocrome
@@ -9,8 +9,8 @@ http://www.neocrome.net
  * MySQL database driver
  *
  * @package Cotonti
- * @version 0.0.3
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @version 0.7.0
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -54,15 +54,15 @@ function sed_sql_connect($host, $user, $pass, $db)
 {
 	global $cfg;
 	$connection = @mysql_connect($host, $user, $pass);
-	if(!$connection && !defined('SED_INSTALL'))
+	if (!$connection && !defined('SED_INSTALL'))
 	{
-		sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
+		sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error()); // TODO: Need translate
 		if (!version_compare(mysql_get_server_info($connection), '4.1.0', '>='))
 		{
-			sed_diefatal('Cotonti system requirements: MySQL 4.1 or above.');
+			sed_diefatal('Cotonti system requirements: MySQL 4.1 or above.'); // TODO: Need translate
 		}
 	}
-	elseif(!$connection)
+	elseif (!$connection)
 	{
 		// Used by installer to identify where the problem was
 		return 1;
@@ -78,11 +78,11 @@ function sed_sql_connect($host, $user, $pass, $db)
 		@mysql_query($collation_query, $connection);
 	}
 	$select = @mysql_select_db($db, $connection);
-	if(!$select && !defined('SED_INSTALL'))
+	if (!$select && !defined('SED_INSTALL'))
 	{
-		sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error());
+		sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error()); // TODO: Need translate
 	}
-	elseif(!$select)
+	elseif (!$select)
 	{
 		// Used by installer to identify where the problem was
 		return 2;
@@ -235,11 +235,11 @@ function sed_sql_query($query, $conn = null)
 	$sys['qcount']++;
 	$xtime = microtime();
 	$result = mysql_query($query, $conn);
-	if(!$result && !defined('SED_INSTALL'))
+	if (!$result && !defined('SED_INSTALL'))
 	{
 		sed_diefatal('SQL error : '.sed_sql_error($conn));
 	}
-	elseif(!$result)
+	elseif (!$result)
 	{
 		return;
 	}
@@ -337,15 +337,15 @@ function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
 					if ($j > 0) $keys .= ',';
 					$keys .= "`{$prefix}$key`";
 				}
-				if(is_null($val))
+				if (is_null($val))
 				{
 					$vals .= 'NULL';
 				}
-				elseif($val === 'NOW()')
+				elseif ($val === 'NOW()')
 				{
 					$vals .= 'NOW()';
 				}
-				elseif(is_int($val) || is_float($val))
+				elseif (is_int($val) || is_float($val))
 				{
 					$vals .= $val;
 				}
@@ -359,7 +359,7 @@ function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
 		$vals .= ')';
 		$keys_built = true;
 	}
-	if(!empty($keys) && !empty($vals))
+	if (!empty($keys) && !empty($vals))
 	{
 		sed_sql_query("INSERT INTO `$table_name` ($keys) VALUES $vals", $conn);
 		return sed_sql_affectedrows($conn);
@@ -379,7 +379,7 @@ function sed_sql_delete($table_name, $condition = '', $conn = null)
 {
 	global $sed_dbc;
 	$conn = is_null($conn) ? $sed_dbc : $conn;
-	if(empty($condition))
+	if (empty($condition))
 	{
 		sed_sql_query("DELETE FROM $table_name", $conn);
 	}
@@ -415,18 +415,18 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '', $conn = nu
 	}
 	$upd = '';
 	$condition = empty($condition) ? '' : 'WHERE '.$condition;
-	foreach($data as $key => $val)
+	foreach ($data as $key => $val)
 	{
 		$upd .= "`{$prefix}$key`=";
-		if(is_null($val))
+		if (is_null($val))
 		{
 			$upd .= 'NULL,';
 		}
-		elseif($val === 'NOW()')
+		elseif ($val === 'NOW()')
 		{
 			$upd .= 'NOW(),';
 		}
-		elseif(is_int($val) || is_float($val))
+		elseif (is_int($val) || is_float($val))
 		{
 			$upd .= $val.',';
 		}
@@ -436,7 +436,7 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '', $conn = nu
 		}
 
 	}
-	if(!empty($upd))
+	if (!empty($upd))
 	{
 		$upd = mb_substr($upd, 0, -1);
 		sed_sql_query("UPDATE $table_name SET $upd $condition", $conn);

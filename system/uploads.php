@@ -10,20 +10,22 @@
 function sed_file_check($path, $name, $ext)
 {
 	global $L, $cfg;
-	if($cfg['pfsfilecheck'])
+	if ($cfg['pfsfilecheck'])
 	{
-		require('./datas/mimetype.php');
+		require './datas/mimetype.php';
 		$fcheck = FALSE;
-		if(in_array($ext, array('jpg', 'jpeg', 'png', 'gif')))
+		if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif')))
 		{
 			switch($ext)
 			{
 				case 'gif':
 					$fcheck = @imagecreatefromgif($path);
 				break;
+
 				case 'png':
 					$fcheck = @imagecreatefrompng($path);
 				break;
+
 				default:
 					$fcheck = @imagecreatefromjpeg($path);
 				break;
@@ -32,9 +34,9 @@ function sed_file_check($path, $name, $ext)
 		}
 		else
 		{
-			if(!empty($mime_type[$ext]))
+			if (!empty($mime_type[$ext]))
 			{
-				foreach($mime_type[$ext] as $mime)
+				foreach ($mime_type[$ext] as $mime)
 				{
 					$content = file_get_contents($path, 0, NULL, $mime[3], $mime[4]);
 					$content = ($mime[2]) ? bin2hex($content) : $content;
@@ -53,7 +55,7 @@ function sed_file_check($path, $name, $ext)
 				sed_log(sprintf($L['pfs_filechecknomime'], $ext, $name), 'sec');
 			}
 		}
-		if(!$fcheck)
+		if (!$fcheck)
 		{
 			sed_log(sprintf($L['pfs_filecheckfail'], $ext, $name), 'sec');
 		}
@@ -87,4 +89,5 @@ function sed_get_uploadmax()
 	}
 	return floor(min($val_a) / 1024); // KB
 }
+
 ?>

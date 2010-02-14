@@ -30,11 +30,11 @@ function sed_watch()
 {
 	$fp = fopen(SED_DEBUG_LOGFILE, 'a');
 	$btrace = debug_backtrace();
-	fputs($fp, $btrace[1]['file'] . ', ' . $btrace[1]['line'] . ":\n");
+	fputs($fp, $btrace[1]['file'].', '.$btrace[1]['line'].":\n");
 	$vars = func_get_args();
 	foreach ($vars as $name => $var)
 	{
-		fputs($fp, "arg #$name = " .print_r($var, TRUE) ."\n");
+		fputs($fp, "arg #$name = ".print_r($var, TRUE)."\n");
 	}
 	fputs($fp, "----------------\n");
 	fclose($fp);
