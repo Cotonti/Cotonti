@@ -23,12 +23,12 @@ require_once './datas/config.php';
  */
 
 $known_content_types = array(
-	'js'   => 'text/javascript',
-	'css'  => 'text/css',
-	'gif'  => 'image/gif',
-	'jpg'  => 'image/jpeg',
+	'js' => 'text/javascript',
+	'css' => 'text/css',
+	'gif' => 'image/gif',
+	'jpg' => 'image/jpeg',
 	'jpeg' => 'image/jpeg',
-	'png'  => 'image/png'
+	'png' => 'image/png'
 );
 
 /*
@@ -38,7 +38,7 @@ $known_content_types = array(
 if (!isset($_GET['uri']))
 {
 	header('HTTP/1.1 400 Bad Request');
-	echo '<html><body><h1>HTTP 400 - Bad Request</h1></body></html>';
+	echo '<html><body><h1>HTTP 400 - Bad Request</h1></body></html>'; // TODO: Need translate
 	exit;
 }
 
@@ -53,7 +53,7 @@ if (!file_exists($src_uri))
 {
 	/* The file does not exist */
 	header('HTTP/1.1 404 Not Found');
-	echo '<html><body><h1>HTTP 404 - Not Found</h1></body></html>';
+	echo '<html><body><h1>HTTP 404 - Not Found</h1></body></html>'; // TODO: Need translate
 	exit;
 }
 
@@ -63,18 +63,18 @@ if (!file_exists($src_uri))
  */
 
 $file_last_modified = filemtime($src_uri);
-header('Last-Modified: ' . date('r', $file_last_modified));
+header('Last-Modified: '.date('r', $file_last_modified));
 
 $max_age = 300 * 24 * 60 * 60;// 300 days
 
 $expires = $file_last_modified + $max_age;
-header('Expires: ' . date('r', $expires));
+header('Expires: '.date('r', $expires));
 
 $etag = dechex($file_last_modified);
-header('ETag: ' . $etag);
+header('ETag: '.$etag);
 
-$cache_control = 'must-revalidate, proxy-revalidate, max-age=' . $max_age . ', s-maxage=' . $max_age;
-header('Cache-Control: ' . $cache_control);
+$cache_control = 'must-revalidate, proxy-revalidate, max-age='.$max_age.', s-maxage='.$max_age;
+header('Cache-Control: '.$cache_control);
 
 /*
  * Check if the client should use the cached version.
@@ -91,7 +91,7 @@ if (function_exists('http_match_etag') && function_exists('http_match_modified')
 }
 else
 {
-	error_log('The HTTP extensions to PHP does not seem to be installed...');
+	error_log('The HTTP extensions to PHP does not seem to be installed...'); // TODO: Need translate
 }
 
 /*
@@ -107,7 +107,7 @@ $uri_parts = explode('/', $src_uri);
 
 for ($i = 0;$i < count($uri_parts) - 1;$i++)
 {
-	$uri_dir .= $uri_parts[$i] . '/';
+	$uri_dir .= $uri_parts[$i].'/';
 }
 
 $file_name = end($uri_parts);
@@ -128,7 +128,7 @@ $doc_root = realpath('.');
 if (!isset($known_content_types[$file_extension]))
 {
 	header('HTTP/1.1 403 Forbidden');
-	echo '<html><body><h1>HTTP 403 - Forbidden</h1></body></html>';
+	echo '<html><body><h1>HTTP 403 - Forbidden</h1></body></html>'; // TODO: Need translate
 	exit;
 }
 
@@ -165,7 +165,7 @@ if ($compress)
 
 if ($content_type)
 {
-	header('Content-Type: ' . $content_type);
+	header('Content-Type: '.$content_type);
 }
 
 //header('Content-Length: ' . filesize($dst_uri));

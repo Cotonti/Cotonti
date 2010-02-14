@@ -133,4 +133,5 @@ function sed_config_set($options, $mod_name = '', $type = 'core')
 	}
 	return $upd_cnt;
 }
+
 ?>

@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -132,4 +132,5 @@ $L['msg950_body'] = 'An error occured, maybe a wrong URL?';
 
 $L['msg951_title'] = 'Session expired';
 $L['msg951_body'] = 'Your session is no longer valid. Please try again.';
+
 ?>

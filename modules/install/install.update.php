@@ -24,7 +24,7 @@ sed_sendheaders();
 
 if (!file_exists("./setup/$branch"))
 {
-	sed_diefatal('Setup directory not found');
+	sed_diefatal('Setup directory not found'); // TODO: Need translate
 }
 
 include $file['config'];
@@ -32,7 +32,7 @@ include $file['config'];
 $mskin = sed_skinfile('update');
 if (!file_exists($mskin))
 {
-	sed_diefatal('Update template file not found');
+	sed_diefatal('Update template file not found'); // TODO: Need translate
 }
 $t = new XTemplate($mskin);
 
@@ -83,16 +83,16 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 			}
 		}
 		$config_contents = file_get_contents($file['config']);
-		$config_contents = str_replace('?>', $delta . '?>', $config_contents);
+		$config_contents = str_replace('?>', $delta.'?>', $config_contents);
 		file_put_contents($file['config'], $config_contents);
-		$msg_string .= $L['install_update_config_success'] . '<br />';
+		$msg_string .= $L['install_update_config_success'].'<br />';
 		include $file['config'];
 	}
 }
 else
 {
 	// Display some warning
-	$msg_string .= $L['install_update_config_error'] . '<br />';
+	$msg_string .= $L['install_update_config_error'].'<br />';
 }
 
 $sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
@@ -109,8 +109,8 @@ if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
 		// Success
 		sed_sql_query("UPDATE $db_updates SET upd_value = '$branch' WHERE upd_param = 'branch'");
 		$t->assign(array(
-			'SUCCESS_TITLE' => $L['install_upgrade_success'] . $branch,
-			'SUCCESS_MSG' => "setup/$branch/patch-$prev_branch.sql<br/>" . $msg_string
+			'SUCCESS_TITLE' => $L['install_upgrade_success'].$branch,
+			'SUCCESS_MSG' => "setup/$branch/patch-$prev_branch.sql<br/>".$msg_string
 		));
 		$t->parse('MAIN.SUCCESS');
 	}
@@ -118,8 +118,8 @@ if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
 	{
 		// Error
 		$t->assign(array(
-			'ERROR_TITLE' => $L['install_upgrade_error'] . $branch,
-			'ERROR_MSG' => $error . '<br />' . $msg_string
+			'ERROR_TITLE' => $L['install_upgrade_error'].$branch,
+			'ERROR_MSG' => $error.'<br />'.$msg_string
 		));
 		$t->parse('MAIN.ERROR');
 	}
@@ -144,7 +144,7 @@ else
 			$r = (int) $mt[1];
 			if ($r > $rev)
 			{
-				$delta[$r]['sql'] = './setup/' . $branch . '/' . $mt[0];
+				$delta[$r]['sql'] = './setup/'.$branch.'/'.$mt[0];
 			}
 		}
 		elseif (preg_match('#^php_r(\d+).inc$#', $f, $mt))
@@ -152,7 +152,7 @@ else
 			$r = (int) $mt[1];
 			if ($r > $rev)
 			{
-				$delta[$r]['php'] = './setup/' . $branch . '/' . $mt[0];
+				$delta[$r]['php'] = './setup/'.$branch.'/'.$mt[0];
 			}
 		}
 	}
@@ -170,18 +170,18 @@ else
 				$error = cot_run_script(file_get_contents($val['sql']));
 				if (empty($error))
 				{
-					$applied .= $val['sql'] . '<br />';
+					$applied .= $val['sql'].'<br />';
 				}
 				else
 				{
-					$error .= $val['sql'] . '<br />';
+					$error .= $val['sql'].'<br />';
 					break;
 				}
 			}
 			if (isset($val['php']))
 			{
 				include $val['php'];
-				$applied .= $val['php'] . '<br />';
+				$applied .= $val['php'].'<br />';
 			}
 			$max_r = $key;
 		}
@@ -190,7 +190,7 @@ else
 			// Display error message
 			$t->assign(array(
 				'ERROR_TITLE' => $L['install_update_error'],
-				'ERROR_MSG' => $error . '<br />' . $msg_string
+				'ERROR_MSG' => $error.'<br />'.$msg_string
 			));
 			$t->parse('MAIN.ERROR');
 		}
@@ -198,8 +198,8 @@ else
 		{
 			sed_sql_query("UPDATE $db_updates SET upd_value = '\$Rev: $max_r \$' WHERE upd_param = 'revision'");
 			$t->assign(array(
-				'SUCCESS_TITLE' => $L['install_update_success'] . $max_r,
-				'SUCCESS_MSG' => $applied . $msg_string
+				'SUCCESS_TITLE' => $L['install_update_success'].$max_r,
+				'SUCCESS_MSG' => $applied.$msg_string
 			));
 			$t->parse('MAIN.SUCCESS');
 		}
@@ -248,11 +248,12 @@ function cot_run_script($text)
 			$result = @sed_sql_query($query);
 			if (!$result)
 			{
-				$error .= sed_sql_error() . '<br />' . htmlspecialchars($query) . '<hr />';
+				$error .= sed_sql_error().'<br />'.htmlspecialchars($query).'<hr />';
 				break;
 			}
 		}
 	}
 	return $error;
 }
+
 ?>

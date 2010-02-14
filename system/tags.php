@@ -15,7 +15,7 @@ function sed_tag($tag, $item, $area = 'pages')
 {
 	global $db_tag_references;
 	$item = (int) $item;
-	if(sed_tag_isset($tag, $item, $area))
+	if (sed_tag_isset($tag, $item, $area))
 	{
 		return false;
 	}
@@ -37,15 +37,17 @@ function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
 	global $db_tag_references;
 	$res = array();
-	$limit = is_null($limit) ? '' : ' LIMIT ' . $limit;
+	$limit = is_null($limit) ? '' : ' LIMIT '.$limit;
 	switch($order)
 	{
 		case 'Alphabetical':
 			$order = '`tag`';
-			break;
+		break;
+
 		case 'Frequency':
 			$order = '`cnt` DESC';
-			break;
+		break;
+
 		default:
 			$order = 'RAND()';
 	}
@@ -55,7 +57,7 @@ function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 		$where
 		GROUP BY `tag`
 		ORDER BY $order $limit");
-	while($row = sed_sql_fetchassoc($sql))
+	while ($row = sed_sql_fetchassoc($sql))
 	{
 		$res[$row['tag']] = $row['cnt'];
 	}
@@ -73,13 +75,13 @@ function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 function sed_tag_complete($tag, $min_length = 3)
 {
 	global $db_tags;
-	if(mb_strlen($tag) < $min_length)
+	if (mb_strlen($tag) < $min_length)
 	{
 		return false;
 	}
 	$res = array();
 	$sql = sed_sql_query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE '$tag%'");
-	while($row = sed_sql_fetchassoc($sql))
+	while ($row = sed_sql_fetchassoc($sql))
 	{
 		$res[] = $row['tag'];
 	}
@@ -98,7 +100,7 @@ function sed_tag_count($tag, $area = '')
 {
 	global $db_tag_references;
 	$query = "SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag'";
-	if(!empty($area))
+	if (!empty($area))
 	{
 		$query .= " AND tag_area = '$area'";
 	}
@@ -145,7 +147,7 @@ function sed_tag_list($item, $area = 'pages')
 	global $db_tag_references;
 	$res = array();
 	$sql = sed_sql_query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
-	while($row = sed_sql_fetchassoc($sql))
+	while ($row = sed_sql_fetchassoc($sql))
 	{
 		$res[] = $row['tag'];
 	}
@@ -164,12 +166,12 @@ function sed_tag_parse($input)
 	$res = array();
 	$invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n");
 	$tags = explode(',', $input);
-	foreach($tags as $tag)
+	foreach ($tags as $tag)
 	{
 		$tag = str_replace($invalid, ' ', $tag);
 		$tag = preg_replace('#\s\s+#', ' ', $tag);
 		$tag = trim($tag);
-		if(!empty($tag))
+		if (!empty($tag))
 		{
 			$res[] = sed_tag_prep($tag);
 		}
@@ -211,7 +213,7 @@ function sed_tag_register($tag)
 function sed_tag_remove($tag, $item, $area = 'pages')
 {
 	global $db_tag_references;
-	if(sed_tag_isset($tag, $item, $area))
+	if (sed_tag_isset($tag, $item, $area))
 	{
 		sed_sql_query("DELETE FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
 		return true;
@@ -230,7 +232,7 @@ function sed_tag_remove($tag, $item, $area = 'pages')
 function sed_tag_remove_all($item = 0, $area = 'pages')
 {
 	global $db_tag_references;
-	if($item == 0)
+	if ($item == 0)
 	{
 		sed_sql_query("DELETE FROM $db_tag_references WHERE tag_area = '$area'");
 	}

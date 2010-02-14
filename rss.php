@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author medar, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009
+ * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
  */
 
@@ -15,7 +15,7 @@ $location = "RSS";
 $z = 'rss';
 
 require_once './datas/config.php';
-require_once $cfg['system_dir'] . '/functions.php';
+require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
 require_once sed_incfile('xtemplate');
 

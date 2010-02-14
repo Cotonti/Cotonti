@@ -31,7 +31,7 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 }
 define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
-if (SED_DEBUG) require_once $cfg['system_dir'] . '/debug.php';
+if (SED_DEBUG) require_once $cfg['system_dir'].'/debug.php';
 
 register_shutdown_function('sed_shutdown');
 
@@ -40,14 +40,15 @@ $sys['now'] = time();
 $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 /* ======== Connect to the SQL DB======== */
 
-require_once($cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php');
+require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
 $sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 /* ======== Cache Subsystem ======== */
+
 if ($cfg['cache'])
 {
-	require_once $cfg['system_dir'] . '/cache.php';
+	require_once $cfg['system_dir'].'/cache.php';
 	$cot_cache = new Cache();
 }
 else
@@ -88,11 +89,11 @@ mb_internal_encoding($cfg['charset']);
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 
 $online_timedout = $sys['now'] - $cfg['timedout'];
-if($cfg['clustermode'])
+if ($cfg['clustermode'])
 {
-	if(isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
-	elseif(isset($_SERVER['HTTP_X_REAL_IP'])) $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
-	elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	if (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
+	elseif (isset($_SERVER['HTTP_X_REAL_IP'])) $usr['ip'] = $_SERVER['HTTP_X_REAL_IP'];
+	elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $usr['ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
 	else $usr['ip'] = $_SERVER['REMOTE_ADDR'];
 }
 else
@@ -106,13 +107,13 @@ $url = parse_url($cfg['mainurl']);
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
 $sys['site_uri'] = $url['path'];
 $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
-if(empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
-if($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
+if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
+if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
 define('SED_SITE_URI', $sys['site_uri']);
-if(empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
+if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
 $sys['host'] = (mb_stripos($_SERVER['HTTP_HOST'], $sys['domain']) !== false) ? $_SERVER['HTTP_HOST'] : $sys['domain'];
-$sys['abs_url'] = $url['scheme'] . '://' . $sys['host']. $sys['site_uri'];
+$sys['abs_url'] = $url['scheme'].'://'.$sys['host']. $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
 
 $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ? mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
@@ -129,7 +130,7 @@ if (!$sed_plugins)
 {
 	$sql = sed_sql_query("SELECT pl_code, pl_file, pl_hook FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
-	if (sed_sql_numrows($sql)>0)
+	if (sed_sql_numrows($sql) > 0)
 	{
 		while ($row = sed_sql_fetcharray($sql))
 		{
@@ -167,7 +168,7 @@ $sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_exp
 
 if (sed_sql_numrows($sql) > 0)
 {
-	$row=sed_sql_fetcharray($sql);
+	$row = sed_sql_fetcharray($sql);
 	if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
 	{
 		$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
@@ -175,8 +176,8 @@ if (sed_sql_numrows($sql) > 0)
 	else
 	{
 		// TODO internationalize this
-		$disp = 'Your IP is banned.<br />Reason: ' . $row['banlist_reason'] . '<br />Until: ';
-		$disp .= ($row['banlist_expire']>0) ? @date($cfg['dateformat'], $row['banlist_expire']) . ' GMT' : 'Never expire.';
+		$disp = 'Your IP is banned.<br />Reason: '.$row['banlist_reason'].'<br />Until: ';
+		$disp .= ($row['banlist_expire'] > 0) ? @date($cfg['dateformat'], $row['banlist_expire']).' GMT' : 'Never expire.';
 		sed_diefatal($disp);
 	}
 }
@@ -187,11 +188,11 @@ if (!$sed_groups )
 {
 	$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
-	if (sed_sql_numrows($sql)>0)
+	if (sed_sql_numrows($sql) > 0)
 	{
 		while ($row = sed_sql_fetcharray($sql))
 		{
-			$sed_groups[$row['grp_id']] = array (
+			$sed_groups[$row['grp_id']] = array(
 				'id' => $row['grp_id'],
 				'alias' => $row['grp_alias'],
 				'level' => $row['grp_level'],
@@ -209,7 +210,7 @@ if (!$sed_groups )
 	}
 	else
 	{
-		sed_diefatal('No groups found.');
+		sed_diefatal('No groups found.'); // TODO: Need translate
 	}
 
 	$cfg['cache'] && $cot_cache->db_set('sed_groups', $sed_groups, 'system');
@@ -227,7 +228,7 @@ $usr['timezone'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-$site_id = 'ct' . substr(md5($cfg['mainurl']), 0, 10);
+$site_id = 'ct'.substr(md5($cfg['mainurl']), 0, 10);
 $sys['site_id'] = $site_id;
 
 session_start();
@@ -237,17 +238,17 @@ if (!defined('SED_MESSAGE'))
 	$_SESSION['s_run_admin'] = defined('SED_ADMIN');
 }
 
-if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
+if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
 	$u = empty($_SESSION[$site_id]) ? base64_decode($_COOKIE[$site_id]) : base64_decode($_SESSION[$site_id]);
 	$u = explode(':_:', $u);
 	$u_id = (int) sed_import($u[0], 'D', 'INT');
 	$u_passhash = sed_import($u[1], 'D', 'ALP');
-	if($u_id > 0)
+	if ($u_id > 0)
 	{
 		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id");
 
-		if($row = sed_sql_fetcharray($sql))
+		if ($row = sed_sql_fetcharray($sql))
 		{
 			if (($u_passhash == md5($row['user_password'].$row['user_hashsalt'])
 					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 60
@@ -277,7 +278,7 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					if ($usr['lastlog'] > $usr['lastvisit'])
 					{
 						$usr['lastvisit'] = $usr['lastlog'];
-						$update_lastvisit = ", user_lastvisit = " . $usr['lastvisit'];
+						$update_lastvisit = ", user_lastvisit = ".$usr['lastvisit'];
 					}
 				}
 
@@ -285,20 +286,19 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				if (!$cfg['authcache'] || empty($row['user_auth']))
 				{
 					$usr['auth'] = sed_auth_build($usr['id'], $usr['maingrp']);
-					if($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
+					if ($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
 				}
 
-				if(empty($_SESSION['saltstamp']) || $sys['now_offset'] - $_SESSION['saltstamp'] > 60)
+				if (empty($_SESSION['saltstamp']) || $sys['now_offset'] - $_SESSION['saltstamp'] > 60)
 				{
 					$_SESSION['saltstamp'] = $sys['now_offset'];
 					$_SESSION['oldhash'] = $u_passhash;
 					$hashsalt = sed_unique(16);
 					$passhash = md5($row['user_password'].$hashsalt);
 					$u = base64_encode($usr['id'].':_:'.$passhash);
-					if(empty($_SESSION[$site_id]))
+					if (empty($_SESSION[$site_id]))
 					{
-						sed_setcookie($site_id, $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'],
-							$cfg['cookiedomain'], $sys['secure'], true);
+						sed_setcookie($site_id, $u, time() + $cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 					}
 					else
 					{
@@ -307,12 +307,11 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$update_hashsalt = ", user_hashsalt = '$hashsalt'";
 				}
 
-				if(empty($_COOKIE['sourcekey']))
+				if (empty($_COOKIE['sourcekey']))
 				{
 					$sys['xk'] = mb_strtoupper(sed_unique(8));
 					$update_sid = ", user_sid = '{$sys['xk']}'";
-					sed_setcookie('sourcekey', $sys['xk'], time()+$cfg['cookielifetime'], $cfg['cookiepath'],
-						$cfg['cookiedomain'], $sys['secure'], true);
+					sed_setcookie('sourcekey', $sys['xk'], time() + $cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 				}
 				else
 				{
@@ -336,7 +335,7 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 	}
 }
 
-if($usr['id']==0)
+if ($usr['id'] == 0)
 {
 	if (!$sed_guest_auth)
 	{
@@ -377,16 +376,16 @@ if ($cfg['maintenance'])
 
 $z_tmp = sed_import('z', 'G',' ALP', 32);
 $z = empty($z_tmp) ? $z : $z_tmp;
-$m = sed_import('m','G','ALP',24);
-$n = sed_import('n','G','ALP',24);
-$a = sed_import('a','G','ALP',24);
-$b = sed_import('b','G','ALP',24);
+$m = sed_import('m', 'G', 'ALP', 24);
+$n = sed_import('n', 'G', 'ALP', 24);
+$a = sed_import('a', 'G', 'ALP', 24);
+$b = sed_import('b', 'G', 'ALP', 24);
 
 /* ======== Who's online (part 1) and shield protection ======== */
 
 if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 {
-	if ($usr['id']>0)
+	if ($usr['id'] > 0)
 	{
 		$sql = sed_sql_query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
 
@@ -397,7 +396,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 			{
 				$shield_limit = $row['online_shield'];
 				$shield_action = $row['online_action'];
-				$shield_hammer = sed_shield_hammer($row['online_hammer'],$shield_action,$row['online_lastseen']);
+				$shield_hammer = sed_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
 			}
 			sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".sed_sql_prep($location)."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$shield_hammer." WHERE online_userid=".$usr['id']);
 		}
@@ -411,7 +410,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 		$sql = sed_sql_query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
 		$online_count = sed_sql_numrows($sql);
 
-		if ($online_count>0)
+		if ($online_count > 0)
 		{
 			if ($cfg['shieldenabled'] && (!sed_auth('admin', 'a', 'A') || SED_SHIELD_FORCE))
 			{
@@ -419,7 +418,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 				{
 					$shield_limit = $row['online_shield'];
 					$shield_action = $row['online_action'];
-					$shield_hammer = sed_shield_hammer($row['online_hammer'],$shield_action,$row['online_lastseen']);
+					$shield_hammer = sed_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
 				}
 			}
 			sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$shield_hammer." WHERE online_ip='".$usr['ip']."'");
@@ -437,10 +436,10 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 	$sys['whosonline_reg_count'] = sed_sql_numrows($sql);
 	$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
 
-	$ii=0;
+	$ii = 0;
 	while ($row = sed_sql_fetcharray($sql))
 	{
-		$out['whosonline_reg_list'] .= ($ii>0) ? ', ' : '';
+		$out['whosonline_reg_list'] .= ($ii > 0) ? ', ' : '';
 		$out['whosonline_reg_list'] .= sed_build_user($row['online_userid'], htmlspecialchars($row['online_name']));
 		$sed_usersonline[] = $row['online_userid'];
 		$ii++;
@@ -476,9 +475,7 @@ $lang = $usr['lang'];
 
 /* ======== Who's online part 2 ======== */
 
-$out['whosonline'] = ($cfg['disablewhosonline']) ? ''
-: sed_declension($sys['whosonline_reg_count'], $Ls['Members']) . ', '
-	. sed_declension($sys['whosonline_vis_count'], $Ls['Guests']);
+$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.sed_declension($sys['whosonline_vis_count'], $Ls['Guests']);
 
 /* ======== Skin ======== */
 
@@ -497,14 +494,14 @@ if (!file_exists($mskin))
 	$mskin = './skins/'.$usr['skin'].'/header.tpl';
 	if (!file_exists($mskin))
 	{
-		sed_diefatal('Default skin not found.');
+		sed_diefatal('Default skin not found.'); // TODO: Need translate
 	}
 }
 
 $mtheme = sed_themefile();
 if (!$mtheme)
 {
-	sed_diefatal('Default theme not found.');
+	sed_diefatal('Default theme not found.'); // TODO: Need translate
 }
 
 require_once sed_langfile('skin', 'core');
@@ -513,20 +510,20 @@ $usr['def_skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.en.lang.p
 $usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
 if ($usr['skin_lang'] != $usr['def_skin_lang'] && @file_exists($usr['skin_lang']))
 {
-	require_once($usr['skin_lang']);
+	require_once $usr['skin_lang'];
 }
 elseif (@file_exists($usr['def_skin_lang']))
 {
-	require_once($usr['def_skin_lang']);
+	require_once $usr['def_skin_lang'];
 }
 
 $skin = $usr['skin'];
 $theme = $usr['theme'];
 
 // Resource strings
-require_once $cfg['system_dir'] . '/resources.php';
+require_once $cfg['system_dir'].'/resources.php';
 // Skin resources
-require_once('./skins/'.$usr['skin'].'/'.$usr['skin'].'.php');
+require_once './skins/'.$usr['skin'].'/'.$usr['skin'].'.php';
 
 $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
 
@@ -587,14 +584,12 @@ $sed_img_right = $R['icon_right'];
 /* ======== Local/GMT time ======== */
 
 $usr['timetext'] = sed_build_timezone($usr['timezone']);
-$usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
+$usr['gmttime'] = @date($cfg['dateformat'], $sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
 
 $x = empty($_POST['x']) ? $_GET['x'] : $_POST['x'];
-if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
-	&& ($_SERVER['REQUEST_METHOD'] == 'POST' && $x != $sys['xk']
-		|| isset($_GET['x']) && $_GET['x'] != $sys['xk']))
+if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH') && ($_SERVER['REQUEST_METHOD'] == 'POST' && $x != $sys['xk'] || isset($_GET['x']) && $_GET['x'] != $sys['xk']))
 {
 	sed_redirect(sed_url('message', 'msg=950', '', true));
 }
@@ -609,12 +604,12 @@ foreach ($extp as $pl)
 
 /* ======== Pre-loads ======== */
 
-if($cfg['parser_custom'])
+if ($cfg['parser_custom'])
 {
 	include_once $cfg['system_dir'].'/parser.php';
 }
 
-if(!$cfg['parser_disable'])
+if (!$cfg['parser_disable'])
 {
 	if (!is_array($sed_smilies))
 	{
@@ -632,4 +627,5 @@ if(!$cfg['parser_disable'])
 		}
 	}
 }
+
 ?>

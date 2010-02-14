@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -118,7 +118,7 @@ if (!SED_AJAX)
 		"HEADER_META_DESCRIPTION" => $out['meta_desc'],
 		"HEADER_META_KEYWORDS" => $out['meta_keywords'],
 		"HEADER_META_LASTMODIFIED" => $out['meta_lastmod'],
-		"HEADER_HEAD" => $out['head_head'],
+		"HEADER_HEAD" => $out['head_head']
 	));
 
 	/* === Hook === */
@@ -128,7 +128,6 @@ if (!SED_AJAX)
 		include $pl;
 	}
 	/* ===== */
-
 
 	if ($usr['id'] > 0)
 	{

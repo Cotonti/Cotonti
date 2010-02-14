@@ -1,18 +1,13 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=index.inc.php
-Version=101
-Updated=2006-mar-15
-Type=Core
-Author=Neocrome
-Description=Home page
-[END_SED]
-==================== */
+<?php
+/**
+ * Home page
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
 
 defined('SED_CODE') or die('Wrong URL');
 
@@ -34,13 +29,10 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-
-require_once $cfg['system_dir'] . '/header.php';
+require_once $cfg['system_dir'].'/header.php';
 
 $mskin = sed_skinfile('index');
 $t = new XTemplate($mskin);
-
-
 
 /* === Hook === */
 $extp = sed_getextplugins('index.tags');
@@ -53,6 +45,6 @@ foreach ($extp as $pl)
 $t->parse("MAIN");
 $t->out("MAIN");
 
-require_once $cfg['system_dir'] . '/footer.php';
+require_once $cfg['system_dir'].'/footer.php';
 
 ?>
