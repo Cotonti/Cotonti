@@ -240,33 +240,18 @@ else
 			}
 			/* ===== */
 
-			foreach ($sed_groups as $k => $v)
-			{
-				if ($k == 1 || $k == 2)
-				{
-					$ins_auth = 1;
-					$ins_lock = 254;
-				}
-				elseif ($k == 3)
-				{
-					$ins_auth = 0;
-					$ins_lock = 255;
-				}
-				elseif ($k == 5)
-				{
-					$ins_auth = 255;
-					$ins_lock = 255;
-				}
-				else
-				{
-					$ins_auth = 3;
-					$ins_lock = ($k == 4) ? 128 : 0;
-				}
+			// The permissions are actually the default
+			// Some records are left for example
+			$auth_permit = array(
+				SED_GROUP_DEFAULT => 'RW'
+			);
 
-				$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'forums', ".(int)$forumid.", ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
-			}
-			sed_auth_reorder();
-			sed_auth_clear('all');
+			$auth_lock = array(
+				SED_GROUP_DEFAULT => '0',
+				SED_GROUP_MEMBERS => 'A'
+			);
+
+			sed_auth_add_item('forums', $forumid, $auth_permit, $auth_lock);
 
 			$adminwarnings = $L['Added'];
 		}

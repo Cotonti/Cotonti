@@ -54,7 +54,6 @@ if ($a == 'validate')
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
 		sed_log($L['Page']." #".$id." - ".$L['adm_queue_validated'], 'adm');
-		$cot_cache->db_unset('latestpages');
 
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_validated'];
 	}
@@ -85,7 +84,6 @@ elseif ($a == 'unvalidate')
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 
 		sed_log($L['Page']." #".$id." - ".$L['adm_queue_unvalidated'], 'adm');
-		$cot_cache->db_unset('latestpages');
 
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_unvalidated'];
 	}
@@ -133,8 +131,6 @@ elseif ($a == 'delete')
 			include $pl;
 		}
 		/* ===== */
-
-		$cot_cache->db_unset('latestpages');
 
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_deleted'];
 	}
@@ -185,8 +181,6 @@ elseif ($a == 'update_cheked')
 				}
 			}
 		}
-
-		$cot_cache->db_unset('latestpages');
 
 		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_validated'] : NULL;
 	}
@@ -245,8 +239,6 @@ elseif ($a == 'update_cheked')
 				}
 			}
 		}
-
-		$cot_cache->db_unset('latestpages');
 
 		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_deleted'] : NULL;
 	}

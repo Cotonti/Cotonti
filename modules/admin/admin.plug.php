@@ -14,6 +14,8 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
+require_once sed_incfile('auth');
+
 $t = new XTemplate(sed_skinfile('admin.plug'));
 
 $adminpath[] = array (sed_url('admin', 'm=plug'), $L['Plugins']);
@@ -200,13 +202,13 @@ switch($a)
 				"ADMIN_PLUG_CONFIG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$pl),
 				"ADMIN_PLUG_TOTALCONFIG" => $totalconfig,
 				"ADMIN_PLUG_RIGHTS" => sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code']),
-				"ADMIN_PLUG_ADMRIGHTS_AUTH_GUESTS" => sed_build_admrights($info['Auth_guests']),
+				"ADMIN_PLUG_ADMRIGHTS_AUTH_GUESTS" => sed_auth_getmask($info['Auth_guests']),
 				"ADMIN_PLUG_AUTH_GUESTS" => $info['Auth_guests'],
-				"ADMIN_PLUG_ADMRIGHTS_LOCK_GUESTS" => sed_build_admrights($info['Lock_guests']),
+				"ADMIN_PLUG_ADMRIGHTS_LOCK_GUESTS" => sed_auth_getmask($info['Lock_guests']),
 				"ADMIN_PLUG_LOCK_GUESTS" => $info['Lock_guests'],
-				"ADMIN_PLUG_ADMRIGHTS_AUTH_MEMBERS" => sed_build_admrights($info['Auth_members']),
+				"ADMIN_PLUG_ADMRIGHTS_AUTH_MEMBERS" => sed_auth_getmask($info['Auth_members']),
 				"ADMIN_PLUG_AUTH_MEMBERS" => $info['Auth_members'],
-				"ADMIN_PLUG_ADMRIGHTS_LOCK_MEMBERS" => sed_build_admrights($info['Lock_members']),
+				"ADMIN_PLUG_ADMRIGHTS_LOCK_MEMBERS" => sed_auth_getmask($info['Lock_members']),
 				"ADMIN_PLUG_LOCK_MEMBERS" => $info['Lock_members'],
 				"ADMIN_PLUG_AUTHOR" => $info['Author'],
 				"ADMIN_PLUG_COPYRIGHT" => $info['Copyright'],
@@ -416,8 +418,8 @@ switch($a)
 					$t->assign(array(
 						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_ID" => $v['id'],
 						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_TITLE" => $sed_groups[$v['id']]['title'],
-						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH" => sed_build_admrights($ins_auth),
-						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK" => sed_build_admrights($ins_lock),
+						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH" => sed_auth_getmask($ins_auth),
+						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK" => sed_auth_getmask($ins_lock),
 						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_COMMENT" => $comment
 					));
 					$t->parse("PLUG.EDIT.INSTALL.ROW_RIGHTS");

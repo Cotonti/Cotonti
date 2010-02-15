@@ -22,7 +22,7 @@ $w = sed_import('w','G','ALP',4);
 $quote = sed_import('quote','G','INT');
 $unread_done = FALSE;
 $fp_num = 0;
-require_once sed_incfile('functions', 'users');
+
 if (!$cfg['disable_polls']) require_once sed_incfile('functions', 'polls');
 require_once sed_langfile('countries', 'core');
 

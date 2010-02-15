@@ -14,6 +14,9 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
+require_once sed_incfile('extrafields');
+require_once sed_incfile('auth');
+
 $t = new XTemplate(sed_skinfile('admin.structure'));
 
 $adminpath[] = array (sed_url('admin', 'm=structure'), $L['Categories']);
@@ -115,7 +118,7 @@ if ($n == 'options')
 
 			sed_auth_reorder();
 			sed_auth_clear('all');
-			$cot_cache->db_unset('sed_cat', 'system');
+			$cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
 		}
 
 		if ($rtplmode == 1)
@@ -155,7 +158,7 @@ if ($n == 'options')
 			WHERE structure_id='".$id."'";
 		$sql = sed_sql_query($sqltxt);
 
-		$cot_cache->db_unset('sed_cat', 'system');
+		$cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
 
 		sed_redirect(sed_url('admin', 'm=structure&d='.$d.$additionsforurl, '', true));
 	}
@@ -319,7 +322,7 @@ else
 
 				sed_auth_reorder();
 				sed_auth_clear('all');
-				$cot_cache->db_unset('sed_cat', 'system');
+				$cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
 			}
 
 			$sql1text = "UPDATE $db_structure
@@ -344,7 +347,7 @@ else
 		}
 
 		sed_auth_clear('all');
-		$cot_cache->db_unset('sed_cat', 'system');
+		$cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
 
 		$adminwarnings = $L['Updated'];
 	}

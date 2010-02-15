@@ -17,68 +17,6 @@ unset($adminmain, $adminhelp, $admin_icon, $plugin_body, $plugin_title, $plugin_
 $adminpath = array();
 
 /**
- * Converts an access character mask into a permission byte
- *
- * @param string $mask Access character mask, e.g. 'RW1A'
- * @return int
- */
-function sed_auth_getvalue($mask)
-{
-    $mn['0'] = 0;
-    $mn['R'] = 1;
-    $mn['W'] = 2;
-    $mn['1'] = 4;
-    $mn['2'] = 8;
-    $mn['3'] = 16;
-    $mn['4'] = 32;
-    $mn['5'] = 64;
-    $mn['A'] = 128;
-
-    $masks = str_split($mask);
-
-    foreach ($mn as $k => $v)
-    {
-        if (in_array($k, $masks))
-        {
-        	$res += $mn[$k];
-        }
-    }
-    return($res);
-}
-
-/**
- * Optimizes auth table by sorting its rows
- * 
- * @return bool
- */
-function sed_auth_reorder()
-{
-    global $db_auth;
-
-    $sql = sed_sql_query("ALTER TABLE $db_auth ORDER BY auth_code ASC, auth_option ASC, auth_groupid ASC, auth_code ASC");
-    return(TRUE);
-}
-
-/**
- * Returns an access character mask for a given access byte
- *
- * @param int $rn Permission byte
- * @return string
- */
-function sed_build_admrights($rn)
-{
-    $res = ($rn & 1) ? 'R' : '';
-    $res .= (($rn & 2) == 2) ? 'W' : '';
-    $res .= (($rn & 4) == 4) ? '1' : '';
-    $res .= (($rn & 8) == 8) ? '2' : '';
-    $res .= (($rn & 16) == 16) ? '3' : '';
-    $res .= (($rn & 32) == 32) ? '4' : '';
-    $res .= (($rn & 64) == 64) ? '5' : '';
-    $res .= (($rn & 128) == 128) ? 'A' : '';
-    return($res);
-}
-
-/**
  * Builds administration breadcrumbs (path)
  *
  * @param array $adminpath Path links
@@ -129,11 +67,10 @@ function sed_forum_deletesection($id)
     $sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_sectionid='$id'");
     $num = sed_sql_affectedrows();
     $sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_sectionid='$id'");
-    $num = $num + sed_sql_affectedrows();
+    $num += sed_sql_affectedrows();
     $sql = sed_sql_query("DELETE FROM $db_forum_sections WHERE fs_id='$id'");
-    $num = $num + sed_sql_affectedrows();
-    $sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='forums' AND auth_option='$id'");
-    $num = $num + sed_sql_affectedrows();
+    $num += sed_sql_affectedrows();
+    $num += sed_auth_remove_item('forums', $id);
     return($num);
 }
 
@@ -300,8 +237,7 @@ function sed_structure_delcat($id, $c)
     global $db_structure, $db_auth, $cfg, $cot_cache;
 
     $sql = sed_sql_query("DELETE FROM $db_structure WHERE structure_id='$id'");
-    $sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='page' AND auth_option='$c'");
-    sed_auth_clear('all');
+	sed_auth_remove_item('page', $c);
     $cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
 }
 
@@ -342,38 +278,21 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
 			}
             $sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order".$colname.") VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.", '".sed_sql_prep($order.'.'.$way)."'".$colvalue.")");
 
-            foreach ($sed_groups as $k => $v)
-            {
-                if ($v['id'] == 1)
-                {
-                    $ins_auth = 5;
-                    $ins_lock = 250;
-                }
-                elseif ($v['id'] == 2)
-                {
-                    $ins_auth = 1;
-                    $ins_lock = 254;
-                }
-                elseif ($v['id'] == 3)
-                {
-                    $ins_auth = 0;
-                    $ins_lock = 255;
-                }
-                elseif ($v['id'] == 5)
-                {
-                    $ins_auth = 255;
-                    $ins_lock = 255;
-                }
-                else
-                {
-                    $ins_auth = 7;
-                    $ins_lock = ($k == 4) ? 128 : 0;
-                }
-                $sql = sed_sql_query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'page', '".sed_sql_prep($code)."', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
-                $res = TRUE;
-            }
-            sed_auth_reorder();
-            sed_auth_clear('all');
+			$auth_permit = array(
+				SED_GROUP_DEFAULT => 7,
+				SED_GROUP_GUESTS => 5,
+				SED_GROUP_MEMBERS => 7
+			);
+
+			$auth_lock = array(
+				SED_GROUP_DEFAULT => 0,
+				SED_GROUP_GUESTS => 250,
+				SED_GROUP_MEMBERS => 128
+			);
+
+			sed_auth_add_item('page', sed_sql_prep($code), $auth_permit, $auth_lock);
+            $res = true;
+			
             $cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
         }
     }

@@ -14,6 +14,9 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
+require_once sed_incfile('auth');
+require_once sed_incfile('uploads');
+
 $t = new XTemplate(sed_skinfile('admin.users'));
 
 $adminpath[] = array(sed_url('admin', 'm=users'), $L['Users']);
@@ -55,14 +58,9 @@ if($n == 'add')
 	}
 	/* ===== */
 
-	$sql = sed_sql_query("SELECT * FROM $db_auth WHERE auth_groupid='".$ncopyrightsfrom."' order by auth_code ASC, auth_option ASC");
-	while($row = sed_sql_fetcharray($sql))
-	{
-		$sql1 = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$grp_id.", '".$row['auth_code']."', '".$row['auth_option']."', ".(int)$row['auth_rights'].", 0, ".(int)$usr['id'].")");
-	}
+	sed_auth_add_group($grp_id, $ncopyrightsfrom);
 
-	sed_auth_reorder();
-	$cot_cache->db_clear('sed_groups', 'system');
+	$cot_cache->db_unset('sed_groups', 'system');
 
 	$adminwarnings = $L['Added'];
 }
@@ -103,7 +101,7 @@ elseif($n == 'edit')
 	elseif($a == 'delete' && $g > 5)
 	{
 		$sql = sed_sql_query("DELETE FROM $db_groups WHERE grp_id='$g'");
-		$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_groupid='$g'");
+		sed_auth_remove_group($g);
 		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
 
 		/* === Hook === */
