@@ -11,6 +11,8 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
+require_once sed_incfile('auth');
+
 $y = sed_import('y','P','TXT');
 $id = sed_import('id','G','INT');
 $s = sed_import('s','G','ALP',13);

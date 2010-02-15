@@ -56,18 +56,8 @@ if ($a == 'update')
 
 	if ($ncopyrightsconf && !empty($sed_groups[$ncopyrightsfrom]['title']) && $g > 5)
 	{
-		$sql = sed_sql_query("SELECT * FROM $db_auth WHERE auth_groupid='".$ncopyrightsfrom."' order by auth_code ASC, auth_option ASC");
-		if (sed_sql_numrows($sql) > 0)
-		{
-			$sql1 = sed_sql_query("DELETE FROM $db_auth WHERE auth_groupid='".$g."'");
-
-			while ($row = sed_sql_fetcharray($sql))
-			{
-				$sql1 = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$g.", '".$row['auth_code']."', '".$row['auth_option']."', ".(int)$row['auth_rights'].", 0, ".(int)$usr['id'].")");
-			}
-		}
-
-		sed_auth_reorder();
+		sed_sql_query("DELETE FROM $db_auth WHERE auth_groupid=$g");
+		sed_auth_add_group($g, $ncopyrightsfrom);
 		sed_auth_clear('all');
 
 		$adminwarnings = $L['Added'];

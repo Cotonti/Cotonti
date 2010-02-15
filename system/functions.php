@@ -19,6 +19,7 @@ if (!defined('SED_INSTALL'))
 }
 
 // Group constants
+define('SED_GROUP_DEFAULT', 0);
 define('SED_GROUP_GUESTS', 1);
 define('SED_GROUP_INACTIVE', 2);
 define('SED_GROUP_BANNED', 3);
@@ -186,28 +187,6 @@ function sed_auth_build($userid, $maingrp = 0)
 	}
 
 	return $authgrid;
-}
-
-/**
- * Clears user permissions cache
- *
- * @param mixed $id User ID or 'all'
- * @return int
- */
-function sed_auth_clear($id = 'all')
-{
-	global $db_users, $cfg, $cot_cache;
-
-	if ($id == 'all')
-	{
-		$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
-		$cot_cache->db_unset('sed_guest_auth', 'system');
-	}
-	else
-	{
-		$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE user_id='$id'");
-	}
-	return sed_sql_affectedrows();
 }
 
 /**
@@ -975,7 +954,37 @@ function sed_string_truncate(&$html, $length = 100, $considerhtml = true, $exact
  * =========================== Output forming functions ===========================
  */
 
-/* ------------------ */
+/**
+ * Calculates age out of D.O.B.
+ *
+ * @param int $birth Date of birth as UNIX timestamp
+ * @return int
+ */
+function sed_build_age($birth)
+{
+	global $sys;
+
+	if ($birth==1)
+	{ return ('?'); }
+
+	$day1 = @date('d', $birth);
+	$month1 = @date('m', $birth);
+	$year1 = @date('Y', $birth);
+
+	$day2 = @date('d', $sys['now_offset']);
+	$month2 = @date('m', $sys['now_offset']);
+	$year2 = @date('Y', $sys['now_offset']);
+
+	$age = ($year2-$year1)-1;
+
+	if ($month1<$month2 || ($month1==$month2 && $day1<=$day2))
+	{ $age++; }
+
+	if($age < 0)
+	{ $age += 136; }
+
+	return ($age);
+}
 
 /**
  * Builds category path
@@ -1330,7 +1339,75 @@ function sed_build_flag($flag)
 	return '<a href="'.sed_url('users', 'f=country_'.$flag).'" title="'.$sed_countries[$flag].'"><img class="flag" src="images/flags/'.$flag.'.png" alt="'.$flag.'" /></a>';
 }
 
-/* ------------------ */
+/**
+ * Returns group link (button)
+ *
+ * @param int $grpid Group ID
+ * @return string
+ */
+function sed_build_group($grpid)
+{
+	if(empty($grpid)) return '';
+	global $sed_groups, $L;
+
+	if($sed_groups[$grpid]['hidden'])
+	{
+		if(sed_auth('users', 'a', 'A'))
+		{
+			return '<a href="'.sed_url('users', 'gm='.$grpid).'">'.$sed_groups[$grpid]['title'].'</a> ('.$L['Hidden'].')';
+		}
+		else
+		{
+			return $L['Hidden'];
+		}
+	}
+	else
+	{
+		return '<a href="'.sed_url('users', 'gm='.$grpid).'">'.$sed_groups[$grpid]['title'].'</a>';
+	}
+}
+
+/**
+ * Builds "edit group" option group for "user edit" part
+ *
+ * @param int $userid Edited user ID
+ * @param bool $edit Permission
+ * @param int $maingrp User main group
+ * @return string
+ */
+function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
+{
+	global $db_groups_users, $sed_groups, $L, $usr;
+
+	$sql = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
+
+	while ($row = sed_sql_fetcharray($sql))
+	{
+		$member[$row['gru_groupid']] = TRUE;
+	}
+
+	foreach($sed_groups as $k => $i)
+	{
+		$checked = ($member[$k]) ? "checked=\"checked\"" : '';
+		$checked_maingrp = ($maingrp==$k) ? "checked=\"checked\"" : '';
+		$readonly = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==SED_GROUP_GUESTS || $k==SED_GROUP_INACTIVE || $k==SED_GROUP_BANNED || ($k==SED_GROUP_TOPADMINS && $userid==1)) ? "disabled=\"disabled\"" : '';
+		$readonly_maingrp = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==SED_GROUP_GUESTS || ($k==SED_GROUP_INACTIVE && $userid==1) || ($k==SED_GROUP_BANNED && $userid==1)) ? "disabled=\"disabled\"" : '';
+
+		if ($member[$k] || $edit)
+		{
+			if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
+			{
+				$res .= "<input type=\"radio\" class=\"radio\" name=\"rusermaingrp\" value=\"$k\" ".$checked_maingrp." ".$readonly_maingrp." /> \n";
+				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"rusergroupsms[$k]\" ".$checked." $readonly />\n";
+				$res .= ($k == SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"".sed_url('users', 'gm='.$k)."\">".$sed_groups[$k]['title']."</a>";
+				$res .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
+				$res .= "<br />";
+			}
+		}
+	}
+
+	return $res;
+}
 
 /**
  * Returns IP Search link
@@ -1378,7 +1455,19 @@ function sed_build_pfs($id, $c1, $c2, $title)
 	return($res);
 }
 
-/* ------------------ */
+/**
+ * Returns user PM link
+ *
+ * @param int $user User ID
+ * @return string
+ */
+// TODO this function should be replaced with some hook-based integration
+function sed_build_pm($user)
+{
+	global $usr, $L, $R;
+	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'">'.$R['pm_icon'].'</a>';
+}
+
 /**
  * Builds ratings for an item
  *
@@ -1613,6 +1702,27 @@ function sed_build_ratings($code, $url, $display)
 }
 
 /**
+ * Returns stars image for user level
+ *
+ * @param int $level User level
+ * @return unknown
+ */
+function sed_build_stars($level)
+{
+	global $skin, $R;
+
+	if($level>0 and $level<100)
+	{
+		$stars = floor($level / 10) + 1;
+		return sed_rc('icon_stars', array('val' => $stars));
+	}
+	else
+	{
+		return '';
+	}
+}
+
+/**
  * Returns time gap between 2 dates
  *
  * @param int $t1 Stamp 1
@@ -1760,6 +1870,35 @@ function sed_build_userimage($image, $type='none')
 			return '<img src="'.$image.'" alt="" />';
 		}
 	}
+}
+
+/**
+ * Renders user signature text
+ *
+ * @param string $text Signature text
+ * @return string
+ */
+function sed_build_usertext($text)
+{
+	global $cfg;
+	if (!$cfg['usertextimg'])
+	{
+		$bbcodes_img = array(
+			'\[img\]([^\[]*)\[/img\]' => '',
+			'\[thumb=([^\[]*)\[/thumb\]' => '',
+			'\[t=([^\[]*)\[/t\]' => '',
+			'\[list\]' => '',
+			'\[style=([^\[]*)\]' => '',
+			'\[quote' => '',
+			'\[code' => ''
+		);
+
+		foreach($bbcodes_img as $bbcode => $bbcodehtml)
+		{
+			$text = preg_replace("#$bbcode#i", $bbcodehtml, $text);
+		}
+	}
+	return sed_parse($text, $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
 }
 
 /**
