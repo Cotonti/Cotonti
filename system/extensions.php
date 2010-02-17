@@ -129,6 +129,23 @@ function sed_module_update($name, $version, $revision)
 /**
  * Registers a plugin or module in hook registry
  *
+ * Example:
+ * <code>
+ * $hook_bindings = array(
+ *     array(
+ *         'part' => 'rss',
+ *         'hook' => 'rss.main',
+ *         'order' => 20
+ *     ),
+ *     array(
+ *         'part' => 'header',
+ *         'hook' => 'header.tags',
+ *     )
+ * );
+ *
+ * sed_plugin_add($hook_bindings, 'test', 'Test plugin', false);
+ * </code>
+ *
  * @param array $hook_bindings Hook binding map
  * @param string $name Module or plugin name (code)
  * @param string $title Module or plugin title
