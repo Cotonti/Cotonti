@@ -35,6 +35,35 @@ define('COT_CONFIG_TYPE_HIDDEN', 4);
 /**
  * Registers a set of configuration entries at once.
  *
+ * Example:
+ * <code>
+ * $config_options = array(
+ *     array(
+ *         'name' => 'disable_test',
+ *         'type' => COT_CONFIG_TYPE_RADIO,
+ *         'default' => '0'
+ *     ),
+ *     array(
+ *         'name' => 'test_selection',
+ *         'type' => COT_CONFIG_TYPE_SELECT,
+ *         'default' => '20',
+ *         'variants' => '5,10,15,20,25,30,35,40,50'
+ *     ),
+ *     array(
+ *         'name' => 'test_value',
+ *         'type' => COT_CONFIG_TYPE_STRING,
+ *         'default' => 'something'
+ *     ),
+ *     array(
+ *         'name' => 'not_visible',
+ *         'type' => COT_CONFIG_TYPE_HIDDEN,
+ *         'default' => 'test23'
+ *     )
+ * );
+ *
+ * sed_config_add($config_options, 'test', 'core');
+ * </code>
+ *
  * @param array $options An associative array of configuration entries.
  * Each entry of the arrray has the following keys:
  * 'name' => Option name, alphanumeric and _. Must be unique for a module/plugin
@@ -119,6 +148,16 @@ function sed_config_remove($mod_name, $type = 'core', $option = '')
 
 /**
  * Updates configuration values
+ *
+ * Example:
+ * <code>
+ * $config_values = array(
+ *     'disable_test' => '0',
+ *     'hidden_test' => 'test45',
+ * );
+ *
+ * sed_config_set($config_values, 'test', 'core');
+ * </code>
  *
  * @param array $options Array of options as 'option name' => 'option value'
  * @param string $mod_name Module a plugin name config belongs to, will apply to all if omitted

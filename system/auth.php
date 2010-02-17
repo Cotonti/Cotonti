@@ -64,6 +64,25 @@ function sed_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
 /**
  * Adds a new object into access control lists
  *
+ * Usage example:
+ * <code>
+ * $auth_permit = array(
+ *     COT_GROUP_DEFAULT => 'R',
+ *     COT_GROUP_GUESTS => '0',,
+ *     COT_GROUP_MEMBERS => 'R',
+ *     12 => 'RW', // allows Read & Write for group with ID = 12
+ * );
+ *
+ * $auth_lock = array(
+ *     COT_GROUP_DEFAULT => 'A',
+ *     COT_GROUP_GUESTS => 'W12345A',
+ *     COT_GROUP_MEMBERS => 'A',
+ *     12 => 'R', // cannot change Read for group with ID = 12
+ * );
+ *
+ * sed_auth_add_item('test', 'item123', $auth_permit, $auth_lock);
+ * </code>
+ * 
  * @param string $module_name The module object belongs to
  * @param string $item_id Object identifier within the module
  * @param array $auth_permit Allowed permissions map

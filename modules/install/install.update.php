@@ -167,7 +167,7 @@ else
 		{
 			if (isset($val['sql']))
 			{
-				$error = cot_run_script(file_get_contents($val['sql']));
+				$error = sed_sql_runscript(file_get_contents($val['sql']));
 				if (empty($error))
 				{
 					$applied .= $val['sql'].'<br />';
