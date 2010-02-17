@@ -243,12 +243,12 @@ else
 			// The permissions are actually the default
 			// Some records are left for example
 			$auth_permit = array(
-				SED_GROUP_DEFAULT => 'RW'
+				COT_GROUP_DEFAULT => 'RW'
 			);
 
 			$auth_lock = array(
-				SED_GROUP_DEFAULT => '0',
-				SED_GROUP_MEMBERS => 'A'
+				COT_GROUP_DEFAULT => '0',
+				COT_GROUP_MEMBERS => 'A'
 			);
 
 			sed_auth_add_item('forums', $forumid, $auth_permit, $auth_lock);

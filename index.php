@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_INDEX', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'Home';
 $z = 'index';
 

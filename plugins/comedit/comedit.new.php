@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once(sed_langfile('comedit'));
+require_once sed_langfile('comedit', 'plug');
 
 if(empty($error_string) && $cfg['plugin']['comedit']['mail'])
 {

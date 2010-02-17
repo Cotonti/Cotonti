@@ -27,6 +27,10 @@ define('COT_CONFIG_TYPE_SELECT', 2);
  * Radio yes/no selection.
  */
 define('COT_CONFIG_TYPE_RADIO', 3);
+/**
+ * Hidden config. It is actually a text string, but it is not displayed anywhere
+ */
+define('COT_CONFIG_TYPE_HIDDEN', 4);
 
 /**
  * Registers a set of configuration entries at once.

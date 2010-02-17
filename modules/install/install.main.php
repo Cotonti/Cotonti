@@ -59,20 +59,7 @@ if ($_POST['submit'])
 	{
 
 		$sql_file = file_get_contents($file['sql']);
-		$sql_queries = preg_split('/;\r?\n/', $sql_file);
-		foreach ($sql_queries as $sql_query)
-		{
-			if ($db_x != 'sed_')
-			{
-				$sql_query = str_replace('`sed_', '`'.$db_x, $sql_query);
-			}
-			$result = sed_sql_query($sql_query);
-			if (!$result)
-			{
-				$error .= sed_sql_error().'<br />';
-				break;
-			}
-		}
+		$error .= sed_sql_runscript($sql_file);
 
 		if (!$error)
 		{

@@ -115,7 +115,7 @@ else
 			}
 			else
 			{
-				include_once sed_langfile('message', 'module');
+				include_once sed_langfile('message', 'core');
 				$info['Name'] = $pl['pl_code'] . ' : '. $L['msg907_1'];
 			}
 

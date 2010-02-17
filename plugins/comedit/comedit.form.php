@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once(sed_langfile('comedit'));
+require_once sed_langfile('comedit', 'plug');
 
 $allowed_time = sed_build_timegap($sys['now_offset'] - $cfg['plugin']['comedit']['time'] * 60, $sys['now_offset']);
 $com_hint = sprintf($L['plu_comhint'], $allowed_time);

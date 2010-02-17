@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_PFS', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'PFS';
 $z = 'pfs';
 

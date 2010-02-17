@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_PM', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'Private_Messages';
 $z = 'pm';
 

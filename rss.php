@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_RSS', TRUE);
+define('COT_MODULE', TRUE);
 $location = "RSS";
 $z = 'rss';
 

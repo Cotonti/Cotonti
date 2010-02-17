@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_VIEW', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'Views';
 $z = 'view';
 

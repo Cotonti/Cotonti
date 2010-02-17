@@ -181,7 +181,7 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0,
         /* ===== */
 		if($cfg['plugin']['tags']['pages'])
 		{
-			require_once(sed_langfile('tags'));
+			require_once(sed_langfile('tags', 'plug'));
 			$item_id = $pag['page_id'];
 			$tags = sed_tag_list($item_id);
 			if(count($tags) > 0)

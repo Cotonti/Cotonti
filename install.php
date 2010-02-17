@@ -12,6 +12,7 @@
 define('SED_CODE', TRUE);
 define('SED_INSTALL', TRUE);
 define('SED_ADMIN', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'Install';
 $z = 'install';
 
