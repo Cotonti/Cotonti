@@ -223,14 +223,14 @@ function sed_sql_prep($str, $conn = null)
  *
  * @global $sys
  * @global $cfg
- * @global $usr
+ * @global $sed_dbc
  * @param string $query SQL query
  * @param resource $conn Custom connection handle
  * @return resource
  */
 function sed_sql_query($query, $conn = null)
 {
-	global $sys, $cfg, $usr, $sed_dbc;
+	global $sys, $cfg, $sed_dbc;
 	$conn = is_null($conn) ? $sed_dbc : $conn;
 	$sys['qcount']++;
 	$xtime = microtime();
@@ -281,6 +281,43 @@ function sed_sql_rowcount($table, $conn = null)
 	$conn = is_null($conn) ? $sed_dbc : $conn;
 	$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $table", $conn);
 	return (int) mysql_result($sqltmp, 0, 0);
+}
+
+/**
+ * Runs an SQL script containing multiple queries.
+ *
+ * @param string $script SQL script body, containing formatted queries separated by semicolons and newlines
+ * @param resource $conn Custom connection handle
+ * @return string Error message if an error occurs or empty string on success
+ */
+function sed_sql_runscript($script, $conn = null)
+{
+	global $sed_dbc, $db_x;
+	$conn = is_null($conn) ? $sed_dbc : $conn;
+
+	$error = '';
+	// Remove comments
+	$script = preg_replace('#^/\*.*?\*/#m', '', $script);
+	$script = preg_replace('#^--.*?$#m', '', $script);
+	// Run queries separated by ; at the end of line
+	$queries =  preg_split('#;\r?\n#', $script);
+	foreach ($queries as $query)
+	{
+		$query = trim($query);
+		if (!empty($query))
+		{
+			if ($db_x != 'sed_')
+			{
+				$query = str_replace('`sed_', '`'.$db_x, $query);
+			}
+			$result = @sed_sql_query($query, $conn);
+			if (!$result)
+			{
+				return sed_sql_error($conn) . '<br />' . htmlspecialchars($query) . '<hr />';
+			}
+		}
+	}
+	return '';
 }
 
 /**

@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_POLLS', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'Polls';
 $z = 'polls';
 

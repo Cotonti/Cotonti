@@ -19,12 +19,12 @@ if (!defined('SED_INSTALL'))
 }
 
 // Group constants
-define('SED_GROUP_DEFAULT', 0);
-define('SED_GROUP_GUESTS', 1);
-define('SED_GROUP_INACTIVE', 2);
-define('SED_GROUP_BANNED', 3);
-define('SED_GROUP_MEMBERS', 4);
-define('SED_GROUP_TOPADMINS', 5);
+define('COT_GROUP_DEFAULT', 0);
+define('COT_GROUP_GUESTS', 1);
+define('COT_GROUP_INACTIVE', 2);
+define('COT_GROUP_BANNED', 3);
+define('COT_GROUP_MEMBERS', 4);
+define('COT_GROUP_SUPERADMINS', 5);
 
 /* ======== Pre-sets ========= */
 
@@ -1390,8 +1390,8 @@ function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
 	{
 		$checked = ($member[$k]) ? "checked=\"checked\"" : '';
 		$checked_maingrp = ($maingrp==$k) ? "checked=\"checked\"" : '';
-		$readonly = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==SED_GROUP_GUESTS || $k==SED_GROUP_INACTIVE || $k==SED_GROUP_BANNED || ($k==SED_GROUP_TOPADMINS && $userid==1)) ? "disabled=\"disabled\"" : '';
-		$readonly_maingrp = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==SED_GROUP_GUESTS || ($k==SED_GROUP_INACTIVE && $userid==1) || ($k==SED_GROUP_BANNED && $userid==1)) ? "disabled=\"disabled\"" : '';
+		$readonly = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==COT_GROUP_GUESTS || $k==COT_GROUP_INACTIVE || $k==COT_GROUP_BANNED || ($k==COT_GROUP_SUPERADMINS && $userid==1)) ? "disabled=\"disabled\"" : '';
+		$readonly_maingrp = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==COT_GROUP_GUESTS || ($k==COT_GROUP_INACTIVE && $userid==1) || ($k==COT_GROUP_BANNED && $userid==1)) ? "disabled=\"disabled\"" : '';
 
 		if ($member[$k] || $edit)
 		{
@@ -1399,7 +1399,7 @@ function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
 			{
 				$res .= "<input type=\"radio\" class=\"radio\" name=\"rusermaingrp\" value=\"$k\" ".$checked_maingrp." ".$readonly_maingrp." /> \n";
 				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"rusergroupsms[$k]\" ".$checked." $readonly />\n";
-				$res .= ($k == SED_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"".sed_url('users', 'gm='.$k)."\">".$sed_groups[$k]['title']."</a>";
+				$res .= ($k == COT_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"".sed_url('users', 'gm='.$k)."\">".$sed_groups[$k]['title']."</a>";
 				$res .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
 				$res .= "<br />";
 			}
@@ -2391,7 +2391,14 @@ function sed_incfile($name, $module = false)
 	global $cfg;
 	if ($module)
 	{
-		return $cfg['modules_dir']."/$module/$module.$name.php";
+		if ($module == 'admin' || $module == 'users')
+		{
+			return $cfg['system_dir']."/$module/$module.$name.php";
+		}
+		else
+		{
+			return $cfg['modules_dir']."/$module/$module.$name.php";
+		}
 	}
 	else
 	{
@@ -2482,9 +2489,13 @@ function sed_javascript($more='')
  * @param mixed $default Default (fallback) language code
  * @return bool
  */
-function sed_langfile($name, $type = 'plug', $default = 'en')
+function sed_langfile($name, $type = '', $default = 'en')
 {
 	global $cfg, $lang;
+	if (empty($type))
+	{
+		throw new Exception('sed_langfile() API has been changed, you must specify the second parameter');
+	}
 	if ($type == 'module')
 	{
 		if (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
@@ -3666,8 +3677,7 @@ function sed_skinfile($base, $plug = false)
 	$basename = $base[0];
 
 	if ((defined('SED_ADMIN')
-		|| defined('SED_MESSAGE') && $_SESSION['s_run_admin'])
-			&& ($basename == 'header' || $basename == 'footer'))
+		|| defined('SED_MESSAGE') && $_SESSION['s_run_admin']))
 	{
 		$admn = true;
 	}
@@ -3702,13 +3712,19 @@ function sed_skinfile($base, $plug = false)
 	}
 	else
 	{
-		if ($admn) $scan_prefix[] = $cfg['modules_dir'].'/admin/tpl/';
 		$scan_prefix[] = './skins/'.$usr['skin'].'/'.$basename.'/';
 		if ($usr['skin'] != $cfg['defaultskin'])
 		{
 			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/'.$basename.'/';
 		}
-		$scan_prefix[] = $cfg['modules_dir'].'/'.$basename.'/tpl/';
+		if ($admn)
+		{
+			$scan_prefix[] = $cfg['system_dir'].'/admin/tpl/';
+		}
+		else
+		{
+			$scan_prefix[] = $cfg['modules_dir'].'/'.$basename.'/tpl/';
+		}
 	}
 	$scan_prefix[] = './skins/'.$usr['skin'].'/';
 	if ($usr['skin'] != $cfg['defaultskin'])

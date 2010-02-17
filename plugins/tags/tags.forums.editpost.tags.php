@@ -25,7 +25,7 @@ defined('SED_CODE') or die('Wrong URL');
 if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_first_post)
 {
 	require_once $cfg['system_dir'] . '/tags.php';
-	require_once sed_langfile('tags');
+	require_once sed_langfile('tags', 'plug');
 	$tags = sed_tag_list($q, 'forums');
 	$tags = implode(', ', $tags);
 	$t->assign(array(

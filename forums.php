@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_FORUMS', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'Forums';
 $z = 'forums';
 

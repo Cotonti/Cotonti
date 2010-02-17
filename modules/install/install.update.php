@@ -103,7 +103,7 @@ if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
 {
 	// Is Genoa, perform upgrade
 	$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
-	$error = cot_run_script($script);
+	$error = sed_sql_runscript($script);
 	if (empty($error))
 	{
 		// Success
@@ -230,30 +230,6 @@ function cot_get_config($file)
 		}
 	}
 	return array($cfg, $db_vars);
-}
-
-function cot_run_script($text)
-{
-	$error = '';
-	// Remove comments
-	$text = preg_replace('#^/\*.*?\*/#m', '', $text);
-	$text = preg_replace('#^--.*?$#m', '', $text);
-	// Run queries separated by ; at the end of line
-	$queries =  preg_split('#;\r?\n#', $text);
-	foreach ($queries as $query)
-	{
-		$query = trim($query);
-		if (!empty($query))
-		{
-			$result = @sed_sql_query($query);
-			if (!$result)
-			{
-				$error .= sed_sql_error().'<br />'.htmlspecialchars($query).'<hr />';
-				break;
-			}
-		}
-	}
-	return $error;
 }
 
 ?>

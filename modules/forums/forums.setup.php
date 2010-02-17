@@ -12,16 +12,34 @@
 defined('SED_CODE') or die('Wrong URL');
 
 /**
+ * Module title
+ */
+$title = 'Forums';
+
+/**
+ * This is displayed as last modification date in Admin panel.
+ * Modify this every time you make valuable changes in the module
+ */
+$date = '2010-02-18';
+
+/**
+ * Increase this every time you add SQL/PHP patches, make changes in DB, etc.
+ * This will help auto-updater to know how to update the module.
+ * Supports SVN Rev keyword and plain integer values
+ */
+$revision = '$Rev$';
+
+/**
  * Custom permissions allowed for specified groups.
  * A default mask will be used if not specified.
  */
 $auth_permit = array(
-	SED_GROUP_DEFAULT => 'RW',
-	SED_GROUP_GUESTS => 'R',
-	SED_GROUP_INACTIVE => 'R',
-	SED_GROUP_BANNED => '0',
-	SED_GROUP_MEMBERS => 'RW',
-	SED_GROUP_TOPADMINS => 'RW12345A'
+	COT_GROUP_DEFAULT => 'RW',
+	COT_GROUP_GUESTS => 'R',
+	COT_GROUP_INACTIVE => 'R',
+	COT_GROUP_BANNED => '0',
+	COT_GROUP_MEMBERS => 'RW',
+	COT_GROUP_SUPERADMINS => 'RW12345A'
 );
 
 /**
@@ -29,12 +47,12 @@ $auth_permit = array(
  * A default mask will be used if not specified.
  */
 $auth_lock = array(
-	SED_GROUP_DEFAULT => '0',
-	SED_GROUP_GUESTS => 'W12345A',
-	SED_GROUP_INACTIVE => 'W12345A',
-	SED_GROUP_BANNED => 'RW12345A',
-	SED_GROUP_MEMBERS => 'A',
-	SED_GROUP_TOPADMINS => 'RW12345A'
+	COT_GROUP_DEFAULT => '0',
+	COT_GROUP_GUESTS => 'W12345A',
+	COT_GROUP_INACTIVE => 'W12345A',
+	COT_GROUP_BANNED => 'RW12345A',
+	COT_GROUP_MEMBERS => 'A',
+	COT_GROUP_SUPERADMINS => 'RW12345A'
 );
 
 /**
@@ -86,5 +104,23 @@ $config_options = array(
 		'variants' => '5,10,15,20,25,30,40,50,60,70,100,200,500'
 	)
 );
+
+/**
+ * Binds module or plugin parts to hooks.
+ * Format: 'part_name' => 'hook.name'
+ * This will bind modulename.part_name.php to a hook hook.name
+ */
+$hook_bindings = array(
+	array(
+		'part' => 'rss',
+		'hook' => 'rss.main',
+		'order' => 20
+	)
+);
+
+/**
+ * Other modules required for this one to work
+ */
+$dependencies = array();
 
 ?>

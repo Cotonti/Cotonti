@@ -38,7 +38,7 @@ $urr = sed_sql_fetcharray($sql);
 
 $urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
 
-$sql1 = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$id' and gru_groupid='".SED_GROUP_TOPADMINS."'");
+$sql1 = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$id' and gru_groupid='".COT_GROUP_SUPERADMINS."'");
 $sys['edited_istopadmin'] = (sed_sql_numrows($sql1)>0) ? TRUE : FALSE;
 $sys['user_istopadmin'] = sed_auth('admin', 'a', 'A');
 $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
@@ -208,7 +208,7 @@ if ($a=='update')
 			WHERE user_id='$id'";
 		$sql = sed_sql_query($ssql);
 
-		$rusermaingrp = ($rusermaingrp < SED_GROUP_MEMBERS && $id==1) ? SED_GROUP_TOPADMINS : $rusermaingrp;
+		$rusermaingrp = ($rusermaingrp < COT_GROUP_MEMBERS && $id==1) ? COT_GROUP_SUPERADMINS : $rusermaingrp;
 
 		if($usr['level'] >= $sed_groups[$rusermaingrp]['level'])
 		{
@@ -224,14 +224,14 @@ if ($a=='update')
 			if (isset($rusergroupsms[$k]) && $usr['level'] >= $sed_groups[$k]['level'])
 			{
 				$sql = sed_sql_query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'");
-				if (sed_sql_numrows($sql)==0 && !(($id==1 && $k==SED_GROUP_BANNED) || ($id==1 && $k==SED_GROUP_INACTIVE)))
+				if (sed_sql_numrows($sql)==0 && !(($id==1 && $k==COT_GROUP_BANNED) || ($id==1 && $k==COT_GROUP_INACTIVE)))
 				{ $sql = sed_sql_query("INSERT INTO $db_groups_users (gru_userid, gru_groupid) VALUES (".(int)$id.", ".(int)$k.")"); }
 			}
-			elseif (!($id==1 && $k==SED_GROUP_TOPADMINS))
+			elseif (!($id==1 && $k==COT_GROUP_SUPERADMINS))
 			{ $sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'"); }
 		}
 
-		if ($rusermaingrp==SED_GROUP_MEMBERS && $urr['user_maingrp']==SED_GROUP_INACTIVE)
+		if ($rusermaingrp==COT_GROUP_MEMBERS && $urr['user_maingrp']==COT_GROUP_INACTIVE)
 		{
 			$rsubject = $cfg['maintitle']." - ".$L['useed_accountactivated'];
 			$rbody = $L['Hi']." ".$urr['user_name'].",\n\n";

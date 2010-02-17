@@ -15,12 +15,12 @@
  * permission map, it will be taken from this one.
  */
 $cot_auth_default_permit = array(
-	SED_GROUP_DEFAULT => 'RW',
-	SED_GROUP_GUESTS => 'R',
-	SED_GROUP_INACTIVE => 'R',
-	SED_GROUP_BANNED => '0',
-	SED_GROUP_MEMBERS => 'RW',
-	SED_GROUP_TOPADMINS => 'RW12345A'
+	COT_GROUP_DEFAULT => 'RW',
+	COT_GROUP_GUESTS => 'R',
+	COT_GROUP_INACTIVE => 'R',
+	COT_GROUP_BANNED => '0',
+	COT_GROUP_MEMBERS => 'RW',
+	COT_GROUP_SUPERADMINS => 'RW12345A'
 );
 
 /**
@@ -28,12 +28,12 @@ $cot_auth_default_permit = array(
  * in user-defined permission lock map, it will be taken from this one.
  */
 $cot_auth_default_lock = array(
-	SED_GROUP_DEFAULT => '0',
-	SED_GROUP_GUESTS => 'W12345A',
-	SED_GROUP_INACTIVE => 'W12345A',
-	SED_GROUP_BANNED => 'RW12345A',
-	SED_GROUP_MEMBERS => 'A',
-	SED_GROUP_TOPADMINS => 'RW12345A'
+	COT_GROUP_DEFAULT => '0',
+	COT_GROUP_GUESTS => 'W12345A',
+	COT_GROUP_INACTIVE => 'W12345A',
+	COT_GROUP_BANNED => 'RW12345A',
+	COT_GROUP_MEMBERS => 'A',
+	COT_GROUP_SUPERADMINS => 'RW12345A'
 );
 
 /**
@@ -43,16 +43,16 @@ $cot_auth_default_lock = array(
  * @param int $base_group_id ID of the group to copy permissions from
  * @return bool Operation status
  */
-function sed_auth_add_group($group_id, $base_group_id = SED_GROUP_MEMBERS)
+function sed_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
 {
 	global $db_auth, $usr;
-	if ($group_id <= SED_GROUP_TOPADMINS)
+	if ($group_id <= COT_GROUP_SUPERADMINS)
 	{
 		return false;
 	}
 	if ($base_group_id <= 0)
 	{
-		$base_group_id = SED_GROUP_MEMBERS;
+		$base_group_id = COT_GROUP_MEMBERS;
 	}
 	sed_sql_query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid)
 		SELECT $group_id, auth_code, auth_option, auth_rights, auth_rights_lock, {$usr['id']}
@@ -78,7 +78,7 @@ function sed_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
 	$ins_array = array();
 	foreach ($sed_groups as $k => $v)
 	{
-		$base_grp = $k > SED_GROUP_TOPADMINS ? SED_GROUP_DEFAULT : $k;
+		$base_grp = $k > COT_GROUP_SUPERADMINS ? COT_GROUP_DEFAULT : $k;
 		$ins_array[] = array(
 			'groupid' => $k,
 			'code' => $module_name,

@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_PAGE', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'Pages';
 $z = 'page';
 

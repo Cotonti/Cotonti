@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_USERS', TRUE);
+define('COT_CORE', TRUE);
 $location = 'Users';
 $z = 'users';
 
@@ -26,7 +27,7 @@ require_once sed_incfile('xtemplate');
 
 require_once sed_incfile('functions', 'users');
 //require_once sed_incfile('resources', 'users');
-require_once sed_langfile('users', 'module');
+require_once sed_langfile('users', 'core');
 
 require_once sed_incfile('email');
 require_once sed_incfile('extrafields');

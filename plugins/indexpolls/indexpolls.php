@@ -33,7 +33,7 @@ defined('SED_CODE') or die('Wrong URL');
 function sed_get_polls($limit)
 {
     global $cfg, $L, $lang, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
-    require_once(sed_langfile('indexpolls'));
+    require_once sed_langfile('indexpolls', 'plug');
     $skin = sed_skinfile('indexpolls', true);
     $indexpolls = new XTemplate($skin);
     if($cfg['plugin']['indexpolls']['mode'] == 'Recent polls')

@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_PLUG', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'Plugins';
 $z = 'plug';
 

@@ -279,15 +279,15 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
             $sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order".$colname.") VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.", '".sed_sql_prep($order.'.'.$way)."'".$colvalue.")");
 
 			$auth_permit = array(
-				SED_GROUP_DEFAULT => 7,
-				SED_GROUP_GUESTS => 5,
-				SED_GROUP_MEMBERS => 7
+				COT_GROUP_DEFAULT => 7,
+				COT_GROUP_GUESTS => 5,
+				COT_GROUP_MEMBERS => 7
 			);
 
 			$auth_lock = array(
-				SED_GROUP_DEFAULT => 0,
-				SED_GROUP_GUESTS => 250,
-				SED_GROUP_MEMBERS => 128
+				COT_GROUP_DEFAULT => 0,
+				COT_GROUP_GUESTS => 250,
+				COT_GROUP_MEMBERS => 128
 			);
 
 			sed_auth_add_item('page', sed_sql_prep($code), $auth_permit, $auth_lock);

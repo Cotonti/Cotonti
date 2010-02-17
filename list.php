@@ -11,6 +11,7 @@
 
 define('SED_CODE', TRUE);
 define('SED_LIST', TRUE);
+define('COT_MODULE', TRUE);
 $location = 'List';
 $z = 'list';
 
