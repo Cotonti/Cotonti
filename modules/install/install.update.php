@@ -106,11 +106,27 @@ if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
 	$error = sed_sql_runscript($script);
 	if (empty($error))
 	{
+		$applied = "setup/$branch/patch-$prev_branch.sql<br/>";
+	}
+	if (file_exists("./setup/$branch/patch-$prev_branch.inc"))
+	{
+		$res = include "./setup/$branch/patch-$prev_branch.inc";
+		if ($res == 1)
+		{
+			$applied .= "./setup/$branch/patch-$prev_branch.inc<br />";
+		}
+		else
+		{
+			$error .= "./setup/$branch/patch-$prev_branch.inc<br />";
+		}
+	}
+	if (empty($error))
+	{
 		// Success
 		sed_sql_query("UPDATE $db_updates SET upd_value = '$branch' WHERE upd_param = 'branch'");
 		$t->assign(array(
 			'SUCCESS_TITLE' => $L['install_upgrade_success'].$branch,
-			'SUCCESS_MSG' => "setup/$branch/patch-$prev_branch.sql<br/>".$msg_string
+			'SUCCESS_MSG' => $applied . $msg_string
 		));
 		$t->parse('MAIN.SUCCESS');
 	}
@@ -180,8 +196,16 @@ else
 			}
 			if (isset($val['php']))
 			{
-				include $val['php'];
-				$applied .= $val['php'].'<br />';
+				$res = include $val['php'];
+				if ($res == 1)
+				{
+					$applied .= $val['php'].'<br />';
+				}
+				else
+				{
+					$error .= $val['php'].'<br />';
+					break;
+				}
 			}
 			$max_r = $key;
 		}

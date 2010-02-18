@@ -57,6 +57,9 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
+$out['head'] .= $R['code_noindex'];
+$out['subtitle'] = empty($qs) ? $L['Tags'] : htmlspecialchars(strip_tags($qs)) . ' - ' . $L['tags_Search_results'];
+
 $t->assign(array(
 	'TAGS_ACTION' => sed_url('plug', 'e=tags&a=' . $a),
 	'TAGS_HINT' => $L['tags_Query_hint'],

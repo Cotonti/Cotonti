@@ -220,10 +220,12 @@ $pfs .= (sed_auth('pfs', 'a', 'A')) ? ' &nbsp; '.sed_build_pfs(0, 'newlink', 'ne
 
 list($totalsentbox, $totalinbox) = sed_message_count($usr['id']);
 
-$title_tags[] = array('{PM}', '{SEND_NEW}');
-$title_tags[] = array('%1$s', '%2$s');
-$title_data = array($L['Private_Messages'], $L['pm_sendnew']);
-$out['subtitle'] = sed_title('title_pm_send', $title_tags, $title_data);
+$title_params = array(
+	'PM' => $L['Private_Messages'],
+	'SEND_NEW' => $L['pm_sendnew']
+);
+$out['subtitle'] = sed_title('title_pm_send', $title_params);
+$out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.main');

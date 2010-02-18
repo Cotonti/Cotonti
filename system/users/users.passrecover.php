@@ -104,13 +104,12 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 	}
 }
 
-$title_tags[] = array('{PASSRECOVER}');
-$title_tags[] = array('%1$s');
-$title_data = array($L['pasrec_title']);
 
-$out['subtitle'] = sed_title('title_users_pasrec', $title_tags, $title_data);
-
-$plug_head .= '<meta name="robots" content="noindex" />';
+$title_params = array(
+	'PASSRECOVER' => $L['pasrec_title']
+);
+$out['subtitle'] = sed_title('title_users_pasrec', $title_params);
+$out['head'] .= $R['code_noindex'];
 
 $bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
 $title = $bhome . $L['pasrec_title'];

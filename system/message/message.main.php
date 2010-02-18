@@ -18,7 +18,7 @@ $msg = sed_import('msg', 'G', 'INT');
 $num = sed_import('num', 'G', 'INT');
 $rc = sed_import('rc', 'G', 'INT');
 
-require_once(sed_langfile('message', true));
+require_once(sed_langfile('message', 'core'));
 
 unset($r, $rd, $ru);
 
@@ -160,8 +160,8 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$plug_head .= '<meta name="robots" content="noindex" />'; // TODO: in resources
-$plug_title = $title." - ";
+$out['head'] .= $R['code_noindex'];
+$out['subtitle'] = $title;
 require_once $cfg['system_dir'].'/header.php';
 $t = new XTemplate(sed_skinfile('message'));
 

@@ -8,6 +8,7 @@
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />
 <meta http-equiv="last-modified" content="{PHP.meta_lastmod} GMT" />
+<meta name="robots" content="noindex" />
 <link rel="shortcut icon" href="favicon.ico" />
 <title>{PHP.L.install_title}</title>
 <style type="text/css" title="Installer CSS">

@@ -269,10 +269,12 @@ $user_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
 $user_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short', '', date('Y', $sys['now_offset']));
 $urr['user_lastip'] = sed_build_ipsearch($urr['user_lastip']);
 
-$title_tags[] = array('{EDIT}', '{NAME}');
-$title_tags[] = array('%1$s', '%2$s');
-$title_data = array($L['Edit'], htmlspecialchars($urr['user_name']));
-$out['subtitle'] = sed_title('title_users_edit', $title_tags, $title_data);
+$title_params = array(
+	'EDIT' => $L['Edit'],
+	'NAME' => $urr['user_name']
+);
+$out['subtitle'] = sed_title('title_users_edit', $title_params);
+$out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.main');

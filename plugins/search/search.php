@@ -45,10 +45,21 @@ $hl = urlencode(mb_strtoupper($sq));
 // Search title
 $plugin_title  = "<a href='".sed_url('plug', 'e=search')."'>".$L['plu_title_all']."</a>";
 $plugin_title .= ($tab=='frm' || $tab=='pag') ? " ".$cfg['separator']." " : "";
-if($tab=='frm')
-{ $plugin_title .= "<a href='".sed_url('plug', 'e=search&tab=frm')."'>".$L['plu_title_frmtab']."</a>"; }
-elseif($tab=='pag')
-{ $plugin_title .= "<a href='".sed_url('plug', 'e=search&tab=pag')."'>".$L['plu_title_pagtab']."</a>"; }
+if ($tab=='frm')
+{
+	$plugin_title .= "<a href='".sed_url('plug', 'e=search&tab=frm')."'>".$L['plu_title_frmtab']."</a>";
+	$L['plu_title'] = $L['plu_title_frmtab'];
+}
+elseif ($tab=='pag')
+{
+	$plugin_title .= "<a href='".sed_url('plug', 'e=search&tab=pag')."'>".$L['plu_title_pagtab']."</a>";
+	$L['plu_title'] = $L['plu_title_pagtab'];
+}
+else
+{
+	$L['plu_title'] = $L['plu_title_all'];
+}
+$out['head'] .= $R['code_noindex'];
 
 // If advanced search
 if($tab=='frm' || $tab=='pag')
@@ -1091,6 +1102,7 @@ else
 }
 
 // Output
+$out['subtitle'] = empty($sq) ? $L['plu_title'] : htmlspecialchars(strip_tags($sq)) . ' - ' . $L['plu_result'];
 $t->assign(array(
 	"PLUGIN_TITLE" => $plugin_title,
 	"PLUGIN_SEARCH_ACTION" => empty($tab) ? sed_url('plug', 'e=search') : sed_url('plug', 'e=search&tab=' . $tab),

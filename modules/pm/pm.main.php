@@ -107,10 +107,13 @@ foreach ($extp as $pl)
 /* ===== */
 
 /* === Title === */
-$title_tags[] = array('{PM}', '{INBOX}', '{SENTBOX}');
-$title_tags[] = array('%1$s', '%2$s', '%3$s');
-$title_data = array($L['Private_Messages'], $totalinbox, $totalsentbox);
-$out['subtitle'] = sed_title('title_pm_main', $title_tags, $title_data);
+$title_params = array(
+	'PM' => $L['Private_Messages'],
+	'INBOX' => $totalinbox,
+	'SENTBOX' => $totalsentbox
+);
+$out['subtitle'] = sed_title('title_pm_main', $title_params);
+$out['head'] .= $R['code_noindex'];
 /* === Title === */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter");

@@ -26,25 +26,27 @@ $out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"".sed_url('users')
 $out['compopup'] = sed_javascript($morejavascript);
 
 unset($title_tags, $title_data);
-$title_tags[] = array('{MAINTITLE}', '{DESCRIPTION}', '{SUBTITLE}');
-$title_tags[] = array('%1$s', '%2$s', '%3$s');
-$title_data = array($cfg['maintitle'], $cfg['subtitle'], $out['subtitle']);
+$title_params = array(
+	'MAINTITLE' => $cfg['maintitle'],
+	'DESCRIPTION' => $cfg['subtitle'],
+	'SUBTITLE' => $out['subtitle']
+);
 if (defined('SED_INDEX'))
 {
-	$out['fulltitle'] = sed_title('title_header_index', $title_tags, $title_data);
+	$out['fulltitle'] = sed_title('title_header_index', $title_params);
 }
 else
 {
-	$out['fulltitle'] = sed_title('title_header', $title_tags, $title_data);
+	$out['fulltitle'] = sed_title('title_header', $title_params);
 }
 
 $out['meta_contenttype'] = ($cfg['doctypeid'] > 2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
 $out['basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
 $out['meta_charset'] = $cfg['charset'];
-$out['meta_desc'] = $plug_desc.htmlspecialchars($cfg['maintitle'])." - ".htmlspecialchars($cfg['subtitle']);
-$out['meta_keywords'] = $plug_keywords.$cfg['metakeywords'];
-$out['meta_lastmod'] = gmdate("D, d M Y H:i:s");
-$out['head_head'] = $plug_head;
+$out['meta_desc'] = htmlspecialchars($out['desc']);
+$out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
+$out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
+$out['head_head'] = $out['head'];
 
 sed_sendheaders();
 

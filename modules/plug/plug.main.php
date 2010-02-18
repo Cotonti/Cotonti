@@ -79,14 +79,10 @@ if (!empty($e))
 		}
 	}
 
-	$out['subtitle'] = (empty($L['plu_title'])) ? $out['subtitle'] : $L['plu_title'];
-	$sys['sublocation'] = $out['subtitle'];
-
 	/* ============= */
 
-	require_once $cfg['system_dir'] . '/header.php';
-
-	$t = new XTemplate($path_skin);
+	$t_plug = new XTemplate($path_skin);
+	$t = $t_plug;
 
 	$empty = true;
 
@@ -106,6 +102,13 @@ if (!empty($e))
 	{
 		sed_redirect(sed_url('message', 'msg=907', '', true));
 	}
+
+	$out['subtitle'] = empty($out['subtitle']) ? $L['plu_title'] : $out['subtitle'];
+	$sys['sublocation'] = $out['subtitle'];
+
+	require_once $cfg['system_dir'] . '/header.php';
+
+	$t = $t_plug;
 
 	if ($autoassigntags)
 	{
