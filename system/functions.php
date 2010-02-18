@@ -4516,7 +4516,11 @@ function sed_title($mask, $tags, $data)
 	global $cfg;
 	$mask = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
 	$mask = str_replace($tags[0], $tags[1], $mask);
-	$data = array_map('htmlspecialchars', $data);
+	$cnt = count($data);
+	for ($i = 0; $i < $cnt; $i++)
+	{
+		$data[$i] = htmlspecialchars($data[$i], ENT_COMPAT, 'UTF-8', false);
+	}
 	$title = vsprintf($mask, $data);
 	return $title;
 }
