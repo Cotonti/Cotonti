@@ -642,8 +642,8 @@ CREATE TABLE `sed_forum_sections` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 INSERT INTO `sed_forum_sections` (`fs_id`, `fs_state`, `fs_order`, `fs_title`, `fs_category`, `fs_desc`, `fs_icon`, `fs_lt_id`, `fs_lt_title`, `fs_lt_date`, `fs_lt_posterid`, `fs_lt_postername`, `fs_autoprune`, `fs_allowusertext`, `fs_allowbbcodes`, `fs_allowsmilies`, `fs_allowprvtopics`, `fs_countposts`, `fs_topiccount`, `fs_topiccount_pruned`, `fs_postcount`, `fs_postcount_pruned`, `fs_viewcount`, `fs_masterid`, `fs_mastername`, `fs_allowviewers`, `fs_allowpolls`) VALUES
-(1, 0, 100, 'General discussion', 'pub', 'General chat.', 'modules/admin/img/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, '', 1, 0),
-(2, 0, 101, 'Off-topic', 'pub', 'Various and off-topic.', 'modules/admin/img/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '', 1, 0);
+(1, 0, 100, 'General discussion', 'pub', 'General chat.', 'system/admin/tpl/img/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, '', 1, 0),
+(2, 0, 101, 'Off-topic', 'pub', 'Various and off-topic.', 'system/admin/tpl/img/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '', 1, 0);
 
 CREATE TABLE `sed_forum_structure` (
   `fn_id` mediumint(8) NOT NULL auto_increment,

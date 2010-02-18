@@ -36,9 +36,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
-
-
+require_once sed_incfile('functions', 'polls');
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
