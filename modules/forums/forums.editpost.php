@@ -203,10 +203,13 @@ $toptitle .= $cfg['separator']." <a href=\"".sed_url('forums', "m=editpost&s=$s&
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;
-$title_tags[] = array('{FORUM}', '{SECTION}', '{EDIT}');
-$title_tags[] = array('%1$s', '%2$s', '%3$s');
-$title_data = array($L['Forums'], $fs_title, $L['Edit']);
-$out['subtitle'] = sed_title('title_forum_editpost', $title_tags, $title_data);
+$title_params = array(
+	'FORUM' => $L['Forums'],
+	'SECTION' => $fs_title,
+	'EDIT' => $L['Edit']
+);
+$out['subtitle'] = sed_title('title_forum_editpost', $title_params);
+$out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.main');

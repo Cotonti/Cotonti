@@ -127,11 +127,12 @@ $pagenav = sed_pagenav('list', "c=$c&s=$s&w=$w&o=$o&p=$p", $d, $totallines, $cfg
 list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=' . $c), $sed_cat[$c]['com']);
 list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=' . $c), $sed_cat[$c]['ratings']);
 
+$title_params = array(
+	'TITLE' => $sed_cat[$c]['title']
+);
+$out['desc'] = htmlspecialchars(strip_tags($sed_cat[$c]['desc']));
 $sys['sublocation'] = $sed_cat[$c]['title'];
-$title_tags[] = array('{TITLE}');
-$title_tags[] = array('%1$s');
-$title_data = array($sed_cat[$c]['title']);
-$out['subtitle'] = sed_title('title_list', $title_tags, $title_data);
+$out['subtitle'] = sed_title('title_list', $title_params);
 
 /* === Hook === */
 $extp = sed_getextplugins('list.main');

@@ -597,10 +597,12 @@ $profile_form_pmnotify = ($urr['user_pmnotify']) ? "<input type=\"radio\" class=
 
 $profile_form_hideemail = ($urr['user_hideemail']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" checked=\"checked\" />".$L['No'];
 
-$title_tags[] = array('{PROFILE}', '{NAME}');
-$title_tags[] = array('%1$s', '%2$s');
-$title_data = array($L['Profile'], htmlspecialchars($urr['user_name']));
-$out['subtitle'] = sed_title('title_users_profile', $title_tags, $title_data);
+$title_params = array(
+	'PROFILE' => $L['Profile'],
+	'NAME' => $urr['user_name']
+);
+$out['subtitle'] = sed_title('title_users_profile', $title_params);
+$out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
 $extp = sed_getextplugins('profile.main');

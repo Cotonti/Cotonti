@@ -61,10 +61,11 @@ $urr['user_age'] = ($urr['user_birthdate']!=0) ? sed_build_age($urr['user_birthd
 $urr['user_birthdate'] = ($urr['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $urr['user_birthdate']) : '';
 $urr['user_gender'] = ($urr['user_gender']=='' || $urr['user_gender']=='U') ?  '' : $L["Gender_".$urr['user_gender']];
 
-$title_tags[] = array('{USER}', '{NAME}');
-$title_tags[] = array('%1$s', '%2$s');
-$title_data = array($L['User'], htmlspecialchars($urr['user_name']));
-$out['subtitle'] = sed_title('title_users_details', $title_tags, $title_data);
+$title_params = array(
+	'USER' => $L['User'],
+	'NAME' => $urr['user_name']
+);
+$out['subtitle'] = sed_title('title_users_details', $title_params);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.details.main');

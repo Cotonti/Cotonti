@@ -2391,7 +2391,7 @@ function sed_incfile($name, $module = false)
 	global $cfg;
 	if ($module)
 	{
-		if ($module == 'admin' || $module == 'users')
+		if ($module == 'admin' || $module == 'users' || $module == 'message')
 		{
 			return $cfg['system_dir']."/$module/$module.$name.php";
 		}
@@ -3911,21 +3911,26 @@ function sed_themefile()
 }
 
 /**
- * Returns a String afterbeing processed by a sprintf mask for titles
+ * Generates a title string by replacing submasks with assigned values
  *
  * @param string $area Area maskname or actual mask
- * @param array $tags Tag Masks
- * @param array $data title options
+ * @param array $params An associative array of available parameters
  * @return string
  */
-function sed_title($mask, $tags, $data)
+function sed_title($mask, $params = array())
 {
 	global $cfg;
-	$mask = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
-	$mask = str_replace($tags[0], $tags[1], $mask);
-	$data = array_map('htmlspecialchars', $data);
-	$title = vsprintf($mask, $data);
-	return $title;
+	$res = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
+	is_array($params) ? $args = $params : mb_parse_str($params, $args);
+	if (preg_match_all('#\{(.+?)\}#', $res, $matches, PREG_SET_ORDER))
+	{
+		foreach($matches as $m)
+		{
+			$var = $m[1];
+			$res = str_replace($m[0], htmlspecialchars($args[$var]), $res);
+		}
+	}
+	return $res;
 }
 
 /**

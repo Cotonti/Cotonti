@@ -121,7 +121,8 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$plug_head .= '<meta name="robots" content="noindex" />';
+$out['subtitle'] = $L['aut_logintitle'];
+$out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.auth'));
 

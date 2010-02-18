@@ -487,10 +487,13 @@ else
 }
 
 $sys['sublocation'] = $fs_title;
-$title_tags[] = array('{FORUM}', '{TITLE}');
-$title_tags[] = array('%1$s', '%2$s');
-$title_data = array($L['Forums'], htmlspecialchars($ft_title));
-$out['subtitle'] = sed_title('title_forum_posts', $title_tags, $title_data);
+$title_params = array(
+	'FORUM' => $L['Forums'],
+	'SECTION' => $fs_title,
+	'TITLE' => $ft_title
+);
+$out['subtitle'] = sed_title('title_forum_posts', $title_params);
+$out['desc'] = htmlspecialchars(strip_tags($ft_desc));
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.posts.main');

@@ -78,10 +78,13 @@ $row_user = sed_sql_fetcharray($sql_user);
 $star = '<div class="'.$star_class.'">'.$row['pm_icon_starred'].'</div>';
 $row['pm_icon_starred'] = sed_rc_link(sed_url('pm', 'a=star&&id='.$row['pm_id']), $R['pm_icon_archive'], array('title' => $titstar));
 
-$title_tags[] = array('{PM}', '{INBOX}', '{SENTBOX}');
-$title_tags[] = array('%1$s', '%2$s', '%3$s');
-$title_data = array($L['Private_Messages'], $totalinbox, $totalsentbox);
-$out['subtitle'] = sed_title('title_pm_main', $title_tags, $title_data);
+$title_params = array(
+	'PM' => $L['Private_Messages'],
+	'INBOX' => $totalinbox,
+	'SENTBOX' => $totalsentbox
+);
+$out['subtitle'] = sed_title('title_pm_main', $title_params);
+$out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.main');
