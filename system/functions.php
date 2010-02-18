@@ -3927,7 +3927,7 @@ function sed_title($mask, $params = array())
 		foreach($matches as $m)
 		{
 			$var = $m[1];
-			$res = str_replace($m[0], htmlspecialchars($args[$var]), $res);
+			$res = str_replace($m[0], htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false), $res);
 		}
 	}
 	return $res;
