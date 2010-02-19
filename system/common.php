@@ -274,7 +274,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 
 				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now_offset'])
 				{
-					$sys['comingback']= TRUE;
+					$sys['comingback'] = TRUE;
 					if ($usr['lastlog'] > $usr['lastvisit'])
 					{
 						$usr['lastvisit'] = $usr['lastlog'];
@@ -392,17 +392,20 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 		if ($row = sed_sql_fetcharray($sql))
 		{
 			$online_count = 1;
+			$sys['online_location'] = $row['online_location'];
+			$sys['online_subloc'] = $row['online_subloc'];
 			if ($cfg['shieldenabled'] && (!sed_auth('admin', 'a', 'A') || SED_SHIELD_FORCE))
 			{
 				$shield_limit = $row['online_shield'];
 				$shield_action = $row['online_action'];
 				$shield_hammer = sed_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
+				$sys['online_hammer'] = $shield_hammer;
 			}
-			sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".sed_sql_prep($location)."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$shield_hammer." WHERE online_userid=".$usr['id']);
+			$sys['comingback'] = true;
 		}
 		else
 		{
-			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer) VALUES ('".$usr['ip']."', '".sed_sql_prep($usr['name'])."', ".(int)$sys['now'].", '".sed_sql_prep($location)."',  '".sed_sql_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
+			$sys['comingback'] = false;
 		}
 	}
 	else
@@ -412,37 +415,24 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 		if ($online_count > 0)
 		{
-			if ($cfg['shieldenabled'] && (!sed_auth('admin', 'a', 'A') || SED_SHIELD_FORCE))
+			if ($row = sed_sql_fetcharray($sql))
 			{
-				if ($row = sed_sql_fetcharray($sql))
+				$sys['online_location'] = $row['online_location'];
+				$sys['online_subloc'] = $row['online_subloc'];
+				if ($cfg['shieldenabled'])
 				{
 					$shield_limit = $row['online_shield'];
 					$shield_action = $row['online_action'];
 					$shield_hammer = sed_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
+					$sys['online_hammer'] = $shield_hammer;
 				}
+				$sys['comingback'] = true;
 			}
-			sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$shield_hammer." WHERE online_ip='".$usr['ip']."'");
+			else
+			{
+				$sys['comingback'] = false;
+			}
 		}
-		else
-		{
-			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer) VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".$location."', '".sed_sql_prep($sys['sublocation'])."', -1, 0, 0)");
-		}
-	}
-
-	$sql = sed_sql_query("DELETE FROM $db_online WHERE online_lastseen<$online_timedout");
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'");
-	$sys['whosonline_vis_count'] = sed_sql_result($sql, 0, 'COUNT(*)');
-	$sql = sed_sql_query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
-	$sys['whosonline_reg_count'] = sed_sql_numrows($sql);
-	$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
-
-	$ii = 0;
-	while ($row = sed_sql_fetcharray($sql))
-	{
-		$out['whosonline_reg_list'] .= ($ii > 0) ? ', ' : '';
-		$out['whosonline_reg_list'] .= sed_build_user($row['online_userid'], htmlspecialchars($row['online_name']));
-		$sed_usersonline[] = $row['online_userid'];
-		$ii++;
 	}
 }
 

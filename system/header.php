@@ -48,6 +48,52 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] = $out['head'];
 
+/* ======== Who's online (part 2) ======== */
+if ($location != $sys['online_location']
+	|| !empty($sys['sublocaction']) && $sys['sublocaction'] != $sys['online_subloc'])
+{
+	if ($usr['id'] > 0)
+	{
+		if (empty($sys['online_location']))
+		{
+			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
+				VALUES ('".$usr['ip']."', '".sed_sql_prep($usr['name'])."', ".(int)$sys['now'].", '".sed_sql_prep($location)."',  '".sed_sql_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
+		}
+		else
+		{
+			sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".sed_sql_prep($location)."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
+		}
+	}
+	else
+	{
+		if (empty($sys['online_location']))
+		{
+			sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
+				VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".sed_sql_prep($location)."', '".sed_sql_prep($sys['sublocation'])."', -1, 0, 0)");
+		}
+		else
+		{
+			sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
+		}
+	}
+}
+// TODO optimize this using cache
+sed_sql_query("DELETE FROM $db_online WHERE online_lastseen<$online_timedout");
+$sys['whosonline_vis_count'] = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'"), 0, 0);
+$sql_o = sed_sql_query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
+$sys['whosonline_reg_count'] = sed_sql_numrows($sql_o);
+$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
+$ii_o = 0;
+while ($row_o = sed_sql_fetcharray($sql_o))
+{
+	$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
+	$out['whosonline_reg_list'] .= sed_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
+	$sed_usersonline[] = $row_o['online_userid'];
+	$ii_o++;
+}
+sed_sql_freeresult($sql_o);
+unset($ii_o, $sql_o, $row_o);
+
 sed_sendheaders();
 
 if (!SED_AJAX)
