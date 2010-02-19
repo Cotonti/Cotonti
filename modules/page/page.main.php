@@ -81,7 +81,10 @@ if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a 
 	}
 	/* ===== */
 
-	if ($_SESSION['dl'] != $pag['page_id'])
+	// Hotlinking protection
+	if ($_SESSION['dl'] != $pag['page_id']
+		&& $sys['online_subloc'] != $pag['page_title']
+		&& $sys['online_subloc'] != $sed_cat[$pag['page_cat']]['title'])
 	{
 		sed_redirect($pag['page_pageurl']);
 	}
@@ -123,6 +126,7 @@ $title_params = array(
 );
 $out['desc'] = htmlspecialchars(strip_tags($pag['page_desc']));
 $out['subtitle'] = sed_title('title_page', $title_params);
+$sys['sublocation'] = $pag['page_title'];
 
 /* === Hook === */
 $extp = sed_getextplugins('page.main');
