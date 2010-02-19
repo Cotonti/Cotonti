@@ -401,11 +401,6 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 				$shield_hammer = sed_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
 				$sys['online_hammer'] = $shield_hammer;
 			}
-			$sys['comingback'] = true;
-		}
-		else
-		{
-			$sys['comingback'] = false;
 		}
 	}
 	else
@@ -426,11 +421,6 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 					$shield_hammer = sed_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
 					$sys['online_hammer'] = $shield_hammer;
 				}
-				$sys['comingback'] = true;
-			}
-			else
-			{
-				$sys['comingback'] = false;
 			}
 		}
 	}
@@ -521,7 +511,7 @@ $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." 
 
 if (!$cfg['disablehitstats'])
 {
-	if ($cot_cache->mem_available)
+	if ($cfg['cache'] && $cot_cache->mem_available)
 	{
 		$hits = $cot_cache->mem_inc('hits', 'system');
 		$cfg['hit_precision'] > 0 || $cfg['hit_precision'] = 100;

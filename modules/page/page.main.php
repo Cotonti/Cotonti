@@ -83,8 +83,7 @@ if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a 
 
 	// Hotlinking protection
 	if ($_SESSION['dl'] != $pag['page_id']
-		&& $sys['online_subloc'] != $pag['page_title']
-		&& $sys['online_subloc'] != $sed_cat[$pag['page_cat']]['title'])
+		&& $_SESSION['cat'] != $pag['page_cat'])
 	{
 		sed_redirect($pag['page_pageurl']);
 	}

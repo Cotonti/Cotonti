@@ -134,6 +134,8 @@ $out['desc'] = htmlspecialchars(strip_tags($sed_cat[$c]['desc']));
 $sys['sublocation'] = $sed_cat[$c]['title'];
 $out['subtitle'] = sed_title('title_list', $title_params);
 
+$_SESSION['cat'] = $c;
+
 /* === Hook === */
 $extp = sed_getextplugins('list.main');
 foreach ($extp as $pl)

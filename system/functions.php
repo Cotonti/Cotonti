@@ -2489,13 +2489,9 @@ function sed_javascript($more='')
  * @param mixed $default Default (fallback) language code
  * @return bool
  */
-function sed_langfile($name, $type = '', $default = 'en')
+function sed_langfile($name, $type = 'plug', $default = 'en')
 {
 	global $cfg, $lang;
-	if (empty($type))
-	{
-		throw new Exception('sed_langfile() API has been changed, you must specify the second parameter');
-	}
 	if ($type == 'module')
 	{
 		if (@file_exists($cfg['modules_dir']."/$name/lang/$name.$lang.lang.php"))
