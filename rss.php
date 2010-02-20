@@ -77,6 +77,7 @@ if ($c == "comments")
 		{
 			$rss_title = $row['page_title'];
 			$rss_description = $L['rss_comments_item_desc'];
+			$page_args = empty($row['page_alias']) ? "id=$page_id" : 'al=' . $row['page_alias'];
 
 			$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code='p$page_id' ORDER BY com_date DESC LIMIT ".$cfg_maxitems);
 			$i = 0;
@@ -100,7 +101,7 @@ if ($c == "comments")
 					$text = sed_post_parse($com_text, 'pages');
 				}
 				$items[$i]['description'] = $text;
-				$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', "id=$page_id", '#c'.$row['com_id'], true);
+				$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('page', $page_args, '#c'.$row['com_id'], true);
 				$items[$i]['pubDate'] = date('r', $row['com_date']);
 				$i++;
 			}
