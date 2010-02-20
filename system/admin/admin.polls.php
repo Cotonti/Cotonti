@@ -3,9 +3,9 @@
  * Administration panel - Poll editor
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -15,6 +15,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls',
 sed_block($usr['isadmin']);
 
 require_once sed_incfile('functions', 'polls');
+require_once sed_langfile('polls', 'module');
 
 $t = new XTemplate(sed_skinfile('admin.polls'));
 

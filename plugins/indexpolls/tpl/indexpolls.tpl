@@ -1,5 +1,6 @@
 <!-- BEGIN: POLL_VIEW -->
-{POLL_FORM_BEGIN}
+<div id = "poll_{POLL_ID}"><form action="{POLL_FORM_URL}" method="post" id="poll_form_{POLL_ID}" class="ajax" title="poll_{POLL_ID}">
+		<input type="hidden" name="poll_id" value="{POLL_ID}" /><input type="hidden" name="poll_skin" value="{PHP.skininput}" />
 <table>
 <!-- BEGIN: POLLTABLE -->
 <tr>
@@ -7,10 +8,10 @@
 </tr>
 <!-- END: POLLTABLE -->
 <tr>
-	<td>{POLL_FORM_BUTTON}</td>
+	<td><input type="submit" class="submit" value="{PHP.L.polls_Vote}" /></td>
 </tr>
 </table>
-{POLL_FORM_END}
+</form></div>
 <!-- END: POLL_VIEW -->
 
 
