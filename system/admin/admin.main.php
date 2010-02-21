@@ -56,10 +56,11 @@ $lincif_user = sed_auth('users', 'a', 'A');
 require_once($sys['inc']);
 $adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
 
-$title_tags[] = array('{ADMIN}');
-$title_tags[] = array('%1$s');
-$title_data = array($L['Administration']);
-$out['subtitle'] = sed_title('{ADMIN}', $title_tags, $title_data);
+$title_params = array(
+	'ADMIN' => $L['Administration']
+);
+$out['head'] .= $R['code_noindex'];
+$out['subtitle'] = sed_title('{ADMIN}', $title_params);
 
 require_once($cfg['system_dir'].'/header.php');
 if (!SED_AJAX)

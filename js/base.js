@@ -78,13 +78,22 @@ var ajaxUsed = false;
 // Global flag to let everybody know that AJAX has failed
 var ajaxError = false;
 
-// AJAX helper function
+/**
+ * AJAX helper function
+ * @param {hash} settings A hashtable with settings
+ * @return FALSE on successful AJAX call, TRUE on error to continue in
+ * synchronous mode
+ * @type bool
+ */
 function ajaxSend(settings) {
-	var method = settings.method || 'GET';
+	var method = settings.method.toUpperCase() || 'GET';
 	var data = settings.data || '';
 	var url = settings.url || $('#' + settings.formId).attr('action');
-	if(method == 'POST') {
+	if (method == 'POST') {
 		data += '&' + $('#' + settings.formId).serialize();
+	} else if (settings.formId) {
+		var sep = url.indexOf('?') > 0 ? '&' : '?';
+		url += sep + $('#' + settings.formId).serialize();
 	}
 	$.ajax({
 		type: method,
@@ -113,7 +122,13 @@ function ajaxSend(settings) {
 	return false;
 }
 
-// AJAX subpage loader with history support
+/**
+ * AJAX subpage loader with history support
+ * @param {string} hash A hash-address string
+ * @return FALSE on successful AJAX call, TRUE on error to continue in
+ * synchronous mode
+ * @type bool
+ */
 function ajaxPageLoad(hash) {
 	var m = hash.match(/^get(-.*?)?;(.*)$/);
 	if (m) {
@@ -135,18 +150,51 @@ function ajaxPageLoad(hash) {
 	return true;
 }
 
-// Constructs ajaxable hash string
-function ajaxMakeHash(href, rel) {
-	var hash = 'get';
+/**
+ * AJAX subform loader without history tracking
+ * @param {string} hash A hash-address string
+ * @param {string} formId Target form id attribute
+ * @return FALSE on successful AJAX call, TRUE on error to continue in
+ * synchronous mode
+ * @type bool
+ */
+function ajaxFormLoad(hash, formId) {
+	var m = hash.match(/^(get|post)(-.*?)?;(.*)$/);
+	if (m) {
+		// ajax bookmark
+		var url = m[3].indexOf(';') > 0 ? m[3].replace(';', '?') : ajaxCurrentBase + '?' + m[3];
+		ajaxUsed = true;
+		return ajaxSend({
+			method: m[1].toUpperCase(),
+			url: url,
+			divId: m[2] ? m[2].substr(1) : 'ajaxBlock',
+			formId: formId
+		});
+	}
+	return true;
+}
+
+/**
+ * Constructs ajaxable hash string
+ * @param {string} href Link href or form action attribute
+ * @param {string} rel An attribute value possibly containing a hash address
+ * @param {string} formData Is passed for forms only, is 'post' for POST forms
+ * or serialized form data for GET forms
+ * @return A valid hash-address string
+ * @type string
+ */
+function ajaxMakeHash(href, rel, formData) {
+	var hash = (formData == 'post') ? 'post' : 'get';
 	var hrefBase, params;
 	var sep = '?';
-	var m = rel.match(/get(-[^ ;]+)?(;\S*)?$/);
+	var m = rel.match(/(get|post)(-[^ ;]+)?(;\S*)?$/);
 	if (m) {
-		if (m[1]) {
-			hash += m[1];
-		}
+		hash = m[1];
 		if (m[2]) {
-			href = m[2].substr(1);
+			hash += m[2];
+		}
+		if (m[3]) {
+			href = m[3].substr(1);
 			sep  = ';';
 		}
 	}
@@ -154,15 +202,23 @@ function ajaxMakeHash(href, rel) {
 	if (href.indexOf(sep) > 0) {
 		hrefBase = href.substr(0, href.indexOf(sep));
 		params = href.substr(href.indexOf(sep) + 1);
+		if (formData && formData != 'post') {
+			params += '&' + formData;
+		}
 	} else {
 		hrefBase = href;
 		params = '';
+		if (formData && formData != 'post') {
+			params += sep + formData;
+		}
 	}
 	hash += hrefBase == ajaxCurrentBase ? params : hrefBase + ';' + params;
 	return hash;
 }
 
-// Standard event bindings
+/**
+ * Standard event bindings
+ */
 function bindHandlers() {
 	if (location.hash == '#comments' || location.hash.match(/#c\d+/)) {
 		$('.comments').css('display', '');
@@ -182,12 +238,12 @@ function bindHandlers() {
 	if (ajaxEnabled) {
 		// AJAX auto-handling
 		$('form.ajax').live('submit', function() {
-			return ajaxSend({
-				method: 'POST',
-				formId: $(this).attr('id'),
-				url: $(this).attr('action'),
-				divId: $(this).attr('title') ? $(this).attr('title') : 'ajaxBlock'
-			});
+			if ($(this).attr('method').toUpperCase() == 'POST') {
+				ajaxFormLoad(ajaxMakeHash($(this).attr('action').replace(/#.*$/, ''), $(this).attr('title'), 'post'), $(this).attr('id'));
+			} else {
+				$.historyLoad(ajaxMakeHash($(this).attr('action').replace(/#.*$/, ''), $(this).attr('title'), $(this).serialize()));
+			}
+			return ajaxError;
 		});
 		$('a.ajax').live('click', function() {
 			$.historyLoad(ajaxMakeHash($(this).attr('href').replace(/#.*$/, ''), $(this).attr('rel')));
