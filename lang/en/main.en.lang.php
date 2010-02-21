@@ -391,7 +391,7 @@ $L['hea_valqueues'] = 'In validation queues: ';
 $L['hea_viewsite'] = 'View Website'; // New in 0.7.0
 $L['hea_welcome'] = 'Welcome';
 $L['hea_youareloggedas'] = 'Logged in as';
-$L['hea_youarenotlogged'] = 'You\'re not logged in.';
+$L['hea_youarenotlogged'] = 'You\'re not logged in';
 
 /**
  * Footer
