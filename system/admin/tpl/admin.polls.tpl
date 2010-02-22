@@ -52,22 +52,21 @@
 
 			var ansCount = {EDIT_POLL_OPTIONSCOUNT};
 			var ansMax = {PHP.cfg.max_options_polls};
-			function delpolloption(object)
-			{
-				$(object).parent().children('.tbox').attr('value', '');
-				if (ansCount>2)
-				{
-					ansCount--;
-					$(object).parent().remove();
-				}
+				$(".deloption").live("click",function () {
+					$(this).parent().children('.tbox').attr('value', '');
+					if (ansCount>2)
+					{
+						ansCount--;
+						$(this).parent().remove();
+					}
 
-				return false;
-			}
+					return false;
+				});
 			$(document).ready(function(){
 				$("#addoption").click(function () {
 					if (ansCount<ansMax)
 					{
-						$('.polloptiondiv').last().clone().attr("id", '').insertBefore($('.polloptiondiv').last()).show().children('.tbox').attr('value', '');
+						$('.polloptiondiv').last().clone().attr("id", '').insertAfter($('.polloptiondiv').last()).show().children('.tbox').attr('value', '');
 						ansCount++;
 					}
 					return false;
@@ -89,9 +88,9 @@
 					<!-- BEGIN: OPTIONS -->
 					<div class="polloptiondiv">
 						<input  class="tbox" type="text" name="poll_option[{EDIT_POLL_OPTION_ID}]" size="40" value="{EDIT_POLL_OPTION_TEXT}" maxlength="128" />
-						<input  name="addoption" value="x" type="button" class="deloption" onclick="delpolloption(this)"  style="display:none;" />
+						<input  name="deloption" value="x" type="button" class="deloption"  style="display:none;" />
 					</div>
-					<!-- END: OPTIONS -->					
+					<!-- END: OPTIONS -->
 					<input id="addoption" name="addoption" value="{PHP.L.Add}" type="button" style="display:none;" /></td>
 			</tr>
 			<tr>

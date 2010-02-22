@@ -1,6 +1,7 @@
 <!-- BEGIN: POLL_VIEW -->
-<div id = "poll_{POLL_ID}"><form action="{POLL_FORM_URL}" method="post" id="poll_form_{POLL_ID}" class="ajax" title="poll_{POLL_ID}">
-		<input type="hidden" name="poll_id" value="{POLL_ID}" /><input type="hidden" name="poll_skin" value="{PHP.skininput}" />
+<div id = "poll_{POLL_ID}">
+	<form action="{POLL_FORM_URL}" method="post" id="poll_form_{POLL_ID}" class="ajax" title="get-poll_{POLL_ID};polls.php;mode=ajax&poll_skin={PHP.skininput}">
+		<input type="hidden" name="poll_id" value="{POLL_ID}" />
 		<table class="cells">
 			<!-- BEGIN: POLLTABLE -->
 			<tr>
@@ -17,7 +18,7 @@
 			</tr>
 			<!-- END: POLLTABLE -->
 			<tr>
-				<td colspan="4"><input type="submit" class="submit" value="{PHP.L.polls_Vote}" /></td>
+				<td colspan="4"><input type="submit" class="submit" value="{PHP.L.polls_Vote}" title="{PHP.L.polls_Vote}" /></td>
 			</tr>
 		</table>
 		<script type="text/javascript">
@@ -30,7 +31,8 @@
 			anim();
 		</script>
 		<p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
-	</form></div>
+	</form>
+</div>
 <!-- END: POLL_VIEW -->
 
 
