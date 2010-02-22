@@ -341,6 +341,7 @@ $L['YIM'] = 'Yahoo Messenger';
  * sed_declension arrays
  */
 
+$Ls['Comments'] = array('comments','comment');
 $Ls['Days'] = array('days','day');
 $Ls['Hours'] = array('hours','hour');
 $Ls['Minutes'] = array('minutes','minute');

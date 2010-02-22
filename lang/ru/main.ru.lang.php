@@ -340,6 +340,7 @@ $L['YIM'] = 'Yahoo Messenger';
  * sed_declension arrays
  */
 
+$Ls['Comments'] = array('комментарий','комментария','комментариев');
 $Ls['Days'] = array('день','дня','дней');
 $Ls['Hours'] = array('час','часа','часов');
 $Ls['Minutes'] = array('минута','минуты','минут');
