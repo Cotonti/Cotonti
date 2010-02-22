@@ -26,7 +26,7 @@ $mode = sed_import('mode', 'G', 'ALP');
 
 if ($mode == 'ajax')
 {
-	$skin = sed_import('poll_skin', 'P', 'TXT');
+	$skin = sed_import('poll_skin', 'G', 'TXT');
 	$id = sed_import('poll_id', 'P', 'INT');
 	sed_sendheaders();
 	sed_poll_vote();

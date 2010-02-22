@@ -449,9 +449,8 @@ if (!$cfg['disablehitstats'])
 }
 
 /* ======== Language ======== */
-require_once sed_langfile('main', 'core');
-
 $lang = $usr['lang'];
+require_once sed_langfile('main', 'core');
 
 /* ======== Who's online part 2 ======== */
 

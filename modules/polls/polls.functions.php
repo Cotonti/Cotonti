@@ -11,19 +11,30 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
+/**
+ * Adds form for create/edit Poll
+ *
+ * @param int $id Poll ID or Poll Code if $type is not epmty or new for new Poll
+ * @param XTemplate $t Template
+ * @param string $block Poll block in Template
+ * @param string $type Poll type
+ * @return bool
+ */
 function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 {
 	global $cfg, $db_polls, $db_polls_options, $error_string;
-	if (gettype($object) != "object")
+	if (gettype($t) != "object")
 	{
 		$t = new XTemplate(sed_skinfile('polls'));
 		$block = "EDIT_POLL_FORM";
+		$poll_full_template = true;
 	}
+	$block = (!empty($block)) ? $block."." : "";
 	$counter = 0;
 	if (!empty($error_string))
 	{
 		global $poll_id, $poll_options, $poll_multiple, $poll_state, $poll_text;
-
+		
 		$id = $poll_id;
 		$poll_multiple = ($poll_multiple) ? 'checked="checked"' : '';
 		$poll_state = ($poll_state) ? 'checked="checked"' : '';
@@ -47,23 +58,23 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 		if ($row = sed_sql_fetcharray($sql))
 		{
 			$id = $row["poll_id"];
-			$sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
 			$poll_text = htmlspecialchars($row["poll_text"]);
 			$poll_multiple = ($row["poll_multiple"]) ? 'checked="checked"' : '';
 			$poll_state = ($row["poll_state"]) ? 'checked="checked"' : '';
 
+			$sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
 			while ($row1 = sed_sql_fetcharray($sql1))
 			{
 				$counter++;
 				$t->assign(array(
-					"EDIT_POLL_OPTION_ID" => $row1['po_id'],
+					"EDIT_POLL_OPTION_ID" => "id".$row1['po_id'],
 					"EDIT_POLL_OPTION_TEXT" =>htmlspecialchars($row1['po_text'])
 				));
-				$t->parse($block.".OPTIONS");
+				$t->parse($block."OPTIONS");
 			}
 		}
 	}
-
+	
 	while ($counter < 2)
 	{
 		$counter++;
@@ -71,46 +82,52 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 			"EDIT_POLL_OPTION_ID" => '',
 			"EDIT_POLL_OPTION_TEXT" => ''
 		));
-		$t->parse($block.".OPTIONS");
-
+		$t->parse($block."OPTIONS");	
 	}
-
+	
 	if ($counter < $cfg['max_options_polls'])
 	{
 		$counter++;
 		$t->assign(array(
-				"EDIT_POLL_OPTION_ID" => '',
-				"EDIT_POLL_OPTION_TEXT" => ''
+			"EDIT_POLL_OPTION_ID" => '',
+			"EDIT_POLL_OPTION_TEXT" => ''
 		));
-		$t->parse($block.".OPTIONS");
+		$t->parse($block."OPTIONS");
 	}
-
+	
 	if ((int)$id > 0)
 	{
 		$t->assign(array(
-			"EDIT_POLL_CLOSE" => '<input name="poll_state" type="checkbox" value="1" $poll_state />', // TODO - to resorses
-			"EDIT_POLL_RESET" => '<input name="poll_reset" type="checkbox" value="1" />', // TODO - to resorses
-			"EDIT_POLL_DELETE" => '<input name="poll_delete" type="checkbox" value="1" />' // TODO - to resorses
+			"EDIT_POLL_CLOSE" => '<input name="poll_state" type="checkbox" value="1" '.$poll_state.' />', // TODO - to resources
+			"EDIT_POLL_RESET" => '<input name="poll_reset" type="checkbox" value="1" />', // TODO - to resources
+			"EDIT_POLL_DELETE" => '<input name="poll_delete" type="checkbox" value="1" />' // TODO - to resources
 		));
-		$t->parse($block.".EDIT");
+		$t->parse($block."EDIT");
 	}
-
+	
 	$t->assign(array(
 		"EDIT_POLL_TEXT" => $poll_text,
 		"EDIT_POLL_OPTIONSCOUNT" => $counter,
 		"EDIT_POLL_ID" => $id,
-		"EDIT_POLL_MULTIPLE" => '<input name="poll_multiple" type="checkbox" value="1" $poll_multiple />' // TODO - to resorses
+		"EDIT_POLL_MULTIPLE" => '<input name="poll_multiple" type="checkbox" value="1" '.$poll_multiple.' />' // TODO - to resources
 	));
-
+	if ($poll_full_template == true)
+	{
+		$t->parse($block);
+		return ($t->text($block));
+	}
 	return true;
 }
 
+/**
+ * Check Poll form
+ */
 function sed_poll_check()
 {
 	global $cfg, $L, $error_string, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
 	$poll_id = sed_import('poll_id', 'P', 'TXT');
 	$poll_delete = sed_import('poll_delete', 'P', 'BOL');
-
+	
 	if ($poll_delete && !empty($poll_id))
 	{
 		sed_poll_delete($poll_id);
@@ -121,30 +138,42 @@ function sed_poll_check()
 		$poll_reset = sed_import('poll_reset', 'P', 'BOL');
 		if ($poll_reset)
 		{
-			sed_poll_reset($id);
+			sed_poll_reset($poll_id);
 		}
 		$poll_text = trim(sed_import('poll_text', 'P', 'HTM'));
 		$poll_multiple = sed_import('poll_multiple', 'P', 'BOL');
 		$poll_state = sed_import('poll_state', 'P', 'BOL');
 		$poll_options = sed_import('poll_option', 'P', 'ARR');
-
+		
 		foreach ($poll_options as $key => $val)
 		{
-			$poll_options[$key] = trim(sed_import($val, 'D', 'TXT'));
+			$val = trim(sed_import($val, 'D', 'TXT'));
+			if (!empty($val))
+			{
+				$poll_options_temp[$key] = $val;
+			}
 		}
+		$poll_options = $poll_options_temp;
 		if (is_int($poll_id) || $cfg['del_dup_options'])
 		{
 			$poll_options = array_unique($poll_options);
 		}
-		$error_string .= (mb_strlen($poll_text) < 4) ? $L['polls_error_title']."<br/>" : '';
-		$error_string .= (count($poll_options) < 2) ? $L['polls_error_count']."<br/>" : '';
+		$error_string .= (mb_strlen($poll_text) < 4) ? $L['polls_error_title']."<br />" : '';
+		$error_string .= (count($poll_options) < 2) ? $L['polls_error_count']."<br />" : '';
 	}
 }
 
+/**
+ * Save Poll form
+ *
+ * @param string $type Poll type
+ * @param int $code Poll Code
+ * @return bool
+ */
 function sed_poll_save($type = 'index', $code = '')
 {
 	global $sys, $db_polls, $db_polls_options, $error_string, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
-
+	
 	if (!empty($poll_id) && empty($error_string))
 	{
 		if ((int)$poll_id > 0)
@@ -158,15 +187,23 @@ function sed_poll_save($type = 'index', $code = '')
 				VALUES ('".sed_sql_prep($type)."', ".(int)$poll_state.", ".(int)$sys['now_offset'].", '".sed_sql_prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
 			$newpoll_id = sed_sql_insertid();
 		}
-
+		
 		foreach ($poll_options as $key => $val)
 		{
 			if (!empty($val))
 			{
-				$sql2 = sed_sql_query( ((int)$key > 0 && (int)$poll_id > 0) ?
-						"UPDATE $db_polls_options SET po_text = '".sed_sql_prep($val)."' WHERE po_id = '".(int)$key."'"	 :
-						"INSERT into $db_polls_options (po_pollid, po_text, po_count) VALUES ('$newpoll_id', '".sed_sql_prep($val)."', '0')");
-				$ids[] = $key;
+				$key = mb_substr($key, 2);
+				if ((int)$key > 0 &&(int)$poll_id > 0)
+				{
+					$sql2 = sed_sql_query("UPDATE $db_polls_options SET po_text = '".sed_sql_prep($val)."' WHERE po_id = '".(int)$key."'");
+					$ids[] = $key;           
+				}
+				else
+				{
+					$sql2 = sed_sql_query( "INSERT into $db_polls_options (po_pollid, po_text, po_count) VALUES ('$newpoll_id', '".sed_sql_prep($val)."', '0')");
+					$ids[] = sed_sql_insertid();
+				}
+				
 			}
 		}
 		if ((int)$poll_id > 0 && count($ids) > 0)
@@ -178,14 +215,17 @@ function sed_poll_save($type = 'index', $code = '')
 	return (false);
 }
 
+/**
+ * Poll function
+ */
 function sed_poll_vote()
 {
 	global $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr;
-
+	
 	$vote = sed_import('vote', 'P', 'ARR');
 	$id = (int) sed_import('poll_id', 'P', 'INT');
-
-	if (!empty($vote))
+	
+	if (count($vote) > 0)
 	{
 		$alreadyvoted = 0;
 		$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_id = '$id'");
@@ -216,11 +256,20 @@ function sed_poll_vote()
 	}
 }
 
+/**
+ * Generates Poll form
+ *
+ * @param int $id Poll ID or Poll Code if $type is not epmty
+ * @param string $formlink Poll form url
+ * @param string $skin Poll template name
+ * @param string $type Poll type
+ * @return array
+ */
 function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 {
 	global $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr, $error_string;
 	$canvote = false;
-
+	
 	if (!is_array($id))
 	{
 		$id = (int) $id;
@@ -236,7 +285,7 @@ function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 		$row = $id;
 	}
 	$id = $row['poll_id'];
-
+	
 	$alreadyvoted = 0;
 	if ($cfg['ip_id_polls'] == 'id' && $usr['id'] > 0)
 	{
@@ -251,34 +300,29 @@ function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 	$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = '$id' AND $where LIMIT 1");
 	$alreadyvoted = (sed_sql_numrows($sql2) == 1) ? 1 : 0;
 
-	$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid = '$id'");
-	$totalvotes = sed_sql_result($sql2, 0, "SUM(po_count)");
-
-	$sql1 = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
-	if (sed_sql_numrows($sql1) < 1)
-	{
-		return false;
-	}
-
 	$skininput = $skin;
 	$skin = (empty($skin)) ? sed_skinfile('polls') : sed_skinfile($skin, true);
 	$t = new XTemplate($skin);
-
+	
 	if ($alreadyvoted) $poll_block = "POLL_VIEW_VOTED";
 	elseif (!$canvote) $poll_block = "POLL_VIEW_DISABLED";
 	elseif ($row['poll_state']) $poll_block = "POLL_VIEW_LOCKED";
 	else $poll_block = "POLL_VIEW";
 
+	$sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid = '$id'");
+	$totalvotes = sed_sql_result($sql2, 0, "SUM(po_count)");
+
+	$sql1 = sed_sql_query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
 	while ($row1 = sed_sql_fetcharray($sql1))
 	{
 		$po_id = $row1['po_id'];
 		$po_count = $row1['po_count'];
 		$percent = @round(100 * ($po_count / $totalvotes), 1);
-
+		
 		$input_type = $row['poll_multiple'] ? "checkbox" : "radio";
 		$polloptions_input = ($alreadyvoted || !$canvote) ? "" : '<input type="'.$input_type.'" name="vote[]" value="'.$po_id.'" />&nbsp;'; // TODO - to resorses
 		$polloptions = sed_parse(htmlspecialchars($row1['po_text']), 1, 1, 1);
-
+		
 		$t->assign(array(
 			"POLL_OPTIONS" => $polloptions,
 			"POLL_PER" => $percent,
@@ -287,7 +331,7 @@ function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 		));
 		$t->parse($poll_block.".POLLTABLE");
 	}
-
+	
 	$t->assign(array(
 		"POLL_VOTERS" => $totalvotes,
 		"POLL_SINCE" => date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
@@ -297,24 +341,28 @@ function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 		"POLL_FORM_URL" => (empty($formlink)) ? sed_url('polls', "id=".$id) : $formlink,
 		"POLL_FORM_BUTTON" => $pollbutton
 	));
-
+	
 	$t->parse($poll_block);
 	$pollform = array($polltext, $t->text($poll_block));
-
+	
 	return($pollform);
 }
 
+/**
+ * Delete Poll
+ *
+ * @param int $id Poll ID or Poll Code if $type is not epmty
+ * @param string $type Poll type
+ * @return bool
+ */
 function sed_poll_delete($id, $type = '')
 {
 	global $db_polls, $db_polls_options, $db_polls_voters, $db_com;
-
+	
 	if ($type)
 	{
 		$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type = '".sed_sql_prep($type)."' AND poll_code = '$id' LIMIT 1");
-		if ($row = sed_sql_fetcharray($sql))
-		{
-			$id = $row['poll_id'];
-		}
+		$id = ($row = sed_sql_fetcharray($sql)) ? $row['poll_id'] : 0;
 	}
 	if ((int)$id > 0)
 	{
@@ -322,59 +370,82 @@ function sed_poll_delete($id, $type = '')
 		$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid = ".$id);
 		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid = ".$id);
 		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code = 'v".$id2."'");
+		return (true);
+	}
+	else
+	{
+		return (false);
 	}
 }
 
+/**
+ * Lock Poll
+ *
+ * @param int $id Poll ID or Poll code if $type is not epmty
+ * @param int $state Poll lock status: 0 - unlocked, 1 - locked, 3 - toggle lock status
+ * @param string $type Poll type
+ * @return bool
+ */
 function sed_poll_lock($id, $state, $type = '')
 {
 	global $db_polls;
-
+	
 	$id = (int) $id;
 	$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".sed_sql_prep($type)."' AND poll_code = '$id'";
-	if ($state = 3)
+	if ($state == 3)
 	{
 		$sql = sed_sql_query("SELECT poll_state FROM $db_polls WHERE  $where LIMIT 1");
-		if ($row = sed_sql_fetcharray($sql))
-		{
-			$rstate = $row['poll_state'];
-		}
-		if ($rstate) $state = 0;
-		else $state = 1;
+		$rstate = ($row = sed_sql_fetcharray($sql)) ? $row['poll_state'] : 0;
+		$state = ($rstate) ? 0 : 1;
 	}
 	if ((int)$id > 0)
 	{
 		$sql = sed_sql_query("UPDATE $db_polls SET poll_state = '".(int)$state."' WHERE $where");
 	}
+	
+	return ((sed_sql_affectedrows() > 0) ? true : false);
 }
 
+/**
+ * Reset Poll votes
+ *
+ * @param int $id Poll ID or Poll Code if $type is not epmty
+ * @param string $type Poll type
+ * @return bool
+ */
 function sed_poll_reset($id, $type = '')
 {
 	global $db_polls, $db_polls_options, $db_polls_voters;
-
 	$id = (int) $id;
 	if ($type)
 	{
 		$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type = '".sed_sql_prep($type)."' AND poll_code = '$id' LIMIT 1");
-		if ($row = sed_sql_fetcharray($sql))
-		{
-			$id = $row['poll_id'];
-		}
+		$id = ($row = sed_sql_fetcharray($sql)) ? $row['poll_id'] : 0;
 	}
 	if ((int)$id > 0)
 	{
 		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid = '$id'");
 		$sql = sed_sql_query("UPDATE $db_polls_options SET po_count = 0 WHERE po_pollid = '$id'");
 	}
+	
+	return ((sed_sql_affectedrows() > 0) ? true : false);
 }
 
+/**
+ * Checks if Poll exists
+ *
+ * @param int $id Poll ID or Poll Code if $type is not epmty
+ * @param string $type Poll type
+ * @return bool true if Poll exists
+ */
 function sed_poll_exists($id, $type = '')
 {
 	global $db_polls;
-
+	
 	$id = (int) $id;
 	$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".sed_sql_prep($type)."' AND poll_code = '$id'";
 	$sql = sed_sql_query("SELECT COUNT(*)  FROM $db_polls WHERE $where LIMIT 1");
-
+	
 	return (sed_sql_result($sql, 0, "COUNT(*)"));
 }
 
