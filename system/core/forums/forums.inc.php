@@ -102,7 +102,7 @@ else
 }
 
 $t->assign(array(
-    "FORUMS_RSS" => sed_url("rss", "c=forums", "", true),
+    "FORUMS_RSS" => sed_url('rss', 'c=forums'),
     "FORUMS_SECTIONS_PAGETITLE" => $bhome."<a href=\"".sed_url('forums')."\">".$L['Forums']."</a>",
     "FORUMS_SECTIONS_MARKALL" =>  $out['markall'],
     "FORUMS_SECTIONS_WHOSONLINE" => $out['whosonline']." : ".$out['whosonline_reg_list']

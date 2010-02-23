@@ -185,7 +185,7 @@ $t->assign(array(
 "LIST_PAGETITLE" => $catpath,
 "LIST_CATEGORY" => '<a href="'.sed_url('list', "c=$c").'">'.$sed_cat[$c]['title'].'</a>',
 "LIST_CAT" => $c,
-"LIST_CAT_RSS" => sed_url("rss", "c=$c", "", true),
+"LIST_CAT_RSS" => sed_url('rss', "c=$c"),
 "LIST_CATTITLE" => $sed_cat[$c]['title'],
 "LIST_CATPATH" => $catpath,
 "LIST_CATDESC" => $sed_cat[$c]['desc'],

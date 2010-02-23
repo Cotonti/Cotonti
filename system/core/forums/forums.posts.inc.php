@@ -584,7 +584,7 @@ $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(
 	"FORUMS_POSTS_ID" => $q,
-	"FORUMS_POSTS_RSS" => sed_url("rss", "c=topics&id=$q", "", true),
+	"FORUMS_POSTS_RSS" => sed_url('rss', "c=topics&id=$q"),
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
 	"FORUMS_POSTS_TOPICDESC" => htmlspecialchars($ft_desc),
     "FORUMS_POSTS_SHORTTITLE" => $ft_title,
