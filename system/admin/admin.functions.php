@@ -238,7 +238,7 @@ function sed_structure_delcat($id, $c)
 
     $sql = sed_sql_query("DELETE FROM $db_structure WHERE structure_id='$id'");
 	sed_auth_remove_item('page', $c);
-    $cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
+    $cot_cache && $cot_cache->db_unset('sed_cat', 'system');
 }
 
 /**
@@ -293,7 +293,7 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
 			sed_auth_add_item('page', sed_sql_prep($code), $auth_permit, $auth_lock);
             $res = true;
 			
-            $cfg['cache'] && $cot_cache->db_unset('sed_cat', 'system');
+            $cot_cache && $cot_cache->db_unset('sed_cat', 'system');
         }
     }
     return $res;

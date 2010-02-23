@@ -58,7 +58,7 @@ else
 
 /* ======== Configuration settings ======== */
 
-if ($cfg['cache'] && $cot_cfg)
+if ($cot_cache && $cot_cfg)
 {
 	$cfg = array_merge($cot_cfg, $cfg);
 	unset($cot_cfg);
@@ -81,7 +81,7 @@ else
 	$cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 	$cfg['css'] = $cfg['defaultskin'];
 
-	$cfg['cache'] && $cot_cache->db_set('cot_cfg', $cfg, 'system');
+	$cot_cache && $cot_cache->db_set('cot_cfg', $cfg, 'system');
 }
 // Mbstring options
 mb_internal_encoding($cfg['charset']);
@@ -137,13 +137,13 @@ if (!$sed_plugins)
 			$sed_plugins[$row['pl_hook']][] = $row;
 		}
 	}
-	$cfg['cache'] && $cot_cache->db_set('sed_plugins', $sed_plugins, 'system');
+	$cot_cache && $cot_cache->db_set('sed_plugins', $sed_plugins, 'system');
 }
 
 if (!is_array($sed_urltrans))
 {
 	sed_load_urltrans();
-	$cfg['cache'] && $cot_cache->db_set('sed_urltrans', $sed_urltrans, 'system', 1200);
+	$cot_cache && $cot_cache->db_set('sed_urltrans', $sed_urltrans, 'system', 1200);
 }
 
 /* ======== Gzip and output filtering ======== */
@@ -213,7 +213,7 @@ if (!$sed_groups )
 		sed_diefatal('No groups found.'); // TODO: Need translate
 	}
 
-	$cfg['cache'] && $cot_cache->db_set('sed_groups', $sed_groups, 'system');
+	$cot_cache && $cot_cache->db_set('sed_groups', $sed_groups, 'system');
 }
 
 /* ======== User/Guest ======== */
@@ -340,7 +340,7 @@ if ($usr['id'] == 0)
 	if (!$sed_guest_auth)
 	{
 		$sed_guest_auth = sed_auth_build(0);
-		$cfg['cache'] && $cot_cache->db_set('sed_guest_auth', $sed_guest_auth, 'system');
+		$cot_cache && $cot_cache->db_set('sed_guest_auth', $sed_guest_auth, 'system');
 	}
 	$usr['auth'] = $sed_guest_auth;
 	unset($sed_guest_auth);
@@ -510,7 +510,7 @@ $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." 
 
 if (!$cfg['disablehitstats'])
 {
-	if ($cfg['cache'] && $cot_cache->mem_available)
+	if ($cot_cache && $cot_cache->mem_available)
 	{
 		$hits = $cot_cache->mem_inc('hits', 'system');
 		$cfg['hit_precision'] > 0 || $cfg['hit_precision'] = 100;
@@ -548,7 +548,7 @@ if (!$cfg['disablehitstats'])
 if (!$sed_cat && !$cfg['disable_page'])
 {
 	sed_load_structure();
-	$cfg['cache'] && $cot_cache->db_set('sed_cat', $sed_cat, 'system');
+	$cot_cache && $cot_cache->db_set('sed_cat', $sed_cat, 'system');
 }
 
 /* ======== Various ======== */
@@ -593,12 +593,12 @@ if (!$cfg['parser_disable'])
 	if (!is_array($sed_smilies))
 	{
 		sed_load_smilies();
-		$cfg['cache'] && $cot_cache->db_set('sed_smilies', $sed_smilies, 'system');
+		$cot_cache && $cot_cache->db_set('sed_smilies', $sed_smilies, 'system');
 	}
 	if (!is_array($sed_bbcodes))
 	{
 		sed_bbcode_load();
-		if ($cfg['cache'])
+		if ($cot_cache)
 		{
 			$cot_cache->db_set('sed_bbcodes', $sed_bbcodes, 'system');
 			$cot_cache->db_set('sed_bbcodes_post', $sed_bbcodes_post, 'system');

@@ -73,7 +73,7 @@ if($n == 'options')
 			fn_defstate='".$rdefstate."'
 			WHERE fn_id='".$id."'");
 
-		$cfg['cache'] && $cot_cache->db_unset('sed_forums_str', 'system');
+		$cot_cache && $cot_cache->db_unset('sed_forums_str', 'system');
 
 		sed_redirect(sed_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
 	}
@@ -154,7 +154,7 @@ else
 				fn_defstate='".$s[$i]['rdefstate']."'
 				WHERE fn_id='".$i."'");
 		}
-		$cfg['cache'] && $cot_cache->db_unset('sed_forums_str', 'system');
+		$cot_cache && $cot_cache->db_unset('sed_forums_str', 'system');
 
 		$adminwarnings = $L['Updated'];
 	}
@@ -174,7 +174,7 @@ else
 			$sql = sed_sql_query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('$ncode', '$npath', '$ntitle', '$ndesc', '$nicon', ".(int)$ndefstate.")");
 		}
 
-		$cfg['cache'] && $cot_cache->db_unset('sed_forums_str', 'system');
+		$cot_cache && $cot_cache->db_unset('sed_forums_str', 'system');
 
 		$adminwarnings = $L['Added'];
 	}
@@ -183,7 +183,7 @@ else
 		sed_check_xg();
 		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 
-		$cfg['cache'] && $cot_cache->db_unset('sed_forums_str', 'system');
+		$cot_cache && $cot_cache->db_unset('sed_forums_str', 'system');
 
 		$adminwarnings = $L['Deleted'];
 	}

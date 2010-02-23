@@ -170,7 +170,7 @@ $t->assign(array(
 	"PAGE_COMMENTS_COUNT" => $comments_count,
 	"PAGE_RATINGS" => $ratings_link,
 	"PAGE_RATINGS_DISPLAY" => $ratings_display,
-	"PAGE_COMMENTS_RSS" => sed_url("rss", "c=comments&id=".$pag['page_id'])
+	"PAGE_COMMENTS_RSS" => sed_url('rss', 'c=comments&id=' . $pag['page_id'])
 ));
 
 // Extra fields for pages

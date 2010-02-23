@@ -31,4 +31,10 @@ $R['link_pagenav_main'] = '<span class="pagenav_pages"><a href="{$url}"{$event}{
 $R['link_pagenav_next'] = '<span class="pagenav_next"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_next'].'</a></span>';
 $R['link_pagenav_prev'] = '<span class="pagenav_prev"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_prev'].'</a></span>';
 
+/* Header */
+$R['code_basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
+$R['form_guest_remember'] = '<input type="checkbox" name="rremember" />';
+$R['form_guest_password'] = '<input type="password" name="rpassword" size="12" maxlength="32" />';
+$R['form_guest_username'] = '<input type="text" name="rusername" size="12" maxlength="100" />';
+
 ?>

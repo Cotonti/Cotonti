@@ -86,7 +86,7 @@ var ajaxError = false;
  * @type bool
  */
 function ajaxSend(settings) {
-	var method = settings.method.toUpperCase() || 'GET';
+	var method = settings.method ? settings.method.toUpperCase() : 'GET';
 	var data = settings.data || '';
 	var url = settings.url || $('#' + settings.formId).attr('action');
 	if (method == 'POST') {

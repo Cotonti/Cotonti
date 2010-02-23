@@ -27,7 +27,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-if($a == 'purge' && $cfg['cache'])
+if($a == 'purge' && $cot_cache)
 {
 	$adminwarnings = (sed_check_xg() && $cot_cache->clear()) ? $L['adm_purgeall_done'] : $L['Error'];
 }
@@ -42,7 +42,7 @@ elseif($a == 'delete')
 
 $is_adminwarnings = isset($adminwarnings);
 
-if ($cfg['cache'] && $cot_cache->mem_available)
+if ($cot_cache && $cot_cache->mem_available)
 {
 	$info = $cot_cache->get_info();
 	if ($info['available'] < 0)
