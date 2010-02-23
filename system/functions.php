@@ -2173,7 +2173,7 @@ function sed_getextplugins($hook, $cond='R')
 	}
 
 	// Trigger cache handlers
-	$cfg['cache'] && $cot_cache->trigger($hook);
+	$cot_cache && $cot_cache->trigger($hook);
 
 	return $extplugins;
 }

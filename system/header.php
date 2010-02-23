@@ -52,7 +52,7 @@ if (!$cfg['disablewhosonline'])
 			}
 		}
 	}
-	if ($cfg['cache'] && $cot_cache->mem_available && $cot_cache->mem_isset('whosonline', 'system'))
+	if ($cot_cache && $cot_cache->mem_available && $cot_cache->mem_isset('whosonline', 'system'))
 	{
 		$whosonline_data = $cot_cache->mem_get('whosonline', 'system');
 		$sys['whosonline_vis_count'] = $whosonline_data['vis_count'];
@@ -76,7 +76,7 @@ if (!$cfg['disablewhosonline'])
 		}
 		sed_sql_freeresult($sql_o);
 		unset($ii_o, $sql_o, $row_o);
-		if ($cfg['cache'] && $cot_cache->mem_available)
+		if ($cot_cache && $cot_cache->mem_available)
 		{
 			$whosonline_data = array(
 				'vis_count' => $sys['whosonline_vis_count'],
@@ -91,7 +91,7 @@ if (!$cfg['disablewhosonline'])
 
 
 $out['logstatus'] = ($usr['id'] > 0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
-$out['userlist'] = (sed_auth('users', 'a', 'R')) ? "<a href=\"".sed_url('users')."\">".$L['Users']."</a>" : '';
+$out['userlist'] = (sed_auth('users', 'a', 'R')) ? sed_rc_link(sed_url('users'), $L['Users']) : '';
 $out['compopup'] = sed_javascript($morejavascript);
 
 unset($title_tags, $title_data);
@@ -110,7 +110,7 @@ else
 }
 
 $out['meta_contenttype'] = ($cfg['doctypeid'] > 2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
-$out['basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
+$out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = $cfg['charset'];
 $out['meta_desc'] = htmlspecialchars($out['desc']);
 $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
@@ -121,7 +121,7 @@ sed_sendheaders();
 
 if (!SED_AJAX)
 {
-	if (sed_auth('page', 'any', 'A'))
+	if ($usr['id'] > 0 && !$cfg['disable_page'] && sed_auth('page', 'any', 'A'))
 	{
 		$sqltmp2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 		$sys['pagesqueued'] = sed_sql_result($sqltmp2, 0, 'COUNT(*)');
@@ -132,15 +132,15 @@ if (!SED_AJAX)
 
 			if ($sys['pagesqueued'] == 1)
 			{
-				$out['notices'] .= "<a href=\"".sed_url('admin', 'm=page')."\">"."1 ".$L['Page']."</a> ";
+				$out['notices'] .= sed_rc_link(sed_url('admin', 'm=page'), '1 ' . $L['Page']);
 			}
 			elseif ($sys['pagesqueued'] > 1)
 			{
-				$out['notices'] .= "<a href=\"".sed_url('admin', 'm=page')."\">".$sys['pagesqueued']." ".$L['Pages']."</a> ";
+				$out['notices'] .= sed_rc_link(sed_url('admin', 'm=page'), $sys['pagesqueued'] . ' ' . $L['Pages']);
 			}
 		}
 	}
-	elseif ($usr['id'] > 0 && sed_auth('page', 'any', 'W'))
+	elseif ($usr['id'] > 0 && !$cfg['disable_page'] && sed_auth('page', 'any', 'W'))
 	{
 		$sqltmp2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1 AND page_ownerid = " . $usr['id']);
 		$sys['pagesqueued'] = sed_sql_result($sqltmp2, 0, 'COUNT(*)');
@@ -151,11 +151,11 @@ if (!SED_AJAX)
 
 			if ($sys['pagesqueued'] == 1)
 			{
-				$out['notices'] .= "<a href=\"".sed_url('list', 'c=unvalidated')."\">"."1 ".$L['Page']."</a> ";
+				$out['notices'] .= sed_rc_link(sed_url('list', 'c=unvalidated'), '1 ' . $L['Page']);
 			}
 			elseif ($sys['pagesqueued'] > 1)
 			{
-				$out['notices'] .= "<a href=\"".sed_url('list', 'c=unvalidated')."\">".$sys['pagesqueued']." ".$L['Pages']."</a> ";
+				$out['notices'] .= sed_rc_link(sed_url('list', 'c=unvalidated'), $sys['pagesqueued'] . ' ' . $L['Pages']);
 			}
 		}
 	}
@@ -172,24 +172,24 @@ if (!SED_AJAX)
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(
-		"HEADER_TITLE" => $plug_title.$out['fulltitle'],
-		"HEADER_DOCTYPE" => $cfg['doctype'],
-		"HEADER_CSS" => $cfg['css'],
-		"HEADER_COMPOPUP" => $out['compopup'],
-		"HEADER_LOGSTATUS" => $out['logstatus'],
-		"HEADER_WHOSONLINE" => $out['whosonline'],
-		"HEADER_TOPLINE" => $cfg['topline'],
-		"HEADER_BANNER" => $cfg['banner'],
-		"HEADER_GMTTIME" => $usr['gmttime'],
-		"HEADER_USERLIST" => $out['userlist'],
-		"HEADER_NOTICES" => $out['notices'],
-		"HEADER_BASEHREF" => $out['basehref'],
-		"HEADER_META_CONTENTTYPE" => $out['meta_contenttype'],
-		"HEADER_META_CHARSET" => $out['meta_charset'],
-		"HEADER_META_DESCRIPTION" => $out['meta_desc'],
-		"HEADER_META_KEYWORDS" => $out['meta_keywords'],
-		"HEADER_META_LASTMODIFIED" => $out['meta_lastmod'],
-		"HEADER_HEAD" => $out['head_head']
+		'HEADER_TITLE' => $plug_title . $out['fulltitle'],
+		'HEADER_DOCTYPE' => $cfg['doctype'],
+		'HEADER_CSS' => $cfg['css'],
+		'HEADER_COMPOPUP' => $out['compopup'],
+		'HEADER_LOGSTATUS' => $out['logstatus'],
+		'HEADER_WHOSONLINE' => $out['whosonline'],
+		'HEADER_TOPLINE' => $cfg['topline'],
+		'HEADER_BANNER' => $cfg['banner'],
+		'HEADER_GMTTIME' => $usr['gmttime'],
+		'HEADER_USERLIST' => $out['userlist'],
+		'HEADER_NOTICES' => $out['notices'],
+		'HEADER_BASEHREF' => $out['basehref'],
+		'HEADER_META_CONTENTTYPE' => $out['meta_contenttype'],
+		'HEADER_META_CHARSET' => $out['meta_charset'],
+		'HEADER_META_DESCRIPTION' => $out['meta_desc'],
+		'HEADER_META_KEYWORDS' => $out['meta_keywords'],
+		'HEADER_META_LASTMODIFIED' => $out['meta_lastmod'],
+		'HEADER_HEAD' => $out['head_head']
 	));
 
 	/* === Hook === */
@@ -202,12 +202,12 @@ if (!SED_AJAX)
 
 	if ($usr['id'] > 0)
 	{
-		$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? "<a href=\"".sed_url('admin')."\">".$L['Administration']."</a>" : '';
-		$out['loginout_url'] = sed_url('users', 'm=logout&'.sed_xg());
-		$out['loginout'] = "<a href=\"".$out['loginout_url']."\">".$L['Logout']."</a>";
-		$out['profile'] = "<a href=\"".sed_url('users', 'm=profile')."\">".$L['Profile']."</a>";
-		$out['pms'] = ($cfg['disable_pm']) ? '' : "<a href=\"".sed_url('pm')."\">".$L['Private_Messages']."</a>";
-		$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || $sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : "<a href=\"".sed_url('pfs')."\">".$L['Mypfs']."</a>";
+		$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? sed_rc_link(sed_url('admin'), $L['Administration']) : '';
+		$out['loginout_url'] = sed_url('users', 'm=logout&' . sed_xg());
+		$out['loginout'] = sed_rc_link($out['loginout_url'], $L['Logout']);
+		$out['profile'] = sed_rc_link(sed_url('users', 'm=profile'), $L['Profile']);
+		$out['pms'] = ($cfg['disable_pm']) ? '' : sed_rc_link(sed_url('pm'), $L['Private_Messages']);
+		$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || $sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : sed_rc_link(sed_url('pfs'), $L['Mypfs']);
 
 		if (!$cfg['disable_pm'])
 		{
@@ -216,40 +216,40 @@ if (!SED_AJAX)
 				$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0");
 				$usr['messages'] = sed_sql_result($sqlpm, 0, 'COUNT(*)');
 			}
-			$out['pmreminder'] = "<a href=\"".sed_url('pm')."\">";
-			$out['pmreminder'] .= ($usr['messages']>0) ? sed_declension($usr['messages'], $Ls['Privatemessages']) : $L['hea_noprivatemessages'];
-			$out['pmreminder'] .= "</a>";
+			$out['pmreminder'] = sed_rc_link(sed_url('pm'),
+				($usr['messages'] > 0) ? sed_declension($usr['messages'], $Ls['Privatemessages']) : $L['hea_noprivatemessages']
+			);
 		}
 
 		$t->assign(array(
-			"HEADER_USER_NAME" => $usr['name'],
-			"HEADER_USER_ADMINPANEL" => $out['adminpanel'],
-			"HEADER_USER_LOGINOUT" => $out['loginout'],
-			"HEADER_USER_PROFILE" => $out['profile'],
-			"HEADER_USER_PMS" => $out['pms'],
-			"HEADER_USER_PFS" => $out['pfs'],
-			"HEADER_USER_PMREMINDER" => $out['pmreminder'],
-			"HEADER_USER_MESSAGES" => $usr['messages']
+			'HEADER_USER_NAME' => $usr['name'],
+			'HEADER_USER_ADMINPANEL' => $out['adminpanel'],
+			'HEADER_USER_LOGINOUT' => $out['loginout'],
+			'HEADER_USER_PROFILE' => $out['profile'],
+			'HEADER_USER_PMS' => $out['pms'],
+			'HEADER_USER_PFS' => $out['pfs'],
+			'HEADER_USER_PMREMINDER' => $out['pmreminder'],
+			'HEADER_USER_MESSAGES' => $usr['messages']
 		));
 
-		$t->parse("HEADER.USER");
+		$t->parse('HEADER.USER');
 	}
 	else
 	{
-		$out['guest_username'] = "<input type=\"text\" name=\"rusername\" size=\"12\" maxlength=\"100\" />";
-		$out['guest_password'] = "<input type=\"password\" name=\"rpassword\" size=\"12\" maxlength=\"32\" />";
-		$out['guest_register'] = "<a href=\"".sed_url('users', 'm=register')."\">".$L["Register"]."</a>";
-		$out['guest_cookiettl'] = '<input type="checkbox" name="rremember" />';
+		$out['guest_username'] = $R['form_guest_username'];
+		$out['guest_password'] = $R['form_guest_password'];
+		$out['guest_register'] = sed_rc_link(sed_url('users', 'm=register'), $L['Register']);
+		$out['guest_cookiettl'] = $R['form_guest_remember'];
 
 		$t->assign(array (
-			"HEADER_GUEST_SEND" => sed_url('users', 'm=auth&a=check&'.$sys['url_redirect']),
-			"HEADER_GUEST_USERNAME" => $out['guest_username'],
-			"HEADER_GUEST_PASSWORD" => $out['guest_password'],
-			"HEADER_GUEST_REGISTER" => $out['guest_register'],
-			"HEADER_GUEST_COOKIETTL" => $out['guest_cookiettl']
+			'HEADER_GUEST_SEND' => sed_url('users', 'm=auth&a=check&' . $sys['url_redirect']),
+			'HEADER_GUEST_USERNAME' => $out['guest_username'],
+			'HEADER_GUEST_PASSWORD' => $out['guest_password'],
+			'HEADER_GUEST_REGISTER' => $out['guest_register'],
+			'HEADER_GUEST_COOKIETTL' => $out['guest_cookiettl']
 		));
 
-		$t->parse("HEADER.GUEST");
+		$t->parse('HEADER.GUEST');
 	}
 
 	/* === Hook === */
@@ -260,7 +260,7 @@ if (!SED_AJAX)
 	}
 	/* ===== */
 
-	$t->parse("HEADER");
-	$t->out("HEADER");
+	$t->parse('HEADER');
+	$t->out('HEADER');
 }
 ?>

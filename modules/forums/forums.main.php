@@ -68,7 +68,7 @@ if (!$sed_sections_act)
         $sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_creation>'$timeback' AND fp_sectionid='$section'");
         $sed_sections_act[$section] = sed_sql_result($sqltmp, 0, "COUNT(*)");
     }
-    $cfg['cache'] && $cot_cache->db_set('sed_sections_act', $sed_sections_act, 'system', 600);
+    $cot_cache && $cot_cache->db_set('sed_sections_act', $sed_sections_act, 'system', 600);
 }
 
 $sed_sections_vw = $cot_cache->mem_get('sections_wv', 'forums');
@@ -80,7 +80,7 @@ if (!$sed_sections_vw)
     {
         $sed_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
     }
-    $cfg['cache'] &&$cot_cache->mem_set('sections_vw', $sed_sections_vw, 'forums', 120);
+    $cot_cache &&$cot_cache->mem_set('sections_vw', $sed_sections_vw, 'forums', 120);
 }
 
 unset($pcat);
@@ -114,7 +114,7 @@ else
 }
 
 $t->assign(array(
-    "FORUMS_RSS" => sed_url("rss", "c=forums", "", true),
+    "FORUMS_RSS" => sed_url('rss', 'c=forums'),
     "FORUMS_SECTIONS_PAGETITLE" => $bhome."<a href=\"".sed_url('forums')."\">".$L['Forums']."</a>",
     "FORUMS_SECTIONS_MARKALL" =>  $out['markall'],
     "FORUMS_SECTIONS_WHOSONLINE" => $out['whosonline']." : ".$out['whosonline_reg_list']
