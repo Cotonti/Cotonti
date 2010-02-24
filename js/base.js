@@ -239,9 +239,9 @@ function bindHandlers() {
 		// AJAX auto-handling
 		$('form.ajax').live('submit', function() {
 			if ($(this).attr('method').toUpperCase() == 'POST') {
-				ajaxFormLoad(ajaxMakeHash($(this).attr('action').replace(/#.*$/, ''), $(this).attr('title'), 'post'), $(this).attr('id'));
+				ajaxFormLoad(ajaxMakeHash($(this).attr('action').replace(/#.*$/, ''), $(this).attr('class'), 'post'), $(this).attr('id'));
 			} else {
-				$.historyLoad(ajaxMakeHash($(this).attr('action').replace(/#.*$/, ''), $(this).attr('title'), $(this).serialize()));
+				$.historyLoad(ajaxMakeHash($(this).attr('action').replace(/#.*$/, ''), $(this).attr('class'), $(this).serialize()));
 			}
 			return ajaxError;
 		});
