@@ -102,7 +102,7 @@ if ($a=='update')
 		{
 			$import = $import != '';
 		}
-		$ruserextrafields[] = $import;
+		$ruserextrafields[$row['field_name']] = $import;
 		$urr['user_'.$row[ 'field_name']] = $import;
 	}
 	
@@ -335,12 +335,16 @@ $useredit_array = array(
 	"USERS_EDIT_LASTIP" => $urr['user_lastip'],
 	"USERS_EDIT_DELETE" => $user_form_delete,
 );
+$t->assign($useredit_array);
 
 // Extra fields
 $extra_array = sed_build_extrafields('user', 'USERS_EDIT', $sed_extrafields['users'], $urr);
-$useredit_array = $useredit_array + $extra_array;
+foreach($sed_extrafields['users'] as $i => $row)
+{
+	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']), sed_build_extrafields('user',  $row, $urr['user_'.$row['field_name']]));
+	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
+}
 
-$t->assign($useredit_array);
 
 /* === Hook === */
 $extp = sed_getextplugins('users.edit.tags');

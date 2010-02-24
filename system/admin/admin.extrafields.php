@@ -155,7 +155,8 @@ elseif ($a == 'del' && isset($name))
 		$adminwarnings = $L['adm_extrafield_not_removed'];
 	}
 }
-$cot_cache->db->remove('sed_extrafields', 'system');
+
+$cfg['cache'] && $cot_cache->db->remove('sed_extrafields', 'system');
 
 $is_adminwarnings = isset($adminwarnings);
 
