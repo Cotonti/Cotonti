@@ -38,6 +38,10 @@ define('COT_CACHE_TYPE_DB', 2);
  * Shared memory cache type
  */
 define('COT_CACHE_TYPE_MEMORY', 3);
+/**
+ * Page cache type
+ */
+define('COT_CACHE_TYPE_PAGE', 4);
 
 /**
  * Abstract class containing code common for all cache drivers
@@ -64,7 +68,7 @@ abstract class Cache_driver
 	 * Returns value of cached image
 	 * @param string $id Object identifier
 	 * @param string $realm Realm name
-	 * @return mixed
+	 * @return mixed Cached item value or NULL if the item was not found in cache
 	 */
 	abstract public function get($id, $realm = COT_DEFAULT_REALM);
 
@@ -131,7 +135,9 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 	abstract public function  __destruct();
 
 	/**
-	 * @see Cache_driver::remove()
+	 * Removes cache image of the object from the database
+	 * @param string $id Object identifier
+	 * @param string $realm Realm name
 	 */
 	public function remove($id, $realm = COT_DEFAULT_REALM)
 	{
@@ -148,9 +154,15 @@ abstract class Writeback_cache_driver extends Dynamic_cache_driver
 	abstract public function remove_now($id, $realm = COT_DEFAULT_REALM);
 
 	/**
+	 * Stores data as object image in cache
+	 * @param string $id Object identifier
+	 * @param mixed $data Object value
+	 * @param string $realm Realm name
+	 * @param int $ttl Time to live, 0 for unlimited
+	 * @return bool
 	 * @see Cache_driver::store()
 	 */
-	public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
+	public function store($id, $data, $realm = COT_DEFAULT_REALM, $ttl = 0)
 	{
 		$this->writeback_data[] = array('id' => $id, 'data' => $data, 'realm' =>  $realm, 'ttl' => $ttl);
 	}
@@ -321,7 +333,10 @@ class File_cache extends Static_cache_driver
 	}
 
 	/**
-	 * @see Cache_driver::exists()
+	 * Checks if an object is stored in disk cache
+	 * @param string $id Object identifier
+	 * @param string $realm Cache realm
+	 * @return bool
 	 */
 	public function exists($id, $realm = COT_DEFAULT_REALM)
 	{
@@ -329,7 +344,10 @@ class File_cache extends Static_cache_driver
 	}
 
 	/**
-	 * @see Cache_driver::get()
+	 * Gets an object directly from disk
+	 * @param string $id Object identifier
+	 * @param string $realm Realm name
+	 * @return mixed Cached item value or NULL if the item was not found in cache
 	 */
 	public function get($id, $realm = COT_DEFAULT_REALM)
 	{
@@ -344,7 +362,9 @@ class File_cache extends Static_cache_driver
 	}
 
 	/**
-	 * @see Cache_driver::remove()
+	 * Removes cache image of the object from disk
+	 * @param string $id Object identifier
+	 * @param string $realm Realm name
 	 */
 	public function remove($id, $realm = COT_DEFAULT_REALM)
 	{
@@ -357,7 +377,11 @@ class File_cache extends Static_cache_driver
 	}
 
 	/**
-	 * @see Cache_driver::store()
+	 * Stores disk cache entry
+	 * @param string $id Object identifier
+	 * @param mixed $data Object value
+	 * @param string $realm Realm name
+	 * @return bool
 	 */
 	public function store($id, $data, $realm = COT_DEFAULT_REALM)
 	{
@@ -367,6 +391,149 @@ class File_cache extends Static_cache_driver
 		}
 		file_put_contents($this->dir.'/'.$realm.'/'.$id, serialize($data));
 		return true;
+	}
+}
+
+/**
+ * A cache that stores entire page outputs. Disk-based.
+ */
+class Page_cache
+{
+	/**
+	 * Cache root
+	 */
+	private $dir;
+	/**
+	 * Relative page (item) path
+	 */
+	private $path;
+	/**
+	 * Short file name
+	 */
+	private $name;
+	/**
+	 * Parameters to exclude
+	 */
+	private $excl;
+	/**
+	 * Filename extension
+	 */
+	private $ext;
+	/**
+	 * Full path to page cache image
+	 */
+	private $filename;
+	/**
+	 * Directory permissions
+	 */
+	private $perms;
+
+	/**
+	 * Constructs controller object and sets basic configuration
+	 * @param string $dir Cache directory
+	 * @param int $perms Octal permission mask for cache directories
+	 */
+	public function __construct($dir, $perms = 0777)
+	{
+		$this->dir = $dir;
+		$this->perms = $perms;
+	}
+
+	/**
+	 * Removes an item and all contained items and cache files
+	 * @param string $path Item path
+	 * @return int Number of files removed
+	 */
+	public function clear($path)
+	{
+		return $this->rm_r($this->dir . '/' . $path);
+	}
+
+	/**
+	 * Initializes actual page cache
+	 * @param string $path Page path string
+	 * @param string $name Short name for the cache file
+	 * @param array $exclude A list of GET params to be excluded from consideration
+	 * @param string $ext File extension
+	 */
+	public function init($path, $name, $exclude = array(), $ext = '')
+	{
+		$this->path = $path;
+		$this->name = $name;
+		$this->excl = $exclude;
+		$this->ext = $ext;
+	}
+
+	/**
+	 * Reads the page cache object from disk and sends it to output.
+	 * If the cache object does not exist, then just calculates the path
+	 * for a following write() call.
+	 */
+	public function read()
+	{
+		$filename = $this->dir. '/' . $this->path . '/' . $this->name;
+		$args = array();
+		foreach ($_GET as $key => $val)
+		{
+			if (!in_array($key, $this->excl))
+			{
+				$args[$key] = $val;
+			}
+			ksort($args);
+		}
+		if (count($args) > 0)
+		{
+			$filename .= '_' . md5(serialize($args));
+		}
+		if (!empty($this->ext))
+		{
+			$filename .= '.' . $ext;
+		}
+		if (file_exists($filename))
+		{
+			readgzfile($filename);
+			exit;
+		}
+		$this->filename = $filename;
+	}
+
+	/**
+	 * Writes output buffer contents to a cache image file
+	 */
+	public function write()
+	{
+		if (!file_exists($this->dir . '/' . $this->path))
+		{
+			mkdir($this->dir . '/' . $this->path, $this->perms, true);
+		}
+		file_put_contents($this->filename, gzencode(ob_get_contents()));
+	}
+
+	/**
+	 * Removes a directory with all its contents recursively
+	 * @param string $path Directory path
+	 * @return int Number of items removed
+	 */
+	private function rm_r($path)
+	{
+		$cnt = 0;
+		$dp = opendir($path);
+		while ($f = readdir($dp))
+		{
+			$fpath = $path . '/' . $f;
+			if (is_dir($fpath) && $f != '.' && $f != '..')
+			{
+				$cnt += $this->rm_r($fpath);
+			}
+			elseif (is_file($fpath))
+			{
+				unlink($fpath);
+				++$cnt;
+			}
+		}
+		closedir($dp);
+		rmdir($path);
+		return ++$cnt;
 	}
 }
 
@@ -943,20 +1110,30 @@ if (extension_loaded('xcache'))
 class Cache
 {
 	/**
-	 * Persistent cache underlayer driver
+	 * Persistent cache underlayer driver.
+	 * Stores disk-only cache entries. Use it for large objects, which you don't want to put
+	 * into memory cache.
 	 * @var Static_cache_driver
 	 */
-	private $disk;
+	public $disk;
 	/**
-	 * Intermediate query cache driver
+	 * Intermediate database cache driver.
+	 * It is recommended to use memory cache for particular objects rather than DB cache.
 	 * @var Db_cache_driver
 	 */
-	private $db;
+	public $db;
 	/**
-	 * Mutable top-layer shared memory driver
+	 * Mutable top-layer shared memory driver.
+	 * Is FALSE if memory cache is not available
 	 * @var Temporary_cache_driver
 	 */
-	private $mem;
+	public $mem;
+	/**
+	 * Page cache driver.
+	 * Is FALSE if page cache is disabled
+	 * @var Page_cache
+	 */
+	public $page;
 	/**
 	 * Event bindings
 	 * @var array
@@ -968,11 +1145,6 @@ class Cache
 	 */
 	private $resync_on_exit = false;
 	/**
-	 * A flag of memory driver availability
-	 * @var bool
-	 */
-	private $mem_avail = false;
-	/**
 	 * Selected memory driver
 	 * @var string
 	 */
@@ -983,13 +1155,15 @@ class Cache
 	 */
 	public function  __construct()
 	{
-		global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $z;
+		global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $z, $usr;
+		
 		$this->disk = new File_cache($cfg['cache_dir']);
 		$this->db = new MySQL_cache();
 		$cot_cache_autoload = is_array($cot_cache_autoload)
 			? array_merge(array('system', 'cot', $z), $cot_cache_autoload)
 				: array('system', 'cot', $z);
 		$this->db->get_all($cot_cache_autoload);
+
 		$cfg['cache_drv'] .= '_driver';
 		if (in_array($cfg['cache_drv'], $cot_cache_drivers))
 		{
@@ -1002,14 +1176,15 @@ class Cache
 		if (!empty($selected))
 		{
 			$this->mem = new $selected();
-			$this->mem_avail = true;
 			$this->selected_drv = $selected;
 		}
 		else
 		{
-			$this->mem = $this->db;
-			$this->mem_avail = false;
+			$this->mem = false;
 		}
+
+		$this->page = new Page_cache($cfg['cache_dir'], $cfg['dir_perms']);
+
 		if (!$cot_cache_bindings)
 		{
 			$this->resync_bindings();
@@ -1041,7 +1216,7 @@ class Cache
 		switch ($name)
 		{
 			case 'mem_available':
-				return $this->mem_avail;
+				return $this->mem !== FALSE;
 			break;
 
 			case 'mem_driver':
@@ -1150,6 +1325,10 @@ class Cache
 				$this->mem->clear();
 			break;
 
+			case COT_CACHE_TYPE_PAGE:
+				$this->disk->clear();
+			break;
+
 			default:
 				$this->mem->clear();
 				$this->db->clear();
@@ -1179,112 +1358,16 @@ class Cache
 				$this->mem->clear($realm);
 			break;
 
+			case COT_CACHE_TYPE_PAGE:
+				$this->page->clear($realm);
+			break;
+
 			default:
 				$this->mem->clear($realm);
 				$this->db->clear($realm);
 				$this->disk->clear($realm);
+				$this->page->clear($realm);
 		}
-	}
-
-	/**
-	 * Gets the object from database cache. It is recommended to use memory cache
-	 * for particular objects rather than DB cache.
-	 * @param string $id Object identifier
-	 * @param string $realm Realm name
-	 * @return mixed Cached item value or NULL if the item was not found in cache
-	 */
-	public function db_get($id, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->db->get($id, $realm);
-	}
-
-	/**
-	 * Checks if an object is stored in database cache
-	 * @param string $id Object identifier
-	 * @param string $realm Cache realm
-	 * @return bool
-	 */
-	public function db_isset($id, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->db->exists($id, $realm);
-	}
-
-	/**
-	 * Loads all variables from a specified realm(s) into the global scope
-	 * @param mixed $realm Realm name or array of realm names
-	 * @return int Number of items loaded
-	 */
-	public function db_load($realm)
-	{
-		return $this->db->get_all($realm);
-	}
-
-	/**
-	 * Stores data as object image in the database cache
-	 * @param string $id Object identifier
-	 * @param mixed $data Object value
-	 * @param string $realm Realm name
-	 * @param int $ttl Time to live, 0 for unlimited
-	 * @return bool
-	 */
-	public function db_set($id, $data, $realm = COT_DEFAULT_REALM, $ttl = 0)
-	{
-		return $this->db->store($id, $data, $realm, $ttl);
-	}
-
-	/**
-	 * Removes cache image of the object from the database
-	 * @param string $id Object identifier
-	 * @param string $realm Realm name
-	 */
-	public function db_unset($id, $realm = COT_DEFAULT_REALM)
-	{
-		$this->db->remove($id, $realm);
-	}
-
-	/**
-	 * Gets an object directly from disk, avoiding the shared memory.
-	 * @param string $id Object identifier
-	 * @param string $realm Realm name
-	 * @return mixed Cached item value or NULL if the item was not found in cache
-	 */
-	public function disk_get($id, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->disk->get($id, $realm);
-	}
-
-	/**
-	 * Checks if an object is stored in disk cache
-	 * @param string $id Object identifier
-	 * @param string $realm Cache realm
-	 * @return bool
-	 */
-	public function disk_isset($id, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->disk->exists($id, $realm);
-	}
-
-	/**
-	 * Stores disk-only cache entry. Use it for large objects, which you don't want to put
-	 * into memory cache.
-	 * @param string $id Object identifier
-	 * @param mixed $data Object value
-	 * @param string $realm Realm name
-	 * @return bool
-	 */
-	public function disk_set($id, $data, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->disk->store($id, $data, $realm);
-	}
-
-	/**
-	 * Removes cache image of the object from disk
-	 * @param string $id Object identifier
-	 * @param string $realm Realm name
-	 */
-	public function disk_unset($id, $realm = COT_DEFAULT_REALM)
-	{
-		$this->disk->remove($id, $realm);
 	}
 
 	/**
@@ -1294,64 +1377,6 @@ class Cache
 	public function get_info()
 	{
 		return $this->mem->get_info();
-	}
-
-	/**
-	 * Gets the object from shared memory cache
-	 * @param string $id Object identifier
-	 * @param string $realm Realm name
-	 * @return mixed Cached item value or NULL if the item was not found in cache
-	 * @see Cache::set(), Cache::get_disk(), Cache::get_shared()
-	 */
-	public function mem_get($id, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->mem->get($id, $realm);
-	}
-
-	/**
-	 * Increments counter value
-	 * @param string $id Counter identifier
-	 * @param string $realm Realm name
-	 * @param int $value Increment value
-	 * return int Result value
-	 */
-	public function mem_inc($id, $realm = COT_DEFAULT_REALM, $value = 1)
-	{
-		return $this->mem->inc($id, $realm, $value);
-	}
-
-	/**
-	 * Checks if an object is stored in shared memory cache
-	 * @param string $id Object identifier
-	 * @param string $realm Cache realm
-	 * @return bool
-	 */
-	public function mem_isset($id, $realm = COT_DEFAULT_REALM)
-	{
-		return $this->mem->exists($id, $realm);
-	}
-
-	/**
-	 * Stores data as object image in shared memory cache
-	 * @param string $id Object identifier
-	 * @param mixed $data Object value
-	 * @param string $realm Realm name
-	 * @param int $ttl Time to live, 0 for unlimited
-	 * @return bool
-	 */
-	public function mem_set($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
-	{
-		return $this->mem->store($id, $data, $realm, $ttl);
-	}
-
-	/**
-	 * Removes cache image of the object from shared memory
-	 * @param string $id Object identifier
-	 * @param string $realm Realm name
-	 */
-	public function mem_unset($id, $realm = COT_DEFAULT_REALM)
-	{
-		$this->mem->remove($id, $realm);
 	}
 
 	/**
@@ -1380,10 +1405,15 @@ class Cache
 						$this->mem->remove($cell['id'], $cell['realm']);
 					break;
 
+					case COT_CACHE_TYPE_PAGE:
+						$this->page->clear($cell['realm'] . '/' . $cell['id']);
+					break;
+
 					default:
 						$this->mem->remove($cell['id'], $cell['realm']);
 						$this->disk->remove($cell['id'], $cell['realm']);
 						$this->db->remove($cell['id'], $cell['realm']);
+						$this->page->clear($cell['realm'] . '/' . $cell['id']);
 				}
 				$cnt++;
 			}
@@ -1424,26 +1454,27 @@ class Cache
 
 /**
  * Clears cache item
- * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
+ * @deprecated Deprecated since 0.7.0, use $cot_cache->db object instead
  * @param string $name Item name
  * @return bool
  */
 function sed_cache_clear($name)
 {
 	global $db_cache;
-
+	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
 	return(TRUE);
 }
 
 /**
  * Clears cache completely
- * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
+ * @deprecated Deprecated since 0.7.0, use $cot_cache->db object instead
  * @return bool
  */
 function sed_cache_clearall()
 {
 	global $db_cache;
+	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	sed_sql_query("DELETE FROM $db_cache");
 	return TRUE;
 }
@@ -1466,14 +1497,14 @@ function sed_cache_clearhtml()
 
 /**
  * Fetches cache value
- * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
+ * @deprecated Deprecated since 0.7.0, use $cot_cache->db object instead
  * @param string $name Item name
  * @return mixed
  */
 function sed_cache_get($name)
 {
 	global $cfg, $sys, $db_cache;
-
+	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
 	if ($row = sed_sql_fetcharray($sql))
 	{
@@ -1494,7 +1525,7 @@ function sed_cache_get($name)
 function sed_cache_getall($auto = 1)
 {
 	global $cfg, $sys, $db_cache;
-
+	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
 	if ($auto)
 	{
@@ -1516,7 +1547,7 @@ function sed_cache_getall($auto = 1)
 
 /**
  * Puts an item into cache
- * @deprecated Deprecated since 0.7.0, use $cot_cache object instead
+ * @deprecated Deprecated since 0.7.0, use $cot_cache->db object instead
  * @param string $name Item name
  * @param mixed $value Item value
  * @param int $expire Expires in seconds
@@ -1526,7 +1557,7 @@ function sed_cache_getall($auto = 1)
 function sed_cache_store($name, $value, $expire, $auto = "1")
 {
 	global $db_cache, $sys, $cfg;
-
+	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	if (!$cfg['cache']) return(FALSE);
 	$sql = sed_sql_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".sed_sql_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
 	return(TRUE);

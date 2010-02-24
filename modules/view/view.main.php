@@ -87,6 +87,8 @@ if (preg_match_all('@<link[^>](.*?)>@si', $ext_head, $ext_links) > 0)
 	}
 }
 
+sed_online_update();
+
 require_once $cfg['system_dir'].'/header.php';
 $t = new XTemplate(sed_skinfile('plugin'));
 

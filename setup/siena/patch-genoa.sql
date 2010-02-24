@@ -351,3 +351,9 @@ INSERT INTO `sed_updates` (`upd_param`, `upd_value`)
 
 /* r1134 Modify icon paths to match new structure */
 UPDATE `sed_forum_sections` SET `fs_icon` = 'system/admin/tpl/img/forums.png' WHERE `fs_icon` = 'images/admin/forums.gif';
+
+/* r1147 Page cache enablement options */
+INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
+('core','performance','31','cache_page',3,'0','0','',''),
+('core','performance','32','cache_index',3,'0','0','',''),
+('core','performance','33','cache_forums',3,'0','0','','');

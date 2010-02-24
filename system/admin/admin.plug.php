@@ -50,22 +50,22 @@ switch($a)
 		{
 			case 'pause':
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl'");
-				$cot_cache->db_unset('sed_plugins', 'system');
+				$cot_cache->db->remove('sed_plugins', 'system');
 				$adminwarnings = $L['adm_paused'];
 			break;
 			case 'unpause':
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl'");
-				$cot_cache->db_unset('sed_plugins', 'system');
+				$cot_cache->db->remove('sed_plugins', 'system');
 				$adminwarnings = $L['adm_running'];
 			break;
 			case 'pausepart':
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=0 WHERE pl_code='$pl' AND pl_id='$part'");
-				$cot_cache->db_unset('sed_plugins', 'system');
+				$cot_cache->db->remove('sed_plugins', 'system');
 				$adminwarnings = $L['adm_partstopped'];
 			break;
 			case 'unpausepart':
 				$sql = sed_sql_query("UPDATE $db_plugins SET pl_active=1 WHERE pl_code='$pl' AND pl_id='$part'");
-				$cot_cache->db_unset('sed_plugins', 'system');
+				$cot_cache->db->remove('sed_plugins', 'system');
 				$adminwarnings = $L['adm_partrunning'];
 			break;
 		}
@@ -432,7 +432,7 @@ switch($a)
 				include_once($extplugin_info);
 
 				sed_auth_reorder();
-				$cot_cache->db_unset('sed_plugins', 'system');
+				$cot_cache->db->remove('sed_plugins', 'system');
 
 				$t->assign(array(
 					"ADMIN_PLUG_EDIT_AFFECTEDROWS1" => $show_sql_affectedrows1,
@@ -470,7 +470,7 @@ switch($a)
 
 				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
 				$show_sql_affectedrows4 = sed_sql_affectedrows();
-				$cot_cache->db_unset('sed_plugins', 'system');
+				$cot_cache->db->remove('sed_plugins', 'system');
 
 				$extplugin_uninstall = $cfg['plugins_dir']."/".$pl."/".$pl.".uninstall.php";
 				$action = 'uninstall';

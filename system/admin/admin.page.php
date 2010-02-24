@@ -55,6 +55,18 @@ if ($a == 'validate')
 
 		sed_log($L['Page']." #".$id." - ".$L['adm_queue_validated'], 'adm');
 
+		if ($cot_cache)
+		{
+			if ($cfg['cache_page'])
+			{
+				$cot_cache->page->clear('page/' . str_replace('.', '/', $sed_cat[$row['page_cat']]['path']));
+			}
+			if ($cfg['cache_index'])
+			{
+				$cot_cache->page->clear('index');
+			}
+		}
+
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_validated'];
 	}
 	else
@@ -84,6 +96,18 @@ elseif ($a == 'unvalidate')
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 
 		sed_log($L['Page']." #".$id." - ".$L['adm_queue_unvalidated'], 'adm');
+
+		if ($cot_cache)
+		{
+			if ($cfg['cache_page'])
+			{
+				$cot_cache->page->clear('page/' . str_replace('.', '/', $sed_cat[$row['page_cat']]['path']));
+			}
+			if ($cfg['cache_index'])
+			{
+				$cot_cache->page->clear('index');
+			}
+		}
 
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_unvalidated'];
 	}
@@ -132,6 +156,18 @@ elseif ($a == 'delete')
 		}
 		/* ===== */
 
+		if ($cot_cache)
+		{
+			if ($cfg['cache_page'])
+			{
+				$cot_cache->page->clear('page/' . str_replace('.', '/', $sed_cat[$row['page_cat']]['path']));
+			}
+			if ($cfg['cache_index'])
+			{
+				$cot_cache->page->clear('index');
+			}
+		}
+
 		$adminwarnings = '#'.$id.' - '.$L['adm_queue_deleted'];
 	}
 	else
@@ -173,6 +209,12 @@ elseif ($a == 'update_cheked')
 					$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
 					sed_log($L['Page']." #".$id." - ".$L['adm_queue_validated'], 'adm');
+
+					if ($cot_cache && $cfg['cache_page'])
+					{
+						$cot_cache->page->clear('page/' . str_replace('.', '/', $sed_cat[$row['page_cat']]['path']));
+					}
+
 					$perelik .= '#'.$id.', ';
 				}
 				else
@@ -180,6 +222,11 @@ elseif ($a == 'update_cheked')
 					$notfoundet .= '#'.$id.' - '.$L['Error'].'<br  />';
 				}
 			}
+		}
+
+		if ($cot_cache && $cfg['cache_index'])
+		{
+			$cot_cache->page->clear('index');
 		}
 
 		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_validated'] : NULL;
@@ -224,6 +271,11 @@ elseif ($a == 'update_cheked')
 
 					sed_log($L['Page']." #".$id." - ".$L['Deleted'],'adm');
 
+					if ($cot_cache && $cfg['cache_page'])
+					{
+						$cot_cache->page->clear('page/' . str_replace('.', '/', $sed_cat[$row['page_cat']]['path']));
+					}
+
 					/* === Hook === */
 					$extp = sed_getextplugins('admin.page.delete.done');
 					foreach ($extp as $pl)
@@ -238,6 +290,11 @@ elseif ($a == 'update_cheked')
 					$notfoundet .= '#'.$id.' - '.$L['Error'].'<br  />';
 				}
 			}
+		}
+
+		if ($cot_cache && $cfg['cache_index'])
+		{
+			$cot_cache->page->clear('index');
 		}
 
 		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_deleted'] : NULL;

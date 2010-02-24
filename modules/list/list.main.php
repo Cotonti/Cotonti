@@ -47,15 +47,28 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
+$cat = $sed_cat[$c];
+
 if (empty($s))
 {
-	$s = $sed_cat[$c]['order'];
-	$w = $sed_cat[$c]['way'];
+	$s = $cat['order'];
+	$w = $cat['way'];
 }
 $s = empty($s) ? 'title' : $s;
 $w = empty($w) ? 'asc' : $w;
 $d = empty($d) ? 0 : (int) $d;
 $dc = empty($dc) ? 0 : (int) $dc;
+
+$sys['sublocation'] = $cat['title'];
+sed_online_update();
+
+$cot_path = 'page/' . str_replace('.', '/', $cat['path']);
+$cot_ignore_params = array('c');
+if ($cot_cache && $usr['id'] === 0 && $cfg['cache_page'])
+{
+	$cot_cache->page->init($cot_path, $skin, $cot_ignore_params);
+	$cot_cache->page->read();
+}
 
 $cfg['maxrowsperpage'] = ($c== 'all' || $c == 'system') ? $cfg['maxrowsperpage'] * 2 : $cfg['maxrowsperpage'];
 
@@ -67,8 +80,8 @@ $where = "(page_state=0 OR page_state=2) ";
 if ($c == 'unvalidated')
 {
 	$where = "page_state = 1 AND page_ownerid = " . $usr['id'];
-	$sed_cat[$c]['title'] = $L['pag_validation'];
-	$sed_cat[$c]['desc'] = $L['pag_validation_desc'];
+	$cat['title'] = $L['pag_validation'];
+	$cat['desc'] = $L['pag_validation_desc'];
 }
 elseif ($c != 'all')
 {
@@ -111,7 +124,7 @@ if (@file_exists($incl))
 
 if ($c == 'all' || $c == 'system' || $c == 'unvalidated')
 {
-	$catpath = $sed_cat[$c]['title'];
+	$catpath = $cat['title'];
 }
 else
 {
@@ -124,14 +137,13 @@ $submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? "<
 
 $pagenav = sed_pagenav('list', "c=$c&s=$s&w=$w&o=$o&p=$p", $d, $totallines, $cfg['maxrowsperpage']);
 
-list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=' . $c), $sed_cat[$c]['com']);
-list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=' . $c), $sed_cat[$c]['ratings']);
+list($list_comments, $list_comments_display) = sed_build_comments($item_code, sed_url('list', 'c=' . $c), $cat['com']);
+list($list_ratings, $list_ratings_display) = sed_build_ratings($item_code, sed_url('list', 'c=' . $c), $cat['ratings']);
 
 $title_params = array(
-	'TITLE' => $sed_cat[$c]['title']
+	'TITLE' => $cat['title']
 );
-$out['desc'] = htmlspecialchars(strip_tags($sed_cat[$c]['desc']));
-$sys['sublocation'] = $sed_cat[$c]['title'];
+$out['desc'] = htmlspecialchars(strip_tags($cat['desc']));
 $out['subtitle'] = sed_title('title_list', $title_params);
 
 $_SESSION['cat'] = $c;
@@ -146,26 +158,26 @@ foreach ($extp as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-if ($sed_cat[$c]['group'])
+if ($cat['group'])
 {
-	$mskin = sed_skinfile(array('list', 'group', $sed_cat[$c]['tpl']));
+	$mskin = sed_skinfile(array('list', 'group', $cat['tpl']));
 }
 else
 {
-	$mskin = sed_skinfile(array('list', $sed_cat[$c]['tpl']));
+	$mskin = sed_skinfile(array('list', $cat['tpl']));
 }
 
 $t = new XTemplate($mskin);
 
 $t -> assign(array(
 	"LIST_PAGETITLE" => $catpath,
-	"LIST_CATEGORY" => '<a href="'.sed_url('list', "c=$c").'">'.$sed_cat[$c]['title'].'</a>',
+	"LIST_CATEGORY" => '<a href="'.sed_url('list', "c=$c").'">'.$cat['title'].'</a>',
 	"LIST_CAT" => $c,
 	"LIST_CAT_RSS" => sed_url('rss', "c=$c"),
-	"LIST_CATTITLE" => $sed_cat[$c]['title'],
+	"LIST_CATTITLE" => $cat['title'],
 	"LIST_CATPATH" => $catpath,
-	"LIST_CATDESC" => $sed_cat[$c]['desc'],
-	"LIST_CATICON" => $sed_cat[$c]['icon'],
+	"LIST_CATDESC" => $cat['desc'],
+	"LIST_CATICON" => $cat['icon'],
 	"LIST_COMMENTS" => $list_comments,
 	"LIST_COMMENTS_DISPLAY" => $list_comments_display,
 	"LIST_RATINGS" => $list_ratings,
@@ -182,11 +194,11 @@ foreach ($sed_extrafields['structure'] as $row_c)
 {
 	$uname = strtoupper($row_c['field_name']);
 	$t -> assign('LIST_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
-	$t -> assign('LIST_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $sed_cat[$c][$row_c['field_name']]));
+	$t -> assign('LIST_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $cat[$row_c['field_name']]));
 }
 
 
-if (!$sed_cat[$c]['group'])
+if (!$cat['group'])
 {
 	$t -> assign(array(
 		"LIST_TOP_CURRENTPAGE" => $currentpage,
@@ -216,7 +228,7 @@ $ii = 0;
 $jj = 1;
 $mm = 0;
 $kk = 0;
-$mtch = $sed_cat[$c]['path'].".";
+$mtch = $cat['path'].".";
 $mtchlen = mb_strlen($mtch);
 $mtchlvl = mb_substr_count($mtch,".");
 
@@ -417,5 +429,10 @@ $t -> parse("MAIN");
 $t -> out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
+
+if ($cot_cache && $usr['id'] === 0 && $cfg['cache_page'])
+{
+	$cot_cache->page->write();
+}
 
 ?>

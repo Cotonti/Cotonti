@@ -36,7 +36,7 @@ if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 //Version Checking
 if ($cfg['check_updates'])
 {
-	$update_info = $cot_cache->db_get('update_info', 'admin');
+	$update_info = $cot_cache->db->get('update_info', 'admin');
 	if (!$update_info)
 	{
 		if (ini_get('allow_url_fopen'))
@@ -45,7 +45,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				$cot_cache->db_set('update_info', $update_info, 'admin', 86400);
+				$cot_cache->db->store('update_info', $update_info, 'admin', 86400);
 			}
 		}
 		elseif (function_exists('curl_init'))
@@ -57,7 +57,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				$cot_cache->db_set('update_info', $update_info, 'admin', 86400);
+				$cot_cache->db->store('update_info', $update_info, 'admin', 86400);
 			}
 			curl_close($curl);
 		}

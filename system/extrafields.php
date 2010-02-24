@@ -123,7 +123,7 @@ if (!$sed_extrafields)
 	{
 		$sed_extrafields[$row['field_location']][$row['field_name']] = $row;
 	}
-	$cot_cache && $cot_cache->db_set('sed_extrafields', $sed_extrafields, 'system');
+	$cot_cache && $cot_cache->db->store('sed_extrafields', $sed_extrafields, 'system');
 }
 
 ?>

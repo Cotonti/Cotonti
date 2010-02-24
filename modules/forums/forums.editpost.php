@@ -174,6 +174,19 @@ if ($a=='update')
 	/* ===== */
 
 	sed_forum_sectionsetlast($fp_sectionid);
+
+	if ($cot_cache)
+	{
+		if ($cfg['cache_forums'])
+		{
+			$cot_cache->page->clear('forums');
+		}
+		if ($cfg['cache_index'])
+		{
+			$cot_cache->page->clear('index');
+		}
+	}
+
 	sed_redirect(sed_url('forums', "m=posts&p=".$p, '#'.$p, true));
 }
 
@@ -210,6 +223,8 @@ $title_params = array(
 );
 $out['subtitle'] = sed_title('title_forum_editpost', $title_params);
 $out['head'] .= $R['code_noindex'];
+
+sed_online_update();
 
 /* === Hook === */
 $extp = sed_getextplugins('forums.editpost.main');

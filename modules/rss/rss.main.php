@@ -37,7 +37,7 @@ $id = empty($id) ? "all" : $id;
 
 header('Content-type: text/xml');
 $sys['now'] = time();
-$cache = $cot_cache->mem_get($c . $id, 'rss');
+$cache = $cot_cache->mem->get($c . $id, 'rss');
 if ($cache)
 {
 	echo $cache;
@@ -48,7 +48,7 @@ $rss_title = $cfg['maintitle'];
 $rss_link = $cfg['mainurl'];
 $rss_description = $cfg['subtitle'];
 
-$domain = str_replace("http://", "", $cfg['mainurl']); // TODO: type of domains may by "https" or not? and may be other format?
+$domain = $sys['domain'];
 
 /* === Hook === */
 $extp = sed_getextplugins('rss.create');
@@ -164,7 +164,7 @@ elseif ($c == "topics")
 		$row = mysql_fetch_assoc($res);
 		if ($row['ft_mode'] == '1')
 		{
-			exit "This topic is private"; // TODO: Need translate
+			die('This topic is private'); // TODO: Need translate
 		}
 
 		$rss_title = $domain." : ".$row['ft_title'];
@@ -174,7 +174,7 @@ elseif ($c == "topics")
 		$forum_id = $row['ft_sectionid'];
 		if (!sed_auth('forums', $forum_id, 'R'))
 		{
-			exit "Not readable for guests"; // TODO: Need translate
+			die('Not readable for guests'); // TODO: Need translate
 		}
 
 		// get number of posts in topic
@@ -363,7 +363,7 @@ foreach ($extp as $pl)
 $t->parse("MAIN");
 $out_rss = $t->out("MAIN");
 
-$cot_cache->mem_set($c . $id, $out_rss, 'rss', $cfg['rss_timetolive']);
+$cot_cache->mem->store($c . $id, $out_rss, 'rss', $cfg['rss_timetolive']);
 echo $out_rss;
 
 function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_pageurl)

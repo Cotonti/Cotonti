@@ -101,10 +101,6 @@ if (!SED_AJAX)
 	$t->parse("FOOTER");
 	$t->out("FOOTER");
 }
-while (ob_get_level() > 0)
-{
-	ob_end_flush();
-}
 
 /* === Hook === */
 $extp = sed_getextplugins('footer.last');

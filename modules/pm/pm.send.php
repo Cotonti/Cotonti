@@ -227,6 +227,8 @@ $title_params = array(
 $out['subtitle'] = sed_title('title_pm_send', $title_params);
 $out['head'] .= $R['code_noindex'];
 
+sed_online_update();
+
 /* === Hook === */
 $extp = sed_getextplugins('pm.send.main');
 foreach ($extp as $pl)

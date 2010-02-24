@@ -19,6 +19,15 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
+sed_online_update();
+
+$cot_path = 'index';
+if ($cot_cache && $usr['id'] === 0 && $cfg['cache_index'])
+{
+	$cot_cache->page->init($cot_path, $skin);
+	$cot_cache->page->read();
+}
+
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('index', 'a');
 
 /* === Hook === */
@@ -46,5 +55,10 @@ $t->parse("MAIN");
 $t->out("MAIN");
 
 require_once $cfg['system_dir'].'/footer.php';
+
+if ($cot_cache && $usr['id'] === 0 && $cfg['cache_index'])
+{
+	$cot_cache->page->write();
+}
 
 ?>

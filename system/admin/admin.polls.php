@@ -83,6 +83,11 @@ if(empty($error_string))
 	{
 		$adminwarnings = $L['polls_updated'];
 	}
+
+	if ($cot_cache && $cfg['cache_index'])
+	{
+		$cot_cache->page->clear('index');
+	}
 }
 else
 {

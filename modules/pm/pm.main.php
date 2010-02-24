@@ -114,6 +114,8 @@ $title_params = array(
 );
 $out['subtitle'] = sed_title('title_pm_main', $title_params);
 $out['head'] .= $R['code_noindex'];
+
+sed_online_update();
 /* === Title === */
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter");

@@ -124,10 +124,10 @@ ORDER by fs_masterid DESC, fs_order ASC");
 			}
 
 			$row['ft_icon'] = sed_rc('frm_icon_topic_t', array('icon' => $row['ft_icon'], 'title' => $L['Rec_'.$row['ft_icon']]));
-			$row['ft_lastpostername'] = sed_build_user($row['ft_lastposterid'], sed_cc($row['ft_lastpostername']));
+			$row['ft_lastpostername'] = sed_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 		}
 
-		$row['ft_firstpostername'] = sed_build_user($row['ft_firstposterid'], sed_cc($row['ft_firstpostername']));
+		$row['ft_firstpostername'] = sed_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername']));
 
 
 		if ($row['ft_postcount']>$cfg['maxtopicsperpage'])

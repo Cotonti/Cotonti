@@ -185,6 +185,18 @@ $ssql.="page_title,
 		}
 		/* ===== */
 
+		if ($page_state == 0 && $cot_cache)
+		{
+			if ($cfg['cache_page'])
+			{
+				$cot_cache->page->clear('page/' . str_replace('.', '/', $sed_cat[$newpagecat]['path']));
+			}
+			if ($cfg['cache_index'])
+			{
+				$cot_cache->page->clear('index');
+			}
+		}
+
 		sed_shield_update(30, "New page");
 		sed_redirect($r_url);
 	}
@@ -240,6 +252,7 @@ $title_params = array(
 $out['subtitle'] = sed_title('title_page', $title_params);
 $out['head'] .= $R['code_noindex'];
 $sys['sublocation'] = $sed_cat[$c]['title'];
+sed_online_update();
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.main');

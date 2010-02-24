@@ -39,6 +39,16 @@ $filter_cats = FALSE;
 $ce = explode('_', $s);
 $sys['sublocation'] = $L['Home'];
 
+sed_online_update();
+
+$cot_path = 'forums';
+$cot_ignore_params = array();
+if ($cot_cache && $usr['id'] === 0 && $cfg['cache_forums'])
+{
+	$cot_cache->page->init($cot_path, $skin, $cot_ignore_params);
+	$cot_cache->page->read();
+}
+
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.first');
 foreach ($extp as $pl)
@@ -68,10 +78,10 @@ if (!$sed_sections_act)
         $sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_creation>'$timeback' AND fp_sectionid='$section'");
         $sed_sections_act[$section] = sed_sql_result($sqltmp, 0, "COUNT(*)");
     }
-    $cot_cache && $cot_cache->db_set('sed_sections_act', $sed_sections_act, 'system', 600);
+    $cot_cache && $cot_cache->db->store('sed_sections_act', $sed_sections_act, 'system', 600);
 }
 
-$sed_sections_vw = $cot_cache->mem_get('sections_wv', 'forums');
+$sed_sections_vw = $cot_cache->mem->get('sections_wv', 'forums');
 if (!$sed_sections_vw)
 {
     $sqltmp = sed_sql_query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
@@ -80,7 +90,7 @@ if (!$sed_sections_vw)
     {
         $sed_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
     }
-    $cot_cache &&$cot_cache->mem_set('sections_vw', $sed_sections_vw, 'forums', 120);
+    $cot_cache &&$cot_cache->mem->store('sections_vw', $sed_sections_vw, 'forums', 120);
 }
 
 unset($pcat);
@@ -326,5 +336,10 @@ $t->parse("MAIN");
 $t->out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
+
+if ($cot_cache && $usr['id'] === 0 && $cfg['cache_forums'])
+{
+	$cot_cache->page->write();
+}
 
 ?>

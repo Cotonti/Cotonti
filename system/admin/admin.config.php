@@ -56,13 +56,13 @@ switch($n)
 					WHERE config_name='" . $row['config_name'] . "' AND config_owner='$o' AND config_cat='$p'");
 			}
 
-			$cot_cache && $cot_cache->db_unset('cot_cfg', 'system');
+			$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
 			$adminwarnings = $L['Updated'];
 		}
 		elseif ($a == 'reset' && !empty($v))
 		{
 			sed_sql_query("UPDATE $db_config SET config_value=config_default WHERE config_name='$v' AND config_owner='$o'");
-			$cot_cache && $cot_cache->db_unset('cot_cfg', 'system');
+			$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_config WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");

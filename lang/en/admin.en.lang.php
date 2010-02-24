@@ -207,6 +207,9 @@ $L['cfg_parsesmiliesusertext'] = array('Parse smilies in user signature', '');
  * Performance Subsection
  */
 
+$L['cfg_cache_forums'] = array('Page cache in forums', 'Caches entire pages output for guests'); // 0.7.0
+$L['cfg_cache_index'] = array('Page cache on index', 'Index will be static for all guests'); // 0.7.0
+$L['cfg_cache_page'] = array('Page cache in page and list', 'Caches entire pages for guests'); // 0.7.0
 $L['cfg_disablehitstats'] = array('Disable hit statistics', 'Referers and hits per day');
 $L['cfg_disableactivitystats'] = array('Do not display statistics of activity', 'Activity for the last 7 days<br />Displayed on the home page administration panel');
 $L['cfg_disabledbstats'] = array('Do not display database statistics', 'Displayed on the home page administration panel');

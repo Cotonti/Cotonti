@@ -386,9 +386,9 @@ function sed_bbcode_load()
 function sed_bbcode_clearcache()
 {
 	global $cot_cache;
-	$cot_cache->db_unset('sed_bbcodes', 'system');
-	$cot_cache->db_unset('sed_bbcodes_post', 'system');
-	$cot_cache->db_unset('sed_bbcode_containers', 'system');
+	$cot_cache->db->remove('sed_bbcodes', 'system');
+	$cot_cache->db->remove('sed_bbcodes_post', 'system');
+	$cot_cache->db->remove('sed_bbcode_containers', 'system');
 }
 
 /**
@@ -1914,6 +1914,7 @@ function sed_cc($text)
 	array('{', '<', '>' , '$', '\'', '"', '\\', '&amp;', '&nbsp;'),
 	array('&#123;', '&lt;', '&gt;', '&#036;', '&#039;', '&quot;', '&#92;', '&amp;amp;', '&amp;nbsp;'), $text);
 	return $text;*/
+	trigger_error('sed_cc() is deprecated since Cotonti Genoa, use htmlspecialchars() instead');
 	return htmlspecialchars($text);
 }
 
@@ -2748,6 +2749,89 @@ function sed_date2stamp($date)
 function sed_stamp2date($stamp)
 {
 	return date('Y-m-d', $stamp);
+}
+
+/**
+ * Updates online users table
+ * @global array $cfg
+ * @global array $sys
+ * @global array $usr
+ * @global array $out
+ * @global string $db_online
+ * @global Cache $cot_cache
+ * @global array $sed_usersonline
+ * @global string $location Location string
+ */
+function sed_online_update()
+{
+	global $cfg, $sys, $usr, $out, $db_online, $cot_cache, $sed_usersonline, $location;
+	if (!$cfg['disablewhosonline'])
+	{
+		if ($location != $sys['online_location']
+			|| !empty($sys['sublocaction']) && $sys['sublocaction'] != $sys['online_subloc'])
+		{
+			if ($usr['id'] > 0)
+			{
+				if (empty($sys['online_location']))
+				{
+					sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
+						VALUES ('".$usr['ip']."', '".sed_sql_prep($usr['name'])."', ".(int)$sys['now'].", '".sed_sql_prep($location)."',  '".sed_sql_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
+				}
+				else
+				{
+					sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".sed_sql_prep($location)."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
+				}
+			}
+			else
+			{
+				if (empty($sys['online_location']))
+				{
+					sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
+						VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".sed_sql_prep($location)."', '".sed_sql_prep($sys['sublocation'])."', -1, 0, 0)");
+				}
+				else
+				{
+					sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
+				}
+			}
+		}
+		if ($cot_cache && $cot_cache->mem && $cot_cache->mem->exists('whosonline', 'system'))
+		{
+			$whosonline_data = $cot_cache->mem->get('whosonline', 'system');
+			$sys['whosonline_vis_count'] = $whosonline_data['vis_count'];
+			$sys['whosonline_reg_count'] = $whosonline_data['reg_count'];
+			$out['whosonline_reg_list'] = $whosonline_data['reg_list'];
+			unset($whosonline_data);
+		}
+		else
+		{
+			$online_timedout = $sys['now'] - $cfg['timedout'];
+			sed_sql_query("DELETE FROM $db_online WHERE online_lastseen < $online_timedout");
+			$sys['whosonline_vis_count'] = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'"), 0, 0);
+			$sql_o = sed_sql_query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
+			$sys['whosonline_reg_count'] = sed_sql_numrows($sql_o);
+			$ii_o = 0;
+			while ($row_o = sed_sql_fetcharray($sql_o))
+			{
+				$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
+				$out['whosonline_reg_list'] .= sed_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
+				$sed_usersonline[] = $row_o['online_userid'];
+				$ii_o++;
+			}
+			sed_sql_freeresult($sql_o);
+			unset($ii_o, $sql_o, $row_o);
+			if ($cot_cache && $cot_cache->mem)
+			{
+				$whosonline_data = array(
+					'vis_count' => $sys['whosonline_vis_count'],
+					'reg_count' => $sys['whosonline_reg_count'],
+					'reg_list' => $out['whosonline_reg_list']
+				);
+				$cot_cache->mem->store('whosonline', $whosonline_data, 'system', 30);
+			}
+		}
+		$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
+	}
 }
 
 /**
