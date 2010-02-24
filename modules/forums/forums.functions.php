@@ -279,7 +279,7 @@ function sed_userisonline($id)
 if (!$sed_forums_str && !$cfg['disable_forums'])
 {
 	sed_load_forum_structure();
-	$cot_cache && $cot_cache->db_set('sed_forums_str', $sed_forums_str, 'system');
+	$cot_cache && $cot_cache->db->store('sed_forums_str', $sed_forums_str, 'system');
 }
 
 ?>

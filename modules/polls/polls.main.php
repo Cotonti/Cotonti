@@ -51,6 +51,8 @@ $ratings = sed_import('ratings', 'G', 'BOL');
 
 $out['subtitle'] = $L['Polls'];
 
+sed_online_update();
+
 /* === Hook === */
 $extp = sed_getextplugins('polls.main');
 foreach ($extp as $pl)

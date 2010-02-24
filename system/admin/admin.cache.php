@@ -42,7 +42,7 @@ elseif($a == 'delete')
 
 $is_adminwarnings = isset($adminwarnings);
 
-if ($cot_cache && $cot_cache->mem_available)
+if ($cot_cache && $cot_cache->mem)
 {
 	$info = $cot_cache->get_info();
 	if ($info['available'] < 0)

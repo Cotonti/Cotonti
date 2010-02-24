@@ -101,12 +101,22 @@ if ($n == 'edit')
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_mastername='".$mastername."' WHERE fs_masterid='$id' ");
 		}
 
+		if ($cot_cache && $cfg['cache_forums'])
+		{
+			$cot_cache->page->clear('forums');
+		}
+
 		sed_redirect(sed_url('admin', 'm=forums&d='.$d.$additionsforurl, '', true));
 	}
 	elseif ($a == 'resync')
 	{
 		sed_check_xg();
 		sed_forum_resync($id);
+
+		if ($cot_cache && $cfg['cache_forums'])
+		{
+			$cot_cache->page->clear('forums');
+		}
 
 		$adminwarnings = $L['Resynced'];
 	}
@@ -197,6 +207,11 @@ else
 			$row_oth = sed_sql_fetcharray($sql);
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='".$row_oth['fs_order']."' WHERE fs_id='".$id."'");
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_order='".$row_cur['fs_order']."' WHERE fs_id='".$row_oth['fs_id']."'");
+
+			if ($cot_cache && $cfg['cache_forums'])
+			{
+				$cot_cache->page->clear('forums');
+			}
 		}
 
 		$adminwarnings = $L['Ordered'];
@@ -253,6 +268,11 @@ else
 
 			sed_auth_add_item('forums', $forumid, $auth_permit, $auth_lock);
 
+			if ($cot_cache && $cfg['cache_forums'])
+			{
+				$cot_cache->page->clear('forums');
+			}
+
 			$adminwarnings = $L['Added'];
 		}
 		else
@@ -268,6 +288,11 @@ else
 		$sql1 = sed_sql_query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='".$id."' ");
 		//$num = sed_sql_numrows($sql1);
 
+		if ($cot_cache && $cfg['cache_forums'])
+		{
+			$cot_cache->page->clear('forums');
+		}
+
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.forums.delete');
 		foreach ($extp as $pl)
@@ -275,6 +300,7 @@ else
 			include $pl;
 		}
 		/* ===== */
+
 		$adminwarnings = $L['Deleted'];
 	}
 	/*

@@ -118,6 +118,17 @@ if ($a=='update')
 					include $pl;
 				}
 				/* ===== */
+				if ($cot_cache)
+				{
+					if ($cfg['cache_page'])
+					{
+						$cot_cache->page->clear('page/' . str_replace('.', '/', $sed_cat[$row['page_cat']]['path']));
+					}
+					if ($cfg['cache_index'])
+					{
+						$cot_cache->page->clear('index');
+					}
+				}
 				sed_redirect(sed_url('list', "c=".$row1['page_cat'], '', true));
 			}
 		}
@@ -223,6 +234,18 @@ if ($a=='update')
 			}
 			/* ===== */
 
+			if ($page_state == 0 && $cot_cache)
+			{
+				if ($cfg['cache_page'])
+				{
+					$cot_cache->page->clear('page/' . str_replace('.', '/', $sed_cat[$rpagecat]['path']));
+				}
+				if ($cfg['cache_index'])
+				{
+					$cot_cache->page->clear('index');
+				}
+			}
+
 			sed_log("Edited page #".$id,'adm');
 			sed_redirect(sed_url('page', "id=".$id, '', true));
 		}
@@ -301,6 +324,7 @@ $title_params = array(
 $out['subtitle'] = sed_title('title_page', $title_params);
 $out['head'] .= $R['code_noindex'];
 $sys['sublocation'] = $sed_cat[$c]['title'];
+sed_online_update();
 
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.main');

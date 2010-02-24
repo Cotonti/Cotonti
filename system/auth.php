@@ -126,7 +126,7 @@ function sed_auth_clear($id = 'all')
 	if ($id == 'all')
 	{
 		sed_sql_query("UPDATE $db_users SET user_auth=''");
-		$cot_cache && $cot_cache->db_unset('sed_guest_auth', 'system');
+		$cot_cache && $cot_cache->db->remove('sed_guest_auth', 'system');
 	}
 	else
 	{

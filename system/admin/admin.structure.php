@@ -118,7 +118,7 @@ if ($n == 'options')
 
 			sed_auth_reorder();
 			sed_auth_clear('all');
-			$cot_cache && $cot_cache->db_unset('sed_cat', 'system');
+			$cot_cache && $cot_cache->db->remove('sed_cat', 'system');
 		}
 
 		if ($rtplmode == 1)
@@ -158,7 +158,14 @@ if ($n == 'options')
 			WHERE structure_id='".$id."'";
 		$sql = sed_sql_query($sqltxt);
 
-		$cot_cache && $cot_cache->db_unset('sed_cat', 'system');
+		if ($cot_cache)
+		{
+			$cot_cache->db->remove('sed_cat', 'system');
+			if ($cfg['cache_page'])
+			{
+				$cot_cache->page->clear('page');
+			}
+		}
 
 		sed_redirect(sed_url('admin', 'm=structure&d='.$d.$additionsforurl, '', true));
 	}
@@ -167,6 +174,11 @@ if ($n == 'options')
 		sed_check_xg();
 
 		$adminwarnings = sed_structure_resync($id) ? $L['Resynced'] : $L['Error'];
+
+		if ($cot_cache && $cfg['cache_page'])
+		{
+			$cot_cache->page->clear('page');
+		}
 	}
 
 	$sql = sed_sql_query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
@@ -322,7 +334,6 @@ else
 
 				sed_auth_reorder();
 				sed_auth_clear('all');
-				$cot_cache && $cot_cache->db_unset('sed_cat', 'system');
 			}
 
 			$sql1text = "UPDATE $db_structure
@@ -347,7 +358,14 @@ else
 		}
 
 		sed_auth_clear('all');
-		$cot_cache && $cot_cache->db_unset('sed_cat', 'system');
+		if ($cot_cache)
+		{
+			$cot_cache->db->remove('sed_cat', 'system');
+			if ($cfg['cache_page'])
+			{
+				$cot_cache->page->clear('page');
+			}
+		}
 
 		$adminwarnings = $L['Updated'];
 	}
@@ -380,6 +398,11 @@ else
 		/* ===== */
 
 		$adminwarnings = (sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup, $norder, $nway, $rstructureextrafields)) ? $L['Added'] : $L['Error'];
+
+		if ($cot_cache && $cfg['cache_page'])
+		{
+			$cot_cache->page->clear('page');
+		}
 	}
 	elseif ($a == 'delete')
 	{
@@ -395,6 +418,11 @@ else
 
 		sed_structure_delcat($id, $c);
 
+		if ($cot_cache && $cfg['cache_page'])
+		{
+			$cot_cache->page->clear('page');
+		}
+
 		$adminwarnings = $L['Deleted'];
 	}
 	elseif ($a == 'resyncall')
@@ -402,6 +430,11 @@ else
 		sed_check_xg();
 
 		$adminwarnings = sed_structure_resyncall() ? $L['Resynced'] : $L['Error'];
+
+		if ($cot_cache && $cfg['cache_page'])
+		{
+			$cot_cache->page->clear('page');
+		}
 	}
 
 	$sql = sed_sql_query("SELECT DISTINCT(page_cat), COUNT(*) FROM $db_pages WHERE 1 GROUP BY page_cat");

@@ -133,6 +133,19 @@ if ($row = sed_sql_fetcharray($sql))
 else
 { sed_die(); }
 
+$sys['sublocation'] = $fs_title;
+sed_online_update();
+
+$cat = $sed_forums_str[$s];
+
+$cot_path = 'forums/' . $s. '/' . $q; // TODO subforums
+$cot_ignore_params = array('p', 'id', 'q');
+if ($cot_cache && $usr['id'] === 0 && $cfg['cache_forums'])
+{
+	$cot_cache->page->init($cot_path, $skin, $cot_ignore_params);
+	$cot_cache->page->read();
+}
+
 if ($a=='newpost')
 {
 	sed_shield_protect();
@@ -234,6 +247,19 @@ if ($a=='newpost')
 			/* ===== */
 
 			sed_forum_sectionsetlast($s);
+
+			if ($cot_cache)
+			{
+				if ($cfg['cache_forums'])
+				{
+					$cot_cache->page->clear('forums');
+				}
+				if ($cfg['cache_index'])
+				{
+					$cot_cache->page->clear('index');
+				}
+			}
+
 			sed_shield_update(30, "New post");
 			sed_redirect(sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
 		}
@@ -273,6 +299,19 @@ if ($a=='newpost')
 			/* ===== */
 
 			sed_forum_sectionsetlast($s);
+
+			if ($cot_cache)
+			{
+				if ($cfg['cache_forums'])
+				{
+					$cot_cache->page->clear('forums');
+				}
+				if ($cfg['cache_index'])
+				{
+					$cot_cache->page->clear('index');
+				}
+			}
+
 			sed_shield_update(30, "New post");
 			sed_redirect(sed_url('forums', "m=posts&q=".$q."&n=last", '#bottom', true));
 		}
@@ -326,6 +365,18 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 		include $pl;
 	}
 	/* ===== */
+
+	if ($cot_cache)
+	{
+		if ($cfg['cache_forums'])
+		{
+			$cot_cache->page->clear('forums');
+		}
+		if ($cfg['cache_index'])
+		{
+			$cot_cache->page->clear('index');
+		}
+	}
 
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$q'");
 
@@ -486,7 +537,6 @@ else
 	ORDER BY fp_id LIMIT $d, ".$cfg['maxpostsperpage']);
 }
 
-$sys['sublocation'] = $fs_title;
 $title_params = array(
 	'FORUM' => $L['Forums'],
 	'SECTION' => $fs_title,
@@ -839,5 +889,10 @@ $t->parse("MAIN");
 $t->out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
+
+if ($cot_cache && $usr['id'] === 0 && $cfg['cache_forums'])
+{
+	$cot_cache->page->write();
+}
 
 ?>

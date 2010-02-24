@@ -81,14 +81,13 @@ else
 	$cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 	$cfg['css'] = $cfg['defaultskin'];
 
-	$cot_cache && $cot_cache->db_set('cot_cfg', $cfg, 'system');
+	$cot_cache && $cot_cache->db->store('cot_cfg', $cfg, 'system');
 }
 // Mbstring options
 mb_internal_encoding($cfg['charset']);
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 
-$online_timedout = $sys['now'] - $cfg['timedout'];
 if ($cfg['clustermode'])
 {
 	if (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP'])) $usr['ip'] = $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
@@ -137,13 +136,13 @@ if (!$sed_plugins)
 			$sed_plugins[$row['pl_hook']][] = $row;
 		}
 	}
-	$cot_cache && $cot_cache->db_set('sed_plugins', $sed_plugins, 'system');
+	$cot_cache && $cot_cache->db->store('sed_plugins', $sed_plugins, 'system');
 }
 
 if (!is_array($sed_urltrans))
 {
 	sed_load_urltrans();
-	$cot_cache && $cot_cache->db_set('sed_urltrans', $sed_urltrans, 'system', 1200);
+	$cot_cache && $cot_cache->db->store('sed_urltrans', $sed_urltrans, 'system', 1200);
 }
 
 /* ======== Gzip and output filtering ======== */
@@ -213,7 +212,7 @@ if (!$sed_groups )
 		sed_diefatal('No groups found.'); // TODO: Need translate
 	}
 
-	$cot_cache && $cot_cache->db_set('sed_groups', $sed_groups, 'system');
+	$cot_cache && $cot_cache->db->store('sed_groups', $sed_groups, 'system');
 }
 
 /* ======== User/Guest ======== */
@@ -340,7 +339,7 @@ if ($usr['id'] == 0)
 	if (!$sed_guest_auth)
 	{
 		$sed_guest_auth = sed_auth_build(0);
-		$cot_cache && $cot_cache->db_set('sed_guest_auth', $sed_guest_auth, 'system');
+		$cot_cache && $cot_cache->db->store('sed_guest_auth', $sed_guest_auth, 'system');
 	}
 	$usr['auth'] = $sed_guest_auth;
 	unset($sed_guest_auth);
@@ -430,15 +429,15 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 if (!$cfg['disablehitstats'])
 {
-	if ($cot_cache->mem_available && $cot_cache->mem_isset('maxusers', 'system'))
+	if ($cot_cache->mem && $cot_cache->mem->exists('maxusers', 'system'))
 	{
-		$maxusers = $cot_cache->mem_get('maxusers', 'system');
+		$maxusers = $cot_cache->mem->get('maxusers', 'system');
 	}
 	else
 	{
 		$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
 		$maxusers = (int) @sed_sql_result($sql, 0, 0);
-		$cot_cache->mem_available && $cot_cache->mem_set('maxusers', $maxusers, 'system', 0);
+		$cot_cache->mem && $cot_cache->mem->store('maxusers', $maxusers, 'system', 0);
 	}
 
 	if ($maxusers < $sys['whosonline_all_count'])
@@ -510,9 +509,9 @@ $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." 
 
 if (!$cfg['disablehitstats'])
 {
-	if ($cot_cache && $cot_cache->mem_available)
+	if ($cot_cache && $cot_cache->mem)
 	{
-		$hits = $cot_cache->mem_inc('hits', 'system');
+		$hits = $cot_cache->mem->inc('hits', 'system');
 		$cfg['hit_precision'] > 0 || $cfg['hit_precision'] = 100;
 		if ($hits % $cfg['hit_precision'] == 0)
 		{
@@ -548,7 +547,7 @@ if (!$cfg['disablehitstats'])
 if (!$sed_cat && !$cfg['disable_page'])
 {
 	sed_load_structure();
-	$cot_cache && $cot_cache->db_set('sed_cat', $sed_cat, 'system');
+	$cot_cache && $cot_cache->db->store('sed_cat', $sed_cat, 'system');
 }
 
 /* ======== Various ======== */
@@ -593,16 +592,16 @@ if (!$cfg['parser_disable'])
 	if (!is_array($sed_smilies))
 	{
 		sed_load_smilies();
-		$cot_cache && $cot_cache->db_set('sed_smilies', $sed_smilies, 'system');
+		$cot_cache && $cot_cache->db->store('sed_smilies', $sed_smilies, 'system');
 	}
 	if (!is_array($sed_bbcodes))
 	{
 		sed_bbcode_load();
 		if ($cot_cache)
 		{
-			$cot_cache->db_set('sed_bbcodes', $sed_bbcodes, 'system');
-			$cot_cache->db_set('sed_bbcodes_post', $sed_bbcodes_post, 'system');
-			$cot_cache->db_set('sed_bbcode_containers', $sed_bbcode_containers, 'system');
+			$cot_cache->db->store('sed_bbcodes', $sed_bbcodes, 'system');
+			$cot_cache->db->store('sed_bbcodes_post', $sed_bbcodes_post, 'system');
+			$cot_cache->db->store('sed_bbcode_containers', $sed_bbcode_containers, 'system');
 		}
 	}
 }

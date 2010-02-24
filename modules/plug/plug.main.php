@@ -106,6 +106,8 @@ if (!empty($e))
 	$out['subtitle'] = empty($out['subtitle']) ? $L['plu_title'] : $out['subtitle'];
 	$sys['sublocation'] = $out['subtitle'];
 
+	sed_online_update();
+
 	require_once $cfg['system_dir'] . '/header.php';
 
 	$t = $t_plug;
