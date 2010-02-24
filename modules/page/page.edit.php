@@ -88,7 +88,7 @@ if ($a=='update')
 		{
 			$import = $import != '';
 		}
-		$rpageextrafields[] = $import;
+		$rpageextrafields[$row['field_name']] = $import;
 	}
 	if (empty($error_string) || $rpagedelete)
 	{
@@ -395,12 +395,16 @@ for($i = 0; $i<$numtags; $i++)
 	$pfs_js = (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, "update", "rpage$field", $L['SFS']) : '';
 	$pageedit_array[$tag] = $pfs_js;
 }
+$t->assign($pageedit_array);
 
 // Extra fields
-$extra_array = sed_build_extrafields('page', 'PAGEEDIT_FORM', $sed_extrafields['pages'], $pag);
-$pageedit_array= $pageedit_array + $extra_array;
+foreach($sed_extrafields['pages'] as $i => $row)
+{
+	$uname = strtoupper($row['field_name']);
+	$t->assign('PAGEEDIT_FORM_'.$uname, sed_build_extrafields('page',  $row, $pag["page_".$row['field_name']]));
+	$t->assign('PAGEEDIT_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+}
 
-$t->assign($pageedit_array);
 /* === Hook === */
 $extp = sed_getextplugins('page.edit.tags');
 foreach ($extp as $pl)

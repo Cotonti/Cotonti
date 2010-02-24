@@ -75,7 +75,7 @@ if ($a=='add')
 		{
 			$import = $import != '';
 		}
-		$newpageextrafields[] = $import;
+		$newpageextrafields[$row['field_name']] = $import;
 	}
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
@@ -330,12 +330,15 @@ for($i = 0; $i<$numtags; $i++)
 	$pfs_js = (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, "newpage", "newpage$field", $L['SFS']) : '';
 	$pageadd_array[$tag] = $pfs_js;
 }
+$t->assign($pageadd_array);
 
 // Extra fields
-$extra_array = sed_build_extrafields('page', 'PAGEADD_FORM', $sed_extrafields['pages'], '', true);
-$pageadd_array= $pageadd_array + $extra_array;
-
-$t->assign($pageadd_array);
+foreach($sed_extrafields['pages'] as $i => $row)
+{
+	$uname = strtoupper($row['field_name']);
+	$t->assign('PAGEADD_FORM_'.$uname, sed_build_extrafields('page',  $row, htmlspecialchars($newpageextrafields[$row['field_name']]), true));
+	$t->assign('PAGEADD_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+}
 
 /* === Hook === */
 $extp = sed_getextplugins('page.add.tags');

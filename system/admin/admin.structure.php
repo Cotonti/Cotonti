@@ -94,7 +94,7 @@ if ($n == 'options')
 			{
 				$import = $import != '';
 			}
-			$rstructureextrafields[] = $import;
+			$rstructureextrafields[$row['field_name']] = $import;
 		}
 
 		$sqql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
@@ -281,8 +281,12 @@ if ($n == 'options')
 	));
 
 	// Extra fields
-	$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE', $sed_extrafields['structure'], $row);
-	$t->assign($extra_array);
+	foreach($sed_extrafields['structure'] as $i => $row2)
+	{
+		$uname = strtoupper($row['field_name']);
+		$t->assign('ADMIN_STRUCTURE_'.$uname, sed_build_extrafields('structure',  $row2, $row["structure_".$row2['field_name']]));
+		$t->assign('ADMIN_STRUCTURE_'.$uname.'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
+	}
 
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.structure.options.tags');
@@ -310,7 +314,7 @@ else
 				{
 					$import = $import != '';
 				}
-				$rstructureextrafields[] = $import;
+				$rstructureextrafields[$row['field_name']] = $import;
 			}
 
 
@@ -574,8 +578,12 @@ else
 	));
 
 	// Extra fields
-	$extra_array = sed_build_extrafields('structure', 'ADMIN_STRUCTURE_FORMADD', $sed_extrafields['structure'], '', true);
-	$t->assign($extra_array);
+	foreach($sed_extrafields['structure'] as $i => $row2)
+	{
+		$uname = strtoupper($row['field_name']);
+		$t->assign('ADMIN_STRUCTURE_FORMADD_'.$uname, sed_build_extrafields('structure',  $row2, '', true));
+		$t->assign('ADMIN_STRUCTURE_FORMADD_'.$uname.'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
+	}
 
 	$t->parse("STRUCTURE.DEFULT");
 }

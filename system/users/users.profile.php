@@ -375,7 +375,7 @@ switch ($a)
 		{
 			$import = $import != '';
 		}
-		$ruserextrafields[] = $import;
+		$ruserextrafields[$row['field_name']] = $import;
 		$urr['user_'.$row[ 'field_name']] = $import;
 	}
 
@@ -663,11 +663,15 @@ $useredit_array = array(
 	"USERS_PROFILE_NEWPASS1" => "<input type=\"password\" class=\"password\" name=\"rnewpass1\" size=\"12\" maxlength=\"16\" />",
 	"USERS_PROFILE_NEWPASS2" => "<input type=\"password\" class=\"password\" name=\"rnewpass2\" size=\"12\" maxlength=\"16\" />",
 );
-// Extra fields
-$extra_array = sed_build_extrafields('user', 'USERS_PROFILE', $sed_extrafields['users'], $urr);
-$useredit_array = $useredit_array + $extra_array;
-
 $t->assign($useredit_array);
+
+// Extra fields
+foreach($sed_extrafields['users'] as $i => $row)
+{
+	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']), sed_build_extrafields('user',  $row, $urr['user_'.$row['field_name']]));
+	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
+}
+
 /* === Hook === */
 $extp = sed_getextplugins('profile.tags');
 foreach ($extp as $pl)
