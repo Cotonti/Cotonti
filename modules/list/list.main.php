@@ -128,7 +128,7 @@ if ($c == 'all' || $c == 'system' || $c == 'unvalidated')
 }
 else
 {
-	$catpath = sed_build_catpath($c, '<a href="%1$s">%2$s</a>');
+	$catpath = sed_build_catpath($c);
 }
 
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
@@ -171,7 +171,7 @@ $t = new XTemplate($mskin);
 
 $t -> assign(array(
 	"LIST_PAGETITLE" => $catpath,
-	"LIST_CATEGORY" => '<a href="'.sed_url('list', "c=$c").'">'.$cat['title'].'</a>',
+	"LIST_CATEGORY" => htmlspecialchars($cat['title']),
 	"LIST_CAT" => $c,
 	"LIST_CAT_RSS" => sed_url('rss', "c=$c"),
 	"LIST_CATTITLE" => $cat['title'],

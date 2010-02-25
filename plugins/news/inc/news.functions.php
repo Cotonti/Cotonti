@@ -80,7 +80,7 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0,
 	while($pag = sed_sql_fetcharray($sql))
 	{
 		$jj++;
-		$catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
+		$catpath = sed_build_catpath($pag['page_cat']);
 		$pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', 'id='.$pag['page_id']) : sed_url('page', 'al='.$pag['page_alias']);
 		$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".htmlspecialchars($pag['page_title'])."</a>";
 
@@ -213,7 +213,7 @@ function sed_get_news($cat, $skinfile="news", $limit=false, $d=0, $textlength=0,
 		$news->parse("NEWS.PAGE_ROW");
 	}
 
-	$catpath = sed_build_catpath($cat, "<a href=\"%1\$s\">%2\$s</a>");
+	$catpath = sed_build_catpath($cat);
 	$news-> assign(array(
 		"PAGE_PAGENAV" => $pagnav,
 		"PAGE_PAGEPREV" => $pages_prev,

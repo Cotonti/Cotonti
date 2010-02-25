@@ -44,10 +44,14 @@ if ($a=='check')
 	if(empty($rremember) && $rcookiettl > 0) $rremember = true;
 	$rmdpass  = md5($rpassword);
 
-	$sql = sed_sql_query("SELECT user_id, user_maingrp, user_banexpire, user_skin, user_theme, user_lang FROM $db_users WHERE user_password='$rmdpass' AND user_name='".sed_sql_prep($rusername)."'");
+	$login_param = preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $rusername) ?
+		'user_email' : 'user_name';
+
+	$sql = sed_sql_query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_skin, user_theme, user_lang FROM $db_users WHERE user_password='$rmdpass' AND $login_param='".sed_sql_prep($rusername)."'");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
+		$rusername = $row['user_name'];
 		if ($row['user_maingrp']==-1)
 		{
 			sed_log("Log in attempt, user inactive : ".$rusername, 'usr');

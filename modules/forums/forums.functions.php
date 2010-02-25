@@ -28,25 +28,41 @@ function sed_build_addtxt($c1, $c2)
  */
 function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master = false)
 {
-	global $sed_forums_str, $cfg, $db_forum_sections, $L;
+	global $sed_forums_str, $cfg, $db_forum_sections, $L, $q;
 	$pathcodes = explode('.', $sed_forums_str[$category]['path']);
 
 	if($link)
 	{
 		if($cfg['homebreadcrumb'])
 		{
-			$tmp[] = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a>';
+			$tmp[] = sed_rc('link_catpath', array(
+				'url' => $cfg['mainurl'],
+				'title' => htmlspecialchars($cfg['maintitle'])
+			));
 		}
-		$tmp[] = '<a href="'.sed_url('forums').'">'.$L['Forums'].'</a>';
+		$tmp[] = sed_rc('link_catpath', array(
+			'url' => sed_url('forums'),
+			'title' => $L['Forums']
+		));
 		foreach($pathcodes as $k => $x)
 		{
-			$tmp[] = '<a href="'.sed_url('forums', 'c='.$x, '#'.$x).'">'.htmlspecialchars($sed_forums_str[$x]['title']).'</a>';
+			$tmp[] = sed_rc('link_catpath', array(
+				'url' => sed_url('forums', 'c='.$x, '#'.$x),
+				'title' => htmlspecialchars($sed_forums_str[$x]['title'])
+			));
 		}
 		if(is_array($master))
 		{
-			$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$master[0]).'">'.htmlspecialchars($master[1]).'</a>';
+			$tmp[] = sed_rc('link_catpath', array(
+				'url' => sed_url('forums', 'm=topics&s='.$master[0]),
+				'title' => htmlspecialchars($master[1])
+			));
 		}
-		$tmp[] = '<a href="'.sed_url('forums', 'm=topics&s='.$sectionid).'">'.htmlspecialchars($title).'</a>';
+		$tmp[] = empty($q) ? htmlspecialchars($title)
+			: sed_rc('link_catpath', array(
+				'url' => sed_url('forums', 'm=topics&s='.$sectionid),
+				'title' =>  htmlspecialchars($title)
+			));
 	}
 	else
 	{
@@ -56,7 +72,7 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 		}
 		if(is_array($master))
 		{
-			$tmp[] = $master[1];
+			$tmp[] = htmlspecialchars($master[1]);
 		}
 		$tmp[] = htmlspecialchars($title);
 	}

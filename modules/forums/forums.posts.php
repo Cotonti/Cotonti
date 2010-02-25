@@ -645,7 +645,7 @@ $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
 $toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master);
 $toppath  = $toptitle;
-$toptitle .= " ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&q=".$q)."\">".$ft_title."</a>";
+$toptitle .= ' ' . $cfg['separator'] . ' ' . $ft_title;
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $t->assign(array(

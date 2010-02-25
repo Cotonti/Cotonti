@@ -15,6 +15,8 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 $usr['isadmin'] &= sed_auth('admin', 'a', 'A');
 sed_block($usr['isadmin']);
 
+require_once sed_incfile('functions', 'forums');
+
 $t = new XTemplate(sed_skinfile('admin.rightsbyitem'));
 
 $ic = sed_import('ic', 'G', 'ALP');

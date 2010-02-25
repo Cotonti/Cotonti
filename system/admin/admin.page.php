@@ -334,7 +334,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$page_urlp = empty($row['page_alias']) ? 'id='.$row['page_id'] : 'al='.$row['page_alias'];
 	$row['page_begin_noformat'] = $row['page_begin'];
 	$row['page_pageurl'] = sed_url('page', $page_urlp);
-	$catpath = sed_build_catpath($row["page_cat"], '<a href="%1$s">%2$s</a>');
+	$catpath = sed_build_catpath($row['page_cat']);
 	$row['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$row['page_pageurl']."\">".htmlspecialchars($row['page_title'])."</a>";
 	$sql4 = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$sed_cat[$row["page_cat"]]['rpath']."%' ");
 	$sub_count = sed_sql_result($sql4, 0, "SUM(structure_pagecount)");

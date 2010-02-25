@@ -228,7 +228,7 @@ function sed_build_recentpages($template, $mode='recent', $maxperpage='5', $d=0,
 	while($pag = sed_sql_fetcharray($sql))
 	{
 		$jj++;
-		$catpath = sed_build_catpath($pag['page_cat'], "<a href=\"%1\$s\">%2\$s</a>");
+		$catpath = sed_build_catpath($pag['page_cat']);
 		if((int)$titlelength>0)
 		{
 			if(sed_string_truncate($pag['page_title'], $titlelength, false))
