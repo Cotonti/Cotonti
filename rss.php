@@ -38,11 +38,15 @@ if ($c=="")	$c = "news";
 
 header('Content-type: text/xml');
 $sys['now'] = time();
-$cache = sed_cache_get("rss_".$c.$id);
-if ($cache)
+
+if ($usr['id'] === 0)
 {
-	echo $cache; // output cache if avaiable
-	exit();
+	$cache = sed_cache_get("rss_".$c.$id);
+	if ($cache)
+	{
+		echo $cache; // output cache if avaiable
+		exit();
+	}
 }
 
 $rss_title = $cfg['maintitle'];
@@ -278,9 +282,9 @@ else
 $out = "<?xml version='1.0' encoding='".$cfg_charset."'?>\n";
 $out .= "<rss version='2.0'>\n";
 $out .= "<channel>\n";
-$out .= "<title>".$rss_title."</title>\n";
+$out .= "<title>".htmlspecialchars($rss_title)."</title>\n";
 $out .= "<link>".$rss_link."</link>\n";
-$out .= "<description>".$rss_description."</description>\n";
+$out .= "<description>".htmlspecialchars($rss_description)."</description>\n";
 $out .= "<generator>Cotonti</generator>\n";
 $out .= "<pubDate>".date("r", time())."</pubDate>\n";
 if (count($items)>0)
@@ -309,7 +313,10 @@ if (is_array($extp))
 }
 /* ===== */
 
-sed_cache_store("rss_".$c.$id, $out, $cfg_timetolive);
+if ($usr['id'] === 0)
+{
+	sed_cache_store("rss_".$c.$id, $out, $cfg_timetolive);
+}
 echo $out;
 
 // ---------------------------------------------------------------------------------------------
