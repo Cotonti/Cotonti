@@ -12,6 +12,11 @@
 defined('SED_CODE') or die('Wrong URL.');
 
 /**
+ * User authentication
+ */
+$L['aut_usernameoremail'] = 'Username or email';
+
+/**
  * User registration
  */
 

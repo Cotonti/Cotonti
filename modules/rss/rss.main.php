@@ -37,11 +37,15 @@ $id = empty($id) ? "all" : $id;
 
 header('Content-type: text/xml');
 $sys['now'] = time();
-$cache = $cot_cache->mem->get($c . $id, 'rss');
-if ($cache)
+
+if ($usr['id'] === 0 && $cot_cache)
 {
-	echo $cache;
-	exit;
+	$cache = $cot_cache->db->get($c . $id, 'rss');
+	if ($cache)
+	{
+		echo $cache;
+		exit;
+	}
 }
 
 $rss_title = $cfg['maintitle'];
@@ -331,10 +335,10 @@ else
 $t = new XTemplate(sed_skinfile('rss'));
 $t->assign(array(
 	"RSS_ENCODING" => $cfg['rss_charset'],
-	"RSS_TITLE" => $rss_title,
+	"RSS_TITLE" => htmlspecialchars($rss_title),
 	"RSS_LINK" => $rss_link,
 	"RSS_LANG" => $cfg['defaultlang'],
-	"RSS_DESCRIPTION" => $rss_description,
+	"RSS_DESCRIPTION" => htmlspecialchars($rss_description),
 	"RSS_DATE" => date("r", time())
 ));
 
@@ -363,7 +367,10 @@ foreach ($extp as $pl)
 $t->parse("MAIN");
 $out_rss = $t->out("MAIN");
 
-$cot_cache->mem->store($c . $id, $out_rss, 'rss', $cfg['rss_timetolive']);
+if ($usr['id'] === 0 && $cot_cache)
+{
+	$cot_cache->db->store($c . $id, $out_rss, 'rss', $cfg['rss_timetolive']);
+}
 echo $out_rss;
 
 function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_pageurl)

@@ -23,6 +23,7 @@ $R['icon_stars'] = '<img class="icon" src="skins/'.$skin.'/img/system/stars{$val
 $R['icon_unread'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-unread.gif" alt="" />';
 $R['icon_up'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-up.png" alt="" />';
 $R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt="" />';
+$R['link_catpath'] = '<a href="{$url}" title="{$title}">{$title}</a>';
 $R['link_pagenav_current'] = '<span class="pagenav_current"><a href="{$url}"{$event}{$rel}>{$num}</a></span>';
 $R['link_pagenav_first'] = '<span class="pagenav_first"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_first'].'</a></span>';
 $R['link_pagenav_gap'] = '<span class="pagenav_pages">..</span>';

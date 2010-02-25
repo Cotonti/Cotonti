@@ -993,19 +993,28 @@ function sed_build_age($birth)
  * @param string $mask Format mask
  * @return string
  */
-function sed_build_catpath($cat, $mask)
+function sed_build_catpath($cat, $mask = 'link_catpath')
 {
 	global $sed_cat, $cfg;
-	$mask = str_replace('%25', '%', $mask);
-	$mask = str_replace('%24', '$', $mask);
+	$mask = str_replace('%1$s', '{$url}', $mask);
+	$mask = str_replace('%2$s', '{$title}', $mask);
 	if ($cfg['homebreadcrumb'])
 	{
-		$tmp[] = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a>';
+		$tmp[] = sed_rc('link_catpath', array(
+			'url' => $cfg['mainurl'],
+			'title' => htmlspecialchars($cfg['maintitle'])
+		));
 	}
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
-	foreach($pathcodes as $k => $x)
+	$last = count($pathcodes) - 1;
+	$list = defined('SED_LIST');
+	foreach ($pathcodes as $k => $x)
 	{
-		$tmp[]= sprintf($mask, sed_url('list', 'c='.$x), $sed_cat[$x]['title']);
+		$tmp[] = ($list && $k === $last) ? htmlspecialchars($sed_cat[$x]['title'])
+			: sed_rc($mask, array(
+				'url' =>sed_url('list', 'c='.$x),
+				'title' => htmlspecialchars($sed_cat[$x]['title'])
+			));
 	}
 	return implode(' '.$cfg['separator'].' ', $tmp);
 }

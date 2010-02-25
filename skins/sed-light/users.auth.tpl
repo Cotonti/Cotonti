@@ -18,7 +18,7 @@
 			 <form name="login" action="{USERS_AUTH_SEND}" method="post">
 			 <table align="center">
 			 <tr>
-				<td>{PHP.L.Username}:</td><td>{USERS_AUTH_USER}</td></tr><tr>
+				<td>{PHP.L.aut_usernameoremail}:</td><td>{USERS_AUTH_USER}</td></tr><tr>
 				<td>{PHP.L.Password}:</td><td>{USERS_AUTH_PASSWORD}</td></tr><tr>
 				<td>{PHP.skinlang.usersauth.Rememberme}: </td><td>{PHP.out.guest_cookiettl} &nbsp; <input type="submit" value="{PHP.L.Login}" /></td>
 			</tr>
