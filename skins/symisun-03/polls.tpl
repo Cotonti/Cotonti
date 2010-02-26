@@ -77,8 +77,10 @@
   <div class="padding20 noimg admin">
     <div class="breadcrumb">{PHP.skinlang.list.bread}: <a href="index.php">{PHP.L.Home}</a><a href="polls.php">{PHP.L.Polls}</a></div>
     <h1>{PHP.skinlang.polls.Allpolls}</h1>
-    {POLLS_LIST}
-    <!-- END: POLLS_VIEWALL -->
+		<!-- BEGIN: POLL_ROW -->
+		{POLL_DATE} <a href="{POLL_HREF}">{POLL_TEXT}</a> {POLLS_COMMENTS}<br />
+		<!-- END: POLL_ROW -->
+<!-- END: POLLS_VIEWALL -->
     <br class="clear" />
     <hr />
     {POLLS_COMMENTS_DISPLAY} </div>

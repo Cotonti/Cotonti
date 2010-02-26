@@ -3,9 +3,9 @@
  * Administration panel - Disk cache
  *
  * @package Cotonti
- * @version 0.6.1
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -212,4 +212,5 @@ function sed_diskcache_clearall()
 
 	return true;
 }
+
 ?>

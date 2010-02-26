@@ -42,7 +42,7 @@ $row = sed_sql_fetcharray($sql);
 $title = sed_rc_link(sed_url('pm'), $L['Private_Messages']) ." ".$cfg['separator'];
 
 if ($row['pm_touserid'] == $usr['id'])
-{	
+{
 	if ($row['pm_tostate'] == 0)
 	{
 		$sql = sed_sql_query("UPDATE $db_pm SET pm_tostate = 1 WHERE pm_id = '".$id."'");
@@ -100,14 +100,14 @@ if($cfg['parser_cache'])
 {
 	if(empty($row['pm_html']) && !empty($row['pm_text']))
 	{
-		$row['pm_html'] = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+		$row['pm_html'] = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
 		sed_sql_query("UPDATE $db_pm SET pm_html = '".sed_sql_prep($row['pm_html'])."' WHERE pm_id = " . $row['pm_id']);
 	}
 	$pm_maindata = sed_post_parse($row['pm_html']);
 }
 else
 {
-	$pm_maindata = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+	$pm_maindata = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
 	$pm_maindata = sed_post_parse($pm_maindata);
 }
 
@@ -115,7 +115,7 @@ require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('pm.message'));
 
 if ($history)
-{	
+{
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
 						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)");
 	$totallines = sed_sql_result($sql, 0, "COUNT(*)");
@@ -158,14 +158,14 @@ if ($history)
 		{
 			if (empty($row2['pm_html']) && !empty($row2['pm_text']))
 			{
-				$row2['pm_html'] = sed_parse(htmlspecialchars($row2['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+				$row2['pm_html'] = sed_parse(htmlspecialchars($row2['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
 				sed_sql_query("UPDATE $db_pm SET pm_html = '".sed_sql_prep($row2['pm_html'])."' WHERE pm_id = " . $row2['pm_id']);
 			}
 			$pm_data = sed_post_parse($row2['pm_html']);
 		}
 		else
 		{
-			$pm_data = sed_parse(htmlspecialchars($row2['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
+			$pm_data = sed_parse(htmlspecialchars($row2['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
 			$pm_data = sed_post_parse($pm_data);
 		}
 		$row2['pm_icon_delete'] = sed_rc_link(sed_url('pm', 'a=delete&'.sed_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d),
@@ -175,18 +175,18 @@ if ($history)
 		$star2 = '<div class="'.$star_class.'">'.$row2['pm_icon_starred'].'</div>';
 
 		$t->assign(array(
-				"PM_ROW_ID" => $row2['pm_id'],
-				"PM_ROW_STATE" => $row2['pm_tostate'],
-				"PM_ROW_STAR" => $star2,
-				"PM_ROW_DATE" => @date($cfg['dateformat'], $row2['pm_date'] + $usr['timezone'] * 3600),
-				"PM_ROW_TITLE" => sed_rc_link(sed_url('pm', 'm=message&id='.$row2['pm_id']), htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
-				"PM_ROW_TEXT" => $pm_data,
-				"PM_ROW_ICON_STATUS" => $row2['pm_icon_readstatus'],
-				"PM_ROW_ICON_STARRED" => $row2['pm_icon_starred'],
-				"PM_ROW_ICON_DELETE" => sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d), $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
-				"PM_ROW_ICON_EDIT" => $row2['pm_icon_edit'],
-				"PM_ROW_ODDEVEN" => sed_build_oddeven($jj),
-				"PM_ROW_NUM" => $jj
+			"PM_ROW_ID" => $row2['pm_id'],
+			"PM_ROW_STATE" => $row2['pm_tostate'],
+			"PM_ROW_STAR" => $star2,
+			"PM_ROW_DATE" => @date($cfg['dateformat'], $row2['pm_date'] + $usr['timezone'] * 3600),
+			"PM_ROW_TITLE" => sed_rc_link(sed_url('pm', 'm=message&id='.$row2['pm_id']), htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
+			"PM_ROW_TEXT" => $pm_data,
+			"PM_ROW_ICON_STATUS" => $row2['pm_icon_readstatus'],
+			"PM_ROW_ICON_STARRED" => $row2['pm_icon_starred'],
+			"PM_ROW_ICON_DELETE" => sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d), $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
+			"PM_ROW_ICON_EDIT" => $row2['pm_icon_edit'],
+			"PM_ROW_ODDEVEN" => sed_build_oddeven($jj),
+			"PM_ROW_NUM" => $jj
 		));
 		$t->assign($pm_user);
 		/* === Hook - Part2 : Include === */
@@ -204,10 +204,10 @@ if ($history)
 		$t->parse("MAIN.HISTORY.PM_ROW_EMPTY");
 	}
 	$t->assign(array(
-			"PM_FORM_UPDATE" => sed_url('pm', sed_xg()),
-			"PM_PAGEPREV" => $pagenav['prev'],
-			"PM_PAGENEXT" => $pagenav['next'],
-			'PM_PAGES' => $pagenav['main'],
+		"PM_FORM_UPDATE" => sed_url('pm', sed_xg()),
+		"PM_PAGEPREV" => $pagenav['prev'],
+		"PM_PAGENEXT" => $pagenav['next'],
+		'PM_PAGES' => $pagenav['main']
 	));
 	$t->parse("MAIN.HISTORY");
 }
@@ -228,12 +228,12 @@ if ($usr['auth_write'])
 	$pfs = sed_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
 	$pfs .= (sed_auth('pfs', 'a', 'A')) ? ' &nbsp; '.sed_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
 	$t->assign(array(
-			"PM_QUOTE" => sed_rc_link(sed_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$d), $L['Quote'], array('onclick' => $onclick)),
-			"PM_FORM_SEND" => sed_url('pm', 'm=send&a=send&to='.$to),
-			"PM_FORM_TITLE" => htmlspecialchars($newpmtitle),
-			"PM_FORM_TEXT" => $newpmtext,
-			"PM_FORM_PFS" => $pfs,
-			"PM_AJAX_MARKITUP" => (SED_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
+		"PM_QUOTE" => sed_rc_link(sed_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$d), $L['Quote'], array('onclick' => $onclick)),
+		"PM_FORM_SEND" => sed_url('pm', 'm=send&a=send&to='.$to),
+		"PM_FORM_TITLE" => htmlspecialchars($newpmtitle),
+		"PM_FORM_TEXT" => $newpmtext,
+		"PM_FORM_PFS" => $pfs,
+		"PM_AJAX_MARKITUP" => (SED_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
 	));
 	$t->parse("MAIN.REPLY");
 }
@@ -245,24 +245,24 @@ if (!SED_AJAX)
 
 $pm_username=sed_build_user($row_user['user_id'], htmlspecialchars($row_user['user_name']));
 $t->assign(array(
-		"PM_PAGETITLE" => $title.' '.$cfg['separator'].' '.$pm_username.' '.$cfg['separator'].' '.sed_rc_link(sed_url('pm', 'm=message&id='.$id),htmlspecialchars($row['pm_title'])),
-		"PM_SENDNEWPM" => ($usr['auth_write']) ? sed_rc_link(sed_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
-		"PM_INBOX" => sed_rc_link(sed_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
-		"PM_INBOX_COUNT" => $totalinbox,
-		"PM_SENTBOX" => sed_rc_link(sed_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
-		"PM_SENTBOX_COUNT" => $totalsentbox,
-		"PM_ID" => $row['pm_id'],
-		"PM_STATE" => $row['pm_tostate'],
-		"PM_STAR" => $star,
-		"PM_DATE" => @date($cfg['dateformat'], $row['pm_date'] + $usr['timezone'] * 3600),
-		"PM_TITLE" => htmlspecialchars($row['pm_title']),
-		"PM_TEXT" => '<div id="pm_text">'.$pm_maindata.'</div>',
-		"PM_ICON_STARRED" => $row['pm_icon_starred'],
-		"PM_DELETE" => sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
-		"PM_EDIT" => $row['pm_icon_edit'],
-		"PM_HISTORY" => sed_rc_link(sed_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
-		"PM_SENT_TYPE" => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
-		));
+	"PM_PAGETITLE" => $title.' '.$cfg['separator'].' '.$pm_username.' '.$cfg['separator'].' '.sed_rc_link(sed_url('pm', 'm=message&id='.$id),htmlspecialchars($row['pm_title'])),
+	"PM_SENDNEWPM" => ($usr['auth_write']) ? sed_rc_link(sed_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
+	"PM_INBOX" => sed_rc_link(sed_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
+	"PM_INBOX_COUNT" => $totalinbox,
+	"PM_SENTBOX" => sed_rc_link(sed_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
+	"PM_SENTBOX_COUNT" => $totalsentbox,
+	"PM_ID" => $row['pm_id'],
+	"PM_STATE" => $row['pm_tostate'],
+	"PM_STAR" => $star,
+	"PM_DATE" => @date($cfg['dateformat'], $row['pm_date'] + $usr['timezone'] * 3600),
+	"PM_TITLE" => htmlspecialchars($row['pm_title']),
+	"PM_TEXT" => '<div id="pm_text">'.$pm_maindata.'</div>',
+	"PM_ICON_STARRED" => $row['pm_icon_starred'],
+	"PM_DELETE" => sed_rc_link(sed_url('pm', 'm=edit&a=delete&'.sed_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
+	"PM_EDIT" => $row['pm_icon_edit'],
+	"PM_HISTORY" => sed_rc_link(sed_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
+	"PM_SENT_TYPE" => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
+));
 $t->assign(sed_generate_usertags($row_user, "PM_USER"));
 
 /* === Hook === */
@@ -272,8 +272,6 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
-
-
 
 if (SED_AJAX && $history)
 {

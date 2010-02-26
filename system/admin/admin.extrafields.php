@@ -23,31 +23,6 @@ $id = (int) sed_import('id', 'G', 'INT');
 $name = sed_import('name', 'G', 'ALP');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-// $n - extrafield value
-switch ($n)
-{
-	case 'pages':
-		$adminpath[] = array(sed_url('admin', 'm=page'), $L['Pages']);
-		$adminpath[] = array(sed_url('admin', 'm=extrafields&n=pages'), $L['adm_extrafields']);
-		$adminhelp = $L['adm_help_pages_extrafield'];
-		$extra_path = 'm=extrafields&n=pages';
-		break;
-	case 'structure':
-		$adminpath[] = array(sed_url('admin', 'm=structure'), $L['Categories']);
-		$adminpath[] = array(sed_url('admin', 'm=extrafields&n=structure'), $L['adm_extrafields']);
-		$adminhelp = $L['adm_help_structure_extrafield'];
-		$extra_path = 'm=extrafields&n=structure';
-		break;
-	default:
-		$adminpath[] = array(sed_url('admin', 'm=users'), $L['Users']);
-		$adminpath[] = array(sed_url('admin', 'm=extrafields&n=users'), $L['adm_extrafields']);
-		$adminhelp = $L['adm_help_users_extrafield'];
-		$extra_path = 'm=extrafields';
-		$n='users';
-		break;
-}
-
-
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.extrafields.first');
@@ -56,6 +31,37 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
+
+switch ($n) // $n - extrafield value
+{
+	case 'pages':
+		$adminpath[] = array(sed_url('admin', 'm=page'), $L['Pages']);
+		$adminpath[] = array(sed_url('admin', 'm=extrafields&n=pages'), $L['adm_extrafields']);
+		$adminhelp = $L['adm_help_pages_extrafield'];
+		$extra_path = 'm=extrafields&n=pages';
+	break;
+
+	case 'structure':
+		$adminpath[] = array(sed_url('admin', 'm=structure'), $L['Categories']);
+		$adminpath[] = array(sed_url('admin', 'm=extrafields&n=structure'), $L['adm_extrafields']);
+		$adminhelp = $L['adm_help_structure_extrafield'];
+		$extra_path = 'm=extrafields&n=structure';
+	break;
+
+	case 'users':
+		$adminpath[] = array(sed_url('admin', 'm=users'), $L['Users']);
+		$adminpath[] = array(sed_url('admin', 'm=extrafields&n=users'), $L['adm_extrafields']);
+		$adminhelp = $L['adm_help_users_extrafield'];
+		$extra_path = 'm=extrafields&n=users';
+	break;
+
+	default:
+		if (empty($extra_path) || empty($n))
+		{
+			sed_redirect(sed_url('message', "msg=950", '', true));
+		}
+	break;
+}
 
 if ($a == 'add')
 {
@@ -69,7 +75,7 @@ if ($a == 'add')
 	{
 		$field['field_html'] = get_default_html_construction($field['field_type']);
 	}
-	
+
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.extrafields.add');
 	foreach ($extp as $pl)
@@ -77,7 +83,7 @@ if ($a == 'add')
 		include $pl;
 	}
 	/* ===== */
-	
+
 	if (!empty($field['field_name']) && !empty($field['field_type']))
 	{
 		if (sed_extrafield_add($n, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_description'], $field['field_noalter']))
@@ -101,8 +107,7 @@ elseif ($a == 'upd')
 	/* === Hook - Part1 : Set === */
 	$extp = sed_getextplugins('admin.extrafields.update');
 	/* ===== */
-
-	foreach($field_name as $k => $v)
+	foreach ($field_name as $k => $v)
 	{
 		$field['field_name'] = sed_import($field_name[$k], 'D', 'ALP');
 		$field['field_type'] = sed_import($field_type[$k], 'D', 'ALP');
@@ -110,21 +115,20 @@ elseif ($a == 'upd')
 		$field['field_variants'] = sed_import($field_variants[$k], 'D', 'HTM');
 		$field['field_description'] = sed_import($field_description[$k], 'D', 'HTM');
 		$field['field_location'] = $n;
-		if ($field != $sed_extrafields[$n][$field['field_name']]
-				&& !empty($field['field_name']) && !empty($field['field_type']))
+		if ($field != $sed_extrafields[$n][$field['field_name']] && !empty($field['field_name']) && !empty($field['field_type']))
 		{
-			if (empty($field['field_html'])
-					|| $field['field_type'] != $sed_extrafields[$n][$field['field_name']]['field_type'])
+			if (empty($field['field_html']) || $field['field_type'] != $sed_extrafields[$n][$field['field_name']]['field_type'])
 			{
 				$field['field_html'] = get_default_html_construction($field['field_type']);
-			}			
+			}
+
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl)
 			{
 				include $pl;
 			}
 			/* ===== */
-			
+
 			if (sed_extrafield_update($n, $k, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_description']))
 			{
 				$adminwarnings .= sprintf($L['adm_extrafield_updated'], $k).'<br />';
@@ -145,7 +149,7 @@ elseif ($a == 'del' && isset($name))
 		include $pl;
 	}
 	/* ===== */
-	
+
 	if (sed_extrafield_remove($n, $name))
 	{
 		$adminwarnings = $L['adm_extrafield_removed'];
@@ -181,7 +185,7 @@ while ($row = sed_sql_fetchassoc($res))
 		));
 		$t->parse("EXTRAFIELDS.EXTRAFIELDS_ROW.EXTRAFIELDS_ROW_SELECT");
 	}
-	
+
 	$t->assign(array(
 			"ADMIN_EXTRAFIELDS_ROW_NAME" => $row['field_name'],
 			"ADMIN_EXTRAFIELDS_ROW_DESCRIPTION" => $row['field_description'],
@@ -191,12 +195,14 @@ while ($row = sed_sql_fetchassoc($res))
 			"ADMIN_EXTRAFIELDS_ROW_BIGNAME" => strtoupper($row['field_name']),
 			"ADMIN_EXTRAFIELDS_ROW_DEL_URL" => sed_url('admin', $extra_path.'&a=del&name='.$row['field_name'])
 	));
+
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
+
 	$t->parse("EXTRAFIELDS.EXTRAFIELDS_ROW");
 	$ii++;
 }

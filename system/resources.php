@@ -11,8 +11,6 @@
 
 /* Common */
 $R['code_noindex'] = '<meta name="robots" content="noindex" />';
-$R['icon_comments'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-comment.gif" alt="'.$L['Comments'].'" />';
-$R['icon_comments_cnt'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-comment.gif" alt="'.$L['Comments'].'" /> ({$cnt})';
 $R['icon_down'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-down.png" alt="" />';
 $R['icon_follow'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-follow.png" alt="" />';
 $R['icon_left'] = '<img class="icon" src="skins/'.$skin.'/img/system/arrow-left.png" alt="" />';

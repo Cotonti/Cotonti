@@ -58,8 +58,6 @@ $L['Clearstatus'] = 'Очистить статус';
 $L['Clickhere'] = 'Продолжить...'; // New in N-0.0.6
 $L['Close'] = 'Закрыть';
 $L['Code'] = 'Код';
-$L['Comment'] = 'Комментарий';
-$L['Comments'] = 'Комментарии';
 $L['Configuration'] = 'Конфигурация';
 $L['Confirm'] = 'Подтвердить';
 $L['Copyright'] = 'Копирайт';
@@ -340,7 +338,6 @@ $L['YIM'] = 'Yahoo Messenger';
  * sed_declension arrays
  */
 
-$Ls['Comments'] = array('комментарий','комментария','комментариев');
 $Ls['Days'] = array('день','дня','дней');
 $Ls['Hours'] = array('час','часа','часов');
 $Ls['Minutes'] = array('минута','минуты','минут');
@@ -403,17 +400,6 @@ $L['foo_seconds'] = array('секунду','секунды','секунд');
 $L['foo_sqlqueries'] = 'SQL запросов';
 $L['foo_sqltotal'] = 'Общее время SQL';
 $L['foo_sqlaverage'] = 'Среднее время SQL';
-
-/**
- * Comments
- */
-
-$L['com_closed'] = 'Для этого элемента нельзя добавлять комментарии'; // New in 0.1.0
-$L['com_commentadded'] = 'Комментарий добавлен';
-$L['com_commenttoolong'] = 'Комментарий слишком длинный';
-$L['com_commenttooshort'] = 'Комментарий слишком короткий либо отсутствует';
-$L['com_nocommentsyet'] = 'Комментарии отсутствуют';
-$L['com_regonly'] = 'Добавление комментариев доступно только зарегистрированным пользователям';
 
 /**
  * Ratings

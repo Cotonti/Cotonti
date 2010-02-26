@@ -1,4 +1,5 @@
 <?php
+
 /* Administration */
 $R['admin_icon_admin'] = '<img class="icon" src="system/admin/img/admin.png" alt="" />';
 $R['admin_icon_allow'] = '<img class="icon" src="system/admin/img/allow.png" alt="" />';

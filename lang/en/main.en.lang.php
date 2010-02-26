@@ -58,8 +58,6 @@ $L['Clearstatus'] = 'Clear status';
 $L['Clickhere'] = 'Click here to continue...'; // New in N-0.0.6
 $L['Close'] = 'Close';
 $L['Code'] = 'Code';
-$L['Comment'] = 'Comment';
-$L['Comments'] = 'Comments';
 $L['Configuration'] = 'Configuration';
 $L['Confirm'] = 'Confirm';
 $L['Copyright'] = 'Copyright';
@@ -341,7 +339,6 @@ $L['YIM'] = 'Yahoo Messenger';
  * sed_declension arrays
  */
 
-$Ls['Comments'] = array('comments','comment');
 $Ls['Days'] = array('days','day');
 $Ls['Hours'] = array('hours','hour');
 $Ls['Minutes'] = array('minutes','minute');
@@ -403,17 +400,6 @@ $L['foo_created'] = 'Page created in';
 $L['foo_sqlqueries'] = 'SQL queries';
 $L['foo_sqltotal'] = 'SQL total time';
 $L['foo_sqlaverage'] = 'Average SQL time';
-
-/**
- * Comments
- */
-
-$L['com_closed'] = 'Adding comments has been disabled for this item'; // New in 0.1.0
-$L['com_commentadded'] = 'Done, comment added';
-$L['com_commenttoolong'] = 'The comment is too long';
-$L['com_commenttooshort'] = 'The comment is too short or missing';
-$L['com_nocommentsyet'] = 'No comments yet';
-$L['com_regonly'] = 'Only registered users can post new comments';
 
 /**
  * Ratings

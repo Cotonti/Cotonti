@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD License
  */
 
@@ -125,13 +125,9 @@ $catpath = sed_build_catpath($pag['page_cat']);
 $pag['page_fulltitle'] = $catpath . ' ' . $cfg['separator'] . ' ' . htmlspecialchars($pag['page_title']);
 $pag['page_fulltitle'] .= ($pag['page_totaltabs'] > 1 && !empty($pag['page_tabtitle'][$pag['page_tab'] - 1])) ? " (".$pag['page_tabtitle'][$pag['page_tab'] - 1].")" : '';// page_totaltabs - Not found befor this line bur after .... see
 
-$comments = ($cat['com']) ? true : false;
+
 $ratings = ($cat['ratings']) ? true : false;
-
-$item_code = 'p'.$id;
-
-list($comments_link, $comments_display, $comments_count) = sed_build_comments($item_code, $pag['page_pageurl'], $comments);
-list($ratings_link, $ratings_display) = sed_build_ratings($item_code, $pag['page_pageurl'], $ratings);
+list($ratings_link, $ratings_display) = sed_build_ratings('p'.$id, $pag['page_pageurl'], $ratings);
 
 $title_params = array(
 	'TITLE' => $pag['page_title'],
@@ -178,16 +174,12 @@ $t->assign(array(
 	"PAGE_BEGIN" => $pag['page_begin'],
 	"PAGE_EXPIRE" => $pag['page_expire'],
 	"PAGE_ALIAS" => $pag['page_alias'],
-	"PAGE_COMMENTS" => $comments_link,
-	"PAGE_COMMENTS_DISPLAY" => $comments_display,
-	"PAGE_COMMENTS_COUNT" => $comments_count,
 	"PAGE_RATINGS" => $ratings_link,
-	"PAGE_RATINGS_DISPLAY" => $ratings_display,
-	"PAGE_COMMENTS_RSS" => sed_url('rss', 'c=comments&id=' . $id)
+	"PAGE_RATINGS_DISPLAY" => $ratings_display
 ));
 
 // Extra fields for pages
-foreach($sed_extrafields['pages'] as $i => $row)
+foreach ($sed_extrafields['pages'] as $i => $row)
 {
 	$uname = strtoupper($row['field_name']);
 	$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag['page_'.$row['field_name']]));
@@ -195,7 +187,7 @@ foreach($sed_extrafields['pages'] as $i => $row)
 }
 
 // Extra fields for structure
-foreach($sed_extrafields['structure'] as $i => $row)
+foreach ($sed_extrafields['structure'] as $i => $row)
 {
 	$uname = strtoupper($row['field_name']);
 	$t->assign('PAGE_CAT_'.$uname, sed_build_extrafields_data('structure', $row['field_type'], $row['field_name'], $cat[$row['field_name']]));
@@ -247,7 +239,7 @@ else
 			}
 			else
 			{
-				$t->assign("PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
+				$t->assign("PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\"."); // TODO - i18n
 			}
 		break;
 

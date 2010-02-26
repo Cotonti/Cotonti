@@ -31,7 +31,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-if($a == 'update')
+if ($a == 'update')
 {
 	$id = sed_import('id', 'G', 'INT');
 	$rbanlistip = sed_import('rbanlistip', 'P', 'TXT');
@@ -42,7 +42,7 @@ if($a == 'update')
 
 	$adminwarnings = ($sql) ? $L['alreadyupdatednewentry'] : $L['Error'];
 }
-elseif($a == 'add')
+elseif ($a == 'add')
 {
 	$nbanlistip = sed_import('nbanlistip', 'P', 'TXT');
 	$nbanlistemail = sed_sql_prep(sed_import('nbanlistemail', 'P', 'TXT'));
@@ -52,7 +52,7 @@ elseif($a == 'add')
 	$nbanlistip_cnt = explode('.', $nbanlistip);
 	$nbanlistip = (count($nbanlistip_cnt)==4) ? $nbanlistip : '';
 
-	if($nexpire > 0)
+	if ($nexpire > 0)
 	{
 		$nexpire += $sys['now'];
 	}
@@ -60,7 +60,7 @@ elseif($a == 'add')
 
 	$adminwarnings = ($sql) ? $L['alreadyaddnewentry'] : $L['Error'];
 }
-elseif($a == 'delete')
+elseif ($a == 'delete')
 {
 	sed_check_xg();
 	$id = sed_import('id', 'G', 'INT');
@@ -84,7 +84,7 @@ $ii = 0;
 $extp = sed_getextplugins('admin.banlist.loop');
 /* ===== */
 
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
 	$t->assign(array(
 		"ADMIN_BANLIST_ID_ROW" => $row['banlist_id'],
@@ -94,7 +94,7 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_BANLIST_IP" => $row['banlist_ip'],
 		"ADMIN_BANLIST_EMAIL" => $row['banlist_email'],
 		"ADMIN_BANLIST_REASON" => $row['banlist_reason'],
-        "ADMIN_BANLIST_ODDEVEN" => sed_build_oddeven($ii)
+		"ADMIN_BANLIST_ODDEVEN" => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
