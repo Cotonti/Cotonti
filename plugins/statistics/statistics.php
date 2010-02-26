@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=statistics
@@ -14,9 +14,9 @@ Order=10
  * Displays statistics info
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -27,7 +27,6 @@ $s = sed_import('s', 'G', 'TXT');
 $plugin_title = $L['plu_title'];
 
 $totaldbpages = sed_sql_rowcount($db_pages);
-$totaldbcomments = sed_sql_rowcount($db_com);
 $totaldbratings = sed_sql_rowcount($db_ratings);
 $totaldbratingsvotes = sed_sql_rowcount($db_rated);
 $totaldbpolls = sed_sql_rowcount($db_polls);
@@ -68,20 +67,26 @@ $row = sed_sql_fetcharray($sql);
 $max_date = $row['stat_name'];
 $max_hits = $row['stat_value'];
 
-if($usr['id'] > 0)
+if ($usr['id'] > 0)
 {
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='".$usr['id']."'");
 	$user_postscount = sed_sql_result($sql, 0, "COUNT(*)");
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='".$usr['id']."'");
 	$user_topicscount = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='".$usr['id']."'");
-	$user_comments = sed_sql_result($sql, 0, "COUNT(*)");
 
 	$t->assign(array(
 		'STATISTICS_USER_POSTSCOUNT' => $user_postscount,
-		'STATISTICS_USER_TOPICSCOUNT' => $user_topicscount,
-		'STATISTICS_USER_COMMENTS' => $user_comments
+		'STATISTICS_USER_TOPICSCOUNT' => $user_topicscount
 	));
+
+	/* === Hook === */
+	$extp = sed_getextplugins('statistics.user');
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	$t->parse('MAIN.IS_USER');
 }
 else
@@ -89,7 +94,7 @@ else
 	$t->parse('MAIN.IS_NOT_USER');
 }
 
-if($s == 'usercount')
+if ($s == 'usercount')
 {
 	$sql1 = sed_sql_query("DROP TEMPORARY TABLE IF EXISTS tmp1");
 	$sql = sed_sql_query("CREATE TEMPORARY TABLE tmp1 SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country");
@@ -106,11 +111,11 @@ $totalusers = sed_sql_result($sqltotal, 0, "COUNT(*)");
 
 $ii = 0;
 
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
 	$country_code = $row['user_country'];
 
-	if(!empty($country_code) && $country_code != '00')
+	if (!empty($country_code) && $country_code != '00')
 	{
 		$ii = $ii + $row['usercount'];
 		$t->assign(array(
@@ -131,7 +136,6 @@ $t->assign(array(
 	'STATISTICS_TOTALPAGES' => $totalpages,
 	'STATISTICS_TOTALDBUSERS' => $totaldbusers,
 	'STATISTICS_TOTALDBPAGES' => $totaldbpages,
-	'STATISTICS_TOTALDBCOMMENTS' => $totaldbcomments,
 	'STATISTICS_TOTALMAILSENT' => $totalmailsent,
 	'STATISTICS_TOTALPMSENT' => $totalpmsent,
 	'STATISTICS_TOTALPMACTIVE' => $totalpmactive,
@@ -152,5 +156,13 @@ $t->assign(array(
 	'STATISTICS_UNKNOWN_COUNT' => $totalusers - $ii,
 	'STATISTICS_TOTALUSERS' => $totalusers
 ));
+
+/* === Hook === */
+$extp = sed_getextplugins('statistics.tags');
+foreach ($extp as $pl)
+{
+	include $pl;
+}
+/* ===== */
 
 ?>

@@ -17,11 +17,6 @@ INSERT INTO `sed_auth` (`auth_id`, `auth_groupid`, `auth_code`, `auth_option`, `
 (3, 3, 'admin', 'a', 0, 255, 1),
 (4, 4, 'admin', 'a', 0, 255, 1),
 (5, 5, 'admin', 'a', 255, 255, 1),
-(6, 1, 'comments', 'a', 1, 254, 1),
-(7, 2, 'comments', 'a', 1, 254, 1),
-(8, 3, 'comments', 'a', 0, 255, 1),
-(9, 4, 'comments', 'a', 3, 128, 1),
-(10, 5, 'comments', 'a', 255, 255, 1),
 (11, 1, 'index', 'a', 1, 254, 1),
 (12, 2, 'index', 'a', 1, 254, 1),
 (13, 3, 'index', 'a', 0, 255, 1),
@@ -118,7 +113,6 @@ INSERT INTO `sed_auth` (`auth_id`, `auth_groupid`, `auth_code`, `auth_option`, `
 (114, 4, 'plug', 'whosonline', 1, 254, 1),
 (115, 5, 'plug', 'whosonline', 255, 255, 1),
 (116, 6, 'admin', 'a', 1, 0, 1),
-(117, 6, 'comments', 'a', 131, 0, 1),
 (118, 6, 'index', 'a', 131, 0, 1),
 (119, 6, 'message', 'a', 131, 0, 1),
 (120, 6, 'pfs', 'a', 131, 0, 1),
@@ -282,21 +276,6 @@ CREATE TABLE `sed_cache_bindings` (
   PRIMARY KEY (`c_event`, `c_id`, `c_realm`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_com` (
-  `com_id` int(11) NOT NULL auto_increment,
-  `com_code` varchar(16) collate utf8_unicode_ci NOT NULL default '',
-  `com_author` varchar(100) collate utf8_unicode_ci NOT NULL,
-  `com_authorid` int(11) default NULL,
-  `com_authorip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
-  `com_text` text collate utf8_unicode_ci NOT NULL,
-  `com_html` text collate utf8_unicode_ci,
-  `com_date` int(11) NOT NULL default '0',
-  `com_count` int(11) NOT NULL default '0',
-  `com_isspecial` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`com_id`),
-  KEY `com_code` (`com_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
 CREATE TABLE `sed_config` (
   `config_owner` varchar(24) collate utf8_unicode_ci NOT NULL default 'core',
   `config_cat` varchar(24) collate utf8_unicode_ci NOT NULL default '',
@@ -310,11 +289,6 @@ CREATE TABLE `sed_config` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
-('core','comments','01','disable_comments',3,'0','0','',''),
-('core','comments','03','expand_comments',3,'1','1','',''),
-('core','comments','04','maxcommentsperpage',2,'15','15','5,10,15,20,25,30,40,50,60,70,100,200,500',''),
-('core','comments','05','commentsize',2,'0','0','0,1024,2048,4096,8192,16384,32768,65536',''),
-('core','comments','10','countcomments',3,'1','1','',''),
 ('core','email','01','email_type',2,'mail(Standart)','mail(Standart)','mail(Standart),smtp',''),
 ('core','email','02','smtp_address',2,'','','',''),
 ('core','email','03','smtp_port',2,'25','25','',''),
@@ -375,11 +349,11 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','parser','10','parser_cache',3,'1','1','',''),
 ('core','parser','10','parser_disable',3,'0','0','',''),
 ('core','parser','20','parsebbcodeusertext',3,'1','1','',''),
-('core','parser','20','parsebbcodecom',3,'1','1','',''),
+('core','parser','20','parsebbcodepm',3,'1','1','',''),
 ('core','parser','20','parsebbcodeforums',3,'1','1','',''),
 ('core','parser','20','parsebbcodepages',3,'1','1','',''),
 ('core','parser','30','parsesmiliesusertext',3,'0','0','',''),
-('core','parser','30','parsesmiliescom',3,'1','1','',''),
+('core','parser','30','parsesmiliespm',3,'1','1','',''),
 ('core','parser','30','parsesmiliesforums',3,'1','1','',''),
 ('core','parser','30','parsesmiliespages',3,'0','0','',''),
 ('core','performance','06','gzip',3,'1','1','',''),
@@ -424,7 +398,6 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','rss','03','rss_maxitems',2,'40','40','5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100,150,200','Max. items in RSS feed'),
 ('core','rss','04','rss_charset',4,'UTF-8','UTF-8','','RSS charset'),
 ('core','rss','05','rss_pagemaxsymbols',1,'','','','Pages. Cut element description longer than N symbols'),
-('core','rss','06','rss_commentmaxsymbols',1,'','','','Comments. Cut element description longer than N symbols'),
 ('core','rss','07','rss_postmaxsymbols',1,'','','','Posts. Cut element description longer than N symbols'),
 ('core','skin','02','forcedefaultskin',3,'0','0','',''),
 ('core','skin','03','homebreadcrumb',3,'0','0','',''),
@@ -464,7 +437,6 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','title','18','title_header',1,'{SUBTITLE} - {MAINTITLE}','{SUBTITLE} - {MAINTITLE}','',''),
 ('core','title','19','title_header_index',1,'{MAINTITLE} - {DESCRIPTION}','{MAINTITLE} - {DESCRIPTION}','',''),
 ('core','trash','01','trash_prunedelay',2,'7','7','0,1,2,3,4,5,7,10,15,20,30,45,60,90,120',''),
-('core','trash','10','trash_comment',3,'1','1','',''),
 ('core','trash','11','trash_forum',3,'1','1','',''),
 ('core','trash','12','trash_page',3,'1','1','',''),
 ('core','trash','13','trash_pm',3,'1','1','',''),
@@ -553,18 +525,15 @@ CREATE TABLE `sed_core` (
 
 INSERT INTO `sed_core` (`ct_id`, `ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
 (1, 'admin', 'Administration panel', '100', 1, 1),
-(2, 'comments', 'Comments', '100', 1, 0),
-(3, 'forums', 'Forums', '100', 1, 0),
-(4, 'index', 'Home page', '100', 1, 1),
-(5, 'message', 'Messages', '100', 1, 1),
-(6, 'page', 'Pages', '100', 1, 0),
-(7, 'pfs', 'Personal File Space', '100', 1, 0),
-(8, 'plug', 'Plugins', '100', 1, 0),
-(9, 'pm', 'Private messages', '100', 1, 0),
-(10, 'polls', 'Polls', '100', 1, 0),
-(11, 'ratings', 'Ratings', '100', 1, 0),
-(12, 'users', 'Users', '100', 1, 1),
-(13, 'trash', 'Trash Can', '110', 1, 1);
+(2, 'forums', 'Forums', '100', 1, 0),
+(3, 'index', 'Home page', '100', 1, 0),
+(4, 'message', 'Messages', '100', 1, 1),
+(5, 'page', 'Pages', '100', 1, 0),
+(6, 'pfs', 'Personal File Space', '100', 1, 0),
+(7, 'plug', 'Plugins', '100', 1, 0),
+(8, 'pm', 'Private messages', '100', 1, 0),
+(9, 'polls', 'Polls', '100', 1, 0),
+(10, 'users', 'Users', '100', 1, 1);
 
 CREATE TABLE `sed_extra_fields` (
   `field_location` varchar(255) collate utf8_unicode_ci NOT NULL,
@@ -780,7 +749,6 @@ CREATE TABLE `sed_pages` (
   `page_size` varchar(16) collate utf8_unicode_ci default NULL,
   `page_count` mediumint(8) unsigned default '0',
   `page_rating` decimal(5,2) NOT NULL default '0.00',
-  `page_comcount` mediumint(8) unsigned default '0',
   `page_filecount` mediumint(8) unsigned default '0',
   `page_alias` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `page_html` MEDIUMTEXT collate utf8_unicode_ci NOT NULL,
@@ -791,8 +759,8 @@ CREATE TABLE `sed_pages` (
   KEY `page_date` (`page_date`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
-INSERT INTO `sed_pages` (`page_id`, `page_state`, `page_type`, `page_cat`, `page_key`, `page_extra1`, `page_extra2`, `page_extra3`, `page_extra4`, `page_extra5`, `page_title`, `page_desc`, `page_text`, `page_author`, `page_ownerid`, `page_date`, `page_begin`, `page_expire`, `page_file`, `page_url`, `page_size`, `page_count`, `page_rating`, `page_comcount`, `page_filecount`, `page_alias`, `page_html`) VALUES
-(1, 0, 0, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !\r\n\r\nNow create your account, go [url=users.php?m=auth]there[/url], then log-in with the link at the top.\r\n\r\nNote that the first user to register is automatically activated and assigned to the group "Administrators". Then, by default, all the next visitors will have to validate their account by clicking a link in an email sent by Cotonti.\r\n\r\nNext step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.', '', 1, 1232998830, 1232998830, 1420110000, 0, '', '', 27, '0.00', 0, 0, '', '');
+INSERT INTO `sed_pages` (`page_id`, `page_state`, `page_type`, `page_cat`, `page_key`, `page_extra1`, `page_extra2`, `page_extra3`, `page_extra4`, `page_extra5`, `page_title`, `page_desc`, `page_text`, `page_author`, `page_ownerid`, `page_date`, `page_begin`, `page_expire`, `page_file`, `page_url`, `page_size`, `page_count`, `page_rating`, `page_filecount`, `page_alias`, `page_html`) VALUES
+(1, 0, 0, 'news', '', '', '', '', '', '', 'Welcome !', '...', 'Congratulations, your website is up and running !\r\n\r\nNow create your account, go [url=users.php?m=auth]there[/url], then log-in with the link at the top.\r\n\r\nNote that the first user to register is automatically activated and assigned to the group "Administrators". Then, by default, all the next visitors will have to validate their account by clicking a link in an email sent by Cotonti.\r\n\r\nNext step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.', '', 1, 1232998830, 1232998830, 1420110000, 0, '', '', 27, '0.00', 0, '', '');
 
 CREATE TABLE `sed_pfs` (
   `pfs_id` int(11) NOT NULL auto_increment,
@@ -895,8 +863,8 @@ CREATE TABLE `sed_pm` (
 
 CREATE TABLE `sed_polls` (
   `poll_id` mediumint(8) NOT NULL auto_increment,
-  `poll_type` varchar(100) collate utf8_unicode_ci NOT NULL default 'index',
-  `poll_code` varchar(16) NOT NULL default '',
+  `poll_type` varchar(10) collate utf8_unicode_ci NOT NULL default 'index',
+  `poll_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `poll_state` tinyint(1) NOT NULL default '0',
   `poll_creationdate` int(11) NOT NULL default '0',
   `poll_text` varchar(255) collate utf8_unicode_ci NOT NULL default '',
@@ -976,7 +944,6 @@ CREATE TABLE `sed_structure` (
   `structure_group` tinyint(1) NOT NULL default '0',
   `structure_order` varchar(16) collate utf8_unicode_ci NOT NULL default 'title.asc',
   `structure_pagecount` mediumint(8) NOT NULL default '0',
-  `structure_comments` tinyint(1) NOT NULL default 1,
   `structure_ratings` tinyint(1) NOT NULL default 1,
   PRIMARY KEY  (`structure_id`),
   KEY `structure_path` (`structure_path`)

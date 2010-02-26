@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -22,7 +22,6 @@ $L['home_newusers'] = 'New members';
 $L['home_newpages'] = 'New pages';
 $L['home_newtopics'] = 'New topics';
 $L['home_newposts'] = 'New posts';
-$L['home_newcomments'] = 'New comments';
 $L['home_newpms'] = 'New private messages';
 
 $L['home_db_rows'] = 'SQL database, number of rows';
@@ -56,7 +55,6 @@ $L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weig
  * Config Section
  */
 
-$L['core_comments'] = &$L['Comments'];
 $L['core_email'] = 'E-mail Settings'; // 0.7.0
 $L['core_forums'] = &$L['Forums'];
 $L['core_lang'] = &$L['Language'];
@@ -89,17 +87,6 @@ $L['cfg_smtp_port'] = array('Port smtp server', 'Set it if the type of sending E
 $L['cfg_smtp_login'] = array('Login', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
 $L['cfg_smtp_password'] = array('Password', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
 $L['cfg_smtp_uses_ssl'] = array('Use SSL', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
-
-/**
- * Config Section
- * Comments Subsection
- */
-
-$L['cfg_countcomments'] = array('Count comments', 'Display the count of comments near the icon');
-$L['cfg_disable_comments'] = array('Disable the comments', '');
-$L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default');	// New in N-0.0.2
-$L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' ');   // New in N-0.0.6
-$L['cfg_commentsize'] = array('Max. size of comment', 'In bytes (zero for unlimited size). Default: 0');   // New in N-0.0.6
 
 /**
  * Config Section
@@ -190,14 +177,14 @@ $L['cfg_maxlistsperpage'] = array('Max. lists per page', ' '); // New in N-0.0.6
  * Parser Subsection
  */
 
-$L['cfg_parsebbcodecom'] = array('Parse BBcode in comments and private messages', '');
+$L['cfg_parsebbcodepm'] = array('Parse BBcode in private messages', '');
 $L['cfg_parsebbcodeforums'] = array('Parse BBcode in forums', '');
 $L['cfg_parsebbcodepages'] = array('Parse BBcode in pages', '');
 $L['cfg_parsebbcodeusertext'] = array('Parse BBcode in user signature', '');
-$L['cfg_parser_cache'] = array('Enable HTML cache', '');	// New in N-0.0.1
-$L['cfg_parser_custom'] = array('Enable custom parser', '');	// New in N-0.0.1
-$L['cfg_parser_disable'] = array('Disable default parser', '');	// New in N-0.0.3
-$L['cfg_parsesmiliescom'] = array('Parse smilies in comments and private messages', '');
+$L['cfg_parser_cache'] = array('Enable HTML cache', ''); // New in N-0.0.1
+$L['cfg_parser_custom'] = array('Enable custom parser', ''); // New in N-0.0.1
+$L['cfg_parser_disable'] = array('Disable default parser', ''); // New in N-0.0.3
+$L['cfg_parsesmiliespm'] = array('Parse smilies in private messages', '');
 $L['cfg_parsesmiliesforums'] = array('Parse smilies in forums', '');
 $L['cfg_parsesmiliespages'] = array('Parse smilies in pages', '');
 $L['cfg_parsesmiliesusertext'] = array('Parse smilies in user signature', '');
@@ -214,7 +201,7 @@ $L['cfg_disablehitstats'] = array('Disable hit statistics', 'Referers and hits p
 $L['cfg_disableactivitystats'] = array('Do not display statistics of activity', 'Activity for the last 7 days<br />Displayed on the home page administration panel');
 $L['cfg_disabledbstats'] = array('Do not display database statistics', 'Displayed on the home page administration panel');
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
-$L['cfg_hit_percision'] = array('Optimized hit counter precision', '');  // 0.7.0
+$L['cfg_hit_percision'] = array('Optimized hit counter precision', ''); // 0.7.0
 $L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // 0.7.0
 
 
@@ -229,7 +216,7 @@ $L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded
 $L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in N-0.0.2
 $L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in N-0.0.2
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/FOLDERNAME/... Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this.');
-$L['cfg_flashupload'] = array('Use flash uploader', 'Allows uploading many files at once.');	// New in N-1.0.0
+$L['cfg_flashupload'] = array('Use flash uploader', 'Allows uploading many files at once.'); // New in N-1.0.0
 $L['cfg_pfs_winclose'] = array('Close popup window after bbcode insertion');
 $L['cfg_th_amode'] = array('Thumbnails generation', '');
 $L['cfg_th_border'] = array('Thumbnails, border size', 'Default: 4 pixels');
@@ -287,7 +274,6 @@ $L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' '); // N
 $L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' '); // New in N-0.7.0
 $L['cfg_rss_charset'] = array('RSS charset', ' '); // New in N-0.7.0
 $L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
-$L['cfg_rss_commentmaxsymbols'] = array('Comments. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
 $L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
 
 
@@ -349,7 +335,6 @@ $L['cfg_title_users_pasrec'] = array('Users - password recovery', 'Options: {PAS
  * Trash Subsection
  */
 
-$L['cfg_trash_comment'] = array('Use the trash can for the comments', '');
 $L['cfg_trash_forum'] = array('Use the trash can for the forums', '');
 $L['cfg_trash_page'] = array('Use the trash can for the pages', '');
 $L['cfg_trash_pm'] = array('Use the trash can for the private messages', '');
@@ -417,7 +402,6 @@ $L['adm_tpl_mode'] = 'Template mode';
 $L['adm_tpl_empty'] = 'Default';
 $L['adm_tpl_forced'] = 'Same as';
 $L['adm_tpl_parent'] = 'Same as the parent category';
-$L['adm_enablecomments'] = 'Enable comments';	// New in N-0.1.0
 $L['adm_enableratings'] = 'Enable ratings';	// New in N-0.1.0
 $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.'; // Added in N-0.7.0
 
@@ -556,13 +540,6 @@ Restore: Put the item back in the live database<br />
 <b>Note</b>:<br />
 - restoring a forum topic will also restore all the posts that belongs to the topic<br />
 - restoring a post in a deleted topic will restore the whole topic (if available) and all the child posts.<br />';
-
-/**
- * Other Section
- * Comments Subsection
- */
-
-$L['adm_comm_already_del'] = 'Comment deleted';		// New in N-0.0.2
 
 /**
  * Other Section

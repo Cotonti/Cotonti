@@ -117,11 +117,11 @@
 <div class="mboxHD">{PHP.skinlang.polls.Allpolls}</div>
 <div class="mboxBody">
 	<table class="cells">
-		{POLLS_LIST}
 		<!-- BEGIN: POLL_ROW -->
 		<tr>
 			<td style="width:128px;">{POLL_DATE}</td>
 			<td><a href="{POLL_HREF}"> {POLL_TEXT} </a></td>
+			<td>{POLLS_COMMENTS}</td>
 		</tr>
 		<!-- END: POLL_ROW -->
 		<!-- BEGIN: POLL_NONE -->

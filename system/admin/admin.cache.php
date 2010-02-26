@@ -27,11 +27,11 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-if($a == 'purge' && $cot_cache)
+if ($a == 'purge' && $cot_cache)
 {
 	$adminwarnings = (sed_check_xg() && $cot_cache->clear()) ? $L['adm_purgeall_done'] : $L['Error'];
 }
-elseif($a == 'delete')
+elseif ($a == 'delete')
 {
 	sed_check_xg();
 	$name = sed_sql_prep(sed_import('name', 'G', 'TXT'));
@@ -65,7 +65,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('admin.cache.loop');
 /* ===== */
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
 	$row['c_value'] = htmlspecialchars($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);
@@ -76,7 +76,7 @@ while($row = sed_sql_fetcharray($sql))
 		"ADMIN_CACHE_EXPIRE" => ($row['c_expire'] - $sys['now']),
 		"ADMIN_CACHE_SIZE" => $row['size'],
 		"ADMIN_CACHE_VALUE" => ($a == 'showall') ? $row['c_value'] : sed_cutstring($row['c_value'], 80),
-        "ADMIN_CACHE_ROW_ODDEVEN" => sed_build_oddeven($ii)
+		"ADMIN_CACHE_ROW_ODDEVEN" => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -87,7 +87,7 @@ while($row = sed_sql_fetcharray($sql))
 	/* ===== */
 
 	$t->parse("CACHE.ADMIN_CACHE_ROW");
-    $ii++;
+	$ii++;
 }
 
 $t->assign(array(

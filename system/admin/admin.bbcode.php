@@ -33,7 +33,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-if($a == 'add')
+if ($a == 'add')
 {
 	$bbc['name'] = sed_import('bbc_name', 'P', 'ALP');
 	$bbc['mode'] = sed_import('bbc_mode', 'P', 'ALP');
@@ -42,7 +42,7 @@ if($a == 'add')
 	$bbc['container'] = sed_import('bbc_container', 'P', 'BOL');
 	$bbc['replacement'] = sed_import('bbc_replacement', 'P', 'HTM');
 	$bbc['postrender'] = sed_import('bbc_postrender', 'P', 'BOL');
-	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
+	if (!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
 		sed_bbcode_clearcache();
 		$adminwarnings = (sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])) ? $L['adm_bbcodes_added'] : $L['Error'];
@@ -52,7 +52,7 @@ if($a == 'add')
 		$adminwarnings = $L['Error'];
 	}
 }
-elseif($a == 'upd' && $id > 0)
+elseif ($a == 'upd' && $id > 0)
 {
 	$bbc['name'] = sed_import('bbc_name', 'P', 'ALP');
 	$bbc['mode'] = sed_import('bbc_mode', 'P', 'ALP');
@@ -72,12 +72,12 @@ elseif($a == 'upd' && $id > 0)
 		$adminwarnings = $L['Error'];
 	}
 }
-elseif($a == 'del' && $id > 0)
+elseif ($a == 'del' && $id > 0)
 {
 	sed_bbcode_clearcache();
 	$adminwarnings = (sed_bbcode_remove($id)) ? $L['adm_bbcodes_removed'] : $L['Error'];
 }
-elseif($a == 'clearcache')
+elseif ($a == 'clearcache')
 {
 	sed_bbcode_clearcache();
 	$adminwarnings = sed_cache_clearhtml() ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
@@ -99,9 +99,9 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('admin.banlist.loop');
 /* ===== */
-while($row = sed_sql_fetchassoc($res))
+while ($row = sed_sql_fetchassoc($res))
 {
-	foreach($bbc_modes as $val)
+	foreach ($bbc_modes as $val)
 	{
 		$t->assign(array(
 			"ADMIN_BBCODE_ROW_MODE_ITEM_SELECTED" => ($val == $row['bbc_mode']) ? ' selected="selected"' : '',
@@ -109,7 +109,7 @@ while($row = sed_sql_fetchassoc($res))
 		));
 		$t->parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_MODE_ROW");
 	}
-	for($i = 1; $i < 256; $i++)
+	for ($i = 1; $i < 256; $i++)
 	{
 		$t->assign(array(
 			"ADMIN_BBCODE_ROW_PRIO_ITEM_SELECTED" => ($i == $row['bbc_priority']) ? ' selected="selected"' : '',
@@ -136,12 +136,13 @@ while($row = sed_sql_fetchassoc($res))
 		include $pl;
 	}
 	/* ===== */
+
 	$t->parse("BBCODE.ADMIN_BBCODE_ROW");
 	$ii++;
 }
 sed_sql_freeresult($res);
 
-foreach($bbc_modes as $val)
+foreach ($bbc_modes as $val)
 {
 	$t->assign(array(
 		"ADMIN_BBCODE_MODE_ITEM_SELECTED" => ($val == 'pcre') ? ' selected="selected"' : '',
@@ -149,7 +150,7 @@ foreach($bbc_modes as $val)
 	));
 	$t->parse("BBCODE.ADMIN_BBCODE_MODE");
 }
-for($i = 1; $i < 256; $i++)
+for ($i = 1; $i < 256; $i++)
 {
 	$t->assign(array(
 		"ADMIN_BBCODE_PRIO_ITEM_SELECTED" => ($i == 128) ? ' selected="selected"' : '',
@@ -166,7 +167,7 @@ $t->assign(array(
 	"ADMIN_BBCODE_TOTALITEMS" => $totalitems,
 	"ADMIN_BBCODE_COUNTER_ROW" => $ii,
 	"ADMIN_BBCODE_FORM_ACTION" => sed_url('admin', 'm=bbcode&a=add'),
-	"ADMIN_BBCODE_URL_CLEAR_CACHE" => sed_url('admin', 'm=bbcode&a=clearcache&d='.$d),
+	"ADMIN_BBCODE_URL_CLEAR_CACHE" => sed_url('admin', 'm=bbcode&a=clearcache&d='.$d)
 ));
 
 /* === Hook  === */

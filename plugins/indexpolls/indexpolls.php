@@ -34,43 +34,48 @@ function sed_get_polls($limit)
 	global $cfg, $L, $lang, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
 	$skin = sed_skinfile('indexpolls', true);
 	$indexpolls = new XTemplate($skin);
-	if($cfg['plugin']['indexpolls']['mode'] == 'Recent polls')
+	if ($cfg['plugin']['indexpolls']['mode'] == 'Recent polls')
 	{
 		$sqlmode = 'poll_creationdate';
 	}
-	elseif($cfg['plugin']['indexpolls']['mode'] == 'Random polls')
+	elseif ($cfg['plugin']['indexpolls']['mode'] == 'Random polls')
 	{
 		$sqlmode = 'RAND()';
 	}
-	$res=0;
+	$res = 0;
 	$sql_p = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode DESC LIMIT $limit");
-	while($row_p = sed_sql_fetcharray($sql_p))
+
+	/* === Hook - Part1 === */
+	$extp = sed_getextplugins('indexpolls.get_polls.tags');
+	/* ===== */
+	while ($row_p = sed_sql_fetcharray($sql_p))
 	{
 		$res++;
 		$poll_id = $row_p['poll_id'];
 
-		list($polltitle, $poll_form)=sed_poll_form($row_p, sed_url('index', ""), 'indexpolls');
-
-		$item_code = 'v'.$poll_id;
-		$comments = true; // TODO enable/disable comments on categories
-
-		list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$poll_id), $comments);
-
+		list($polltitle, $poll_form) = sed_poll_form($row_p, sed_url('index', ""), 'indexpolls');
 		$pollurl = sed_url('polls', 'id='.$poll_id);
 
 		$indexpolls->assign(array(
 			"IPOLLS_ID" => $poll_id,
 			"IPOLLS_TITLE" => $polltitle,
 			"IPOLLS_URL" => $pollurl,
-			"IPOLLS_COMMENTS" => $comments_link,
-			"IPOLLS_FORM" => $poll_form,
+			"IPOLLS_FORM" => $poll_form
 		));
+
+		/* === Hook - Part2 === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
 		$indexpolls->parse("INDEXPOLLS.POLL");
 
 	}
 	if ($res)
 	{
-		$indexpolls->assign("IPOLLS_ALL","<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>");
+		$indexpolls->assign("IPOLLS_ALL", "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>");
 	}
 	else
 	{
@@ -82,9 +87,8 @@ function sed_get_polls($limit)
 	return($indexpolls->text("INDEXPOLLS"));
 
 }
-/* ============= */
 
-if($cfg['plugin']['indexpolls']['maxpolls'] > 0 && !$cfg['disable_polls'])
+if ($cfg['plugin']['indexpolls']['maxpolls'] > 0 && !$cfg['disable_polls'])
 {
 	require_once sed_langfile('indexpolls', 'plug');
 	require_once sed_langfile('polls', 'module');

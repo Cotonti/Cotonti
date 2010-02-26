@@ -46,7 +46,6 @@ if (empty($vote))
 	$vote = sed_import('vote', 'P', 'ARR');
 }
 
-$comments = sed_import('comments', 'G', 'BOL');
 $ratings = sed_import('ratings', 'G', 'BOL');
 
 $out['subtitle'] = $L['Polls'];
@@ -61,7 +60,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-require_once $cfg['system_dir'].'/header.php';
+require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate(sed_skinfile('polls'));
 
@@ -80,17 +79,19 @@ elseif ((int)$id > 0)
 	sed_poll_vote();
 	list($polltitle, $poll_form) = sed_poll_form($id);
 
-	$item_code = 'v'.$id;
-	$comments = true; // TODO enable/disable comments on categories
-	list($comments_link, $comments_display) = sed_build_comments($item_code, sed_url('polls', 'id='.$id), $comments);
-
 	$t->assign(array(
 		"POLLS_TITLE" => $polltitle,
 		"POLLS_FORM" => $poll_form,
-		"POLLS_COMMENTS" => $comments_link,
-		"POLLS_COMMENTS_DISPLAY" => $comments_display,
-		"POLLS_VIEWALL" => "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>",
+		"POLLS_VIEWALL" => "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>" // TODO to resourse
 	));
+
+	/* === Hook === */
+	$extp = sed_getextplugins('polls.view.tags');
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
 	$t->parse("MAIN.POLLS_VIEW");
 
@@ -110,6 +111,10 @@ else
 {
 	$jj = 0;
 	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_state = 0 AND poll_type = 'index' ORDER BY poll_id DESC");
+
+	/* === Hook - Part1 === */
+	$extp = sed_getextplugins('polls.viewall.tags');
+	/* ===== */
 	while ($row = sed_sql_fetcharray($sql))
 	{
 		$jj++;
@@ -120,6 +125,14 @@ else
 			"POLL_NUM" => $jj,
 			"POLL_ODDEVEN" => sed_build_oddeven($jj)
 		));
+
+		/* === Hook - Part2 === */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
 		$t->parse("MAIN.POLLS_VIEWALL.POLL_ROW");
 	}
 
@@ -129,7 +142,6 @@ else
 	}
 	$t->parse("MAIN.POLLS_VIEWALL");
 }
-
 
 /* === Hook === */
 $extp = sed_getextplugins('polls.tags');
@@ -141,6 +153,6 @@ foreach ($extp as $pl)
 
 $t->parse("MAIN");
 $t->out("MAIN");
-require_once $cfg['system_dir'].'/footer.php';
+require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

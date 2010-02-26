@@ -5,7 +5,7 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -36,11 +36,5 @@ $L['pag_notavailable'] = 'Страница будет опубликована '
 $L['pag_titletooshort'] = 'Заголовок слишком короткий либо отсутствует';
 $L['pag_validation'] = 'Ожидают утверждения';
 $L['pag_validation_desc'] = 'Ваши страницы, которые не были ещё утверждены администратором';
-
-/**
- * elsewhere?
- */
-
-$L['comm_on_page'] = 'на странице'; // New in N-0.0.2
 
 ?>

@@ -3,9 +3,9 @@
  * Administration panel - Manager of moduls
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -27,27 +27,27 @@ foreach ($extp as $pl)
 /* ===== */
 
 $sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner!='plug' GROUP BY config_cat");
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
 	$cfgentries[$row['config_cat']] = $row['COUNT(*)'];
 }
 
 $sql = sed_sql_query("SELECT DISTINCT(auth_code), COUNT(*) FROM $db_auth WHERE 1 GROUP BY auth_code");
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
 	$authentries[$row['auth_code']] = $row['COUNT(*)'];
 }
 
-$sql = sed_sql_query("SELECT * FROM $db_core WHERE ct_code NOT IN ('admin', 'message', 'index', 'forums', 'users', 'plug', 'page', 'trash') ORDER BY ct_title ASC");
+$sql = sed_sql_query("SELECT * FROM $db_core WHERE ct_lock <> 1 ORDER BY ct_title ASC");
 $lines = array();
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('admin.other.loop');
 /* ===== */
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
-    $lincif_mode = (sed_auth($row['ct_code'], 'a', 'A') && $row['ct_code'] != 'admin' && $row['ct_code'] != 'index' && $row['ct_code'] != 'message') ? true : false;
-    $lincif_confmode = ($cfgentries[$row['ct_code']] > 0) ? true : false;
-    $lincif_rightsmode = ($authentries[$row['ct_code']] > 0) ? true : false;
+	$lincif_mode = (sed_auth($row['ct_code'], 'a', 'A') && $row['ct_code'] != 'admin' && $row['ct_code'] != 'index' && $row['ct_code'] != 'message') ? true : false;
+	$lincif_confmode = ($cfgentries[$row['ct_code']] > 0) ? true : false;
+	$lincif_rightsmode = ($authentries[$row['ct_code']] > 0) ? true : false;
 	$cfgcode = "disable_".$row['ct_code'];
 
 	$t->assign(array(

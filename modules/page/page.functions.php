@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Reads raw data from file
  *
@@ -7,7 +8,7 @@
  */
 function sed_readraw($file)
 {
-	return (mb_strpos($file, '..') === false && file_exists($file)) ? file_get_contents($file) : 'File not found : ' . $file;
+	return (mb_strpos($file, '..') === false && file_exists($file)) ? file_get_contents($file) : 'File not found : '.$file; // TODO need translate
 }
 
 /**
@@ -18,19 +19,19 @@ function sed_readraw($file)
  * @param bool $hideprivate Hide private categories
  * @return string
  */
-function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
+function sed_selectbox_categories($check, $name, $hideprivate = TRUE)
 {
 	global $db_structure, $usr, $sed_cat, $L;
 
-	$result =  "<select name=\"$name\" size=\"1\">";
+	$result = "<select name=\"$name\" size=\"1\">";
 
-	foreach($sed_cat as $i => $x)
+	foreach ($sed_cat as $i => $x)
 	{
 		$display = ($hideprivate) ? sed_auth('page', $i, 'W') : TRUE;
 
 		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
 		{
-			$selected = ($i==$check) ? "selected=\"selected\"" : '';
+			$selected = ($i == $check) ? "selected=\"selected\"" : '';
 			$result .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
 		}
 	}
