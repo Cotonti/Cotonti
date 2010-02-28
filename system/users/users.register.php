@@ -225,35 +225,58 @@ if ($a=='add')
 
 elseif ($a=='validate' && mb_strlen($v)==32)
 {
+	/* === Hook for the plugins === */
+	$extp = sed_getextplugins('users.register.validate.first');
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	sed_shield_protect();
 	$sql = sed_sql_query("SELECT user_id, user_maingrp, user_sid FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') ");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
-	
-	if ($row['user_maingrp'] == 2)
+		if ($row['user_maingrp'] == 2)
 		{
-		
-	if ($y==1)
-		{
-		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp=4 WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
-		$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
-		sed_auth_clear($row['user_id']);
-		sed_redirect(sed_url('message', 'msg=106', '', true));
+			if ($y==1)
+			{
+				$sql = sed_sql_query("UPDATE $db_users SET user_maingrp=4 WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
+				$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
+
+				/* === Hook for the plugins === */
+				$extp = sed_getextplugins('users.register.validate.done');
+				foreach ($extp as $pl)
+				{
+					include $pl;
+				}
+				/* ===== */
+
+				sed_auth_clear($row['user_id']);
+				sed_redirect(sed_url('message', 'msg=106', '', true));
+			}
+			elseif ($y==0)
+			{
+				$sql = sed_sql_query("DELETE FROM $db_users WHERE user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
+				$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='".$row['user_id']."'");
+				$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='".$row['user_id']."'");
+
+				/* === Hook for the plugins === */
+				$extp = sed_getextplugins('users.register.validate.rejected');
+				foreach ($extp as $pl)
+				{
+					include $pl;
+				}
+				/* ===== */
+
+				sed_redirect(sed_url('message', 'msg=109', '', true));
+			}
 		}
-	elseif ($y==0)
+		elseif ($row['user_maingrp']==-1)
 		{
-		$sql = sed_sql_query("DELETE FROM $db_users WHERE user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
-		$sql = sed_sql_query("DELETE FROM $db_users WHERE user_id='".$row['user_id']."'");
-		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='".$row['user_id']."'");
-		sed_redirect(sed_url('message', 'msg=109', '', true));
-		}
-		
-		}
-	elseif ($row['user_maingrp']==-1)
-		{
-		$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='".sed_sql_prep($row['user_sid'])."' WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
-		sed_redirect(sed_url('message', 'msg=106', '', true));
+			$sql = sed_sql_query("UPDATE $db_users SET user_maingrp='".sed_sql_prep($row['user_sid'])."' WHERE user_id='".$row['user_id']."' AND user_lostpass='$v'");
+			sed_redirect(sed_url('message', 'msg=106', '', true));
 		}
 	}
 	else
