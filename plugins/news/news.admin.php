@@ -21,7 +21,7 @@ Order=10
  */
 
 defined('SED_CODE') or die('Wrong URL');
-
+require_once sed_incfile('functions', 'page');
 if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnajax'])
 {
 	$sskin = sed_skinfile('news.admin', true);

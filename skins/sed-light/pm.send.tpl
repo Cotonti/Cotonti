@@ -42,19 +42,14 @@
 	</div>
 	<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
 	<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-$("#newpmrecipient").autocomplete("pm.php?a=getusers&m=send", {multiple: true, minChars: 3});
-});
-//]]>
-</script>
+		$(document).ready(function(){
+			$("#newpmrecipient").autocomplete("pm.php?a=getusers&m=send", {multiple: true, minChars: 3});
+		});
+	</script>
 	<!-- IF {PMSEND_AJAX_MARKITUP} -->
 	<script type="text/javascript">
-		//<![CDATA[
-		mySettings.previewAutorefresh = false;
-		mySettings.previewParserPath = "plug.php?r=markitup&x=CAB73666";
 		$(document).ready(function() {$("textarea.editor").markItUp(mySettings);});
-		//]]></script>
+	</script>
 	<!-- ENDIF -->
 
 <!-- BEGIN: AFTER_AJAX -->

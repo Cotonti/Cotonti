@@ -44,57 +44,17 @@
 					<!-- END: PM_ROW_EMPTY -->
 				</table>
 				<div class="paging">{PM_PAGEPREV}&nbsp;{PM_PAGES}&nbsp;{PM_PAGENEXT}</div>
-					<!-- IF {PHP.cfg.jquery} -->
-					<script type="text/javascript">
-						$(document).ready(function() {
-							$('.star-rating').hover(
-							function () {
-								if (!$(this).hasClass('star-rating-readonly'))
-								{
-									$(this).addClass('star-rating-hover');
-									if ($(this).hasClass('star-rating-on'))
-									{
-										$(this).addClass('star-rating-off').removeClass('star-rating-on');
-									}
-								}
-							},
-							function () {
-								if (!$(this).hasClass('star-rating-readonly'))
-								{
-									$(this).removeClass('star-rating-hover');
-									if ($(this).hasClass('star-rating-off'))
-									{
-										$(this).addClass('star-rating-on').removeClass('star-rating-off');
-									}
-								}
-							});
-
-							if (ajaxEnabled) {
-								$('.star-rating').click(
-								function () {
-									if (!$(this).hasClass('star-rating-readonly'))
-									{
-										var txt = $(this).children('a').attr('href');
-										ajaxSend({url: txt, divId: 'pagePreview'});
-										$(this).toggleClass('star-rating-off');
-										return(false);
-									}
-								});
-							}
-						});
-					</script>
-					<!-- ENDIF -->
 				<!-- END: HISTORY -->
 			</div>
 		</div>
 	</div>
 <!-- IF {PM_AJAX_MARKITUP} -->
 <script type="text/javascript">
-//<![CDATA[
-mySettings.previewAutorefresh = false;
-mySettings.previewParserPath = "plug.php?r=markitup&x=CAB73666";
 $(document).ready(function() {$("textarea.editor").markItUp(mySettings);});
-//]]></script>
+</script>
+<!-- ENDIF -->
+<!-- IF {PHP.cfg.jquery} -->
+<script type="text/javascript" src="{PHP.cfg.modules_dir}/pm/js/pm.js"></script>
 <!-- ENDIF -->
 <!-- BEGIN: AFTER_AJAX -->
 </div>
