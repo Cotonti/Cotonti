@@ -95,7 +95,7 @@ function sed_generate_usertags($ruser_array, $tag_prefix = '', $emptyname='', $a
 	global $sed_extrafields, $cfg, $L, $sed_yesno, $skinlang, $cache;
 	if ($ruser_array['user_id'] > 0 && !empty($ruser_array['user_name']))
 	{
-		if (count($cache['user_'.$ruser_array['user_id']]) > 0 )
+		if (!is_array($cache['user_'.$ruser_array['user_id']]))
 		{
 			$ruser_array['user_birthdate'] = sed_date2stamp($ruser_array['user_birthdate']);
 			$ruser_array['user_text'] = sed_build_usertext(htmlspecialchars($ruser_array['user_text']));
@@ -171,6 +171,7 @@ function sed_generate_usertags($ruser_array, $tag_prefix = '', $emptyname='', $a
 			$tag_prefix.'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
 		);
 	}
+	
 	return $return_array;
 }
 
