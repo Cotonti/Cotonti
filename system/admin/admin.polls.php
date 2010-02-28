@@ -15,7 +15,6 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls',
 sed_block($usr['isadmin']);
 
 require_once sed_incfile('functions', 'polls');
-require_once sed_langfile('polls', 'module');
 
 $t = new XTemplate(sed_skinfile('admin.polls'));
 
@@ -166,6 +165,11 @@ while($row = sed_sql_fetcharray($sql))
 	$t->parse("POLLS.POLLS_ROW");
 
 	$ii++;
+}
+
+if ($ii == 0)
+{
+	$t->parse("POLLS.POLLS_ROW_EMPTY");
 }
 
 if($n == 'options')

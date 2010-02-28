@@ -11,6 +11,7 @@
 
 defined('SED_CODE') or die('Wrong URL.');
 
+$L['poll'] = 'Опрос';	// New in N-0.7.0
 $L['polls_alreadyvoted'] = 'Вы уже проголосовали в этом опросе';
 $L['polls_created'] = 'Опрос создан'; // New in N-0.0.2
 $L['polls_error_count'] = 'Количество вариантов ответа должно быть не менее двух'; // New in N-0.0.2

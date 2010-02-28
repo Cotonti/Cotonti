@@ -35,7 +35,7 @@ foreach ($extp as $pl)
 sed_blockguests();
 sed_check_xg();
 
-if (!$cfg['disable_polls']) require_once($cfg['system_dir'].'/core/polls/polls.functions.php');
+require_once sed_incfile('functions', 'polls');
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_sectionid='$s' LIMIT 1");
 

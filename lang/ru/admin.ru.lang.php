@@ -569,6 +569,7 @@ $L['adm_polls_msg916_deleted'] = 'Опрос удален!';	// New in N-0.0.3
 $L['adm_polls_msg916_reset'] = 'Результаты опроса обнулены!';	// New in N-0.0.3
 $L['adm_polls_on_page'] = 'на странице';	// New in N-0.0.2
 $L['adm_polls_polltopic'] = 'Опрос';	// New in N-0.0.1
+$L['adm_polls_nopolls'] = 'Опросов нет'; // New in N-0.7.0
 
 /**
  * Other Section

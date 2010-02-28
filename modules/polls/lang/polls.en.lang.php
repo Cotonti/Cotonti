@@ -11,6 +11,7 @@
 
 defined('SED_CODE') or die('Wrong URL.');
 
+$L['poll'] = 'Poll';	// New in N-0.7.0
 $L['polls_alreadyvoted'] = 'You\'ve already voted for this poll.';
 $L['polls_created'] = 'The poll has been successfully created'; // New in N-0.0.2
 $L['polls_error_count'] = 'A poll must have two or more options'; // New in N-0.0.2
