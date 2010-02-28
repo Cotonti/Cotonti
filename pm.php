@@ -36,11 +36,11 @@ switch($m)
 	break;
 
 	case 'message':
-		require_once require_once sed_incfile($m, 'pm');
+		require_once sed_incfile($m, 'pm');
 	break;
 
 	default:
-		require_once require_once sed_incfile('main', 'pm');
+		require_once sed_incfile('main', 'pm');
 	break;
 }
 
