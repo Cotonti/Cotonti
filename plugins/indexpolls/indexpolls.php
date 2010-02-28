@@ -34,16 +34,9 @@ function sed_get_polls($limit)
 	global $cfg, $L, $lang, $db_polls, $db_polls_voters, $db_polls_options, $usr, $plu_empty;
 	$skin = sed_skinfile('indexpolls', true);
 	$indexpolls = new XTemplate($skin);
-	if ($cfg['plugin']['indexpolls']['mode'] == 'Recent polls')
-	{
-		$sqlmode = 'poll_creationdate';
-	}
-	elseif ($cfg['plugin']['indexpolls']['mode'] == 'Random polls')
-	{
-		$sqlmode = 'RAND()';
-	}
+	$sqlmode = ($cfg['plugin']['indexpolls']['mode'] == 'Recent polls') ? 'poll_creationdate DESC' :'RAND()';
 	$res = 0;
-	$sql_p = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode DESC LIMIT $limit");
+	$sql_p = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode LIMIT $limit");
 
 	/* === Hook - Part1 === */
 	$extp = sed_getextplugins('indexpolls.get_polls.tags');
@@ -53,14 +46,14 @@ function sed_get_polls($limit)
 		$res++;
 		$poll_id = $row_p['poll_id'];
 
-		list($polltitle, $poll_form) = sed_poll_form($row_p, sed_url('index', ""), 'indexpolls');
+		$poll_form = sed_poll_form($row_p, sed_url('index', ''), 'indexpolls');
 		$pollurl = sed_url('polls', 'id='.$poll_id);
 
 		$indexpolls->assign(array(
-			"IPOLLS_ID" => $poll_id,
-			"IPOLLS_TITLE" => $polltitle,
-			"IPOLLS_URL" => $pollurl,
-			"IPOLLS_FORM" => $poll_form
+			'IPOLLS_ID' => $poll_id,
+			'IPOLLS_TITLE' => sed_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
+			'IPOLLS_URL' => $pollurl,
+			'IPOLLS_FORM' => $poll_form['poll_block']
 		));
 
 		/* === Hook - Part2 === */
@@ -70,21 +63,21 @@ function sed_get_polls($limit)
 		}
 		/* ===== */
 
-		$indexpolls->parse("INDEXPOLLS.POLL");
+		$indexpolls->parse('INDEXPOLLS.POLL');
 
 	}
 	if ($res)
 	{
-		$indexpolls->assign("IPOLLS_ALL", "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>");
+		$indexpolls->assign('IPOLLS_ALL', sed_rc_link(sed_url('polls', 'id=viewall'), $L['polls_viewarchives']));
 	}
 	else
 	{
-		$indexpolls->assign("IPOLLS_ERROR", $L['None']);
-		$indexpolls->parse("INDEXPOLLS.ERROR");
+		$indexpolls->assign('IPOLLS_ERROR', $L['None']);
+		$indexpolls->parse('INDEXPOLLS.ERROR');
 	}
 
-	$indexpolls->parse("INDEXPOLLS");
-	return($indexpolls->text("INDEXPOLLS"));
+	$indexpolls->parse('INDEXPOLLS');
+	return($indexpolls->text('INDEXPOLLS'));
 
 }
 
