@@ -55,12 +55,12 @@ $c=(empty($c)||!isset($sed_cat[$c])) ? $indexcat : $c;
 
 if(isset($cats[$c]) && !empty($individual)) unset($cats[$c]);
 
+require_once sed_incfile('functions', 'users');
 require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 
 if($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 {
 	$limit = $cfg['plugin']['news']['maxpages'];
-	// echo $symblim;
 	$t->assign("INDEX_NEWS", sed_get_news($c, "news", $limit, $d, $symblim, true));
 	if(!empty($cats) && !$one)
 	{

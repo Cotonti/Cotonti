@@ -143,13 +143,13 @@ if ($history)
 		if ($row2['pm_fromuserid']==$usr['id'])
 		{// sentbox
 			$row2['pm_icon_edit'] = ($row2['pm_tostate'] == 0) ? sed_rc_link(sed_url('pm', 'm=send&id='.$row2['pm_id']), $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '';
-			$pm_user = sed_generate_usertags($usr['profile'], "PM_ROW_USER");
+			$pm_user = sed_generate_usertags($usr['profile'], "PM_ROW_USER_");
 			$titstar = ($row2['pm_fromstate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
 			$star_class = ($row2['pm_fromstate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
 		}
 		else
 		{//inbox
-			$pm_user = sed_generate_usertags($row_user, "PM_ROW_USER");
+			$pm_user = sed_generate_usertags($row_user, "PM_ROW_USER_");
 			$titstar = ($row2['pm_tostate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
 			$star_class = ($row2['pm_tostate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
 		}
@@ -263,7 +263,7 @@ $t->assign(array(
 	"PM_HISTORY" => sed_rc_link(sed_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
 	"PM_SENT_TYPE" => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
 ));
-$t->assign(sed_generate_usertags($row_user, "PM_USER"));
+$t->assign(sed_generate_usertags($row_user, "PM_USER_"));
 
 /* === Hook === */
 $extp = sed_getextplugins('pm.tags');

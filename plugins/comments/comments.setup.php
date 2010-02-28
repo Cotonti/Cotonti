@@ -10,9 +10,9 @@ Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2010
 Notes=BSD License
 Auth_guests=R
-Lock_guests=W12345A
-Auth_members=R
-Lock_members=W12345A
+Lock_guests=12345A
+Auth_members=RW
+Lock_members=
 [END_SED_EXTPLUGIN]
 
 [BEGIN_SED_EXTPLUGIN_CONFIG]

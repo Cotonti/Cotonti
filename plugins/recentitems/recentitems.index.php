@@ -21,6 +21,8 @@ Order=10
  */
 
 defined('SED_CODE') or die('Wrong URL');
+
+require_once sed_incfile('functions', 'users');
 require_once $cfg['plugins_dir'].'/recentitems/inc/recentitems.functions.php';
 require_once sed_langfile('recentitems', 'plug');
 

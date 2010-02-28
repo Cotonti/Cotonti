@@ -31,7 +31,7 @@
 					<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_STATUS}</td>
 					<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_STAR}</td>
 					<td class="{PM_ROW_ODDEVEN}"><div>{PM_ROW_TITLE}</div>{PM_ROW_DESC}</td>
-					<td class="{PM_ROW_ODDEVEN}">{PM_ROW_USER_LINK}</td>
+					<td class="{PM_ROW_ODDEVEN}">{PM_ROW_USER_NAME}</td>
 					<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_DATE}</td>
 					<td class="centerall {PM_ROW_ODDEVEN}">{PM_ROW_ICON_EDIT} {PM_ROW_ICON_DELETE}</td>
 				</tr>

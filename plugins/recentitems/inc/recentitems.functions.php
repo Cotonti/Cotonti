@@ -218,7 +218,7 @@ function sed_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$totalrecent['pages'] = $maxperpage;
 	}
 
-	$sql = sed_sql_query("SELECT p.*, u.user_name, user_avatar FROM $db_pages AS p
+	$sql = sed_sql_query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid ".$where." ORDER by page_date desc LIMIT $d, ".$maxperpage);
 
 	$jj = 0;
@@ -302,7 +302,6 @@ function sed_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 			"PAGE_ROW_MORE" => ($pag_more) ? "<span class='readmore'><a href='".$pag['page_pageurl']."'>{$L['ReadMore']}</a></span>" : "",
 			"PAGE_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
 			"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-			"PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
 			"PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
 			"PAGE_ROW_FILEURL" => $pag['page_url'],
 			"PAGE_ROW_SIZE" => $pag['page_size'],
@@ -312,6 +311,7 @@ function sed_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj),
 			"PAGE_ROW_NUM" => $jj
 		));
+		$recentitems->assign(sed_generate_usertags($pag, "PAGE_ROW_OWNER_"));
 
 		//extrafields
 		foreach ($sed_extrafields['pages'] as $row)

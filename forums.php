@@ -23,6 +23,7 @@ require_once sed_incfile('xtemplate');
 sed_dieifdisabled($cfg['disable_forums']);
 
 require_once sed_incfile('functions', 'forums');
+require_once sed_incfile('functions', 'users');
 require_once sed_incfile('resources', 'forums');
 require_once sed_langfile('forums', 'module');
 

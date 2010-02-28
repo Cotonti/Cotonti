@@ -52,7 +52,7 @@ function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlen
 		include $pl;
 	}
 	/* ===== */
-	$sql = sed_sql_query("SELECT p.*, u.user_name, user_avatar FROM $db_pages AS p
+	$sql = sed_sql_query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE ".$where."
 		ORDER BY page_".$order." ".$way." LIMIT $d, ".$limit);
@@ -148,7 +148,6 @@ function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlen
 			"PAGE_ROW_MORE" => ($pag_more) ? "<span class='readmore'><a href='".$pag['page_pageurl']."'>{$L['ReadMore']}</a></span>" : "",
 			"PAGE_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
 			"PAGE_ROW_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-			"PAGE_ROW_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
 			"PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
 			"PAGE_ROW_BEGIN" => @date($cfg['formatyearmonthday'], $pag['page_begin'] + $usr['timezone'] * 3600),
 			"PAGE_ROW_EXPIRE" => @date($cfg['formatyearmonthday'], $pag['page_expire'] + $usr['timezone'] * 3600),
@@ -160,6 +159,7 @@ function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlen
 			"PAGE_ROW_ODDEVEN" => sed_build_oddeven($jj),
 			"PAGE_ROW_NUM" => $jj
 		));
+		$news->assign(sed_generate_usertags($pag, "PAGE_ROW_OWNER_"));
 
 		// Extrafields
 		foreach ($sed_extrafields['pages'] as $row)

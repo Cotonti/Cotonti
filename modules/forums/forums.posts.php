@@ -709,28 +709,12 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['fp_text'] = sed_parse($row['fp_text'], ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1);
 		$row['fp_text'] = sed_post_parse($row['fp_text'], 'forums');
 	}
-	$row['fp_useronline'] = (sed_userisonline($row['fp_posterid'])) ? "1" : "0";
-	$row['fp_useronlinetitle'] = ($row['fp_useronline']) ? $skinlang['forumspost']['Onlinestatus1'] : $skinlang['forumspost']['Onlinestatus0'];
 
 	if (!empty($row['fp_updater']))
 	{ $row['fp_updatedby'] = sprintf($L['for_updatedby'], htmlspecialchars($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']); }
 
-	if (!$cache[$row['fp_posterid']]['cached'])
-	{
-		$row['user_birthdate'] = sed_date2stamp($row['user_birthdate']);
-		$row['user_text'] = sed_build_usertext($row['user_text']);
-		$row['user_age'] = ($row['user_birthdate']!=0) ? sed_build_age($row['user_birthdate']) : '';
-		$cache[$row['fp_posterid']]['user_text'] = $row['user_text'];
-		$cache[$row['fp_posterid']]['user_age']= $row['user_age'];
-		$cache[$row['fp_posterid']]['cached'] = TRUE;
-	}
-	else
-	{
-		$row['user_text'] = $cache[$row['fp_posterid']]['user_text'];
-		$row['user_journal'] = $cache[$row['fp_posterid']]['user_journal'];
-		$row['user_age'] = $cache[$row['fp_posterid']]['user_age'];
-	}
-
+	$t->assign(sed_generate_usertags($row, "FORUMS_POSTS_ROW_")); // Lieve only best variant(some tags use has different key mask
+	$t->assign(sed_generate_usertags($row, "FORUMS_POSTS_ROW_USER"));
 	$t-> assign(array(
 		"FORUMS_POSTS_ROW_ID" => $row['fp_id'],
 		"FORUMS_POSTS_ROW_POSTID" => 'post_'.$row['fp_id'],
@@ -744,45 +728,16 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_ANCHORLINK" => "<a name=\"post{$row['fp_id']}\" id=\"post{$row['fp_id']}\"></a>",
 		"FORUMS_POSTS_ROW_POSTERNAME" => sed_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
-		"FORUMS_POSTS_ROW_MAINGRP" => sed_build_group($row['user_maingrp']),
-		"FORUMS_POSTS_ROW_MAINGRPID" => $row['user_maingrp'],
-		"FORUMS_POSTS_ROW_MAINGRPSTARS" => sed_build_stars($sed_groups[$row['user_maingrp']]['level']),
-		"FORUMS_POSTS_ROW_MAINGRPICON" => sed_build_userimage($sed_groups[$row['user_maingrp']]['icon']),
-		"FORUMS_POSTS_ROW_USERTEXT" => $row['user_text'],
-		"FORUMS_POSTS_ROW_AVATAR" => sed_build_userimage($row['user_avatar'], 'avatar'),
-		"FORUMS_POSTS_ROW_PHOTO" => sed_build_userimage($row['user_photo'], 'photo'),
-		"FORUMS_POSTS_ROW_SIGNATURE" => sed_build_userimage($row['user_signature'], 'sig'),
-		"FORUMS_POSTS_ROW_GENDER" => $row['user_gender'] = ($row['user_gender']=='' || $row['user_gender']=='U') ? '' : $L["Gender_".$row['user_gender']],
 		"FORUMS_POSTS_ROW_POSTERIP" => $row['fp_posterip'],
-		"FORUMS_POSTS_ROW_USERONLINE" => $row['fp_useronline'],
-		"FORUMS_POSTS_ROW_USERONLINETITLE" => $row['fp_useronlinetitle'],
         "FORUMS_POSTS_ROW_DELETE" => $rowdelete,
         "FORUMS_POSTS_ROW_EDIT" => $rowedit,
         "FORUMS_POSTS_ROW_QUOTE" => $rowquote,
 		"FORUMS_POSTS_ROW_ADMIN" => $adminoptions,
-		"FORUMS_POSTS_ROW_COUNTRY" => $sed_countries[$row['user_country']],
-		"FORUMS_POSTS_ROW_COUNTRYFLAG" => sed_build_flag($row['user_country']),
-		"FORUMS_POSTS_ROW_WEBSITE" => sed_build_url($row['user_website'], 36),
-		"FORUMS_POSTS_ROW_WEBSITERAW" => $row['user_website'],
-		"FORUMS_POSTS_ROW_JOURNAL" => $row['user_journal'],
-		"FORUMS_POSTS_ROW_EMAIL" => sed_build_email($row['user_email'], $row['user_hideemail']),
-		"FORUMS_POSTS_ROW_LOCATION" => htmlspecialchars($row['user_location']),
-		"FORUMS_POSTS_ROW_OCCUPATION" => htmlspecialchars($row['user_occupation']),
-		"FORUMS_POSTS_ROW_AGE" => $row['user_age'],
-		"FORUMS_POSTS_ROW_POSTCOUNT" => $row['user_postcount'],
 		"FORUMS_POSTS_ROW_ODDEVEN" => sed_build_oddeven($fp_num),
         "FORUMS_POSTS_ROW_NUM" => $fp_num,
 		"FORUMS_POSTS_ROW_ORDER" => $i,
 		"FORUMS_POSTS_ROW" => $row,
 	));
-
-	// Extra fields for users
-	foreach($sed_extrafields['users'] as $i=>$extrafield)
-	{
-		$uname = strtoupper($extrafield['field_name']);
-		$t->assign('FORUMS_POSTS_ROW_USER'.$uname, htmlspecialchars($row['user_'.$extrafield['field_name']]));
-		$t->assign('FORUMS_POSTS_ROW_USER'.$uname.'_TITLE', isset($L['page_'.$extrafield['field_name'].'_title']) ?  $L['page_'.$extrafield['field_name'].'_title'] : $extrafield['field_description']);
-	}
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)

@@ -274,22 +274,6 @@ function sed_selectbox_sections($check, $name)
 	return($result);
 }
 
-/**
- * Checks whether user is online
- *
- * @param int $id User ID
- * @return bool
- */
-function sed_userisonline($id)
-{
-	global $sed_usersonline;
-
-	$res = FALSE;
-	if (is_array($sed_usersonline))
-	{ $res = (in_array($id,$sed_usersonline)) ? TRUE : FALSE; }
-	return ($res);
-}
-
 // Preload forum structure
 
 if (!$sed_forums_str && !$cfg['disable_forums'])

@@ -280,54 +280,12 @@ $extp = sed_getextplugins('users.loop');
 while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 {
 	$jj++;
-	$urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
-	$urr['user_age'] = ($urr['user_birthdate'] > 0) ? sed_build_age($urr['user_birthdate']) : '';
-	$urr['user_birthdate'] = ($urr['user_birthdate'] > 0) ? @date($cfg['formatyearmonthday'], $urr['user_birthdate']) : '';
-	$urr['user_gender'] = ($urr['user_gender']=='' || $urr['user_gender']=='U') ?  '' : $L["Gender_".$urr['user_gender']];
-
 	$t -> assign(array(
-		"USERS_ROW_USERID" => $urr['user_id'],
-		"USERS_ROW_TAG" => $urr['user_tag'],
-		"USERS_ROW_PM" => sed_build_pm($urr['user_id']),
-		"USERS_ROW_NAME" => sed_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])),
-		"USERS_ROW_MAINGRP" => sed_build_group($urr['user_maingrp']),
-		"USERS_ROW_MAINGRPID" => $urr['user_maingrp'],
-		"USERS_ROW_MAINGRPSTARS" => sed_build_stars($sed_groups[$urr['user_maingrp']]['level']),
-		"USERS_ROW_MAINGRPICON" => sed_build_userimage($sed_groups[$urr['user_maingrp']]['icon']),
-		"USERS_ROW_COUNTRY" => sed_build_country($urr['user_country']),
-		"USERS_ROW_COUNTRYFLAG" => sed_build_flag($urr['user_country']),
-		"USERS_ROW_TEXT" => sed_build_usertext($urr['user_text']),
-		"USERS_ROW_WEBSITE" => sed_build_url($urr['user_website']),
-		"USERS_ROW_ICQ" => sed_build_icq($urr['user_icq']),
-		"USERS_ROW_MSN" => sed_build_msn($urr['user_msn']),
-		"USERS_ROW_IRC" => htmlspecialchars($urr['user_irc']),
-		"USERS_ROW_GENDER" => $urr['user_gender'],
-		"USERS_ROW_BIRTHDATE" => $urr['user_birthdate'],
-		"USERS_ROW_AGE" => $urr['user_age'],
-		"USERS_ROW_TIMEZONE" => sed_build_timezone($urr['user_timezone']),
-		"USERS_ROW_LOCATION" => htmlspecialchars($urr['user_location']),
-		"USERS_ROW_OCCUPATION" => htmlspecialchars($urr['user_occupation']),
-		"USERS_ROW_AVATAR" => sed_build_userimage($urr['user_avatar'], 'avatar'),
-		"USERS_ROW_SIGNATURE" => sed_build_userimage($urr['user_signature'], 'sig'),
-		"USERS_ROW_PHOTO" => sed_build_userimage($urr['user_photo'], 'photo'),
-		"USERS_ROW_EMAIL" => sed_build_email($urr['user_email'], $urr['user_hideemail']),
-		"USERS_ROW_REGDATE" => @date($cfg['formatyearmonthday'], $urr['user_regdate'] + $usr['timezone'] * 3600),
-		"USERS_ROW_PMNOTIFY" => $sed_yesno[$urr['user_pmnotify']],
-		"USERS_ROW_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600),
-		"USERS_ROW_LOGCOUNT" => $urr['user_logcount'],
-		"USERS_ROW_LASTIP" => $urr['user_lastip'],
 		"USERS_ROW_ODDEVEN" => sed_build_oddeven($jj),
         "USERS_ROW_NUM" => $jj,
 		"USERS_ROW" => $urr
 	));
-
-	// Extra fields for users
-	foreach($sed_extrafields['users'] as $i => $extrafield)
-	{
-		$t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']), sed_build_extrafields_data('user', $extrafield['field_type'], $extrafield['field_name'], $urr['user_'.$extrafield['field_name']]));
-		$t -> assign('USERS_ROW_'.strtoupper($extrafield['field_name']).'_TITLE', isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title'] : $extrafield['field_description']);
-	}
-
+	$t->assign(sed_generate_usertags($urr, "USERS_ROW_"));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{

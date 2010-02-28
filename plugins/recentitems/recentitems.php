@@ -42,6 +42,8 @@ if($days > 0)
     $timeminus = $days*86400;
     $timeback = $sys['now_offset'] - $timeminus;
 }
+
+require_once sed_incfile('functions', 'users');
 require_once $cfg['plugins_dir'].'/recentitems/inc/recentitems.functions.php';
 $totalrecent[]=0;
 if($cfg['plugin']['recentitems']['newpages'] && !$cfg['disable_page'] && (empty($mode) || $mode == 'pages'))
