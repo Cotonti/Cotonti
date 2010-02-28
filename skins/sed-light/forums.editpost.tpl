@@ -21,21 +21,46 @@
 {FORUMS_EDITPOST_TEXTBOXER}</div></td>
 				</tr>
 				<!-- BEGIN: POLL -->
-                <tr>
+				<tr>
 					<td>
-                <table>
-<tr><td>{PHP.L.Poll}:</td><td><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td></tr>
-
-<tr><td>{PHP.L.Options}:</td><td>{EDIT_POLL_OPTIONS}</td></tr>
-<tr><td></td><td><label>{EDIT_POLL_MULTIPLE}{PHP.L.polls_multiple}</label>
-<!-- BEGIN: EDIT -->
-<br /><label>{EDIT_POLL_CLOSE}{PHP.L.Close}</label>
-<br /><label>{EDIT_POLL_RESET}{PHP.L.Reset}</label>
-<br /><label>{EDIT_POLL_DELETE}{PHP.L.Delete}</label>
-<!-- END: EDIT -->
-</td></tr>
-                </table>
-                    </td>
+						<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/poll.js"></script>
+						<script type="text/javascript">
+							var ansCount = {EDIT_POLL_OPTIONSCOUNT};
+							var ansMax = {PHP.cfg.max_options_polls};
+						</script>
+						<!-- ENDIF -->
+						<table class="cells">
+							<tr>
+								<td style="width:15%;">{PHP.L.poll}:</td>
+								<td style="width:85%;"><input type="hidden" name="poll_id" value="{EDIT_POLL_ID}" /><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td>
+							</tr>
+							<tr>
+								<td>{PHP.L.Options}:</td>
+								<td>
+									<!-- BEGIN: OPTIONS -->
+									<div class="polloptiondiv">
+										<input  class="tbox" type="text" name="poll_option[{EDIT_POLL_OPTION_ID}]" size="40" value="{EDIT_POLL_OPTION_TEXT}" maxlength="128" />
+										<input  name="deloption" value="x" type="button" class="deloption"  style="display:none;" />
+									</div>
+									<!-- END: OPTIONS -->
+									<input id="addoption" name="addoption" value="{PHP.L.Add}" type="button" style="display:none;" /></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<label>{EDIT_POLL_MULTIPLE} {PHP.L.polls_multiple}</label>
+									<!-- BEGIN: EDIT -->
+									<br />
+									<label>{EDIT_POLL_CLOSE} {PHP.L.Close}</label>
+									<br />
+									<label>{EDIT_POLL_RESET} {PHP.L.Reset}</label>
+									<br />
+									<label>{EDIT_POLL_DELETE} {PHP.L.Delete}</label>
+									<!-- END: EDIT -->
+								</td>
+							</tr>
+						</table>
+					</td>
 				</tr>
 				<!-- END: POLL -->
 				<!-- BEGIN: FORUMS_EDITPOST_TAGS -->

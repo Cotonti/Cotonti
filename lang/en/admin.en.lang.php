@@ -570,6 +570,7 @@ $L['adm_polls_msg916_deleted'] = 'Successfully deleted!';	// New in N-0.0.3
 $L['adm_polls_msg916_reset'] = 'Successfully reset!';	// New in N-0.0.3
 $L['adm_polls_on_page'] = 'on page';	// New in N-0.0.2
 $L['adm_polls_polltopic'] = 'Poll topic';	// New in N-0.0.1
+$L['adm_polls_nopolls'] = 'There is no polls'; // New in N-0.7.0
 
 /**
  * Other Section

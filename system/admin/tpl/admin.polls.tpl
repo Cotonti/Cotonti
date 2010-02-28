@@ -11,14 +11,11 @@
 		<li><a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration}</a></li>
 	</ul>
 	<h3>{PHP.L.editdeleteentries}:</h3>
-			{PHP.L.Filter}:
-	<form style="display:inline!important;" id="jump">
-		<select name="jumpbox" size="1" onchange="redirect(this)">
+	<select name="jumpbox" size="1" onchange="redirect(this)">
 			<!-- BEGIN: POLLS_ROW_FILTER -->
 			<option value="{ADMIN_POLLS_ROW_FILTER_VALUE}"{ADMIN_POLLS_ROW_FILTER_CHECKED}>{ADMIN_POLLS_ROW_FILTER_NAME}</option>
 			<!-- END: POLLS_ROW_FILTER -->
-		</select>
-	</form>
+	</select>
 	<table class="cells">
 		<tr>
 			<td class="coltop" style="width:15%;">{PHP.L.Date}</td>
@@ -42,44 +39,25 @@
 			</td>
 		</tr>
 		<!-- END: POLLS_ROW -->
+		<!-- BEGIN: POLLS_ROW_EMPTY -->
+		<tr>
+			<td colspan="5" class="textcenter">{PHP.L.adm_polls_nopolls}</td>
+		</tr>
+		<!-- END: POLLS_ROW_EMPTY -->
 	</table>
 	<p class="paging">{ADMIN_POLLS_PAGINATION_PREV}{ADMIN_POLLS_PAGNAV}{ADMIN_POLLS_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_POLLS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_POLLS_ON_PAGE}</span></p>
 	<h3>{ADMIN_POLLS_FORMNAME}:</h3>
 	<form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
 		<!-- IF {PHP.cfg.jquery} -->
+		<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/poll.js"></script>
 		<script type="text/javascript">
-			//<![CDATA[
-
 			var ansCount = {EDIT_POLL_OPTIONSCOUNT};
 			var ansMax = {PHP.cfg.max_options_polls};
-				$(".deloption").live("click",function () {
-					$(this).parent().children('.tbox').attr('value', '');
-					if (ansCount>2)
-					{
-						ansCount--;
-						$(this).parent().remove();
-					}
-
-					return false;
-				});
-			$(document).ready(function(){
-				$("#addoption").click(function () {
-					if (ansCount<ansMax)
-					{
-						$('.polloptiondiv').last().clone().attr("id", '').insertAfter($('.polloptiondiv').last()).show().children('.tbox').attr('value', '');
-						ansCount++;
-					}
-					return false;
-				});
-				$('#addoption').show();
-				$('.deloption').show();
-			});
-			//]]>
-		</script>
+		</script>		
 		<!-- ENDIF -->
 		<table class="cells">
 			<tr>
-				<td style="width:15%;">{PHP.L.adm_polls_polltopic}:</td>
+				<td style="width:15%;">{PHP.L.poll}:</td>
 				<td style="width:85%;"><input type="hidden" name="poll_id" value="{EDIT_POLL_ID}" /><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td>
 			</tr>
 			<tr>

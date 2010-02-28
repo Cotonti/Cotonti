@@ -11,6 +11,8 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
+require_once sed_langfile('polls', 'module');
+
 /**
  * Adds form for create/edit Poll
  *
