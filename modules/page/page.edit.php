@@ -311,8 +311,8 @@ $page_form_file = <<<HTM
 <option value="1"$sel1>{$L['Yes']}</option>
 <option value="2"$sel2>{$L['Members_only']}</option>
 </select>
-HTM; // TODO - to resorses
-
+HTM;
+// TODO - to resources
 $pfs = sed_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
 $pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
 $pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';

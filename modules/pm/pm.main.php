@@ -184,7 +184,7 @@ while ($row = sed_sql_fetcharray($sql))
 		$star_title = ($row['pm_tostate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
 		$star_class = ($row['pm_tostate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
 	}
-	$pm_user = sed_generate_usertags($row, "PM_ROW_USER");
+	$pm_user = sed_generate_usertags($row, "PM_ROW_USER_");
 
 	$row['pm_icon_starred'] = sed_rc_link(sed_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d),
 			$R['pm_icon_archive'], array('title' => $star_title));

@@ -19,6 +19,7 @@ require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
 require_once sed_incfile('xtemplate');
+require_once sed_incfile('functions', 'users');
 
 sed_dieifdisabled($cfg['disable_page']);
 

@@ -8,7 +8,7 @@
  * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
  */
-
+require_once sed_incfile('functions', 'users');
 // TODO I messed up this code, please see if I did huge mistakes and inform me (oc)
 function sed_build_comments($code, $url, $display = true)
 {
@@ -134,7 +134,7 @@ function sed_build_comments($code, $url, $display = true)
 	}
 	/* ===== */
 
-	$sql = sed_sql_query("SELECT c.*, u.user_avatar FROM $db_com AS c
+	$sql = sed_sql_query("SELECT c.*, u.* FROM $db_com AS c
 		LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
 		WHERE com_code='$code' ORDER BY com_id ASC LIMIT $d, ".$cfg['plugin']['comments']['maxcommentsperpage']);
 
@@ -235,6 +235,7 @@ function sed_build_comments($code, $url, $display = true)
 				'COMMENTS_ROW_ADMIN' => $com_admin,
 				'COMMENTS_ROW_EDIT' => $com_edit
 			));
+			$t->assign(sed_generate_usertags($pag, "COMMENTS_ROW_AUTHOR"), $com_author);
 
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl)

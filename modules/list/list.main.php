@@ -103,7 +103,7 @@ foreach ($extp as $pl)
 if(empty($sql_string))
 {
 	$sql_count = "SELECT COUNT(*) FROM $db_pages WHERE $where";
-	$sql_string = "SELECT p.*, u.user_name ".$join_ratings_columns."
+	$sql_string = "SELECT p.*, u.* ".$join_ratings_columns."
 		FROM $db_pages as p ".$join_ratings_condition."
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE $where
@@ -340,6 +340,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 		"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj),
 		"LIST_ROW_NUM" => $jj
 	));
+	$t->assign(sed_generate_usertags($pag, "LIST_ROW_OWNER_"));
 
 	// Adding LIST_ROW_TEXT tag
 	switch ($pag['page_type'])

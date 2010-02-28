@@ -10,7 +10,7 @@
 
 		<div>
 		{PHP.L.Subject}: <strong>{PM_TITLE}</strong><br />
-		{PM_SENT_TYPE}: {PM_USER_LINK}<br />
+		{PM_SENT_TYPE}: {PM_USER_NAME}<br />
 		{PHP.L.Date}: {PM_DATE}
 			<hr />
 
@@ -33,7 +33,7 @@
 
 					<!-- BEGIN: PM_ROW -->
 					<tr>
-						<td class="{PM_ROW_ODDEVEN}" style="width:126px;">{PM_ROW_USER_LINK}<br />{PM_ROW_DATE}</td>
+						<td class="{PM_ROW_ODDEVEN}" style="width:126px;">{PM_ROW_USER_NAME}<br />{PM_ROW_DATE}</td>
 						<td class="{PM_ROW_ODDEVEN}">{PM_ROW_TEXT}</td>
 					</tr>
 					<!-- END: PM_ROW -->

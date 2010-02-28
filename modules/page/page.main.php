@@ -28,19 +28,11 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-if (!empty($al))
-{
-	$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar FROM $db_pages AS p
+$where = (!empty($al)) ? "page_alias='".$al."'" : "page_id='".$id."'";
+$sql = sed_sql_query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE page_alias='$al' LIMIT 1");
-}
-else
-{
-	$sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar FROM $db_pages AS p
-		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE page_id='$id'");
-}
-
+		WHERE $where LIMIT 1");
+	
 sed_die(sed_sql_numrows($sql) == 0);
 $pag = sed_sql_fetcharray($sql);
 
@@ -151,6 +143,7 @@ if ($pag['page_file'])
 }
 
 require_once $cfg['system_dir'] . '/header.php';
+require_once sed_incfile('functions', 'users');
 
 $mskin = sed_skinfile(array('page', $cat['tpl']));
 $t = new XTemplate($mskin);
@@ -169,7 +162,6 @@ $t->assign(array(
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
 	"PAGE_DATE" => $pag['page_date'],
 	"PAGE_BEGIN" => $pag['page_begin'],
 	"PAGE_EXPIRE" => $pag['page_expire'],
@@ -177,6 +169,7 @@ $t->assign(array(
 	"PAGE_RATINGS" => $ratings_link,
 	"PAGE_RATINGS_DISPLAY" => $ratings_display
 ));
+$t->assign(sed_generate_usertags($pag, "PAGE_ROW_OWNER_"));
 
 // Extra fields for pages
 foreach ($sed_extrafields['pages'] as $i => $row)
