@@ -25,7 +25,7 @@ require_once sed_langfile('polls', 'module');
 function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 {
 	global $cfg, $db_polls, $db_polls_options, $error_string;
-	if (gettype($t) != "object")
+	if (gettype($t) != 'object')
 	{
 		$t = new XTemplate(sed_skinfile('polls'));
 		$block = "EDIT_POLL_FORM";
@@ -42,7 +42,7 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 		$poll_state = ($poll_state) ? 'checked="checked"' : '';
 		foreach ($poll_options as $key => $val)
 		{
-			if ($val != "")
+			if ($val != '')
 			{
 				$counter++;
 				$t->assign(array(
@@ -133,7 +133,7 @@ function sed_poll_check()
 	if ($poll_delete && !empty($poll_id))
 	{
 		sed_poll_delete($poll_id);
-		$poll_id = "";
+		$poll_id = '';
 	}
 	if (!empty($poll_id))
 	{
@@ -160,8 +160,8 @@ function sed_poll_check()
 		{
 			$poll_options = array_unique($poll_options);
 		}
-		$error_string .= (mb_strlen($poll_text) < 4) ? $L['polls_error_title']."<br />" : '';
-		$error_string .= (count($poll_options) < 2) ? $L['polls_error_count']."<br />" : '';
+		$error_string .= (mb_strlen($poll_text) < 4) ? $L['polls_error_title'].'<br />' : '';
+		$error_string .= (count($poll_options) < 2) ? $L['polls_error_count'].'<br />' : '';
 	}
 }
 
@@ -321,7 +321,7 @@ function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 		$po_count = $row1['po_count'];
 		$percent = @round(100 * ($po_count / $totalvotes), 1);
 
-		$input_type = $row['poll_multiple'] ? "checkbox" : "radio";
+		$input_type = $row['poll_multiple'] ? 'checkbox' : 'radio';
 		$polloptions_input = ($alreadyvoted || !$canvote) ? "" : '<input type="'.$input_type.'" name="vote[]" value="'.$po_id.'" />&nbsp;'; // TODO - to resorses
 		$polloptions = sed_parse(htmlspecialchars($row1['po_text']), 1, 1, 1);
 
@@ -340,14 +340,15 @@ function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 		"POLL_SINCE_SHORT" => date($cfg['formatmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
 		"POLL_TITLE" => sed_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
 		"POLL_ID" => $id,
-		"POLL_FORM_URL" => (empty($formlink)) ? sed_url('polls', "id=".$id) : $formlink,
+		"POLL_FORM_URL" => (empty($formlink)) ? sed_url('polls', 'id='.$id) : $formlink,
 		"POLL_FORM_BUTTON" => $pollbutton
 	));
-
 	$t->parse($poll_block);
-	$pollform = array($polltext, $t->text($poll_block));
 
-	return($pollform);
+	$row['poll_count'] = $totalvotes;
+	$row['poll_block'] = $t->text($poll_block);;
+
+	return($row);
 }
 
 /**

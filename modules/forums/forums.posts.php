@@ -561,10 +561,10 @@ $t = new XTemplate($mskin);
 if (!$cfg['disable_polls'] && $ft_poll_id)
 {
 	sed_poll_vote();
-	list($polltitle, $poll_form)=sed_poll_form($ft_poll, sed_url('forums', "m=posts&q=".$q), '', 'forum');
+	$poll_form=sed_poll_form($ft_poll, sed_url('forums', 'm=posts&q='.$q), '', 'forum');
 	$t->assign(array(
-		"POLLS_TITLE" => $polltitle,
-		"POLLS_FORM" => $poll_form,
+		"POLLS_TITLE" => sed_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
+		"POLLS_FORM" => $poll_form['poll_block'],
 	));
 
 	$t->parse("MAIN.POLLS_VIEW");

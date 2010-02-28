@@ -77,11 +77,11 @@ elseif ((int)$id > 0)
 		sed_redirect(sed_url('message', 'msg=404', '', TRUE));
 	}
 	sed_poll_vote();
-	list($polltitle, $poll_form) = sed_poll_form($id);
+	$poll_form = sed_poll_form($id);
 
 	$t->assign(array(
-		"POLLS_TITLE" => $polltitle,
-		"POLLS_FORM" => $poll_form,
+		"POLLS_TITLE" => sed_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
+		"POLLS_FORM" => $poll_form['poll_block'],
 		"POLLS_VIEWALL" => "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>" // TODO to resourse
 	));
 
