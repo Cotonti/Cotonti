@@ -236,6 +236,11 @@ if(!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				$usr['level'] = $sed_groups[$usr['maingrp']]['level'];
 				$usr['profile'] = $row;
 
+				if (!isset($_SESSION['cot_user_id']))
+				{
+					$_SESSION['cot_user_id'] = $usr['id'];
+				}
+
 				if ($usr['lastlog'] + $cfg['timedout'] < $sys['now_offset'])
 				{
 					$sys['comingback']= TRUE;
