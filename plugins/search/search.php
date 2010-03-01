@@ -87,7 +87,7 @@ if($a=='search')
 	// Making query string
 	$sqlsearch = implode("%", $words);
 	$sqlsearch = "%".$sqlsearch."%";
-	
+
 	// String query for addition pages fields.
 	$addfields = trim($cfg['plugin']['search']['addfields']);
 	if(strlen($addfields))
@@ -408,7 +408,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 			$sea_pagdesc = 1;
 			$sea_pagtext = 1;
 		}
-		
+
 		$_SESSION['sea_pagtitle'] = $sea_pagtitle;
 		$_SESSION['sea_pagdesc'] = $sea_pagdesc;
 		$_SESSION['sea_pagtext'] = $sea_pagtext;
