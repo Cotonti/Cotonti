@@ -49,7 +49,7 @@ if ($a=='add')
 	$rpassword2 = sed_import('rpassword2','P','TXT',16);
 	$rcountry = sed_import('rcountry','P','TXT');
 	$rlocation = sed_import('rlocation','P','TXT');
-	$rtimezone = (float) sed_import('rtimezone','P','TXT',5);
+	$rtimezone = sed_import('rtimezone','P','TXT',5);
 	$roccupation = sed_import('roccupation','P','TXT');
 	$rusergender = sed_import('rusergender','P','TXT');
 	$ryear = sed_import('ryear','P','INT');
@@ -60,6 +60,8 @@ if ($a=='add')
 	$rusermsn = sed_import('rusermsn','P','TXT');
 	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
 	$ruseremail = mb_strtolower($ruseremail);
+
+	$rtimezone = is_null($rtimezone) ? $cfg['defaulttimezone'] : (float) $rtimezone;
 
 	// Extra fields
 	foreach($sed_extrafields['users'] as $row)
