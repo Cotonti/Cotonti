@@ -1761,7 +1761,7 @@ function sed_build_timezone($tz)
 
 	$result = 'GMT';
 
-	$result .= sed_declension($tz,$L['Hours']);
+	$result .= sed_declension($tz, $L['Hours']);
 
 	return $result;
 }
