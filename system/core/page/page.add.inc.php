@@ -224,7 +224,7 @@ $pageadd_form_file = <<<HTM
 </select>
 HTM;
 
-if (empty($newpagecat))
+if (empty($newpagecat) && !empty($c))
 {
 	$newpagecat = $c;
 	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
