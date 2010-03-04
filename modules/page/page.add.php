@@ -236,7 +236,7 @@ if (empty($newpagecat) && !empty($c))
 	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
 }
 
-$pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat');
+$pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat', true);
 $newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600, 'long', '_beg');
 $newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600 + 31536000, 'long', '_exp');
 

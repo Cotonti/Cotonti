@@ -16,7 +16,7 @@ $L['cfg_maxwords']= array('Max. words in search query');
 $L['cfg_maxsigns']= array('Max. latters in search query');
 $L['cfg_maxitems']= array('Max. entries in normal search results');
 $L['cfg_minsigns'] = array('Min. signs in query');
-$L['cfg_pageseach'] = array('Enable pages search');
+$L['cfg_pagesearch'] = array('Enable pages search');
 $L['cfg_forumsearch'] = array('Enable forums search');
 $L['cfg_searchurl'] = array('Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
 $L['cfg_addfields']= array('Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"');
@@ -26,7 +26,7 @@ $L['plu_title_all'] = 'Site search';
 $L['plu_subtitle_all'] = "You can make the search more exact by selecting necessary categories and search options only.";
 $L['plu_search_req'] = 'Query';
 $L['plu_search_key'] = 'Find';
-$L['plu_search_example'] = 'E.g. cotonti 7 genesis';
+$L['plu_search_example'] = 'E.g. cotonti 7 siena';
 
 // Title extras
 $L['plu_title_frmtab'] = 'Forums';

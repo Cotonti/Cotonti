@@ -106,7 +106,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-if (($tab == 'pag' || empty($tab))  && !$cfg['disable_page'] && $cfg['plugin']['search']['pageseach'])
+if (($tab == 'pag' || empty($tab))  && !$cfg['disable_page'] && $cfg['plugin']['search']['pagesearch'])
 {
 	// Making the category list
 	$plugin_page_sec_list  = '<select multiple name="rpagsub[]" size="10" style="width:385px">';
@@ -199,7 +199,7 @@ if (!empty($sq))
 
 	$sqlsearch = implode('%', $words);
 	$sqlsearch = '%'.$sqlsearch.'%';
-	if (($tab == 'pag' || empty($tab)) && !$cfg['disable_page'] && $cfg['plugin']['search']['pageseach'] && empty($error_string))
+	if (($tab == 'pag' || empty($tab)) && !$cfg['disable_page'] && $cfg['plugin']['search']['pagesearch'] && empty($error_string))
 	{
 		$where = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
 			"AND page_cat IN ('".sed_sql_prep(implode("','", $rsearch['pag']['sub']))."')" : "AND page_cat IN ('".implode("','", $pag_catauth)."')";

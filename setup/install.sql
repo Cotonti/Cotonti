@@ -493,7 +493,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug','search','2','maxsigns',2,'40','40','20,30,40,50,60,70,80','Maximum signs in query'),
 ('plug','search','3','minsigns',2,'3','3','2,3,4,5','Min. signs in query'),
 ('plug','search','4','maxitems',2,'50','50','15,30,50,80,100,150,200','Maximum results lines for general search'),
-('plug','search','5','pageseach',3,'1','1','','Enable pages search'),
+('plug','search','5','pagesearch',3,'1','1','','Enable pages search'),
 ('plug','search','6','forumsearch',3, '1','1','','Enable forums search'),
 ('plug','tags','1','pages',3,'1','1','','Enable Tags for Pages'),
 ('plug','tags','8','lim_pages',1,'0','0','','Limit of tags in a cloud displayed for pages, 0 is unlimited'),
