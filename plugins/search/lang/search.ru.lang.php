@@ -16,7 +16,7 @@ $L['cfg_maxwords']= array('Максимум поисковых слов');
 $L['cfg_maxsigns']= array('Максимум знаков в поиске');
 $L['cfg_maxitems']= array('Максимум результатов в обычном поиске');
 $L['cfg_minsigns'] = array('Минимум знаков в запросе');
-$L['cfg_pageseach'] = array('Влючить поиск по страницам');
+$L['cfg_pagesearch'] = array('Влючить поиск по страницам');
 $L['cfg_forumsearch'] = array('Включить поиск по форумам');
 $L['cfg_searchurl'] = array('Вид отображения сообщений в форумах, Single - отдельное сообщение на странице, Normal - переход к сообщению при отображении всей темы');
 $L['cfg_addfields']= array('Дополнительные поля страниц для поиска, разделенные запятыми. Например "page_extra1,page_extra2,page_key"');
@@ -26,7 +26,7 @@ $L['plu_title_all'] = "Поиск по сайту";
 $L['plu_subtitle_all'] = "Вы можете конкретизировать поиск, отметив ниже лишь необходимые разделы и параметры.";
 $L['plu_search_req'] = "Запрос";
 $L['plu_search_key'] = "Найти";
-$L['plu_search_example'] = "Например, cotonti 7 genesis";
+$L['plu_search_example'] = "Например, cotonti 7 siena";
 
 // Дополнения в заголовок.
 $L['plu_title_frmtab'] = "Форум";

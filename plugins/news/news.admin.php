@@ -58,7 +58,7 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 
 
 	}
-	$newscat=sed_selectbox_categories($index, 'newsmaincat', true);
+	$newscat=sed_selectbox_categories($index, 'newsmaincat');
 
 	$jj++;
 	$tt-> assign(array(

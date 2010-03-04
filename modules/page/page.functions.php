@@ -16,26 +16,34 @@ function sed_readraw($file)
  *
  * @param string $check Seleced value
  * @param string $name Dropdown name
+ * @param bool $subcatonly Show only subcats of selected category
  * @param bool $hideprivate Hide private categories
  * @return string
  */
-function sed_selectbox_categories($check, $name, $hideprivate = TRUE)
+function sed_selectbox_categories($check, $name, $subcatonly = false, $hideprivate = true)
 {
 	global $db_structure, $usr, $sed_cat, $L;
 
-	$result = "<select name=\"$name\" size=\"1\">";
+	$mtch = $sed_cat[$check]['path'].".";
+	$mtchlen = mb_strlen($mtch);
+
+	$result = '<select name="'.$name.'" size="1">';
 
 	foreach ($sed_cat as $i => $x)
 	{
-		$display = ($hideprivate) ? sed_auth('page', $i, 'W') : TRUE;
+		$display = ($hideprivate) ? sed_auth('page', $i, 'W') : true;
+		if ($display && $subcatonly && !(empty($check)))
+		{
+			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i == $check) ? true : false;
+		}
 
 		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
 		{
-			$selected = ($i == $check) ? "selected=\"selected\"" : '';
-			$result .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
+			$selected = ($i == $check) ? 'selected="selected"' : '';
+			$result .= '<option value="'.$i.'" '.$selected.'> '.$x['tpath'].'</option>';
 		}
 	}
-	$result .= "</select>";
+	$result .= '</select>';
 	return($result);
 }
 
