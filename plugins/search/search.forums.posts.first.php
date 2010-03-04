@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=search
@@ -12,9 +12,9 @@ Order=10
 
 /**
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author oc
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */
 
