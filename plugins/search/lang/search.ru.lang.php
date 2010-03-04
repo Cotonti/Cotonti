@@ -1,12 +1,12 @@
-<?PHP
+<?php
 /**
  * Russian Language File for Search Plugin
  *
  * @package Cotonti
- * @version 0.0.6
- * @author Neocrome, Spartan, Boss
- * @copyright Copyright (c) Cotonti Team 2008-2009
- * @license BSD
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @license BSD License
  */
 
 defined('SED_CODE') or die('Wrong URL.');
@@ -15,24 +15,22 @@ defined('SED_CODE') or die('Wrong URL.');
 $L['cfg_maxwords']= array('Максимум поисковых слов');
 $L['cfg_maxsigns']= array('Максимум знаков в поиске');
 $L['cfg_maxitems']= array('Максимум результатов в обычном поиске');
-$L['cfg_maxitems_ext']= array('Максимум результатов в расширенном поиске');
 $L['cfg_minsigns'] = array('Минимум знаков в запросе');
+$L['cfg_pageseach'] = array('Влючить поиск по страницам');
+$L['cfg_forumsearch'] = array('Включить поиск по форумам');
 $L['cfg_searchurl'] = array('Вид отображения сообщений в форумах, Single - отдельное сообщение на странице, Normal - переход к сообщению при отображении всей темы');
-$L['cfg_showtext']= array('Отображение текста в результатах обычного поиска');
-$L['cfg_showtext_ext']= array('Отображение текста в результатах расширенного поиска');
 $L['cfg_addfields']= array('Дополнительные поля страниц для поиска, разделенные запятыми. Например "page_extra1,page_extra2,page_key"');
 
 // Общие - залоговок, инфо, запрос.
 $L['plu_title_all'] = "Поиск по сайту";
-$L['plu_subtitle_all'] = "Вы можете конкретизировать поиск, отметив ниже лишь необходимые разделы и параметры. Обратите внимание, что общий поиск предоставляет не полные возможности. Выберите поиск по форуму или публикациям, чтобы получить доступ к дополнительным параметрам.";
+$L['plu_subtitle_all'] = "Вы можете конкретизировать поиск, отметив ниже лишь необходимые разделы и параметры.";
 $L['plu_search_req'] = "Запрос";
 $L['plu_search_key'] = "Найти";
-$L['plu_search_example'] = "Например, cotonti 6 genoa";
+$L['plu_search_example'] = "Например, cotonti 7 genesis";
 
 // Дополнения в заголовок.
 $L['plu_title_frmtab'] = "Форум";
 $L['plu_title_pagtab'] = "Публикации";
-$L['plu_title_usetab'] = "Пользователи";
 
 // Переключатели режимов и заголовки результатов.
 $L['plu_tabs_all'] = "Общий поиск";
@@ -56,9 +54,6 @@ $L['plu_last_1_month'] = 'Последний месяц';
 $L['plu_last_3_month'] = 'Последние 3 месяца';
 $L['plu_last_1_year'] = 'Последний год';
 $L['plu_need_datas'] = 'Произвольный диапазон';
-$L['plu_need_dd'] = 'дд';
-$L['plu_need_mm'] = 'мм';
-$L['plu_need_yy'] = 'гггг';
 
 // Параметры - Форум.
 $L['plu_frm_set_sec'] = "Выберите разделы форума";
@@ -84,14 +79,11 @@ $L['plu_pag_search_file'] = "Публикации только с файлами
 // Ошибки.
 $L['plu_querytooshort'] = "Поисковый запрос слишком короткий.";
 $L['plu_toomanywords'] = "Слишком много слов, должно быть не больше";
-$L['plu_notseltopmes'] = "Вы не выбрали область поиска для форума в дополнительных параметрах.";
-$L['plu_notseloption'] = "Вы не выбрали область поиска для публикаций в дополнительных параметрах.";
 $L['plu_noneresult'] = "Ничего не найдено, попробуйте упростить запрос.";
 
 // Результаты.
 $L['plu_result'] = "Результаты поиска";
 $L['plu_found'] = "Найдено";
-$L['plu_moreres'] = "более";
 $L['plu_match'] = "совпадений";
 $L['plu_section'] = "Раздел";
 $L['plu_last_date'] = "Дата обновления";

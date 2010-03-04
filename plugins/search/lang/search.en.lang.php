@@ -1,12 +1,12 @@
-<?PHP
+<?php
 /**
  * English Language File for Search Plugin
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
- * @license BSD
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @license BSD License
  */
 
 defined('SED_CODE') or die('Wrong URL.');
@@ -15,24 +15,22 @@ defined('SED_CODE') or die('Wrong URL.');
 $L['cfg_maxwords']= array('Max. words in search query');
 $L['cfg_maxsigns']= array('Max. latters in search query');
 $L['cfg_maxitems']= array('Max. entries in normal search results');
-$L['cfg_maxitems_ext']= array('Max. entries in advanced search results');
 $L['cfg_minsigns'] = array('Min. signs in query');
+$L['cfg_pageseach'] = array('Enable pages search');
+$L['cfg_forumsearch'] = array('Enable forums search');
 $L['cfg_searchurl'] = array('Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
-$L['cfg_showtext']= array('Display text entries in normal search results');
-$L['cfg_showtext_ext']= array('Display text entries in advanced search results');
 $L['cfg_addfields']= array('Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"');
 
 // Common - title, info, query
 $L['plu_title_all'] = 'Site search';
-$L['plu_subtitle_all'] = "You can make the search more exact by selecting necessary categories and search options only. Please note that &quot;Search All&quot; does not give you all the options. Choose &quot;Forums&quot; or &quot;Pages&quot; for more options.";
+$L['plu_subtitle_all'] = "You can make the search more exact by selecting necessary categories and search options only.";
 $L['plu_search_req'] = 'Query';
 $L['plu_search_key'] = 'Find';
-$L['plu_search_example'] = 'E.g. cotonti 6 genoa';
+$L['plu_search_example'] = 'E.g. cotonti 7 genesis';
 
 // Title extras
 $L['plu_title_frmtab'] = 'Forums';
 $L['plu_title_pagtab'] = 'Pages';
-$L['plu_title_usetab'] = 'Users';
 
 // Mode selectors and result titles
 $L['plu_tabs_all'] = 'All';
@@ -56,9 +54,6 @@ $L['plu_last_1_month'] = 'Last month';
 $L['plu_last_3_month'] = 'Last 3 months';
 $L['plu_last_1_year'] = 'Last year';
 $L['plu_need_datas'] = 'Custom range';
-$L['plu_need_dd'] = 'dd';
-$L['plu_need_mm'] = 'mm';
-$L['plu_need_yy'] = 'yyyy';
 
 // Parameters - forums
 $L['plu_frm_set_sec'] = 'Select forum sections';
@@ -84,14 +79,11 @@ $L['plu_pag_search_file'] = 'Show pages with files only';
 // Error messages
 $L['plu_querytooshort'] = 'The query string is too short';
 $L['plu_toomanywords'] = 'Too many words, limit is set to';
-$L['plu_notseltopmes'] = 'You have not selected forum sections in search options';
-$L['plu_notseloption'] = 'You have not selected page categories in search options';
 $L['plu_noneresult'] = 'Nothing was found. Please try to simplify your query';
 
 // Results
 $L['plu_result'] = 'Search results';
 $L['plu_found'] = 'Found';
-$L['plu_moreres'] = 'more';
 $L['plu_match'] = 'matches';
 $L['plu_section'] = 'Section';
 $L['plu_last_date'] = 'Date updated';

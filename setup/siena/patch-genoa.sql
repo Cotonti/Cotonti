@@ -391,3 +391,11 @@ UPDATE sed_core SET ct_id = '10' WHERE ct_code = 'users';
 
 ALTER TABLE sed_polls ADD COLUMN poll_comcount mediumint(8) unsigned default '0';
 ALTER TABLE sed_polls ADD COLUMN poll_comments tinyint(1) NOT NULL default 1;
+
+/* r1164  Update settings from search plugin */
+DELETE FROM sed_config WHERE config_owner = 'plug' AND config_cat = 'search' AND config_name = 'maxitems_ext';
+DELETE FROM sed_config WHERE config_owner = 'plug' AND config_cat = 'search' AND config_name = 'showtext_ext';
+DELETE FROM sed_config WHERE config_owner = 'plug' AND config_cat = 'search' AND config_name = 'showtext';
+
+INSERT INTO `sed_config` VALUES ('plug', 'search', '5', 'pageseach', 3, '1', '1', '', 'Enable pages search');
+INSERT INTO `sed_config` VALUES ('plug', 'search', '6', 'forumsearch', 3, '1', '1', '', 'Enable forums search');
