@@ -49,9 +49,9 @@
 	<div id="right">
 
 		<!-- IF {PHP.usr.id} == 0 -->
-		<h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.skinlang.forumspost.to} {PHP.L.lis_submitnew}</a></h3>
+		<h3><a href="users.php?m=auth">{PHP.L.Login} {PHP.skinlang.forumspost.to} {PHP.L.Submitnew}</a></h3>
 		<!-- ELSE -->
-		<h3><a href="page.php?m=add">{PHP.L.lis_submitnew}</a></h3>
+		<h3><a href="page.php?m=add">{PHP.L.Submitnew}</a></h3>
 		<!-- ENDIF -->
 
 		<h3><a href="{LIST_CAT_RSS}">{PHP.skinlang.list.rss}</a></h3>
