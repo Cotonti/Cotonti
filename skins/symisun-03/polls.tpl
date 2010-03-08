@@ -59,32 +59,31 @@
 <!-- END: POLL_VIEW_DISABLED -->
 <!-- BEGIN: MAIN -->
 <!-- BEGIN: POLLS_VIEW -->
-<div id="content">
-<div class="padding20">
 <div id="left">
-  <div class="breadcrumb">{PHP.skinlang.list.bread}: <a href="index.php">{PHP.L.Home}</a><a href="polls.php">{PHP.L.Polls}</a> {PHP.L.Poll} #{PHP.id}</div>
-  <h2>{POLLS_TITLE}</h2>
-  {POLLS_FORM}</div>
+	<h1>{POLLS_TITLE}</h1>
+	<p class="breadcrumb">{PHP.skinlang.list.bread}: <a href="index.php">{PHP.L.Home}</a> {PHP.cfg.separator} <a href="polls.php">{PHP.L.Polls}</a> {PHP.cfg.separator} {PHP.L.Poll} #{PHP.id}</p>
+	{POLLS_FORM}
+   	<hr />
+	{POLLS_COMMENTS_DISPLAY}
+</div>
+</div></div>
 <div id="right">
-  <h3><a href="polls.php?id={PHP.id}#com">{PHP.L.Comments}</a></h3>
-  <!-- BEGIN: POLLS_EXTRA -->
-  <h3>{POLLS_VIEWALL}</h3>
-  <!-- END: POLLS_EXTRA -->
-  &nbsp; </div>
+	<h3><a href="polls.php?id={PHP.id}#com">{PHP.L.Comments}</a></h3>
+	<!-- BEGIN: POLLS_EXTRA -->
+	<h3>{POLLS_VIEWALL}</h3>
+	<!-- END: POLLS_EXTRA -->
+	&nbsp;
+</div>
 <!-- END: POLLS_VIEW -->
 <!-- BEGIN: POLLS_VIEWALL -->
-<div id="content">
-  <div class="padding20 noimg admin">
-    <div class="breadcrumb">{PHP.skinlang.list.bread}: <a href="index.php">{PHP.L.Home}</a><a href="polls.php">{PHP.L.Polls}</a></div>
-    <h1>{PHP.skinlang.polls.Allpolls}</h1>
-		<!-- BEGIN: POLL_ROW -->
-		{POLL_DATE} <a href="{POLL_HREF}">{POLL_TEXT}</a> {POLLS_COMMENTS}<br />
-		<!-- END: POLL_ROW -->
-<!-- END: POLLS_VIEWALL -->
-    <br class="clear" />
-    <hr />
-    {POLLS_COMMENTS_DISPLAY} </div>
+<div id="left" style="margin-right:25px" class="noimg">
+	<h1>{PHP.skinlang.polls.Allpolls}</h1>
+	<p class="breadcrumb">{PHP.skinlang.list.bread}: <a href="index.php">{PHP.L.Home}</a> {PHP.cfg.separator} <a href="polls.php">{PHP.L.Polls}</a></p>
+	{POLLS_LIST}
 </div>
+</div></div>
+<!-- END: POLLS_VIEWALL -->
+
 <br class="clear" />
 
 <!-- END: MAIN -->

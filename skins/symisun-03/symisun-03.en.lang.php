@@ -3,9 +3,9 @@
  * English Language File for SymiSun-03 Skin
  *
  * @package Cotonti
- * @version 0.6.3
+ * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -42,8 +42,8 @@ $skinlang['forumsnewtopic']['privatetopic2'] = 'Only forums moderators and you, 
  */
 
 $skinlang['forumspost']['privatetopic'] = 'This topic is private, only moderators and the starter of the topic can read and reply here.';
-$skinlang['forumspost']['Onlinestatus0'] = 'user is offline';	// New in N-0.0.2
-$skinlang['forumspost']['Onlinestatus1'] = 'user is online';	// New in N-0.0.2
+$skinlang['forumspost']['Onlinestatus0'] = ' is offline';	// New in N-0.0.2
+$skinlang['forumspost']['Onlinestatus1'] = ' is online';	// New in N-0.0.2
 $skinlang['forumspost']['permalink'] = 'Permalink';	// SymiSun-03 specific
 $skinlang['forumspost']['updated'] = 'This post was updated by';	// SymiSun-03 specific
 $skinlang['forumspost']['to'] = 'to';	// SymiSun-03 specific
@@ -59,6 +59,7 @@ $skinlang['forumssections']['Markasread'] = 'Mark all posts as read';
 $skinlang['forumssections']['Activity'] = 'Activity';
 $skinlang['forumssections']['FoldAll'] = 'Fold all';
 $skinlang['forumssections']['UnfoldAll'] = 'Unfold all';
+$skinlang['forumssections']['view'] = 'viewing';	// SymiSun-03 specific
 
 /**
  * forums.topics.tpl
@@ -67,7 +68,6 @@ $skinlang['forumssections']['UnfoldAll'] = 'Unfold all';
 $skinlang['forumstopics']['ago'] = 'ago';
 $skinlang['forumstopics']['legend'] = 'Legend';
 $skinlang['forumstopics']['Newtopic'] = 'New topic';
-$skinlang['forumstopics']['Start'] = 'Start a New topic'; // SymiSun-03 specific
 $skinlang['forumstopics']['Newpoll'] = 'New poll';
 $skinlang['forumstopics']['Viewers'] = 'Viewers';
 $skinlang['forumstopics']['Nonewposts'] = 'No new posts';
@@ -81,6 +81,8 @@ $skinlang['forumstopics']['Newpostslocked'] = 'New posts (locked)';
 $skinlang['forumstopics']['Announcment'] = 'Announcement';
 $skinlang['forumstopics']['Newannouncment'] = 'New announcement';
 $skinlang['forumstopics']['Movedoutofthissection'] = 'Moved out of this section';
+$skinlang['forumstopics']['Start'] = 'Start a New topic'; // SymiSun-03 specific
+$skinlang['forumstopics']['Sub'] = 'Subforums'; // SymiSun-03 specific
 
 /**
  * header.tpl
@@ -91,18 +93,16 @@ $skinlang['header']['Welcome'] = 'Welcome!';	// New in N-0.0.1
 $skinlang['header']['user'] = 'User Panel'; // SymiSun-03 specific
 $skinlang['header']['logged'] = 'Logged in as'; // SymiSun-03 specific
 $skinlang['header']['notmember'] = 'Not a member yet?'; // SymiSun-03 specific
-$skinlang['header']['register'] = 'Register'; // SymiSun-03 specific
-$skinlang['header']['login'] = 'Login'; // SymiSun-03 specific
-$skinlang['header']['search'] = 'Site Search'; // SymiSun-03 specific
 $skinlang['header']['navigation'] = 'Navigation'; // SymiSun-03 specific
 $skinlang['header']['account'] = 'My Account'; // SymiSun-03 specific
+$skinlang['header']['rss'] = 'RSS Feed'; // SymiSun-03 specific
 
 /**
  * footer.tpl
  */
 
 $skinlang['footer']['top'] = 'Top Of Page'; // SymiSun-03 specific
-$skinlang['footer']['design'] = 'Designed by <a href="http://symisun.com" title="We digitalize your ambitions">SymiSun<span class="orange">*</span></a>'; // SymiSun-03 specific
+$skinlang['footer']['design'] = 'Web Design by <a href="http://symisun.com" title="We digitalize your ambitions">SymiSun<span class="orange">*</span></a>'; // SymiSun-03 specific
 $skinlang['footer']['valid'] = '
 <a href="http://validator.w3.org/check?uri=referer" class="valid" title="Valid XHTML 1.0 Strict">valid XHTML</a> &nbsp; 
 <a href="http://jigsaw.w3.org/css-validator/check/referer" class="valid" title="Valid CSS 2.1">valid CSS</a>'; // SymiSun-03 specific
@@ -130,9 +130,12 @@ $skinlang['list']['hits'] = 'hits';
 $skinlang['list']['sort'] = 'Sort by'; // SymiSun-03 specific
 $skinlang['list']['title'] = 'title'; // SymiSun-03 specific
 $skinlang['list']['date'] = 'date'; // SymiSun-03 specific
+$skinlang['list']['asc'] = 'ascending'; // SymiSun-03 specific
+$skinlang['list']['desc'] = 'descending'; // SymiSun-03 specific
 $skinlang['list']['bread'] = 'You are here'; // SymiSun-03 specific
 $skinlang['list']['none'] = 'There are no entries here yet.'; // SymiSun-03 specific
 $skinlang['list']['rss'] = 'Subscribe via RSS'; // SymiSun-03 specific
+$skinlang['list']['all'] = 'All entries'; // SymiSun-03 specific
 
 /**
  * page.tpl
@@ -141,10 +144,12 @@ $skinlang['list']['rss'] = 'Subscribe via RSS'; // SymiSun-03 specific
 $skinlang['page']['Submittedby'] = 'Posted by';
 $skinlang['page']['Summary'] = 'Summary';
 $skinlang['page']['Filesize'] = 'Filesize';
-$skinlang['page']['downloaded'] = 'downloaded';	// New in N-0.0.1
+$skinlang['page']['downloaded'] = 'Downloads';	// New in N-0.0.1
 $skinlang['page']['times'] = 'times';	// New in N-0.0.1
 $skinlang['page']['views'] = 'views'; // SymiSun-03 specific
 $skinlang['page']['admin'] = 'Administration'; // SymiSun-03 specific
+$skinlang['page']['update'] = 'Page was updated on '; // SymiSun-03 specific
+$skinlang['page']['members'] = 'Available to members only'; // SymiSun-03 specific
 
 /**
  * page.add.tpl
@@ -201,6 +206,7 @@ $skinlang['pm']['Sendtoarchives'] = 'Send to archives';
 $skinlang['pm']['Selectall'] = 'Select all';
 $skinlang['pm']['Unselectall'] = 'Unselect all';
 $skinlang['pm']['pm'] = 'PM'; // SymiSun-03 specific
+$skinlang['pm']['to'] = 'To'; // SymiSun-03 specific
 
 /**
  * polls.tpl
@@ -242,21 +248,16 @@ $skinlang['usersauth']['goto'] = 'Go to your account'; // SymiSun-03 specific
  */
 
 $skinlang['usersdetails']['Sendprivatemessage'] = 'Send a private message';
-$skinlang['usersdetails']['none'] = 'This user has no signature set.'; // SymiSun-03 specific
 
 /**
  * users.edit.tpl
  */
 
 $skinlang['usersedit']['UserID'] = 'User ID';
-$skinlang['usersedit']['Newpassword'] = 'Set a new password';
-$skinlang['usersedit']['Newpasswordhint'] = '(Leave empty to keep the current password)';
-$skinlang['usersedit']['Hidetheemail'] = 'Always hide the e-mail';
-$skinlang['usersedit']['PMnotify'] = 'PM notify';
-$skinlang['usersedit']['PMnotifyhint'] = '(Notify by e-mail when there\'s a new private message)';
 $skinlang['usersedit']['LastIP'] = 'Last known IP';
 $skinlang['usersedit']['Logcounter'] = 'Log counter';
-$skinlang['usersedit']['Deletethisuser'] = '!Delete this user!';
+$skinlang['usersedit']['Deletethisuser'] = '[X] Delete this user';
+$skinlang['usersedit']['info'] = 'Quick Info'; // SymiSun-03 specific
 
 /**
  * users.profile.tpl
@@ -293,9 +294,11 @@ $skinlang['usersprofile']['current'] = 'Current'; // SymiSun-03 specific
  */
 
 $skinlang['usersregister']['Validemail'] = 'Valid e-mail';
-$skinlang['usersregister']['Validemailhint'] = 'A valid e-mail is required to complete the registration process !';
+$skinlang['usersregister']['Validemailhint'] = 'A valid e-mail is required to complete the registration process.';
 $skinlang['usersregister']['Confirmpassword'] = 'Confirm password';
-$skinlang['usersregister']['Formhint'] = 'Once you\'re registered and logged in, have a look in your profile to set<br />your avatar, signature, ICQ, website, location, timezone, etc.';
+$skinlang['usersregister']['Formhint'] = 'Once you\'re registered and logged in, head over to update profile to set your avatar, signature, personal and contact details, as well as privacy and site settings.';
+$skinlang['usersregister']['Generalhint'] = 'All fields are mandatory.'; // SymiSun-03 specific
+$skinlang['usersregister']['Usernamehint'] = 'Username must be at least 2 chars long.'; // SymiSun-03 specific
 
 /**
  * admin.tpl

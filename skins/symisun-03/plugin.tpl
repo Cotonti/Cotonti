@@ -1,16 +1,17 @@
 <!-- BEGIN: MAIN -->
 
-	<div id="content">
-    	<div class="padding20">
-            
-            <h1>{PLUGIN_TITLE}</h1>
-            
-            <p class="details">{PLUGIN_SUBTITLE}</p>
+			<div id="left" style="margin-right:25px">
 
-			{PLUGIN_BODY}
+				<h1>{PLUGIN_TITLE}</h1>
+
+				<p class="details">{PLUGIN_SUBTITLE}</p>
+				{PLUGIN_BODY}
+
+			</div>
 
 		</div>
 	</div>
+
 	<br class="clear" />
 
 <!-- END: MAIN -->
