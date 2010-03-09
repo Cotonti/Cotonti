@@ -1450,7 +1450,6 @@ class Cache
 /*
  * ================================ Old Cache Subsystem ================================
  */
-// TODO scheduled for complete removal and replacement with new cache system
 
 /**
  * Clears cache item
@@ -1461,7 +1460,7 @@ class Cache
 function sed_cache_clear($name)
 {
 	global $db_cache;
-	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
+	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
 	return(TRUE);
 }
@@ -1474,7 +1473,7 @@ function sed_cache_clear($name)
 function sed_cache_clearall()
 {
 	global $db_cache;
-	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
+	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	sed_sql_query("DELETE FROM $db_cache");
 	return TRUE;
 }
@@ -1504,7 +1503,7 @@ function sed_cache_clearhtml()
 function sed_cache_get($name)
 {
 	global $cfg, $sys, $db_cache;
-	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
+	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
 	if ($row = sed_sql_fetcharray($sql))
 	{
@@ -1525,7 +1524,7 @@ function sed_cache_get($name)
 function sed_cache_getall($auto = 1)
 {
 	global $cfg, $sys, $db_cache;
-	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
+	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
 	if ($auto)
 	{
@@ -1557,7 +1556,7 @@ function sed_cache_getall($auto = 1)
 function sed_cache_store($name, $value, $expire, $auto = "1")
 {
 	global $db_cache, $sys, $cfg;
-	trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
+	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	if (!$cfg['cache']) return(FALSE);
 	$sql = sed_sql_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".sed_sql_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
 	return(TRUE);

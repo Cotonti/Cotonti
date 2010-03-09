@@ -399,3 +399,8 @@ DELETE FROM sed_config WHERE config_owner = 'plug' AND config_cat = 'search' AND
 
 INSERT INTO `sed_config` VALUES ('plug', 'search', '5', 'pagesearch', 3, '1', '1', '', 'Enable pages search');
 INSERT INTO `sed_config` VALUES ('plug', 'search', '6', 'forumsearch', 3, '1', '1', '', 'Enable forums search');
+
+/* r1168 Fix for comments plugin and cache cleanup */
+DELETE FROM `sed_plugins` WHERE `pl_code` = 'comedit';
+
+TRUNCATE `sed_cache`;

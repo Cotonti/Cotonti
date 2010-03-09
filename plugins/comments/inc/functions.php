@@ -320,4 +320,19 @@ function sed_get_comcount($code)
 	}
 }
 
+/**
+ * New comments count for admin page
+ *
+ * @param string $timeback Datetime to count from
+ * @return int
+ */
+function sed_get_newcomments($timeback)
+{
+	global $db_com;
+
+	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'");
+	$newcomments = sed_sql_result($sql, 0, "COUNT(*)");
+	return $newcomments;
+}
+
 ?>
