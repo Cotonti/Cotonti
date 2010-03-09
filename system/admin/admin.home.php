@@ -36,7 +36,7 @@ if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 //Version Checking
 if ($cfg['check_updates'])
 {
-	$update_info = $cot_cache->db->get('update_info', 'admin');
+	$update_info = sed_cache_get('update_info');
 	if (!$update_info)
 	{
 		if (ini_get('allow_url_fopen'))
@@ -45,7 +45,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				$cot_cache->db->store('update_info', $update_info, 'admin', 86400);
+				sed_cache_store('update_info', $update_info, 86400, false);
 			}
 		}
 		elseif (function_exists('curl_init'))
@@ -57,7 +57,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				$cot_cache->db->store('update_info', $update_info, 'admin', 86400);
+				sed_cache_store('update_info', $update_info, 86400, false);
 			}
 			curl_close($curl);
 		}
@@ -122,8 +122,10 @@ if (!$cfg['disableactivitystats'])
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
 	$newposts = sed_sql_result($sql, 0, "COUNT(*)");
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'");
-	$newcomments = sed_sql_result($sql, 0, "COUNT(*)");
+	if (function_exists('sed_get_newcomments'))
+	{
+		$newcomments = sed_get_newcomments($timeback);
+	}
 
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
 	$newpms = sed_sql_result($sql, 0, "COUNT(*)");

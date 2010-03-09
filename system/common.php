@@ -432,7 +432,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 if (!$cfg['disablehitstats'])
 {
-	if ($cot_cache->mem && $cot_cache->mem->exists('maxusers', 'system'))
+	if ($cot_cache && $cot_cache->mem && $cot_cache->mem->exists('maxusers', 'system'))
 	{
 		$maxusers = $cot_cache->mem->get('maxusers', 'system');
 	}
@@ -440,7 +440,7 @@ if (!$cfg['disablehitstats'])
 	{
 		$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
 		$maxusers = (int) @sed_sql_result($sql, 0, 0);
-		$cot_cache->mem && $cot_cache->mem->store('maxusers', $maxusers, 'system', 0);
+		$cot_cache && $cot_cache->mem && $cot_cache->mem->store('maxusers', $maxusers, 'system', 0);
 	}
 
 	if ($maxusers < $sys['whosonline_all_count'])
@@ -453,10 +453,6 @@ if (!$cfg['disablehitstats'])
 /* ======== Language ======== */
 $lang = $usr['lang'];
 require_once sed_langfile('main', 'core');
-
-/* ======== Who's online part 2 ======== */
-
-$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.sed_declension($sys['whosonline_vis_count'], $Ls['Guests']);
 
 /* ======== Skin ======== */
 

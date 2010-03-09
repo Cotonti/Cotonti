@@ -2495,7 +2495,7 @@ function sed_stamp2date($stamp)
  */
 function sed_online_update()
 {
-	global $cfg, $sys, $usr, $out, $db_online, $cot_cache, $sed_usersonline, $location;
+	global $cfg, $sys, $usr, $out, $db_online, $cot_cache, $sed_usersonline, $location, $Ls;
 	if (!$cfg['disablewhosonline'])
 	{
 		if ($location != $sys['online_location']
@@ -2562,6 +2562,7 @@ function sed_online_update()
 			}
 		}
 		$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
+		$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.sed_declension($sys['whosonline_vis_count'], $Ls['Guests']);
 	}
 }
 
