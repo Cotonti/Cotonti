@@ -9,10 +9,11 @@ INSERT INTO `sed_plugins` (`pl_hook` , `pl_code` , `pl_part` , `pl_title` , `pl_
 UPDATE `sed_config` SET `config_default` = '1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100' WHERE `config_owner` = 'plug' AND `config_cat` = 'news' AND   `config_name` = 'maxpages' LIMIT 1 ;
 UPDATE `sed_config` SET `config_name` = 'syncpagination' WHERE `config_owner` = 'plug' AND `config_cat` = 'news' AND `config_name` = 'addpagination' LIMIT 1 ;
 
-/* r923 add columns and config option for new PFS system */
+/* r923 add columns and config option for new PFS system 
 ALTER TABLE sed_pfs_folders ADD pff_parentid INT(11) AFTER pff_id;
 ALTER TABLE sed_pfs_folders ADD pff_path VARCHAR(255) AFTER pff_desc;
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('core', 'pfs', '06', 'flashupload', 3, '0', '', '');
+*/
 
 /* r930 Reinstall recentitems plugin */
 DELETE FROM `sed_plugins` WHERE `pl_code` = 'recentitems';
@@ -404,3 +405,9 @@ INSERT INTO `sed_config` VALUES ('plug', 'search', '6', 'forumsearch', 3, '1', '
 DELETE FROM `sed_plugins` WHERE `pl_code` = 'comedit';
 
 TRUNCATE `sed_cache`;
+
+/* r1169 a fix for config options type */
+UPDATE `sed_config` SET `config_type` = 1
+  WHERE `config_name` IN ('th_x', 'th_y', 'th_border', 'th_colorbg', 'th_colortext', 'av_maxsize', 'av_maxx',
+    'av_maxy', 'usertextmax', 'sig_maxsize', 'sig_maxx', 'sig_maxy', 'ph_maxsize', 'ph_maxx', 'ph_maxy',
+	'smtp_address', 'smtp_port', 'smtp_login', 'smtp_password');
