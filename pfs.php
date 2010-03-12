@@ -31,23 +31,9 @@ require_once sed_incfile('uploads');
 
 switch($m)
 {
-	case 'admin':
-		require_once sed_incfile($m, 'pfs');
-	break;
-
 	case 'view':
-		require_once sed_incfile($m, 'pfs');
-	break;
-
 	case 'edit':
-		require_once sed_incfile($m, 'pfs');
-	break;
-
 	case 'editfolder':
-		require_once sed_incfile($m, 'pfs');
-	break;
-
-	case 'system':
 		require_once sed_incfile($m, 'pfs');
 	break;
 
