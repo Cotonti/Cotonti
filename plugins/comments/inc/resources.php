@@ -9,7 +9,9 @@
  * @license BSD
  */
 
-$R['icon_comments'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-comment.gif" alt="'.$L['Comments'].'" />';
-$R['icon_comments_cnt'] = '<img class="icon" src="skins/'.$skin.'/img/system/icon-comment.gif" alt="'.$L['Comments'].'" /> ({$cnt})';
+$R['icon_comments'] = 
+	'<img class="icon" src="images/iconpacks/default/comments.png" alt="'.$L['Comments'].'" />';
+$R['icon_comments_cnt'] = 
+	'<img class="icon" src="images/iconpacks/default/comments.png" alt="'.$L['Comments'].'" /> ({$cnt})';
 
 ?>
