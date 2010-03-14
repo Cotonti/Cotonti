@@ -84,7 +84,7 @@ $skinlang['list']['linesinthissection'] = 'Lines in this section';
 $skinlang['page']['Submittedby'] = 'Submitted by';
 $skinlang['page']['Summary'] = 'Summary';
 $skinlang['page']['Filesize'] = 'Filesize';
-$skinlang['page']['downloaded'] = 'downloaded'; // New in N-0.0.1
+$skinlang['page']['downloaded'] = 'Downloaded'; // New in N-0.0.1
 $skinlang['page']['times'] = 'times'; // New in N-0.0.1
 
 /**

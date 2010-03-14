@@ -1,45 +1,28 @@
 <!-- BEGIN: MAIN -->
 
 <table class="cells">
-
-    <tr>
-        <td class="coltop">
-        {PHP.L.Date}</td>
-        <td class="coltop">
-        {PHP.L.Category}</td>
-    </tr>
-
-    <!-- BEGIN: PAGE_ROW -->
-
-    <tr>
-
-
-        <td class="{PAGE_ROW_ODDEVEN}">
-            {PAGE_ROW_DATE}
-        </td>
-
-
-        <td class="centerall {PAGE_ROW_ODDEVEN}">
-            {PAGE_ROW_CATPATH_SHORT}
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" class="{PAGE_ROW_ODDEVEN}">
-            <span style="float:right">{PAGE_ROW_COMMENTS}</span>{PAGE_ROW_SHORTTITLE}
-        </td>
-
-
-    </tr>
-
-    <!-- END: PAGE_ROW -->
-    <!-- BEGIN: NO_PAGES_FOUND -->
-    <tr>
-        <td colspan="2">
-            <div class="error">{PHP.L.Rec_forum_nonew}</div>
-        </td>
-    </tr>
-    <!-- END: NO_PAGES_FOUND -->
+	<tr>
+		<td class="coltop width5">&nbsp;</td>
+		<td class="coltop width55">{PHP.L.Page}</td>
+		<td class="coltop width25">{PHP.L.Category}</td>
+		<td class="coltop width15">{PHP.L.Date}</td>
+	</tr>
+<!-- BEGIN: PAGE_ROW -->
+	<tr>
+		<td class="centerall {PAGE_ROW_ODDEVEN}"><img src="skins/{PHP.skin}/img/icons/page.png" alt="" /></td>
+		<td class="{PAGE_ROW_ODDEVEN}">
+			<p class="strong"><a href="{PAGE_ROW_URL}">{PAGE_ROW_SHORTTITLE} ({PAGE_ROW_COMMENTS})</a></p>
+			<!-- IF {PAGE_ROW_DESC} --><p class="small">{PAGE_ROW_DESC}</p><!-- ENDIF -->
+		</td>
+		<td class="centerall {PAGE_ROW_ODDEVEN}">{PAGE_ROW_CATPATH_SHORT}</td>
+		<td class="centerall {PAGE_ROW_ODDEVEN}">{PAGE_ROW_DATE}</td>
+	</tr>
+<!-- END: PAGE_ROW -->
+<!-- BEGIN: NO_PAGES_FOUND -->
+	<tr>
+		<td colspan="2"><div class="error">{PHP.L.Rec_forum_nonew}</div></td>
+	</tr>
+<!-- END: NO_PAGES_FOUND -->
 </table>
-
 
 <!-- END: MAIN -->
