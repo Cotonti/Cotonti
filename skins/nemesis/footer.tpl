@@ -5,9 +5,9 @@
 	<div id="footer">
 		<ul class="column">
 			<li><strong>Stay tuned!</strong></li>
-			<li><img src="skins/{PHP.skin}/img/social/rss.png" alt="" style="vertical-align:-4px; margin-right:5px;" /><a href="rss.php">RSS</a></li>
-			<li><img src="skins/{PHP.skin}/img/social/rss.png" alt="" style="vertical-align:-4px; margin-right:5px;" /><a href="rss.php?c=forums">RSS (forums)</a></li>
-			<li><img src="skins/{PHP.skin}/img/social/twitter.png" alt="" style="vertical-align:-4px; margin-right:5px;" /><a href="http://twitter.com/seditio">Follow us on Twitter</a></li>
+			<li>{PHP.R.icon_rss} <a href="rss.php">RSS</a></li>
+			<li>{PHP.R.icon_rss} <a href="rss.php?c=forums"> RSS (forums)</a></li>
+			<li>{PHP.R.icon_twitter} <a href="http://twitter.com/seditio">Follow us on Twitter</a></li>
 		</ul>
 		<ul class="column">
 			<li><strong>Navigation</strong></li>

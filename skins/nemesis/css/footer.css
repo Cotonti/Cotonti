@@ -6,5 +6,6 @@
 #footer strong		{ color:#a1b3aa; text-shadow:1px 1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
 
 #footer ul 				{ width:200px; }
+#footer ul  img			{ vertical-align:-4px; }
 #footer ul#account		{ width:420px; }
 #footer ul#account img	{ margin-top:3px; }
