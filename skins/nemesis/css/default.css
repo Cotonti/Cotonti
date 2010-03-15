@@ -34,28 +34,28 @@ hr	{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
 h2	{ color:#a01517; font-size:1.1em; text-shadow:0 1px 0 #fff; margin-bottom:15px; padding:8px 8px 8px 40px; background-color:#ddd; background-position:10px 9px; background-repeat: no-repeat; }
 h3	{ font-size:1.1em; font-weight:bold; margin:10px 0 5px; }
 
-.admin		{ background-image:url(../img/icons/prefs.png); }
-.comments	{ background-image:url(../img/icons/comments.png); }
-.folder		{ background-image:url(../img/icons/folder.png); }
-.forums		{ background-image:url(../img/icons/forums.png); }
-.info		{ background-image:url(../img/icons/info.png); }
-.news		{ background-image:url(../img/icons/news.png); }
-.online		{ background-image:url(../img/icons/online.png); }
-.page		{ background-image:url(../img/icons/page.png); }
-.pfs		{ background-image:url(../img/icons/pfs.png); }
-.plugin		{ background-image:url(../img/icons/plugin.png); }
-.polls		{ background-image:url(../img/icons/polls.png); }
-.prefs		{ background-image:url(../img/icons/prefs.png); }
-.queue		{ background-image:url(../img/icons/update.png); }
-.search		{ background-image:url(../img/icons/search.png); }
-.stats		{ background-image:url(../img/icons/stats.png); }
-.tags		{ background-image:url(../img/icons/tags.png); }
-.users		{ background-image:url(../img/icons/users.png); }
-.warning	{ background-image:url(../img/icons/warning.png); }
+.admin		{ background-image:url(/images/iconpacks/default/prefs.png); }
+.comments	{ background-image:url(/images/iconpacks/default/comments.png); }
+.folder		{ background-image:url(/images/iconpacks/default/folder.png); }
+.forums		{ background-image:url(/images/iconpacks/default/forums.png); }
+.info		{ background-image:url(/images/iconpacks/default/info.png); }
+.news		{ background-image:url(/images/iconpacks/default//news.png); }
+.online		{ background-image:url(/images/iconpacks/default//online.png); }
+.page		{ background-image:url(/images/iconpacks/default/page.png); }
+.pfs		{ background-image:url(/images/iconpacks/default/pfs.png); }
+.plugin		{ background-image:url(/images/iconpacks/default/plugin.png); }
+.polls		{ background-image:url(/images/iconpacks/default/polls.png); }
+.prefs		{ background-image:url(/images/iconpacks/default/prefs.png); }
+.queue		{ background-image:url(/images/iconpacks/default/update.png); }
+.search		{ background-image:url(/images/iconpacks/default/search.png); }
+.stats		{ background-image:url(/images/iconpacks/default/stats.png); }
+.tags		{ background-image:url(/images/iconpacks/default/tags.png); }
+.users		{ background-image:url(/images/iconpacks/default/users.png); }
+.warning	{ background-image:url(/images/iconpacks/default/warning.png); }
 
 .error, .help	{ margin:20px 0; padding:10px 50px; background-position:15px 9px; background-repeat:no-repeat; }
-.error		{ color:#d8000c; background-color:#ffbaba; background-image:url(../img/icons/error.png); border:1px solid #d8000c; }
-.help		{ color:#00529b; background-color:#bde5f8; background-image:url(../img/icons/help.png); border:1px solid #00529b; }
+.error		{ color:#d8000c; background-color:#ffbaba; background-image:url(/images/iconpacks/default/error.png); border:1px solid #d8000c; }
+.help		{ color:#00529b; background-color:#bde5f8; background-image:url(/images/iconpacks/default/help.png); border:1px solid #00529b; }
 
 /* 4. Tables
 -------------------------------------------------- */
@@ -221,15 +221,14 @@ input, select			{ padding:2px; }
 
 #magnifier		{ height:30px; width:310px; position:absolute; left:650px; top:75px; }
 #magnifier #s1	{ float:left; padding:6px 10px; border:0; height:18px; line-height:18px; width:240px; background:#fff; }
-#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:30px; width:40px; border:0; background:#fff url(../img/icons/search.png) no-repeat 50% 50%; cursor:pointer; }
+#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:30px; width:40px; border:0; background:#fff url(/images/iconpacks/default/search.png) no-repeat 50% 50%; cursor:pointer; }
 
 .search-hl      { font-weight:bold; padding:0 2px; background:yellow; }
 
 /* 15. Lists
 -------------------------------------------------- */
 
-ul.bullets li	{ padding-left:25px; background:url(../img/lists/bullets.png) no-repeat 5px 2px; }
-ul.pages li	{ padding-left:25px; background:url(../img/lists/pages.png) no-repeat 5px 3px; }
+ul.bullets li	{ padding-left:25px; background:url(../img/bullets.png) no-repeat 5px 2px; }
 
 ol 		{ margin-left:20px; list-style-type:decimal; }
 
