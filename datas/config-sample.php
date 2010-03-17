@@ -34,6 +34,7 @@ $cfg['mainurl'] = 'http://localhost';
 
 $cfg['defaultskin'] = 'sed-light';	// Default skin code. Be SURE it's pointing to a valid folder in ./skins/... !!
 $cfg['defaulttheme'] = 'sed-light';	// Default theme, only name, not like skinname.css. Be SURE it's pointing to a valid folder in ./skins/defaultskin/... !!
+$cfg['defaulticons'] = 'default';	// Default icon pack
 $cfg['defaultlang'] = 'en';			// Default language code
 $cfg['enablecustomhf'] = FALSE;		// To enable header.$location.tpl and footer.$location.tpl
 
