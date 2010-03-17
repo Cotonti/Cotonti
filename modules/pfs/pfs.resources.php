@@ -19,20 +19,20 @@ $R['pfs_link_thumbnail'] =
  */
 
 $R['pfs_icon_gallery'] = 
-	'<img class="icon" src="images/iconpacks/default/gallery.png" alt="'.$L['Gallery'].'" />';
+	'<img class="icon" src="images/icons/default/gallery.png" alt="'.$L['Gallery'].'" />';
 $R['pfs_icon_folder'] = 
-	'<img class="icon" src="images/iconpacks/default/folder.png" alt="'.$L['Folder'].'" />';
+	'<img class="icon" src="images/icons/default/folder.png" alt="'.$L['Folder'].'" />';
 
 /**
  * Image / Thumb / Link Insert Icons
  */
 
 $R['pfs_icon_pastefile'] = 
-	'<img class="icon" src="images/iconpacks/default/link.png" title="'.$L['pfs_pastefile'].'" />';
+	'<img class="icon" src="images/icons/default/link.png" title="'.$L['pfs_pastefile'].'" />';
 $R['pfs_icon_pasteimage'] = 
-	'<img class="icon" src="images/iconpacks/default/image.png" title="'.$L['pfs_pasteimage'].'" />';
+	'<img class="icon" src="images/icons/default/image.png" title="'.$L['pfs_pasteimage'].'" />';
 $R['pfs_icon_pastethumb'] = 
-	'<img class="icon" src="images/iconpacks/default/thumbnail.png" title="'.$L['pfs_pastethumb'].'" />';
+	'<img class="icon" src="images/icons/default/thumbnail.png" title="'.$L['pfs_pastethumb'].'" />';
 
 /**
  * Image / Thumb / Link Add Icons

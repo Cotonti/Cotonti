@@ -501,6 +501,16 @@ $theme = $usr['theme'];
 require_once $cfg['system_dir'].'/resources.php';
 // Skin resources
 require_once './skins/'.$usr['skin'].'/'.$usr['skin'].'.php';
+// Iconpack
+if (empty($cfg['defaulticons']))
+{
+	$cfg['defaulticons'] = 'default';
+}
+if (empty($usr['icons']))
+{
+	$usr['icons'] = $cfg['defaulticons'];
+}
+require_once './images/icons/' . $usr['icons'] . '/resources.php';
 
 $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
 
