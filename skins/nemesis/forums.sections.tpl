@@ -5,21 +5,22 @@
 			<table class="cells">
 				<thead>
 				<tr>
-					<td class="coltop" class="width5">&nbsp;</td>
-					<td class="coltop" class="width45">
+					<td class="coltop" class="width10">&nbsp;</td>
+					<td class="coltop" class="width40">
 						<a href="forums.php?c=fold#top">{PHP.skinlang.forumssections.FoldAll}</a> / 
 						<a href="forums.php?c=unfold#top">{PHP.skinlang.forumssections.UnfoldAll}</a>
 					</td>
-					<td class="coltop" class="width30">{PHP.L.Lastpost}</td>
+					<td class="coltop" class="width20">{PHP.L.Lastpost}</td>
 					<td class="coltop" class="width10">{PHP.L.Topics}</td>
 					<td class="coltop" class="width10">{PHP.L.Posts}</td>
+					<td class="coltop" class="width10">{PHP.L.Activity}</td>
 				</tr>
 				</thead>
 				<!-- BEGIN: FORUMS_SECTIONS_ROW -->
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_CAT -->
 				<tbody id="{FORUMS_SECTIONS_ROW_CAT_CODE}">
 				<tr>
-					<td class="odd strong" colspan="5" class="forumsection">
+					<td class="odd strong" colspan="6" class="forumsection">
 						{FORUMS_SECTIONS_ROW_CAT_TITLE}
 					</td>
 				</tr>
@@ -46,6 +47,7 @@
 					</td>
 					<td class="centerall">{FORUMS_SECTIONS_ROW_TOPICCOUNT}</td>
 					<td class="centerall">{FORUMS_SECTIONS_ROW_POSTCOUNT}</td>
+					<td class="centerall">{FORUMS_SECTIONS_ROW_ACTIVITY}</td>
 				</tr>
 				<!-- END: FORUMS_SECTIONS_ROW_SECTION -->
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_CAT_FOOTER -->

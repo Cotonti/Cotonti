@@ -33,7 +33,7 @@
 		<!-- END: USER -->
 		</ul>
 	</div>
-	<p class="margin10 textcenter">&copy; 2010 seditio.by All rights reserved<span class="spaced">|</span>{FOOTER_COPYRIGHT}</p>
+	<p class="margin10 textcenter">{FOOTER_COPYRIGHT}</p>
 
 	<div id="magnifier">
 		<form id="search" action="plug.php?e=search" method="post">

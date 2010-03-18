@@ -18,6 +18,7 @@ defined('SED_CODE') or die('Wrong URL.');
 $L['Access'] = 'Доступ';
 $L['Action'] = 'Действие';
 $L['Active'] = 'Активно';
+$L['Activity'] = 'Активность';
 $L['Add'] = 'Добавить';
 $L['Added'] = 'Добавлено'; // New in N-0.1.0
 $L['Admin'] = 'Администратор';
