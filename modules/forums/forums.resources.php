@@ -32,7 +32,7 @@ $R['frm_icon_posts_sticky_locked'] =
  */
 
 $R['frm_icon_section_activity'] = 
-	'<img class="icon" src="images/icons/default/activity{$secact_num}.png" alt="" />';
+	'<img class="icon" src="modules/forums/img/activity{$secact_num}.png" alt="" />';
 $R['frm_icon_topic'] = 
 	'<img class="icon" src="images/icons/default/{$icon}.png" alt="" />';	// ???
 $R['frm_icon_topic_t'] = 

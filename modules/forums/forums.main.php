@@ -81,7 +81,7 @@ if (!$sed_sections_act)
     $cot_cache && $cot_cache->db->store('sed_sections_act', $sed_sections_act, 'system', 600);
 }
 
-$cot_cache && $sed_sections_vw = $cot_cache->mem->get('sections_wv', 'forums');
+$cot_cache && $cot_cache->mem && $sed_sections_vw = $cot_cache->mem->get('sections_wv', 'forums');
 if (!$sed_sections_vw)
 {
     $sqltmp = sed_sql_query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
@@ -90,7 +90,7 @@ if (!$sed_sections_vw)
     {
         $sed_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
     }
-    $cot_cache &&$cot_cache->mem->store('sections_vw', $sed_sections_vw, 'forums', 120);
+    $cot_cache && $cot_cache->mem && $cot_cache->mem->store('sections_vw', $sed_sections_vw, 'forums', 120);
 }
 
 unset($pcat);
