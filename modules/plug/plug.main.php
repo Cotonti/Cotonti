@@ -137,7 +137,7 @@ elseif (!empty($o))
 		{
 			if ($k['pl_code'] == $o)
 			{
-				$extp[$i] = $k;
+				$extp[] = $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
 			}
 		}
 	}
