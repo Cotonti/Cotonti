@@ -317,7 +317,7 @@ while ($row1 = sed_sql_fetcharray($sql1))
 $jumpbox .= "</select>";
 
 if (empty($d))
-{ 
+{
 	$d = '0';
 }
 
@@ -504,7 +504,7 @@ while ($fsn = sed_sql_fetcharray($sqql))
 	$catnum++;
 }
 if ($catnum>1)
-{ 
+{
 	$t->parse("MAIN.FORUMS_SECTIONS");
 }
 
@@ -575,7 +575,7 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['ft_title'] = $L['Poll'].": ".$row['ft_title'];
 	}
 
-	if ($row['ft_postcount']>$cfg['maxtopicsperpage'])
+	if ($row['ft_postcount']>$cfg['maxpostsperpage'])
 	{
 		/*$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
 			if($row['ft_maxpages'] > 5)
@@ -589,7 +589,7 @@ while ($row = sed_sql_fetcharray($sql))
 				$last_page = '';
 			}*/
 		$pn_q = $row['ft_movedto'] > 0 ? $row['ft_movedto'] : $row['ft_id'];
-		$pn = sed_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['maxtopicsperpage'], 'd');
+		$pn = sed_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['maxpostsperpage'], 'd');
 		$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . $pn['main'] . $pn['last'] . '</span>';
 	}
 
