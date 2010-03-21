@@ -2856,12 +2856,13 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'rel' => $rel,
 			'num' => $last_n + 1
 		));
-		$lastn = sed_rc('link_pagenav_main', array(
+   		$lastn  = (($last +  $perpage)<$totalpages) ?
+		sed_rc('link_pagenav_main', array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
-			'num' => $last_n + 1
-		));
+			'num' => $last_n / $perpage + 1
+		)): FALSE;
 	}
 
 	return array(
