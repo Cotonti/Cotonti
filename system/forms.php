@@ -110,7 +110,7 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 /**
  * Renders a dropdown
  *
- * @param string $chosen Seleced value
+ * @param mixed $chosen Seleced value (or values array for mutli-select)
  * @param string $name Dropdown name
  * @param array $values Options available
  * @param array $titles Titles for options
@@ -121,7 +121,6 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '')
 {
 	global $R;
-	$chosen = trim($chosen);
 	if (!is_array($values))
 	{
 		$values = explode(',', $values);
@@ -132,6 +131,7 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = sed_rc_attr_string($attrs);
+	$multi = is_array($chosen) && isset($input_attrs['multiple']);
 	$result = sed_rc('input_select_begin', array('name' => $name, 'attrs' => $input_attrs));
 	$selected = (is_null($chosen) || $chosen === '' || $chosen=='00') ? ' selected="selected"' : '';
 	if ($add_empty)
@@ -145,7 +145,7 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	foreach ($values as $k => $x)
 	{
 		$x = trim($x);
-		$selected = ($x == $chosen) ? ' selected="selected"' : '';
+		$selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
 		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
 		$result .= sed_rc('input_option', array(
 			'value' => htmlspecialchars($x),
@@ -180,9 +180,10 @@ function sed_selectbox_countries($chosen, $name)
  * @param string $mode Display mode: 'short' or complete
  * @param string $ext Variable name suffix
  * @param int $max_year Max. year possible
+ * @param int $min_year Min. year possible
  * @return string
  */
-function sed_selectbox_date($utime, $mode, $ext = '', $max_year = 2030)
+function sed_selectbox_date($utime, $mode, $ext = '', $max_year = 2030, $min_year = 1902)
 {
 	global $L, $R;
 	if ($utime == 0)
@@ -207,7 +208,7 @@ function sed_selectbox_date($utime, $mode, $ext = '', $max_year = 2030)
 	$months[11] = $L['November'];
 	$months[12] = $L['December'];
 
-	$result = sed_selectbox($s_year, "ryear$ext", range(1902, $max_year));
+	$result = sed_selectbox($s_year, "ryear$ext", range($min_year, $max_year));
 	$result .= sed_selectbox($s_month, "rmonth$ext", array_keys($months), array_values($months));
 	$result .= sed_selectbox($s_day, "rday$ext", range(1, 31));
 
