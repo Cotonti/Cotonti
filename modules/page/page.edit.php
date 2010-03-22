@@ -70,8 +70,8 @@ if ($a == 'update')
 
 	$rpagedelete = sed_import('rpagedelete', 'P', 'BOL');
 
-	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing']."<br />" : '';
-	$error_string .= (mb_strlen($rpagetitle) < 2) ? $L['pag_titletooshort']."<br />" : '';
+	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing'] . $R['code_error_separator'] : '';
+	$error_string .= (mb_strlen($rpagetitle) < 2) ? $L['pag_titletooshort'] . $R['code_error_separator'] : '';
 
 	if ($rpagefile == 0 && !empty($rpageurl))
 	{
@@ -257,10 +257,6 @@ $sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 sed_die(sed_sql_numrows($sql) == 0);
 $pag = sed_sql_fetcharray($sql);
 
-$pag['page_date'] = sed_selectbox_date($pag['page_date'] + $usr['timezone'] * 3600,'long');
-$pag['page_begin'] = sed_selectbox_date($pag['page_begin'] + $usr['timezone'] * 3600, 'long', '_beg');
-$pag['page_expire'] = sed_selectbox_date($pag['page_expire'] + $usr['timezone'] * 3600, 'long', '_exp');
-
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
 
 /* === Hook === */
@@ -271,52 +267,6 @@ foreach ($extp as $pl)
 }
 /* ===== */
 sed_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);
-
-
-$page_form_delete = "<input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"rpagedelete\" value=\"0\" checked=\"checked\" />".$L['No']; // TODO - to resorses
-$page_form_categories = sed_selectbox_categories($pag['page_cat'], 'rpagecat');
-
-$page_form_type = "<select name=\"rpagetype\" size=\"1\">";
-$selected0 = ($pag['page_type']==0) ? "selected=\"selected\"" : '';
-$selected1 = ($pag['page_type']==1) ? "selected=\"selected\"" : '';
-$selected2 = ($pag['page_type']==2 && $usr['maingrp']==5) ? "selected=\"selected\"" : '';
-$page_form_type .= "<option value=\"0\" $selected0>".$L['Default']."</option>";
-$page_form_type .= "<option value=\"1\" $selected1>HTML</option>";
-$page_form_type .= ($usr['maingrp']==5 && $cfg['allowphp_pages'] && $cfg['allowphp_override']) ? "<option value=\"2\" $selected2>PHP</option>" : '';
-$page_form_type .= "</select>";
-
-switch ($pag['page_file'])
-{
-	case 1:
-		$sel0 = '';
-		$sel1 = ' selected="selected"';
-		$sel2 = '';
-	break;
-
-	case 2:
-		$sel0 = '';
-		$sel1 = '';
-		$sel2 = ' selected="selected"';
-	break;
-
-	default:
-		$sel0 = ' selected="selected"';
-		$sel1 = '';
-		$sel2 = '';
-	break;
-}
-$page_form_file = <<<HTM
-<select name="rpagefile">
-<option value="0"$sel0>{$L['No']}</option>
-<option value="1"$sel1>{$L['Yes']}</option>
-<option value="2"$sel2>{$L['Members_only']}</option>
-</select>
-HTM;
-// TODO - to resources
-$pfs = sed_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
-$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
-$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';
-$pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'update', 'rpageurl', $L['SFS']) : '';
 
 $title_params = array(
 	'TITLE' => $L['paged_title'],
@@ -346,6 +296,32 @@ if (!empty($error_string))
 	$t->parse("MAIN.PAGEEDIT_ERROR");
 }
 
+require_once sed_incfile('forms');
+
+$pag['page_date'] = sed_selectbox_date($pag['page_date'] + $usr['timezone'] * 3600,'long');
+$pag['page_begin'] = sed_selectbox_date($pag['page_begin'] + $usr['timezone'] * 3600, 'long', '_beg');
+$pag['page_expire'] = sed_selectbox_date($pag['page_expire'] + $usr['timezone'] * 3600, 'long', '_exp');
+
+$page_form_delete = sed_radiobox(0, 'rpagedelete', array(1, 0), array($L['Yes'], $L['No']));
+$page_form_categories = sed_selectbox_categories($pag['page_cat'], 'rpagecat');
+
+$page_type_options = array('0' => $L['Default'], '1' => 'HTML');
+if ($usr['maingrp'] == 5 && $cfg['allowphp_pages'] && $cfg['allowphp_override'])
+{
+	$page_type_options += array('2' => 'PHP');
+}
+$page_form_type = sed_selectbox($pag['page_type'], 'rpagetype', array_keys($page_type_options),
+	array_values($page_type_options), false);
+
+$page_form_file = sed_selectbox($pag['page_file'], 'rpagefile', range(0, 2),
+	array($L['No'], $L['Yes'], $L['Members_only']), false);
+
+$pfs = sed_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
+$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
+$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';
+$pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'update', 'rpageurl', $L['SFS']) : '';
+
+
 $pageedit_array = array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
 	"PAGEEDIT_SUBTITLE" => $L['paged_subtitle'],
@@ -354,23 +330,23 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_STATE" => $pag['page_state'],
 	"PAGEEDIT_FORM_TYPE" => $page_form_type,
 	"PAGEEDIT_FORM_CAT" => $page_form_categories,
-	"PAGEEDIT_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"rpagekey\" value=\"".htmlspecialchars($pag['page_key'])."\" size=\"16\" maxlength=\"16\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"rpagealias\" value=\"".htmlspecialchars($pag['page_alias'])."\" size=\"16\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"rpagetitle\" value=\"".htmlspecialchars($pag['page_title'])."\" size=\"56\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"rpagedesc\" value=\"".htmlspecialchars($pag['page_desc'])."\" size=\"56\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"rpageauthor\" value=\"".htmlspecialchars($pag['page_author'])."\" size=\"32\" maxlength=\"24\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_OWNERID" => "<input type=\"text\" class=\"text\" name=\"rpageownerid\" value=\"".htmlspecialchars($pag['page_ownerid'])."\" size=\"32\" maxlength=\"24\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_DATE" => $pag['page_date']." ".$usr['timetext'],
-	"PAGEEDIT_FORM_DATENOW" => "<input type=\"checkbox\" class=\"checkbox\" name=\"rpagedatenow\" value=\"1\" />", // TODO - to resorses
+	"PAGEEDIT_FORM_KEY" => sed_inputbox('text', 'rpagekey', $pag['page_key'], array('size' => '16', 'maxlength' => '16')),
+	"PAGEEDIT_FORM_ALIAS" => sed_inputbox('text', 'rpagealias', $pag['page_alias'], array('size' => '32', 'maxlength' => '255')),
+	"PAGEEDIT_FORM_TITLE" => sed_inputbox('text', 'rpagetitle', $pag['page_title'], array('size' => '64', 'maxlength' => '255')),
+	"PAGEEDIT_FORM_DESC" => sed_inputbox('text', 'rpagedesc', $pag['page_desc'], array('size' => '64', 'maxlength' => '255')),
+	"PAGEEDIT_FORM_AUTHOR" => sed_inputbox('text', 'rpageauthor', $pag['page_author'], array('size' => '24', 'maxlength' => '24')),
+	"PAGEEDIT_FORM_OWNERID" => sed_inputbox('text', 'rpageownerid', $pag['page_ownerid'], array('size' => '24', 'maxlength' => '24')),
+	"PAGEEDIT_FORM_DATE" => $pag['page_date'].' '.$usr['timetext'],
+	"PAGEEDIT_FORM_DATENOW" => sed_checkbox(0, 'rpagedatenow'),
 	"PAGEEDIT_FORM_BEGIN" => $pag['page_begin']." ".$usr['timetext'],
 	"PAGEEDIT_FORM_EXPIRE" => $pag['page_expire']." ".$usr['timetext'],
 	"PAGEEDIT_FORM_FILE" => $page_form_file,
-	"PAGEEDIT_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"rpageurl\" value=\"".htmlspecialchars($pag['page_url'])."\" size=\"56\" maxlength=\"255\" /> ", // TODO - to resorses
-	"PAGEEDIT_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"rpagesize\" value=\"".htmlspecialchars($pag['page_size'])."\" size=\"56\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_PAGECOUNT" => "<input type=\"text\" class=\"text\" name=\"rpagecount\" value=\"".$pag['page_count']."\" size=\"8\" maxlength=\"8\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_FILECOUNT" => "<input type=\"text\" class=\"text\" name=\"rpagefilecount\" value=\"".$pag['page_filecount']."\" size=\"8\" maxlength=\"8\" />", // TODO - to resorses
-	"PAGEEDIT_FORM_TEXT" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($pag['page_text'])."</textarea>", // TODO - to resorses
-	"PAGEEDIT_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"rpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($pag['page_text'])."</textarea>", // TODO - to resorses
+	"PAGEEDIT_FORM_URL" => sed_inputbox('text', 'rpageurl', $pag['page_url'], array('size' => '56', 'maxlength' => '255')),
+	"PAGEEDIT_FORM_SIZE" => sed_inputbox('text', 'rpagesize', $pag['page_size'], array('size' => '56', 'maxlength' => '255')),
+	"PAGEEDIT_FORM_PAGECOUNT" => sed_inputbox('text', 'rpagecount', $pag['page_count'], array('size' => '8', 'maxlength' => '8')),
+	"PAGEEDIT_FORM_FILECOUNT" => sed_inputbox('text', 'rpagefilecount', $pag['page_filecount'], array('size' => '8', 'maxlength' => '8')),
+	"PAGEEDIT_FORM_TEXT" => sed_textarea('rpagetext', $pag['page_text'], 24, 120, '', 'input_textarea_editor'),
+	"PAGEEDIT_FORM_TEXTBOXER" => sed_textarea('rpagetext', $pag['page_text'], 24, 120, '', 'input_textarea_editor'),
 	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
 );
