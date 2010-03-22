@@ -3029,6 +3029,29 @@ function sed_rc($name, $params = array())
 }
 
 /**
+ * Converts custom attributes to a string if necessary
+ *
+ * @param mixed $attrs A string or associative array
+ * @return string
+ */
+function sed_rc_attr_string($attrs)
+{
+	$attr_str = '';
+	if (is_array($attrs))
+	{
+		foreach ($attrs as $key => $val)
+		{
+			$attr_str .= ' ' . $key . '="' . htmlspecialchars($val) . '"';
+		}
+	}
+	else
+	{
+		$attr_str = $attrs;
+	}
+	return $attr_str;
+}
+
+/**
  * Quick link resource pattern
  *
  * @param string $url Link href
@@ -3038,14 +3061,7 @@ function sed_rc($name, $params = array())
  */
 function sed_rc_link($url, $text, $attrs = '')
 {
-	if (is_array($attrs))
-	{
-		foreach ($attrs as $key => $val)
-		{
-			$link_attrs .= ' '.$key.'="'.$val.'"';
-		}
-	}
-	else $link_attrs = $attrs;
+	$link_attrs = sed_rc_attr_string($attrs);
 	return '<a href="'.$url.'"'.$link_attrs.'>'.$text.'</a>';
 }
 
@@ -3094,164 +3110,6 @@ function sed_shutdown()
 	sed_sql_close();
 }
 
-
-/**
- * Renders a dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @param array $values Options available
- * @return string
- */
-function sed_selectbox($check, $name, $values)
-{
-	$check = trim($check);
-	$values = explode(',', $values);
-	$selected = (empty($check) || $check=="00") ? "selected=\"selected\"" : '';
-	$result =  "<select name=\"$name\" size=\"1\"><option value=\"\" $selected>---</option>";
-	foreach ($values as $k => $x)
-	{
-		$x = trim($x);
-		$selected = ($x == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$x\" $selected>".htmlspecialchars($x)."</option>";
-	}
-	$result .= "</select>";
-	return($result);
-}
-
-/**
- * Renders country dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @return string
- */
-function sed_selectbox_countries($check,$name)
-{
-	global $sed_countries;
-
-	if (!$sed_countries) include_once sed_langfile('countries', 'core');
-
-	$selected = (empty($check) || $check=='00') ? "selected=\"selected\"" : '';
-	$result =  "<select name=\"$name\" size=\"1\">";
-	foreach($sed_countries as $i => $x)
-	{
-		$selected = ($i==$check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$i\" $selected>".$x."</option>";
-	}
-	$result .= "</select>";
-
-	return($result);
-}
-
-/**
- * Generates date part dropdown
- *
- * @param int $utime Selected timestamp
- * @param string $mode Display mode: 'short' or complete
- * @param string $ext Variable name suffix
- * @param int $max_year Max. year possible
- * @return string
- */
-function sed_selectbox_date($utime, $mode, $ext='', $max_year = 2030)
-{
-	global $L;
-	list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
-	$p_monthes = array();
-	$p_monthes[] = array(1, $L['January']);
-	$p_monthes[] = array(2, $L['February']);
-	$p_monthes[] = array(3, $L['March']);
-	$p_monthes[] = array(4, $L['April']);
-	$p_monthes[] = array(5, $L['May']);
-	$p_monthes[] = array(6, $L['June']);
-	$p_monthes[] = array(7, $L['July']);
-	$p_monthes[] = array(8, $L['August']);
-	$p_monthes[] = array(9, $L['September']);
-	$p_monthes[] = array(10, $L['October']);
-	$p_monthes[] = array(11, $L['November']);
-	$p_monthes[] = array(12, $L['December']);
-
-	$result = "<select name=\"ryear".$ext."\">";
-	for ($i = 1902; $i < $max_year; $i++)
-	{
-		$selected = ($i==$s_year) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$i\" $selected>$i</option>";
-	}
-	$result .= ($utime==0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
-
-	$result .= "</select><select name=\"rmonth".$ext."\">";
-	reset($p_monthes);
-	foreach ($p_monthes as $k => $line)
-	{
-		$selected = ($line[0]==$s_month) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"".$line[0]."\" $selected>".$line[1]."</option>";
-	}
-	$result .= ($utime==0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
-
-	$result .= "</select><select name=\"rday".$ext."\">";
-	for ($i = 1; $i<32; $i++)
-	{
-		$selected = ($i==$s_day) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$i\" $selected>$i</option>";
-	}
-	$result .= ($utime==0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
-	$result .= "</select> ";
-
-	if ($mode=='short')
-	{ return ($result); }
-
-	$result .= " <select name=\"rhour".$ext."\">";
-	for ($i = 0; $i<24; $i++)
-	{
-		$selected = ($i==$s_hour) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$i\" $selected>".sprintf("%02d",$i)."</option>";
-	}
-	$result .= ($utime==0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
-
-	$result .= "</select>:<select name=\"rminute".$ext."\">";
-	for ($i = 0; $i<60; $i=$i+1)
-	{
-		$selected = ($i==$s_minute) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"$i\" $selected>".sprintf("%02d",$i)."</option>";
-	}
-	$result .= ($utime==0) ? "<option value=\"0\" selected=\"selected\">---</option>" : "<option value=\"0\">---</option>";
-	$result .= "</select>";
-
-	return ($result);
-}
-
-/**
- * Returns language selection dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @return string
- */
-function sed_selectbox_lang($check, $name)
-{
-	global $sed_languages, $sed_countries, $cfg;
-
-	$handle = opendir($cfg['lang_dir'].'/');
-	while ($f = readdir($handle))
-	{
-		if ($f[0] != '.')
-		{ $langlist[] = $f; }
-	}
-	closedir($handle);
-	sort($langlist);
-
-	$result = "<select name=\"$name\" size=\"1\">";
-	while (list($i,$x) = each($langlist))
-	{
-		$selected = ($x==$check) ? "selected=\"selected\"" : '';
-		$lng = (empty($sed_languages[$x])) ? $sed_countries[$x] : $sed_languages[$x];
-		$result .= "<option value=\"$x\" $selected>".$lng." (".$x.")</option>";
-	}
-	$result .= "</select>";
-
-	return($result);
-}
-
 /**
  * Returns skin selection dropdown
  *
@@ -3261,6 +3119,7 @@ function sed_selectbox_lang($check, $name)
  */
 function sed_selectbox_skin($check, $name)
 {
+	// TODO replace with synced Theme - Color scheme selection
 	$handle = opendir('./skins/');
 	while ($f = readdir($handle))
 	{
@@ -3301,6 +3160,7 @@ function sed_selectbox_skin($check, $name)
  */
 function sed_selectbox_theme($skinname, $name, $theme)
 {
+	// TODO replace with synced Theme - Color scheme selection
 	global $skin_themes;
 
 	if (empty($skin_themes))
@@ -4086,25 +3946,26 @@ function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
 	return setcookie($name, $value, $expire, $path, $domain);
 }
 
-/* ============== FLAGS AND COUNTRIES (ISO 3166) =============== */
+/* ============== Internationalization (i18n) =============== */
 
+$sed_languages['cn']= '中文';
 $sed_languages['de']= 'Deutsch';
 $sed_languages['dk']= 'Dansk';
-$sed_languages['es']= 'Espa�ol';
-$sed_languages['fi']= 'Suomi';
-$sed_languages['fr']= 'Fran�ais';
-$sed_languages['it']= 'Italiano';
-$sed_languages['nl']= 'Nederlands';
-$sed_languages['ru']= '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;';
-$sed_languages['se']= 'Svenska';
 $sed_languages['en']= 'English';
-$sed_languages['pl']= 'Polski';
-$sed_languages['pt']= 'Portugese';
-$sed_languages['cn']= '&#27721;&#35821;';
+$sed_languages['es']= 'Español';
+$sed_languages['fi']= 'Suomi';
+$sed_languages['fr']= 'Français';
 $sed_languages['gr']= 'Greek';
 $sed_languages['hu']= 'Hungarian';
-$sed_languages['jp']= '&#26085;&#26412;&#35486;';
-$sed_languages['kr']= '&#54620;&#44397;&#47568;';
+$sed_languages['it']= 'Italiano';
+$sed_languages['jp']= '日本語';
+$sed_languages['kr']= '한국어';
+$sed_languages['nl']= 'Dutch';
+$sed_languages['pl']= 'Polski';
+$sed_languages['pt']= 'Portugese';
+$sed_languages['ru']= 'Русский';
+$sed_languages['se']= 'Svenska';
+$sed_languages['uk'] = 'Українська';
 
 /**
  * Makes correct plural forms of words

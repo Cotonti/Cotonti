@@ -12,6 +12,22 @@
 defined('SED_CODE') or die('Wrong URL');
 
 /**
+ * Form generation
+ */
+$R['code_option_empty'] = '---';
+$R['code_time_separator'] = ':';
+$R['input_checkbox'] = '<input type="checkbox" class="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}';
+$R['input_default'] = '<input type="{$type}" name="{$name}" value="{$value}"{$attrs} />';
+$R['input_option'] = '<option value="{$value}"{$selected}>{$title}</option>';
+$R['input_radio'] = '<input type="radio" class="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}';
+$R['input_radio_separator'] = ' ';
+$R['input_select_begin'] = '<select name="{$name}"{$attrs}>';
+$R['input_select_end'] = '</select>';
+$R['input_text'] = '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />';
+$R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>';
+$R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>';
+
+/**
  * Stars / Votes Icons
  */
 
@@ -45,6 +61,7 @@ $R['form_guest_username'] = '<input type="text" name="rusername" size="12" maxle
  * Misc
  */
 
+$R['code_error_separator'] = '<br />';
 $R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt="" />';
 $R['link_catpath'] = '<a href="{$url}" title="{$title}">{$title}</a>';
 
