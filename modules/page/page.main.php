@@ -104,7 +104,7 @@ if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a 
 	}
 	$redir = (preg_match('#^(http|ftp)s?://#', $pag['page_url']) ? '' : SED_ABSOLUTE_URL) . $pag['page_url'];
 	header('Location: ' . $redir);
-	echo "<script type='text/javascript'>location.href='" . $redir . "';</script>Redirecting...";
+	echo sed_rc('page_code_redir');
 	exit;
 }
 if (!$usr['isadmin'] || $cfg['count_admin'])
@@ -197,11 +197,11 @@ if ($usr['isadmin'])
 
 	if ($pag['page_state'] == 1)
 	{
-		$validation = "<a href=\"".sed_url('admin', "m=page&a=validate&id=".$id."&amp;".sed_xg())."\">".$L['Validate']."</a>";
+		$validation = sed_rc_link(sed_url('admin', 'm=page&a=validate&id='.$id.'&'.sed_xg()), $L['Validate']);
 	}
 	else
 	{
-		$validation = "<a href=\"".sed_url('admin', "m=page&a=unvalidate&id=".$id."&amp;".sed_xg())."\">".$L['Putinvalidationqueue']."</a>";
+		$validation = sed_rc_link(sed_url('admin', 'm=page&a=unvalidate&id='.$id.'&'.sed_xg()), $L['Putinvalidationqueue']);
 	}
 
 	$t->assign(array(
@@ -338,7 +338,8 @@ if ($pag['page_totaltabs'] > 1)
 			$pag['page_tabtitle'][$i] = $i == 1 ? $pag['page_title'] : $L['Page'] . ' ' . ($i + 1);
 		}
 		$tab_url = empty($al) ? sed_url('page', 'id='.$id.'&pg='.$i) : sed_url('page', 'al='.$al.'&pg='.$i);
-		$pag['page_tabtitles'][] .= '<a href="'.$tab_url.'">'.($i+1).'. '.$pag['page_tabtitle'][$i].'</a>';
+		$pag['page_tabtitles'][] .= sed_rc_link(sed_url($tab_url), ($i+1).'. '.$pag['page_tabtitle'][$i],
+			array('class' => 'page_tabtitle'));
 		$pn = sed_pagenav('page', (empty($al) ? 'id='.$id : 'al='.$al), $pag['page_tab'], $pag['page_totaltabs'], 1, 'pg');
 		$pag['page_tabnav'] = $pn['main'];
 		$pag['page_tabs'][$i] = str_replace('[newpage]', '', $pag['page_tabs'][$i]);

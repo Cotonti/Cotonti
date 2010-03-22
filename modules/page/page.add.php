@@ -81,8 +81,8 @@ if ($a == 'add')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
 
-	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing']."<br />" : '';
-	$error_string .= (mb_strlen($newpagetitle) < 2) ? $L['pag_titletooshort']."<br />" : '';
+	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing'] . $R['code_error_separator'] : '';
+	$error_string .= (mb_strlen($newpagetitle) < 2) ? $L['pag_titletooshort'] . $R['code_error_separator'] : '';
 
 	if ($newpagefile == 0 && !empty($newpageurl))
 	{
@@ -202,48 +202,11 @@ $ssql.="page_title,
 	}
 }
 
-switch ($newpagefile)
-{
-	case 1:
-		$sel0 = '';
-		$sel1 = ' selected="selected"';
-		$sel2 = '';
-	break;
-
-	case 2:
-		$sel0 = '';
-		$sel1 = '';
-		$sel2 = ' selected="selected"';
-	break;
-
-	default:
-		$sel0 = ' selected="selected"';
-		$sel1 = '';
-		$sel2 = '';
-	break;
-}
-$pageadd_form_file = <<<HTM
-<select name="newpagefile">
-<option value="0"$sel0>{$L['No']}</option>
-<option value="1"$sel1>{$L['Yes']}</option>
-<option value="2"$sel2>{$L['Members_only']}</option>
-</select>
-HTM;
-
 if (empty($newpagecat) && !empty($c))
 {
 	$newpagecat = $c;
 	$usr['isadmin'] = sed_auth('page', $newpagecat, 'A');
 }
-
-$pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat', true);
-$newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600, 'long', '_beg');
-$newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600 + 31536000, 'long', '_exp');
-
-$pfs = sed_build_pfs($usr['id'], 'newpage', 'newpagetext',$L['Mypfs']);
-$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'newpagetext', $L['SFS']) : '';
-$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "newpage", "newpageurl", $L['Mypfs']) : '';
-$pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'newpage', 'newpageurl', $L['SFS']) : '';
 
 $title_params = array(
 	'TITLE' => $L['pagadd_subtitle'],
@@ -273,40 +236,52 @@ if (!empty($error_string))
 	$t->parse("MAIN.PAGEADD_ERROR");
 }
 
+require_once sed_incfile('forms');
+
+$pageadd_form_file = sed_selectbox($newpagefile, 'newpagefile', range(0, 2),
+	array($L['No'], $L['Yes'], $L['Members_only']), false);
+
+$pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat', true);
+$newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600, 'long', '_beg');
+$newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600 + 31536000, 'long', '_exp');
+
+$pfs = sed_build_pfs($usr['id'], 'newpage', 'newpagetext',$L['Mypfs']);
+$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'newpagetext', $L['SFS']) : '';
+$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], 'newpage', 'newpageurl', $L['Mypfs']) : '';
+$pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'newpage', 'newpageurl', $L['SFS']) : '';
+
 $pageadd_array = array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
 	"PAGEADD_SUBTITLE" => $L['pagadd_subtitle'],
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
-	"PAGEADD_FORM_SEND" => sed_url('page', "m=add&a=add"),
+	"PAGEADD_FORM_SEND" => sed_url('page', 'm=add&a=add'),
 	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
-	"PAGEADD_FORM_KEY" => "<input type=\"text\" class=\"text\" name=\"newpagekey\" value=\"".htmlspecialchars($newpagekey)."\" size=\"16\" maxlength=\"16\" />", // TODO - to resorses
-	"PAGEADD_FORM_ALIAS" => "<input type=\"text\" class=\"text\" name=\"newpagealias\" value=\"".htmlspecialchars($newpagealias)."\" size=\"16\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEADD_FORM_TITLE" => "<input type=\"text\" class=\"text\" name=\"newpagetitle\" value=\"".htmlspecialchars($newpagetitle)."\" size=\"56\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEADD_FORM_DESC" => "<input type=\"text\" class=\"text\" name=\"newpagedesc\" value=\"".htmlspecialchars($newpagedesc)."\" size=\"56\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEADD_FORM_AUTHOR" => "<input type=\"text\" class=\"text\" name=\"newpageauthor\" value=\"".htmlspecialchars($newpageauthor)."\" size=\"16\" maxlength=\"24\" />", // TODO - to resorses
+	"PAGEADD_FORM_KEY" => sed_inputbox('text', 'newpagekey', $newpagekey, array('size' => '16', 'maxlength' => '16')),
+	"PAGEADD_FORM_ALIAS" => sed_inputbox('text', 'newpagealias', $newpagealias, array('size' => '32', 'maxlength' => '255')),
+	"PAGEADD_FORM_TITLE" => sed_inputbox('text', 'newpagetitle', $newpagetitle, array('size' => '64', 'maxlength' => '255')),
+	"PAGEADD_FORM_DESC" => sed_inputbox('text', 'newpagedesc', $newpagedesc, array('size' => '64', 'maxlength' => '255')),
+	"PAGEADD_FORM_AUTHOR" => sed_inputbox('text', 'newpageauthor', $newpageauthor, array('size' => '16', 'maxlength' => '24')),
 	"PAGEADD_FORM_OWNER" => sed_build_user($usr['id'], htmlspecialchars($usr['name'])),
 	"PAGEADD_FORM_OWNERID" => $usr['id'],
 	"PAGEADD_FORM_BEGIN" => $newpage_form_begin,
 	"PAGEADD_FORM_EXPIRE" => $newpage_form_expire,
 	"PAGEADD_FORM_FILE" => $pageadd_form_file,
-	"PAGEADD_FORM_URL" => "<input type=\"text\" class=\"text\" name=\"newpageurl\" value=\"".htmlspecialchars($newpageurl)."\" size=\"56\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEADD_FORM_SIZE" => "<input type=\"text\" class=\"text\" name=\"newpagesize\" value=\"".htmlspecialchars($newpagesize)."\" size=\"56\" maxlength=\"255\" />", // TODO - to resorses
-	"PAGEADD_FORM_TEXT" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($newpagetext)."</textarea>", // TODO - to resorses
-	"PAGEADD_FORM_TEXTBOXER" => "<textarea class=\"editor\" name=\"newpagetext\" rows=\"24\" cols=\"120\">".htmlspecialchars($newpagetext)."</textarea>", // TODO - to resorses
+	"PAGEADD_FORM_URL" => sed_inputbox('text', 'newpageurl', $newpageurl, array('size' => '56', 'maxlength' => '255')),
+	"PAGEADD_FORM_SIZE" => sed_inputbox('text', 'newpagesize', $newpagesize, array('size' => '56', 'maxlength' => '255')),
+	"PAGEADD_FORM_TEXT" => sed_textarea('newpagetext', $newpagetext, 24, 120, '', 'input_textarea_editor'),
+	"PAGEADD_FORM_TEXTBOXER" => sed_textarea('newpagetext', $newpagetext, 24, 120, '', 'input_textarea_editor'),
 	"PAGEADD_FORM_MYPFS" => $pfs
 );
 
 if ($usr['isadmin'])
 {
-	$page_form_type = "<select name=\"newpagetype\" size=\"1\">";
-	$selected0 = ($newpagetype == 0) ? "selected=\"selected\"" : '';
-	$selected1 = ($newpagetype == 1) ? "selected=\"selected\"" : '';
-	$selected2 = ($newpagetype == 2 && $usr['maingrp'] == 5) ? "selected=\"selected\"" : '';
-	$page_form_type .= "<option value=\"0\" $selected0>".$L['Default']."</option>";
-	$page_form_type .= "<option value=\"1\" $selected1>HTML</option>";
-	$page_form_type .= ($usr['maingrp'] == 5 && $cfg['allowphp_pages'] && $cfg['allowphp_override']) ? "<option value=\"2\" $selected2>PHP</option>" : '';
-	$page_form_type .= "</select>";
-	$pageadd_array['PAGEADD_FORM_TYPE'] = $page_form_type;
+	$page_type_options = array(0 => $L['Default'], 1 => 'HTML');
+	if ($usr['maingrp'] == 5 && $cfg['allowphp_pages'] && $cfg['allowphp_override'])
+	{
+		$page_type_options += array(2 => 'PHP');
+	}
+	$pageadd_array['PAGEADD_FORM_TYPE'] = sed_selectbox($newpagetype, 'newpagetype', array_keys($page_type_options),
+		array_values($page_type_options), false);
 }
 
 // PFS tags
