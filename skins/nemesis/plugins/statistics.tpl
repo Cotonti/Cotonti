@@ -131,7 +131,7 @@
 		</tr>
 		<!-- END: ROW_COUNTRY -->
 		<tr>
-			<td class="textcenter"><img src="images/flags/f-00.gif" alt="" /></td>
+			<td class="textcenter"><img src="images/flags/f-00.png" alt="" /></td>
 			<td>{PHP.L.plu_unknown}</td>
 			<td class="textright">{STATISTICS_UNKNOWN_COUNT}</td>
 		</tr>

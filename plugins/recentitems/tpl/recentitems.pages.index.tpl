@@ -9,7 +9,7 @@
 	</tr>
 <!-- BEGIN: PAGE_ROW -->
 	<tr>
-		<td class="centerall {PAGE_ROW_ODDEVEN}"><img src="skins/{PHP.skin}/img/icons/page.png" alt="" /></td>
+		<td class="centerall {PAGE_ROW_ODDEVEN}">{PHP.R.icon_page}</td>
 		<td class="{PAGE_ROW_ODDEVEN}">
 			<p class="strong"><a href="{PAGE_ROW_URL}">{PAGE_ROW_SHORTTITLE} ({PAGE_ROW_COMMENTS})</a></p>
 			<!-- IF {PAGE_ROW_DESC} --><p class="small">{PAGE_ROW_DESC}</p><!-- ENDIF -->

@@ -125,7 +125,7 @@
 <!-- BEGIN: FCACHE -->
 				<tr>
 					<td class="centerall">{PHP.R.admin_icon_subfolder}</td>
-					<td><span class="spaced">&ndash;</span><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a></td>
+					<td class="lhn"><span class="spaced">&ndash;</span><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a></td>
 					<td class="centerall"><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL}" class="ajax">{PHP.sed_img_up}</a> <a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL}" class="ajax">{PHP.sed_img_down}</a></td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS}</td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT}</td>
