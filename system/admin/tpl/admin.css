@@ -50,6 +50,7 @@ h4		{ font-weight:bold; }
 .small	{ font-size:.9em; line-height:1.4em; }
 .clear	{ clear:both; }
 .strong	{ font-weight:bold; }
+.lhn	{ line-height:normal!important; }
 
 .textleft		{ text-align:left; }
 .textcenter		{ text-align:center; }

@@ -55,7 +55,7 @@
 <div class="comments" style="display:{COMMENTS_DISPLAY}">
 <!-- BEGIN: COMMENTS_ROW -->
 <span class="title">
-<a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}"><img src="skins/{PHP.skin}/img/system/icon-comment.gif" alt="" /> {COMMENTS_ROW_ORDER}.</a>
+<a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}">{PHP.R.icon_comments} {COMMENTS_ROW_ORDER}.</a>
  &nbsp; {PHP.skinlang.comments.Postedby} {COMMENTS_ROW_AUTHOR}</span> &nbsp; {COMMENTS_ROW_DATE} &nbsp; {COMMENTS_ROW_ADMIN} &nbsp; {COMMENTS_ROW_EDIT}
 
 <p>{COMMENTS_ROW_TEXT}</p>

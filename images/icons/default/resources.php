@@ -33,12 +33,14 @@ $R['icon_twitter'] = '<img class="icon" src="images/icons/default/twitter.png" a
  * Temporary
  */
 
+$R['icon_comments'] = '<img class="icon" src="images/icons/default/comments.png" alt="" />';
 $R['icon_error'] = '<img class="icon" src="images/icons/default/error.png" alt="" />';
 $R['icon_forums'] = '<img class="icon" src="images/icons/default/forums.png" alt="" />';
 $R['icon_help'] = '<img class="icon" src="images/icons/default/help.png" alt="" />';
 $R['icon_info'] = '<img class="icon" src="images/icons/default/info.png" alt="" />';
 $R['icon_news'] = '<img class="icon" src="images/icons/default/news.png" alt="" />';
 $R['icon_online'] = '<img class="icon" src="images/icons/default/online.png" alt="" />';
+$R['icon_page'] = '<img class="icon" src="images/icons/default/page.png" alt="" />';
 $R['icon_pfs'] = '<img class="icon" src="images/icons/default/pfs.png" alt="" />';
 $R['icon_plugin'] = '<img class="icon" src="images/icons/default/plugin.png" alt="" />';
 $R['icon_polls'] = '<img class="icon" src="images/icons/default/polls.png" alt="" />';
