@@ -15,7 +15,7 @@
 		<li><a href="admin.php?m=trashcan">{PHP.L.Trashcan}</a></li>
 		<li><a href="admin.php?m=other">{PHP.L.Other}</a></li>
 	</ul>
-	<p>{PHP.out.copyright}</p>
+	<p>{PHP.out.copyright} {PHP.cfg.version}</p>
 </div>
 
 </body>

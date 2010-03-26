@@ -111,9 +111,9 @@
 				<td class="coltop" style="width:15%;">{PHP.L.Title}</td>
 				<td class="coltop" style="width:10%;">{PHP.L.TPL}</td>
 				<td class="coltop" style="width:10%;">{PHP.L.Group}</td>
-				<td class="coltop" style="width:20%;">{PHP.L.Order}</td>
+				<td class="coltop" style="width:15%;">{PHP.L.Order}</td>
 				<td class="coltop" style="width:10%;">{PHP.L.Pages}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Action}</td>
+				<td class="coltop" style="width:20%;">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: ROW -->
 			<tr>
