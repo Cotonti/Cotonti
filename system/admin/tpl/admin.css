@@ -4,11 +4,11 @@
 *	{ margin:0; padding:0; }
 html	{ padding:0; }
 
-body	{ font:normal 76%/1.8em Tahoma; background:url(img/body.png) repeat-x 0 60px; }
+body	{ font:normal 76%/1.8em Georgia; background:url(img/body.png) repeat-x 0 60px; }
 
 ul 			{ list-style-type:none; }
 ol			{ list-style-position:outside; margin-bottom:5px; padding-left:20px; }
-ul.follow li	{ margin:0 15px; padding-left:16px; background:url(img/follow.png) no-repeat 0 6px; }
+ul.follow li	{ padding-left:25px; background:url(img/follow.png) no-repeat 5px 3px; }
 ul.follow img	{ vertical-align:-3px; }
 
 a			{ color:#172973; text-decoration:none; }
@@ -21,17 +21,17 @@ hr		{ margin:4px 0 1px; border: 1px solid; border-color:#ddd transparent transpa
 /* 2. Structure
 -------------------------------------------------- */
 
-#container	{ font-size:.9em; width:960px; margin:0 auto; }
+#container	{ font-size:1em; width:960px; margin:0 auto; }
 #user		{ text-align:right; padding:30px 45px 0; height:30px; background:url(img/user.png) no-repeat 0 0; position:relative; }
 #user a		{ font-weight:bold; }
 #user li#hi	{ position:absolute; top:30px; left:45px; }
 #main		{ padding:0 45px; }
-#center		{ width:575px; margin-right:45px;  }
-#side		{ width:250px; }
+#center		{ width:550px; margin-right:40px;  }
+#side		{ width:280px; }
 .column		{ position:relative; float:left; }
 .block		{ margin-bottom:10px; }
 #footer		{ font-size:.9em; text-align:center; padding:15px; height:50px; background:url(img/footer.png) repeat-x 0 0; }
-#footer a	{ color:#d3dde7; font-weight:bold; }
+#footer a	{ color:#d3dde7; }
 #footer ul li	{ display:inline; margin:0 5px; }
 
 /* 3. Headings
@@ -57,7 +57,7 @@ h4		{ font-weight:bold; }
 .textright		{ text-align:right; }
 .textjustify	{ text-align:justify; }
 
-.error, .help, .warning	{ color:#444; margin:20px 45px; padding:10px 20px 10px 60px; }
+.error, .help, .warning	{ color:#444; margin:20px 45px; padding:10px 20px 10px 60px; clear:both; }
 .error p, .help p, .warning p	{ line-height:1.6em; }
 .help img		{ vertical-align:-3px; }
 
@@ -96,7 +96,7 @@ h4		{ font-weight:bold; }
 table td 	{ vertical-align:top; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
-table.cells td	{ padding:4px 8px; border:1px solid #a4b6c8; }
+table.cells td	{ padding:5px 10px; border:1px solid #a4b6c8; }
 
 table.flat 	{ border-collapse:collapse; width:100%; }
 table.flat td	{ padding:0; border:0; }
@@ -117,7 +117,7 @@ table.flat td	{ padding:0; border:0; }
 -------------------------------------------------- */
 
 form					{ }
-input, select, textarea	{ font:normal 1em Tahoma; }
+input, select, textarea	{ font:normal 1em Georgia; }
 input, select			{ padding:2px; }
 
 /* 9. Pagination

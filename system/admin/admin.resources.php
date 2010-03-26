@@ -16,9 +16,15 @@ $R['admin_icon_banlist'] = '<img class="icon" src="system/admin/img/banlist.png"
 $R['admin_icon_bbcodes'] = '<img class="icon" src="system/admin/img/page.png" alt="" />';
 $R['admin_icon_cache'] = '<img class="icon" src="system/admin/img/config.png" alt="" />';
 $R['admin_icon_comments'] = '<img class="icon" src="system/admin/img/comments.png" alt="" />';
-$R['admin_icon_config'] = '<img class="icon" src="system/admin/img/config.png" alt="" />';
+
+$R['admin_icon_config'] = 
+	'<img class="icon" src="images/icons/default/prefs.png" alt="" />';
+
 $R['admin_icon_ct'] = '<img class="icon" src="system/admin/img/{$code}.png" alt="" />';
-$R['admin_icon_delete'] = '<img class="icon" src="system/admin/img/delete.png" alt="" />';
+
+$R['admin_icon_delete'] = 
+	'<img class="icon" src="images/icons/default/trash.png" alt="" />';
+
 $R['admin_icon_deny'] = '<img class="icon" src="system/admin/img/deny.png" alt="" />';
 $R['admin_icon_deny_locked'] = '<img class="icon" src="system/admin/img/deny_locked.png" alt="" />';
 $R['admin_icon_discheck0'] = '<img class="icon" src="system/admin/img/discheck0.png" alt="" />';
@@ -40,7 +46,10 @@ $R['admin_icon_ipsearch'] = '<img class="icon" src="system/admin/img/ipsearch.pn
 $R['admin_icon_join1'] = '<img class="icon" src="system/admin/img/join1.png" alt="" />';
 $R['admin_icon_join2'] = '<img class="icon" src="system/admin/img/join2.png" alt="" />';
 $R['admin_icon_journals'] = '<img class="icon" src="system/admin/img/journals.png" alt="" />';
-$R['admin_icon_jumpto'] = '<img class="icon" src="system/admin/img/jumpto.png" alt="" />';
+
+$R['admin_icon_jumpto'] = 
+	'<img class="icon" src="images/icons/default/arrow-jump.png" alt="" />';
+
 $R['admin_icon_links'] = '<img class="icon" src="system/admin/img/links.png" alt="" />';
 $R['admin_icon_lock'] = '<img class="icon" src="system/admin/img/lock.png" alt="" />';
 $R['admin_icon_log'] = '<img class="icon" src="system/admin/img/page.png" alt="" />';
@@ -58,9 +67,14 @@ $R['admin_icon_pm'] = '<img class="icon" src="system/admin/img/pm.png" alt="" />
 $R['admin_icon_polls'] = '<img class="icon" src="system/admin/img/polls.png" alt="" />';
 $R['admin_icon_ratings'] = '<img class="icon" src="system/admin/img/ratings.png" alt="" />';
 $R['admin_icon_referers'] = '<img class="icon" src="system/admin/img/info.png" alt="" />';
-$R['admin_icon_reset'] = '<img class="icon" src="system/admin/img/reset.png" alt="" />';
-$R['admin_icon_rights'] = '<img class="icon" src="system/admin/img/rights.png" alt="" />';
-$R['admin_icon_rights2'] = '<img class="icon" src="system/admin/img/rights2.png" alt="" />';
+
+$R['admin_icon_reset'] = 
+	'<img class="icon" src="images/icons/default/reset.png" alt="" />';
+$R['admin_icon_rights'] = 
+	'<img class="icon" src="images/icons/default/rights.png" alt="" />';
+$R['admin_icon_rights2'] = 
+	'<img class="icon" src="images/icons/default/rights.png" alt="" />';
+
 $R['admin_icon_skins'] = '<img class="icon" src="system/admin/img/skins.png" alt="" />';
 $R['admin_icon_smilies'] = '<img class="icon" src="system/admin/img/smilies.png" alt="" />';
 $R['admin_icon_statistics'] = '<im class="icon"g src="system/admin/img/statistics.png" alt="" />';
