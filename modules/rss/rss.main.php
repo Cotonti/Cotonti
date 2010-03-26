@@ -68,7 +68,7 @@ if ($c == "topics")
 	$res = sed_sql_query($sql);
 	if (sed_sql_affectedrows() > 0)
 	{
-		$row = mysql_fetch_assoc($res);
+		$row = sed_sql_fetchassoc($res);
 		if ($row['ft_mode'] == '1')
 		{
 			die('This topic is private'); // TODO: Need translate
@@ -92,7 +92,7 @@ if ($c == "topics")
 		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid='$topic_id' ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
 		$res = sed_sql_query($sql);
 		$i = 0;
-		while ($row = mysql_fetch_assoc($res))
+		while ($row = sed_sql_fetchassoc($res))
 		{
 			$totalposts--;
 			$curpage = $cfg['maxtopicsperpage'] * floor($totalposts / $cfg['maxtopicsperpage']);
@@ -115,7 +115,7 @@ elseif ($c == "section")
 	$res = sed_sql_query($sql);
 	if (sed_sql_affectedrows() > 0)
 	{
-		$row = mysql_fetch_assoc($res);
+		$row = sed_sql_fetchassoc($res);
 		$section_title = $row['fs_title'];
 		$section_desc = $row['fs_desc'];
 		$rss_title = $section_title;
@@ -126,7 +126,7 @@ elseif ($c == "section")
 		unset($subsections);
 		$sql = "SELECT fs_id FROM $db_forum_sections WHERE fs_mastername = '$section_title'";
 		$res = sed_sql_query($sql);
-		while ($row = mysql_fetch_assoc($res))
+		while ($row = sed_sql_fetchassoc($res))
 		{
 			$where .= " OR fp_sectionid ='{$row['fs_id']}'";
 		}
@@ -135,7 +135,7 @@ elseif ($c == "section")
 		$res = sed_sql_query($sql);
 		$i = 0;
 
-		while ($row = mysql_fetch_assoc($res))
+		while ($row = sed_sql_fetchassoc($res))
 		{
 			$post_id = $row['fp_id'];
 			$topic_id = $row['fp_topicid'];
@@ -143,7 +143,7 @@ elseif ($c == "section")
 			$flag_private = 0;
 			$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
 			$res2 = sed_sql_query($sql);
-			$row2 = mysql_fetch_assoc($res2);
+			$row2 = sed_sql_fetchassoc($res2);
 			$topic_title = $row2['ft_title'];
 			if ($row2['ft_mode'] == '1')
 			{
@@ -173,7 +173,7 @@ elseif ($c == "forums")
 	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
 	$res = sed_sql_query($sql);
 	$i = 0;
-	while ($row = mysql_fetch_assoc($res))
+	while ($row = sed_sql_fetchassoc($res))
 	{
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
@@ -182,7 +182,7 @@ elseif ($c == "forums")
 		$flag_private = 0;
 		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
 		$res2 = sed_sql_query($sql);
-		$row2 = mysql_fetch_assoc($res2);
+		$row2 = sed_sql_fetchassoc($res2);
 		$topic_title = $row2['ft_title'];
 		if ($row2['ft_mode'] == '1')
 		{
@@ -224,7 +224,7 @@ elseif ($defult_c)
 		$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	$i = 0;
-	while ($row = mysql_fetch_assoc($sql))
+	while ($row = sed_sql_fetchassoc($sql))
 	{
 		$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
 

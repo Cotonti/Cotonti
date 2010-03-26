@@ -62,19 +62,19 @@ if ($action == 'install')
 	  KEY `com_code` (`com_code`)
 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1");
 
-	if (!mysql_query("SELECT page_comcount FROM $db_pages"))
+	if (!sed_sql_query("SELECT page_comcount FROM $db_pages"))
 	{
 		sed_sql_query("ALTER TABLE $db_pages ADD COLUMN page_comcount mediumint(8) unsigned default '0'");
 	}
-	if (!mysql_query("SELECT poll_comcount FROM $db_polls"))
+	if (!sed_sql_query("SELECT poll_comcount FROM $db_polls"))
 	{
 		sed_sql_query("ALTER TABLE $db_polls ADD COLUMN poll_comcount mediumint(8) unsigned default '0'");
 	}
-	if (!mysql_query("SELECT poll_comments FROM $db_polls"))
+	if (!sed_sql_query("SELECT poll_comments FROM $db_polls"))
 	{
 		sed_sql_query("ALTER TABLE $db_polls ADD COLUMN poll_comments tinyint(1) NOT NULL default 1");
 	}
-	if (!mysql_query("SELECT structure_comments FROM $db_structure"))
+	if (!sed_sql_query("SELECT structure_comments FROM $db_structure"))
 	{
 		sed_sql_query("ALTER TABLE $db_structure ADD COLUMN structure_comments tinyint(1) NOT NULL default 1");
 	}
