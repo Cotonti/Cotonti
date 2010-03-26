@@ -21,13 +21,13 @@ hr		{ margin:4px 0 1px; border: 1px solid; border-color:#ddd transparent transpa
 /* 2. Structure
 -------------------------------------------------- */
 
-#container	{ font-size:.9em; width:825px; margin:0 auto; }
-#user		{ text-align:right; padding:30px 50px 0; height:30px; background:url(img/user.png) no-repeat 0 0; position:relative; }
+#container	{ font-size:.9em; width:960px; margin:0 auto; }
+#user		{ text-align:right; padding:30px 45px 0; height:30px; background:url(img/user.png) no-repeat 0 0; position:relative; }
 #user a		{ font-weight:bold; }
-#user li#hi	{ position:absolute; top:30px; left:50px; }
-#main		{ padding:0 30px; }
-#center		{ width:500px; margin-right:35px;  }
-#side		{ width:230px; }
+#user li#hi	{ position:absolute; top:30px; left:45px; }
+#main		{ padding:0 45px; }
+#center		{ width:575px; margin-right:45px;  }
+#side		{ width:250px; }
 .column		{ position:relative; float:left; }
 .block		{ margin-bottom:10px; }
 #footer		{ font-size:.9em; text-align:center; padding:15px; height:50px; background:url(img/footer.png) repeat-x 0 0; }
@@ -38,7 +38,7 @@ hr		{ margin:4px 0 1px; border: 1px solid; border-color:#ddd transparent transpa
 -------------------------------------------------- */
 
 h1,h2,h3,h4,h5,h6 { font-weight:normal; font-size:1em; margin:0; padding:0; position:relative; }
-h1		{ color:#036; padding:8px 0 0 50px; height:52px; background:url(img/crumbs.png) no-repeat 0 0; }
+h1		{ color:#036; padding:8px 0 0 45px; height:52px; background:url(img/crumbs.png) no-repeat 0 0; }
 h1 a		{ font-weight:bold; padding:0 10px; }
 h2		{ font:normal 2em "Times New Roman"; margin:10px 0; padding-bottom:2px; border-bottom:1px solid; }
 h3		{ color:#4f789f; font:normal 1.6em "Times New Roman"; margin:5px 0; }
@@ -57,26 +57,25 @@ h4		{ font-weight:bold; }
 .textright		{ text-align:right; }
 .textjustify	{ text-align:justify; }
 
-.error			{ color:#444; margin:20px 0; padding:10px 20px 10px 60px; background:#f9e4e3 url(img/error.png) no-repeat 15px 15px; border:1px solid #e89e9d; }
-.error p			{ line-height:1.6em; }
-
-.help			{ color:#444; margin:20px 0; padding:10px 20px 10px 60px; background:#cdfcd2 url(img/help.png) no-repeat 15px 15px; border:1px solid #60a400; }
-.help p			{ line-height:1.6em; }
+.error, .help, .warning	{ color:#444; margin:20px 45px; padding:10px 20px 10px 60px; }
+.error p, .help p, .warning p	{ line-height:1.6em; }
 .help img		{ vertical-align:-3px; }
 
-.warning		{ color:#444; margin:20px 0; padding:10px 20px 10px 60px; background:#fdf0cd url(img/warning.png) no-repeat 15px 15px; border:1px solid #ecc635; }
-.warning p		{ line-height:1.6em; }
+.error			{ background:#f9e4e3 url(img/error.png) no-repeat 15px 15px; border:1px solid #e89e9d; }
+.help			{ background:#cdfcd2 url(img/help.png) no-repeat 15px 15px; border:1px solid #60a400; }
+.warning		{ background:#fdf0cd url(img/warning.png) no-repeat 15px 15px; border:1px solid #ecc635; }
+
 
 /* 5. Admin Menu
 -------------------------------------------------- */
 
-#adminmenu		{ height:160px; padding:15px 40px; background:url(img/adminmenu.png) no-repeat 0 0; }
-#adminmenu li		{ margin-right:5px; width:120px; float:left; }
-li#am06, li#am12	{ margin:0!important; }
+#adminmenu		{ height:160px; padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; }
+#adminmenu li		{ width:145px; float:left; }
 #adminmenu li a, #adminmenu li span	{ text-align:center; padding-top:54px; display:block; height:26px; background-repeat:no-repeat; background-position:0 -80px; }
 #adminmenu li span	{ color:#999; background-position:0 0; }
-#adminmenu li a	{ background-position:0 -80px; }
-#adminmenu li a:hover, #adminmenu li a.sel	{ font-weight:bold; text-decoration:none; background-position:0 -160px; }
+#adminmenu li a	{ text-shadow:0 1px 0 #eee; background-position:0 0; }
+#adminmenu li a:hover	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; background-position:0 -80px; }
+#adminmenu li a.sel	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; background-position:0 -160px; }
 #am01 a, #am01 span	{ background-image:url(img/adminmenu/home.png); }
 #am02 a, #am02 span	{ background-image:url(img/adminmenu/config.png); }
 #am03 a, #am03 span	{ background-image:url(img/adminmenu/pages.png); }
