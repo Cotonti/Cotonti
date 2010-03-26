@@ -39,10 +39,10 @@ if ($c == "comments")
 
 		$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code LIKE 'p%' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
 		$i = 0;
-		while ($row = mysql_fetch_assoc($sql))
+		while ($row = sed_sql_fetchassoc($sql))
 		{
 			$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row['com_authorid']."' LIMIT 1");
-			$row2 = mysql_fetch_assoc($sql2);
+			$row2 = sed_sql_fetchassoc($sql2);
 			$items[$i]['title'] = $L['rss_comment_of_user']." ".$row2['user_name'];
 			if ($cfg['parser_cache'])
 			{
@@ -78,7 +78,7 @@ if ($c == "comments")
 		$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
 		if (sed_sql_affectedrows() > 0)
 		{
-			$row = mysql_fetch_assoc($sql);
+			$row = sed_sql_fetchassoc($sql);
 			if (sed_auth('page', $row['page_cat'], 'R'))
 			{
 				$rss_title = $row['page_title'];
@@ -87,10 +87,10 @@ if ($c == "comments")
 
 				$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code='p$page_id' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
 				$i = 0;
-				while ($row1 = mysql_fetch_assoc($sql))
+				while ($row1 = sed_sql_fetchassoc($sql))
 				{
 					$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row1['com_authorid']."' LIMIT 1");
-					$row2 = mysql_fetch_assoc($sql2);
+					$row2 = sed_sql_fetchassoc($sql2);
 					$items[$i]['title'] = $L['rss_comment_of_user']." ".$row2['user_name'];
 					if ($cfg['parser_cache'])
 					{

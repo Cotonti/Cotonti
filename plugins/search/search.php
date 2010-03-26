@@ -154,7 +154,7 @@ if (($tab == 'frm' || empty($tab)) && !$cfg['disable_forums'] && $cfg['plugin'][
 
 	$plugin_forum_sec_list  = '<select multiple name="rfrmsub[]" size="10" style="width:385px">';
 	$plugin_forum_sec_list .= '<option value="all"'.(($rsearch['frm']['sub'][0] == 'all' || count($rsearch['frm']['sub']) == 0) ? ' selected="selected"':'').'>'.$L['plu_allsections'].'</option>';
-	while($row1 = mysql_fetch_array($sql1))
+	while($row1 = sed_sql_fetcharray($sql1))
 	{
 		if(sed_auth('forums', $row1['fs_id'], 'R'))
 		{
@@ -240,7 +240,7 @@ if (!empty($sq))
 		$items = sed_sql_numrows($sql);
 		$totalitems[] = sed_sql_foundrows();
 		$jj = 0;
-		while($row = mysql_fetch_array($sql))
+		while($row = sed_sql_fetcharray($sql))
 		{
 			$page_url = empty($row['page_alias']) ? sed_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : sed_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(array(
@@ -294,7 +294,7 @@ if (!empty($sq))
 		$items = sed_sql_numrows($sql);
 		$totalitems[] = sed_sql_foundrows();
 		$jj = 0;
-		while($row = mysql_fetch_array($sql))
+		while($row = sed_sql_fetcharray($sql))
 		{
 			if($row['ft_updated'] > 0)
 			{

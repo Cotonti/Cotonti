@@ -559,13 +559,13 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	{
 		return FALSE;
 	}
-	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
-	while ($i < mysql_num_fields($fieldsres))
+	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table");
+	while ($fieldrow = sed_sql_fetchassoc($fieldsres))
 	{
-		$column = mysql_fetch_field($fieldsres, $i);
+		$column = $fieldrow['Field'];
 		// get column prefix in this table
-		$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
-		preg_match("#.*?_$name$#",$column->name,$match);
+		$column_prefix = substr($column, 0, strpos($column, "_"));
+		preg_match("#.*?_$name$#",$column,$match);
 		if($match[1]!="" && !$noalter) return false; // No adding - fields already exist
 		$i++;
 	}
@@ -620,9 +620,10 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 		return FALSE;
 	}
 	$field = sed_sql_fetchassoc($fieldsres);
-	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
-	$column = mysql_fetch_field($fieldsres, 0);
-	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
+	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table");
+	$fieldrow = sed_sql_fetchassoc($fieldsres);
+	$column = $fieldrow['Field'];
+	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$alter = FALSE;
 	if ($name != $field['field_name'])
 	{
@@ -675,9 +676,10 @@ function sed_extrafield_remove($sql_table, $name)
 		// Attempt to remove non-extra field
 		return FALSE;
 	}
-	$fieldsres = sed_sql_query("SELECT * FROM $db_x$sql_table LIMIT 1");
-	$column = mysql_fetch_field($fieldsres, 0);
-	$column_prefix = substr($column->name, 0, strpos($column->name, "_"));
+	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table");
+	$fieldrow = sed_sql_fetchassoc($fieldsres);
+	$column = $fieldrow['Field'];
+	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$step1 = sed_sql_delete($db_extra_fields, "field_name = '$name' AND field_location='$sql_table'") == 1;
 	$sql = "ALTER TABLE $db_x$sql_table DROP ".$column_prefix."_".$name;
 	$step2 = sed_sql_query($sql);

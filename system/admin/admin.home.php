@@ -212,7 +212,7 @@ if ($cfg['trash_prunedelay'] > 0)
 {
 	$timeago = $sys['now_offset'] - ($cfg['trash_prunedelay'] * 86400);
 	$sqltmp = sed_sql_query("DELETE FROM $db_trash WHERE tr_date<$timeago");
-	$deleted = mysql_affected_rows();
+	$deleted = sed_sql_affectedrows();
 	if ($deleted > 0)
 	{
 		sed_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['trash_prunedelay'].' days', 'adm');
