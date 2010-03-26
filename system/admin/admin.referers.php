@@ -54,7 +54,7 @@ $sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $
 
 if(sed_sql_numrows($sql) > 0)
 {
-	while($row = sed_sql_fetch_array($sql))
+	while($row = sed_sql_fetcharray($sql))
 	{
 		preg_match("#//([^/]+)/#", $row['ref_url'], $a);
 		$host = preg_replace('#^www.#i', '', $a[1]);
