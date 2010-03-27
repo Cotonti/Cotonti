@@ -1,5 +1,10 @@
 <!-- BEGIN: MAIN -->
-
+<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#rsuser").autocomplete("plug.php?r=search", {multiple: true, minChars: 3});
+	});
+</script>
 			<div id="left" style="margin-right:25px" class="whitee">
 
 				<h1>{PHP.L.Search}</h1>
@@ -59,7 +64,7 @@
               <div>{PLUGIN_PAGE_SEC_LIST}</div>
               <div class='desc'>{PHP.L.plu_ctrl_list}</div>
               <div style='padding:15px 0 0 0'>{PHP.L.plu_res_sort}:</div>
-              <div><span>{PLUGIN_PAGE_RES_SORT}</span><span style='margin-left:12px'>{PLUGIN_PAGE_RES_DESC}</span><span style='margin-left:12px'>{PLUGIN_PAGE_RES_ASC}</span></div></td>
+              <div><span>{PLUGIN_PAGE_RES_SORT}</span><span style='margin-left:12px'>{PLUGIN_PAGE_RES_SORT_WAY}</span></div></td>
             <td style='padding-left:25px'><div style='padding:10px 0'>{PHP.L.plu_other_opt}:</div>
               <div>{PLUGIN_PAGE_SEARCH_NAMES}</div>
               <div style='margin:5px 0'>{PLUGIN_PAGE_SEARCH_DESC}</div>
@@ -79,7 +84,7 @@
               <div>{PLUGIN_FORUM_SEC_LIST}</div>
               <div class='desc'>{PHP.L.plu_ctrl_list}</div>
               <div style='padding:15px 0 0 0'>{PHP.L.plu_res_sort}:</div>
-              <div><span>{PLUGIN_FORUM_RES_SORT}</span><span style='margin-left:12px'>{PLUGIN_FORUM_RES_DESC}</span><span style='margin-left:12px'>{PLUGIN_FORUM_RES_ASC}</span></div></td>
+              <div><span>{PLUGIN_FORUM_RES_SORT}</span><span style='margin-left:12px'>{PLUGIN_FORUM_RES_SORT_WAY}</span></div></td>
             <td style='padding-left:25px'><div style='padding-bottom:10px'>{PHP.L.plu_other_opt}:</div>
               <div>{PLUGIN_FORUM_SEARCH_NAMES}</div>
               <div style='margin:5px 0'>{PLUGIN_FORUM_SEARCH_POST}</div>

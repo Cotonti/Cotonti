@@ -1,4 +1,10 @@
 <!-- BEGIN: MAIN -->
+<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#rsuser").autocomplete("plug.php?r=search", {multiple: true, minChars: 3});
+	});
+</script>
 <div class="mboxHD">{PLUGIN_TITLE}</div>
 <div class="mboxBody">
 	<div>{PHP.L.plu_subtitle_all}</div>
@@ -24,6 +30,7 @@
 			</table>
 			<div class="bCap"></div>
 			<div style="margin:10px 0">{PHP.L.plu_other_date}: {PLUGIN_SEARCH_DATE_SELECT} {PLUGIN_SEARCH_DATE_FROM} - {PLUGIN_SEARCH_DATE_TO}</div>
+			<div style="margin:10px 0">{PHP.L.plu_other_userfilter}: {PLUGIN_SEARCH_USER}</div>
 			<!-- BEGIN: PAGES_OPTIONS -->
 			<div style="margin:20px 0">
 				<table>
@@ -36,15 +43,14 @@
 						<td style="padding-left:25px">
 							<div style="padding:10px 0">{PHP.L.plu_other_opt}:</div>
 
-							<div><label>{PLUGIN_PAGE_SEARCH_NAMES} {PHP.L.plu_pag_search_names}</label></div>
-							<div style="margin:5px 0"><label>{PLUGIN_PAGE_SEARCH_DESC} {PHP.L.plu_pag_search_desc}</label></div>
-							<div style="margin:5px 0"><label>{PLUGIN_PAGE_SEARCH_TEXT} {PHP.L.plu_pag_search_text}</label></div>
-							<div><label>{PLUGIN_PAGE_SEARCH_FILE} {PHP.L.plu_pag_search_file}</label></div>
+							<div>{PLUGIN_FORUM_SEARCH_NAMES}</div>
+							<div style="margin:5px 0">{PLUGIN_PAGE_SEARCH_DESC}</div>
+							<div style="margin:5px 0">{PLUGIN_PAGE_SEARCH_TEXT}</div>
+							<div>{PLUGIN_PAGE_SEARCH_FILE}</div>
 							<div style="padding:15px 0 0 0">{PHP.L.plu_res_sort}:</div>
 							<div>
 								<div>{PLUGIN_PAGE_RES_SORT}</div>
-								<span style="margin-left:12px"><label>{PLUGIN_PAGE_RES_DESC} {PHP.L.plu_sort_desc}</label></span>
-								<span style="margin-left:12px"><label>{PLUGIN_PAGE_RES_ASC} {PHP.L.plu_sort_asc}</label></span>
+								<span style="margin-left:12px">{PLUGIN_PAGE_RES_SORT_WAY}</span>
 							</div>
 
 						</td>
@@ -66,14 +72,13 @@
 						<td style="padding-left:25px">
 							<div style="padding-bottom:10px">{PHP.L.plu_other_opt}:</div>
 
-							<div><label>{PLUGIN_FORUM_SEARCH_NAMES} {PHP.L.plu_frm_search_names}</label></div>
-							<div style="margin:5px 0"><label>{PLUGIN_FORUM_SEARCH_POST} {PHP.L.plu_frm_search_post}</label></div>
-							<div><label>{PLUGIN_FORUM_SEARCH_ANSW} {PHP.L.plu_frm_search_answ}</label></div>
+							<div>{PLUGIN_FORUM_SEARCH_NAMES}</div>
+							<div style="margin:5px 0">{PLUGIN_FORUM_SEARCH_POST}</div>
+							<div>{PLUGIN_FORUM_SEARCH_ANSW}</div>
 							<div style="padding:15px 0 0 0">{PHP.L.plu_res_sort}:</div>
 							<div>
 								<div>{PLUGIN_FORUM_RES_SORT}</div>
-								<span style="margin-left:12px"><label>{PLUGIN_FORUM_RES_DESC} {PHP.L.plu_sort_desc}</label></span>
-								<span style="margin-left:12px"><label>{PLUGIN_FORUM_RES_ASC} {PHP.L.plu_sort_asc}</label></span>
+								<span style="margin-left:12px">{PLUGIN_FORUM_RES_SORT_WAY}</span>
 							</div>
 
 						</td>

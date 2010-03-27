@@ -25,6 +25,7 @@ pagesearch=05:radio::1:Enable pages search
 forumsearch=06:radio::1:Enable forums search
 searchurl=07:select:Normal,Single:Normal:Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link
 addfields=08:string:::Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"
+extrafilters=09:radio::1:Show extrafilters on main search page
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 

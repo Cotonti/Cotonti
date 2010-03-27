@@ -493,7 +493,8 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('plug','search','3','minsigns',2,'3','3','2,3,4,5','Min. signs in query'),
 ('plug','search','4','maxitems',2,'50','50','15,30,50,80,100,150,200','Maximum results lines for general search'),
 ('plug','search','5','pagesearch',3,'1','1','','Enable pages search'),
-('plug','search','6','forumsearch',3, '1','1','','Enable forums search'),
+('plug','search','6','forumsearch',3,'1','1','','Enable forums search'),
+('plug','search','9','extrafilters',3,'1','1','','Show extrafilters on main search page')
 ('plug','tags','1','pages',3,'1','1','','Enable Tags for Pages'),
 ('plug','tags','8','lim_pages',1,'0','0','','Limit of tags in a cloud displayed for pages, 0 is unlimited'),
 ('plug','tags','7','limit',1,'0','0','','Max. tags per items, 0 is unlimited'),
@@ -839,7 +840,8 @@ INSERT INTO `sed_plugins` (`pl_id`, `pl_hook`, `pl_code`, `pl_part`, `pl_title`,
 (46, 'ajax', 'tags', 'ajax', 'Tags', 'tags.ajax', 10, 1),
 (47, 'page.main', 'tags', 'page.main', 'Tags', 'tags.page.main', 10, 1),
 (48, 'forums.posts.tags', 'tags', 'forums.posts', 'Tags', 'tags.forums.posts', 10, 1),
-(49, 'forums.posts.main', 'tags', 'forums.posts.main', 'Tags', 'tags.forums.posts.main', 10, 1);
+(49, 'forums.posts.main', 'tags', 'forums.posts.main', 'Tags', 'tags.forums.posts.main', 10, 1),
+(50, 'ajax', 'search', 'ajax', 'Search', 'search.ajax', 10, 1);
 
 CREATE TABLE `sed_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,
