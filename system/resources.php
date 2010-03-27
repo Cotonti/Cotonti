@@ -16,10 +16,10 @@ defined('SED_CODE') or die('Wrong URL');
  */
 $R['code_option_empty'] = '---';
 $R['code_time_separator'] = ':';
-$R['input_checkbox'] = '<input type="checkbox" class="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> <label>{$title}</label>';
+$R['input_checkbox'] = '<label><input type="checkbox" class="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
 $R['input_default'] = '<input type="{$type}" name="{$name}" value="{$value}"{$attrs} />';
 $R['input_option'] = '<option value="{$value}"{$selected}>{$title}</option>';
-$R['input_radio'] = '<input type="radio" class="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> <label>{$title}</label>';
+$R['input_radio'] = '<label><input type="radio" class="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
 $R['input_radio_separator'] = ' ';
 $R['input_select_begin'] = '<select name="{$name}"{$attrs}>';
 $R['input_select_end'] = '</select>';

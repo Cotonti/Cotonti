@@ -20,6 +20,7 @@ $L['cfg_pagesearch'] = array('Enable pages search');
 $L['cfg_forumsearch'] = array('Enable forums search');
 $L['cfg_searchurl'] = array('Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
 $L['cfg_addfields']= array('Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"');
+$L['cfg_extrafilters']= array('Show extrafilters on main search page');
 
 // Common - title, info, query
 $L['plu_title_all'] = 'Site search';
@@ -62,15 +63,18 @@ $L['plu_frm_res_sort2'] = 'Topic started';
 $L['plu_frm_res_sort3'] = 'Topic title';
 $L['plu_frm_res_sort4'] = 'Replies count';
 $L['plu_frm_res_sort5'] = 'Views count';
+$L['plu_frm_res_sort6'] = 'Section';
 $L['plu_frm_search_names'] = 'Search in topic titles';
 $L['plu_frm_search_post'] = 'Search in posts';
 $L['plu_frm_search_answ'] = 'Show topics with replies only';
+$L['plu_other_userfilter'] = 'Filter users';
 
 // Parameters - pages
 $L['plu_pag_set_sec'] = 'Select page categories';
 $L['plu_pag_res_sort1'] = 'Date published';
 $L['plu_pag_res_sort2'] = 'Title';
 $L['plu_pag_res_sort3'] = 'Popularity';
+$L['plu_pag_res_sort3'] = 'Category';
 $L['plu_pag_search_names'] = 'Search in page titles';
 $L['plu_pag_search_desc'] = 'Search in page descriptions';
 $L['plu_pag_search_text'] = 'Search in page text';
@@ -80,6 +84,7 @@ $L['plu_pag_search_file'] = 'Show pages with files only';
 $L['plu_querytooshort'] = 'The query string is too short';
 $L['plu_toomanywords'] = 'Too many words, limit is set to';
 $L['plu_noneresult'] = 'Nothing was found. Please try to simplify your query';
+$L['plu_usernotexist'] = 'User does not exists';
 
 // Results
 $L['plu_result'] = 'Search results';

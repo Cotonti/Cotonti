@@ -19,9 +19,10 @@
  */
 function sed_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
 {
+	global $R;
 	$input_attrs = sed_rc_attr_string($attrs);
 	$checked = $chosen ? ' checked="checked"' : '';
-	$result .= sed_rc('input_checkbox', array(
+	return sed_rc('input_checkbox', array(
 		'value' => $value,
 		'name' => $name,
 		'checked' => $checked,
