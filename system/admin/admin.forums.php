@@ -19,6 +19,8 @@ require_once sed_incfile('functions', 'forums');
 
 $t = new XTemplate(sed_skinfile('admin.forums'));
 
+require_once sed_incfile('forms');
+
 $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 
 $id = sed_import('id','G','INT');

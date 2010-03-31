@@ -70,8 +70,8 @@ if ($a == 'update')
 
 	$rpagedelete = sed_import('rpagedelete', 'P', 'BOL');
 
-	$error_string .= (empty($rpagecat)) ? $L['pag_catmissing'] . $R['code_error_separator'] : '';
-	$error_string .= (mb_strlen($rpagetitle) < 2) ? $L['pag_titletooshort'] . $R['code_error_separator'] : '';
+	if (empty($rpagecat)) sed_error('pag_catmissing', 'rpagecat');
+	if (mb_strlen($rpagetitle) < 2) sed_error('pag_titletooshort', 'rpagetitle');
 
 	if ($rpagefile == 0 && !empty($rpageurl))
 	{
@@ -88,7 +88,7 @@ if ($a == 'update')
 		}
 		$rpageextrafields[$row['field_name']] = $import;
 	}
-	if (empty($error_string) || $rpagedelete)
+	if (!$cot_error || $rpagedelete)
 	{
 		if ($rpagedelete)
 		{
@@ -251,6 +251,10 @@ if ($a == 'update')
 			sed_redirect(sed_url('page', "id=".$id, '', true));
 		}
 	}
+	else
+	{
+		sed_redirect(sed_url('page', "m=edit&id=$id", '', true));
+	}
 }
 
 $sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
@@ -289,12 +293,6 @@ require_once $cfg['system_dir'].'/header.php';
 
 $mskin = sed_skinfile(array('page', 'edit', $sed_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
-
-if (!empty($error_string))
-{
-	$t->assign("PAGEEDIT_ERROR_BODY", $error_string);
-	$t->parse("MAIN.PAGEEDIT_ERROR");
-}
 
 require_once sed_incfile('forms');
 
@@ -380,6 +378,14 @@ foreach($sed_extrafields['pages'] as $i => $row)
 	$uname = strtoupper($row['field_name']);
 	$t->assign('PAGEEDIT_FORM_'.$uname, sed_build_extrafields('page',  $row, $pag["page_".$row['field_name']]));
 	$t->assign('PAGEEDIT_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+}
+
+// Error and message handling
+if (sed_check_messages())
+{
+	$t->assign('PAGEEDIT_ERROR_BODY', sed_implode_messages());
+	$t->parse('MAIN.PAGEEDIT_ERROR');
+	sed_clear_messages();
 }
 
 /* === Hook === */

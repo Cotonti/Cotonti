@@ -81,15 +81,15 @@ if ($a == 'add')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $newpagecat);
 	sed_block($usr['auth_write']);
 
-	$error_string .= (empty($newpagecat)) ? $L['pag_catmissing'] . $R['code_error_separator'] : '';
-	$error_string .= (mb_strlen($newpagetitle) < 2) ? $L['pag_titletooshort'] . $R['code_error_separator'] : '';
+	if (empty($newpagecat)) sed_error('pag_catmissing', 'newpagecat');
+	if (mb_strlen($newpagetitle) < 2) sed_error('pag_titletooshort', 'newpagetitle');
 
 	if ($newpagefile == 0 && !empty($newpageurl))
 	{
 		$newpagefile = 1;
 	}
 
-	if (empty($error_string))
+	if (!$cot_error)
 	{
 		if (!empty($newpagealias))
 		{
@@ -135,31 +135,37 @@ if ($a == 'add')
 		/* ===== */
 
 		$ssql = "INSERT into $db_pages
-		(page_state,
-		page_type,
-		page_cat,
-		page_key,";
-		foreach ($sed_extrafields['pages'] as $row) $ssql .= "page_".$row['field_name'].", "; // Extra fields
-$ssql.="page_title,
-		page_desc,
-		page_text,
-		page_html,
-		page_author,
-		page_ownerid,
-		page_date,
-		page_begin,
-		page_expire,
-		page_file,
-		page_url,
-		page_size,
-		page_alias)
-		VALUES
-		(".(int)$page_state.",
-		".(int)$newpagetype.",
-		'".sed_sql_prep($newpagecat)."',
+			(page_state,
+			page_type,
+			page_cat,
+			page_key,";
+		foreach ($sed_extrafields['pages'] as $row)
+		{
+			$ssql .= "page_".$row['field_name'].", "; // Extra fields
+		}
+		$ssql.="page_title,
+			page_desc,
+			page_text,
+			page_html,
+			page_author,
+			page_ownerid,
+			page_date,
+			page_begin,
+			page_expire,
+			page_file,
+			page_url,
+			page_size,
+			page_alias)
+			VALUES
+			(".(int)$page_state.",
+			".(int)$newpagetype.",
+			'".sed_sql_prep($newpagecat)."',
 			'".sed_sql_prep($newpagekey)."',";
-			foreach ($newpageextrafields as $newpageextrafield) $ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields
-  	$ssql.="'".sed_sql_prep($newpagetitle)."',
+		foreach ($newpageextrafields as $newpageextrafield)
+		{
+			$ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields
+		}
+		$ssql.="'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
 			'".sed_sql_prep($newpagetext)."',
 			'".sed_sql_prep($newpagehtml)."',
@@ -172,7 +178,7 @@ $ssql.="page_title,
 			'".sed_sql_prep($newpageurl)."',
 			'".sed_sql_prep($newpagesize)."',
 			'".sed_sql_prep($newpagealias)."')";
-  		$sql = sed_sql_query($ssql);
+		$sql = sed_sql_query($ssql);
 
 		$id = sed_sql_insertid();
 		$r_url = (!$page_state) ? sed_url('page', "id=".$id, '', true) : sed_url('message', "msg=300", '', true);
@@ -199,6 +205,10 @@ $ssql.="page_title,
 
 		sed_shield_update(30, "New page");
 		sed_redirect($r_url);
+	}
+	else
+	{
+		sed_redirect(sed_url('page', 'm=add'));
 	}
 }
 
@@ -229,12 +239,6 @@ require_once $cfg['system_dir'].'/header.php';
 
 $mskin = sed_skinfile(array('page', 'add', $sed_cat[$newpagecat]['tpl']));
 $t = new XTemplate($mskin);
-
-if (!empty($error_string))
-{
-	$t->assign("PAGEADD_ERROR_BODY", $error_string);
-	$t->parse("MAIN.PAGEADD_ERROR");
-}
 
 require_once sed_incfile('forms');
 
@@ -313,6 +317,14 @@ foreach($sed_extrafields['pages'] as $i => $row)
 	$uname = strtoupper($row['field_name']);
 	$t->assign('PAGEADD_FORM_'.$uname, sed_build_extrafields('page',  $row, htmlspecialchars($newpageextrafields[$row['field_name']]), true));
 	$t->assign('PAGEADD_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+}
+
+// Error and message handling
+if (sed_check_messages())
+{
+	$t->assign('PAGEADD_ERROR_BODY', sed_implode_messages());
+	$t->parse('MAIN.PAGEADD_ERROR');
+	sed_clear_messages();
 }
 
 /* === Hook === */

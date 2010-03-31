@@ -1826,6 +1826,27 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 	imagedestroy($source);
 }
 
+/*======================== Error & Message Handling =========================*/
+
+/**
+ * Checks if there are messages to display
+ * @return bool
+ */
+function sed_check_messages()
+{
+	return is_array($_SESSION['cot_messages']) && count($_SESSION['cot_messages']) > 0;
+}
+
+/**
+ * Clears error and other messages after they have bin displayed
+ * @see sed_error()
+ * @see sed_message()
+ */
+function sed_clear_messages()
+{
+	unset($_SESSION['cot_messages']);
+}
+
 /**
  * Terminates script execution and performs redirect
  *
@@ -1866,7 +1887,7 @@ function sed_diefatal($text='Reason is unknown.', $title='Fatal error')
 /**
  * Terminates with "disabled" error
  *
- * @param unknown_type $disabled
+ * @param bool $disabled
  */
 function sed_dieifdisabled($disabled)
 {
@@ -1875,6 +1896,85 @@ function sed_dieifdisabled($disabled)
 		sed_redirect(sed_url('message', "msg=940", '', true));
 	}
 }
+
+/**
+ * Records an error message to be displayed on results page
+ * @param string $message Message lang string code or full text
+ * @param string $src Error source identifier, such as field name for invalid input
+ * @see sed_message()
+ */
+function sed_error($message, $src = 'default')
+{
+	global $cot_error;
+	$cot_error ? $cot_error++ : $cot_error = 1;
+	sed_message($message, 'error', $src);
+}
+
+/**
+ * Returns an array of messages for a specific source
+ * @param string $src Message source identifier
+ * @return array Multidimensional array of error messages
+ */
+function sed_get_messages($src = 'default')
+{
+	return is_array($_SESSION['cot_messages'][$src]) ? $_SESSION['cot_messages'][$src] : false;
+}
+
+/**
+ * Collects all messages and implodes them into a single string
+ * @param string $src Origin of the target messages
+ * @param string $class Group messages of selected class only. Empty to group all
+ * @return string Composite HTML string
+ * @see sed_error()
+ * @see sed_get_messages()
+ * @see sed_message()
+ */
+function sed_implode_messages($src = 'default', $class = '')
+{
+	global $R, $L;
+	$res = '';
+	$i = 0;
+	if (is_array($_SESSION['cot_messages']) && is_array($_SESSION['cot_messages'][$src]))
+	{
+		$res = sed_rc('code_msg_begin', array('class' => $class));
+		foreach ($_SESSION['cot_messages'][$src] as $msg)
+		{
+			if (!empty($class) && $msg['class'] != $class)
+			{
+				continue;
+			}
+			if ($i > 0) $res .= $R['code_error_separator'];
+			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
+			$res .= sed_rc('code_msg_line', array('class' => $msg['class'], 'text' => $text));
+			$i++;
+		}
+		$res .= $R['code_msg_end'];
+	}
+	return $res;
+}
+
+/**
+ * Records a generic message to be displayed on results page
+ * @param string $text Message lang string code or full text
+ * @param string $class Message class: 'status', 'error', 'ok', 'notice', etc.
+ * @param string $src Message source identifier
+ * @see sed_error()
+ */
+function sed_message($text, $class = 'status', $src = 'default')
+{
+	global $cfg;
+	if (!$cfg['msg_separate'])
+	{
+		// Force the src to default if all errors are displayed in the same place
+		$src = 'default';
+	}
+	$_SESSION['cot_messages'][$src][] = array(
+		'text' => $text,
+		'class' => $class
+	);
+}
+
+/*===========================================================================*/
 
 /**
  * Returns a list of plugins registered for a hook
@@ -2088,7 +2188,11 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
 	if ($pass)
 	{
-		return($v);
+		if ($source === 'P' && $filter !== 'PSW')
+		{
+			sed_import_buffer($name, $v);
+		}
+		return $v;
 	}
 	else
 	{
@@ -2102,8 +2206,55 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		}
 		else
 		{
-			return($defret);
+			if ($source === 'P' && $filter !== 'PSW')
+			{
+				sed_import_buffer($name, $defret);
+			}
+			return $defret;
 		}
+	}
+}
+
+/**
+ * Puts an imported variable into the cross-request buffer
+ * @param string $name Input name
+ * @param mixed $value Imported value
+ */
+function sed_import_buffer($name, $value)
+{
+	static $called = false;
+	if (!$called)
+	{
+		// Clean the previously set buffer
+		unset($_SESSION['cot_buffer']);
+		$called = true;
+	}
+	$_SESSION['cot_buffer'][$name] = $value;
+}
+
+/**
+ * Attempts to fetch a buffered value for a variable previously imported
+ * if the currently imported value is empty
+ * @param string $name Input name
+ * @param mixed $value Currently imported value
+ * @return mixed Input value or NULL if the variable is not in the buffer
+ */
+function sed_import_buffered($name, $value)
+{
+	if (empty($value))
+	{
+		if (isset($_SESSION['cot_buffer'][$name]))
+		{
+			return $_SESSION['cot_buffer'][$name];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	else
+	{
+		return $value;
 	}
 }
 

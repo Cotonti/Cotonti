@@ -16,6 +16,8 @@ sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.config'));
 
+require_once sed_incfile('forms');
+
 $adminpath[] = array(sed_url('admin', 'm=config'), $L['Configuration']);
 
 $sed_select_charset = sed_loadcharsets();

@@ -19,6 +19,8 @@ require_once sed_incfile('functions', 'forums');
 
 $t = new XTemplate(sed_skinfile('admin.rights'));
 
+require_once sed_incfile('forms');
+
 $g = sed_import('g', 'G', 'INT');
 $advanced = sed_import('advanced', 'G', 'BOL');
 

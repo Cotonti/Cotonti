@@ -5,7 +5,7 @@ Code=comments
 Name=Comments system
 Description=Comments system for Cotonti
 Version=0.7.0
-Date=2010-jan-03
+Date=2010-mar-28
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2010
 Notes=BSD License
@@ -44,40 +44,12 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($action == 'install')
 {
-	require_once $cfg['plugins_dir'] . '/comments/comments.global.php';
-
-	sed_sql_query("CREATE TABLE IF NOT EXISTS $db_com (
-	  `com_id` int(11) NOT NULL auto_increment,
-	  `com_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-	  `com_code_prefix` varchar(30) collate utf8_unicode_ci NOT NULL default '',
-	  `com_author` varchar(100) collate utf8_unicode_ci NOT NULL,
-	  `com_authorid` int(11) default NULL,
-	  `com_authorip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
-	  `com_text` text collate utf8_unicode_ci NOT NULL,
-	  `com_html` text collate utf8_unicode_ci,
-	  `com_date` int(11) NOT NULL default '0',
-	  `com_count` int(11) NOT NULL default '0',
-	  `com_isspecial` tinyint(1) NOT NULL default '0',
-	  PRIMARY KEY (`com_id`),
-	  KEY `com_code` (`com_code`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1");
-
-	if (!sed_sql_query("SELECT page_comcount FROM $db_pages"))
-	{
-		sed_sql_query("ALTER TABLE $db_pages ADD COLUMN page_comcount mediumint(8) unsigned default '0'");
-	}
-	if (!sed_sql_query("SELECT poll_comcount FROM $db_polls"))
-	{
-		sed_sql_query("ALTER TABLE $db_polls ADD COLUMN poll_comcount mediumint(8) unsigned default '0'");
-	}
-	if (!sed_sql_query("SELECT poll_comments FROM $db_polls"))
-	{
-		sed_sql_query("ALTER TABLE $db_polls ADD COLUMN poll_comments tinyint(1) NOT NULL default 1");
-	}
-	if (!sed_sql_query("SELECT structure_comments FROM $db_structure"))
-	{
-		sed_sql_query("ALTER TABLE $db_structure ADD COLUMN structure_comments tinyint(1) NOT NULL default 1");
-	}
+	sed_sql_runscript(file_get_contents($cfg['plugins_dir'] . '/comments/setup/install.sql'));
+}
+elseif ($action == 'uninstall')
+{
+	// Uncomment for complete uninstall
+	// sed_sql_runscript(file_get_contents($cfg['plugins_dir'] . '/comments/setup/uninstall.sql'));
 }
 
 ?>

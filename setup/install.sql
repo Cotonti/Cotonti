@@ -407,6 +407,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','skin','15','disablesysinfos',3,'0','0','',''),
 ('core','skin','15','keepcrbottom',3,'1','1','',''),
 ('core','skin','15','showsqlstats',3,'0','0','',''),
+('core','skin','21','msg_separate',3,'0','0','','Show messages separately for each source'),
 ('core','structure','05','maxlistsperpage',2,'15','15','5,10,15,20,25,30,40,50,60,70,100,200,500',''),
 ('core','structure','05','maxrowsperpage',2,'15','15','5,10,15,20,25,30,40,50,60,70,100,200,500',''),
 ('core','time','11','dateformat',1,'Y-m-d H:i','Y-m-d H:i','',''),

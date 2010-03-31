@@ -289,6 +289,7 @@ $L['cfg_forcedefaultskin'] = array('Force the default skin for all users', '');
 $L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');	// New in N-0.0.2
 $L['cfg_keepcrbottom'] = array('Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}', 'In footer.tpl');
 $L['cfg_metakeywords'] = array('HTML Meta keywords (comma separated)', 'Search engines');
+$L['cfg_msg_separate'] = array('Display messages separately for each source', '');
 $L['cfg_separator'] = array('Generic separator', 'Default:>');
 $L['cfg_showsqlstats'] = array('Show SQL queries statistics', 'In footer.tpl');
 

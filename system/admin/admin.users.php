@@ -19,6 +19,8 @@ require_once sed_incfile('uploads');
 
 $t = new XTemplate(sed_skinfile('admin.users'));
 
+require_once sed_incfile('forms');
+
 $adminpath[] = array(sed_url('admin', 'm=users'), $L['Users']);
 
 $g = sed_import('g', 'G', 'INT');

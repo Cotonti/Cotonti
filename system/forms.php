@@ -23,7 +23,7 @@ function sed_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
 	$input_attrs = sed_rc_attr_string($attrs);
 	$checked = $chosen ? ' checked="checked"' : '';
 	return sed_rc('input_checkbox', array(
-		'value' => $value,
+		'value' => sed_import_buffered($name, $value),
 		'name' => $name,
 		'checked' => $checked,
 		'title' => $title,
@@ -43,18 +43,20 @@ function sed_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
  */
 function sed_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 {
-	global $R;
+	global $R, $cfg;
 	$input_attrs = sed_rc_attr_string($attrs);
 	$rc = empty($custom_rc) ? "input_$type" : $custom_rc;
 	if (!isset($R[$rc]))
 	{
 		$rc = 'input_default';
 	}
+	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
 	return sed_rc($rc, array(
 		'type' => $type,
 		'name' => $name,
-		'value' => htmlspecialchars($value),
-		'attrs' => $input_attrs
+		'value' => htmlspecialchars(sed_import_buffered($name, $value)),
+		'attrs' => $input_attrs,
+		'error' => $error
 	));
 }
 
@@ -82,6 +84,7 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = sed_rc_attr_string($attrs);
+	$chosen = sed_import_buffered($name, $chosen);
 	if (empty($separator))
 	{
 		$separator = $R['input_radio_separator'];
@@ -121,7 +124,7 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
  */
 function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '')
 {
-	global $R;
+	global $R, $cfg;
 	if (!is_array($values))
 	{
 		$values = explode(',', $values);
@@ -132,7 +135,9 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = sed_rc_attr_string($attrs);
+	$chosen = sed_import_buffered($name, $chosen);
 	$multi = is_array($chosen) && isset($input_attrs['multiple']);
+	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
 	$result = sed_rc('input_select_begin', array('name' => $name, 'attrs' => $input_attrs));
 	$selected = (is_null($chosen) || $chosen === '' || $chosen=='00') ? ' selected="selected"' : '';
 	if ($add_empty)
@@ -154,7 +159,9 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 			'title' => $title
 		));
 	}
-	$result .= $R['input_select_end'];
+	$result .= sed_rc('input_select_end', array(
+		'error' => $error
+	));
 	return $result;
 }
 
@@ -284,12 +291,14 @@ function sed_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 {
 	$input_attrs = sed_rc_attr_string($attrs);
 	$rc = empty($custom_rc) ? 'input_textarea' : $custom_rc;
+	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
 	return sed_rc($rc, array(
 		'name' => $name,
-		'value' => htmlspecialchars($value),
+		'value' => htmlspecialchars(sed_import_buffered($name, $value)),
 		'rows' => $rows,
 		'cols' => $cols,
-		'attrs' => $input_attrs
+		'attrs' => $input_attrs,
+		'error' => $error
 	));
 }
 

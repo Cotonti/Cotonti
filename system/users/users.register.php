@@ -88,17 +88,20 @@ if ($a=='add')
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_email='".sed_sql_prep($ruseremail)."'");
 	$res2 = sed_sql_result($sql,0,"COUNT(*)");
 
-	$error_string .= (preg_match('/&#\d+;/', $rusername) || preg_match('/[<>#\'"\/]/', $rusername)) ?
-		$L['aut_invalidloginchars'] . '<br />' : '';
-	$error_string .= (!empty($bannedreason)) ? $L['aut_emailbanned'].$bannedreason."<br />" : '';
-	$error_string .= (mb_strlen($rusername)<2) ? $L['aut_usernametooshort']."<br />" : '';
-	$error_string .= (mb_strlen($rpassword1)<4 || sed_alphaonly($rpassword1)!=$rpassword1) ? $L['aut_passwordtooshort']."<br />" : '';
-	$error_string .= (mb_strlen($ruseremail)<4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
-	$error_string .= ($res1>0) ? $L['aut_usernamealreadyindb']."<br />" : '';
-	$error_string .= ($res2>0) ? $L['aut_emailalreadyindb']."<br />" : '';
-	$error_string .= ($rpassword1!=$rpassword2) ? $L['aut_passwordmismatch']."<br />" : '';
+	if (preg_match('/&#\d+;/', $rusername) || preg_match('/[<>#\'"\/]/', $rusername))
+		sed_error('aut_invalidloginchars', 'rusername');
+	if (!empty($bannedreason)) sed_error($L['aut_emailbanned'].$bannedreason);
+	if (mb_strlen($rusername)<2) sed_error('aut_usernametooshort', 'rusername');
+	if (mb_strlen($rpassword1)<4 || sed_alphaonly($rpassword1)!=$rpassword1)
+		sed_error('aut_passwordtooshort', 'rpassword1');
+	if (mb_strlen($ruseremail)<4
+		|| !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail))
+		sed_error('aut_emailtooshort', 'ruseremail');
+	if ($res1>0) sed_error('aut_usernamealreadyindb', 'rusername');
+	if ($res2>0) sed_error('aut_emailalreadyindb', 'ruseremail');
+	if ($rpassword1!=$rpassword2) sed_error('aut_passwordmismatch', 'rpassword2');
 
-	if (empty($error_string))
+	if (!$cot_error)
 	{
 		if (sed_sql_rowcount($db_users)==0)
 		{ $defgroup = 5; }
@@ -223,6 +226,10 @@ if ($a=='add')
 			sed_redirect(sed_url('message', 'msg=105', '', true));
 		}
 	}
+	else
+	{
+		sed_redirect(sed_url('users', 'm=register', '', true));
+	}
 }
 
 elseif ($a=='validate' && mb_strlen($v)==32)
@@ -289,20 +296,6 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 	}
 }
 
-$form_usergender = sed_selectbox_gender($rusergender,'rusergender');
-$form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']));
-
-$timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
-
-$form_timezone = "<select name=\"rtimezone\" size=\"1\">";
-foreach($timezonelist as $x) 
-{ 
-	$f = (float) $x; 
-	$selected = ($f==$rtimezone) ? "selected=\"selected\"" : ''; 
-	$form_timezone .= "<option value=\"$f\" $selected>GMT ".$x."</option>";
-}
-$form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
-
 /* === Hook === */
 $extp = sed_getextplugins('users.register.main');
 foreach ($extp as $pl)
@@ -316,31 +309,39 @@ $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.register'));
 
-if (!empty($error_string))
+require_once sed_incfile('forms');
+
+$form_usergender = sed_selectbox_gender($rusergender,'rusergender');
+$form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']));
+
+$timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
+foreach($timezonelist as $x)
 {
-	$t->assign("USERS_REGISTER_ERROR_BODY",$error_string);
-	$t->parse("MAIN.USERS_REGISTER_ERROR");
+	$timezonename[] = 'GMT ' . $x;
 }
+$form_timezone = sed_selectbox($rtimezone, 'rtimezone', $timezonelist, $timezonename, false);
+$form_timezone .= ' '.$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
+
 
 $useredit_array = array(
 	"USERS_REGISTER_TITLE" => $L['aut_registertitle'],
 	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
-	"USERS_REGISTER_ADMINEMAIL" => "$sed_adminemail",
+	"USERS_REGISTER_ADMINEMAIL" => $sed_adminemail,
 	"USERS_REGISTER_SEND" => sed_url('users', 'm=register&a=add'),
-	"USERS_REGISTER_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".htmlspecialchars($rusername)."\" size=\"24\" maxlength=\"100\" />",
-	"USERS_REGISTER_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".htmlspecialchars($ruseremail)."\" size=\"24\" maxlength=\"64\" />",
-	"USERS_REGISTER_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword1\" size=\"8\" maxlength=\"16\" />",
-	"USERS_REGISTER_PASSWORDREPEAT" => "<input type=\"password\" class=\"password\" name=\"rpassword2\" size=\"8\" maxlength=\"16\" />",
+	"USERS_REGISTER_USER" => sed_inputbox('text', 'rusername', $rusername, array('size' => 24, 'maxlength' => 100)),
+	"USERS_REGISTER_EMAIL" => sed_inputbox('text', 'ruseremail', $ruseremail, array('size' => 24, 'maxlength' => 64)),
+	"USERS_REGISTER_PASSWORD" => sed_inputbox('password', 'rpassword1', '', array('size' => 8, 'maxlength' => 32)),
+	"USERS_REGISTER_PASSWORDREPEAT" => sed_inputbox('password', 'rpassword2', '', array('size' => 8, 'maxlength' => 32)),
 	"USERS_REGISTER_COUNTRY" => sed_selectbox_countries($rcountry, 'rcountry'),
-	"USERS_REGISTER_LOCATION" => "<input type=\"text\" class=\"text\" name=\"rlocation\" value=\"".htmlspecialchars($rlocation)."\" size=\"24\" maxlength=\"64\" />",
+	"USERS_REGISTER_LOCATION" => sed_inputbox('text', 'rlocation', $rlocation, array('size' => 24, 'maxlength' => 64)),
 	"USERS_REGISTER_TIMEZONE" => $form_timezone,
-	"USERS_REGISTER_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"roccupation\" value=\"".htmlspecialchars($roccupation)."\" size=\"24\" maxlength=\"64\" />",
+	"USERS_REGISTER_OCCUPATION" => sed_inputbox('text', 'roccupation', $roccupation, array('size' => 24, 'maxlength' => 64)),
 	"USERS_REGISTER_GENDER" => $form_usergender,
 	"USERS_REGISTER_BIRTHDATE" => $form_birthdate,
-	"USERS_REGISTER_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".htmlspecialchars($ruserwebsite)."\" size=\"56\" maxlength=\"128\" />",
-	"USERS_REGISTER_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".htmlspecialchars($rusericq)."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_REGISTER_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".htmlspecialchars($ruserirc)."\" size=\"56\" maxlength=\"128\" />",
-	"USERS_REGISTER_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".htmlspecialchars($rusermsn)."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_REGISTER_WEBSITE" => sed_inputbox('text', 'rwebsite', $rwebsite, array('size' => 56, 'maxlength' => 128)),
+	"USERS_REGISTER_ICQ" => sed_inputbox('text', 'rusericq', $rusericq, array('size' => 32, 'maxlength' => 16)),
+	"USERS_REGISTER_IRC" => sed_inputbox('text', 'ruserirc', $ruserirc, array('size' => 56, 'maxlength' => 128)),
+	"USERS_REGISTER_MSN" => sed_inputbox('text', 'rusermsn', $rusermsn, array('size' => 32, 'maxlength' => 64)),
 );
 $t->assign($useredit_array);
 
@@ -349,6 +350,14 @@ foreach($sed_extrafields['users'] as $i => $row)
 {
 	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']), sed_build_extrafields('user',  $row, htmlspecialchars($ruserextrafields[$row['field_name']])));
 	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
+}
+
+// Error and message handling
+if (sed_check_messages())
+{
+	$t->assign('USERS_REGISTER_ERROR_BODY', sed_implode_messages());
+	$t->parse('MAIN.USERS_REGISTER_ERROR');
+	sed_clear_messages();
 }
 
 
