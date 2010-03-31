@@ -130,6 +130,8 @@ $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.auth'));
 
+require_once sed_incfile('forms');
+
 if ($cfg['maintenance'])
 {
 	$t->assign(array("USERS_AUTH_MAINTENANCERES" => $cfg['maintenancereason']));
@@ -139,8 +141,8 @@ if ($cfg['maintenance'])
 $t->assign(array(
 	"USERS_AUTH_TITLE" => $L['aut_logintitle'],
 	"USERS_AUTH_SEND" => sed_url('users', 'm=auth&a=check' . (empty($redirect) ? '' : "&redirect=$redirect")),
-	"USERS_AUTH_USER" => "<input type=\"text\" class=\"text\" name=\"rusername\" size=\"16\" maxlength=\"32\" />",
-	"USERS_AUTH_PASSWORD" => "<input type=\"password\" class=\"password\" name=\"rpassword\" size=\"16\" maxlength=\"32\" />",
+	"USERS_AUTH_USER" => sed_inputbox('text', 'rusername', $rusername, array('size' => '16', 'maxlength' => '32')),
+	"USERS_AUTH_PASSWORD" => sed_inputbox('password', 'rpassword', '', array('size' => '16', 'maxlength' => '32')),
 	"USERS_AUTH_REGISTER" => sed_url('users', 'm=register')
 ));
 

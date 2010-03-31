@@ -72,12 +72,12 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
 
 $t->assign(array(
-	"USERS_DETAILS_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])),
+	"USERS_DETAILS_TITLE" => $bhome . sed_rc_link(sed_url('users'), $L['Users']).' '.$cfg['separator'].' '.sed_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])),
 	"USERS_DETAILS_SUBTITLE" => $L['use_subtitle'],
-		));
+));
 
 $t->assign(sed_generate_usertags($urr, "USERS_DETAILS_", '', true));
 
@@ -90,13 +90,13 @@ foreach ($extp as $pl)
 /* ===== */
 
 if ($usr['isadmin'])
-		{
-		$t-> assign(array(
-			"USERS_DETAILS_ADMIN_EDIT" => "<a href=\"".sed_url('users', 'm=edit&id='.$urr['user_id'])."\">".$L['Edit']."</a>"
-			));
+{
+	$t-> assign(array(
+		"USERS_DETAILS_ADMIN_EDIT" => sed_url(sed_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])
+	));
 
-		$t->parse("MAIN.USERS_DETAILS_ADMIN");
-		}
+	$t->parse("MAIN.USERS_DETAILS_ADMIN");
+}
 
 $t->parse("MAIN");
 $t->out("MAIN");

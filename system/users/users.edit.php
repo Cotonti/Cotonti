@@ -91,8 +91,10 @@ if ($a=='update')
 	$rusernewpass = sed_import('rusernewpass','P','TXT', 16);
 	$rusergroupsms = sed_import('rusergroupsms', 'P', 'ARR');
 
-	$error_string .= (mb_strlen($rusername) < 2 || mb_strpos($rusername, ',') !== false || mb_strpos($rusername, "'") !== false) ? $L['aut_usernametooshort'] . '<br />' : '';
-	$error_string .= (!empty($rusernewpass) && (mb_strlen($rusernewpass) < 4 || sed_alphaonly($rusernewpass) != $rusernewpass)) ? $L['aut_passwordtooshort'] . '<br />' : '';
+	if (mb_strlen($rusername) < 2 || mb_strpos($rusername, ',') !== false || mb_strpos($rusername, "'") !== false)
+		sed_error('aut_usernametooshort', 'rusername');
+	if (!empty($rusernewpass) && (mb_strlen($rusernewpass) < 4 || sed_alphaonly($rusernewpass) != $rusernewpass))
+		sed_error('aut_passwordtooshort', 'rusernewpass');
 
 	// Extra fields
 	foreach($sed_extrafields['users'] as $row)
@@ -129,7 +131,7 @@ if ($a=='update')
 		}
 	}
 
-	if (empty($error_string))
+	if (!$cot_error)
 	{
 		$ruserpassword = (mb_strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
 
@@ -252,22 +254,11 @@ if ($a=='update')
 		sed_log("Edited user #".$id,'adm');
 		sed_redirect(sed_url('users', "m=edit&id=".$id, '', true));
 	}
+	else
+	{
+		sed_redirect(sed_url('users', "m=edit&id=$id", '', true));
+	}
 }
-
-$user_form_delete = ($sys['user_istopadmin']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserdelete\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserdelete\" value=\"0\" checked=\"checked\" />".$L['No']."<br />+ ".$L['PFS'].":<input type=\"checkbox\" class=\"checkbox\" name=\"ruserdelpfs\" />" : $L['na'];
-
-$user_form_hideemail = ($urr['user_hideemail']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-$user_form_pmnotify = ($urr['user_pmnotify']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-$user_form_pass = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"text\" name=\"rusernewpass\" value=\"\" size=\"16\" maxlength=\"16\" disabled=\"disabled\" />" : "<input type=\"text\" class=\"text\" name=\"rusernewpass\" value=\"\" size=\"16\" maxlength=\"16\" />";
-
-$user_form_username = $sys['protecttopadmin'] ? "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".htmlspecialchars($urr['user_name'])."\" size=\"32\" maxlength=\"100\"  disabled=\"disabled\" />" : "<input type=\"text\" class=\"text\" name=\"rusername\" value=\"".htmlspecialchars($urr['user_name'])."\" size=\"32\" maxlength=\"100\" />";
-
-$user_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
-$user_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
-$user_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short', '', date('Y', $sys['now_offset']));
-$urr['user_lastip'] = sed_build_ipsearch($urr['user_lastip']);
 
 $title_params = array(
 	'EDIT' => $L['Edit'],
@@ -290,45 +281,58 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'edit', $usr['maingrp']));
 $t = new XTemplate($mskin);
 
-if (!empty($error_string))
-{
-	$t->assign("USERS_EDIT_ERROR_BODY",$error_string);
-	$t->parse("MAIN.USERS_EDIT_ERROR");
-}
+require_once sed_incfile('forms');
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ?
+	sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
+
+$user_form_delete = ($sys['user_istopadmin']) ? sed_radiobox(0, 'ruserdelete', array(1, 0), array($L['Yes'], $L['No']))
+	. sed_checkbox(false, 'ruserdelpfs', $L['PFS']) : $L['na'];
+$user_form_hideemail = sed_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No']));
+$user_form_pmnotify = sed_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No']));
+$protected = $sys['protecttopadmin'] ? array('disabled' => 'disabled') : array();
+$user_form_pass = sed_inputbox('password', 'rusernewpass', '', array('size' => 16, 'maxlength' => 16) + $protected);
+$user_form_username = sed_inputbox('text', 'rusername', $urr['user_name'], array('size' => 32, 'maxlength' => 100)
+	+ $protected);
+
+$user_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
+$user_form_gender = sed_selectbox_gender($urr['user_gender'], 'rusergender');
+$user_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short', '', date('Y', $sys['now_offset']));
+$urr['user_lastip'] = sed_build_ipsearch($urr['user_lastip']);
 
 $useredit_array = array(
-	"USERS_EDIT_TITLE" => $bhome . "<a href=\"".sed_url('users')."\">".$L['Users']."</a> ".$cfg['separator']." ".sed_build_user($urr['user_id'], htmlspecialchars($urr['user_name']))." ".$cfg['separator']." <a href=\"".sed_url('users', 'm=edit&id='.$urr['user_id'])."\">".$L['Edit']."</a>",
+	"USERS_EDIT_TITLE" => $bhome.sed_rc_link(sed_url('users'), $L['Users']).' '.$cfg['separator'].' '
+		.sed_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])).' '.$cfg['separator']
+		.sed_rc_link(sed_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit']),
 	"USERS_EDIT_SUBTITLE" => $L['useed_subtitle'],
 	"USERS_EDIT_SEND" => sed_url('users', 'm=edit&a=update&'.sed_xg().'&id='.$urr['user_id']),
 	"USERS_EDIT_ID" => $urr['user_id'],
 	"USERS_EDIT_NAME" => $user_form_username,
 	"USERS_EDIT_ACTIVE" => $user_form_active,
 	"USERS_EDIT_BANNED" => $user_form_banned,
-	"USERS_EDIT_SKIN" => "<input type=\"text\" class=\"text\" name=\"ruserskin\" value=\"".$urr['user_skin']."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_EDIT_LANG" => "<input type=\"text\" class=\"text\" name=\"ruserlang\" value=\"".$urr['user_lang']."\" size=\"32\" maxlength=\"16\" />",
+	"USERS_EDIT_SKIN" => sed_inputbox('text', 'ruserskin', $urr['user_skin'], array('size' => 32, 'maxlength' => 32)),
+	"USERS_EDIT_LANG" => sed_inputbox('text', 'ruserlang', $urr['user_lang'], array('size' => 32, 'maxlength' => 32)),
 	"USERS_EDIT_NEWPASS" => $user_form_pass,
 	"USERS_EDIT_MAINGRP" => sed_build_group($urr['user_maingrp']),
 	"USERS_EDIT_GROUPS" => sed_build_groupsms($urr['user_id'], $usr['isadmin'], $urr['user_maingrp']),
 	"USERS_EDIT_COUNTRY" => $user_form_countries,
-	"USERS_EDIT_EMAIL" => "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".htmlspecialchars($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_EDIT_EMAIL" => sed_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)),
 	"USERS_EDIT_HIDEEMAIL" => $user_form_hideemail,
 	"USERS_EDIT_PMNOTIFY" => $user_form_pmnotify,
-	"USERS_EDIT_TEXT" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"4\" cols=\"56\">".htmlspecialchars($urr['user_text'])."</textarea>",
-	"USERS_EDIT_TEXTBOXER" => "<textarea class=\"editor\" name=\"rusertext\" rows=\"4\" cols=\"56\">".htmlspecialchars($urr['user_text'])."</textarea>",
-	"USERS_EDIT_AVATAR" => "<input type=\"text\" class=\"text\" name=\"ruseravatar\" value=\"".htmlspecialchars($urr['user_avatar'])."\" size=\"32\" maxlength=\"255\" />",
-	"USERS_EDIT_PHOTO" => "<input type=\"text\" class=\"text\" name=\"ruserphoto\" value=\"".htmlspecialchars($urr['user_photo'])."\" size=\"32\" maxlength=\"255\" />",
-	"USERS_EDIT_SIGNATURE" => "<input type=\"text\" class=\"text\" name=\"rusersignature\" value=\"".htmlspecialchars($urr['user_signature'])."\" size=\"32\" maxlength=\"255\" />",
-	"USERS_EDIT_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".htmlspecialchars($urr['user_website'])."\" size=\"56\" maxlength=\"128\" />",
-	"USERS_EDIT_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".htmlspecialchars($urr['user_icq'])."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_EDIT_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".htmlspecialchars($urr['user_msn'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_EDIT_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".htmlspecialchars($urr['user_irc'])."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_EDIT_TEXT" => sed_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
+	"USERS_EDIT_TEXTBOXER" => sed_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
+	"USERS_EDIT_AVATAR" => sed_inputbox('text', 'ruseravatar', $urr['user_avatar'], array('size' => 32, 'maxlength' => 255)),
+	"USERS_EDIT_PHOTO" => sed_inputbox('text', 'ruserphoto', $urr['user_photo'], array('size' => 32, 'maxlength' => 255)),
+	"USERS_EDIT_SIGNATURE" => sed_inputbox('text', 'rusersignature', $urr['user_signature'], array('size' => 32, 'maxlength' => 255)),
+	"USERS_EDIT_WEBSITE" => sed_inputbox('text', 'ruserwebsite', $urr['user_website'], array('size' => 56, 'maxlength' => 128)),
+	"USERS_EDIT_ICQ" => sed_inputbox('text', 'rusericq', $urr['user_icq'], array('size' => 32, 'maxlength' => 16)),
+	"USERS_EDIT_MSN" => sed_inputbox('text', 'rusermsn', $urr['user_msn'], array('size' => 32, 'maxlength' => 64)),
+	"USERS_EDIT_IRC" => sed_inputbox('text', 'ruserirc', $urr['user_irc'], array('size' => 56, 'maxlength' => 255)),
 	"USERS_EDIT_GENDER" => $user_form_gender,
 	"USERS_EDIT_BIRTHDATE" => $user_form_birthdate,
-	"USERS_EDIT_TIMEZONE" => "<input type=\"text\" class=\"text\" name=\"rusertimezone\" value=\"".htmlspecialchars($urr['user_timezone'])."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_EDIT_LOCATION" => "<input type=\"text\" class=\"text\" name=\"ruserlocation\" value=\"".htmlspecialchars($urr['user_location'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_EDIT_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"ruseroccupation\" value=\"".htmlspecialchars($urr['user_occupation'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_EDIT_TIMEZONE" => sed_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),
+	"USERS_EDIT_LOCATION" => sed_inputbox('text', 'ruserlocation', $urr['user_location'], array('size' => 32, 'maxlength' => 64)),
+	"USERS_EDIT_OCCUPATION" => sed_inputbox('text', 'ruseroccupation', $urr['user_occupation'], array('size' => 32, 'maxlength' => 64)),
 	"USERS_EDIT_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_EDIT_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone']*3600)." ".$usr['timetext'],
 	"USERS_EDIT_LOGCOUNT" => $urr['user_logcount'],
@@ -343,6 +347,14 @@ foreach($sed_extrafields['users'] as $i => $row)
 {
 	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']), sed_build_extrafields('user',  $row, $urr['user_'.$row['field_name']]));
 	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
+}
+
+// Error and message reporting
+if (sed_check_messages())
+{
+	$t->assign('USERS_EDIT_ERROR_BODY', sed_implode_messages());
+	$t->parse('MAIN.USERS_EDIT_ERROR');
+	sed_clear_messages();
 }
 
 

@@ -19,14 +19,14 @@ defined('SED_CODE') or die('Wrong URL');
 /**
  * Returns number of rows affected by last query
  *
- * @param resource $conn Custom connection handle
+ * @param PDO $conn Custom connection handle
  * @return int
  */
 function sed_sql_affectedrows($conn = null)
 {
-	// FIXME unsupported by PDO
 	global $sed_dbc, $sed_sql_affectedrows;
-	return $sed_sql_affectedrows;
+	if (is_null($conn)) $conn = $sed_dbc;
+	return $sed_sql_affectedrows[spl_object_hash($conn)];
 }
 
 /**
@@ -165,7 +165,7 @@ function sed_sql_freeresult($res)
 function sed_sql_insertid($conn = null)
 {
 	global $sed_dbc;
-	return is_null($conn) ? $sed_dbc->lastInserdId() : $conn->lastInserdId();
+	return is_null($conn) ? $sed_dbc->lastInsertId() : $conn->lastInsertId();
 }
 
 /**
@@ -224,7 +224,7 @@ function sed_sql_query($query, $conn = null)
 	$sys['qcount']++;
 	$xtime = microtime();
 	$result = $conn->query($query) OR sed_diefatal('SQL error : '.sed_sql_error($conn));
-	$sed_sql_affectedrows = $result->rowCount();
+	$sed_sql_affectedrows[spl_object_hash($conn)] = $result->rowCount();
 	$ytime = microtime();
 	$xtime = explode(' ',$xtime);
 	$ytime = explode(' ',$ytime);
@@ -264,6 +264,43 @@ function sed_sql_rowcount($table, $conn = null)
 	$conn = is_null($conn) ? $sed_dbc : $conn;
 	$res = $conn->query("SELECT COUNT(*) FROM `$table`");
 	return (int) $res->fetchColumn();
+}
+
+/**
+ * Runs an SQL script containing multiple queries.
+ *
+ * @param string $script SQL script body, containing formatted queries separated by semicolons and newlines
+ * @param PDO $conn Custom connection handle
+ * @return string Error message if an error occurs or empty string on success
+ */
+function sed_sql_runscript($script, $conn = null)
+{
+	global $sed_dbc, $db_x;
+	$conn = is_null($conn) ? $sed_dbc : $conn;
+
+	$error = '';
+	// Remove comments
+	$script = preg_replace('#^/\*.*?\*/#m', '', $script);
+	$script = preg_replace('#^--.*?$#m', '', $script);
+	// Run queries separated by ; at the end of line
+	$queries =  preg_split('#;\r?\n#', $script);
+	foreach ($queries as $query)
+	{
+		$query = trim($query);
+		if (!empty($query))
+		{
+			if ($db_x != 'sed_')
+			{
+				$query = str_replace('`sed_', '`'.$db_x, $query);
+			}
+			$result = $conn->query($query);
+			if (!$result)
+			{
+				return sed_sql_error($conn) . '<br />' . htmlspecialchars($query) . '<hr />';
+			}
+		}
+	}
+	return '';
 }
 
 /**
