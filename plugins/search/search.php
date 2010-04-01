@@ -130,7 +130,7 @@ if (($tab == 'pag' || empty($tab))  && !$cfg['disable_page'] && $cfg['plugin']['
 	}
 
 	$t->assign(array(
-		'PLUGIN_PAGE_SEC_LIST' => sed_selectbox($rsearch['pag']['sub'], 'rpagsub[]', array_keys($pages_cat_list), array_values($pages_cat_list), false, 'multiple="multiple" size="10" style="width:385px"'),
+		'PLUGIN_PAGE_SEC_LIST' => sed_selectbox($rsearch['pag']['sub'], 'rpagsub[]', array_keys($pages_cat_list), array_values($pages_cat_list), false, 'multiple="multiple" style="width:50%"'),
 		'PLUGIN_PAGE_RES_SORT' => sed_selectbox($rsearch['pag']['sort'], 'rpagsort', array('date', 'title', 'count', 'cat'), array($L['plu_pag_res_sort1'], $L['plu_pag_res_sort2'], $L['plu_pag_res_sort3'], $L['plu_pag_res_sort4']), false),
 		'PLUGIN_PAGE_RES_SORT_WAY' => sed_radiobox($rsearch['pag']['sort2'], 'rpagsort2', array("DESC", "ASC"), array($L['plu_sort_desc'],  $L['plu_sort_asc'])),
 		'PLUGIN_PAGE_SEARCH_NAMES' => sed_checkbox(($rsearch['pag']['title'] == 1 || count($rsearch['pag']['sub']) == 0), 'rpagtitle', $L['plu_pag_search_names']),
@@ -166,7 +166,7 @@ if (($tab == 'frm' || empty($tab)) && !$cfg['disable_forums'] && $cfg['plugin'][
 	}
 
 	$t->assign(array(
-		'PLUGIN_FORUM_SEC_LIST' => sed_selectbox($rsearch['frm']['sub'], 'rfrmsub[]', array_keys($forum_cat_list), array_values($forum_cat_list), false, 'multiple="multiple" size="10" style="width:385px"'),
+		'PLUGIN_FORUM_SEC_LIST' => sed_selectbox($rsearch['frm']['sub'], 'rfrmsub[]', array_keys($forum_cat_list), array_values($forum_cat_list), false, 'multiple="multiple" style="width:50%"'),
 		'PLUGIN_FORUM_RES_SORT' => sed_selectbox($rsearch['frm']['sort'], 'rfrmsort', array('updated', 'creationdate', 'title', 'postcount', 'viewcount', 'sectionid'), array($L['plu_frm_res_sort1'], $L['plu_frm_res_sort2'], $L['plu_frm_res_sort3'], $L['plu_frm_res_sort4'], $L['plu_frm_res_sort5'], $L['plu_frm_res_sort6']), false),
 		'PLUGIN_FORUM_RES_SORT_WAY' => sed_radiobox($rsearch['frm']['sort2'], 'rfrmsort2', array("DESC", "ASC"), array($L['plu_sort_desc'],  $L['plu_sort_asc'])),
 		'PLUGIN_FORUM_SEARCH_NAMES' => sed_checkbox(($rsearch['frm']['title'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmtitle', $L['plu_frm_search_names']),
@@ -331,7 +331,6 @@ if (!empty($tab))
 $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = empty($sq) ? $L['plu_title'] : htmlspecialchars(strip_tags($sq)).' - '.$L['plu_result'];
 $t->assign(array(
-	'PLUGIN_TITLE' => $plugin_title,
 	'PLUGIN_SEARCH_ACTION' => sed_url('plug', 'e=search&tab='.$tab),
 	'PLUGIN_SEARCH_TEXT' => sed_inputbox('text', 'rsq', htmlspecialchars($sq), 'size="32" maxlength="'.$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => sed_inputbox('text', 'rsuser', htmlspecialchars($rsearch['set']['user']), 'id="rsuser" size="32"'),

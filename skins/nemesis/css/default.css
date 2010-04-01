@@ -32,7 +32,7 @@ hr	{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
 -------------------------------------------------- */
 
 h2	{ color:#a01517; font-size:1.1em; text-shadow:0 1px 0 #fff; margin-bottom:15px; padding:8px 8px 8px 40px; background-color:#ddd; background-position:10px 9px; background-repeat: no-repeat; }
-h3	{ font-size:1.1em; font-weight:bold; margin:10px 0 5px; }
+h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-position:10px 9px; background-repeat: no-repeat; }
 
 .admin		{ background-image:url(/images/icons/default/prefs.png); }
 .comments	{ background-image:url(/images/icons/default/comments.png); }
@@ -79,7 +79,7 @@ table.fico td		{ padding:5px 0; margin:0; border:0; }
 table.fico td img	{ margin-right:10px; vertical-align:middle; }
 
 
-.coltop		{ text-align:center; vertical-align:middle; font-size:.9em; background-color:#e0e0e0!important; color:#000; }
+.coltop		{ text-align:center; vertical-align:middle; font-size:.9em; background-color:#efefef!important; color:#000; }
 .coltop img	{ vertical-align:middle; }
 .centerall 	{ text-align:center; vertical-align:middle; }
 .valid 		{ height:48px; text-align:center; vertical-align:middle; border:0!important; }
@@ -147,17 +147,23 @@ input, select			{ padding:2px; }
 .width40	{ width:40%; }
 .width45	{ width:45%; }
 .width50	{ width:50%; }
+.width55	{ width:55%; }
 .width60	{ width:60%; }
+.width65	{ width:65%; }
 .width70	{ width:70%; }
 .width75	{ width:75%; }
 .width80	{ width:80%; }
 .width85	{ width:85%; }
+.width90	{ width:90%; }
+.width95	{ width:95%; }
 .width100	{ width:100%; }
 
 .desc		{ font-size:.9em; margin:5px 0; padding:5px 0; background:#f2f2f2; border:1px solid #ccc; border-left:0; border-right:0; overflow:auto; }
 .desc strong	{ color:#fff; margin-right:8px; padding:2px 6px; background:#aaa; }
+
 .combox		{ font-size:2em; text-align:center; margin:0 10px 5px 0; padding-top:6px; height:42px; width:48px; background:url(../img/comments.png) no-repeat 0 0; float:left; }
 .textbox	{ margin-bottom:10px; overflow:auto; }
+
 .readmore	{ display:block; }
 .download	{ margin:10px 0; padding:10px 0 10px 84px; background:url(../img/download.png) no-repeat 10px 12px; border:1px dashed #c00; }
 
@@ -223,7 +229,9 @@ input, select			{ padding:2px; }
 #magnifier #s1	{ float:left; padding:6px 10px; border:0; height:18px; line-height:18px; width:240px; background:#fff; }
 #magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:30px; width:40px; border:0; background:#fff url(/images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
 
-.search-hl      { font-weight:bold; padding:0 2px; background:yellow; }
+.search-res			{ margin:0 0 10px; overflow:auto; }
+.search-res .small	{ color:#000; }
+.search-hl      		{ font-weight:bold; padding:0 2px; background:yellow; }
 
 /* 15. Lists
 -------------------------------------------------- */
