@@ -204,13 +204,13 @@ if (!$cat['group'])
 		"LIST_TOP_TOTALLINES" => $totallines,
 		"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
 		"LIST_TOP_TOTALPAGES" => $totalpages,
-		"LIST_TOP_TITLE" => sed_rc('list_top_title_down', array('list_top_url_down' => sed_url('list', "c=$c&s=title&w=asc&o=$o&p=$p"))).sed_rc('list_top_title_up', array('list_top_url_up' => sed_url('list', "c=$c&s=title&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_KEY" => sed_rc('list_top_key_down', array('list_top_key_url_down' => sed_url('list', "c=$c&s=key&w=asc&o=$o&p=$p"))).sed_rc('list_top_key_up', array('list_top_key_url_up' => sed_url('list', "c=$c&s=key&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_DATE" => sed_rc('list_top_date_down', array('list_top_date_url_down' => sed_url('list', "c=$c&s=date&w=asc&o=$o&p=$p"))).sed_rc('list_top_date_up', array('list_top_date_url_up' => sed_url('list', "c=$c&s=date&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_AUTHOR" => sed_rc('list_top_author_down', array('list_top_author_url_down' => sed_url('list', "c=$c&s=author&w=asc&o=$o&p=$p"))).sed_rc('list_top_author_up', array('list_top_author_url_up' => sed_url('list', "c=$c&s=author&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_OWNER" => sed_rc('list_top_owner_down', array('list_top_owner_url_down' => sed_url('list', "c=$c&s=ownerid&w=asc&o=$o&p=$p"))).sed_rc('list_top_owner_up', array('list_top_owner_url_up' => sed_url('list', "c=$c&s=ownerid&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_COUNT" => sed_rc('list_top_count_down', array('list_top_count_url_down' => sed_url('list', "c=$c&s=count&w=asc&o=$o&p=$p"))).sed_rc('list_top_count_up', array('list_top_count_url_up' => sed_url('list', "c=$c&s=count&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_FILECOUNT" => sed_rc('list_top_filecount_down', array('list_top_filecount_url_down' => sed_url('list', "c=$c&s=filecount&w=asc&o=$o&p=$p"))).sed_rc('list_top_filecount_up', array('list_top_filecount_url_up' => sed_url('list', "c=$c&s=filecount&w=desc&o=$o&p=$p"))) // TODO - to resorses
+		"LIST_TOP_TITLE" => sed_rc('list_top_title', array('list_top_url_down' => sed_url('list', "c=$c&s=title&w=asc&o=$o&p=$p"), 'list_top_url_up' => sed_url('list', "c=$c&s=title&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_KEY" => sed_rc('list_top_key', array('list_top_key_url_down' => sed_url('list', "c=$c&s=key&w=asc&o=$o&p=$p"), 'list_top_key_url_up' => sed_url('list', "c=$c&s=key&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_DATE" => sed_rc('list_top_date', array('list_top_date_url_down' => sed_url('list', "c=$c&s=date&w=asc&o=$o&p=$p"), 'list_top_date_url_up' => sed_url('list', "c=$c&s=date&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_AUTHOR" => sed_rc('list_top_author', array('list_top_author_url_down' => sed_url('list', "c=$c&s=author&w=asc&o=$o&p=$p"), 'list_top_author_url_up' => sed_url('list', "c=$c&s=author&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_OWNER" => sed_rc('list_top_owner', array('list_top_owner_url_down' => sed_url('list', "c=$c&s=ownerid&w=asc&o=$o&p=$p"), 'list_top_owner_url_up' => sed_url('list', "c=$c&s=ownerid&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_COUNT" => sed_rc('list_top_count', array('list_top_count_url_down' => sed_url('list', "c=$c&s=count&w=asc&o=$o&p=$p"), 'list_top_count_url_up' => sed_url('list', "c=$c&s=count&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_FILECOUNT" => sed_rc('list_top_filecount', array('list_top_filecount_url_down' => sed_url('list', "c=$c&s=filecount&w=asc&o=$o&p=$p"), 'list_top_filecount_url_up' => sed_url('list', "c=$c&s=filecount&w=desc&o=$o&p=$p"))) // TODO - to resorses
 	));
 }
 
@@ -219,7 +219,7 @@ foreach ($sed_extrafields['pages'] as $row_p)
 {
 	$uname = strtoupper($row_p['field_name']);
 	isset($L['page_'.$row_p['field_name'].'_title']) ? $extratitle = $L['page_'.$row_p['field_name'].'_title'] : $extratitle = $row_p['field_description'];
-	$t->assign('LIST_TOP_'.$uname, sed_rc('list_top_field_name_down', array('list_top_field_name_url_down' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=asc&o=$o&p=$p"))).sed_rc('list_top_field_name_up', array('list_top_field_name_url_up' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=desc&o=$o&p=$p")))); // TODO - to resorses
+	$t->assign('LIST_TOP_'.$uname, sed_rc('list_top_field_name_down', array('list_top_field_name_url_down' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=asc&o=$o&p=$p"), 'list_top_field_name_url_up' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=desc&o=$o&p=$p")))); // TODO - to resorses
 }
 
 $ii = 0;
