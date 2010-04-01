@@ -24,7 +24,7 @@ require_once sed_incfile('functions', 'users');
 sed_dieifdisabled($cfg['disable_page']);
 
 require_once sed_incfile('extrafields');
-
+require_once sed_incfile('resources', 'list');
 require_once sed_incfile('main', 'list');
 
 ?>

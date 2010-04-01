@@ -134,7 +134,8 @@ else
 
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil($d / $cfg['maxrowsperpage']) + 1;
-$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? "<a href=\"".sed_url('page', 'm=add&c='.$c)."\">".$L['Submitnew'].'</a>' : ''; // TODO - to resorses OR move to tpl with logic {if}
+
+$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? sed_rc('page_submitnewpage', array('sub_url' => sed_url('page', 'm=add&c='.$c))) : ''; // TODO - to resorses OR move to tpl with logic {if}
 
 $pagenav = sed_pagenav('list', "c=$c&s=$s&w=$w&o=$o&p=$p", $d, $totallines, $cfg['maxrowsperpage']);
 
@@ -203,13 +204,13 @@ if (!$cat['group'])
 		"LIST_TOP_TOTALLINES" => $totallines,
 		"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
 		"LIST_TOP_TOTALPAGES" => $totalpages,
-		"LIST_TOP_TITLE" => "<a href=\"".sed_url('list', "c=$c&s=title&w=asc&o=$o&p=$p")."\">$sed_img_down</a> <a href=\"".sed_url('list', "c=$c&s=title&w=desc&o=$o&p=$p")."\">$sed_img_up</a> ".$L['Title'], // TODO - to resorses
-		"LIST_TOP_KEY" => "<a href=\"".sed_url('list', "c=$c&s=key&w=asc&o=$o&p=$p")."\">$sed_img_down</a> <a href=\"".sed_url('list', "c=$c&s=key&w=desc&o=$o&p=$p")."\">$sed_img_up</a> ".$L['Key'], // TODO - to resorses
-		"LIST_TOP_DATE" => "<a href=\"".sed_url('list', "c=$c&s=date&w=asc&o=$o&p=$p")."\">$sed_img_down</a> <a href=\"".sed_url('list', "c=$c&s=date&w=desc&o=$o&p=$p")."\">$sed_img_up</a> ".$L['Date'], // TODO - to resorses
-		"LIST_TOP_AUTHOR" => "<a href=\"".sed_url('list', "c=$c&s=author&w=asc&o=$o&p=$p")."\">$sed_img_down</a> <a href=\"".sed_url('list', "c=$c&s=author&w=desc&o=$o&p=$p")."\">$sed_img_up</a> ".$L['Author'], // TODO - to resorses
-		"LIST_TOP_OWNER" => "<a href=\"".sed_url('list', "c=$c&s=ownerid&w=asc&o=$o&p=$p")."\">$sed_img_down</a> <a href=\"".sed_url('list', "c=$c&s=ownerid&w=desc&o=$o&p=$p")."\">$sed_img_up</a> ".$L['Owner'], // TODO - to resorses
-		"LIST_TOP_COUNT" => "<a href=\"".sed_url('list', "c=$c&s=count&w=asc&o=$o&p=$p")."\">$sed_img_down</a> <a href=\"".sed_url('list', "c=$c&s=count&w=desc&o=$o&p=$p")."\">$sed_img_up</a> ".$L['Hits'], // TODO - to resorses
-		"LIST_TOP_FILECOUNT" => "<a href=\"".sed_url('list', "c=$c&s=filecount&w=asc&o=$o&p=$p")."\">$sed_img_down</a> <a href=\"".sed_url('list', "c=$c&s=filecount&w=desc&o=$o&p=$p")."\">$sed_img_up</a> ".$L['Hits'] // TODO - to resorses
+		"LIST_TOP_TITLE" => sed_rc('list_top_title_down', array('list_top_url_down' => sed_url('list', "c=$c&s=title&w=asc&o=$o&p=$p"))).sed_rc('list_top_title_up', array('list_top_url_up' => sed_url('list', "c=$c&s=title&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_KEY" => sed_rc('list_top_key_down', array('list_top_key_url_down' => sed_url('list', "c=$c&s=key&w=asc&o=$o&p=$p"))).sed_rc('list_top_key_up', array('list_top_key_url_up' => sed_url('list', "c=$c&s=key&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_DATE" => sed_rc('list_top_date_down', array('list_top_date_url_down' => sed_url('list', "c=$c&s=date&w=asc&o=$o&p=$p"))).sed_rc('list_top_date_up', array('list_top_date_url_up' => sed_url('list', "c=$c&s=date&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_AUTHOR" => sed_rc('list_top_author_down', array('list_top_author_url_down' => sed_url('list', "c=$c&s=author&w=asc&o=$o&p=$p"))).sed_rc('list_top_author_up', array('list_top_author_url_up' => sed_url('list', "c=$c&s=author&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_OWNER" => sed_rc('list_top_owner_down', array('list_top_owner_url_down' => sed_url('list', "c=$c&s=ownerid&w=asc&o=$o&p=$p"))).sed_rc('list_top_owner_up', array('list_top_owner_url_up' => sed_url('list', "c=$c&s=ownerid&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_COUNT" => sed_rc('list_top_count_down', array('list_top_count_url_down' => sed_url('list', "c=$c&s=count&w=asc&o=$o&p=$p"))).sed_rc('list_top_count_up', array('list_top_count_url_up' => sed_url('list', "c=$c&s=count&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_FILECOUNT" => sed_rc('list_top_filecount_down', array('list_top_filecount_url_down' => sed_url('list', "c=$c&s=filecount&w=asc&o=$o&p=$p"))).sed_rc('list_top_filecount_up', array('list_top_filecount_url_up' => sed_url('list', "c=$c&s=filecount&w=desc&o=$o&p=$p"))) // TODO - to resorses
 	));
 }
 
@@ -218,7 +219,7 @@ foreach ($sed_extrafields['pages'] as $row_p)
 {
 	$uname = strtoupper($row_p['field_name']);
 	isset($L['page_'.$row_p['field_name'].'_title']) ? $extratitle = $L['page_'.$row_p['field_name'].'_title'] : $extratitle = $row_p['field_description'];
-	$t->assign('LIST_TOP_'.$uname, "<a href=\"".sed_url('list', "c=$c&s=".$row_p['field_name']."&w=asc&o=$o&p=$p")."\">$sed_img_down</a><a href=\"".sed_url('list', "c=$c&s=".$row_p['field_name']."&w=desc&o=$o&p=$p")."\">$sed_img_up</a> $extratitle"); // TODO - to resorses
+	$t->assign('LIST_TOP_'.$uname, sed_rc('list_top_field_name_down', array('list_top_field_name_url_down' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=asc&o=$o&p=$p"))).sed_rc('list_top_field_name_up', array('list_top_field_name_url_up' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=desc&o=$o&p=$p")))); // TODO - to resorses
 }
 
 $ii = 0;
@@ -315,7 +316,8 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 		$pag['page_fileicon'] = '';
 	}
 
-	$pag['admin'] = $usr['isadmin'] ? "<a href=\"".sed_url('admin', "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg())."\">".$L['Putinvalidationqueue']."</a> &nbsp;<a href=\"".sed_url('page', "m=edit&id=".$pag['page_id']."&r=list")."\">".$L['Edit']."</a> " : '';
+	$pag['admin'] = $usr['isadmin'] ? sed_rc('list_row_admin', array('unvalidate_url' => sed_url('admin', "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg()),'edit_url' => sed_url('page', "m=edit&id=".$pag['page_id']."&r=list"))) : '';
+
 	list($list_ratings, $list_ratings_display) = sed_build_ratings('p'.$pag['page_id'], sed_url('page', 'id='.$pag['page_id']), $ratings);
 
 	$t->assign(array(
@@ -363,6 +365,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 		break;
 
 		default:
+
 			if ($cfg['parser_cache'])
 			{
 				if (empty($pag['page_html']) && !empty($pag['page_text']))
@@ -374,7 +377,8 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 				if ($readmore > 0)
 				{
 					$pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore);
-					$pag['page_html'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>"; // TODO - to resorses
+				    $pag['page_html'] .= sed_rc('list_page_html', array('page_url'=> $pag['page_pageurl'])); // TODO - to resorses
+
 				}
 				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
 				$t->assign('LIST_ROW_TEXT', $html);
@@ -386,7 +390,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 				if ($readmore > 0)
 				{
 					$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);
-					$pag['page_text'] .= " <span class=\"readmore\"><a href=\"".$pag['page_pageurl']."\">".$L['ReadMore']."</a></span>"; // TODO - to resorses
+					$pag['page_text'] .= sed_rc('list_page_text', array('page_url'=> $pag['page_pageurl'])); // TODO - to resorses
 				}
 				$text = sed_post_parse($text, 'pages');
 				$t->assign('LIST_ROW_TEXT', $text);
