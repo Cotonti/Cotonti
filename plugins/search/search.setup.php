@@ -6,7 +6,7 @@ Name=Search
 Description=Search with extended features
 Version=4.00
 Date=2010-mar-10
-Author=Neocrome, Spartan, Boss, esclkm, Cotonti Team
+Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008 - 2010
 Notes=
 SQL=
@@ -35,7 +35,7 @@ extrafilters=09:radio::1:Show extrafilters on main search page
  *
  * @package Cotonti
  * @version 0.7.0
- * @author Neocrome, Spartan, Boss, Cotonti Team
+ * @author Cotonti Team
  * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */

@@ -23,20 +23,11 @@ $L['cfg_addfields']= array('Additional pages fields for search, separated by com
 $L['cfg_extrafilters']= array('Show extrafilters on main search page');
 
 // Common - title, info, query
-$L['plu_title_all'] = 'Site search';
-$L['plu_subtitle_all'] = "You can make the search more exact by selecting necessary categories and search options only.";
 $L['plu_search_req'] = 'Query';
 $L['plu_search_key'] = 'Find';
-$L['plu_search_example'] = 'E.g. cotonti 7 siena';
-
-// Title extras
-$L['plu_title_frmtab'] = 'Forums';
-$L['plu_title_pagtab'] = 'Pages';
 
 // Mode selectors and result titles
 $L['plu_tabs_all'] = 'All';
-$L['plu_tabs_frm'] = 'Forums';
-$L['plu_tabs_pag'] = 'Pages';
 
 // Parameters - common
 $L['plu_ctrl_list'] = 'Hold CTRL to select multiple sections';
