@@ -1,25 +1,25 @@
-<!-- BEGIN: RECENTPAGES -->
-<table class="cells">
-	<!-- BEGIN: RECENTPAGE -->
-	<tr>
-		<td class="centerall width20">{RI_DATE}</td>
-		<td class="width35">{RI_CAT}</td>
-		<td class="width45">{RI_NAME}</td>
-	</tr>
-	<!-- END: RECENTPAGE -->
-</table>
-<!-- END: RECENTPAGES -->
+<!-- BEGIN: MAIN -->
 
-<!-- BEGIN: RECENTFORUMS -->
-<table class="cells">
-	<!-- BEGIN: RECENTFORUM -->
-	<tr>
-		<td class="centerall width5">{RI_IMG}</td>
-		<td class="centerall width15">{RI_DATE}</td>
-		<td class="width35">{RI_CAT}</td>
-		<td class="width35">{RI_NAME}</td>
-		<td class="centerall width10">({RI_COUNT})</td>
-	</tr>
-	<!-- END: RECENTFORUM -->
-</table>
-<!-- END: RECENTFORUMS -->
+		<h2 class="stats">{PHP.L.Recentitems}</h2>
+		<p class="small">
+			{PHP.L.Rec_shownew}:
+			<!-- IF {$usr.id} > 0 -->
+				<a href="plug.php?e=recentitems{PHP.mode}">{PHP.L.Rec_from_lastvisit}</a>,
+			<!-- ENDIF -->
+				<a href="plug.php?e=recentitems&amp;days=1{PHP.mode}">{PHP.L.Rec_1day}</a>,
+				<a href="plug.php?e=recentitems&amp;days=2{PHP.mode}">{PHP.L.Rec_2days}</a>,
+				<a href="plug.php?e=recentitems&amp;days=3{PHP.mode}">{PHP.L.Rec_3days}</a>,
+				<a href="plug.php?e=recentitems&amp;days=7{PHP.mode}">{PHP.L.Rec_1week}</a>,
+				<a href="plug.php?e=recentitems&amp;days=14{PHP.mode}">{PHP.L.Rec_2weeks}</a>,
+				<a href="plug.php?e=recentitems&amp;days=30{PHP.mode}">{PHP.L.Rec_1month}</a>
+		<p class="small">
+			{PHP.L.Show} :
+			<a href="plug.php?e=recentitems{PHP.days}">{PHP.L.All}</a>,
+			<a href="plug.php?e=recentitems{PHP.days}&amp;mode=pages">{PHP.L.Pages}</a>,
+			<a href="plug.php?e=recentitems{PHP.days}&amp;mode=forums">{PHP.L.Forums}</a>
+		</p>
+		{RECENT_FORUMS}
+		{RECENT_PAGES}
+		<p class="paging">{PAGE_PAGEPREV} {PAGE_PAGENAV} {PAGE_PAGENEXT}</p>
+
+<!-- END: MAIN -->
