@@ -1,7 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<div class="block">
-			<h2 class="stats">{PHP.L.plu_title}</h2>
+		<h2 class="stats">{PHP.L.plu_title}</h2>
 
 			<h3>{PHP.L.plu_title}</h3>
 			<table class="cells">
@@ -25,7 +24,6 @@
 
 			<h3>{PHP.L.plu_repliedtop10}</h3>
 			<table class="cells">
-
 <!-- BEGIN: FORUMSTATS_REPLIEDTOP_USER -->
 				<tr>
 					<td class="centerall width5">{FORUMSTATS_REPLIEDTOP_II}.</td>
@@ -33,7 +31,6 @@
 					<td class="centerall width10">{FORUMSTATS_REPLIEDTOP_POSTCOUNT}</td>
 				</tr>
 <!-- END: FORUMSTATS_REPLIEDTOP_USER -->
-
 <!-- BEGIN: FORUMSTATS_REPLIEDTOP_NO_USER -->
 				<tr>
 					<td class="centerall width5">{FORUMSTATS_REPLIEDTOP_II}.</td>
@@ -71,7 +68,5 @@
 				</tr>
 <!-- END: POSTERSTOP -->
 			</table>
-
-		</div>
 
 <!-- END: MAIN -->
