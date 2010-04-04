@@ -85,14 +85,14 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 		$config_contents = file_get_contents($file['config']);
 		$config_contents = str_replace('?>', $delta.'?>', $config_contents);
 		file_put_contents($file['config'], $config_contents);
-		$msg_string .= $L['install_update_config_success'].'<br />';
+		$msg_string .= $L['install_update_config_success'].$R['code_error_separator'];
 		include $file['config'];
 	}
 }
 else
 {
 	// Display some warning
-	$msg_string .= $L['install_update_config_error'].'<br />';
+	$msg_string .= $L['install_update_config_error'].$R['code_error_separator'];
 }
 
 $sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
@@ -135,7 +135,7 @@ if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
 		// Error
 		$t->assign(array(
 			'ERROR_TITLE' => $L['install_upgrade_error'].$branch,
-			'ERROR_MSG' => $error.'<br />'.$msg_string
+			'ERROR_MSG' => $error.$R['code_error_separator'].$msg_string
 		));
 		$t->parse('MAIN.ERROR');
 	}
@@ -186,11 +186,11 @@ else
 				$error = sed_sql_runscript(file_get_contents($val['sql']));
 				if (empty($error))
 				{
-					$applied .= $val['sql'].'<br />';
+					$applied .= $val['sql'].$R['code_error_separator'];
 				}
 				else
 				{
-					$error .= $val['sql'].'<br />';
+					$error .= $val['sql'].$R['code_error_separator'];
 					break;
 				}
 			}
@@ -199,11 +199,11 @@ else
 				$res = include $val['php'];
 				if ($res == 1)
 				{
-					$applied .= $val['php'].'<br />';
+					$applied .= $val['php'].$R['code_error_separator'];
 				}
 				else
 				{
-					$error .= $val['php'].'<br />';
+					$error .= $val['php'].$R['code_error_separator'];
 					break;
 				}
 			}
@@ -214,7 +214,7 @@ else
 			// Display error message
 			$t->assign(array(
 				'ERROR_TITLE' => $L['install_update_error'],
-				'ERROR_MSG' => $error.'<br />'.$msg_string
+				'ERROR_MSG' => $error.$R['code_error_separator'].$msg_string
 			));
 			$t->parse('MAIN.ERROR');
 		}

@@ -158,65 +158,6 @@ $perpage= $cfg['maxusersperpage'];
 
 $pagenav = sed_pagenav('users', "f=$f&g=$g&gm=$gm&s=$s&w=$w&sq=$sq", $d, $totalusers, $perpage);
 
-/*=========*/
-
-$countryfilters = "<form action=\"".sed_url('users', 'f=search')."\" method=\"post\">".$L['Filters'].": <a href=\"".sed_url('users')."\">".$L['All']."</a> ";
-$countryfilters .= "<select name=\"bycountry\" size=\"1\" onchange=\"redirect(this)\">";
-
-require_once sed_langfile('countries', 'core');
-
-foreach($sed_countries as $i => $x)
-{
-	if($i == '00')
-	{
-		$countryfilters .= "<option value=\"".sed_url('users')."\">".$L['Country']."...</option>";
-		$selected = ("country_00"==$f) ? "selected=\"selected\"" : '';
-		$countryfilters .= "<option value=\"".sed_url('users', 'f=country_00')."\" ".$selected.">".$L['None']."</option>";
-	}
-	else
-	{
-		$selected = ("country_".$i==$f) ? "selected=\"selected\"" : '';
-		$countryfilters .= "<option value=\"".sed_url('users', 'f=country_'.$i)."\" ".$selected.">".sed_cutstring($x,23)."</option>";
-	}
-}
-
-$countryfilters .= "</select>";
-
-/*=========*/
-
-$maingrpfilters .= " <select name=\"bymaingroup\" size=\"1\" onchange=\"redirect(this)\"><option value=\"".sed_url('users')."\">".$L['Maingroup']."...</option>";
-unset($grpms);
-foreach($sed_groups as $k => $i)
-{
-	$selected = ($k == $g) ? "selected=\"selected\"" : '';
-	$selected1 = ($k == $gm) ? "selected=\"selected\"" : '';
-	if(!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
-	{
-		$maingrpfilters .= ($k > 1) ? "<option value=\"".sed_url('users', 'g='.$k)."\" $selected> ".$sed_groups[$k]['title']."</option>" : '';
-		$maingrpfilters .= ($k > 1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-		$grpms .= ($k > 1) ? "<option value=\"".sed_url('users', 'gm='.$k)."\" $selected1> ".$sed_groups[$k]['title']."</option>" : '';
-		$grpms .= ($k > 1 && $sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-	}
-}
-$maingrpfilters .= "</select>";
-
-$grpfilters .= "<select name=\"bygroupms\" size=\"1\" onchange=\"redirect(this)\"><option value=\"".sed_url('users')."\">".$L['Group']."...</option>";
-$grpfilters .= $grpms."</select>";
-
-/*=========*/
-
-$searchfilters .= " <input type=\"text\" class=\"text\" name=\"y\" value=\"".htmlspecialchars($y)."\" size=\"8\" maxlength=\"8\" /><input type=\"submit\" class=\"submit\" value=\"".$L['Search']."\" /></form>";
-
-/*=========*/
-
-$otherfilters .= "\n".$L['Byfirstletter'].":";
-for($i = 1; $i <= 26; $i++)
-{
-	$j = chr($i + 64);
-	$otherfilters .= " <a href=\"".sed_url('users','f='.$j)."\">".$j."</a>";
-}
-$otherfilters .= " <a href=\"".sed_url('users','f=_')."\">%</a>";
-
 $title_params = array(
 	'USERS' => $L['Users']
 );
@@ -230,10 +171,70 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$plug_head .= '<meta name="robots" content="noindex" />';
+$plug_head .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
+
+require_once sed_incfile('forms');
+require_once sed_langfile('countries', 'core');
+
+$filter_titles = array();
+$filter_values = array();
+foreach($sed_countries as $i => $x)
+{
+	if($i == '00')
+	{
+		$filter_titles[] = $L['Country'];
+		$filter_values[] = sed_url('users');
+		$filter_titles[] = $L['None'];
+		$filter_values[] = sed_url('users', 'f=country_00');
+	}
+	else
+	{
+		$filter_titles[] = sed_cutstring($x,23);
+		$filter_values[] = sed_url('users', 'f=country_'.$i);
+	}
+}
+$countryfilters = sed_selectbox($f, 'bycountry', $filter_values, $filter_titles, false, array(
+	'onchange' => 'redirect(this)'
+));
+
+/*=========*/
+
+$filter_titles = array();
+$filter_values = array();
+$filter_values_g = array();
+$filter_titles[] = $L['Maingroup'];
+$filter_values[] = sed_url('users');
+$filter_values_g[] = sed_url('users');
+foreach($sed_groups as $k => $i)
+{
+	if(!$sed_groups[$k]['hidden'] || sed_auth('users', 'a', 'A'))
+	{
+		$filter_titles[] = $sed_groups[$k]['title'] . ($sed_groups[$k]['hidden'] ?  ' ('.$L['Hidden'].')' : '');
+		$filter_values_g[] = sed_url('users', 'g='.$k);
+		$filter_values[] = sed_url('users', 'gm='.$k);
+	}
+}
+$maingrpfilters = sed_selectbox($gm, 'bymaingroup', $filter_values, $filter_titles, false, array(
+	'onchange' => 'redirect(this)'
+));
+
+$filter_titles[0] = $L['Group'];
+$grpfilters = sed_selectbox($g, 'bygroupms', $filter_values_g, $filter_titles, false, array(
+	'onchange' => 'redirect(this)'
+));
+
+/*=========*/
+
+$otherfilters = '';
+for($i = 1; $i <= 26; $i++)
+{
+	$j = chr($i + 64);
+	$otherfilters .= ' ' . sed_rc_link(sed_url('users','f='.$j), $j);
+}
+$otherfilters .= ' ' . sed_rc_link(sed_url('users','f=_'), '%');
 
 $t -> assign(array(
 	"USERS_TITLE" => $title,
@@ -246,11 +247,13 @@ $t -> assign(array(
 	"USERS_TOP_PAGNAV" => $pagenav['main'],
 	"USERS_TOP_PAGEPREV" => $pagenav['prev'],
 	"USERS_TOP_PAGENEXT" => $pagenav['next'],
+	"USERS_TOP_FILTER_ACTION" => sed_url('users', 'f=search'),
 	"USERS_TOP_FILTERS_COUNTRY" => $countryfilters,
 	"USERS_TOP_FILTERS_MAINGROUP" => $maingrpfilters,
 	"USERS_TOP_FILTERS_GROUP" => $grpfilters,
-	"USERS_TOP_FILTERS_SEARCH" => $searchfilters,
+	"USERS_TOP_FILTERS_SEARCH" => sed_inputbox('text', 'y', $y, array('size' => 8, 'maxlength' => 8)),
 	"USERS_TOP_FILTERS_OTHERS" => $otherfilters,
+	"USERS_TOP_FILTERS_SUBMIT" => sed_inputbox('submit', 'submit', $L['Search']),
 	"USERS_TOP_PM" => "PM",
 ));
 
@@ -259,16 +262,24 @@ $asc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=asc&amp;g=$g&amp;gm=$gm
 $desc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
 foreach ($users_sort_tags as $k => $x)
 {
-	$t -> assign($x[0], '<a href="'.implode($k, $asc).'">'.$sed_img_down.'</a> <a href="'.implode($k, $desc).'">'.$sed_img_up.'</a> '.$x[1]);
+	$t->assign($x[0], sed_rc('users_link_sort', array(
+		'asc_url' => implode($k, $asc),
+		'desc_url' => implode($k, $desc),
+		'text' => $x[1]
+	)));
 }
 
 // Extra fields for users
 foreach($sed_extrafields['users'] as $i => $extrafield)
 {
 	$uname = strtoupper($extrafield['field_name']);
-	$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title'] : $extrafield['field_description'];
-	$fieldtext = "<a href=\"".sed_url('users', "f=$f&amp;s=".$extrafield['field_name']."&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_down</a> <a href=\"".sed_url('users', "f=$f&amp;s=".$extrafield['field_name']."&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq")."\">$sed_img_up</a> ".$fieldtext;
-	$t -> assign('USERS_TOP_'.$uname, $fieldtext);
+	$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title']
+		: $extrafield['field_description'];
+	$t->assign('USERS_TOP_'.$uname, sed_rc('users_link_sort', array(
+		'asc_url' => sed_url('users', "f=$f&s=".$extrafield['field_name']."&w=asc&g=$g&gm=$gm&sq=$sq"),
+		'desc_url' => sed_url('users', "f=$f&s=".$extrafield['field_name']."&w=desc&g=$g&gm=$gm&sq=$sq"),
+		'text' => $fieldtext
+	)));
 }
 
 $jj=0;

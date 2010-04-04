@@ -26,10 +26,14 @@
 
 		<div class="block">
 			<h2 class="prefs">{PHP.L.Filters}</h2>
+			<form action="{USERS_TOP_FILTER_ACTION}" method="post">
 			{USERS_TOP_FILTERS_COUNTRY}
 			{USERS_TOP_FILTERS_MAINGROUP}
 			{USERS_TOP_FILTERS_GROUP}
-			{USERS_TOP_FILTERS_SEARCH}
+			{USERS_TOP_FILTERS_SEARCH}<br />
+			{PHP.L.Byfirstletter}: {USERS_TOP_FILTERS_OTHER}
+			{USERS_TOP_FILTERS_SUBMIT}
+			</form>
 		</div>
 
 		<p class="paging"><span class="a1">{PHP.skinlang.users.usersperpage}: {USERS_TOP_MAXPERPAGE}</span><span class="a1">{PHP.skinlang.users.usersinthissection}: {USERS_TOP_TOTALUSERS}</span>{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT}</p>

@@ -39,10 +39,6 @@ $urr = sed_sql_fetcharray($sql);
 
 $urr['user_birthdate'] = sed_date2stamp($urr['user_birthdate']);
 
-$profile_form_avatar = "<a name=\"avatar\" id=\"avatar\"></a>";
-$profile_form_photo = "<a name=\"photo\" id=\"photo\"></a>";
-$profile_form_signature = "<a name=\"signature\" id=\"signature\"></a>";
-
 switch ($a)
 {
 	/* ============= */
@@ -197,11 +193,11 @@ switch ($a)
 		}
 		elseif($fcheck == 2)
 		{
-			$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
+			sed_error(sprintf($L['pfs_filemimemissing'], $f_extension), 'userfile');
 		}
 		else
 		{
-			$error_string .= sprintf($L['pro_avatarnotvalid'], $f_extension);
+			sed_error(sprintf($L['pro_avatarnotvalid'], $f_extension), 'userfile');
 		}
 	}
 
@@ -265,11 +261,11 @@ switch ($a)
 		}
 		elseif($fcheck == 2)
 		{
-			$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
+			sed_error(sprintf($L['pfs_filemimemissing'], $f_extension), 'userphoto');
 		}
 		else
 		{
-			$error_string .= sprintf($L['pro_photonotvalid'], $f_extension);
+			sed_error(sprintf($L['pro_photonotvalid'], $f_extension), 'userphoto');
 		}
 	}
 
@@ -331,11 +327,11 @@ switch ($a)
 		}
 		elseif($fcheck == 2)
 		{
-			$disp_errors .= sprintf($L['pfs_filemimemissing'], $f_extension);
+			sed_error(sprintf($L['pfs_filemimemissing'], $f_extension), 'usersig');
 		}
 		else
 		{
-			$error_string .= sprintf($L['pro_signotvalid'], $f_extension);
+			sed_error(sprintf($L['pro_signotvalid'], $f_extension), 'usersig');
 		}
 	}
 
@@ -395,16 +391,16 @@ switch ($a)
 		$sql = sed_sql_query("SELECT user_password FROM $db_users WHERE user_id='".$usr['id']."' ");
 		$row = sed_sql_fetcharray($sql);
 
-		$error_string .= ($rnewpass1!=$rnewpass2) ? $L['pro_passdiffer']."<br />" : '';
-		$error_string .= (mb_strlen($rnewpass1)<4 || sed_alphaonly($rnewpass1)!=$rnewpass2) ? $L['pro_passtoshort']."<br />" : '';
-		$error_string .= ($roldpass!=$row['user_password']) ? $L['pro_wrongpass']."<br />" : '';
+		if ($rnewpass1!=$rnewpass2) sed_error('pro_passdiffer', 'rnewpass2');
+		if (mb_strlen($rnewpass1)<4 || sed_alphaonly($rnewpass1)!=$rnewpass2) sed_error('pro_passtoshort', 'rnewpass1');
+		if ($roldpass!=$row['user_password']) sed_error('pro_wrongpass', 'roldpass');
 
 		if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
 		{
-			$error_string .= $L['pro_emailandpass'].'<br />';
+			sed_error('pro_emailandpass', 'ruseremail');
 		}
 
-		if (empty($error_string))
+		if (!$cot_error)
 		{
 			$rnewpass = md5($rnewpass1);
 
@@ -435,15 +431,16 @@ switch ($a)
 		if (!$cfg['user_email_noprotection'])
 		{
 			$rmailpass = md5($rmailpass);
-			$error_string .= ($rmailpass!=$urr['user_password']) ? $L['pro_wrongpass']."<br />" : '';
+			if ($rmailpass!=$urr['user_password']) sed_error('pro_wrongpass', 'rmailpass');
 		}
 		
-		$error_string .= (mb_strlen($ruseremail)<4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
-		$error_string .= ($res>0) ? $L['aut_emailalreadyindb']."<br />" : '';
+		if (mb_strlen($ruseremail)<4
+			|| !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail))
+			sed_error('aut_emailtooshort', 'ruseremail');
+		if ($res>0) sed_error('aut_emailalreadyindb', 'ruseremail');
 
-		if (empty($error_string))
+		if (!$cot_error)
 		{
-
 			if (!$cfg['user_email_noprotection'])
 			{
 				$validationkey = md5(microtime());
@@ -477,7 +474,7 @@ switch ($a)
 	}
 
 
-	if (empty($error_string))
+	if (!$cot_error)
 	{
 		if ($rmonth=='x' || $rday=='x' || $ryear=='x' || empty($rmonth) || empty($rday) || empty($ryear))
 		{
@@ -543,60 +540,6 @@ switch ($a)
 
 }
 
-$profile_form_skins .= sed_selectbox_skin($urr['user_skin'], 'ruserskin');
-$profile_form_themes .= sed_selectbox_theme($urr['user_skin'], 'rusertheme', $urr['user_theme']);
-$profile_form_langs .= sed_selectbox_lang($urr['user_lang'], 'ruserlang');
-
-$timezonelist = array ('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
-
-$profile_form_timezone = "<select name=\"rusertimezone\" size=\"1\">";
-foreach($timezonelist as $x)
-{
-	$f = (float) $x;
-	$selected = ($x==$urr['user_timezone']) ? "selected=\"selected\"" : '';
-	$profile_form_timezone .= "<option value=\"$f\" $selected>GMT ".$x.", ".date($cfg['dateformat'], $sys['now_offset'] + $x*3600)."</option>";
-}
-$profile_form_timezone .= "</select> ".$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600)." ".$usr['timetext'];
-
-$profile_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
-$profile_form_gender = sed_selectbox_gender($urr['user_gender'] ,'rusergender');
-$profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short', '', date('Y', $sys['now_offset']));
-$profile_form_email = ($cfg['useremailchange']) ? "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".htmlspecialchars($urr['user_email'])."\" size=\"32\" maxlength=\"64\" />" : "<input type=\"text\" class=\"text\" name=\"ruseremail\" value=\"".htmlspecialchars($urr['user_email'])."\" size=\"32\" maxlength=\"64\" disabled=\"disabled\" />";
-
-$profile_form_avatar .= (!empty($urr['user_avatar'])) ? "<img src=\"".$urr['user_avatar']."\" alt=\"\" /><br />".$L['Delete']." [<a href=\"" .sed_url('users', 'm=profile&a=avatardelete&'.sed_xg())."\">x</a>]<br />&nbsp;<br />" : '';
-$profile_form_avatar .= $L['pro_avatarsupload']." (".$cfg['av_maxx']."x".$cfg['av_maxy']."x".$cfg['av_maxsize'].$L['b'].")<br />";
-$profile_form_avatar .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['av_maxsize']*1024)."\" />";
-$profile_form_avatar .= "<input name=\"userfile\" type=\"file\" class=\"file\" size=\"24\" /><br />";
-
-$profile_form_photo .= (!empty($urr['user_photo'])) ? "<img src=\"".$urr['user_photo']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"".sed_url('users', 'm=profile&a=phdelete&'.sed_xg())."\">x</a>]" : '';
-$profile_form_photo .= $L['pro_photoupload']." (".$cfg['ph_maxx']."x".$cfg['ph_maxy']."x".$cfg['ph_maxsize'].$L['b'].")<br />";
-$profile_form_photo .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['ph_maxsize']*1024)."\" />";
-$profile_form_photo .= "<input name=\"userphoto\" type=\"file\" class=\"file\" size=\"24\" /><br />";
-
-$profile_form_signature .= (!empty($urr['user_signature'])) ? "<img src=\"".$urr['user_signature']."\" alt=\"\" /> ".$L['Delete']." [<a href=\"".sed_url('users', 'm=profile&a=sigdelete&'.sed_xg())."\">x</a>]" : '';
-$profile_form_signature .= $L['pro_sigupload']." (".$cfg['sig_maxx']."x".$cfg['sig_maxy']."x".$cfg['sig_maxsize'].$L['b'].")<br />";
-$profile_form_signature .= "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"".($cfg['sig_maxsize']*1024)."\" />";
-$profile_form_signature .= "<input name=\"usersig\" type=\"file\" class=\"file\" size=\"24\" /><br />";
-
-if ($a=='avatarchoose')
-{
-	sed_check_xg();
-	$profile_form_avatar .=  "<a name=\"list\" id=\"list\"></a><h4>".$L['pro_avatarschoose']." :</h4>";
-	$handle = opendir($cfg['defav_dir']);
-	while ($f = readdir($handle))
-	{
-		if ($f != "." && $f != "..")
-			{ $profile_form_avatar .= "<a href=\"".sed_url('users', 'm=profile&a=avatarselect&'.sed_xg().'&id='.urlencode($f), '#avatar')."\"><img src=\"".$cfg['defav_dir'].$f."\" alt=\"\" /></a> "; }
-	}
-	closedir($handle);
-}
-else
-	{ $profile_form_avatar .= "<a href=\"".sed_url('users', 'm=profile&a=avatarchoose&'.sed_xg(), '#list')."\">".$L['pro_avatarspreset']."</a>"; }
-
-$profile_form_pmnotify = ($urr['user_pmnotify']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserpmnotify\" value=\"0\" checked=\"checked\" />".$L['No'];
-
-$profile_form_hideemail = ($urr['user_hideemail']) ? "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" checked=\"checked\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" />".$L['No'] : "<input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"1\" />".$L['Yes']." <input type=\"radio\" class=\"radio\" name=\"ruserhideemail\" value=\"0\" checked=\"checked\" />".$L['No'];
-
 $title_params = array(
 	'PROFILE' => $L['Profile'],
 	'NAME' => $urr['user_name']
@@ -617,16 +560,93 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'profile'));
 $t = new XTemplate($mskin);
 
-if (!empty($error_string))
+require_once sed_incfile('resources', 'users');
+require_once sed_incfile('forms');
+
+$profile_form_avatar = $R['users_link_avatar'];
+$profile_form_photo = $R['users_link_photo'];
+$profile_form_signature = $R['users_link_signature'];
+
+$profile_form_skins .= sed_selectbox_skin($urr['user_skin'], 'ruserskin');
+$profile_form_themes .= sed_selectbox_theme($urr['user_skin'], 'rusertheme', $urr['user_theme']);
+$profile_form_langs .= sed_selectbox_lang($urr['user_lang'], 'ruserlang');
+
+$timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
+foreach($timezonelist as $x)
 {
-	$t->assign("USERS_PROFILE_ERROR_BODY",$error_string);
-	$t->parse("MAIN.USERS_PROFILE_ERROR");
+	$timezonename[] = 'GMT '.$x.', '.date($cfg['dateformat'], $sys['now_offset'] + $x*3600);
+}
+$profile_form_timezone = sed_selectbox($urr['user_timezone'], 'rusertimezone', $timezonelist, $timezonename, false);
+$profile_form_timezone .= ' '.$usr['gmttime'].' / '.date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
+
+$profile_form_countries = sed_selectbox_countries($urr['user_country'], 'rusercountry');
+$profile_form_gender = sed_selectbox_gender($urr['user_gender'] ,'rusergender');
+$profile_form_birthdate = sed_selectbox_date($urr['user_birthdate'], 'short', '', date('Y', $sys['now_offset']));
+$protected = !$cfg['useremailchange'] ? array('disabled' => 'disabled') : array();
+$profile_form_email = sed_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
+	+ $protected);
+
+$profile_form_avatar_existing = !empty($urr['user_avatar']) ? sed_rc('users_code_avatar_existing', array(
+	'avatar_url' => $urr['user_avatar'],
+	'delete_url' => sed_url('users', 'm=profile&a=avatardelete&'.sed_xg())
+)) : '';
+$profile_form_avatar = sed_rc('users_code_avatar', array(
+	'avatar_existing' => $profile_form_avatar_existing,
+	'input_maxsize' => sed_inputbox('hidden', 'MAX_FILE_SIZE', $cfg['av_maxsize']*1024),
+	'input_file' => sed_inputbox('file', 'userfile', '', array('size' => 24))
+));
+
+$profile_form_photo_existing = !empty($urr['user_photo']) ? sed_rc('users_code_photo_existing', array(
+	'photo_url' => $urr['user_photo'],
+	'delete_url' => sed_url('users', 'm=profile&a=phdelete&'.sed_xg())
+)) : '';
+$profile_form_avatar = sed_rc('users_code_photo', array(
+	'photo_existing' => $profile_form_photo_existing,
+	'input_maxsize' => sed_inputbox('hidden', 'MAX_FILE_SIZE', $cfg['ph_maxsize']*1024),
+	'input_file' => sed_inputbox('file', 'userphoto', '', array('size' => 24))
+));
+
+$profile_form_signature_existing = !empty($urr['user_signature']) ? sed_rc('users_code_signature_existing', array(
+	'signature_url' => $urr['user_signature'],
+	'delete_url' => sed_url('users', 'm=profile&a=sigdelete&'.sed_xg())
+)) : '';
+$profile_form_signature = sed_rc('users_code_signature', array(
+	'signature_existing' => $profile_form_signature_existing,
+	'input_maxsize' => sed_inputbox('hidden', 'MAX_FILE_SIZE', $cfg['sig_maxsize']*1024),
+	'input_file' => sed_inputbox('file', 'usersig', '', array('size' => 24))
+));
+
+if ($a=='avatarchoose')
+{
+	sed_check_xg();
+	$profile_form_avatar .= $R['users_code_avatarchoose_title'];
+	$handle = opendir($cfg['defav_dir']);
+	while ($f = readdir($handle))
+	{
+		if ($f != "." && $f != "..")
+		{
+			$profile_form_avatar .= sed_rc('users_link_avatarselect', array(
+				'url' => sed_url('users', 'm=profile&a=avatarselect&'.sed_xg().'&id='.urlencode($f), '#avatar'),
+				'f' => $f
+			));
+		}
+	}
+	closedir($handle);
+}
+else
+{
+	$profile_form_avatar .= sed_rc('users_link_avatarchoose', array(
+		'url' => sed_url('users', 'm=profile&a=avatarchoose&'.sed_xg(), '#list')
+	));
 }
 
-$editor_class = $cfg['parsebbcodeusertext'] ? 'class="minieditor"' : '';
+$profile_form_pmnotify = sed_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No']));
+$profile_form_hideemail = sed_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No']));
+
+$editor_class = $cfg['parsebbcodeusertext'] ? 'minieditor' : '';
 
 $useredit_array = array(
-	"USERS_PROFILE_TITLE" => "<a href=\"".sed_url('users', 'm=profile')."\">".$L['pro_title']."</a>",
+	"USERS_PROFILE_TITLE" => sed_rc_link(sed_url('users', 'm=profile'), $L['pro_title']),
 	"USERS_PROFILE_SUBTITLE" => $L['pro_subtitle'],
 	"USERS_PROFILE_FORM_SEND" => sed_url('users', "m=profile&a=update&".sed_xg()),
 	"USERS_PROFILE_ID" => $urr['user_id'],
@@ -637,31 +657,31 @@ $useredit_array = array(
 	"USERS_PROFILE_AVATAR" => $profile_form_avatar,
 	"USERS_PROFILE_PHOTO" => $profile_form_photo,
 	"USERS_PROFILE_SIGNATURE" => $profile_form_signature,
-	"USERS_PROFILE_TEXT" => "<textarea $editor_class name=\"rusertext\" rows=\"8\" cols=\"56\">".htmlspecialchars($urr['user_text'])."</textarea>",
-	"USERS_PROFILE_TEXTBOXER" => "<textarea $editor_class name=\"rusertext\" rows=\"8\" cols=\"56\">".htmlspecialchars($urr['user_text'])."</textarea>",
+	"USERS_PROFILE_TEXT" => sed_textarea('rusertext', $urr['user_text'], 8, 56, array('class' => $editor_class)),
+	"USERS_PROFILE_TEXTBOXER" => sed_textarea('rusertext', $urr['user_text'], 8, 56, array('class' => $editor_class)),
 	"USERS_PROFILE_EMAIL" => $profile_form_email,
-	"USERS_PROFILE_EMAILPASS" => "<input type=\"password\" class=\"password\" name=\"rmailpass\" size=\"12\" maxlength=\"16\" />",
+	"USERS_PROFILE_EMAILPASS" => sed_inputbox('password', 'rmailpass', '', array('size' => 12, 'maxlength' => 32)),
 	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,
 	"USERS_PROFILE_PMNOTIFY" => $profile_form_pmnotify,
-	"USERS_PROFILE_WEBSITE" => "<input type=\"text\" class=\"text\" name=\"ruserwebsite\" value=\"".$urr['user_website']."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_PROFILE_WEBSITE" => sed_inputbox('text', 'ruserwebsite', $urr['user_website'], array('size' => 56, 'maxlength' => 128)),
 	"USERS_PROFILE_SKIN" => $profile_form_skins,
 	"USERS_PROFILE_THEME" => $profile_form_themes,
 	"USERS_PROFILE_LANG" => $profile_form_langs,
-	"USERS_PROFILE_ICQ" => "<input type=\"text\" class=\"text\" name=\"rusericq\" value=\"".htmlspecialchars($urr['user_icq'])."\" size=\"32\" maxlength=\"16\" />",
-	"USERS_PROFILE_MSN" => "<input type=\"text\" class=\"text\" name=\"rusermsn\" value=\"".htmlspecialchars($urr['user_msn'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_PROFILE_IRC" => "<input type=\"text\" class=\"text\" name=\"ruserirc\" value=\"".htmlspecialchars($urr['user_irc'])."\" size=\"56\" maxlength=\"128\" />",
+	"USERS_PROFILE_ICQ" => sed_inputbox('text', 'rusericq', $urr['user_icq'], array('size' => 32, 'maxlength' => 16)),
+	"USERS_PROFILE_MSN" => sed_inputbox('text', 'rusermsn', $urr['user_msn'], array('size' => 32, 'maxlength' => 64)),
+	"USERS_PROFILE_IRC" => sed_inputbox('text', 'ruserirc', $urr['user_irc'], array('size' => 56, 'maxlength' => 255)),
 	"USERS_PROFILE_GENDER" => $profile_form_gender,
 	"USERS_PROFILE_BIRTHDATE" => $profile_form_birthdate,
 	"USERS_PROFILE_TIMEZONE" => $profile_form_timezone,
-	"USERS_PROFILE_LOCATION" => "<input type=\"text\" class=\"text\" name=\"ruserlocation\" value=\"".htmlspecialchars($urr['user_location'])."\" size=\"32\" maxlength=\"64\" />",
-	"USERS_PROFILE_OCCUPATION" => "<input type=\"text\" class=\"text\" name=\"ruseroccupation\" value=\"".htmlspecialchars($urr['user_occupation'])."\" size=\"32\" maxlength=\"64\" />",
+	"USERS_PROFILE_LOCATION" => sed_inputbox('text', 'ruserlocation', $urr['user_location'], array('size' => 32, 'maxlength' => 64)),
+	"USERS_PROFILE_OCCUPATION" => sed_inputbox('text', 'ruseroccupation', $urr['user_occupation'], array('size' => 32, 'maxlength' => 64)),
 	"USERS_PROFILE_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_PROFILE_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_PROFILE_LOGCOUNT" => $urr['user_logcount'],
 	"USERS_PROFILE_ADMINRIGHTS" => '',
-	"USERS_PROFILE_OLDPASS" => "<input type=\"password\" class=\"password\" name=\"roldpass\" size=\"12\" maxlength=\"16\" />",
-	"USERS_PROFILE_NEWPASS1" => "<input type=\"password\" class=\"password\" name=\"rnewpass1\" size=\"12\" maxlength=\"16\" />",
-	"USERS_PROFILE_NEWPASS2" => "<input type=\"password\" class=\"password\" name=\"rnewpass2\" size=\"12\" maxlength=\"16\" />",
+	"USERS_PROFILE_OLDPASS" => sed_inputbox('password', 'roldpass', '', array('size' => 12, 'maxlength' => 32)),
+	"USERS_PROFILE_NEWPASS1" => sed_inputbox('password', 'rnewpass1', '', array('size' => 12, 'maxlength' => 32)),
+	"USERS_PROFILE_NEWPASS2" => sed_inputbox('password', 'rnewpass2', '', array('size' => 12, 'maxlength' => 32)),
 );
 $t->assign($useredit_array);
 
@@ -670,6 +690,14 @@ foreach($sed_extrafields['users'] as $i => $row)
 {
 	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']), sed_build_extrafields('user',  $row, $urr['user_'.$row['field_name']]));
 	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
+}
+
+// Error handling
+if (sed_check_messages())
+{
+	$t->assign('USERS_PROFILE_ERROR_BODY', sed_implode_messages());
+	$t->parse('MAIN.USERS_PROFILE_ERROR');
+	sed_clear_messages();
 }
 
 /* === Hook === */

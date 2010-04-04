@@ -22,6 +22,10 @@ sed_sendheaders();
 $mskin = sed_skinfile('install');
 $t = new XTemplate($mskin);
 
+require_once sed_incfile('resources');
+require_once sed_incfile('forms');
+require_once sed_incfile('resources', 'install');
+
 if ($_POST['submit'])
 {
 	$cfg['mysqlhost'] = sed_import('db_host', 'P', 'TXT');
@@ -121,91 +125,103 @@ clearstatcache();
 
 if (is_dir($cfg['av_dir']))
 {
-	$status['av_dir'] = (substr(decoct(fileperms($cfg['av_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['av_dir'])), -4)).'</span>';
+	$status['av_dir'] = (substr(decoct(fileperms($cfg['av_dir'])), -4) >= $cfg['dir_perms']) ? $R['install_code_writable']
+		: sed_rc('install_code_invalid', array('text' => sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['av_dir'])), -4))));
 }
 else
 {
-	$status['av_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['av_dir'] = $R['install_code_not_found'];
 }
 /* ------------------- */
 if (is_dir($cfg['cache_dir']))
 {
-	$status['cache_dir'] = (substr(decoct(fileperms($cfg['cache_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['cache_dir'])), -4)).'</span>';
+	$status['cache_dir'] = (substr(decoct(fileperms($cfg['cache_dir'])), -4) >= $cfg['dir_perms']) ? $R['install_code_writable']
+		: sed_rc('install_code_invalid', array('text' => sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['cache_dir'])), -4))));
 }
 else
 {
-	$status['cache_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['cache_dir'] = $R['install_code_not_found'];
 }
 /* ------------------- */
 if (is_dir($cfg['pfs_dir']))
 {
-	$status['pfs_dir'] = (substr(decoct(fileperms($cfg['pfs_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['pfs_dir'])), -4)).'</span>';
+	$status['pfs_dir'] = (substr(decoct(fileperms($cfg['pfs_dir'])), -4) >= $cfg['dir_perms']) ? $R['install_code_writable']
+		: sed_rc('install_code_invalid', array('text' => sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['pfs_dir'])), -4))));
 }
 else
 {
-	$status['pfs_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['pfs_dir'] = $R['install_code_not_found'];
 }
 /* ------------------- */
 if (is_dir($cfg['photos_dir']))
 {
-	$status['photos_dir'] = (substr(decoct(fileperms($cfg['photos_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['photos_dir'])), -4)).'</span>';
+	$status['photos_dir'] = (substr(decoct(fileperms($cfg['photos_dir'])), -4) >= $cfg['dir_perms']) ? $R['install_code_writable']
+		: sed_rc('install_code_invalid', array('text' => sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['photos_dir'])), -4))));
 }
 else
 {
-	$status['photos_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['photos_dir'] = $R['install_code_not_found'];
 }
 /* ------------------- */
 if (is_dir($cfg['sig_dir']))
 {
-	$status['sig_dir'] = (substr(decoct(fileperms($cfg['sig_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['sig_dir'])), -4)).'</span>';
+	$status['sig_dir'] = (substr(decoct(fileperms($cfg['sig_dir'])), -4) >= $cfg['dir_perms']) ? $R['install_code_writable']
+		: sed_rc('install_code_invalid', array('text' => sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['sig_dir'])), -4))));
 }
 else
 {
-	$status['sig_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['sig_dir'] = $R['install_code_not_found'];
 }
 /* ------------------- */
 if (is_dir($cfg['th_dir']))
 {
-	$status['th_dir'] = (substr(decoct(fileperms($cfg['th_dir'])), -4) >= $cfg['dir_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['th_dir'])), -4)).'</span>';
+	$status['th_dir'] = (substr(decoct(fileperms($cfg['th_dir'])), -4) >= $cfg['dir_perms']) ? $R['install_code_writable']
+		: sed_rc('install_code_invalid', array('text' => sprintf($L['install_chmod_value'], substr(decoct(fileperms($cfg['th_dir'])), -4))));
 }
 else
 {
-	$status['th_dir'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['th_dir'] = $R['install_code_not_found'];
 }
 /* ------------------- */
 if (file_exists($file['config']))
 {
-	$status['config'] = (substr(decoct(fileperms($file['config'])), -4) >= $cfg['file_perms']) ? '<span class="install_valid">'.$L['install_writable'].'</span>' : '<span class="install_invalid">'.sprintf($L['install_chmod_value'], substr(decoct(fileperms($file['config'])), -4)).'</span>';
+	$status['config'] = (substr(decoct(fileperms($file['config'])), -4) >= $cfg['file_perms']) ? $R['install_code_writable']
+		: sed_rc('install_code_invalid', array('text' => sprintf($L['install_chmod_value'], substr(decoct(fileperms($file['config'])), -4))));
 }
 else
 {
-	$status['config'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['config'] = $R['install_code_not_found'];
 }
 /* ------------------- */
 if (file_exists($file['config_sample']))
 {
-	$status['config_sample'] = '<span class="install_valid">'.$L['Found'].'</span>';
+	$status['config_sample'] = $R['install_code_found'];
 }
 else
 {
-	$status['config_sample'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['config_sample'] = $R['install_code_not_found'];
 }
 /* ------------------- */
 if (file_exists($file['sql']))
 {
-	$status['sql_file'] = '<span class="install_valid">'.$L['Found'].'</span>';
+	$status['sql_file'] = $R['install_code_found'];
 }
 else
 {
-	$status['sql_file'] = '<span class="install_invalid">'.$L['nf'].'</span>';
+	$status['sql_file'] = $R['install_code_not_found'];
 }
-$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>=')) ? '<span class="install_valid">'.sprintf($L['install_ver_valid'],  PHP_VERSION).'</span>' : '<span class="install_invalid">'.sprintf($L['install_ver_invalid'],  PHP_VERSION).'</span>';
-$status['mbstring'] = (extension_loaded('mbstring')) ? '<span class="install_valid">'.$L['Available'].'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
-$status['mysql'] = (extension_loaded('mysql')) ? '<span class="install_valid">'.$L['Available'].'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
+$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>='))
+	? sed_rc('install_code_valid', array('text' => sprintf($L['install_ver_valid'],  PHP_VERSION)))
+	: sed_rc('install_code_invalid', array('text' => sprintf($L['install_ver_invalid'],  PHP_VERSION)));
+$status['mbstring'] = (extension_loaded('mbstring')) ? $R['install_code_available'] : $R['install_code_not_available'];
+$status['mysql'] = (extension_loaded('mysql')) ? $R['install_code_available'] : $R['install_code_not_available'];
 
 if ($_POST['submit'])
 {
-	$status['mysql_ver'] = '/ ' . ($sed_dbc && function_exists('version_compare') && version_compare(@mysql_get_server_info($sed_dbc), '4.1.0', '>=')) ? '<span class="install_valid">'.sprintf($L['install_ver_valid'],  mysql_get_server_info($sed_dbc)).'</span>' : '<span class="install_invalid">'.$L['na'].'</span>';
+	$status['mysql_ver'] = '/ '
+		. ($sed_dbc && function_exists('version_compare') && version_compare(@mysql_get_server_info($sed_dbc), '4.1.0', '>='))
+			? sed_rc('install_code_valid', array('text' => sprintf($L['install_ver_valid'],  mysql_get_server_info($sed_dbc))))
+			: $R['install_code_not_available'];
 }
 /*else
 {

@@ -111,7 +111,7 @@ $title_params = array(
 $out['subtitle'] = sed_title('title_users_pasrec', $title_params);
 $out['head'] .= $R['code_noindex'];
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? sed_url($cfg['mainurl'], $cfg['maintitle']).' '.$cfg['separator'].' ' : '';
 $title = $bhome . $L['pasrec_title'];
 
 require_once $cfg['system_dir'].'/header.php';
