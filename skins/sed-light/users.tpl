@@ -4,7 +4,10 @@
 	<div class="mboxBody">
 
 		<div id="subtitle">
-			{USERS_TOP_FILTERS_COUNTRY} {USERS_TOP_FILTERS_MAINGROUP} {USERS_TOP_FILTERS_GROUP} {USERS_TOP_FILTERS_SEARCH} {USERS_TOP_FILTERS_OTHERS}
+			<form action="{USERS_TOP_FILTER_ACTION}" method="post">
+			{USERS_TOP_FILTERS_COUNTRY} {USERS_TOP_FILTERS_MAINGROUP} {USERS_TOP_FILTERS_GROUP} {USERS_TOP_FILTERS_SEARCH} {USERS_TOP_FILTERS_SUBMIT} <br />
+			{PHP.L.Byfirstletter}: {USERS_TOP_FILTERS_OTHERS}
+			</form>
 		</div>
 
 		<div class="paging">{USERS_TOP_PAGEPREV}{USERS_TOP_PAGNAV}{USERS_TOP_PAGENEXT} &nbsp; {PHP.skinlang.users.usersperpage}: {USERS_TOP_MAXPERPAGE} {PHP.cfg.separator} {PHP.skinlang.users.usersinthissection}: {USERS_TOP_TOTALUSERS}</div>

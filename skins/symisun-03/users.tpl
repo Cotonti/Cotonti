@@ -5,7 +5,9 @@
 				<h1>{PHP.L.Users}</h1>
 
 				<p class="breadcrumb">{PHP.skinlang.list.bread}: <a href="users.php">{PHP.L.Users}</a></p>&nbsp;
-				<p>{USERS_TOP_FILTERS_COUNTRY} {USERS_TOP_FILTERS_MAINGROUP} {USERS_TOP_FILTERS_GROUP} {USERS_TOP_FILTERS_SEARCH}</p><br />
+				<form action="{USERS_TOP_FILTER_ACTION}" method="post">
+				<p>{USERS_TOP_FILTERS_COUNTRY} {USERS_TOP_FILTERS_MAINGROUP} {USERS_TOP_FILTERS_GROUP} {USERS_TOP_FILTERS_SEARCH} {USERS_TOP_FILTERS_SUBMIT}</p><br />
+				</form>
 
 				<!-- IF {USERS_TOP_TOTALUSERS} > 0 -->
 				{PHP.skinlang.list.sort}
