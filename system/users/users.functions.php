@@ -11,6 +11,101 @@
  */
 
 /**
+ * Returns group link (button)
+ *
+ * @param int $grpid Group ID
+ * @return string
+ */
+function sed_build_group($grpid)
+{
+	if(empty($grpid)) return '';
+	global $sed_groups, $L;
+
+	if($sed_groups[$grpid]['hidden'])
+	{
+		if(sed_auth('users', 'a', 'A'))
+		{
+			return sed_rc_link(sed_url('users', 'gm='.$grpid), $sed_groups[$grpid]['title'] .' ('.$L['Hidden'].')');
+		}
+		else
+		{
+			return $L['Hidden'];
+		}
+	}
+	else
+	{
+		return sed_rc_link(sed_url('users', 'gm='.$grpid), $sed_groups[$grpid]['title']);
+	}
+}
+
+/**
+ * Builds list of user's groups, editable or not
+ *
+ * @param int $userid Edited user ID
+ * @param bool $edit Permission
+ * @param int $maingrp User main group
+ * @return string
+ */
+function sed_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
+{
+	global $db_groups_users, $sed_groups, $L, $usr, $R;
+
+	$sql = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
+
+	while ($row = sed_sql_fetcharray($sql))
+	{
+		$member[$row['gru_groupid']] = TRUE;
+	}
+
+	$res = $R['users_code_grplist_begin'];
+	foreach($sed_groups as $k => $i)
+	{
+		if ($edit)
+		{
+			$checked = ($member[$k]) ? ' checked="checked"' : '';
+			$checked_maingrp = ($maingrp==$k) ? ' checked="checked"' : '';
+			$readonly = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k == COT_GROUP_GUESTS
+				|| $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED || ($k == COT_GROUP_SUPERADMINS && $userid == 1))
+					? ' disabled="disabled"' : '';
+			$readonly_maingrp = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k == COT_GROUP_GUESTS
+				|| ($k == COT_GROUP_INACTIVE && $userid == 1) || ($k == COT_GROUP_BANNED && $userid == 1))
+					? ' disabled="disabled"' : '';
+		}
+		if ($member[$k] || $edit)
+		{
+			if (!$sed_groups[$k]['hidden'] || sed_auth('users', 'a', 'A'))
+			{
+				$item = '';
+				if ($edit)
+				{
+					$item .= sed_rc('users_input_grplist_radio', array(
+						'value' => $k,
+						'name' => 'rusermaingrp',
+						'checked' => $checked_maingrp,
+						'title' => '',
+						'attrs' => $readonly_maingrp
+					));
+					$item .= sed_rc('users_input_grplist_checkbox', array(
+						'value' => '1',
+						'name' => "rusergroupsms[$k]",
+						'checked' => $checked,
+						'title' => '',
+						'attrs' => $readonly
+					));
+				}
+				$item .= ($k == COT_GROUP_GUESTS) ? $sed_groups[$k]['title']
+					: sed_rc_link(sed_url('users', 'gm='.$k), $sed_groups[$k]['title']);
+				$item .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
+				$rc = ($maingrp == $k) ? 'users_code_grplist_item_main' : 'users_code_grplist_item';
+				$res .= sed_rc('users_code_grplist_item', array('item' => $item));
+			}
+		}
+	}
+	$res .= $R['users_code_grplist_end'];
+	return $res;
+}
+
+/**
  * Returns user ICQ pager link
  *
  * @param int $text ICQ number
@@ -46,19 +141,17 @@ function sed_build_msn($msn)
  * @param string $name Input name
  * @return string
  */
-function sed_selectbox_gender($check,$name)
+function sed_selectbox_gender($check, $name)
 {
 	global $L;
 
 	$genlist = array ('U', 'M', 'F');
-	$result =  '<select name="'.$name.'" size="1">';
-	foreach(array ('U', 'M', 'F') as $i)
+	$titlelist = array();
+	foreach ($genlist as $i)
 	{
-		$selected = ($i==$check) ? 'selected="selected"' : '';
-		$result .= '<option value="'.$i.'" $selected>'.$L['Gender_'.$i].'</option>';
+		$titlelist[] = $L['Gender_'.$i];
 	}
-	$result .= '</select>';
-	return($result);
+	return sed_selectbox($check, $name, $genlist, $titlelist, false);
 }
 
 

@@ -1028,9 +1028,11 @@ function sed_build_catpath($cat, $mask = 'link_catpath')
 function sed_build_country($flag)
 {
 	global $sed_countries;
-
+	if (!$sed_countries) include_once sed_langfile('countries', 'core');
 	$flag = (empty($flag)) ? '00' : $flag;
-	return '<a href="'.sed_url('users', 'f=country_'.$flag).'">'.$sed_countries[$flag].'</a>';
+	return sed_rc_link(sed_url('users', 'f=country_'.$flag), $sed_countries[$flag], array(
+		'title' => $sed_countries[$flag]
+	));
 }
 
 /**
@@ -1062,78 +1064,12 @@ function sed_build_email($email, $hide = false)
 function sed_build_flag($flag)
 {
 	global $sed_countries;
+	if (!$sed_countries) include_once sed_langfile('countries', 'core');
 	$flag = (empty($flag)) ? '00' : $flag;
-	return '<a href="'.sed_url('users', 'f=country_'.$flag).'" title="'.$sed_countries[$flag].'"><img class="flag" src="images/flags/'.$flag.'.png" alt="'.$flag.'" /></a>';
-}
-
-/**
- * Returns group link (button)
- *
- * @param int $grpid Group ID
- * @return string
- */
-function sed_build_group($grpid)
-{
-	if(empty($grpid)) return '';
-	global $sed_groups, $L;
-
-	if($sed_groups[$grpid]['hidden'])
-	{
-		if(sed_auth('users', 'a', 'A'))
-		{
-			return '<a href="'.sed_url('users', 'gm='.$grpid).'">'.$sed_groups[$grpid]['title'].'</a> ('.$L['Hidden'].')';
-		}
-		else
-		{
-			return $L['Hidden'];
-		}
-	}
-	else
-	{
-		return '<a href="'.sed_url('users', 'gm='.$grpid).'">'.$sed_groups[$grpid]['title'].'</a>';
-	}
-}
-
-/**
- * Builds "edit group" option group for "user edit" part
- *
- * @param int $userid Edited user ID
- * @param bool $edit Permission
- * @param int $maingrp User main group
- * @return string
- */
-function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
-{
-	global $db_groups_users, $sed_groups, $L, $usr;
-
-	$sql = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
-
-	while ($row = sed_sql_fetcharray($sql))
-	{
-		$member[$row['gru_groupid']] = TRUE;
-	}
-
-	foreach($sed_groups as $k => $i)
-	{
-		$checked = ($member[$k]) ? "checked=\"checked\"" : '';
-		$checked_maingrp = ($maingrp==$k) ? "checked=\"checked\"" : '';
-		$readonly = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==COT_GROUP_GUESTS || $k==COT_GROUP_INACTIVE || $k==COT_GROUP_BANNED || ($k==COT_GROUP_SUPERADMINS && $userid==1)) ? "disabled=\"disabled\"" : '';
-		$readonly_maingrp = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k==COT_GROUP_GUESTS || ($k==COT_GROUP_INACTIVE && $userid==1) || ($k==COT_GROUP_BANNED && $userid==1)) ? "disabled=\"disabled\"" : '';
-
-		if ($member[$k] || $edit)
-		{
-			if (!($sed_groups[$k]['hidden'] && !sed_auth('users', 'a', 'A')))
-			{
-				$res .= "<input type=\"radio\" class=\"radio\" name=\"rusermaingrp\" value=\"$k\" ".$checked_maingrp." ".$readonly_maingrp." /> \n";
-				$res .= "<input type=\"checkbox\" class=\"checkbox\" name=\"rusergroupsms[$k]\" ".$checked." $readonly />\n";
-				$res .= ($k == COT_GROUP_GUESTS) ? $sed_groups[$k]['title'] : "<a href=\"".sed_url('users', 'gm='.$k)."\">".$sed_groups[$k]['title']."</a>";
-				$res .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
-				$res .= "<br />";
-			}
-		}
-	}
-
-	return $res;
+	return sed_rc_link(sed_url('users', 'f=country_'.$flag),
+		sed_rc('icon_flag', array('code' => $flag, 'alt' => $flag)),
+		array('title' => $sed_countries[$flag])
+	);
 }
 
 /**
@@ -1147,7 +1083,7 @@ function sed_build_ipsearch($ip)
 	global $sys;
 	if (!empty($ip))
 	{
-		return '<a href="'.sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']).'">'.$ip.'</a>'; // TODO - to resorses
+		return sed_rc_link(sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']), $ip);
 	}
 	return '';
 }
@@ -1192,7 +1128,7 @@ function sed_build_pfs($id, $c1, $c2, $title)
 function sed_build_pm($user)
 {
 	global $usr, $L, $R;
-	return '<a href="'.sed_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew'].'">'.$R['pm_icon'].'</a>';
+	return sed_rc_link(sed_url('pm', 'm=send&to='.$user), $R['pm_icon'], array('title' => $L['pm_sendnew']));
 }
 
 /**
@@ -1529,7 +1465,7 @@ function sed_build_url($text, $maxlen=64)
 			$text='http://'. $text;
 		}
 		$text = htmlspecialchars($text);
-		$text = '<a href="'.$text.'">'.sed_cutstring($text, $maxlen).'</a>';
+		$text = sed_rc_link($text, sed_cutstring($text, $maxlen));
 	}
 	return $text;
 }
@@ -1555,7 +1491,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? '<a href="'.sed_url('users', 'm=details&id='.$id.'&u='.$user).'">'.$user.'</a>' : '?';
+		return (!empty($user)) ? sed_rc_link(sed_url('users', 'm=details&id='.$id.'&u='.$user), $user) : '?';
 	}
 }
 
@@ -1565,38 +1501,22 @@ function sed_build_user($id, $user)
  * @param string $image Image src
  * @return string
  */
-function sed_build_userimage($image, $type='none')
+function sed_build_userimage($image, $type = 'none')
 {
-	if ($type == 'avatar')
+	global $R;
+	if (empty($image) && $type == 'avatar')
 	{
-		if (empty($image))
-		{
-			$image = 'datas/defaultav/blank.png';
-		}
-		return '<img src="'.$image.'" alt="" class="avatar" />';
+		return $R['img_avatar_default'];
 	}
-	elseif ($type == 'photo')
+	if (empty($type))
 	{
-		if (!empty($image))
-		{
-			return '<img src="'.$image.'" alt="" class="photo" />';
-		}
-
+		$type = 'none';
 	}
-	elseif ($type == 'sig')
+	if (!empty($image))
 	{
-		if (!empty($image))
-		{
-			return '<img src="'.$image.'" alt="" class="signature" />';
-		}
+		return sed_rc("img_$type", array('src' => $image));
 	}
-	else
-	{
-		if (!empty($image))
-		{
-			return '<img src="'.$image.'" alt="" />';
-		}
-	}
+	return '';
 }
 
 /**
