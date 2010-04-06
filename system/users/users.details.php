@@ -72,6 +72,8 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
 
+require_once sed_incfile('resources', 'users');
+
 $bhome = $cfg['homebreadcrumb'] ? sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
 
 $t->assign(array(
@@ -92,7 +94,7 @@ foreach ($extp as $pl)
 if ($usr['isadmin'])
 {
 	$t-> assign(array(
-		"USERS_DETAILS_ADMIN_EDIT" => sed_url(sed_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])
+		"USERS_DETAILS_ADMIN_EDIT" => sed_rc_link(sed_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])
 	));
 
 	$t->parse("MAIN.USERS_DETAILS_ADMIN");

@@ -282,6 +282,7 @@ $mskin = sed_skinfile(array('users', 'edit', $usr['maingrp']));
 $t = new XTemplate($mskin);
 
 require_once sed_incfile('forms');
+require_once sed_incfile('resources', 'users');
 
 $bhome = $cfg['homebreadcrumb'] ?
 	sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
