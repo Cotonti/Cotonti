@@ -12,14 +12,14 @@
 				<a href="plug.php?e=recentitems&amp;days=7{PHP.mode}">{PHP.L.Rec_1week}</a>,
 				<a href="plug.php?e=recentitems&amp;days=14{PHP.mode}">{PHP.L.Rec_2weeks}</a>,
 				<a href="plug.php?e=recentitems&amp;days=30{PHP.mode}">{PHP.L.Rec_1month}</a>
-		<p class="small">
+		<p class="marginbottom10 small">
 			{PHP.L.Show} :
 			<a href="plug.php?e=recentitems{PHP.days}">{PHP.L.All}</a>,
 			<a href="plug.php?e=recentitems{PHP.days}&amp;mode=pages">{PHP.L.Pages}</a>,
 			<a href="plug.php?e=recentitems{PHP.days}&amp;mode=forums">{PHP.L.Forums}</a>
 		</p>
-		{RECENT_FORUMS}
 		{RECENT_PAGES}
-		<p class="paging">{PAGE_PAGEPREV} {PAGE_PAGENAV} {PAGE_PAGENEXT}</p>
+		{RECENT_FORUMS}
+		<!-- IF {PAGE_PAGENAV} --><p class="paging">{PAGE_PAGEPREV}{PAGE_PAGENAV}{PAGE_PAGENEXT}</p><!-- ENDIF -->
 
 <!-- END: MAIN -->

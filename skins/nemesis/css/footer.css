@@ -3,7 +3,7 @@
 
 #footer				{ font-size:.9em; color:#f8f8f8; padding:20px 40px; background:#667e72; overflow:auto; }
 #footer a			{ color:#fff; }
-#footer strong		{ color:#a1b3aa; text-shadow:1px 1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
+#footer strong		{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
 
 #footer ul 				{ width:200px; }
 #footer ul  img			{ vertical-align:-4px; }
