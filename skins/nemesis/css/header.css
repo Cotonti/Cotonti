@@ -3,8 +3,8 @@
 
 #nav			{ line-height:1.4em; background:#eee; overflow:auto; }
 #nav li			{ float:left; width:159px; border-right:1px solid #f8f8f8; }
-#nav li a			{ text-shadow:0 1px 0 #fff; padding:10px 20px; display:block; height:100%; }
-#nav li a:hover	{ text-shadow:0 1px 0 #000; color:#fff; text-decoration:none; background:#667e72; }
+#nav li a			{ text-shadow:0 -1px 0 #fff; padding:10px 20px; display:block; height:100%; }
+#nav li a:hover	{ text-shadow:0 -1px 0 #000; color:#fff; text-decoration:none; background:#667e72; }
 #nav li a span		{ color:#ccc; font-size:.9em; text-transform:lowercase; display:block; }
 
 
