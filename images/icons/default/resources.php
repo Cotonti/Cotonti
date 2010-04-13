@@ -19,6 +19,9 @@ $R['icon_right'] = '<img class="icon" src="images/icons/default/arrow-right.png"
 $R['icon_left'] = '<img class="icon" src="images/icons/default/arrow-left.png" alt="" />';
 $R['icon_up'] = '<img class="icon" src="images/icons/default/arrow-up.png" alt="" />';
 
+$R['icon_vert_active']['desc'] = '<img class="icon" src="images/icons/default/arrow-up-active.png" alt="" />';
+$R['icon_vert_active']['asc'] = '<img class="icon" src="images/icons/default/arrow-down-active.png" alt="" />';;
+
 $R['icon_follow'] = '<img class="icon" src="images/icons/default/arrow-follow.png" alt="" />';
 $R['icon_unread'] = '<img class="icon" src="images/icons/default/arrow-unread.png" alt="" />';
 

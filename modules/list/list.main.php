@@ -135,7 +135,7 @@ else
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil($d / $cfg['maxrowsperpage']) + 1;
 
-$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? sed_rc('page_submitnewpage', array('sub_url' => sed_url('page', 'm=add&c='.$c))) : ''; // TODO - to resorses OR move to tpl with logic {if}
+$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? sed_rc('page_link_submitnewpage', array('sub_url' => sed_url('page', 'm=add&c='.$c))) : ''; // TODO - to resorses OR move to tpl with logic {if}
 
 $pagenav = sed_pagenav('list', "c=$c&s=$s&w=$w&o=$o&p=$p", $d, $totallines, $cfg['maxrowsperpage']);
 
@@ -196,6 +196,14 @@ foreach ($sed_extrafields['structure'] as $row_c)
 	$t->assign('LIST_CAT_'.$uname, sed_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $cat[$row_c['field_name']]));
 }
 
+$arrows = array();
+$params = array('title','key','date','author','owner','count','filecount');
+foreach($params as $val)
+{
+    $arrows[$val]['asc']  = $sed_img_down;
+    $arrows[$val]['desc'] = $sed_img_up;
+}
+$arrows[$s][$w]  = $R['icon_vert_active'][$w];
 
 if (!$cat['group'])
 {
@@ -204,13 +212,13 @@ if (!$cat['group'])
 		"LIST_TOP_TOTALLINES" => $totallines,
 		"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
 		"LIST_TOP_TOTALPAGES" => $totalpages,
-		"LIST_TOP_TITLE" => sed_rc('list_top_title', array('list_top_url_down' => sed_url('list', "c=$c&s=title&w=asc&o=$o&p=$p"), 'list_top_url_up' => sed_url('list', "c=$c&s=title&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_KEY" => sed_rc('list_top_key', array('list_top_key_url_down' => sed_url('list', "c=$c&s=key&w=asc&o=$o&p=$p"), 'list_top_key_url_up' => sed_url('list', "c=$c&s=key&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_DATE" => sed_rc('list_top_date', array('list_top_date_url_down' => sed_url('list', "c=$c&s=date&w=asc&o=$o&p=$p"), 'list_top_date_url_up' => sed_url('list', "c=$c&s=date&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_AUTHOR" => sed_rc('list_top_author', array('list_top_author_url_down' => sed_url('list', "c=$c&s=author&w=asc&o=$o&p=$p"), 'list_top_author_url_up' => sed_url('list', "c=$c&s=author&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_OWNER" => sed_rc('list_top_owner', array('list_top_owner_url_down' => sed_url('list', "c=$c&s=ownerid&w=asc&o=$o&p=$p"), 'list_top_owner_url_up' => sed_url('list', "c=$c&s=ownerid&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_COUNT" => sed_rc('list_top_count', array('list_top_count_url_down' => sed_url('list', "c=$c&s=count&w=asc&o=$o&p=$p"), 'list_top_count_url_up' => sed_url('list', "c=$c&s=count&w=desc&o=$o&p=$p"))), // TODO - to resorses
-		"LIST_TOP_FILECOUNT" => sed_rc('list_top_filecount', array('list_top_filecount_url_down' => sed_url('list', "c=$c&s=filecount&w=asc&o=$o&p=$p"), 'list_top_filecount_url_up' => sed_url('list', "c=$c&s=filecount&w=desc&o=$o&p=$p"))) // TODO - to resorses
+		"LIST_TOP_TITLE" => sed_rc('list_link_title', array('sed_img_down'=>$arrows['title']['asc'],'sed_img_up'=>$arrows['title']['desc'],'list_link_url_down' => sed_url('list', "c=$c&s=title&w=asc&o=$o&p=$p"), 'list_link_url_up' => sed_url('list', "c=$c&s=title&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_KEY" => sed_rc('list_link_key', array('sed_img_down'=>$arrows['key']['asc'],'sed_img_up'=>$arrows['key']['desc'],'list_link_key_url_down' => sed_url('list', "c=$c&s=key&w=asc&o=$o&p=$p"), 'list_link_key_url_up' => sed_url('list', "c=$c&s=key&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_DATE" => sed_rc('list_link_date', array('sed_img_down'=>$arrows['date']['asc'],'sed_img_up'=>$arrows['date']['desc'],'list_link_date_url_down' => sed_url('list', "c=$c&s=date&w=asc&o=$o&p=$p"), 'list_link_date_url_up' => sed_url('list', "c=$c&s=date&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_AUTHOR" => sed_rc('list_link_author', array('sed_img_down'=>$arrows['author']['asc'],'sed_img_up'=>$arrows['author']['desc'],'list_link_author_url_down' => sed_url('list', "c=$c&s=author&w=asc&o=$o&p=$p"), 'list_link_author_url_up' => sed_url('list', "c=$c&s=author&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_OWNER" => sed_rc('list_link_owner', array('sed_img_down'=>$arrows['owner']['asc'],'sed_img_up'=>$arrows['owner']['desc'],'list_link_owner_url_down' => sed_url('list', "c=$c&s=ownerid&w=asc&o=$o&p=$p"), 'list_link_owner_url_up' => sed_url('list', "c=$c&s=ownerid&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_COUNT" => sed_rc('list_link_count', array('sed_img_down'=>$arrows['count']['asc'],'sed_img_up'=>$arrows['count']['desc'],'list_link_count_url_down' => sed_url('list', "c=$c&s=count&w=asc&o=$o&p=$p"), 'list_link_count_url_up' => sed_url('list', "c=$c&s=count&w=desc&o=$o&p=$p"))), // TODO - to resorses
+		"LIST_TOP_FILECOUNT" => sed_rc('list_link_filecount', array('sed_img_down'=>$arrows['filecount']['asc'],'sed_img_up'=>$arrows['filecount']['desc'],'list_link_filecount_url_down' => sed_url('list', "c=$c&s=filecount&w=asc&o=$o&p=$p"), 'list_link_filecount_url_up' => sed_url('list', "c=$c&s=filecount&w=desc&o=$o&p=$p"))) // TODO - to resorses
 	));
 }
 
@@ -218,8 +226,11 @@ if (!$cat['group'])
 foreach ($sed_extrafields['pages'] as $row_p)
 {
 	$uname = strtoupper($row_p['field_name']);
+    $arrows[$row_p['field_name']]['asc']  = $sed_img_down;
+    $arrows[$row_p['field_name']]['desc'] = $sed_img_up;
+    $arrows[$s][$w]  = $R['icon_vert_active'][$w];
 	isset($L['page_'.$row_p['field_name'].'_title']) ? $extratitle = $L['page_'.$row_p['field_name'].'_title'] : $extratitle = $row_p['field_description'];
-	$t->assign('LIST_TOP_'.$uname, sed_rc('list_top_field_name_down', array('list_top_field_name_url_down' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=asc&o=$o&p=$p"), 'list_top_field_name_url_up' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=desc&o=$o&p=$p")))); // TODO - to resorses
+	$t->assign('LIST_TOP_'.$uname, sed_rc('list_link_field_name', array('sed_img_down'=>$arrows[$row_p['field_name']]['asc'],'sed_img_up'=>$arrows[$row_p['field_name']]['desc'],'list_link_url_down' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=asc&o=$o&p=$p"), 'list_link_url_up' => sed_url('list', "c=$c&s=".$row_p['field_name']."&w=desc&o=$o&p=$p")))); // TODO - to resorses
 }
 
 $ii = 0;
@@ -316,7 +327,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 		$pag['page_fileicon'] = '';
 	}
 
-	$pag['admin'] = $usr['isadmin'] ? sed_rc('list_row_admin', array('unvalidate_url' => sed_url('admin', "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg()),'edit_url' => sed_url('page', "m=edit&id=".$pag['page_id']."&r=list"))) : '';
+	$pag['admin'] = $usr['isadmin'] ? sed_rc('list_link_row_admin', array('unvalidate_url' => sed_url('admin', "m=page&a=unvalidate&id=".$pag['page_id']."&".sed_xg()),'edit_url' => sed_url('page', "m=edit&id=".$pag['page_id']."&r=list"))) : '';
 
 	list($list_ratings, $list_ratings_display) = sed_build_ratings('p'.$pag['page_id'], sed_url('page', 'id='.$pag['page_id']), $ratings);
 
@@ -377,7 +388,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 				if ($readmore > 0)
 				{
 					$pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore);
-				    $pag['page_html'] .= sed_rc('list_page_html', array('page_url'=> $pag['page_pageurl'])); // TODO - to resorses
+				    $pag['page_html'] .= sed_rc('list_link_page_html', array('page_url'=> $pag['page_pageurl'])); // TODO - to resorses
 
 				}
 				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
@@ -390,7 +401,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 				if ($readmore > 0)
 				{
 					$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);
-					$pag['page_text'] .= sed_rc('list_page_text', array('page_url'=> $pag['page_pageurl'])); // TODO - to resorses
+					$pag['page_text'] .= sed_rc('list_link_page_text', array('page_url'=> $pag['page_pageurl'])); // TODO - to resorses
 				}
 				$text = sed_post_parse($text, 'pages');
 				$t->assign('LIST_ROW_TEXT', $text);
