@@ -23,6 +23,7 @@ require_once sed_incfile('xtemplate');
 require_once sed_incfile('functions', 'admin');
 require_once sed_incfile('resources', 'admin');
 require_once sed_langfile('admin', 'core');
+require_once sed_incfile('extrafields');
 
 require_once sed_incfile('main', 'admin');
 
