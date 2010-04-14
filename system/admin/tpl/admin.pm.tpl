@@ -5,8 +5,8 @@
 		</ul>
 		<table class="cells">
 			<tr>
-				<td style="width:85%;">{PHP.L.adm_pm_totaldb}</td>
-				<td class="centerall" style="width:15%;">{ADMIN_PM_TOTALPMDB}</td>
+				<td class="width85">{PHP.L.adm_pm_totaldb}</td>
+				<td class="centerall width15">{ADMIN_PM_TOTALPMDB}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.adm_pm_totalsent}</td>

@@ -11,18 +11,18 @@
 		<li><a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration}</a></li>
 	</ul>
 	<h3>{PHP.L.editdeleteentries}:</h3>
-	<select name="jumpbox" size="1" onchange="redirect(this)">
+	<select name="jumpbox" size="1" onchange="redirect(this)" class="marginbottom10 margintop10">
 			<!-- BEGIN: POLLS_ROW_FILTER -->
 			<option value="{ADMIN_POLLS_ROW_FILTER_VALUE}"{ADMIN_POLLS_ROW_FILTER_CHECKED}>{ADMIN_POLLS_ROW_FILTER_NAME}</option>
 			<!-- END: POLLS_ROW_FILTER -->
 	</select>
 	<table class="cells">
 		<tr>
-			<td class="coltop" style="width:15%;">{PHP.L.Date}</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Type}</td>
-			<td class="coltop" style="width:30%;">{PHP.L.Poll} {PHP.L.adm_clicktoedit}</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Votes}</td>
-			<td class="coltop" style="width:25%;">{PHP.L.Action}</td>
+			<td class="coltop width15">{PHP.L.Date}</td>
+			<td class="coltop width15">{PHP.L.Type}</td>
+			<td class="coltop width30">{PHP.L.Poll} {PHP.L.adm_clicktoedit}</td>
+			<td class="coltop width15">{PHP.L.Votes}</td>
+			<td class="coltop width25">{PHP.L.Action}</td>
 		</tr>
 		<!-- BEGIN: POLLS_ROW -->
 		<tr>
@@ -57,8 +57,8 @@
 		<!-- ENDIF -->
 		<table class="cells">
 			<tr>
-				<td style="width:15%;">{PHP.L.poll}:</td>
-				<td style="width:85%;"><input type="hidden" name="poll_id" value="{EDIT_POLL_ID}" /><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td>
+				<td class="width15">{PHP.L.poll}:</td>
+				<td class="width85"><input type="hidden" name="poll_id" value="{EDIT_POLL_ID}" /><input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" /></td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Options}:</td>
@@ -66,7 +66,7 @@
 					<!-- BEGIN: OPTIONS -->
 					<div class="polloptiondiv">
 						<input  class="tbox" type="text" name="poll_option[{EDIT_POLL_OPTION_ID}]" size="40" value="{EDIT_POLL_OPTION_TEXT}" maxlength="128" />
-						<input  name="deloption" value="x" type="button" class="deloption"  style="display:none;" />
+						<input name="deloption" value="x" type="button" class="deloption" style="display:none;" />
 					</div>
 					<!-- END: OPTIONS -->
 					<input id="addoption" name="addoption" value="{PHP.L.Add}" type="button" style="display:none;" /></td>

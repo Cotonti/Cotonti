@@ -8,15 +8,15 @@
 <!-- ENDIF -->
 <!-- IF {PHP.if_conf_url} -->
 	<ul>
-		<li><a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.L.Configuration} : {PHP.R.admin_icon_config}</a></li>
+		<li><a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>
 	</ul>
 <!-- ENDIF -->
 <!-- BEGIN: DETAILS -->
 	<h2>{PHP.L.Plugin} {ADMIN_PLUG_NAME}:</h2>
 	<table class="cells">
 		<tr>
-			<td style="width:20%;">{PHP.L.Code}:</td>
-			<td style="width:80%;">{ADMIN_PLUG_CODE}</td>
+			<td class="width20">{PHP.L.Code}:</td>
+			<td class="width80">{ADMIN_PLUG_CODE}</td>
 		</tr>
 		<tr>
 			<td>{PHP.L.Description}:</td>
@@ -34,7 +34,7 @@
 			<td>{PHP.L.Configuration}:</td>
 			<td>
 <!-- IF {ADMIN_PLUG_TOTALCONFIG} > 0 -->
-				<a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.R.admin_icon_config} ({ADMIN_PLUG_TOTALCONFIG}) {PHP.L.Edit}</a>
+				<a title="{PHP.L.Configuration}" href="{ADMIN_PLUG_CONFIG_URL}">{PHP.R.icon_prefs} {PHP.L.Edit} ({ADMIN_PLUG_TOTALCONFIG})</a>
 <!-- ELSE -->
 				{PHP.L.None}
 <!-- ENDIF -->
@@ -44,7 +44,7 @@
 			<td>{PHP.L.Rights}:</td>
 			<td>
 <!-- IF {PHP.isinstalled} -->
-				<a title="{PHP.L.Rights}" href="{ADMIN_PLUG_RIGHTS}">{PHP.R.admin_icon_rights2}</a>
+				<a title="{PHP.L.Rights}" href="{ADMIN_PLUG_RIGHTS}">{PHP.R.icon_rights}</a>
 <!-- ELSE -->
 				{PHP.L.None}
 <!-- ENDIF -->
@@ -82,10 +82,10 @@
 	<h3>{PHP.L.Options}:</h3>
 	<table class="cells">
 		<tr>
-			<td style="width:20%;">
+			<td class="width20">
 				<a href="{ADMIN_PLUG_INSTALL_URL}" class="ajax">{PHP.L.adm_opt_installall}</a>
 			</td>
-			<td style="width:80%;">
+			<td class="width80">
 				{PHP.L.adm_opt_installall_explain}
 <!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} -->
 				<p class="small"><a href="{ADMIN_PLUG_INSTALL_KO_URL}" class="ajax">{PHP.L.adm_opt_setoption_warn}</a></p>
@@ -127,13 +127,13 @@
 	<h3>{PHP.L.Parts}:</h3>
 	<table class="cells">
 		<tr>
-			<td class="coltop" style="width:5%;">#</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Part}</td>
-			<td class="coltop" style="width:20%;">{PHP.L.File}</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Hooks}</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Order}</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Status}</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Action}</td>
+			<td class="coltop width5">#</td>
+			<td class="coltop width15">{PHP.L.Part}</td>
+			<td class="coltop width20">{PHP.L.File}</td>
+			<td class="coltop width15">{PHP.L.Hooks}</td>
+			<td class="coltop width15">{PHP.L.Order}</td>
+			<td class="coltop width15">{PHP.L.Status}</td>
+			<td class="coltop width15">{PHP.L.Action}</td>
 		</tr>
 <!-- BEGIN: ROW_ERROR_PART -->
 		<tr>
@@ -166,9 +166,9 @@
 	<h3>{PHP.L.Tags}:</h3>
 	<table class="cells">
 		<tr>
-			<td class="coltop" style="width:5%;">#</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Part}</td>
-			<td class="coltop" style="width:80%;">{PHP.L.Files} / {PHP.L.Tags}</td>
+			<td class="coltop width5">#</td>
+			<td class="coltop width15">{PHP.L.Part}</td>
+			<td class="coltop width80">{PHP.L.Files} / {PHP.L.Tags}</td>
 		</tr>
 <!-- BEGIN: ROW_ERROR_TAGS -->
 		<tr>
@@ -190,12 +190,12 @@
 	<h2>{PHP.L.Plugins} ({ADMIN_PLUG_CNT_EXTP}):</h2>
 	<table class="cells">
 		<tr>
-			<td class="coltop" style="width:5%;">&nbsp;</td>
-			<td class="coltop" style="width:30%;">{PHP.L.Plugins} {PHP.L.adm_clicktoedit}</td>
-			<td class="coltop" style="width:20%;">{PHP.L.Code}</td>
-			<td class="coltop" style="width:10%;">{PHP.L.Parts}</td>
-			<td class="coltop" style="width:20%;">{PHP.L.Status}</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Action}</td>
+			<td class="coltop width5">&nbsp;</td>
+			<td class="coltop width30">{PHP.L.Plugins} {PHP.L.adm_clicktoedit}</td>
+			<td class="coltop width20">{PHP.L.Code}</td>
+			<td class="coltop width10">{PHP.L.Parts}</td>
+			<td class="coltop width20">{PHP.L.Status}</td>
+			<td class="coltop width15">{PHP.L.Action}</td>
 		</tr>
 <!-- BEGIN: ROW -->
 <!-- BEGIN: ROW_ERROR_PLUG -->
@@ -207,9 +207,9 @@
 		<tr>
 			<td class="centerall">
 <!-- IF {PHP.ifthistools} -->
-				{PHP.R.admin_icon_tools}
+				{PHP.R.icon_tool}
 <!-- ELSE -->
-				{PHP.R.admin_icon_plug}
+				{PHP.R.icon_plug}
 <!-- ENDIF -->
 			</td>
 			<td><a href="{ADMIN_PLUG_DETAILS_URL}">{ADMIN_PLUG_NAME}</a></td>
@@ -242,10 +242,10 @@
 	<h2>{PHP.L.Hooks} ({ADMIN_PLUG_CNT_HOOK}):</h2>
 	<table class="cells">
 		<tr>
-			<td class="coltop" style="width:45%;">{PHP.L.Hooks}</td>
-			<td class="coltop" style="width:20%;">{PHP.L.Plugin}</td>
-			<td class="coltop" style="width:20%;">{PHP.L.Order}</td>
-			<td class="coltop" style="width:15%;">{PHP.L.Active}</td>
+			<td class="coltop width45">{PHP.L.Hooks}</td>
+			<td class="coltop width20">{PHP.L.Plugin}</td>
+			<td class="coltop width20">{PHP.L.Order}</td>
+			<td class="coltop width15">{PHP.L.Active}</td>
 		</tr>
 <!-- BEGIN: HOOKS -->
 		<tr>

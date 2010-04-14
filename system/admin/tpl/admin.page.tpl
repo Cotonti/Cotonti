@@ -44,14 +44,14 @@
 		<form id="form_valqueue" name="form_valqueue" method="post" action="{ADMIN_PAGE_FORM_URL}">
 			<table class="cells">
 			<tr>
-				<td class="coltop" style="width:5%;">
+				<td class="coltop width5">
 <!-- IF {PHP.cfg.jquery} -->
 					<input name="allchek" class="checkbox" type="checkbox" value="" onclick="$('.checkbox').attr('checked', this.checked);" />
 <!-- ENDIF -->
 				</td>
-				<td class="coltop" style="width:5%;">{PHP.L.Id}</td>
-				<td class="coltop" style="width:75%;">{PHP.L.Title}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Action}</td>
+				<td class="coltop width5">{PHP.L.Id}</td>
+				<td class="coltop width70">{PHP.L.Title}</td>
+				<td class="coltop width20">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: PAGE_ROW -->
 			<tr>
@@ -68,8 +68,8 @@
 							<hr />
 							<table class="flat">
 								<tr>
-									<td style="width:20%;">{PHP.L.Category}:</td>
-									<td style="width:80%;"><a href="{ADMIN_PAGE_CAT_URL}">{ADMIN_PAGE_CATICON}{ADMIN_PAGE_CAT_TITLE}</a></td>
+									<td class="width20">{PHP.L.Category}:</td>
+									<td class="width80"><a href="{ADMIN_PAGE_CAT_URL}">{ADMIN_PAGE_CATICON}{ADMIN_PAGE_CAT_TITLE}</a></td>
 								</tr>
 								<tr>
 									<td>{PHP.L.Description}:</td>
@@ -84,8 +84,8 @@
 					</div>
 				</td>
 				<td class="centerall action {ADMIN_PAGE_ODDEVEN}">
-					<a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}" class="ajax">{PHP.R.admin_icon_discheck1}</a>
-					<a title="{PHP.L.Delete}" href="{ADMIN_PAGE_URL_FOR_DELETED}" class="ajax">{PHP.R.admin_icon_discheck0}</a>
+					<a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}" class="ajax">{PHP.R.icon_news}</a>
+					<a title="{PHP.L.Delete}" href="{ADMIN_PAGE_URL_FOR_DELETED}" class="ajax">{PHP.R.icon_delete}</a>
 					<a title="{PHP.L.Open}" href="{ADMIN_PAGE_ID_URL}">{PHP.R.admin_icon_jumpto}</a>
 					<a title="{PHP.L.Edit}" href="{ADMIN_PAGE_URL_FOR_EDIT}">{PHP.R.admin_icon_config}</a>
 				</td>
@@ -93,7 +93,7 @@
 <!-- END: PAGE_ROW -->
 <!-- IF {PHP.is_row_empty} -->
 			<tr>
-				<td colspan="4">{PHP.L.None}</td>
+				<td class="centerall" colspan="4">{PHP.L.None}</td>
 			</tr>
 <!-- ENDIF -->
 			<tr>

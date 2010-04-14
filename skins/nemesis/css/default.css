@@ -16,7 +16,8 @@ body	{ color:#667e72; font:normal 76%/1.8em Georgia, serif; background:#f8f8f8; 
 a 			{ color:#111; text-decoration:none; border:0; outline:none; }
 a:hover 		{ text-decoration:underline; }
 
-hr	{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
+hr			{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
+hr.divider	{ margin:10px 0; }
 
 /* 2. Structure
 -------------------------------------------------- */
@@ -254,20 +255,3 @@ div.star-rating-hover a{background-position:0 -32px}
 div.star-rating-readonly a{cursor:default !important}
 /* Partial Star CSS */
 div.star-rating{background:transparent!important;overflow:hidden!important}
-
-/* xx. Adminmenu
--------------------------------------------------- */
-
-#adminmenu		{ height:80px; }
-#adminmenu li		{ width:10%; float:left; background-position:center top; background-repeat:no-repeat; }
-#adminmenu li a	{ display:block; width:100%; height:30px; padding-top:35px; text-align:center; }
-#am01			{ background-image:url(../img/adminmenu/home.png); }
-#am02			{ background-image:url(../img/adminmenu/config.png); }
-#am03			{ background-image:url(../img/adminmenu/pages.png); }
-#am04			{ background-image:url(../img/adminmenu/forums.png); }
-#am05			{ background-image:url(../img/adminmenu/users.png); }
-#am06			{ background-image:url(../img/adminmenu/plugins.png); }
-#am07			{ background-image:url(../img/adminmenu/tools.png); }
-#am08			{ background-image:url(../img/adminmenu/folder.png); }
-#am09			{ background-image:url(../img/adminmenu/trash.png); }
-#am10			{ background-image:url(../img/adminmenu/logout.png); }

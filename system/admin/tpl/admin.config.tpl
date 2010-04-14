@@ -11,9 +11,9 @@
 		<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
-				<td class="coltop" style="width:30%;">{PHP.L.Parameter}</td>
-				<td class="coltop" style="width:60%;">{PHP.L.Value}</td>
-				<td class="coltop" style="width:10%;">{PHP.L.Reset}</td>
+				<td class="coltop width30">{PHP.L.Parameter}</td>
+				<td class="coltop width60">{PHP.L.Value}</td>
+				<td class="coltop width10">{PHP.L.Reset}</td>
 			</tr>
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
 			<tr>
@@ -78,8 +78,8 @@
 <!-- BEGIN: DEFAULT -->
 		<table class="cells">
 			<tr>
-				<td class="coltop" style="width:50%;">{PHP.L.Core}</td>
-				<td class="coltop" style="width:50%;">{PHP.L.Plugins}</td>
+				<td class="coltop width50">{PHP.L.Core}</td>
+				<td class="coltop width50">{PHP.L.Plugins}</td>
 			</tr>
 			<tr>
 				<td>

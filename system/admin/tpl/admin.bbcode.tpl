@@ -10,11 +10,11 @@
 			<h3>{PHP.L.editdeleteentries}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:35%;">{PHP.L.Name}<br />{PHP.L.adm_bbcodes_mode} / {PHP.L.Enabled} / {PHP.L.adm_bbcodes_container}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.adm_bbcodes_pattern}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.adm_bbcodes_replacement}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.Plugin}<br />{PHP.L.adm_bbcodes_priority}<br />{PHP.L.adm_bbcodes_postrender}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Action}</td>
+					<td class="coltop width35">{PHP.L.Name}<br />{PHP.L.adm_bbcodes_mode} / {PHP.L.Enabled} / {PHP.L.adm_bbcodes_container}</td>
+					<td class="coltop width20">{PHP.L.adm_bbcodes_pattern}</td>
+					<td class="coltop width20">{PHP.L.adm_bbcodes_replacement}</td>
+					<td class="coltop width15">{PHP.L.Plugin}<br />{PHP.L.adm_bbcodes_priority}<br />{PHP.L.adm_bbcodes_postrender}</td>
+					<td class="coltop width10">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: ADMIN_BBCODE_ROW -->
 				<form action="{ADMIN_BBCODE_ROW_UPDATE_URL}" method="post">
@@ -56,11 +56,11 @@
 			<h3>{PHP.L.adm_bbcodes_new}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:35%;">{PHP.L.Name}<br />{PHP.L.adm_bbcodes_mode} / {PHP.L.Enabled} / {PHP.L.adm_bbcodes_container}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.adm_bbcodes_pattern}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.adm_bbcodes_replacement}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.Plugin}<br />{PHP.L.adm_bbcodes_priority}<br />{PHP.L.adm_bbcodes_postrender}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Action}</td>
+					<td class="coltop width35">{PHP.L.Name}<br />{PHP.L.adm_bbcodes_mode} / {PHP.L.Enabled} / {PHP.L.adm_bbcodes_container}</td>
+					<td class="coltop width20">{PHP.L.adm_bbcodes_pattern}</td>
+					<td class="coltop width20">{PHP.L.adm_bbcodes_replacement}</td>
+					<td class="coltop width15">{PHP.L.Plugin}<br />{PHP.L.adm_bbcodes_priority}<br />{PHP.L.adm_bbcodes_postrender}</td>
+					<td class="coltop width10">{PHP.L.Action}</td>
 				</tr>
 				<form action="{ADMIN_BBCODE_FORM_ACTION}" method="post">
 				<tr>

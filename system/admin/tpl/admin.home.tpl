@@ -19,14 +19,14 @@
 <!-- ENDIF -->
 <!-- BEGIN: ADMIN_HOME_ROW -->
 					<tr>
-						<td style="width:15%;">{ADMIN_HOME_DAY}</td>
-						<td class="centerall" style="width:40%;">
+						<td class="width15">{ADMIN_HOME_DAY}</td>
+						<td class="centerall width40">
 							<div class="bar_back">
 								<div class="bar_front" style="width:{ADMIN_HOME_PERCENTBAR}%;"></div>
 							</div>
 						</td>
-						<td style="width:25%;">{PHP.L.Hits}: {ADMIN_HOME_HITS}</td>
-						<td class="textcenter" style="width:20%;">{ADMIN_HOME_PERCENTBAR}%</td>
+						<td class="width25">{PHP.L.Hits}: {ADMIN_HOME_HITS}</td>
+						<td class="textcenter width20">{ADMIN_HOME_PERCENTBAR}%</td>
 					</tr>
 <!-- END: ADMIN_HOME_ROW -->
 <!-- IF !{PHP.cfg.disablehitstats} -->
@@ -37,8 +37,8 @@
 				<h3>{PHP.L.home_pastdays}</h3>
 				<table class="cells">
 					<tr>
-						<td style="width:80%;"><a href="{ADMIN_HOME_NEWUSERS_URL}">{PHP.L.home_newusers}</a></td>
-						<td class="textcenter" style="width:20%;">{ADMIN_HOME_NEWUSERS}</td>
+						<td class="width80"><a href="{ADMIN_HOME_NEWUSERS_URL}">{PHP.L.home_newusers}</a></td>
+						<td class="textcenter width20">{ADMIN_HOME_NEWUSERS}</td>
 					</tr>
 					<tr>
 						<td><a href="{ADMIN_HOME_NEWPAGES_URL}">{PHP.L.home_newpages}</a></td>
@@ -66,8 +66,8 @@
 				<h3>Cotonti:</h3>
 				<table class="cells">
 					<tr>
-						<td style="width:80%;">{PHP.L.Version} ({PHP.L.home_rev_title})</td>
-						<td class="textcenter" style="width:20%;">{ADMIN_HOME_VERSION} ({ADMIN_HOME_REVISION})</td>
+						<td class="width80">{PHP.L.Version} ({PHP.L.home_rev_title})</td>
+						<td class="textcenter width20">{ADMIN_HOME_VERSION} ({ADMIN_HOME_REVISION})</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Database}</td>

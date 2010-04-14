@@ -30,8 +30,8 @@ $skinlang['forumsnewtopic']['privatetopic2'] = 'Only forums moderators and the s
  */
 
 $skinlang['forumspost']['privatetopic'] = 'This topic is private, only moderators and the starter of the topic can read and reply here.';
-$skinlang['forumspost']['Onlinestatus0'] = 'user is offline'; // New in N-0.0.2
-$skinlang['forumspost']['Onlinestatus1'] = 'user is online'; // New in N-0.0.2
+$skinlang['forumspost']['Onlinestatus0'] = 'user is offline'; // New in 0.0.2
+$skinlang['forumspost']['Onlinestatus1'] = 'user is online'; // New in 0.0.2
 
 /**
  * forums.sections.tpl
@@ -84,8 +84,8 @@ $skinlang['list']['linesinthissection'] = 'Lines in this section';
 $skinlang['page']['Submittedby'] = 'Submitted by';
 $skinlang['page']['Summary'] = 'Summary';
 $skinlang['page']['Filesize'] = 'Filesize';
-$skinlang['page']['downloaded'] = 'Downloaded'; // New in N-0.0.1
-$skinlang['page']['times'] = 'times'; // New in N-0.0.1
+$skinlang['page']['downloaded'] = 'Downloaded'; // New in 0.0.1
+$skinlang['page']['times'] = 'times'; // New in 0.0.1
 
 /**
  * page.add.tpl
@@ -119,7 +119,7 @@ $skinlang['pageedit']['Deletethispage'] = '!Delete this page!';
 $skinlang['pfs']['Insertasthumbnail'] = 'Insert as thumbnail';
 $skinlang['pfs']['Insertasimage'] = 'Insert as fullsize image';
 $skinlang['pfs']['Insertaslink'] = 'Insert as a link to the file';
-$skinlang['pfs']['Dimensions'] = 'Dimensions'; // New in N-0.0.1
+$skinlang['pfs']['Dimensions'] = 'Dimensions'; // New in 0.0.1
 
 /**
  * pm.send.tpl
@@ -164,8 +164,8 @@ $skinlang['users']['usersinthissection'] = 'Users in this section';
 
 $skinlang['usersauth']['Rememberme'] = 'Remember me';
 $skinlang['usersauth']['Lostpassword'] = 'Lost your password?';
-$skinlang['usersauth']['Maintenance'] = 'Site in maintenance mode. Administrators can login below.'; // New in N-0.0.2
-$skinlang['usersauth']['Maintenancereason'] = 'Reason: '; // New in N-0.0.2
+$skinlang['usersauth']['Maintenance'] = 'Site in maintenance mode. Administrators can login below.'; // New in 0.0.2
+$skinlang['usersauth']['Maintenancereason'] = 'Reason: '; // New in 0.0.2
 
 /**
  * users.details.tpl
@@ -202,13 +202,13 @@ $skinlang['usersprofile']['Emailnotes'] = '<p><b>E-mail transition process (if e
 	<li>Be careful while typing your new e-mail: you won\'t have a chance to change it later</li>
 	<li>If you still mistyped your new e-mail, please contact administrator</li>
 </ol>
-<p><b>If new e-mail validation is not required, the new e-mail will become effective immediately.</b></p>'; // New in N-0.1.0
+<p><b>If new e-mail validation is not required, the new e-mail will become effective immediately.</b></p>'; // New in 0.1.0
 $skinlang['usersprofile']['Hidetheemail'] = 'Always hide the e-mail';
 $skinlang['usersprofile']['PMnotify'] = 'PM notify';
 $skinlang['usersprofile']['PMnotifyhint'] = '(Notify by e-mail when there\'s a new private message)';
 $skinlang['usersprofile']['Newpassword'] = 'Set a new password';
-$skinlang['usersprofile']['Newpasswordhint1'] = '(Leave empty to keep the current password)'; // New in N-0.0.2
-$skinlang['usersprofile']['Newpasswordhint2'] = '(Enter your new password twice)'; // New in N-0.0.2
+$skinlang['usersprofile']['Newpasswordhint1'] = '(Leave empty to keep the current password)'; // New in 0.0.2
+$skinlang['usersprofile']['Newpasswordhint2'] = '(Enter your new password twice)'; // New in 0.0.2
 $skinlang['usersprofile']['Oldpasswordhint'] = '(To set a new password enter your current one)';
 
 /**

@@ -14,6 +14,8 @@
 			<li><a href="{PHP.cfg.mainurl}">{PHP.L.Home}</a></li>
 			<li><a href="forums.php">{PHP.L.Forums}</a></li>
 			<li><a href="list.php?c=news">{PHP.L.News}</a></li>
+			<li><a href="#">{PHP.L.Contact}</a></li>
+			<li><a href="#">{PHP.L.Sitemap}</a></li>
 		</ul>
 		<ul id="account" class="column">
 		<!-- BEGIN: GUEST -->

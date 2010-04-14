@@ -1,4 +1,5 @@
 <!-- BEGIN: EXTRAFIELDS -->
+
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_extrafields}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -11,17 +12,15 @@
 		<table class="cells">
 			<tr>
 				<td class="coltop">{PHP.L.extf_Name}</td>
-				<td class="coltop" style="width:70px;">{PHP.L.extf_Type}</td>
-				<td class="coltop" style="width:380px;">{PHP.L.extf_Base_HTML}</td>
-				<td class="coltop" style="width:60px;">{PHP.L.Action}</td>
+				<td class="coltop">{PHP.L.extf_Type}</td>
+				<td class="coltop">{PHP.L.extf_Base_HTML}</td>
+				<td class="coltop">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: EXTRAFIELDS_ROW -->			
 			<tr>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
 					<input type="text" name="field_name[{ADMIN_EXTRAFIELDS_ROW_NAME}]" value="{ADMIN_EXTRAFIELDS_ROW_NAME}" />
-					<br />
-					<span style="font-size: 80%;">{PHP.L.extf_Description}</span>
-					<br />
+					<p class="small">{PHP.L.extf_Description}</p>
 					<textarea name="field_description[{ADMIN_EXTRAFIELDS_ROW_NAME}]" rows="1" cols="30">{ADMIN_EXTRAFIELDS_ROW_DESCRIPTION}</textarea>
 				</td>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
@@ -72,14 +71,16 @@
 			</tr>
 		</table>
 		</form>
+
 		<p class="paging">{ADMIN_EXTRAFIELDS_PAGINATION_PREV}{ADMIN_EXTRAFIELDS_PAGNAV}{ADMIN_EXTRAFIELDS_PAGINATION_NEXT} <span class="a1">{PHP.L.Total}: {ADMIN_EXTRAFIELDS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_EXTRAFIELDS_COUNTER_ROW}</span></p>
+
 		<h3>{PHP.L.adm_extrafield_new}:</h3>
 		<form action="{ADMIN_EXTRAFIELDS_URL_FORM_ADD}" method="post">
 			<table class="cells">
 				<tr>
-					<td class="coltop">{PHP.L.extf_Name}</td>
-					<td class="coltop" style="width:70px;">{PHP.L.extf_Type}</td>
-					<td class="coltop" style="width:440px;">{PHP.L.extf_Base_HTML}</td>
+					<td class="coltop width40">{PHP.L.extf_Name}</td>
+					<td class="coltop width20">{PHP.L.extf_Type}</td>
+					<td class="coltop width40">{PHP.L.extf_Base_HTML}</td>
 				</tr>
 				<tr>
 					<td>
@@ -93,7 +94,6 @@
 							<option{ADMIN_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION_SELECTED}>{ADMIN_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION}</option>
 <!-- END: EXTRAFIELDS_FORM_ADD_SELECT_FIELD_TYPE -->
 						</select>
-
 					</td>
 					<td>
 						<textarea name="field_html" rows="1" cols="40"></textarea>
@@ -110,4 +110,5 @@
 			</table>
 		</form>
 	</div>
+
 <!-- END: EXTRAFIELDS -->

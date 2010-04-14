@@ -26,16 +26,10 @@ $R['icon_follow'] = '<img class="icon" src="images/icons/default/arrow-follow.pn
 $R['icon_unread'] = '<img class="icon" src="images/icons/default/arrow-unread.png" alt="" />';
 
 /**
- * Misc
+ * Main Icons
  */
 
-$R['icon_rss'] = '<img class="icon" src="images/icons/default/rss.png" alt="" />';
-$R['icon_twitter'] = '<img class="icon" src="images/icons/default/twitter.png" alt="" />';
-
-/**
- * Temporary
- */
-
+$R['icon_admin'] = '<img class="icon" src="images/icons/default/prefs.png" alt="" />';
 $R['icon_comments'] = '<img class="icon" src="images/icons/default/comments.png" alt="" />';
 $R['icon_delete'] = '<img class="icon" src="images/icons/default/delete.png" alt="" />';
 $R['icon_error'] = '<img class="icon" src="images/icons/default/error.png" alt="" />';
@@ -48,15 +42,25 @@ $R['icon_news'] = '<img class="icon" src="images/icons/default/news.png" alt="" 
 $R['icon_online'] = '<img class="icon" src="images/icons/default/online.png" alt="" />';
 $R['icon_page'] = '<img class="icon" src="images/icons/default/page.png" alt="" />';
 $R['icon_pfs'] = '<img class="icon" src="images/icons/default/pfs.png" alt="" />';
-$R['icon_plugin'] = '<img class="icon" src="images/icons/default/plugin.png" alt="" />';
+$R['icon_plug'] = '<img class="icon" src="images/icons/default/plugin.png" alt="" />';
 $R['icon_polls'] = '<img class="icon" src="images/icons/default/polls.png" alt="" />';
 $R['icon_prefs'] = '<img class="icon" src="images/icons/default/prefs.png" alt="" />';
 $R['icon_reset'] = '<img class="icon" src="images/icons/default/reset.png" alt="" />';
+$R['icon_rights'] = '<img class="icon" src="images/icons/default/rights.png" alt="" />';
 $R['icon_search'] = '<img class="icon" src="images/icons/default/search.png" alt="" />';
 $R['icon_stats'] = '<img class="icon" src="images/icons/default/stats.png" alt="" />';
+$R['icon_stop'] = '<img class="icon" src="images/icons/default/stop.png" alt="" />';
 $R['icon_tags'] = '<img class="icon" src="images/icons/default/tags.png" alt="" />';
+$R['icon_tool'] = '<img class="icon" src="images/icons/default/tool.png" alt="" />';
 $R['icon_update'] = '<img class="icon" src="images/icons/default/update.png" alt="" />';
 $R['icon_users'] = '<img class="icon" src="images/icons/default/users.png" alt="" />';
 $R['icon_warning'] = '<img class="icon" src="images/icons/default/warning.png" alt="" />';
+
+/**
+ * Misc
+ */
+
+$R['icon_rss'] = '<img class="icon" src="images/icons/default/rss.png" alt="" />';
+$R['icon_twitter'] = '<img class="icon" src="images/icons/default/twitter.png" alt="" />';
 
 ?>

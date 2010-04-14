@@ -12,11 +12,11 @@
 			</ul>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:20%;">{PHP.L.Code}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.Date} (GMT)</td>
-					<td class="coltop" style="width:20%;">{PHP.L.Votes}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.Rating}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.Action}</td>
+					<td class="coltop width20" style="width:20%;">{PHP.L.Code}</td>
+					<td class="coltop width20" style="width:20%;">{PHP.L.Date} (GMT)</td>
+					<td class="coltop width20" style="width:20%;">{PHP.L.Votes}</td>
+					<td class="coltop width20" style="width:20%;">{PHP.L.Rating}</td>
+					<td class="coltop width20" style="width:20%;">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: RATINGS_ROW -->
 				<tr>

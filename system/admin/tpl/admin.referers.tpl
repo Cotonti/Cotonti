@@ -16,8 +16,8 @@
 <!-- IF {PHP.is_ref_empty} -->
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:70%;">{PHP.L.Referer}</td>
-					<td class="coltop" style="width:30%;">{PHP.L.Hits}</td>
+					<td class="coltop width70">{PHP.L.Referer}</td>
+					<td class="coltop width30">{PHP.L.Hits}</td>
 				</tr>
 <!-- ENDIF -->
 <!-- BEGIN: REFERERS_ROW -->
@@ -37,11 +37,11 @@
 <!-- ELSE -->
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:70%;">{PHP.L.Referer}</td>
-					<td class="coltop" style="width:30%;">{PHP.L.Hits}</td>
+					<td class="coltop width70">{PHP.L.Referer}</td>
+					<td class="coltop width30">{PHP.L.Hits}</td>
 				</tr>
 				<tr>
-					<td class="textcenter" colspan="2">{PHP.L.None}</td>
+					<td class="centerall" colspan="2">{PHP.L.None}</td>
 				</tr>
 			</table>
 <!-- ENDIF -->

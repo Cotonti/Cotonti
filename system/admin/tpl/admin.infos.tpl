@@ -2,8 +2,8 @@
 	<h2>Info</h2>
 	<table class="cells">
 		<tr>
-			<td style="width:60%;">{PHP.L.adm_phpver}</td>
-			<td class="textcenter" style="width:40%;">{ADMIN_INFOS_PHPVER}</td>
+			<td class="width60">{PHP.L.adm_phpver}</td>
+			<td class="textcenter width40">{ADMIN_INFOS_PHPVER}</td>
 		</tr>
 		<tr>
 			<td>{PHP.L.adm_zendver}</td>
