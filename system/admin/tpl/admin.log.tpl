@@ -12,7 +12,7 @@
 				<li><a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax">{PHP.L.adm_purgeall}</a></li>
 			</ul>
 <!-- ENDIF -->
-			<form action="">{PHP.L.Group}:
+			<form action="" class="margintop10 marginbottom10">{PHP.L.Group}:
 				<select name="groups" size="1" onchange="redirect(this)">
 <!-- BEGIN: GROUP_SELECT_OPTION -->
 					<option value="{ADMIN_LOG_OPTION_VALUE_URL}"{ADMIN_LOG_OPTION_SELECTED}>{ADMIN_LOG_OPTION_GRP_NAME}</option>
@@ -21,12 +21,12 @@
 			</form>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:5%;">#</td>
-					<td class="coltop" style="width:15%;">{PHP.L.Date} (GMT)</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Ip}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.User}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.Group}</td>
-					<td class="coltop" style="width:40%;">{PHP.L.Log}</td>
+					<td class="coltop width5">#</td>
+					<td class="coltop width15">{PHP.L.Date} (GMT)</td>
+					<td class="coltop width10">{PHP.L.Ip}</td>
+					<td class="coltop width15">{PHP.L.User}</td>
+					<td class="coltop width15">{PHP.L.Group}</td>
+					<td class="coltop width40">{PHP.L.Log}</td>
 				</tr>
 <!-- BEGIN: LOG_ROW -->
 				<tr>

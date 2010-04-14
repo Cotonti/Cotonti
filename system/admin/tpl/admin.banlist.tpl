@@ -10,12 +10,12 @@
 			<h3>{PHP.L.editdeleteentries}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:20%;">{PHP.L.adm_ipmask}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.adm_emailmask}</td>
-					<td class="coltop" style="width:25%;">{PHP.L.Reason}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.Until}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Delete}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Update}</td>
+					<td class="coltop width20">{PHP.L.adm_ipmask}</td>
+					<td class="coltop width15">{PHP.L.adm_emailmask}</td>
+					<td class="coltop width25">{PHP.L.Reason}</td>
+					<td class="coltop width20">{PHP.L.Until}</td>
+					<td class="coltop width10">{PHP.L.Delete}</td>
+					<td class="coltop width10">{PHP.L.Update}</td>
 				</tr>
 <!-- BEGIN: ADMIN_BANLIST_ROW -->
 				<form name="savebanlist_{ADMIN_BANLIST_ID_ROW}" id="savebanlist_{ADMIN_BANLIST_ID_ROW}" action="{ADMIN_BANLIST_URL}" method="post" class="ajax">
@@ -35,8 +35,8 @@
 			<form name="addbanlist" id="addbanlist" action="{ADMIN_BANLIST_INC_URLFORMADD}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td style="width:20%;">{PHP.L.Ipmask}:</td>
-					<td style="width:80%;"><input type="text" class="text" name="nbanlistip" value="" size="15" maxlength="15" /></td>
+					<td class="width20">{PHP.L.Ipmask}:</td>
+					<td class="width80"><input type="text" class="text" name="nbanlistip" value="" size="15" maxlength="15" /></td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Emailmask}:</td>

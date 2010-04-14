@@ -24,7 +24,7 @@
 
     <div class="textbox">{PAGE_ROW_TEXT}{PAGE_ROW_MORE}</div>
 
-	<hr />
+	<hr class="clear divider" />
 <!-- END: PAGE_ROW -->
 
 <!-- END: NEWS -->

@@ -14,7 +14,7 @@
 		<h3>{PHP.L.adm_gd}:</h3>
 		<ul class="follow">
 <!-- BEGIN: PFS_ROW -->
-			<li>{ADMIN_PFS_DATAS_NAME}: {ADMIN_PFS_DATAS_ENABLE_OR_DISABLE}</li>
+			<li>{ADMIN_PFS_DATAS_NAME}: <span class="strong">{ADMIN_PFS_DATAS_ENABLE_OR_DISABLE}</span></li>
 <!-- END: PFS_ROW -->
 		</ul>
 <!-- END: PFS -->

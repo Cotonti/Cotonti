@@ -19,8 +19,8 @@
 			<form name="savestructure" id="savestructure" action="{ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL}" method="post">
 			<table class="cells">
 				<tr>
-					<td style="width:20%;">{PHP.L.Code}:</td>
-					<td style="width:80%;">{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_CODE}</td>
+					<td class="width20">{PHP.L.Code}:</td>
+					<td class="width80">{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_CODE}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Path}:</td>
@@ -70,13 +70,13 @@
 			<form name="savestructure" id="savestructure" action="{ADMIN_FORUMS_STRUCTURE_FORM_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:25%;">{PHP.L.Title}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Code}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Path}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.adm_defstate}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.TPL}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Sections}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.Action}</td>
+					<td class="coltop width25">{PHP.L.Title}</td>
+					<td class="coltop width10">{PHP.L.Code}</td>
+					<td class="coltop width10">{PHP.L.Path}</td>
+					<td class="coltop width15">{PHP.L.adm_defstate}</td>
+					<td class="coltop width10">{PHP.L.TPL}</td>
+					<td class="coltop width10">{PHP.L.Sections}</td>
+					<td class="coltop width20">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: ROW -->
 				<tr>
@@ -126,8 +126,8 @@
 			<form name="addstructure" id="addstructure" action="{ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td style="width:20%;">{PHP.L.Code}:</td>
-					<td style="width:80%;"><input type="text" class="text" name="ncode" value="" size="16" maxlength="16" /> {PHP.L.adm_required}</td>
+					<td class="width20">{PHP.L.Code}:</td>
+					<td class="width80"><input type="text" class="text" name="ncode" value="" size="16" maxlength="16" /> {PHP.L.adm_required}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Path}:</td>

@@ -24,11 +24,11 @@
 			<h3>{PHP.L.Database}</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:20%;">{PHP.L.Item}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Expire}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Size}</td>
-					<td class="coltop" style="width:50%;">{PHP.L.Value}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Delete}</td>
+					<td class="coltop width20">{PHP.L.Item}</td>
+					<td class="coltop width10">{PHP.L.Expire}</td>
+					<td class="coltop width10">{PHP.L.Size}</td>
+					<td class="coltop width50">{PHP.L.Value}</td>
+					<td class="coltop width10">{PHP.L.Delete}</td>
 				</tr>
 <!-- BEGIN: ADMIN_CACHE_ROW -->
 				<tr>

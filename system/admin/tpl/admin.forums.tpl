@@ -13,8 +13,8 @@
 		<form id="updatesection" action="{ADMIN_FORUMS_EDIT_FORM_URL}" method="post">
 		<table class="cells">
 			<tr>
-				<td style="width:30%;">{PHP.L.Section}:</td>
-				<td style="width:70%;">{ADMIN_FORUMS_EDIT_FS_ID}</td>
+				<td class="width30">{PHP.L.Section}:</td>
+				<td class="width70">{ADMIN_FORUMS_EDIT_FS_ID}</td>
 			</tr>
 <!-- BEGIN: EDIT_FORUMS_MASTER -->
 			<tr>
@@ -95,14 +95,14 @@
 		<form name="updateorder" id="updateorder" action="{ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:5%;"></td>
-					<td class="coltop" style="width:25%;">{PHP.L.Section} {PHP.L.adm_clicktoedit}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Order}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.adm_enableprvtopics}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Topics}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Posts}</td>
-					<td class="coltop" style="width:10%;">{PHP.L.Views}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.Action}</td>
+					<td class="coltop width5"></td>
+					<td class="coltop width25">{PHP.L.Section} {PHP.L.adm_clicktoedit}</td>
+					<td class="coltop width10">{PHP.L.Order}</td>
+					<td class="coltop width15">{PHP.L.adm_enableprvtopics}</td>
+					<td class="coltop width10">{PHP.L.Topics}</td>
+					<td class="coltop width10">{PHP.L.Posts}</td>
+					<td class="coltop width10">{PHP.L.Views}</td>
+					<td class="coltop width15">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: ROW -->
 				<!-- IF {PHP.show_fn} --><tr>
@@ -152,8 +152,8 @@
 		<form name="addsection" id="addsection" action="{ADMIN_FORUMS_DEFAULT_FORM_ADD_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
-					<td style="width:30%;">{PHP.L.Category}:</td>
-					<td style="width:70%;">{ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT}</td>
+					<td class="width30">{PHP.L.Category}:</td>
+					<td class="width70">{ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_forums_master}:</td>

@@ -12,10 +12,10 @@
 				<li><a href="{ADMIN_DISKCACHE_URL_PURGE}" class="ajax">{PHP.L.adm_purgeall}</a></li>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:25%;">{PHP.L.Item}</td>
-					<td class="coltop" style="width:25%;">{PHP.L.Files}</td>
-					<td class="coltop" style="width:25%;">{PHP.L.Size}</td>
-					<td class="coltop" style="width:25%;">{PHP.L.Delete}</td>
+					<td class="coltop width25">{PHP.L.Item}</td>
+					<td class="coltop width25">{PHP.L.Files}</td>
+					<td class="coltop width25">{PHP.L.Size}</td>
+					<td class="coltop width25">{PHP.L.Delete}</td>
 				</tr>
 <!-- BEGIN: ADMIN_DISKCACHE_ROW -->
 				<tr>

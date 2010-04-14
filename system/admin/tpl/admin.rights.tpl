@@ -8,17 +8,17 @@
 		<form name="saverights" id="saverights" action="{ADMIN_RIGHTS_FORM_URL}" method="post" class="ajax">
 			<!-- IF {PHP.g} > 5 --><table class="cells">
 				<tr>
-					<td><input type="checkbox" class="checkbox" name="ncopyrightsconf" />{PHP.L.adm_copyrightsfrom}: {ADMIN_RIGHTS_SELECTBOX_GROUPS}&nbsp; <input type="submit" class="submit" value="{PHP.L.Update}" /></td>
+					<td><input type="checkbox" class="checkbox" name="ncopyrightsconf" />{PHP.L.adm_copyrightsfrom}: {ADMIN_RIGHTS_SELECTBOX_GROUPS} &nbsp; <input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 				</tr>
 			</table><!-- ENDIF -->
 			<h3>{PHP.L.Core}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:5%;" rowspan="2"></td>
-					<td class="coltop" style="width:25%;" rowspan="2">{PHP.L.Section}</td>
-					<td class="coltop" style="width:40%;" colspan="{ADMIN_RIGHTS_ADV_COLUMNS}">{PHP.L.Rights}</td>
-					<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.adm_rightspergroup}</td>
-					<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.adm_setby}</td>
+					<td class="coltop width5" rowspan="2"></td>
+					<td class="coltop width25" rowspan="2">{PHP.L.Section}</td>
+					<td class="coltop width40" colspan="{ADMIN_RIGHTS_ADV_COLUMNS}">{PHP.L.Rights}</td>
+					<td class="coltop width15" rowspan="2">{PHP.L.adm_rightspergroup}</td>
+					<td class="coltop width15" rowspan="2">{PHP.L.adm_setby}</td>
 				</tr>
 				<tr>
 					<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
@@ -33,7 +33,7 @@
 				</tr>
 <!-- BEGIN: RIGHTS_ROW_CORE -->
 				<tr>
-					<td class="centerall"><img src="images/admin/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
+					<td class="centerall"><img src="images/icons/default/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
 					<td> <a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_CORE_ITEMS -->
 					<td class="centerall">
@@ -51,11 +51,11 @@
 			<h3>{PHP.L.Forums}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:5%;" rowspan="2"></td>
-					<td class="coltop" style="width:25%;" rowspan="2">{PHP.L.Section}</td>
-					<td class="coltop" style="width:40%;" colspan="{ADMIN_RIGHTS_ADV_COLUMNS}">{PHP.L.Rights}</td>
-					<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.adm_rightspergroup}</td>
-					<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.adm_setby}</td>
+					<td class="coltop width5" rowspan="2"></td>
+					<td class="coltop width25" rowspan="2">{PHP.L.Section}</td>
+					<td class="coltop width40" colspan="{ADMIN_RIGHTS_ADV_COLUMNS}">{PHP.L.Rights}</td>
+					<td class="coltop width15" rowspan="2">{PHP.L.adm_rightspergroup}</td>
+					<td class="coltop width15" rowspan="2">{PHP.L.adm_setby}</td>
 				</tr>
 				<tr>
 					<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
@@ -69,7 +69,7 @@
 				</tr>
 <!-- BEGIN: RIGHTS_ROW_FORUMS -->
 				<tr>
-					<td class="centerall"><img src="images/admin/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
+					<td class="centerall"><img src="images/icons/default/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
 					<td><a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_FORUMS_ITEMS -->
 					<td class="centerall">
@@ -87,7 +87,7 @@
 			<h3>{PHP.L.Pages}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:5%;" rowspan="2"></td>
+					<td class="coltop" style="width:5%;" rowspan="2"><img src="images/icons/default/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
 					<td class="coltop" style="width:25%;" rowspan="2">{PHP.L.Section}</td>
 					<td class="coltop" style="width:40%;" colspan="{ADMIN_RIGHTS_ADV_COLUMNS}">{PHP.L.Rights}</td>
 					<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.adm_rightspergroup}</td>

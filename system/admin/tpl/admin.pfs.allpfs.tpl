@@ -2,15 +2,15 @@
 	<div id="ajaxBlock">
 		<table class="cells">
 			<tr>
-				<td class="coltop">{PHP.L.User}</td>
-				<td class="coltop">{PHP.L.Files}</td>
-				<td class="coltop">{PHP.L.Edit}</td>
+				<td class="coltop width60">{PHP.L.User}</td>
+				<td class="coltop width20">{PHP.L.Files}</td>
+				<td class="coltop width20">{PHP.L.Edit}</td>
 			</tr>
 <!-- BEGIN: ALLPFS_ROW -->
 			<tr>
 				<td>{ADMIN_ALLPFS_ROW_USER}</td>
-		 		<td>{ADMIN_ALLPFS_ROW_COUNT}</td>
-				<td><a title="{PHP.L.Edit}" href="{ADMIN_ALLPFS_ROW_URL}">{PHP.R.admin_icon_config}</a></td>
+		 		<td class="centerall">{ADMIN_ALLPFS_ROW_COUNT}</td>
+				<td class="centerall"><a title="{PHP.L.Edit}" href="{ADMIN_ALLPFS_ROW_URL}">{PHP.R.icon_prefs}</a></td>
 			</tr>
 <!-- END: ALLPFS_ROW -->
 		</table>

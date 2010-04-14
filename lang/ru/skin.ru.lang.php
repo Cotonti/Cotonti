@@ -30,8 +30,8 @@ $skinlang['forumsnewtopic']['privatetopic2'] = 'просмотр и ответы
  */
 
 $skinlang['forumspost']['privatetopic'] = 'Это частная тема: доступ к просмотру и ответам только для модераторов и автора темы.';
-$skinlang['forumspost']['Onlinestatus0'] = 'не в сети'; // New in N-0.0.2
-$skinlang['forumspost']['Onlinestatus1'] = 'в сети'; // New in N-0.0.2
+$skinlang['forumspost']['Onlinestatus0'] = 'не в сети'; // New in 0.0.2
+$skinlang['forumspost']['Onlinestatus1'] = 'в сети'; // New in 0.0.2
 
 /**
  * forums.sections.tpl
@@ -84,8 +84,8 @@ $skinlang['list']['linesinthissection'] = 'Записей в разделе';
 $skinlang['page']['Submittedby'] = 'Опубликовано';
 $skinlang['page']['Summary'] = 'Содержание';
 $skinlang['page']['Filesize'] = 'Размер файла';
-$skinlang['page']['downloaded'] = 'Загружен'; // New in N-0.0.1
-$skinlang['page']['times'] = 'раз(а)'; // New in N-0.0.1
+$skinlang['page']['downloaded'] = 'Загружен'; // New in 0.0.1
+$skinlang['page']['times'] = 'раз(а)'; // New in 0.0.1
 
 /**
  * page.add.tpl
@@ -119,7 +119,7 @@ $skinlang['pageedit']['Deletethispage'] = '!Удалить страницу!';
 $skinlang['pfs']['Insertasthumbnail'] = 'Вставить миниатюру';
 $skinlang['pfs']['Insertasimage'] = 'Вставить полноразмерное изображение';
 $skinlang['pfs']['Insertaslink'] = 'Вставить в виде ссылки на файл';
-$skinlang['pfs']['Dimensions'] = 'Размеры'; // New in N-0.0.1
+$skinlang['pfs']['Dimensions'] = 'Размеры'; // New in 0.0.1
 
 /**
  * pm.send.tpl
@@ -164,8 +164,8 @@ $skinlang['users']['usersinthissection'] = 'Всего пользователе�
 
 $skinlang['usersauth']['Rememberme'] = 'Запомнить меня';
 $skinlang['usersauth']['Lostpassword'] = 'Восстановить пароль';
-$skinlang['usersauth']['Maintenance'] = 'Режим обслуживания (Maintenance Mode): вход разрешен только администраторам'; // New in N-0.0.2
-$skinlang['usersauth']['Maintenancereason'] = 'Причина'; // New in N-0.0.2
+$skinlang['usersauth']['Maintenance'] = 'Режим обслуживания (Maintenance Mode): вход разрешен только администраторам'; // New in 0.0.2
+$skinlang['usersauth']['Maintenancereason'] = 'Причина'; // New in 0.0.2
 
 /**
  * users.details.tpl
@@ -202,14 +202,14 @@ $skinlang['usersprofile']['Emailnotes'] = '<p><b>Порядок смены e-mai
 	<li>Будьте аккуратны при вводе нового e-mail: в случае ошибки вы не сможете его исправить</li>
 	<li>Если вы все-таки допустили ошибку при вводе нового e-mail, обратитесь к администратору.</li>
 </ol>
-<p><b>При отсутствии обязательного подтверждения нового e-mail, изменения вступают в силу немедленно.</b></p>'; // New in N-0.1.0
+<p><b>При отсутствии обязательного подтверждения нового e-mail, изменения вступают в силу немедленно.</b></p>'; // New in 0.1.0
 $skinlang['usersprofile']['Hidetheemail'] = 'Скрывать e-mail';
 $skinlang['usersprofile']['PMnotify'] = 'Уведомлять о новых личных сообщениях';
 $skinlang['usersprofile']['PMnotifyhint'] = '(получать e-mail уведомление при получении нового личного сообщения)';
 $skinlang['usersprofile']['Newpassword'] = 'Установить новый пароль';
 $skinlang['usersprofile']['Newpasswordhint1'] = '(оставьте пустым чтобы сохранить текущий)';
-$skinlang['usersprofile']['Newpasswordhint2'] = '(введите новый пароль дважды)'; // New in N-0.0.2
-$skinlang['usersprofile']['Oldpasswordhint'] = '(введите свой текущий пароль чтобы установить новый)'; // New in N-0.0.2
+$skinlang['usersprofile']['Newpasswordhint2'] = '(введите новый пароль дважды)'; // New in 0.0.2
+$skinlang['usersprofile']['Oldpasswordhint'] = '(введите свой текущий пароль чтобы установить новый)'; // New in 0.0.2
 
 /**
  * users.register.tpl

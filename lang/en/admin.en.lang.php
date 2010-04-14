@@ -55,22 +55,22 @@ $L['home_update_revision'] = 'Current Version: <span style="color:#C00;font-weig
  * Config Section
  */
 
-$L['core_email'] = 'E-mail Settings'; // 0.7.0
+$L['core_email'] = 'E-mail Settings'; // New in 0.7.0
 $L['core_forums'] = &$L['Forums'];
 $L['core_lang'] = &$L['Language'];
 $L['core_main'] = 'Main Settings';
 $L['core_menus'] = &$L['Menus'];
 $L['core_page'] = &$L['Pages'];
 $L['core_parser'] = &$L['Parser'];
-$L['core_performance'] = 'Performance'; // 0.7.0
+$L['core_performance'] = 'Performance'; // New in 0.7.0
 $L['core_pfs'] = &$L['PFS'];
 $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
 $L['core_ratings'] = &$L['Ratings'];
-$L['core_rss'] = &$L['Rss_feeds'];// New in N-0.7.0
+$L['core_rss'] = &$L['Rss_feeds'];// New in 0.7.0
 $L['core_skin'] = &$L['Skins'];
-$L['core_structure'] = &$L['Categories'];// New in N-0.7.0
+$L['core_structure'] = &$L['Categories'];// New in 0.7.0
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles (&lt;title&gt; tag)';
 $L['core_trash'] = &$L['Trashcan'];
@@ -81,26 +81,26 @@ $L['core_users'] = &$L['Users'];
  * E-mail Subsection
  */
 
-$L['cfg_email_type'] = array('Type of sending E-mail', ''); // New in N-0.7.0
-$L['cfg_smtp_address'] = array('Address smtp server', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
-$L['cfg_smtp_port'] = array('Port smtp server', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
-$L['cfg_smtp_login'] = array('Login', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
-$L['cfg_smtp_password'] = array('Password', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
-$L['cfg_smtp_uses_ssl'] = array('Use SSL', 'Set it if the type of sending E-mail selected smtp'); // New in N-0.7.0
+$L['cfg_email_type'] = array('Type of sending E-mail', ''); // New in 0.7.0
+$L['cfg_smtp_address'] = array('Address smtp server', 'Set it if the type of sending E-mail selected smtp'); // New in 0.7.0
+$L['cfg_smtp_port'] = array('Port smtp server', 'Set it if the type of sending E-mail selected smtp'); // New in 0.7.0
+$L['cfg_smtp_login'] = array('Login', 'Set it if the type of sending E-mail selected smtp'); // New in 0.7.0
+$L['cfg_smtp_password'] = array('Password', 'Set it if the type of sending E-mail selected smtp'); // New in 0.7.0
+$L['cfg_smtp_uses_ssl'] = array('Use SSL', 'Set it if the type of sending E-mail selected smtp'); // New in 0.7.0
 
 /**
  * Config Section
  * Forums Subsection
  */
 
-$L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users from posting twice in a row in the same topic');	// New in N-0.1.0
+$L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users from posting twice in a row in the same topic');	// New in 0.1.0
 $L['cfg_disable_forums'] = array('Disable the forums', '');
 $L['cfg_hideprivateforums'] = array('Hide private forums', '');
 $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics per page', '');
-$L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');	// New in N-0.1.0
-$L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');	// New in N-0.1.0
-$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' '); // New in N-0.0.6
+$L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');	// New in 0.1.0
+$L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');	// New in 0.1.0
+$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' '); // New in 0.0.6
 
 /**
  * Config Section
@@ -121,11 +121,11 @@ $L['cfg_cookielifetime'] = array('Maximum cookie lifetime', 'In seconds');
 $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
 $L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
 $L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
-$L['cfg_jquery'] = array('Enable jQuery', '');	// New in N-0.0.1
-$L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');	// New in N-0.0.2
-$L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');	// New in N-0.0.2
-$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');	// New in N-0.6.1
-$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');	// New in N-0.6.1
+$L['cfg_jquery'] = array('Enable jQuery', '');	// New in 0.0.1
+$L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');	// New in 0.0.2
+$L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');	// New in 0.0.2
+$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');	// New in 0.6.1
+$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');	// New in 0.6.1
 $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
 $L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
 $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
@@ -166,11 +166,11 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
  */
 
 $L['cfg_allowphp_pages'] = array('Allow the PHP page type', 'Execution of PHP code in pages, use with caution!');
-$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');	// New in N-0.0.2
-$L['cfg_count_admin'] = array('Count Administrators\' hits', '');	// New in N-0.0.1
+$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');	// New in 0.0.2
+$L['cfg_count_admin'] = array('Count Administrators\' hits', '');	// New in 0.0.1
 $L['cfg_disable_page'] = array('Disable the pages', '');
 $L['cfg_maxrowsperpage'] = array('Max. lines in lists', ' ');
-$L['cfg_maxlistsperpage'] = array('Max. lists per page', ' '); // New in N-0.0.6
+$L['cfg_maxlistsperpage'] = array('Max. lists per page', ' '); // New in 0.0.6
 
 /**
  * Config Section
@@ -181,9 +181,9 @@ $L['cfg_parsebbcodepm'] = array('Parse BBcode in private messages', '');
 $L['cfg_parsebbcodeforums'] = array('Parse BBcode in forums', '');
 $L['cfg_parsebbcodepages'] = array('Parse BBcode in pages', '');
 $L['cfg_parsebbcodeusertext'] = array('Parse BBcode in user signature', '');
-$L['cfg_parser_cache'] = array('Enable HTML cache', ''); // New in N-0.0.1
-$L['cfg_parser_custom'] = array('Enable custom parser', ''); // New in N-0.0.1
-$L['cfg_parser_disable'] = array('Disable default parser', ''); // New in N-0.0.3
+$L['cfg_parser_cache'] = array('Enable HTML cache', ''); // New in 0.0.1
+$L['cfg_parser_custom'] = array('Enable custom parser', ''); // New in 0.0.1
+$L['cfg_parser_disable'] = array('Disable default parser', ''); // New in 0.0.3
 $L['cfg_parsesmiliespm'] = array('Parse smilies in private messages', '');
 $L['cfg_parsesmiliesforums'] = array('Parse smilies in forums', '');
 $L['cfg_parsesmiliespages'] = array('Parse smilies in pages', '');
@@ -194,15 +194,15 @@ $L['cfg_parsesmiliesusertext'] = array('Parse smilies in user signature', '');
  * Performance Subsection
  */
 
-$L['cfg_cache_forums'] = array('Page cache in forums', 'Caches entire pages output for guests'); // 0.7.0
-$L['cfg_cache_index'] = array('Page cache on index', 'Index will be static for all guests'); // 0.7.0
-$L['cfg_cache_page'] = array('Page cache in page and list', 'Caches entire pages for guests'); // 0.7.0
+$L['cfg_cache_forums'] = array('Page cache in forums', 'Caches entire pages output for guests'); // New in 0.7.0
+$L['cfg_cache_index'] = array('Page cache on index', 'Index will be static for all guests'); // New in 0.7.0
+$L['cfg_cache_page'] = array('Page cache in page and list', 'Caches entire pages for guests'); // New in 0.7.0
 $L['cfg_disablehitstats'] = array('Disable hit statistics', 'Referers and hits per day');
 $L['cfg_disableactivitystats'] = array('Do not display statistics of activity', 'Activity for the last 7 days<br />Displayed on the home page administration panel');
 $L['cfg_disabledbstats'] = array('Do not display database statistics', 'Displayed on the home page administration panel');
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
-$L['cfg_hit_percision'] = array('Optimized hit counter precision', ''); // 0.7.0
-$L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // 0.7.0
+$L['cfg_hit_percision'] = array('Optimized hit counter precision', ''); // New in 0.7.0
+$L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // New in 0.7.0
 
 
 /**
@@ -212,11 +212,11 @@ $L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache
 
 $L['cfg_disable_pfs'] = array('Disable the '.$L['PFS'], '');
 $L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');
-$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');	// New in N-0.0.2
-$L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in N-0.0.2
-$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in N-0.0.2
+$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');	// New in 0.0.2
+$L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in 0.0.2
+$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in 0.0.2
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/FOLDERNAME/... Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this.');
-$L['cfg_flashupload'] = array('Use flash uploader', 'Allows uploading many files at once.'); // New in N-1.0.0
+$L['cfg_flashupload'] = array('Use flash uploader', 'Allows uploading many files at once.'); // New in 1.0.0
 $L['cfg_pfs_winclose'] = array('Close popup window after bbcode insertion');
 $L['cfg_th_amode'] = array('Thumbnails generation', '');
 $L['cfg_th_border'] = array('Thumbnails, border size', 'Default: 4 pixels');
@@ -244,17 +244,17 @@ $L['cfg_disable_plug'] = array('Disable the plugins', '');
 $L['cfg_disable_pm'] = array('Disable the private messages', '');
 $L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
 $L['cfg_pm_maxsize'] = array('Maximum length for messages', 'Default: 10000 chars');
-$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in N-0.0.6
+$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in 0.0.6
 
 /**
  * Config Section
  * Polls Subsection
  */
 
-$L['cfg_del_dup_options'] = array('Force duplicate option removal', ' Remove duplicate options even if it is already in the database');	// New in N-0.0.2
+$L['cfg_del_dup_options'] = array('Force duplicate option removal', ' Remove duplicate options even if it is already in the database');	// New in 0.0.2
 $L['cfg_disable_polls'] = array('Disable the polls', '');
-$L['cfg_ip_id_polls'] = array('Vote counting method', '');	// New in N-0.0.2
-$L['cfg_max_options_polls'] = array('Max number of options', 'Options above this limit will be automatically removed');	// New in N-0.0.2
+$L['cfg_ip_id_polls'] = array('Vote counting method', '');	// New in 0.0.2
+$L['cfg_max_options_polls'] = array('Max number of options', 'Options above this limit will be automatically removed');	// New in 0.0.2
 
 /**
  * Config Section
@@ -262,7 +262,7 @@ $L['cfg_max_options_polls'] = array('Max number of options', 'Options above this
  */
 
 $L['cfg_disable_ratings'] = array('Disable the ratings', '');
-$L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enabled it will allow users to change their rating.');	// New in N-0.0.2
+$L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enabled it will allow users to change their rating.');	// New in 0.0.2
 
 /**
  * Config Section
@@ -270,11 +270,11 @@ $L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enable
  */
 
 $L['cfg_disable_rss'] = array('Disable the RSS feeds', '');
-$L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' '); // New in N-0.7.0
-$L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' '); // New in N-0.7.0
-$L['cfg_rss_charset'] = array('RSS charset', ' '); // New in N-0.7.0
-$L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
-$L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
+$L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' '); // New in 0.7.0
+$L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' '); // New in 0.7.0
+$L['cfg_rss_charset'] = array('RSS charset', ' '); // New in 0.7.0
+$L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
+$L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
 
 
 /**
@@ -286,7 +286,7 @@ $L['cfg_charset'] = array('HTML charset', '');
 $L['cfg_disablesysinfos'] = array('Turn off page creation time', 'In footer.tpl');
 $L['cfg_doctypeid'] = array('Document Type', '&lt;!DOCTYPE&gt; of the HTML layout');
 $L['cfg_forcedefaultskin'] = array('Force the default skin for all users', '');
-$L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');	// New in N-0.0.2
+$L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');	// New in 0.0.2
 $L['cfg_keepcrbottom'] = array('Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}', 'In footer.tpl');
 $L['cfg_metakeywords'] = array('HTML Meta keywords (comma separated)', 'Search engines');
 $L['cfg_msg_separate'] = array('Display messages separately for each source', '');
@@ -403,7 +403,7 @@ $L['adm_tpl_mode'] = 'Template mode';
 $L['adm_tpl_empty'] = 'Default';
 $L['adm_tpl_forced'] = 'Same as';
 $L['adm_tpl_parent'] = 'Same as the parent category';
-$L['adm_enableratings'] = 'Enable ratings';	// New in N-0.1.0
+$L['adm_enableratings'] = 'Enable ratings';	// New in 0.1.0
 $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.'; // Added in N-0.7.0
 
 /**
@@ -427,7 +427,7 @@ $L['adm_help_structure_extrafield'] = '<b>Base HTML</b> set automaticaly if you 
  */
 
 $L['adm_forum_structure'] = 'Structure of the forums (categories)';
-$L['adm_forum_emptytitle'] = 'Error: title empty';	// New in N-0.1.0
+$L['adm_forum_emptytitle'] = 'Error: title empty';	// New in 0.1.0
 
 /**
   * Forums Section
@@ -443,13 +443,13 @@ $L['adm_defstate_1'] = 'Unfolded';
   * Forum Edit Subsection
  */
 
-$L['adm_forums_master'] = 'Master section';	// New in N-0.0.1
+$L['adm_forums_master'] = 'Master section';	// New in 0.0.1
 $L['adm_diplaysignatures'] = 'Display signatures';
 $L['adm_enablebbcodes'] = 'Enable BBcodes';
 $L['adm_enablesmilies'] = 'Enable smilies';
 $L['adm_enableprvtopics'] = 'Allow private topics';
-$L['adm_enableviewers'] = 'Enable Viewers';	// New in N-0.0.2
-$L['adm_enablepolls'] = 'Enable Polls';	// New in N-0.0.2
+$L['adm_enableviewers'] = 'Enable Viewers';	// New in 0.0.2
+$L['adm_enablepolls'] = 'Enable Polls';	// New in 0.0.2
 $L['adm_countposts'] = 'Count posts';
 $L['adm_autoprune'] = 'Auto-prune topics after * days';
 $L['adm_postcounters'] = 'Check the counters';
@@ -462,7 +462,7 @@ $L['adm_rightspergroup'] = 'Rights per group';
 $L['adm_maxsizesingle'] = 'Max size for a single file in '.$L['PFS'].' (KB)';
 $L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KB)';
 $L['adm_copyrightsfrom'] = 'Set the same rights as the group';
-$L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';	// New in N-0.0.2
+$L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';	// New in 0.0.2
 
 /**
  * Users Section
@@ -492,13 +492,13 @@ $L['adm_paused'] = 'Paused';
 $L['adm_running'] = 'Running';
 $L['adm_partrunning'] = 'Partially running';
 $L['adm_partstopped'] = 'Partially stopped';
-$L['adm_installed'] = 'Installed';	// New in N-0.0.6
+$L['adm_installed'] = 'Installed';	// New in 0.0.6
 $L['adm_notinstalled'] = 'Not installed';
 
-$L['adm_plugsetup'] = 'Plugin Setup';	// New in N-0.0.6
-$L['adm_override_guests'] = 'System override, guests and inactive are not allowed to admin';	// New in N-0.0.6
-$L['adm_override_banned'] = 'System override, Banned';	// New in N-0.0.6
-$L['adm_override_admins'] = 'System override, Administrators';	// New in N-0.0.6
+$L['adm_plugsetup'] = 'Plugin Setup';	// New in 0.0.6
+$L['adm_override_guests'] = 'System override, guests and inactive are not allowed to admin';	// New in 0.0.6
+$L['adm_override_banned'] = 'System override, Banned';	// New in 0.0.6
+$L['adm_override_admins'] = 'System override, Administrators';	// New in 0.0.6
 
 $L['adm_opt_installall'] = 'Install all';
 $L['adm_opt_installall_explain'] = 'This will install or reset all the parts of the plugin.';
@@ -509,21 +509,21 @@ $L['adm_opt_pauseall_explain'] = 'This will pause (disable) all the parts of the
 $L['adm_opt_unpauseall'] = 'Un-pause all';
 $L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the parts of the plugin.';
 
-$L['adm_opt_setoption_warn'] = 'Options found for this plugin. Would you like to install from kept options?';	// New in N-0.0.2
-$L['adm_opt_uninstall_warn'] = 'You can delete this plugin without deleting old settings (rights and options). Click if you want to.';	// New in N-0.0.2
-$L['adm_opt_setup_missing'] = 'Error: setup file missing!';	// New in N-0.0.6
+$L['adm_opt_setoption_warn'] = 'Options found for this plugin. Would you like to install from kept options?';	// New in 0.0.2
+$L['adm_opt_uninstall_warn'] = 'You can delete this plugin without deleting old settings (rights and options). Click if you want to.';	// New in 0.0.2
+$L['adm_opt_setup_missing'] = 'Error: setup file missing!';	// New in 0.0.6
 
-$L['adm_pluginstall_msg01'] = 'Configuring plugin...';	// New in N-0.0.6
-$L['adm_pluginstall_msg02'] = 'Deleting old configuration entries...';	// New in N-0.0.6
-$L['adm_pluginstall_msg03'] = 'Looking for the setup file...';	// New in N-0.0.6
-$L['adm_pluginstall_msg04'] = 'Looking for parts...';	// New in N-0.0.6
-$L['adm_pluginstall_msg05'] = 'Installing the parts...';	// New in N-0.0.6
-$L['adm_pluginstall_msg06'] = 'Looking for configuration entries in the setup file...';	// New in N-0.0.6
-$L['adm_pluginstall_msg07'] = 'Not found! Installation failed!';	// New in N-0.0.6
-$L['adm_pluginstall_msg08'] = 'Deleting any old rights about this plugin...';	// New in N-0.0.6
-$L['adm_pluginstall_msg09'] = 'Adding the rights for the groups of users...';	// New in N-0.0.6
-$L['adm_pluginstall_msg10'] = 'Resetting the auth column for all the users...';	// New in N-0.0.6
-$L['adm_pluginstall_msg11'] = 'Running on-install part of the setup script...';	// New in N-0.0.6
+$L['adm_pluginstall_msg01'] = 'Configuring plugin...';	// New in 0.0.6
+$L['adm_pluginstall_msg02'] = 'Deleting old configuration entries...';	// New in 0.0.6
+$L['adm_pluginstall_msg03'] = 'Looking for the setup file...';	// New in 0.0.6
+$L['adm_pluginstall_msg04'] = 'Looking for parts...';	// New in 0.0.6
+$L['adm_pluginstall_msg05'] = 'Installing the parts...';	// New in 0.0.6
+$L['adm_pluginstall_msg06'] = 'Looking for configuration entries in the setup file...';	// New in 0.0.6
+$L['adm_pluginstall_msg07'] = 'Not found! Installation failed!';	// New in 0.0.6
+$L['adm_pluginstall_msg08'] = 'Deleting any old rights about this plugin...';	// New in 0.0.6
+$L['adm_pluginstall_msg09'] = 'Adding the rights for the groups of users...';	// New in 0.0.6
+$L['adm_pluginstall_msg10'] = 'Resetting the auth column for all the users...';	// New in 0.0.6
+$L['adm_pluginstall_msg11'] = 'Running on-install part of the setup script...';	// New in 0.0.6
 
 /**
  * Tools Section
@@ -563,15 +563,15 @@ $L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotont
  * Polls Subsection
  */
 
-$L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.';	// New in N-0.0.2
-$L['adm_polls_forumpolls'] = 'Polls from forums (recent at top):';	// New in N-0.0.1
-$L['adm_polls_indexpolls'] = 'Index polls (recent at top):';	// New in N-0.0.1
-$L['adm_polls_msg916_bump'] = 'Successfully bumped!';	// New in N-0.0.3
-$L['adm_polls_msg916_deleted'] = 'Successfully deleted!';	// New in N-0.0.3
-$L['adm_polls_msg916_reset'] = 'Successfully reset!';	// New in N-0.0.3
-$L['adm_polls_on_page'] = 'on page';	// New in N-0.0.2
-$L['adm_polls_polltopic'] = 'Poll topic';	// New in N-0.0.1
-$L['adm_polls_nopolls'] = 'There is no polls'; // New in N-0.7.0
+$L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.';	// New in 0.0.2
+$L['adm_polls_forumpolls'] = 'Polls from forums (recent at top):';	// New in 0.0.1
+$L['adm_polls_indexpolls'] = 'Index polls (recent at top):';	// New in 0.0.1
+$L['adm_polls_msg916_bump'] = 'Successfully bumped!';	// New in 0.0.3
+$L['adm_polls_msg916_deleted'] = 'Successfully deleted!';	// New in 0.0.3
+$L['adm_polls_msg916_reset'] = 'Successfully reset!';	// New in 0.0.3
+$L['adm_polls_on_page'] = 'on page';	// New in 0.0.2
+$L['adm_polls_polltopic'] = 'Poll topic';	// New in 0.0.1
+$L['adm_polls_nopolls'] = 'There is no polls'; // New in 0.7.0
 
 /**
  * Other Section
@@ -586,7 +586,7 @@ $L['adm_pm_totalsent'] = 'Total of private messages ever sent';
  * Ratings Subsection
  */
 
-$L['adm_ratings_already_del'] = 'Rating removed';	// New in N-0.0.3
+$L['adm_ratings_already_del'] = 'Rating removed';	// New in 0.0.3
 $L['adm_ratings_totalitems'] = 'Total pages rated';
 $L['adm_ratings_totalvotes'] = 'Total votes';
 $L['adm_help_ratings'] = 'To reset a rating, simply delete it. It will be re-created with the first new vote.';
@@ -596,10 +596,10 @@ $L['adm_help_ratings'] = 'To reset a rating, simply delete it. It will be re-cre
  * Cache Subsection
  */
 
-$L['adm_delcacheitem'] = 'Cache item removed';	// New in N-0.0.2
+$L['adm_delcacheitem'] = 'Cache item removed';	// New in 0.0.2
 $L['adm_internalcache'] = 'Internal cache';
-$L['adm_purgeall_done'] = 'Cache cleared completely';	// New in N-0.0.2
-$L['adm_diskcache'] = 'Disk cache';	// New in N-0.6.1
+$L['adm_purgeall_done'] = 'Cache cleared completely';	// New in 0.0.2
+$L['adm_diskcache'] = 'Disk cache';	// New in 0.6.1
 
 /**
  * Other Section
@@ -756,8 +756,8 @@ $L['adm_failed'] = 'Failed';
 $L['adm_from'] = 'From';
 $L['adm_more'] = 'More tools...';
 $L['adm_purgeall'] = 'Purge all';
-$L['adm_queue_unvalidated'] = 'Unvalidated';	// New in N-0.0.3
-$L['adm_queue_validated'] = 'Validated';	// New in N-0.0.3
+$L['adm_queue_unvalidated'] = 'Unvalidated';	// New in 0.0.3
+$L['adm_queue_validated'] = 'Validated';	// New in 0.0.3
 $L['adm_required'] = '(Required)';
 $L['adm_setby'] = 'Set by';
 $L['adm_to'] = 'To';
