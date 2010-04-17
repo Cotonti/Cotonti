@@ -5,8 +5,8 @@
 <!-- ENDIF -->
 <!-- BEGIN: ROW -->
 		<tr>
-			<td class="centerall" style="width:5%;">{PHP.R.admin_icon_tools}</td>
-			<td style="width:95%;"><a href="{ADMIN_TOOLS_PLUG_URL}">{ADMIN_TOOLS_PLUG_NAME}</a></td>
+			<td class="centerall width5">{PHP.R.icon_tool}</td>
+			<td class="width95"><a href="{ADMIN_TOOLS_PLUG_URL}">{ADMIN_TOOLS_PLUG_NAME}</a></td>
 		</tr>
 <!-- END: ROW -->
 <!-- IF {PHP.list_present} -->

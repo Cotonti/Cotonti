@@ -32,10 +32,10 @@
 	<form name="add_url" id="add_url" action="{ADMIN_URLS_FORM_URL}" method="post" class="ajax">
 		<table id="rules" class="cells">
 			<tr id="rules_top" class="nodrop nodrag">
-				<td class="coltop" style="width:35%;">{PHP.L.adm_urls_area}</td>
-				<td class="coltop" style="width:25%;">{PHP.L.adm_urls_parameters}</td>
-				<td class="coltop" style="width:25%;">{PHP.L.adm_urls_format}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Delete}</td>
+				<td class="coltop width15">{PHP.L.adm_urls_area}</td>
+				<td class="coltop width35">{PHP.L.adm_urls_parameters}</td>
+				<td class="coltop width35">{PHP.L.adm_urls_format}</td>
+				<td class="coltop width15">{PHP.L.Delete}</td>
 			</tr>
 <!-- BEGIN: ROW -->
 			<tr id="rule_{ADMIN_URLS_ROW_I}">

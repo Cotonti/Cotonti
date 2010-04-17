@@ -23,8 +23,8 @@
 		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post">
 		<table class="cells">
 			<tr>
-				<td style="width:20%;">{PHP.L.Path}:</td>
-				<td style="width:80%;"><input type="text" class="text" name="rpath" value="{ADMIN_STRUCTURE_PATH}" size="16" maxlength="16" /></td>
+				<td class="width20">{PHP.L.Path}:</td>
+				<td class="width80"><input type="text" class="text" name="rpath" value="{ADMIN_STRUCTURE_PATH}" size="16" maxlength="16" /></td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Code}:</td>
@@ -106,14 +106,14 @@
 		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
-				<td class="coltop" style="width:10%;">{PHP.L.Path}</td>
-				<td class="coltop" style="width:10%;">{PHP.L.Code}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Title}</td>
-				<td class="coltop" style="width:10%;">{PHP.L.TPL}</td>
-				<td class="coltop" style="width:10%;">{PHP.L.Group}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Order}</td>
-				<td class="coltop" style="width:10%;">{PHP.L.Pages}</td>
-				<td class="coltop" style="width:20%;">{PHP.L.Action}</td>
+				<td class="coltop width10">{PHP.L.Path}</td>
+				<td class="coltop width10">{PHP.L.Code}</td>
+				<td class="coltop width15">{PHP.L.Title}</td>
+				<td class="coltop width10">{PHP.L.TPL}</td>
+				<td class="coltop width10">{PHP.L.Group}</td>
+				<td class="coltop width15">{PHP.L.Order}</td>
+				<td class="coltop width10">{PHP.L.Pages}</td>
+				<td class="coltop width20">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: ROW -->
 			<tr>
@@ -152,8 +152,8 @@
 		<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
-				<td style="width:20%;">{PHP.L.Path}:</td>
-				<td style="width:80%;"><input type="text" class="text" name="npath" value="" size="16" maxlength="16" /> {PHP.L.adm_required}</td>
+				<td class="width20">{PHP.L.Path}:</td>
+				<td class="width80"><input type="text" class="text" name="npath" value="" size="16" maxlength="16" /> {PHP.L.adm_required}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Code}:</td>

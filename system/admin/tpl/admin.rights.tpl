@@ -87,7 +87,7 @@
 			<h3>{PHP.L.Pages}:</h3>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:5%;" rowspan="2"><img src="images/icons/default/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
+					<td class="coltop" style="width:5%;" rowspan="2"></td>
 					<td class="coltop" style="width:25%;" rowspan="2">{PHP.L.Section}</td>
 					<td class="coltop" style="width:40%;" colspan="{ADMIN_RIGHTS_ADV_COLUMNS}">{PHP.L.Rights}</td>
 					<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.adm_rightspergroup}</td>
@@ -105,7 +105,7 @@
 				</tr>
 <!-- BEGIN: RIGHTS_ROW_PAGES -->
 				<tr>
-					<td class="centerall"><img src="images/admin/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
+					<td class="centerall"><img src="images/icons/default/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
 					<td><a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_PAGES_ITEMS -->
 					<td class="centerall">
@@ -141,7 +141,7 @@
 				</tr>
 <!-- BEGIN: RIGHTS_ROW_PLUGINS -->
 				<tr>
-					<td class="centerall"><img src="images/admin/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
+					<td class="centerall"><img src="images/icons/default/{ADMIN_RIGHTS_ROW_AUTH_CODE}.png" alt="" /></td>
 					<td><a href="{ADMIN_RIGHTS_ROW_LINK}">{ADMIN_RIGHTS_ROW_TITLE}</a></td>
 <!-- BEGIN: ROW_PLUGINS_ITEMS -->
 					<td class="centerall">

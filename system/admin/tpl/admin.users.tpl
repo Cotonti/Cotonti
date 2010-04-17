@@ -18,17 +18,17 @@
 <!-- BEGIN: ADMIN_USERS_DEFAULT -->
 		<table class="cells">
 			<tr>
-				<td class="coltop" style="width:5%;">&nbsp;</td>
-				<td class="coltop" style="width:35%;">{PHP.L.Groups} {PHP.L.adm_clicktoedit}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Members}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Enabled}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Hidden}</td>
-				<td class="coltop" style="width:15%;">{PHP.L.Action}</td>
+				<td class="coltop width5">&nbsp;</td>
+				<td class="coltop width35">{PHP.L.Groups} {PHP.L.adm_clicktoedit}</td>
+				<td class="coltop width15">{PHP.L.Members}</td>
+				<td class="coltop width15">{PHP.L.Enabled}</td>
+				<td class="coltop width15">{PHP.L.Hidden}</td>
+				<td class="coltop width15">{PHP.L.Action}</td>
 			</tr>
 <!-- BEGIN: USERS_ROW -->
 			<tr>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_ID}</td>
-				<td>{PHP.R.admin_icon_groups} <a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax">{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
+				<td><a href="{ADMIN_USERS_ROW_GRP_TITLE_URL}" class="ajax">{ADMIN_USERS_ROW_GRP_TITLE}</a></td>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_COUNT_MEMBERS}</td>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_DISABLED}</td>
 				<td class="centerall">{ADMIN_USERS_ROW_GRP_HIDDEN}</td>
@@ -43,8 +43,8 @@
 		<form name="addlevel" id="addlevel" action="{ADMIN_USERS_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
-				<td style="width:30%;">{PHP.L.Group}:</td>
-				<td style="width:70%;"><input type="text" class="text" name="ntitle" value="" size="40" maxlength="64" /> {PHP.L.adm_required}</td>
+				<td class="width40">{PHP.L.Group}:</td>
+				<td class="width60"><input type="text" class="text" name="ntitle" value="" size="40" maxlength="64" /> {PHP.L.adm_required}</td>
 			</tr>
 			<tr>
 					<td>{PHP.L.Description}:</td>
@@ -111,8 +111,8 @@
 			<form name="editlevel" id="editlevel" action="{ADMIN_USERS_EDITFORM_URL}" method="post" class="ajax">
 				<table class="cells">
 					<tr>
-						<td style="width:30%;">{PHP.L.Group}:</td>
-						<td style="width:70%;"><input type="text" class="text" name="rtitle" value="{ADMIN_USERS_EDITFORM_GRP_TITLE}" size="40" maxlength="64" /> {PHP.L.adm_required}</td>
+						<td class="width40">{PHP.L.Group}:</td>
+						<td class="width60"><input type="text" class="text" name="rtitle" value="{ADMIN_USERS_EDITFORM_GRP_TITLE}" size="40" maxlength="64" /> {PHP.L.adm_required}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Description}:</td>

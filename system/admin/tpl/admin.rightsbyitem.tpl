@@ -8,11 +8,11 @@
 			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post" class="ajax">
 				<table class="cells">
 					<tr>
-						<td class="coltop" style="width:5%;" rowspan="2"></td>
-						<td class="coltop" style="width:25%;" rowspan="2">{PHP.L.Groups}</td>
-						<td class="coltop" style="width:40%;" colspan="{ADMIN_RIGHTSBYITEM_ADV_COLUMNS}">{PHP.L.Rights}</td>
-						<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.adm_setby}</td>
-						<td class="coltop" style="width:15%;" rowspan="2">{PHP.L.Open}</td>
+						<td class="coltop width5" rowspan="2"></td>
+						<td class="coltop width25" rowspan="2">{PHP.L.Groups}</td>
+						<td class="coltop width40" colspan="{ADMIN_RIGHTSBYITEM_ADV_COLUMNS}">{PHP.L.Rights}</td>
+						<td class="coltop width15" rowspan="2">{PHP.L.adm_setby}</td>
+						<td class="coltop width15" rowspan="2">{PHP.L.Open}</td>
 					</tr>
 					<tr>
 						<td class="coltop">{PHP.R.admin_icon_auth_r}</td>
