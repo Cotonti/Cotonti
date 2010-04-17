@@ -13,12 +13,12 @@
 			</ul>
 			<table class="cells">
 				<tr>
-					<td class="coltop" style="width:5%;"></td>
-					<td class="coltop" style="width:15%;">{PHP.L.Type}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.Date}</td>
-					<td class="coltop" style="width:30%;">{PHP.L.Title}</td>
-					<td class="coltop" style="width:20%;">{PHP.L.adm_setby}</td>
-					<td class="coltop" style="width:15%;">{PHP.L.Action}</td>
+					<td class="coltop width5"></td>
+					<td class="coltop width15">{PHP.L.Type}</td>
+					<td class="coltop width15">{PHP.L.Date}</td>
+					<td class="coltop width30">{PHP.L.Title}</td>
+					<td class="coltop width20">{PHP.L.adm_setby}</td>
+					<td class="coltop width15">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: TRASHCAN_ROW -->
 			<tr>
@@ -28,8 +28,8 @@
 				<td class="centerall">{ADMIN_TRASHCAN_TITLE}</td>
 				<td class="centerall">{ADMIN_TRASHCAN_TRASHEDBY}</td>
 				<td class="centerall action">
-					<a title="{PHP.L.Restore}" href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}">{PHP.R.admin_icon_discheck1}</a>
-					<a title="{PHP.L.Wipe}" href="{ADMIN_TRASHCAN_ROW_WIPE_URL}">{PHP.R.admin_icon_discheck0}</a>
+					<a title="{PHP.L.Restore}" href="{ADMIN_TRASHCAN_ROW_RESTORE_URL}">{PHP.R.icon_undo}</a>
+					<a title="{PHP.L.Wipe}" href="{ADMIN_TRASHCAN_ROW_WIPE_URL}">{PHP.R.icon_delete}</a>
 				</td>
 			</tr>
 <!-- END: TRASHCAN_ROW -->

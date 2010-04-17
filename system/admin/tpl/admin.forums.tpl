@@ -109,7 +109,7 @@
 					<td class="strong" colspan="8"><a href="{ADMIN_FORUMS_DEFAULT_ROW_FN_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FN_TITLE} ({ADMIN_FORUMS_DEFAULT_ROW_FN_PATH})</a></td>
 				</tr><!-- ENDIF -->
 				<tr>
-					<td class="centerall">{PHP.R.admin_icon_folder}</td>
+					<td class="centerall">{PHP.R.icon_folder}</td>
 					<td><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a></td>
 					<td class="centerall"><a title="{PHP.L.Up}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL}" class="ajax">{PHP.sed_img_up}</a> <a title="{PHP.L.Down}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL}" class="ajax">{PHP.sed_img_down}</a></td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS}</td>
@@ -124,8 +124,8 @@
 				</tr>
 <!-- BEGIN: FCACHE -->
 				<tr>
-					<td class="centerall">{PHP.R.admin_icon_subfolder}</td>
-					<td class="lhn"><span class="spaced">&ndash;</span><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a></td>
+					<td class="centerall">{PHP.R.icon_subfolder}</td>
+					<td class="leftindent"><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a></td>
 					<td class="centerall"><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL}" class="ajax">{PHP.sed_img_up}</a> <a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL}" class="ajax">{PHP.sed_img_down}</a></td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS}</td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT}</td>
