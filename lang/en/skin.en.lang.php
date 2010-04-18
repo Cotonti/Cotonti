@@ -220,4 +220,12 @@ $skinlang['usersregister']['Validemailhint'] = 'A valid e-mail is required to co
 $skinlang['usersregister']['Confirmpassword'] = 'Confirm password';
 $skinlang['usersregister']['Formhint'] = 'Once you\'re registered and logged in, have a look in your profile to set your avatar, signature, ICQ, website, location, timezone, etc.';
 
+/**
+ * Some helpful global strings
+ */
+
+$L['Contact'] = 'Contact'; // New in 0.7.0
+$L['Follow_Twitter'] = 'Follow us on Twitter!'; // New in 0.7.0
+$L['Sitemap'] = 'Sitemap'; // New in 0.7.0
+
 ?>

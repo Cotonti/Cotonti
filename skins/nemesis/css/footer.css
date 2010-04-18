@@ -1,7 +1,7 @@
 /* 1. Footer
 -------------------------------------------------- */
 
-#footer				{ font-size:.9em; color:#f8f8f8; padding:20px 40px; background:#667e72; overflow:auto; }
+#footer				{ font-size:.9em; color:#f8f8f8; margin:0 0 10px; padding:20px 40px; background:#667e72; overflow:auto; }
 #footer a			{ color:#fff; }
 #footer strong		{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
 
@@ -9,3 +9,9 @@
 #footer ul  img			{ vertical-align:-4px; }
 #footer ul#account		{ width:420px; }
 #footer ul#account img	{ margin-top:3px; }
+
+/* 2. Powered by Cotonti (optional)
+-------------------------------------------------- */
+
+#powered	{ margin-top:-145px; background:url(../img/powered-by-cotonti.png) no-repeat 0 0; height:120px; width:157px; position:absolute; left:814px; top:100%; }
+#powered a	{ text-indent:-9999px; display:block; height:100%; }
