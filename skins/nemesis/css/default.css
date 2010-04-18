@@ -23,7 +23,7 @@ hr.divider	{ margin:10px 0; }
 -------------------------------------------------- */
 
 #container			{ margin:0 auto; width:960px; position:relative; border-top:5px solid; }
-#main				{ padding:30px 0 15px; overflow:auto; }
+#main				{ padding:30px 0 15px; }
 #center, .search1	{ width:620px; }
 #side, .search2		{ width:300px; }
 .column				{ margin:0 10px; position:relative; float:left; }
@@ -70,7 +70,7 @@ table.main 	{ border-collapse:collapse; width:100%; }
 table.main td 	{ padding:1px 0; margin:0; border:0; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
-table.cells td	{ padding:4px 8px; border:1px solid #e7e7e7; }
+table.cells td{ padding:4px 8px; border:1px solid #e7e7e7; }
 
 table.list 	{ border-collapse:collapse; width:100%; }
 table.list td 	{ padding:5px 5px 5px 0; border-bottom:1px dashed #ccc; }
@@ -247,7 +247,7 @@ ol 		{ margin-left:20px; list-style-type:decimal; }
 /* jQuery.Rating Plugin CSS - http://www.fyneworks.com/jquery/star-rating/ */
 div.rating-cancel,div.star-rating{float:left;width:17px;height:15px;text-indent:-999em;cursor:pointer;display:block;background:transparent;overflow:hidden}
 div.rating-cancel,div.rating-cancel a{background:url(img/delete.gif) no-repeat 0 -16px}
-div.star-rating,div.star-rating a{background:url(img/star.gif) no-repeat 0 0px}
+div.star-rating,div.star-rating a{background:url(images/icons/default/star.png) no-repeat 0 0px}
 div.rating-cancel a,div.star-rating a{display:block;width:16px;height:100%;background-position:0 0px;border:0;font-size:0}
 div.star-rating-on a{background-position:0 -16px!important}
 div.star-rating-hover a{background-position:0 -32px}

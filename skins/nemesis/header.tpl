@@ -23,30 +23,30 @@
 
 <div id="container">
 
-	<h1><a href="{PHP.cfg.mainurl}">{PHP.cfg.maintitle}</a></h1>
+	<h1><a href="{PHP.cfg.mainurl}" title="{PHP.cfg.maintitle} {PHP.cfg.separator} {PHP.cfg.subtitle}">{PHP.cfg.maintitle}</a></h1>
 	<p class="small subtitle">{PHP.cfg.subtitle}</p>
 
 	<ul id="nav">
 		<li>
-			<a href="{PHP.cfg.mainurl}">
+			<a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">
 				{PHP.L.Home}
 				<span>Start here</span>
 			</a>
 		</li>
 		<li>
-			<a href="forums.php">
+			<a href="forums.php" title="{PHP.L.Forums}">
 				{PHP.L.Forums}
 				<span>Discussions</span>
 			</a>
 		</li>
 		<li>
-			<a href="list.php?c=news">
+			<a href="list.php?c=news" title="{PHP.L.News}">
 				{PHP.L.News}
 				<span>Our updates</span>
 			</a>
 		</li>
 		<li>
-			<a href="rss.php">
+			<a href="rss.php" title="{PHP.L.RSS_Feeds}">
 				RSS
 				<span>Subscribe me</span>
 			</a>

@@ -29,7 +29,13 @@
 				<!-- END: FORUMS_SECTIONS_ROW_CAT -->
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION -->
 				<tr>
-					<td class="centerall"><img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" /></td>
+					<td class="centerall">
+						<!-- IF {FORUMS_SECTIONS_ROW_ICON} <> "" -->
+							<img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" />
+						<!-- ELSE -->
+							{PHP.R.icon_forums}
+						<!-- ENDIF -->
+					</td>
 					<td>
 						<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>
 						<!-- IF {FORUMS_SECTIONS_ROW_DESC} -->
