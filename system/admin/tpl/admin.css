@@ -4,7 +4,7 @@
 *	{ margin:0; padding:0; }
 html	{ padding:0; }
 
-body	{ font:normal 76%/1.8em Verdana; background:url(img/body.png) repeat-x 0 60px; }
+body	{ font:normal 76%/1.8em Georgia; background:url(img/body.png) repeat-x 0 60px; }
 
 ul 			{ list-style-type:none; }
 ol			{ list-style-position:outside; margin-bottom:5px; padding-left:20px; }
@@ -110,9 +110,9 @@ h4		{ font-weight:bold; }
 #adminmenu li		{ width:145px; float:left; }
 #adminmenu li a, #adminmenu li span	{ text-align:center; padding-top:54px; display:block; height:26px; background-repeat:no-repeat; background-position:0 -80px; }
 #adminmenu li span	{ color:#999; background-position:0 0; }
-#adminmenu li a	{ text-shadow:1px 1px 2px #999; background-position:0 0;  }
-#adminmenu li a:hover	{ text-shadow:0 1px 0 #fff; text-decoration:none; background-position:0 -80px;  color: #800000;  }
-#adminmenu li a.sel	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; background-position:0 -160px; color: #800000; }
+#adminmenu li a	{ text-shadow:0 1px 0 #eee; background-position:0 0; }
+#adminmenu li a:hover	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; background-position:0 -80px; }
+#adminmenu li a.sel	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; background-position:0 -160px; }
 #am01 a, #am01 span	{ background-image:url(img/adminmenu/home.png); }
 #am02 a, #am02 span	{ background-image:url(img/adminmenu/config.png); }
 #am03 a, #am03 span	{ background-image:url(img/adminmenu/pages.png); }
@@ -125,7 +125,6 @@ h4		{ font-weight:bold; }
 #am10 a, #am10 span	{ background-image:url(img/adminmenu/folder.png); }
 #am11 a, #am11 span	{ background-image:url(img/adminmenu/info.png); }
 #am12 a, #am12 span	{ background-image:url(img/adminmenu/logout.png); }
-
 
 /* 6. Tables
 -------------------------------------------------- */
