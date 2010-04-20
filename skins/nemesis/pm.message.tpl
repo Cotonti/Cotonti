@@ -74,7 +74,6 @@
 				<!-- END: HISTORY -->
 			</div>
 		</div>
-	</div>
 
 <!-- IF {PM_AJAX_MARKITUP} -->
 	<script type="text/javascript">$(document).ready(function() {$("textarea.editor").markItUp(mySettings);});</script>
