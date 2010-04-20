@@ -20,7 +20,7 @@
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_CAT -->
 				<tbody id="{FORUMS_SECTIONS_ROW_CAT_CODE}">
 				<tr>
-					<td class="odd strong" colspan="6" class="forumsection">
+					<td class="forumssection" colspan="6">
 						{FORUMS_SECTIONS_ROW_CAT_TITLE}
 					</td>
 				</tr>
@@ -33,7 +33,7 @@
 						<!-- IF {FORUMS_SECTIONS_ROW_ICON} <> "" -->
 							<img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" />
 						<!-- ELSE -->
-							{PHP.R.icon_forums}
+							{PHP.R.icon_users}
 						<!-- ENDIF -->
 					</td>
 					<td>
