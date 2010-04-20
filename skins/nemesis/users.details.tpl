@@ -28,10 +28,6 @@
 					<td>{USERS_DETAILS_TIMEZONE}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Blog}:</td>
-					<td>{USERS_DETAILS_JOURNAL}</td>
-				</tr>
-				<tr>
 					<td>{PHP.L.Website}:</td>
 					<td>{USERS_DETAILS_WEBSITE}</td>
 				</tr>
