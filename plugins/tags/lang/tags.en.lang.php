@@ -24,6 +24,7 @@ $L['tags_Keywords'] = 'Keywords';
 $L['tags_Orderby'] = 'Order results by';
 $L['tags_Query_hint'] = 'Several comma-separated tags will be considered as logical AND between them. You can also use semicolon for logical OR. AND has a priority over OR and you cannot use parentheses for logical grouping. Asterisk (*) within a tag will be regarded as a mask for &quot;any string&quot;.';
 $L['tags_Search_results'] = 'Search Results';
+$L['tags_Search_tags'] = 'Search Tags';
 $L['tags_Tag_cloud'] = 'Tag Cloud';
 $L['tags_Tag_cloud_none'] = 'No tags';
 
