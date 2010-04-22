@@ -15,7 +15,7 @@ $p = sed_import('p', 'G', 'ALP');
 $e = sed_import('e', 'G', 'ALP');
 $o = sed_import('o', 'G', 'ALP');
 $s = sed_import('s', 'G', 'ALP');
-$r = sed_import('r', 'G', 'ALP');
+$r = ($_SERVER['REQUEST_METHOD'] != 'GET') ? sed_import('r','P','ALP') : sed_import('r','G','ALP');
 $h = sed_import('h', 'G', 'ALP');
 $c1= sed_import('c1', 'G', 'ALP');
 $c2 = sed_import('c2', 'G', 'ALP');

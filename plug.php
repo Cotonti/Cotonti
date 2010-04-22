@@ -15,7 +15,7 @@ define('COT_MODULE', TRUE);
 $location = 'Plugins';
 $z = 'plug';
 
-if (empty($_GET['e']) && empty($_GET['o']) && !empty($_GET['r']))
+if (empty($_GET['e']) && empty($_GET['o']) && (!empty($_GET['r']) || !empty($_POST['r'])))
 {
 	define('SED_AJAX', 1);
 }
