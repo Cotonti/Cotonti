@@ -171,29 +171,22 @@ $pagenav = sed_pagenav('admin',$extra_path, $d, $totalitems, $cfg['maxrowsperpag
 
 $field_types = array('input', 'textarea', 'select', 'checkbox', 'radio');
 
+require_once sed_incfile('forms');
+
 $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('admin.extrafields.loop');
 /* ===== */
 while ($row = sed_sql_fetchassoc($res))
 {
-	foreach ($field_types as $val)
-	{
-		$t->assign(array(
-				"ADMIN_EXTRAFIELDS_ROW_SELECT_SELECTED" => ($val == $row['field_type']) ? ' selected="selected"' : '',
-				"ADMIN_EXTRAFIELDS_ROW_SELECT_OPTION" => $val
-		));
-		$t->parse("EXTRAFIELDS.EXTRAFIELDS_ROW.EXTRAFIELDS_ROW_SELECT");
-	}
-
 	$t->assign(array(
-			"ADMIN_EXTRAFIELDS_ROW_NAME" => $row['field_name'],
-			"ADMIN_EXTRAFIELDS_ROW_DESCRIPTION" => $row['field_description'],
-			"ADMIN_EXTRAFIELDS_ROW_VARIANTS_STYLE" => ($row['field_type'] == "select" OR $row['field_type'] == "checkbox") ? 'style="display:block;' : 'style="display:none;',
-			"ADMIN_EXTRAFIELDS_ROW_VARIANTS" => $row['field_variants'],
-			"ADMIN_EXTRAFIELDS_ROW_FIELD_HTML_ENCODED" => htmlspecialchars($row['field_html']),
-			"ADMIN_EXTRAFIELDS_ROW_BIGNAME" => strtoupper($row['field_name']),
-			"ADMIN_EXTRAFIELDS_ROW_DEL_URL" => sed_url('admin', $extra_path.'&a=del&name='.$row['field_name'])
+			'ADMIN_EXTRAFIELDS_ROW_NAME' => sed_inputbox('text', 'field_name['.$row['field_name'].']', $row['field_name']),
+			'ADMIN_EXTRAFIELDS_ROW_DESCRIPTION' => sed_textarea('field_description['.$row['field_name'].']', $row['field_description'], 1, 30),
+			'ADMIN_EXTRAFIELDS_ROW_SELECT' => sed_selectbox($row['field_type'], 'field_type['.$row['field_name'].']', $field_types, $field_types, false),
+			'ADMIN_EXTRAFIELDS_ROW_VARIANTS' => sed_textarea('field_variants['.$row['field_name'].']', $row['field_variants'], 1, 60),
+			'ADMIN_EXTRAFIELDS_ROW_HTML' => sed_textarea('field_html['.$row['field_name'].']', $row['field_html'], 1, 60),
+			'ADMIN_EXTRAFIELDS_ROW_BIGNAME' => strtoupper($row['field_name']),
+			'ADMIN_EXTRAFIELDS_ROW_DEL_URL' => sed_url('admin', $extra_path.'&a=del&name='.$row['field_name'])
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -203,29 +196,25 @@ while ($row = sed_sql_fetchassoc($res))
 	}
 	/* ===== */
 
-	$t->parse("EXTRAFIELDS.EXTRAFIELDS_ROW");
+	$t->parse('MAIN.EXTRAFIELDS_ROW');
 	$ii++;
 }
 
-foreach ($field_types as $val)
-{
-	$t->assign(array(
-			"ADMIN_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION_SELECTED" => ($val == 'input') ? ' selected="selected"' : '',
-			"ADMIN_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION" => $val
-	));
-	$t->parse("EXTRAFIELDS.EXTRAFIELDS_FORM_ADD_SELECT_FIELD_TYPE");
-}
-
 $t->assign(array(
-		"ADMIN_EXTRAFIELDS_URL_FORM_EDIT" => sed_url('admin', $extra_path.'&a=upd&d='.$d),
-		"ADMIN_EXTRAFIELDS_URL_FORM_ADD" => sed_url('admin', $extra_path.'&a=add&d='.$d),
-		"ADMIN_EXTRAFIELDS_ADMINWARNINGS" => $adminwarnings,
-		"ADMIN_EXTRAFIELDS_PAGINATION_PREV" => $pagenav['prev'],
-		"ADMIN_EXTRAFIELDS_PAGNAV" => $pagenav['main'],
-		"ADMIN_EXTRAFIELDS_PAGINATION_NEXT" => $pagenav['next'],
-		"ADMIN_EXTRAFIELDS_TOTALITEMS" => $totalitems,
-		"ADMIN_EXTRAFIELDS_COUNTER_ROW" => $ii,
-		"ADMIN_EXTRAFIELDS_ODDEVEN" =>sed_build_oddeven($ii)
+		'ADMIN_EXTRAFIELDS_URL_FORM_EDIT' => sed_url('admin', $extra_path.'&a=upd&d='.$d),
+		'ADMIN_EXTRAFIELDS_NAME' => sed_inputbox('text', 'field_name', ''),
+		'ADMIN_EXTRAFIELDS_DESCRIPTION' => sed_textarea('field_description', '', 1, 30),
+		'ADMIN_EXTRAFIELDS_SELECT' => sed_selectbox('input', 'field_type', $field_types, $field_types, false),
+		'ADMIN_EXTRAFIELDS_VARIANTS' => sed_textarea('field_variants', '', 1, 60),
+		'ADMIN_EXTRAFIELDS_HTML' => sed_textarea('field_html', '', 1, 60),
+		'ADMIN_EXTRAFIELDS_URL_FORM_ADD' => sed_url('admin', $extra_path.'&a=add&d='.$d),
+		'ADMIN_EXTRAFIELDS_ADMINWARNINGS' => $adminwarnings,
+		'ADMIN_EXTRAFIELDS_PAGINATION_PREV' => $pagenav['prev'],
+		'ADMIN_EXTRAFIELDS_PAGNAV' => $pagenav['main'],
+		'ADMIN_EXTRAFIELDS_PAGINATION_NEXT' => $pagenav['next'],
+		'ADMIN_EXTRAFIELDS_TOTALITEMS' => $totalitems,
+		'ADMIN_EXTRAFIELDS_COUNTER_ROW' => $ii,
+		'ADMIN_EXTRAFIELDS_ODDEVEN' => sed_build_oddeven($ii)
 ));
 
 /* === Hook  === */
@@ -236,14 +225,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('EXTRAFIELDS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('EXTRAFIELDS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('EXTRAFIELDS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>
