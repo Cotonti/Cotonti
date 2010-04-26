@@ -1,4 +1,4 @@
-<!-- BEGIN: EXTRAFIELDS -->
+<!-- BEGIN: MAIN -->
 
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_extrafields}</h2>
@@ -19,22 +19,17 @@
 <!-- BEGIN: EXTRAFIELDS_ROW -->			
 			<tr>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
-					<input type="text" name="field_name[{ADMIN_EXTRAFIELDS_ROW_NAME}]" value="{ADMIN_EXTRAFIELDS_ROW_NAME}" />
+					{ADMIN_EXTRAFIELDS_ROW_NAME}
 					<p class="small">{PHP.L.extf_Description}</p>
-					<textarea name="field_description[{ADMIN_EXTRAFIELDS_ROW_NAME}]" rows="1" cols="30">{ADMIN_EXTRAFIELDS_ROW_DESCRIPTION}</textarea>
+					{ADMIN_EXTRAFIELDS_ROW_DESCRIPTION}
 				</td>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
-					<select name="field_type[{ADMIN_EXTRAFIELDS_ROW_NAME}]" >
-<!-- BEGIN: EXTRAFIELDS_ROW_SELECT -->
-						<option{ADMIN_EXTRAFIELDS_ROW_SELECT_SELECTED}>{ADMIN_EXTRAFIELDS_ROW_SELECT_OPTION}</option>
-<!-- END: EXTRAFIELDS_ROW_SELECT -->
-					</select>					
+					{ADMIN_EXTRAFIELDS_ROW_SELECT}
 				</td>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
-					<textarea name="field_html[{ADMIN_EXTRAFIELDS_ROW_NAME}]" rows="1" cols="60">{ADMIN_EXTRAFIELDS_ROW_FIELD_HTML_ENCODED}</textarea>
-                    <!-- <div class="variants_{ADMIN_EXTRAFIELDS_ROW_NAME}" {ADMIN_EXTRAFIELDS_ROW_VARIANTS_STYLE}> -->
+					{ADMIN_EXTRAFIELDS_ROW_HTML}
                     <p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
-					<textarea name="field_variants[{ADMIN_EXTRAFIELDS_ROW_NAME}]" rows="1" cols="60">{ADMIN_EXTRAFIELDS_ROW_VARIANTS}</textarea><br />
+					{ADMIN_EXTRAFIELDS_ROW_VARIANTS}
 				</td>
 				<td class="centerall {ADMIN_EXTRAFIELDS_ODDEVEN}">
 					
@@ -84,21 +79,17 @@
 				</tr>
 				<tr>
 					<td>
-						<input type="text" name="field_name" value="" />
+						{ADMIN_EXTRAFIELDS_NAME}
 						<p class="small">{PHP.L.extf_Description}</p>
-						<textarea name="field_description" rows="1" cols="30"></textarea>
+						{ADMIN_EXTRAFIELDS_DESCRIPTION}
 					</td>
 					<td>
-						<select name="field_type">
-<!-- BEGIN: EXTRAFIELDS_FORM_ADD_SELECT_FIELD_TYPE -->
-							<option{ADMIN_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION_SELECTED}>{ADMIN_EXTRAFIELDS_SELECT_FIELD_TYPE_OPTION}</option>
-<!-- END: EXTRAFIELDS_FORM_ADD_SELECT_FIELD_TYPE -->
-						</select>
+						{ADMIN_EXTRAFIELDS_SELECT}
 					</td>
 					<td>
-						<textarea name="field_html" rows="1" cols="40"></textarea>
+						{ADMIN_EXTRAFIELDS_HTML}
 						<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
-						<textarea name="field_variants" rows="1" cols="20"></textarea>
+						{ADMIN_EXTRAFIELDS_VARIANTS}
 					</td>
 				</tr>
 				<tr>
@@ -111,4 +102,4 @@
 		</form>
 	</div>
 
-<!-- END: EXTRAFIELDS -->
+<!-- END: MAIN -->

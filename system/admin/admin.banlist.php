@@ -84,17 +84,19 @@ $ii = 0;
 $extp = sed_getextplugins('admin.banlist.loop');
 /* ===== */
 
+require_once sed_incfile('forms');
+
 while ($row = sed_sql_fetcharray($sql))
 {
 	$t->assign(array(
-		"ADMIN_BANLIST_ID_ROW" => $row['banlist_id'],
-		"ADMIN_BANLIST_URL" => sed_url('admin', 'm=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
-		"ADMIN_BANLIST_DELURL" => sed_url('admin', 'm=banlist&a=delete&id='.$row['banlist_id'].'&'.sed_xg()),
-		"ADMIN_BANLIST_EXPIRE" => ($row['banlist_expire']>0) ? date($cfg['dateformat'],$row['banlist_expire'])." GMT" : $L['adm_neverexpire'],
-		"ADMIN_BANLIST_IP" => $row['banlist_ip'],
-		"ADMIN_BANLIST_EMAIL" => $row['banlist_email'],
-		"ADMIN_BANLIST_REASON" => $row['banlist_reason'],
-		"ADMIN_BANLIST_ODDEVEN" => sed_build_oddeven($ii)
+		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],
+		'ADMIN_BANLIST_ROW_URL' => sed_url('admin', 'm=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
+		'ADMIN_BANLIST_ROW_DELURL' => sed_url('admin', 'm=banlist&a=delete&id='.$row['banlist_id'].'&'.sed_xg()),
+		'ADMIN_BANLIST_ROW_EXPIRE' => ($row['banlist_expire'] > 0) ? date($cfg['dateformat'], $row['banlist_expire'])." GMT" : $L['adm_neverexpire'],
+		'ADMIN_BANLIST_ROW_IP' => sed_inputbox('text', 'rbanlistip', $row['banlist_ip'], 'size="18" maxlength="16"'),
+		'ADMIN_BANLIST_ROW_EMAIL' => sed_inputbox('text', 'rbanlistemail', $row['banlist_email'], 'size="10" maxlength="64"'),
+		'ADMIN_BANLIST_ROW_REASON' => sed_inputbox('text', 'rbanlistreason', $row['banlist_reason'], 'size="22" maxlength="64"'),
+		'ADMIN_BANLIST_ROW_ODDEVEN' => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -104,18 +106,27 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t->parse("BANLIST.ADMIN_BANLIST_ROW");
+	$t->parse('MAIN.ADMIN_BANLIST_ROW');
 	$ii++;
 }
 
+$time_array = array('0', '3600', '7200', '14400', '28800', '57600', '86400',
+		'172800', '345600', '604800', '1209600', '1814400', '2592000');
+$time_values = array($L['adm_neverexpire'], '1 '.$Ls['Hours']['0'], '2 '.$Ls['Hours']['0'], '4 '.$Ls['Hours']['0'], '8 '.$Ls['Hours']['0'], '16 '.$Ls['Hours']['0'], '1 '.$Ls['Days']['0'],
+		'2 '.$Ls['Days'][0], '4 '.$Ls['Days'][0], '1 '.$L['Week'], '2 '.$L['Weeks'], '3 '.$L['Weeks'], '1 '.$L['Month']);
+
 $t->assign(array(
-	"ADMIN_BANLIST_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_BANLIST_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_BANLIST_PAGNAV" => $pagenav['main'],
-	"ADMIN_BANLIST_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_BANLIST_TOTALITEMS" => $totalitems,
-	"ADMIN_BANLIST_COUNTER_ROW" => $ii,
-	"ADMIN_BANLIST_INC_URLFORMADD" => sed_url('admin', 'm=banlist&a=add')
+	'ADMIN_BANLIST_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_BANLIST_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_BANLIST_PAGNAV' => $pagenav['main'],
+	'ADMIN_BANLIST_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_BANLIST_TOTALITEMS' => $totalitems,
+	'ADMIN_BANLIST_COUNTER_ROW' => $ii,
+	'ADMIN_BANLIST_URLFORMADD' => sed_url('admin', 'm=banlist&a=add'),
+	'ADMIN_BANLIST_EXPIRE' => sed_selectbox('0', 'nexpire', $time_array, $time_values, false),
+	'ADMIN_BANLIST_IP' => sed_inputbox('text', 'nbanlistip', '', 'size="18" maxlength="16"'),
+	'ADMIN_BANLIST_EMAIL' => sed_inputbox('text', 'nbanlistemail', '', 'size="24" maxlength="64"'),
+	'ADMIN_BANLIST_REASON' => sed_inputbox('text', 'nbanlistreason', '', 'size="48" maxlength="64"')
 ));
 
 /* === Hook  === */
@@ -126,14 +137,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('BANLIST');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('BANLIST');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('BANLIST');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>
