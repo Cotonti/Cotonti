@@ -1,4 +1,4 @@
-<!-- BEGIN: BBCODE -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>BBCodes</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -20,29 +20,19 @@
 				<form action="{ADMIN_BBCODE_ROW_UPDATE_URL}" method="post">
 				<tr>
 					<td class="centerall">
-						<input type="text" name="bbc_name" value="{ADMIN_BBCODE_ROW_BBC_NAME}" /> 
-						<select name="bbc_mode">
-<!-- BEGIN: ADMIN_BBCODE_MODE_ROW -->
-							<option{ADMIN_BBCODE_ROW_MODE_ITEM_SELECTED}>{ADMIN_BBCODE_ROW_MODE_ITEM}</option>
-<!-- END: ADMIN_BBCODE_MODE_ROW -->
-						</select>
-						<input type="checkbox" name="bbc_enabled"{ADMIN_BBCODE_ROW_ENABLED} />
-						<input type="checkbox" name="bbc_container"{ADMIN_BBCODE_ROW_CONTAINER} />
+						{ADMIN_BBCODE_ROW_NAME}
+						{ADMIN_BBCODE_ROW_MODE} {ADMIN_BBCODE_ROW_ENABLED} {ADMIN_BBCODE_ROW_CONTAINER}
 					</td>
 					<td class="centerall">
-						<textarea name="bbc_pattern" rows="2" cols="20">{ADMIN_BBCODE_ROW_PATTERN}</textarea>
+						{ADMIN_BBCODE_ROW_PATTERN}
 					</td>
 					<td class="centerall">
 						<textarea name="bbc_replacement" rows="2" cols="20">{ADMIN_BBCODE_ROW_REPLACEMENT}</textarea>
 					</td>
 					<td class="centerall">
 						<span style="display:block;">{ADMIN_BBCODE_ROW_PLUG}</span>
-						<select name="bbc_priority">
-<!-- BEGIN: ADMIN_BBCODE_PRIO_ROW -->
-							<option{ADMIN_BBCODE_ROW_PRIO_ITEM_SELECTED}>{ADMIN_BBCODE_ROW_PRIO_ITEM}</option>
-<!-- END: ADMIN_BBCODE_PRIO_ROW -->
-						</select>
-						<input type="checkbox" name="bbc_postrender"{ADMIN_BBCODE_ROW_POSTRENDER} />
+						{ADMIN_BBCODE_ROW_PRIO}
+						{ADMIN_BBCODE_ROW_POSTRENDER}
 					</td>
 					<td class="centerall">
 						<input type="submit" value="{PHP.L.Update}" /><br />
@@ -65,23 +55,16 @@
 				<form action="{ADMIN_BBCODE_FORM_ACTION}" method="post">
 				<tr>
 					<td class="centerall">
-						<input type="text" name="bbc_name" value="" /><br />
-						<select name="bbc_mode">
-<!-- BEGIN: ADMIN_BBCODE_MODE -->
-							<option{ADMIN_BBCODE_MODE_ITEM_SELECTED}>{ADMIN_BBCODE_MODE_ITEM}</option>
-<!-- END: ADMIN_BBCODE_MODE -->
-						</select>
+						{ADMIN_BBCODE_NAME}<br />
+						{ADMIN_BBCODE_MODE}
 					</td>
 					<td class="centerall">
-						<input type="text" name="bbc_pattern" value="" /><br />
-						<select name="bbc_priority">
-<!-- BEGIN: ADMIN_BBCODE_PRIO -->
-							<option{ADMIN_BBCODE_PRIO_ITEM_SELECTED}>{ADMIN_BBCODE_PRIO_ITEM}</option>
-<!-- END: ADMIN_BBCODE_PRIO -->
-						</select> &nbsp; <input type="checkbox" name="bbc_container" checked="checked" />
+						{ADMIN_BBCODE_PATTERN}<br />
+						{ADMIN_BBCODE_PRIO} &nbsp;
+						{ADMIN_BBCODE_CONTAINER}
 					</td>
-					<td class="centerall"><textarea name="bbc_replacement" rows="2" cols="20"></textarea></td>
-					<td class="centerall"><input type="checkbox" name="bbc_postrender" /></td>
+					<td class="centerall">{ADMIN_BBCODE_REPLACEMENT}</td>
+					<td class="centerall">{ADMIN_BBCODE_POSTRENDER}</td>
 					<td class="centerall"><input type="submit" value="{PHP.L.Add}" /></td>
 				</tr>
 				<tr>
@@ -90,4 +73,4 @@
 				</form>
 			</table>
 	</div>
-<!-- END: BBCODE -->
+<!-- END: MAIN -->

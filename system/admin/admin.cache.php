@@ -71,12 +71,12 @@ while ($row = sed_sql_fetcharray($sql))
 	$row['size'] = mb_strlen($row['c_value']);
 	$cachesize += $row['size'];
 	$t->assign(array(
-		"ADMIN_CACHE_ITEM_DEL_URL" => sed_url('admin', 'm=cache&a=delete&name='.$row['c_name'].'&'.sed_xg()),
-		"ADMIN_CACHE_ITEM_NAME" => $row['c_name'],
-		"ADMIN_CACHE_EXPIRE" => ($row['c_expire'] - $sys['now']),
-		"ADMIN_CACHE_SIZE" => $row['size'],
-		"ADMIN_CACHE_VALUE" => ($a == 'showall') ? $row['c_value'] : sed_cutstring($row['c_value'], 80),
-		"ADMIN_CACHE_ROW_ODDEVEN" => sed_build_oddeven($ii)
+		'ADMIN_CACHE_ITEM_DEL_URL' => sed_url('admin', 'm=cache&a=delete&name='.$row['c_name'].'&'.sed_xg()),
+		'ADMIN_CACHE_ITEM_NAME' => $row['c_name'],
+		'ADMIN_CACHE_EXPIRE' => ($row['c_expire'] - $sys['now']),
+		'ADMIN_CACHE_SIZE' => $row['size'],
+		'ADMIN_CACHE_VALUE' => ($a == 'showall') ? $row['c_value'] : sed_cutstring($row['c_value'], 80),
+		'ADMIN_CACHE_ROW_ODDEVEN' => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -86,16 +86,16 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t->parse("CACHE.ADMIN_CACHE_ROW");
+	$t->parse('MAIN.ADMIN_CACHE_ROW');
 	$ii++;
 }
 
 $t->assign(array(
-	"ADMIN_CACHE_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_CACHE_URL_REFRESH" => sed_url('admin', 'm=cache'),
-	"ADMIN_CACHE_URL_PURGE" => sed_url('admin', 'm=cache&a=purge&'.sed_xg()),
-	"ADMIN_CACHE_URL_SHOWALL" => sed_url('admin', 'm=cache&a=showall'),
-	"ADMIN_CACHE_CACHESIZE" => $cachesize
+	'ADMIN_CACHE_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_CACHE_URL_REFRESH' => sed_url('admin', 'm=cache'),
+	'ADMIN_CACHE_URL_PURGE' => sed_url('admin', 'm=cache&a=purge&'.sed_xg()),
+	'ADMIN_CACHE_URL_SHOWALL' => sed_url('admin', 'm=cache&a=showall'),
+	'ADMIN_CACHE_CACHESIZE' => $cachesize
 ));
 
 /* === Hook  === */
@@ -106,14 +106,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('CACHE');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('CACHE');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('CACHE');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

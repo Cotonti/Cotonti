@@ -95,39 +95,28 @@ $pagenav = sed_pagenav('admin', 'm=bbcode', $d, $totalitems, $cfg['maxrowsperpag
 $bbc_modes = array('str', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
 
+require_once sed_incfile('forms');
+
 $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('admin.banlist.loop');
 /* ===== */
 while ($row = sed_sql_fetchassoc($res))
 {
-	foreach ($bbc_modes as $val)
-	{
-		$t->assign(array(
-			"ADMIN_BBCODE_ROW_MODE_ITEM_SELECTED" => ($val == $row['bbc_mode']) ? ' selected="selected"' : '',
-			"ADMIN_BBCODE_ROW_MODE_ITEM" => $val
-		));
-		$t->parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_MODE_ROW");
-	}
-	for ($i = 1; $i < 256; $i++)
-	{
-		$t->assign(array(
-			"ADMIN_BBCODE_ROW_PRIO_ITEM_SELECTED" => ($i == $row['bbc_priority']) ? ' selected="selected"' : '',
-			"ADMIN_BBCODE_ROW_PRIO_ITEM" => $i
-		));
-		$t->parse("BBCODE.ADMIN_BBCODE_ROW.ADMIN_BBCODE_PRIO_ROW");
-	}
+
 	$t->assign(array(
-		"ADMIN_BBCODE_ROW_BBC_NAME" => $row['bbc_name'],
-		"ADMIN_BBCODE_ROW_ENABLED" => $row['bbc_enabled'] ? ' checked="checked"' : '',
-		"ADMIN_BBCODE_ROW_CONTAINER" => $row['bbc_container'] ? ' checked="checked"' : '',
-		"ADMIN_BBCODE_ROW_PATTERN" => $row['bbc_pattern'],
-		"ADMIN_BBCODE_ROW_REPLACEMENT" => $row['bbc_replacement'],
-		"ADMIN_BBCODE_ROW_PLUG" => $row['bbc_plug'],
-		"ADMIN_BBCODE_ROW_POSTRENDER" => $row['bbc_postrender'] ? ' checked="checked"' : '',
-		"ADMIN_BBCODE_ROW_UPDATE_URL" => sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id'].'&d='.$d),
-		"ADMIN_BBCODE_ROW_DELETE_URL" => sed_url('admin', 'm=bbcode&a=del&id='.$row['bbc_id']),
-		"ADMIN_BBCODE_ROW_ODDEVEN" => sed_build_oddeven($ii)
+		'ADMIN_BBCODE_ROW_NAME' => sed_inputbox('text', 'bbc_name', $row['bbc_name']),
+		'ADMIN_BBCODE_ROW_ENABLED' => sed_checkbox($row['bbc_enabled'], 'bbc_enabled'),
+		'ADMIN_BBCODE_ROW_CONTAINER' => sed_checkbox($row['bbc_container'], 'bbc_container'),
+		'ADMIN_BBCODE_ROW_PATTERN' => sed_textarea('bbc_pattern', $row['bbc_pattern'], 2, 20),
+		'ADMIN_BBCODE_ROW_REPLACEMENT' => sed_textarea('bbc_replacement', $row['bbc_replacement'], 2, 20),
+		'ADMIN_BBCODE_ROW_PLUG' => $row['bbc_plug'],
+		'ADMIN_BBCODE_ROW_MODE' => sed_selectbox($row['bbc_mode'], 'bbc_mode', $bbc_modes, $bbc_modes, false),
+		'ADMIN_BBCODE_ROW_PRIO' => sed_selectbox($row['bbc_priority'], 'bbc_priority', range(1, 256), range(1, 256), false),
+		'ADMIN_BBCODE_ROW_POSTRENDER' => sed_checkbox($row['bbc_postrender'], 'bbc_postrender'),
+		'ADMIN_BBCODE_ROW_UPDATE_URL' => sed_url('admin', 'm=bbcode&a=upd&id='.$row['bbc_id'].'&d='.$d),
+		'ADMIN_BBCODE_ROW_DELETE_URL' => sed_url('admin', 'm=bbcode&a=del&id='.$row['bbc_id']),
+		'ADMIN_BBCODE_ROW_ODDEVEN' => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -137,37 +126,28 @@ while ($row = sed_sql_fetchassoc($res))
 	}
 	/* ===== */
 
-	$t->parse("BBCODE.ADMIN_BBCODE_ROW");
+	$t->parse('MAIN.ADMIN_BBCODE_ROW');
 	$ii++;
 }
 sed_sql_freeresult($res);
 
-foreach ($bbc_modes as $val)
-{
-	$t->assign(array(
-		"ADMIN_BBCODE_MODE_ITEM_SELECTED" => ($val == 'pcre') ? ' selected="selected"' : '',
-		"ADMIN_BBCODE_MODE_ITEM" => $val
-	));
-	$t->parse("BBCODE.ADMIN_BBCODE_MODE");
-}
-for ($i = 1; $i < 256; $i++)
-{
-	$t->assign(array(
-		"ADMIN_BBCODE_PRIO_ITEM_SELECTED" => ($i == 128) ? ' selected="selected"' : '',
-		"ADMIN_BBCODE_PRIO_ITEM" => $i
-	));
-	$t->parse("BBCODE.ADMIN_BBCODE_PRIO");
-}
-
 $t->assign(array(
-	"ADMIN_BBCODE_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_BBCODE_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_BBCODE_PAGNAV" => $pagenav['main'],
-	"ADMIN_BBCODE_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_BBCODE_TOTALITEMS" => $totalitems,
-	"ADMIN_BBCODE_COUNTER_ROW" => $ii,
-	"ADMIN_BBCODE_FORM_ACTION" => sed_url('admin', 'm=bbcode&a=add'),
-	"ADMIN_BBCODE_URL_CLEAR_CACHE" => sed_url('admin', 'm=bbcode&a=clearcache&d='.$d)
+	'ADMIN_BBCODE_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_BBCODE_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_BBCODE_PAGNAV' => $pagenav['main'],
+	'ADMIN_BBCODE_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_BBCODE_TOTALITEMS' => $totalitems,
+	'ADMIN_BBCODE_COUNTER_ROW' => $ii,
+	'ADMIN_BBCODE_FORM_ACTION' => sed_url('admin', 'm=bbcode&a=add'),
+	'ADMIN_BBCODE_NAME' => sed_inputbox('text', 'bbc_name', ''),
+	'ADMIN_BBCODE_ENABLED' => sed_checkbox('', 'bbc_enabled'),
+	'ADMIN_BBCODE_CONTAINER' => sed_checkbox(1, 'bbc_container'),
+	'ADMIN_BBCODE_PATTERN' => sed_textarea('bbc_pattern', '', 2, 20),
+	'ADMIN_BBCODE_REPLACEMENT' => sed_textarea('bbc_replacement', '', 2, 20),
+	'ADMIN_BBCODE_MODE' => sed_selectbox('pcre', 'bbc_mode', $bbc_modes, $bbc_modes, false),
+	'ADMIN_BBCODE_PRIO' => sed_selectbox('128', 'bbc_priority', range(1, 256), range(1, 256), false),
+	'ADMIN_BBCODE_POSTRENDER' => sed_checkbox('0', 'bbc_postrender'),
+	'ADMIN_BBCODE_URL_CLEAR_CACHE' => sed_url('admin', 'm=bbcode&a=clearcache&d='.$d)
 ));
 
 /* === Hook  === */
@@ -178,14 +158,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('BBCODE');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('BBCODE');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('BBCODE');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

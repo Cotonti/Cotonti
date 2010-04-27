@@ -26,5 +26,5 @@ $L_idx['vote_opt'] = 'You did not pick an option';
 
 $L['cfg_maxpolls'] = array('Number of polls displayed');
 $L['cfg_mode'] = array('Poll display mode', '&quot;Recent polls&quot; displays last poll(s)<br />&quot;Random polls&quot; displays random poll(s)');
-
+$L['cfg_mode_params'] = array('Recent polls', 'Random polls');
 ?>

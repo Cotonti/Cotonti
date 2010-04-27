@@ -1,4 +1,4 @@
-<!-- BEGIN: CACHE -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_internalcache}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -47,4 +47,4 @@
 				</tr>
 			</table>
 	</div>
-<!-- END: CACHE -->
+<!-- END: MAIN -->

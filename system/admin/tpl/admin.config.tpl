@@ -1,4 +1,4 @@
-<!-- BEGIN: CONFIG -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Configuration}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -19,43 +19,7 @@
 			<tr>
 				<td>{ADMIN_CONFIG_ROW_CONFIG_TITLE}:</td>
 				<td>
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_1 -->
-					<input type="text" class="text" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="{ADMIN_CONFIG_ROW_CONFIG_VALUE}" size="32" maxlength="255" />
-<!-- END: ADMIN_CONFIG_ROW_TYPE_1 -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_2 -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_2_SELECT -->
-					<select name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" size="1">
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_2_OTP -->
-						<option value="{ADMIN_CONFIG_ROW_CONFIG_OPTION_VALUE}"{ADMIN_CONFIG_ROW_CONFIG_OPTION_SELECTED}>{ADMIN_CONFIG_ROW_CONFIG_OPTION_VALUE}</option>
-<!-- END: ADMIN_CONFIG_ROW_TYPE_2_OTP -->
-					</select>
-<!-- END: ADMIN_CONFIG_ROW_TYPE_2_SELECT -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_2_SELECTBOXLEVELS -->
-					{ADMIN_CONFIG_ROW_CONFIG_OPTION}
-<!-- END: ADMIN_CONFIG_ROW_TYPE_2_SELECTBOXLEVELS -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_2_TEXT -->
-					<input type="text" class="text" name="{ADMIN_CONFIG_ROW_CONFIG_OPTION_NAME}" value="{ADMIN_CONFIG_ROW_CONFIG_OPTION_VALUE}" size="8" maxlength="11" />
-<!-- END: ADMIN_CONFIG_ROW_TYPE_2_TEXT -->
-<!-- END: ADMIN_CONFIG_ROW_TYPE_2 -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_3 -->
-<!-- IF {PHP.config_value} == 1 -->
-					<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="1" checked="checked" />{PHP.L.Yes}&nbsp;
-					<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="0" />{PHP.L.No}
-<!-- ELSE -->
-					<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="1" />{PHP.L.Yes}&nbsp;
-					<input type="radio" class="radio" name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" value="0" checked="checked" />{PHP.L.No}
-<!-- ENDIF -->
-<!-- END: ADMIN_CONFIG_ROW_TYPE_3 -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_4 -->
-					<select name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" size="1">
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_4_OTP -->
-						<option value="{ADMIN_CONFIG_ROW_CONFIG_OPTION_VALUE}"{ADMIN_CONFIG_ROW_CONFIG_OPTION_SELECTED}>{ADMIN_CONFIG_ROW_CONFIG_OPTION_NAME}</option>
-<!-- END: ADMIN_CONFIG_ROW_TYPE_4_OTP -->
-					</select>
-<!-- END: ADMIN_CONFIG_ROW_TYPE_4 -->
-<!-- BEGIN: ADMIN_CONFIG_ROW_TYPE_5 -->
-					<textarea name="{ADMIN_CONFIG_ROW_CONFIG_NAME}" rows="8" cols="56">{ADMIN_CONFIG_ROW_CONFIG_VALUE}</textarea>
-<!-- END: ADMIN_CONFIG_ROW_TYPE_5 -->
+					{ADMIN_CONFIG_ROW_CONFIG}
 <!-- IF {PHP.if_config_more} -->
 					<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
 <!-- ENDIF -->
@@ -101,4 +65,4 @@
 		</table>
 <!-- END: DEFAULT -->
 	</div>
-<!-- END: CONFIG -->
+<!-- END: MAIN -->
