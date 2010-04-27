@@ -118,7 +118,7 @@ function sed_build_icq($text)
 	$text = (int) $text;
 	if($text > 0)
 	{
-		return $text.' <a href="http://www.icq.com/'.$text.'#pager"><img src="http://web.icq.com/whitepages/online?icq='.$text.'&amp;img=5" alt="" /></a>';
+		return '<a href="http://www.icq.com/people/'.$text.'/">'.$text.' <img src="http://status.icq.com/online.gif?icq='.$text.'&amp;img=5" alt="" /></a>';
 	}
 	return '';
 }
