@@ -1,4 +1,4 @@
-<!-- BEGIN: DISKCACHE -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>Disk Cache</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -33,4 +33,4 @@
 			</tr>
 			</table>
 	</div>
-<!-- END: DISKCACHE -->
+<!-- END: MAIN -->

@@ -68,7 +68,7 @@ foreach ($row as $i => $x)
 	}
 	/* ===== */
 
-	$t->parse('DISKCACHE.ADMIN_DISKCACHE_ROW');
+	$t->parse('MAIN.ADMIN_DISKCACHE_ROW');
 	$ii++;
 }
 
@@ -88,14 +88,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('DISKCACHE');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('DISKCACHE');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('DISKCACHE');
+	$adminmain = $t->text('MAIN');
 }
 
 /**
