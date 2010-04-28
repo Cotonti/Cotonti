@@ -104,12 +104,12 @@ switch($n)
 			$config_owner = $row['config_owner'];
 			$config_cat = $row['config_cat'];
 			$config_name = $row['config_name'];
-			$config_value = htmlspecialchars($row['config_value']);
+			$config_value = $row['config_value'];
 			$config_default = $row['config_default'];
 			$config_type = $row['config_type'];
-			$config_title = $L['cfg_'.$row['config_name']][0];
+			$config_title = $L['cfg_'.$config_name][0];
 			$config_text = htmlspecialchars($row['config_text']);
-			$config_more = $L['cfg_'.$row['config_name']][1];
+			$config_more = $L['cfg_'.$config_name][1];
 			$if_config_more = (!empty($config_more)) ? true : false;
 					
 			if ($config_type == 1)
@@ -133,7 +133,12 @@ switch($n)
 			{
 				$varname = "sed_select_".$config_name;
 				reset($$varname);
-				$config_input = sed_selectbox($config_value, $config_name, array_keys($$varname), array_values($$varname), false);
+				$vararray = array();
+				foreach ($$varname as $key => $value)
+				{
+					$vararray[$value[1]] = $value[0];
+				}
+				$config_input = sed_selectbox($config_value, $config_name, array_keys($vararray), array_values($vararray), false);
 			}
 			else
 			{
