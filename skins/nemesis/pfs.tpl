@@ -31,7 +31,7 @@ function picture(url,sx,sy) {
 <body>
 <!-- END: STANDALONE_HEADER -->
 
-		<div class="block">
+		<div class="block margin10">
 			<h2 class="pfs">{PFS_TITLE} {PFS_PATH}</h2>
 			<!-- IF {PFS_SUBTITLE} --><p class="small">{PFS_SUBTITLE}</p><!-- ENDIF -->
 			<!-- BEGIN: PFS_ERRORS -->
@@ -180,8 +180,8 @@ function picture(url,sx,sy) {
 		
 		<h3>{PHP.L.pfs_extallowed}</h3>
 		<!-- BEGIN: ALLOWED_ROW -->
-		<div style="width:20%; float:left;">
-			<span style="vertical-align:-14px;">{ALLOWED_ROW_ICON}</span> {ALLOWED_ROW_EXT} {ALLOWED_ROW_DESC}
+		<div class="floatleft small width20">
+			<span style="vertical-align:-15px;">{ALLOWED_ROW_ICON}</span> {ALLOWED_ROW_EXT} {ALLOWED_ROW_DESC}
 		</div>
 		<!-- END: ALLOWED_ROW -->
 		<br class="clear" />
