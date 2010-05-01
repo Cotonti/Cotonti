@@ -60,8 +60,8 @@
 				<table class="cells">
 					<!-- BEGIN: PM_ROW -->
 					<tr>
-						<td class="{PM_ROW_ODDEVEN}" style="width:126px;">{PM_ROW_USER_NAME}<br />{PM_ROW_DATE}</td>
-						<td class="{PM_ROW_ODDEVEN}">{PM_ROW_TEXT}</td>
+						<td class="{PM_ROW_ODDEVEN} width15">{PM_ROW_USER_NAME}<br />{PM_ROW_DATE}</td>
+						<td class="{PM_ROW_ODDEVEN} width85">{PM_ROW_TEXT}</td>
 					</tr>
 					<!-- END: PM_ROW -->
 					<!-- BEGIN: PM_ROW_EMPTY -->
@@ -70,7 +70,7 @@
 					</tr>
 					<!-- END: PM_ROW_EMPTY -->
 				</table>
-				<p class="paging">{PM_PAGEPREV}{PM_PAGES}{PM_PAGENEXT}</p>
+				<!-- IF {PM_PAGES} --><p class="paging">{PM_PAGEPREV}{PM_PAGES}{PM_PAGENEXT}</p><!-- ENDIF -->
 				<!-- END: HISTORY -->
 			</div>
 		</div>
