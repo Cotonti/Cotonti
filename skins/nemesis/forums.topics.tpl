@@ -14,7 +14,7 @@
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION -->
 				<tr>
 					<td class="centerall {FORUMS_SECTIONS_ROW_ODDEVEN}">
-						<img src="{FORUMS_SECTIONS_ROW_NEWPOSTS}" alt="" />
+						{PHP.R.icon_subfolder}
 					</td>
 					<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}">
 						<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>

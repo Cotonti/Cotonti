@@ -27,4 +27,6 @@
 	<hr class="clear divider" />
 <!-- END: PAGE_ROW -->
 
+	<p class="paging">{PAGE_PAGEPREV}{PAGE_PAGENAV}{PAGE_PAGENEXT}</p>
+
 <!-- END: NEWS -->

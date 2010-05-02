@@ -39,6 +39,7 @@ $R['icon_help'] = '<img class="icon" src="images/icons/default/help.png" alt="" 
 $R['icon_info'] = '<img class="icon" src="images/icons/default/info.png" alt="" />';
 $R['icon_jumpto'] = '<img class="icon" src="images/icons/default/arrow-jump.png" alt="" />';
 $R['icon_lock'] = '<img class="icon" src="images/icons/default/lock.png" alt="" />';
+$R['icon_message'] = '<img class="icon" src="images/icons/default/message.png" alt="" />';
 $R['icon_news'] = '<img class="icon" src="images/icons/default/news.png" alt="" />';
 $R['icon_online'] = '<img class="icon" src="images/icons/default/online.png" alt="" />';
 $R['icon_page'] = '<img class="icon" src="images/icons/default/page.png" alt="" />';
