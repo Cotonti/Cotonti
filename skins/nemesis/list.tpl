@@ -5,8 +5,8 @@
 				<h2 class="folder">{LIST_CATTITLE}</h2>
 				<!-- BEGIN: LIST_ROW -->
 					<h3><a href="{LIST_ROW_URL}">{LIST_ROW_TITLE}</a></h3>
-					<!-- IF {LIST_ROW_DESC} --><p class="small marginbottom10">{LIST_ROW_DESC}<!-- ENDIF -->
-					<!-- IF {PHP.usr.isadmin} --><p class="small">{LIST_ROW_ADMIN} ({LIST_ROW_COUNT})</p><!-- ENDIF --></p>
+					<!-- IF {LIST_ROW_DESC} --><p class="small marginbottom10">{LIST_ROW_DESC}</p><!-- ENDIF -->
+					<!-- IF {PHP.usr.isadmin} --><p class="small marginbottom10">{LIST_ROW_ADMIN} ({LIST_ROW_COUNT})</p><!-- ENDIF -->
 					<hr />
 				<!-- END: LIST_ROW -->
 			</div>

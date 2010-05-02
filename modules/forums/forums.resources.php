@@ -4,28 +4,23 @@
  * Forums Icons
  */
 
-$R['frm_icon_posts'] = 
-	'<img class="icon" src="images/icons/default/posts.png" alt="" />';
-$R['frm_icon_posts_hot'] = 
-	'<img class="icon" src="images/icons/default/posts_hot.png" alt="" />';
-$R['frm_icon_posts_locked'] = 
-	'<img class="icon" src="images/icons/default/posts_locked.png" alt="" />';
-$R['frm_icon_posts_moved'] = 
-	'<img class="icon" src="images/icons/default/posts_moved.png" alt="" />';
-$R['frm_icon_posts_new'] = 
-	'<img class="icon" src="images/icons/default/posts_new.png" alt="" />';
-$R['frm_icon_posts_new_hot'] = 
-	'<img class="icon" src="images/icons/default/posts_new_hot.png" alt="" />';
-$R['frm_icon_posts_new_locked'] = 
-	'<img class="icon" src="images/icons/default/posts_new_locked.png" alt="" />';
-$R['frm_icon_posts_new_sticky'] = 
-	'<img class="icon" src="images/icons/default/posts_new_sticky.png" alt="" />';
-$R['frm_icon_posts_new_sticky_locked'] = 
-	'<img class="icon" src="images/icons/default/posts_new_sticky_locked.png" alt="" />';
-$R['frm_icon_posts_sticky'] = 
-	'<img class="icon" src="images/icons/default/posts_sticky.png" alt="" />';
-$R['frm_icon_posts_sticky_locked'] = 
-	'<img class="icon" src="images/icons/default/posts_sticky_locked.png" alt="" />';
+$R['frm_icon_posts'] = '<img class="icon" src="images/icons/default/posts.png" alt="" />';
+$R['frm_icon_posts_hot'] = '<img class="icon" src="images/icons/default/posts_hot.png" alt="" />';
+$R['frm_icon_posts_locked'] = '<img class="icon" src="images/icons/default/posts_locked.png" alt="" />';
+$R['frm_icon_posts_moved'] = '<img class="icon" src="images/icons/default/posts_moved.png" alt="" />';
+$R['frm_icon_posts_new'] = '<img class="icon" src="images/icons/default/posts_new.png" alt="" />';
+$R['frm_icon_posts_new_hot'] = '<img class="icon" src="images/icons/default/posts_new_hot.png" alt="" />';
+$R['frm_icon_posts_new_locked'] = '<img class="icon" src="images/icons/default/posts_new_locked.png" alt="" />';
+$R['frm_icon_posts_new_sticky'] = '<img class="icon" src="images/icons/default/posts_new_sticky.png" alt="" />';
+$R['frm_icon_posts_new_sticky_locked'] = '<img class="icon" src="images/icons/default/posts_new_sticky_locked.png" alt="" />';
+$R['frm_icon_posts_sticky'] = '<img class="icon" src="images/icons/default/posts_sticky.png" alt="" />';
+$R['frm_icon_posts_sticky_locked'] = '<img class="icon" src="images/icons/default/posts_sticky_locked.png" alt="" />';
+
+/**
+ * Subforum Icon
+ */
+
+$R['frm_icon_subforum'] = '<img class="icon" src="modules/forums/img/subforum.png" alt="{PHP.L.Subforum}" />';
 
 /**
  * Forums Activity

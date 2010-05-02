@@ -40,8 +40,9 @@ h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-
 .folder		{ background-image:url(/images/icons/default/folder.png); }
 .forums		{ background-image:url(/images/icons/default/forums.png); }
 .info		{ background-image:url(/images/icons/default/info.png); }
-.news		{ background-image:url(/images/icons/default//news.png); }
-.online		{ background-image:url(/images/icons/default//online.png); }
+.message	{ background-image:url(/images/icons/default/message.png); }
+.news		{ background-image:url(/images/icons/default/news.png); }
+.online		{ background-image:url(/images/icons/default/online.png); }
 .page		{ background-image:url(/images/icons/default/page.png); }
 .pfs		{ background-image:url(/images/icons/default/pfs.png); }
 .plugin		{ background-image:url(/images/icons/default/plugin.png); }
@@ -91,6 +92,7 @@ table.fico td img	{ margin-right:10px; vertical-align:middle; }
 form					{ }
 input, select, textarea	{ font:normal 11px Georgia; }
 input, select			{ padding:2px; }
+label input			{ vertical-align:middle; }
 
 /* 6. Misc
 -------------------------------------------------- */
@@ -220,6 +222,7 @@ input, select			{ padding:2px; }
 .b1 img			{ vertical-align:-5px; }
 .userstatus		{ margin-top:2px; float:right; }
 .forumssection	{ font-weight:bold; background:#eee; }
+.subforums img	{ vertical-align:-3px; margin-right:5px; }
 #newf			{ margin:10px 0; }
 #newf li			{ margin-right:10px; display:inline; }
 
