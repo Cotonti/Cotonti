@@ -14,7 +14,7 @@ Order=10
  * Comedit plug
  *
  * @package Cotonti
- * @version 0.6.6
+ * @version 0.6.8
  * @author Asmo (Edited by motor2hg), Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
@@ -65,13 +65,46 @@ if($a == 'update')
 		$sql = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($comtext)."',
 			com_html = '".sed_sql_prep($comhtml)."' WHERE com_id=$cid AND com_code='$pid'");
 
+		$pid_com_type = mb_substr($pid, 0, 1);
+		$pid_com_value = mb_substr($pid, 1);
+
+		switch($pid_com_type)
+		{
+			case 'p':
+				$com_url = sed_url('page', "id=".$pid_com_value."&comments=1", "#c".$cid, true);
+			break;
+
+			case 'j':
+				$com_url = sed_url('plug', 'e=weblogs&m=page&id='.$pid_com_value, '#c'.$cid, true);
+			break;
+
+			case 'g':
+				$com_url = sed_url('plug', 'e=gal&pic='.$pid_com_value, '#c'.$cid, true);
+			break;
+
+			case 'u':
+				$com_url = sed_url('users', 'm=details&id='.$pid_com_value, '#c'.$cid, true);
+			break;
+
+			case 'v':
+				$com_url = sed_url('polls', 'id='.$pid_com_value."&comments=1", '#c'.$cid, true);
+			break;
+
+			case 's':
+				$com_url = sed_url('plug', 'e=e_shop&sh=product&productID='.$pid_com_value, '#c'.$cid, true);
+			break;
+
+			default:
+				$com_url = '';
+			break;
+		}
+
 		if($cfg['plugin']['comedit']['mail'])
 		{
 			$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
 			$email_title = $L['plu_comlive'].$cfg['main_url'];
-			$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive3'];
-			$email_body .= $cfg['mainurl'].'/'.sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid)."\n\n";
+			$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive3'].$cfg['mainurl'].'/'.$com_url."\n\n";
 
 			while($adm = sed_sql_fetcharray($sql2))
 			{
@@ -81,7 +114,7 @@ if($a == 'update')
 
 		$com_grp = ($usr['isadmin']) ? "adm" : "usr";
 		sed_log("Edited comment #".$cid, $com_grp);
-		header('Location: ' . SED_ABSOLUTE_URL . sed_url('page', 'id='.substr($pid, 1).'&comments=1', '#c'.$cid, true));
+		header('Location: ' . SED_ABSOLUTE_URL . $com_url);
 		exit;
 	}
 }
