@@ -4,10 +4,10 @@
 Code=seditio
 Name=Seditio Compatibility
 Description=Seditio Compatibility Plugin
-Version=0.0.4
-Date=2009-jan-02
+Version=0.7.0
+Date=2010-jan-03
 Author=Trustmaster, Cotonti Team
-Copyright=Partial copyright (c) 2009 Cotonti Team
+Copyright=Partial copyright (c) Cotonti Team 2009-2010
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -21,9 +21,9 @@ Lock_members=12345A
  * Seditio Compatibility: setup
  *
  * @package Cotonti
- * @version 0.0.4
+ * @version 0.7.0
  * @author Trustmaster, Cotonti Team
- * @copyright Copyright (c) 2009 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
  */
 
@@ -114,4 +114,5 @@ elseif ($action == 'uninstall')
 	// Remove plugin bbcodes
 	sed_bbcode_remove(0, 'seditio');
 }
+
 ?>

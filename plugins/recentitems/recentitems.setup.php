@@ -5,9 +5,9 @@ Code=recentitems
 Name=Recent items
 Description=Recent pages, topics in forums, users, comments
 Version=0.7.0
-Date=2009-jan-03
+Date=2010-jan-03
 Author=esclkm & Cotonti Team
-Copyright=2008-2009 Cotonti Team
+Copyright=Partial copyright (c) Cotonti Team 2008-2010
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -39,7 +39,7 @@ rightscan=23:radio::1:Enable prescanning category rights
  * @package Cotonti
  * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

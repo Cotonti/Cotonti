@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /**
  * English Language File for SymiSun-03 Skin
  *
@@ -14,7 +14,7 @@ defined('SED_CODE') or die('Wrong URL.');
 /**
  * misc
  */
- 
+
 $L['pagenav_first'] = 'First';	// New in N-0.0.2
 $L['pagenav_prev'] = '&laquo; Previous';	// New in N-0.0.2
 $L['pagenav_next'] = 'Next &raquo;';	// New in N-0.0.2
@@ -104,7 +104,7 @@ $skinlang['header']['rss'] = 'RSS Feed'; // SymiSun-03 specific
 $skinlang['footer']['top'] = 'Top Of Page'; // SymiSun-03 specific
 $skinlang['footer']['design'] = 'Web Design by <a href="http://symisun.com" title="We digitalize your ambitions">SymiSun<span class="orange">*</span></a>'; // SymiSun-03 specific
 $skinlang['footer']['valid'] = '
-<a href="http://validator.w3.org/check?uri=referer" class="valid" title="Valid XHTML 1.0 Strict">valid XHTML</a> &nbsp; 
+<a href="http://validator.w3.org/check?uri=referer" class="valid" title="Valid XHTML 1.0 Strict">valid XHTML</a> &nbsp;
 <a href="http://jigsaw.w3.org/css-validator/check/referer" class="valid" title="Valid CSS 2.1">valid CSS</a>'; // SymiSun-03 specific
 $skinlang['footer']['advanced'] = 'advanced'; // SymiSun-03 specific
 

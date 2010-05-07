@@ -41,9 +41,9 @@ $visituser = 0;
 while ($row = sed_sql_fetcharray($sql1))
 {
 	$visituser++;
-    if($usr['isadmin'])
-    {
-    	$sublock = (!empty($row['online_subloc'])) ? ' '.$cfg['separator'].' '.htmlspecialchars($row['online_subloc']) : '';
+	if ($usr['isadmin'])
+	{
+		$sublock = (!empty($row['online_subloc'])) ? ' '.$cfg['separator'].' '.htmlspecialchars($row['online_subloc']) : '';
 		$t->assign(array(
 			'WHOSONlINE_ROW1_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
 			'WHOSONlINE_ROW1_USER_ONLINE_IP'=> sed_rc_link(sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.sed_xg()), $row['online_ip'])
@@ -53,7 +53,7 @@ while ($row = sed_sql_fetcharray($sql1))
 
 	if ($showavatars)
 	{
-		$user_avatar = '<a href="'.sed_url('users', 'm=details&id='.$row['online_userid']).'">';
+		$user_avatar = '<a href="'.sed_url('users', 'm=details&id='.$row['online_userid'].'&u='.htmlspecialchars($row['online_name'])).'">';
 		$user_avatar .= (!empty($row['user_avatar'])) ? '<img src="'.$row['user_avatar'].'" width="'.$miniavatar_x.'" height="'.$miniavatar_y.'" alt="" /></a>' : sed_rc('img_pixel', array('x' => $miniavatar_x, 'y' => $miniavatar_y)) . '</a>';
 	}
 
@@ -71,9 +71,9 @@ while ($row = sed_sql_fetcharray($sql2))
 	$visitornum++;
 	$online_location = $L[$row['online_location']];//This line is needed?
 
-    if($usr['isadmin'])
-    {
-    	$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator'].' '.htmlspecialchars($row['online_subloc']) : '';
+	if($usr['isadmin'])
+	{
+		$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator'].' '.htmlspecialchars($row['online_subloc']) : '';
 		$t->assign(array(
 			'WHOSONlINE_ROW2_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
 			'WHOSONlINE_ROW2_USER_ONLINE_IP'=> sed_rc_link(sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.sed_xg()), $row['online_ip'])

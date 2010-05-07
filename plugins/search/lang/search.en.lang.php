@@ -5,22 +5,21 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) 2008-2010 Cotonti Team
- * @license BSD License
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL.');
 
-// Plugin settings
-$L['cfg_maxwords']= array('Max. words in search query');
-$L['cfg_maxsigns']= array('Max. latters in search query');
-$L['cfg_maxitems']= array('Max. entries in normal search results');
-$L['cfg_minsigns'] = array('Min. signs in query');
-$L['cfg_pagesearch'] = array('Enable pages search');
-$L['cfg_forumsearch'] = array('Enable forums search');
-$L['cfg_searchurl'] = array('Type of forum post link to use, Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
-$L['cfg_addfields']= array('Additional pages fields for search, separated by commas. Example "page_extra1,page_extra2,page_key"');
-$L['cfg_extrafilters']= array('Show extrafilters on main search page');
+/**
+ * Plugin Title & Subtitle
+ */
+
+$L['plu_title'] = 'Search';
+
+/**
+ * Plugin Body
+ */
 
 // Common - title, info, query
 $L['plu_search_req'] = 'Query';
@@ -83,4 +82,19 @@ $L['plu_found'] = 'Found';
 $L['plu_match'] = 'matches';
 $L['plu_section'] = 'Section';
 $L['plu_last_date'] = 'Date updated';
+
+/**
+ * Plugin Config
+ */
+
+$L['cfg_maxwords']= array('Max. words in search query');
+$L['cfg_maxsigns']= array('Max. latters in search query');
+$L['cfg_maxitems']= array('Max. entries in normal search results');
+$L['cfg_minsigns'] = array('Min. signs in query');
+$L['cfg_pagesearch'] = array('Enable pages search');
+$L['cfg_forumsearch'] = array('Enable forums search');
+$L['cfg_searchurl'] = array('Type of forum post link to use', 'Single uses a Single post view, while Normal uses the traditional thread/jump-to link');
+$L['cfg_addfields']= array('Additional pages fields for search, separated by commas', 'Example "page_extra1,page_extra2,page_key"');
+$L['cfg_extrafilters']= array('Show extrafilters on main search page');
+
 ?>

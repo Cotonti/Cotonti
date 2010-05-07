@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['forums'])
+if ($cfg['plugin']['tags']['forums'])
 {
 	require_once $cfg['system_dir'] . '/tags.php';
 	require_once sed_langfile('tags', 'plug');

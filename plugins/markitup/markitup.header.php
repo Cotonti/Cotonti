@@ -14,24 +14,24 @@ Order=10
  * MarkItUp! connector for Seditio
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Trustmaster
- * @copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL');
 
-if(!defined('SED_INDEX') && !defined('SED_LIST') && !defined('SED_MESSAGE'))
+if (!defined('SED_INDEX') && !defined('SED_LIST') && !defined('SED_MESSAGE'))
 {
 
 	$mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
-	if(!file_exists($mkup_lang))
+	if (!file_exists($mkup_lang))
 	{
 		$mkup_lang = $cfg['plugins_dir'].'/markitup/lang/en.lang.js';
 	}
 	$smile_lang = "./images/smilies/lang/$lang.lang.js";
-	if(!file_exists($smile_lang))
+	if (!file_exists($smile_lang))
 	{
 		$smile_lang = './images/smilies/lang/en.lang.js';
 	}
@@ -46,7 +46,7 @@ if(!defined('SED_INDEX') && !defined('SED_LIST') && !defined('SED_MESSAGE'))
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/{$cfg['plugin']['markitup']['skin']}/style.css" />
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/style.css" />
 HTM;
-	if($cfg['plugin']['markitup']['chili'])
+	if ($cfg['plugin']['markitup']['chili'])
 	{
 		$out['compopup'] .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/markitup/js/chili.js"></script>';
 	}
@@ -64,7 +64,6 @@ $("textarea.minieditor").markItUp(mini);
 });
 //]]>
 </script>';
-
 }
 
 ?>

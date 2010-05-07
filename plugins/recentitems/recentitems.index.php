@@ -16,7 +16,7 @@ Order=10
  * @package Cotonti
  * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -26,16 +26,16 @@ require_once sed_incfile('functions', 'users');
 require_once $cfg['plugins_dir'].'/recentitems/inc/recentitems.functions.php';
 require_once sed_langfile('recentitems', 'plug');
 
-if($cfg['plugin']['recentitems']['recentpages'] && !$cfg['disable_page'])
+if ($cfg['plugin']['recentitems']['recentpages'] && !$cfg['disable_page'])
 {
-    $res = sed_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
-    $t-> assign("PLUGIN_LATESTPAGES", $res);
+	$res = sed_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
+	$t->assign("PLUGIN_LATESTPAGES", $res);
 }
 
-if($cfg['plugin']['recentitems']['recentforums'] && !$cfg['disable_forums'])
+if ($cfg['plugin']['recentitems']['recentforums'] && !$cfg['disable_forums'])
 {
-    $res = sed_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
-    $t-> assign("PLUGIN_LATESTTOPICS", $res);
+	$res = sed_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
+	$t->assign("PLUGIN_LATESTTOPICS", $res);
 }
 
 ?>

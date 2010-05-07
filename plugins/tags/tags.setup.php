@@ -7,7 +7,7 @@ Description=Basic Tags implementation
 Version=0.7.0
 Date=2010-jan-22
 Author=Trustmaster
-Copyright=All rights reserved (c) 2008-2010, Vladimir Sibirov.
+Copyright=All rights reserved (c) Vladimir Sibirov 2008-2010
 Notes=BSD License.
 SQL=
 Auth_guests=R
@@ -44,4 +44,5 @@ autocomplete=23:select:0,1,2,3,4,5,6:3:Min. chars for autocomplete
  */
 
 defined('SED_CODE') or die('Wrong URL');
+
 ?>

@@ -1,11 +1,11 @@
-<?PHP
+<?php
 /**
  * Russian Language File for MarkItUp Plugin
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

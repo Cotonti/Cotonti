@@ -1,11 +1,11 @@
-<?PHP
+<?php
 /**
  * English Language File for IndexPolls Plugin
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -27,4 +27,5 @@ $L_idx['vote_opt'] = 'You did not pick an option';
 $L['cfg_maxpolls'] = array('Number of polls displayed');
 $L['cfg_mode'] = array('Poll display mode', '&quot;Recent polls&quot; displays last poll(s)<br />&quot;Random polls&quot; displays random poll(s)');
 $L['cfg_mode_params'] = array('Recent polls', 'Random polls');
+
 ?>

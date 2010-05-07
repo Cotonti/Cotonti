@@ -1,13 +1,13 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=cleaner
 Name=Cleaner
 Description=Will clean various things...
-Version=0.0.3
-Date=2009-jan-03
+Version=0.7.0
+Date=2010-jan-03
 Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) 2008-2009 Cotonti Team
+Copyright=Partial copyright (c) Cotonti Team 2008-2010
 Notes=BSD License
 SQL=
 Auth_guests=0
@@ -31,9 +31,9 @@ pmold=07:select:0,15,30,60,120,180,365:365:Delete ALL the private messages older
  * Will clean various things
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

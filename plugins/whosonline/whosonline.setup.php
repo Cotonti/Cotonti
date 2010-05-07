@@ -1,13 +1,13 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=whosonline
 Name=Who's online
 Description=Lists the members online
-Version=0.0.3
-Date=2009-jan-03
+Version=0.7.0
+Date=2010-jan-03
 Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) 2008-2009 Cotonti Team
+Copyright=Partial copyright (c) Cotonti Team 2008-2010
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -27,9 +27,9 @@ miniavatar_y=03:string::16:The size of a mini-avatars on the axis y, in pixels
  * Lists the members online
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

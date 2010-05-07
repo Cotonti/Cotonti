@@ -16,9 +16,10 @@ Order=10
  * @package Cotonti
  * @version 0.7.0
  * @author Neocrome, Spartan, esclkm, Cotonti Team
- * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD License
  */
+
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
 require_once sed_incfile('functions', 'page');
@@ -26,13 +27,13 @@ require_once sed_incfile('functions', 'forums');
 require_once 'plugins/search/inc/search.functions.php';
 require_once sed_incfile('forms');
 
-$rsq = sed_import('rsq','P','TXT',$cfg['plugin']['search']['maxsigns']);
-$sq = sed_import('sq','G','TXT');
+$rsq = sed_import('rsq', 'P', 'TXT', $cfg['plugin']['search']['maxsigns']);
+$sq = sed_import('sq', 'G', 'TXT');
 $sq = (!empty($sq)) ? $sq : $rsq;
 $sq = preg_replace('/ +/', ' ', trim($sq));
 $sq = sed_sql_prep($sq);
 $hl = urlencode(mb_strtoupper($sq));
-$tab = sed_import('tab','G','ALP');
+$tab = sed_import('tab', 'G', 'ALP');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 $totalitems = array();
@@ -45,24 +46,24 @@ if ($d > 0 && !empty($sq))
 }
 else
 {
-	$rsearch['pag']['title'] = sed_import('rpagtitle','P','INT');
-	$rsearch['pag']['desc'] = sed_import('rpagdesc','P','INT');
-	$rsearch['pag']['text'] = sed_import('rpagtext','P','INT');
-	$rsearch['pag']['file'] = sed_import('rpagfile','P','INT');
-	$rsearch['pag']['sort'] = sed_import('rpagsort','P','TXT');
+	$rsearch['pag']['title'] = sed_import('rpagtitle', 'P', 'INT');
+	$rsearch['pag']['desc'] = sed_import('rpagdesc', 'P', 'INT');
+	$rsearch['pag']['text'] = sed_import('rpagtext', 'P', 'INT');
+	$rsearch['pag']['file'] = sed_import('rpagfile', 'P', 'INT');
+	$rsearch['pag']['sort'] = sed_import('rpagsort', 'P', 'TXT');
 	$rsearch['pag']['sort'] = (empty($rsearch['pag']['sort'])) ? 'date' : $rsearch['pag']['sort'];
-	$rsearch['pag']['sort2'] = sed_sql_prep(sed_import('rpagsort2','P','TXT'));
+	$rsearch['pag']['sort2'] = sed_sql_prep(sed_import('rpagsort2', 'P', 'TXT'));
 	$rsearch['pag']['sort2'] = (empty($rsearch['pag']['sort2'])) ? 'DESC' : $rsearch['pag']['sort2'];
-	$rsearch['pag']['sub'] = sed_import('rpagsub','P','ARR');
+	$rsearch['pag']['sub'] = sed_import('rpagsub', 'P', 'ARR');
 
-	$rsearch['frm']['title'] = sed_import('rfrmtitle','P','INT');
-	$rsearch['frm']['text'] = sed_import('rfrmtext','P','INT');
-	$rsearch['frm']['reply'] = sed_import('rfrmreply','P','INT');
-	$rsearch['frm']['sort'] = sed_import('sea_frmsort','P','TXT');
+	$rsearch['frm']['title'] = sed_import('rfrmtitle', 'P', 'INT');
+	$rsearch['frm']['text'] = sed_import('rfrmtext', 'P', 'INT');
+	$rsearch['frm']['reply'] = sed_import('rfrmreply', 'P', 'INT');
+	$rsearch['frm']['sort'] = sed_import('sea_frmsort', 'P', 'TXT');
 	$rsearch['frm']['sort'] = (empty($rsearch['frm']['sort'])) ? 'updated' : $rsearch['frm']['sort'];
-	$rsearch['frm']['sort2'] = sed_sql_prep(sed_import('rfrmsort2','P','TXT'));
+	$rsearch['frm']['sort2'] = sed_sql_prep(sed_import('rfrmsort2', 'P', 'TXT'));
 	$rsearch['frm']['sort2'] = (empty($rsearch['frm']['sort2'])) ? 'DESC' : $rsearch['frm']['sort2'];
-	$rsearch['frm']['sub'] = sed_import('rfrmsub','P','ARR');
+	$rsearch['frm']['sub'] = sed_import('rfrmsub', 'P', 'ARR');
 
 	if ($rsearch['pag']['title'] < 1 && $rsearch['pag']['desc'] < 1 && $rsearch['pag']['text'] < 1)
 	{
@@ -75,29 +76,34 @@ else
 		$rsearch['frm']['title'] = 1;
 		$rsearch['frm']['text'] = 1;
 	}
-	$rsearch['set']['user'] = sed_import('rsuser','P','INT');
-	$rsearch['set']['limit'] = sed_import('rwithin','P','INT');
+	$rsearch['set']['user'] = sed_import('rsuser', 'P', 'INT');
+	$rsearch['set']['limit'] = sed_import('rwithin', 'P', 'INT');
 	$rsearch['set']['from'] = $sys['now_offset'] - 31536000;
 	$rsearch['set']['to'] = $sys['now_offset'];
-	switch ($rsearch['set']['limit'])
+	switch($rsearch['set']['limit'])
 	{
-		case 1: $rsearch['set']['from'] = $sys['now_offset'] - 1209600;
-			break;
-		case 2: $rsearch['set']['from'] = $sys['now_offset'] - 2592000;
-			break;
-		case 3: $rsearch['set']['from'] = $sys['now_offset'] - 7776000;
-			break;
-		case 4: $rsearch['set']['from'] = $sys['now_offset'] - 31536000;
-			break;
-		case 5: $from_year = sed_import('ryear_from', 'P', 'INT');
+		case 1:
+			$rsearch['set']['from'] = $sys['now_offset'] - 1209600;
+		break;
+		case 2:
+			$rsearch['set']['from'] = $sys['now_offset'] - 2592000;
+		break;
+		case 3:
+			$rsearch['set']['from'] = $sys['now_offset'] - 7776000;
+		break;
+		case 4:
+			$rsearch['set']['from'] = $sys['now_offset'] - 31536000;
+		break;
+		case 5:
+			$from_year = sed_import('ryear_from', 'P', 'INT');
 			$from_month = sed_import('rmonth_from', 'P', 'INT');
 			$from_day = sed_import('rday_from', 'P', 'INT');
 			$to_year = sed_import('ryear_to', 'P', 'INT');
 			$to_month = sed_import('rmonth_to', 'P', 'INT');
 			$to_day = sed_import('rday_to', 'P', 'INT');
-			$rsearch['set']['from'] = mktime(0,0,0,$from_month,$from_day,$from_year) - $usr['timezone'] * 3600;
-			$rsearch['set']['to'] = mktime(0,0,0,$to_month,$to_day,$to_year) - $usr['timezone'] * 3600;
-			break;
+			$rsearch['set']['from'] = mktime(0, 0, 0, $from_month, $from_day, $from_year) - $usr['timezone'] * 3600;
+			$rsearch['set']['to'] = mktime(0, 0, 0, $to_month, $to_day, $to_year) - $usr['timezone'] * 3600;
+		break;
 		default: break;
 	}
 	$_SESSION['search'] = $rsearch;
@@ -151,9 +157,9 @@ if (($tab == 'frm' || empty($tab)) && !$cfg['disable_forums'] && $cfg['plugin'][
 		ORDER by fn_path ASC, fs_order ASC");
 
 	$forum_cat_list['all'] = $L['plu_allsections'];
-	while($row1 = sed_sql_fetcharray($sql1))
+	while ($row1 = sed_sql_fetcharray($sql1))
 	{
-		if(sed_auth('forums', $row1['fs_id'], 'R'))
+		if (sed_auth('forums', $row1['fs_id'], 'R'))
 		{
 			$forum_cat_list[$row1['fs_id']] = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE);
 			$frm_catauth[] = sed_sql_prep($row1['fs_id']);
@@ -190,7 +196,7 @@ if (!empty($sq))
 	if (!empty($rsearch['set']['user']))
 	{
 		$touser_src = explode(",", $rsearch['set']['user']);
-		foreach($touser_src as $k => $i)
+		foreach ($touser_src as $k => $i)
 		{
 			$user_name=trim(sed_import($i, 'D', 'TXT'));
 			if (!empty($user_name))
@@ -224,7 +230,7 @@ if (!empty($sq))
 		$pagsql .= (($rsearch['pag']['text'] == 1)) ? "page_text LIKE '".sed_sql_prep($sqlsearch)."'" : "";
 		// String query for addition pages fields.
 		$addfields = trim($cfg['plugin']['search']['addfields']);
-		if(!empty($addfields))
+		if (!empty($addfields))
 		{
 			$addfields_sql = '';
 			foreach (explode(',', $addfields) as $addfields_el)
@@ -236,7 +242,7 @@ if (!empty($sq))
 		$pagsql .= $addfields_sql.")";
 
 		$sql = sed_sql_query("SELECT SQL_CALC_FOUND_ROWS * FROM $db_pages
-		   	 		WHERE $pagsql $where AND page_state = '0' AND page_cat <> 'system'
+					WHERE $pagsql $where AND page_state = '0' AND page_cat <> 'system'
 					ORDER BY page_".$rsearch['pag']['sort']." ".$rsearch['pag']['sort2']." LIMIT $d, ".$cfg['plugin']['search']['maxitems']);
 		$items = sed_sql_numrows($sql);
 		$totalitems[] = sed_sql_foundrows();
@@ -250,7 +256,7 @@ if (!empty($sq))
 				'PLUGIN_PR_TEXT' => sed_clear_mark($row['page_text'], $row['page_type'], $words),
 				'PLUGIN_PR_TIME' => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
 				'PLUGIN_PR_ODDEVEN' => sed_build_oddeven($jj),
-				'PLUGIN_PR_NUM' => $jj,
+				'PLUGIN_PR_NUM' => $jj
 			));
 			$t->parse("MAIN.RESULTS.PAGES.ITEM");
 			$jj++;
@@ -351,4 +357,5 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
+
 ?>

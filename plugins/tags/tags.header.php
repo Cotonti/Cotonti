@@ -22,14 +22,14 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['pages']
+if ($cfg['plugin']['tags']['pages']
 	&& (defined('SED_INDEX') || defined('SED_LIST') || defined('SED_PAGE'))
 	|| $cfg['plugin']['tags']['forums'] && defined('SED_FORUMS')
 	|| defined('SED_PLUG'))
 {
 	require_once sed_langfile('tags', 'plug');
 	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
-/*	$out['compopup'] .= $R['tags_code_style'];*/
+	/*$out['compopup'] .= $R['tags_code_style'];*/
 	if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['tags']['autocomplete'] > 0
 		&& in_array($m, array('edit', 'editpost', 'posts', 'newtopic'))
 		&& sed_auth('plug', 'tags', 'W'))
