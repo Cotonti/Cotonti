@@ -12,6 +12,12 @@
 defined('SED_CODE') or die('Wrong URL.');
 
 /**
+ * Plugin Title & Subtitle
+ */
+
+$L['plu_title'] = "Теги";
+
+/**
  * Plugin Body
  */
 
