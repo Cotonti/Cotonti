@@ -134,7 +134,7 @@ function sed_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_pages'] = $L['Pages'].":";
 		}
 
-		$recentitems -> assign(array(
+		$recentitems->assign(array(
 			"FORUM_ROW_ID" => $row['ft_id'],
 			"FORUM_ROW_STATE" => $row['ft_state'],
 			"FORUM_ROW_ICON" => $row['ft_icon'],

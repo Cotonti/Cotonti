@@ -7,8 +7,8 @@ Description=Search with extended features
 Version=4.00
 Date=2010-mar-10
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008 - 2010
-Notes=
+Copyright=Partial copyright (c) Cotonti Team 2008-2010
+Notes=BSD License
 SQL=
 Auth_guests=R
 Lock_guests=W12345A
@@ -29,14 +29,13 @@ extrafilters=09:radio::1:Show extrafilters on main search page
 [END_SED_EXTPLUGIN_CONFIG]
 ==================== */
 
-
 /**
  * Search plugin
  *
  * @package Cotonti
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD License
  */
 

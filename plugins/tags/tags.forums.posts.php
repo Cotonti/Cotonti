@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['forums'])
+if ($cfg['plugin']['tags']['forums'])
 {
 	if (!isset($tags))
 	{
@@ -31,11 +31,11 @@ if($cfg['plugin']['tags']['forums'])
 		require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
 		$tags = sed_tag_list($q, 'forums');
 	}
-	if(count($tags) > 0)
+	if (count($tags) > 0)
 	{
 		$tc_html = $L['Tags'] . ': ';
 		$tag_i = 0;
-		foreach($tags as $tag)
+		foreach ($tags as $tag)
 		{
 			$tag_t = $cfg['plugin']['tags']['title'] ? htmlspecialchars(sed_tag_title($tag)) : htmlspecialchars($tag);
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);

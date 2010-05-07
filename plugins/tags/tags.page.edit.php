@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
+if ($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 {
 	require_once $cfg['system_dir'] . '/tags.php';
 	$rtags = sed_import('rtags', 'P', 'TXT');
@@ -32,7 +32,7 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	$new_tags = array();
 	// Find new tags, count old tags that have been left
 	$cnt = 0;
-	foreach($tags as $tag)
+	foreach ($tags as $tag)
 	{
 		$p = array_search($tag, $old_tags);
 		if($p !== false)
@@ -47,7 +47,7 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	}
 	// Remove old tags that have been removed
 	$rem_tags = array_diff($old_tags, $kept_tags);
-	foreach($rem_tags as $tag)
+	foreach ($rem_tags as $tag)
 	{
 		sed_tag_remove($tag, $id);
 	}
@@ -62,7 +62,7 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	{
 		$lim = $ncnt;
 	}
-	for($i = 0; $i < $lim; $i++)
+	for ($i = 0; $i < $lim; $i++)
 	{
 		sed_tag($new_tags[$i], $id);
 	}

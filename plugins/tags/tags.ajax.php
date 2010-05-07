@@ -26,12 +26,14 @@ require_once $cfg['system_dir'] . '/tags.php';
 $q = strtolower(sed_import('q', 'G', 'TXT'));
 $q = sed_sql_prep(urldecode($q));
 if (!$q) return;
-$tagslist=sed_tag_complete($q, $cfg['plugin']['tags']['autocomplete']);
-if(is_array($tagslist))
-{
-	$tagstring=implode("\n", $tagslist);
-}
-sed_sendheaders();
 
+$tagslist = sed_tag_complete($q, $cfg['plugin']['tags']['autocomplete']);
+if (is_array($tagslist))
+{
+	$tagstring = implode("\n", $tagslist);
+}
+
+sed_sendheaders();
 echo $tagstring;
+
 ?>

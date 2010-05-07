@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['pages'])
+if ($cfg['plugin']['tags']['pages'])
 {
 	require_once $cfg['system_dir'] . '/tags.php';
 	require_once sed_langfile('tags', 'plug');
@@ -31,7 +31,7 @@ if($cfg['plugin']['tags']['pages'])
 	// Get all subcategories
 	$tc_cats = array("'$c'");
 	$tc_path = $sed_cat[$c]['path'] . '.';
-	foreach($sed_cat as $key => $val)
+	foreach ($sed_cat as $key => $val)
 	{
 		if (mb_strpos($val['path'], $tc_path) !== false)
 		{
@@ -47,10 +47,10 @@ if($cfg['plugin']['tags']['pages'])
 	{
 		case 'Alphabetical':
 			$order = '`tag`';
-			break;
+		break;
 		case 'Frequency':
 			$order = '`cnt` DESC';
-			break;
+		break;
 		default:
 			$order = 'RAND()';
 	}
@@ -62,7 +62,7 @@ if($cfg['plugin']['tags']['pages'])
 		GROUP BY r.tag
 		ORDER BY $order $limit");
 	$tc_html = $R['tags_code_cloud_open'];
-	while($tc_row = sed_sql_fetchassoc($tc_res))
+	while ($tc_row = sed_sql_fetchassoc($tc_res))
 	{
 		$tag_count++;
 		$tag = $tc_row['tag'];
@@ -70,9 +70,9 @@ if($cfg['plugin']['tags']['pages'])
 		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 		$cnt = (int) $tc_row['cnt'];
-		foreach($tc_styles as $key => $val)
+		foreach ($tc_styles as $key => $val)
 		{
-			if($cnt <= $key)
+			if ($cnt <= $key)
 			{
 				$dim = $val;
 				break;
@@ -85,7 +85,7 @@ if($cfg['plugin']['tags']['pages'])
 		));
 	}
 	sed_sql_freeresult($tc_res);
-	if($cfg['plugin']['tags']['more'] && !empty($limit))
+	if ($cfg['plugin']['tags']['more'] && !empty($limit))
 	{
 		$tc_html .= sed_rc('tags_code_cloud_more', array('url' => sed_url('plug', 'e=tags&a=pages')));
 	}

@@ -5,11 +5,12 @@
  * @package Cotonti
  * @version 0.7.0
  * @author Boss, Cotonti Team
- * @copyright Copyright (c) 2008-2010 Cotonti Team
- * @license BSD License
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
  */
 
 defined('SED_CODE') || die('Wrong URL.');
+
 function sed_clear_mark($text, $type, $words)
 {
 	$text = trim($text);
@@ -44,7 +45,7 @@ function sed_clear_mark($text, $type, $words)
 			sort($p_arr);
 			$text_result = '';
 			$last_pos = -1;
-			$delta = 255/count($p_arr);
+			$delta = 255 / count($p_arr);
 			$text_len = mb_strlen($text);
 			foreach ($p_arr as $pos_mid)
 			{
@@ -79,7 +80,7 @@ function sed_clear_mark($text, $type, $words)
 				}
 				else
 				{
-					$arOtr[] = Array($pos_beg, $pos_end);
+					$arOtr[] = array($pos_beg, $pos_end);
 				}
 				$last_pos = $pos_end;
 			}
@@ -89,7 +90,7 @@ function sed_clear_mark($text, $type, $words)
 				for ($i = 0; $i < count($arOtr); $i++)
 				{
 					$text_result .= ($arOtr[$i][0] <= 0) ? '' : ' ...';
-					$text_result .= mb_substr($text, $arOtr[$i][0], $arOtr[$i][1]-$arOtr[$i][0]);
+					$text_result .= mb_substr($text, $arOtr[$i][0], $arOtr[$i][1] - $arOtr[$i][0]);
 					$text_result .= ($arOtr[$i][1] >= $text_len) ? '' : ' ... ';
 				}
 			}
@@ -111,4 +112,5 @@ function sed_clear_mark($text, $type, $words)
 	}
 	return ("");
 }
+
 ?>

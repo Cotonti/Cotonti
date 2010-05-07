@@ -12,14 +12,14 @@ Order=10
 
 /**
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author oc
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD License
  */
 
 defined('SED_CODE') or die('Wrong URL');
 
-$highlight = sed_import('highlight','G','TXT');
+$highlight = sed_import('highlight', 'G', 'TXT');
 
 ?>

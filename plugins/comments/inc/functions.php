@@ -8,7 +8,9 @@
  * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
  */
+
 require_once sed_incfile('functions', 'users');
+
 // TODO I messed up this code, please see if I did huge mistakes and inform me (oc)
 function sed_build_comments($code, $url, $display = true)
 {

@@ -1,13 +1,13 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=indexpolls
 Name=Indexpolls
 Description=Polls (recent or random) on index with jQuery
-Version=0.0.3
-Date=2009-jan-03
+Version=0.7.0
+Date=2010-jan-03
 Author=Cotonti Team
-Copyright=Partial copyright (c) 2008-2009 Cotonti Team
+Copyright=Partial copyright (c) Cotonti Team 2008-2010
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -26,9 +26,9 @@ mode=02:select:Recent polls,Random polls:Recent polls:Mode polls displayed
  * Polls (recent or random) on index with jQuery
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

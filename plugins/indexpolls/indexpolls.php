@@ -78,7 +78,6 @@ function sed_get_polls($limit)
 
 	$indexpolls->parse('INDEXPOLLS');
 	return($indexpolls->text('INDEXPOLLS'));
-
 }
 
 if ($cfg['plugin']['indexpolls']['maxpolls'] > 0 && !$cfg['disable_polls'])

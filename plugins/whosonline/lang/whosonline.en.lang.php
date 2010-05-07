@@ -1,11 +1,11 @@
-<?PHP
+<?php
 /**
  * English Language File for WhosOnline Plugin
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -31,8 +31,8 @@ $L['plu_visitor'] = 'Visitor';
  * Plugin Config
  */
 
-$L['cfg_miniavatar_x'] = array('V-size of mini-avatars','pixels');
-$L['cfg_miniavatar_y'] = array('H-size of mini-avatars','pixels');
+$L['cfg_miniavatar_x'] = array('V-size of mini-avatars', 'pixels');
+$L['cfg_miniavatar_y'] = array('H-size of mini-avatars', 'pixels');
 $L['cfg_showavatars'] = array('Display user avatars');
 
 ?>

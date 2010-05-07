@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED]
 Name=SED-Light
@@ -9,9 +9,9 @@ Name=SED-Light
  * Official skin
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Xiode - XiodeStudios.Com http://www.xiodestudios.com , Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

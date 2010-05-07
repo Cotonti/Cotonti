@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['pages'])
+if ($cfg['plugin']['tags']['pages'])
 {
 	if (!isset($tags))
 	{
@@ -31,10 +31,10 @@ if($cfg['plugin']['tags']['pages'])
 		$item_id = $pag['page_id'];
 		$tags = sed_tag_list($item_id);
 	}
-	if(count($tags) > 0)
+	if (count($tags) > 0)
 	{
 		$tag_i = 0;
-		foreach($tags as $tag)
+		foreach ($tags as $tag)
 		{
 			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
@@ -49,7 +49,7 @@ if($cfg['plugin']['tags']['pages'])
 	else
 	{
 		$t->assign(array(
-			'PAGE_NO_TAGS' => $L['tags_Tag_cloud_none'],
+			'PAGE_NO_TAGS' => $L['tags_Tag_cloud_none']
 		));
 		$t->parse('MAIN.PAGE_NO_TAGS');
 	}

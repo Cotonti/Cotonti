@@ -1,11 +1,11 @@
-<?PHP
+<?php
 /**
  * Пользовательский файл локализации скина Sed-Light
  *
  * @package Cotonti
- * @version 0.6.6
+ * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 

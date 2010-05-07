@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_first_post)
+if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_first_post)
 {
 	require_once $cfg['system_dir'] . '/tags.php';
 	$rtags = sed_import('rtags', 'P', 'TXT');
@@ -32,10 +32,10 @@ if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_firs
 	$new_tags = array();
 	// Find new tags, count old tags that have been left
 	$cnt = 0;
-	foreach($tags as $tag)
+	foreach ($tags as $tag)
 	{
 		$ps = array_search($tag, $old_tags);
-		if($ps !== false)
+		if ($ps !== false)
 		{
 			$kept_tags[] = $old_tags[$ps];
 			$cnt++;
@@ -47,7 +47,7 @@ if($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_firs
 	}
 	// Remove old tags that have been removed
 	$rem_tags = array_diff($old_tags, $kept_tags);
-	foreach($rem_tags as $tag)
+	foreach ($rem_tags as $tag)
 	{
 		sed_tag_remove($tag, $q, 'forums');
 	}

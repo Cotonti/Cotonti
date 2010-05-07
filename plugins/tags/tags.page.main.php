@@ -22,7 +22,7 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['pages'])
+if ($cfg['plugin']['tags']['pages'])
 {
 	require_once $cfg['system_dir'] . '/tags.php';
 	require_once sed_langfile('tags', 'plug');
@@ -31,4 +31,5 @@ if($cfg['plugin']['tags']['pages'])
 	$tag_keywords = implode(', ', $tags);
 	$out['keywords'] = $tag_keywords;
 }
+
 ?>

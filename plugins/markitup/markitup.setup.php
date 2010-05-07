@@ -1,10 +1,10 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=markitup
 Name=MarkItUp!
 Description=jQuery BBcode editor
-Version=0.0.6
+Version=0.7.0
 Date=2009-jan-03
 Author=Jay Salvat
 Copyright=
@@ -27,19 +27,19 @@ chili=03:radio::0:Enable Chili tags
  * jQuery BBcode editor
  *
  * @package Cotonti
- * @version 0.0.6
+ * @version 0.7.0
  * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($action == 'install')
+if ($action == 'install')
 {
 	// Installing new bbcodes
 	sed_bbcode_remove(0, 'markitup');
-	
+
 	sed_bbcode_add('size', 'pcre', '\[size=([1-2][0-9])\](.+?)\[/size\]', '<span style="font-size:$1pt">$2</span>', true, 128, 'markitup');
 	sed_bbcode_add('table', 'str', '[table]', '<table>', true, 128, 'markitup');
 	sed_bbcode_add('table', 'str', '[/table]', '</table>', true, 128, 'markitup');
@@ -56,7 +56,7 @@ if($action == 'install')
 	sed_cache_clearhtml();
 	sed_bbcode_clearcache();
 }
-elseif($action == 'uninstall')
+elseif ($action == 'uninstall')
 {
 	// Remove plugin bbcodes
 	sed_bbcode_remove(0, 'markitup');

@@ -1,11 +1,11 @@
-<?PHP
+<?php
 /**
  * Russian Language File for WhosOnline Plugin
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -31,8 +31,8 @@ $L['plu_visitor'] = 'Гость';
  * Plugin Config
  */
 
-$L['cfg_miniavatar_x'] = array('Размер мини-аватара по оси x','в пикселях');
-$L['cfg_miniavatar_y'] = array('Размер мини-аватара по оси y','в пикселях');
+$L['cfg_miniavatar_x'] = array('Размер мини-аватара по оси x', 'в пикселях');
+$L['cfg_miniavatar_y'] = array('Размер мини-аватара по оси y', 'в пикселях');
 $L['cfg_showavatars'] = array('Включить отображение аватаров пользователей');
 
 ?>

@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /* ====================
 [BEGIN_SED_EXTPLUGIN]
 Code=forumstats
@@ -14,9 +14,9 @@ Order=10
  * Statistics for the forums
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
@@ -46,34 +46,34 @@ LEFT JOIN $db_forum_sections s ON t.ft_sectionid=s.fs_id
 WHERE 1
 ORDER BY ft_postcount DESC LIMIT 10");
 
-$ii=0;
+$ii = 0;
 
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
-	if(sed_auth('forums', $row['fs_id'], 'R'))
+	if (sed_auth('forums', $row['fs_id'], 'R'))
 	{
 		$ii++;
 		$ft_title = $row['ft_title'];
 		$ft_title .= ($row['ft_sticky']) ? " (*)" : '';
 		$ft_title .= ($row['ft_state']) ? " (x)" : '';
-		$t -> assign(array(
+		$t->assign(array(
 			'FORUMSTATS_REPLIEDTOP_II' => $ii,
 			'FORUMSTATS_REPLIEDTOP_FORUMS' => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
 			'FORUMSTATS_REPLIEDTOP_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
 			'FORUMSTATS_REPLIEDTOP_TITLE' => htmlspecialchars($ft_title),
 			'FORUMSTATS_REPLIEDTOP_POSTCOUNT' => $row['ft_postcount']
 		));
-		$t -> parse('MAIN.FORUMSTATS_REPLIEDTOP_USER');
+		$t->parse('MAIN.FORUMSTATS_REPLIEDTOP_USER');
 	}
 	else
 	{
 		$ii++;
-		$t -> assign(array(
+		$t->assign(array(
 			'FORUMSTATS_REPLIEDTOP_II' => $ii,
 			'FORUMSTATS_REPLIEDTOP_FORUMS' => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
 			'FORUMSTATS_REPLIEDTOP_POSTCOUNT' => $row['ft_postcount']
 		));
-		$t -> parse('MAIN.FORUMSTATS_REPLIEDTOP_NO_USER');
+		$t->parse('MAIN.FORUMSTATS_REPLIEDTOP_NO_USER');
 	}
 }
 
@@ -84,61 +84,61 @@ LEFT JOIN  $db_forum_sections AS s ON t.ft_sectionid=s.fs_id
 WHERE 1
 ORDER BY ft_viewcount DESC LIMIT 10");
 
-$ii=0;
+$ii = 0;
 
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
-	if(sed_auth('forums', $row['fs_id'], 'R'))
+	if (sed_auth('forums', $row['fs_id'], 'R'))
 	{
 		$ii++;
 		$ft_title = $row['ft_title'];
 		$ft_title .= ($row['ft_sticky'] && $row['ft_state']) ? " (!)" : '';
 		$ft_title .= ($row['ft_sticky'] && !$row['ft_state']) ? " (*)" : '';
 		$ft_title .= ($row['ft_state'] && !$row['ft_sticky']) ? " (x)" : '';
-		$t -> assign(array(
+		$t->assign(array(
 			'FORUMSTATS_VIEWEDTOP_II' => $ii,
 			'FORUMSTATS_VIEWEDTOP_FORUMS' => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
 			'FORUMSTATS_VIEWEDTOP_URL' => sed_url('forums', 'm=posts&q='.$row['ft_id']),
 			'FORUMSTATS_VIEWEDTOP_TITLE' => htmlspecialchars($ft_title),
 			'FORUMSTATS_VIEWEDTOP_VIEWCOUNT' => $row['ft_viewcount']
 		));
-		$t -> parse('MAIN.FORUMSTATS_VIEWEDTOP_USER');
+		$t->parse('MAIN.FORUMSTATS_VIEWEDTOP_USER');
 	}
 	else
 	{
 		$ii++;
-		$t -> assign(array(
+		$t->assign(array(
 			'FORUMSTATS_VIEWEDTOP_II' => $ii,
 			'FORUMSTATS_VIEWEDTOP_FORUMS' => sed_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
 			'FORUMSTATS_VIEWEDTOP_VIEWCOUNT' => $row['ft_viewcount']
 		));
-		$t -> parse('MAIN.FORUMSTATS_VIEWEDTOP_NO_USER');
+		$t->parse('MAIN.FORUMSTATS_VIEWEDTOP_NO_USER');
 	}
 }
 
-$ii=0;
+$ii = 0;
 $tmpstats = '';
 $sql = sed_sql_query("SELECT user_id, user_name, user_postcount
 FROM $db_users
 WHERE 1 ORDER by user_postcount DESC
 LIMIT 10");
 
-while($row = sed_sql_fetcharray($sql))
+while ($row = sed_sql_fetcharray($sql))
 {
 	$ii++;
-	$t -> assign(array(
+	$t->assign(array(
 		'FORUMSTATS_POSTERSTOP_II' => $ii,
 		'FORUMSTATS_POSTERSTOP_USER_NAME' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
 		'FORUMSTATS_POSTERSTOP_USER_POSTCOUNT' => $row["user_postcount"]
 	));
-	$t -> parse('MAIN.POSTERSTOP');
+	$t->parse('MAIN.POSTERSTOP');
 }
 
-$t -> assign(array(
+$t->assign(array(
 	'FORUMSTATS_TOTALSECTIONS' => $totalsections,
 	'FORUMSTATS_TOTALTOPICS' => $totaltopics,
 	'FORUMSTATS_TOTALPOSTS' => $totalposts,
-	'FORUMSTATS_TOTALVIEWS' => $totalviews,
+	'FORUMSTATS_TOTALVIEWS' => $totalviews
 ));
 
 ?>
