@@ -51,7 +51,7 @@ while ($row = sed_sql_fetcharray($sql1))
 
 	if ($showavatars)
 	{
-		$user_avatar = "<a href=\"".sed_url('users', 'm=details&id='.$row['online_userid'])."\">";
+		$user_avatar = "<a href=\"".sed_url('users', 'm=details&id='.$row['online_userid'].'&u='.htmlspecialchars($row['online_name']))."\">";
 		$user_avatar .= (!empty($row['user_avatar'])) ? "<img src=\"".$row['user_avatar']."\" width=\"".$miniavatar_x."\" height=\"".$miniavatar_y."\" alt=\"\" /></a>" : "<img src=\"images/pixel.gif\" width=\"".$miniavatar_x."\" height=\"".$miniavatar_y."\" alt=\"\" /></a>";
 	}
 
