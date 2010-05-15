@@ -14,8 +14,10 @@
 					</tr>
 					<tr>
 						<td>{PHP.skinlang.usersregister.Validemail}:</td>
-						<td>{USERS_REGISTER_EMAIL} *<br />
-						{PHP.skinlang.usersregister.Validemailhint}</td>
+						<td>
+							{USERS_REGISTER_EMAIL} *
+							<p class="small">{PHP.skinlang.usersregister.Validemailhint}</p>
+						</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Password}:</td>
