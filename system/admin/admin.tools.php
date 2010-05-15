@@ -58,10 +58,10 @@ if(!empty($p))
 
 	if(count($extp) == 0)
 	{
-		sed_redirect(sed_url('message', "msg=907", '', true));
+		sed_redirect(sed_url('message', 'msg=907', '', true));
 	}
 
-	$extplugin_info = $cfg['plugins_dir']."/".$p."/".$p.".setup.php";
+	$extplugin_info = $cfg['plugins_dir'].'/'.$p.'/'.$p.'.setup.php';
 
 	if(file_exists($extplugin_info))
 	{
@@ -69,11 +69,11 @@ if(!empty($p))
 	}
 	else
 	{
-		sed_redirect(sed_url('message', "msg=907", '', true));
+		sed_redirect(sed_url('message', 'msg=907', '', true));
 	}
 
-	$adminpath[] = array(sed_url('admin', "m=tools&p=".$p), htmlspecialchars($info['Name']));
-	$adminhelp = $L['Description']." : ".$info['Description']."<br />".$L['Version']." : ".$info['Version']."<br />".$L['Date']." : ".$info['Date']."<br />".$L['Author']." : ".$info['Author']."<br />".$L['Copyright']." : ".$info['Copyright']."<br />".$L['Notes']." : ".$info['Notes'];
+	$adminpath[] = array(sed_url('admin', 'm=tools&p='.$p), htmlspecialchars($info['Name']));
+	$adminhelp = $L['Description'].' : '.$info['Description'].'<br />'.$L['Version'].' : '.$info['Version'].'<br />'.$L['Date'].' : '.$info['Date'].'<br />'.$L['Author'].' : '.$info['Author'].'<br />'.$L['Copyright'].' : '.$info['Copyright'].'<br />'.$L['Notes'].' : '.$info['Notes'];
 
 	if(is_array($extp))
 	{
@@ -122,10 +122,10 @@ else
 			$plugin_icon = (empty($pl['pl_title'])) ? 'plugins' : $pl['pl_title'];
 
 			$t->assign(array(
-				"ADMIN_TOOLS_PLUG_URL" => sed_url('admin', 'm=tools&p=' . $pl['pl_code']),
-				"ADMIN_TOOLS_PLUG_NAME" => $info['Name']
+				'ADMIN_TOOLS_PLUG_URL' => sed_url('admin', 'm=tools&p=' . $pl['pl_code']),
+				'ADMIN_TOOLS_PLUG_NAME' => $info['Name']
 			));
-			$t->parse("TOOLS.ROW");
+			$t->parse('MAIN.ROW');
 		}
 	}
 	/* === Hook === */
@@ -135,8 +135,8 @@ else
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("TOOLS");
-	$adminmain = $t->text("TOOLS");
+	$t->parse('MAIN');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

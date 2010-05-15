@@ -68,14 +68,14 @@ if(sed_sql_numrows($sql) > 0)
 	foreach($referers as $referer => $url)
 	{
 
-		$t->assign(array("ADMIN_REFERERS_REFERER" => htmlspecialchars($referer)));
+		$t->assign('ADMIN_REFERERS_REFERER', htmlspecialchars($referer));
 		
 		foreach($url as $uri => $count)
 		{
 			$t->assign(array(
-				"ADMIN_REFERERS_URI" => htmlspecialchars(sed_cutstring($uri, 128)),
-				"ADMIN_REFERERS_COUNT" => $count,
-				"ADMIN_REFERERS_ODDEVEN" => sed_build_oddeven($ii)
+				'ADMIN_REFERERS_URI' => htmlspecialchars(sed_cutstring($uri, 128)),
+				'ADMIN_REFERERS_COUNT' => $count,
+				'ADMIN_REFERERS_ODDEVEN' => sed_build_oddeven($ii)
 			));
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl)
@@ -83,9 +83,9 @@ if(sed_sql_numrows($sql) > 0)
 				include $pl;
 			}
 			/* ===== */
-			$t->parse("REFERERS.REFERERS_ROW.REFERERS_URI");
+			$t->parse('MAIN.REFERERS_ROW.REFERERS_URI');
 		}
-		$t->parse("REFERERS.REFERERS_ROW");
+		$t->parse("MAIN.REFERERS_ROW");
 		$ii++;
 	}
 	$is_ref_empty = true;
@@ -96,14 +96,14 @@ else
 }
 
 $t->assign(array(
-	"ADMIN_REFERERS_URL_PRUNE" => sed_url('admin', "m=referers&a=prune&".sed_xg()),
-	"ADMIN_REFERERS_URL_PRUNELOWHITS" => sed_url('admin', "m=referers&a=prunelowhits&".sed_xg()),
-	"ADMIN_REFERERS_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_REFERERS_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_REFERERS_PAGNAV" => $pagenav['main'],
-	"ADMIN_REFERERS_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_REFERERS_TOTALITEMS" => $totalitems,
-	"ADMIN_REFERERS_ON_PAGE" => $ii
+	'ADMIN_REFERERS_URL_PRUNE' => sed_url('admin', 'm=referers&a=prune&'.sed_xg()),
+	'ADMIN_REFERERS_URL_PRUNELOWHITS' => sed_url('admin', 'm=referers&a=prunelowhits&'.sed_xg()),
+	'ADMIN_REFERERS_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_REFERERS_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_REFERERS_PAGNAV' => $pagenav['main'],
+	'ADMIN_REFERERS_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_REFERERS_TOTALITEMS' => $totalitems,
+	'ADMIN_REFERERS_ON_PAGE' => $ii
 ));
 
 /* === Hook  === */
@@ -114,14 +114,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('REFERERS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('REFERERS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('REFERERS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

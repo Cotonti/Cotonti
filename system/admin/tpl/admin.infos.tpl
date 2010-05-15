@@ -1,4 +1,4 @@
-<!-- BEGIN: INFOS -->
+<!-- BEGIN: MAIN -->
 	<h2>Info</h2>
 	<table class="cells">
 		<tr>
@@ -33,4 +33,4 @@
 			<td class="textcenter">{ADMIN_INFOS_USRTIME} {ADMIN_INFOS_TIMETEXT}</td>
 		</tr>
 	</table>
-<!-- END: INFOS -->
+<!-- END: MAIN -->

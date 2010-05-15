@@ -92,7 +92,7 @@ while ($row = sed_sql_fetcharray($sql))
 		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],
 		'ADMIN_BANLIST_ROW_URL' => sed_url('admin', 'm=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
 		'ADMIN_BANLIST_ROW_DELURL' => sed_url('admin', 'm=banlist&a=delete&id='.$row['banlist_id'].'&'.sed_xg()),
-		'ADMIN_BANLIST_ROW_EXPIRE' => ($row['banlist_expire'] > 0) ? date($cfg['dateformat'], $row['banlist_expire'])." GMT" : $L['adm_neverexpire'],
+		'ADMIN_BANLIST_ROW_EXPIRE' => ($row['banlist_expire'] > 0) ? date($cfg['dateformat'], $row['banlist_expire']).' GMT' : $L['adm_neverexpire'],
 		'ADMIN_BANLIST_ROW_IP' => sed_inputbox('text', 'rbanlistip', $row['banlist_ip'], 'size="18" maxlength="16"'),
 		'ADMIN_BANLIST_ROW_EMAIL' => sed_inputbox('text', 'rbanlistemail', $row['banlist_email'], 'size="10" maxlength="64"'),
 		'ADMIN_BANLIST_ROW_REASON' => sed_inputbox('text', 'rbanlistreason', $row['banlist_reason'], 'size="22" maxlength="64"'),

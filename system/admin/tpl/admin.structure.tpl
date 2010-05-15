@@ -1,4 +1,4 @@
-<!-- BEGIN: STRUCTURE -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Structure}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -199,4 +199,4 @@
 		</form>
 <!-- END: DEFULT -->
 	</div>
-<!-- END: STRUCTURE -->
+<!-- END: MAIN -->

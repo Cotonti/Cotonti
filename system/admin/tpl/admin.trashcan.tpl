@@ -1,4 +1,4 @@
-<!-- BEGIN: TRASHCAN -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Trashcan}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -36,4 +36,4 @@
 		</table>
 		<p class="paging">{ADMIN_TRASHCAN_PAGINATION_PREV}{ADMIN_TRASHCAN_PAGNAV}{ADMIN_TRASHCAN_PAGINATION_NEXT} <span class="a1">{PHP.L.Total}: {ADMIN_TRASHCAN_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_TRASHCAN_COUNTER_ROW}</span></p>
 	</div>
-<!-- END: TRASHCAN -->
+<!-- END: MAIN -->

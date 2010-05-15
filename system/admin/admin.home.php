@@ -68,7 +68,7 @@ if ($cfg['check_updates'])
 			'ADMIN_HOME_UPDATE_REVISION' => sprintf($L['home_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
 			'ADMIN_HOME_UPDATE_MESSAGE' => sed_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
 		));
-		$t->parse('HOME.UPDATE');
+		$t->parse('MAIN.UPDATE');
 	}
 }
 
@@ -99,7 +99,7 @@ if (!$cfg['disablehitstats'])
 				'ADMIN_HOME_HITS' => $hits,
 				'ADMIN_HOME_PERCENTBAR' => $percentbar
 			));
-			$t->parse('HOME.ADMIN_HOME_ROW');
+			$t->parse('MAIN.ADMIN_HOME_ROW');
 		}
 	}
 	$t->assign('ADMIN_HOME_MORE_HITS_URL', sed_url('admin', 'm=hits'));
@@ -184,20 +184,20 @@ if (!$cfg['disabledbstats'])
 }
 
 $t->assign(array(
-	"ADMIN_HOME_URL" => sed_url('admin', "m=page"),
-	"ADMIN_HOME_PAGESQUEUED" => $pagesqueued,
+	'ADMIN_HOME_URL' => sed_url('admin', 'm=page'),
+	'ADMIN_HOME_PAGESQUEUED' => $pagesqueued,
 	'ADMIN_HOME_VERSION' => $cfg['version'],
 	'ADMIN_HOME_REVISION' => $L['home_rev'].$cfg['revision'],
 	'ADMIN_HOME_DB_VERSION' => $cfg['dbversion']
 ));
-$t->parse('HOME');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('HOME');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('HOME');
+	$adminmain = $t->text('MAIN');
 }
 
 /* === Hook === */

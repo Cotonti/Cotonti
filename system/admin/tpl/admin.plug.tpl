@@ -1,4 +1,4 @@
-<!-- BEGIN: PLUG -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -334,4 +334,4 @@
 <!-- END: UNINSTALL -->
 <!-- END: EDIT -->
 	</div>
-<!-- END: PLUG -->
+<!-- END: MAIN -->

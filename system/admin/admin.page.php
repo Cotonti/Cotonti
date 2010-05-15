@@ -53,7 +53,7 @@ if ($a == 'validate')
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
-		sed_log($L['Page']." #".$id." - ".$L['adm_queue_validated'], 'adm');
+		sed_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
 		if ($cot_cache)
 		{
@@ -95,7 +95,7 @@ elseif ($a == 'unvalidate')
 		$sql = sed_sql_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
 		$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 
-		sed_log($L['Page']." #".$id." - ".$L['adm_queue_unvalidated'], 'adm');
+		sed_log($L['Page'].' #'.$id.' - '.$L['adm_queue_unvalidated'], 'adm');
 
 		if ($cot_cache)
 		{
@@ -140,13 +140,13 @@ elseif ($a == 'delete')
 			$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 		}
 
-		$id2 = "p".$id;
+		$id2 = 'p'.$id;
 		$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
 		$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
 		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
 		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 
-		sed_log($L['Page']." #".$id." - ".$L['Deleted'], 'adm');
+		sed_log($L['Page'].' #'.$id.' - '.$L['Deleted'], 'adm');
 
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.page.delete.done');
@@ -208,7 +208,7 @@ elseif ($a == 'update_cheked')
 					$sql = sed_sql_query("UPDATE $db_pages SET page_state=0 WHERE page_id='".$id."'");
 					$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
-					sed_log($L['Page']." #".$id." - ".$L['adm_queue_validated'], 'adm');
+					sed_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
 					if ($cot_cache && $cfg['cache_page'])
 					{
@@ -256,20 +256,20 @@ elseif ($a == 'update_cheked')
 					$id = $row['page_id'];
 					if ($cfg['trash_page'])
 					{
-						sed_trash_put('page', $L['Page']." #".$id." ".$row['page_title'], $id, $row);
+						sed_trash_put('page', $L['Page'].' #'.$id.' '.$row['page_title'], $id, $row);
 					}
 					if ($row['page_state'] != 1)
 					{
 						$sql = sed_sql_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 					}
 
-					$id2 = "p".$id;
+					$id2 = 'p'.$id;
 					$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
 					$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
 					$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
 					$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
 
-					sed_log($L['Page']." #".$id." - ".$L['Deleted'],'adm');
+					sed_log($L['Page'].' #'.$id.' - '.$L['Deleted'],'adm');
 
 					if ($cot_cache && $cfg['cache_page'])
 					{
@@ -335,20 +335,20 @@ while ($row = sed_sql_fetcharray($sql))
 	$row['page_begin_noformat'] = $row['page_begin'];
 	$row['page_pageurl'] = sed_url('page', $page_urlp);
 	$catpath = sed_build_catpath($row['page_cat']);
-	$row['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$row['page_pageurl']."\">".htmlspecialchars($row['page_title'])."</a>";
+	$row['page_fulltitle'] = $catpath.' '.$cfg['separator'].' <a href="'.$row['page_pageurl'].'">'.htmlspecialchars($row['page_title']).'</a>';
 	$sql4 = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$sed_cat[$row["page_cat"]]['rpath']."%' ");
 	$sub_count = sed_sql_result($sql4, 0, "SUM(structure_pagecount)");
 	$row['page_file'] = intval($row['page_file']);
 	if (!empty($row['page_url']) && $row['page_file'] > 0)
 	{
-		$dotpos = mb_strrpos($row['page_url'],".") + 1;
+		$dotpos = mb_strrpos($row['page_url'], '.') + 1;
 		$fileex = mb_strtolower(mb_substr($row['page_url'], $dotpos, 5));
-		$row['page_fileicon'] = "images/pfs/".$fileex.".gif";
+		$row['page_fileicon'] = 'images/pfs/'.$fileex.'.gif';
 		if (!file_exists($row['page_fileicon']))
 		{
-			$row['page_fileicon'] = "images/admin/page.gif";
+			$row['page_fileicon'] = 'images/admin/page.gif';
 		}
-		$row['page_fileicon'] = "<img src=\"".$row['page_fileicon']."\" alt=\"".$fileex."\" />";
+		$row['page_fileicon'] = '<img src="'.$row['page_fileicon'].'" alt="'.$fileex.'" />';
 	}
 	else
 	{
@@ -356,41 +356,41 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 
 	$t->assign(array(
-		"ADMIN_PAGE_ID" => $row['page_id'],
-		"ADMIN_PAGE_ID_URL" => sed_url('page', "id=".$row['page_id']),
-		"ADMIN_PAGE_URL" => $row['page_pageurl'],
-		"ADMIN_PAGE_TITLE" => $row['page_fulltitle'],
-		"ADMIN_PAGE_SHORTTITLE" => htmlspecialchars($row['page_title']),
-		"ADMIN_PAGE_TYPE" => $page_type,
-		"ADMIN_PAGE_DESC" => htmlspecialchars($row['page_desc']),
-		"ADMIN_PAGE_AUTHOR" => htmlspecialchars($row['page_author']),
-		"ADMIN_PAGE_OWNER" => sed_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
-		"ADMIN_PAGE_OWNER_AVATAR" => sed_build_userimage($row['user_avatar'], 'avatar'),
-		"ADMIN_PAGE_DATE" => date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
-		"ADMIN_PAGE_BEGIN" => date($cfg['dateformat'], $row['page_begin'] + $usr['timezone'] * 3600),
-		"ADMIN_PAGE_EXPIRE" => date($cfg['dateformat'], $row['page_expire'] + $usr['timezone'] * 3600),
-		"ADMIN_PAGE_ADMIN_COUNT" => $row['page_count'],
-		"ADMIN_PAGE_KEY" => htmlspecialchars($row['page_key']),
-		"ADMIN_PAGE_ALIAS" => htmlspecialchars($row['page_alias']),
-		"ADMIN_PAGE_FILE" => $sed_yesno[$row['page_file']],
-		"ADMIN_PAGE_FILE_BOOL" => $row['page_file'],
-		"ADMIN_PAGE_FILE_URL" => $row['page_url'],
-		"ADMIN_PAGE_FILE_URL_FOR_DOWNLOAD" => sed_url('page', "id=".$row['page_id']."&a=dl"),
-		"ADMIN_PAGE_FILE_NAME" => basename($row['page_url']),
-		"ADMIN_PAGE_FILE_SIZE" => $row['page_size'],
-		"ADMIN_PAGE_FILE_COUNT" => $row['page_filecount'],
-		"ADMIN_PAGE_FILE_ICON" => $row['page_fileicon'],
-		"ADMIN_PAGE_URL_FOR_VALIDATED" => sed_url('admin', "m=page&a=validate&id=".$row['page_id']."&d=".$d."&".sed_xg()),
-		"ADMIN_PAGE_URL_FOR_DELETED" => sed_url('admin', "m=page&a=delete&id=".$row['page_id']."&d=".$d."&".sed_xg()),
-		"ADMIN_PAGE_URL_FOR_EDIT" => sed_url('page', "m=edit&id=".$row["page_id"]."&r=adm"),
-		"ADMIN_PAGE_ODDEVEN" => sed_build_oddeven($ii),
-		"ADMIN_PAGE_CAT_URL" => sed_url('list', 'c='.$row["page_cat"]),
-		"ADMIN_PAGE_CAT" => $row["page_cat"],
-		"ADMIN_PAGE_CAT_TITLE" => $sed_cat[$row['page_cat']]['title'],
-		"ADMIN_PAGE_CATPATH" => $catpath,
-		"ADMIN_PAGE_CATDESC" => $sed_cat[$row['page_cat']]['desc'],
-		"ADMIN_PAGE_CATICON" => $sed_cat[$row['page_cat']]['icon'],
-		"ADMIN_PAGE_CAT_COUNT" => $sub_count
+		'ADMIN_PAGE_ID' => $row['page_id'],
+		'ADMIN_PAGE_ID_URL' => sed_url('page', 'id='.$row['page_id']),
+		'ADMIN_PAGE_URL' => $row['page_pageurl'],
+		'ADMIN_PAGE_TITLE' => $row['page_fulltitle'],
+		'ADMIN_PAGE_SHORTTITLE' => htmlspecialchars($row['page_title']),
+		'ADMIN_PAGE_TYPE' => $page_type,
+		'ADMIN_PAGE_DESC' => htmlspecialchars($row['page_desc']),
+		'ADMIN_PAGE_AUTHOR' => htmlspecialchars($row['page_author']),
+		'ADMIN_PAGE_OWNER' => sed_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
+		'ADMIN_PAGE_OWNER_AVATAR' => sed_build_userimage($row['user_avatar'], 'avatar'),
+		'ADMIN_PAGE_DATE' => date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
+		'ADMIN_PAGE_BEGIN' => date($cfg['dateformat'], $row['page_begin'] + $usr['timezone'] * 3600),
+		'ADMIN_PAGE_EXPIRE' => date($cfg['dateformat'], $row['page_expire'] + $usr['timezone'] * 3600),
+		'ADMIN_PAGE_ADMIN_COUNT' => $row['page_count'],
+		'ADMIN_PAGE_KEY' => htmlspecialchars($row['page_key']),
+		'ADMIN_PAGE_ALIAS' => htmlspecialchars($row['page_alias']),
+		'ADMIN_PAGE_FILE' => $sed_yesno[$row['page_file']],
+		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
+		'ADMIN_PAGE_FILE_URL' => $row['page_url'],
+		'ADMIN_PAGE_FILE_URL_FOR_DOWNLOAD' => sed_url('page', 'id='.$row['page_id'].'&a=dl'),
+		'ADMIN_PAGE_FILE_NAME' => basename($row['page_url']),
+		'ADMIN_PAGE_FILE_SIZE' => $row['page_size'],
+		'ADMIN_PAGE_FILE_COUNT' => $row['page_filecount'],
+		'ADMIN_PAGE_FILE_ICON' => $row['page_fileicon'],
+		'ADMIN_PAGE_URL_FOR_VALIDATED' => sed_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$d.'&'.sed_xg()),
+		'ADMIN_PAGE_URL_FOR_DELETED' => sed_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$d.'&'.sed_xg()),
+		'ADMIN_PAGE_URL_FOR_EDIT' => sed_url('page', 'm=edit&id='.$row['page_id'].'&r=adm'),
+		'ADMIN_PAGE_ODDEVEN' => sed_build_oddeven($ii),
+		'ADMIN_PAGE_CAT_URL' => sed_url('list', 'c='.$row['page_cat']),
+		'ADMIN_PAGE_CAT' => $row['page_cat'],
+		'ADMIN_PAGE_CAT_TITLE' => $sed_cat[$row['page_cat']]['title'],
+		'ADMIN_PAGE_CATPATH' => $catpath,
+		'ADMIN_PAGE_CATDESC' => $sed_cat[$row['page_cat']]['desc'],
+		'ADMIN_PAGE_CATICON' => $sed_cat[$row['page_cat']]['icon'],
+		'ADMIN_PAGE_CAT_COUNT' => $sub_count
 	));
 
 	// Extra fields for structure
@@ -416,17 +416,17 @@ while ($row = sed_sql_fetcharray($sql))
 			{
 				ob_start();
 				eval($row['page_text']);
-				$t->assign("ADMIN_PAGE_TEXT", ob_get_clean());
+				$t->assign('ADMIN_PAGE_TEXT', ob_get_clean());
 			}
 			else
 			{
-				$t->assign("ADMIN_PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
+				$t->assign('ADMIN_PAGE_TEXT', 'The PHP mode is disabled for pages.<br />Please see the administration panel, then "Configuration", then "Parsers".');
 			}
 		break;
 
 		case 1:
-			$row_more = ((int)$textlength>0) ? sed_string_truncate($row['page_text'], $textlength) : sed_cut_more($row['page_text']);
-			$t->assign("ADMIN_PAGE_TEXT", $row['page_text']);
+			$row_more = ((int)$textlength > 0) ? sed_string_truncate($row['page_text'], $textlength) : sed_cut_more($row['page_text']);
+			$t->assign('ADMIN_PAGE_TEXT', $row['page_text']);
 		break;
 
 		default:
@@ -459,7 +459,7 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t->parse("PAGE.PAGE_ROW");
+	$t->parse('MAIN.PAGE_ROW');
 	$ii++;
 }
 
@@ -473,18 +473,18 @@ $lincif_conf = sed_auth('admin', 'a', 'A');
 $lincif_page = sed_auth('page', 'any', 'A');
 
 $t->assign(array(
-	"ADMIN_PAGE_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=page"),
-	"ADMIN_PAGE_URL_ADD" => sed_url('page', 'm=add'),
-	"ADMIN_PAGE_URL_EXTRAFIELDS" => sed_url('admin', 'm=extrafields&n=pages'),
-	"ADMIN_PAGE_URL_LIST_ALL" => sed_url('list', 'c=all'),
-	"ADMIN_PAGE_FORM_URL" => sed_url('admin', "m=page&a=update_cheked&d=".$d),
-	"ADMIN_PAGE_TOTALDBPAGES" => $totaldbpages,
-	"ADMIN_PAGE_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_PAGE_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_PAGE_PAGNAV" => $pagenav['main'],
-	"ADMIN_PAGE_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_PAGE_TOTALITEMS" => $totalitems,
-	"ADMIN_PAGE_ON_PAGE" => $ii
+	'ADMIN_PAGE_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=page'),
+	'ADMIN_PAGE_URL_ADD' => sed_url('page', 'm=add'),
+	'ADMIN_PAGE_URL_EXTRAFIELDS' => sed_url('admin', 'm=extrafields&n=pages'),
+	'ADMIN_PAGE_URL_LIST_ALL' => sed_url('list', 'c=all'),
+	'ADMIN_PAGE_FORM_URL' => sed_url('admin', 'm=page&a=update_cheked&d='.$d),
+	'ADMIN_PAGE_TOTALDBPAGES' => $totaldbpages,
+	'ADMIN_PAGE_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_PAGE_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_PAGE_PAGNAV' => $pagenav['main'],
+	'ADMIN_PAGE_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_PAGE_TOTALITEMS' => $totalitems,
+	'ADMIN_PAGE_ON_PAGE' => $ii
 ));
 
 /* === Hook  === */
@@ -495,14 +495,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('PAGE');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('PAGE');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('PAGE');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

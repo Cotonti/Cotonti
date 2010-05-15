@@ -48,12 +48,12 @@ $extp = sed_getextplugins('admin.pfs.allpfs.loop');
 while($row = sed_sql_fetcharray($sql))
 {
 	$row['user_name'] = ($row['user_id'] == 0) ? $L['SFS'] : $row['user_name'];
-	$row['user_id'] = ($row['user_id'] == 0) ? "0" : $row['user_id'];
+	$row['user_id'] = ($row['user_id'] == 0) ? '0' : $row['user_id'];
 
 	$t->assign(array(
-		"ADMIN_ALLPFS_ROW_URL" => sed_url('pfs', "userid=".$row['user_id']),
-		"ADMIN_ALLPFS_ROW_USER" => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
-		"ADMIN_ALLPFS_ROW_COUNT" => $row['COUNT(*)']
+		'ADMIN_ALLPFS_ROW_URL' => sed_url('pfs', 'userid='.$row['user_id']),
+		'ADMIN_ALLPFS_ROW_USER' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+		'ADMIN_ALLPFS_ROW_COUNT' => $row['COUNT(*)']
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -62,16 +62,16 @@ while($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("ALLPFS.ALLPFS_ROW");
+	$t->parse('MAIN.ALLPFS_ROW');
 	$ii++;
 }
 
 $t->assign(array(
-	"ADMIN_ALLPFS_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_ALLPFS_PAGNAV" => $pagenav['main'],
-	"ADMIN_ALLPFS_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_ALLPFS_TOTALITEMS" => $totalitems,
-	"ADMIN_ALLPFS_ON_PAGE" => $ii
+	'ADMIN_ALLPFS_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_ALLPFS_PAGNAV' => $pagenav['main'],
+	'ADMIN_ALLPFS_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_ALLPFS_TOTALITEMS' => $totalitems,
+	'ADMIN_ALLPFS_ON_PAGE' => $ii
 ));
 
 /* === Hook  === */
@@ -82,14 +82,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('ALLPFS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('ALLPFS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('ALLPFS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

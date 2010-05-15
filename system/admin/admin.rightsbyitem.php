@@ -88,16 +88,16 @@ sed_die(sed_sql_numrows($sql) == 0);
 switch($ic)
 {
 	case 'page':
-		$title = " : ".$sed_cat[$io]['title'];
+		$title = ' : '.$sed_cat[$io]['title'];
 	break;
 
 	case 'forums':
 		$forum = sed_forum_info($io);
-		$title = " : ".htmlspecialchars($forum['fs_title'])." (#".$io.")";
+		$title = ' : '.htmlspecialchars($forum['fs_title'])." (#".$io.")";
 	break;
 
 	case 'plug':
-		$title = " : ".$io;
+		$title = ' : '.$io;
 	break;
 
 	default:
@@ -113,7 +113,7 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$adminpath[] = ($advanced) ? array(sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), $L['Rights']." / ".$L['adm_code'][$ic].$title.' ('.$L['More'].')') : array(sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), $L['Rights']." / ".$L['adm_code'][$ic].$title);
+$adminpath[] = ($advanced) ? array(sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), $L['Rights'].' / '.$L['adm_code'][$ic].$title.' ('.$L['More'].')') : array(sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), $L['Rights'].' / '.$L['adm_code'][$ic].$title);
 
 $adv_columns = ($advanced) ? 8 : 3;
 $adv_columns = (!$advanced && $ic == 'page') ? 4 : $adv_columns;
@@ -122,7 +122,7 @@ $l_custom1 = ($ic == 'page') ? $L['Download'] : $L['Custom'].' #1';
 
 while ($row = sed_sql_fetcharray($sql))
 {
-	$link = sed_url('admin', "m=rights&g=".$row['auth_groupid']);
+	$link = sed_url('admin', 'm=rights&g='.$row['auth_groupid']);
 	$title = htmlspecialchars($row['grp_title']);
 	sed_rights_parseline($row, $title, $link);
 }
@@ -131,11 +131,11 @@ $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
 $t->assign(array(
-	"ADMIN_RIGHTSBYITEM_FORM_URL" => sed_url('admin', "m=rightsbyitem&a=update&ic=".$ic."&io=".$io.$adv_for_url),
-	"ADMIN_RIGHTSBYITEM_ADVANCED_URL" => sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
-	"ADMIN_RIGHTSBYITEM_ADV_COLUMNS" => $adv_columns,
-	"ADMIN_RIGHTSBYITEM_4ADV_COLUMNS" => 4 + $adv_columns,
-	"ADMIN_RIGHTSBYITEM_ADMINWARNINGS" => $adminwarnings
+	'ADMIN_RIGHTSBYITEM_FORM_URL' => sed_url('admin', 'm=rightsbyitem&a=update&ic='.$ic.'&io='.$io.$adv_for_url),
+	'ADMIN_RIGHTSBYITEM_ADVANCED_URL' => sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
+	'ADMIN_RIGHTSBYITEM_ADV_COLUMNS' => $adv_columns,
+	'ADMIN_RIGHTSBYITEM_4ADV_COLUMNS' => 4 + $adv_columns,
+	'ADMIN_RIGHTSBYITEM_ADMINWARNINGS' => $adminwarnings
 ));
 
 /* === Hook === */
@@ -146,18 +146,18 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('RIGHTSBYITEM');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('RIGHTSBYITEM');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('RIGHTSBYITEM');
+	$adminmain = $t->text('MAIN');
 }
 
-$t->parse("RIGHTSBYITEM_HELP");
-$adminhelp = $t->text("RIGHTSBYITEM_HELP");
+$t->parse('RIGHTSBYITEM_HELP');
+$adminhelp = $t->text('RIGHTSBYITEM_HELP');
 
 function sed_rights_parseline($row, $title, $link)
 {
@@ -199,11 +199,11 @@ function sed_rights_parseline($row, $title, $link)
 		$out['tpl_rights_parseline_state'] = $state[$code];
 
 		$t->assign(array(
-			"ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME" => "auth[".$row['auth_groupid']."][".$code."]",
-			"ADMIN_RIGHTSBYITEM_ROW_ITEMS_CHECKED" => ($state[$code]) ? " checked=\"checked\"" : '',
-			"ADMIN_RIGHTSBYITEM_ROW_ITEMS_DISABLED" => ($locked[$code]) ? " disabled=\"disabled\"" : ''
+			'ADMIN_RIGHTSBYITEM_ROW_ITEMS_NAME' => 'auth['.$row['auth_groupid'].']['.$code.']',
+			'ADMIN_RIGHTSBYITEM_ROW_ITEMS_CHECKED' => ($state[$code]) ? " checked=\"checked\"" : '',
+			'ADMIN_RIGHTSBYITEM_ROW_ITEMS_DISABLED' => ($locked[$code]) ? " disabled=\"disabled\"" : ''
 		));
-		$t->parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW.ROW_ITEMS");
+		$t->parse('MAIN.RIGHTSBYITEM_ROW.ROW_ITEMS');
 	}
 
 	if (!$advanced)
@@ -220,12 +220,12 @@ function sed_rights_parseline($row, $title, $link)
 	}
 
 	$t->assign(array(
-		"ADMIN_RIGHTSBYITEM_ROW_TITLE" => $title,
-		"ADMIN_RIGHTSBYITEM_ROW_LINK" => $link,
-		"ADMIN_RIGHTSBYITEM_ROW_USER" => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
-		"ADMIN_RIGHTSBYITEM_ROW_JUMPTO" => sed_url('users', "g=".$row['auth_groupid']),
+		'ADMIN_RIGHTSBYITEM_ROW_TITLE' => $title,
+		'ADMIN_RIGHTSBYITEM_ROW_LINK' => $link,
+		'ADMIN_RIGHTSBYITEM_ROW_USER' => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
+		'ADMIN_RIGHTSBYITEM_ROW_JUMPTO' => sed_url('users', 'g='.$row['auth_groupid']),
 	));
-	$t->parse("RIGHTSBYITEM.RIGHTSBYITEM_ROW");
+	$t->parse('MAIN.RIGHTSBYITEM_ROW');
 }
 
 ?>

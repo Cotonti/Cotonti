@@ -1,4 +1,4 @@
-<!-- BEGIN: ALLPFS -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<table class="cells">
 			<tr>
@@ -16,4 +16,4 @@
 		</table>
 		<p class="paging">{ADMIN_ALLPFS_PAGINATION_PREV}{ADMIN_ALLPFS_PAGNAV}{ADMIN_ALLPFS_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_ALLPFS_TOTALITEMS}, {PHP.L.comm_on_page}: {ADMIN_ALLPFS_ON_PAGE}</span></p>
 	</div>
-<!-- END: ALLPFS -->
+<!-- END: MAIN -->

@@ -1,4 +1,4 @@
-<!-- BEGIN: TOOLS -->
+<!-- BEGIN: MAIN -->
 <!-- IF {PHP.list_present} -->
 	<h2>{PHP.L.Tools}</h2>
 	<table class="cells">
@@ -14,4 +14,4 @@
 <!-- ELSE -->
 	{PHP.L.adm_listisempty}
 <!-- ENDIF -->
-<!-- END: TOOLS -->
+<!-- END: MAIN -->

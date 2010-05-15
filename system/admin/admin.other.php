@@ -48,15 +48,15 @@ while ($row = sed_sql_fetcharray($sql))
 	$lincif_mode = (sed_auth($row['ct_code'], 'a', 'A') && $row['ct_code'] != 'admin' && $row['ct_code'] != 'index' && $row['ct_code'] != 'message') ? true : false;
 	$lincif_confmode = ($cfgentries[$row['ct_code']] > 0) ? true : false;
 	$lincif_rightsmode = ($authentries[$row['ct_code']] > 0) ? true : false;
-	$cfgcode = "disable_".$row['ct_code'];
+	$cfgcode = 'disable_'.$row['ct_code'];
 
 	$t->assign(array(
-		"ADMIN_OTHER_CT_CODE" => $row['ct_code'],
-		"ADMIN_OTHER_CT_ICON" => sed_rc('admin_icon_ct', array('code' => $row['ct_code'])),
-		"ADMIN_OTHER_CT_TITLE_LOC" => (empty($L["core_".$row['ct_code']])) ? $row['ct_title'] : $L["core_".$row['ct_code']],
-		"ADMIN_OTHER_CT_CODE_URL" => sed_url('admin', "m=".$row['ct_code']),
-		"ADMIN_OTHER_RIGHTS" => ($authentries[$row['ct_code']] > 0) ? sed_url('admin', "m=rightsbyitem&ic=".$row['ct_code']."&io=a") : '#',
-		"ADMIN_OTHER_CONFIG" => ($cfgentries[$row['ct_code']] > 0) ? sed_url('admin', "m=config&n=edit&o=core&p=".$row['ct_code']) : '#'
+		'ADMIN_OTHER_CT_CODE' => $row['ct_code'],
+		'ADMIN_OTHER_CT_ICON' => sed_rc('admin_icon_ct', array('code' => $row['ct_code'])),
+		'ADMIN_OTHER_CT_TITLE_LOC' => (empty($L['core_'.$row['ct_code']])) ? $row['ct_title'] : $L['core_'.$row['ct_code']],
+		'ADMIN_OTHER_CT_CODE_URL' => sed_url('admin', 'm='.$row['ct_code']),
+		'ADMIN_OTHER_RIGHTS' => ($authentries[$row['ct_code']] > 0) ? sed_url('admin', 'm=rightsbyitem&ic='.$row['ct_code'].'&io=a') : '#',
+		'ADMIN_OTHER_CONFIG' => ($cfgentries[$row['ct_code']] > 0) ? sed_url('admin', 'm=config&n=edit&o=core&p='.$row['ct_code']) : '#'
 	));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -64,22 +64,22 @@ while ($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("OTHER.OTHER_ROW");
+	$t->parse('MAIN.OTHER_ROW');
 }
 
 $lincif_conf = sed_auth('admin', 'a', 'A');
 $lincif_user = sed_auth('users', 'a', 'A');
 
 $t->assign(array(
-	"ADMIN_OTHER_URL_CACHE" => sed_url('admin', "m=cache"),
-	"ADMIN_OTHER_URL_DISKCACHE" => sed_url('admin', "m=cache&s=disk"),
-	"ADMIN_OTHER_URL_BBCODE" => sed_url('admin', "m=bbcode"),
-	"ADMIN_OTHER_URL_URLS" => sed_url('admin', "m=urls"),
-	"ADMIN_OTHER_URL_BANLIST" => sed_url('admin', "m=banlist"),
-	"ADMIN_OTHER_URL_HITS" => sed_url('admin', "m=hits"),
-	"ADMIN_OTHER_URL_REFERS" => sed_url('admin', "m=referers"),
-	"ADMIN_OTHER_URL_LOG" => sed_url('admin', "m=log"),
-	"ADMIN_OTHER_URL_INFOS" => sed_url('admin', "m=infos")
+	'ADMIN_OTHER_URL_CACHE' => sed_url('admin', 'm=cache'),
+	'ADMIN_OTHER_URL_DISKCACHE' => sed_url('admin', 'm=cache&s=disk'),
+	'ADMIN_OTHER_URL_BBCODE' => sed_url('admin', 'm=bbcode'),
+	'ADMIN_OTHER_URL_URLS' => sed_url('admin', 'm=urls'),
+	'ADMIN_OTHER_URL_BANLIST' => sed_url('admin', 'm=banlist'),
+	'ADMIN_OTHER_URL_HITS' => sed_url('admin', 'm=hits'),
+	'ADMIN_OTHER_URL_REFERS' => sed_url('admin', 'm=referers'),
+	'ADMIN_OTHER_URL_LOG' => sed_url('admin', 'm=log'),
+	'ADMIN_OTHER_URL_INFOS' => sed_url('admin', 'm=infos')
 ));
 
 /* === Hook  === */
@@ -90,14 +90,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('OTHER');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('OTHER');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('OTHER');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

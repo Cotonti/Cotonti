@@ -1,4 +1,4 @@
-<!-- BEGIN: FORUMS -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Forums}</h2>
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">
@@ -181,4 +181,4 @@
 		</form>
 <!-- END: DEFULT -->
 	</div>
-<!-- END: FORUMS -->
+<!-- END: MAIN -->

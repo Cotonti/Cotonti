@@ -154,22 +154,22 @@ while ($row = sed_sql_fetcharray($sql1))
 
 while ($row = sed_sql_fetcharray($sql2))
 {
-	$link = sed_url('admin', "m=forums&n=edit&id=".$row['auth_option']);
+	$link = sed_url('admin', 'm=forums&n=edit&id='.$row['auth_option']);
 	$title = htmlspecialchars(sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'], 24), sed_cutstring($row['fs_category'], 32), FALSE));
 	sed_rights_parseline($row, $title, $link, '_FORUMS');
 }
 
 while ($row = sed_sql_fetcharray($sql3))
 {
-	$link = sed_url('admin', "m=page");
+	$link = sed_url('admin', 'm=page');
 	$title = $sed_cat[$row['auth_option']]['tpath'];
 	sed_rights_parseline($row, $title, $link, '_PAGES');
 }
 
 while ($row = sed_sql_fetcharray($sql4))
 {
-	$link = sed_url('admin', "m=plug&a=details&pl=".$row['auth_option']);
-	$title = $L['Plugin']." : ".$row['auth_option'];
+	$link = sed_url('admin', 'm=plug&a=details&pl='.$row['auth_option']);
+	$title = $L['Plugin'].' : '.$row['auth_option'];
 	sed_rights_parseline($row, $title, $link, '_PLUGINS');
 }
 
@@ -185,12 +185,12 @@ $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
 $t->assign(array(
-	"ADMIN_RIGHTS_FORM_URL" => sed_url('admin', "m=rights&a=update&g=".$g.$adv_for_url),
-	"ADMIN_RIGHTS_ADVANCED_URL" => sed_url('admin', 'm=rights&g='.$g.'&advanced=1'),
-	"ADMIN_RIGHTS_SELECTBOX_GROUPS" => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
-	"ADMIN_RIGHTS_ADV_COLUMNS" => $adv_columns,
-	"ADMIN_RIGHTS_4ADV_COLUMNS" => 4 + $adv_columns,
-	"ADMIN_RIGHTS_ADMINWARNINGS" => $adminwarnings
+	'ADMIN_RIGHTS_FORM_URL' => sed_url('admin', 'm=rights&a=update&g='.$g.$adv_for_url),
+	'ADMIN_RIGHTS_ADVANCED_URL' => sed_url('admin', 'm=rights&g='.$g.'&advanced=1'),
+	'ADMIN_RIGHTS_SELECTBOX_GROUPS' => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
+	'ADMIN_RIGHTS_ADV_COLUMNS' => $adv_columns,
+	'ADMIN_RIGHTS_4ADV_COLUMNS' => 4 + $adv_columns,
+	'ADMIN_RIGHTS_ADMINWARNINGS' => $adminwarnings
 ));
 
 /* === Hook === */
@@ -201,18 +201,18 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('RIGHTS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('RIGHTS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('RIGHTS');
+	$adminmain = $t->text('MAIN');
 }
 
-$t->parse("RIGHTS_HELP");
-$adminhelp = $t->text("RIGHTS_HELP");
+$t->parse('RIGHTS_HELP');
+$adminhelp = $t->text('RIGHTS_HELP');
 
 function sed_rights_parseline($row, $title, $link, $name)
 {
@@ -247,11 +247,11 @@ function sed_rights_parseline($row, $title, $link, $name)
 		$out['tpl_rights_parseline_state'] = $state[$code];
 
 		$t->assign(array(
-			"ADMIN_RIGHTS_ROW_ITEMS_NAME" => "auth[".$row['auth_code']."][".$row['auth_option']."][".$code."]",
-			"ADMIN_RIGHTS_ROW_ITEMS_CHECKED" => ($state[$code]) ? " checked=\"checked\"" : '',
-			"ADMIN_RIGHTS_ROW_ITEMS_DISABLED" => ($locked[$code]) ? " disabled=\"disabled\"" : ''
+			'ADMIN_RIGHTS_ROW_ITEMS_NAME' => 'auth['.$row['auth_code'].']['.$row['auth_option'].']['.$code.']',
+			'ADMIN_RIGHTS_ROW_ITEMS_CHECKED' => ($state[$code]) ? " checked=\"checked\"" : '',
+			'ADMIN_RIGHTS_ROW_ITEMS_DISABLED' => ($locked[$code]) ? " disabled=\"disabled\"" : ''
 		));
-		$t->parse("RIGHTS.RIGHTS_ROW".$name.".ROW".$name."_ITEMS");
+		$t->parse('MAIN.RIGHTS_ROW'.$name.'.ROW'.$name.'_ITEMS');
 	}
 
 	if (!$advanced)
@@ -268,13 +268,13 @@ function sed_rights_parseline($row, $title, $link, $name)
 	}
 
 	$t->assign(array(
-		"ADMIN_RIGHTS_ROW_AUTH_CODE" => $row['auth_code'],
-		"ADMIN_RIGHTS_ROW_TITLE" => $title,
-		"ADMIN_RIGHTS_ROW_LINK" => $link,
-		"ADMIN_RIGHTS_ROW_RIGHTSBYITEM" => sed_url('admin', "m=rightsbyitem&ic=".$row['auth_code']."&io=".$row['auth_option']),
-		"ADMIN_RIGHTS_ROW_USER" => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
+		'ADMIN_RIGHTS_ROW_AUTH_CODE' => $row['auth_code'],
+		'ADMIN_RIGHTS_ROW_TITLE' => $title,
+		'ADMIN_RIGHTS_ROW_LINK' => $link,
+		'ADMIN_RIGHTS_ROW_RIGHTSBYITEM' => sed_url('admin', 'm=rightsbyitem&ic='.$row['auth_code'].'&io='.$row['auth_option']),
+		'ADMIN_RIGHTS_ROW_USER' => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
 	));
-	$t->parse("RIGHTS.RIGHTS_ROW".$name);
+	$t->parse('MAIN.RIGHTS_ROW'.$name);
 }
 
 ?>

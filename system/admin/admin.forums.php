@@ -154,21 +154,21 @@ if ($n == 'edit')
 		while ($rowa = sed_sql_fetchassoc($sqla))
 		{
 			$ifmaster = ($fs_masterid == $rowa['fs_id']) ? true : false;
-			$t->assign("ADMIN_FORUMS_EDIT_FORUMS_MASTER_ROW_CFS", sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE));
-			$t->parse("FORUMS.EDIT.EDIT_FORUMS_MASTER.EDIT_FORUMS_MASTER_ROW");
+			$t->assign('ADMIN_FORUMS_EDIT_FORUMS_MASTER_ROW_CFS', sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE));
+			$t->parse('MAIN.EDIT.EDIT_FORUMS_MASTER.EDIT_FORUMS_MASTER_ROW');
 		}
-		$t->parse("FORUMS.EDIT.EDIT_FORUMS_MASTER");
+		$t->parse('MAIN.EDIT.EDIT_FORUMS_MASTER');
 	}
 
 	$t->assign(array(
-		"ADMIN_FORUMS_EDIT_FORM_URL" => sed_url('admin', "m=forums&n=edit&a=update&id=".$fs_id),
-		"ADMIN_FORUMS_EDIT_FS_ID" => $fs_id,
-		"ADMIN_FORUMS_EDIT_SELECTBOX_FORUMCAT" => sed_selectbox_forumcat($fs_category, 'rcat'),
-		"ADMIN_FORUMS_EDIT_FS_TITLE" => htmlspecialchars($fs_title),
-		"ADMIN_FORUMS_EDIT_FS_DESC" => htmlspecialchars($fs_desc),
-		"ADMIN_FORUMS_EDIT_FS_ICON" => htmlspecialchars($fs_icon),
-		"ADMIN_FORUMS_EDIT_FS_AUTOPRUNE" => $fs_autoprune,
-		"ADMIN_FORUMS_EDIT_RESYNC_URL" => sed_url('admin', "m=forums&n=edit&a=resync&id=".$fs_id."&".sed_xg())
+		'ADMIN_FORUMS_EDIT_FORM_URL' => sed_url('admin', 'm=forums&n=edit&a=update&id='.$fs_id),
+		'ADMIN_FORUMS_EDIT_FS_ID' => $fs_id,
+		'ADMIN_FORUMS_EDIT_SELECTBOX_FORUMCAT' => sed_selectbox_forumcat($fs_category, 'rcat'),
+		'ADMIN_FORUMS_EDIT_FS_TITLE' => htmlspecialchars($fs_title),
+		'ADMIN_FORUMS_EDIT_FS_DESC' => htmlspecialchars($fs_desc),
+		'ADMIN_FORUMS_EDIT_FS_ICON' => htmlspecialchars($fs_icon),
+		'ADMIN_FORUMS_EDIT_FS_AUTOPRUNE' => $fs_autoprune,
+		'ADMIN_FORUMS_EDIT_RESYNC_URL' => sed_url('admin', 'm=forums&n=edit&a=resync&id='.$fs_id.'&'.sed_xg())
 	));
 	/* === Hook === */
 	$extp = sed_getextplugins('admin.forums.edit');
@@ -177,7 +177,7 @@ if ($n == 'edit')
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("FORUMS.EDIT");
+	$t->parse('MAIN.EDIT');
 }
 else
 {
@@ -354,17 +354,17 @@ else
 				foreach ($fcache[$fs_id] as $key => $value)
 				{
 					$t->assign(array(
-						"ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL" => sed_url('admin', "m=forums&a=delete&id=".$key."&".sed_xg()),
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL" => sed_url('admin', "m=forums&n=edit&id=".$key),
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE" => htmlspecialchars($value[0]),
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL" => sed_url('admin', "m=forums&id=".$key."&a=order&w=up&d=".$d),
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL" => sed_url('admin', "m=forums&id=".$key."&a=order&w=down&d=".$d),
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS" => $sed_yesno[$value[4]],
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT" => $value[1],
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT" => $value[2],
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_VIEWCOUNT" => $value[3],
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=forums&io=".$key),
-						"ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL" => sed_url('forums', "m=topics&s=".$key)
+						'ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL' => sed_url('admin', 'm=forums&a=delete&id='.$key.'&'.sed_xg()),
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL' => sed_url('admin', 'm=forums&n=edit&id='.$key),
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE' => htmlspecialchars($value[0]),
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL' => sed_url('admin', 'm=forums&id='.$key.'&a=order&w=up&d='.$d),
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL' => sed_url('admin', 'm=forums&id='.$key.'&a=order&w=down&d='.$d),
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS' => $sed_yesno[$value[4]],
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT' => $value[1],
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT' => $value[2],
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_VIEWCOUNT' => $value[3],
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL' => sed_url('admin', 'm=rightsbyitem&ic=forums&io='.$key),
+						'ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL' => sed_url('forums', 'm=topics&s='.$key)
 					));
 
 					/* === Hook - Part2 : Include === */
@@ -374,27 +374,27 @@ else
 					}
 					/* ===== */
 
-					$t->parse("FORUMS.DEFULT.ROW.FCACHE");
+					$t->parse('MAIN.DEFULT.ROW.FCACHE');
 
 					$ii++;
 				}
 			}
 
 			$t->assign(array(
-				"ADMIN_FORUMS_DEFAULT_ROW_FN_URL" => sed_url('admin', "m=forums&s=structure&n=options&id=".$row['fn_id']),
-				"ADMIN_FORUMS_DEFAULT_ROW_FN_TITLE" => htmlspecialchars($row['fn_title']),
-				"ADMIN_FORUMS_DEFAULT_ROW_FN_PATH" => $row['fn_path'],
-				"ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL" => sed_url('admin', "m=forums&a=delete&id=".$fs_id."&".sed_xg()),
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL" => sed_url('admin', "m=forums&n=edit&id=".$fs_id),
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE" => htmlspecialchars($fs_title),
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL" => sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=up&d=".$d),
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL" => sed_url('admin', "m=forums&id=".$fs_id."&a=order&w=down&d=".$d),
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS" => $sed_yesno[$row['fs_allowprvtopics']],
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT" => $row['fs_topiccount'],
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT" => $row['fs_postcount'],
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_VIEWCOUNT" => $row['fs_viewcount'],
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=forums&io=".$fs_id),
-				"ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL" => sed_url('forums', "m=topics&s=".$fs_id)
+				'ADMIN_FORUMS_DEFAULT_ROW_FN_URL' => sed_url('admin', 'm=forums&s=structure&n=options&id='.$row['fn_id']),
+				'ADMIN_FORUMS_DEFAULT_ROW_FN_TITLE' => htmlspecialchars($row['fn_title']),
+				'ADMIN_FORUMS_DEFAULT_ROW_FN_PATH' => $row['fn_path'],
+				'ADMIN_FORUMS_DEFAULT_ROW_DELETE_URL' => sed_url('admin', 'm=forums&a=delete&id='.$fs_id.'&'.sed_xg()),
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL' => sed_url('admin', 'm=forums&n=edit&id='.$fs_id),
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE' => htmlspecialchars($fs_title),
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL' => sed_url('admin', 'm=forums&id='.$fs_id.'&a=order&w=up&d='.$d),
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL' => sed_url('admin', 'm=forums&id='.$fs_id.'&a=order&w=down&d='.$d),
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS' => $sed_yesno[$row['fs_allowprvtopics']],
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT' => $row['fs_topiccount'],
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT' => $row['fs_postcount'],
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_VIEWCOUNT' => $row['fs_viewcount'],
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL' => sed_url('admin', 'm=rightsbyitem&ic=forums&io='.$fs_id),
+				'ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL' => sed_url('forums', 'm=topics&s='.$fs_id)
 			));
 
 			/* === Hook - Part2 : Include === */
@@ -404,7 +404,7 @@ else
 			}
 			/* ===== */
 
-			$t->parse("FORUMS.DEFULT.ROW");
+			$t->parse('MAIN.DEFULT.ROW');
 		}
 	}
 
@@ -413,32 +413,32 @@ else
 	while ($rowa = sed_sql_fetchassoc($sqla))
 	{
 		$t->assign(array(
-			"ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_CFS" => sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE),
-			"ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_FS_ID" => $rowa['fs_id']
+			'ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_CFS' => sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE),
+			'ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_FS_ID' => $rowa['fs_id']
 		));
-		$t->parse("FORUMS.DEFULT.FORMADDSELECT");
+		$t->parse('MAIN.DEFULT.FORMADDSELECT');
 	}
 
 	$t->assign(array(
-		"ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL" => sed_url('admin', 'm=forums&a=update&d='.$d),
-		//"ADMIN_FORUMS_PAGINATION_PREV" => $pagenav['prev'],
-		//"ADMIN_FORUMS_PAGNAV" => $pagenav['main'],
-		//"ADMIN_FORUMS_PAGINATION_NEXT" => $pagenav['next'],
-		"ADMIN_FORUMS_TOTALITEMS" => $totalitems,
-		"ADMIN_FORUMS_COUNTER_ROW" => $ii,
-		"ADMIN_FORUMS_DEFAULT_FORM_ADD_URL" => sed_url('admin', "m=forums&a=add"),
-		"ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT" => sed_selectbox_forumcat('', 'ncat')
+		'ADMIN_FORUMS_DEFAULT_FORM_UPDATEORDER_URL' => sed_url('admin', 'm=forums&a=update&d='.$d),
+		//'ADMIN_FORUMS_PAGINATION_PREV' => $pagenav['prev'],
+		//'ADMIN_FORUMS_PAGNAV' => $pagenav['main'],
+		//'ADMIN_FORUMS_PAGINATION_NEXT' => $pagenav['next'],
+		'ADMIN_FORUMS_TOTALITEMS' => $totalitems,
+		'ADMIN_FORUMS_COUNTER_ROW' => $ii,
+		'ADMIN_FORUMS_DEFAULT_FORM_ADD_URL' => sed_url('admin', 'm=forums&a=add'),
+		'ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT' => sed_selectbox_forumcat('', 'ncat')
 	));
-	$t->parse("FORUMS.DEFULT");
+	$t->parse('MAIN.DEFULT');
 }
 
 $is_adminwarnings = isset($adminwarnings);
 $lincif_conf = sed_auth('admin', 'a', 'A');
 
 $t->assign(array(
-	"ADMIN_FORUMS_CONF_URL" => sed_url('admin', 'm=config&n=edit&o=core&p=forums'),
-	"ADMIN_FORUMS_CONF_STRUCTURE_URL" => sed_url('admin', 'm=forums&s=structure'),
-	"ADMIN_FORUMS_ADMINWARNINGS" => $adminwarnings
+	'ADMIN_FORUMS_CONF_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=forums'),
+	'ADMIN_FORUMS_CONF_STRUCTURE_URL' => sed_url('admin', 'm=forums&s=structure'),
+	'ADMIN_FORUMS_ADMINWARNINGS' => $adminwarnings
 ));
 
 /* === Hook === */
@@ -449,14 +449,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('FORUMS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('FORUMS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('FORUMS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

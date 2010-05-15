@@ -58,7 +58,7 @@ switch ($n) // $n - extrafield value
 	default:
 		if (empty($extra_path) || empty($n))
 		{
-			sed_redirect(sed_url('message', "msg=950", '', true));
+			sed_redirect(sed_url('message', 'msg=950', '', true));
 		}
 	break;
 }
@@ -71,7 +71,7 @@ if ($a == 'add')
 	$field['field_variants'] = sed_import('field_variants', 'P', 'HTM');
 	$field['field_description'] = sed_import('field_description', 'P', 'HTM');
 	$field['field_noalter'] = sed_import('field_noalter', 'P', 'BOL');
-	if ($field['field_html'] == "")
+	if (empty($field['field_html']))
 	{
 		$field['field_html'] = get_default_html_construction($field['field_type']);
 	}

@@ -1,4 +1,4 @@
-<!-- BEGIN: PFS -->
+<!-- BEGIN: MAIN -->
 	<h2>{PHP.L.PFS}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">
@@ -17,4 +17,4 @@
 			<li>{ADMIN_PFS_DATAS_NAME}: <span class="strong">{ADMIN_PFS_DATAS_ENABLE_OR_DISABLE}</span></li>
 <!-- END: PFS_ROW -->
 		</ul>
-<!-- END: PFS -->
+<!-- END: MAIN -->

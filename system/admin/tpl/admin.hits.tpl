@@ -1,4 +1,4 @@
-<!-- BEGIN: HITS -->
+<!-- BEGIN: MAIN -->
 	<h2>{PHP.L.Hits}</h2>
 	<p>{ADMIN_HITS_MAXHITS}</p>
 <!-- BEGIN: YEAR_OR_MONTH -->
@@ -65,4 +65,4 @@
 <!-- END: ROW_WEEK -->
 	</table>
 <!-- END: DEFAULT -->
-<!-- END: HITS -->
+<!-- END: MAIN -->

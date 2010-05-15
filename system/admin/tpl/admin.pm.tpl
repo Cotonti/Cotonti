@@ -1,4 +1,4 @@
-<!-- BEGIN: PM -->
+<!-- BEGIN: MAIN -->
 	<h2>{PHP.L.Private_Messages}</h2>
 		<ul class="follow">
 			<li><a title="{PHP.L.Configuration}" href="{ADMIN_PM_URL_CONFIG}">{PHP.L.Configuration}</a></li>
@@ -13,4 +13,4 @@
 				<td class="centerall">{ADMIN_PM_TOTALPMSENT}</td>
 			</tr>
 		</table>
-<!-- END: PM -->
+<!-- END: MAIN -->

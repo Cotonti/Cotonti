@@ -1,4 +1,4 @@
-<!-- BEGIN: PAGE -->
+<!-- BEGIN: MAIN -->
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
@@ -109,4 +109,4 @@
 			</p>
 		</form>
 	</div>
-<!-- END: PAGE -->
+<!-- END: MAIN -->
