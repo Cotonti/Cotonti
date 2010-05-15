@@ -19,6 +19,10 @@ a:hover 		{ text-decoration:underline; }
 hr			{ border:0 dashed #ccc; border-top-width:1px; clear:both; height:0; }
 hr.divider	{ margin:10px 0; }
 
+sub, sup	{ font-size:.8em; position:relative; }
+sub			{ top:.5em; }
+sup			{ top:-.5em; }
+
 /* 2. Structure
 -------------------------------------------------- */
 
