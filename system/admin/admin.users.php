@@ -136,24 +136,24 @@ elseif($n == 'edit')
 		for($i = 1;$i < 100;$i++)
 		{
 			$t->assign(array(
-				"ADMIN_USERS_EDITFORM_RLEVEL_ITEM_SELECTED" => ($i == $row['grp_level']) ? ' selected="selected"' : '',
-				"ADMIN_USERS_EDITFORM_RLEVEL_ITEM" => $i
+				'ADMIN_USERS_EDITFORM_RLEVEL_ITEM_SELECTED' => ($i == $row['grp_level']) ? ' selected="selected"' : '',
+				'ADMIN_USERS_EDITFORM_RLEVEL_ITEM' => $i
 			));
-			$t->parse("USERS.ADMIN_USERS_EDIT.SELECT_RLEVEL");
+			$t->parse('MAIN.ADMIN_USERS_EDIT.SELECT_RLEVEL');
 		}
 
 		$t->assign(array(
-			"ADMIN_USERS_EDITFORM_URL" => sed_url('admin', "m=users&n=edit&a=update&g=".$g),
-			"ADMIN_USERS_EDITFORM_GRP_TITLE" => $row['grp_title'],
-			"ADMIN_USERS_EDITFORM_GRP_DESC" => htmlspecialchars($row['grp_desc']),
-			"ADMIN_USERS_EDITFORM_GRP_ICON" => htmlspecialchars($row['grp_icon']),
-			"ADMIN_USERS_EDITFORM_GRP_ALIAS" => htmlspecialchars($row['grp_alias']),
-			"ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE" => htmlspecialchars($row['grp_pfs_maxfile']),
-			"ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL" => htmlspecialchars($row['grp_pfs_maxtotal']),
-			"ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT" => $row['grp_memberscount'],
-			"ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT_URL" => sed_url('users', "g=".$g),
-			"ADMIN_USERS_EDITFORM_RIGHT_URL" => sed_url('admin', "m=rights&g=".$g),
-			"ADMIN_USERS_EDITFORM_DEL_URL" => sed_url('admin', "m=users&n=edit&a=delete&g=".$g."&".sed_xg()),
+			'ADMIN_USERS_EDITFORM_URL' => sed_url('admin', 'm=users&n=edit&a=update&g='.$g),
+			'ADMIN_USERS_EDITFORM_GRP_TITLE' => $row['grp_title'],
+			'ADMIN_USERS_EDITFORM_GRP_DESC' => htmlspecialchars($row['grp_desc']),
+			'ADMIN_USERS_EDITFORM_GRP_ICON' => htmlspecialchars($row['grp_icon']),
+			'ADMIN_USERS_EDITFORM_GRP_ALIAS' => htmlspecialchars($row['grp_alias']),
+			'ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE' => htmlspecialchars($row['grp_pfs_maxfile']),
+			'ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL' => htmlspecialchars($row['grp_pfs_maxtotal']),
+			'ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT' => $row['grp_memberscount'],
+			'ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT_URL' => sed_url('users', 'g='.$g),
+			'ADMIN_USERS_EDITFORM_RIGHT_URL' => sed_url('admin', 'm=rights&g='.$g),
+			'ADMIN_USERS_EDITFORM_DEL_URL' => sed_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.sed_xg()),
 		));
 		/* === Hook === */
 		$extp = sed_getextplugins('admin.users.edit.tags');
@@ -162,7 +162,7 @@ elseif($n == 'edit')
 			include $pl;
 		}
 		/* ===== */
-		$t->parse("USERS.ADMIN_USERS_EDIT");
+		$t->parse('MAIN.ADMIN_USERS_EDIT');
 	}
 }
 
@@ -183,40 +183,40 @@ if(!isset($showdefault) OR $showdefault == true)
 			$row['grp_hidden'] = ($row['grp_hidden']) ? '1' : '0';
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
 			$t->assign(array(
-				"ADMIN_USERS_ROW_GRP_TITLE_URL" => sed_url('admin', "m=users&n=edit&g=".$row['grp_id']),
-				"ADMIN_USERS_ROW_GRP_TITLE" => htmlspecialchars($row['grp_title']),
-				"ADMIN_USERS_ROW_GRP_ID" => $row['grp_id'],
-				"ADMIN_USERS_ROW_GRP_COUNT_MEMBERS" => $members[$row['grp_id']],
-				"ADMIN_USERS_ROW_GRP_DISABLED" => $sed_yesno[!$row['grp_disabled']],
-				"ADMIN_USERS_ROW_GRP_HIDDEN" => $sed_yesno[$row['grp_hidden']],
-				"ADMIN_USERS_ROW_GRP_RIGHTS_URL" => sed_url('admin', "m=rights&g=".$row['grp_id']),
-				"ADMIN_USERS_ROW_GRP_JUMPTO_URL" => sed_url('users', "g=".$row['grp_id'])
+				'ADMIN_USERS_ROW_GRP_TITLE_URL' => sed_url('admin', 'm=users&n=edit&g='.$row['grp_id']),
+				'ADMIN_USERS_ROW_GRP_TITLE' => htmlspecialchars($row['grp_title']),
+				'ADMIN_USERS_ROW_GRP_ID' => $row['grp_id'],
+				'ADMIN_USERS_ROW_GRP_COUNT_MEMBERS' => $members[$row['grp_id']],
+				'ADMIN_USERS_ROW_GRP_DISABLED' => $sed_yesno[!$row['grp_disabled']],
+				'ADMIN_USERS_ROW_GRP_HIDDEN' => $sed_yesno[$row['grp_hidden']],
+				'ADMIN_USERS_ROW_GRP_RIGHTS_URL' => sed_url('admin', 'm=rights&g='.$row['grp_id']),
+				'ADMIN_USERS_ROW_GRP_JUMPTO_URL' => sed_url('users', 'g='.$row['grp_id'])
 			));
-			$t->parse("USERS.ADMIN_USERS_DEFAULT.USERS_ROW");
+			$t->parse('MAIN.ADMIN_USERS_DEFAULT.USERS_ROW');
 		}
 	}
 
 	for($i = 1;$i < 100;$i++)
 	{
 		$t->assign(array(
-			"ADMIN_USERS_FORM_SELECT_VALUE" => $i
+			'ADMIN_USERS_FORM_SELECT_VALUE' => $i
 		));
-		$t->parse("USERS.ADMIN_USERS_DEFAULT.USERS_FORM_SELECT_NLEVEL");
+		$t->parse('MAIN.ADMIN_USERS_DEFAULT.USERS_FORM_SELECT_NLEVEL');
 	}
 
 	$t->assign(array(
-		"ADMIN_USERS_FORM_URL" => sed_url('admin', "m=users&n=add"),
-		"ADMIN_USERS_FORM_SELECTBOX_GROUPS" => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5'))
+		'ADMIN_USERS_FORM_URL' => sed_url('admin', 'm=users&n=add'),
+		'ADMIN_USERS_FORM_SELECTBOX_GROUPS' => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5'))
 	));
-	$t->parse("USERS.ADMIN_USERS_DEFAULT");
+	$t->parse('MAIN.ADMIN_USERS_DEFAULT');
 }
 
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_USERS_URL" => sed_url('admin', "m=config&n=edit&o=core&p=users"),
-	"ADMIN_USERS_EXTRAFIELDS_URL" => sed_url('admin', 'm=extrafields&n=users'),
-	"ADMIN_USERS_ADMINWARNINGS" => $adminwarnings
+	'ADMIN_USERS_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=users'),
+	'ADMIN_USERS_EXTRAFIELDS_URL' => sed_url('admin', 'm=extrafields&n=users'),
+	'ADMIN_USERS_ADMINWARNINGS' => $adminwarnings
 ));
 
 /* === Hook  === */
@@ -227,14 +227,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('USERS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('USERS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('USERS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

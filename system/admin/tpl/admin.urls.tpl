@@ -1,4 +1,4 @@
-<!-- BEGIN: URLS -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_urls_rules}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -88,4 +88,4 @@
 		</table>
 		</form>
 	</div>
-<!-- END: URLS -->
+<!-- END: MAIN -->

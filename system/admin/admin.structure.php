@@ -90,7 +90,7 @@ if ($n == 'options')
 		foreach ($sed_extrafields['structure'] as $row)
 		{
 			$import = sed_import('rstructure'.$row['field_name'], 'P', 'HTM');
-			if ($row['field_type'] == "checkbox")
+			if ($row['field_type'] == 'checkbox')
 			{
 				$import = $import != '';
 			}
@@ -189,7 +189,7 @@ if ($n == 'options')
 
 	while ($f = readdir($handle))
 	{
-		if (($f != ".") && ($f != "..") && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'tpl')
+		if (($f != '.') && ($f != '..') && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'tpl')
 		{
 			$allskinfiles[] = $f;
 		}
@@ -219,20 +219,20 @@ if ($n == 'options')
 	while (list($i, $x) = each($options_sort))
 	{
 		$t->assign(array(
-			"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_SELECTED" => ($i == $sort) ? ' selected="selected"' : '',
-			"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_NAME" => $x,
-			"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_VALUE" => $i
+			'ADMIN_STRUCTURE_CATORDER_SELECT_SORT_SELECTED' => ($i == $sort) ? ' selected="selected"' : '',
+			'ADMIN_STRUCTURE_CATORDER_SELECT_SORT_NAME' => $x,
+			'ADMIN_STRUCTURE_CATORDER_SELECT_SORT_VALUE' => $i
 		));
-		$t->parse("STRUCTURE.OPTIONS.STRUCTURE_CATORDER_SELECT_SORT");
+		$t->parse('MAIN.OPTIONS.STRUCTURE_CATORDER_SELECT_SORT');
 	}
 	while (list($i, $x) = each($options_way))
 	{
 		$t->assign(array(
-			"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_SELECTED" => ($i == $way) ? ' selected="selected"' : '',
-			"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_NAME" => $x,
-			"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_VALUE" => $i
+			'ADMIN_STRUCTURE_CATORDER_SELECT_WAY_SELECTED' => ($i == $way) ? ' selected="selected"' : '',
+			'ADMIN_STRUCTURE_CATORDER_SELECT_WAY_NAME' => $x,
+			'ADMIN_STRUCTURE_CATORDER_SELECT_WAY_VALUE' => $i
 		));
-		$t->parse("STRUCTURE.OPTIONS.STRUCTURE_CATORDER_SELECT_WAY");
+		$t->parse('MAIN.OPTIONS.STRUCTURE_CATORDER_SELECT_WAY');
 	}
 
 	if (empty($row['structure_tpl']))
@@ -258,33 +258,33 @@ if ($n == 'options')
 		if ($i != 'all')
 		{
 			$t->assign(array(
-				"ADMIN_STRUCTURE_OPTION_SELECTED" => ($i == $row['structure_tpl']) ? " selected=\"selected\"" : '',
-				"ADMIN_STRUCTURE_OPTION_I" => $i,
-				"ADMIN_STRUCTURE_OPTION_TPATH" => $x['tpath']
+				'ADMIN_STRUCTURE_OPTION_SELECTED' => ($i == $row['structure_tpl']) ? " selected=\"selected\"" : '',
+				'ADMIN_STRUCTURE_OPTION_I' => $i,
+				'ADMIN_STRUCTURE_OPTION_TPATH' => $x['tpath']
 			));
-			$t->parse("STRUCTURE.OPTIONS.SELECT");
+			$t->parse('MAIN.OPTIONS.SELECT');
 		}
 	}
 
 	$t->assign(array(
-		"ADMIN_STRUCTURE_UPDATE_FORM_URL" => sed_url('admin', "m=structure&n=options&a=update&id=".$structure_id."&d=".$d."&".sed_xg()),
-		"ADMIN_STRUCTURE_CODE" => $structure_code,
-		"ADMIN_STRUCTURE_PATH" => $structure_path,
-		"ADMIN_STRUCTURE_TITLE" => $structure_title,
-		"ADMIN_STRUCTURE_DESC" => $structure_desc,
-		"ADMIN_STRUCTURE_ICON" => $structure_icon,
-		"ADMIN_STRUCTURE_CHECK" => ($structure_pages || $structure_group) ? " checked=\"checked\"" : '',
-		"ADMIN_STRUCTURE_CHECK1" => $check1,
-		"ADMIN_STRUCTURE_CHECK2" => $check2,
-		"ADMIN_STRUCTURE_CHECK3" => $check3,
-		"ADMIN_STRUCTURE_RESYNC" => sed_url('admin', "m=structure&n=options&a=resync&id=".$structure_id."&".sed_xg()),
+		'ADMIN_STRUCTURE_UPDATE_FORM_URL' => sed_url('admin', 'm=structure&n=options&a=update&id='.$structure_id.'&d='.$d.'&'.sed_xg()),
+		'ADMIN_STRUCTURE_CODE' => $structure_code,
+		'ADMIN_STRUCTURE_PATH' => $structure_path,
+		'ADMIN_STRUCTURE_TITLE' => $structure_title,
+		'ADMIN_STRUCTURE_DESC' => $structure_desc,
+		'ADMIN_STRUCTURE_ICON' => $structure_icon,
+		'ADMIN_STRUCTURE_CHECK' => ($structure_pages || $structure_group) ? " checked=\"checked\"" : '',
+		'ADMIN_STRUCTURE_CHECK1' => $check1,
+		'ADMIN_STRUCTURE_CHECK2' => $check2,
+		'ADMIN_STRUCTURE_CHECK3' => $check3,
+		'ADMIN_STRUCTURE_RESYNC' => sed_url('admin', 'm=structure&n=options&a=resync&id='.$structure_id.'&'.sed_xg()),
 	));
 
 	// Extra fields
 	foreach($sed_extrafields['structure'] as $i => $row2)
 	{
 		$uname = strtoupper($row['field_name']);
-		$t->assign('ADMIN_STRUCTURE_'.$uname, sed_build_extrafields('structure',  $row2, $row["structure_".$row2['field_name']]));
+		$t->assign('ADMIN_STRUCTURE_'.$uname, sed_build_extrafields('structure',  $row2, $row['structure_'.$row2['field_name']]));
 		$t->assign('ADMIN_STRUCTURE_'.$uname.'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 	}
 
@@ -295,7 +295,7 @@ if ($n == 'options')
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("STRUCTURE.OPTIONS");
+	$t->parse('MAIN.OPTIONS');
 }
 else
 {
@@ -310,7 +310,7 @@ else
 			foreach ($sed_extrafields['structure'] as $row)
 			{
 				$import = $s[$i]['rstructure'.$row['field_name']];
-				if ($row['field_type'] == "checkbox")
+				if ($row['field_type'] == 'checkbox')
 				{
 					$import = $import != '';
 				}
@@ -386,7 +386,7 @@ else
 		foreach ($sed_extrafields['structure'] as $row)
 		{
 			$import = sed_import('newstructure'.$row['field_name'], 'P', 'HTM');
-			if ($row['field_type'] == "checkbox")
+			if ($row['field_type'] == 'checkbox')
 			{
 				$import = $import != '';
 			}
@@ -467,9 +467,9 @@ else
 		$structure_desc = $row['structure_desc'];
 		$structure_icon = $row['structure_icon'];
 		$structure_group = $row['structure_group'];
-		$pathfieldlen = (mb_strpos($structure_path, ".") == 0) ? 3 : 9;
-		$pathfieldimg = (mb_strpos($structure_path, ".") == 0) ? '' : "<img src=\"images/admin/join2.gif\" alt=\"\" /> ";
-		$pagecount[$structure_code] = (!$pagecount[$structure_code]) ? "0" : $pagecount[$structure_code];
+		$pathfieldlen = (mb_strpos($structure_path, '.') == 0) ? 3 : 9;
+		$pathfieldimg = (mb_strpos($structure_path, '.') == 0) ? '' : '<img src="images/admin/join2.gif" alt="" /> ';
+		$pagecount[$structure_code] = (!$pagecount[$structure_code]) ? '0' : $pagecount[$structure_code];
 		$raw = explode('.', $row['structure_order']);
 		$sort = $raw[0];
 		$way = $raw[1];
@@ -480,52 +480,52 @@ else
 		while (list($i, $x) = each($options_sort))
 		{
 			$t->assign(array(
-				"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_SELECTED" => ($i == $sort) ? ' selected="selected"' : '',
-				"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_NAME" => $x,
-				"ADMIN_STRUCTURE_CATORDER_SELECT_SORT_VALUE" => $i
+				'ADMIN_STRUCTURE_CATORDER_SELECT_SORT_SELECTED' => ($i == $sort) ? ' selected="selected"' : '',
+				'ADMIN_STRUCTURE_CATORDER_SELECT_SORT_NAME' => $x,
+				'ADMIN_STRUCTURE_CATORDER_SELECT_SORT_VALUE' => $i
 			));
-			$t->parse("STRUCTURE.DEFULT.ROW.STRUCTURE_CATORDER_SELECT_SORT");
+			$t->parse('MAIN.DEFULT.ROW.STRUCTURE_CATORDER_SELECT_SORT');
 		}
 		while (list($i, $x) = each($options_way))
 		{
 			$t->assign(array(
-				"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_SELECTED" => ($i == $way) ? ' selected="selected"' : '',
-				"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_NAME" => $x,
-				"ADMIN_STRUCTURE_CATORDER_SELECT_WAY_VALUE" => $i
+				'ADMIN_STRUCTURE_CATORDER_SELECT_WAY_SELECTED' => ($i == $way) ? ' selected="selected"' : '',
+				'ADMIN_STRUCTURE_CATORDER_SELECT_WAY_NAME' => $x,
+				'ADMIN_STRUCTURE_CATORDER_SELECT_WAY_VALUE' => $i
 			));
-			$t->parse("STRUCTURE.DEFULT.ROW.STRUCTURE_CATORDER_SELECT_WAY");
+			$t->parse('MAIN.DEFULT.ROW.STRUCTURE_CATORDER_SELECT_WAY');
 		}
 
 		if (empty($row['structure_tpl']))
 		{
-			$structure_tpl_sym = "-";
+			$structure_tpl_sym = '-';
 		}
 		elseif ($row['structure_tpl'] == 'same_as_parent')
 		{
-			$structure_tpl_sym = "*";
+			$structure_tpl_sym = '*';
 		}
 		else
 		{
-			$structure_tpl_sym = "+";
+			$structure_tpl_sym = '+';
 		}
 
 		$dozvil = ($pagecount[$structure_code] > 0) ? false : true;
 
 		$t->assign(array(
-			"ADMIN_STRUCTURE_UPDATE_DEL_URL" => sed_url('admin', "m=structure&a=delete&id=".$structure_id."&c=".$row['structure_code']."&d=".$d."&".sed_xg()),
-			"ADMIN_STRUCTURE_ID" => $structure_id,
-			"ADMIN_STRUCTURE_CODE" => $structure_code,
-			"ADMIN_STRUCTURE_PATHFIELDIMG" => $pathfieldimg,
-			"ADMIN_STRUCTURE_PATH" => $structure_path,
-			"ADMIN_STRUCTURE_PATHFIELDLEN" => $pathfieldlen,
-			"ADMIN_STRUCTURE_TPL_SYM" => $structure_tpl_sym,
-			"ADMIN_STRUCTURE_TITLE" => $structure_title,
-			"ADMIN_STRUCTURE_CHECKED" => ($structure_group) ? " checked=\"checked\"" : '',
-			"ADMIN_STRUCTURE_PAGECOUNT" => $pagecount[$structure_code],
-			"ADMIN_STRUCTURE_JUMPTO_URL" => sed_url('list', "c=".$structure_code),
-			"ADMIN_STRUCTURE_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=page&io=".$structure_code),
-			"ADMIN_STRUCTURE_OPTIONS_URL" => sed_url('admin', "m=structure&n=options&id=".$structure_id."&".sed_xg()),
-			"ADMIN_STRUCTURE_ODDEVEN" => sed_build_oddeven($ii)
+			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => sed_url('admin', 'm=structure&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.sed_xg()),
+			'ADMIN_STRUCTURE_ID' => $structure_id,
+			'ADMIN_STRUCTURE_CODE' => $structure_code,
+			'ADMIN_STRUCTURE_PATHFIELDIMG' => $pathfieldimg,
+			'ADMIN_STRUCTURE_PATH' => $structure_path,
+			'ADMIN_STRUCTURE_PATHFIELDLEN' => $pathfieldlen,
+			'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
+			'ADMIN_STRUCTURE_TITLE' => $structure_title,
+			'ADMIN_STRUCTURE_CHECKED' => ($structure_group) ? " checked=\"checked\"" : '',
+			'ADMIN_STRUCTURE_PAGECOUNT' => $pagecount[$structure_code],
+			'ADMIN_STRUCTURE_JUMPTO_URL' => sed_url('list', 'c='.$structure_code),
+			'ADMIN_STRUCTURE_RIGHTS_URL' => sed_url('admin', 'm=rightsbyitem&ic=page&io='.$structure_code),
+			'ADMIN_STRUCTURE_OPTIONS_URL' => sed_url('admin', 'm=structure&n=options&id='.$structure_id.'&'.sed_xg()),
+			'ADMIN_STRUCTURE_ODDEVEN' => sed_build_oddeven($ii)
 		));
 
 		// Extra fields
@@ -539,7 +539,7 @@ else
 		}
 		/* ===== */
 
-		$t->parse("STRUCTURE.DEFULT.ROW");
+		$t->parse('MAIN.DEFULT.ROW');
 
 		$ii++;
 	}
@@ -550,31 +550,31 @@ else
 	while (list($i, $x) = each($options_sort))
 	{
 		$t->assign(array(
-			"ADMIN_STRUCTURE_CATORDER_SORT_SELECTED" => ($i == 'title') ? ' selected="selected"' : '',
-			"ADMIN_STRUCTURE_CATORDER_SORT_NAME" => $x,
-			"ADMIN_STRUCTURE_CATORDER_SORT_VALUE" => $i
+			'ADMIN_STRUCTURE_CATORDER_SORT_SELECTED' => ($i == 'title') ? ' selected="selected"' : '',
+			'ADMIN_STRUCTURE_CATORDER_SORT_NAME' => $x,
+			'ADMIN_STRUCTURE_CATORDER_SORT_VALUE' => $i
 		));
-		$t->parse("STRUCTURE.DEFULT.STRUCTURE_CATORDER_SORT");
+		$t->parse('MAIN.DEFULT.STRUCTURE_CATORDER_SORT');
 	}
 	while (list($i, $x) = each($options_way))
 	{
 		$t->assign(array(
-			"ADMIN_STRUCTURE_CATORDER_WAY_SELECTED" => ($i == 'asc') ? ' selected="selected"' : '',
-			"ADMIN_STRUCTURE_CATORDER_WAY_NAME" => $x,
-			"ADMIN_STRUCTURE_CATORDER_WAY_VALUE" => $i
+			'ADMIN_STRUCTURE_CATORDER_WAY_SELECTED' => ($i == 'asc') ? ' selected="selected"' : '',
+			'ADMIN_STRUCTURE_CATORDER_WAY_NAME' => $x,
+			'ADMIN_STRUCTURE_CATORDER_WAY_VALUE' => $i
 		));
-		$t->parse("STRUCTURE.DEFULT.STRUCTURE_CATORDER_WAY");
+		$t->parse('MAIN.DEFULT.STRUCTURE_CATORDER_WAY');
 	}
 
 	$t->assign(array(
-		"ADMIN_STRUCTURE_UPDATE_FORM_URL" => sed_url('admin', "m=structure&a=update&d=".$d),
-		"ADMIN_STRUCTURE_PAGINATION_PREV" => $pagenav['prev'],
-		"ADMIN_STRUCTURE_PAGNAV" => $pagenav['main'],
-		"ADMIN_STRUCTURE_PAGINATION_NEXT" => $pagenav['next'],
-		"ADMIN_STRUCTURE_TOTALITEMS" => $totalitems,
-		"ADMIN_STRUCTURE_COUNTER_ROW" => $ii,
-		"ADMIN_STRUCTURE_URL_FORM_ADD" => sed_url('admin', "m=structure&a=add"),
-		"ADMIN_PAGE_STRUCTURE_RESYNCALL" => sed_url('admin', "m=structure&a=resyncall&".sed_xg()."&d=".$d)
+		'ADMIN_STRUCTURE_UPDATE_FORM_URL' => sed_url('admin', 'm=structure&a=update&d='.$d),
+		'ADMIN_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
+		'ADMIN_STRUCTURE_PAGNAV' => $pagenav['main'],
+		'ADMIN_STRUCTURE_PAGINATION_NEXT' => $pagenav['next'],
+		'ADMIN_STRUCTURE_TOTALITEMS' => $totalitems,
+		'ADMIN_STRUCTURE_COUNTER_ROW' => $ii,
+		'ADMIN_STRUCTURE_URL_FORM_ADD' => sed_url('admin', 'm=structure&a=add'),
+		'ADMIN_PAGE_STRUCTURE_RESYNCALL' => sed_url('admin', 'm=structure&a=resyncall&'.sed_xg().'&d='.$d)
 	));
 
 	// Extra fields
@@ -585,16 +585,16 @@ else
 		$t->assign('ADMIN_STRUCTURE_FORMADD_'.$uname.'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 	}
 
-	$t->parse("STRUCTURE.DEFULT");
+	$t->parse('MAIN.DEFULT');
 }
 
 $lincif_conf = sed_auth('admin', 'a', 'A');
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_STRUCTURE_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_STRUCTURE_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=structure"),
-	"ADMIN_STRUCTURE_URL_EXTRAFIELDS" => sed_url('admin', 'm=extrafields&n=structure')
+	'ADMIN_STRUCTURE_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_STRUCTURE_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=structure'),
+	'ADMIN_STRUCTURE_URL_EXTRAFIELDS' => sed_url('admin', 'm=extrafields&n=structure')
 ));
 
 /* === Hook  === */
@@ -605,14 +605,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('STRUCTURE');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('STRUCTURE');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('STRUCTURE');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

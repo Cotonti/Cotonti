@@ -1,4 +1,4 @@
-<!-- BEGIN: REFERERS -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Referers}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -46,4 +46,4 @@
 			</table>
 <!-- ENDIF -->
 	</div>
-<!-- END: REFERERS -->
+<!-- END: MAIN -->

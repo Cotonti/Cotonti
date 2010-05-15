@@ -45,7 +45,7 @@ switch($a)
 	/* =============== */
 	case 'details':
 	/* =============== */
-		$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
+		$extplugin_info = $cfg['plugins_dir'].'/'.$pl.'/'.$pl.'.setup.php';
 		switch($b)
 		{
 			case 'pause':
@@ -71,15 +71,15 @@ switch($a)
 		}
 		if(file_exists($extplugin_info))
 		{
-			$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
+			$extplugin_info = $cfg['plugins_dir'].'/'.$pl.'/'.$pl.'.setup.php';
 			$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 			$adminpath[] = array(sed_url('admin', 'm=plug&a=details&pl='.$pl), $info['Name']." ($pl)");
 
-			$handle = opendir($cfg['plugins_dir']."/".$pl);
+			$handle = opendir($cfg['plugins_dir'].'/'.$pl);
 			$setupfile = $pl.'.setup.php';
 			while($f = readdir($handle))
 			{
-				if($f != "." && $f != ".." && $f != $setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'php')
+				if($f != '.' && $f != '..' && $f != $setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'php')
 				{
 					$parts[] = $f;
 				}
@@ -108,17 +108,17 @@ switch($a)
 				/* ===== */
 				while(list($i, $x) = each($parts))
 				{
-					$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
+					$extplugin_file = $cfg['plugins_dir'].'/'.$pl.'/'.$x;
 					$info_file = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 					$inf_fil_err = false;
 
 					if(!empty($info_file['Error']))
 					{
 						$t->assign(array(
-							"ADMIN_PLUG_DETAILS_ROW_X" => $x,
-							"ADMIN_PLUG_DETAILS_ROW_ERROR" => $info_file['Error']
+							'ADMIN_PLUG_DETAILS_ROW_X' => $x,
+							'ADMIN_PLUG_DETAILS_ROW_ERROR' => $info_file['Error']
 						));
-						$t->parse("PLUG.DETAILS.ROW_ERROR_PART");
+						$t->parse('MAIN.DETAILS.ROW_ERROR_PART');
 					}
 					else
 					{
@@ -136,51 +136,51 @@ switch($a)
 						if(empty($info_file['Tags']))
 						{
 							$t->assign(array(
-								"ADMIN_PLUG_DETAILS_ROW_I_1" => $i+1,
-								"ADMIN_PLUG_DETAILS_ROW_PART" => $info_file['Part']
+								'ADMIN_PLUG_DETAILS_ROW_I_1' => $i+1,
+								'ADMIN_PLUG_DETAILS_ROW_PART' => $info_file['Part']
 							));
-							$t->parse("PLUG.DETAILS.ROW_ERROR_TAGS");
+							$t->parse('MAIN.DETAILS.ROW_ERROR_TAGS');
 						}
 						else
 						{
-							$line = explode(":", $info_file['Tags']);
+							$line = explode(':', $info_file['Tags']);
 							$line[0] = trim($line[0]);
-							$tags = explode(",", $line[1]);
-							$listtags = $line[0]." :<br />";
+							$tags = explode(',', $line[1]);
+							$listtags = $line[0].' :<br />';
 							foreach($tags as $k => $v)
 							{
 								if(mb_substr(trim($v), 0, 1) == '{')
 								{
-									$listtags .= $v." : ";
+									$listtags .= $v.' : ';
 									$found = sed_stringinfile('./skins/'.$cfg['defaultskin'].'/'.$line[0], trim($v));
-									$listtags .= $found_txt[$found]."<br />";
+									$listtags .= $found_txt[$found].'<br />';
 								}
 								else
 								{
-									$listtags .= $v."<br />";
+									$listtags .= $v.'<br />';
 								}
 							}
 
 							$t->assign(array(
-								"ADMIN_PLUG_DETAILS_ROW_I_1" => $i+1,
-								"ADMIN_PLUG_DETAILS_ROW_PART" => $info_file['Part'],
-								"ADMIN_PLUG_DETAILS_ROW_FILE" => $line[0]." :<br />",
-								"ADMIN_PLUG_DETAILS_ROW_LISTTAGS" => $listtags,
-								//"ADMIN_PLUG_DETAILS_ROW_TAGS_ODDEVEN" => sed_build_oddeven($ii)
+								'ADMIN_PLUG_DETAILS_ROW_I_1' => $i+1,
+								'ADMIN_PLUG_DETAILS_ROW_PART' => $info_file['Part'],
+								'ADMIN_PLUG_DETAILS_ROW_FILE' => $line[0].' :<br />',
+								'ADMIN_PLUG_DETAILS_ROW_LISTTAGS' => $listtags,
+								//'ADMIN_PLUG_DETAILS_ROW_TAGS_ODDEVEN' => sed_build_oddeven($ii)
 							));
-							$t->parse("PLUG.DETAILS.ROW_TAGS");
+							$t->parse('MAIN.DETAILS.ROW_TAGS');
 						}
 
 						$t->assign(array(
-							"ADMIN_PLUG_DETAILS_ROW_I_1" => $i+1,
-							"ADMIN_PLUG_DETAILS_ROW_PART" => $info_file['Part'],
-							"ADMIN_PLUG_DETAILS_ROW_FILE" => $info_file['File'],
-							"ADMIN_PLUG_DETAILS_ROW_HOOKS" => $info_file['Hooks'],
-							"ADMIN_PLUG_DETAILS_ROW_ORDER" => $info_file['Order'],
-							"ADMIN_PLUG_DETAILS_ROW_STATUS" => $status[$info_file['Status']],
-							"ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl."&b=pausepart&part=".$row['pl_id']),
-							"ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl."&b=unpausepart&part=".$row['pl_id']),
-							//"ADMIN_PLUG_DETAILS_ROW_PART_ODDEVEN" => sed_build_oddeven($ii)
+							'ADMIN_PLUG_DETAILS_ROW_I_1' => $i+1,
+							'ADMIN_PLUG_DETAILS_ROW_PART' => $info_file['Part'],
+							'ADMIN_PLUG_DETAILS_ROW_FILE' => $info_file['File'],
+							'ADMIN_PLUG_DETAILS_ROW_HOOKS' => $info_file['Hooks'],
+							'ADMIN_PLUG_DETAILS_ROW_ORDER' => $info_file['Order'],
+							'ADMIN_PLUG_DETAILS_ROW_STATUS' => $status[$info_file['Status']],
+							'ADMIN_PLUG_DETAILS_ROW_PAUSEPART_URL' => sed_url('admin', 'm=plug&a=details&pl='.$pl.'&b=pausepart&part='.$row['pl_id']),
+							'ADMIN_PLUG_DETAILS_ROW_UNPAUSEPART_URL' => sed_url('admin', 'm=plug&a=details&pl='.$pl.'&b=unpausepart&part='.$row['pl_id']),
+							//'ADMIN_PLUG_DETAILS_ROW_PART_ODDEVEN' => sed_build_oddeven($ii)
 						));
 						/* === Hook - Part2 : Include === */
 						foreach ($extp as $pl)
@@ -188,37 +188,37 @@ switch($a)
 							include $pl;
 						}
 						/* ===== */
-						$t->parse("PLUG.DETAILS.ROW_PART");
+						$t->parse('MAIN.DETAILS.ROW_PART');
 					}
 				}
 			}
 
 			$t->assign(array(
-				"ADMIN_PLUG_NAME" => $info['Name'],
-				"ADMIN_PLUG_CODE" => $info['Code'],
-				"ADMIN_PLUG_DESCRIPTION" => $info['Description'],
-				"ADMIN_PLUG_VERSION" => $info['Version'],
-				"ADMIN_PLUG_DATE" => $info['Date'],
-				"ADMIN_PLUG_CONFIG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$pl),
-				"ADMIN_PLUG_TOTALCONFIG" => $totalconfig,
-				"ADMIN_PLUG_RIGHTS" => sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code']),
-				"ADMIN_PLUG_ADMRIGHTS_AUTH_GUESTS" => sed_auth_getmask($info['Auth_guests']),
-				"ADMIN_PLUG_AUTH_GUESTS" => $info['Auth_guests'],
-				"ADMIN_PLUG_ADMRIGHTS_LOCK_GUESTS" => sed_auth_getmask($info['Lock_guests']),
-				"ADMIN_PLUG_LOCK_GUESTS" => $info['Lock_guests'],
-				"ADMIN_PLUG_ADMRIGHTS_AUTH_MEMBERS" => sed_auth_getmask($info['Auth_members']),
-				"ADMIN_PLUG_AUTH_MEMBERS" => $info['Auth_members'],
-				"ADMIN_PLUG_ADMRIGHTS_LOCK_MEMBERS" => sed_auth_getmask($info['Lock_members']),
-				"ADMIN_PLUG_LOCK_MEMBERS" => $info['Lock_members'],
-				"ADMIN_PLUG_AUTHOR" => $info['Author'],
-				"ADMIN_PLUG_COPYRIGHT" => $info['Copyright'],
-				"ADMIN_PLUG_NOTES" => sed_parse($info['Notes'], 1, 0, 0),
-				"ADMIN_PLUG_INSTALL_URL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=install"),
-				"ADMIN_PLUG_INSTALL_KO_URL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=install&ko=1"),
-				"ADMIN_PLUG_UNINSTALL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=uninstall"),
-				"ADMIN_PLUG_UNINSTALL_KO_URL" => sed_url('admin', "m=plug&a=edit&pl=".$info['Code']."&b=uninstall&ko=1"),
-				"ADMIN_PLUG_PAUSE_URL" => sed_url('admin', "m=plug&a=details&pl=".$info['Code']."&b=pause"),
-				"ADMIN_PLUG_UNPAUSE_URL" => sed_url('admin', "m=plug&a=details&pl=".$info['Code']."&b=unpause")
+				'ADMIN_PLUG_NAME' => $info['Name'],
+				'ADMIN_PLUG_CODE' => $info['Code'],
+				'ADMIN_PLUG_DESCRIPTION' => $info['Description'],
+				'ADMIN_PLUG_VERSION' => $info['Version'],
+				'ADMIN_PLUG_DATE' => $info['Date'],
+				'ADMIN_PLUG_CONFIG_URL' => sed_url('admin', 'm=config&n=edit&o=plug&p='.$pl),
+				'ADMIN_PLUG_TOTALCONFIG' => $totalconfig,
+				'ADMIN_PLUG_RIGHTS' => sed_url('admin', 'm=rightsbyitem&ic=plug&io='.$info['Code']),
+				'ADMIN_PLUG_ADMRIGHTS_AUTH_GUESTS' => sed_auth_getmask($info['Auth_guests']),
+				'ADMIN_PLUG_AUTH_GUESTS' => $info['Auth_guests'],
+				'ADMIN_PLUG_ADMRIGHTS_LOCK_GUESTS' => sed_auth_getmask($info['Lock_guests']),
+				'ADMIN_PLUG_LOCK_GUESTS' => $info['Lock_guests'],
+				'ADMIN_PLUG_ADMRIGHTS_AUTH_MEMBERS' => sed_auth_getmask($info['Auth_members']),
+				'ADMIN_PLUG_AUTH_MEMBERS' => $info['Auth_members'],
+				'ADMIN_PLUG_ADMRIGHTS_LOCK_MEMBERS' => sed_auth_getmask($info['Lock_members']),
+				'ADMIN_PLUG_LOCK_MEMBERS' => $info['Lock_members'],
+				'ADMIN_PLUG_AUTHOR' => $info['Author'],
+				'ADMIN_PLUG_COPYRIGHT' => $info['Copyright'],
+				'ADMIN_PLUG_NOTES' => sed_parse($info['Notes'], 1, 0, 0),
+				'ADMIN_PLUG_INSTALL_URL' => sed_url('admin', 'm=plug&a=edit&pl='.$info['Code'].'&b=install'),
+				'ADMIN_PLUG_INSTALL_KO_URL' => sed_url('admin', 'm=plug&a=edit&pl='.$info['Code'].'&b=install&ko=1'),
+				'ADMIN_PLUG_UNINSTALL' => sed_url('admin', 'm=plug&a=edit&pl='.$info['Code'].'&b=uninstall'),
+				'ADMIN_PLUG_UNINSTALL_KO_URL' => sed_url('admin', 'm=plug&a=edit&pl='.$info['Code'].'&b=uninstall&ko=1'),
+				'ADMIN_PLUG_PAUSE_URL' => sed_url('admin', 'm=plug&a=details&pl='.$info['Code'].'&b=pause'),
+				'ADMIN_PLUG_UNPAUSE_URL' => sed_url('admin', 'm=plug&a=details&pl='.$info['Code'].'&b=unpause')
 			));
 			/* === Hook  === */
 			$extp = sed_getextplugins('admin.plug.details');
@@ -227,7 +227,7 @@ switch($a)
 				include $pl;
 			}
 			/* ===== */
-			$t->parse("PLUG.DETAILS");
+			$t->parse('MAIN.DETAILS');
 		}
 		else
 		{
@@ -250,7 +250,7 @@ switch($a)
 					$show_sql_affectedrows2 = sed_sql_affectedrows();
 				}
 
-				$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
+				$extplugin_info = $cfg['plugins_dir'].'/'.$pl.'/'.$pl.'.setup.php';
 
 				if(file_exists($extplugin_info))
 				{
@@ -258,18 +258,18 @@ switch($a)
 					$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 					$adminpath[] = array(sed_url('admin', 'm=plug&a=details&pl='.$pl), $info['Name']." ($pl)");
 
-					$handle = opendir($cfg['plugins_dir']."/".$pl);
-					$setupfile = $pl.".setup.php";
+					$handle = opendir($cfg['plugins_dir'].'/'.$pl);
+					$setupfile = $pl.'.setup.php';
 					while($f = readdir($handle))
 					{
-						if($f != "." && $f != ".." && $f != $setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'php')
+						if($f != '.' && $f != '..' && $f != $setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'php')
 						{
 							$parts[] = $f;
 
 							$t->assign(array(
-								"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F" => $f
+								'ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F' => $f
 							));
-							$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_FOUND");
+							$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_FOUND');
 						}
 					}
 					closedir($handle);
@@ -278,7 +278,7 @@ switch($a)
 					{
 						while(list($i, $x) = each($parts))
 						{
-							$extplugin_file = $cfg['plugins_dir']."/".$pl."/".$x;
+							$extplugin_file = $cfg['plugins_dir'].'/'.$pl.'/'.$x;
 							$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
 
 							if(empty($info_part['Error']))
@@ -293,10 +293,10 @@ switch($a)
 							}
 
 							$t->assign(array(
-								"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_X" => $x,
-								"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG" => $msg
+								'ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_X' => $x,
+								'ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG' => $msg
 							));
-							$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_INSTALLING");
+							$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_INSTALLING');
 						}
 					}
 
@@ -307,7 +307,7 @@ switch($a)
 						$j = 0;
 						foreach($info_cfg as $i => $x)
 						{
-							$line = explode(":", $x);
+							$line = explode(':', $x);
 
 							if(is_array($line) && !empty($line[1]) && !empty($i))
 							{
@@ -343,23 +343,23 @@ switch($a)
 								}
 
 								$t->assign(array(
-									"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_J" => $j,
-									"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_I" => $i,
-									"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_LINE" => $line[1]
+									'ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_J' => $j,
+									'ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_I' => $i,
+									'ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_LINE' => $line[1]
 								));
-								$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG.ROW_PARTS_CFG_ENTRY");
+								$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_CFG.ROW_PARTS_CFG_ENTRY');
 							}
 							$totalconfig++;
 						}
 
 						$t->assign(array(
-							"ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG" => $totalconfig
+							'ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG' => $totalconfig
 						));
-						$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG");
+						$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_CFG');
 					}
 					else
 					{
-						$t->parse("PLUG.EDIT.INSTALL.ROW_PARTS_CFG_ERROR");
+						$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_CFG_ERROR');
 					}
 				}
 
@@ -416,13 +416,13 @@ switch($a)
 					}
 
 					$t->assign(array(
-						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_ID" => $v['id'],
-						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_TITLE" => $sed_groups[$v['id']]['title'],
-						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH" => sed_auth_getmask($ins_auth),
-						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK" => sed_auth_getmask($ins_lock),
-						"ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_COMMENT" => $comment
+						'ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_ID' => $v['id'],
+						'ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_TITLE' => $sed_groups[$v['id']]['title'],
+						'ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_AUTH' => sed_auth_getmask($ins_auth),
+						'ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_LOCK' => sed_auth_getmask($ins_lock),
+						'ADMIN_PLUG_EDIT_INSTALL_ROW_RIGHTS_COMMENT' => $comment
 					));
-					$t->parse("PLUG.EDIT.INSTALL.ROW_RIGHTS");
+					$t->parse('MAIN.EDIT.INSTALL.ROW_RIGHTS');
 				}
 				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
 				$show_sql_affectedrows4 = sed_sql_affectedrows();
@@ -435,13 +435,13 @@ switch($a)
 				$cot_cache->db->remove('sed_plugins', 'system');
 
 				$t->assign(array(
-					"ADMIN_PLUG_EDIT_AFFECTEDROWS1" => $show_sql_affectedrows1,
-					"ADMIN_PLUG_EDIT_AFFECTEDROWS2" => $show_sql_affectedrows2,
-					"ADMIN_PLUG_EDIT_AFFECTEDROWS3" => $show_sql_affectedrows3,
-					"ADMIN_PLUG_EDIT_AFFECTEDROWS4" => $show_sql_affectedrows4,
-					"ADMIN_PLUG_EDIT_EXTPLUGIN_INFO" => include_once($extplugin_info),
-					"ADMIN_PLUG_EDIT_LOG" => $edit_log,
-					"ADMIN_PLUG_EDIT_CONTINUE_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl)
+					'ADMIN_PLUG_EDIT_AFFECTEDROWS1' => $show_sql_affectedrows1,
+					'ADMIN_PLUG_EDIT_AFFECTEDROWS2' => $show_sql_affectedrows2,
+					'ADMIN_PLUG_EDIT_AFFECTEDROWS3' => $show_sql_affectedrows3,
+					'ADMIN_PLUG_EDIT_AFFECTEDROWS4' => $show_sql_affectedrows4,
+					'ADMIN_PLUG_EDIT_EXTPLUGIN_INFO' => include_once($extplugin_info),
+					'ADMIN_PLUG_EDIT_LOG' => $edit_log,
+					'ADMIN_PLUG_EDIT_CONTINUE_URL' => sed_url('admin', "m=plug&a=details&pl=".$pl)
 				));
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.plug.install.tags');
@@ -450,11 +450,11 @@ switch($a)
 					include $pl;
 				}
 				/* ===== */
-				$t->parse("PLUG.EDIT.INSTALL");
-				$t->parse("PLUG.EDIT");
+				$t->parse('MAIN.EDIT.INSTALL');
+				$t->parse('MAIN.EDIT');
 			break;
 			case 'uninstall':
-				$extplugin_info = $cfg['plugins_dir']."/".$pl."/".$pl.".setup.php";
+				$extplugin_info = $cfg['plugins_dir'].'/'.$pl.'/'.$pl.'.setup.php';
 				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
 				$adminpath[] = array(sed_url('admin', 'm=plug&a=details&pl='.$pl), $info['Name']." ($pl)");
 				$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$pl'");
@@ -472,18 +472,18 @@ switch($a)
 				$show_sql_affectedrows4 = sed_sql_affectedrows();
 				$cot_cache->db->remove('sed_plugins', 'system');
 
-				$extplugin_uninstall = $cfg['plugins_dir']."/".$pl."/".$pl.".uninstall.php";
+				$extplugin_uninstall = $cfg['plugins_dir'].'/'.$pl.'/'.$pl.'.uninstall.php';
 				$action = 'uninstall';
 				include_once($extplugin_info);
 
 				$t->assign(array(
-					"ADMIN_PLUG_EDIT_AFFECTEDROWS1" => $show_sql_affectedrows1,
-					"ADMIN_PLUG_EDIT_AFFECTEDROWS2" => $show_sql_affectedrows2,
-					"ADMIN_PLUG_EDIT_AFFECTEDROWS3" => $show_sql_affectedrows3,
-					"ADMIN_PLUG_EDIT_AFFECTEDROWS4" => $show_sql_affectedrows4,
-					"ADMIN_PLUG_EDIT_EXTPLUGIN_INFO" => include_once($extplugin_info),
-					"ADMIN_PLUG_EDIT_LOG" => $edit_log,
-					"ADMIN_PLUG_EDIT_CONTINUE_URL" => sed_url('admin', "m=plug&a=details&pl=".$pl)
+					'ADMIN_PLUG_EDIT_AFFECTEDROWS1' => $show_sql_affectedrows1,
+					'ADMIN_PLUG_EDIT_AFFECTEDROWS2' => $show_sql_affectedrows2,
+					'ADMIN_PLUG_EDIT_AFFECTEDROWS3' => $show_sql_affectedrows3,
+					'ADMIN_PLUG_EDIT_AFFECTEDROWS4' => $show_sql_affectedrows4,
+					'ADMIN_PLUG_EDIT_EXTPLUGIN_INFO' => include_once($extplugin_info),
+					'ADMIN_PLUG_EDIT_LOG' => $edit_log,
+					'ADMIN_PLUG_EDIT_CONTINUE_URL' => sed_url('admin', 'm=plug&a=details&pl='.$pl)
 				));
 				/* === Hook  === */
 				$extp = sed_getextplugins('admin.plug.uninstall.tags');
@@ -492,8 +492,8 @@ switch($a)
 					include $pl;
 				}
 				/* ===== */
-				$t->parse("PLUG.EDIT.UNINSTALL");
-				$t->parse("PLUG.EDIT");
+				$t->parse('MAIN.EDIT.UNINSTALL');
+				$t->parse('MAIN.EDIT');
 			break;
 			default:
 				sed_die();
@@ -553,7 +553,7 @@ switch($a)
 		/* ===== */
 		while(list($i, $x) = each($extplugins))
 		{
-			$extplugin_info = $cfg['plugins_dir']."/".$x."/".$x.".setup.php";
+			$extplugin_info = $cfg['plugins_dir'].'/'.$x.'/'.$x.'.setup.php';
 			if(file_exists($extplugin_info))
 			{
 				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
@@ -561,11 +561,11 @@ switch($a)
 				if(!empty($info['Error']))
 				{
 					$t->assign(array(
-						"ADMIN_PLUG_X_ERR" => $x,
-						"ADMIN_PLUG_ERROR_MSG" => $info['Error']
+						'ADMIN_PLUG_X_ERR' => $x,
+						'ADMIN_PLUG_ERROR_MSG' => $info['Error']
 					));
-					$t->parse("PLUG.DEFAULT.ROW.ROW_ERROR_PLUG");
-					$t->parse("PLUG.DEFAULT.ROW");
+					$t->parse('MAIN.DEFAULT.ROW.ROW_ERROR_PLUG');
+					$t->parse('MAIN.DEFAULT.ROW');
 				}
 				else
 				{
@@ -602,16 +602,16 @@ switch($a)
 					$if_plg_standalone = $plg_standalone[$info['Code']];
 
 					$t->assign(array(
-						"ADMIN_PLUG_DETAILS_URL" => sed_url('admin', "m=plug&a=details&pl=".$info['Code']),
-						"ADMIN_PLUG_NAME" => $info['Name'],
-						"ADMIN_PLUG_CODE_X" => $x,
-						"ADMIN_PLUG_EDIT_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$info['Code']),
-						"ADMIN_PLUG_PARTSCOUNT" => $info['Partscount'],
-						"ADMIN_PLUG_STATUS" => $status[$part_status],
-						"ADMIN_PLUG_RIGHTS_URL" => sed_url('admin', "m=rightsbyitem&ic=plug&io=".$info['Code']),
-						"ADMIN_PLUG_JUMPTO_URL_TOOLS" => sed_url('admin', "m=tools&p=".$info['Code']),
-						"ADMIN_PLUG_JUMPTO_URL" => sed_url('plug', "e=".$info['Code']),
-						"ADMIN_PLUG_ODDEVEN" => sed_build_oddeven($ii)
+						'ADMIN_PLUG_DETAILS_URL' => sed_url('admin', 'm=plug&a=details&pl='.$info['Code']),
+						'ADMIN_PLUG_NAME' => $info['Name'],
+						'ADMIN_PLUG_CODE_X' => $x,
+						'ADMIN_PLUG_EDIT_URL' => sed_url('admin', 'm=config&n=edit&o=plug&p='.$info['Code']),
+						'ADMIN_PLUG_PARTSCOUNT' => $info['Partscount'],
+						'ADMIN_PLUG_STATUS' => $status[$part_status],
+						'ADMIN_PLUG_RIGHTS_URL' => sed_url('admin', 'm=rightsbyitem&ic=plug&io='.$info['Code']),
+						'ADMIN_PLUG_JUMPTO_URL_TOOLS' => sed_url('admin', 'm=tools&p='.$info['Code']),
+						'ADMIN_PLUG_JUMPTO_URL' => sed_url('plug', 'e='.$info['Code']),
+						'ADMIN_PLUG_ODDEVEN' => sed_build_oddeven($ii)
 					));
 					/* === Hook - Part2 : Include === */
 					foreach ($extp as $pl)
@@ -619,15 +619,15 @@ switch($a)
 						include $pl;
 					}
 					/* ===== */
-					$t->parse("PLUG.DEFAULT.ROW");
+					$t->parse('MAIN.DEFAULT.ROW');
 				}
 			}
 			else
 			{
 				$t->assign(array(
-					"ADMIN_PLUG_X" => $x
+					'ADMIN_PLUG_X' => $x
 				));
-				$t->parse("PLUG.DEFAULT.ROW_ERROR");
+				$t->parse('MAIN.DEFAULT.ROW_ERROR');
 			}
 		}
 
@@ -643,19 +643,19 @@ switch($a)
 		while($row = sed_sql_fetcharray($sql))
 		{
 			$t->assign(array(
-				"ADMIN_PLUG_HOOK" => $row['pl_hook'],
-				"ADMIN_PLUG_CODE" => $row['pl_code'],
-				"ADMIN_PLUG_ORDER" => $row['pl_order'],
-				"ADMIN_PLUG_ACTIVE" => $sed_yesno[$row['pl_active']]
+				'ADMIN_PLUG_HOOK' => $row['pl_hook'],
+				'ADMIN_PLUG_CODE' => $row['pl_code'],
+				'ADMIN_PLUG_ORDER' => $row['pl_order'],
+				'ADMIN_PLUG_ACTIVE' => $sed_yesno[$row['pl_active']]
 			));
-			$t->parse("PLUG.DEFAULT.HOOKS");
+			$t->parse('MAIN.DEFAULT.HOOKS');
 		}
 
 		$t->assign(array(
-			"ADMIN_PLUG_CNT_EXTP" => $cnt_extp,
-			"ADMIN_PLUG_CNT_HOOK" => sed_sql_numrows($sql)
+			'ADMIN_PLUG_CNT_EXTP' => $cnt_extp,
+			'ADMIN_PLUG_CNT_HOOK' => sed_sql_numrows($sql)
 		));
-		$t->parse("PLUG.DEFAULT");
+		$t->parse('MAIN.DEFAULT');
 	break;
 }
 
@@ -663,8 +663,8 @@ $if_conf_url = (!empty($pl) && $b == 'install' && $totalconfig > 0) ? true : fal
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_PLUG_CONFIG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$pl),
-	"ADMIN_PLUG_ADMINWARNINGS" => $adminwarnings
+	'ADMIN_PLUG_CONFIG_URL' => sed_url('admin', 'm=config&n=edit&o=plug&p='.$pl),
+	'ADMIN_PLUG_ADMINWARNINGS' => $adminwarnings
 ));
 
 /* === Hook  === */
@@ -674,14 +674,14 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
-$t->parse('PLUG');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('PLUG');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('PLUG');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

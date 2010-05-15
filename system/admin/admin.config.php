@@ -74,7 +74,7 @@ switch($n)
 		
 		if ($o == 'core')
 		{
-			$adminpath[] = array(sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L["core_".$p]);
+			$adminpath[] = array(sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['core_'.$p]);
 		}
 		else
 		{
@@ -131,7 +131,7 @@ switch($n)
 			}
 			elseif ($config_type == 4)
 			{
-				$varname = "sed_select_".$config_name;
+				$varname = 'sed_select_'.$config_name;
 				reset($$varname);
 				$vararray = array();
 				foreach ($$varname as $key => $value)
@@ -148,7 +148,7 @@ switch($n)
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_CONFIG' => $config_input,
 				'ADMIN_CONFIG_ROW_CONFIG_TITLE' => (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text)) ? $config_text : $config_title,
-				'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=reset&v=".$config_name),
+				'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' => sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=reset&v='.$config_name),
 				'ADMIN_CONFIG_ROW_CONFIG_MORE' => $config_more
 			));
 			/* === Hook - Part2 : Include === */
@@ -161,7 +161,7 @@ switch($n)
 		}
 		
 		$t->assign(array(
-			'ADMIN_CONFIG_FORM_URL' => sed_url('admin', "m=config&n=edit&o=".$o."&p=".$p."&a=update")
+			'ADMIN_CONFIG_FORM_URL' => sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=update')
 		));
 		/* === Hook  === */
 		$extp = sed_getextplugins('admin.config.edit.tags');
@@ -177,11 +177,11 @@ switch($n)
 		$sql = sed_sql_query("SELECT DISTINCT(config_cat) FROM $db_config WHERE config_owner='core' ORDER BY config_cat ASC");
 		while ($row = sed_sql_fetcharray($sql))
 		{
-			if($L["core_".$row['config_cat']])
+			if($L['core_'.$row['config_cat']])
 			{
 				$t->assign(array(
-					'ADMIN_CONFIG_ROW_CORE_URL' => sed_url('admin', "m=config&n=edit&o=core&p=".$row['config_cat']),
-					'ADMIN_CONFIG_ROW_CORE_NAME' => $L["core_".$row['config_cat']]
+					'ADMIN_CONFIG_ROW_CORE_URL' => sed_url('admin', 'm=config&n=edit&o=core&p='.$row['config_cat']),
+					'ADMIN_CONFIG_ROW_CORE_NAME' => $L['core_'.$row['config_cat']]
 				));
 				$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_ROW_CORE');
 			}
@@ -190,7 +190,7 @@ switch($n)
 		while ($row = sed_sql_fetcharray($sql))
 		{
 			$t->assign(array(
-				'ADMIN_CONFIG_ROW_PLUG_URL' => sed_url('admin', "m=config&n=edit&o=plug&p=".$row['config_cat']),
+				'ADMIN_CONFIG_ROW_PLUG_URL' => sed_url('admin', 'm=config&n=edit&o=plug&p='.$row['config_cat']),
 				'ADMIN_CONFIG_ROW_PLUG_NAME' => $row['config_cat']
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_ROW_PLUG');

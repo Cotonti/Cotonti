@@ -1,4 +1,4 @@
-<!-- BEGIN: HOME -->
+<!-- BEGIN: MAIN -->
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">{PHP.L.adm_warnings}: {PHP.adm_nogd}</div><!-- ENDIF -->
 		<h2>{PHP.L.Main}</h2>
 		<h3>{PHP.L.adm_valqueue}:</h3>
@@ -145,4 +145,4 @@
 			</div>
 		</div>
 		<div class="clear"></div>
-<!-- END: HOME -->
+<!-- END: MAIN -->

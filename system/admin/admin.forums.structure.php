@@ -93,7 +93,7 @@ if($n == 'options')
 
 	while($f = readdir($handle))
 	{
-		if(($f != ".") && ($f != "..") && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'tpl')
+		if(($f != '.') && ($f != '..') && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'tpl')
 		{
 			$allskinfiles[] = $f;
 		}
@@ -124,17 +124,17 @@ if($n == 'options')
 		$check1 = " checked=\"checked\"";
 	}
 
-	$adminpath[] = array(sed_url('admin', "m=forums&s=structure&n=options&id=".$id), htmlspecialchars($fn_title));
+	$adminpath[] = array(sed_url('admin', 'm=forums&s=structure&n=options&id='.$id), htmlspecialchars($fn_title));
 
 	$t->assign(array(
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL" => sed_url('admin', "m=forums&s=structure&n=options&a=update&id=".$fn_id."&d=".$d),
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_CODE" => $fn_code,
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH" => $fn_path,
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE" => $fn_title,
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC" => $fn_desc,
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON" => $fn_icon,
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK1" => $check1,
-		"ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK3" => $check3
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL' => sed_url('admin', 'm=forums&s=structure&n=options&a=update&id='.$fn_id.'&d='.$d),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_CODE' => $fn_code,
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH' => $fn_path,
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE' => $fn_title,
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC' => $fn_desc,
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON' => $fn_icon,
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK1' => $check1,
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK3' => $check3
 	));
 
 	/* === Hook === */
@@ -145,7 +145,7 @@ if($n == 'options')
 	}
 	/* ===== */
 
-	$t->parse("FORUMS_STRUCTURE.OPTIONS");
+	$t->parse('MAIN.OPTIONS');
 }
 else
 {
@@ -243,37 +243,37 @@ else
 		$fn_desc = $row['fn_desc'];
 		$fn_icon = $row['fn_icon'];
 
-		$pathfieldimg = (mb_strpos($fn_path, ".") == 0) ? false : true;
+		$pathfieldimg = (mb_strpos($fn_path, '.') == 0) ? false : true;
 		$sectioncount[$fn_code] = (!$sectioncount[$fn_code]) ? "0" : $sectioncount[$fn_code];
 		$del_url = ($sectioncount[$fn_code] > 0) ? false : true;
 		$selected = ($row['fn_defstate']) ? true : false;
 
 		if(empty($row['fn_tpl']))
 		{
-			$fn_tpl_sym = "-";
+			$fn_tpl_sym = '-';
 		}
 		elseif($row['fn_tpl'] == 'same_as_parent')
 		{
-			$fn_tpl_sym = "*";
+			$fn_tpl_sym = '*';
 		}
 		else
 		{
-			$fn_tpl_sym = "+";
+			$fn_tpl_sym = '+';
 		}
 
 		$t->assign(array(
-			"FORUMS_STRUCTURE_ROW_DEL_URL" => sed_url('admin', "m=forums&s=structure&a=delete&id=".$fn_id."&c=".$row['fn_code']."&d=".$d."&".sed_xg()),
-			"FORUMS_STRUCTURE_ROW_FN_CODE" => $fn_code,
-			"FORUMS_STRUCTURE_ROW_INPUT_PATH_NAME" => "s[".$fn_id."][rpath]",
-			"FORUMS_STRUCTURE_ROW_FN_PATH" => $fn_path,
-			"FORUMS_STRUCTURE_ROW_PATHFIELDLEN" => (mb_strpos($fn_path, ".") == 0) ? 3 : 9,
-			"FORUMS_STRUCTURE_ROW_SELECT_NAME" => "s[".$fn_id."][rdefstate]",
-			"FORUMS_STRUCTURE_ROW_FN_TPL_SYM" => $fn_tpl_sym,
-			"FORUMS_STRUCTURE_ROW_INPUT_TITLE_NAME" => "s[".$fn_id."][rtitle]",
-			"FORUMS_STRUCTURE_ROW_FN_TITLE" => $fn_title,
-			"FORUMS_STRUCTURE_ROW_SECTIONCOUNT" => $sectioncount[$fn_code],
-			"FORUMS_STRUCTURE_ROW_JUMPTO_URL" => sed_url('forums', "c=".$fn_code),
-			"FORUMS_STRUCTURE_ROW_OPTIONS_URL" => sed_url('admin', "m=forums&s=structure&n=options&id=".$fn_id."&d=".$d."&".sed_xg())
+			'FORUMS_STRUCTURE_ROW_DEL_URL' => sed_url('admin', 'm=forums&s=structure&a=delete&id='.$fn_id.'&c='.$row['fn_code'].'&d='.$d.'&'.sed_xg()),
+			'FORUMS_STRUCTURE_ROW_FN_CODE' => $fn_code,
+			'FORUMS_STRUCTURE_ROW_INPUT_PATH_NAME' => 's['.$fn_id.'][rpath]',
+			'FORUMS_STRUCTURE_ROW_FN_PATH' => $fn_path,
+			'FORUMS_STRUCTURE_ROW_PATHFIELDLEN' => (mb_strpos($fn_path, '.') == 0) ? 3 : 9,
+			'FORUMS_STRUCTURE_ROW_SELECT_NAME' => 's['.$fn_id.'][rdefstate]',
+			'FORUMS_STRUCTURE_ROW_FN_TPL_SYM' => $fn_tpl_sym,
+			'FORUMS_STRUCTURE_ROW_INPUT_TITLE_NAME' => 's['.$fn_id.'][rtitle]',
+			'FORUMS_STRUCTURE_ROW_FN_TITLE' => $fn_title,
+			'FORUMS_STRUCTURE_ROW_SECTIONCOUNT' => $sectioncount[$fn_code],
+			'FORUMS_STRUCTURE_ROW_JUMPTO_URL' => sed_url('forums', 'c='.$fn_code),
+			'FORUMS_STRUCTURE_ROW_OPTIONS_URL' => sed_url('admin', 'm=forums&s=structure&n=options&id='.$fn_id.'&d='.$d.'&'.sed_xg())
 		));
 		/* === Hook - Part2 : Include === */
 		foreach ($extp as $pl)
@@ -281,27 +281,27 @@ else
 			include $pl;
 		}
 		/* ===== */
-		$t->parse("FORUMS_STRUCTURE.DEFULT.ROW");
+		$t->parse('MAIN.DEFULT.ROW');
 
 		$ii++;
 	}
 
 	$t->assign(array(
-		"ADMIN_FORUMS_STRUCTURE_FORM_URL" => sed_url('admin', "m=forums&s=structure&a=update&d=".$d),
-		"ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV" => $pagenav['prev'],
-		"ADMIN_FORUMS_STRUCTURE_PAGNAV" => $pagenav['main'],
-		"ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT" => $pagenav['next'],
-		"ADMIN_FORUMS_STRUCTURE_TOTALITEMS" => $totalitems,
-		"ADMIN_FORUMS_STRUCTURE_COUNTER_ROW" => $ii,
-		"ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD" => sed_url('admin', "m=forums&s=structure&a=add")
+		'ADMIN_FORUMS_STRUCTURE_FORM_URL' => sed_url('admin', 'm=forums&s=structure&a=update&d='.$d),
+		'ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
+		'ADMIN_FORUMS_STRUCTURE_PAGNAV' => $pagenav['main'],
+		'ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT' => $pagenav['next'],
+		'ADMIN_FORUMS_STRUCTURE_TOTALITEMS' => $totalitems,
+		'ADMIN_FORUMS_STRUCTURE_COUNTER_ROW' => $ii,
+		'ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD' => sed_url('admin', 'm=forums&s=structure&a=add')
 	));
-	$t->parse("FORUMS_STRUCTURE.DEFULT");
+	$t->parse('MAIN.DEFULT');
 }
 
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_FORUMS_STRUCTURE_ADMINWARNINGS" => $adminwarnings
+	'ADMIN_FORUMS_STRUCTURE_ADMINWARNINGS' => $adminwarnings
 ));
 
 /* === Hook === */
@@ -312,14 +312,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('FORUMS_STRUCTURE');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('FORUMS_STRUCTURE');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('FORUMS_STRUCTURE');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

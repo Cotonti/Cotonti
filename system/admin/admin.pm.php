@@ -24,9 +24,9 @@ $totalpmdb = sed_sql_rowcount($db_pm);
 $totalpmsent = sed_stat_get('totalpms');
 
 $t->assign(array(
-	"ADMIN_PM_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=pm"),
-	"ADMIN_PM_TOTALPMDB" => $totalpmdb,
-	"ADMIN_PM_TOTALPMSENT" => $totalpmsent
+	'ADMIN_PM_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=pm'),
+	'ADMIN_PM_TOTALPMDB' => $totalpmdb,
+	'ADMIN_PM_TOTALPMSENT' => $totalpmsent
 ));
 
 /* === Hook === */
@@ -37,14 +37,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('PM');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('PM');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('PM');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

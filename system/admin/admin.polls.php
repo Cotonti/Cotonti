@@ -97,13 +97,13 @@ $is_adminwarnings = isset($adminwarnings);
 
 if(!$filter)
 {
-    $poll_type = "1";
-    $poll_filter = "";
+    $poll_type = '1';
+    $poll_filter = '';
 }
 else
 {
-    $poll_type = "poll_type='$filter'";
-    $poll_filter = "&filter=$filter";
+    $poll_type = 'poll_type='.$filter;
+    $poll_filter = '"&filter='.$filter;
 }
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
@@ -128,31 +128,31 @@ while($row = sed_sql_fetcharray($sql))
 
 	if($type == 'index')
 	{
-		$admtypepoll = sed_url('polls', "id=".$row['poll_id']);
+		$admtypepoll = sed_url('polls', 'id='.$row['poll_id']);
 	}
 	else
 	{
-		$admtypepoll = sed_url('forums', "m=posts&q=".$row['poll_id']);
+		$admtypepoll = sed_url('forums', 'm=posts&q='.$row['poll_id']);
 	}
 
-	$poll_state = ($row['poll_state']) ? "[-] " : "";
+	$poll_state = ($row['poll_state']) ? '[-] ' : '';
 
     $sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
     $totalvotes = sed_sql_result($sql2, 0, "SUM(po_count)");
 
 	$t->assign(array(
-		"ADMIN_POLLS_ROW_POLL_CREATIONDATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
-		"ADMIN_POLLS_ROW_POLL_TYPE" => $variants[htmlspecialchars($type)][0],
-		"ADMIN_POLLS_ROW_POLL_URL" => sed_url('admin', "m=polls".$poll_filter."&n=options&d=".$d."&id=".$row['poll_id']),
-		"ADMIN_POLLS_ROW_POLL_TEXT" => htmlspecialchars($row['poll_text']),
-		"ADMIN_POLLS_ROW_POLL_TOTALVOTES" => $totalvotes,
-		"ADMIN_POLLS_ROW_POLL_CLOSED" => $poll_state,
-		"ADMIN_POLLS_ROW_POLL_URL_DEL" => sed_url('admin', "m=polls".$poll_filter."&a=delete&id=".$id."&".sed_xg()),
-		"ADMIN_POLLS_ROW_POLL_URL_LCK" => sed_url('admin', "m=polls".$poll_filter."&a=lock&id=".$id."&".sed_xg()),
-		"ADMIN_POLLS_ROW_POLL_URL_RES" => sed_url('admin', "m=polls".$poll_filter."&a=reset&d=".$d."&id=".$id."&".sed_xg()),
-		"ADMIN_POLLS_ROW_POLL_URL_BMP" => sed_url('admin', "m=polls".$poll_filter."&a=bump&id=".$id."&".sed_xg()),
-		"ADMIN_POLLS_ROW_POLL_URL_OPN" => $admtypepoll,
-		"ADMIN_POLLS_ROW_POLL_ODDEVEN" => sed_build_oddeven($ii)
+		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
+		'ADMIN_POLLS_ROW_POLL_TYPE' => $variants[htmlspecialchars($type)][0],
+		'ADMIN_POLLS_ROW_POLL_URL' => sed_url('admin', 'm=polls'.$poll_filter.'&n=options&d='.$d.'&id='.$row['poll_id']),
+		'ADMIN_POLLS_ROW_POLL_TEXT' => htmlspecialchars($row['poll_text']),
+		'ADMIN_POLLS_ROW_POLL_TOTALVOTES' => $totalvotes,
+		'ADMIN_POLLS_ROW_POLL_CLOSED' => $poll_state,
+		'ADMIN_POLLS_ROW_POLL_URL_DEL' => sed_url('admin', 'm=polls'.$poll_filter.'&a=delete&id='.$id.'&'.sed_xg()),
+		'ADMIN_POLLS_ROW_POLL_URL_LCK' => sed_url('admin', 'm=polls'.$poll_filter.'&a=lock&id='.$id.'&'.sed_xg()),
+		'ADMIN_POLLS_ROW_POLL_URL_RES' => sed_url('admin', 'm=polls'.$poll_filter.'&a=reset&d='.$d.'&id='.$id.'&'.sed_xg()),
+		'ADMIN_POLLS_ROW_POLL_URL_BMP' => sed_url('admin', 'm=polls'.$poll_filter.'&a=bump&id='.$id.'&'.sed_xg()),
+		'ADMIN_POLLS_ROW_POLL_URL_OPN' => $admtypepoll,
+		'ADMIN_POLLS_ROW_POLL_ODDEVEN' => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -162,14 +162,14 @@ while($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t->parse("POLLS.POLLS_ROW");
+	$t->parse('MAIN.POLLS_ROW');
 
 	$ii++;
 }
 
 if ($ii == 0)
 {
-	$t->parse("POLLS.POLLS_ROW_EMPTY");
+	$t->parse('MAIN.POLLS_ROW_EMPTY');
 }
 
 if($n == 'options')
@@ -205,31 +205,31 @@ foreach($variants as $val)
 	$checked = ($filter == $val[1]) ? " selected='selected'" : "";
 	if($val[1])
 	{
-		$val[1] = "&filter=".$val[1];
+		$val[1] = '&filter='.$val[1];
 	}
 
 	$t->assign(array(
-		"ADMIN_POLLS_ROW_FILTER_VALUE" => sed_url('admin', "m=polls".$val[1]),
-		"ADMIN_POLLS_ROW_FILTER_CHECKED" => $checked,
-		"ADMIN_POLLS_ROW_FILTER_NAME" => $val[0]
+		'ADMIN_POLLS_ROW_FILTER_VALUE' => sed_url('admin', 'm=polls'.$val[1]),
+		'ADMIN_POLLS_ROW_FILTER_CHECKED' => $checked,
+		'ADMIN_POLLS_ROW_FILTER_NAME' => $val[0]
 	));
-	$t->parse("POLLS.POLLS_ROW_FILTER");
+	$t->parse('POLLS.POLLS_ROW_FILTER');
 }
 
-sed_poll_edit_form($poll_id, $t, "POLLS");
+sed_poll_edit_form($poll_id, $t, 'POLLS');
 
 $t->assign(array(
-	"ADMIN_POLLS_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=polls"),
-	"ADMIN_POLLS_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_POLLS_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_POLLS_PAGNAV" => $pagenav['main'],
-	"ADMIN_POLLS_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_POLLS_TOTALITEMS" => $totalitems,
-	"ADMIN_POLLS_ON_PAGE" => $ii,
-	"ADMIN_POLLS_FORMNAME" => $formname,
-	"ADMIN_POLLS_FORM_URL" => ($poll_id != 'new') ? sed_url('admin', "m=polls".$poll_filter."&d=".$d) : sed_url('admin', "m=polls"),
-	"ADMIN_POLLS_EDIT_FORM" => $poll_text,
-	"ADMIN_POLLS_SEND_BUTTON" => $send_button
+	'ADMIN_POLLS_CONF_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=polls'),
+	'ADMIN_POLLS_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_POLLS_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_POLLS_PAGNAV' => $pagenav['main'],
+	'ADMIN_POLLS_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_POLLS_TOTALITEMS' => $totalitems,
+	'ADMIN_POLLS_ON_PAGE' => $ii,
+	'ADMIN_POLLS_FORMNAME' => $formname,
+	'ADMIN_POLLS_FORM_URL' => ($poll_id != 'new') ? sed_url('admin', 'm=polls'.$poll_filter.'&d='.$d) : sed_url('admin', 'm=polls'),
+	'ADMIN_POLLS_EDIT_FORM' => $poll_text,
+	'ADMIN_POLLS_SEND_BUTTON' => $send_button
 ));
 
 /* === Hook  === */
@@ -240,14 +240,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('POLLS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('POLLS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('POLLS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

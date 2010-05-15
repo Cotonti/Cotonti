@@ -1,4 +1,4 @@
-<!-- BEGIN: RIGHTSBYITEM -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Rights}</h2>
 		<!-- IF {PHP.is_adminwarnings} --><div class="error">
@@ -53,7 +53,7 @@
 				</table>
 			</form>
 	</div>
-<!-- END: RIGHTSBYITEM -->
+<!-- END: MAIN -->
 
 <!-- BEGIN: RIGHTSBYITEM_HELP -->
 		<p>{PHP.R.admin_icon_auth_r}&nbsp; {PHP.L.Read}</p>

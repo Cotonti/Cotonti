@@ -65,11 +65,11 @@ foreach($log_groups as $grp_code => $grp_name)
 	$selected = ($grp_code == $n) ? " selected=\"selected\"" : "";
 
 	$t->assign(array(
-		"ADMIN_LOG_OPTION_VALUE_URL" => sed_url('admin', "m=log&n=".$grp_code),
-		"ADMIN_LOG_OPTION_GRP_NAME" => $grp_name,
-		"ADMIN_LOG_OPTION_SELECTED" => $selected
+		'ADMIN_LOG_OPTION_VALUE_URL' => sed_url('admin', 'm=log&n='.$grp_code),
+		'ADMIN_LOG_OPTION_GRP_NAME' => $grp_name,
+		'ADMIN_LOG_OPTION_SELECTED' => $selected
 	));
-	$t->parse("LOG.GROUP_SELECT_OPTION");
+	$t->parse('MAIN.GROUP_SELECT_OPTION');
 }
 
 $is_adminwarnings = isset($adminwarnings);
@@ -93,14 +93,14 @@ $extp = sed_getextplugins('admin.log.loop');
 while($row = sed_sql_fetcharray($sql))
 {
 	$t->assign(array(
-		"ADMIN_LOG_ROW_LOG_ID" => $row['log_id'],
-		"ADMIN_LOG_ROW_DATE" => date($cfg['dateformat'], $row['log_date']),
-		"ADMIN_LOG_ROW_URL_IP_SEARCH" => sed_url('admin', "m=tools&p=ipsearch&a=search&id=".$row['log_ip']."&".sed_xg()),
-		"ADMIN_LOG_ROW_LOG_IP" => $row['log_ip'],
-		"ADMIN_LOG_ROW_LOG_NAME" => $row['log_name'],
-		"ADMIN_LOG_ROW_URL_LOG_GROUP" => sed_url('admin', "m=log&n=".$row['log_group']),
-		"ADMIN_LOG_ROW_LOG_GROUP" => $log_groups[$row['log_group']],
-		"ADMIN_LOG_ROW_LOG_TEXT" => htmlspecialchars($row['log_text'])
+		'ADMIN_LOG_ROW_LOG_ID' => $row['log_id'],
+		'ADMIN_LOG_ROW_DATE' => date($cfg['dateformat'], $row['log_date']),
+		'ADMIN_LOG_ROW_URL_IP_SEARCH' => sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['log_ip'].'&'.sed_xg()),
+		'ADMIN_LOG_ROW_LOG_IP' => $row['log_ip'],
+		'ADMIN_LOG_ROW_LOG_NAME' => $row['log_name'],
+		'ADMIN_LOG_ROW_URL_LOG_GROUP' => sed_url('admin', 'm=log&n='.$row['log_group']),
+		'ADMIN_LOG_ROW_LOG_GROUP' => $log_groups[$row['log_group']],
+		'ADMIN_LOG_ROW_LOG_TEXT' => htmlspecialchars($row['log_text'])
 	));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -108,19 +108,19 @@ while($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("LOG.LOG_ROW");
+	$t->parse('MAIN.LOG_ROW');
 	$ii++;
 }
 
 $t->assign(array(
-	"ADMIN_LOG_URL_PRUNE" => sed_url('admin', "m=log&a=purge&".sed_xg()),
-	"ADMIN_LOG_TOTALDBLOG" => $totaldblog,
-	"ADMIN_LOG_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_LOG_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_LOG_PAGNAV" => $pagenav['main'],
-	"ADMIN_LOG_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_LOG_TOTALITEMS" => $totalitems,
-	"ADMIN_LOG_ON_PAGE" => $ii
+	'ADMIN_LOG_URL_PRUNE' => sed_url('admin', 'm=log&a=purge&'.sed_xg()),
+	'ADMIN_LOG_TOTALDBLOG' => $totaldblog,
+	'ADMIN_LOG_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_LOG_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_LOG_PAGNAV' => $pagenav['main'],
+	'ADMIN_LOG_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_LOG_TOTALITEMS' => $totalitems,
+	'ADMIN_LOG_ON_PAGE' => $ii
 ));
 
 /* === Hook  === */
@@ -131,14 +131,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('LOG');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('LOG');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('LOG');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

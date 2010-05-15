@@ -1,4 +1,4 @@
-<!-- BEGIN: OTHER -->
+<!-- BEGIN: MAIN -->
 	<h2>{PHP.L.Modules}</h2>
 	<table class="cells">
 		<tr>
@@ -113,4 +113,4 @@
 			</td>
 		</tr>
 	</table>
-<!-- END: OTHER -->
+<!-- END: MAIN -->

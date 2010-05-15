@@ -33,7 +33,7 @@ foreach ($extp as $pl)
 
 if($f == 'year' || $f == 'month')
 {
-    $adminpath[] = array(sed_url('admin', 'm=hits&f='.$f.'&v='.$v), "(".$v.")");
+    $adminpath[] = array(sed_url('admin', 'm=hits&f='.$f.'&v='.$v), '('.$v.')');
     $sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
 
     while($row = sed_sql_fetcharray($sql))
@@ -54,10 +54,10 @@ if($f == 'year' || $f == 'month')
     {
         $percentbar = floor(($hits / $hits_d_max) * 100);
         $t->assign(array(
-            "ADMIN_HITS_ROW_DAY" => $day,
-            "ADMIN_HITS_ROW_HITS" => $hits,
-            "ADMIN_HITS_ROW_PERCENTBAR" => $percentbar,
-            "ADMIN_HITS_ROW_ODDEVEN" => sed_build_oddeven($ii)
+            'ADMIN_HITS_ROW_DAY' => $day,
+            'ADMIN_HITS_ROW_HITS' => $hits,
+            'ADMIN_HITS_ROW_PERCENTBAR' => $percentbar,
+            'ADMIN_HITS_ROW_ODDEVEN' => sed_build_oddeven($ii)
             ));
 
         /* === Hook - Part2 : Include === */
@@ -67,11 +67,11 @@ if($f == 'year' || $f == 'month')
         }
         /* ===== */
 
-        $t->parse("HITS.YEAR_OR_MONTH.ROW");
+        $t->parse('MAIN.YEAR_OR_MONTH.ROW');
         $ii++;
     }
 
-    $t->parse("HITS.YEAR_OR_MONTH");
+    $t->parse('MAIN.YEAR_OR_MONTH');
 }
 else
 {
@@ -91,8 +91,8 @@ else
         $m = mb_substr($row['stat_name'], 5, 2);
         $d = mb_substr($row['stat_name'], 8, 2);
         $w = @date('W', mktime(0, 0, 0, $m, $d, $y));
-        $hits_w[$y."-W".$w] += $row['stat_value'];
-        $hits_m[$y."-".$m] += $row['stat_value'];
+        $hits_w[$y.'-W'.$w] += $row['stat_value'];
+        $hits_m[$y.'-'.$m] += $row['stat_value'];
         $hits_y[$y] += $row['stat_value'];
     }
 
@@ -107,10 +107,10 @@ else
     {
         $percentbar = floor(($hits / $hits_y_max) * 100);
         $t->assign(array(
-            "ADMIN_HITS_ROW_YEAR_URL" => sed_url('admin', 'm=hits&f=year&v='.$year),
-            "ADMIN_HITS_ROW_YEAR" => $year,
-            "ADMIN_HITS_ROW_YEAR_HITS" => $hits,
-            "ADMIN_HITS_ROW_YEAR_PERCENTBAR" => $percentbar
+            'ADMIN_HITS_ROW_YEAR_URL' => sed_url('admin', 'm=hits&f=year&v='.$year),
+            'ADMIN_HITS_ROW_YEAR' => $year,
+            'ADMIN_HITS_ROW_YEAR_HITS' => $hits,
+            'ADMIN_HITS_ROW_YEAR_PERCENTBAR' => $percentbar
             ));
         /* === Hook - Part2 : Include === */
         foreach ($extp as $pl)
@@ -118,7 +118,7 @@ else
         	include $pl;
         }
         /* ===== */
-        $t->parse("HITS.DEFAULT.ROW_YEAR");
+        $t->parse('MAIN.DEFAULT.ROW_YEAR');
         $ii++;
     }
     $ii=0;
@@ -126,10 +126,10 @@ else
     {
         $percentbar = floor(($hits / $hits_m_max) * 100);
         $t->assign(array(
-            "ADMIN_HITS_ROW_MONTH_URL" => sed_url('admin', 'm=hits&f=month&v='.$month),
-            "ADMIN_HITS_ROW_MONTH" => $month,
-            "ADMIN_HITS_ROW_MONTH_HITS" => $hits,
-            "ADMIN_HITS_ROW_MONTH_PERCENTBAR" => $percentbar
+            'ADMIN_HITS_ROW_MONTH_URL' => sed_url('admin', 'm=hits&f=month&v='.$month),
+            'ADMIN_HITS_ROW_MONTH' => $month,
+            'ADMIN_HITS_ROW_MONTH_HITS' => $hits,
+            'ADMIN_HITS_ROW_MONTH_PERCENTBAR' => $percentbar
             ));
         /* === Hook - Part2 : Include === */
         foreach ($extp as $pl)
@@ -137,18 +137,18 @@ else
         	include $pl;
         }
         /* ===== */
-        $t->parse("HITS.DEFAULT.ROW_MONTH");
+        $t->parse('MAIN.DEFAULT.ROW_MONTH');
         $ii++;
     }
     $ii=0;
     foreach($hits_w as $week => $hits)
     {
-        $ex = explode("-W", $week);
+        $ex = explode('-W', $week);
         $percentbar = floor(($hits / $hits_w_max) * 100);
         $t->assign(array(
-            "ADMIN_HITS_ROW_WEEK" => $week,
-            "ADMIN_HITS_ROW_WEEK_HITS" => $hits,
-            "ADMIN_HITS_ROW_WEEK_PERCENTBAR" => $percentbar
+            'ADMIN_HITS_ROW_WEEK' => $week,
+            'ADMIN_HITS_ROW_WEEK_HITS' => $hits,
+            'ADMIN_HITS_ROW_WEEK_PERCENTBAR' => $percentbar
             ));
         /* === Hook - Part2 : Include === */
         foreach ($extp as $pl)
@@ -156,14 +156,14 @@ else
         	include $pl;
         }
         /* ===== */
-        $t->parse("HITS.DEFAULT.ROW_WEEK");
+        $t->parse('MAIN.DEFAULT.ROW_WEEK');
         $ii++;
     }
 
     $t->assign(array(
-        "ADMIN_HITS_MAXHITS" => sprintf($L['adm_maxhits'], $max_date, $max_hits)
+        'ADMIN_HITS_MAXHITS' => sprintf($L['adm_maxhits'], $max_date, $max_hits)
         ));
-    $t->parse("HITS.DEFAULT");
+    $t->parse('MAIN.DEFAULT');
 }
 
 /* === Hook  === */
@@ -174,14 +174,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('HITS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('HITS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('HITS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

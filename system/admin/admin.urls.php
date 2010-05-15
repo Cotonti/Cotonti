@@ -296,10 +296,10 @@ if($a == 'save')
 	}
 
 	$t->assign(array(
-		"ADMIN_URLS_CONF_NAME" => $conf_name,
-		"ADMIN_URLS_HTA" => $hta
+		'ADMIN_URLS_CONF_NAME' => $conf_name,
+		'ADMIN_URLS_HTA' => $hta
 	));
-	$t->parse("URLS.HTA");
+	$t->parse('MAIN.HTA');
 
 	if(!empty($error_string))
 	{
@@ -330,10 +330,10 @@ sort($areas);
 foreach($areas as $ar)
 {
 	$t->assign(array(
-		"ADMIN_URLS_AREABOX_SELECTED" => ($ar == '*') ? ' selected="selected"' : '',
-		"ADMIN_URLS_AREABOX_ITEM" => $ar
+		'ADMIN_URLS_AREABOX_SELECTED' => ($ar == '*') ? ' selected="selected"' : '',
+		'ADMIN_URLS_AREABOX_ITEM' => $ar
 	));
-	$t->parse("URLS.AREABOX");
+	$t->parse('MAIN.AREABOX');
 }
 
 $fp = fopen('./datas/urltrans.dat', 'r');
@@ -354,19 +354,19 @@ while($line = trim(fgets($fp), " \t\r\n"))
 ' : '	<option>'.$ar.'</option>
 ';
 		$t->assign(array(
-			"ADMIN_URLS_AREABOX_SELECTED" => ($ar == $parts[0]) ? ' selected="selected"' : '',
-			"ADMIN_URLS_AREABOX_ITEM" => $ar
+			'ADMIN_URLS_AREABOX_SELECTED' => ($ar == $parts[0]) ? ' selected="selected"' : '',
+			'ADMIN_URLS_AREABOX_ITEM' => $ar
 		));
-		$t->parse("URLS.ROW.AREABOX2");
+		$t->parse('MAIN.ROW.AREABOX2');
 	}
 	$areabox .= '</select>
 ';
 
 	$t->assign(array(
-		"ADMIN_URLS_ROW_I" => $ii,
-		"ADMIN_URLS_ROW_PARTS1" => $parts[1],
-		"ADMIN_URLS_ROW_PARTS2" => $parts[2],
-		"ADMIN_URLS_ROW_ODDEVEN" => sed_build_oddeven($ii)
+		'ADMIN_URLS_ROW_I' => $ii,
+		'ADMIN_URLS_ROW_PARTS1' => $parts[1],
+		'ADMIN_URLS_ROW_PARTS2' => $parts[2],
+		'ADMIN_URLS_ROW_ODDEVEN' => sed_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -376,7 +376,7 @@ while($line = trim(fgets($fp), " \t\r\n"))
 	}
 	/* ===== */
 
-	$t->parse("URLS.ROW");
+	$t->parse('MAIN.ROW');
 	$ii++;
 }
 fclose($fp);
@@ -386,10 +386,10 @@ $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : f
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(
-	"ADMIN_URLS_II" => $ii,
-	"ADMIN_URLS_FORM_URL" => sed_url('admin', "m=urls&a=save"),
-	"ADMIN_URLS_AREABOX" => $areabox,
-	"ADMIN_URLS_ADMINWARNINGS" => $adminwarnings
+	'ADMIN_URLS_II' => $ii,
+	'ADMIN_URLS_FORM_URL' => sed_url('admin', 'm=urls&a=save'),
+	'ADMIN_URLS_AREABOX' => $areabox,
+	'ADMIN_URLS_ADMINWARNINGS' => $adminwarnings
 ));
 
 /* === Hook  === */
@@ -400,14 +400,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('URLS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('URLS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('URLS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

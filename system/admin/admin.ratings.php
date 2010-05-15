@@ -65,7 +65,7 @@ while($row = sed_sql_fetcharray($sql))
 	switch($rat_type)
 	{
 		case 'p':
-			$rat_url = sed_url('page', "id=".$rat_value);
+			$rat_url = sed_url('page', 'id='.$rat_value);
 		break;
 		default:
 			$rat_url = '';
@@ -73,13 +73,13 @@ while($row = sed_sql_fetcharray($sql))
 	}
 
 	$t->assign(array(
-		"ADMIN_RATINGS_ROW_URL_DEL" => sed_url('admin', "m=ratings&a=delete&id=".$row['rating_code']."&d=".$d."&".sed_xg()),
-		"ADMIN_RATINGS_ROW_RATING_CODE" => $row['rating_code'],
-		"ADMIN_RATINGS_ROW_CREATIONDATE" => date($cfg['dateformat'], $row['rating_creationdate']),
-		"ADMIN_RATINGS_ROW_VOTES" => $votes,
-		"ADMIN_RATINGS_ROW_RATING_AVERAGE" => $row['rating_average'],
-		"ADMIN_RATINGS_ROW_RAT_URL" => $rat_url,
-		"ADMIN_RATINGS_ROW_ODDEVEN" => sed_build_oddeven($ii)
+		'ADMIN_RATINGS_ROW_URL_DEL' => sed_url('admin', 'm=ratings&a=delete&id='.$row['rating_code'].'&d='.$d.'&'.sed_xg()),
+		'ADMIN_RATINGS_ROW_RATING_CODE' => $row['rating_code'],
+		'ADMIN_RATINGS_ROW_CREATIONDATE' => date($cfg['dateformat'], $row['rating_creationdate']),
+		'ADMIN_RATINGS_ROW_VOTES' => $votes,
+		'ADMIN_RATINGS_ROW_RATING_AVERAGE' => $row['rating_average'],
+		'ADMIN_RATINGS_ROW_RAT_URL' => $rat_url,
+		'ADMIN_RATINGS_ROW_ODDEVEN' => sed_build_oddeven($ii)
 	));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -87,20 +87,20 @@ while($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("RATINGS.RATINGS_ROW");
+	$t->parse('MAIN.RATINGS_ROW');
 	$ii++;
 	$jj = $jj + $votes;
 }
 
 $t->assign(array(
-	"ADMIN_RATINGS_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_RATINGS_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=ratings"),
-	"ADMIN_RATINGS_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_RATINGS_PAGNAV" => $pagenav['main'],
-	"ADMIN_RATINGS_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_RATINGS_TOTALITEMS" => $totalitems,
-	"ADMIN_RATINGS_ON_PAGE" => $ii,
-	"ADMIN_RATINGS_TOTALVOTES" => $jj
+	'ADMIN_RATINGS_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_RATINGS_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=ratings'),
+	'ADMIN_RATINGS_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_RATINGS_PAGNAV' => $pagenav['main'],
+	'ADMIN_RATINGS_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_RATINGS_TOTALITEMS' => $totalitems,
+	'ADMIN_RATINGS_ON_PAGE' => $ii,
+	'ADMIN_RATINGS_TOTALVOTES' => $jj
 ));
 
 /* === Hook  === */
@@ -111,14 +111,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('RATINGS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('RATINGS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('RATINGS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

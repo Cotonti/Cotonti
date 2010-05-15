@@ -1,4 +1,4 @@
-<!-- BEGIN: LOG -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Log} ({ADMIN_LOG_TOTALDBLOG})</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -41,4 +41,4 @@
 			</table>
 			<p class="paging">{ADMIN_LOG_PAGINATION_PREV} {ADMIN_LOG_PAGNAV} {ADMIN_LOG_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_LOG_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_LOG_ON_PAGE}</span></p>
 	</div>
-<!-- END: LOG -->
+<!-- END: MAIN -->

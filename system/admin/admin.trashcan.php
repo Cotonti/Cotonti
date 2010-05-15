@@ -131,13 +131,13 @@ while($row = sed_sql_fetcharray($sql))
 	}
 
 	$t->assign(array(
-		"ADMIN_TRASHCAN_DATE" => date($cfg['dateformat'], $row['tr_date'] + $usr['timezone'] * 3600),
-		"ADMIN_TRASHCAN_TYPESTR_ICON" => $icon,
-		"ADMIN_TRASHCAN_TYPESTR" => $typestr,
-		"ADMIN_TRASHCAN_TITLE" => htmlspecialchars($row['tr_title']),
-		"ADMIN_TRASHCAN_TRASHEDBY" => ($row['tr_trashedby'] == 0) ? $L['System'] : sed_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
-		"ADMIN_TRASHCAN_ROW_WIPE_URL" => sed_url('admin', "m=trashcan&a=wipe&id=".$row['tr_id']."&d=".$d."&".sed_xg()),
-		"ADMIN_TRASHCAN_ROW_RESTORE_URL" => sed_url('admin', "m=trashcan&a=restore&id=".$row['tr_id']."&d=".$d."&".sed_xg())
+		'ADMIN_TRASHCAN_DATE' => date($cfg['dateformat'], $row['tr_date'] + $usr['timezone'] * 3600),
+		'ADMIN_TRASHCAN_TYPESTR_ICON' => $icon,
+		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
+		'ADMIN_TRASHCAN_TITLE' => htmlspecialchars($row['tr_title']),
+		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ? $L['System'] : sed_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
+		'ADMIN_TRASHCAN_ROW_WIPE_URL' => sed_url('admin', 'm=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$d.'&'.sed_xg()),
+		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => sed_url('admin', 'm=trashcan&a=restore&id='.$row['tr_id'].'&d='.$d.'&'.sed_xg())
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -147,20 +147,20 @@ while($row = sed_sql_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t->parse("TRASHCAN.TRASHCAN_ROW");
+	$t->parse('MAIN.TRASHCAN_ROW');
 	$ii++;
 }
 
 $t->assign(array(
-	"ADMIN_TRASHCAN_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=trash"),
-	"ADMIN_TRASHCAN_WIPEALL_URL" => sed_url('admin', "m=trashcan&a=wipeall&".sed_xg()),
-	"ADMIN_TRASHCAN_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_TRASHCAN_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_TRASHCAN_PAGNAV" => $pagenav['main'],
-	"ADMIN_TRASHCAN_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_TRASHCAN_TOTALITEMS" => $totalitems,
-	"ADMIN_TRASHCAN_COUNTER_ROW" => $ii,
-	"ADMIN_TRASHCAN_PAGESQUEUED" => $pagesqueued
+	'ADMIN_TRASHCAN_CONF_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=trash'),
+	'ADMIN_TRASHCAN_WIPEALL_URL' => sed_url('admin', 'm=trashcan&a=wipeall&'.sed_xg()),
+	'ADMIN_TRASHCAN_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_TRASHCAN_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_TRASHCAN_PAGNAV' => $pagenav['main'],
+	'ADMIN_TRASHCAN_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_TRASHCAN_TOTALITEMS' => $totalitems,
+	'ADMIN_TRASHCAN_COUNTER_ROW' => $ii,
+	'ADMIN_TRASHCAN_PAGESQUEUED' => $pagesqueued
 ));
 
 /* === Hook  === */
@@ -171,14 +171,14 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse('TRASHCAN');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('TRASHCAN');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('TRASHCAN');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>

@@ -1,4 +1,4 @@
-<!-- BEGIN: USERS -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Users}</h2>
 <!-- IF {PHP.is_adminwarnings} -->
@@ -203,4 +203,4 @@
 			</form>
 <!-- END: ADMIN_USERS_EDIT -->
 		</div>
-<!-- END: USERS -->
+<!-- END: MAIN -->

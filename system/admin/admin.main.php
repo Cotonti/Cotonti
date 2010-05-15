@@ -35,7 +35,7 @@ foreach ($extp as $pl)
 }
 
 $sys['inc'] = (empty($m)) ? 'home' : $m;
-$sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'].".$s";
+$sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'].'.'.$s;
 $sys['inc'] = sed_incfile($sys['inc'], 'admin');
 
 if (!file_exists($sys['inc']))
@@ -68,20 +68,20 @@ if (!SED_AJAX)
 	$t = new XTemplate(sed_skinfile('admin'));
 
 	$t->assign(array(
-		"ADMIN_TITLE" => sed_build_adminsection($adminpath),
-		"ADMIN_SUBTITLE" => $adminsubtitle,
-		"ADMIN_MAIN" => $adminmain,
-		"ADMIN_HELP" => $adminhelp,
-		"ADMINMENU_URL" => sed_url('admin'),
-		"ADMINMENU_CONF_URL" => sed_url('admin', "m=config"),
-		"ADMINMENU_PAGE_URL" => sed_url('admin', "m=page"),
-		"ADMINMENU_STRUCTURE_URL" => sed_url('admin', "m=structure"),
-		"ADMINMENU_FORUMS_URL" => sed_url('admin', "m=forums"),
-		"ADMINMENU_USERS_URL" => sed_url('admin', "m=users"),
-		"ADMINMENU_PLUG_URL" => sed_url('admin', "m=plug"),
-		"ADMINMENU_TOOLS_URL" => sed_url('admin', "m=tools"),
-		"ADMINMENU_TRASHCAN_URL" => sed_url('admin', "m=trashcan"),
-		"ADMINMENU_OTHER_URL" => sed_url('admin', "m=other")
+		'ADMIN_TITLE' => sed_build_adminsection($adminpath),
+		'ADMIN_SUBTITLE' => $adminsubtitle,
+		'ADMIN_MAIN' => $adminmain,
+		'ADMIN_HELP' => $adminhelp,
+		'ADMINMENU_URL' => sed_url('admin'),
+		'ADMINMENU_CONF_URL' => sed_url('admin', 'm=config'),
+		'ADMINMENU_PAGE_URL' => sed_url('admin', 'm=page'),
+		'ADMINMENU_STRUCTURE_URL' => sed_url('admin', 'm=structure'),
+		'ADMINMENU_FORUMS_URL' => sed_url('admin', 'm=forums'),
+		'ADMINMENU_USERS_URL' => sed_url('admin', 'm=users'),
+		'ADMINMENU_PLUG_URL' => sed_url('admin', 'm=plug'),
+		'ADMINMENU_TOOLS_URL' => sed_url('admin', 'm=tools'),
+		'ADMINMENU_TRASHCAN_URL' => sed_url('admin', 'm=trashcan'),
+		'ADMINMENU_OTHER_URL' => sed_url('admin', 'm=other')
 	));
 
 	/* === Hook for the plugins === */
@@ -92,8 +92,8 @@ if (!SED_AJAX)
 	}
 	/* ===== */
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
+	$t->parse('MAIN');
+	$t->out('MAIN');
 }
 
 require_once($cfg['system_dir'].'/footer.php');
