@@ -193,7 +193,7 @@ if ($a=='upload')
 							/* === Hook === */
 							$extp = sed_getextplugins('pfs.upload.moved');
 							if (is_array($extp))
-							{ foreach($extp as $k => $pl) { include_once ($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+							{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 							/* ===== */
 
 							$sql = sed_sql_query("INSERT INTO $db_pfs
@@ -222,7 +222,7 @@ if ($a=='upload')
 							/* === Hook === */
 							$extp = sed_getextplugins('pfs.upload.done');
 							if (is_array($extp))
-							{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
+							{ foreach($extp as $k => $pl) { include($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 							/* ===== */
 
 							if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled' && file_exists($cfg['pfs_dir_user'].$u_newname))
