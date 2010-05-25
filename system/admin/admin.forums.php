@@ -128,23 +128,8 @@ if ($n == 'edit')
 	sed_die(sed_sql_numrows($sql) == 0);
 	$row = sed_sql_fetcharray($sql);
 
-	$fs_id = $row['fs_id'];
-	$fs_masterid = $row['fs_masterid'];
-	$fs_state = $row['fs_state'];
-	$fs_order = $row['fs_order'];
-	$fs_title = $row['fs_title'];
-	$fs_desc = $row['fs_desc'];
-	$fs_category = $row['fs_category'];
-	$fs_icon = $row['fs_icon'];
-	$fs_autoprune = $row['fs_autoprune'];
-	$fs_allowusertext = $row['fs_allowusertext'];
-	$fs_allowbbcodes = $row['fs_allowbbcodes'];
-	$fs_allowsmilies = $row['fs_allowsmilies'];
-	$fs_allowprvtopics = $row['fs_allowprvtopics'];
-	$fs_allowviewers = $row['fs_allowviewers'];
-	$fs_allowpolls = $row['fs_allowpolls'];
-	$fs_countposts = $row['fs_countposts'];
-
+	extract($row);
+	
 	$adminpath[] = array (sed_url('admin', 'm=forums&n=edit&id='.$id), htmlspecialchars($fs_title));
 
 	$sqlc = sed_sql_query("SELECT fs_id FROM $db_forum_sections WHERE fs_masterid='".$id."' ");
@@ -153,21 +138,27 @@ if ($n == 'edit')
 		$sqla = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='".$fs_category."' ORDER by fn_path ASC, fs_order ASC");
 		while ($rowa = sed_sql_fetchassoc($sqla))
 		{
-			$ifmaster = ($fs_masterid == $rowa['fs_id']) ? true : false;
-			$t->assign('ADMIN_FORUMS_EDIT_FORUMS_MASTER_ROW_CFS', sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE));
-			$t->parse('MAIN.EDIT.EDIT_FORUMS_MASTER.EDIT_FORUMS_MASTER_ROW');
+			$forumslist[$rowa['fs_id']] = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
 		}
-		$t->parse('MAIN.EDIT.EDIT_FORUMS_MASTER');
 	}
 
 	$t->assign(array(
 		'ADMIN_FORUMS_EDIT_FORM_URL' => sed_url('admin', 'm=forums&n=edit&a=update&id='.$fs_id),
 		'ADMIN_FORUMS_EDIT_FS_ID' => $fs_id,
 		'ADMIN_FORUMS_EDIT_SELECTBOX_FORUMCAT' => sed_selectbox_forumcat($fs_category, 'rcat'),
-		'ADMIN_FORUMS_EDIT_FS_TITLE' => htmlspecialchars($fs_title),
-		'ADMIN_FORUMS_EDIT_FS_DESC' => htmlspecialchars($fs_desc),
-		'ADMIN_FORUMS_EDIT_FS_ICON' => htmlspecialchars($fs_icon),
-		'ADMIN_FORUMS_EDIT_FS_AUTOPRUNE' => $fs_autoprune,
+		'ADMIN_FORUMS_EDIT_FS_TITLE' => sed_inputbox('text', 'rtitle', htmlspecialchars($fs_title), 'size="56" maxlength="128"'),
+		'ADMIN_FORUMS_EDIT_FS_DESC' => sed_inputbox('text', 'rdesc', htmlspecialchars($fs_desc), 'size="56"'),
+		'ADMIN_FORUMS_EDIT_FS_ICON' => sed_inputbox('text', 'ricon', htmlspecialchars($fs_icon), 'size="56"'),
+		'ADMIN_FORUMS_EDIT_FS_ALLOWUSERTEXT' => sed_radiobox($fs_allowusertext, 'rallowusertext', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_FORUMS_EDIT_FS_ALLOWBBCODES' => sed_radiobox($fs_allowbbcodes, 'rallowbbcodes', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_FORUMS_EDIT_FS_ALLOWSMILES' => sed_radiobox($fs_allowsmilies, 'rallowsmilies', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_FORUMS_EDIT_FS_ALLOWPRVTOPICS' => sed_radiobox($fs_allowprvtopics, 'rallowprvtopics', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_FORUMS_EDIT_FS_ALLOWVIEWERS' => sed_radiobox($fs_allowviewers, 'rallowviewers', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_FORUMS_EDIT_FS_ALLOWPOLLS' => sed_radiobox($fs_allowpolls, 'rallowpolls', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_FORUMS_EDIT_FS_COUNTPOSTS' => sed_radiobox($fs_countposts, 'rcountposts', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_FORUMS_EDIT_FS_STATE' => sed_radiobox($fs_state, 'rstate', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_FORUMS_EDIT_FS_MASTER' => sed_selectbox($fs_masterid, 'rmaster', array_keys($forumslist), array_values($forumslist)),
+		'ADMIN_FORUMS_EDIT_FS_AUTOPRUNE' => sed_inputbox('text', 'rautoprune', $fs_autoprune, 'size="3" maxlength="7"'),
 		'ADMIN_FORUMS_EDIT_RESYNC_URL' => sed_url('admin', 'm=forums&n=edit&a=resync&id='.$fs_id.'&'.sed_xg())
 	));
 	/* === Hook === */
@@ -412,11 +403,7 @@ else
 
 	while ($rowa = sed_sql_fetchassoc($sqla))
 	{
-		$t->assign(array(
-			'ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_CFS' => sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE),
-			'ADMIN_FORUMS_DEFAULT_FORM_ADD_OPTION_FS_ID' => $rowa['fs_id']
-		));
-		$t->parse('MAIN.DEFULT.FORMADDSELECT');
+		$forumslist[$rowa['fs_id']] = sed_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
 	}
 
 	$t->assign(array(
@@ -427,7 +414,10 @@ else
 		'ADMIN_FORUMS_TOTALITEMS' => $totalitems,
 		'ADMIN_FORUMS_COUNTER_ROW' => $ii,
 		'ADMIN_FORUMS_DEFAULT_FORM_ADD_URL' => sed_url('admin', 'm=forums&a=add'),
-		'ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT' => sed_selectbox_forumcat('', 'ncat')
+		'ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT' => sed_selectbox_forumcat('', 'ncat'),
+		'ADMIN_FORUMS_DEFAULT_FORM_ADD_TITLE' => sed_inputbox('text', 'ntitle', htmlspecialchars($fs_title), 'size="56" maxlength="128"'),
+		'ADMIN_FORUMS_DEFAULT_FORM_ADD_DESC' => sed_inputbox('text', 'ndesc', htmlspecialchars($fs_desc), 'size="56"'),
+		'ADMIN_FORUMS_DEFAULT_FORM_ADD_MASTER' => sed_selectbox(0, 'nmaster', array_keys($forumslist), array_values($forumslist))
 	));
 	$t->parse('MAIN.DEFULT');
 }

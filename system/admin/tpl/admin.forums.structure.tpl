@@ -24,40 +24,27 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.Path}:</td>
-					<td><input type="text" class="text" name="rpath" value="{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH}" size="16" maxlength="16" /></td>
+					<td>{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Title}:</td>
-					<td><input type="text" class="text" name="rtitle" value="{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE}" size="64" maxlength="100" /></td>
+					<td>{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Description}:</td>
-					<td><input type="text" class="text" name="rdesc" value="{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC}" size="64" maxlength="255" /></td>
+					<td>{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Icon}:</td>
-					<td><input type="text" class="text" name="ricon" value="{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON}" size="64" maxlength="128" /></td>
+					<td>{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_defstate}:</td>
-					<td>
-						<select name="rdefstate" size="1">
-<!-- IF {PHP.selected} -->
-							<option value="1" selected="selected">{PHP.L.adm_defstate_1}</option>
-							<option value="0">{PHP.L.adm_defstate_0}</option>
-<!-- ELSE -->
-							<option value="1">{PHP.L.adm_defstate_1}</option>
-							<option value="0" selected="selected">{PHP.L.adm_defstate_0}</option>
-<!-- ENDIF -->
-						</select>
-					</td>
+					<td>{ADMIN_FORUMS_STRUCTURE_OPTIONS_SELECT}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_tpl_mode}:</td>
-					<td>
-						<input type="radio" class="radio" name="rtplmode" value="1"{ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK1} /> {PHP.L.adm_tpl_empty}<br/>
-						<input type="radio" class="radio" name="rtplmode" value="3"{ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK3} /> {PHP.L.adm_tpl_parent}
-					</td>
+					<td>{ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK}</td>
 				</tr>
 				<tr>
 					<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
@@ -80,30 +67,16 @@
 				</tr>
 <!-- BEGIN: ROW -->
 				<tr>
-					<td class="centerall">
-						<input type="text" class="text" name="{FORUMS_STRUCTURE_ROW_INPUT_TITLE_NAME}" value="{FORUMS_STRUCTURE_ROW_FN_TITLE}" size="24" maxlength="100" />
-					</td>
+					<td class="centerall">{FORUMS_STRUCTURE_ROW_FN_TITLE}</td>
 					<td class="centerall">{FORUMS_STRUCTURE_ROW_FN_CODE}</td>
 					<td class="centerall">
 <!-- IF {PHP.pathfieldimg} -->
 						{PHP.R.admin_icon_join2}
 <!-- ENDIF -->
-						<input type="text" class="text" name="{FORUMS_STRUCTURE_ROW_INPUT_PATH_NAME}" value="{FORUMS_STRUCTURE_ROW_FN_PATH}" size="{FORUMS_STRUCTURE_ROW_PATHFIELDLEN}" maxlength="24" />
+						{FORUMS_STRUCTURE_ROW_FN_PATH}
 					</td>
-					<td class="centerall">
-						<select name="{FORUMS_STRUCTURE_ROW_SELECT_NAME}" size="1">
-<!-- IF {PHP.selected} -->
-							<option value="1" selected="selected">{PHP.L.adm_defstate_1}</option>
-							<option value="0">{PHP.L.adm_defstate_0}</option>
-<!-- ELSE -->
-							<option value="1">{PHP.L.adm_defstate_1}</option>
-							<option value="0" selected="selected">{PHP.L.adm_defstate_0}</option>
-<!-- ENDIF -->
-						</select>
-					</td>
-					<td class="centerall">
-						{FORUMS_STRUCTURE_ROW_FN_TPL_SYM}
-					</td>
+					<td class="centerall">{FORUMS_STRUCTURE_ROW_SELECT}</td>
+					<td class="centerall">{FORUMS_STRUCTURE_ROW_FN_TPL_SYM}</td>
 					<td class="centerall">{FORUMS_STRUCTURE_ROW_SECTIONCOUNT}</td>
 					<td class="actions centerall">
 						<a href="{FORUMS_STRUCTURE_ROW_OPTIONS_URL}"{FORUMS_STRUCTURE_ROW_OPTIONS_URL_AJAX} title="{PHP.L.Edit}">{PHP.R.admin_icon_config}</a>
@@ -127,27 +100,27 @@
 			<table class="cells">
 				<tr>
 					<td class="width20">{PHP.L.Code}:</td>
-					<td class="width80"><input type="text" class="text" name="ncode" value="" size="16" maxlength="16" /> {PHP.L.adm_required}</td>
+					<td class="width80">{ADMIN_FORUMS_STRUCTURE_CODE} {PHP.L.adm_required}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Path}:</td>
-					<td><input type="text" class="text" name="npath" value="" size="16" maxlength="16" /> {PHP.L.adm_required}</td>
+					<td>{ADMIN_FORUMS_STRUCTURE_PATH} {PHP.L.adm_required}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_defstate}:</td>
-					<td><input type="radio" class="radio" name="ndefstate" value="1" checked="checked" />{PHP.L.adm_defstate_1} <input type="radio" class="radio" name="ndefstate" value="0" />{PHP.L.adm_defstate_0}</td>
+					<td>{ADMIN_FORUMS_STRUCTURE_SELECT}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Title}:</td>
-					<td><input type="text" class="text" name="ntitle" value="" size="48" maxlength="100" /> {PHP.L.adm_required}</td>
+					<td>{ADMIN_FORUMS_STRUCTURE_TITLE} {PHP.L.adm_required}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Description}:</td>
-					<td><input type="text" class="text" name="ndesc" value="" size="48" maxlength="255" /></td>
+					<td>{ADMIN_FORUMS_STRUCTURE_DESC}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Icon}:</td>
-					<td><input type="text" class="text" name="nicon" value="" size="48" maxlength="128" /></td>
+					<td>{ADMIN_FORUMS_STRUCTURE_ICON}</td>
 				</tr>
 				<tr>
 					<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Add}" /></td>
