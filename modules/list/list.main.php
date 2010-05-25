@@ -334,6 +334,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 	$t->assign(array(
 		"LIST_ROW_URL" => $pag['page_pageurl'],
 		"LIST_ROW_ID" => $pag['page_id'],
+		"LIST_ROW_ALIAS" => $pag['page_alias'],
 		"LIST_ROW_CAT" => $pag['page_cat'],
 		"LIST_ROW_KEY" => htmlspecialchars($pag['page_key']),
 		"LIST_ROW_TITLE" => htmlspecialchars($pag['page_title']),
