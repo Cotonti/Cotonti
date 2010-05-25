@@ -315,7 +315,7 @@ $t->assign($pageadd_array);
 foreach($sed_extrafields['pages'] as $i => $row)
 {
 	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGEADD_FORM_'.$uname, sed_build_extrafields('page',  $row, htmlspecialchars($newpageextrafields[$row['field_name']]), true));
+	$t->assign('PAGEADD_FORM_'.$uname, sed_build_extrafields('page', $row, sed_import_buffered('newpage'.$row['field_name'], $newpageextrafields[$row['field_name']]), true));
 	$t->assign('PAGEADD_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 

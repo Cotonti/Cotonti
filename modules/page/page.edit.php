@@ -376,7 +376,9 @@ $t->assign($pageedit_array);
 foreach($sed_extrafields['pages'] as $i => $row)
 {
 	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGEEDIT_FORM_'.$uname, sed_build_extrafields('page',  $row, $pag["page_".$row['field_name']]));
+	$extrafieldvalue = sed_import_buffered('rpage'.$row['field_name'], $rpageextrafields[$row['field_name']]);
+	if($extrafieldvalue == '') $fieldval = $pag["page_".$row['field_name']];
+	$t->assign('PAGEEDIT_FORM_'.$uname, sed_build_extrafields('page', $row, $extrafieldvalue));
 	$t->assign('PAGEEDIT_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 
