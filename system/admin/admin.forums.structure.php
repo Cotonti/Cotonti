@@ -16,6 +16,8 @@ sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.forums.structure'));
 
+require_once sed_incfile('forms');
+
 $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 $adminpath[] = array (sed_url('admin', 'm=forums&s=structure'), $L['Structure']);
 $adminhelp = $L['adm_help_forum_structure'];
@@ -111,17 +113,17 @@ if($n == 'options')
 	$fn_desc = $row['fn_desc'];
 	$fn_icon = $row['fn_icon'];
 	$fn_defstate = $row['fn_defstate'];
-	$selected = ($row['fn_defstate']) ? true : false;
+	$selected = ($row['fn_defstate']) ? 1 : 0;
 
 	if($row['fn_tpl'] == 'same_as_parent')
 	{
-		$fn_tpl_sym = "*";
-		$check3 = " checked=\"checked\"";
+		$fn_tpl_sym = '*';
+		$check = '3';
 	}
 	else
 	{
 		$fn_tpl_sym = "-";
-		$check1 = " checked=\"checked\"";
+		$check = '1';
 	}
 
 	$adminpath[] = array(sed_url('admin', 'm=forums&s=structure&n=options&id='.$id), htmlspecialchars($fn_title));
@@ -129,12 +131,12 @@ if($n == 'options')
 	$t->assign(array(
 		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL' => sed_url('admin', 'm=forums&s=structure&n=options&a=update&id='.$fn_id.'&d='.$d),
 		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_CODE' => $fn_code,
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH' => $fn_path,
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE' => $fn_title,
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC' => $fn_desc,
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON' => $fn_icon,
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK1' => $check1,
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK3' => $check3
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH' => sed_inputbox('text', 'rpath', $fn_path, 'size="16" maxlength="16"'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE' => sed_inputbox('text', 'rtitle', $fn_title, 'size="64" maxlength="100"'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC' => sed_inputbox('text', 'rdesc', $fn_desc, 'size="64"'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON' => sed_inputbox('text', 'ricon', $fn_icon, 'size="64" maxlength="128"'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK' => sed_radiobox($check, 'rtplmode', array(1, 3), array($L['adm_tpl_empty'], $L['adm_tpl_parent']), '', '<br />'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_SELECT' => sed_selectbox($selected, 'rdefstate', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false)
 	));
 
 	/* === Hook === */
@@ -246,7 +248,7 @@ else
 		$pathfieldimg = (mb_strpos($fn_path, '.') == 0) ? false : true;
 		$sectioncount[$fn_code] = (!$sectioncount[$fn_code]) ? "0" : $sectioncount[$fn_code];
 		$del_url = ($sectioncount[$fn_code] > 0) ? false : true;
-		$selected = ($row['fn_defstate']) ? true : false;
+		$selected = ($row['fn_defstate']) ? 1 : 0;
 
 		if(empty($row['fn_tpl']))
 		{
@@ -264,13 +266,10 @@ else
 		$t->assign(array(
 			'FORUMS_STRUCTURE_ROW_DEL_URL' => sed_url('admin', 'm=forums&s=structure&a=delete&id='.$fn_id.'&c='.$row['fn_code'].'&d='.$d.'&'.sed_xg()),
 			'FORUMS_STRUCTURE_ROW_FN_CODE' => $fn_code,
-			'FORUMS_STRUCTURE_ROW_INPUT_PATH_NAME' => 's['.$fn_id.'][rpath]',
-			'FORUMS_STRUCTURE_ROW_FN_PATH' => $fn_path,
-			'FORUMS_STRUCTURE_ROW_PATHFIELDLEN' => (mb_strpos($fn_path, '.') == 0) ? 3 : 9,
-			'FORUMS_STRUCTURE_ROW_SELECT_NAME' => 's['.$fn_id.'][rdefstate]',
+			'FORUMS_STRUCTURE_ROW_FN_PATH' => sed_inputbox('text', 's['.$fn_id.'][rpath]', $fn_path, 'size="'.((mb_strpos($fn_path, '.') == 0) ? 3 : 9).'" maxlength="24"'),
+			'FORUMS_STRUCTURE_ROW_SELECT' => sed_selectbox($selected,  's['.$fn_id.'][rdefstate]', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false),
 			'FORUMS_STRUCTURE_ROW_FN_TPL_SYM' => $fn_tpl_sym,
-			'FORUMS_STRUCTURE_ROW_INPUT_TITLE_NAME' => 's['.$fn_id.'][rtitle]',
-			'FORUMS_STRUCTURE_ROW_FN_TITLE' => $fn_title,
+			'FORUMS_STRUCTURE_ROW_FN_TITLE' => sed_inputbox('text', 's['.$fn_id.'][rtitle]', $fn_title, 'size="24" maxlength="100"'),
 			'FORUMS_STRUCTURE_ROW_SECTIONCOUNT' => $sectioncount[$fn_code],
 			'FORUMS_STRUCTURE_ROW_JUMPTO_URL' => sed_url('forums', 'c='.$fn_code),
 			'FORUMS_STRUCTURE_ROW_OPTIONS_URL' => sed_url('admin', 'm=forums&s=structure&n=options&id='.$fn_id.'&d='.$d.'&'.sed_xg())
@@ -288,6 +287,12 @@ else
 
 	$t->assign(array(
 		'ADMIN_FORUMS_STRUCTURE_FORM_URL' => sed_url('admin', 'm=forums&s=structure&a=update&d='.$d),
+		'ADMIN_FORUMS_STRUCTURE_CODE' => sed_inputbox('text', 'ncode', '', 'size="16" maxlength="16"'),
+		'ADMIN_FORUMS_STRUCTURE_PATH' => sed_inputbox('text', 'npath', '', 'size="16" maxlength="16"'),
+		'ADMIN_FORUMS_STRUCTURE_TITLE' => sed_inputbox('text', 'ntitle', '', 'size="64" maxlength="100"'),
+		'ADMIN_FORUMS_STRUCTURE_DESC' => sed_inputbox('text', 'ndesc', '', 'size="64"'),
+		'ADMIN_FORUMS_STRUCTURE_ICON' => sed_inputbox('text', 'nicon', '', 'size="64" maxlength="128"'),
+		'ADMIN_FORUMS_STRUCTURE_SELECT' => sed_selectbox('1', 'ndefstate', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false),
 		'ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
 		'ADMIN_FORUMS_STRUCTURE_PAGNAV' => $pagenav['main'],
 		'ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT' => $pagenav['next'],
