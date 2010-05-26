@@ -39,35 +39,21 @@
 			</tr>
 <!-- BEGIN: ROW -->
 			<tr id="rule_{ADMIN_URLS_ROW_I}">
-				<td class="centerall">
-					<select name="area[]">
-<!-- BEGIN: AREABOX2 -->
-						<option{ADMIN_URLS_AREABOX_SELECTED}>{ADMIN_URLS_AREABOX_ITEM}</option>
-<!-- END: AREABOX2 -->
-					</select>
-				</td>
-				<td class="centerall">
-					<input type="text" name="params[]" value="{ADMIN_URLS_ROW_PARTS1}" />
-				</td>
-				<td class="centerall">
-					<input type="text" name="format[]" value="{ADMIN_URLS_ROW_PARTS2}" />
-				</td>
+				<td class="centerall">{ADMIN_URLS_ROW_AREAS}</td>
+				<td class="centerall">{ADMIN_URLS_ROW_PARTS1}</td>
+				<td class="centerall">{ADMIN_URLS_ROW_PARTS2}</td>
 				<td class="centerall">
 					<a title="{PHP.L.Delete}" href="#" onclick="$(this).parent().parent().remove();return false;">{PHP.R.admin_icon_delete}</a>
 				</td>
 			</tr>
 <!-- END: ROW -->
 			<tr id="rule_new">
+				<td class="centerall">{ADMIN_URLS_ROW_AREAS}</td>
+				<td class="centerall">{ADMIN_URLS_ROW_PARTS1}</td>
+				<td class="centerall">{ADMIN_URLS_ROW_PARTS2}</td>
 				<td class="centerall">
-					<select name="area[]">
-<!-- BEGIN: AREABOX -->
-						<option{ADMIN_URLS_AREABOX_SELECTED}>{ADMIN_URLS_AREABOX_ITEM}</option>
-<!-- END: AREABOX -->
-					</select>
+					<a title="{PHP.L.Delete}" href="#" onclick="$(this).parent().parent().remove();return false;">{PHP.R.admin_icon_delete}</a>
 				</td>
-				<td class="centerall"><input type="text" name="params[]" value="*" /></td>
-				<td class="centerall"><input type="text" name="format[]" value="" /></td>
-				<td class="centerall"><a href="#" id="delete_rule" onclick="$(this).parent().parent().remove(); return false;">{PHP.R.admin_icon_delete}</a></td>
 			</tr>
 			<tr id="add_rule" style="display:none;" class="nodrop nodrag">
 				<td colspan="4">

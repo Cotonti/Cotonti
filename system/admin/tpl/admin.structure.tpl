@@ -24,72 +24,49 @@
 		<table class="cells">
 			<tr>
 				<td class="width20">{PHP.L.Path}:</td>
-				<td class="width80"><input type="text" class="text" name="rpath" value="{ADMIN_STRUCTURE_PATH}" size="16" maxlength="16" /></td>
+				<td class="width80">{ADMIN_STRUCTURE_PATH}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Code}:</td>
-				<td><input type="text" class="text" name="rcode" value="{ADMIN_STRUCTURE_CODE}" size="16" maxlength="255" /></td>
+				<td>{ADMIN_STRUCTURE_CODE}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Title}:</td>
-				<td><input type="text" class="text" name="rtitle" value="{ADMIN_STRUCTURE_TITLE}" size="64" maxlength="100" /></td>
+				<td>{ADMIN_STRUCTURE_TITLE}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Description}:</td>
-				<td><input type="text" class="text" name="rdesc" value="{ADMIN_STRUCTURE_DESC}" size="64" maxlength="255" /></td>
+				<td>{ADMIN_STRUCTURE_DESC}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Icon}:</td>
-				<td><input type="text" class="text" name="ricon" value="{ADMIN_STRUCTURE_ICON}" size="64" maxlength="128" /></td>
+				<td>{ADMIN_STRUCTURE_ICON}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Group}:</td>
-				<td><input type="checkbox" class="checkbox" name="rgroup"{ADMIN_STRUCTURE_CHECK} /></td>
+				<td>{ADMIN_STRUCTURE_GROUP}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.adm_tpl_mode}:</td>
-				<td>
-					<input type="radio" class="radio" name="rtplmode" value="1"{ADMIN_STRUCTURE_CHECK1} /> {PHP.L.adm_tpl_empty}<br/>
-					<input type="radio" class="radio" name="rtplmode" value="2"{ADMIN_STRUCTURE_CHECK2} /> {PHP.L.adm_tpl_forced}
-					<select name="rtplforced" size="1">
-<!-- BEGIN: SELECT -->
-						<option value="{ADMIN_STRUCTURE_OPTION_I}"{ADMIN_STRUCTURE_OPTION_SELECTED}> {ADMIN_STRUCTURE_OPTION_TPATH}</option>
-<!-- END: SELECT -->
-					</select>
-					<br/>
-					<input type="radio" class="radio" name="rtplmode" value="3"{ADMIN_STRUCTURE_CHECK3} /> {PHP.L.adm_tpl_parent}
-				</td>
-				</tr>
-			<tr>
-				<td>{PHP.L.adm_sortingorder}:</td>
-				<td class="{ADMIN_STRUCTURE_ODDEVEN}">
-					<select name="rorder" size="1">
-<!-- BEGIN: STRUCTURE_CATORDER_SELECT_SORT -->
-						<option value="{ADMIN_STRUCTURE_CATORDER_SELECT_SORT_VALUE}"{ADMIN_STRUCTURE_CATORDER_SELECT_SORT_SELECTED}>{ADMIN_STRUCTURE_CATORDER_SELECT_SORT_NAME}</option>
-<!-- END: STRUCTURE_CATORDER_SELECT_SORT -->
-					</select>
-					<select name="rway" size="1">
-<!-- BEGIN: STRUCTURE_CATORDER_SELECT_WAY -->
-						<option value="{ADMIN_STRUCTURE_CATORDER_SELECT_WAY_VALUE}"{ADMIN_STRUCTURE_CATORDER_SELECT_WAY_SELECTED}>{ADMIN_STRUCTURE_CATORDER_SELECT_WAY_NAME}</option>
-<!-- END: STRUCTURE_CATORDER_SELECT_WAY -->
-					</select>
-				</td>
+				<td>{ADMIN_STRUCTURE_TPLMODE}</td>
 			</tr>
 			<tr>
+				<td>{PHP.L.adm_sortingorder}:</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_ORDER}{ADMIN_STRUCTURE_WAY}</td>
+			</tr>
+			<!-- BEGIN: EXTRAFLD -->
+			<tr>
+				<td>{ADMIN_STRUCTURE_EXTRAFLD_TITLE}:</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_EXTRAFLD}</td>
+			</tr>
+			<!-- END: EXTRAFLD -->
+			<tr>
 				<td>{PHP.L.adm_enablecomments}:</td>
-<!-- IF {PHP.structure_comments} -->
-				<td><input type="radio" class="radio" name="rallowcomments" value="1" checked="checked" />{PHP.L.Yes} <input type="radio" class="radio" name="rallowcomments" value="0" />{PHP.L.No}</td>
-<!-- ELSE -->
-				<td><input type="radio" class="radio" name="rallowcomments" value="1" />{PHP.L.Yes} <input type="radio" class="radio" name="rallowcomments" value="0" checked="checked" />{PHP.L.No}</td>
-<!-- ENDIF -->
+				<td>{ADMIN_STRUCTURE_COMMENTS}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.adm_enableratings}:</td>
-<!-- IF {PHP.structure_ratings} -->
-				<td><input type="radio" class="radio" name="rallowratings" value="1" checked="checked" />{PHP.L.Yes} <input type="radio" class="radio" name="rallowratings" value="0" />{PHP.L.No}</td>
-<!-- ELSE -->
-				<td><input type="radio" class="radio" name="rallowratings" value="1" />{PHP.L.Yes} <input type="radio" class="radio" name="rallowratings" value="0" checked="checked" />{PHP.L.No}</td>
-<!-- ENDIF -->
+				<td>{ADMIN_STRUCTURE_RATINGS}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.adm_postcounters} :</td>
@@ -117,22 +94,15 @@
 			</tr>
 <!-- BEGIN: ROW -->
 			<tr>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PATHFIELDIMG}<input type="text" class="text" name="s[{ADMIN_STRUCTURE_ID}][rpath]" value="{ADMIN_STRUCTURE_PATH}" size="{ADMIN_STRUCTURE_PATHFIELDLEN}" maxlength="24" /></td>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}"><input type="text" class="text" name="s[{ADMIN_STRUCTURE_ID}][rcode]" value="{ADMIN_STRUCTURE_CODE}" size="8" maxlength="255" /></td>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}"><input type="text" class="text" name="s[{ADMIN_STRUCTURE_ID}][rtitle]" value="{ADMIN_STRUCTURE_TITLE}" size="24" maxlength="100" /></td>
+				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PATHFIELDIMG}{ADMIN_STRUCTURE_PATH}</td>
+				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
+				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_SYM}</td>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}"><input type="checkbox" class="checkbox" name="s[{ADMIN_STRUCTURE_ID}][rgroup]"{ADMIN_STRUCTURE_CHECKED} /></td>
+				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_GROUP}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">
-					<select name="s[{ADMIN_STRUCTURE_ID}][rorder]" size="1" style="width:85px;">
-<!-- BEGIN: STRUCTURE_CATORDER_SELECT_SORT -->
-						<option value="{ADMIN_STRUCTURE_CATORDER_SELECT_SORT_VALUE}"{ADMIN_STRUCTURE_CATORDER_SELECT_SORT_SELECTED}>{ADMIN_STRUCTURE_CATORDER_SELECT_SORT_NAME}</option>
-<!-- END: STRUCTURE_CATORDER_SELECT_SORT -->
-					</select><br />
-					<select name="s[{ADMIN_STRUCTURE_ID}][rway]" size="1" style="width:85px;">
-<!-- BEGIN: STRUCTURE_CATORDER_SELECT_WAY -->
-						<option value="{ADMIN_STRUCTURE_CATORDER_SELECT_WAY_VALUE}"{ADMIN_STRUCTURE_CATORDER_SELECT_WAY_SELECTED}>{ADMIN_STRUCTURE_CATORDER_SELECT_WAY_NAME}</option>
-<!-- END: STRUCTURE_CATORDER_SELECT_WAY -->
-					</select>
+					{ADMIN_STRUCTURE_ORDER}
+					<br />
+					{ADMIN_STRUCTURE_WAY}
 				</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PAGECOUNT}</td>
 				<td class="centerall action {ADMIN_STRUCTURE_ODDEVEN}">
@@ -153,43 +123,38 @@
 		<table class="cells">
 			<tr>
 				<td class="width20">{PHP.L.Path}:</td>
-				<td class="width80"><input type="text" class="text" name="npath" value="" size="16" maxlength="16" /> {PHP.L.adm_required}</td>
+				<td class="width80">{ADMIN_STRUCTURE_PATH} {PHP.L.adm_required}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Code}:</td>
-				<td><input type="text" class="text" name="ncode" value="" size="16" maxlength="255" /> {PHP.L.adm_required}</td>
+				<td>{ADMIN_STRUCTURE_CODE} {PHP.L.adm_required}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Title}:</td>
-				<td><input type="text" class="text" name="ntitle" value="" size="48" maxlength="100" /> {PHP.L.adm_required}</td>
+				<td>{ADMIN_STRUCTURE_TITLE} {PHP.L.adm_required}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Description}:</td>
-				<td><input type="text" class="text" name="ndesc" value="" size="48" maxlength="255" /></td>
+				<td>{ADMIN_STRUCTURE_DESC}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Icon}:</td>
-				<td><input type="text" class="text" name="nicon" value="" size="48" maxlength="128" /></td>
+				<td>{ADMIN_STRUCTURE_ICON}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Group}:</td>
-				<td><input type="checkbox" class="checkbox" name="ngroup" /></td>
+				<td>{ADMIN_STRUCTURE_GROUP}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Order}:</td>
-				<td>
-					<select name="norder" size="1">
-<!-- BEGIN: STRUCTURE_CATORDER_SORT -->
-							<option value="{ADMIN_STRUCTURE_CATORDER_SORT_VALUE}"{ADMIN_STRUCTURE_CATORDER_SORT_SELECTED}>{ADMIN_STRUCTURE_CATORDER_SORT_NAME}</option>
-<!-- END: STRUCTURE_CATORDER_SORT -->
-					</select>
-					<select name="nway" size="1">
-<!-- BEGIN: STRUCTURE_CATORDER_WAY -->
-						<option value="{ADMIN_STRUCTURE_CATORDER_WAY_VALUE}"{ADMIN_STRUCTURE_CATORDER_WAY_SELECTED}>{ADMIN_STRUCTURE_CATORDER_WAY_NAME}</option>
-<!-- END: STRUCTURE_CATORDER_WAY -->
-					</select>
-				</td>
+				<td>{ADMIN_STRUCTURE_ORDER}{ADMIN_STRUCTURE_WAY}</td>
 			</tr>
+			<!-- BEGIN: EXTRAFLD -->
+			<tr>
+				<td>{ADMIN_STRUCTURE_EXTRAFLD_TITLE}:</td>
+				<td>{ADMIN_STRUCTURE_EXTRAFLD}</td>
+			</tr>
+			<!-- END: EXTRAFLD -->
 			<tr>
 				<td class="valid" colspan="2">
 					<input type="submit" class="submit" value="{PHP.L.Add}" />

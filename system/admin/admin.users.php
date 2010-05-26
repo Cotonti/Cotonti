@@ -133,25 +133,20 @@ elseif($n == 'edit')
 
 		$adminpath[] = array (sed_url('admin', 'm=users&n=edit&g='.$g), $row['grp_title']);
 
-		for($i = 1;$i < 100;$i++)
-		{
-			$t->assign(array(
-				'ADMIN_USERS_EDITFORM_RLEVEL_ITEM_SELECTED' => ($i == $row['grp_level']) ? ' selected="selected"' : '',
-				'ADMIN_USERS_EDITFORM_RLEVEL_ITEM' => $i
-			));
-			$t->parse('MAIN.ADMIN_USERS_EDIT.SELECT_RLEVEL');
-		}
-
 		$t->assign(array(
 			'ADMIN_USERS_EDITFORM_URL' => sed_url('admin', 'm=users&n=edit&a=update&g='.$g),
-			'ADMIN_USERS_EDITFORM_GRP_TITLE' => $row['grp_title'],
-			'ADMIN_USERS_EDITFORM_GRP_DESC' => htmlspecialchars($row['grp_desc']),
-			'ADMIN_USERS_EDITFORM_GRP_ICON' => htmlspecialchars($row['grp_icon']),
-			'ADMIN_USERS_EDITFORM_GRP_ALIAS' => htmlspecialchars($row['grp_alias']),
-			'ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE' => htmlspecialchars($row['grp_pfs_maxfile']),
-			'ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL' => htmlspecialchars($row['grp_pfs_maxtotal']),
-			'ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT' => $row['grp_memberscount'],
-			'ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT_URL' => sed_url('users', 'g='.$g),
+			'ADMIN_USERS_EDITFORM_GRP_TITLE' => sed_inputbox('text', 'rtitle', $row['grp_title'], 'size="40" maxlength="64"'),
+			'ADMIN_USERS_EDITFORM_GRP_DESC' => sed_inputbox('text', 'rdesc', htmlspecialchars($row['grp_desc']), 'size="40" maxlength="64"'),
+			'ADMIN_USERS_EDITFORM_GRP_ICON' => sed_inputbox('text', 'ricon', htmlspecialchars($row['grp_icon']), 'size="40" maxlength="128"'),
+			'ADMIN_USERS_EDITFORM_GRP_ALIAS' => sed_inputbox('text', 'ralias', htmlspecialchars($row['grp_alias']), 'size="40" maxlength="24"'),
+			'ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE' => sed_inputbox('text', 'rmaxfile', htmlspecialchars($row['grp_pfs_maxfile']), 'size="16" maxlength="16"'),
+			'ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL' => sed_inputbox('text', 'rmaxtotal', htmlspecialchars($row['grp_pfs_maxtotal']), 'size="16" maxlength="16"'),
+			'ADMIN_USERS_EDITFORM_GRP_DISABLED' => ($g <= 5) ? $L['No'] : sed_radiobox($row['grp_disabled'], 'rdisabled', array(1, 0), array($L['Yes'], $L['No'])),
+			'ADMIN_USERS_EDITFORM_GRP_HIDDEN' => ($g == 4) ? $L['No'] : sed_radiobox($row['grp_hidden'], 'rhidden', array(1, 0), array($L['Yes'], $L['No'])),
+			'ADMIN_USERS_EDITFORM_GRP_MAINTENANCE' => sed_radiobox($row['grp_maintenance'], 'rmtmode', array(1, 0), array($L['Yes'], $L['No'])),
+			'ADMIN_USERS_EDITFORM_GRP_RLEVEL' => sed_selectbox($row['grp_level'], 'rlevel', range(0, 99), range(0, 99), false),
+			'ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT' => $row['grp_memberscount'],
+			'ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT_URL' => sed_url('users', 'g='.$g),
 			'ADMIN_USERS_EDITFORM_RIGHT_URL' => sed_url('admin', 'm=rights&g='.$g),
 			'ADMIN_USERS_EDITFORM_DEL_URL' => sed_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.sed_xg()),
 		));
@@ -196,16 +191,18 @@ if(!isset($showdefault) OR $showdefault == true)
 		}
 	}
 
-	for($i = 1;$i < 100;$i++)
-	{
-		$t->assign(array(
-			'ADMIN_USERS_FORM_SELECT_VALUE' => $i
-		));
-		$t->parse('MAIN.ADMIN_USERS_DEFAULT.USERS_FORM_SELECT_NLEVEL');
-	}
-
 	$t->assign(array(
 		'ADMIN_USERS_FORM_URL' => sed_url('admin', 'm=users&n=add'),
+		'ADMIN_USERS_NGRP_TITLE' => sed_inputbox('text', 'ntitle', '', 'size="40" maxlength="64"'),
+		'ADMIN_USERS_NGRP_DESC' => sed_inputbox('text', 'ndesc', '', 'size="40" maxlength="64"'),
+		'ADMIN_USERS_NGRP_ICON' => sed_inputbox('text', 'nicon', '', 'size="40" maxlength="128"'),
+		'ADMIN_USERS_NGRP_ALIAS' => sed_inputbox('text', 'nalias', '', 'size="40" maxlength="24"'),
+		'ADMIN_USERS_NGRP_PFS_MAXFILE' => sed_inputbox('text', 'nmaxfile', '', 'size="16" maxlength="16"'),
+		'ADMIN_USERS_NGRP_PFS_MAXTOTAL' => sed_inputbox('text', 'nmaxtotal', '', 'size="16" maxlength="16"'),
+		'ADMIN_USERS_NGRP_DISABLED' => sed_radiobox(0, 'ndisabled', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_USERS_NGRP_HIDDEN' => sed_radiobox(0, 'nhidden', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_USERS_NGRP_MAINTENANCE' => sed_radiobox(0, 'nmtmode', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_USERS_NGRP_RLEVEL' => sed_selectbox(50, 'nlevel', range(0, 99), range(0, 99), false),
 		'ADMIN_USERS_FORM_SELECTBOX_GROUPS' => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5'))
 	));
 	$t->parse('MAIN.ADMIN_USERS_DEFAULT');
