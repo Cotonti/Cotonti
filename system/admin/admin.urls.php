@@ -16,6 +16,8 @@ sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.urls'));
 
+require_once sed_incfile('forms');
+
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=urls'), $L['adm_urls']);
 $adminhelp = $L['adm_help_urls'];
@@ -346,26 +348,11 @@ while($line = trim(fgets($fp), " \t\r\n"))
 {
 	$parts = explode("\t", $line);
 
-	$areabox = '<select name="area[]">
-';
-	foreach($areas as $ar)
-	{
-		$areabox .= ($ar == $parts[0]) ? '	<option selected="selected">'.$ar.'</option>
-' : '	<option>'.$ar.'</option>
-';
-		$t->assign(array(
-			'ADMIN_URLS_AREABOX_SELECTED' => ($ar == $parts[0]) ? ' selected="selected"' : '',
-			'ADMIN_URLS_AREABOX_ITEM' => $ar
-		));
-		$t->parse('MAIN.ROW.AREABOX2');
-	}
-	$areabox .= '</select>
-';
-
 	$t->assign(array(
 		'ADMIN_URLS_ROW_I' => $ii,
-		'ADMIN_URLS_ROW_PARTS1' => $parts[1],
-		'ADMIN_URLS_ROW_PARTS2' => $parts[2],
+		'ADMIN_URLS_ROW_AREAS' => sed_selectbox($parts[0], 'area[]', $areas, $areas, false),
+		'ADMIN_URLS_ROW_PARTS1' => sed_inputbox('text', 'params[]', $parts[1]),
+		'ADMIN_URLS_ROW_PARTS2' => sed_inputbox('text', 'format[]', $parts[2]),
 		'ADMIN_URLS_ROW_ODDEVEN' => sed_build_oddeven($ii)
 	));
 
@@ -388,7 +375,10 @@ $is_adminwarnings = isset($adminwarnings);
 $t->assign(array(
 	'ADMIN_URLS_II' => $ii,
 	'ADMIN_URLS_FORM_URL' => sed_url('admin', 'm=urls&a=save'),
-	'ADMIN_URLS_AREABOX' => $areabox,
+	'ADMIN_URLS_ROW_AREAS' => sed_selectbox('*', 'area[]', $areas, $areas, false),
+	'ADMIN_URLS_ROW_PARTS1' => sed_inputbox('text', 'params[]', ''),
+	'ADMIN_URLS_ROW_PARTS2' => sed_inputbox('text', 'format[]', ''),
+	'ADMIN_URLS_ROW_ODDEVEN' => sed_build_oddeven($ii),
 	'ADMIN_URLS_ADMINWARNINGS' => $adminwarnings
 ));
 

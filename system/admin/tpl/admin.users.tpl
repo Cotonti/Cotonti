@@ -44,27 +44,27 @@
 		<table class="cells">
 			<tr>
 				<td class="width40">{PHP.L.Group}:</td>
-				<td class="width60"><input type="text" class="text" name="ntitle" value="" size="40" maxlength="64" /> {PHP.L.adm_required}</td>
+				<td class="width60">{ADMIN_USERS_NGRP_TITLE}{PHP.L.adm_required}</td>
 			</tr>
 			<tr>
 					<td>{PHP.L.Description}:</td>
-					<td><input type="text" class="text" name="ndesc" value="" size="40" maxlength="64" /></td>
+					<td>{ADMIN_USERS_NGRP_DESC}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Icon}:</td>
-					<td><input type="text" class="text" name="nicon" value="" size="40" maxlength="128" /></td>
+					<td>{ADMIN_USERS_NGRP_ICON}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Alias}:</td>
-					<td><input type="text" class="text" name="nalias" value="" size="16" maxlength="24" /></td>
+					<td>{ADMIN_USERS_NGRP_ALIAS}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_maxsizesingle}:</td>
-					<td><input type="text" class="text" name="nmaxsingle" value="0" size="16" maxlength="16" /></td>
+					<td>{ADMIN_USERS_NGRP_PFS_MAXFILE}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_maxsizeallpfs}:</td>
-					<td><input type="text" class="text" name="nmaxtotal" value="0" size="16" maxlength="16" /></td>
+					<td>{ADMIN_USERS_NGRP_PFS_MAXTOTAL}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_copyrightsfrom}:</td>
@@ -72,34 +72,19 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.Level}:</td>
-					<td>
-						<select name="nlevel" size="1">
-<!-- BEGIN: USERS_FORM_SELECT_NLEVEL -->
-							<option value="{ADMIN_USERS_FORM_SELECT_VALUE}">{ADMIN_USERS_FORM_SELECT_VALUE}</option>
-<!-- END: USERS_FORM_SELECT_NLEVEL -->
-						</select>
-					</td>
+					<td>{ADMIN_USERS_NGRP_RLEVEL}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Enabled}:</td>
-					<td>
-						<input type="radio" class="radio" name="ndisabled" value="0" checked="checked" /> {PHP.L.Yes}
-						<input type="radio" class="radio" name="ndisabled" value="1" /> {PHP.L.No}
-					</td>
+					<td>{PHP.L.Disabled}:</td>
+					<td>{ADMIN_USERS_NGRP_DISABLED}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Hidden}:</td>
-					<td>
-						<input type="radio" class="radio" name="nhidden" value="1" /> {PHP.L.Yes}
-						<input type="radio" class="radio" name="nhidden" value="0" checked="checked" /> {PHP.L.No}
-					</td>
+					<td>{ADMIN_USERS_NGRP_HIDDEN}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.adm_rights_maintenance}:</td>
-					<td>
-						<input type="radio" class="radio" name="nmtmode" value="1" /> {PHP.L.Yes}
-						<input type="radio" class="radio" name="nmtmode" value="0" checked="checked" /> {PHP.L.No}
-					</td>
+					<td>{ADMIN_USERS_NGRP_MAINTENANCE}</td>
 				</tr>
 				<tr>
 					<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Add}" /></td>
@@ -112,79 +97,47 @@
 				<table class="cells">
 					<tr>
 						<td class="width40">{PHP.L.Group}:</td>
-						<td class="width60"><input type="text" class="text" name="rtitle" value="{ADMIN_USERS_EDITFORM_GRP_TITLE}" size="40" maxlength="64" /> {PHP.L.adm_required}</td>
+						<td class="width60">{ADMIN_USERS_EDITFORM_GRP_TITLE} {PHP.L.adm_required}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Description}:</td>
-						<td><input type="text" class="text" name="rdesc" value="{ADMIN_USERS_EDITFORM_GRP_DESC}" size="40" maxlength="64" /></td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_DESC}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Icon}:</td>
-						<td><input type="text" class="text" name="ricon" value="{ADMIN_USERS_EDITFORM_GRP_ICON}" size="40" maxlength="128" /></td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_ICON}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Alias}:</td>
-						<td><input type="text" class="text" name="ralias" value="{ADMIN_USERS_EDITFORM_GRP_ALIAS}" size="16" maxlength="24" /></td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_ALIAS}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.adm_maxsizesingle}:</td>
-						<td><input type="text" class="text" name="rmaxfile" value="{ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE}" size="16" maxlength="16" /></td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.adm_maxsizeallpfs}:</td>
-						<td><input type="text" class="text" name="rmaxtotal" value="{ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL}" size="16" maxlength="16" /></td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Enabled}:</td>
-						<td>
-<!-- IF {PHP.g} > 5 AND !{PHP.row.grp_disabled} -->
-							<input type="radio" class="radio" name="rdisabled" value="0" checked="checked" />{PHP.L.Yes} <input type="radio" class="radio" name="rdisabled" value="1" />{PHP.L.No}
-<!-- ENDIF -->
-<!-- IF {PHP.g} > 5 AND {PHP.row.grp_disabled} -->
-							<input type="radio" class="radio" name="rdisabled" value="0" />{PHP.L.Yes} <input type="radio" class="radio" name="rdisabled" value="1" checked="checked" />{PHP.L.No}
-<!-- ENDIF -->
-<!-- IF {PHP.g} <= 5 -->
-							{PHP.L.Yes}
-<!-- ENDIF -->
-						</td>
+						<td>{PHP.L.Disabled}:</td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_DISABLED}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Hidden}:</td>
-						<td>
-<!-- IF {PHP.g} != 4 AND {PHP.row.grp_disabled} -->
-							<input type="radio" class="radio" name="rhidden" value="1" checked="checked" />{PHP.L.Yes} <input type="radio" class="radio" name="rhidden" value="0" />{PHP.L.No}
-<!-- ENDIF -->
-<!-- IF {PHP.g} != 4 AND !{PHP.row.grp_disabled} -->
-							<input type="radio" class="radio" name="rhidden" value="1" />{PHP.L.Yes} <input type="radio" class="radio" name="rhidden" value="0" checked="checked" />{PHP.L.No}
-<!-- ENDIF -->
-<!-- IF {PHP.g} == 4 -->
-							{PHP.L.No}
-<!-- ENDIF -->
-						</td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_HIDDEN}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Level}:</td>
-						<td>
-							<select name="rlevel" size="1">
-<!-- BEGIN: SELECT_RLEVEL -->
-								<option value="{ADMIN_USERS_EDITFORM_RLEVEL_ITEM}"{ADMIN_USERS_EDITFORM_RLEVEL_ITEM_SELECTED}>{ADMIN_USERS_EDITFORM_RLEVEL_ITEM}</option>
-<!-- END: SELECT_RLEVEL -->
-							</select>
-						</td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_RLEVEL}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Members}:</td>
-						<td><a href="{ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT_URL}">{ADMIN_USERS_EDITFORM_GRP_PFS_MEMBERSCOUNT}</a></td>
+						<td><a href="{ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT_URL}">{ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT}</a></td>
 					</tr>
 					<tr>
 						<td>{PHP.L.adm_rights_maintenance}:</td>
-						<td>
-<!-- IF {PHP.row.grp_maintenance} -->
-							<input type="radio" class="radio" name="rmtmode" value="1" checked="checked" />{PHP.L.Yes} <input type="radio" class="radio" name="rmtmode" value="0" />{PHP.L.No}
-<!-- ELSE -->
-							<input type="radio" class="radio" name="rmtmode" value="1" />{PHP.L.Yes} <input type="radio" class="radio" name="rmtmode" value="0" checked="checked" />{PHP.L.No}
-<!-- ENDIF -->
-						</td>
+						<td>{ADMIN_USERS_EDITFORM_GRP_MAINTENANCE}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Rights}:</td>
