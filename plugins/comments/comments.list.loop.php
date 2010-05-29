@@ -22,10 +22,11 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-$pag['page_comcount'] = (!$pag['page_comcount']) ? "0" : $pag['page_comcount'];
-$pag['page_comments'] = sed_rc_link(sed_url('page', $page_urlp, '#comments'), sed_rc('icon_comments_cnt', array('cnt' => $pag['page_comcount'])));
-$t->assign(array(
-	"LIST_ROW_COMMENTS" => $pag['page_comments']
-));
+require_once sed_langfile('comments');
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+require_once sed_incfile('resources', 'comments', true);
+
+$t->assign('LIST_ROW_COMMENTS', sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c));
 
 ?>

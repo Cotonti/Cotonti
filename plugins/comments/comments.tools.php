@@ -25,6 +25,11 @@ Order=10
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', 'comments');
 sed_block($usr['isadmin']);
 
+require_once sed_langfile('comments');
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+require_once sed_incfile('resources', 'comments', true);
+
 $t = new XTemplate(sed_skinfile('comments.tools', true));
 
 $adminhelp = $L['plu_help_comments'];
@@ -52,7 +57,7 @@ $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_com);
 
-$pagenav = sed_pagenav('admin', 'm=tools&amp;p=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=tools&p=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -64,31 +69,31 @@ while ($row = sed_sql_fetcharray($sql))
 {
 	$row['com_text'] = htmlspecialchars(sed_cutstring($row['com_text'], 40));
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);
-	$row['com_value'] = mb_substr($row['com_code'], 1);
+	$row['com_value'] = $row['com_code'];
 
-	switch ($row['com_type'])
+	switch ($row['com_area'])
 	{
-		case 'p':
+		case 'page':
 			$row['com_url'] = sed_url('page', "id=".$row['com_value']."&comments=1", "#c".$row['com_id']);
 		break;
 
-		case 'j':
+		case 'weblogs':
 			$row['com_url'] = sed_url('plug', 'e=weblogs&m=page&id='.$row['com_value'], '#c'.$row['com_id']);
 		break;
 
-		case 'g':
+		case 'gal':
 			$row['com_url'] = sed_url('plug', 'e=gal&pic='.$row['com_value'], '#c'.$row['com_id']);
 		break;
 
-		case 'u':
+		case 'users':
 			$row['com_url'] = sed_url('users', 'm=details&id='.$row['com_value'], '#c'.$row['com_id']);
 		break;
 
-		case 'v':
+		case 'polls':
 			$row['com_url'] = sed_url('polls', 'id='.$row['com_value']."&comments=1", '#c'.$row['com_id']);
 		break;
 
-		case 's':
+		case 'e_shop':
 			$row['com_url'] = sed_url('plug', 'e=e_shop&sh=product&productID='.$row['com_value'], '#c'.$row['com_id']);
 		break;
 
@@ -98,14 +103,14 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 
 	$t->assign(array(
-		"ADMIN_COMMENTS_ITEM_DEL_URL" => sed_url('admin', "m=tools&amp;p=comments&amp;a=delete&amp;id=".$row['com_id']."&amp;".sed_xg()),
-		"ADMIN_COMMENTS_ITEM_ID" => $row['com_id'],
-		"ADMIN_COMMENTS_CODE" => $row['com_code'],
-		"ADMIN_COMMENTS_AUTHOR" => $row['com_author'],
-		"ADMIN_COMMENTS_DATE" => date($cfg['dateformat'], $row['com_date']),
-		"ADMIN_COMMENTS_TEXT" => $row['com_text'],
-		"ADMIN_COMMENTS_URL" => $row['com_url'],
-		"ADMIN_COMMENTS_ODDEVEN" => sed_build_oddeven($ii)
+		'ADMIN_COMMENTS_ITEM_DEL_URL' => sed_url('admin', 'm=tools&p=comments&a=delete&id='.$row['com_id'].'&'.sed_xg()),
+		'ADMIN_COMMENTS_ITEM_ID' => $row['com_id'],
+		'ADMIN_COMMENTS_CODE' => $row['com_code'],
+		'ADMIN_COMMENTS_AUTHOR' => $row['com_author'],
+		'ADMIN_COMMENTS_DATE' => date($cfg['dateformat'], $row['com_date']),
+		'ADMIN_COMMENTS_TEXT' => $row['com_text'],
+		'ADMIN_COMMENTS_URL' => $row['com_url'],
+		'ADMIN_COMMENTS_ODDEVEN' => sed_build_oddeven($ii)
 	));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -113,18 +118,18 @@ while ($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("COMMENTS.ADMIN_COMMENTS_ROW");
+	$t->parse('COMMENTS.ADMIN_COMMENTS_ROW');
 	$ii++;
 }
 
 $t->assign(array(
-	"ADMIN_COMMENTS_CONFIG_URL" => sed_url('admin', 'm=config&amp;n=edit&amp;o=plug&amp;p=comments'),
-	"ADMIN_COMMENTS_ADMINWARNINGS" => $adminwarnings,
-	"ADMIN_COMMENTS_PAGINATION_PREV" => $pagenav['prev'],
-	"ADMIN_COMMENTS_PAGNAV" => $pagenav['main'],
-	"ADMIN_COMMENTS_PAGINATION_NEXT" => $pagenav['next'],
-	"ADMIN_COMMENTS_TOTALITEMS" => $totalitems,
-	"ADMIN_COMMENTS_COUNTER_ROW" => $ii
+	'ADMIN_COMMENTS_CONFIG_URL' => sed_url('admin', 'm=config&n=edit&o=plug&p=comments'),
+	'ADMIN_COMMENTS_ADMINWARNINGS' => $adminwarnings,
+	'ADMIN_COMMENTS_PAGINATION_PREV' => $pagenav['prev'],
+	'ADMIN_COMMENTS_PAGNAV' => $pagenav['main'],
+	'ADMIN_COMMENTS_PAGINATION_NEXT' => $pagenav['next'],
+	'ADMIN_COMMENTS_TOTALITEMS' => $totalitems,
+	'ADMIN_COMMENTS_COUNTER_ROW' => $ii
 ));
 
 /* === Hook  === */

@@ -22,6 +22,8 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
+require_once sed_incfile('config', 'comments', true);
+
 $totaldbcomments = sed_sql_rowcount($db_com);
 $t->assign(array(
 	'STATISTICS_TOTALDBCOMMENTS' => $totaldbcomments

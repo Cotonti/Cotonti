@@ -104,6 +104,7 @@ $sys['unique'] = sed_unique(16);
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
+$sys['scheme'] = $url['scheme'];
 $sys['site_uri'] = $url['path'];
 $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
@@ -111,11 +112,13 @@ if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .
 define('SED_SITE_URI', $sys['site_uri']);
 if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
-$sys['host'] = (mb_stripos($_SERVER['HTTP_HOST'], $sys['domain']) !== false) ? $_SERVER['HTTP_HOST'] : $sys['domain'];
+$sys['host'] = preg_match('`^(.+\.)?'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
+	: $sys['domain'];
 $sys['abs_url'] = $url['scheme'].'://'.$sys['host']. $sys['site_uri'];
 define('SED_ABSOLUTE_URL', $sys['abs_url']);
-
-$sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ? mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
+// URI redirect appliance
+$sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ?
+	mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
 $sys['uri_redir'] = base64_encode($sys['uri_curr']);
 $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
 $redirect = sed_import('redirect','G','SLU');
@@ -227,7 +230,7 @@ $usr['timezone'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-$site_id = 'ct'.substr(md5($cfg['mainurl']), 0, 10);
+$site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
 $sys['site_id'] = $site_id;
 
 session_start();
@@ -239,20 +242,16 @@ if (!defined('SED_MESSAGE'))
 
 if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
-	$u = empty($_SESSION[$site_id]) ? base64_decode($_COOKIE[$site_id]) : base64_decode($_SESSION[$site_id]);
-	$u = explode(':_:', $u);
+	$u = empty($_SESSION[$site_id]) ? explode(':', $_COOKIE[$site_id]) : explode(':', $_SESSION[$site_id]);
 	$u_id = (int) sed_import($u[0], 'D', 'INT');
-	$u_passhash = sed_import($u[1], 'D', 'ALP');
+	$u_sid = sed_import($u[1], 'D', 'ALP');
 	if ($u_id > 0)
 	{
-		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id");
+		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
 
 		if ($row = sed_sql_fetcharray($sql))
 		{
-			if (($u_passhash == md5($row['user_password'].$row['user_hashsalt'])
-					|| ($sys['now_offset'] - $_SESSION['saltstamp'] < 60
-						&& $u_passhash == $_SESSION['oldhash']))
-				&& $row['user_maingrp'] > 3
+			if ($row['user_maingrp'] > 3
 				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip']))
 			{
 				$usr['id'] = (int) $row['user_id'];
@@ -269,6 +268,8 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				$usr['level'] = $sed_groups[$usr['maingrp']]['level'];
 				$usr['profile'] = $row;
 
+				$sys['xk'] = $row['user_token'];
+
 				if (!isset($_SESSION['cot_user_id']))
 				{
 					$_SESSION['cot_user_id'] = $usr['id'];
@@ -280,52 +281,29 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					if ($usr['lastlog'] > $usr['lastvisit'])
 					{
 						$usr['lastvisit'] = $usr['lastlog'];
-						$update_lastvisit = ", user_lastvisit = ".$usr['lastvisit'];
+						$update_lastvisit = ", user_lastvisit = " . $usr['lastvisit'];
 					}
+
+					// Generate new security token
+					$token = sed_unique(16);
+					$sys['xk_prev'] = $sys['xk'];
+					$sys['xk'] = $token;
+					$update_token = ", user_token = '$token'";
 				}
 
 
 				if (!$cfg['authcache'] || empty($row['user_auth']))
 				{
 					$usr['auth'] = sed_auth_build($usr['id'], $usr['maingrp']);
-					if ($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
-				}
-
-				if (empty($_SESSION['saltstamp']) || $sys['now_offset'] - $_SESSION['saltstamp'] > 60)
-				{
-					$_SESSION['saltstamp'] = $sys['now_offset'];
-					$_SESSION['oldhash'] = $u_passhash;
-					$hashsalt = sed_unique(16);
-					$passhash = md5($row['user_password'].$hashsalt);
-					$u = base64_encode($usr['id'].':_:'.$passhash);
-					if (empty($_SESSION[$site_id]))
-					{
-						sed_setcookie($site_id, $u, time() + $cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
-					}
-					else
-					{
-						$_SESSION[$site_id] = $u;
-					}
-					$update_hashsalt = ", user_hashsalt = '$hashsalt'";
-				}
-
-				if (empty($_COOKIE['sourcekey']))
-				{
-					$sys['xk'] = mb_strtoupper(sed_unique(8));
-					$update_sid = ", user_sid = '{$sys['xk']}'";
-					sed_setcookie('sourcekey', $sys['xk'], time() + $cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
-				}
-				else
-				{
-					$sys['xk'] = $_COOKIE['sourcekey'];
-					$update_sid = '';
+					if($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
 				}
 
 				sed_sql_query("UPDATE $db_users
-					SET user_lastlog = {$sys['now_offset']} $update_lastvisit $update_sid $update_hashsalt $update_auth
+					SET user_lastlog = {$sys['now_offset']} $update_lastvisit $update_token $update_auth
 					WHERE user_id='{$usr['id']}'");
 
-				unset($u, $passhash, $update_auth, $update_hashsalt, $update_lastvisit, $update_sid);
+				unset($u, $passhash, $oldhash, $hashsalt, $hashsaltprev, $update_auth, $update_hashsalt,
+					$update_lastvisit, $update_sid);
 			}
 		}
 	}
@@ -425,28 +403,6 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 				}
 			}
 		}
-	}
-}
-
-/* ======== Max users ======== */
-
-if (!$cfg['disablehitstats'])
-{
-	if ($cot_cache && $cot_cache->mem && $cot_cache->mem->exists('maxusers', 'system'))
-	{
-		$maxusers = $cot_cache->mem->get('maxusers', 'system');
-	}
-	else
-	{
-		$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-		$maxusers = (int) @sed_sql_result($sql, 0, 0);
-		$cot_cache && $cot_cache->mem && $cot_cache->mem->store('maxusers', $maxusers, 'system', 0);
-	}
-
-	if ($maxusers < $sys['whosonline_all_count'])
-	{
-		$sql = sed_sql_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
-			WHERE stat_name='maxusers'");
 	}
 }
 
@@ -575,8 +531,9 @@ $usr['gmttime'] = @date($cfg['dateformat'], $sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
 
-$x = empty($_POST['x']) ? $_GET['x'] : $_POST['x'];
-if (!defined('SED_NO_ANTIXSS') && !defined('SED_AUTH') && ($_SERVER['REQUEST_METHOD'] == 'POST' && $x != $sys['xk'] || isset($_GET['x']) && $_GET['x'] != $sys['xk']))
+$x = sed_import('x', 'P', 'ALP');
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
+	&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 {
 	sed_redirect(sed_url('message', 'msg=950', '', true));
 }

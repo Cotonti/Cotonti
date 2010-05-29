@@ -22,9 +22,10 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-list($comments_link, $comments_display) = sed_build_comments('v'.$poll_id, sed_url('polls', 'id='.$poll_id), true);
-$indexpolls->assign(array(
-	"IPOLLS_COMMENTS" => $comments_link
-));
+require_once sed_langfile('comments');
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+require_once sed_incfile('resources', 'comments', true);
 
+$indexpolls->assign('IPOLLS_COMMENTS', sed_comments_link('polls', 'id='.$poll_id, 'polls', $poll_id));
 ?>
