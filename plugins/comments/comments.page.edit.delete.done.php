@@ -22,6 +22,9 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='p.$id'");
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+
+sed_comments_remove('page', $id);
 
 ?>

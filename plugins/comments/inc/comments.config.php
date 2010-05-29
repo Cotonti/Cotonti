@@ -9,6 +9,7 @@
  * @license BSD
  */
 
-$db_com = $db_x . 'com';
+$db_com			 = $db_x . 'com';
+$db_com_settings = $db_x . 'com_settings';
 
 ?>

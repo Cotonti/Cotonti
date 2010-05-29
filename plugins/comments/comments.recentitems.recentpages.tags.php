@@ -22,9 +22,14 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-list($pag['page_comments'], $pag['page_comments_display']) = sed_build_comments('p' . $pag['page_id'], $pag['page_pageurl'], FALSE);
+require_once sed_langfile('comments');
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+require_once sed_incfile('resources', 'comments', true);
+
+$page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 $recentitems->assign(array(
-	"PAGE_ROW_COMMENTS" => $pag['page_comments']
+	'PAGE_ROW_COMMENTS' => sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $pag['page_cat'])
 ));
 
 ?>

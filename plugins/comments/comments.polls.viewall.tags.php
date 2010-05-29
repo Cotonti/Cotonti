@@ -22,10 +22,13 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-$row['poll_comcount'] = (!$row['poll_comcount']) ? "0" : $row['poll_comcount'];
-$row['poll_comments'] = sed_rc_link(sed_url('polls', 'id=' . $row['poll_id'], '#comments'), sed_rc('icon_comments_cnt', array('cnt' => $row['poll_comcount'])));
+require_once sed_langfile('comments');
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+require_once sed_incfile('resources', 'comments', true);
+
 $t->assign(array(
-	"POLLS_COMMENTS" => $row['poll_comments']
+	'POLLS_COMMENTS' => sed_comments_link('polls', 'id='.$row['poll_id'], 'polls', $row['poll_id'])
 ));
 
 ?>

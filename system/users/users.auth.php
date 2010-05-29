@@ -47,7 +47,21 @@ if ($a=='check')
 	$login_param = preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $rusername) ?
 		'user_email' : 'user_name';
 
-	$sql = sed_sql_query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_skin, user_theme, user_lang FROM $db_users WHERE user_password='$rmdpass' AND $login_param='".sed_sql_prep($rusername)."'");
+	/**
+	 * Sets user selection criteria for authentication. Override this string in your plugin
+	 * hooking into users.auth.check.query to provide other authentication methods.
+	 */
+	$user_select_condition = "user_password='$rmdpass' AND $login_param='".sed_sql_prep($rusername)."'";
+
+	/* === Hook for the plugins === */
+	$extp = sed_getextplugins('users.auth.check.query');
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	$sql = sed_sql_query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_skin, user_theme, user_lang FROM $db_users WHERE $user_select_condition");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
@@ -79,12 +93,12 @@ if ($a=='check')
 		$rdefskin = $row['user_skin'];
 		$rdeftheme = $row['user_theme'];
 
-		$hashsalt = sed_unique(16);
+		$token = sed_unique(16);
+		$sid = sed_unique(32);
 
-		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_hashsalt = '$hashsalt' WHERE user_id={$row['user_id']}");
+		sed_sql_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token', user_sid = '$sid' WHERE user_id={$row['user_id']}");
 
-		$passhash = md5($rmdpass.$hashsalt);
-		$u = base64_encode($ruserid.':_:'.$passhash);
+		$u = $ruserid.':'.$sid;
 
 		if($rremember)
 		{
@@ -94,8 +108,6 @@ if ($a=='check')
 		{
 			$_SESSION[$sys['site_id']] = $u;
 		}
-
-		$_SESSION['saltstamp'] = $sys['now_offset'];
 
 		/* === Hook === */
 		$extp = sed_getextplugins('users.auth.check.done');

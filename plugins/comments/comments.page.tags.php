@@ -22,12 +22,17 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-list($comments_link, $comments_display, $comments_count) = sed_build_comments('p'.$pag['page_id'], $pag['page_pageurl'], ($sed_cat[$pag['page_cat']]['com']) ? true : false);
+require_once sed_langfile('comments');
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+require_once sed_incfile('resources', 'comments', true);
+
+$page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 $t->assign(array(
-	"PAGE_COMMENTS" => $comments_link,
-	"PAGE_COMMENTS_DISPLAY" => $comments_display,
-	"PAGE_COMMENTS_COUNT" => $comments_count,
-	"PAGE_COMMENTS_RSS" => sed_url('rss', 'c=comments&id=' . $pag['page_id'])
+	'PAGE_COMMENTS' => sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $pag['page_cat']),
+	'PAGE_COMMENTS_DISPLAY' => sed_comments_display('page', $pag['page_id'], $pag['page_cat']),
+	'PAGE_COMMENTS_COUNT' => sed_comments_count('page', $pag['page_id']),
+	'PAGE_COMMENTS_RSS' => sed_url('rss', 'c=comments&id=' . $pag['page_id'])
 ));
 
 ?>

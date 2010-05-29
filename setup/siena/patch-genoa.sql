@@ -421,3 +421,6 @@ INSERT INTO sed_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order,
 /* r1195 Error message output control */
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`)
 	VALUES ('core','skin','21','msg_separate',3,'0','0','','Show messages separately for each source');
+
+/* r1237 Authentication/security improvement */
+ALTER TABLE `sed_users` CHANGE COLUMN `user_hashsalt` `user_token` char(16) collate utf8_unicode_ci NOT NULL default '';

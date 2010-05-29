@@ -29,7 +29,12 @@ defined('SED_CODE') or die('Wrong URL');
 	rss.php?c=comments				=== Show comments from all page ===
 */
 
-if ($c == "comments")
+require_once sed_langfile('comments');
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+require_once sed_incfile('resources', 'comments', true);
+
+if ($c == 'comments')
 {
 	$defult_c = false;
 	if ($id == 'all')
@@ -37,13 +42,14 @@ if ($c == "comments")
 		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 		$rss_description = $L['rss_comments_item_desc'];
 
-		$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code LIKE 'p%' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = sed_sql_query("SELECT c.*, u.user_name
+			FROM $db_com AS c
+				LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
+			WHERE com_area = 'page' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
 		$i = 0;
 		while ($row = sed_sql_fetchassoc($sql))
 		{
-			$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row['com_authorid']."' LIMIT 1");
-			$row2 = sed_sql_fetchassoc($sql2);
-			$items[$i]['title'] = $L['rss_comment_of_user']." ".$row2['user_name'];
+			$items[$i]['title'] = $L['rss_comment_of_user']." ".$row['user_name'];
 			if ($cfg['parser_cache'])
 			{
 				if (empty($row['com_html']) && !empty($row['com_text']))
@@ -85,13 +91,15 @@ if ($c == "comments")
 				$rss_description = $L['rss_comments_item_desc'];
 				$page_args = empty($row['page_alias']) ? "id=$page_id" : 'al=' . $row['page_alias'];
 
-				$sql = sed_sql_query("SELECT * FROM $db_com WHERE com_code='p$page_id' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
+				$sql = sed_sql_query("SELECT c.*, u.user_name
+					FROM $db_com AS c
+						LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
+					WHERE com_area = 'page' AND com_code='$page_id'
+					ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
 				$i = 0;
 				while ($row1 = sed_sql_fetchassoc($sql))
 				{
-					$sql2 = sed_sql_query("SELECT * FROM $db_users WHERE user_id='".$row1['com_authorid']."' LIMIT 1");
-					$row2 = sed_sql_fetchassoc($sql2);
-					$items[$i]['title'] = $L['rss_comment_of_user']." ".$row2['user_name'];
+					$items[$i]['title'] = $L['rss_comment_of_user']." ".$row1['user_name'];
 					if ($cfg['parser_cache'])
 					{
 						if (empty($row1['com_html']) && !empty($row1['com_text']))

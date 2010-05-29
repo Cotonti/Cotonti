@@ -52,7 +52,7 @@
 
 <!-- BEGIN: COMMENTS -->
 <a name="comments">&nbsp;</a>
-<div class="comments" style="display:{COMMENTS_DISPLAY}">
+<div id="comments" class="comments" style="display:{COMMENTS_DISPLAY}">
 <!-- BEGIN: COMMENTS_ROW -->
 <span class="title">
 <a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}"><img src="skins/{PHP.skin}/img/system/icon-comment.gif" alt="" /> {COMMENTS_ROW_ORDER}.</a>

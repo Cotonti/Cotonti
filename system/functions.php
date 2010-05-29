@@ -1572,12 +1572,14 @@ function sed_cc($text)
  */
 function sed_check_xg()
 {
-	if (isset($_GET['x']))
+	global $sys;
+	$x = sed_import('x', 'G', 'ALP');
+	if ($x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 	{
-		return true;
+		sed_redirect(sed_url('message', 'msg=950', '', true));
+		return false;
 	}
-
-	sed_redirect(sed_url('message', 'msg=950', '', true));
+	return true;
 }
 
 /**
@@ -2046,7 +2048,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 
 		case 'PSW':
 			$v = trim($v);
-			$f = sed_alphaonly($v);
+			$f = preg_replace('#[\'"&<>]#', '', $v);
 			$f = mb_substr($f, 0 ,32);
 
 			if ($v == $f)
@@ -2183,14 +2185,19 @@ function sed_import_buffered($name, $value)
  *
  * @param string $name Name of the API or the part
  * @param mixed $module Module name or FALSE if it is a core API file
+ * @param bool $is_plugin TRUE if incfile is in plugin, FALSE if it is a module part
  * @return string File path
  */
-function sed_incfile($name, $module = false)
+function sed_incfile($name, $module = false, $is_plugin = false)
 {
 	global $cfg;
 	if ($module)
 	{
-		if ($module == 'admin' || $module == 'users' || $module == 'message')
+		if ($is_plugin)
+		{
+			return $cfg['plugins_dir']."/$module/inc/$module.$name.php";
+		}
+		elseif ($module == 'admin' || $module == 'users' || $module == 'message')
 		{
 			return $cfg['system_dir']."/$module/$module.$name.php";
 		}
@@ -2566,7 +2573,7 @@ function sed_stamp2date($stamp)
  */
 function sed_online_update()
 {
-	global $cfg, $sys, $usr, $out, $db_online, $cot_cache, $sed_usersonline, $location, $Ls;
+	global $cfg, $sys, $usr, $out, $db_online, $db_stats, $cot_cache, $sed_usersonline, $location, $Ls;
 	if (!$cfg['disablewhosonline'])
 	{
 		if ($location != $sys['online_location']
@@ -2634,6 +2641,27 @@ function sed_online_update()
 		}
 		$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
 		$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.sed_declension($sys['whosonline_vis_count'], $Ls['Guests']);
+	
+		/* ======== Max users ======== */
+		if (!$cfg['disablehitstats'])
+		{
+			if ($cot_cache && $cot_cache->mem && $cot_cache->mem->exists('maxusers', 'system'))
+			{
+				$maxusers = $cot_cache->mem->get('maxusers', 'system');
+			}
+			else
+			{
+				$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
+				$maxusers = (int) @sed_sql_result($sql, 0, 0);
+				$cot_cache && $cot_cache->mem && $cot_cache->mem->store('maxusers', $maxusers, 'system', 0);
+			}
+
+			if ($maxusers < $sys['whosonline_all_count'])
+			{
+				$sql = sed_sql_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
+					WHERE stat_name='maxusers'");
+			}
+		}
 	}
 }
 
@@ -3145,24 +3173,30 @@ function sed_redirect($url)
 {
 	global $cfg;
 
+	if (!sed_url_check($url))
+	{
+		$url = SED_ABSOLUTE_URL . $url;
+	}
+
 	if ($cfg['redirmode'])
 	{
-		$output = $cfg['doctype']."
+		$output = $cfg['doctype'].<<<HTM
 		<html>
 		<head>
-		<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
-		<meta http-equiv=\"refresh\" content=\"0; url=".SED_ABSOLUTE_URL.$url."\" />
+		<meta http-equiv="content-type" content="text/html; charset={$cfg['charset']}" />
+		<meta http-equiv="refresh" content="0; url=$url" />
 		<title>Redirecting...</title></head>
-		<body>Redirecting to <a href=\"".SED_ABSOLUTE_URL.$url."\">".$cfg['mainurl']."/".$url."</a>
+		<body>Redirecting to <a href="$url">$url</a>
 		</body>
-		</html>";
-		header("Refresh: 0; URL=".SED_ABSOLUTE_URL.$url);
-		echo($output);
+		</html>
+HTM;
+		header('Refresh: 0; URL='.$url);
+		echo $output;
 		exit;
 	}
 	else
 	{
-		header('Location: '.SED_ABSOLUTE_URL.$url);
+		header('Location: '.$url);
 		exit;
 	}
 }
@@ -3702,7 +3736,7 @@ function sed_trash_put($type, $title, $itemid, $datas)
  */
 function sed_unique($l=16)
 {
-	return(mb_substr(md5(mt_rand(0,1000000)), 0, $l));
+	return(mb_substr(md5(mt_rand()), 0, $l));
 }
 
 /**
@@ -3838,6 +3872,18 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$url .= $tail;
 	$url = str_replace('&amp;amp;', '&amp;', $url);
 	return $url;
+}
+
+/**
+ * Checks if an absolute URL belongs to current site or its subdomains
+ *
+ * @param string $url Absolute URL
+ * @return bool
+ */
+function sed_url_check($url)
+{
+	global $sys;
+	return preg_match('`^'.preg_quote($sys['scheme'].'://').'([^/]+\.)?'.preg_quote($sys['domain']).'`i', $url);
 }
 
 /**

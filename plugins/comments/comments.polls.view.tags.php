@@ -22,10 +22,14 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-list($comments_link, $comments_display) = sed_build_comments('v'.$id, sed_url('polls', 'id='.$id), true);
+require_once sed_langfile('comments');
+require_once sed_incfile('config', 'comments', true);
+require_once sed_incfile('functions', 'comments', true);
+require_once sed_incfile('resources', 'comments', true);
+
 $t->assign(array(
-	"POLLS_COMMENTS" => $comments_link,
-	"POLLS_COMMENTS_DISPLAY" => $comments_display
+	'POLLS_COMMENTS' => sed_comments_link('polls', 'id='.$id, 'polls', $id),
+	'POLLS_COMMENTS_DISPLAY' => sed_comments_display('polls', $id)
 ));
 
 ?>

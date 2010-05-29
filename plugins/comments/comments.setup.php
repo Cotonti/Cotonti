@@ -18,7 +18,6 @@ Lock_members=
 [BEGIN_SED_EXTPLUGIN_CONFIG]
 time=01:select:1,2,3,4,5,6,7,8,9,10,15,30,60,90,120,180:10:Comments editable timeout for users, minutes
 mail=02:radio:0,1:0:Notify about new comments by email?
-markitup=03:select:No,Yes:Yes:Use markitup?
 trash_comment=04:radio:0,1:1:Use the trash can for the comments
 rss_commentmaxsymbols=05:string:::Comments. Cut element description longer than N symbols, Disabled by default
 expand_comments=06:radio:0,1:1:Expand comments, Show comments expanded by default
@@ -44,12 +43,12 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($action == 'install')
 {
-	sed_sql_runscript(file_get_contents($cfg['plugins_dir'] . '/comments/setup/install.sql'));
+	sed_sql_runscript(file_get_contents($cfg['plugins_dir'] . '/comments/setup/commments.install.sql'));
 }
 elseif ($action == 'uninstall')
 {
 	// Uncomment for complete uninstall
-	// sed_sql_runscript(file_get_contents($cfg['plugins_dir'] . '/comments/setup/uninstall.sql'));
+	// sed_sql_runscript(file_get_contents($cfg['plugins_dir'] . '/comments/setup/comments.uninstall.sql'));
 }
 
 ?>

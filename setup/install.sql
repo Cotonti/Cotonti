@@ -1033,7 +1033,7 @@ CREATE TABLE `sed_users` (
   `user_lostpass` char(32) collate utf8_unicode_ci NOT NULL default '',
   `user_auth` text collate utf8_unicode_ci,
   `user_theme` varchar(16) collate utf8_unicode_ci NOT NULL default '',
-  `user_hashsalt` char(16) collate utf8_unicode_ci NOT NULL default '',
+  `user_token` char(16) collate utf8_unicode_ci NOT NULL default '',
   PRIMARY KEY  (`user_id`),
   KEY `user_password` (`user_password`),
   KEY `user_regdate` (`user_regdate`)
