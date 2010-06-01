@@ -74,6 +74,11 @@ function sed_comments_display($area, $code, $cat = '')
 	$d = sed_import($d_var, 'G', 'INT');
 	$d = empty($d) ? 0 : (int) $d;
 
+	if ($auth_write && $enabled)
+	{
+		require_once sed_incfile('forms');
+	}
+
 	$t = new XTemplate(sed_skinfile('comments', true));
 
 	/* == Hook == */
@@ -89,7 +94,7 @@ function sed_comments_display($area, $code, $cat = '')
 		'COMMENTS_FORM_SEND' => sed_url('plug', "e=comments&a=send&area=$area&cat=$cat&item=$code"),
 		'COMMENTS_FORM_AUTHOR' => $usr['name'],
 		'COMMENTS_FORM_AUTHORID' => $usr['id'],
-		'COMMENTS_FORM_TEXT' => $auth_write ? sed_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor')
+		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? sed_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor')
 			: '',
 		'COMMENTS_DISPLAY' => $cfg['plugin']['comments']['expand_comments'] ? '' : 'none'
 	));
@@ -222,7 +227,7 @@ function sed_comments_display($area, $code, $cat = '')
 	}
 	elseif (!sed_sql_numrows($sql) && $enabled)
 	{
-		$t-> assign(array(
+		$t->assign(array(
 			'COMMENTS_EMPTYTEXT' => $L['com_nocommentsyet'],
 		));
 		$t->parse('COMMENTS.COMMENTS_EMPTY');
@@ -298,7 +303,8 @@ function sed_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 	global $db_com_settings;
 	// A static call cache saves us from duplicate queries
 	static $cache = array();
-	if (isset($cache[$area][$cat]))
+	// FIXME row cache and cache per item
+	if (isset($cache[$area][$cat]) && !$return_row)
 	{
 		return $cache[$area][$cat];
 	}
@@ -312,7 +318,7 @@ function sed_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 	$enabled = true;
 	if (!empty($cat) && !empty($code))
 	{
-		$extra_where = "OR coms_area = '$area' AND coms_cat = '$cat' AND coms_code = '';
+		$extra_where = "OR coms_area = '$area' AND coms_cat = '$cat' AND coms_code = ''
 			OR coms_area = '$area' AND coms_cat = '' AND coms_code = ''";
 	}
 	elseif (!empty($cat) || !empty($code))

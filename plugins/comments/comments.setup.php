@@ -43,7 +43,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($action == 'install')
 {
-	sed_sql_runscript(file_get_contents($cfg['plugins_dir'] . '/comments/setup/commments.install.sql'));
+	sed_sql_runscript(file_get_contents($cfg['plugins_dir'] . '/comments/setup/comments.install.sql'));
 }
 elseif ($action == 'uninstall')
 {
