@@ -22,7 +22,6 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-list($list_comments, $list_comments_display) = sed_build_comments('list_'.$c, sed_url('list', 'c='.$c), $cat['com']);
 $t->assign(array(
 	'LIST_COMMENTS' => sed_comments_link('list', 'c='.$c, 'list', $c),
 	'LIST_COMMENTS_DISPLAY' => sed_comments_display('list', $c)

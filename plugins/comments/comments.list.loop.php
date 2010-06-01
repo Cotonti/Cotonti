@@ -27,6 +27,6 @@ require_once sed_incfile('config', 'comments', true);
 require_once sed_incfile('functions', 'comments', true);
 require_once sed_incfile('resources', 'comments', true);
 
-$t->assign('LIST_ROW_COMMENTS', sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c));
+//$t->assign('LIST_ROW_COMMENTS', sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c));
 
 ?>

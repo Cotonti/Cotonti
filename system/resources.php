@@ -26,6 +26,7 @@ $R['input_select_end'] = '</select>{$error}';
 $R['input_text'] = '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}';
 $R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
+$R['input_textarea_minieditor'] =  '<textarea class="minieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 
 /**
  * Stars / Votes Icons

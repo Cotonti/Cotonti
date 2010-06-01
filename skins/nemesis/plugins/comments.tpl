@@ -79,7 +79,7 @@
 <!-- BEGIN: COMMENTS_NEWCOMMENT -->
 <form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
 	<h4>{PHP.skinlang.comments.Comment}:</h4>
-	<div style="width:100%;">{COMMENTS_FORM_TEXTBOXER}<br />{COMMENTS_FORM_HINT}</div>
+	<div style="width:100%;">{COMMENTS_FORM_TEXT}<br />{COMMENTS_FORM_HINT}</div>
 	<p><input type="submit" value="{PHP.L.Submit}" /></p>
 </form>
 <!-- END: COMMENTS_NEWCOMMENT -->
