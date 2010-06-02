@@ -24,6 +24,8 @@ $L['plu_title'] = 'Search';
 // Common - title, info, query
 $L['plu_search_req'] = 'Query';
 $L['plu_search_key'] = 'Find';
+$L['plu_search_forums'] = 'Search forums';
+$L['plu_search_pages'] = 'Search pages';
 
 // Mode selectors and result titles
 $L['plu_tabs_all'] = 'All';
