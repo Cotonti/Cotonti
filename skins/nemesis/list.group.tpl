@@ -4,7 +4,7 @@
 			<div class="block">
 				<h2 class="folder">{LIST_PAGETITLE}</h2>
 				<!-- BEGIN: LIST_ROWCAT -->
-					<h3><a href="{LIST_ROWCAT_URL}">{LIST_ROWCAT_TITLE}</a> ({LIST_ROWCAT_COUNT})</h3>
+					<h3><a href="{LIST_ROWCAT_URL}" title="{LIST_ROWCAT_TITLE}">{LIST_ROWCAT_TITLE}</a> ({LIST_ROWCAT_COUNT})</h3>
 					<!-- IF {LIST_ROWCAT_DESC} -->
 					<p class="small">{LIST_ROWCAT_DESC}</p>
 					<!-- ENDIF -->
