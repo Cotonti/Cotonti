@@ -18,7 +18,7 @@
 				</tr>
 			</table>
 <!-- BEGIN: PAGES_OPTIONS -->
-			<h3>Поиск по страницам</h3>
+			<h3>{PHP.L.plu_search_pages}:</h3>
 			<table class="cells marginbottom10">
 				<tr>
 					<td class="width20">{PHP.L.plu_pag_set_sec}:</td>
@@ -49,7 +49,7 @@
 			</table>
 <!-- END: PAGES_OPTIONS -->
 <!-- BEGIN: FORUMS_OPTIONS -->
-			<h3>Поиск по форумам</h3>
+			<h3>{PHP.L.plu_search_forums}:</h3>
 			<table class="cells marginbottom10">
 				<tr>
 					<td class="width20">{PHP.L.plu_frm_set_sec}:</td>
