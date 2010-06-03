@@ -36,11 +36,8 @@
 				{PHP.L.adm_extrafields_desc}
 <!-- ENDIF -->
 			</li>
-			<li>
-				<a href="{ADMIN_PAGE_URL_LIST_ALL}">{PHP.L.adm_showall}</a>
-			</li>
 		</ul>
-		<h3>{PHP.L.adm_valqueue}:</h3>
+		<h3>{PHP.L.Pages}:</h3>
 		<form id="form_valqueue" name="form_valqueue" method="post" action="{ADMIN_PAGE_FORM_URL}">
 			<table class="cells">
 			<tr>
@@ -53,6 +50,21 @@
 				<td class="coltop width70">{PHP.L.Title}</td>
 				<td class="coltop width20">{PHP.L.Action}</td>
 			</tr>
+<!-- IF !{PHP.is_row_empty} -->
+			<tr>
+				<td class="right" colspan="4">
+					<input type="hidden" name="paction" value="" />
+					<select size="1" name="filter">
+<!-- ENDIF -->
+<!-- BEGIN: FILTER_ROW -->
+						<option value="{ADMIN_FILTER_ROW}"{ADMIN_FILTER_ROW_SELECTED}>{ADMIN_FILTER_ROW}</option>
+<!-- END: FILTER_ROW -->
+<!-- IF !{PHP.is_row_empty} -->
+					</select>
+					<input name="paction" type="submit" value="{PHP.L.Filter}" onclick="this.form.paction.value=this.value" />
+				</td>
+			</tr>
+<!-- ENDIF -->
 <!-- BEGIN: PAGE_ROW -->
 			<tr>
 				<td class="centerall {ADMIN_PAGE_ODDEVEN}">
@@ -84,7 +96,7 @@
 					</div>
 				</td>
 				<td class="centerall action {ADMIN_PAGE_ODDEVEN}">
-					<a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}" class="ajax">{PHP.R.icon_news}</a>
+					<!-- IF {PHP.row.page_state} == 1 --><a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}" class="ajax">{PHP.R.icon_news}</a><!-- ENDIF -->
 					<a title="{PHP.L.Delete}" href="{ADMIN_PAGE_URL_FOR_DELETED}" class="ajax">{PHP.R.icon_delete}</a>
 					<a title="{PHP.L.Open}" href="{ADMIN_PAGE_ID_URL}">{PHP.R.admin_icon_jumpto}</a>
 					<a title="{PHP.L.Edit}" href="{ADMIN_PAGE_URL_FOR_EDIT}">{PHP.R.admin_icon_config}</a>
@@ -98,8 +110,7 @@
 <!-- ENDIF -->
 			<tr>
 				<td class="valid" colspan="4">
-					<input type="hidden" name="paction" value="" />
-					<input name="paction" type="submit" value="{PHP.L.Validate}" onclick="this.form.paction.value=this.value" />
+					<!-- IF {PHP.filter} != {PHP.L.adm_validated} --><input name="paction" type="submit" value="{PHP.L.Validate}" onclick="this.form.paction.value=this.value" /><!-- ENDIF -->
 					<input name="paction" type="submit" value="{PHP.L.Delete}" onclick="this.form.paction.value=this.value" />
 				</td>
 			</tr>

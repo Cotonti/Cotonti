@@ -24,6 +24,14 @@ $id = sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
+$sqlwhere = "page_state=1";
+$filter = $L['adm_valqueue'];
+$filter_type = array(
+	$L['adm_showall'],
+	$L['adm_valqueue'],
+	$L['adm_validated']
+);
+
 /* === Hook  === */
 $extp = sed_getextplugins('admin.page.first');
 foreach ($extp as $pl)
@@ -299,17 +307,49 @@ elseif ($a == 'update_cheked')
 
 		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_deleted'] : NULL;
 	}
+	elseif ($paction == $L['Filter'])
+	{
+		$filter = sed_import('filter', 'P', 'TXT');
+		if ($filter == $L['adm_showall'])
+		{
+			$sqlwhere = "1 ";
+		}
+		elseif ($filter == $L['adm_valqueue'])
+		{
+			$sqlwhere = "page_state=1";
+		}
+		elseif ($filter == $L['adm_validated'])
+		{
+			$sqlwhere = "page_state<>1 ";
+		}
+		/* === Hook  === */
+		$extp = sed_getextplugins('admin.page.filter');
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+	}
+}
+
+foreach ($filter_type as $item)
+{
+	$t->assign(array(
+		'ADMIN_FILTER_ROW' => $item,
+		'ADMIN_FILTER_ROW_SELECTED' => ($filter == $item) ? ' selected="selected"' : ''
+	));
+	$t->parse('MAIN.FILTER_ROW');
 }
 
 $is_adminwarnings = isset($adminwarnings);
 
-$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1"), 0, 0);
+$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere), 0, 0);
 $pagenav = sed_pagenav('admin', 'm=page', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar
 	FROM $db_pages as p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-	WHERE page_state=1
+	WHERE $sqlwhere
 		ORDER by page_id DESC
 		LIMIT $d,".$cfg['maxrowsperpage']);
 
@@ -476,7 +516,7 @@ $t->assign(array(
 	'ADMIN_PAGE_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=page'),
 	'ADMIN_PAGE_URL_ADD' => sed_url('page', 'm=add'),
 	'ADMIN_PAGE_URL_EXTRAFIELDS' => sed_url('admin', 'm=extrafields&n=pages'),
-	'ADMIN_PAGE_URL_LIST_ALL' => sed_url('list', 'c=all'),
+	//'ADMIN_PAGE_URL_LIST_ALL' => sed_url('list', 'c=all'),
 	'ADMIN_PAGE_FORM_URL' => sed_url('admin', 'm=page&a=update_cheked&d='.$d),
 	'ADMIN_PAGE_TOTALDBPAGES' => $totaldbpages,
 	'ADMIN_PAGE_ADMINWARNINGS' => $adminwarnings,
