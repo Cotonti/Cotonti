@@ -373,6 +373,7 @@ $L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300
 $L['addnewentry'] = 'Add a new entry';
 $L['adm_queue_deleted'] = 'Page was deleted in to trash can';
 $L['adm_valqueue'] = 'Waiting for validation';
+$L['adm_validated'] = 'Already validated';
 $L['adm_structure'] = 'Structure of the pages (categories)';
 $L['adm_extrafields_desc'] = 'Add/Edit extra fields';
 $L['adm_sortingorder'] = 'Set a default sorting order for the categories';
