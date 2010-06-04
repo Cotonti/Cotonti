@@ -16,6 +16,8 @@ sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.page'));
 
+require_once sed_incfile('forms');
+
 $adminpath[] = array(sed_url('admin', 'm=page'), $L['Pages']);
 $adminhelp = $L['adm_help_page'];
 
@@ -24,13 +26,57 @@ $id = sed_import('id', 'G', 'INT');
 $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
-$sqlwhere = "page_state=1";
-$filter = $L['adm_valqueue'];
-$filter_type = array(
-	$L['adm_showall'],
-	$L['adm_valqueue'],
-	$L['adm_validated']
+$sorttype = sed_import('sorttype', 'R', 'ALP');
+$sorttype = empty($sorttype) ? 'id' : $sorttype;
+$sort_type = array(
+	'id' => $L['Id'],
+	'type' => $L['Type'],
+	'key' => $L['Key'],
+	'title' => $L['Title'],
+	'desc' => $L['Description'],
+	'text' => $L['Body'],
+	'author' => $L['Author'],
+	'ownerid' => $L['Owner'],
+	'date' => $L['Date'],
+	'begin' => $L['Begin'],
+	'expire' => $L['Expire'],
+	'rating' => $L['Rating'],
+	'count' => $L['Hits'],
+	'comcount' => $L['Comments'],//TODO: if comments plug not instaled this row generated error
+	'file' => $L['adm_fileyesno'],
+	'url' => $L['adm_fileurl'],
+	'size' => $L['adm_filesize'],
+	'filecount' => $L['adm_filecount']
 );
+$sqlsorttype = 'page_'.$sorttype;
+
+$sortway = sed_import('sortway', 'R', 'ALP');
+$sortway = empty($sortway) ? 'desc' : $sortway;
+$sort_way = array(
+	'asc' => $L['Ascending'],
+	'desc' => $L['Descending']
+);
+$sqlsortway = $sortway;
+
+$filter = sed_import('filter', 'R', 'ALP');
+$filter = empty($filter) ? 'valqueue' : $filter;
+$filter_type = array(
+	'all' => $L['All'],
+	'valqueue' => $L['adm_valqueue'],
+	'validated' => $L['adm_validated']
+);
+if ($filter == 'all')
+{
+	$sqlwhere = "1 ";
+}
+elseif ($filter == 'valqueue')
+{
+	$sqlwhere = "page_state=1 ";
+}
+elseif ($filter == 'validated')
+{
+	$sqlwhere = "page_state<>1 ";
+}
 
 /* === Hook  === */
 $extp = sed_getextplugins('admin.page.first');
@@ -152,7 +198,7 @@ elseif ($a == 'delete')
 		$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
 		$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
 		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
+		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
 
 		sed_log($L['Page'].' #'.$id.' - '.$L['Deleted'], 'adm');
 
@@ -275,7 +321,7 @@ elseif ($a == 'update_cheked')
 					$sql = sed_sql_query("DELETE FROM $db_pages WHERE page_id='$id'");
 					$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
 					$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-					$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");
+					$sql = sed_sql_query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
 
 					sed_log($L['Page'].' #'.$id.' - '.$L['Deleted'],'adm');
 
@@ -307,51 +353,19 @@ elseif ($a == 'update_cheked')
 
 		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_deleted'] : NULL;
 	}
-	elseif ($paction == $L['Filter'])
-	{
-		$filter = sed_import('filter', 'P', 'TXT');
-		if ($filter == $L['adm_showall'])
-		{
-			$sqlwhere = "1 ";
-		}
-		elseif ($filter == $L['adm_valqueue'])
-		{
-			$sqlwhere = "page_state=1";
-		}
-		elseif ($filter == $L['adm_validated'])
-		{
-			$sqlwhere = "page_state<>1 ";
-		}
-		/* === Hook  === */
-		$extp = sed_getextplugins('admin.page.filter');
-		foreach ($extp as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
-	}
-}
-
-foreach ($filter_type as $item)
-{
-	$t->assign(array(
-		'ADMIN_FILTER_ROW' => $item,
-		'ADMIN_FILTER_ROW_SELECTED' => ($filter == $item) ? ' selected="selected"' : ''
-	));
-	$t->parse('MAIN.FILTER_ROW');
 }
 
 $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere), 0, 0);
-$pagenav = sed_pagenav('admin', 'm=page', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = sed_pagenav('admin', 'm=page&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = sed_sql_query("SELECT p.*, u.user_name, u.user_avatar
 	FROM $db_pages as p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE $sqlwhere
-		ORDER by page_id DESC
-		LIMIT $d,".$cfg['maxrowsperpage']);
+		ORDER BY $sqlsorttype $sqlsortway
+		LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
@@ -516,8 +530,10 @@ $t->assign(array(
 	'ADMIN_PAGE_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=page'),
 	'ADMIN_PAGE_URL_ADD' => sed_url('page', 'm=add'),
 	'ADMIN_PAGE_URL_EXTRAFIELDS' => sed_url('admin', 'm=extrafields&n=pages'),
-	//'ADMIN_PAGE_URL_LIST_ALL' => sed_url('list', 'c=all'),
-	'ADMIN_PAGE_FORM_URL' => sed_url('admin', 'm=page&a=update_cheked&d='.$d),
+	'ADMIN_PAGE_FORM_URL' => sed_url('admin', 'm=page&a=update_cheked&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter.'&d='.$d),
+	'ADMIN_PAGE_ORDER' => sed_selectbox($sorttype, 'sorttype', array_keys($sort_type), array_values($sort_type), false),
+	'ADMIN_PAGE_WAY' => sed_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),
+	'ADMIN_PAGE_FILTER' => sed_selectbox($filter, 'filter', array_keys($filter_type), array_values($filter_type), false),
 	'ADMIN_PAGE_TOTALDBPAGES' => $totaldbpages,
 	'ADMIN_PAGE_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_PAGE_PAGINATION_PREV' => $pagenav['prev'],

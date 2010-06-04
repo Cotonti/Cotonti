@@ -41,6 +41,13 @@
 		<form id="form_valqueue" name="form_valqueue" method="post" action="{ADMIN_PAGE_FORM_URL}">
 			<table class="cells">
 			<tr>
+				<td class="right" colspan="4">
+					<input type="hidden" name="paction" value="" />
+					<!-- IF {ADMIN_PAGE_TOTALITEMS} > 1 -->{PHP.L.adm_sort} {ADMIN_PAGE_ORDER} {ADMIN_PAGE_WAY};<!-- ENDIF --> {PHP.L.Show} {ADMIN_PAGE_FILTER}
+					<input name="paction" type="submit" value="{PHP.L.Filter}" onclick="this.form.paction.value=this.value" />
+				</td>
+			</tr>
+			<tr>
 				<td class="coltop width5">
 <!-- IF {PHP.cfg.jquery} -->
 					<input name="allchek" class="checkbox" type="checkbox" value="" onclick="$('.checkbox').attr('checked', this.checked);" />
@@ -50,21 +57,6 @@
 				<td class="coltop width70">{PHP.L.Title}</td>
 				<td class="coltop width20">{PHP.L.Action}</td>
 			</tr>
-<!-- IF !{PHP.is_row_empty} -->
-			<tr>
-				<td class="right" colspan="4">
-					<input type="hidden" name="paction" value="" />
-					<select size="1" name="filter">
-<!-- ENDIF -->
-<!-- BEGIN: FILTER_ROW -->
-						<option value="{ADMIN_FILTER_ROW}"{ADMIN_FILTER_ROW_SELECTED}>{ADMIN_FILTER_ROW}</option>
-<!-- END: FILTER_ROW -->
-<!-- IF !{PHP.is_row_empty} -->
-					</select>
-					<input name="paction" type="submit" value="{PHP.L.Filter}" onclick="this.form.paction.value=this.value" />
-				</td>
-			</tr>
-<!-- ENDIF -->
 <!-- BEGIN: PAGE_ROW -->
 			<tr>
 				<td class="centerall {ADMIN_PAGE_ODDEVEN}">
