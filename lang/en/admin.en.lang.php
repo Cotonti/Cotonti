@@ -376,6 +376,7 @@ $L['adm_valqueue'] = 'Waiting for validation';
 $L['adm_validated'] = 'Already validated';
 $L['adm_structure'] = 'Structure of the pages (categories)';
 $L['adm_extrafields_desc'] = 'Add/Edit extra fields';
+$L['adm_sort'] = 'Sort';
 $L['adm_sortingorder'] = 'Set a default sorting order for the categories';
 $L['adm_showall'] = 'Show all';
 $L['adm_help_page'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.';
