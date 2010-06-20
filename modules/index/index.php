@@ -1,4 +1,10 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=module
+[END_COT_EXT]
+==================== */
+
 /**
  * Home page
  *
@@ -10,6 +16,10 @@
  */
 
 defined('SED_CODE') or die('Wrong URL');
+
+// Environment setup
+define('SED_INDEX', TRUE);
+$location = 'Home';
 
 /* === Hook === */
 $extp = sed_getextplugins('index.first');
@@ -51,8 +61,8 @@ foreach ($extp as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'].'/footer.php';
 

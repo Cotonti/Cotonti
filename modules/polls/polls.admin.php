@@ -1,4 +1,10 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=admin
+[END_COT_EXT]
+==================== */
+
 /**
  * Administration panel - Poll editor
  *
@@ -16,7 +22,7 @@ sed_block($usr['isadmin']);
 
 require_once sed_incfile('functions', 'polls');
 
-$t = new XTemplate(sed_skinfile('admin.polls'));
+$t = new XTemplate(sed_skinfile('polls.admin'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=polls'), $L['Polls']);

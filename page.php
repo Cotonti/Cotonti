@@ -7,40 +7,17 @@
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
+ * @deprecated Deprecated since Cotonti Siena
  */
 
-define('SED_CODE', TRUE);
-define('SED_PAGE', TRUE);
-define('COT_MODULE', TRUE);
-$location = 'Pages';
-$z = 'page';
+define('SED_CODE', true);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
-require_once sed_incfile('xtemplate');
 
-sed_dieifdisabled($cfg['disable_page']);
+parse_str($_SERVER['QUERY_STRING'], $params);
 
-require_once sed_incfile('functions', 'page');
-require_once sed_incfile('resources', 'page');
-require_once sed_langfile('page', 'module');
-
-require_once sed_incfile('extrafields');
-
-switch($m)
-{
-	case 'add':
-		require_once sed_incfile($m, 'page');;
-	break;
-
-	case 'edit':
-		require_once sed_incfile($m, 'page');
-	break;
-
-	default:
-		require_once sed_incfile('main', 'page');
-	break;
-}
+header('Location: '.sed_url('page', $params), true, 301);
 
 ?>

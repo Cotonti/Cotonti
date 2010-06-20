@@ -7,24 +7,17 @@
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
+ * @deprecated Deprecated since Cotonti Siena
  */
 
-define('SED_CODE', TRUE);
-define('SED_POLLS', TRUE);
-define('COT_MODULE', TRUE);
-$location = 'Polls';
-$z = 'polls';
+define('SED_CODE', true);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
-require_once sed_incfile('xtemplate');
 
-sed_dieifdisabled($cfg['disable_polls']);
+parse_str($_SERVER['QUERY_STRING'], $params);
 
-require_once sed_incfile('functions', 'polls');
-require_once sed_langfile('polls', 'module');
-
-require_once sed_incfile('main', 'polls');
+header('Location: '.sed_url('polls', $params), true, 301);
 
 ?>

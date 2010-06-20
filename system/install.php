@@ -1,6 +1,6 @@
 <?php
 /**
- * Home page loader
+ * Install script
  *
  * @package Cotonti
  * @version 0.7.0
@@ -9,10 +9,10 @@
  * @license BSD
  */
 
+// Environment setup
 define('SED_CODE', TRUE);
 define('SED_INSTALL', TRUE);
 define('SED_ADMIN', TRUE);
-define('COT_MODULE', TRUE);
 $location = 'Install';
 $z = 'install';
 
@@ -59,18 +59,13 @@ require_once sed_incfile('xtemplate');
 require_once sed_langfile('install', 'module');
 require_once sed_incfile('functions', 'admin');
 
-if ($_GET['m'] == 'update')
+if (!$cfg['new_install'])
 {
 	require_once sed_incfile('update', 'install');
 }
 else
 {
-	if (!$cfg['new_install'])
-	{
-		header('Location: '.$cfg['mainurl']);
-		exit;
-	}
-	require_once sed_incfile('main', 'install');
+	require_once sed_incfile('install', 'install');
 }
 
 ?>

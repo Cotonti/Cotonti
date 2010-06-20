@@ -1,4 +1,10 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=module
+[END_COT_EXT]
+==================== */
+
 /**
  * Polls
  *
@@ -10,6 +16,12 @@
  */
 
 defined('SED_CODE') or die('Wrong URL');
+
+sed_dieifdisabled($cfg['disable_polls']);
+
+// Environment setup
+define('SED_POLLS', TRUE);
+$location = 'Polls';
 
 /* === Hook === */
 $extp = sed_getextplugins('polls.first');

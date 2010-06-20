@@ -7,28 +7,17 @@
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
+ * @deprecated Deprecated since Cotonti Siena
  */
 
-define('SED_CODE', TRUE);
-define('SED_PLUG', TRUE);
-define('COT_MODULE', TRUE);
-$location = 'Plugins';
-$z = 'plug';
-
-if (empty($_GET['e']) && empty($_GET['o']) && (!empty($_GET['r']) || !empty($_POST['r'])))
-{
-	define('SED_AJAX', 1);
-}
+define('SED_CODE', true);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
-require_once sed_incfile('xtemplate');
 
-sed_dieifdisabled($cfg['disable_plug']);
+parse_str($_SERVER['QUERY_STRING'], $params);
 
-require_once sed_incfile('resources', 'plug');
-
-require_once sed_incfile('main', 'plug');
+header('Location: '.sed_url('index', $params), true, 301);
 
 ?>

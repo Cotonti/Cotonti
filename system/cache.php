@@ -491,6 +491,8 @@ class Page_cache
 		}
 		if (file_exists($filename))
 		{
+			global $cfg;
+			header('Content-Type: text/html; charset=' . $cfg['charset']);
 			readgzfile($filename);
 			exit;
 		}

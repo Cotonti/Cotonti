@@ -1,4 +1,10 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=module
+[END_COT_EXT]
+==================== */
+
 /**
  * HTML/TXT viewer
  *
@@ -10,6 +16,10 @@
  */
 
 defined('SED_CODE') or die('Wrong URL');
+
+// Environment setup
+define('SED_VIEW', TRUE);
+$location = 'Views';
 
 $v = sed_import('v', 'G', 'TXT');
 

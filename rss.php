@@ -7,23 +7,17 @@
  * @author medar, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
+ * @deprecated Deprecated since Cotonti Siena
  */
 
-define('SED_CODE', TRUE);
-define('SED_RSS', TRUE);
-define('COT_MODULE', TRUE);
-$location = "RSS";
-$z = 'rss';
+define('SED_CODE', true);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
-require_once sed_incfile('xtemplate');
 
-sed_dieifdisabled($cfg['disable_rss']);
+parse_str($_SERVER['QUERY_STRING'], $params);
 
-require_once sed_langfile('rss', 'module');
-
-require_once sed_incfile('main', 'rss');
+header('Location: '.sed_url('rss', $params), true, 301);
 
 ?>

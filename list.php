@@ -7,24 +7,17 @@
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
+ * @deprecated Deprecated since Cotonti Siena
  */
 
-define('SED_CODE', TRUE);
-define('SED_LIST', TRUE);
-define('COT_MODULE', TRUE);
-$location = 'List';
-$z = 'list';
+define('SED_CODE', true);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
-require_once sed_incfile('xtemplate');
-require_once sed_incfile('functions', 'users');
 
-sed_dieifdisabled($cfg['disable_page']);
+parse_str($_SERVER['QUERY_STRING'], $params);
 
-require_once sed_incfile('extrafields');
-require_once sed_incfile('resources', 'list');
-require_once sed_incfile('main', 'list');
+header('Location: '.sed_url('page', $params), true, 301);
 
 ?>

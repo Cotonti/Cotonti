@@ -44,6 +44,51 @@ function sed_file_phpdoc($filename)
 }
 
 /**
+ * Extract info from SED file headers
+ *
+ * @param string $file File path
+ * @param string $limiter Tag name
+ * @param int $maxsize Max header size
+ * @return array
+ */
+function sed_infoget($file, $limiter='SED', $maxsize=32768)
+{
+	$result = array();
+
+	if ($fp = @fopen($file, 'r'))
+	{
+		$limiter_begin = "[BEGIN_".$limiter."]";
+		$limiter_end = "[END_".$limiter."]";
+		$data = fread($fp, $maxsize);
+		$begin = mb_strpos($data, $limiter_begin);
+		$end = mb_strpos($data, $limiter_end);
+
+		if ($end>$begin && $begin>0)
+		{
+			$lines = mb_substr($data, $begin+8+mb_strlen($limiter), $end-$begin-mb_strlen($limiter)-8);
+			$lines = explode ("\n",$lines);
+
+			foreach ($lines as $k => $line)
+			{
+				$linex = explode ("=", $line);
+				$ii=1;
+				while (!empty($linex[$ii]))
+				{
+					$result[$linex[0]] .= trim($linex[$ii]);
+					$ii++;
+				}
+			}
+		}
+		else
+		{ $result['Error'] = 'Warning: No tags found in '.$file; }
+	}
+	else
+	{ $result['Error'] = 'Error: File '.$file.' is missing!'; }
+	@fclose($fp);
+	return ($result);
+}
+
+/**
  * Registers a module in the core
  *
  * @param string $name Module name (code)

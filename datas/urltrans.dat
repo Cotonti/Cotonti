@@ -1,1 +1,5 @@
-*	*	{$_area}.php
+admin	*	{$_zone}.php
+message	*	{$_zone}.php
+users	*	{$_zone}.php
+plug	*	index.php
+*	*	index.php?z={$_zone}
