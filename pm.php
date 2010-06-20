@@ -7,41 +7,16 @@
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
+ * @deprecated Deprecated since Cotonti Siena
  */
 
-define('SED_CODE', TRUE);
-define('SED_PM', TRUE);
-define('COT_MODULE', TRUE);
-$location = 'Private_Messages';
-$z = 'pm';
+define('SED_CODE', true);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once sed_incfile('common');
-require_once sed_incfile('xtemplate');
 
-sed_dieifdisabled($cfg['disable_pm']);
+parse_str($_SERVER['QUERY_STRING'], $params);
 
-require_once sed_incfile('functions', 'pm');
-require_once sed_incfile('resources', 'pm');
-require_once sed_langfile('pm', 'module');
-
-require_once sed_incfile('extrafields');
-require_once sed_incfile('functions', 'users');
-
-switch($m)
-{
-	case 'send':
-		require_once sed_incfile($m, 'pm');
-	break;
-
-	case 'message':
-		require_once sed_incfile($m, 'pm');
-	break;
-
-	default:
-		require_once sed_incfile('main', 'pm');
-	break;
-}
-
+header('Location: '.sed_url('pm', $params), true, 301);
 ?>

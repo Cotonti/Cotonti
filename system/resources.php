@@ -76,4 +76,11 @@ $R['img_photo'] = '<img src="{$src}" alt="'.$L['Photo'].'" class="photo" />';
 $R['img_sig'] = '<img src="{$src}" alt="'.$L['Signature'].'" class="signature" />';
 $R['link_catpath'] = '<a href="{$url}" title="{$title}">{$title}</a>';
 
+/**
+ * Plugin Title
+ */
+
+$R['plug_code_homebreadcrumb'] = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
+$R['plug_code_title'] = '{$bhome}<a href="{$url}">{$plugin_title}</a>';
+
 ?>

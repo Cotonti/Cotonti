@@ -11,10 +11,7 @@
 
 (defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
-sed_block($usr['isadmin']);
-
-$t = new XTemplate(sed_skinfile('admin.pfs.allpfs'));
+$t = new XTemplate(sed_skinfile('pfs.admin.allpfs'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=pfs'), $L['PFS']);
@@ -81,15 +78,5 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
-
-$t->parse('MAIN');
-if (SED_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
 
 ?>

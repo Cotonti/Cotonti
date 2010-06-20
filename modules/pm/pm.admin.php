@@ -1,4 +1,10 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=admin
+[END_COT_EXT]
+==================== */
+
 /**
  * Administration panel - PM manager
  *
@@ -14,7 +20,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pm', 'a');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.pm'));
+$t = new XTemplate(sed_skinfile('pm.admin'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=pm'), $L['Private_Messages']);

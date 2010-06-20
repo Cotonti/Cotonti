@@ -11,20 +11,11 @@
 
 (defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
-sed_block($usr['isadmin']);
-
-$t = new XTemplate(sed_skinfile('admin.forums.structure'));
-
-require_once sed_incfile('forms');
+$t = new XTemplate(sed_skinfile('forums.admin.structure'));
 
 $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 $adminpath[] = array (sed_url('admin', 'm=forums&s=structure'), $L['Structure']);
 $adminhelp = $L['adm_help_forum_structure'];
-
-$id = sed_import('id', 'G', 'INT');
-$d = sed_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
 $extp = sed_getextplugins('admin.forums.structure.first');
@@ -316,15 +307,5 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
-
-$t->parse('MAIN');
-if (SED_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
 
 ?>

@@ -1,4 +1,10 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=module
+[END_COT_EXT]
+==================== */
+
 /**
  * RSS
  *
@@ -25,6 +31,12 @@ rss.php?c=pages&id=XX			=== Show pages from category "XX" ===						=== Where XX 
 rss.php
 	OR rss.php?c=pages			=== Show pages from category "news" ===
 */
+
+// Environment setup
+define('SED_RSS', TRUE);
+$location = 'RSS';
+
+sed_dieifdisabled($cfg['disable_rss']);
 
 $c = sed_import('c', 'G', 'ALP');
 $id = sed_import('id', 'G', 'ALP');

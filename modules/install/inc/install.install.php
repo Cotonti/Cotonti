@@ -259,7 +259,7 @@ $t->assign(array(
 	'INSTALL_COUNTRY_SELECT' => sed_selectbox_countries($user['country'], 'user_country')
 ));
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 ?>
