@@ -2013,13 +2013,14 @@ function sed_cc($text)
  */
 function sed_check_xg()
 {
-	if (isset($_GET['x']))
+	global $sys;
+	$x = sed_import('x', 'G', 'ALP');
+	if ($x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 	{
-		return true;
+		sed_redirect(sed_url('message', 'msg=950', '', true));
+		return false;
 	}
-
-	sed_redirect(sed_url('message', 'msg=950', '', true));
-	exit; // like return NULL
+	return true;
 }
 
 /**
@@ -2619,7 +2620,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 
 		case 'PSW':
 			$v = trim($v);
-			$f = sed_alphaonly($v);
+			$f = preg_replace('#[\'"&<>]#', '', $v);
 			$f = mb_substr($f, 0 ,32);
 
 			if ($v == $f)
@@ -3385,24 +3386,30 @@ function sed_redirect($url)
 {
 	global $cfg;
 
+	if (!sed_url_check($url))
+	{
+		$url = SED_ABSOLUTE_URL . $url;
+	}
+
 	if ($cfg['redirmode'])
 	{
-		$output = $cfg['doctype']."
+		$output = $cfg['doctype'].<<<HTM
 		<html>
 		<head>
-		<meta http-equiv=\"content-type\" content=\"text/html; charset=".$cfg['charset']."\" />
-		<meta http-equiv=\"refresh\" content=\"0; url=".SED_ABSOLUTE_URL . $url."\" />
+		<meta http-equiv="content-type" content="text/html; charset={$cfg['charset']}" />
+		<meta http-equiv="refresh" content="0; url=$url" />
 		<title>Redirecting...</title></head>
-		<body>Redirecting to <a href=\"". SED_ABSOLUTE_URL .$url."\">".$cfg['mainurl']."/".$url."</a>
+		<body>Redirecting to <a href="$url">$url</a>
 		</body>
-		</html>";
-		header("Refresh: 0; URL=". SED_ABSOLUTE_URL .$url);
-		echo($output);
+		</html>
+HTM;
+		header('Refresh: 0; URL='.$url);
+		echo $output;
 		exit;
 	}
 	else
 	{
-		header("Location: " . SED_ABSOLUTE_URL . $url);
+		header('Location: '.$url);
 		exit;
 	}
 }
@@ -4550,7 +4557,7 @@ function sed_trash_put($type, $title, $itemid, $datas)
  */
 function sed_unique($l=16)
 {
-	return(mb_substr(md5(mt_rand(0,1000000)), 0, $l));
+	return(mb_substr(md5(mt_rand()), 0, $l));
 }
 
 /**
@@ -4687,6 +4694,18 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$url .= $tail;
 	$url = str_replace('&amp;amp;', '&amp;', $url);
 	return $url;
+}
+
+/**
+ * Checks if an absolute URL belongs to current site or its subdomains
+ *
+ * @param string $url Absolute URL
+ * @return bool
+ */
+function sed_url_check($url)
+{
+	global $sys;
+	return preg_match('`^'.preg_quote($sys['scheme'].'://').'([^/]+\.)?'.preg_quote($sys['domain']).'`i', $url);
 }
 
 /**

@@ -409,6 +409,7 @@ function sed_loadconfigmap()
     $result[] = array ('users', '20', 'extra7uchange', 3, '0', '');
     $result[] = array ('users', '20', 'extra8uchange', 3, '0', '');
     $result[] = array ('users', '20', 'extra9uchange', 3, '0', '');
+	$result[] = array ('users', '21', 'forcerememberme', 3, '0', '');
     // N-0.0.2
     $result[] = array ('title', '01', 'maintitle', 1, 'Title of your site', '');
     $result[] = array ('title', '02', 'subtitle', 1, 'Subtitle', '');

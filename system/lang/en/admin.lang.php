@@ -280,6 +280,7 @@ $L['cfg_av_maxx'] = array('Avatar, maximum width', 'Default: 64 pixels');
 $L['cfg_av_maxy'] = array('Avatar, maximum height', 'Default: 64 pixels');
 $L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from registering new accounts');
 $L['cfg_disablewhosonline'] = array('Disable who\'s online', 'Automatically enabled if you turn on the Shield');
+$L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
 $L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
 $L['cfg_ph_maxsize'] = array('Photo, maximum file size', 'Default: 8000 bytes');
 $L['cfg_ph_maxx'] = array('Photo, maximum width', 'Default: 96 pixels');
