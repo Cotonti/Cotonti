@@ -8,7 +8,7 @@
  * RewriteRule \.(js|css)$ rc.php?uri=%{REQUEST_FILENAME} [NC,L]
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.6.9
  * @author Julien Lecomte, Cotonti Team
  * @link http://www.julienlecomte.net/blog/2007/08/13/
  * @license BSD
@@ -47,7 +47,7 @@ if (!isset($_GET['uri']))
  * Return HTTP 404 if needed.
  */
 
-$src_uri = $_GET['uri'];
+$src_uri = str_replace("\0", '', $_GET['uri']);
 
 if (!file_exists($src_uri))
 {
@@ -124,8 +124,9 @@ if (count($file_parts) > 1)
  */
 
 $doc_root = realpath( '.' );
+$file_dir = realpath($uri_dir);
 
-if (!isset($known_content_types[$file_extension]))
+if (!isset($known_content_types[$file_extension]) || strpos($file_dir, $doc_root) !== 0)
 {
     header( 'HTTP/1.1 403 Forbidden' );
     echo( '<html><body><h1>HTTP 403 - Forbidden</h1></body></html>' );
