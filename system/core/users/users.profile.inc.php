@@ -417,21 +417,7 @@ switch ($a)
 		{
 			$rnewpass = md5($rnewpass1);
 
-			$hashsalt = sed_unique(16);
-
-			sed_sql_query("UPDATE $db_users SET user_password='$rnewpass', user_hashsalt = '$hashsalt' WHERE user_id={$usr['id']}");
-
-			$passhash = md5($rnewpass.$hashsalt);
-			$u = base64_encode($usr['id'].':_:'.$passhash);
-
-			if(empty($_SESSION[$sys['site_id']]))
-			{
-				sed_setcookie($sys['site_id'], $u, time()+$cfg['cookielifetime'], $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
-			}
-			else
-			{
-				$_SESSION[$sys['site_id']] = $u;
-			}
+			sed_sql_query("UPDATE $db_users SET user_password='$rnewpass' WHERE user_id={$usr['id']}");
 		}
 	}
 
