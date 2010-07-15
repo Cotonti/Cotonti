@@ -8,7 +8,7 @@
  * RewriteRule \.(js|css)$ rc.php?uri=%{REQUEST_FILENAME} [NC,L]
  *
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.6.9
  * @author Julien Lecomte, Cotonti Team
  * @link http://www.julienlecomte.net/blog/2007/08/13/
  * @license BSD
@@ -35,19 +35,22 @@ $known_content_types = array(
  * Get the path of the target file.
  */
 
-if (!isset($_GET['uri']))
+if (!isset($_GET['uri'])
+	|| preg_match('#[^\x20-\x7e]#', $_GET['uri']) // ASCII printable chars only
+	|| mb_strlen($_GET['uri']) > 256 // No super long paths supported
+	)
 {
-    header('HTTP/1.1 400 Bad Request');
-    echo '<html><body><h1>HTTP 400 - Bad Request</h1></body></html>';
-    exit;
+	header('HTTP/1.1 400 Bad Request');
+	echo('<html><body><h1>HTTP 400 - Bad Request</h1></body></html>');
+	exit;
 }
+
+$src_uri = $_GET['uri'];
 
 /*
  * Verify the existence of the target file.
  * Return HTTP 404 if needed.
  */
-
-$src_uri = $_GET['uri'];
 
 if (!file_exists($src_uri))
 {
@@ -65,12 +68,12 @@ if (!file_exists($src_uri))
 $file_last_modified = filemtime($src_uri);
 header( 'Last-Modified: ' . date( 'r', $file_last_modified ) );
 
-$max_age = 300 * 24 * 60 * 60; // 300 days
+$max_age = 5 * 365 * 24 * 60 * 60; // ~5 years
 
 $expires = $file_last_modified + $max_age;
 header('Expires: ' . date( 'r', $expires ));
 
-$etag = dechex($file_last_modified);
+$etag = md5(realpath($src_uri) . filesize($src_uri) . filemtime($src_uri));
 header('ETag: ' . $etag);
 
 $cache_control = 'must-revalidate, proxy-revalidate, max-age=' . $max_age . ', s-maxage=' . $max_age;
@@ -124,8 +127,9 @@ if (count($file_parts) > 1)
  */
 
 $doc_root = realpath( '.' );
+$file_dir = realpath($uri_dir);
 
-if (!isset($known_content_types[$file_extension]))
+if (!isset($known_content_types[$file_extension]) || strpos($file_dir, $doc_root) !== 0)
 {
     header( 'HTTP/1.1 403 Forbidden' );
     echo( '<html><body><h1>HTTP 403 - Forbidden</h1></body></html>' );

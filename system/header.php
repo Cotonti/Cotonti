@@ -158,7 +158,9 @@ if (!SED_AJAX)
 		$out['guest_username'] = "<input type=\"text\" name=\"rusername\" size=\"12\" maxlength=\"100\" />";
 		$out['guest_password'] = "<input type=\"password\" name=\"rpassword\" size=\"12\" maxlength=\"32\" />";
 		$out['guest_register'] = "<a href=\"".sed_url('users', 'm=register')."\">".$L["Register"]."</a>";
-		$out['guest_cookiettl'] = '<input type="checkbox" name="rremember" />';
+		$out['guest_cookiettl'] = $cfg['forcerememberme'] ?
+			'<input type="checkbox" name="rremember" checked="checked" disabled="disabled" />'
+			: '<input type="checkbox" name="rremember" />';
 
 		$t->assign(array (
 			"HEADER_GUEST_SEND" => sed_url('users', 'm=auth&a=check&'.$sys['url_redirect']),

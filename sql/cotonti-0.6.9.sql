@@ -425,6 +425,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core', 'users', '14', 'ph_maxsize', 2, '32000', '', ''),
 ('core', 'users', '14', 'ph_maxx', 2, '128', '', ''),
 ('core', 'users', '14', 'ph_maxy', 2, '128', '', ''),
+('core', 'users', '21', 'forcerememberme', 3, '0', '', ''),
 ('plug', 'tags', '1', 'pages', 3, '1', '', 'Enable Tags for Pages'),
 ('plug', 'tags', '8', 'lim_pages', 1, '0', '', 'Limit of tags in a cloud displayed for pages, 0 is unlimited'),
 ('plug', 'tags', '7', 'limit', 1, '0', '', 'Max. tags per items, 0 is unlimited'),
@@ -1013,7 +1014,7 @@ CREATE TABLE `sed_users` (
   `user_lostpass` char(32) collate utf8_unicode_ci NOT NULL default '',
   `user_auth` text collate utf8_unicode_ci,
   `user_theme` varchar(16) collate utf8_unicode_ci NOT NULL default '',
-  `user_hashsalt` char(16) collate utf8_unicode_ci NOT NULL default '',
+  `user_token` char(16) collate utf8_unicode_ci NOT NULL default '',
   PRIMARY KEY  (`user_id`),
   KEY `user_password` (`user_password`),
   KEY `user_regdate` (`user_regdate`)

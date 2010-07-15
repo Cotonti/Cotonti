@@ -33,11 +33,8 @@ if(!empty($_COOKIE[$sys['site_id']]))
 	sed_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 }
 
-if (!empty($_SESSION[$sys['site_id']]))
-{
-	session_unset();
-	session_destroy();
-}
+session_unset();
+session_destroy();
 
 if ($usr['id'] > 0)
 {
