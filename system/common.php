@@ -531,6 +531,10 @@ $usr['gmttime'] = @date($cfg['dateformat'],$sys['now_offset']).' GMT';
 /* ======== Anti-XSS protection ======== */
 
 $x = sed_import('x', 'P', 'ALP');
+if (empty($x) && SED_AJAX && $_SERVER['REQUEST_METHOD'] == 'POST')
+{
+	$x = sed_import('x', 'G', 'ALP');
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
 	&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 {

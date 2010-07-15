@@ -969,7 +969,7 @@ CREATE TABLE `sed_trash` (
   PRIMARY KEY  (`tr_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-CCREATE TABLE `sed_users` (
+CREATE TABLE `sed_users` (
   `user_id` int(11) unsigned NOT NULL auto_increment,
   `user_banexpire` int(11) default '0',
   `user_name` varchar(100) collate utf8_unicode_ci NOT NULL,

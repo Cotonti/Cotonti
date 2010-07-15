@@ -47,7 +47,12 @@ if (!isset($_GET['uri']))
  * Return HTTP 404 if needed.
  */
 
-$src_uri = str_replace("\0", '', $_GET['uri']);
+$src_uri = preg_replace('#[^\x20-\x7e]+#', '', $_GET['uri']); // ASCII printable chars only
+if (strlen($src_uri) > 256)
+{
+	// No super long paths supported
+	$src_uri = substr($src_uri, 0, 256);
+}
 
 if (!file_exists($src_uri))
 {
@@ -65,12 +70,12 @@ if (!file_exists($src_uri))
 $file_last_modified = filemtime($src_uri);
 header( 'Last-Modified: ' . date( 'r', $file_last_modified ) );
 
-$max_age = 300 * 24 * 60 * 60; // 300 days
+$max_age = 5 * 365 * 24 * 60 * 60; // ~5 years
 
 $expires = $file_last_modified + $max_age;
 header('Expires: ' . date( 'r', $expires ));
 
-$etag = dechex($file_last_modified);
+$etag = md5(realpath($src_uri) . filesize($src_uri) . filemtime($src_uri));
 header('ETag: ' . $etag);
 
 $cache_control = 'must-revalidate, proxy-revalidate, max-age=' . $max_age . ', s-maxage=' . $max_age;
