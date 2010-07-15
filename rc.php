@@ -35,24 +35,22 @@ $known_content_types = array(
  * Get the path of the target file.
  */
 
-if (!isset($_GET['uri']))
+if (!isset($_GET['uri'])
+	|| preg_match('#[^\x20-\x7e]#', $_GET['uri']) // ASCII printable chars only
+	|| mb_strlen($_GET['uri']) > 256 // No super long paths supported
+	)
 {
 	header('HTTP/1.1 400 Bad Request');
-	echo '<html><body><h1>HTTP 400 - Bad Request</h1></body></html>'; // TODO: Need translate
+	echo('<html><body><h1>HTTP 400 - Bad Request</h1></body></html>');
 	exit;
 }
+
+$src_uri = $_GET['uri'];
 
 /*
  * Verify the existence of the target file.
  * Return HTTP 404 if needed.
  */
-
-$src_uri = preg_replace('#[^\x20-\x7e]+#', '', $_GET['uri']); // ASCII printable chars only
-if (strlen($src_uri) > 256)
-{
-	// No super long paths supported
-	$src_uri = substr($src_uri, 0, 256);
-}
 
 if (!file_exists($src_uri))
 {
