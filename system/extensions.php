@@ -49,10 +49,11 @@ function sed_file_phpdoc($filename)
  * @param string $file File path
  * @param string $limiter Tag name
  * @param int $maxsize Max header size
- * @return array
+ * @return array Array containing block data or FALSE on error
  */
 function sed_infoget($file, $limiter='SED', $maxsize=32768)
 {
+	global $L;
 	$result = array();
 
 	if ($fp = @fopen($file, 'r'))
@@ -80,12 +81,16 @@ function sed_infoget($file, $limiter='SED', $maxsize=32768)
 			}
 		}
 		else
-		{ $result['Error'] = 'Warning: No tags found in '.$file; }
+		{
+			$result = false;	
+		}
 	}
 	else
-	{ $result['Error'] = 'Error: File '.$file.' is missing!'; }
+	{
+		$result = false;
+	}
 	@fclose($fp);
-	return ($result);
+	return $result;
 }
 
 /**
@@ -110,6 +115,20 @@ function sed_module_add($name, $title, $version = '1.0.0', $revision = 1)
 	}
 
 	return  false;
+}
+
+/**
+ * Checks if module is already installed
+ *
+ * @param string $name Module code
+ * @return bool
+ */
+function sed_module_installed($name)
+{
+	global $db_core, $cfg;
+
+	$cnt = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_core WHERE ct_code = '$name'"));
+	return $cnt > 0 && file_exists($cfg['modules_dir'] . '/' . $name);
 }
 
 /**
@@ -202,7 +221,7 @@ function sed_plugin_add($hook_bindings, $name, $title, $is_module = false)
 	global $db_plugins, $cfg;
 
 	if (empty($title)) $title = $name;
-	$path = $is_module ? $cfg['modules_dir'] . "/$name." : $cfg['plugins_dir'] . "/$name.";
+	$path = $is_module ? $cfg['modules_dir'] . "/$name/$name." : $cfg['plugins_dir'] . "/$name/$name.";
 	
 	$insert_rows = array();
 	foreach ($hook_bindings as $binding)
@@ -213,11 +232,206 @@ function sed_plugin_add($hook_bindings, $name, $title, $is_module = false)
 			'part' => $binding['part'],
 			'title' => $title,
 			'file' => $path . $binding['part'] . '.php',
-			'order' => isset($binding['order']) ? (int) $binding['order'] : COT_PLUGIN_DEFAULT_ORDER,
-			'active' => 1
+			'order' => $binding['order'],
+			'active' => 1,
+			'module' => (int) $is_module
 		);
 	}
 	return sed_sql_insert($db_plugins, $insert_rows, 'pl_');
+}
+
+/**
+ * Makes a new plugin install. Messages emitted during installation can be received
+ * through standard Cotonti messages interface.
+ * @param string $name Plugin code
+ * @param bool $is_module TRUE if it is a module, otherwise a plugin is considered
+ * @return bool Operation status
+ */
+function sed_plugin_install($name, $is_module = false)
+{
+	global $cfg, $L, $cot_error, $cot_cache, $usr, $db_auth, $db_users;
+	
+	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
+
+	// Check setup file and tags
+	$setup_file = $path . "/$name.setup.php";
+	if (!file_exists($setup_file))
+	{
+		sed_error('ext_setup_not_found');
+		return false;
+	}
+	$info = sed_infoget($setup_file, 'COT_EXT');
+	if ($info === false)
+	{
+		sed_error('ext_invalid_format');
+		return false;
+	}
+
+	// Check dependencies
+	if (!empty($info['Requires_modules']))
+	{
+		$req_mods = explode(',', $info['Requires_modules']);
+		array_walk($req_mods, 'trim');
+		foreach ($req_mods as $req_mod)
+		{
+			if (!sed_module_installed($req_mod))
+			{
+				sed_error(sed_rc('ext_req_module_missing', array('name' => $req_mod)));
+			}
+		}
+	}
+	if (!empty($info['Requires_plugins']))
+	{
+		$req_plugs = explode(',', $info['Requires_plugins']);
+		array_walk($req_plugs, 'trim');
+		foreach ($req_mods as $req_plug)
+		{
+			if (!sed_plugin_installed($req_plug))
+			{
+				sed_error(sed_rc('ext_req_plugin_missing', array('name' => $req_plug)));
+			}
+		}
+	}
+	if ($cot_error)
+	{
+		return false;
+	}
+
+	// Install hook parts and bindings
+	$hook_bindings = array();
+	$dp = opendir($path);
+	while ($f = readdir($dp))
+	{
+		if (preg_match("#^$name.([\w\.]+).php$#", $f, $mt))
+		{
+			$part_info = sed_infoget($path . "/$f", 'COT_EXT');
+			if ($part_info)
+			{
+				if (empty($info['Hooks']))
+				{
+					$hooks = $is_module ? 'module' : 'standalone';
+				}
+				else
+				{
+					$hooks = explode(',', $part_info['Hooks']);
+					array_walk($hooks, 'trim');
+				}
+				foreach ($hooks as $hook)
+				{
+					$hook_bindings[] = array(
+						'part' => $mt[1],
+						'hook' => $hook,
+						'order' => isset($part_info['Order']) ? (int) $part_info['Order'] : COT_PLUGIN_DEFAULT_ORDER
+					);
+				}
+			}
+		}
+	}
+	closedir($dp);
+	$bindings_cnt = sed_plugin_add($hook_bindings, $name, $info['Name'], $is_module);
+	sed_message(sed_rc('ext_bindings_installed', array('cnt' => $bindings_cnt)));
+
+	// Install config
+	$info_cfg = sed_infoget($setup_file, 'COT_EXT_CONFIG');
+	$options = sed_config_parse($info_cfg, $is_module);
+	if (sed_config_add($options, $name, $is_module))
+	{
+		sed_message('ext_config_installed');
+	}
+	else
+	{
+		sed_error('ext_config_error');
+	}
+
+	// Install auth
+	$insert_rows = array();
+	foreach ($sed_groups as $k => $v)
+	{
+		if ($v['id'] == COT_GROUP_GUESTS || $v['id'] == COT_GROUP_INACTIVE)
+		{
+			$ins_auth = sed_auth_getvalue($info['Auth_guests']);
+			$ins_lock = sed_auth_getvalue($info['Lock_guests']);
+
+			if ($ins_auth > 128 || $ins_lock < 128)
+			{
+				$ins_auth = ($ins_auth > 127) ? $ins_auth - 128 : $ins_auth;
+				$ins_lock = 128;
+			}
+		}
+		elseif ($v['id'] == COT_GROUP_BANNED)
+		{
+			$ins_auth = 0;
+			$ins_lock = 255;
+		}
+		elseif ($v['id'] == COT_GROUP_SUPERADMINS)
+		{
+			$ins_auth = 255;
+			$ins_lock = 255;
+		}
+		else
+		{
+			$ins_auth = sed_auth_getvalue($info['Auth_members']);
+			$ins_lock = sed_auth_getvalue($info['Lock_members']);
+		}
+
+		if ($is_module)
+		{
+			$insert_rows[] = array(
+				'groupid' => $v['id'],
+				'code' => $name,
+				'option' => 'a',
+				'rights' => $ins_auth,
+				'rights_lock' => $ins_lock,
+				'setbyuserid' => $usr['id']
+			);
+		}
+		else
+		{
+			$insert_rows[] = array(
+				'groupid' => $v['id'],
+				'code' => 'plug',
+				'option' => $name,
+				'rights' => $ins_auth,
+				'rights_lock' => $ins_lock,
+				'setbyuserid' => $usr['id']
+			);
+		}
+	}
+	if (sed_sql_insert($db_auth, $insert_rows, 'auth_'))
+	{
+		sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
+		sed_message('ext_auth_installed');
+	}
+
+	// Run handler part
+	if (file_exists(sed_incfile('install', $name, !$is_module)))
+	{
+		$ret = include sed_incfile('install', $name, !$is_module);
+		if ($ret !== false)
+		{
+			sed_message(sed_rc('ext_executed_install', array('ret' => $ret)));
+		}
+	}
+
+	// Cleanup
+	sed_auth_reorder();
+	$cot_cache && $cot_cache->db->remove('sed_plugins', 'system');
+
+	return !$cot_error;
+}
+
+/**
+ * Checks if plugin is already installed
+ *
+ * @param string $name Plugin code
+ * @return bool
+ */
+function sed_plugin_installed($name)
+{
+	global $db_plugins, $cfg;
+
+	$cnt = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code = '$name'"));
+	return $cnt > 0 && file_exists($cfg['plugins_dir'] . '/' . $name);
 }
 
 /**
@@ -278,5 +492,25 @@ function sed_plugin_resume($name, $binding_id = 0)
 	}
 
 	return sed_sql_update($db_plugins, $condition, array('active' => 1), 'pl_');
+}
+
+/**
+ * Uninstalls the plugin and removes all its data
+ * @param string $name Plugin name
+ * @param bool $is_module TRUE if it is a module, otherwise a plugin is considered
+ */
+function sed_plugin_uninstall($name, $is_module = false)
+{
+
+}
+
+/**
+ * Updates plugin data keeping its configuration
+ * @param string $name Plugin name
+ * @param bool $is_module TRUE if it is a module, otherwise a plugin is considered
+ */
+function sed_plugin_update($name, $is_module = false)
+{
+
 }
 ?>

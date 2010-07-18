@@ -1,13 +1,8 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=cleaner
-Part=main
-File=cleaner
+[BEGIN_COT_EXT]
 Hooks=admin.home
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**

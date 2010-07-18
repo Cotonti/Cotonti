@@ -200,7 +200,7 @@ function sed_generate_usertags($ruser_array, $tag_prefix = '', $emptyname='', $a
 
 			$return_array = array(
 				$tag_prefix.'ID' => $ruser_array['user_id'],
-				$tag_prefix.'PM' => sed_build_pm($ruser_array['user_id']),
+				$tag_prefix.'PM' => function_exists('sed_build_pm') ? sed_build_pm($ruser_array['user_id']) : '',
 				$tag_prefix.'NAME' => sed_build_user($ruser_array['user_id'], htmlspecialchars($ruser_array['user_name'])),
 				$tag_prefix.'NICKNAME' => htmlspecialchars($ruser_array['user_name']),
 				$tag_prefix.'DETAILSLINK' => sed_url('users', 'm=details&id='.$ruser_array['user_id']),

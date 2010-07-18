@@ -400,7 +400,6 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','rss','07','rss_postmaxsymbols',1,'','','','Posts. Cut element description longer than N symbols'),
 ('core','skin','02','forcedefaultskin',3,'0','0','',''),
 ('core','skin','03','homebreadcrumb',3,'0','0','',''),
-('core','skin','04','doctypeid',4,'4','4','',''),
 ('core','skin','06','charset',4,'UTF-8','UTF-8','',''),
 ('core','skin','08','metakeywords',1,'','','',''),
 ('core','skin','08','separator',1,'/','/','',''),
@@ -459,6 +458,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','users','14','ph_maxsize',1,'32000','32000','',''),
 ('core','users','14','ph_maxx',1,'128','128','',''),
 ('core','users','14','ph_maxy',1,'128','128','',''),
+('core','users','21','forcerememberme',3,'0','',''),
 ('core','version','01','revision',0,'','','',''),
 ('plug','cleaner','1','userprune',2,'2','2','0,1,2,3,4,5,6,7','Delete the user accounts not activated within * days (0 to disable).'),
 ('plug','cleaner','2','logprune',2,'15','15','0,1,2,3,7,15,30,60','Delete the log entries older than * days (0 to disable).'),
@@ -799,6 +799,7 @@ CREATE TABLE `sed_plugins` (
   `pl_file` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_order` tinyint(2) unsigned NOT NULL default '10',
   `pl_active` tinyint(1) unsigned NOT NULL default '1',
+  `pl_module` tinyint(1) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY  (`pl_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=42 ;
 

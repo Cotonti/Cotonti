@@ -11,7 +11,8 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once $cfg['system_dir'] . '/tags.php';
+require_once sed_incfile('tags');
+require_once sed_incfile('extrafields');
 
 	/* === Hook - Part1 : Set === FIRST === */
 $news_first_extp = sed_getextplugins('news.first');
@@ -61,11 +62,11 @@ function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlen
 		WHERE ".$where);
 
 	$totalnews = sed_sql_result($sql2, 0, "COUNT(*)");
-	$news_link = sed_news_link($cat, $deftag);
+	$news_link_params = sed_news_link($cat, $deftag, true);
+    $news_link = sed_url('index', $news_link_params);
 	$catd = ((!$deftag || $c != $cat) && !$cfg['plugin']['news']['syncpagination']) ? $cat."d" : "d";
-	// TODO use sed_pagenav()
-	$pagnav = sed_pagination($news_link, $d, $totalnews, $limit, $catd);
-	list($pages_prev, $pages_next) = sed_pagination_pn($news_link, $d, $totalnews, $limit, TRUE, $catd);
+
+	$pagenav = sed_pagenav('index', $news_link_params, $d, $totalnews, $limit, $catd);
 
 	if (file_exists(sed_skinfile($skinfile, true)))
 	{
@@ -211,9 +212,9 @@ function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlen
 
 	$catpath = sed_build_catpath($cat);
 	$news->assign(array(
-		"PAGE_PAGENAV" => $pagnav,
-		"PAGE_PAGEPREV" => $pages_prev,
-		"PAGE_PAGENEXT" => $pages_next,
+		"PAGE_PAGENAV" => $pagenav['main'],
+		"PAGE_PAGEPREV" => $pagenav['prev'],
+		"PAGE_PAGENEXT" => $pagenav['next'],
 		"PAGE_SUBMITNEWPOST" => $submitnewpage,
 		"PAGE_CATTITLE" =>$sed_cat[$cat]['title'],
 		"PAGE_CATPATH" =>$catpath,
@@ -231,7 +232,7 @@ function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlen
 	return ($news->text("NEWS"));
 }
 
-function sed_news_link($maincat, $tag)
+function sed_news_link($maincat, $tag, $ret_params = false)
 {
 	global $c, $cats, $indexcat, $d, $cfg;
 	if ($c != $indexcat)
@@ -252,7 +253,7 @@ function sed_news_link($maincat, $tag)
 			}
 		}
 	}
-	return sed_url('index', $valtext);
+	return $ret_params ? $valtext : sed_url('index', $valtext);
 }
 
 ?>

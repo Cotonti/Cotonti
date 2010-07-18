@@ -422,5 +422,10 @@ INSERT INTO sed_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order,
 INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`)
 	VALUES ('core','skin','21','msg_separate',3,'0','0','','Show messages separately for each source');
 
-/* r1237 Authentication/security improvement */
-ALTER TABLE `sed_users` CHANGE COLUMN `user_hashsalt` `user_token` char(16) collate utf8_unicode_ci NOT NULL default '';
+/* r1252 Plugin extension */
+ALTER TABLE sed_plugins ADD COLUMN `pl_module` tinyint(1) unsigned NOT NULL
+    DEFAULT 0;
+
+/* r1252 Obsolete entries removal */
+DELETE FROM sed_config WHERE config_owner = 'core' AND config_cat = 'skin' AND
+    config_name = 'doctypeid';

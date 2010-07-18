@@ -78,7 +78,6 @@ else
 			$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
 		}
 	}
-	$cfg['doctype'] = sed_setdoctype($cfg['doctypeid']);
 	$cfg['css'] = $cfg['defaultskin'];
 
 	$cot_cache && $cot_cache->db->store('cot_cfg', $cfg, 'system');
@@ -138,6 +137,7 @@ if (!$sed_plugins)
 		{
 			$sed_plugins[$row['pl_hook']][] = $row;
 		}
+        sed_sql_freeresult($sql);
 	}
 	$cot_cache && $cot_cache->db->store('sed_plugins', $sed_plugins, 'system');
 }
@@ -146,6 +146,24 @@ if (!is_array($sed_urltrans))
 {
 	sed_load_urltrans();
 	$cot_cache && $cot_cache->db->store('sed_urltrans', $sed_urltrans, 'system', 1200);
+}
+
+if (!$sed_modules)
+{
+    $sql = sed_sql_query("SELECT ct_code, ct_title FROM $db_core
+		WHERE ct_state = 1 AND ct_lock = 0");
+	if (sed_sql_numrows($sql) > 0)
+	{
+		while ($row = sed_sql_fetcharray($sql))
+		{
+			$sed_modules[$row['ct_code']] = array(
+                'code' => $row['ct_code'],
+                'title' => $row['ct_title']
+            );
+		}
+        sed_sql_freeresult($sql);
+	}
+	$cot_cache && $cot_cache->db->store('sed_modules', $sed_modules, 'system');
 }
 
 /* ======== Gzip and output filtering ======== */
@@ -163,24 +181,27 @@ ob_start('sed_outputfilters');
 
 /* ======== Check the banlist ======== */
 
-$userip = explode('.', $usr['ip']);
-$ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";
-
-$sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
-
-if (sed_sql_numrows($sql) > 0)
+if (!$cfg['disablebanlist'])
 {
-	$row = sed_sql_fetcharray($sql);
-	if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
+	$userip = explode('.', $usr['ip']);
+	$ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";
+
+	$sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
+
+	if (sed_sql_numrows($sql) > 0)
 	{
-		$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
-	}
-	else
-	{
-		// TODO internationalize this
-		$disp = 'Your IP is banned.<br />Reason: '.$row['banlist_reason'].'<br />Until: ';
-		$disp .= ($row['banlist_expire'] > 0) ? @date($cfg['dateformat'], $row['banlist_expire']).' GMT' : 'Never expire.';
-		sed_diefatal($disp);
+		$row = sed_sql_fetcharray($sql);
+		if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
+		{
+			$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
+		}
+		else
+		{
+			// TODO internationalize this
+			$disp = 'Your IP is banned.<br />Reason: '.$row['banlist_reason'].'<br />Until: ';
+			$disp .= ($row['banlist_expire'] > 0) ? @date($cfg['dateformat'], $row['banlist_expire']).' GMT' : 'Never expire.';
+			sed_diefatal($disp);
+		}
 	}
 }
 
@@ -354,7 +375,7 @@ if ($cfg['maintenance'])
 
 /* ======== Zone variables ======== */
 
-$z_tmp = sed_import('z', 'G',' ALP', 32);
+$z_tmp = sed_import('z', 'G', 'ALP', 32);
 $z = empty($z_tmp) ? $z : $z_tmp;
 $m = sed_import('m', 'G', 'ALP', 24);
 $n = sed_import('n', 'G', 'ALP', 24);
@@ -548,32 +569,6 @@ $extp = sed_getextplugins('global');
 foreach ($extp as $pl)
 {
 	include $pl;
-}
-
-/* ======== Pre-loads ======== */
-
-if ($cfg['parser_custom'])
-{
-	include_once $cfg['system_dir'].'/parser.php';
-}
-
-if (!$cfg['parser_disable'])
-{
-	if (!is_array($sed_smilies))
-	{
-		sed_load_smilies();
-		$cot_cache && $cot_cache->db->store('sed_smilies', $sed_smilies, 'system');
-	}
-	if (!is_array($sed_bbcodes))
-	{
-		sed_bbcode_load();
-		if ($cot_cache)
-		{
-			$cot_cache->db->store('sed_bbcodes', $sed_bbcodes, 'system');
-			$cot_cache->db->store('sed_bbcodes_post', $sed_bbcodes_post, 'system');
-			$cot_cache->db->store('sed_bbcode_containers', $sed_bbcode_containers, 'system');
-		}
-	}
 }
 
 ?>

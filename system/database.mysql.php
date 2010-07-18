@@ -263,7 +263,7 @@ function sed_sql_query($query, $conn = null)
  * @param mixed $col Column name or index (null-based)
  * @return mixed
  */
-function sed_sql_result($res, $row, $col)
+function sed_sql_result($res, $row = 0, $col = 0)
 {
 	return mysql_result($res, $row, $col);
 }
