@@ -483,7 +483,8 @@ class Page_cache
 		}
 		if (count($args) > 0)
 		{
-			$filename .= '_' . md5(serialize($args));
+			$hashkey = serialize($args);
+			$filename .= '_' . md5($hashkey) . sha1($hashkey);
 		}
 		if (!empty($this->ext))
 		{
@@ -491,9 +492,42 @@ class Page_cache
 		}
 		if (file_exists($filename))
 		{
-			global $cfg;
-			header('Content-Type: text/html; charset=' . $cfg['charset']);
-			readgzfile($filename);
+			// Browser cache headers
+            $filemtime = filemtime($filename);
+			$etag = md5($filename . filesize($filename) . $filemtime);
+			if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))
+            {
+                // convert to unix timestamp
+                $if_modified_since = strtotime(preg_replace('#;.*$#', '',
+                    stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE'])));
+            }
+            else
+            {
+                $if_modified_since = false;
+            }
+			$if_none_match = stripslashes($_SERVER['HTTP_IF_NONE_MATCH']);
+			if ($if_none_match == $etag
+				&& $if_modified_since >= $filemtime)
+			{
+				header('HTTP/1.1 304 Not Modified');
+				header("Etag: $etag");
+				exit;
+			}
+			header('Last-Modified: ' . gmdate('D, d M Y H:i:s \G\M\T', $filemtime));
+			header("ETag: $etag");
+			header('Expires: Mon, 01 Apr 1974 00:00:00 GMT');
+			header('Cache-Control: must-revalidate, proxy-revalidate');
+			// Page output
+			header('Content-Type: text/html; charset=UTF-8');
+			if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE)
+			{
+				readgzfile($filename);
+			}
+			else
+			{
+				header('Content-Encoding: gzip');
+				echo file_get_contents($filename);
+			}
 			exit;
 		}
 		$this->filename = $filename;
@@ -504,11 +538,14 @@ class Page_cache
 	 */
 	public function write()
 	{
-		if (!file_exists($this->dir . '/' . $this->path))
+		if (!empty($this->filename))
 		{
-			mkdir($this->dir . '/' . $this->path, $this->perms, true);
+			if (!file_exists($this->dir . '/' . $this->path))
+			{
+				mkdir($this->dir . '/' . $this->path, $this->perms, true);
+			}
+			file_put_contents($this->filename, gzencode(sed_outputfilters(ob_get_contents())));
 		}
-		file_put_contents($this->filename, gzencode(ob_get_contents()));
 	}
 
 	/**
@@ -1153,48 +1190,13 @@ class Cache
 	private $selected_drv = '';
 
 	/**
-	 * Initializes controller components
+	 * Initializes Page cache for early page caching
 	 */
 	public function  __construct()
 	{
-		global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $z, $usr;
-		
-		$this->disk = new File_cache($cfg['cache_dir']);
-		$this->db = new MySQL_cache();
-		$cot_cache_autoload = is_array($cot_cache_autoload)
-			? array_merge(array('system', 'cot', $z), $cot_cache_autoload)
-				: array('system', 'cot', $z);
-		$this->db->get_all($cot_cache_autoload);
-
-		$cfg['cache_drv'] .= '_driver';
-		if (in_array($cfg['cache_drv'], $cot_cache_drivers))
-		{
-			$selected = $cfg['cache_drv'];
-		}
-		elseif (count($cot_cache_drivers) > 0)
-		{
-			$selected = $cot_cache_drivers[0];
-		}
-		if (!empty($selected))
-		{
-			$this->mem = new $selected();
-			$this->selected_drv = $selected;
-		}
-		else
-		{
-			$this->mem = false;
-		}
+		global $cfg;
 
 		$this->page = new Page_cache($cfg['cache_dir'], $cfg['dir_perms']);
-
-		if (!$cot_cache_bindings)
-		{
-			$this->resync_bindings();
-		}
-		else
-		{
-			unset($cot_cache_bindings);
-		}
 	}
 
 	/**
@@ -1230,6 +1232,49 @@ class Cache
 			break;
 		}
 	}
+
+    /**
+     * Initializes the rest Cache components when the sources are available
+     */
+    public function init()
+    {
+        global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $z, $usr;
+
+        $this->disk = new File_cache($cfg['cache_dir']);
+		$this->db = new MySQL_cache();
+		$cot_cache_autoload = is_array($cot_cache_autoload)
+			? array_merge(array('system', 'cot', $z), $cot_cache_autoload)
+				: array('system', 'cot', $z);
+		$this->db->get_all($cot_cache_autoload);
+
+		$cfg['cache_drv'] .= '_driver';
+		if (in_array($cfg['cache_drv'], $cot_cache_drivers))
+		{
+			$selected = $cfg['cache_drv'];
+		}
+		elseif (count($cot_cache_drivers) > 0)
+		{
+			$selected = $cot_cache_drivers[0];
+		}
+		if (!empty($selected))
+		{
+			$this->mem = new $selected();
+			$this->selected_drv = $selected;
+		}
+		else
+		{
+			$this->mem = false;
+		}
+
+        if (!$cot_cache_bindings)
+		{
+			$this->resync_bindings();
+		}
+		else
+		{
+			unset($cot_cache_bindings);
+		}
+    }
 
 	/**
 	 * Rereads bindings from database

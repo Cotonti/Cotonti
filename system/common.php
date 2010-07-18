@@ -38,23 +38,38 @@ register_shutdown_function('sed_shutdown');
 $sys['day'] = @date('Y-m-d');
 $sys['now'] = time();
 $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
+$site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
+$sys['site_id'] = $site_id;
+
+session_start();
+
+/* =========== Early page cache ==========*/
+if ($cfg['cache'] && !$cfg['devmode'])
+{
+	require_once $cfg['system_dir'].'/cache.php';
+	$cot_cache = new Cache();
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$site_id]) && empty($_SESSION[$site_id]))
+	{
+		$cache_z = ($z == 'list') ? 'page' : $z;
+		if ($cfg["cache_$cache_z"])
+		{
+			$cot_cache->page->init($cache_z, $cfg['defaultskin']);
+			$cot_cache->page->read();
+		}
+	}
+}
+else
+{
+	$cot_cache = false;
+}
+
 /* ======== Connect to the SQL DB======== */
 
 require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
 $sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
-/* ======== Cache Subsystem ======== */
-
-if ($cfg['cache'])
-{
-	require_once $cfg['system_dir'].'/cache.php';
-	$cot_cache = new Cache();
-}
-else
-{
-	$cot_cache = false;
-}
+$cot_cache && $cot_cache->init();
 
 /* ======== Configuration settings ======== */
 
@@ -250,11 +265,6 @@ $usr['lastlog'] = 0;
 $usr['timezone'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
-
-$site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
-$sys['site_id'] = $site_id;
-
-session_start();
 
 if (!defined('SED_MESSAGE'))
 {

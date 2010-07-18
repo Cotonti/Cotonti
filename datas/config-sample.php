@@ -27,6 +27,7 @@ $cfg['mysqlcollate'] = 'utf8_unicode_ci';
 // ========================
 
 $cfg['mainurl'] = 'http://localhost';
+$cfg['site_id'] = 'Some unique string specific to your site';
 
 // ========================
 // Default skin and default language
@@ -47,6 +48,10 @@ $cfg['cache_drv'] = '';			// Cache driver name to use on your server (if availab
 								// Possible values: APC, eAccelerator, Memcache, Xcache
 $cfg['xtpl_cache'] = TRUE;		// Enable XTemplate structure disk cache
 $cfg['html_cleanup'] = FALSE;	// Wipe extra spaces and breaks from HTML to get smaller footprint
+
+$cfg['cache_index'] = FALSE;    // Static page cache for guests on index
+$cfg['cache_page'] = FALSE;     // Static page cache for guests on pages and categories
+$cfg['cache_forums'] = FALSE;   // Static page cache for guests on forums
 
 // ========================
 // Default built-in time zone settings

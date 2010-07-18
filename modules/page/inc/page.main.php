@@ -46,14 +46,6 @@ $cat = $sed_cat[$pag['page_cat']];
 $sys['sublocation'] = $pag['page_title'];
 sed_online_update();
 
-$cot_path = 'page/' . str_replace('.', '/', $cat['path']) . '/' . (empty($al) ? $id : $al);
-$cot_ignore_params = array('id', 'al');
-if ($cot_cache && $usr['id'] === 0 && $cfg['cache_page'])
-{
-	$cot_cache->page->init($cot_path, $skin, $cot_ignore_params);
-	$cot_cache->page->read();
-}
-
 $pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600);
 $pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_begin'] = @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600);

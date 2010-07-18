@@ -55,6 +55,11 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 					{
 						$val = false;
 					}
+                    elseif ($key == 'site_id')
+                    {
+                        $val = sed_unique(32);
+                    }
+
 					if (is_bool($val))
 					{
 						$val = $val ? 'TRUE' : 'FALSE';

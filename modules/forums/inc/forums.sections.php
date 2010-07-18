@@ -41,14 +41,6 @@ $sys['sublocation'] = $L['Home'];
 
 sed_online_update();
 
-$cot_path = 'forums';
-$cot_ignore_params = array();
-if ($cot_cache && $usr['id'] === 0 && $cfg['cache_forums'])
-{
-	$cot_cache->page->init($cot_path, $skin, $cot_ignore_params);
-	$cot_cache->page->read();
-}
-
 /* === Hook === */
 $extp = sed_getextplugins('forums.sections.first');
 foreach ($extp as $pl)

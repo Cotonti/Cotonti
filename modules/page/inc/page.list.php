@@ -68,14 +68,6 @@ $dc = empty($dc) ? 0 : (int) $dc;
 $sys['sublocation'] = $cat['title'];
 sed_online_update();
 
-$cot_path = 'page/' . str_replace('.', '/', $cat['path']);
-$cot_ignore_params = array('c');
-if ($cot_cache && $usr['id'] === 0 && $cfg['cache_page'])
-{
-	$cot_cache->page->init($cot_path, $skin, $cot_ignore_params);
-	$cot_cache->page->read();
-}
-
 $cfg['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['maxrowsperpage'] * 2 : $cfg['maxrowsperpage'];
 
 $join_ratings_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
