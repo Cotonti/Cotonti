@@ -26,6 +26,14 @@ if ($cfg['new_install'])
 }
 
 require_once $cfg['system_dir'].'/functions.php';
+$z = sed_import('z', 'G', 'ALP');
+$z = empty($z) ? 'index' : $z;
+$e = sed_import('e', 'G', 'ALP');
+$o = sed_import('o', 'G', 'ALP');
+$r = (isset($_POST['r'])) ? sed_import('r','P','ALP') : sed_import('r','G','ALP');
+$c1 = sed_import('c1', 'G', 'ALP');
+$c2 = sed_import('c2', 'G', 'ALP');
+
 require_once sed_incfile('common');
 if ($cfg['enable_obsolete'])
 {
@@ -34,20 +42,7 @@ if ($cfg['enable_obsolete'])
 require_once sed_incfile('xtemplate');
 require_once sed_incfile('parser'); // TODO module-dependent parser selection/loading
 
-$z = sed_import('z', 'G', 'ALP');
-$e = sed_import('e', 'G', 'ALP');
-$o = sed_import('o', 'G', 'ALP');
-$r = (isset($_POST['r'])) ? sed_import('r','P','ALP') : sed_import('r','G','ALP');
-$c1 = sed_import('c1', 'G', 'ALP');
-$c2 = sed_import('c2', 'G', 'ALP');
-
-if (!empty($z))
-{
-	define('COT_MODULE', true);
-	$extname = $z;
-	$exttype = 'module';
-}
-elseif (!empty($e))
+if (!empty($e))
 {
 	define('SED_PLUG', true);
 	$extname = $e;
@@ -84,7 +79,6 @@ elseif (!empty($r))
 }
 else
 {
-	$z = 'index';
 	define('COT_MODULE', true);
 	$extname = $z;
 	$exttype = 'module';

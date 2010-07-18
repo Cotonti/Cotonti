@@ -73,8 +73,8 @@ $max_age = 5 * 365 * 24 * 60 * 60; // ~5 years
 $expires = $file_last_modified + $max_age;
 header('Expires: '.date('r', $expires));
 
-$etag = dechex($file_last_modified);
-header('ETag: '.$etag);
+$etag = md5(realpath($src_uri) . filesize($src_uri) . filemtime($src_uri));
+header('ETag: ' . $etag);
 
 $cache_control = 'must-revalidate, proxy-revalidate, max-age='.$max_age.', s-maxage='.$max_age;
 header('Cache-Control: '.$cache_control);

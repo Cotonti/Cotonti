@@ -138,14 +138,6 @@ sed_online_update();
 
 $cat = $sed_forums_str[$s];
 
-$cot_path = 'forums/' . $s. '/' . $q; // TODO subforums
-$cot_ignore_params = array('p', 'id', 'q');
-if ($cot_cache && $usr['id'] === 0 && $cfg['cache_forums'])
-{
-	$cot_cache->page->init($cot_path, $skin, $cot_ignore_params);
-	$cot_cache->page->read();
-}
-
 if ($a=='newpost')
 {
 	sed_shield_protect();

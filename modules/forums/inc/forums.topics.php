@@ -107,14 +107,6 @@ sed_online_update();
 
 $cat = $sed_forums_str[$fs_id];
 
-$cot_path = 'forums/' . $fs_id;
-$cot_ignore_params = array('p', 'id', 'q', 's');
-if ($cot_cache && $usr['id'] === 0 && $cfg['cache_forums'])
-{
-	$cot_cache->page->init($cot_path, $skin, $cot_ignore_params);
-	$cot_cache->page->read();
-}
-
 if ($usr['isadmin'] && !empty($q) && !empty($a))
 {
 	switch($a)

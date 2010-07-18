@@ -80,6 +80,9 @@ if ($_POST['submit'])
 			$file_contents = preg_replace('/^\$cfg\[\'mainurl\'\]\s*=\s*\'.*?\';/m', '$cfg[\'mainurl\'] = \''.$cfg['mainurl'].'\';', $file_contents);
 			$file_contents = preg_replace('/^\$cfg\[\'new_install\'\]\s*=\s*.*?;/m', '$cfg[\'new_install\'] = FALSE;', $file_contents);
 
+            $new_site_id = sed_unique(32);
+            $file_contents = preg_replace('/^\$cfg\[\'site_id\'\]\s*=\s*\'.*?\';/m', '$cfg[\'site_id\'] = \''.$new_site_id.'\';', $file_contents);
+
 			//echo"<pre>".$file_contents."</pre>";
 			file_put_contents($file['config'], "<?PHP".$file_contents);
 
