@@ -170,7 +170,8 @@ if (!SED_AJAX)
 		$out['guest_username'] = $R['form_guest_username'];
 		$out['guest_password'] = $R['form_guest_password'];
 		$out['guest_register'] = sed_rc_link(sed_url('users', 'm=register'), $L['Register']);
-		$out['guest_cookiettl'] = $R['form_guest_remember'];
+		$out['guest_cookiettl'] = $cfg['forcerememberme'] ? $R['form_guest_remember_forced']
+			: $R['form_guest_remember'];
 
 		$t->assign(array (
 			'HEADER_GUEST_SEND' => sed_url('users', 'm=auth&a=check&' . $sys['url_redirect']),

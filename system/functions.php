@@ -297,7 +297,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			break;
 
 		default:
-			sed_diefatal('Unknown filter for a variable : <br />Var = '.$cv_v.'<br />Filter = '.$filter.' ?');
+			sed_diefatal('Unknown filter for a variable : <br />Var = '.$cv_v.'<br />Filter = &quot;'.$filter.'&quot; ?');
 			break;
 	}
 
@@ -1519,6 +1519,37 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 }
 
 /**
+ * Outputs standard javascript
+ *
+ * @param string $more Extra javascript
+ * @return string
+ */
+function sed_javascript($more='')
+{
+	// TODO replace this function with JS/CSS proxy
+	global $cfg, $lang;
+	if ($cfg['jquery'])
+	{
+		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
+		if ($cfg['turnajax'])
+		{
+			$result .= '<script type="text/javascript" src="js/jquery.history.js"></script>';
+			$more .= empty($more) ? 'ajaxEnabled = true;' : "\najaxEnabled = true;";
+		}
+	}
+	$result .= '<script type="text/javascript" src="js/base.js"></script>';
+	if (!empty($more))
+	{
+	$result .= '<script type="text/javascript">
+//<![CDATA[
+'.$more.'
+//]]>
+</script>';
+	}
+	return $result;
+}
+
+/**
  * Returns skin selection dropdown
  *
  * @param string $check Seleced value
@@ -1798,7 +1829,7 @@ function sed_incfile($api, $extension = false, $is_plugin = false)
 		}
 		else
 		{
-			return $cfg['modules_dir']."/$extension/$extension.$api.php";
+			return $cfg['modules_dir']."/$extension/inc/$extension.$api.php";
 		}
 	}
 	else
@@ -2370,14 +2401,16 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
  * 'pet=rabbit&food=carrots'. Or omit the second parameter in case all substitutions are globals.
  *
  * @global array $R Resource strings
+ * @global array $L Language strings, support resource sequences too
  * @param string $name Name of the $R item or a resource string itself
  * @param array $params Associative array of arguments or a parameter string
  * @return string Assembled resource string
  */
 function sed_rc($name, $params = array())
 {
-	global $R;
-	$res = isset($R[$name]) ? $R[$name] : $name;
+	global $R, $L;
+	$res = isset($R[$name]) ? $R[$name]
+		: isset($L[$name]) ? $L[$name] : $name;
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
 	if (preg_match_all('#\{\$(.+?)\}#', $res, $matches, PREG_SET_ORDER))
 	{
@@ -2772,9 +2805,9 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	// Append query string if needed
 	if (!empty($args))
 	{
-		$qs = '?';
-		$sep = $header ? '&' : '&amp;';
-		$sep_len = strlen($sep);
+        $sep = $header ? '&' : '&amp;';
+        $sep_len = strlen($sep);
+		$qs = mb_strpos($url, '?') !== false ? $sep : '?';
 		foreach($args as $key => $val)
 		{
 			// Exclude static parameters that are not used in format,

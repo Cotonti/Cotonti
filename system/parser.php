@@ -875,4 +875,23 @@ function sed_wraptext($str,$wrap=128)
 	return($str);
 }
 
+if (!$cfg['parser_disable'])
+{
+	if (!is_array($sed_smilies))
+	{
+		sed_load_smilies();
+		$cot_cache && $cot_cache->db->store('sed_smilies', $sed_smilies, 'system');
+	}
+	if (!is_array($sed_bbcodes))
+	{
+		sed_bbcode_load();
+		if ($cot_cache)
+		{
+			$cot_cache->db->store('sed_bbcodes', $sed_bbcodes, 'system');
+			$cot_cache->db->store('sed_bbcodes_post', $sed_bbcodes_post, 'system');
+			$cot_cache->db->store('sed_bbcode_containers', $sed_bbcode_containers, 'system');
+		}
+	}
+}
+
 ?>

@@ -75,37 +75,6 @@ function sed_htmlmetas()
 }
 
 /**
- * Outputs standard javascript
- *
- * @param string $more Extra javascript
- * @return string
- */
-function sed_javascript($more='')
-{
-	// TODO replace this function with JS/CSS proxy
-	global $cfg, $lang;
-	if ($cfg['jquery'])
-	{
-		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
-		if ($cfg['turnajax'])
-		{
-			$result .= '<script type="text/javascript" src="js/jquery.history.js"></script>';
-			$more .= empty($more) ? 'ajaxEnabled = true;' : "\najaxEnabled = true;";
-		}
-	}
-	$result .= '<script type="text/javascript" src="js/base.js"></script>';
-	if (!empty($more))
-	{
-	$result .= '<script type="text/javascript">
-//<![CDATA[
-'.$more.'
-//]]>
-</script>';
-	}
-	return $result;
-}
-
-/**
  * Renders page navigation bar
  *
  * @deprecated Siena 0.7.0 - 23.01.2010, use sed_pagenav() instead

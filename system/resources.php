@@ -55,6 +55,7 @@ $R['code_basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
 $R['code_noindex'] = '<meta name="robots" content="noindex" />';
 
 $R['form_guest_remember'] = '<input type="checkbox" name="rremember" />';
+$R['form_guest_remember_forced'] = '<input type="checkbox" name="rremember" checked="checked" disabled="disabled" />';
 $R['form_guest_password'] = '<input type="password" name="rpassword" size="12" maxlength="32" />';
 $R['form_guest_username'] = '<input type="text" name="rusername" size="12" maxlength="100" />';
 

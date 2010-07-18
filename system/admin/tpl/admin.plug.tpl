@@ -260,16 +260,7 @@
 <!-- BEGIN: EDIT -->
 <!-- BEGIN: INSTALL -->
 		<h2>{PHP.L.adm_pluginstall_msg01}</h2>
-		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS1}</p>
-<!-- IF !{PHP.ko} -->
-		<h3>{PHP.L.adm_pluginstall_msg02}</h3>
-		<p>{PHP.L.Found}: {ADMIN_PLUG_EDIT_AFFECTEDROWS2}</p>
-<!-- ENDIF -->
-		<h3>{PHP.L.adm_pluginstall_msg03}</h3>
-<!-- IF {PHP.extplugin_info_exists} -->
-		<p>{PHP.L.Found}: 1</p>
-		<h3>{PHP.L.adm_pluginstall_msg04}</h3>
-<!-- ENDIF -->
+
 <!-- BEGIN: ROW_PARTS_FOUND -->
 		<p>&ndash; {PHP.L.Found}: {ADMIN_PLUG_EDIT_INSTALL_ROW_PARTS_FOUND_F}</p>
 <!-- END: ROW_PARTS_FOUND -->

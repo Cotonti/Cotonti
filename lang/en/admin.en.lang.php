@@ -352,6 +352,7 @@ $L['cfg_av_maxx'] = array('Avatar, maximum width', 'Default: 64 pixels');
 $L['cfg_av_maxy'] = array('Avatar, maximum height', 'Default: 64 pixels');
 $L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from registering new accounts');
 $L['cfg_disablewhosonline'] = array('Disable who\'s online', 'Automatically enabled if you turn on the Shield');
+$L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
 $L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
 $L['cfg_ph_maxsize'] = array('Photo, maximum file size', 'Default: 8000 bytes');
 $L['cfg_ph_maxx'] = array('Photo, maximum width', 'Default: 96 pixels');
@@ -365,6 +366,19 @@ $L['cfg_user_email_noprotection'] = array('Disable password protection of e-mail
 $L['cfg_useremailchange'] = array('Allow users to change their e-mail address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
 $L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300 chars');
+
+/**
+ * Extension management
+ */
+$L['ext_auth_installed'] = 'Installed authorization defaults';
+$L['ext_bindings_installed'] = 'Installed {$cnt} hook bindings';
+$L['ext_config_error'] = 'Configuration setup failed';
+$L['ext_config_installed'] = 'Installed configuration';
+$L['ext_executed_install'] = 'Executed install handler part. {$ret}';
+$L['ext_invalid_format'] = 'This is not a valid Cotonti >= 0.9 extension. Please contact the developer';
+$L['ext_req_module_missing'] = 'Required module is not installed: {$name}';
+$L['ext_req_plugin_missing'] = 'Required plugin is not installed: {$name}';
+$L['ext_setup_not_found'] = 'Setup file is not found';
 
 /**
   * Page Section
