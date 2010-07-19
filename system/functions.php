@@ -573,20 +573,22 @@ function sed_outputfilters($output)
 /**
  * Sends standard HTTP headers and disables browser cache
  *
+ * @param string $content_type Content-Type value (without charset)
+ * @param string $status_line HTTP status line containing response code
  * @return bool
  */
-function sed_sendheaders()
+function sed_sendheaders($content_type = 'text/html', $status_line = 'HTTP/1.1 200 OK')
 {
 	global $cfg;
-	$contenttype = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? 'application/xhtml+xml' : 'text/html';
-	header('Expires: Fri, Apr 01 1974 00:00:00 GMT');
+    header($status_line);
+	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
-	header('Content-Type: '.$contenttype.'; charset='.$cfg['charset']);
+	header('Content-Type: '.$content_type.'; charset='.$cfg['charset']);
 	header('Cache-Control: no-store,no-cache,must-revalidate');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
 	header('Pragma: no-cache');
-	return(TRUE);
+	return TRUE;
 }
 
 /**

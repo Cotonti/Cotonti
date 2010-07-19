@@ -71,7 +71,7 @@ function sed_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		}
 		$build_forum = sed_build_forums($row['ft_sectionid'], sed_cutstring($forum_cats[$row['ft_sectionid']]['fs_title'], 24), sed_cutstring($forum_cats[$row['ft_sectionid']]['fs_category'], 16));
 		$build_forum_full = sed_build_forums($row['ft_sectionid'], sed_cutstring($forum_cats[$row['ft_sectionid']]['fs_title'], 24), sed_cutstring($forum_cats[$row['ft_sectionid']]['fs_category'], 16), true, array($forum_cats[$row['ft_sectionid']]['fs_masterid'], $forum_cats[$row['ft_sectionid']]['fs_mastername']));
-		$build_forum_short = "<a href=\"".sed_url('forums', 'm=topics&s='.$row['ft_sectionid']).'">'.htmlspecialchars(sed_cutstring(stripslashes($forum_cats[$row['ft_sectionid']]['fs_title']), 16))."</a>";
+		$build_forum_short = sed_rc_link(sed_url('forums', 'm=topics&s='.$row['ft_sectionid']), htmlspecialchars(sed_cutstring(stripslashes($forum_cats[$row['ft_sectionid']]['fs_title']), 16)));
 
 		if ($row['ft_mode'] == 1)
 		{
@@ -80,7 +80,7 @@ function sed_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 		if ($row['ft_movedto'] > 0)
 		{
-			$row['ft_url'] = "forums.php?m=posts&amp;q=".$row['ft_movedto'];
+			$row['ft_url'] = sed_url('forums', 'm=posts&q='.$row['ft_movedto']);
 			$row['ft_icon'] = $R['frm_icon_posts_moved'];
 			$row['ft_title'] = $L['Moved'].": ".$row['ft_title'];
 			$row['ft_lastpostername'] = "&nbsp;";
@@ -88,13 +88,15 @@ function sed_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_replycount'] = "&nbsp;";
 			$row['ft_viewcount'] = "&nbsp;";
 			$row['ft_lastpostername'] = "&nbsp;";
-			$row['ft_lastposturl'] = "<a href=\"forums.php?m=posts&amp;q=".$row['ft_movedto']."&amp;n=last#bottom\">{$R['icon_follow']}</a> ".$L['Moved'];
+			$row['ft_lastposturl'] = sed_rc_link(sed_url('forums', 'm=posts&q='.$row['ft_movedto'].'&n=last', '#bottom'), $R['icon_follow']) . ' '. $L['Moved'];
 			$row['ft_timago'] = sed_build_timegap($row['ft_updated'], $sys['now_offset']);
 		}
 		else
 		{
-			$row['ft_url'] = "forums.php?m=posts&amp;q=".$row['ft_id'];
-			$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=unread#unread\">{$R['icon_unread']}</a>" : "<a href=\"forums.php?m=posts&amp;q=".$row['ft_id']."&amp;n=last#bottom\">{$R['icon_follow']}</a>";
+			$row['ft_url'] = sed_url('forums', 'm=posts&q=' . $row['ft_id']);
+			$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ?
+                sed_rc_link(sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=unread', '#unread'), $R['icon_unread'])
+                : sed_rc_link(sed_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom'), $R['icon_follow']);
 			$row['ft_lastposturl'] .= @date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
 			$row['ft_timago'] = sed_build_timegap($row['ft_updated'], $sys['now_offset']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;

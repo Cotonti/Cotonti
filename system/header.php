@@ -40,7 +40,7 @@ else
 	$out['fulltitle'] = sed_title('title_header', $title_params);
 }
 
-$out['meta_contenttype'] = ($cfg['doctypeid'] > 2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
+$out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
 $out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = $cfg['charset'];
 $out['meta_desc'] = htmlspecialchars($out['desc']);
@@ -48,7 +48,7 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] = $out['head'];
 
-sed_sendheaders();
+sed_sendheaders($out['meta_contenttype']);
 
 if (!SED_AJAX)
 {
