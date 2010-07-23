@@ -108,6 +108,7 @@ label input			{ vertical-align:middle; }
 .clear	{ clear:both; }
 .lhn	{ line-height:normal; }
 .strong	{ font-weight:bold; }
+.italics{ font-style:italics; }
 
 .small	{ font-size:.9em!important; line-height:1.6em; }
 .large	{ font-size:1.1em!important; }
