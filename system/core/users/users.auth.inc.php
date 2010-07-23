@@ -37,7 +37,10 @@ if ($a=='check')
 	$rpassword = sed_import('rpassword','P','PSW', 16, TRUE);
 	$rcookiettl = sed_import('rcookiettl', 'P', 'INT');
 	$rremember = sed_import('rremember', 'P', 'BOL');
-	if(empty($rremember) && $rcookiettl > 0) $rremember = true;
+	if(empty($rremember) && $rcookiettl > 0 || $cfg['forcerememberme'])
+    {
+        $rremember = true;
+    }
 	$rmdpass  = md5($rpassword);
 
 	$login_param = preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $rusername) ?
