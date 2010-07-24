@@ -301,7 +301,6 @@ $pag['page_begin'] = sed_selectbox_date($pag['page_begin'] + $usr['timezone'] * 
 $pag['page_expire'] = sed_selectbox_date($pag['page_expire'] + $usr['timezone'] * 3600, 'long', '_exp');
 
 $page_form_delete = sed_radiobox(0, 'rpagedelete', array(1, 0), array($L['Yes'], $L['No']));
-$page_form_categories = sed_selectbox_categories($pag['page_cat'], 'rpagecat');
 
 $page_type_options = array('0' => $L['Default'], '1' => 'HTML');
 if ($usr['maingrp'] == 5 && $cfg['allowphp_pages'] && $cfg['allowphp_override'])
@@ -327,7 +326,8 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_ID" => $pag['page_id'],
 	"PAGEEDIT_FORM_STATE" => $pag['page_state'],
 	"PAGEEDIT_FORM_TYPE" => $page_form_type,
-	"PAGEEDIT_FORM_CAT" => $page_form_categories,
+	"PAGEEDIT_FORM_CAT" => sed_selectbox_categories($pag['page_cat'], 'rpagecat'),
+	"PAGEEDIT_FORM_CAT_SHORT" => sed_selectbox_categories($pag['page_cat'], 'rpagecat', $c),
 	"PAGEEDIT_FORM_KEY" => sed_inputbox('text', 'rpagekey', $pag['page_key'], array('size' => '16', 'maxlength' => '16')),
 	"PAGEEDIT_FORM_ALIAS" => sed_inputbox('text', 'rpagealias', $pag['page_alias'], array('size' => '32', 'maxlength' => '255')),
 	"PAGEEDIT_FORM_TITLE" => sed_inputbox('text', 'rpagetitle', $pag['page_title'], array('size' => '64', 'maxlength' => '255')),

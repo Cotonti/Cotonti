@@ -245,7 +245,6 @@ require_once sed_incfile('forms');
 $pageadd_form_file = sed_selectbox($newpagefile, 'newpagefile', range(0, 2),
 	array($L['No'], $L['Yes'], $L['Members_only']), false);
 
-$pageadd_form_categories = sed_selectbox_categories($newpagecat, 'newpagecat', true);
 $newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600, 'long', '_beg');
 $newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600 + 31536000, 'long', '_exp');
 
@@ -259,7 +258,8 @@ $pageadd_array = array(
 	"PAGEADD_SUBTITLE" => $L['pagadd_subtitle'],
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
 	"PAGEADD_FORM_SEND" => sed_url('page', 'm=add&a=add'),
-	"PAGEADD_FORM_CAT" => $pageadd_form_categories,
+	"PAGEADD_FORM_CAT" => sed_selectbox_categories($newpagecat, 'newpagecat'),
+	"PAGEADD_FORM_CAT_SHORT" => sed_selectbox_categories($newpagecat, 'newpagecat', $c),
 	"PAGEADD_FORM_KEY" => sed_inputbox('text', 'newpagekey', $newpagekey, array('size' => '16', 'maxlength' => '16')),
 	"PAGEADD_FORM_ALIAS" => sed_inputbox('text', 'newpagealias', $newpagealias, array('size' => '32', 'maxlength' => '255')),
 	"PAGEADD_FORM_TITLE" => sed_inputbox('text', 'newpagetitle', $newpagetitle, array('size' => '64', 'maxlength' => '255')),

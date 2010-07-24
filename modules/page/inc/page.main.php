@@ -158,6 +158,7 @@ $t->assign(array(
 	"PAGE_BEGIN" => $pag['page_begin'],
 	"PAGE_EXPIRE" => $pag['page_expire'],
 	"PAGE_ALIAS" => $pag['page_alias'],
+	"RAGE_NOTAVAILIBLE" => ($pag['page_begin_noformat'] > $sys['now_offset']) ? $L['pag_notavailable'].sed_build_timegap($sys['now_offset'], $pag['page_begin_noformat']) : '',
 	"PAGE_RATINGS" => $ratings_link,
 	"PAGE_RATINGS_DISPLAY" => $ratings_display
 ));
@@ -202,52 +203,43 @@ if ($usr['isadmin'])
 	));
 }
 
-if ($pag['page_begin_noformat'] > $sys['now_offset'])
+switch($pag['page_type'])
 {
-	$pag['page_text'] = $L['pag_notavailable'].sed_build_timegap($sys['now_offset'], $pag['page_begin_noformat']);
-	$t->assign("PAGE_TEXT", $pag['page_text']);
-}
-else
-{
-	switch($pag['page_type'])
-	{
-		case '1':
-			$t->assign("PAGE_TEXT", $pag['page_text']);
-		break;
+	case '1':
+		$t->assign("PAGE_TEXT", $pag['page_text']);
+	break;
 
-		case '2':
-			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-			{
-				ob_start();
-				eval($pag['page_text']);
-				$t->assign("PAGE_TEXT", ob_get_clean());
-			}
-			else
-			{
-				$t->assign("PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\"."); // TODO - i18n
-			}
-		break;
+	case '2':
+		if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
+		{
+			ob_start();
+			eval($pag['page_text']);
+			$t->assign("PAGE_TEXT", ob_get_clean());
+		}
+		else
+		{
+			$t->assign("PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\"."); // TODO - i18n
+		}
+	break;
 
-		default:
-			if ($cfg['parser_cache'])
+	default:
+		if ($cfg['parser_cache'])
+		{
+			if (empty($pag['page_html']) && !empty($pag['page_text']))
 			{
-				if (empty($pag['page_html']) && !empty($pag['page_text']))
-				{
-					$pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
-					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $id);
-				}
-				$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
-				$t->assign('PAGE_TEXT', $html);
+				$pag['page_html'] = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
+				sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag['page_html'])."' WHERE page_id = " . $id);
 			}
-			else
-			{
-				$text = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
-				$text = sed_post_parse($text, 'pages');
-				$t->assign('PAGE_TEXT', $text);
-			}
-		break;
-	}
-
+			$html = $cfg['parsebbcodepages'] ? sed_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
+			$t->assign('PAGE_TEXT', $html);
+		}
+		else
+		{
+			$text = sed_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
+			$text = sed_post_parse($text, 'pages');
+			$t->assign('PAGE_TEXT', $text);
+		}
+	break;
 }
 
 $pag['page_file'] = intval($pag['page_file']);
