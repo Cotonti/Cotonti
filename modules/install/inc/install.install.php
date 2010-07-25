@@ -121,6 +121,9 @@ else
 	$rskin = $skin;
 	$rtheme = $theme;
 	$rlang = $cfg['defaultlang'];
+    // Try guess mainurl
+    $cfg['mainurl'] = (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false ? 'http://' : 'https://') 
+        . $_SERVER['HTTP_HOST'] . preg_replace('#/$#','', dirname($_SERVER['REQUEST_URI']));
 }
 
 //Build CHMOD/Exists/Version data
