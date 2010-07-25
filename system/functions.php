@@ -2412,7 +2412,7 @@ function sed_rc($name, $params = array())
 {
 	global $R, $L;
 	$res = isset($R[$name]) ? $R[$name]
-		: isset($L[$name]) ? $L[$name] : $name;
+		: (isset($L[$name]) ? $L[$name] : $name);
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
 	if (preg_match_all('#\{\$(.+?)\}#', $res, $matches, PREG_SET_ORDER))
 	{

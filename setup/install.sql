@@ -458,7 +458,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','users','14','ph_maxsize',1,'32000','32000','',''),
 ('core','users','14','ph_maxx',1,'128','128','',''),
 ('core','users','14','ph_maxy',1,'128','128','',''),
-('core','users','21','forcerememberme',3,'0','',''),
+('core','users','21','forcerememberme',3,'0','0','',''),
 ('core','version','01','revision',0,'','','',''),
 ('plug','cleaner','1','userprune',2,'2','2','0,1,2,3,4,5,6,7','Delete the user accounts not activated within * days (0 to disable).'),
 ('plug','cleaner','2','logprune',2,'15','15','0,1,2,3,7,15,30,60','Delete the log entries older than * days (0 to disable).'),

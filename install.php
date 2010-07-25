@@ -55,6 +55,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 require_once sed_langfile('main', 'core');
 
+require_once sed_incfile('extensions');
 require_once sed_incfile('xtemplate');
 require_once sed_langfile('install', 'module');
 require_once sed_incfile('functions', 'admin');

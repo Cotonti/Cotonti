@@ -125,6 +125,7 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '')
 {
 	global $R, $cfg;
+
 	if (!is_array($values))
 	{
 		$values = explode(',', $values);

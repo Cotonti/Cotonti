@@ -41,6 +41,9 @@ $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 $site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
 $sys['site_id'] = $site_id;
 
+$z = sed_import('z', 'G', 'ALP');
+$z = empty($z) ? 'index' : $z;
+
 session_start();
 
 /* =========== Early page cache ==========*/
