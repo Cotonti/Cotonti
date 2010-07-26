@@ -323,7 +323,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','menus','10','topline',0,'','','',''),
 ('core','menus','10','banner',0,'','','',''),
 ('core','menus','10','bottomline',0,'','','',''),
-('core','menus','15','menu1',0,'<ul>\n<li><a href=\"index.php\">Home</a></li>\n<li><a href=\"forums.php\">Forums</a></li>\n<li><a href=\"list.php?c=articles\">Articles</a></li>\n<li><a href=\"plug.php?e=search\">Search</a></li>\n</ul>','<ul>\n<li><a href=\"index.php\">Home</a></li>\n<li><a href=\"forums.php\">Forums</a></li>\n<li><a href=\"list.php?c=articles\">Articles</a></li>\n<li><a href=\"plug.php?e=search\">Search</a></li>\n</ul>','',''),
+('core','menus','15','menu1',0,'<ul>\n<li><a href=\"index.php\">Home</a></li>\n<li><a href=\"index.php?z=forums\">Forums</a></li>\n<li><a href=\"index.php?z=page&amp;c=articles\">Articles</a></li>\n<li><a href=\"index.php?e=search\">Search</a></li>\n</ul>','<ul>\n<li><a href=\"index.php\">Home</a></li>\n<li><a href=\"index.php?z=forums\">Forums</a></li>\n<li><a href=\"index.php?z=page&c=articles\">Articles</a></li>\n<li><a href=\"index.php?e=search\">Search</a></li>\n</ul>','',''),
 ('core','menus','15','menu2',0,'','','',''),
 ('core','menus','15','menu3',0,'','','',''),
 ('core','menus','15','menu4',0,'','','',''),

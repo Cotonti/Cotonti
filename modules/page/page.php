@@ -25,6 +25,7 @@ $location = 'Forums';
 
 // Additional API requirements
 require_once sed_incfile('extrafields');
+require_once sed_incfile('functions', 'users');
 
 // Mode choice
 if (!in_array($m, array('add', 'edit')))

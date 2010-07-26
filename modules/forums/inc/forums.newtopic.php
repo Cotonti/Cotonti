@@ -230,8 +230,9 @@ if ($a=='newtopic')
 	}
 }
 
-$pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
-$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
+// FIXME PFS dependency
+//$pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
+//$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
 $post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.htmlspecialchars($newmsg).'</textarea>';
 

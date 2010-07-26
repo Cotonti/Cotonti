@@ -204,8 +204,9 @@ if ($row = sed_sql_fetcharray($sql))
 	}
 }
 
-$pfs = sed_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
-$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rtext", $L['SFS']) : '';
+// FIXME PFS dependency
+//$pfs = sed_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
+//$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rtext", $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('editpost', 'rtext');
 $post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.htmlspecialchars($fp_text).'</textarea>';
 

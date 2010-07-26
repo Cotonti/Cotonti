@@ -313,10 +313,11 @@ $page_form_type = sed_selectbox($pag['page_type'], 'rpagetype', array_keys($page
 $page_form_file = sed_selectbox($pag['page_file'], 'rpagefile', range(0, 2),
 	array($L['No'], $L['Yes'], $L['Members_only']), false);
 
-$pfs = sed_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
-$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
-$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';
-$pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'update', 'rpageurl', $L['SFS']) : '';
+// FIXME PFS dependency
+//$pfs = sed_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
+//$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
+//$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';
+//$pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'update', 'rpageurl', $L['SFS']) : '';
 
 
 $pageedit_array = array(
@@ -349,27 +350,28 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_DELETE" => $page_form_delete
 );
 
+// FIXME PFS dependency
 // PFS tags
-$tplskin = file_get_contents($mskin);
-preg_match_all("#\{(PAGEEDIT_FORM_PFS_([^\}]*?)_USER)\}#", $tplskin, $match);
-$numtags = count($match[0]);
-for($i = 0; $i < $numtags; $i++)
-{
-	$tag = $match[1][$i];
-	$field = strtolower($match[2][$i]);
-	$pfs_js = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpage$field", $L['Mypfs']) : '';
-	$pageedit_array[$tag] = $pfs_js;
-}
-unset($match);
-preg_match_all("#\{(PAGEEDIT_FORM_PFS_([^\}]*?)_SITE)\}#", $tplskin, $match);
-$numtags = count($match[0]);
-for($i = 0; $i < $numtags; $i++)
-{
-	$tag = $match[1][$i];
-	$field = strtolower($match[2][$i]);
-	$pfs_js = (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, "update", "rpage$field", $L['SFS']) : '';
-	$pageedit_array[$tag] = $pfs_js;
-}
+//$tplskin = file_get_contents($mskin);
+//preg_match_all("#\{(PAGEEDIT_FORM_PFS_([^\}]*?)_USER)\}#", $tplskin, $match);
+//$numtags = count($match[0]);
+//for($i = 0; $i < $numtags; $i++)
+//{
+//	$tag = $match[1][$i];
+//	$field = strtolower($match[2][$i]);
+//	$pfs_js = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "update", "rpage$field", $L['Mypfs']) : '';
+//	$pageedit_array[$tag] = $pfs_js;
+//}
+//unset($match);
+//preg_match_all("#\{(PAGEEDIT_FORM_PFS_([^\}]*?)_SITE)\}#", $tplskin, $match);
+//$numtags = count($match[0]);
+//for($i = 0; $i < $numtags; $i++)
+//{
+//	$tag = $match[1][$i];
+//	$field = strtolower($match[2][$i]);
+//	$pfs_js = (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, "update", "rpage$field", $L['SFS']) : '';
+//	$pageedit_array[$tag] = $pfs_js;
+//}
 $t->assign($pageedit_array);
 
 // Extra fields

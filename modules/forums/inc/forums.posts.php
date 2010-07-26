@@ -776,8 +776,9 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		}
 	}
 
-	$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
-	$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
+    // FIXME PFS dependency
+	//$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
+	//$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
 
 	$post_mark = "<a name=\"np\" id=\"np\"></a>";
 	$post_main = $post_mark.'<textarea class="editor" name="newmsg" rows="16" cols="56">'.htmlspecialchars($newmsg).'</textarea>';

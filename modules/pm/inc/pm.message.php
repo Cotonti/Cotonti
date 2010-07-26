@@ -225,8 +225,9 @@ if ($usr['auth_write'])
 	}
 	$newpmtext = (!empty($q)) ? '[quote]'.htmlspecialchars($row['pm_text']).'[/quote]' : '';
 	$onclick = "insertText(document, 'newlink', 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
-	$pfs = sed_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
-	$pfs .= (sed_auth('pfs', 'a', 'A')) ? ' &nbsp; '.sed_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
+    // FIXME PFS dependency
+//	$pfs = sed_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
+//	$pfs .= (sed_auth('pfs', 'a', 'A')) ? ' &nbsp; '.sed_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
 	$t->assign(array(
 		"PM_QUOTE" => sed_rc_link(sed_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$d), $L['Quote'], array('onclick' => $onclick)),
 		"PM_FORM_SEND" => sed_url('pm', 'm=send&a=send&to='.$to),
