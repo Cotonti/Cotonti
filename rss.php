@@ -36,7 +36,7 @@ $c = sed_import('c', 'G', 'ALP');
 $id = sed_import('id', 'G', 'INT');
 if ($c=="")	$c = "news";
 
-header('Content-type: text/xml');
+header('Content-type: text/xml; charset=' . $cfg['charset']);
 $sys['now'] = time();
 
 if ($usr['id'] === 0)
