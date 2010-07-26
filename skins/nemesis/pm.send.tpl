@@ -48,7 +48,7 @@
 	<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$("#newpmrecipient").autocomplete("pm.php?a=getusers&m=send", {multiple: true, minChars: 3});
+			$("#newpmrecipient").autocomplete("index.php?z=pm&a=getusers&m=send", {multiple: true, minChars: 3});
 		});
 	</script>
 

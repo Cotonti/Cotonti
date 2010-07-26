@@ -5,15 +5,15 @@
 	<div id="footer" class="clear">
 		<ul class="column">
 			<li><strong>Stay tuned!</strong></li>
-			<li>{PHP.R.icon_rss} <a href="rss.php" title="{PHP.L.RSS_Feeds}">RSS</a></li>
-			<li>{PHP.R.icon_rss} <a href="rss.php?c=forums" title="{PHP.L.RSS_Feeds} {PHP.cfg.separator} {PHP.L.Forums}"> RSS (<span class="lower">{PHP.L.Forums}</span>)</a></li>
+			<li>{PHP.R.icon_rss} <a href="index.php?z=rss" title="{PHP.L.RSS_Feeds}">RSS</a></li>
+			<li>{PHP.R.icon_rss} <a href="index.php?z=rss&amp;c=forums" title="{PHP.L.RSS_Feeds} {PHP.cfg.separator} {PHP.L.Forums}"> RSS (<span class="lower">{PHP.L.Forums}</span>)</a></li>
 			<li>{PHP.R.icon_twitter} <a href="http://twitter.com/seditio" title="{PHP.L.Follow_Twitter}">{PHP.L.Follow_Twitter}</a></li>
 		</ul>
 		<ul class="column">
 			<li><strong>{PHP.L.Navigation}</strong></li>
 			<li><a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">{PHP.L.Home}</a></li>
-			<li><a href="forums.php" title="{PHP.L.Forums}">{PHP.L.Forums}</a></li>
-			<li><a href="list.php?c=news" title="{PHP.L.News}">{PHP.L.News}</a></li>
+			<li><a href="index.php?z=forums" title="{PHP.L.Forums}">{PHP.L.Forums}</a></li>
+			<li><a href="index.php?z=page&amp;c=news" title="{PHP.L.News}">{PHP.L.News}</a></li>
 			<li><a href="#" title="{PHP.L.Contact}">{PHP.L.Contact}</a></li>
 			<li><a href="#" title="{PHP.L.Sitemap}">{PHP.L.Sitemap}</a></li>
 		</ul>
@@ -29,15 +29,15 @@
 			<!-- IF {PHP.usr.profile.user_avatar} --><li class="floatleft marginright10"><img src="{PHP.usr.profile.user_avatar}" alt="{PHP.L.Avatar}" /></li><!-- ELSE --><li class="floatleft marginright10"><img src="datas/defaultav/blank.png" alt="{PHP.L.Avatar}" /></li><!-- ENDIF -->
 			<li><a href="users.php" title="{PHP.L.Users}">{PHP.L.Users}</a></li>
 			<li><a href="users.php?m=profile" title="{PHP.L.Profile}">{PHP.L.Profile}</a></li>
-			<li><a href="pm.php" title="{PHP.L.Private_messages}">{PHP.L.Private_Messages}</a></li>
-			<li><a href="pfs.php" title="{PHP.L.PFS}">{PHP.L.PFS}</a></li>
+			<li><a href="index.php?z=pm" title="{PHP.L.Private_messages}">{PHP.L.Private_Messages}</a></li>
+			<li><a href="index.php?z=pfs" title="{PHP.L.PFS}">{PHP.L.PFS}</a></li>
 			<li>{PHP.out.loginout}</li>
 <!-- END: USER -->
 		</ul>
 	</div>
 
 	<div id="magnifier">
-		<form id="search" action="plug.php?e=search" method="post">
+		<form id="search" action="index.php?e=search" method="post">
 			<p>
 			<input type="hidden" name="a" value="search" />
 			<input type="text" name="sq" id="s1" value="{PHP.L.Search}..." onblur="if(this.value=='') this.value='{PHP.L.Search}...';" onfocus="if(this.value=='{PHP.L.Search}...') this.value='';" />

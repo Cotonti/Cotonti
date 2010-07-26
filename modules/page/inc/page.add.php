@@ -248,10 +248,11 @@ $pageadd_form_file = sed_selectbox($newpagefile, 'newpagefile', range(0, 2),
 $newpage_form_begin = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600, 'long', '_beg');
 $newpage_form_expire = sed_selectbox_date($sys['now_offset']+$usr['timezone'] * 3600 + 31536000, 'long', '_exp');
 
-$pfs = sed_build_pfs($usr['id'], 'newpage', 'newpagetext',$L['Mypfs']);
-$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'newpagetext', $L['SFS']) : '';
-$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], 'newpage', 'newpageurl', $L['Mypfs']) : '';
-$pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'newpage', 'newpageurl', $L['SFS']) : '';
+// FIXME PFS dependency
+//$pfs = sed_build_pfs($usr['id'], 'newpage', 'newpagetext',$L['Mypfs']);
+//$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newpage', 'newpagetext', $L['SFS']) : '';
+//$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], 'newpage', 'newpageurl', $L['Mypfs']) : '';
+//$pfs_form_url_myfiles .= (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, 'newpage', 'newpageurl', $L['SFS']) : '';
 
 $pageadd_array = array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
@@ -288,27 +289,28 @@ if ($usr['isadmin'])
 		array_values($page_type_options), false);
 }
 
+// FIXME PFS dependency
 // PFS tags
-$tplskin = file_get_contents($mskin);
-preg_match_all("#\{(PAGEADD_FORM_PFS_([^\}]*?)_USER)\}#", $tplskin, $match);
-$numtags = count($match[0]);
-for ($i = 0; $i < $numtags; $i++)
-{
-	$tag = $match[1][$i];
-	$field = strtolower($match[2][$i]);
-	$pfs_js = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "newpage", "newpage$field", $L['Mypfs']) : '';
-	$pageadd_array[$tag] = $pfs_js;
-}
-unset($match);
-preg_match_all("#\{(PAGEADD_FORM_PFS_([^\}]*?)_SITE)\}#", $tplskin, $match);
-$numtags = count($match[0]);
-for ($i = 0; $i < $numtags; $i++)
-{
-	$tag = $match[1][$i];
-	$field = strtolower($match[2][$i]);
-	$pfs_js = (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, "newpage", "newpage$field", $L['SFS']) : '';
-	$pageadd_array[$tag] = $pfs_js;
-}
+//$tplskin = file_get_contents($mskin);
+//preg_match_all("#\{(PAGEADD_FORM_PFS_([^\}]*?)_USER)\}#", $tplskin, $match);
+//$numtags = count($match[0]);
+//for ($i = 0; $i < $numtags; $i++)
+//{
+//	$tag = $match[1][$i];
+//	$field = strtolower($match[2][$i]);
+//	$pfs_js = (!$cfg['disable_pfs']) ? sed_build_pfs($usr['id'], "newpage", "newpage$field", $L['Mypfs']) : '';
+//	$pageadd_array[$tag] = $pfs_js;
+//}
+//unset($match);
+//preg_match_all("#\{(PAGEADD_FORM_PFS_([^\}]*?)_SITE)\}#", $tplskin, $match);
+//$numtags = count($match[0]);
+//for ($i = 0; $i < $numtags; $i++)
+//{
+//	$tag = $match[1][$i];
+//	$field = strtolower($match[2][$i]);
+//	$pfs_js = (sed_auth('pfs', 'a', 'A')) ? ' '.sed_build_pfs(0, "newpage", "newpage$field", $L['SFS']) : '';
+//	$pageadd_array[$tag] = $pfs_js;
+//}
 $t->assign($pageadd_array);
 
 // Extra fields

@@ -10,7 +10,7 @@
 <script type="text/javascript">
 //<![CDATA[
 function help(rcode,c1,c2) {
-	window.open("plug.php?h="+rcode+"&amp;c1="+c1+"&amp;c2="+c2,"Help","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=480,height=512,left=512,top=16");
+	// obsolete
 }
 function addthumb(gfile,c1,c2) {
 	insertText(opener.document, "{PFS_C1}", "{PFS_C2}", {PFS_ADDTHUMB});{PFS_WINCLOSE}
@@ -22,7 +22,7 @@ function addfile(gfile,c1,c2) {
 	insertText(opener.document, "{PFS_C1}", "{PFS_C2}", {PFS_ADDFILE});{PFS_WINCLOSE}
 }
 function picture(url,sx,sy) {
-	window.open("pfs.php?m=view&amp;id="+url,"Picture","toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width="+sx+",height="+sy+",left=0,top=0");
+	window.open("index.php?z=pfs&m=view&amp;id="+url,"Picture","toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width="+sx+",height="+sy+",left=0,top=0");
 }
 //]]>
 </script>

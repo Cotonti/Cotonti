@@ -19,7 +19,7 @@
 			</div>
 			<div class="block">
 				<h2 class="online">{PHP.skinlang.index.Online}</h2>
-				<p><a href="plug.php?e=whosonline">{PHP.out.whosonline}</a><!-- IF {PHP.out.whosonline_reg_list} -->:<br />{PHP.out.whosonline_reg_list}<!-- ENDIF --></p>
+				<p><a href="index.php?e=whosonline">{PHP.out.whosonline}</a><!-- IF {PHP.out.whosonline_reg_list} -->:<br />{PHP.out.whosonline_reg_list}<!-- ENDIF --></p>
 			</div>
 		</div>
 

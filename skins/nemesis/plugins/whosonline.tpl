@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 
 		<div class="block">
-			<h2 class="users"><a href="plug.php?e=whosonline">{WHOSONlINE_TITLE}</a></h2>
+			<h2 class="users"><a href="index.php?e=whosonline">{WHOSONlINE_TITLE}</a></h2>
 
 <!-- BEGIN: NOT_EMPTY -->
 			<table class="cells">
