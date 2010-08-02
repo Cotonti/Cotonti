@@ -129,7 +129,7 @@ $L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to p
 $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
 $L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
 $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
-$L['cfg_turnajax'] = array('Turn Ajax On', 'Works only if jQuery is enabled');
+$L['cfg_turnajax'] = array('Enable Ajax', 'Works only if jQuery is enabled');
 
 /**
  * Config Section
