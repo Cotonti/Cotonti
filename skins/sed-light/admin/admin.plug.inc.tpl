@@ -77,18 +77,18 @@
 				<tr>
 					<td><a href="{ADMIN_PLUG_INSTALL_URL}"{ADMIN_PLUG_INSTALL_URL_AJAX}>{PHP.L.adm_opt_installall}</a></td>
 					<td>{PHP.L.adm_opt_installall_explain}
-<!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} -->
+<!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} > 0 -->
 						<br />
 						<small><a href="{ADMIN_PLUG_INSTALL_KO_URL}"{ADMIN_PLUG_INSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_setoption_warn}</a></small>
 <!-- ENDIF -->
 					</td>
 				</tr>
-<!-- IF {PHP.isinstalled} -->
+<!-- IF {PHP.isinstalled} > 0 -->
 				<tr>
 					<td><a href="{ADMIN_PLUG_UNINSTALL}"{ADMIN_PLUG_UNINSTALL_AJAX}>{PHP.L.adm_opt_uninstallall}</a></td>
 					<td>{PHP.L.adm_opt_uninstallall_explain}
 <!-- ENDIF -->
-<!-- IF {PHP.isinstalled} AND {PHP.totalconfig} -->
+<!-- IF {PHP.isinstalled} > 0 AND {PHP.totalconfig} > 0 -->
 						<br />
 						<small><a href="{ADMIN_PLUG_UNINSTALL_KO_URL}"{ADMIN_PLUG_UNINSTALL_KO_URL_AJAX}>{PHP.L.adm_opt_uninstall_warn}</a></small>
 <!-- ENDIF -->
