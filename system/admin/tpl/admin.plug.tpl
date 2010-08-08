@@ -87,12 +87,12 @@
 			</td>
 			<td class="width80">
 				{PHP.L.adm_opt_installall_explain}
-<!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} -->
+<!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} > 0 -->
 				<p class="small"><a href="{ADMIN_PLUG_INSTALL_KO_URL}" class="ajax">{PHP.L.adm_opt_setoption_warn}</a></p>
 <!-- ENDIF -->
 			</td>
 		</tr>
-<!-- IF {PHP.isinstalled} -->
+<!-- IF {PHP.isinstalled} > 0 -->
 		<tr>
 			<td>
 				<a href="{ADMIN_PLUG_UNINSTALL}" class="ajax">{PHP.L.adm_opt_uninstallall}</a>
@@ -100,7 +100,7 @@
 			<td>
 				{PHP.L.adm_opt_uninstallall_explain}
 <!-- ENDIF -->
-<!-- IF {PHP.isinstalled} AND {PHP.totalconfig} -->
+<!-- IF {PHP.isinstalled} > 0 AND {PHP.totalconfig} > 0 -->
 				<p class="small"><a href="{ADMIN_PLUG_UNINSTALL_KO_URL}" class="ajax">{PHP.L.adm_opt_uninstall_warn}</a></p>
 <!-- ENDIF -->
 <!-- IF {PHP.isinstalled} -->
