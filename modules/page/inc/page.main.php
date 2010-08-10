@@ -46,10 +46,7 @@ $cat = $sed_cat[$pag['page_cat']];
 $sys['sublocation'] = $pag['page_title'];
 sed_online_update();
 
-$pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600);
 $pag['page_begin_noformat'] = $pag['page_begin'];
-$pag['page_begin'] = @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600);
-$pag['page_expire'] = @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600);
 $pag['page_tab'] = (empty($pg)) ? 0 : $pg;
 $pag['page_pageurl'] = (empty($al)) ? sed_url('page', 'id='.$id) : sed_url('page', 'al='.$al);
 
@@ -154,9 +151,9 @@ $t->assign(array(
 	"PAGE_DESC" => $pag['page_desc'],
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-	"PAGE_DATE" => $pag['page_date'],
-	"PAGE_BEGIN" => $pag['page_begin'],
-	"PAGE_EXPIRE" => $pag['page_expire'],
+	"PAGE_DATE" => @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600),
+	"PAGE_BEGIN" => @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600),
+	"PAGE_EXPIRE" => @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600),
 	"PAGE_ALIAS" => $pag['page_alias'],
 	"RAGE_NOTAVAILIBLE" => ($pag['page_begin_noformat'] > $sys['now_offset']) ? $L['pag_notavailable'].sed_build_timegap($sys['now_offset'], $pag['page_begin_noformat']) : '',
 	"PAGE_RATINGS" => $ratings_link,
