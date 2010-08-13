@@ -76,10 +76,11 @@ require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate(sed_skinfile('polls'));
 
-if (!empty($error_string))
+if (sed_check_messages())
 {
-	$t->assign("POLLS_EXTRATEXT", $error_string);
-	$t->parse("MAIN.POLLS_EXTRA");
+	$t->assign('POLLS_EXTRATEXT', sed_implode_messages());
+	$t->parse('MAIN.POLLS_EXTRA');
+	sed_clear_messages();
 }
 elseif ((int)$id > 0)
 {

@@ -138,12 +138,18 @@ if($a == 'save')
 			// Default rule doesn't need any rewrite rules
 			continue;
 		}
+        $has_callbacks = false;
 		if(preg_match('#\{[\w_]+\(\)\}#', $ut_format[$i]))
 		{
 			// Rule with callback, requires custom rewrite
-			$error_string .= $L['adm_urls_callbacks'] . ': ' . htmlspecialchars($ut_format[$i]) . '<br />';
+			sed_message($L['adm_urls_callbacks'] . ': ' . htmlspecialchars($ut_format[$i]), 'warning');
+            $has_callbacks = true;
 			continue;
 		}
+        if ($has_callbacks)
+        {
+            sed_message('adm_urls_errors');
+        }
 		// Remove unsets
 		$ut_format[$i] = preg_replace('#\{\!\$.+?\}#', '', $ut_format[$i]);
 		// Set some defaults
@@ -302,17 +308,12 @@ if($a == 'save')
 		'ADMIN_URLS_HTA' => $hta
 	));
 	$t->parse('MAIN.HTA');
-
-	if(!empty($error_string))
-	{
-		$adminwarnings = $error_string . $L['adm_urls_errors'];
-	}
 }
 
 // Check urltrans.dat
 if(!is_writeable('./datas/urltrans.dat'))
 {
-	$adminwarnings .= $L['adm_urls_error_dat'];
+	sed_error('adm_urls_error_dat');
 }
 
 // Get list of valid areas
@@ -370,7 +371,12 @@ fclose($fp);
 
 $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : false;
 
-$is_adminwarnings = isset($adminwarnings);
+// Error and message reporting
+if (sed_check_messages())
+{
+	$adminwarnings = sed_implode_messages();
+	sed_clear_messages();
+}
 
 $t->assign(array(
 	'ADMIN_URLS_II' => $ii,

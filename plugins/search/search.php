@@ -189,8 +189,14 @@ if (!empty($sq))
 {
 	$words = explode(' ', $sq);
 	$sqlsearch = '%'.implode('%', $words).'%';
-	$error_string .= (mb_strlen($sq) < $cfg['plugin']['search']['minsigns']) ? $L['plu_querytooshort'].$R['code_error_separator'] : '';
-	$error_string .= (count($words) > $cfg['plugin']['search']['maxwords']) ? $L['plu_toomanywords'].' '.$cfg['plugin']['search']['maxwords'].$R['code_error_separator'] : '';
+	if (mb_strlen($sq) < $cfg['plugin']['search']['minsigns'])
+	{
+		sed_error($L['plu_querytooshort'].$R['code_error_separator'], '');
+	}
+	if (count($words) > $cfg['plugin']['search']['maxwords'])
+	{
+		sed_error($L['plu_toomanywords'].' '.$cfg['plugin']['search']['maxwords'].$R['code_error_separator']);
+	}
 	// Users LIST
 	$rsearch['set']['user'] = trim($rsearch['set']['user']);
 	if (!empty($rsearch['set']['user']))
@@ -211,11 +217,14 @@ if (!empty($sq))
 		{
 			$touser_ids[] = $row['user_id'];
 		}
-		$error_string .= ($totalusers == 0) ? $L['plu_usernotexist'].$R['code_error_separator'] : '';
-		$touser = ($totalusers > 0 && empty($error_string)) ? 'IN ('.implode(',', $touser_ids).')' : '';
+		if ($totalusers == 0)
+		{
+			sed_error($L['plu_usernotexist'].$R['code_error_separator'], 'rsuser');
+		}
+		$touser = ($totalusers > 0 && !$cot_error) ? 'IN ('.implode(',', $touser_ids).')' : '';
 	}
 
-	if (($tab == 'pag' || empty($tab)) && !$cfg['disable_page'] && $cfg['plugin']['search']['pagesearch'] && empty($error_string))
+	if (($tab == 'pag' || empty($tab)) && !$cfg['disable_page'] && $cfg['plugin']['search']['pagesearch'] && !$cot_error)
 	{
 		$where = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
 			"AND page_cat IN ('".sed_sql_prep(implode("','", $rsearch['pag']['sub']))."')" : "AND page_cat IN ('".implode("','", $pag_catauth)."')";
@@ -266,7 +275,7 @@ if (!empty($sq))
 			$t->parse('MAIN.RESULTS.PAGES');
 		}
 	}
-	if (($tab == 'frm' || empty($tab)) && !$cfg['disable_forums'] && $cfg['plugin']['search']['forumsearch'] && empty($error_string))
+	if (($tab == 'frm' || empty($tab)) && !$cfg['disable_forums'] && $cfg['plugin']['search']['forumsearch'] && !$cot_error)
 	{
 		$where = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
 			"AND s.fs_id IN ('".sed_sql_prep(implode("','", $rsearch['frm']['sub']))."')" : "AND s.fs_id IN ('".implode("','", $frm_catauth)."')";
@@ -319,8 +328,11 @@ if (!empty($sq))
 	}
 	/* ===== */
 
-	$error_string .= (array_sum($totalitems) < 1) ? $L['plu_noneresult'].$R['code_error_separator'] : '';
-	if (empty($error_string))
+	if (array_sum($totalitems) < 1)
+	{
+		sed_error($L['plu_noneresult'].$R['code_error_separator']);
+	}
+	if (!$cot_error)
 	{
 		$t->parse('MAIN.RESULTS');
 	}
@@ -347,7 +359,7 @@ $t->assign(array(
 	'PLUGIN_PAGEPREV' => $pagenav['prev'],
 	'PLUGIN_PAGENEXT' => $pagenav['next'],
 	'PLUGIN_PAGENAV' => $pagenav['main'],
-	'PLUGIN_ERROR' => $error_string
+	'PLUGIN_ERROR' => sed_check_messages() ? sed_implode_messages() : ''
 ));
 
 /* === Hook === */

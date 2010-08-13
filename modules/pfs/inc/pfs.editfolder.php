@@ -166,7 +166,7 @@ if ($standalone)
 
 $t->assign(array(
 	'PFS_TITLE' => $title,
-	'PFS_ERRORS' => $error_string,
+	'PFS_ERRORS' => sed_check_messages() ? sed_implode_messages() : '',
 	'PFS_ACTION' => sed_url('pfs', 'm=editfolder&a=update&f=' . $pff_id . '&' . $more),
 	'PFF_FOLDER' => sed_selectbox_folders($userid, '', $row['pff_parentid'], 'rparentid'),
 	'PFF_TITLE' => htmlspecialchars($pff_title),

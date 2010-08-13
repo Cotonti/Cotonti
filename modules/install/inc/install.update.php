@@ -41,7 +41,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 {
 	list($old_cfg, $old_db) = cot_get_config($file['config']);
 	list($new_cfg, $new_db) = cot_get_config($file['config_sample']);
-	if (count($new_cfg) > count($old_cfg) || count($new_db) > count($old_db))
+	if (count($new_cfg) > count($old_cfg) || count(array_diff($new_db, $old_db)) > 0)
 	{
 		// Add new config options
 		$delta = '';
@@ -76,7 +76,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 				}
 			}
 		}
-		if (count($new_db) > count($old_db))
+		if (count(array_diff($new_db, $old_db)) > 0)
 		{
 			foreach ($new_db as $key => $val)
 			{

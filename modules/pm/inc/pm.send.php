@@ -57,8 +57,14 @@ elseif ($a == 'send')
 	$newpmrecipient = sed_import('newpmrecipient', 'P', 'TXT');
 	$fromstate = (sed_import('fromstate', 'P', 'INT') == 0) ? 0 : 3;
 
-	$error_string .= (mb_strlen($newpmtext) < 2) ? $L['pm_bodytooshort'].'<br />' : '';
-	$error_string .= (mb_strlen($newpmtext) > $cfg['pm_maxsize']) ? $L['pm_bodytoolong'].'<br />' : '';
+	if (mb_strlen($newpmtext) < 2)
+	{
+		sed_error('pm_bodytooshort', 'newpmtext');
+	}
+	if (mb_strlen($newpmtext) > $cfg['pm_maxsize'])
+	{
+		sed_error('pm_bodytoolong', 'newpmtext');
+	}
 	$newpmtitle .= (mb_strlen($newpmtitle) < 2) ? ' . . . ' : '';
 	$newpmhtml = ($cfg['parser_cache']) ? sed_sql_prep(sed_parse(htmlspecialchars($newpmtext))) : '';
 	/* === Hook === */
@@ -73,7 +79,7 @@ elseif ($a == 'send')
 	if (!empty($id))			// edit message
 
 	{
-		if (empty($error_string))
+		if (!$cot_error)
 		{
 			$sql = sed_sql_query("UPDATE $db_pm SET
 				pm_title = '".sed_sql_prep($newpmtitle)."', pm_text = '".sed_sql_prep($newpmtext)."',
@@ -116,19 +122,28 @@ elseif ($a == 'send')
 				$touser_ids[] = $row['user_id'];
 				$touser_names[] = htmlspecialchars($row['user_name']);
 			}
-			$error_string .= ($totalrecipients < $touser_req ) ? $L['pm_wrongname']."<br />" : '';
-			$error_string .= (!$usr['isadmin'] && $totalrecipients > 10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
+			if ($totalrecipients < $touser_req )
+			{
+				sed_error('pm_wrongname', 'newpmrecipient');
+			}
+			if (!$usr['isadmin'] && $totalrecipients > 10)
+			{
+				sed_error(sprintf($L['pm_toomanyrecipients'], 10), 'newpmrecipient');
+			}
 			$touser = ($totalrecipients > 0) ? implode(",", $touser_names) : '';
 		}
 		else
 		{
-			if (empty($to)) $error_string .= $L['pm_norecipient'].'<br />';
+			if (empty($to))
+			{
+				sed_error('pm_norecipient', 'newpmrecipient');
+			}
 			$touser_ids[] = $to;
 			$touser = $to;
 			$totalrecipients = 1;
 		}
 
-		if (empty($error_string))
+		if (!$cot_error)
 		{
 			foreach ($touser_ids as $k => $userid)
 			{
@@ -210,8 +225,14 @@ if (!empty($to))
 			$touser_names[] = htmlspecialchars($row['user_name']);
 		}
 		$touser = implode(", ", $touser_names);
-		$error_string .= ($totalrecipients < $touser_req) ? $L['pm_wrongname']."<br />" : '';
-		$error_string .= (!$usr['isadmin'] && $totalrecipients>10) ? sprintf($L['pm_toomanyrecipients'], 10)."<br />" : '';
+		if ($totalrecipients < $touser_req)
+		{
+			sed_error('pm_wrongname', 'newpmrecipient');
+		}
+		if (!$usr['isadmin'] && $totalrecipients > 10)
+		{
+			sed_error(sprintf($L['pm_toomanyrecipients'], 10), 'newpmrecipient');
+		}
 	}
 }
 
@@ -262,10 +283,11 @@ if (!SED_AJAX)
 	$t->parse("MAIN.AFTER_AJAX");
 }
 
-if (!empty($error_string))
+if (sed_check_messages())
 {
-	$t->assign("PMSEND_ERROR_BODY",$error_string);
-	$t->parse("MAIN.PMSEND_ERROR");
+	$t->assign('PMSEND_ERROR_BODY', sed_implode_messages());
+	$t->parse('MAIN.PMSEND_ERROR');
+	sed_clear_messages();
 }
 
 $bhome = $cfg['homebreadcrumb'] ? sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
