@@ -76,15 +76,15 @@ elseif($a == 'bump')
 
 sed_poll_check();
 
-if(empty($error_string))
+if (!$cot_error)
 {
 	$number = sed_poll_save();
 
-	if($poll_id == 'new')
+	if ($poll_id == 'new')
 	{
 		$adminwarnings = $L['polls_created'];
 	}
-	elseif(!empty($poll_id))
+	elseif (!empty($poll_id))
 	{
 		$adminwarnings = $L['polls_updated'];
 	}
@@ -96,7 +96,8 @@ if(empty($error_string))
 }
 else
 {
-	$adminwarnings = $error_string;
+	$adminwarnings = sed_implode_messages();
+	sed_clear_messages();
 }
 
 $is_adminwarnings = isset($adminwarnings);
@@ -178,16 +179,16 @@ if ($ii == 0)
 	$t->parse('MAIN.POLLS_ROW_EMPTY');
 }
 
-if($n == 'options')
+if ($n == 'options')
 {
 	$poll_id = sed_import('id', 'G', 'TXT');
 	$adminpath[] = array(sed_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$id)");
 	$formname = $L['editdeleteentries'];
 	$send_button = $L['Update'];
 }
-elseif(!empty($error_string))
+elseif ($cot_error)
 {
-	if($poll_id != 'new')
+	if ($poll_id != 'new')
 	{
 		$adminpath[] = array(sed_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$id)");
 		$formname = $L['editdeleteentries'];

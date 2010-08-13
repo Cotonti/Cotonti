@@ -9,12 +9,6 @@ INSERT INTO `sed_plugins` (`pl_hook` , `pl_code` , `pl_part` , `pl_title` , `pl_
 UPDATE `sed_config` SET `config_default` = '1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100' WHERE `config_owner` = 'plug' AND `config_cat` = 'news' AND   `config_name` = 'maxpages' LIMIT 1 ;
 UPDATE `sed_config` SET `config_name` = 'syncpagination' WHERE `config_owner` = 'plug' AND `config_cat` = 'news' AND `config_name` = 'addpagination' LIMIT 1 ;
 
-/* r923 add columns and config option for new PFS system 
-ALTER TABLE sed_pfs_folders ADD pff_parentid INT(11) AFTER pff_id;
-ALTER TABLE sed_pfs_folders ADD pff_path VARCHAR(255) AFTER pff_desc;
-INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES ('core', 'pfs', '06', 'flashupload', 3, '0', '', '');
-*/
-
 /* r930 Reinstall recentitems plugin */
 DELETE FROM `sed_plugins` WHERE `pl_code` = 'recentitems';
 DELETE FROM `sed_config` WHERE `config_cat` = 'recentitems';
@@ -44,7 +38,7 @@ INSERT INTO `sed_config` (config_owner, config_cat, config_order, config_name, c
 /* r1016 delete plug passrecover & add email config */
 DELETE FROM `sed_auth` WHERE `auth_code` = 'plug' AND `auth_option` = 'passrecover' LIMIT 6;
 DELETE FROM `sed_plugins` WHERE `pl_code` = 'passrecover' LIMIT 1;
-INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES 
+INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES
 ('core', 'email', '01', 'email_type', 2, 'mail(Standart)', '', ''),
 ('core', 'email', '02', 'smtp_address', 2, '', '', ''),
 ('core', 'email', '03', 'smtp_port', 2, '25', '', ''),
@@ -429,3 +423,12 @@ ALTER TABLE `sed_plugins` ADD COLUMN `pl_module` tinyint(1) unsigned NOT NULL
 /* r1252 Obsolete entries removal */
 DELETE FROM `sed_config` WHERE config_owner = 'core' AND config_cat = 'skin' AND
     config_name = 'doctypeid';
+
+/* r1266 Things that have been forgotten previously */
+/* r1237 Authentication/security improvement */
+ALTER TABLE `sed_users` CHANGE COLUMN `user_hashsalt` `user_token` char(16) collate utf8_unicode_ci NOT NULL default '';
+
+/* r1247 "remember me" enforcement option */
+INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`,
+  `config_default`, `config_text`) VALUES
+('core', 'users', '21', 'forcerememberme', 3, '0', '', '');

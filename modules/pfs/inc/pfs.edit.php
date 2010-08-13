@@ -171,7 +171,7 @@ if ($standalone)
 
 $t->assign(array(
 	'PFS_TITLE' => $title,
-	'PFS_ERRORS' => $error_string,
+	'PFS_ERRORS' => sed_check_messages() ? sed_implode_messages() : '',
 	'PFS_ACTION'=> sed_url('pfs', 'm=edit&a=update&id='.$pfs_id.'&'.$more),
 	'PFS_FILE' => $pfs_file,
 	'PFS_DATE' => $pfs_date,

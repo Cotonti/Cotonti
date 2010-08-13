@@ -100,17 +100,26 @@ if ($a=='newtopic')
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
 
 
-	$error_string .= ( strlen($newtopictitle) < 2) ? $L["for_titletooshort"]."<br />" : '';
-	$error_string .= ( strlen($newmsg) < 5) ? $L["for_messagetooshort"]."<br />" : '';
-	if($poll){
-	sed_poll_check();
+	if (strlen($newtopictitle) < 2)
+	{
+		sed_error('for_titletooshort', 'newtopictitle');
+	}
+	if (strlen($newmsg) < 5)
+	{
+		sed_error('for_messagetooshort', 'newmsg');
+	}
+	if($poll)
+	{
+		sed_poll_check();
 	}
 
 
-	if (empty($error_string))
+	if (!$cot_error)
 	{
 		if (mb_substr($newtopictitle, 0 ,1)=="#")
-		{ $newtopictitle = str_replace('#', '', $newtopictitle); }
+		{
+			$newtopictitle = str_replace('#', '', $newtopictitle);
+		}
 
 
 		$sql = sed_sql_query("INSERT into $db_forum_topics
@@ -268,10 +277,11 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'newtopic', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-if (!empty($error_string))
+if (sed_check_messages())
 {
-	$t->assign("FORUMS_NEWTOPIC_ERROR_BODY",$error_string);
-	$t->parse("MAIN.FORUMS_NEWTOPIC_ERROR");
+	$t->assign('FORUMS_NEWTOPIC_ERROR_BODY', sed_implode_messages());
+	$t->parse('MAIN.FORUMS_NEWTOPIC_ERROR');
+	sed_clear_messages();
 }
 
 $t->assign(array(

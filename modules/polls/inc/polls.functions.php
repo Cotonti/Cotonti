@@ -24,7 +24,7 @@ require_once sed_langfile('polls', 'module');
  */
 function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 {
-	global $cfg, $db_polls, $db_polls_options, $error_string;
+	global $cfg, $db_polls, $db_polls_options, $cot_error;
 	if (gettype($t) != 'object')
 	{
 		$t = new XTemplate(sed_skinfile('polls'));
@@ -33,7 +33,7 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 	}
 	$block = (!empty($block)) ? $block."." : "";
 	$counter = 0;
-	if (!empty($error_string))
+	if ($cot_error)
 	{
 		global $poll_id, $poll_options, $poll_multiple, $poll_state, $poll_text;
 
@@ -126,7 +126,7 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
  */
 function sed_poll_check()
 {
-	global $cfg, $L, $error_string, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
+	global $cfg, $L, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
 	$poll_id = sed_import('poll_id', 'P', 'TXT');
 	$poll_delete = sed_import('poll_delete', 'P', 'BOL');
 
@@ -160,8 +160,14 @@ function sed_poll_check()
 		{
 			$poll_options = array_unique($poll_options);
 		}
-		$error_string .= (mb_strlen($poll_text) < 4) ? $L['polls_error_title'].'<br />' : '';
-		$error_string .= (count($poll_options) < 2) ? $L['polls_error_count'].'<br />' : '';
+		if (mb_strlen($poll_text) < 4)
+		{
+			sed_error('polls_error_title', 'poll_text');
+		}
+		if (count($poll_options) < 2)
+		{
+			sed_error('polls_error_count', 'poll_option');
+		}
 	}
 }
 
@@ -174,9 +180,9 @@ function sed_poll_check()
  */
 function sed_poll_save($type = 'index', $code = '')
 {
-	global $sys, $db_polls, $db_polls_options, $error_string, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
+	global $sys, $db_polls, $db_polls_options, $cot_error, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
 
-	if (!empty($poll_id) && empty($error_string))
+	if (!empty($poll_id) && !$cot_error)
 	{
 		if ((int)$poll_id > 0)
 		{
@@ -269,7 +275,7 @@ function sed_poll_vote()
  */
 function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 {
-	global $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr, $error_string;
+	global $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 	$canvote = false;
 
 	if (!is_array($id))

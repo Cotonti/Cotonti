@@ -36,8 +36,6 @@ $usr = array();
 $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
-//unset ($warnings, $moremetas, $morejavascript, $error_string,  $sed_cat, $sed_smilies, $sed_acc, $sed_catacc, $sed_rights, $sed_config, $sql_config, $sed_usersonline, $sed_plugins, $sed_groups, $rsedition, $rseditiop, $rseditios, $tcount, $qcount)
-
 $cfg['svnrevision'] = '$Rev$'; //DO NOT MODIFY this is set by SVN automatically
 $cfg['version'] = '0.7.0';
 $cfg['dbversion'] = '0.7.0';
@@ -1637,7 +1635,9 @@ function sed_selectbox_theme($skinname, $name, $theme)
  */
 function sed_check_messages()
 {
-	return is_array($_SESSION['cot_messages']) && count($_SESSION['cot_messages']) > 0;
+	global $error_string;
+	return (is_array($_SESSION['cot_messages']) && count($_SESSION['cot_messages']) > 0)
+		|| !empty($error_string);
 }
 
 /**
@@ -1647,7 +1647,9 @@ function sed_check_messages()
  */
 function sed_clear_messages()
 {
+	global $error_string;
 	unset($_SESSION['cot_messages']);
+	unset($error_string);
 }
 
 /**
@@ -1734,12 +1736,11 @@ function sed_get_messages($src = 'default')
  */
 function sed_implode_messages($src = 'default', $class = '')
 {
-	global $R, $L;
+	global $R, $L, $error_string;
 	$res = '';
 	$i = 0;
 	if (is_array($_SESSION['cot_messages']) && is_array($_SESSION['cot_messages'][$src]))
 	{
-		$res = sed_rc('code_msg_begin', array('class' => $class));
 		foreach ($_SESSION['cot_messages'][$src] as $msg)
 		{
 			if (!empty($class) && $msg['class'] != $class)
@@ -1751,9 +1752,13 @@ function sed_implode_messages($src = 'default', $class = '')
 			$res .= sed_rc('code_msg_line', array('class' => $msg['class'], 'text' => $text));
 			$i++;
 		}
-		$res .= $R['code_msg_end'];
 	}
-	return $res;
+	if (!empty($error_string) && empty($class))
+	{
+		if ($i > 0) $res .= $R['code_error_separator'];
+		$res .= $error_string;
+	}
+	return empty($res) ? '' : sed_rc('code_msg_begin', array('class' => $class)) . $res . $R['code_msg_end'];
 }
 
 /**

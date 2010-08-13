@@ -177,7 +177,7 @@ if ($a=='newpost')
 
 	$newmsg = sed_import('newmsg','P','HTM');
 
-	if (empty($error_string) && !empty($newmsg) && !empty($s) && !empty($q))
+	if (!$cot_error && !empty($newmsg) && !empty($s) && !empty($q))
 	{
 
 		if (!$merge)
@@ -791,10 +791,11 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
 	));
 
-	if (!empty($error_string))
+	if (sed_check_messages())
 	{
-		$t->assign('FORUMS_POSTS_NEWPOST_ERROR_MSG', $error_string);
+		$t->assign('FORUMS_POSTS_NEWPOST_ERROR_MSG', sed_implode_messages());
 		$t->parse('MAIN.FORUMS_POSTS_NEWPOST.FORUMS_POSTS_NEWPOST_ERROR');
+		sed_clear_messages();
 	}
 
 	/* === Hook  === */

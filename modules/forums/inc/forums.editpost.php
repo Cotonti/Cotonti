@@ -150,7 +150,7 @@ if ($a=='update')
 				if($poll_id && !$cfg['disable_polls'])
 				{
 					sed_poll_check();
-					if(empty($error_string))
+					if (!$cot_error)
 					{
 						$number = sed_poll_save();
 					}
@@ -240,10 +240,11 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'editpost', $fs_category, $fp_sectionid));
 $t = new XTemplate($mskin);
 
-if (!empty($error_string))
+if (sed_check_messages())
 {
-	$t->assign("FORUMS_POSTS_EDITPOST_ERROR_BODY",$error_string);
-	$t->parse("MAIN.FORUMS_EDITPOST_ERROR");
+	$t->assign('FORUMS_POSTS_EDITPOST_ERROR_BODY', sed_implode_messages());
+	$t->parse('MAIN.FORUMS_EDITPOST_ERROR');
+	sed_clear_messages();
 }
 if ($is_first_post)
 {
