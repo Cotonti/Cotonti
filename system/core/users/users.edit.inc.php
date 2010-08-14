@@ -8,7 +8,7 @@ http://www.neocrome.net
 
 /**
  * @package Cotonti
- * @version 0.0.3
+ * @version 0.6.10
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
  */
@@ -103,7 +103,7 @@ if ($a=='update')
 	foreach($extrafields as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
-		if($row['field_type']=="checkbox")
+		if($row['field_type'] == 'checkbox' && !is_null($import))
 		{
 			$import = $import != '';
 		}

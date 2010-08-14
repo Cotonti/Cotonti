@@ -1,18 +1,14 @@
 <?PHP
 
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=users.profile.inc.php
-Version=125
-Updated=2008-mar-20
-Type=Core
-Author=Neocrome
-Description=User profile
-[END_SED]
-==================== */
+/**
+ * User Profile
+ *
+ * @package Cotonti
+ * @version 0.6.10
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
 
 defined('SED_CODE') or die('Wrong URL');
 
@@ -380,7 +376,7 @@ switch ($a)
 	foreach($extrafields as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
-		if($row['field_type']=="checkbox")
+		if($row['field_type'] == 'checkbox' && !is_null($import))
 		{
 			$import = $import != '';
 		}
