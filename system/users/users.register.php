@@ -67,7 +67,7 @@ if ($a=='add')
 	foreach($sed_extrafields['users'] as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
-		if($row['field_type']=="checkbox")
+		if($row['field_type'] == 'checkbox' && !is_null($import))
 		{
 			$import = $import != '';
 		}
@@ -128,10 +128,13 @@ if ($a=='add')
 
 		// Extra fields
 		$extra_columns = ""; $extra_values = "";
-		foreach($sed_extrafields['users'] as $i=>$row)
+		foreach($sed_extrafields['users'] as $i => $row)
 		{
-			$extra_columns .= "user_".$row['field_name'].", ";
-			$extra_values .= "'".sed_sql_prep($ruserextrafields[$i])."', ";
+			if (!is_null($ruserextrafields[$i]))
+			{
+				$extra_columns .= "user_".$row['field_name'].", ";
+				$extra_values .= "'".sed_sql_prep($ruserextrafields[$i])."', ";
+			}
 		}
 		$ssql = "INSERT into $db_users
 			(user_name,
