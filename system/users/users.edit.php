@@ -100,7 +100,7 @@ if ($a=='update')
 	foreach($sed_extrafields['users'] as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
-		if($row['field_type']=="checkbox")
+		if($row['field_type'] == 'checkbox' && !is_null($import))
 		{
 			$import = $import != '';
 		}

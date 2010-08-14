@@ -82,7 +82,7 @@ if ($a == 'update')
 	foreach ($sed_extrafields['pages'] as $row)
 	{
 		$import = sed_import('rpage'.$row['field_name'], 'P', 'HTM');
-		if ($row['field_type'] == "checkbox")
+		if ($row['field_type'] == 'checkbox' && !is_null($import))
 		{
 			$import = $import != '';
 		}

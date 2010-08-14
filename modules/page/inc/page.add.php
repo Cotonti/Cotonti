@@ -71,7 +71,7 @@ if ($a == 'add')
 	foreach ($sed_extrafields['pages'] as $row)
 	{
 		$import = sed_import('newpage'.$row['field_name'], 'P', 'HTM');
-		if ($row['field_type'] == "checkbox")
+		if ($row['field_type'] == 'checkbox' && !is_null($import))
 		{
 			$import = $import != '';
 		}
@@ -134,16 +134,25 @@ if ($a == 'add')
 		}
 		/* ===== */
 
+		// Extra fields
+		if(count($extrafields) > 0)
+		{
+			foreach($extrafields as $i => $row)
+			{
+				if(!is_null($newpageextrafields[$i]))
+				{
+					$ssql_extra_columns .= 'page_'.$row['field_name'].', ';
+					$ssql_extra_values .= "'".sed_sql_prep($newpageextrafields[$i])."', ";
+				}
+			}
+		}
+
 		$ssql = "INSERT into $db_pages
 			(page_state,
 			page_type,
 			page_cat,
-			page_key,";
-		foreach ($sed_extrafields['pages'] as $row)
-		{
-			$ssql .= "page_".$row['field_name'].", "; // Extra fields
-		}
-		$ssql.="page_title,
+			page_key,
+			page_title,
 			page_desc,
 			page_text,
 			page_html,
@@ -155,17 +164,14 @@ if ($a == 'add')
 			page_file,
 			page_url,
 			page_size,
+			$ssql_extra_columns
 			page_alias)
 			VALUES
 			(".(int)$page_state.",
 			".(int)$newpagetype.",
 			'".sed_sql_prep($newpagecat)."',
-			'".sed_sql_prep($newpagekey)."',";
-		foreach ($newpageextrafields as $newpageextrafield)
-		{
-			$ssql.= "'".sed_sql_prep($newpageextrafield)."',"; // Extra fields
-		}
-		$ssql.="'".sed_sql_prep($newpagetitle)."',
+			'".sed_sql_prep($newpagekey)."',
+			'".sed_sql_prep($newpagetitle)."',
 			'".sed_sql_prep($newpagedesc)."',
 			'".sed_sql_prep($newpagetext)."',
 			'".sed_sql_prep($newpagehtml)."',
@@ -177,6 +183,7 @@ if ($a == 'add')
 			".intval($newpagefile).",
 			'".sed_sql_prep($newpageurl)."',
 			'".sed_sql_prep($newpagesize)."',
+			$ssql_extra_values
 			'".sed_sql_prep($newpagealias)."')";
 		$sql = sed_sql_query($ssql);
 
