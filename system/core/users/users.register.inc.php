@@ -10,7 +10,7 @@ http://www.neocrome.net
  * User registration script.
  *
  * @package Cotonti
- * @version 0.0.2
+ * @version 0.6.10
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD License
@@ -74,7 +74,7 @@ if ($a=='add')
 	foreach($extrafields as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
-		if($row['field_type']=="checkbox")
+		if($row['field_type'] == 'checkbox' && !is_null($import))
 		{
 			$import = $import != '';
 		}
@@ -133,10 +133,13 @@ if ($a=='add')
 		// Extra fields
 		$extra_columns = ""; $extra_values = "";
 		if(count($extrafields)>0)
-		foreach($extrafields as $i=>$row)
+		foreach($extrafields as $i => $row)
 		{
-			$extra_columns .= "user_".$row['field_name'].", ";
-			$extra_values .= "'".sed_sql_prep($ruserextrafields[$i])."', ";
+			if (!is_null($ruserextrafields[$i]))
+			{
+				$extra_columns .= "user_".$row['field_name'].", ";
+				$extra_values .= "'".sed_sql_prep($ruserextrafields[$i])."', ";
+			}
 		}
 		$ssql = "INSERT into $db_users
 			(user_name,
