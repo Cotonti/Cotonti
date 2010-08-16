@@ -370,15 +370,21 @@ $L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300
 /**
  * Extension management
  */
+$L['ext_already_installed'] = 'This extension is already installed';
 $L['ext_auth_installed'] = 'Installed authorization defaults';
+$L['ext_auth_locks_updated'] = 'Updated authorization locks';
 $L['ext_auth_uninstalled'] = 'Removed authorization options';
 $L['ext_bindings_installed'] = 'Installed {$cnt} hook bindings';
+$L['ext_bindings_uninstalled'] = 'Removed {$cnt} hook bindings';
 $L['ext_config_error'] = 'Configuration setup failed';
 $L['ext_config_installed'] = 'Installed configuration';
 $L['ext_config_uninstalled'] = 'Uninstalled configuration';
+$L['ext_config_updated'] = 'Updated configuration options';
 $L['ext_executed_php'] = 'Executed PHP handler part. {$ret}';
 $L['ext_executed_sql'] = 'Executed PHP handler part. {$ret}';
 $L['ext_invalid_format'] = 'This is not a valid Cotonti >= 0.9 extension. Please contact the developer';
+$L['ext_patch_applied'] = 'Applied patch {$f}';
+$L['ext_patch_error'] = 'Error applying patch {$f}: {$msg}';
 $L['ext_req_module_missing'] = 'Required module is not installed: {$name}';
 $L['ext_req_plugin_missing'] = 'Required plugin is not installed: {$name}';
 $L['ext_setup_not_found'] = 'Setup file is not found';
