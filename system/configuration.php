@@ -61,9 +61,10 @@ define('COT_CONFIG_TYPE_HIDDEN', 5);
  *     )
  * );
  *
- * sed_config_add($config_options, 'test', true);
+ * sed_config_add('test', $config_options, true);
  * </code>
  *
+ * @param string $name Extension name (code)
  * @param array $options An associative array of configuration entries.
  * Each entry of the arrray has the following keys:
  * 'name' => Option name, alphanumeric and _. Must be unique for a module/plugin
@@ -74,37 +75,102 @@ define('COT_CONFIG_TYPE_HIDDEN', 5);
  * 'order' => A string that determines position of the option in the list,
  * 		e.g. '04'. Or will be assigned automatically if omitted
  * 'text' => Textual description. It is usually omitted and stored in langfiles
- * @param string $mod_name Module or plugin name (code)
  * @param bool $is_module Flag indicating if it is module or plugin config
  * @return bool Operation status
  */
-function sed_config_add($options, $mod_name, $is_module = false)
+function sed_config_add($name, $options, $is_module = false)
 {
     global $cfg, $db_config;
     $cnt = count($options);
     $type = $is_module ? 'module' : 'plug';
     // Check the arguments
     if (!$cnt
-        || $is_module && count($cfg['module'][$mod_name]) > 0
-        || !$is_module && count($cfg['plugin'][$mod_name]) > 0)
+        || $is_module && count($cfg['module'][$name]) > 0
+        || !$is_module && count($cfg['plugin'][$name]) > 0)
     {
         return false;
     }
     // Build the SQL query
-    $query = "INSERT INTO `$db_config` (`config_owner`, `config_cat`, `config_order`,
-        `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES ";
+    $query = "INSERT INTO `$db_config` (`config_owner`, `config_cat`,
+		`config_order`, `config_name`, `config_type`, `config_value`,
+		`config_default`, `config_variants`, `config_text`) VALUES ";
     for ($i = 0; $i < $cnt; $i++)
     {
         if ($i > 0)
+		{
             $query .= ',';
-        $order = isset($options[$i]['order']) ? sed_sql_prep($options[$i]['order']) : str_pad($i, 2, 0, STR_PAD_LEFT);
-        $query .= "('$type', '$mod_name', '$order', '" . sed_sql_prep($options[$i]['name']) . "', "
-            . (int) $options[$i]['type'] . ", '" . sed_sql_prep($options[$i]['default']) . "', '"
-            . sed_sql_prep($options[$i]['default']) . "', '" . sed_sql_prep($options[$i]['variants']) . "', '"
+		}
+        $order = isset($options[$i]['order'])
+			? sed_sql_prep($options[$i]['order'])
+			: str_pad($i, 2, 0, STR_PAD_LEFT);
+        $query .= "('$type', '$name', '$order', '"
+			. sed_sql_prep($options[$i]['name']) . "', "
+			. (int) $options[$i]['type'] . ", '"
+			. sed_sql_prep($options[$i]['default']) . "', '"
+            . sed_sql_prep($options[$i]['default']) . "', '"
+			. sed_sql_prep($options[$i]['variants']) . "', '"
             . sed_sql_prep($options[$i]['text']) . "')";
     }
     sed_sql_query($query);
     return sed_sql_affectedrows() == $cnt;
+}
+
+/**
+ * Loads config structure from database into an array
+ * @param string $name Extension code
+ * @param bool $is_module TRUE if module, FALSE if plugin
+ * @return array Config options structure
+ * @see sed_config_add()
+ */
+function sed_config_load($name, $is_module = false)
+{
+	global $db_config;
+	$options = array();
+	$type = $is_module ? 'module' : 'plug';
+
+	$res = sed_sql_query("SELECT config_name, config_type, config_value,
+			config_default, config_variants, config_order
+		FROM $db_config WHERE config_owner = '$type' AND config_cat = '$name'");
+	while ($row = sed_sql_fetchassoc($res))
+	{
+		$options[] = array(
+			'name' => $row['config_name'],
+			'type' => $row['config_type'],
+			'order' => $row['config_order'],
+			'value' => $row['config_value'],
+			'default' => $row['config_default'],
+			'variants' => $row['config_variants']
+		);
+	}
+	sed_sql_freeresult($res);
+
+	return $options;
+}
+
+/**
+ * Updates config map properties in the database for given options
+ *
+ * @param string $name Extension code
+ * @param array $options Configuration entries
+ * @param bool $is_module TRUE if module, FALSE if plugin
+ * @return int Number of entries updated
+ */
+function sed_config_modify($name, $options, $is_module = false)
+{
+	global $db_config;
+	$type = $is_module ? 'module' : 'plug';
+	$affected = 0;
+
+	foreach ($options as $opt)
+	{
+		$config_name = $opt['name'];
+		unset($opt['name']);
+		$affected += sed_sql_update($db_config, "config_owner = '$type'
+			AND config_cat = '$name' AND config_name = '$config_name'",
+			$opt, 'config_');
+	}
+
+	return $affected;
 }
 
 /**
@@ -155,18 +221,18 @@ function sed_config_parse($info_cfg)
 /**
  * Unregisters configuration option(s).
  *
- * @param string $mod_name Module or plugin name (code)
+ * @param string $name Extension name (code)
  * @param bool $is_module Flag indicating if it is module or plugin config
  * @param mixed $option String name of a single configuration option.
  * Or pass an array of option names to remove them at once. If empty or omitted,
  * all options from selected module/plugin will be removed
  * @return int Number of options actually removed
  */
-function sed_config_remove($mod_name, $is_module = false, $option = '')
+function sed_config_remove($name, $is_module = false, $option = '')
 {
     global $db_config;
     $type = $is_module ? 'module' : 'plug';
-    $where = "config_owner = '$type' AND config_cat = '$mod_name'";
+    $where = "config_owner = '$type' AND config_cat = '$name'";
     if (is_array($option))
     {
         $cnt = count($option);
@@ -206,23 +272,103 @@ function sed_config_remove($mod_name, $is_module = false, $option = '')
  * sed_config_set($config_values, 'test', true);
  * </code>
  *
+ * @param string $name Extension name config belongs to
  * @param array $options Array of options as 'option name' => 'option value'
- * @param string $mod_name Module a plugin name config belongs to, will apply to all if omitted
  * @param bool $is_module Flag indicating if it is module or plugin config
  * @return int Number of entries updated
  */
-function sed_config_set($options, $mod_name = '', $is_module = false)
+function sed_config_set($name, $options, $is_module = false)
 {
     global $db_config;
     $type = $is_module ? 'module' : 'plug';
     $upd_cnt = 0;
     foreach ($options as $key => $val)
     {
-        $where = "config_owner = '$type' AND config_name = '" . sed_sql_prep($key) . "'";
-        if (!empty($mod_name))
-            $where .= " AND config_cat = '$mod_name'";
-        $upd_cnt += sed_sql_update($db_config, $where, array('value' => $val), 'config_');
+        $where = "config_owner = '$type' AND config_name = '"
+			. sed_sql_prep($key) . "'";
+        if (!empty($name))
+            $where .= " AND config_cat = '$name'";
+        $upd_cnt += sed_sql_update($db_config, $where, array('value' => $val),
+			'config_');
     }
     return $upd_cnt;
+}
+
+/**
+ * Updates existing configuration map removing obosolete options, adding new
+ * options and tweaking options which need to be updated.
+ *
+ * @param string $name Extension code
+ * @param array $options Configuration options
+ * @param bool $is_module TRUE for modules, FALSE for plugins
+ * @return int Number of entries affected
+ */
+function sed_config_update($name, $options, $is_module = false)
+{
+	$affected = 0;
+	$old_options = sed_config_load($name, $is_module);
+
+	// Find and remove options which no longer exist
+	$remove_opts = array();
+	foreach ($old_options as $old_opt)
+	{
+		$keep = false;
+		foreach ($options as $opt)
+		{
+			if ($opt['name'] == $old_opt['name'])
+			{
+				$keep = true;
+				break;
+			}
+		}
+		if (!$keep)
+		{
+			$remove_opts[] = $old_opt['name'];
+		}
+	}
+	if (count($remove_opts) > 0)
+	{
+		$affected += sed_config_remove($name, $is_module, $remove_opts);
+	}
+
+	// Find new options and options which have been modified
+	$new_options = array();
+	$upd_options = array();
+	foreach ($options as $opt)
+	{
+		$existed = false;
+		foreach ($old_options as $old_opt)
+		{
+			if ($opt['name'] == $old_opt['name'])
+			{
+				$changed = array_diff($opt, $old_opt);
+				foreach ($changed as $key => $val)
+				{
+					if ($key != 'value')
+					{
+						// Values for modified options are set to default
+						$opt['value'] = $opt['default'];
+						$upd_options[] = $opt;
+					}
+				}
+				$existed = true;
+				break;
+			}
+		}
+		if (!$existed)
+		{
+			$new_options[] = $opt;
+		}
+	}
+	if (count($new_options) > 0)
+	{
+		$affected += sed_config_add($name, $new_options, $is_module);
+	}
+	if (count($upd_options) > 0)
+	{
+		$affected += sed_config_modify($name, $upd_options, $is_module);
+	}
+
+	return $affected;
 }
 ?>
