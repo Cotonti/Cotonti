@@ -8,7 +8,7 @@ Hooks=admin.home
 /**
  * Will clean various things
  *
- * @package Cotonti
+ * @package cleaner
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

@@ -2,7 +2,7 @@
 /**
  * Russian Language File for the RSS Module (rss.ru.lang.php)
  *
- * @package Cotonti
+ * @package rss
  * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

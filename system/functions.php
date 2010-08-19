@@ -1747,7 +1747,6 @@ function sed_implode_messages($src = 'default', $class = '')
 			{
 				continue;
 			}
-			if ($i > 0) $res .= $R['code_error_separator'];
 			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
 			$res .= sed_rc('code_msg_line', array('class' => $msg['class'], 'text' => $text));
 			$i++;
@@ -1755,8 +1754,7 @@ function sed_implode_messages($src = 'default', $class = '')
 	}
 	if (!empty($error_string) && empty($class))
 	{
-		if ($i > 0) $res .= $R['code_error_separator'];
-		$res .= $error_string;
+		$res .= sed_rc('code_msg_line', array('class' => 'error', 'text' => $error_string));
 	}
 	return empty($res) ? '' : sed_rc('code_msg_begin', array('class' => $class)) . $res . $R['code_msg_end'];
 }

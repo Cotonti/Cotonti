@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=comments
-Part=comments.edit
-File=comments
+[BEGIN_COT_EXT]
 Hooks=standalone
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Comments system for Cotonti
  *
- * @package Cotonti
+ * @package comments
  * @version 0.7.0
  * @author Neocrome, Asmo, motor2hg, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

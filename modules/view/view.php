@@ -8,7 +8,7 @@ Hooks=module
 /**
  * HTML/TXT viewer
  *
- * @package Cotonti
+ * @package view
  * @version 0.7.0
  * @author Neocrome, Enhancements by Dimitar Hubenov (dux) - 2006-may-10, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

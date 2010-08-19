@@ -7,7 +7,7 @@ http://www.neocrome.net
 ==================== */
 
 /**
- * @package Cotonti
+ * @package forums
  * @version 0.0.3
  * @copyright Copyright (c) 2008-2009 Cotonti Team
  * @license BSD

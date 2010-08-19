@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=search
-Part=main
-File=search
+[BEGIN_COT_EXT]
 Hooks=standalone
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Search standalone.
  *
- * @package Cotonti
+ * @package search
  * @version 0.7.0
  * @author Neocrome, Spartan, esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

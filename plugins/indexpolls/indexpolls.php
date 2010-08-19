@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=indexpolls
-Part=main
-File=indexpolls
+[BEGIN_COT_EXT]
 Hooks=index.tags
 Tags=index.tpl:{PLUGIN_INDEXPOLLS}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Polls (recent or random) on index with jQuery
  *
- * @package Cotonti
+ * @package indexpolls
  * @version 0.7.0
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

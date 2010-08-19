@@ -27,7 +27,7 @@ rss_postmaxsymbols=06:string:::
 /**
  * RSS setup file
  *
- * @package Cotonti
+ * @package rss
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

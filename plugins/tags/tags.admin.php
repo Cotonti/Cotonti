@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=tags
-Part=admin
-File=tags.admin
+[BEGIN_COT_EXT]
 Hooks=admin.page.loop
 Tags=admin.page.inc.tpl:{ADMIN_TAGS_ROW_TAG},{ADMIN_TAGS_ROW_URL}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Shows tags in page administration area
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author Dayver - Pavel Tkachenko
  * @copyright Copyright (c) Cotonti Team 2008-2010

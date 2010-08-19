@@ -2,7 +2,7 @@
 /**
  * English Language File for Comments Plugin
  *
- * @package Cotonti
+ * @package comments
  * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

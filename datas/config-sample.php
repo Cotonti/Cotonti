@@ -68,19 +68,19 @@ date_default_timezone_set('GMT');
 // TRUE = enabled / FALSE = disabled
 // ========================
 
-$cfg['check_updates'] = FALSE;			// Automatically check for updates, set it TRUE to enable
+$cfg['check_updates'] = FALSE;		// Automatically check for updates, set it TRUE to enable
 
-$cfg['sqldb'] = 'mysql';  				// Type of the database engine.
-$cfg['redirmode'] = FALSE;				// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
-$cfg['xmlclient'] = FALSE;  			// For testing-purposes only, else keep it off.
-$cfg['ipcheck'] = TRUE;  				// Will kill the logged-in session if the IP has changed
-$cfg['allowphp_override'] = FALSE; 		// General lock for execution of the PHP code by the core
+$cfg['sqldb'] = 'mysql';  			// Type of the database engine.
+$cfg['redirmode'] = FALSE;			// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
+$cfg['xmlclient'] = FALSE;  		// For testing-purposes only, else keep it off.
+$cfg['ipcheck'] = TRUE;  			// Will kill the logged-in session if the IP has changed
+$cfg['allowphp_override'] = FALSE; 	// General lock for execution of the PHP code by the core
 $cfg['pfsmaxuploads'] = 8;
-$cfg['authcache'] = TRUE;				// Auth cache in SQL tables. Set it FALSE if your huge database
-										// goes down because of that
-$cfg['customfuncs'] = FALSE;			// Includes file named functions.custom.php
-$cfg['new_install'] = TRUE;				// This setting denotes a new install and redirects you to the install page
-										// If you already have Cotonti installed then set it to FALSE
+$cfg['authcache'] = TRUE;			// Auth cache in SQL tables. Set it FALSE if your huge database
+									// goes down because of that
+$cfg['customfuncs'] = FALSE;		// Includes file named functions.custom.php
+$cfg['new_install'] = 1;			// This setting denotes a new install step and redirects you to the install page
+									// If you already have Cotonti installed then set it to FALSE or remove it
 
 // ========================
 // Directory paths

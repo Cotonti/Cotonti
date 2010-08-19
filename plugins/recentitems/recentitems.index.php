@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=recentitems
-Part=recent.index
-File=recentitems.index
+[BEGIN_COT_EXT]
 Hooks=index.tags
 Tags=index.tpl:{PLUGIN_LATESTPAGES}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Recent pages, topics in forums, users, comments
  *
- * @package Cotonti
+ * @package recentitmes
  * @version 0.7.0
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

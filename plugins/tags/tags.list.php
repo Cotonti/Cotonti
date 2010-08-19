@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=tags
-Part=list
-File=tags.list
+[BEGIN_COT_EXT]
 Hooks=list.tags
 Tags=list.tpl:{LIST_TAG_CLOUD},{LIST_TOP_TAG_CLOUD}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Category tag cloud
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
  * @copyright Copyright (c) Cotonti Team 2008-2010

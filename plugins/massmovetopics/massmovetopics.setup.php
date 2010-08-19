@@ -1,6 +1,6 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
+[BEGIN_COT_EXT]
 Code=massmovetopics
 Name=Mass-move topics in forums
 Description=Move all topics from one section to another section in forums
@@ -14,13 +14,14 @@ Auth_guests=0
 Lock_guests=RW12345A
 Auth_members=0
 Lock_members=RW12345A
-[END_SED_EXTPLUGIN]
+Requires_modules=forums
+[END_COT_EXT]
 ==================== */
 
 /**
  * Move all topics from one section to another section in forums
  *
- * @package Cotonti
+ * @package massmovetopics
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

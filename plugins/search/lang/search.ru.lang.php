@@ -2,7 +2,7 @@
 /**
  * Russian Language File for Search Plugin
  *
- * @package Cotonti
+ * @package search
  * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

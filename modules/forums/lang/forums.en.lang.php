@@ -2,7 +2,7 @@
 /**
  * English Language File for the Forums Module (forums.en.lang.php)
  *
- * @package Cotonti
+ * @package forums
  * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009

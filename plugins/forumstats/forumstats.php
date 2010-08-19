@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=forumstats
-Part=main
-File=forumstats
+[BEGIN_COT_EXT]
 Hooks=standalone
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Statistics for the forums
  *
- * @package Cotonti
+ * @package forumstats
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

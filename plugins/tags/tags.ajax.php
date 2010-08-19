@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=tags
-Part=ajax
-File=tags.ajax
+[BEGIN_COT_EXT]x
 Hooks=ajax
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * AJAX handler for autocompletion
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author esclkm - Pavel Mikulik
  * @copyright Copyright (c) Cotonti Team 2008-2010

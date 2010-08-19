@@ -31,7 +31,7 @@ maxpostsperpage=08:select:5,10,15,20,25,30,40,50,60,70,100,200,500:15:
 /**
  * Forums module setup file
  *
- * @package Cotonti
+ * @package forums
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

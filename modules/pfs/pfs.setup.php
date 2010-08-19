@@ -38,7 +38,7 @@ pfs_winclose=17:radio::0:
 /**
  * PFS setup file
  *
- * @package Cotonti
+ * @package pfs
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

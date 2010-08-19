@@ -2,7 +2,7 @@
 /**
  * Pick up pages from a category and display the newest in the home page
  *
- * @package Cotonti
+ * @package news
  * @version 0.7.0
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

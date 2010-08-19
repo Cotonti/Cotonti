@@ -25,7 +25,7 @@ maxpmperpage=04:select:5,10,15,20,25,30,40,50,60,70,100,200,50:15:
 /**
  * PM setup file
  *
- * @package Cotonti
+ * @package pm
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

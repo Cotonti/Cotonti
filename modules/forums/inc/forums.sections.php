@@ -7,7 +7,7 @@
  ==================== */
 
 /**
- * @package Cotonti
+ * @package forums
  * @version 0.7.0
  * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD

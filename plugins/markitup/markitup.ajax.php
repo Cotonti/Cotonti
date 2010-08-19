@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=markitup
-Part=preview
-File=markitup.ajax
+[BEGIN_COT_EXT]
 Hooks=ajax
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Simple AJAX previewer for MarkItUp!
  *
- * @package Cotonti
+ * @package markitup
  * @version 0.7.0
  * @author Trustmaster
  * @copyright Copyright (c) Cotonti Team 2008-2010

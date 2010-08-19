@@ -25,7 +25,7 @@ del_dup_options=04:radio::1:
 /**
  * Polls setup file
  *
- * @package Cotonti
+ * @package polls
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

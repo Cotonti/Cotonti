@@ -8,7 +8,7 @@
 /**
  * Personal File Storage, edit
  *
- * @package Cotonti
+ * @package pfs
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2009 Cotonti Team
