@@ -383,7 +383,7 @@ $L['ext_config_updated'] = 'Updated configuration options';
 $L['ext_executed_php'] = 'Executed PHP handler part. {$ret}';
 $L['ext_executed_sql'] = 'Executed PHP handler part. {$ret}';
 $L['ext_invalid_format'] = 'This is not a valid Cotonti >= 0.9 extension. Please contact the developer';
-$L['ext_patch_applied'] = 'Applied patch {$f}';
+$L['ext_patch_applied'] = 'Applied patch {$f}: {$msg}';
 $L['ext_patch_error'] = 'Error applying patch {$f}: {$msg}';
 $L['ext_req_module_missing'] = 'Required module is not installed: {$name}';
 $L['ext_req_plugin_missing'] = 'Required plugin is not installed: {$name}';

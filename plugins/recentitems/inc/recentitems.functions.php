@@ -2,7 +2,7 @@
 /**
  * Recent pages, topics in forums, users, comments
  *
- * @package Cotonti
+ * @package recentitems
  * @version 0.7.0
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

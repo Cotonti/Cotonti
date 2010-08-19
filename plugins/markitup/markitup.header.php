@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=markitup
-Part=header
-File=markitup.header
+[BEGIN_COT_EXT]
 Hooks=header.main
 Tags=header.tpl:{HEADER_COMPOPUP}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * MarkItUp! connector for Seditio
  *
- * @package Cotonti
+ * @package markitup
  * @version 0.7.0
  * @author Trustmaster
  * @copyright Copyright (c) Cotonti Team 2008-2010

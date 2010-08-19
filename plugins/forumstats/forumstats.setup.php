@@ -1,6 +1,6 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
+[BEGIN_COT_EXT]
 Code=forumstats
 Name=Forum statistics
 Description=Statistics for the forums
@@ -14,13 +14,14 @@ Auth_guests=R
 Lock_guests=A
 Auth_members=R
 Lock_members=A
-[END_SED_EXTPLUGIN]
+Requires_modules=forums
+[END_COT_EXT]
 ==================== */
 
 /**
  * Statistics for the forums
  *
- * @package Cotonti
+ * @package forumstats
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=news
-Part=adminconfig
-File=news.admin
+[BEGIN_COT_EXT]
 Hooks=admin.config.edit.loop
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * news admin usability modification
  *
- * @package Cotonti
+ * @package news
  * @version 0.7.0
  * @author esclkm
  * @copyright Copyright (c) Cotonti Team 2008-2010

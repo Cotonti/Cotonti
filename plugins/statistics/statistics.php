@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=statistics
-Part=main
-File=statistics
+[BEGIN_COT_EXT]
 Hooks=standalone
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Displays statistics info
  *
- * @package Cotonti
+ * @package statistics
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

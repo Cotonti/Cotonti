@@ -2,7 +2,7 @@
 /**
  * Static and dynamic resource (e.g. HTML) strings. Can be overriden by skin files and other code.
  *
- * @package Cotonti
+ * @package comments
  * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2010

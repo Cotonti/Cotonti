@@ -12,7 +12,7 @@
 // Environment setup
 define('SED_CODE', TRUE);
 define('SED_INSTALL', TRUE);
-define('SED_ADMIN', TRUE);
+//define('SED_ADMIN', TRUE);
 $location = 'Install';
 $z = 'install';
 
@@ -52,6 +52,22 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 }
 define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
+
+session_start();
+
+// Installer language selection support
+if (empty($_SESSION['cot_inst_lang']))
+{
+	$lang = sed_import('lang', 'P', 'ALP');
+	if (empty($lang))
+	{
+		$lang = 'en';
+	}
+}
+else
+{
+	$lang = $_SESSION['cot_inst_lang'];
+}
 
 require_once sed_langfile('main', 'core');
 

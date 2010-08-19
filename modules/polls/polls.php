@@ -8,7 +8,7 @@ Hooks=module
 /**
  * Polls
  *
- * @package Cotonti
+ * @package polls
  * @version 0.7.0
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

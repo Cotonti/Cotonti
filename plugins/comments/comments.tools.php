@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=comments
-Part=admin
-File=comments.tools
+[BEGIN_COT_EXT]
 Hooks=tools
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Administration panel - Manager of comments
  *
- * @package Cotonti
+ * @package comments
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

@@ -9,7 +9,7 @@
  * @license BSD License
  */
 
-defined('SED_CODE') && defined('SED_ADMIN') or die('Wrong URL.');
+defined('SED_CODE') or die('Wrong URL.');
 
 /* ======== Defaulting the admin variables ========= */
 

@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=comments
-Part=list.tags
-File=comments.list.tags
+[BEGIN_COT_EXT]
 Hooks=list.tags
 Tags=list.tpl:{LIST_COMMENTS},{LIST_COMMENTS_DISPLAY}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Comments system for Cotonti
  *
- * @package Cotonti
+ * @package comments
  * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

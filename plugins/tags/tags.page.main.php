@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=tags
-Part=page.main
-File=tags.page.main
+[BEGIN_COT_EXT]
 Hooks=page.main
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Generates page keywords
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
  * @copyright Copyright (c) Cotonti Team 2008-2010

@@ -2,7 +2,7 @@
 /**
  * Administration panel - PFS manager
  *
- * @package Cotonti
+ * @package pfs
  * @version 0.1.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009

@@ -1,18 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=recentitems
-Part=main
-File=recentitems
+[BEGIN_COT_EXT]
 Hooks=standalone
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Recent pages, topics in forums, users, comments
  *
- * @package Cotonti
+ * @package recentitems
  * @version 0.7.0
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

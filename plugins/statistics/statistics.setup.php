@@ -1,6 +1,6 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
+[BEGIN_COT_EXT]
 Code=statistics
 Name=Statistics
 Description=All kind of statistics about the site
@@ -14,13 +14,13 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * All kind of statistics about the site
  *
- * @package Cotonti
+ * @package statistics
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

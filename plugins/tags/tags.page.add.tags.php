@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=tags
-Part=page.add.tags
-File=tags.page.add.tags
+[BEGIN_COT_EXT]
 Hooks=page.add.tags
 Tags=page.add.tpl:{PAGEADD_FORM_TAGS},{PAGEADD_TOP_TAGS},{PAGEADD_TOP_TAGS_HINT}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Generates tag inputs when adding a new page
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
  * @copyright Copyright (c) Cotonti Team 2008-2010

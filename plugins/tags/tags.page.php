@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=tags
-Part=page
-File=tags.page
+[BEGIN_COT_EXT]
 Hooks=page.tags
 Tags=page.tpl:{PAGE_TAGS_ROW_TAG},{PAGE_TAGS_ROW_URL}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Renders page tags output
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
  * @copyright Copyright (c) Cotonti Team 2008-2010

@@ -1,6 +1,6 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
+[BEGIN_COT_EXT]
 Code=tags
 Name=Tags
 Description=Basic Tags implementation
@@ -14,9 +14,10 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=RW
 Lock_members=12345
-[END_SED_EXTPLUGIN]
+Recommends_modules=index,page,forums
+[END_COT_EXT]
 
-[BEGIN_SED_EXTPLUGIN_CONFIG]
+[BEGIN_COT_EXT_CONFIG]
 pages=11:radio::1:Enable Tags for Pages
 forums=12:radio::1:Enable Tags for Forums
 title=13:radio::1:Capitalize first latters of keywords
@@ -30,13 +31,13 @@ more=20:radio::1:Show 'All tags' link in tag clouds
 perpage=21:string::0:Tags displayed per page in standalone cloud, 0 is all at once
 index=22:select:pages,forums,all:pages:Index page tag cloud area
 autocomplete=23:select:0,1,2,3,4,5,6:3:Min. chars for autocomplete
-[END_SED_EXTPLUGIN_CONFIG]
+[END_COT_EXT_CONFIG]
 ==================== */
 
 /**
  * Basic Tags implementation
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author Trustmaster, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

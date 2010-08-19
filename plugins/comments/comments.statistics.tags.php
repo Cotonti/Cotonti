@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=comments
-Part=statistics.tags
-File=comments.statistics.tags
+[BEGIN_COT_EXT]
 Hooks=statistics.tags
 Tags=statistics.tpl:{STATISTICS_TOTALDBCOMMENTS}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Comments system for Cotonti
  *
- * @package Cotonti
+ * @package comments
  * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

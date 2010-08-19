@@ -18,7 +18,7 @@ Lock_members=
 /**
  * View setup file
  *
- * @package Cotonti
+ * @package view
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

@@ -1,17 +1,12 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=search
-Part=page
-File=search.page.first
+[BEGIN_COT_EXT]
 Hooks=page.first
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
- * @package Cotonti
+ * @package search
  * @version 0.7.0
  * @author oc
  * @copyright Copyright (c) Cotonti Team 2008-2010

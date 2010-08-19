@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=tags
-Part=forums.posts
-File=tags.forums.posts
+[BEGIN_COT_EXT]
 Hooks=forums.posts.tags
 Tags=forums.posts.tpl:{FORUMS_POSTS_TAGS}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Forum post tags output
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
  * @copyright Copyright (c) Cotonti Team 2008-2010

@@ -1,19 +1,14 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=massmovetopics
-Part=admin
-File=massmovetopics.admin
+[BEGIN_COT_EXT]
 Hooks=tools
-Tags=
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Move all topics from one section to another section in forums.
  *
- * @package Cotonti
+ * @package massmovetopics
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

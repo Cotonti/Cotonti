@@ -2,7 +2,7 @@
 /**
  * English Language File for ForumStats Plugin
  *
- * @package Cotonti
+ * @package forumstats
  * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

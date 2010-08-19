@@ -2,7 +2,7 @@
 /**
  * PM function library.
  *
- * @package Cotonti
+ * @package pm
  * @version 0.7.0
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) 2008-2010 Cotonti Team

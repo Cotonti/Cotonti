@@ -2,7 +2,7 @@
 /**
  * Comments system for Cotonti
  *
- * @package Cotonti
+ * @package comments
  * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2009-2010

@@ -2,7 +2,7 @@
 /**
  * Search functions
  *
- * @package Cotonti
+ * @package search
  * @version 0.7.0
  * @author Boss, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

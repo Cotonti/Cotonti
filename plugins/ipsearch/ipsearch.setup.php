@@ -1,6 +1,6 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
+[BEGIN_COT_EXT]
 Code=ipsearch
 Name=IP search
 Description=Search for an IP in the user database
@@ -14,13 +14,13 @@ Auth_guests=0
 Lock_guests=RW12345A
 Auth_members=0
 Lock_members=RW12345A
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Search for an IP in the user database
  *
- * @package Cotonti
+ * @package ipsearch
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

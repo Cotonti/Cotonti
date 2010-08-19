@@ -2,7 +2,7 @@
 /**
  * English Language File for the Polls Module (polls.en.lang.php)
  *
- * @package Cotonti
+ * @package polls
  * @version 0.7.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

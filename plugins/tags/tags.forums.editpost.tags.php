@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=tags
-Part=forums.editpost.tags
-File=tags.forums.editpost.tags
+[BEGIN_COT_EXT]
 Hooks=forums.editpost.tags
 Tags=forums.editpost.tpl:{FORUMS_EDITPOST_FORM_TAGS},{FORUMS_EDITPOST_TOP_TAGS},{FORUMS_EDITPOST_TOP_TAGS_HINT}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Generates tag input when editing a forum post
  *
- * @package Cotonti
+ * @package tags
  * @version 0.7.0
  * @author Trustmaster - Vladimir Sibirov
  * @copyright Copyright (c) Cotonti Team 2008-2010

@@ -8,7 +8,7 @@ Hooks=module
 /**
  * RSS
  *
- * @package Cotonti
+ * @package rss
  * @version 0.7.0
  * @author medar, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010

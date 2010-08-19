@@ -3,7 +3,7 @@
 /**
  * Forums posts display.
  *
- * @package Cotonti
+ * @package forums
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) 2008-2010 Cotonti Team

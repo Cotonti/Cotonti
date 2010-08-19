@@ -1,19 +1,15 @@
 <?php
 /* ====================
-[BEGIN_SED_EXTPLUGIN]
-Code=news
-Part=homepage
-File=news
+[BEGIN_COT_EXT]
 Hooks=index.tags
 Tags=index.tpl:{INDEX_NEWS}
-Order=10
-[END_SED_EXTPLUGIN]
+[END_COT_EXT]
 ==================== */
 
 /**
  * Pick up pages from a category and display the newest in the home page
  *
- * @package Cotonti
+ * @package news
  * @version 0.7.0
  * @author esclkm, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
