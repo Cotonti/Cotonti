@@ -303,9 +303,9 @@ CREATE TABLE `sed_core` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
 
 INSERT INTO `sed_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
-('admin', 'Administration panel', '100', 1, 1),
-('message', 'Messages', '100', 1, 1),
-('users', 'Users', '100', 1, 1);
+('admin', 'Administration panel', '0.7.0', 1, 1),
+('message', 'Messages', '0.7.0', 1, 1),
+('users', 'Users', '0.7.0', 1, 1);
 
 CREATE TABLE `sed_extra_fields` (
   `field_location` varchar(255) collate utf8_unicode_ci NOT NULL,

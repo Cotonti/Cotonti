@@ -1,8 +1,8 @@
 <?php
 /* ====================
-[BEGIN_SED]
+[BEGIN_COT_SKIN]
 Name=Nemesis ver. 1.0
-[END_SED]
+[END_COT_SKIN]
 ==================== */
 
 /**

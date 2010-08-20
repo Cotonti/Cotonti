@@ -241,35 +241,49 @@ span.invalid {color: #EA0000;}
 	text-decoration: underline;
 }
 
-div.error {
-	background: #F7AEA3;
+div.message {
 	margin: 6px 4px 0;
 	padding: 8px;
-	border: 1px solid #F27A68;
+	background: #22EE99;
+	border: 1px solid #00CC33;
 }
 
-div.error p {
-	background: url(icons.png) no-repeat 0 -174px;
+div.message p {
 	padding-left: 21px;
 	margin: 0 !important;
 	text-align: left !important;
 	font-size: 11px;
-	color: #BC3B29 !important;
 }
 
-div.error ul li {
+div.message ul li {
 	margin: 5px 0 0 25px;
 	font-size: 11px;
-	color: #BC3B29 !important;
 	list-style: disc inside none;
 	padding: 0px !important;
 	background: none !important;
 	text-shadow: none !important;
 }
 
-div.error ul li span {
-	color: #BC3B29;
+div.message ul li span {
 	text-shadow: none;
+}
+
+div.error {
+	background: #F7AEA3 !important;
+	border: 1px solid #F27A68 !important;
+}
+
+div.error p {
+	background: url(icons.png) no-repeat 0 -174px;
+	color: #BC3B29 !important;
+}
+
+div.error ul li {
+	color: #BC3B29 !important;
+}
+
+div.error ul li span {
+	color: #BC3B29 !important;
 }
 
 select  {

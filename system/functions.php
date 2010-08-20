@@ -1575,7 +1575,7 @@ function sed_selectbox_skin($check, $name)
 		$skininfo = "./skins/$x/$x.php";
 		if (file_exists($skininfo))
 		{
-			$info = sed_infoget($skininfo);
+			$info = sed_infoget($skininfo, 'COT_SKIN');
 			$result .= (!empty($info['Error'])) ? '<option value="'.$x.'" '.$selected.'>'.$x.' ('.$info['Error'].')' : '<option value="'.$x.'" '.$selected.'>'.$info['Name'];
 		}
 		else
@@ -1631,25 +1631,124 @@ function sed_selectbox_theme($skinname, $name, $theme)
 
 /**
  * Checks if there are messages to display
+ * 
+ * @param string $src If non-emtpy, check messages in this specific source only
+ * @param string $class If non-empty, check messages of this specific class only
  * @return bool
  */
-function sed_check_messages()
+function sed_check_messages($src = '', $class = '')
 {
 	global $error_string;
-	return (is_array($_SESSION['cot_messages']) && count($_SESSION['cot_messages']) > 0)
-		|| !empty($error_string);
+
+	if (empty($src) && empty($class))
+	{
+		return (is_array($_SESSION['cot_messages']) && count($_SESSION['cot_messages']) > 0)
+			|| !empty($error_string);
+	}
+
+	if (!is_array($_SESSION['cot_messages']))
+	{
+		return false;
+	}
+
+	if (empty($src))
+	{
+		foreach ($_SESSION['cot_messages'] as $src => $grp)
+		{
+			foreach ($grp as $msg)
+			{
+				if ($msg['class'] == $class)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	elseif (empty($class))
+	{
+		return count($_SESSION['cot_messages'][$src]) > 0;
+	}
+	else
+	{
+		foreach ($_SESSION['cot_messages'][$src] as $msg)
+		{
+			if ($msg['class'] == $class)
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
 }
 
 /**
  * Clears error and other messages after they have bin displayed
+ * @param string $src If non-emtpy, clear messages in this specific source only
+ * @param string $class If non-empty, clear messages of this specific class only
  * @see sed_error()
  * @see sed_message()
  */
-function sed_clear_messages()
+function sed_clear_messages($src = '', $class = '')
 {
 	global $error_string;
-	unset($_SESSION['cot_messages']);
-	unset($error_string);
+
+	if (empty($src) && empty($class))
+	{
+		unset($_SESSION['cot_messages']);
+		unset($error_string);
+	}
+
+	if (!is_array($_SESSION['cot_messages']))
+	{
+		return;
+	}
+
+	if (empty($src))
+	{
+		foreach ($_SESSION['cot_messages'] as $src => $grp)
+		{
+			$new_grp = array();
+			foreach ($grp as $msg)
+			{
+				if ($msg['class'] != $class)
+				{
+					$new_grp[] = $msg;
+				}
+			}
+			if (count($new_grp) > 0)
+			{
+				$_SESSION['cot_messages'][$src] = $new_grp;
+			}
+			else
+			{
+				unset($_SESSION['cot_messages'][$src]);
+			}
+		}
+	}
+	elseif (empty($class))
+	{
+		unset($_SESSION['cot_messages'][$src]);
+	}
+	else
+	{
+		$new_grp = array();
+		foreach ($_SESSION['cot_messages'][$src] as $msg)
+		{
+			if ($msg['class'] != $class)
+			{
+				$new_grp[] = $msg;
+			}
+		}
+		if (count($new_grp) > 0)
+		{
+			$_SESSION['cot_messages'][$src] = $new_grp;
+		}
+		else
+		{
+			unset($_SESSION['cot_messages'][$src]);
+		}
+	}
 }
 
 /**
@@ -1716,13 +1815,58 @@ function sed_error($message, $src = 'default')
 }
 
 /**
- * Returns an array of messages for a specific source
- * @param string $src Message source identifier
- * @return array Multidimensional array of error messages
+ * Returns an array of messages for a specific source and/or class
+ *
+ * @param string $src Message source identifier. Search in all sources if empty
+ * @param string $class Message class. Search for all classes if empty
+ * @return array Array of message strings
  */
-function sed_get_messages($src = 'default')
+function sed_get_messages($src = 'default', $class = '')
 {
-	return is_array($_SESSION['cot_messages'][$src]) ? $_SESSION['cot_messages'][$src] : false;
+	$messages = array();
+	if (empty($src) && empty($class))
+	{
+		return $_SESSION['cot_messages'];
+	}
+
+	if (!is_array($_SESSION['cot_messages']))
+	{
+		return $messages;
+	}
+
+	if (empty($src))
+	{
+		foreach ($_SESSION['cot_messages'] as $src => $grp)
+		{
+			foreach ($grp as $msg)
+			{
+				if (!empty($class) && $msg['class'] != $class)
+				{
+					continue;
+				}
+				$messages[] = $msg;
+			}
+		}
+	}
+	elseif (is_array($_SESSION['cot_messages'][$src]))
+	{
+		if (empty($class))
+		{
+			return $_SESSION['cot_messages'][$src];
+		}
+		else
+		{
+			foreach ($_SESSION['cot_messages'][$src] as $msg)
+			{
+				if ($msg['class'] != $class)
+				{
+					continue;
+				}
+				$messages[] = $msg;
+			}
+		}
+	}
+	return $messages;
 }
 
 /**
@@ -1738,21 +1882,20 @@ function sed_implode_messages($src = 'default', $class = '')
 {
 	global $R, $L, $error_string;
 	$res = '';
-	$i = 0;
-	if (is_array($_SESSION['cot_messages']) && is_array($_SESSION['cot_messages'][$src]))
+
+	if (!is_array($_SESSION['cot_messages']))
 	{
-		foreach ($_SESSION['cot_messages'][$src] as $msg)
-		{
-			if (!empty($class) && $msg['class'] != $class)
-			{
-				continue;
-			}
-			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
-			$res .= sed_rc('code_msg_line', array('class' => $msg['class'], 'text' => $text));
-			$i++;
-		}
+		return;
 	}
-	if (!empty($error_string) && empty($class))
+
+	$messages = sed_get_messages($src, $class);
+	foreach ($messages as $msg)
+	{
+		$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
+		$res .= sed_rc('code_msg_line', array('class' => $msg['class'], 'text' => $text));
+	}
+
+	if (!empty($error_string) && (empty($class) || $class == 'error'))
 	{
 		$res .= sed_rc('code_msg_line', array('class' => 'error', 'text' => $error_string));
 	}

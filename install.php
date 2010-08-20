@@ -75,6 +75,7 @@ require_once sed_incfile('extensions');
 require_once sed_incfile('xtemplate');
 require_once sed_langfile('install', 'module');
 require_once sed_incfile('functions', 'admin');
+require_once sed_langfile('admin', 'core');
 
 if (!$cfg['new_install'])
 {

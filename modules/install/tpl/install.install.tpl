@@ -24,11 +24,18 @@
 
 			<div id="content">
 				<!-- BEGIN: ERROR -->
-				<div class="error">
+				<div class="message error">
 					<p>{PHP.L.Error}</p>
 					{INSTALL_ERROR}
 				</div>
 				<!-- END: ERROR -->
+
+				<!-- BEGIN: MESSAGE -->
+				<div class="message">
+					<p>{PHP.L.Messages}</p>
+					{INSTALL_MESSAGE}
+				</div>
+				<!-- END: MESSAGE -->
 
 				<form action="install.php" method="post">
 
@@ -112,7 +119,7 @@
 							{MODULE_ROW_CHECKBOX}
 							<strong>{MODULE_ROW_TITLE}</strong>
 							<p>{MODULE_ROW_DESCRIPTION}</p>
-							{MODULE_ROW_DEPENDS}
+							{MODULE_ROW_REQUIRES}
 							{MODULE_ROW_RECOMMENDS}
 						</li>
 						<!-- END: MODULE_ROW -->
@@ -124,8 +131,8 @@
 							{PLUGIN_ROW_CHECKBOX}
 							<strong>{PLUGIN_ROW_TITLE}</strong>
 							<p>{PLUGIN_ROW_DESCRIPTION}</p>
-							{PLUGIN_ROW_DEPENDS}
-							{MODULE_ROW_RECOMMENDS}
+							{PLUGIN_ROW_REQUIRES}
+							{PLUGIN_ROW_RECOMMENDS}
 						</li>
 						<!-- END: PLUGIN_ROW -->
 					</ul>
