@@ -2,20 +2,24 @@
 /**
  * @package install
  * @version 0.7.0
- * @author Kilandor, Cotonti Team
+ * @author Kilandor, Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
  */
 
 defined('SED_CODE') or die('Wrong URL');
 
-//Various Generic Vars needed to operate as Normal
+// Various Generic Vars needed to operate as Normal
 $skin = $cfg['defaultskin'];
 $theme = $cfg['defaulttheme'];
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $file['config'] = './datas/config.php';
 $file['config_sample'] = './datas/config-sample.php';
 $file['sql'] = './setup/install.sql';
+
+// Modules and plugins checked by default
+$default_modules = array('index', 'page', 'rss');
+$default_plugins = array('cleaner', 'ipsearch', 'markitup', 'news', 'search', 'tags');
 
 $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
@@ -41,23 +45,55 @@ if ($step != 2)
 }
 
 // Import section
-// Step 2
-$db_host = sed_import('db_host', 'P', 'TXT');
-$db_user = sed_import('db_user', 'P', 'TXT');
-$db_pass = sed_import('db_pass', 'P', 'TXT');
-$db_name = sed_import('db_name', 'P', 'TXT');
+switch ($step)
+{
+	case 2:
+		$db_host = sed_import('db_host', 'P', 'TXT');
+		$db_user = sed_import('db_user', 'P', 'TXT');
+		$db_pass = sed_import('db_pass', 'P', 'TXT');
+		$db_name = sed_import('db_name', 'P', 'TXT');
+		break;
 
-// Step 3
-$cfg['mainurl'] = sed_import('mainurl', 'P', 'TXT');
-$user['name'] = sed_import('user_name', 'P', 'TXT', 100, TRUE);
-$user['pass'] = sed_import('user_pass', 'P', 'TXT', 16);
-$user['pass2'] = sed_import('user_pass2', 'P', 'TXT', 16);
-$user['email'] = sed_import('user_email', 'P', 'TXT', 64, TRUE);
-$user['country'] = sed_import('user_country', 'P', 'TXT');
-$rskin = sed_import('skin', 'P', 'TXT');
-//$rtheme = sed_import('theme', 'P', 'TXT');
-//$rtheme = ($skin == $rtheme && $rskin != $rtheme) ? $rskin : $rtheme;
-$rlang = sed_import('lang', 'P', 'TXT');
+	case 3:
+		$cfg['mainurl'] = sed_import('mainurl', 'P', 'TXT');
+		$user['name'] = sed_import('user_name', 'P', 'TXT', 100, TRUE);
+		$user['pass'] = sed_import('user_pass', 'P', 'TXT', 16);
+		$user['pass2'] = sed_import('user_pass2', 'P', 'TXT', 16);
+		$user['email'] = sed_import('user_email', 'P', 'TXT', 64, TRUE);
+		$user['country'] = sed_import('user_country', 'P', 'TXT');
+		$rskin = sed_import('skin', 'P', 'TXT');
+		//$rtheme = sed_import('theme', 'P', 'TXT');
+		//$rtheme = ($skin == $rtheme && $rskin != $rtheme) ? $rskin : $rtheme;
+		$rlang = sed_import('lang', 'P', 'TXT');
+		break;
+	case 4:
+		// Extension selection
+		$install_modules = sed_import('install_modules', 'P', 'ARR');
+		$selected_modules = array();
+		if (is_array($install_modules))
+		{
+			foreach ($install_modules as $key => $val)
+			{
+				if ($val)
+				{
+					$selected_modules[] = $key;
+				}
+			}
+		}
+		$install_plugins = sed_import('install_plugins', 'P', 'ARR');
+		$selected_plugins = array();
+		if (is_array($install_plugins))
+		{
+			foreach ($install_plugins as $key => $val)
+			{
+				if ($val)
+				{
+					$selected_plugins[] = $key;
+				}
+			}
+		}
+		break;
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
@@ -67,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		case 0:
 			// Lang selection
 			$_SESSION['cot_inst_lang'] = $lang;
+			sed_redirect('install.php');
 			break;
 		case 1:
 			// System info
@@ -205,7 +242,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 			break;
 		case 4:
-			// Extension selection
+			// Dependency check
+			$install = true;
+			foreach ($selected_modules as $ext)
+			{
+				$install &= sed_extension_dependencies_statisfied($ext, true, $selected_modules, $selected_plugins);
+			}
+			foreach ($selected_plugins as $ext)
+			{
+				$install &= sed_extension_dependencies_statisfied($ext, false, $selected_modules, $selected_plugins);
+			}
+
+			if ($install && !$cot_error)
+			{
+				// Load groups
+				$sed_groups = array();
+				$res = sed_sql_query("SELECT grp_id FROM $db_groups
+					WHERE grp_disabled=0 ORDER BY grp_level DESC");
+				while ($row = sed_sql_fetchassoc($res))
+				{
+					$sed_groups[$row['grp_id']] = array(
+						'id' => $row['grp_id'],
+						'alias' => $row['grp_alias'],
+						'level' => $row['grp_level'],
+						'disabled' => $row['grp_disabled'],
+						'hidden' => $row['grp_hidden'],
+						'state' => $row['grp_state'],
+						'title' => htmlspecialchars($row['grp_title'])
+					);
+				}
+				sed_sql_freeresult($res);
+				// Install all at once
+				// Note: installation statuses are ignored in this installer
+				foreach ($selected_modules as $ext)
+				{
+					sed_extension_install($ext, true);
+				}
+				foreach ($selected_plugins as $ext)
+				{
+					sed_extension_install($ext, false);
+				}
+			}
 			break;
 		case 5:
 			// End credits
@@ -422,8 +499,8 @@ switch ($step)
 		));
 	case 4:
 		// Extensions
-		cot_install_parse_extensions('Module');
-		cot_install_parse_extensions('Plugin');
+		cot_install_parse_extensions('Module', $default_modules, $selected_modules);
+		cot_install_parse_extensions('Plugin', $default_plugins, $selected_plugins);
 		break;
 	case 5:
 		// End credits
@@ -433,13 +510,21 @@ switch ($step)
 
 $t->parse("MAIN.STEP_$step");
 
-// Error display
+// Error & message display
+if (sed_check_messages('', 'error'))
+{
+	$t->assign(array(
+		'INSTALL_ERROR' => sed_implode_messages('', 'error')
+	));
+	$t->parse('MAIN.ERROR');
+	sed_clear_messages('', 'error');
+}
 if (sed_check_messages())
 {
 	$t->assign(array(
-		'INSTALL_ERROR' => sed_implode_messages()
+		'INSTALL_MESSAGE' => sed_implode_messages()
 	));
-	$t->parse('MAIN.ERROR');
+	$t->parse('MAIN.MESSAGE');
 	sed_clear_messages();
 }
 
@@ -470,58 +555,77 @@ function cot_install_config_replace(&$file_contents, $config_name, $config_value
  * Parses extensions selection section
  *
  * @param string $ext_type Extension type: 'Module' or 'Plugin'
+ * @param array $default_list A list of recommended extensions (checked by default)
+ * @param array $selected_list A list of previously selected extensions
  */
-function cot_install_parse_extensions($ext_type)
+function cot_install_parse_extensions($ext_type, $default_list = array(), $selected_list = array())
 {
 	global $t, $cfg, $L;
 	$ext_type_lc = strtolower($ext_type);
 	$ext_type_uc = strtoupper($ext_type);
+
+	$ext_list = array();
 	$dp = opendir($cfg["{$ext_type_lc}s_dir"]);
 	while ($f = readdir($dp))
 	{
 		$path = $cfg["{$ext_type_lc}s_dir"] . '/' . $f;
 		if ($f[0] != '.' && is_dir($path) && file_exists("$path/$f.setup.php"))
 		{
-			$info = sed_infoget("$path/$f.setup.php", 'COT_EXT');
-			if (is_array($info))
-			{
-				if (!empty($info["Requires_modules"]) || !empty($info['Requires_plugins']))
-				{
-					$modules_list = empty($info['Requires_modules']) ? $L['None']
-						: implode(', ', explode(',', $info['Requires_modules']));
-					$plugins_list = empty($info['Requires_plugins']) ? $L['None']
-						: implode(', ', explode(',', $info['Requires_plugins']));
-					$requires = sed_rc('install_code_requires',
-							array('modules_list' => $modules_list, 'plugins_list' => $plugins_list));
-				}
-				else
-				{
-					$requires = '';
-				}
-				if (!empty($info['Recommends_modules']) || !empty($info['Recommends_plugins']))
-				{
-					$modules_list = empty($info['Recommends_modules']) ? $L['None']
-						: implode(', ', explode(',', $info['Recommends_modules']));
-					$plugins_list = empty($info['Recommends_plugins']) ? $L['None']
-						: implode(', ', explode(',', $info['Recommends_plugins']));
-					$recommends = sed_rc('install_code_recommends',
-							array('modules_list' => $modules_list, 'plugins_list' => $plugins_list));
-				}
-				else
-				{
-					$recommends = '';
-				}
-				$t->assign(array(
-					"{$ext_type_uc}_ROW_CHECKBOX" => sed_checkbox(true, "install_$f"),
-					"{$ext_type_uc}_ROW_TITLE" => $info['Name'],
-					"{$ext_type_uc}_ROW_DESCRIPTION" => $info['Description'],
-					"{$ext_type_uc}_ROW_REQUIRES" => $requires,
-					"{$ext_type_uc}_ROW_RECOMMENDS" => $recommends
-				));
-				$t->parse("MAIN.STEP_4.{$ext_type_uc}_ROW");
-			}
+			$ext_list[$f] = "$path/$f.setup.php";
 		}
 	}
 	closedir($dp);
+
+	ksort($ext_list);
+
+	foreach ($ext_list as $f => $ext_setup)
+	{
+		$info = sed_infoget($ext_setup, 'COT_EXT');
+		if (is_array($info))
+		{
+			if (!empty($info["Requires_modules"]) || !empty($info['Requires_plugins']))
+			{
+				$modules_list = empty($info['Requires_modules']) ? $L['None']
+					: implode(', ', explode(',', $info['Requires_modules']));
+				$plugins_list = empty($info['Requires_plugins']) ? $L['None']
+					: implode(', ', explode(',', $info['Requires_plugins']));
+				$requires = sed_rc('install_code_requires',
+						array('modules_list' => $modules_list, 'plugins_list' => $plugins_list));
+			}
+			else
+			{
+				$requires = '';
+			}
+			if (!empty($info['Recommends_modules']) || !empty($info['Recommends_plugins']))
+			{
+				$modules_list = empty($info['Recommends_modules']) ? $L['None']
+					: implode(', ', explode(',', $info['Recommends_modules']));
+				$plugins_list = empty($info['Recommends_plugins']) ? $L['None']
+					: implode(', ', explode(',', $info['Recommends_plugins']));
+				$recommends = sed_rc('install_code_recommends',
+						array('modules_list' => $modules_list, 'plugins_list' => $plugins_list));
+			}
+			else
+			{
+				$recommends = '';
+			}
+			if (count($selected_list) > 0)
+			{
+				$checked = in_array($f, $selected_list);
+			}
+			else
+			{
+				$checked = in_array($f, $default_list);
+			}
+			$t->assign(array(
+				"{$ext_type_uc}_ROW_CHECKBOX" => sed_checkbox($checked, "install_{$ext_type_lc}s[$f]"),
+				"{$ext_type_uc}_ROW_TITLE" => $info['Name'],
+				"{$ext_type_uc}_ROW_DESCRIPTION" => $info['Description'],
+				"{$ext_type_uc}_ROW_REQUIRES" => $requires,
+				"{$ext_type_uc}_ROW_RECOMMENDS" => $recommends
+			));
+			$t->parse("MAIN.STEP_4.{$ext_type_uc}_ROW");
+		}
+	}
 }
 ?>

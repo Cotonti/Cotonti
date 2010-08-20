@@ -10,6 +10,8 @@
  * @license BSD
  */
 
+defined('SED_CODE') or die('Wrong URL');
+
 /**
  * Default allowed permissions map. If some value is missing in user-defined
  * permission map, it will be taken from this one.

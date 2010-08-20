@@ -9,6 +9,14 @@
  * @copyright Copyright (c) Cotonti Team 2010
  * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL');
+
+// Requirements
+require_once sed_incfile('auth');
+require_once sed_incfile('configuration');
+require_once sed_langfile('admin', 'core');
+
 /**
  * Default plugin part execution priority
  */
@@ -97,6 +105,69 @@ function sed_apply_patches($directory, $from_ver,
 }
 
 /**
+ * Checks if all dependencies for selected extension are satisfied. It means
+ * that either all required modules and plugins are already installed or
+ * selected for installation.
+ *
+ * Unsatisfied requirements messages are emitted with error & messaging API.
+ *
+ * @param string $name Extension code
+ * @param bool $is_module TRUE for modules, FALSE for plugins
+ * @param array $selected_modules A list of modules currently in selection
+ * @param array $selected_plugins A list of plugins currently in selection
+ * @return bool TRUE if all dependencies are satisfied, or FALSE otherwise
+ */
+function sed_extension_dependencies_statisfied($name, $is_module = false,
+	$selected_modules = array(), $selected_plugins = array())
+{
+	global $cfg, $L;
+	$path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
+	$ret = true;
+
+	// Get the dependency list
+	$info = sed_infoget("$path/$name.setup.php", 'COT_EXT');
+	$required_modules = empty($info['Requires_modules']) ? array()
+		: explode(',', $info['Requires_modules']);
+	 array_walk($required_modules, 'trim');
+	$required_plugins = empty($info['Requires_plugins']) ? array()
+		: explode(',', $info['Requires_plugins']);
+	array_walk($required_plugins, 'trim');
+
+	// Check each dependency
+	foreach ($required_modules as $req_ext)
+	{
+		if (!empty($req_ext) && !in_array($req_ext, $selected_modules)
+			&& !sed_module_installed($req_ext))
+		{
+			sed_error(sed_rc('ext_dependency_error', array(
+				'name' => $name,
+				'type' => $is_module ? $L['Module'] : $L['Plugin'],
+				'dep_type' => $L['Module'],
+				'dep_name' => $req_ext
+			)));
+			$ret = false;
+		}
+	}
+
+	foreach ($required_plugins as $req_ext)
+	{
+		if (!empty($req_ext) && !in_array($req_ext, $selected_plugins)
+			&& !sed_plugin_installed($req_ext))
+		{
+			sed_error(sed_rc('ext_dependency_error', array(
+				'name' => $name,
+				'type' => $is_module ? $L['Module'] : $L['Plugin'],
+				'dep_type' => $L['Plugin'],
+				'dep_name' => $req_ext
+			)));
+			$ret = false;
+		}
+	}
+
+	return $ret;
+}
+
+/**
  * Installs or updates a Cotonti extension: module or plugin.
  * Messages emitted during installation can be received through standard
  * Cotonti messages interface.
@@ -108,10 +179,9 @@ function sed_apply_patches($directory, $from_ver,
 function sed_extension_install($name, $is_module = false, $update = false)
 {
     global $cfg, $L, $cot_error, $cot_cache, $usr, $db_auth, $db_users,
-		$db_updates, $db_core;
+		$db_updates, $db_core, $sed_groups;
 
-    $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
-		. "/$name";
+    $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
     // Check setup file and tags
     $setup_file = $path . "/$name.setup.php";
@@ -149,33 +219,6 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		}
 	}
 
-    // Check dependencies
-    if (!empty($info['Requires_modules']))
-    {
-        $req_mods = explode(',', $info['Requires_modules']);
-        array_walk($req_mods, 'trim');
-        foreach ($req_mods as $req_mod)
-        {
-            if (!sed_module_installed($req_mod))
-            {
-                sed_error(sed_rc('ext_req_module_missing',
-					array('name' => $req_mod)));
-            }
-        }
-    }
-    if (!empty($info['Requires_plugins']))
-    {
-        $req_plugs = explode(',', $info['Requires_plugins']);
-        array_walk($req_plugs, 'trim');
-        foreach ($req_mods as $req_plug)
-        {
-            if (!sed_plugin_installed($req_plug))
-            {
-                sed_error(sed_rc('ext_req_plugin_missing',
-					array('name' => $req_plug)));
-            }
-        }
-    }
     if ($cot_error)
     {
         return false;
@@ -185,32 +228,34 @@ function sed_extension_install($name, $is_module = false, $update = false)
 	{
 		// Safely drop existing bindings
 		$bindings_cnt = sed_plugin_remove($name);
-		sed_message(sed_rc('ext_bindings_uninstalled',
-			array('cnt' => $bindings_cnt)));
+		sed_message(sed_rc('ext_bindings_uninstalled', array('cnt' => $bindings_cnt)));
 	}
     // Install hook parts and bindings
     $hook_bindings = array();
+	// These parts ($name.$part.php) are reserved handlers with no hooks
+	$ignore_parts = array('configure', 'install', 'setup', 'uninstall');
     $dp = opendir($path);
     while ($f = readdir($dp))
     {
-        if (preg_match("#^$name.([\w\.]+).php$#", $f, $mt))
+        if (preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt)
+			&& !in_array($mt[2], $ignore_parts))
         {
             $part_info = sed_infoget($path . "/$f", 'COT_EXT');
             if ($part_info)
             {
                 if (empty($info['Hooks']))
                 {
-                    $hooks = $is_module ? 'module' : 'standalone';
+                    $hooks = $is_module ? array('module') : array('standalone');
                 }
                 else
                 {
                     $hooks = explode(',', $part_info['Hooks']);
-                    array_walk($hooks, 'trim');
+					is_array($hooks) ? array_walk($hooks, 'trim') : $hooks = array();
                 }
                 foreach ($hooks as $hook)
                 {
                     $hook_bindings[] = array(
-                        'part' => $mt[1],
+                        'part' => empty($mt[2]) ? 'main' : $mt[2],
                         'hook' => $hook,
                         'order' => isset($part_info['Order'])
 							? (int) $part_info['Order']
@@ -221,10 +266,8 @@ function sed_extension_install($name, $is_module = false, $update = false)
         }
     }
     closedir($dp);
-    $bindings_cnt = sed_plugin_add($hook_bindings, $name, $info['Name'],
-		$is_module);
-    sed_message(sed_rc('ext_bindings_installed',
-		array('cnt' => $bindings_cnt)));
+    $bindings_cnt = sed_plugin_add($hook_bindings, $name, $info['Name'], $is_module);
+    sed_message(sed_rc('ext_bindings_installed', array('cnt' => $bindings_cnt)));
 
     // Install config
     $info_cfg = sed_infoget($setup_file, 'COT_EXT_CONFIG');
@@ -238,7 +281,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
 			sed_message('ext_config_updated');
 		}
 	}
-	else
+	elseif (count($options) > 0)
 	{
 		if (sed_config_add($name, $options, $is_module))
 		{
@@ -256,13 +299,16 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		// Only update auth locks
 		$lock_guests = sed_auth_getvalue($info['Lock_guests']);
 		sed_sql_update($db_auth, 'auth_groupid = ' . COT_GROUP_GUESTS
-			. ' OR auth_groupid = ' . COT_GROUP_INACTIVE,
+				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE,
 			array('rights_lock' => $lock_guests), 'auth_');
 
 		$lock_members = sed_auth_getvalue($info['Lock_members']);
-		$ingore_groups = implode(',', array(COT_GROUP_GUESTS,
-			COT_GROUP_INACTIVE, COT_GROUP_BANNED, COT_GROUP_BANNED,
-			COT_GROUP_SUPERADMINS));
+		$ingore_groups = implode(',', array(
+			COT_GROUP_GUESTS,
+			COT_GROUP_INACTIVE,
+			COT_GROUP_BANNED,
+			COT_GROUP_SUPERADMINS
+		));
 		sed_sql_update($db_auth, "auth_groupid NOT IN ($ingore_groups)",
 			array('rights_lock' => $lock_members), 'auth_');
 
@@ -526,7 +572,7 @@ function sed_file_phpdoc($filename)
  * @param int $maxsize Max header size
  * @return array Array containing block data or FALSE on error
  */
-function sed_infoget($file, $limiter = 'SED', $maxsize = 32768)
+function sed_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 {
     global $L;
     $result = array();

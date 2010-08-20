@@ -1,7 +1,15 @@
 <?php
-/*
- * ================================ Debugging Facilities ================================
+/**
+ * Debugging Facilities
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Neocrome, Trustmaster
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL');
 
 /**
  * Accepts several variables and prints their values in debug mode (var dump).

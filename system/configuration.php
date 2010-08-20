@@ -9,6 +9,9 @@
  * @copyright Copyright (c) Cotonti Team 2010
  * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL');
+
 /**
  * Generic text configuration. Is displayed as textarea. Contains text.
  * Is used by default.
@@ -182,39 +185,42 @@ function sed_config_modify($name, $options, $is_module = false)
 function sed_config_parse($info_cfg)
 {
     $options = array();
-    foreach ($info_cfg as $i => $x)
-    {
-        $line = explode(':', $x);
-        if (is_array($line) && !empty($line[1]) && !empty($i))
-        {
-            switch ($line[1])
-            {
-                case 'string':
-                    $line['Type'] = COT_CONFIG_TYPE_STRING;
-                    break;
-                case 'select':
-                    $line['Type'] = COT_CONFIG_TYPE_SELECT;
-                    break;
-                case 'radio':
-                    $line['Type'] = COT_CONFIG_TYPE_RADIO;
-                    break;
-                case 'hidden':
-                    $line['Type'] = COT_CONFIG_TYPE_HIDDEN;
-                    break;
-                default:
-                    $line['Type'] = COT_CONFIG_TYPE_TEXT;
-                    break;
-            }
-            $options[] = array(
-                'name' => $i,
-                'order' => $line[0],
-                'type' => $line['Type'],
-                'variants' => $line[2],
-                'default' => $line[3],
-                'text' => $line[4]
-            );
-        }
-    }
+	if (is_array($info_cfg))
+	{
+		foreach ($info_cfg as $i => $x)
+		{
+			$line = explode(':', $x);
+			if (is_array($line) && !empty($line[1]) && !empty($i))
+			{
+				switch ($line[1])
+				{
+					case 'string':
+						$line['Type'] = COT_CONFIG_TYPE_STRING;
+						break;
+					case 'select':
+						$line['Type'] = COT_CONFIG_TYPE_SELECT;
+						break;
+					case 'radio':
+						$line['Type'] = COT_CONFIG_TYPE_RADIO;
+						break;
+					case 'hidden':
+						$line['Type'] = COT_CONFIG_TYPE_HIDDEN;
+						break;
+					default:
+						$line['Type'] = COT_CONFIG_TYPE_TEXT;
+						break;
+				}
+				$options[] = array(
+					'name' => $i,
+					'order' => $line[0],
+					'type' => $line['Type'],
+					'variants' => $line[2],
+					'default' => $line[3],
+					'text' => $line[4]
+				);
+			}
+		}
+	}
     return $options;
 }
 

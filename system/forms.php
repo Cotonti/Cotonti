@@ -23,7 +23,8 @@ function sed_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
     global $R;
     $input_attrs = sed_rc_attr_string($attrs);
     $checked = $chosen ? ' checked="checked"' : '';
-    $rc = empty($R["input_checkbox_$name"]) ? 'input_checkbox' : "input_checkbox_$name";
+	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+    $rc = empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}";
     return sed_rc($rc, array(
         'value' => sed_import_buffered($name, $value),
         'name' => $name,
@@ -47,8 +48,9 @@ function sed_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 {
     global $R, $cfg;
     $input_attrs = sed_rc_attr_string($attrs);
+	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
     $rc = empty($custom_rc)
-        ? (empty($R["input_{$type}_{$name}"]) ? "input_$type" : "input_{$type}_{$name}")
+        ? (empty($R["input_{$type}_{$rc_name}"]) ? "input_$type" : "input_{$type}_{$rc_name}")
         : $custom_rc;
     if (!isset($R[$rc]))
     {
@@ -95,7 +97,8 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
     }
     $i = 0;
     $result = '';
-    $rc = empty($R["input_radio_$name"]) ? 'input_radio' : "input_radio_$name";
+	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+    $rc = empty($R["input_radio_{$rc_name}"]) ? 'input_radio' : "input_radio_{$rc_name}";
     foreach ($values as $k => $x)
     {
         $checked = ($x == $chosen) ? ' checked="checked"' : '';
@@ -144,10 +147,11 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
     $chosen = sed_import_buffered($name, $chosen);
     $multi = is_array($chosen) && isset($input_attrs['multiple']);
     $error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
-    $rc = empty($R["input_select_begin_$name"]) ? 'input_select_begin' : "input_select_begin_$name";
+	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+    $rc = empty($R["input_select_begin_{$rc_name}"]) ? 'input_select_begin' : "input_select_begin_{$rc_name}";
     $result = sed_rc($rc, array('name' => $name, 'attrs' => $input_attrs));
     $selected = (is_null($chosen) || $chosen === '' || $chosen == '00') ? ' selected="selected"' : '';
-    $rc = empty($R["input_option_$name"]) ? 'input_option' : "input_option_$name";
+    $rc = empty($R["input_option_{$rc_name}"]) ? 'input_option' : "input_option_{$rc_name}";
     if ($add_empty)
     {
         $result .= sed_rc($rc, array(
@@ -167,7 +171,7 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
                 'title' => $title
             ));
     }
-    $rc = empty($R["input_select_end_$name"]) ? 'input_select_end' : "input_select_end_$name";
+    $rc = empty($R["input_select_end_{$rc_name}"]) ? 'input_select_end' : "input_select_end_{$rc_name}";
     $result .= sed_rc($rc, array(
             'error' => $error
         ));
@@ -301,8 +305,9 @@ function sed_selectbox_lang($chosen, $name)
 function sed_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 {
     $input_attrs = sed_rc_attr_string($attrs);
+	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
     $rc = empty($custom_rc)
-        ? (empty($R["input_textarea_$name"]) ? 'input_textarea' : "input_textarea_$name")
+        ? (empty($R["input_textarea_{$rc_name}"]) ? 'input_textarea' : "input_textarea_{$rc_name}")
         : $custom_rc;
     $error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
     return sed_rc($rc, array(

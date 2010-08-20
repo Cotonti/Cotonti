@@ -8,6 +8,8 @@
  * @license BSD
  */
 
+defined('SED_CODE') or die('Wrong URL');
+
 /**
  * Stores the list of advanced cachers provided by the host
  * @var array
