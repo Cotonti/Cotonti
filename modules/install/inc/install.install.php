@@ -62,6 +62,7 @@ switch ($step)
 		$user['email'] = sed_import('user_email', 'P', 'TXT', 64, TRUE);
 		$user['country'] = sed_import('user_country', 'P', 'TXT');
 		$rskin = sed_import('skin', 'P', 'TXT');
+		$rtheme = 'default'; // TODO color scheme support (after #481)
 		//$rtheme = sed_import('theme', 'P', 'TXT');
 		//$rtheme = ($skin == $rtheme && $rskin != $rtheme) ? $rskin : $rtheme;
 		$rlang = sed_import('lang', 'P', 'TXT');
@@ -205,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'defaultlang', $rlang);
 				cot_install_config_replace($config_contents, 'defaultskin', $rskin);
-				cot_install_config_replace($config_contents, 'defaulttheme', $rskin);
+				cot_install_config_replace($config_contents, 'defaulttheme', $rtheme);
 				cot_install_config_replace($config_contents, 'mainurl', $cfg['mainurl']);
 
 				$new_site_id = sed_unique(32);
@@ -220,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 						'country' => (string) $user['country'],
 						'email' => $user['email'],
 						'skin' => $rskin,
-						'theme' => $rskin,
+						'theme' => $rtheme,
 						'lang' => $rlang,
 						'regdate' => time(),
 						'lastip' => $_SERVER['REMOTE_ADDR']
@@ -272,15 +273,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 					);
 				}
 				sed_sql_freeresult($res);
+				$usr['id'] = 1;
 				// Install all at once
 				// Note: installation statuses are ignored in this installer
 				foreach ($selected_modules as $ext)
 				{
-					sed_extension_install($ext, true);
+					if (!sed_extension_install($ext, true))
+                    {
+                        sed_error("Installing $ext module has failed");
+                    }
 				}
 				foreach ($selected_plugins as $ext)
 				{
-					sed_extension_install($ext, false);
+					if (!sed_extension_install($ext, false))
+                    {
+                        sed_error("Installing $ext plugin has failed");
+                    }
 				}
 			}
 			break;

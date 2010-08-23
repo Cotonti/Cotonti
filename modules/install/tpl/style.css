@@ -33,7 +33,7 @@ ol,ul {
 }
 
 body {
-	background: #DDE1E9 url(body_bg.png) repeat top left;
+	background: #DDE1E9 url(../img/body_bg.png) repeat top left;
 	width: 100%;
     font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif;
 	font-size: 100%;
@@ -41,14 +41,14 @@ body {
 }
 
 #box {
-	background: url(box_footer.png) no-repeat bottom center;
+	background: url(../img/box_footer.png) no-repeat bottom center;
 	width: 532px;
 	margin: 30px auto 40px;
 	padding-bottom: 27px;
 }
 
 #header {
-	background: url(box_header.png) no-repeat top left;
+	background: url(../img/box_header.png) no-repeat top left;
 	width: 479px;
 	height: 29px;
 	padding: 29px 27px 0 26px;
@@ -67,7 +67,7 @@ body {
 }
 
 #content {
-	background: url(box_bg.png) repeat-y top left;
+	background: url(../img/box_bg.png) repeat-y top left;
 	width: 492px;
 	padding: 3px 20px 5px 20px;
 }
@@ -77,7 +77,7 @@ body {
 }
 
 #content ul li {
-	background: url(box_ul_li.png) repeat-x bottom left;
+	background: url(../img/box_ul_li.png) repeat-x bottom left;
 	padding: 10px 3px 12px 3px;
 	font-size: 10px;
 	font-weight: bold;
@@ -96,43 +96,43 @@ body {
 }
 
 #content ul li span.administrator {
-	background: url(icons.png) no-repeat 0 -80px;
+	background: url(../img/icons.png) no-repeat 0 -80px;
 	margin-left: 15px;
 	padding-left: 22px;
 }
 
 #content ul li span.settings {
-	background: url(icons.png) no-repeat 0 -96px;
+	background: url(../img/icons.png) no-repeat 0 -96px;
 	margin-left: 21px;
 	padding-left: 18px;
 }
 
 #content ul li span.plugins {
-	background: url(icons.png) no-repeat 0 -143px;
+	background: url(../img/icons.png) no-repeat 0 -143px;
 	padding-left: 18px;
 }
 
 #content ul li span.modules {
-	background: url(icons.png) no-repeat 0 -112px;
+	background: url(../img/icons.png) no-repeat 0 -112px;
 	padding-left: 18px;
 }
 
 #content ul li span.forum {
-	background: url(icons.png) no-repeat 0 -127px;
+	background: url(../img/icons.png) no-repeat 0 -127px;
 	padding-left: 18px;
 }
 
 #content ul li span.miscellaneous {
-	background: url(icons.png) no-repeat 0 -159px;
+	background: url(../img/icons.png) no-repeat 0 -159px;
 	padding-left: 20px;
 }
 
-strong.php {background: url(icons.png) no-repeat 0 -32px;}
-strong.mbstring {background: url(icons.png) no-repeat 0 -48px;}
-strong.mysql {background: url(icons.png) no-repeat 0 -64px;}
-strong.file {background: url(icons.png) no-repeat 0 0;}
-strong.folder {background: url(icons.png) no-repeat 0 -16px;}
-strong.plugin {background: url(icons.png) no-repeat 0 -112px;}
+strong.php {background: url(../img/icons.png) no-repeat 0 -32px;}
+strong.mbstring {background: url(../img/icons.png) no-repeat 0 -48px;}
+strong.mysql {background: url(../img/icons.png) no-repeat 0 -64px;}
+strong.file {background: url(../img/icons.png) no-repeat 0 0;}
+strong.folder {background: url(../img/icons.png) no-repeat 0 -16px;}
+strong.plugin {background: url(../img/icons.png) no-repeat 0 -112px;}
 
 span.valid {color: #34A100;}
 span.invalid {color: #EA0000;}
@@ -266,6 +266,7 @@ div.message ul li {
 
 div.message ul li span {
 	text-shadow: none;
+	color: #333;
 }
 
 div.error {
@@ -274,7 +275,7 @@ div.error {
 }
 
 div.error p {
-	background: url(icons.png) no-repeat 0 -174px;
+	background: url(../img/icons.png) no-repeat 0 -174px;
 	color: #BC3B29 !important;
 }
 
@@ -317,7 +318,7 @@ input[type=text]:focus, input[type=password]:focus {
 }
 
 input[type=submit] {
-	background: url(submit.png) repeat-x 0 0;
+	background: url(../img/submit.png) repeat-x 0 0;
 	width: 220px;
 	margin: 6px auto 0;
 	padding: 6px 10px;
@@ -333,5 +334,5 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-	background: url(submit.png) repeat-x 0 -28px;
+	background: url(../img/submit.png) repeat-x 0 -28px;
 }

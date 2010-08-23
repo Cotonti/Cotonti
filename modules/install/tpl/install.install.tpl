@@ -11,7 +11,7 @@
 		<meta name="robots" content="noindex" />
 		<link rel="shortcut icon" href="favicon.ico" />
 		<title>{PHP.L.install_title}</title>
-		<link rel="stylesheet" type="text/css" href="modules/install/img/style.css" />
+		<link rel="stylesheet" type="text/css" href="modules/install/tpl/style.css" />
 	</head>
 
 
