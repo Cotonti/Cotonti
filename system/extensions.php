@@ -212,7 +212,15 @@ function sed_extension_install($name, $is_module = false, $update = false)
 	{
 		$current_ver = sed_sql_result($res);
 		sed_sql_freeresult($res);
-		if (!$update)
+		if ($update)
+		{
+			if (version_compare($current_ver, $info['Version']) == 0)
+			{
+				// Nothing to update
+				return false;
+			}
+		}
+		else
 		{
 			sed_error('ext_already_installed');
 			return false;
@@ -243,7 +251,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
             $part_info = sed_infoget($path . "/$f", 'COT_EXT');
             if ($part_info)
             {
-                if (empty($info['Hooks']))
+                if (empty($part_info['Hooks']))
                 {
                     $hooks = $is_module ? array('module') : array('standalone');
                 }
@@ -256,6 +264,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
                 {
                     $hook_bindings[] = array(
                         'part' => empty($mt[2]) ? 'main' : $mt[2],
+						'file' => $f,
                         'hook' => $hook,
                         'order' => isset($part_info['Order'])
 							? (int) $part_info['Order']
@@ -739,9 +748,10 @@ function sed_plugin_add($hook_bindings, $name, $title, $is_module = false)
     global $db_plugins, $cfg;
 
     if (empty($title))
-        $title = $name;
-    $path = $is_module ? $cfg['modules_dir'] . "/$name/$name."
-		: $cfg['plugins_dir'] . "/$name/$name.";
+    {
+		$title = $name;
+	}
+    $path = $is_module ? $cfg['modules_dir'] . "/$name." : $cfg['plugins_dir'] . "/$name";
 
     $insert_rows = array();
     foreach ($hook_bindings as $binding)
@@ -751,7 +761,7 @@ function sed_plugin_add($hook_bindings, $name, $title, $is_module = false)
             'code' => $name,
             'part' => $binding['part'],
             'title' => $title,
-            'file' => $path . $binding['part'] . '.php',
+            'file' => empty($binding['file']) ? "$path/$name.{$binding['part']}.php" : $path . '/' . $binding['file'],
             'order' => $binding['order'],
             'active' => 1,
             'module' => (int) $is_module

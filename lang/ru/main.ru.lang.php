@@ -37,6 +37,7 @@ $L['Anonymous'] = 'Анонимный';
 $L['Archives'] = 'Архив';
 $L['Ascending'] = 'По возрастанию';
 $L['Author'] = 'Автор';
+$L['Available'] = 'Доступно'; // New in 0.7.0
 $L['Avatar'] = 'Аватар'; // New in N-0.1.0
 $L['Avatars'] = 'Аватары'; // New in N-0.1.0
 $L['Banlist'] = 'Список заблокированных учетных записей';
