@@ -9,7 +9,14 @@
  * @license BSD
  */
 
-require_once sed_incfile('functions', 'users');
+// Requirements
+sed_require('users');
+sed_require_lang('comments', 'plug');
+sed_require_rc('comments', true);
+
+// Table name globals
+$GLOBALS['db_com'] = $GLOBALS['db_x'] . 'com';
+$GLOBALS['db_com_settings'] = $GLOBALS['db_x'] . 'com_settings';
 
 /**
  * Returns number of comments for item
@@ -76,7 +83,7 @@ function sed_comments_display($area, $code, $cat = '')
 
 	if ($auth_write && $enabled)
 	{
-		require_once sed_incfile('forms');
+		sed_require_api('forms');
 	}
 
 	$t = new XTemplate(sed_skinfile('comments', true));

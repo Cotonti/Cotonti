@@ -24,8 +24,8 @@ define('SED_FORUMS', TRUE);
 $location = 'Forums';
 
 // Additional API requirements
-require_once sed_incfile('extrafields');
-require_once sed_incfile('functions', 'users');
+sed_require_api('extrafields');
+sed_require('users');
 
 // Mode choice
 if (!in_array($m, array('add', 'edit')))
@@ -40,5 +40,5 @@ if (!in_array($m, array('add', 'edit')))
 	}
 }
 
-require_once sed_incfile($m, $z);
+require_once sed_incfile($z, $m);
 ?>

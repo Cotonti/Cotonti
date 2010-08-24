@@ -25,6 +25,7 @@ define('COT_GROUP_INACTIVE', 2);
 define('COT_GROUP_BANNED', 3);
 define('COT_GROUP_MEMBERS', 4);
 define('COT_GROUP_SUPERADMINS', 5);
+define('COT_GROUP_MODERATORS', 6);
 
 /* ======== Pre-sets ========= */
 
@@ -99,7 +100,7 @@ function sed_alphaonly($text)
  */
 function sed_getextplugins($hook, $cond='R')
 {
-	global $sed_plugins, $usr, $cfg, $cot_cache;
+	global $sed_plugins, $cot_cache;
 
 	$extplugins = array();
 
@@ -109,7 +110,7 @@ function sed_getextplugins($hook, $cond='R')
 		{
 			if (sed_auth('plug', $k['pl_code'], $cond))
 			{
-				$extplugins[] = $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
+				$extplugins[] = $k['pl_file'];
 			}
 		}
 	}
@@ -1957,32 +1958,25 @@ function sed_message($text, $class = 'status', $src = 'default')
 /**
  * Returns path to include file
  *
- * @param string $api Name of the API or the part
- * @param mixed $extension Extension name or FALSE if it is a core API file
+ * @param string $extension Extension name
+ * @param string $part Name of the extension part
  * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
  * @return string File path
  */
-function sed_incfile($api, $extension = false, $is_plugin = false)
+function sed_incfile($extension, $part, $is_plugin = false)
 {
 	global $cfg;
-	if ($extension)
+	if ($is_plugin)
 	{
-		if ($is_plugin)
-		{
-			return $cfg['plugins_dir']."/$extension/inc/$extension.$api.php";
-		}
-		elseif ($extension == 'admin' || $extension == 'users' || $extension == 'message')
-		{
-			return $cfg['system_dir']."/$extension/$extension.$api.php";
-		}
-		else
-		{
-			return $cfg['modules_dir']."/$extension/inc/$extension.$api.php";
-		}
+		return $cfg['plugins_dir']."/$extension/inc/$extension.$part.php";
+	}
+	elseif ($extension == 'admin' || $extension == 'users' || $extension == 'message')
+	{
+		return $cfg['system_dir']."/$extension/$extension.$part.php";
 	}
 	else
 	{
-		return $cfg['system_dir']."/$api.php";
+		return $cfg['modules_dir']."/$extension/inc/$extension.$part.php";
 	}
 }
 
@@ -2030,6 +2024,55 @@ function sed_langfile($name, $type = 'plug', $default = 'en')
 			return $cfg['plugins_dir']."/$name/lang/$name.$default.lang.php";
 		}
 	}
+}
+
+/**
+ * Requires an extension API and its attendant files
+ *
+ * @param string $name Extension name
+ * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
+ * @param string $part Extension part
+ */
+function sed_require($name, $is_plugin = false, $part = 'functions')
+{
+	require_once sed_incfile($name, $part, $is_plugin);
+}
+
+/**
+ * Requires a core API
+ *
+ * @param string $api_name API name
+ */
+function sed_require_api($api_name)
+{
+	global $cfg;
+	require_once $cfg['system_dir'] . "/$api_name.php";
+}
+
+/**
+ * Loads a requested language file into global $L array if it is not already there.
+ *
+ * @param string $name Extension name
+ * @param bool $type Langfile type: 'plug', 'module' or 'core'
+ * @param mixed $default Default (fallback) language code
+ * @see sed_langfile()
+ */
+function sed_require_lang($name, $type = 'plug', $default = 'en')
+{
+	global $cfg, $L, $Ls, $R, $skinlang;
+	require_once sed_langfile($name, $type, $default);
+}
+
+/**
+ * Loads a requested resource file into global $L array if it is not already there.
+ *
+ * @param string $name Extension name
+ * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
+ */
+function sed_require_rc($name, $is_plugin = false)
+{
+	global $cfg, $L, $Ls, $R, $skinlang;
+	require_once sed_incfile($name, 'resources', $is_plugin);
 }
 
 /**

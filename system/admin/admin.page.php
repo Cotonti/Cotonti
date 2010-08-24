@@ -16,7 +16,7 @@ sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.page'));
 
-require_once sed_incfile('forms');
+sed_require('page');
 
 $adminpath[] = array(sed_url('admin', 'm=page'), $L['Pages']);
 $adminhelp = $L['adm_help_page'];

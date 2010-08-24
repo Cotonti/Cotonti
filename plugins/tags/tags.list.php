@@ -20,10 +20,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages'])
 {
-	require_once $cfg['system_dir'] . '/tags.php';
-	require_once sed_langfile('tags', 'plug');
-	require_once $cfg['plugins_dir'].'/tags/inc/config.php';
-	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
+	sed_require('tags', true);
 	// Get all subcategories
 	$tc_cats = array("'$c'");
 	$tc_path = $sed_cat[$c]['path'] . '.';

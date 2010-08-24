@@ -9,9 +9,11 @@
  * @license BSD License
  */
 
-if (file_exists(sed_incfile('parser.custom')))
+defined('SED_CODE') or die('Wrong URL');
+
+if (file_exists($cfg['system_dir'] . '/parser.custom.php'))
 {
-	require_once sed_incfile('parser.custom');
+	sed_require_api('parser.custom');
 }
 
 /**

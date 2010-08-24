@@ -20,8 +20,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W'))
 {
-	require_once $cfg['system_dir'] . '/tags.php';
-	require_once sed_langfile('tags', 'plug');
+	sed_require('tags', true);
 	$t->assign(array(
 		'FORUMS_NEWTOPIC_TOP_TAGS' => $L['Tags'],
 		'FORUMS_NEWTOPIC_TOP_TAGS_HINT' => $L['tags_comma_separated'],

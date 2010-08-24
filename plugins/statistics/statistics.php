@@ -17,6 +17,14 @@ Hooks=standalone
 
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
+// TODO show statistics for installed modules only
+
+sed_require('forums');
+sed_require('page');
+sed_require('pfs');
+sed_require('pm');
+sed_require('polls');
+
 $s = sed_import('s', 'G', 'TXT');
 
 $plugin_title = $L['plu_title'];

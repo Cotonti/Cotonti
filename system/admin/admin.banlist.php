@@ -84,7 +84,7 @@ $ii = 0;
 $extp = sed_getextplugins('admin.banlist.loop');
 /* ===== */
 
-require_once sed_incfile('forms');
+
 
 while ($row = sed_sql_fetcharray($sql))
 {

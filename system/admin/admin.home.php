@@ -11,6 +11,8 @@
 
 (defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
+sed_require('page'); // FIXME hard dependency
+
 //Version Checking
 preg_match('/Rev: ([0-9]+)/', $cfg['svnrevision'], $revmatch);
 $cfg['svnrevision'] = $revmatch[1];
@@ -116,6 +118,8 @@ if (!$cfg['disableactivitystats'])
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_date >'$timeback'");
 	$newpages = sed_sql_result($sql, 0, "COUNT(*)");
 
+	sed_require('forums');
+
 	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
 	$newtopics = sed_sql_result($sql, 0, "COUNT(*)");
 
@@ -127,8 +131,12 @@ if (!$cfg['disableactivitystats'])
 		$newcomments = sed_get_newcomments($timeback);
 	}
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
-	$newpms = sed_sql_result($sql, 0, "COUNT(*)");
+	if ($cfg['module']['pm'])
+	{
+	 sed_require('pm');
+		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
+		$newpms = sed_sql_result($sql, 0, "COUNT(*)");
+	}
 
 	$t->assign(array(
 		'ADMIN_HOME_NEWUSERS_URL' => sed_url('users', 'f=all&s=regdate&w=desc'),

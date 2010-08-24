@@ -171,7 +171,7 @@ $pagenav = sed_pagenav('admin',$extra_path, $d, $totalitems, $cfg['maxrowsperpag
 
 $field_types = array('input', 'textarea', 'select', 'checkbox', 'radio');
 
-require_once sed_incfile('forms');
+
 
 $ii = 0;
 /* === Hook - Part1 : Set === */

@@ -16,7 +16,7 @@ sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.config'));
 
-require_once sed_incfile('forms');
+
 
 $adminpath[] = array(sed_url('admin', 'm=config'), $L['Configuration']);
 
@@ -31,8 +31,6 @@ foreach ($extp as $pl)
 	include $pl;
 }
 /* ===== */
-
-require_once sed_incfile('forms');
 
 switch($n)
 {

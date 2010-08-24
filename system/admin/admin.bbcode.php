@@ -95,7 +95,7 @@ $pagenav = sed_pagenav('admin', 'm=bbcode', $d, $totalitems, $cfg['maxrowsperpag
 $bbc_modes = array('str', 'pcre', 'callback');
 $res = sed_sql_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
 
-require_once sed_incfile('forms');
+
 
 $ii = 0;
 /* === Hook - Part1 : Set === */

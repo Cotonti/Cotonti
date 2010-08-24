@@ -16,7 +16,7 @@ sed_block($usr['isadmin']);
 
 $t = new XTemplate(sed_skinfile('admin.urls'));
 
-require_once sed_incfile('forms');
+
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=urls'), $L['adm_urls']);

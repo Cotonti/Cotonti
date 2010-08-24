@@ -22,50 +22,20 @@ if (isset($_GET['m']) && $_GET['m'] == 'auth')
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
-require_once sed_incfile('common');
-require_once sed_incfile('xtemplate');
+require_once $cfg['system_dir'] . '/common.php';
+sed_require_api('xtemplate');
 
-require_once sed_incfile('functions', 'users');
-//require_once sed_incfile('resources', 'users');
-require_once sed_langfile('users', 'core');
+sed_require('users');
 
-require_once sed_incfile('email');
-require_once sed_incfile('extrafields');
-require_once sed_incfile('uploads');
+sed_require_api('email');
+sed_require_api('extrafields');
+sed_require_api('uploads');
 
-switch($m)
+if (!in_array($m, array('auth', 'details', 'edit', 'logout', 'passrecover', 'profile', 'register')))
 {
-	case 'register':
-		require_once sed_incfile($m, 'users');
-	break;
-
-	case 'passrecover':
-		require_once sed_incfile($m, 'users');
-	break;
-
-	case 'auth':
-		require_once sed_incfile($m, 'users');
-	break;
-
-	case 'details':
-		require_once sed_incfile($m, 'users');
-	break;
-
-	case 'edit':
-		require_once sed_incfile($m, 'users');
-	break;
-
-	case 'logout':
-		require_once sed_incfile($m, 'users');
-	break;
-
-	case 'profile':
-		require_once sed_incfile($m, 'users');
-	break;
-
-	default:
-		require_once sed_incfile('main', 'users');
-	break;
+	$m = 'main';
 }
+
+include sed_incfile('users', $m);
 
 ?>

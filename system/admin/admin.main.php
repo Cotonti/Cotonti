@@ -36,7 +36,7 @@ foreach ($extp as $pl)
 
 $sys['inc'] = (empty($m)) ? 'home' : $m;
 $sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'].'.'.$s;
-$sys['inc'] = sed_incfile($sys['inc'], 'admin');
+$sys['inc'] = sed_incfile('admin', $sys['inc']);
 
 if (!file_exists($sys['inc']))
 {

@@ -17,9 +17,7 @@ Hooks=standalone
 
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
-require_once sed_incfile('config', 'comments', true);
-require_once sed_incfile('functions', 'comments', true);
-require_once sed_incfile('resources', 'comments', true);
+sed_require('comments', true);
 
 $m = sed_import('m', 'G', 'ALP');
 $a = sed_import('a', 'G', 'ALP');

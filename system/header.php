@@ -52,8 +52,9 @@ sed_sendheaders($out['meta_contenttype']);
 
 if (!SED_AJAX)
 {
-	if ($usr['id'] > 0 && !$cfg['disable_page'] && sed_auth('page', 'any', 'A'))
+	if ($usr['id'] > 0 && $cfg['module']['page'] && !$cfg['disable_page'] && sed_auth('page', 'any', 'A'))
 	{
+		sed_require('page');
 		$sqltmp2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 		$sys['pagesqueued'] = sed_sql_result($sqltmp2, 0, 'COUNT(*)');
 
@@ -71,8 +72,9 @@ if (!SED_AJAX)
 			}
 		}
 	}
-	elseif ($usr['id'] > 0 && !$cfg['disable_page'] && sed_auth('page', 'any', 'W'))
+	elseif ($usr['id'] > 0 && $cfg['module']['page'] && !$cfg['disable_page'] && sed_auth('page', 'any', 'W'))
 	{
+		sed_require('page');
 		$sqltmp2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1 AND page_ownerid = " . $usr['id']);
 		$sys['pagesqueued'] = sed_sql_result($sqltmp2, 0, 'COUNT(*)');
 
@@ -140,8 +142,9 @@ if (!SED_AJAX)
 		$out['pms'] = ($cfg['disable_pm']) ? '' : sed_rc_link(sed_url('pm'), $L['Private_Messages']);
 		$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || $sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : sed_rc_link(sed_url('pfs'), $L['Mypfs']);
 
-		if (!$cfg['disable_pm'])
+		if ($cfg['module']['pm'] && !$cfg['disable_pm'])
 		{
+			sed_require('pm');
 			if ($usr['newpm'])
 			{
 				$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0");

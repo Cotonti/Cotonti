@@ -17,7 +17,7 @@ Hooks=standalone
 
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
-require_once sed_incfile('functions', 'forums');
+sed_require('forums');
 
 $plugin_title = $L['plu_title'];
 

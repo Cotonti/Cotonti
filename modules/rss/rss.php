@@ -73,6 +73,8 @@ foreach ($extp as $pl)
 
 if ($c == "topics")
 {
+	sed_require('forums');
+
 	$defult_c = false;
 	$topic_id = ($id == 'all') ? 0 : $id;
 
@@ -120,6 +122,8 @@ if ($c == "topics")
 }
 elseif ($c == "section")
 {
+	sed_require('forums');
+
 	$defult_c = false;
 	$forum_id = ($id == 'all') ? 0 : $id;;
 
@@ -178,6 +182,8 @@ elseif ($c == "section")
 }
 elseif ($c == "forums")
 {
+	sed_require('forums');
+
 	$defult_c = false;
 	$rss_title = $domain." : ".$L['rss_allforums_item_title'];
 	$rss_description = "";
@@ -214,6 +220,8 @@ elseif ($c == "forums")
 }
 elseif ($defult_c)
 {
+	sed_require('page');
+	
 	if ($id != 'all')
 	{
 		$mtch = $sed_cat[$id]['path'].".";

@@ -1,4 +1,22 @@
 <?php
+/**
+ * Page API
+ *
+ * @package page
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
+
+defined('SED_CODE') or die('Wrong URL.');
+
+// Requirements
+sed_require_lang('page', 'module');
+sed_require_rc('page');
+
+// Global variables
+$GLOBALS['db_pages'] = $GLOBALS['db_x'] . 'pages';
 
 /**
  * Reads raw data from file

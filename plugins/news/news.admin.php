@@ -17,7 +17,7 @@ Hooks=admin.config.edit.loop
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_incfile('functions', 'page');
+sed_require('page');
 
 if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnajax'])
 {

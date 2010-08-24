@@ -107,20 +107,31 @@ function sed_build_extrafields_data($rowname, $type, $field_name, $value)
 	}
 }
 
+/**
+ * Loads extrafields data into global
+ * @global array $sed_extrafields
+ */
+function sed_load_extrafields()
+{
+	global $sed_dbc, $sed_extrafields, $db_extra_fields, $cot_cache;
+	if (!$sed_extrafields && $sed_dbc)
+	{
+		$sed_extrafields = array();
+		$sed_extrafields['structure'] = array();
+		$sed_extrafields['pages'] = array();
+		$sed_extrafields['users'] = array();
+		$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE 1");
+		while ($row = sed_sql_fetchassoc($fieldsres))
+		{
+			$sed_extrafields[$row['field_location']][$row['field_name']] = $row;
+		}
+		sed_sql_freeresult($fieldsres);
+		$cot_cache && $cot_cache->db->store('sed_extrafields', $sed_extrafields, 'system');
+	}
+}
+
 /* ======== Extrafields Pre-load ======== */
 
-if (!$sed_extrafields)
-{
-	$sed_extrafields = array();
-	$sed_extrafields['structure'] = array();
-	$sed_extrafields['pages'] = array();
-	$sed_extrafields['users'] = array();
-	$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE 1");
-	while ($row = sed_sql_fetchassoc($fieldsres))
-	{
-		$sed_extrafields[$row['field_location']][$row['field_name']] = $row;
-	}
-	$cot_cache && $cot_cache->db->store('sed_extrafields', $sed_extrafields, 'system');
-}
+sed_load_extrafields();
 
 ?>

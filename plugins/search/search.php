@@ -17,10 +17,10 @@ Hooks=standalone
 
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
-require_once sed_incfile('functions', 'page');
-require_once sed_incfile('functions', 'forums');
-require_once 'plugins/search/inc/search.functions.php';
-require_once sed_incfile('forms');
+sed_require('page');
+sed_require('forums');
+sed_require('search', true);
+sed_require_api('forms');
 
 $rsq = sed_import('rsq', 'P', 'TXT', $cfg['plugin']['search']['maxsigns']);
 $sq = sed_import('sq', 'G', 'TXT');

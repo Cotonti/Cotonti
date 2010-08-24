@@ -11,10 +11,8 @@
 
 defined('SED_CODE') or die("Wrong URL.");
 
-require_once sed_incfile('extrafields');
-require_once sed_incfile('functions', 'page');
-require_once sed_incfile('functions', 'forums');
-require_once sed_incfile('resources', 'forums');
+sed_require_api('extrafields');
+sed_require_lang('recentitems', 'plug');
 
 function sed_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
 {

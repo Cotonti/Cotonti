@@ -132,7 +132,7 @@ if ($pag['page_file'])
 }
 
 require_once $cfg['system_dir'] . '/header.php';
-require_once sed_incfile('functions', 'users');
+sed_require('users');
 
 $mskin = sed_skinfile(array('page', $cat['tpl']));
 $t = new XTemplate($mskin);

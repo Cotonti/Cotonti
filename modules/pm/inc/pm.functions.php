@@ -9,6 +9,15 @@
  * @license BSD License
  */
 
+defined('SED_CODE') or die('Wrong URL');
+
+// Requirements
+sed_require_lang('pm', 'module');
+sed_require_rc('pm');
+
+// Global variables
+$GLOBALS['db_pm'] = $GLOBALS['db_x'] . 'pm';
+
 /**
  * Returns usertags
  *

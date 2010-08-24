@@ -17,14 +17,11 @@ $z = 'admin';
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
-require_once sed_incfile('common');
-require_once sed_incfile('xtemplate');
+require_once $cfg['system_dir'] . '/common.php';
+sed_require_api('xtemplate');
 
-require_once sed_incfile('functions', 'admin');
-require_once sed_incfile('resources', 'admin');
-require_once sed_langfile('admin', 'core');
-require_once sed_incfile('extrafields');
+sed_require('admin');
 
-require_once sed_incfile('main', 'admin');
+include sed_incfile('admin', 'main');
 
 ?>

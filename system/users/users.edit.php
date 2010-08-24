@@ -11,7 +11,7 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_incfile('auth');
+sed_require_api('auth');
 
 $y = sed_import('y','P','TXT');
 $id = sed_import('id','G','INT');
@@ -165,13 +165,29 @@ if ($a=='update')
 		{
 			$oldname = sed_sql_prep($urr['user_name']);
 			$newname = sed_sql_prep($rusername);
-			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_lastpostername='$newname' WHERE ft_lastpostername='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_firstpostername='$newname' WHERE ft_firstpostername='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_forum_posts SET fp_postername='$newname' WHERE fp_postername='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_pages SET page_author='$newname' WHERE page_author='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_com SET com_author='$newname' WHERE com_author='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_online SET online_name='$newname' WHERE online_name='$oldname'");
-			$sql = sed_sql_query("UPDATE $db_pm SET pm_fromuser='$newname' WHERE pm_fromuser='$oldname'");
+			if ($cfg['module']['forums'])
+			{
+				sed_require('forums');
+				sed_sql_query("UPDATE $db_forum_topics SET ft_lastpostername='$newname' WHERE ft_lastpostername='$oldname'");
+				sed_sql_query("UPDATE $db_forum_topics SET ft_firstpostername='$newname' WHERE ft_firstpostername='$oldname'");
+				sed_sql_query("UPDATE $db_forum_posts SET fp_postername='$newname' WHERE fp_postername='$oldname'");
+			}
+			if ($cfg['module']['page'])
+			{
+				sed_require('page');
+				sed_sql_query("UPDATE $db_pages SET page_author='$newname' WHERE page_author='$oldname'");
+			}
+			if ($cfg['plugin']['comments'])
+			{
+				sed_require('comments', true);
+				sed_sql_query("UPDATE $db_com SET com_author='$newname' WHERE com_author='$oldname'");
+			}
+			if ($cfg['module']['pm'])
+			{
+				sed_require('pm');
+				sed_sql_query("UPDATE $db_pm SET pm_fromuser='$newname' WHERE pm_fromuser='$oldname'");
+			}
+			sed_sql_query("UPDATE $db_online SET online_name='$newname' WHERE online_name='$oldname'");
 		}
 		// Extra fields
 		foreach($sed_extrafields['users'] as $i=>$row)
@@ -281,8 +297,7 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'edit', $usr['maingrp']));
 $t = new XTemplate($mskin);
 
-require_once sed_incfile('forms');
-require_once sed_incfile('resources', 'users');
+sed_require_api('forms');
 
 $bhome = $cfg['homebreadcrumb'] ?
 	sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';

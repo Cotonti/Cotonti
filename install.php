@@ -37,7 +37,9 @@ if (empty($cfg['lang_dir']))
 require_once $cfg['system_dir'].'/functions.php';
 require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
 
-//A Few basics from common.php
+require_once 'system/debug.php';
+
+// A Few basics from common.php
 if (version_compare(PHP_VERSION, '6.0.0', '<='))
 {
 	if (get_magic_quotes_gpc())
@@ -70,20 +72,23 @@ else
 }
 
 require_once sed_langfile('main', 'core');
+require_once $cfg['system_dir'] . '/resources.php';
 
-require_once sed_incfile('extensions');
-require_once sed_incfile('xtemplate');
-require_once sed_langfile('install', 'module');
-require_once sed_incfile('functions', 'admin');
-require_once sed_langfile('admin', 'core');
+sed_require_api('forms');
+sed_require_api('extensions');
+sed_require_api('xtemplate');
+sed_require_lang('install', 'module');
+sed_require_lang('users', 'core');
+sed_require('admin');
+sed_require_rc('install');
 
 if (!$cfg['new_install'])
 {
-	require_once sed_incfile('update', 'install');
+	include sed_incfile($z, 'update');
 }
 else
 {
-	require_once sed_incfile('install', 'install');
+	include sed_incfile($z, 'install');
 }
 
 ?>

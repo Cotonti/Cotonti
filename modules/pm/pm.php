@@ -24,8 +24,8 @@ define('SED_PM', TRUE);
 $location = 'Private_Messages';
 
 // Additional API requirements
-require_once sed_incfile('extrafields');
-require_once sed_incfile('functions', 'users');
+sed_require_api('extrafields');
+sed_require('users');
 
 // Mode choice
 if (!in_array($m, array('send', 'message')))
@@ -33,5 +33,5 @@ if (!in_array($m, array('send', 'message')))
 	$m = 'folder';
 }
 
-require_once sed_incfile($m, $z);
+require_once sed_incfile($z, $m);
 ?>

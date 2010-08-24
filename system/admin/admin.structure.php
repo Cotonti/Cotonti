@@ -14,12 +14,12 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-require_once sed_incfile('extrafields');
-require_once sed_incfile('auth');
+sed_require_api('extrafields');
+sed_require_api('auth');
+
+sed_require('page');
 
 $t = new XTemplate(sed_skinfile('admin.structure'));
-
-require_once sed_incfile('forms');
 
 $adminpath[] = array (sed_url('admin', 'm=structure'), $L['Categories']);
 $adminhelp = $L['adm_help_structure'];

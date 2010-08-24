@@ -18,6 +18,8 @@ Tags=index.tpl:{PLUGIN_INDEXPOLLS}
 
 defined('SED_CODE') or die('Wrong URL');
 
+sed_require('polls');
+
 /* ================== FUNCTIONS ================== */
 /**
  * Gets polls with AJAX
@@ -80,7 +82,7 @@ if ($cfg['plugin']['indexpolls']['maxpolls'] > 0 && !$cfg['disable_polls'])
 {
 	require_once sed_langfile('indexpolls', 'plug');
 	require_once sed_langfile('polls', 'module');
-	require_once sed_incfile('functions', 'polls');
+	sed_require('polls');
 	sed_poll_vote();
 	$latestpoll = sed_get_polls($cfg['plugin']['indexpolls']['maxpolls']);
 }

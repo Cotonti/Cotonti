@@ -14,12 +14,12 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-require_once sed_incfile('auth');
-require_once sed_incfile('uploads');
+sed_require_api('auth');
+sed_require_api('uploads');
 
 $t = new XTemplate(sed_skinfile('admin.users'));
 
-require_once sed_incfile('forms');
+
 
 $adminpath[] = array(sed_url('admin', 'm=users'), $L['Users']);
 

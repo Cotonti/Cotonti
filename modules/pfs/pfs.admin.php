@@ -24,7 +24,7 @@ $s = sed_import('s', 'G', 'ALP');
 
 if ($s == 'allpfs')
 {
-	require sed_incfile('admin.allpfs', 'pfs', true);
+	require sed_incfile('pfs', 'admin.allpfs');
 }
 else
 {

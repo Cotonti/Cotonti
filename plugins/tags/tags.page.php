@@ -22,8 +22,7 @@ if ($cfg['plugin']['tags']['pages'])
 {
 	if (!isset($tags))
 	{
-		require_once $cfg['system_dir'] . '/tags.php';
-		require_once sed_langfile('tags', 'plug');
+		sed_require('tags', true);
 		$item_id = $pag['page_id'];
 		$tags = sed_tag_list($item_id);
 	}

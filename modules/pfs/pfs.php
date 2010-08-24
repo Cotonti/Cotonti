@@ -24,7 +24,7 @@ define('SED_PFS', TRUE);
 $location = 'PFS';
 
 // Additional API requirements
-require_once sed_incfile('uploads');
+sed_require_api('uploads');
 require_once './datas/extensions.php';
 
 // Mode choice
@@ -33,5 +33,5 @@ if (!in_array($m, array('edit', 'editfolder', 'view')))
 	$m = 'main';
 }
 
-require_once sed_incfile($m, $z);
+require_once sed_incfile($z, $m);
 ?>

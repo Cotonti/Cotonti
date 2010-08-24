@@ -20,10 +20,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'])
 {
-	require_once $cfg['system_dir'] . '/tags.php';
-	require_once sed_langfile('tags', 'plug');
-	require_once $cfg['plugins_dir'].'/tags/inc/config.php';
-	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
+	sed_require('tags', true);
 	// Get all subcategories
 	$limit = $cfg['plugin']['tags']['lim_forums'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_forums'];
 	$tcloud = sed_tag_cloud('forums', $cfg['plugin']['tags']['order'], $limit);

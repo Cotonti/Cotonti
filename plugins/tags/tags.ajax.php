@@ -17,7 +17,7 @@ Hooks=ajax
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once $cfg['system_dir'] . '/tags.php';
+sed_require('tags', true);
 $q = strtolower(sed_import('q', 'G', 'TXT'));
 $q = sed_sql_prep(urldecode($q));
 if (!$q) return;

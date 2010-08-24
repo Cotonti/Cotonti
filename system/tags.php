@@ -1,7 +1,15 @@
 <?php
-/*
- * ===================================== Tags API ==========================================
+/**
+ * Tags API
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Trustmaster
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
  */
+
+defined('SED_CODE') or die('Wrong URL');
 
 /**
  * Tags a given item from a specific area with a keyword

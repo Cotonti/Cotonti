@@ -72,8 +72,6 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'details'));
 $t = new XTemplate($mskin);
 
-require_once sed_incfile('resources', 'users');
-
 $bhome = $cfg['homebreadcrumb'] ? sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
 
 $t->assign(array(

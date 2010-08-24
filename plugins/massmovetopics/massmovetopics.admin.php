@@ -17,7 +17,7 @@ Hooks=tools
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_oncesed_incfile('functions', 'forums');
+sed_require('forums');
 
 $plugin_title = "Mass-move topics in forums";
 

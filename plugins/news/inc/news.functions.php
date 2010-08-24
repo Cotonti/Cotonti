@@ -11,20 +11,31 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_incfile('tags');
-require_once sed_incfile('extrafields');
-
-	/* === Hook - Part1 : Set === FIRST === */
-$news_first_extp = sed_getextplugins('news.first');
-	/* === Hook - Part1 : Set === LOOP === */
-$news_extp = sed_getextplugins('news.loop');
-	/* === Hook - Part1 : Set === TAGS === */
-$news_tags_extp = sed_getextplugins('news.tags');
-	/* ===== */
+sed_require_api('tags');
+sed_require_api('extrafields');
+sed_require('page');
+sed_require_lang('news', 'plug');
 
 function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlength = 0, $deftag = false)
 {
-	global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $sed_extrafields, $usr, $sed_dbc, $sed_urltrans, $c, $news_extp, $news_tags_extp, $news_first_extp;
+	global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $sed_extrafields, $usr, $sed_dbc, $sed_urltrans, $c;
+	static $news_extp, $news_tags_extp, $news_first_extp;
+	/* === Hook - Part1 : Set === FIRST === */
+	if (!$news_first_extp)
+	{
+		$news_first_extp = sed_getextplugins('news.first');
+	}
+	/* === Hook - Part1 : Set === LOOP === */
+	if (!$news_extp)
+	{
+		$news_extp = sed_getextplugins('news.loop');
+	}
+	/* === Hook - Part1 : Set === TAGS === */
+	if (!$news_tags_extp)
+	{
+		$news_tags_extp = sed_getextplugins('news.tags');
+	}
+	/* ===== */
 	$jj = 0;
 	$mtch = $sed_cat[$cat]['path'].".";
 	$mtchlen = mb_strlen($mtch);

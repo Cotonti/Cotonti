@@ -25,14 +25,8 @@ $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
 sed_sendheaders();
 
-require_once 'system/debug.php';
 $mskin = sed_skinfile('install.install');
 $t = new XTemplate($mskin);
-
-require_once sed_incfile('resources');
-require_once sed_incfile('forms');
-require_once sed_incfile('resources', 'install');
-require_once sed_langfile('users', 'core');
 
 $site_url = (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false ? 'http://' : 'https://')
 	. $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);

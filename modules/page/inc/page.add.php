@@ -247,7 +247,7 @@ require_once $cfg['system_dir'].'/header.php';
 $mskin = sed_skinfile(array('page', 'add', $sed_cat[$newpagecat]['tpl']));
 $t = new XTemplate($mskin);
 
-require_once sed_incfile('forms');
+sed_require_api('forms');
 
 $pageadd_form_file = sed_selectbox($newpagefile, 'newpagefile', range(0, 2),
 	array($L['No'], $L['Yes'], $L['Members_only']), false);

@@ -39,17 +39,19 @@ if ($days > 0)
 	$timeback = $sys['now_offset'] - $timeminus;
 }
 
-require_once sed_incfile('functions', 'users');
-require_once $cfg['plugins_dir'].'/recentitems/inc/recentitems.functions.php';
+sed_require('users');
+sed_require('recentitems', true);
 $totalrecent[] = 0;
-if ($cfg['plugin']['recentitems']['newpages'] && !$cfg['disable_page'] && (empty($mode) || $mode == 'pages'))
+if ($cfg['plugin']['recentitems']['newpages'] && $cfg['module']['page'] && !$cfg['disable_page'] && (empty($mode) || $mode == 'pages'))
 {
+	sed_require('page');
 	$res = sed_build_recentpages('recentitems.pages', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $pagetitlelimit, $cfg['plugin']['recentitems']['newpagestext'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("RECENT_PAGES", $res);
 }
 
-if ($cfg['plugin']['recentitems']['newforums'] && !$cfg['disable_forums'] && (empty($mode) || $mode == 'forums'))
+if ($cfg['plugin']['recentitems']['newforums'] && $cfg['module']['forums'] && !$cfg['disable_forums'] && (empty($mode) || $mode == 'forums'))
 {
+	sed_require('forums');
 	$res = sed_build_recentforums('recentitems.forums', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $forumtitlelimit, $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("RECENT_FORUMS", $res);
 }

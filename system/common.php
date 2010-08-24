@@ -91,6 +91,11 @@ else
 		{
 			$cfg[$row['config_name']] = $row['config_value'];
 		}
+		elseif ($row['config_owner'] == 'module')
+		{
+			$cfg[$row['config_name']] = $row['config_value']; // TODO use ['module'] in modules instead
+			$cfg['module'][$row['config_name']] = $row['config_value'];
+		}
 		else
 		{
 			$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];

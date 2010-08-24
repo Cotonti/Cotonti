@@ -23,7 +23,7 @@ $quote = sed_import('quote','G','INT');
 $unread_done = FALSE;
 $fp_num = 0;
 
-if (!$cfg['disable_polls']) require_once sed_incfile('functions', 'polls');
+if (!$cfg['disable_polls']) sed_require('polls');
 require_once sed_langfile('countries', 'core');
 
 unset ($notlastpage);

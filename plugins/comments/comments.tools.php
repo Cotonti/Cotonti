@@ -20,10 +20,7 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', 'comments');
 sed_block($usr['isadmin']);
 
-require_once sed_langfile('comments');
-require_once sed_incfile('config', 'comments', true);
-require_once sed_incfile('functions', 'comments', true);
-require_once sed_incfile('resources', 'comments', true);
+sed_require('comments', true);
 
 $t = new XTemplate(sed_skinfile('comments.tools', true));
 
