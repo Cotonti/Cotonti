@@ -1554,6 +1554,7 @@ function sed_javascript($more='')
 function sed_selectbox_skin($check, $name)
 {
 	// TODO replace with synced Theme - Color scheme selection
+	sed_require_api('extensions');
 	$handle = opendir('./skins/');
 	while ($f = readdir($handle))
 	{

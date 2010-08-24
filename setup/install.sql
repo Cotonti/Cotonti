@@ -446,12 +446,6 @@ CREATE TABLE `sed_structure` (
   KEY `structure_path` (`structure_path`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_structure` (`structure_code`, `structure_path`, `structure_tpl`, `structure_title`, `structure_desc`, `structure_icon`, `structure_group`, `structure_order`, `structure_pagecount`) VALUES
-('articles', '1', '', 'Articles', '', '', 0, 'title.asc', 0),
-('links', '2', '', 'Links', '', '', 0, 'title.asc', 0),
-('events', '3', '', 'Events', '', '', 0, 'date.asc', 0),
-('news', '4', '', 'News', '', '', 0, 'date.desc', 1);
-
 CREATE TABLE `sed_tags` (
   `tag` varchar(255) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`tag`)
