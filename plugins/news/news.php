@@ -51,7 +51,7 @@ $c = (empty($c)||!isset($sed_cat[$c])) ? $indexcat : $c;
 
 if (isset($cats[$c]) && !empty($individual)) unset($cats[$c]);
 
-require_once sed_incfile('functions', 'users');
+sed_require('users');
 require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 
 if ($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))

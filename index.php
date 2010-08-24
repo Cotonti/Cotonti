@@ -26,13 +26,13 @@ if ($cfg['new_install'])
 }
 
 require_once $cfg['system_dir'].'/functions.php';
-require_once sed_incfile('common');
+require_once $cfg['system_dir'] . '/common.php';
 if ($cfg['enable_obsolete'])
 {
-    require_once sed_incfile('obsolete');
+    sed_require_api('obsolete');
 }
-require_once sed_incfile('xtemplate');
-require_once sed_incfile('parser'); // TODO module-dependent parser selection/loading
+sed_require_api('xtemplate');
+sed_require_api('parser'); // TODO module-dependent parser selection/loading
 
 $e = sed_import('e', 'G', 'ALP');
 $o = sed_import('o', 'G', 'ALP');
@@ -84,10 +84,8 @@ else
 
 $req_files = array();
 $req_files[] = sed_langfile($extname, $exttype);
-$req_files[] = sed_incfile('config', $extname, $exttype == 'plug');
-$req_files[] = sed_incfile('functions', $extname, $exttype == 'plug');
-$req_files[] = sed_incfile('resources', $extname, $exttype == 'plug');
-// $req_files += sed_get_requirements($extname, $exttype == 'plug');
+$req_files[] = sed_incfile($extname, 'functions', $exttype == 'plug');
+$req_files[] = sed_incfile($extname, 'resources', $exttype == 'plug');
 
 foreach ($req_files as $req_file)
 {

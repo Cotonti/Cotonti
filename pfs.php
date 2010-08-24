@@ -14,7 +14,7 @@ define('SED_CODE', true);
 
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
-require_once sed_incfile('common');
+require_once $cfg['system_dir'] . '/common.php';
 
 parse_str($_SERVER['QUERY_STRING'], $params);
 

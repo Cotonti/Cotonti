@@ -12,7 +12,7 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_incfile('auth');
+sed_require_api('auth');
 
 $v = sed_import('v','G','ALP');
 $y = sed_import('y','G','INT');
@@ -312,7 +312,7 @@ $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.register'));
 
-require_once sed_incfile('forms');
+sed_require_api('forms');
 
 $form_usergender = sed_selectbox_gender($rusergender,'rusergender');
 $form_birthdate = sed_selectbox_date(sed_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']));

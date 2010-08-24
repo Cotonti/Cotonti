@@ -10,7 +10,7 @@
  * @license BSD
  */
 
-$tc_styles = array(
+$GLOBALS['tc_styles'] = array(
 	1 => 'xs',
 	5 => 's',
 	20 => 'm',

@@ -12,6 +12,8 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
+sed_require('pfs'); // FIXME hard PFS dependency
+
 @clearstatcache();
 
 if ($usr['id']<1)
@@ -546,8 +548,7 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('users', 'profile'));
 $t = new XTemplate($mskin);
 
-require_once sed_incfile('resources', 'users');
-require_once sed_incfile('forms');
+sed_require_api('forms');
 
 $profile_form_avatar = $R['users_link_avatar'];
 $profile_form_photo = $R['users_link_photo'];

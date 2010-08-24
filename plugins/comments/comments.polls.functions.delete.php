@@ -17,8 +17,7 @@ Hooks=polls.functions.delete
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_incfile('config', 'comments', true);
-require_once sed_incfile('functions', 'comments', true);
+sed_require('comments', true);
 
 sed_comments_remove('polls', $id2);
 

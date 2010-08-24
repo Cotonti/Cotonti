@@ -11,6 +11,14 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
+// Requirements
+sed_require_lang('pfs', 'module');
+sed_require_rc('pfs');
+
+// Global variables
+$GLOBALS['db_pfs'] = $GLOBALS['db_x'] . 'pfs';
+$GLOBALS['db_pfs_folders'] = $GLOBALS['db_x'] . 'pfs_folders';
+
 /**
  * Create a new PFS folder, return new folder ID
  *

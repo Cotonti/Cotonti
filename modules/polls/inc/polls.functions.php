@@ -11,7 +11,14 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_langfile('polls', 'module');
+// Requirements
+sed_require_api('forms');
+sed_require_lang('polls', 'module');
+
+// Global variables
+$GLOBALS['db_polls'] 			= $GLOBALS['db_x'] . 'polls';
+$GLOBALS['db_polls_options'] 	= $GLOBALS['db_x'] . 'polls_options';
+$GLOBALS['db_polls_voters'] 	= $GLOBALS['db_x'] . 'polls_voters';
 
 /**
  * Adds form for create/edit Poll

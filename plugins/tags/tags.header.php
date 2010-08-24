@@ -23,8 +23,7 @@ if ($cfg['plugin']['tags']['pages']
 	|| $cfg['plugin']['tags']['forums'] && defined('SED_FORUMS')
 	|| defined('SED_PLUG'))
 {
-	require_once sed_langfile('tags', 'plug');
-	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
+	sed_require('tags', true);
 	/*$out['compopup'] .= $R['tags_code_style'];*/
 	if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['tags']['autocomplete'] > 0
 		&& in_array($m, array('edit', 'editpost', 'posts', 'newtopic'))

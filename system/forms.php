@@ -10,6 +10,8 @@
  * @license BSD
  */
 
+defined('SED_CODE') or die('Wrong URL');
+
 /**
  * Generates a checkbox output
  * @param bool $chosen Checkbox state

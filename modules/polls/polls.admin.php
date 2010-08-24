@@ -20,7 +20,7 @@ Hooks=admin
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
 sed_block($usr['isadmin']);
 
-require_once sed_incfile('functions', 'polls');
+sed_require('polls');
 
 $t = new XTemplate(sed_skinfile('polls.admin'));
 

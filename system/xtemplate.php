@@ -4,7 +4,7 @@
  * written specially for Cotonti.
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 2.2
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD

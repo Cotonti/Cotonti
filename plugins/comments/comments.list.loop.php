@@ -18,10 +18,7 @@ Tags=list.tpl:{LIST_ROW_COMMENTS}
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_langfile('comments');
-require_once sed_incfile('config', 'comments', true);
-require_once sed_incfile('functions', 'comments', true);
-require_once sed_incfile('resources', 'comments', true);
+sed_require('comments', true);
 
 //$t->assign('LIST_ROW_COMMENTS', sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c));
 

@@ -18,7 +18,7 @@ Tags=statistics.tpl:{STATISTICS_USER_COMMENTS}
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_incfile('config', 'comments', true);
+sed_require('comments', true);
 
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='".$usr['id']."'");
 $user_comments = sed_sql_result($sql, 0, "COUNT(*)");

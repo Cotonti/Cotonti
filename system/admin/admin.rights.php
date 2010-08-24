@@ -15,11 +15,11 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 $usr['isadmin'] &= sed_auth('admin', 'a', 'A');
 sed_block($usr['isadmin']);
 
-require_once sed_incfile('functions', 'forums');
+sed_require('forums');
 
 $t = new XTemplate(sed_skinfile('admin.rights'));
 
-require_once sed_incfile('forms');
+
 
 $g = sed_import('g', 'G', 'INT');
 $advanced = sed_import('advanced', 'G', 'BOL');
@@ -112,6 +112,8 @@ WHERE auth_groupid='$g' AND auth_code IN ('admin', 'comments', 'index', 'message
 ORDER BY auth_code ASC");
 
 sed_die(sed_sql_numrows($sql1) == 0);
+
+sed_require('forums');
 
 $sql2 = sed_sql_query("SELECT a.*, u.user_name, f.fs_id, f.fs_title, f.fs_category FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid

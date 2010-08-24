@@ -9,6 +9,14 @@
  * @license BSD
  */
 
+defined('SED_CODE') or die('Wrong URL');
+
+sed_require('page');
+sed_require('forums');
+sed_require_api('tags');
+sed_require('tags', true, 'config');
+sed_require_rc('tags', true);
+
 /**
  * Parses search string into SQL query
  *

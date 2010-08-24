@@ -17,8 +17,7 @@ Hooks=page.edit.delete.done
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_incfile('config', 'comments', true);
-require_once sed_incfile('functions', 'comments', true);
+sed_require('comments', true);
 
 sed_comments_remove('page', $id);
 

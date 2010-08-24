@@ -18,10 +18,7 @@ Tags=polls.tpl:{POLLS_COMMENTS},{POLLS_COMMENTS_DISPLAY}
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_langfile('comments');
-require_once sed_incfile('config', 'comments', true);
-require_once sed_incfile('functions', 'comments', true);
-require_once sed_incfile('resources', 'comments', true);
+sed_require('comments', true);
 
 $t->assign(array(
 	'POLLS_COMMENTS' => sed_comments_link('polls', 'id='.$id, 'polls', $id),

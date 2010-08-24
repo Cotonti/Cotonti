@@ -18,10 +18,7 @@ Tags=page.tpl:{PAGE_COMMENTS},{PAGE_COMMENTS_DISPLAY},{PAGE_COMMENTS_COUNT},{PAG
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_langfile('comments');
-require_once sed_incfile('config', 'comments', true);
-require_once sed_incfile('functions', 'comments', true);
-require_once sed_incfile('resources', 'comments', true);
+sed_require('comments', true);
 
 $page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 $t->assign(array(

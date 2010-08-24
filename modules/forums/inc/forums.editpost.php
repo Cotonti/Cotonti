@@ -35,7 +35,7 @@ foreach ($extp as $pl)
 sed_blockguests();
 sed_check_xg();
 
-require_once sed_incfile('functions', 'polls');
+sed_require('polls');
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_sectionid='$s' LIMIT 1");
 

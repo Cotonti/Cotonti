@@ -145,7 +145,7 @@ $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(sed_skinfile('users.auth'));
 
-require_once sed_incfile('forms');
+sed_require_api('forms');
 
 if ($cfg['maintenance'])
 {

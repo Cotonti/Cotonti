@@ -176,8 +176,7 @@ require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
 
-require_once sed_incfile('forms');
-require_once sed_incfile('resources', 'users');
+sed_require_api('forms');
 require_once sed_langfile('countries', 'core');
 
 $filter_titles = array();

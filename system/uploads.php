@@ -1,5 +1,17 @@
 <?php
 /**
+ * File Upload Helpers
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Neocrome, Trustmaster
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
+
+defined('SED_CODE') or die('Wrong URL');
+
+/**
  * Checks a file to be sure it is valid
  *
  * @param string $path File path

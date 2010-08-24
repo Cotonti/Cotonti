@@ -13,8 +13,8 @@
 defined('SED_CODE') or die('Wrong URL');
 
 // Requirements
-require_once sed_incfile('auth');
-require_once sed_incfile('configuration');
+sed_require_api('auth');
+sed_require_api('configuration');
 require_once sed_langfile('admin', 'core');
 
 /**
@@ -413,10 +413,10 @@ function sed_extension_install($name, $is_module = false, $update = false)
 			}
 		}
 
-		if (file_exists(sed_incfile('install', $name, !$is_module)))
+		if (file_exists(sed_incfile($name, 'install', !$is_module)))
 		{
 			// Run PHP install handler
-			$ret = include sed_incfile('install', $name, !$is_module);
+			$ret = include sed_incfile($name, 'install', !$is_module);
 			if ($ret !== false)
 			{
 				$msg = $ret == 1 ? 'OK' : $ret;
@@ -516,9 +516,9 @@ function sed_extension_uninstall($name, $is_module = false)
     }
 
     // Run handler part
-    if (file_exists(sed_incfile('uninstall', $name, !$is_module)))
+    if (file_exists(sed_incfile($name, 'uninstall', !$is_module)))
     {
-        $ret = include sed_incfile('uninstall', $name, !$is_module);
+        $ret = include sed_incfile($name, 'uninstall', !$is_module);
         if ($ret !== false)
         {
             sed_message(sed_rc('ext_executed_php', array('ret' => $ret)));

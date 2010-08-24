@@ -19,7 +19,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W'))
 {
-	require_once $cfg['system_dir'] . '/tags.php';
+	sed_require('tags', true);
 	$item_id = $q;
 	$rtags = sed_import('rtags', 'P', 'TXT');
 	$tags = sed_tag_parse($rtags);

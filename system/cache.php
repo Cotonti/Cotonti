@@ -1535,11 +1535,29 @@ function sed_cache_clearall()
  */
 function sed_cache_clearhtml()
 {
-	global $db_pages, $db_forum_posts, $db_pm;
+	global $cfg, $db_pages, $db_forum_posts, $db_pm;
 	$res = TRUE;
-	$res &= sed_sql_query("UPDATE $db_pages SET page_html=''");
-	$res &= sed_sql_query("UPDATE $db_forum_posts SET fp_html=''");
-	$res &= sed_sql_query("UPDATE $db_pm SET pm_html = ''");
+	if ($cfg['module']['page'])
+	{
+		sed_require('page');
+		$res &= sed_sql_query("UPDATE $db_pages SET page_html=''");
+	}
+	if ($cfg['module']['forums'])
+	{
+		sed_require('forums');
+		$res &= sed_sql_query("UPDATE $db_forum_posts SET fp_html=''");
+	}
+	if ($cfg['module']['pm'])
+	{
+		sed_require('pm');
+		$res &= sed_sql_query("UPDATE $db_pm SET pm_html = ''");
+	}
+	/* === Hook === */
+	foreach (sed_getextplugins('cache.clearhtml') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	return $res;
 }
 

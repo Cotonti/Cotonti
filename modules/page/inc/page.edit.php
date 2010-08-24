@@ -294,7 +294,7 @@ require_once $cfg['system_dir'].'/header.php';
 $mskin = sed_skinfile(array('page', 'edit', $sed_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
-require_once sed_incfile('forms');
+sed_require_api('forms');
 
 $pag['page_date'] = sed_selectbox_date($pag['page_date'] + $usr['timezone'] * 3600,'long');
 $pag['page_begin'] = sed_selectbox_date($pag['page_begin'] + $usr['timezone'] * 3600, 'long', '_beg');

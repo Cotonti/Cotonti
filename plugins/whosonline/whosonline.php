@@ -17,7 +17,7 @@ Hooks=standalone
 
 (defined('SED_CODE') || defined('SED_PLUG')) or die('Wrong URL.');
 
-require_once sed_incfile('functions', 'users');
+sed_require('users');
 
 $showavatars = $cfg['plugin']['whosonline']['showavatars'];
 $miniavatar_x = $cfg['plugin']['whosonline']['miniavatar_x'];

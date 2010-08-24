@@ -23,9 +23,9 @@ sed_dieifdisabled($cfg['disable_forums']);
 define('SED_FORUMS', TRUE);
 $location = 'Forums';
 
-// Additional API requirements
-require_once sed_incfile('extrafields');
-require_once sed_incfile('functions', 'users');
+// Additional requirements
+sed_require_api('extrafields');
+sed_require('users');
 
 // Mode choice
 if (!in_array($m, array('topics', 'posts', 'editpost', 'newtopic')))
@@ -33,5 +33,5 @@ if (!in_array($m, array('topics', 'posts', 'editpost', 'newtopic')))
 	$m = 'sections';
 }
 
-require_once sed_incfile($m, $z);
+include sed_incfile($z, $m);
 ?>

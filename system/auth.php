@@ -16,7 +16,7 @@ defined('SED_CODE') or die('Wrong URL');
  * Default allowed permissions map. If some value is missing in user-defined
  * permission map, it will be taken from this one.
  */
-$cot_auth_default_permit = array(
+$GLOBALS['cot_auth_default_permit'] = array(
 	COT_GROUP_DEFAULT => 'RW',
 	COT_GROUP_GUESTS => 'R',
 	COT_GROUP_INACTIVE => 'R',
@@ -29,7 +29,7 @@ $cot_auth_default_permit = array(
  * Default disabled (locked) permissions map. If some value is missing
  * in user-defined permission lock map, it will be taken from this one.
  */
-$cot_auth_default_lock = array(
+$GLOBALS['cot_auth_default_lock'] = array(
 	COT_GROUP_DEFAULT => '0',
 	COT_GROUP_GUESTS => 'W12345A',
 	COT_GROUP_INACTIVE => 'W12345A',

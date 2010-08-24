@@ -18,7 +18,7 @@ Tags=statistics.tpl:{STATISTICS_TOTALDBCOMMENTS}
 
 defined('SED_CODE') or die('Wrong URL');
 
-require_once sed_incfile('config', 'comments', true);
+sed_require('comments', true);
 
 $totaldbcomments = sed_sql_rowcount($db_com);
 $t->assign(array(

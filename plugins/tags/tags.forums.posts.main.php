@@ -19,9 +19,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'])
 {
-	require_once $cfg['system_dir'] . '/tags.php';
-	require_once sed_langfile('tags', 'plug');
-	require_once $cfg['plugins_dir'].'/tags/inc/resources.php';
+	sed_require('tags', true);
 	$tags = sed_tag_list($q, 'forums');
 	$tag_keywords = implode(', ', $tags);
 	$out['keywords'] = $tag_keywords;

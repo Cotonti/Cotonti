@@ -20,8 +20,9 @@ Hooks=admin
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
 sed_block($usr['isadmin']);
 
-require_once sed_incfile('auth');
-require_once sed_incfile('forms');
+// Requirements
+sed_require_api('auth');
+sed_require_api('forms');
 
 $s = sed_import('s', 'G', 'ALP');
 $id = sed_import('id', 'G', 'INT');
@@ -30,7 +31,7 @@ $d = empty($d) ? 0 : (int) $d;
 
 if ($s == 'structure')
 {
-	require_once sed_incfile('admin.structure', 'forums', true);
+	require_once sed_incfile('forums', 'admin.structure');
 }
 else
 {
