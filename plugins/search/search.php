@@ -105,8 +105,7 @@ else
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('search.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('search.first') as $pl)
 {
 	include $pl;
 }
@@ -316,8 +315,7 @@ if (!empty($sq))
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('search.list');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('search.list') as $pl)
 	{
 		include $pl;
 	}
@@ -358,8 +356,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('search.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('search.tags') as $pl)
 {
 	include $pl;
 }

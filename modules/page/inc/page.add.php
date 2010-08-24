@@ -18,8 +18,7 @@ $c = sed_import('c', 'G', 'ALP');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 
 /* === Hook === */
-$extp = sed_getextplugins('page.add.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.add.first') as $pl)
 {
 	include $pl;
 }
@@ -31,8 +30,7 @@ if ($a == 'add')
 	sed_shield_protect();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('page.add.add.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('page.add.add.first') as $pl)
 	{
 		include $pl;
 	}
@@ -127,8 +125,7 @@ if ($a == 'add')
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('page.add.add.query');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('page.add.add.query') as $pl)
 		{
 			include $pl;
 		}
@@ -191,8 +188,7 @@ if ($a == 'add')
 		$r_url = (!$page_state) ? sed_url('page', "id=".$id, '', true) : sed_url('message', "msg=300", '', true);
 
 		/* === Hook === */
-		$extp = sed_getextplugins('page.add.add.done');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('page.add.add.done') as $pl)
 		{
 			include $pl;
 		}
@@ -235,8 +231,7 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 sed_online_update();
 
 /* === Hook === */
-$extp = sed_getextplugins('page.add.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.add.main') as $pl)
 {
 	include $pl;
 }
@@ -337,8 +332,7 @@ if (sed_check_messages())
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('page.add.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.add.tags') as $pl)
 {
 	include $pl;
 }

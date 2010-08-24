@@ -24,8 +24,7 @@ define('SED_POLLS', TRUE);
 $location = 'Polls';
 
 /* === Hook === */
-$extp = sed_getextplugins('polls.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('polls.first') as $pl)
 {
 	include $pl;
 }
@@ -65,8 +64,7 @@ $out['subtitle'] = $L['Polls'];
 sed_online_update();
 
 /* === Hook === */
-$extp = sed_getextplugins('polls.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('polls.main') as $pl)
 {
 	include $pl;
 }
@@ -99,8 +97,7 @@ elseif ((int)$id > 0)
 	));
 
 	/* === Hook === */
-	$extp = sed_getextplugins('polls.view.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('polls.view.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -157,8 +154,7 @@ else
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('polls.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('polls.tags') as $pl)
 {
 	include $pl;
 }

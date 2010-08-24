@@ -79,8 +79,7 @@ elseif ($filter == 'validated')
 }
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.page.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.page.first') as $pl)
 {
 	include $pl;
 }
@@ -91,8 +90,7 @@ if ($a == 'validate')
 	sed_check_xg();
 
 	/* === Hook  === */
-	$extp = sed_getextplugins('admin.page.validate');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.page.validate') as $pl)
 	{
 		include $pl;
 	}
@@ -133,8 +131,7 @@ elseif ($a == 'unvalidate')
 	sed_check_xg();
 
 	/* === Hook  === */
-	$extp = sed_getextplugins('admin.page.unvalidate');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.page.unvalidate') as $pl)
 	{
 		include $pl;
 	}
@@ -175,8 +172,7 @@ elseif ($a == 'delete')
 	sed_check_xg();
 
 	/* === Hook  === */
-	$extp = sed_getextplugins('admin.page.delete');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.page.delete') as $pl)
 	{
 		include $pl;
 	}
@@ -203,8 +199,7 @@ elseif ($a == 'delete')
 		sed_log($L['Page'].' #'.$id.' - '.$L['Deleted'], 'adm');
 
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.page.delete.done');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.page.delete.done') as $pl)
 		{
 			include $pl;
 		}
@@ -245,8 +240,7 @@ elseif ($a == 'update_cheked')
 			if ($s[$i] == '1' || $s[$i] == 'on')
 			{
 				/* === Hook  === */
-				$extp = sed_getextplugins('admin.page.cheked_validate');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('admin.page.cheked_validate') as $pl)
 				{
 					include $pl;
 				}
@@ -297,8 +291,7 @@ elseif ($a == 'update_cheked')
 			if ($s[$i] == '1' || $s[$i] == 'on')
 			{
 				/* === Hook  === */
-				$extp = sed_getextplugins('admin.page.cheked_delete');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('admin.page.cheked_delete') as $pl)
 				{
 					include $pl;
 				}
@@ -331,8 +324,7 @@ elseif ($a == 'update_cheked')
 					}
 
 					/* === Hook === */
-					$extp = sed_getextplugins('admin.page.delete.done');
-					foreach ($extp as $pl)
+					foreach (sed_getextplugins('admin.page.delete.done') as $pl)
 					{
 						include $pl;
 					}
@@ -544,8 +536,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.page.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.page.tags') as $pl)
 {
 	include $pl;
 }

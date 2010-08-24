@@ -370,8 +370,7 @@ if ($usr['id'] == 0)
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('input');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('input') as $pl)
 {
 	include $pl;
 }
@@ -583,8 +582,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_NO_ANTIXSS') && !defin
 
 /* ======== Global hook ======== */
 
-$extp = sed_getextplugins('global');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('global') as $pl)
 {
 	include $pl;
 }

@@ -30,8 +30,7 @@ $filter = sed_import('filter','G','TXT');	// filter
 */
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.list.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.list.first') as $pl)
 {
 	include $pl;
 }
@@ -98,8 +97,7 @@ elseif ($filter == 'starred')
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.list.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.list.main') as $pl)
 {
 	include $pl;
 }
@@ -132,8 +130,7 @@ $currentpage = ceil($d / $cfg['maxpmperpage'])+1;
 $pagenav = sed_pagenav('pm', 'f='.$f.'&filter='.$filter, $d, $totallines, $cfg['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.list.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.list.main') as $pl)
 {
 	include $pl;
 }
@@ -248,8 +245,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.list.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.list.tags') as $pl)
 {
 	include $pl;
 }

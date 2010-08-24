@@ -22,8 +22,7 @@ $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.cache.disk.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.cache.disk.first') as $pl)
 {
 	include $pl;
 }
@@ -81,8 +80,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.cache.disk.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.cache.disk.tags') as $pl)
 {
 	include $pl;
 }

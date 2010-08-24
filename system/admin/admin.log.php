@@ -34,8 +34,7 @@ $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.log.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.log.first') as $pl)
 {
 	include $pl;
 }
@@ -45,8 +44,7 @@ if($a == 'purge' && $usr['isadmin'])
 {
 	sed_check_xg();
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.log.purge');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.log.purge') as $pl)
 	{
 		include $pl;
 	}
@@ -124,8 +122,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.log.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.log.tags') as $pl)
 {
 	include $pl;
 }

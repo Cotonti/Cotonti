@@ -18,8 +18,7 @@ defined('SED_CODE') or die('Wrong URL');
 $v = sed_import('v','G','PSW');
 
 /* === Hook === */
-$extp = sed_getextplugins('users.auth.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.auth.first') as $pl)
 {
 	include $pl;
 }
@@ -30,8 +29,7 @@ if ($a=='check')
 	sed_shield_protect();
 
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('users.auth.check');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('users.auth.check') as $pl)
 	{
 		include $pl;
 	}
@@ -57,8 +55,7 @@ if ($a=='check')
 	$user_select_condition = "user_password='$rmdpass' AND $login_param='".sed_sql_prep($rusername)."'";
 
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('users.auth.check.query');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('users.auth.check.query') as $pl)
 	{
 		include $pl;
 	}
@@ -113,8 +110,7 @@ if ($a=='check')
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('users.auth.check.done');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('users.auth.check.done') as $pl)
 		{
 			include $pl;
 		}
@@ -133,8 +129,7 @@ if ($a=='check')
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.auth.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.auth.main') as $pl)
 {
 	include $pl;
 }
@@ -162,8 +157,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('users.auth.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.auth.tags') as $pl)
 {
 	include $pl;
 }

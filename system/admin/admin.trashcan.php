@@ -24,8 +24,7 @@ $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.trashcan.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.trashcan.first') as $pl)
 {
 	include $pl;
 }
@@ -35,8 +34,7 @@ if($a == 'wipe')
 {
 	sed_check_xg();
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.trashcan.wipe');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.trashcan.wipe') as $pl)
 	{
 		include $pl;
 	}
@@ -49,8 +47,7 @@ elseif($a == 'wipeall')
 {
 	sed_check_xg();
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.trashcan.wipeall');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.trashcan.wipeall') as $pl)
 	{
 		include $pl;
 	}
@@ -63,8 +60,7 @@ elseif($a == 'restore')
 {
 	sed_check_xg();
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.trashcan.restore');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.trashcan.restore') as $pl)
 	{
 		include $pl;
 	}
@@ -164,8 +160,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.trashcan.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.trashcan.tags') as $pl)
 {
 	include $pl;
 }

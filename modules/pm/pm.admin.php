@@ -36,8 +36,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.pm.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.pm.tags') as $pl)
 {
 	include $pl;
 }

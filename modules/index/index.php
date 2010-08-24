@@ -22,8 +22,7 @@ define('SED_INDEX', TRUE);
 $location = 'Home';
 
 /* === Hook === */
-$extp = sed_getextplugins('index.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('index.first') as $pl)
 {
 	include $pl;
 }
@@ -34,8 +33,7 @@ sed_online_update();
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('index', 'a');
 
 /* === Hook === */
-$extp = sed_getextplugins('index.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('index.main') as $pl)
 {
 	include $pl;
 }
@@ -47,8 +45,7 @@ $mskin = sed_skinfile('index');
 $t = new XTemplate($mskin);
 
 /* === Hook === */
-$extp = sed_getextplugins('index.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('index.tags') as $pl)
 {
 	include $pl;
 }

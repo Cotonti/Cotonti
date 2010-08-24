@@ -46,8 +46,7 @@ else
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('list.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('list.first') as $pl)
 {
 	include $pl;
 }
@@ -95,8 +94,7 @@ $list_url_path = array('c' =>$c, 's' => $s, 'w' => $w, 'o' => $o, 'p' => $p);
 $list_url = sed_url('list', $list_url_path);
 
 /* === Hook === */
-$extp = sed_getextplugins('list.query');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('list.query') as $pl)
 {
 	include $pl;
 }
@@ -152,8 +150,7 @@ $out['subtitle'] = sed_title('title_list', $title_params);
 $_SESSION['cat'] = $c;
 
 /* === Hook === */
-$extp = sed_getextplugins('list.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('list.main') as $pl)
 {
 	include $pl;
 }
@@ -430,8 +427,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('list.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('list.tags') as $pl)
 {
 	include $pl;
 }

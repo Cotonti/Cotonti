@@ -25,8 +25,7 @@ $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.extrafields.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.extrafields.first') as $pl)
 {
 	include $pl;
 }
@@ -77,8 +76,7 @@ if ($a == 'add')
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.extrafields.add');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.extrafields.add') as $pl)
 	{
 		include $pl;
 	}
@@ -143,8 +141,7 @@ elseif ($a == 'upd')
 elseif ($a == 'del' && isset($name))
 {
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.extrafields.delete');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.extrafields.delete') as $pl)
 	{
 		include $pl;
 	}
@@ -218,8 +215,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.extrafields.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.extrafields.tags') as $pl)
 {
 	include $pl;
 }

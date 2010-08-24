@@ -18,8 +18,7 @@ defined('SED_CODE') or die('Wrong URL');
 sed_check_xg();
 
 /* === Hook === */
-$extp = sed_getextplugins('users.logout');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.logout') as $pl)
 {
 	include $pl;
 }

@@ -25,8 +25,7 @@ $touser_ids = array();
 $touser_names = array();
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.send.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.send.first') as $pl)
 {
 	include $pl;
 }
@@ -68,8 +67,7 @@ elseif ($a == 'send')
 	$newpmtitle .= (mb_strlen($newpmtitle) < 2) ? ' . . . ' : '';
 	$newpmhtml = ($cfg['parser_cache']) ? sed_sql_prep(sed_parse(htmlspecialchars($newpmtext))) : '';
 	/* === Hook === */
-	$extp = sed_getextplugins('pm.send.send.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('pm.send.send.first') as $pl)
 	{
 		include $pl;
 	}
@@ -87,8 +85,7 @@ elseif ($a == 'send')
 				WHERE pm_id = '$id' AND pm_fromuserid = '".$usr['id']."' AND pm_tostate = '0'");
 		}
 		/* === Hook === */
-		$extp = sed_getextplugins('pm.send.update.done');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('pm.send.update.done') as $pl)
 		{
 			include $pl;
 		}
@@ -173,8 +170,7 @@ elseif ($a == 'send')
 			}
 
 			/* === Hook === */
-			$extp = sed_getextplugins('pm.send.send.done');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('pm.send.send.done') as $pl)
 			{
 				include $pl;
 			}
@@ -252,8 +248,7 @@ $out['head'] .= $R['code_noindex'];
 sed_online_update();
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.send.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.send.main') as $pl)
 {
 	include $pl;
 }
@@ -319,8 +314,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.send.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.send.tags') as $pl)
 {
 	include $pl;
 }

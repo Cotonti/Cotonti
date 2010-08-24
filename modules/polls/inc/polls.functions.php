@@ -387,8 +387,7 @@ function sed_poll_delete($id, $type = '')
 		$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid = ".$id);
 
 		/* === Hook === */
-		$extp = sed_getextplugins('polls.functions.delete');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('polls.functions.delete') as $pl)
 		{
 			include $pl;
 		}

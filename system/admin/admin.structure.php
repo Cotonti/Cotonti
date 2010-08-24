@@ -30,8 +30,7 @@ $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.structure.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.structure.first') as $pl)
 {
 	include $pl;
 }
@@ -103,8 +102,7 @@ if ($n == 'options')
 		$roww = sed_sql_fetcharray($sqql);
 
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.structure.options.update');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.structure.options.update') as $pl)
 		{
 			include $pl;
 		}
@@ -275,8 +273,7 @@ if ($n == 'options')
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.structure.options.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.structure.options.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -308,8 +305,7 @@ else
 			$roww = sed_sql_fetcharray($sqql);
 
 			/* === Hook === */
-			$extp = sed_getextplugins('admin.structure.update');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('admin.structure.update') as $pl)
 			{
 				include $pl;
 			}
@@ -380,8 +376,7 @@ else
 		}
 
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.structure.add');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.structure.add') as $pl)
 		{
 			include $pl;
 		}
@@ -399,8 +394,7 @@ else
 		sed_check_xg();
 
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.structure.delete');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.structure.delete') as $pl)
 		{
 			include $pl;
 		}
@@ -563,8 +557,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.structure.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.structure.tags') as $pl)
 {
 	include $pl;
 }

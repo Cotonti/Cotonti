@@ -37,8 +37,7 @@ $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.rightsbyitem.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.rightsbyitem.first') as $pl)
 {
 	include $pl;
 }
@@ -50,8 +49,7 @@ if ($a == 'update')
 	$auth = sed_import('auth', 'P', 'ARR');
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.rightsbyitem.update');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.rightsbyitem.update') as $pl)
 	{
 		include $pl;
 	}
@@ -106,8 +104,7 @@ switch($ic)
 }
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.rightsbyitem.case');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.rightsbyitem.case') as $pl)
 {
 	include $pl;
 }
@@ -139,8 +136,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.rightsbyitem.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.rightsbyitem.tags') as $pl)
 {
 	include $pl;
 }

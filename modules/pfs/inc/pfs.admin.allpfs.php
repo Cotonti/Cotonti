@@ -22,8 +22,7 @@ $d = sed_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.pfs.allpfs.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.pfs.allpfs.first') as $pl)
 {
 	include $pl;
 }
@@ -72,8 +71,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.pfs.allpfs.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.pfs.allpfs.tags') as $pl)
 {
 	include $pl;
 }

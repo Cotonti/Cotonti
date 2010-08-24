@@ -21,8 +21,7 @@ $adminpath[] = array(sed_url('admin', 'm=infos'), $L['adm_infos']);
 $adminhelp = $L['adm_help_versions'];
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.infos.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.infos.first') as $pl)
 {
 	include $pl;
 }
@@ -43,8 +42,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.infos.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.infos.tags') as $pl)
 {
 	include $pl;
 }

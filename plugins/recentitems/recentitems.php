@@ -59,8 +59,7 @@ if ($cfg['plugin']['recentitems']['newforums'] && $cfg['module']['forums'] && !$
 if ($cfg['plugin']['recentitems']['newadditional'] && ($mode  != 'pages' || $mode != 'forums'))
 {
 	/* === Hook === */
-	$extp = sed_getextplugins('recentitems.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('recentitems.tags') as $pl)
 	{
 		include $pl;
 	}

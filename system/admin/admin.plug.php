@@ -33,8 +33,7 @@ $found_txt[1] = '<span style="color:#739E48;font-weight:bold;">'.$L['adm_present
 unset($disp_errors);
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.plug.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.plug.first') as $pl)
 {
 	include $pl;
 }
@@ -221,8 +220,7 @@ switch($a)
 				'ADMIN_PLUG_UNPAUSE_URL' => sed_url('admin', 'm=plug&a=details&pl='.$info['Code'].'&b=unpause')
 			));
 			/* === Hook  === */
-			$extp = sed_getextplugins('admin.plug.details');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('admin.plug.details') as $pl)
 			{
 				include $pl;
 			}
@@ -444,8 +442,7 @@ switch($a)
 					'ADMIN_PLUG_EDIT_CONTINUE_URL' => sed_url('admin', "m=plug&a=details&pl=".$pl)
 				));
 				/* === Hook  === */
-				$extp = sed_getextplugins('admin.plug.install.tags');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('admin.plug.install.tags') as $pl)
 				{
 					include $pl;
 				}
@@ -486,8 +483,7 @@ switch($a)
 					'ADMIN_PLUG_EDIT_CONTINUE_URL' => sed_url('admin', 'm=plug&a=details&pl='.$pl)
 				));
 				/* === Hook  === */
-				$extp = sed_getextplugins('admin.plug.uninstall.tags');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('admin.plug.uninstall.tags') as $pl)
 				{
 					include $pl;
 				}
@@ -668,8 +664,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.plug.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.plug.tags') as $pl)
 {
 	include $pl;
 }

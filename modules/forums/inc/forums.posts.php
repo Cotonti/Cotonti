@@ -29,8 +29,7 @@ require_once sed_langfile('countries', 'core');
 unset ($notlastpage);
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.posts.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.posts.first') as $pl)
 {
 	include $pl;
 }
@@ -116,8 +115,7 @@ if ($row = sed_sql_fetcharray($sql))
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.posts.rights');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.posts.rights') as $pl)
 	{
 		include $pl;
 	}
@@ -168,8 +166,7 @@ if ($a=='newpost')
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.posts.newpost.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.posts.newpost.first') as $pl)
 	{
 		include $pl;
 	}
@@ -231,8 +228,7 @@ if ($a=='newpost')
 			{ $sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'"); }
 
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.posts.newpost.done');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('forums.posts.newpost.done') as $pl)
 			{
 				include $pl;
 			}
@@ -283,8 +279,7 @@ if ($a=='newpost')
 			$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
 
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.posts.newpost.done');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('forums.posts.newpost.done') as $pl)
 			{
 				include $pl;
 			}
@@ -315,8 +310,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	sed_check_xg();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.posts.delete.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.posts.delete.first') as $pl)
 	{
 		include $pl;
 	}
@@ -351,8 +345,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	sed_log("Deleted post #".$p, 'for');
 
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.posts.delete.done');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.posts.delete.done') as $pl)
 	{
 		include $pl;
 	}
@@ -407,8 +400,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 			}
 
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.posts.emptytopicdel');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('forums.posts.emptytopicdel') as $pl)
 			{
 				include $pl;
 			}
@@ -538,8 +530,7 @@ $out['subtitle'] = sed_title('title_forum_posts', $title_params);
 $out['desc'] = htmlspecialchars(strip_tags($ft_desc));
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.posts.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.posts.main') as $pl)
 {
 	include $pl;
 }
@@ -799,8 +790,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 	}
 
 	/* === Hook  === */
-	$extp = sed_getextplugins('forums.posts.newpost.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.posts.newpost.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -827,8 +817,7 @@ if ($ft_mode==1)
 }
 
 /* === Hook  === */
-$extp = sed_getextplugins('forums.posts.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.posts.tags') as $pl)
 {
 	include $pl;
 }

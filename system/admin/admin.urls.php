@@ -78,8 +78,7 @@ else
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.urls.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.urls.first') as $pl)
 {
 	include $pl;
 }
@@ -94,8 +93,7 @@ if($a == 'save')
 	$htaccess = sed_import('htaccess', 'P', 'BOL');
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.urls.save');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.urls.save') as $pl)
 	{
 		include $pl;
 	}
@@ -389,8 +387,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.urls.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.urls.tags') as $pl)
 {
 	include $pl;
 }

@@ -92,8 +92,7 @@ if ($userid!=$usr['id'])
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('pfs.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pfs.first') as $pl)
 {
 	include $pl;
 }
@@ -112,8 +111,7 @@ if ($a=='upload')
 	$ndesc = sed_import('ndesc','P','ARR');
 
 	/* === Hook === */
-	$extp = sed_getextplugins('pfs.upload.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('pfs.upload.first') as $pl)
 	{
 		include $pl;
 	}
@@ -187,8 +185,7 @@ if ($a=='upload')
 						if ($is_moved && (int)$u_size > 0)
 						{
 							/* === Hook === */
-							$extp = sed_getextplugins('pfs.upload.moved');
-							foreach ($extp as $pl)
+							foreach (sed_getextplugins('pfs.upload.moved') as $pl)
 							{
 								include $pl;
 							}
@@ -218,8 +215,7 @@ if ($a=='upload')
 							$pfs_totalsize += $u_size;
 
 							/* === Hook === */
-							$extp = sed_getextplugins('pfs.upload.done');
-							foreach ($extp as $pl)
+							foreach (sed_getextplugins('pfs.upload.done') as $pl)
 							{
 								include $pl;
 							}
@@ -622,8 +618,7 @@ if ($standalone)
 	$t->parse('MAIN.STANDALONE_FOOTER');
 
 	/* === Hook === */
-	$extp = sed_getextplugins('pfs.standalone');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('pfs.standalone') as $pl)
 	{
 		include $pl;
 	}
@@ -632,8 +627,7 @@ if ($standalone)
 else
 {
 	/* === Hook === */
-	$extp = sed_getextplugins('pfs.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('pfs.tags') as $pl)
 	{
 		include $pl;
 	}
