@@ -387,6 +387,9 @@ $L['ext_invalid_format'] = 'This is not a valid Cotonti >= 0.9 extension. Please
 $L['ext_patch_applied'] = 'Applied patch {$f}: {$msg}';
 $L['ext_patch_error'] = 'Error applying patch {$f}: {$msg}';
 $L['ext_setup_not_found'] = 'Setup file is not found';
+$L['ext_up2date'] = '{$type} &quot;{$name}&quot; is up to date';
+$L['ext_update_error'] = 'Failed updating {$type} &quot;{$name}&quot;';
+$L['ext_updated'] = '{$type} &quot;{$name}&quot; has been updated to version {$ver}';
 
 /**
   * Page Section
