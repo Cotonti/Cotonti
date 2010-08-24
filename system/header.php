@@ -14,8 +14,7 @@ defined('SED_CODE') or die('Wrong URL');
 sed_uriredir_store();
 
 /* === Hook === */
-$extp = sed_getextplugins('header.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('header.first') as $pl)
 {
 	include $pl;
 }
@@ -94,8 +93,7 @@ if (!SED_AJAX)
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('header.main');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('header.main') as $pl)
 	{
 		include $pl;
 	}
@@ -126,8 +124,7 @@ if (!SED_AJAX)
 	));
 
 	/* === Hook === */
-	$extp = sed_getextplugins('header.body');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('header.body') as $pl)
 	{
 		include $pl;
 	}
@@ -188,8 +185,7 @@ if (!SED_AJAX)
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('header.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('header.tags') as $pl)
 	{
 		include $pl;
 	}

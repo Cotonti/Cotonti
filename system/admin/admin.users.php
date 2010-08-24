@@ -28,8 +28,7 @@ $g = sed_import('g', 'G', 'INT');
 $lincif_extfld = sed_auth('admin', 'a', 'A');
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.users.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.users.first') as $pl)
 {
 	include $pl;
 }
@@ -53,8 +52,7 @@ if($n == 'add')
 	$grp_id = sed_sql_insertid();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.users.add');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.users.add') as $pl)
 	{
 		include $pl;
 	}
@@ -82,8 +80,7 @@ elseif($n == 'edit')
 		$rmtmode = sed_import('rmtmode', 'P', 'BOL');
 
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.users.update');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.users.update') as $pl)
 		{
 			include $pl;
 		}
@@ -107,8 +104,7 @@ elseif($n == 'edit')
 		$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
 
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.users.delete');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.users.delete') as $pl)
 		{
 			include $pl;
 		}
@@ -151,8 +147,7 @@ elseif($n == 'edit')
 			'ADMIN_USERS_EDITFORM_DEL_URL' => sed_url('admin', 'm=users&n=edit&a=delete&g='.$g.'&'.sed_xg()),
 		));
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.users.edit.tags');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.users.edit.tags') as $pl)
 		{
 			include $pl;
 		}
@@ -217,8 +212,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.users.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.users.tags') as $pl)
 {
 	include $pl;
 }

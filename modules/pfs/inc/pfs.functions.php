@@ -388,8 +388,7 @@ function sed_pfs_upload($userid, $folderid='')
 	$npath = sed_pfs_folderpath($folderid);
 	
 	/* === Hook === */
-	$extp = sed_getextplugins('pfs.upload.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('pfs.upload.first') as $pl)
 	{
 		include $pl;
 	}
@@ -463,8 +462,7 @@ function sed_pfs_upload($userid, $folderid='')
 						if ($is_moved && (int)$u_size > 0)
 						{
 							/* === Hook === */
-							$extp = sed_getextplugins('pfs.upload.moved');
-							foreach ($extp as $pl)
+							foreach (sed_getextplugins('pfs.upload.moved') as $pl)
 							{
 								include $pl;
 							}
@@ -495,8 +493,7 @@ function sed_pfs_upload($userid, $folderid='')
 							$pfs_totalsize += $u_size;
 
 							/* === Hook === */
-							$extp = sed_getextplugins('pfs.upload.done');
-							foreach ($extp as $pl)
+							foreach (sed_getextplugins('pfs.upload.done') as $pl)
 							{
 								include $pl;
 							}

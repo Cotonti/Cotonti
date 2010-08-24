@@ -35,8 +35,7 @@ else
 	$adminhelp = $L['adm_help_pfs'];
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.pfs.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.pfs.first') as $pl)
 	{
 		include $pl;
 	}
@@ -70,8 +69,7 @@ else
 	));
 
 	/* === Hook  === */
-	$extp = sed_getextplugins('admin.pfs.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.pfs.tags') as $pl)
 	{
 		include $pl;
 	}

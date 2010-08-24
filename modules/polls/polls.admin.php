@@ -38,8 +38,7 @@ $variants['index'] = array($L['Main'], "index");
 $variants['forum'] = array($L['Forums'], "forum");
 
 /* === Hook === */
-$extp = sed_getextplugins('adim.polls.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('adim.polls.first') as $pl)
 {
 	include $pl;
 }
@@ -240,8 +239,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.polls.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.polls.tags') as $pl)
 {
 	include $pl;
 }

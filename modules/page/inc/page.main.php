@@ -21,8 +21,7 @@ $c = sed_import('c', 'G', 'TXT');
 $pg = sed_import('pg', 'G', 'INT');
 
 /* === Hook === */
-$extp = sed_getextplugins('page.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.first') as $pl)
 {
 	include $pl;
 }
@@ -69,8 +68,7 @@ elseif (mb_substr($pag['page_text'], 0, 8) == 'include:')
 if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_download']) || $pag['page_file'] == 1))
 {
 	/* === Hook === */
-	$extp = sed_getextplugins('page.download.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('page.download.first') as $pl)
 	{
 		include $pl;
 	}
@@ -118,8 +116,7 @@ $out['desc'] = htmlspecialchars(strip_tags($pag['page_desc']));
 $out['subtitle'] = sed_title('title_page', $title_params);
 
 /* === Hook === */
-$extp = sed_getextplugins('page.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.main') as $pl)
 {
 	include $pl;
 }
@@ -342,8 +339,7 @@ if ($pag['page_totaltabs'] > 1)
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('page.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.tags') as $pl)
 {
 	include $pl;
 }

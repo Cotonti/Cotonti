@@ -40,8 +40,7 @@ else
 	$adminpath[] = array(sed_url('admin', 'm=forums'), $L['Forums']);
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.forums.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.forums.first') as $pl)
 	{
 		include $pl;
 	}
@@ -71,8 +70,7 @@ else
 			$mastername = $rtitle;
 
 			/* === Hook === */
-			$extp = sed_getextplugins('admin.forums.update');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('admin.forums.update') as $pl)
 			{
 				include $pl;
 			}
@@ -174,8 +172,7 @@ else
 			'ADMIN_FORUMS_EDIT_RESYNC_URL' => sed_url('admin', 'm=forums&n=edit&a=resync&id=' . $fs_id . '&' . sed_xg())
 		));
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.forums.edit');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.forums.edit') as $pl)
 		{
 			include $pl;
 		}
@@ -193,8 +190,7 @@ else
 			$row_cur = sed_sql_fetcharray($sql);
 
 			/* === Hook === */
-			$extp = sed_getextplugins('admin.forums.order');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('admin.forums.order') as $pl)
 			{
 				include $pl;
 			}
@@ -254,8 +250,7 @@ else
 				$forumid = sed_sql_insertid();
 
 				/* === Hook === */
-				$extp = sed_getextplugins('admin.forums.add');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('admin.forums.add') as $pl)
 				{
 					include $pl;
 				}
@@ -300,8 +295,7 @@ else
 			}
 
 			/* === Hook === */
-			$extp = sed_getextplugins('admin.forums.delete');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('admin.forums.delete') as $pl)
 			{
 				include $pl;
 			}
@@ -444,8 +438,7 @@ else
 	));
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.forums.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.forums.tags') as $pl)
 	{
 		include $pl;
 	}

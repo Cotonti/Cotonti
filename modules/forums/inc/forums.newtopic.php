@@ -29,8 +29,7 @@ sed_blockguests();
 sed_die(empty($s));
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.newtopic.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.newtopic.first') as $pl)
 {
 	include $pl;
 }
@@ -59,8 +58,7 @@ if ($row = sed_sql_fetcharray($sql))
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.newtopic.rights');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.newtopic.rights') as $pl)
 	{
 		include $pl;
 	}
@@ -85,8 +83,7 @@ if ($a=='newtopic')
 	sed_shield_protect();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.newtopic.newtopic.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.newtopic.newtopic.first') as $pl)
 	{
 		include $pl;
 	}
@@ -215,8 +212,7 @@ if ($a=='newtopic')
 		{ sed_forum_sectionsetlast($s); }
 
 		/* === Hook === */
-		$extp = sed_getextplugins('forums.newtopic.newtopic.done');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('forums.newtopic.newtopic.done') as $pl)
 		{
 			include $pl;
 		}
@@ -265,8 +261,7 @@ $out['head'] .= $R['code_noindex'];
 sed_online_update();
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.newtopic.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.newtopic.main') as $pl)
 {
 	include $pl;
 }
@@ -318,8 +313,7 @@ if ($fs_allowpolls && $poll)
 	}
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.newtopic.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.newtopic.tags') as $pl)
 {
 	include $pl;
 }

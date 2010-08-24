@@ -10,8 +10,7 @@
 defined('SED_CODE') or die('Wrong URL');
 
 /* === Hook === */
-$extp = sed_getextplugins('footer.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('footer.first') as $pl)
 {
 	include $pl;
 }
@@ -60,8 +59,7 @@ $out['devmode']	 .= $out['devauth'];
 if (!SED_AJAX)
 {
 	/* === Hook === */
-	$extp = sed_getextplugins('footer.main');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('footer.main') as $pl)
 	{
 		include $pl;
 	}
@@ -82,8 +80,7 @@ if (!SED_AJAX)
 	));
 
 	/* === Hook === */
-	$extp = sed_getextplugins('footer.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('footer.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -103,8 +100,7 @@ if (!SED_AJAX)
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('footer.last');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('footer.last') as $pl)
 {
 	include $pl;
 }

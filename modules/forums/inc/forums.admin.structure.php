@@ -18,8 +18,7 @@ $adminpath[] = array (sed_url('admin', 'm=forums&s=structure'), $L['Structure'])
 $adminhelp = $L['adm_help_forum_structure'];
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.forums.structure.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.forums.structure.first') as $pl)
 {
 	include $pl;
 }
@@ -37,8 +36,7 @@ if($n == 'options')
 		$rdefstate = sed_import('rdefstate', 'P', 'BOL');
 
 		/* === Hook === */
-		$extp = sed_getextplugins('admin.forums.structure.options.update');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.forums.structure.options.update') as $pl)
 		{
 			include $pl;
 		}
@@ -131,8 +129,7 @@ if($n == 'options')
 	));
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.forums.structure.options');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.forums.structure.options') as $pl)
 	{
 		include $pl;
 	}
@@ -301,8 +298,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.forums.structure.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.forums.structure.tags') as $pl)
 {
 	include $pl;
 }

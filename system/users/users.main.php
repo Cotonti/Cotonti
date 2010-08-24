@@ -48,8 +48,7 @@ $users_sort_tags = array(
 $users_sort_blacklist = array('email', 'lastip',);
 
 /* === Hook === */
-$extp = sed_getextplugins('users.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.first') as $pl)
 {
 	include $pl;
 }
@@ -164,8 +163,7 @@ $title_params = array(
 $out['subtitle'] = sed_title('title_users_main', $title_params);
 
 /* === Hook === */
-$extp = sed_getextplugins('users.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.main') as $pl)
 {
 	include $pl;
 }
@@ -308,8 +306,7 @@ while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.tags') as $pl)
 {
 	include $pl;
 }

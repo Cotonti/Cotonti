@@ -25,8 +25,7 @@ $sed_select_doctypeid = sed_loaddoctypes();
 $sed_select_rss_charset = sed_loadcharsets();
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.config.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.config.first') as $pl)
 {
 	include $pl;
 }
@@ -162,8 +161,7 @@ switch($n)
 			'ADMIN_CONFIG_FORM_URL' => sed_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=update')
 		));
 		/* === Hook  === */
-		$extp = sed_getextplugins('admin.config.edit.tags');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.config.edit.tags') as $pl)
 		{
 			include $pl;
 		}
@@ -194,8 +192,7 @@ switch($n)
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_ROW_PLUG');
 		}
 		/* === Hook  === */
-		$extp = sed_getextplugins('admin.config.default.tags');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('admin.config.default.tags') as $pl)
 		{
 			include $pl;
 		}
@@ -211,8 +208,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.config.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.config.tags') as $pl)
 {
 	include $pl;
 }

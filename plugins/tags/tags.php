@@ -43,8 +43,7 @@ foreach ($tag_orders as $order)
 }
 
 /* == Hook for the plugins == */
-$extp = sed_getextplugins('tags.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('tags.first') as $pl)
 {
 	include $pl;
 }
@@ -121,8 +120,7 @@ elseif ($a == 'all')
 else
 {
 	/* == Hook for the plugins == */
-	$extp = sed_getextplugins('tags.search.custom');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('tags.search.custom') as $pl)
 	{
 		include $pl;
 	}

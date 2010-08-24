@@ -23,8 +23,7 @@ if ($cfg['disablereg'])
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.register.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.register.first') as $pl)
 {
 	include $pl;
 }
@@ -36,8 +35,7 @@ if ($a=='add')
 	sed_shield_protect();
 
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('users.register.add.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('users.register.add.first') as $pl)
 	{
 		include $pl;
 	}
@@ -193,8 +191,7 @@ if ($a=='add')
 		$sql = sed_sql_query("INSERT INTO $db_groups_users (gru_userid, gru_groupid) VALUES (".(int)$userid.", ".(int)$defgroup.")");
 
 		/* === Hook for the plugins === */
-		$extp = sed_getextplugins('users.register.add.done');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('users.register.add.done') as $pl)
 		{
 			include $pl;
 		}
@@ -238,8 +235,7 @@ if ($a=='add')
 elseif ($a=='validate' && mb_strlen($v)==32)
 {
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('users.register.validate.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('users.register.validate.first') as $pl)
 	{
 		include $pl;
 	}
@@ -258,8 +254,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 				$sql = sed_sql_query("UPDATE $db_groups_users SET gru_groupid=4 WHERE gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 
 				/* === Hook for the plugins === */
-				$extp = sed_getextplugins('users.register.validate.done');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('users.register.validate.done') as $pl)
 				{
 					include $pl;
 				}
@@ -275,8 +270,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 				$sql = sed_sql_query("DELETE FROM $db_groups_users WHERE gru_userid='".$row['user_id']."'");
 
 				/* === Hook for the plugins === */
-				$extp = sed_getextplugins('users.register.validate.rejected');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('users.register.validate.rejected') as $pl)
 				{
 					include $pl;
 				}
@@ -300,8 +294,7 @@ elseif ($a=='validate' && mb_strlen($v)==32)
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('users.register.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.register.main') as $pl)
 {
 	include $pl;
 }
@@ -365,8 +358,7 @@ if (sed_check_messages())
 
 
 /* === Hook === */
-$extp = sed_getextplugins('users.register.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.register.tags') as $pl)
 {
 	include $pl;
 }

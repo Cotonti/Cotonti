@@ -64,8 +64,7 @@ $domain = $sys['domain'];
 $defult_c = true;
 
 /* === Hook === */
-$extp = sed_getextplugins('rss.create');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('rss.create') as $pl)
 {
 	include $pl;
 }
@@ -282,8 +281,7 @@ if (count($items) > 0)
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('rss.output');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('rss.output') as $pl)
 {
 	include $pl;
 }

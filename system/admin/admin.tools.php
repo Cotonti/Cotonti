@@ -22,8 +22,7 @@ $adminhelp = $L['adm_help_tools'];
 $p = sed_import('p', 'G', 'ALP');
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.tools.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.tools.first') as $pl)
 {
 	include $pl;
 }
@@ -129,8 +128,7 @@ else
 		}
 	}
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.tools.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.tools.tags') as $pl)
 	{
 		include $pl;
 	}

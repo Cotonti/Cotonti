@@ -38,8 +38,7 @@ $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.rights.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.rights.first') as $pl)
 {
 	include $pl;
 }
@@ -51,8 +50,7 @@ if ($a == 'update')
 	$ncopyrightsfrom = sed_import('ncopyrightsfrom', 'P', 'INT');
 
 	/* === Hook === */
-	$extp = sed_getextplugins('admin.rights.update');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.rights.update') as $pl)
 	{
 		include $pl;
 	}
@@ -99,8 +97,7 @@ if ($a == 'update')
 $jj = 1;
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.rights.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.rights.main') as $pl)
 {
 	include $pl;
 }
@@ -176,8 +173,7 @@ while ($row = sed_sql_fetcharray($sql4))
 }
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.rights.end');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.rights.end') as $pl)
 {
 	include $pl;
 }
@@ -196,8 +192,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.rights.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.rights.tags') as $pl)
 {
 	include $pl;
 }

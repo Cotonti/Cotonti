@@ -20,8 +20,7 @@ $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(sed_url('admin', 'm=cache'), $L['adm_internalcache']);
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.cache.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.cache.first') as $pl)
 {
 	include $pl;
 }
@@ -99,8 +98,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.cache.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.cache.tags') as $pl)
 {
 	include $pl;
 }

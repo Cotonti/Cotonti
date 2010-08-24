@@ -19,8 +19,7 @@ $t = new XTemplate(sed_skinfile('admin.other'));
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.other.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.other.first') as $pl)
 {
 	include $pl;
 }
@@ -83,8 +82,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.other.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.other.tags') as $pl)
 {
 	include $pl;
 }

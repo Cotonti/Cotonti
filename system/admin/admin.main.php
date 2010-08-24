@@ -28,8 +28,7 @@ $u = sed_import('u', 'P', 'TXT');
 $s = sed_import('s', 'G', 'ALP', 24);
 
 /* === Hook for the plugins === */
-$extp = sed_getextplugins('admin.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.main') as $pl)
 {
 	include $pl;
 }
@@ -85,8 +84,7 @@ if (!SED_AJAX)
 	));
 
 	/* === Hook for the plugins === */
-	$extp = sed_getextplugins('admin.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('admin.tags') as $pl)
 	{
 		include $pl;
 	}

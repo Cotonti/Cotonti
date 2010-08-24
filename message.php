@@ -35,8 +35,7 @@ $title = $L['msg'.$msg.'_title'];
 $body = $L['msg'.$msg.'_body'];
 
 /* === Hook === */
-$extp = sed_getextplugins('message.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('message.first') as $pl)
 {
 	include $pl;
 }
@@ -162,8 +161,7 @@ elseif ($rd != '')
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('message.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('message.main') as $pl)
 {
 	include $pl;
 }
@@ -181,8 +179,7 @@ $t->assign('MESSAGE_TITLE', $title);
 $t->assign('MESSAGE_BODY', $body);
 
 /* === Hook === */
-$extp = sed_getextplugins('message.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('message.tags') as $pl)
 {
 	include $pl;
 }

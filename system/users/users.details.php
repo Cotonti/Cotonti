@@ -23,8 +23,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 sed_block($usr['auth_read']);
 
 /* === Hook === */
-$extp = sed_getextplugins('users.details.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.details.first') as $pl)
 {
 	include $pl;
 }
@@ -60,8 +59,7 @@ $title_params = array(
 $out['subtitle'] = sed_title('title_users_details', $title_params);
 
 /* === Hook === */
-$extp = sed_getextplugins('users.details.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.details.main') as $pl)
 {
 	include $pl;
 }
@@ -82,8 +80,7 @@ $t->assign(array(
 $t->assign(sed_generate_usertags($urr, "USERS_DETAILS_", '', true));
 
 /* === Hook === */
-$extp = sed_getextplugins('users.details.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('users.details.tags') as $pl)
 {
 	include $pl;
 }

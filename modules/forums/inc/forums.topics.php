@@ -31,8 +31,7 @@ sed_die(empty($s));
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 /* === Hook === */
-$extp = sed_getextplugins('forums.topics.rights');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.topics.rights') as $pl)
 {
 	include $pl;
 }
@@ -95,8 +94,7 @@ if ($fs_state)
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.topics.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.topics.first') as $pl)
 {
 	include $pl;
 }
@@ -119,8 +117,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			sed_log("Deleted topic #".$q, 'for');
 			sed_forum_sectionsetlast($s);
 			/* === Hook === */
-			$extp = sed_getextplugins('forums.topics.delete.done');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('forums.topics.delete.done') as $pl)
 			{
 				include $pl;
 			}
@@ -333,8 +330,7 @@ $out['subtitle'] = sed_title('title_forum_topics', $title_params);
 $out['desc'] = htmlspecialchars(strip_tags($fs_desc));
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.topics.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.topics.main') as $pl)
 {
 	include $pl;
 }
@@ -619,8 +615,7 @@ while ($row = sed_sql_fetcharray($sql))
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.topics.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.topics.tags') as $pl)
 {
 	include $pl;
 }

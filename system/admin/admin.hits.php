@@ -24,8 +24,7 @@ $f = sed_import('f', 'G', 'TXT');
 $v = sed_import('v', 'G', 'TXT');
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.hits.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.hits.first') as $pl)
 {
 	include $pl;
 }
@@ -167,8 +166,7 @@ else
 }
 
 /* === Hook  === */
-$extp = sed_getextplugins('admin.hits.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.hits.tags') as $pl)
 {
 	include $pl;
 }

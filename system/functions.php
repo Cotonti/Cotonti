@@ -432,8 +432,7 @@ function sed_load_structure()
 		}
 
 		/* == Hook == */
-		$extp = sed_getextplugins('structure');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('structure') as $pl)
 		{
 			include $pl;
 		}
@@ -557,8 +556,7 @@ function sed_outputfilters($output)
 	global $cfg;
 
 	/* === Hook === */
-	$extp = sed_getextplugins('output');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('output') as $pl)
 	{
 		include $pl;
 	}
@@ -1078,8 +1076,7 @@ function sed_build_ratings($code, $url, $display)
 	if ($inr == 'send' && $newrate >= 0 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0)
 	{
 		/* == Hook for the plugins == */
-		$extp = sed_getextplugins('ratings.send.first');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('ratings.send.first') as $pl)
 		{
 			include $pl;
 		}
@@ -1106,8 +1103,7 @@ function sed_build_ratings($code, $url, $display)
 		}
 
 		/* == Hook for the plugins == */
-		$extp = sed_getextplugins('ratings.send.done');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('ratings.send.done') as $pl)
 		{
 			include $pl;
 		}
@@ -1138,8 +1134,7 @@ function sed_build_ratings($code, $url, $display)
 		$called = true;
 	}
 	/* == Hook for the plugins == */
-	$extp = sed_getextplugins('ratings.main');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('ratings.main') as $pl)
 	{
 		include $pl;
 	}
@@ -1187,8 +1182,7 @@ function sed_build_ratings($code, $url, $display)
 	));
 
 	/* == Hook for the plugins == */
-	$extp = sed_getextplugins('ratings.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('ratings.tags') as $pl)
 	{
 		include $pl;
 	}

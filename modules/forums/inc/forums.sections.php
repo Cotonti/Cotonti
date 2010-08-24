@@ -17,8 +17,7 @@ defined('SED_CODE') or die('Wrong URL');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', 'any');
 /* === Hook === */
-$extp = sed_getextplugins('forums.sections.rights');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.sections.rights') as $pl)
 {
 	include $pl;
 }
@@ -42,8 +41,7 @@ $sys['sublocation'] = $L['Home'];
 sed_online_update();
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.sections.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.sections.first') as $pl)
 {
 	include $pl;
 }
@@ -95,8 +93,7 @@ $title_params = array(
 $out['subtitle'] = sed_title('title_forum_main', $title_params);
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.sections.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.sections.main') as $pl)
 {
 	include $pl;
 }
@@ -317,8 +314,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.sections.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.sections.tags') as $pl)
 {
 	include $pl;
 }

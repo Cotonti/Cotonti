@@ -25,8 +25,7 @@ $w = sed_import('w','G','ALP',4);
 $quote = sed_import('quote','G','INT');
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.editpost.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.editpost.first') as $pl)
 {
 	include $pl;
 }
@@ -52,8 +51,7 @@ if ($row = sed_sql_fetcharray($sql))
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 	
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.editpost.rights');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.editpost.rights') as $pl)
 	{
 		include $pl;
 	}
@@ -107,8 +105,7 @@ else
 if ($a=='update')
 {
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.editpost.update.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.editpost.update.first') as $pl)
 	{
 		include $pl;
 	}
@@ -166,8 +163,7 @@ if ($a=='update')
 	}
 
 	/* === Hook === */
-	$extp = sed_getextplugins('forums.editpost.update.done');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('forums.editpost.update.done') as $pl)
 	{
 		include $pl;
 	}
@@ -228,8 +224,7 @@ $out['head'] .= $R['code_noindex'];
 sed_online_update();
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.editpost.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.editpost.main') as $pl)
 {
 	include $pl;
 }
@@ -271,8 +266,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('forums.editpost.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('forums.editpost.tags') as $pl)
 {
 	include $pl;
 }

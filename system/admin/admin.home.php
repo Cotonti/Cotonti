@@ -209,8 +209,7 @@ else
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('admin.home', 'R');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('admin.home', 'R') as $pl)
 {
 	include $pl;
 }

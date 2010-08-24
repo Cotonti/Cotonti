@@ -67,8 +67,7 @@ $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
 $title = sed_rc_link(sed_url('pfs', $more), $L['pfs_title']);
 
 /* === Hook === */
-$extp = sed_getextplugins('pfs.editfolder.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pfs.editfolder.first') as $pl)
 {
 	include $pl;
 }
@@ -176,8 +175,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('pfs.editfolder.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pfs.editfolder.tags') as $pl)
 {
 	include $pl;
 }

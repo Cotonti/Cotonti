@@ -27,8 +27,7 @@ if (empty($id))
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.first') as $pl)
 {
 	include $pl;
 }
@@ -89,8 +88,7 @@ $out['head'] .= $R['code_noindex'];
 sed_online_update();
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.main') as $pl)
 {
 	include $pl;
 }
@@ -267,8 +265,7 @@ $t->assign(array(
 $t->assign(sed_generate_usertags($row_user, "PM_USER_"));
 
 /* === Hook === */
-$extp = sed_getextplugins('pm.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('pm.tags') as $pl)
 {
 	include $pl;
 }

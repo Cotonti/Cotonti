@@ -89,8 +89,7 @@ function sed_comments_display($area, $code, $cat = '')
 	$t = new XTemplate(sed_skinfile('comments', true));
 
 	/* == Hook == */
-	$extp = sed_getextplugins('comments.main');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('comments.main') as $pl)
 	{
 		include $pl;
 	}
@@ -114,8 +113,7 @@ function sed_comments_display($area, $code, $cat = '')
 		$com_hint = sprintf($L['plu_comhint'], $allowed_time);
 
 		/* == Hook == */
-		$extp = sed_getextplugins('comments.newcomment.tags');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('comments.newcomment.tags') as $pl)
 		{
 			include $pl;
 		}
@@ -283,8 +281,7 @@ function sed_comments_display($area, $code, $cat = '')
 	}
 
 	/* == Hook == */
-	$extp = sed_getextplugins('comments.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('comments.tags') as $pl)
 	{
 		include $pl;
 	}

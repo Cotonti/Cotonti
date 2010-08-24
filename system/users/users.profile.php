@@ -25,8 +25,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 sed_block($usr['auth_write']);
 
 /* === Hook === */
-$extp = sed_getextplugins('profile.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('profile.first') as $pl)
 {
 	include $pl;
 }
@@ -110,8 +109,7 @@ switch ($a)
 	sed_check_xg();
 
 	/* === Hook === */
-	$extp = sed_getextplugins('profile.update.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('profile.update.first') as $pl)
 	{
 		include $pl;
 	}
@@ -172,8 +170,7 @@ switch ($a)
 				}
 
 				/* === Hook === */
-				$extp = sed_getextplugins('profile.update.avatar');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('profile.update.avatar') as $pl)
 				{
 					include $pl;
 				}
@@ -240,8 +237,7 @@ switch ($a)
 				}
 
 				/* === Hook === */
-				$extp = sed_getextplugins('profile.update.photo');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('profile.update.photo') as $pl)
 				{
 					include $pl;
 				}
@@ -308,8 +304,7 @@ switch ($a)
 				}
 
 				/* === Hook === */
-				$extp = sed_getextplugins('profile.update.signature');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('profile.update.signature') as $pl)
 				{
 					include $pl;
 				}
@@ -509,8 +504,7 @@ switch ($a)
 		$sql = sed_sql_query($ssql);
 
 		/* === Hook === */
-		$extp = sed_getextplugins('profile.update.done');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('profile.update.done') as $pl)
 		{
 			include $pl;
 		}
@@ -536,8 +530,7 @@ $out['subtitle'] = sed_title('title_users_profile', $title_params);
 $out['head'] .= $R['code_noindex'];
 
 /* === Hook === */
-$extp = sed_getextplugins('profile.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('profile.main') as $pl)
 {
 	include $pl;
 }
@@ -688,8 +681,7 @@ if (sed_check_messages())
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('profile.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('profile.tags') as $pl)
 {
 	include $pl;
 }

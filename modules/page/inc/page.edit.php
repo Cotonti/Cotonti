@@ -26,8 +26,7 @@ if ($a == 'update')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $row1['page_cat']);
 
 	/* === Hook === */
-	$extp = sed_getextplugins('page.edit.update.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('page.edit.update.first') as $pl)
 	{
 		include $pl;
 	}
@@ -113,8 +112,7 @@ if ($a == 'update')
 				$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
 				sed_log("Deleted page #".$id,'adm');
 				/* === Hook === */
-				$extp = sed_getextplugins('page.edit.delete.done');
-				foreach ($extp as $pl)
+				foreach (sed_getextplugins('page.edit.delete.done') as $pl)
 				{
 					include $pl;
 				}
@@ -228,8 +226,7 @@ if ($a == 'update')
 			$sql = sed_sql_query($ssql);
 
 			/* === Hook === */
-			$extp = sed_getextplugins('page.edit.update.done');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('page.edit.update.done') as $pl)
 			{
 				include $pl;
 			}
@@ -264,8 +261,7 @@ $pag = sed_sql_fetcharray($sql);
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
 
 /* === Hook === */
-$extp = sed_getextplugins('page.edit.first');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.edit.first') as $pl)
 {
 	include $pl;
 }
@@ -282,8 +278,7 @@ $sys['sublocation'] = $sed_cat[$c]['title'];
 sed_online_update();
 
 /* === Hook === */
-$extp = sed_getextplugins('page.edit.main');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.edit.main') as $pl)
 {
 	include $pl;
 }
@@ -393,8 +388,7 @@ if (sed_check_messages())
 }
 
 /* === Hook === */
-$extp = sed_getextplugins('page.edit.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('page.edit.tags') as $pl)
 {
 	include $pl;
 }

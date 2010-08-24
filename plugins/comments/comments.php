@@ -41,8 +41,7 @@ if ($m == 'edit' && $id > 0)
 	{
 		sed_check_xg();
 		/* == Hook == */
-		$extp = sed_getextplugins('comments.edit.update.first');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('comments.edit.update.first') as $pl)
 		{
 			include $pl;
 		}
@@ -87,8 +86,7 @@ if ($m == 'edit' && $id > 0)
 				}
 			}
 			/* == Hook == */
-			$extp = sed_getextplugins('comments.edit.update.done');
-			foreach ($extp as $pl)
+			foreach (sed_getextplugins('comments.edit.update.done') as $pl)
 			{
 				include $pl;
 			}
@@ -132,8 +130,7 @@ if ($m == 'edit' && $id > 0)
 	));
 
 	/* == Hook == */
-	$extp = sed_getextplugins('comments.edit.tags');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('comments.edit.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -148,8 +145,7 @@ if ($a == 'send' && $usr['auth_write'])
 	$rtext = sed_import('rtext', 'P', 'HTM');
 
 	/* == Hook == */
-	$extp = sed_getextplugins('comments.send.first');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('comments.send.first') as $pl)
 	{
 		include $pl;
 	}
@@ -190,8 +186,7 @@ if ($a == 'send' && $usr['auth_write'])
 		}
 
 		/* == Hook == */
-		$extp = sed_getextplugins('comments.send.new');
-		foreach ($extp as $pl)
+		foreach (sed_getextplugins('comments.send.new') as $pl)
 		{
 			include $pl;
 		}

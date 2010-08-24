@@ -83,8 +83,7 @@ if ($usr['id'] > 0)
 	));
 
 	/* === Hook === */
-	$extp = sed_getextplugins('statistics.user');
-	foreach ($extp as $pl)
+	foreach (sed_getextplugins('statistics.user') as $pl)
 	{
 		include $pl;
 	}
@@ -161,8 +160,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-$extp = sed_getextplugins('statistics.tags');
-foreach ($extp as $pl)
+foreach (sed_getextplugins('statistics.tags') as $pl)
 {
 	include $pl;
 }
