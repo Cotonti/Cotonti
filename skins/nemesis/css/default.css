@@ -235,8 +235,8 @@ label input			{ vertical-align:middle; }
 -------------------------------------------------- */
 
 #magnifier		{ height:30px; width:310px; position:absolute; left:650px; top:75px; }
-#magnifier #s1	{ float:left; padding:6px 10px; border:0; height:18px; line-height:18px; width:240px; background:#fff; }
-#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:30px; width:40px; border:0; background:#fff url(/images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
+#magnifier #s1	{ float:left; padding:6px 10px; border:0; height:25px; line-height:18px; width:240px; background:#fff; }
+#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:25px; width:40px; border:0; background:#fff url(../../../images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
 
 .search-res			{ margin:0 0 10px; overflow:auto; }
 .search-res .small	{ color:#000; }
