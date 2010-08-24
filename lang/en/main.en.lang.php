@@ -31,6 +31,7 @@ $L['Alias'] = 'Alias';
 $L['All'] = 'All';
 $L['Allcategories'] = 'All categories';
 $L['Allpages'] = 'All pages';
+$L['Alltimesare'] = 'All times are';
 $L['Announcement'] = 'Announcement';
 $L['Anonymous'] = 'Anonymous';
 $L['Archives'] = 'Archives';
