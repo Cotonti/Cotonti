@@ -35,52 +35,68 @@ if (empty($cfg['lang_dir']))
 }
 
 require_once $cfg['system_dir'].'/functions.php';
-require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
-
 require_once 'system/debug.php';
 
-// A Few basics from common.php
-if (version_compare(PHP_VERSION, '6.0.0', '<='))
+if ($cfg['new_install'])
 {
-	if (get_magic_quotes_gpc())
+	require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
+
+	// A Few basics from common.php
+	if (version_compare(PHP_VERSION, '6.0.0', '<='))
 	{
-		function sed_disable_mqgpc(&$value, $key)
+		if (get_magic_quotes_gpc())
 		{
-			$value = stripslashes($value);
+			function sed_disable_mqgpc(&$value, $key)
+			{
+				$value = stripslashes($value);
+			}
+			$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
+			array_walk_recursive($gpc, 'sed_disable_mqgpc');
 		}
-		$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
-		array_walk_recursive($gpc, 'sed_disable_mqgpc');
 	}
-}
-define('MQGPC', FALSE);
-error_reporting(E_ALL ^ E_NOTICE);
+	define('MQGPC', FALSE);
+	error_reporting(E_ALL ^ E_NOTICE);
 
-session_start();
+	session_start();
 
-// Installer language selection support
-if (empty($_SESSION['cot_inst_lang']))
-{
-	$lang = sed_import('lang', 'P', 'ALP');
-	if (empty($lang))
+	// Installer language selection support
+	if (empty($_SESSION['cot_inst_lang']))
 	{
-		$lang = 'en';
+		$lang = sed_import('lang', 'P', 'ALP');
+		if (empty($lang))
+		{
+			$lang = 'en';
+		}
 	}
+	else
+	{
+		$lang = $_SESSION['cot_inst_lang'];
+	}
+
+	require_once sed_langfile('main', 'core');
+	require_once $cfg['system_dir'] . '/resources.php';
 }
 else
 {
-	$lang = $_SESSION['cot_inst_lang'];
+	require_once $cfg['system_dir'].'/common.php';
 }
-
-require_once sed_langfile('main', 'core');
-require_once $cfg['system_dir'] . '/resources.php';
 
 sed_require_api('forms');
 sed_require_api('extensions');
 sed_require_api('xtemplate');
 sed_require_lang('install', 'module');
 sed_require_lang('users', 'core');
-sed_require('admin');
+sed_require_lang('admin', 'core');
+
 sed_require_rc('install');
+
+// Various Generic Vars needed to operate as Normal
+$skin = $cfg['defaultskin'];
+$theme = $cfg['defaulttheme'];
+$out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
+$file['config'] = './datas/config.php';
+$file['config_sample'] = './datas/config-sample.php';
+$file['sql'] = './setup/install.sql';
 
 if (!$cfg['new_install'])
 {

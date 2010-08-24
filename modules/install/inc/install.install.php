@@ -9,14 +9,6 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-// Various Generic Vars needed to operate as Normal
-$skin = $cfg['defaultskin'];
-$theme = $cfg['defaulttheme'];
-$out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
-$file['config'] = './datas/config.php';
-$file['config_sample'] = './datas/config-sample.php';
-$file['sql'] = './setup/install.sql';
-
 // Modules and plugins checked by default
 $default_modules = array('index', 'page', 'rss');
 $default_plugins = array('cleaner', 'ipsearch', 'markitup', 'news', 'search', 'tags');
@@ -307,7 +299,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		$config_contents = file_get_contents($file['config']);
 		if ($step == 5)
 		{
-			$config_contents = preg_replace("#^\\\$cfg\['new_install'\]\s*=\s*.*?;.*?$#m", '', $config_contents);
+			$config_contents = preg_replace("#^\\\$cfg\['new_install'\]\s*=\s*.*?;#m", "\$cfg['new_install'] = false;", $config_contents);
 		}
 		else
 		{

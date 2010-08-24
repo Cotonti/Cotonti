@@ -15,7 +15,13 @@ defined('SED_CODE') or die('Wrong URL');
 // Requirements
 sed_require_api('auth');
 sed_require_api('configuration');
-require_once sed_langfile('admin', 'core');
+sed_require_lang('admin', 'core');
+
+/**
+ * A value returned by sed_extension_install() when updating and
+ * there is nothing to update
+ */
+define('COT_EXT_NOTHING_TO_UPDATE', 2);
 
 /**
  * Default plugin part execution priority
@@ -217,7 +223,11 @@ function sed_extension_install($name, $is_module = false, $update = false)
 			if (version_compare($current_ver, $info['Version']) == 0)
 			{
 				// Nothing to update
-				return false;
+				sed_message(sed_rc('ext_up2date', array(
+					'type' => $is_module ? $L['Module'] : $L['Plugin'],
+					'name' => $name
+				)));
+				return COT_EXT_NOTHING_TO_UPDATE;
 			}
 		}
 		else
@@ -390,8 +400,11 @@ function sed_extension_install($name, $is_module = false, $update = false)
 	if ($update)
 	{
 		// Find and apply patches
-		$new_ver = sed_apply_patches("$path/setup", $current_ver);
-		if (version_compare($info['Version'], $new_ver) > 0)
+		if (file_exists("$path/setup"))
+		{
+			$new_ver = sed_apply_patches("$path/setup", $current_ver);
+		}
+		if (version_compare($info['Version'], $new_ver) > 0 || $new_ver === true)
 		{
 			$new_ver = $info['Version'];
 		}
@@ -436,6 +449,11 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		if ($update)
 		{
 			sed_module_update($name, $new_ver);
+			sed_message(sed_rc('ext_updated', array(
+				'type' => $L['Module'],
+				'name' => $name,
+				'ver' => $new_ver
+			)));
 		}
 		else
 		{
@@ -448,6 +466,11 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		{
 			sed_sql_update($db_updates, "upd_param = '$name.ver'",
 				array('value' => $new_ver), 'upd_');
+			sed_message(sed_rc('ext_updated', array(
+				'type' => $L['Plugin'],
+				'name' => $name,
+				'ver' => $new_ver
+			)));
 		}
 		else
 		{
