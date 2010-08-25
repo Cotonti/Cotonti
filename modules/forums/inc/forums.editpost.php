@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
@@ -189,13 +189,16 @@ if ($a=='update')
 $sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
 
 $is_first_post = false;
+
+sed_require_api('forms');
+
 if ($row = sed_sql_fetcharray($sql))
 {
 	$fp_idp = $row['fp_id'];
 	if ($fp_idp==$p)
 	{
-	 	$edittopictitle = "<input type=\"text\" class=\"text\" name=\"rtopictitle\" value=\"".htmlspecialchars($ft_title)."\" size=\"56\" maxlength=\"255\" />";
-	 	$topicdescription ="<input type=\"text\" class=\"text\" name=\"rtopicdesc\" value=\"".htmlspecialchars($ft_desc)."\" size=\"56\" maxlength=\"255\" />";
+	 	$edittopictitle = sed_inputbox('text', 'rtopictitle', htmlspecialchars($ft_title), array('size' => 56, 'maxlength' => 255));
+	 	$topicdescription = sed_inputbox('text', 'rtopicdesc', htmlspecialchars($ft_desc), array('size' => 56, 'maxlength' => 255));
 	 	$is_first_post = true;
 	}
 }
@@ -204,12 +207,11 @@ if ($row = sed_sql_fetcharray($sql))
 //$pfs = sed_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
 //$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "editpost", "rtext", $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('editpost', 'rtext');
-$post_main = '<textarea class="editor" name="rtext" rows="20" cols="56">'.htmlspecialchars($fp_text).'</textarea>';
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
-$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." <a href=\"".sed_url('forums', "m=posts&p=".$p, "#".$p)."\">".htmlspecialchars($ft_fulltitle)."</a> ";
-$toptitle .= $cfg['separator']." <a href=\"".sed_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".sed_xg())."\">".$L['Edit']."</a>";
+$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." ".sed_rc_link(sed_url('forums', "m=posts&p=".$p, "#".$p), htmlspecialchars($ft_fulltitle));
+$toptitle .= $cfg['separator']." ".sed_rc_link(sed_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".sed_xg()), $L['Edit']);
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;
@@ -259,9 +261,7 @@ $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
 	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
 	"FORUMS_EDITPOST_SEND" => sed_url('forums', "m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".sed_xg()),
-	"FORUMS_EDITPOST_TEXT" => $post_main."<br />".$pfs,
-	"FORUMS_EDITPOST_TEXTONLY" => $post_main,
-	"FORUMS_EDITPOST_TEXTBOXER" => $post_main."<br />".$pfs,
+	"FORUMS_EDITPOST_TEXT" => sed_textarea('rtext', htmlspecialchars($fp_text), 20, 56, '', 'input_textarea_editor'),
 	"FORUMS_EDITPOST_MYPFS" => $pfs
 ));
 

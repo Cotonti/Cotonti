@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /* ====================
  Seditio - Website engine
@@ -85,7 +85,7 @@ if (!$sed_sections_vw)
 
 unset($pcat);
 $secact_max = max($sed_sections_act);
-$out['markall'] = ($usr['id']>0) ? "<a href=\"".sed_url('forums', "n=markall")."\">".$L['for_markallasread']."</a>" : '';
+$out['markall'] = ($usr['id']>0) ? sed_rc_link(sed_url('forums', "n=markall"), $L['for_markallasread']) : '';
 
 $title_params = array(
 	'FORUM' => $L['Forums']
@@ -105,7 +105,7 @@ $t = new XTemplate(sed_skinfile('forums.sections'));
 
 if($cfg['homebreadcrumb'])
 {
-    $bhome = '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ';
+    $bhome = sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ';
 }
 else
 {
@@ -114,7 +114,7 @@ else
 
 $t->assign(array(
     "FORUMS_RSS" => sed_url('rss', 'c=forums'),
-    "FORUMS_SECTIONS_PAGETITLE" => $bhome."<a href=\"".sed_url('forums')."\">".$L['Forums']."</a>",
+    "FORUMS_SECTIONS_PAGETITLE" => $bhome.sed_rc_link(sed_url('forums'), $L['Forums']),
     "FORUMS_SECTIONS_MARKALL" =>  $out['markall'],
     "FORUMS_SECTIONS_WHOSONLINE" => $out['whosonline']." : ".$out['whosonline_reg_list']
     ));
@@ -134,9 +134,7 @@ while ($fsn = sed_sql_fetcharray($sql))
         $sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat'");
         $catnum = sed_sql_result($sql2, 0, "COUNT(*)");
 
-        $cattitle = "<a href=\"".sed_url('forums')."#\" onclick=\"return toggleblock('blk_".$fsn['fs_category']."')\">";
-        $cattitle .= htmlspecialchars($sed_forums_str[$fsn['fs_category']]['tpath']);
-        $cattitle .= "</a>";
+        $cattitle = sed_rc_link(sed_url('forums'), htmlspecialchars($sed_forums_str[$fsn['fs_category']]['tpath']),  "onclick=\"return toggleblock('blk_".$fsn['fs_category']."')'\"");
 
         if ($c=='fold')
         { $fold = TRUE; }
@@ -187,8 +185,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 
         if ($fsn['fs_lt_id']>0)
         {
-            $fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread")."\">" : "<a href=\"".sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom")."\">";
-            $fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
+            $fsn['lastpost'] = sed_rc_link(($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread") : sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom"), sed_cutstring($fsn['fs_lt_title'], 32));
         }
         else
         {
@@ -258,8 +255,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 
                 $fsnn['fs_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fs_lt_date'] + $usr['timezone'] * 3600);
 
-                $fsnn['lastpost'] = "<a href=\"".sed_url('forums', "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom")."\">";
-                $fsnn['lastpost'] .= sed_cutstring($fsnn['fs_lt_title'], 32)."</a>";
+                $fsnn['lastpost'] = sed_rc_link(sed_url('forums', "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom"), sed_cutstring($fsnn['fs_lt_title'], 32));
 
                 $fsnn['fs_timago'] = sed_build_timegap($row['fs_lt_date'], $sys['now_offset']);
 
@@ -286,7 +282,7 @@ while ($fsn = sed_sql_fetcharray($sql))
                 "FORUMS_SECTIONS_ROW_SLAVE_ODDEVEN" => sed_build_oddeven($ii),
                 "FORUMS_SECTIONS_ROW_SLAVE_NUM" => $ii,
                 "FORUMS_SECTIONS_ROW_SLAVE" => $row,
-                "FORUMS_SECTIONS_ROW_SLAVEI" => "<a href=\"".sed_url('forums', "m=topics&s=".$row['fs_id'])."\">".$j.htmlspecialchars($row['fs_title'])."</a>",
+                "FORUMS_SECTIONS_ROW_SLAVEI" => sed_rc_link(sed_url('forums', "m=topics&s=".$row['fs_id']), $j.htmlspecialchars($row['fs_title'])),
                 ));
 
             $t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVES");

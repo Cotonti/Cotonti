@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
@@ -291,19 +291,19 @@ $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid,
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 
-$jumpbox = "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
-$jumpbox .= "<option value=\"".sed_url('forums')."\">".$L['Forums']."</option>";
+sed_require_api('forms');
+
+$jumpbox[sed_url('forums')] = $L['Forums'];
 
 while ($row1 = sed_sql_fetcharray($sql1))
 {
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
 	{
 		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
-		$selected = ($row1['fs_id']==$s) ? "selected=\"selected\"" : '';
-		$jumpbox .= "<option $selected value=\"".sed_url('forums', "m=topics&s=".$row1['fs_id'])."\">".sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master)."</option>";
+		$jumpbox[sed_url('forums', "m=topics&s=".$row1['fs_id'])] = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
 	}
 }
-$jumpbox .= "</select>";
+$jumpbox = sed_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"');
 
 if (empty($d))
 {
@@ -311,16 +311,6 @@ if (empty($d))
 }
 
 $fs_desc = sed_parse_autourls($fs_desc);
-
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s' and ft_mode=1");
-$prvtopics = sed_sql_result($sql, 0, "COUNT(*)");
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s'");
-$totaltopics = sed_sql_result($sql, 0, "COUNT(*)");
-$cond = ($usr['isadmin']) ? '' : "AND t.ft_mode=0 OR (t.ft_mode=1 AND t.ft_firstposterid=".$usr['id'].")";
-$sql = sed_sql_query("SELECT t.*, p.poll_id FROM $db_forum_topics AS t LEFT JOIN
-	$db_polls AS p ON t.ft_id=p.poll_code  WHERE t.ft_sectionid='$s' $cond AND (p.poll_type='forum' OR p.poll_id IS NULL)
-ORDER by ft_sticky DESC, ft_".$o." ".$w."
-LIMIT $d, ".$cfg['maxtopicsperpage']);
 
 $title_params = array(
 	'FORUM' => $L['Forums'],
@@ -365,32 +355,6 @@ if ($fs_allowviewers)
 
 }
 
-$pagenav = sed_pagenav('forums', "m=topics&s=$s&o=$o&w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']);
-
-$master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
-
-$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master);
-$toptitle .= ($usr['isadmin']) ? " *" : '';
-
-$t->assign(array(
-	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
-	"FORUMS_TOPICS_SECTION_RSS" => sed_url('rss', "c=section&id=$s"),
-	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
-	"FORUMS_TOPICS_SHORTTITLE" => htmlspecialchars($fs_title),
-	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
-	"FORUMS_TOPICS_NEWTOPICURL" => sed_url('forums', "m=newtopic&s=".$s),
-	"FORUMS_TOPICS_PAGES" => $pagenav['main'],
-	"FORUMS_TOPICS_PAGEPREV" => $pagenav['prev'],
-	"FORUMS_TOPICS_PAGENEXT" => $pagenav['next'],
-	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
-	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
-	"FORUMS_TOPICS_TITLE_TOPICS" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=title&w=".rev($w))."\">".$L['Topics']." ".cursort($o=='title', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_VIEWS" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=viewcount&w=".rev($w))."\">".$L['Views']." ".cursort($o=='viewcount', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_POSTS" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=postcount&w=".rev($w))."\">".$L['Posts']." ".cursort($o=='postcount', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_REPLIES" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=postcount&w=".rev($w))."\">".$L['Replies']." ".cursort($o=='postcount', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_STARTED" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=creationdate&w=".rev($w))."\">".$L['Started']." ".cursort($o=='creationdate', $w)."</a>",
-	"FORUMS_TOPICS_TITLE_LASTPOST" => "<a href=\"".sed_url('forums', "m=topics&s=".$s."&o=updated&w=".rev($w))."\">".$L['Lastpost']." ".cursort($o=='updated', $w)."</a>"
-));
 
 if ($fs_allowpolls && !$cfg['disable_polls'])
 {
@@ -402,15 +366,15 @@ if ($fs_allowpolls && !$cfg['disable_polls'])
 
 }
 
-/* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('forums.topics.loop');
-/* ===== */
-
 $sqql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s, $db_forum_structure AS n
 						   WHERE s.fs_masterid=".$s." AND n.fn_code=s.fs_category
 						   ORDER BY fs_masterid DESC, fn_path ASC, fs_order ASC");
 
 $catnum = 1;
+
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('forums.topics.sections.loop');
+/* ===== */
 
 while ($fsn = sed_sql_fetcharray($sqql))
 {
@@ -440,10 +404,9 @@ while ($fsn = sed_sql_fetcharray($sqql))
 		}
 
 
-		if ($fsn['fs_lt_id']>0)
+		if ($fsn['fs_lt_id'] > 0)
 		{
-			$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? "<a href=\"".sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread")."\">" : "<a href=\"".sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom")."\">";
-			$fsn['lastpost'] .= sed_cutstring($fsn['fs_lt_title'], 32)."</a>";
+			$fsn['lastpost'] = ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? sed_rc_link(sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread"), sed_cutstring($fsn['fs_lt_title'], 32)) : sed_rc_link(sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom"), sed_cutstring($fsn['fs_lt_title'], 32));
 		}
 		else
 		{
@@ -488,13 +451,33 @@ while ($fsn = sed_sql_fetcharray($sqql))
 		));
 		$t->parse("MAIN.FORUMS_SECTIONS.FORUMS_SECTIONS_ROW_SECTION");
 	}
-
+	/* === Hook - Part2 : Include === */
+	foreach ($extp as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	$catnum++;
 }
 if ($catnum>1)
 {
 	$t->parse("MAIN.FORUMS_SECTIONS");
 }
+
+$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s' and ft_mode=1");
+$prvtopics = sed_sql_result($sql, 0, "COUNT(*)");
+$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s'");
+$totaltopics = sed_sql_result($sql, 0, "COUNT(*)");
+$cond = ($usr['isadmin']) ? '' : "AND t.ft_mode=0 OR (t.ft_mode=1 AND t.ft_firstposterid=".$usr['id'].")";
+$sql = sed_sql_query("SELECT t.*, p.poll_id FROM $db_forum_topics AS t LEFT JOIN
+	$db_polls AS p ON t.ft_id=p.poll_code  WHERE t.ft_sectionid='$s' $cond AND (p.poll_type='forum' OR p.poll_id IS NULL)
+ORDER by ft_sticky DESC, ft_".$o." ".$w."
+LIMIT $d, ".$cfg['maxtopicsperpage']);
+
+/* === Hook - Part1 : Set === */
+$extp = sed_getextplugins('forums.topics.loop');
+/* ===== */
+
 
 while ($row = sed_sql_fetcharray($sql))
 {
@@ -518,13 +501,13 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['ft_replycount'] = "&nbsp;";
 		$row['ft_viewcount'] = "&nbsp;";
 		$row['ft_lastpostername'] = "&nbsp;";
-		$row['ft_lastposturl'] = "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom")."\">{$R['icon_follow']}</a> ".$L['Moved'];
+		$row['ft_lastposturl'] = sed_rc_link(sed_url('forums', "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom"), $R['icon_follow']) .$L['Moved'];
 		$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 	}
 	else
 	{
 		$row['ft_url'] = sed_url('forums', "m=posts&q=".$row['ft_id']);
-		$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread")."\">{$R['icon_unread']}</a>" : "<a href=\"".sed_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom")."\">{$R['icon_follow']}</a>";
+		$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? sed_rc_link(sed_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread"), $R['icon_unread']) : sed_rc_link(sed_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom"), $R['icon_follow']);
 		$row['ft_lastposturl'] .= @date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
 		$row['ft_timago'] = sed_build_timegap($row['ft_updated'],$sys['now_offset']);
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
@@ -613,6 +596,34 @@ while ($row = sed_sql_fetcharray($sql))
 
 	$t->parse("MAIN.FORUMS_TOPICS_ROW");
 }
+
+$pagenav = sed_pagenav('forums', "m=topics&s=$s&o=$o&w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']);
+
+$master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
+
+$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master);
+$toptitle .= ($usr['isadmin']) ? " *" : '';
+
+$t->assign(array(
+	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
+	"FORUMS_TOPICS_SECTION_RSS" => sed_url('rss', "c=section&id=$s"),
+	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
+	"FORUMS_TOPICS_SHORTTITLE" => htmlspecialchars($fs_title),
+	"FORUMS_TOPICS_SUBTITLE" => $fs_desc,
+	"FORUMS_TOPICS_NEWTOPICURL" => sed_url('forums', "m=newtopic&s=".$s),
+	"FORUMS_TOPICS_PAGES" => $pagenav['main'],
+	"FORUMS_TOPICS_PAGEPREV" => $pagenav['prev'],
+	"FORUMS_TOPICS_PAGENEXT" => $pagenav['next'],
+	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
+	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
+	"FORUMS_TOPICS_TITLE_TOPICS" => sed_rc_link(sed_url('forums', "m=topics&s=".$s."&o=title&w=".rev($w)), $L['Topics'].' '.cursort($o == 'title', $w)),
+	"FORUMS_TOPICS_TITLE_VIEWS" => sed_rc_link(sed_url('forums', "m=topics&s=".$s."&o=viewcount&w=".rev($w)), $L['Views']." ".cursort($o == 'viewcount', $w)),
+	"FORUMS_TOPICS_TITLE_POSTS" => sed_rc_link(sed_url('forums', "m=topics&s=".$s."&o=postcount&w=".rev($w)), $L['Posts']." ".cursort($o == 'postcount', $w)),
+	"FORUMS_TOPICS_TITLE_REPLIES" => sed_rc_link(sed_url('forums', "m=topics&s=".$s."&o=postcount&w=".rev($w)), $L['Replies']." ".cursort($o == 'postcount', $w)),
+	"FORUMS_TOPICS_TITLE_STARTED" => sed_rc_link(sed_url('forums', "m=topics&s=".$s."&o=creationdate&w=".rev($w)), $L['Started']." ".cursort($o == 'creationdate', $w)),
+	"FORUMS_TOPICS_TITLE_LASTPOST" => sed_rc_link(sed_url('forums', "m=topics&s=".$s."&o=updated&w=".rev($w)), $L['Lastpost']." ".cursort($o == 'updated', $w))
+));
+
 
 /* === Hook === */
 foreach (sed_getextplugins('forums.topics.tags') as $pl)
