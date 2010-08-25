@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /* ====================
 Seditio - Website engine
@@ -239,7 +239,6 @@ if ($a=='newtopic')
 //$pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
 //$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
-$post_main = '<textarea class="editor" name="newmsg" rows="16" cols="56">'.htmlspecialchars($newmsg).'</textarea>';
 
 $newtopicurl = ($poll) ? sed_url('forums', "m=newtopic&a=newtopic&s=".$s."&poll=1") : sed_url('forums', "m=newtopic&a=newtopic&s=".$s);
 
@@ -266,7 +265,7 @@ foreach (sed_getextplugins('forums.newtopic.main') as $pl)
 	include $pl;
 }
 /* ===== */
-
+sed_require_api('forms');
 require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = sed_skinfile(array('forums', 'newtopic', $fs_category, $s));
@@ -284,22 +283,16 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
 	"FORUMS_NEWTOPIC_SUBTITLE" => htmlspecialchars($fs_desc),
 	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
-	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".htmlspecialchars($newtopictitle)."\" size=\"56\" maxlength=\"255\" />",
-	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".htmlspecialchars($newtopicdesc)."\" size=\"56\" maxlength=\"255\" />",
-	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$pfs."<br />&nbsp;<br />",
-	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
-	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$pfs."<br />&nbsp;<br />",
+	"FORUMS_NEWTOPIC_TITLE" => sed_inputbox('text', 'newtopictitle', htmlspecialchars($newtopictitle), array('size' => 56, 'maxlength' => 255)),
+	"FORUMS_NEWTOPIC_DESC" => sed_inputbox('text', 'newtopicdesc', htmlspecialchars($newtopicdesc), array('size' => 56, 'maxlength' => 255)),
+	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor'),
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
 ));
 
 if ($fs_allowprvtopics)
 {
-	$checked = ($newprvtopic) ? "checked=\"checked\"" : '';
-	$prvtopic = "<input type=\"checkbox\" class=\"checkbox\" name=\"newprvtopic\" $checked />";
 
-	$t->assign(array(
-		"FORUMS_NEWTOPIC_ISPRIVATE" => $prvtopic
-	));
+	$t->assign("FORUMS_NEWTOPIC_ISPRIVATE", sed_checkbox($newprvtopic, newprvtopic));
 	$t->parse("MAIN.PRIVATE");
 }
 

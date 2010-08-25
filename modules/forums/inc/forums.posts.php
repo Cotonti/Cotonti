@@ -576,10 +576,9 @@ $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid,
 $db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 
-$movebox = "<input type=\"submit\" class=\"submit\" value=\"".$L['Move']."\" /><select name=\"ns\" size=\"1\">";
-$jumpbox .= "<select name=\"jumpbox\" size=\"1\" onchange=\"redirect(this)\">";
-$jumpbox .= "<option value=\"".sed_url('forums')."\">".$L['Forums']."</option>";
+sed_require_api('forms');
 
+$jumpbox[sed_url('forums')] = $L['Forums'];
 while ($row1 = sed_sql_fetcharray($sql1))
 {
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
@@ -592,18 +591,18 @@ while ($row1 = sed_sql_fetcharray($sql1))
 
 			$cfs = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
 
-			if ($row1['fs_id'] != $s && $usr['isadmin'])
-			{ $movebox .= "<option value=\"".$row1['fs_id']."\">".$cfs."</option>"; }
-			$selected = ($row1['fs_id']==$s) ? "selected=\"selected\"" : '';
-			$jumpbox .= "<option $selected value=\"".sed_url('forums', "m=topics&s=".$row1['fs_id'])."\">".$cfs."</option>";
+			if ($row1['fs_id'] != $s)
+			{
+				$movebox[$row1['fs_id']] = $cfs;
+			}
 
+			$jumpbox[sed_url('forums', "m=topics&s=".$row1['fs_id'])] = $cfs;
 		}
-
 	}
 }
+$jumpbox = sed_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"');
 
-$movebox .= "</select> ".$L['for_keepmovedlink']." <input type=\"checkbox\" class=\"checkbox\" name=\"ghost\" />";
-$jumpbox .= "</select>";
+$movebox =  ($usr['isadmin']) ? '<input type="submit" class="submit" value="'.$L['Move'].'" />'.sed_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false).' '. $L['for_keepmovedlink'].' '.sed_checkbox('1', 'ghost') : '';
 
 if ($usr['isadmin'])
 {
@@ -771,14 +770,12 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 	//$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
 	//$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
 
+	sed_require_api('forms');
 	$post_mark = "<a name=\"np\" id=\"np\"></a>";
-	$post_main = $post_mark.'<textarea class="editor" name="newmsg" rows="16" cols="56">'.htmlspecialchars($newmsg).'</textarea>';
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => sed_url('forums', "m=posts&a=newpost&s=".$s."&q=".$q),
-		"FORUMS_POSTS_NEWPOST_TEXT" => $post_main."<br />".$pfs,
-		"FORUMS_POSTS_NEWPOST_TEXTONLY" => $post_main,
-		"FORUMS_POSTS_NEWPOST_TEXTBOXER" => $post_main."<br />".$pfs,
+		"FORUMS_POSTS_NEWPOST_TEXT" => $post_mark . sed_textarea('newmsg', htmlspecialchars($newmsg), 16, 56, '', 'input_textarea_editor'),
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
 	));
 

@@ -390,29 +390,6 @@ function sed_load_forum_structure()
 	}
 }
 
-/**
- * Renders forum section selection dropdown
- *
- * @param string $check Seleced value
- * @param string $name Dropdown name
- * @return string
- */
-function sed_selectbox_sections($check, $name)
-{
-	global $db_forum_sections, $cfg;
-
-	$sql = sed_sql_query("SELECT fs_id, fs_title, fs_category FROM $db_forum_sections WHERE 1 ORDER by fs_order ASC");
-	$result = "<select name=\"$name\" size=\"1\">";
-	while ($row = sed_sql_fetcharray($sql))
-	{
-		$selected = ($row['fs_id'] == $check) ? "selected=\"selected\"" : '';
-		$result .= "<option value=\"".$row['fs_id']."\" $selected>".htmlspecialchars(sed_cutstring($row['fs_category'], 24));
-		$result .= ' '.$cfg['separator'].' '.htmlspecialchars(sed_cutstring($row['fs_title'], 32));
-	}
-	$result .= "</select>";
-	return($result);
-}
-
 // Preload forum structure
 
 if (!$sed_forums_str && !$cfg['disable_forums'])
