@@ -896,13 +896,16 @@ function sed_build_catpath($cat, $mask = 'link_catpath')
 	$list = defined('SED_LIST');
 	foreach ($pathcodes as $k => $x)
 	{
-		$tmp[] = ($list && $k === $last) ? htmlspecialchars($sed_cat[$x]['title'])
-			: sed_rc($mask, array(
-				'url' =>sed_url('list', 'c='.$x),
-				'title' => htmlspecialchars($sed_cat[$x]['title'])
-			));
+		if ($k != 'system')
+		{
+			$tmp[] = ($list && $k === $last) ? htmlspecialchars($sed_cat[$x]['title'])
+				: sed_rc($mask, array(
+					'url' =>sed_url('list', 'c='.$x),
+					'title' => htmlspecialchars($sed_cat[$x]['title'])
+				));
+		}
 	}
-	return implode(' '.$cfg['separator'].' ', $tmp);
+	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
 }
 
 /**
