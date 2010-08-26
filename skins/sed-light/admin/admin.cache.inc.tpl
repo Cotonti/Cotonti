@@ -3,7 +3,8 @@
 			<p>
 				<a href="{ADMIN_CACHE_URL_REFRESH}"{ADMIN_CACHE_URL_REFRESH_AJAX}>{PHP.L.Refresh}</a> |
 				<a href="{ADMIN_CACHE_URL_PURGE}"{ADMIN_CACHE_URL_PURGE_AJAX}>{PHP.L.adm_purgeall}</a> |
-				<a href="{ADMIN_CACHE_URL_SHOWALL}"{ADMIN_CACHE_URL_SHOWALL_AJAX}>{PHP.L.adm_showall}</a>
+				<a href="{ADMIN_CACHE_URL_SHOWALL}"{ADMIN_CACHE_URL_SHOWALL_AJAX}>{PHP.L.adm_showall}</a>|
+				<a href="{ADMIN_CACHE_URL_CLEAR_HTML}" onclick="return confirm('{PHP.L.adm_bbcodes_clearcache_confirm}')">{PHP.L.adm_bbcodes_clearcache}</a>
 			</p>
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_CACHE_ADMINWARNINGS}</div>
