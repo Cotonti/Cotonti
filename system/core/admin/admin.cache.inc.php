@@ -45,6 +45,10 @@ elseif($a == 'delete')
 
 	$adminwarnings = ($sql) ? $L['adm_delcacheitem'] : $L['Error'];
 }
+elseif($a == 'clearhtml')
+{
+	$adminwarnings = sed_cache_clearhtml() ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
+}
 
 $is_adminwarnings = isset($adminwarnings);
 
@@ -93,6 +97,7 @@ $t -> assign(array(
 	"ADMIN_CACHE_URL_PURGE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=purge&ajax=1&id='.$row['c_name'].'&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_CACHE_URL_SHOWALL" => sed_url('admin', 'm=cache&a=showall'),
 	"ADMIN_CACHE_URL_SHOWALL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&a=showall&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
+	"ADMIN_CACHE_URL_CLEAR_HTML" => sed_url('admin', 'm=cache&a=clearhtml'),
 	"ADMIN_CACHE_CACHESIZE" => $cachesize
 ));
 
