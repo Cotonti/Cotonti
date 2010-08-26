@@ -533,20 +533,20 @@ $t->assign(array(
 		if ($row['poll_id']>0)
 		{ $row['ft_title'] = $L['Poll'].": ".$row['ft_title']; }
 
-		if ($row['ft_postcount']>$cfg['maxtopicsperpage'])
+		if ($row['ft_postcount']>$cfg['maxpostsperpage'])
 		{
-			$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
+			$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxpostsperpage']);
 			if($row['ft_maxpages'] > 5)
 			{
 				$address = $row['ft_url'] . ((mb_strpos($row['ft_url'], '?') !== false) ? '&amp;d=' : '?d=');
-				$last_n = ($row['ft_maxpages'] - 1) * $cfg['maxtopicsperpage'];
+				$last_n = ($row['ft_maxpages'] - 1) * $cfg['maxpostsperpage'];
 				$last_page = '<span class="pagenav_last"><a href="'.$address.$last_n.'">'.$row['ft_maxpages'].'</a></span>';
 			}
 			else
 			{
 				$last_page = '';
 			}
-			$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . sed_pagination($row['ft_url'], 0, $row['ft_postcount'], $cfg['maxtopicsperpage'], 'd') . $last_page . '</span>';
+			$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . sed_pagination($row['ft_url'], 0, $row['ft_postcount'], $cfg['maxpostsperpage'], 'd') . $last_page . '</span>';
 		}
 
 		$t-> assign(array(
