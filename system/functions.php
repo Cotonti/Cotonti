@@ -862,9 +862,12 @@ function sed_build_catpath($cat, $mask)
 	$pathcodes = explode('.', $sed_cat[$cat]['path']);
 	foreach($pathcodes as $k => $x)
 	{
-		$tmp[]= sprintf($mask, sed_url('list', 'c='.$x), $sed_cat[$x]['title']);
+		if ($x != 'system')
+		{
+			$tmp[]= sprintf($mask, sed_url('list', 'c='.$x), $sed_cat[$x]['title']);
+		}
 	}
-	return implode(' '.$cfg['separator'].' ', $tmp);
+	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
 }
 
 /* ------------------ */
