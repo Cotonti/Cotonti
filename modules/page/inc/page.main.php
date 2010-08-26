@@ -101,19 +101,30 @@ if (!$usr['isadmin'] || $cfg['count_admin'])
 }
 
 $catpath = sed_build_catpath($pag['page_cat']);
-$pag['page_fulltitle'] = $catpath . ' ' . $cfg['separator'] . ' ' . htmlspecialchars($pag['page_title']);
+$pag['page_fulltitle'] = empty($catpath) ? '' : $catpath .' ' . $cfg['separator']. ' ';
+$pag['page_fulltitle'] .= htmlspecialchars($pag['page_title']);
 $pag['page_fulltitle'] .= ($pag['page_totaltabs'] > 1 && !empty($pag['page_tabtitle'][$pag['page_tab'] - 1])) ? " (".$pag['page_tabtitle'][$pag['page_tab'] - 1].")" : '';// page_totaltabs - Not found befor this line bur after .... see
 
 
 $ratings = ($cat['ratings']) ? true : false;
 list($ratings_link, $ratings_display) = sed_build_ratings('p'.$id, $pag['page_pageurl'], $ratings);
 
-$title_params = array(
-	'TITLE' => $pag['page_title'],
-	'CATEGORY' => $cat['title']
-);
+if ($pag['page_cat'] == 'system')
+{
+	$title_params = array(
+		'TITLE' => $pag['page_title']
+	);
+	$out['subtitle'] = sed_title('title_list', $title_params);
+}
+else
+{
+	$title_params = array(
+		'TITLE' => $pag['page_title'],
+		'CATEGORY' => $cat['title']
+	);
+	$out['subtitle'] = sed_title('title_page', $title_params);
+}
 $out['desc'] = htmlspecialchars(strip_tags($pag['page_desc']));
-$out['subtitle'] = sed_title('title_page', $title_params);
 
 /* === Hook === */
 foreach (sed_getextplugins('page.main') as $pl)
