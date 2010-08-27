@@ -176,7 +176,7 @@ $t->assign(array(
 	'PFS_DATE' => $pfs_date,
 	'PFS_FOLDER' => sed_selectbox_folders($userid, '', $pfs_folderid),
 	'PFS_URL' => $ff,
-	'PFS_DESC' => $pfs_desc
+	'PFS_DESC' => sed_inputbox('text', 'rdesc', $pfs_desc, 'size="56" maxlength="255"')
 ));
 
 /* === Hook === */

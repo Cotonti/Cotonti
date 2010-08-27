@@ -38,7 +38,9 @@ else
 }
 
 if ($userid!=$usr['id'])
-{ sed_block($usr['isadmin']); }
+{ 
+	sed_block($usr['isadmin']);
+}
 
 $standalone = FALSE;
 $user_info = sed_userinfo($userid);
@@ -96,7 +98,9 @@ if ($row = sed_sql_fetcharray($sql))
 	$title .= " ".$cfg['separator']." ".htmlspecialchars($pff_title);
 }
 else
-{ sed_die(); }
+{ 
+	sed_die();
+}
 
 if ($a=='update' && !empty($f))
 {
@@ -168,9 +172,11 @@ $t->assign(array(
 	'PFS_ERRORS' => sed_check_messages() ? sed_implode_messages() : '',
 	'PFS_ACTION' => sed_url('pfs', 'm=editfolder&a=update&f=' . $pff_id . '&' . $more),
 	'PFF_FOLDER' => sed_selectbox_folders($userid, '', $row['pff_parentid'], 'rparentid'),
-	'PFF_TITLE' => htmlspecialchars($pff_title),
-	'PFF_DESC' => htmlspecialchars($pff_desc),
+	'PFF_TITLE' => sed_inputbox('text', 'rtitle', htmlspecialchars($pff_title), 'size="56" maxlength="255"'),
+	'PFF_DESC' => sed_inputbox('text', 'rdesc',  htmlspecialchars($pff_desc), 'size="56" maxlength="255"'),
 	'PFF_DATE' => $row['pff_date'],
+	'PFF_ISGALLERY' => sed_radiobox($pff_isgallery, 'risgallery', array('1', '0'), array($L['Yes'], $L['No']), '', ' '),
+	'PFF_ISPUBLIC' => sed_radiobox($pff_ispublic, 'rispublic', array('1', '0'), array($L['Yes'], $L['No']), '', ' '),
 	'PFF_UPDATED' => $row['pff_updated']
 ));
 

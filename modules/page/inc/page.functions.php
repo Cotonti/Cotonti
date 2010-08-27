@@ -14,6 +14,7 @@ defined('SED_CODE') or die('Wrong URL.');
 // Requirements
 sed_require_lang('page', 'module');
 sed_require_rc('page');
+sed_require_api('forms');
 
 // Global variables
 $GLOBALS['db_pages'] = $GLOBALS['db_x'] . 'pages';
@@ -106,9 +107,7 @@ function sed_structure_parents($cat, $type = 'full')
  */
 function sed_selectbox_categories($check, $name, $subcat = '', $hideprivate = true)
 {
-	global $db_structure, $usr, $sed_cat, $L;
-
-	$result = '<select name="'.$name.'" size="1">';
+	global $db_structure, $usr, $sed_cat, $L, $R;
 
 	foreach ($sed_cat as $i => $x)
 	{
@@ -122,11 +121,11 @@ function sed_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
 
 		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
 		{
-			$selected = ($i == $check) ? 'selected="selected"' : '';
-			$result .= '<option value="'.$i.'" '.$selected.'> '.$x['tpath'].'</option>';
+			$result_array[i] = $x['tpath'];
 		}
 	}
-	$result .= '</select>';
+	$result = sed_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
+
 	return($result);
 }
 

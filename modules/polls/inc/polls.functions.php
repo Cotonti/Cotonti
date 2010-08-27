@@ -31,7 +31,7 @@ $GLOBALS['db_polls_voters'] 	= $GLOBALS['db_x'] . 'polls_voters';
  */
 function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 {
-	global $cfg, $db_polls, $db_polls_options, $cot_error;
+	global $cfg, $db_polls, $db_polls_options, $cot_error, $R, $L;
 	if (gettype($t) != 'object')
 	{
 		$t = new XTemplate(sed_skinfile('polls'));
@@ -45,17 +45,12 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 		global $poll_id, $poll_options, $poll_multiple, $poll_state, $poll_text;
 
 		$id = $poll_id;
-		$poll_multiple = ($poll_multiple) ? 'checked="checked"' : '';
-		$poll_state = ($poll_state) ? 'checked="checked"' : '';
 		foreach ($poll_options as $key => $val)
 		{
 			if ($val != '')
 			{
 				$counter++;
-				$t->assign(array(
-					"EDIT_POLL_OPTION_ID" => $key,
-					"EDIT_POLL_OPTION_TEXT" => htmlspecialchars($val)
-				));
+				$t->assign("EDIT_POLL_OPTION_TEXT", sed_inputbox('text', $key, htmlspecialchars($val), 'size="40" maxlength="128"'));
 				$t->parse($block.".OPTIONS");
 			}
 		}
@@ -68,17 +63,12 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 		{
 			$id = $row["poll_id"];
 			$poll_text = htmlspecialchars($row["poll_text"]);
-			$poll_multiple = ($row["poll_multiple"]) ? 'checked="checked"' : '';
-			$poll_state = ($row["poll_state"]) ? 'checked="checked"' : '';
 
 			$sql1 = sed_sql_query("SELECT * FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
 			while ($row1 = sed_sql_fetcharray($sql1))
 			{
 				$counter++;
-				$t->assign(array(
-					"EDIT_POLL_OPTION_ID" => "id".$row1['po_id'],
-					"EDIT_POLL_OPTION_TEXT" =>htmlspecialchars($row1['po_text'])
-				));
+				$t->assign("EDIT_POLL_OPTION_TEXT", sed_inputbox('text', 'poll_option[id'.$row1['po_id'].']', htmlspecialchars($row1['po_text']), 'size="40" maxlength="128"'));
 				$t->parse($block."OPTIONS");
 			}
 		}
@@ -87,38 +77,33 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 	while ($counter < 2)
 	{
 		$counter++;
-		$t->assign(array(
-			"EDIT_POLL_OPTION_ID" => '',
-			"EDIT_POLL_OPTION_TEXT" => ''
-		));
+		$t->assign("EDIT_POLL_OPTION_TEXT", sed_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
 		$t->parse($block."OPTIONS");
 	}
 
 	if ($counter < $cfg['max_options_polls'])
 	{
 		$counter++;
-		$t->assign(array(
-			"EDIT_POLL_OPTION_ID" => '',
-			"EDIT_POLL_OPTION_TEXT" => ''
-		));
+		$t->assign("EDIT_POLL_OPTION_TEXT", sed_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
 		$t->parse($block."OPTIONS");
 	}
 
 	if ((int)$id > 0)
 	{
 		$t->assign(array(
-			"EDIT_POLL_CLOSE" => '<input name="poll_state" type="checkbox" value="1" '.$poll_state.' />', // TODO - to resources
-			"EDIT_POLL_RESET" => '<input name="poll_reset" type="checkbox" value="1" />', // TODO - to resources
-			"EDIT_POLL_DELETE" => '<input name="poll_delete" type="checkbox" value="1" />' // TODO - to resources
+			"EDIT_POLL_CLOSE" => sed_checkbox($poll_state, 'poll_state' , $L['Close']),
+			"EDIT_POLL_RESET" => sed_checkbox(0, 'poll_reset' , $L['Reset']),
+			"EDIT_POLL_DELETE" => sed_checkbox(0, 'poll_delete' , $L['Delete']),
 		));
 		$t->parse($block."EDIT");
 	}
 
 	$t->assign(array(
-		"EDIT_POLL_TEXT" => $poll_text,
+		"EDIT_POLL_TEXT" => sed_inputbox('text', 'poll_text', $poll_text, 'size="64" maxlength="255"'),
+		"EDIT_POLL_IDFIELD" => sed_inputbox('hidden', 'poll_id', $id),
 		"EDIT_POLL_OPTIONSCOUNT" => $counter,
 		"EDIT_POLL_ID" => $id,
-		"EDIT_POLL_MULTIPLE" => '<input name="poll_multiple" type="checkbox" value="1" '.$poll_multiple.' />' // TODO - to resources
+		"EDIT_POLL_MULTIPLE" => sed_checkbox($poll_multiple, 'poll_state' , $L['poll_multiple']),
 	));
 	if ($poll_full_template == true)
 	{

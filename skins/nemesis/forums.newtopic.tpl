@@ -38,8 +38,8 @@
 				<tr>
 					<td>{PHP.L.poll}:</td>
 					<td>
-						<input type="hidden" name="poll_id" value="{EDIT_POLL_ID}" />
-						<input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" />
+						{EDIT_POLL_IDFIELD}
+						{EDIT_POLL_TEXT}
 					</td>
 				</tr>
 				<tr>
@@ -47,7 +47,7 @@
 					<td>
 						<!-- BEGIN: OPTIONS -->
 						<div class="polloptiondiv">
-							<input class="tbox" type="text" name="poll_option[{EDIT_POLL_OPTION_ID}]" size="40" value="{EDIT_POLL_OPTION_TEXT}" maxlength="128" />
+							{EDIT_POLL_OPTION_TEXT}
 							<input name="deloption" value="x" type="button" class="deloption" style="display:none;" />
 						</div>
 						<!-- END: OPTIONS -->
@@ -56,15 +56,7 @@
 				<tr>
 					<td></td>
 					<td>
-						<label>{EDIT_POLL_MULTIPLE} {PHP.L.polls_multiple}</label>
-						<!-- BEGIN: EDIT -->
-						<br />
-						<label>{EDIT_POLL_CLOSE} {PHP.L.Close}</label>
-						<br />
-						<label>{EDIT_POLL_RESET} {PHP.L.Reset}</label>
-						<br />
-						<label>{EDIT_POLL_DELETE} {PHP.L.Delete}</label>
-						<!-- END: EDIT -->
+						{EDIT_POLL_MULTIPLE}
 					</td>
 				</tr>
 				<!-- END: POLL -->

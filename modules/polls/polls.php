@@ -93,7 +93,7 @@ elseif ((int)$id > 0)
 	$t->assign(array(
 		"POLLS_TITLE" => sed_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
 		"POLLS_FORM" => $poll_form['poll_block'],
-		"POLLS_VIEWALL" => "<a href=\"".sed_url('polls', 'id=viewall')."\">".$L['polls_viewarchives']."</a>" // TODO to resourse
+		"POLLS_VIEWALL" => sed_rc_link(sed_url('polls', 'id=viewall'), $L['polls_viewarchives'])
 	));
 
 	/* === Hook === */
