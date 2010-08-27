@@ -57,14 +57,14 @@
 					<legend>{PHP.L.Poll}</legend>
 					<div>
 						<label>{PHP.L.Edit}</label>
-						<input type="text" class="text" name="poll_text" value="{EDIT_POLL_TEXT}" size="64" maxlength="255" />
+						{EDIT_POLL_IDFIELD}{EDIT_POLL_TEXT}
 					</div>
 					<div><label>{PHP.L.Options}</label>{EDIT_POLL_OPTIONS}</div>
-					<div><label>{PHP.L.polls_multiple}</label>{EDIT_POLL_MULTIPLE}</div>
+					<div>{EDIT_POLL_MULTIPLE}</div>
 					<!-- BEGIN: EDIT -->
-					<div><label>{PHP.L.Close}</label>{EDIT_POLL_CLOSE}</div>
-					<div><label>{PHP.L.Reset}</label>{EDIT_POLL_RESET}</div>
-					<div><label>{PHP.L.Delete}</label>{EDIT_POLL_DELETE}</div>
+					<div>{EDIT_POLL_CLOSE}</div>
+					<div>{EDIT_POLL_RESET}</div>
+					<div>{EDIT_POLL_DELETE}</div>
 					<!-- END: EDIT -->
 				</fieldset>
 				<!-- END: POLL -->

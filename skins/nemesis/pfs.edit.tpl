@@ -34,7 +34,7 @@
 				</tr>
 				<tr>
 					<td>{PHP.L.Description}:</td>
-					<td><input type="text" class="text" name="rdesc" value="{PFS_DESC}" size="56" maxlength="255" /></td>
+					<td>{PFS_DESC}</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="valid"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
