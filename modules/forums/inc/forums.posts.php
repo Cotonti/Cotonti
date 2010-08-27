@@ -596,7 +596,7 @@ while ($row1 = sed_sql_fetcharray($sql1))
 				$movebox[$row1['fs_id']] = $cfs;
 			}
 
-			$jumpbox[sed_url('forums', "m=topics&s=".$row1['fs_id'])] = $cfs;
+			$jumpbox[sed_url('forums', "m=topics&s=".$row1['fs_id'], '', true)] = $cfs;
 		}
 	}
 }

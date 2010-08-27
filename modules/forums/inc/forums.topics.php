@@ -300,7 +300,7 @@ while ($row1 = sed_sql_fetcharray($sql1))
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
 	{
 		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
-		$jumpbox[sed_url('forums', "m=topics&s=".$row1['fs_id'])] = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
+		$jumpbox[sed_url('forums', "m=topics&s=".$row1['fs_id'], '', true)] = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
 	}
 }
 $jumpbox = sed_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"');
