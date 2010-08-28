@@ -34,8 +34,6 @@ foreach (sed_getextplugins('forums.editpost.first') as $pl)
 sed_blockguests();
 sed_check_xg();
 
-sed_require('polls');
-
 $sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_sectionid='$s' LIMIT 1");
 
 if ($row = sed_sql_fetcharray($sql))
@@ -143,15 +141,6 @@ if ($a=='update')
 				{ $rtopictitle = str_replace('#', '', $rtopictitle); }
 				$sql = sed_sql_query("UPDATE $db_forum_topics SET ft_title='".sed_sql_prep($rtopictitle)."', ft_desc='".sed_sql_prep($rtopicdesc)."' WHERE ft_id='$q'");
 				$is_first_post = true;
-				$poll_id = sed_import('poll_id','P','TXT');
-				if($poll_id && !$cfg['disable_polls'])
-				{
-					sed_poll_check();
-					if (!$cot_error)
-					{
-						$number = sed_poll_save();
-					}
-				}
 			}
 		}
 	}
@@ -252,10 +241,6 @@ $t->assign(array(
 	$t->parse("MAIN.FORUMS_EDITPOST_FIRSTPOST");
 }
 
-if ($is_first_post && $usr['isadmin'] && !$cfg['disable_polls'] && sed_poll_edit_form($q, $t, 'MAIN.POLL', 'forum'))
-{
-    	$t->parse("MAIN.POLL");
-}
 
 $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,

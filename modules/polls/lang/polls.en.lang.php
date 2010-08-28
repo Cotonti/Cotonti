@@ -32,11 +32,10 @@ $L['polls_votes'] = 'votes';
  * Config
  */
 $L['cfg_del_dup_options'] = array('Force duplicate option removal', ' Remove duplicate options even if it is already in the database');	// New in 0.0.2
-$L['cfg_disable_polls'] = array('Disable the polls', '');
 $L['cfg_ip_id_polls'] = array('Vote counting method', '');	// New in 0.0.2
 $L['cfg_max_options_polls'] = array('Max number of options', 'Options above this limit will be automatically removed');	// New in 0.0.2
-$L['cfg_pollsmaxpolls'] = array('Number of polls displayed on index');
-$L['cfg_pollsmode'] = array('Poll display mode on index', '&quot;Recent polls&quot; displays last poll(s)<br />&quot;Random polls&quot; displays random poll(s)');
-$L['cfg_pollsmode_params'] = array('Recent polls', 'Random polls');
+$L['cfg_maxpolls'] = array('Number of polls displayed on index');
+$L['cfg_mode'] = array('Poll display mode on index', '&quot;Recent polls&quot; displays last poll(s)<br />&quot;Random polls&quot; displays random poll(s)');
+$L['cfg_mode_params'] = array('Recent polls', 'Random polls');
 
 ?>

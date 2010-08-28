@@ -23,7 +23,6 @@ $quote = sed_import('quote','G','INT');
 $unread_done = FALSE;
 $fp_num = 0;
 
-if (!$cfg['disable_polls']) sed_require('polls');
 require_once sed_langfile('countries', 'core');
 
 unset ($notlastpage);
@@ -74,7 +73,9 @@ elseif (!empty($p))
 		$fp_posterid = $row['fp_posterid'];
 	}
 	else
-	{ sed_die(); }
+	{
+		sed_die();
+	}
 }
 elseif (!empty($id))
 {
@@ -87,15 +88,21 @@ elseif (!empty($id))
 		$fp_posterid = $row['fp_posterid'];
 	}
 	else
-	{ sed_die(); }
+	{
+		sed_die();
+	}
 }
 elseif (!empty($q))
 {
 	$sql = sed_sql_query("SELECT ft_sectionid FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
 	if ($row = sed_sql_fetcharray($sql))
-	{ $s = $row['ft_sectionid']; }
+	{
+		$s = $row['ft_sectionid'];
+	}
 	else
-	{ sed_die(); }
+	{
+		sed_die();
+	}
 }
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
@@ -113,14 +120,14 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_mastername = $row['fs_mastername'];
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
-	
+
 	/* === Hook === */
 	foreach (sed_getextplugins('forums.posts.rights') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	
+
 	sed_block($usr['auth_read']);
 
 	if ($fs_state)
@@ -129,7 +136,9 @@ if ($row = sed_sql_fetcharray($sql))
 	}
 }
 else
-{ sed_die(); }
+{ 
+	sed_die();
+}
 
 $sys['sublocation'] = $fs_title;
 sed_online_update();
@@ -145,10 +154,14 @@ if ($a=='newpost')
 	if ($row = sed_sql_fetcharray($sql))
 	{
 		if ($row['ft_state'])
-		{ sed_die(); }
+		{
+			sed_die();
+		}
 		$merge = (!$cfg['antibumpforums'] && $cfg['mergeforumposts'] && $row['ft_lastposterid']==$usr['id']) ? true : false;
 		if ($merge && $cfg['mergetimeout']>0 && ( ($sys['now_offset']-$row['ft_updated'])>($cfg['mergetimeout']*3600) ) )
-			{ $merge = false; }
+		{
+			$merge = false;
+		}
 	}
 
 	$sql = sed_sql_query("SELECT fp_posterid, fp_posterip FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC LIMIT 1");
@@ -225,7 +238,9 @@ if ($a=='newpost')
 
 
 			if ($fs_countposts)
-			{ $sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'"); }
+			{
+				$sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'");
+			}
 
 			/* === Hook === */
 			foreach (sed_getextplugins('forums.posts.newpost.done') as $pl)
@@ -332,15 +347,21 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	if ($row = sed_sql_fetchassoc($sql))
 	{
 		if ($cfg['trash_forum'])
-		{ sed_trash_put('forumpost', $L['Post']." #".$p." from topic #".$q, "p".$p."-q".$q, $row); }
+		{
+			sed_trash_put('forumpost', $L['Post']." #".$p." from topic #".$q, "p".$p."-q".$q, $row);
+		}
 	}
 	else
-	{ sed_die(); }
+	{
+		sed_die();
+	}
 
 	$sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_id='$p' AND fp_topicid='$q' AND fp_sectionid='$s'");
 
 	if ($fs_countposts)
-	{ $sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount-1 WHERE user_id='".$fp_posterid."' AND user_postcount>0"); }
+	{
+		$sql = sed_sql_query("UPDATE $db_users SET user_postcount=user_postcount-1 WHERE user_id='".$fp_posterid."' AND user_postcount>0");
+	}
 
 	sed_log("Deleted post #".$p, 'for');
 
@@ -373,14 +394,11 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 		if ($row = sed_sql_fetchassoc($sql))
 		{
 			if ($cfg['trash_forum'])
-			{ sed_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row); }
+			{
+				sed_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row);
+			}
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
-
-			if (!$cfg['disable_polls'])
-			{
-				sed_poll_delete($q, 'forum');
-			}
 
 			$sql = sed_sql_query("UPDATE $db_forum_sections SET
 			fs_topiccount=fs_topiccount-1,
@@ -455,8 +473,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 	}
 }
 
-//$sql = sed_sql_query("SELECT ft_id, ft_title, ft_desc, ft_mode, ft_state, ft_poll, ft_firstposterid FROM $db_forum_topics WHERE ft_id='$q'");
-$sql = sed_sql_query("SELECT t.*, p.* FROM $db_forum_topics AS t LEFT JOIN $db_polls AS p ON t.ft_id=p.poll_code WHERE t.ft_id='$q' AND (p.poll_type='forum' OR p.poll_id IS NULL)");
+$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
 
 if ($row = sed_sql_fetcharray($sql))
 {
@@ -464,15 +481,17 @@ if ($row = sed_sql_fetcharray($sql))
 	$ft_desc = $row['ft_desc'];
 	$ft_mode = $row['ft_mode'];
 	$ft_state = $row['ft_state'];
-	$ft_poll = $row;
-    $ft_poll_id = $row['poll_id'];
 	$ft_firstposterid = $row['ft_firstposterid'];
 
 	if ($ft_mode==1 && !($usr['isadmin'] || $ft_firstposterid==$usr['id']))
-	{ sed_die(); }
+	{
+		sed_die();
+	}
 }
 else
-{ sed_die(); }
+{ 
+	sed_die();
+}
 
 $sql = sed_sql_query("UPDATE $db_forum_topics SET ft_viewcount=ft_viewcount+1 WHERE ft_id='$q'");
 $sql = sed_sql_query("UPDATE $db_forum_sections SET fs_viewcount=fs_viewcount+1 WHERE fs_id='$s'");
@@ -488,10 +507,14 @@ if (!empty($p))
 }
 
 if (empty($d))
-{ $d = '0'; }
+{ 
+	$d = '0';
+}
 
 if ($usr['id']>0)
-{ $morejavascript .= sed_build_addtxt('newpost', 'newmsg'); }
+{ 
+	$morejavascript .= sed_build_addtxt('newpost', 'newmsg');
+}
 
 $user_extrafields = "";
 //Extra fields for users
@@ -504,7 +527,7 @@ foreach($sed_extrafields['users'] as $i => $row)
 if (!empty($id))
 {
 	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
-	$user_extrafields
+		$user_extrafields
 	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
 	u.user_postcount
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
@@ -513,7 +536,7 @@ if (!empty($id))
 else
 {
 	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
-	$user_extrafields
+		$user_extrafields
 	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
 	u.user_postcount
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
@@ -541,31 +564,6 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'posts', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-if (!$cfg['disable_polls'] && $ft_poll_id)
-{
-	sed_poll_vote();
-	$poll_form=sed_poll_form($ft_poll, sed_url('forums', 'm=posts&q='.$q), '', 'forum');
-	$t->assign(array(
-		"POLLS_TITLE" => sed_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
-		"POLLS_FORM" => $poll_form['poll_block'],
-	));
-
-	$t->parse("MAIN.POLLS_VIEW");
-
-	if ($alreadyvoted)
-	{ $extra = ($votecasted) ? $L['polls_votecasted'] : $L['polls_alreadyvoted']; }
-	else
-	{ $extra = $L['polls_notyetvoted']; }
-
-	$t->assign(array(
-		"POLLS_EXTRATEXT" => $extra,
-	));
-
-	$t->parse("MAIN.POLLS_EXTRA");
-
-
-}
-
 $nbpages = ceil($totalposts / $cfg['maxpostsperpage']);
 $curpage = $d / $cfg['maxpostsperpage'];
 $notlastpage = (($d + $cfg['maxpostsperpage'])<$totalposts) ? TRUE : FALSE;
@@ -573,7 +571,7 @@ $notlastpage = (($d + $cfg['maxpostsperpage'])<$totalposts) ? TRUE : FALSE;
 $pagenav = sed_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['maxpostsperpage']);
 
 $sql1 = sed_sql_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername, s.fs_allowpolls FROM $db_forum_sections AS s LEFT JOIN
-$db_forum_structure AS n ON n.fn_code=s.fs_category
+	$db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 
 sed_require_api('forms');
@@ -583,21 +581,16 @@ while ($row1 = sed_sql_fetcharray($sql1))
 {
 	if (sed_auth('forums', $row1['fs_id'], 'R'))
 	{
+		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
 
-		if ( ($ft_poll_id>0 && $row1['fs_allowpolls']) || ($ft_poll_id==0) )
+		$cfs = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
+
+		if ($row1['fs_id'] != $s)
 		{
-
-			$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
-
-			$cfs = sed_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
-
-			if ($row1['fs_id'] != $s)
-			{
-				$movebox[$row1['fs_id']] = $cfs;
-			}
-
-			$jumpbox[sed_url('forums', "m=topics&s=".$row1['fs_id'], '', true)] = $cfs;
+			$movebox[$row1['fs_id']] = $cfs;
 		}
+
+		$jumpbox[sed_url('forums', "m=topics&s=".$row1['fs_id'], '', true)] = $cfs;
 	}
 }
 $jumpbox = sed_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"');
@@ -616,10 +609,9 @@ if ($usr['isadmin'])
 	$adminoptions .= "</a> &nbsp; &nbsp; ".$movebox." &nbsp; &nbsp; ".$L['Delete'].":[<a href=\"".sed_url('forums', "m=topics&a=delete&".sed_xg()."&s=".$s."&q=".$q)."\">x</a>]</form>";
 }
 else
-{ $adminoptions = "&nbsp;"; }
-
-if ($ft_poll_id>0)
-{ $ft_title = $L['Poll'].": ".$ft_title; }
+{ 
+	$adminoptions = "&nbsp;";
+}
 
 $ft_title = ($ft_mode==1) ? "# ".htmlspecialchars($ft_title) : htmlspecialchars($ft_title);
 
@@ -635,13 +627,12 @@ $t->assign(array(
 	"FORUMS_POSTS_RSS" => sed_url('rss', "c=topics&id=$q"),
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
 	"FORUMS_POSTS_TOPICDESC" => htmlspecialchars($ft_desc),
-    "FORUMS_POSTS_SHORTTITLE" => $ft_title,
-    "FORUMS_POSTS_PATH" => $toppath,
+	"FORUMS_POSTS_SHORTTITLE" => $ft_title,
+	"FORUMS_POSTS_PATH" => $toppath,
 	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
 	"FORUMS_POSTS_PAGES" => $pagenav['main'],
 	"FORUMS_POSTS_PAGEPREV" => $pagenav['prev'],
 	"FORUMS_POSTS_PAGENEXT" => $pagenav['next'],
-	"FORUMS_POSTS_POLL" => $poll_result,
 	"FORUMS_POSTS_JUMPBOX" => $jumpbox,
 ));
 
@@ -668,7 +659,7 @@ while ($row = sed_sql_fetcharray($sql))
 	$rowedit   = (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? sed_rc('frm_rowedit', array('url' => sed_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".sed_xg()))) : '';
 	$rowdelete = ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? sed_rc('frm_rowdelete', array('url' => sed_url('forums', "m=posts&a=delete&".sed_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id']))) : '';
 	$rowdelete .= ($fp_num==$totalposts) ? "<a name=\"bottom\" id=\"bottom\"></a>" : '';
-    $adminoptions = $rowquote.' &nbsp; '.$rowedit.' &nbsp; '.$rowdelete;
+	$adminoptions = $rowquote.' &nbsp; '.$rowedit.' &nbsp; '.$rowdelete;
 
 	if ($usr['id']>0 && $n=='unread' && !$unread_done && $row['fp_creation']>$usr['lastvisit'])
 	{
@@ -693,7 +684,9 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 
 	if (!empty($row['fp_updater']))
-	{ $row['fp_updatedby'] = sprintf($L['for_updatedby'], htmlspecialchars($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']); }
+	{
+		$row['fp_updatedby'] = sprintf($L['for_updatedby'], htmlspecialchars($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']);
+	}
 
 	$t->assign(sed_generate_usertags($row, "FORUMS_POSTS_ROW_")); // Lieve only best variant(some tags use has different key mask
 	$t->assign(sed_generate_usertags($row, "FORUMS_POSTS_ROW_USER"));
@@ -711,12 +704,12 @@ while ($row = sed_sql_fetcharray($sql))
 		"FORUMS_POSTS_ROW_POSTERNAME" => sed_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
 		"FORUMS_POSTS_ROW_POSTERIP" => $row['fp_posterip'],
-        "FORUMS_POSTS_ROW_DELETE" => $rowdelete,
-        "FORUMS_POSTS_ROW_EDIT" => $rowedit,
-        "FORUMS_POSTS_ROW_QUOTE" => $rowquote,
+		"FORUMS_POSTS_ROW_DELETE" => $rowdelete,
+		"FORUMS_POSTS_ROW_EDIT" => $rowedit,
+		"FORUMS_POSTS_ROW_QUOTE" => $rowquote,
 		"FORUMS_POSTS_ROW_ADMIN" => $adminoptions,
 		"FORUMS_POSTS_ROW_ODDEVEN" => sed_build_oddeven($fp_num),
-        "FORUMS_POSTS_ROW_NUM" => $fp_num,
+		"FORUMS_POSTS_ROW_NUM" => $fp_num,
 		"FORUMS_POSTS_ROW_ORDER" => $i,
 		"FORUMS_POSTS_ROW" => $row,
 	));
@@ -735,19 +728,31 @@ $allowreplybox = (!$cfg['antibumpforums']) ? TRUE : FALSE;
 $allowreplybox = ($cfg['antibumpforums'] && $lastposterid>0 && $lastposterid==$usr['id'] && $usr['auth_write']) ? FALSE : TRUE;
 
 // Nested quote stripper by Spartan
-function sed_stripquote($string) {
+function sed_stripquote($string)
+{
 	global $sys;
 	$starttime = $sys['now'];
 	$startindex = mb_stripos($string,'[quote');
-	while ($startindex>=0) {
-		if (($sys['now']-$starttime)>2000) { break; }
+	while ($startindex>=0)
+	{
+		if (($sys['now']-$starttime)>2000)
+		{
+			break;
+		}
 		$stopindex = mb_strpos($string,'[/quote]');
-		if ($stopindex>0) {
-			if (($sys['now']-$starttime)>3000) { break; }
+		if ($stopindex>0)
+		{
+			if (($sys['now']-$starttime)>3000)
+			{
+				break;
+			}
 			$fragment = mb_substr($string,$startindex,($stopindex-$startindex+8));
 			$string = str_ireplace($fragment,'',$string);
 			$stopindex = mb_stripos($string,'[/quote]');
-		} else { break; }
+		} else
+		{
+			break;
+		}
 		$string = trim($string);
 		$startindex = mb_stripos($string,'[quote');
 	}
@@ -766,7 +771,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		}
 	}
 
-    // FIXME PFS dependency
+	// FIXME PFS dependency
 	//$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
 	//$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
 
