@@ -23,7 +23,6 @@ $p = sed_import('p','G','INT');
 $d = sed_import('d','G','INT');
 $o = sed_import('o','G','ALP');
 $w = sed_import('w','G','ALP',4);
-$poll = sed_import('poll','G','INT');
 
 sed_blockguests();
 sed_die(empty($s));
@@ -34,8 +33,6 @@ foreach (sed_getextplugins('forums.newtopic.first') as $pl)
 	include $pl;
 }
 /* ===== */
-
-sed_require('polls');
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
@@ -73,11 +70,6 @@ if ($fs_state)
 	sed_redirect(sed_url('message', "msg=602", '', true));
 }
 
-if (!$fs_allowpolls & $poll)
-{
-	sed_redirect(sed_url('message', "msg=930", '', true));
-}
-
 if ($a=='newtopic')
 {
 	sed_shield_protect();
@@ -105,11 +97,6 @@ if ($a=='newtopic')
 	{
 		sed_error('for_messagetooshort', 'newmsg');
 	}
-	if($poll)
-	{
-		sed_poll_check();
-	}
-
 
 	if (!$cot_error)
 	{
@@ -153,7 +140,6 @@ if ($a=='newtopic')
 			'".sed_sql_prep($usr['name'])."')");
 
 		$q = sed_sql_insertid();
-        if ($poll) sed_poll_save('forum', $q);
 
 		if($cfg['parser_cache'])
 		{
@@ -201,7 +187,9 @@ if ($a=='newtopic')
 		WHERE fs_id='$fs_masterid'"); }
 		
 		if ($fs_autoprune>0)
-		{ sed_forum_prunetopics('updated', $s, $fs_autoprune); }
+		{
+			sed_forum_prunetopics('updated', $s, $fs_autoprune);
+		}
 
 		if ($fs_countposts)
 		{ $sql = sed_sql_query("UPDATE $db_users SET
@@ -240,7 +228,7 @@ if ($a=='newtopic')
 //$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
 $morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
 
-$newtopicurl = ($poll) ? sed_url('forums', "m=newtopic&a=newtopic&s=".$s."&poll=1") : sed_url('forums', "m=newtopic&a=newtopic&s=".$s);
+$newtopicurl = sed_url('forums', "m=newtopic&a=newtopic&s=".$s);
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
@@ -295,15 +283,6 @@ if ($fs_allowprvtopics)
 	$t->assign("FORUMS_NEWTOPIC_ISPRIVATE", sed_checkbox($newprvtopic, newprvtopic));
 	$t->parse("MAIN.PRIVATE");
 }
-
-
-if ($fs_allowpolls && $poll)
-	{
-
-    sed_poll_edit_form("new", $t, "MAIN.POLL");
-	$t->parse("MAIN.POLL");
-
-	}
 
 /* === Hook === */
 foreach (sed_getextplugins('forums.newtopic.tags') as $pl)

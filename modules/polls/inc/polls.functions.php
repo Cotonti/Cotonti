@@ -342,7 +342,8 @@ function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 		"POLL_FORM_BUTTON" => $pollbutton
 	));
 	$t->parse($poll_block);
-
+	
+	$row['poll_alreadyvoted'] = $alreadyvoted;
 	$row['poll_count'] = $totalvotes;
 	$row['poll_block'] = $t->text($poll_block);;
 

@@ -14,7 +14,6 @@ defined('SED_CODE') or die('Wrong URL.');
 // Requirements
 sed_require_lang('forums', 'module');
 sed_require_rc('forums');
-sed_require('polls'); // Fixme hard polls dependency
 
 // Global variables
 $GLOBALS['db_forum_posts']		= $GLOBALS['db_x'] . 'forum_posts';
@@ -35,7 +34,7 @@ function sed_build_addtxt($c1, $c2)
 	function addtxt(text) {
 		insertText(document, '$c1', '$c2', text);
 	}
-	";
+		";
 	return($result);
 }
 
@@ -83,9 +82,9 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 		}
 		$tmp[] = empty($q) ? htmlspecialchars($title)
 			: sed_rc('link_catpath', array(
-				'url' => sed_url('forums', 'm=topics&s='.$sectionid),
-				'title' =>  htmlspecialchars($title)
-			));
+			'url' => sed_url('forums', 'm=topics&s='.$sectionid),
+			'title' =>  htmlspecialchars($title)
+		));
 	}
 	else
 	{
@@ -105,7 +104,7 @@ function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master =
 
 /*
  * ==================================== Forum Functions ==================================
- */
+*/
 
 /**
  * Removes a forum section and all its contents
@@ -175,7 +174,7 @@ function sed_forum_info($id)
  */
 function sed_forum_prunetopics($mode, $section, $param)
 {
-	global $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_sections, $db_polls, $L;
+	global $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_sections, $L;
 
 	$num = 0;
 	$num1 = 0;
@@ -203,7 +202,9 @@ function sed_forum_prunetopics($mode, $section, $param)
 				$sql = sed_sql_query("SELECT * FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC");
 
 				while ($row = sed_sql_fetchassoc($sql))
-				{ sed_trash_put('forumpost', $L['Post']." #".$row['fp_id']." from topic #".$q, "p".$row['fp_id']."-q".$q, $row); }
+				{
+					sed_trash_put('forumpost', $L['Post']." #".$row['fp_id']." from topic #".$q, "p".$row['fp_id']."-q".$q, $row);
+				}
 			}
 
 			$sql = sed_sql_query("DELETE FROM $db_forum_posts WHERE fp_topicid='$q'");
@@ -214,21 +215,21 @@ function sed_forum_prunetopics($mode, $section, $param)
 				$sql = sed_sql_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
 
 				while ($row = sed_sql_fetchassoc($sql))
-				{ sed_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row); }
+				{
+					sed_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row);
+				}
 			}
 
 			$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
 			$num1 += sed_sql_affectedrows();
 
-			$sql = sed_sql_query("SELECT poll_id FROM $db_polls WHERE poll_type='forum' AND poll_code='$q' LIMIT 1");
-			if ($row = sed_sql_fetcharray($sql))
+			/* === Hook === */
+			foreach (sed_getextplugins('forums.functions.prunetopics') as $pl)
 			{
-				$id=$row['poll_id'];
-				global $db_polls_options, $db_polls_voters;
-				$sql = sed_sql_query("DELETE FROM $db_polls WHERE poll_id=".$id);
-				$sql = sed_sql_query("DELETE FROM $db_polls_options WHERE po_pollid=".$id);
-				$sql = sed_sql_query("DELETE FROM $db_polls_voters WHERE pv_pollid=".$id);
+				include $pl;
 			}
+			/* ===== */
+
 		}
 
 		$sql = sed_sql_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
@@ -332,7 +333,7 @@ function sed_forum_resyncall()
 function sed_forum_sectionsetlast($id)
 {
 	global $db_forum_topics, $db_forum_sections;
-	$sql = sed_sql_query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title, ft_poll FROM $db_forum_topics WHERE ft_sectionid='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
+	$sql = sed_sql_query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_sectionid='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
 	$row = sed_sql_fetcharray($sql);
 	$sql = sed_sql_query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".sed_sql_prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".sed_sql_prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
 
@@ -356,7 +357,9 @@ function sed_load_forum_structure()
 	while ($row = sed_sql_fetcharray($sql))
 	{
 		if (!empty($row['fn_icon']))
-		{ $row['fn_icon'] = "<img src=\"".$row['fn_icon']."\" alt=\"\" />"; }
+		{
+			$row['fn_icon'] = "<img src=\"".$row['fn_icon']."\" alt=\"\" />";
+		}
 
 		$path2 = mb_strrpos($row['fn_path'], '.');
 

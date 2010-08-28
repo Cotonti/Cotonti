@@ -15,12 +15,11 @@ Lock_members=
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-disable_polls=01:radio::0:
 ip_id_polls=02:select:ip,id:ip:
-max_options_polls=03:string::100:
+max_options_polls=03:select:5,10,20,50,100:100:
 del_dup_options=04:radio::1:
-pollsmaxpolls=01:select:1,2,3,4,5:1:Polls displayed
-pollsmode=02:select:Recent polls,Random polls:Recent polls:Mode polls displayed
+maxpolls=01:select:1,2,3,4,5:1:
+mode=02:select:Recent polls,Random polls:Recent polls:
 [END_COT_EXT_CONFIG]
 ==================== */
 

@@ -41,9 +41,13 @@ sed_block($usr['auth_read']);
 function rev($sway)
 {
 	if ($sway=='desc')
-	{ return ('asc'); }
+	{
+		return ('asc');
+	}
 	else
-	{ return ('desc'); }
+	{
+		return ('desc');
+	}
 }
 
 function cursort($trigger, $way)
@@ -52,16 +56,28 @@ function cursort($trigger, $way)
 	{
 		global $sed_img_up, $sed_img_down;
 		if ($way=='asc')
-		{ return ($sed_img_down); }
+		{
+			return ($sed_img_down);
+		}
 		else
-		{ return ($sed_img_up); }
+		{
+			return ($sed_img_up);
+		}
 	}
 	else
-	{ return (''); }
+	{
+		return ('');
+	}
 }
 
-if (empty($o)) { $o = 'updated'; }
-if (empty($w)) { $w = 'desc'; }
+if (empty($o))
+{ 
+	$o = 'updated';
+}
+if (empty($w))
+{ 
+	$w = 'desc';
+}
 
 $sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
@@ -83,7 +99,9 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_allowpolls = $row['fs_allowpolls'];
 }
 else
-{ sed_die(); }
+{ 
+	sed_die();
+}
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
 sed_block($usr['auth_read']);
@@ -355,17 +373,6 @@ if ($fs_allowviewers)
 
 }
 
-
-if ($fs_allowpolls && !$cfg['disable_polls'])
-{
-
-	$t->assign(array(
-		"FORUMS_TOPICS_NEWPOLLURL" => sed_url('forums', "m=newtopic&s=".$s."&poll=1"),
-	));
-	$t->parse("MAIN.FORUMS_SECTIONS_POLLS");
-
-}
-
 $sqql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s, $db_forum_structure AS n
 						   WHERE s.fs_masterid=".$s." AND n.fn_code=s.fs_category
 						   ORDER BY fs_masterid DESC, fn_path ASC, fs_order ASC");
@@ -464,15 +471,28 @@ if ($catnum>1)
 	$t->parse("MAIN.FORUMS_SECTIONS");
 }
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s' and ft_mode=1");
+$cond = ($usr['isadmin']) ? '' : "AND ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".$usr['id'].")";
+$sqql_select = 't.*';
+$sqql_where = "ft_sectionid='$s' $cond";
+$sqql_order = "ft_sticky DESC, ft_$o $w";
+$sqql_limit = "$d, ".$cfg['maxtopicsperpage'];
+$sqql_join_ratings_columns = '';
+$sqql_join_ratings_condition = '';
+
+/* === Hook === */
+foreach (sed_getextplugins('forums.topics.query') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
+$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where AND ft_mode=1");
 $prvtopics = sed_sql_result($sql, 0, "COUNT(*)");
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_sectionid='$s'");
+$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where");
 $totaltopics = sed_sql_result($sql, 0, "COUNT(*)");
-$cond = ($usr['isadmin']) ? '' : "AND t.ft_mode=0 OR (t.ft_mode=1 AND t.ft_firstposterid=".$usr['id'].")";
-$sql = sed_sql_query("SELECT t.*, p.poll_id FROM $db_forum_topics AS t LEFT JOIN
-	$db_polls AS p ON t.ft_id=p.poll_code  WHERE t.ft_sectionid='$s' $cond AND (p.poll_type='forum' OR p.poll_id IS NULL)
-ORDER by ft_sticky DESC, ft_".$o." ".$w."
-LIMIT $d, ".$cfg['maxtopicsperpage']);
+
+$sql = sed_sql_query("SELECT $sqql_select $sqql_join_ratings_columns FROM $db_forum_topics AS t $sqql_join_ratings_condition
+	WHERE $sqql_where ORDER BY $sqql_order LIMIT $sqql_limit");
 
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('forums.topics.loop');
@@ -540,11 +560,6 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 
 	$row['ft_firstpostername'] = sed_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername']));
-
-	if ($row['poll_id']>0)
-	{
-		$row['ft_title'] = $L['Poll'].": ".$row['ft_title'];
-	}
 
 	if ($row['ft_postcount']>$cfg['maxpostsperpage'])
 	{
