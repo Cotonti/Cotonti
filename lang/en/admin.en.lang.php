@@ -248,16 +248,6 @@ $L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in 0.0.6
 
 /**
  * Config Section
- * Polls Subsection
- */
-
-$L['cfg_del_dup_options'] = array('Force duplicate option removal', ' Remove duplicate options even if it is already in the database');	// New in 0.0.2
-$L['cfg_disable_polls'] = array('Disable the polls', '');
-$L['cfg_ip_id_polls'] = array('Vote counting method', '');	// New in 0.0.2
-$L['cfg_max_options_polls'] = array('Max number of options', 'Options above this limit will be automatically removed');	// New in 0.0.2
-
-/**
- * Config Section
  * Ratings Subsection
  */
 

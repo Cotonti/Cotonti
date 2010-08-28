@@ -11,7 +11,7 @@
 <!-- IF {PHP.usr.isadmin} -->{FILE "skins/nemesis/inc/admin.tpl"}<!-- ENDIF -->
 			<div class="block">
 				<h2 class="polls">{PHP.L.Polls}</h2>
-				{PLUGIN_INDEXPOLLS}
+				{INDEX_POLLS}
 			</div>
 			<div class="block">
 				<h2 class="tags">{PHP.L.Tags}</h2>
