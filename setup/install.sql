@@ -307,6 +307,9 @@ CREATE TABLE `sed_extra_fields` (
   `field_type` varchar(255) collate utf8_unicode_ci NOT NULL,
   `field_html` text collate utf8_unicode_ci NOT NULL,
   `field_variants` text collate utf8_unicode_ci NOT NULL,
+  `field_default` text collate utf8_unicode_ci NOT NULL,
+  `field_required` tinyint(1) unsigned NOT NULL default '0',
+  `field_parse` varchar(32) collate utf8_unicode_ci NOT NULL default 'HTML',
   `field_description` text collate utf8_unicode_ci NOT NULL,
   KEY `field_location` (`field_location`),
   KEY `field_name` (`field_name`)
