@@ -151,6 +151,7 @@ $t->assign(array(
 	"PAGE_TITLE" => $pag['page_fulltitle'],
 	"PAGE_SHORTTITLE" => $pag['page_title'],
 	"PAGE_CAT" => $pag['page_cat'],
+	"PAGE_CATURL" => sed_url('list', 'c=' . $pag['page_cat']),
 	"PAGE_CATTITLE" => $cat['title'],
 	"PAGE_CATPATH" => $catpath,
 	"PAGE_CATDESC" => $cat['desc'],

@@ -149,6 +149,7 @@ function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlen
 			"PAGE_ROW_TITLE" => $pag['page_fulltitle'],
 			"PAGE_ROW_SHORTTITLE" => htmlspecialchars($pag['page_title']),
 			"PAGE_ROW_CAT" => $pag['page_cat'],
+			"PAGE_ROW_CATURL" => sed_url('list', 'c=' . $pag['page_cat']),
 			"PAGE_ROW_CATTITLE" => htmlspecialchars($sed_cat[$pag['page_cat']]['title']),
 			"PAGE_ROW_CATPATH" => $catpath,
 			"PAGE_ROW_CATPATH_SHORT" => "<a href=\"".sed_url('list', 'c='.$pag['page_cat'])."\">".htmlspecialchars($sed_cat[$pag['page_cat']]['title'])."</a>",
