@@ -349,6 +349,7 @@ $Ls['Minutes'] = array('minutes','minute');
 $Ls['Seconds'] = array('seconds','second');
 $Ls['Guests'] = array('guests','guest');
 $Ls['Members'] = array('members','member');
+$Ls['Pages'] = array('pages','page');
 $Ls['Privatemessages'] = array('new private messages','new private message');
 
 /**
