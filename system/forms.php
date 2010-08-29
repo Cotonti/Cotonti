@@ -22,18 +22,18 @@ defined('SED_CODE') or die('Wrong URL');
  */
 function sed_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
 {
-    global $R;
-    $input_attrs = sed_rc_attr_string($attrs);
-    $checked = $chosen ? ' checked="checked"' : '';
+	global $R;
+	$input_attrs = sed_rc_attr_string($attrs);
+	$checked = $chosen ? ' checked="checked"' : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-    $rc = empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}";
-    return sed_rc($rc, array(
-        'value' => sed_import_buffered($name, $value),
-        'name' => $name,
-        'checked' => $checked,
-        'title' => $title,
-        'attrs' => $input_attrs
-    ));
+	$rc = empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}";
+	return sed_rc($rc, array(
+		'value' => sed_import_buffered($name, $value),
+		'name' => $name,
+		'checked' => $checked,
+		'title' => $title,
+		'attrs' => $input_attrs
+	));
 }
 
 /**
@@ -48,24 +48,24 @@ function sed_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
  */
 function sed_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 {
-    global $R, $cfg;
-    $input_attrs = sed_rc_attr_string($attrs);
+	global $R, $cfg;
+	$input_attrs = sed_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-    $rc = empty($custom_rc)
-        ? (empty($R["input_{$type}_{$rc_name}"]) ? "input_$type" : "input_{$type}_{$rc_name}")
-        : $custom_rc;
-    if (!isset($R[$rc]))
-    {
-        $rc = 'input_default';
-    }
-    $error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
-    return sed_rc($rc, array(
-        'type' => $type,
-        'name' => $name,
-        'value' => htmlspecialchars(sed_import_buffered($name, $value)),
-        'attrs' => $input_attrs,
-        'error' => $error
-    ));
+	$rc = empty($custom_rc)
+		? (empty($R["input_{$type}_{$rc_name}"]) ? "input_$type" : "input_{$type}_{$rc_name}")
+		: $custom_rc;
+	if (!isset($R[$rc]))
+	{
+		$rc = 'input_default';
+	}
+	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
+	return sed_rc($rc, array(
+		'type' => $type,
+		'name' => $name,
+		'value' => htmlspecialchars(sed_import_buffered($name, $value)),
+		'attrs' => $input_attrs,
+		'error' => $error
+	));
 }
 
 /**
@@ -81,44 +81,44 @@ function sed_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
  */
 function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '')
 {
-    global $R;
-    if (!is_array($values))
-    {
-        $values = explode(',', $values);
-    }
-    if (!is_array($titles))
-    {
-        $titles = explode(',', $titles);
-    }
-    $use_titles = count($values) == count($titles);
-    $input_attrs = sed_rc_attr_string($attrs);
-    $chosen = sed_import_buffered($name, $chosen);
-    if (empty($separator))
-    {
-        $separator = $R['input_radio_separator'];
-    }
-    $i = 0;
-    $result = '';
+	global $R;
+	if (!is_array($values))
+	{
+		$values = explode(',', $values);
+	}
+	if (!is_array($titles))
+	{
+		$titles = explode(',', $titles);
+	}
+	$use_titles = count($values) == count($titles);
+	$input_attrs = sed_rc_attr_string($attrs);
+	$chosen = sed_import_buffered($name, $chosen);
+	if (empty($separator))
+	{
+		$separator = $R['input_radio_separator'];
+	}
+	$i = 0;
+	$result = '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-    $rc = empty($R["input_radio_{$rc_name}"]) ? 'input_radio' : "input_radio_{$rc_name}";
-    foreach ($values as $k => $x)
-    {
-        $checked = ($x == $chosen) ? ' checked="checked"' : '';
-        $title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
-        if ($i > 0)
-        {
-            $result .= $separator;
-        }
-        $result .= sed_rc($rc, array(
-                'value' => htmlspecialchars($x),
-                'name' => $name,
-                'checked' => $checked,
-                'title' => $title,
-                'attrs' => $input_attrs
-            ));
-        $i++;
-    }
-    return $result;
+	$rc = empty($R["input_radio_{$rc_name}"]) ? 'input_radio' : "input_radio_{$rc_name}";
+	foreach ($values as $k => $x)
+	{
+		$checked = ($x == $chosen) ? ' checked="checked"' : '';
+		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
+		if ($i > 0)
+		{
+			$result .= $separator;
+		}
+		$result .= sed_rc($rc, array(
+			'value' => htmlspecialchars($x),
+			'name' => $name,
+			'checked' => $checked,
+			'title' => $title,
+			'attrs' => $input_attrs
+		));
+		$i++;
+	}
+	return $result;
 }
 
 /**
@@ -134,50 +134,52 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
  */
 function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '')
 {
-    global $R, $cfg;
+	global $R, $cfg;
 
-    if (!is_array($values))
-    {
-        $values = explode(',', $values);
-    }
-    if (!is_array($titles))
-    {
-        $titles = explode(',', $titles);
-    }
-    $use_titles = count($values) == count($titles);
-    $input_attrs = sed_rc_attr_string($attrs);
-    $chosen = sed_import_buffered($name, $chosen);
-    $multi = is_array($chosen) && isset($input_attrs['multiple']);
-    $error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
+	if (!is_array($values))
+	{
+		$values = explode(',', $values);
+	}
+	if (!is_array($titles))
+	{
+		$titles = explode(',', $titles);
+	}
+	$use_titles = count($values) == count($titles);
+	$input_attrs = sed_rc_attr_string($attrs);
+	$chosen = sed_import_buffered($name, $chosen);
+	$multi = is_array($chosen) && isset($input_attrs['multiple']);
+	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-    $rc = empty($R["input_select_begin_{$rc_name}"]) ? 'input_select_begin' : "input_select_begin_{$rc_name}";
-    $result = sed_rc($rc, array('name' => $name, 'attrs' => $input_attrs));
-    $selected = (is_null($chosen) || $chosen === '' || $chosen == '00') ? ' selected="selected"' : '';
-    $rc = empty($R["input_option_{$rc_name}"]) ? 'input_option' : "input_option_{$rc_name}";
-    if ($add_empty)
-    {
-        $result .= sed_rc($rc, array(
-                'value' => '',
-                'selected' => $selected,
-                'title' => $R['code_option_empty']
-            ));
-    }
-    foreach ($values as $k => $x)
-    {
-        $x = trim($x);
-        $selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
-        $title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
-        $result .= sed_rc($rc, array(
-                'value' => htmlspecialchars($x),
-                'selected' => $selected,
-                'title' => $title
-            ));
-    }
-    $rc = empty($R["input_select_end_{$rc_name}"]) ? 'input_select_end' : "input_select_end_{$rc_name}";
-    $result .= sed_rc($rc, array(
-            'error' => $error
-        ));
-    return $result;
+
+	$selected = (is_null($chosen) || $chosen === '' || $chosen == '00') ? ' selected="selected"' : '';
+	$rc = empty($R["input_option_{$rc_name}"]) ? 'input_option' : "input_option_{$rc_name}";
+	if ($add_empty)
+	{
+		$options .= sed_rc($rc, array(
+			'value' => '',
+			'selected' => $selected,
+			'title' => $R['code_option_empty']
+		));
+	}
+	foreach ($values as $k => $x)
+	{
+		$x = trim($x);
+		$selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
+		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
+		$options .= sed_rc($rc, array(
+			'value' => htmlspecialchars($x),
+			'selected' => $selected,
+			'title' => $title
+		));
+	}
+	$rc = empty($R["input_select_{$rc_name}"]) ? 'input_select' : "input_select_{$rc_name}";
+	$result .= sed_rc($rc, array(
+		'name' => $name,
+		'attrs' => $input_attrs,
+		'error' => $error,
+		'options' => $options
+	));
+	return $result;
 }
 
 /**
@@ -189,12 +191,12 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
  */
 function sed_selectbox_countries($chosen, $name)
 {
-    global $sed_countries;
+	global $sed_countries;
 
-    if (!$sed_countries)
-        include_once sed_langfile('countries', 'core');
+	if (!$sed_countries)
+		include_once sed_langfile('countries', 'core');
 
-    return sed_selectbox($chosen, $name, array_keys($sed_countries), array_values($sed_countries));
+	return sed_selectbox($chosen, $name, array_keys($sed_countries), array_values($sed_countries));
 }
 
 /**
@@ -209,53 +211,53 @@ function sed_selectbox_countries($chosen, $name)
  */
 function sed_selectbox_date($utime, $mode, $ext = '', $max_year = 2030, $min_year = 1902)
 {
-    global $L, $R;
-    if ($utime == 0)
-    {
-        list($s_year, $s_month, $s_day, $s_hour, $s_minute) = array(null, null, null, null, null);
-    }
-    else
-    {
-        list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
-    }
-    $months = array();
-    $months[1] = $L['January'];
-    $months[2] = $L['February'];
-    $months[3] = $L['March'];
-    $months[4] = $L['April'];
-    $months[5] = $L['May'];
-    $months[6] = $L['June'];
-    $months[7] = $L['July'];
-    $months[8] = $L['August'];
-    $months[9] = $L['September'];
-    $months[10] = $L['October'];
-    $months[11] = $L['November'];
-    $months[12] = $L['December'];
+	global $L, $R;
+	if ($utime == 0)
+	{
+		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = array(null, null, null, null, null);
+	}
+	else
+	{
+		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = explode('-', @date('Y-m-d-H-i', $utime));
+	}
+	$months = array();
+	$months[1] = $L['January'];
+	$months[2] = $L['February'];
+	$months[3] = $L['March'];
+	$months[4] = $L['April'];
+	$months[5] = $L['May'];
+	$months[6] = $L['June'];
+	$months[7] = $L['July'];
+	$months[8] = $L['August'];
+	$months[9] = $L['September'];
+	$months[10] = $L['October'];
+	$months[11] = $L['November'];
+	$months[12] = $L['December'];
 
-    $result = sed_selectbox($s_year, "ryear$ext", range($min_year, $max_year));
-    $result .= sed_selectbox($s_month, "rmonth$ext", array_keys($months), array_values($months));
-    $result .= sed_selectbox($s_day, "rday$ext", range(1, 31));
+	$result = sed_selectbox($s_year, "ryear$ext", range($min_year, $max_year));
+	$result .= sed_selectbox($s_month, "rmonth$ext", array_keys($months), array_values($months));
+	$result .= sed_selectbox($s_day, "rday$ext", range(1, 31));
 
-    if ($mode == 'short')
-    {
-        return $result;
-    }
+	if ($mode == 'short')
+	{
+		return $result;
+	}
 
-    $range = array();
-    for ($i = 0; $i < 24; $i++)
-    {
-        $range[] = sprintf('%02d', $i);
-    }
-    $result .= sed_selectbox($s_hour, "rhour$ext", $range);
-    $result .= $R['code_time_separator'];
-    $range = array();
-    for ($i = 0; $i < 60; $i++)
-    {
-        $range[] = sprintf('%02d', $i);
-    }
-    $result .= sed_selectbox($s_minute, "rminute$ext", $range);
+	$range = array();
+	for ($i = 0; $i < 24; $i++)
+	{
+		$range[] = sprintf('%02d', $i);
+	}
+	$result .= sed_selectbox($s_hour, "rhour$ext", $range);
+	$result .= $R['code_time_separator'];
+	$range = array();
+	for ($i = 0; $i < 60; $i++)
+	{
+		$range[] = sprintf('%02d', $i);
+	}
+	$result .= sed_selectbox($s_minute, "rminute$ext", $range);
 
-    return $result;
+	return $result;
 }
 
 /**
@@ -267,30 +269,30 @@ function sed_selectbox_date($utime, $mode, $ext = '', $max_year = 2030, $min_yea
  */
 function sed_selectbox_lang($chosen, $name)
 {
-    global $sed_languages, $sed_countries, $cfg;
+	global $sed_languages, $sed_countries, $cfg;
 
-    $handle = opendir($cfg['lang_dir'] . '/');
-    while ($f = readdir($handle))
-    {
-        if ($f[0] != '.')
-        {
-            $langlist[] = $f;
-        }
-    }
-    closedir($handle);
-    sort($langlist);
+	$handle = opendir($cfg['lang_dir'] . '/');
+	while ($f = readdir($handle))
+	{
+		if ($f[0] != '.')
+		{
+			$langlist[] = $f;
+		}
+	}
+	closedir($handle);
+	sort($langlist);
 
-    if (!$sed_countries)
-        include_once sed_langfile('countries', 'core');
+	if (!$sed_countries)
+		include_once sed_langfile('countries', 'core');
 
-    $vals = array();
-    $titles = array();
-    foreach ($langlist as $lang)
-    {
-        $vals[] = $lang;
-        $titles[] = (empty($sed_languages[$lang]) ? $sed_countries[$lang] : $sed_languages[$lang]) . " ($lang)";
-    }
-    return sed_selectbox($chosen, $name, $vals, $titles);
+	$vals = array();
+	$titles = array();
+	foreach ($langlist as $lang)
+	{
+		$vals[] = $lang;
+		$titles[] = (empty($sed_languages[$lang]) ? $sed_countries[$lang] : $sed_languages[$lang]) . " ($lang)";
+	}
+	return sed_selectbox($chosen, $name, $vals, $titles);
 }
 
 /**
@@ -306,19 +308,19 @@ function sed_selectbox_lang($chosen, $name)
  */
 function sed_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 {
-    $input_attrs = sed_rc_attr_string($attrs);
+	$input_attrs = sed_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
-    $rc = empty($custom_rc)
-        ? (empty($R["input_textarea_{$rc_name}"]) ? 'input_textarea' : "input_textarea_{$rc_name}")
-        : $custom_rc;
-    $error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
-    return sed_rc($rc, array(
-        'name' => $name,
-        'value' => htmlspecialchars(sed_import_buffered($name, $value)),
-        'rows' => $rows,
-        'cols' => $cols,
-        'attrs' => $input_attrs,
-        'error' => $error
-    ));
+	$rc = empty($custom_rc)
+		? (empty($R["input_textarea_{$rc_name}"]) ? 'input_textarea' : "input_textarea_{$rc_name}")
+		: $custom_rc;
+	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
+	return sed_rc($rc, array(
+		'name' => $name,
+		'value' => htmlspecialchars(sed_import_buffered($name, $value)),
+		'rows' => $rows,
+		'cols' => $cols,
+		'attrs' => $input_attrs,
+		'error' => $error
+	));
 }
 ?>
