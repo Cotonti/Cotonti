@@ -32,12 +32,12 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
 
     $sql = sed_sql_query("SELECT p.*, u.user_name, user_avatar FROM $db_pages AS p
     LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-    WHERE page_state=0 AND page_cat NOT LIKE 'system'
+    WHERE page_state=0 AND page_cat != 'system'
     AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
     AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$order." ".$way." LIMIT $d, $limit" );
 
     $sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=0
-    AND page_cat NOT LIKE 'system'
+    AND page_cat != 'system'
     AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
     AND page_cat IN ('".implode("','", $catsub)."')");
 
@@ -84,6 +84,7 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
             "PAGE_ROW_TITLE" => $pag['page_fulltitle'],
             "PAGE_ROW_SHORTTITLE" => htmlspecialchars($pag['page_title']),
             "PAGE_ROW_CAT" => $pag['page_cat'],
+			"PAGE_ROW_CATURL" => sed_url('list', 'c=' . $pag['page_cat']),
             "PAGE_ROW_CATTITLE" => htmlspecialchars($sed_cat[$pag['page_cat']]['title']),
             "PAGE_ROW_CATPATH" => $catpath,
             "PAGE_ROW_CATDESC" => htmlspecialchars($sed_cat[$pag['page_cat']]['desc']),
