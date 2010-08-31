@@ -57,7 +57,10 @@ while($row = sed_sql_fetcharray($sql))
 	$hits_d[$dat] = $row['stat_value'];
 }
 
-$hits_d_max = max($hits_d);
+if (is_array($hits_d))
+{
+	$hits_d_max = max($hits_d);
+}
 
 $sql = sed_sql_query("SHOW TABLES");
 
@@ -84,16 +87,19 @@ $totalplugins = sed_sql_numrows($sql);
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_plugins");
 $totalhooks = sed_sql_result($sql, 0, "COUNT(*)");
 
-foreach($hits_d as $day => $hits)
+if (is_array($hits_d))
 {
-	$percentbar = floor(($hits / $hits_d_max) * 100);
-	$t -> assign(array(
-		'ADMINQV_DAY' => $day,
-		'ADMINQV_HITS' => $hits,
-		'ADMINQV_PERCENTBAR' => $percentbar
-	));
-	$t -> parse('ADMINQV.ADMINQV_ROW');
-}
+	foreach($hits_d as $day => $hits)
+	{
+		$percentbar = floor(($hits / $hits_d_max) * 100);
+		$t -> assign(array(
+			'ADMINQV_DAY' => $day,
+			'ADMINQV_HITS' => $hits,
+			'ADMINQV_PERCENTBAR' => $percentbar
+		));
+		$t -> parse('ADMINQV.ADMINQV_ROW');
+	}
+	}
 
 //Version Checking
 if ($cfg['check_updates'])
