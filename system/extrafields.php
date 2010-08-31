@@ -11,63 +11,73 @@
  */
 function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 {
-	global $L;
+	global $L, $R;
 	$inputname = ($importnew) ? 'new' : 'r';
 	$inputname .= $rowname.$extrafield['field_name'];
 
-	$t2 = $extrafield['field_html'];
 	switch($extrafield['field_type'])
 	{
 		case "input":
-			$t2 = str_replace('<input ', '<input name="'.$inputname.'" ', $t2);
-			$t2 = str_replace('<input ', '<input value="'.htmlspecialchars($data).'" ', $t2);
+			$R["input_text_{$inputname}"] = (!empty($R["input_text_{$inputname}"])) ? $R["input_text_{$inputname}"] : $extrafield['field_html'];
+			$result = sed_inputbox('text', $inputname, htmlspecialchars($data));
 			break;
 
 		case "textarea":
-			$t2 = str_replace('<textarea ', '<textarea name="'.$inputname.'" ', $t2);
-			$t2 = str_replace('</textarea>', htmlspecialchars($data).'</textarea>', $t2);
+			$R["input_textarea_{$inputname}"] =(!empty($R["input_textarea_{$inputname}"])) ? $R["input_textarea_{$inputname}"] : $extrafield['field_html'];
+			$result = sed_textarea($inputname, htmlspecialchars($data), 4, 56);
 			break;
 
 		case "select":
-			$t2 = str_replace('<select', '<select name="'.$inputname.'"', $t2);
-			$options = "";
+			$R["input_select_{$inputname}"] = (!empty($R["input_select_{$inputname}"])) ? $R["input_select_{$inputname}"] : $extrafield['field_html'];
 			$opt_array = explode(",", $extrafield['field_variants']);
-			if (count($opt_array) > 0)
+			$ii = 0;
+			foreach ($opt_array as $var)
 			{
-				foreach ($opt_array as $var)
-				{
-					$var_text = (!empty($L[$rowname.'_'.$extrafield['field_name'].'_'.$var])) ? $L[$rowname.'_'.$extrafield['field_name'].'_'.$var] : $var;
-					$sel = (trim($var) == trim($data)) ? ' selected="selected"' : '';
-					$options .= '<option value="'.$var.'" '.$sel.'>'.$var_text.'</option>';
-				}
+				$ii++;
+				$options_titles[$ii] = (!empty($L[$rowname.'_'.$extrafield['field_name'].'_'.$var])) ? $L[$rowname.'_'.$extrafield['field_name'].'_'.$var] : $var;
+				$options_values[$ii] .= trim($var);
 			}
-			$t2 = str_replace('</select>', $options.'</select>', $t2);
+			$result = sed_selectbox(trim($data), $inputname, $options_values, $options_titles, false);
 			break;
 
 		case "checkbox":
-			$t2 = str_replace('<input', '<input name="'.$inputname.'"', $t2);
-			$sel = ($data == 1) ? ' checked="checked"' : '';
-			$t2 = str_replace('<input ', '<input value="on" '.$sel.' ', $t2);
+			$R["input_checkbox_{$inputname}"] = (!empty($R["input_checkbox_{$inputname}"])) ? $R["input_checkbox_{$inputname}"] : $extrafield['field_html'];
+			$result = sed_checkbox($data, $inputname, $extrafield['field_description']);
 			break;
 
 		case "radio":
-
-			$t2 = str_replace('<input', '<input name="'.$inputname.'"', $t2);
-			$options = "";
+			$R["input_radio_{$inputname}"] = (!empty($R["input_radio_{$inputname}"])) ? $R["input_radio_{$inputname}"] :  $extrafield['field_html'];
 			$opt_array = explode(",", $extrafield['field_variants']);
 			if (count($opt_array) > 0)
 			{
+				$ii = 0;
 				foreach ($opt_array as $var)
 				{
-					$var_text = (!empty($L[$rowname.'_'.$extrafield['field_name'].'_'.$var])) ? $L[$rowname.'_'.$extrafield['field_name'].'_'.$var] : $var;
-					$sel = (trim($var) == trim($data)) ? ' checked="checked"' : '';
-					$options .= str_replace('/>', 'value="'.$var.'"'.$sel.' />'.$var_text.'&nbsp;&nbsp;', $t2);
+					$ii++;
+					$options_titles[$ii] = (!empty($L[$rowname.'_'.$extrafield['field_name'].'_'.$var])) ? $L[$rowname.'_'.$extrafield['field_name'].'_'.$var] : $var;
+					$options_values[$ii] .= trim($var);
 				}
 			}
-			$t2 = $options;
+			$result = sed_radiobox(trim($data), $inputname, $options_values, $options_titles);
 			break;
 	}
-	return $t2;
+	return $result;
+}
+
+/**
+ * Imports Extra fields data
+ *
+ * @param string $rowname Post/SQL/Lang row
+ * @param array $extrafields Extra fields data
+ * @param string $data Existing data for fields
+ * @param bool $importnew Import type new
+ * @return string
+ */
+function sed_import_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
+{
+	$inputname = ($importnew) ? 'new' : 'r';
+	$inputname .= $rowname.$extrafield['field_name'];
+	return '';
 }
 
 /**

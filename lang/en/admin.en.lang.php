@@ -797,6 +797,9 @@ $L['adm_extrafield_removed'] = 'Successfully removed extra field.';
 $L['adm_extrafield_not_removed'] = 'Error! Extra field not deleted.';
 $L['adm_extrafield_confirmdel'] = 'Really delete this extra field? All data in this field will be lost!';
 $L['adm_extrafield_confirmupd'] = 'Really update this extra field? Some data in this field may be lost!';
+$L['adm_extrafield_default'] = 'Default value';
+$L['adm_extrafield_required'] = 'Required field';
+$L['adm_extrafield_parse'] = 'Parse';
 
 $L['extf_Name'] = 'Name';
 $L['extf_Type'] = 'Type of field';

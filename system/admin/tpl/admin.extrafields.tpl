@@ -25,11 +25,17 @@
 				</td>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
 					{ADMIN_EXTRAFIELDS_ROW_SELECT}
+                    <p class="small">{PHP.L.adm_extrafield_parse}</p>
+					{ADMIN_EXTRAFIELDS_ROW_PARSE}
+                    <p class="small">{ADMIN_EXTRAFIELDS_ROW_REQUIRED}{PHP.L.adm_extrafield_required}</p>
+
 				</td>
 				<td class="{ADMIN_EXTRAFIELDS_ODDEVEN}">
 					{ADMIN_EXTRAFIELDS_ROW_HTML}
                     <p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
 					{ADMIN_EXTRAFIELDS_ROW_VARIANTS}
+                    <p class="small">{PHP.L.adm_extrafield_default}</p>
+					{ADMIN_EXTRAFIELDS_ROW_DEFAULT}
 				</td>
 				<td class="centerall {ADMIN_EXTRAFIELDS_ODDEVEN}">
 					
@@ -85,11 +91,16 @@
 					</td>
 					<td>
 						{ADMIN_EXTRAFIELDS_SELECT}
+						                  <p class="small">{PHP.L.adm_extrafield_parse}</p>
+					{ADMIN_EXTRAFIELDS_PARSE}
+                    <p class="small">{ADMIN_EXTRAFIELDS_REQUIRED}{PHP.L.adm_extrafield_required}</p>
 					</td>
 					<td>
 						{ADMIN_EXTRAFIELDS_HTML}
 						<p class="small">{PHP.L.adm_extrafield_selectable_values}</p>
 						{ADMIN_EXTRAFIELDS_VARIANTS}
+						                    <p class="small">{PHP.L.adm_extrafield_default}</p>
+					{ADMIN_EXTRAFIELDS_DEFAULT}
 					</td>
 				</tr>
 				<tr>

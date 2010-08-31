@@ -20,8 +20,8 @@ defined('SED_CODE') or die('Wrong URL');
 sed_dieifdisabled($cfg['disable_page']);
 
 // Environment setup
-define('SED_FORUMS', TRUE);
-$location = 'Forums';
+define('SED_PAGES', TRUE);
+$location = 'Pages';
 
 // Additional API requirements
 sed_require_api('extrafields');
