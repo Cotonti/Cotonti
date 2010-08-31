@@ -443,3 +443,11 @@ UPDATE `sed_extra_fields` SET field_html = '<textarea name="{$name}" rows="{$row
 UPDATE `sed_extra_fields` SET field_html = '<select name="{$name}"{$attrs}>{$options}</select>{$error}' WHERE field_html LIKE '%select%';
 UPDATE `sed_extra_fields` SET field_html = '<label><input type="checkbox" class="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>' WHERE field_html LIKE '%type="checkbox"%';
 UPDATE `sed_extra_fields` SET field_html = '<label><input type="radio" class="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>' WHERE field_html LIKE '%type="radio"%';
+
+/* r1297 Index polls sql delete and extrafields upd */
+UPDATE `sed_extra_fields` SET field_location = 'users' WHERE field_location = 'sed_users';
+UPDATE `sed_extra_fields` SET field_location = 'pages' WHERE field_location = 'sed_pages';
+
+DELETE FROM `sed_auth` WHERE auth_option = 'indexpolls';
+DELETE FROM `sed_config` WHERE config_cat = 'indexpolls';
+DELETE FROM `sed_plugins` WHERE pl_code = 'indexpolls';

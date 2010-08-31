@@ -393,29 +393,30 @@ function sed_trash_restore($id)
  * @return string
  *
  */
-function get_default_html_construction($type)
+function sed_default_html_construction($type)
 {
+	global $R;
 	$html = '';
 	switch($type)
 	{
 		case 'input':
-			$html = '<input class="text" type="text" maxlength="255" size="56" />';
+			$html = $R['input_text'];
 			break;
 
 		case 'textarea':
-			$html = '<textarea cols="80" rows="6" ></textarea>';
+			$html = $R['input_textarea'];
 			break;
 
 		case 'select':
-			$html = '<select></select>';
+			$html = $R['input_select'];
 			break;
 
 		case 'checkbox':
-			$html = '<input type="checkbox" />';
+			$html = $R['input_checkbox'];
 			break;
 
 		case 'radio':
-			$html = '<input type="radio" />';
+			$html = $R['input_radio'];
 			break;
 	}
 	return $html;
@@ -424,20 +425,23 @@ function get_default_html_construction($type)
 /**
  * Add extra field for pages
  *
- * @param string $sql_table Table for adding extrafield (without sed_)
+ * @param string $location Table for adding extrafield
  * @param string $name Field name (unique)
  * @param string $type Field type (input, textarea etc)
- * @param string $html HTML display of element without parameter "name="
+ * @param string $html HTML Resource string
  * @param string $variants Variants of values (for radiobuttons, selectors etc)
+ * @param string $default Default value
+ * @param bool $required Required field
+ * @param string $parse Parsing Type (HTML, BBCodes)
  * @param string $description Description of field (optional, for admin)
  * @param bool $noalter Do not ALTER the table, just register the extra field
  * @return bool
  *
  */
-function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $description="", $noalter = FALSE)
+function sed_extrafield_add($location, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $noalter = false)
 {
-	global $db_extra_fields, $db_x;
-	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$sql_table'");
+	global $db_extra_fields;
+	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$location'");
 	while($row = sed_sql_fetchassoc($fieldsres))
 	{
 		$extrafieldsnames[] = $row['field_name'];
@@ -445,27 +449,32 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
 
 	// Check table sed_$sql_table - if field with same name exists - exit.
-	if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table LIKE '%\_$name'")) > 0 && !$noalter)
+	if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0 && !$noalter)
 	{
-		return FALSE;
+		return false;
 	}
-	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table");
+	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $location");
 	while ($fieldrow = sed_sql_fetchassoc($fieldsres))
 	{
 		$column = $fieldrow['Field'];
 		// get column prefix in this table
 		$column_prefix = substr($column, 0, strpos($column, "_"));
+		
 		preg_match("#.*?_$name$#",$column,$match);
 		if($match[1]!="" && !$noalter) return false; // No adding - fields already exist
 		$i++;
 	}
 
-	$extf['location'] = $sql_table;
+	$extf['location'] = $location;
 	$extf['name'] = $name;
 	$extf['type'] = $type;
 	$extf['html'] = $html;
-	$extf['variants'] = $variants;
-	$extf['description'] = $description;
+	$extf['variants'] = is_null($variants) ? '' : $variants;
+	$extf['default'] = is_null($default) ? '' : $default;
+	$extf['required'] = ($required > 0) ? 1 : 0;
+	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
+	$extf['description'] = is_null($description) ? '' : $description;
+	
 	$step1 = sed_sql_insert($db_extra_fields, $extf, 'field_') == 1;
 	if ($noalter)
 	{
@@ -484,59 +493,65 @@ function sed_extrafield_add($sql_table, $name, $type, $html, $variants="", $desc
 		case 'radio': $sqltype = "VARCHAR(255)";
 			break;
 	}
-	$sql = "ALTER TABLE $db_x$sql_table ADD ".$column_prefix."_$name $sqltype ";
+	$sql = "ALTER TABLE $location ADD ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
-	return $step1&&$step2;
+	return $step1 && $step2;
 }
 
 /**
  * Update extra field for pages
  *
- * @param string $sql_table Table contains extrafield (without sed_)
+ * @param string $location Table contains extrafield
  * @param string $oldname Exist name of field
  * @param string $name Field name (unique)
- * @param string $type Field type (input, textarea etc)
- * @param string $html HTML display of element without parameter "name="
+ * @param string $html HTML Resource string
+ * @param string $variants Variants of values (for radiobuttons, selectors etc)
+ * @param string $default Default value
+ * @param bool $required Required field
+ * @param string $parse Parsing Type (HTML, BBCodes)
+ * @param string $html HTML Resource string
  * @param string $variants Variants of values (for radiobuttons, selectors etc)
  * @param string $description Description of field (optional, for admin)
  * @return bool
  *
  */
-function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $variants="", $description="")
+function sed_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="")
 {
-	global $db_extra_fields, $db_x;
+	global $db_extra_fields;
 	$fieldsres = sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields
-			WHERE field_name = '$oldname' AND field_location='$sql_table'");
+			WHERE field_name = '$oldname' AND field_location='$location'");
 	if (sed_sql_numrows($fieldsres) <= 0
 		|| $name != $oldname
-		&& sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table LIKE '%\_$name'")) > 0)
+		&& sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0)
 	{
 		// Attempt to edit non-extra field or override an existing field
-		return FALSE;
+		return false;
 	}
 	$field = sed_sql_fetchassoc($fieldsres);
-	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table");
+	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $location");
 	$fieldrow = sed_sql_fetchassoc($fieldsres);
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
-	$alter = FALSE;
+	$alter = false;
 	if ($name != $field['field_name'])
 	{
 		$extf['name'] = $name;
-		$alter = TRUE;
+		$alter = true;
 	}
 	if ($type != $field['field_type'])
 	{
 		$extf['type'] = $type;
-		$alter = TRUE;
+		$alter = true;
 	}
-	if ($html != $field['field_html'])
-		$extf['html'] = $html;
-	if ($variants != $field['field_variants'])
-		$extf['variants'] = $variants;
-	if ($description != $field['field_description'])
-		$extf['description'] = $description;
-	$step1 = sed_sql_update($db_extra_fields, "field_name = '$oldname' AND field_location='$sql_table'", $extf, 'field_') == 1;
+
+	$extf['html'] = $html;
+	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
+	$extf['variants'] = is_null($variants) ? '' : $variants;
+	$extf['default'] = is_null($default) ? '' : $default;
+	$extf['required'] = ($required > 0) ? 1 : 0;
+	$extf['description'] = is_null($description) ? '' : $description;
+
+	$step1 = sed_sql_update($db_extra_fields, "field_name = '$oldname' AND field_location='$location'", $extf, 'field_') == 1;
 
 	if (!$alter) return $step1;
 
@@ -553,37 +568,37 @@ function sed_extrafield_update($sql_table, $oldname, $name, $type, $html, $varia
 		case 'radio': $sqltype = "VARCHAR(255)";
 			break;
 	}
-	$sql = "ALTER TABLE $db_x$sql_table CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
+	$sql = "ALTER TABLE $location CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
 	$step2 = sed_sql_query($sql);
 
-	return $step1&&$step2;
+	return $step1 && $step2;
 }
 
 /**
  * Delete extra field
  *
- * @param string $sql_table Table contains extrafield (without sed_)
+ * @param string $location Table contains extrafield
  * @param string $name Name of extra field
  * @return bool
  *
  */
-function sed_extrafield_remove($sql_table, $name)
+function sed_extrafield_remove($location, $name)
 {
-	global $db_extra_fields, $db_x;
+	global $db_extra_fields;
 	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields
-		WHERE field_name = '$name' AND field_location='$sql_table'"), 0, 0) <= 0)
+		WHERE field_name = '$name' AND field_location='$location'"), 0, 0) <= 0)
 	{
 		// Attempt to remove non-extra field
-		return FALSE;
+		return false;
 	}
-	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $db_x$sql_table");
+	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $location");
 	$fieldrow = sed_sql_fetchassoc($fieldsres);
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
-	$step1 = sed_sql_delete($db_extra_fields, "field_name = '$name' AND field_location='$sql_table'") == 1;
-	$sql = "ALTER TABLE $db_x$sql_table DROP ".$column_prefix."_".$name;
+	$step1 = sed_sql_delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
+	$sql = "ALTER TABLE $location DROP ".$column_prefix."_".$name;
 	$step2 = sed_sql_query($sql);
-	return $step1&&$step2;
+	return $step1 && $step2;
 }
 
 /**

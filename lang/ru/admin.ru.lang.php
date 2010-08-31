@@ -772,6 +772,9 @@ $L['adm_extrafield_removed'] = 'Поле удалено';
 $L['adm_extrafield_not_removed'] = 'Ошибка! Поле не удалено';
 $L['adm_extrafield_confirmdel'] = 'Вы действительно хотите удалить поле? Все данные этого поля будут потеряны!';
 $L['adm_extrafield_confirmupd'] = 'Вы действительно хотите редактировать поле? Некоторые данные этого поля могут быть потеряны.';
+$L['adm_extrafield_default'] = 'Значение по умолчанию';
+$L['adm_extrafield_required'] = 'Обязательное';
+$L['adm_extrafield_parse'] = 'Парсинг';
 
 $L['extf_Name'] = 'Название поля';
 $L['extf_Type'] = 'Тип поля';
