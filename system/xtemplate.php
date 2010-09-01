@@ -4,7 +4,7 @@
  * written specially for Cotonti.
  *
  * @package Cotonti
- * @version 2.2
+ * @version 2.2.1
  * @author Vladimir Sibirov a.k.a. Trustmaster
  * @copyright Copyright (c) Cotonti Team 2009-2010
  * @license BSD
@@ -27,6 +27,11 @@ class XTemplate
 	 * @var string Template file name
 	 */
 	public $filename = '';
+
+	/**
+	 * @var bool Indicates that root-level blocks were found during another run
+	 */
+	private $found = false;
 
 	/**
 	 * Simplified constructor
@@ -137,6 +142,34 @@ class XTemplate
 	}
 
 	/**
+	 * restart() replace callback for FILE inclusion
+	 *
+	 * @param array $m PCRE matches
+	 * @return string
+	 */
+	private static function restart_include_files($m)
+	{
+		if (preg_match('`\.tpl$`i', $m[2]) && file_exists($m[2]))
+			return file_get_contents($m[2]);
+		else return $m[0];
+	}
+
+	/**
+	 * restart() replace callback for root-level blocks
+	 *
+	 * @param array $m PCRE matches
+	 * @return string
+	 */
+	private function restart_root_blocks($m)
+	{
+		$name = $m[1];
+		$bdata = trim($m[2], " \r\n\t");
+		$this->blocks[$name] = new Xtpl_block($bdata);
+		$this->found = true;
+		return '';
+	}
+
+	/**
 	 * Loads template file structure into memory
 	 *
 	 * @param string $path Template file path
@@ -158,18 +191,15 @@ class XTemplate
 			// Remove BOM if present
 			if ($data[0] == chr(0xEF) && $data[1] == chr(0xBB) && $data[2] == chr(0xBF)) $data = mb_substr($data, 0);
 			// FILE includes
-			if (preg_match_all('`\{FILE\s+("|\')?(.+?)\\1\}`', $data, $mt, PREG_SET_ORDER))
-				foreach ($mt as $m)
-					if (preg_match('`\.tpl$`i', $m[2]) && file_exists($m[2]))
-						$data = str_replace($m[0], file_get_contents($m[2]), $data);
+			$data = preg_replace_callback('`\{FILE\s+("|\'|)(.+?)\1\}`', 'XTemplate::restart_include_files', $data);
 			// Get root-level blocks
-			while (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s', $data, $mt))
+			do
 			{
-				$name = $mt[1];
-				$bdata = trim($mt[2], " \r\n\t");
-				$this->blocks[$name] = new Xtpl_block($bdata);
-				$data = str_replace($mt[0], '', $data);
-			}
+				$this->found = false;
+				$data = preg_replace_callback('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s',
+					array($this, 'restart_root_blocks'), $data);
+			} while($this->found);
+
 			if ($cfg['xtpl_cache'])
 			{
 				if (is_writeable($cfg['cache_dir'] . '/templates/'))
@@ -206,6 +236,17 @@ class XTemplate
 		else $path = array();
 		if (is_object($this->blocks[$block])) $this->blocks[$block]->parse($this, $path);
 		//else throw new Exception("Block $block is not found in " . $this->filename);
+	}
+
+	/**
+	 * PCRE replace callback for Xtpl_data::text()
+	 *
+	 * @param array $m PCRE match
+	 * @return string
+	 */
+	public function replace_var($m)
+	{
+		return $this->get_var($m[1]);
 	}
 
 	/**
@@ -304,8 +345,7 @@ class Xtpl_data
 					$data = mb_substr($data, 0, $p1) . mb_substr($data, $p3 + 14);
 			}
 		}
-		if (preg_match_all('`\{([\w_.]+)\}`', $data, $mt, PREG_SET_ORDER))
-			foreach ($mt as $m) $data = str_replace($m[0], $xtpl->get_var($m[1]), $data);
+		$data = preg_replace_callback('`\{([\w_.]+)\}`', array($xtpl, 'replace_var'), $data);
 		return $data;
 	}
 
@@ -340,6 +380,31 @@ class Xtpl_block
 	public $blocks = array();
 
 	/**
+	 * @var bool Indicates that root-level blocks were found during another run
+	 */
+	private $found = false;
+
+	/**
+	 * __construct() replace callback for root-level blocks
+	 *
+	 * @param array $m PCRE matches
+	 * @return string
+	 */
+	private function construct_blocks($m)
+	{
+		// Save plain data
+		$chunk = trim($m[1], " \r\n\t");
+		if (!empty($chunk)) $this->blocks[] = new Xtpl_data($chunk);
+		// Get a nested block
+		$name = $m[2];
+		$bdata = trim($m[3], " \r\n\t");
+		// Create block object and link to it
+		$this->blocks[$name] = new Xtpl_block($bdata);
+		$this->found = true;
+		return '';
+	}
+
+	/**
 	 * Block constructor
 	 *
 	 * @param array $blk Reference to XTemplate blocks hashtable
@@ -349,29 +414,16 @@ class Xtpl_block
 	public function __construct($data)
 	{
 		// Split the data into nested blocks
-		while (!empty($data))
+		do
 		{
-			if (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s', $data, $mt))
-			{
-				// Save plain data
-				$pos = mb_strpos($data, $mt[0]);
-				$chunk = trim(mb_substr($data, 0, $pos), " \r\n\t");
-				$data = mb_substr($data, $pos);
-				if (!empty($chunk)) $this->blocks[] = new Xtpl_data($chunk);
-				// Get a nested block
-				$name = $mt[1];
-				$bdata = trim($mt[2], " \r\n\t");
-				// Create block object and link to it
-				$this->blocks[$name] = new Xtpl_block($bdata);
-				// Procceed with less data
-				$data = str_replace($mt[0], '', $data);
-				$data = trim($data, " \r\n\t");
-			}
-			else
-			{
-				$this->blocks[] = new Xtpl_data($data);
-				break;
-			}
+			$this->found = false;
+			$data = preg_replace_callback('`^(.*?)<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\2\s*-->`s',
+				array($this, 'construct_blocks'), $data);
+		} while ($this->found);
+		$data = trim($data, " \r\n\t");
+		if (!empty($data))
+		{
+			$this->blocks[] = new Xtpl_data($data);
 		}
 	}
 

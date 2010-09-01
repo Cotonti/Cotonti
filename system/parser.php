@@ -624,85 +624,28 @@ function sed_cutpost($text, $max_chars, $parse_bbcodes = true)
 }
 
 /**
- * Truncates a string
- *
- * @param string $res Source string
- * @param int $l Length
- * @return unknown
- */
-function sed_cutstring($res, $l)
-{
-	global $cfg;
-	if (mb_strlen($res)>$l)
-	{
-		$res = mb_substr($res, 0, ($l-3)).'...';
-	}
-	return $res;
-}
-
-/**
  * Load smilies from current pack
  */
 function sed_load_smilies()
 {
 	global $sed_smilies;
-	$sed_smilies = array();
-	if (!file_exists('./images/smilies/set.js')) return;
 
-	// A simple JSON parser and decoder
-	$json = '';
-	$started = false;
-	$fp = fopen('./images/smilies/set.js', 'r');
-	$i = -1;
-	$prio = array();
-	$code = array();
-	$file = array();
-	while (!feof($fp))
+	function sed_smcp($sm1, $sm2)
 	{
-		$line = fgets($fp);
-		if ($line == '];') break;
-		if ($started)
-		{
-			$line = trim($line, " \t\r\n");
-			if ($line == '{')
-			{
-				$i++;
-			}
-			elseif ($line != '},')
-			{
-				if (preg_match('#^(\w+)\s*:\s*"?(.+?)"?,?$#', $line, $m))
-				{
-					switch($m[1])
-					{
-						case 'prio':
-							$prio[$i] = intval($m[2]);
-							break;
-						case 'code':
-							$code[$i] = str_replace('\\\\', '\\', $m[2]);
-							break;
-						case 'file':
-							$file[$i] = $m[2];
-							break;
-					}
-				}
-			}
-		}
-		elseif (mb_strpos($line, 'smileSet') !== false)
-		{
-			$started = true;
-		}
+		if ($sm1['prio'] == $sm2['prio']) return 0;
+		else return $sm1['prio'] > $sm2['prio'] ? 1 : -1;
 	}
-	fclose($fp);
 
-	// Sort the result
-	array_multisort($prio, SORT_ASC, $code, $file);
-	$cnt = count($code);
-	for ($i = 0; $i < $cnt; $i++)
+	
+	$sed_smilies = array();
+
+	if (file_exists('./images/smilies/set.js')
+		&& preg_match('#var\s*smileSet\s*=\s*(\[.*?\n\]);#s', file_get_contents('./images/smilies/set.js'), $mt))
 	{
-		$sed_smilies[$i] = array(
-				'code' => $code[$i],
-				'file' => $file[$i]
-		);
+		$js = str_replace(array("\r", "\n"), '', $mt[1]);
+		$js = preg_replace('#(smileL\.\w+)#', '"$1"', $js);
+		$sed_smilies = json_decode($js, true);
+		usort($sed_smilies, 'sed_smcp');
 	}
 }
 
