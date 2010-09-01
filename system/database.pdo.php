@@ -322,32 +322,61 @@ function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
 {
 	global $sed_dbc;
 	$conn = is_null($conn) ? $sed_dbc : $conn;
-	if(!is_array($data))
+	if (!is_array($data))
 	{
 		return 0;
 	}
 	$keys = '';
 	$vals = '';
-	foreach($data as $key => $val)
+	// Check the array type
+	$arr_keys = array_keys($data);
+	$multiline = is_numeric($arr_keys[0]);
+	// Build the query
+	if ($multiline)
 	{
-		$keys .= "`{$prefix}$key`,";
-		if(is_null($val))
+		$rowset = &$data;
+	}
+	else
+	{
+		$rowset = array($data);
+	}
+	$keys_built = false;
+	$cnt = count($rowset);
+	for ($i = 0; $i < $cnt; $i++)
+	{
+		$vals .= ($i > 0) ? ',(' : '(';
+		$j = 0;
+		if (is_array($rowset[$i]))
 		{
-			$vals .= 'NULL,';
+			foreach ($rowset[$i] as $key => $val)
+			{
+				if (is_null($val))
+				{
+					continue;
+				}
+				if ($j > 0) $vals .= ',';
+				if (!$keys_built)
+				{
+					if ($j > 0) $keys .= ',';
+					$keys .= "`{$prefix}$key`";
+				}
+				if ($val === 'NOW()')
+				{
+					$vals .= 'NOW()';
+				}
+				elseif (is_int($val) || is_float($val))
+				{
+					$vals .= $val;
+				}
+				else
+				{
+					$vals .= $conn->quote($val);
+				}
+				$j++;
+			}
 		}
-		elseif($val === 'NOW()')
-		{
-			$vals .= 'NOW(),';
-		}
-		elseif(is_int($val) || is_float($val))
-		{
-			$vals .= $val.',';
-		}
-		else
-		{
-			$vals .= $conn->quote($val).",";
-		}
-
+		$vals .= ')';
+		$keys_built = true;
 	}
 	if(!empty($keys) && !empty($vals))
 	{
@@ -394,7 +423,7 @@ function sed_sql_delete($table_name, $condition = '', $conn = null)
  * @param string $condition Body of SQL WHERE clause
  * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key
  * @param bool $update_null Nullify cells which have null values in the array. By default they are skipped
- * @param resource $conn Custom connection handle
+ * @param PDO $conn Custom connection handle
  * @return int The number of affected records
  */
 function sed_sql_update($table_name, $data, $condition, $prefix = '', $update_null = false, $conn = null)

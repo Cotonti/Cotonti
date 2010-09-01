@@ -368,17 +368,17 @@ function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
 		{
 			foreach ($rowset[$i] as $key => $val)
 			{
+				if (is_null($val))
+				{
+					continue;
+				}
 				if ($j > 0) $vals .= ',';
 				if (!$keys_built)
 				{
 					if ($j > 0) $keys .= ',';
 					$keys .= "`{$prefix}$key`";
 				}
-				if (is_null($val))
-				{
-					$vals .= 'NULL';
-				}
-				elseif ($val === 'NOW()')
+				if ($val === 'NOW()')
 				{
 					$vals .= 'NOW()';
 				}
