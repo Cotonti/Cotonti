@@ -390,13 +390,14 @@ function sed_sql_delete($table_name, $condition = '', $conn = null)
  * The number of affected records is returned.
  *
  * @param string $table_name Table name
+ * @param array $data Associative array containing data for update
  * @param string $condition Body of SQL WHERE clause
- * @param array $data Associative array containing data for insertion.
- * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key.
- * @param PDO $conn Custom connection handle
- * @return int
+ * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key
+ * @param bool $update_null Nullify cells which have null values in the array. By default they are skipped
+ * @param resource $conn Custom connection handle
+ * @return int The number of affected records
  */
-function sed_sql_update($table_name, $condition, $data, $prefix = '', $conn = null)
+function sed_sql_update($table_name, $data, $condition, $prefix = '', $update_null = false, $conn = null)
 {
 	global $sed_dbc;
 	$conn = is_null($conn) ? $sed_dbc : $conn;
@@ -406,10 +407,14 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '', $conn = nu
 	}
 	$upd = '';
 	$condition = empty($condition) ? '' : 'WHERE '.$condition;
-	foreach($data as $key => $val)
+	foreach ($data as $key => $val)
 	{
+		if (is_null($val) && !$update_null)
+		{
+			continue;
+		}
 		$upd .= "`{$prefix}$key`=";
-		if(is_null($val))
+		if (is_null($val))
 		{
 			$upd .= 'NULL,';
 		}
