@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				sed_error(sed_rc('install_error_missing_file', array('file' => $file['sql'])));
 			}
-			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.1.0', '>='))
+			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.2.0', '>='))
 			{
 				sed_error(sed_rc('install_error_php_ver', array('ver' => PHP_VERSION)));
 			}
@@ -433,7 +433,7 @@ switch ($step)
 		{
 			$status['sql_file'] = $R['install_code_not_found'];
 		}
-		$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>='))
+		$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.2.0', '>='))
 			? sed_rc('install_code_valid', array('text' =>
 				sed_rc('install_ver_valid', array('ver' => PHP_VERSION))))
 			: sed_rc('install_code_invalid', array('text' =>

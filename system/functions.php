@@ -14,7 +14,7 @@ defined('SED_CODE') or die('Wrong URL');
 // System requirements check
 if (!defined('SED_INSTALL'))
 {
-	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.1.0', '>=')) or die('Cotonti system requirements: PHP 5.1 or above.'); // TODO: Need translate
+	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.2.0', '>=')) or die('Cotonti system requirements: PHP 5.2 or above.'); // TODO: Need translate
 	extension_loaded('mbstring') or die('Cotonti system requirements: mbstring PHP extension must be loaded.'); // TODO: Need translate
 }
 
@@ -51,31 +51,6 @@ if (!isset($cfg['dir_perms']))
 	$cfg['dir_perms'] = 0777;
 }
 
-// For compatibility with PHP < 5.2
-
-if (PHP_VERSION < '5.2.0')
-{
-	function mb_stripos($haystack, $needle, $offset = 0)
-	{
-		return stripos($haystack, $needle, $offset);
-	}
-
-	function mb_stristr($haystack, $needle)
-	{
-		return stristr($haystack, $needle);
-	}
-
-	function mb_strripos($haystack, $needle, $offset = 0)
-	{
-		return strripos($haystack, $needle, $offset);
-	}
-
-	function mb_strstr($haystack, $needle)
-	{
-		return strstr($haystack, $needle);
-	}
-}
-
 /*
  * =========================== System Functions ===============================
  */
@@ -89,6 +64,23 @@ if (PHP_VERSION < '5.2.0')
 function sed_alphaonly($text)
 {
 	return(preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
+}
+
+/**
+ * Truncates a string
+ *
+ * @param string $res Source string
+ * @param int $l Length
+ * @return unknown
+ */
+function sed_cutstring($res, $l)
+{
+	global $cfg;
+	if (mb_strlen($res)>$l)
+	{
+		$res = mb_substr($res, 0, ($l-3)).'...';
+	}
+	return $res;
 }
 
 /**
