@@ -551,7 +551,7 @@ function sed_extrafield_update($location, $oldname, $name, $type, $html, $varian
 	$extf['required'] = ($required > 0) ? 1 : 0;
 	$extf['description'] = is_null($description) ? '' : $description;
 
-	$step1 = sed_sql_update($db_extra_fields, "field_name = '$oldname' AND field_location='$location'", $extf, 'field_') == 1;
+	$step1 = sed_sql_update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'", 'field_') == 1;
 
 	if (!$alter) return $step1;
 

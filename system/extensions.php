@@ -317,9 +317,8 @@ function sed_extension_install($name, $is_module = false, $update = false)
 	{
 		// Only update auth locks
 		$lock_guests = sed_auth_getvalue($info['Lock_guests']);
-		sed_sql_update($db_auth, 'auth_groupid = ' . COT_GROUP_GUESTS
-				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE,
-			array('rights_lock' => $lock_guests), 'auth_');
+		sed_sql_update($db_auth, array('rights_lock' => $lock_guests), 'auth_groupid = ' . COT_GROUP_GUESTS
+				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE, 'auth_');
 
 		$lock_members = sed_auth_getvalue($info['Lock_members']);
 		$ingore_groups = implode(',', array(
@@ -328,8 +327,8 @@ function sed_extension_install($name, $is_module = false, $update = false)
 			COT_GROUP_BANNED,
 			COT_GROUP_SUPERADMINS
 		));
-		sed_sql_update($db_auth, "auth_groupid NOT IN ($ingore_groups)",
-			array('rights_lock' => $lock_members), 'auth_');
+		sed_sql_update($db_auth, array('rights_lock' => $lock_members),
+			"auth_groupid NOT IN ($ingore_groups)", 'auth_');
 
 		sed_message('ext_auth_locks_updated');
 	}
@@ -391,7 +390,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		}
 		if (sed_sql_insert($db_auth, $insert_rows, 'auth_'))
 		{
-			sed_sql_update($db_users, '1', array('auth' => ''), 'user_');
+			sed_sql_update($db_users, array('auth' => ''), '1', 'user_');
 			sed_message('ext_auth_installed');
 		}
 	}
@@ -464,8 +463,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
     {
         if ($update)
 		{
-			sed_sql_update($db_updates, "upd_param = '$name.ver'",
-				array('value' => $new_ver), 'upd_');
+			sed_sql_update($db_updates, array('value' => $new_ver), "upd_param = '$name.ver'", 'upd_');
 			sed_message(sed_rc('ext_updated', array(
 				'type' => $L['Plugin'],
 				'name' => $name,
@@ -521,7 +519,7 @@ function sed_extension_uninstall($name, $is_module = false)
 
     // Clear cache
     $cot_cache && $cot_cache->db->remove('sed_plugins', 'system');
-    sed_sql_update($db_users, '1', array('auth' => ''), 'user_');
+    sed_sql_update($db_users, array('auth' => ''), '1', 'user_');
 
     // Run SQL script if present
     if (file_exists($path . "/setup/$name.uninstall.sql"))
@@ -691,8 +689,7 @@ function sed_module_pause($name)
 {
     global $db_core;
 
-    return sed_sql_update($db_core, "ct_code = '$name'", array('state' => 0),
-		'ct_') == 1;
+    return sed_sql_update($db_core, array('state' => 0), "ct_code = '$name'", 'ct_') == 1;
 }
 
 /**
@@ -718,8 +715,7 @@ function sed_module_resume($name)
 {
     global $db_core;
 
-    return sed_sql_update($db_core, "ct_code = '$name'", array('state' => 1),
-		'ct_') == 1;
+    return sed_sql_update($db_core, array('state' => 1), "ct_code = '$name'", 'ct_') == 1;
 }
 
 /**
@@ -733,11 +729,7 @@ function sed_module_update($name, $version)
 {
     global $db_core;
 
-    // TODO write correct module update code
-    $res = sed_sql_update($db_core, "ct_code = '$name'",
-		array('version' => $version), 'ct_');
-
-    return $res;
+    return sed_sql_update($db_core, array('version' => $version), "ct_code = '$name'", 'ct_');
 }
 
 /**
@@ -825,7 +817,7 @@ function sed_plugin_pause($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return sed_sql_update($db_plugins, $condition, array('active' => 0), 'pl_');
+    return sed_sql_update($db_plugins, array('active' => 0), $condition, 'pl_');
 }
 
 /**
@@ -865,7 +857,7 @@ function sed_plugin_resume($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return sed_sql_update($db_plugins, $condition, array('active' => 1), 'pl_');
+    return sed_sql_update($db_plugins, array('active' => 1), $condition, 'pl_');
 }
 
 ?>

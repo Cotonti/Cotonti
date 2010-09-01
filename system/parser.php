@@ -119,7 +119,7 @@ function sed_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
 	}
 	$bbc['container'] = empty($container) ? 0 : 1;
 	$bbc['postrender'] = empty($postrender) ? 0 : 1;
-	return sed_sql_update($db_bbcode, "bbc_id = $id", $bbc, 'bbc_') == 1;
+	return sed_sql_update($db_bbcode, $bbc, "bbc_id = $id", 'bbc_') == 1;
 }
 
 /**

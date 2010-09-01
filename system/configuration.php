@@ -168,9 +168,8 @@ function sed_config_modify($name, $options, $is_module = false)
 	{
 		$config_name = $opt['name'];
 		unset($opt['name']);
-		$affected += sed_sql_update($db_config, "config_owner = '$type'
-			AND config_cat = '$name' AND config_name = '$config_name'",
-			$opt, 'config_');
+		$affected += sed_sql_update($db_config, $opt, "config_owner = '$type'
+			AND config_cat = '$name' AND config_name = '$config_name'", 'config_');
 	}
 
 	return $affected;
