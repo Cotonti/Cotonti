@@ -66,9 +66,6 @@ while ($row = sed_sql_fetcharray($sql))
 	$t->parse('MAIN.OTHER_ROW');
 }
 
-$lincif_conf = sed_auth('admin', 'a', 'A');
-$lincif_user = sed_auth('users', 'a', 'A');
-
 $t->assign(array(
 	'ADMIN_OTHER_URL_CACHE' => sed_url('admin', 'm=cache'),
 	'ADMIN_OTHER_URL_DISKCACHE' => sed_url('admin', 'm=cache&s=disk'),

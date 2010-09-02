@@ -14,6 +14,7 @@ Auth_members=RW
 Lock_members=
 Recommends_modules=pm,polls
 Recommends_plugins=forumstats,tags
+Admin_icon=img/adminmenu_forums.png
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]

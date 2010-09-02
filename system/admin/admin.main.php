@@ -32,12 +32,24 @@ foreach (sed_getextplugins('admin.main') as $pl)
 {
 	include $pl;
 }
+/* ===== */
 
-$sys['inc'] = (empty($m)) ? 'home' : $m;
-$sys['inc'] = (empty($s)) ? $sys['inc'] : $sys['inc'].'.'.$s;
-$sys['inc'] = sed_incfile('admin', $sys['inc']);
+$standard_admin = array('banlist', 'bbcode', 'cache.disk', 'cache', 'config', 'extrafields', 'hits', 'home', 'infos',
+	'log', 'other', 'ext', 'ratings', 'referers', 'rights', 'rightsbyitem', 'structure', 'tools', 'trashcan', 'urls',
+	'users');
 
-if (!file_exists($sys['inc']))
+$inc_file = (empty($m)) ? 'home' : $m;
+$inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
+if (in_array($inc_file, $standard_admin))
+{
+	$inc_file = sed_incfile('admin', $inc_file);
+}
+else
+{
+	$inc_file = sed_incfile($inc_file, 'admin');
+}
+
+if (!file_exists($inc_file))
 {
 	sed_die();
 }
@@ -47,12 +59,12 @@ $allow_img['1']['0'] = $R['admin_icon_allow'];
 $allow_img['0']['1'] = $R['admin_icon_deny_locked'];
 $allow_img['1']['1'] = $R['admin_icon_allow_locked'];
 
-$lincif_conf = sed_auth('admin', 'a', 'A');
-$lincif_page = sed_auth('page', 'any', 'A');
-$lincif_strc = sed_auth('structure', 'a', 'A');
-$lincif_user = sed_auth('users', 'a', 'A');
+$usr['admin_config'] = sed_auth('admin', 'a', 'A');
+$usr['admin_structure'] = sed_auth('structure', 'a', 'A');
+$usr['admin_users'] = sed_auth('users', 'a', 'A');
 
-require_once($sys['inc']);
+require $inc_file;
+
 $adminhelp = (empty($adminhelp)) ? $L['None'] : $adminhelp;
 
 $title_params = array(
@@ -61,26 +73,99 @@ $title_params = array(
 $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = sed_title('{ADMIN}', $title_params);
 
-require_once($cfg['system_dir'].'/header.php');
+require_once $cfg['system_dir'].'/header.php';
+
 if (!SED_AJAX)
 {
 	$t = new XTemplate(sed_skinfile('admin'));
+
+	// Generate the admin menu
+	$admin_menu = array();
+	// Standard admin areas
+	$admin_menu[] = array(
+		'url' => sed_url('admin'),
+		'icon' => $R['admin_menu_icon_home'],
+		'class' => empty($m) ? 'sel' : ''
+	);
+	if ($usr['admin_config'])
+	{
+		$admin_menu[] = array(
+			'url' => sed_url('admin', 'm=config'),
+			'icon' => $R['admin_menu_icon_config'],
+			'class' => $m == 'config' ? 'sel' : ''
+		);
+		$admin_menu[] = array(
+			'url' => sed_url('admin', 'm=ext'),
+			'icon' => $R['admin_menu_icon_extensions'],
+			'class' => $m == 'ext' ? 'sel' : ''
+		);
+	}
+	if ($usr['admin_structure'])
+	{
+		$admin_menu[] = array(
+			'url' => sed_url('admin', 'm=structure'),
+			'icon' => $R['admin_menu_icon_structure'],
+			'class' => $m == 'structure' ? 'sel' : ''
+		);
+	}
+	if ($usr['admin_users'])
+	{
+		$admin_menu[] = array(
+			'url' => sed_url('admin', 'm=users'),
+			'icon' => $R['admin_menu_icon_users'],
+			'class' => $m == 'users' ? 'sel' : ''
+		);
+	}
+	if ($usr['isadmin'])
+	{
+		foreach (array('tools', 'other') as $loc)
+		{
+			$admin_menu[] = array(
+				'url' => sed_url('admin', "m=$loc"),
+				'icon' => $R['admin_menu_icon_' . $loc],
+				'class' => $m == $loc ? 'sel' : ''
+			);
+		}
+	}
+	// Module admin
+	foreach ($sed_modules as $code => $mod)
+	{
+		$info = sed_infoget($cfg['modules_dir'] . "/$code/$code.setup.php", 'COT_EXT');
+		if (!empty($info['Admin_icon']))
+		{
+			if (file_exists(sed_langfile($code, 'module')))
+			{
+				sed_require_lang($code, 'module');
+				$title = $L[ucfirst($code)];
+			}
+			$uccode = ucfirst($code);
+			$title = isset($L[$uccode]) ? $L[$uccode] : $uccode;
+			$src = $cfg['modules_dir'] . "/$code/" . trim($info['Admin_icon']);
+			$admin_menu[] = array(
+				'url' => sed_url('admin', "m=$code"),
+				'icon' => sed_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
+				'class' => $m == $code ? 'sel' : ''
+			);
+		}
+	}
+
+	// Rendering
+	foreach ($admin_menu as $item)
+	{
+		$t->assign(array(
+			'ADMIN_MENU_URL' => $item['url'],
+			'AMDIN_MENU_TITLE' => $item['title'],
+			'ADMIN_MENU_ICON' => $item['icon'],
+			'ADMIN_MENU_CLASS' => $item['class']
+		));
+		$t->parse('MAIN.ADMIN_MENU_ROW');
+	}
 
 	$t->assign(array(
 		'ADMIN_TITLE' => sed_build_adminsection($adminpath),
 		'ADMIN_SUBTITLE' => $adminsubtitle,
 		'ADMIN_MAIN' => $adminmain,
-		'ADMIN_HELP' => $adminhelp,
-		'ADMINMENU_URL' => sed_url('admin'),
-		'ADMINMENU_CONF_URL' => sed_url('admin', 'm=config'),
-		'ADMINMENU_PAGE_URL' => sed_url('admin', 'm=page'),
-		'ADMINMENU_STRUCTURE_URL' => sed_url('admin', 'm=structure'),
-		'ADMINMENU_FORUMS_URL' => sed_url('admin', 'm=forums'),
-		'ADMINMENU_USERS_URL' => sed_url('admin', 'm=users'),
-		'ADMINMENU_PLUG_URL' => sed_url('admin', 'm=plug'),
-		'ADMINMENU_TOOLS_URL' => sed_url('admin', 'm=tools'),
-		'ADMINMENU_TRASHCAN_URL' => sed_url('admin', 'm=trashcan'),
-		'ADMINMENU_OTHER_URL' => sed_url('admin', 'm=other')
+		'ADMIN_HELP' => $adminhelp
 	));
 
 	/* === Hook for the plugins === */
@@ -94,6 +179,6 @@ if (!SED_AJAX)
 	$t->out('MAIN');
 }
 
-require_once($cfg['system_dir'].'/footer.php');
+require_once $cfg['system_dir'].'/footer.php';
 
 ?>

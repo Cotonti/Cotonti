@@ -547,7 +547,6 @@ else
 	$t->parse('MAIN.DEFULT');
 }
 
-$lincif_conf = sed_auth('admin', 'a', 'A');
 $is_adminwarnings = isset($adminwarnings);
 
 $t->assign(array(

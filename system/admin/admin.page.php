@@ -515,9 +515,6 @@ $totaldbpages = sed_sql_rowcount($db_pages);
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 $sys['pagesqueued'] = sed_sql_result($sql, 0, 'COUNT(*)');
 
-$lincif_conf = sed_auth('admin', 'a', 'A');
-$lincif_page = sed_auth('page', 'any', 'A');
-
 $t->assign(array(
 	'ADMIN_PAGE_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=page'),
 	'ADMIN_PAGE_URL_ADD' => sed_url('page', 'm=add'),
