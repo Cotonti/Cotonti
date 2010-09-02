@@ -139,9 +139,7 @@ if ($a=='add')
 			user_password,
 			user_maingrp,
 			user_country,
-			user_location,
 			user_timezone,
-			user_occupation,
 			user_text,
 			user_email,
 			user_hideemail,
@@ -154,10 +152,6 @@ if ($a=='add')
 			user_lostpass,
 			user_gender,
 			user_birthdate,
-			user_icq,
-			user_irc,
-			user_msn,
-			user_website,
 			$extra_columns
 			user_lastip)
 			VALUES
@@ -165,9 +159,7 @@ if ($a=='add')
 			'$mdpass',
 			".(int)$defgroup.",
 			'".sed_sql_prep($rcountry)."',
-			'".sed_sql_prep($rlocation)."',
 			'".sed_sql_prep($rtimezone)."',
-			'".sed_sql_prep($roccupation)."',
 			'',
 			'".sed_sql_prep($ruseremail)."',
 			1,
@@ -180,10 +172,6 @@ if ($a=='add')
 			'$validationkey',
 			'".sed_sql_prep($rusergender)."',
 			'".$ruserbirthdate."',
-			'".sed_sql_prep($rusericq)."',
-			'".sed_sql_prep($ruserirc)."',
-			'".sed_sql_prep($rusermsn)."',
-			'".sed_sql_prep($ruserwebsite)."',
 			$extra_values
 			'".$usr['ip']."')";
 		$sql = sed_sql_query($ssql);
@@ -329,15 +317,9 @@ $useredit_array = array(
 	"USERS_REGISTER_PASSWORD" => sed_inputbox('password', 'rpassword1', '', array('size' => 8, 'maxlength' => 32)),
 	"USERS_REGISTER_PASSWORDREPEAT" => sed_inputbox('password', 'rpassword2', '', array('size' => 8, 'maxlength' => 32)),
 	"USERS_REGISTER_COUNTRY" => sed_selectbox_countries($rcountry, 'rcountry'),
-	"USERS_REGISTER_LOCATION" => sed_inputbox('text', 'rlocation', $rlocation, array('size' => 24, 'maxlength' => 64)),
 	"USERS_REGISTER_TIMEZONE" => $form_timezone,
-	"USERS_REGISTER_OCCUPATION" => sed_inputbox('text', 'roccupation', $roccupation, array('size' => 24, 'maxlength' => 64)),
 	"USERS_REGISTER_GENDER" => $form_usergender,
 	"USERS_REGISTER_BIRTHDATE" => $form_birthdate,
-	"USERS_REGISTER_WEBSITE" => sed_inputbox('text', 'rwebsite', $rwebsite, array('size' => 56, 'maxlength' => 128)),
-	"USERS_REGISTER_ICQ" => sed_inputbox('text', 'rusericq', $rusericq, array('size' => 32, 'maxlength' => 16)),
-	"USERS_REGISTER_IRC" => sed_inputbox('text', 'ruserirc', $ruserirc, array('size' => 56, 'maxlength' => 128)),
-	"USERS_REGISTER_MSN" => sed_inputbox('text', 'rusermsn', $rusermsn, array('size' => 32, 'maxlength' => 64)),
 );
 $t->assign($useredit_array);
 

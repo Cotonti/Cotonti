@@ -106,35 +106,6 @@ function sed_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 }
 
 /**
- * Returns user ICQ pager link
- *
- * @param int $text ICQ number
- * @return string
- */
-function sed_build_icq($text)
-{
-	global $cfg;
-
-	$text = (int) $text;
-	if($text > 0)
-	{
-		return '<a href="http://www.icq.com/people/'.$text.'/">'.$text.' <img src="http://status.icq.com/online.gif?icq='.$text.'&amp;img=5" alt="" /></a>';
-	}
-	return '';
-}
-
-/**
- * Returns MSN link as e-mail link
- *
- * @param string $msn MSN address
- * @return string
- */
-function sed_build_msn($msn)
-{
-	return sed_build_email($msn);
-}
-
-/**
  * Generates gender dropdown
  *
  * @param string $check Checked gender
@@ -224,17 +195,10 @@ function sed_generate_usertags($ruser_data, $tag_prefix = '', $emptyname='', $al
 				$tag_prefix.'EMAIL' => sed_build_email($ruser_data['user_email'], $ruser_data['user_hideemail']),
 				$tag_prefix.'PMNOTIFY' =>  $sed_yesno[$urr['user_pmnotify']],
 				$tag_prefix.'SKIN' => $ruser_data['user_skin'],
-				$tag_prefix.'WEBSITE' => sed_build_url($ruser_data['user_website']),
-				$tag_prefix.'JOURNAL' => $ruser_data['user_journal'],
-				$tag_prefix.'ICQ' => sed_build_icq($ruser_data['user_icq']),
-				$tag_prefix.'MSN' => sed_build_msn($ruser_data['user_msn']),
-				$tag_prefix.'IRC' => htmlspecialchars($ruser_data['user_irc']),
 				$tag_prefix.'GENDER' => $ruser_data['user_gender'],
 				$tag_prefix.'BIRTHDATE' => $ruser_data['user_birthdate'],
 				$tag_prefix.'AGE' => $ruser_data['user_age'],
 				$tag_prefix.'TIMEZONE' => sed_build_timezone($ruser_data['user_timezone']),
-				$tag_prefix.'LOCATION' => htmlspecialchars($ruser_data['user_location']),
-				$tag_prefix.'OCCUPATION' => htmlspecialchars($ruser_data['user_occupation']),
 				$tag_prefix.'REGDATE' => @date($cfg['dateformat'], $ruser_data['user_regdate'] + $usr['timezone'] * 3600).' '.$usr['timetext'],
 				$tag_prefix.'LASTLOG' => @date($cfg['dateformat'], $ruser_data['user_lastlog'] + $usr['timezone'] * 3600).' '.$usr['timetext'],
 				$tag_prefix.'LOGCOUNT' => $ruser_data['user_logcount'],
