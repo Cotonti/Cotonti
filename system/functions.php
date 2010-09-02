@@ -3,7 +3,7 @@
  * Main function library.
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD License
@@ -53,7 +53,7 @@ if (!isset($cfg['dir_perms']))
 
 /*
  * =========================== System Functions ===============================
- */
+*/
 
 /**
  * Strips everything but alphanumeric, hyphens and underscores
@@ -135,7 +135,10 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		case 'P':
 			$v = (isset($_POST[$name])) ? $_POST[$name] : NULL;
 			$log = TRUE;
-			if ($filter=='ARR') { return($v); }
+			if ($filter=='ARR')
+			{
+				return($v);
+			}
 			break;
 
 		case 'R':
@@ -184,14 +187,14 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			{
 				$pass = TRUE;
 			}
-		break;
+			break;
 
 		case 'NUM':
 			if (is_numeric($v))
 			{
 				$pass = TRUE;
 			}
-		break;
+			break;
 
 		case 'TXT':
 			$v = trim($v);
@@ -203,7 +206,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			{
 				$defret = str_replace('<', '&lt;', $v);
 			}
-		break;
+			break;
 
 		case 'SLU':
 			$v = trim($v);
@@ -216,7 +219,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			{
 				$defret = '';
 			}
-		break;
+			break;
 
 		case 'ALP':
 			$v = trim($v);
@@ -229,7 +232,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			{
 				$defret = $f;
 			}
-		break;
+			break;
 
 		case 'PSW':
 			$v = trim($v);
@@ -244,16 +247,16 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			{
 				$defret = $f;
 			}
-		break;
+			break;
 
 		case 'HTM':
 			$v = trim($v);
 			$pass = TRUE;
-		break;
+			break;
 
 		case 'ARR':
 			$pass = TRUE;
-		break;
+			break;
 
 		case 'BOL':
 			if ($v == '1' || $v == 'on')
@@ -363,6 +366,49 @@ function sed_import_buffered($name, $value)
 	{
 		return $value;
 	}
+}
+
+/**
+ * Imports date stamp
+ *
+ * @param string $name Variable name preffix
+ * @param string $ext Variable name suffix
+ * @param bool $usertimezone Use user timezone
+ * @param bool $returnarray Return Date Array
+ * @return mixed
+ */
+function sed_import_date($name = '', $ext='', $usertimezone = true, $returnarray = false)
+{
+	global $L, $R, $usr;
+	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+
+	$year = sed_import($name.'_year'.$ext, 'P', 'INT');
+	$month = sed_import($name.'_month'.$ext, 'P', 'INT');
+	$day = sed_import($name.'_day'.$ext, 'P', 'INT');
+	$hour = sed_import($name.'_hour'.$ext, 'P', 'INT');
+	$minute = sed_import($name.'_minute'.$ext, 'P', 'INT');
+
+	if (((int)($month) > 0 && (int)($day) > 0 && (int)($year) > 0) || ((int)($day) > 0 && (int)($minute) > 0))
+	{
+		$result = sed_mktime($hour, $minute, 0, $month, $day, $year);
+		$result = ($usertimezone) ? ($result - $usr['timezone'] * 3600) : $result;
+	}
+	else
+	{
+		$result = 0;
+	}
+
+	if($returnarray)
+	{
+		$result['stamp'] = $result;
+		$result['year'] = $year;
+		$result['month'] = $month;
+		$result['day'] = $day;
+		$result['hour'] = $hour;
+		$result['minute'] = $minute;
+	}
+
+	return $result;
 }
 
 /**
@@ -569,7 +615,7 @@ function sed_outputfilters($output)
 function sed_sendheaders($content_type = 'text/html', $status_line = 'HTTP/1.1 200 OK')
 {
 	global $cfg;
-    header($status_line);
+	header($status_line);
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
@@ -696,7 +742,7 @@ function sed_unique($l=16)
 
 /*
  * ================================= Authorization Subsystem ==================================
- */
+*/
 
 /**
  * Returns specific access permissions
@@ -830,7 +876,7 @@ function sed_blockguests()
 
 /*
  * =========================== Output forming functions ===========================
- */
+*/
 
 /**
  * Calculates age out of D.O.B.
@@ -843,7 +889,9 @@ function sed_build_age($birth)
 	global $sys;
 
 	if ($birth==1)
-	{ return ('?'); }
+	{
+		return ('?');
+	}
 
 	$day1 = @date('d', $birth);
 	$month1 = @date('m', $birth);
@@ -856,10 +904,14 @@ function sed_build_age($birth)
 	$age = ($year2-$year1)-1;
 
 	if ($month1<$month2 || ($month1==$month2 && $day1<=$day2))
-	{ $age++; }
+	{
+		$age++;
+	}
 
 	if($age < 0)
-	{ $age += 136; }
+	{
+		$age += 136;
+	}
 
 	return ($age);
 }
@@ -892,9 +944,9 @@ function sed_build_catpath($cat, $mask = 'link_catpath')
 		{
 			$tmp[] = ($list && $k === $last) ? htmlspecialchars($sed_cat[$x]['title'])
 				: sed_rc($mask, array(
-					'url' =>sed_url('list', 'c='.$x),
-					'title' => htmlspecialchars($sed_cat[$x]['title'])
-				));
+				'url' =>sed_url('list', 'c='.$x),
+				'title' => htmlspecialchars($sed_cat[$x]['title'])
+			));
 		}
 	}
 	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
@@ -1414,7 +1466,9 @@ function sed_build_usertext($text)
 function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority="Width")
 {
 	if (!function_exists('gd_info'))
-	{ return; }
+	{
+		return;
+	}
 
 	global $cfg;
 
@@ -1457,34 +1511,50 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 	if ($textsize==0)
 	{
 		if ($cfg['th_amode']=='GD1')
-		{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2); }
+		{
+			$new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2);
+		}
 		else
-		{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2); }
+		{
+			$new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2);
+		}
 
 		$background_color = imagecolorallocate ($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
 		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2, $background_color);
 
 		if ($cfg['th_amode']=='GD1')
-		{ imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+		{
+			imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
 		else
-		{ imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+		{
+			imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
 
 	}
 	else
 	{
 		if ($cfg['th_amode']=='GD1')
-		{ $new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6); }
+		{
+			$new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6);
+		}
 		else
-		{ $new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6); }
+		{
+			$new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6);
+		}
 
 		$background_color = imagecolorallocate($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
 		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*4+14, $background_color);
 		$text_color = imagecolorallocate($new, $textcolor[0],$textcolor[1],$textcolor[2]);
 
 		if ($cfg['th_amode']=='GD1')
-		{ imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+		{
+			imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
 		else
-		{ imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y); }
+		{
+			imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
 
 		imagestring ($new, $textsize, $bordersize, $thumb_y+$bordersize+$textsize+1, $big_x."x".$big_y." ".$fsize."kb", $text_color);
 	}
@@ -1530,7 +1600,7 @@ function sed_javascript($more='')
 	$result .= '<script type="text/javascript" src="js/base.js"></script>';
 	if (!empty($more))
 	{
-	$result .= '<script type="text/javascript">
+		$result .= '<script type="text/javascript">
 //<![CDATA[
 '.$more.'
 //]]>
@@ -1554,7 +1624,9 @@ function sed_selectbox_skin($check, $name)
 	while ($f = readdir($handle))
 	{
 		if (mb_strpos($f, '.') === FALSE && is_dir('./skins/'.$f))
-		{ $skinlist[] = $f; }
+		{
+			$skinlist[] = $f;
+		}
 	}
 	closedir($handle);
 	sort($skinlist);
@@ -1618,11 +1690,11 @@ function sed_selectbox_theme($skinname, $name, $theme)
 
 /*
  * ======================== Error & Message + Logs API ========================
- */
+*/
 
 /**
  * Checks if there are messages to display
- * 
+ *
  * @param string $src If non-emtpy, check messages in this specific source only
  * @param string $class If non-empty, check messages of this specific class only
  * @return bool
@@ -1669,7 +1741,7 @@ function sed_check_messages($src = '', $class = '')
 			}
 		}
 	}
-	
+
 	return false;
 }
 
@@ -1943,7 +2015,7 @@ function sed_message($text, $class = 'status', $src = 'default')
 
 /*
  * =============================== File Path Functions ========================
- */
+*/
 
 /**
  * Returns path to include file
@@ -2233,7 +2305,7 @@ function sed_themefile()
 
 /*
  * ============================ Date and Time Functions =======================
- */
+*/
 
 /**
  * Creates UNIX timestamp out of a date
@@ -2284,7 +2356,7 @@ function sed_stamp2date($stamp)
 
 /*
  * ================================== Pagination ==============================
- */
+*/
 
 /**
  * Page navigation (pagination) builder. Uses URL transformation and resource strings,
@@ -2397,10 +2469,10 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 				$rel = $base_rel;
 			}
 			$before .= sed_rc('link_pagenav_main', array(
-					'url' => sed_url($module, $args, $hash),
-					'event' => $event,
-					'rel' => $rel,
-					'num' => $i + 1
+				'url' => sed_url($module, $args, $hash),
+				'event' => $event,
+				'rel' => $rel,
+				'num' => $i + 1
 			));
 		}
 		$i *= ($n % 2) ? 2 : 5;
@@ -2450,10 +2522,10 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 				$rel = $base_rel;
 			}
 			$after .= sed_rc('link_pagenav_main', array(
-					'url' => sed_url($module, $args, $hash),
-					'event' => $event,
-					'rel' => $rel,
-					'num' => $i - 1
+				'url' => sed_url($module, $args, $hash),
+				'event' => $event,
+				'rel' => $rel,
+				'num' => $i - 1
 			));
 		}
 		$args[$characters] = ($i - 1) * $perpage;
@@ -2482,7 +2554,10 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 	if ($current > 0)
 	{
 		$prev_n = $current - $perpage;
-		if ($prev_n < 0) { $prev_n = 0; }
+		if ($prev_n < 0)
+		{
+			$prev_n = 0;
+		}
 		$args[$characters] = $prev_n;
 		if ($ajax_rel)
 		{
@@ -2553,13 +2628,13 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'rel' => $rel,
 			'num' => $last_n + 1
 		));
-   		$lastn  = (($last +  $perpage)<$totalpages) ?
-		sed_rc('link_pagenav_main', array(
+		$lastn  = (($last +  $perpage)<$totalpages) ?
+			sed_rc('link_pagenav_main', array(
 			'url' => sed_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $last_n / $perpage + 1
-		)): FALSE;
+			)): FALSE;
 	}
 
 	return array(
@@ -2572,7 +2647,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 
 /*
  * ============================== Resource Strings ============================
- */
+*/
 
 /**
  * Resource string formatter function. Takes a string with predefined variable substitution, e.g.
@@ -2643,7 +2718,7 @@ function sed_rc_link($url, $text, $attrs = '')
 
 /*
  * ========================== Security Shield =================================
- */
+*/
 
 /**
  * Checks GET anti-XSS parameter
@@ -2716,7 +2791,9 @@ function sed_shield_hammer($hammer,$action, $lastseen)
 	else
 	{
 		if ($hammer>0)
-		{ $hammer--; }
+		{
+			$hammer--;
+		}
 	}
 	return($hammer);
 }
@@ -2776,7 +2853,7 @@ function sed_xp()
 
 /*
  * =============================== Statistics API =============================
- */
+*/
 
 /**
  * Creates new stats parameter
@@ -2832,7 +2909,7 @@ function sed_stat_update($name, $value = 1)
 
 /*
  * ============================ URL and URI ===================================
- */
+*/
 
 /**
  * Loads URL Transformation Rules
@@ -2986,8 +3063,8 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	// Append query string if needed
 	if (!empty($args))
 	{
-        $sep = $header ? '&' : '&amp;';
-        $sep_len = strlen($sep);
+		$sep = $header ? '&' : '&amp;';
+		$sep_len = strlen($sep);
 		$qs = mb_strpos($url, '?') !== false ? $sep : '?';
 		foreach($args as $key => $val)
 		{
@@ -3074,8 +3151,8 @@ function sed_uriredir_store()
 		&& ($script != 'users.php' // not login/logout location
 			|| empty($_GET['m'])
 			|| !in_array($_GET['m'], array('auth', 'logout', 'register'))
-			)
-		)
+	)
+	)
 	{
 		$_SESSION['s_uri_redir'] = $sys['uri_redir'];
 	}
@@ -3113,7 +3190,7 @@ function sed_uriredir_redirect($uri)
 
 /*
  * ========================= Internationalization (i18n) ======================
- */
+*/
 
 $sed_languages['cn']= '中文';
 $sed_languages['de']= 'Deutsch';
@@ -3207,7 +3284,7 @@ function sed_get_plural($plural, $lang, $is_frac = false)
 
 /*
  * ============================================================================
- */
+*/
 
 if ($cfg['customfuncs'])
 {
