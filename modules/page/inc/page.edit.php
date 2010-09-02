@@ -11,11 +11,19 @@
 
 defined('SED_CODE') or die('Wrong URL');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
-sed_block($usr['auth_read']);
-
 $id = sed_import('id', 'G', 'INT');
 $c = sed_import('c', 'G', 'TXT');
+
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
+
+/* === Hook === */
+foreach (sed_getextplugins('page.edit.first') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
+sed_block($usr['auth_read']);
 
 if ($a == 'update')
 {
@@ -199,13 +207,6 @@ sed_die(sed_sql_numrows($sql) == 0);
 $pag = sed_sql_fetcharray($sql);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', $pag['page_cat']);
-
-/* === Hook === */
-foreach (sed_getextplugins('page.edit.first') as $pl)
-{
-	include $pl;
-}
-/* ===== */
 sed_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);
 
 $title_params = array(
