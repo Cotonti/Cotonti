@@ -658,21 +658,7 @@ function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
 		}
 	}
 
-	if (version_compare(PHP_VERSION, '5.2.0', '>='))
-	{
-		return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
-	}
-
-	if (!$httponly)
-	{
-		return setcookie($name, $value, $expire, $path, $domain, $secure);
-	}
-
-	if (trim($domain) != '')
-	{
-		$domain .= ($secure ? '; secure' : '').($httponly ? '; httponly' : '');
-	}
-	return setcookie($name, $value, $expire, $path, $domain);
+	return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
 }
 
 /**
