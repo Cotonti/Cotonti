@@ -160,11 +160,11 @@ require_once $cfg['system_dir'] . '/header.php';
 
 if ($cat['group'])
 {
-	$mskin = sed_skinfile(array('list', 'group', $cat['tpl']));
+	$mskin = sed_skinfile(array('page' ,'list', 'group', $cat['tpl']));
 }
 else
 {
-	$mskin = sed_skinfile(array('list', $cat['tpl']));
+	$mskin = sed_skinfile(array('page' ,'list', $cat['tpl']));
 }
 
 $t = new XTemplate($mskin);

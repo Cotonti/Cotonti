@@ -26,10 +26,6 @@
 						<td>{USERS_EDIT_COUNTRY}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Location}:</td>
-						<td>{USERS_EDIT_LOCATION}</td>
-					</tr>
-					<tr>
 						<td>{PHP.L.Timezone}:</td>
 						<td>{USERS_EDIT_TIMEZONE}</td>
 					</tr>
@@ -70,28 +66,8 @@
 						<td>{USERS_EDIT_PMNOTIFY}<br />{PHP.skinlang.usersedit.PMnotifyhint}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Website}:</td>
-						<td>{USERS_EDIT_WEBSITE}</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.IRC}:</td>
-						<td>{USERS_EDIT_IRC}</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.ICQ}:</td>
-						<td>{USERS_EDIT_ICQ}</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.MSN}:</td>
-						<td>{USERS_EDIT_MSN}</td>
-					</tr>
-					<tr>
 						<td>{PHP.L.Birthdate}:</td>
 						<td>{USERS_EDIT_BIRTHDATE}</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.Occupation}:</td>
-						<td>{USERS_EDIT_OCCUPATION}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Gender}:</td>

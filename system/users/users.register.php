@@ -46,17 +46,11 @@ if ($a=='add')
 	$rpassword1 = sed_import('rpassword1','P','TXT',16);
 	$rpassword2 = sed_import('rpassword2','P','TXT',16);
 	$rcountry = sed_import('rcountry','P','TXT');
-	$rlocation = sed_import('rlocation','P','TXT');
 	$rtimezone = sed_import('rtimezone','P','TXT',5);
-	$roccupation = sed_import('roccupation','P','TXT');
 	$rusergender = sed_import('rusergender','P','TXT');
 	$ryear = sed_import('ryear','P','INT');
 	$rmonth = sed_import('rmonth','P','INT');
 	$rday = sed_import('rday','P','INT');
-	$rusericq = sed_import('rusericq','P','TXT');
-	$ruserirc = sed_import('ruserirc','P','TXT');
-	$rusermsn = sed_import('rusermsn','P','TXT');
-	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
 	$ruseremail = mb_strtolower($ruseremail);
 
 	$rtimezone = is_null($rtimezone) ? $cfg['defaulttimezone'] : (float) $rtimezone;

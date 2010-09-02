@@ -20,28 +20,8 @@
 					<td>{USERS_DETAILS_COUNTRYFLAG} {USERS_DETAILS_COUNTRY}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Location}:</td>
-					<td>{USERS_DETAILS_LOCATION}</td>
-				</tr>
-				<tr>
 					<td>{PHP.L.Timezone}:</td>
 					<td>{USERS_DETAILS_TIMEZONE}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.Website}:</td>
-					<td>{USERS_DETAILS_WEBSITE}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.IRC}:</td>
-					<td>{USERS_DETAILS_IRC}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.ICQ}:</td>
-					<td>{USERS_DETAILS_ICQ}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.MSN}:</td>
-					<td>{USERS_DETAILS_MSN}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Birthdate}:</td>
@@ -50,10 +30,6 @@
 				<tr>
 					<td>{PHP.L.Age}:</td>
 					<td>{USERS_DETAILS_AGE}</td>
-				</tr>
-				<tr>
-					<td>{PHP.L.Occupation}:</td>
-					<td>{USERS_DETAILS_OCCUPATION}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Gender}:</td>
