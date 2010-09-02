@@ -1,6 +1,16 @@
 <?php
 
 /**
+ * Extrafields API
+ *
+ * @package Cotonti
+ * @version 0.9.0
+ * @author esclkm
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
+
+/**
  * Returns Extra fields edit fields
  *
  * @param string $rowname Post/SQL/Lang row
@@ -40,11 +50,6 @@ function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 			$result = sed_selectbox(trim($data), $inputname, $options_values, $options_titles, false);
 			break;
 
-		case "checkbox":
-			$R["input_checkbox_{$inputname}"] = (!empty($R["input_checkbox_{$inputname}"])) ? $R["input_checkbox_{$inputname}"] : $extrafield['field_html'];
-			$result = sed_checkbox($data, $inputname, $extrafield['field_description']);
-			break;
-
 		case "radio":
 			$R["input_radio_{$inputname}"] = (!empty($R["input_radio_{$inputname}"])) ? $R["input_radio_{$inputname}"] :  $extrafield['field_html'];
 			$opt_array = explode(",", $extrafield['field_variants']);
@@ -60,6 +65,11 @@ function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 			}
 			$result = sed_radiobox(trim($data), $inputname, $options_values, $options_titles);
 			break;
+
+		case "checkbox":
+			$R["input_checkbox_{$inputname}"] = (!empty($R["input_checkbox_{$inputname}"])) ? $R["input_checkbox_{$inputname}"] : $extrafield['field_html'];
+			$result = sed_checkbox($data, $inputname, $extrafield['field_description']);
+			break;
 	}
 	return $result;
 }
@@ -69,50 +79,59 @@ function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
  *
  * @param string $rowname Post/SQL/Lang row
  * @param array $extrafields Extra fields data
- * @param string $data Existing data for fields
  * @param bool $importnew Import type new
  * @return string
  */
-function sed_import_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
+function sed_import_extrafields($rowname, $extrafield, $importnew = FALSE)
 {
 	$inputname = ($importnew) ? 'new' : 'r';
 	$inputname .= $rowname.$extrafield['field_name'];
-	return '';
+
+	$import = sed_import($inputname, 'P', 'HTM');
+	if ($extrafield['field_type'] == 'checkbox' && !is_null($import))
+	{
+		$import = $import != '';
+	}
+
+	return  $import;
 }
 
 /**
  * Returns Extra fields data
  *
  * @param string $rowname Lang row
- * @param string $type Extra field type
- * @param string $field_name Extra field name
+ * @param array $extrafields Extra fields data
  * @param string $value Existing user value
  * @return string
  */
-function sed_build_extrafields_data($rowname, $type, $field_name, $value)
+function sed_build_extrafields_data($rowname, $extrafield, $value)
 {
 	global $L;
 	$value = htmlspecialchars($value);
-	switch($type)
+	$parse_type = array('HTML', 'BBCode', 'Text');
+	switch($extrafield['field_type'])
 	{
 		case "input":
-			return $value;
-			break;
-
 		case "textarea":
+			if($extrafield['field_parse'] == 'BBCode')
+			{
+				$value = sed_parse($value);
+			}
+			if($extrafield['field_parse'] == 'Text')
+			{
+				$value = htmlspecialchars($value);
+			}
 			return $value;
 			break;
 
 		case "select":
-			return (!empty($L[$rowname.'_'.$field_name.'_'.$value])) ? $L[$rowname.'_'.$field_name.'_'.$value] : $value;
+		case "radio":
+			$value = htmlspecialchars($value);
+			return (!empty($L[$rowname.'_'.$extrafield['field_name'].'_'.$value])) ? $L[$rowname.'_'.$extrafield['field_name'].'_'.$value] : $value;
 			break;
 
 		case "checkbox":
 			return $value;
-			break;
-
-		case "radio":
-			return (!empty($L[$rowname.'_'.$field_name.'_'.$value])) ? $L[$rowname.'_'.$field_name.'_'.$value] : $value;
 			break;
 	}
 }
@@ -128,7 +147,6 @@ function sed_load_extrafields()
 	{
 		$sed_extrafields = array();
 		$sed_extrafields['structure'] = array();
-		$sed_extrafields['pages'] = array();
 		$sed_extrafields['users'] = array();
 		$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE 1");
 		while ($row = sed_sql_fetchassoc($fieldsres))

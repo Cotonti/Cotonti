@@ -204,14 +204,20 @@ function sed_selectbox_countries($chosen, $name)
  *
  * @param int $utime Selected timestamp
  * @param string $mode Display mode: 'short' or complete
- * @param string $ext Variable name suffix
+ * @param string $name Variable name preffix
  * @param int $max_year Max. year possible
  * @param int $min_year Min. year possible
+ * @param string $ext Variable name suffix
+ * @param bool $usertimezone Use user timezone
  * @return string
  */
-function sed_selectbox_date($utime, $mode, $ext = '', $max_year = 2030, $min_year = 1902)
+function sed_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $ext='', $usertimezone = true)
 {
-	global $L, $R;
+	global $L, $R, $usr;
+	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+
+	$utime = ($usertimezone && $utime > 0) ? ($utime + $usr['timezone'] * 3600) : $utime;
+
 	if ($utime == 0)
 	{
 		list($s_year, $s_month, $s_day, $s_hour, $s_minute) = array(null, null, null, null, null);
@@ -234,28 +240,35 @@ function sed_selectbox_date($utime, $mode, $ext = '', $max_year = 2030, $min_yea
 	$months[11] = $L['November'];
 	$months[12] = $L['December'];
 
-	$result = sed_selectbox($s_year, "ryear$ext", range($min_year, $max_year));
-	$result .= sed_selectbox($s_month, "rmonth$ext", array_keys($months), array_values($months));
-	$result .= sed_selectbox($s_day, "rday$ext", range(1, 31));
-
-	if ($mode == 'short')
-	{
-		return $result;
-	}
+	$year = sed_selectbox($s_year, $name.'_year'.$ext, range($min_year, $max_year));
+	$month = sed_selectbox($s_month, $name.'_month'.$ext, array_keys($months), array_values($months));
+	$day = sed_selectbox($s_day, $name.'_day'.$ext, range(1, 31));
 
 	$range = array();
 	for ($i = 0; $i < 24; $i++)
 	{
 		$range[] = sprintf('%02d', $i);
 	}
-	$result .= sed_selectbox($s_hour, "rhour$ext", $range);
-	$result .= $R['code_time_separator'];
+	$hour = sed_selectbox($s_hour, $name.'_hour'.$ext, $range);
+
 	$range = array();
 	for ($i = 0; $i < 60; $i++)
 	{
 		$range[] = sprintf('%02d', $i);
 	}
-	$result .= sed_selectbox($s_minute, "rminute$ext", $range);
+
+	$minute = sed_selectbox($s_minute, $name.'_minute'.$ext, $range);
+
+	$rc = empty($R["input_date_{$mode}"]) ? 'input_date' : "input_date_{$mode}";
+	$rc = empty($R["input_date_{$name}"]) ? $rc : "input_date_{$name}";
+
+	$result = sed_rc($rc, array(
+		'$day' => $day,
+		'$month' => $month,
+		'$year' => $year,
+		'$hour' => $hour,
+		'$minute' => $minute
+	));
 
 	return $result;
 }

@@ -174,7 +174,7 @@ $t->assign(sed_generate_usertags($pag, "PAGE_ROW_OWNER_"));
 foreach ($sed_extrafields['pages'] as $i => $row)
 {
 	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag['page_'.$row['field_name']]));
+	$t->assign('PAGE_'.$uname, sed_build_extrafields_data('page', $row, $pag['page_'.$row['field_name']]));
 	$t->assign('PAGE_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 
