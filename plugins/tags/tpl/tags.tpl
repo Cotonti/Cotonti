@@ -1,36 +1,45 @@
 <!-- BEGIN: MAIN -->
-<div id="main">
-<form action="{TAGS_ACTION}" method="post">
-<input type="text" name="t" value="{TAGS_QUERY}" /> <input type="submit" value="&gt;&gt;" />
-<select name="order">
-	<option value="">{PHP.L.tags_Orderby}</option><option value="">--</option>
-	{TAGS_ORDER}
-</select>
-<br />
-<em>{TAGS_HINT}</em>
-</form>
-<br />
 
-<!-- BEGIN: TAGS_CLOUD -->
-<div class="block">
-{TAGS_CLOUD_BODY}
-</div>
-<!-- END: TAGS_CLOUD -->
+		<div id="center" class="column">
+			<div class="block">
+				<h2 class="tags">{PHP.L.tags_Search_tags}</h2>
+				<form action="{TAGS_ACTION}" method="post">
+					<input type="text" name="t" value="{TAGS_QUERY}" />
+					<input type="submit" value="&raquo;&raquo;" />
+					<select name="order">
+						<option value="">{PHP.L.tags_Orderby}</option>
+						<option value="">--</option>
+						{TAGS_ORDER}
+					</select>
+				</form>
+			</div>
+			<!-- BEGIN: TAGS_CLOUD -->
+			<div class="block">
+				<h2 class="tags">{PHP.L.tags_All}</h2>
+				{TAGS_CLOUD_BODY}
+			</div>
+			<!-- END: TAGS_CLOUD -->
+			<!-- BEGIN: TAGS_RESULT -->
+			<div class="block">
+				<h2 class="search">{TAGS_RESULT_TITLE}</h2>
+				<ol>
+					<!-- BEGIN: TAGS_RESULT_ROW -->
+					<li class="marginbottom10">
+						<span class="strong"><a href="{TAGS_RESULT_ROW_URL}">{TAGS_RESULT_ROW_TITLE}</a></span><br />
+						<span class="small">{PHP.L.Sections}: {TAGS_RESULT_ROW_PATH}<br />
+						{PHP.L.Tags}: {TAGS_RESULT_ROW_TAGS}</span>
+					</li>
+					<!-- END: TAGS_RESULT_ROW -->
+				</ol>
+			</div>
+			<!-- END: TAGS_RESULT -->
+			<!-- IF {TAGS_PAGNAV} --><p class="paging">{TAGS_PAGEPREV}{TAGS_PAGNAV}{TAGS_PAGENEXT}</p><!-- ENDIF -->
+		</div>
+		<div id="side" class="column">
+			<div class="block">
+				<h2 class="info">{PHP.L.Tags}</h2>
+				<p>{TAGS_HINT}</p>
+			</div>
+		</div>
 
-<!-- BEGIN: TAGS_RESULT -->
-
-<h3>{TAGS_RESULT_TITLE}</h3>
-
-<!-- BEGIN: TAGS_RESULT_ROW -->
-<div>
-<h4><a href="{TAGS_RESULT_ROW_URL}">{TAGS_RESULT_ROW_TITLE}</a></h4>
-{TAGS_RESULT_ROW_PATH} {PHP.L.Tags}: {TAGS_RESULT_ROW_TAGS}
-</div>
-<!-- END: TAGS_RESULT_ROW -->
-
-<!-- END: TAGS_RESULT -->
-
-<div class="pagnav">{TAGS_PAGEPREV} {TAGS_PAGNAV} {TAGS_PAGENEXT}</div>
-
-</div>
 <!-- END: MAIN -->

@@ -66,37 +66,13 @@
 						<td>{USERS_PROFILE_COUNTRY}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Location}:</td>
-						<td>{USERS_PROFILE_LOCATION}</td>
-					</tr>
-					<tr>
 						<td>{PHP.L.Timezone}:</td>
 						<td>{USERS_PROFILE_TIMEZONE}</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.Website}:</td>
-						<td>{USERS_PROFILE_WEBSITE}</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.IRC}:</td>
-						<td>{USERS_PROFILE_IRC}</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.ICQ}:</td>
-						<td>{USERS_PROFILE_ICQ}</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.MSN}:</td>
-						<td>{USERS_PROFILE_MSN}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Birthdate}:</td>
 						<td>{USERS_PROFILE_BIRTHDATE}
 						</td>
-					</tr>
-					<tr>
-						<td>{PHP.L.Occupation}:</td>
-						<td>{USERS_PROFILE_OCCUPATION}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Gender}:</td>

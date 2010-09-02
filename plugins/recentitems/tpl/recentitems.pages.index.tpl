@@ -11,7 +11,7 @@
 	<tr>
 		<td class="centerall {PAGE_ROW_ODDEVEN}">{PHP.R.icon_page}</td>
 		<td class="{PAGE_ROW_ODDEVEN}">
-			<p class="strong"><a href="{PAGE_ROW_URL}">{PAGE_ROW_SHORTTITLE} ({PAGE_ROW_COMMENTS})</a></p>
+			<p class="strong"><a href="{PAGE_ROW_URL}">{PAGE_ROW_SHORTTITLE} ({PAGE_ROW_COUNT})</a></p>
 			<!-- IF {PAGE_ROW_DESC} --><p class="small">{PAGE_ROW_DESC}</p><!-- ENDIF -->
 		</td>
 		<td class="centerall {PAGE_ROW_ODDEVEN}">{PAGE_ROW_CATPATH_SHORT}</td>
