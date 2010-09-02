@@ -337,10 +337,6 @@ switch ($a)
 	$ruserskin = sed_import('ruserskin','P','TXT');
 	$rusertheme = sed_import('rusertheme','P','TXT');
 	$ruserlang = sed_import('ruserlang','P','ALP');
-	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
-	$rusericq = sed_import('rusericq','P','TXT');
-	$ruserirc = sed_import('ruserirc','P','TXT');
-	$rusermsn = sed_import('rusermsn','P','TXT');
 	$rusergender = sed_import('rusergender','P','ALP');
 	$ryear = sed_import('ryear','P','INT');
 	$rmonth = sed_import('rmonth','P','INT');
@@ -348,8 +344,6 @@ switch ($a)
 	$rhour = sed_import('rhour','P','INT');
 	$rminute = sed_import('rminute','P','INT');
 	$rusertimezone = (float) sed_import('rusertimezone','P','TXT',5);
-	$ruserlocation = sed_import('ruserlocation','P','TXT');
-	$ruseroccupation = sed_import('ruseroccupation','P','TXT');
 	$ruseremail = sed_import('ruseremail','P','TXT');
 	$ruserhideemail = sed_import('ruserhideemail','P','BOL');
 	$ruserpmnotify = sed_import('ruserpmnotify','P','BOL');
@@ -487,15 +481,9 @@ switch ($a)
 			user_skin='".sed_sql_prep($ruserskin)."',
 			user_theme='".sed_sql_prep($rusertheme)."',
 			user_lang='".sed_sql_prep($ruserlang)."',
-			user_website='".sed_sql_prep($ruserwebsite)."',
-			user_icq='".sed_sql_prep($rusericq)."',
-			user_msn='".sed_sql_prep($rusermsn)."',
-			user_irc='".sed_sql_prep($ruserirc)."',
 			user_gender='".sed_sql_prep($rusergender)."',
 			user_birthdate='".sed_sql_prep($ruserbirthdate)."',
 			user_timezone='".sed_sql_prep($rusertimezone)."',
-			user_location='".sed_sql_prep($ruserlocation)."',
-			user_occupation='".sed_sql_prep($ruseroccupation)."',
 			user_hideemail='$ruserhideemail',
 			user_pmnotify='$ruserpmnotify',
 			".$ssql_extra."
@@ -643,18 +631,12 @@ $useredit_array = array(
 	"USERS_PROFILE_EMAILPASS" => sed_inputbox('password', 'rmailpass', '', array('size' => 12, 'maxlength' => 32)),
 	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,
 	"USERS_PROFILE_PMNOTIFY" => $profile_form_pmnotify,
-	"USERS_PROFILE_WEBSITE" => sed_inputbox('text', 'ruserwebsite', $urr['user_website'], array('size' => 56, 'maxlength' => 128)),
 	"USERS_PROFILE_SKIN" => $profile_form_skins,
 	"USERS_PROFILE_THEME" => $profile_form_themes,
 	"USERS_PROFILE_LANG" => $profile_form_langs,
-	"USERS_PROFILE_ICQ" => sed_inputbox('text', 'rusericq', $urr['user_icq'], array('size' => 32, 'maxlength' => 16)),
-	"USERS_PROFILE_MSN" => sed_inputbox('text', 'rusermsn', $urr['user_msn'], array('size' => 32, 'maxlength' => 64)),
-	"USERS_PROFILE_IRC" => sed_inputbox('text', 'ruserirc', $urr['user_irc'], array('size' => 56, 'maxlength' => 255)),
 	"USERS_PROFILE_GENDER" => $profile_form_gender,
 	"USERS_PROFILE_BIRTHDATE" => $profile_form_birthdate,
 	"USERS_PROFILE_TIMEZONE" => $profile_form_timezone,
-	"USERS_PROFILE_LOCATION" => sed_inputbox('text', 'ruserlocation', $urr['user_location'], array('size' => 32, 'maxlength' => 64)),
-	"USERS_PROFILE_OCCUPATION" => sed_inputbox('text', 'ruseroccupation', $urr['user_occupation'], array('size' => 32, 'maxlength' => 64)),
 	"USERS_PROFILE_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_PROFILE_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_PROFILE_LOGCOUNT" => $urr['user_logcount'],

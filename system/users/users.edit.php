@@ -71,10 +71,6 @@ if ($a=='update')
 	$ruserpmnotify = sed_import('ruserpmnotify','P','INT');
 	$ruserskin = sed_import('ruserskin','P','TXT');
 	$ruserlang = sed_import('ruserlang','P','ALP');
-	$ruserwebsite = sed_import('ruserwebsite','P','TXT');
-	$rusericq = sed_import('rusericq','P','TXT');
-	$ruserirc = sed_import('ruserirc','P','TXT');
-	$rusermsn = sed_import('rusermsn','P','TXT');
 	$rusergender = sed_import('rusergender','P','TXT');
 	$ryear = sed_import('ryear','P','INT');
 	$rmonth = sed_import('rmonth','P','INT');
@@ -82,8 +78,6 @@ if ($a=='update')
 	$rhour = sed_import('rhour','P','INT');
 	$rminute = sed_import('rminute','P','INT');
 	$rusertimezone = (float) sed_import('rusertimezone','P','TXT');
-	$ruserlocation = sed_import('ruserlocation','P','TXT');
-	$ruseroccupation = sed_import('ruseroccupation','P','TXT');
 	$ruserdelete = sed_import('ruserdelete','P','BOL');
 	$ruserdelpfs = sed_import('ruserdelpfs','P','BOL');
 	$rusernewpass = sed_import('rusernewpass','P','TXT', 16);
@@ -210,15 +204,9 @@ if ($a=='update')
 			user_pmnotify='$ruserpmnotify',
 			user_skin='".sed_sql_prep($ruserskin)."',
 			user_lang='".sed_sql_prep($ruserlang)."',
-			user_website='".sed_sql_prep($ruserwebsite)."',
-			user_icq='".sed_sql_prep($rusericq)."',
-			user_msn='".sed_sql_prep($rusermsn)."',
-			user_irc='".sed_sql_prep($ruserirc)."',
 			user_gender='".sed_sql_prep($rusergender)."',
 			user_birthdate='".sed_sql_prep($ruserbirthdate)."',
 			user_timezone='".sed_sql_prep($rusertimezone)."',
-			user_location='".sed_sql_prep($ruserlocation)."',
-			user_occupation='".sed_sql_prep($ruseroccupation)."',
 			".$ssql_extra."
 			user_auth=''
 			WHERE user_id='$id'";
@@ -336,15 +324,9 @@ $useredit_array = array(
 	"USERS_EDIT_AVATAR" => sed_inputbox('text', 'ruseravatar', $urr['user_avatar'], array('size' => 32, 'maxlength' => 255)),
 	"USERS_EDIT_PHOTO" => sed_inputbox('text', 'ruserphoto', $urr['user_photo'], array('size' => 32, 'maxlength' => 255)),
 	"USERS_EDIT_SIGNATURE" => sed_inputbox('text', 'rusersignature', $urr['user_signature'], array('size' => 32, 'maxlength' => 255)),
-	"USERS_EDIT_WEBSITE" => sed_inputbox('text', 'ruserwebsite', $urr['user_website'], array('size' => 56, 'maxlength' => 128)),
-	"USERS_EDIT_ICQ" => sed_inputbox('text', 'rusericq', $urr['user_icq'], array('size' => 32, 'maxlength' => 16)),
-	"USERS_EDIT_MSN" => sed_inputbox('text', 'rusermsn', $urr['user_msn'], array('size' => 32, 'maxlength' => 64)),
-	"USERS_EDIT_IRC" => sed_inputbox('text', 'ruserirc', $urr['user_irc'], array('size' => 56, 'maxlength' => 255)),
 	"USERS_EDIT_GENDER" => $user_form_gender,
 	"USERS_EDIT_BIRTHDATE" => $user_form_birthdate,
 	"USERS_EDIT_TIMEZONE" => sed_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),
-	"USERS_EDIT_LOCATION" => sed_inputbox('text', 'ruserlocation', $urr['user_location'], array('size' => 32, 'maxlength' => 64)),
-	"USERS_EDIT_OCCUPATION" => sed_inputbox('text', 'ruseroccupation', $urr['user_occupation'], array('size' => 32, 'maxlength' => 64)),
 	"USERS_EDIT_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_EDIT_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone']*3600)." ".$usr['timetext'],
 	"USERS_EDIT_LOGCOUNT" => $urr['user_logcount'],
