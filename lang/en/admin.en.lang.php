@@ -12,6 +12,12 @@
 defined('SED_CODE') or die('Wrong URL.');
 
 /**
+ * Common words
+ */
+$L['Extension'] = 'Extension';
+$L['Extensions'] = 'Extensions';
+
+/**
  * Home Section
  */
 

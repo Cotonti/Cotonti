@@ -14,6 +14,7 @@ defined('SED_CODE') or die('Wrong URL.');
 // Requirements
 sed_require_api('extrafields');
 sed_require_api('forms');
+sed_require_api('extensions');
 sed_require_lang('admin', 'core');
 sed_require_rc('admin');
 
