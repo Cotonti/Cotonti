@@ -13,7 +13,7 @@
 
 		<div class="block">
 			<h2 class="forums">{FORUMS_POSTS_PAGETITLE}</h2>
-			<p class="small">{FORUMS_POSTS_SUBTITLE}<br /></p>
+			<!-- IF {FORUMS_POSTS_SUBTITLE} --><p class="small">{FORUMS_POSTS_SUBTITLE}</p><!-- ENDIF -->
 			<table class="cells">
 				<tr>
 					<td class="coltop width20">{PHP.L.Author}</td>

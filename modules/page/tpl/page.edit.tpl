@@ -66,7 +66,7 @@
 					<!-- END: ADMIN -->
 					<tr>
 						<td colspan="2">
-							{PAGEEDIT_FORM_TEXT}{PAGEEDIT_FORM_PFS_TEXT_USER} &nbsp; {PAGEEDIT_FORM_PFS_TEXT_SITE}
+							{PAGEEDIT_FORM_TEXT}<!-- IF {PAGEEDIT_FORM_PFS_TEXT_USER} -->{PAGEEDIT_FORM_PFS_TEXT_USER}<!-- ENDIF --><!-- IF {PAGEEDIT_FORM_PFS_TEXT_SITE} --><span class="spaced">{PHP.cfg.separator}</span>{PAGEEDIT_FORM_PFS_TEXT_SITE}<!-- ENDIF -->
 						</td>
 					</tr>
 					<tr>
