@@ -35,8 +35,8 @@ foreach (sed_getextplugins('admin.main') as $pl)
 /* ===== */
 
 $standard_admin = array('banlist', 'bbcode', 'cache.disk', 'cache', 'config', 'extrafields', 'hits', 'home', 'infos',
-	'log', 'other', 'ext', 'ratings', 'referers', 'rights', 'rightsbyitem', 'structure', 'tools', 'trashcan', 'urls',
-	'users');
+	'log', 'other', 'extensions', 'ratings', 'referers', 'rights', 'rightsbyitem', 'structure', 'tools', 'trashcan',
+	'urls', 'users');
 
 $inc_file = (empty($m)) ? 'home' : $m;
 $inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
@@ -95,7 +95,7 @@ if (!SED_AJAX)
 			'class' => $m == 'config' ? 'sel' : ''
 		);
 		$admin_menu[] = array(
-			'url' => sed_url('admin', 'm=ext'),
+			'url' => sed_url('admin', 'm=extensions'),
 			'icon' => $R['admin_menu_icon_extensions'],
 			'class' => $m == 'ext' ? 'sel' : ''
 		);

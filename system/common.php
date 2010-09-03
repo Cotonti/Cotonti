@@ -109,7 +109,7 @@ else
 	$cot_cache && $cot_cache->db->store('cot_cfg', $cfg, 'system');
 }
 // Mbstring options
-mb_internal_encoding($cfg['charset']);
+mb_internal_encoding('UTF-8');
 
 /* ======== Extra settings (the other presets are in functions.php) ======== */
 

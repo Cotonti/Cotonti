@@ -43,7 +43,7 @@ $id = sed_import('id', 'G', 'ALP');
 $c = empty($c) ? "pages" : $c;
 $id = empty($id) ? "all" : $id;
 
-header('Content-type: text/xml; charset=' . $cfg['charset']);
+header('Content-type: text/xml; charset=' . $cfg['module']['rss']['charset']);
 $sys['now'] = time();
 
 if ($usr['id'] === 0 && $cot_cache)

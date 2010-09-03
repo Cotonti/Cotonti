@@ -1,12 +1,12 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Configuration}</h2>
-<!-- IF {PHP.is_adminwarnings} -->
+<!-- BEGIN: MESSAGE -->
 			<div class="error">
 				<h4>{PHP.L.Message}</h4>
 				<p>{ADMIN_CONFIG_ADMINWARNINGS}</p>
 			</div>
-<!-- ENDIF -->
+<!-- END: MESSAGE -->
 <!-- BEGIN: EDIT -->
 		<form name="saveconfig" id="saveconfig" action="{ADMIN_CONFIG_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
@@ -20,9 +20,7 @@
 				<td>{ADMIN_CONFIG_ROW_CONFIG_TITLE}:</td>
 				<td>
 					{ADMIN_CONFIG_ROW_CONFIG}
-<!-- IF {PHP.if_config_more} -->
 					<div class="adminconfigmore">{ADMIN_CONFIG_ROW_CONFIG_MORE}</div>
-<!-- ENDIF -->
 				</td>
 				<td class="centerall">
 					<a href="{ADMIN_CONFIG_ROW_CONFIG_MORE_URL}" class="ajax">
@@ -42,25 +40,21 @@
 <!-- BEGIN: DEFAULT -->
 		<table class="cells">
 			<tr>
-				<td class="coltop width50">{PHP.L.Core}</td>
-				<td class="coltop width50">{PHP.L.Plugins}</td>
+				<td class="coltop width30">{PHP.L.Core}</td>
+				<td class="coltop width30">{PHP.L.Modules}</td>
+				<td class="coltop width30">{PHP.L.Plugins}</td>
 			</tr>
 			<tr>
+<!-- BEGIN: ADMIN_CONFIG_COL -->
 				<td>
 					<ul class="follow">
-<!-- BEGIN: ADMIN_CONFIG_ROW_CORE -->
-						<li><a href="{ADMIN_CONFIG_ROW_CORE_URL}" class="ajax">
-					{ADMIN_CONFIG_ROW_CORE_NAME}</a></li>
-<!-- END: ADMIN_CONFIG_ROW_CORE -->
+<!-- BEGIN: ADMIN_CONFIG_ROW -->
+						<li><a href="{ADMIN_CONFIG_ROW_URL}" class="ajax">
+					{ADMIN_CONFIG_ROW_NAME}</a></li>
+<!-- END: ADMIN_CONFIG_ROW -->
 					</ul>
 				</td>
-				<td>
-					<ul class="follow">
-<!-- BEGIN: ADMIN_CONFIG_ROW_PLUG -->
-						<li><a href="{ADMIN_CONFIG_ROW_PLUG_URL}" class="ajax">{ADMIN_CONFIG_ROW_PLUG_NAME}</a></li>
-<!-- END: ADMIN_CONFIG_ROW_PLUG -->
-					</ul>
-				</td>
+<!-- END: ADMIN_CONFIG_COL -->
 			</tr>
 		</table>
 <!-- END: DEFAULT -->

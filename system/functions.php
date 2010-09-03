@@ -619,7 +619,7 @@ function sed_sendheaders($content_type = 'text/html', $status_line = 'HTTP/1.1 2
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
-	header('Content-Type: '.$content_type.'; charset='.$cfg['charset']);
+	header('Content-Type: '.$content_type.'; charset=UTF-8');
 	header('Cache-Control: no-store,no-cache,must-revalidate');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
 	header('Pragma: no-cache');
@@ -2943,7 +2943,7 @@ function sed_redirect($url)
 		$output = $cfg['doctype'].<<<HTM
 		<html>
 		<head>
-		<meta http-equiv="content-type" content="text/html; charset={$cfg['charset']}" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="refresh" content="0; url=$url" />
 		<title>Redirecting...</title></head>
 		<body>Redirecting to <a href="$url">$url</a>

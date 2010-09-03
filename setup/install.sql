@@ -224,7 +224,6 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','ratings','02','ratings_allowchange',3,'0','0','',''),
 ('core','skin','02','forcedefaultskin',3,'0','0','',''),
 ('core','skin','03','homebreadcrumb',3,'0','0','',''),
-('core','skin','06','charset',4,'UTF-8','UTF-8','',''),
 ('core','skin','08','metakeywords',1,'','','',''),
 ('core','skin','08','separator',1,'/','/','',''),
 ('core','skin','15','disablesysinfos',3,'0','0','',''),
