@@ -31,6 +31,10 @@ define('COT_CONFIG_TYPE_SELECT', 2);
  */
 define('COT_CONFIG_TYPE_RADIO', 3);
 /**
+ * Callback function type
+ */
+define('COT_CONFIG_TYPE_CALLBACK', 4);
+/**
  * Hidden config. It is actually a text string, but it is not displayed anywhere
  */
 define('COT_CONFIG_TYPE_HIDDEN', 5);

@@ -4,6 +4,15 @@
  * Administration
  */
 
+// Status indicators
+$R['admin_code_missing'] = '<span style="color:#AC5866;font-weight:bold;">'.$L['adm_missing'].'</span>';
+$R['admin_code_notinstalled'] = '<span style="color:#AC5866;font-weight:bold;">'.$L['adm_notinstalled'].'</span>';
+$R['admin_code_partrunning'] = '<span style="color:#A78731;font-weight:bold;">'.$L['adm_partrunning'].'</span>';
+$R['admin_code_paused'] = '<span style="color:#5882AC;font-weight:bold;">'.$L['adm_paused'].'</span>';
+$R['admin_code_present'] = '<span style="color:#739E48;font-weight:bold;">'.$L['adm_present'].'</span>';
+$R['admin_code_running'] = '<span style="color:#739E48;font-weight:bold;">'.$L['adm_running'].'</span>';
+
+// Icons
 $R['admin_icon_admin'] = '<img class="icon" src="system/admin/img/admin.png" alt="" />';
 $R['admin_icon_allow'] = '<img class="icon" src="system/admin/img/allow.png" alt="" />';
 $R['admin_icon_allow_locked'] = '<img class="icon" src="system/admin/img/allow_locked.png" alt="" />';

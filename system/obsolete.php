@@ -61,7 +61,7 @@ function sed_htmlmetas()
 {
 		global $cfg;
 		$contenttype = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
-		$result = "<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=".$cfg['charset']."\" />
+		$result = "<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=UTF-8\" />
 <meta name=\"description\" content=\"".$cfg['maintitle']." - ".$cfg['subtitle']."\" />
 <meta name=\"keywords\" content=\"".$cfg['metakeywords']."\" />
 <meta name=\"generator\" content=\"Cotonti http://www.cotonti.com\" />

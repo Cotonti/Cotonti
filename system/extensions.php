@@ -29,6 +29,11 @@ define('COT_EXT_NOTHING_TO_UPDATE', 2);
 define('COT_PLUGIN_DEFAULT_ORDER', 10);
 
 /**
+ * These parts ($name.$part.php) are reserved handlers with no hooks
+ */
+$GLOBALS['cot_ext_ignore_parts'] = array('configure', 'install', 'setup', 'uninstall');
+
+/**
  * Applies custom SQL and PHP patches in a directory. Error and success
  * messages are emitted via standard messaging API during execution.
  * 
@@ -185,7 +190,7 @@ function sed_extension_dependencies_statisfied($name, $is_module = false,
 function sed_extension_install($name, $is_module = false, $update = false)
 {
     global $cfg, $L, $cot_error, $cot_cache, $usr, $db_auth, $db_users,
-		$db_updates, $db_core, $sed_groups;
+		$db_updates, $db_core, $sed_groups, $cot_ext_ignore_parts;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
@@ -250,13 +255,11 @@ function sed_extension_install($name, $is_module = false, $update = false)
 	}
     // Install hook parts and bindings
     $hook_bindings = array();
-	// These parts ($name.$part.php) are reserved handlers with no hooks
-	$ignore_parts = array('configure', 'install', 'setup', 'uninstall');
     $dp = opendir($path);
     while ($f = readdir($dp))
     {
         if (preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt)
-			&& !in_array($mt[2], $ignore_parts))
+			&& !in_array($mt[2], $cot_ext_ignore_parts))
         {
             $part_info = sed_infoget($path . "/$f", 'COT_EXT');
             if ($part_info)

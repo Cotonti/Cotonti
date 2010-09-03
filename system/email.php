@@ -20,25 +20,15 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 	}
 	else
 	{
-		if ($cfg['charset'] != 'us-ascii')
-		{
-			$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], $cfg['charset'], 'B', "\n");
-		}
-		else
-		{
-			$sitemaintitle = $cfg['maintitle'];
-		}
+		$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
 
 		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
 		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
 
 		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
-		if ($cfg['charset'] != 'us-ascii')
-		{
-			$headers .= "Content-Type: text/plain; charset=".$cfg['charset']."\n";
-			$headers .= "Content-Transfer-Encoding: 8bit\n";
-			$subject = mb_encode_mimeheader($subject, $cfg['charset'], 'B', "\n");
-		}
+		$headers .= "Content-Type: text/plain; charset=UTF-8\n";
+		$headers .= "Content-Transfer-Encoding: 8bit\n";
+		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
 		if (ini_get('safe_mode'))
 		{
 			mail($fmail, $subject, $body, $headers);
