@@ -462,5 +462,5 @@ INSERT INTO `sed_extra_fields` (`field_location`, `field_name`, `field_type`, `f
 ('sed_users', 'location', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', ''),
 ('sed_users', 'occupation', 'input', '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}', '', '', 0, 'Text', '');
 
-/* r1310 charset option is obsolete */
+/* r1311 charset option is obsolete */
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'skin' AND `config_name` = 'charset';
