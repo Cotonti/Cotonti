@@ -52,8 +52,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">{PHP.L.Text}:
-							{PAGEADD_FORM_TEXT}
-							{PAGEADD_FORM_PFS_TEXT_USER} &nbsp; {PAGEADD_FORM_PFS_TEXT_SITE}
+							{PAGEADD_FORM_TEXT}<!-- IF {PAGEADD_FORM_PFS_TEXT_USER} -->{PAGEADD_FORM_PFS_TEXT_USER}<!-- ENDIF --><!-- IF {PAGEADD_FORM_PFS_TEXT_SITE} --><span class="spaced">{PHP.cfg.separator}</span>{PAGEADD_FORM_PFS_TEXT_SITE}<!-- ENDIF -->
 						</td>
 					</tr>			
 					<tr>
