@@ -379,13 +379,16 @@ $L['ext_config_updated'] = 'Updated configuration options';
 $L['ext_dependency_error'] = '{$dep_type} &quot;{$dep_name}&quot; required by {$type} &quot;{$name}&quot; is neither installed nor selected for installation';
 $L['ext_executed_php'] = 'Executed PHP handler part: {$ret}';
 $L['ext_executed_sql'] = 'Executed SQL handler part: {$ret}';
+$L['ext_installing'] = 'Installing {$type} &quot;{$name}&quot;';
 $L['ext_invalid_format'] = 'This is not a valid Cotonti >= 0.9 extension. Please contact the developer';
 $L['ext_patch_applied'] = 'Applied patch {$f}: {$msg}';
 $L['ext_patch_error'] = 'Error applying patch {$f}: {$msg}';
 $L['ext_setup_not_found'] = 'Setup file is not found';
+$L['ext_uninstalling'] = 'Uninstalling {$type} &quot;{$name}&quot;';
 $L['ext_up2date'] = '{$type} &quot;{$name}&quot; is up to date';
 $L['ext_update_error'] = 'Failed updating {$type} &quot;{$name}&quot;';
 $L['ext_updated'] = '{$type} &quot;{$name}&quot; has been updated to version {$ver}';
+$L['ext_updating'] = 'Updating {$type} &quot;{$name}&quot;';
 
 /**
   * Page Section
@@ -523,30 +526,18 @@ $L['adm_override_guests'] = 'System override, guests and inactive are not allowe
 $L['adm_override_banned'] = 'System override, Banned';	// New in 0.0.6
 $L['adm_override_admins'] = 'System override, Administrators';	// New in 0.0.6
 
-$L['adm_opt_installall'] = 'Install all';
-$L['adm_opt_installall_explain'] = 'This will install or reset all the parts of the plugin.';
-$L['adm_opt_uninstallall'] = 'Un-install all</a></td>';
-$L['adm_opt_uninstallall_explain'] = 'This will disable all the parts of the plugin, but won\'t physically remove the files.';
+$L['adm_opt_install'] = 'Install';
+$L['adm_opt_install_explain'] = 'This will make a new install of this extension';
 $L['adm_opt_pauseall'] = 'Pause all';
-$L['adm_opt_pauseall_explain'] = 'This will pause (disable) all the parts of the plugin.';
+$L['adm_opt_pauseall_explain'] = 'This will pause (disable) all the plugin parts.';
+$L['adm_opt_update'] = 'Update';
+$L['adm_opt_update_explain'] = 'This will update extension configuration and data if extension files on disk have been updated already';
+$L['adm_opt_uninstall'] = 'Un-install';
+$L['adm_opt_uninstall_explain'] = 'This will disable all the parts of the extension and remove all of its data and configuration, but won\'t physically remove the files.';
 $L['adm_opt_unpauseall'] = 'Un-pause all';
-$L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the parts of the plugin.';
+$L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the plugin parts.';
 
-$L['adm_opt_setoption_warn'] = 'Options found for this plugin. Would you like to install from kept options?';	// New in 0.0.2
-$L['adm_opt_uninstall_warn'] = 'You can delete this plugin without deleting old settings (rights and options). Click if you want to.';	// New in 0.0.2
 $L['adm_opt_setup_missing'] = 'Error: setup file missing!';	// New in 0.0.6
-
-$L['adm_pluginstall_msg01'] = 'Configuring plugin...';	// New in 0.0.6
-$L['adm_pluginstall_msg02'] = 'Deleting old configuration entries...';	// New in 0.0.6
-$L['adm_pluginstall_msg03'] = 'Looking for the setup file...';	// New in 0.0.6
-$L['adm_pluginstall_msg04'] = 'Looking for parts...';	// New in 0.0.6
-$L['adm_pluginstall_msg05'] = 'Installing the parts...';	// New in 0.0.6
-$L['adm_pluginstall_msg06'] = 'Looking for configuration entries in the setup file...';	// New in 0.0.6
-$L['adm_pluginstall_msg07'] = 'Not found! Installation failed!';	// New in 0.0.6
-$L['adm_pluginstall_msg08'] = 'Deleting any old rights about this plugin...';	// New in 0.0.6
-$L['adm_pluginstall_msg09'] = 'Adding the rights for the groups of users...';	// New in 0.0.6
-$L['adm_pluginstall_msg10'] = 'Resetting the auth column for all the users...';	// New in 0.0.6
-$L['adm_pluginstall_msg11'] = 'Running on-install part of the setup script...';	// New in 0.0.6
 
 /**
  * Tools Section
