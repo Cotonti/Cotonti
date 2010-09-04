@@ -81,29 +81,30 @@
 	</table>
 	<h3>{PHP.L.Options}:</h3>
 	<table class="cells">
+<!-- IF !{PHP.isinstalled} -->
 		<tr>
 			<td class="width20">
-				<a href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax">{PHP.L.adm_opt_installall}</a>
+				<a href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax">{PHP.L.adm_opt_install}</a>
 			</td>
 			<td class="width80">
-				{PHP.L.adm_opt_installall_explain}
-<!-- IF !{PHP.isinstalled} AND {PHP.totalconfig} > 0 -->
-				<p class="small"><a href="{ADMIN_EXTENSIONS_INSTALL_KO_URL}" class="ajax">{PHP.L.adm_opt_setoption_warn}</a></p>
-<!-- ENDIF -->
+				{PHP.L.adm_opt_install_explain}
 			</td>
 		</tr>
-<!-- IF {PHP.isinstalled} > 0 -->
+<!-- ELSE -->
 		<tr>
 			<td>
-				<a href="{ADMIN_EXTENSIONS_UNINSTALL}" class="ajax">{PHP.L.adm_opt_uninstallall}</a>
+				<a href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax">{PHP.L.adm_opt_update}</a>
 			</td>
 			<td>
-				{PHP.L.adm_opt_uninstallall_explain}
-<!-- ENDIF -->
-<!-- IF {PHP.isinstalled} > 0 AND {PHP.totalconfig} > 0 -->
-				<p class="small"><a href="{ADMIN_EXTENSIONS_UNINSTALL_KO_URL}" class="ajax">{PHP.L.adm_opt_uninstall_warn}</a></p>
-<!-- ENDIF -->
-<!-- IF {PHP.isinstalled} -->
+				{PHP.L.adm_opt_update_explain}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="{ADMIN_EXTENSIONS_UNINSTALL_URL}" class="ajax">{PHP.L.adm_opt_uninstall}</a>
+			</td>
+			<td>
+				{PHP.L.adm_opt_uninstall_explain}
 			</td>
 		</tr>
 		<tr>
@@ -145,7 +146,7 @@
 		<tr>
 			<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_I_1}</td>
 			<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_PART}</td>
-			<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_FILE}.php</td>
+			<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_FILE}</td>
 			<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS}</td>
 			<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_ORDER}</td>
 			<td class="centerall">{ADMIN_EXTENSIONS_DETAILS_ROW_STATUS}</td>
@@ -186,24 +187,26 @@
 <!-- END: ROW_TAGS -->
 	</table>
 <!-- END: DETAILS -->
+
 <!-- BEGIN: DEFAULT -->
-	<h2>{PHP.L.Plugins} ({ADMIN_EXTENSIONS_CNT_EXTP}):</h2>
+<!-- BEGIN: SECTION-->
+	<h2>{ADMIN_EXTENSIONS_SECTION_TITLE} ({ADMIN_EXTENSIONS_CNT_EXTP}):</h2>
 	<table class="cells">
 		<tr>
 			<td class="coltop width5">&nbsp;</td>
-			<td class="coltop width30">{PHP.L.Plugins} {PHP.L.adm_clicktoedit}</td>
+			<td class="coltop width30">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
 			<td class="coltop width20">{PHP.L.Code}</td>
 			<td class="coltop width10">{PHP.L.Parts}</td>
 			<td class="coltop width20">{PHP.L.Status}</td>
 			<td class="coltop width15">{PHP.L.Action}</td>
 		</tr>
 <!-- BEGIN: ROW -->
-<!-- BEGIN: ROW_ERROR_PLUG -->
+<!-- BEGIN: ROW_ERROR_EXT-->
 		<tr>
 			<td>{ADMIN_EXTENSIONS_X_ERR}</td>
 			<td colspan="5">{ADMIN_EXTENSIONS_ERROR_MSG}</td>
 		</tr>
-<!-- END: ROW_ERROR_PLUG -->
+<!-- END: ROW_ERROR_EXT -->
 		<tr>
 			<td class="centerall">
 <!-- IF {PHP.ifthistools} -->
@@ -234,11 +237,12 @@
 <!-- END: ROW -->
 <!-- BEGIN: ROW_ERROR -->
 		<tr>
-			<td>plugins/{ADMIN_EXTENSIONS_X}</td>
+			<td>{ADMIN_EXTENSIONS_X}</td>
 			<td colspan="5">{PHP.L.adm_opt_setup_missing}</td>
 		</tr>
 <!-- END: ROW_ERROR -->
 	</table>
+<!-- END: SECTION -->
 	<h2>{PHP.L.Hooks} ({ADMIN_EXTENSIONS_CNT_HOOK}):</h2>
 	<table class="cells">
 		<tr>
@@ -258,71 +262,13 @@
 	</table>
 <!-- END: DEFAULT -->
 <!-- BEGIN: EDIT -->
-<!-- BEGIN: INSTALL -->
-		<h2>{PHP.L.adm_pluginstall_msg01}</h2>
-
-<!-- BEGIN: ROW_PARTS_FOUND -->
-		<p>&ndash; {PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_FOUND_F}</p>
-<!-- END: ROW_PARTS_FOUND -->
-<!-- IF {PHP.extplugin_info_exists} -->
-		<h3>{PHP.L.adm_pluginstall_msg05}</h3>
-<!-- ENDIF -->
-<!-- BEGIN: ROW_PARTS_INSTALLING -->
-		<p>&ndash; {PHP.L.Part}: {ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_INSTALLING_X} ...<br />
-		{ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG}</p>
-<!-- END: ROW_PARTS_INSTALLING -->
-<!-- IF {PHP.extplugin_info_exists} -->
-		<h3>{PHP.L.adm_pluginstall_msg06}</h3>
-<!-- ENDIF -->
-<!-- BEGIN: ROW_PARTS_CFG -->
-		<p>&ndash; {PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG}</p>
-<!-- BEGIN: ROW_PARTS_CFG_ENTRY -->
-		<p>&ndash; {PHP.L.Entry} #{ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_CFG_J} {ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_CFG_I} ({ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_CFG_LINE}) {PHP.L.adm_installed}</p>
-<!-- END: ROW_PARTS_CFG_ENTRY -->
-<!-- END: ROW_PARTS_CFG -->
-<!-- BEGIN: ROW_PARTS_CFG_ERROR -->
-		<p>{PHP.L.None}</p>
-<!-- END: ROW_PARTS_CFG_ERROR -->
-<!-- IF !{PHP.extplugin_info_exists} -->
-		<h3>{PHP.L.adm_pluginstall_msg07}</h3>
-<!-- ENDIF -->
-<!-- IF !{PHP.ko} -->
-		<h3>{PHP.L.adm_pluginstall_msg08}</h3>
-		<p>{PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS3}</p>
-<!-- ENDIF -->
-		<h3>{PHP.L.adm_pluginstall_msg09}</h3>
-<!-- BEGIN: ROW_RIGHTS -->
-		<p>&ndash; {PHP.L.Group} #{ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_ID}, {ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_TITLE} : Auth={ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_AUTH} / Lock={ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_LOCK} ({ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_COMMENT})</p>
-<!-- END: ROW_RIGHTS -->
-		<h3>{PHP.L.adm_pluginstall_msg10}</h3>
-		<p>{PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS4}</p>
-		<h3>{PHP.L.adm_pluginstall_msg11}</h3>
-		<p>{PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_EXTPLUGIN_INFO}</p>
-		<h3>{PHP.L.Done}!</h3>
-		<span>{ADMIN_EXTENSIONS_EDIT_LOG}</span>
+		<h2>{ADMIN_EXTENSIONS_EDIT_TITLE}</h2>
+		<div class="{ADMIN_EXTENSIONS_EDIT_RESULT}">
+			{ADMIN_EXTENSIONS_EDIT_LOG}
+		</div>
 		<ul class="follow">
 			<li><a href="{ADMIN_EXTENSIONS_EDIT_CONTINUE_URL}" class="ajax">{PHP.L.Clickhere}</a></li>
 		</ul>
-<!-- END: INSTALL -->
-<!-- BEGIN: UNINSTALL -->
-	<h2>{PHP.L.adm_pluginstall_msg01}</h2>
-		<p>{PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS1}</p>
-<!-- IF !{PHP.ko} -->
-		<h3>{PHP.L.adm_pluginstall_msg02}</h3>
-		<p>{PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS2}</p>
-		<h3>{PHP.L.adm_pluginstall_msg08}</h3>
-		<p>{PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS3}</p>
-<!-- ENDIF -->
-		<h3>{PHP.L.adm_pluginstall_msg10}</h3>
-		<p>{PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS4}</p>
-		<h3>{PHP.L.adm_pluginstall_msg11}</h3>
-		<p>{PHP.L.Found}: {ADMIN_EXTENSIONS_EDIT_EXTPLUGIN_INFO}</p>
-		<h3>{PHP.L.Done}</h3>
-		<span>{ADMIN_EXTENSIONS_EDIT_LOG}</span>
-		<ul class="follow">
-			<li><a href="{ADMIN_EXTENSIONS_EDIT_CONTINUE_URL}" class="ajax">{PHP.L.Clickhere}</a></li>
-		</ul>
-<!-- END: UNINSTALL -->
 <!-- END: EDIT -->
 	</div>
 <!-- END: MAIN -->

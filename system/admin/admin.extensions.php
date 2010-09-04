@@ -15,6 +15,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin',
 sed_block($usr['isadmin']);
 
 sed_require_api('auth');
+sed_require_api('parser');
 
 $t = new XTemplate(sed_skinfile('admin.extensions'));
 
@@ -23,13 +24,16 @@ $adminpath[] = array (sed_url('admin', 'm=extensions'), $L['Extensions']);
 $pl = sed_import('pl', 'G', 'ALP');
 $mod = sed_import('mod', 'G', 'ALP');
 $part = sed_import('part', 'G', 'ALP');
-$ko = sed_import('ko', 'G', 'BOL');
 
 if (empty($mod))
 {
 	if (empty($pl))
 	{
-		sed_die();
+		if (!empty($a))
+		{
+			sed_print($m, $a, $mod, $pl, $part);
+			sed_die();
+		}
 	}
 	else
 	{
@@ -69,7 +73,7 @@ switch($a)
 	/* =============== */
 	case 'details':
 	/* =============== */
-		$extplugin_info = $dir . '/' . $code . '/' . $code . '.setup.php';
+		$ext_info = $dir . '/' . $code . '/' . $code . '.setup.php';
 		switch($b)
 		{
 			case 'pause':
@@ -101,9 +105,9 @@ switch($a)
 				sed_message('adm_partrunning');
 			break;
 		}
-		if(file_exists($extplugin_info))
+		if(file_exists($ext_info))
 		{
-			$info = sed_infoget($extplugin_info, 'COT_EXT');
+			$info = sed_infoget($ext_info, 'COT_EXT');
 			$adminpath[] = array(sed_url('admin', "m=extensions&a=details&$arg=$code"), $info['Name']." ($code)");
 
 			$parts = array();
@@ -166,7 +170,7 @@ switch($a)
 						{
 							$t->assign(array(
 								'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
-								'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_file['Part']
+								'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part
 							));
 							$t->parse('MAIN.DETAILS.ROW_ERROR_TAGS');
 						}
@@ -192,7 +196,7 @@ switch($a)
 
 							$t->assign(array(
 								'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
-								'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_file['Part'],
+								'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
 								'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $line[0].' :<br />',
 								'ADMIN_EXTENSIONS_DETAILS_ROW_LISTTAGS' => $listtags,
 								//'ADMIN_EXTENSIONS_DETAILS_ROW_TAGS_ODDEVEN' => sed_build_oddeven($ii)
@@ -200,12 +204,13 @@ switch($a)
 							$t->parse('MAIN.DETAILS.ROW_TAGS');
 						}
 
+						$info_order = empty($info_file['Order']) ? COT_PLUGIN_DEFAULT_ORDER : $info_file['Order'];
 						$t->assign(array(
 							'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
-							'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_file['Part'],
-							'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $info_file['File'],
+							'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
+							'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $x,
 							'ADMIN_EXTENSIONS_DETAILS_ROW_HOOKS' => $info_file['Hooks'],
-							'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER' => $info_file['Order'],
+							'ADMIN_EXTENSIONS_DETAILS_ROW_ORDER' => $info_order,
 							'ADMIN_EXTENSIONS_DETAILS_ROW_STATUS' => $status[$info_file['Status']],
 							//'ADMIN_EXTENSIONS_DETAILS_ROW_PART_ODDEVEN' => sed_build_oddeven($ii)
 						));
@@ -217,13 +222,13 @@ switch($a)
 						if ($info_file['Status'] != 3 && $row['pl_active'] == 1)
 						{
 							$t->assign('ADMIN_EXTENSIONS_DETAILS_ROW_PAUSEPART_URL',
-								sed_url('admin', "m=plug&a=details&$arg=$code&b=pausepart&part=".$row['pl_id']));
+								sed_url('admin', "m=extensions&a=details&$arg=$code&b=pausepart&part=".$row['pl_id']));
 							$t->parse('MAIN.DETAILS.ROW_PART.ROW_PART_PAUSE');
 						}
 						if ($info_file['Status'] != 3 && $row['pl_active'] == 0)
 						{
 							$t->assign('ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL',
-								sed_url('admin', "m=plug&a=details&$arg=$code&b=unpausepart&part=".$row['pl_id']));
+								sed_url('admin', "m=extensions&a=details&$arg=$code&b=unpausepart&part=".$row['pl_id']));
 							$t->parse('MAIN.DETAILS.ROW_PART.ROW_PARTUNPAUSE');
 						}
 
@@ -258,12 +263,11 @@ switch($a)
 				'ADMIN_EXTENSIONS_AUTHOR' => $info['Author'],
 				'ADMIN_EXTENSIONS_COPYRIGHT' => $info['Copyright'],
 				'ADMIN_EXTENSIONS_NOTES' => sed_parse($info['Notes'], 1, 0, 0),
-				'ADMIN_EXTENSIONS_INSTALL_URL' => sed_url('admin', "m=plug&a=edit&$arg=$code&b=install"),
-				'ADMIN_EXTENSIONS_INSTALL_KO_URL' => sed_url('admin', "m=plug&a=edit&$arg=$code&b=install&ko=1"),
-				'ADMIN_EXTENSIONS_UNINSTALL' => sed_url('admin', "m=plug&a=edit&$arg=$code&b=uninstall"),
-				'ADMIN_EXTENSIONS_UNINSTALL_KO_URL' => sed_url('admin', "m=plug&a=edit&$arg=$code&b=uninstall&ko=1"),
-				'ADMIN_EXTENSIONS_PAUSE_URL' => sed_url('admin', "m=plug&a=details&$arg=$code&b=pause"),
-				'ADMIN_EXTENSIONS_UNPAUSE_URL' => sed_url('admin', "m=plug&a=details&$arg=$code&b=unpause")
+				'ADMIN_EXTENSIONS_INSTALL_URL' => sed_url('admin', "m=extensions&a=edit&$arg=$code&b=install"),
+				'ADMIN_EXTENSIONS_UPDATE_URL' => sed_url('admin', "m=extensions&a=edit&$arg=$code&b=update"),
+				'ADMIN_EXTENSIONS_UNINSTALL_URL' => sed_url('admin', "m=extensions&a=edit&$arg=$code&b=uninstall"),
+				'ADMIN_EXTENSIONS_PAUSE_URL' => sed_url('admin', "m=extensions&a=details&$arg=$code&b=pause"),
+				'ADMIN_EXTENSIONS_UNPAUSE_URL' => sed_url('admin', "m=extensions&a=details&$arg=$code&b=unpause")
 			));
 			/* === Hook  === */
 			foreach (sed_getextplugins('admin.extensions.details') as $pl)
@@ -284,207 +288,16 @@ switch($a)
 		switch($b)
 		{
 			case 'install':
-				$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$code'");
-				$show_sql_affectedrows1 = sed_sql_affectedrows();
-
-				if(!$ko)
-				{
-					$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' and config_cat='$code'");
-					$show_sql_affectedrows2 = sed_sql_affectedrows();
-				}
-
-				$extplugin_info = $cfg['plugins_dir'].'/'.$code.'/'.$code.'.setup.php';
-
-				if(file_exists($extplugin_info))
-				{
-					$extplugin_info_exists = TRUE;
-					$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-					$adminpath[] = array(sed_url('admin', 'm=plug&a=details&pl='.$code), $info['Name']." ($code)");
-
-					$handle = opendir($cfg['plugins_dir'].'/'.$code);
-					$setupfile = $code.'.setup.php';
-					while($f = readdir($handle))
-					{
-						if($f != '.' && $f != '..' && $f != $setupfile && mb_strtolower(mb_substr($f, mb_strrpos($f, '.') + 1, 4)) == 'php')
-						{
-							$parts[] = $f;
-
-							$t->assign(array(
-								'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_FOUND_F' => $f
-							));
-							$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_FOUND');
-						}
-					}
-					closedir($handle);
-
-					if(count($parts) > 0)
-					{
-						while(list($i, $x) = each($parts))
-						{
-							$extplugin_file = $cfg['plugins_dir'].'/'.$code.'/'.$x;
-							$info_part = sed_infoget($extplugin_file, 'SED_EXTPLUGIN');
-
-							if(empty($info_part['Error']))
-							{
-								$sql = sed_sql_query("INSERT into $db_plugins (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active ) VALUES ('".$info_part['Hooks']."', '".$info_part['Code']."', '".sed_sql_prep($info_part['Part'])."', '".sed_sql_prep($info['Name'])."', '".$info_part['File']."',  ".(int)$info_part['Order'].", 1)");
-
-								$msg = ($sql) ? $L['adm_installed'] : $L['Error'];
-							}
-							else
-							{
-								$msg = $L['Error'];
-							}
-
-							$t->assign(array(
-								'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_INSTALLING_X' => $x,
-								'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_INSTALLING_MSG' => $msg
-							));
-							$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_INSTALLING');
-						}
-					}
-
-					$info_cfg = sed_infoget($extplugin_info, 'SED_EXTPLUGIN_CONFIG');
-
-					if(empty($info_cfg['Error']))
-					{
-						$j = 0;
-						foreach($info_cfg as $i => $x)
-						{
-							$line = explode(':', $x);
-
-							if(is_array($line) && !empty($line[1]) && !empty($i))
-							{
-								$j++;
-								switch($line[1])
-								{
-									case 'string':
-										$line['Type'] = 1;
-									break;
-									case 'select':
-										$line['Type'] = 2;
-									break;
-									case 'radio':
-										$line['Type'] = 3;
-									break;
-									default:
-										$line['Type'] = 0;
-									break;
-								}
-
-								if(!$ko)
-								{
-									$sql = sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_variants, config_text)
-										VALUES ('plug', '".$code."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".sed_sql_prep($line[3])."', '".sed_sql_prep($line[3])."', '".sed_sql_prep($line[2])."', '".sed_sql_prep($line[4])."')");
-								}
-								elseif ($ko)
-								{
-									$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$code' AND config_name='".$line[0]."' ");
-									$if = sed_sql_result($sqltmp, 0, "COUNT(*)");
-
-									$sql = (!$if) ? sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_variants, config_text)
-										VALUES ('plug', '".$code."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".sed_sql_prep($line[3])."', '".sed_sql_prep($line[3])."', '".sed_sql_prep($line[2])."', '".sed_sql_prep($line[4])."')") : '';
-								}
-
-								$t->assign(array(
-									'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_CFG_J' => $j,
-									'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_CFG_I' => $i,
-									'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_CFG_LINE' => $line[1]
-								));
-								$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_CFG.ROW_PARTS_CFG_ENTRY');
-							}
-							$totalconfig++;
-						}
-
-						$t->assign(array(
-							'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_PARTS_CFG_TOTALCONFIG' => $totalconfig
-						));
-						$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_CFG');
-					}
-					else
-					{
-						$t->parse('MAIN.EDIT.INSTALL.ROW_PARTS_CFG_ERROR');
-					}
-				}
-
-				if(!$ko)
-				{
-					$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$code'");
-					$show_sql_affectedrows3 = sed_sql_affectedrows();
-				}
-
-				foreach($sed_groups as $k => $v)
-				{
-					$comment = $L['adm_plugsetup'];
-
-					if($v['id'] == 1 || $v['id'] == 2)
-					{
-						$ins_auth = sed_auth_getvalue($info['Auth_guests']);
-						$ins_lock = sed_auth_getvalue($info['Lock_guests']);
-
-						if($ins_auth > 128 || $ins_lock < 128)
-						{
-							$ins_auth = ($ins_auth > 127) ? $ins_auth - 128 : $ins_auth;
-							$ins_lock = 128;
-							$comment = $L['adm_override_guests'];
-						}
-					}
-					elseif($v['id'] == 3)
-					{
-						$ins_auth = 0;
-						$ins_lock = 255;
-						$comment = $L['adm_override_banned'];
-					}
-					elseif($v['id'] == 5)
-					{
-						$ins_auth = 255;
-						$ins_lock = 255;
-						$comment = $L['adm_override_admins'];
-					}
-					else
-					{
-						$ins_auth = sed_auth_getvalue($info['Auth_members']);
-						$ins_lock = sed_auth_getvalue($info['Lock_members']);
-					}
-
-					if(!$ko)
-					{
-						$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$code', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
-					}
-					elseif(!$ko)
-					{
-						$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_auth WHERE auth_code='plug' AND auth_groupid='".(int)$v['id']."' AND auth_option='$code' ");
-						$if = sed_sql_result($sqltmp, 0, "COUNT(*)");
-
-						$sql = (!$if) ? sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$code', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")") : '';
-					}
-
-					$t->assign(array(
-						'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_ID' => $v['id'],
-						'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_TITLE' => $sed_groups[$v['id']]['title'],
-						'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_AUTH' => sed_auth_getmask($ins_auth),
-						'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_LOCK' => sed_auth_getmask($ins_lock),
-						'ADMIN_EXTENSIONS_EDIT_INSTALL_ROW_RIGHTS_COMMENT' => $comment
-					));
-					$t->parse('MAIN.EDIT.INSTALL.ROW_RIGHTS');
-				}
-				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
-				$show_sql_affectedrows4 = sed_sql_affectedrows();
-
-				$extplugin_install = $cfg['plugins_dir']."/".$code."/".$code.".install.php";
-				$action = 'install';
-				include_once($extplugin_info);
-
-				sed_auth_reorder();
-				$cot_cache && $cot_cache->db->remove('sed_plugins', 'system');
+				$result = sed_extension_install($code, $is_module);
 
 				$t->assign(array(
-					'ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS1' => $show_sql_affectedrows1,
-					'ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS2' => $show_sql_affectedrows2,
-					'ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS3' => $show_sql_affectedrows3,
-					'ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS4' => $show_sql_affectedrows4,
-					'ADMIN_EXTENSIONS_EDIT_EXTPLUGIN_INFO' => include_once($extplugin_info),
-					'ADMIN_EXTENSIONS_EDIT_LOG' => $edit_log,
-					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => sed_url('admin', "m=plug&a=details&pl=".$code)
+					'ADMIN_EXTENSIONS_EDIT_TITLE' => sed_rc('ext_installing', array(
+							'type' => $is_module ? $L['Module'] : $L['Plugin'],
+							'name' => $code
+						)),
+					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !$cot_error ? 'success' : 'error',
+					'ADMIN_EXTENSIONS_EDIT_LOG' => sed_implode_messages(),
+					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => sed_url('admin', "m=extensions&a=details&$arg=$code")
 				));
 				/* === Hook  === */
 				foreach (sed_getextplugins('admin.extensions.install.tags') as $pl)
@@ -492,40 +305,37 @@ switch($a)
 					include $pl;
 				}
 				/* ===== */
-				$t->parse('MAIN.EDIT.INSTALL');
-				$t->parse('MAIN.EDIT');
 			break;
-			case 'uninstall':
-				$extplugin_info = $cfg['plugins_dir'].'/'.$code.'/'.$code.'.setup.php';
-				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-				$adminpath[] = array(sed_url('admin', 'm=plug&a=details&pl='.$code), $info['Name']." ($code)");
-				$sql = sed_sql_query("DELETE FROM $db_plugins WHERE pl_code='$code'");
-				$show_sql_affectedrows1 = sed_sql_affectedrows();
-
-				if(!$ko)
-				{
-					$sql = sed_sql_query("DELETE FROM $db_config WHERE config_owner='plug' AND config_cat='$code'");
-					$show_sql_affectedrows2 = sed_sql_affectedrows();
-					$sql = sed_sql_query("DELETE FROM $db_auth WHERE auth_code='plug' and auth_option='$code'");
-					$show_sql_affectedrows3 = sed_sql_affectedrows();
-				}
-
-				$sql = sed_sql_query("UPDATE $db_users SET user_auth='' WHERE 1");
-				$show_sql_affectedrows4 = sed_sql_affectedrows();
-				$cot_cache && $cot_cache->db->remove('sed_plugins', 'system');
-
-				$extplugin_uninstall = $cfg['plugins_dir'].'/'.$code.'/'.$code.'.uninstall.php';
-				$action = 'uninstall';
-				include_once($extplugin_info);
+			case 'update':
+				$result = sed_extension_install($code, $is_module, true);
 
 				$t->assign(array(
-					'ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS1' => $show_sql_affectedrows1,
-					'ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS2' => $show_sql_affectedrows2,
-					'ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS3' => $show_sql_affectedrows3,
-					'ADMIN_EXTENSIONS_EDIT_AFFECTEDROWS4' => $show_sql_affectedrows4,
-					'ADMIN_EXTENSIONS_EDIT_EXTPLUGIN_INFO' => include_once($extplugin_info),
-					'ADMIN_EXTENSIONS_EDIT_LOG' => $edit_log,
-					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => sed_url('admin', 'm=plug&a=details&pl='.$code)
+					'ADMIN_EXTENSIONS_EDIT_TITLE' => sed_rc('ext_updating', array(
+							'type' => $is_module ? $L['Module'] : $L['Plugin'],
+							'name' => $code
+						)),
+					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !$cot_error ? 'success' : 'error',
+					'ADMIN_EXTENSIONS_EDIT_LOG' => sed_implode_messages(),
+					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => sed_url('admin', "m=extensions&a=details&$arg=$code")
+				));
+				/* === Hook  === */
+				foreach (sed_getextplugins('admin.extensions.install.tags') as $pl)
+				{
+					include $pl;
+				}
+				/* ===== */
+				break;
+			case 'uninstall':
+				$result = sed_extension_uninstall($code, $is_module);
+
+				$t->assign(array(
+					'ADMIN_EXTENSIONS_EDIT_TITLE' => sed_rc('ext_uninstalling', array(
+							'type' => $is_module ? $L['Module'] : $L['Plugin'],
+							'name' => $code
+						)),
+					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !$cot_error ? 'success' : 'error',
+					'ADMIN_EXTENSIONS_EDIT_LOG' => sed_implode_messages(),
+					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => sed_url('admin', "m=extensions&a=details&$arg=$code")
 				));
 				/* === Hook  === */
 				foreach (sed_getextplugins('admin.extensions.uninstall.tags') as $pl)
@@ -533,143 +343,172 @@ switch($a)
 					include $pl;
 				}
 				/* ===== */
-				$t->parse('MAIN.EDIT.UNINSTALL');
-				$t->parse('MAIN.EDIT');
 			break;
 			default:
 				sed_die();
 			break;
+
+			sed_clear_messages();
+			$t->parse('MAIN.EDIT');
 		}
 	break;
 	default:
-		$sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config WHERE config_owner='plug' GROUP BY config_cat");
-		while($row = sed_sql_fetcharray($sql))
+		foreach (array('module', 'plug') as $type)
 		{
-			$cfgentries[$row['config_cat']] = $row['COUNT(*)'];
-		}
-
-		$handle = opendir($cfg['plugins_dir']);
-		while($f = readdir($handle))
-		{
-			if(is_dir($cfg['plugins_dir'].'/'.$f) && $f[0] !='.' && $f != 'code')
+			$sql = sed_sql_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
+			WHERE config_owner='$type' GROUP BY config_cat");
+			while ($row = sed_sql_fetchrow($sql))
 			{
-				// Check for plugin .php files, otherwise it's inconsistent
-				$is_plug = false;
-				$dp = opendir($cfg['plugins_dir'].'/'.$f);
-				while($pf = readdir($dp))
+				$cfgentries[$row['config_cat']] = $row[0];
+			}
+			sed_sql_freeresult($sql);
+
+			$dir = $type == 'module' ? $cfg['modules_dir'] : $cfg['plugins_dir'];
+			$extensions = array();
+			$handle = opendir($dir);
+			while ($f = readdir($handle))
+			{
+				if (is_dir($dir . '/' . $f) && $f[0] != '.')
 				{
-					if(preg_match('#^'.preg_quote($f).'.*\.php$#', $pf))
+					// Check for extension .php files, otherwise it's inconsistent
+					$is_ext = false;
+					$dp = opendir($dir . '/' . $f);
+					while ($pf = readdir($dp))
 					{
-						$is_plug = true;
-						break;
+						if (preg_match("#^$f(\.([\w\.]+))?.php$#", $pf))
+						{
+							$is_ext = true;
+							break;
+						}
+					}
+					closedir($dp);
+					if ($is_ext)
+					{
+						$extensions[] = $f;
 					}
 				}
-				closedir($dp);
-				if($is_plug)
-				{
-					$extplugins[] = $f;
-				}
 			}
-		}
-		closedir($handle);
-		sort($extplugins);
-		$cnt_extp = count($extplugins);
-		$cnt_parts = 0;
+			closedir($handle);
+			sort($extensions);
+			$cnt_extp = count($extensions);
+			$cnt_parts = 0;
 
-		$plg_standalone = array();
-		$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
-		while($row3 = sed_sql_fetcharray($sql3))
-		{
-			$plg_standalone[$row3['pl_code']] = TRUE;
-		}
-
-		$plg_tools = array();
-		$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='tools'");
-		while($row3 = sed_sql_fetcharray($sql3))
-		{
-			$plg_tools[$row3['pl_code']] = TRUE;
-		}
-		/* === Hook - Part1 : Set === */
-		$extp = sed_getextplugins('admin.extensions.list.loop');
-		/* ===== */
-		while(list($i, $x) = each($extplugins))
-		{
-			$extplugin_info = $cfg['plugins_dir'].'/'.$x.'/'.$x.'.setup.php';
-			if(file_exists($extplugin_info))
+			if ($type == 'plug')
 			{
-				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-
-				if(!empty($info['Error']))
+				$plg_standalone = array();
+				$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
+				while ($row3 = sed_sql_fetcharray($sql3))
 				{
-					$t->assign(array(
-						'ADMIN_EXTENSIONS_X_ERR' => $x,
-						'ADMIN_EXTENSIONS_ERROR_MSG' => $info['Error']
-					));
-					$t->parse('MAIN.DEFAULT.ROW.ROW_ERROR_PLUG');
-					$t->parse('MAIN.DEFAULT.ROW');
+					$plg_standalone[$row3['pl_code']] = TRUE;
 				}
-				else
-				{
-					$sql1 = sed_sql_query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
-					$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
-					$totalactive = sed_sql_result($sql1, 0, "SUM(pl_active)");
-					$totalinstalled = sed_sql_result($sql2, 0, "COUNT(*)");
-					$cnt_parts += $totalinstalled;
+				sed_sql_freeresult($sql3);
 
-					if($totalinstalled == 0)
+				$plg_tools = array();
+				$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='tools'");
+				while ($row3 = sed_sql_fetcharray($sql3))
+				{
+					$plg_tools[$row3['pl_code']] = TRUE;
+				}
+				sed_sql_freeresult($sql3);
+			}
+			/* === Hook - Part1 : Set === */
+			$extp = sed_getextplugins("admin.extensions.$type.list.loop");
+			/* ===== */
+			foreach ($extensions as $i => $x)
+			{
+				$ext_info = $dir . '/' . $x . '/' . $x . '.setup.php';
+				if (file_exists($ext_info))
+				{
+					$info = sed_infoget($ext_info, 'COT_EXT');
+
+					if (!empty($info['Error']))
 					{
-						$part_status = 3;
-						$info['Partscount'] = '?';
+						$t->assign(array(
+							'ADMIN_EXTENSIONS_X_ERR' => $x,
+							'ADMIN_EXTENSIONS_ERROR_MSG' => $info['Error']
+						));
+						$t->parse('MAIN.DEFAULT.ROW.ROW_ERROR_EXT');
+						$t->parse('MAIN.DEFAULT.ROW');
 					}
 					else
 					{
-						$info['Partscount'] = $totalinstalled;
-						if($totalinstalled > $totalactive && $totalactive > 0)
+						$sql1 = sed_sql_query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
+						$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
+						$totalactive = sed_sql_result($sql1, 0, "SUM(pl_active)");
+						$totalinstalled = sed_sql_result($sql2, 0, "COUNT(*)");
+						$cnt_parts += $totalinstalled;
+
+						if ($totalinstalled == 0)
 						{
-							$part_status = 2;
-						}
-						elseif($totalactive == 0)
-						{
-							$part_status = 0;
+							$part_status = 3;
+							$info['Partscount'] = '?';
 						}
 						else
 						{
-							$part_status = 1;
+							$info['Partscount'] = $totalinstalled;
+							if ($totalinstalled > $totalactive && $totalactive > 0)
+							{
+								$part_status = 2;
+							}
+							elseif ($totalactive == 0)
+							{
+								$part_status = 0;
+							}
+							else
+							{
+								$part_status = 1;
+							}
 						}
+
+						$ifthistools = $plg_tools[$x];
+						$ent_code = $cfgentries[$x];
+						$if_plg_standalone = $plg_standalone[$x];
+
+						if ($type == 'module')
+						{
+							$arg = 'mod';
+							$ze = 'z';
+						}
+						else
+						{
+							$arg = 'pl';
+							$ze = 'e';
+						}
+
+						$t->assign(array(
+							'ADMIN_EXTENSIONS_DETAILS_URL' => sed_url('admin', "m=extensions&a=details&$arg=$x"),
+							'ADMIN_EXTENSIONS_NAME' => $info['Name'],
+							'ADMIN_EXTENSIONS_CODE_X' => $x,
+							'ADMIN_EXTENSIONS_EDIT_URL' => sed_url('admin', "m=config&n=edit&o=$type&p=$x"),
+							'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
+							'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
+							'ADMIN_EXTENSIONS_RIGHTS_URL' => sed_url('admin', "m=rightsbyitem&ic=$type&io=$x"),
+							'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => sed_url('admin', "m=tools&p=$x"),
+							'ADMIN_EXTENSIONS_JUMPTO_URL' => sed_url('index', "$ze=$x"),
+							'ADMIN_EXTENSIONS_ODDEVEN' => sed_build_oddeven($i)
+						));
+						/* === Hook - Part2 : Include === */
+						foreach ($extp as $pl)
+						{
+							include $pl;
+						}
+						/* ===== */
+						$t->parse('MAIN.DEFAULT.SECTION.ROW');
 					}
-
-					$ifthistools = $plg_tools[$info['Code']];
-					$ent_code = $cfgentries[$info['Code']];
-					$if_plg_standalone = $plg_standalone[$info['Code']];
-
+				}
+				else
+				{
 					$t->assign(array(
-						'ADMIN_EXTENSIONS_DETAILS_URL' => sed_url('admin', 'm=plug&a=details&pl='.$info['Code']),
-						'ADMIN_EXTENSIONS_NAME' => $info['Name'],
-						'ADMIN_EXTENSIONS_CODE_X' => $x,
-						'ADMIN_EXTENSIONS_EDIT_URL' => sed_url('admin', 'm=config&n=edit&o=plug&p='.$info['Code']),
-						'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
-						'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
-						'ADMIN_EXTENSIONS_RIGHTS_URL' => sed_url('admin', 'm=rightsbyitem&ic=plug&io='.$info['Code']),
-						'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => sed_url('admin', 'm=tools&p='.$info['Code']),
-						'ADMIN_EXTENSIONS_JUMPTO_URL' => sed_url('plug', 'e='.$info['Code']),
-						'ADMIN_EXTENSIONS_ODDEVEN' => sed_build_oddeven($ii)
+						'ADMIN_EXTENSIONS_X' => $x
 					));
-					/* === Hook - Part2 : Include === */
-					foreach ($extp as $pl)
-					{
-						include $pl;
-					}
-					/* ===== */
-					$t->parse('MAIN.DEFAULT.ROW');
+					$t->parse('MAIN.DEFAULT.SECTION.ROW_ERROR');
 				}
 			}
-			else
-			{
-				$t->assign(array(
-					'ADMIN_EXTENSIONS_X' => $x
-				));
-				$t->parse('MAIN.DEFAULT.ROW_ERROR');
-			}
+			$t->assign(array(
+				'ADMIN_EXTENSIONS_SECTION_TITLE' => $type == 'module' ? $L['Modules'] : $L['Plugins'],
+				'ADMIN_EXTENSIONS_CNT_EXTP' => $cnt_extp
+			));
+			$t->parse('MAIN.DEFAULT.SECTION');
 		}
 
 		if($o == 'code')
@@ -693,7 +532,6 @@ switch($a)
 		}
 
 		$t->assign(array(
-			'ADMIN_EXTENSIONS_CNT_EXTP' => $cnt_extp,
 			'ADMIN_EXTENSIONS_CNT_HOOK' => sed_sql_numrows($sql)
 		));
 		$t->parse('MAIN.DEFAULT');
