@@ -528,12 +528,14 @@ $L['adm_override_admins'] = 'System override, Administrators';	// New in 0.0.6
 
 $L['adm_opt_install'] = 'Install';
 $L['adm_opt_install_explain'] = 'This will make a new install of this extension';
+$L['adm_opt_pause'] = 'Pause';
 $L['adm_opt_pauseall'] = 'Pause all';
 $L['adm_opt_pauseall_explain'] = 'This will pause (disable) all the plugin parts.';
 $L['adm_opt_update'] = 'Update';
 $L['adm_opt_update_explain'] = 'This will update extension configuration and data if extension files on disk have been updated already';
 $L['adm_opt_uninstall'] = 'Un-install';
 $L['adm_opt_uninstall_explain'] = 'This will disable all the parts of the extension and remove all of its data and configuration, but won\'t physically remove the files.';
+$L['adm_opt_unpause'] = 'Un-pause';
 $L['adm_opt_unpauseall'] = 'Un-pause all';
 $L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the plugin parts.';
 
