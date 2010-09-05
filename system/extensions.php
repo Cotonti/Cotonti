@@ -522,6 +522,7 @@ function sed_extension_uninstall($name, $is_module = false)
 
     // Clear cache
     $cot_cache && $cot_cache->db->remove('sed_plugins', 'system');
+	$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
     sed_sql_update($db_users, array('auth' => ''), '1', 'user_');
 
     // Run SQL script if present
@@ -531,7 +532,7 @@ function sed_extension_uninstall($name, $is_module = false)
 			file_get_contents("$path/setup/$name.uninstall.sql"));
         if (empty($sql_err))
         {
-            sed_message(sed_rc('ext_executed_sql', array('ret' => '')));
+            sed_message(sed_rc('ext_executed_sql', array('ret' => 'OK')));
         }
         else
         {

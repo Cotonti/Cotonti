@@ -97,7 +97,7 @@ if (!SED_AJAX)
 		$admin_menu[] = array(
 			'url' => sed_url('admin', 'm=extensions'),
 			'icon' => $R['admin_menu_icon_extensions'],
-			'class' => $m == 'ext' ? 'sel' : ''
+			'class' => $m == 'extensions' ? 'sel' : ''
 		);
 	}
 	if ($usr['admin_structure'])

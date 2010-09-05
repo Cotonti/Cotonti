@@ -12,7 +12,7 @@
 	</ul>
 <!-- END: CONFIG_URL -->
 <!-- BEGIN: DETAILS -->
-	<h2>{PHP.L.Plugin} {ADMIN_EXTENSIONS_NAME}:</h2>
+	<h2>{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
 	<table class="cells">
 		<tr>
 			<td class="width20">{PHP.L.Code}:</td>
@@ -155,10 +155,10 @@
 				&ndash;
 <!-- END: ROW_PART_NOTINSTALLED -->
 <!-- BEGIN: ROW_PART_PAUSE -->
-				<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_PAUSEPART_URL}" class="ajax">{PHP.L.adm_opt_pauseall}</a>
+				<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_PAUSEPART_URL}" class="ajax">{PHP.L.adm_opt_pause}</a>
 <!-- END: ROW_PART_PAUSE -->
 <!-- BEGIN: ROW_PART_UNPAUSE -->
-				<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL}" class="ajax">{PHP.L.adm_opt_unpauseall}</a>
+				<a href="{ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL}" class="ajax">{PHP.L.adm_opt_unpause}</a>
 <!-- END: ROW_PART_UNPAUSE -->
 			</td>
 		</tr>

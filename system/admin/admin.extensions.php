@@ -229,7 +229,7 @@ switch($a)
 						{
 							$t->assign('ADMIN_EXTENSIONS_DETAILS_ROW_UNPAUSEPART_URL',
 								sed_url('admin', "m=extensions&a=details&$arg=$code&b=unpausepart&part=".$row['pl_id']));
-							$t->parse('MAIN.DETAILS.ROW_PART.ROW_PARTUNPAUSE');
+							$t->parse('MAIN.DETAILS.ROW_PART.ROW_PART_UNPAUSE');
 						}
 
 						/* === Hook - Part2 : Include === */
@@ -245,7 +245,8 @@ switch($a)
 
 			$t->assign(array(
 				'ADMIN_EXTENSIONS_NAME' => $info['Name'],
-				'ADMIN_EXTENSIONS_CODE' => $info['Code'],
+				'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
+				'ADMIN_EXTENSIONS_CODE' => $code,
 				'ADMIN_EXTENSIONS_DESCRIPTION' => $info['Description'],
 				'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 				'ADMIN_EXTENSIONS_DATE' => $info['Date'],
@@ -347,10 +348,9 @@ switch($a)
 			default:
 				sed_die();
 			break;
-
-			sed_clear_messages();
-			$t->parse('MAIN.EDIT');
 		}
+		sed_clear_messages();
+		$t->parse('MAIN.EDIT');
 	break;
 	default:
 		foreach (array('module', 'plug') as $type)
@@ -478,6 +478,7 @@ switch($a)
 						$t->assign(array(
 							'ADMIN_EXTENSIONS_DETAILS_URL' => sed_url('admin', "m=extensions&a=details&$arg=$x"),
 							'ADMIN_EXTENSIONS_NAME' => $info['Name'],
+							'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
 							'ADMIN_EXTENSIONS_CODE_X' => $x,
 							'ADMIN_EXTENSIONS_EDIT_URL' => sed_url('admin', "m=config&n=edit&o=$type&p=$x"),
 							'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
