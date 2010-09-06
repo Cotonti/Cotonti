@@ -1,6 +1,12 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=admin
+[END_COT_EXT]
+==================== */
+
 /**
- * Administration panel - Pages manager & Queue of pages
+ * Pages manager & Queue of pages
  *
  * @package Cotonti
  * @version 0.7.0

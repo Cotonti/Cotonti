@@ -227,9 +227,9 @@
 				<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
 <!-- ENDIF -->
 <!-- IF {PHP.ifthistools} -->
-				<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}">{PHP.R.admin_icon_jumpto}</a>
+				<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}">{PHP.R.admin_icon_tools}</a>
 <!-- ENDIF -->
-<!-- IF !{PHP.ifthistools} AND {PHP.if_plg_standalone} -->
+<!-- IF {PHP.if_plg_standalone} -->
 				<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a>
 <!-- ENDIF -->
 			</td>

@@ -1,17 +1,19 @@
 <!-- BEGIN: MAIN -->
-<!-- IF {PHP.list_present} -->
 	<h2>{PHP.L.Tools}</h2>
+<!-- BEGIN: SECTION -->
+	<h3>{ADMIN_TOOLS_SECTION}</h3>
 	<table class="cells">
-<!-- ENDIF -->
 <!-- BEGIN: ROW -->
 		<tr>
 			<td class="centerall width5">{PHP.R.icon_tool}</td>
-			<td class="width95"><a href="{ADMIN_TOOLS_PLUG_URL}">{ADMIN_TOOLS_PLUG_NAME}</a></td>
+			<td class="width95"><a href="{ADMIN_TOOLS_EXT_URL}">{ADMIN_TOOLS_EXT_NAME}</a></td>
 		</tr>
 <!-- END: ROW -->
-<!-- IF {PHP.list_present} -->
+<!-- BEGIN: EMPTY -->
+		<tr>
+			<td colspan="2">{PHP.L.adm_listisempty}</td>
+		</tr>
+<!-- END: EMPTY -->
 	</table>
-<!-- ELSE -->
-	{PHP.L.adm_listisempty}
-<!-- ENDIF -->
+<!-- END: SECTION -->
 <!-- END: MAIN -->
