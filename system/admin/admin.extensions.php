@@ -395,22 +395,23 @@ switch($a)
 
 			if ($type == 'plug')
 			{
-				$plg_standalone = array();
+				$standalone = array();
 				$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
 				while ($row3 = sed_sql_fetcharray($sql3))
 				{
-					$plg_standalone[$row3['pl_code']] = TRUE;
-				}
-				sed_sql_freeresult($sql3);
-
-				$plg_tools = array();
-				$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='tools'");
-				while ($row3 = sed_sql_fetcharray($sql3))
-				{
-					$plg_tools[$row3['pl_code']] = TRUE;
+					$standalone[$row3['pl_code']] = TRUE;
 				}
 				sed_sql_freeresult($sql3);
 			}
+
+			$tools = array();
+			$tool_hook = $type == 'plug' ? 'tools' : 'admin';
+			$sql3 = sed_sql_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook'");
+			while ($row3 = sed_sql_fetcharray($sql3))
+			{
+				$tools[$row3['pl_code']] = TRUE;
+			}
+			sed_sql_freeresult($sql3);
 			/* === Hook - Part1 : Set === */
 			$extp = sed_getextplugins("admin.extensions.$type.list.loop");
 			/* ===== */
@@ -460,9 +461,9 @@ switch($a)
 							}
 						}
 
-						$ifthistools = $plg_tools[$x];
+						$ifthistools = $tools[$x];
 						$ent_code = $cfgentries[$x];
-						$if_plg_standalone = $plg_standalone[$x];
+						$if_plg_standalone = $type == 'plug' ? $standalone[$x] : true;
 
 						if ($type == 'module')
 						{
@@ -484,7 +485,8 @@ switch($a)
 							'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
 							'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
 							'ADMIN_EXTENSIONS_RIGHTS_URL' => sed_url('admin', "m=rightsbyitem&ic=$type&io=$x"),
-							'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => sed_url('admin', "m=tools&p=$x"),
+							'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? sed_url('admin', "m=tools&p=$x")
+								: sed_url('admin', "m=$x"),
 							'ADMIN_EXTENSIONS_JUMPTO_URL' => sed_url('index', "$ze=$x"),
 							'ADMIN_EXTENSIONS_ODDEVEN' => sed_build_oddeven($i)
 						));

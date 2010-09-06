@@ -46,7 +46,7 @@ if (in_array($inc_file, $standard_admin))
 }
 else
 {
-	$inc_file = sed_incfile($inc_file, 'admin');
+	$inc_file = $cfg['modules_dir'] . "/$inc_file/$inc_file.admin.php";
 }
 
 if (!file_exists($inc_file))

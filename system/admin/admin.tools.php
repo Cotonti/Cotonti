@@ -30,16 +30,9 @@ foreach (sed_getextplugins('admin.tools.first') as $pl)
 
 if(!empty($p))
 {
-	$path_lang_def = $cfg['plugins_dir']."/$p/lang/$p.en.lang.php";
-	$path_lang_alt = $cfg['plugins_dir']."/$p/lang/$p.$lang.lang.php";
-
-	if(@file_exists($path_lang_def))
+	if (file_exists(sed_langfile($p, 'plug')))
 	{
-		require_once($path_lang_def);
-	}
-	if(@file_exists($path_lang_alt) && $lang!='en')
-	{
-		require_once($path_lang_alt);
+		sed_require_lang($p, 'plug');
 	}
 
 	$extp = array();
@@ -64,7 +57,7 @@ if(!empty($p))
 
 	if(file_exists($extplugin_info))
 	{
-		$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
+		$info = sed_infoget($extplugin_info, 'COT_EXT');
 	}
 	else
 	{
@@ -72,13 +65,13 @@ if(!empty($p))
 	}
 
 	$adminpath[] = array(sed_url('admin', 'm=tools&p='.$p), htmlspecialchars($info['Name']));
-	$adminhelp = $L['Description'].' : '.$info['Description'].'<br />'.$L['Version'].' : '.$info['Version'].'<br />'.$L['Date'].' : '.$info['Date'].'<br />'.$L['Author'].' : '.$info['Author'].'<br />'.$L['Copyright'].' : '.$info['Copyright'].'<br />'.$L['Notes'].' : '.$info['Notes'];
+	// $adminhelp = $L['Description'].' : '.$info['Description'].'<br />'.$L['Version'].' : '.$info['Version'].'<br />'.$L['Date'].' : '.$info['Date'].'<br />'.$L['Author'].' : '.$info['Author'].'<br />'.$L['Copyright'].' : '.$info['Copyright'].'<br />'.$L['Notes'].' : '.$info['Notes'];
 
 	if(is_array($extp))
 	{
 		foreach($extp as $k => $pl)
 		{
-			include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php');
+			include_once $pl['pl_file'];
 			$adminmain .= $plugin_body;
 		}
 	}
@@ -86,7 +79,7 @@ if(!empty($p))
 }
 else
 {
-	$plugins = array();
+	$target = array();
 
 	function cot_admin_tools_cmp($pl_a, $pl_b)
 	{
@@ -97,35 +90,51 @@ else
 		return ($pl_a['pl_code'] < $pl_b['pl_code']) ? -1 : 1;
 	}
 
-	/* === Hook === */
-
-	if (is_array($sed_plugins['tools']))
+	foreach (array('module', 'plug') as $type)
 	{
-		$list_present = true;
-		$plugins = $sed_plugins['tools'];
-		usort($plugins, 'cot_admin_tools_cmp');
-		foreach ($plugins as $pl)
+		if ($type == 'module')
 		{
-			$extplugin_info = $cfg['plugins_dir'] .'/' . $pl['pl_code'] .'/' . $pl['pl_code'] . '.setup.php';
-
-			if(file_exists($extplugin_info))
-			{
-				$info = sed_infoget($extplugin_info, 'SED_EXTPLUGIN');
-			}
-			else
-			{
-				include_once sed_langfile('message', 'core');
-				$info['Name'] = $pl['pl_code'] . ' : '. $L['msg907_1'];
-			}
-
-			$plugin_icon = (empty($pl['pl_title'])) ? 'plugins' : $pl['pl_title'];
-
-			$t->assign(array(
-				'ADMIN_TOOLS_PLUG_URL' => sed_url('admin', 'm=tools&p=' . $pl['pl_code']),
-				'ADMIN_TOOLS_PLUG_NAME' => $info['Name']
-			));
-			$t->parse('MAIN.ROW');
+			$target = $sed_plugins['admin'];
+			$dir = $cfg['modules_dir'];
+			$title = $L['Modules'];
 		}
+		else
+		{
+			$target = $sed_plugins['tools'];
+			$dir = $cfg['plugins_dir'];
+			$title = $L['Plugins'];
+		}
+		if (is_array($target))
+		{
+			usort($target, 'cot_admin_tools_cmp');
+			foreach ($target as $pl)
+			{
+				$extplugin_info = $dir .'/' . $pl['pl_code'] .'/' . $pl['pl_code'] . '.setup.php';
+
+				if(file_exists($extplugin_info))
+				{
+					$info = sed_infoget($extplugin_info, 'COT_EXT');
+				}
+				else
+				{
+					include_once sed_langfile('message', 'core');
+					$info['Name'] = $pl['pl_code'] . ' : '. $L['msg907_1'];
+				}
+
+				$t->assign(array(
+					'ADMIN_TOOLS_EXT_URL' => $type == 'plug' ? sed_url('admin', 'm=tools&p=' . $pl['pl_code']) :
+						sed_url('admin', 'm=' . $pl['pl_code']),
+					'ADMIN_TOOLS_EXT_NAME' => $info['Name']
+				));
+				$t->parse('MAIN.SECTION.ROW');
+			}
+		}
+		else
+		{
+			$t->parse('MAIN.SECTION.EMPTY');
+		}
+		$t->assign('ADMIN_TOOLS_SECTION', $title);
+		$t->parse('MAIN.SECTION');
 	}
 	/* === Hook === */
 	foreach (sed_getextplugins('admin.tools.tags') as $pl)
