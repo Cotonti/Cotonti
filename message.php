@@ -18,7 +18,7 @@ $z = 'message';
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
-sed_require_api('xtemplate');
+sed_require_api('cotemplate');
 
 require_once sed_langfile('message', 'core');
 
