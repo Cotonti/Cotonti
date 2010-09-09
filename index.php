@@ -31,7 +31,7 @@ if ($cfg['enable_obsolete'])
 {
     sed_require_api('obsolete');
 }
-sed_require_api('xtemplate');
+sed_require_api('cotemplate');
 sed_require_api('parser'); // TODO module-dependent parser selection/loading
 
 $e = sed_import('e', 'G', 'ALP');

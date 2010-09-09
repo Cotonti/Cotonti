@@ -83,7 +83,7 @@ else
 
 sed_require_api('forms');
 sed_require_api('extensions');
-sed_require_api('xtemplate');
+sed_require_api('cotemplate');
 sed_require_lang('install', 'module');
 sed_require_lang('users', 'core');
 sed_require_lang('admin', 'core');
