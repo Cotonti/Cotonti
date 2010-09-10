@@ -519,7 +519,7 @@ class Cotpl_data
 		{
 			$code = $this->cleanup($code);
 		}
-		if (preg_match_all('`(.*?){([\w\.\(\),]+?)}`s', $code, $mt, PREG_SET_ORDER | PREG_OFFSET_CAPTURE))
+		if (preg_match_all('`(.*?){((?:[\w\.]+)(?:|.+?)?)}`s', $code, $mt, PREG_SET_ORDER | PREG_OFFSET_CAPTURE))
 		{
 			foreach ($mt as $m)
 			{
@@ -738,10 +738,11 @@ class Cotpl_expr
 	{
 		// Fix possible syntactic problems with missing spaces
 		$text = str_replace('(', ' ( ', $text);
-		$text = str_replace('(', ' ) ', $text);
-		$text = str_replace('!', ' ! ', $text);
+		$text = str_replace(')', ' ) ', $text);
+		$text = str_replace('!{', ' ! {', $text);
+		$text = str_replace('!(', ' ! (', $text);
 		// Splitting into words
-		$words = preg_split('`\s+`', $text);
+		$words = cotpl_tokenize($text, array(' ', "\t"));
 		$operators = array_keys(self::$operators);
 		// Splitting infix into tokens
 		$tokens = array();
@@ -835,36 +836,48 @@ class Cotpl_expr
 					array_push($stack, array_pop($stack) && array_pop($stack));
 					break;
 				case COTPL_OP_CONTAINS:
-					$haystack = array_pop($stack);
 					$needle = array_pop($stack);
+					$haystack = array_pop($stack);
 					array_push($stack, is_string($haystack) && is_string($needle)
 						&& strpos($haystack, $needle) !== false);
 					break;
 				case COTPL_OP_DIV:
-					array_push($stack, array_pop($stack) / array_pop($stack));
+					$divisor = array_pop($stack);
+					$dividend = array_pop($stack);
+					array_push($stack, $dividend / $divisor);
 					break;
 				case COTPL_OP_EQ:
 					array_push($stack, array_pop($stack) == array_pop($stack));
 					break;
 				case COTPL_OP_GE:
-					array_push($stack, array_pop($stack) >= array_pop($stack));
+					$arg2 = array_pop($stack);
+					$arg1 = array_pop($stack);
+					array_push($stack, $arg1 >= $arg2);
 					break;
 				case COTPL_OP_GT:
-					array_push($stack, array_pop($stack) > array_pop($stack));
+					$arg2 = array_pop($stack);
+					$arg1 = array_pop($stack);
+					array_push($stack, $arg1 > $arg2);
 					break;
 				case COTPL_OP_HAS:
-					$haystack = array_pop($stack);
 					$needle = array_pop($stack);
+					$haystack = array_pop($stack);
 					array_push($stack, is_array($haystack) && in_array($needle, $haystack));
 					break;
 				case COTPL_OP_LE:
-					array_push($stack, array_pop($stack) <= array_pop($stack));
+					$arg2 = array_pop($stack);
+					$arg1 = array_pop($stack);
+					array_push($stack, $arg1 <= $arg2);
 					break;
 				case COTPL_OP_LT:
-					array_push($stack, array_pop($stack) < array_pop($stack));
+					$arg2 = array_pop($stack);
+					$arg1 = array_pop($stack);
+					array_push($stack, $arg1 < $arg2);
 					break;
 				case COTPL_OP_MOD:
-					array_push($stack, array_pop($stack) % array_pop($stack));
+					$arg2 = array_pop($stack);
+					$arg1 = array_pop($stack);
+					array_push($stack, $arg1 % $arg2);
 					break;
 				case COTPL_OP_MUL:
 					array_push($stack, array_pop($stack) * array_pop($stack));
@@ -1024,7 +1037,21 @@ class Cotpl_var
 		{
 			$chain = explode('|', $text);
 			$text = array_shift($chain);
-			$this->callbacks = $chain;
+			foreach ($chain as $cbk)
+			{
+				if (strpos($cbk, '(') !== false
+					&& preg_match('`(\w+)\((.+?)\)`', $cbk, $mt))
+				{
+					$this->callbacks[] = array(
+						'name' => $mt[1],
+						'args' => cotpl_tokenize($mt[2], array(',', ' '))
+					);
+				}
+				else
+				{
+					$this->callbacks[] = $cbk;
+				}
+			}
 		}
 		if (mb_strpos($text, '.') !== false)
 		{
@@ -1048,8 +1075,17 @@ class Cotpl_var
 		}
 		if (is_array($this->callbacks))
 		{
-			// TODO callbacks with more args
-			$str .= '|' . implode('|', $this->callbacks);
+			foreach ($this->callbacks as $cb)
+			{
+				if (is_array($cb))
+				{
+					$str .= '|' . $cb['name'] . '(' . implode(',', $cb['args']) . ')';
+				}
+				else
+				{
+					$str .= '|' . $cb;
+				}
+			}
 		}
 		$str .= '}';
 		return $str;
@@ -1100,7 +1136,19 @@ class Cotpl_var
 		{
 			foreach ($this->callbacks as $func)
 			{
-				$val = $func($val);
+				if (is_array($func))
+				{
+					$pos = array_search('$this', $func['args']);
+					if ($pos !== false)
+					{
+						$func['args'][$pos] = $val;
+					}
+					$val = call_user_func_array($func['name'], $func['args']);
+				}
+				else
+				{
+					$val = $func($val);
+				}
 			}
 		}
 		return $val;
@@ -1124,6 +1172,66 @@ function cotpl_index_glue($path)
 		}
 	}
 	return $str;
+}
+
+/**
+ * Splits a string into tokens by delimiter characters with double and single quotes support.
+ * Unicode-aware.
+ *
+ * @param string $str Source string
+ * @param array $delim Array of delimiter characters
+ * @return array
+ */
+function cotpl_tokenize($str, $delim = array(' '))
+{
+	$tokens = array();
+	$idx = 0;
+	$quote = '';
+	$prev_delim = false;
+	$len = mb_strlen($str);
+	for ($i = 0; $i < $len; $i++)
+	{
+		$c = mb_substr($str, $i, 1);
+		if (in_array($c, $delim))
+		{
+			if ($quote)
+			{
+				$tokens[$idx] .= $c;
+				$prev_delim = false;
+			}
+			elseif ($prev_delim)
+			{
+				continue;
+			}
+			else
+			{
+				$idx++;
+				$prev_delim = true;
+			}
+		}
+		elseif ($c == '"' || $c == "'")
+		{
+			if (!$quote)
+			{
+				$quote = $c;
+			}
+			elseif ($quote == $c)
+			{
+				$quote = '';
+			}
+			else
+			{
+				$tokens[$idx] .= $c;
+			}
+			$prev_delim = false;
+		}
+		else
+		{
+			$tokens[$idx] .= $c;
+			$prev_delim = false;
+		}
+	}
+	return $tokens;
 }
 
 ?>

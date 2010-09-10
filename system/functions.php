@@ -2186,9 +2186,14 @@ function sed_skinfile($base, $plug = false)
 		{
 			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/'.$basename.'/';
 		}
-		if ($admn)
+		if ((defined('SED_ADMIN')
+			|| defined('SED_MESSAGE') && $_SESSION['s_run_admin']))
 		{
 			$scan_prefix[] = $cfg['system_dir'].'/admin/tpl/';
+		}
+		elseif (defined('SED_USERS'))
+		{
+			$scan_prefix[] = $cfg['system_dir'].'/users/tpl/';
 		}
 		else
 		{
