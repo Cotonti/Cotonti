@@ -23,13 +23,13 @@
 			</div>
 		</div>
 
-<!-- IF {PHP.cfg.plugin.recentitems.recentpages} && !{PHP.cfg.disable_page} --> 
+<!-- IF {PHP.cfg.plugin.recentitems.recentpages} AND !{PHP.cfg.disable_page} -->
 		<div class="clear block">
 			<h2 class="page">{PHP.skinlang.index.Recentadditions}</h2>
 			<div>{PLUGIN_LATESTPAGES}</div>
 		</div>
 <!-- ENDIF -->
-<!-- IF {PHP.cfg.plugin.recentitems.recentforums} && !{PHP.cfg.disable_forums} -->
+<!-- IF {PHP.cfg.plugin.recentitems.recentforums} AND !{PHP.cfg.disable_forums} -->
 		<div class="clear block">
 			<h2 class="forums">{PHP.skinlang.index.Newinforums}</h2>
 			<div>{PLUGIN_LATESTTOPICS}</div>

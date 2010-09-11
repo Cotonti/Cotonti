@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=RSS
 Description=Provides RSS/Atom feeds for your site
-Version=0.7.0
+Version=0.7.0.1
 Date=2010-jun-22
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010

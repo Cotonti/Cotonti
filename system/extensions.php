@@ -770,7 +770,7 @@ function sed_plugin_add($hook_bindings, $name, $title, $is_module = false)
     {
 		$title = $name;
 	}
-    $path = $is_module ? $cfg['modules_dir'] . "/$name." : $cfg['plugins_dir'] . "/$name";
+    $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
     $insert_rows = array();
     foreach ($hook_bindings as $binding)

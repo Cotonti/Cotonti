@@ -1,10 +1,12 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Rights}</h2>
-		<!-- IF {PHP.is_adminwarnings} --><div class="error">
+<!-- BEGIN: MESSAGE -->
+		<div class="error">
 			<h4>{PHP.L.Message}</h4>
 			<p>{ADMIN_RIGHTSBYITEM_ADMINWARNINGS}</p>
-		</div><!-- ENDIF -->
+		</div>
+<!-- END: MESSAGE -->
 			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post" class="ajax">
 				<table class="cells">
 					<tr>

@@ -100,7 +100,17 @@ function sed_getextplugins($hook, $cond='R')
 	{
 		foreach($sed_plugins[$hook] as $k)
 		{
-			if (sed_auth('plug', $k['pl_code'], $cond))
+			if ($k['pl_module'])
+			{
+				$cat = $k['pl_code'];
+				$opt = 'a';
+			}
+			else
+			{
+				$cat = 'plug';
+				$opt = $k['pl_code'];
+			}
+			if (sed_auth($cat, $opt, $cond))
 			{
 				$extplugins[] = $k['pl_file'];
 			}
