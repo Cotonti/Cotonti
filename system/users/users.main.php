@@ -58,22 +58,22 @@ if (empty($s) || in_array(mb_strtolower($s), array('password', 'sid', 'lostpass'
 {
 	$s = 'name';
 }
-if(empty($w))
+if (empty($w))
 {
 	$w = 'asc';
 }
-if(empty($f))
+if (empty($f))
 {
 	$f = 'all';
 }
-if(empty($d))
+if (empty($d))
 {
 	$d = 0;
 }
 
-$bhome = $cfg['homebreadcrumb'] ? '<a href="'.$cfg['mainurl'].'">'.htmlspecialchars($cfg['maintitle']).'</a> '.$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
 
-$title = $bhome . '<a href="'.sed_url('users').'">'.$L['Users'].'</a> ';
+$title = $bhome . sed_rc_link(sed_url('users'), $L['Users']);
 $localskin = sed_skinfile('users');
 
 if(!empty($sq))
@@ -107,20 +107,6 @@ elseif($gm > 1)
 	$title .= $cfg['separator']." ".$L['Group']." = ".sed_build_group($gm);
 	$sqlmask = "as u ".(empty($sqljoin) ? '' : "LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp ")."LEFT JOIN $db_groups_users as m ON m.gru_userid=u.user_id WHERE m.gru_groupid=$gm";
 }
-elseif(mb_strlen($f) == 1)
-{
-	if($f == "_")
-	{
-		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '%'";
-		$sqlmask = "$sqljoin WHERE {$sqlu}user_name NOT REGEXP(\"^[a-zA-Z]\")";
-	}
-	else
-	{
-		$f = mb_strtoupper($f);
-		$title .= $cfg['separator']." ".$L['use_byfirstletter']." '".$f."'";
-		$sqlmask = "$sqljoin WHERE {$sqlu}user_name LIKE '$f%'";
-	}
-}
 elseif(mb_substr($f, 0, 8) == 'country_')
 {
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
@@ -146,16 +132,22 @@ switch ($s)
 	break;
 }
 
+$users_url_path = array('f' => $f, 'g' => $g, 'gm' => $gm, 's' => $s, 'w' => $w, 'sq' => $sq);
+
+/* === Hook === */
+foreach (sed_getextplugins('users.query') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
 $sql = sed_sql_query("SELECT COUNT(*) FROM $db_users $sqlmask");
 $totalusers = sed_sql_result($sql, 0, "COUNT(*)");
 $sql = sed_sql_query("SELECT * FROM $db_users $sqlmask $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
-
-$perpage= $cfg['maxusersperpage'];
-
-$pagenav = sed_pagenav('users', "f=$f&g=$g&gm=$gm&s=$s&w=$w&sq=$sq", $d, $totalusers, $perpage);
+$pagenav = sed_pagenav('users', $users_url_path, $d, $totalusers, $cfg['maxusersperpage']);
 
 $title_params = array(
 	'USERS' => $L['Users']
@@ -194,9 +186,7 @@ foreach($sed_countries as $i => $x)
 		$filter_values[] = sed_url('users', 'f=country_'.$i);
 	}
 }
-$countryfilters = sed_selectbox($f, 'bycountry', $filter_values, $filter_titles, false, array(
-	'onchange' => 'redirect(this)'
-));
+$countryfilters = sed_selectbox($f, 'bycountry', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
 
 /*=========*/
 
@@ -215,26 +205,14 @@ foreach($sed_groups as $k => $i)
 		$filter_values[] = sed_url('users', 'gm='.$k);
 	}
 }
-$maingrpfilters = sed_selectbox($gm, 'bymaingroup', $filter_values, $filter_titles, false, array(
-	'onchange' => 'redirect(this)'
-));
+$maingrpfilters = sed_selectbox($gm, 'bymaingroup', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
 
 $filter_titles[0] = $L['Group'];
-$grpfilters = sed_selectbox($g, 'bygroupms', $filter_values_g, $filter_titles, false, array(
-	'onchange' => 'redirect(this)'
-));
+$grpfilters = sed_selectbox($g, 'bygroupms', $filter_values_g, $filter_titles, false, array('onchange' => 'redirect(this)'));
 
 /*=========*/
 
-$otherfilters = '';
-for($i = 1; $i <= 26; $i++)
-{
-	$j = chr($i + 64);
-	$otherfilters .= ' ' . sed_rc_link(sed_url('users','f='.$j), $j);
-}
-$otherfilters .= ' ' . sed_rc_link(sed_url('users','f=_'), '%');
-
-$t -> assign(array(
+$t->assign(array(
 	"USERS_TITLE" => $title,
 	"USERS_SUBTITLE" => $L['use_subtitle'],
 	"USERS_CURRENTFILTER" => $f,
@@ -250,14 +228,13 @@ $t -> assign(array(
 	"USERS_TOP_FILTERS_MAINGROUP" => $maingrpfilters,
 	"USERS_TOP_FILTERS_GROUP" => $grpfilters,
 	"USERS_TOP_FILTERS_SEARCH" => sed_inputbox('text', 'y', $y, array('size' => 8, 'maxlength' => 8)),
-	"USERS_TOP_FILTERS_OTHERS" => $otherfilters,
 	"USERS_TOP_FILTERS_SUBMIT" => sed_inputbox('submit', 'submit', $L['Search']),
 	"USERS_TOP_PM" => "PM",
 ));
 
 $k = '_.+._';
-$asc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=asc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
-$desc = explode($k, sed_url('users', "f=$f&amp;s=$k&amp;w=desc&amp;g=$g&amp;gm=$gm&amp;sq=$sq"));
+$asc = explode($k, sed_url('users', array('s' => $k, 'w'=> 'asc') + $users_url_path));
+$desc = explode($k, sed_url('users', array('s' => $k, 'w'=> 'desc') + $users_url_path));
 foreach ($users_sort_tags as $k => $x)
 {
 	$t->assign($x[0], sed_rc('users_link_sort', array(
@@ -274,22 +251,22 @@ foreach($sed_extrafields['users'] as $i => $extrafield)
 	$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title']
 		: $extrafield['field_description'];
 	$t->assign('USERS_TOP_'.$uname, sed_rc('users_link_sort', array(
-		'asc_url' => sed_url('users', "f=$f&s=".$extrafield['field_name']."&w=asc&g=$g&gm=$gm&sq=$sq"),
-		'desc_url' => sed_url('users', "f=$f&s=".$extrafield['field_name']."&w=desc&g=$g&gm=$gm&sq=$sq"),
+		'asc_url' => sed_url('users', array('s' => $extrafield['field_name'], 'w'=> 'asc') + $users_url_path),
+		'desc_url' => sed_url('users', array('s' => $extrafield['field_name'], 'w'=> 'desc') + $users_url_path),
 		'text' => $fieldtext
 	)));
 }
 
-$jj=0;
+$jj = 0;
 
 /* === Hook - Part1 : Set === */
 $extp = sed_getextplugins('users.loop');
 /* ===== */
 
-while($urr = sed_sql_fetcharray($sql) AND $jj < $cfg['maxusersperpage'])
+while($urr = sed_sql_fetcharray($sql) && $jj < $cfg['maxusersperpage'])
 {
 	$jj++;
-	$t -> assign(array(
+	$t->assign(array(
 		"USERS_ROW_ODDEVEN" => sed_build_oddeven($jj),
         "USERS_ROW_NUM" => $jj,
 		"USERS_ROW" => $urr
@@ -312,8 +289,8 @@ foreach (sed_getextplugins('users.tags') as $pl)
 }
 /* ===== */
 
-$t -> parse("MAIN");
-$t -> out("MAIN");
+$t->parse("MAIN");
+$t->out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
 ?>

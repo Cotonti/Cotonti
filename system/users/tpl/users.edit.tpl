@@ -75,7 +75,7 @@
 					</tr>
 					<tr>
 						<td>{PHP.L.Signature}:</td>
-						<td>{USERS_EDIT_TEXTBOXER}</td>
+						<td>{USERS_EDIT_TEXT}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Registered}:</td>
