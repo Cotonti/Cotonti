@@ -14,6 +14,8 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
+sed_require_api('parser');
+
 $t = new XTemplate(sed_skinfile('admin.bbcode'));
 
 $adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
@@ -44,11 +46,12 @@ if ($a == 'add')
 	if (!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
 		sed_bbcode_clearcache();
-		$adminwarnings = (sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])) ? $L['adm_bbcodes_added'] : $L['Error'];
+		sed_bbcode_add($bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], '', $bbc['postrender'])
+				? sed_message('adm_bbcodes_added') : sed_message('Error');
 	}
 	else
 	{
-		$adminwarnings = $L['Error'];
+		sed_message('Error');
 	}
 }
 elseif ($a == 'upd' && $id > 0)
@@ -64,25 +67,24 @@ elseif ($a == 'upd' && $id > 0)
 	if(!empty($bbc['name']) && !empty($bbc['pattern']) && !empty($bbc['replacement']))
 	{
 		sed_bbcode_clearcache();
-		$adminwarnings = (sed_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])) ? $L['adm_bbcodes_updated'] : $L['Error'];
+		sed_bbcode_update($id, $bbc['enabled'], $bbc['name'], $bbc['mode'], $bbc['pattern'], $bbc['replacement'], $bbc['container'], $bbc['priority'], $bbc['postrender'])
+			? sed_message('adm_bbcodes_updated') : sed_message('Error');
 	}
 	else
 	{
-		$adminwarnings = $L['Error'];
+		sed_message('Error');
 	}
 }
 elseif ($a == 'del' && $id > 0)
 {
 	sed_bbcode_clearcache();
-	$adminwarnings = (sed_bbcode_remove($id)) ? $L['adm_bbcodes_removed'] : $L['Error'];
+	sed_bbcode_remove($id) ? sed_message('adm_bbcodes_removed') : sed_message('Error');
 }
 elseif ($a == 'clearcache')
 {
 	sed_bbcode_clearcache();
-	$adminwarnings = sed_cache_clearhtml() ? $L['adm_bbcodes_clearcache_done'] : $L['Error'];
+	sed_cache_clearhtml() ? sed_message('adm_bbcodes_clearcache_done') : sed_message('Error');
 }
-
-$is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_bbcode);
 
@@ -131,7 +133,6 @@ while ($row = sed_sql_fetchassoc($res))
 sed_sql_freeresult($res);
 
 $t->assign(array(
-	'ADMIN_BBCODE_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_BBCODE_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_BBCODE_PAGNAV' => $pagenav['main'],
 	'ADMIN_BBCODE_PAGINATION_NEXT' => $pagenav['next'],
@@ -148,6 +149,13 @@ $t->assign(array(
 	'ADMIN_BBCODE_POSTRENDER' => sed_checkbox('0', 'bbc_postrender'),
 	'ADMIN_BBCODE_URL_CLEAR_CACHE' => sed_url('admin', 'm=bbcode&a=clearcache&d='.$d)
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.bbcode.tags') as $pl)

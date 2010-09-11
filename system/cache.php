@@ -738,7 +738,7 @@ class MySQL_cache extends Db_cache_driver
 	public function remove_now($id, $realm = COT_DEFAULT_REALM)
 	{
 		global $db_cache;
-		sed_sql_query("DELETE FROM $db_cache WHERE c_realm = '$realm' AND c_id = $id");
+		sed_sql_query("DELETE FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
 		unset($this->buffer[$realm][$id]);
 		return sed_sql_affectedrows() == 1;
 	}

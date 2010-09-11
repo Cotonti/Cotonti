@@ -372,7 +372,8 @@ $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : f
 // Error and message reporting
 if (sed_check_messages())
 {
-	$adminwarnings = sed_implode_messages();
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
 	sed_clear_messages();
 }
 
@@ -382,8 +383,7 @@ $t->assign(array(
 	'ADMIN_URLS_ROW_AREAS' => sed_selectbox('*', 'area[]', $areas, $areas, false),
 	'ADMIN_URLS_ROW_PARTS1' => sed_inputbox('text', 'params[]', ''),
 	'ADMIN_URLS_ROW_PARTS2' => sed_inputbox('text', 'format[]', ''),
-	'ADMIN_URLS_ROW_ODDEVEN' => sed_build_oddeven($ii),
-	'ADMIN_URLS_ADMINWARNINGS' => $adminwarnings
+	'ADMIN_URLS_ROW_ODDEVEN' => sed_build_oddeven($ii)
 ));
 
 /* === Hook  === */

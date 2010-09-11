@@ -1,12 +1,12 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_internalcache}</h2>
-<!-- IF {PHP.is_adminwarnings} -->
+<!-- BEGIN: MESSAGE -->
 			<div class="error">
 				<h4>{PHP.L.Message}</h4>
-				<p>{ADMIN_CACHE_ADMINWARNINGS}</p>
+				<p>{MESSAGE_TEXT}</p>
 			</div>
-<!-- ENDIF -->
+<!-- END: MESSAGE -->
 			<ul class="follow">
 				<li><a href="{ADMIN_CACHE_URL_REFRESH}" class="ajax">{PHP.L.Refresh}</a></li>
 				<li><a href="{ADMIN_CACHE_URL_PURGE}" class="ajax">{PHP.L.adm_purgeall}</a></li>
