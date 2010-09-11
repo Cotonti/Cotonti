@@ -37,9 +37,15 @@ if ($a == 'update')
 	$rbanlistemail = sed_sql_prep(sed_import('rbanlistemail', 'P', 'TXT'));
 	$rbanlistreason = sed_sql_prep(sed_import('rbanlistreason', 'P', 'TXT'));
 
-	$sql = (!empty($rbanlistip) || !empty($rbanlistemail)) ? sed_sql_query("UPDATE $db_banlist SET banlist_ip='$rbanlistip', banlist_email='$rbanlistemail', banlist_reason='$rbanlistreason' WHERE banlist_id='$id'") : '';
+	$sql = (!empty($rbanlistip) || !empty($rbanlistemail))
+		? sed_sql_update($db_banlist, array(
+			'ip' => $rbanlistip,
+			'email' => $rbanlistemail,
+			'reason' => $rbanlistreason
+			), "banlist_id=$id", 'banlist_')
+		: '';
 
-	$adminwarnings = ($sql) ? $L['alreadyupdatednewentry'] : $L['Error'];
+	($sql) ? sed_message('alreadyupdatednewentry') : sed_message('Error');
 }
 elseif ($a == 'add')
 {
@@ -55,21 +61,24 @@ elseif ($a == 'add')
 	{
 		$nexpire += $sys['now'];
 	}
-	$sql = (!empty($nbanlistip) || !empty($nbanlistemail)) ? sed_sql_query("INSERT INTO $db_banlist (banlist_ip, banlist_email, banlist_reason, banlist_expire) VALUES ('$nbanlistip', '$nbanlistemail', '$nbanlistreason', ".(int)$nexpire.")") : '';
+	$sql = (!empty($nbanlistip) || !empty($nbanlistemail))
+		? sed_sql_insert($db_banlist, array(
+			'ip' => $nbanlistip,
+			'email' => $nbanlistemail,
+			'reason' => $nbanlistreason,
+			'expire' => (int) $nexpire
+			), 'banlist_')
+		: '';
 
-	$adminwarnings = ($sql) ? $L['alreadyaddnewentry'] : $L['Error'];
+	($sql) ? sed_message('alreadyaddnewentry') : sed_message('Error');
 }
 elseif ($a == 'delete')
 {
 	sed_check_xg();
 	$id = sed_import('id', 'G', 'INT');
 
-	$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='$id'");
-
-	$adminwarnings = ($sql) ? $L['alreadydeletednewentry'] : $L['Error'];
+	sed_sql_delete($db_banlist, "banlist_id=$id") ? sed_message('alreadydeletednewentry') : sed_message('Error');
 }
-
-$is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_banlist);
 
@@ -115,7 +124,6 @@ $time_values = array($L['adm_neverexpire'], '1 '.$Ls['Hours']['0'], '2 '.$Ls['Ho
 		'2 '.$Ls['Days'][0], '4 '.$Ls['Days'][0], '1 '.$L['Week'], '2 '.$L['Weeks'], '3 '.$L['Weeks'], '1 '.$L['Month']);
 
 $t->assign(array(
-	'ADMIN_BANLIST_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_BANLIST_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_BANLIST_PAGNAV' => $pagenav['main'],
 	'ADMIN_BANLIST_PAGINATION_NEXT' => $pagenav['next'],
@@ -127,6 +135,13 @@ $t->assign(array(
 	'ADMIN_BANLIST_EMAIL' => sed_inputbox('text', 'nbanlistemail', '', 'size="24" maxlength="64"'),
 	'ADMIN_BANLIST_REASON' => sed_inputbox('text', 'nbanlistreason', '', 'size="48" maxlength="64"')
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.banlist.tags') as $pl)

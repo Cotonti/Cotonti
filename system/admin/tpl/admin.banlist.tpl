@@ -1,12 +1,12 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Banlist}</h2>
-<!-- IF {PHP.is_adminwarnings} -->
+<!-- BEGIN: MESSAGE -->
 			<div class="error">
 				<h4>{PHP.L.Message}</h4>
-				<p>{ADMIN_BANLIST_ADMINWARNINGS}</p>
+				<p>{MESSAGE_TEXT}</p>
 			</div>
-<!-- ENDIF -->
+<!-- END: MESSAGE -->
 			<h3>{PHP.L.editdeleteentries}:</h3>
 			<table class="cells">
 				<tr>

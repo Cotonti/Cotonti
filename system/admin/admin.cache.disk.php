@@ -30,16 +30,15 @@ foreach (sed_getextplugins('admin.cache.disk.first') as $pl)
 
 if ($a == 'purge')
 {
-	$adminwarnings = (sed_check_xg() && sed_diskcache_clearall()) ? $L['adm_purgeall_done'] : $L['Error'];
+	sed_check_xg() && sed_diskcache_clearall() ? sed_message('adm_purgeall_done') : sed_message('Error');
 }
 elseif ($a == 'delete')
 {
 	$is_id = mb_strpos($id, '/') === false && mb_strpos($id, '\\') === false && $id != '.' && $id != '..';
 	$is_onlyf = $id == SED_DISKCACHE_ONLYFILES;
-	$adminwarnings = (sed_check_xg() && $is_id && sed_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf)) ? $L['adm_delcacheitem'] : $L['Error'];
+	(sed_check_xg() && $is_id && sed_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf))
+		? sed_message('adm_delcacheitem') : sed_message('Error');
 }
-
-$is_adminwarnings = isset($adminwarnings);
 
 $row = sed_diskcache_list();
 $cachefiles = $cachesize = 0;
@@ -74,10 +73,16 @@ foreach ($row as $i => $x)
 $t->assign(array(
 	'ADMIN_DISKCACHE_URL_REFRESH' => sed_url('admin', 'm=cache&s=disk'),
 	'ADMIN_DISKCACHE_URL_PURGE' => sed_url('admin', 'm=cache&s=disk&a=purge&' . sed_xg()),
-	'ADMIN_DISKCACHE_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_DISKCACHE_CACHEFILES' => $cachefiles,
 	'ADMIN_DISKCACHE_CACHESIZE' => $cachesize
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook === */
 foreach (sed_getextplugins('admin.cache.disk.tags') as $pl)

@@ -28,18 +28,15 @@ foreach (sed_getextplugins('admin.cache.first') as $pl)
 
 if ($a == 'purge' && $cot_cache)
 {
-	$adminwarnings = (sed_check_xg() && $cot_cache->clear()) ? $L['adm_purgeall_done'] : $L['Error'];
+	(sed_check_xg() && $cot_cache->clear()) ? sed_message('adm_purgeall_done') : sed_error('Error');
 }
 elseif ($a == 'delete')
 {
 	sed_check_xg();
 	$name = sed_sql_prep(sed_import('name', 'G', 'TXT'));
-	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
 
-	$adminwarnings = ($sql) ? $L['adm_delcacheitem'] : $L['Error'];
+	sed_sql_delete($db_cache, "c_name = '$name'") ? sed_message('adm_delcacheitem') : sed_error('Error');
 }
-
-$is_adminwarnings = isset($adminwarnings);
 
 if ($cot_cache && $cot_cache->mem)
 {
@@ -90,12 +87,18 @@ while ($row = sed_sql_fetcharray($sql))
 }
 
 $t->assign(array(
-	'ADMIN_CACHE_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_CACHE_URL_REFRESH' => sed_url('admin', 'm=cache'),
 	'ADMIN_CACHE_URL_PURGE' => sed_url('admin', 'm=cache&a=purge&'.sed_xg()),
 	'ADMIN_CACHE_URL_SHOWALL' => sed_url('admin', 'm=cache&a=showall'),
 	'ADMIN_CACHE_CACHESIZE' => $cachesize
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.cache.tags') as $pl)
