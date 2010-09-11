@@ -15,8 +15,6 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 $usr['isadmin'] &= sed_auth('admin', 'a', 'A');
 sed_block($usr['isadmin']);
 
-sed_require('forums');
-
 $t = new XTemplate(sed_skinfile('admin.rightsbyitem'));
 
 $ic = sed_import('ic', 'G', 'ALP');
@@ -55,7 +53,7 @@ if ($a == 'update')
 	}
 	/* ===== */
 
-	$sql = sed_sql_query("UPDATE $db_auth SET auth_rights=0 WHERE auth_code='$ic' AND auth_option='$io'");
+	sed_sql_update($db_auth, array('auth_rights' => 0), "auth_code='$ic' AND auth_option='$io'");
 
 	foreach ($auth as $i => $j)
 	{
@@ -66,14 +64,15 @@ if ($a == 'update')
 			{
 				$mask += sed_auth_getvalue($l);
 			}
-			$sql = sed_sql_query("UPDATE $db_auth SET auth_rights='$mask' WHERE auth_groupid='$i' AND auth_code='$ic' AND auth_option='$io'");
+			sed_sql_update($db_auth, array('auth_rights' => $mask),
+				"auth_groupid=$i AND auth_code='$ic' AND auth_option='$io'");
 		}
 	}
 
 	sed_auth_reorder();
 	sed_auth_clear('all');
 
-	$adminwarnings = $L['Updated'];
+	sed_message('Updated');
 }
 
 $sql = sed_sql_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
@@ -87,11 +86,6 @@ switch($ic)
 {
 	case 'page':
 		$title = ' : '.$sed_cat[$io]['title'];
-	break;
-
-	case 'forums':
-		$forum = sed_forum_info($io);
-		$title = ' : '.htmlspecialchars($forum['fs_title'])." (#".$io.")";
 	break;
 
 	case 'plug':
@@ -131,9 +125,15 @@ $t->assign(array(
 	'ADMIN_RIGHTSBYITEM_FORM_URL' => sed_url('admin', 'm=rightsbyitem&a=update&ic='.$ic.'&io='.$io.$adv_for_url),
 	'ADMIN_RIGHTSBYITEM_ADVANCED_URL' => sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
 	'ADMIN_RIGHTSBYITEM_ADV_COLUMNS' => $adv_columns,
-	'ADMIN_RIGHTSBYITEM_4ADV_COLUMNS' => 4 + $adv_columns,
-	'ADMIN_RIGHTSBYITEM_ADMINWARNINGS' => $adminwarnings
+	'ADMIN_RIGHTSBYITEM_4ADV_COLUMNS' => 4 + $adv_columns
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('ADMIN_RIGHTSBYITEM_ADMINWARNINGS', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook === */
 foreach (sed_getextplugins('admin.rightsbyitem.tags') as $pl)

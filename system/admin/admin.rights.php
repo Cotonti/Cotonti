@@ -15,11 +15,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users',
 $usr['isadmin'] &= sed_auth('admin', 'a', 'A');
 sed_block($usr['isadmin']);
 
-sed_require('forums');
-
 $t = new XTemplate(sed_skinfile('admin.rights'));
-
-
 
 $g = sed_import('g', 'G', 'INT');
 $advanced = sed_import('advanced', 'G', 'BOL');
@@ -58,18 +54,18 @@ if ($a == 'update')
 
 	if ($ncopyrightsconf && !empty($sed_groups[$ncopyrightsfrom]['title']) && $g > 5)
 	{
-		sed_sql_query("DELETE FROM $db_auth WHERE auth_groupid=$g");
+		sed_sql_delete($db_auth, "auth_groupid=$g");
 		sed_auth_add_group($g, $ncopyrightsfrom);
 		sed_auth_clear('all');
 
-		$adminwarnings = $L['Added'];
+		sed_message('Added');
 	}
 	elseif (is_array($_POST['auth']))
 	{
 		$mask = array();
 		$auth = sed_import('auth', 'P', 'ARR');
 
-		$sql = sed_sql_query("UPDATE $db_auth SET auth_rights=0 WHERE auth_groupid='$g'");
+		sed_sql_update($db_auth, array('auth_rights' => 0), "auth_groupid=$g");
 
 		foreach ($auth as $k => $v)
 		{
@@ -82,7 +78,8 @@ if ($a == 'update')
 					{
 						$mask += sed_auth_getvalue($l);
 					}
-					$sql = sed_sql_query("UPDATE $db_auth SET auth_rights='$mask' WHERE auth_groupid='$g' AND auth_code='$k' AND auth_option='$i'");
+					sed_sql_update($db_auth, array('auth_rights' => $mask),
+						"auth_groupid='$g' AND auth_code='$k' AND auth_option='$i'");
 				}
 			}
 		}
@@ -90,7 +87,7 @@ if ($a == 'update')
 		sed_auth_reorder();
 		sed_auth_clear('all');
 
-		$adminwarnings = $L['Updated'];
+		sed_message('Updated');
 	}
 }
 
@@ -103,42 +100,41 @@ foreach (sed_getextplugins('admin.rights.main') as $pl)
 }
 /* ===== */
 
-$sql1 = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
-LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-WHERE auth_groupid='$g' AND auth_code IN ('admin', 'comments', 'index', 'message', 'pfs', 'polls', 'pm', 'ratings', 'users')
-ORDER BY auth_code ASC");
-
-sed_die(sed_sql_numrows($sql1) == 0);
-
-sed_require('forums');
-
-$sql2 = sed_sql_query("SELECT a.*, u.user_name, f.fs_id, f.fs_title, f.fs_category FROM $db_auth as a
-	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-	LEFT JOIN $db_forum_sections AS f ON f.fs_id=a.auth_option
-	LEFT JOIN $db_forum_structure AS n ON n.fn_code=f.fs_category
-	WHERE auth_groupid='$g' AND auth_code='forums'
-	ORDER BY fn_path ASC, fs_order ASC, fs_title ASC");
-$sql3 = sed_sql_query("SELECT a.*, u.user_name, s.structure_path FROM $db_auth as a
-	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-	LEFT JOIN $db_structure AS s ON s.structure_code=a.auth_option
-	WHERE auth_groupid='$g' AND auth_code='page'
-	ORDER BY structure_path ASC");
-$sql4 = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
-	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
-	WHERE auth_groupid='$g' AND auth_code='plug'
-	ORDER BY auth_option ASC");
-
 $adminpath[] = ($advanced) ? array(sed_url('admin', 'm=rights&g='.$g.'&advanced=1'), $L['Rights']." / ".htmlspecialchars($sed_groups[$g]['title'])." (".$L['More'].")") : array(sed_url('admin', "m=rights&g=".$g), $L['Rights']." / ".htmlspecialchars($sed_groups[$g]['title']));
 
 $adv_columns = ($advanced) ? 8 : 4;
 
-while ($row = sed_sql_fetcharray($sql1))
+// Common tags
+$t->assign(array(
+	'ADMIN_RIGHTS_FORM_URL' => sed_url('admin', 'm=rights&a=update&g='.$g.$adv_for_url),
+	'ADMIN_RIGHTS_ADVANCED_URL' => sed_url('admin', 'm=rights&g='.$g.'&advanced=1'),
+	'ADMIN_RIGHTS_SELECTBOX_GROUPS' => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
+	'ADMIN_RIGHTS_ADV_COLUMNS' => $adv_columns,
+	'ADMIN_RIGHTS_4ADV_COLUMNS' => 4 + $adv_columns
+));
+
+// Preload module langfiles
+foreach ($sed_modules as $code => $mod)
+{
+	if (file_exists(sed_langfile($code, 'module')))
+	{
+		sed_require_lang($code, 'module');
+	}
+}
+
+// The core and modules top-level
+$sql = sed_sql_query("SELECT a.*, u.user_name FROM $db_core AS c
+LEFT JOIN $db_auth AS a ON c.ct_code=a.auth_code
+LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
+WHERE auth_groupid='$g' AND auth_option = 'a'
+ORDER BY auth_code ASC");
+while ($row = sed_sql_fetcharray($sql))
 {
 	if ($row['auth_code'] == 'admin' || $row['auth_code'] == 'index')
 	{
 		$link = sed_url($row['auth_code']);
 	}
-	if ($row['auth_code'] == 'message')
+	elseif ($row['auth_code'] == 'message')
 	{
 		$link = '#';
 	}
@@ -148,29 +144,51 @@ while ($row = sed_sql_fetcharray($sql1))
 	}
 
 	$title = $L['adm_code'][$row['auth_code']];
-	sed_rights_parseline($row, $title, $link, '_CORE');
+	sed_rights_parseline($row, $title, $link);
 }
+sed_sql_freeresult($sql);
+$t->assign('RIGHTS_SECTION_TITLE', $L['Core'] . ' &amp; ' . $L['Modules']);
+$t->parse('MAIN.RIGHTS_SECTION');
 
-while ($row = sed_sql_fetcharray($sql2))
-{
-	$link = sed_url('admin', 'm=forums&n=edit&id='.$row['auth_option']);
-	$title = htmlspecialchars(sed_build_forums($row['fs_id'], sed_cutstring($row['fs_title'], 24), sed_cutstring($row['fs_category'], 32), FALSE));
-	sed_rights_parseline($row, $title, $link, '_FORUMS');
-}
 
-while ($row = sed_sql_fetcharray($sql3))
+// Structure permissions
+$sql = sed_sql_query("SELECT a.*, u.user_name, s.structure_path FROM $db_auth as a
+	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
+	LEFT JOIN $db_structure AS s ON s.structure_code=a.auth_option
+	WHERE auth_groupid='$g' AND auth_code='page' AND auth_option != 'a'
+	ORDER BY structure_path ASC");
+while ($row = sed_sql_fetcharray($sql))
 {
 	$link = sed_url('admin', 'm=page');
 	$title = $sed_cat[$row['auth_option']]['tpath'];
-	sed_rights_parseline($row, $title, $link, '_PAGES');
+	sed_rights_parseline($row, $title, $link);
 }
+sed_sql_freeresult($sql);
+$t->assign('RIGHTS_SECTION_TITLE', $L['Structure']);
+$t->parse('MAIN.RIGHTS_SECTION');
 
-while ($row = sed_sql_fetcharray($sql4))
+// Module items permissions are pluggable
+/* === Hook for the plugins === */
+foreach (sed_getextplugins('admin.rights.modules') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+
+// Plugin permissions
+$sql = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
+	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
+	WHERE auth_groupid='$g' AND auth_code='plug'
+	ORDER BY auth_option ASC");
+while ($row = sed_sql_fetcharray($sql))
 {
 	$link = sed_url('admin', 'm=plug&a=details&pl='.$row['auth_option']);
 	$title = $L['Plugin'].' : '.$row['auth_option'];
-	sed_rights_parseline($row, $title, $link, '_PLUGINS');
+	sed_rights_parseline($row, $title, $link);
 }
+sed_sql_freeresult($sql);
+$t->assign('RIGHTS_SECTION_TITLE', $L['Plugins']);
+$t->parse('MAIN.RIGHTS_SECTION');
 
 /* === Hook for the plugins === */
 foreach (sed_getextplugins('admin.rights.end') as $pl)
@@ -182,14 +200,12 @@ foreach (sed_getextplugins('admin.rights.end') as $pl)
 $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
-$t->assign(array(
-	'ADMIN_RIGHTS_FORM_URL' => sed_url('admin', 'm=rights&a=update&g='.$g.$adv_for_url),
-	'ADMIN_RIGHTS_ADVANCED_URL' => sed_url('admin', 'm=rights&g='.$g.'&advanced=1'),
-	'ADMIN_RIGHTS_SELECTBOX_GROUPS' => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
-	'ADMIN_RIGHTS_ADV_COLUMNS' => $adv_columns,
-	'ADMIN_RIGHTS_4ADV_COLUMNS' => 4 + $adv_columns,
-	'ADMIN_RIGHTS_ADMINWARNINGS' => $adminwarnings
-));
+if (sed_check_messages())
+{
+	$t->assign('ADMIN_RIGHTS_ADMINWARNINGS', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook === */
 foreach (sed_getextplugins('admin.rights.tags') as $pl)
@@ -211,7 +227,7 @@ else
 $t->parse('RIGHTS_HELP');
 $adminhelp = $t->text('RIGHTS_HELP');
 
-function sed_rights_parseline($row, $title, $link, $name)
+function sed_rights_parseline($row, $title, $link)
 {
 	global $L, $advanced, $t, $out;
 
@@ -248,7 +264,7 @@ function sed_rights_parseline($row, $title, $link, $name)
 			'ADMIN_RIGHTS_ROW_ITEMS_CHECKED' => ($state[$code]) ? " checked=\"checked\"" : '',
 			'ADMIN_RIGHTS_ROW_ITEMS_DISABLED' => ($locked[$code]) ? " disabled=\"disabled\"" : ''
 		));
-		$t->parse('MAIN.RIGHTS_ROW'.$name.'.ROW'.$name.'_ITEMS');
+		$t->parse('MAIN.RIGHTS_SECTION.RIGHTS_ROW.RIGHTS_ROW_ITEMS');
 	}
 
 	if (!$advanced)
@@ -271,7 +287,7 @@ function sed_rights_parseline($row, $title, $link, $name)
 		'ADMIN_RIGHTS_ROW_RIGHTSBYITEM' => sed_url('admin', 'm=rightsbyitem&ic='.$row['auth_code'].'&io='.$row['auth_option']),
 		'ADMIN_RIGHTS_ROW_USER' => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
 	));
-	$t->parse('MAIN.RIGHTS_ROW'.$name);
+	$t->parse('MAIN.RIGHTS_SECTION.RIGHTS_ROW');
 }
 
 ?>

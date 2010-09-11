@@ -252,7 +252,8 @@ switch($a)
 				'ADMIN_EXTENSIONS_DATE' => $info['Date'],
 				'ADMIN_EXTENSIONS_CONFIG_URL' => sed_url('admin', "m=config&n=edit&o=$type&p=$code"),
 				'ADMIN_EXTENSIONS_TOTALCONFIG' => $totalconfig,
-				'ADMIN_EXTENSIONS_RIGHTS' => sed_url('admin', "m=rightsbyitem&ic=$type&io=$code"),
+				'ADMIN_EXTENSIONS_RIGHTS' => $type == 'module' ? sed_url('admin', "m=rightsbyitem&ic=$code&io=a")
+					: sed_url('admin', "m=rightsbyitem&ic=$type&io=$code"),
 				'ADMIN_EXTENSIONS_ADMRIGHTS_AUTH_GUESTS' => sed_auth_getmask($info['Auth_guests']),
 				'ADMIN_EXTENSIONS_AUTH_GUESTS' => $info['Auth_guests'],
 				'ADMIN_EXTENSIONS_ADMRIGHTS_LOCK_GUESTS' => sed_auth_getmask($info['Lock_guests']),
@@ -484,7 +485,9 @@ switch($a)
 							'ADMIN_EXTENSIONS_EDIT_URL' => sed_url('admin', "m=config&n=edit&o=$type&p=$x"),
 							'ADMIN_EXTENSIONS_PARTSCOUNT' => $info['Partscount'],
 							'ADMIN_EXTENSIONS_STATUS' => $status[$part_status],
-							'ADMIN_EXTENSIONS_RIGHTS_URL' => sed_url('admin', "m=rightsbyitem&ic=$type&io=$x"),
+							'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == 'module'
+								? sed_url('admin', "m=rightsbyitem&ic=$x&io=a")
+								: sed_url('admin', "m=rightsbyitem&ic=$type&io=$x"),
 							'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? sed_url('admin', "m=tools&p=$x")
 								: sed_url('admin', "m=$x"),
 							'ADMIN_EXTENSIONS_JUMPTO_URL' => sed_url('index', "$ze=$x"),

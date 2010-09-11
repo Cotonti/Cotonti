@@ -155,7 +155,7 @@ define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER[
 
 if (!$sed_plugins)
 {
-	$sql = sed_sql_query("SELECT pl_code, pl_file, pl_hook FROM $db_plugins
+	$sql = sed_sql_query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 	if (sed_sql_numrows($sql) > 0)
 	{
