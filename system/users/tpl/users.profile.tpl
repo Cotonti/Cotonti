@@ -88,7 +88,7 @@
 					</tr>
 					<tr>
 						<td>{PHP.L.Signature}:</td>
-						<td>{USERS_PROFILE_TEXTBOXER}</td>
+						<td>{USERS_PROFILE_TEXT}</td>
 					</tr>
 					<tr>
 						<td>

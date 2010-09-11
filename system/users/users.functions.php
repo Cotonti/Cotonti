@@ -10,6 +10,9 @@
  * @license BSD
  */
 
+$sed_extrafields['users'] = $sed_extrafields[$db_users];
+$sed_extrafields['users'] = (!empty($sed_extrafields['users'])) ? $sed_extrafields['users'] : array();
+
 /**
  * Returns group link (button)
  *
@@ -212,14 +215,11 @@ function sed_generate_usertags($ruser_data, $tag_prefix = '', $emptyname='', $al
 			{
 				$return_array[$tag_prefix.'GROUPS'] = sed_build_groupsms($ruser_data['user_id'], FALSE, $ruser_data['user_maingrp']);
 			}
-			if (count($sed_extrafields['users']) > 0)
-			{
 				// Extra fields
-				foreach ($sed_extrafields['users'] as $i => $row)
-				{
-					$return_array[$tag_prefix.strtoupper($row['field_name'])] = sed_build_extrafields_data('user', $row['field_type'], $row['field_name'], $ruser_data['user_'.$row['field_name']]);
-					$return_array[$tag_prefix.strtoupper($row['field_name']).'_TITLE'] = isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description'];
-				}
+			foreach ($sed_extrafields['users'] as $i => $row)
+			{
+				$return_array[$tag_prefix.strtoupper($row['field_name'])] = sed_build_extrafields_data('user', $row, $ruser_data['user_'.$row['field_name']]);
+				$return_array[$tag_prefix.strtoupper($row['field_name']).'_TITLE'] = isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description'];
 			}
 
 			$cache['user_'.$ruser_data['user_id']] = $return_array;
