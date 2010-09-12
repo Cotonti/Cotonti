@@ -11,7 +11,7 @@
 
 (defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
 
-$t = new XTemplate(sed_skinfile('forums.admin.structure'));
+$t = new XTemplate(sed_skinfile('forums.admin.structure', 'module'));
 
 $adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
 $adminpath[] = array (sed_url('admin', 'm=forums&s=structure'), $L['Structure']);
@@ -72,6 +72,8 @@ if($n == 'options')
 				$cot_cache->page->clear('forums');
 			}
 		}
+
+		sed_message('Updated');
 
 		sed_redirect(sed_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
 	}
@@ -160,7 +162,7 @@ else
 			}
 		}
 
-		$adminwarnings = $L['Updated'];
+		sed_message('Updated');
 	}
 	elseif($a == 'add')
 	{
@@ -187,7 +189,7 @@ else
 			}
 		}
 
-		$adminwarnings = $L['Added'];
+		sed_message('Added');
 	}
 	elseif($a == 'delete')
 	{
@@ -203,7 +205,7 @@ else
 			}
 		}
 
-		$adminwarnings = $L['Deleted'];
+		sed_message('Deleted');
 	}
 
 	$sql = sed_sql_query("SELECT DISTINCT(fs_category), COUNT(*) FROM $db_forum_sections WHERE 1 GROUP BY fs_category");
@@ -290,12 +292,6 @@ else
 	));
 	$t->parse('MAIN.DEFULT');
 }
-
-$is_adminwarnings = isset($adminwarnings);
-
-$t->assign(array(
-	'ADMIN_FORUMS_STRUCTURE_ADMINWARNINGS' => $adminwarnings
-));
 
 /* === Hook === */
 foreach (sed_getextplugins('admin.forums.structure.tags') as $pl)

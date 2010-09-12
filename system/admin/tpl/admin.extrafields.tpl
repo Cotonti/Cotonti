@@ -1,13 +1,12 @@
 <!-- BEGIN: MAIN -->
-
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_extrafields}</h2>
-<!-- IF {PHP.is_adminwarnings} -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{ADMIN_EXTRAFIELDS_ADMINWARNINGS}</p>
-			</div>
-<!-- ENDIF -->
+<!-- BEGIN: MESSAGE -->
+		<div class="error">
+			<h4>{PHP.L.Message}</h4>
+			<p>{MESSAGE_TEXT}</p>
+		</div>
+<!-- END: MESSAGE -->
 		<form action="{ADMIN_EXTRAFIELDS_URL_FORM_EDIT}" method="post">
 		<table class="cells">
 			<tr>

@@ -50,7 +50,6 @@ $options_sort = array(
 	'expire' => $L['Expire'],
 	'rating' => $L['Rating'],
 	'count' => $L['Hits'],
-	'comcount' => $L['Comments'],//TODO: if comments plug not instaled this row generated error
 	'file' => $L['adm_fileyesno'],
 	'url' => $L['adm_fileurl'],
 	'size' => $L['adm_filesize'],
@@ -59,9 +58,12 @@ $options_sort = array(
 
 // Extra fields pages
 $extrafields = array();
-foreach($sed_extrafields['pages'] as $i => $row)
+if (is_array($sed_extrafields['pages']))
 {
-	$$extrafields[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
+	foreach($sed_extrafields['pages'] as $i => $row)
+	{
+		$$extrafields[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
+	}
 }
 $options_sort = ($options_sort + $extrafields);
 
@@ -84,7 +86,6 @@ if ($n == 'options')
 		$rgroup = ($rgroup) ? 1 : 0;
 		$rorder = sed_import('rorder', 'P', 'ALP');
 		$rway = sed_import('rway', 'P', 'ALP');
-		$rallowcomments = sed_import('rallowcomments', 'P', 'BOL');
 		$rallowratings = sed_import('rallowratings', 'P', 'BOL');
 
 		// Extra fields
@@ -153,7 +154,6 @@ if ($n == 'options')
 		}
 
 		$sqltxt .= "
-				structure_comments='".$rallowcomments."',
 				structure_ratings='".$rallowratings."'
 			WHERE structure_id='".$id."'";
 		$sql = sed_sql_query($sqltxt);
@@ -167,13 +167,15 @@ if ($n == 'options')
 			}
 		}
 
+		sed_message('Updated');
+
 		sed_redirect(sed_url('admin', 'm=structure&d='.$d.$additionsforurl, '', true));
 	}
 	elseif ($a == 'resync')
 	{
 		sed_check_xg();
 
-		$adminwarnings = sed_structure_resync($id) ? $L['Resynced'] : $L['Error'];
+		sed_structure_resync($id) ? sed_message('Resynced') : sed_message('Error');
 
 		if ($cot_cache && $cfg['cache_page'])
 		{
@@ -207,7 +209,6 @@ if ($n == 'options')
 	$structure_desc = $row['structure_desc'];
 	$structure_icon = $row['structure_icon'];
 	$structure_group = $row['structure_group'];
-	$structure_comments = $row['structure_comments'];
 	$structure_ratings = $row['structure_ratings'];
 	$raw = explode('.', $row['structure_order']);
 	$sort = $raw[0];
@@ -254,7 +255,6 @@ if ($n == 'options')
 		'ADMIN_STRUCTURE_TPLMODE' => sed_radiobox($check_tpl, 'rtplmode', array('1'. '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_forced'].'  '.$cat_selectbox, $L['adm_tpl_parent']), '', '<br />'),
 		'ADMIN_STRUCTURE_WAY' => sed_selectbox($way, 'rway', array_keys($options_way), array_values($options_way), false),
 		'ADMIN_STRUCTURE_ORDER' => sed_selectbox($sort, 'rorder', array_keys($options_sort), array_values($options_sort), false),
-		'ADMIN_STRUCTURE_COMMENTS' => sed_radiobox($structure_comments, 'rallowcomments', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_STRUCTURE_RATINGS' => sed_radiobox($structure_ratings, 'rallowratings', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_STRUCTURE_RESYNC' => sed_url('admin', 'm=structure&n=options&a=resync&id='.$structure_id.'&'.sed_xg()),
 	));
@@ -353,7 +353,7 @@ else
 			}
 		}
 
-		$adminwarnings = $L['Updated'];
+		sed_message('Updated');
 	}
 	elseif ($a == 'add')
 	{
@@ -382,7 +382,8 @@ else
 		}
 		/* ===== */
 
-		$adminwarnings = (sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup, $norder, $nway, $rstructureextrafields)) ? $L['Added'] : $L['Error'];
+		sed_structure_newcat($ncode, $npath, $ntitle, $ndesc, $nicon, $ngroup, $norder, $nway, $rstructureextrafields)
+			? sed_message('Added') : sed_message('Error');
 
 		if ($cot_cache && $cfg['cache_page'])
 		{
@@ -407,13 +408,13 @@ else
 			$cot_cache->page->clear('page');
 		}
 
-		$adminwarnings = $L['Deleted'];
+		sed_message('Deleted');
 	}
 	elseif ($a == 'resyncall')
 	{
 		sed_check_xg();
 
-		$adminwarnings = sed_structure_resyncall() ? $L['Resynced'] : $L['Error'];
+		sed_structure_resyncall() ? sed_message('Resynced') : sed_message('Error');
 
 		if ($cot_cache && $cfg['cache_page'])
 		{
@@ -526,7 +527,6 @@ else
 		'ADMIN_STRUCTURE_GROUP' => sed_checkbox(0, 'ngroup'),
 		'ADMIN_STRUCTURE_WAY' => sed_selectbox('asc', 'nway', array_keys($options_way), array_values($options_way), false),
 		'ADMIN_STRUCTURE_ORDER' => sed_selectbox('title', 'norder', array_keys($options_sort), array_values($options_sort), false),
-		'ADMIN_STRUCTURE_COMMENTS' => sed_radiobox(1, 'nallowcomments', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_STRUCTURE_RATINGS' => sed_radiobox(1, 'nallowratings', array(1, 0), array($L['Yes'], $L['No']))
 
 	));
@@ -547,13 +547,17 @@ else
 	$t->parse('MAIN.DEFULT');
 }
 
-$is_adminwarnings = isset($adminwarnings);
-
 $t->assign(array(
-	'ADMIN_STRUCTURE_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_STRUCTURE_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=structure'),
 	'ADMIN_STRUCTURE_URL_EXTRAFIELDS' => sed_url('admin', 'm=extrafields&n=structure')
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.structure.tags') as $pl)

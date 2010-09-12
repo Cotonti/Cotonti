@@ -2180,7 +2180,7 @@ function sed_skinfile($base, $plug = false)
 		}
 	}
 
-	if ($plug)
+	if ($plug === true)
 	{
 		$scan_prefix[] = './skins/'.$usr['skin'].'/plugins/';
 		if ($usr['skin'] != $cfg['defaultskin'])
@@ -2196,7 +2196,7 @@ function sed_skinfile($base, $plug = false)
 		{
 			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/'.$basename.'/';
 		}
-		if ((defined('SED_ADMIN')
+		if ((defined('SED_ADMIN') && $plug !== 'module'
 			|| defined('SED_MESSAGE') && $_SESSION['s_run_admin']))
 		{
 			$scan_prefix[] = $cfg['system_dir'].'/admin/tpl/';

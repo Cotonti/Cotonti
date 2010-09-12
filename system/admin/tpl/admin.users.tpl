@@ -1,12 +1,12 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Users}</h2>
-<!-- IF {PHP.is_adminwarnings} -->
+<!-- BEGIN: MESSAGE -->
 			<div class="error">
 				<h4>{PHP.L.Message}</h4>
-				<p>{ADMIN_USERS_ADMINWARNINGS}</p>
+				<p>{MESSAGE_TEXT}</p>
 			</div>
-<!-- ENDIF -->
+<!-- END: MESSAGE -->
 		<ul class="follow">
 			<li><a title="{PHP.L.Configuration}" href="{ADMIN_USERS_URL}">{PHP.L.Configuration}</a></li>
 <!-- IF {PHP.lincif_extfld} -->

@@ -3,7 +3,7 @@
  * Administration panel - Ratings manager
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.7.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -34,13 +34,12 @@ foreach (sed_getextplugins('admin.ratings.first') as $pl)
 if($a == 'delete')
 {
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$id' ");
-	$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='$id' ");
+	sed_sql_delete($db_ratings, "rating_code = '$id'");
+	sed_sql_delete($db_rated, "rated_code = '$id'");
 
-	$adminwarnings = $L['adm_ratings_already_del'];
+	sed_message('adm_ratings_already_del');
 }
 
-$is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_ratings);
 $pagenav = sed_pagenav('admin', 'm=ratings', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
@@ -92,7 +91,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t->assign(array(
-	'ADMIN_RATINGS_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_RATINGS_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=ratings'),
 	'ADMIN_RATINGS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_RATINGS_PAGNAV' => $pagenav['main'],
@@ -101,6 +99,13 @@ $t->assign(array(
 	'ADMIN_RATINGS_ON_PAGE' => $ii,
 	'ADMIN_RATINGS_TOTALVOTES' => $jj
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.ratings.tags') as $pl)

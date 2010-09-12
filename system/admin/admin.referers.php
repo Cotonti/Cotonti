@@ -32,19 +32,12 @@ foreach (sed_getextplugins('admin.referers.first') as $pl)
 
 if($a == 'prune' && $usr['isadmin'])
 {
-	$sql = sed_sql_query("TRUNCATE $db_referers");
-
-	$adminwarnings = ($sql) ? $L['adm_ref_prune'] : $L['Error'];
-
+	sed_sql_query("TRUNCATE $db_referers") ? sed_message('adm_ref_prune') : sed_message('Error');
 }
 elseif($a == 'prunelowhits' && $usr['isadmin'])
 {
-	$sql = sed_sql_query("DELETE FROM $db_referers WHERE ref_count<6");
-
-	$adminwarnings = ($sql) ? $L['adm_ref_prunelowhits'] : $L['Error'];
+	sed_sql_delete($db_referers, 'ref_count < 6') ? sed_message('adm_ref_prunelowhits') : sed_message('Error');
 }
-
-$is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_referers);
 $pagenav = sed_pagenav('admin', 'm=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
@@ -56,7 +49,7 @@ if(sed_sql_numrows($sql) > 0)
 	while($row = sed_sql_fetcharray($sql))
 	{
 		preg_match("#//([^/]+)/#", $row['ref_url'], $a);
-		$host = preg_replace('#^www.#i', '', $a[1]);
+		$host = preg_replace('#^www\.#i', '', $a[1]);
 		$referers[$host][$row['ref_url']] = $row['ref_count'];
 	}
 
@@ -97,13 +90,19 @@ else
 $t->assign(array(
 	'ADMIN_REFERERS_URL_PRUNE' => sed_url('admin', 'm=referers&a=prune&'.sed_xg()),
 	'ADMIN_REFERERS_URL_PRUNELOWHITS' => sed_url('admin', 'm=referers&a=prunelowhits&'.sed_xg()),
-	'ADMIN_REFERERS_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_REFERERS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_REFERERS_PAGNAV' => $pagenav['main'],
 	'ADMIN_REFERERS_PAGINATION_NEXT' => $pagenav['next'],
 	'ADMIN_REFERERS_TOTALITEMS' => $totalitems,
 	'ADMIN_REFERERS_ON_PAGE' => $ii
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.referers.tags') as $pl)

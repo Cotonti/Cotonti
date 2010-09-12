@@ -1,12 +1,12 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Trashcan}</h2>
-<!-- IF {PHP.is_adminwarnings} -->
+<!-- BEGIN: MESSAGE -->
 			<div class="error">
 				<h4>{PHP.L.Message}</h4>
-				<p>{ADMIN_TRASHCAN_ADMINWARNINGS}</p>
+				<p>{MESSAGE_TEXT}</p>
 			</div>
-<!-- ENDIF -->
+<!-- END: MESSAGE -->
 			<ul class="follow">
 				<li><a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}">{PHP.L.Configuration}</a></li>
 				<li><a title="{PHP.L.Wipeall}" href="{ADMIN_TRASHCAN_WIPEALL_URL}">{PHP.L.Wipeall}</a></li>

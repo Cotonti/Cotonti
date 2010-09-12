@@ -23,6 +23,7 @@ sed_block($usr['isadmin']);
 // Requirements
 sed_require_api('auth');
 sed_require_api('forms');
+sed_require('forums');
 
 $s = sed_import('s', 'G', 'ALP');
 $id = sed_import('id', 'G', 'INT');
@@ -35,7 +36,7 @@ if ($s == 'structure')
 }
 else
 {
-	$t = new XTemplate(sed_skinfile('forums.admin'));
+	$t = new XTemplate(sed_skinfile('forums.admin', 'module'));
 
 	$adminpath[] = array(sed_url('admin', 'm=forums'), $L['Forums']);
 
@@ -131,7 +132,7 @@ else
 				$cot_cache->page->clear('forums');
 			}
 
-			$adminwarnings = $L['Resynced'];
+			sed_message('Resynced');
 		}
 
 		$sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
@@ -216,7 +217,7 @@ else
 				}
 			}
 
-			$adminwarnings = $L['Ordered'];
+			sed_message('Ordered');
 		}
 		elseif ($a == 'add')
 		{
@@ -274,11 +275,11 @@ else
 					$cot_cache->page->clear('forums');
 				}
 
-				$adminwarnings = $L['Added'];
+				sed_message('Added');
 			}
 			else
 			{
-				$adminwarnings = $L['adm_forum_emptytitle'];
+				sed_error('adm_forum_emptytitle', 'ntitle');
 			}
 		}
 		elseif ($a == 'delete')
@@ -301,7 +302,7 @@ else
 			}
 			/* ===== */
 
-			$adminwarnings = $L['Deleted'];
+			sed_message('Deleted');
 		}
 		/*
 		  $totalitems = sed_sql_rowcount($db_forum_sections)+sed_sql_rowcount($db_forum_structure);
@@ -428,13 +429,11 @@ else
 		$t->parse('MAIN.DEFULT');
 	}
 
-	$is_adminwarnings = isset($adminwarnings);
 	$lincif_conf = sed_auth('admin', 'a', 'A');
 
 	$t->assign(array(
 		'ADMIN_FORUMS_CONF_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=forums'),
 		'ADMIN_FORUMS_CONF_STRUCTURE_URL' => sed_url('admin', 'm=forums&s=structure'),
-		'ADMIN_FORUMS_ADMINWARNINGS' => $adminwarnings
 	));
 
 	/* === Hook === */
@@ -443,6 +442,13 @@ else
 		include $pl;
 	}
 	/* ===== */
+}
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
 }
 
 $t->parse('MAIN');

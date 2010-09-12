@@ -62,7 +62,7 @@ if($n == 'add')
 
 	$cot_cache->db->remove('sed_groups', 'system');
 
-	$adminwarnings = $L['Added'];
+	sed_message('Added');
 }
 elseif($n == 'edit')
 {
@@ -95,7 +95,7 @@ elseif($n == 'edit')
 
 		$cot_cache->db->remove('sed_groups', 'system');
 
-		$adminwarnings = $L['Updated'];
+		sed_message('Updated');
 	}
 	elseif($a == 'delete' && $g > 5)
 	{
@@ -112,7 +112,7 @@ elseif($n == 'edit')
 		sed_auth_clear('all');
 		$cot_cache->db->remove('sed_groups', 'system');
 
-		$adminwarnings = $L['Deleted'];
+		sed_message('Deleted');
 	}
 	else
 	{
@@ -203,13 +203,18 @@ if(!isset($showdefault) OR $showdefault == true)
 	$t->parse('MAIN.ADMIN_USERS_DEFAULT');
 }
 
-$is_adminwarnings = isset($adminwarnings);
-
 $t->assign(array(
 	'ADMIN_USERS_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=users'),
-	'ADMIN_USERS_EXTRAFIELDS_URL' => sed_url('admin', 'm=extrafields&n=users'),
-	'ADMIN_USERS_ADMINWARNINGS' => $adminwarnings
+	'ADMIN_USERS_EXTRAFIELDS_URL' => sed_url('admin', 'm=extrafields&n=users')
 ));
+
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.users.tags') as $pl)
