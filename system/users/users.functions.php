@@ -9,7 +9,6 @@
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
-
 // Requirements
 sed_require_lang('users', 'core');
 sed_require_rc('users');
@@ -25,14 +24,15 @@ $GLOBALS['sed_extrafields']['users'] = (!empty($GLOBALS['sed_extrafields'][$GLOB
  */
 function sed_build_group($grpid)
 {
-	if(empty($grpid)) return '';
+	if (empty($grpid))
+		return '';
 	global $sed_groups, $L;
 
-	if($sed_groups[$grpid]['hidden'])
+	if ($sed_groups[$grpid]['hidden'])
 	{
-		if(sed_auth('users', 'a', 'A'))
+		if (sed_auth('users', 'a', 'A'))
 		{
-			return sed_rc_link(sed_url('users', 'gm='.$grpid), $sed_groups[$grpid]['title'] .' ('.$L['Hidden'].')');
+			return sed_rc_link(sed_url('users', 'gm=' . $grpid), $sed_groups[$grpid]['title'] . ' (' . $L['Hidden'] . ')');
 		}
 		else
 		{
@@ -41,7 +41,7 @@ function sed_build_group($grpid)
 	}
 	else
 	{
-		return sed_rc_link(sed_url('users', 'gm='.$grpid), $sed_groups[$grpid]['title']);
+		return sed_rc_link(sed_url('users', 'gm=' . $grpid), $sed_groups[$grpid]['title']);
 	}
 }
 
@@ -65,18 +65,16 @@ function sed_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 	}
 
 	$res = $R['users_code_grplist_begin'];
-	foreach($sed_groups as $k => $i)
+	foreach ($sed_groups as $k => $i)
 	{
 		if ($edit)
 		{
 			$checked = ($member[$k]) ? ' checked="checked"' : '';
-			$checked_maingrp = ($maingrp==$k) ? ' checked="checked"' : '';
+			$checked_maingrp = ($maingrp == $k) ? ' checked="checked"' : '';
 			$readonly = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k == COT_GROUP_GUESTS
-				|| $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED || ($k == COT_GROUP_SUPERADMINS && $userid == 1))
-					? ' disabled="disabled"' : '';
+					|| $k == COT_GROUP_INACTIVE || $k == COT_GROUP_BANNED || ($k == COT_GROUP_SUPERADMINS && $userid == 1)) ? ' disabled="disabled"' : '';
 			$readonly_maingrp = (!$edit || $usr['level'] < $sed_groups[$k]['level'] || $k == COT_GROUP_GUESTS
-				|| ($k == COT_GROUP_INACTIVE && $userid == 1) || ($k == COT_GROUP_BANNED && $userid == 1))
-					? ' disabled="disabled"' : '';
+					|| ($k == COT_GROUP_INACTIVE && $userid == 1) || ($k == COT_GROUP_BANNED && $userid == 1)) ? ' disabled="disabled"' : '';
 		}
 		if ($member[$k] || $edit)
 		{
@@ -100,9 +98,8 @@ function sed_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 						'attrs' => $readonly
 					));
 				}
-				$item .= ($k == COT_GROUP_GUESTS) ? $sed_groups[$k]['title']
-					: sed_rc_link(sed_url('users', 'gm='.$k), $sed_groups[$k]['title']);
-				$item .= ($sed_groups[$k]['hidden']) ? ' ('.$L['Hidden'].')' : '';
+				$item .= ( $k == COT_GROUP_GUESTS) ? $sed_groups[$k]['title'] : sed_rc_link(sed_url('users', 'gm=' . $k), $sed_groups[$k]['title']);
+				$item .= ( $sed_groups[$k]['hidden']) ? ' (' . $L['Hidden'] . ')' : '';
 				$rc = ($maingrp == $k) ? 'users_code_grplist_item_main' : 'users_code_grplist_item';
 				$res .= sed_rc('users_code_grplist_item', array('item' => $item));
 			}
@@ -123,15 +120,14 @@ function sed_selectbox_gender($check, $name)
 {
 	global $L;
 
-	$genlist = array ('U', 'M', 'F');
+	$genlist = array('U', 'M', 'F');
 	$titlelist = array();
 	foreach ($genlist as $i)
 	{
-		$titlelist[] = $L['Gender_'.$i];
+		$titlelist[] = $L['Gender_' . $i];
 	}
 	return sed_selectbox($check, $name, $genlist, $titlelist, false);
 }
-
 
 /**
  * Checks whether user is online
@@ -146,7 +142,7 @@ function sed_userisonline($id)
 	$res = FALSE;
 	if (is_array($sed_usersonline))
 	{
-		$res = (in_array($id,$sed_usersonline)) ? TRUE : FALSE;
+		$res = (in_array($id, $sed_usersonline)) ? TRUE : FALSE;
 	}
 	return ($res);
 }
@@ -154,91 +150,94 @@ function sed_userisonline($id)
 /**
  * Returns all user tags foк XTemplate
  *
- * @param mixed $ruser_data User Info Array
+ * @param mixed $user_data User Info Array
  * @param string $tag_prefix Prefix for tags
  * @param string $emptyname Name text if user is not exist
  * @param bool $allgroups Build info about all user groups
  *
  * @return array
  */
-function sed_generate_usertags($ruser_data, $tag_prefix = '', $emptyname='', $allgroups = false)
+function sed_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false)
 {
 	global $sed_extrafields, $cfg, $L, $sed_yesno, $skinlang, $cache, $db_users, $usr;
-	if (!is_array($cache['user_'.$ruser_data['user_id']]) || (is_int($ruser_data) && !is_array($cache['user_'.$ruser_data])))
+	if (is_array($user_data) && is_array($cache['user_' . $user_data['user_id']]))
+	{	
+		$temp_array = $cache['user_' . $user_data['user_id']];
+	}
+	elseif (is_array($cache['user_' . $user_data]))
 	{
-		if(is_int($ruser_data))
+		$temp_array = $cache['user_' . $user_data];
+	}
+	else
+	{
+		if (!is_array($user_data))
 		{
-			$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = '".(int)$ruser_data."' LIMIT 1");
-			$ruser_data = sed_sql_fetchassoc($sql);
+			$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = '" . (int) $user_data . "' LIMIT 1");
+			$user_data = sed_sql_fetchassoc($sql);
 		}
 
-		if ($ruser_data['user_id'] > 0 && !empty($ruser_data['user_name']))
+		if ($user_data['user_id'] > 0 && !empty($user_data['user_name']))
 		{
 
-			$ruser_data['user_birthdate'] = sed_date2stamp($ruser_data['user_birthdate']);
-			$ruser_data['user_text'] = sed_build_usertext(htmlspecialchars($ruser_data['user_text']));
-			$ruser_data['user_age'] = ($ruser_data['user_birthdate']!=0) ? sed_build_age($ruser_data['user_birthdate']) : '';
-			$ruser_data['user_birthdate'] = ($ruser_data['user_birthdate']!=0) ? @date($cfg['formatyearmonthday'], $ruser_data['user_birthdate']) : '';
-			$ruser_data['user_gender'] = ($ruser_data['user_gender']=='' || $ruser_data['user_gender']=='U') ?  '' : $L['Gender_'.$ruser_data['user_gender']];
-			$ruser_data['user_online'] = (sed_userisonline($ruser_data['user_id'])) ? '1' : '0';
-			$ruser_data['user_onlinetitle'] = ($ruser_data['user_online']) ? $skinlang['forumspost']['Onlinestatus1'] : $skinlang['forumspost']['Onlinestatus0'];
-
-			$return_array = array(
-				$tag_prefix.'ID' => $ruser_data['user_id'],
-				$tag_prefix.'PM' => function_exists('sed_build_pm') ? sed_build_pm($ruser_data['user_id']) : '',
-				$tag_prefix.'NAME' => sed_build_user($ruser_data['user_id'], htmlspecialchars($ruser_data['user_name'])),
-				$tag_prefix.'NICKNAME' => htmlspecialchars($ruser_data['user_name']),
-				$tag_prefix.'DETAILSLINK' => sed_url('users', 'm=details&id='.$ruser_data['user_id']),
-				$tag_prefix.'MAINGRP' => sed_build_group($ruser_data['user_maingrp']),
-				$tag_prefix.'MAINGRPID' => $ruser_data['user_maingrp'],
-				$tag_prefix.'MAINGRPSTARS' => sed_build_stars($sed_groups[$ruser_data['user_maingrp']]['level']),
-				$tag_prefix.'MAINGRPICON' => sed_build_userimage($sed_groups[$ruser_data['user_maingrp']]['icon']),
-				$tag_prefix.'COUNTRY' => sed_build_country($ruser_data['user_country']),
-				$tag_prefix.'COUNTRYFLAG' => sed_build_flag($ruser_data['user_country']),
-				$tag_prefix.'TEXT' => $cfg['parsebbcodeusertext'] ? sed_bbcode_parse($ruser_data['user_text'], true) : $ruser_data['user_text'],
-				$tag_prefix.'AVATAR' => sed_build_userimage($ruser_data['user_avatar'], 'avatar'),
-				$tag_prefix.'PHOTO' => sed_build_userimage($ruser_data['user_photo'], 'photo'),
-				$tag_prefix.'SIGNATURE' => sed_build_userimage($ruser_data['user_signature'], 'sig'),
-				$tag_prefix.'EMAIL' => sed_build_email($ruser_data['user_email'], $ruser_data['user_hideemail']),
-				$tag_prefix.'PMNOTIFY' =>  $sed_yesno[$urr['user_pmnotify']],
-				$tag_prefix.'SKIN' => $ruser_data['user_skin'],
-				$tag_prefix.'GENDER' => $ruser_data['user_gender'],
-				$tag_prefix.'BIRTHDATE' => $ruser_data['user_birthdate'],
-				$tag_prefix.'AGE' => $ruser_data['user_age'],
-				$tag_prefix.'TIMEZONE' => sed_build_timezone($ruser_data['user_timezone']),
-				$tag_prefix.'REGDATE' => @date($cfg['dateformat'], $ruser_data['user_regdate'] + $usr['timezone'] * 3600).' '.$usr['timetext'],
-				$tag_prefix.'LASTLOG' => @date($cfg['dateformat'], $ruser_data['user_lastlog'] + $usr['timezone'] * 3600).' '.$usr['timetext'],
-				$tag_prefix.'LOGCOUNT' => $ruser_data['user_logcount'],
-				$tag_prefix.'POSTCOUNT' => $ruser_data['user_postcount'],
-				$tag_prefix.'LASTIP' => $ruser_data['user_lastip'],
-				$tag_prefix.'ONLINE' => $ruser_data['user_online'],
-				$tag_prefix.'ONLINETITLE' => $ruser_data['user_onlinetitle'],
+			$user_data['user_birthdate'] = sed_date2stamp($user_data['user_birthdate']);
+			$user_data['user_text'] = sed_build_usertext(htmlspecialchars($user_data['user_text']));
+			
+			$temp_array = array(
+				'ID' => $user_data['user_id'],
+				'PM' => function_exists('sed_build_pm') ? sed_build_pm($user_data['user_id']) : '',
+				'NAME' => sed_build_user($user_data['user_id'], htmlspecialchars($user_data['user_name'])),
+				'NICKNAME' => htmlspecialchars($user_data['user_name']),
+				'DETAILSLINK' => sed_url('users', 'm=details&id=' . $user_data['user_id']),
+				'MAINGRP' => sed_build_group($user_data['user_maingrp']),
+				'MAINGRPID' => $user_data['user_maingrp'],
+				'MAINGRPSTARS' => sed_build_stars($sed_groups[$user_data['user_maingrp']]['level']),
+				'MAINGRPICON' => sed_build_userimage($sed_groups[$user_data['user_maingrp']]['icon']),
+				'COUNTRY' => sed_build_country($user_data['user_country']),
+				'COUNTRYFLAG' => sed_build_flag($user_data['user_country']),
+				'TEXT' => $cfg['parsebbcodeusertext'] ? sed_bbcode_parse($user_data['user_text'], true) : $user_data['user_text'],
+				'AVATAR' => sed_build_userimage($user_data['user_avatar'], 'avatar'),
+				'PHOTO' => sed_build_userimage($user_data['user_photo'], 'photo'),
+				'SIGNATURE' => sed_build_userimage($user_data['user_signature'], 'sig'),
+				'EMAIL' => sed_build_email($user_data['user_email'], $user_data['user_hideemail']),
+				'PMNOTIFY' => $sed_yesno[$urr['user_pmnotify']],
+				'SKIN' => $user_data['user_skin'],
+				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
+				'BIRTHDATE' => ($user_data['user_birthdate'] != 0) ? @date($cfg['formatyearmonthday'], $user_data['user_birthdate']) : '',
+				'AGE' => ($user_data['user_birthdate'] != 0) ? sed_build_age($user_data['user_birthdate']) : '',
+				'TIMEZONE' => sed_build_timezone($user_data['user_timezone']),
+				'REGDATE' => @date($cfg['dateformat'], $user_data['user_regdate'] + $usr['timezone'] * 3600) . ' ' . $usr['timetext'],
+				'LASTLOG' => @date($cfg['dateformat'], $user_data['user_lastlog'] + $usr['timezone'] * 3600) . ' ' . $usr['timetext'],
+				'LOGCOUNT' => $user_data['user_logcount'],
+				'POSTCOUNT' => $user_data['user_postcount'],
+				'LASTIP' => $user_data['user_lastip'],
+				'ONLINE' => (sed_userisonline($user_data['user_id'])) ? '1' : '0',
+				'ONLINETITLE' => ($user_data['user_online']) ? $skinlang['forumspost']['Onlinestatus1'] : $skinlang['forumspost']['Onlinestatus0'],
 			);
 
 			if ($allgroups)
 			{
-				$return_array[$tag_prefix.'GROUPS'] = sed_build_groupsms($ruser_data['user_id'], FALSE, $ruser_data['user_maingrp']);
+				$temp_array['GROUPS'] = sed_build_groupsms($user_data['user_id'], FALSE, $user_data['user_maingrp']);
 			}
-				// Extra fields
+			// Extra fields
 			foreach ($sed_extrafields['users'] as $i => $row)
 			{
-				$return_array[$tag_prefix.strtoupper($row['field_name'])] = sed_build_extrafields_data('user', $row, $ruser_data['user_'.$row['field_name']]);
-				$return_array[$tag_prefix.strtoupper($row['field_name']).'_TITLE'] = isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description'];
+				$temp_array[strtoupper($row['field_name'])] = sed_build_extrafields_data('user', $row, $user_data['user_' . $row['field_name']]);
+				$temp_array[strtoupper($row['field_name']) . '_TITLE'] = isset($L['user_' . $row['field_name'] . '_title']) ? $L['user_' . $row['field_name'] . '_title'] : $row['field_description'];
 			}
 
-			$cache['user_'.$ruser_data['user_id']] = $return_array;
+			$cache['user_' . $user_data['user_id']] = $temp_array;
 		}
 		else
 		{
-			$return_array = array(
-				$tag_prefix.'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
-				$tag_prefix.'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+			$temp_array = array(
+				'NAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
+				'NICKNAME' => (!empty($emptyname)) ? $emptyname : $L['Deleted'],
 			);
 		}
 	}
-	else
+	foreach ($temp_array as $key => $val)
 	{
-		$return_array = $cache['user_'.$ruser_data['user_id']];
+		$return_array[$tag_prefix . $key] = $val;
 	}
 	return $return_array;
 }

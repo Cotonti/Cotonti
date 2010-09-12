@@ -263,7 +263,7 @@ $jj = 0;
 $extp = sed_getextplugins('users.loop');
 /* ===== */
 
-while($urr = sed_sql_fetcharray($sql) && $jj < $cfg['maxusersperpage'])
+while($urr = sed_sql_fetcharray($sql))
 {
 	$jj++;
 	$t->assign(array(

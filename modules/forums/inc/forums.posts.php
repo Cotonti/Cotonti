@@ -516,29 +516,16 @@ if ($usr['id']>0)
 	$morejavascript .= sed_build_addtxt('newpost', 'newmsg');
 }
 
-$user_extrafields = "";
-//Extra fields for users
-foreach($sed_extrafields['users'] as $i => $row)
-{
-	$user_extrafields .= "u.user_{$row['field_name']}, ";
-}
-
 
 if (!empty($id))
 {
-	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
-		$user_extrafields
-	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
-	u.user_postcount
+	$sql = sed_sql_query("SELECT p.*, u.*
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
 	WHERE fp_topicid='$q' AND fp_id='$id' ");
 }
 else
 {
-	$sql = sed_sql_query("SELECT p.*, u.user_text, u.user_maingrp, u.user_avatar, u.user_photo, u.user_signature,
-		$user_extrafields
-	u.user_country, u.user_occupation, u.user_location, u.user_website, u.user_email, u.user_hideemail, u.user_gender, u.user_birthdate,
-	u.user_postcount
+	$sql = sed_sql_query("SELECT p.*, u.*
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
 	WHERE fp_topicid='$q'
 	ORDER BY fp_id LIMIT $d, ".$cfg['maxpostsperpage']);
@@ -613,7 +600,7 @@ else
 	$adminoptions = "&nbsp;";
 }
 
-$ft_title = ($ft_mode==1) ? "# ".htmlspecialchars($ft_title) : htmlspecialchars($ft_title);
+$ft_title = ($ft_mode == 1) ? "# ".htmlspecialchars($ft_title) : htmlspecialchars($ft_title);
 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
@@ -688,7 +675,6 @@ while ($row = sed_sql_fetcharray($sql))
 		$row['fp_updatedby'] = sprintf($L['for_updatedby'], htmlspecialchars($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']);
 	}
 
-	$t->assign(sed_generate_usertags($row, "FORUMS_POSTS_ROW_")); // Lieve only best variant(some tags use has different key mask
 	$t->assign(sed_generate_usertags($row, "FORUMS_POSTS_ROW_USER"));
 	$t-> assign(array(
 		"FORUMS_POSTS_ROW_ID" => $row['fp_id'],

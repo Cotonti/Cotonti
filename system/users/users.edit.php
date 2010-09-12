@@ -106,7 +106,7 @@ if ($a=='update')
 	$ruser['birthdate'] = (int)sed_import_date('ruserbirthdate');
 
 	$ruser['timezone'] = (float) sed_import('rusertimezone','P','TXT');
-	$ruser['newpass'] = sed_import('rusernewpass','P','TXT', 16);
+	$rusernewpass = sed_import('rusernewpass','P','TXT', 16);
 
 	// Extra fields
 	foreach($sed_extrafields['users'] as $row)
@@ -120,14 +120,14 @@ if ($a=='update')
 	{
 		sed_error('aut_usernametooshort', 'rusername');
 	}
-	if (!empty($ruser['newpass']) && (mb_strlen($ruser['newpass']) < 4 || sed_alphaonly($ruser['newpass']) != $ruser['newpass']))
+	if (!empty($rusernewpass) && (mb_strlen($rusernewpass) < 4 || sed_alphaonly($rusernewpass) != $rusernewpass))
 	{
 		sed_error('aut_passwordtooshort', 'rusernewpass');
 	}
 
 	if (!$cot_error)
 	{
-		$ruser['password'] = (mb_strlen($ruser['newpass'])>0) ? md5($ruser['newpass']) : $urr['user_password'];
+		$ruser['password'] = (mb_strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
 
 		$ruser['name'] = ($ruser['name']=='') ? $urr['user_name'] : $ruser['name'];
 

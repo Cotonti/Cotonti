@@ -24,7 +24,8 @@ function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 	global $L, $R;
 	$inputname = ($importnew) ? 'new' : 'r';
 	$inputname .= $rowname.$extrafield['field_name'];
-
+	$data = ($data == null) ? $extrafield['field_default'] : $data;
+	
 	switch($extrafield['field_type'])
 	{
 		case "input":
