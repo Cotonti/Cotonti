@@ -20,7 +20,7 @@ Hooks=admin
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('page', 'any');
 sed_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.page'));
+$t = new XTemplate(sed_skinfile('page.admin', 'module'));
 
 sed_require('page');
 
@@ -125,7 +125,7 @@ if ($a == 'validate')
 			}
 		}
 
-		$adminwarnings = '#'.$id.' - '.$L['adm_queue_validated'];
+		sed_message('#'.$id.' - '.$L['adm_queue_validated']);
 	}
 	else
 	{
@@ -166,7 +166,7 @@ elseif ($a == 'unvalidate')
 			}
 		}
 
-		$adminwarnings = '#'.$id.' - '.$L['adm_queue_unvalidated'];
+		sed_message('#'.$id.' - '.$L['adm_queue_unvalidated']);
 	}
 	else
 	{
@@ -223,7 +223,7 @@ elseif ($a == 'delete')
 			}
 		}
 
-		$adminwarnings = '#'.$id.' - '.$L['adm_queue_deleted'];
+		sed_message('#'.$id.' - '.$L['adm_queue_deleted']);
 	}
 	else
 	{
@@ -283,7 +283,10 @@ elseif ($a == 'update_cheked')
 			$cot_cache->page->clear('index');
 		}
 
-		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_validated'] : NULL;
+		if (!empty($perelik))
+		{
+			sed_message($notfoundet.$perelik.' - '.$L['adm_queue_validated']);
+		}
 	}
 	elseif ($paction == $L['Delete'] && is_array($_POST['s']))
 	{
@@ -349,11 +352,12 @@ elseif ($a == 'update_cheked')
 			$cot_cache->page->clear('index');
 		}
 
-		$adminwarnings = (!empty($perelik)) ? $notfoundet.$perelik.' - '.$L['adm_queue_deleted'] : NULL;
+		if (!empty($perelik))
+		{
+			sed_message($notfoundet.$perelik.' - '.$L['adm_queue_deleted']);
+		}
 	}
 }
-
-$is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere), 0, 0);
 $pagenav = sed_pagenav('admin', 'm=page&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
@@ -530,13 +534,19 @@ $t->assign(array(
 	'ADMIN_PAGE_WAY' => sed_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),
 	'ADMIN_PAGE_FILTER' => sed_selectbox($filter, 'filter', array_keys($filter_type), array_values($filter_type), false),
 	'ADMIN_PAGE_TOTALDBPAGES' => $totaldbpages,
-	'ADMIN_PAGE_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_PAGE_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_PAGE_PAGNAV' => $pagenav['main'],
 	'ADMIN_PAGE_PAGINATION_NEXT' => $pagenav['next'],
 	'ADMIN_PAGE_TOTALITEMS' => $totalitems,
 	'ADMIN_PAGE_ON_PAGE' => $ii
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.page.tags') as $pl)

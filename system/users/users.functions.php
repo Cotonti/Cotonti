@@ -10,8 +10,12 @@
  * @license BSD
  */
 
-$sed_extrafields['users'] = $sed_extrafields[$db_users];
-$sed_extrafields['users'] = (!empty($sed_extrafields['users'])) ? $sed_extrafields['users'] : array();
+// Requirements
+sed_require_lang('users', 'core');
+sed_require_rc('users');
+
+// Extafield globals
+$GLOBALS['sed_extrafields']['users'] = (!empty($GLOBALS['sed_extrafields'][$GLOBALS['db_users']])) ? $GLOBALS['sed_extrafields'][$GLOBALS['db_users']] : array();
 
 /**
  * Returns group link (button)

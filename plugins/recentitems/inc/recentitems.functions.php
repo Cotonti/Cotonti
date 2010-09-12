@@ -314,10 +314,13 @@ function sed_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$recentitems->assign(sed_generate_usertags($pag, "PAGE_ROW_OWNER_"));
 
 		//extrafields
-		foreach ($sed_extrafields['pages'] as $row)
+		if (is_array($sed_extrafields['pages']))
 		{
-			$recentitems->assign('PAGE_ROW_'.strtoupper($row_p['field_name']).'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
-			$recentitems->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"]));
+			foreach ($sed_extrafields['pages'] as $row)
+			{
+				$recentitems->assign('PAGE_ROW_'.strtoupper($row_p['field_name']).'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+				$recentitems->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"]));
+			}
 		}
 
 		/* === Hook - Part2 === */

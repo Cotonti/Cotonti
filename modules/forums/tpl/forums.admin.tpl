@@ -1,10 +1,12 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Forums}</h2>
-		<!-- IF {PHP.is_adminwarnings} --><div class="error">
+<!-- BEGIN: MESSAGE -->
+		<div class="error">
 			<h4>{PHP.L.Message}</h4>
-			<p>{ADMIN_FORUMS_ADMINWARNINGS}</p>
-		</div><!-- ENDIF -->
+			<p>{MESSAGE_TEXT}</p>
+		</div>
+<!-- END: MESSAGE -->
 		<ul class="follow">
 			<li><a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration}</a></li>
 			<!-- IF {PHP.lincif_conf} --><li><a href="{ADMIN_FORUMS_CONF_STRUCTURE_URL}">{PHP.L.adm_forum_structure}</a></li><!-- ELSE --><li>{PHP.L.adm_forum_structure}</li><!-- ENDIF -->

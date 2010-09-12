@@ -41,7 +41,7 @@ if($a == 'wipe')
 	/* ===== */
 	$sql = sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
 
-	$adminwarnings = $L['adm_trashcan_deleted'];
+	sed_message('adm_trashcan_deleted');
 }
 elseif($a == 'wipeall')
 {
@@ -54,7 +54,7 @@ elseif($a == 'wipeall')
 	/* ===== */
 	$sql = sed_sql_query("TRUNCATE $db_trash");
 
-	$adminwarnings = $L['adm_trashcan_prune'];
+	sed_message('adm_trashcan_prune');
 }
 elseif($a == 'restore')
 {
@@ -70,10 +70,8 @@ elseif($a == 'restore')
 		sed_trash_delete($id);
 	}
 
-	$adminwarnings = $L['adm_trashcan_restored'];
+	sed_message('adm_trashcan_restored');
 }
-
-$is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_rowcount($db_trash);
 $pagenav = sed_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
@@ -150,7 +148,6 @@ while($row = sed_sql_fetcharray($sql))
 $t->assign(array(
 	'ADMIN_TRASHCAN_CONF_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=trash'),
 	'ADMIN_TRASHCAN_WIPEALL_URL' => sed_url('admin', 'm=trashcan&a=wipeall&'.sed_xg()),
-	'ADMIN_TRASHCAN_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_TRASHCAN_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_TRASHCAN_PAGNAV' => $pagenav['main'],
 	'ADMIN_TRASHCAN_PAGINATION_NEXT' => $pagenav['next'],
@@ -158,6 +155,14 @@ $t->assign(array(
 	'ADMIN_TRASHCAN_COUNTER_ROW' => $ii,
 	'ADMIN_TRASHCAN_PAGESQUEUED' => $pagesqueued
 ));
+
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.trashcan.tags') as $pl)

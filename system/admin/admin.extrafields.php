@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
 sed_block($usr['isadmin']);
 
-require_once $cfg['system_dir'] . '/extrafields.php';
+sed_require_api('extrafields');
 
 $t = new XTemplate(sed_skinfile(array('admin', 'extrafields', $n)));
 
@@ -83,11 +83,11 @@ if ($a == 'add')
 	{
 		if (sed_extrafield_add($location, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description'], $field['field_noalter']))
 		{
-			$adminwarnings = $L['adm_extrafield_added'];
+			sed_message('adm_extrafield_added');
 		}
 		else
 		{
-			$adminwarnings = $L['adm_extrafield_not_added'];
+			sed_message('adm_extrafield_not_added');
 		}
 	}
 }
@@ -135,11 +135,11 @@ elseif ($a == 'upd')
 
 				if (sed_extrafield_update($location, $k, $field['field_name'], $field['field_type'], $field['field_html'], $field['field_variants'], $field['field_default'], $field['field_required'], $field['field_parse'], $field['field_description']))
 				{
-					$adminwarnings .= sprintf($L['adm_extrafield_updated'], $k).'<br />';
+					sed_message(sprintf($L['adm_extrafield_updated'], $k));
 				}
 				else
 				{
-					$adminwarnings .= sprintf($L['adm_extrafield_not_updated'], $k).'<br />';
+					sed_message(sprintf($L['adm_extrafield_not_updated'], $k));
 				}
 			}
 		}
@@ -156,17 +156,15 @@ elseif ($a == 'del' && isset($name))
 
 	if (sed_extrafield_remove($location, $name))
 	{
-		$adminwarnings = $L['adm_extrafield_removed'];
+		sed_message('adm_extrafield_removed');
 	}
 	else
 	{
-		$adminwarnings = $L['adm_extrafield_not_removed'];
+		sed_message('adm_extrafield_not_removed');
 	}
 }
 
 $cfg['cache'] && $cot_cache->db->remove('sed_extrafields', 'system');
-
-$is_adminwarnings = isset($adminwarnings);
 
 $totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$location'"), 0, 0);
 $res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location = '$location' LIMIT $d, ".$cfg['maxrowsperpage']);
@@ -216,7 +214,6 @@ $t->assign(array(
 	'ADMIN_EXTRAFIELDS_REQUIRED' => sed_checkbox(0, 'field_required'),
 	'ADMIN_EXTRAFIELDS_PARSE' => sed_selectbox('HTML', 'field_parse', $parse_type, $parse_type, false),
 	'ADMIN_EXTRAFIELDS_URL_FORM_ADD' => sed_url('admin', $extra_path.'&a=add&d='.$d),
-	'ADMIN_EXTRAFIELDS_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_EXTRAFIELDS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_EXTRAFIELDS_PAGNAV' => $pagenav['main'],
 	'ADMIN_EXTRAFIELDS_PAGINATION_NEXT' => $pagenav['next'],
@@ -224,6 +221,13 @@ $t->assign(array(
 	'ADMIN_EXTRAFIELDS_COUNTER_ROW' => $ii,
 	'ADMIN_EXTRAFIELDS_ODDEVEN' => sed_build_oddeven($ii)
 ));
+
+if (sed_check_messages())
+{
+	$t->assign('MESSAGE_TEXT', sed_implode_messages());
+	$t->parse('MAIN.MESSAGE');
+	sed_clear_messages();
+}
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.extrafields.tags') as $pl)
