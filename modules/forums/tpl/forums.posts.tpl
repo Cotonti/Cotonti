@@ -71,7 +71,7 @@
 		<form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">
 		<table class="flat">
 			<tr>
-				<td>{FORUMS_POSTS_NEWPOST_TEXTBOXER}</td>
+				<td>{FORUMS_POSTS_NEWPOST_TEXT}</td>
 			</tr>
 			<tr>
 				<td class="valid"><input type="submit" value="{PHP.L.Reply}" /></td>

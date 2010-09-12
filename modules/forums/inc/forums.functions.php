@@ -16,10 +16,10 @@ sed_require_lang('forums', 'module');
 sed_require_rc('forums');
 
 // Global variables
-$GLOBALS['db_forum_posts']		= $GLOBALS['db_x'] . 'forum_posts';
-$GLOBALS['db_forum_sections'] 	= $GLOBALS['db_x'] . 'forum_sections';
-$GLOBALS['db_forum_structure']	= $GLOBALS['db_x'] . 'forum_structure';
-$GLOBALS['db_forum_topics'] 	= $GLOBALS['db_x'] . 'forum_topics';
+$GLOBALS['db_forum_posts']		= (isset($GLOBALS['db_forum_posts']))     ? $GLOBALS['db_forum_posts']     : $GLOBALS['db_x'] . 'forum_posts';
+$GLOBALS['db_forum_sections'] 	= (isset($GLOBALS['db_forum_sections']))  ? $GLOBALS['db_forum_sections']  : $GLOBALS['db_x'] . 'forum_sections';
+$GLOBALS['db_forum_structure']	= (isset($GLOBALS['db_forum_structure'])) ? $GLOBALS['db_forum_structure'] : $GLOBALS['db_x'] . 'forum_structure';
+$GLOBALS['db_forum_topics'] 	= (isset($GLOBALS['db_forum_topics']))    ? $GLOBALS['db_forum_topics']    : $GLOBALS['db_x'] . 'forum_topics';
 
 /**
  * Builds a javascript function for text insertion

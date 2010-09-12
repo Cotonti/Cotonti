@@ -19,7 +19,7 @@ defined('SED_CODE') or die('Wrong URL');
 $poll = trim(sed_import('poll_text', 'P', 'HTM'));
 $poll_id = sed_import('poll_id','P','TXT');
 
-if(!empy($poll) && $poll_id)
+if(!empty($poll) && $poll_id)
 {
 	sed_poll_check();
 }

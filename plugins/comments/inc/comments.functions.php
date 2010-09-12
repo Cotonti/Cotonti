@@ -15,8 +15,8 @@ sed_require_lang('comments', 'plug');
 sed_require_rc('comments', true);
 
 // Table name globals
-$GLOBALS['db_com'] = $GLOBALS['db_x'] . 'com';
-$GLOBALS['db_com_settings'] = $GLOBALS['db_x'] . 'com_settings';
+$GLOBALS['db_com'] = (isset($GLOBALS['db_com'])) ? $GLOBALS['db_com'] : $GLOBALS['db_x'] . 'com';
+$GLOBALS['db_com_settings'] = (isset($GLOBALS['db_com_settings'])) ? $GLOBALS['db_com_settings'] : $GLOBALS['db_x'] . 'com_settings';
 
 /**
  * Returns number of comments for item
@@ -158,8 +158,7 @@ function sed_comments_display($area, $code, $cat = '')
 				{
 					$row['com_html'] = sed_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'],
 						$cfg['parsesmiliescom'], true);
-					sed_sql_query("UPDATE $db_com SET com_html = '".sed_sql_prep($row['com_html'])."'
-						WHERE com_id = ".$row['com_id']);
+					sed_sql_update($db_com, array('com_html' => $row['com_html']), "com_id = ".$row['com_id']);
 				}
 				$com_text = $cfg['parsebbcodepages'] ? sed_post_parse($row['com_html'])
 					: htmlspecialchars($row['com_text']);
@@ -404,8 +403,8 @@ function sed_comments_newcount($timeback)
 function sed_comments_remove($area, $code)
 {
 	global $db_com, $db_com_settings;
-	sed_sql_query("DELETE FROM $db_com WHERE com_area = '$area' AND com_code = '$code'");
-	sed_sql_query("DELETE FROM $db_com_settings WHERE coms_area = '$area' AND coms_code = '$code'");
+	sed_sql_delete($db_com, "com_area = '$area' AND com_code = '$code'");
+	sed_sql_delete($db_com_settings, "com_area = '$area' AND com_code = '$code'");
 }
 
 ?>

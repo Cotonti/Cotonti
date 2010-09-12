@@ -39,7 +39,7 @@ foreach (sed_getextplugins('admin.comments.first') as $pl)
 if ($a == 'delete')
 {
 	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
+	sed_sql_delete($db_com, "com_id='$id'");
 
 	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
 }

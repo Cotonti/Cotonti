@@ -1,8 +1,8 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=indexpolls.get_polls.tags
-Tags=indexpolls.tpl:{IPOLLS_COMMENTS}
+Hooks=polls.index.tags
+Tags=polls.index.tpl:{IPOLLS_COMMENTS}
 [END_COT_EXT]
 ==================== */
 

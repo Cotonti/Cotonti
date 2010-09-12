@@ -16,9 +16,9 @@ sed_require_api('forms');
 sed_require_lang('polls', 'module');
 
 // Global variables
-$GLOBALS['db_polls'] 			= $GLOBALS['db_x'] . 'polls';
-$GLOBALS['db_polls_options'] 	= $GLOBALS['db_x'] . 'polls_options';
-$GLOBALS['db_polls_voters'] 	= $GLOBALS['db_x'] . 'polls_voters';
+$GLOBALS['db_polls'] 		 = (isset($GLOBALS['db_polls'])) ? $GLOBALS['db_polls'] : $GLOBALS['db_x'] . 'polls';
+$GLOBALS['db_polls_options'] = (isset($GLOBALS['db_polls_options'])) ? $GLOBALS['db_polls_options'] : $GLOBALS['db_x'] . 'polls_options';
+$GLOBALS['db_polls_voters']  = (isset($GLOBALS['db_polls_voters'])) ? $GLOBALS['db_polls_voters'] : $GLOBALS['db_x'] . 'polls_voters';
 
 /**
  * Adds form for create/edit Poll
@@ -31,7 +31,7 @@ $GLOBALS['db_polls_voters'] 	= $GLOBALS['db_x'] . 'polls_voters';
  */
 function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 {
-	global $cfg, $db_polls, $db_polls_options, $cot_error, $R, $L;
+	global $cfg, $db_polls, $db_polls_options, $cot_error, $poll_id, $R, $L;
 	if (gettype($t) != 'object')
 	{
 		$t = new XTemplate(sed_skinfile('polls'));
@@ -40,9 +40,9 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 	}
 	$block = (!empty($block)) ? $block."." : "";
 	$counter = 0;
-	if ($cot_error)
+	if ($cot_error && !empty($poll_id))
 	{
-		global $poll_id, $poll_options, $poll_multiple, $poll_state, $poll_text;
+		global  $poll_options, $poll_multiple, $poll_state, $poll_text;
 
 		$id = $poll_id;
 		foreach ($poll_options as $key => $val)
@@ -103,7 +103,7 @@ function sed_poll_edit_form($id, $t = '', $block = '', $type = '')
 		"EDIT_POLL_IDFIELD" => sed_inputbox('hidden', 'poll_id', $id),
 		"EDIT_POLL_OPTIONSCOUNT" => $counter,
 		"EDIT_POLL_ID" => $id,
-		"EDIT_POLL_MULTIPLE" => sed_checkbox($poll_multiple, 'poll_state' , $L['poll_multiple']),
+		"EDIT_POLL_MULTIPLE" => sed_checkbox($poll_multiple, 'poll_state' , $L['polls_multiple']),
 	));
 	if ($poll_full_template == true)
 	{

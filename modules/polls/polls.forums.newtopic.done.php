@@ -18,7 +18,7 @@ Tags=
 
 defined('SED_CODE') or die('Wrong URL');
 
-if(!empy($poll))
+if(!empty($poll))
 {
 	sed_poll_save('forum', $q);
 }

@@ -32,7 +32,7 @@ if ($cfg['module']['polls']['maxpolls'] > 0)
 	$sql_p = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode LIMIT ".$cfg['module']['polls']['maxpolls']);
 
 	/* === Hook - Part1 === */
-	$extp = sed_getextplugins('index.polls.tags');
+	$extp = sed_getextplugins('polls.index.tags');
 	/* ===== */
 	while ($row_p = sed_sql_fetcharray($sql_p))
 	{

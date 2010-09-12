@@ -18,8 +18,8 @@ sed_require_rc('pfs');
 sed_require_api('forms');
 
 // Global variables
-$GLOBALS['db_pfs'] = $GLOBALS['db_x'] . 'pfs';
-$GLOBALS['db_pfs_folders'] = $GLOBALS['db_x'] . 'pfs_folders';
+$GLOBALS['db_pfs'] = (isset($GLOBALS['db_pfs'])) ? $GLOBALS['db_pfs'] : $GLOBALS['db_x'] . 'pfs';
+$GLOBALS['db_pfs_folders'] = (isset($GLOBALS['db_pfs_folders'])) ? $GLOBALS['db_pfs_folders'] : $GLOBALS['db_x'] . 'pfs_folders';
 
 /**
  * Create a new PFS folder, return new folder ID

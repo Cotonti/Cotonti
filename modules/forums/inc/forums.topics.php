@@ -474,6 +474,7 @@ if ($catnum>1)
 $cond = ($usr['isadmin']) ? '' : "AND ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".$usr['id'].")";
 $sqql_select = 't.*';
 $sqql_where = "ft_sectionid='$s' $cond";
+$sqql_where_count = "ft_sectionid='$s' $cond";
 $sqql_order = "ft_sticky DESC, ft_$o $w";
 $sqql_limit = "$d, ".$cfg['maxtopicsperpage'];
 $sqql_join_ratings_columns = '';
@@ -486,9 +487,9 @@ foreach (sed_getextplugins('forums.topics.query') as $pl)
 }
 /* ===== */
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where AND ft_mode=1");
+$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where_count AND ft_mode=1");
 $prvtopics = sed_sql_result($sql, 0, "COUNT(*)");
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where");
+$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where_count");
 $totaltopics = sed_sql_result($sql, 0, "COUNT(*)");
 
 $sql = sed_sql_query("SELECT $sqql_select $sqql_join_ratings_columns FROM $db_forum_topics AS t $sqql_join_ratings_condition

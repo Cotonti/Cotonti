@@ -27,7 +27,7 @@
 				</tr>
 				<!-- END: PRIVATE -->
 				<tr>
-					<td colspan="2">{FORUMS_NEWTOPIC_TEXTBOXER}</td>
+					<td colspan="2">{FORUMS_NEWTOPIC_TEXT}</td>
 				</tr>
 				<!-- BEGIN: POLL -->
 <script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/poll.js"></script>
