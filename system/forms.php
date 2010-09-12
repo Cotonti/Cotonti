@@ -263,11 +263,11 @@ function sed_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	$rc = empty($R["input_date_{$name}"]) ? $rc : "input_date_{$name}";
 
 	$result = sed_rc($rc, array(
-		'$day' => $day,
-		'$month' => $month,
-		'$year' => $year,
-		'$hour' => $hour,
-		'$minute' => $minute
+		'day' => $day,
+		'month' => $month,
+		'year' => $year,
+		'hour' => $hour,
+		'minute' => $minute
 	));
 
 	return $result;

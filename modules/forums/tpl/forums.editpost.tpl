@@ -21,7 +21,7 @@
 					</tr>
 					<!-- END: FORUMS_EDITPOST_FIRSTPOST -->
 					<tr>
-						<td colspan="2">{FORUMS_EDITPOST_TEXTBOXER}</td>
+						<td colspan="2">{FORUMS_EDITPOST_TEXT}</td>
 					</tr>
 					<!-- BEGIN: POLL -->
 					<tr>

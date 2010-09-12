@@ -17,7 +17,7 @@ sed_require_rc('page');
 sed_require_api('forms');
 
 // Global variables
-$GLOBALS['db_pages'] = $GLOBALS['db_x'] . 'pages';
+$GLOBALS['db_pages'] = (isset($GLOBALS['db_pages'])) ? $GLOBALS['db_pages'] : $GLOBALS['db_x'] . 'pages';
 
 $sed_extrafields['pages'] = $sed_extrafields[$db_pages];
 $sed_extrafields['pages'] = (!empty($sed_extrafields['pages'])) ? $sed_extrafields['pages'] : array();

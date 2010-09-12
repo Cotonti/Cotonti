@@ -69,8 +69,7 @@ if ($m == 'edit' && $id > 0)
 		{
 			$comhtml = $cfg['parser_cache'] ? sed_parse(htmlspecialchars($comtext), $cfg['parsebbcodecom'],
 				$cfg['parsesmiliescom'], true) : '';
-			$sql = sed_sql_query("UPDATE $db_com SET com_text = '".sed_sql_prep($comtext)."',
-				com_html = '".sed_sql_prep($comhtml)."' WHERE com_id=$id AND com_code='$item'");
+			$sql = sed_sql_update($db_com, array('com_text' => $comtext, 'com_html' => $comhtml), "com_id=$id AND com_code='$item'");
 
 			if ($cfg['plugin']['comments']['mail'])
 			{
@@ -164,12 +163,10 @@ if ($a == 'send' && $usr['auth_write'])
 	{
 		$rhtml = $cfg['parser_cache'] ? sed_parse(htmlspecialchars($rtext), $cfg['parsebbcodecom'],
 			$cfg['parsesmiliescom'], true) : '';
-		$sql = sed_sql_query("INSERT INTO $db_com (com_area, com_code, com_author, com_authorid, com_authorip, com_text,
-				com_html, com_date)
-			VALUES ('".sed_sql_prep($area)."', '".sed_sql_prep($item)."', '".sed_sql_prep($usr['name'])."', "
-			.(int)$usr['id'].", '".$usr['ip']."', '".sed_sql_prep($rtext)."', '".sed_sql_prep($rhtml)."',"
-			.(int)$sys['now_offset'].")");
 
+		$comarray += array('area' => $area, 'code' => $item, 'author' => $usr['name'], 'authorid' => (int)$usr['id'], 'authorip' => $usr['ip'],
+			'text' => $rtext, 'html' => $rhtml, 'date' => (int)$sys['now_offset']);
+		$sql = sed_sql_insert($db_com, $comarray, 'com_');
 		$id = sed_sql_insertid();
 
 		if ($cfg['plugin']['comments']['mail'])
@@ -211,7 +208,7 @@ elseif ($a == 'delete' && $usr['isadmin'])
 			sed_trash_put('comment', $L['Comment']." #".$id." (".$row['com_author'].")", $id, $row);
 		}
 
-		$sql = sed_sql_query("DELETE FROM $db_com WHERE com_id='$id'");
+		$sql = sed_sql_delete($db_com, "com_id='$id'");
 
 		sed_log('Deleted comment #'.$id.' in &quot;'.$item.'&quot;', 'adm');
 	}

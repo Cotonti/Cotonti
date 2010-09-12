@@ -150,26 +150,26 @@ if ($a=='update')
 			if ($cfg['module']['forums'])
 			{
 				sed_require('forums');
-				sed_sql_update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername='.$oldname);
-				sed_sql_update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername='.$oldname);
-				sed_sql_update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername='.$oldname);
+				sed_sql_update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername="'.$oldname.'"');
+				sed_sql_update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername="'.$oldname.'"');
+				sed_sql_update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername="'.$oldname.'"');
 			}
 			if ($cfg['module']['page'])
 			{
 				sed_require('page');
-				sed_sql_update($db_pages, array('page_author' => $newname), 'page_author='.$oldname);
+				sed_sql_update($db_pages, array('page_author' => $newname), 'page_author="'.$oldname.'"');
 			}
 			if ($cfg['plugin']['comments'])
 			{
 				sed_require('comments', true);
-				sed_sql_update($db_com, array('com_author' => $newname), 'com_author='.$oldname);
+				sed_sql_update($db_com, array('com_author' => $newname), 'com_author="'.$oldname.'"');
 			}
 			if ($cfg['module']['pm'])
 			{
 				sed_require('pm');
-				sed_sql_update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser='.$oldname);
+				sed_sql_update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser="'.$oldname.'"');
 			}
-			sed_sql_update($db_online, array('online_name' => $newname), 'online_name='.$oldname);
+			sed_sql_update($db_online, array('online_name' => $newname), 'online_name="'.$oldname.'"');
 		}
 
 		$ruser['auth'] = '';

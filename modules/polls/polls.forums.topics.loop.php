@@ -17,7 +17,7 @@ Hooks=forums.topics.loop
 
 defined('SED_CODE') or die('Wrong URL');
 
-if ($row['poll_id']>0)
+if ($row['poll_id'] > 0)
 {
 	$row['ft_title'] = $L['Poll'].": ".$row['ft_title'];
 }

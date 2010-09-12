@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=forums.newtopic.first,forums.editpost.first,forums.posts.first
+Hooks=forums.newtopic.first,forums.editpost.first,forums.posts.first,forums.topics.first
 [END_COT_EXT]
 ==================== */
 

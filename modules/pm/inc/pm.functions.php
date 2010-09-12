@@ -16,7 +16,7 @@ sed_require_lang('pm', 'module');
 sed_require_rc('pm');
 
 // Global variables
-$GLOBALS['db_pm'] = $GLOBALS['db_x'] . 'pm';
+$GLOBALS['db_pm'] = (isset($GLOBALS['db_pm'])) ? $GLOBALS['db_pm'] : $GLOBALS['db_x'] . 'pm';
 
 /**
  * Returns usertags

@@ -19,7 +19,7 @@ Tags=
 defined('SED_CODE') or die('Wrong URL');
 $poll = trim(sed_import('poll_text', 'P', 'HTM'));
 
-if(!empy($poll))
+if(!empty($poll))
 {
 	sed_poll_check();
 }

@@ -17,9 +17,11 @@ Hooks=forums.topics.query
 
 defined('SED_CODE') or die('Wrong URL');
 
-$sqql_where .= " AND (poll_type='forum' OR poll_id IS NULL)";
-$sqql_join_ratings_columns = ', p.poll_id';
-$sqql_join_ratings_condition = ' LEFT JOIN
-	$db_polls AS p ON t.ft_id=p.poll_code';
+if($fs_allowpolls)
+{
+	$sqql_where .= " AND (poll_type='forum' OR poll_id IS NULL)";
+	$sqql_join_ratings_columns = ', p.poll_id, p.poll_type';
+	$sqql_join_ratings_condition = " LEFT JOIN $db_polls AS p ON t.ft_id=p.poll_code";
+}
 
 ?>
