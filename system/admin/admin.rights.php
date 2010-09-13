@@ -144,6 +144,7 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 
 	$title = $L['adm_code'][$row['auth_code']];
+	$title = empty($title) ? $L[$row['auth_code'] . '_title'] : $title;
 	sed_rights_parseline($row, $title, $link);
 }
 sed_sql_freeresult($sql);

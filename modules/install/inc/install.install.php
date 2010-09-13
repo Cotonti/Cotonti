@@ -22,6 +22,7 @@ $t = new XTemplate($mskin);
 
 $site_url = (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false ? 'http://' : 'https://')
 	. $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
+$site_url = str_replace('\\', '/', $site_url);
 $site_url = preg_replace('#/$#', '', $site_url);
 define('SED_ABSOLUTE_URL', $site_url . '/');
 

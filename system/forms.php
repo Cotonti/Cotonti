@@ -187,16 +187,18 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
  *
  * @param string $chosen Seleced value
  * @param string $name Dropdown name
+ * @param bool $add_empty Add empty language option
+ * @param mixed $attrs Additional attributes as an associative array or a string
  * @return string
  */
-function sed_selectbox_countries($chosen, $name)
+function sed_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '')
 {
 	global $sed_countries;
 
 	if (!$sed_countries)
 		include_once sed_langfile('countries', 'core');
 
-	return sed_selectbox($chosen, $name, array_keys($sed_countries), array_values($sed_countries));
+	return sed_selectbox($chosen, $name, array_keys($sed_countries), array_values($sed_countries), $add_empty, $attrs);
 }
 
 /**
@@ -278,9 +280,11 @@ function sed_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
  *
  * @param string $chosen Seleced value
  * @param string $name Dropdown name
+ * @param bool $add_empty Add empty language option
+ * @param mixed $attrs Additional attributes as an associative array or a string
  * @return string
  */
-function sed_selectbox_lang($chosen, $name)
+function sed_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
 {
 	global $sed_languages, $sed_countries, $cfg;
 
@@ -305,7 +309,7 @@ function sed_selectbox_lang($chosen, $name)
 		$vals[] = $lang;
 		$titles[] = (empty($sed_languages[$lang]) ? $sed_countries[$lang] : $sed_languages[$lang]) . " ($lang)";
 	}
-	return sed_selectbox($chosen, $name, $vals, $titles);
+	return sed_selectbox($chosen, $name, $vals, $titles, $add_empty, $attrs);
 }
 
 /**

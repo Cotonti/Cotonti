@@ -464,3 +464,6 @@ INSERT INTO `sed_extra_fields` (`field_location`, `field_name`, `field_type`, `f
 
 /* r1311 charset option is obsolete */
 DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'skin' AND `config_name` = 'charset';
+
+/* r1326 Enable Users display for Guests by default */
+UPDATE `sed_auth` SET auth_rights = 1 WHERE auth_groupid = 1 AND auth_code = 'users' AND auth_option = 'a';

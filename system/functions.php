@@ -1958,7 +1958,8 @@ function sed_implode_messages($src = 'default', $class = '')
 	{
 		$res .= sed_rc('code_msg_line', array('class' => 'error', 'text' => $error_string));
 	}
-	return empty($res) ? '' : sed_rc('code_msg_begin', array('class' => $class)) . $res . $R['code_msg_end'];
+	return empty($res) ? '' : sed_rc('code_msg_begin', array('class' => empty($class) ? 'message' : $class))
+		. $res . $R['code_msg_end'];
 }
 
 /**
