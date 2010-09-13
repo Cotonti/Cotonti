@@ -28,4 +28,19 @@ if ($count > 0)
 			VALUES ('forums.posts.main', 'tags', 'forums.posts.main', 'Tags', 'tags.forums.posts.main')");
 	}
 }
+
+/**
+ * r1318: datas/cache/templates cleanup for CoTemplate 2.5
+ */
+
+$dp = opendir('./datas/cache/templates');
+while ($f = readdir($dp))
+{
+	$path = './datas/cache/templates/' . $f;
+	if (is_file($path))
+	{
+		unlink($path);
+	}
+}
+closedir($dp);
 ?>

@@ -35,7 +35,7 @@ foreach (sed_getextplugins('admin.main') as $pl)
 /* ===== */
 
 $standard_admin = array('banlist', 'bbcode', 'cache.disk', 'cache', 'config', 'extrafields', 'hits', 'home', 'infos',
-	'log', 'other', 'extensions', 'ratings', 'referers', 'rights', 'rightsbyitem', 'structure', 'tools', 'trashcan',
+	'log', 'other', 'extensions', 'ratings', 'referers', 'rights', 'rightsbyitem', 'structure', 'trashcan',
 	'urls', 'users');
 
 $inc_file = (empty($m)) ? 'home' : $m;
@@ -118,14 +118,11 @@ if (!SED_AJAX)
 	}
 	if ($usr['isadmin'])
 	{
-		foreach (array('tools', 'other') as $loc)
-		{
-			$admin_menu[] = array(
-				'url' => sed_url('admin', "m=$loc"),
-				'icon' => $R['admin_menu_icon_' . $loc],
-				'class' => $m == $loc ? 'sel' : ''
-			);
-		}
+		$admin_menu[] = array(
+			'url' => sed_url('admin', "m=other"),
+			'icon' => $R['admin_menu_icon_other'],
+			'class' => $m == 'other' ? 'sel' : ''
+		);
 	}
 	// Module admin
 	foreach ($sed_modules as $code => $mod)
@@ -137,9 +134,8 @@ if (!SED_AJAX)
 			{
 				sed_require_lang($code, 'module');
 				$title = $L[ucfirst($code)];
-			}
-			$uccode = ucfirst($code);
-			$title = isset($L[$uccode]) ? $L[$uccode] : $uccode;
+			};
+			$title = isset($L[$info['Name']]) ? $L[$info['Name']] : $info['Name'];
 			$src = $cfg['modules_dir'] . "/$code/" . trim($info['Admin_icon']);
 			$admin_menu[] = array(
 				'url' => sed_url('admin', "m=$code"),

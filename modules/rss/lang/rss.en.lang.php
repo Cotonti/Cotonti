@@ -11,7 +11,8 @@
 
 defined('SED_CODE') or die('Wrong URL.');
 
-$L['rss_allforums_item_title'] = "Last posts on forum";	// New in N-0.0.2
-$L['rss_topic_item_desc'] = 'Last posts in topic';	// New in N-0.0.2
+$L['rss_allforums_item_title'] = 'Last posts on forum';
+$L['rss_title'] = 'RSS';
+$L['rss_topic_item_desc'] = 'Last posts in topic';
 
 ?>

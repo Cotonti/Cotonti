@@ -30,7 +30,7 @@ INSERT INTO `sed_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 (4, 'ratings', 'a', 3, 128, 1),
 (5, 'ratings', 'a', 255, 255, 1),
 (6, 'ratings', 'a', 131, 0, 1),
-(1, 'users', 'a', 0, 254, 1),
+(1, 'users', 'a', 1, 254, 1),
 (2, 'users', 'a', 0, 254, 1),
 (3, 'users', 'a', 0, 255, 1),
 (4, 'users', 'a', 3, 128, 1),

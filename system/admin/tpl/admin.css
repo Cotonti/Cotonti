@@ -58,13 +58,13 @@ h4		{ font-weight:bold; }
 .textright		{ text-align:right; }
 .textjustify	{ text-align:justify; }
 
-.error, .help, .warning	{ color:#444; margin:20px 45px; padding:10px 20px 10px 60px; clear:both; }
-.error p, .help p, .warning p	{ line-height:1.6em; }
-.help img		{ vertical-align:-3px; }
+div.error, div.help, div.warning	{ color:#444; margin:20px 45px; padding:10px 20px 10px 60px; clear:both; }
+div.error p, div.help p, div.warning p	{ line-height:1.6em; }
+div.help img		{ vertical-align:-3px; }
 
-.error			{ background:#f9e4e3 url(img/error.png) no-repeat 15px 15px; border:1px solid #e89e9d; }
-.help			{ background:#cdfcd2 url(img/help.png) no-repeat 15px 15px; border:1px solid #60a400; }
-.warning		{ background:#fdf0cd url(img/warning.png) no-repeat 15px 15px; border:1px solid #ecc635; }
+div.error			{ background:#f9e4e3 url(img/error.png) no-repeat 15px 15px; border:1px solid #e89e9d; }
+div.help			{ background:#cdfcd2 url(img/help.png) no-repeat 15px 15px; border:1px solid #60a400; }
+div.warning		{ background:#fdf0cd url(img/warning.png) no-repeat 15px 15px; border:1px solid #ecc635; }
 
 .margintop10	{ margin-top:10px; }
 .marginright10	{ margin-right:10px; }
