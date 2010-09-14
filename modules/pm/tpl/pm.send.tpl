@@ -9,9 +9,7 @@
 			<p class="small">{PMSEND_SUBTITLE}</p>
 			<p class="paging">{PMSEND_INBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENTBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENDNEWPM}</div>
 
-<!-- BEGIN: PMSEND_ERROR -->
-	<div class="error">{PMSEND_ERROR_BODY}</div>
-<!-- END: PMSEND_ERROR -->
+			{FILE ./themes/nemesis/warnings.tpl}>
 
 			<form action="{PMSEND_FORM_SEND}" method="post" name="newmessage" id="mewmessage">
 				<table class="cells">

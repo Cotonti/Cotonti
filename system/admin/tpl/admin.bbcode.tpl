@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>BBCodes</h2>
-<!-- BEGIN: MESSAGE -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{MESSAGE_TEXT}</p>
-			</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 			<h3>{PHP.L.editdeleteentries}:</h3>
 			<table class="cells">
 				<tr>

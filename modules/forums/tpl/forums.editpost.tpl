@@ -4,9 +4,7 @@
 			<h2 class="forums">{FORUMS_EDITPOST_PAGETITLE}</h2>
 			<p class="small">{FORUMS_EDITPOST_SUBTITLE}</p>
 
-			<!-- BEGIN: FORUMS_EDITPOST_ERROR -->
-				<div class="error">{FORUMS_POSTS_EDITPOST_ERROR_BODY}</div>
-			<!-- END: FORUMS_EDITPOST_ERROR -->
+			{FILE ./themes/nemesis/warnings.tpl}
 
 			<form action="{FORUMS_EDITPOST_SEND}" method="post" name="editpost">
 				<table class="cells">

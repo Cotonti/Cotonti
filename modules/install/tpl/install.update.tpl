@@ -23,20 +23,8 @@
 			</div>
 
 			<div id="content">
-				<!-- BEGIN: ERROR -->
-				<div class="message error">
-					<p>{ERROR_TITLE}</p>
-					{ERROR_MSG}
-				</div>
-				<!-- END: ERROR -->
-
-				<!-- BEGIN: SUCCESS -->
-				<div class="message">
-					<p>{SUCCESS_TITLE}</p>
-					{SUCCESS_MSG}
-				</div>
-				<!-- END: SUCCESS -->
-
+				<h3>{UPDATE_TITLE}</h3>
+				{FILE ./themes/nemesis/warnings.tpl}
 			</div>
 		</div>
 	</body>

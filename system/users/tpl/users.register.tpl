@@ -1,8 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<!-- BEGIN: USERS_REGISTER_ERROR -->
-		<div class="error">{USERS_REGISTER_ERROR_BODY}</div>
-		<!-- END: USERS_REGISTER_ERROR -->
+		{FILE ./themes/nemesis/warnings.tpl}
 
 		<div class="block">
 			<h2 class="users">{USERS_REGISTER_TITLE}</h2>

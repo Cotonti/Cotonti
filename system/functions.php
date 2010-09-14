@@ -1837,6 +1837,54 @@ function sed_dieifdisabled($disabled)
 }
 
 /**
+ * Renders different messages on page
+ *
+ * @param XTemplate $tpl Current template object reference
+ */
+function sed_display_messages($tpl)
+{
+	global $L;
+	if (!sed_check_messages())
+	{
+		return;
+	}
+	$errors = sed_get_messages('', 'error');
+	if (count($errors) > 0)
+	{
+		foreach ($errors as $msg)
+		{
+			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
+			$tpl->assign('ERROR_ROW_MSG', $text);
+			$tpl->parse('MAIN.ERROR.ERROR_ROW');
+		}
+		$tpl->parse('MAIN.ERROR');
+	}
+	$warnings = sed_get_messages('', 'warning');
+	if (count($warnings) > 0)
+	{
+		foreach ($warnings as $msg)
+		{
+			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
+			$tpl->assign('WARNING_ROW_MSG', $text);
+			$tpl->parse('MAIN.WARNING.WARNING_ROW');
+		}
+		$tpl->parse('MAIN.WARNING');
+	}
+	$okays = sed_get_messages('', 'ok');
+	if (count($okays) > 0)
+	{
+		foreach ($okays as $msg)
+		{
+			$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
+			$tpl->assign('DONE_ROW_MSG', $text);
+			$tpl->parse('MAIN.DONE.DONE_ROW');
+		}
+		$tpl->parse('MAIN.DONE');
+	}
+	sed_clear_messages();
+}
+
+/**
  * Records an error message to be displayed on results page
  * @param string $message Message lang string code or full text
  * @param string $src Error source identifier, such as field name for invalid input
@@ -1972,7 +2020,7 @@ function sed_log_sed_import($s, $e, $v, $o)
  * @param string $src Message source identifier
  * @see sed_error()
  */
-function sed_message($text, $class = 'status', $src = 'default')
+function sed_message($text, $class = 'ok', $src = 'default')
 {
 	global $cfg;
 	if (!$cfg['msg_separate'])

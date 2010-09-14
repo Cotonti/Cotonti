@@ -259,12 +259,7 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'newtopic', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-if (sed_check_messages())
-{
-	$t->assign('FORUMS_NEWTOPIC_ERROR_BODY', sed_implode_messages());
-	$t->parse('MAIN.FORUMS_NEWTOPIC_ERROR');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 $t->assign(array(
 

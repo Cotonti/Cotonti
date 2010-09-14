@@ -1,12 +1,7 @@
-<!-- BEGIN: COMMENTS -->
+<!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Comments}</h2>
-<!-- IF {PHP.is_adminwarnings} -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{ADMIN_COMMENTS_ADMINWARNINGS}</p>
-			</div>
-<!-- ENDIF -->
+		{FILE ./themes/nemesis/warnings.tpl}
 			<ul class="follow">
 				<li><a title="{PHP.L.Configuration}" href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration}</a></li>
 			</ul>
@@ -36,4 +31,4 @@
 			</table>
 			<p class="paging">{ADMIN_COMMENTS_PAGINATION_PREV}{ADMIN_COMMENTS_PAGNAV}{ADMIN_COMMENTS_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_COMMENTS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_COMMENTS_COUNTER_ROW}</span></p>
 	</div>
-<!-- END: COMMENTS -->
+<!-- END: MAIN -->

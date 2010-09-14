@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_internalcache}</h2>
-<!-- BEGIN: MESSAGE -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{MESSAGE_TEXT}</p>
-			</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 			<ul class="follow">
 				<li><a href="{ADMIN_CACHE_URL_REFRESH}" class="ajax">{PHP.L.Refresh}</a></li>
 				<li><a href="{ADMIN_CACHE_URL_PURGE}" class="ajax">{PHP.L.adm_purgeall}</a></li>

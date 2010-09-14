@@ -1,11 +1,6 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
-<!-- BEGIN: MESSAGE -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{ADMIN_EXTENSIONS_ADMINWARNINGS}</p>
-			</div>
-<!-- END: MESSAGE -->
+	{FILE ./themes/nemesis/warnings.tpl}
 <!-- BEGIN: CONFIG_URL -->
 	<ul>
 		<li><a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_CONFIG_URL}">{PHP.L.Configuration}: {PHP.R.admin_icon_config}</a></li>

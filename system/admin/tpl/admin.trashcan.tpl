@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Trashcan}</h2>
-<!-- BEGIN: MESSAGE -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{MESSAGE_TEXT}</p>
-			</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 			<ul class="follow">
 				<li><a title="{PHP.L.Configuration}" href="{ADMIN_TRASHCAN_CONF_URL}">{PHP.L.Configuration}</a></li>
 				<li><a title="{PHP.L.Wipeall}" href="{ADMIN_TRASHCAN_WIPEALL_URL}">{PHP.L.Wipeall}</a></li>

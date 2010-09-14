@@ -23,19 +23,7 @@
 			</div>
 
 			<div id="content">
-				<!-- BEGIN: ERROR -->
-				<div class="message error">
-					<p>{PHP.L.Error}</p>
-					{INSTALL_ERROR}
-				</div>
-				<!-- END: ERROR -->
-
-				<!-- BEGIN: MESSAGE -->
-				<div class="message">
-					<p>{PHP.L.Messages}</p>
-					{INSTALL_MESSAGE}
-				</div>
-				<!-- END: MESSAGE -->
+				{FILE ./themes/nemesis/warnings.tpl}
 
 				<form action="install.php" method="post">
 

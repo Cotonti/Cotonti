@@ -169,7 +169,6 @@ if ($standalone)
 
 $t->assign(array(
 	'PFS_TITLE' => $title,
-	'PFS_ERRORS' => sed_check_messages() ? sed_implode_messages() : '',
 	'PFS_ACTION' => sed_url('pfs', 'm=editfolder&a=update&f=' . $pff_id . '&' . $more),
 	'PFF_FOLDER' => sed_selectbox_folders($userid, '', $row['pff_parentid'], 'rparentid'),
 	'PFF_TITLE' => sed_inputbox('text', 'rtitle', htmlspecialchars($pff_title), 'size="56" maxlength="255"'),
@@ -179,6 +178,8 @@ $t->assign(array(
 	'PFF_ISPUBLIC' => sed_radiobox($pff_ispublic, 'rispublic', array('1', '0'), array($L['Yes'], $L['No']), '', ' '),
 	'PFF_UPDATED' => $row['pff_updated']
 ));
+
+sed_display_messages($t);
 
 /* === Hook === */
 foreach (sed_getextplugins('pfs.editfolder.tags') as $pl)

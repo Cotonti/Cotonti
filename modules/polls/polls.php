@@ -76,9 +76,7 @@ $t = new XTemplate(sed_skinfile('polls'));
 
 if (sed_check_messages())
 {
-	$t->assign('POLLS_EXTRATEXT', sed_implode_messages());
-	$t->parse('MAIN.POLLS_EXTRA');
-	sed_clear_messages();
+	sed_display_messages($t);
 }
 elseif ((int)$id > 0)
 {

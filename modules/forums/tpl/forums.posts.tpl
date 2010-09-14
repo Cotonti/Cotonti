@@ -64,10 +64,9 @@
 		<div>{FORUMS_POSTS_ANTIBUMP_BODY}</div>
 		<!-- END: FORUMS_POSTS_ANTIBUMP -->
 
+		{FILE ./themes/nemesis/warnings.tpl}
+
 		<!-- BEGIN: FORUMS_POSTS_NEWPOST -->
-		<!-- BEGIN: FORUMS_POSTS_NEWPOST_ERROR -->
-		<div class="error">{FORUMS_POSTS_NEWPOST_ERROR_MSG}</div>
-		<!-- END: FORUMS_POSTS_NEWPOST_ERROR -->
 		<form action="{FORUMS_POSTS_NEWPOST_SEND}" method="post" name="newpost">
 		<table class="flat">
 			<tr>

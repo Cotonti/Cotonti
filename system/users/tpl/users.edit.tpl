@@ -1,8 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<!-- BEGIN: USERS_EDIT_ERROR -->
-		<div class="error">{USERS_EDIT_ERROR_BODY}</div>
-		<!-- END: USERS_EDIT_ERROR -->
+		{FILE ./themes/nemesis/warnings.tpl}
 
 		<div class="block">
 			<h2 class="users">{USERS_EDIT_TITLE}</h2>

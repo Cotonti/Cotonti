@@ -1,8 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<!-- BEGIN: USERS_PROFILE_ERROR -->
-		<div class="error">{USERS_PROFILE_ERROR_BODY}</div>
-		<!-- END: USERS_PROFILE_ERROR -->
+		{FILE ./themes/nemesis/warnings.tpl}
 
 		<div class="block">
 			<h2 class="users">{USERS_PROFILE_TITLE}</h2>

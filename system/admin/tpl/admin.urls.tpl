@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_urls_rules}</h2>
-<!-- BEGIN: MESSAGE -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{MESSAGE_TEXT}</p>
-			</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 <!-- BEGIN: HTA -->
 		<h3>{PHP.L.adm_urls_your} {ADMIN_URLS_CONF_NAME}</h3>
 		<pre class="code">{ADMIN_URLS_HTA}</pre>

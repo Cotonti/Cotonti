@@ -264,12 +264,7 @@ foreach($sed_extrafields['users'] as $i => $row)
 }
 
 // Error and message handling
-if (sed_check_messages())
-{
-	$t->assign('USERS_REGISTER_ERROR_BODY', sed_implode_messages());
-	$t->parse('MAIN.USERS_REGISTER_ERROR');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 
 /* === Hook === */

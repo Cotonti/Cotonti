@@ -550,12 +550,7 @@ if (!empty($code) && $b == 'install' && $totalconfig > 0)
 	$t->parse('MAIN.CONFIG_URL');
 }
 
-if (sed_check_messages())
-{
-	$t->assign('ADMIN_EXTENSIONS_ADMINWARNINGS', sed_implode_messages());
-	$t->parse('MAIN.MESSAGE');
-}
-sed_clear_messages();
+sed_display_messages($t);
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.extensions.tags') as $pl)

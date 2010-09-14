@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Log} ({ADMIN_LOG_TOTALDBLOG})</h2>
-<!-- BEGIN: MESSAGE -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{MESSAGE_TEXT}</p>
-			</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 <!-- IF {PHP.usr.isadmin} -->
 			<ul class="follow">
 				<li><a title="{PHP.L.adm_purgeall}" href="{ADMIN_LOG_URL_PRUNE}" class="ajax">{PHP.L.adm_purgeall}</a></li>

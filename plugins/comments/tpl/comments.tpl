@@ -5,11 +5,7 @@
 </div>
 <!-- END: COMMENTS_TITLE -->
 
-<!-- BEGIN: COMMENTS_ERROR -->
-<div class="block">
-	<span style="color:red;">{COMMENTS_ERROR_BODY}</span>
-</div>
-<!-- END: COMMENTS_ERROR -->
+{FILE ./themes/nemesis/warnings.tpl}
 
 <!-- BEGIN: COMMENTS_FORM_EDIT -->
 <div class="block">
