@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Rights}</h2>
-<!-- BEGIN: MESSAGE -->
-		<div class="error">
-			<h4>{PHP.L.Message}</h4>
-			<p>{ADMIN_RIGHTSBYITEM_ADMINWARNINGS}</p>
-		</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post" class="ajax">
 				<table class="cells">
 					<tr>

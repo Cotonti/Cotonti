@@ -3,9 +3,7 @@
 		<div class="block">
 			<h2 class="forums">{FORUMS_NEWTOPIC_PAGETITLE}</h2>
 		
-			<!-- BEGIN: FORUMS_NEWTOPIC_ERROR -->
-				<div class="error">{FORUMS_NEWTOPIC_ERROR_BODY}</div>
-			<!-- END: FORUMS_NEWTOPIC_ERROR -->
+			{FILE ./themes/nemesis/warnings.tpl}
 
 		<form action="{FORUMS_NEWTOPIC_SEND}" method="post" name="newtopic">
 			<table class="cells">

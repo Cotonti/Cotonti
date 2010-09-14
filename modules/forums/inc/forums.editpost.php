@@ -226,12 +226,8 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = sed_skinfile(array('forums', 'editpost', $fs_category, $fp_sectionid));
 $t = new XTemplate($mskin);
 
-if (sed_check_messages())
-{
-	$t->assign('FORUMS_POSTS_EDITPOST_ERROR_BODY', sed_implode_messages());
-	$t->parse('MAIN.FORUMS_EDITPOST_ERROR');
-	sed_clear_messages();
-}
+sed_display_messages($t);
+
 if ($is_first_post)
 {
 $t->assign(array(

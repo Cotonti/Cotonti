@@ -447,12 +447,7 @@ foreach($sed_extrafields['users'] as $i => $row)
 }
 
 // Error handling
-if (sed_check_messages())
-{
-	$t->assign('USERS_PROFILE_ERROR_BODY', sed_implode_messages());
-	$t->parse('MAIN.USERS_PROFILE_ERROR');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 /* === Hook === */
 foreach (sed_getextplugins('profile.tags') as $pl)

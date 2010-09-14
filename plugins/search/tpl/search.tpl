@@ -89,9 +89,7 @@
 		</form>
 	</div>
 
-	<!-- IF {PLUGIN_ERROR} -->
-	<div class="error">{PLUGIN_ERROR}</div>
-	<!-- ENDIF -->
+	{FILE ./themes/nemesis/warnings.tpl}
 
 	<!-- BEGIN: RESULTS -->
 	<div class="tCap"></div>

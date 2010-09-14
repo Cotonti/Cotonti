@@ -12,12 +12,7 @@
 	</script>
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Pages} ({ADMIN_PAGE_TOTALDBPAGES})</h2>
-<!-- BEGIN: MESSAGE -->
-		<div class="error">
-			<h4>{PHP.L.Message}</h4>
-			<p>{MESSAGE_TEXT}</p>
-		</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 		<ul class="follow">
 			<li>
 				<a title="{PHP.L.Configuration}" href="{ADMIN_PAGE_URL_CONFIG}">{PHP.L.Configuration}</a>

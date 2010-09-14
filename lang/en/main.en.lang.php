@@ -333,6 +333,7 @@ $L['View'] = 'View';
 $L['Views'] = 'Views';
 $L['Vote'] = 'Vote';
 $L['Votes'] = 'Votes';
+$L['Warning'] = 'Warning';
 $L['Website'] = 'Website';
 $L['Week'] = 'week'; // New in 0.0.2
 $L['Weeks'] = 'weeks'; // New in 0.0.2

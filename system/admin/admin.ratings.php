@@ -100,12 +100,7 @@ $t->assign(array(
 	'ADMIN_RATINGS_TOTALVOTES' => $jj
 ));
 
-if (sed_check_messages())
-{
-	$t->assign('MESSAGE_TEXT', sed_implode_messages());
-	$t->parse('MAIN.MESSAGE');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.ratings.tags') as $pl)

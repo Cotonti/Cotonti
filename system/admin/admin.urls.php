@@ -370,12 +370,7 @@ fclose($fp);
 $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : false;
 
 // Error and message reporting
-if (sed_check_messages())
-{
-	$t->assign('MESSAGE_TEXT', sed_implode_messages());
-	$t->parse('MAIN.MESSAGE');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 $t->assign(array(
 	'ADMIN_URLS_II' => $ii,

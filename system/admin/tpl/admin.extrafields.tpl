@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_extrafields}</h2>
-<!-- BEGIN: MESSAGE -->
-		<div class="error">
-			<h4>{PHP.L.Message}</h4>
-			<p>{MESSAGE_TEXT}</p>
-		</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 		<form action="{ADMIN_EXTRAFIELDS_URL_FORM_EDIT}" method="post">
 		<table class="cells">
 			<tr>

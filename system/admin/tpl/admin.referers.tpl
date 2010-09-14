@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Referers}</h2>
-<!-- BEGIN: MESSAGE -->
-			<div class="error">
-				<h4>{PHP.L.Message}</h4>
-				<p>{MESSAGE_TEXT}</p>
-			</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 <!-- IF {PHP.usr.isadmin} -->
 			<ul class="follow">
 				<li><a href="{ADMIN_REFERERS_URL_PRUNE}">{PHP.L.adm_purgeall}</a></li>

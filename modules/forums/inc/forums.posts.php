@@ -770,12 +770,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
 	));
 
-	if (sed_check_messages())
-	{
-		$t->assign('FORUMS_POSTS_NEWPOST_ERROR_MSG', sed_implode_messages());
-		$t->parse('MAIN.FORUMS_POSTS_NEWPOST.FORUMS_POSTS_NEWPOST_ERROR');
-		sed_clear_messages();
-	}
+	sed_display_messages($t);
 
 	/* === Hook  === */
 	foreach (sed_getextplugins('forums.posts.newpost.tags') as $pl)

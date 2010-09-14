@@ -170,7 +170,6 @@ if ($standalone)
 
 $t->assign(array(
 	'PFS_TITLE' => $title,
-	'PFS_ERRORS' => sed_check_messages() ? sed_implode_messages() : '',
 	'PFS_ACTION'=> sed_url('pfs', 'm=edit&a=update&id='.$pfs_id.'&'.$more),
 	'PFS_FILE' => $pfs_file,
 	'PFS_DATE' => $pfs_date,
@@ -178,6 +177,8 @@ $t->assign(array(
 	'PFS_URL' => $ff,
 	'PFS_DESC' => sed_inputbox('text', 'rdesc', $pfs_desc, 'size="56" maxlength="255"')
 ));
+
+sed_display_messages($t);
 
 /* === Hook === */
 foreach (sed_getextplugins('pfs.edit.tags') as $pl)

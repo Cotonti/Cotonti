@@ -121,8 +121,6 @@
 	</table>
 <!-- END: POLLS_VIEWALL -->
 
-<!-- BEGIN: POLLS_EXTRA -->
-	<div class="block">{POLLS_EXTRATEXT}<br />{POLLS_VIEWALL}</div>
-<!-- END: POLLS_EXTRA -->
+{FILE ./themes/nemesis/warnings.tpl}
 
 <!-- END: MAIN -->

@@ -1,8 +1,6 @@
 <!-- BEGIN: MAIN -->
 
-		<!-- BEGIN: PAGEADD_ERROR -->
-		<div class="error">{PAGEADD_ERROR_BODY}</div>
-		<!-- END: PAGEADD_ERROR -->
+		{FILE ./themes/nemesis/warnings.tpl}
 
 		<div class="block">
 			<h2 class="page">{PAGEADD_PAGETITLE}</h2>

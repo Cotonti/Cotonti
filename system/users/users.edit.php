@@ -303,13 +303,7 @@ foreach($sed_extrafields['users'] as $i => $row)
 }
 
 // Error and message reporting
-if (sed_check_messages())
-{
-	$t->assign('USERS_EDIT_ERROR_BODY', sed_implode_messages());
-	$t->parse('MAIN.USERS_EDIT_ERROR');
-	sed_clear_messages();
-}
-
+sed_display_messages($t);
 
 /* === Hook === */
 foreach (sed_getextplugins('users.edit.tags') as $pl)

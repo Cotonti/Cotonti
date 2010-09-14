@@ -143,22 +143,12 @@ if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
 		// Success
 		sed_sql_query("UPDATE $db_updates SET upd_value = '$branch'
 			WHERE upd_param = 'branch'");
-		$t->assign(array(
-			'SUCCESS_TITLE' => sed_rc('install_upgrade_success',
-				array('ver' => $branch)),
-			'SUCCESS_MSG' => sed_implode_messages()
-		));
-		$t->parse('MAIN.SUCCESS');
+		$t->assign('UPDATE_TITLE', sed_rc('install_upgrade_success', array('ver' => $branch)));
 	}
 	else
 	{
 		// Error
-		$t->assign(array(
-			'ERROR_TITLE' => sed_rc('install_upgrade_error',
-				array('ver' => $branch)),
-			'ERROR_MSG' => sed_implode_messages()
-		));
-		$t->parse('MAIN.ERROR');
+		$t->assign('UPDATE_TITLE', sed_rc('install_upgrade_error', array('ver' => $branch)));
 	}
 
 	$t->assign(array(
@@ -226,19 +216,11 @@ else
 	if ($new_rev === false || $cot_error)
 	{
 		// Display error message
-		$t->assign(array(
-			'ERROR_TITLE' => $L['install_update_error'],
-			'ERROR_MSG' => sed_implode_messages()
-		));
-		$t->parse('MAIN.ERROR');
+		$t->assign('UPDATE_TITLE', $L['install_update_error']);
 	}
 	elseif ($new_rev === true && !$updated_config && !$updated_ext)
 	{
-		$t->assign(array(
-			'ERROR_TITLE' => $L['install_update_nothing'],
-			'ERROR_MSG' => sed_implode_messages()
-		));
-		$t->parse('MAIN.ERROR');
+		$t->assign('UPDATE_TITLE', $L['install_update_nothing']);
 	}
 	else
 	{
@@ -251,12 +233,7 @@ else
 			sed_sql_query("UPDATE $db_updates SET upd_value = '\$Rev: $new_rev \$'
 				WHERE upd_param = 'revision'");
 		}
-		$t->assign(array(
-			'SUCCESS_TITLE' => sed_rc('install_update_success',
-				array('rev' => $new_rev)),
-			'SUCCESS_MSG' => sed_implode_messages()
-		));
-		$t->parse('MAIN.SUCCESS');
+		$t->assign('UPDATE_TITLE', sed_rc('install_update_success', array('rev' => $new_rev)));
 	}
 
 	$t->assign(array(
@@ -265,7 +242,7 @@ else
 	));
 }
 
-sed_clear_messages();
+sed_display_messages($t);
 
 $t->parse('MAIN');
 $t->out('MAIN');

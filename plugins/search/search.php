@@ -351,9 +351,10 @@ $t->assign(array(
 	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ?  array_sum($totalitems) : '',
 	'PLUGIN_PAGEPREV' => $pagenav['prev'],
 	'PLUGIN_PAGENEXT' => $pagenav['next'],
-	'PLUGIN_PAGENAV' => $pagenav['main'],
-	'PLUGIN_ERROR' => sed_check_messages() ? sed_implode_messages() : ''
+	'PLUGIN_PAGENAV' => $pagenav['main']
 ));
+
+sed_display_messages($t);
 
 /* === Hook === */
 foreach (sed_getextplugins('search.tags') as $pl)

@@ -1,12 +1,7 @@
 <!-- BEGIN: MAIN -->
 	<div id="ajaxBlock">
 		<h2>{PHP.L.Rights}</h2>
-<!-- BEGIN: MESSAGE -->
-		<div class="error">
-			<h4>{PHP.L.Message}</h4>
-			<p>{ADMIN_RIGHTS_ADMINWARNINGS}</p>
-		</div>
-<!-- END: MESSAGE -->
+		{FILE ./themes/nemesis/warnings.tpl}
 		<form name="saverights" id="saverights" action="{ADMIN_RIGHTS_FORM_URL}" method="post" class="ajax">
 			<!-- IF {PHP.g} > 5 -->
 			<table class="cells">

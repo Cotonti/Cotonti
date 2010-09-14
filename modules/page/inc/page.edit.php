@@ -310,12 +310,7 @@ foreach($sed_extrafields['pages'] as $i => $row)
 }
 
 // Error and message handling
-if (sed_check_messages())
-{
-	$t->assign('PAGEEDIT_ERROR_BODY', sed_implode_messages());
-	$t->parse('MAIN.PAGEEDIT_ERROR');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 /* === Hook === */
 foreach (sed_getextplugins('page.edit.tags') as $pl)

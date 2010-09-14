@@ -504,22 +504,7 @@ switch ($step)
 $t->parse("MAIN.STEP_$step");
 
 // Error & message display
-if (sed_check_messages('', 'error'))
-{
-	$t->assign(array(
-		'INSTALL_ERROR' => sed_implode_messages('', 'error')
-	));
-	$t->parse('MAIN.ERROR');
-	sed_clear_messages('', 'error');
-}
-if (sed_check_messages())
-{
-	$t->assign(array(
-		'INSTALL_MESSAGE' => sed_implode_messages()
-	));
-	$t->parse('MAIN.MESSAGE');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 $t->assign(array(
 	'INSTALL_STEP' => $step == 5 ? $L['Complete'] : sed_rc('install_step', array('step' => $step, 'total' => 4)),

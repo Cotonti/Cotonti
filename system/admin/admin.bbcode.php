@@ -150,12 +150,7 @@ $t->assign(array(
 	'ADMIN_BBCODE_URL_CLEAR_CACHE' => sed_url('admin', 'm=bbcode&a=clearcache&d='.$d)
 ));
 
-if (sed_check_messages())
-{
-	$t->assign('MESSAGE_TEXT', sed_implode_messages());
-	$t->parse('MAIN.MESSAGE');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 /* === Hook  === */
 foreach (sed_getextplugins('admin.bbcode.tags') as $pl)

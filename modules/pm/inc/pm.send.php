@@ -278,12 +278,7 @@ if (!SED_AJAX)
 	$t->parse("MAIN.AFTER_AJAX");
 }
 
-if (sed_check_messages())
-{
-	$t->assign('PMSEND_ERROR_BODY', sed_implode_messages());
-	$t->parse('MAIN.PMSEND_ERROR');
-	sed_clear_messages();
-}
+sed_display_messages($t);
 
 $bhome = $cfg['homebreadcrumb'] ? sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
 $title = $bhome . sed_rc_link(sed_url('pm'), $L['Private_Messages']).' '.$cfg['separator'].' ';

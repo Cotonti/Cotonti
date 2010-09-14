@@ -109,7 +109,7 @@ while ($row = sed_sql_fetcharray($sql))
 		include $pl;
 	}
 	/* ===== */
-	$t->parse('COMMENTS.ADMIN_COMMENTS_ROW');
+	$t->parse('MAIN.ADMIN_COMMENTS_ROW');
 	$ii++;
 }
 
@@ -130,14 +130,14 @@ foreach (sed_getextplugins('admin.comments.tags') as $pl)
 }
 /* ===== */
 
-$t->parse('COMMENTS');
+$t->parse('MAIN');
 if (SED_AJAX)
 {
-	$t->out('COMMENTS');
+	$t->out('MAIN');
 }
 else
 {
-	$adminmain = $t->text('COMMENTS');
+	$adminmain = $t->text('MAIN');
 }
 
 ?>
