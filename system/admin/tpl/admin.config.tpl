@@ -40,7 +40,7 @@
 <!-- BEGIN: DEFAULT -->
 		<table class="cells">
 			<tr>
-				<td class="coltop width30">{PHP.L.Core}</td>
+				<td class="coltop width40">{PHP.L.Core}</td>
 				<td class="coltop width30">{PHP.L.Modules}</td>
 				<td class="coltop width30">{PHP.L.Plugins}</td>
 			</tr>
