@@ -580,6 +580,7 @@ if (empty($x) && SED_AJAX && $_SERVER['REQUEST_METHOD'] == 'POST')
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
 	&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 {
+	$cot_error = true;
 	sed_redirect(sed_url('message', 'msg=950', '', true));
 }
 
