@@ -106,12 +106,14 @@ div.warning		{ background:#fdf0cd url(img/warning.png) no-repeat 15px 15px; bord
 /* 5. Admin Menu
 -------------------------------------------------- */
 
-#adminmenu		{ height:160px; padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; }
-#adminmenu li		{ width:145px; float:left; }
-#adminmenu li a	{ text-align:center; display:block; height:80px; text-shadow:0 1px 0 #eee; opacity:1;}
-#adminmenu li span	{ text-align:center; display:block; color:#999; position: relative; z-index:500; top: -25px; }
-#adminmenu li a:hover	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; }
-#adminmenu li a.sel	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; background-position:0 -30px; }
+#adminmenu			{ padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; overflow:auto; }
+#adminmenu li			{ padding:12px 15px 10px; height:60px; width:115px; background:url(img/menuitem.png) no-repeat 0 0; display:block; float:left; }
+#adminmenu li a		{ color:#3b3b3b; text-align:center; display:block; height:100%; opacity:.6; }
+#adminmenu li a:hover	{ text-decoration:none; opacity:.8; }
+#adminmenu li a.sel	{ text-align:center; display:block; height:100%; opacity:1; }
+#adminmenu li a img		{ height:32px; width:32px; }
+#adminmenu li a span	{ text-align:center; line-height:18px; margin:8px 0 0; height:18px; background:#ddd; display:block; overflow:hidden; }
+
 
 /* 6. Tables
 -------------------------------------------------- */

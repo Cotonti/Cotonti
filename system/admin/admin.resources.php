@@ -106,7 +106,7 @@ $R['admin_menu_icon_extensions'] = '<img src="system/admin/tpl/img/adminmenu/ext
 $R['admin_menu_icon_home'] = '<img src="system/admin/tpl/img/adminmenu/home.png" alt="'.$L['Home'].'" />
 	<span>'.$L['Home'].'</span>';
 $R['admin_menu_icon_module'] = '<img src="{$src}" alt="{$title}" /><span>{$title}</span>';
-$R['admin_menu_icon_other'] = '<img src="system/admin/tpl/img/adminmenu/folder.png" alt="'.$L['Other'].'" />
+$R['admin_menu_icon_other'] = '<img src="system/admin/tpl/img/adminmenu/other.png" alt="'.$L['Other'].'" />
 	<span>'.$L['Other'].'</span>';
 $R['admin_menu_icon_structure'] = '<img src="system/admin/tpl/img/adminmenu/structure.png" alt="'.$L['Structure'].'" />
 	<span>'.$L['Structure'].'</span>';

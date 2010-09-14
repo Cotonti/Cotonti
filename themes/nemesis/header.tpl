@@ -14,7 +14,7 @@
 {HEADER_HEAD}
 {HEADER_BASEHREF}
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
+<link href="skins/{PHP.skin}/css/{PHP.theme}.css" type="text/css" rel="stylesheet" />
 {HEADER_COMPOPUP}
 
 </head>
@@ -53,7 +53,7 @@
 		</li>
 	</ul>
 
-	<!-- IF {PHP.z} == "index" --><img src="themes/{PHP.theme}/img/front_image.png" alt="" id="front_image" /><!-- ENDIF -->
+	<!-- IF {PHP.z} == "index" --><img src="skins/{PHP.skin}/img/front_image.png" alt="" id="front_image" /><!-- ENDIF -->
 
 	<div id="main">
 

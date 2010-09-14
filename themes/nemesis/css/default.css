@@ -166,7 +166,7 @@ label input			{ vertical-align:middle; }
 .width95	{ width:95%; }
 .width100	{ width:100%; }
 
-.desc		{ font-size:.9em; margin:5px 0; padding:5px 0; background:#f2f2f2; border:1px solid #ccc; border-left:0; border-right:0; overflow:auto; }
+.desc		{ font-size:.9em; margin:5px 0; padding:5px 0; background:#e9e9e9; border:1px solid #ccc; border-left:0; border-right:0; overflow:auto; }
 .desc strong	{ color:#fff; margin-right:8px; padding:2px 6px; background:#aaa; }
 
 .combox		{ font-size:2em; text-align:center; margin:0 10px 5px 0; padding-top:6px; height:42px; width:48px; background:url(../img/comments.png) no-repeat 0 0; float:left; }
@@ -234,9 +234,9 @@ label input			{ vertical-align:middle; }
 /* 14. Search
 -------------------------------------------------- */
 
-#magnifier		{ height:30px; width:310px; position:absolute; left:650px; top:75px; }
-#magnifier #s1	{ float:left; padding:6px 10px; border:0; height:25px; line-height:18px; width:240px; background:#fff; }
-#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:25px; width:40px; border:0; background:#fff url(../../../images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
+#magnifier		{ height:36px; width:310px; position:absolute; left:650px; top:70px; }
+#magnifier #s1	{ float:left; padding:6px 10px; border:0; height:24px; line-height:24px; width:240px; background:#fff; }
+#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:36px; width:40px; border:0; background:#fff url(../../../images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
 
 .search-res			{ margin:0 0 10px; overflow:auto; }
 .search-res .small	{ color:#000; }

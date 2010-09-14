@@ -1,7 +1,11 @@
 <!-- BEGIN: MAIN -->
-	<ul id="adminmenu" class="small">
+	<ul id="adminmenu" class="">
 		<!-- BEGIN: ADMIN_MENU_ROW -->
-		<li><a href="{ADMIN_MENU_URL}" class="{ADMIN_MENU_CLASS}">{ADMIN_MENU_ICON}</a></li>
+		<li>
+			<a href="{ADMIN_MENU_URL}" class="{ADMIN_MENU_CLASS}">
+				{ADMIN_MENU_ICON}
+			</a>
+		</li>
 		<!-- END: ADMIN_MENU_ROW -->
 	</ul>
 
