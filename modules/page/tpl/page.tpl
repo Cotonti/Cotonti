@@ -29,8 +29,8 @@
 							<!-- BEGIN: DOWNLOAD -->
 							<p>{PHP.L.Download}: <a class="strong" href="{PAGE_FILE_URL}">{PAGE_SHORTTITLE}</a></p>
 							<!-- END: DOWNLOAD -->
-							<p>{PHP.skinlang.page.Filesize}: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
-							<p>{PHP.skinlang.page.downloaded}: {PAGE_FILE_COUNT} {PHP.skinlang.page.times}</p>
+							<p>{PHP.themelang.page.Filesize}: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
+							<p>{PHP.themelang.page.downloaded}: {PAGE_FILE_COUNT} {PHP.themelang.page.times}</p>
 						</div>
 					<!-- END: PAGE_FILE -->
 			</div>
@@ -39,12 +39,12 @@
 
 		<div id="side" class="column">
 			<!-- BEGIN: PAGE_ADMIN -->
-{FILE "skins/nemesis/inc/admin-page.tpl"}
+{FILE "themes/nemesis/inc/admin-page.tpl"}
 			<!-- END: PAGE_ADMIN -->
-{FILE "skins/nemesis/inc/contact.tpl"}
+{FILE "themes/nemesis/inc/contact.tpl"}
 			<!-- BEGIN: PAGE_MULTI -->
 			<div class="block">
-				<h2 class="info">{PHP.skinlang.page.Summary}:</h2>
+				<h2 class="info">{PHP.themelang.page.Summary}:</h2>
 				{PAGE_MULTI_TABTITLES}
 				<p class="paging">{PAGE_MULTI_TABNAV}</p>
 			</div>

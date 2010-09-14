@@ -185,7 +185,7 @@ switch($a)
 								if(mb_substr(trim($v), 0, 1) == '{')
 								{
 									$listtags .= $v.' : ';
-									$found = sed_stringinfile('./skins/'.$cfg['defaultskin'].'/'.$line[0], trim($v));
+									$found = sed_stringinfile('./themes/'.$cfg['defaultskin'].'/'.$line[0], trim($v));
 									$listtags .= $found_txt[$found].'<br />';
 								}
 								else

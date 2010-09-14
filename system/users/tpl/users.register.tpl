@@ -13,10 +13,10 @@
 						<td class="width70">{USERS_REGISTER_USER} *</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersregister.Validemail}:</td>
+						<td>{PHP.themelang.usersregister.Validemail}:</td>
 						<td>
 							{USERS_REGISTER_EMAIL} *
-							<p class="small">{PHP.skinlang.usersregister.Validemailhint}</p>
+							<p class="small">{PHP.themelang.usersregister.Validemailhint}</p>
 						</td>
 					</tr>
 					<tr>
@@ -24,7 +24,7 @@
 						<td>{USERS_REGISTER_PASSWORD} *</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersregister.Confirmpassword}:</td>
+						<td>{PHP.themelang.usersregister.Confirmpassword}:</td>
 						<td>{USERS_REGISTER_PASSWORDREPEAT} *</td>
 					</tr>
 					<tr>
@@ -32,7 +32,7 @@
 						<td>{USERS_REGISTER_COUNTRY}</td>
 					</tr>
 					<tr>
-						<td colspan="2">{PHP.skinlang.usersregister.Formhint}</td>
+						<td colspan="2">{PHP.themelang.usersregister.Formhint}</td>
 					</tr>
 					<tr>
 						<td colspan="2" class="valid"><input type="submit" value="{PHP.L.Submit}" /></td>

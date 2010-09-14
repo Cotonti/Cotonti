@@ -195,8 +195,9 @@ switch ($a)
 
 		$ruser['text'] = sed_import('rusertext','P','TXT', $cfg['usertextmax']);
 		$ruser['country'] = sed_import('rusercountry','P','ALP');
-		$ruser['skin'] = sed_import('ruserskin','P','TXT');
-		$ruser['theme'] = sed_import('rusertheme','P','TXT');
+		$rtheme = explode(':', sed_import('rusertheme','P','TXT'));
+		$ruser['theme'] = $rtheme[0];
+		$ruset['scheme'] = $rtheme[1];
 		$ruser['lang'] = sed_import('ruserlang','P','ALP');
 		$ruser['gender'] = sed_import('rusergender','P','ALP');
 		$ruser['timezone'] = (float) sed_import('rusertimezone','P','TXT',5);	
@@ -215,7 +216,7 @@ switch ($a)
 		$rmailpass = sed_import('rmailpass','P','TXT');
 		$ruseremail = sed_import('ruseremail','P','TXT');
 
-		$ruser['theme'] = ($ruser['skin'] != $urr['user_skin']) ? $ruser['skin'] : $ruser['theme'];
+		//$ruser['scheme'] = ($ruser['theme'] != $urr['user_theme']) ? $ruser['theme'] : $ruser['scheme'];
 
 		if (!empty($rnewpass1) && !empty($rnewpass2) && !empty($roldpass))
 		{
@@ -423,8 +424,7 @@ $useredit_array = array(
 	"USERS_PROFILE_EMAILPASS" => sed_inputbox('password', 'rmailpass', '', array('size' => 12, 'maxlength' => 32)),
 	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,
 	"USERS_PROFILE_PMNOTIFY" => sed_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No'])),
-	"USERS_PROFILE_SKIN" => sed_selectbox_skin($urr['user_skin'], 'ruserskin'),
-	"USERS_PROFILE_THEME" => sed_selectbox_theme($urr['user_skin'], 'rusertheme', $urr['user_theme']),
+	"USERS_PROFILE_THEME" => sed_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	"USERS_PROFILE_LANG" => sed_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	"USERS_PROFILE_GENDER" => sed_selectbox_gender($urr['user_gender'] ,'rusergender'),
 	"USERS_PROFILE_BIRTHDATE" => sed_selectbox_date(sed_date2stamp($urr['user_birthdate']), 'short', '', date('Y', $sys['now_offset']), 1910),

@@ -258,6 +258,8 @@ $L['Resynced'] = 'Resynced'; // New in 0.1.0
 $L['Right'] = 'Right';
 $L['Rights'] = 'Rights';
 $L['RSS_Feeds'] = 'RSS Feeds'; // New in 0.7.0
+$L['Scheme'] = 'Color scheme';
+$L['Schemes'] = 'Color schemes';
 $L['Search'] = 'Search';
 $L['Seconds'] = 'Seconds';
 $L['Section'] = 'Section';
@@ -294,6 +296,7 @@ $L['Tag'] = 'Tag';
 $L['Tags'] = 'Tags';
 $L['Text'] = 'Text';
 $L['Theme'] = 'Theme'; // New in 0.7.0
+$L['Themes'] = 'Themes'; // 0.7.0
 $L['Thumbnail'] = 'Thumbnail';
 $L['Thumbnails'] = 'Thumbnails';
 $L['Timezone'] = 'Timezone';
@@ -381,8 +384,8 @@ $L['Gender_U'] = 'Unknown';
  * Common Entries
  */
 
-$L['com_skinfail'] = 'Warning, failed to load your prefered skin, check your profile';
-$L['com_themefail'] = 'Warning, failed to load your prefered theme for the prefered skin, please check your profile and update values'; // New in 0.0.2
+$L['com_themefail'] = 'Warning, failed to load your prefered theme, check your profile';
+$L['com_schemefail'] = 'Warning, failed to load your prefered color scheme for the prefered theme, please check your profile and update values'; // New in 0.0.2
 
 /**
  * Header

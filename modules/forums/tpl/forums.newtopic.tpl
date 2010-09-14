@@ -19,10 +19,10 @@
 				</tr>
 				<!-- BEGIN: PRIVATE -->
 				<tr>
-					<td>{PHP.skinlang.forumsnewtopic.privatetopic1}:</td>
+					<td>{PHP.themelang.forumsnewtopic.privatetopic1}:</td>
 					<td>
 						{FORUMS_NEWTOPIC_ISPRIVATE}
-						<span class="small">({PHP.skinlang.forumsnewtopic.privatetopic2})</span>
+						<span class="small">({PHP.themelang.forumsnewtopic.privatetopic2})</span>
 					</td>
 				</tr>
 				<!-- END: PRIVATE -->

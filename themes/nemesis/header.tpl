@@ -1,5 +1,5 @@
 <!-- BEGIN: HEADER -->
-{HEADER_DOCTYPE}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
 <title>{HEADER_TITLE}</title> 
@@ -14,7 +14,7 @@
 {HEADER_HEAD}
 {HEADER_BASEHREF}
 <link rel="shortcut icon" href="favicon.ico" />
-<link href="skins/{PHP.skin}/css/{PHP.theme}.css" type="text/css" rel="stylesheet" />
+<link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
 {HEADER_COMPOPUP}
 
 </head>
@@ -53,7 +53,7 @@
 		</li>
 	</ul>
 
-	<!-- IF {PHP.z} == "index" --><img src="skins/{PHP.skin}/img/front_image.png" alt="" id="front_image" /><!-- ENDIF -->
+	<!-- IF {PHP.z} == "index" --><img src="themes/{PHP.theme}/img/front_image.png" alt="" id="front_image" /><!-- ENDIF -->
 
 	<div id="main">
 

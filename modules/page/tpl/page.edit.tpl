@@ -70,28 +70,28 @@
 						</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.pageedit.File}:<br />
-						{PHP.skinlang.pageadd.Filehint}</td>
+						<td>{PHP.themelang.pageedit.File}:<br />
+						{PHP.themelang.pageadd.Filehint}</td>
 						<td>{PAGEEDIT_FORM_FILE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.URL}:<br />{PHP.skinlang.pageedit.URLhint}</td>
+						<td>{PHP.L.URL}:<br />{PHP.themelang.pageedit.URLhint}</td>
 						<td>{PAGEEDIT_FORM_URL}<br />{PAGEEDIT_FORM_PFS_URL_USER} &nbsp; {PAGEEDIT_FORM_PFS_URL_SITE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.pageedit.Filesize}:<br />{PHP.skinlang.pageedit.Filesizehint}</td>
+						<td>{PHP.themelang.pageedit.Filesize}:<br />{PHP.themelang.pageedit.Filesizehint}</td>
 						<td>{PAGEEDIT_FORM_SIZE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.pageedit.Filehitcount}:<br />{PHP.skinlang.pageedit.Filehitcounthint}</td>
+						<td>{PHP.themelang.pageedit.Filehitcount}:<br />{PHP.themelang.pageedit.Filehitcounthint}</td>
 						<td>{PAGEEDIT_FORM_FILECOUNT}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.pageedit.Pageid}:</td>
+						<td>{PHP.themelang.pageedit.Pageid}:</td>
 						<td>#{PAGEEDIT_FORM_ID}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.pageedit.Deletethispage}:</td>
+						<td>{PHP.themelang.pageedit.Deletethispage}:</td>
 						<td>{PAGEEDIT_FORM_DELETE}</td>
 					</tr>
 					<tr>

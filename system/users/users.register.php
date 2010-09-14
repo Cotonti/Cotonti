@@ -102,8 +102,8 @@ if ($a=='add')
 		$ruser['hideemail'] = 1;
 		$ruser['pmnotify'] = 0;
 
-		$ruser['skin'] = $cfg['defaultskin'];
 		$ruser['theme'] = $cfg['defaulttheme'];
+		$ruser['scheme'] = $cfg['defaultscheme'];
 		$ruser['lang'] = $cfg['defaultlang'];
 		$ruser['regdate'] = (int)$sys['now_offset'];
 		$ruser['logcount'] = 0;

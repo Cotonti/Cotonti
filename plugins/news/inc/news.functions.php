@@ -16,7 +16,7 @@ sed_require_api('extrafields');
 sed_require('page');
 sed_require_lang('news', 'plug');
 
-function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlength = 0, $deftag = false)
+function sed_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textlength = 0, $deftag = false)
 {
 	global $sed_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $sed_extrafields, $usr, $sed_dbc, $sed_urltrans, $c;
 	static $news_extp, $news_tags_extp, $news_first_extp;
@@ -79,9 +79,9 @@ function sed_get_news($cat, $skinfile = "news", $limit = false, $d = 0, $textlen
 
 	$pagenav = sed_pagenav('index', $news_link_params, $d, $totalnews, $limit, $catd);
 
-	if (file_exists(sed_skinfile($skinfile, true)))
+	if (file_exists(sed_skinfile($themefile, true)))
 	{
-		$news = new XTemplate(sed_skinfile($skinfile, true));
+		$news = new XTemplate(sed_skinfile($themefile, true));
 	}
 	else
 	{

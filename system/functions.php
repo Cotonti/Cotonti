@@ -328,17 +328,6 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 }
 
 /**
- * Loads data from cross-request buffer into POST
- */
-function sed_import_buffer_load()
-{
-	if (is_array($_SESSION['cot_buffer']))
-	{
-		$_POST += $_SESSION['cot_buffer'];
-	}
-}
-
-/**
  * Puts POST data into the cross-request buffer
  */
 function sed_import_buffer_save()
@@ -1266,7 +1255,7 @@ function sed_build_ratings($code, $url, $display)
  */
 function sed_build_stars($level)
 {
-	global $skin, $R;
+	global $theme, $R;
 
 	if($level>0 and $level<100)
 	{
@@ -1607,82 +1596,68 @@ function sed_javascript($more='')
 }
 
 /**
- * Returns skin selection dropdown
+ * Returns Theme/Scheme selection dropdown
  *
- * @param string $check Seleced value
+ * @param string $selected_theme Seleced theme
+ * @param string $selected_scheme Seleced color scheme
  * @param string $name Dropdown name
  * @return string
  */
-function sed_selectbox_skin($check, $name)
+function sed_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 {
-	// TODO replace with synced Theme - Color scheme selection
 	sed_require_api('extensions');
-	$handle = opendir('./skins/');
+	$handle = opendir('./themes/');
 	while ($f = readdir($handle))
 	{
-		if (mb_strpos($f, '.') === FALSE && is_dir('./skins/'.$f))
+		if (mb_strpos($f, '.') === FALSE && is_dir('./themes/'.$f))
 		{
-			$skinlist[] = $f;
+			$themelist[] = $f;
 		}
 	}
 	closedir($handle);
-	sort($skinlist);
+	sort($themelist);
 
-	$result = '<select name="'.$name.'" size="1">';
-	while (list($i,$x) = each($skinlist))
+	$values = array();
+	$titles = array();
+	foreach ($themelist as $i => $x)
 	{
-		$selected = ($x==$check) ? 'selected="selected"' : '';
-		$skininfo = "./skins/$x/$x.php";
-		if (file_exists($skininfo))
+		$themeinfo = "./themes/$x/$x.php";
+		if (file_exists($themeinfo))
 		{
-			$info = sed_infoget($skininfo, 'COT_SKIN');
-			$result .= (!empty($info['Error'])) ? '<option value="'.$x.'" '.$selected.'>'.$x.' ('.$info['Error'].')' : '<option value="'.$x.'" '.$selected.'>'.$info['Name'];
+			$info = sed_infoget($themeinfo, 'COT_THEME');
+			if ($info)
+			{
+				if (empty($info['Schemes']))
+				{
+					$values[] = "$x:default";
+					$titles[] = $info['Name'];
+				}
+				else
+				{
+					$schemes = explode(',', $info['Schemes']);
+					sort($schemes);
+					foreach ($schemes as $sc)
+					{
+						$sc = explode(':', $sc);
+						$values[] = $x . ':' . $sc[0];
+						$titles[] = count($schemes) > 1 ? $info['Name'] .  ' (' . $sc[1] . ')' : $info['Name'];
+					}
+				}
+			}
+			else
+			{
+				$values[] = "$x:default";
+				$titles[] = $x;
+			}
 		}
 		else
 		{
-			$result .= '<option value="'.$x.'" $selected>'.$x;
-		}
-		$result .= '</option>';
-	}
-	$result .= '</select>';
-
-	return $result;
-}
-
-/**
- * Returns skin selection dropdown
- *
- * @param string $skinname Skin name
- * @param string $name Dropdown name
- * @param string $theme Selected theme
- * @return string
- */
-function sed_selectbox_theme($skinname, $name, $theme)
-{
-	// TODO replace with synced Theme - Color scheme selection
-	global $skin_themes;
-
-	if (empty($skin_themes))
-	{
-		if (file_exists("./skins/$skinname/$skinname.css"))
-		{
-			$skin_themes = array($skinname => $skinname);
-		}
-		else
-		{
-			$skin_themes = array('style' => $skinname);
+			$values[] = "$x:default";
+			$titles[] = $x;
 		}
 	}
 
-	$result = '<select name="'.$name.'" size="1">';
-	foreach($skin_themes as $x => $tname)
-	{
-		$selected = ($x==$theme) ? 'selected="selected"' : '';
-		$result .= '<option value="'.$x.'" '.$selected.'>'.$tname.'</option>';
-	}
-	$result .= '</select>';
-
-	return $result;
+	return sed_selectbox("$selected_theme:$selected_scheme", $name, $values, $titles, false);
 }
 
 /*
@@ -2119,7 +2094,7 @@ function sed_require_api($api_name)
  */
 function sed_require_lang($name, $type = 'plug', $default = 'en')
 {
-	global $cfg, $L, $Ls, $R, $skinlang;
+	global $cfg, $L, $Ls, $R, $themelang;
 	require_once sed_langfile($name, $type, $default);
 }
 
@@ -2131,8 +2106,78 @@ function sed_require_lang($name, $type = 'plug', $default = 'en')
  */
 function sed_require_rc($name, $is_plugin = false)
 {
-	global $cfg, $L, $Ls, $R, $skinlang;
+	global $cfg, $L, $Ls, $R, $themelang;
 	require_once sed_incfile($name, 'resources', $is_plugin);
+}
+
+/**
+ * Tries to detect and fetch a user scheme or returns FALSE on error.
+ *
+ * @global array $usr User object
+ * @global array $cfg Configuration
+ * @global array $out Output vars
+ * @return mixed
+ */
+function sed_schemefile()
+{
+	global $usr, $cfg, $out;
+
+	if (file_exists('./themes/'.$usr['theme'].'/'.$usr['scheme'].'.css'))
+	{
+		return './themes/'.$usr['theme'].'/'.$usr['scheme'].'.css';
+	}
+	elseif (file_exists('./themes/'.$usr['theme'].'/css/'))
+	{
+		if (file_exists('./themes/'.$usr['theme'].'/css/'.$usr['scheme'].'.css'))
+		{
+			return './themes/'.$usr['theme'].'/css/'.$usr['scheme'].'.css';
+		}
+		elseif (file_exists('./themes/'.$usr['theme'].'/css/'.$cfg['defaultscheme'].'.css'))
+		{
+			$out['notices'] .= $L['com_schemefail'];
+			$usr['scheme'] = $cfg['defaultscheme'];
+			return './themes/'.$usr['theme'].'/css/'.$cfg['defaultscheme'].'.css';
+		}
+	}
+	elseif (file_exists('./themes/'.$usr['theme']))
+	{
+		if (file_exists('./themes/'.$usr['theme'].'/'.$cfg['defaultscheme'].'.css'))
+		{
+			$out['notices'] .= $L['com_schemefail'];
+			$usr['scheme'] = $cfg['defaultscheme'];
+			return './themes/'.$usr['theme'].'/'.$cfg['defaultscheme'].'.css';
+		}
+		elseif (file_exists('./themes/'.$usr['theme'].'/'.$usr['theme'].'.css'))
+		{
+			$out['notices'] .= $L['com_schemefail'];
+			$usr['scheme'] = $usr['theme'];
+			return './themes/'.$usr['theme'].'/'.$usr['theme'].'.css';
+		}
+		elseif (file_exists('./themes/'.$usr['theme'].'/style.css'))
+		{
+			$out['notices'] .= $L['com_schemefail'];
+			$usr['scheme'] = 'style';
+			return './themes/'.$usr['theme'].'/style.css';
+		}
+	}
+
+	$out['notices'] .= $L['com_schemefail'];
+	if (file_exists('./themes/'.$cfg['defaulttheme'].'/'.$cfg['defaultscheme'].'.css'))
+	{
+		$usr['theme'] = $cfg['defaulttheme'];
+		$usr['scheme'] = $cfg['defaultscheme'];
+		return './themes/'.$cfg['defaulttheme'].'/'.$cfg['defaultscheme'].'.css';
+	}
+	elseif (file_exists('./themes/'.$cfg['defaulttheme'].'/css/'.$cfg['defaultscheme'].'.css'))
+	{
+		$usr['theme'] = $cfg['defaulttheme'];
+		$usr['scheme'] = $cfg['defaultscheme'];
+		return './themes/'.$cfg['defaulttheme'].'/css/'.$cfg['defaultscheme'].'.css';
+	}
+	else
+	{
+		return false;
+	}
 }
 
 /**
@@ -2184,19 +2229,19 @@ function sed_skinfile($base, $plug = false)
 
 	if ($plug === true)
 	{
-		$scan_prefix[] = './skins/'.$usr['skin'].'/plugins/';
-		if ($usr['skin'] != $cfg['defaultskin'])
+		$scan_prefix[] = './themes/'.$usr['theme'].'/plugins/';
+		if ($usr['theme'] != $cfg['defaulttheme'])
 		{
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/plugins/';
+			$scan_prefix[] = './themes/'.$cfg['defaulttheme'].'/plugins/';
 		}
 		$scan_prefix[] = $cfg['plugins_dir'].'/'.$basename.'/tpl/';
 	}
 	else
 	{
-		$scan_prefix[] = './skins/'.$usr['skin'].'/'.$basename.'/';
-		if ($usr['skin'] != $cfg['defaultskin'])
+		$scan_prefix[] = './themes/'.$usr['theme'].'/'.$basename.'/';
+		if ($usr['theme'] != $cfg['defaulttheme'])
 		{
-			$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/'.$basename.'/';
+			$scan_prefix[] = './themes/'.$cfg['defaulttheme'].'/'.$basename.'/';
 		}
 		if ((defined('SED_ADMIN') && $plug !== 'module'
 			|| defined('SED_MESSAGE') && $_SESSION['s_run_admin']))
@@ -2212,98 +2257,28 @@ function sed_skinfile($base, $plug = false)
 			$scan_prefix[] = $cfg['modules_dir'].'/'.$basename.'/tpl/';
 		}
 	}
-	$scan_prefix[] = './skins/'.$usr['skin'].'/';
-	if ($usr['skin'] != $cfg['defaultskin'])
+	$scan_prefix[] = './themes/'.$usr['theme'].'/';
+	if ($usr['theme'] != $cfg['defaulttheme'])
 	{
-		$scan_prefix[] = './skins/'.$cfg['defaultskin'].'/';
+		$scan_prefix[] = './themes/'.$cfg['defaulttheme'].'/';
 	}
 
 	$base_depth = count($base);
 	for ($i = $base_depth; $i > 0; $i--)
 	{
 		$levels = array_slice($base, 0, $i);
-		$skinfile = implode('.', $levels).'.tpl';
+		$themefile = implode('.', $levels).'.tpl';
 		foreach ($scan_prefix as $pfx)
 		{
-			if (file_exists($pfx.$skinfile))
+			if (file_exists($pfx.$themefile))
 			{
-				return $pfx.$skinfile;
+				return $pfx.$themefile;
 			}
 		}
 	}
 
-//	throw new Exception('Template file <em>'.implode('.', $base).'.tpl</em> was not found. Please check your skin.');
+//	throw new Exception('Template file <em>'.implode('.', $base).'.tpl</em> was not found. Please check your theme.');
 	return '';
-}
-
-/**
- * Tries to detect and fetch a user theme or returns FALSE on error.
- *
- * @global array $usr User object
- * @global array $cfg Configuration
- * @global array $out Output vars
- * @return mixed
- */
-function sed_themefile()
-{
-	global $usr, $cfg, $out;
-
-	if (file_exists('./skins/'.$usr['skin'].'/'.$usr['theme'].'.css'))
-	{
-		return './skins/'.$usr['skin'].'/'.$usr['theme'].'.css';
-	}
-	elseif (file_exists('./skins/'.$usr['skin'].'/css/'))
-	{
-		if (file_exists('./skins/'.$usr['skin'].'/css/'.$usr['theme'].'.css'))
-		{
-			return './skins/'.$usr['skin'].'/css/'.$usr['theme'].'.css';
-		}
-		elseif (file_exists('./skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css'))
-		{
-			$out['notices'] .= $L['com_themefail'];
-			$usr['theme'] = $cfg['defaulttheme'];
-			return './skins/'.$usr['skin'].'/css/'.$cfg['defaulttheme'].'.css';
-		}
-	}
-	elseif (file_exists('./skins/'.$usr['skin']))
-	{
-		if (file_exists('./skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css'))
-		{
-			$out['notices'] .= $L['com_themefail'];
-			$usr['theme'] = $cfg['defaulttheme'];
-			return './skins/'.$usr['skin'].'/'.$cfg['defaulttheme'].'.css';
-		}
-		elseif (file_exists('./skins/'.$usr['skin'].'/'.$usr['skin'].'.css'))
-		{
-			$out['notices'] .= $L['com_themefail'];
-			$usr['theme'] = $usr['skin'];
-			return './skins/'.$usr['skin'].'/'.$usr['skin'].'.css';
-		}
-		elseif (file_exists('./skins/'.$usr['skin'].'/style.css'))
-		{
-			$out['notices'] .= $L['com_themefail'];
-			$usr['theme'] = 'style';
-			return './skins/'.$usr['skin'].'/style.css';
-		}
-	}
-
-	$out['notices'] .= $L['com_themefail'];
-	if (file_exists('./skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css'))
-	{
-		$usr['skin'] = $cfg['defaultskin'];
-		$usr['theme'] = $cfg['defaulttheme'];
-		return './skins/'.$cfg['defaultskin'].'/'.$cfg['defaulttheme'].'.css';
-	}
-	elseif (file_exists('./skins/'.$cfg['defaultskin'].'/css/'.$cfg['defaulttheme'].'.css'))
-	{
-		$usr['skin'] = $cfg['defaultskin'];
-		$usr['theme'] = $cfg['defaulttheme'];
-		return './skins/'.$cfg['defaultskin'].'/css/'.$cfg['defaulttheme'].'.css';
-	}
-	else
-	{
-		return false;
-	}
 }
 
 /*

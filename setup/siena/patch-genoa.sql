@@ -467,3 +467,10 @@ DELETE FROM `sed_config` WHERE `config_owner` = 'core' AND `config_cat` = 'skin'
 
 /* r1326 Enable Users display for Guests by default */
 UPDATE `sed_auth` SET auth_rights = 1 WHERE auth_groupid = 1 AND auth_code = 'users' AND auth_option = 'a';
+
+/* r1329 Skins => Tehemes, Themes => Color Schemes */
+ALTER TABLE `sed_users` CHANGE COLUMN `user_theme` `user_scheme` varchar(32) collate utf8_unicode_ci NOT NULL default '';
+ALTER TABLE `sed_users` CHANGE COLUMN `user_skin` `user_theme` varchar(32) collate utf8_unicode_ci NOT NULL default '';
+
+UPDATE `sed_config` SET `config_cat` = 'theme' WHERE `config_cat` = 'skin';
+UPDATE `sed_config` SET `config_name` = 'forcedefaulttheme' WHERE `config_name` = 'forcedefaultskin';

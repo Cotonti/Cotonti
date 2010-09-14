@@ -91,8 +91,8 @@ sed_require_lang('admin', 'core');
 sed_require_rc('install');
 
 // Various Generic Vars needed to operate as Normal
-$skin = $cfg['defaultskin'];
 $theme = $cfg['defaulttheme'];
+$scheme = $cfg['defaultscheme'];
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $file['config'] = './datas/config.php';
 $file['config_sample'] = './datas/config-sample.php';

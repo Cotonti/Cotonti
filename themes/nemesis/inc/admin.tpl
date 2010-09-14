@@ -5,6 +5,6 @@
 		<li><a href="users.php">{PHP.L.Users}</a></li>
 		<li><a href="users.php?m=profile">{PHP.L.Profile}</a></li>
 		<li><a href="index.php?z=pfs">{PHP.L.PFS}</a></li>
-		<li><a href="index.php?e=whosonline">{PHP.skinlang.index.Online}</a></li>
+		<li><a href="index.php?e=whosonline">{PHP.themelang.index.Online}</a></li>
 	</ul>
 </div>

@@ -12,7 +12,7 @@
 defined('SED_CODE') or die('Wrong URL.');
 
 /**
- * Put your skin-specific language strings here
+ * Put your theme-specific language strings here
  */
 
 

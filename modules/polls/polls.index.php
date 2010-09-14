@@ -24,8 +24,8 @@ if ($cfg['module']['polls']['maxpolls'] > 0)
 
 	sed_poll_vote();
 
-	$skin = sed_skinfile(array('polls', 'index'), false);
-	$indexpolls = new XTemplate($skin);
+	$theme = sed_skinfile(array('polls', 'index'), false);
+	$indexpolls = new XTemplate($theme);
 
 	$sqlmode = ($cfg['module']['polls']['mode'] == 'Recent polls') ? 'poll_creationdate DESC' :'RAND()';
 	$res = 0;

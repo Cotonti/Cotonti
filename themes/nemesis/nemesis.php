@@ -1,12 +1,13 @@
 <?php
 /* ====================
-[BEGIN_COT_SKIN]
+[BEGIN_COT_THEME]
 Name=Nemesis ver. 1.0
-[END_COT_SKIN]
+Schemes=default:Default
+[END_COT_THEME]
 ==================== */
 
 /**
- * Custom skin
+ * Custom theme
  *
  * @package Cotonti
  * @version 0.7.0
@@ -16,10 +17,5 @@ Name=Nemesis ver. 1.0
  */
 
 defined('SED_CODE') or die('Wrong URL');
-
-// List of supported themes
-$skin_themes = array(
-	'default' => 'Default'
-);
 
 ?>

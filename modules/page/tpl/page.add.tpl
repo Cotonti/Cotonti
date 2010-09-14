@@ -56,20 +56,20 @@
 						</td>
 					</tr>			
 					<tr>
-						<td>{PHP.skinlang.pageadd.File}:<br />
-						{PHP.skinlang.pageadd.Filehint}</td>
+						<td>{PHP.themelang.pageadd.File}:<br />
+						{PHP.themelang.pageadd.Filehint}</td>
 						<td>{PAGEADD_FORM_FILE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.URL}:<br />{PHP.skinlang.pageadd.URLhint}</td>
+						<td>{PHP.L.URL}:<br />{PHP.themelang.pageadd.URLhint}</td>
 						<td>{PAGEADD_FORM_URL}<br />{PAGEADD_FORM_PFS_URL_USER} &nbsp; {PAGEADD_FORM_PFS_URL_SITE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.pageadd.Filesize}:<br />{PHP.skinlang.pageadd.Filesizehint}</td>
+						<td>{PHP.themelang.pageadd.Filesize}:<br />{PHP.themelang.pageadd.Filesizehint}</td>
 						<td>{PAGEADD_FORM_SIZE}</td>
 					</tr>
 					<tr>
-						<td colspan="2">{PHP.skinlang.pageadd.Formhint}</td>
+						<td colspan="2">{PHP.themelang.pageadd.Formhint}</td>
 					</tr>
 					<tr>
 						<td colspan="2" class="valid">

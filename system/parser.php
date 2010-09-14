@@ -20,7 +20,7 @@ if (file_exists($cfg['system_dir'] . '/parser.custom.php'))
  * Registers a new bbcode in database.
  * In 'callback' mode $replacement is normal PHP function body (without declaration) which
  * takes $input array of matches as parameter and must return a replacement string. These
- * variables are also imported as globals in callback function: $cfg, $sys, $usr, $L, $skin, $sed_groups
+ * variables are also imported as globals in callback function: $cfg, $sys, $usr, $L, $theme, $sed_groups
  *
  * @global $db_bbcode;
  * @param string $name BBcode name
@@ -252,7 +252,7 @@ function sed_bbcode_parse($text, $post = false)
 			break;
 
 			case 'callback':
-				$code = 'global $cfg, $sys, $usr, $L, $skin, $sed_groups;'.$bbcode['replacement'];
+				$code = 'global $cfg, $sys, $usr, $L, $theme, $sed_groups;'.$bbcode['replacement'];
 				$text = preg_replace_callback('`'.$bbcode['pattern'].'`mis', create_function('$input', $code), $text);
 			break;
 		}

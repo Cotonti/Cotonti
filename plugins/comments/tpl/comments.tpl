@@ -56,7 +56,7 @@
 <!-- BEGIN: COMMENTS_ROW -->
 <span class="title">
 <a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}">{PHP.R.icon_comments} {COMMENTS_ROW_ORDER}.</a>
- &nbsp; {PHP.skinlang.comments.Postedby} {COMMENTS_ROW_AUTHOR}</span> &nbsp; {COMMENTS_ROW_DATE} &nbsp; {COMMENTS_ROW_ADMIN} &nbsp; {COMMENTS_ROW_EDIT}
+ &nbsp; {PHP.themelang.comments.Postedby} {COMMENTS_ROW_AUTHOR}</span> &nbsp; {COMMENTS_ROW_DATE} &nbsp; {COMMENTS_ROW_ADMIN} &nbsp; {COMMENTS_ROW_EDIT}
 
 <p>{COMMENTS_ROW_TEXT}</p>
 
@@ -78,7 +78,7 @@
 
 <!-- BEGIN: COMMENTS_NEWCOMMENT -->
 <form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
-	<h4>{PHP.skinlang.comments.Comment}:</h4>
+	<h4>{PHP.themelang.comments.Comment}:</h4>
 	<div style="width:100%;">{COMMENTS_FORM_TEXT}<br />{COMMENTS_FORM_HINT}</div>
 	<p><input type="submit" value="{PHP.L.Submit}" /></p>
 </form>

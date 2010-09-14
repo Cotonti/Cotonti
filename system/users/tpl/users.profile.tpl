@@ -38,24 +38,24 @@
 		//]]>
 		</script>
 							<div>
-								{PHP.skinlang.usersprofile.Emailpassword}:<br />{USERS_PROFILE_EMAILPASS}
+								{PHP.themelang.usersprofile.Emailpassword}:<br />{USERS_PROFILE_EMAILPASS}
 							</div>
-							<div class="small" id="emailnotes">{PHP.skinlang.usersprofile.Emailnotes}</div>
+							<div class="small" id="emailnotes">{PHP.themelang.usersprofile.Emailnotes}</div>
 						<!-- END: USERS_PROFILE_EMAILPROTECTION -->
 						</td>
 					</tr>
 					<!-- END: USERS_PROFILE_EMAILCHANGE -->
 					<tr>
-						<td>{PHP.skinlang.usersprofile.Hidetheemail}:</td>
+						<td>{PHP.themelang.usersprofile.Hidetheemail}:</td>
 						<td>{USERS_PROFILE_HIDEEMAIL}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersprofile.PMnotify}:</td>
-						<td>{USERS_PROFILE_PMNOTIFY}<br />{PHP.skinlang.usersprofile.PMnotifyhint}</td>
+						<td>{PHP.themelang.usersprofile.PMnotify}:</td>
+						<td>{USERS_PROFILE_PMNOTIFY}<br />{PHP.themelang.usersprofile.PMnotifyhint}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Skin}:</td>
-						<td>{USERS_PROFILE_SKIN}{USERS_PROFILE_THEME}</td>
+						<td>{PHP.L.Theme}:</td>
+						<td>{USERS_PROFILE_THEME}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Language}:</td>
@@ -92,13 +92,13 @@
 					</tr>
 					<tr>
 						<td>
-							{PHP.skinlang.usersprofile.Newpassword}:<br />{PHP.skinlang.usersprofile.Newpasswordhint1}
+							{PHP.themelang.usersprofile.Newpassword}:<br />{PHP.themelang.usersprofile.Newpasswordhint1}
 						</td>
 						<td>
 							{USERS_PROFILE_OLDPASS}
-							<p class="small">{PHP.skinlang.usersprofile.Oldpasswordhint}</p>
+							<p class="small">{PHP.themelang.usersprofile.Oldpasswordhint}</p>
 							{USERS_PROFILE_NEWPASS1} {USERS_PROFILE_NEWPASS2}
-							<p class="small">{PHP.skinlang.usersprofile.Newpasswordhint2}</p>
+							<p class="small">{PHP.themelang.usersprofile.Newpasswordhint2}</p>
 						</td>
 					</tr>
 					<tr>
