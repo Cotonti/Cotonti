@@ -16,19 +16,19 @@ http://www.neocrome.net
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-$id = sed_import('id','G','INT');
-$o = sed_import('o','G','ALP');
-$f = sed_import('f','G','INT');
-$v = sed_sql_prep(sed_import('v','G','TXT'));
-$c1 = sed_import('c1','G','ALP');
-$c2 = sed_import('c2','G','ALP');
-$userid = sed_import('userid','G','INT');
+$id = cot_import('id','G','INT');
+$o = cot_import('o','G','ALP');
+$f = cot_import('f','G','INT');
+$v = cot_db_prep(cot_import('v','G','TXT'));
+$c1 = cot_import('c1','G','ALP');
+$c2 = cot_import('c2','G','ALP');
+$userid = cot_import('userid','G','INT');
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
-// sed_block($usr['auth_read']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
+// cot_block($usr['auth_read']);
 
 $pos = mb_strlen(stristr($v, '-'));
 $fid = mb_substr($v, 0, -$pos);
@@ -39,30 +39,30 @@ $f_extension = strtolower(mb_substr($imgpath, $dotpos,4));
 
 if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported) )
 {
-	$pfs_header1 = sed_rc('code_pfs_header', array('metas' => sed_htmlmetas()));
+	$pfs_header1 = cot_rc('code_pfs_header', array('metas' => cot_htmlmetas()));
 	$pfs_header2 = $R['code_pfs_header_end'];
 	$pfs_footer = $R['code_pfs_footer'];
 	$pfs_img = "<img src=\"".$imgpath."\" alt=\"\" />";
 	$pfs_imgsize = @getimagesize($imgpath);
 
-	$sql = sed_sql_query("SELECT p.*, u.user_name FROM $db_pfs p, $db_users u WHERE p.pfs_file='$v' AND p.pfs_userid=u.user_id LIMIT 1");
-	if(!$row = sed_sql_fetcharray($sql))
+	$sql = cot_db_query("SELECT p.*, u.user_name FROM $db_pfs p, $db_users u WHERE p.pfs_file='$v' AND p.pfs_userid=u.user_id LIMIT 1");
+	if(!$row = cot_db_fetcharray($sql))
 	{
 		$pfs_owner = $L['SFS'];
 	}
 	else
 	{
-		$pfs_owner = sed_build_user($row['pfs_userid'], htmlspecialchars($row['user_name']));
+		$pfs_owner = cot_build_user($row['pfs_userid'], htmlspecialchars($row['user_name']));
 	}
 
-	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
+	$sql = cot_db_query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
 }
 else
-{ sed_die(); }
+{ cot_die(); }
 
 /* ============= */
 
-$t = new XTemplate(sed_skinfile('pfs.view'));
+$t = new XTemplate(cot_skinfile('pfs.view'));
 
 $t->assign(array(
 	'PFSVIEW_HEADER1' => $pfs_header1,

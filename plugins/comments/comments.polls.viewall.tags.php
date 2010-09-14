@@ -16,12 +16,12 @@ Tags=polls.tpl:{POLLS_COMMENTS}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
 $t->assign(array(
-	'POLLS_COMMENTS' => sed_comments_link('polls', 'id='.$row['poll_id'], 'polls', $row['poll_id'])
+	'POLLS_COMMENTS' => cot_comments_link('polls', 'id='.$row['poll_id'], 'polls', $row['poll_id'])
 ));
 
 ?>

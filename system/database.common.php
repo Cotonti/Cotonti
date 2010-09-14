@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Returns number of rows in a table
@@ -18,12 +18,12 @@ defined('SED_CODE') or die('Wrong URL');
  * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_rowcount($table, $conn = null)
+function cot_db_rowcount($table, $conn = null)
 {
-	global $sed_dbc;
-	$conn = is_null($conn) ? $sed_dbc : $conn;
-	$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $table", $conn);
-	return (int) sed_sql_result($sqltmp);
+	global $cot_dbc;
+	$conn = is_null($conn) ? $cot_dbc : $conn;
+	$sqltmp = cot_db_query("SELECT COUNT(*) FROM $table", $conn);
+	return (int) cot_db_result($sqltmp);
 }
 
 /**
@@ -33,10 +33,10 @@ function sed_sql_rowcount($table, $conn = null)
  * @param resource $conn Custom connection handle
  * @return string Error message if an error occurs or empty string on success
  */
-function sed_sql_runscript($script, $conn = null)
+function cot_db_runscript($script, $conn = null)
 {
-	global $sed_dbc, $db_x;
-	$conn = is_null($conn) ? $sed_dbc : $conn;
+	global $cot_dbc, $db_x;
+	$conn = is_null($conn) ? $cot_dbc : $conn;
 
 	$error = '';
 	// Remove comments
@@ -49,14 +49,14 @@ function sed_sql_runscript($script, $conn = null)
 		$query = trim($query);
 		if (!empty($query))
 		{
-			if ($db_x != 'sed_')
+			if ($db_x != 'cot_')
 			{
-				$query = str_replace('`sed_', '`'.$db_x, $query);
+				$query = str_replace('`cot_', '`'.$db_x, $query);
 			}
-			$result = @sed_sql_query($query, $conn);
+			$result = @cot_db_query($query, $conn);
 			if (!$result)
 			{
-				return sed_sql_error($conn) . '<br />' . htmlspecialchars($query) . '<hr />';
+				return cot_db_error($conn) . '<br />' . htmlspecialchars($query) . '<hr />';
 			}
 		}
 	}
@@ -79,10 +79,10 @@ function sed_sql_runscript($script, $conn = null)
  * @param resource $conn Custom connection handle
  * @return int The number of affected records
  */
-function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
+function cot_db_insert($table_name, $data, $prefix = '', $conn = null)
 {
-	global $sed_dbc;
-	$conn = is_null($conn) ? $sed_dbc : $conn;
+	global $cot_dbc;
+	$conn = is_null($conn) ? $cot_dbc : $conn;
 	if (!is_array($data))
 	{
 		return 0;
@@ -131,7 +131,7 @@ function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
 				}
 				else
 				{
-					$vals .= "'".sed_sql_prep($val, $conn)."'";
+					$vals .= "'".cot_db_prep($val, $conn)."'";
 				}
 				$j++;
 			}
@@ -141,8 +141,8 @@ function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
 	}
 	if (!empty($keys) && !empty($vals))
 	{
-		sed_sql_query("INSERT INTO `$table_name` ($keys) VALUES $vals", $conn);
-		return sed_sql_affectedrows($conn);
+		cot_db_query("INSERT INTO `$table_name` ($keys) VALUES $vals", $conn);
+		return cot_db_affectedrows($conn);
 	}
 	return 0;
 }
@@ -155,19 +155,19 @@ function sed_sql_insert($table_name, $data, $prefix = '', $conn = null)
  * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_delete($table_name, $condition = '', $conn = null)
+function cot_db_delete($table_name, $condition = '', $conn = null)
 {
-	global $sed_dbc;
-	$conn = is_null($conn) ? $sed_dbc : $conn;
+	global $cot_dbc;
+	$conn = is_null($conn) ? $cot_dbc : $conn;
 	if (empty($condition))
 	{
-		sed_sql_query("DELETE FROM $table_name", $conn);
+		cot_db_query("DELETE FROM $table_name", $conn);
 	}
 	else
 	{
-		sed_sql_query("DELETE FROM $table_name WHERE $condition", $conn);
+		cot_db_query("DELETE FROM $table_name WHERE $condition", $conn);
 	}
-	return sed_sql_affectedrows($conn);
+	return cot_db_affectedrows($conn);
 }
 
 /**
@@ -186,10 +186,10 @@ function sed_sql_delete($table_name, $condition = '', $conn = null)
  * @param resource $conn Custom connection handle
  * @return int The number of affected records
  */
-function sed_sql_update($table_name, $data, $condition, $prefix = '', $update_null = false, $conn = null)
+function cot_db_update($table_name, $data, $condition, $prefix = '', $update_null = false, $conn = null)
 {
-	global $sed_dbc;
-	$conn = is_null($conn) ? $sed_dbc : $conn;
+	global $cot_dbc;
+	$conn = is_null($conn) ? $cot_dbc : $conn;
 	if(!is_array($data))
 	{
 		return 0;
@@ -217,15 +217,15 @@ function sed_sql_update($table_name, $data, $condition, $prefix = '', $update_nu
 		}
 		else
 		{
-			$upd .= "'".sed_sql_prep($val, $conn)."',";
+			$upd .= "'".cot_db_prep($val, $conn)."',";
 		}
 
 	}
 	if (!empty($upd))
 	{
 		$upd = mb_substr($upd, 0, -1);
-		sed_sql_query("UPDATE $table_name SET $upd $condition", $conn);
-		return sed_sql_affectedrows($conn);
+		cot_db_query("UPDATE $table_name SET $upd $condition", $conn);
+		return cot_db_affectedrows($conn);
 	}
 	return 0;
 }

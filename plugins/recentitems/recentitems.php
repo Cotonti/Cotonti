@@ -15,12 +15,12 @@ Hooks=standalone
  * @license BSD
  */
 
-defined('SED_CODE') or die("Wrong URL.");
+defined('COT_CODE') or die("Wrong URL.");
 
-$days = sed_import('days', 'G', 'INT');
-$d = sed_import('d', 'G', 'INT');
+$days = cot_import('days', 'G', 'INT');
+$d = cot_import('d', 'G', 'INT');
 if (empty($d)) $d = '0';
-$mode = sed_import('mode', 'G', 'TXT');
+$mode = cot_import('mode', 'G', 'TXT');
 
 if ($days == 0)
 {
@@ -39,27 +39,27 @@ if ($days > 0)
 	$timeback = $sys['now_offset'] - $timeminus;
 }
 
-sed_require('users');
-sed_require('recentitems', true);
+cot_require('users');
+cot_require('recentitems', true);
 $totalrecent[] = 0;
 if ($cfg['plugin']['recentitems']['newpages'] && $cfg['module']['page'] && !$cfg['disable_page'] && (empty($mode) || $mode == 'pages'))
 {
-	sed_require('page');
-	$res = sed_build_recentpages('recentitems.pages', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $pagetitlelimit, $cfg['plugin']['recentitems']['newpagestext'], $cfg['plugin']['recentitems']['rightscan']);
+	cot_require('page');
+	$res = cot_build_recentpages('recentitems.pages', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $pagetitlelimit, $cfg['plugin']['recentitems']['newpagestext'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("RECENT_PAGES", $res);
 }
 
 if ($cfg['plugin']['recentitems']['newforums'] && $cfg['module']['forums'] && !$cfg['disable_forums'] && (empty($mode) || $mode == 'forums'))
 {
-	sed_require('forums');
-	$res = sed_build_recentforums('recentitems.forums', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $forumtitlelimit, $cfg['plugin']['recentitems']['rightscan']);
+	cot_require('forums');
+	$res = cot_build_recentforums('recentitems.forums', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $forumtitlelimit, $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("RECENT_FORUMS", $res);
 }
 
 if ($cfg['plugin']['recentitems']['newadditional'] && ($mode  != 'pages' || $mode != 'forums'))
 {
 	/* === Hook === */
-	foreach (sed_getextplugins('recentitems.tags') as $pl)
+	foreach (cot_getextplugins('recentitems.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -69,7 +69,7 @@ if ($cfg['plugin']['recentitems']['newadditional'] && ($mode  != 'pages' || $mod
 $totalpages = max($totalrecent);
 $days =($days > 0) ? "&amp;days=".$days : "";
 $mode=(!empty($mode)) ? "&amp;mode=".$mode : "";
-$pagenav = sed_pagenav('plug', 'e=recentitems'.$days.$mode, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage']);
+$pagenav = cot_pagenav('plug', 'e=recentitems'.$days.$mode, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage']);
 
 $t->assign(array(
 	"PAGE_PAGENAV" => $pagenav['main'],

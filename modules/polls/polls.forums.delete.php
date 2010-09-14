@@ -15,8 +15,8 @@ Hooks=forums.posts.emptytopicdel, forums.functions.prunetopics
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_poll_delete($q, 'forum');
+cot_poll_delete($q, 'forum');
 
 ?>

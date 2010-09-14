@@ -9,22 +9,22 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
-sed_block($usr['auth_read']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
+cot_block($usr['auth_read']);
 
-$t = new XTemplate(sed_skinfile('admin.referers'));
+$t = new XTemplate(cot_skinfile('admin.referers'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=referers'), $L['Referers']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=referers'), $L['Referers']);
 $adminhelp = $L['adm_help_referers'];
 
-$d = sed_import('d', 'G', 'INT');
+$d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.referers.first') as $pl)
+foreach (cot_getextplugins('admin.referers.first') as $pl)
 {
 	include $pl;
 }
@@ -32,21 +32,21 @@ foreach (sed_getextplugins('admin.referers.first') as $pl)
 
 if($a == 'prune' && $usr['isadmin'])
 {
-	sed_sql_query("TRUNCATE $db_referers") ? sed_message('adm_ref_prune') : sed_message('Error');
+	cot_db_query("TRUNCATE $db_referers") ? cot_message('adm_ref_prune') : cot_message('Error');
 }
 elseif($a == 'prunelowhits' && $usr['isadmin'])
 {
-	sed_sql_delete($db_referers, 'ref_count < 6') ? sed_message('adm_ref_prunelowhits') : sed_message('Error');
+	cot_db_delete($db_referers, 'ref_count < 6') ? cot_message('adm_ref_prunelowhits') : cot_message('Error');
 }
 
-$totalitems = sed_sql_rowcount($db_referers);
-$pagenav = sed_pagenav('admin', 'm=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$totalitems = cot_db_rowcount($db_referers);
+$pagenav = cot_pagenav('admin', 'm=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = sed_sql_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = cot_db_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
-if(sed_sql_numrows($sql) > 0)
+if(cot_db_numrows($sql) > 0)
 {
-	while($row = sed_sql_fetcharray($sql))
+	while($row = cot_db_fetcharray($sql))
 	{
 		preg_match("#//([^/]+)/#", $row['ref_url'], $a);
 		$host = preg_replace('#^www\.#i', '', $a[1]);
@@ -55,7 +55,7 @@ if(sed_sql_numrows($sql) > 0)
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
-	$extp = sed_getextplugins('admin.referers.loop');
+	$extp = cot_getextplugins('admin.referers.loop');
 	/* ===== */
 	foreach($referers as $referer => $url)
 	{
@@ -65,9 +65,9 @@ if(sed_sql_numrows($sql) > 0)
 		foreach($url as $uri => $count)
 		{
 			$t->assign(array(
-				'ADMIN_REFERERS_URI' => htmlspecialchars(sed_cutstring($uri, 128)),
+				'ADMIN_REFERERS_URI' => htmlspecialchars(cot_cutstring($uri, 128)),
 				'ADMIN_REFERERS_COUNT' => $count,
-				'ADMIN_REFERERS_ODDEVEN' => sed_build_oddeven($ii)
+				'ADMIN_REFERERS_ODDEVEN' => cot_build_oddeven($ii)
 			));
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl)
@@ -88,8 +88,8 @@ else
 }
 
 $t->assign(array(
-	'ADMIN_REFERERS_URL_PRUNE' => sed_url('admin', 'm=referers&a=prune&'.sed_xg()),
-	'ADMIN_REFERERS_URL_PRUNELOWHITS' => sed_url('admin', 'm=referers&a=prunelowhits&'.sed_xg()),
+	'ADMIN_REFERERS_URL_PRUNE' => cot_url('admin', 'm=referers&a=prune&'.cot_xg()),
+	'ADMIN_REFERERS_URL_PRUNELOWHITS' => cot_url('admin', 'm=referers&a=prunelowhits&'.cot_xg()),
 	'ADMIN_REFERERS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_REFERERS_PAGNAV' => $pagenav['main'],
 	'ADMIN_REFERERS_PAGINATION_NEXT' => $pagenav['next'],
@@ -97,17 +97,17 @@ $t->assign(array(
 	'ADMIN_REFERERS_ON_PAGE' => $ii
 ));
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.referers.tags') as $pl)
+foreach (cot_getextplugins('admin.referers.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 $L['poll'] = 'Опрос';	// New in 0.7.0
 $L['polls_alreadyvoted'] = 'Вы уже проголосовали в этом опросе';

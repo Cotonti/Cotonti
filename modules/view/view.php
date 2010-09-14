@@ -15,13 +15,13 @@ Hooks=module
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 // Environment setup
-define('SED_VIEW', TRUE);
+define('COT_VIEW', TRUE);
 $location = 'Views';
 
-$v = sed_import('v', 'G', 'TXT');
+$v = cot_import('v', 'G', 'TXT');
 
 if (mb_strpos($v, '.') !== false || mb_strpos($v, '/') !== false)
 {
@@ -52,7 +52,7 @@ elseif (file_exists($incl_html))
 }
 else
 {
-	sed_die();
+	cot_die();
 }
 
 if (preg_match('@<head>(.*?)</head>@si', $vd, $ext_head) == 1)
@@ -67,9 +67,9 @@ if (preg_match('@<body[^>]*?>(.*?)</body>@si', $vd, $ext_body) == 1)
 
 $vt = '&nbsp;';
 
-if (mb_stripos($ext_head, '<meta name="sed_title"') !== false)
+if (mb_stripos($ext_head, '<meta name="cot_title"') !== false)
 {
-	$vt = mb_stristr($ext_head, '<meta name="sed_title"');
+	$vt = mb_stristr($ext_head, '<meta name="cot_title"');
 	$vt = mb_stristr($vt, 'content="');
 	$vt = mb_substr($vt, 9);
 	$tag_title_end = mb_strpos($vt, '">');
@@ -97,10 +97,10 @@ if (preg_match_all('@<link[^>](.*?)>@si', $ext_head, $ext_links) > 0)
 	}
 }
 
-sed_online_update();
+cot_online_update();
 
 require_once $cfg['system_dir'].'/header.php';
-$t = new XTemplate(sed_skinfile('plugin'));
+$t = new XTemplate(cot_skinfile('plugin'));
 
 $t->assign(array(
 	"PLUGIN_TITLE" => $vt,

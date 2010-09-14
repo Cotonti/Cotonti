@@ -40,6 +40,6 @@ extrafilters=09:radio::1:Show extrafilters on main search page
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 ?>

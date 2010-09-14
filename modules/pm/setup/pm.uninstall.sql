@@ -2,4 +2,4 @@
  * PM DB uninstall
  */
 
-DROP TABLE IF EXISTS `sed_pm`;
+DROP TABLE IF EXISTS `cot_pm`;

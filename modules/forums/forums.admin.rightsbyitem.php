@@ -15,11 +15,11 @@ Hooks=admin.rightsbyitem.case
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-sed_require('forums');
+cot_require('forums');
 
-$forum = sed_forum_info($io);
+$forum = cot_forum_info($io);
 $title = ' : '.htmlspecialchars($forum['fs_title'])." (#".$io.")";
 
 ?>

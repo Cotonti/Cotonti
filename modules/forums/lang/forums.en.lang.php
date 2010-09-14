@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 $L['for_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';	// 0.0.6
 $L['for_keepmovedlink'] = 'Keep a Moved Topic link'; // 0.6.6

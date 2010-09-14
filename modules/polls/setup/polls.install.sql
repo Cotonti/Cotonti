@@ -3,7 +3,7 @@
  */
 
 -- Polls
-CREATE TABLE IF NOT EXISTS `sed_polls` (
+CREATE TABLE IF NOT EXISTS `cot_polls` (
   `poll_id` mediumint(8) NOT NULL auto_increment,
   `poll_type` varchar(10) collate utf8_unicode_ci NOT NULL default 'index',
   `poll_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `sed_polls` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- Options
-CREATE TABLE IF NOT EXISTS `sed_polls_options` (
+CREATE TABLE IF NOT EXISTS `cot_polls_options` (
   `po_id` mediumint(8) unsigned NOT NULL auto_increment,
   `po_pollid` mediumint(8) unsigned NOT NULL default '0',
   `po_text` varchar(128) collate utf8_unicode_ci NOT NULL default '',
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `sed_polls_options` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- Votes
-CREATE TABLE IF NOT EXISTS `sed_polls_voters` (
+CREATE TABLE IF NOT EXISTS `cot_polls_voters` (
   `pv_id` mediumint(8) unsigned NOT NULL auto_increment,
   `pv_pollid` mediumint(8) NOT NULL default '0',
   `pv_userid` mediumint(8) NOT NULL default '0',

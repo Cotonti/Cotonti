@@ -15,17 +15,17 @@ Hooks=module
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_dieifdisabled($cfg['disable_forums']);
+cot_dieifdisabled($cfg['disable_forums']);
 
 // Environment setup
-define('SED_FORUMS', TRUE);
+define('COT_FORUMS', TRUE);
 $location = 'Forums';
 
 // Additional requirements
-sed_require_api('extrafields');
-sed_require('users');
+cot_require_api('extrafields');
+cot_require('users');
 
 // Mode choice
 if (!in_array($m, array('topics', 'posts', 'editpost', 'newtopic')))
@@ -33,5 +33,5 @@ if (!in_array($m, array('topics', 'posts', 'editpost', 'newtopic')))
 	$m = 'sections';
 }
 
-include sed_incfile($z, $m);
+include cot_incfile($z, $m);
 ?>

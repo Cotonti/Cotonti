@@ -15,13 +15,13 @@ Hooks=page.main
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages'])
 {
-	sed_require('tags', true);
+	cot_require('tags', true);
 	$item_id = $pag['page_id'];
-	$tags = sed_tag_list($item_id);
+	$tags = cot_tag_list($item_id);
 	$tag_keywords = implode(', ', $tags);
 	$out['keywords'] = $tag_keywords;
 }

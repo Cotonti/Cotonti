@@ -9,18 +9,18 @@
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if (file_exists($cfg['system_dir'] . '/parser.custom.php'))
 {
-	sed_require_api('parser.custom');
+	cot_require_api('parser.custom');
 }
 
 /**
  * Registers a new bbcode in database.
  * In 'callback' mode $replacement is normal PHP function body (without declaration) which
  * takes $input array of matches as parameter and must return a replacement string. These
- * variables are also imported as globals in callback function: $cfg, $sys, $usr, $L, $theme, $sed_groups
+ * variables are also imported as globals in callback function: $cfg, $sys, $usr, $L, $theme, $cot_groups
  *
  * @global $db_bbcode;
  * @param string $name BBcode name
@@ -33,7 +33,7 @@ if (file_exists($cfg['system_dir'] . '/parser.custom.php'))
  * @param bool $postrender Whether this bbcode must be applied on a pre-rendered HTML cache.
  * @return bool
  */
-function sed_bbcode_add($name, $mode, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
+function cot_bbcode_add($name, $mode, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
 {
 	global $db_bbcode;
 	$bbc['name'] = $name;
@@ -50,7 +50,7 @@ function sed_bbcode_add($name, $mode, $pattern, $replacement, $container = true,
 		$bbc['plug'] = $plug;
 	}
 	$bbc['postrender'] = empty($postrender) ? 0 : 1;
-	return sed_sql_insert($db_bbcode, $bbc, 'bbc_') == 1;
+	return cot_db_insert($db_bbcode, $bbc, 'bbc_') == 1;
 }
 
 /**
@@ -61,20 +61,20 @@ function sed_bbcode_add($name, $mode, $pattern, $replacement, $container = true,
  * @param string $plug Remove all bbcodes that belong to this plug
  * @return bool
  */
-function sed_bbcode_remove($id = 0, $plug = '')
+function cot_bbcode_remove($id = 0, $plug = '')
 {
 	global $db_bbcode;
 	if ($id > 0)
 	{
-		return sed_sql_delete($db_bbcode, "bbc_id = $id") == 1;
+		return cot_db_delete($db_bbcode, "bbc_id = $id") == 1;
 	}
 	elseif (!empty($plug))
 	{
-		return sed_sql_delete($db_bbcode, "bbc_plug = '".sed_sql_prep($plug)."'");
+		return cot_db_delete($db_bbcode, "bbc_plug = '".cot_db_prep($plug)."'");
 	}
 	else
 	{
-		return sed_sql_delete($db_bbcode) > 0;
+		return cot_db_delete($db_bbcode) > 0;
 	}
 }
 
@@ -93,7 +93,7 @@ function sed_bbcode_remove($id = 0, $plug = '')
  * @param bool $postrender Whether this bbcode must be applied on a pre-rendered HTML cache.
  * @return bool
  */
-function sed_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority = 128, $postrender = false)
+function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority = 128, $postrender = false)
 {
 	global $db_bbcode;
 	$bbc['enabled'] = empty($enabled) ? 0 : 1;
@@ -119,32 +119,32 @@ function sed_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
 	}
 	$bbc['container'] = empty($container) ? 0 : 1;
 	$bbc['postrender'] = empty($postrender) ? 0 : 1;
-	return sed_sql_update($db_bbcode, $bbc, "bbc_id = $id", 'bbc_') == 1;
+	return cot_db_update($db_bbcode, $bbc, "bbc_id = $id", 'bbc_') == 1;
 }
 
 /**
  * Loads bbcodes from database if they havent been already loaded.
  *
- * @global $sed_bbcodes
+ * @global $cot_bbcodes
  * @global $db_bbcode
  */
-function sed_bbcode_load()
+function cot_bbcode_load()
 {
-	global $db_bbcode, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
-	$sed_bbcodes = array();
-	$sed_bbcodes_post = array();
-	$sed_bbcode_containers = ''; // required for auto-close
+	global $db_bbcode, $cot_bbcodes, $cot_bbcodes_post, $cot_bbcode_containers;
+	$cot_bbcodes = array();
+	$cot_bbcodes_post = array();
+	$cot_bbcode_containers = ''; // required for auto-close
 	$bbc_cntr = array();
 	$i = 0;
 	$j = 0;
-	$res = sed_sql_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
-	while ($row = sed_sql_fetchassoc($res))
+	$res = cot_db_query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
+	while ($row = cot_db_fetchassoc($res))
 	{
 		if ($row['bbc_postrender'] == 1)
 		{
 			foreach ($row as $key => $val)
 			{
-				$sed_bbcodes_post[$j][str_replace('bbc_', '', $key)] = $val;
+				$cot_bbcodes_post[$j][str_replace('bbc_', '', $key)] = $val;
 			}
 			$j++;
 		}
@@ -152,49 +152,49 @@ function sed_bbcode_load()
 		{
 			foreach ($row as $key => $val)
 			{
-				$sed_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
+				$cot_bbcodes[$i][str_replace('bbc_', '', $key)] = $val;
 			}
 			$i++;
 		}
 		if ($row['bbc_container'] == 1 && !isset($bbc_cntr[$row['bbc_name']]))
 		{
-			$sed_bbcode_containers .= $row['bbc_name'].'|';
+			$cot_bbcode_containers .= $row['bbc_name'].'|';
 			$bbc_cntr[$row['bbc_name']] = 1;
 		}
 	}
-	sed_sql_freeresult($res);
-	if (!empty($sed_bbcode_containers))
+	cot_db_freeresult($res);
+	if (!empty($cot_bbcode_containers))
 	{
-		$sed_bbcode_containers = mb_substr($sed_bbcode_containers, 0, -1);
+		$cot_bbcode_containers = mb_substr($cot_bbcode_containers, 0, -1);
 	}
 }
 
 /**
  * Clears bbcode cache
  */
-function sed_bbcode_clearcache()
+function cot_bbcode_clearcache()
 {
 	global $cot_cache;
-	$cot_cache->db->remove('sed_bbcodes', 'system');
-	$cot_cache->db->remove('sed_bbcodes_post', 'system');
-	$cot_cache->db->remove('sed_bbcode_containers', 'system');
+	$cot_cache->db->remove('cot_bbcodes', 'system');
+	$cot_cache->db->remove('cot_bbcodes_post', 'system');
+	$cot_cache->db->remove('cot_bbcode_containers', 'system');
 }
 
 /**
  * Parses bbcodes in text.
  *
- * @global $sed_bbcodes
+ * @global $cot_bbcodes
  * @param string $text Text body
  * @param bool $post Post-rendering
  * @return string
  */
-function sed_bbcode_parse($text, $post = false)
+function cot_bbcode_parse($text, $post = false)
 {
-	global $cfg, $sed_bbcodes, $sed_bbcodes_post, $sed_bbcode_containers;
+	global $cfg, $cot_bbcodes, $cot_bbcodes_post, $cot_bbcode_containers;
 
 	// BB auto-close
 	$bbc = array();
-	if (!$post && preg_match_all('#\[(/)?('.$sed_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
+	if (!$post && preg_match_all('#\[(/)?('.$cot_bbcode_containers.')(=[^\]]*)?\]#i', $text, $mt, PREG_SET_ORDER))
 	{
 		$cdata = '';
 		// Count all unclosed bbcode entries
@@ -237,10 +237,10 @@ function sed_bbcode_parse($text, $post = false)
 		}
 	}
 	// Done, ready to parse bbcodes
-	$cnt = $post ? count($sed_bbcodes_post) : count($sed_bbcodes);
+	$cnt = $post ? count($cot_bbcodes_post) : count($cot_bbcodes);
 	for ($i = 0; $i < $cnt; $i++)
 	{
-		$bbcode = ($post) ? $sed_bbcodes_post[$i] : $sed_bbcodes[$i];
+		$bbcode = ($post) ? $cot_bbcodes_post[$i] : $cot_bbcodes[$i];
 		switch($bbcode['mode'])
 		{
 			case 'str':
@@ -252,7 +252,7 @@ function sed_bbcode_parse($text, $post = false)
 			break;
 
 			case 'callback':
-				$code = 'global $cfg, $sys, $usr, $L, $theme, $sed_groups;'.$bbcode['replacement'];
+				$code = 'global $cfg, $sys, $usr, $L, $theme, $cot_groups;'.$bbcode['replacement'];
 				$text = preg_replace_callback('`'.$bbcode['pattern'].'`mis', create_function('$input', $code), $text);
 			break;
 		}
@@ -267,7 +267,7 @@ function sed_bbcode_parse($text, $post = false)
  * @param string $text Source text
  * @return string
  */
-function sed_bbcode_cdata($text)
+function cot_bbcode_cdata($text)
 {
 	$res = $text;
 	//$res = preg_replace('`&(?!amp;)`i', '&amp;$1', $res);
@@ -430,7 +430,7 @@ function utf8ToUnicode(&$str)
  * @param string $text Source text
  * @return string
  */
-function sed_obfuscate($text)
+function cot_obfuscate($text)
 {
 	$enc_string = '[';
 	$ut = utf8ToUnicode($text);
@@ -440,7 +440,7 @@ function sed_obfuscate($text)
 		$enc_string .= $ut[$i].',';
 	}
 	$enc_string = substr($enc_string, 0, -1).']';
-	$name = 'a'.sed_unique(8);
+	$name = 'a'.cot_unique(8);
 	$script = '<script type="text/javascript">var '.$name.' = '.$enc_string.','.$name.'_d = ""; for (var ii = 0; ii < '.$name.'.length; ii++) { var c = '.$name.'[ii]; '.$name.'_d += String.fromCharCode(c); } document.write('.$name.'_d)</script>';
 	return $script;
 }
@@ -451,9 +451,9 @@ function sed_obfuscate($text)
  * @param array $m PCRE entry
  * @return string
  */
-function sed_obfuscate_eml($m)
+function cot_obfuscate_eml($m)
 {
-	return $m[1].sed_obfuscate('<a href="mailto:'.$m[2].'">'.$m[2].'</a>');
+	return $m[1].cot_obfuscate('<a href="mailto:'.$m[2].'">'.$m[2].'</a>');
 }
 
 
@@ -463,10 +463,10 @@ function sed_obfuscate_eml($m)
  * @param string $text Text body
  * @return string
  */
-function sed_parse_autourls($text)
+function cot_parse_autourls($text)
 {
 	$text = preg_replace('`(^|\s)(http|https|ftp)://([^\s"\'\[]+)`', '$1<a href="$2://$3">$2://$3</a>', $text);
-	$text = preg_replace_callback('`(^|\s)(\w[\._\w\-]+@[\w\.\-]+\.[a-z]+)`', 'sed_obfuscate_eml', $text);
+	$text = preg_replace_callback('`(^|\s)(\w[\._\w\-]+@[\w\.\-]+\.[a-z]+)`', 'cot_obfuscate_eml', $text);
 	return $text;
 }
 
@@ -476,7 +476,7 @@ function sed_parse_autourls($text)
  * @param array $m PCRE entries
  * @return string
  */
-function sed_parse_pre($m)
+function cot_parse_pre($m)
 {
 	return str_replace('<br />', '', $m[0]);
 }
@@ -490,13 +490,13 @@ function sed_parse_pre($m)
  * @param bool $parse_newlines Replace line breaks with <br />
  * @return string
  */
-function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE)
+function cot_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE)
 {
-	global $cfg, $sys, $sed_smilies, $L, $usr;
+	global $cfg, $sys, $cot_smilies, $L, $usr;
 
-	if ($cfg['parser_custom'] && function_exists('sed_custom_parse'))
+	if ($cfg['parser_custom'] && function_exists('cot_custom_parse'))
 	{
-		$text = sed_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
+		$text = cot_custom_parse($text, $parse_bbcodes, $parse_smilies, $parse_newlines);
 	}
 
 	if (!$cfg['parser_disable'])
@@ -505,11 +505,11 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 		$unique_seed = $sys['unique'];
 		$ii = 10000;
 
-		$text = sed_parse_autourls($text);
+		$text = cot_parse_autourls($text);
 
-		if ($parse_smilies && is_array($sed_smilies))
+		if ($parse_smilies && is_array($cot_smilies))
 		{
-			foreach($sed_smilies as $k => $v)
+			foreach($cot_smilies as $k => $v)
 			{
 				$ii++;
 				$key = '**'.$ii.$unique_seed.'**';
@@ -525,7 +525,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 
 		if ($parse_bbcodes)
 		{
-			$text = sed_bbcode_parse($text);
+			$text = cot_bbcode_parse($text);
 		}
 
 		if ($parse_bbcodes || $parse_smilies)
@@ -540,7 +540,7 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
 			$text = str_replace("\r", '', $text);
 			// Strip extraneous breaks
 			$text = preg_replace('#<(/?)(p|hr|ul|ol|li|blockquote|table|tr|td|th|div|h1|h2|h3|h4|h5)(.*?)>(\s*)<br />#', '<$1$2$3>', $text);
-			$text = preg_replace_callback('#<pre[^>]*>(.+?)</pre>#sm', 'sed_parse_pre', $text);
+			$text = preg_replace_callback('#<pre[^>]*>(.+?)</pre>#sm', 'cot_parse_pre', $text);
 		}
 	}
 	return $text;
@@ -553,17 +553,17 @@ function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_n
  * @param string $area Site area to check bbcode enablement
  * @return string
  */
-function sed_post_parse($text, $area = '')
+function cot_post_parse($text, $area = '')
 {
 	global $cfg;
-	if ($cfg['parser_custom'] && function_exists('sed_custom_post_parse'))
+	if ($cfg['parser_custom'] && function_exists('cot_custom_post_parse'))
 	{
-		$text = sed_custom_post_parse($text, $area);
+		$text = cot_custom_post_parse($text, $area);
 	}
 
 	if (!$cfg['parser_disable'] && (empty($area) || $cfg["parsebbcode$area"]))
 	{
-		$text = sed_bbcode_parse($text, true);
+		$text = cot_bbcode_parse($text, true);
 	}
 	return $text;
 }
@@ -574,7 +574,7 @@ function sed_post_parse($text, $area = '')
  * @param string ptr $html Page body
  * @return bool
  */
-function sed_cut_more(&$html)
+function cot_cut_more(&$html)
 {
 	$cutted = false;
 	$mpos = mb_strpos($html, '<!--more-->');
@@ -608,16 +608,16 @@ function sed_cut_more(&$html)
  * @param bool $parse_bbcodes Parse bbcodes
  * @return unknown
  */
-function sed_cutpost($text, $max_chars, $parse_bbcodes = true)
+function cot_cutpost($text, $max_chars, $parse_bbcodes = true)
 {
-	$text = $max_chars == 0 ? $text : sed_cutstring(strip_tags($text), $max_chars);
+	$text = $max_chars == 0 ? $text : cot_cutstring(strip_tags($text), $max_chars);
 	// Fix partial cuttoff
 	$text = preg_replace('#\[[^\]]*?$#', '...', $text);
 	// Parse the BB-codes or skip them
 	if ($parse_bbcodes)
 	{
 		// Parse it
-		$text = sed_parse($text);
+		$text = cot_parse($text);
 	}
 	else $text = preg_replace('#\[[^\]]+?\]#', '', $text);
 	return $text;
@@ -626,26 +626,26 @@ function sed_cutpost($text, $max_chars, $parse_bbcodes = true)
 /**
  * Load smilies from current pack
  */
-function sed_load_smilies()
+function cot_load_smilies()
 {
-	global $sed_smilies;
+	global $cot_smilies;
 
-	function sed_smcp($sm1, $sm2)
+	function cot_smcp($sm1, $sm2)
 	{
 		if ($sm1['prio'] == $sm2['prio']) return 0;
 		else return $sm1['prio'] > $sm2['prio'] ? 1 : -1;
 	}
 
 	
-	$sed_smilies = array();
+	$cot_smilies = array();
 
 	if (file_exists('./images/smilies/set.js')
 		&& preg_match('#var\s*smileSet\s*=\s*(\[.*?\n\]);#s', file_get_contents('./images/smilies/set.js'), $mt))
 	{
 		$js = str_replace(array("\r", "\n"), '', $mt[1]);
 		$js = preg_replace('#(smileL\.\w+)#', '"$1"', $js);
-		$sed_smilies = json_decode($js, true);
-		usort($sed_smilies, 'sed_smcp');
+		$cot_smilies = json_decode($js, true);
+		usort($cot_smilies, 'cot_smcp');
 	}
 }
 
@@ -655,13 +655,13 @@ function sed_load_smilies()
  * @param string $res Source text
  * @return string
  */
-function sed_smilies($res)
+function cot_smilies($res)
 {
-	global $sed_smilies;
+	global $cot_smilies;
 
-	if (is_array($sed_smilies))
+	if (is_array($cot_smilies))
 	{
-		foreach($sed_smilies as $k => $v)
+		foreach($cot_smilies as $k => $v)
 		{ $res = str_replace($v['smilie_code'],"<img src=\"".$v['smilie_image']."\" alt=\"\" />", $res); }
 	}
 	return($res);
@@ -678,7 +678,7 @@ function sed_smilies($res)
  * @param boolean $exact If false, $text will not be cut mid-word
  * @return boolean true if string is trimmed.
  */
-function sed_string_truncate(&$html, $length = 100, $considerhtml = true, $exact = false)
+function cot_string_truncate(&$html, $length = 100, $considerhtml = true, $exact = false)
 {
 	if ($considerhtml)
 	{
@@ -813,7 +813,7 @@ function sed_string_truncate(&$html, $length = 100, $considerhtml = true, $exact
  * @param int $wrap Wrapping boundary
  * @return string
  */
-function sed_wraptext($str,$wrap=128)
+function cot_wraptext($str,$wrap=128)
 {
 	if (!empty($str))
 	{ $str = preg_replace("/([^\n\r ?&\.\/<>\"\\-]{80})/i"," \\1\n", $str); }
@@ -822,19 +822,19 @@ function sed_wraptext($str,$wrap=128)
 
 if (!$cfg['parser_disable'])
 {
-	if (!is_array($sed_smilies))
+	if (!is_array($cot_smilies))
 	{
-		sed_load_smilies();
-		$cot_cache && $cot_cache->db->store('sed_smilies', $sed_smilies, 'system');
+		cot_load_smilies();
+		$cot_cache && $cot_cache->db->store('cot_smilies', $cot_smilies, 'system');
 	}
-	if (!is_array($sed_bbcodes))
+	if (!is_array($cot_bbcodes))
 	{
-		sed_bbcode_load();
+		cot_bbcode_load();
 		if ($cot_cache)
 		{
-			$cot_cache->db->store('sed_bbcodes', $sed_bbcodes, 'system');
-			$cot_cache->db->store('sed_bbcodes_post', $sed_bbcodes_post, 'system');
-			$cot_cache->db->store('sed_bbcode_containers', $sed_bbcode_containers, 'system');
+			$cot_cache->db->store('cot_bbcodes', $cot_bbcodes, 'system');
+			$cot_cache->db->store('cot_bbcodes_post', $cot_bbcodes_post, 'system');
+			$cot_cache->db->store('cot_bbcode_containers', $cot_bbcode_containers, 'system');
 		}
 	}
 }

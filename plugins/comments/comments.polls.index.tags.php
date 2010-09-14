@@ -16,9 +16,9 @@ Tags=polls.index.tpl:{IPOLLS_COMMENTS}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
-$indexpolls->assign('IPOLLS_COMMENTS', sed_comments_link('polls', 'id='.$poll_id, 'polls', $poll_id));
+$indexpolls->assign('IPOLLS_COMMENTS', cot_comments_link('polls', 'id='.$poll_id, 'polls', $poll_id));
 ?>

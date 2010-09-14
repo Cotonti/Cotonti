@@ -15,22 +15,22 @@ Hooks=admin
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('polls', 'a');
+cot_block($usr['isadmin']);
 
-sed_require('polls');
+cot_require('polls');
 
-$t = new XTemplate(sed_skinfile('polls.admin'));
+$t = new XTemplate(cot_skinfile('polls.admin'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=polls'), $L['Polls']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=polls'), $L['Polls']);
 $adminhelp = $L['adm_help_polls'];
 
-$d = sed_import('d', 'G', 'INT');
+$d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$filter = sed_import('filter', 'G', 'TXT');
+$filter = cot_import('filter', 'G', 'TXT');
 
 //$variant[key]=array("Caption", "filter", "page", "page_get", "sql", "sqlfield")
 $variants[0] = array($L['All'], "");
@@ -38,7 +38,7 @@ $variants['index'] = array($L['Main'], "index");
 $variants['forum'] = array($L['Forums'], "forum");
 
 /* === Hook === */
-foreach (sed_getextplugins('adim.polls.first') as $pl)
+foreach (cot_getextplugins('adim.polls.first') as $pl)
 {
 	include $pl;
 }
@@ -46,38 +46,38 @@ foreach (sed_getextplugins('adim.polls.first') as $pl)
 
 if($a == 'delete')
 {
-	sed_check_xg();
-	sed_poll_delete($id);
+	cot_check_xg();
+	cot_poll_delete($id);
 
 	$adminwarnings = $L['adm_polls_msg916_deleted'];
 }
 elseif($a == 'reset')
 {
-	sed_check_xg();
-	sed_poll_reset($id);
+	cot_check_xg();
+	cot_poll_reset($id);
 
 	$adminwarnings = $L['adm_polls_msg916_reset'];
 }
 elseif($a == 'lock')
 {
-	sed_check_xg();
-	sed_poll_lock($id, 3);
+	cot_check_xg();
+	cot_poll_lock($id, 3);
 
 	$adminwarnings = $L['Locked'];
 }
 elseif($a == 'bump')
 {
-	sed_check_xg();
-	$sql = sed_sql_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
+	cot_check_xg();
+	$sql = cot_db_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
 
 	$adminwarnings = $L['adm_polls_msg916_bump'];
 }
 
-sed_poll_check();
+cot_poll_check();
 
 if (!$cot_error)
 {
-	$number = sed_poll_save();
+	$number = cot_poll_save();
 
 	if ($poll_id == 'new')
 	{
@@ -95,8 +95,8 @@ if (!$cot_error)
 }
 else
 {
-	$adminwarnings = sed_implode_messages();
-	sed_clear_messages();
+	$adminwarnings = cot_implode_messages();
+	cot_clear_messages();
 }
 
 $is_adminwarnings = isset($adminwarnings);
@@ -112,11 +112,11 @@ else
     $poll_filter = '"&filter='.$filter;
 }
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
-$totalitems = sed_sql_result($sql, 0, "COUNT(*)");
-$pagenav = sed_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$sql = cot_db_query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
+$totalitems = cot_db_result($sql, 0, "COUNT(*)");
+$pagenav = cot_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = sed_sql_query("SELECT * FROM $db_polls
+$sql = cot_db_query("SELECT * FROM $db_polls
 					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
@@ -124,41 +124,41 @@ $indexheader = false;
 $forumheader = false;
 
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('admin.polls.loop');
+$extp = cot_getextplugins('admin.polls.loop');
 /* ===== */
 
-while($row = sed_sql_fetcharray($sql))
+while($row = cot_db_fetcharray($sql))
 {
 	$id = $row['poll_id'];
 	$type = $row['poll_type'];
 
 	if($type == 'index')
 	{
-		$admtypepoll = sed_url('polls', 'id='.$row['poll_id']);
+		$admtypepoll = cot_url('polls', 'id='.$row['poll_id']);
 	}
 	else
 	{
-		$admtypepoll = sed_url('forums', 'm=posts&q='.$row['poll_id']);
+		$admtypepoll = cot_url('forums', 'm=posts&q='.$row['poll_id']);
 	}
 
 	$poll_state = ($row['poll_state']) ? '[-] ' : '';
 
-    $sql2 = sed_sql_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
-    $totalvotes = sed_sql_result($sql2, 0, "SUM(po_count)");
+    $sql2 = cot_db_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
+    $totalvotes = cot_db_result($sql2, 0, "SUM(po_count)");
 
 	$t->assign(array(
 		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
 		'ADMIN_POLLS_ROW_POLL_TYPE' => $variants[htmlspecialchars($type)][0],
-		'ADMIN_POLLS_ROW_POLL_URL' => sed_url('admin', 'm=polls'.$poll_filter.'&n=options&d='.$d.'&id='.$row['poll_id']),
+		'ADMIN_POLLS_ROW_POLL_URL' => cot_url('admin', 'm=polls'.$poll_filter.'&n=options&d='.$d.'&id='.$row['poll_id']),
 		'ADMIN_POLLS_ROW_POLL_TEXT' => htmlspecialchars($row['poll_text']),
 		'ADMIN_POLLS_ROW_POLL_TOTALVOTES' => $totalvotes,
 		'ADMIN_POLLS_ROW_POLL_CLOSED' => $poll_state,
-		'ADMIN_POLLS_ROW_POLL_URL_DEL' => sed_url('admin', 'm=polls'.$poll_filter.'&a=delete&id='.$id.'&'.sed_xg()),
-		'ADMIN_POLLS_ROW_POLL_URL_LCK' => sed_url('admin', 'm=polls'.$poll_filter.'&a=lock&id='.$id.'&'.sed_xg()),
-		'ADMIN_POLLS_ROW_POLL_URL_RES' => sed_url('admin', 'm=polls'.$poll_filter.'&a=reset&d='.$d.'&id='.$id.'&'.sed_xg()),
-		'ADMIN_POLLS_ROW_POLL_URL_BMP' => sed_url('admin', 'm=polls'.$poll_filter.'&a=bump&id='.$id.'&'.sed_xg()),
+		'ADMIN_POLLS_ROW_POLL_URL_DEL' => cot_url('admin', 'm=polls'.$poll_filter.'&a=delete&id='.$id.'&'.cot_xg()),
+		'ADMIN_POLLS_ROW_POLL_URL_LCK' => cot_url('admin', 'm=polls'.$poll_filter.'&a=lock&id='.$id.'&'.cot_xg()),
+		'ADMIN_POLLS_ROW_POLL_URL_RES' => cot_url('admin', 'm=polls'.$poll_filter.'&a=reset&d='.$d.'&id='.$id.'&'.cot_xg()),
+		'ADMIN_POLLS_ROW_POLL_URL_BMP' => cot_url('admin', 'm=polls'.$poll_filter.'&a=bump&id='.$id.'&'.cot_xg()),
 		'ADMIN_POLLS_ROW_POLL_URL_OPN' => $admtypepoll,
-		'ADMIN_POLLS_ROW_POLL_ODDEVEN' => sed_build_oddeven($ii)
+		'ADMIN_POLLS_ROW_POLL_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -180,8 +180,8 @@ if ($ii == 0)
 
 if ($n == 'options')
 {
-	$poll_id = sed_import('id', 'G', 'TXT');
-	$adminpath[] = array(sed_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$id)");
+	$poll_id = cot_import('id', 'G', 'TXT');
+	$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$id)");
 	$formname = $L['editdeleteentries'];
 	$send_button = $L['Update'];
 }
@@ -189,7 +189,7 @@ elseif ($cot_error)
 {
 	if ($poll_id != 'new')
 	{
-		$adminpath[] = array(sed_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$id)");
+		$adminpath[] = array(cot_url('admin', 'm=polls'.$poll_filter.'&n=options&id='.$poll_id.'&d='.$d), $L['Options']." (#$id)");
 		$formname = $L['editdeleteentries'];
 		$send_button = $L['Update'];
 	}
@@ -215,17 +215,17 @@ foreach($variants as $val)
 	}
 
 	$t->assign(array(
-		'ADMIN_POLLS_ROW_FILTER_VALUE' => sed_url('admin', 'm=polls'.$val[1]),
+		'ADMIN_POLLS_ROW_FILTER_VALUE' => cot_url('admin', 'm=polls'.$val[1]),
 		'ADMIN_POLLS_ROW_FILTER_CHECKED' => $checked,
 		'ADMIN_POLLS_ROW_FILTER_NAME' => $val[0]
 	));
 	$t->parse('POLLS.POLLS_ROW_FILTER');
 }
 
-sed_poll_edit_form($poll_id, $t, 'POLLS');
+cot_poll_edit_form($poll_id, $t, 'POLLS');
 
 $t->assign(array(
-	'ADMIN_POLLS_CONF_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=polls'),
+	'ADMIN_POLLS_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=polls'),
 	'ADMIN_POLLS_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_POLLS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_POLLS_PAGNAV' => $pagenav['main'],
@@ -233,20 +233,20 @@ $t->assign(array(
 	'ADMIN_POLLS_TOTALITEMS' => $totalitems,
 	'ADMIN_POLLS_ON_PAGE' => $ii,
 	'ADMIN_POLLS_FORMNAME' => $formname,
-	'ADMIN_POLLS_FORM_URL' => ($poll_id != 'new') ? sed_url('admin', 'm=polls'.$poll_filter.'&d='.$d) : sed_url('admin', 'm=polls'),
+	'ADMIN_POLLS_FORM_URL' => ($poll_id != 'new') ? cot_url('admin', 'm=polls'.$poll_filter.'&d='.$d) : cot_url('admin', 'm=polls'),
 	'ADMIN_POLLS_EDIT_FORM' => $poll_text,
 	'ADMIN_POLLS_SEND_BUTTON' => $send_button
 ));
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.polls.tags') as $pl)
+foreach (cot_getextplugins('admin.polls.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

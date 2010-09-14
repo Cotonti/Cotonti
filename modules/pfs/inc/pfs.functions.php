@@ -9,13 +9,13 @@
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
-sed_require_lang('pfs', 'module');
-sed_require_rc('pfs');
+cot_require_lang('pfs', 'module');
+cot_require_rc('pfs');
 
-sed_require_api('forms');
+cot_require_api('forms');
 
 // Global variables
 $GLOBALS['db_pfs'] = (isset($GLOBALS['db_pfs'])) ? $GLOBALS['db_pfs'] : $GLOBALS['db_x'] . 'pfs';
@@ -32,15 +32,15 @@ $GLOBALS['db_pfs_folders'] = (isset($GLOBALS['db_pfs_folders'])) ? $GLOBALS['db_
  * @param boolean $isgallery Gallery?
  * @return int
  */
-function sed_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispublic='', $isgallery='')
+function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispublic='', $isgallery='')
 {
 	global $db_pfs_folders, $cfg, $sys, $L, $err_msg;
 
-	if ($title==='') 		$title = sed_import('ntitle','P','TXT');
-	if ($desc==='') 		$desc = sed_import('ndesc','P','TXT');
-	if ($parentid==='') 	$parentid = sed_import('nparentid','P','INT');
-	if ($ispublic==='') 	$ispublic = sed_import('nispublic','P','BOL');
-	if ($isgallery==='') 	$isgallery = sed_import('nisgallery','P','BOL');
+	if ($title==='') 		$title = cot_import('ntitle','P','TXT');
+	if ($desc==='') 		$desc = cot_import('ndesc','P','TXT');
+	if ($parentid==='') 	$parentid = cot_import('nparentid','P','INT');
+	if ($ispublic==='') 	$ispublic = cot_import('nispublic','P','BOL');
+	if ($isgallery==='') 	$isgallery = cot_import('nisgallery','P','BOL');
 
 	if(empty($title))
 	{
@@ -48,21 +48,21 @@ function sed_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 		return 0;
 	}
 
-	$newpath = sed_urlencode(strtolower($title));
+	$newpath = cot_urlencode(strtolower($title));
 	if ($parentid > 0)
 	{
-		$newpath = sed_pfs_folderpath($parentid, TRUE).$newpath;
+		$newpath = cot_pfs_folderpath($parentid, TRUE).$newpath;
 
-		$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid=".(int)$ownerid." AND pff_id=".(int)$parentid);
-		sed_sql_numrows($sql)>0 or sed_die();
+		$sql = cot_db_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid=".(int)$ownerid." AND pff_id=".(int)$parentid);
+		cot_db_numrows($sql)>0 or cot_die();
 	}
 	if ($cfg['pfsuserfolder'])
 	{
-		sed_pfs_mkdir($cfg['pfs_path'].$newpath) or sed_redirect(sed_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
-		sed_pfs_mkdir($cfg['pfs_thumbpath'].$newpath) or sed_redirect(sed_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
+		cot_pfs_mkdir($cfg['pfs_path'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
+		cot_pfs_mkdir($cfg['pfs_thumbpath'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
 	}
 
-	$sql = sed_sql_query("INSERT INTO $db_pfs_folders
+	$sql = cot_db_query("INSERT INTO $db_pfs_folders
 		(pff_parentid,
 		pff_userid,
 		pff_title,
@@ -76,16 +76,16 @@ function sed_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 		VALUES
 		(".(int)$parentid.",
 		".(int)$ownerid.",
-		'".sed_sql_prep($title)."',
+		'".cot_db_prep($title)."',
 		".(int)$sys['now'].",
 		".(int)$sys['now'].",
-		'".sed_sql_prep($desc)."',
-		'".sed_sql_prep($newpath)."',
+		'".cot_db_prep($desc)."',
+		'".cot_db_prep($newpath)."',
 		".(int)$ispublic.",
 		".(int)$isgallery.",
 		0)"
 	);
-	return sed_sql_insertid();
+	return cot_db_insertid();
 }
 
 /**
@@ -95,15 +95,15 @@ function sed_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
  * @param int $id File ID
  * @return boolean
  */
-function sed_pfs_deletefile($userid, $id)
+function cot_pfs_deletefile($userid, $id)
 {
 	global $db_pfs, $cfg;
 
-	$sql = sed_sql_query("SELECT pfs_id FROM $db_pfs WHERE pfs_userid=".(int)$userid." AND pfs_id=".(int)$id." LIMIT 1");
+	$sql = cot_db_query("SELECT pfs_id FROM $db_pfs WHERE pfs_userid=".(int)$userid." AND pfs_id=".(int)$id." LIMIT 1");
 
-	if (sed_sql_numrows($sql)>0)
+	if (cot_db_numrows($sql)>0)
 	{
-		$fpath = sed_pfs_filepath($id);
+		$fpath = cot_pfs_filepath($id);
 
 		if (file_exists($cfg['pfs_thumbpath'].$fpath))
 		{
@@ -118,7 +118,7 @@ function sed_pfs_deletefile($userid, $id)
 			return FALSE;
 		}
 
-		sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id=".(int)$id);
+		cot_db_query("DELETE FROM $db_pfs WHERE pfs_id=".(int)$id);
 		return TRUE;
 	}
 	else
@@ -134,34 +134,34 @@ function sed_pfs_deletefile($userid, $id)
  * @param int $folderid Folder ID
  * @return boolean
  */
-function sed_pfs_deletefolder($userid, $folderid)
+function cot_pfs_deletefolder($userid, $folderid)
 {
 	global $db_pfs_folders, $db_pfs, $cfg;
 
-	$sql = sed_sql_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_userid=".(int)$userid." AND pff_id=".(int)$folderid." LIMIT 1");
-	if($row = sed_sql_fetcharray($sql))
+	$sql = cot_db_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_userid=".(int)$userid." AND pff_id=".(int)$folderid." LIMIT 1");
+	if($row = cot_db_fetcharray($sql))
 	{
 		$fpath = $row['pff_path'];
 
 		// Remove files
-		$sql = sed_sql_query("SELECT pfs_id FROM $db_pfs WHERE pfs_folderid IN (SELECT pff_id FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%')");
-		while($row = sed_sql_fetcharray($sql))
+		$sql = cot_db_query("SELECT pfs_id FROM $db_pfs WHERE pfs_folderid IN (SELECT pff_id FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%')");
+		while($row = cot_db_fetcharray($sql))
 		{
-			sed_pfs_deletefile($row['pfs_id']);
+			cot_pfs_deletefile($row['pfs_id']);
 		}
 
 		// Remove folders
-		$sql = sed_sql_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%' ORDER BY CHAR_LENGTH(pff_path) DESC");
-		while($row = sed_sql_fetcharray($sql))
+		$sql = cot_db_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%' ORDER BY CHAR_LENGTH(pff_path) DESC");
+		while($row = cot_db_fetcharray($sql))
 		{
 			if($cfg['pfsuserfolder'])
 			{
 				@rmdir($cfg['pfs_path'].$row['pff_path']);
 				@rmdir($cfg['pfs_thumbpath'].$row['pff_path']);
 			}
-			sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_id=".(int)$row['pff_id']);
+			cot_db_query("DELETE FROM $db_pfs_folders WHERE pff_id=".(int)$row['pff_id']);
 		}
-		if(sed_sql_numrows($sql)>0)
+		if(cot_db_numrows($sql)>0)
 		{
 			return TRUE;
 		}
@@ -183,7 +183,7 @@ function sed_pfs_deletefolder($userid, $folderid)
  * @param int $userid User ID
  * @return int
  */
-function sed_pfs_deleteall($userid)
+function cot_pfs_deleteall($userid)
 {
 	global $db_pfs_folders, $db_pfs, $cfg;
 
@@ -191,9 +191,9 @@ function sed_pfs_deleteall($userid)
 	{
 		return 0;
 	}
-	$sql = sed_sql_query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid'");
+	$sql = cot_db_query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid'");
 
-	while($row = sed_sql_fetcharray($sql))
+	while($row = cot_db_fetcharray($sql))
 	{
 		$pfs_file = $row['pfs_file'];
 		$f = $row['pfs_folderid'];
@@ -208,10 +208,10 @@ function sed_pfs_deleteall($userid)
 			}
 		}
 	}
-	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid'");
-	$num = $num + sed_sql_affectedrows();
-	$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
-	$num = $num + sed_sql_affectedrows();
+	$sql = cot_db_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid'");
+	$num = $num + cot_db_affectedrows();
+	$sql = cot_db_query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
+	$num = $num + cot_db_affectedrows();
 
 	if ($cfg['pfsuserfolder'] && $userid>0)
 	{
@@ -229,12 +229,12 @@ function sed_pfs_deleteall($userid)
  * @param string $id File ID
  * @return string
  */
-function sed_pfs_filepath($id)
+function cot_pfs_filepath($id)
 {
 	global $db_pfs_folders, $db_pfs, $cfg;
 
-	$sql = sed_sql_query("SELECT p.pfs_file AS file, f.pff_path AS path FROM $db_pfs AS p LEFT JOIN $db_pfs_folders AS f ON p.pfs_folderid=f.pff_id WHERE p.pfs_id=".(int)$id." LIMIT 1");
-	if($row = sed_sql_fetcharray($sql))
+	$sql = cot_db_query("SELECT p.pfs_file AS file, f.pff_path AS path FROM $db_pfs AS p LEFT JOIN $db_pfs_folders AS f ON p.pfs_folderid=f.pff_id WHERE p.pfs_id=".(int)$id." LIMIT 1");
+	if($row = cot_db_fetcharray($sql))
 	{
 		return ($cfg['pfsuserfolder'] && $row['path']!='') ? $row['path'].'/'.$row['file'] : $row['file'];
 	}
@@ -251,7 +251,7 @@ function sed_pfs_filepath($id)
  * @param boolean $fullpath Return full path like in Folder Storage Mode ?
  * @return mixed
  */
-function sed_pfs_folderpath($folderid, $fullpath='')
+function cot_pfs_folderpath($folderid, $fullpath='')
 {
 	global $db_pfs_folders, $cfg;
 
@@ -259,14 +259,14 @@ function sed_pfs_folderpath($folderid, $fullpath='')
 
 	if($fullpath && $folderid>0)
 	{
-		$sql = sed_sql_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid);
-		if(sed_sql_numrows($sql)==0)
+		$sql = cot_db_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid);
+		if(cot_db_numrows($sql)==0)
 		{
 			return FALSE;
 		}
 		else
 		{
-			return sed_sql_result($sql, 0, 'pff_path').'/';
+			return cot_db_result($sql, 0, 'pff_path').'/';
 		}
 	}
 	else
@@ -281,17 +281,17 @@ function sed_pfs_folderpath($folderid, $fullpath='')
  * @param int $userid User ID
  * @return array
  */
-function sed_pfs_limits($userid)
+function cot_pfs_limits($userid)
 {
 	global $db_groups, $db_groups_users;
 
 	$maxfile = 0;
 	$maxtotal = 0;
-	$sql = sed_sql_query("SELECT MAX(grp_pfs_maxfile) AS maxfile, MAX(grp_pfs_maxtotal) AS maxtotal
+	$sql = cot_db_query("SELECT MAX(grp_pfs_maxfile) AS maxfile, MAX(grp_pfs_maxtotal) AS maxtotal
 	FROM $db_groups	WHERE grp_id IN (SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=".(int)$userid.")");
-	if ($row = sed_sql_fetcharray($sql))
+	if ($row = cot_db_fetcharray($sql))
 	{
-		$maxfile = min($row['maxfile'], sed_get_uploadmax());
+		$maxfile = min($row['maxfile'], cot_get_uploadmax());
 		$maxtotal = $row['maxtotal'];
 	}
 	return array($maxfile, $maxtotal);
@@ -304,7 +304,7 @@ function sed_pfs_limits($userid)
  * $param boolean $feedback Prevent endless loop
  * @return boolean
  */
-function sed_pfs_mkdir($path, $feedback=FALSE)
+function cot_pfs_mkdir($path, $feedback=FALSE)
 {
 	global $cfg;
 
@@ -314,7 +314,7 @@ function sed_pfs_mkdir($path, $feedback=FALSE)
 	}
 	if(!$feedback && !file_exists($cfg['pfs_path']))
 	{
-		sed_pfs_mkdir($cfg['pfs_path'], TRUE);
+		cot_pfs_mkdir($cfg['pfs_path'], TRUE);
 	}
 	if(@mkdir($path, $cfg['dir_perms']))
 	{
@@ -332,7 +332,7 @@ function sed_pfs_mkdir($path, $feedback=FALSE)
  * @param int $userid User ID
  * @return string
  */
-function sed_pfs_path($userid)
+function cot_pfs_path($userid)
 {
 	global $cfg;
 
@@ -352,7 +352,7 @@ function sed_pfs_path($userid)
  * @param int $userid User ID
  * @return string
  */
-function sed_pfs_relpath($userid)
+function cot_pfs_relpath($userid)
 {
 	global $cfg;
 
@@ -372,7 +372,7 @@ function sed_pfs_relpath($userid)
  * @param unknown_type $userid
  * @return unknown
  */
-function sed_pfs_thumbpath($userid)
+function cot_pfs_thumbpath($userid)
 {
 	global $cfg;
 
@@ -394,22 +394,22 @@ function sed_pfs_thumbpath($userid)
  * @return int
  */
 
-function sed_pfs_upload($userid, $folderid='')
+function cot_pfs_upload($userid, $folderid='')
 {
-	global $cfg, $sys, $sed_extensions, $gd_supported, $maxfile, $maxtotal, $db_pfs, $db_pfs_folders, $L, $err_msg;
+	global $cfg, $sys, $cot_extensions, $gd_supported, $maxfile, $maxtotal, $db_pfs, $db_pfs_folders, $L, $err_msg;
 
-	if($folderid==='') $folderid = sed_import('folderid','P','INT');
-	$ndesc = sed_import('ndesc','P','ARR');
-	$npath = sed_pfs_folderpath($folderid);
+	if($folderid==='') $folderid = cot_import('folderid','P','INT');
+	$ndesc = cot_import('ndesc','P','ARR');
+	$npath = cot_pfs_folderpath($folderid);
 
 	/* === Hook === */
-	foreach (sed_getextplugins('pfs.upload.first') as $pl)
+	foreach (cot_getextplugins('pfs.upload.first') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
 
-	sed_die($npath===FALSE);
+	cot_die($npath===FALSE);
 
 	for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
 	{
@@ -439,12 +439,12 @@ function sed_pfs_upload($userid, $folderid='')
 				$u_name = $usr['id'].'_'.$u_name;
 			}
 
-			$u_newname = sed_safename($u_name, true);
-			$u_sqlname = sed_sql_prep($u_newname);
+			$u_newname = cot_safename($u_name, true);
+			$u_sqlname = cot_db_prep($u_newname);
 
 			if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
 			{
-				foreach ($sed_extensions as $k => $line)
+				foreach ($cot_extensions as $k => $line)
 				{
 					if (mb_strtolower($f_extension) == $line[0])
 					{
@@ -456,7 +456,7 @@ function sed_pfs_upload($userid, $folderid='')
 			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok
 				&& ($pfs_totalsize+$u_size)<$maxtotal*1024   )
 			{
-				$fcheck = sed_file_check($u_tmp_name, $u_name, $f_extension);
+				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
 				if($fcheck == 1)
 				{
 					if (!file_exists($cfg['pfs_path'].$npath.$u_newname))
@@ -483,13 +483,13 @@ function sed_pfs_upload($userid, $folderid='')
 						if ($is_moved && (int)$u_size > 0)
 						{
 							/* === Hook === */
-							foreach (sed_getextplugins('pfs.upload.moved') as $pl)
+							foreach (cot_getextplugins('pfs.upload.moved') as $pl)
 							{
 								include $pl;
 							}
 							/* ===== */
 
-							$sql = sed_sql_query("INSERT INTO $db_pfs
+							$sql = cot_db_query("INSERT INTO $db_pfs
 							(pfs_userid,
 							pfs_date,
 							pfs_file,
@@ -501,20 +501,20 @@ function sed_pfs_upload($userid, $folderid='')
 							VALUES
 							(".(int)$userid.",
 							".(int)$sys['now_offset'].",
-							'".sed_sql_prep($u_sqlname)."',
-							'".sed_sql_prep($f_extension)."',
+							'".cot_db_prep($u_sqlname)."',
+							'".cot_db_prep($f_extension)."',
 							".(int)$folderid.",
-							'".sed_sql_prep($desc)."',
+							'".cot_db_prep($desc)."',
 							".(int)$u_size.",
 							0) ");
 
-							$sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."'
+							$sql = cot_db_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."'
 								WHERE pff_id='$folderid'");
 							$disp_errors .= $L['Yes'];
 							$pfs_totalsize += $u_size;
 
 							/* === Hook === */
-							foreach (sed_getextplugins('pfs.upload.done') as $pl)
+							foreach (cot_getextplugins('pfs.upload.done') as $pl)
 							{
 								include $pl;
 							}
@@ -528,7 +528,7 @@ function sed_pfs_upload($userid, $folderid='')
 									hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)),
 									hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
-								sed_createthumb($cfg['pfs_path'].$npath.$u_newname,
+								cot_createthumb($cfg['pfs_path'].$npath.$u_newname,
 									$cfg['pfs_thumbpath'].$npath.$u_newname, $cfg['th_x'],$cfg['th_y'],
 									$cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext,
 									$cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'],
@@ -573,19 +573,19 @@ function sed_pfs_upload($userid, $folderid='')
  * @param string $postfix Postfix appended to filename
  * @return string
  */
-function sed_safename($basename, $underscore = true, $postfix = '')
+function cot_safename($basename, $underscore = true, $postfix = '')
 {
-	global $lang, $sed_translit;
+	global $lang, $cot_translit;
 	$fname = mb_substr($basename, 0, mb_strrpos($basename, '.'));
 	$ext = mb_substr($basename, mb_strrpos($basename, '.') + 1);
-	if($lang != 'en' && is_array($sed_translit))
+	if($lang != 'en' && is_array($cot_translit))
 	{
-		$fname = strtr($fname, $sed_translit);
+		$fname = strtr($fname, $cot_translit);
 	}
 	if($underscore) $fname = str_replace(' ', '_', $fname);
 	$fname = preg_replace('#[^a-zA-Z0-9\-_\.\ \+]#', '', $fname);
 	$fname = str_replace('..', '.', $fname);
-	if(empty($fname)) $fname = sed_unique();
+	if(empty($fname)) $fname = cot_unique();
 	return $fname . $postfix . '.' . mb_strtolower($ext);
 }
 
@@ -598,11 +598,11 @@ function sed_safename($basename, $underscore = true, $postfix = '')
  * @param string $name Input name
  * @return string
  */
-function sed_selectbox_folders($user, $skip, $check, $name = 'folderid')
+function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 {
 	global $db_pfs_folders, $R;
 
-	$sql = sed_sql_query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
+	$sql = cot_db_query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
 
 	$check = (empty($check) || $check=="/") ? '0' : $check;
 
@@ -611,7 +611,7 @@ function sed_selectbox_folders($user, $skip, $check, $name = 'folderid')
 		$result_arr[0] = '/ &nbsp; &nbsp;';
 	}
 	
-	while ($row = sed_sql_fetcharray($sql))
+	while ($row = cot_db_fetcharray($sql))
 	{
 		if ($skip!=$row['pff_id'])
 		{
@@ -619,7 +619,7 @@ function sed_selectbox_folders($user, $skip, $check, $name = 'folderid')
 		}
 	}
 
-	$result = sed_selectbox($check, $name, array_keys($result_arr), array_values($result_arr), false);
+	$result = cot_selectbox($check, $name, array_keys($result_arr), array_values($result_arr), false);
 
 	return ($result);
 }
@@ -630,12 +630,12 @@ function sed_selectbox_folders($user, $skip, $check, $name = 'folderid')
  * @param int $id User ID
  * @return array
  */
-function sed_userinfo($id)
+function cot_userinfo($id)
 {
 	global $db_users;
 
-	$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id='$id'");
-	if ($res = sed_sql_fetcharray($sql))
+	$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id='$id'");
+	if ($res = cot_db_fetcharray($sql))
 	{
 		return ($res);
 	}

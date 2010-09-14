@@ -13,8 +13,8 @@ Hooks=page.first
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-$highlight = sed_import('highlight', 'G', 'TXT');
+$highlight = cot_import('highlight', 'G', 'TXT');
 
 ?>

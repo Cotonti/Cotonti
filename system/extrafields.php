@@ -19,7 +19,7 @@
  * @param bool $importnew Import type new
  * @return string
  */
-function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
+function cot_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 {
 	global $L, $R;
 	$inputname = ($importnew) ? 'new' : 'r';
@@ -30,12 +30,12 @@ function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 	{
 		case "input":
 			$R["input_text_{$inputname}"] = (!empty($R["input_text_{$inputname}"])) ? $R["input_text_{$inputname}"] : $extrafield['field_html'];
-			$result = sed_inputbox('text', $inputname, htmlspecialchars($data));
+			$result = cot_inputbox('text', $inputname, htmlspecialchars($data));
 			break;
 
 		case "textarea":
 			$R["input_textarea_{$inputname}"] =(!empty($R["input_textarea_{$inputname}"])) ? $R["input_textarea_{$inputname}"] : $extrafield['field_html'];
-			$result = sed_textarea($inputname, htmlspecialchars($data), 4, 56);
+			$result = cot_textarea($inputname, htmlspecialchars($data), 4, 56);
 			break;
 
 		case "select":
@@ -48,7 +48,7 @@ function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 				$options_titles[$ii] = (!empty($L[$rowname.'_'.$extrafield['field_name'].'_'.$var])) ? $L[$rowname.'_'.$extrafield['field_name'].'_'.$var] : $var;
 				$options_values[$ii] .= trim($var);
 			}
-			$result = sed_selectbox(trim($data), $inputname, $options_values, $options_titles, false);
+			$result = cot_selectbox(trim($data), $inputname, $options_values, $options_titles, false);
 			break;
 
 		case "radio":
@@ -64,12 +64,12 @@ function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 					$options_values[$ii] .= trim($var);
 				}
 			}
-			$result = sed_radiobox(trim($data), $inputname, $options_values, $options_titles);
+			$result = cot_radiobox(trim($data), $inputname, $options_values, $options_titles);
 			break;
 
 		case "checkbox":
 			$R["input_checkbox_{$inputname}"] = (!empty($R["input_checkbox_{$inputname}"])) ? $R["input_checkbox_{$inputname}"] : $extrafield['field_html'];
-			$result = sed_checkbox($data, $inputname, $extrafield['field_description']);
+			$result = cot_checkbox($data, $inputname, $extrafield['field_description']);
 			break;
 	}
 	return $result;
@@ -83,12 +83,12 @@ function sed_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
  * @param bool $importnew Import type new
  * @return string
  */
-function sed_import_extrafields($rowname, $extrafield, $importnew = FALSE)
+function cot_import_extrafields($rowname, $extrafield, $importnew = FALSE)
 {
 	$inputname = ($importnew) ? 'new' : 'r';
 	$inputname .= $rowname.$extrafield['field_name'];
 
-	$import = sed_import($inputname, 'P', 'HTM');
+	$import = cot_import($inputname, 'P', 'HTM');
 	if ($extrafield['field_type'] == 'checkbox' && !is_null($import))
 	{
 		$import = $import != '';
@@ -105,7 +105,7 @@ function sed_import_extrafields($rowname, $extrafield, $importnew = FALSE)
  * @param string $value Existing user value
  * @return string
  */
-function sed_build_extrafields_data($rowname, $extrafield, $value)
+function cot_build_extrafields_data($rowname, $extrafield, $value)
 {
 	global $L;
 	$value = htmlspecialchars($value);
@@ -116,7 +116,7 @@ function sed_build_extrafields_data($rowname, $extrafield, $value)
 		case "textarea":
 			if($extrafield['field_parse'] == 'BBCode')
 			{
-				$value = sed_parse($value);
+				$value = cot_parse($value);
 			}
 			if($extrafield['field_parse'] == 'Text')
 			{
@@ -139,28 +139,28 @@ function sed_build_extrafields_data($rowname, $extrafield, $value)
 
 /**
  * Loads extrafields data into global
- * @global array $sed_extrafields
+ * @global array $cot_extrafields
  */
-function sed_load_extrafields()
+function cot_load_extrafields()
 {
-	global $sed_dbc, $sed_extrafields, $db_extra_fields, $cot_cache;
-	if (!$sed_extrafields && $sed_dbc)
+	global $cot_dbc, $cot_extrafields, $db_extra_fields, $cot_cache;
+	if (!$cot_extrafields && $cot_dbc)
 	{
-		$sed_extrafields = array();
-		$sed_extrafields['structure'] = array();
-		$sed_extrafields['users'] = array();
-		$fieldsres = sed_sql_query("SELECT * FROM $db_extra_fields WHERE 1");
-		while ($row = sed_sql_fetchassoc($fieldsres))
+		$cot_extrafields = array();
+		$cot_extrafields['structure'] = array();
+		$cot_extrafields['users'] = array();
+		$fieldsres = cot_db_query("SELECT * FROM $db_extra_fields WHERE 1");
+		while ($row = cot_db_fetchassoc($fieldsres))
 		{
-			$sed_extrafields[$row['field_location']][$row['field_name']] = $row;
+			$cot_extrafields[$row['field_location']][$row['field_name']] = $row;
 		}
-		sed_sql_freeresult($fieldsres);
-		$cot_cache && $cot_cache->db->store('sed_extrafields', $sed_extrafields, 'system');
+		cot_db_freeresult($fieldsres);
+		$cot_cache && $cot_cache->db->store('cot_extrafields', $cot_extrafields, 'system');
 	}
 }
 
 /* ======== Extrafields Pre-load ======== */
 
-sed_load_extrafields();
+cot_load_extrafields();
 
 ?>

@@ -9,19 +9,19 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
-sed_block($usr['auth_read']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
+cot_block($usr['auth_read']);
 
-$t = new XTemplate(sed_skinfile('admin.infos'));
+$t = new XTemplate(cot_skinfile('admin.infos'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=infos'), $L['adm_infos']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=infos'), $L['adm_infos']);
 $adminhelp = $L['adm_help_versions'];
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.infos.first') as $pl)
+foreach (cot_getextplugins('admin.infos.first') as $pl)
 {
 	include $pl;
 }
@@ -42,14 +42,14 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.infos.tags') as $pl)
+foreach (cot_getextplugins('admin.infos.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

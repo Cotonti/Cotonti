@@ -9,10 +9,10 @@
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 // System requirements check
-if (!defined('SED_INSTALL'))
+if (!defined('COT_INSTALL'))
 {
 	(function_exists('version_compare') && version_compare(PHP_VERSION, '5.2.0', '>=')) or die('Cotonti system requirements: PHP 5.2 or above.'); // TODO: Need translate
 	extension_loaded('mbstring') or die('Cotonti system requirements: mbstring PHP extension must be loaded.'); // TODO: Need translate
@@ -61,7 +61,7 @@ if (!isset($cfg['dir_perms']))
  * @param string $text Input
  * @return string
  */
-function sed_alphaonly($text)
+function cot_alphaonly($text)
 {
 	return(preg_replace('/[^a-zA-Z0-9\-_]/', '', $text));
 }
@@ -73,7 +73,7 @@ function sed_alphaonly($text)
  * @param int $l Length
  * @return unknown
  */
-function sed_cutstring($res, $l)
+function cot_cutstring($res, $l)
 {
 	global $cfg;
 	if (mb_strlen($res)>$l)
@@ -90,15 +90,15 @@ function sed_cutstring($res, $l)
  * @param string $cond Permissions
  * @return array
  */
-function sed_getextplugins($hook, $cond='R')
+function cot_getextplugins($hook, $cond='R')
 {
-	global $sed_plugins, $cot_cache;
+	global $cot_plugins, $cot_cache;
 
 	$extplugins = array();
 
-	if (is_array($sed_plugins[$hook]))
+	if (is_array($cot_plugins[$hook]))
 	{
-		foreach($sed_plugins[$hook] as $k)
+		foreach($cot_plugins[$hook] as $k)
 		{
 			if ($k['pl_module'])
 			{
@@ -110,7 +110,7 @@ function sed_getextplugins($hook, $cond='R')
 				$cat = 'plug';
 				$opt = $k['pl_code'];
 			}
-			if (sed_auth($cat, $opt, $cond))
+			if (cot_auth($cat, $opt, $cond))
 			{
 				$extplugins[] = $k['pl_file'];
 			}
@@ -133,7 +133,7 @@ function sed_getextplugins($hook, $cond='R')
  * @param bool $dieonerror Die with fatal error on wrong input
  * @return mixed
  */
-function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
+function cot_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 {
 	switch($source)
 	{
@@ -167,7 +167,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			break;
 
 		default:
-			sed_diefatal('Unknown source for a variable : <br />Name = '.$name.'<br />Source = '.$source.' ? (must be G, P, C or D)');
+			cot_diefatal('Unknown source for a variable : <br />Name = '.$name.'<br />Source = '.$source.' ? (must be G, P, C or D)');
 			break;
 	}
 
@@ -233,7 +233,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 
 		case 'ALP':
 			$v = trim($v);
-			$f = sed_alphaonly($v);
+			$f = cot_alphaonly($v);
 			if ($v == $f)
 			{
 				$pass = TRUE;
@@ -301,7 +301,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			break;
 
 		default:
-			sed_diefatal('Unknown filter for a variable : <br />Var = '.$cv_v.'<br />Filter = &quot;'.$filter.'&quot; ?');
+			cot_diefatal('Unknown filter for a variable : <br />Var = '.$cv_v.'<br />Filter = &quot;'.$filter.'&quot; ?');
 			break;
 	}
 
@@ -314,11 +314,11 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	{
 		if ($log)
 		{
-			sed_log_sed_import($source, $filter, $name, $v);
+			cot_log_import($source, $filter, $name, $v);
 		}
 		if ($dieonerror)
 		{
-			sed_diefatal('Wrong input.');
+			cot_diefatal('Wrong input.');
 		}
 		else
 		{
@@ -330,7 +330,7 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 /**
  * Puts POST data into the cross-request buffer
  */
-function sed_import_buffer_save()
+function cot_import_buffer_save()
 {
 	unset($_SESSION['cot_buffer']);
 	$_SESSION['cot_buffer'] = $_POST;
@@ -344,7 +344,7 @@ function sed_import_buffer_save()
  * @param mixed $value Currently imported value
  * @return mixed Input value or NULL if the variable is not in the buffer
  */
-function sed_import_buffered($name, $value)
+function cot_import_buffered($name, $value)
 {
 	if (empty($value))
 	{
@@ -372,20 +372,20 @@ function sed_import_buffered($name, $value)
  * @param bool $returnarray Return Date Array
  * @return mixed
  */
-function sed_import_date($name = '', $ext='', $usertimezone = true, $returnarray = false)
+function cot_import_date($name = '', $ext='', $usertimezone = true, $returnarray = false)
 {
 	global $L, $R, $usr;
 	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
-	$year = sed_import($name.'_year'.$ext, 'P', 'INT');
-	$month = sed_import($name.'_month'.$ext, 'P', 'INT');
-	$day = sed_import($name.'_day'.$ext, 'P', 'INT');
-	$hour = sed_import($name.'_hour'.$ext, 'P', 'INT');
-	$minute = sed_import($name.'_minute'.$ext, 'P', 'INT');
+	$year = cot_import($name.'_year'.$ext, 'P', 'INT');
+	$month = cot_import($name.'_month'.$ext, 'P', 'INT');
+	$day = cot_import($name.'_day'.$ext, 'P', 'INT');
+	$hour = cot_import($name.'_hour'.$ext, 'P', 'INT');
+	$minute = cot_import($name.'_minute'.$ext, 'P', 'INT');
 
 	if (((int)($month) > 0 && (int)($day) > 0 && (int)($year) > 0) || ((int)($day) > 0 && (int)($minute) > 0))
 	{
-		$result = sed_mktime($hour, $minute, 0, $month, $day, $year);
+		$result = cot_mktime($hour, $minute, 0, $month, $day, $year);
 		$result = ($usertimezone) ? ($result - $usr['timezone'] * 3600) : $result;
 	}
 	else
@@ -409,13 +409,13 @@ function sed_import_date($name = '', $ext='', $usertimezone = true, $returnarray
 /**
  * Loads comlete category structure into array
  */
-function sed_load_structure()
+function cot_load_structure()
 {
-	global $db_structure, $db_extra_fields, $cfg, $L, $sed_cat, $sed_extrafields;
-	$sed_cat = array();
-	$sql = sed_sql_query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
+	global $db_structure, $db_extra_fields, $cfg, $L, $cot_cat, $cot_extrafields;
+	$cot_cat = array();
+	$sql = cot_db_query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
 
-	while ($row = sed_sql_fetcharray($sql))
+	while ($row = cot_db_fetcharray($sql))
 	{
 		if (!empty($row['structure_icon']))
 		{
@@ -442,7 +442,7 @@ function sed_load_structure()
 		$order = explode('.', $row['structure_order']);
 		$parent_tpl = $row['structure_tpl'];
 
-		$sed_cat[$row['structure_code']] = array(
+		$cot_cat[$row['structure_code']] = array(
 			'path' => $path[$row['structure_path']],
 			'tpath' => $tpath[$row['structure_path']],
 			'rpath' => $row['structure_path'],
@@ -456,16 +456,16 @@ function sed_load_structure()
 			'way' => $order[1]
 		);
 
-		if (is_array($sed_extrafields['structure']))
+		if (is_array($cot_extrafields['structure']))
 		{
-			foreach ($sed_extrafields['structure'] as $row_c)
+			foreach ($cot_extrafields['structure'] as $row_c)
 			{
-				$sed_cat[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
+				$cot_cat[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
 			}
 		}
 
 		/* == Hook == */
-		foreach (sed_getextplugins('structure') as $pl)
+		foreach (cot_getextplugins('structure') as $pl)
 		{
 			include $pl;
 		}
@@ -481,12 +481,12 @@ function sed_load_structure()
  * @global array $out
  * @global string $db_online
  * @global Cache $cot_cache
- * @global array $sed_usersonline
+ * @global array $cot_usersonline
  * @global string $location Location string
  */
-function sed_online_update()
+function cot_online_update()
 {
-	global $cfg, $sys, $usr, $out, $db_online, $db_stats, $cot_cache, $sed_usersonline, $location, $Ls;
+	global $cfg, $sys, $usr, $out, $db_online, $db_stats, $cot_cache, $cot_usersonline, $location, $Ls;
 	if (!$cfg['disablewhosonline'])
 	{
 		if ($location != $sys['online_location']
@@ -496,24 +496,24 @@ function sed_online_update()
 			{
 				if (empty($sys['online_location']))
 				{
-					sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
-						VALUES ('".$usr['ip']."', '".sed_sql_prep($usr['name'])."', ".(int)$sys['now'].", '".sed_sql_prep($location)."',  '".sed_sql_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
+					cot_db_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
+						VALUES ('".$usr['ip']."', '".cot_db_prep($usr['name'])."', ".(int)$sys['now'].", '".cot_db_prep($location)."',  '".cot_db_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
 				}
 				else
 				{
-					sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".sed_sql_prep($location)."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
+					cot_db_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".cot_db_prep($location)."', online_subloc='".cot_db_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
 				}
 			}
 			else
 			{
 				if (empty($sys['online_location']))
 				{
-					sed_sql_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
-						VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".sed_sql_prep($location)."', '".sed_sql_prep($sys['sublocation'])."', -1, 0, 0)");
+					cot_db_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
+						VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".cot_db_prep($location)."', '".cot_db_prep($sys['sublocation'])."', -1, 0, 0)");
 				}
 				else
 				{
-					sed_sql_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".sed_sql_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
+					cot_db_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".cot_db_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
 				}
 			}
 		}
@@ -528,19 +528,19 @@ function sed_online_update()
 		else
 		{
 			$online_timedout = $sys['now'] - $cfg['timedout'];
-			sed_sql_query("DELETE FROM $db_online WHERE online_lastseen < $online_timedout");
-			$sys['whosonline_vis_count'] = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'"), 0, 0);
-			$sql_o = sed_sql_query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
-			$sys['whosonline_reg_count'] = sed_sql_numrows($sql_o);
+			cot_db_query("DELETE FROM $db_online WHERE online_lastseen < $online_timedout");
+			$sys['whosonline_vis_count'] = cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'"), 0, 0);
+			$sql_o = cot_db_query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
+			$sys['whosonline_reg_count'] = cot_db_numrows($sql_o);
 			$ii_o = 0;
-			while ($row_o = sed_sql_fetcharray($sql_o))
+			while ($row_o = cot_db_fetcharray($sql_o))
 			{
 				$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
-				$out['whosonline_reg_list'] .= sed_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
-				$sed_usersonline[] = $row_o['online_userid'];
+				$out['whosonline_reg_list'] .= cot_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
+				$cot_usersonline[] = $row_o['online_userid'];
 				$ii_o++;
 			}
-			sed_sql_freeresult($sql_o);
+			cot_db_freeresult($sql_o);
 			unset($ii_o, $sql_o, $row_o);
 			if ($cot_cache && $cot_cache->mem)
 			{
@@ -553,7 +553,7 @@ function sed_online_update()
 			}
 		}
 		$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
-		$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : sed_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.sed_declension($sys['whosonline_vis_count'], $Ls['Guests']);
+		$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : cot_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.cot_declension($sys['whosonline_vis_count'], $Ls['Guests']);
 
 		/* ======== Max users ======== */
 		if (!$cfg['disablehitstats'])
@@ -564,14 +564,14 @@ function sed_online_update()
 			}
 			else
 			{
-				$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-				$maxusers = (int) @sed_sql_result($sql, 0, 0);
+				$sql = cot_db_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
+				$maxusers = (int) @cot_db_result($sql, 0, 0);
 				$cot_cache && $cot_cache->mem && $cot_cache->mem->store('maxusers', $maxusers, 'system', 0);
 			}
 
 			if ($maxusers < $sys['whosonline_all_count'])
 			{
-				$sql = sed_sql_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
+				$sql = cot_db_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
 					WHERE stat_name='maxusers'");
 			}
 		}
@@ -584,18 +584,18 @@ function sed_online_update()
  * @param unknown_type $output
  * @return unknown
  */
-function sed_outputfilters($output)
+function cot_outputfilters($output)
 {
 	global $cfg;
 
 	/* === Hook === */
-	foreach (sed_getextplugins('output') as $pl)
+	foreach (cot_getextplugins('output') as $pl)
 	{
 		include $pl;
 	}
 	/* ==== */
 
-	$output = str_ireplace('</form>', sed_xp().'</form>', $output);
+	$output = str_ireplace('</form>', cot_xp().'</form>', $output);
 
 	return($output);
 }
@@ -607,7 +607,7 @@ function sed_outputfilters($output)
  * @param string $status_line HTTP status line containing response code
  * @return bool
  */
-function sed_sendheaders($content_type = 'text/html', $status_line = 'HTTP/1.1 200 OK')
+function cot_sendheaders($content_type = 'text/html', $status_line = 'HTTP/1.1 200 OK')
 {
 	global $cfg;
 	header($status_line);
@@ -632,7 +632,7 @@ function sed_sendheaders($content_type = 'text/html', $status_line = 'HTTP/1.1 2
  * @param bool $httponly HttpOnly flag
  * @return bool
  */
-function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
+function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
 {
 	if (strpos($domain, '.') === FALSE)
 	{
@@ -659,7 +659,7 @@ function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
 /**
  * Performs actions required right before shutdown
  */
-function sed_shutdown()
+function cot_shutdown()
 {
 	global $cot_cache, $cot_error;
 	// Clear import buffer if everything's OK on POST
@@ -672,7 +672,7 @@ function sed_shutdown()
 		ob_end_flush();
 	}
 	$cot_cache = null; // Need to destroy before DB connection is lost
-	sed_sql_close();
+	cot_db_close();
 }
 
 /**
@@ -682,7 +682,7 @@ function sed_shutdown()
  * @param array $params An associative array of available parameters
  * @return string
  */
-function sed_title($mask, $params = array())
+function cot_title($mask, $params = array())
 {
 	global $cfg;
 	$res = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
@@ -706,13 +706,13 @@ function sed_title($mask, $params = array())
  * @param int $itemid Item ID
  * @param mixed $datas Item contents
  */
-function sed_trash_put($type, $title, $itemid, $datas)
+function cot_trash_put($type, $title, $itemid, $datas)
 {
 	global $db_trash, $sys, $usr;
 
-	$sql = sed_sql_query("INSERT INTO $db_trash (tr_date, tr_type, tr_title, tr_itemid, tr_trashedby, tr_datas)
+	$sql = cot_db_query("INSERT INTO $db_trash (tr_date, tr_type, tr_title, tr_itemid, tr_trashedby, tr_datas)
 	VALUES
-	(".$sys['now_offset'].", '".sed_sql_prep($type)."', '".sed_sql_prep($title)."', '".sed_sql_prep($itemid)."', ".$usr['id'].", '".sed_sql_prep(serialize($datas))."')");
+	(".$sys['now_offset'].", '".cot_db_prep($type)."', '".cot_db_prep($title)."', '".cot_db_prep($itemid)."', ".$usr['id'].", '".cot_db_prep(serialize($datas))."')");
 }
 
 /**
@@ -721,7 +721,7 @@ function sed_trash_put($type, $title, $itemid, $datas)
  * @param int $l Length
  * @return string
  */
-function sed_unique($l=16)
+function cot_unique($l=16)
 {
 	return(mb_substr(md5(mt_rand()), 0, $l));
 }
@@ -738,7 +738,7 @@ function sed_unique($l=16)
  * @param string $mask Access mask
  * @return mixed
  */
-function sed_auth($area, $option, $mask = 'RWA')
+function cot_auth($area, $option, $mask = 'RWA')
 {
 	global $sys, $usr;
 
@@ -793,7 +793,7 @@ function sed_auth($area, $option, $mask = 'RWA')
  * @param int $maingrp User main group
  * @return array
  */
-function sed_auth_build($userid, $maingrp = 0)
+function cot_auth_build($userid, $maingrp = 0)
 {
 	global $db_auth, $db_groups_users;
 
@@ -808,18 +808,18 @@ function sed_auth_build($userid, $maingrp = 0)
 	else
 	{
 		$groups[] = $maingrp;
-		$sql = sed_sql_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
+		$sql = cot_db_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
 
-		while ($row = sed_sql_fetcharray($sql))
+		while ($row = cot_db_fetcharray($sql))
 		{
 			$groups[] = $row['gru_groupid'];
 		}
 	}
 
 	$sql_groups = implode(',', $groups);
-	$sql = sed_sql_query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN (".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
+	$sql = cot_db_query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN (".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
 
-	while ($row = sed_sql_fetcharray($sql))
+	while ($row = cot_db_fetcharray($sql))
 	{
 		$authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights'];
 	}
@@ -833,12 +833,12 @@ function sed_auth_build($userid, $maingrp = 0)
  * @param bool $allowed Authorization result
  * @return bool
  */
-function sed_block($allowed)
+function cot_block($allowed)
 {
 	if (!$allowed)
 	{
 		global $sys;
-		sed_redirect(sed_url('message', 'msg=930&'.$sys['url_redirect'], '', true));
+		cot_redirect(cot_url('message', 'msg=930&'.$sys['url_redirect'], '', true));
 	}
 	return FALSE;
 }
@@ -849,13 +849,13 @@ function sed_block($allowed)
  *
  * @return bool
  */
-function sed_blockguests()
+function cot_blockguests()
 {
 	global $usr, $sys;
 
 	if ($usr['id'] < 1)
 	{
-		sed_redirect(sed_url('message', "msg=930&".$sys['url_redirect'], '', true));
+		cot_redirect(cot_url('message', "msg=930&".$sys['url_redirect'], '', true));
 	}
 	return FALSE;
 }
@@ -870,7 +870,7 @@ function sed_blockguests()
  * @param int $birth Date of birth as UNIX timestamp
  * @return int
  */
-function sed_build_age($birth)
+function cot_build_age($birth)
 {
 	global $sys;
 
@@ -909,29 +909,29 @@ function sed_build_age($birth)
  * @param string $mask Format mask
  * @return string
  */
-function sed_build_catpath($cat, $mask = 'link_catpath')
+function cot_build_catpath($cat, $mask = 'link_catpath')
 {
-	global $sed_cat, $cfg;
+	global $cot_cat, $cfg;
 	$mask = str_replace('%1$s', '{$url}', $mask);
 	$mask = str_replace('%2$s', '{$title}', $mask);
 	if ($cfg['homebreadcrumb'])
 	{
-		$tmp[] = sed_rc('link_catpath', array(
+		$tmp[] = cot_rc('link_catpath', array(
 			'url' => $cfg['mainurl'],
 			'title' => htmlspecialchars($cfg['maintitle'])
 		));
 	}
-	$pathcodes = explode('.', $sed_cat[$cat]['path']);
+	$pathcodes = explode('.', $cot_cat[$cat]['path']);
 	$last = count($pathcodes) - 1;
-	$list = defined('SED_LIST');
+	$list = defined('COT_LIST');
 	foreach ($pathcodes as $k => $x)
 	{
 		if ($k != 'system')
 		{
-			$tmp[] = ($list && $k === $last) ? htmlspecialchars($sed_cat[$x]['title'])
-				: sed_rc($mask, array(
-				'url' =>sed_url('list', 'c='.$x),
-				'title' => htmlspecialchars($sed_cat[$x]['title'])
+			$tmp[] = ($list && $k === $last) ? htmlspecialchars($cot_cat[$x]['title'])
+				: cot_rc($mask, array(
+				'url' =>cot_url('list', 'c='.$x),
+				'title' => htmlspecialchars($cot_cat[$x]['title'])
 			));
 		}
 	}
@@ -944,13 +944,13 @@ function sed_build_catpath($cat, $mask = 'link_catpath')
  * @param string $flag Country code
  * @return string
  */
-function sed_build_country($flag)
+function cot_build_country($flag)
 {
-	global $sed_countries;
-	if (!$sed_countries) include_once sed_langfile('countries', 'core');
+	global $cot_countries;
+	if (!$cot_countries) include_once cot_langfile('countries', 'core');
 	$flag = (empty($flag)) ? '00' : $flag;
-	return sed_rc_link(sed_url('users', 'f=country_'.$flag), $sed_countries[$flag], array(
-		'title' => $sed_countries[$flag]
+	return cot_rc_link(cot_url('users', 'f=country_'.$flag), $cot_countries[$flag], array(
+		'title' => $cot_countries[$flag]
 	));
 }
 
@@ -961,7 +961,7 @@ function sed_build_country($flag)
  * @param bool $hide Hide email option
  * @return string
  */
-function sed_build_email($email, $hide = false)
+function cot_build_email($email, $hide = false)
 {
 	global $L;
 	if ($hide)
@@ -970,7 +970,7 @@ function sed_build_email($email, $hide = false)
 	}
 	elseif (!empty($email) && preg_match('#^\w[\._\w\-]+@[\w\.\-]+\.[a-z]+$#', $email))
 	{
-		return sed_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
+		return cot_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
 	}
 }
 
@@ -980,14 +980,14 @@ function sed_build_email($email, $hide = false)
  * @param string $flag Country code
  * @return string
  */
-function sed_build_flag($flag)
+function cot_build_flag($flag)
 {
-	global $sed_countries;
-	if (!$sed_countries) include_once sed_langfile('countries', 'core');
+	global $cot_countries;
+	if (!$cot_countries) include_once cot_langfile('countries', 'core');
 	$flag = (empty($flag)) ? '00' : $flag;
-	return sed_rc_link(sed_url('users', 'f=country_'.$flag),
-		sed_rc('icon_flag', array('code' => $flag, 'alt' => $flag)),
-		array('title' => $sed_countries[$flag])
+	return cot_rc_link(cot_url('users', 'f=country_'.$flag),
+		cot_rc('icon_flag', array('code' => $flag, 'alt' => $flag)),
+		array('title' => $cot_countries[$flag])
 	);
 }
 
@@ -997,12 +997,12 @@ function sed_build_flag($flag)
  * @param string $ip IP mask
  * @return string
  */
-function sed_build_ipsearch($ip)
+function cot_build_ipsearch($ip)
 {
 	global $sys;
 	if (!empty($ip))
 	{
-		return sed_rc_link(sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']), $ip);
+		return cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']), $ip);
 	}
 	return '';
 }
@@ -1013,7 +1013,7 @@ function sed_build_ipsearch($ip)
  * @param int $number Row number
  * @return string
  */
-function sed_build_oddeven($number)
+function cot_build_oddeven($number)
 {
 	return ($number % 2 == 0 ) ? 'even' : 'odd';
 }
@@ -1026,30 +1026,30 @@ function sed_build_oddeven($number)
  * @param $display Display available for edit
  * @return array
  */
-function sed_build_ratings($code, $url, $display)
+function cot_build_ratings($code, $url, $display)
 {
 	global $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L, $R;
 	static $called = false;
 
-	list($usr['auth_read_rat'], $usr['auth_write_rat'], $usr['isadmin_rat']) = sed_auth('ratings', 'a');
+	list($usr['auth_read_rat'], $usr['auth_write_rat'], $usr['isadmin_rat']) = cot_auth('ratings', 'a');
 
 	if ($cfg['disable_ratings'] || !$usr['auth_read_rat'])
 	{
 		return (array('', ''));
 	}
 
-	if (SED_AJAX)
+	if (COT_AJAX)
 	{
-		$rcode = sed_import('rcode', 'G', 'ALP');
+		$rcode = cot_import('rcode', 'G', 'ALP');
 		if (!empty($rcode))
 		{
 			$code = $rcode;
 		}
 	}
 
-	$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
+	$sql = cot_db_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
 
-	if ($row = sed_sql_fetcharray($sql))
+	if ($row = cot_db_fetcharray($sql))
 	{
 		$rating_average = $row['rating_average'];
 		$yetrated = TRUE;
@@ -1070,7 +1070,7 @@ function sed_build_ratings($code, $url, $display)
 		$rating_cntround = 0;
 	}
 
-	if (SED_AJAX && !empty($rcode))
+	if (COT_AJAX && !empty($rcode))
 	{
 		ob_clean();
 		echo $rating_cntround;
@@ -1092,14 +1092,14 @@ function sed_build_ratings($code, $url, $display)
 
 	$sep = (mb_strpos($url, '?') !== false) ? '&amp;' : '?';
 
-	$inr = sed_import('inr', 'G', 'ALP');
-	$newrate = sed_import('rate_'.$code,'P', 'INT');
+	$inr = cot_import('inr', 'G', 'ALP');
+	$newrate = cot_import('rate_'.$code,'P', 'INT');
 
 	$newrate = (!empty($newrate)) ? $newrate : 0;
 
 	if (!$cfg['ratings_allowchange'])
 	{
-		$alr_rated = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".sed_sql_prep($code)."'"), 0, 'COUNT(*)');
+		$alr_rated = cot_db_result(cot_db_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".cot_db_prep($code)."'"), 0, 'COUNT(*)');
 	}
 	else
 	{
@@ -1109,54 +1109,54 @@ function sed_build_ratings($code, $url, $display)
 	if ($inr == 'send' && $newrate >= 0 && $newrate <= 10 && $usr['auth_write_rat'] && $alr_rated <= 0)
 	{
 		/* == Hook for the plugins == */
-		foreach (sed_getextplugins('ratings.send.first') as $pl)
+		foreach (cot_getextplugins('ratings.send.first') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
 
-		$sql = sed_sql_query("DELETE FROM $db_rated WHERE rated_code='".sed_sql_prep($code)."' AND rated_userid='".$usr['id']."' ");
+		$sql = cot_db_query("DELETE FROM $db_rated WHERE rated_code='".cot_db_prep($code)."' AND rated_userid='".$usr['id']."' ");
 
 		if (!$yetrated)
 		{
-			$sql = sed_sql_query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('".sed_sql_prep($code)."', 0, ".(int)$newrate.", ".(int)$sys['now_offset'].", '') ");
+			$sql = cot_db_query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('".cot_db_prep($code)."', 0, ".(int)$newrate.", ".(int)$sys['now_offset'].", '') ");
 		}
 
-		$sql = ($newrate) ? sed_sql_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".sed_sql_prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")") : '';
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
-		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
+		$sql = ($newrate) ? cot_db_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".cot_db_prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")") : '';
+		$sql = cot_db_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
+		$rating_voters = cot_db_result($sql, 0, "COUNT(*)");
 		if ($rating_voters > 0)
 		{
-			$ratingnewaverage = sed_sql_result(sed_sql_query("SELECT AVG(rated_value) FROM $db_rated WHERE rated_code='$code'"), 0, "AVG(rated_value)");
-			$sql = sed_sql_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
+			$ratingnewaverage = cot_db_result(cot_db_query("SELECT AVG(rated_value) FROM $db_rated WHERE rated_code='$code'"), 0, "AVG(rated_value)");
+			$sql = cot_db_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
 		}
 		else
 		{
-			$sql = sed_sql_query("DELETE FROM $db_ratings WHERE rating_code='$code' ");
+			$sql = cot_db_query("DELETE FROM $db_ratings WHERE rating_code='$code' ");
 		}
 
 		/* == Hook for the plugins == */
-		foreach (sed_getextplugins('ratings.send.done') as $pl)
+		foreach (cot_getextplugins('ratings.send.done') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
 
-		sed_redirect($url);
+		cot_redirect($url);
 	}
 
 	if ($usr['id'] > 0)
 	{
-		$sql1 = sed_sql_query("SELECT rated_value FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' LIMIT 1");
+		$sql1 = cot_db_query("SELECT rated_value FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' LIMIT 1");
 
-		if ($row1 = sed_sql_fetcharray($sql1))
+		if ($row1 = cot_db_fetcharray($sql1))
 		{
 			$alreadyvoted = ($cfg['ratings_allowchange']) ? FALSE : TRUE;
 			$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
 		}
 	}
 
-	$t = new XTemplate(sed_skinfile('ratings'));
+	$t = new XTemplate(cot_skinfile('ratings'));
 
 	if (!$called && $usr['id'] > 0 && !$alreadyvoted)
 	{
@@ -1167,7 +1167,7 @@ function sed_build_ratings($code, $url, $display)
 		$called = true;
 	}
 	/* == Hook for the plugins == */
-	foreach (sed_getextplugins('ratings.main') as $pl)
+	foreach (cot_getextplugins('ratings.main') as $pl)
 	{
 		include $pl;
 	}
@@ -1177,8 +1177,8 @@ function sed_build_ratings($code, $url, $display)
 
 	if ($yetrated)
 	{
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
-		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
+		$sql = cot_db_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
+		$rating_voters = cot_db_result($sql, 0, "COUNT(*)");
 		$rating_average = $row['rating_average'];
 		$rating_since = $L['rat_since']." ".date($cfg['dateformat'], $row['rating_creationdate'] + $usr['timezone'] * 3600);
 		if ($rating_average<1)
@@ -1191,9 +1191,9 @@ function sed_build_ratings($code, $url, $display)
 		}
 
 		$rating = round($rating_average,0);
-		$rating_averageimg = sed_rc('icon_rating_stars', array('val' => $rating));
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
-		$rating_voters = sed_sql_result($sql, 0, "COUNT(*)");
+		$rating_averageimg = cot_rc('icon_rating_stars', array('val' => $rating));
+		$sql = cot_db_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
+		$rating_voters = cot_db_result($sql, 0, "COUNT(*)");
 	}
 	else
 	{
@@ -1215,7 +1215,7 @@ function sed_build_ratings($code, $url, $display)
 	));
 
 	/* == Hook for the plugins == */
-	foreach (sed_getextplugins('ratings.tags') as $pl)
+	foreach (cot_getextplugins('ratings.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -1253,14 +1253,14 @@ function sed_build_ratings($code, $url, $display)
  * @param int $level User level
  * @return unknown
  */
-function sed_build_stars($level)
+function cot_build_stars($level)
 {
 	global $theme, $R;
 
 	if($level>0 and $level<100)
 	{
 		$stars = floor($level / 10) + 1;
-		return sed_rc('icon_stars', array('val' => $stars));
+		return cot_rc('icon_stars', array('val' => $stars));
 	}
 	else
 	{
@@ -1275,7 +1275,7 @@ function sed_build_stars($level)
  * @param int $t2 Stamp2
  * @return string
  */
-function sed_build_timegap($t1,$t2)
+function cot_build_timegap($t1,$t2)
 {
 	global $Ls;
 
@@ -1287,27 +1287,27 @@ function sed_build_timegap($t1,$t2)
 	}
 	elseif ($gap<60)
 	{
-		$result = sed_declension($gap,$Ls['Seconds']);
+		$result = cot_declension($gap,$Ls['Seconds']);
 	}
 	elseif ($gap<3600)
 	{
 		$gap = floor($gap/60);
-		$result = sed_declension($gap,$Ls['Minutes']);
+		$result = cot_declension($gap,$Ls['Minutes']);
 	}
 	elseif ($gap<86400)
 	{
 		$gap1 = floor($gap/3600);
 		$gap2 = floor(($gap-$gap1*3600)/60);
-		$result = sed_declension($gap1,$Ls['Hours']).' ';
+		$result = cot_declension($gap1,$Ls['Hours']).' ';
 		if ($gap2>0)
 		{
-			$result .= sed_declension($gap2,$Ls['Minutes']);
+			$result .= cot_declension($gap2,$Ls['Minutes']);
 		}
 	}
 	else
 	{
 		$gap = floor($gap/86400);
-		$result = sed_declension($gap,$Ls['Days']);
+		$result = cot_declension($gap,$Ls['Days']);
 	}
 
 	return $result;
@@ -1319,13 +1319,13 @@ function sed_build_timegap($t1,$t2)
  * @param int $tz Timezone
  * @return string
  */
-function sed_build_timezone($tz)
+function cot_build_timezone($tz)
 {
 	global $L;
 
 	$result = 'GMT';
 
-	$result .= sed_declension($tz,$Ls['Hours']);
+	$result .= cot_declension($tz,$Ls['Hours']);
 
 	return $result;
 }
@@ -1337,7 +1337,7 @@ function sed_build_timezone($tz)
  * @param int $maxlen Max. allowed length
  * @return unknown
  */
-function sed_build_url($text, $maxlen=64)
+function cot_build_url($text, $maxlen=64)
 {
 	global $cfg;
 
@@ -1348,7 +1348,7 @@ function sed_build_url($text, $maxlen=64)
 			$text='http://'. $text;
 		}
 		$text = htmlspecialchars($text);
-		$text = sed_rc_link($text, sed_cutstring($text, $maxlen));
+		$text = cot_rc_link($text, cot_cutstring($text, $maxlen));
 	}
 	return $text;
 }
@@ -1360,7 +1360,7 @@ function sed_build_url($text, $maxlen=64)
  * @param string $user User name
  * @return string
  */
-function sed_build_user($id, $user)
+function cot_build_user($id, $user)
 {
 	global $cfg;
 
@@ -1374,7 +1374,7 @@ function sed_build_user($id, $user)
 	}
 	else
 	{
-		return (!empty($user)) ? sed_rc_link(sed_url('users', 'm=details&id='.$id.'&u='.$user), $user) : '?';
+		return (!empty($user)) ? cot_rc_link(cot_url('users', 'm=details&id='.$id.'&u='.$user), $user) : '?';
 	}
 }
 
@@ -1384,7 +1384,7 @@ function sed_build_user($id, $user)
  * @param string $image Image src
  * @return string
  */
-function sed_build_userimage($image, $type = 'none')
+function cot_build_userimage($image, $type = 'none')
 {
 	global $R;
 	if (empty($image) && $type == 'avatar')
@@ -1397,7 +1397,7 @@ function sed_build_userimage($image, $type = 'none')
 	}
 	if (!empty($image))
 	{
-		return sed_rc("img_$type", array('src' => $image));
+		return cot_rc("img_$type", array('src' => $image));
 	}
 	return '';
 }
@@ -1408,7 +1408,7 @@ function sed_build_userimage($image, $type = 'none')
  * @param string $text Signature text
  * @return string
  */
-function sed_build_usertext($text)
+function cot_build_usertext($text)
 {
 	global $cfg;
 	if (!$cfg['usertextimg'])
@@ -1428,7 +1428,7 @@ function sed_build_usertext($text)
 			$text = preg_replace("#$bbcode#i", $bbcodehtml, $text);
 		}
 	}
-	return sed_parse($text, $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
+	return cot_parse($text, $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
 }
 
 /**
@@ -1449,7 +1449,7 @@ function sed_build_usertext($text)
  * @param int $jpegquality JPEG quality in %
  * @param string $dim_priority Resize priority dimension
  */
-function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority="Width")
+function cot_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority="Width")
 {
 	if (!function_exists('gd_info'))
 	{
@@ -1570,7 +1570,7 @@ function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
  * @param string $more Extra javascript
  * @return string
  */
-function sed_javascript($more='')
+function cot_javascript($more='')
 {
 	// TODO replace this function with JS/CSS proxy
 	global $cfg, $lang;
@@ -1603,9 +1603,9 @@ function sed_javascript($more='')
  * @param string $name Dropdown name
  * @return string
  */
-function sed_selectbox_theme($selected_theme, $selected_scheme, $input_name)
+function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 {
-	sed_require_api('extensions');
+	cot_require_api('extensions');
 	$handle = opendir('./themes/');
 	while ($f = readdir($handle))
 	{
@@ -1624,7 +1624,7 @@ function sed_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 		$themeinfo = "./themes/$x/$x.php";
 		if (file_exists($themeinfo))
 		{
-			$info = sed_infoget($themeinfo, 'COT_THEME');
+			$info = cot_infoget($themeinfo, 'COT_THEME');
 			if ($info)
 			{
 				if (empty($info['Schemes']))
@@ -1657,7 +1657,7 @@ function sed_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 		}
 	}
 
-	return sed_selectbox("$selected_theme:$selected_scheme", $name, $values, $titles, false);
+	return cot_selectbox("$selected_theme:$selected_scheme", $name, $values, $titles, false);
 }
 
 /*
@@ -1671,7 +1671,7 @@ function sed_selectbox_theme($selected_theme, $selected_scheme, $input_name)
  * @param string $class If non-empty, check messages of this specific class only
  * @return bool
  */
-function sed_check_messages($src = '', $class = '')
+function cot_check_messages($src = '', $class = '')
 {
 	global $error_string;
 
@@ -1721,10 +1721,10 @@ function sed_check_messages($src = '', $class = '')
  * Clears error and other messages after they have bin displayed
  * @param string $src If non-emtpy, clear messages in this specific source only
  * @param string $class If non-empty, clear messages of this specific class only
- * @see sed_error()
- * @see sed_message()
+ * @see cot_error()
+ * @see cot_message()
  */
-function sed_clear_messages($src = '', $class = '')
+function cot_clear_messages($src = '', $class = '')
 {
 	global $error_string;
 
@@ -1792,11 +1792,11 @@ function sed_clear_messages($src = '', $class = '')
  * @param bool $cond Really die?
  * @return bool
  */
-function sed_die($cond=TRUE)
+function cot_die($cond=TRUE)
 {
 	if ($cond)
 	{
-		sed_redirect(sed_url('message', "msg=950", '', true));
+		cot_redirect(cot_url('message', "msg=950", '', true));
 	}
 	return FALSE;
 }
@@ -1807,11 +1807,11 @@ function sed_die($cond=TRUE)
  * @param string $text Reason
  * @param string $title Message title
  */
-function sed_diefatal($text='Reason is unknown.', $title='Fatal error')
+function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 {
 	global $cfg;
 
-	if (defined('SED_DEBUG') && SED_DEBUG)
+	if (defined('COT_DEBUG') && COT_DEBUG)
 	{
 		echo '<br /><pre>';
 		debug_print_backtrace();
@@ -1828,11 +1828,11 @@ function sed_diefatal($text='Reason is unknown.', $title='Fatal error')
  *
  * @param bool $disabled
  */
-function sed_dieifdisabled($disabled)
+function cot_dieifdisabled($disabled)
 {
 	if ($disabled)
 	{
-		sed_redirect(sed_url('message', "msg=940", '', true));
+		cot_redirect(cot_url('message', "msg=940", '', true));
 	}
 }
 
@@ -1841,14 +1841,14 @@ function sed_dieifdisabled($disabled)
  *
  * @param XTemplate $tpl Current template object reference
  */
-function sed_display_messages($tpl)
+function cot_display_messages($tpl)
 {
 	global $L;
-	if (!sed_check_messages())
+	if (!cot_check_messages())
 	{
 		return;
 	}
-	$errors = sed_get_messages('', 'error');
+	$errors = cot_get_messages('', 'error');
 	if (count($errors) > 0)
 	{
 		foreach ($errors as $msg)
@@ -1859,7 +1859,7 @@ function sed_display_messages($tpl)
 		}
 		$tpl->parse('MAIN.ERROR');
 	}
-	$warnings = sed_get_messages('', 'warning');
+	$warnings = cot_get_messages('', 'warning');
 	if (count($warnings) > 0)
 	{
 		foreach ($warnings as $msg)
@@ -1870,7 +1870,7 @@ function sed_display_messages($tpl)
 		}
 		$tpl->parse('MAIN.WARNING');
 	}
-	$okays = sed_get_messages('', 'ok');
+	$okays = cot_get_messages('', 'ok');
 	if (count($okays) > 0)
 	{
 		foreach ($okays as $msg)
@@ -1881,20 +1881,20 @@ function sed_display_messages($tpl)
 		}
 		$tpl->parse('MAIN.DONE');
 	}
-	sed_clear_messages();
+	cot_clear_messages();
 }
 
 /**
  * Records an error message to be displayed on results page
  * @param string $message Message lang string code or full text
  * @param string $src Error source identifier, such as field name for invalid input
- * @see sed_message()
+ * @see cot_message()
  */
-function sed_error($message, $src = 'default')
+function cot_error($message, $src = 'default')
 {
 	global $cot_error;
 	$cot_error ? $cot_error++ : $cot_error = 1;
-	sed_message($message, 'error', $src);
+	cot_message($message, 'error', $src);
 }
 
 /**
@@ -1904,7 +1904,7 @@ function sed_error($message, $src = 'default')
  * @param string $class Message class. Search for all classes if empty
  * @return array Array of message strings
  */
-function sed_get_messages($src = 'default', $class = '')
+function cot_get_messages($src = 'default', $class = '')
 {
 	$messages = array();
 	if (empty($src) && empty($class))
@@ -1957,11 +1957,11 @@ function sed_get_messages($src = 'default', $class = '')
  * @param string $src Origin of the target messages
  * @param string $class Group messages of selected class only. Empty to group all
  * @return string Composite HTML string
- * @see sed_error()
- * @see sed_get_messages()
- * @see sed_message()
+ * @see cot_error()
+ * @see cot_get_messages()
+ * @see cot_message()
  */
-function sed_implode_messages($src = 'default', $class = '')
+function cot_implode_messages($src = 'default', $class = '')
 {
 	global $R, $L, $error_string;
 	$res = '';
@@ -1971,18 +1971,18 @@ function sed_implode_messages($src = 'default', $class = '')
 		return;
 	}
 
-	$messages = sed_get_messages($src, $class);
+	$messages = cot_get_messages($src, $class);
 	foreach ($messages as $msg)
 	{
 		$text = isset($L[$msg['text']]) ? $L[$msg['text']] : $msg['text'];
-		$res .= sed_rc('code_msg_line', array('class' => $msg['class'], 'text' => $text));
+		$res .= cot_rc('code_msg_line', array('class' => $msg['class'], 'text' => $text));
 	}
 
 	if (!empty($error_string) && (empty($class) || $class == 'error'))
 	{
-		$res .= sed_rc('code_msg_line', array('class' => 'error', 'text' => $error_string));
+		$res .= cot_rc('code_msg_line', array('class' => 'error', 'text' => $error_string));
 	}
-	return empty($res) ? '' : sed_rc('code_msg_begin', array('class' => empty($class) ? 'message' : $class))
+	return empty($res) ? '' : cot_rc('code_msg_begin', array('class' => empty($class) ? 'message' : $class))
 		. $res . $R['code_msg_end'];
 }
 
@@ -1992,11 +1992,11 @@ function sed_implode_messages($src = 'default', $class = '')
  * @param string $text Event description
  * @param string $group Event group
  */
-function sed_log($text, $group='def')
+function cot_log($text, $group='def')
 {
 	global $db_logger, $sys, $usr, $_SERVER;
 
-	$sql = sed_sql_query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (".(int)$sys['now_offset'].", '".$usr['ip']."', '".sed_sql_prep($usr['name'])."', '$group', '".sed_sql_prep($text.' - '.$_SERVER['REQUEST_URI'])."')");
+	$sql = cot_db_query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (".(int)$sys['now_offset'].", '".$usr['ip']."', '".cot_db_prep($usr['name'])."', '$group', '".cot_db_prep($text.' - '.$_SERVER['REQUEST_URI'])."')");
 }
 
 /**
@@ -2007,10 +2007,10 @@ function sed_log($text, $group='def')
  * @param string $v Variable name
  * @param string $o Value
  */
-function sed_log_sed_import($s, $e, $v, $o)
+function cot_log_import($s, $e, $v, $o)
 {
 	$text = "A variable type check failed, expecting ".$s."/".$e." for '".$v."' : ".$o;
-	sed_log($text, 'sec');
+	cot_log($text, 'sec');
 }
 
 /**
@@ -2018,9 +2018,9 @@ function sed_log_sed_import($s, $e, $v, $o)
  * @param string $text Message lang string code or full text
  * @param string $class Message class: 'status', 'error', 'ok', 'notice', etc.
  * @param string $src Message source identifier
- * @see sed_error()
+ * @see cot_error()
  */
-function sed_message($text, $class = 'ok', $src = 'default')
+function cot_message($text, $class = 'ok', $src = 'default')
 {
 	global $cfg;
 	if (!$cfg['msg_separate'])
@@ -2046,7 +2046,7 @@ function sed_message($text, $class = 'ok', $src = 'default')
  * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
  * @return string File path
  */
-function sed_incfile($extension, $part, $is_plugin = false)
+function cot_incfile($extension, $part, $is_plugin = false)
 {
 	global $cfg;
 	if ($is_plugin)
@@ -2071,7 +2071,7 @@ function sed_incfile($extension, $part, $is_plugin = false)
  * @param mixed $default Default (fallback) language code
  * @return bool
  */
-function sed_langfile($name, $type = 'plug', $default = 'en')
+function cot_langfile($name, $type = 'plug', $default = 'en')
 {
 	global $cfg, $lang;
 	if ($type == 'module')
@@ -2116,9 +2116,9 @@ function sed_langfile($name, $type = 'plug', $default = 'en')
  * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
  * @param string $part Extension part
  */
-function sed_require($name, $is_plugin = false, $part = 'functions')
+function cot_require($name, $is_plugin = false, $part = 'functions')
 {
-	require_once sed_incfile($name, $part, $is_plugin);
+	require_once cot_incfile($name, $part, $is_plugin);
 }
 
 /**
@@ -2126,7 +2126,7 @@ function sed_require($name, $is_plugin = false, $part = 'functions')
  *
  * @param string $api_name API name
  */
-function sed_require_api($api_name)
+function cot_require_api($api_name)
 {
 	global $cfg;
 	require_once $cfg['system_dir'] . "/$api_name.php";
@@ -2138,12 +2138,12 @@ function sed_require_api($api_name)
  * @param string $name Extension name
  * @param bool $type Langfile type: 'plug', 'module' or 'core'
  * @param mixed $default Default (fallback) language code
- * @see sed_langfile()
+ * @see cot_langfile()
  */
-function sed_require_lang($name, $type = 'plug', $default = 'en')
+function cot_require_lang($name, $type = 'plug', $default = 'en')
 {
 	global $cfg, $L, $Ls, $R, $themelang;
-	require_once sed_langfile($name, $type, $default);
+	require_once cot_langfile($name, $type, $default);
 }
 
 /**
@@ -2152,10 +2152,10 @@ function sed_require_lang($name, $type = 'plug', $default = 'en')
  * @param string $name Extension name
  * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
  */
-function sed_require_rc($name, $is_plugin = false)
+function cot_require_rc($name, $is_plugin = false)
 {
 	global $cfg, $L, $Ls, $R, $themelang;
-	require_once sed_incfile($name, 'resources', $is_plugin);
+	require_once cot_incfile($name, 'resources', $is_plugin);
 }
 
 /**
@@ -2166,7 +2166,7 @@ function sed_require_rc($name, $is_plugin = false)
  * @global array $out Output vars
  * @return mixed
  */
-function sed_schemefile()
+function cot_schemefile()
 {
 	global $usr, $cfg, $out;
 
@@ -2235,7 +2235,7 @@ function sed_schemefile()
  * @param mixed $plug Plugin flag (bool), or '+' (string) to probe plugin
  * @return string
  */
-function sed_skinfile($base, $plug = false)
+function cot_skinfile($base, $plug = false)
 {
 	global $usr, $cfg;
 
@@ -2250,8 +2250,8 @@ function sed_skinfile($base, $plug = false)
 
 	$basename = $base[0];
 
-	if ((defined('SED_ADMIN')
-		|| defined('SED_MESSAGE') && $_SESSION['s_run_admin']))
+	if ((defined('COT_ADMIN')
+		|| defined('COT_MESSAGE') && $_SESSION['s_run_admin']))
 	{
 		$admn = true;
 	}
@@ -2259,7 +2259,7 @@ function sed_skinfile($base, $plug = false)
 	if ($plug === '+')
 	{
 		$plug = false;
-		if (defined('SED_PLUG'))
+		if (defined('COT_PLUG'))
 		{
 			global $e;
 
@@ -2291,12 +2291,12 @@ function sed_skinfile($base, $plug = false)
 		{
 			$scan_prefix[] = './themes/'.$cfg['defaulttheme'].'/'.$basename.'/';
 		}
-		if ((defined('SED_ADMIN') && $plug !== 'module'
-			|| defined('SED_MESSAGE') && $_SESSION['s_run_admin']))
+		if ((defined('COT_ADMIN') && $plug !== 'module'
+			|| defined('COT_MESSAGE') && $_SESSION['s_run_admin']))
 		{
 			$scan_prefix[] = $cfg['system_dir'].'/admin/tpl/';
 		}
-		elseif (defined('SED_USERS'))
+		elseif (defined('COT_USERS'))
 		{
 			$scan_prefix[] = $cfg['system_dir'].'/users/tpl/';
 		}
@@ -2344,7 +2344,7 @@ function sed_skinfile($base, $plug = false)
  * @param int $year Year
  * @return int
  */
-function sed_mktime($hour = false, $minute = false, $second = false, $month = false, $date = false, $year = false)
+function cot_mktime($hour = false, $minute = false, $second = false, $month = false, $date = false, $year = false)
 {
 	if ($hour === false)  $hour  = date ('G');
 	if ($minute === false) $minute = date ('i');
@@ -2362,7 +2362,7 @@ function sed_mktime($hour = false, $minute = false, $second = false, $month = fa
  * @param string $date Date in MySQL format
  * @return int UNIX timestamp
  */
-function sed_date2stamp($date)
+function cot_date2stamp($date)
 {
 	if ($date == '0000-00-00') return 0;
 	preg_match('#(\d{4})-(\d{2})-(\d{2})#', $date, $m);
@@ -2375,7 +2375,7 @@ function sed_date2stamp($date)
  * @param int $stamp UNIX timestamp
  * @return string MySQL date
  */
-function sed_stamp2date($stamp)
+function cot_stamp2date($stamp)
 {
 	return date('Y-m-d', $stamp);
 }
@@ -2405,13 +2405,13 @@ function sed_stamp2date($stamp)
  * @param string $ajax_params URL parameters for ajax if $ajax_module is not empty
  * @return array
  */
-function sed_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd', $hash = '',
+function cot_pagenav($module, $params, $current, $entries, $perpage, $characters = 'd', $hash = '',
 	$ajax = false, $target_div = '', $ajax_module = '', $ajax_params = array())
 {
-	if (function_exists('sed_pagenav_custom'))
+	if (function_exists('cot_pagenav_custom'))
 	{
 		// For custom pagination functions in plugins
-		return sed_pagenav_custom($module, $params, $current, $entries, $perpage, $characters, $hash,
+		return cot_pagenav_custom($module, $params, $current, $entries, $perpage, $characters, $hash,
 			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
@@ -2466,14 +2466,14 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
 			$rel = $base_rel;
 		}
-		$before .= sed_rc('link_pagenav_main', array(
-			'url' => sed_url($module, $args, $hash),
+		$before .= cot_rc('link_pagenav_main', array(
+			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $i
@@ -2488,14 +2488,14 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 			if ($ajax_rel)
 			{
 				$ajax_args[$characters] = $args[$characters];
-				$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+				$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 			}
 			else
 			{
 				$rel = $base_rel;
 			}
-			$before .= sed_rc('link_pagenav_main', array(
-				'url' => sed_url($module, $args, $hash),
+			$before .= cot_rc('link_pagenav_main', array(
+				'url' => cot_url($module, $args, $hash),
 				'event' => $event,
 				'rel' => $rel,
 				'num' => $i + 1
@@ -2510,15 +2510,15 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
 			$rel = $base_rel;
 		}
 		$rc = $j == $currentpage ? 'current' : 'main';
-		$pages .= sed_rc('link_pagenav_'.$rc, array(
-			'url' => sed_url($module, $args, $hash),
+		$pages .= cot_rc('link_pagenav_'.$rc, array(
+			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $j
@@ -2541,14 +2541,14 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 			if ($ajax_rel)
 			{
 				$ajax_args[$characters] = $args[$characters];
-				$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+				$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 			}
 			else
 			{
 				$rel = $base_rel;
 			}
-			$after .= sed_rc('link_pagenav_main', array(
-				'url' => sed_url($module, $args, $hash),
+			$after .= cot_rc('link_pagenav_main', array(
+				'url' => cot_url($module, $args, $hash),
 				'event' => $event,
 				'rel' => $rel,
 				'num' => $i - 1
@@ -2558,14 +2558,14 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
 			$rel = $base_rel;
 		}
-		$after .= sed_rc('link_pagenav_main', array(
-			'url' => sed_url($module, $args, $hash),
+		$after .= cot_rc('link_pagenav_main', array(
+			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $i
@@ -2588,14 +2588,14 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
 			$rel = $base_rel;
 		}
-		$prev = sed_rc('link_pagenav_prev', array(
-			'url' => sed_url($module, $args, $hash),
+		$prev = cot_rc('link_pagenav_prev', array(
+			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $prev_n + 1
@@ -2604,14 +2604,14 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
 			$rel = $base_rel;
 		}
-		$first = sed_rc('link_pagenav_first', array(
-			'url' => sed_url($module, $args, $hash),
+		$first = cot_rc('link_pagenav_first', array(
+			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => 1
@@ -2625,14 +2625,14 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
 			$rel = $base_rel;
 		}
-		$next = sed_rc('link_pagenav_next', array(
-			'url' => sed_url($module, $args, $hash),
+		$next = cot_rc('link_pagenav_next', array(
+			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $next_n + 1
@@ -2642,21 +2642,21 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
-			$rel = $base_rel.str_replace('?', ';', sed_url($ajax_module, $ajax_args)).'"';
+			$rel = $base_rel.str_replace('?', ';', cot_url($ajax_module, $ajax_args)).'"';
 		}
 		else
 		{
 			$rel = $base_rel;
 		}
-		$last = sed_rc('link_pagenav_last', array(
-			'url' => sed_url($module, $args, $hash),
+		$last = cot_rc('link_pagenav_last', array(
+			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $last_n + 1
 		));
 		$lastn  = (($last +  $perpage)<$totalpages) ?
-			sed_rc('link_pagenav_main', array(
-			'url' => sed_url($module, $args, $hash),
+			cot_rc('link_pagenav_main', array(
+			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
 			'num' => $last_n / $perpage + 1
@@ -2688,7 +2688,7 @@ function sed_pagenav($module, $params, $current, $entries, $perpage, $characters
  * @param array $params Associative array of arguments or a parameter string
  * @return string Assembled resource string
  */
-function sed_rc($name, $params = array())
+function cot_rc($name, $params = array())
 {
 	global $R, $L;
 	$res = isset($R[$name]) ? $R[$name]
@@ -2711,7 +2711,7 @@ function sed_rc($name, $params = array())
  * @param mixed $attrs A string or associative array
  * @return string
  */
-function sed_rc_attr_string($attrs)
+function cot_rc_attr_string($attrs)
 {
 	$attr_str = '';
 	if (is_array($attrs))
@@ -2736,9 +2736,9 @@ function sed_rc_attr_string($attrs)
  * @param mixed $attrs Additional attributes as a string or an associative array
  * @return string HTML link
  */
-function sed_rc_link($url, $text, $attrs = '')
+function cot_rc_link($url, $text, $attrs = '')
 {
-	$link_attrs = sed_rc_attr_string($attrs);
+	$link_attrs = cot_rc_attr_string($attrs);
 	return '<a href="'.$url.'"'.$link_attrs.'>'.$text.'</a>';
 }
 
@@ -2751,13 +2751,13 @@ function sed_rc_link($url, $text, $attrs = '')
  *
  * @return bool
  */
-function sed_check_xg()
+function cot_check_xg()
 {
 	global $sys;
-	$x = sed_import('x', 'G', 'ALP');
+	$x = cot_import('x', 'G', 'ALP');
 	if ($x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 	{
-		sed_redirect(sed_url('message', 'msg=950', '', true));
+		cot_redirect(cot_url('message', 'msg=950', '', true));
 		return false;
 	}
 	return true;
@@ -2768,9 +2768,9 @@ function sed_check_xg()
  *
  * @return bool
  */
-function sed_check_xp()
+function cot_check_xp()
 {
-	return (defined('SED_NO_ANTIXSS') || defined('SED_AUTH')) ?
+	return (defined('COT_NO_ANTIXSS') || defined('COT_AUTH')) ?
 		($_SERVER['REQUEST_METHOD'] == 'POST') : isset($_POST['x']);
 }
 
@@ -2778,11 +2778,11 @@ function sed_check_xp()
  * Clears current user action in Who's online.
  *
  */
-function sed_shield_clearaction()
+function cot_shield_clearaction()
 {
 	global  $db_online, $usr;
 
-	$sql = sed_sql_query("UPDATE $db_online SET online_action='' WHERE online_ip='".$usr['ip']."'");
+	$sql = cot_db_query("UPDATE $db_online SET online_action='' WHERE online_ip='".$usr['ip']."'");
 }
 
 /**
@@ -2793,15 +2793,15 @@ function sed_shield_clearaction()
  * @param int $lastseen User last seen timestamp
  * @return int
  */
-function sed_shield_hammer($hammer,$action, $lastseen)
+function cot_shield_hammer($hammer,$action, $lastseen)
 {
 	global $cfg, $sys, $usr;
 
 	if ($action=='Hammering')
 	{
-		sed_shield_protect();
-		sed_shield_clearaction();
-		sed_stat_inc('totalantihammer');
+		cot_shield_protect();
+		cot_shield_clearaction();
+		cot_stat_inc('totalantihammer');
 	}
 
 	if (($sys['now']-$lastseen)<4)
@@ -2809,8 +2809,8 @@ function sed_shield_hammer($hammer,$action, $lastseen)
 		$hammer++;
 		if ($hammer>$cfg['shieldzhammer'])
 		{
-			sed_shield_update(180, 'Hammering');
-			sed_log('IP banned 3 mins, was hammering', 'sec');
+			cot_shield_update(180, 'Hammering');
+			cot_log('IP banned 3 mins, was hammering', 'sec');
 			$hammer = 0;
 		}
 	}
@@ -2828,13 +2828,13 @@ function sed_shield_hammer($hammer,$action, $lastseen)
  * Warn user of shield protection
  *
  */
-function sed_shield_protect()
+function cot_shield_protect()
 {
 	global $cfg, $sys, $online_count, $shield_limit, $shield_action;
 
 	if ($cfg['shieldenabled'] && $online_count>0 && $shield_limit>$sys['now'])
 	{
-		sed_diefatal('Shield protection activated, please retry in '.($shield_limit-$sys['now']).' seconds...<br />After this duration, you can refresh the current page to continue.<br />Last action was : '.$shield_action);
+		cot_diefatal('Shield protection activated, please retry in '.($shield_limit-$sys['now']).' seconds...<br />After this duration, you can refresh the current page to continue.<br />Last action was : '.$shield_action);
 	}
 }
 
@@ -2844,13 +2844,13 @@ function sed_shield_protect()
  * @param int $shield_add Hammer
  * @param string $shield_newaction New action type
  */
-function sed_shield_update($shield_add, $shield_newaction)
+function cot_shield_update($shield_add, $shield_newaction)
 {
 	global $cfg, $usr, $sys, $db_online;
 	if ($cfg['shieldenabled'])
 	{
 		$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] /100);
-		$sql = sed_sql_query("UPDATE $db_online SET online_shield='$shield_newlimit', online_action='$shield_newaction' WHERE online_ip='".$usr['ip']."'");
+		$sql = cot_db_query("UPDATE $db_online SET online_shield='$shield_newlimit', online_action='$shield_newaction' WHERE online_ip='".$usr['ip']."'");
 	}
 }
 
@@ -2859,7 +2859,7 @@ function sed_shield_update($shield_add, $shield_newaction)
  *
  * @return unknown
  */
-function sed_xg()
+function cot_xg()
 {
 	global $sys;
 	return ('x='.$sys['xk']);
@@ -2870,7 +2870,7 @@ function sed_xg()
  *
  * @return string
  */
-function sed_xp()
+function cot_xp()
 {
 	global $sys;
 	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="'.$sys['xk'].'" /></div>';
@@ -2886,11 +2886,11 @@ function sed_xp()
  *
  * @param string $name Parameter name
  */
-function sed_stat_create($name)
+function cot_stat_create($name)
 {
 	global $db_stats;
 
-	sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".sed_sql_prep($name)."', 1)");
+	cot_db_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".cot_db_prep($name)."', 1)");
 }
 
 /**
@@ -2899,12 +2899,12 @@ function sed_stat_create($name)
  * @param string $name Parameter name
  * @return int
  */
-function sed_stat_get($name)
+function cot_stat_get($name)
 {
 	global $db_stats;
 
-	$sql = sed_sql_query("SELECT stat_value FROM $db_stats where stat_name='$name' LIMIT 1");
-	return (sed_sql_numrows($sql) > 0) ? (int) sed_sql_result($sql, 0, 'stat_value') : FALSE;
+	$sql = cot_db_query("SELECT stat_value FROM $db_stats where stat_name='$name' LIMIT 1");
+	return (cot_db_numrows($sql) > 0) ? (int) cot_db_result($sql, 0, 'stat_value') : FALSE;
 }
 
 /**
@@ -2913,10 +2913,10 @@ function sed_stat_get($name)
  * @param string $name Parameter name
  * @param int $value Increment step
  */
-function sed_stat_inc($name, $value = 1)
+function cot_stat_inc($name, $value = 1)
 {
 	global $db_stats;
-	sed_sql_query("UPDATE $db_stats SET stat_value=stat_value+$value WHERE stat_name='$name'");
+	cot_db_query("UPDATE $db_stats SET stat_value=stat_value+$value WHERE stat_name='$name'");
 }
 
 /**
@@ -2925,11 +2925,11 @@ function sed_stat_inc($name, $value = 1)
  * @param string $name Parameter name
  * @param int $value Increment step
  */
-function sed_stat_update($name, $value = 1)
+function cot_stat_update($name, $value = 1)
 {
 	global $db_stats;
-	sed_sql_query("INSERT INTO $db_stats (stat_name, stat_value)
-		VALUES ('".sed_sql_prep($name)."', 1)
+	cot_db_query("INSERT INTO $db_stats (stat_name, stat_value)
+		VALUES ('".cot_db_prep($name)."', 1)
 		ON DUPLICATE KEY UPDATE stat_value=stat_value+$value");
 }
 
@@ -2940,10 +2940,10 @@ function sed_stat_update($name, $value = 1)
 /**
  * Loads URL Transformation Rules
  */
-function sed_load_urltrans()
+function cot_load_urltrans()
 {
-	global $sed_urltrans;
-	$sed_urltrans = array();
+	global $cot_urltrans;
+	$cot_urltrans = array();
 	$fp = fopen('./datas/urltrans.dat', 'r');
 	// Rules
 	while ($line = trim(fgets($fp), " \t\r\n"))
@@ -2959,7 +2959,7 @@ function sed_load_urltrans()
 				$rule['params'][$key] = explode('|', $val);
 			}
 		}
-		$sed_urltrans[$parts[0]][] = $rule;
+		$cot_urltrans[$parts[0]][] = $rule;
 	}
 	fclose($fp);
 }
@@ -2969,19 +2969,19 @@ function sed_load_urltrans()
  *
  * @param string $url Target URI
  */
-function sed_redirect($url)
+function cot_redirect($url)
 {
 	global $cfg, $cot_error;
 
 	if ($cot_error && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 		// Save the POST data
-		sed_import_buffer_save();
+		cot_import_buffer_save();
 	}
 
-	if (!sed_url_check($url))
+	if (!cot_url_check($url))
 	{
-		$url = SED_ABSOLUTE_URL . $url;
+		$url = COT_ABSOLUTE_URL . $url;
 	}
 
 	if ($cfg['redirmode'])
@@ -3016,18 +3016,18 @@ HTM;
  * @param bool $header Set this TRUE if the url will be used in HTTP header rather than body output
  * @return string
  */
-function sed_url($name, $params = '', $tail = '', $header = false)
+function cot_url($name, $params = '', $tail = '', $header = false)
 {
-	global $cfg, $sed_urltrans;
+	global $cfg, $cot_urltrans;
 	// Preprocess arguments
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
-	$area = empty($sed_urltrans[$name]) ? '*' : $name;
+	$area = empty($cot_urltrans[$name]) ? '*' : $name;
 	// Find first matching rule
-	$url = $sed_urltrans['*'][0]['trans']; // default rule
+	$url = $cot_urltrans['*'][0]['trans']; // default rule
 	$rule = array();
-	if (!empty($sed_urltrans[$area]))
+	if (!empty($cot_urltrans[$area]))
 	{
-		foreach($sed_urltrans[$area] as $rule)
+		foreach($cot_urltrans[$area] as $rule)
 		{
 			$matched = true;
 			foreach($rule['params'] as $key => $val)
@@ -3053,7 +3053,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	$spec['_zone'] = $name;
 	$spec['_host'] = $mainurl['host'];
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
-	$spec['_path'] = SED_SITE_URI;
+	$spec['_path'] = COT_SITE_URI;
 	// Transform the data into URL
 	if (preg_match_all('#\{(.+?)\}#', $url, $matches, PREG_SET_ORDER))
 	{
@@ -3122,7 +3122,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
  * @param string $url Absolute URL
  * @return bool
  */
-function sed_url_check($url)
+function cot_url_check($url)
 {
 	global $sys;
 	return preg_match('`^'.preg_quote($sys['scheme'].'://').'([^/]+\.)?'.preg_quote($sys['domain']).'`i', $url);
@@ -3136,31 +3136,31 @@ function sed_url_check($url)
  * @return string
  */
 
-function sed_urlencode($str, $translit = false)
+function cot_urlencode($str, $translit = false)
 {
-	global $lang, $sed_translit;
-	if ($translit && $lang != 'en' && is_array($sed_translit))
+	global $lang, $cot_translit;
+	if ($translit && $lang != 'en' && is_array($cot_translit))
 	{
 		// Apply transliteration
-		$str = strtr($str, $sed_translit);
+		$str = strtr($str, $cot_translit);
 	}
 	return urlencode($str);
 }
 
 /**
- * Decodes a string that has been previously encoded with sed_urlencode()
+ * Decodes a string that has been previously encoded with cot_urlencode()
  *
  * @param string $str Encoded string
  * @param bool $translit Transliteration of non-English characters was used
  * @return string
  */
-function sed_urldecode($str, $translit = false)
+function cot_urldecode($str, $translit = false)
 {
-	global $lang, $sed_translitb;
-	if ($translit && $lang != 'en' && is_array($sed_translitb))
+	global $lang, $cot_translitb;
+	if ($translit && $lang != 'en' && is_array($cot_translitb))
 	{
 		// Apply transliteration
-		$str = strtr($str, $sed_translitb);
+		$str = strtr($str, $cot_translitb);
 	}
 	return urldecode($str);
 }
@@ -3170,7 +3170,7 @@ function sed_urldecode($str, $translit = false)
  *
  * @global $sys
  */
-function sed_uriredir_store()
+function cot_uriredir_store()
 {
 	global $sys;
 
@@ -3196,7 +3196,7 @@ function sed_uriredir_store()
  * @param bool $cfg_redir Configuration of redirect back
  * @global $redirect
  */
-function sed_uriredir_apply($cfg_redir = true)
+function cot_uriredir_apply($cfg_redir = true)
 {
 	global $redirect;
 
@@ -3211,37 +3211,37 @@ function sed_uriredir_apply($cfg_redir = true)
  *
  * @param string $uri Target URI
  */
-function sed_uriredir_redirect($uri)
+function cot_uriredir_redirect($uri)
 {
 	if (mb_strpos($uri, '&x=') !== false || mb_strpos($uri, '?x=') !== false)
 	{
-		$uri = sed_url('index'); // xg, not redirect to form action/GET or to command from GET
+		$uri = cot_url('index'); // xg, not redirect to form action/GET or to command from GET
 	}
-	sed_redirect($uri);
+	cot_redirect($uri);
 }
 
 /*
  * ========================= Internationalization (i18n) ======================
 */
 
-$sed_languages['cn']= '中文';
-$sed_languages['de']= 'Deutsch';
-$sed_languages['dk']= 'Dansk';
-$sed_languages['en']= 'English';
-$sed_languages['es']= 'Español';
-$sed_languages['fi']= 'Suomi';
-$sed_languages['fr']= 'Français';
-$sed_languages['gr']= 'Greek';
-$sed_languages['hu']= 'Hungarian';
-$sed_languages['it']= 'Italiano';
-$sed_languages['jp']= '日本語';
-$sed_languages['kr']= '한국어';
-$sed_languages['nl']= 'Dutch';
-$sed_languages['pl']= 'Polski';
-$sed_languages['pt']= 'Portugese';
-$sed_languages['ru']= 'Русский';
-$sed_languages['se']= 'Svenska';
-$sed_languages['uk'] = 'Українська';
+$cot_languages['cn']= '中文';
+$cot_languages['de']= 'Deutsch';
+$cot_languages['dk']= 'Dansk';
+$cot_languages['en']= 'English';
+$cot_languages['es']= 'Español';
+$cot_languages['fi']= 'Suomi';
+$cot_languages['fr']= 'Français';
+$cot_languages['gr']= 'Greek';
+$cot_languages['hu']= 'Hungarian';
+$cot_languages['it']= 'Italiano';
+$cot_languages['jp']= '日本語';
+$cot_languages['kr']= '한국어';
+$cot_languages['nl']= 'Dutch';
+$cot_languages['pl']= 'Polski';
+$cot_languages['pt']= 'Portugese';
+$cot_languages['ru']= 'Русский';
+$cot_languages['se']= 'Svenska';
+$cot_languages['uk'] = 'Українська';
 
 /**
  * Makes correct plural forms of words
@@ -3253,7 +3253,7 @@ $sed_languages['uk'] = 'Українська';
  * @param bool $canfrac - Numeric value can be Decimal Fraction
  * @return string
  */
-function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
+function cot_declension($digit, $expr, $onlyword = false, $canfrac = false)
 {
 	global $lang;
 
@@ -3273,20 +3273,20 @@ function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
 		$i = preg_replace('#\D+#', '', $digit);
 	}
 
-	$plural = sed_get_plural($i, $lang, $is_frac);
+	$plural = cot_get_plural($i, $lang, $is_frac);
 	$cnt = count($expr);
 	return trim(($onlyword ? '' : "$digit ").(($cnt > 0 && $plural < $cnt) ? $expr[$plural] : ''));
 }
 
 /**
- * Used in sed_declension to get rules for concrete languages
+ * Used in cot_declension to get rules for concrete languages
  *
  * @param int $plural Numeric value
  * @param string $lang Target language code
  * @param bool $is_frac true if numeric value is fraction, otherwise false
  * @return int
  */
-function sed_get_plural($plural, $lang, $is_frac = false)
+function cot_get_plural($plural, $lang, $is_frac = false)
 {
 	switch ($lang)
 	{

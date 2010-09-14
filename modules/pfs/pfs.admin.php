@@ -15,27 +15,27 @@ Hooks=admin
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
+cot_block($usr['isadmin']);
 
-$s = sed_import('s', 'G', 'ALP');
+$s = cot_import('s', 'G', 'ALP');
 
 if ($s == 'allpfs')
 {
-	require sed_incfile('pfs', 'admin.allpfs');
+	require cot_incfile('pfs', 'admin.allpfs');
 }
 else
 {
-	$t = new XTemplate(sed_skinfile('pfs.admin'));
+	$t = new XTemplate(cot_skinfile('pfs.admin'));
 
-	$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-	$adminpath[] = array(sed_url('admin', 'm=pfs'), $L['PFS']);
+	$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+	$adminpath[] = array(cot_url('admin', 'm=pfs'), $L['PFS']);
 	$adminhelp = $L['adm_help_pfs'];
 
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.pfs.first') as $pl)
+	foreach (cot_getextplugins('admin.pfs.first') as $pl)
 	{
 		include $pl;
 	}
@@ -52,7 +52,7 @@ else
 		{
 			if (mb_strlen($i) < 2)
 			{
-				$i = $sed_yesno[$i];
+				$i = $cot_yesno[$i];
 			}
 			$t->assign(array(
 				'ADMIN_PFS_DATAS_NAME' => $k,
@@ -63,13 +63,13 @@ else
 	}
 
 	$t->assign(array(
-		'ADMIN_PFS_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=pfs'),
-		'ADMIN_PFS_URL_ALLPFS' => sed_url('admin', 'm=pfs&s=allpfs'),
-		'ADMIN_PFS_URL_SFS' => sed_url('pfs', 'userid=0')
+		'ADMIN_PFS_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=core&p=pfs'),
+		'ADMIN_PFS_URL_ALLPFS' => cot_url('admin', 'm=pfs&s=allpfs'),
+		'ADMIN_PFS_URL_SFS' => cot_url('pfs', 'userid=0')
 	));
 
 	/* === Hook  === */
-	foreach (sed_getextplugins('admin.pfs.tags') as $pl)
+	foreach (cot_getextplugins('admin.pfs.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -77,7 +77,7 @@ else
 }
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

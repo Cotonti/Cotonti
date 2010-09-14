@@ -2,7 +2,7 @@
  * PM DB install
  */
 
-CREATE TABLE IF NOT EXISTS `sed_pm` (
+CREATE TABLE IF NOT EXISTS `cot_pm` (
   `pm_id` int(11) unsigned NOT NULL auto_increment,
   `pm_date` int(11) NOT NULL default '0',
   `pm_fromuserid` int(11) NOT NULL default '0',

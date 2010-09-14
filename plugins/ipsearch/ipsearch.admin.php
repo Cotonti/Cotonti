@@ -15,21 +15,21 @@ Hooks=tools
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 $plugin_title = "IP search";
 
-$t = new XTemplate(sed_skinfile('ipsearch', true));
+$t = new XTemplate(cot_skinfile('ipsearch', true));
 $t->assign(array(
-	'IPSEARCH_FORM_URL' => sed_url('admin', 'm=tools&p=ipsearch&a=search&'.sed_xg()),
+	'IPSEARCH_FORM_URL' => cot_url('admin', 'm=tools&p=ipsearch&a=search&'.cot_xg()),
 	'IPSEARCH_ID' => $id
 ));
 
 if ($a == 'search')
 {
-	sed_check_xg();
-	$id_g = sed_import('id', 'G', 'TXT', 15);
-	$id_p = sed_import('id', 'P', 'TXT', 15);
+	cot_check_xg();
+	$id_g = cot_import('id', 'G', 'TXT', 15);
+	$id_p = cot_import('id', 'P', 'TXT', 15);
 	if (!empty($id_g))
 	{
 		$id = $id_g;
@@ -40,7 +40,7 @@ if ($a == 'search')
 	}
 
 	$userip = explode(".", $id);
-	if (count($userip) != 4 || mb_strlen($userip[0]) > 3 || mb_strlen($userip[1]) > 3 || mb_strlen($userip[2]) > 3 || mb_strlen($userip[3]) > 3) sed_die();
+	if (count($userip) != 4 || mb_strlen($userip[0]) > 3 || mb_strlen($userip[1]) > 3 || mb_strlen($userip[2]) > 3 || mb_strlen($userip[3]) > 3) cot_die();
 
 	$ipmask1 = $userip[0].".".$userip[1].".".$userip[2].".".$userip[3];
 	$ipmask2 = $userip[0].".".$userip[1].".".$userip[2];
@@ -49,38 +49,38 @@ if ($a == 'search')
 	$res_host = @gethostbyaddr($id);
 	$res_dns = ($res_host == $id) ? 'Unknown' : $res_host;
 
-	$sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip='$ipmask1' ");
-	$totalmatches1 = sed_sql_numrows($sql);
+	$sql = cot_db_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip='$ipmask1' ");
+	$totalmatches1 = cot_db_numrows($sql);
 
-	while ($row = sed_sql_fetcharray($sql))
+	while ($row = cot_db_fetcharray($sql))
 	{
 		$t->assign(array(
-			'IPSEARCH_USER_IPMASK1' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
-			'IPSEARCH_USER_LASTIP_IPMASK1' => sed_build_ipsearch($row['user_lastip'])
+			'IPSEARCH_USER_IPMASK1' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+			'IPSEARCH_USER_LASTIP_IPMASK1' => cot_build_ipsearch($row['user_lastip'])
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK1');
 	}
 
-	$sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
-	$totalmatches2 = sed_sql_numrows($sql);
+	$sql = cot_db_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
+	$totalmatches2 = cot_db_numrows($sql);
 
-	while ($row = sed_sql_fetcharray($sql))
+	while ($row = cot_db_fetcharray($sql))
 	{
 		$t->assign(array(
-			'IPSEARCH_USER_IPMASK2' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
-			'IPSEARCH_USER_LASTIP_IPMASK2' => sed_build_ipsearch($row['user_lastip'])
+			'IPSEARCH_USER_IPMASK2' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+			'IPSEARCH_USER_LASTIP_IPMASK2' => cot_build_ipsearch($row['user_lastip'])
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK2');
 	}
 
-	$sql = sed_sql_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
-	$totalmatches3 = sed_sql_numrows($sql);
+	$sql = cot_db_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
+	$totalmatches3 = cot_db_numrows($sql);
 
-	while($row = sed_sql_fetcharray($sql))
+	while($row = cot_db_fetcharray($sql))
 	{
 		$t->assign(array(
-			'IPSEARCH_USER_IPMASK3' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
-			'IPSEARCH_USER_LASTIP_IPMASK3' => sed_build_ipsearch($row['user_lastip'])
+			'IPSEARCH_USER_IPMASK3' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+			'IPSEARCH_USER_LASTIP_IPMASK3' => cot_build_ipsearch($row['user_lastip'])
 		));
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK3');
 	}

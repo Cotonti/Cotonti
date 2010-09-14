@@ -9,15 +9,15 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Accepts several variables and prints their values in debug mode (var dump).
  *
- * @example sed_assert($foo, $bar);
- * @see sed_watch(), sed_backtrace(), sed_vardump()
+ * @example cot_assert($foo, $bar);
+ * @see cot_watch(), cot_backtrace(), cot_vardump()
  */
-function sed_print()
+function cot_print()
 {
 	ob_end_clean();
 	$vars = func_get_args();
@@ -31,12 +31,12 @@ function sed_print()
 /**
  * Dumps current state of its arguments to debug log file and continues normal script execution.
  *
- * @example sed_watch($foo, $bar);
- * @see sed_assert(), sed_checkpoint(), SED_DEBUG_LOGFILE
+ * @example cot_watch($foo, $bar);
+ * @see cot_assert(), cot_checkpoint(), COT_DEBUG_LOGFILE
  */
-function sed_watch()
+function cot_watch()
 {
-	$fp = fopen(SED_DEBUG_LOGFILE, 'a');
+	$fp = fopen(COT_DEBUG_LOGFILE, 'a');
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[1]['file'].', '.$btrace[1]['line'].":\n");
 	$vars = func_get_args();
@@ -52,9 +52,9 @@ function sed_watch()
  * Prints program execution backtrace.
  *
  * @param bool $clear_screen If TRUE displays backtrace only. Otherwise it will be printed in normal flow.
- * @see sed_assert(), sed_vardump()
+ * @see cot_assert(), cot_vardump()
  */
-function sed_backtrace($clear_screen = TRUE)
+function cot_backtrace($clear_screen = TRUE)
 {
 	if ($clear_screen)
 	{
@@ -71,9 +71,9 @@ function sed_backtrace($clear_screen = TRUE)
  * Prints structure and contents of all global variables currently assigned.
  *
  * @param bool $clear_screen If TRUE displays vardump only. Otherwise it will be printed in normal flow.
- * @see SED_VARDUMP_LOCALS, sed_assert(), sed_backtrace()
+ * @see COT_VARDUMP_LOCALS, cot_assert(), cot_backtrace()
  */
-function sed_vardump($clear_screen = TRUE)
+function cot_vardump($clear_screen = TRUE)
 {
 	if ($clear_screen)
 	{
@@ -96,10 +96,10 @@ function sed_vardump($clear_screen = TRUE)
 /**
  * Local vardump macro. Prints structure and contents of all variables in the local scope.
  *
- * @example eval(SED_VARDUMP_LOCALS);
- * @see sed_vardump(), sed_watch()
+ * @example eval(COT_VARDUMP_LOCALS);
+ * @see cot_vardump(), cot_watch()
  */
-define('SED_VARDUMP_LOCALS', 'ob_end_clean();
+define('COT_VARDUMP_LOCALS', 'ob_end_clean();
 $debug_vars = get_defined_vars();
 foreach ($debug_vars as $debug_key => $debug_val)
 {
@@ -114,11 +114,11 @@ die();');
 /**
  * Dumps current state of global variables into debug log file and continues normal script execution.
  *
- * @see SED_CHECKPOINT_LOCALS, SED_DEBUG_LOGFILE, sed_watch(), sed_vardump()
+ * @see COT_CHECKPOINT_LOCALS, COT_DEBUG_LOGFILE, cot_watch(), cot_vardump()
  */
-function sed_checkpoint()
+function cot_checkpoint()
 {
-	$fp = fopen(SED_DEBUG_LOGFILE, 'a');
+	$fp = fopen(COT_DEBUG_LOGFILE, 'a');
 	$btrace = debug_backtrace();
 	fputs($fp, $btrace[1]['file'] . ', ' . $btrace[1]['line'] . ":\n");
 	foreach ($GLOBALS as $key => $val)
@@ -135,10 +135,10 @@ function sed_checkpoint()
 /**
  * Dumps variables in local scope into debug log file and continues normal script execution.
  *
- * @example eval(SED_CHECKPOINT_LOCALS);
- * @see sed_checkpoint(), SED_DEBUG_LOGFILE, sed_watch(), SED_VARDUMP_LOCALS
+ * @example eval(COT_CHECKPOINT_LOCALS);
+ * @see cot_checkpoint(), COT_DEBUG_LOGFILE, cot_watch(), COT_VARDUMP_LOCALS
  */
-define('SED_CHECKPOINT_LOCALS', '$debug_fp = fopen(SED_DEBUG_LOGFILE, "a");
+define('COT_CHECKPOINT_LOCALS', '$debug_fp = fopen(COT_DEBUG_LOGFILE, "a");
 	$debug_btrace = debug_backtrace();
 	fputs($debug_fp, $debug_btrace[0]["file"] . ", " . $debug_btrace[1]["line"] . ":\n");
 	$debug_vars = get_defined_vars();

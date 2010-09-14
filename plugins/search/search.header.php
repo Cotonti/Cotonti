@@ -14,7 +14,7 @@ Tags=header.tpl:{HEADER_COMPOPUP}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if (!empty($highlight))
 {

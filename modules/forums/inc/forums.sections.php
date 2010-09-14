@@ -13,35 +13,35 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', 'any');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', 'any');
 /* === Hook === */
-foreach (sed_getextplugins('forums.sections.rights') as $pl)
+foreach (cot_getextplugins('forums.sections.rights') as $pl)
 {
 	include $pl;
 }
 /* ===== */
-sed_block($usr['auth_read']);
+cot_block($usr['auth_read']);
 
-$id = sed_import('id','G','INT');
-$s = sed_import('s','G','ALP');
-$q = sed_import('q','G','INT');
-$p = sed_import('p','G','INT');
-$d = sed_import('d','G','INT');
-$o = sed_import('o','G','ALP');
-$w = sed_import('w','G','ALP',4);
-$c = sed_import('c','G','ALP');
-$quote = sed_import('quote','G','INT');
+$id = cot_import('id','G','INT');
+$s = cot_import('s','G','ALP');
+$q = cot_import('q','G','INT');
+$p = cot_import('p','G','INT');
+$d = cot_import('d','G','INT');
+$o = cot_import('o','G','ALP');
+$w = cot_import('w','G','ALP',4);
+$c = cot_import('c','G','ALP');
+$quote = cot_import('quote','G','INT');
 $unread_done = FALSE;
 $filter_cats = FALSE;
 $ce = explode('_', $s);
 $sys['sublocation'] = $L['Home'];
 
-sed_online_update();
+cot_online_update();
 
 /* === Hook === */
-foreach (sed_getextplugins('forums.sections.first') as $pl)
+foreach (cot_getextplugins('forums.sections.first') as $pl)
 {
 	include $pl;
 }
@@ -49,51 +49,51 @@ foreach (sed_getextplugins('forums.sections.first') as $pl)
 
 if ($n=='markall' && $usr['id']>0)
 {
-    $sql = sed_sql_query("UPDATE $db_users set user_lastvisit='".$sys['now_offset']."' WHERE user_id='".$usr['id']."'");
+    $sql = cot_db_query("UPDATE $db_users set user_lastvisit='".$sys['now_offset']."' WHERE user_id='".$usr['id']."'");
     $usr['lastvisit'] = $sys['now_offset'];
 }
 
-$sql = sed_sql_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
+$sql = cot_db_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
     $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid='0'
 ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC");
 
-if (!$sed_sections_act)
+if (!$cot_sections_act)
 {
     $timeback = $sys['now'] - 604800;
-    $sqlact = sed_sql_query("SELECT fs_id FROM $db_forum_sections");
+    $sqlact = cot_db_query("SELECT fs_id FROM $db_forum_sections");
 
-    while ($tmprow = sed_sql_fetcharray($sqlact))
+    while ($tmprow = cot_db_fetcharray($sqlact))
     {
         $section = $tmprow['fs_id'];
-        $sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_creation>'$timeback' AND fp_sectionid='$section'");
-        $sed_sections_act[$section] = sed_sql_result($sqltmp, 0, "COUNT(*)");
+        $sqltmp = cot_db_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_creation>'$timeback' AND fp_sectionid='$section'");
+        $cot_sections_act[$section] = cot_db_result($sqltmp, 0, "COUNT(*)");
     }
-    $cot_cache && $cot_cache->db->store('sed_sections_act', $sed_sections_act, 'system', 600);
+    $cot_cache && $cot_cache->db->store('cot_sections_act', $cot_sections_act, 'system', 600);
 }
 
-$cot_cache && $cot_cache->mem && $sed_sections_vw = $cot_cache->mem->get('sections_wv', 'forums');
-if (!$sed_sections_vw)
+$cot_cache && $cot_cache->mem && $cot_sections_vw = $cot_cache->mem->get('sections_wv', 'forums');
+if (!$cot_sections_vw)
 {
-    $sqltmp = sed_sql_query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
+    $sqltmp = cot_db_query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
 
-    while ($tmprow = sed_sql_fetcharray($sqltmp))
+    while ($tmprow = cot_db_fetcharray($sqltmp))
     {
-        $sed_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
+        $cot_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
     }
-    $cot_cache && $cot_cache->mem && $cot_cache->mem->store('sections_vw', $sed_sections_vw, 'forums', 120);
+    $cot_cache && $cot_cache->mem && $cot_cache->mem->store('sections_vw', $cot_sections_vw, 'forums', 120);
 }
 
 unset($pcat);
-$secact_max = max($sed_sections_act);
-$out['markall'] = ($usr['id']>0) ? sed_rc_link(sed_url('forums', "n=markall"), $L['for_markallasread']) : '';
+$secact_max = max($cot_sections_act);
+$out['markall'] = ($usr['id']>0) ? cot_rc_link(cot_url('forums', "n=markall"), $L['for_markallasread']) : '';
 
 $title_params = array(
 	'FORUM' => $L['Forums']
 );
-$out['subtitle'] = sed_title('title_forum_main', $title_params);
+$out['subtitle'] = cot_title('title_forum_main', $title_params);
 
 /* === Hook === */
-foreach (sed_getextplugins('forums.sections.main') as $pl)
+foreach (cot_getextplugins('forums.sections.main') as $pl)
 {
 	include $pl;
 }
@@ -101,11 +101,11 @@ foreach (sed_getextplugins('forums.sections.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$t = new XTemplate(sed_skinfile('forums.sections'));
+$t = new XTemplate(cot_skinfile('forums.sections'));
 
 if($cfg['homebreadcrumb'])
 {
-    $bhome = sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ';
+    $bhome = cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ';
 }
 else
 {
@@ -113,28 +113,28 @@ else
 }
 
 $t->assign(array(
-    "FORUMS_RSS" => sed_url('rss', 'c=forums'),
-    "FORUMS_SECTIONS_PAGETITLE" => $bhome.sed_rc_link(sed_url('forums'), $L['Forums']),
+    "FORUMS_RSS" => cot_url('rss', 'c=forums'),
+    "FORUMS_SECTIONS_PAGETITLE" => $bhome.cot_rc_link(cot_url('forums'), $L['Forums']),
     "FORUMS_SECTIONS_MARKALL" =>  $out['markall'],
     "FORUMS_SECTIONS_WHOSONLINE" => $out['whosonline']." : ".$out['whosonline_reg_list']
     ));
 
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('forums.sections.loop');
+$extp = cot_getextplugins('forums.sections.loop');
 /* ===== */
 
 
-while ($fsn = sed_sql_fetcharray($sql))
+while ($fsn = cot_db_fetcharray($sql))
 {
 
     $latestp = $fsn['fs_lt_date'];
     if ($pcat!=$fsn['fs_category'])
     {
         $pcat = $fsn['fs_category'];
-        $sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat'");
-        $catnum = sed_sql_result($sql2, 0, "COUNT(*)");
+        $sql2 = cot_db_query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat'");
+        $catnum = cot_db_result($sql2, 0, "COUNT(*)");
 
-        $cattitle = sed_rc_link(sed_url('forums'), htmlspecialchars($sed_forums_str[$fsn['fs_category']]['tpath']),  "onclick=\"return toggleblock('blk_".$fsn['fs_category']."')'\"");
+        $cattitle = cot_rc_link(cot_url('forums'), htmlspecialchars($cot_forums_str[$fsn['fs_category']]['tpath']),  "onclick=\"return toggleblock('blk_".$fsn['fs_category']."')'\"");
 
         if ($c=='fold')
         { $fold = TRUE; }
@@ -145,7 +145,7 @@ while ($fsn = sed_sql_fetcharray($sql))
             $fold = ($c==$fsn['fs_category']) ? FALSE : TRUE;
         }
         else
-        { $fold = (!$sed_forums_str[$fsn['fs_category']]['defstate']) ? TRUE : FALSE; }
+        { $fold = (!$cot_forums_str[$fsn['fs_category']]['defstate']) ? TRUE : FALSE; }
 
         $fsn['toggle_state'] .= ($fold) ? " style=\"display:none;\"" : '';
         $fsn['toggle_body'] = "<tbody id=\"blk_".$fsn['fs_category']."\" ".$fsn['toggle_state'].">";
@@ -154,7 +154,7 @@ while ($fsn = sed_sql_fetcharray($sql))
             "FORUMS_SECTIONS_ROW_CAT_TITLE" => $cattitle,
             "FORUMS_SECTIONS_ROW_CAT_ICON" => $fsn['fn_icon'],
             "FORUMS_SECTIONS_ROW_CAT_SHORTTITLE" => htmlspecialchars($fsn['fn_title']),
-            "FORUMS_SECTIONS_ROW_CAT_DESC" => sed_parse_autourls($fsn['fn_desc']),
+            "FORUMS_SECTIONS_ROW_CAT_DESC" => cot_parse_autourls($fsn['fn_desc']),
             "FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => htmlspecialchars($fsn['fn_defstate']),
             "FORUMS_SECTIONS_ROW_CAT_TBODY" => $fsn['toggle_body'],
             "FORUMS_SECTIONS_ROW_CAT_TBODY_END" => "</tbody>",
@@ -163,19 +163,19 @@ while ($fsn = sed_sql_fetcharray($sql))
         $t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_CAT");
     }
 
-    if (sed_auth('forums', $fsn['fs_id'], 'R'))
+    if (cot_auth('forums', $fsn['fs_id'], 'R'))
     {
         $fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
         $fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
         $fsn['fs_newposts'] = '0';
-        $fsn['fs_desc'] = sed_parse_autourls($fsn['fs_desc']);
+        $fsn['fs_desc'] = cot_parse_autourls($fsn['fs_desc']);
         $fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
-        $sed_sections_vw_cur = (!$sed_sections_vw[$fsn['fs_title']]) ? "0" : $sed_sections_vw[$fsn['fs_title']];
+        $cot_sections_vw_cur = (!$cot_sections_vw[$fsn['fs_title']]) ? "0" : $cot_sections_vw[$fsn['fs_title']];
 
         if (!$fsn['fs_lt_id'])
-        { sed_forum_sectionsetlast($fsn['fs_id']); }
+        { cot_forum_sectionsetlast($fsn['fs_id']); }
 
-        $fsn['fs_timago'] = sed_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
+        $fsn['fs_timago'] = cot_build_timegap($fsn['fs_lt_date'], $sys['now_offset']);
 
         if ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id'])
         {
@@ -185,7 +185,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 
         if ($fsn['fs_lt_id']>0)
         {
-            $fsn['lastpost'] = sed_rc_link(($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread") : sed_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom"), sed_cutstring($fsn['fs_lt_title'], 32));
+            $fsn['lastpost'] = cot_rc_link(($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id']) ? cot_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=unread", "#unread") : cot_url('forums', "m=posts&q=".$fsn['fs_lt_id']."&n=last", "#bottom"), cot_cutstring($fsn['fs_lt_title'], 32));
         }
         else
         {
@@ -197,7 +197,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 
         $fsn['fs_lt_date'] = ($fsn['fs_lt_date']>0) ? @date($cfg['formatmonthdayhourmin'], $fsn['fs_lt_date'] + $usr['timezone'] * 3600) : '';
         $fsn['fs_viewcount_short'] = ($fsn['fs_viewcount']>9999) ? floor($fsn['fs_viewcount']/1000)."k" : $fsn['fs_viewcount'];
-        $fsn['fs_lt_postername'] = sed_build_user($fsn['fs_lt_posterid'], htmlspecialchars($fsn['fs_lt_postername']));
+        $fsn['fs_lt_postername'] = cot_build_user($fsn['fs_lt_posterid'], htmlspecialchars($fsn['fs_lt_postername']));
 
         if (!$secact_max)
         {
@@ -207,10 +207,10 @@ while ($fsn = sed_sql_fetcharray($sql))
         }
         else
         {
-            $secact_num = round(6.25 * $sed_sections_act[$fsn['fs_id']] / $secact_max);
+            $secact_num = round(6.25 * $cot_sections_act[$fsn['fs_id']] / $secact_max);
             if ($secact_num>5) { $secact_num = 5; }
-            if (!$secact_num && $sed_sections_act[$fsn['fs_id']]>1) { $secact_num = 1; }
-            $section_activity_img = sed_rc('frm_icon_section_activity');
+            if (!$secact_num && $cot_sections_act[$fsn['fs_id']]>1) { $secact_num = 1; }
+            $section_activity_img = cot_rc('frm_icon_section_activity');
         }
 
         $fs_num++;
@@ -229,8 +229,8 @@ while ($fsn = sed_sql_fetcharray($sql))
         "FORUMS_SECTIONS_ROW_POSTCOUNT_ALL" => $fsn['fs_postcount_all'],
         "FORUMS_SECTIONS_ROW_VIEWCOUNT" => $fsn['fs_viewcount'],
         "FORUMS_SECTIONS_ROW_VIEWCOUNT_SHORT" => $fsn['fs_viewcount_short'],
-        "FORUMS_SECTIONS_ROW_VIEWERS" => $sed_sections_vw_cur,
-        "FORUMS_SECTIONS_ROW_URL" => sed_url('forums', "m=topics&s=".$fsn['fs_id']),
+        "FORUMS_SECTIONS_ROW_VIEWERS" => $cot_sections_vw_cur,
+        "FORUMS_SECTIONS_ROW_URL" => cot_url('forums', "m=topics&s=".$fsn['fs_id']),
         "FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsn['fs_lt_date'],
         "FORUMS_SECTIONS_ROW_LASTPOSTER" => $fsn['fs_lt_postername'],
         "FORUMS_SECTIONS_ROW_LASTPOST" => $fsn['lastpost'],
@@ -238,30 +238,30 @@ while ($fsn = sed_sql_fetcharray($sql))
         "FORUMS_SECTIONS_ROW_ACTIVITY" => $section_activity_img,
         "FORUMS_SECTIONS_ROW_ACTIVITYVALUE" => $secact_num,
         "FORUMS_SECTIONS_ROW_NEWPOSTS" => $fsn['fs_newposts'],
-        "FORUMS_SECTIONS_ROW_ODDEVEN" => sed_build_oddeven($fs_num),
+        "FORUMS_SECTIONS_ROW_ODDEVEN" => cot_build_oddeven($fs_num),
         "FORUMS_SECTIONS_ROW_NUM" => $fs_num,
         "FORUMS_SECTIONS_ROW" => $fsn
             ));
 
         $ii = 0;
-        $sql1 = sed_sql_query("SELECT fs_id, fs_title, fs_lt_date FROM $db_forum_sections WHERE fs_masterid='".$fsn['fs_id']."' ");
-        while ($row = sed_sql_fetcharray($sql1))
+        $sql1 = cot_db_query("SELECT fs_id, fs_title, fs_lt_date FROM $db_forum_sections WHERE fs_masterid='".$fsn['fs_id']."' ");
+        while ($row = cot_db_fetcharray($sql1))
         {
 
             if ($row['fs_lt_date']>$latestp)
             {
-                $sql0 = sed_sql_query("SELECT fs_lt_id, fs_lt_title, fs_lt_posterid, fs_lt_postername FROM $db_forum_sections WHERE fs_id='".$row['fs_id']."' ");
-                $fsnn = sed_sql_fetcharray($sql0);
+                $sql0 = cot_db_query("SELECT fs_lt_id, fs_lt_title, fs_lt_posterid, fs_lt_postername FROM $db_forum_sections WHERE fs_id='".$row['fs_id']."' ");
+                $fsnn = cot_db_fetcharray($sql0);
 
                 $fsnn['fs_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fs_lt_date'] + $usr['timezone'] * 3600);
 
-                $fsnn['lastpost'] = sed_rc_link(sed_url('forums', "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom"), sed_cutstring($fsnn['fs_lt_title'], 32));
+                $fsnn['lastpost'] = cot_rc_link(cot_url('forums', "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom"), cot_cutstring($fsnn['fs_lt_title'], 32));
 
-                $fsnn['fs_timago'] = sed_build_timegap($row['fs_lt_date'], $sys['now_offset']);
+                $fsnn['fs_timago'] = cot_build_timegap($row['fs_lt_date'], $sys['now_offset']);
 
                 $t-> assign(array(
                     "FORUMS_SECTIONS_ROW_LASTPOSTDATE" => $fsnn['fs_lt_date'],
-                    "FORUMS_SECTIONS_ROW_LASTPOSTER" => sed_build_user($fsnn['fs_lt_posterid'], htmlspecialchars($fsnn['fs_lt_postername'])),
+                    "FORUMS_SECTIONS_ROW_LASTPOSTER" => cot_build_user($fsnn['fs_lt_posterid'], htmlspecialchars($fsnn['fs_lt_postername'])),
                     "FORUMS_SECTIONS_ROW_LASTPOST" => $fsnn['lastpost'],
                     "FORUMS_SECTIONS_ROW_TIMEAGO" => $fsnn['fs_timago']
                     ));
@@ -278,11 +278,11 @@ while ($fsn = sed_sql_fetcharray($sql))
                 "FORUMS_SECTIONS_ROW_SLAVE_DESC" => $row['fs_desc'],
                 "FORUMS_SECTIONS_ROW_SLAVE_ICON" => $row['fs_icon'],
                 "FORUMS_SECTIONS_ROW_SLAVE_NEW" => $j,
-                "FORUMS_SECTIONS_ROW_SLAVE_URL" => sed_url('forums', "m=topics&s=".$row['fs_id']),
-                "FORUMS_SECTIONS_ROW_SLAVE_ODDEVEN" => sed_build_oddeven($ii),
+                "FORUMS_SECTIONS_ROW_SLAVE_URL" => cot_url('forums', "m=topics&s=".$row['fs_id']),
+                "FORUMS_SECTIONS_ROW_SLAVE_ODDEVEN" => cot_build_oddeven($ii),
                 "FORUMS_SECTIONS_ROW_SLAVE_NUM" => $ii,
                 "FORUMS_SECTIONS_ROW_SLAVE" => $row,
-                "FORUMS_SECTIONS_ROW_SLAVEI" => sed_rc_link(sed_url('forums', "m=topics&s=".$row['fs_id']), $j.htmlspecialchars($row['fs_title'])),
+                "FORUMS_SECTIONS_ROW_SLAVEI" => cot_rc_link(cot_url('forums', "m=topics&s=".$row['fs_id']), $j.htmlspecialchars($row['fs_title'])),
                 ));
 
             $t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_SECTION.FORUMS_SECTIONS_ROW_SECTION_SLAVES");
@@ -310,7 +310,7 @@ while ($fsn = sed_sql_fetcharray($sql))
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('forums.sections.tags') as $pl)
+foreach (cot_getextplugins('forums.sections.tags') as $pl)
 {
 	include $pl;
 }

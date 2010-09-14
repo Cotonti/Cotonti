@@ -15,13 +15,13 @@ Hooks=admin.config.edit.loop
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('page');
+cot_require('page');
 
 if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnajax'])
 {
-	$sskin = sed_skinfile('news.admin', true);
+	$sskin = cot_skinfile('news.admin', true);
 	$tt = new XTemplate($sskin);
 
 	$categories=explode(',', $config_value);
@@ -30,7 +30,7 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 	{
 		$v = trim($v);
 		$v = explode('|', $v);
-		$checkin = isset($sed_cat[$v[0]]);
+		$checkin = isset($cot_cat[$v[0]]);
 		if ($checkin)
 		{
 			if (empty($index))
@@ -53,7 +53,7 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 			}
 		}
 	}
-	$newscat = sed_selectbox_categories($index, 'newsmaincat');
+	$newscat = cot_selectbox_categories($index, 'newsmaincat');
 
 	$jj++;
 	$tt->assign(array(

@@ -16,12 +16,12 @@ Tags=statistics.tpl:{STATISTICS_USER_COMMENTS}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='".$usr['id']."'");
-$user_comments = sed_sql_result($sql, 0, "COUNT(*)");
+$sql = cot_db_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='".$usr['id']."'");
+$user_comments = cot_db_result($sql, 0, "COUNT(*)");
 $t->assign(array(
 	'STATISTICS_USER_COMMENTS' => $user_comments
 ));

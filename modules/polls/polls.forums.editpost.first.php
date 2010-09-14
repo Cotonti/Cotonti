@@ -15,13 +15,13 @@ Hooks=forums.editpost.update.first
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
-$poll = trim(sed_import('poll_text', 'P', 'HTM'));
-$poll_id = sed_import('poll_id','P','TXT');
+defined('COT_CODE') or die('Wrong URL');
+$poll = trim(cot_import('poll_text', 'P', 'HTM'));
+$poll_id = cot_import('poll_id','P','TXT');
 
 if(!empty($poll) && $poll_id)
 {
-	sed_poll_check();
+	cot_poll_check();
 }
 
 ?>

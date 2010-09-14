@@ -9,11 +9,11 @@
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
-sed_require_lang('pm', 'module');
-sed_require_rc('pm');
+cot_require_lang('pm', 'module');
+cot_require_rc('pm');
 
 // Global variables
 $GLOBALS['db_pm'] = (isset($GLOBALS['db_pm'])) ? $GLOBALS['db_pm'] : $GLOBALS['db_x'] . 'pm';
@@ -26,7 +26,7 @@ $GLOBALS['db_pm'] = (isset($GLOBALS['db_pm'])) ? $GLOBALS['db_pm'] : $GLOBALS['d
  * @param string $rusername recipient name
  *
  */
-function sed_send_translated_mail($rlang, $remail, $rusername)
+function cot_send_translated_mail($rlang, $remail, $rusername)
 {
 	global $cfg, $usr, $lang;
 
@@ -52,9 +52,9 @@ function sed_send_translated_mail($rlang, $remail, $rusername)
 	}
 
 	$rsubject = "{$cfg['maintitle']} - {$L['pm_notifytitle']}";
-	$rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), $cfg['mainurl'] . '/' . sed_url('pm', '', '', true));
+	$rbody = sprintf($L['pm_notify'], $rusername, htmlspecialchars($usr['name']), $cfg['mainurl'] . '/' . cot_url('pm', '', '', true));
 
-	sed_mail($remail, $rsubject, $rbody);
+	cot_mail($remail, $rsubject, $rbody);
 }
 
 /**
@@ -65,7 +65,7 @@ function sed_send_translated_mail($rlang, $remail, $rusername)
  *
  * @return bool true if  action sucsessfull
  */
-function sed_remove_pm($message_id)
+function cot_remove_pm($message_id)
 {
 	global $usr, $db_pm, $cfg;
 	if (!is_array($message_id))
@@ -75,14 +75,14 @@ function sed_remove_pm($message_id)
 
 	foreach($message_id as $k => $v)
 	{
-		$msg[] = (int)sed_import($k, 'D', 'INT');
+		$msg[] = (int)cot_import($k, 'D', 'INT');
 	}
 
 	if (count($msg)>0)
 	{
 		$msg = '('.implode(',', $msg).')';
-		$sql = sed_sql_query("SELECT * FROM $db_pm WHERE pm_id IN $msg");
-		while($row = sed_sql_fetcharray($sql))
+		$sql = cot_db_query("SELECT * FROM $db_pm WHERE pm_id IN $msg");
+		while($row = cot_db_fetcharray($sql))
 		{
 			$id = $row['pm_id'];
 			if (($row['pm_fromuserid'] == $usr['id'] && ($row['pm_tostate'] == 3 || $row['pm_tostate'] == 0)) ||
@@ -91,17 +91,17 @@ function sed_remove_pm($message_id)
 			{
 				if ($cfg['trash_pm'])
 				{
-					sed_trash_put('pm', $L['Private_Messages']." #".$id." ".$row['pm_title']." (".$row['pm_fromuser'].")", $id, $row);
+					cot_trash_put('pm', $L['Private_Messages']." #".$id." ".$row['pm_title']." (".$row['pm_fromuser'].")", $id, $row);
 				}
-				$sql2 = sed_sql_query("DELETE FROM $db_pm WHERE pm_id = '$id'");
+				$sql2 = cot_db_query("DELETE FROM $db_pm WHERE pm_id = '$id'");
 			}
 			elseif($row['pm_fromuserid'] == $usr['id'] && ($row['pm_tostate'] != 3 || $row['pm_tostate'] != 0))
 			{
-				$sql2 = sed_sql_query("UPDATE $db_pm SET pm_fromstate = 3 WHERE pm_id = '$id'");
+				$sql2 = cot_db_query("UPDATE $db_pm SET pm_fromstate = 3 WHERE pm_id = '$id'");
 			}
 			elseif($row['pm_touserid'] == $usr['id'] && $row['pm_fromstate'] != 3)
 			{
-				$sql2 = sed_sql_query("UPDATE $db_pm SET pm_tostate = 3 WHERE pm_id = '$id'");
+				$sql2 = cot_db_query("UPDATE $db_pm SET pm_tostate = 3 WHERE pm_id = '$id'");
 			}
 		}
 	}
@@ -114,7 +114,7 @@ function sed_remove_pm($message_id)
  *
  * @return bool true if  action sucsessfull
  */
-function sed_star_pm($message_id)
+function cot_star_pm($message_id)
 {
 	
 	global $usr, $db_pm, $cfg;
@@ -125,30 +125,30 @@ function sed_star_pm($message_id)
 
 	foreach($message_id as $k => $v)
 	{
-		$msg[] = (int)sed_import($k, 'D', 'INT');
+		$msg[] = (int)cot_import($k, 'D', 'INT');
 	}
 
 	if (count($msg)>0)
 	{
 		$msg = '('.implode(',', $msg).')';
-		$sql = sed_sql_query("SELECT * FROM $db_pm WHERE pm_id IN $msg");
-		while($row = sed_sql_fetcharray($sql))
+		$sql = cot_db_query("SELECT * FROM $db_pm WHERE pm_id IN $msg");
+		while($row = cot_db_fetcharray($sql))
 		{
 			$id = $row['pm_id'];
 			if ($row['pm_fromuserid'] == $usr['id'] && $row['pm_touserid'] == $usr['id'])
 			{
 				$fromstate = ($row['pm_fromstate'] == 2) ?  1 : 2;
-				$sql2 = sed_sql_query("UPDATE $db_pm SET pm_tostate = ".(int)$fromstate.", pm_fromstate = ".(int)$fromstate." WHERE pm_id = '$id'");
+				$sql2 = cot_db_query("UPDATE $db_pm SET pm_tostate = ".(int)$fromstate.", pm_fromstate = ".(int)$fromstate." WHERE pm_id = '$id'");
 			}
 			elseif ($row['pm_touserid'] == $usr['id'])
 			{
 				$tostate = ($row['pm_tostate'] == 2) ?  1 : 2;
-				$sql2 = sed_sql_query("UPDATE $db_pm SET pm_tostate = ".(int)$tostate." WHERE pm_id = '$id'");
+				$sql2 = cot_db_query("UPDATE $db_pm SET pm_tostate = ".(int)$tostate." WHERE pm_id = '$id'");
 			}
 			elseif ($row['pm_fromuserid'] == $usr['id'])
 			{
 				$fromstate = ($row['pm_fromstate'] == 2) ?  1 : 2;
-				$sql2 = sed_sql_query("UPDATE $db_pm SET pm_fromstate = ".(int)$fromstate." WHERE pm_id = '$id'");
+				$sql2 = cot_db_query("UPDATE $db_pm SET pm_fromstate = ".(int)$fromstate." WHERE pm_id = '$id'");
 			}
 		}
 	}
@@ -160,13 +160,13 @@ function sed_star_pm($message_id)
  * @param int $user_id User ID
  * @return array
  */
-function sed_message_count($user_id=0)
+function cot_message_count($user_id=0)
 {
 	global $db_pm;
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_fromuserid = '".$user_id."' AND pm_fromstate <> '3'");
-	$totalsentbox = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$user_id."' AND pm_tostate <> 3");
-	$totalinbox = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_fromuserid = '".$user_id."' AND pm_fromstate <> '3'");
+	$totalsentbox = cot_db_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$user_id."' AND pm_tostate <> 3");
+	$totalinbox = cot_db_result($sql, 0, "COUNT(*)");
 
 	return array($totalsentbox, $totalinbox);
 }

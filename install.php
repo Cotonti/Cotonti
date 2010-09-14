@@ -10,9 +10,9 @@
  */
 
 // Environment setup
-define('SED_CODE', TRUE);
-define('SED_INSTALL', TRUE);
-//define('SED_ADMIN', TRUE);
+define('COT_CODE', TRUE);
+define('COT_INSTALL', TRUE);
+//define('COT_ADMIN', TRUE);
 $location = 'Install';
 $z = 'install';
 
@@ -46,12 +46,12 @@ if ($cfg['new_install'])
 	{
 		if (get_magic_quotes_gpc())
 		{
-			function sed_disable_mqgpc(&$value, $key)
+			function cot_disable_mqgpc(&$value, $key)
 			{
 				$value = stripslashes($value);
 			}
 			$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
-			array_walk_recursive($gpc, 'sed_disable_mqgpc');
+			array_walk_recursive($gpc, 'cot_disable_mqgpc');
 		}
 	}
 	define('MQGPC', FALSE);
@@ -62,7 +62,7 @@ if ($cfg['new_install'])
 	// Installer language selection support
 	if (empty($_SESSION['cot_inst_lang']))
 	{
-		$lang = sed_import('lang', 'P', 'ALP');
+		$lang = cot_import('lang', 'P', 'ALP');
 		if (empty($lang))
 		{
 			$lang = 'en';
@@ -73,7 +73,7 @@ if ($cfg['new_install'])
 		$lang = $_SESSION['cot_inst_lang'];
 	}
 
-	require_once sed_langfile('main', 'core');
+	require_once cot_langfile('main', 'core');
 	require_once $cfg['system_dir'] . '/resources.php';
 }
 else
@@ -81,14 +81,14 @@ else
 	require_once $cfg['system_dir'].'/common.php';
 }
 
-sed_require_api('forms');
-sed_require_api('extensions');
-sed_require_api('cotemplate');
-sed_require_lang('install', 'module');
-sed_require_lang('users', 'core');
-sed_require_lang('admin', 'core');
+cot_require_api('forms');
+cot_require_api('extensions');
+cot_require_api('cotemplate');
+cot_require_lang('install', 'module');
+cot_require_lang('users', 'core');
+cot_require_lang('admin', 'core');
 
-sed_require_rc('install');
+cot_require_rc('install');
 
 // Various Generic Vars needed to operate as Normal
 $theme = $cfg['defaulttheme'];
@@ -100,11 +100,11 @@ $file['sql'] = './setup/install.sql';
 
 if (!$cfg['new_install'])
 {
-	include sed_incfile($z, 'update');
+	include cot_incfile($z, 'update');
 }
 else
 {
-	include sed_incfile($z, 'install');
+	include cot_incfile($z, 'install');
 }
 
 ?>

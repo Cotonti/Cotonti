@@ -15,12 +15,12 @@ Hooks=forums.posts.tags
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_poll_vote();
-$poll_form=sed_poll_form($q, sed_url('forums', 'm=posts&q='.$q), '', 'forum');
+cot_poll_vote();
+$poll_form=cot_poll_form($q, cot_url('forums', 'm=posts&q='.$q), '', 'forum');
 $t->assign(array(
-	"POLLS_TITLE" => sed_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
+	"POLLS_TITLE" => cot_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
 	"POLLS_FORM" => $poll_form['poll_block'],
 ));
 

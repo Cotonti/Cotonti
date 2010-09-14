@@ -16,12 +16,12 @@ Tags=
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
-$poll = trim(sed_import('poll_text', 'P', 'HTM'));
+defined('COT_CODE') or die('Wrong URL');
+$poll = trim(cot_import('poll_text', 'P', 'HTM'));
 
 if(!empty($poll))
 {
-	sed_poll_check();
+	cot_poll_check();
 }
 
 ?>

@@ -15,7 +15,7 @@ Hooks=forums.topics.query
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if($fs_allowpolls)
 {

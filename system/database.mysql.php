@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Returns number of rows affected by last query
@@ -17,10 +17,10 @@ defined('SED_CODE') or die('Wrong URL');
  * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_affectedrows($conn = null)
+function cot_db_affectedrows($conn = null)
 {
-	global $sed_dbc;
-	return is_null($conn) ? mysql_affected_rows($sed_dbc) : mysql_affected_rows($conn);
+	global $cot_dbc;
+	return is_null($conn) ? mysql_affected_rows($cot_dbc) : mysql_affected_rows($conn);
 }
 
 /**
@@ -29,10 +29,10 @@ function sed_sql_affectedrows($conn = null)
  * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_close($conn = null)
+function cot_db_close($conn = null)
 {
-	global $sed_dbc;
-	return is_null($conn) ? mysql_close($sed_dbc) : mysql_close($conn);
+	global $cot_dbc;
+	return is_null($conn) ? mysql_close($cot_dbc) : mysql_close($conn);
 }
 
 /**
@@ -45,16 +45,16 @@ function sed_sql_close($conn = null)
  * @param string $db Database name
  * @return resource
  */
-function sed_sql_connect($host, $user, $pass, $db)
+function cot_db_connect($host, $user, $pass, $db)
 {
 	global $cfg;
 	$connection = @mysql_connect($host, $user, $pass);
-	if (!$connection && !defined('SED_INSTALL'))
+	if (!$connection && !defined('COT_INSTALL'))
 	{
-		sed_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error()); // TODO: Need translate
+		cot_diefatal('Could not connect to database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.cot_db_error()); // TODO: Need translate
 		if (!version_compare(mysql_get_server_info($connection), '4.1.0', '>='))
 		{
-			sed_diefatal('Cotonti system requirements: MySQL 4.1 or above.'); // TODO: Need translate
+			cot_diefatal('Cotonti system requirements: MySQL 4.1 or above.'); // TODO: Need translate
 		}
 	}
 	elseif (!$connection)
@@ -73,9 +73,9 @@ function sed_sql_connect($host, $user, $pass, $db)
 		@mysql_query($collation_query, $connection);
 	}
 	$select = @mysql_select_db($db, $connection);
-	if (!$select && !defined('SED_INSTALL'))
+	if (!$select && !defined('COT_INSTALL'))
 	{
-		sed_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.sed_sql_error()); // TODO: Need translate
+		cot_diefatal('Could not select the database !<br />Please check your settings in the file datas/config.php<br />'.'MySQL error : '.cot_db_error()); // TODO: Need translate
 	}
 	elseif (!$select)
 	{
@@ -91,10 +91,10 @@ function sed_sql_connect($host, $user, $pass, $db)
  * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_errno($conn = null)
+function cot_db_errno($conn = null)
 {
-	global $sed_dbc;
-	return is_null($conn) ? mysql_errno($sed_dbc) : mysql_errno($conn);
+	global $cot_dbc;
+	return is_null($conn) ? mysql_errno($cot_dbc) : mysql_errno($conn);
 }
 
 /**
@@ -103,10 +103,10 @@ function sed_sql_errno($conn = null)
  * @param resource $conn Custom connection handle
  * @return string
  */
-function sed_sql_error($conn = null)
+function cot_db_error($conn = null)
 {
-	global $sed_dbc;
-	return is_null($conn) ? mysql_error($sed_dbc) : mysql_error($conn);
+	global $cot_dbc;
+	return is_null($conn) ? mysql_error($cot_dbc) : mysql_error($conn);
 }
 
 /**
@@ -115,7 +115,7 @@ function sed_sql_error($conn = null)
  * @param resource $res Query result
  * @return array
  */
-function sed_sql_fetcharray($res)
+function cot_db_fetcharray($res)
 {
 	return mysql_fetch_array($res);
 }
@@ -126,7 +126,7 @@ function sed_sql_fetcharray($res)
  * @param resource $res Query result
  * @return array
  */
-function sed_sql_fetchassoc($res)
+function cot_db_fetchassoc($res)
 {
 	return mysql_fetch_assoc($res);
 }
@@ -137,7 +137,7 @@ function sed_sql_fetchassoc($res)
  * @param resource $res Query result
  * @return array
  */
-function sed_sql_fetchrow($res)
+function cot_db_fetchrow($res)
 {
 	return mysql_fetch_row($res);
 }
@@ -148,9 +148,9 @@ function sed_sql_fetchrow($res)
  * @param resource $conn Custom connection
  * @return int
  */
-function sed_sql_foundrows($conn = NULL)
+function cot_db_foundrows($conn = NULL)
 {
-	return (int) sed_sql_result(sed_sql_query('SELECT FOUND_ROWS()'), 0, 0);
+	return (int) cot_db_result(cot_db_query('SELECT FOUND_ROWS()'), 0, 0);
 }
 
 /**
@@ -159,7 +159,7 @@ function sed_sql_foundrows($conn = NULL)
  * @param resource $res Query result
  * @return bool
  */
-function sed_sql_freeresult($res)
+function cot_db_freeresult($res)
 {
 	return mysql_free_result($res);
 }
@@ -170,23 +170,23 @@ function sed_sql_freeresult($res)
  * @param resource $conn Custom connection handle
  * @return int
  */
-function sed_sql_insertid($conn = null)
+function cot_db_insertid($conn = null)
 {
-	global $sed_dbc;
-	return is_null($conn) ? mysql_insert_id($sed_dbc) : mysql_insert_id($conn);
+	global $cot_dbc;
+	return is_null($conn) ? mysql_insert_id($cot_dbc) : mysql_insert_id($conn);
 }
 
 /**
- * Returns list of tables for a database. Use sed_sql_fetcharray() to get table names from result
+ * Returns list of tables for a database. Use cot_db_fetcharray() to get table names from result
  *
  * @param string $db_name Database name
  * @param resource $conn Custom connection handle
  * @return resource
  */
-function sed_sql_listtables($db_name, $conn = null)
+function cot_db_listtables($db_name, $conn = null)
 {
-	global $sed_dbc;
-	return is_null($conn) ? mysql_list_tables($db_name, $sed_dbc) : mysql_list_tables($db_name, $conn);
+	global $cot_dbc;
+	return is_null($conn) ? mysql_list_tables($db_name, $cot_dbc) : mysql_list_tables($db_name, $conn);
 }
 
 /**
@@ -195,7 +195,7 @@ function sed_sql_listtables($db_name, $conn = null)
  * @param resource $res Query result
  * @return int
  */
-function sed_sql_numrows($res)
+function cot_db_numrows($res)
 {
 	return mysql_num_rows($res);
 }
@@ -207,10 +207,10 @@ function sed_sql_numrows($res)
  * @param resource $conn Custom connection handle
  * @return string
  */
-function sed_sql_prep($str, $conn = null)
+function cot_db_prep($str, $conn = null)
 {
-	global $sed_dbc;
-	return is_null($conn) ? mysql_real_escape_string($str, $sed_dbc) : mysql_real_escape_string($str, $conn);
+	global $cot_dbc;
+	return is_null($conn) ? mysql_real_escape_string($str, $cot_dbc) : mysql_real_escape_string($str, $conn);
 }
 
 /**
@@ -218,21 +218,21 @@ function sed_sql_prep($str, $conn = null)
  *
  * @global $sys
  * @global $cfg
- * @global $sed_dbc
+ * @global $cot_dbc
  * @param string $query SQL query
  * @param resource $conn Custom connection handle
  * @return resource
  */
-function sed_sql_query($query, $conn = null)
+function cot_db_query($query, $conn = null)
 {
-	global $sys, $cfg, $sed_dbc;
-	$conn = is_null($conn) ? $sed_dbc : $conn;
+	global $sys, $cfg, $cot_dbc;
+	$conn = is_null($conn) ? $cot_dbc : $conn;
 	$sys['qcount']++;
 	$xtime = microtime();
 	$result = mysql_query($query, $conn);
-	if (!$result && !defined('SED_INSTALL'))
+	if (!$result && !defined('COT_INSTALL'))
 	{
-		sed_diefatal('SQL error : '.sed_sql_error($conn));
+		cot_diefatal('SQL error : '.cot_db_error($conn));
 	}
 	elseif (!$result)
 	{
@@ -258,7 +258,7 @@ function sed_sql_query($query, $conn = null)
  * @param mixed $col Column name or index (null-based)
  * @return mixed
  */
-function sed_sql_result($res, $row = 0, $col = 0)
+function cot_db_result($res, $row = 0, $col = 0)
 {
 	return mysql_result($res, $row, $col);
 }

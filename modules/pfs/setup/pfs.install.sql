@@ -3,7 +3,7 @@
  */
 
 -- Files
-CREATE TABLE IF NOT EXISTS `sed_pfs` (
+CREATE TABLE IF NOT EXISTS `cot_pfs` (
   `pfs_id` int(11) NOT NULL auto_increment,
   `pfs_userid` int(11) NOT NULL default '0',
   `pfs_date` int(11) NOT NULL default '0',
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `sed_pfs` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Folders
-CREATE TABLE IF NOT EXISTS `sed_pfs_folders` (
+CREATE TABLE IF NOT EXISTS `cot_pfs_folders` (
   `pff_id` int(11) NOT NULL auto_increment,
   `pff_userid` int(11) NOT NULL default '0',
   `pff_date` int(11) NOT NULL default '0',

@@ -7,25 +7,25 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 define('COT_UPDATE', true);
 
 $branch = 'siena';
 $prev_branch = 'genoa';
 
-sed_sendheaders();
+cot_sendheaders();
 
 if (!file_exists("./setup/$branch"))
 {
-	sed_diefatal($L['install_dir_not_found']);
+	cot_diefatal($L['install_dir_not_found']);
 }
 
 include $file['config'];
 
-$mskin = sed_skinfile('install.update');
+$mskin = cot_skinfile('install.update');
 if (!file_exists($mskin))
 {
-	sed_diefatal($L['install_update_template_not_found']);
+	cot_diefatal($L['install_update_template_not_found']);
 }
 $t = new XTemplate($mskin);
 
@@ -51,7 +51,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 					}
                     elseif ($key == 'site_id')
                     {
-                        $val = sed_unique(32);
+                        $val = cot_unique(32);
                     }
 
 					if (is_bool($val))
@@ -76,7 +76,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 			{
 				if (!isset($old_db[$key]))
 				{
-					$val = str_replace("sed_", "\$db_x.'", $val);
+					$val = str_replace("cot_", "\$db_x.'", $val);
 					$delta .= "\${$key} = $val';\n";
 				}
 			}
@@ -86,7 +86,7 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 			$config_contents = file_get_contents($file['config']);
 			$config_contents = str_replace('?>', $delta.'?>', $config_contents);
 			file_put_contents($file['config'], $config_contents);
-			sed_message('install_update_config_success');
+			cot_message('install_update_config_success');
 			$updated_config = true;
 			include $file['config'];
 		}
@@ -95,29 +95,29 @@ if (is_writable($file['config']) && file_exists($file['config_sample']))
 else
 {
 	// Display some warning
-	sed_error('install_update_config_error');
+	cot_error('install_update_config_error');
 }
 
-$sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
+$cot_dbc = cot_db_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 
-$sql = @sed_sql_query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
-$sql2 = @sed_sql_query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
-$old_branch = @sed_sql_result($sql2, 0, 0);
+$sql = @cot_db_query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
+$sql2 = @cot_db_query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
+$old_branch = @cot_db_result($sql2, 0, 0);
 
-if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
+if (cot_db_errno() > 0 || cot_db_numrows($sql) != 1)
 {
 	// Is Genoa, perform upgrade
 	$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
-	$error = sed_sql_runscript($script);
+	$error = cot_db_runscript($script);
 	if (empty($error))
 	{
-		sed_message(sed_rc('install_update_patch_applied',
+		cot_message(cot_rc('install_update_patch_applied',
 			array('f' => "setup/$branch/patch-$prev_branch.sql",
 				'msg' => 'OK')));
 	}
 	else
 	{
-		sed_error(sed_rc('install_update_patch_error',
+		cot_error(cot_rc('install_update_patch_error',
 			array('f' => "setup/$branch/patch-$prev_branch.sql",
 				'msg' => $error)));
 	}
@@ -127,13 +127,13 @@ if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
 		if ($ret !== false)
 		{
 			$msg = $ret == 1 ? 'OK' : $ret;
-			sed_message('install_update_patch_applied',
+			cot_message('install_update_patch_applied',
 				array('f' => "setup/$branch/patch-$prev_branch.inc",
 					'msg' => $ret));
 		}
 		else
 		{
-			sed_error('install_update_patch_error',
+			cot_error('install_update_patch_error',
 				array('f' => "setup/$branch/patch-$prev_branch.inc",
 					'msg' => $L['Error']));
 		}
@@ -141,14 +141,14 @@ if (sed_sql_errno() > 0 || sed_sql_numrows($sql) != 1)
 	if (!$cot_error)
 	{
 		// Success
-		sed_sql_query("UPDATE $db_updates SET upd_value = '$branch'
+		cot_db_query("UPDATE $db_updates SET upd_value = '$branch'
 			WHERE upd_param = 'branch'");
-		$t->assign('UPDATE_TITLE', sed_rc('install_upgrade_success', array('ver' => $branch)));
+		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
 	}
 	else
 	{
 		// Error
-		$t->assign('UPDATE_TITLE', sed_rc('install_upgrade_error', array('ver' => $branch)));
+		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_error', array('ver' => $branch)));
 	}
 
 	$t->assign(array(
@@ -163,10 +163,10 @@ elseif ($old_branch != $branch)
 else
 {
 	// Update the core
-	$upd_rev = sed_sql_result($sql, 0, 0);
+	$upd_rev = cot_db_result($sql, 0, 0);
 	preg_match('#\$Rev: (\d+) \$#', $upd_rev, $mt);
 	$rev = (int) $mt[1];
-	$new_rev = sed_apply_patches("./setup/$branch", 'r' . $rev);
+	$new_rev = cot_apply_patches("./setup/$branch", 'r' . $rev);
 	if (is_string($new_rev))
 	{
 		$new_rev = (int) substr($new_rev, 1);
@@ -174,39 +174,39 @@ else
 
 	// Update installed modules and plugins
 	$updated_ext = false;
-	foreach ($sed_modules as $code => $mod)
+	foreach ($cot_modules as $code => $mod)
 	{
-		$ret = sed_extension_install($code, true, true);
+		$ret = cot_extension_install($code, true, true);
 		if ($ret === true)
 		{
 			$updated_ext = true;
 		}
 		elseif ($ret === false)
 		{
-			sed_error(sed_rc('ext_update_error', array(
+			cot_error(cot_rc('ext_update_error', array(
 				'type' => $L['Module'],
 				'name' => $name
 			)));
 		}
 	}
 	$installed_plugs = array();
-	$res = sed_sql_query("SELECT DISTINCT(pl_code) FROM $db_plugins
+	$res = cot_db_query("SELECT DISTINCT(pl_code) FROM $db_plugins
 		WHERE pl_module = 0 AND pl_active = 1");
-	while ($row = sed_sql_fetchrow($res))
+	while ($row = cot_db_fetchrow($res))
 	{
 		$installed_plugs[] = $row[0];
 	}
-	sed_sql_freeresult($res);
+	cot_db_freeresult($res);
 	foreach ($installed_plugs as $code)
 	{
-		$ret = sed_extension_install($code, false, true);
+		$ret = cot_extension_install($code, false, true);
 		if ($ret === true)
 		{
 			$updated_ext = true;
 		}
 		elseif ($ret === false)
 		{
-			sed_error(sed_rc('ext_update_error', array(
+			cot_error(cot_rc('ext_update_error', array(
 				'type' => $L['Plugin'],
 				'name' => $name
 			)));
@@ -230,10 +230,10 @@ else
 		}
 		else
 		{
-			sed_sql_query("UPDATE $db_updates SET upd_value = '\$Rev: $new_rev \$'
+			cot_db_query("UPDATE $db_updates SET upd_value = '\$Rev: $new_rev \$'
 				WHERE upd_param = 'revision'");
 		}
-		$t->assign('UPDATE_TITLE', sed_rc('install_update_success', array('rev' => $new_rev)));
+		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', array('rev' => $new_rev)));
 	}
 
 	$t->assign(array(
@@ -242,7 +242,7 @@ else
 	));
 }
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 $t->parse('MAIN');
 $t->out('MAIN');

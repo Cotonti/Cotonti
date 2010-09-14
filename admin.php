@@ -9,8 +9,8 @@
  * @license BSD
  */
 
-define('SED_CODE', TRUE);
-define('SED_ADMIN', TRUE);
+define('COT_CODE', TRUE);
+define('COT_ADMIN', TRUE);
 define('COT_CORE', TRUE);
 $location = 'Administration';
 $z = 'admin';
@@ -18,10 +18,10 @@ $z = 'admin';
 require_once './datas/config.php';
 require_once $cfg['system_dir'].'/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
-sed_require_api('cotemplate');
+cot_require_api('cotemplate');
 
-sed_require('admin');
+cot_require('admin');
 
-include sed_incfile('admin', 'main');
+include cot_incfile('admin', 'main');
 
 ?>

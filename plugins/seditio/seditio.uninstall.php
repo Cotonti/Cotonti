@@ -9,8 +9,8 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 // Remove plugin bbcodes
-sed_bbcode_remove(0, 'seditio')
+cot_bbcode_remove(0, 'seditio')
 ?>

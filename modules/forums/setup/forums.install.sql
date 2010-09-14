@@ -3,7 +3,7 @@
  */
 
 -- Install auth for default forums
-INSERT INTO `sed_auth` (`auth_groupid`, `auth_code`, `auth_option`,
+INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`,
 	`auth_rights`, `auth_rights_lock`, `auth_setbyuserid`) VALUES
 (1, 'forums', '1', 1, 254, 1),
 (2, 'forums', '1', 1, 254, 1),
@@ -19,7 +19,7 @@ INSERT INTO `sed_auth` (`auth_groupid`, `auth_code`, `auth_option`,
 (6, 'forums', '2', 131, 0, 1);
 
 -- Forum posts
-CREATE TABLE IF NOT EXISTS `sed_forum_posts` (
+CREATE TABLE IF NOT EXISTS `cot_forum_posts` (
   `fp_id` mediumint(8) unsigned NOT NULL auto_increment,
   `fp_topicid` mediumint(8) NOT NULL default '0',
   `fp_sectionid` smallint(5) NOT NULL default '0',
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `sed_forum_posts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Forum sections
-CREATE TABLE IF NOT EXISTS `sed_forum_sections` (
+CREATE TABLE IF NOT EXISTS `cot_forum_sections` (
   `fs_id` smallint(5) unsigned NOT NULL auto_increment,
   `fs_state` tinyint(1) unsigned NOT NULL default '0',
   `fs_order` smallint(5) unsigned NOT NULL default '0',
@@ -72,12 +72,12 @@ CREATE TABLE IF NOT EXISTS `sed_forum_sections` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Default sections
-INSERT INTO `sed_forum_sections` (`fs_state`, `fs_order`, `fs_title`, `fs_category`, `fs_desc`, `fs_icon`, `fs_lt_id`, `fs_lt_title`, `fs_lt_date`, `fs_lt_posterid`, `fs_lt_postername`, `fs_autoprune`, `fs_allowusertext`, `fs_allowbbcodes`, `fs_allowsmilies`, `fs_allowprvtopics`, `fs_countposts`, `fs_topiccount`, `fs_topiccount_pruned`, `fs_postcount`, `fs_postcount_pruned`, `fs_viewcount`, `fs_masterid`, `fs_mastername`, `fs_allowviewers`, `fs_allowpolls`) VALUES
+INSERT INTO `cot_forum_sections` (`fs_state`, `fs_order`, `fs_title`, `fs_category`, `fs_desc`, `fs_icon`, `fs_lt_id`, `fs_lt_title`, `fs_lt_date`, `fs_lt_posterid`, `fs_lt_postername`, `fs_autoprune`, `fs_allowusertext`, `fs_allowbbcodes`, `fs_allowsmilies`, `fs_allowprvtopics`, `fs_countposts`, `fs_topiccount`, `fs_topiccount_pruned`, `fs_postcount`, `fs_postcount_pruned`, `fs_viewcount`, `fs_masterid`, `fs_mastername`, `fs_allowviewers`, `fs_allowpolls`) VALUES
 (0, 100, 'General discussion', 'pub', 'General chat.', 'system/admin/tpl/img/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, '', 1, 0),
 (0, 101, 'Off-topic', 'pub', 'Various and off-topic.', 'system/admin/tpl/img/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '', 1, 0);
 
 -- Forum structure
-CREATE TABLE IF NOT EXISTS `sed_forum_structure` (
+CREATE TABLE IF NOT EXISTS `cot_forum_structure` (
   `fn_id` mediumint(8) NOT NULL auto_increment,
   `fn_path` varchar(16) collate utf8_unicode_ci NOT NULL default '',
   `fn_code` varchar(16) collate utf8_unicode_ci NOT NULL default '',
@@ -90,11 +90,11 @@ CREATE TABLE IF NOT EXISTS `sed_forum_structure` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Default categories
-INSERT INTO `sed_forum_structure` (`fn_path`, `fn_code`, `fn_tpl`, `fn_title`, `fn_desc`, `fn_icon`, `fn_defstate`) VALUES
+INSERT INTO `cot_forum_structure` (`fn_path`, `fn_code`, `fn_tpl`, `fn_title`, `fn_desc`, `fn_icon`, `fn_defstate`) VALUES
 ('1', 'pub', '', 'Public', '', '', 1);
 
 -- Forum topics
-CREATE TABLE IF NOT EXISTS `sed_forum_topics` (
+CREATE TABLE IF NOT EXISTS `cot_forum_topics` (
   `ft_id` mediumint(8) unsigned NOT NULL auto_increment,
   `ft_mode` tinyint(1) unsigned NOT NULL default '0',
   `ft_state` tinyint(1) unsigned NOT NULL default '0',

@@ -15,18 +15,18 @@ Hooks=forums.newtopic.newtopic.done
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W'))
+if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W'))
 {
-	sed_require('tags', true);
+	cot_require('tags', true);
 	$item_id = $q;
-	$rtags = sed_import('rtags', 'P', 'TXT');
-	$tags = sed_tag_parse($rtags);
+	$rtags = cot_import('rtags', 'P', 'TXT');
+	$tags = cot_tag_parse($rtags);
 	$cnt = 0;
 	foreach ($tags as $tag)
 	{
-		sed_tag($tag, $item_id, 'forums');
+		cot_tag($tag, $item_id, 'forums');
 		$cnt++;
 		if ($cfg['plugin']['tags']['limit'] > 0 && $cnt == $cfg['plugin']['tags']['limit'])
 		{

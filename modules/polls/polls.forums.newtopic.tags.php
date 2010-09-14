@@ -16,11 +16,11 @@ Tags=
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($fs_allowpolls)
 {
-	sed_poll_edit_form('new', $t, 'MAIN.POLL');
+	cot_poll_edit_form('new', $t, 'MAIN.POLL');
 	$t->parse('MAIN.POLL');
 }
 

@@ -9,9 +9,9 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 // Remove plugin bbcodes
-sed_bbcode_remove(0, 'markitup');
-sed_bbcode_clearcache();
+cot_bbcode_remove(0, 'markitup');
+cot_bbcode_clearcache();
 ?>

@@ -15,35 +15,35 @@ Hooks=admin
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pm', 'a');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a');
+cot_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('pm.admin'));
+$t = new XTemplate(cot_skinfile('pm.admin'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=pm'), $L['Private_Messages']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=pm'), $L['Private_Messages']);
 $adminhelp = $L['adm_help_pm'];
 
-$totalpmdb = sed_sql_rowcount($db_pm);
-$totalpmsent = sed_stat_get('totalpms');
+$totalpmdb = cot_db_rowcount($db_pm);
+$totalpmsent = cot_stat_get('totalpms');
 
 $t->assign(array(
-	'ADMIN_PM_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=pm'),
+	'ADMIN_PM_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=core&p=pm'),
 	'ADMIN_PM_TOTALPMDB' => $totalpmdb,
 	'ADMIN_PM_TOTALPMSENT' => $totalpmsent
 ));
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.pm.tags') as $pl)
+foreach (cot_getextplugins('admin.pm.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

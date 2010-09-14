@@ -16,20 +16,20 @@ Tags=index.tpl:{PLUGIN_LATESTPAGES}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('users');
-sed_require('recentitems', true);
+cot_require('users');
+cot_require('recentitems', true);
 
 if ($cfg['plugin']['recentitems']['recentpages'] && !$cfg['disable_page'])
 {
-	$res = sed_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
+	$res = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("PLUGIN_LATESTPAGES", $res);
 }
 
 if ($cfg['plugin']['recentitems']['recentforums'] && !$cfg['disable_forums'])
 {
-	$res = sed_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
+	$res = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("PLUGIN_LATESTTOPICS", $res);
 }
 

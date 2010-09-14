@@ -9,22 +9,22 @@
  * @license BSD License
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+cot_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.urls'));
+$t = new XTemplate(cot_skinfile('admin.urls'));
 
 
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=urls'), $L['adm_urls']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=urls'), $L['adm_urls']);
 $adminhelp = $L['adm_help_urls'];
 
-$a = sed_import('a', 'G', 'ALP');
+$a = cot_import('a', 'G', 'ALP');
 
-$site_uri = SED_SITE_URI;
+$site_uri = COT_SITE_URI;
 
 // Server type detection
 if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'apache') !== false)
@@ -78,7 +78,7 @@ else
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.urls.first') as $pl)
+foreach (cot_getextplugins('admin.urls.first') as $pl)
 {
 	include $pl;
 }
@@ -87,13 +87,13 @@ foreach (sed_getextplugins('admin.urls.first') as $pl)
 if($a == 'save')
 {
 	// Fetch data
-	$ut_area = sed_import('area', 'P', 'ARR');
-	$ut_params = sed_import('params', 'P', 'ARR');
-	$ut_format = sed_import('format', 'P', 'ARR');
-	$htaccess = sed_import('htaccess', 'P', 'BOL');
+	$ut_area = cot_import('area', 'P', 'ARR');
+	$ut_params = cot_import('params', 'P', 'ARR');
+	$ut_format = cot_import('format', 'P', 'ARR');
+	$htaccess = cot_import('htaccess', 'P', 'BOL');
 
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.urls.save') as $pl)
+	foreach (cot_getextplugins('admin.urls.save') as $pl)
 	{
 		include $pl;
 	}
@@ -116,7 +116,7 @@ if($a == 'save')
 	$var_pattern = '[^/&?#]+';
 	$mainurl = parse_url($cfg['mainurl']);
 	$host = preg_quote($mainurl['host']);
-	$path = preg_quote(SED_SITE_URI);
+	$path = preg_quote(COT_SITE_URI);
 	// Pepend rules to fix static data when using dynamic categories
 	if($serv_type != 'nginx')
 	{
@@ -140,13 +140,13 @@ if($a == 'save')
 		if(preg_match('#\{[\w_]+\(\)\}#', $ut_format[$i]))
 		{
 			// Rule with callback, requires custom rewrite
-			sed_message($L['adm_urls_callbacks'] . ': ' . htmlspecialchars($ut_format[$i]), 'warning');
+			cot_message($L['adm_urls_callbacks'] . ': ' . htmlspecialchars($ut_format[$i]), 'warning');
             $has_callbacks = true;
 			continue;
 		}
         if ($has_callbacks)
         {
-            sed_message('adm_urls_errors');
+            cot_message('adm_urls_errors');
         }
 		// Remove unsets
 		$ut_format[$i] = preg_replace('#\{\!\$.+?\}#', '', $ut_format[$i]);
@@ -311,7 +311,7 @@ if($a == 'save')
 // Check urltrans.dat
 if(!is_writeable('./datas/urltrans.dat'))
 {
-	sed_error('adm_urls_error_dat');
+	cot_error('adm_urls_error_dat');
 }
 
 // Get list of valid areas
@@ -341,7 +341,7 @@ $fp = fopen('./datas/urltrans.dat', 'r');
 // Rules
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('admin.urls.loop');
+$extp = cot_getextplugins('admin.urls.loop');
 /* ===== */
 while($line = trim(fgets($fp), " \t\r\n"))
 {
@@ -349,10 +349,10 @@ while($line = trim(fgets($fp), " \t\r\n"))
 
 	$t->assign(array(
 		'ADMIN_URLS_ROW_I' => $ii,
-		'ADMIN_URLS_ROW_AREAS' => sed_selectbox($parts[0], 'area[]', $areas, $areas, false),
-		'ADMIN_URLS_ROW_PARTS1' => sed_inputbox('text', 'params[]', $parts[1]),
-		'ADMIN_URLS_ROW_PARTS2' => sed_inputbox('text', 'format[]', $parts[2]),
-		'ADMIN_URLS_ROW_ODDEVEN' => sed_build_oddeven($ii)
+		'ADMIN_URLS_ROW_AREAS' => cot_selectbox($parts[0], 'area[]', $areas, $areas, false),
+		'ADMIN_URLS_ROW_PARTS1' => cot_inputbox('text', 'params[]', $parts[1]),
+		'ADMIN_URLS_ROW_PARTS2' => cot_inputbox('text', 'format[]', $parts[2]),
+		'ADMIN_URLS_ROW_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -370,26 +370,26 @@ fclose($fp);
 $htaccess = ($serv_type == 'apache' && is_writeable('./'.$conf_name)) ? true : false;
 
 // Error and message reporting
-sed_display_messages($t);
+cot_display_messages($t);
 
 $t->assign(array(
 	'ADMIN_URLS_II' => $ii,
-	'ADMIN_URLS_FORM_URL' => sed_url('admin', 'm=urls&a=save'),
-	'ADMIN_URLS_ROW_AREAS' => sed_selectbox('*', 'area[]', $areas, $areas, false),
-	'ADMIN_URLS_ROW_PARTS1' => sed_inputbox('text', 'params[]', ''),
-	'ADMIN_URLS_ROW_PARTS2' => sed_inputbox('text', 'format[]', ''),
-	'ADMIN_URLS_ROW_ODDEVEN' => sed_build_oddeven($ii)
+	'ADMIN_URLS_FORM_URL' => cot_url('admin', 'm=urls&a=save'),
+	'ADMIN_URLS_ROW_AREAS' => cot_selectbox('*', 'area[]', $areas, $areas, false),
+	'ADMIN_URLS_ROW_PARTS1' => cot_inputbox('text', 'params[]', ''),
+	'ADMIN_URLS_ROW_PARTS2' => cot_inputbox('text', 'format[]', ''),
+	'ADMIN_URLS_ROW_ODDEVEN' => cot_build_oddeven($ii)
 ));
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.urls.tags') as $pl)
+foreach (cot_getextplugins('admin.urls.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

@@ -15,14 +15,14 @@ Hooks=page.edit.update.done
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
+if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
-	sed_require('tags', true);
-	$rtags = sed_import('rtags', 'P', 'TXT');
-	$tags = sed_tag_parse($rtags);
-	$old_tags = sed_tag_list($id);
+	cot_require('tags', true);
+	$rtags = cot_import('rtags', 'P', 'TXT');
+	$tags = cot_tag_parse($rtags);
+	$old_tags = cot_tag_list($id);
 	$kept_tags = array();
 	$new_tags = array();
 	// Find new tags, count old tags that have been left
@@ -44,7 +44,7 @@ if ($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	$rem_tags = array_diff($old_tags, $kept_tags);
 	foreach ($rem_tags as $tag)
 	{
-		sed_tag_remove($tag, $id);
+		cot_tag_remove($tag, $id);
 	}
 	// Add new tags
 	$ncnt = count($new_tags);
@@ -59,7 +59,7 @@ if ($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	}
 	for ($i = 0; $i < $lim; $i++)
 	{
-		sed_tag($new_tags[$i], $id);
+		cot_tag($new_tags[$i], $id);
 	}
 }
 

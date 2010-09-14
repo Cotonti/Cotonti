@@ -16,17 +16,17 @@ Tags=index.tpl:{INDEX_NEWS}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-$d = sed_import('d', 'G', 'INT');
-$c = sed_import('c', 'G', 'TXT');
-$one = sed_import('one', 'G', 'INT');
+$d = cot_import('d', 'G', 'INT');
+$c = cot_import('c', 'G', 'TXT');
+$one = cot_import('one', 'G', 'INT');
 $categories = explode(',', $cfg['plugin']['news']['category']);
 $limit = $cfg['plugin']['news']['maxpages'];
 foreach ($categories as $k => $v)
 {
 	$v = explode('|', trim($v));
-	if (isset($sed_cat[$v[0]]))
+	if (isset($cot_cat[$v[0]]))
 	{
 		if (empty($indexcat))
 		{
@@ -36,7 +36,7 @@ foreach ($categories as $k => $v)
 		}
 		else
 		{
-			$v[3] = sed_import($v[0].'d','G','INT');
+			$v[3] = cot_import($v[0].'d','G','INT');
 			$v[3] = (empty($v[3])) ? 0 : $v[3];
 			$v[2] = ((int)$v[2] > 0) ? $v[2] : 0;
 			$v[1] = (empty($v[1])) ? $limit : $v[1];
@@ -47,23 +47,23 @@ foreach ($categories as $k => $v)
 }
 $d = (empty($d)) ? '0' : $d;
 
-$c = (empty($c)||!isset($sed_cat[$c])) ? $indexcat : $c;
+$c = (empty($c)||!isset($cot_cat[$c])) ? $indexcat : $c;
 
 if (isset($cats[$c]) && !empty($individual)) unset($cats[$c]);
 
-sed_require('users');
+cot_require('users');
 require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 
 if ($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))
 {
 	$limit = $cfg['plugin']['news']['maxpages'];
-	$t->assign("INDEX_NEWS", sed_get_news($c, "news", $limit, $d, $symblim, true));
+	$t->assign("INDEX_NEWS", cot_get_news($c, "news", $limit, $d, $symblim, true));
 	if (!empty($cats) && !$one)
 	{
 		foreach ($cats as $k => $v)
 		{
 			$dadd = ($cfg['plugin']['news']['syncpagination'])? $d : $v[3];
-			$t->assign("INDEX_NEWS_".strtoupper($v[0]), sed_get_news($v[0], "news.".$v[0], $v[1], $dadd, $v[2]));
+			$t->assign("INDEX_NEWS_".strtoupper($v[0]), cot_get_news($v[0], "news.".$v[0], $v[1], $dadd, $v[2]));
 		}
 	}
 }

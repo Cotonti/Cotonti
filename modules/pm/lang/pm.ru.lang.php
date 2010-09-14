@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 $L['pmsend_subtitle'] = 'Форма для создания нового сообщения';
 $L['pmsend_title'] = 'Новое личное сообщение';

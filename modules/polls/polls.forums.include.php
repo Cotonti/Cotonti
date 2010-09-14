@@ -15,8 +15,8 @@ Hooks=forums.newtopic.first,forums.editpost.first,forums.posts.first,forums.topi
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('polls');
+cot_require('polls');
 
 ?>

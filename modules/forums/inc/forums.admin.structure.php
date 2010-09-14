@@ -9,16 +9,16 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-$t = new XTemplate(sed_skinfile('forums.admin.structure', 'module'));
+$t = new XTemplate(cot_skinfile('forums.admin.structure', 'module'));
 
-$adminpath[] = array (sed_url('admin', 'm=forums'), $L['Forums']);
-$adminpath[] = array (sed_url('admin', 'm=forums&s=structure'), $L['Structure']);
+$adminpath[] = array (cot_url('admin', 'm=forums'), $L['Forums']);
+$adminpath[] = array (cot_url('admin', 'm=forums&s=structure'), $L['Structure']);
 $adminhelp = $L['adm_help_forum_structure'];
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.forums.structure.first') as $pl)
+foreach (cot_getextplugins('admin.forums.structure.first') as $pl)
 {
 	include $pl;
 }
@@ -28,15 +28,15 @@ if($n == 'options')
 {
 	if($a == 'update')
 	{
-		$rpath = sed_import('rpath', 'P', 'TXT');
-		$rtitle = sed_import('rtitle', 'P', 'TXT');
-		$rtplmode = sed_import('rtplmode', 'P', 'INT');
-		$rdesc = sed_import('rdesc', 'P', 'TXT');
-		$ricon = sed_import('ricon', 'P', 'TXT');
-		$rdefstate = sed_import('rdefstate', 'P', 'BOL');
+		$rpath = cot_import('rpath', 'P', 'TXT');
+		$rtitle = cot_import('rtitle', 'P', 'TXT');
+		$rtplmode = cot_import('rtplmode', 'P', 'INT');
+		$rdesc = cot_import('rdesc', 'P', 'TXT');
+		$ricon = cot_import('ricon', 'P', 'TXT');
+		$rdefstate = cot_import('rdefstate', 'P', 'BOL');
 
 		/* === Hook === */
-		foreach (sed_getextplugins('admin.forums.structure.options.update') as $pl)
+		foreach (cot_getextplugins('admin.forums.structure.options.update') as $pl)
 		{
 			include $pl;
 		}
@@ -52,34 +52,34 @@ if($n == 'options')
 		}
 		/*else
 		{
-			$rtpl = sed_import('rtplforced','P','ALP');
+			$rtpl = cot_import('rtplforced','P','ALP');
 		}*/
 
-		$sql = sed_sql_query("UPDATE $db_forum_structure SET
-			fn_path='".sed_sql_prep($rpath)."',
-			fn_tpl='".sed_sql_prep($rtpl)."',
-			fn_title='".sed_sql_prep($rtitle)."',
-			fn_desc='".sed_sql_prep($rdesc)."',
-			fn_icon='".sed_sql_prep($ricon)."',
+		$sql = cot_db_query("UPDATE $db_forum_structure SET
+			fn_path='".cot_db_prep($rpath)."',
+			fn_tpl='".cot_db_prep($rtpl)."',
+			fn_title='".cot_db_prep($rtitle)."',
+			fn_desc='".cot_db_prep($rdesc)."',
+			fn_icon='".cot_db_prep($ricon)."',
 			fn_defstate='".$rdefstate."'
 			WHERE fn_id='".$id."'");
 
 		if ($cot_cache)
 		{
-			$cot_cache->db->remove('sed_forums_str', 'system');
+			$cot_cache->db->remove('cot_forums_str', 'system');
 			if ($cfg['cache_forums'])
 			{
 				$cot_cache->page->clear('forums');
 			}
 		}
 
-		sed_message('Updated');
+		cot_message('Updated');
 
-		sed_redirect(sed_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
+		cot_redirect(cot_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
 	}
 
-	$sql = sed_sql_query("SELECT * FROM $db_forum_structure WHERE fn_id='$id' LIMIT 1");
-	sed_die(sed_sql_numrows($sql) == 0);
+	$sql = cot_db_query("SELECT * FROM $db_forum_structure WHERE fn_id='$id' LIMIT 1");
+	cot_die(cot_db_numrows($sql) == 0);
 
 	$handle = opendir('./themes/'.$cfg['defaultskin'].'/');
 	$allskinfiles = array();
@@ -95,7 +95,7 @@ if($n == 'options')
 
 	$allskinfiles = implode(',', $allskinfiles);
 
-	$row = sed_sql_fetcharray($sql);
+	$row = cot_db_fetcharray($sql);
 
 	$fn_id = $row['fn_id'];
 	$fn_code = $row['fn_code'];
@@ -117,21 +117,21 @@ if($n == 'options')
 		$check = '1';
 	}
 
-	$adminpath[] = array(sed_url('admin', 'm=forums&s=structure&n=options&id='.$id), htmlspecialchars($fn_title));
+	$adminpath[] = array(cot_url('admin', 'm=forums&s=structure&n=options&id='.$id), htmlspecialchars($fn_title));
 
 	$t->assign(array(
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL' => sed_url('admin', 'm=forums&s=structure&n=options&a=update&id='.$fn_id.'&d='.$d),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FORM_URL' => cot_url('admin', 'm=forums&s=structure&n=options&a=update&id='.$fn_id.'&d='.$d),
 		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_CODE' => $fn_code,
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH' => sed_inputbox('text', 'rpath', $fn_path, 'size="16" maxlength="16"'),
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE' => sed_inputbox('text', 'rtitle', $fn_title, 'size="64" maxlength="100"'),
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC' => sed_inputbox('text', 'rdesc', $fn_desc, 'size="64"'),
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON' => sed_inputbox('text', 'ricon', $fn_icon, 'size="64" maxlength="128"'),
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK' => sed_radiobox($check, 'rtplmode', array(1, 3), array($L['adm_tpl_empty'], $L['adm_tpl_parent']), '', '<br />'),
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_SELECT' => sed_selectbox($selected, 'rdefstate', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false)
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_PATH' => cot_inputbox('text', 'rpath', $fn_path, 'size="16" maxlength="16"'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_TITLE' => cot_inputbox('text', 'rtitle', $fn_title, 'size="64" maxlength="100"'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC' => cot_inputbox('text', 'rdesc', $fn_desc, 'size="64"'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON' => cot_inputbox('text', 'ricon', $fn_icon, 'size="64" maxlength="128"'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK' => cot_radiobox($check, 'rtplmode', array(1, 3), array($L['adm_tpl_empty'], $L['adm_tpl_parent']), '', '<br />'),
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_SELECT' => cot_selectbox($selected, 'rdefstate', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false)
 	));
 
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.forums.structure.options') as $pl)
+	foreach (cot_getextplugins('admin.forums.structure.options') as $pl)
 	{
 		include $pl;
 	}
@@ -143,11 +143,11 @@ else
 {
 	if($a == 'update')
 	{
-		$s = sed_import('s', 'P', 'ARR');
+		$s = cot_import('s', 'P', 'ARR');
 
 		foreach($s as $i => $k)
 		{
-			$sql1 = sed_sql_query("UPDATE $db_forum_structure SET
+			$sql1 = cot_db_query("UPDATE $db_forum_structure SET
 				fn_path='".$s[$i]['rpath']."',
 				fn_title='".$s[$i]['rtitle']."',
 				fn_defstate='".$s[$i]['rdefstate']."'
@@ -155,14 +155,14 @@ else
 		}
 		if ($cot_cache)
 		{
-			$cot_cache->db->remove('sed_forums_str', 'system');
+			$cot_cache->db->remove('cot_forums_str', 'system');
 			if ($cfg['cache_forums'])
 			{
 				$cot_cache->page->clear('forums');
 			}
 		}
 
-		sed_message('Updated');
+		cot_message('Updated');
 	}
 	elseif($a == 'add')
 	{
@@ -174,58 +174,58 @@ else
 
 		if(!empty($ntitle) && !empty($ncode) && !empty($npath) && $ncode != 'all')
 		{
-			$sql = sed_sql_query("SELECT fn_code FROM $db_forum_structure WHERE fn_code='".sed_sql_prep($ncode)."' LIMIT 1");
-			$ncode .= (sed_sql_numrows($sql)>0) ? "_".rand(100,999) : '';
+			$sql = cot_db_query("SELECT fn_code FROM $db_forum_structure WHERE fn_code='".cot_db_prep($ncode)."' LIMIT 1");
+			$ncode .= (cot_db_numrows($sql)>0) ? "_".rand(100,999) : '';
 
-			$sql = sed_sql_query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('$ncode', '$npath', '$ntitle', '$ndesc', '$nicon', ".(int)$ndefstate.")");
+			$sql = cot_db_query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('$ncode', '$npath', '$ntitle', '$ndesc', '$nicon', ".(int)$ndefstate.")");
 		}
 
 		if ($cot_cache)
 		{
-			$cot_cache->db->remove('sed_forums_str', 'system');
+			$cot_cache->db->remove('cot_forums_str', 'system');
 			if ($cfg['cache_forums'])
 			{
 				$cot_cache->page->clear('forums');
 			}
 		}
 
-		sed_message('Added');
+		cot_message('Added');
 	}
 	elseif($a == 'delete')
 	{
-		sed_check_xg();
-		$sql = sed_sql_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
+		cot_check_xg();
+		$sql = cot_db_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 
 		if ($cot_cache)
 		{
-			$cot_cache->db->remove('sed_forums_str', 'system');
+			$cot_cache->db->remove('cot_forums_str', 'system');
 			if ($cfg['cache_forums'])
 			{
 				$cot_cache->page->clear('forums');
 			}
 		}
 
-		sed_message('Deleted');
+		cot_message('Deleted');
 	}
 
-	$sql = sed_sql_query("SELECT DISTINCT(fs_category), COUNT(*) FROM $db_forum_sections WHERE 1 GROUP BY fs_category");
+	$sql = cot_db_query("SELECT DISTINCT(fs_category), COUNT(*) FROM $db_forum_sections WHERE 1 GROUP BY fs_category");
 
-	while($row = sed_sql_fetcharray($sql))
+	while($row = cot_db_fetcharray($sql))
 	{
 		$sectioncount[$row['fs_category']] = $row['COUNT(*)'];
 	}
 
-	$totalitems = sed_sql_rowcount($db_forum_structure);
+	$totalitems = cot_db_rowcount($db_forum_structure);
 
-	$pagenav = sed_pagenav('admin', 'm=forums&s=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+	$pagenav = cot_pagenav('admin', 'm=forums&s=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-	$sql = sed_sql_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = cot_db_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
-	$extp = sed_getextplugins('admin.forums.structure.loop');
+	$extp = cot_getextplugins('admin.forums.structure.loop');
 	/* ===== */
-	while($row = sed_sql_fetcharray($sql))
+	while($row = cot_db_fetcharray($sql))
 	{
 		$jj++;
 		$fn_id = $row['fn_id'];
@@ -254,15 +254,15 @@ else
 		}
 
 		$t->assign(array(
-			'FORUMS_STRUCTURE_ROW_DEL_URL' => sed_url('admin', 'm=forums&s=structure&a=delete&id='.$fn_id.'&c='.$row['fn_code'].'&d='.$d.'&'.sed_xg()),
+			'FORUMS_STRUCTURE_ROW_DEL_URL' => cot_url('admin', 'm=forums&s=structure&a=delete&id='.$fn_id.'&c='.$row['fn_code'].'&d='.$d.'&'.cot_xg()),
 			'FORUMS_STRUCTURE_ROW_FN_CODE' => $fn_code,
-			'FORUMS_STRUCTURE_ROW_FN_PATH' => sed_inputbox('text', 's['.$fn_id.'][rpath]', $fn_path, 'size="'.((mb_strpos($fn_path, '.') == 0) ? 3 : 9).'" maxlength="24"'),
-			'FORUMS_STRUCTURE_ROW_SELECT' => sed_selectbox($selected,  's['.$fn_id.'][rdefstate]', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false),
+			'FORUMS_STRUCTURE_ROW_FN_PATH' => cot_inputbox('text', 's['.$fn_id.'][rpath]', $fn_path, 'size="'.((mb_strpos($fn_path, '.') == 0) ? 3 : 9).'" maxlength="24"'),
+			'FORUMS_STRUCTURE_ROW_SELECT' => cot_selectbox($selected,  's['.$fn_id.'][rdefstate]', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false),
 			'FORUMS_STRUCTURE_ROW_FN_TPL_SYM' => $fn_tpl_sym,
-			'FORUMS_STRUCTURE_ROW_FN_TITLE' => sed_inputbox('text', 's['.$fn_id.'][rtitle]', $fn_title, 'size="24" maxlength="100"'),
+			'FORUMS_STRUCTURE_ROW_FN_TITLE' => cot_inputbox('text', 's['.$fn_id.'][rtitle]', $fn_title, 'size="24" maxlength="100"'),
 			'FORUMS_STRUCTURE_ROW_SECTIONCOUNT' => $sectioncount[$fn_code],
-			'FORUMS_STRUCTURE_ROW_JUMPTO_URL' => sed_url('forums', 'c='.$fn_code),
-			'FORUMS_STRUCTURE_ROW_OPTIONS_URL' => sed_url('admin', 'm=forums&s=structure&n=options&id='.$fn_id.'&d='.$d.'&'.sed_xg())
+			'FORUMS_STRUCTURE_ROW_JUMPTO_URL' => cot_url('forums', 'c='.$fn_code),
+			'FORUMS_STRUCTURE_ROW_OPTIONS_URL' => cot_url('admin', 'm=forums&s=structure&n=options&id='.$fn_id.'&d='.$d.'&'.cot_xg())
 		));
 		/* === Hook - Part2 : Include === */
 		foreach ($extp as $pl)
@@ -276,25 +276,25 @@ else
 	}
 
 	$t->assign(array(
-		'ADMIN_FORUMS_STRUCTURE_FORM_URL' => sed_url('admin', 'm=forums&s=structure&a=update&d='.$d),
-		'ADMIN_FORUMS_STRUCTURE_CODE' => sed_inputbox('text', 'ncode', '', 'size="16" maxlength="16"'),
-		'ADMIN_FORUMS_STRUCTURE_PATH' => sed_inputbox('text', 'npath', '', 'size="16" maxlength="16"'),
-		'ADMIN_FORUMS_STRUCTURE_TITLE' => sed_inputbox('text', 'ntitle', '', 'size="64" maxlength="100"'),
-		'ADMIN_FORUMS_STRUCTURE_DESC' => sed_inputbox('text', 'ndesc', '', 'size="64"'),
-		'ADMIN_FORUMS_STRUCTURE_ICON' => sed_inputbox('text', 'nicon', '', 'size="64" maxlength="128"'),
-		'ADMIN_FORUMS_STRUCTURE_SELECT' => sed_selectbox('1', 'ndefstate', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false),
+		'ADMIN_FORUMS_STRUCTURE_FORM_URL' => cot_url('admin', 'm=forums&s=structure&a=update&d='.$d),
+		'ADMIN_FORUMS_STRUCTURE_CODE' => cot_inputbox('text', 'ncode', '', 'size="16" maxlength="16"'),
+		'ADMIN_FORUMS_STRUCTURE_PATH' => cot_inputbox('text', 'npath', '', 'size="16" maxlength="16"'),
+		'ADMIN_FORUMS_STRUCTURE_TITLE' => cot_inputbox('text', 'ntitle', '', 'size="64" maxlength="100"'),
+		'ADMIN_FORUMS_STRUCTURE_DESC' => cot_inputbox('text', 'ndesc', '', 'size="64"'),
+		'ADMIN_FORUMS_STRUCTURE_ICON' => cot_inputbox('text', 'nicon', '', 'size="64" maxlength="128"'),
+		'ADMIN_FORUMS_STRUCTURE_SELECT' => cot_selectbox('1', 'ndefstate', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false),
 		'ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
 		'ADMIN_FORUMS_STRUCTURE_PAGNAV' => $pagenav['main'],
 		'ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT' => $pagenav['next'],
 		'ADMIN_FORUMS_STRUCTURE_TOTALITEMS' => $totalitems,
 		'ADMIN_FORUMS_STRUCTURE_COUNTER_ROW' => $ii,
-		'ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD' => sed_url('admin', 'm=forums&s=structure&a=add')
+		'ADMIN_FORUMS_STRUCTURE_INC_URLFORMADD' => cot_url('admin', 'm=forums&s=structure&a=add')
 	));
 	$t->parse('MAIN.DEFULT');
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.forums.structure.tags') as $pl)
+foreach (cot_getextplugins('admin.forums.structure.tags') as $pl)
 {
 	include $pl;
 }

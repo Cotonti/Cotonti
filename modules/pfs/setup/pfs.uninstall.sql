@@ -2,5 +2,5 @@
  * PFS database removal
  */
 
-DROP TABLE IF EXISTS `sed_pfs`;
-DROP TABLE IF EXISTS `sed_pfs_folders`;
+DROP TABLE IF EXISTS `cot_pfs`;
+DROP TABLE IF EXISTS `cot_pfs_folders`;

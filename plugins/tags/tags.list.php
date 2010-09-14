@@ -16,15 +16,15 @@ Tags=list.tpl:{LIST_TAG_CLOUD},{LIST_TOP_TAG_CLOUD}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages'])
 {
-	sed_require('tags', true);
+	cot_require('tags', true);
 	// Get all subcategories
 	$tc_cats = array("'$c'");
-	$tc_path = $sed_cat[$c]['path'] . '.';
-	foreach ($sed_cat as $key => $val)
+	$tc_path = $cot_cat[$c]['path'] . '.';
+	foreach ($cot_cat as $key => $val)
 	{
 		if (mb_strpos($val['path'], $tc_path) !== false)
 		{
@@ -48,19 +48,19 @@ if ($cfg['plugin']['tags']['pages'])
 			$order = 'RAND()';
 	}
 
-	$tc_res = sed_sql_query("SELECT r.tag AS tag, COUNT(r.tag_item) AS cnt
+	$tc_res = cot_db_query("SELECT r.tag AS tag, COUNT(r.tag_item) AS cnt
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 		ON r.tag_item = p.page_id
 		WHERE r.tag_area = 'pages' AND p.page_cat IN ($tc_cats) AND p.page_state = 0
 		GROUP BY r.tag
 		ORDER BY $order $limit");
 	$tc_html = $R['tags_code_cloud_open'];
-	while ($tc_row = sed_sql_fetchassoc($tc_res))
+	while ($tc_row = cot_db_fetchassoc($tc_res))
 	{
 		$tag_count++;
 		$tag = $tc_row['tag'];
-		$tag_t = $cfg['plugin']['tags']['title'] ? sed_tag_title($tag) : $tag;
-		$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+		$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
+		$tag_u = cot_urlencode($tag, $cfg['plugin']['tags']['translit']);
 		$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 		$cnt = (int) $tc_row['cnt'];
 		foreach ($tc_styles as $key => $val)
@@ -71,16 +71,16 @@ if ($cfg['plugin']['tags']['pages'])
 				break;
 			}
 		}
-		$tc_html .= sed_rc('tags_link_cloud_tag', array(
-			'url' => sed_url('plug', 'e=tags&a=pages' . $tl . '&t=' . $tag_u),
+		$tc_html .= cot_rc('tags_link_cloud_tag', array(
+			'url' => cot_url('plug', 'e=tags&a=pages' . $tl . '&t=' . $tag_u),
 			'tag_title' => htmlspecialchars($tag_t),
 			'dim' => $dim
 		));
 	}
-	sed_sql_freeresult($tc_res);
+	cot_db_freeresult($tc_res);
 	if ($cfg['plugin']['tags']['more'] && !empty($limit))
 	{
-		$tc_html .= sed_rc('tags_code_cloud_more', array('url' => sed_url('plug', 'e=tags&a=pages')));
+		$tc_html .= cot_rc('tags_code_cloud_more', array('url' => cot_url('plug', 'e=tags&a=pages')));
 	}
 	$tc_html .= $R['tags_code_cloud_close'];
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];

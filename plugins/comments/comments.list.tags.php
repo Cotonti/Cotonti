@@ -16,11 +16,11 @@ Tags=list.tpl:{LIST_COMMENTS},{LIST_COMMENTS_DISPLAY}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 $t->assign(array(
-	'LIST_COMMENTS' => sed_comments_link('list', 'c='.$c, 'list', $c),
-	'LIST_COMMENTS_DISPLAY' => sed_comments_display('list', $c)
+	'LIST_COMMENTS' => cot_comments_link('list', 'c='.$c, 'list', $c),
+	'LIST_COMMENTS_DISPLAY' => cot_comments_display('list', $c)
 ));
 
 ?>

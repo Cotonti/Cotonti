@@ -15,20 +15,20 @@ Hooks=ajax
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('tags', true);
-$q = strtolower(sed_import('q', 'G', 'TXT'));
-$q = sed_sql_prep(urldecode($q));
+cot_require('tags', true);
+$q = strtolower(cot_import('q', 'G', 'TXT'));
+$q = cot_db_prep(urldecode($q));
 if (!$q) return;
 
-$tagslist = sed_tag_complete($q, $cfg['plugin']['tags']['autocomplete']);
+$tagslist = cot_tag_complete($q, $cfg['plugin']['tags']['autocomplete']);
 if (is_array($tagslist))
 {
 	$tagstring = implode("\n", $tagslist);
 }
 
-sed_sendheaders();
+cot_sendheaders();
 echo $tagstring;
 
 ?>

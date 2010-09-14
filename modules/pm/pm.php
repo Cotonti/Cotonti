@@ -15,17 +15,17 @@ Hooks=module
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_dieifdisabled($cfg['disable_pm']);
+cot_dieifdisabled($cfg['disable_pm']);
 
 // Environment setup
-define('SED_PM', TRUE);
+define('COT_PM', TRUE);
 $location = 'Private_Messages';
 
 // Additional API requirements
-sed_require_api('extrafields');
-sed_require('users');
+cot_require_api('extrafields');
+cot_require('users');
 
 // Mode choice
 if (!in_array($m, array('send', 'message')))
@@ -33,5 +33,5 @@ if (!in_array($m, array('send', 'message')))
 	$m = 'folder';
 }
 
-require_once sed_incfile($z, $m);
+require_once cot_incfile($z, $m);
 ?>

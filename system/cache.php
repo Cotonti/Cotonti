@@ -8,7 +8,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Stores the list of advanced cachers provided by the host
@@ -546,7 +546,7 @@ class Page_cache
 			{
 				mkdir($this->dir . '/' . $this->path, $this->perms, true);
 			}
-			file_put_contents($this->filename, gzencode(sed_outputfilters(ob_get_contents())));
+			file_put_contents($this->filename, gzencode(cot_outputfilters(ob_get_contents())));
 		}
 	}
 
@@ -612,13 +612,13 @@ class MySQL_cache extends Db_cache_driver
 			$i = 0;
 			foreach ($this->removed_data as $entry)
 			{
-				$c_name = sed_sql_prep($entry['id']);
-				$c_realm = sed_sql_prep($entry['realm']);
+				$c_name = cot_db_prep($entry['id']);
+				$c_realm = cot_db_prep($entry['realm']);
 				$or = $i == 0 ? '' : ' OR';
 				$q .= $or." (c_name = '$c_name' AND c_realm = '$c_realm')";
 				$i++;
 			}
-			sed_sql_query($q);
+			cot_db_query($q);
 		}
 		if (count($this->writeback_data) > 0)
 		{
@@ -626,16 +626,16 @@ class MySQL_cache extends Db_cache_driver
 			$i = 0;
 			foreach ($this->writeback_data as $entry)
 			{
-				$c_name = sed_sql_prep($entry['id']);
-				$c_realm = sed_sql_prep($entry['realm']);
+				$c_name = cot_db_prep($entry['id']);
+				$c_realm = cot_db_prep($entry['realm']);
 				$c_expire = $entry['ttl'] > 0 ? $sys['now'] + $entry['ttl'] : 0;
-				$c_value = sed_sql_prep(serialize($entry['data']));
+				$c_value = cot_db_prep(serialize($entry['data']));
 				$comma = $i == 0 ? '' : ',';
 				$q .= $comma."('$c_name', '$c_realm', $c_expire, '$c_value')";
 				$i++;
 			}
 			$q .= " ON DUPLICATE KEY UPDATE c_value=VALUES(c_value), c_expire=VALUES(c_expire)";
-			sed_sql_query($q);
+			cot_db_query($q);
 		}
 	}
 
@@ -647,11 +647,11 @@ class MySQL_cache extends Db_cache_driver
 		global $db_cache;
 		if (empty($realm))
 		{
-			sed_sql_query("TRUNCATE $db_cache");
+			cot_db_query("TRUNCATE $db_cache");
 		}
 		else
 		{
-			sed_sql_query("DELETE FROM $db_cache WHERE c_realm = '$realm'");
+			cot_db_query("DELETE FROM $db_cache WHERE c_realm = '$realm'");
 		}
 		$this->buffer = array();
 		return TRUE;
@@ -663,11 +663,11 @@ class MySQL_cache extends Db_cache_driver
 	public function exists($id, $realm = COT_DEFAULT_REALM)
 	{
 		global $db_cache;
-		$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
-		$res = sed_sql_numrows($sql) == 1;
+		$sql = cot_db_query("SELECT c_value FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
+		$res = cot_db_numrows($sql) == 1;
 		if ($res)
 		{
-			$this->buffer[$realm][$id] = unserialize(sed_sql_result($sql, 0, 0));
+			$this->buffer[$realm][$id] = unserialize(cot_db_result($sql, 0, 0));
 		}
 		return $res;
 	}
@@ -679,8 +679,8 @@ class MySQL_cache extends Db_cache_driver
 	private function gc()
 	{
 		global $db_cache, $sys;
-		sed_sql_query("DELETE FROM $db_cache WHERE c_expire > 0 AND c_expire < ".$sys['now']);
-		return sed_sql_affectedrows();
+		cot_db_query("DELETE FROM $db_cache WHERE c_expire > 0 AND c_expire < ".$sys['now']);
+		return cot_db_affectedrows();
 	}
 
 	/**
@@ -712,18 +712,18 @@ class MySQL_cache extends Db_cache_driver
 			foreach ($realms as $realm)
 			{
 				$glue = $i == 0 ? "'" : ",'";
-				$r_where .= $glue.sed_sql_prep($realm)."'";
+				$r_where .= $glue.cot_db_prep($realm)."'";
 				$i++;
 			}
 			$r_where .= ')';
 		}
 		else
 		{
-			$r_where = "c_realm = '".sed_sql_prep($realms)."'";
+			$r_where = "c_realm = '".cot_db_prep($realms)."'";
 		}
-		$sql = sed_sql_query("SELECT c_name, c_value FROM `$db_cache` WHERE c_auto=1 AND $r_where");
+		$sql = cot_db_query("SELECT c_name, c_value FROM `$db_cache` WHERE c_auto=1 AND $r_where");
 		$i = 0;
-		while ($row = sed_sql_fetchassoc($sql))
+		while ($row = cot_db_fetchassoc($sql))
 		{
 			global ${$row['c_name']};
 			${$row['c_name']} = unserialize($row['c_value']);
@@ -738,9 +738,9 @@ class MySQL_cache extends Db_cache_driver
 	public function remove_now($id, $realm = COT_DEFAULT_REALM)
 	{
 		global $db_cache;
-		sed_sql_query("DELETE FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
+		cot_db_query("DELETE FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
 		unset($this->buffer[$realm][$id]);
-		return sed_sql_affectedrows() == 1;
+		return cot_db_affectedrows() == 1;
 	}
 
 	/**
@@ -755,14 +755,14 @@ class MySQL_cache extends Db_cache_driver
 	public function store_now($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 	{
 		global $db_cache;
-		$c_name = sed_sql_prep($id);
-		$c_realm = sed_sql_prep($realm);
+		$c_name = cot_db_prep($id);
+		$c_realm = cot_db_prep($realm);
 		$c_expire = $ttl > 0 ? $sys['now'] + $ttl : 0;
-		$c_value = sed_sql_prep(serialize($data));
-		sed_sql_query("INSERT INTO $db_cache (c_name, c_realm, c_expire, c_value)
+		$c_value = cot_db_prep(serialize($data));
+		cot_db_query("INSERT INTO $db_cache (c_name, c_realm, c_expire, c_value)
 			VALUES ('$c_name', '$c_realm', $c_expire, '$c_value')");
 		$this->buffer[$realm][$id] = $data;
-		return sed_sql_affectedrows() == 1;
+		return cot_db_affectedrows() == 1;
 	}
 }
 
@@ -1285,12 +1285,12 @@ class Cache
 	{
 		global $db_cache_bindings;
 		$this->bindings = array();
-		$sql = sed_sql_query("SELECT * FROM `$db_cache_bindings`");
-		while ($row = sed_sql_fetchassoc($sql))
+		$sql = cot_db_query("SELECT * FROM `$db_cache_bindings`");
+		while ($row = cot_db_fetchassoc($sql))
 		{
 			$this->bindings[$row['c_event']][] = array('id' => $row['c_id'], 'realm' => $row['c_realm']);
 		}
-		sed_sql_freeresult($sql);
+		cot_db_freeresult($sql);
 		$this->db->store('cot_cache_bindings', $this->bindings, 'system');
 	}
 
@@ -1305,13 +1305,13 @@ class Cache
 	public function bind($event, $id, $realm = COT_DEFAULT_REALM, $type = COT_CACHE_TYPE_DEFAULT)
 	{
 		global $db_cache_bindings;
-		$c_event = sed_sql_prep($event);
-		$c_id = sed_sql_prep($id);
-		$c_realm = sed_sql_prep($realm);
+		$c_event = cot_db_prep($event);
+		$c_id = cot_db_prep($id);
+		$c_realm = cot_db_prep($realm);
 		$c_type = (int) $type;
-		sed_sql_query("INSERT INTO `$db_cache_bindings` (c_event, c_id, c_realm, c_type)
+		cot_db_query("INSERT INTO `$db_cache_bindings` (c_event, c_id, c_realm, c_type)
 			VALUES ('$c_event', '$c_id', '$c_realm', $c_type)");
-		$res = sed_sql_affectedrows() == 1;
+		$res = cot_db_affectedrows() == 1;
 		if ($res)
 		{
 			$this->resync_on_exit = true;
@@ -1337,15 +1337,15 @@ class Cache
 		$i = 0;
 		foreach ($bindings as $entry)
 		{
-			$c_event = sed_sql_prep($entry['event']);
-			$c_id = sed_sql_prep($entry['id']);
-			$c_realm = sed_sql_prep($entry['realm']);
+			$c_event = cot_db_prep($entry['event']);
+			$c_id = cot_db_prep($entry['id']);
+			$c_realm = cot_db_prep($entry['realm']);
 			$c_type = (int) $entry['type'];
 			$comma = $i == 0 ? '' : ',';
 			$q .= $comma."('$c_event', '$c_id', '$c_realm', $c_type)";
 		}
-		sed_sql_query($q);
-		$res = sed_sql_affectedrows();
+		cot_db_query($q);
+		$res = cot_db_affectedrows();
 		if ($res > 0)
 		{
 			$this->resync_on_exit = true;
@@ -1479,15 +1479,15 @@ class Cache
 	public function unbind($realm, $id = '')
 	{
 		global $db_cache_bindings;
-		$c_realm = sed_sql_prep($realm);
+		$c_realm = cot_db_prep($realm);
 		$q = "DELETE FROM `$db_cache_bindings` WHERE c_realm = '$c_realm'";
 		if (!empty($id))
 		{
-			$c_id = sed_sql_prep($id);
+			$c_id = cot_db_prep($id);
 			$q .= " AND c_id = '$c_id'";
 		}
-		sed_sql_query($q);
-		$res = sed_sql_affectedrows();
+		cot_db_query($q);
+		$res = cot_db_affectedrows();
 		if ($res > 0)
 		{
 			$this->resync_on_exit = true;
@@ -1506,11 +1506,11 @@ class Cache
  * @param string $name Item name
  * @return bool
  */
-function sed_cache_clear($name)
+function cot_cache_clear($name)
 {
 	global $db_cache;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
-	sed_sql_query("DELETE FROM $db_cache WHERE c_name='$name'");
+	cot_db_query("DELETE FROM $db_cache WHERE c_name='$name'");
 	return(TRUE);
 }
 
@@ -1519,11 +1519,11 @@ function sed_cache_clear($name)
  * @deprecated Deprecated since 0.7.0, use $cot_cache->db object instead
  * @return bool
  */
-function sed_cache_clearall()
+function cot_cache_clearall()
 {
 	global $db_cache;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
-	sed_sql_query("DELETE FROM $db_cache");
+	cot_db_query("DELETE FROM $db_cache");
 	return TRUE;
 }
 
@@ -1533,27 +1533,27 @@ function sed_cache_clearall()
  * @todo Add trigger support here to clean non-standard html fields
  * @return bool
  */
-function sed_cache_clearhtml()
+function cot_cache_clearhtml()
 {
 	global $cfg, $db_pages, $db_forum_posts, $db_pm;
 	$res = TRUE;
 	if ($cfg['module']['page'])
 	{
-		sed_require('page');
-		$res &= sed_sql_query("UPDATE $db_pages SET page_html=''");
+		cot_require('page');
+		$res &= cot_db_query("UPDATE $db_pages SET page_html=''");
 	}
 	if ($cfg['module']['forums'])
 	{
-		sed_require('forums');
-		$res &= sed_sql_query("UPDATE $db_forum_posts SET fp_html=''");
+		cot_require('forums');
+		$res &= cot_db_query("UPDATE $db_forum_posts SET fp_html=''");
 	}
 	if ($cfg['module']['pm'])
 	{
-		sed_require('pm');
-		$res &= sed_sql_query("UPDATE $db_pm SET pm_html = ''");
+		cot_require('pm');
+		$res &= cot_db_query("UPDATE $db_pm SET pm_html = ''");
 	}
 	/* === Hook === */
-	foreach (sed_getextplugins('cache.clearhtml') as $pl)
+	foreach (cot_getextplugins('cache.clearhtml') as $pl)
 	{
 		include $pl;
 	}
@@ -1567,12 +1567,12 @@ function sed_cache_clearhtml()
  * @param string $name Item name
  * @return mixed
  */
-function sed_cache_get($name)
+function cot_cache_get($name)
 {
 	global $cfg, $sys, $db_cache;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
-	$sql = sed_sql_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
-	if ($row = sed_sql_fetcharray($sql))
+	$sql = cot_db_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
+	if ($row = cot_db_fetcharray($sql))
 	{
 		return(unserialize($row['c_value']));
 	}
@@ -1588,20 +1588,20 @@ function sed_cache_get($name)
  * @param int $auto Only with autoload flag
  * @return mixed
  */
-function sed_cache_getall($auto = 1)
+function cot_cache_getall($auto = 1)
 {
 	global $cfg, $sys, $db_cache;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
-	$sql = sed_sql_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
+	$sql = cot_db_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
 	if ($auto)
 	{
-		$sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1");
+		$sql = cot_db_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1");
 	}
 	else
 	{
-		$sql = sed_sql_query("SELECT c_name, c_value FROM $db_cache");
+		$sql = cot_db_query("SELECT c_name, c_value FROM $db_cache");
 	}
-	if (sed_sql_numrows($sql) > 0)
+	if (cot_db_numrows($sql) > 0)
 	{
 		return($sql);
 	}
@@ -1620,12 +1620,12 @@ function sed_cache_getall($auto = 1)
  * @param int $auto Autload flag
  * @return bool
  */
-function sed_cache_store($name, $value, $expire, $auto = "1")
+function cot_cache_store($name, $value, $expire, $auto = "1")
 {
 	global $db_cache, $sys, $cfg;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	if (!$cfg['cache']) return(FALSE);
-	$sql = sed_sql_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".sed_sql_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
+	$sql = cot_db_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".cot_db_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
 	return(TRUE);
 }
 

@@ -4,7 +4,7 @@
  * в порядке убывания приоритета при обработке
  */
 
-$sed_translit = array(
+$cot_translit = array(
 	'ци' => 'ci',
 	'Ци' => 'Ci',
 	'ЦИ' => 'CI',
@@ -84,6 +84,6 @@ $sed_translit = array(
  * Обратное преобразование (backwards transition)
  */
 
-$sed_translitb = array_flip($sed_translit);
+$cot_translitb = array_flip($cot_translit);
 
 ?>

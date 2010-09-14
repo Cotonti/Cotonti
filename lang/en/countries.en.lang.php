@@ -3,7 +3,7 @@
  * Countries
  * ISO 3166-1 publication 2009-05-08
  */
-$GLOBALS['sed_countries'] = array(
+$GLOBALS['cot_countries'] = array(
 	'00' => '---',
 	'af' => 'Afghanistan',
 	'ax' => 'Åland Islands',

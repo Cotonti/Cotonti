@@ -15,14 +15,14 @@ Hooks=forums.editpost.update.done
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_first_post)
+if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $is_first_post)
 {
-	sed_require('tags', true);
-	$rtags = sed_import('rtags', 'P', 'TXT');
-	$tags = sed_tag_parse($rtags);
-	$old_tags = sed_tag_list($q, 'forums');
+	cot_require('tags', true);
+	$rtags = cot_import('rtags', 'P', 'TXT');
+	$tags = cot_tag_parse($rtags);
+	$old_tags = cot_tag_list($q, 'forums');
 	$kept_tags = array();
 	$new_tags = array();
 	// Find new tags, count old tags that have been left
@@ -44,7 +44,7 @@ if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_fir
 	$rem_tags = array_diff($old_tags, $kept_tags);
 	foreach ($rem_tags as $tag)
 	{
-		sed_tag_remove($tag, $q, 'forums');
+		cot_tag_remove($tag, $q, 'forums');
 	}
 	// Add new tags
 	$ncnt = count($new_tags);
@@ -59,7 +59,7 @@ if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_fir
 	}
 	for($i = 0; $i < $lim; $i++)
 	{
-		sed_tag($new_tags[$i], $q, 'forums');
+		cot_tag($new_tags[$i], $q, 'forums');
 	}
 }
 

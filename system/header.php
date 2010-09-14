@@ -9,20 +9,20 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_uriredir_store();
+cot_uriredir_store();
 
 /* === Hook === */
-foreach (sed_getextplugins('header.first') as $pl)
+foreach (cot_getextplugins('header.first') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $out['logstatus'] = ($usr['id'] > 0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
-$out['userlist'] = (sed_auth('users', 'a', 'R')) ? sed_rc_link(sed_url('users'), $L['Users']) : '';
-$out['compopup'] = sed_javascript($morejavascript);
+$out['userlist'] = (cot_auth('users', 'a', 'R')) ? cot_rc_link(cot_url('users'), $L['Users']) : '';
+$out['compopup'] = cot_javascript($morejavascript);
 
 unset($title_tags, $title_data);
 $title_params = array(
@@ -30,13 +30,13 @@ $title_params = array(
 	'DESCRIPTION' => $cfg['subtitle'],
 	'SUBTITLE' => $out['subtitle']
 );
-if (defined('SED_INDEX'))
+if (defined('COT_INDEX'))
 {
-	$out['fulltitle'] = sed_title('title_header_index', $title_params);
+	$out['fulltitle'] = cot_title('title_header_index', $title_params);
 }
 else
 {
-	$out['fulltitle'] = sed_title('title_header', $title_params);
+	$out['fulltitle'] = cot_title('title_header', $title_params);
 }
 
 $out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
@@ -47,15 +47,15 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] = $out['head'];
 
-sed_sendheaders($out['meta_contenttype']);
+cot_sendheaders($out['meta_contenttype']);
 
-if (!SED_AJAX)
+if (!COT_AJAX)
 {
-	if ($usr['id'] > 0 && $cfg['module']['page'] && !$cfg['disable_page'] && sed_auth('page', 'any', 'A'))
+	if ($usr['id'] > 0 && $cfg['module']['page'] && !$cfg['disable_page'] && cot_auth('page', 'any', 'A'))
 	{
-		sed_require('page');
-		$sqltmp2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
-		$sys['pagesqueued'] = sed_sql_result($sqltmp2, 0, 'COUNT(*)');
+		cot_require('page');
+		$sqltmp2 = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
+		$sys['pagesqueued'] = cot_db_result($sqltmp2, 0, 'COUNT(*)');
 
 		if ($sys['pagesqueued'] > 0)
 		{
@@ -63,19 +63,19 @@ if (!SED_AJAX)
 
 			if ($sys['pagesqueued'] == 1)
 			{
-				$out['notices'] .= sed_rc_link(sed_url('admin', 'm=page'), '1 ' . $L['Page']);
+				$out['notices'] .= cot_rc_link(cot_url('admin', 'm=page'), '1 ' . $L['Page']);
 			}
 			elseif ($sys['pagesqueued'] > 1)
 			{
-				$out['notices'] .= sed_rc_link(sed_url('admin', 'm=page'), $sys['pagesqueued'] . ' ' . $L['Pages']);
+				$out['notices'] .= cot_rc_link(cot_url('admin', 'm=page'), $sys['pagesqueued'] . ' ' . $L['Pages']);
 			}
 		}
 	}
-	elseif ($usr['id'] > 0 && $cfg['module']['page'] && !$cfg['disable_page'] && sed_auth('page', 'any', 'W'))
+	elseif ($usr['id'] > 0 && $cfg['module']['page'] && !$cfg['disable_page'] && cot_auth('page', 'any', 'W'))
 	{
-		sed_require('page');
-		$sqltmp2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1 AND page_ownerid = " . $usr['id']);
-		$sys['pagesqueued'] = sed_sql_result($sqltmp2, 0, 'COUNT(*)');
+		cot_require('page');
+		$sqltmp2 = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1 AND page_ownerid = " . $usr['id']);
+		$sys['pagesqueued'] = cot_db_result($sqltmp2, 0, 'COUNT(*)');
 
 		if ($sys['pagesqueued'] > 0)
 		{
@@ -83,23 +83,23 @@ if (!SED_AJAX)
 
 			if ($sys['pagesqueued'] == 1)
 			{
-				$out['notices'] .= sed_rc_link(sed_url('list', 'c=unvalidated'), '1 ' . $L['Page']);
+				$out['notices'] .= cot_rc_link(cot_url('list', 'c=unvalidated'), '1 ' . $L['Page']);
 			}
 			elseif ($sys['pagesqueued'] > 1)
 			{
-				$out['notices'] .= sed_rc_link(sed_url('list', 'c=unvalidated'), $sys['pagesqueued'] . ' ' . $L['Pages']);
+				$out['notices'] .= cot_rc_link(cot_url('list', 'c=unvalidated'), $sys['pagesqueued'] . ' ' . $L['Pages']);
 			}
 		}
 	}
 
 	/* === Hook === */
-	foreach (sed_getextplugins('header.main') as $pl)
+	foreach (cot_getextplugins('header.main') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
 
-	$mskin = sed_skinfile($cfg['enablecustomhf'] ? array('header', mb_strtolower($location)) : 'header', '+', defined('SED_ADMIN'));
+	$mskin = cot_skinfile($cfg['enablecustomhf'] ? array('header', mb_strtolower($location)) : 'header', '+', defined('COT_ADMIN'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(
@@ -124,7 +124,7 @@ if (!SED_AJAX)
 	));
 
 	/* === Hook === */
-	foreach (sed_getextplugins('header.body') as $pl)
+	foreach (cot_getextplugins('header.body') as $pl)
 	{
 		include $pl;
 	}
@@ -132,23 +132,23 @@ if (!SED_AJAX)
 
 	if ($usr['id'] > 0)
 	{
-		$out['adminpanel'] = (sed_auth('admin', 'any', 'R')) ? sed_rc_link(sed_url('admin'), $L['Administration']) : '';
-		$out['loginout_url'] = sed_url('users', 'm=logout&' . sed_xg());
-		$out['loginout'] = sed_rc_link($out['loginout_url'], $L['Logout']);
-		$out['profile'] = sed_rc_link(sed_url('users', 'm=profile'), $L['Profile']);
-		$out['pms'] = ($cfg['disable_pm']) ? '' : sed_rc_link(sed_url('pm'), $L['Private_Messages']);
-		$out['pfs'] = ($cfg['disable_pfs'] || !sed_auth('pfs', 'a', 'R') || $sed_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || $sed_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : sed_rc_link(sed_url('pfs'), $L['Mypfs']);
+		$out['adminpanel'] = (cot_auth('admin', 'any', 'R')) ? cot_rc_link(cot_url('admin'), $L['Administration']) : '';
+		$out['loginout_url'] = cot_url('users', 'm=logout&' . cot_xg());
+		$out['loginout'] = cot_rc_link($out['loginout_url'], $L['Logout']);
+		$out['profile'] = cot_rc_link(cot_url('users', 'm=profile'), $L['Profile']);
+		$out['pms'] = ($cfg['disable_pm']) ? '' : cot_rc_link(cot_url('pm'), $L['Private_Messages']);
+		$out['pfs'] = ($cfg['disable_pfs'] || !cot_auth('pfs', 'a', 'R') || $cot_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || $cot_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : cot_rc_link(cot_url('pfs'), $L['Mypfs']);
 
 		if ($cfg['module']['pm'] && !$cfg['disable_pm'])
 		{
-			sed_require('pm');
+			cot_require('pm');
 			if ($usr['newpm'])
 			{
-				$sqlpm = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0");
-				$usr['messages'] = sed_sql_result($sqlpm, 0, 'COUNT(*)');
+				$sqlpm = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0");
+				$usr['messages'] = cot_db_result($sqlpm, 0, 'COUNT(*)');
 			}
-			$out['pmreminder'] = sed_rc_link(sed_url('pm'),
-				($usr['messages'] > 0) ? sed_declension($usr['messages'], $Ls['Privatemessages']) : $L['hea_noprivatemessages']
+			$out['pmreminder'] = cot_rc_link(cot_url('pm'),
+				($usr['messages'] > 0) ? cot_declension($usr['messages'], $Ls['Privatemessages']) : $L['hea_noprivatemessages']
 			);
 		}
 
@@ -169,12 +169,12 @@ if (!SED_AJAX)
 	{
 		$out['guest_username'] = $R['form_guest_username'];
 		$out['guest_password'] = $R['form_guest_password'];
-		$out['guest_register'] = sed_rc_link(sed_url('users', 'm=register'), $L['Register']);
+		$out['guest_register'] = cot_rc_link(cot_url('users', 'm=register'), $L['Register']);
 		$out['guest_cookiettl'] = $cfg['forcerememberme'] ? $R['form_guest_remember_forced']
 			: $R['form_guest_remember'];
 
 		$t->assign(array (
-			'HEADER_GUEST_SEND' => sed_url('users', 'm=auth&a=check&' . $sys['url_redirect']),
+			'HEADER_GUEST_SEND' => cot_url('users', 'm=auth&a=check&' . $sys['url_redirect']),
 			'HEADER_GUEST_USERNAME' => $out['guest_username'],
 			'HEADER_GUEST_PASSWORD' => $out['guest_password'],
 			'HEADER_GUEST_REGISTER' => $out['guest_register'],
@@ -185,7 +185,7 @@ if (!SED_AJAX)
 	}
 
 	/* === Hook === */
-	foreach (sed_getextplugins('header.tags') as $pl)
+	foreach (cot_getextplugins('header.tags') as $pl)
 	{
 		include $pl;
 	}

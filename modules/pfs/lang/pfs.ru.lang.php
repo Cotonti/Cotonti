@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 $L['pfs_cancelall'] = 'Отменить все'; // New in N-0.7.0
 $L['pfs_direxists'] = 'Такой каталог уже существует.<br />Старый путь: %1$s<br />Новый путь: %2$s';
