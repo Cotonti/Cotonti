@@ -308,10 +308,6 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	$v = preg_replace('/(&#\d+)(?![\d;])/', '$1;', $v);
 	if ($pass)
 	{
-		if ($source === 'P' && $filter !== 'PSW')
-		{
-			sed_import_buffer($name, $v);
-		}
 		return $v;
 	}
 	else
@@ -326,35 +322,35 @@ function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 		}
 		else
 		{
-			if ($source === 'P' && $filter !== 'PSW')
-			{
-				sed_import_buffer($name, $defret);
-			}
 			return $defret;
 		}
 	}
 }
 
 /**
- * Puts an imported variable into the cross-request buffer
- * @param string $name Input name
- * @param mixed $value Imported value
+ * Loads data from cross-request buffer into POST
  */
-function sed_import_buffer($name, $value)
+function sed_import_buffer_load()
 {
-	static $called = false;
-	if (!$called)
+	if (is_array($_SESSION['cot_buffer']))
 	{
-		// Clean the previously set buffer
-		unset($_SESSION['cot_buffer']);
-		$called = true;
+		$_POST += $_SESSION['cot_buffer'];
 	}
-	$_SESSION['cot_buffer'][$name] = $value;
+}
+
+/**
+ * Puts POST data into the cross-request buffer
+ */
+function sed_import_buffer_save()
+{
+	unset($_SESSION['cot_buffer']);
+	$_SESSION['cot_buffer'] = $_POST;
 }
 
 /**
  * Attempts to fetch a buffered value for a variable previously imported
  * if the currently imported value is empty
+ *
  * @param string $name Input name
  * @param mixed $value Currently imported value
  * @return mixed Input value or NULL if the variable is not in the buffer
@@ -365,7 +361,7 @@ function sed_import_buffered($name, $value)
 	{
 		if (isset($_SESSION['cot_buffer'][$name]))
 		{
-			return $_SESSION['cot_buffer'][$name];
+			return htmlspecialchars($_SESSION['cot_buffer'][$name]);
 		}
 		else
 		{
@@ -676,7 +672,12 @@ function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
  */
 function sed_shutdown()
 {
-	global $cot_cache;
+	global $cot_cache, $cot_error;
+	// Clear import buffer if everything's OK on POST
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$cot_error)
+	{
+		unset($_SESSION['cot_buffer']);
+	}
 	while (ob_get_level() > 0)
 	{
 		ob_end_flush();
@@ -2947,7 +2948,13 @@ function sed_load_urltrans()
  */
 function sed_redirect($url)
 {
-	global $cfg;
+	global $cfg, $cot_error;
+
+	if ($cot_error && $_SERVER['REQUEST_METHOD'] == 'POST')
+	{
+		// Save the POST data
+		sed_import_buffer_save();
+	}
 
 	if (!sed_url_check($url))
 	{
