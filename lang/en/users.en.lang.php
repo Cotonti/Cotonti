@@ -1,4 +1,5 @@
 <?php
+
 /**
  * English Language File for the Users Module (users.en.lang.php)
  *
@@ -14,7 +15,8 @@ defined('SED_CODE') or die('Wrong URL.');
 /**
  * User authentication
  */
-$L['aut_usernameoremail'] = 'Username or email';
+
+ $L['aut_usernameoremail'] = 'Username or email';
 
 /**
  * User registration
