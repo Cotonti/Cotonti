@@ -1,4 +1,5 @@
 <?php
+
 /**
  * English Language File for the Admin Module (admin.en.lang.php)
  *
@@ -14,6 +15,7 @@ defined('SED_CODE') or die('Wrong URL.');
 /**
  * Common words
  */
+
 $L['Extension'] = 'Extension';
 $L['Extensions'] = 'Extensions';
 
@@ -210,7 +212,6 @@ $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
 $L['cfg_hit_percision'] = array('Optimized hit counter precision', ''); // New in 0.7.0
 $L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // New in 0.7.0
 
-
 /**
  * Config Section
  * PFS Subsection
@@ -271,7 +272,6 @@ $L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' '); // New in 0.7.0
 $L['cfg_rss_charset'] = array('RSS charset', ' '); // New in 0.7.0
 $L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
 $L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
-
 
 /**
  * Config Section
@@ -366,6 +366,7 @@ $L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300
 /**
  * Extension management
  */
+
 $L['ext_already_installed'] = 'This extension is already installed';
 $L['ext_auth_installed'] = 'Installed authorization defaults';
 $L['ext_auth_locks_updated'] = 'Updated authorization locks';
@@ -391,7 +392,7 @@ $L['ext_updated'] = '{$type} &quot;{$name}&quot; has been updated to version {$v
 $L['ext_updating'] = 'Updating {$type} &quot;{$name}&quot;';
 
 /**
-  * Page Section
+ * Page Section
  */
 
 $L['addnewentry'] = 'Add a new entry';
