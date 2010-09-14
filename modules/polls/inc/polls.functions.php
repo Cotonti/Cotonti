@@ -261,11 +261,11 @@ function sed_poll_vote()
  *
  * @param int $id Poll ID or Poll Code if $type is not epmty
  * @param string $formlink Poll form url
- * @param string $skin Poll template name
+ * @param string $theme Poll template name
  * @param string $type Poll type
  * @return array
  */
-function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
+function sed_poll_form($id, $formlink = '', $theme = '', $type = '')
 {
 	global $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 	$canvote = false;
@@ -300,9 +300,9 @@ function sed_poll_form($id, $formlink = '', $skin = '', $type = '')
 	$sql2 = sed_sql_query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = '$id' AND $where LIMIT 1");
 	$alreadyvoted = (sed_sql_numrows($sql2) == 1) ? 1 : 0;
 
-	$skininput = $skin;
-	$skin = (empty($skin)) ? sed_skinfile('polls') : sed_skinfile($skin, true);
-	$t = new XTemplate($skin);
+	$themeinput = $themefile;
+	$themefile = (empty($themefile)) ? sed_skinfile('polls') : sed_skinfile($themefile, true);
+	$t = new XTemplate($themefile);
 
 	if ($alreadyvoted) $poll_block = "POLL_VIEW_VOTED";
 	elseif (!$canvote) $poll_block = "POLL_VIEW_DISABLED";

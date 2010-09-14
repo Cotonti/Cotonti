@@ -20,7 +20,7 @@
 						<td class="width20">{PHP.L.Recipients}:</td>
 						<td>
 							<textarea name="newpmrecipient" id="newpmrecipient" rows="3" cols="56">{PMSEND_FORM_TOUSER}</textarea>
-							<p class="small">{PHP.skinlang.pmsend.Sendmessagetohint}</p>
+							<p class="small">{PHP.themelang.pmsend.Sendmessagetohint}</p>
 						</td>
 					</tr>
 					<!-- END: PMSEND_USERLIST -->

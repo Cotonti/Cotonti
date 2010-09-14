@@ -120,7 +120,7 @@ if($a == 'save')
 	// Pepend rules to fix static data when using dynamic categories
 	if($serv_type != 'nginx')
 	{
-		$hta .= $hta_rule . ' ' . $rb . '(datas|images|js|skins)/(.*)$' . $re . ' ' . $loc . '$1/$2' . ' ' . $hta_flags . "\n";
+		$hta .= $hta_rule . ' ' . $rb . '(datas|images|js|themes)/(.*)$' . $re . ' ' . $loc . '$1/$2' . ' ' . $hta_flags . "\n";
 	}
 	for($i = 0; $i < $count; $i++)
 	{

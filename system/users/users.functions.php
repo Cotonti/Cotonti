@@ -159,7 +159,7 @@ function sed_userisonline($id)
  */
 function sed_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false)
 {
-	global $sed_extrafields, $cfg, $L, $sed_yesno, $skinlang, $cache, $db_users, $usr;
+	global $sed_extrafields, $cfg, $L, $sed_yesno, $themelang, $cache, $db_users, $usr;
 	if (is_array($user_data) && is_array($cache['user_' . $user_data['user_id']]))
 	{	
 		$temp_array = $cache['user_' . $user_data['user_id']];
@@ -200,7 +200,8 @@ function sed_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'SIGNATURE' => sed_build_userimage($user_data['user_signature'], 'sig'),
 				'EMAIL' => sed_build_email($user_data['user_email'], $user_data['user_hideemail']),
 				'PMNOTIFY' => $sed_yesno[$urr['user_pmnotify']],
-				'SKIN' => $user_data['user_skin'],
+				'THEME' => $user_data['user_theme'],
+				'SCHEME' => $user_data['user_scheme'],
 				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
 				'BIRTHDATE' => ($user_data['user_birthdate'] != 0) ? @date($cfg['formatyearmonthday'], $user_data['user_birthdate']) : '',
 				'AGE' => ($user_data['user_birthdate'] != 0) ? sed_build_age($user_data['user_birthdate']) : '',
@@ -211,7 +212,7 @@ function sed_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'POSTCOUNT' => $user_data['user_postcount'],
 				'LASTIP' => $user_data['user_lastip'],
 				'ONLINE' => (sed_userisonline($user_data['user_id'])) ? '1' : '0',
-				'ONLINETITLE' => ($user_data['user_online']) ? $skinlang['forumspost']['Onlinestatus1'] : $skinlang['forumspost']['Onlinestatus0'],
+				'ONLINETITLE' => ($user_data['user_online']) ? $themelang['forumspost']['Onlinestatus1'] : $themelang['forumspost']['Onlinestatus0'],
 			);
 
 			if ($allgroups)

@@ -30,7 +30,7 @@
 				}
 				anim();
 			</script>
-			<p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
+			<p>{POLL_VOTERS} {PHP.themelang.polls.voterssince} {POLL_SINCE}</p>
 		</form>
 	</div>
 <!-- END: POLL_VIEW -->
@@ -62,7 +62,7 @@
 		}
 		anim();
 	</script>
-	<p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
+	<p>{POLL_VOTERS} {PHP.themelang.polls.voterssince} {POLL_SINCE}</p>
 <!-- END: POLL_VIEW_VOTED -->
 
 <!-- BEGIN: POLL_VIEW_LOCKED -->
@@ -83,7 +83,7 @@
 			<td class="strong valid" colspan="4">{PHP.L.polls_locked}</td>
 		</tr>
 	</table>
-	<p>{POLL_VOTERS} {PHP.skinlang.polls.voterssince} {POLL_SINCE}</p>
+	<p>{POLL_VOTERS} {PHP.themelang.polls.voterssince} {POLL_SINCE}</p>
 <!-- END: POLL_VIEW_LOCKED -->
 
 <!-- BEGIN: POLL_VIEW_DISABLED -->
@@ -104,7 +104,7 @@
 <!-- END: POLLS_VIEW -->
 
 <!-- BEGIN: POLLS_VIEWALL -->
-	<h2 class="polls">{PHP.skinlang.polls.Allpolls}</h2>
+	<h2 class="polls">{PHP.themelang.polls.Allpolls}</h2>
 	<table class="cells">
 <!-- BEGIN: POLL_ROW -->
 		<tr>

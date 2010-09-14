@@ -38,7 +38,7 @@ $L['home_db_totalsize'] = 'SQL database, total size (KB)';
 $L['home_ql_b1_title'] = 'Site properties';
 $L['home_ql_b1_1'] = 'Basic config';
 $L['home_ql_b1_2'] = 'Titles';
-$L['home_ql_b1_3'] = 'Skin and charset';
+$L['home_ql_b1_3'] = 'Theme and charset';
 $L['home_ql_b1_4'] = 'Menu slots in tpl-files';
 $L['home_ql_b1_5'] = 'Language';
 $L['home_ql_b1_6'] = 'Time and date';
@@ -75,8 +75,8 @@ $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
 $L['core_ratings'] = &$L['Ratings'];
 $L['core_rss'] = &$L['RSS_Feeds'];// New in 0.7.0
-$L['core_skin'] = &$L['Skins'];
 $L['core_structure'] = &$L['Categories'];// New in 0.7.0
+$L['core_theme'] = &$L['Themes'];
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles (&lt;title&gt; tag)';
 $L['core_trash'] = &$L['Trashcan'];
@@ -275,13 +275,13 @@ $L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than
 
 /**
  * Config Section
- * Skins Subsection
+ * Themes Subsection
  */
 
 $L['cfg_charset'] = array('HTML charset', '');
 $L['cfg_disablesysinfos'] = array('Turn off page creation time', 'In footer.tpl');
 $L['cfg_doctypeid'] = array('Document Type', '&lt;!DOCTYPE&gt; of the HTML layout');
-$L['cfg_forcedefaultskin'] = array('Force the default skin for all users', '');
+$L['cfg_forcedefaulttheme'] = array('Force the default theme for all users', '');
 $L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');	// New in 0.0.2
 $L['cfg_keepcrbottom'] = array('Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}', 'In footer.tpl');
 $L['cfg_metakeywords'] = array('HTML Meta keywords (comma separated)', 'Search engines');
@@ -732,12 +732,12 @@ $L['adm_ref_prunelowhits'] = 'Referers with the number of visitors is less 5 suc
 $L['adm_log'] = 'System log';
 $L['adm_infos'] = 'Informations';
 $L['adm_versiondclocks'] = 'Versions and clocks';
-$L['adm_checkcoreskins'] = 'Check core files and skins';
+$L['adm_checkcorethemes'] = 'Check core files and themes';
 $L['adm_checkcorenow'] = 'Check core files now!';
 $L['adm_checkingcore'] = 'Checking core files...';
-$L['adm_checkskins'] = 'Check if all files are present in skins';
-$L['adm_checkskin'] = 'Check TPL files for the skin';
-$L['adm_checkingskin'] = 'Checking the skin...';
+$L['adm_checkthemes'] = 'Check if all files are present in themes';
+$L['adm_checktheme'] = 'Check TPL files for the theme';
+$L['adm_checkingtheme'] = 'Checking the theme...';
 $L['adm_hits'] = 'Hits';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Missing';

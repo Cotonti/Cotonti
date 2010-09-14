@@ -2,7 +2,7 @@
 /**
  * GZIP-compressed resource output and cache control utility
  * Usage: rc.php?uri=js/filename.js
- *		rc.php?uri=skins/myskin/style.css
+ *		rc.php?uri=themes/myskin/style.css
  *
  * Or set automatic compression at the top of .htaccess rewrite rules:
  * RewriteRule \.(js|css)$ rc.php?uri=%{REQUEST_FILENAME} [NC,L]

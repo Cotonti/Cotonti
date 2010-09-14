@@ -39,9 +39,9 @@
 			<!-- END: FORUMS_SECTIONS -->
 
 			<ul id="newf">
-				<li><a href="{FORUMS_TOPICS_NEWTOPICURL}">{PHP.skinlang.forumstopics.Newtopic}</a></li>
+				<li><a href="{FORUMS_TOPICS_NEWTOPICURL}">{PHP.themelang.forumstopics.Newtopic}</a></li>
 				<!-- BEGIN: FORUMS_SECTIONS_POLLS -->
-				<li><a href="{FORUMS_TOPICS_NEWPOLLURL}">{PHP.skinlang.forumstopics.Newpoll}</a></li>
+				<li><a href="{FORUMS_TOPICS_NEWPOLLURL}">{PHP.themelang.forumstopics.Newpoll}</a></li>
 				<!-- END: FORUMS_SECTIONS_POLLS -->
 			</ul>
 
@@ -76,7 +76,7 @@
 
 			<p class="paging">
 				<!-- BEGIN: FORUMS_SECTIONS_VIEWERS -->
-				<span class="a1">{PHP.skinlang.forumstopics.Viewers}: {FORUMS_TOPICS_VIEWERS} {FORUMS_TOPICS_VIEWER_NAMES}</span>
+				<span class="a1">{PHP.themelang.forumstopics.Viewers}: {FORUMS_TOPICS_VIEWERS} {FORUMS_TOPICS_VIEWER_NAMES}</span>
 				<!-- END: FORUMS_SECTIONS_VIEWERS -->
 				{FORUMS_TOPICS_PAGEPREV}{FORUMS_TOPICS_PAGES}{FORUMS_TOPICS_PAGENEXT}
 			</p>
@@ -87,22 +87,22 @@
 				<h2 class="info">Info</h2>
 				<table class="fico">
 					<tr>
-						<td>{PHP.R.frm_icon_posts}{PHP.skinlang.forumstopics.Nonewposts}</td>
-						<td>{PHP.R.frm_icon_posts_new}{PHP.skinlang.forumstopics.Newposts}</td>
-						<td>{PHP.R.frm_icon_posts_hot}{PHP.skinlang.forumstopics.Nonewpostspopular}</td>
-						<td>{PHP.R.frm_icon_posts_new_hot}{PHP.skinlang.forumstopics.Newpostspopular}</td>
+						<td>{PHP.R.frm_icon_posts}{PHP.themelang.forumstopics.Nonewposts}</td>
+						<td>{PHP.R.frm_icon_posts_new}{PHP.themelang.forumstopics.Newposts}</td>
+						<td>{PHP.R.frm_icon_posts_hot}{PHP.themelang.forumstopics.Nonewpostspopular}</td>
+						<td>{PHP.R.frm_icon_posts_new_hot}{PHP.themelang.forumstopics.Newpostspopular}</td>
 					</tr>
 					<tr>
-						<td>{PHP.R.frm_icon_posts_sticky}{PHP.skinlang.forumstopics.Sticky}</td>
-						<td>{PHP.R.frm_icon_posts_new_sticky}{PHP.skinlang.forumstopics.Newpostssticky}</td>
-						<td>{PHP.R.frm_icon_posts_locked}{PHP.skinlang.forumstopics.Locked}</td>
-						<td>{PHP.R.frm_icon_posts_new_locked}{PHP.skinlang.forumstopics.Newpostslocked}</td>
+						<td>{PHP.R.frm_icon_posts_sticky}{PHP.themelang.forumstopics.Sticky}</td>
+						<td>{PHP.R.frm_icon_posts_new_sticky}{PHP.themelang.forumstopics.Newpostssticky}</td>
+						<td>{PHP.R.frm_icon_posts_locked}{PHP.themelang.forumstopics.Locked}</td>
+						<td>{PHP.R.frm_icon_posts_new_locked}{PHP.themelang.forumstopics.Newpostslocked}</td>
 					</tr>
 					<tr>
-						<td>{PHP.R.frm_icon_posts_sticky_locked}{PHP.skinlang.forumstopics.Announcment}</td>
-						<td>{PHP.R.frm_icon_posts_new_sticky_locked}{PHP.skinlang.forumstopics.Newannouncment}</td>	
+						<td>{PHP.R.frm_icon_posts_sticky_locked}{PHP.themelang.forumstopics.Announcment}</td>
+						<td>{PHP.R.frm_icon_posts_new_sticky_locked}{PHP.themelang.forumstopics.Newannouncment}</td>	
 						<td colspan="2">
-							{PHP.R.frm_icon_posts_moved}{PHP.skinlang.forumstopics.Movedoutofthissection}
+							{PHP.R.frm_icon_posts_moved}{PHP.themelang.forumstopics.Movedoutofthissection}
 						</td>
 					</tr>
 				</table>

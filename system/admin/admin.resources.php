@@ -87,10 +87,10 @@ $R['admin_icon_rights'] =
 $R['admin_icon_rights2'] = 
 	'<img class="icon" src="images/icons/default/rights.png" alt="" />';
 
-$R['admin_icon_skins'] = '<img class="icon" src="system/admin/img/skins.png" alt="" />';
 $R['admin_icon_smilies'] = '<img class="icon" src="system/admin/img/smilies.png" alt="" />';
 $R['admin_icon_statistics'] = '<im class="icon"g src="system/admin/img/statistics.png" alt="" />';
 $R['admin_icon_structure'] = '<img class="icon" src="system/admin/img/structure.png" alt="" />';
+$R['admin_icon_themes'] = '<img class="icon" src="system/admin/img/themes.png" alt="" />';
 $R['admin_icon_tools'] = '<img class="icon" src="system/admin/img/tools.png" alt="" />';
 $R['admin_icon_trash'] = '<img class="icon" src="system/admin/img/trash.png" alt="" />';
 $R['admin_icon_urls'] = '<img class="icon" src="system/admin/img/info.png" alt="" />';

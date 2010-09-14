@@ -95,7 +95,7 @@
 					<input type="hidden" name="step" value="3" />
 					<ul>
 						<li class="title"><span class="settings">{PHP.L.install_misc}</span></li>
-						<li><label>{PHP.L.install_misc_skin}</label> {INSTALL_SKIN_SELECT}</li>
+						<li><label>{PHP.L.install_misc_theme}</label> {INSTALL_THEME_SELECT}</li>
 						<li><label>{PHP.L.install_misc_lng}</label> {INSTALL_LANG_SELECT}</li>
 						<li><label>{PHP.L.install_misc_url}</label> <input type="text" name="mainurl" value="{PHP.cfg.mainurl}" size="32" /></li>
 					</ul>

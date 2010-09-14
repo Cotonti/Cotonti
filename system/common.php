@@ -59,7 +59,7 @@ if ($cfg['cache'] && !$cfg['devmode'])
 		$cache_z = ($z == 'list') ? 'page' : $z;
 		if ($cfg["cache_$cache_z"])
 		{
-			$cot_cache->page->init($cache_z, $cfg['defaultskin']);
+			$cot_cache->page->init($cache_z, $cfg['defaulttheme']);
 			$cot_cache->page->read();
 		}
 	}
@@ -104,7 +104,7 @@ else
 			$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
 		}
 	}
-	$cfg['css'] = $cfg['defaultskin'];
+	$cfg['css'] = $cfg['defaulttheme'];
 
 	$cot_cache && $cot_cache->db->store('cot_cfg', $cfg, 'system');
 }
@@ -302,8 +302,8 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				$usr['lastvisit'] = $row['user_lastvisit'];
 				$usr['lastlog'] = $row['user_lastlog'];
 				$usr['timezone'] = $row['user_timezone'];
-				$usr['skin'] = ($cfg['forcedefaultskin']) ? $cfg['defaultskin'] : $row['user_skin'];
-				$usr['theme'] = $row['user_theme'];
+				$usr['theme'] = ($cfg['forcedefaulttheme']) ? $cfg['defaulttheme'] : $row['user_theme'];
+				$usr['scheme'] = $row['user_scheme'];
 				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
 				$usr['newpm'] = $row['user_newpm'];
 				$usr['auth'] = unserialize($row['user_auth']);
@@ -351,8 +351,8 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 	}
 	else
 	{
-		$usr['skin'] = sed_import($u[0], 'D', 'ALP');
-		$usr['theme'] = sed_import($u[1], 'D', 'ALP');
+		$usr['theme'] = sed_import($u[0], 'D', 'ALP');
+		$usr['scheme'] = sed_import($u[1], 'D', 'ALP');
 		$usr['lang'] = sed_import($u[2], 'D', 'ALP');
 	}
 }
@@ -366,8 +366,8 @@ if ($usr['id'] == 0)
 	}
 	$usr['auth'] = $sed_guest_auth;
 	unset($sed_guest_auth);
-	$usr['skin'] = empty($usr['skin']) ? $cfg['defaultskin'] : $usr['skin'];
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
+	$usr['scheme'] = empty($usr['scheme']) ? $cfg['defaultscheme'] : $usr['scheme'];
 	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
 	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['abs_url']))); // Site related key for guests
 }
@@ -451,53 +451,53 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 $lang = $usr['lang'];
 require_once sed_langfile('main', 'core');
 
-/* ======== Skin ======== */
+/* ======== Theme / color scheme ======== */
 
-$usr['skin_raw'] = $usr['skin'];
+$usr['theme_raw'] = $usr['theme'];
 
-if (@file_exists('./skins/'.$usr['skin'].'.'.$usr['lang'].'/header.tpl'))
+if (@file_exists('./themes/'.$usr['theme'].'.'.$usr['lang'].'/header.tpl'))
 {
-	$usr['skin'] = $usr['skin'].'.'.$usr['lang'];
+	$usr['theme'] = $usr['theme'].'.'.$usr['lang'];
 }
 
-$mskin = './skins/'.$usr['skin'].'/header.tpl';
-if (!file_exists($mskin))
+$mtheme = './themes/'.$usr['theme'].'/header.tpl';
+if (!file_exists($mtheme))
 {
-	$out['notices'] .= $L['com_skinfail'].'<br />';
-	$usr['skin'] = $cfg['defaultskin'];
-	$mskin = './skins/'.$usr['skin'].'/header.tpl';
-	if (!file_exists($mskin))
+	$out['notices'] .= $L['com_themefail'].'<br />';
+	$usr['theme'] = $cfg['defaulttheme'];
+	$mtheme = './themes/'.$usr['theme'].'/header.tpl';
+	if (!file_exists($mtheme))
 	{
-		sed_diefatal('Default skin not found.'); // TODO: Need translate
+		sed_diefatal('Default theme not found.'); // TODO: Need translate
 	}
 }
 
-$mtheme = sed_themefile();
-if (!$mtheme)
+$mscheme = sed_schemefile();
+if (!$mscheme)
 {
-	sed_diefatal('Default theme not found.'); // TODO: Need translate
+	sed_diefatal('Default scheme not found.'); // TODO: Need translate
 }
 
-require_once sed_langfile('skin', 'core');
+require_once sed_langfile('theme', 'core');
 
-$usr['def_skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.en.lang.php';
-$usr['skin_lang'] = './skins/'.$usr['skin'].'/'.$usr['skin_raw'].'.'.$usr['lang'].'.lang.php';
-if ($usr['skin_lang'] != $usr['def_skin_lang'] && @file_exists($usr['skin_lang']))
+$usr['def_theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme_raw'].'.en.lang.php';
+$usr['theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme_raw'].'.'.$usr['lang'].'.lang.php';
+if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
 {
-	require_once $usr['skin_lang'];
+	require_once $usr['theme_lang'];
 }
-elseif (@file_exists($usr['def_skin_lang']))
+elseif (@file_exists($usr['def_theme_lang']))
 {
-	require_once $usr['def_skin_lang'];
+	require_once $usr['def_theme_lang'];
 }
 
-$skin = $usr['skin'];
 $theme = $usr['theme'];
+$scheme = $usr['scheme'];
 
 // Resource strings
 require_once $cfg['system_dir'].'/resources.php';
-// Skin resources
-require_once './skins/'.$usr['skin'].'/'.$usr['skin'].'.php';
+// Theme resources
+require_once './themes/'.$usr['theme'].'/'.$usr['theme'].'.php';
 // Iconpack
 if (empty($cfg['defaulticons']))
 {

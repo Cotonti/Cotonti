@@ -16,12 +16,12 @@
 		</div>
 
 		<div id="side" class="column">
-<!-- IF {PHP.usr.isadmin} -->{FILE "skins/nemesis/inc/admin-list.tpl"}<!-- ENDIF -->
+<!-- IF {PHP.usr.isadmin} -->{FILE "themes/nemesis/inc/admin-list.tpl"}<!-- ENDIF -->
 			<div class="block">
 				<h2 class="tags">{LIST_TOP_TAG_CLOUD}</h2>
 				{LIST_TAG_CLOUD}
 			</div>
-{FILE "skins/nemesis/inc/contact.tpl"}
+{FILE "themes/nemesis/inc/contact.tpl"}
 		</div>
 
 <!-- END: MAIN -->

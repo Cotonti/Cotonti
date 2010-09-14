@@ -10,7 +10,7 @@
 				<input type="hidden" name="id" value="{USERS_EDIT_ID}" />
 				<table class="cells">
 					<tr>
-						<td class="width30">{PHP.skinlang.usersedit.UserID}:</td>
+						<td class="width30">{PHP.themelang.usersedit.UserID}:</td>
 						<td class="width70">#{USERS_EDIT_ID}</td>
 					</tr>
 					<tr>
@@ -30,8 +30,8 @@
 						<td>{USERS_EDIT_TIMEZONE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Skin}:</td>
-						<td>{USERS_EDIT_SKIN}</td>
+						<td>{PHP.L.Theme}:</td>
+						<td>{USERS_EDIT_THEME}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Language}:</td>
@@ -50,20 +50,20 @@
 						<td>{USERS_EDIT_PHOTO}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersedit.Newpassword}:</td>
-						<td>{USERS_EDIT_NEWPASS}<br />{PHP.skinlang.usersedit.Newpasswordhint}</td>
+						<td>{PHP.themelang.usersedit.Newpassword}:</td>
+						<td>{USERS_EDIT_NEWPASS}<br />{PHP.themelang.usersedit.Newpasswordhint}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Email}:</td>
 						<td>{USERS_EDIT_EMAIL}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersedit.Hidetheemail}:</td>
+						<td>{PHP.themelang.usersedit.Hidetheemail}:</td>
 						<td>{USERS_EDIT_HIDEEMAIL}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersedit.PMnotify}:</td>
-						<td>{USERS_EDIT_PMNOTIFY}<br />{PHP.skinlang.usersedit.PMnotifyhint}</td>
+						<td>{PHP.themelang.usersedit.PMnotify}:</td>
+						<td>{USERS_EDIT_PMNOTIFY}<br />{PHP.themelang.usersedit.PMnotifyhint}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Birthdate}:</td>
@@ -86,15 +86,15 @@
 						<td>{USERS_EDIT_LASTLOG}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersedit.LastIP}:</td>
+						<td>{PHP.themelang.usersedit.LastIP}:</td>
 						<td>{USERS_EDIT_LASTIP}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersedit.Logcounter}:</td>
+						<td>{PHP.themelang.usersedit.Logcounter}:</td>
 						<td>{USERS_EDIT_LOGCOUNT}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersedit.Deletethisuser}:</td>
+						<td>{PHP.themelang.usersedit.Deletethisuser}:</td>
 						<td>{USERS_EDIT_DELETE}</td>
 					</tr>
 					<tr>

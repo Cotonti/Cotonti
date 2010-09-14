@@ -61,7 +61,7 @@ if ($a=='check')
 	}
 	/* ===== */
 
-	$sql = sed_sql_query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_skin, user_theme, user_lang FROM $db_users WHERE $user_select_condition");
+	$sql = sed_sql_query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang FROM $db_users WHERE $user_select_condition");
 
 	if ($row = sed_sql_fetcharray($sql))
 	{
@@ -90,8 +90,8 @@ if ($a=='check')
 		}
 
 		$ruserid = $row['user_id'];
-		$rdefskin = $row['user_skin'];
 		$rdeftheme = $row['user_theme'];
+		$rdefscheme = $row['user_scheme'];
 
 		$token = sed_unique(16);
 		$sid = sed_unique(32);

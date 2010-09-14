@@ -4,7 +4,7 @@
 			<!-- BEGIN: USERS_AUTH_MAINTENANCE -->
 			<div class="block">
 				<h2 class="users">{USERS_AUTH_MAINTENANCERES}</h2>
-				<p>{PHP.skinlang.usersauth.Maintenance}</p>
+				<p>{PHP.themelang.usersauth.Maintenance}</p>
 			</div>
 			<!-- END: USERS_AUTH_MAINTENANCE -->
 			<div class="block">
@@ -20,7 +20,7 @@
 						<td>{USERS_AUTH_PASSWORD}</td>
 					</tr>
 					<tr>
-						<td>{PHP.skinlang.usersauth.Rememberme}</td>
+						<td>{PHP.themelang.usersauth.Rememberme}</td>
 						<td>{PHP.out.guest_cookiettl}</td>
 					</tr>
 					<tr>
@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		<div id="side" class="column">
-{FILE "skins/nemesis/inc/contact.tpl"}
+{FILE "themes/nemesis/inc/contact.tpl"}
 		</div>
 
 <!-- END: MAIN -->

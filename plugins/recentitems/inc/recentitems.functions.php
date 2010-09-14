@@ -16,7 +16,7 @@ sed_require_lang('recentitems', 'plug');
 
 function sed_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
 {
-	global $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $skin, $usr, $sys;
+	global $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $theme, $usr, $sys;
 	$recentitems = new XTemplate(sed_skinfile($template, true));
 	if ($rightprescan)
 	{

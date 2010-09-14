@@ -48,10 +48,9 @@ switch ($step)
 		$user['pass2'] = sed_import('user_pass2', 'P', 'TXT', 16);
 		$user['email'] = sed_import('user_email', 'P', 'TXT', 64, TRUE);
 		$user['country'] = sed_import('user_country', 'P', 'TXT');
-		$rskin = sed_import('skin', 'P', 'TXT');
-		$rtheme = 'default'; // TODO color scheme support (after #481)
-		//$rtheme = sed_import('theme', 'P', 'TXT');
-		//$rtheme = ($skin == $rtheme && $rskin != $rtheme) ? $rskin : $rtheme;
+		$rtheme = explode(':', sed_import('theme', 'P', 'TXT'));
+		$rscheme = $rtheme[1];
+		$rtheme = $rtheme[0];
 		$rlang = sed_import('lang', 'P', 'TXT');
 		break;
 	case 4:
@@ -192,8 +191,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'defaultlang', $rlang);
-				cot_install_config_replace($config_contents, 'defaultskin', $rskin);
 				cot_install_config_replace($config_contents, 'defaulttheme', $rtheme);
+				cot_install_config_replace($config_contents, 'defaultscheme', $rscheme);
 				cot_install_config_replace($config_contents, 'mainurl', $cfg['mainurl']);
 
 				$new_site_id = sed_unique(32);
@@ -207,8 +206,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 						'maingrp' => COT_GROUP_SUPERADMINS,
 						'country' => (string) $user['country'],
 						'email' => $user['email'],
-						'skin' => $rskin,
 						'theme' => $rtheme,
+						'scheme' => $rscheme,
 						'lang' => $rlang,
 						'regdate' => time(),
 						'lastip' => $_SERVER['REMOTE_ADDR']
@@ -480,15 +479,14 @@ switch ($step)
 		// Settings
 		if ($_POST['step'] != 3)
 		{
-			$rskin = $skin;
 			$rtheme = $theme;
+			$rscheme = $scheme;
 			$rlang = $cfg['defaultlang'];
 			$cfg['mainurl'] = $site_url;
 		}
 
 		$t->assign(array(
-			'INSTALL_SKIN_SELECT' => sed_selectbox_skin($rskin, 'skin'),
-			//'INSTALL_THEME_SELECT' => sed_selectbox_theme($rskin, 'theme', $theme),
+			'INSTALL_THEME_SELECT' => sed_selectbox_theme($rtheme, $rscheme, 'theme'),
 			'INSTALL_LANG_SELECT' => sed_selectbox_lang($rlang, 'lang'),
 			'INSTALL_COUNTRY_SELECT' => sed_selectbox_countries($user['country'], 'user_country')
 		));

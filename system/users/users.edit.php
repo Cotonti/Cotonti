@@ -99,7 +99,7 @@ if ($a=='update')
 	$ruser['email'] = sed_import('ruseremail','P','TXT');
 	$ruser['hideemail'] = sed_import('ruserhideemail','P','INT');
 	$ruser['pmnotify'] = sed_import('ruserpmnotify','P','INT');
-	$ruser['skin'] = sed_import('ruserskin','P','TXT');
+	$ruser['theme'] = sed_import('rusertheme','P','TXT');
 	$ruser['lang'] = sed_import('ruserlang','P','ALP');
 	$ruser['gender'] = sed_import('rusergender','P','TXT');
 
@@ -269,7 +269,7 @@ $useredit_array = array(
 	"USERS_EDIT_NAME" => sed_inputbox('text', 'rusername', $urr['user_name'], array('size' => 32, 'maxlength' => 100) + $protected),
 	"USERS_EDIT_ACTIVE" => $user_form_active,
 	"USERS_EDIT_BANNED" => $user_form_banned,
-	"USERS_EDIT_SKIN" => sed_inputbox('text', 'ruserskin', $urr['user_skin'], array('size' => 32, 'maxlength' => 32)),
+	"USERS_EDIT_THEME" => sed_inputbox('text', 'rusertheme', $urr['user_theme'], array('size' => 32, 'maxlength' => 32)),
 	"USERS_EDIT_LANG" => sed_inputbox('text', 'ruserlang', $urr['user_lang'], array('size' => 32, 'maxlength' => 32)),
 	"USERS_EDIT_NEWPASS" => sed_inputbox('password', 'rusernewpass', '', array('size' => 16, 'maxlength' => 16) + $protected),
 	"USERS_EDIT_MAINGRP" => sed_build_group($urr['user_maingrp']),
