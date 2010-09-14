@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 $L['pfs_cancelall'] = 'Cancel All'; /// 0.7.0
 $L['pfs_direxists'] = 'Such a folder already exists.<br />Old path: %1$s<br />New path: %2$s'; // 0.7.0

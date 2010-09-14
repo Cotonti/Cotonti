@@ -16,24 +16,24 @@ Tags=header.tpl:{HEADER_COMPOPUP}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages']
-	&& (defined('SED_INDEX') || defined('SED_LIST') || defined('SED_PAGE'))
-	|| $cfg['plugin']['tags']['forums'] && defined('SED_FORUMS')
-	|| defined('SED_PLUG'))
+	&& (defined('COT_INDEX') || defined('COT_LIST') || defined('COT_PAGE'))
+	|| $cfg['plugin']['tags']['forums'] && defined('COT_FORUMS')
+	|| defined('COT_PLUG'))
 {
-	sed_require('tags', true);
+	cot_require('tags', true);
 	/*$out['compopup'] .= $R['tags_code_style'];*/
 	if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['tags']['autocomplete'] > 0
 		&& in_array($m, array('edit', 'editpost', 'posts', 'newtopic'))
-		&& sed_auth('plug', 'tags', 'W'))
+		&& cot_auth('plug', 'tags', 'W'))
 	{
 		$out['compopup'] .= '<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-$(".autotags").autocomplete("'.sed_url('plug', 'r=tags').'", {multiple: true, minChars: '.$cfg['plugin']['tags']['autocomplete'].'});
+$(".autotags").autocomplete("'.cot_url('plug', 'r=tags').'", {multiple: true, minChars: '.$cfg['plugin']['tags']['autocomplete'].'});
 });
 //]]>
 </script>';

@@ -120,8 +120,8 @@
 		<table class="cells">
 		<tr>
 			<td class="coltop width10">{PHP.L.plu_flag}</td>
-			<td class="coltop width70"><a href="{STATISTICS_PLU_URL}">{PHP.sed_img_down}</a> {PHP.L.Country}</td>
-			<td class="coltop width20"><a href="{STATISTICS_SORT_BY_USERCOUNT}">{PHP.sed_img_down}</a> {PHP.L.Users}</td>
+			<td class="coltop width70"><a href="{STATISTICS_PLU_URL}">{PHP.cot_img_down}</a> {PHP.L.Country}</td>
+			<td class="coltop width20"><a href="{STATISTICS_SORT_BY_USERCOUNT}">{PHP.cot_img_down}</a> {PHP.L.Users}</td>
 		</tr>
 		<!-- BEGIN: ROW_COUNTRY -->
 		<tr>

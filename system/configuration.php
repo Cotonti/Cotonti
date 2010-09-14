@@ -10,7 +10,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Generic text configuration. Is displayed as textarea. Contains text.
@@ -68,7 +68,7 @@ define('COT_CONFIG_TYPE_HIDDEN', 5);
  *     )
  * );
  *
- * sed_config_add('test', $config_options, true);
+ * cot_config_add('test', $config_options, true);
  * </code>
  *
  * @param string $name Extension name (code)
@@ -85,7 +85,7 @@ define('COT_CONFIG_TYPE_HIDDEN', 5);
  * @param bool $is_module Flag indicating if it is module or plugin config
  * @return bool Operation status
  */
-function sed_config_add($name, $options, $is_module = false)
+function cot_config_add($name, $options, $is_module = false)
 {
     global $cfg, $db_config;
     $cnt = count($options);
@@ -108,18 +108,18 @@ function sed_config_add($name, $options, $is_module = false)
             $query .= ',';
 		}
         $order = isset($options[$i]['order'])
-			? sed_sql_prep($options[$i]['order'])
+			? cot_db_prep($options[$i]['order'])
 			: str_pad($i, 2, 0, STR_PAD_LEFT);
         $query .= "('$type', '$name', '$order', '"
-			. sed_sql_prep($options[$i]['name']) . "', "
+			. cot_db_prep($options[$i]['name']) . "', "
 			. (int) $options[$i]['type'] . ", '"
-			. sed_sql_prep($options[$i]['default']) . "', '"
-            . sed_sql_prep($options[$i]['default']) . "', '"
-			. sed_sql_prep($options[$i]['variants']) . "', '"
-            . sed_sql_prep($options[$i]['text']) . "')";
+			. cot_db_prep($options[$i]['default']) . "', '"
+            . cot_db_prep($options[$i]['default']) . "', '"
+			. cot_db_prep($options[$i]['variants']) . "', '"
+            . cot_db_prep($options[$i]['text']) . "')";
     }
-    sed_sql_query($query);
-    return sed_sql_affectedrows() == $cnt;
+    cot_db_query($query);
+    return cot_db_affectedrows() == $cnt;
 }
 
 /**
@@ -127,18 +127,18 @@ function sed_config_add($name, $options, $is_module = false)
  * @param string $name Extension code
  * @param bool $is_module TRUE if module, FALSE if plugin
  * @return array Config options structure
- * @see sed_config_add()
+ * @see cot_config_add()
  */
-function sed_config_load($name, $is_module = false)
+function cot_config_load($name, $is_module = false)
 {
 	global $db_config;
 	$options = array();
 	$type = $is_module ? 'module' : 'plug';
 
-	$res = sed_sql_query("SELECT config_name, config_type, config_value,
+	$res = cot_db_query("SELECT config_name, config_type, config_value,
 			config_default, config_variants, config_order
 		FROM $db_config WHERE config_owner = '$type' AND config_cat = '$name'");
-	while ($row = sed_sql_fetchassoc($res))
+	while ($row = cot_db_fetchassoc($res))
 	{
 		$options[] = array(
 			'name' => $row['config_name'],
@@ -149,7 +149,7 @@ function sed_config_load($name, $is_module = false)
 			'variants' => $row['config_variants']
 		);
 	}
-	sed_sql_freeresult($res);
+	cot_db_freeresult($res);
 
 	return $options;
 }
@@ -162,7 +162,7 @@ function sed_config_load($name, $is_module = false)
  * @param bool $is_module TRUE if module, FALSE if plugin
  * @return int Number of entries updated
  */
-function sed_config_modify($name, $options, $is_module = false)
+function cot_config_modify($name, $options, $is_module = false)
 {
 	global $db_config;
 	$type = $is_module ? 'module' : 'plug';
@@ -172,7 +172,7 @@ function sed_config_modify($name, $options, $is_module = false)
 	{
 		$config_name = $opt['name'];
 		unset($opt['name']);
-		$affected += sed_sql_update($db_config, $opt, "config_owner = '$type'
+		$affected += cot_db_update($db_config, $opt, "config_owner = '$type'
 			AND config_cat = '$name' AND config_name = '$config_name'", 'config_');
 	}
 
@@ -185,7 +185,7 @@ function sed_config_modify($name, $options, $is_module = false)
  * @param array $info_cfg Setup file config entries
  * @return array Config options
  */
-function sed_config_parse($info_cfg)
+function cot_config_parse($info_cfg)
 {
     $options = array();
 	if (is_array($info_cfg))
@@ -237,7 +237,7 @@ function sed_config_parse($info_cfg)
  * all options from selected module/plugin will be removed
  * @return int Number of options actually removed
  */
-function sed_config_remove($name, $is_module = false, $option = '')
+function cot_config_remove($name, $is_module = false, $option = '')
 {
     global $db_config;
     $type = $is_module ? 'module' : 'plug';
@@ -256,16 +256,16 @@ function sed_config_remove($name, $is_module = false, $option = '')
             {
                 if ($i > 0)
                     $where .= ',';
-                $where .= "'" . sed_sql_prep($option[$i]) . "'";
+                $where .= "'" . cot_db_prep($option[$i]) . "'";
             }
             unset($option);
         }
     }
     if (!empty($option))
     {
-        $where .= " AND config_name = '" . sed_sql_prep($option) . "'";
+        $where .= " AND config_name = '" . cot_db_prep($option) . "'";
     }
-    return sed_sql_delete($db_config, $where);
+    return cot_db_delete($db_config, $where);
 }
 
 /**
@@ -278,7 +278,7 @@ function sed_config_remove($name, $is_module = false, $option = '')
  *     'hidden_test' => 'test45',
  * );
  *
- * sed_config_set($config_values, 'test', true);
+ * cot_config_set($config_values, 'test', true);
  * </code>
  *
  * @param string $name Extension name config belongs to
@@ -286,7 +286,7 @@ function sed_config_remove($name, $is_module = false, $option = '')
  * @param bool $is_module Flag indicating if it is module or plugin config
  * @return int Number of entries updated
  */
-function sed_config_set($name, $options, $is_module = false)
+function cot_config_set($name, $options, $is_module = false)
 {
     global $db_config;
     $type = $is_module ? 'module' : 'plug';
@@ -294,10 +294,10 @@ function sed_config_set($name, $options, $is_module = false)
     foreach ($options as $key => $val)
     {
         $where = "config_owner = '$type' AND config_name = '"
-			. sed_sql_prep($key) . "'";
+			. cot_db_prep($key) . "'";
         if (!empty($name))
             $where .= " AND config_cat = '$name'";
-        $upd_cnt += sed_sql_update($db_config, $where, array('value' => $val),
+        $upd_cnt += cot_db_update($db_config, $where, array('value' => $val),
 			'config_');
     }
     return $upd_cnt;
@@ -312,10 +312,10 @@ function sed_config_set($name, $options, $is_module = false)
  * @param bool $is_module TRUE for modules, FALSE for plugins
  * @return int Number of entries affected
  */
-function sed_config_update($name, $options, $is_module = false)
+function cot_config_update($name, $options, $is_module = false)
 {
 	$affected = 0;
-	$old_options = sed_config_load($name, $is_module);
+	$old_options = cot_config_load($name, $is_module);
 
 	// Find and remove options which no longer exist
 	$remove_opts = array();
@@ -337,7 +337,7 @@ function sed_config_update($name, $options, $is_module = false)
 	}
 	if (count($remove_opts) > 0)
 	{
-		$affected += sed_config_remove($name, $is_module, $remove_opts);
+		$affected += cot_config_remove($name, $is_module, $remove_opts);
 	}
 
 	// Find new options and options which have been modified
@@ -371,11 +371,11 @@ function sed_config_update($name, $options, $is_module = false)
 	}
 	if (count($new_options) > 0)
 	{
-		$affected += sed_config_add($name, $new_options, $is_module);
+		$affected += cot_config_add($name, $new_options, $is_module);
 	}
 	if (count($upd_options) > 0)
 	{
-		$affected += sed_config_modify($name, $upd_options, $is_module);
+		$affected += cot_config_modify($name, $upd_options, $is_module);
 	}
 
 	return $affected;

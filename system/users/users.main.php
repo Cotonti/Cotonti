@@ -9,21 +9,21 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-$id = sed_import('id', 'G', 'INT');
-$s = sed_import('s', 'G', 'ALP', 13);
-$w = sed_import('w', 'G', 'ALP', 4);
-$d = sed_import('d', 'G', 'INT');
-$f = sed_import('f', 'G', 'ALP', 16);
-$g = sed_import('g', 'G', 'INT');
-$gm = sed_import('gm', 'G', 'INT');
-$y = sed_import('y', 'P', 'TXT', 8);
-$sq = sed_import('sq', 'G', 'TXT', 8);
+$id = cot_import('id', 'G', 'INT');
+$s = cot_import('s', 'G', 'ALP', 13);
+$w = cot_import('w', 'G', 'ALP', 4);
+$d = cot_import('d', 'G', 'INT');
+$f = cot_import('f', 'G', 'ALP', 16);
+$g = cot_import('g', 'G', 'INT');
+$gm = cot_import('gm', 'G', 'INT');
+$y = cot_import('y', 'P', 'TXT', 8);
+$sq = cot_import('sq', 'G', 'TXT', 8);
 unset($localskin, $grpms);
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
-sed_block($usr['auth_read']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+cot_block($usr['auth_read']);
 
 $users_sort_tags = array(
 	// columns in $db_users table
@@ -48,7 +48,7 @@ $users_sort_tags = array(
 $users_sort_blacklist = array('email', 'lastip',);
 
 /* === Hook === */
-foreach (sed_getextplugins('users.first') as $pl)
+foreach (cot_getextplugins('users.first') as $pl)
 {
 	include $pl;
 }
@@ -71,10 +71,10 @@ if (empty($d))
 	$d = 0;
 }
 
-$bhome = $cfg['homebreadcrumb'] ? sed_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
+$bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
 
-$title = $bhome . sed_rc_link(sed_url('users'), $L['Users']);
-$localskin = sed_skinfile('users');
+$title = $bhome . cot_rc_link(cot_url('users'), $L['Users']);
+$localskin = cot_skinfile('users');
 
 if(!empty($sq))
 {
@@ -95,23 +95,23 @@ if($f == 'search' && mb_strlen($y) > 1)
 {
 	$sq = $y;
 	$title .= $cfg['separator']." ". $L['Search']." '".htmlspecialchars($y)."'";
-	$sqlmask = "$sqljoin WHERE {$sqlu}user_name LIKE '%".sed_sql_prep($y)."%'";
+	$sqlmask = "$sqljoin WHERE {$sqlu}user_name LIKE '%".cot_db_prep($y)."%'";
 }
 elseif($g > 1)
 {
-	$title .= $cfg['separator']." ".$L['Maingroup']." = ".sed_build_group($g);
+	$title .= $cfg['separator']." ".$L['Maingroup']." = ".cot_build_group($g);
 	$sqlmask = "$sqljoin WHERE {$sqlu}user_maingrp=$g";
 }
 elseif($gm > 1)
 {
-	$title .= $cfg['separator']." ".$L['Group']." = ".sed_build_group($gm);
+	$title .= $cfg['separator']." ".$L['Group']." = ".cot_build_group($gm);
 	$sqlmask = "as u ".(empty($sqljoin) ? '' : "LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp ")."LEFT JOIN $db_groups_users as m ON m.gru_userid=u.user_id WHERE m.gru_groupid=$gm";
 }
 elseif(mb_substr($f, 0, 8) == 'country_')
 {
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
 	$title .= $cfg['separator']." ".$L['Country']." '";
-	$title .= ($cn == '00') ? $L['None']."'" : $sed_countries[$cn]."'";
+	$title .= ($cn == '00') ? $L['None']."'" : $cot_countries[$cn]."'";
 	$sqlmask = "$sqljoin WHERE {$sqlu}user_country='$cn'";
 }
 else//if($f == 'all')
@@ -135,27 +135,27 @@ switch ($s)
 $users_url_path = array('f' => $f, 'g' => $g, 'gm' => $gm, 's' => $s, 'w' => $w, 'sq' => $sq);
 
 /* === Hook === */
-foreach (sed_getextplugins('users.query') as $pl)
+foreach (cot_getextplugins('users.query') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users $sqlmask");
-$totalusers = sed_sql_result($sql, 0, "COUNT(*)");
-$sql = sed_sql_query("SELECT * FROM $db_users $sqlmask $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
+$sql = cot_db_query("SELECT COUNT(*) FROM $db_users $sqlmask");
+$totalusers = cot_db_result($sql, 0, "COUNT(*)");
+$sql = cot_db_query("SELECT * FROM $db_users $sqlmask $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
-$pagenav = sed_pagenav('users', $users_url_path, $d, $totalusers, $cfg['maxusersperpage']);
+$pagenav = cot_pagenav('users', $users_url_path, $d, $totalusers, $cfg['maxusersperpage']);
 
 $title_params = array(
 	'USERS' => $L['Users']
 );
-$out['subtitle'] = sed_title('title_users_main', $title_params);
+$out['subtitle'] = cot_title('title_users_main', $title_params);
 
 /* === Hook === */
-foreach (sed_getextplugins('users.main') as $pl)
+foreach (cot_getextplugins('users.main') as $pl)
 {
 	include $pl;
 }
@@ -166,27 +166,27 @@ require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
 
-sed_require_api('forms');
-require_once sed_langfile('countries', 'core');
+cot_require_api('forms');
+require_once cot_langfile('countries', 'core');
 
 $filter_titles = array();
 $filter_values = array();
-foreach($sed_countries as $i => $x)
+foreach($cot_countries as $i => $x)
 {
 	if($i == '00')
 	{
 		$filter_titles[] = $L['Country'];
-		$filter_values[] = sed_url('users');
+		$filter_values[] = cot_url('users');
 		$filter_titles[] = $L['None'];
-		$filter_values[] = sed_url('users', 'f=country_00');
+		$filter_values[] = cot_url('users', 'f=country_00');
 	}
 	else
 	{
-		$filter_titles[] = sed_cutstring($x,23);
-		$filter_values[] = sed_url('users', 'f=country_'.$i);
+		$filter_titles[] = cot_cutstring($x,23);
+		$filter_values[] = cot_url('users', 'f=country_'.$i);
 	}
 }
-$countryfilters = sed_selectbox($f, 'bycountry', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
+$countryfilters = cot_selectbox($f, 'bycountry', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
 
 /*=========*/
 
@@ -194,21 +194,21 @@ $filter_titles = array();
 $filter_values = array();
 $filter_values_g = array();
 $filter_titles[] = $L['Maingroup'];
-$filter_values[] = sed_url('users');
-$filter_values_g[] = sed_url('users');
-foreach($sed_groups as $k => $i)
+$filter_values[] = cot_url('users');
+$filter_values_g[] = cot_url('users');
+foreach($cot_groups as $k => $i)
 {
-	if(!$sed_groups[$k]['hidden'] || sed_auth('users', 'a', 'A'))
+	if(!$cot_groups[$k]['hidden'] || cot_auth('users', 'a', 'A'))
 	{
-		$filter_titles[] = $sed_groups[$k]['title'] . ($sed_groups[$k]['hidden'] ?  ' ('.$L['Hidden'].')' : '');
-		$filter_values_g[] = sed_url('users', 'g='.$k);
-		$filter_values[] = sed_url('users', 'gm='.$k);
+		$filter_titles[] = $cot_groups[$k]['title'] . ($cot_groups[$k]['hidden'] ?  ' ('.$L['Hidden'].')' : '');
+		$filter_values_g[] = cot_url('users', 'g='.$k);
+		$filter_values[] = cot_url('users', 'gm='.$k);
 	}
 }
-$maingrpfilters = sed_selectbox($gm, 'bymaingroup', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
+$maingrpfilters = cot_selectbox($gm, 'bymaingroup', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
 
 $filter_titles[0] = $L['Group'];
-$grpfilters = sed_selectbox($g, 'bygroupms', $filter_values_g, $filter_titles, false, array('onchange' => 'redirect(this)'));
+$grpfilters = cot_selectbox($g, 'bygroupms', $filter_values_g, $filter_titles, false, array('onchange' => 'redirect(this)'));
 
 /*=========*/
 
@@ -223,21 +223,21 @@ $t->assign(array(
 	"USERS_TOP_PAGNAV" => $pagenav['main'],
 	"USERS_TOP_PAGEPREV" => $pagenav['prev'],
 	"USERS_TOP_PAGENEXT" => $pagenav['next'],
-	"USERS_TOP_FILTER_ACTION" => sed_url('users', 'f=search'),
+	"USERS_TOP_FILTER_ACTION" => cot_url('users', 'f=search'),
 	"USERS_TOP_FILTERS_COUNTRY" => $countryfilters,
 	"USERS_TOP_FILTERS_MAINGROUP" => $maingrpfilters,
 	"USERS_TOP_FILTERS_GROUP" => $grpfilters,
-	"USERS_TOP_FILTERS_SEARCH" => sed_inputbox('text', 'y', $y, array('size' => 8, 'maxlength' => 8)),
-	"USERS_TOP_FILTERS_SUBMIT" => sed_inputbox('submit', 'submit', $L['Search']),
+	"USERS_TOP_FILTERS_SEARCH" => cot_inputbox('text', 'y', $y, array('size' => 8, 'maxlength' => 8)),
+	"USERS_TOP_FILTERS_SUBMIT" => cot_inputbox('submit', 'submit', $L['Search']),
 	"USERS_TOP_PM" => "PM",
 ));
 
 $k = '_.+._';
-$asc = explode($k, sed_url('users', array('s' => $k, 'w'=> 'asc') + $users_url_path));
-$desc = explode($k, sed_url('users', array('s' => $k, 'w'=> 'desc') + $users_url_path));
+$asc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'asc') + $users_url_path));
+$desc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'desc') + $users_url_path));
 foreach ($users_sort_tags as $k => $x)
 {
-	$t->assign($x[0], sed_rc('users_link_sort', array(
+	$t->assign($x[0], cot_rc('users_link_sort', array(
 		'asc_url' => implode($k, $asc),
 		'desc_url' => implode($k, $desc),
 		'text' => $x[1]
@@ -245,14 +245,14 @@ foreach ($users_sort_tags as $k => $x)
 }
 
 // Extra fields for users
-foreach($sed_extrafields['users'] as $i => $extrafield)
+foreach($cot_extrafields['users'] as $i => $extrafield)
 {
 	$uname = strtoupper($extrafield['field_name']);
 	$fieldtext = isset($L['user_'.$extrafield['field_name'].'_title']) ? $L['user_'.$extrafield['field_name'].'_title']
 		: $extrafield['field_description'];
-	$t->assign('USERS_TOP_'.$uname, sed_rc('users_link_sort', array(
-		'asc_url' => sed_url('users', array('s' => $extrafield['field_name'], 'w'=> 'asc') + $users_url_path),
-		'desc_url' => sed_url('users', array('s' => $extrafield['field_name'], 'w'=> 'desc') + $users_url_path),
+	$t->assign('USERS_TOP_'.$uname, cot_rc('users_link_sort', array(
+		'asc_url' => cot_url('users', array('s' => $extrafield['field_name'], 'w'=> 'asc') + $users_url_path),
+		'desc_url' => cot_url('users', array('s' => $extrafield['field_name'], 'w'=> 'desc') + $users_url_path),
 		'text' => $fieldtext
 	)));
 }
@@ -260,18 +260,18 @@ foreach($sed_extrafields['users'] as $i => $extrafield)
 $jj = 0;
 
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('users.loop');
+$extp = cot_getextplugins('users.loop');
 /* ===== */
 
-while($urr = sed_sql_fetcharray($sql))
+while($urr = cot_db_fetcharray($sql))
 {
 	$jj++;
 	$t->assign(array(
-		"USERS_ROW_ODDEVEN" => sed_build_oddeven($jj),
+		"USERS_ROW_ODDEVEN" => cot_build_oddeven($jj),
         "USERS_ROW_NUM" => $jj,
 		"USERS_ROW" => $urr
 	));
-	$t->assign(sed_generate_usertags($urr, "USERS_ROW_"));
+	$t->assign(cot_generate_usertags($urr, "USERS_ROW_"));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{
@@ -283,7 +283,7 @@ while($urr = sed_sql_fetcharray($sql))
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('users.tags') as $pl)
+foreach (cot_getextplugins('users.tags') as $pl)
 {
 	include $pl;
 }

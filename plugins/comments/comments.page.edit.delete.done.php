@@ -15,10 +15,10 @@ Hooks=page.edit.delete.done
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
-sed_comments_remove('page', $id);
+cot_comments_remove('page', $id);
 
 ?>

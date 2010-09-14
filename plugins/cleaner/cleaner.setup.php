@@ -37,6 +37,6 @@ pmold=07:select:0,15,30,60,120,180,365:365:Delete ALL the private messages older
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 ?>

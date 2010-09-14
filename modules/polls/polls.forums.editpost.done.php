@@ -15,11 +15,11 @@ Hooks=forums.editpost.update.done
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if(!empty($poll) && $poll_id && $is_first_post && !$cot_error)
 {
-	$number = sed_poll_save();
+	$number = cot_poll_save();
 }
 
 ?>

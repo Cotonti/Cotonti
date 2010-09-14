@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 /**
  * Plugin Title & Subtitle
@@ -49,7 +49,7 @@ $L['rss_comments_item_desc'] = 'Last comments on page';	// New in N-0.0.2
 $L['rss_original'] = 'Original message'; // New in N-0.0.2
 
 /**
- * sed_declension arrays
+ * cot_declension arrays
  */
 
 $Ls['Comments'] = array('comments','comment');

@@ -15,7 +15,7 @@ Hooks=module
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /*
 Example of feeds:
@@ -33,13 +33,13 @@ rss.php
 */
 
 // Environment setup
-define('SED_RSS', TRUE);
+define('COT_RSS', TRUE);
 $location = 'RSS';
 
-sed_dieifdisabled($cfg['disable_rss']);
+cot_dieifdisabled($cfg['disable_rss']);
 
-$c = sed_import('c', 'G', 'ALP');
-$id = sed_import('id', 'G', 'ALP');
+$c = cot_import('c', 'G', 'ALP');
+$id = cot_import('id', 'G', 'ALP');
 $c = empty($c) ? "pages" : $c;
 $id = empty($id) ? "all" : $id;
 
@@ -64,7 +64,7 @@ $domain = $sys['domain'];
 $defult_c = true;
 
 /* === Hook === */
-foreach (sed_getextplugins('rss.create') as $pl)
+foreach (cot_getextplugins('rss.create') as $pl)
 {
 	include $pl;
 }
@@ -72,16 +72,16 @@ foreach (sed_getextplugins('rss.create') as $pl)
 
 if ($c == "topics")
 {
-	sed_require('forums');
+	cot_require('forums');
 
 	$defult_c = false;
 	$topic_id = ($id == 'all') ? 0 : $id;
 
 	$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-	$res = sed_sql_query($sql);
-	if (sed_sql_affectedrows() > 0)
+	$res = cot_db_query($sql);
+	if (cot_db_affectedrows() > 0)
 	{
-		$row = sed_sql_fetchassoc($res);
+		$row = cot_db_fetchassoc($res);
 		if ($row['ft_mode'] == '1')
 		{
 			die('This topic is private'); // TODO: Need translate
@@ -92,28 +92,28 @@ if ($c == "topics")
 
 		// check forum read permission for guests
 		$forum_id = $row['ft_sectionid'];
-		if (!sed_auth('forums', $forum_id, 'R'))
+		if (!cot_auth('forums', $forum_id, 'R'))
 		{
 			die('Not readable for guests'); // TODO: Need translate
 		}
 
 		// get number of posts in topic
 		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
-		$res = sed_sql_query($sql);
-		$totalposts = sed_sql_result($res, 0, "COUNT(*)");
+		$res = cot_db_query($sql);
+		$totalposts = cot_db_result($res, 0, "COUNT(*)");
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid='$topic_id' ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-		$res = sed_sql_query($sql);
+		$res = cot_db_query($sql);
 		$i = 0;
-		while ($row = sed_sql_fetchassoc($res))
+		while ($row = cot_db_fetchassoc($res))
 		{
 			$totalposts--;
 			$curpage = $cfg['maxtopicsperpage'] * floor($totalposts / $cfg['maxtopicsperpage']);
 
 			$post_id = $row['fp_id'];
 			$items[$i]['title'] = $row['fp_postername'];
-			$items[$i]['description'] = sed_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
-			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('forums', "m=posts&q=$topic_id&d=$curpage", "#post$post_id", true);
+			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
+			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&q=$topic_id&d=$curpage", "#post$post_id", true);
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 			$i++;
 		}
@@ -121,16 +121,16 @@ if ($c == "topics")
 }
 elseif ($c == "section")
 {
-	sed_require('forums');
+	cot_require('forums');
 
 	$defult_c = false;
 	$forum_id = ($id == 'all') ? 0 : $id;;
 
 	$sql = "SELECT * FROM $db_forum_sections WHERE fs_id = '$forum_id'";
-	$res = sed_sql_query($sql);
-	if (sed_sql_affectedrows() > 0)
+	$res = cot_db_query($sql);
+	if (cot_db_affectedrows() > 0)
 	{
-		$row = sed_sql_fetchassoc($res);
+		$row = cot_db_fetchassoc($res);
 		$section_title = $row['fs_title'];
 		$section_desc = $row['fs_desc'];
 		$rss_title = $section_title;
@@ -140,38 +140,38 @@ elseif ($c == "section")
 		// get subsections
 		unset($subsections);
 		$sql = "SELECT fs_id FROM $db_forum_sections WHERE fs_mastername = '$section_title'";
-		$res = sed_sql_query($sql);
-		while ($row = sed_sql_fetchassoc($res))
+		$res = cot_db_query($sql);
+		while ($row = cot_db_fetchassoc($res))
 		{
 			$where .= " OR fp_sectionid ='{$row['fs_id']}'";
 		}
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-		$res = sed_sql_query($sql);
+		$res = cot_db_query($sql);
 		$i = 0;
 
-		while ($row = sed_sql_fetchassoc($res))
+		while ($row = cot_db_fetchassoc($res))
 		{
 			$post_id = $row['fp_id'];
 			$topic_id = $row['fp_topicid'];
 
 			$flag_private = 0;
 			$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-			$res2 = sed_sql_query($sql);
-			$row2 = sed_sql_fetchassoc($res2);
+			$res2 = cot_db_query($sql);
+			$row2 = cot_db_fetchassoc($res2);
 			$topic_title = $row2['ft_title'];
 			if ($row2['ft_mode'] == '1')
 			{
 				$flag_private = 1;
 			}
 
-			if (!$flag_private AND sed_auth('forums', $forum_id, 'R'))
+			if (!$flag_private AND cot_auth('forums', $forum_id, 'R'))
 			{
-				//$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? sed_url('forums', 'm=posts&id='.$post_id, "", true) : sed_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
-				$post_url = sed_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
+				//$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? cot_url('forums', 'm=posts&id='.$post_id, "", true) : cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
+				$post_url = cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
-				$items[$i]['description'] = sed_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
-				$items[$i]['link'] = SED_ABSOLUTE_URL.$post_url;
+				$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
+				$items[$i]['link'] = COT_ABSOLUTE_URL.$post_url;
 				$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 			}
 
@@ -181,16 +181,16 @@ elseif ($c == "section")
 }
 elseif ($c == "forums")
 {
-	sed_require('forums');
+	cot_require('forums');
 
 	$defult_c = false;
 	$rss_title = $domain." : ".$L['rss_allforums_item_title'];
 	$rss_description = "";
 
 	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-	$res = sed_sql_query($sql);
+	$res = cot_db_query($sql);
 	$i = 0;
-	while ($row = sed_sql_fetchassoc($res))
+	while ($row = cot_db_fetchassoc($res))
 	{
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
@@ -198,19 +198,19 @@ elseif ($c == "forums")
 
 		$flag_private = 0;
 		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-		$res2 = sed_sql_query($sql);
-		$row2 = sed_sql_fetchassoc($res2);
+		$res2 = cot_db_query($sql);
+		$row2 = cot_db_fetchassoc($res2);
 		$topic_title = $row2['ft_title'];
 		if ($row2['ft_mode'] == '1')
 		{
 			$flag_private = 1;
 		}
 
-		if (!$flag_private AND sed_auth('forums', $forum_id, 'R'))
+		if (!$flag_private AND cot_auth('forums', $forum_id, 'R'))
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
-			$items[$i]['description'] = sed_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
-			$items[$i]['link'] = SED_ABSOLUTE_URL.sed_url('forums', "m=posts&p=$post_id", "#$post_id", true);
+			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
+			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&p=$post_id", "#$post_id", true);
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 		}
 
@@ -219,16 +219,16 @@ elseif ($c == "forums")
 }
 elseif ($defult_c)
 {
-	sed_require('page');
+	cot_require('page');
 	
 	if ($id != 'all')
 	{
-		$mtch = $sed_cat[$id]['path'].".";
+		$mtch = $cot_cat[$id]['path'].".";
 		$mtchlen = strlen($mtch);
 		$catsub = array();
 		$catsub[] = $id;
 
-		foreach ($sed_cat as $i => $x)
+		foreach ($cot_cat as $i => $x)
 		{
 			if (substr($x['path'], 0, $mtchlen) == $mtch)
 			{
@@ -236,27 +236,27 @@ elseif ($defult_c)
 			}
 		}
 
-		$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	else
 	{
-		$sql = sed_sql_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	$i = 0;
-	while ($row = sed_sql_fetchassoc($sql))
+	while ($row = cot_db_fetchassoc($sql))
 	{
-		$row['page_pageurl'] = (empty($row['page_alias'])) ? sed_url('page', 'id='.$row['page_id']) : sed_url('page', 'al='.$row['page_alias']);
+		$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']);
 
 		$items[$i]['title'] = $row['page_title'];
-		$items[$i]['link'] = SED_ABSOLUTE_URL . $row['page_pageurl'];
+		$items[$i]['link'] = COT_ABSOLUTE_URL . $row['page_pageurl'];
 		$items[$i]['pubDate'] = date('r', $row['page_date']);
-		$items[$i]['description'] = sed_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
+		$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
 
 		$i++;
 	}
 }
 
-$t = new XTemplate(sed_skinfile('rss'));
+$t = new XTemplate(cot_skinfile('rss'));
 $t->assign(array(
 	"RSS_ENCODING" => $cfg['rss_charset'],
 	"RSS_TITLE" => htmlspecialchars($rss_title),
@@ -272,7 +272,7 @@ if (count($items) > 0)
 	{
 		$t->assign(array(
 			"RSS_ROW_TITLE" => htmlspecialchars($item['title']),
-			"RSS_ROW_DESCRIPTION" => sed_convert_relative_urls($item['description']),
+			"RSS_ROW_DESCRIPTION" => cot_convert_relative_urls($item['description']),
 			"RSS_ROW_DATE" => $item['pubDate'],
 			"RSS_ROW_LINK" => $item['link']
 		));
@@ -281,7 +281,7 @@ if (count($items) > 0)
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('rss.output') as $pl)
+foreach (cot_getextplugins('rss.output') as $pl)
 {
 	include $pl;
 }
@@ -296,7 +296,7 @@ if ($usr['id'] === 0 && $cot_cache)
 }
 echo $out_rss;
 
-function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_pageurl)
+function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_pageurl)
 {
 	global $cfg, $db_pages, $usr;
 	switch($pag_type)
@@ -323,8 +323,8 @@ function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_page
 			{
 				if (empty($pag_html))
 				{
-					$pag_html = sed_parse(htmlspecialchars($pag_text), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-					sed_sql_query("UPDATE $db_pages SET page_html = '".sed_sql_prep($pag_html)."' WHERE page_id = ".$pag_id);
+					$pag_html = cot_parse(htmlspecialchars($pag_text), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+					cot_db_query("UPDATE $db_pages SET page_html = '".cot_db_prep($pag_html)."' WHERE page_id = ".$pag_id);
 				}
 				$readmore = mb_strpos($pag_html, "<!--more-->");
 				if ($readmore > 0)
@@ -342,11 +342,11 @@ function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_page
 
 				$pag_html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_html);
 
-				$cfg['parsebbcodepages'] ? $text = sed_post_parse($pag_html, 'pages') : $text = htmlspecialchars($pag_text);
+				$cfg['parsebbcodepages'] ? $text = cot_post_parse($pag_html, 'pages') : $text = htmlspecialchars($pag_text);
 			}
 			else
 			{
-				$pag_text = sed_parse(htmlspecialchars($pag_text), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
+				$pag_text = cot_parse(htmlspecialchars($pag_text), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
 				$readmore = mb_strpos($pag_text, "<!--more-->");
 				if ($readmore > 0)
 				{
@@ -363,43 +363,43 @@ function sed_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_page
 
 				$pag_html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_html);
 
-				$pag_text = sed_post_parse($pag_text, 'pages');
+				$pag_text = cot_post_parse($pag_text, 'pages');
 				$text = $pag_text;
 			}
 		break;
 	}
 	if ((int)$cfg['rss_pagemaxsymbols'] > 0)
 	{
-		$text .= (sed_string_truncate($text, $cfg['rss_pagemaxsymbols'])) ? '...' : '';
+		$text .= (cot_string_truncate($text, $cfg['rss_pagemaxsymbols'])) ? '...' : '';
 	}
 	return $text;
 }
 
-function sed_parse_post_text($post_id, $post_text, $post_html)
+function cot_parse_post_text($post_id, $post_text, $post_html)
 {
 	global $cfg, $db_forum_posts, $usr, $fs_allowbbcodes, $fs_allowsmilies;
 	if ($cfg['parser_cache'])
 	{
 		if (empty($post_html) && !empty($post_text))
 		{
-			$post_html = sed_parse($post_text, $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1);
-			sed_sql_query("UPDATE $db_forum_posts SET fp_html = '".sed_sql_prep($post_html)."' WHERE fp_id = ".$post_id);
+			$post_html = cot_parse($post_text, $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1);
+			cot_db_query("UPDATE $db_forum_posts SET fp_html = '".cot_db_prep($post_html)."' WHERE fp_id = ".$post_id);
 		}
-		$post_text = sed_post_parse($post_html, 'forums');
+		$post_text = cot_post_parse($post_html, 'forums');
 	}
 	else
 	{
-		$post_text = sed_parse($post_text, ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1);
-		$post_text = sed_post_parse($post_text, 'forums');
+		$post_text = cot_parse($post_text, ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1);
+		$post_text = cot_post_parse($post_text, 'forums');
 	}
 	if ((int)$cfg['rss_postmaxsymbols'] > 0)
 	{
-		$post_text .= (sed_string_truncate($text, $cfg['rss_postmaxsymbols'])) ? '...' : '';
+		$post_text .= (cot_string_truncate($text, $cfg['rss_postmaxsymbols'])) ? '...' : '';
 	}
 	return $post_text;
 }
 
-function sed_relative2absolute($matches)
+function cot_relative2absolute($matches)
 {
 	global $sys;
 	$res = $matches[1].$matches[2].'='.$matches[3];
@@ -416,16 +416,16 @@ function sed_relative2absolute($matches)
 		}
 		else
 		{
-			$res .= SED_ABSOLUTE_URL . $matches[4];
+			$res .= COT_ABSOLUTE_URL . $matches[4];
 		}
 	}
 	$res .= $matches[5];
 	return $res;
 }
 
-function sed_convert_relative_urls($text)
+function cot_convert_relative_urls($text)
 {
-	$text = preg_replace_callback('#(\s)(href|src)=("|\')?([^"\'\s>]+)(["\'\s>])#', 'sed_relative2absolute', $text);
+	$text = preg_replace_callback('#(\s)(href|src)=("|\')?([^"\'\s>]+)(["\'\s>])#', 'cot_relative2absolute', $text);
 	return $text;
 }
 

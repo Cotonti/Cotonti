@@ -13,12 +13,12 @@ Description=User authication
 [END_SED]
 ==================== */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_check_xg();
+cot_check_xg();
 
 /* === Hook === */
-foreach (sed_getextplugins('users.logout') as $pl)
+foreach (cot_getextplugins('users.logout') as $pl)
 {
 	include $pl;
 }
@@ -26,12 +26,12 @@ foreach (sed_getextplugins('users.logout') as $pl)
 
 if ($usr['id'] > 0)
 {
-	sed_uriredir_apply($cfg['redirbkonlogout']);
+	cot_uriredir_apply($cfg['redirbkonlogout']);
 }
 
 if(!empty($_COOKIE[$sys['site_id']]))
 {
-	sed_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+	cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
 }
 
 session_unset();
@@ -39,12 +39,12 @@ session_destroy();
 
 if ($usr['id'] > 0)
 {
-	sed_sql_query("UPDATE $db_users SET user_lastvisit = {$sys['now_offset']} WHERE user_id = " . $usr['id']);
-	sed_sql_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
-	sed_uriredir_redirect(empty($redirect) ? sed_url('index') : base64_decode($redirect));
+	cot_db_query("UPDATE $db_users SET user_lastvisit = {$sys['now_offset']} WHERE user_id = " . $usr['id']);
+	cot_db_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
+	cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
 }
 else
 {
-	sed_redirect(sed_url('index'));
+	cot_redirect(cot_url('index'));
 }
 ?>

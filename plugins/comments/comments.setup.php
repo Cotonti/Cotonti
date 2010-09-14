@@ -39,6 +39,6 @@ parsesmiliescom=11:radio:0,1:1:Parse smilies in comments
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 ?>

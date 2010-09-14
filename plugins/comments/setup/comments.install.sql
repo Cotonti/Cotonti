@@ -1,7 +1,7 @@
 /* Comments schema */
 
 -- Main comments table
-CREATE TABLE IF NOT EXISTS `sed_com` (
+CREATE TABLE IF NOT EXISTS `cot_com` (
 	`com_id` int(11) NOT NULL auto_increment,
 	`com_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
 	`com_area` varchar(64) collate utf8_unicode_ci NOT NULL default '',
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `sed_com` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Comments enablement settings
-CREATE TABLE IF NOT EXISTS `sed_com_settings` (
+CREATE TABLE IF NOT EXISTS `cot_com_settings` (
 	`coms_area` varchar(64) collate utf8_unicode_ci NOT NULL default '',
 	`coms_cat` varchar(255) collate utf8_unicode_ci NOT NULL default '',
 	`coms_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',

@@ -7,10 +7,10 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /* === Hook === */
-foreach (sed_getextplugins('footer.first') as $pl)
+foreach (cot_getextplugins('footer.first') as $pl)
 {
 	include $pl;
 }
@@ -20,12 +20,12 @@ $i = explode(' ', microtime());
 $sys['endtime'] = $i[1] + $i[0];
 $sys['creationtime'] = round(($sys['endtime'] - $sys['starttime']), 3);
 
-$out['creationtime'] = (!$cfg['disablesysinfos']) ? $L['foo_created'].' '.sed_declension($sys['creationtime'], $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
-$out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.sed_declension(round($sys['tcount'], 3), $Ls['Seconds'], $onlyword = false, $canfrac = true).' - '.$L['foo_sqlqueries'].': '.$sys['qcount']. ' - '.$L['foo_sqlaverage'].': '.sed_declension(round(($sys['tcount'] / $sys['qcount']), 5), $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
+$out['creationtime'] = (!$cfg['disablesysinfos']) ? $L['foo_created'].' '.cot_declension($sys['creationtime'], $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
+$out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.cot_declension(round($sys['tcount'], 3), $Ls['Seconds'], $onlyword = false, $canfrac = true).' - '.$L['foo_sqlqueries'].': '.$sys['qcount']. ' - '.$L['foo_sqlaverage'].': '.cot_declension(round(($sys['tcount'] / $sys['qcount']), 5), $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
 $out['bottomline'] = $cfg['bottomline'];
 $out['bottomline'] .= ($cfg['keepcrbottom']) ? $out['copyright'] : '';
 
-if ($cfg['devmode'] && sed_auth('admin', 'a', 'A'))
+if ($cfg['devmode'] && cot_auth('admin', 'a', 'A'))
 {
 	$out['devmode'] = "<h4>Dev-mode :</h4><table><tr><td><em>SQL query</em></td><td><em>Duration</em></td><td><em>Timeline</em></td><td><em>Query</em></td></tr>";
 	$out['devmode'] .= "<tr><td colspan=\"2\">BEGIN</td>";
@@ -56,16 +56,16 @@ $out['devmode']	 .= $out['devauth'];
 ========= DEBUG:END =========
 */
 
-if (!SED_AJAX)
+if (!COT_AJAX)
 {
 	/* === Hook === */
-	foreach (sed_getextplugins('footer.main') as $pl)
+	foreach (cot_getextplugins('footer.main') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
 
-	$mskin = sed_skinfile($cfg['enablecustomhf'] ? array('footer', mb_strtolower($location)) : 'footer', '+', defined('SED_ADMIN'));
+	$mskin = cot_skinfile($cfg['enablecustomhf'] ? array('footer', mb_strtolower($location)) : 'footer', '+', defined('COT_ADMIN'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(
@@ -80,7 +80,7 @@ if (!SED_AJAX)
 	));
 
 	/* === Hook === */
-	foreach (sed_getextplugins('footer.tags') as $pl)
+	foreach (cot_getextplugins('footer.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -100,7 +100,7 @@ if (!SED_AJAX)
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('footer.last') as $pl)
+foreach (cot_getextplugins('footer.last') as $pl)
 {
 	include $pl;
 }

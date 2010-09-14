@@ -44,6 +44,6 @@ autocomplete=23:select:0,1,2,3,4,5,6:3:Min. chars for autocomplete
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 ?>

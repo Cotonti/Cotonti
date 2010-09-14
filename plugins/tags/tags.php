@@ -15,24 +15,24 @@ Hooks=standalone
  * @license BSD
  */
 
-defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
+defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
-$qs = sed_import('t', 'G', 'TXT');
-if(empty($qs)) $qs = sed_import('t', 'P', 'TXT');
+$qs = cot_import('t', 'G', 'TXT');
+if(empty($qs)) $qs = cot_import('t', 'P', 'TXT');
 
-$tl = sed_import('tl', 'G', 'BOL');
-if($tl) $qs = strtr($qs, $sed_translitb);
+$tl = cot_import('tl', 'G', 'BOL');
+if($tl) $qs = strtr($qs, $cot_translitb);
 
-$d = (int) sed_import('d', 'G', 'INT');
+$d = (int) cot_import('d', 'G', 'INT');
 $perpage = $cfg['plugin']['tags']['perpage'];
 
-sed_require('tags', true);
+cot_require('tags', true);
 
 // Array to register areas with tag functions provided
 $tag_areas = array('pages', 'forums');
 
 // Sorting order
-$o = sed_import('order', 'P', 'ALP');
+$o = cot_import('order', 'P', 'ALP');
 $tag_order = '';
 $tag_orders = array('Title', 'Date', 'Category');
 foreach ($tag_orders as $order)
@@ -43,7 +43,7 @@ foreach ($tag_orders as $order)
 }
 
 /* == Hook for the plugins == */
-foreach (sed_getextplugins('tags.first') as $pl)
+foreach (cot_getextplugins('tags.first') as $pl)
 {
 	include $pl;
 }
@@ -53,7 +53,7 @@ $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = empty($qs) ? $L['Tags'] : htmlspecialchars(strip_tags($qs)) . ' - ' . $L['tags_Search_results'];
 
 $t->assign(array(
-	'TAGS_ACTION' => sed_url('plug', 'e=tags&a=' . $a),
+	'TAGS_ACTION' => cot_url('plug', 'e=tags&a=' . $a),
 	'TAGS_HINT' => $L['tags_Query_hint'],
 	'TAGS_QUERY' => htmlspecialchars($qs),
 	'TAGS_ORDER' => $tag_order
@@ -64,15 +64,15 @@ if ($a == 'pages')
 	if(empty($qs))
 	{
 		// Form and cloud
-		sed_tag_search_form('pages');
+		cot_tag_search_form('pages');
 	}
 	else
 	{
 		// Search results
-		$query = sed_tag_parse_query($qs);
+		$query = cot_tag_parse_query($qs);
 		if(!empty($query))
 		{
-			sed_tag_search_pages($query);
+			cot_tag_search_pages($query);
 		}
 	}
 }
@@ -81,15 +81,15 @@ elseif ($a == 'forums')
 	if (empty($qs))
 	{
 		// Form and cloud
-		sed_tag_search_form('forums');
+		cot_tag_search_form('forums');
 	}
 	else
 	{
 		// Search results
-		$query = sed_tag_parse_query($qs);
+		$query = cot_tag_parse_query($qs);
 		if(!empty($query))
 		{
-			sed_tag_search_forums($query);
+			cot_tag_search_forums($query);
 		}
 	}
 }
@@ -98,17 +98,17 @@ elseif ($a == 'all')
 	if (empty($qs))
 	{
 		// Form and cloud
-		sed_tag_search_form('all');
+		cot_tag_search_form('all');
 	}
 	else
 	{
 		// Search results
-		$query = sed_tag_parse_query($qs);
+		$query = cot_tag_parse_query($qs);
 		if(!empty($query))
 		{
 			foreach ($tag_areas as $area)
 			{
-				$tag_search_callback = 'sed_tag_search_' . $area;
+				$tag_search_callback = 'cot_tag_search_' . $area;
 				if (function_exists($tag_search_callback))
 				{
 					$tag_search_callback($query);
@@ -120,7 +120,7 @@ elseif ($a == 'all')
 else
 {
 	/* == Hook for the plugins == */
-	foreach (sed_getextplugins('tags.search.custom') as $pl)
+	foreach (cot_getextplugins('tags.search.custom') as $pl)
 	{
 		include $pl;
 	}

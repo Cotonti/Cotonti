@@ -16,10 +16,10 @@ Tags=list.tpl:{LIST_ROW_COMMENTS}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
-//$t->assign('LIST_ROW_COMMENTS', sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c));
+//$t->assign('LIST_ROW_COMMENTS', cot_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c));
 
 ?>

@@ -10,7 +10,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Default allowed permissions map. If some value is missing in user-defined
@@ -45,7 +45,7 @@ $GLOBALS['cot_auth_default_lock'] = array(
  * @param int $base_group_id ID of the group to copy permissions from
  * @return bool Operation status
  */
-function sed_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
+function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
 {
 	global $db_auth, $usr;
 	if ($group_id <= COT_GROUP_SUPERADMINS)
@@ -56,10 +56,10 @@ function sed_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
 	{
 		$base_group_id = COT_GROUP_MEMBERS;
 	}
-	sed_sql_query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid)
+	cot_db_query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid)
 		SELECT $group_id, auth_code, auth_option, auth_rights, auth_rights_lock, {$usr['id']}
 			FROM $db_auth WHERE auth_groupid = $base_group_id");
-	sed_auth_reorder();
+	cot_auth_reorder();
 	return true;
 }
 
@@ -82,7 +82,7 @@ function sed_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
  *     12 => 'R', // cannot change Read for group with ID = 12
  * );
  *
- * sed_auth_add_item('test', 'item123', $auth_permit, $auth_lock);
+ * cot_auth_add_item('test', 'item123', $auth_permit, $auth_lock);
  * </code>
  * 
  * @param string $module_name The module object belongs to
@@ -91,27 +91,27 @@ function sed_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
  * @param array $auth_lock Locked permissions map
  * @return int Number of rows inserted
  */
-function sed_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth_lock = array())
+function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth_lock = array())
 {
-	global $sed_groups, $db_auth, $usr, $cot_auth_default_permit, $cot_auth_default_lock;
+	global $cot_groups, $db_auth, $usr, $cot_auth_default_permit, $cot_auth_default_lock;
 	$auth_permit = $auth_permit + $cot_auth_default_permit;
 	$auth_lock = $auth_lock + $cot_auth_default_lock;
 	$ins_array = array();
-	foreach ($sed_groups as $k => $v)
+	foreach ($cot_groups as $k => $v)
 	{
 		$base_grp = $k > COT_GROUP_SUPERADMINS ? COT_GROUP_DEFAULT : $k;
 		$ins_array[] = array(
 			'groupid' => $k,
 			'code' => $module_name,
 			'option' => $item_id,
-			'rights' => sed_auth_getvalue($auth_permit[$base_grp]),
-			'rights_lock' => sed_auth_getvalue($auth_lock[$base_grp]),
+			'rights' => cot_auth_getvalue($auth_permit[$base_grp]),
+			'rights_lock' => cot_auth_getvalue($auth_lock[$base_grp]),
 			'setbyuserid' => $usr['id']
 		);
 	}
-	$res = sed_sql_insert($db_auth, $ins_array, 'auth_');
-	sed_auth_reorder();
-	sed_auth_clear('all');
+	$res = cot_db_insert($db_auth, $ins_array, 'auth_');
+	cot_auth_reorder();
+	cot_auth_clear('all');
 	return $res;
 }
 
@@ -121,20 +121,20 @@ function sed_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
  * @param mixed $id User ID or 'all'
  * @return int Number of items affected
  */
-function sed_auth_clear($id = 'all')
+function cot_auth_clear($id = 'all')
 {
 	global $db_users, $cfg, $cot_cache;
 
 	if ($id == 'all')
 	{
-		sed_sql_query("UPDATE $db_users SET user_auth=''");
-		$cot_cache && $cot_cache->db->remove('sed_guest_auth', 'system');
+		cot_db_query("UPDATE $db_users SET user_auth=''");
+		$cot_cache && $cot_cache->db->remove('cot_guest_auth', 'system');
 	}
 	else
 	{
-		sed_sql_query("UPDATE $db_users SET user_auth='' WHERE user_id='$id'");
+		cot_db_query("UPDATE $db_users SET user_auth='' WHERE user_id='$id'");
 	}
-	return sed_sql_affectedrows();
+	return cot_db_affectedrows();
 }
 
 /**
@@ -143,7 +143,7 @@ function sed_auth_clear($id = 'all')
  * @param int $rn Permission byte
  * @return string
  */
-function sed_auth_getmask($rn)
+function cot_auth_getmask($rn)
 {
     $res = ($rn & 1) ? 'R' : '';
     $res .= (($rn & 2) == 2) ? 'W' : '';
@@ -162,7 +162,7 @@ function sed_auth_getmask($rn)
  * @param string $mask Access character mask, e.g. 'RW1A'
  * @return int
  */
-function sed_auth_getvalue($mask)
+function cot_auth_getvalue($mask)
 {
     $mn['0'] = 0;
     $mn['R'] = 1;
@@ -190,12 +190,12 @@ function sed_auth_getvalue($mask)
  * @param int $group_id Group ID
  * @return int Number of records removed
  */
-function sed_auth_remove_group($group_id)
+function cot_auth_remove_group($group_id)
 {
 	global $db_auth;
 
-	sed_sql_query("DELETE FROM $db_auth WHERE auth_groupid=$group_id");
-	return sed_sql_affectedrows();
+	cot_db_query("DELETE FROM $db_auth WHERE auth_groupid=$group_id");
+	return cot_db_affectedrows();
 }
 
 /**
@@ -205,22 +205,22 @@ function sed_auth_remove_group($group_id)
  * @param string $item_id Object identifier within the module. If omitted, all objects will be removed.
  * @return int Number of records removed
  */
-function sed_auth_remove_item($module_name, $item_id = null)
+function cot_auth_remove_item($module_name, $item_id = null)
 {
 	global $db_auth;
 
 	$opt = is_null($item_id) ? '' : "AND auth_option='$item_id'";
-	sed_sql_query("DELETE FROM $db_auth WHERE auth_code='$module_name' $opt");
-	return sed_sql_affectedrows();
+	cot_db_query("DELETE FROM $db_auth WHERE auth_code='$module_name' $opt");
+	return cot_db_affectedrows();
 }
 
 /**
  * Optimizes auth table by sorting its rows
  */
-function sed_auth_reorder()
+function cot_auth_reorder()
 {
     global $db_auth;
 
-    $sql = sed_sql_query("ALTER TABLE $db_auth ORDER BY auth_code ASC, auth_option ASC, auth_groupid ASC, auth_code ASC");
+    $sql = cot_db_query("ALTER TABLE $db_auth ORDER BY auth_code ASC, auth_option ASC, auth_groupid ASC, auth_code ASC");
 }
 ?>

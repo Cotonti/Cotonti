@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 $L['for_antibump'] = 'Активирована система защиты от поднятия тем: вы не можете создавать несколько сообщений подряд';	// 0.0.2
 $L['for_keepmovedlink'] = 'Оставить ссылку в старом разделе'; // 0.6.6

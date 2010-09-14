@@ -16,11 +16,11 @@ Tags=statistics.tpl:{STATISTICS_TOTALDBCOMMENTS}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
-$totaldbcomments = sed_sql_rowcount($db_com);
+$totaldbcomments = cot_db_rowcount($db_com);
 $t->assign(array(
 	'STATISTICS_TOTALDBCOMMENTS' => $totaldbcomments
 ));

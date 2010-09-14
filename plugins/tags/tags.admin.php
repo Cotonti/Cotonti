@@ -16,23 +16,23 @@ Tags=admin.page.inc.tpl:{ADMIN_TAGS_ROW_TAG},{ADMIN_TAGS_ROW_URL}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages'])
 {
-	sed_require('tags', true);
+	cot_require('tags', true);
 	$item_id = $row['page_id'];
-	$tags = sed_tag_list($item_id);
+	$tags = cot_tag_list($item_id);
 	if (count($tags) > 0)
 	{
 		$tag_i = 0;
 		foreach ($tags as $tag)
 		{
-			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+			$tag_u = cot_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = ($lang != 'en' && $tag_u != urlencode($tag)) ? '&tl=1' : '';
 			$t->assign(array(
-				'ADMIN_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(sed_tag_title($tag)) : htmlspecialchars($tag),
-				'ADMIN_TAGS_ROW_URL' => sed_url('plug', 'e=tags&a=pages'.$tl.'&t='.$tag_u)
+				'ADMIN_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag),
+				'ADMIN_TAGS_ROW_URL' => cot_url('plug', 'e=tags&a=pages'.$tl.'&t='.$tag_u)
 			));
 			$t->parse('PAGE.PAGE_ROW.ADMIN_TAGS_ROW');
 			$tag_i++;

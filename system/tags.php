@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Tags a given item from a specific area with a keyword
@@ -19,16 +19,16 @@ defined('SED_CODE') or die('Wrong URL');
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @return bool
  */
-function sed_tag($tag, $item, $area = 'pages')
+function cot_tag($tag, $item, $area = 'pages')
 {
 	global $db_tag_references;
 	$item = (int) $item;
-	if (sed_tag_isset($tag, $item, $area))
+	if (cot_tag_isset($tag, $item, $area))
 	{
 		return false;
 	}
-	sed_sql_query("INSERT INTO $db_tag_references VALUES('$tag', $item, '$area')");
-	sed_tag_register($tag);
+	cot_db_query("INSERT INTO $db_tag_references VALUES('$tag', $item, '$area')");
+	cot_tag_register($tag);
 	return true;
 }
 
@@ -41,7 +41,7 @@ function sed_tag($tag, $item, $area = 'pages')
  * @param int $limit Use this parameter to limit number of rows in the result set
  * @return array
  */
-function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
+function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
 	global $db_tag_references;
 	$res = array();
@@ -60,16 +60,16 @@ function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 			$order = 'RAND()';
 	}
 	$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
-	$sql = sed_sql_query("SELECT `tag`, COUNT(*) AS `cnt`
+	$sql = cot_db_query("SELECT `tag`, COUNT(*) AS `cnt`
 		FROM $db_tag_references
 		$where
 		GROUP BY `tag`
 		ORDER BY $order $limit");
-	while ($row = sed_sql_fetchassoc($sql))
+	while ($row = cot_db_fetchassoc($sql))
 	{
 		$res[$row['tag']] = $row['cnt'];
 	}
-	sed_sql_freeresult($sql);
+	cot_db_freeresult($sql);
 	return $res;
 }
 
@@ -80,7 +80,7 @@ function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
  * @param int $min_length Minimal length of the beginning
  * @return array
  */
-function sed_tag_complete($tag, $min_length = 3)
+function cot_tag_complete($tag, $min_length = 3)
 {
 	global $db_tags;
 	if (mb_strlen($tag) < $min_length)
@@ -88,12 +88,12 @@ function sed_tag_complete($tag, $min_length = 3)
 		return false;
 	}
 	$res = array();
-	$sql = sed_sql_query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE '$tag%'");
-	while ($row = sed_sql_fetchassoc($sql))
+	$sql = cot_db_query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE '$tag%'");
+	while ($row = cot_db_fetchassoc($sql))
 	{
 		$res[] = $row['tag'];
 	}
-	sed_sql_freeresult($sql);
+	cot_db_freeresult($sql);
 	return $res;
 }
 
@@ -104,7 +104,7 @@ function sed_tag_complete($tag, $min_length = 3)
  * @param string $area Site area or empty to count in all areas
  * @return int
  */
-function sed_tag_count($tag, $area = '')
+function cot_tag_count($tag, $area = '')
 {
 	global $db_tag_references;
 	$query = "SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag'";
@@ -112,7 +112,7 @@ function sed_tag_count($tag, $area = '')
 	{
 		$query .= " AND tag_area = '$area'";
 	}
-	return (int) sed_sql_result(sed_sql_query($query), 0, 0);
+	return (int) cot_db_result(cot_db_query($query), 0, 0);
 }
 
 /**
@@ -121,10 +121,10 @@ function sed_tag_count($tag, $area = '')
  * @param string $tag The tag
  * @return bool
  */
-function sed_tag_exists($tag)
+function cot_tag_exists($tag)
 {
 	global $db_tags;
-	return sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_tags WHERE `tag` = '$tag'"), 0, 0) == 1;
+	return cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_tags WHERE `tag` = '$tag'"), 0, 0) == 1;
 }
 
 /**
@@ -135,12 +135,12 @@ function sed_tag_exists($tag)
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @return bool
  */
-function sed_tag_isset($tag, $item, $area = 'pages')
+function cot_tag_isset($tag, $item, $area = 'pages')
 {
 	global $db_tag_references;
 	$item = (int) $item;
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
-	return sed_sql_result($sql, 0, 0) == 1;
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
+	return cot_db_result($sql, 0, 0) == 1;
 }
 
 /**
@@ -150,16 +150,16 @@ function sed_tag_isset($tag, $item, $area = 'pages')
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @return array
  */
-function sed_tag_list($item, $area = 'pages')
+function cot_tag_list($item, $area = 'pages')
 {
 	global $db_tag_references;
 	$res = array();
-	$sql = sed_sql_query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
-	while ($row = sed_sql_fetchassoc($sql))
+	$sql = cot_db_query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
+	while ($row = cot_db_fetchassoc($sql))
 	{
 		$res[] = $row['tag'];
 	}
-	sed_sql_freeresult($sql);
+	cot_db_freeresult($sql);
 	return $res;
 }
 
@@ -169,7 +169,7 @@ function sed_tag_list($item, $area = 'pages')
  * @param string $input Comma separated user input
  * @return array
  */
-function sed_tag_parse($input)
+function cot_tag_parse($input)
 {
 	$res = array();
 	$invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n");
@@ -181,7 +181,7 @@ function sed_tag_parse($input)
 		$tag = trim($tag);
 		if (!empty($tag))
 		{
-			$res[] = sed_tag_prep($tag);
+			$res[] = cot_tag_prep($tag);
 		}
 	}
 	$res = array_unique($res);
@@ -189,14 +189,14 @@ function sed_tag_parse($input)
 }
 
 /**
- * Convert the tag to lowercase and prepare it for SQL operations. Please call this after sed_import()!
+ * Convert the tag to lowercase and prepare it for SQL operations. Please call this after cot_import()!
  *
  * @param string $tag The tag
  * @return string
  */
-function sed_tag_prep($tag)
+function cot_tag_prep($tag)
 {
-	return sed_sql_prep(mb_strtolower($tag));
+	return cot_db_prep(mb_strtolower($tag));
 }
 
 /**
@@ -204,10 +204,10 @@ function sed_tag_prep($tag)
  *
  * @param string $tag The tag
  */
-function sed_tag_register($tag)
+function cot_tag_register($tag)
 {
 	global $db_tags;
-	sed_sql_query("INSERT IGNORE INTO $db_tags VALUES('$tag')");
+	cot_db_query("INSERT IGNORE INTO $db_tags VALUES('$tag')");
 }
 
 /**
@@ -218,12 +218,12 @@ function sed_tag_register($tag)
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
  * @return bool
  */
-function sed_tag_remove($tag, $item, $area = 'pages')
+function cot_tag_remove($tag, $item, $area = 'pages')
 {
 	global $db_tag_references;
-	if (sed_tag_isset($tag, $item, $area))
+	if (cot_tag_isset($tag, $item, $area))
 	{
-		sed_sql_query("DELETE FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
+		cot_db_query("DELETE FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
 		return true;
 	}
 	return false;
@@ -237,18 +237,18 @@ function sed_tag_remove($tag, $item, $area = 'pages')
  * @param string $area Site area
  * @return int
  */
-function sed_tag_remove_all($item = 0, $area = 'pages')
+function cot_tag_remove_all($item = 0, $area = 'pages')
 {
 	global $db_tag_references;
 	if ($item == 0)
 	{
-		sed_sql_query("DELETE FROM $db_tag_references WHERE tag_area = '$area'");
+		cot_db_query("DELETE FROM $db_tag_references WHERE tag_area = '$area'");
 	}
 	else
 	{
-		sed_sql_query("DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
+		cot_db_query("DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
 	}
-	return sed_sql_affectedrows();
+	return cot_db_affectedrows();
 }
 
 /**
@@ -257,7 +257,7 @@ function sed_tag_remove_all($item = 0, $area = 'pages')
  * @param string $tag A tag
  * @return string
  */
-function sed_tag_title($tag)
+function cot_tag_title($tag)
 {
 	return mb_convert_case($tag, MB_CASE_TITLE);
 }
@@ -267,10 +267,10 @@ function sed_tag_title($tag)
  *
  * @param string $tag The tag
  */
-function sed_tag_unregister($tag)
+function cot_tag_unregister($tag)
 {
 	global $db_tags;
-	sed_sql_query("DELETE FROM $db_tags WHERE `tag` = '$tag'");
+	cot_db_query("DELETE FROM $db_tags WHERE `tag` = '$tag'");
 }
 
 ?>

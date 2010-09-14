@@ -9,20 +9,20 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-$t = new XTemplate(sed_skinfile('pfs.admin.allpfs'));
+$t = new XTemplate(cot_skinfile('pfs.admin.allpfs'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=pfs'), $L['PFS']);
-$adminpath[] = array(sed_url('admin', 'm=pfs&s=allpfs'), $L['adm_allpfs']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=pfs'), $L['PFS']);
+$adminpath[] = array(cot_url('admin', 'm=pfs&s=allpfs'), $L['adm_allpfs']);
 $adminhelp = $L['adm_help_allpfs'];
 
-$d = sed_import('d', 'G', 'INT');
+$d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.pfs.allpfs.first') as $pl)
+foreach (cot_getextplugins('admin.pfs.allpfs.first') as $pl)
 {
 	include $pl;
 }
@@ -30,25 +30,25 @@ foreach (sed_getextplugins('admin.pfs.allpfs.first') as $pl)
 
 unset($disp_list);
 
-$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid>=0"), 0, "COUNT(DISTINCT pfs_userid)");
-$pagenav = sed_pagenav('admin', 'm=pfs&s=allpfs', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$totalitems = cot_db_result(cot_db_query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid>=0"), 0, "COUNT(DISTINCT pfs_userid)");
+$pagenav = cot_pagenav('admin', 'm=pfs&s=allpfs', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = sed_sql_query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COUNT(*) FROM $db_pfs AS p
+$sql = cot_db_query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COUNT(*) FROM $db_pfs AS p
 	LEFT JOIN $db_users AS u ON p.pfs_userid=u.user_id
 	WHERE pfs_folderid>=0 GROUP BY p.pfs_userid ORDER BY u.user_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('admin.pfs.allpfs.loop');
+$extp = cot_getextplugins('admin.pfs.allpfs.loop');
 /* ===== */
-while($row = sed_sql_fetcharray($sql))
+while($row = cot_db_fetcharray($sql))
 {
 	$row['user_name'] = ($row['user_id'] == 0) ? $L['SFS'] : $row['user_name'];
 	$row['user_id'] = ($row['user_id'] == 0) ? '0' : $row['user_id'];
 
 	$t->assign(array(
-		'ADMIN_ALLPFS_ROW_URL' => sed_url('pfs', 'userid='.$row['user_id']),
-		'ADMIN_ALLPFS_ROW_USER' => sed_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
+		'ADMIN_ALLPFS_ROW_URL' => cot_url('pfs', 'userid='.$row['user_id']),
+		'ADMIN_ALLPFS_ROW_USER' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
 		'ADMIN_ALLPFS_ROW_COUNT' => $row['COUNT(*)']
 	));
 
@@ -71,7 +71,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.pfs.allpfs.tags') as $pl)
+foreach (cot_getextplugins('admin.pfs.allpfs.tags') as $pl)
 {
 	include $pl;
 }

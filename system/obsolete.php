@@ -9,16 +9,16 @@
  */
 
 // TODO eliminate this function
-function sed_build_pfs($id, $c1, $c2, $title)
+function cot_build_pfs($id, $c1, $c2, $title)
 {
-	global $L, $cfg, $usr, $sed_groups;
+	global $L, $cfg, $usr, $cot_groups;
 	if ($cfg['disable_pfs'])
 	{ $res = ''; }
 	else
 	{
 		if ($id==0)
 		{ $res = "<a href=\"javascript:pfs('0','".$c1."','".$c2."')\">".$title."</a>"; }
-		elseif ($sed_groups[$usr['maingrp']]['pfs_maxtotal']>0 && $sed_groups[$usr['maingrp']]['pfs_maxfile']>0 && sed_auth('pfs', 'a', 'R'))
+		elseif ($cot_groups[$usr['maingrp']]['pfs_maxtotal']>0 && $cot_groups[$usr['maingrp']]['pfs_maxfile']>0 && cot_auth('pfs', 'a', 'R'))
 		{ $res = "<a href=\"javascript:pfs('".$id."','".$c1."','".$c2."')\">".$title."</a>"; }
 		else
 		{ $res = ''; }
@@ -33,10 +33,10 @@ function sed_build_pfs($id, $c1, $c2, $title)
  * @return string
  */
 // TODO this function should be replaced with some hook-based integration
-function sed_build_pm($user)
+function cot_build_pm($user)
 {
 	global $usr, $L, $R;
-	return sed_rc_link(sed_url('pm', 'm=send&to='.$user), $R['pm_icon'], array('title' => $L['pm_sendnew']));
+	return cot_rc_link(cot_url('pm', 'm=send&to='.$user), $R['pm_icon'], array('title' => $L['pm_sendnew']));
 }
 
 /**
@@ -46,18 +46,18 @@ function sed_build_pm($user)
  * @param string $text Source string
  * @return string
  */
-function sed_cc($text)
+function cot_cc($text)
 {
 	/*$text = str_replace(
 	array('{', '<', '>' , '$', '\'', '"', '\\', '&amp;', '&nbsp;'),
 	array('&#123;', '&lt;', '&gt;', '&#036;', '&#039;', '&quot;', '&#92;', '&amp;amp;', '&amp;nbsp;'), $text);
 	return $text;*/
-	trigger_error('sed_cc() is deprecated since Cotonti Genoa, use htmlspecialchars() instead');
+	trigger_error('cot_cc() is deprecated since Cotonti Genoa, use htmlspecialchars() instead');
 	return htmlspecialchars($text);
 }
 
 // FIXME this function is obsolete, or meta/title generation must be reworked
-function sed_htmlmetas()
+function cot_htmlmetas()
 {
 		global $cfg;
 		$contenttype = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
@@ -77,8 +77,8 @@ function sed_htmlmetas()
 /**
  * Renders page navigation bar
  *
- * @deprecated Siena 0.7.0 - 23.01.2010, use sed_pagenav() instead
- * @see sed_pagenav
+ * @deprecated Siena 0.7.0 - 23.01.2010, use cot_pagenav() instead
+ * @see cot_pagenav
  * @param string $url Basic URL
  * @param int $current Current page number
  * @param int $entries Total rows
@@ -88,12 +88,12 @@ function sed_htmlmetas()
  * @param string $target_div Target div ID if $ajax is true
  * @return string
  */
-function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $ajax = false, $target_div = '')
+function cot_pagination($url, $current, $entries, $perpage, $characters = 'd', $ajax = false, $target_div = '')
 {
-	if (function_exists('sed_pagination_custom'))
+	if (function_exists('cot_pagination_custom'))
 	{
 		// For custom pagination functions in plugins
-		return sed_pagination_custom($url, $current, $entries, $perpage, $characters, $onclick, $object);
+		return cot_pagination_custom($url, $current, $entries, $perpage, $characters, $onclick, $object);
 	}
 
 	if ($entries <= $perpage)
@@ -151,8 +151,8 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
 /**
  * Renders page navigation previous/next buttons
  *
- * @deprecated Siena 0.7.0 - 23.01.2010, use sed_pagenav() instead
- * @see sed_pagenav()
+ * @deprecated Siena 0.7.0 - 23.01.2010, use cot_pagenav() instead
+ * @see cot_pagenav()
  * @param string $url Basic URL
  * @param int $current Current page number
  * @param int $entries Total rows
@@ -163,12 +163,12 @@ function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $
  * @param string $target_div Target div ID if $ajax is true
  * @return mixed
  */
-function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALSE, $characters = 'd', $ajax = false, $target_div = '')
+function cot_pagination_pn($url, $current, $entries, $perpage, $res_array = FALSE, $characters = 'd', $ajax = false, $target_div = '')
 {
-	if (function_exists('sed_pagination_pn_custom'))
+	if (function_exists('cot_pagination_pn_custom'))
 	{
 		// For custom pagination functions in plugins
-		return sed_pagination_pn_custom($url, $current, $entries, $perpage, $res_array, $characters, $onclick, $object);
+		return cot_pagination_pn_custom($url, $current, $entries, $perpage, $res_array, $characters, $onclick, $object);
 	}
 
 	global $L;
@@ -202,7 +202,7 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 }
 
 // TODO this function is obsolete, doctype should be set in header.tpl
-function sed_setdoctype($type)
+function cot_setdoctype($type)
 {
 	switch($type)
 	{
@@ -250,7 +250,7 @@ function sed_setdoctype($type)
  * @deprecated This function is not needed anymore, use global $sys['xk'] value instead
  * @return string
  */
-function sed_sourcekey()
+function cot_sourcekey()
 {
 	global $sys;
 	return $sys['xk'];

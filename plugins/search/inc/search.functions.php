@@ -9,9 +9,9 @@
  * @license BSD
  */
 
-defined('SED_CODE') || die('Wrong URL.');
+defined('COT_CODE') || die('Wrong URL.');
 
-function sed_clear_mark($text, $type, $words)
+function cot_clear_mark($text, $type, $words)
 {
 	$text = trim($text);
 	if (strlen($text))

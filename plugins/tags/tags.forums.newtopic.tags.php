@@ -16,15 +16,15 @@ Tags=forums.newtopic.tpl:{FORUMS_NEWTOPIC_TOP_TAGS},{FORUMS_NEWTOPIC_TOP_TAGS_HI
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W'))
+if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W'))
 {
-	sed_require('tags', true);
+	cot_require('tags', true);
 	$t->assign(array(
 		'FORUMS_NEWTOPIC_TOP_TAGS' => $L['Tags'],
 		'FORUMS_NEWTOPIC_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-		'FORUMS_NEWTOPIC_FORM_TAGS' => sed_rc('tags_input_editpost', array('tags' => ''))
+		'FORUMS_NEWTOPIC_FORM_TAGS' => cot_rc('tags_input_editpost', array('tags' => ''))
 	));
 	$t->parse('MAIN.FORUMS_NEWTOPIC_TAGS');
 }

@@ -15,7 +15,7 @@ Hooks=forums.topics.loop
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($row['poll_id'] > 0)
 {

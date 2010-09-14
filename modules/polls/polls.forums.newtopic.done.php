@@ -16,11 +16,11 @@ Tags=
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if(!empty($poll))
 {
-	sed_poll_save('forum', $q);
+	cot_poll_save('forum', $q);
 }
 
 ?>

@@ -9,17 +9,17 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
-$usr['isadmin'] &= sed_auth('admin', 'a', 'A');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+$usr['isadmin'] &= cot_auth('admin', 'a', 'A');
+cot_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.rightsbyitem'));
+$t = new XTemplate(cot_skinfile('admin.rightsbyitem'));
 
-$ic = sed_import('ic', 'G', 'ALP');
-$io = sed_import('io', 'G', 'ALP');
-$advanced = sed_import('advanced', 'G', 'BOL');
+$ic = cot_import('ic', 'G', 'ALP');
+$io = cot_import('io', 'G', 'ALP');
+$advanced = cot_import('advanced', 'G', 'BOL');
 
 $L['adm_code']['admin'] = $L['Administration'];
 $L['adm_code']['comments'] = $L['Comments'];
@@ -35,7 +35,7 @@ $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.rightsbyitem.first') as $pl)
+foreach (cot_getextplugins('admin.rightsbyitem.first') as $pl)
 {
 	include $pl;
 }
@@ -44,16 +44,16 @@ foreach (sed_getextplugins('admin.rightsbyitem.first') as $pl)
 if ($a == 'update')
 {
 	$mask = array();
-	$auth = sed_import('auth', 'P', 'ARR');
+	$auth = cot_import('auth', 'P', 'ARR');
 
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.rightsbyitem.update') as $pl)
+	foreach (cot_getextplugins('admin.rightsbyitem.update') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
 
-	sed_sql_update($db_auth, array('auth_rights' => 0), "auth_code='$ic' AND auth_option='$io'");
+	cot_db_update($db_auth, array('auth_rights' => 0), "auth_code='$ic' AND auth_option='$io'");
 
 	foreach ($auth as $i => $j)
 	{
@@ -62,30 +62,30 @@ if ($a == 'update')
 			$mask = 0;
 			foreach ($j as $l => $m)
 			{
-				$mask += sed_auth_getvalue($l);
+				$mask += cot_auth_getvalue($l);
 			}
-			sed_sql_update($db_auth, array('auth_rights' => $mask),
+			cot_db_update($db_auth, array('auth_rights' => $mask),
 				"auth_groupid=$i AND auth_code='$ic' AND auth_option='$io'");
 		}
 	}
 
-	sed_auth_reorder();
-	sed_auth_clear('all');
+	cot_auth_reorder();
+	cot_auth_clear('all');
 
-	sed_message('Updated');
+	cot_message('Updated');
 }
 
-$sql = sed_sql_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
+$sql = cot_db_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
 	WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC");
 
-sed_die(sed_sql_numrows($sql) == 0);
+cot_die(cot_db_numrows($sql) == 0);
 
 switch($ic)
 {
 	case 'page':
-		$title = ' : '.$sed_cat[$io]['title'];
+		$title = ' : '.$cot_cat[$io]['title'];
 	break;
 
 	case 'plug':
@@ -98,47 +98,47 @@ switch($ic)
 }
 
 /* === Hook for the plugins === */
-foreach (sed_getextplugins('admin.rightsbyitem.case') as $pl)
+foreach (cot_getextplugins('admin.rightsbyitem.case') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-$adminpath[] = ($advanced) ? array(sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), $L['Rights'].' / '.$L['adm_code'][$ic].$title.' ('.$L['More'].')') : array(sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), $L['Rights'].' / '.$L['adm_code'][$ic].$title);
+$adminpath[] = ($advanced) ? array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'), $L['Rights'].' / '.$L['adm_code'][$ic].$title.' ('.$L['More'].')') : array(cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io), $L['Rights'].' / '.$L['adm_code'][$ic].$title);
 
 $adv_columns = ($advanced) ? 8 : 3;
 $adv_columns = (!$advanced && $ic == 'page') ? 4 : $adv_columns;
 
 $l_custom1 = ($ic == 'page') ? $L['Download'] : $L['Custom'].' #1';
 
-while ($row = sed_sql_fetcharray($sql))
+while ($row = cot_db_fetcharray($sql))
 {
-	$link = sed_url('admin', 'm=rights&g='.$row['auth_groupid']);
+	$link = cot_url('admin', 'm=rights&g='.$row['auth_groupid']);
 	$title = htmlspecialchars($row['grp_title']);
-	sed_rights_parseline($row, $title, $link);
+	cot_rights_parseline($row, $title, $link);
 }
 
 $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
 $t->assign(array(
-	'ADMIN_RIGHTSBYITEM_FORM_URL' => sed_url('admin', 'm=rightsbyitem&a=update&ic='.$ic.'&io='.$io.$adv_for_url),
-	'ADMIN_RIGHTSBYITEM_ADVANCED_URL' => sed_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
+	'ADMIN_RIGHTSBYITEM_FORM_URL' => cot_url('admin', 'm=rightsbyitem&a=update&ic='.$ic.'&io='.$io.$adv_for_url),
+	'ADMIN_RIGHTSBYITEM_ADVANCED_URL' => cot_url('admin', 'm=rightsbyitem&ic='.$ic.'&io='.$io.'&advanced=1'),
 	'ADMIN_RIGHTSBYITEM_ADV_COLUMNS' => $adv_columns,
 	'ADMIN_RIGHTSBYITEM_4ADV_COLUMNS' => 4 + $adv_columns
 ));
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.rightsbyitem.tags') as $pl)
+foreach (cot_getextplugins('admin.rightsbyitem.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }
@@ -150,7 +150,7 @@ else
 $t->parse('RIGHTSBYITEM_HELP');
 $adminhelp = $t->text('RIGHTSBYITEM_HELP');
 
-function sed_rights_parseline($row, $title, $link)
+function cot_rights_parseline($row, $title, $link)
 {
 	global $L, $advanced, $t, $out, $ic;
 
@@ -213,8 +213,8 @@ function sed_rights_parseline($row, $title, $link)
 	$t->assign(array(
 		'ADMIN_RIGHTSBYITEM_ROW_TITLE' => $title,
 		'ADMIN_RIGHTSBYITEM_ROW_LINK' => $link,
-		'ADMIN_RIGHTSBYITEM_ROW_USER' => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
-		'ADMIN_RIGHTSBYITEM_ROW_JUMPTO' => sed_url('users', 'g='.$row['auth_groupid']),
+		'ADMIN_RIGHTSBYITEM_ROW_USER' => cot_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
+		'ADMIN_RIGHTSBYITEM_ROW_JUMPTO' => cot_url('users', 'g='.$row['auth_groupid']),
 	));
 	$t->parse('MAIN.RIGHTSBYITEM_ROW');
 }

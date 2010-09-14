@@ -9,14 +9,14 @@
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
-sed_require_api('extrafields');
-sed_require_api('forms');
-sed_require_api('extensions');
-sed_require_lang('admin', 'core');
-sed_require_rc('admin');
+cot_require_api('extrafields');
+cot_require_api('forms');
+cot_require_api('extensions');
+cot_require_lang('admin', 'core');
+cot_require_rc('admin');
 
 /* ======== Defaulting the admin variables ========= */
 
@@ -29,12 +29,12 @@ $adminpath = array();
  * @param array $adminpath Path links
  * @return string
  */
-function sed_build_adminsection($adminpath)
+function cot_build_adminsection($adminpath)
 {
 	global $cfg, $L;
 
 	$result = array();
-	$result[] = '<a href="'.sed_url('admin').'">'.$L['Adminpanel'].'</a>';
+	$result[] = '<a href="'.cot_url('admin').'">'.$L['Adminpanel'].'</a>';
 	foreach ($adminpath as $i => $k)
 	{
 		$result[] = '<a href="'.$k[0].'">'.$k[1].'</a>';
@@ -51,7 +51,7 @@ function sed_build_adminsection($adminpath)
  * @param bool $cond Condition
  * @return string
  */
-function sed_linkif($url, $text, $cond)
+function cot_linkif($url, $text, $cond)
 {
 	if ($cond)
 	{
@@ -70,7 +70,7 @@ function sed_linkif($url, $text, $cond)
  *
  * @return array
  */
-function sed_loadcharsets()
+function cot_loadcharsets()
 {
 	// FIXME this function is obviously obsolete
 	$result = array();
@@ -103,7 +103,7 @@ function sed_loadcharsets()
  *
  * @return array
  */
-function sed_loaddoctypes()
+function cot_loaddoctypes()
 {
 	$result = array();
 	$result[] = array(0, 'HTML 4.01');
@@ -123,13 +123,13 @@ function sed_loaddoctypes()
  * @param int $id Category ID
  * @param string $c Category code
  */
-function sed_structure_delcat($id, $c)
+function cot_structure_delcat($id, $c)
 {
 	global $db_structure, $db_auth, $cfg, $cot_cache;
 
-	$sql = sed_sql_query("DELETE FROM $db_structure WHERE structure_id='$id'");
-	sed_auth_remove_item('page', $c);
-	$cot_cache && $cot_cache->db->remove('sed_cat', 'system');
+	$sql = cot_db_query("DELETE FROM $db_structure WHERE structure_id='$id'");
+	cot_auth_remove_item('page', $c);
+	$cot_cache && $cot_cache->db->remove('cot_cat', 'system');
 }
 
 /**
@@ -146,16 +146,16 @@ function sed_structure_delcat($id, $c)
  * @param array $extra_array Extra fields: names => values
  * @return bool Operation status
  */
-function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order, $way, $extra_array = array())
+function cot_structure_newcat($code, $path, $title, $desc, $icon, $group, $order, $way, $extra_array = array())
 {
-	global $db_structure, $db_auth, $sed_groups, $usr, $cfg, $cot_cache;
+	global $db_structure, $db_auth, $cot_groups, $usr, $cfg, $cot_cache;
 
 	$res = FALSE;
 
 	if (!empty($title) && !empty($code) && !empty($path) && $code != 'all')
 	{
-		$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_code='".sed_sql_prep($code)."' LIMIT 1");
-		if (sed_sql_numrows($sql) == 0)
+		$sql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_code='".cot_db_prep($code)."' LIMIT 1");
+		if (cot_db_numrows($sql) == 0)
 		{
 			$colname = '';
 			$colvalue = '';
@@ -164,10 +164,10 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
 				while (list($i, $x) = each($extra_array))
 				{
 					$colname .= ", structure_".$i;
-					$colvalue .= ", '".sed_sql_prep($x)."'";
+					$colvalue .= ", '".cot_db_prep($x)."'";
 				}
 			}
-			$sql = sed_sql_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order".$colname.") VALUES ('".sed_sql_prep($code)."', '".sed_sql_prep($path)."', '".sed_sql_prep($title)."', '".sed_sql_prep($desc)."', '".sed_sql_prep($icon)."', ".(int)$group.", '".sed_sql_prep($order.'.'.$way)."'".$colvalue.")");
+			$sql = cot_db_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order".$colname.") VALUES ('".cot_db_prep($code)."', '".cot_db_prep($path)."', '".cot_db_prep($title)."', '".cot_db_prep($desc)."', '".cot_db_prep($icon)."', ".(int)$group.", '".cot_db_prep($order.'.'.$way)."'".$colvalue.")");
 
 			$auth_permit = array(
 				COT_GROUP_DEFAULT => 7,
@@ -181,10 +181,10 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
 				COT_GROUP_MEMBERS => 128
 			);
 
-			sed_auth_add_item('page', sed_sql_prep($code), $auth_permit, $auth_lock);
+			cot_auth_add_item('page', cot_db_prep($code), $auth_permit, $auth_lock);
 			$res = true;
 
-			$cot_cache && $cot_cache->db->remove('sed_cat', 'system');
+			$cot_cache && $cot_cache->db->remove('cot_cat', 'system');
 		}
 	}
 	return $res;
@@ -196,16 +196,16 @@ function sed_structure_newcat($code, $path, $title, $desc, $icon, $group, $order
  * @param int $id Category ID
  * @return bool
  */
-function sed_structure_resync($id)
+function cot_structure_resync($id)
 {
 	global $db_structure, $db_pages;
 
-	$sql = sed_sql_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
-	$row = sed_sql_fetcharray($sql);
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages
+	$sql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
+	$row = cot_db_fetcharray($sql);
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_pages
 		WHERE page_cat='".$row['structure_code']."' AND (page_state = 0 OR page_state=2)");
-	$num = (int) sed_sql_result($sql, 0, 0);
-	return (bool) sed_sql_query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
+	$num = (int) cot_db_result($sql, 0, 0);
+	return (bool) cot_db_query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
 }
 
 /**
@@ -214,17 +214,17 @@ function sed_structure_resync($id)
  * @param int $id Category ID
  * @return bool
  */
-function sed_structure_resyncall()
+function cot_structure_resyncall()
 {
 	global $db_structure;
 
 	$res = TRUE;
-	$sql = sed_sql_query("SELECT structure_id FROM $db_structure");
-	while ($row = sed_sql_fetchassoc($sql))
+	$sql = cot_db_query("SELECT structure_id FROM $db_structure");
+	while ($row = cot_db_fetchassoc($sql))
 	{
-		$res &= sed_structure_resync($row['structure_id']);
+		$res &= cot_structure_resync($row['structure_id']);
 	}
-	sed_sql_freeresult($sql);
+	cot_db_freeresult($sql);
 	return $res;
 }
 
@@ -234,12 +234,12 @@ function sed_structure_resyncall()
  * @param int $id Item ID
  * @return int Number of rows affected
  */
-function sed_trash_delete($id)
+function cot_trash_delete($id)
 {
 	global $db_trash;
 
-	$sql = sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
-	return sed_sql_affectedrows();
+	$sql = cot_db_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+	return cot_db_affectedrows();
 }
 
 /**
@@ -248,12 +248,12 @@ function sed_trash_delete($id)
  * @param int $id
  * @return array
  */
-function sed_trash_get($id)
+function cot_trash_get($id)
 {
 	global $db_trash;
 
-	$sql = sed_sql_query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
-	if ($res = sed_sql_fetchassoc($sql))
+	$sql = cot_db_query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
+	if ($res = cot_db_fetchassoc($sql))
 	{
 		$res['tr_datas'] = unserialize($res['tr_datas']);
 		return $res;
@@ -271,14 +271,14 @@ function sed_trash_get($id)
  * @param string $db Table name
  * @return bool
  */
-function sed_trash_insert($dat, $db)
+function cot_trash_insert($dat, $db)
 {
 	foreach ($dat as $k => $v)
 	{
 		$columns[] = $k;
-		$datas[] = "'".sed_sql_prep($v)."'";
+		$datas[] = "'".cot_db_prep($v)."'";
 	}
-	$sql = sed_sql_query("INSERT INTO $db (".implode(', ', $columns).") VALUES (".implode(', ', $datas).")");
+	$sql = cot_db_query("INSERT INTO $db (".implode(', ', $columns).") VALUES (".implode(', ', $datas).")");
 	return TRUE;
 }
 
@@ -288,95 +288,95 @@ function sed_trash_insert($dat, $db)
  * @param int $id Trash item ID
  * @return bool Operation success or failure
  */
-function sed_trash_restore($id)
+function cot_trash_restore($id)
 {
 	global $db_forum_topics, $db_forum_posts, $db_trash;
 
 	$columns = array();
 	$datas = array();
 
-	$res = sed_trash_get($id);
+	$res = cot_trash_get($id);
 
 	switch($res['tr_type'])
 	{
 		case 'comment':
 			global $db_com;
-			sed_trash_insert($res['tr_datas'], $db_com);
-			sed_log("Comment #".$res['tr_itemid']." restored from the trash can.", 'adm');
+			cot_trash_insert($res['tr_datas'], $db_com);
+			cot_log("Comment #".$res['tr_itemid']." restored from the trash can.", 'adm');
 			return (TRUE);
 			break;
 
 		case 'forumpost':
 			global $db_forum_posts;
-			$sql = sed_sql_query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$res['tr_datas']['fp_topicid']."'");
+			$sql = cot_db_query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$res['tr_datas']['fp_topicid']."'");
 
-			if ($row = sed_sql_fetcharray($sql))
+			if ($row = cot_db_fetcharray($sql))
 			{
-				sed_trash_insert($res['tr_datas'], $db_forum_posts);
-				sed_log("Post #".$res['tr_itemid']." restored from the trash can.", 'adm');
-				sed_forum_resynctopic($res['tr_datas']['fp_topicid']);
-				sed_forum_sectionsetlast($res['tr_datas']['fp_sectionid']);
-				sed_forum_resync($res['tr_datas']['fp_sectionid']);
+				cot_trash_insert($res['tr_datas'], $db_forum_posts);
+				cot_log("Post #".$res['tr_itemid']." restored from the trash can.", 'adm');
+				cot_forum_resynctopic($res['tr_datas']['fp_topicid']);
+				cot_forum_sectionsetlast($res['tr_datas']['fp_sectionid']);
+				cot_forum_resync($res['tr_datas']['fp_sectionid']);
 				return TRUE;
 			}
 			else
 			{
-				$sql1 = sed_sql_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumtopic' AND tr_itemid='q".$res['tr_datas']['fp_topicid']."'");
-				if ($row1 = sed_sql_fetcharray($sql1))
+				$sql1 = cot_db_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumtopic' AND tr_itemid='q".$res['tr_datas']['fp_topicid']."'");
+				if ($row1 = cot_db_fetcharray($sql1))
 				{
-					sed_trash_restore($row1['tr_id']);
-					sed_trash_delete($row1['tr_id']);
+					cot_trash_restore($row1['tr_id']);
+					cot_trash_delete($row1['tr_id']);
 				}
 			}
 			break;
 
 		case 'forumtopic':
 			global $db_forum_topics;
-			sed_trash_insert($res['tr_datas'], $db_forum_topics);
-			sed_log("Topic #".$res['tr_datas']['ft_id']." restored from the trash can.", 'adm');
+			cot_trash_insert($res['tr_datas'], $db_forum_topics);
+			cot_log("Topic #".$res['tr_datas']['ft_id']." restored from the trash can.", 'adm');
 
-			$sql = sed_sql_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumpost' AND tr_itemid LIKE '%-".$res['tr_itemid']."'");
+			$sql = cot_db_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumpost' AND tr_itemid LIKE '%-".$res['tr_itemid']."'");
 
-			while ($row = sed_sql_fetcharray($sql))
+			while ($row = cot_db_fetcharray($sql))
 			{
-				$res2 = sed_trash_get($row['tr_id']);
-				sed_trash_insert($res2['tr_datas'], $db_forum_posts);
-				sed_trash_delete($row['tr_id']);
-				sed_log("Post #".$res2['tr_datas']['fp_id']." restored from the trash can (belongs to topic #".$res2['tr_datas']['fp_topicid'].").", 'adm');
+				$res2 = cot_trash_get($row['tr_id']);
+				cot_trash_insert($res2['tr_datas'], $db_forum_posts);
+				cot_trash_delete($row['tr_id']);
+				cot_log("Post #".$res2['tr_datas']['fp_id']." restored from the trash can (belongs to topic #".$res2['tr_datas']['fp_topicid'].").", 'adm');
 			}
 
-			sed_forum_resynctopic($res['tr_itemid']);
-			sed_forum_sectionsetlast($res['tr_datas']['ft_sectionid']);
-			sed_forum_resync($res['tr_datas']['ft_sectionid']);
+			cot_forum_resynctopic($res['tr_itemid']);
+			cot_forum_sectionsetlast($res['tr_datas']['ft_sectionid']);
+			cot_forum_resync($res['tr_datas']['ft_sectionid']);
 			return TRUE;
 			break;
 
 		case 'page':
 			global $db_pages, $db_structure;
-			sed_trash_insert($res['tr_datas'], $db_pages);
-			sed_log("Page #".$res['tr_itemid']." restored from the trash can.", 'adm');
-			$sql = sed_sql_query("SELECT page_cat FROM $db_pages WHERE page_id='".$res['tr_itemid']."'");
-			$row = sed_sql_fetcharray($sql);
-			$sql = sed_sql_query("SELECT structure_id FROM $db_structure WHERE structure_code='".$row['page_cat']."'");
-			if (sed_sql_numrows($sql) == 0)
+			cot_trash_insert($res['tr_datas'], $db_pages);
+			cot_log("Page #".$res['tr_itemid']." restored from the trash can.", 'adm');
+			$sql = cot_db_query("SELECT page_cat FROM $db_pages WHERE page_id='".$res['tr_itemid']."'");
+			$row = cot_db_fetcharray($sql);
+			$sql = cot_db_query("SELECT structure_id FROM $db_structure WHERE structure_code='".$row['page_cat']."'");
+			if (cot_db_numrows($sql) == 0)
 			{
-				sed_structure_newcat('restored', 999, 'RESTORED', '', '', 0);
-				$sql = sed_sql_query("UPDATE $db_pages SET page_cat='restored' WHERE page_id='".$res['tr_itemid']."'");
+				cot_structure_newcat('restored', 999, 'RESTORED', '', '', 0);
+				$sql = cot_db_query("UPDATE $db_pages SET page_cat='restored' WHERE page_id='".$res['tr_itemid']."'");
 			}
 			return TRUE;
 			break;
 
 		case 'pm':
 			global $db_pm;
-			sed_trash_insert($res['tr_datas'], $db_pm);
-			sed_log("Private message #".$res['tr_itemid']." restored from the trash can.", 'adm');
+			cot_trash_insert($res['tr_datas'], $db_pm);
+			cot_log("Private message #".$res['tr_itemid']." restored from the trash can.", 'adm');
 			return TRUE;
 			break;
 
 		case 'user':
 			global $db_users;
-			sed_trash_insert($res['tr_datas'], $db_users);
-			sed_log("User #".$res['tr_itemid']." restored from the trash can.", 'adm');
+			cot_trash_insert($res['tr_datas'], $db_users);
+			cot_log("User #".$res['tr_itemid']." restored from the trash can.", 'adm');
 			return TRUE;
 			break;
 
@@ -394,7 +394,7 @@ function sed_trash_restore($id)
  * @return string
  *
  */
-function sed_default_html_construction($type)
+function cot_default_html_construction($type)
 {
 	global $R;
 	$html = '';
@@ -439,23 +439,23 @@ function sed_default_html_construction($type)
  * @return bool
  *
  */
-function sed_extrafield_add($location, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $noalter = false)
+function cot_extrafield_add($location, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $noalter = false)
 {
 	global $db_extra_fields;
-	$fieldsres = sed_sql_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$location'");
-	while($row = sed_sql_fetchassoc($fieldsres))
+	$fieldsres = cot_db_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$location'");
+	while($row = cot_db_fetchassoc($fieldsres))
 	{
 		$extrafieldsnames[] = $row['field_name'];
 	}
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
 
-	// Check table sed_$sql_table - if field with same name exists - exit.
-	if (sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0 && !$noalter)
+	// Check table cot_$sql_table - if field with same name exists - exit.
+	if (cot_db_numrows(cot_db_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0 && !$noalter)
 	{
 		return false;
 	}
-	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $location");
-	while ($fieldrow = sed_sql_fetchassoc($fieldsres))
+	$fieldsres = cot_db_query("SHOW COLUMNS FROM $location");
+	while ($fieldrow = cot_db_fetchassoc($fieldsres))
 	{
 		$column = $fieldrow['Field'];
 		// get column prefix in this table
@@ -476,7 +476,7 @@ function sed_extrafield_add($location, $name, $type, $html, $variants="", $defau
 	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
 	$extf['description'] = is_null($description) ? '' : $description;
 	
-	$step1 = sed_sql_insert($db_extra_fields, $extf, 'field_') == 1;
+	$step1 = cot_db_insert($db_extra_fields, $extf, 'field_') == 1;
 	if ($noalter)
 	{
 		return $step1;
@@ -495,7 +495,7 @@ function sed_extrafield_add($location, $name, $type, $html, $variants="", $defau
 			break;
 	}
 	$sql = "ALTER TABLE $location ADD ".$column_prefix."_$name $sqltype ";
-	$step2 = sed_sql_query($sql);
+	$step2 = cot_db_query($sql);
 	return $step1 && $step2;
 }
 
@@ -516,21 +516,21 @@ function sed_extrafield_add($location, $name, $type, $html, $variants="", $defau
  * @return bool
  *
  */
-function sed_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="")
+function cot_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="")
 {
 	global $db_extra_fields;
-	$fieldsres = sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields
+	$fieldsres = cot_db_query("SELECT COUNT(*) FROM $db_extra_fields
 			WHERE field_name = '$oldname' AND field_location='$location'");
-	if (sed_sql_numrows($fieldsres) <= 0
+	if (cot_db_numrows($fieldsres) <= 0
 		|| $name != $oldname
-		&& sed_sql_numrows(sed_sql_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0)
+		&& cot_db_numrows(cot_db_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0)
 	{
 		// Attempt to edit non-extra field or override an existing field
 		return false;
 	}
-	$field = sed_sql_fetchassoc($fieldsres);
-	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $location");
-	$fieldrow = sed_sql_fetchassoc($fieldsres);
+	$field = cot_db_fetchassoc($fieldsres);
+	$fieldsres = cot_db_query("SHOW COLUMNS FROM $location");
+	$fieldrow = cot_db_fetchassoc($fieldsres);
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$alter = false;
@@ -552,7 +552,7 @@ function sed_extrafield_update($location, $oldname, $name, $type, $html, $varian
 	$extf['required'] = ($required > 0) ? 1 : 0;
 	$extf['description'] = is_null($description) ? '' : $description;
 
-	$step1 = sed_sql_update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'", 'field_') == 1;
+	$step1 = cot_db_update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'", 'field_') == 1;
 
 	if (!$alter) return $step1;
 
@@ -570,7 +570,7 @@ function sed_extrafield_update($location, $oldname, $name, $type, $html, $varian
 			break;
 	}
 	$sql = "ALTER TABLE $location CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
-	$step2 = sed_sql_query($sql);
+	$step2 = cot_db_query($sql);
 
 	return $step1 && $step2;
 }
@@ -583,22 +583,22 @@ function sed_extrafield_update($location, $oldname, $name, $type, $html, $varian
  * @return bool
  *
  */
-function sed_extrafield_remove($location, $name)
+function cot_extrafield_remove($location, $name)
 {
 	global $db_extra_fields;
-	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_extra_fields
+	if ((int) cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_extra_fields
 		WHERE field_name = '$name' AND field_location='$location'"), 0, 0) <= 0)
 	{
 		// Attempt to remove non-extra field
 		return false;
 	}
-	$fieldsres = sed_sql_query("SHOW COLUMNS FROM $location");
-	$fieldrow = sed_sql_fetchassoc($fieldsres);
+	$fieldsres = cot_db_query("SHOW COLUMNS FROM $location");
+	$fieldrow = cot_db_fetchassoc($fieldsres);
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
-	$step1 = sed_sql_delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
+	$step1 = cot_db_delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
 	$sql = "ALTER TABLE $location DROP ".$column_prefix."_".$name;
-	$step2 = sed_sql_query($sql);
+	$step2 = cot_db_query($sql);
 	return $step1 && $step2;
 }
 
@@ -609,13 +609,13 @@ function sed_extrafield_remove($location, $name)
  * @param string $name Dropdown name
  * @return string
  */
-function sed_selectbox_forumcat($check, $name)
+function cot_selectbox_forumcat($check, $name)
 {
-	global $usr, $sed_forums_str, $L;
+	global $usr, $cot_forums_str, $L;
 
 	$result =  "<select name=\"$name\" size=\"1\">";
-	if (is_array($sed_forums_str))
-		foreach($sed_forums_str as $i => $x)
+	if (is_array($cot_forums_str))
+		foreach($cot_forums_str as $i => $x)
 		{
 			$selected = ($i==$check) ? "selected=\"selected\"" : '';
 			$result .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
@@ -632,16 +632,16 @@ function sed_selectbox_forumcat($check, $name)
  * @param array $skip Hidden groups
  * @return string
  */
-function sed_selectbox_groups($check, $name, $skip=array(0))
+function cot_selectbox_groups($check, $name, $skip=array(0))
 {
-	global $sed_groups;
+	global $cot_groups;
 
 	$res = "<select name=\"$name\" size=\"1\">";
 
-	foreach($sed_groups as $k => $i)
+	foreach($cot_groups as $k => $i)
 	{
 		$selected = ($k == $check) ? "selected=\"selected\"" : '';
-		$res .= (in_array($k, $skip)) ? '' : "<option value=\"$k\" $selected>".$sed_groups[$k]['title']."</option>";
+		$res .= (in_array($k, $skip)) ? '' : "<option value=\"$k\" $selected>".$cot_groups[$k]['title']."</option>";
 	}
 	$res .= "</select>";
 
@@ -656,7 +656,7 @@ function sed_selectbox_groups($check, $name, $skip=array(0))
  * @param int $maxsize Search limit
  * @return int
  */
-function sed_stringinfile($file, $str, $maxsize=32768)
+function cot_stringinfile($file, $str, $maxsize=32768)
 {
 	if ($fp = @fopen($file, 'r'))
 	{

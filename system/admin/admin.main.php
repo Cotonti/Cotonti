@@ -9,26 +9,26 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'any');
-sed_block($usr['auth_read']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'any');
+cot_block($usr['auth_read']);
 
 $enabled[0] = $L['Disabled'];
 $enabled[1] = $L['Enabled'];
 
-$id = sed_import('id', 'G', 'TXT');
-$po = sed_import('po', 'G', 'TXT');
-$c = sed_import('c', 'G', 'TXT');
-$p = sed_import('p', 'G', 'TXT');
-$l = sed_import('l', 'G', 'TXT');
-$o = sed_import('o', 'P', 'TXT');
-$w = sed_import('w', 'P', 'TXT');
-$u = sed_import('u', 'P', 'TXT');
-$s = sed_import('s', 'G', 'ALP', 24);
+$id = cot_import('id', 'G', 'TXT');
+$po = cot_import('po', 'G', 'TXT');
+$c = cot_import('c', 'G', 'TXT');
+$p = cot_import('p', 'G', 'TXT');
+$l = cot_import('l', 'G', 'TXT');
+$o = cot_import('o', 'P', 'TXT');
+$w = cot_import('w', 'P', 'TXT');
+$u = cot_import('u', 'P', 'TXT');
+$s = cot_import('s', 'G', 'ALP', 24);
 
 /* === Hook for the plugins === */
-foreach (sed_getextplugins('admin.main') as $pl)
+foreach (cot_getextplugins('admin.main') as $pl)
 {
 	include $pl;
 }
@@ -42,7 +42,7 @@ $inc_file = (empty($m)) ? 'home' : $m;
 $inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
 if (in_array($inc_file, $standard_admin))
 {
-	$inc_file = sed_incfile('admin', $inc_file);
+	$inc_file = cot_incfile('admin', $inc_file);
 }
 else
 {
@@ -51,7 +51,7 @@ else
 
 if (!file_exists($inc_file))
 {
-	sed_die();
+	cot_die();
 }
 
 $allow_img['0']['0'] = $R['admin_icon_deny'];
@@ -59,9 +59,9 @@ $allow_img['1']['0'] = $R['admin_icon_allow'];
 $allow_img['0']['1'] = $R['admin_icon_deny_locked'];
 $allow_img['1']['1'] = $R['admin_icon_allow_locked'];
 
-$usr['admin_config'] = sed_auth('admin', 'a', 'A');
-$usr['admin_structure'] = sed_auth('structure', 'a', 'A');
-$usr['admin_users'] = sed_auth('users', 'a', 'A');
+$usr['admin_config'] = cot_auth('admin', 'a', 'A');
+$usr['admin_structure'] = cot_auth('structure', 'a', 'A');
+$usr['admin_users'] = cot_auth('users', 'a', 'A');
 
 require $inc_file;
 
@@ -71,31 +71,31 @@ $title_params = array(
 	'ADMIN' => $L['Administration']
 );
 $out['head'] .= $R['code_noindex'];
-$out['subtitle'] = sed_title('{ADMIN}', $title_params);
+$out['subtitle'] = cot_title('{ADMIN}', $title_params);
 
 require_once $cfg['system_dir'].'/header.php';
 
-if (!SED_AJAX)
+if (!COT_AJAX)
 {
-	$t = new XTemplate(sed_skinfile('admin'));
+	$t = new XTemplate(cot_skinfile('admin'));
 
 	// Generate the admin menu
 	$admin_menu = array();
 	// Standard admin areas
 	$admin_menu[] = array(
-		'url' => sed_url('admin'),
+		'url' => cot_url('admin'),
 		'icon' => $R['admin_menu_icon_home'],
 		'class' => empty($m) ? 'sel' : ''
 	);
 	if ($usr['admin_config'])
 	{
 		$admin_menu[] = array(
-			'url' => sed_url('admin', 'm=config'),
+			'url' => cot_url('admin', 'm=config'),
 			'icon' => $R['admin_menu_icon_config'],
 			'class' => $m == 'config' ? 'sel' : ''
 		);
 		$admin_menu[] = array(
-			'url' => sed_url('admin', 'm=extensions'),
+			'url' => cot_url('admin', 'm=extensions'),
 			'icon' => $R['admin_menu_icon_extensions'],
 			'class' => $m == 'extensions' ? 'sel' : ''
 		);
@@ -103,7 +103,7 @@ if (!SED_AJAX)
 	if ($usr['admin_structure'])
 	{
 		$admin_menu[] = array(
-			'url' => sed_url('admin', 'm=structure'),
+			'url' => cot_url('admin', 'm=structure'),
 			'icon' => $R['admin_menu_icon_structure'],
 			'class' => $m == 'structure' ? 'sel' : ''
 		);
@@ -111,7 +111,7 @@ if (!SED_AJAX)
 	if ($usr['admin_users'])
 	{
 		$admin_menu[] = array(
-			'url' => sed_url('admin', 'm=users'),
+			'url' => cot_url('admin', 'm=users'),
 			'icon' => $R['admin_menu_icon_users'],
 			'class' => $m == 'users' ? 'sel' : ''
 		);
@@ -119,27 +119,27 @@ if (!SED_AJAX)
 	if ($usr['isadmin'])
 	{
 		$admin_menu[] = array(
-			'url' => sed_url('admin', "m=other"),
+			'url' => cot_url('admin', "m=other"),
 			'icon' => $R['admin_menu_icon_other'],
 			'class' => $m == 'other' ? 'sel' : ''
 		);
 	}
 	// Module admin
-	foreach ($sed_modules as $code => $mod)
+	foreach ($cot_modules as $code => $mod)
 	{
-		$info = sed_infoget($cfg['modules_dir'] . "/$code/$code.setup.php", 'COT_EXT');
+		$info = cot_infoget($cfg['modules_dir'] . "/$code/$code.setup.php", 'COT_EXT');
 		if (!empty($info['Admin_icon']))
 		{
-			if (file_exists(sed_langfile($code, 'module')))
+			if (file_exists(cot_langfile($code, 'module')))
 			{
-				sed_require_lang($code, 'module');
+				cot_require_lang($code, 'module');
 				$title = $L[ucfirst($code)];
 			};
 			$title = isset($L[$info['Name']]) ? $L[$info['Name']] : $info['Name'];
 			$src = $cfg['modules_dir'] . "/$code/" . trim($info['Admin_icon']);
 			$admin_menu[] = array(
-				'url' => sed_url('admin', "m=$code"),
-				'icon' => sed_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
+				'url' => cot_url('admin', "m=$code"),
+				'icon' => cot_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
 				'class' => $m == $code ? 'sel' : ''
 			);
 		}
@@ -158,14 +158,14 @@ if (!SED_AJAX)
 	}
 
 	$t->assign(array(
-		'ADMIN_TITLE' => sed_build_adminsection($adminpath),
+		'ADMIN_TITLE' => cot_build_adminsection($adminpath),
 		'ADMIN_SUBTITLE' => $adminsubtitle,
 		'ADMIN_MAIN' => $adminmain,
 		'ADMIN_HELP' => $adminhelp
 	));
 
 	/* === Hook for the plugins === */
-	foreach (sed_getextplugins('admin.tags') as $pl)
+	foreach (cot_getextplugins('admin.tags') as $pl)
 	{
 		include $pl;
 	}

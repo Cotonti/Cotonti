@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-define('SED_CODE', TRUE);
+define('COT_CODE', TRUE);
 
 if (!file_exists('./datas/config.php'))
 {
@@ -29,45 +29,45 @@ require_once $cfg['system_dir'].'/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
 if ($cfg['enable_obsolete'])
 {
-    sed_require_api('obsolete');
+    cot_require_api('obsolete');
 }
-sed_require_api('cotemplate');
-sed_require_api('parser'); // TODO module-dependent parser selection/loading
+cot_require_api('cotemplate');
+cot_require_api('parser'); // TODO module-dependent parser selection/loading
 
-$e = sed_import('e', 'G', 'ALP');
-$o = sed_import('o', 'G', 'ALP');
-$r = (isset($_POST['r'])) ? sed_import('r','P','ALP') : sed_import('r','G','ALP');
-$c1 = sed_import('c1', 'G', 'ALP');
-$c2 = sed_import('c2', 'G', 'ALP');
+$e = cot_import('e', 'G', 'ALP');
+$o = cot_import('o', 'G', 'ALP');
+$r = (isset($_POST['r'])) ? cot_import('r','P','ALP') : cot_import('r','G','ALP');
+$c1 = cot_import('c1', 'G', 'ALP');
+$c2 = cot_import('c2', 'G', 'ALP');
 
 if (!empty($e))
 {
-	define('SED_PLUG', true);
+	define('COT_PLUG', true);
 	$extname = $e;
 	$exttype = 'plug';
     $exthook = 'standalone';
     $ext_display_header = true;
-    $path_skin = sed_skinfile($extname, true);
+    $path_skin = cot_skinfile($extname, true);
     $autoassigntags = false;
     if (!file_exists($path_skin))
     {
-        $path_skin = sed_skinfile(array('plugin', $extname));
+        $path_skin = cot_skinfile(array('plugin', $extname));
         $autoassigntags = true;
     }
 }
 elseif (!empty($o))
 {
-	define('SED_PLUG', true);
+	define('COT_PLUG', true);
 	$extname = $o;
 	$exttype = 'plug';
     $exthook = 'popup';
     $ext_display_header = false;
-    $path_skin = sed_skinfile(array('popup', $extname));
+    $path_skin = cot_skinfile(array('popup', $extname));
     $autoassigntags = true;
 }
 elseif (!empty($r))
 {
-	define('SED_PLUG', true);
+	define('COT_PLUG', true);
 	$extname = $r;
 	$exttype = 'plug';
     $exthook = 'ajax';
@@ -83,9 +83,9 @@ else
 }
 
 $req_files = array();
-$req_files[] = sed_langfile($extname, $exttype);
-$req_files[] = sed_incfile($extname, 'functions', $exttype == 'plug');
-$req_files[] = sed_incfile($extname, 'resources', $exttype == 'plug');
+$req_files[] = cot_langfile($extname, $exttype);
+$req_files[] = cot_incfile($extname, 'functions', $exttype == 'plug');
+$req_files[] = cot_incfile($extname, 'resources', $exttype == 'plug');
 
 foreach ($req_files as $req_file)
 {
@@ -97,23 +97,23 @@ foreach ($req_files as $req_file)
 
 if (COT_MODULE)
 {
-    if (is_array($sed_modules[$extname]))
+    if (is_array($cot_modules[$extname]))
     {
-        $out['subtitle'] = $sed_modules[$extname]['title'];
+        $out['subtitle'] = $cot_modules[$extname]['title'];
         include $cfg['modules_dir'] . '/' . $extname . '/' . $extname . '.php';
         $empty = false;
     }
     else
 	{
-		sed_redirect(sed_url('message', 'msg=907', '', true));
+		cot_redirect(cot_url('message', 'msg=907', '', true));
 	}
 }
-elseif (SED_PLUG)
+elseif (COT_PLUG)
 {
-	sed_dieifdisabled($cfg['disable_plug']);
+	cot_dieifdisabled($cfg['disable_plug']);
 
-	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('plug', $extname);
-	sed_block($usr['auth_read']);
+	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', $extname);
+	cot_block($usr['auth_read']);
 
     if (!empty($path_skin))
     {
@@ -123,9 +123,9 @@ elseif (SED_PLUG)
 
 	$empty = true;
 
-	if (is_array($sed_plugins[$exthook]))
+	if (is_array($cot_plugins[$exthook]))
 	{
-		foreach ($sed_plugins[$exthook] as $k)
+		foreach ($cot_plugins[$exthook] as $k)
 		{
 			if ($k['pl_code'] == $extname)
 			{
@@ -138,13 +138,13 @@ elseif (SED_PLUG)
 
 	if ($empty)
 	{
-		sed_redirect(sed_url('message', 'msg=907', '', true));
+		cot_redirect(cot_url('message', 'msg=907', '', true));
 	}
 
 	$out['subtitle'] = empty($out['subtitle']) ? $L['plu_title'] : $out['subtitle'];
 	$sys['sublocation'] = $out['subtitle'];
 
-	sed_online_update();
+	cot_online_update();
 
     if ($ext_display_header)
     {
@@ -169,17 +169,17 @@ elseif (SED_PLUG)
         if (empty($o))
         {
             $t->assign(array(
-                'PLUGIN_TITLE' => sed_rc('plug_code_title', array('url' => sed_url('plug', "e=$e"))),
+                'PLUGIN_TITLE' => cot_rc('plug_code_title', array('url' => cot_url('plug', "e=$e"))),
                 'PLUGIN_SUBTITLE' => $plugin_subtitle,
                 'PLUGIN_BODY' => $plugin_body
             ));
         }
         else
         {
-            sed_sendheaders();
+            cot_sendheaders();
 
             $t->assign(array(
-                'POPUP_JAVASCRIPT' => sed_javascript(),
+                'POPUP_JAVASCRIPT' => cot_javascript(),
                 'POPUP_C1' => $c1,
                 'POPUP_C2' => $c2,
                 'POPUP_BODY' => $popup_body
@@ -197,7 +197,7 @@ elseif (SED_PLUG)
 }
 else
 {
-	sed_die();
+	cot_die();
 }
 
 ?>

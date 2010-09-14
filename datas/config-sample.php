@@ -120,7 +120,7 @@ $cfg['file_perms'] = 0664;
  * Set it FALSE on production sites.
  */
 
-define('SED_DEBUG', FALSE);
+define('COT_DEBUG', FALSE);
 
 /**
  * Path to debug log file used by functions which dump debug data into it.
@@ -129,14 +129,14 @@ define('SED_DEBUG', FALSE);
  * path accessible to you only via FTP.
  */
 
-define('SED_DEBUG_LOGFILE', '/tmp/cot_debug_'.date("Ymd_His").'.log');
+define('COT_DEBUG_LOGFILE', '/tmp/cot_debug_'.date("Ymd_His").'.log');
 
 /**
  * The shield is disabled for administrators by default. But if you are testing
  * it with your admin account, you can enable it by setting this TRUE.
  */
 
-define('SED_SHIELD_FORCE', FALSE);
+define('COT_SHIELD_FORCE', FALSE);
 
 // ========================
 // Names for MySQL tables
@@ -146,7 +146,7 @@ define('SED_SHIELD_FORCE', FALSE);
 // Else do not change.
 // ========================
 
-$db_x				= 'sed_'; // Default: sed_, prefix for extra fields' table(s)
+$db_x				= 'cot_'; // Default: cot_, prefix for extra fields' table(s)
 
 $db_auth			= $db_x.'auth';
 $db_banlist 		= $db_x.'banlist';

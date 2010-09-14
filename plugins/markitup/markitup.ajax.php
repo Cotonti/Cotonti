@@ -15,12 +15,12 @@ Hooks=ajax
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 // Preview contents
-$text = sed_import('text', 'P', 'HTM');
+$text = cot_import('text', 'P', 'HTM');
 $style = '<link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'.css" />'."\n";
-sed_sendheaders();
-echo $style . '<body class="preview">' . sed_post_parse(sed_parse($text)) . '</body>';
+cot_sendheaders();
+echo $style . '<body class="preview">' . cot_post_parse(cot_parse($text)) . '</body>';
 
 ?>

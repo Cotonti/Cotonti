@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 /**
  * Main strings
@@ -342,7 +342,7 @@ $L['Yes'] = 'Да';
 $L['YIM'] = 'Yahoo Messenger';
 
 /**
- * sed_declension arrays
+ * cot_declension arrays
  */
 
 $Ls['Days'] = array('день','дня','дней');

@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 $L['rss_allforums_item_title'] = 'Последние сообщения на форуме';
 $L['rss_title'] = 'RSS';

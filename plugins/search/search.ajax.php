@@ -16,20 +16,20 @@ Hooks=ajax
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-$q = strtolower(sed_import('q', 'G', 'TXT'));
-$q = sed_sql_prep(urldecode($q));
+$q = strtolower(cot_import('q', 'G', 'TXT'));
+$q = cot_db_prep(urldecode($q));
 if (!empty($q))
 {
 	$res = array();
-	$sql = sed_sql_query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
-	while ($row = sed_sql_fetchassoc($sql))
+	$sql = cot_db_query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
+	while ($row = cot_db_fetchassoc($sql))
 	{
 		$res[] = $row['user_name'];
 	}
 	$userlist = implode("\n", $res);
-	sed_sendheaders();
+	cot_sendheaders();
 }
 echo $userlist;
 

@@ -9,9 +9,9 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-sed_require('page'); // FIXME hard dependency
+cot_require('page'); // FIXME hard dependency
 
 //Version Checking
 preg_match('/Rev: ([0-9]+)/', $cfg['svnrevision'], $revmatch);
@@ -20,15 +20,15 @@ unset($revmatch);
 if ($cfg['svnrevision'] > $cfg['revision'])
 {
 	$cfg['revision'] = $cfg['svnrevision'];
-	sed_sql_query("UPDATE ".$db_config." SET `config_value`= ".(int)$cfg['svnrevision']." WHERE `config_owner` = 'core' AND `config_cat` = 'version' AND `config_name` = 'revision' LIMIT 1");
+	cot_db_query("UPDATE ".$db_config." SET `config_value`= ".(int)$cfg['svnrevision']." WHERE `config_owner` = 'core' AND `config_cat` = 'version' AND `config_name` = 'revision' LIMIT 1");
 }
 
-$t = new XTemplate(sed_skinfile('admin.home'));
+$t = new XTemplate(cot_skinfile('admin.home'));
 
-$adminpath[] = array(sed_url('admin', 'm=home'), $L['Home']);
+$adminpath[] = array(cot_url('admin', 'm=home'), $L['Home']);
 
-$pagesqueued = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
-$pagesqueued = sed_sql_result($pagesqueued, 0, "COUNT(*)");
+$pagesqueued = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
+$pagesqueued = cot_db_result($pagesqueued, 0, "COUNT(*)");
 
 if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 {
@@ -38,7 +38,7 @@ if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 //Version Checking
 if ($cfg['check_updates'])
 {
-	$update_info = sed_cache_get('update_info');
+	$update_info = cot_cache_get('update_info');
 	if (!$update_info)
 	{
 		if (ini_get('allow_url_fopen'))
@@ -47,7 +47,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				sed_cache_store('update_info', $update_info, 86400, false);
+				cot_cache_store('update_info', $update_info, 86400, false);
 			}
 		}
 		elseif (function_exists('curl_init'))
@@ -59,7 +59,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				sed_cache_store('update_info', $update_info, 86400, false);
+				cot_cache_store('update_info', $update_info, 86400, false);
 			}
 			curl_close($curl);
 		}
@@ -68,7 +68,7 @@ if ($cfg['check_updates'])
 	{
 		$t->assign(array(
 			'ADMIN_HOME_UPDATE_REVISION' => sprintf($L['home_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
-			'ADMIN_HOME_UPDATE_MESSAGE' => sed_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
+			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
 		));
 		$t->parse('MAIN.UPDATE');
 	}
@@ -79,8 +79,8 @@ if (!$cfg['disablehitstats'])
 {
 	$timeback_stats = 15;// 15 days
 
-	$sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_stats);
-	while ($row = sed_sql_fetcharray($sql))
+	$sql = cot_db_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_stats);
+	while ($row = cot_db_fetcharray($sql))
 	{
 		$year = mb_substr($row['stat_name'], 0, 4);
 		$mons = mb_substr($row['stat_name'], 5, 2);
@@ -104,7 +104,7 @@ if (!$cfg['disablehitstats'])
 			$t->parse('MAIN.ADMIN_HOME_ROW');
 		}
 	}
-	$t->assign('ADMIN_HOME_MORE_HITS_URL', sed_url('admin', 'm=hits'));
+	$t->assign('ADMIN_HOME_MORE_HITS_URL', cot_url('admin', 'm=hits'));
 }
 
 //Show activity stats
@@ -112,42 +112,42 @@ if (!$cfg['disableactivitystats'])
 {
 	$timeback = $sys['now_offset'] - (7 * 86400);// 7 days
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE user_regdate>'$timeback'");
-	$newusers = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_users WHERE user_regdate>'$timeback'");
+	$newusers = cot_db_result($sql, 0, "COUNT(*)");
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_date >'$timeback'");
-	$newpages = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_date >'$timeback'");
+	$newpages = cot_db_result($sql, 0, "COUNT(*)");
 
-	sed_require('forums');
+	cot_require('forums');
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
-	$newtopics = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
+	$newtopics = cot_db_result($sql, 0, "COUNT(*)");
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
-	$newposts = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
+	$newposts = cot_db_result($sql, 0, "COUNT(*)");
 
-	if (function_exists('sed_get_newcomments'))
+	if (function_exists('cot_get_newcomments'))
 	{
-		$newcomments = sed_get_newcomments($timeback);
+		$newcomments = cot_get_newcomments($timeback);
 	}
 
 	if ($cfg['module']['pm'])
 	{
-	 sed_require('pm');
-		$sql = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
-		$newpms = sed_sql_result($sql, 0, "COUNT(*)");
+	 cot_require('pm');
+		$sql = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
+		$newpms = cot_db_result($sql, 0, "COUNT(*)");
 	}
 
 	$t->assign(array(
-		'ADMIN_HOME_NEWUSERS_URL' => sed_url('users', 'f=all&s=regdate&w=desc'),
+		'ADMIN_HOME_NEWUSERS_URL' => cot_url('users', 'f=all&s=regdate&w=desc'),
 		'ADMIN_HOME_NEWUSERS' => $newusers,
-		'ADMIN_HOME_NEWPAGES_URL' => sed_url('admin', 'm=page'),
+		'ADMIN_HOME_NEWPAGES_URL' => cot_url('admin', 'm=page'),
 		'ADMIN_HOME_NEWPAGES' => $newpages,
-		'ADMIN_HOME_NEWTOPICS_URL' => sed_url('forums'),
+		'ADMIN_HOME_NEWTOPICS_URL' => cot_url('forums'),
 		'ADMIN_HOME_NEWTOPICS' => $newtopics,
-		'ADMIN_HOME_NEWPOSTS_URL' => sed_url('forums'),
+		'ADMIN_HOME_NEWPOSTS_URL' => cot_url('forums'),
 		'ADMIN_HOME_NEWPOSTS' => $newposts,
-		'ADMIN_HOME_NEWCOMMENTS_URL' => sed_url('admin', 'm=comments'),
+		'ADMIN_HOME_NEWCOMMENTS_URL' => cot_url('admin', 'm=comments'),
 		'ADMIN_HOME_NEWCOMMENTS' => $newcomments,
 		'ADMIN_HOME_NEWPMS' => $newpms
 	));
@@ -156,13 +156,13 @@ if (!$cfg['disableactivitystats'])
 //Show db stats
 if (!$cfg['disabledbstats'])
 {
-	$sql = sed_sql_query("SHOW TABLES");
+	$sql = cot_db_query("SHOW TABLES");
 
-	while ($row = sed_sql_fetchrow($sql))
+	while ($row = cot_db_fetchrow($sql))
 	{
 		$table_name = $row[0];
-		$status = sed_sql_query("SHOW TABLE STATUS LIKE '$table_name'");
-		$status1 = sed_sql_fetcharray($status);
+		$status = cot_db_query("SHOW TABLE STATUS LIKE '$table_name'");
+		$status1 = cot_db_fetcharray($status);
 		$tables[] = $status1;
 	}
 
@@ -175,11 +175,11 @@ if (!$cfg['disabledbstats'])
 		$total_data_length += $dat['Data_length'];
 	}
 
-	$sql = sed_sql_query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code");
-	$totalplugins = sed_sql_numrows($sql);
+	$sql = cot_db_query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code");
+	$totalplugins = cot_db_numrows($sql);
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_plugins");
-	$totalhooks = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_plugins");
+	$totalhooks = cot_db_result($sql, 0, "COUNT(*)");
 
 	$t->assign(array(
 		'ADMIN_HOME_DB_TOTAL_ROWS' => $total_rows,
@@ -192,14 +192,14 @@ if (!$cfg['disabledbstats'])
 }
 
 $t->assign(array(
-	'ADMIN_HOME_URL' => sed_url('admin', 'm=page'),
+	'ADMIN_HOME_URL' => cot_url('admin', 'm=page'),
 	'ADMIN_HOME_PAGESQUEUED' => $pagesqueued,
 	'ADMIN_HOME_VERSION' => $cfg['version'],
 	'ADMIN_HOME_REVISION' => $L['home_rev'].$cfg['revision'],
 	'ADMIN_HOME_DB_VERSION' => $cfg['dbversion']
 ));
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }
@@ -209,7 +209,7 @@ else
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.home', 'R') as $pl)
+foreach (cot_getextplugins('admin.home', 'R') as $pl)
 {
 	include $pl;
 }
@@ -218,11 +218,11 @@ foreach (sed_getextplugins('admin.home', 'R') as $pl)
 if ($cfg['trash_prunedelay'] > 0)
 {
 	$timeago = $sys['now_offset'] - ($cfg['trash_prunedelay'] * 86400);
-	$sqltmp = sed_sql_query("DELETE FROM $db_trash WHERE tr_date<$timeago");
-	$deleted = sed_sql_affectedrows();
+	$sqltmp = cot_db_query("DELETE FROM $db_trash WHERE tr_date<$timeago");
+	$deleted = cot_db_affectedrows();
 	if ($deleted > 0)
 	{
-		sed_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['trash_prunedelay'].' days', 'adm');
+		cot_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['trash_prunedelay'].' days', 'adm');
 	}
 }
 

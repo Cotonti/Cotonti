@@ -15,12 +15,12 @@ Hooks=page.edit.delete.done
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
+if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
-	sed_require('tags', true);
-	sed_tag_remove_all($id);
+	cot_require('tags', true);
+	cot_tag_remove_all($id);
 }
 
 ?>

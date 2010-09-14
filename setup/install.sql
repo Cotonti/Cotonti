@@ -1,4 +1,4 @@
-CREATE TABLE `sed_auth` (
+CREATE TABLE `cot_auth` (
   `auth_id` int NOT NULL auto_increment,
   `auth_groupid` int NOT NULL default '0',
   `auth_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
@@ -11,7 +11,7 @@ CREATE TABLE `sed_auth` (
   KEY `auth_code` (`auth_code`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights`, `auth_rights_lock`, `auth_setbyuserid`) VALUES
+INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights`, `auth_rights_lock`, `auth_setbyuserid`) VALUES
 (1, 'admin', 'a', 0, 255, 1),
 (2, 'admin', 'a', 0, 255, 1),
 (3, 'admin', 'a', 0, 255, 1),
@@ -43,7 +43,7 @@ INSERT INTO `sed_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 (5, 'structure', 'a', 255, 255, 1),
 (6, 'structure', 'a', 1, 0, 1);
 
-CREATE TABLE `sed_banlist` (
+CREATE TABLE `cot_banlist` (
   `banlist_id` int NOT NULL auto_increment,
   `banlist_ip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
   `banlist_email` varchar(128) collate utf8_unicode_ci NOT NULL default '',
@@ -53,7 +53,7 @@ CREATE TABLE `sed_banlist` (
   KEY `banlist_ip` (`banlist_ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_bbcode` (
+CREATE TABLE `cot_bbcode` (
   `bbc_id` int NOT NULL auto_increment,
   `bbc_name` varchar(100) collate utf8_unicode_ci NOT NULL,
   `bbc_mode` enum('str','ereg','pcre','callback') collate utf8_unicode_ci NOT NULL default 'str',
@@ -69,7 +69,7 @@ CREATE TABLE `sed_bbcode` (
   KEY `bbc_priority` (`bbc_priority`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacement`, `bbc_container`, `bbc_enabled`, `bbc_priority`, `bbc_plug`, `bbc_postrender`) VALUES
+INSERT INTO `cot_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacement`, `bbc_container`, `bbc_enabled`, `bbc_priority`, `bbc_plug`, `bbc_postrender`) VALUES
 ('b', 'str', '[b]', '<strong>', 1, 1, 128, '', 0),
 ('b', 'str', '[/b]', '</strong>', 0, 1, 128, '', 0),
 ('i', 'str', '[i]', '<em>', 1, 1, 128, '', 0),
@@ -89,7 +89,7 @@ INSERT INTO `sed_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('pre', 'str', '[pre]', '<pre>', 1, 1, 128, '', 0),
 ('pre', 'str', '[/pre]', '</pre>', 0, 1, 128, '', 0),
 ('nbsp', 'str', '[_]', '&nbsp;', 0, 1, 128, '', 0),
-('email', 'callback', '\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]', 'return sed_obfuscate(''<a href="mailto:''.$input[1].''">''.$input[2].''</a>'');', 1, 1, 128, '', 0),
+('email', 'callback', '\\[email=(\\w[\\._\\w\\-]+@[\\w\\.\\-]+\\.[a-z]+)\\](.+?)\\[/email\\]', 'return cot_obfuscate(''<a href="mailto:''.$input[1].''">''.$input[2].''</a>'');', 1, 1, 128, '', 0),
 ('quote', 'pcre', '\\[quote=(.+?)\\](.+?)\\[/quote\\]', '<blockquote><strong>$1:</strong><hr />$2</blockquote>', 1, 1, 128, '', 0),
 ('quote', 'pcre', '\\[quote\\](.+?)\\[/quote\\]', '<blockquote>$1</blockquote>', 1, 1, 128, '', 0),
 ('color', 'pcre', '\\[color=(#?\\w+)\\](.+?)\\[/color\\]', '<span style="color:$1">$2</span>', 1, 1, 128, '', 0),
@@ -97,7 +97,7 @@ INSERT INTO `sed_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('img', 'pcre', '\\[img=((?:http://|https://|ftp://)?[^\\]"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\]((?:http://|https://|ftp://)?[^\\]"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/img\\]', '<a href="$1"><img src="$2" alt="" /></a>', 1, 1, 128, '', 0),
 ('url', 'pcre', '\\[url=((?:http://|https://|ftp://)?[^\\s"\\'':\\[]+)\\](.+?)\\[/url\\]', '<a href="$1">$2</a>', 1, 1, 128, '', 0),
 ('url', 'pcre', '\\[url\\]((?:http://|https://|ftp://)?[^\\s"\\'':]+)\\[/url\\]', '<a href="$1">$1</a>', 1, 1, 128, '', 0),
-('code', 'callback', '\\[code\\](.+?)\\[/code\\]', 'return ''<pre class="code">''.sed_bbcode_cdata($input[1]).''</pre>'';', 1, 1, 1, '', 0),
+('code', 'callback', '\\[code\\](.+?)\\[/code\\]', 'return ''<pre class="code">''.cot_bbcode_cdata($input[1]).''</pre>'';', 1, 1, 1, '', 0),
 ('more', 'str', '[more]', '<!--more-->', 1, 1, 128, '', 0),
 ('more', 'str', '[/more]', '&nbsp;', 1, 1, 128, '', 0),
 ('size', 'pcre', '\\[size=([1-2][0-9])\\](.+?)\\[/size\\]', '<span style="font-size:$1pt">$2</span>', 1, 1, 128, 'markitup', 0),
@@ -124,7 +124,7 @@ INSERT INTO `sed_bbcode` (`bbc_name`, `bbc_mode`, `bbc_pattern`, `bbc_replacemen
 ('thumb', 'pcre', '\\[thumb\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png))\\[/thumb\\]', '<a href="datas/users/$1"><img src="datas/thumbs/$1" /></a>', 1, 1, 128, '', 0),
 ('pfs', 'pcre', '\\[pfs\\](.*?[^"\\'';:\\?]+\\.(?:jpg|jpeg|gif|png|zip|rar|7z|pdf|txt))\\[/pfs\\]', '<strong><a href="datas/users/$1">$1</a></strong>', 1, 1, 128, '', 0);
 
-CREATE TABLE `sed_cache` (
+CREATE TABLE `cot_cache` (
   `c_name` varchar(120) collate utf8_unicode_ci NOT NULL,
   `c_realm` varchar(80) collate utf8_unicode_ci NOT NULL default 'cot',
   `c_expire` int NOT NULL default '0',
@@ -136,7 +136,7 @@ CREATE TABLE `sed_cache` (
   KEY (`c_expire`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_cache_bindings` (
+CREATE TABLE `cot_cache_bindings` (
   `c_event` VARCHAR(80) collate utf8_unicode_ci NOT NULL,
   `c_id` VARCHAR(120) collate utf8_unicode_ci NOT NULL,
   `c_realm` VARCHAR(80) collate utf8_unicode_ci NOT NULL DEFAULT 'cot',
@@ -144,7 +144,7 @@ CREATE TABLE `sed_cache_bindings` (
   PRIMARY KEY (`c_event`, `c_id`, `c_realm`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_config` (
+CREATE TABLE `cot_config` (
   `config_owner` varchar(24) collate utf8_unicode_ci NOT NULL default 'core',
   `config_cat` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `config_order` char(2) collate utf8_unicode_ci NOT NULL default '00',
@@ -156,7 +156,7 @@ CREATE TABLE `sed_config` (
   `config_text` varchar(255) collate utf8_unicode_ci NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
+INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
 ('core','email','01','email_type',2,'mail(Standard)','mail(Standard)','mail(Standard),smtp',''),
 ('core','email','02','smtp_address',1,'','','',''),
 ('core','email','03','smtp_port',1,'25','25','',''),
@@ -284,7 +284,7 @@ INSERT INTO `sed_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','users','21','forcerememberme',3,'0','0','',''),
 ('core','version','01','revision',0,'','','','');
 
-CREATE TABLE `sed_core` (
+CREATE TABLE `cot_core` (
   `ct_id` mediumint NOT NULL auto_increment,
   `ct_code` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `ct_title` varchar(64) collate utf8_unicode_ci NOT NULL default '',
@@ -295,12 +295,12 @@ CREATE TABLE `sed_core` (
   KEY `ct_code` (`ct_code`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
+INSERT INTO `cot_core` (`ct_code`, `ct_title`, `ct_version`, `ct_state`, `ct_lock`) VALUES
 ('admin', 'Administration panel', '0.7.0', 1, 1),
 ('message', 'Messages', '0.7.0', 1, 1),
 ('users', 'Users', '0.7.0', 1, 1);
 
-CREATE TABLE `sed_extra_fields` (
+CREATE TABLE `cot_extra_fields` (
   `field_location` varchar(255) collate utf8_unicode_ci NOT NULL,
   `field_name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `field_type` varchar(255) collate utf8_unicode_ci NOT NULL,
@@ -314,7 +314,7 @@ CREATE TABLE `sed_extra_fields` (
   KEY `field_name` (`field_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_groups` (
+CREATE TABLE `cot_groups` (
   `grp_id` int NOT NULL auto_increment,
   `grp_alias` varchar(32) collate utf8_unicode_ci NOT NULL default '',
   `grp_level` tinyint NOT NULL default '1',
@@ -331,7 +331,7 @@ CREATE TABLE `sed_groups` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7;
 
 
-INSERT INTO `sed_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_hidden`, `grp_title`, `grp_desc`, `grp_icon`, `grp_pfs_maxfile`, `grp_pfs_maxtotal`, `grp_ownerid`, `grp_maintenance`) VALUES
+INSERT INTO `cot_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `grp_hidden`, `grp_title`, `grp_desc`, `grp_icon`, `grp_pfs_maxfile`, `grp_pfs_maxtotal`, `grp_ownerid`, `grp_maintenance`) VALUES
 (1, 'guests', 0, 0, 0, 'Guests', '', '', 0, 0, 1, 0),
 (2, 'inactive', 1, 0, 0, 'Inactive', '', '', 0, 0, 1, 0),
 (3, 'banned', 1, 0, 0, 'Banned', '', '', 0, 0, 1, 0),
@@ -339,7 +339,7 @@ INSERT INTO `sed_groups` (`grp_id`, `grp_alias`, `grp_level`, `grp_disabled`, `g
 (5, 'administrators', 99, 0, 0, 'Administrators', '', '', 256, 1024, 1, 1),
 (6, 'moderators', 50, 0, 0, 'Moderators', '', '', 256, 1024, 1, 1);
 
-CREATE TABLE `sed_groups_users` (
+CREATE TABLE `cot_groups_users` (
   `gru_userid` int NOT NULL default '0',
   `gru_groupid` int NOT NULL default '0',
   `gru_state` tinyint NOT NULL default '0',
@@ -350,7 +350,7 @@ CREATE TABLE `sed_groups_users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-CREATE TABLE `sed_logger` (
+CREATE TABLE `cot_logger` (
   `log_id` mediumint NOT NULL auto_increment,
   `log_date` int NOT NULL default '0',
   `log_ip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
@@ -360,7 +360,7 @@ CREATE TABLE `sed_logger` (
   PRIMARY KEY  (`log_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_online` (
+CREATE TABLE `cot_online` (
   `online_id` int NOT NULL auto_increment,
   `online_ip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
   `online_name` varchar(100) collate utf8_unicode_ci NOT NULL,
@@ -377,7 +377,7 @@ CREATE TABLE `sed_online` (
   KEY `online_name` (`online_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_plugins` (
+CREATE TABLE `cot_plugins` (
   `pl_id` mediumint NOT NULL auto_increment,
   `pl_hook` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `pl_code` varchar(32) collate utf8_unicode_ci NOT NULL default '',
@@ -390,7 +390,7 @@ CREATE TABLE `sed_plugins` (
   PRIMARY KEY  (`pl_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_rated` (
+CREATE TABLE `cot_rated` (
   `rated_id` int unsigned NOT NULL auto_increment,
   `rated_code` varchar(32) collate utf8_unicode_ci default NULL,
   `rated_userid` int default NULL,
@@ -399,7 +399,7 @@ CREATE TABLE `sed_rated` (
   KEY `rated_code` (`rated_code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_ratings` (
+CREATE TABLE `cot_ratings` (
   `rating_id` int NOT NULL auto_increment,
   `rating_code` varchar(32) collate utf8_unicode_ci NOT NULL default '',
   `rating_state` tinyint NOT NULL default '0',
@@ -410,20 +410,20 @@ CREATE TABLE `sed_ratings` (
   KEY `rating_code` (`rating_code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_referers` (
+CREATE TABLE `cot_referers` (
   `ref_url` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `ref_date` int unsigned NOT NULL default '0',
   `ref_count` int NOT NULL default '0',
   PRIMARY KEY  (`ref_url`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_stats` (
+CREATE TABLE `cot_stats` (
   `stat_name` varchar(32) collate utf8_unicode_ci NOT NULL default '',
   `stat_value` int NOT NULL default '0',
   PRIMARY KEY  (`stat_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `sed_stats` (`stat_name`, `stat_value`) VALUES
+INSERT INTO `cot_stats` (`stat_name`, `stat_value`) VALUES
 ('totalpages', 0),
 ('totalmailsent', 0),
 ('totalmailpmnot', 0),
@@ -432,7 +432,7 @@ INSERT INTO `sed_stats` (`stat_name`, `stat_value`) VALUES
 ('textboxerprev', 0),
 ('version', 999);
 
-CREATE TABLE `sed_structure` (
+CREATE TABLE `cot_structure` (
   `structure_id` mediumint NOT NULL auto_increment,
   `structure_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `structure_path` varchar(255) collate utf8_unicode_ci NOT NULL default '',
@@ -448,12 +448,12 @@ CREATE TABLE `sed_structure` (
   KEY `structure_path` (`structure_path`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_tags` (
+CREATE TABLE `cot_tags` (
   `tag` varchar(255) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`tag`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_tag_references` (
+CREATE TABLE `cot_tag_references` (
   `tag` varchar(255) collate utf8_unicode_ci NOT NULL,
   `tag_item` int NOT NULL,
   `tag_area` varchar(64) collate utf8_unicode_ci NOT NULL default 'pages',
@@ -462,7 +462,7 @@ CREATE TABLE `sed_tag_references` (
   KEY `tag_area` (`tag_area`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_trash` (
+CREATE TABLE `cot_trash` (
   `tr_id` int NOT NULL auto_increment,
   `tr_date` int unsigned NOT NULL default '0',
   `tr_type` varchar(24) collate utf8_unicode_ci NOT NULL default '',
@@ -473,16 +473,16 @@ CREATE TABLE `sed_trash` (
   PRIMARY KEY  (`tr_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `sed_updates` (
+CREATE TABLE `cot_updates` (
   `upd_param` VARCHAR(255) NOT NULL,
   `upd_value` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`upd_param`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-INSERT INTO `sed_updates` (`upd_param`, `upd_value`) VALUES
+INSERT INTO `cot_updates` (`upd_param`, `upd_value`) VALUES
 ('revision', '$Rev$'),
 ('branch', 'siena');
 
-CREATE TABLE `sed_users` (
+CREATE TABLE `cot_users` (
   `user_id` int unsigned NOT NULL auto_increment,
   `user_banexpire` int default '0',
   `user_name` varchar(100) collate utf8_unicode_ci NOT NULL,

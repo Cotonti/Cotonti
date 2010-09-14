@@ -16,17 +16,17 @@ Tags=forums.editpost.tpl:{FORUMS_EDITPOST_FORM_TAGS},{FORUMS_EDITPOST_TOP_TAGS},
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['forums'] && sed_auth('plug', 'tags', 'W') && $is_first_post)
+if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $is_first_post)
 {
-	sed_require('tags', true);
-	$tags = sed_tag_list($q, 'forums');
+	cot_require('tags', true);
+	$tags = cot_tag_list($q, 'forums');
 	$tags = implode(', ', $tags);
 	$t->assign(array(
 		'FORUMS_EDITPOST_TOP_TAGS' => $L['Tags'],
 		'FORUMS_EDITPOST_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-		'FORUMS_EDITPOST_FORM_TAGS' => sed_rc('tags_input_editpost')
+		'FORUMS_EDITPOST_FORM_TAGS' => cot_rc('tags_input_editpost')
 	));
 	$t->parse('MAIN.FORUMS_EDITPOST_TAGS');
 }

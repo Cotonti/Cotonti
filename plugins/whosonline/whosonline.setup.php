@@ -33,6 +33,6 @@ miniavatar_y=03:string::16:The size of a mini-avatars on the axis y, in pixels
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 ?>

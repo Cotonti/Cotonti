@@ -9,23 +9,23 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('ratings', 'a');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('ratings', 'a');
+cot_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.ratings'));
+$t = new XTemplate(cot_skinfile('admin.ratings'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=ratings'), $L['Ratings']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=ratings'), $L['Ratings']);
 $adminhelp = $L['adm_help_ratings'];
 
-$id = sed_import('id','G','TXT');
-$d = sed_import('d', 'G', 'INT');
+$id = cot_import('id','G','TXT');
+$d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.ratings.first') as $pl)
+foreach (cot_getextplugins('admin.ratings.first') as $pl)
 {
 	include $pl;
 }
@@ -33,29 +33,29 @@ foreach (sed_getextplugins('admin.ratings.first') as $pl)
 
 if($a == 'delete')
 {
-	sed_check_xg();
-	sed_sql_delete($db_ratings, "rating_code = '$id'");
-	sed_sql_delete($db_rated, "rated_code = '$id'");
+	cot_check_xg();
+	cot_db_delete($db_ratings, "rating_code = '$id'");
+	cot_db_delete($db_rated, "rated_code = '$id'");
 
-	sed_message('adm_ratings_already_del');
+	cot_message('adm_ratings_already_del');
 }
 
 
-$totalitems = sed_sql_rowcount($db_ratings);
-$pagenav = sed_pagenav('admin', 'm=ratings', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$totalitems = cot_db_rowcount($db_ratings);
+$pagenav = cot_pagenav('admin', 'm=ratings', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = sed_sql_query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = cot_db_query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 $jj = 0;
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('admin.ratings.loop');
+$extp = cot_getextplugins('admin.ratings.loop');
 /* ===== */
-while($row = sed_sql_fetcharray($sql))
+while($row = cot_db_fetcharray($sql))
 {
 	$id2 = $row['rating_code'];
-	$sql1 = sed_sql_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$id2'");
-	$votes = sed_sql_result($sql1, 0, "COUNT(*)");
+	$sql1 = cot_db_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$id2'");
+	$votes = cot_db_result($sql1, 0, "COUNT(*)");
 
 	$rat_type = mb_substr($row['rating_code'], 0, 1);
 	$rat_value = mb_substr($row['rating_code'], 1);
@@ -63,7 +63,7 @@ while($row = sed_sql_fetcharray($sql))
 	switch($rat_type)
 	{
 		case 'p':
-			$rat_url = sed_url('page', 'id='.$rat_value);
+			$rat_url = cot_url('page', 'id='.$rat_value);
 		break;
 		default:
 			$rat_url = '';
@@ -71,13 +71,13 @@ while($row = sed_sql_fetcharray($sql))
 	}
 
 	$t->assign(array(
-		'ADMIN_RATINGS_ROW_URL_DEL' => sed_url('admin', 'm=ratings&a=delete&id='.$row['rating_code'].'&d='.$d.'&'.sed_xg()),
+		'ADMIN_RATINGS_ROW_URL_DEL' => cot_url('admin', 'm=ratings&a=delete&id='.$row['rating_code'].'&d='.$d.'&'.cot_xg()),
 		'ADMIN_RATINGS_ROW_RATING_CODE' => $row['rating_code'],
 		'ADMIN_RATINGS_ROW_CREATIONDATE' => date($cfg['dateformat'], $row['rating_creationdate']),
 		'ADMIN_RATINGS_ROW_VOTES' => $votes,
 		'ADMIN_RATINGS_ROW_RATING_AVERAGE' => $row['rating_average'],
 		'ADMIN_RATINGS_ROW_RAT_URL' => $rat_url,
-		'ADMIN_RATINGS_ROW_ODDEVEN' => sed_build_oddeven($ii)
+		'ADMIN_RATINGS_ROW_ODDEVEN' => cot_build_oddeven($ii)
 	));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -91,7 +91,7 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t->assign(array(
-	'ADMIN_RATINGS_URL_CONFIG' => sed_url('admin', 'm=config&n=edit&o=core&p=ratings'),
+	'ADMIN_RATINGS_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=core&p=ratings'),
 	'ADMIN_RATINGS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_RATINGS_PAGNAV' => $pagenav['main'],
 	'ADMIN_RATINGS_PAGINATION_NEXT' => $pagenav['next'],
@@ -100,17 +100,17 @@ $t->assign(array(
 	'ADMIN_RATINGS_TOTALVOTES' => $jj
 ));
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.ratings.tags') as $pl)
+foreach (cot_getextplugins('admin.ratings.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

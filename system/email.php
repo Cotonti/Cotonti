@@ -10,7 +10,7 @@
  * @param string $additional_parameters Additional parameters passed to sendmail
  * @return bool
  */
-function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
+function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
 {
 	global $cfg;
 
@@ -37,7 +37,7 @@ function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 		{
 			mail($fmail, $subject, $body, $headers, $additional_parameters);
 		}
-		sed_stat_inc('totalmailsent');
+		cot_stat_inc('totalmailsent');
 		return(TRUE);
 	}
 }

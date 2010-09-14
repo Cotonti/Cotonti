@@ -16,25 +16,25 @@ Tags=forums.topics.tpl:{FORUMS_TOPICS_ROW_TAGS}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'])
 {
-	sed_require('tags', true);
+	cot_require('tags', true);
 	$item_id = $row['ft_id'];
-	$tags = sed_tag_list($item_id, 'forums');
+	$tags = cot_tag_list($item_id, 'forums');
 	if (count($tags) > 0)
 	{
 		$tc_html = $L['Tags'] . ': ';
 		$tag_i = 0;
 		foreach ($tags as $tag)
 		{
-			$tag_t = $cfg['plugin']['tags']['title'] ? htmlspecialchars(sed_tag_title($tag)) : htmlspecialchars($tag);
-			$tag_u = sed_urlencode($tag, $cfg['plugin']['tags']['translit']);
+			$tag_t = $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag);
+			$tag_u = cot_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 			if ($tag_i > 0) $tc_html .= ', ';
-			$tc_html .= sed_rc('tags_link_tag', array(
-				'url' => sed_url('plug', 'e=tags&a=forums' . $tl . '&t=' . $tag_u),
+			$tc_html .= cot_rc('tags_link_tag', array(
+				'url' => cot_url('plug', 'e=tags&a=forums' . $tl . '&t=' . $tag_u),
 				'tag_title' => $tag_t
 			));
 			$tag_i++;

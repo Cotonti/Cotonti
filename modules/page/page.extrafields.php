@@ -15,16 +15,16 @@ Hooks=admin.extrafields.first
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($n == 'pages')
 {
-	sed_require('pages');
-	$adminpath[] = array(sed_url('admin', 'm=page'), $L['Pages']);
-	$adminpath[] = array(sed_url('admin', 'm=extrafields&n=pages'), $L['adm_extrafields']);
+	cot_require('pages');
+	$adminpath[] = array(cot_url('admin', 'm=page'), $L['Pages']);
+	$adminpath[] = array(cot_url('admin', 'm=extrafields&n=pages'), $L['adm_extrafields']);
 	$adminhelp = $L['adm_help_pages_extrafield'];
 	$extra_path = 'm=extrafields&n=pages';
-	$location = $sed_pages;
+	$location = $cot_pages;
 }
 
 ?>

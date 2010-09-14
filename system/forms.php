@@ -10,7 +10,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Generates a checkbox output
@@ -20,15 +20,15 @@ defined('SED_CODE') or die('Wrong URL');
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @param string $value Input value (passed), defaults to 'on' or '1'
  */
-function sed_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
+function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
 {
 	global $R;
-	$input_attrs = sed_rc_attr_string($attrs);
+	$input_attrs = cot_rc_attr_string($attrs);
 	$checked = $chosen ? ' checked="checked"' : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}";
-	return sed_rc($rc, array(
-		'value' => sed_import_buffered($name, $value),
+	return cot_rc($rc, array(
+		'value' => cot_import_buffered($name, $value),
 		'name' => $name,
 		'checked' => $checked,
 		'title' => $title,
@@ -46,10 +46,10 @@ function sed_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
  * @param string $custom_rc Custom resource string name
  * @return string
  */
-function sed_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
+function cot_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 {
 	global $R, $cfg;
-	$input_attrs = sed_rc_attr_string($attrs);
+	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($custom_rc)
 		? (empty($R["input_{$type}_{$rc_name}"]) ? "input_$type" : "input_{$type}_{$rc_name}")
@@ -58,11 +58,11 @@ function sed_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
 	{
 		$rc = 'input_default';
 	}
-	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
-	return sed_rc($rc, array(
+	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+	return cot_rc($rc, array(
 		'type' => $type,
 		'name' => $name,
-		'value' => htmlspecialchars(sed_import_buffered($name, $value)),
+		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
 		'attrs' => $input_attrs,
 		'error' => $error
 	));
@@ -79,7 +79,7 @@ function sed_inputbox($type, $name, $value = '', $attrs = '', $custom_rc = '')
  * @param string $separator Option separator, by default is taken from $R['input_radio_separator']
  * @return string
  */
-function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '')
+function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $separator = '')
 {
 	global $R;
 	if (!is_array($values))
@@ -91,8 +91,8 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 		$titles = explode(',', $titles);
 	}
 	$use_titles = count($values) == count($titles);
-	$input_attrs = sed_rc_attr_string($attrs);
-	$chosen = sed_import_buffered($name, $chosen);
+	$input_attrs = cot_rc_attr_string($attrs);
+	$chosen = cot_import_buffered($name, $chosen);
 	if (empty($separator))
 	{
 		$separator = $R['input_radio_separator'];
@@ -109,7 +109,7 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 		{
 			$result .= $separator;
 		}
-		$result .= sed_rc($rc, array(
+		$result .= cot_rc($rc, array(
 			'value' => htmlspecialchars($x),
 			'name' => $name,
 			'checked' => $checked,
@@ -132,7 +132,7 @@ function sed_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @return string
  */
-function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '')
+function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = true, $attrs = '')
 {
 	global $R, $cfg;
 
@@ -145,17 +145,17 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 		$titles = explode(',', $titles);
 	}
 	$use_titles = count($values) == count($titles);
-	$input_attrs = sed_rc_attr_string($attrs);
-	$chosen = sed_import_buffered($name, $chosen);
+	$input_attrs = cot_rc_attr_string($attrs);
+	$chosen = cot_import_buffered($name, $chosen);
 	$multi = is_array($chosen) && isset($input_attrs['multiple']);
-	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
+	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 
 	$selected = (is_null($chosen) || $chosen === '' || $chosen == '00') ? ' selected="selected"' : '';
 	$rc = empty($R["input_option_{$rc_name}"]) ? 'input_option' : "input_option_{$rc_name}";
 	if ($add_empty)
 	{
-		$options .= sed_rc($rc, array(
+		$options .= cot_rc($rc, array(
 			'value' => '',
 			'selected' => $selected,
 			'title' => $R['code_option_empty']
@@ -166,14 +166,14 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 		$x = trim($x);
 		$selected = ($multi && in_array($x, $chosen)) || (!$multi && $x == $chosen) ? ' selected="selected"' : '';
 		$title = $use_titles ? htmlspecialchars($titles[$k]) : htmlspecialchars($x);
-		$options .= sed_rc($rc, array(
+		$options .= cot_rc($rc, array(
 			'value' => htmlspecialchars($x),
 			'selected' => $selected,
 			'title' => $title
 		));
 	}
 	$rc = empty($R["input_select_{$rc_name}"]) ? 'input_select' : "input_select_{$rc_name}";
-	$result .= sed_rc($rc, array(
+	$result .= cot_rc($rc, array(
 		'name' => $name,
 		'attrs' => $input_attrs,
 		'error' => $error,
@@ -191,14 +191,14 @@ function sed_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @return string
  */
-function sed_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '')
+function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '')
 {
-	global $sed_countries;
+	global $cot_countries;
 
-	if (!$sed_countries)
-		include_once sed_langfile('countries', 'core');
+	if (!$cot_countries)
+		include_once cot_langfile('countries', 'core');
 
-	return sed_selectbox($chosen, $name, array_keys($sed_countries), array_values($sed_countries), $add_empty, $attrs);
+	return cot_selectbox($chosen, $name, array_keys($cot_countries), array_values($cot_countries), $add_empty, $attrs);
 }
 
 /**
@@ -213,7 +213,7 @@ function sed_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '')
  * @param bool $usertimezone Use user timezone
  * @return string
  */
-function sed_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $ext='', $usertimezone = true)
+function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $ext='', $usertimezone = true)
 {
 	global $L, $R, $usr;
 	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
@@ -242,16 +242,16 @@ function sed_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	$months[11] = $L['November'];
 	$months[12] = $L['December'];
 
-	$year = sed_selectbox($s_year, $name.'_year'.$ext, range($min_year, $max_year));
-	$month = sed_selectbox($s_month, $name.'_month'.$ext, array_keys($months), array_values($months));
-	$day = sed_selectbox($s_day, $name.'_day'.$ext, range(1, 31));
+	$year = cot_selectbox($s_year, $name.'_year'.$ext, range($min_year, $max_year));
+	$month = cot_selectbox($s_month, $name.'_month'.$ext, array_keys($months), array_values($months));
+	$day = cot_selectbox($s_day, $name.'_day'.$ext, range(1, 31));
 
 	$range = array();
 	for ($i = 0; $i < 24; $i++)
 	{
 		$range[] = sprintf('%02d', $i);
 	}
-	$hour = sed_selectbox($s_hour, $name.'_hour'.$ext, $range);
+	$hour = cot_selectbox($s_hour, $name.'_hour'.$ext, $range);
 
 	$range = array();
 	for ($i = 0; $i < 60; $i++)
@@ -259,12 +259,12 @@ function sed_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 		$range[] = sprintf('%02d', $i);
 	}
 
-	$minute = sed_selectbox($s_minute, $name.'_minute'.$ext, $range);
+	$minute = cot_selectbox($s_minute, $name.'_minute'.$ext, $range);
 
 	$rc = empty($R["input_date_{$mode}"]) ? 'input_date' : "input_date_{$mode}";
 	$rc = empty($R["input_date_{$name}"]) ? $rc : "input_date_{$name}";
 
-	$result = sed_rc($rc, array(
+	$result = cot_rc($rc, array(
 		'day' => $day,
 		'month' => $month,
 		'year' => $year,
@@ -284,9 +284,9 @@ function sed_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
  * @param mixed $attrs Additional attributes as an associative array or a string
  * @return string
  */
-function sed_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
+function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
 {
-	global $sed_languages, $sed_countries, $cfg;
+	global $cot_languages, $cot_countries, $cfg;
 
 	$handle = opendir($cfg['lang_dir'] . '/');
 	while ($f = readdir($handle))
@@ -299,17 +299,17 @@ function sed_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
 	closedir($handle);
 	sort($langlist);
 
-	if (!$sed_countries)
-		include_once sed_langfile('countries', 'core');
+	if (!$cot_countries)
+		include_once cot_langfile('countries', 'core');
 
 	$vals = array();
 	$titles = array();
 	foreach ($langlist as $lang)
 	{
 		$vals[] = $lang;
-		$titles[] = (empty($sed_languages[$lang]) ? $sed_countries[$lang] : $sed_languages[$lang]) . " ($lang)";
+		$titles[] = (empty($cot_languages[$lang]) ? $cot_countries[$lang] : $cot_languages[$lang]) . " ($lang)";
 	}
-	return sed_selectbox($chosen, $name, $vals, $titles, $add_empty, $attrs);
+	return cot_selectbox($chosen, $name, $vals, $titles, $add_empty, $attrs);
 }
 
 /**
@@ -323,17 +323,17 @@ function sed_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
  * @param string $custom_rc Custom resource string name
  * @return string
  */
-function sed_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
+function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 {
-	$input_attrs = sed_rc_attr_string($attrs);
+	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($custom_rc)
 		? (empty($R["input_textarea_{$rc_name}"]) ? 'input_textarea' : "input_textarea_{$rc_name}")
 		: $custom_rc;
-	$error = $cfg['msg_separate'] ? sed_implode_messages($name, 'error') : '';
-	return sed_rc($rc, array(
+	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
+	return cot_rc($rc, array(
 		'name' => $name,
-		'value' => htmlspecialchars(sed_import_buffered($name, $value)),
+		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
 		'rows' => $rows,
 		'cols' => $cols,
 		'attrs' => $input_attrs,

@@ -28,6 +28,6 @@ Requires_modules=forums,page,pfs,pm,polls
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 ?>

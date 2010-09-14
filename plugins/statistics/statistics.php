@@ -15,67 +15,67 @@ Hooks=standalone
  * @license BSD
  */
 
-defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
+defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
 // TODO show statistics for installed modules only
 
-sed_require('forums');
-sed_require('page');
-sed_require('pfs');
-sed_require('pm');
-sed_require('polls');
+cot_require('forums');
+cot_require('page');
+cot_require('pfs');
+cot_require('pm');
+cot_require('polls');
 
-$s = sed_import('s', 'G', 'TXT');
+$s = cot_import('s', 'G', 'TXT');
 
 $plugin_title = $L['plu_title'];
 
-$totaldbpages = sed_sql_rowcount($db_pages);
-$totaldbratings = sed_sql_rowcount($db_ratings);
-$totaldbratingsvotes = sed_sql_rowcount($db_rated);
-$totaldbpolls = sed_sql_rowcount($db_polls);
-$totaldbpollsvotes = sed_sql_rowcount($db_polls_voters);
-$totaldbposts = sed_sql_rowcount($db_forum_posts);
-$totaldbtopics = sed_sql_rowcount($db_forum_topics);
-$totaldbfiles = sed_sql_rowcount($db_pfs);
-$totaldbusers = sed_sql_rowcount($db_users);
+$totaldbpages = cot_db_rowcount($db_pages);
+$totaldbratings = cot_db_rowcount($db_ratings);
+$totaldbratingsvotes = cot_db_rowcount($db_rated);
+$totaldbpolls = cot_db_rowcount($db_polls);
+$totaldbpollsvotes = cot_db_rowcount($db_polls_voters);
+$totaldbposts = cot_db_rowcount($db_forum_posts);
+$totaldbtopics = cot_db_rowcount($db_forum_topics);
+$totaldbfiles = cot_db_rowcount($db_pfs);
+$totaldbusers = cot_db_rowcount($db_users);
 
-$totalpages = sed_stat_get('totalpages');
-$totalmailsent = sed_stat_get('totalmailsent');
-$totalpmsent = sed_stat_get('totalpms');
+$totalpages = cot_stat_get('totalpages');
+$totalmailsent = cot_stat_get('totalmailsent');
+$totalpmsent = cot_stat_get('totalpms');
 
-$totaldbviews = sed_sql_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
-$totaldbviews = sed_sql_result($totaldbviews, 0, "SUM(fs_viewcount)");
+$totaldbviews = cot_db_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
+$totaldbviews = cot_db_result($totaldbviews, 0, "SUM(fs_viewcount)");
 
-$sql = sed_sql_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
-$totaldbtopicspruned = sed_sql_result($sql, 0, "SUM(fs_topiccount_pruned)");
+$sql = cot_db_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
+$totaldbtopicspruned = cot_db_result($sql, 0, "SUM(fs_topiccount_pruned)");
 
-$sql = sed_sql_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
-$totaldbpostspruned = sed_sql_result($sql, 0, "SUM(fs_postcount_pruned)");
+$sql = cot_db_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
+$totaldbpostspruned = cot_db_result($sql, 0, "SUM(fs_postcount_pruned)");
 
-$totaldbfilesize = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs");
-$totaldbfilesize = sed_sql_result($totaldbfilesize, 0, "SUM(pfs_size)");
+$totaldbfilesize = cot_db_query("SELECT SUM(pfs_size) FROM $db_pfs");
+$totaldbfilesize = cot_db_result($totaldbfilesize, 0, "SUM(pfs_size)");
 
-$totalpmactive = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate<2");
-$totalpmactive = sed_sql_result($totalpmactive, 0, "COUNT(*)");
+$totalpmactive = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate<2");
+$totalpmactive = cot_db_result($totalpmactive, 0, "COUNT(*)");
 
-$totalpmarchived = sed_sql_query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate=2");
-$totalpmarchived = sed_sql_result($totalpmarchived, 0, "COUNT(*)");
+$totalpmarchived = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate=2");
+$totalpmarchived = cot_db_result($totalpmarchived, 0, "COUNT(*)");
 
-$sql = sed_sql_query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");
-$row = sed_sql_fetcharray($sql);
+$sql = cot_db_query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");
+$row = cot_db_fetcharray($sql);
 $since = $row['stat_name'];
 
-$sql = sed_sql_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
-$row = sed_sql_fetcharray($sql);
+$sql = cot_db_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
+$row = cot_db_fetcharray($sql);
 $max_date = $row['stat_name'];
 $max_hits = $row['stat_value'];
 
 if ($usr['id'] > 0)
 {
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='".$usr['id']."'");
-	$user_postscount = sed_sql_result($sql, 0, "COUNT(*)");
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='".$usr['id']."'");
-	$user_topicscount = sed_sql_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='".$usr['id']."'");
+	$user_postscount = cot_db_result($sql, 0, "COUNT(*)");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='".$usr['id']."'");
+	$user_topicscount = cot_db_result($sql, 0, "COUNT(*)");
 
 	$t->assign(array(
 		'STATISTICS_USER_POSTSCOUNT' => $user_postscount,
@@ -83,7 +83,7 @@ if ($usr['id'] > 0)
 	));
 
 	/* === Hook === */
-	foreach (sed_getextplugins('statistics.user') as $pl)
+	foreach (cot_getextplugins('statistics.user') as $pl)
 	{
 		include $pl;
 	}
@@ -98,22 +98,22 @@ else
 
 if ($s == 'usercount')
 {
-	$sql1 = sed_sql_query("DROP TEMPORARY TABLE IF EXISTS tmp1");
-	$sql = sed_sql_query("CREATE TEMPORARY TABLE tmp1 SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country");
-	$sql = sed_sql_query("SELECT * FROM tmp1 WHERE 1 ORDER by usercount DESC");
-	$sql1 = sed_sql_query("DROP TEMPORARY TABLE IF EXISTS tmp1");
+	$sql1 = cot_db_query("DROP TEMPORARY TABLE IF EXISTS tmp1");
+	$sql = cot_db_query("CREATE TEMPORARY TABLE tmp1 SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country");
+	$sql = cot_db_query("SELECT * FROM tmp1 WHERE 1 ORDER by usercount DESC");
+	$sql1 = cot_db_query("DROP TEMPORARY TABLE IF EXISTS tmp1");
 }
 else
 {
-	$sql = sed_sql_query("SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country ASC");
+	$sql = cot_db_query("SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country ASC");
 }
 
-$sqltotal = sed_sql_query("SELECT COUNT(*) FROM $db_users WHERE 1");
-$totalusers = sed_sql_result($sqltotal, 0, "COUNT(*)");
+$sqltotal = cot_db_query("SELECT COUNT(*) FROM $db_users WHERE 1");
+$totalusers = cot_db_result($sqltotal, 0, "COUNT(*)");
 
 $ii = 0;
 
-while ($row = sed_sql_fetcharray($sql))
+while ($row = cot_db_fetcharray($sql))
 {
 	$country_code = $row['user_country'];
 
@@ -121,17 +121,17 @@ while ($row = sed_sql_fetcharray($sql))
 	{
 		$ii = $ii + $row['usercount'];
 		$t->assign(array(
-			'STATISTICS_COUNTRY_FLAG' => sed_build_flag($country_code),
+			'STATISTICS_COUNTRY_FLAG' => cot_build_flag($country_code),
 			'STATISTICS_COUNTRY_COUNT' => $row['usercount'],
-			'STATISTICS_COUNTRY_NAME' => sed_build_country($country_code)
+			'STATISTICS_COUNTRY_NAME' => cot_build_country($country_code)
 		));
 		$t->parse('MAIN.ROW_COUNTRY');
 	}
 }
 
 $t->assign(array(
-	'STATISTICS_PLU_URL' => sed_url('plug', 'e=statistics'),
-	'STATISTICS_SORT_BY_USERCOUNT' => sed_url('plug', 'e=statistics&s=usercount'),
+	'STATISTICS_PLU_URL' => cot_url('plug', 'e=statistics'),
+	'STATISTICS_SORT_BY_USERCOUNT' => cot_url('plug', 'e=statistics&s=usercount'),
 	'STATISTICS_MAX_DATE' => $max_date,
 	'STATISTICS_MAX_HITS' => $max_hits,
 	'STATISTICS_SINCE' => $since,
@@ -160,7 +160,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-foreach (sed_getextplugins('statistics.tags') as $pl)
+foreach (cot_getextplugins('statistics.tags') as $pl)
 {
 	include $pl;
 }

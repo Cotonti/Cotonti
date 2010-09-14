@@ -13,7 +13,7 @@ http://www.neocrome.net
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /* ======== First... ======== */
 
@@ -21,19 +21,19 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 {
 	if (get_magic_quotes_gpc())
 	{
-		function sed_disable_mqgpc(&$value, $key)
+		function cot_disable_mqgpc(&$value, $key)
 		{
 			$value = stripslashes($value);
 		}
 		$gpc = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
-		array_walk_recursive($gpc, 'sed_disable_mqgpc');
+		array_walk_recursive($gpc, 'cot_disable_mqgpc');
 	}
 }
 define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
-if (SED_DEBUG) require_once $cfg['system_dir'].'/debug.php';
+if (COT_DEBUG) require_once $cfg['system_dir'].'/debug.php';
 
-register_shutdown_function('sed_shutdown');
+register_shutdown_function('cot_shutdown');
 
 $sys['day'] = @date('Y-m-d');
 $sys['now'] = time();
@@ -43,7 +43,7 @@ $sys['site_id'] = $site_id;
 
 if (empty($z))
 {
-	$z = sed_import('z', 'G', 'ALP');
+	$z = cot_import('z', 'G', 'ALP');
 	$z = empty($z) ? 'index' : $z;
 }
 
@@ -72,7 +72,7 @@ else
 /* ======== Connect to the SQL DB======== */
 
 require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
-$sed_dbc = sed_sql_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
+$cot_dbc = cot_db_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 $cot_cache && $cot_cache->init();
@@ -86,9 +86,9 @@ if ($cot_cache && $cot_cfg)
 }
 else
 {
-	$sql_config = sed_sql_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
+	$sql_config = cot_db_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
 
-	while ($row = sed_sql_fetcharray($sql_config))
+	while ($row = cot_db_fetcharray($sql_config))
 	{
 		if ($row['config_owner'] == 'core')
 		{
@@ -124,7 +124,7 @@ else
 {
 	$usr['ip'] = $_SERVER['REMOTE_ADDR'];
 }
-$sys['unique'] = sed_unique(16);
+$sys['unique'] = cot_unique(16);
 
 // Getting the server-relative path
 $url = parse_url($cfg['mainurl']);
@@ -134,62 +134,62 @@ $sys['site_uri'] = $url['path'];
 $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
 if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';
-define('SED_SITE_URI', $sys['site_uri']);
+define('COT_SITE_URI', $sys['site_uri']);
 if (empty($cfg['cookiepath'])) $cfg['cookiepath'] = $sys['site_uri'];
 // Absolute site url
 $sys['host'] = preg_match('`^(.+\.)?'.preg_quote($sys['domain']).'$`i', $_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
 	: $sys['domain'];
 $sys['abs_url'] = $url['scheme'].'://'.$sys['host']. $sys['site_uri'];
-define('SED_ABSOLUTE_URL', $sys['abs_url']);
+define('COT_ABSOLUTE_URL', $sys['abs_url']);
 // URI redirect appliance
 $sys['uri_curr'] = (mb_stripos($_SERVER['REQUEST_URI'], $sys['site_uri']) === 0) ?
 	mb_substr($_SERVER['REQUEST_URI'], mb_strlen($sys['site_uri'])) : ltrim($_SERVER['REQUEST_URI'], '/');
 $sys['uri_redir'] = base64_encode($sys['uri_curr']);
 $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
-$redirect = sed_import('redirect','G','SLU');
+$redirect = cot_import('redirect','G','SLU');
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
-define('SED_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER['X-Requested-With']));
+define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER['X-Requested-With']));
 
 /* ======== Plugins ======== */
 
-if (!$sed_plugins)
+if (!$cot_plugins)
 {
-	$sql = sed_sql_query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
+	$sql = cot_db_query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
-	if (sed_sql_numrows($sql) > 0)
+	if (cot_db_numrows($sql) > 0)
 	{
-		while ($row = sed_sql_fetcharray($sql))
+		while ($row = cot_db_fetcharray($sql))
 		{
-			$sed_plugins[$row['pl_hook']][] = $row;
+			$cot_plugins[$row['pl_hook']][] = $row;
 		}
-        sed_sql_freeresult($sql);
+        cot_db_freeresult($sql);
 	}
-	$cot_cache && $cot_cache->db->store('sed_plugins', $sed_plugins, 'system');
+	$cot_cache && $cot_cache->db->store('cot_plugins', $cot_plugins, 'system');
 }
 
-if (!is_array($sed_urltrans))
+if (!is_array($cot_urltrans))
 {
-	sed_load_urltrans();
-	$cot_cache && $cot_cache->db->store('sed_urltrans', $sed_urltrans, 'system', 1200);
+	cot_load_urltrans();
+	$cot_cache && $cot_cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
 }
 
-if (!$sed_modules)
+if (!$cot_modules)
 {
-    $sql = sed_sql_query("SELECT ct_code, ct_title FROM $db_core
+    $sql = cot_db_query("SELECT ct_code, ct_title FROM $db_core
 		WHERE ct_state = 1 AND ct_lock = 0");
-	if (sed_sql_numrows($sql) > 0)
+	if (cot_db_numrows($sql) > 0)
 	{
-		while ($row = sed_sql_fetcharray($sql))
+		while ($row = cot_db_fetcharray($sql))
 		{
-			$sed_modules[$row['ct_code']] = array(
+			$cot_modules[$row['ct_code']] = array(
                 'code' => $row['ct_code'],
                 'title' => $row['ct_title']
             );
 		}
-        sed_sql_freeresult($sql);
+        cot_db_freeresult($sql);
 	}
-	$cot_cache && $cot_cache->db->store('sed_modules', $sed_modules, 'system');
+	$cot_cache && $cot_cache->db->store('cot_modules', $cot_modules, 'system');
 }
 
 /* ======== Gzip and output filtering ======== */
@@ -203,7 +203,7 @@ else
 	ob_start();
 }
 
-ob_start('sed_outputfilters');
+ob_start('cot_outputfilters');
 
 /* ======== Check the banlist ======== */
 
@@ -212,36 +212,36 @@ if (!$cfg['disablebanlist'])
 	$userip = explode('.', $usr['ip']);
 	$ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";
 
-	$sql = sed_sql_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
+	$sql = cot_db_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
 
-	if (sed_sql_numrows($sql) > 0)
+	if (cot_db_numrows($sql) > 0)
 	{
-		$row = sed_sql_fetcharray($sql);
+		$row = cot_db_fetcharray($sql);
 		if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
 		{
-			$sql = sed_sql_query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
+			$sql = cot_db_query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
 		}
 		else
 		{
 			// TODO internationalize this
 			$disp = 'Your IP is banned.<br />Reason: '.$row['banlist_reason'].'<br />Until: ';
 			$disp .= ($row['banlist_expire'] > 0) ? @date($cfg['dateformat'], $row['banlist_expire']).' GMT' : 'Never expire.';
-			sed_diefatal($disp);
+			cot_diefatal($disp);
 		}
 	}
 }
 
 /* ======== Groups ======== */
 
-if (!$sed_groups )
+if (!$cot_groups )
 {
-	$sql = sed_sql_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
+	$sql = cot_db_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
-	if (sed_sql_numrows($sql) > 0)
+	if (cot_db_numrows($sql) > 0)
 	{
-		while ($row = sed_sql_fetcharray($sql))
+		while ($row = cot_db_fetcharray($sql))
 		{
-			$sed_groups[$row['grp_id']] = array(
+			$cot_groups[$row['grp_id']] = array(
 				'id' => $row['grp_id'],
 				'alias' => $row['grp_alias'],
 				'level' => $row['grp_level'],
@@ -259,10 +259,10 @@ if (!$sed_groups )
 	}
 	else
 	{
-		sed_diefatal('No groups found.'); // TODO: Need translate
+		cot_diefatal('No groups found.'); // TODO: Need translate
 	}
 
-	$cot_cache && $cot_cache->db->store('sed_groups', $sed_groups, 'system');
+	$cot_cache && $cot_cache->db->store('cot_groups', $cot_groups, 'system');
 }
 
 /* ======== User/Guest ======== */
@@ -277,21 +277,21 @@ $usr['timezone'] = $cfg['defaulttimezone'];
 $usr['newpm'] = 0;
 $usr['messages'] = 0;
 
-if (!defined('SED_MESSAGE'))
+if (!defined('COT_MESSAGE'))
 {
-	$_SESSION['s_run_admin'] = defined('SED_ADMIN');
+	$_SESSION['s_run_admin'] = defined('COT_ADMIN');
 }
 
 if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 {
 	$u = empty($_SESSION[$site_id]) ? explode(':', $_COOKIE[$site_id]) : explode(':', $_SESSION[$site_id]);
-	$u_id = (int) sed_import($u[0], 'D', 'INT');
-	$u_sid = sed_import($u[1], 'D', 'ALP');
+	$u_id = (int) cot_import($u[0], 'D', 'INT');
+	$u_sid = cot_import($u[1], 'D', 'ALP');
 	if ($u_id > 0)
 	{
-		$sql = sed_sql_query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
+		$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
 
-		if ($row = sed_sql_fetcharray($sql))
+		if ($row = cot_db_fetcharray($sql))
 		{
 			if ($row['user_maingrp'] > 3
 				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip']))
@@ -307,7 +307,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 				$usr['lang'] = ($cfg['forcedefaultlang']) ? $cfg['defaultlang'] : $row['user_lang'];
 				$usr['newpm'] = $row['user_newpm'];
 				$usr['auth'] = unserialize($row['user_auth']);
-				$usr['level'] = $sed_groups[$usr['maingrp']]['level'];
+				$usr['level'] = $cot_groups[$usr['maingrp']]['level'];
 				$usr['profile'] = $row;
 
 				$sys['xk'] = $row['user_token'];
@@ -327,7 +327,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					}
 
 					// Generate new security token
-					$token = sed_unique(16);
+					$token = cot_unique(16);
 					$sys['xk_prev'] = $sys['xk'];
 					$sys['xk'] = $token;
 					$update_token = ", user_token = '$token'";
@@ -336,11 +336,11 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 
 				if (!$cfg['authcache'] || empty($row['user_auth']))
 				{
-					$usr['auth'] = sed_auth_build($usr['id'], $usr['maingrp']);
+					$usr['auth'] = cot_auth_build($usr['id'], $usr['maingrp']);
 					if($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
 				}
 
-				sed_sql_query("UPDATE $db_users
+				cot_db_query("UPDATE $db_users
 					SET user_lastlog = {$sys['now_offset']} $update_lastvisit $update_token $update_auth
 					WHERE user_id='{$usr['id']}'");
 
@@ -351,21 +351,21 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 	}
 	else
 	{
-		$usr['theme'] = sed_import($u[0], 'D', 'ALP');
-		$usr['scheme'] = sed_import($u[1], 'D', 'ALP');
-		$usr['lang'] = sed_import($u[2], 'D', 'ALP');
+		$usr['theme'] = cot_import($u[0], 'D', 'ALP');
+		$usr['scheme'] = cot_import($u[1], 'D', 'ALP');
+		$usr['lang'] = cot_import($u[2], 'D', 'ALP');
 	}
 }
 
 if ($usr['id'] == 0)
 {
-	if (!$sed_guest_auth)
+	if (!$cot_guest_auth)
 	{
-		$sed_guest_auth = sed_auth_build(0);
-		$cot_cache && $cot_cache->db->store('sed_guest_auth', $sed_guest_auth, 'system');
+		$cot_guest_auth = cot_auth_build(0);
+		$cot_cache && $cot_cache->db->store('cot_guest_auth', $cot_guest_auth, 'system');
 	}
-	$usr['auth'] = $sed_guest_auth;
-	unset($sed_guest_auth);
+	$usr['auth'] = $cot_guest_auth;
+	unset($cot_guest_auth);
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
 	$usr['scheme'] = empty($usr['scheme']) ? $cfg['defaultscheme'] : $usr['scheme'];
 	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
@@ -373,7 +373,7 @@ if ($usr['id'] == 0)
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('input') as $pl)
+foreach (cot_getextplugins('input') as $pl)
 {
 	include $pl;
 }
@@ -384,23 +384,23 @@ foreach (sed_getextplugins('input') as $pl)
 
 if ($cfg['maintenance'])
 {
-	$sqll = sed_sql_query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
-	$roow = sed_sql_fetcharray($sqll);
+	$sqll = cot_db_query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
+	$roow = cot_db_fetcharray($sqll);
 
-	if (!$roow['grp_maintenance'] && !defined('SED_AUTH'))
+	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
 	{
-		sed_redirect(sed_url('users', 'm=auth', '', true));
+		cot_redirect(cot_url('users', 'm=auth', '', true));
 	}
 }
 
 /* ======== Zone variables ======== */
 
-$z_tmp = sed_import('z', 'G', 'ALP', 32);
+$z_tmp = cot_import('z', 'G', 'ALP', 32);
 $z = empty($z_tmp) ? $z : $z_tmp;
-$m = sed_import('m', 'G', 'ALP', 24);
-$n = sed_import('n', 'G', 'ALP', 24);
-$a = sed_import('a', 'G', 'ALP', 24);
-$b = sed_import('b', 'G', 'ALP', 24);
+$m = cot_import('m', 'G', 'ALP', 24);
+$n = cot_import('n', 'G', 'ALP', 24);
+$a = cot_import('a', 'G', 'ALP', 24);
+$b = cot_import('b', 'G', 'ALP', 24);
 
 /* ======== Who's online (part 1) and shield protection ======== */
 
@@ -408,30 +408,30 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 {
 	if ($usr['id'] > 0)
 	{
-		$sql = sed_sql_query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
+		$sql = cot_db_query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
 
-		if ($row = sed_sql_fetcharray($sql))
+		if ($row = cot_db_fetcharray($sql))
 		{
 			$online_count = 1;
 			$sys['online_location'] = $row['online_location'];
 			$sys['online_subloc'] = $row['online_subloc'];
-			if ($cfg['shieldenabled'] && (!sed_auth('admin', 'a', 'A') || SED_SHIELD_FORCE))
+			if ($cfg['shieldenabled'] && (!cot_auth('admin', 'a', 'A') || COT_SHIELD_FORCE))
 			{
 				$shield_limit = $row['online_shield'];
 				$shield_action = $row['online_action'];
-				$shield_hammer = sed_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
+				$shield_hammer = cot_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
 				$sys['online_hammer'] = $shield_hammer;
 			}
 		}
 	}
 	else
 	{
-		$sql = sed_sql_query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
-		$online_count = sed_sql_numrows($sql);
+		$sql = cot_db_query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
+		$online_count = cot_db_numrows($sql);
 
 		if ($online_count > 0)
 		{
-			if ($row = sed_sql_fetcharray($sql))
+			if ($row = cot_db_fetcharray($sql))
 			{
 				$sys['online_location'] = $row['online_location'];
 				$sys['online_subloc'] = $row['online_subloc'];
@@ -439,7 +439,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 				{
 					$shield_limit = $row['online_shield'];
 					$shield_action = $row['online_action'];
-					$shield_hammer = sed_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
+					$shield_hammer = cot_shield_hammer($row['online_hammer'], $shield_action, $row['online_lastseen']);
 					$sys['online_hammer'] = $shield_hammer;
 				}
 			}
@@ -449,7 +449,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 
 /* ======== Language ======== */
 $lang = $usr['lang'];
-require_once sed_langfile('main', 'core');
+require_once cot_langfile('main', 'core');
 
 /* ======== Theme / color scheme ======== */
 
@@ -468,17 +468,17 @@ if (!file_exists($mtheme))
 	$mtheme = './themes/'.$usr['theme'].'/header.tpl';
 	if (!file_exists($mtheme))
 	{
-		sed_diefatal('Default theme not found.'); // TODO: Need translate
+		cot_diefatal('Default theme not found.'); // TODO: Need translate
 	}
 }
 
-$mscheme = sed_schemefile();
+$mscheme = cot_schemefile();
 if (!$mscheme)
 {
-	sed_diefatal('Default scheme not found.'); // TODO: Need translate
+	cot_diefatal('Default scheme not found.'); // TODO: Need translate
 }
 
-require_once sed_langfile('theme', 'core');
+require_once cot_langfile('theme', 'core');
 
 $usr['def_theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme_raw'].'.en.lang.php';
 $usr['theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme_raw'].'.'.$usr['lang'].'.lang.php';
@@ -521,14 +521,14 @@ if (!$cfg['disablehitstats'])
 		$cfg['hit_precision'] > 0 || $cfg['hit_precision'] = 100;
 		if ($hits % $cfg['hit_precision'] == 0)
 		{
-			sed_stat_inc('totalpages', $cfg['hit_precision']);
-			sed_stat_inc($sys['day'], $cfg['hit_precision']);
+			cot_stat_inc('totalpages', $cfg['hit_precision']);
+			cot_stat_inc($sys['day'], $cfg['hit_precision']);
 		}
 	}
 	else
 	{
-		sed_stat_inc('totalpages');
-		sed_stat_update($sys['day']);
+		cot_stat_inc('totalpages');
+		cot_stat_update($sys['day']);
 	}
 
 	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
@@ -539,10 +539,10 @@ if (!$cfg['disablehitstats'])
 		&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === false
 		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === false)
 	{
-		sed_sql_query("INSERT INTO $db_referers
+		cot_db_query("INSERT INTO $db_referers
 				(ref_url, ref_count, ref_date)
 			VALUES
-				('".sed_sql_prep($sys['referer'])."', 1, {$sys['now_offset']})
+				('".cot_db_prep($sys['referer'])."', 1, {$sys['now_offset']})
 			ON DUPLICATE KEY UPDATE
 				ref_count=ref_count+1, ref_date={$sys['now_offset']}");
 	}
@@ -550,43 +550,43 @@ if (!$cfg['disablehitstats'])
 
 /* ======== Categories ======== */
 
-if (!$sed_cat && !$cfg['disable_page'])
+if (!$cot_cat && !$cfg['disable_page'])
 {
-	sed_load_structure();
-	$cot_cache && $cot_cache->db->store('sed_cat', $sed_cat, 'system');
+	cot_load_structure();
+	$cot_cache && $cot_cache->db->store('cot_cat', $cot_cat, 'system');
 }
 
 /* ======== Various ======== */
 
-$sed_yesno[0] = $L['No'];
-$sed_yesno[1] = $L['Yes'];
-$sed_img_up = $R['icon_up'];
-$sed_img_down = $R['icon_down'];
-$sed_img_left = $R['icon_left'];
-$sed_img_right = $R['icon_right'];
+$cot_yesno[0] = $L['No'];
+$cot_yesno[1] = $L['Yes'];
+$cot_img_up = $R['icon_up'];
+$cot_img_down = $R['icon_down'];
+$cot_img_left = $R['icon_left'];
+$cot_img_right = $R['icon_right'];
 
 /* ======== Local/GMT time ======== */
 
-$usr['timetext'] = sed_build_timezone($usr['timezone']);
+$usr['timetext'] = cot_build_timezone($usr['timezone']);
 $usr['gmttime'] = @date($cfg['dateformat'], $sys['now_offset']).' GMT';
 
 /* ======== Anti-XSS protection ======== */
 
-$x = sed_import('x', 'P', 'ALP');
-if (empty($x) && SED_AJAX && $_SERVER['REQUEST_METHOD'] == 'POST')
+$x = cot_import('x', 'P', 'ALP');
+if (empty($x) && COT_AJAX && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
-	$x = sed_import('x', 'G', 'ALP');
+	$x = cot_import('x', 'G', 'ALP');
 }
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('SED_NO_ANTIXSS') && !defined('SED_AUTH')
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('COT_NO_ANTIXSS') && !defined('COT_AUTH')
 	&& $x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 {
 	$cot_error = true;
-	sed_redirect(sed_url('message', 'msg=950', '', true));
+	cot_redirect(cot_url('message', 'msg=950', '', true));
 }
 
 /* ======== Global hook ======== */
 
-foreach (sed_getextplugins('global') as $pl)
+foreach (cot_getextplugins('global') as $pl)
 {
 	include $pl;
 }

@@ -16,35 +16,35 @@ Tags=index.tpl:{INDEX_POLLS}
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['module']['polls']['maxpolls'] > 0)
 {
-	sed_require('polls');
+	cot_require('polls');
 
-	sed_poll_vote();
+	cot_poll_vote();
 
-	$theme = sed_skinfile(array('polls', 'index'), false);
+	$theme = cot_skinfile(array('polls', 'index'), false);
 	$indexpolls = new XTemplate($theme);
 
 	$sqlmode = ($cfg['module']['polls']['mode'] == 'Recent polls') ? 'poll_creationdate DESC' :'RAND()';
 	$res = 0;
-	$sql_p = sed_sql_query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode LIMIT ".$cfg['module']['polls']['maxpolls']);
+	$sql_p = cot_db_query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode LIMIT ".$cfg['module']['polls']['maxpolls']);
 
 	/* === Hook - Part1 === */
-	$extp = sed_getextplugins('polls.index.tags');
+	$extp = cot_getextplugins('polls.index.tags');
 	/* ===== */
-	while ($row_p = sed_sql_fetcharray($sql_p))
+	while ($row_p = cot_db_fetcharray($sql_p))
 	{
 		$res++;
 		$poll_id = $row_p['poll_id'];
 
-		$poll_form = sed_poll_form($row_p, sed_url('index', ''), 'indexpolls');
-		$pollurl = sed_url('polls', 'id='.$poll_id);
+		$poll_form = cot_poll_form($row_p, cot_url('index', ''), 'indexpolls');
+		$pollurl = cot_url('polls', 'id='.$poll_id);
 
 		$indexpolls->assign(array(
 			'IPOLLS_ID' => $poll_id,
-			'IPOLLS_TITLE' => sed_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
+			'IPOLLS_TITLE' => cot_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
 			'IPOLLS_URL' => $pollurl,
 			'IPOLLS_FORM' => $poll_form['poll_block']
 		));
@@ -61,7 +61,7 @@ if ($cfg['module']['polls']['maxpolls'] > 0)
 	}
 	if ($res)
 	{
-		$indexpolls->assign('IPOLLS_ALL', sed_url('polls', 'id=viewall'));
+		$indexpolls->assign('IPOLLS_ALL', cot_url('polls', 'id=viewall'));
 	}
 	else
 	{

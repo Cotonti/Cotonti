@@ -16,9 +16,9 @@ Tags=
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if ($is_first_post && $usr['isadmin'] && !$cfg['disable_polls'] && sed_poll_edit_form($q, $t, 'MAIN.POLL', 'forum'))
+if ($is_first_post && $usr['isadmin'] && !$cfg['disable_polls'] && cot_poll_edit_form($q, $t, 'MAIN.POLL', 'forum'))
 {
     	$t->parse("MAIN.POLL");
 }

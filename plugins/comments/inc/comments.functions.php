@@ -10,9 +10,9 @@
  */
 
 // Requirements
-sed_require('users');
-sed_require_lang('comments', 'plug');
-sed_require_rc('comments', true);
+cot_require('users');
+cot_require_lang('comments', 'plug');
+cot_require_rc('comments', true);
 
 // Table name globals
 $GLOBALS['db_com'] = (isset($GLOBALS['db_com'])) ? $GLOBALS['db_com'] : $GLOBALS['db_x'] . 'com';
@@ -25,7 +25,7 @@ $GLOBALS['db_com_settings'] = (isset($GLOBALS['db_com_settings'])) ? $GLOBALS['d
  * @param string $code Item code
  * @return int
  */
-function sed_comments_count($area, $code)
+function cot_comments_count($area, $code)
 {
 	global $db_com;
 	static $cache = array();
@@ -35,9 +35,9 @@ function sed_comments_count($area, $code)
 		return $cache[$area][$code];
 	}
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_area='$area' AND com_code='$code'");
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_com WHERE com_area='$area' AND com_code='$code'");
 
-	if ($row = sed_sql_fetchrow($sql))
+	if ($row = cot_db_fetchrow($sql))
 	{
 		$cache[$area][$code] = (int) $row[0];
 		return (int) $row[0];
@@ -56,14 +56,14 @@ function sed_comments_count($area, $code)
  * @param string $cat Item category code (optional)
  * @return string Rendered HTML output for comments
  */
-function sed_comments_display($area, $code, $cat = '')
+function cot_comments_display($area, $code, $cat = '')
 {
 	global $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $z;
 
 	// Check permissions and enablement
-	list($auth_read, $auth_write, $auth_admin) = sed_auth('plug', 'comments');
+	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'comments');
 
-	$enabled_row = sed_comments_enabled($area, $cat, $code, true);
+	$enabled_row = cot_comments_enabled($area, $cat, $code, true);
 	$enabled = $enabled_row['coms_enabled'];
 
 	if (!$auth_read || !$enabled && !$auth_admin)
@@ -78,18 +78,18 @@ function sed_comments_display($area, $code, $cat = '')
 	$_SESSION['cot_com_back'][$area][$cat][$code] = array($link_area, $link_params);
 
 	$d_var = 'dcm';
-	$d = sed_import($d_var, 'G', 'INT');
+	$d = cot_import($d_var, 'G', 'INT');
 	$d = empty($d) ? 0 : (int) $d;
 
 	if ($auth_write && $enabled)
 	{
-		sed_require_api('forms');
+		cot_require_api('forms');
 	}
 
-	$t = new XTemplate(sed_skinfile('comments', true));
+	$t = new XTemplate(cot_skinfile('comments', true));
 
 	/* == Hook == */
-	foreach (sed_getextplugins('comments.main') as $pl)
+	foreach (cot_getextplugins('comments.main') as $pl)
 	{
 		include $pl;
 	}
@@ -97,10 +97,10 @@ function sed_comments_display($area, $code, $cat = '')
 
 	$t->assign(array(
 		'COMMENTS_CODE' => $code,
-		'COMMENTS_FORM_SEND' => sed_url('plug', "e=comments&a=send&area=$area&cat=$cat&item=$code"),
+		'COMMENTS_FORM_SEND' => cot_url('plug', "e=comments&a=send&area=$area&cat=$cat&item=$code"),
 		'COMMENTS_FORM_AUTHOR' => $usr['name'],
 		'COMMENTS_FORM_AUTHORID' => $usr['id'],
-		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? sed_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor')
+		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor')
 			: '',
 		'COMMENTS_DISPLAY' => $cfg['plugin']['comments']['expand_comments'] ? '' : 'none'
 	));
@@ -108,12 +108,12 @@ function sed_comments_display($area, $code, $cat = '')
 	if ($auth_write && $enabled)
 	{
 
-		$allowed_time = sed_build_timegap($sys['now_offset'] - $cfg['plugin']['comedit']['time'] * 60,
+		$allowed_time = cot_build_timegap($sys['now_offset'] - $cfg['plugin']['comedit']['time'] * 60,
 			$sys['now_offset']);
 		$com_hint = sprintf($L['plu_comhint'], $allowed_time);
 
 		/* == Hook == */
-		foreach (sed_getextplugins('comments.newcomment.tags') as $pl)
+		foreach (cot_getextplugins('comments.newcomment.tags') as $pl)
 		{
 			include $pl;
 		}
@@ -128,46 +128,46 @@ function sed_comments_display($area, $code, $cat = '')
 		$t->parse('COMMENTS.COMMENTS_CLOSED');
 	}
 
-	$sql = sed_sql_query("SELECT c.*, u.* FROM $db_com AS c
+	$sql = cot_db_query("SELECT c.*, u.* FROM $db_com AS c
 		LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
 		WHERE com_area='$area' AND com_code='$code' ORDER BY com_id ASC LIMIT $d, "
 		.$cfg['plugin']['comments']['maxcommentsperpage']);
 
-	if (sed_sql_numrows($sql) > 0 && $enabled)
+	if (cot_db_numrows($sql) > 0 && $enabled)
 	{
 		$i = $d;
 
 		/* === Hook - Part1 : Set === */
-		$extp = sed_getextplugins('comments.loop');
+		$extp = cot_getextplugins('comments.loop');
 		/* ===== */
 
-		while ($row = sed_sql_fetcharray($sql))
+		while ($row = cot_db_fetcharray($sql))
 		{
 			$i++;
 			$com_author = htmlspecialchars($row['com_author']);
 
-			$com_admin = ($auth_admin) ? sed_rc('comments_code_admin', array(
-					'ipsearch' => sed_build_ipsearch($row['com_authorip']),
-					'delete_url' => sed_url('plug', 'e=comments&a=delete&id='.$row['com_id'].'&'.sed_xg())
+			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
+					'ipsearch' => cot_build_ipsearch($row['com_authorip']),
+					'delete_url' => cot_url('plug', 'e=comments&a=delete&id='.$row['com_id'].'&'.cot_xg())
 				)) : '';
-			$com_authorlink = sed_build_user($row['com_authorid'], $com_author);
+			$com_authorlink = cot_build_user($row['com_authorid'], $com_author);
 
 			if ($cfg['parser_cache'])
 			{
 				if (empty($row['com_html']) && !empty($row['com_text']))
 				{
-					$row['com_html'] = sed_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'],
+					$row['com_html'] = cot_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'],
 						$cfg['parsesmiliescom'], true);
-					sed_sql_update($db_com, array('com_html' => $row['com_html']), "com_id = ".$row['com_id']);
+					cot_db_update($db_com, array('com_html' => $row['com_html']), "com_id = ".$row['com_id']);
 				}
-				$com_text = $cfg['parsebbcodepages'] ? sed_post_parse($row['com_html'])
+				$com_text = $cfg['parsebbcodepages'] ? cot_post_parse($row['com_html'])
 					: htmlspecialchars($row['com_text']);
 			}
 			else
 			{
-				$com_text = sed_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'],
+				$com_text = cot_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'],
 					$cfg['parsesmiliescom'], true);
-				$com_text = sed_post_parse($com_text, 'pages');
+				$com_text = cot_post_parse($com_text, 'pages');
 			}
 
 			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60)) ? TRUE
@@ -176,25 +176,25 @@ function sed_comments_display($area, $code, $cat = '')
 				|| $usr['id'] == 0 && $usr['ip'] == $row['com_authorip']);
 			$com_gup = $sys['now_offset'] - ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60);
 			$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? ' - '
-				. sed_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']) . $L['plu_comgup'] : '';
-			$com_edit = ($auth_admin || $usr['isowner_com']) ? sed_rc('comments_code_edit', array(
-					'edit_url' => sed_url('plug', 'e=comedit&m=edit&amp;pid=' . $code . '&amp;cid=' . $row['com_id']),
+				. cot_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']) . $L['plu_comgup'] : '';
+			$com_edit = ($auth_admin || $usr['isowner_com']) ? cot_rc('comments_code_edit', array(
+					'edit_url' => cot_url('plug', 'e=comedit&m=edit&amp;pid=' . $code . '&amp;cid=' . $row['com_id']),
 					'allowed_time' => $allowed_time
 				)) : '';
 			
 			$t->assign(array(
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => $i,
-				'COMMENTS_ROW_URL' => sed_url($link_area, $link_params, '#c'.$row['com_id']),
+				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#c'.$row['com_id']),
 				'COMMENTS_ROW_AUTHOR' => $com_authorlink,
 				'COMMENTS_ROW_AUTHORID' => $row['com_authorid'],
-				'COMMENTS_ROW_AVATAR' => sed_build_userimage($row['user_avatar'], 'avatar'),
+				'COMMENTS_ROW_AVATAR' => cot_build_userimage($row['user_avatar'], 'avatar'),
 				'COMMENTS_ROW_TEXT' => $com_text,
 				'COMMENTS_ROW_DATE' => @date($cfg['dateformat'], $row['com_date'] + $usr['timezone'] * 3600),
 				'COMMENTS_ROW_ADMIN' => $com_admin,
 				'COMMENTS_ROW_EDIT' => $com_edit
 			));
-			$t->assign(sed_generate_usertags($pag, 'COMMENTS_ROW_AUTHOR'), $com_author);
+			$t->assign(cot_generate_usertags($pag, 'COMMENTS_ROW_AUTHOR'), $com_author);
 
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl)
@@ -206,8 +206,8 @@ function sed_comments_display($area, $code, $cat = '')
 			$t->parse('COMMENTS.COMMENTS_ROW');
 		}
 
-		$totalitems = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'"), 0, 0);
-		$pagenav = sed_pagenav($link_area, $link_params, $d, $totalitems,
+		$totalitems = cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'"), 0, 0);
+		$pagenav = cot_pagenav($link_area, $link_params, $d, $totalitems,
 			$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
 			$cfg['jquery'] && $cfg['ajax_enabled'], 'comments', 'plug', "e=comments&area=$area&cat=$cat&item=$code");
 		if (!$cfg['plugin']['comments']['expand_comments'])
@@ -218,7 +218,7 @@ function sed_comments_display($area, $code, $cat = '')
 			$pagenav['next'] = preg_replace('/href="(.+?)"/', 'href="$1#comments"', $pagenav['next']);
 		}
 		$t->assign(array(
-			'COMMENTS_PAGES_INFO' => sed_rc('comments_code_pages_info', array(
+			'COMMENTS_PAGES_INFO' => cot_rc('comments_code_pages_info', array(
 					'totalitems' => $totalitems,
 					'onpage' => $i - $d
 				)),
@@ -229,7 +229,7 @@ function sed_comments_display($area, $code, $cat = '')
 		$t->parse('COMMENTS.PAGNAVIGATOR');
 
 	}
-	elseif (!sed_sql_numrows($sql) && $enabled)
+	elseif (!cot_db_numrows($sql) && $enabled)
 	{
 		$t->assign(array(
 			'COMMENTS_EMPTYTEXT' => $L['com_nocommentsyet'],
@@ -257,13 +257,13 @@ function sed_comments_display($area, $code, $cat = '')
 			$enablement_type = 'area';
 		}
 
-		$enablement_change = sed_radiobox((int) !$enabled, 'state', array(1, 0), array($L['Enable'], $L['Disable']));
+		$enablement_change = cot_radiobox((int) !$enabled, 'state', array(1, 0), array($L['Enable'], $L['Disable']));
 		$L['comments'] = lcfirst($L['Comments']);
-		$enablement_selection = sed_selectbox($enablement_type, 'area', array('item', 'cat', 'area'),
+		$enablement_selection = cot_selectbox($enablement_type, 'area', array('item', 'cat', 'area'),
 			array($L['for_this_item'], $L['for_this_category'], $L['for_this_area']), false);
 
 		$t->assign(array(
-			'COMMENTS_ENABLEMENT_ACTION' => sed_url('plug', "e=comments&a=enable&area=$area&cat=$cat&item=$code"),
+			'COMMENTS_ENABLEMENT_ACTION' => cot_url('plug', "e=comments&a=enable&area=$area&cat=$cat&item=$code"),
 			'COMMENTS_ENABLEMENT_STATE' => $enabled ? $L['Enabled'] : $L['Disabled'],
 			'COMMENTS_ENABLEMENT_AREA' => $enablement_area,
 			'COMMENTS_ENABLEMENT_CHANGE' => $enablement_change,
@@ -272,10 +272,10 @@ function sed_comments_display($area, $code, $cat = '')
 		$t->parse('COMMENTS.COMMENTS_ENABLEMENT');
 	}
 
-	sed_display_messages($t);
+	cot_display_messages($t);
 
 	/* == Hook == */
-	foreach (sed_getextplugins('comments.tags') as $pl)
+	foreach (cot_getextplugins('comments.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -296,7 +296,7 @@ function sed_comments_display($area, $code, $cat = '')
  * @param bool $return_row If true returns the matching row instead of bool result, used to detect the enablement type
  * @return bool
  */
-function sed_comments_enabled($area, $cat = '', $code = '', $return_row = false)
+function cot_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 {
 	global $db_com_settings;
 	// A static call cache saves us from duplicate queries
@@ -307,7 +307,7 @@ function sed_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 		return $cache[$area][$cat];
 	}
 
-	if (!sed_auth('plug', 'comments', 'R'))
+	if (!cot_auth('plug', 'comments', 'R'))
 	{
 		$cache[$area][$cat] = false;
 		return false;
@@ -323,14 +323,14 @@ function sed_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 	{
 		$extra_where = "OR coms_area = '$area' AND coms_cat = '' AND coms_code = ''";
 	}
-	$res = sed_sql_query("SELECT coms_enabled, coms_area, coms_cat, coms_code FROM $db_com_settings
+	$res = cot_db_query("SELECT coms_enabled, coms_area, coms_cat, coms_code FROM $db_com_settings
 		WHERE coms_area = '$area' AND coms_cat = '$cat' AND coms_code = '$code' $extra_where
 		ORDER BY coms_code DESC, coms_cat DESC LIMIT 1");
-	if ($row = sed_sql_fetchassoc($res))
+	if ($row = cot_db_fetchassoc($res))
 	{
 		$enabled &= (bool) $row['coms_enabled'];
 	}
-	sed_sql_freeresult($res);
+	cot_db_freeresult($res);
 
 	$cache[$area][$cat] = $enabled;
 	if ($return_row)
@@ -351,25 +351,25 @@ function sed_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 /**
  * Generates comments display for a given item
  *
- * @param string $link_area Target URL area for sed_url()
- * @param string $link_params Target URL params for sed_url()
+ * @param string $link_area Target URL area for cot_url()
+ * @param string $link_params Target URL params for cot_url()
  * @param string $area Module or plugin code
  * @param string $code Item identifier
  * @param string $cat Item category code (optional)
  * @return string Rendered HTML output for comments
  */
-function sed_comments_link($link_area, $link_params, $area, $code, $cat = '')
+function cot_comments_link($link_area, $link_params, $area, $code, $cat = '')
 {
 	global $R, $L, $db_com;
 
-	if (!sed_comments_enabled($area, $cat, $code))
+	if (!cot_comments_enabled($area, $cat, $code))
 	{
 		return '';
 	}
 
-	$res = sed_rc('comments_link', array(
-		'url' => sed_url($link_area, $link_params, '#comments'),
-		'count' => $cfg['plugin']['comments']['countcomments'] ? sed_comments_count($area, $code) : ''
+	$res = cot_rc('comments_link', array(
+		'url' => cot_url($link_area, $link_params, '#comments'),
+		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($area, $code) : ''
 	));
 	return $res;
 }
@@ -380,12 +380,12 @@ function sed_comments_link($link_area, $link_params, $area, $code, $cat = '')
  * @param string $timeback Datetime to count from
  * @return int
  */
-function sed_comments_newcount($timeback)
+function cot_comments_newcount($timeback)
 {
 	global $db_com;
 
-	$sql = sed_sql_query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'");
-	$newcomments = sed_sql_result($sql, 0, 'COUNT(*)');
+	$sql = cot_db_query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'");
+	$newcomments = cot_db_result($sql, 0, 'COUNT(*)');
 	return $newcomments;
 }
 
@@ -395,11 +395,11 @@ function sed_comments_newcount($timeback)
  * @param string $area Item area code
  * @param string $code Item identifier
  */
-function sed_comments_remove($area, $code)
+function cot_comments_remove($area, $code)
 {
 	global $db_com, $db_com_settings;
-	sed_sql_delete($db_com, "com_area = '$area' AND com_code = '$code'");
-	sed_sql_delete($db_com_settings, "com_area = '$area' AND com_code = '$code'");
+	cot_db_delete($db_com, "com_area = '$area' AND com_code = '$code'");
+	cot_db_delete($db_com_settings, "com_area = '$area' AND com_code = '$code'");
 }
 
 ?>

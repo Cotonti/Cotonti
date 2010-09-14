@@ -10,15 +10,15 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
-sed_require_api('auth');
-sed_require_api('configuration');
-sed_require_lang('admin', 'core');
+cot_require_api('auth');
+cot_require_api('configuration');
+cot_require_lang('admin', 'core');
 
 /**
- * A value returned by sed_extension_install() when updating and
+ * A value returned by cot_extension_install() when updating and
  * there is nothing to update
  */
 define('COT_EXT_NOTHING_TO_UPDATE', 2);
@@ -45,7 +45,7 @@ $GLOBALS['cot_ext_ignore_parts'] = array('configure', 'install', 'setup', 'unins
  * FALSE if an error occured while patching or a string containing version
  * number of the latest applied patch if patching was successful.
  */
-function sed_apply_patches($directory, $from_ver,
+function cot_apply_patches($directory, $from_ver,
 	$sql_pattern = '(sql)_([\w\.\-\_]+)\.sql',
 	$php_pattern = '(php)_([\w\.\-\_]+)\.inc')
 {
@@ -80,15 +80,15 @@ function sed_apply_patches($directory, $from_ver,
 	{
 		if (isset($val['sql']))
 		{
-			$error = sed_sql_runscript(file_get_contents($val['sql']));
+			$error = cot_db_runscript(file_get_contents($val['sql']));
 			if (empty($error))
 			{
-				sed_message(sed_rc('ext_patch_applied',
+				cot_message(cot_rc('ext_patch_applied',
 					array('f' => $val['sql'], 'msg' => 'OK')));
 			}
 			else
 			{
-				sed_error(sed_rc('ext_patch_error',
+				cot_error(cot_rc('ext_patch_error',
 					array('f' => $val['sql'], 'msg' => $error)));
 				return false;
 			}
@@ -99,12 +99,12 @@ function sed_apply_patches($directory, $from_ver,
 			if ($ret !== false)
 			{
 				$msg = $ret == 1 ? 'OK' : $ret;
-				sed_message(sed_rc('ext_patch_applied',
+				cot_message(cot_rc('ext_patch_applied',
 					array('f' => $val['php'], 'msg' => $msg)));
 			}
 			else
 			{
-				sed_error(sed_rc('ext_patch_error',
+				cot_error(cot_rc('ext_patch_error',
 					array('f' => $val['php'], 'msg' => $L['Error'])));
 				return false;
 			}
@@ -128,7 +128,7 @@ function sed_apply_patches($directory, $from_ver,
  * @param array $selected_plugins A list of plugins currently in selection
  * @return bool TRUE if all dependencies are satisfied, or FALSE otherwise
  */
-function sed_extension_dependencies_statisfied($name, $is_module = false,
+function cot_extension_dependencies_statisfied($name, $is_module = false,
 	$selected_modules = array(), $selected_plugins = array())
 {
 	global $cfg, $L;
@@ -136,7 +136,7 @@ function sed_extension_dependencies_statisfied($name, $is_module = false,
 	$ret = true;
 
 	// Get the dependency list
-	$info = sed_infoget("$path/$name.setup.php", 'COT_EXT');
+	$info = cot_infoget("$path/$name.setup.php", 'COT_EXT');
 	$required_modules = empty($info['Requires_modules']) ? array()
 		: explode(',', $info['Requires_modules']);
 	 array_walk($required_modules, 'trim');
@@ -148,9 +148,9 @@ function sed_extension_dependencies_statisfied($name, $is_module = false,
 	foreach ($required_modules as $req_ext)
 	{
 		if (!empty($req_ext) && !in_array($req_ext, $selected_modules)
-			&& !sed_module_installed($req_ext))
+			&& !cot_module_installed($req_ext))
 		{
-			sed_error(sed_rc('ext_dependency_error', array(
+			cot_error(cot_rc('ext_dependency_error', array(
 				'name' => $name,
 				'type' => $is_module ? $L['Module'] : $L['Plugin'],
 				'dep_type' => $L['Module'],
@@ -163,9 +163,9 @@ function sed_extension_dependencies_statisfied($name, $is_module = false,
 	foreach ($required_plugins as $req_ext)
 	{
 		if (!empty($req_ext) && !in_array($req_ext, $selected_plugins)
-			&& !sed_plugin_installed($req_ext))
+			&& !cot_plugin_installed($req_ext))
 		{
-			sed_error(sed_rc('ext_dependency_error', array(
+			cot_error(cot_rc('ext_dependency_error', array(
 				'name' => $name,
 				'type' => $is_module ? $L['Module'] : $L['Plugin'],
 				'dep_type' => $L['Plugin'],
@@ -187,10 +187,10 @@ function sed_extension_dependencies_statisfied($name, $is_module = false,
  * @param bool $update Perform update rather than new install
  * @return bool Operation status
  */
-function sed_extension_install($name, $is_module = false, $update = false)
+function cot_extension_install($name, $is_module = false, $update = false)
 {
     global $cfg, $L, $cot_error, $cot_cache, $usr, $db_auth, $db_users,
-		$db_updates, $db_core, $sed_groups, $cot_ext_ignore_parts;
+		$db_updates, $db_core, $cot_groups, $cot_ext_ignore_parts;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
@@ -198,37 +198,37 @@ function sed_extension_install($name, $is_module = false, $update = false)
     $setup_file = $path . "/$name.setup.php";
     if (!file_exists($setup_file))
     {
-        sed_error('ext_setup_not_found');
+        cot_error('ext_setup_not_found');
         return false;
     }
-    $info = sed_infoget($setup_file, 'COT_EXT');
+    $info = cot_infoget($setup_file, 'COT_EXT');
     if ($info === false)
     {
-        sed_error('ext_invalid_format');
+        cot_error('ext_invalid_format');
         return false;
     }
 
 	// Check versions
 	if ($is_module)
 	{
-		$res = sed_sql_query("SELECT ct_version FROM $db_core
+		$res = cot_db_query("SELECT ct_version FROM $db_core
 			WHERE ct_code = '$name'");
 	}
 	else
 	{
-		$res = sed_sql_query("SELECT upd_value FROM $db_updates
+		$res = cot_db_query("SELECT upd_value FROM $db_updates
 			WHERE upd_param = '$name.ver'");
 	}
-	if (sed_sql_numrows($res) == 1)
+	if (cot_db_numrows($res) == 1)
 	{
-		$current_ver = sed_sql_result($res);
-		sed_sql_freeresult($res);
+		$current_ver = cot_db_result($res);
+		cot_db_freeresult($res);
 		if ($update)
 		{
 			if (version_compare($current_ver, $info['Version']) == 0)
 			{
 				// Nothing to update
-				sed_message(sed_rc('ext_up2date', array(
+				cot_message(cot_rc('ext_up2date', array(
 					'type' => $is_module ? $L['Module'] : $L['Plugin'],
 					'name' => $name
 				)));
@@ -237,7 +237,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		}
 		else
 		{
-			sed_error('ext_already_installed');
+			cot_error('ext_already_installed');
 			return false;
 		}
 	}
@@ -250,8 +250,8 @@ function sed_extension_install($name, $is_module = false, $update = false)
 	if ($update)
 	{
 		// Safely drop existing bindings
-		$bindings_cnt = sed_plugin_remove($name);
-		sed_message(sed_rc('ext_bindings_uninstalled', array('cnt' => $bindings_cnt)));
+		$bindings_cnt = cot_plugin_remove($name);
+		cot_message(cot_rc('ext_bindings_uninstalled', array('cnt' => $bindings_cnt)));
 	}
     // Install hook parts and bindings
     $hook_bindings = array();
@@ -261,7 +261,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
         if (preg_match("#^$name(\.([\w\.]+))?.php$#", $f, $mt)
 			&& !in_array($mt[2], $cot_ext_ignore_parts))
         {
-            $part_info = sed_infoget($path . "/$f", 'COT_EXT');
+            $part_info = cot_infoget($path . "/$f", 'COT_EXT');
             if ($part_info)
             {
                 if (empty($part_info['Hooks']))
@@ -288,30 +288,30 @@ function sed_extension_install($name, $is_module = false, $update = false)
         }
     }
     closedir($dp);
-    $bindings_cnt = sed_plugin_add($hook_bindings, $name, $info['Name'], $is_module);
-    sed_message(sed_rc('ext_bindings_installed', array('cnt' => $bindings_cnt)));
+    $bindings_cnt = cot_plugin_add($hook_bindings, $name, $info['Name'], $is_module);
+    cot_message(cot_rc('ext_bindings_installed', array('cnt' => $bindings_cnt)));
 
     // Install config
-    $info_cfg = sed_infoget($setup_file, 'COT_EXT_CONFIG');
-    $options = sed_config_parse($info_cfg, $is_module);
+    $info_cfg = cot_infoget($setup_file, 'COT_EXT_CONFIG');
+    $options = cot_config_parse($info_cfg, $is_module);
 
 	if ($update)
 	{
 		// Get differential config
-		if (sed_config_update($name, $options, $is_module) > 0)
+		if (cot_config_update($name, $options, $is_module) > 0)
 		{
-			sed_message('ext_config_updated');
+			cot_message('ext_config_updated');
 		}
 	}
 	elseif (count($options) > 0)
 	{
-		if (sed_config_add($name, $options, $is_module))
+		if (cot_config_add($name, $options, $is_module))
 		{
-			sed_message('ext_config_installed');
+			cot_message('ext_config_installed');
 		}
 		else
 		{
-			sed_error('ext_config_error');
+			cot_error('ext_config_error');
 		}
 	}
 
@@ -319,32 +319,32 @@ function sed_extension_install($name, $is_module = false, $update = false)
 	if ($update)
 	{
 		// Only update auth locks
-		$lock_guests = sed_auth_getvalue($info['Lock_guests']);
-		sed_sql_update($db_auth, array('rights_lock' => $lock_guests), 'auth_groupid = ' . COT_GROUP_GUESTS
+		$lock_guests = cot_auth_getvalue($info['Lock_guests']);
+		cot_db_update($db_auth, array('rights_lock' => $lock_guests), 'auth_groupid = ' . COT_GROUP_GUESTS
 				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE, 'auth_');
 
-		$lock_members = sed_auth_getvalue($info['Lock_members']);
+		$lock_members = cot_auth_getvalue($info['Lock_members']);
 		$ingore_groups = implode(',', array(
 			COT_GROUP_GUESTS,
 			COT_GROUP_INACTIVE,
 			COT_GROUP_BANNED,
 			COT_GROUP_SUPERADMINS
 		));
-		sed_sql_update($db_auth, array('rights_lock' => $lock_members),
+		cot_db_update($db_auth, array('rights_lock' => $lock_members),
 			"auth_groupid NOT IN ($ingore_groups)", 'auth_');
 
-		sed_message('ext_auth_locks_updated');
+		cot_message('ext_auth_locks_updated');
 	}
 	else
 	{
 		// Install auth
 		$insert_rows = array();
-		foreach ($sed_groups as $k => $v)
+		foreach ($cot_groups as $k => $v)
 		{
 			if ($v['id'] == COT_GROUP_GUESTS || $v['id'] == COT_GROUP_INACTIVE)
 			{
-				$ins_auth = sed_auth_getvalue($info['Auth_guests']);
-				$ins_lock = sed_auth_getvalue($info['Lock_guests']);
+				$ins_auth = cot_auth_getvalue($info['Auth_guests']);
+				$ins_lock = cot_auth_getvalue($info['Lock_guests']);
 
 				if ($ins_auth > 128 || $ins_lock < 128)
 				{
@@ -364,8 +364,8 @@ function sed_extension_install($name, $is_module = false, $update = false)
 			}
 			else
 			{
-				$ins_auth = sed_auth_getvalue($info['Auth_members']);
-				$ins_lock = sed_auth_getvalue($info['Lock_members']);
+				$ins_auth = cot_auth_getvalue($info['Auth_members']);
+				$ins_lock = cot_auth_getvalue($info['Lock_members']);
 			}
 
 			if ($is_module)
@@ -391,10 +391,10 @@ function sed_extension_install($name, $is_module = false, $update = false)
 				);
 			}
 		}
-		if (sed_sql_insert($db_auth, $insert_rows, 'auth_'))
+		if (cot_db_insert($db_auth, $insert_rows, 'auth_'))
 		{
-			sed_sql_update($db_users, array('auth' => ''), '1', 'user_');
-			sed_message('ext_auth_installed');
+			cot_db_update($db_users, array('auth' => ''), '1', 'user_');
+			cot_message('ext_auth_installed');
 		}
 	}
 
@@ -404,7 +404,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		// Find and apply patches
 		if (file_exists("$path/setup"))
 		{
-			$new_ver = sed_apply_patches("$path/setup", $current_ver);
+			$new_ver = cot_apply_patches("$path/setup", $current_ver);
 		}
 		if (version_compare($info['Version'], $new_ver) > 0 || $new_ver === true)
 		{
@@ -416,30 +416,30 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		if (file_exists($path . "/setup/$name.install.sql"))
 		{
 			// Run SQL install script
-			$sql_err = sed_sql_runscript(
+			$sql_err = cot_db_runscript(
 				file_get_contents("$path/setup/$name.install.sql"));
 			if (empty($sql_err))
 			{
-				sed_message(sed_rc('ext_executed_sql', array('ret' => 'OK')));
+				cot_message(cot_rc('ext_executed_sql', array('ret' => 'OK')));
 			}
 			else
 			{
-				sed_error(sed_rc('ext_executed_sql', array('ret' => $sql_err)));
+				cot_error(cot_rc('ext_executed_sql', array('ret' => $sql_err)));
 			}
 		}
 
-		if (file_exists(sed_incfile($name, 'install', !$is_module)))
+		if (file_exists(cot_incfile($name, 'install', !$is_module)))
 		{
 			// Run PHP install handler
-			$ret = include sed_incfile($name, 'install', !$is_module);
+			$ret = include cot_incfile($name, 'install', !$is_module);
 			if ($ret !== false)
 			{
 				$msg = $ret == 1 ? 'OK' : $ret;
-				sed_message(sed_rc('ext_executed_php', array('ret' => $msg)));
+				cot_message(cot_rc('ext_executed_php', array('ret' => $msg)));
 			}
 			else
 			{
-				sed_error(sed_rc('ext_executed_php',
+				cot_error(cot_rc('ext_executed_php',
 					array('ret' => $L['Error'])));
 			}
 		}
@@ -450,8 +450,8 @@ function sed_extension_install($name, $is_module = false, $update = false)
 	{
 		if ($update)
 		{
-			sed_module_update($name, $new_ver);
-			sed_message(sed_rc('ext_updated', array(
+			cot_module_update($name, $new_ver);
+			cot_message(cot_rc('ext_updated', array(
 				'type' => $L['Module'],
 				'name' => $name,
 				'ver' => $new_ver
@@ -459,15 +459,15 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		}
 		else
 		{
-			sed_module_add($name, $info['Name'], $info['Version']);
+			cot_module_add($name, $info['Name'], $info['Version']);
 		}
 	}
     else
     {
         if ($update)
 		{
-			sed_sql_update($db_updates, array('value' => $new_ver), "upd_param = '$name.ver'", 'upd_');
-			sed_message(sed_rc('ext_updated', array(
+			cot_db_update($db_updates, array('value' => $new_ver), "upd_param = '$name.ver'", 'upd_');
+			cot_message(cot_rc('ext_updated', array(
 				'type' => $L['Plugin'],
 				'name' => $name,
 				'ver' => $new_ver
@@ -475,14 +475,14 @@ function sed_extension_install($name, $is_module = false, $update = false)
 		}
 		else
 		{
-			sed_sql_insert($db_updates, array('param' => "$name.ver",
+			cot_db_insert($db_updates, array('param' => "$name.ver",
 				'value' => $info['Version']), 'upd_');
 		}
     }
 
     // Cleanup
-    sed_auth_reorder();
-    $cot_cache && $cot_cache->db->remove('sed_plugins', 'system');
+    cot_auth_reorder();
+    $cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
 
     return !$cot_error;
 }
@@ -492,7 +492,7 @@ function sed_extension_install($name, $is_module = false, $update = false)
  * @param string $name Extension code
  * @param bool $is_module TRUE for modules, FALSE for plugins
  */
-function sed_extension_uninstall($name, $is_module = false)
+function cot_extension_uninstall($name, $is_module = false)
 {
     global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cot_cache,
 		$cot_error;
@@ -501,68 +501,68 @@ function sed_extension_uninstall($name, $is_module = false)
 		. "/$name";
 
     // Remove bindings
-    sed_plugin_remove($name);
+    cot_plugin_remove($name);
 
     // Drop auth and config
     if ($is_module)
     {
-        sed_sql_delete($db_config, "config_owner = 'module'
+        cot_db_delete($db_config, "config_owner = 'module'
 			AND config_cat = '$name'");
-        sed_sql_delete($db_auth, "auth_code = '$name'");
+        cot_db_delete($db_auth, "auth_code = '$name'");
     }
     else
     {
-        sed_sql_delete($db_config, "config_owner = 'plug'
+        cot_db_delete($db_config, "config_owner = 'plug'
 			AND config_cat = '$name'");
-        sed_sql_delete($db_auth, "auth_code = 'plug'
+        cot_db_delete($db_auth, "auth_code = 'plug'
 			AND auth_option = '$name'");
     }
-    sed_message('ext_auth_uninstalled');
-    sed_message('ext_config_uninstalled');
+    cot_message('ext_auth_uninstalled');
+    cot_message('ext_config_uninstalled');
 
     // Clear cache
-    $cot_cache && $cot_cache->db->remove('sed_plugins', 'system');
+    $cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
 	$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
-    sed_sql_update($db_users, array('auth' => ''), '1', 'user_');
+    cot_db_update($db_users, array('auth' => ''), '1', 'user_');
 
     // Run SQL script if present
     if (file_exists($path . "/setup/$name.uninstall.sql"))
     {
-        $sql_err = sed_sql_runscript(
+        $sql_err = cot_db_runscript(
 			file_get_contents("$path/setup/$name.uninstall.sql"));
         if (empty($sql_err))
         {
-            sed_message(sed_rc('ext_executed_sql', array('ret' => 'OK')));
+            cot_message(cot_rc('ext_executed_sql', array('ret' => 'OK')));
         }
         else
         {
-            sed_error(sed_rc('ext_executed_sql', array('ret' => $sql_err)));
+            cot_error(cot_rc('ext_executed_sql', array('ret' => $sql_err)));
         }
     }
 
     // Run handler part
-    if (file_exists(sed_incfile($name, 'uninstall', !$is_module)))
+    if (file_exists(cot_incfile($name, 'uninstall', !$is_module)))
     {
-        $ret = include sed_incfile($name, 'uninstall', !$is_module);
+        $ret = include cot_incfile($name, 'uninstall', !$is_module);
         if ($ret !== false)
         {
-            sed_message(sed_rc('ext_executed_php', array('ret' => $ret)));
+            cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
         }
         else
         {
-            sed_error(sed_rc('ext_executed_php', array('ret' => $L['Error'])));
+            cot_error(cot_rc('ext_executed_php', array('ret' => $L['Error'])));
         }
     }
 
     if ($is_module)
 	{
 		// Unregister from modules table
-		sed_module_remove($name);
+		cot_module_remove($name);
 	}
 	else
     {
         // Unregister from updates table
-        sed_sql_delete($db_updates, "upd_param = '$name.ver'");
+        cot_db_delete($db_updates, "upd_param = '$name.ver'");
     }
 }
 
@@ -573,7 +573,7 @@ function sed_extension_uninstall($name, $is_module = false)
  * @return array Associative array containing PHPDoc contents. The array is
  *  empty if no PHPDoc was found
  */
-function sed_file_phpdoc($filename)
+function cot_file_phpdoc($filename)
 {
     $res = array();
     $data = file_get_contents($filename);
@@ -606,7 +606,7 @@ function sed_file_phpdoc($filename)
  * @param int $maxsize Max header size
  * @return array Array containing block data or FALSE on error
  */
-function sed_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
+function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 {
     global $L;
     $result = array();
@@ -658,11 +658,11 @@ function sed_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
  * @param string $version Version number as A.B.C
  * @return bool TRUE on success, FALSE on error
  */
-function sed_module_add($name, $title, $version = '1.0.0')
+function cot_module_add($name, $title, $version = '1.0.0')
 {
     global $db_core;
 
-    $res = sed_sql_insert($db_core, array('code' => $name, 'title' => $title,
+    $res = cot_db_insert($db_core, array('code' => $name, 'title' => $title,
 		'version' => $version), 'ct_');
 
     return false;
@@ -674,11 +674,11 @@ function sed_module_add($name, $title, $version = '1.0.0')
  * @param string $name Module code
  * @return bool
  */
-function sed_module_installed($name)
+function cot_module_installed($name)
 {
     global $db_core, $cfg;
 
-    $cnt = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_core
+    $cnt = cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_core
 		WHERE ct_code = '$name'"));
     return $cnt > 0 && file_exists($cfg['modules_dir'] . '/' . $name);
 }
@@ -689,11 +689,11 @@ function sed_module_installed($name)
  * @param string $name Module name
  * @return bool
  */
-function sed_module_pause($name)
+function cot_module_pause($name)
 {
     global $db_core;
 
-    return sed_sql_update($db_core, array('state' => 0), "ct_code = '$name'", 'ct_') == 1;
+    return cot_db_update($db_core, array('state' => 0), "ct_code = '$name'", 'ct_') == 1;
 }
 
 /**
@@ -702,11 +702,11 @@ function sed_module_pause($name)
  * @param string $name Module name
  * @return bool
  */
-function sed_module_remove($name)
+function cot_module_remove($name)
 {
     global $db_core, $db_updates;
 
-    return sed_sql_delete($db_core, "ct_code = '$name'");
+    return cot_db_delete($db_core, "ct_code = '$name'");
 }
 
 /**
@@ -715,11 +715,11 @@ function sed_module_remove($name)
  * @param string $name Module name
  * @return bool
  */
-function sed_module_resume($name)
+function cot_module_resume($name)
 {
     global $db_core;
 
-    return sed_sql_update($db_core, array('state' => 1), "ct_code = '$name'", 'ct_') == 1;
+    return cot_db_update($db_core, array('state' => 1), "ct_code = '$name'", 'ct_') == 1;
 }
 
 /**
@@ -729,11 +729,11 @@ function sed_module_resume($name)
  * @param string $version New version string
  * @return bool
  */
-function sed_module_update($name, $version)
+function cot_module_update($name, $version)
 {
     global $db_core;
 
-    return sed_sql_update($db_core, array('version' => $version), "ct_code = '$name'", 'ct_');
+    return cot_db_update($db_core, array('version' => $version), "ct_code = '$name'", 'ct_');
 }
 
 /**
@@ -753,7 +753,7 @@ function sed_module_update($name, $version)
  *     )
  * );
  *
- * sed_plugin_add($hook_bindings, 'test', 'Test plugin', false);
+ * cot_plugin_add($hook_bindings, 'test', 'Test plugin', false);
  * </code>
  *
  * @param array $hook_bindings Hook binding map
@@ -762,7 +762,7 @@ function sed_module_update($name, $version)
  * @param bool $is_module TRUE for modules, FALSE for plugins
  * @return int Number of records added
  */
-function sed_plugin_add($hook_bindings, $name, $title, $is_module = false)
+function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
 {
     global $db_plugins, $cfg;
 
@@ -786,7 +786,7 @@ function sed_plugin_add($hook_bindings, $name, $title, $is_module = false)
             'module' => (int) $is_module
         );
     }
-    return sed_sql_insert($db_plugins, $insert_rows, 'pl_');
+    return cot_db_insert($db_plugins, $insert_rows, 'pl_');
 }
 
 /**
@@ -795,11 +795,11 @@ function sed_plugin_add($hook_bindings, $name, $title, $is_module = false)
  * @param string $name Plugin code
  * @return bool
  */
-function sed_plugin_installed($name)
+function cot_plugin_installed($name)
 {
     global $db_plugins, $cfg;
 
-    $cnt = sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_plugins
+    $cnt = cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_plugins
 		WHERE pl_code = '$name'"));
     return $cnt > 0 && file_exists($cfg['plugins_dir'] . '/' . $name);
 }
@@ -811,7 +811,7 @@ function sed_plugin_installed($name)
  * @param int $binding_id ID of the binding to supsend or 0 to suspend all
  * @return int Number of bindings suspended
  */
-function sed_plugin_pause($name, $binding_id = 0)
+function cot_plugin_pause($name, $binding_id = 0)
 {
     global $db_plugins;
 
@@ -821,7 +821,7 @@ function sed_plugin_pause($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return sed_sql_update($db_plugins, array('active' => 0), $condition, 'pl_');
+    return cot_db_update($db_plugins, array('active' => 0), $condition, 'pl_');
 }
 
 /**
@@ -831,7 +831,7 @@ function sed_plugin_pause($name, $binding_id = 0)
  * @param int $binding_id ID of the binding to remove or 0 to remove all
  * @return int Number of bindings removed
  */
-function sed_plugin_remove($name, $binding_id = 0)
+function cot_plugin_remove($name, $binding_id = 0)
 {
     global $db_plugins;
 
@@ -841,7 +841,7 @@ function sed_plugin_remove($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return sed_sql_delete($db_plugins, $condition);
+    return cot_db_delete($db_plugins, $condition);
 }
 
 /**
@@ -851,7 +851,7 @@ function sed_plugin_remove($name, $binding_id = 0)
  * @param int $binding_id ID of the binding to resume or 0 to resume all
  * @return int Number of bindings resumed
  */
-function sed_plugin_resume($name, $binding_id = 0)
+function cot_plugin_resume($name, $binding_id = 0)
 {
     global $db_plugins;
 
@@ -861,7 +861,7 @@ function sed_plugin_resume($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return sed_sql_update($db_plugins, array('active' => 1), $condition, 'pl_');
+    return cot_db_update($db_plugins, array('active' => 1), $condition, 'pl_');
 }
 
 ?>

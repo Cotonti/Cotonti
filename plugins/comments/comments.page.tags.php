@@ -16,16 +16,16 @@ Tags=page.tpl:{PAGE_COMMENTS},{PAGE_COMMENTS_DISPLAY},{PAGE_COMMENTS_COUNT},{PAG
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
 $page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 $t->assign(array(
-	'PAGE_COMMENTS' => sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $pag['page_cat']),
-	'PAGE_COMMENTS_DISPLAY' => sed_comments_display('page', $pag['page_id'], $pag['page_cat']),
-	'PAGE_COMMENTS_COUNT' => sed_comments_count('page', $pag['page_id']),
-	'PAGE_COMMENTS_RSS' => sed_url('rss', 'c=comments&id=' . $pag['page_id'])
+	'PAGE_COMMENTS' => cot_comments_link('page', $page_urlp, 'page', $pag['page_id'], $pag['page_cat']),
+	'PAGE_COMMENTS_DISPLAY' => cot_comments_display('page', $pag['page_id'], $pag['page_cat']),
+	'PAGE_COMMENTS_COUNT' => cot_comments_count('page', $pag['page_id']),
+	'PAGE_COMMENTS_RSS' => cot_url('rss', 'c=comments&id=' . $pag['page_id'])
 ));
 
 ?>

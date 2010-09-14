@@ -14,29 +14,29 @@ Description=Forums
 [END_SED]
 ==================== */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-$id = sed_import('id','G','INT');
-$s = sed_import('s','G','INT');
-$q = sed_import('q','G','INT');
-$p = sed_import('p','G','INT');
-$d = sed_import('d','G','INT');
-$o = sed_import('o','G','ALP');
-$w = sed_import('w','G','ALP',4);
+$id = cot_import('id','G','INT');
+$s = cot_import('s','G','INT');
+$q = cot_import('q','G','INT');
+$p = cot_import('p','G','INT');
+$d = cot_import('d','G','INT');
+$o = cot_import('o','G','ALP');
+$w = cot_import('w','G','ALP',4);
 
-sed_blockguests();
-sed_die(empty($s));
+cot_blockguests();
+cot_die(empty($s));
 
 /* === Hook === */
-foreach (sed_getextplugins('forums.newtopic.first') as $pl)
+foreach (cot_getextplugins('forums.newtopic.first') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-$sql = sed_sql_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
+$sql = cot_db_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
-if ($row = sed_sql_fetcharray($sql))
+if ($row = cot_db_fetcharray($sql))
 {
 	$fs_state = $row['fs_state'];
 	$fs_minlevel = $row['fs_minlevel'];
@@ -53,49 +53,49 @@ if ($row = sed_sql_fetcharray($sql))
 	$fs_masterid = $row['fs_masterid'];
 	$fs_mastername = $row['fs_mastername'];
 
-	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('forums', $s);
+	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
 	/* === Hook === */
-	foreach (sed_getextplugins('forums.newtopic.rights') as $pl)
+	foreach (cot_getextplugins('forums.newtopic.rights') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	sed_block($usr['auth_write']);
+	cot_block($usr['auth_write']);
 }
 else
-{ sed_die(); }
+{ cot_die(); }
 
 if ($fs_state)
 {
-	sed_redirect(sed_url('message', "msg=602", '', true));
+	cot_redirect(cot_url('message', "msg=602", '', true));
 }
 
 if ($a=='newtopic')
 {
-	sed_shield_protect();
+	cot_shield_protect();
 
 	/* === Hook === */
-	foreach (sed_getextplugins('forums.newtopic.newtopic.first') as $pl)
+	foreach (cot_getextplugins('forums.newtopic.newtopic.first') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
 
-	$newtopictitle = sed_import('newtopictitle','P','TXT', 255);
-	$newtopicdesc = sed_import('newtopicdesc','P','TXT', 255);
-	$newprvtopic = sed_import('newprvtopic','P','BOL');
-	$newmsg = sed_import('newmsg','P','HTM');
+	$newtopictitle = cot_import('newtopictitle','P','TXT', 255);
+	$newtopicdesc = cot_import('newtopicdesc','P','TXT', 255);
+	$newprvtopic = cot_import('newprvtopic','P','BOL');
+	$newmsg = cot_import('newmsg','P','HTM');
 	$newtopicpreview = mb_substr(htmlspecialchars($newmsg), 0, 128);
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
 
 
 	if (strlen($newtopictitle) < 2)
 	{
-		sed_error('for_titletooshort', 'newtopictitle');
+		cot_error('for_titletooshort', 'newtopictitle');
 	}
 	if (strlen($newmsg) < 5)
 	{
-		sed_error('for_messagetooshort', 'newmsg');
+		cot_error('for_messagetooshort', 'newmsg');
 	}
 
 	if (!$cot_error)
@@ -106,7 +106,7 @@ if ($a=='newtopic')
 		}
 
 
-		$sql = sed_sql_query("INSERT into $db_forum_topics
+		$sql = cot_db_query("INSERT into $db_forum_topics
 		(ft_state,
 		ft_mode,
 		ft_sticky,
@@ -127,30 +127,30 @@ if ($a=='newtopic')
 			".(int)$newprvtopic.",
 			0,
 			".(int)$s.",
-			'".sed_sql_prep($newtopictitle)."',
-			'".sed_sql_prep($newtopicdesc)."',
-			'".sed_sql_prep($newtopicpreview)."',
+			'".cot_db_prep($newtopictitle)."',
+			'".cot_db_prep($newtopicdesc)."',
+			'".cot_db_prep($newtopicpreview)."',
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
 			1,
 			0,
 			".(int)$usr['id'].",
-			'".sed_sql_prep($usr['name'])."',
+			'".cot_db_prep($usr['name'])."',
 			".(int)$usr['id'].",
-			'".sed_sql_prep($usr['name'])."')");
+			'".cot_db_prep($usr['name'])."')");
 
-		$q = sed_sql_insertid();
+		$q = cot_db_insertid();
 
 		if($cfg['parser_cache'])
 		{
-			$rhtml = sed_sql_prep(sed_parse(htmlspecialchars($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
+			$rhtml = cot_db_prep(cot_parse(htmlspecialchars($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
 		}
 		else
 		{
 			$rhtml = '';
 		}
 
-		$sql = sed_sql_query("INSERT into $db_forum_posts
+		$sql = cot_db_query("INSERT into $db_forum_posts
 		(fp_topicid,
 		fp_sectionid,
 		fp_posterid,
@@ -164,43 +164,43 @@ if ($a=='newtopic')
 		(".(int)$q.",
 			".(int)$s.",
 			".(int)$usr['id'].",
-			'".sed_sql_prep($usr['name'])."',
+			'".cot_db_prep($usr['name'])."',
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
-			'".sed_sql_prep($newmsg)."',
+			'".cot_db_prep($newmsg)."',
 		'$rhtml',
 		'".$usr['ip']."')");
 
-		$sql = sed_sql_query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
-		$row = sed_sql_fetcharray($sql);
+		$sql = cot_db_query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
+		$row = cot_db_fetcharray($sql);
 		$p = $row['fp_id'];
 
-		$sql = sed_sql_query("UPDATE $db_forum_sections SET
+		$sql = cot_db_query("UPDATE $db_forum_sections SET
 		fs_postcount=fs_postcount+1,
 		fs_topiccount=fs_topiccount+1
 		WHERE fs_id='$s'");
 
 		if ($fs_masterid>0)
-		{ $sql = sed_sql_query("UPDATE $db_forum_sections SET
+		{ $sql = cot_db_query("UPDATE $db_forum_sections SET
 		fs_postcount=fs_postcount+1,
 		fs_topiccount=fs_topiccount+1
 		WHERE fs_id='$fs_masterid'"); }
 		
 		if ($fs_autoprune>0)
 		{
-			sed_forum_prunetopics('updated', $s, $fs_autoprune);
+			cot_forum_prunetopics('updated', $s, $fs_autoprune);
 		}
 
 		if ($fs_countposts)
-		{ $sql = sed_sql_query("UPDATE $db_users SET
+		{ $sql = cot_db_query("UPDATE $db_users SET
 		user_postcount=user_postcount+1
 		WHERE user_id='".$usr['id']."'"); }
 
 		if (!$newprvtopic)
-		{ sed_forum_sectionsetlast($s); }
+		{ cot_forum_sectionsetlast($s); }
 
 		/* === Hook === */
-		foreach (sed_getextplugins('forums.newtopic.newtopic.done') as $pl)
+		foreach (cot_getextplugins('forums.newtopic.newtopic.done') as $pl)
 		{
 			include $pl;
 		}
@@ -218,22 +218,22 @@ if ($a=='newtopic')
 			}
 		}
 
-		sed_shield_update(45, "New topic");
-		sed_redirect(sed_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
+		cot_shield_update(45, "New topic");
+		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 }
 
 // FIXME PFS dependency
-//$pfs = sed_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
-//$pfs .= (sed_auth('pfs', 'a', 'A')) ? " &nbsp; ".sed_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
-$morejavascript .= sed_build_addtxt('newtopic', 'newmsg');
+//$pfs = cot_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
+//$pfs .= (cot_auth('pfs', 'a', 'A')) ? " &nbsp; ".cot_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
+$morejavascript .= cot_build_addtxt('newtopic', 'newmsg');
 
-$newtopicurl = sed_url('forums', "m=newtopic&a=newtopic&s=".$s);
+$newtopicurl = cot_url('forums', "m=newtopic&a=newtopic&s=".$s);
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
 
-$toptitle = sed_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." <a href=\"".sed_url('forums', "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
+$toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." <a href=\"".cot_url('forums', "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 
 $sys['sublocation'] = $fs_title;
@@ -242,45 +242,45 @@ $title_params = array(
 	'SECTION' => $fs_title,
 	'NEWTOPIC' => $L['for_newtopic']
 );
-$out['subtitle'] = sed_title('title_forum_newtopic', $title_params);
+$out['subtitle'] = cot_title('title_forum_newtopic', $title_params);
 $out['head'] .= $R['code_noindex'];
 
-sed_online_update();
+cot_online_update();
 
 /* === Hook === */
-foreach (sed_getextplugins('forums.newtopic.main') as $pl)
+foreach (cot_getextplugins('forums.newtopic.main') as $pl)
 {
 	include $pl;
 }
 /* ===== */
-sed_require_api('forms');
+cot_require_api('forms');
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = sed_skinfile(array('forums', 'newtopic', $fs_category, $s));
+$mskin = cot_skinfile(array('forums', 'newtopic', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 $t->assign(array(
 
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
 	"FORUMS_NEWTOPIC_SUBTITLE" => htmlspecialchars($fs_desc),
 	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
-	"FORUMS_NEWTOPIC_TITLE" => sed_inputbox('text', 'newtopictitle', htmlspecialchars($newtopictitle), array('size' => 56, 'maxlength' => 255)),
-	"FORUMS_NEWTOPIC_DESC" => sed_inputbox('text', 'newtopicdesc', htmlspecialchars($newtopicdesc), array('size' => 56, 'maxlength' => 255)),
-	"FORUMS_NEWTOPIC_TEXT" => sed_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor'),
+	"FORUMS_NEWTOPIC_TITLE" => cot_inputbox('text', 'newtopictitle', htmlspecialchars($newtopictitle), array('size' => 56, 'maxlength' => 255)),
+	"FORUMS_NEWTOPIC_DESC" => cot_inputbox('text', 'newtopicdesc', htmlspecialchars($newtopicdesc), array('size' => 56, 'maxlength' => 255)),
+	"FORUMS_NEWTOPIC_TEXT" => cot_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor'),
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
 ));
 
 if ($fs_allowprvtopics)
 {
 
-	$t->assign("FORUMS_NEWTOPIC_ISPRIVATE", sed_checkbox($newprvtopic, newprvtopic));
+	$t->assign("FORUMS_NEWTOPIC_ISPRIVATE", cot_checkbox($newprvtopic, newprvtopic));
 	$t->parse("MAIN.PRIVATE");
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('forums.newtopic.tags') as $pl)
+foreach (cot_getextplugins('forums.newtopic.tags') as $pl)
 {
 	include $pl;
 }

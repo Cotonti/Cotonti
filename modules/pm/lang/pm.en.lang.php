@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 $L['pmsend_subtitle'] = 'New private message submission form';
 $L['pmsend_title'] = 'Send a new private message';

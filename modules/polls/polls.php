@@ -15,56 +15,56 @@ Hooks=module
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_dieifdisabled($cfg['disable_polls']);
+cot_dieifdisabled($cfg['disable_polls']);
 
 // Environment setup
-define('SED_POLLS', TRUE);
+define('COT_POLLS', TRUE);
 $location = 'Polls';
 
 /* === Hook === */
-foreach (sed_getextplugins('polls.first') as $pl)
+foreach (cot_getextplugins('polls.first') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('polls', 'a');
-sed_block($usr['auth_read']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('polls', 'a');
+cot_block($usr['auth_read']);
 
-$mode = sed_import('mode', 'G', 'ALP');
+$mode = cot_import('mode', 'G', 'ALP');
 
 if ($mode == 'ajax')
 {
-	$theme = sed_import('poll_skin', 'G', 'TXT');
-	$id = sed_import('poll_id', 'P', 'INT');
-	sed_sendheaders();
-	sed_poll_vote();
-	list($polltitle, $poll_form) = sed_poll_form($id, '', $theme);
+	$theme = cot_import('poll_skin', 'G', 'TXT');
+	$id = cot_import('poll_id', 'P', 'INT');
+	cot_sendheaders();
+	cot_poll_vote();
+	list($polltitle, $poll_form) = cot_poll_form($id, '', $theme);
 	echo $poll_form;
 	exit;
 }
 
-$id = sed_import('id', 'G', 'ALP', 8);
-$vote = sed_import('vote', 'G', 'TXT');
+$id = cot_import('id', 'G', 'ALP', 8);
+$vote = cot_import('vote', 'G', 'TXT');
 if (!empty($vote))
 {
 	$vote = explode(" ", $vote);
 }
 if (empty($vote))
 {
-	$vote = sed_import('vote', 'P', 'ARR');
+	$vote = cot_import('vote', 'P', 'ARR');
 }
 
-$ratings = sed_import('ratings', 'G', 'BOL');
+$ratings = cot_import('ratings', 'G', 'BOL');
 
 $out['subtitle'] = $L['Polls'];
 
-sed_online_update();
+cot_online_update();
 
 /* === Hook === */
-foreach (sed_getextplugins('polls.main') as $pl)
+foreach (cot_getextplugins('polls.main') as $pl)
 {
 	include $pl;
 }
@@ -72,30 +72,30 @@ foreach (sed_getextplugins('polls.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$t = new XTemplate(sed_skinfile('polls'));
+$t = new XTemplate(cot_skinfile('polls'));
 
-if (sed_check_messages())
+if (cot_check_messages())
 {
-	sed_display_messages($t);
+	cot_display_messages($t);
 }
 elseif ((int)$id > 0)
 {
-	$id = sed_import($id, 'D', 'INT');
-	if ((int) sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index' "), 0, 0) != 1)
+	$id = cot_import($id, 'D', 'INT');
+	if ((int) cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index' "), 0, 0) != 1)
 	{
-		sed_redirect(sed_url('message', 'msg=404', '', TRUE));
+		cot_redirect(cot_url('message', 'msg=404', '', TRUE));
 	}
-	sed_poll_vote();
-	$poll_form = sed_poll_form($id);
+	cot_poll_vote();
+	$poll_form = cot_poll_form($id);
 
 	$t->assign(array(
-		"POLLS_TITLE" => sed_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
+		"POLLS_TITLE" => cot_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
 		"POLLS_FORM" => $poll_form['poll_block'],
-		"POLLS_VIEWALL" => sed_rc_link(sed_url('polls', 'id=viewall'), $L['polls_viewarchives'])
+		"POLLS_VIEWALL" => cot_rc_link(cot_url('polls', 'id=viewall'), $L['polls_viewarchives'])
 	));
 
 	/* === Hook === */
-	foreach (sed_getextplugins('polls.view.tags') as $pl)
+	foreach (cot_getextplugins('polls.view.tags') as $pl)
 	{
 		include $pl;
 	}
@@ -118,20 +118,20 @@ elseif ((int)$id > 0)
 else
 {
 	$jj = 0;
-	$sql = sed_sql_query("SELECT * FROM $db_polls WHERE poll_state = 0 AND poll_type = 'index' ORDER BY poll_id DESC");
+	$sql = cot_db_query("SELECT * FROM $db_polls WHERE poll_state = 0 AND poll_type = 'index' ORDER BY poll_id DESC");
 
 	/* === Hook - Part1 === */
-	$extp = sed_getextplugins('polls.viewall.tags');
+	$extp = cot_getextplugins('polls.viewall.tags');
 	/* ===== */
-	while ($row = sed_sql_fetcharray($sql))
+	while ($row = cot_db_fetcharray($sql))
 	{
 		$jj++;
 		$t->assign(array(
 			"POLL_DATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
-			"POLL_HREF" => sed_url('polls', 'id='.$row['poll_id']),
-			"POLL_TEXT" => sed_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
+			"POLL_HREF" => cot_url('polls', 'id='.$row['poll_id']),
+			"POLL_TEXT" => cot_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
 			"POLL_NUM" => $jj,
-			"POLL_ODDEVEN" => sed_build_oddeven($jj)
+			"POLL_ODDEVEN" => cot_build_oddeven($jj)
 		));
 
 		/* === Hook - Part2 === */
@@ -152,7 +152,7 @@ else
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('polls.tags') as $pl)
+foreach (cot_getextplugins('polls.tags') as $pl)
 {
 	include $pl;
 }

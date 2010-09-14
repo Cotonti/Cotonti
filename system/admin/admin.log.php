@@ -9,15 +9,15 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
-sed_block($usr['auth_read']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
+cot_block($usr['auth_read']);
 
-$t = new XTemplate(sed_skinfile('admin.log'));
+$t = new XTemplate(cot_skinfile('admin.log'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=log'), $L['Log']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=log'), $L['Log']);
 $adminhelp = $L['adm_help_log'];
 
 $log_groups = array(
@@ -30,11 +30,11 @@ $log_groups = array(
 	'plg' => $L['Plugins']
 );
 
-$d = sed_import('d', 'G', 'INT');
+$d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.log.first') as $pl)
+foreach (cot_getextplugins('admin.log.first') as $pl)
 {
 	include $pl;
 }
@@ -42,18 +42,18 @@ foreach (sed_getextplugins('admin.log.first') as $pl)
 
 if($a == 'purge' && $usr['isadmin'])
 {
-	sed_check_xg();
+	cot_check_xg();
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.log.purge') as $pl)
+	foreach (cot_getextplugins('admin.log.purge') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
 
-	sed_sql_query("TRUNCATE $db_logger") ? sed_message('adm_ref_prune') : sed_message('Error');
+	cot_db_query("TRUNCATE $db_logger") ? cot_message('adm_ref_prune') : cot_message('Error');
 }
 
-$totaldblog = sed_sql_rowcount($db_logger);
+$totaldblog = cot_db_rowcount($db_logger);
 
 $n = (empty($n)) ? 'all' : $n;
 
@@ -62,7 +62,7 @@ foreach($log_groups as $grp_code => $grp_name)
 	$selected = ($grp_code == $n) ? " selected=\"selected\"" : "";
 
 	$t->assign(array(
-		'ADMIN_LOG_OPTION_VALUE_URL' => sed_url('admin', 'm=log&n='.$grp_code),
+		'ADMIN_LOG_OPTION_VALUE_URL' => cot_url('admin', 'm=log&n='.$grp_code),
 		'ADMIN_LOG_OPTION_GRP_NAME' => $grp_name,
 		'ADMIN_LOG_OPTION_SELECTED' => $selected
 	));
@@ -71,31 +71,31 @@ foreach($log_groups as $grp_code => $grp_name)
 
 $is_adminwarnings = isset($adminwarnings);
 
-$totalitems = ($n == 'all') ? $totaldblog : sed_sql_result(sed_sql_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
-$pagenav = sed_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$totalitems = ($n == 'all') ? $totaldblog : cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'"), 0, 0);
+$pagenav = cot_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 if($n == 'all')
 {
-	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = cot_db_query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 }
 else
 {
-	$sql = sed_sql_query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = cot_db_query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 }
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('admin.log.loop');
+$extp = cot_getextplugins('admin.log.loop');
 /* ===== */
-while($row = sed_sql_fetcharray($sql))
+while($row = cot_db_fetcharray($sql))
 {
 	$t->assign(array(
 		'ADMIN_LOG_ROW_LOG_ID' => $row['log_id'],
 		'ADMIN_LOG_ROW_DATE' => date($cfg['dateformat'], $row['log_date']),
-		'ADMIN_LOG_ROW_URL_IP_SEARCH' => sed_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['log_ip'].'&'.sed_xg()),
+		'ADMIN_LOG_ROW_URL_IP_SEARCH' => cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['log_ip'].'&'.cot_xg()),
 		'ADMIN_LOG_ROW_LOG_IP' => $row['log_ip'],
 		'ADMIN_LOG_ROW_LOG_NAME' => $row['log_name'],
-		'ADMIN_LOG_ROW_URL_LOG_GROUP' => sed_url('admin', 'm=log&n='.$row['log_group']),
+		'ADMIN_LOG_ROW_URL_LOG_GROUP' => cot_url('admin', 'm=log&n='.$row['log_group']),
 		'ADMIN_LOG_ROW_LOG_GROUP' => $log_groups[$row['log_group']],
 		'ADMIN_LOG_ROW_LOG_TEXT' => htmlspecialchars($row['log_text'])
 	));
@@ -110,7 +110,7 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t->assign(array(
-	'ADMIN_LOG_URL_PRUNE' => sed_url('admin', 'm=log&a=purge&'.sed_xg()),
+	'ADMIN_LOG_URL_PRUNE' => cot_url('admin', 'm=log&a=purge&'.cot_xg()),
 	'ADMIN_LOG_TOTALDBLOG' => $totaldblog,
 	'ADMIN_LOG_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_LOG_PAGNAV' => $pagenav['main'],
@@ -119,17 +119,17 @@ $t->assign(array(
 	'ADMIN_LOG_ON_PAGE' => $ii
 ));
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.log.tags') as $pl)
+foreach (cot_getextplugins('admin.log.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

@@ -15,24 +15,24 @@
  * @license BSD License
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-$id = sed_import('id','G','INT');                     // id (delete file(folder) id
-$o = sed_import('o','G','ALP');                       //
-$f = sed_import('f','G','INT');                       // folder id
-$c1 = sed_import('c1','G','ALP');					  //
-$c2 = sed_import('c2','G','ALP');					  //
-$userid = sed_import('userid','G','INT');			  // User ID or 0
+$id = cot_import('id','G','INT');                     // id (delete file(folder) id
+$o = cot_import('o','G','ALP');                       //
+$f = cot_import('f','G','INT');                       // folder id
+$c1 = cot_import('c1','G','ALP');					  //
+$c2 = cot_import('c2','G','ALP');					  //
+$userid = cot_import('userid','G','INT');			  // User ID or 0
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
-$d = sed_import('d', 'G', 'INT');					   // Page number files
-$df = sed_import('df', 'G', 'INT');					   // page number folders
+$d = cot_import('d', 'G', 'INT');					   // Page number files
+$df = cot_import('df', 'G', 'INT');					   // page number folders
 
 $df = empty($df) ? 0 : (int) $df;
 $d = empty($d) ? 0 : (int) $d;
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('pfs', 'a');
-sed_block($usr['auth_read']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
+cot_block($usr['auth_read']);
 
 $pn_c1 = empty($c1) ? '' : '&c1=' . $c1;
 $pn_c2 = empty($c2) ? '' : '&c2=' . $c2;
@@ -49,69 +49,69 @@ else
 $files_count = 0;
 $folders_count = 0;
 $standalone = FALSE;
-$user_info = sed_userinfo($userid);
+$user_info = cot_userinfo($userid);
 $maingroup = ($userid==0) ? 5 : $user_info['user_maingrp'];
 
-$cfg['pfs_dir_user'] = sed_pfs_path($userid);
-$cfg['th_dir_user'] = sed_pfs_thumbpath($userid);
-$cfg['rel_dir_user'] = sed_pfs_relpath($userid);
+$cfg['pfs_dir_user'] = cot_pfs_path($userid);
+$cfg['th_dir_user'] = cot_pfs_thumbpath($userid);
+$cfg['rel_dir_user'] = cot_pfs_relpath($userid);
 
-$sql = sed_sql_query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id='$maingroup'");
-if ($row = sed_sql_fetcharray($sql))
+$sql = cot_db_query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id='$maingroup'");
+if ($row = cot_db_fetcharray($sql))
 {
-	$maxfile = min($row['grp_pfs_maxfile'], sed_get_uploadmax());
+	$maxfile = min($row['grp_pfs_maxfile'], cot_get_uploadmax());
 	$maxtotal = $row['grp_pfs_maxtotal'];
 }
 else
-{ sed_die(); }
+{ cot_die(); }
 
 if (($maxfile==0 || $maxtotal==0) && !$usr['isadmin'])
-{ sed_block(FALSE); }
+{ cot_block(FALSE); }
 
 if (!empty($c1) || !empty($c2))
 {
-	$morejavascript = sed_rc('pfs_code_header_javascript');
+	$morejavascript = cot_rc('pfs_code_header_javascript');
 	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
 
-reset($sed_extensions);
-foreach ($sed_extensions as $k => $line)
+reset($cot_extensions);
+foreach ($cot_extensions as $k => $line)
 {
-	$icon[$line[0]] = sed_rc('pfs_icon_type', array('type' => $line[2], 'name' => $line[1]));
+	$icon[$line[0]] = cot_rc('pfs_icon_type', array('type' => $line[2], 'name' => $line[1]));
 	$filedesc[$line[0]] = $line[1];
 }
 
 
 $L['pfs_title'] = ($userid==0) ? $L['SFS'] : $L['pfs_title'];
-$title = sed_rc_link(sed_url('pfs', $more), $L['pfs_title']);
+$title = cot_rc_link(cot_url('pfs', $more), $L['pfs_title']);
 
 if ($userid!=$usr['id'])
 {
-	$title .= ($userid==0) ? '' : " (".sed_build_user($user_info['user_id'], $user_info['user_name']).")";
+	$title .= ($userid==0) ? '' : " (".cot_build_user($user_info['user_id'], $user_info['user_name']).")";
 }
 
 /* === Hook === */
-foreach (sed_getextplugins('pfs.first') as $pl)
+foreach (cot_getextplugins('pfs.first') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $u_totalsize=0;
-$sql = sed_sql_query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' ");
-$pfs_totalsize = sed_sql_result($sql,0,"SUM(pfs_size)");
+$sql = cot_db_query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' ");
+$pfs_totalsize = cot_db_result($sql,0,"SUM(pfs_size)");
 
 $err_msg = array();
 
 if ($a=='upload')
 {
-	sed_block($usr['auth_write']);
-	$folderid = sed_import('folderid','P','INT');
-	$ndesc = sed_import('ndesc','P','ARR');
+	cot_block($usr['auth_write']);
+	$folderid = cot_import('folderid','P','INT');
+	$ndesc = cot_import('ndesc','P','ARR');
 
 	/* === Hook === */
-	foreach (sed_getextplugins('pfs.upload.first') as $pl)
+	foreach (cot_getextplugins('pfs.upload.first') as $pl)
 	{
 		include $pl;
 	}
@@ -119,8 +119,8 @@ if ($a=='upload')
 
 	if (!empty($folderid))
 	{
-		$sql = sed_sql_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid' ");
-		sed_die(sed_sql_numrows($sql)==0);
+		$sql = cot_db_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid' ");
+		cot_die(cot_db_numrows($sql)==0);
 	}
 
 	for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
@@ -143,17 +143,17 @@ if ($a=='upload')
 			$desc = $ndesc[$ii];
 			if($cfg['pfstimename'])
 			{
-				$u_newname = time() . '_' . sed_unique(6) . '_' . $userid . '.' . $f_extension;
+				$u_newname = time() . '_' . cot_unique(6) . '_' . $userid . '.' . $f_extension;
 			}
 			else
 			{
-				$u_newname = sed_safename($u_name, true, '_' . $userid);
+				$u_newname = cot_safename($u_name, true, '_' . $userid);
 			}
-			$u_sqlname = sed_sql_prep($u_newname);
+			$u_sqlname = cot_db_prep($u_newname);
 
 			if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
 			{
-				foreach ($sed_extensions as $k => $line)
+				foreach ($cot_extensions as $k => $line)
 				{
 					if (mb_strtolower($f_extension) == $line[0])
 					{ $f_extension_ok = 1; }
@@ -162,7 +162,7 @@ if ($a=='upload')
 
 			if (is_uploaded_file($u_tmp_name) && $u_size>0 && $u_size<($maxfile*1024) && $f_extension_ok && ($pfs_totalsize+$u_size)<$maxtotal*1024   )
 			{
-				$fcheck = sed_file_check($u_tmp_name, $u_name, $f_extension);
+				$fcheck = cot_file_check($u_tmp_name, $u_name, $f_extension);
 				if($fcheck == 1)
 				{
 					if (!file_exists($cfg['pfs_dir_user'].$u_newname))
@@ -185,13 +185,13 @@ if ($a=='upload')
 						if ($is_moved && (int)$u_size > 0)
 						{
 							/* === Hook === */
-							foreach (sed_getextplugins('pfs.upload.moved') as $pl)
+							foreach (cot_getextplugins('pfs.upload.moved') as $pl)
 							{
 								include $pl;
 							}
 							/* ===== */
 
-							$sql = sed_sql_query("INSERT INTO $db_pfs
+							$sql = cot_db_query("INSERT INTO $db_pfs
 							(pfs_userid,
 							pfs_date,
 							pfs_file,
@@ -203,19 +203,19 @@ if ($a=='upload')
 							VALUES
 							(".(int)$userid.",
 							".(int)$sys['now_offset'].",
-							'".sed_sql_prep($u_sqlname)."',
-							'".sed_sql_prep($f_extension)."',
+							'".cot_db_prep($u_sqlname)."',
+							'".cot_db_prep($f_extension)."',
 							".(int)$folderid.",
-							'".sed_sql_prep($desc)."',
+							'".cot_db_prep($desc)."',
 							".(int)$u_size.",
 							0) ");
 
-							$sql = sed_sql_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
+							$sql = cot_db_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
 							$disp_errors .= $L['Yes'];
 							$pfs_totalsize += $u_size;
 
 							/* === Hook === */
-							foreach (sed_getextplugins('pfs.upload.done') as $pl)
+							foreach (cot_getextplugins('pfs.upload.done') as $pl)
 							{
 								include $pl;
 							}
@@ -226,7 +226,7 @@ if ($a=='upload')
 								@unlink($cfg['th_dir_user'].$u_newname);
 								$th_colortext = array(hexdec(substr($cfg['th_colortext'],0,2)), hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)), hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
-								sed_createthumb($cfg['pfs_dir_user'].$u_newname, $cfg['th_dir_user'].$u_newname, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
+								cot_createthumb($cfg['pfs_dir_user'].$u_newname, $cfg['th_dir_user'].$u_newname, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
 							}
 						}
 						else
@@ -259,11 +259,11 @@ if ($a=='upload')
 }
 elseif ($a=='delete')
 {
-	sed_block($usr['auth_write']);
-	sed_check_xg();
-	$sql = sed_sql_query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
+	cot_block($usr['auth_write']);
+	cot_check_xg();
+	$sql = cot_db_query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
 
-	if ($row = sed_sql_fetcharray($sql))
+	if ($row = cot_db_fetcharray($sql))
 	{
 		$pfs_file = $row['pfs_file'];
 		$f = $row['pfs_folderid'];
@@ -278,19 +278,19 @@ elseif ($a=='delete')
 			}
 		}
 
-		$sql = sed_sql_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
+		$sql = cot_db_query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
 	}
 }
 elseif ($a=='newfolder')
 {
-	sed_block($usr['auth_write']);
-	$ntitle = sed_import('ntitle','P','TXT');
-	$ndesc = sed_import('ndesc','P','TXT');
-	$nispublic = sed_import('nispublic','P','BOL');
-	$nisgallery = sed_import('nisgallery','P','BOL');
+	cot_block($usr['auth_write']);
+	$ntitle = cot_import('ntitle','P','TXT');
+	$ndesc = cot_import('ndesc','P','TXT');
+	$nispublic = cot_import('nispublic','P','BOL');
+	$nisgallery = cot_import('nisgallery','P','BOL');
 	$ntitle = (empty($ntitle)) ? '???' : $ntitle;
 
-	$sql = sed_sql_query("INSERT INTO $db_pfs_folders
+	$sql = cot_db_query("INSERT INTO $db_pfs_folders
 	(pff_userid,
 	pff_title,
 	pff_date,
@@ -301,33 +301,33 @@ elseif ($a=='newfolder')
 	pff_count)
 	VALUES
 	(".(int)$userid.",
-		'".sed_sql_prep($ntitle)."',
+		'".cot_db_prep($ntitle)."',
 		".(int)$sys['now'].",
 		".(int)$sys['now'].",
-		'".sed_sql_prep($ndesc)."',
+		'".cot_db_prep($ndesc)."',
 		".(int)$nispublic.",
 		".(int)$nisgallery.",
 		0)");
-	sed_redirect(sed_url('pfs', $more, '', true));
+	cot_redirect(cot_url('pfs', $more, '', true));
 }
 elseif ($a=='deletefolder')
 {
-	sed_block($usr['auth_write']);
-	sed_check_xg();
-	$sql = sed_sql_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$id' ");
-	$sql = sed_sql_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$id' ");
+	cot_block($usr['auth_write']);
+	cot_check_xg();
+	$sql = cot_db_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$id' ");
+	$sql = cot_db_query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$id' ");
 }
 
 $f = (empty($f)) ? '0' : $f;
 
 if (!$standalone) require_once $cfg['system_dir'] . '/header.php';
-$mskin = ($standalone) ? sed_skinfile(array('pfs', 'standalone')) : sed_skinfile('pfs');
+$mskin = ($standalone) ? cot_skinfile(array('pfs', 'standalone')) : cot_skinfile('pfs');
 $t = new XTemplate($mskin);
 
 if ($f>0)
 {
-	$sql1 = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_id='$f' AND pff_userid='$userid'");
-	if ($row1 = sed_sql_fetcharray($sql1))
+	$sql1 = cot_db_query("SELECT * FROM $db_pfs_folders WHERE pff_id='$f' AND pff_userid='$userid'");
+	if ($row1 = cot_db_fetcharray($sql1))
 	{
 		$pff_id = $row1['pff_id'];
 		$pff_title = $row1['pff_title'];
@@ -337,37 +337,37 @@ if ($f>0)
 		$pff_isgallery = $row1['pff_isgallery'];
 		$pff_count = $row1['pff_count'];
 
-		$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
-		$sqll = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
-		$title .= " ".$cfg['separator']." <a href=\"".sed_url('pfs', 'f='.$pff_id.'&'.$more)."\">".$pff_title."</a>";
+		$sql = cot_db_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
+		$sqll = cot_db_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
+		$title .= " ".$cfg['separator']." <a href=\"".cot_url('pfs', 'f='.$pff_id.'&'.$more)."\">".$pff_title."</a>";
 	}
 	else
-	{ sed_die(); }
-	$movebox = sed_selectbox_folders($userid,"",$f);
+	{ cot_die(); }
+	$movebox = cot_selectbox_folders($userid,"",$f);
 }
 else
 {
-	$sql = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC");
-	$sqll = sed_sql_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
-	$sql1 = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC");
-	$sql1l = sed_sql_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['maxpfsperpage']);
-	$sql3 = sed_sql_query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
+	$sql = cot_db_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC");
+	$sqll = cot_db_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
+	$sql1 = cot_db_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC");
+	$sql1l = cot_db_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['maxpfsperpage']);
+	$sql3 = cot_db_query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
 
-	while ($row3 = sed_sql_fetcharray($sql3))
+	while ($row3 = cot_db_fetcharray($sql3))
 	{
 		$pff_filescount[$row3['pfs_folderid']] = $row3['COUNT(*)'];
 		$pff_filessize[$row3['pfs_folderid']] = $row3['SUM(pfs_size)'];
 	}
 
-	$folders_count = sed_sql_numrows($sql1);
-	$movebox = sed_selectbox_folders($userid,"/","");
-	$sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_folderid>0 AND pfs_userid='$userid'");
-	$subfiles_count = sed_sql_result($sql2,0,"COUNT(*)");
+	$folders_count = cot_db_numrows($sql1);
+	$movebox = cot_selectbox_folders($userid,"/","");
+	$sql2 = cot_db_query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_folderid>0 AND pfs_userid='$userid'");
+	$subfiles_count = cot_db_result($sql2,0,"COUNT(*)");
 
 	$iki=0;
 	$subfiles_count_on_page=0;
 
-	while ($row1 = sed_sql_fetcharray($sql1l))
+	while ($row1 = cot_db_fetcharray($sql1l))
 	{
 		$pff_id = $row1['pff_id'];
 		$pff_title = $row1['pff_title'];
@@ -388,13 +388,13 @@ else
 			'PFF_ROW_COUNT' => $pff_count,
 			'PFF_ROW_FCOUNT' => $pff_fcount,
 			'PFF_ROW_FSIZE' => $pff_fssize,
-			'PFF_ROW_DELETE_URL' => sed_url('pfs', 'a=deletefolder&'.sed_xg().'&f='.$pff_id.'&'.$more),
-			'PFF_ROW_EDIT_URL' => sed_url('pfs', "m=editfolder&f=".$pff_id.'&'.$more),
-			'PFF_ROW_URL' => sed_url('pfs', 'f='.$pff_id.'&'.$more),
+			'PFF_ROW_DELETE_URL' => cot_url('pfs', 'a=deletefolder&'.cot_xg().'&f='.$pff_id.'&'.$more),
+			'PFF_ROW_EDIT_URL' => cot_url('pfs', "m=editfolder&f=".$pff_id.'&'.$more),
+			'PFF_ROW_URL' => cot_url('pfs', 'f='.$pff_id.'&'.$more),
 			'PFF_ROW_ICON' => $icon_f,
 			'PFF_ROW_UPDATED' => date($cfg['dateformat'], $row1['pff_updated'] + $usr['timezone'] * 3600),
-			'PFF_ROW_ISPUBLIC' => $sed_yesno[$pff_ispublic],
-			'PFF_ROW_DESC' => sed_cutstring($pff_desc,32)
+			'PFF_ROW_ISPUBLIC' => $cot_yesno[$pff_ispublic],
+			'PFF_ROW_DESC' => cot_cutstring($pff_desc,32)
 		));
 
 		$t->parse('MAIN.PFF_ROW');
@@ -405,14 +405,14 @@ else
 
 }
 
-$files_count = sed_sql_numrows($sql);
-$movebox = (empty($f)) ? sed_selectbox_folders($userid,"/","") : sed_selectbox_folders($userid,"$f","");
+$files_count = cot_db_numrows($sql);
+$movebox = (empty($f)) ? cot_selectbox_folders($userid,"/","") : cot_selectbox_folders($userid,"$f","");
 $th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
 $th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
 
 $iji=0;
 
-while ($row = sed_sql_fetcharray($sqll))
+while ($row = cot_db_fetcharray($sqll))
 {
 	$pfs_id = $row['pfs_id'];
 	$pfs_file = $row['pfs_file'];
@@ -426,11 +426,11 @@ while ($row = sed_sql_fetcharray($sqll))
 	$dotpos = mb_strrpos($pfs_file, ".")+1;
 	$pfs_realext = mb_strtolower(mb_substr($pfs_file, $dotpos, 5));
 	unset($add_thumbnail, $add_image);
-	$add_file = ($standalone) ? sed_rc('pfs_link_addfile') : '';
+	$add_file = ($standalone) ? cot_rc('pfs_link_addfile') : '';
 
 	if ($pfs_extension!=$pfs_realext)
 	{
-		$sql1 = sed_sql_query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' " );
+		$sql1 = cot_db_query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' " );
 		$pfs_extension = $pfs_realext;
 	}
 
@@ -440,18 +440,18 @@ while ($row = sed_sql_fetcharray($sqll))
 		{
 			$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
 			$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
-			sed_createthumb($cfg['pfs_dir_user'].$pfs_file, $cfg['th_dir_user'].$pfs_file, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $pfs_extension, $pfs_file, $pfs_filesize, $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
+			cot_createthumb($cfg['pfs_dir_user'].$pfs_file, $cfg['th_dir_user'].$pfs_file, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $pfs_extension, $pfs_file, $pfs_filesize, $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
 		}
 
 		if ($standalone)
 		{
-			$add_thumbnail .= sed_rc('pfs_link_addthumb');
-			$add_image = sed_rc('pfs_link_addpix');
+			$add_thumbnail .= cot_rc('pfs_link_addthumb');
+			$add_image = cot_rc('pfs_link_addpix');
 		}
 		if ($o=='thumbs')
 		{
 			$thumbpath = $cfg['pfs_thumbpath'];
-			$pfs_icon = sed_rc('pfs_link_thumbnail');
+			$pfs_icon = cot_rc('pfs_link_thumbnail');
 		}
 	}
 
@@ -465,8 +465,8 @@ while ($row = sed_sql_fetcharray($sqll))
 		'PFS_ROW_FILE_URL' => $pfs_fullfile,
 		'PFS_ROW_SIZE' => $pfs_filesize,
 		'PFS_ROW_ICON' => $pfs_icon,
-		'PFS_ROW_DELETE_URL' => sed_url('pfs', 'a=delete&'.sed_xg().'&id='.$pfs_id.'&'.$more.'&o='.$o),
-		'PFS_ROW_EDIT_URL' => sed_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
+		'PFS_ROW_DELETE_URL' => cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&o='.$o),
+		'PFS_ROW_EDIT_URL' => cot_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
 		'PFS_ROW_COUNT' => $row['pfs_count'],
 		'PFS_ROW_INSERT' => $add_thumbnail.$add_image.$add_file
 	));
@@ -482,7 +482,7 @@ if ($files_count>0 || $folders_count>0)
 	if ($folders_count>0)
 	{
 		$totalitemsf = $folders_count;
-		$pagenav = sed_pagenav('pfs', 'userid='.$usr['id'].$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['maxpfsperpage'], 'df');
+		$pagenav = cot_pagenav('pfs', 'userid='.$usr['id'].$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['maxpfsperpage'], 'df');
 
 		$t->assign(array(
 			'PFF_FOLDERCOUNT' => $folders_count,
@@ -499,7 +499,7 @@ if ($files_count>0 || $folders_count>0)
 	{
 		$thumbspagination = ($o == 'thumbs') ? '&o=thumbs' : '';
 		$totalitems = $files_count;
-		$pagenav = sed_pagenav('pfs', 'f='.$f.'&userid='.$usr['id'].$pn_c1.$pn_c2.$thumbspagination, $d,
+		$pagenav = cot_pagenav('pfs', 'f='.$f.'&userid='.$usr['id'].$pn_c1.$pn_c2.$thumbspagination, $d,
 			$totalitems, $cfg['maxpfsperpage']);
 
 		$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];
@@ -517,7 +517,7 @@ if ($files_count>0 || $folders_count>0)
 
 // ========== Statistics =========
 
-$showthumbs .= ($o!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? "<a href=\"".sed_url('pfs', 'f='.$f.'&'.$more.'&o=thumbs')."\">".$L['Thumbnails']."</a>" : '';
+$showthumbs .= ($o!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? "<a href=\"".cot_url('pfs', 'f='.$f.'&'.$more.'&o=thumbs')."\">".$L['Thumbnails']."</a>" : '';
 
 $t->assign(array(
 	'PFS_TOTALSIZE' => floor($pfs_totalsize/1024).$L['kb'],
@@ -535,8 +535,8 @@ $t->assign(array(
 ));
 
 $t->assign(array(
-	'PFS_UPLOAD_FORM_ACTION' => sed_url('pfs', "f=$f&a=upload&$more"),
-	'PFS_UPLOAD_FORM_FOLDERS' => sed_selectbox_folders($userid, '', $f),
+	'PFS_UPLOAD_FORM_ACTION' => cot_url('pfs', "f=$f&a=upload&$more"),
+	'PFS_UPLOAD_FORM_FOLDERS' => cot_selectbox_folders($userid, '', $f),
 ));
 
 for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
@@ -550,9 +550,9 @@ for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
 $t->parse('MAIN.PFS_UPLOAD_FORM');
 // ========== Allowed =========
 
-reset($sed_extensions);
-sort($sed_extensions);
-foreach ($sed_extensions as $k => $line)
+reset($cot_extensions);
+sort($cot_extensions);
+foreach ($cot_extensions as $k => $line)
 {
 	$t->assign(array(
 		'ALLOWED_ROW_ICON' => $icon[$line[0]],
@@ -567,8 +567,8 @@ foreach ($sed_extensions as $k => $line)
 if ($usr['auth_write'])
 {
 	$t->assign(array(
-		'NEWFOLDER_FORM_ACTION' => sed_url('pfs', 'a=newfolder&'.$more),
-		'NEWFOLDER_FORM_INPUT_PARENT' => sed_selectbox_folders($userid, '', $f, 'nparentid'),
+		'NEWFOLDER_FORM_ACTION' => cot_url('pfs', 'a=newfolder&'.$more),
+		'NEWFOLDER_FORM_INPUT_PARENT' => cot_selectbox_folders($userid, '', $f, 'nparentid'),
 	));
 	$t->parse('MAIN.PFS_NEWFOLDER_FORM');
 }
@@ -578,7 +578,7 @@ if ($usr['auth_write'])
 $title_tags[] = array('{PFS}');
 $title_tags[] = array('%1$s');
 $title_data = array($L['Mypfs']);
-$out['subtitle'] = sed_title('title_pfs', $title_tags, $title_data);
+$out['subtitle'] = cot_title('title_pfs', $title_tags, $title_data);
 
 /* ============= */
 
@@ -600,12 +600,12 @@ if ($standalone)
 	}
 	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
 
-	sed_sendheaders();
+	cot_sendheaders();
 
 	$t->assign(array(
 		'PFS_DOCTYPE' => $cfg['doctype'],
-		'PFS_METAS' => sed_htmlmetas(),
-		'PFS_JAVASCRIPT' => sed_javascript(),
+		'PFS_METAS' => cot_htmlmetas(),
+		'PFS_JAVASCRIPT' => cot_javascript(),
 		'PFS_C1' => $c1,
 		'PFS_C2' => $c2,
 		'PFS_ADDTHUMB' => $addthumb,
@@ -618,7 +618,7 @@ if ($standalone)
 	$t->parse('MAIN.STANDALONE_FOOTER');
 
 	/* === Hook === */
-	foreach (sed_getextplugins('pfs.standalone') as $pl)
+	foreach (cot_getextplugins('pfs.standalone') as $pl)
 	{
 		include $pl;
 	}
@@ -627,7 +627,7 @@ if ($standalone)
 else
 {
 	/* === Hook === */
-	foreach (sed_getextplugins('pfs.tags') as $pl)
+	foreach (cot_getextplugins('pfs.tags') as $pl)
 	{
 		include $pl;
 	}

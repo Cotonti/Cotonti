@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Checks a file to be sure it is valid
@@ -19,7 +19,7 @@ defined('SED_CODE') or die('Wrong URL');
  * @param string $ext File extension
  * @return bool
  */
-function sed_file_check($path, $name, $ext)
+function cot_file_check($path, $name, $ext)
 {
 	global $L, $cfg;
 	if ($cfg['pfsfilecheck'])
@@ -64,12 +64,12 @@ function sed_file_check($path, $name, $ext)
 			else
 			{
 				$fcheck = ($cfg['pfsnomimepass']) ? 1 : 2;
-				sed_log(sprintf($L['pfs_filechecknomime'], $ext, $name), 'sec');
+				cot_log(sprintf($L['pfs_filechecknomime'], $ext, $name), 'sec');
 			}
 		}
 		if (!$fcheck)
 		{
-			sed_log(sprintf($L['pfs_filecheckfail'], $ext, $name), 'sec');
+			cot_log(sprintf($L['pfs_filecheckfail'], $ext, $name), 'sec');
 		}
 	}
 	else
@@ -84,7 +84,7 @@ function sed_file_check($path, $name, $ext)
  *
  * @return int
  */
-function sed_get_uploadmax()
+function cot_get_uploadmax()
 {
 	static $par_a = array('upload_max_filesize', 'post_max_size', 'memory_limit');
 	static $opt_a = array('G' => 1073741824, 'M' => 1048576, 'K' => 1024);

@@ -15,12 +15,12 @@ Hooks=forums.posts.main
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'])
 {
-	sed_require('tags', true);
-	$tags = sed_tag_list($q, 'forums');
+	cot_require('tags', true);
+	$tags = cot_tag_list($q, 'forums');
 	$tag_keywords = implode(', ', $tags);
 	$out['keywords'] = $tag_keywords;
 }

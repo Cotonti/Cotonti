@@ -16,13 +16,13 @@ Tags=recentitems.tpl:{PAGE_ROW_COMMENTS}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
 $page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 $recentitems->assign(array(
-	'PAGE_ROW_COMMENTS' => sed_comments_link('page', $page_urlp, 'page', $pag['page_id'], $pag['page_cat'])
+	'PAGE_ROW_COMMENTS' => cot_comments_link('page', $page_urlp, 'page', $pag['page_id'], $pag['page_cat'])
 ));
 
 ?>

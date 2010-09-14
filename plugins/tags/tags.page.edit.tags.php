@@ -16,17 +16,17 @@ Tags=page.edit.tpl:{PAGEEDIT_FORM_TAGS},{PAGEEDIT_TOP_TAGS},{PAGEEDIT_TOP_TAGS_H
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
+if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
-	sed_require('tags', true);
-	$tags = sed_tag_list($id);
+	cot_require('tags', true);
+	$tags = cot_tag_list($id);
 	$tags = implode(', ', $tags);
 	$t->assign(array(
 		'PAGEEDIT_TOP_TAGS' => $L['Tags'],
 		'PAGEEDIT_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-		'PAGEEDIT_FORM_TAGS' => sed_rc('tags_input_editpage')
+		'PAGEEDIT_FORM_TAGS' => cot_rc('tags_input_editpage')
 	));
 	$t->parse('MAIN.TAGS');
 }

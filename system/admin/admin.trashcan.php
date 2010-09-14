@@ -9,22 +9,22 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
+cot_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.trashcan'));
+$t = new XTemplate(cot_skinfile('admin.trashcan'));
 
-$adminpath[] = array(sed_url('admin', 'm=trashcan'), $L['Trashcan']);
+$adminpath[] = array(cot_url('admin', 'm=trashcan'), $L['Trashcan']);
 $adminhelp = $L['adm_help_trashcan'];
 
-$id = sed_import('id', 'G', 'INT');
-$d = sed_import('d', 'G', 'INT');
+$id = cot_import('id', 'G', 'INT');
+$d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.trashcan.first') as $pl)
+foreach (cot_getextplugins('admin.trashcan.first') as $pl)
 {
 	include $pl;
 }
@@ -32,59 +32,59 @@ foreach (sed_getextplugins('admin.trashcan.first') as $pl)
 
 if($a == 'wipe')
 {
-	sed_check_xg();
+	cot_check_xg();
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.trashcan.wipe') as $pl)
+	foreach (cot_getextplugins('admin.trashcan.wipe') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	$sql = sed_sql_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+	$sql = cot_db_query("DELETE FROM $db_trash WHERE tr_id='$id'");
 
-	sed_message('adm_trashcan_deleted');
+	cot_message('adm_trashcan_deleted');
 }
 elseif($a == 'wipeall')
 {
-	sed_check_xg();
+	cot_check_xg();
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.trashcan.wipeall') as $pl)
+	foreach (cot_getextplugins('admin.trashcan.wipeall') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	$sql = sed_sql_query("TRUNCATE $db_trash");
+	$sql = cot_db_query("TRUNCATE $db_trash");
 
-	sed_message('adm_trashcan_prune');
+	cot_message('adm_trashcan_prune');
 }
 elseif($a == 'restore')
 {
-	sed_check_xg();
+	cot_check_xg();
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.trashcan.restore') as $pl)
+	foreach (cot_getextplugins('admin.trashcan.restore') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-	if(sed_trash_restore($id))
+	if(cot_trash_restore($id))
 	{
-		sed_trash_delete($id);
+		cot_trash_delete($id);
 	}
 
-	sed_message('adm_trashcan_restored');
+	cot_message('adm_trashcan_restored');
 }
 
-$totalitems = sed_sql_rowcount($db_trash);
-$pagenav = sed_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$totalitems = cot_db_rowcount($db_trash);
+$pagenav = cot_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = sed_sql_query("SELECT t.*, u.user_name FROM $db_trash AS t
+$sql = cot_db_query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
 	WHERE 1 ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('admin.trashcan.loop');
+$extp = cot_getextplugins('admin.trashcan.loop');
 /* ===== */
-while($row = sed_sql_fetcharray($sql))
+while($row = cot_db_fetcharray($sql))
 {
 	switch($row['tr_type'])
 	{
@@ -129,9 +129,9 @@ while($row = sed_sql_fetcharray($sql))
 		'ADMIN_TRASHCAN_TYPESTR_ICON' => $icon,
 		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
 		'ADMIN_TRASHCAN_TITLE' => htmlspecialchars($row['tr_title']),
-		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ? $L['System'] : sed_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
-		'ADMIN_TRASHCAN_ROW_WIPE_URL' => sed_url('admin', 'm=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$d.'&'.sed_xg()),
-		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => sed_url('admin', 'm=trashcan&a=restore&id='.$row['tr_id'].'&d='.$d.'&'.sed_xg())
+		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ? $L['System'] : cot_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
+		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_url('admin', 'm=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg()),
+		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=trashcan&a=restore&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg())
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -146,8 +146,8 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t->assign(array(
-	'ADMIN_TRASHCAN_CONF_URL' => sed_url('admin', 'm=config&n=edit&o=core&p=trash'),
-	'ADMIN_TRASHCAN_WIPEALL_URL' => sed_url('admin', 'm=trashcan&a=wipeall&'.sed_xg()),
+	'ADMIN_TRASHCAN_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=trash'),
+	'ADMIN_TRASHCAN_WIPEALL_URL' => cot_url('admin', 'm=trashcan&a=wipeall&'.cot_xg()),
 	'ADMIN_TRASHCAN_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_TRASHCAN_PAGNAV' => $pagenav['main'],
 	'ADMIN_TRASHCAN_PAGINATION_NEXT' => $pagenav['next'],
@@ -157,17 +157,17 @@ $t->assign(array(
 ));
 
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.trashcan.tags') as $pl)
+foreach (cot_getextplugins('admin.trashcan.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }

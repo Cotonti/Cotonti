@@ -16,9 +16,9 @@ Tags=header.tpl:{HEADER_COMPOPUP}
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-if (!defined('SED_INDEX') && !defined('SED_LIST') && !defined('SED_MESSAGE'))
+if (!defined('COT_INDEX') && !defined('COT_LIST') && !defined('COT_MESSAGE'))
 {
 
 	$mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
@@ -51,7 +51,7 @@ HTM;
 <script type="text/javascript">
 //<![CDATA[
 mySettings.previewAutorefresh = '.$autorefresh.';
-mySettings.previewParserPath = "plug.php?r=markitup&'.sed_xg().'";
+mySettings.previewParserPath = "plug.php?r=markitup&'.cot_xg().'";
 mini.previewAutorefresh = '.$autorefresh.';
 mini.previewParserPath = mySettings.previewParserPath;
 $(document).ready(function() {

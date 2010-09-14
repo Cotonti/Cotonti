@@ -9,16 +9,16 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
-$usr['isadmin'] &= sed_auth('admin', 'a', 'A');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+$usr['isadmin'] &= cot_auth('admin', 'a', 'A');
+cot_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.rights'));
+$t = new XTemplate(cot_skinfile('admin.rights'));
 
-$g = sed_import('g', 'G', 'INT');
-$advanced = sed_import('advanced', 'G', 'BOL');
+$g = cot_import('g', 'G', 'INT');
+$advanced = cot_import('advanced', 'G', 'BOL');
 
 $L['adm_code']['admin'] = $L['Administration'];
 $L['adm_code']['comments'] = $L['Comments'];
@@ -34,7 +34,7 @@ $L['adm_code']['ratings'] = $L['Ratings'];
 $L['adm_code']['users'] = $L['Users'];
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.rights.first') as $pl)
+foreach (cot_getextplugins('admin.rights.first') as $pl)
 {
 	include $pl;
 }
@@ -42,30 +42,30 @@ foreach (sed_getextplugins('admin.rights.first') as $pl)
 
 if ($a == 'update')
 {
-	$ncopyrightsconf = sed_import('ncopyrightsconf', 'P', 'BOL');
-	$ncopyrightsfrom = sed_import('ncopyrightsfrom', 'P', 'INT');
+	$ncopyrightsconf = cot_import('ncopyrightsconf', 'P', 'BOL');
+	$ncopyrightsfrom = cot_import('ncopyrightsfrom', 'P', 'INT');
 
 	/* === Hook === */
-	foreach (sed_getextplugins('admin.rights.update') as $pl)
+	foreach (cot_getextplugins('admin.rights.update') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
 
-	if ($ncopyrightsconf && !empty($sed_groups[$ncopyrightsfrom]['title']) && $g > 5)
+	if ($ncopyrightsconf && !empty($cot_groups[$ncopyrightsfrom]['title']) && $g > 5)
 	{
-		sed_sql_delete($db_auth, "auth_groupid=$g");
-		sed_auth_add_group($g, $ncopyrightsfrom);
-		sed_auth_clear('all');
+		cot_db_delete($db_auth, "auth_groupid=$g");
+		cot_auth_add_group($g, $ncopyrightsfrom);
+		cot_auth_clear('all');
 
-		sed_message('Added');
+		cot_message('Added');
 	}
 	elseif (is_array($_POST['auth']))
 	{
 		$mask = array();
-		$auth = sed_import('auth', 'P', 'ARR');
+		$auth = cot_import('auth', 'P', 'ARR');
 
-		sed_sql_update($db_auth, array('auth_rights' => 0), "auth_groupid=$g");
+		cot_db_update($db_auth, array('auth_rights' => 0), "auth_groupid=$g");
 
 		foreach ($auth as $k => $v)
 		{
@@ -76,63 +76,63 @@ if ($a == 'update')
 					$mask = 0;
 					foreach ($j as $l => $m)
 					{
-						$mask += sed_auth_getvalue($l);
+						$mask += cot_auth_getvalue($l);
 					}
-					sed_sql_update($db_auth, array('auth_rights' => $mask),
+					cot_db_update($db_auth, array('auth_rights' => $mask),
 						"auth_groupid='$g' AND auth_code='$k' AND auth_option='$i'");
 				}
 			}
 		}
 
-		sed_auth_reorder();
-		sed_auth_clear('all');
+		cot_auth_reorder();
+		cot_auth_clear('all');
 
-		sed_message('Updated');
+		cot_message('Updated');
 	}
 }
 
 $jj = 1;
 
 /* === Hook for the plugins === */
-foreach (sed_getextplugins('admin.rights.main') as $pl)
+foreach (cot_getextplugins('admin.rights.main') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-$adminpath[] = ($advanced) ? array(sed_url('admin', 'm=rights&g='.$g.'&advanced=1'), $L['Rights']." / ".htmlspecialchars($sed_groups[$g]['title'])." (".$L['More'].")") : array(sed_url('admin', "m=rights&g=".$g), $L['Rights']." / ".htmlspecialchars($sed_groups[$g]['title']));
+$adminpath[] = ($advanced) ? array(cot_url('admin', 'm=rights&g='.$g.'&advanced=1'), $L['Rights']." / ".htmlspecialchars($cot_groups[$g]['title'])." (".$L['More'].")") : array(cot_url('admin', "m=rights&g=".$g), $L['Rights']." / ".htmlspecialchars($cot_groups[$g]['title']));
 
 $adv_columns = ($advanced) ? 8 : 4;
 
 // Common tags
 $t->assign(array(
-	'ADMIN_RIGHTS_FORM_URL' => sed_url('admin', 'm=rights&a=update&g='.$g.$adv_for_url),
-	'ADMIN_RIGHTS_ADVANCED_URL' => sed_url('admin', 'm=rights&g='.$g.'&advanced=1'),
-	'ADMIN_RIGHTS_SELECTBOX_GROUPS' => sed_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
+	'ADMIN_RIGHTS_FORM_URL' => cot_url('admin', 'm=rights&a=update&g='.$g.$adv_for_url),
+	'ADMIN_RIGHTS_ADVANCED_URL' => cot_url('admin', 'm=rights&g='.$g.'&advanced=1'),
+	'ADMIN_RIGHTS_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'ncopyrightsfrom', array('5', $g)),
 	'ADMIN_RIGHTS_ADV_COLUMNS' => $adv_columns,
 	'ADMIN_RIGHTS_4ADV_COLUMNS' => 4 + $adv_columns
 ));
 
 // Preload module langfiles
-foreach ($sed_modules as $code => $mod)
+foreach ($cot_modules as $code => $mod)
 {
-	if (file_exists(sed_langfile($code, 'module')))
+	if (file_exists(cot_langfile($code, 'module')))
 	{
-		sed_require_lang($code, 'module');
+		cot_require_lang($code, 'module');
 	}
 }
 
 // The core and modules top-level
-$sql = sed_sql_query("SELECT a.*, u.user_name FROM $db_core AS c
+$sql = cot_db_query("SELECT a.*, u.user_name FROM $db_core AS c
 LEFT JOIN $db_auth AS a ON c.ct_code=a.auth_code
 LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 WHERE auth_groupid='$g' AND auth_option = 'a'
 ORDER BY auth_code ASC");
-while ($row = sed_sql_fetcharray($sql))
+while ($row = cot_db_fetcharray($sql))
 {
 	if ($row['auth_code'] == 'admin' || $row['auth_code'] == 'index')
 	{
-		$link = sed_url($row['auth_code']);
+		$link = cot_url($row['auth_code']);
 	}
 	elseif ($row['auth_code'] == 'message')
 	{
@@ -140,59 +140,59 @@ while ($row = sed_sql_fetcharray($sql))
 	}
 	else
 	{
-		$link = sed_url('admin', "m=".$row['auth_code']);
+		$link = cot_url('admin', "m=".$row['auth_code']);
 	}
 
 	$title = $L['adm_code'][$row['auth_code']];
 	$title = empty($title) ? $L[$row['auth_code'] . '_title'] : $title;
-	sed_rights_parseline($row, $title, $link);
+	cot_rights_parseline($row, $title, $link);
 }
-sed_sql_freeresult($sql);
+cot_db_freeresult($sql);
 $t->assign('RIGHTS_SECTION_TITLE', $L['Core'] . ' &amp; ' . $L['Modules']);
 $t->parse('MAIN.RIGHTS_SECTION');
 
 
 // Structure permissions
-$sql = sed_sql_query("SELECT a.*, u.user_name, s.structure_path FROM $db_auth as a
+$sql = cot_db_query("SELECT a.*, u.user_name, s.structure_path FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_structure AS s ON s.structure_code=a.auth_option
 	WHERE auth_groupid='$g' AND auth_code='page' AND auth_option != 'a'
 	ORDER BY structure_path ASC");
-while ($row = sed_sql_fetcharray($sql))
+while ($row = cot_db_fetcharray($sql))
 {
-	$link = sed_url('admin', 'm=page');
-	$title = $sed_cat[$row['auth_option']]['tpath'];
-	sed_rights_parseline($row, $title, $link);
+	$link = cot_url('admin', 'm=page');
+	$title = $cot_cat[$row['auth_option']]['tpath'];
+	cot_rights_parseline($row, $title, $link);
 }
-sed_sql_freeresult($sql);
+cot_db_freeresult($sql);
 $t->assign('RIGHTS_SECTION_TITLE', $L['Structure']);
 $t->parse('MAIN.RIGHTS_SECTION');
 
 // Module items permissions are pluggable
 /* === Hook for the plugins === */
-foreach (sed_getextplugins('admin.rights.modules') as $pl)
+foreach (cot_getextplugins('admin.rights.modules') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 // Plugin permissions
-$sql = sed_sql_query("SELECT a.*, u.user_name FROM $db_auth as a
+$sql = cot_db_query("SELECT a.*, u.user_name FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	WHERE auth_groupid='$g' AND auth_code='plug'
 	ORDER BY auth_option ASC");
-while ($row = sed_sql_fetcharray($sql))
+while ($row = cot_db_fetcharray($sql))
 {
-	$link = sed_url('admin', 'm=plug&a=details&pl='.$row['auth_option']);
+	$link = cot_url('admin', 'm=plug&a=details&pl='.$row['auth_option']);
 	$title = $L['Plugin'].' : '.$row['auth_option'];
-	sed_rights_parseline($row, $title, $link);
+	cot_rights_parseline($row, $title, $link);
 }
-sed_sql_freeresult($sql);
+cot_db_freeresult($sql);
 $t->assign('RIGHTS_SECTION_TITLE', $L['Plugins']);
 $t->parse('MAIN.RIGHTS_SECTION');
 
 /* === Hook for the plugins === */
-foreach (sed_getextplugins('admin.rights.end') as $pl)
+foreach (cot_getextplugins('admin.rights.end') as $pl)
 {
 	include $pl;
 }
@@ -200,17 +200,17 @@ foreach (sed_getextplugins('admin.rights.end') as $pl)
 
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.rights.tags') as $pl)
+foreach (cot_getextplugins('admin.rights.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }
@@ -222,7 +222,7 @@ else
 $t->parse('RIGHTS_HELP');
 $adminhelp = $t->text('RIGHTS_HELP');
 
-function sed_rights_parseline($row, $title, $link)
+function cot_rights_parseline($row, $title, $link)
 {
 	global $L, $advanced, $t, $out;
 
@@ -279,8 +279,8 @@ function sed_rights_parseline($row, $title, $link)
 		'ADMIN_RIGHTS_ROW_AUTH_CODE' => $row['auth_code'],
 		'ADMIN_RIGHTS_ROW_TITLE' => $title,
 		'ADMIN_RIGHTS_ROW_LINK' => $link,
-		'ADMIN_RIGHTS_ROW_RIGHTSBYITEM' => sed_url('admin', 'm=rightsbyitem&ic='.$row['auth_code'].'&io='.$row['auth_option']),
-		'ADMIN_RIGHTS_ROW_USER' => sed_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
+		'ADMIN_RIGHTS_ROW_RIGHTSBYITEM' => cot_url('admin', 'm=rightsbyitem&ic='.$row['auth_code'].'&io='.$row['auth_option']),
+		'ADMIN_RIGHTS_ROW_USER' => cot_build_user($row['auth_setbyuserid'], htmlspecialchars($row['user_name'])),
 	));
 	$t->parse('MAIN.RIGHTS_SECTION.RIGHTS_ROW');
 }

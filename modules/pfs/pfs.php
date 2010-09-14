@@ -15,16 +15,16 @@ Hooks=module
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_dieifdisabled($cfg['disable_pfs']);
+cot_dieifdisabled($cfg['disable_pfs']);
 
 // Environment setup
-define('SED_PFS', TRUE);
+define('COT_PFS', TRUE);
 $location = 'PFS';
 
 // Additional API requirements
-sed_require_api('uploads');
+cot_require_api('uploads');
 require_once './datas/extensions.php';
 
 // Mode choice
@@ -33,5 +33,5 @@ if (!in_array($m, array('edit', 'editfolder', 'view')))
 	$m = 'main';
 }
 
-require_once sed_incfile($z, $m);
+require_once cot_incfile($z, $m);
 ?>

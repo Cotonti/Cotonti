@@ -15,17 +15,17 @@ Hooks=module
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_dieifdisabled($cfg['disable_page']);
+cot_dieifdisabled($cfg['disable_page']);
 
 // Environment setup
-define('SED_PAGES', TRUE);
+define('COT_PAGES', TRUE);
 $location = 'Pages';
 
 // Additional API requirements
-sed_require_api('extrafields');
-sed_require('users');
+cot_require_api('extrafields');
+cot_require('users');
 
 // Mode choice
 if (!in_array($m, array('add', 'edit')))
@@ -40,5 +40,5 @@ if (!in_array($m, array('add', 'edit')))
 	}
 }
 
-require_once sed_incfile($z, $m);
+require_once cot_incfile($z, $m);
 ?>

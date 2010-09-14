@@ -9,18 +9,18 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
-sed_require_lang('page', 'module');
-sed_require_rc('page');
-sed_require_api('forms');
+cot_require_lang('page', 'module');
+cot_require_rc('page');
+cot_require_api('forms');
 
 // Global variables
 $GLOBALS['db_pages'] = (isset($GLOBALS['db_pages'])) ? $GLOBALS['db_pages'] : $GLOBALS['db_x'] . 'pages';
 
-$sed_extrafields['pages'] = $sed_extrafields[$db_pages];
-$sed_extrafields['pages'] = (!empty($sed_extrafields['pages'])) ? $sed_extrafields['pages'] : array();
+$GLOBALS['cot_extrafields']['pages'] = (!empty($GLOBALS['cot_extrafields'][$GLOBALS['db_pages']]))
+	? $GLOBALS['cot_extrafields'][$GLOBALS['db_pages']] : array();
 
 /**
  * Reads raw data from file
@@ -28,7 +28,7 @@ $sed_extrafields['pages'] = (!empty($sed_extrafields['pages'])) ? $sed_extrafiel
  * @param string $file File path
  * @return string
  */
-function sed_readraw($file)
+function cot_readraw($file)
 {
 	return (mb_strpos($file, '..') === false && file_exists($file)) ? file_get_contents($file) : 'File not found : '.$file; // TODO need translate
 }
@@ -41,31 +41,31 @@ function sed_readraw($file)
  * @param bool $allsublev All sublevels array
  * @param bool $firstcat Add main cat
  * @param bool $userrights Check userrights
- * @param bool $sqlprep use sed_sql_prep function
+ * @param bool $sqlprep use cot_db_prep function
  * @return array
  */
-function sed_structure_children($cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
+function cot_structure_children($cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
 {
-	global $sed_cat, $sys, $cfg;
+	global $cot_cat, $sys, $cfg;
 
-	$mtch = $sed_cat[$cat]['path'].'.';
+	$mtch = $cot_cat[$cat]['path'].'.';
 	$mtchlen = mb_strlen($mtch);
 	$mtchlvl = mb_substr_count($mtch,".");
 
 	$catsub = array();
-	if ($firstcat && (($userrights && sed_auth('page', $cat, 'R') || !$userrights)))
+	if ($firstcat && (($userrights && cot_auth('page', $cat, 'R') || !$userrights)))
 	{
 		$catsub[] = $cat;
 	}
 
-	foreach($sed_cat as $i => $x)
+	foreach($cot_cat as $i => $x)
 	{
-		if(mb_substr($x['path'], 0, $mtchlen) == $mtch && (($userrights && sed_auth('page', $i, 'R') || !$userrights)))
+		if(mb_substr($x['path'], 0, $mtchlen) == $mtch && (($userrights && cot_auth('page', $i, 'R') || !$userrights)))
 		{
 			$subcat = mb_substr($x['path'], $mtchlen + 1);
 			if($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
 			{
-				$i = ($sqlprep) ? sed_sql_prep($i) : $i;
+				$i = ($sqlprep) ? cot_db_prep($i) : $i;
 				$catsub[] = $i;
 			}
 		}
@@ -80,10 +80,10 @@ function sed_structure_children($cat, $allsublev = true,  $firstcat = true, $use
  * @param string $type Type 'full', 'first', 'last'
  * @return mixed
  */
-function sed_structure_parents($cat, $type = 'full')
+function cot_structure_parents($cat, $type = 'full')
 {
-	global $sed_cat, $cfg;
-	$pathcodes = explode('.', $sed_cat[$cat]['path']);
+	global $cot_cat, $cfg;
+	$pathcodes = explode('.', $cot_cat[$cat]['path']);
 
 	if ($type == 'first')
 	{
@@ -108,26 +108,26 @@ function sed_structure_parents($cat, $type = 'full')
  * @param bool $hideprivate Hide private categories
  * @return string
  */
-function sed_selectbox_categories($check, $name, $subcat = '', $hideprivate = true)
+function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = true)
 {
-	global $db_structure, $usr, $sed_cat, $L, $R;
+	global $db_structure, $usr, $cot_cat, $L, $R;
 
-	foreach ($sed_cat as $i => $x)
+	foreach ($cot_cat as $i => $x)
 	{
-		$display = ($hideprivate) ? sed_auth('page', $i, 'W') : true;
-		if ($display && !empty($subcat) && isset($sed_cat[$subcat]) && !(empty($check)))
+		$display = ($hideprivate) ? cot_auth('page', $i, 'W') : true;
+		if ($display && !empty($subcat) && isset($cot_cat[$subcat]) && !(empty($check)))
 		{
-			$mtch = $sed_cat[$subcat]['path'].".";
+			$mtch = $cot_cat[$subcat]['path'].".";
 			$mtchlen = mb_strlen($mtch);
 			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i == $check) ? true : false;
 		}
 
-		if (sed_auth('page', $i, 'R') && $i!='all' && $display)
+		if (cot_auth('page', $i, 'R') && $i!='all' && $display)
 		{
 			$result_array[i] = $x['tpath'];
 		}
 	}
-	$result = sed_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
+	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
 
 	return($result);
 }

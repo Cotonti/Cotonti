@@ -9,7 +9,7 @@
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 /**
  * Returns number of rows affected by last query
@@ -17,11 +17,11 @@ defined('SED_CODE') or die('Wrong URL');
  * @param PDO $conn Custom connection handle
  * @return int
  */
-function sed_sql_affectedrows($conn = null)
+function cot_db_affectedrows($conn = null)
 {
-	global $sed_dbc, $sed_sql_affectedrows;
-	if (is_null($conn)) $conn = $sed_dbc;
-	return $sed_sql_affectedrows[spl_object_hash($conn)];
+	global $cot_dbc, $cot_db_affectedrows;
+	if (is_null($conn)) $conn = $cot_dbc;
+	return $cot_db_affectedrows[spl_object_hash($conn)];
 }
 
 /**
@@ -29,10 +29,10 @@ function sed_sql_affectedrows($conn = null)
  *
  * @param PDO $conn Custom connection handle
  */
-function sed_sql_close($conn = null)
+function cot_db_close($conn = null)
 {
-	global $sed_dbc;
-	is_null($conn) ? $sed_dbc = null : $conn = null;
+	global $cot_dbc;
+	is_null($conn) ? $cot_dbc = null : $conn = null;
 }
 
 /**
@@ -45,7 +45,7 @@ function sed_sql_close($conn = null)
  * @param string $db Database name
  * @return PDO
  */
-function sed_sql_connect($host, $user, $pass, $db)
+function cot_db_connect($host, $user, $pass, $db)
 {
 	global $cfg;
 	$pdo_options = array(PDO::ATTR_PERSISTENT => true);
@@ -64,7 +64,7 @@ function sed_sql_connect($host, $user, $pass, $db)
 	}
 	catch (PDOException $e)
 	{
-		sed_diefatal('Could not connect to database !<br />
+		cot_diefatal('Could not connect to database !<br />
 			Please check your settings in the file datas/config.php<br />
 			MySQL error : '.$e->getMessage());
 	}
@@ -77,10 +77,10 @@ function sed_sql_connect($host, $user, $pass, $db)
  * @param PDO $conn Custom connection handle
  * @return int
  */
-function sed_sql_errno($conn = null)
+function cot_db_errno($conn = null)
 {
-	global $sed_dbc;
-	$info = is_null($conn) ? $sed_dbc->errorInfo() : $conn->errorInfo();
+	global $cot_dbc;
+	$info = is_null($conn) ? $cot_dbc->errorInfo() : $conn->errorInfo();
 	return $info[1];
 }
 
@@ -90,10 +90,10 @@ function sed_sql_errno($conn = null)
  * @param PDO $conn Custom connection handle
  * @return string
  */
-function sed_sql_error($conn = null)
+function cot_db_error($conn = null)
 {
-	global $sed_dbc;
-	$info = is_null($conn) ? $sed_dbc->errorInfo() : $conn->errorInfo();
+	global $cot_dbc;
+	$info = is_null($conn) ? $cot_dbc->errorInfo() : $conn->errorInfo();
 	return $info[2];
 }
 
@@ -103,7 +103,7 @@ function sed_sql_error($conn = null)
  * @param PDOStatement $res Query result
  * @return array
  */
-function sed_sql_fetcharray($res)
+function cot_db_fetcharray($res)
 {
 	return $res->fetch();
 }
@@ -114,7 +114,7 @@ function sed_sql_fetcharray($res)
  * @param PDOStatement $res Query result
  * @return array
  */
-function sed_sql_fetchassoc($res)
+function cot_db_fetchassoc($res)
 {
 	return $res->fetch(PDO::FETCH_ASSOC);
 }
@@ -125,7 +125,7 @@ function sed_sql_fetchassoc($res)
  * @param PDOStatement $res Query result
  * @return array
  */
-function sed_sql_fetchrow($res)
+function cot_db_fetchrow($res)
 {
 	return $res->fetch(PDO::FETCH_NUM);
 }
@@ -136,9 +136,9 @@ function sed_sql_fetchrow($res)
  * @param PDO $conn Custom connection
  * @return int
  */
-function sed_sql_foundrows($conn = NULL)
+function cot_db_foundrows($conn = NULL)
 {
-	return (int) sed_sql_result(sed_sql_query('SELECT FOUND_ROWS()'), 0, 0);
+	return (int) cot_db_result(cot_db_query('SELECT FOUND_ROWS()'), 0, 0);
 }
 
 /**
@@ -146,7 +146,7 @@ function sed_sql_foundrows($conn = NULL)
  *
  * @param PDOStatement $res Query result
  */
-function sed_sql_freeresult($res)
+function cot_db_freeresult($res)
 {
 	$res = null;
 }
@@ -157,23 +157,23 @@ function sed_sql_freeresult($res)
  * @param PDO $conn Custom connection handle
  * @return int
  */
-function sed_sql_insertid($conn = null)
+function cot_db_insertid($conn = null)
 {
-	global $sed_dbc;
-	return is_null($conn) ? $sed_dbc->lastInsertId() : $conn->lastInsertId();
+	global $cot_dbc;
+	return is_null($conn) ? $cot_dbc->lastInsertId() : $conn->lastInsertId();
 }
 
 /**
- * Returns list of tables for a database. Use sed_sql_fetcharray() to get table names from result
+ * Returns list of tables for a database. Use cot_db_fetcharray() to get table names from result
  *
  * @param string $db_name Database name
  * @param PDO $conn Custom connection handle
  * @return PDOStatement
  */
-function sed_sql_listtables($db_name, $conn = null)
+function cot_db_listtables($db_name, $conn = null)
 {
-	global $sed_dbc;
-	if (is_null($conn)) $conn = $sed_dbc;
+	global $cot_dbc;
+	if (is_null($conn)) $conn = $cot_dbc;
 	return $conn->query("SHOW TABLES");
 }
 
@@ -183,7 +183,7 @@ function sed_sql_listtables($db_name, $conn = null)
  * @param PDOStatement $res Query result
  * @return int
  */
-function sed_sql_numrows($res)
+function cot_db_numrows($res)
 {
 	return $res->rowCount();
 }
@@ -195,10 +195,10 @@ function sed_sql_numrows($res)
  * @param PDO $conn Custom connection handle
  * @return string
  */
-function sed_sql_prep($str, $conn = null)
+function cot_db_prep($str, $conn = null)
 {
-	global $sed_dbc;
-	$conn = is_null($conn) ? $sed_dbc : $conn;
+	global $cot_dbc;
+	$conn = is_null($conn) ? $cot_dbc : $conn;
 	return preg_replace("#^'(.*)'\$#", '$1', $conn->quote($str));
 }
 
@@ -212,14 +212,14 @@ function sed_sql_prep($str, $conn = null)
  * @param PDO $conn Custom connection handle
  * @return PDOStatement
  */
-function sed_sql_query($query, $conn = null)
+function cot_db_query($query, $conn = null)
 {
-	global $sys, $cfg, $usr, $sed_dbc, $sed_sql_affectedrows;
-	$conn = is_null($conn) ? $sed_dbc : $conn;
+	global $sys, $cfg, $usr, $cot_dbc, $cot_db_affectedrows;
+	$conn = is_null($conn) ? $cot_dbc : $conn;
 	$sys['qcount']++;
 	$xtime = microtime();
-	$result = $conn->query($query) OR sed_diefatal('SQL error : '.sed_sql_error($conn));
-	$sed_sql_affectedrows[spl_object_hash($conn)] = $result->rowCount();
+	$result = $conn->query($query) OR cot_diefatal('SQL error : '.cot_db_error($conn));
+	$cot_db_affectedrows[spl_object_hash($conn)] = $result->rowCount();
 	$ytime = microtime();
 	$xtime = explode(' ',$xtime);
 	$ytime = explode(' ',$ytime);
@@ -240,7 +240,7 @@ function sed_sql_query($query, $conn = null)
  * @param mixed $col Column name or index (null-based)
  * @return mixed
  */
-function sed_sql_result($res, $row = 0, $col = 0)
+function cot_db_result($res, $row = 0, $col = 0)
 {
 	$r = $res->fetch(PDO::FETCH_BOTH, PDO::FETCH_ORI_ABS, $row);
 	return $r[$col];

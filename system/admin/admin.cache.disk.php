@@ -9,20 +9,20 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-define('SED_DISKCACHE_ONLYFILES', '*files*');
+define('COT_DISKCACHE_ONLYFILES', '*files*');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('admin', 'a');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
+cot_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.cache.disk'));
+$t = new XTemplate(cot_skinfile('admin.cache.disk'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.cache.disk.first') as $pl)
+foreach (cot_getextplugins('admin.cache.disk.first') as $pl)
 {
 	include $pl;
 }
@@ -30,33 +30,33 @@ foreach (sed_getextplugins('admin.cache.disk.first') as $pl)
 
 if ($a == 'purge')
 {
-	sed_check_xg() && sed_diskcache_clearall() ? sed_message('adm_purgeall_done') : sed_message('Error');
+	cot_check_xg() && cot_diskcache_clearall() ? cot_message('adm_purgeall_done') : cot_message('Error');
 }
 elseif ($a == 'delete')
 {
 	$is_id = mb_strpos($id, '/') === false && mb_strpos($id, '\\') === false && $id != '.' && $id != '..';
-	$is_onlyf = $id == SED_DISKCACHE_ONLYFILES;
-	(sed_check_xg() && $is_id && sed_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf))
-		? sed_message('adm_delcacheitem') : sed_message('Error');
+	$is_onlyf = $id == COT_DISKCACHE_ONLYFILES;
+	(cot_check_xg() && $is_id && cot_diskcache_clear($cfg['cache_dir'] . ($is_onlyf ? '' : "/$id"), !$is_onlyf))
+		? cot_message('adm_delcacheitem') : cot_message('Error');
 }
 
-$row = sed_diskcache_list();
+$row = cot_diskcache_list();
 $cachefiles = $cachesize = 0;
 $ii = 0;
 
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('admin.cache.disk.loop');
+$extp = cot_getextplugins('admin.cache.disk.loop');
 /* ===== */
 foreach ($row as $i => $x)
 {
 	$cachefiles += $x[0];
 	$cachesize += $x[1];
 	$t->assign(array(
-		'ADMIN_DISKCACHE_ITEM_DEL_URL' => sed_url('admin', 'm=cache&s=disk&a=delete&id=' . $i . '&' . sed_xg()),
+		'ADMIN_DISKCACHE_ITEM_DEL_URL' => cot_url('admin', 'm=cache&s=disk&a=delete&id=' . $i . '&' . cot_xg()),
 		'ADMIN_DISKCACHE_ITEM_NAME' => $i,
 		'ADMIN_DISKCACHE_FILES' => $x[0],
 		'ADMIN_DISKCACHE_SIZE' => $x[1],
-		'ADMIN_DISKCACHE_ROW_ODDEVEN' => sed_build_oddeven($ii)
+		'ADMIN_DISKCACHE_ROW_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -71,23 +71,23 @@ foreach ($row as $i => $x)
 }
 
 $t->assign(array(
-	'ADMIN_DISKCACHE_URL_REFRESH' => sed_url('admin', 'm=cache&s=disk'),
-	'ADMIN_DISKCACHE_URL_PURGE' => sed_url('admin', 'm=cache&s=disk&a=purge&' . sed_xg()),
+	'ADMIN_DISKCACHE_URL_REFRESH' => cot_url('admin', 'm=cache&s=disk'),
+	'ADMIN_DISKCACHE_URL_PURGE' => cot_url('admin', 'm=cache&s=disk&a=purge&' . cot_xg()),
 	'ADMIN_DISKCACHE_CACHEFILES' => $cachefiles,
 	'ADMIN_DISKCACHE_CACHESIZE' => $cachesize
 ));
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.cache.disk.tags') as $pl)
+foreach (cot_getextplugins('admin.cache.disk.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }
@@ -98,13 +98,13 @@ else
 
 /**
  * Calculates directory size
- * It's helper function for sed_diskcache_list()
+ * It's helper function for cot_diskcache_list()
  *
  * @param string $dir Directory name
  * @param bool $do_subdirs true when enter subdirectories, otherwise false
  * @return array
  */
-function sed_diskcache_calc($dir, $do_subdirs = true)
+function cot_diskcache_calc($dir, $do_subdirs = true)
 {
 	$cnt = $sz = 0;
 
@@ -117,7 +117,7 @@ function sed_diskcache_calc($dir, $do_subdirs = true)
 		}
 		elseif (is_dir($f) && $do_subdirs)
 		{
-			$a = sed_diskcache_calc($f);
+			$a = cot_diskcache_calc($f);
 			$cnt += $a[0]/*files*/ + 1/*directory*/;
 			$sz += $a[1];
 		}
@@ -132,22 +132,22 @@ function sed_diskcache_calc($dir, $do_subdirs = true)
  * @global $cfg
  * @return array
  */
-function sed_diskcache_list()
+function cot_diskcache_list()
 {
 	global $cfg;
 
 	$dir_a = array();
 
-	$a = sed_diskcache_calc($cfg['cache_dir'], false);
+	$a = cot_diskcache_calc($cfg['cache_dir'], false);
 	if ($a[0])
 	{
-		$dir_a[SED_DISKCACHE_ONLYFILES] = $a;
+		$dir_a[COT_DISKCACHE_ONLYFILES] = $a;
 	}
 
 	$pos = mb_strlen($cfg['cache_dir']) + 1;
 	foreach (glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR) as $dir)
 	{
-		$a = sed_diskcache_calc($dir);
+		$a = cot_diskcache_calc($dir);
 		if ($a[0])
 		{
 			$dir_a[mb_substr($dir, $pos)] = $a;
@@ -165,7 +165,7 @@ function sed_diskcache_list()
  * @param bool $rm_dir true when remove directory, otherwise false
  * @return bool
  */
-function sed_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
+function cot_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
 {
 	if (!is_dir($dir) || !is_writable($dir))
 	{
@@ -180,7 +180,7 @@ function sed_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
 		}
 		elseif (is_dir($f) && $do_subdirs)
 		{
-			sed_diskcache_clear($f, true, true);
+			cot_diskcache_clear($f, true, true);
 		}
 	}
 
@@ -198,14 +198,14 @@ function sed_diskcache_clear($dir, $do_subdirs = true, $rm_dir = false)
  * @global $cfg
  * @return bool
  */
-function sed_diskcache_clearall()
+function cot_diskcache_clearall()
 {
 	global $cfg;
 
-	sed_diskcache_clear($cfg['cache_dir'], false);
+	cot_diskcache_clear($cfg['cache_dir'], false);
 	foreach (glob("{$cfg['cache_dir']}/*", GLOB_ONLYDIR) as $dir)
 	{
-		sed_diskcache_clear($dir);
+		cot_diskcache_clear($dir);
 	}
 
 	return true;

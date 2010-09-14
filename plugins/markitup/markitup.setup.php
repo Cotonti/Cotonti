@@ -33,6 +33,6 @@ chili=03:radio::0:Enable Chili tags
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 ?>

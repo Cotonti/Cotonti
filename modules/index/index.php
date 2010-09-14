@@ -15,25 +15,25 @@ Hooks=module
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
 // Environment setup
-define('SED_INDEX', TRUE);
+define('COT_INDEX', TRUE);
 $location = 'Home';
 
 /* === Hook === */
-foreach (sed_getextplugins('index.first') as $pl)
+foreach (cot_getextplugins('index.first') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-sed_online_update();
+cot_online_update();
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('index', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('index', 'a');
 
 /* === Hook === */
-foreach (sed_getextplugins('index.main') as $pl)
+foreach (cot_getextplugins('index.main') as $pl)
 {
 	include $pl;
 }
@@ -41,11 +41,11 @@ foreach (sed_getextplugins('index.main') as $pl)
 
 require_once $cfg['system_dir'].'/header.php';
 
-$mskin = sed_skinfile('index');
+$mskin = cot_skinfile('index');
 $t = new XTemplate($mskin);
 
 /* === Hook === */
-foreach (sed_getextplugins('index.tags') as $pl)
+foreach (cot_getextplugins('index.tags') as $pl)
 {
 	include $pl;
 }

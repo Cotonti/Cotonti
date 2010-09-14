@@ -15,10 +15,10 @@ Hooks=polls.functions.delete
  * @license BSD
  */
 
-defined('SED_CODE') or die('Wrong URL');
+defined('COT_CODE') or die('Wrong URL');
 
-sed_require('comments', true);
+cot_require('comments', true);
 
-sed_comments_remove('polls', $id2);
+cot_comments_remove('polls', $id2);
 
 ?>

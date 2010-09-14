@@ -9,22 +9,22 @@
  * @license BSD
  */
 
-(defined('SED_CODE') && defined('SED_ADMIN')) or die('Wrong URL.');
+(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = sed_auth('users', 'a');
-sed_block($usr['isadmin']);
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+cot_block($usr['isadmin']);
 
-$t = new XTemplate(sed_skinfile('admin.banlist'));
+$t = new XTemplate(cot_skinfile('admin.banlist'));
 
-$adminpath[] = array(sed_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(sed_url('admin', 'm=banlist'), $L['Banlist']);
+$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
+$adminpath[] = array(cot_url('admin', 'm=banlist'), $L['Banlist']);
 $adminhelp = $L['adm_help_banlist'];
 
-$d = sed_import('d', 'G', 'INT');
+$d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-foreach (sed_getextplugins('admin.banlist.first') as $pl)
+foreach (cot_getextplugins('admin.banlist.first') as $pl)
 {
 	include $pl;
 }
@@ -32,27 +32,27 @@ foreach (sed_getextplugins('admin.banlist.first') as $pl)
 
 if ($a == 'update')
 {
-	$id = sed_import('id', 'G', 'INT');
-	$rbanlistip = sed_import('rbanlistip', 'P', 'TXT');
-	$rbanlistemail = sed_sql_prep(sed_import('rbanlistemail', 'P', 'TXT'));
-	$rbanlistreason = sed_sql_prep(sed_import('rbanlistreason', 'P', 'TXT'));
+	$id = cot_import('id', 'G', 'INT');
+	$rbanlistip = cot_import('rbanlistip', 'P', 'TXT');
+	$rbanlistemail = cot_db_prep(cot_import('rbanlistemail', 'P', 'TXT'));
+	$rbanlistreason = cot_db_prep(cot_import('rbanlistreason', 'P', 'TXT'));
 
 	$sql = (!empty($rbanlistip) || !empty($rbanlistemail))
-		? sed_sql_update($db_banlist, array(
+		? cot_db_update($db_banlist, array(
 			'ip' => $rbanlistip,
 			'email' => $rbanlistemail,
 			'reason' => $rbanlistreason
 			), "banlist_id=$id", 'banlist_')
 		: '';
 
-	($sql) ? sed_message('alreadyupdatednewentry') : sed_message('Error');
+	($sql) ? cot_message('alreadyupdatednewentry') : cot_message('Error');
 }
 elseif ($a == 'add')
 {
-	$nbanlistip = sed_import('nbanlistip', 'P', 'TXT');
-	$nbanlistemail = sed_sql_prep(sed_import('nbanlistemail', 'P', 'TXT'));
-	$nbanlistreason = sed_sql_prep(sed_import('nbanlistreason', 'P', 'TXT'));
-	$nexpire = sed_import('nexpire', 'P', 'INT');
+	$nbanlistip = cot_import('nbanlistip', 'P', 'TXT');
+	$nbanlistemail = cot_db_prep(cot_import('nbanlistemail', 'P', 'TXT'));
+	$nbanlistreason = cot_db_prep(cot_import('nbanlistreason', 'P', 'TXT'));
+	$nexpire = cot_import('nexpire', 'P', 'INT');
 
 	$nbanlistip_cnt = explode('.', $nbanlistip);
 	$nbanlistip = (count($nbanlistip_cnt)==4) ? $nbanlistip : '';
@@ -62,7 +62,7 @@ elseif ($a == 'add')
 		$nexpire += $sys['now'];
 	}
 	$sql = (!empty($nbanlistip) || !empty($nbanlistemail))
-		? sed_sql_insert($db_banlist, array(
+		? cot_db_insert($db_banlist, array(
 			'ip' => $nbanlistip,
 			'email' => $nbanlistemail,
 			'reason' => $nbanlistreason,
@@ -70,41 +70,41 @@ elseif ($a == 'add')
 			), 'banlist_')
 		: '';
 
-	($sql) ? sed_message('alreadyaddnewentry') : sed_message('Error');
+	($sql) ? cot_message('alreadyaddnewentry') : cot_message('Error');
 }
 elseif ($a == 'delete')
 {
-	sed_check_xg();
-	$id = sed_import('id', 'G', 'INT');
+	cot_check_xg();
+	$id = cot_import('id', 'G', 'INT');
 
-	sed_sql_delete($db_banlist, "banlist_id=$id") ? sed_message('alreadydeletednewentry') : sed_message('Error');
+	cot_db_delete($db_banlist, "banlist_id=$id") ? cot_message('alreadydeletednewentry') : cot_message('Error');
 }
 
-$totalitems = sed_sql_rowcount($db_banlist);
+$totalitems = cot_db_rowcount($db_banlist);
 
-$pagenav = sed_pagenav('admin', 'm=banlist', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=banlist', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = sed_sql_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = cot_db_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 
 /* === Hook - Part1 : Set === */
-$extp = sed_getextplugins('admin.banlist.loop');
+$extp = cot_getextplugins('admin.banlist.loop');
 /* ===== */
 
 
 
-while ($row = sed_sql_fetcharray($sql))
+while ($row = cot_db_fetcharray($sql))
 {
 	$t->assign(array(
 		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],
-		'ADMIN_BANLIST_ROW_URL' => sed_url('admin', 'm=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
-		'ADMIN_BANLIST_ROW_DELURL' => sed_url('admin', 'm=banlist&a=delete&id='.$row['banlist_id'].'&'.sed_xg()),
+		'ADMIN_BANLIST_ROW_URL' => cot_url('admin', 'm=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
+		'ADMIN_BANLIST_ROW_DELURL' => cot_url('admin', 'm=banlist&a=delete&id='.$row['banlist_id'].'&'.cot_xg()),
 		'ADMIN_BANLIST_ROW_EXPIRE' => ($row['banlist_expire'] > 0) ? date($cfg['dateformat'], $row['banlist_expire']).' GMT' : $L['adm_neverexpire'],
-		'ADMIN_BANLIST_ROW_IP' => sed_inputbox('text', 'rbanlistip', $row['banlist_ip'], 'size="18" maxlength="16"'),
-		'ADMIN_BANLIST_ROW_EMAIL' => sed_inputbox('text', 'rbanlistemail', $row['banlist_email'], 'size="10" maxlength="64"'),
-		'ADMIN_BANLIST_ROW_REASON' => sed_inputbox('text', 'rbanlistreason', $row['banlist_reason'], 'size="22" maxlength="64"'),
-		'ADMIN_BANLIST_ROW_ODDEVEN' => sed_build_oddeven($ii)
+		'ADMIN_BANLIST_ROW_IP' => cot_inputbox('text', 'rbanlistip', $row['banlist_ip'], 'size="18" maxlength="16"'),
+		'ADMIN_BANLIST_ROW_EMAIL' => cot_inputbox('text', 'rbanlistemail', $row['banlist_email'], 'size="10" maxlength="64"'),
+		'ADMIN_BANLIST_ROW_REASON' => cot_inputbox('text', 'rbanlistreason', $row['banlist_reason'], 'size="22" maxlength="64"'),
+		'ADMIN_BANLIST_ROW_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -129,24 +129,24 @@ $t->assign(array(
 	'ADMIN_BANLIST_PAGINATION_NEXT' => $pagenav['next'],
 	'ADMIN_BANLIST_TOTALITEMS' => $totalitems,
 	'ADMIN_BANLIST_COUNTER_ROW' => $ii,
-	'ADMIN_BANLIST_URLFORMADD' => sed_url('admin', 'm=banlist&a=add'),
-	'ADMIN_BANLIST_EXPIRE' => sed_selectbox('0', 'nexpire', $time_array, $time_values, false),
-	'ADMIN_BANLIST_IP' => sed_inputbox('text', 'nbanlistip', '', 'size="18" maxlength="16"'),
-	'ADMIN_BANLIST_EMAIL' => sed_inputbox('text', 'nbanlistemail', '', 'size="24" maxlength="64"'),
-	'ADMIN_BANLIST_REASON' => sed_inputbox('text', 'nbanlistreason', '', 'size="48" maxlength="64"')
+	'ADMIN_BANLIST_URLFORMADD' => cot_url('admin', 'm=banlist&a=add'),
+	'ADMIN_BANLIST_EXPIRE' => cot_selectbox('0', 'nexpire', $time_array, $time_values, false),
+	'ADMIN_BANLIST_IP' => cot_inputbox('text', 'nbanlistip', '', 'size="18" maxlength="16"'),
+	'ADMIN_BANLIST_EMAIL' => cot_inputbox('text', 'nbanlistemail', '', 'size="24" maxlength="64"'),
+	'ADMIN_BANLIST_REASON' => cot_inputbox('text', 'nbanlistreason', '', 'size="48" maxlength="64"')
 ));
 
-sed_display_messages($t);
+cot_display_messages($t);
 
 /* === Hook  === */
-foreach (sed_getextplugins('admin.banlist.tags') as $pl)
+foreach (cot_getextplugins('admin.banlist.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
 $t->parse('MAIN');
-if (SED_AJAX)
+if (COT_AJAX)
 {
 	$t->out('MAIN');
 }
