@@ -147,7 +147,7 @@ if ($rc != '')
 		$r["$rc"] = COT_ABSOLUTE_URL . $r["$rc"];
 	}
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />"; // TODO: in resources
-	$body .= "<br />&nbsp;<br />".$L['msgredir'];
+	$body .= "<br />".$L['msgredir'];
 }
 
 elseif ($rd != '')
@@ -157,7 +157,7 @@ elseif ($rd != '')
 		$ru = COT_ABSOLUTE_URL.ltrim($ru, '/');
 	}
 	$plug_head .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />"; // TODO: in resources
-	$body .= "<br />&nbsp;<br />".$L['msgredir'];
+	$body .= "<br />".$L['msgredir'];
 }
 
 /* === Hook === */

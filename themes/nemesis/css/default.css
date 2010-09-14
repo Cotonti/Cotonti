@@ -59,10 +59,11 @@ h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-
 .users		{ background-image:url(/images/icons/default/users.png); }
 .warning	{ background-image:url(/images/icons/default/warning.png); }
 
-div.error, div.help, div.done	{ margin:20px 0; padding:10px 50px; background-position:15px 9px; background-repeat:no-repeat; }
-div.error					{ color:#d8000c; background-color:#ffbaba; background-image:url(/images/icons/default/error.png); border:1px solid #d8000c; }
-div.help						{ color:#00529b; background-color:#bde5f8; background-image:url(/images/icons/default/help.png); border:1px solid #00529b; }
-div.done						{ color:#4f8a10; background-color:#dff2bf; background-image:url(/images/icons/default/done.png); border:1px solid #4f8a10; }
+div.error, div.warning, div.done, div.help		{ line-height:2em; margin:20px 0; padding:10px 50px; background-position:15px 50%; background-repeat:no-repeat; }
+div.error									{ color:#d8000c; background-color:#ffbaba; background-image:url(/images/icons/default/error.png); border:1px solid #d8000c; }
+div.warning									{ color:#9f6000; background-color:#feefb3; background-image:url(/images/icons/default/warning.png); border:1px solid #9f6000; }
+div.done										{ color:#4f8a10; background-color:#dff2bf; background-image:url(/images/icons/default/done.png); border:1px solid #4f8a10; }
+div.help										{ color:#00529b; background-color:#bde5f8; background-image:url(/images/icons/default/help.png); border:1px solid #00529b; }
 
 /* 4. Tables
 -------------------------------------------------- */
