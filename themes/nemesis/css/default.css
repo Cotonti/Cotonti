@@ -59,9 +59,10 @@ h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-
 .users		{ background-image:url(/images/icons/default/users.png); }
 .warning	{ background-image:url(/images/icons/default/warning.png); }
 
-div.error, div.help	{ margin:20px 0; padding:10px 50px; background-position:15px 9px; background-repeat:no-repeat; }
-div.error		{ color:#d8000c; background-color:#ffbaba; background-image:url(/images/icons/default/error.png); border:1px solid #d8000c; }
-div.help		{ color:#00529b; background-color:#bde5f8; background-image:url(/images/icons/default/help.png); border:1px solid #00529b; }
+div.error, div.help, div.done	{ margin:20px 0; padding:10px 50px; background-position:15px 9px; background-repeat:no-repeat; }
+div.error					{ color:#d8000c; background-color:#ffbaba; background-image:url(/images/icons/default/error.png); border:1px solid #d8000c; }
+div.help						{ color:#00529b; background-color:#bde5f8; background-image:url(/images/icons/default/help.png); border:1px solid #00529b; }
+div.done						{ color:#4f8a10; background-color:#dff2bf; background-image:url(/images/icons/default/done.png); border:1px solid #4f8a10; }
 
 /* 4. Tables
 -------------------------------------------------- */
@@ -75,7 +76,7 @@ table.main 	{ border-collapse:collapse; width:100%; }
 table.main td 	{ padding:1px 0; margin:0; border:0; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
-table.cells td{ padding:4px 8px; border:1px solid #e7e7e7; }
+table.cells td	{ padding:4px 8px; border:1px solid #e7e7e7; }
 
 table.list 	{ border-collapse:collapse; width:100%; }
 table.list td 	{ padding:5px 5px 5px 0; border-bottom:1px dashed #ccc; }
@@ -207,8 +208,8 @@ label input			{ vertical-align:middle; }
 -------------------------------------------------- */
 
 .tag_cloud	{ }
-.tag_cloud li { }
-.tag_cloud a { }
+.tag_cloud li	{ }
+.tag_cloud a	{ }
 
 .tag_cloud a.xs			{ color:#c4c4c4; }
 .tag_cloud a.xs:hover	{ color:#000; }
@@ -236,7 +237,7 @@ label input			{ vertical-align:middle; }
 
 #magnifier		{ height:36px; width:310px; position:absolute; left:650px; top:70px; }
 #magnifier #s1	{ float:left; padding:6px 10px; border:0; height:24px; line-height:24px; width:240px; background:#fff; }
-#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:36px; width:40px; border:0; background:#fff url(../../../images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
+#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:36px; width:40px; border:0; background:#fff url(/images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
 
 .search-res			{ margin:0 0 10px; overflow:auto; }
 .search-res .small	{ color:#000; }
@@ -246,8 +247,7 @@ label input			{ vertical-align:middle; }
 -------------------------------------------------- */
 
 ul.bullets li	{ padding-left:25px; background:url(../img/bullets.png) no-repeat 5px 2px; }
-
-ol 		{ margin-left:20px; list-style-type:decimal; }
+ol			{ margin-left:20px; list-style-type:decimal; }
 
 /* 16. Ratings
 -------------------------------------------------- */
