@@ -108,9 +108,9 @@ div.warning		{ background:#fdf0cd url(img/warning.png) no-repeat 15px 15px; bord
 
 #adminmenu			{ padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; overflow:auto; }
 #adminmenu li			{ padding:12px 15px 10px; height:60px; width:115px; background:url(img/menuitem.png) no-repeat 0 0; display:block; float:left; }
-#adminmenu li a		{ color:#3b3b3b; text-align:center; display:block; height:100%; opacity:.6; }
-#adminmenu li a:hover	{ text-decoration:none; opacity:.8; }
-#adminmenu li a.sel	{ text-align:center; display:block; height:100%; opacity:1; }
+#adminmenu li a		{ color:#3b3b3b; text-align:center; display:block; height:100%; opacity:.6; zoom:1; filter:alpha(opacity=60); }
+#adminmenu li a:hover	{ text-decoration:none; opacity:.8; zoom:1; filter:alpha(opacity=80); }
+#adminmenu li a.sel	{ text-align:center; display:block; height:100%; opacity:1; zoom:1; filter:alpha(opacity=100); }
 #adminmenu li a img		{ height:32px; width:32px; }
 #adminmenu li a span	{ text-align:center; line-height:18px; margin:8px 0 0; height:18px; background:#ddd; display:block; overflow:hidden; }
 

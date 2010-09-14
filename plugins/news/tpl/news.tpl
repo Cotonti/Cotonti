@@ -1,7 +1,6 @@
 <!-- BEGIN: NEWS -->
 
 <!-- BEGIN: PAGE_ROW -->
-	<div class="combox">{PHP.pag.page_comcount}</div>
 	<h3><!-- IF {PHP.usr.isadmin} -->[ <a href="index.php?z=page&amp;m=edit&amp;id={PAGE_ROW_ID}&amp;r=list">{PHP.L.Edit}</a> ] &nbsp; <!-- ENDIF --><a href="{PAGE_ROW_URL}" title="{PAGE_ROW_SHORTTITLE}">{PAGE_ROW_SHORTTITLE}</a></h3>
 	<!-- IF {PAGE_ROW_DESC} --><p class="small">{PAGE_ROW_DESC}</p><!-- ENDIF -->
 
