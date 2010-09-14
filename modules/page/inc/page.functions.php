@@ -124,7 +124,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
 
 		if (cot_auth('page', $i, 'R') && $i!='all' && $display)
 		{
-			$result_array[i] = $x['tpath'];
+			$result_array[$i] = $x['tpath'];
 		}
 	}
 	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
