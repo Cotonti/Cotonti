@@ -4,7 +4,7 @@
 *	{ margin:0; padding:0; }
 html	{ padding:0; }
 
-body	{ font:normal 76%/1.8em Georgia; background:url(img/body.png) repeat-x 0 60px; }
+body	{ font:normal 76%/1.8em Georgia, serif; background:url(img/body.png) repeat-x 0 60px; }
 
 ul 			{ list-style-type:none; }
 ol			{ list-style-position:outside; margin-bottom:5px; padding-left:20px; }
@@ -21,7 +21,7 @@ hr		{ margin:4px 0 1px; border: 1px solid; border-color:#ddd transparent transpa
 /* 2. Structure
 -------------------------------------------------- */
 
-#container	{ font-size:1em; width:960px; margin:0 auto; }
+#container	{ font-size:.9em; width:960px; margin:0 auto; }
 #user		{ text-align:right; padding:30px 45px 0; height:30px; background:url(img/user.png) no-repeat 0 0; position:relative; }
 #user a		{ font-weight:bold; }
 #user li#hi	{ position:absolute; top:30px; left:45px; }
@@ -110,8 +110,8 @@ div.warning		{ background:#fdf0cd url(img/warning.png) no-repeat 15px 15px; bord
 #adminmenu li		{ width:145px; float:left; }
 #adminmenu li a	{ text-align:center; display:block; height:80px; text-shadow:0 1px 0 #eee; opacity:1;}
 #adminmenu li span	{ text-align:center; display:block; color:#999; position: relative; z-index:500; top: -25px; }
-#adminmenu li a:hover	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; opacity:0.8;}
-#adminmenu li a.sel	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; opacity:0.5;}
+#adminmenu li a:hover	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; }
+#adminmenu li a.sel	{ text-shadow:0 1px 0 #fff; font-weight:bold; text-decoration:none; background-position:0 -30px; }
 
 /* 6. Tables
 -------------------------------------------------- */
