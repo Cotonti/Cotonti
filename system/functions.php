@@ -1657,7 +1657,7 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 		}
 	}
 
-	return cot_selectbox("$selected_theme:$selected_scheme", $name, $values, $titles, false);
+	return cot_selectbox("$selected_theme:$selected_scheme", $input_name, $values, $titles, false);
 }
 
 /*
