@@ -83,11 +83,11 @@ if (!COT_AJAX)
 
 			if ($sys['pagesqueued'] == 1)
 			{
-				$out['notices'] .= cot_rc_link(cot_url('list', 'c=unvalidated'), '1 ' . $L['Page']);
+				$out['notices'] .= cot_rc_link(cot_url('page', 'c=unvalidated'), '1 ' . $L['Page']);
 			}
 			elseif ($sys['pagesqueued'] > 1)
 			{
-				$out['notices'] .= cot_rc_link(cot_url('list', 'c=unvalidated'), $sys['pagesqueued'] . ' ' . $L['Pages']);
+				$out['notices'] .= cot_rc_link(cot_url('page', 'c=unvalidated'), $sys['pagesqueued'] . ' ' . $L['Pages']);
 			}
 		}
 	}

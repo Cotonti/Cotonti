@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+cot_require_api('forms');
+
 $id = cot_import('id', 'G', 'INT');
 $r = cot_import('r', 'G', 'ALP');
 $c = cot_import('c', 'G', 'ALP');
@@ -169,8 +171,6 @@ require_once $cfg['system_dir'].'/header.php';
 
 $mskin = cot_skinfile(array('page', 'add', $cot_cat[$rpage['cat']]['tpl']));
 $t = new XTemplate($mskin);
-
-cot_require_api('forms');
 
 // FIXME PFS dependency
 //$pfs = cot_build_pfs($usr['id'], 'rpage', 'rpagetext',$L['Mypfs']);

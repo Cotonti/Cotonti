@@ -483,7 +483,7 @@ else
 			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 's['.$structure_id.'][rtitle]', $structure_title, 'size="24" maxlength="100"'),
 			'ADMIN_STRUCTURE_GROUP' => cot_checkbox($structure_group, 's['.$structure_id.'][rgroup]'),
 			'ADMIN_STRUCTURE_PAGECOUNT' => $pagecount[$structure_code],
-			'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url('list', 'c='.$structure_code),
+			'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url('page', 'c='.$structure_code),
 			'ADMIN_STRUCTURE_RIGHTS_URL' => cot_url('admin', 'm=rightsbyitem&ic=page&io='.$structure_code),
 			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n=options&id='.$structure_id.'&'.cot_xg()),
 			'ADMIN_STRUCTURE_WAY' => cot_selectbox($way, 's['.$structure_id.'][rway]', array_keys($options_way), array_values($options_way), false, 'style="width:85px;"'),

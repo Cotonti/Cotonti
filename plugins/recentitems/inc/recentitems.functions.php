@@ -294,7 +294,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 			"PAGE_ROW_CAT" => $pag['page_cat'],
 			"PAGE_ROW_CATTITLE" => htmlspecialchars($cot_cat[$pag['page_cat']]['title']),
 			"PAGE_ROW_CATPATH" => $catpath,
-			"PAGE_ROW_CATPATH_SHORT" => "<a href=\"".cot_url('list', 'c='.$pag['page_cat'])."\">".htmlspecialchars($cot_cat[$pag['page_cat']]['title'])."</a>",
+			"PAGE_ROW_CATPATH_SHORT" => "<a href=\"".cot_url('page', 'c='.$pag['page_cat'])."\">".htmlspecialchars($cot_cat[$pag['page_cat']]['title'])."</a>",
 			"PAGE_ROW_CATDESC" => htmlspecialchars($cot_cat[$pag['page_cat']]['desc']),
 			"PAGE_ROW_CATICON" => $cot_cat[$pag['page_cat']]['icon'],
 			"PAGE_ROW_KEY" => htmlspecialchars($pag['page_key']),
