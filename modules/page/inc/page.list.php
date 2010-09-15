@@ -192,7 +192,7 @@ foreach ($cot_extrafields['structure'] as $row_c)
 {
 	$uname = strtoupper($row_c['field_name']);
 	$t->assign('LIST_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ? $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
-	$t->assign('LIST_CAT_'.$uname, cot_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $cat[$row_c['field_name']]));
+	$t->assign('LIST_CAT_'.$uname, cot_build_extrafields_data('structure', $row_c, $cat[$row_c['field_name']]));
 }
 
 $arrows = array();
@@ -271,7 +271,7 @@ while (list($i, $x) = each($cot_cat))
 		{
 			$uname = strtoupper($row_c['field_name']);
 			$t->assign('LIST_ROWCAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
-			$t->assign('LIST_ROWCAT_'.$uname, cot_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $x[$row_c['field_name']]));
+			$t->assign('LIST_ROWCAT_'.$uname, cot_build_extrafields_data('structure', $row_c, $x[$row_c['field_name']]));
 		}
 
 
@@ -414,7 +414,7 @@ while ($pag = cot_db_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 	{
 		$uname = strtoupper($row_p['field_name']);
 		$t->assign('LIST_ROW_'.$uname.'_TITLE', isset($L['page_'.$row_p['field_name'].'_title']) ?  $L['page_'.$row_p['field_name'].'_title'] : $row_p['field_description']);
-		$t->assign('LIST_ROW_'.$uname, cot_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $pag['page_'.$row_p['field_name']]));
+		$t->assign('LIST_ROW_'.$uname, cot_build_extrafields_data('page', $row_p, $pag['page_'.$row_p['field_name']]));
 	}
 
 	/* === Hook - Part2 : Include === */

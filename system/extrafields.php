@@ -147,13 +147,12 @@ function cot_load_extrafields()
 	if (!$cot_extrafields && $cot_dbc)
 	{
 		$cot_extrafields = array();
-		$cot_extrafields['structure'] = array();
-		$cot_extrafields['users'] = array();
 		$fieldsres = cot_db_query("SELECT * FROM $db_extra_fields WHERE 1");
 		while ($row = cot_db_fetchassoc($fieldsres))
 		{
 			$cot_extrafields[$row['field_location']][$row['field_name']] = $row;
 		}
+		$cot_extrafields['structure'] = (!empty($cot_extrafields[$GLOBALS['db_structure']])) ? $cot_extrafields[$GLOBALS['db_structure']] : array();
 		cot_db_freeresult($fieldsres);
 		$cot_cache && $cot_cache->db->store('cot_extrafields', $cot_extrafields, 'system');
 	}
