@@ -171,25 +171,19 @@ $t->assign(array(
 $t->assign(cot_generate_usertags($pag, "PAGE_ROW_OWNER_"));
 
 // Extra fields for pages
-if (is_array($cot_extrafields['pages']))
+foreach ($cot_extrafields['pages'] as $i => $row)
 {
-	foreach ($cot_extrafields['pages'] as $i => $row)
-	{
-		$uname = strtoupper($row['field_name']);
-		$t->assign('PAGE_'.$uname, cot_build_extrafields_data('page', $row, $pag['page_'.$row['field_name']]));
-		$t->assign('PAGE_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
-	}
+	$uname = strtoupper($row['field_name']);
+	$t->assign('PAGE_'.$uname, cot_build_extrafields_data('page', $row, $pag['page_'.$row['field_name']]));
+	$t->assign('PAGE_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 
 // Extra fields for structure
-if (is_array($cot_extrafields['structure']))
+foreach ($cot_extrafields['structure'] as $i => $row)
 {
-	foreach ($cot_extrafields['structure'] as $i => $row)
-	{
-		$uname = strtoupper($row['field_name']);
-		$t->assign('PAGE_CAT_'.$uname, cot_build_extrafields_data('structure', $row['field_type'], $row['field_name'], $cat[$row['field_name']]));
-		$t->assign('PAGE_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description']);
-	}
+	$uname = strtoupper($row['field_name']);
+	$t->assign('PAGE_CAT_'.$uname, cot_build_extrafields_data('structure', $row, $cat[$row['field_name']]));
+	$t->assign('PAGE_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 
 if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])
