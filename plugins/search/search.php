@@ -254,7 +254,7 @@ if (!empty($sq))
 		{
 			$page_url = empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(array(
-				'PLUGIN_PR_CATEGORY' => cot_rc_link(cot_url('list', 'c='.$row['page_cat']), $cot_cat[$row['page_cat']]['tpath']),
+				'PLUGIN_PR_CATEGORY' => cot_rc_link(cot_url('page', 'c='.$row['page_cat']), $cot_cat[$row['page_cat']]['tpath']),
 				'PLUGIN_PR_TITLE' => cot_rc_link($page_url, htmlspecialchars($row['page_title'])),
 				'PLUGIN_PR_TEXT' => cot_clear_mark($row['page_text'], $row['page_type'], $words),
 				'PLUGIN_PR_TIME' => @date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),

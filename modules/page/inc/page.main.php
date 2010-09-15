@@ -151,7 +151,7 @@ $t->assign(array(
 	"PAGE_TITLE" => $pag['page_fulltitle'],
 	"PAGE_SHORTTITLE" => $pag['page_title'],
 	"PAGE_CAT" => $pag['page_cat'],
-	"PAGE_CATURL" => cot_url('list', 'c=' . $pag['page_cat']),
+	"PAGE_CATURL" => cot_url('page', 'c=' . $pag['page_cat']),
 	"PAGE_CATTITLE" => $cat['title'],
 	"PAGE_CATPATH" => $catpath,
 	"PAGE_CATDESC" => $cat['desc'],
@@ -188,7 +188,7 @@ foreach ($cot_extrafields['structure'] as $i => $row)
 
 if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])
 {
-	$t->assign("PAGE_ADMIN_EDIT", "<a href=\"".cot_url('page', 'm=edit&id='.$id.'&r=list')."\">".$L['Edit'].'</a>');
+	$t->assign('PAGE_ADMIN_EDIT', cot_rc_link(cot_url('page', 'm=edit&id='.$id), $L['Edit']));
 }
 
 if ($usr['isadmin'])

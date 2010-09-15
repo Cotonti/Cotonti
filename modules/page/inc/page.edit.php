@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+cot_require_api('forms');
+
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
 
@@ -123,7 +125,7 @@ if ($a == 'update')
 					$cot_cache->page->clear('index');
 				}
 			}
-			cot_redirect(cot_url('list', "c=".$row1['page_cat'], '', true));
+			cot_redirect(cot_url('page', "c=".$row1['page_cat'], '', true));
 		}
 	}
 	elseif (!$cot_error)
@@ -230,8 +232,6 @@ require_once $cfg['system_dir'].'/header.php';
 $mskin = cot_skinfile(array('page', 'edit', $cot_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
-cot_require_api('forms');
-
 $page_type_options = array('0' => $L['Default'], '1' => 'HTML');
 if ($usr['maingrp'] == 5 && $cfg['allowphp_pages'] && $cfg['allowphp_override'])
 {
@@ -247,7 +247,7 @@ if ($usr['maingrp'] == 5 && $cfg['allowphp_pages'] && $cfg['allowphp_override'])
 $pageedit_array = array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
 	"PAGEEDIT_SUBTITLE" => $L['paged_subtitle'],
-	"PAGEEDIT_FORM_SEND" => cot_url('page', "m=edit&a=update&id=".$pag['page_id']."&r=".$r),
+	"PAGEEDIT_FORM_SEND" => cot_url('page', "m=edit&a=update&id=".$pag['page_id']),
 	"PAGEEDIT_FORM_ID" => $pag['page_id'],
 	"PAGEEDIT_FORM_STATE" => $pag['page_state'],
 	"PAGEEDIT_FORM_CAT" => cot_selectbox_categories($pag['page_cat'], 'rpagecat'),

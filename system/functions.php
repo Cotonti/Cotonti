@@ -926,11 +926,11 @@ function cot_build_catpath($cat, $mask = 'link_catpath')
 	$list = defined('COT_LIST');
 	foreach ($pathcodes as $k => $x)
 	{
-		if ($k != 'system')
+		if ($x != 'system')
 		{
 			$tmp[] = ($list && $k === $last) ? htmlspecialchars($cot_cat[$x]['title'])
 				: cot_rc($mask, array(
-				'url' =>cot_url('list', 'c='.$x),
+				'url' => cot_url('page', 'c='.$x),
 				'title' => htmlspecialchars($cot_cat[$x]['title'])
 			));
 		}

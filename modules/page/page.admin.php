@@ -440,7 +440,7 @@ while ($row = cot_db_fetcharray($sql))
 		'ADMIN_PAGE_URL_FOR_DELETED' => cot_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$d.'&'.cot_xg()),
 		'ADMIN_PAGE_URL_FOR_EDIT' => cot_url('page', 'm=edit&id='.$row['page_id'].'&r=adm'),
 		'ADMIN_PAGE_ODDEVEN' => cot_build_oddeven($ii),
-		'ADMIN_PAGE_CAT_URL' => cot_url('list', 'c='.$row['page_cat']),
+		'ADMIN_PAGE_CAT_URL' => cot_url('page', 'c='.$row['page_cat']),
 		'ADMIN_PAGE_CAT' => $row['page_cat'],
 		'ADMIN_PAGE_CAT_TITLE' => $cot_cat[$row['page_cat']]['title'],
 		'ADMIN_PAGE_CATPATH' => $catpath,
