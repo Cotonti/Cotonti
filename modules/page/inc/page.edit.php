@@ -270,7 +270,7 @@ $pageedit_array = array(
 );
 if ($usr['isadmin'])
 {
-	$pageedit_array = array(
+	$pageedit_array += array(
 		"PAGEEDIT_FORM_TYPE" => cot_selectbox($pag['page_type'], 'rpagetype', array_keys($page_type_options), array_values($page_type_options), false),
 		"PAGEEDIT_FORM_OWNERID" => cot_inputbox('text', 'rpageownerid', $pag['page_ownerid'], array('size' => '24', 'maxlength' => '24')),
 		"PAGEEDIT_FORM_PAGECOUNT" => cot_inputbox('text', 'rpagecount', $pag['page_count'], array('size' => '8', 'maxlength' => '8')),
