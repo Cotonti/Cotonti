@@ -366,7 +366,7 @@ class Cotpl_block
 				// Extract preceeding plain data chunk
 				if ($block_pos > 0)
 				{
-					$chunk = trim(mb_substr($code, 0, $block_pos));
+					$chunk = trim(mb_substr($code, 0, $block_pos), "\t\r\n");
 					if (!empty($chunk))
 					{
 						$blocks[$i++] = new Cotpl_data($chunk);
@@ -384,7 +384,7 @@ class Cotpl_block
 				// Extract preceeding plain data chunk
 				if ($log_pos > 0)
 				{
-					$chunk = trim(mb_substr($code, 0, $log_pos));
+					$chunk = trim(mb_substr($code, 0, $log_pos), "\t\r\n");
 					if (!empty($chunk))
 					{
 						$blocks[$i++] = new Cotpl_data($chunk);
@@ -434,7 +434,7 @@ class Cotpl_block
 					$bpath = $path;
 					array_push($bpath, $i);
 					$blocks[$i++] = new Cotpl_logical($log_mt[1], $if_code, $else_code, $index, $bpath);
-					$code = trim($code);
+					$code = trim($code, "\t\r\n");
 				}
 				else
 				{
@@ -444,7 +444,7 @@ class Cotpl_block
 			else
 			{
 				// No blocks found
-				$code = trim($code);
+				$code = trim($code, "\t\r\n");
 				if (!empty($code))
 				{
 					$blocks[$i++] = new Cotpl_data($code);
