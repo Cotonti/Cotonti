@@ -95,7 +95,7 @@ foreach ($req_files as $req_file)
 	}
 }
 
-if (COT_MODULE)
+if (defined('COT_MODULE'))
 {
     if (is_array($cot_modules[$extname]))
     {
@@ -108,7 +108,7 @@ if (COT_MODULE)
 		cot_redirect(cot_url('message', 'msg=907', '', true));
 	}
 }
-elseif (COT_PLUG)
+elseif (defined('COT_PLUG'))
 {
 	cot_dieifdisabled($cfg['disable_plug']);
 
@@ -130,7 +130,7 @@ elseif (COT_PLUG)
 			if ($k['pl_code'] == $extname)
 			{
                 $out['subtitle'] = $k['pl_title'];
-				include $cfg['plugins_dir'].'/'.$k['pl_code'].'/'.$k['pl_file'].'.php';
+				include $k['pl_file'];
 				$empty = false;
 			}
 		}
