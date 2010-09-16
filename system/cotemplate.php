@@ -347,17 +347,18 @@ class Cotpl_block
 		{
 			$block_found = false;
 			$log_found = false;
-			if (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s', $code, $mt, PREG_OFFSET_CAPTURE))
+			if (preg_match('`<!--\s*BEGIN:\s*([\w_]+)\s*-->(.*?)<!--\s*END:\s*\1\s*-->`s', $code, $mt))
 			{
 				$block_found = true;
-				$block_pos = $mt[0][1];
+				$block_pos = mb_strpos($code, $mt[0]);
 				$block_mt = $mt;
-				$block_name = $mt[1][0];
+				$block_name = $mt[1];
 			}
-			if (preg_match('`<!-- IF (.+?) -->`', $code, $mt, PREG_OFFSET_CAPTURE))
+			if (preg_match('`<!--\s*IF\s+(.+?)\s*-->`', $code, $mt))
 			{
 				$log_found = true;
-				$log_pos = $mt[0][1];
+				$log_pos = mb_strpos($code, $mt[0]);
+				$log_len = mb_strlen($mt[0]);
 				$log_mt = $mt;
 			}
 			if ($block_found && (!$log_found || $block_pos < $log_pos))
@@ -375,8 +376,8 @@ class Cotpl_block
 				$bpath = $path;
 				array_push($bpath, $block_name);
 				$index[cotpl_index_glue($bpath)] = $bpath;
-				$blocks[$block_name] = new Cotpl_block(trim($block_mt[2][0]), $index, $bpath);
-				$code = trim(mb_substr($code, $block_pos + mb_strlen($block_mt[0][0])));
+				$blocks[$block_name] = new Cotpl_block(trim($block_mt[2]), $index, $bpath);
+				$code = trim(mb_substr($code, $block_pos + mb_strlen($block_mt[0])));
 			}
 			elseif ($log_found)
 			{
@@ -393,58 +394,51 @@ class Cotpl_block
 				$scope = 1;
 				$if_code = '';
 				$else_code = '';
-				$else_pos = false;
-				if (preg_match_all('`<!-- (IF (.+?)|ELSE|ENDIF) -->`', $code, $mt, PREG_SET_ORDER | PREG_OFFSET_CAPTURE))
+				$else = false;
+				$code = mb_substr($code, $log_pos + $log_len);
+				while ($scope > 0 && preg_match('`<!--\s*(IF\s+.+?|ELSE|ENDIF)\s*-->`', $code, $m))
 				{
-					foreach ($mt as $m)
-					{
-						if ($m[1][0] === 'ENDIF')
+						$m_pos = mb_strpos($code, $m[0]);
+						$m_len = mb_strlen($m[0]);
+						if ($m[1] === 'ENDIF')
 						{
 							$scope--;
-							if ($scope === 0)
-							{
-								if ($else_pos === false)
-								{
-									$if_code = mb_substr($code, $log_pos + mb_strlen($log_mt[0][0]),
-										$m[0][1] - $log_pos - mb_strlen($log_mt[0][0]));
-								}
-								else
-								{
-									$else_code = mb_substr($code, $else_pos, $m[0][1] - $else_pos);
-								}
-								break;
-							}
 						}
-						elseif ($m[1][0] === 'ELSE')
+						elseif ($m[1] === 'ELSE')
 						{
 							if ($scope === 1)
 							{
-								$else_pos = true;
-								$if_code = mb_substr($code, $log_pos + mb_strlen($log_mt[0][0]),
-									$m[0][1] - $log_pos - mb_strlen($log_mt[0][0]));
-								$else_pos = $m[0][1] + mb_strlen($m[0][0]);
+								$if_code .= mb_substr($code, 0, $m_pos);
+								$else = true;
+								$code = mb_substr($code, $m_pos + $m_len);
+								continue;
 							}
 						}
-						elseif ($m[0][1] !== $log_pos)
+						else
 						{
 							$scope++;
 						}
-					}
-					if ($scope === 0)
-					{
-						$bpath = $path;
-						array_push($bpath, $i);
-						$blocks[$i++] = new Cotpl_logical($log_mt[1][0], $if_code, $else_code, $index, $bpath);
-						$code = trim(mb_substr($code, $m[0][1] + mb_strlen($m[0][0])));
-					}
-					else
-					{
-						throw new Exception('Logical block ' . htmlspecialchars($log_mt[0][0]) . ' not closed');
-					}
+						$postfix_len = $scope === 0 ? 0 : $m_len;
+						if ($else === false)
+						{
+							$if_code .= mb_substr($code, 0, $m_pos + $postfix_len);
+						}
+						else
+						{
+							$else_code .= mb_substr($code, 0, $m_pos + $postfix_len);
+						}
+						$code = mb_substr($code, $m_pos + $m_len);
+				}
+				if ($scope === 0)
+				{
+					$bpath = $path;
+					array_push($bpath, $i);
+					$blocks[$i++] = new Cotpl_logical($log_mt[1], $if_code, $else_code, $index, $bpath);
+					$code = trim($code);
 				}
 				else
 				{
-					throw new Exception('Logical block ' . htmlspecialchars($log_mt[0][0]) . ' not closed');
+					throw new Exception('Logical block ' . htmlspecialchars($log_mt[0]) . ' not closed');
 				}
 			}
 			else
@@ -519,19 +513,21 @@ class Cotpl_data
 		{
 			$code = $this->cleanup($code);
 		}
-		if (preg_match_all('`(.*?){((?:[\w\.]+)(?:|.+?)?)}`s', $code, $mt, PREG_SET_ORDER | PREG_OFFSET_CAPTURE))
+		if (preg_match_all('`(.*?){((?:[\w\.]+)(?:|.+?)?)}`s', $code, $mt, PREG_SET_ORDER))
 		{
 			foreach ($mt as $m)
 			{
-				if (!empty($m[1][0]))
+				if (!empty($m[1]))
 				{
-					$this->chunks[] = $m[1][0];
+					$this->chunks[] = $m[1];
 				}
-				$this->chunks[] = new Cotpl_var($m[2][0]);
+				$this->chunks[] = new Cotpl_var($m[2]);
 			}
-			if ($m[0][1] + mb_strlen($m[0][0]) < mb_strlen($code))
+			$m_pos = mb_strpos($code, $m[0]);
+			$m_len = mb_strlen($m[0]);
+			if ($m_pos + $m_len < mb_strlen($code))
 			{
-				$this->chunks[] = mb_substr($code, $m[0][1] + mb_strlen($m[0][0]));
+				$this->chunks[] = mb_substr($code, $m_pos + $m_len);
 			}
 		}
 		else
