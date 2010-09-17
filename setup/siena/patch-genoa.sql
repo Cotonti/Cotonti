@@ -345,7 +345,7 @@ INSERT INTO `cot_updates` (`upd_param`, `upd_value`)
 	VALUES ('branch', 'siena');
 
 /* r1134 Modify icon paths to match new structure */
-UPDATE `cot_forum_sections` SET `fs_icon` = 'system/admin/tpl/img/forums.png' WHERE `fs_icon` = 'images/admin/forums.gif';
+UPDATE `cot_forum_sections` SET `fs_icon` = 'system/admin/img/forums.png' WHERE `fs_icon` = 'images/admin/forums.gif';
 
 /* r1147 Page cache enablement options */
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES

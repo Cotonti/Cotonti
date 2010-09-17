@@ -236,7 +236,7 @@ label input			{ vertical-align:middle; }
 /* 14. Search
 -------------------------------------------------- */
 
-#magnifier		{ height:36px; width:310px; position:absolute; left:650px; top:70px; }
+#magnifier		{ height:36px; width:310px; position:absolute; left:650px; top:71px; }
 #magnifier #s1	{ float:left; padding:6px 10px; border:0; height:24px; line-height:24px; width:240px; background:#fff; }
 #magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:36px; width:40px; border:0; background:#fff url(/images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
 

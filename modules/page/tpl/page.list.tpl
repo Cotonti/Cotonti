@@ -18,7 +18,7 @@
 		<div id="side" class="column">
 <!-- IF {PHP.usr.isadmin} -->{FILE "themes/nemesis/inc/admin-list.tpl"}<!-- ENDIF -->
 			<div class="block">
-				<h2 class="tags">{LIST_TOP_TAG_CLOUD}</h2>
+				<h2 class="tags">{PHP.L.Tags}</h2>
 				{LIST_TAG_CLOUD}
 			</div>
 {FILE "themes/nemesis/inc/contact.tpl"}
