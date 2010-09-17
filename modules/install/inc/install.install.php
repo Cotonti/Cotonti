@@ -17,6 +17,9 @@ $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
 cot_sendheaders();
 
+// Force Xtpl cache off
+$cfg['xtpl_cache'] = false;
+
 $mskin = cot_skinfile('install.install');
 $t = new XTemplate($mskin);
 
