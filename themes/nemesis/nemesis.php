@@ -1,18 +1,18 @@
 <?php
 /* ====================
 [BEGIN_COT_THEME]
-Name=Nemesis ver. 1.0
+Name=Nemesis ver. 1.00
 Schemes=default:Default
 [END_COT_THEME]
 ==================== */
 
 /**
- * Custom theme
+ * Cotonti Model Theme
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Dmitri 'Kort' Beliavski / Seditio.by
- * @copyright Copyright (c) Seditio.by 2010
+ * @copyright (c) Seditio.by 2010
  * @license BSD
  */
 

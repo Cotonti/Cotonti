@@ -65,7 +65,7 @@
 		</div>
 
 		<div class="block">
-			<h2 class="tags">{FORUMS_SECTIONS_TOP_TAG_CLOUD}</h2>
+			<h2 class="tags">{PHP.L.Tags}</h2>
 			{FORUMS_SECTIONS_TAG_CLOUD}
 		</div>
 

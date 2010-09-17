@@ -8,6 +8,7 @@
 			<li>{PHP.R.icon_rss} <a href="index.php?z=rss" title="{PHP.L.RSS_Feeds}">RSS</a></li>
 			<li>{PHP.R.icon_rss} <a href="index.php?z=rss&amp;c=forums" title="{PHP.L.RSS_Feeds} {PHP.cfg.separator} {PHP.L.Forums}"> RSS (<span class="lower">{PHP.L.Forums}</span>)</a></li>
 			<li>{PHP.R.icon_twitter} <a href="http://twitter.com/seditio" title="{PHP.L.Follow_Twitter}">{PHP.L.Follow_Twitter}</a></li>
+			<li class="margintop10"><a href="http://www.seditio.by" title="Free and Commercial Cotonti Themes and Plugins">Nemesis Theme by Seditio.by</a></li>
 		</ul>
 		<ul class="column">
 			<li><strong>{PHP.L.Navigation}</strong></li>
