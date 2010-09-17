@@ -34,7 +34,7 @@ rss.php
 
 // Environment setup
 define('COT_RSS', TRUE);
-$location = 'RSS';
+$env['location'] = 'rss';
 
 cot_dieifdisabled($cfg['disable_rss']);
 

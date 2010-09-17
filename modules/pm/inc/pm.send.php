@@ -15,6 +15,8 @@ defined('COT_CODE') or die('Wrong URL');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a');
 cot_block($usr['auth_write']);
 
+cot_require_api('email');
+
 $to = cot_import('to', 'G', 'TXT');
 $a = cot_import('a','G','TXT');
 $id = cot_import('id','G','INT');

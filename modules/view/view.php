@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 // Environment setup
 define('COT_VIEW', TRUE);
-$location = 'Views';
+$env['location'] = 'views';
 
 $v = cot_import('v', 'G', 'TXT');
 

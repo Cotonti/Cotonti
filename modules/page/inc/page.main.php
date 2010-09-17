@@ -32,7 +32,11 @@ $sql = cot_db_query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE $where LIMIT 1");
 	
-cot_die(cot_db_numrows($sql) == 0);
+if(cot_db_numrows($sql) == 0)
+{
+	$env['status'] = '404 Not Found';
+	cot_redirect(cot_url('message', 'msg=404', '', true));
+}
 $pag = cot_db_fetcharray($sql);
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin'], $usr['auth_download']) = cot_auth('page', $pag['page_cat'], 'RWA1');
@@ -51,11 +55,13 @@ $pag['page_pageurl'] = (empty($al)) ? cot_url('page', 'id='.$id) : cot_url('page
 
 if ($pag['page_state'] == 1 && !$usr['isadmin'] && $usr['id'] != $pag['page_ownerid'])
 {
+	$env['status'] = '403 Forbidden';
 	cot_log("Attempt to directly access an un-validated page", 'sec'); // TODO i18n
 	cot_redirect(cot_url('message', "msg=930", '', true));
 }
 if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 {
+	$env['status'] = '303 See Other';
 	$redir = trim(str_replace('redir:', '', $pag['page_text']));
 	$sql = cot_db_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$id."'");
 	header('Location: ' . (preg_match('#^(http|ftp)s?://#', $redir) ? '' : COT_ABSOLUTE_URL) . $redir);

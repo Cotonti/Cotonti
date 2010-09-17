@@ -65,7 +65,7 @@ if (!COT_AJAX)
 	}
 	/* ===== */
 
-	$mskin = cot_skinfile($cfg['enablecustomhf'] ? array('footer', mb_strtolower($location)) : 'footer', '+', defined('COT_ADMIN'));
+	$mskin = cot_skinfile($cfg['enablecustomhf'] ? array('footer', $env['location']) : 'footer', '+', defined('COT_ADMIN'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(

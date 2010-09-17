@@ -62,6 +62,12 @@ $R['form_guest_password'] = '<input type="password" name="rpassword" size="12" m
 $R['form_guest_username'] = '<input type="text" name="rusername" size="12" maxlength="100" />';
 
 /**
+ * Messages
+ */
+$R['msg_code_153_date'] = '<br />(-&gt; {$date}GMT)';
+$R['msg_code_redir_head'] = '<meta http-equiv="refresh" content="{$delay};url={$url}" />';
+
+/**
  * Misc
  */
 

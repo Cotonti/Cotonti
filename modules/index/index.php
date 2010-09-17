@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 // Environment setup
 define('COT_INDEX', TRUE);
-$location = 'Home';
+$env['location'] = 'home';
 
 /* === Hook === */
 foreach (cot_getextplugins('index.first') as $pl)

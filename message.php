@@ -12,7 +12,7 @@
 define('COT_CODE', TRUE);
 define('COT_MESSAGE', TRUE);
 define('COT_CORE', TRUE);
-$location = 'Messages';
+$env['location'] = 'messages';
 $z = 'message';
 
 require_once './datas/config.php';
@@ -59,7 +59,7 @@ switch( $msg )
 	case '153':
 		if ($num > 0)
 		{
-			$body .= "<br />(-> ".date($cfg['dateformat'], $num)."GMT".")";
+			$body .= cot_rc('msg_code_153_date', array('date' => date($cfg['dateformat'], $num)));
 		}
 	break;
 
@@ -116,19 +116,19 @@ if (empty($rc) && empty($rd))
 switch ($rc)
 {
 	case '100':
-		$r['100'] = cot_url('admin', "m=plug");
+		$r['100'] = cot_url('admin', 'm=plug');
 	break;
 
 	case '101':
-		$r['101'] = cot_url('admin', "m=hitsperday");
+		$r['101'] = cot_url('admin', 'm=hitsperday');
 	break;
 
 	case '102':
-		$r['102'] = cot_url('admin', "m=polls");
+		$r['102'] = cot_url('admin', 'm=polls');
 	break;
 
 	case '103':
-		$r['103'] = cot_url('admin', "m=forums");
+		$r['103'] = cot_url('admin', 'm=forums');
 	break;
 
 	case '200':
@@ -146,8 +146,8 @@ if ($rc != '')
 	{
 		$r["$rc"] = COT_ABSOLUTE_URL . $r["$rc"];
 	}
-	$plug_head .= "<meta http-equiv=\"refresh\" content=\"2;url=".$r["$rc"]."\" /><br />"; // TODO: in resources
-	$body .= "<br />".$L['msgredir'];
+	$out['head'] .= cot_rc('msg_code_redir_head', array('delay' => 2, 'url' => $r["$rc"]));
+	$body .= $R['code_error_separator'] . $L['msgredir'];
 }
 
 elseif ($rd != '')
@@ -156,8 +156,8 @@ elseif ($rd != '')
 	{
 		$ru = COT_ABSOLUTE_URL.ltrim($ru, '/');
 	}
-	$plug_head .= "<meta http-equiv=\"refresh\" content=\"".$rd.";url=".$ru."\" />"; // TODO: in resources
-	$body .= "<br />".$L['msgredir'];
+	$out['head'] .= cot_rc('msg_code_redir_head', array('delay' => $rd, 'url' => $ru));
+	$body .= $R['code_error_separator'] . $L['msgredir'];
 }
 
 /* === Hook === */

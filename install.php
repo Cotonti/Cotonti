@@ -13,7 +13,7 @@
 define('COT_CODE', TRUE);
 define('COT_INSTALL', TRUE);
 //define('COT_ADMIN', TRUE);
-$location = 'Install';
+$env['location'] = 'install';
 $z = 'install';
 
 if (file_exists('./datas/config.php'))
