@@ -21,7 +21,7 @@ cot_dieifdisabled($cfg['disable_forums']);
 
 // Environment setup
 define('COT_FORUMS', TRUE);
-$location = 'Forums';
+$env['location'] = 'forums';
 
 // Additional requirements
 cot_require_api('extrafields');

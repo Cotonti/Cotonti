@@ -21,7 +21,7 @@ cot_dieifdisabled($cfg['disable_page']);
 
 // Environment setup
 define('COT_PAGES', TRUE);
-$location = 'Pages';
+$env['location'] = 'pages';
 
 // Additional API requirements
 cot_require_api('extrafields');

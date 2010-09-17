@@ -482,14 +482,14 @@ function cot_load_structure()
  * @global string $db_online
  * @global Cache $cot_cache
  * @global array $cot_usersonline
- * @global string $location Location string
+ * @global array $env
  */
 function cot_online_update()
 {
-	global $cfg, $sys, $usr, $out, $db_online, $db_stats, $cot_cache, $cot_usersonline, $location, $Ls;
+	global $cfg, $sys, $usr, $out, $db_online, $db_stats, $cot_cache, $cot_usersonline, $env, $Ls;
 	if (!$cfg['disablewhosonline'])
 	{
-		if ($location != $sys['online_location']
+		if ($env['location'] != $sys['online_location']
 			|| !empty($sys['sublocaction']) && $sys['sublocaction'] != $sys['online_subloc'])
 		{
 			if ($usr['id'] > 0)
@@ -497,11 +497,11 @@ function cot_online_update()
 				if (empty($sys['online_location']))
 				{
 					cot_db_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
-						VALUES ('".$usr['ip']."', '".cot_db_prep($usr['name'])."', ".(int)$sys['now'].", '".cot_db_prep($location)."',  '".cot_db_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
+						VALUES ('".$usr['ip']."', '".cot_db_prep($usr['name'])."', ".(int)$sys['now'].", '".cot_db_prep($env['location'])."',  '".cot_db_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
 				}
 				else
 				{
-					cot_db_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".cot_db_prep($location)."', online_subloc='".cot_db_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
+					cot_db_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".cot_db_prep($env['location'])."', online_subloc='".cot_db_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
 				}
 			}
 			else
@@ -509,11 +509,11 @@ function cot_online_update()
 				if (empty($sys['online_location']))
 				{
 					cot_db_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
-						VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".cot_db_prep($location)."', '".cot_db_prep($sys['sublocation'])."', -1, 0, 0)");
+						VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".cot_db_prep($env['location'])."', '".cot_db_prep($sys['sublocation'])."', -1, 0, 0)");
 				}
 				else
 				{
-					cot_db_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$location."', online_subloc='".cot_db_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
+					cot_db_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$env['location']."', online_subloc='".cot_db_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
 				}
 			}
 		}
@@ -604,13 +604,13 @@ function cot_outputfilters($output)
  * Sends standard HTTP headers and disables browser cache
  *
  * @param string $content_type Content-Type value (without charset)
- * @param string $status_line HTTP status line containing response code
+ * @param string $response_code HTTP response code, e.g. '404 Not Found'
  * @return bool
  */
-function cot_sendheaders($content_type = 'text/html', $status_line = 'HTTP/1.1 200 OK')
+function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
 {
 	global $cfg;
-	header($status_line);
+	header('HTTP/1.1 ' . $response_code);
 	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 	header('Cache-Control: post-check=0,pre-check=0', FALSE);
@@ -1794,9 +1794,11 @@ function cot_clear_messages($src = '', $class = '')
  */
 function cot_die($cond=TRUE)
 {
+	global $env;
 	if ($cond)
 	{
-		cot_redirect(cot_url('message', "msg=950", '', true));
+		$env['status'] = '403 Forbidden';
+		cot_redirect(cot_url('message', 'msg=950', '', true));
 	}
 	return FALSE;
 }
@@ -2971,7 +2973,7 @@ function cot_load_urltrans()
  */
 function cot_redirect($url)
 {
-	global $cfg, $cot_error;
+	global $cfg, $cot_error, $env;
 
 	if ($cot_error && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
@@ -2982,6 +2984,11 @@ function cot_redirect($url)
 	if (!cot_url_check($url))
 	{
 		$url = COT_ABSOLUTE_URL . $url;
+	}
+
+	if (isset($env['status']))
+	{
+		header('HTTP/1.1' . $env['status']);
 	}
 
 	if ($cfg['redirmode'])

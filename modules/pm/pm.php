@@ -21,7 +21,7 @@ cot_dieifdisabled($cfg['disable_pm']);
 
 // Environment setup
 define('COT_PM', TRUE);
-$location = 'Private_Messages';
+$env['location'] = 'private_messages';
 
 // Additional API requirements
 cot_require_api('extrafields');

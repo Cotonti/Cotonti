@@ -21,7 +21,7 @@ cot_dieifdisabled($cfg['disable_pfs']);
 
 // Environment setup
 define('COT_PFS', TRUE);
-$location = 'PFS';
+$env['location'] = 'pfs';
 
 // Additional API requirements
 cot_require_api('uploads');

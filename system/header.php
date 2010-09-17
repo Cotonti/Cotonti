@@ -47,7 +47,14 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] = $out['head'];
 
-cot_sendheaders($out['meta_contenttype']);
+if (isset($env['status']))
+{
+	cot_sendheaders($out['meta_contenttype'], $env['status']);
+}
+else
+{
+	cot_sendheaders($out['meta_contenttype']);
+}
 
 if (!COT_AJAX)
 {
@@ -99,7 +106,7 @@ if (!COT_AJAX)
 	}
 	/* ===== */
 
-	$mskin = cot_skinfile($cfg['enablecustomhf'] ? array('header', mb_strtolower($location)) : 'header', '+', defined('COT_ADMIN'));
+	$mskin = cot_skinfile($cfg['enablecustomhf'] ? array('header', $env['location']) : 'header', '+', defined('COT_ADMIN'));
 	$t = new XTemplate($mskin);
 
 	$t->assign(array(

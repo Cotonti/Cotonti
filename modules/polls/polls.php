@@ -21,7 +21,7 @@ cot_dieifdisabled($cfg['disable_polls']);
 
 // Environment setup
 define('COT_POLLS', TRUE);
-$location = 'Polls';
+$env['location'] = 'polls';
 
 /* === Hook === */
 foreach (cot_getextplugins('polls.first') as $pl)

@@ -12,7 +12,7 @@
 define('COT_CODE', TRUE);
 define('COT_ADMIN', TRUE);
 define('COT_CORE', TRUE);
-$location = 'Administration';
+$env['location'] = 'administration';
 $z = 'admin';
 
 require_once './datas/config.php';

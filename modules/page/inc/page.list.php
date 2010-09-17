@@ -15,7 +15,7 @@ cot_dieifdisabled($cfg['disable_page']);
 
 // Environment setup
 define('COT_LIST', TRUE);
-$location = 'List';
+$env['location'] = 'list';
 
 $s = cot_import('s', 'G', 'ALP'); // order field name without "page_"
 $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)

@@ -12,7 +12,7 @@
 define('COT_CODE', TRUE);
 define('COT_USERS', TRUE);
 define('COT_CORE', TRUE);
-$location = 'Users';
+$env['location'] = 'users';
 $z = 'users';
 
 if (isset($_GET['m']) && $_GET['m'] == 'auth')
