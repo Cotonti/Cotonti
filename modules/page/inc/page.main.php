@@ -16,7 +16,6 @@ cot_block($usr['auth_read']);
 
 $id = cot_import('id', 'G', 'INT');
 $al = cot_import('al', 'G', 'ALP');
-$r = cot_import('r', 'G', 'ALP');
 $c = cot_import('c', 'G', 'TXT');
 $pg = cot_import('pg', 'G', 'INT');
 

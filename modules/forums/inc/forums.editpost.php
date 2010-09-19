@@ -15,14 +15,9 @@ http://www.neocrome.net
 
 defined('COT_CODE') or die('Wrong URL');
 
-$id = cot_import('id','G','INT');
 $s = cot_import('s','G','INT');
 $q = cot_import('q','G','INT');
 $p = cot_import('p','G','INT');
-$d = cot_import('d','G','INT');
-$o = cot_import('o','G','ALP');
-$w = cot_import('w','G','ALP',4);
-$quote = cot_import('quote','G','INT');
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.editpost.first') as $pl)

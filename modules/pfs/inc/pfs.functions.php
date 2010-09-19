@@ -604,16 +604,18 @@ function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 
 	$sql = cot_db_query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
 
-	$check = (empty($check) || $check=="/") ? '0' : $check;
+	$check = (empty($check) || $check == '/') ? '0' : $check;
 
-	if ($skip!="/" && $skip!="0")
+	$result_arr = array();
+
+	if ($skip != '/' && $skip != '0')
 	{
-		$result_arr[0] = '/ &nbsp; &nbsp;';
+		$result_arr[0] = '/';
 	}
 	
 	while ($row = cot_db_fetcharray($sql))
 	{
-		if ($skip!=$row['pff_id'])
+		if ($skip != $row['pff_id'])
 		{
 			$result_arr[$row['pff_id']] = htmlspecialchars($row['pff_title']);
 		}

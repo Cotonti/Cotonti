@@ -14,7 +14,6 @@ defined('COT_CODE') or die('Wrong URL');
 cot_require_api('forms');
 
 $id = cot_import('id', 'G', 'INT');
-$r = cot_import('r', 'G', 'ALP');
 $c = cot_import('c', 'G', 'ALP');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 'any');

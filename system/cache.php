@@ -1071,13 +1071,21 @@ if (extension_loaded('xcache'))
 		 */
 		public function clear($realm = '')
 		{
-			if (empty($realm))
+			if (function_exists('xcache_unset_by_prefix'))
 			{
-				return xcache_unset_by_prefix('');
+				if (empty($realm))
+				{
+					return xcache_unset_by_prefix('');
+				}
+				else
+				{
+					return xcache_unset_by_prefix($realm.'/');
+				}
 			}
 			else
 			{
-				return xcache_unset_by_prefix($realm.'/');
+				// This does not actually mean success but we can do nothing with it
+				return true;
 			}
 		}
 
@@ -1357,32 +1365,41 @@ class Cache
 	 * Clears all cache entries
 	 * @param int $type Cache storage type:
 	 * COT_CACHE_TYPE_ALL, COT_CACHE_TYPE_DB, COT_CACHE_TYPE_DISK, COT_CACHE_TYPE_MEMORY.
+	 * @return bool
 	 */
 	public function clear($type = COT_CACHE_TYPE_ALL)
 	{
+		$res = true;
 		switch ($type)
 		{
 			case COT_CACHE_TYPE_DB:
-				$this->db->clear();
+				$res = $this->db->clear();
 			break;
 
 			case COT_CACHE_TYPE_DISK:
-				$this->disk->clear();
+				$res = $this->disk->clear();
 			break;
 
 			case COT_CACHE_TYPE_MEMORY:
-				$this->mem->clear();
+				if ($this->mem)
+				{
+					$res = $this->mem->clear();
+				}
 			break;
 
 			case COT_CACHE_TYPE_PAGE:
-				$this->disk->clear();
+				$res = $this->disk->clear();
 			break;
 
 			default:
-				$this->mem->clear();
-				$this->db->clear();
-				$this->disk->clear();
+				if ($this->mem)
+				{
+					$res &= $this->mem->clear();
+				}
+				$res &= $this->db->clear();
+				$res &= $this->disk->clear();
 		}
+		return $res;
 	}
 
 	/**
@@ -1404,7 +1421,10 @@ class Cache
 			break;
 
 			case COT_CACHE_TYPE_MEMORY:
-				$this->mem->clear($realm);
+				if ($this->mem)
+				{
+					$this->mem->clear($realm);
+				}
 			break;
 
 			case COT_CACHE_TYPE_PAGE:
@@ -1412,7 +1432,10 @@ class Cache
 			break;
 
 			default:
-				$this->mem->clear($realm);
+				if ($this->mem)
+				{
+					$this->mem->clear($realm);
+				}
 				$this->db->clear($realm);
 				$this->disk->clear($realm);
 				$this->page->clear($realm);
@@ -1425,7 +1448,14 @@ class Cache
 	 */
 	public function get_info()
 	{
-		return $this->mem->get_info();
+		if ($this->mem)
+		{
+			return $this->mem->get_info();
+		}
+		else
+		{
+			return array();
+		}
 	}
 
 	/**
@@ -1451,7 +1481,10 @@ class Cache
 					break;
 
 					case COT_CACHE_TYPE_MEMORY:
-						$this->mem->remove($cell['id'], $cell['realm']);
+						if ($this->mem)
+						{
+							$this->mem->remove($cell['id'], $cell['realm']);
+						}
 					break;
 
 					case COT_CACHE_TYPE_PAGE:
@@ -1459,7 +1492,10 @@ class Cache
 					break;
 
 					default:
-						$this->mem->remove($cell['id'], $cell['realm']);
+						if ($this->mem)
+						{
+							$this->mem->remove($cell['id'], $cell['realm']);
+						}
 						$this->disk->remove($cell['id'], $cell['realm']);
 						$this->db->remove($cell['id'], $cell['realm']);
 						$this->page->clear($cell['realm'] . '/' . $cell['id']);

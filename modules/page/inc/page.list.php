@@ -20,7 +20,7 @@ $env['location'] = 'list';
 $s = cot_import('s', 'G', 'ALP'); // order field name without "page_"
 $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
-$o = cot_import('o', 'G', 'ALP', 16); // sort field name without "page_"
+$o = cot_import('ord', 'G', 'ALP', 16); // sort field name without "page_"
 $p = cot_import('p', 'G', 'ALP', 16); // sort way (asc, desc)
 $d = cot_import('d', 'G', 'INT'); //page number for pages list
 $dc = cot_import('dc', 'G', 'INT');// page number for cats list
@@ -90,7 +90,7 @@ if (!empty($o) && !empty($p) && $p != 'password')
 {
 	$where .= " AND page_$o='$p'";
 }
-$list_url_path = array('c' =>$c, 's' => $s, 'w' => $w, 'o' => $o, 'p' => $p);
+$list_url_path = array('c' =>$c, 's' => $s, 'w' => $w, 'ord' => $o, 'p' => $p);
 $list_url = cot_url('page', $list_url_path);
 
 /* === Hook === */

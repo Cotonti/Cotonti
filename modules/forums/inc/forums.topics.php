@@ -18,12 +18,10 @@ http://www.neocrome.net
 
 defined('COT_CODE') or die('Wrong URL');
 
-$id = cot_import('id','G','INT');
 $s = cot_import('s','G','INT');
 $q = cot_import('q','G','INT');
-$p = cot_import('p','G','INT');
 $d = cot_import('d','G','INT');
-$o = cot_import('o','G','ALP',16);
+$o = cot_import('ord','G','ALP',16);
 $w = cot_import('w','G','ALP',4);
 $quote = cot_import('quote','G','INT');
 
@@ -613,7 +611,7 @@ while ($row = cot_db_fetcharray($sql))
 	$t->parse("MAIN.FORUMS_TOPICS_ROW");
 }
 
-$pagenav = cot_pagenav('forums', "m=topics&s=$s&o=$o&w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']);
+$pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']);
 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
@@ -632,12 +630,12 @@ $t->assign(array(
 	"FORUMS_TOPICS_PAGENEXT" => $pagenav['next'],
 	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
 	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
-	"FORUMS_TOPICS_TITLE_TOPICS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&o=title&w=".rev($w)), $L['Topics'].' '.cursort($o == 'title', $w)),
-	"FORUMS_TOPICS_TITLE_VIEWS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&o=viewcount&w=".rev($w)), $L['Views']." ".cursort($o == 'viewcount', $w)),
-	"FORUMS_TOPICS_TITLE_POSTS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&o=postcount&w=".rev($w)), $L['Posts']." ".cursort($o == 'postcount', $w)),
-	"FORUMS_TOPICS_TITLE_REPLIES" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&o=postcount&w=".rev($w)), $L['Replies']." ".cursort($o == 'postcount', $w)),
-	"FORUMS_TOPICS_TITLE_STARTED" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&o=creationdate&w=".rev($w)), $L['Started']." ".cursort($o == 'creationdate', $w)),
-	"FORUMS_TOPICS_TITLE_LASTPOST" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&o=updated&w=".rev($w)), $L['Lastpost']." ".cursort($o == 'updated', $w))
+	"FORUMS_TOPICS_TITLE_TOPICS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=title&w=".rev($w)), $L['Topics'].' '.cursort($o == 'title', $w)),
+	"FORUMS_TOPICS_TITLE_VIEWS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=viewcount&w=".rev($w)), $L['Views']." ".cursort($o == 'viewcount', $w)),
+	"FORUMS_TOPICS_TITLE_POSTS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Posts']." ".cursort($o == 'postcount', $w)),
+	"FORUMS_TOPICS_TITLE_REPLIES" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Replies']." ".cursort($o == 'postcount', $w)),
+	"FORUMS_TOPICS_TITLE_STARTED" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=creationdate&w=".rev($w)), $L['Started']." ".cursort($o == 'creationdate', $w)),
+	"FORUMS_TOPICS_TITLE_LASTPOST" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=updated&w=".rev($w)), $L['Lastpost']." ".cursort($o == 'updated', $w))
 ));
 
 

@@ -51,7 +51,7 @@ if ($cot_cache && $cot_cache->mem)
 		'ADMIN_CACHE_MEMORY_AVAILABLE' => $info['available'],
 		'ADMIN_CACHE_MEMORY_MAX' => $info['max']
 	));
-	$t->parse('CACHE.ADMIN_CACHE_MEMORY');
+	$t->parse('MAIN.ADMIN_CACHE_MEMORY');
 }
 
 $sql = cot_db_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
