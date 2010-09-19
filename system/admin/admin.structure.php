@@ -56,12 +56,10 @@ $options_sort = array(
 	'filecount' => $L['adm_filecount']
 );
 
-foreach($cot_extrafields['pages'] as $i => $row)
+foreach($cot_extrafields['pages'] as $row)
 {
-	$extrafields[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
+	$options_sort[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
 }
-
-$options_sort = ($options_sort + $extrafields);
 
 $options_way = array(
 	'asc' => $L['Ascending'],
@@ -72,21 +70,21 @@ if ($n == 'options')
 {
 	if ($a == 'update')
 	{
-		$rstructure['code'] = cot_import('rcode', 'P', 'TXT');
-		$rstructure['path'] = cot_import('rpath', 'P', 'TXT');
-		$rstructure['title'] = cot_import('rtitle', 'P', 'TXT');
-		$rstructure['desc'] = cot_import('rdesc', 'P', 'TXT');
-		$rstructure['icon'] = cot_import('ricon', 'P', 'TXT');
-		$rstructure['group'] = (cot_import('rgroup', 'P', 'BOL')) ? 1 : 0;
-		$rstructure['order'] = cot_import('rorder', 'P', 'ALP').".".cot_import('rway', 'P', 'ALP');
-		$rstructure['ratings'] = cot_import('rallowratings', 'P', 'BOL');
+		$rstructure['code'] = cot_import('rstructurecode', 'P', 'TXT');
+		$rstructure['path'] = cot_import('rstructurepath', 'P', 'TXT');
+		$rstructure['title'] = cot_import('rstructuretitle', 'P', 'TXT');
+		$rstructure['desc'] = cot_import('rstructuredesc', 'P', 'TXT');
+		$rstructure['icon'] = cot_import('rstructureicon', 'P', 'TXT');
+		$rstructure['group'] = (cot_import('rstructuregroup', 'P', 'BOL')) ? 1 : 0;
+		$rstructure['order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rstructureway', 'P', 'ALP');
+		$rstructure['ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
 
 		foreach ($cot_extrafields['structure'] as $row)
 		{
 			$rstructure[$row['field_name']] = cot_import_extrafields('structure', $row);
 		}
 
-		$rtplmode = cot_import('rtplmode', 'P', 'INT');
+		$rtplmode = cot_import('rstructuretplmode', 'P', 'INT');
 		$rstructure['tpl'] = ($rtplmode == 1) ? '' : (($rtplmode == 3) ? 'same_as_parent' : cot_import('rtplforced', 'P', 'ALP'));
 
 		$sqql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
@@ -178,20 +176,20 @@ if ($n == 'options')
 			$cat_path[$i] = $x['tpath'];
 		}
 	}
-	$cat_selectbox = cot_selectbox($row['structure_tpl'], 'rtplforced', array_keys($cat_path), array_values($cat_path), false);
+	$cat_selectbox = cot_selectbox($row['structure_tpl'], 'rstructuretplforced', array_keys($cat_path), array_values($cat_path), false);
 
 	$t->assign(array(
 		'ADMIN_STRUCTURE_UPDATE_FORM_URL' => cot_url('admin', 'm=structure&n=options&a=update&id='.$row['structure_id'].'&d='.$d.'&'.cot_xg()),
-		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rcode', $row['structure_code'], 'size="16"'),
-		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rpath', $row['structure_path'], 'size="16" maxlength="16"'),
-		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rtitle', $row['structure_title'], 'size="64" maxlength="100"'),
-		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rdesc', $row['structure_desc'], 'size="64" maxlength="255"'),
-		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'ricon', $row['structure_icon'], 'size="64" maxlength="128"'),
-		'ADMIN_STRUCTURE_GROUP' => cot_checkbox(($structure_pages || $row['structure_group']), 'rgroup'),
+		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', $row['structure_code'], 'size="16"'),
+		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath', $row['structure_path'], 'size="16" maxlength="16"'),
+		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', $row['structure_title'], 'size="64" maxlength="100"'),
+		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', $row['structure_desc'], 'size="64" maxlength="255"'),
+		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', $row['structure_icon'], 'size="64" maxlength="128"'),
+		'ADMIN_STRUCTURE_GROUP' => cot_checkbox(($structure_pages || $row['structure_group']), 'rstructuregroup'),
 		'ADMIN_STRUCTURE_SELECT' => $cat_selectbox,
-		'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rtplmode', array('1'. '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_forced'].'  '.$cat_selectbox, $L['adm_tpl_parent']), '', '<br />'),
-		'ADMIN_STRUCTURE_WAY' => cot_selectbox($way, 'rway', array_keys($options_way), array_values($options_way), false),
-		'ADMIN_STRUCTURE_ORDER' => cot_selectbox($sort, 'rorder', array_keys($options_sort), array_values($options_sort), false),
+		'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode', array('1'. '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_forced'].'  '.$cat_selectbox, $L['adm_tpl_parent']), '', '<br />'),
+		'ADMIN_STRUCTURE_WAY' => cot_selectbox($way, 'rstructureway', array_keys($options_way), array_values($options_way), false),
+		'ADMIN_STRUCTURE_ORDER' => cot_selectbox($sort, 'rstructureorder', array_keys($options_sort), array_values($options_sort), false),
 		'ADMIN_STRUCTURE_RATINGS' => cot_radiobox($row['structure_ratings'], 'rallowratings', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_STRUCTURE_RESYNC' => cot_url('admin', 'm=structure&n=options&a=resync&id='.$row['structure_id'].'&'.cot_xg()),
 	));
@@ -199,7 +197,7 @@ if ($n == 'options')
 	// Extra fields
 	foreach($cot_extrafields['structure'] as $i => $row2)
 	{
-		$uname = strtoupper($row['field_name']);
+		$uname = strtoupper($row2['field_name']);
 		$t->assign('ADMIN_STRUCTURE_'.$uname, cot_build_extrafields('structure',  $row2, $row['structure_'.$row2['field_name']]));
 		$t->assign('ADMIN_STRUCTURE_'.$uname.'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 
@@ -222,15 +220,20 @@ else
 {
 	if ($a == 'update')
 	{
-		$rstructurecode = cot_import('rcode', 'P', 'ARR');
-		$rstructurepath = cot_import('rpath', 'P', 'ARR');
-		$rstructuretitle = cot_import('rtitle', 'P', 'ARR');
-		$rstructuredesc = cot_import('rdesc', 'P', 'ARR');
-		$rstructureicon = cot_import('ricon', 'P', 'ARR');
-		$rstructuregroup = cot_import('rgroup', 'P', 'ARR');
-		$rstructureorder = cot_import('rorder', 'P', 'ARR');
-		$rstructureway =	cot_import('rway', 'P', 'ARR');
-		$rstructureratings = cot_import('rallowratings', 'P', 'ARR');
+		$rstructurecode = cot_import('rstructurecode', 'P', 'ARR');
+		$rstructurepath = cot_import('rstructurepath', 'P', 'ARR');
+		$rstructuretitle = cot_import('rstructuretitle', 'P', 'ARR');
+		$rstructuredesc = cot_import('rstructuredesc', 'P', 'ARR');
+		$rstructureicon = cot_import('rstructureicon', 'P', 'ARR');
+		$rstructuregroup = cot_import('rstructuregroup', 'P', 'ARR');
+		$rstructureorder = cot_import('rstructureorder', 'P', 'ARR');
+		$rstructureway =	cot_import('rstructureway', 'P', 'ARR');
+		$rstructureratings = cot_import('rstructureallowratings', 'P', 'ARR');
+
+		foreach ($cot_extrafields['structure'] as $row)
+		{
+			$rstructurearray[$row['field_name']] = cot_import('rstructure'.$row['field_name'], 'P', 'ARR');
+		}
 
 		foreach ($rstructurecode as $i => $k)
 		{
@@ -242,6 +245,11 @@ else
 			$rstructure['group'] = (cot_import($rstructuregroup[i], 'D', 'BOL')) ? 1 : 0;
 			$rstructure['order'] = cot_import($rstructureorder[i], 'D', 'ALP').".".cot_import($rstructureorder[i], 'D', 'ALP');
 			$rstructure['ratings'] = cot_import($rstructureratings[i], 'D', 'BOL');
+
+			foreach ($cot_extrafields['structure'] as $row)
+			{
+				$rstructure[$row['field_name']] = cot_import_extrafields($rstructurearray, $row, 'D');
+			}
 
 			$sqql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
 			$roww = cot_db_fetcharray($sqql);
@@ -262,10 +270,9 @@ else
 				cot_auth_reorder();
 				cot_auth_clear('all');
 			}
-
 			$sql1 = cot_db_update($db_structure, $rstructure, "structure_id='".$i."'", 'structure_');
 		}
-		
+
 		cot_auth_clear('all');
 		if ($cot_cache)
 		{
@@ -277,14 +284,14 @@ else
 	}
 	elseif ($a == 'add')
 	{
-		$rstructure['code'] = cot_import('rcode', 'P', 'TXT');
-		$rstructure['path'] = cot_import('rpath', 'P', 'TXT');
-		$rstructure['title'] = cot_import('rtitle', 'P', 'TXT');
-		$rstructure['desc'] = cot_import('rdesc', 'P', 'TXT');
-		$rstructure['icon'] = cot_import('ricon', 'P', 'TXT');
-		$rstructure['group'] = (cot_import('rgroup', 'P', 'BOL')) ? 1 : 0;
-		$rstructure['order'] = cot_import('rorder', 'P', 'ALP').".".cot_import('rway', 'P', 'ALP');
-		$rstructure['ratings'] = cot_import('rallowratings', 'P', 'BOL');
+		$rstructure['code'] = cot_import('rstructurecode', 'P', 'TXT');
+		$rstructure['path'] = cot_import('rstructurepath', 'P', 'TXT');
+		$rstructure['title'] = cot_import('rstructuretitle', 'P', 'TXT');
+		$rstructure['desc'] = cot_import('rstructuredesc', 'P', 'TXT');
+		$rstructure['icon'] = cot_import('rstructureicon', 'P', 'TXT');
+		$rstructure['group'] = (cot_import('rstructuregroup', 'P', 'BOL')) ? 1 : 0;
+		$rstructure['order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rway', 'P', 'ALP');
+		$rstructure['ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
 
 		foreach ($cot_extrafields['structure'] as $row)
 		{
@@ -402,22 +409,28 @@ else
 		$t->assign(array(
 			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_url('admin', 'm=structure&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.cot_xg()),
 			'ADMIN_STRUCTURE_ID' => $structure_id,
-			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rcode['.$structure_id.']', $structure_code, 'size="8" maxlength="255"'),
+			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="8" maxlength="255"'),
 			'ADMIN_STRUCTURE_PATHFIELDIMG' => $pathfieldimg,
-			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rpath['.$structure_id.']', $row['structure_path'], 'size="'.$pathfieldlen.'" maxlength="24"'),
+			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="'.$pathfieldlen.'" maxlength="24"'),
 			'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
-			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rtitle['.$structure_id.']', $row['structure_title'], 'size="24" maxlength="100"'),
-			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rdesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
-			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'ricon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
-			'ADMIN_STRUCTURE_WAY' => cot_selectbox($way, 'rway['.$structure_id.']', array_keys($options_way), array_values($options_way), false, 'style="width:85px;"'),
-			'ADMIN_STRUCTURE_ORDER' => cot_selectbox($sort, 'rorder['.$structure_id.']', array_keys($options_sort), array_values($options_sort), false, 'style="width:85px;"'),
-			'ADMIN_STRUCTURE_GROUP' => cot_checkbox($row['structure_group'], 'rgroup['.$structure_id.']'),
+			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="24" maxlength="100"'),
+			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
+			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
+			'ADMIN_STRUCTURE_WAY' => cot_selectbox($way, 'rstructureway['.$structure_id.']', array_keys($options_way), array_values($options_way), false, 'style="width:85px;"'),
+			'ADMIN_STRUCTURE_ORDER' => cot_selectbox($sort, 'rstructureorder['.$structure_id.']', array_keys($options_sort), array_values($options_sort), false, 'style="width:85px;"'),
+			'ADMIN_STRUCTURE_GROUP' => cot_checkbox($row['structure_group'], 'rstructuregroup['.$structure_id.']'),
 			'ADMIN_STRUCTURE_PAGECOUNT' => $pagecount[$structure_code],
 			'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url('page', 'c='.$structure_code),
 			'ADMIN_STRUCTURE_RIGHTS_URL' => cot_url('admin', 'm=rightsbyitem&ic=page&io='.$structure_code),
 			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n=options&id='.$structure_id.'&'.cot_xg()),
 			'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii)
 		));
+
+		foreach($cot_extrafields['structure'] as $i => $row2)
+		{
+			$t->assign('ADMIN_STRUCTURE_'.strtoupper($row2['field_name']), cot_build_extrafields('structure',  $row2, $row['structure_'.$row2['field_name']], '['.$structure_id.']'));
+		}
+
 
 		/* === Hook - Part2 : Include === */
 		foreach ($extp as $pl)
@@ -443,21 +456,21 @@ else
 		'ADMIN_STRUCTURE_COUNTER_ROW' => $ii,
 		'ADMIN_PAGE_STRUCTURE_RESYNCALL' => cot_url('admin', 'm=structure&a=resyncall&'.cot_xg().'&d='.$d),
 		'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&a=add'),
-		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rcode', '', 'size="16"'),
-		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rpath', '', 'size="16" maxlength="16"'),
-		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rtitle', '', 'size="64" maxlength="100"'),
-		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rdesc', '', 'size="64" maxlength="255"'),
-		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'ricon', '', 'size="64" maxlength="128"'),
-		'ADMIN_STRUCTURE_GROUP' => cot_checkbox(0, 'rgroup'),
-		'ADMIN_STRUCTURE_WAY' => cot_selectbox('asc', 'rway', array_keys($options_way), array_values($options_way), false),
-		'ADMIN_STRUCTURE_ORDER' => cot_selectbox('title', 'rorder', array_keys($options_sort), array_values($options_sort), false),
-		'ADMIN_STRUCTURE_RATINGS' => cot_radiobox(1, 'rallowratings', array(1, 0), array($L['Yes'], $L['No']))
+		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', '', 'size="16"'),
+		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath', '', 'size="16" maxlength="16"'),
+		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', '', 'size="64" maxlength="100"'),
+		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', '', 'size="64" maxlength="255"'),
+		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', '', 'size="64" maxlength="128"'),
+		'ADMIN_STRUCTURE_GROUP' => cot_checkbox(0, 'rstructuregroup'),
+		'ADMIN_STRUCTURE_WAY' => cot_selectbox('asc', 'rstructureway', array_keys($options_way), array_values($options_way), false),
+		'ADMIN_STRUCTURE_ORDER' => cot_selectbox('title', 'rstructureorder', array_keys($options_sort), array_values($options_sort), false),
+		'ADMIN_STRUCTURE_RATINGS' => cot_radiobox(1, 'rstructureallowratings', array(1, 0), array($L['Yes'], $L['No']))
 	));
 
 	// Extra fields
 	foreach($cot_extrafields['structure'] as $i => $row2)
 	{
-		$uname = strtoupper($row['field_name']);
+		$uname = strtoupper($row2['field_name']);
 		$t->assign('ADMIN_STRUCTURE_'.$uname, cot_build_extrafields('structure',  $row2, ''));
 		$t->assign('ADMIN_STRUCTURE_'.$uname.'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 

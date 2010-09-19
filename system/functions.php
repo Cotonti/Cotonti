@@ -370,18 +370,20 @@ function cot_import_buffered($name, $value)
  * @param string $ext Variable name suffix
  * @param bool $usertimezone Use user timezone
  * @param bool $returnarray Return Date Array
+ * @param string $source Source type: P (POST), C (COOKIE) or D (variable filtering)
  * @return mixed
  */
-function cot_import_date($name = '', $ext='', $usertimezone = true, $returnarray = false)
+function cot_import_date($name, $ext='', $usertimezone = true, $returnarray = false, $source = 'P')
 {
 	global $L, $R, $usr;
 	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
+	$date = cot_import($name, $source, 'ARR');
 
-	$year = cot_import($name.'_year'.$ext, 'P', 'INT');
-	$month = cot_import($name.'_month'.$ext, 'P', 'INT');
-	$day = cot_import($name.'_day'.$ext, 'P', 'INT');
-	$hour = cot_import($name.'_hour'.$ext, 'P', 'INT');
-	$minute = cot_import($name.'_minute'.$ext, 'P', 'INT');
+	$year = cot_import($date['year'], 'D', 'INT');
+	$month = cot_import($date['month'], 'D', 'INT');
+	$day = cot_import($date['day'], 'D', 'INT');
+	$hour = cot_import($date['hour'], 'D', 'INT');
+	$minute = cot_import($date['minute'], 'D', 'INT');
 
 	if (((int)($month) > 0 && (int)($day) > 0 && (int)($year) > 0) || ((int)($day) > 0 && (int)($minute) > 0))
 	{

@@ -242,16 +242,16 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	$months[11] = $L['November'];
 	$months[12] = $L['December'];
 
-	$year = cot_selectbox($s_year, $name.'_year'.$ext, range($min_year, $max_year));
-	$month = cot_selectbox($s_month, $name.'_month'.$ext, array_keys($months), array_values($months));
-	$day = cot_selectbox($s_day, $name.'_day'.$ext, range(1, 31));
+	$year = cot_selectbox($s_year, $name.'[year]'.$ext, range($min_year, $max_year));
+	$month = cot_selectbox($s_month, $name.'[month]'.$ext, array_keys($months), array_values($months));
+	$day = cot_selectbox($s_day, $name.'[day]'.$ext, range(1, 31));
 
 	$range = array();
 	for ($i = 0; $i < 24; $i++)
 	{
 		$range[] = sprintf('%02d', $i);
 	}
-	$hour = cot_selectbox($s_hour, $name.'_hour'.$ext, $range);
+	$hour = cot_selectbox($s_hour, $name.'[hour]'.$ext, $range);
 
 	$range = array();
 	for ($i = 0; $i < 60; $i++)
@@ -259,7 +259,7 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 		$range[] = sprintf('%02d', $i);
 	}
 
-	$minute = cot_selectbox($s_minute, $name.'_minute'.$ext, $range);
+	$minute = cot_selectbox($s_minute, $name.'[minute]'.$ext, $range);
 
 	$rc = empty($R["input_date_{$mode}"]) ? 'input_date' : "input_date_{$mode}";
 	$rc = empty($R["input_date_{$name}"]) ? $rc : "input_date_{$name}";
