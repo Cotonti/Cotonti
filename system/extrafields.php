@@ -16,26 +16,26 @@
  * @param string $rowname Post/SQL/Lang row
  * @param array $extrafields Extra fields data
  * @param string $data Existing data for fields
- * @param bool $importnew Import type new
+ * @param string $ext Variable name suffix
  * @return string
  */
-function cot_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
+function cot_build_extrafields($rowname, $extrafield, $data, $ext='')
 {
 	global $L, $R;
-	$inputname = ($importnew) ? 'new' : 'r';
-	$inputname .= $rowname.$extrafield['field_name'];
+	$inputname .= 'r'.$rowname.$extrafield['field_name'];
+	$inputnamefull = $inputname.$ext;
 	$data = ($data == null) ? $extrafield['field_default'] : $data;
 	
 	switch($extrafield['field_type'])
 	{
 		case "input":
 			$R["input_text_{$inputname}"] = (!empty($R["input_text_{$inputname}"])) ? $R["input_text_{$inputname}"] : $extrafield['field_html'];
-			$result = cot_inputbox('text', $inputname, htmlspecialchars($data));
+			$result = cot_inputbox('text', $inputnamefull, htmlspecialchars($data));
 			break;
 
 		case "textarea":
 			$R["input_textarea_{$inputname}"] =(!empty($R["input_textarea_{$inputname}"])) ? $R["input_textarea_{$inputname}"] : $extrafield['field_html'];
-			$result = cot_textarea($inputname, htmlspecialchars($data), 4, 56);
+			$result = cot_textarea($inputnamefull, htmlspecialchars($data), 4, 56);
 			break;
 
 		case "select":
@@ -48,7 +48,7 @@ function cot_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 				$options_titles[$ii] = (!empty($L[$rowname.'_'.$extrafield['field_name'].'_'.$var])) ? $L[$rowname.'_'.$extrafield['field_name'].'_'.$var] : $var;
 				$options_values[$ii] .= trim($var);
 			}
-			$result = cot_selectbox(trim($data), $inputname, $options_values, $options_titles, false);
+			$result = cot_selectbox(trim($data), $inputnamefull, $options_values, $options_titles, false);
 			break;
 
 		case "radio":
@@ -64,12 +64,12 @@ function cot_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
 					$options_values[$ii] .= trim($var);
 				}
 			}
-			$result = cot_radiobox(trim($data), $inputname, $options_values, $options_titles);
+			$result = cot_radiobox(trim($data), $inputnamefull, $options_values, $options_titles);
 			break;
 
 		case "checkbox":
 			$R["input_checkbox_{$inputname}"] = (!empty($R["input_checkbox_{$inputname}"])) ? $R["input_checkbox_{$inputname}"] : $extrafield['field_html'];
-			$result = cot_checkbox($data, $inputname, $extrafield['field_description']);
+			$result = cot_checkbox($data, $inputnamefull, $extrafield['field_description']);
 			break;
 	}
 	return $result;
@@ -80,20 +80,18 @@ function cot_build_extrafields($rowname, $extrafield, $data, $importnew = FALSE)
  *
  * @param string $rowname Post/SQL/Lang row
  * @param array $extrafields Extra fields data
- * @param bool $importnew Import type new
+ * @param string $source Source type: G (GET), P (POST), C (COOKIE) or D (variable filtering)
  * @return string
  */
-function cot_import_extrafields($rowname, $extrafield, $importnew = FALSE)
+function cot_import_extrafields($rowname, $extrafield, $source='P')
 {
-	$inputname = ($importnew) ? 'new' : 'r';
-	$inputname .= $rowname.$extrafield['field_name'];
+	$inputname = ($source == 'D') ? $rowname[$extrafield['field_name']] : 'r'.$rowname.$extrafield['field_name'];
 
-	$import = cot_import($inputname, 'P', 'HTM');
+	$import = cot_import($inputname, $source, 'HTM');
 	if ($extrafield['field_type'] == 'checkbox' && !is_null($import))
 	{
 		$import = $import != '';
 	}
-
 	return  $import;
 }
 
