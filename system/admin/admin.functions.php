@@ -133,64 +133,6 @@ function cot_structure_delcat($id, $c)
 }
 
 /**
- * Adds a new category
- *
- * @param string $code Category code
- * @param string $path Path string, dot-separated
- * @param string $title Category title
- * @param string $desc Description
- * @param string $icon Icon URL
- * @param bool $group Is group of categories
- * @param string $order Order by field
- * @param string $way Sorting direction
- * @param array $extra_array Extra fields: names => values
- * @return bool Operation status
- */
-function cot_structure_newcat($code, $path, $title, $desc, $icon, $group, $order, $way, $extra_array = array())
-{
-	global $db_structure, $db_auth, $cot_groups, $usr, $cfg, $cot_cache;
-
-	$res = FALSE;
-
-	if (!empty($title) && !empty($code) && !empty($path) && $code != 'all')
-	{
-		$sql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_code='".cot_db_prep($code)."' LIMIT 1");
-		if (cot_db_numrows($sql) == 0)
-		{
-			$colname = '';
-			$colvalue = '';
-			if (is_array($extra_array))
-			{
-				while (list($i, $x) = each($extra_array))
-				{
-					$colname .= ", structure_".$i;
-					$colvalue .= ", '".cot_db_prep($x)."'";
-				}
-			}
-			$sql = cot_db_query("INSERT INTO $db_structure (structure_code, structure_path, structure_title, structure_desc, structure_icon, structure_group, structure_order".$colname.") VALUES ('".cot_db_prep($code)."', '".cot_db_prep($path)."', '".cot_db_prep($title)."', '".cot_db_prep($desc)."', '".cot_db_prep($icon)."', ".(int)$group.", '".cot_db_prep($order.'.'.$way)."'".$colvalue.")");
-
-			$auth_permit = array(
-				COT_GROUP_DEFAULT => 7,
-				COT_GROUP_GUESTS => 5,
-				COT_GROUP_MEMBERS => 7
-			);
-
-			$auth_lock = array(
-				COT_GROUP_DEFAULT => 0,
-				COT_GROUP_GUESTS => 250,
-				COT_GROUP_MEMBERS => 128
-			);
-
-			cot_auth_add_item('page', cot_db_prep($code), $auth_permit, $auth_lock);
-			$res = true;
-
-			$cot_cache && $cot_cache->db->remove('cot_cat', 'system');
-		}
-	}
-	return $res;
-}
-
-/**
  * Recalculates category counters
  *
  * @param int $id Category ID
@@ -360,7 +302,6 @@ function cot_trash_restore($id)
 			$sql = cot_db_query("SELECT structure_id FROM $db_structure WHERE structure_code='".$row['page_cat']."'");
 			if (cot_db_numrows($sql) == 0)
 			{
-				cot_structure_newcat('restored', 999, 'RESTORED', '', '', 0);
 				$sql = cot_db_query("UPDATE $db_pages SET page_cat='restored' WHERE page_id='".$res['tr_itemid']."'");
 			}
 			return TRUE;
