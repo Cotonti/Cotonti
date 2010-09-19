@@ -350,6 +350,12 @@ switch($a)
 				cot_die();
 			break;
 		}
+		if ($cot_cache)
+		{
+			$cot_cache->db->remove('cot_plugins', 'system');
+			$cot_cache->db->remove('cot_modules', 'system');
+			$cot_cache->db->remove('cot_cfg', 'system');
+		}
 		cot_clear_messages();
 		$t->parse('MAIN.EDIT');
 	break;

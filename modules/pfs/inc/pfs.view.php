@@ -19,12 +19,7 @@ http://www.neocrome.net
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id','G','INT');
-$o = cot_import('o','G','ALP');
-$f = cot_import('f','G','INT');
 $v = cot_db_prep(cot_import('v','G','TXT'));
-$c1 = cot_import('c1','G','ALP');
-$c2 = cot_import('c2','G','ALP');
-$userid = cot_import('userid','G','INT');
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');

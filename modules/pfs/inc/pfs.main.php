@@ -18,7 +18,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id','G','INT');                     // id (delete file(folder) id
-$o = cot_import('o','G','ALP');                       //
+$opt = cot_import('opt','G','ALP');                     // display option
 $f = cot_import('f','G','INT');                       // folder id
 $c1 = cot_import('c1','G','ALP');					  //
 $c2 = cot_import('c2','G','ALP');					  //
@@ -388,7 +388,7 @@ else
 			'PFF_ROW_COUNT' => $pff_count,
 			'PFF_ROW_FCOUNT' => $pff_fcount,
 			'PFF_ROW_FSIZE' => $pff_fssize,
-			'PFF_ROW_DELETE_URL' => cot_url('pfs', 'a=deletefolder&'.cot_xg().'&f='.$pff_id.'&'.$more),
+			'PFF_ROW_DELETE_URL' => cot_url('pfs', 'a=deletefolder&'.cot_xg().'&id='.$pff_id.'&'.$more),
 			'PFF_ROW_EDIT_URL' => cot_url('pfs', "m=editfolder&f=".$pff_id.'&'.$more),
 			'PFF_ROW_URL' => cot_url('pfs', 'f='.$pff_id.'&'.$more),
 			'PFF_ROW_ICON' => $icon_f,
@@ -448,9 +448,9 @@ while ($row = cot_db_fetcharray($sqll))
 			$add_thumbnail .= cot_rc('pfs_link_addthumb');
 			$add_image = cot_rc('pfs_link_addpix');
 		}
-		if ($o=='thumbs')
+		if ($opt=='thumbs')
 		{
-			$thumbpath = $cfg['pfs_thumbpath'];
+			$thumbpath = $cfg['th_dir'];
 			$pfs_icon = cot_rc('pfs_link_thumbnail');
 		}
 	}
@@ -465,7 +465,7 @@ while ($row = cot_db_fetcharray($sqll))
 		'PFS_ROW_FILE_URL' => $pfs_fullfile,
 		'PFS_ROW_SIZE' => $pfs_filesize,
 		'PFS_ROW_ICON' => $pfs_icon,
-		'PFS_ROW_DELETE_URL' => cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&o='.$o),
+		'PFS_ROW_DELETE_URL' => cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&opt='.$opt),
 		'PFS_ROW_EDIT_URL' => cot_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
 		'PFS_ROW_COUNT' => $row['pfs_count'],
 		'PFS_ROW_INSERT' => $add_thumbnail.$add_image.$add_file
@@ -497,7 +497,7 @@ if ($files_count>0 || $folders_count>0)
 
 	if ($files_count>0)
 	{
-		$thumbspagination = ($o == 'thumbs') ? '&o=thumbs' : '';
+		$thumbspagination = ($opt == 'thumbs') ? '&opt=thumbs' : '';
 		$totalitems = $files_count;
 		$pagenav = cot_pagenav('pfs', 'f='.$f.'&userid='.$usr['id'].$pn_c1.$pn_c2.$thumbspagination, $d,
 			$totalitems, $cfg['maxpfsperpage']);
@@ -517,7 +517,7 @@ if ($files_count>0 || $folders_count>0)
 
 // ========== Statistics =========
 
-$showthumbs .= ($o!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? "<a href=\"".cot_url('pfs', 'f='.$f.'&'.$more.'&o=thumbs')."\">".$L['Thumbnails']."</a>" : '';
+$showthumbs .= ($opt!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? "<a href=\"".cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs')."\">".$L['Thumbnails']."</a>" : '';
 
 $t->assign(array(
 	'PFS_TOTALSIZE' => floor($pfs_totalsize/1024).$L['kb'],

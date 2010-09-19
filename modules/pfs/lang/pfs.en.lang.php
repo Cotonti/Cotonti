@@ -32,6 +32,7 @@ $L['pfs_maxsize'] = 'Maximum size for a file';
 $L['pfs_maxspace'] = 'Maximum space allowed';
 $L['pfs_newfile'] = 'Upload a file:';
 $L['pfs_newfolder'] = 'Create a new folder:';
+$L['pfs_onpage'] = 'On this page'; // 0.7.0
 $L['pfs_parentfolder'] = 'Parent folder'; // 0.7.0
 $L['pfs_pastefile'] = 'Paste as file link'; // 0.7.0
 $L['pfs_pasteimage'] = 'Paste as image'; // 0.7.0

@@ -24,17 +24,8 @@ foreach (cot_getextplugins('forums.sections.rights') as $pl)
 /* ===== */
 cot_block($usr['auth_read']);
 
-$id = cot_import('id','G','INT');
 $s = cot_import('s','G','ALP');
-$q = cot_import('q','G','INT');
-$p = cot_import('p','G','INT');
-$d = cot_import('d','G','INT');
-$o = cot_import('o','G','ALP');
-$w = cot_import('w','G','ALP',4);
 $c = cot_import('c','G','ALP');
-$quote = cot_import('quote','G','INT');
-$unread_done = FALSE;
-$filter_cats = FALSE;
 $ce = explode('_', $s);
 $sys['sublocation'] = $L['Home'];
 

@@ -41,7 +41,7 @@ function picture(url,sx,sy) {
 				<!-- END: PFS_ERRORS_ROW -->
 			</ul>
 			<!-- END: PFS_ERRORS -->
-			<h3>{PFF_FOLDERCOUNT} {PHP.L.Folders} / {PFF_FILESCOUNT} {PHP.L.Files} ({PHP.L.comm_on_page}: {PFF_ONPAGE_FOLDERS} {PHP.L.Folders} / {PFF_ONPAGE_FILES} {PHP.L.Files})</h3>
+			<h3>{PFF_FOLDERCOUNT} {PHP.L.Folders} / {PFF_FILESCOUNT} {PHP.L.Files} ({PHP.L.pfs_onpage}: {PFF_ONPAGE_FOLDERS} {PHP.L.Folders} / {PFF_ONPAGE_FILES} {PHP.L.Files})</h3>
 			<table class="cells">
 				<tr>
 					<td class="coltop width10">&nbsp;</td>
@@ -72,7 +72,7 @@ function picture(url,sx,sy) {
 			</table>
 			<p class="paging">{PFF_PAGING_PREV}{PFF_PAGING_CURRENT}{PFF_PAGING_NEXT}</p>
 		
-			<h3>{PFS_FILESCOUNT} {PHP.L.Files} {PFS_INTHISFOLDER} ({PHP.L.comm_on_page}: {PFS_ONPAGE_FILES} {PHP.L.Files}) {PFS_SHOWTHUMBS}</h3>
+			<h3>{PFS_FILESCOUNT} {PHP.L.Files} {PFS_INTHISFOLDER} ({PHP.L.pfs_onpage}: {PFS_ONPAGE_FILES} {PHP.L.Files}) {PFS_SHOWTHUMBS}</h3>
 			<table class="cells">
 				<tr>
 					<td class="coltop width10">&nbsp;</td>

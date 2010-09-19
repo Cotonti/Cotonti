@@ -18,12 +18,9 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id', 'G', 'INT');
-$o = cot_import('o', 'G', 'ALP');
-$f = cot_import('f', 'G', 'INT');
 $c1 = cot_import('c1', 'G', 'ALP');
 $c2 = cot_import('c2', 'G', 'ALP');
 $userid = cot_import('userid', 'G', 'INT');
-$gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
 cot_block($usr['auth_write']);
