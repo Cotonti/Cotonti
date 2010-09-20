@@ -96,7 +96,7 @@ $themelang['pageadd']['Filehint'] = '(Set &quot;Yes&quot; to enable the download
 $themelang['pageadd']['URLhint'] = '(If File download = &quot;Yes&quot;)';
 $themelang['pageadd']['Filesize'] = 'Filesize (KB)';
 $themelang['pageadd']['Filesizehint'] = '(If File download = &quot;Yes&quot;)';
-$themelang['pageadd']['Formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section.<br />Check all fields carefully.<br />If you need to change something, you will be able to do that later. But submitting changes puts a page into validation queue again.';
+$themelang['pageadd']['Formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section. Check all fields carefully. If you need to change something, you will be able to do that later. But submitting changes puts a page into validation queue again.';
 
 /**
  * page.edit.tpl
@@ -110,7 +110,7 @@ $themelang['pageedit']['Filesizehint'] = '(If File download = &quot;Yes&quot;)';
 $themelang['pageedit']['Filehitcount'] = 'File hit count';
 $themelang['pageedit']['Filehitcounthint'] = '(If File download = &quot;Yes&quot;)';
 $themelang['pageedit']['Pageid'] = 'Page ID';
-$themelang['pageedit']['Deletethispage'] = '!Delete this page!';
+$themelang['pageedit']['Deletethispage'] = 'Delete this page';
 
 /**
  * pfs.tpl
@@ -185,7 +185,7 @@ $themelang['usersedit']['PMnotify'] = 'PM notify';
 $themelang['usersedit']['PMnotifyhint'] = '(Notify by e-mail when there\'s a new private message)';
 $themelang['usersedit']['LastIP'] = 'Last known IP';
 $themelang['usersedit']['Logcounter'] = 'Log counter';
-$themelang['usersedit']['Deletethisuser'] = '!Delete this user!';
+$themelang['usersedit']['Deletethisuser'] = 'Delete this user';
 
 /**
  * users.profile.tpl
@@ -216,7 +216,7 @@ $themelang['usersprofile']['Oldpasswordhint'] = '(To set a new password enter yo
  */
 
 $themelang['usersregister']['Validemail'] = 'Valid e-mail';
-$themelang['usersregister']['Validemailhint'] = 'A valid e-mail is required to complete the registration process !';
+$themelang['usersregister']['Validemailhint'] = 'A valid e-mail is required to complete the registration process!';
 $themelang['usersregister']['Confirmpassword'] = 'Confirm password';
 $themelang['usersregister']['Formhint'] = 'Once you\'re registered and logged in, have a look in your profile to set your avatar, signature, ICQ, website, location, timezone, etc.';
 
