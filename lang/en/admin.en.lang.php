@@ -430,6 +430,8 @@ $L['adm_tpl_mode'] = 'Template mode';
 $L['adm_tpl_empty'] = 'Default';
 $L['adm_tpl_forced'] = 'Same as';
 $L['adm_tpl_parent'] = 'Same as the parent category';
+$L['adm_tpl_resyncalltitle'] = 'Resync all page counters';
+$L['adm_tpl_resynctitle'] = 'Resync category page counters';
 $L['adm_enableratings'] = 'Enable ratings';	// New in 0.1.0
 $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.'; // Added in N-0.7.0
 
