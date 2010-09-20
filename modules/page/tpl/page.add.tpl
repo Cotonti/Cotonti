@@ -49,14 +49,16 @@
 						<td>{PAGEADD_FORM_EXPIRE}</td>
 					</tr>
 					<tr>
-						<td colspan="2">{PHP.L.Text}:
+						<td colspan="2">
 							{PAGEADD_FORM_TEXT}<!-- IF {PAGEADD_FORM_PFS_TEXT_USER} -->{PAGEADD_FORM_PFS_TEXT_USER}<!-- ENDIF --><!-- IF {PAGEADD_FORM_PFS_TEXT_SITE} --><span class="spaced">{PHP.cfg.separator}</span>{PAGEADD_FORM_PFS_TEXT_SITE}<!-- ENDIF -->
 						</td>
 					</tr>			
 					<tr>
-						<td>{PHP.themelang.pageadd.File}:<br />
-						{PHP.themelang.pageadd.Filehint}</td>
-						<td>{PAGEADD_FORM_FILE}</td>
+						<td>{PHP.themelang.pageadd.File}:</td>
+						<td>
+							{PAGEADD_FORM_FILE}
+							<p>{PHP.themelang.pageadd.Filehint}</p>
+						</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.URL}:<br />{PHP.themelang.pageadd.URLhint}</td>
@@ -65,9 +67,6 @@
 					<tr>
 						<td>{PHP.themelang.pageadd.Filesize}:<br />{PHP.themelang.pageadd.Filesizehint}</td>
 						<td>{PAGEADD_FORM_SIZE}</td>
-					</tr>
-					<tr>
-						<td colspan="2">{PHP.themelang.pageadd.Formhint}</td>
 					</tr>
 					<tr>
 						<td colspan="2" class="valid">
@@ -83,5 +82,7 @@
 				</table>
 			</form>
 		</div>
+		
+		<div class="help">{PHP.themelang.pageadd.Formhint}</div>
 
 <!-- END: MAIN -->
