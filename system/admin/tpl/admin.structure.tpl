@@ -13,6 +13,13 @@
 				{PHP.L.adm_extrafields_desc}
 <!-- ENDIF -->
 			</li>
+			<li>
+<!-- IF !{PHP.n} -->
+				<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
+<!-- ELSE -->
+				<a href="{ADMIN_STRUCTURE_RESYNC}" class="ajax" title="{PHP.L.adm_tpl_resynctitle}">{PHP.L.Resync}</a>
+<!-- ENDIF -->
+			</li>
 		</ul>
 <!-- BEGIN: OPTIONS -->
 		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post">
@@ -46,8 +53,10 @@
 				<td>{ADMIN_STRUCTURE_TPLMODE}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_sortingorder}:</td>
-				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_ORDER}{ADMIN_STRUCTURE_WAY}</td>
+				<td>{PHP.L.Order}:</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">
+					{ADMIN_STRUCTURE_ORDER}{ADMIN_STRUCTURE_WAY} ({PHP.L.adm_sortingorder})
+				</td>
 			</tr>
 			<!-- BEGIN: EXTRAFLD -->
 			<tr>
@@ -58,10 +67,6 @@
 			<tr>
 				<td>{PHP.L.adm_enableratings}:</td>
 				<td>{ADMIN_STRUCTURE_RATINGS}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.adm_postcounters} :</td>
-				<td><a href="{ADMIN_STRUCTURE_RESYNC}" class="ajax">{PHP.L.Resync}</a></td>
 			</tr>
 			<tr>
 				<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
@@ -76,8 +81,8 @@
 			<tr>
 				<td class="coltop width10">{PHP.L.Path}</td>
 				<td class="coltop width10">{PHP.L.Code}</td>
-				<td class="coltop width15">{PHP.L.Title}</td>
-				<td class="coltop width10">{PHP.L.TPL}</td>
+				<td class="coltop width20">{PHP.L.Title}</td>
+				<td class="coltop width5">{PHP.L.TPL}</td>
 				<td class="coltop width10">{PHP.L.Group}</td>
 				<td class="coltop width15">{PHP.L.Order}</td>
 				<td class="coltop width10">{PHP.L.Pages}</td>
@@ -85,7 +90,7 @@
 			</tr>
 <!-- BEGIN: ROW -->
 			<tr>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PATHFIELDIMG}{ADMIN_STRUCTURE_PATH}</td>
+				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}"><!-- IF {ADMIN_STRUCTURE_PATHFIELDIMG} -->{ADMIN_STRUCTURE_PATHFIELDIMG}<!-- ELSE -->{PHP.R.admin_icon_pathfieldnoimg}<!-- ENDIF -->{ADMIN_STRUCTURE_PATH}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_SYM}</td>
@@ -101,7 +106,7 @@
 			</tr>
 <!-- END: ROW -->
 			<tr>
-				<td class="valid" colspan="8"><input type="submit" class="submit" value="{PHP.L.Update}" /> <a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax">{PHP.L.Resync}</a></td>
+				<td class="valid" colspan="8"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 			</tr>
 		</table>
 		</form>

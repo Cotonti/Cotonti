@@ -13,9 +13,13 @@ $R['admin_code_present'] = '<span style="color:#739E48;font-weight:bold;">'.$L['
 $R['admin_code_running'] = '<span style="color:#739E48;font-weight:bold;">'.$L['adm_running'].'</span>';
 
 // Icons
+$R['admin_icon_pathfieldnoimg'] = '<img class="icon" src="system/admin/img/join1.png" alt="" />';
+$R['admin_icon_pathfieldimg'] = '<img class="icon" src="system/admin/img/join2.png" alt="" />';
+
 $R['admin_icon_admin'] = '<img class="icon" src="system/admin/img/admin.png" alt="" />';
 $R['admin_icon_allow'] = '<img class="icon" src="system/admin/img/allow.png" alt="" />';
 $R['admin_icon_allow_locked'] = '<img class="icon" src="system/admin/img/allow_locked.png" alt="" />';
+
 $R['admin_icon_auth_1'] = '<img class="icon" src="system/admin/img/auth_1.png" alt="" />';
 $R['admin_icon_auth_2'] = '<img class="icon" src="system/admin/img/auth_2.png" alt="" />';
 $R['admin_icon_auth_3'] = '<img class="icon" src="system/admin/img/auth_3.png" alt="" />';
@@ -24,6 +28,7 @@ $R['admin_icon_auth_5'] = '<img class="icon" src="system/admin/img/auth_5.png" a
 $R['admin_icon_auth_a'] = '<img class="icon" src="system/admin/img/auth_a.png" alt="" />';
 $R['admin_icon_auth_r'] = '<img class="icon" src="system/admin/img/auth_r.png" alt="" />';
 $R['admin_icon_auth_w'] = '<img class="icon" src="system/admin/img/auth_w.png" alt="" />';
+
 $R['admin_icon_banlist'] = '<img class="icon" src="system/admin/img/banlist.png" alt="" />';
 $R['admin_icon_bbcodes'] = '<img class="icon" src="system/admin/img/page.png" alt="" />';
 $R['admin_icon_cache'] = '<img class="icon" src="system/admin/img/config.png" alt="" />';

@@ -380,8 +380,8 @@ else
 		$structure_id = $row['structure_id'];
 		$structure_code = $row['structure_code'];
 
-		$pathfieldlen = (mb_strpos($row['structure_path'], '.') == 0) ? 3 : 9;
-		$pathfieldimg = (mb_strpos($row['structure_path'], '.') == 0) ? '' : '<img src="system/admin/img/join2.png" alt="" /> ';
+		$pathfieldlen = (mb_strpos($row['structure_path'], '.') == 0) ? 3 : 3;
+		$pathfieldimg = (mb_strpos($row['structure_path'], '.') == 0) ? '' : $R['admin_icon_pathfieldimg'];
 		$pathfielddep = count(explode(".", $row['structure_path']));
 		$pagecount[$structure_code] = (!$pagecount[$structure_code]) ? 0 : $pagecount[$structure_code];
 		$raw = explode('.', $row['structure_order']);
@@ -413,7 +413,7 @@ else
 			'ADMIN_STRUCTURE_PATHFIELDIMG' => $pathfieldimg,
 			'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="'.$pathfieldlen.'" maxlength="24"'),
 			'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
-			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="24" maxlength="100"'),
+			'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="18" maxlength="100"'),
 			'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
 			'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
 			'ADMIN_STRUCTURE_WAY' => cot_selectbox($way, 'rstructureway['.$structure_id.']', array_keys($options_way), array_values($options_way), false, 'style="width:85px;"'),

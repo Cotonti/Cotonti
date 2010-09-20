@@ -1,6 +1,5 @@
 <!-- BEGIN: MAIN -->
-	<h2>{PHP.L.Other}</h2>
-	<h3>{PHP.L.Core}</h3>
+	<h2>{PHP.L.Core}</h2>
 	<table class="cells">
 		<tr>
 			<td class="coltop width5"></td>
@@ -69,7 +68,7 @@
 	</table>
 
 <!-- BEGIN: SECTION -->
-	<h3>{ADMIN_OTHER_SECTION}</h3>
+	<h2>{ADMIN_OTHER_SECTION}</h2>
 	<table class="cells">
 <!-- BEGIN: ROW -->
 		<tr>
