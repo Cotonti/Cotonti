@@ -208,7 +208,7 @@ switch ($a)
 		{
 			$ruser[$row['field_name']] = cot_import_extrafields('user', $row);
 		}
-		$ruser['birthdate'] = (int) cot_import_date('ruserbirthdate', '', false);
+		$ruser['birthdate'] = (int) cot_import_date('ruserbirthdate', false);
 		
 		$roldpass = cot_import('roldpass','P','PSW');
 		$rnewpass1 = cot_import('rnewpass1','P','PSW');
@@ -427,7 +427,7 @@ $useredit_array = array(
 	"USERS_PROFILE_THEME" => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
 	"USERS_PROFILE_LANG" => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
 	"USERS_PROFILE_GENDER" => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),
-	"USERS_PROFILE_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), 1910),
+	"USERS_PROFILE_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), 1910, '', false),
 	"USERS_PROFILE_TIMEZONE" => $profile_form_timezone,
 	"USERS_PROFILE_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_PROFILE_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],

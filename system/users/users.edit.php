@@ -103,7 +103,7 @@ if ($a=='update')
 	$ruser['lang'] = cot_import('ruserlang','P','ALP');
 	$ruser['gender'] = cot_import('rusergender','P','TXT');
 
-	$ruser['birthdate'] = (int)cot_import_date('ruserbirthdate');
+	$ruser['birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
 	$ruser['timezone'] = (float) cot_import('rusertimezone','P','TXT');
 	$rusernewpass = cot_import('rusernewpass','P','TXT', 16);
@@ -284,7 +284,7 @@ $useredit_array = array(
 	"USERS_EDIT_PHOTO" => cot_inputbox('text', 'ruserphoto', $urr['user_photo'], array('size' => 32, 'maxlength' => 255)),
 	"USERS_EDIT_SIGNATURE" => cot_inputbox('text', 'rusersignature', $urr['user_signature'], array('size' => 32, 'maxlength' => 255)),
 	"USERS_EDIT_GENDER" => cot_selectbox_gender($urr['user_gender'], 'rusergender'),
-	"USERS_EDIT_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), 1910),
+	"USERS_EDIT_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), 1910, '', false),
 	"USERS_EDIT_TIMEZONE" => cot_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),
 	"USERS_EDIT_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_EDIT_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone']*3600)." ".$usr['timetext'],

@@ -367,13 +367,12 @@ function cot_import_buffered($name, $value)
  * Imports date stamp
  *
  * @param string $name Variable name preffix
- * @param string $ext Variable name suffix
  * @param bool $usertimezone Use user timezone
  * @param bool $returnarray Return Date Array
  * @param string $source Source type: P (POST), C (COOKIE) or D (variable filtering)
  * @return mixed
  */
-function cot_import_date($name, $ext='', $usertimezone = true, $returnarray = false, $source = 'P')
+function cot_import_date($name, $usertimezone = true, $returnarray = false, $source = 'P')
 {
 	global $L, $R, $usr;
 	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
