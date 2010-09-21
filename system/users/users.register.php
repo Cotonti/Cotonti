@@ -56,7 +56,7 @@ if ($a=='add')
 	{
 		$ruser[$row['field_name']] = cot_import_extrafields('user', $row);
 	}
-	$ruser['birthdate'] = (int)cot_import_date('ruserbirthdate');
+	$ruser['birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
 	$sql = cot_db_query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
 
@@ -252,7 +252,7 @@ $useredit_array = array(
 	"USERS_REGISTER_COUNTRY" => cot_selectbox_countries($ruser['country'], 'rcountry'),
 	"USERS_REGISTER_TIMEZONE" => $form_timezone,
 	"USERS_REGISTER_GENDER" => cot_selectbox_gender($ruser['gender'],'rusergender'),
-	"USERS_REGISTER_BIRTHDATE" => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']), 1910),
+	"USERS_REGISTER_BIRTHDATE" => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']), 1910, '', false),
 );
 $t->assign($useredit_array);
 
