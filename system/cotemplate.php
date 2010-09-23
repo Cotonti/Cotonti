@@ -513,26 +513,17 @@ class Cotpl_data
 		{
 			$code = $this->cleanup($code);
 		}
-		if (preg_match_all('`(.*?){((?:[\w\.]+)(?:|.+?)?)}`s', $code, $mt, PREG_SET_ORDER))
+		$chunks = preg_split('`({.+?})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
+		foreach ($chunks as $chunk)
 		{
-			foreach ($mt as $m)
+			if (preg_match('`^{((?:[\w\.]+)(?:|.+?)?)}$`', $chunk, $m))
 			{
-				if (!empty($m[1]))
-				{
-					$this->chunks[] = $m[1];
-				}
-				$this->chunks[] = new Cotpl_var($m[2]);
+				$this->chunks[] = new Cotpl_var($m[1]);
 			}
-			$m_pos = mb_strpos($code, $m[0]);
-			$m_len = mb_strlen($m[0]);
-			if ($m_pos + $m_len < mb_strlen($code))
+			else
 			{
-				$this->chunks[] = mb_substr($code, $m_pos + $m_len);
+				$this->chunks[] = $chunk;
 			}
-		}
-		else
-		{
-			$this->chunks[0] = $code;
 		}
 	}
 
@@ -885,13 +876,19 @@ class Cotpl_expr
 					array_push($stack, !array_pop($stack));
 					break;
 				case COTPL_OP_OR:
-					array_push($stack, array_pop($stack) || array_pop($stack));
+					$arg2 = array_pop($stack);
+					$arg1 = array_pop($stack);
+					array_push($stack, ($arg1 || $arg2));
 					break;
 				case COTPL_OP_SUB:
-					array_push($stack, array_pop($stack) && array_pop($stack));
+					$sub = array_pop($stack);
+					$min = array_pop($stack);
+					array_push($stack, $min - $sub);
 					break;
 				case COTPL_OP_XOR:
-					array_push($stack, array_pop($stack) xor array_pop($stack));
+					$arg2 = array_pop($stack);
+					$arg1 = array_pop($stack);
+					array_push($stack, ($arg1 xor $arg2));
 					break;
 				case COTPL_OP_OPEN:
 				case COTPL_OP_CLOSE:
