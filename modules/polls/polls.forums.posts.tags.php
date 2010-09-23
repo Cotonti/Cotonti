@@ -42,7 +42,7 @@ if (!empty($poll_form['poll_text']))
 	$ft_title = $L['Poll'].": ".$ft_title;
 }
 
-$toptitle .= $toppath.' ' . $cfg['separator'] . ' ' . $ft_title;
+$toptitle = $toppath.' ' . $cfg['separator'] . ' ' . $ft_title;
 $toptitle .= ($usr['isadmin']) ? " *" : '';
 $t->assign(array(
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
