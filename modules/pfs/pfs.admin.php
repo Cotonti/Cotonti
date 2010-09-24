@@ -28,7 +28,7 @@ if ($s == 'allpfs')
 }
 else
 {
-	$t = new XTemplate(cot_skinfile('pfs.admin'));
+	$t = new XTemplate(cot_skinfile('pfs.admin', 'module'));
 
 	$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 	$adminpath[] = array(cot_url('admin', 'm=pfs'), $L['PFS']);

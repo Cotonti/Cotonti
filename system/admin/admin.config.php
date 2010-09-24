@@ -119,8 +119,7 @@ switch($n)
 			}
 			elseif ($config_type == COT_CONFIG_TYPE_RADIO)
 			{
-				$config_input = cot_radiobox($config_value, $config_name, array('1', '0'),
-					array($L['Yes'], $L['No']), '', ' ');
+				$config_input = cot_radiobox($config_value, $config_name, array(1, 0), array($L['Yes'], $L['No']), '', ' ');
 			}
 			elseif ($config_type == COT_CONFIG_TYPE_CALLBACK)
 			{

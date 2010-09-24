@@ -244,7 +244,6 @@ else
 			$rstructure['icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
 			$rstructure['group'] = (cot_import($rstructuregroup[$i], 'D', 'BOL')) ? 1 : 0;
 			$rstructure['order'] = cot_import($rstructureorder[$i], 'D', 'TXT').".".cot_import($rstructureway[$i], 'D', 'ALP');
-
 			$rstructure['ratings'] = cot_import($rstructureratings[$i], 'D', 'BOL');
 
 			foreach ($cot_extrafields['structure'] as $row)
