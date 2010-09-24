@@ -7,11 +7,7 @@
 				<a title="{PHP.L.Configuration}" href="{ADMIN_STRUCTURE_URL_CONFIG}">{PHP.L.Configuration}</a>
 			</li>
 			<li>
-<!-- IF {PHP.lincif_conf} -->
 				<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}">{PHP.L.adm_extrafields_desc}</a>
-<!-- ELSE -->
-				{PHP.L.adm_extrafields_desc}
-<!-- ENDIF -->
 			</li>
 			<li>
 <!-- IF !{PHP.n} -->
