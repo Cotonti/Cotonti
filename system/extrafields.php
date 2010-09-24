@@ -85,7 +85,7 @@ function cot_build_extrafields($rowname, $extrafield, $data, $ext='')
  */
 function cot_import_extrafields($rowname, $extrafield, $source='P')
 {
-	$inputname = ($source == 'D') ? $rowname[$extrafield['field_name']] : 'r'.$rowname.$extrafield['field_name'];
+	$inputname = ($source == 'D') ? $rowname : 'r'.$rowname.$extrafield['field_name'];
 
 	$import = cot_import($inputname, $source, 'HTM');
 	if ($extrafield['field_type'] == 'checkbox' && !is_null($import))

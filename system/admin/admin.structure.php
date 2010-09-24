@@ -237,18 +237,19 @@ else
 
 		foreach ($rstructurecode as $i => $k)
 		{
-			$rstructure['code'] = cot_import($rstructurecode[i], 'D', 'TXT');
-			$rstructure['path'] = cot_import($rstructurepath[i], 'D', 'TXT');
-			$rstructure['title'] = cot_import($rstructuretitle[i], 'D', 'TXT');
-			$rstructure['desc'] = cot_import($rstructuredesc[i], 'D', 'TXT');
-			$rstructure['icon'] = cot_import($rstructureicon[i], 'D', 'TXT');
-			$rstructure['group'] = (cot_import($rstructuregroup[i], 'D', 'BOL')) ? 1 : 0;
-			$rstructure['order'] = cot_import($rstructureorder[i], 'D', 'ALP').".".cot_import($rstructureorder[i], 'D', 'ALP');
-			$rstructure['ratings'] = cot_import($rstructureratings[i], 'D', 'BOL');
+			$rstructure['code'] = cot_import($rstructurecode[$i], 'D', 'TXT');
+			$rstructure['path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
+			$rstructure['title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
+			$rstructure['desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
+			$rstructure['icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
+			$rstructure['group'] = (cot_import($rstructuregroup[$i], 'D', 'BOL')) ? 1 : 0;
+			$rstructure['order'] = cot_import($rstructureorder[$i], 'D', 'TXT').".".cot_import($rstructureway[$i], 'D', 'ALP');
+
+			$rstructure['ratings'] = cot_import($rstructureratings[$i], 'D', 'BOL');
 
 			foreach ($cot_extrafields['structure'] as $row)
 			{
-				$rstructure[$row['field_name']] = cot_import_extrafields($rstructurearray, $row, 'D');
+				$rstructure[$row['field_name']] = cot_import_extrafields($rstructurearray[$row['field_name']][$i], $row, 'D');
 			}
 
 			$sqql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
@@ -290,7 +291,7 @@ else
 		$rstructure['desc'] = cot_import('rstructuredesc', 'P', 'TXT');
 		$rstructure['icon'] = cot_import('rstructureicon', 'P', 'TXT');
 		$rstructure['group'] = (cot_import('rstructuregroup', 'P', 'BOL')) ? 1 : 0;
-		$rstructure['order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rway', 'P', 'ALP');
+		$rstructure['order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rstructureway', 'P', 'ALP');
 		$rstructure['ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
 
 		foreach ($cot_extrafields['structure'] as $row)
