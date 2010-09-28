@@ -360,6 +360,10 @@ function cot_default_html_construction($type)
 		case 'radio':
 			$html = $R['input_radio'];
 			break;
+		
+		case 'datetime':
+			$html = $R['input_date'];
+			break;
 	}
 	return $html;
 }

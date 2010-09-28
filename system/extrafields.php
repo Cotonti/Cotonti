@@ -25,7 +25,7 @@ function cot_build_extrafields($rowname, $extrafield, $data, $ext='')
 	$inputname .= 'r'.$rowname.$extrafield['field_name'];
 	$inputnamefull = $inputname.$ext;
 	$data = ($data == null) ? $extrafield['field_default'] : $data;
-	
+
 	switch($extrafield['field_type'])
 	{
 		case "input":
@@ -71,6 +71,11 @@ function cot_build_extrafields($rowname, $extrafield, $data, $ext='')
 			$R["input_checkbox_{$inputname}"] = (!empty($R["input_checkbox_{$inputname}"])) ? $R["input_checkbox_{$inputname}"] : $extrafield['field_html'];
 			$result = cot_checkbox($data, $inputnamefull, $extrafield['field_description']);
 			break;
+
+		case "datetime":
+			$R["input_date_{$inputname}"] = (!empty($R["input_date_{$inputname}"])) ? $R["input_date_{$inputname}"] : $extrafield['field_html'];
+			$result = cot_selectbox_date($data, 'long', $inputnamefull);
+			break;
 	}
 	return $result;
 }
@@ -86,12 +91,28 @@ function cot_build_extrafields($rowname, $extrafield, $data, $ext='')
 function cot_import_extrafields($rowname, $extrafield, $source='P')
 {
 	$inputname = ($source == 'D') ? $rowname : 'r'.$rowname.$extrafield['field_name'];
-
-	$import = cot_import($inputname, $source, 'HTM');
-	if ($extrafield['field_type'] == 'checkbox' && !is_null($import))
+	switch($extrafield['field_type'])
 	{
-		$import = $import != '';
+		case "input":
+		case "textarea":
+		case "select":
+		case "radio":
+			$import = cot_import($inputname, $source, 'HTM');
+			break;
+
+		case "checkbox":
+			$import = cot_import($inputname, $source, 'BOL');
+			if ($extrafield['field_type'] == 'checkbox' && !is_null($import))
+			{
+				$import = $import != '';
+			}
+			break;
+
+		case "datetime":
+			$import = cot_import_date($inputname, true, false, $source);
+			break;
 	}
+
 	return  $import;
 }
 
@@ -131,6 +152,10 @@ function cot_build_extrafields_data($rowname, $extrafield, $value)
 
 		case "checkbox":
 			return $value;
+			break;
+
+		case "datetime":
+			return @date($cfg['dateformat'], $value + $usr['timezone'] * 3600);
 			break;
 	}
 }
