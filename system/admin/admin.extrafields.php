@@ -167,11 +167,11 @@ elseif ($a == 'del' && isset($name))
 $cfg['cache'] && $cot_cache->db->remove('cot_extrafields', 'system');
 
 $totalitems = cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$location'"), 0, 0);
-$res = cot_db_query("SELECT * FROM $db_extra_fields WHERE field_location = '$location' LIMIT $d, ".$cfg['maxrowsperpage']);
+$res = cot_db_query("SELECT * FROM $db_extra_fields WHERE field_location = '$location' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $pagenav = cot_pagenav('admin',$extra_path, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$field_types = array('input', 'textarea', 'select', 'checkbox', 'radio');
+$field_types = array('input', 'textarea', 'select', 'checkbox', 'radio', 'datetime');
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
