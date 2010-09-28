@@ -170,162 +170,6 @@ function cot_structure_resyncall()
 	return $res;
 }
 
-/**
- * Removes a trash item
- *
- * @param int $id Item ID
- * @return int Number of rows affected
- */
-function cot_trash_delete($id)
-{
-	global $db_trash;
-
-	$sql = cot_db_query("DELETE FROM $db_trash WHERE tr_id='$id'");
-	return cot_db_affectedrows();
-}
-
-/**
- * Fetches a trash item
- *
- * @param int $id
- * @return array
- */
-function cot_trash_get($id)
-{
-	global $db_trash;
-
-	$sql = cot_db_query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
-	if ($res = cot_db_fetchassoc($sql))
-	{
-		$res['tr_datas'] = unserialize($res['tr_datas']);
-		return $res;
-	}
-	else
-	{
-		return FALSE;
-	}
-}
-
-/**
- * Inserts an item into trash
- *
- * @param array $dat Trash record(s)
- * @param string $db Table name
- * @return bool
- */
-function cot_trash_insert($dat, $db)
-{
-	foreach ($dat as $k => $v)
-	{
-		$columns[] = $k;
-		$datas[] = "'".cot_db_prep($v)."'";
-	}
-	$sql = cot_db_query("INSERT INTO $db (".implode(', ', $columns).") VALUES (".implode(', ', $datas).")");
-	return TRUE;
-}
-
-/**
- * Restores a trash item
- *
- * @param int $id Trash item ID
- * @return bool Operation success or failure
- */
-function cot_trash_restore($id)
-{
-	global $db_forum_topics, $db_forum_posts, $db_trash;
-
-	$columns = array();
-	$datas = array();
-
-	$res = cot_trash_get($id);
-
-	switch($res['tr_type'])
-	{
-		case 'comment':
-			global $db_com;
-			cot_trash_insert($res['tr_datas'], $db_com);
-			cot_log("Comment #".$res['tr_itemid']." restored from the trash can.", 'adm');
-			return (TRUE);
-			break;
-
-		case 'forumpost':
-			global $db_forum_posts;
-			$sql = cot_db_query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$res['tr_datas']['fp_topicid']."'");
-
-			if ($row = cot_db_fetcharray($sql))
-			{
-				cot_trash_insert($res['tr_datas'], $db_forum_posts);
-				cot_log("Post #".$res['tr_itemid']." restored from the trash can.", 'adm');
-				cot_forum_resynctopic($res['tr_datas']['fp_topicid']);
-				cot_forum_sectionsetlast($res['tr_datas']['fp_sectionid']);
-				cot_forum_resync($res['tr_datas']['fp_sectionid']);
-				return TRUE;
-			}
-			else
-			{
-				$sql1 = cot_db_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumtopic' AND tr_itemid='q".$res['tr_datas']['fp_topicid']."'");
-				if ($row1 = cot_db_fetcharray($sql1))
-				{
-					cot_trash_restore($row1['tr_id']);
-					cot_trash_delete($row1['tr_id']);
-				}
-			}
-			break;
-
-		case 'forumtopic':
-			global $db_forum_topics;
-			cot_trash_insert($res['tr_datas'], $db_forum_topics);
-			cot_log("Topic #".$res['tr_datas']['ft_id']." restored from the trash can.", 'adm');
-
-			$sql = cot_db_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumpost' AND tr_itemid LIKE '%-".$res['tr_itemid']."'");
-
-			while ($row = cot_db_fetcharray($sql))
-			{
-				$res2 = cot_trash_get($row['tr_id']);
-				cot_trash_insert($res2['tr_datas'], $db_forum_posts);
-				cot_trash_delete($row['tr_id']);
-				cot_log("Post #".$res2['tr_datas']['fp_id']." restored from the trash can (belongs to topic #".$res2['tr_datas']['fp_topicid'].").", 'adm');
-			}
-
-			cot_forum_resynctopic($res['tr_itemid']);
-			cot_forum_sectionsetlast($res['tr_datas']['ft_sectionid']);
-			cot_forum_resync($res['tr_datas']['ft_sectionid']);
-			return TRUE;
-			break;
-
-		case 'page':
-			global $db_pages, $db_structure;
-			cot_trash_insert($res['tr_datas'], $db_pages);
-			cot_log("Page #".$res['tr_itemid']." restored from the trash can.", 'adm');
-			$sql = cot_db_query("SELECT page_cat FROM $db_pages WHERE page_id='".$res['tr_itemid']."'");
-			$row = cot_db_fetcharray($sql);
-			$sql = cot_db_query("SELECT structure_id FROM $db_structure WHERE structure_code='".$row['page_cat']."'");
-			if (cot_db_numrows($sql) == 0)
-			{
-				$sql = cot_db_query("UPDATE $db_pages SET page_cat='restored' WHERE page_id='".$res['tr_itemid']."'");
-			}
-			return TRUE;
-			break;
-
-		case 'pm':
-			global $db_pm;
-			cot_trash_insert($res['tr_datas'], $db_pm);
-			cot_log("Private message #".$res['tr_itemid']." restored from the trash can.", 'adm');
-			return TRUE;
-			break;
-
-		case 'user':
-			global $db_users;
-			cot_trash_insert($res['tr_datas'], $db_users);
-			cot_log("User #".$res['tr_itemid']." restored from the trash can.", 'adm');
-			return TRUE;
-			break;
-
-		default:
-			return FALSE;
-			break;
-	}
-}
 // =========== Extra fields ================================
 /**
  * Extra fields - Return default base html-construction for various types of fields (without value= and name=)
@@ -360,7 +204,7 @@ function cot_default_html_construction($type)
 		case 'radio':
 			$html = $R['input_radio'];
 			break;
-		
+
 		case 'datetime':
 			$html = $R['input_date'];
 			break;
@@ -405,7 +249,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 		$column = $fieldrow['Field'];
 		// get column prefix in this table
 		$column_prefix = substr($column, 0, strpos($column, "_"));
-		
+
 		preg_match("#.*?_$name$#",$column,$match);
 		if($match[1]!="" && !$noalter) return false; // No adding - fields already exist
 		$i++;
@@ -420,7 +264,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 	$extf['required'] = ($required > 0) ? 1 : 0;
 	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
 	$extf['description'] = is_null($description) ? '' : $description;
-	
+
 	$step1 = cot_db_insert($db_extra_fields, $extf, 'field_') == 1;
 	if ($noalter)
 	{

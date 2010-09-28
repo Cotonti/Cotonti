@@ -261,7 +261,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','trash','01','trash_prunedelay',2,'7','7','0,1,2,3,4,5,7,10,15,20,30,45,60,90,120',''),
 ('core','trash','11','trash_forum',3,'1','1','',''),
 ('core','trash','12','trash_page',3,'1','1','',''),
-('core','trash','13','trash_pm',3,'1','1','',''),
 ('core','trash','14','trash_user',3,'1','1','',''),
 ('core','users','01','disablereg',3,'0','0','',''),
 ('core','users','03','disablewhosonline',3,'0','0','',''),

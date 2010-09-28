@@ -81,7 +81,7 @@ if ($n == 'options')
 
 		foreach ($cot_extrafields['structure'] as $row)
 		{
-			$rstructure[$row['field_name']] = cot_import_extrafields('structure', $row);
+			$rstructure[$row['field_name']] = cot_import_extrafields('rstructure'.$row['field_name'], $row);
 		}
 
 		$rtplmode = cot_import('rstructuretplmode', 'P', 'INT');
@@ -198,11 +198,11 @@ if ($n == 'options')
 	foreach($cot_extrafields['structure'] as $i => $row2)
 	{
 		$uname = strtoupper($row2['field_name']);
-		$t->assign('ADMIN_STRUCTURE_'.$uname, cot_build_extrafields('structure',  $row2, $row['structure_'.$row2['field_name']]));
+		$t->assign('ADMIN_STRUCTURE_'.$uname, cot_build_extrafields('rstructure'.$row2['field_name'],  $row2, $row['structure_'.$row2['field_name']]));
 		$t->assign('ADMIN_STRUCTURE_'.$uname.'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 
 		// extra fields universal tags
-		$t->assign('ADMIN_STRUCTURE_EXTRAFLD', cot_build_extrafields('structure',  $row2, $row['structure_'.$row2['field_name']]));
+		$t->assign('ADMIN_STRUCTURE_EXTRAFLD', cot_build_extrafields('rstructure'.$row2['field_name'],  $row2, $row['structure_'.$row2['field_name']]));
 		$t->assign('ADMIN_STRUCTURE_EXTRAFLD_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 		$t->parse('MAIN.OPTIONS.EXTRAFLD');
 	}
@@ -295,7 +295,7 @@ else
 
 		foreach ($cot_extrafields['structure'] as $row)
 		{
-			$rstructure[$row['field_name']] = cot_import_extrafields('structure', $row);
+			$rstructure[$row['field_name']] = cot_import_extrafields('rstructure'.$row['field_name'], $row);
 		}
 
 		$rtplmode = cot_import('rtplmode', 'P', 'INT');
@@ -428,7 +428,7 @@ else
 
 		foreach($cot_extrafields['structure'] as $i => $row2)
 		{
-			$t->assign('ADMIN_STRUCTURE_'.strtoupper($row2['field_name']), cot_build_extrafields('structure',  $row2, $row['structure_'.$row2['field_name']], '['.$structure_id.']'));
+			$t->assign('ADMIN_STRUCTURE_'.strtoupper($row2['field_name']), cot_build_extrafields('rstructure'.$row2['field_name'].'['.$structure_id.']', $row2, $row['structure_'.$row2['field_name']]));
 		}
 
 
@@ -471,11 +471,11 @@ else
 	foreach($cot_extrafields['structure'] as $i => $row2)
 	{
 		$uname = strtoupper($row2['field_name']);
-		$t->assign('ADMIN_STRUCTURE_'.$uname, cot_build_extrafields('structure',  $row2, ''));
+		$t->assign('ADMIN_STRUCTURE_'.$uname, cot_build_extrafields('rstructure'.$row2['field_name'],  $row2, ''));
 		$t->assign('ADMIN_STRUCTURE_'.$uname.'_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 
 		// extra fields universal tags
-		$t->assign('ADMIN_STRUCTURE_EXTRAFLD', cot_build_extrafields('structure',  $row2, ''));
+		$t->assign('ADMIN_STRUCTURE_EXTRAFLD', cot_build_extrafields('rstructure'.$row2['field_name'],  $row2, ''));
 		$t->assign('ADMIN_STRUCTURE_EXTRAFLD_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 		$t->parse('MAIN.DEFULT.EXTRAFLD');
 	}

@@ -25,11 +25,7 @@
 <!-- ENDIF -->
 			</li>
 			<li>
-<!-- IF {PHP.lincif_conf} -->
 				<a href="{ADMIN_PAGE_URL_EXTRAFIELDS}">{PHP.L.adm_extrafields_desc}</a>
-<!-- ELSE -->
-				{PHP.L.adm_extrafields_desc}
-<!-- ENDIF -->
 			</li>
 		</ul>
 		<h3>{PHP.L.Pages}:</h3>

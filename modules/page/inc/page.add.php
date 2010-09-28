@@ -59,7 +59,7 @@ if ($a == 'add')
 	// Extra fields
 	foreach ($cot_extrafields['pages'] as $row)
 	{
-		$rpage[$row['field_name']] = cot_import_extrafields('page', $row);
+		$rpage[$row['field_name']] = cot_import_extrafields('rpage'.$row['field_name'], $row);
 	}
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $rpage['cat']);
@@ -239,7 +239,7 @@ $t->assign($pageadd_array);
 foreach($cot_extrafields['pages'] as $i => $row)
 {
 	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGEADD_FORM_'.$uname, cot_build_extrafields('page', $row, $rpage[$row['field_name']]));
+	$t->assign('PAGEADD_FORM_'.$uname, cot_build_extrafields('rpage'.$row['field_name'], $row, $rpage[$row['field_name']]));
 	$t->assign('PAGEADD_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 
