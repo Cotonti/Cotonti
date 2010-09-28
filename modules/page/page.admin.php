@@ -528,7 +528,7 @@ $sys['pagesqueued'] = cot_db_result($sql, 0, 'COUNT(*)');
 $t->assign(array(
 	'ADMIN_PAGE_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=core&p=page'),
 	'ADMIN_PAGE_URL_ADD' => cot_url('page', 'm=add'),
-	'ADMIN_PAGE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=pages'),
+	'ADMIN_PAGE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=page'),
 	'ADMIN_PAGE_FORM_URL' => cot_url('admin', 'm=page&a=update_cheked&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter.'&d='.$d),
 	'ADMIN_PAGE_ORDER' => cot_selectbox($sorttype, 'sorttype', array_keys($sort_type), array_values($sort_type), false),
 	'ADMIN_PAGE_WAY' => cot_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),

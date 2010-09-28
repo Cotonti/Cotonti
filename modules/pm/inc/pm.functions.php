@@ -89,10 +89,6 @@ function cot_remove_pm($message_id)
 					($row['pm_touserid'] == $usr['id'] && $row['pm_fromstate'] == 3) ||
 					($row['pm_fromuserid'] == $usr['id'] && $row['pm_touserid'] == $usr['id']))
 			{
-				if ($cfg['trash_pm'])
-				{
-					cot_trash_put('pm', $L['Private_Messages']." #".$id." ".$row['pm_title']." (".$row['pm_fromuser'].")", $id, $row);
-				}
 				$sql2 = cot_db_query("DELETE FROM $db_pm WHERE pm_id = '$id'");
 			}
 			elseif($row['pm_fromuserid'] == $usr['id'] && ($row['pm_tostate'] != 3 || $row['pm_tostate'] != 0))

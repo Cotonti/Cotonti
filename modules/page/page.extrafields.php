@@ -17,14 +17,14 @@ Hooks=admin.extrafields.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($n == 'pages')
+if ($n == 'page')
 {
-	cot_require('pages');
-	$adminpath[] = array(cot_url('admin', 'm=page'), $L['Pages']);
-	$adminpath[] = array(cot_url('admin', 'm=extrafields&n=pages'), $L['adm_extrafields']);
+	cot_require('page');
+	$adminpath[] = array(cot_url('admin', 'm=page'), $L['Page']);
+	$adminpath[] = array(cot_url('admin', 'm=extrafields&n=page'), $L['adm_extrafields']);
 	$adminhelp = $L['adm_help_pages_extrafield'];
-	$extra_path = 'm=extrafields&n=pages';
-	$location = $cot_pages;
+	$extra_path = 'm=extrafields&n=page';
+	$location = $db_pages;
 }
 
 ?>

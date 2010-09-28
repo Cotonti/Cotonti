@@ -111,7 +111,7 @@ if ($a=='update')
 	// Extra fields
 	foreach($cot_extrafields['users'] as $row)
 	{
-		$ruser[$row['field_name']] = cot_import_extrafields('user', $row);
+		$ruser[$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
 	}
 
 	$rusergroupsms = cot_import('rusergroupsms', 'P', 'ARR');
@@ -284,7 +284,7 @@ $useredit_array = array(
 	"USERS_EDIT_PHOTO" => cot_inputbox('text', 'ruserphoto', $urr['user_photo'], array('size' => 32, 'maxlength' => 255)),
 	"USERS_EDIT_SIGNATURE" => cot_inputbox('text', 'rusersignature', $urr['user_signature'], array('size' => 32, 'maxlength' => 255)),
 	"USERS_EDIT_GENDER" => cot_selectbox_gender($urr['user_gender'], 'rusergender'),
-	"USERS_EDIT_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), 1910, '', false),
+	"USERS_EDIT_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
 	"USERS_EDIT_TIMEZONE" => cot_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),
 	"USERS_EDIT_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
 	"USERS_EDIT_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone']*3600)." ".$usr['timetext'],
@@ -298,7 +298,7 @@ $t->assign($useredit_array);
 $extra_array = cot_build_extrafields('user', 'USERS_EDIT', $cot_extrafields['users'], $urr);
 foreach($cot_extrafields['users'] as $i => $row)
 {
-	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']), cot_build_extrafields('user',  $row, $urr['user_'.$row['field_name']]));
+	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'],  $row, $urr['user_'.$row['field_name']]));
 	$t->assign('USERS_EDIT_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 

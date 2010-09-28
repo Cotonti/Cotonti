@@ -54,7 +54,7 @@ if ($a=='add')
 	// Extra fields
 	foreach($cot_extrafields['users'] as $row)
 	{
-		$ruser[$row['field_name']] = cot_import_extrafields('user', $row);
+		$ruser[$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
 	}
 	$ruser['birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
@@ -252,14 +252,14 @@ $useredit_array = array(
 	"USERS_REGISTER_COUNTRY" => cot_selectbox_countries($ruser['country'], 'rcountry'),
 	"USERS_REGISTER_TIMEZONE" => $form_timezone,
 	"USERS_REGISTER_GENDER" => cot_selectbox_gender($ruser['gender'],'rusergender'),
-	"USERS_REGISTER_BIRTHDATE" => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']), 1910, '', false),
+	"USERS_REGISTER_BIRTHDATE" => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
 );
 $t->assign($useredit_array);
 
 // Extra fields
 foreach($cot_extrafields['users'] as $i => $row)
 {
-	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']), cot_build_extrafields('user',  $row, htmlspecialchars($ruser['extrafields'][$row['field_name']])));
+	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'],  $row, htmlspecialchars($ruser['extrafields'][$row['field_name']])));
 	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 

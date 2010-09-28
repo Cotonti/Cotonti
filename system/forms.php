@@ -209,11 +209,10 @@ function cot_selectbox_countries($chosen, $name, $add_empty = true, $attrs = '')
  * @param string $name Variable name preffix
  * @param int $max_year Max. year possible
  * @param int $min_year Min. year possible
- * @param string $ext Variable name suffix
  * @param bool $usertimezone Use user timezone
  * @return string
  */
-function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $ext='', $usertimezone = true)
+function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030, $min_year = 2000, $usertimezone = true)
 {
 	global $L, $R, $usr;
 	$name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
@@ -242,16 +241,16 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 	$months[11] = $L['November'];
 	$months[12] = $L['December'];
 
-	$year = cot_selectbox($s_year, $name.'[year]'.$ext, range($min_year, $max_year));
-	$month = cot_selectbox($s_month, $name.'[month]'.$ext, array_keys($months), array_values($months));
-	$day = cot_selectbox($s_day, $name.'[day]'.$ext, range(1, 31));
+	$year = cot_selectbox($s_year, $name.'[year]', range($min_year, $max_year));
+	$month = cot_selectbox($s_month, $name.'[month]', array_keys($months), array_values($months));
+	$day = cot_selectbox($s_day, $name.'[day]', range(1, 31));
 
 	$range = array();
 	for ($i = 0; $i < 24; $i++)
 	{
 		$range[] = sprintf('%02d', $i);
 	}
-	$hour = cot_selectbox($s_hour, $name.'[hour]'.$ext, $range);
+	$hour = cot_selectbox($s_hour, $name.'[hour]', $range);
 
 	$range = array();
 	for ($i = 0; $i < 60; $i++)
@@ -259,7 +258,7 @@ function cot_selectbox_date($utime, $mode = 'long', $name = '', $max_year = 2030
 		$range[] = sprintf('%02d', $i);
 	}
 
-	$minute = cot_selectbox($s_minute, $name.'[minute]'.$ext, $range);
+	$minute = cot_selectbox($s_minute, $name.'[minute]', $range);
 
 	$rc = empty($R["input_date_{$mode}"]) ? 'input_date' : "input_date_{$mode}";
 	$rc = empty($R["input_date_{$name}"]) ? $rc : "input_date_{$name}";
