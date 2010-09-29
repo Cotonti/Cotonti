@@ -110,13 +110,14 @@ label input			{ vertical-align:middle; }
 .clear	{ clear:both; }
 .lhn	{ line-height:normal; }
 .strong	{ font-weight:bold; }
-.italics{ font-style:italics; }
+.italic	{ font-style:italic; }
 
 .small	{ font-size:.9em!important; line-height:1.6em; }
 .large	{ font-size:1.1em!important; }
 
 .lower		{ text-transform:lowercase; }
 .upper		{ text-transform:uppercase; }
+.capital	{ text-transform:capitalize; }
 
 .textleft		{ text-align:left; }
 .textcenter		{ text-align:center; }
