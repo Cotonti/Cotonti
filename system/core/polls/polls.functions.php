@@ -18,10 +18,10 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
     global $error_string;
     $poll_options ='';
 
-    $mask_edit_form ="<div %1\$s>
-        <input type='hidden' name='poll_option_id[]' value='%2\$s' />
-        <input  class='tbox' type='text' name='poll_option[]' size='40' value='%3\$s' maxlength='128' />
-        <input  name='addoption' value='x' onclick='removeAns(this)' type='button' /></div>";
+    $mask_edit_form ='<div class="%1$s">
+        <input type="hidden" name="poll_option_id[]" value="%2$s" />
+        <input class="tbox" type="text" name="poll_option[]" size="40" value="%3$s" maxlength="128" />
+        <input name="addoption" value="x" onclick="removeAns(this)" type="button" /></div>';
 
 
     if(!empty($error_string))
@@ -102,7 +102,7 @@ function sed_poll_edit_form($id, $t, $block='', $type='')
 <script type="text/javascript">
 //<![CDATA[
 
-document.write('<style type="text/css">.noscript{display:none;} .script{display:inherit;} </style>');
+$('head').append('<style type="text/css">.noscript{display:none;} .script{display:inherit;} </style>');
 
 
 var ansCount = $counter;
