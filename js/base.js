@@ -104,7 +104,7 @@ function ajaxSend(settings) {
 		},
 		success: function(msg) {
 			$('#loading').remove();
-			$('#' + settings.divId).html(msg).hide().stop().fadeIn('slow');
+			$('#' + settings.divId).fadeOut().replaceWith(msg).fadeIn();
 		},
 		error: function(msg) {
 			$('#loading').remove();
