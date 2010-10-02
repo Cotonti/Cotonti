@@ -409,6 +409,14 @@ $L['foo_sqltotal'] = 'Общее время SQL';
 $L['foo_sqlaverage'] = 'Среднее время SQL';
 
 /**
+ * Extra fields
+ */
+
+$L['field_pregmatch'] = 'Значение поля не верное';
+$L['field_notinarray'] = 'Значение поля не верное';
+$L['field_required'] = 'Поле должно быть заполнено';
+
+/**
  * Ratings
  */
 

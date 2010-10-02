@@ -38,12 +38,13 @@ function cot_build_extrafields($name, $extrafield, $data)
 
 		case "select":
 			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
+			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
 			$ii = 0;
 			foreach ($opt_array as $var)
 			{
 				$ii++;
-				$options_titles[$ii] = (!empty($L[$name.'_'.$extrafield['field_name'].'_'.$var])) ? $L[$name.'_'.$extrafield['field_name'].'_'.$var] : $var;
+				$options_titles[$ii] = (!empty($L[$extrafield['field_name'].'_'.$var])) ? $L[$extrafield['field_name'].'_'.$var] : $var;
 				$options_values[$ii] .= trim($var);
 			}
 			$result = cot_selectbox(trim($data), $name, $options_values, $options_titles, false);
@@ -51,6 +52,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 
 		case "radio":
 			$R["input_radio_{$rc_name}"] = (!empty($R["input_radio_{$rc_name}"])) ? $R["input_radio_{$rc_name}"] :  $extrafield['field_html'];
+			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
 			if (count($opt_array) > 0)
 			{
@@ -58,7 +60,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 				foreach ($opt_array as $var)
 				{
 					$ii++;
-					$options_titles[$ii] = (!empty($L[$name.'_'.$extrafield['field_name'].'_'.$var])) ? $L[$name.'_'.$extrafield['field_name'].'_'.$var] : $var;
+					$options_titles[$ii] = (!empty($L[$extrafield['field_name'].'_'.$var])) ? $L[$extrafield['field_name'].'_'.$var] : $var;
 					$options_values[$ii] .= trim($var);
 				}
 			}
@@ -88,29 +90,47 @@ function cot_build_extrafields($name, $extrafield, $data)
  */
 function cot_import_extrafields($name, $extrafield, $source='P')
 {
-	$inputname = ($source == 'D') ? $name : 'r'.$name.$extrafield['field_name'];
+	global $L;
 	switch($extrafield['field_type'])
 	{
 		case "input":
+			$import = cot_import($inputname, $source, 'HTM');
+			if (!empty($extrafield['field_variants']) && !is_null($import) && !preg_match($extrafield['field_variants'], $import))
+			{
+				$L['field_pregmatch_'.$extrafield['field_name']] = (isset($L['field_pregmatch_'.$extrafield['field_name']])) ? $L['field_pregmatch_'.$extrafield['field_name']] : $L['field_pregmatch'];
+				cot_error('field_pregmatch_'.$extrafield['field_name'], $name);
+			}
+			break;
+
 		case "textarea":
-		case "select":
-		case "radio":
 			$import = cot_import($inputname, $source, 'HTM');
 			break;
 
-		case "checkbox":
-			$import = cot_import($inputname, $source, 'BOL');
-			if ($extrafield['field_type'] == 'checkbox' && !is_null($import))
+		case "select":
+		case "radio":
+			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
+			$opt_array = explode(",", trim($extrafield['field_variants']));
+			$import = cot_import($inputname, $source, 'HTM');
+			if(!is_null($import) && !in_array(trim($import), $opt_array))
 			{
-				$import = $import != '';
+				$L['field_notinarray_'.$extrafield['field_name']] = (isset($L['field_notinarray_'.$extrafield['field_name']])) ? $L['field_notinarray_'.$extrafield['field_name']] : $L['field_notinarray'];
+				cot_error('field_notinarray_'.$extrafield['field_name'], $name);
 			}
+			break;
+
+		case "checkbox":
+			$import = cot_import($inputname, $source, 'BOL') ? 1 : 0;
 			break;
 
 		case "datetime":
 			$import = cot_import_date($inputname, true, false, $source);
 			break;
 	}
-
+	if (is_null($import) && $extrafield['field_required'])
+	{
+		$L['field_required_'.$extrafield['field_name']] = (isset($L['field_required_'.$extrafield['field_name']])) ? $L['field_required_'.$extrafield['field_name']] : $L['field_required'];
+		cot_error('field_required_'.$extrafield['field_name'], $name);
+	}
 	return  $import;
 }
 
