@@ -69,26 +69,27 @@ cot_online_update();
 
 $cfg['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['maxrowsperpage'] * 2 : $cfg['maxrowsperpage'];
 
-$join_ratings_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
-$join_ratings_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_ratings as r ON r.rating_code=CONCAT('p',p.page_id)";
+$join_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
+$join_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_ratings as r ON r.rating_code=CONCAT('p',p.page_id)";
 
 $c = (empty($cot_cat[$c]['title'])) ? 'all' : $c;
 cot_die((empty($cot_cat[$c]['title'])) && !$usr['isadmin']);
 
-$where = "(page_state=0 OR page_state=2) ";
+$where['state'] = "(page_state=0 OR page_state=2)";
 if ($c == 'unvalidated')
 {
-	$where = "page_state = 1 AND page_ownerid = " . $usr['id'];
+	$where['state'] = "page_state = 1";
+	$where['ownerid'] = "page_ownerid = " . $usr['id'];
 	$cat['title'] = $L['pag_validation'];
 	$cat['desc'] = $L['pag_validation_desc'];
 }
 elseif ($c != 'all')
 {
-	$catwhere = " AND page_cat='$c'";
+	$where['cat'] = "page_cat='$c'";
 }
 if (!empty($o) && !empty($p) && $p != 'password')
 {
-	$where .= " AND page_$o='$p'";
+	$where['filter'] .= "page_$o='$p'";
 }
 $list_url_path = array('c' =>$c, 's' => $s, 'w' => $w, 'ord' => $o, 'p' => $p);
 $list_url = cot_url('page', $list_url_path);
@@ -102,11 +103,11 @@ foreach (cot_getextplugins('page.list.query') as $pl)
 
 if(empty($sql_string))
 {
-	$sql_count = "SELECT COUNT(*) FROM $db_pages WHERE $where $catwhere";
-	$sql_string = "SELECT p.*, u.* ".$join_ratings_columns."
-		FROM $db_pages as p ".$join_ratings_condition."
+	$sql_count = "SELECT COUNT(*) FROM $db_pages as p ".$join_condition." WHERE ".implode(" AND ", $where);
+	$sql_string = "SELECT p.*, u.* ".$join_columns."
+		FROM $db_pages as p ".$join_condition."
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE $where $catwhere
+		WHERE ".implode(" AND ", $where)."
 		ORDER BY page_$s $w LIMIT $d, ".$cfg['maxrowsperpage'];
 }
 $sql = cot_db_query($sql_count);

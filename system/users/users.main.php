@@ -81,54 +81,50 @@ if(!empty($sq))
 	$y = $sq;
 }
 
-if ($s == 'grplevel' || $s == 'grptitle')
+if ($s == 'grplevel' || $s == 'grptitle' || $gm > 1)
 {
-	$sqljoin = "as u LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp";
-	$sqlu = 'u.';
-}
-else
-{
-	$sqljoin = $sqlu = '';
+	$join_condition = "LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp";
 }
 
 if($f == 'search' && mb_strlen($y) > 1)
 {
 	$sq = $y;
 	$title .= $cfg['separator']." ". $L['Search']." '".htmlspecialchars($y)."'";
-	$sqlmask = "$sqljoin WHERE {$sqlu}user_name LIKE '%".cot_db_prep($y)."%'";
+	$where['namelike'] = "user_name LIKE '%".cot_db_prep($y)."%'";
 }
 elseif($g > 1)
 {
 	$title .= $cfg['separator']." ".$L['Maingroup']." = ".cot_build_group($g);
-	$sqlmask = "$sqljoin WHERE {$sqlu}user_maingrp=$g";
+	$where['maingrp'] = "user_maingrp=$g";
 }
 elseif($gm > 1)
 {
 	$title .= $cfg['separator']." ".$L['Group']." = ".cot_build_group($gm);
-	$sqlmask = "as u ".(empty($sqljoin) ? '' : "LEFT JOIN $db_groups as g ON g.grp_id=u.user_maingrp ")."LEFT JOIN $db_groups_users as m ON m.gru_userid=u.user_id WHERE m.gru_groupid=$gm";
+	$join_condition .= " LEFT JOIN $db_groups_users as m ON m.gru_userid=u.user_id";
+	$where['maingrp'] = "m.gru_groupid=".$gm;
 }
 elseif(mb_substr($f, 0, 8) == 'country_')
 {
 	$cn = mb_strtolower(mb_substr($f, 8, 2));
 	$title .= $cfg['separator']." ".$L['Country']." '";
 	$title .= ($cn == '00') ? $L['None']."'" : $cot_countries[$cn]."'";
-	$sqlmask = "$sqljoin WHERE {$sqlu}user_country='$cn'";
+	$where['country'] = "user_country='$cn'";
 }
 else//if($f == 'all')
 {
-	$sqlmask = "$sqljoin WHERE 1";
+	$where['1'] = "1";
 }
 
 switch ($s)
 {
 	case 'grplevel':
-		$sqlorder = "ORDER BY g.grp_level $w";
+		$sqlorder = "g.grp_level $w";
 	break;
 	case 'grptitle':
-		$sqlorder = "ORDER BY g.grp_title $w";
+		$sqlorder = "g.grp_title $w";
 	break;
 	default:
-		$sqlorder = "ORDER BY user_$s $w";
+		$sqlorder = "user_$s $w";
 	break;
 }
 
@@ -141,9 +137,9 @@ foreach (cot_getextplugins('users.query') as $pl)
 }
 /* ===== */
 
-$sql = cot_db_query("SELECT COUNT(*) FROM $db_users $sqlmask");
+$sql = cot_db_query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE $where");
 $totalusers = cot_db_result($sql, 0, "COUNT(*)");
-$sql = cot_db_query("SELECT * FROM $db_users $sqlmask $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
+$sql = cot_db_query("SELECT u.* $join_columns FROM $db_users AS u $join_condition  WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
