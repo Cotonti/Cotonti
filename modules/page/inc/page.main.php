@@ -48,7 +48,7 @@ $cat = $cot_cat[$pag['page_cat']];
 $sys['sublocation'] = $pag['page_title'];
 cot_online_update();
 
-$pag['page_begin_noformat'] = $pag['page_begin'];
+$pag['page_begin_noformat'] = $pag['page_date'];
 $pag['page_tab'] = (empty($pg)) ? 0 : $pg;
 $pag['page_pageurl'] = (empty($al)) ? cot_url('page', 'id='.$id) : cot_url('page', 'al='.$al);
 
@@ -70,7 +70,7 @@ elseif (mb_substr($pag['page_text'], 0, 8) == 'include:')
 {
 	$pag['page_text'] = cot_readraw('datas/html/'.trim(mb_substr($pag['page_text'], 8, 255)));
 }
-if ($pag['page_file'] && $sys['now_offset'] > $pag['page_begin_noformat'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_download']) || $pag['page_file'] == 1))
+if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_download']) || $pag['page_file'] == 1))
 {
 	/* === Hook === */
 	foreach (cot_getextplugins('page.download.first') as $pl)

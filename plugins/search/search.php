@@ -245,7 +245,7 @@ if (!empty($sq))
 		$pagsql .= $addfields_sql.")";
 
 		$sql = cot_db_query("SELECT SQL_CALC_FOUND_ROWS * FROM $db_pages
-					WHERE $pagsql $where AND page_state = '0' AND page_cat <> 'system'
+					WHERE $pagsql $where AND page_state = '0' AND page_cat <> 'system' AND page_date <= ".(int)$sys['now_offset']."
 					ORDER BY page_".$rsearch['pag']['sort']." ".$rsearch['pag']['sort2']." LIMIT $d, ".$cfg['plugin']['search']['maxitems']);
 		$items = cot_db_numrows($sql);
 		$totalitems[] = cot_db_foundrows();

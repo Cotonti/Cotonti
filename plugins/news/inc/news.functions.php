@@ -57,7 +57,7 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 	$way = $cot_cat[$cat]['way'];
 
 	$where = "page_state=0 AND page_cat <> 'system' AND page_begin<'".$sys['now_offset']."'
-		AND page_expire>'".$sys['now_offset']."' AND page_cat IN ('".implode("','", $catsub)."')";
+		AND page_expire>'".$sys['now_offset']."' AND page_date <= ".(int)$sys['now_offset']." AND page_cat IN ('".implode("','", $catsub)."')";
 	/* === Hook - Part2 : Include === FIRST === */
 	foreach ($news_first_extp as $pl)
 	{
