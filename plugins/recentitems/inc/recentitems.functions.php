@@ -213,7 +213,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	else
 	{
 		//and ft_lastposterid!=".$usr['id']."
-		$where = "WHERE page_date >= $mode AND page_state=0 AND page_cat <> 'system' ".$incat;
+		$where = "WHERE page_date >= $mode AND page_date <= ".(int)$sys['now_offset']." AND page_state=0 AND page_cat <> 'system' ".$incat;
 		$sql = cot_db_query("SELECT COUNT(*) FROM $db_pages ".$where);
 		$totalrecent['pages'] = $maxperpage;
 	}

@@ -91,6 +91,10 @@ if (!empty($o) && !empty($p) && $p != 'password')
 {
 	$where['filter'] .= "page_$o='$p'";
 }
+if (!$usr['isadmin'])
+{
+	$where['date'] = "page_date <= ".(int)$sys['now_offset'];
+}
 $list_url_path = array('c' =>$c, 's' => $s, 'w' => $w, 'ord' => $o, 'p' => $p);
 $list_url = cot_url('page', $list_url_path);
 
