@@ -409,6 +409,14 @@ $L['foo_sqltotal'] = 'SQL total time';
 $L['foo_sqlaverage'] = 'Average SQL time';
 
 /**
+ * Extra fields
+ */
+
+$L['field_pregmatch'] = 'Field value is not true';
+$L['field_notinarray'] = 'Field value is not true';
+$L['field_required'] = 'Field must be filled';
+
+/**
  * Ratings
  */
 
