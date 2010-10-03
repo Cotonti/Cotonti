@@ -311,116 +311,13 @@ $extp = cot_getextplugins('page.list.loop');
 while ($pag = cot_db_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
 {
 	$jj++;
-	$pag['page_desc'] = htmlspecialchars($pag['page_desc']);
-	$page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
-	$pag['page_pageurl'] = cot_url('page', $page_urlp);
-
-	if (!empty($pag['page_url']) && $pag['page_file'])
-	{
-		$dotpos = mb_strrpos($pag['page_url'], ".") + 1;
-		$type = mb_strtolower(mb_substr($pag['page_url'], $dotpos, 5));
-		$pag['page_fileicon'] = cot_rc('page_icon_file_path');
-		if (!file_exists($pag['page_fileicon']))
-		{
-			$pag['page_fileicon'] = cot_rc('page_icon_file_default');
-		}
-		$pag['page_fileicon'] = cot_rc('page_icon_file', array('icon' => $pag['page_fileicon']));
-	}
-	else
-	{
-		$pag['page_fileicon'] = '';
-	}
-
-	$pag['admin'] = $usr['isadmin'] ? cot_rc('list_link_row_admin', array('unvalidate_url' => cot_url('admin', "m=page&a=unvalidate&id=".$pag['page_id']."&".cot_xg()),'edit_url' => cot_url('page', "m=edit&id=".$pag['page_id']))) : '';
-
-	list($list_ratings, $list_ratings_display) = cot_build_ratings('p'.$pag['page_id'], cot_url('page', 'id='.$pag['page_id']), $ratings);
-
+	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));
 	$t->assign(array(
-		"LIST_ROW_URL" => $pag['page_pageurl'],
-		"LIST_ROW_ID" => $pag['page_id'],
-		"LIST_ROW_ALIAS" => $pag['page_alias'],
-		"LIST_ROW_CAT" => $pag['page_cat'],
-		"LIST_ROW_KEY" => htmlspecialchars($pag['page_key']),
-		"LIST_ROW_TITLE" => htmlspecialchars($pag['page_title']),
-		"LIST_ROW_DESC" => $pag['page_desc'],
-		"LIST_ROW_DESC_OR_TEXT" => cot_cutpost($pag['page_text'], 200, false),
-		"LIST_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
-		"LIST_ROW_OWNER" => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-		"LIST_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
-		"LIST_ROW_FILEURL" => empty($pag['page_url']) ? '' : cot_url('page', 'id='.$pag['page_id'].'&a=dl'),
-		"LIST_ROW_SIZE" => $pag['page_size'],
-		"LIST_ROW_COUNT" => $pag['page_count'],
-		"LIST_ROW_FILEICON" => $pag['page_fileicon'],
-		"LIST_ROW_FILECOUNT" => $pag['page_filecount'],
-		"LIST_ROW_JUMP" => cot_url('page', $page_urlp.'&a=dl'),
-		"LIST_ROW_RATINGS" => $list_ratings,
-		"LIST_ROW_ADMIN" => $pag['admin'],
-		"LIST_ROW_ODDEVEN" => cot_build_oddeven($jj),
-		"LIST_ROW_NUM" => $jj
+		'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
+		'LIST_ROW_ODDEVEN' => cot_build_oddeven($jj),
+		'LIST_ROW_NUM' => $jj
 	));
-	$t->assign(cot_generate_usertags($pag, "LIST_ROW_OWNER_"));
-
-	// Adding LIST_ROW_TEXT tag
-	switch ($pag['page_type'])
-	{
-		case 1:
-			$t->assign("LIST_ROW_TEXT", $pag['page_text']);
-		break;
-
-		case 2:
-			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-			{
-				ob_start();
-				eval($pag['page_text']);
-				$t->assign("LIST_ROW_TEXT", ob_get_clean());
-			}
-			else
-			{
-				$t->assign("LIST_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\"."); // TODO - i18n
-			}
-		break;
-
-		default:
-
-			if ($cfg['parser_cache'])
-			{
-				if (empty($pag['page_html']) && !empty($pag['page_text']))
-				{
-					$pag['page_html'] = cot_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-					cot_db_query("UPDATE $db_pages SET page_html = '".cot_db_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
-				}
-				$readmore = mb_strpos($pag['page_html'], "<!--more-->");
-				if ($readmore > 0)
-				{
-					$pag['page_html'] = mb_substr($pag['page_html'], 0, $readmore);
-				    $pag['page_html'] .= cot_rc('list_link_page_html', array('page_url'=> $pag['page_pageurl'])); // TODO - to resorses
-
-				}
-				$html = $cfg['parsebbcodepages'] ? cot_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
-				$t->assign('LIST_ROW_TEXT', $html);
-			}
-			else
-			{
-				$readmore = mb_strpos($pag['page_text'], "[more]");
-				$text = cot_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-				if ($readmore > 0)
-				{
-					$pag['page_text'] = mb_substr($pag['page_text'], 0, $readmore);
-					$pag['page_text'] .= cot_rc('list_link_page_text', array('page_url'=> $pag['page_pageurl'])); // TODO - to resorses
-				}
-				$text = cot_post_parse($text, 'pages');
-				$t->assign('LIST_ROW_TEXT', $text);
-			}
-		break;
-	}
-
-	// Extra fields for pages
-	foreach ($cot_extrafields['pages'] as $row_p)
-	{
-		$uname = strtoupper($row_p['field_name']);
-		$t->assign('LIST_ROW_'.$uname.'_TITLE', isset($L['page_'.$row_p['field_name'].'_title']) ?  $L['page_'.$row_p['field_name'].'_title'] : $row_p['field_description']);
-		$t->assign('LIST_ROW_'.$uname, cot_build_extrafields_data('page', $row_p, $pag['page_'.$row_p['field_name']]));
-	}
+	$t->assign(cot_generate_usertags($pag, 'LIST_ROW_OWNER_'));
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)

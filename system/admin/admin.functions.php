@@ -282,6 +282,8 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 			break;
 		case 'radio': $sqltype = "VARCHAR(255)";
 			break;
+		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
+			break;
 	}
 	$sql = "ALTER TABLE $location ADD ".$column_prefix."_$name $sqltype ";
 	$step2 = cot_db_query($sql);
@@ -356,6 +358,8 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 		case 'checkbox': $sqltype = "BOOL";
 			break;
 		case 'radio': $sqltype = "VARCHAR(255)";
+			break;
+		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
 			break;
 	}
 	$sql = "ALTER TABLE $location CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";

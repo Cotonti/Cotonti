@@ -92,97 +92,15 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 	{
 		$jj++;
 		$catpath = cot_build_catpath($pag['page_cat']);
-		$pag['page_pageurl'] = (empty($pag['page_alias'])) ? cot_url('page', 'id='.$pag['page_id']) : cot_url('page', 'al='.$pag['page_alias']);
-		$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".htmlspecialchars($pag['page_title'])."</a>";
-
-		$submitnewpage = (cot_auth('page', $cat, 'W')) ? "<a href=\"page.php?m=add&amp;c=$cat\">".$L['Submitnew']."</a>" : '';
-
-		$item_code = 'p'.$pag['page_id'];
-		list($pag['page_ratings'], $pag['page_ratings_display']) = cot_build_ratings($item_code, $pag['page_pageurl'], $ratings);
-
-		switch ($pag['page_type'])
-		{
-			case 2:
-				if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-				{
-					ob_start();
-					eval($pag['page_text']);
-					$news->assign("PAGE_ROW_TEXT", ob_get_clean());
-				}
-				else
-				{
-					$news->assign("PAGE_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
-				}
-			break;
-
-			case 1:
-				$pag_more = ((int)$textlength > 0) ? cot_string_truncate($pag['page_text'], $textlength) : cot_cut_more($pag['page_text']);
-				$news->assign("PAGE_ROW_TEXT", $pag['page_text']);
-			break;
-
-			default:
-				if ($cfg['parser_cache'])
-				{
-					if (empty($pag['page_html']))
-					{
-						$pag['page_html'] = cot_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-						cot_db_query("UPDATE $db_pages SET page_html = '".cot_db_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
-					}
-					$pag['page_html'] = ($cfg['parsebbcodepages']) ?  $pag['page_html'] : htmlspecialchars($pag['page_text']);
-					$pag_more = ((int)$textlength > 0) ? cot_string_truncate($pag['page_html'], $textlength) : cot_cut_more($pag['page_html']);
-					$pag['page_html'] = cot_post_parse($pag['page_html'], 'pages');
-					$news->assign('PAGE_ROW_TEXT', $pag['page_html']);
-				}
-				else
-				{
-					$pag['page_html'] = cot_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-					$pag_more = ((int)$textlength > 0) ? cot_string_truncate($pag['page_html'], $textlength) : cot_cut_more($pag['page_html']);
-					$pag['page_html'] = cot_post_parse($pag['page_html'], 'pages');
-					$news->assign('PAGE_ROW_TEXT', $pag['page_html']);
-				}
-			break;
-		}
-
+		$news->assign(cot_generate_pagetags($pag, "PAGE_ROW_", $textlength));
 		$news->assign(array(
-			"PAGE_ROW_URL" => $pag['page_pageurl'],
-			"PAGE_ROW_ID" => $pag['page_id'],
-			"PAGE_ROW_TITLE" => $pag['page_fulltitle'],
-			"PAGE_ROW_SHORTTITLE" => htmlspecialchars($pag['page_title']),
-			"PAGE_ROW_CAT" => $pag['page_cat'],
-			"PAGE_ROW_CATURL" => cot_url('page', 'c=' . $pag['page_cat']),
-			"PAGE_ROW_CATTITLE" => htmlspecialchars($cot_cat[$pag['page_cat']]['title']),
-			"PAGE_ROW_CATPATH" => $catpath,
-			"PAGE_ROW_CATPATH_SHORT" => "<a href=\"".cot_url('page', 'c='.$pag['page_cat'])."\">".htmlspecialchars($cot_cat[$pag['page_cat']]['title'])."</a>",
-			"PAGE_ROW_NEWSPATH" => "<a href=\"".cot_url('index', 'c='.$pag['page_cat'])."\">".htmlspecialchars($cot_cat[$row['page_cat']]['title'])."</a>",
+			"PAGE_ROW_NEWSPATH" => cot_rc_link(cot_url('index', 'c='.$pag['page_cat']), htmlspecialchars($cot_cat[$row['page_cat']]['title'])),
 			"PAGE_ROW_CATDESC" => htmlspecialchars($cot_cat[$pag['page_cat']]['desc']),
-			"PAGE_ROW_CATICON" => $cot_cat[$pag['page_cat']]['icon'],
-			"PAGE_ROW_KEY" => htmlspecialchars($pag['page_key']),
-			"PAGE_ROW_DESC" => htmlspecialchars($pag['page_desc']),
-			"PAGE_ROW_MORE" => ($pag_more) ? "<span class='readmore'><a href='".$pag['page_pageurl']."'>{$L['ReadMore']}</a></span>" : "",
-			"PAGE_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
 			"PAGE_ROW_OWNER" => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-			"PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
-			"PAGE_ROW_BEGIN" => @date($cfg['formatyearmonthday'], $pag['page_begin'] + $usr['timezone'] * 3600),
-			"PAGE_ROW_EXPIRE" => @date($cfg['formatyearmonthday'], $pag['page_expire'] + $usr['timezone'] * 3600),
-			"PAGE_ROW_FILEURL" => $pag['page_url'],
-			"PAGE_ROW_SIZE" => $pag['page_size'],
-			"PAGE_ROW_COUNT" => $pag['page_count'],
-			"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
-			"PAGE_ROW_RATINGS" => $pag['page_ratings'],
 			"PAGE_ROW_ODDEVEN" => cot_build_oddeven($jj),
 			"PAGE_ROW_NUM" => $jj
 		));
 		$news->assign(cot_generate_usertags($pag, "PAGE_ROW_OWNER_"));
-
-		// Extrafields
-		if (is_array($cot_extrafields['pages']))
-		{
-			foreach ($cot_extrafields['pages'] as $row)
-			{
-				$news->assign('PAGE_ROW_'.strtoupper($row_p['field_name']).'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
-				$news->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), cot_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"]));
-			}
-		}
 
 		/* === Hook - Part2 : Include === LOOP === */
 		foreach ($news_extp as $pl)
@@ -230,7 +148,7 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 		"PAGE_PAGENAV" => $pagenav['main'],
 		"PAGE_PAGEPREV" => $pagenav['prev'],
 		"PAGE_PAGENEXT" => $pagenav['next'],
-		"PAGE_SUBMITNEWPOST" => $submitnewpage,
+		"PAGE_SUBMITNEWPOST" => (cot_auth('page', $cat, 'W')) ? cot_rc_link(cot_url('page', 'm=add&c='.$cat), $L['Submitnew']) : '',
 		"PAGE_CATTITLE" =>$cot_cat[$cat]['title'],
 		"PAGE_CATPATH" =>$catpath,
 		"PAGE_CAT" => $cat

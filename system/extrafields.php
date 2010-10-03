@@ -193,7 +193,7 @@ function cot_load_extrafields()
 		{
 			$cot_extrafields[$row['field_location']][$row['field_name']] = $row;
 		}
-		$cot_extrafields['structure'] = (!empty($cot_extrafields[$GLOBALS['db_structure']])) ? $cot_extrafields[$GLOBALS['db_structure']] : array();
+
 		cot_db_freeresult($fieldsres);
 		$cot_cache && $cot_cache->db->store('cot_extrafields', $cot_extrafields, 'system');
 	}
@@ -202,5 +202,6 @@ function cot_load_extrafields()
 /* ======== Extrafields Pre-load ======== */
 
 cot_load_extrafields();
+$GLOBALS['cot_extrafields']['structure'] = (!empty($GLOBALS['cot_extrafields'][$GLOBALS['db_structure']])) ? $GLOBALS['cot_extrafields'][$GLOBALS['db_structure']] : array();
 
 ?>

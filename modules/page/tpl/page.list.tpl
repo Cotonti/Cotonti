@@ -4,7 +4,7 @@
 			<div class="block">
 				<h2 class="folder">{LIST_CATTITLE}</h2>
 				<!-- BEGIN: LIST_ROW -->
-					<h3><a href="{LIST_ROW_URL}" title="{LIST_ROW_TITLE}">{LIST_ROW_TITLE}</a></h3>
+					<h3>{LIST_ROW_TITLE}</h3>
 					<!-- IF {LIST_ROW_DESC} --><p class="small marginbottom10">{LIST_ROW_DESC}</p><!-- ENDIF -->
 					<!-- IF {PHP.usr.isadmin} --><p class="small marginbottom10">{LIST_ROW_ADMIN} ({LIST_ROW_COUNT})</p><!-- ENDIF -->
 					<hr />
