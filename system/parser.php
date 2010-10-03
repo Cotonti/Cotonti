@@ -571,12 +571,11 @@ function cot_post_parse($text, $area = '')
 /**
  * Cuts the page after 'more' tag or after the first page (if multipage)
  *
- * @param string ptr $html Page body
- * @return bool
+ * @param string $html Page body
+ * @return string
  */
-function cot_cut_more(&$html)
+function cot_cut_more($html)
 {
-	$cutted = false;
 	$mpos = mb_strpos($html, '<!--more-->');
 	if ($mpos === false)
 	{
@@ -585,19 +584,17 @@ function cot_cut_more(&$html)
 	if ($mpos !== false)
 	{
 		$html = mb_substr($html, 0, $mpos);
-		$cutted = true;
 	}
 	$mpos = mb_strpos($html, '[newpage]');
 	if ($mpos !== false)
 	{
 		$html = mb_substr($html, 0, $mpos);
-		$cutted = true;
 	}
 	if (mb_strpos($html, '[title]'))
 	{
 		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
 	}
-	return $cutted;
+	return $html;
 }
 
 /**
@@ -672,23 +669,23 @@ function cot_smilies($res)
  *
  * Cuts a string to the length of $length
  *
- * @param string  ptr $text String to truncate.
+ * @param string  $text String to truncate.
  * @param integer $length Length of returned string, including ellipsis.
  * @param boolean $considerhtml If true, HTML tags would be handled correctly *
  * @param boolean $exact If false, $text will not be cut mid-word
- * @return boolean true if string is trimmed.
+ * @return string trimmed string.
  */
-function cot_string_truncate(&$html, $length = 100, $considerhtml = true, $exact = false)
+function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false)
 {
 	if ($considerhtml)
 	{
 		// if the plain text is shorter than the maximum length, return the whole text
-		if (mb_strlen(preg_replace('/<.*?>/', '', $html)) <= $length)
+		if (mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length)
 		{
-			return false;
+			return $text;
 		}
 		// splits all html-tags to scanable lines
-		preg_match_all('/(<.+?>)?([^<>]*)/s', $html, $lines, PREG_SET_ORDER);
+		preg_match_all('/(<.+?>)?([^<>]*)/s', $text, $lines, PREG_SET_ORDER);
 
 		$total_length = 0;
 		$open_tags = array();
@@ -768,20 +765,20 @@ function cot_string_truncate(&$html, $length = 100, $considerhtml = true, $exact
 	}
 	else
 	{
-		if (mb_strlen($html) <= $length)
+		if (mb_strlen($text) <= $length)
 		{
-			return false;
+			return $text;
 		}
 		else
 		{
-			$truncate = mb_substr($html, 0, $length);
+			$truncate = mb_substr($text, 0, $length);
 		}
 	}
 
 	if (!$exact)
 	{
 		// ...search the last occurance of a space...
-		if (mb_strrpos($truncate, ' ')>0)
+		if (mb_strrpos($truncate, ' ') > 0)
 		{
 			$pos1 = mb_strrpos($truncate, ' ');
 			$pos2 = mb_strrpos($truncate, '>');
@@ -801,9 +798,7 @@ function cot_string_truncate(&$html, $length = 100, $considerhtml = true, $exact
 			$truncate .= '</'.$tag.'>';
 		}
 	}
-	$html =  $truncate;
-	return true;
-
+	return $truncate;
 }
 
 /**

@@ -150,46 +150,9 @@ cot_require('users');
 $mskin = cot_skinfile(array('page', $cat['tpl']));
 $t = new XTemplate($mskin);
 
-$t->assign(array(
-	"PAGE_ID" => $pag['page_id'],
-	"PAGE_STATE" => $pag['page_state'],
-	"PAGE_TITLE" => $pag['page_fulltitle'],
-	"PAGE_SHORTTITLE" => $pag['page_title'],
-	"PAGE_CAT" => $pag['page_cat'],
-	"PAGE_CATURL" => cot_url('page', 'c=' . $pag['page_cat']),
-	"PAGE_CATTITLE" => $cat['title'],
-	"PAGE_CATPATH" => $catpath,
-	"PAGE_CATDESC" => $cat['desc'],
-	"PAGE_CATICON" => $cat['icon'],
-	"PAGE_KEY" => $pag['page_key'],
-	"PAGE_DESC" => $pag['page_desc'],
-	"PAGE_AUTHOR" => $pag['page_author'],
-	"PAGE_OWNER" => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-	"PAGE_DATE" => @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600),
-	"PAGE_BEGIN" => @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600),
-	"PAGE_EXPIRE" => @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600),
-	"PAGE_ALIAS" => $pag['page_alias'],
-	"RAGE_NOTAVAILIBLE" => ($pag['page_begin_noformat'] > $sys['now_offset']) ? $L['pag_notavailable'].cot_build_timegap($sys['now_offset'], $pag['page_begin_noformat']) : '',
-	"PAGE_RATINGS" => $ratings_link,
-	"PAGE_RATINGS_DISPLAY" => $ratings_display
-));
+$t->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', 0, $usr['isadmin']));
+$t->assign('PAGE_OWNER', cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])));
 $t->assign(cot_generate_usertags($pag, "PAGE_ROW_OWNER_"));
-
-// Extra fields for pages
-foreach ($cot_extrafields['pages'] as $i => $row)
-{
-	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGE_'.$uname, cot_build_extrafields_data('page', $row, $pag['page_'.$row['field_name']]));
-	$t->assign('PAGE_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
-}
-
-// Extra fields for structure
-foreach ($cot_extrafields['structure'] as $i => $row)
-{
-	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGE_CAT_'.$uname, cot_build_extrafields_data('structure', $row, $cat[$row['field_name']]));
-	$t->assign('PAGE_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row['field_name'].'_title']) ?  $L['structure_'.$row['field_name'].'_title'] : $row['field_description']);
-}
 
 if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])
 {
@@ -256,7 +219,7 @@ switch($pag['page_type'])
 $pag['page_file'] = intval($pag['page_file']);
 if ($pag['page_file'] > 0)
 {
-	if ($sys['now_offset'] > $pag['page_begin_noformat'])
+	if ($sys['now_offset'] > $pag['page_date'])
 	{
 		if (!empty($pag['page_url']))
 		{

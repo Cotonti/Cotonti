@@ -232,96 +232,16 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		$catpath = cot_build_catpath($pag['page_cat']);
 		if ((int)$titlelength > 0)
 		{
-			if (cot_string_truncate($pag['page_title'], $titlelength, false))
-			{
-				$pag['page_title'].="...";
-			}
+			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titlelength, false))."...";
 		}
-		$pag['page_pageurl'] = (empty($pag['page_alias'])) ? cot_url('page', 'id='.$pag['page_id']) : cot_url('page', 'al='.$pag['page_alias']);
-		$pag['page_fulltitle'] = $catpath." ".$cfg['separator']." <a href=\"".$pag['page_pageurl']."\">".htmlspecialchars($pag['page_title'])."</a>";
-
-		$item_code = 'p'.$pag['page_id'];
-		list($pag['page_ratings'], $pag['page_ratings_display']) = cot_build_ratings($item_code, $pag['page_pageurl'], $ratings);
-
-		switch ($pag['page_type'])
-		{
-			case 2:
-				if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-				{
-					ob_start();
-					eval($pag['page_text']);
-					$recentitems->assign("PAGE_ROW_TEXT", ob_get_clean());
-				}
-				else
-				{
-					$recentitems->assign("PAGE_ROW_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\".");
-				}
-			break;
-
-			case 1:
-				$pag_more = ((int)$textlength>0) ? cot_string_truncate($pag['page_text'], $textlength) : cot_cut_more($pag['page_text']);
-				$recentitems->assign("PAGE_ROW_TEXT", $pag['page_text']);
-			break;
-
-			default:
-				if ($cfg['parser_cache'])
-				{
-					if (empty($pag['page_html']))
-					{
-						$pag['page_html'] = cot_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-						cot_db_query("UPDATE $db_pages SET page_html = '".cot_db_prep($pag['page_html'])."' WHERE page_id = " . $pag['page_id']);
-					}
-					$pag['page_html'] = ($cfg['parsebbcodepages']) ?  $pag['page_html'] : htmlspecialchars($pag['page_text']);
-					$pag_more = ((int)$textlength > 0) ? cot_string_truncate($pag['page_html'], $textlength) : cot_cut_more($pag['page_html']);
-					$pag['page_html'] = cot_post_parse($pag['page_html'], 'pages');
-					$recentitems -> assign('PAGE_ROW_TEXT', $pag['page_html']);
-				}
-				else
-				{
-					$pag['page_html'] = cot_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-					$pag_more = ((int)$textlength > 0) ? cot_string_truncate($pag['page_html'], $textlength) : cot_cut_more($pag['page_html']);
-					$pag['page_html'] = cot_post_parse($pag['page_html'], 'pages');
-					$recentitems -> assign('PAGE_ROW_TEXT', $pag['page_html']);
-				}
-			break;
-		}
-
+		$recentitems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textlength));
 		$recentitems->assign(array(
-			"PAGE_ROW_URL" => $pag['page_pageurl'],
-			"PAGE_ROW_ID" => $pag['page_id'],
-			"PAGE_ROW_TITLE" => $pag['page_fulltitle'],
 			"PAGE_ROW_SHORTTITLE" => htmlspecialchars($pag['page_title']),
-			"PAGE_ROW_CAT" => $pag['page_cat'],
-			"PAGE_ROW_CATTITLE" => htmlspecialchars($cot_cat[$pag['page_cat']]['title']),
-			"PAGE_ROW_CATPATH" => $catpath,
-			"PAGE_ROW_CATPATH_SHORT" => "<a href=\"".cot_url('page', 'c='.$pag['page_cat'])."\">".htmlspecialchars($cot_cat[$pag['page_cat']]['title'])."</a>",
-			"PAGE_ROW_CATDESC" => htmlspecialchars($cot_cat[$pag['page_cat']]['desc']),
-			"PAGE_ROW_CATICON" => $cot_cat[$pag['page_cat']]['icon'],
-			"PAGE_ROW_KEY" => htmlspecialchars($pag['page_key']),
-			"PAGE_ROW_DESC" => htmlspecialchars($pag['page_desc']),
-			"PAGE_ROW_MORE" => ($pag_more) ? "<span class='readmore'><a href='".$pag['page_pageurl']."'>{$L['ReadMore']}</a></span>" : "",
-			"PAGE_ROW_AUTHOR" => htmlspecialchars($pag['page_author']),
 			"PAGE_ROW_OWNER" => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-			"PAGE_ROW_DATE" => @date($cfg['formatyearmonthday'], $pag['page_date'] + $usr['timezone'] * 3600),
-			"PAGE_ROW_FILEURL" => $pag['page_url'],
-			"PAGE_ROW_SIZE" => $pag['page_size'],
-			"PAGE_ROW_COUNT" => $pag['page_count'],
-			"PAGE_ROW_FILECOUNT" => $pag['page_filecount'],
-			"PAGE_ROW_RATINGS" => $pag['page_ratings'],
 			"PAGE_ROW_ODDEVEN" => cot_build_oddeven($jj),
 			"PAGE_ROW_NUM" => $jj
 		));
 		$recentitems->assign(cot_generate_usertags($pag, "PAGE_ROW_OWNER_"));
-
-		//extrafields
-		if (is_array($cot_extrafields['pages']))
-		{
-			foreach ($cot_extrafields['pages'] as $row)
-			{
-				$recentitems->assign('PAGE_ROW_'.strtoupper($row_p['field_name']).'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
-				$recentitems->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']), cot_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"]));
-			}
-		}
 
 		/* === Hook - Part2 === */
 		foreach ($extp as $pl)

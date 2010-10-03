@@ -395,118 +395,19 @@ while ($row = cot_db_fetcharray($sql))
 	$sql4 = cot_db_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$cot_cat[$row["page_cat"]]['rpath']."%' ");
 	$sub_count = cot_db_result($sql4, 0, "SUM(structure_pagecount)");
 	$row['page_file'] = intval($row['page_file']);
-	if (!empty($row['page_url']) && $row['page_file'] > 0)
-	{
-		$dotpos = mb_strrpos($row['page_url'], '.') + 1;
-		$fileex = mb_strtolower(mb_substr($row['page_url'], $dotpos, 5));
-		$row['page_fileicon'] = 'images/pfs/'.$fileex.'.gif';
-		if (!file_exists($row['page_fileicon']))
-		{
-			$row['page_fileicon'] = 'images/admin/page.gif';
-		}
-		$row['page_fileicon'] = '<img src="'.$row['page_fileicon'].'" alt="'.$fileex.'" />';
-	}
-	else
-	{
-		$row['page_fileicon'] = '';
-	}
-
+	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
 	$t->assign(array(
-		'ADMIN_PAGE_ID' => $row['page_id'],
 		'ADMIN_PAGE_ID_URL' => cot_url('page', 'id='.$row['page_id']),
-		'ADMIN_PAGE_URL' => $row['page_pageurl'],
-		'ADMIN_PAGE_TITLE' => $row['page_fulltitle'],
-		'ADMIN_PAGE_SHORTTITLE' => htmlspecialchars($row['page_title']),
 		'ADMIN_PAGE_TYPE' => $page_type,
-		'ADMIN_PAGE_DESC' => htmlspecialchars($row['page_desc']),
-		'ADMIN_PAGE_AUTHOR' => htmlspecialchars($row['page_author']),
 		'ADMIN_PAGE_OWNER' => cot_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
 		'ADMIN_PAGE_OWNER_AVATAR' => cot_build_userimage($row['user_avatar'], 'avatar'),
-		'ADMIN_PAGE_DATE' => date($cfg['dateformat'], $row['page_date'] + $usr['timezone'] * 3600),
-		'ADMIN_PAGE_BEGIN' => date($cfg['dateformat'], $row['page_begin'] + $usr['timezone'] * 3600),
-		'ADMIN_PAGE_EXPIRE' => date($cfg['dateformat'], $row['page_expire'] + $usr['timezone'] * 3600),
-		'ADMIN_PAGE_ADMIN_COUNT' => $row['page_count'],
-		'ADMIN_PAGE_KEY' => htmlspecialchars($row['page_key']),
-		'ADMIN_PAGE_ALIAS' => htmlspecialchars($row['page_alias']),
-		'ADMIN_PAGE_FILE' => $cot_yesno[$row['page_file']],
 		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
-		'ADMIN_PAGE_FILE_URL' => $row['page_url'],
-		'ADMIN_PAGE_FILE_URL_FOR_DOWNLOAD' => cot_url('page', 'id='.$row['page_id'].'&a=dl'),
-		'ADMIN_PAGE_FILE_NAME' => basename($row['page_url']),
-		'ADMIN_PAGE_FILE_SIZE' => $row['page_size'],
-		'ADMIN_PAGE_FILE_COUNT' => $row['page_filecount'],
-		'ADMIN_PAGE_FILE_ICON' => $row['page_fileicon'],
 		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$d.'&'.cot_xg()),
 		'ADMIN_PAGE_URL_FOR_DELETED' => cot_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$d.'&'.cot_xg()),
 		'ADMIN_PAGE_URL_FOR_EDIT' => cot_url('page', 'm=edit&id='.$row['page_id'].'&r=adm'),
 		'ADMIN_PAGE_ODDEVEN' => cot_build_oddeven($ii),
-		'ADMIN_PAGE_CAT_URL' => cot_url('page', 'c='.$row['page_cat']),
-		'ADMIN_PAGE_CAT' => $row['page_cat'],
-		'ADMIN_PAGE_CAT_TITLE' => $cot_cat[$row['page_cat']]['title'],
-		'ADMIN_PAGE_CATPATH' => $catpath,
-		'ADMIN_PAGE_CATDESC' => $cot_cat[$row['page_cat']]['desc'],
-		'ADMIN_PAGE_CATICON' => $cot_cat[$row['page_cat']]['icon'],
 		'ADMIN_PAGE_CAT_COUNT' => $sub_count
 	));
-
-	// Extra fields for structure
-	foreach ($cot_extrafields['structure'] as $row_c)
-	{
-		$uname = strtoupper($row_c['field_name']);
-		$t->assign('ADMIN_PAGE_CAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
-		$t->assign('ADMIN_PAGE_CAT_'.$uname, cot_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $cot_cat[$row['page_cat']][$row_c['field_name']]));
-	}
-
-	// Extra fields for pages
-	foreach ($cot_extrafields['pages'] as $row_p)
-	{
-		$uname = strtoupper($row_p['field_name']);
-		$t->assign('ADMIN_PAGE_'.$uname.'_TITLE', isset($L['page_'.$row_p['field_name'].'_title']) ?  $L['page_'.$row_p['field_name'].'_title'] : $row_p['field_description']);
-		$t->assign('ADMIN_PAGE_'.$uname, cot_build_extrafields_data('page', $row_p['field_type'], $row_p['field_name'], $row['page_'.$row_p['field_name']]));
-	}
-
-	switch($row['page_type'])
-	{
-		case 2:
-			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-			{
-				ob_start();
-				eval($row['page_text']);
-				$t->assign('ADMIN_PAGE_TEXT', ob_get_clean());
-			}
-			else
-			{
-				$t->assign('ADMIN_PAGE_TEXT', 'The PHP mode is disabled for pages.<br />Please see the administration panel, then "Configuration", then "Parsers".');
-			}
-		break;
-
-		case 1:
-			$row_more = ((int)$textlength > 0) ? cot_string_truncate($row['page_text'], $textlength) : cot_cut_more($row['page_text']);
-			$t->assign('ADMIN_PAGE_TEXT', $row['page_text']);
-		break;
-
-		default:
-			if($cfg['parser_cache'])
-			{
-				if(empty($row['page_html']))
-				{
-					$row['page_html'] = cot_parse(htmlspecialchars($row['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-					cot_db_query("UPDATE $db_pages SET page_html = '".cot_db_prep($row['page_html'])."' WHERE page_id = " . $row['page_id']);
-				}
-				$row['page_html'] = ($cfg['parsebbcodepages']) ?  $row['page_html'] : htmlspecialchars($row['page_text']);
-				$row_more = ((int)$textlength>0) ? cot_string_truncate($row['page_html'], $textlength) : cot_cut_more($row['page_html']);
-				$row['page_html'] = cot_post_parse($row['page_html'], 'pages');
-				$t->assign('ADMIN_PAGE_TEXT', $row['page_html']);
-			}
-			else
-			{
-				$row['page_html'] = cot_parse(htmlspecialchars($row['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-				$row_more = ((int)$textlength>0) ? cot_string_truncate($row['page_html'], $textlength) : cot_cut_more($row['page_html']);
-				$row['page_html'] = cot_post_parse($row['page_html'], 'pages');
-				$t->assign('ADMIN_PAGE_TEXT', $row['page_html']);
-			}
-		break;
-	}
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
