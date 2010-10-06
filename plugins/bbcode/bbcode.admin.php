@@ -160,7 +160,7 @@ foreach (cot_getextplugins('admin.bbcode.tags') as $pl)
 	include $pl;
 }
 /* ===== */
-
+$bb_t->parse('MAIN');
 $plugin_body = $bb_t->text('MAIN');
 
 ?>
