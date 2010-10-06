@@ -83,6 +83,7 @@ $R['img_none'] = '<img src="{$src}" alt="'.$L['Image'].'" />';
 $R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt="" />';
 $R['img_photo'] = '<img src="{$src}" alt="'.$L['Photo'].'" class="photo" />';
 $R['img_sig'] = '<img src="{$src}" alt="'.$L['Signature'].'" class="signature" />';
+$R['img_smilie'] = '<img src="{$src}" alt="{$name}" class="icon" />';
 $R['link_catpath'] = '<a href="{$url}" title="{$title}">{$title}</a>';
 
 /**

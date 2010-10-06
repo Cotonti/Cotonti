@@ -1,25 +1,27 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=tools
+[END_COT_EXT]
+==================== */
+
 /**
- * Administration panel - BBCode editor
+ * BBcode management interface
  *
- * @package Cotonti
+ * @package bbcode
  * @version 0.7.0
- * @author Trustmaster, Cotonti Team
+ * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
-(defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
+defined('COT_CODE') or die('Wrong URL');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
-cot_block($usr['isadmin']);
+cot_require_lang('bbcode', 'plug');
 
-cot_require_api('parser');
+$bb_t = new XTemplate(cot_skinfile('bbcode.admin', true));
 
-$t = new XTemplate(cot_skinfile('admin.bbcode'));
-
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=bbcode'), $L['adm_bbcodes']);
+$plugin_title = $L['adm_bbcodes'];
 $adminhelp = $L['adm_help_bbcodes'];
 
 $a = cot_import('a', 'G', 'ALP');
@@ -105,7 +107,7 @@ $extp = cot_getextplugins('admin.banlist.loop');
 while ($row = cot_db_fetchassoc($res))
 {
 
-	$t->assign(array(
+	$bb_t->assign(array(
 		'ADMIN_BBCODE_ROW_NAME' => cot_inputbox('text', 'bbc_name', $row['bbc_name']),
 		'ADMIN_BBCODE_ROW_ENABLED' => cot_checkbox($row['bbc_enabled'], 'bbc_enabled'),
 		'ADMIN_BBCODE_ROW_CONTAINER' => cot_checkbox($row['bbc_container'], 'bbc_container'),
@@ -127,12 +129,12 @@ while ($row = cot_db_fetchassoc($res))
 	}
 	/* ===== */
 
-	$t->parse('MAIN.ADMIN_BBCODE_ROW');
+	$bb_t->parse('MAIN.ADMIN_BBCODE_ROW');
 	$ii++;
 }
 cot_db_freeresult($res);
 
-$t->assign(array(
+$bb_t->assign(array(
 	'ADMIN_BBCODE_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_BBCODE_PAGNAV' => $pagenav['main'],
 	'ADMIN_BBCODE_PAGINATION_NEXT' => $pagenav['next'],
@@ -150,7 +152,7 @@ $t->assign(array(
 	'ADMIN_BBCODE_URL_CLEAR_CACHE' => cot_url('admin', 'm=bbcode&a=clearcache&d='.$d)
 ));
 
-cot_display_messages($t);
+cot_display_messages($bb_t);
 
 /* === Hook  === */
 foreach (cot_getextplugins('admin.bbcode.tags') as $pl)
@@ -159,14 +161,6 @@ foreach (cot_getextplugins('admin.bbcode.tags') as $pl)
 }
 /* ===== */
 
-$t->parse('MAIN');
-if (COT_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
+$plugin_body = $bb_t->text('MAIN');
 
 ?>

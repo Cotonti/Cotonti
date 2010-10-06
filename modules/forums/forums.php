@@ -17,8 +17,6 @@ Hooks=module
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_dieifdisabled($cfg['disable_forums']);
-
 // Environment setup
 define('COT_FORUMS', TRUE);
 $env['location'] = 'forums';

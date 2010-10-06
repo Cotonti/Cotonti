@@ -91,9 +91,7 @@ function cot_config_add($name, $options, $is_module = false)
     $cnt = count($options);
     $type = $is_module ? 'module' : 'plug';
     // Check the arguments
-    if (!$cnt
-        || $is_module && count($cfg['module'][$name]) > 0
-        || !$is_module && count($cfg['plugin'][$name]) > 0)
+    if (!$cnt)
     {
         return false;
     }

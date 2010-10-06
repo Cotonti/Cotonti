@@ -137,15 +137,6 @@ if ($a=='newtopic')
 
 		$q = cot_db_insertid();
 
-		if($cfg['parser_cache'])
-		{
-			$rhtml = cot_db_prep(cot_parse(htmlspecialchars($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
-		}
-		else
-		{
-			$rhtml = '';
-		}
-
 		$sql = cot_db_query("INSERT into $db_forum_posts
 		(fp_topicid,
 		fp_sectionid,
@@ -154,7 +145,6 @@ if ($a=='newtopic')
 		fp_creation,
 		fp_updated,
 		fp_text,
-		fp_html,
 		fp_posterip)
 		VALUES
 		(".(int)$q.",
@@ -164,7 +154,6 @@ if ($a=='newtopic')
 			".(int)$sys['now_offset'].",
 			".(int)$sys['now_offset'].",
 			'".cot_db_prep($newmsg)."',
-		'$rhtml',
 		'".$usr['ip']."')");
 
 		$sql = cot_db_query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
@@ -219,9 +208,6 @@ if ($a=='newtopic')
 	}
 }
 
-// FIXME PFS dependency
-//$pfs = cot_build_pfs($usr['id'], 'newtopic', 'newmsg', $L['Mypfs']);
-//$pfs .= (cot_auth('pfs', 'a', 'A')) ? " &nbsp; ".cot_build_pfs(0, 'newtopic', 'newmsg', $L['SFS']) : '';
 $morejavascript .= cot_build_addtxt('newtopic', 'newmsg');
 
 $newtopicurl = cot_url('forums', "m=newtopic&a=newtopic&s=".$s);
@@ -258,14 +244,12 @@ $t = new XTemplate($mskin);
 cot_display_messages($t);
 
 $t->assign(array(
-
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
 	"FORUMS_NEWTOPIC_SUBTITLE" => htmlspecialchars($fs_desc),
 	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
 	"FORUMS_NEWTOPIC_TITLE" => cot_inputbox('text', 'newtopictitle', htmlspecialchars($newtopictitle), array('size' => 56, 'maxlength' => 255)),
 	"FORUMS_NEWTOPIC_DESC" => cot_inputbox('text', 'newtopicdesc', htmlspecialchars($newtopicdesc), array('size' => 56, 'maxlength' => 255)),
-	"FORUMS_NEWTOPIC_TEXT" => cot_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor'),
-	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
+	"FORUMS_NEWTOPIC_TEXT" => cot_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor')
 ));
 
 if ($fs_allowprvtopics)

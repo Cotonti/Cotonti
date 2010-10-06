@@ -44,7 +44,7 @@ if ($cfg['module']['polls']['maxpolls'] > 0)
 
 		$indexpolls->assign(array(
 			'IPOLLS_ID' => $poll_id,
-			'IPOLLS_TITLE' => cot_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
+			'IPOLLS_TITLE' => cot_parse($row['poll_text'], $cfg['module']['polls']['markup']),
 			'IPOLLS_URL' => $pollurl,
 			'IPOLLS_FORM' => $poll_form['poll_block']
 		));

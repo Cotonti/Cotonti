@@ -111,16 +111,8 @@ if ($a=='update')
 
 	if(!empty($rtext))
 	{
-		if($cfg['parser_cache'])
-		{
-			$rhtml = cot_db_prep(cot_parse(htmlspecialchars($rtext), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
-		}
-		else
-		{
-			$rhtml = '';
-		}
 		$rtext = cot_db_prep($rtext);
-		$sql = cot_db_query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_html = '$rhtml', fp_updated='".$sys['now_offset']."', fp_updater='".cot_db_prep($rupdater)."' WHERE fp_id='$p'");
+		$sql = cot_db_query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_updated='".$sys['now_offset']."', fp_updater='".cot_db_prep($rupdater)."' WHERE fp_id='$p'");
 	}
 
 	$is_first_post = false;
@@ -187,9 +179,6 @@ if ($row = cot_db_fetcharray($sql))
 	}
 }
 
-// FIXME PFS dependency
-//$pfs = cot_build_pfs($usr['id'], 'editpost', 'rtext', $L['Mypfs']);
-//$pfs .= (cot_auth('pfs', 'a', 'A')) ? " &nbsp; ".cot_build_pfs(0, "editpost", "rtext", $L['SFS']) : '';
 $morejavascript .= cot_build_addtxt('editpost', 'rtext');
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
@@ -237,8 +226,7 @@ $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
 	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
 	"FORUMS_EDITPOST_SEND" => cot_url('forums', "m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".cot_xg()),
-	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', htmlspecialchars($fp_text), 20, 56, '', 'input_textarea_editor'),
-	"FORUMS_EDITPOST_MYPFS" => $pfs
+	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', htmlspecialchars($fp_text), 20, 56, '', 'input_textarea_editor')
 ));
 
 /* === Hook === */

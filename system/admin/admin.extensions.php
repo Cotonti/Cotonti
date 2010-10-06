@@ -15,7 +15,6 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin',
 cot_block($usr['isadmin']);
 
 cot_require_api('auth');
-cot_require_api('parser');
 
 $t = new XTemplate(cot_skinfile('admin.extensions'));
 
@@ -176,32 +175,36 @@ switch($a)
 						}
 						else
 						{
-							$line = explode(':', $info_file['Tags']);
-							$line[0] = trim($line[0]);
-							$tags = explode(',', $line[1]);
-							$listtags = $line[0].' :<br />';
-							foreach($tags as $k => $v)
+							$taggroups = explode(';', $info_file['Tags']);
+							foreach ($taggroups as $taggroup)
 							{
-								if(mb_substr(trim($v), 0, 1) == '{')
+								$line = explode(':', $taggroup);
+								$line[0] = trim($line[0]);
+								$tags = explode(',', $line[1]);
+								$listtags = $line[0].' :<br />';
+								foreach($tags as $k => $v)
 								{
-									$listtags .= $v.' : ';
-									$found = cot_stringinfile('./themes/'.$cfg['defaultskin'].'/'.$line[0], trim($v));
-									$listtags .= $found_txt[$found].'<br />';
+									if(mb_substr(trim($v), 0, 1) == '{')
+									{
+										$listtags .= $v.' : ';
+										$found = cot_stringinfile('./themes/'.$cfg['defaultskin'].'/'.$line[0], trim($v));
+										$listtags .= $found_txt[$found].'<br />';
+									}
+									else
+									{
+										$listtags .= $v.'<br />';
+									}
 								}
-								else
-								{
-									$listtags .= $v.'<br />';
-								}
-							}
 
-							$t->assign(array(
-								'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
-								'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
-								'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $line[0].' :<br />',
-								'ADMIN_EXTENSIONS_DETAILS_ROW_LISTTAGS' => $listtags,
-								//'ADMIN_EXTENSIONS_DETAILS_ROW_TAGS_ODDEVEN' => cot_build_oddeven($ii)
-							));
-							$t->parse('MAIN.DETAILS.ROW_TAGS');
+								$t->assign(array(
+									'ADMIN_EXTENSIONS_DETAILS_ROW_I_1' => $i+1,
+									'ADMIN_EXTENSIONS_DETAILS_ROW_PART' => $info_part,
+									'ADMIN_EXTENSIONS_DETAILS_ROW_FILE' => $line[0].' :<br />',
+									'ADMIN_EXTENSIONS_DETAILS_ROW_LISTTAGS' => $listtags,
+									//'ADMIN_EXTENSIONS_DETAILS_ROW_TAGS_ODDEVEN' => cot_build_oddeven($ii)
+								));
+								$t->parse('MAIN.DETAILS.ROW_TAGS');
+							}
 						}
 
 						$info_order = empty($info_file['Order']) ? COT_PLUGIN_DEFAULT_ORDER : $info_file['Order'];
@@ -264,7 +267,7 @@ switch($a)
 				'ADMIN_EXTENSIONS_LOCK_MEMBERS' => $info['Lock_members'],
 				'ADMIN_EXTENSIONS_AUTHOR' => $info['Author'],
 				'ADMIN_EXTENSIONS_COPYRIGHT' => $info['Copyright'],
-				'ADMIN_EXTENSIONS_NOTES' => cot_parse($info['Notes'], 1, 0, 0),
+				'ADMIN_EXTENSIONS_NOTES' => cot_parse($info['Notes']),
 				'ADMIN_EXTENSIONS_INSTALL_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=install"),
 				'ADMIN_EXTENSIONS_UPDATE_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=update"),
 				'ADMIN_EXTENSIONS_UNINSTALL_URL' => cot_url('admin', "m=extensions&a=edit&$arg=$code&b=uninstall"),

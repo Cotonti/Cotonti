@@ -150,7 +150,6 @@ if ($standalone)
 
 	$t->assign(array(
 		'PFS_DOCTYPE' => $cfg['doctype'],
-		'PFS_METAS' => cot_htmlmetas(),
 		'PFS_JAVASCRIPT' => cot_javascript(),
 		'PFS_C1' => $c1,
 		'PFS_C2' => $c2,

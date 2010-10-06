@@ -17,8 +17,6 @@ Hooks=module
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_dieifdisabled($cfg['disable_pm']);
-
 // Environment setup
 define('COT_PM', TRUE);
 $env['location'] = 'private_messages';

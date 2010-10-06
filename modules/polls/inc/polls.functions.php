@@ -321,7 +321,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 
 		$input_type = $row['poll_multiple'] ? 'checkbox' : 'radio';
 		$polloptions_input = ($alreadyvoted || !$canvote) ? "" : '<input type="'.$input_type.'" name="vote[]" value="'.$po_id.'" />&nbsp;'; // TODO - to resorses
-		$polloptions = cot_parse(htmlspecialchars($row1['po_text']), 1, 1, 1);
+		$polloptions = cot_parse($row1['po_text'], $cfg['module']['polls']['markup']);
 
 		$t->assign(array(
 			"POLL_OPTIONS" => $polloptions,
@@ -336,7 +336,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 		"POLL_VOTERS" => $totalvotes,
 		"POLL_SINCE" => date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
 		"POLL_SINCE_SHORT" => date($cfg['formatmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
-		"POLL_TITLE" => cot_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
+		"POLL_TITLE" => cot_parse($row['poll_text'], $cfg['module']['polls']['markup']),
 		"POLL_ID" => $id,
 		"POLL_FORM_URL" => (empty($formlink)) ? cot_url('polls', 'id='.$id) : $formlink,
 		"POLL_FORM_BUTTON" => $pollbutton

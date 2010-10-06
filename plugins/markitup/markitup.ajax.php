@@ -21,6 +21,6 @@ defined('COT_CODE') or die('Wrong URL');
 $text = cot_import('text', 'P', 'HTM');
 $style = '<link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'.css" />'."\n";
 cot_sendheaders();
-echo $style . '<body class="preview">' . cot_post_parse(cot_parse($text)) . '</body>';
+echo $style . '<body class="preview">' . cot_parse($text) . '</body>';
 
 ?>

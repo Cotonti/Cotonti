@@ -11,6 +11,50 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+/**
+ * Admin
+ */
+
+$L['adm_gd'] = 'GD graphical library';
+$L['adm_allpfs'] = 'All '.$L['PFS'];
+$L['adm_allfiles'] = 'All files';
+$L['adm_thumbnails'] = 'Thumbnails';
+$L['adm_orphandbentries'] = 'Orphan DB entries';
+$L['adm_orphanfiles'] = 'Orphan files';
+$L['adm_delallthumbs'] = 'Delete all thumbnails';
+$L['adm_rebuildallthumbs']= 'Delete and rebuild all thumbnails';
+$L['adm_help_allpfs'] = $L['PFS'].' of all registered users';
+$L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotonti won\'t be able to create thumbnails for images. Go for '.$L['Configuration'].' &gt; '.$L['PFS'].' and set &quot;Thumbnails generation&quot; to &quot;'.$L['Disabled'].'&quot;.';
+
+$L['adm_help_pfsfiles'] = 'Not available';
+$L['adm_help_pfsthumbs'] = 'Not available';
+
+/**
+ * Config
+ */
+
+$L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');
+$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');	// New in 0.0.2
+$L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in 0.0.2
+$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in 0.0.2
+$L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/FOLDERNAME/... Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this.');
+$L['cfg_flashupload'] = array('Use flash uploader', 'Allows uploading many files at once.'); // New in 1.0.0
+$L['cfg_pfs_winclose'] = array('Close popup window after bbcode insertion');
+$L['cfg_th_amode'] = array('Thumbnails generation', '');
+$L['cfg_th_border'] = array('Thumbnails, border size', 'Default: 4 pixels');
+$L['cfg_th_colorbg'] = array('Thumbnails, border color', 'Default: 000000, hex color code');
+$L['cfg_th_colortext'] = array('Thumbnails, text color', 'Default: FFFFFF, hex color code');
+$L['cfg_th_dimpriority'] = array('Thumbnails, rescaling priority dimension', '');
+$L['cfg_th_jpeg_quality'] = array('Thumbnails, Jpeg quality', 'Default: 85');
+$L['cfg_th_keepratio'] = array('Thumbnail, keep ratio?', '');
+$L['cfg_th_textsize'] = array('Thumbnails, size of the text', '');
+$L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
+$L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Width x 0.75');
+
+/**
+ * Main
+ */
+
 $L['pfs_cancelall'] = 'Cancel All'; /// 0.7.0
 $L['pfs_direxists'] = 'Such a folder already exists.<br />Old path: %1$s<br />New path: %2$s'; // 0.7.0
 $L['pfs_extallowed'] = 'Extensions allowed';

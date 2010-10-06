@@ -3,7 +3,7 @@
  * PHP patchset to upgrade from Genoa to Siena
  */
 
-defined('SED_CODE') && defined('COT_UPDATE') or die('Wrong URL');
+defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
 /*
  * r1135: insert new Tags plugin parts if the plugin is installed

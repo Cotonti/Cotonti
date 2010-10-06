@@ -68,7 +68,7 @@ if ($cfg['check_updates'])
 	{
 		$t->assign(array(
 			'ADMIN_HOME_UPDATE_REVISION' => sprintf($L['home_update_revision'], $cfg['version'], $cfg['revision'], htmlspecialchars($update_info['update_ver']), (int)$update_info['update_rev']),
-			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse(htmlspecialchars($update_info['update_message']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true),
+			'ADMIN_HOME_UPDATE_MESSAGE' => cot_parse($update_info['update_message']),
 		));
 		$t->parse('MAIN.UPDATE');
 	}

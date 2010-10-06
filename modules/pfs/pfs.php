@@ -17,8 +17,6 @@ Hooks=module
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_dieifdisabled($cfg['disable_pfs']);
-
 // Environment setup
 define('COT_PFS', TRUE);
 $env['location'] = 'pfs';

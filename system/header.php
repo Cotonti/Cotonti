@@ -58,47 +58,6 @@ else
 
 if (!COT_AJAX)
 {
-	if ($usr['id'] > 0 && $cfg['module']['page'] && !$cfg['disable_page'] && cot_auth('page', 'any', 'A'))
-	{
-		cot_require('page');
-		$sqltmp2 = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
-		$sys['pagesqueued'] = cot_db_result($sqltmp2, 0, 'COUNT(*)');
-
-		if ($sys['pagesqueued'] > 0)
-		{
-			$out['notices'] .= $L['hea_valqueues'];
-
-			if ($sys['pagesqueued'] == 1)
-			{
-				$out['notices'] .= cot_rc_link(cot_url('admin', 'm=page'), '1 ' . $L['Page']);
-			}
-			elseif ($sys['pagesqueued'] > 1)
-			{
-				$out['notices'] .= cot_rc_link(cot_url('admin', 'm=page'), $sys['pagesqueued'] . ' ' . $L['Pages']);
-			}
-		}
-	}
-	elseif ($usr['id'] > 0 && $cfg['module']['page'] && !$cfg['disable_page'] && cot_auth('page', 'any', 'W'))
-	{
-		cot_require('page');
-		$sqltmp2 = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1 AND page_ownerid = " . $usr['id']);
-		$sys['pagesqueued'] = cot_db_result($sqltmp2, 0, 'COUNT(*)');
-
-		if ($sys['pagesqueued'] > 0)
-		{
-			$out['notices'] .= $L['hea_valqueues'];
-
-			if ($sys['pagesqueued'] == 1)
-			{
-				$out['notices'] .= cot_rc_link(cot_url('page', 'c=unvalidated'), '1 ' . $L['Page']);
-			}
-			elseif ($sys['pagesqueued'] > 1)
-			{
-				$out['notices'] .= cot_rc_link(cot_url('page', 'c=unvalidated'), $sys['pagesqueued'] . ' ' . $L['Pages']);
-			}
-		}
-	}
-
 	/* === Hook === */
 	foreach (cot_getextplugins('header.main') as $pl)
 	{
@@ -143,30 +102,12 @@ if (!COT_AJAX)
 		$out['loginout_url'] = cot_url('users', 'm=logout&' . cot_xg());
 		$out['loginout'] = cot_rc_link($out['loginout_url'], $L['Logout']);
 		$out['profile'] = cot_rc_link(cot_url('users', 'm=profile'), $L['Profile']);
-		$out['pms'] = ($cfg['disable_pm']) ? '' : cot_rc_link(cot_url('pm'), $L['Private_Messages']);
-		$out['pfs'] = ($cfg['disable_pfs'] || !cot_auth('pfs', 'a', 'R') || $cot_groups[$usr['maingrp']]['pfs_maxtotal'] == 0 || $cot_groups[$usr['maingrp']]['pfs_maxfile'] == 0) ? '' : cot_rc_link(cot_url('pfs'), $L['Mypfs']);
-
-		if ($cfg['module']['pm'] && !$cfg['disable_pm'])
-		{
-			cot_require('pm');
-			if ($usr['newpm'])
-			{
-				$sqlpm = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0");
-				$usr['messages'] = cot_db_result($sqlpm, 0, 'COUNT(*)');
-			}
-			$out['pmreminder'] = cot_rc_link(cot_url('pm'),
-				($usr['messages'] > 0) ? cot_declension($usr['messages'], $Ls['Privatemessages']) : $L['hea_noprivatemessages']
-			);
-		}
 
 		$t->assign(array(
 			'HEADER_USER_NAME' => $usr['name'],
 			'HEADER_USER_ADMINPANEL' => $out['adminpanel'],
 			'HEADER_USER_LOGINOUT' => $out['loginout'],
 			'HEADER_USER_PROFILE' => $out['profile'],
-			'HEADER_USER_PMS' => $out['pms'],
-			'HEADER_USER_PFS' => $out['pfs'],
-			'HEADER_USER_PMREMINDER' => $out['pmreminder'],
 			'HEADER_USER_MESSAGES' => $usr['messages']
 		));
 

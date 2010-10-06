@@ -21,13 +21,13 @@ defined('COT_CODE') or die('Wrong URL');
 cot_require('users');
 cot_require('recentitems', true);
 
-if ($cfg['plugin']['recentitems']['recentpages'] && !$cfg['disable_page'])
+if ($cfg['plugin']['recentitems']['recentpages'] && $cfg['module']['page'])
 {
 	$res = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("PLUGIN_LATESTPAGES", $res);
 }
 
-if ($cfg['plugin']['recentitems']['recentforums'] && !$cfg['disable_forums'])
+if ($cfg['plugin']['recentitems']['recentforums'] && $cfg['modules']['forums'])
 {
 	$res = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("PLUGIN_LATESTTOPICS", $res);

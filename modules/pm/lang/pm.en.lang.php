@@ -11,6 +11,25 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+/**
+ * Admin
+ */
+
+$L['adm_pm_totaldb'] = 'Private messages in the database';
+$L['adm_pm_totalsent'] = 'Total of private messages ever sent';
+
+/**
+ * Config
+ */
+
+$L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
+$L['cfg_pm_maxsize'] = array('Maximum length for messages', 'Default: 10000 chars');
+$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in 0.0.6
+
+/**
+ * Main
+ */
+
 $L['pmsend_subtitle'] = 'New private message submission form';
 $L['pmsend_title'] = 'Send a new private message';
 

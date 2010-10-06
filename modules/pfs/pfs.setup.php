@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=PFS
 Description=Personal File Space
-Version=0.7.0.1
-Date=2010-jun-22
+Version=0.7.0.3
+Date=2010-oct-05
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010
 Notes=BSD License
@@ -15,7 +15,6 @@ Lock_members=
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-disable_pfs=01:radio::0:
 pfsuserfolder=02:radio::0:
 pfstimename=03:radio::0:
 pfsfilecheck=04:radio::1:

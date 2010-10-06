@@ -15,8 +15,6 @@ defined('COT_CODE') or die('Wrong URL');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a');
 cot_block($usr['auth_write']);
 
-cot_require_api('email');
-
 $to = cot_import('to', 'G', 'TXT');
 $a = cot_import('a','G','TXT');
 $id = cot_import('id','G','INT');
@@ -67,7 +65,6 @@ elseif ($a == 'send')
 		cot_error('pm_bodytoolong', 'newpmtext');
 	}
 	$newpmtitle .= (mb_strlen($newpmtitle) < 2) ? ' . . . ' : '';
-	$newpmhtml = ($cfg['parser_cache']) ? cot_db_prep(cot_parse(htmlspecialchars($newpmtext))) : '';
 	/* === Hook === */
 	foreach (cot_getextplugins('pm.send.send.first') as $pl)
 	{
@@ -83,7 +80,7 @@ elseif ($a == 'send')
 		{
 			$sql = cot_db_query("UPDATE $db_pm SET
 				pm_title = '".cot_db_prep($newpmtitle)."', pm_text = '".cot_db_prep($newpmtext)."',
-				pm_html = '$newpmhtml', pm_date = '".$sys['now_offset']."', pm_fromstate = '".$fromstate."' 
+				pm_date = '".$sys['now_offset']."', pm_fromstate = '".$fromstate."' 
 				WHERE pm_id = '$id' AND pm_fromuserid = '".$usr['id']."' AND pm_tostate = '0'");
 		}
 		/* === Hook === */
@@ -149,11 +146,11 @@ elseif ($a == 'send')
 				$sql = cot_db_query("INSERT into $db_pm
 					(pm_date, pm_fromuserid, pm_fromuser,
 					pm_touserid, pm_title, pm_text,
-					pm_html, pm_fromstate, pm_tostate)
+					pm_fromstate, pm_tostate)
 					VALUES
 					(".(int)$sys['now_offset'].", ".(int)$usr['id'].", '".cot_db_prep($usr['name'])."',
 					".(int)$userid.", '".cot_db_prep($newpmtitle)."', '".cot_db_prep($newpmtext)."',
-					'$newpmhtml', '".(int)$fromstate."', 0)");
+					'".(int)$fromstate."', 0)");
 
 				$sql = cot_db_query("UPDATE $db_users SET user_newpm = 1 WHERE user_id = '".$userid."'");
 
@@ -305,7 +302,6 @@ $t->assign(array(
 		"PMSEND_FORM_SEND" => cot_url('pm', 'm=send&a=send'.$idurl),
 		"PMSEND_FORM_TITLE" => htmlspecialchars($newpmtitle),
 		"PMSEND_FORM_TEXT" => htmlspecialchars($newpmtext),
-		"PMSEND_FORM_PFS" => $pfs,
 		"PMSEND_FORM_TOUSER" => $touser,
 		"PMSEND_AJAX_MARKITUP" => (COT_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
 ));

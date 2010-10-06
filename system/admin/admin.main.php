@@ -34,7 +34,7 @@ foreach (cot_getextplugins('admin.main') as $pl)
 }
 /* ===== */
 
-$standard_admin = array('banlist', 'bbcode', 'cache.disk', 'cache', 'config', 'extrafields', 'hits', 'home', 'infos',
+$standard_admin = array('banlist', 'cache.disk', 'cache', 'config', 'extrafields', 'hits', 'home', 'infos',
 	'log', 'other', 'extensions', 'ratings', 'referers', 'rights', 'rightsbyitem', 'structure', 'trashcan',
 	'urls', 'users');
 

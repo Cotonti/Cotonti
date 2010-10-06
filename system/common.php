@@ -550,7 +550,7 @@ if (!$cfg['disablehitstats'])
 
 /* ======== Categories ======== */
 
-if (!$cot_cat && !$cfg['disable_page'])
+if (!$cot_cat)
 {
 	cot_load_structure();
 	$cot_cache && $cot_cache->db->store('cot_cat', $cot_cat, 'system');

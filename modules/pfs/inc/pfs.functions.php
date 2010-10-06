@@ -21,6 +21,24 @@ cot_require_api('forms');
 $GLOBALS['db_pfs'] = (isset($GLOBALS['db_pfs'])) ? $GLOBALS['db_pfs'] : $GLOBALS['db_x'] . 'pfs';
 $GLOBALS['db_pfs_folders'] = (isset($GLOBALS['db_pfs_folders'])) ? $GLOBALS['db_pfs_folders'] : $GLOBALS['db_x'] . 'pfs_folders';
 
+// TODO eliminate this function
+function cot_build_pfs($id, $c1, $c2, $title)
+{
+	global $L, $cfg, $usr, $cot_groups;
+	if ($cfg['disable_pfs'])
+	{ $res = ''; }
+	else
+	{
+		if ($id==0)
+		{ $res = "<a href=\"javascript:pfs('0','".$c1."','".$c2."')\">".$title."</a>"; }
+		elseif ($cot_groups[$usr['maingrp']]['pfs_maxtotal']>0 && $cot_groups[$usr['maingrp']]['pfs_maxfile']>0 && cot_auth('pfs', 'a', 'R'))
+		{ $res = "<a href=\"javascript:pfs('".$id."','".$c1."','".$c2."')\">".$title."</a>"; }
+		else
+		{ $res = ''; }
+	}
+	return($res);
+}
+
 /**
  * Create a new PFS folder, return new folder ID
  *

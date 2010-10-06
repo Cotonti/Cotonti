@@ -70,7 +70,6 @@ if ($a == 'update')
 
 	if ($usr['isadmin'])
 	{
-		$rpage['type'] = cot_import('rpagetype', 'P', 'INT');
 		$rpage['count'] = cot_import('rpagecount', 'P', 'INT');
 		$rpage['ownerid'] = cot_import('rpageownerid', 'P', 'INT');
 		$rpage['filecount'] = cot_import('rpagefilecount', 'P', 'INT');
@@ -130,15 +129,11 @@ if ($a == 'update')
 	}
 	elseif (!$cot_error)
 	{
-		$rpage['type'] = ($usr['maingrp'] != 5 && $rpage['type'] == 2) ? 0 : $rpage['type'];
-
 		if (!empty($rpage['alias']))
 		{
 			$sql = cot_db_query("SELECT page_id FROM $db_pages WHERE page_alias='".cot_db_prep($rpage['alias'])."' AND page_id!='".$id."'");
 			$rpage['alias'] = (cot_db_numrows($sql) > 0) ? $rpage['alias'].rand(1000, 9999) : $rpage['alias'];
 		}
-
-		$rpage['html'] = ($cfg['parser_cache'] && $rpage['type'] != 1) ? cot_parse(htmlspecialchars($rpage['text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true) : '';
 
 		$sql = cot_db_query("SELECT page_cat, page_state FROM $db_pages WHERE page_id='$id' ");
 		$row = cot_db_fetcharray($sql);
@@ -232,18 +227,6 @@ require_once $cfg['system_dir'].'/header.php';
 $mskin = cot_skinfile(array('page', 'edit', $cot_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
-$page_type_options = array('0' => $L['Default'], '1' => 'HTML');
-if ($usr['maingrp'] == 5 && $cfg['allowphp_pages'] && $cfg['allowphp_override'])
-{
-	$page_type_options += array('2' => 'PHP');
-}
-
-// FIXME PFS dependency
-//$pfs = cot_build_pfs($usr['id'], 'update', 'rpagetext', $L['Mypfs']);
-//$pfs .= (cot_auth('pfs', 'a', 'A')) ? " &nbsp; ".cot_build_pfs(0, 'update', 'rpagetext', $L['SFS']) : '';
-//$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? cot_build_pfs($usr['id'], "update", "rpageurl", $L['Mypfs']) : '';
-//$pfs_form_url_myfiles .= (cot_auth('pfs', 'a', 'A')) ? ' '.cot_build_pfs(0, 'update', 'rpageurl', $L['SFS']) : '';
-
 $pageedit_array = array(
 	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
 	"PAGEEDIT_SUBTITLE" => $L['paged_subtitle'],
@@ -265,40 +248,17 @@ $pageedit_array = array(
 	"PAGEEDIT_FORM_URL" => cot_inputbox('text', 'rpageurl', $pag['page_url'], array('size' => '56', 'maxlength' => '255')),
 	"PAGEEDIT_FORM_SIZE" => cot_inputbox('text', 'rpagesize', $pag['page_size'], array('size' => '56', 'maxlength' => '255')),
 	"PAGEEDIT_FORM_TEXT" => cot_textarea('rpagetext', $pag['page_text'], 24, 120, '', 'input_textarea_editor'),
-	"PAGEEDIT_FORM_MYPFS" => $pfs,
 	"PAGEEDIT_FORM_DELETE" => cot_radiobox(0, 'rpagedelete', array(1, 0), array($L['Yes'], $L['No']))
 );
 if ($usr['isadmin'])
 {
 	$pageedit_array += array(
-		"PAGEEDIT_FORM_TYPE" => cot_selectbox($pag['page_type'], 'rpagetype', array_keys($page_type_options), array_values($page_type_options), false),
 		"PAGEEDIT_FORM_OWNERID" => cot_inputbox('text', 'rpageownerid', $pag['page_ownerid'], array('size' => '24', 'maxlength' => '24')),
 		"PAGEEDIT_FORM_PAGECOUNT" => cot_inputbox('text', 'rpagecount', $pag['page_count'], array('size' => '8', 'maxlength' => '8')),
 		"PAGEEDIT_FORM_FILECOUNT" => cot_inputbox('text', 'rpagefilecount', $pag['page_filecount'], array('size' => '8', 'maxlength' => '8'))
 	);
 }
-// FIXME PFS dependency
-// PFS tags
-//$tplskin = file_get_contents($mskin);
-//preg_match_all("#\{(PAGEEDIT_FORM_PFS_([^\}]*?)_USER)\}#", $tplskin, $match);
-//$numtags = count($match[0]);
-//for($i = 0; $i < $numtags; $i++)
-//{
-//	$tag = $match[1][$i];
-//	$field = strtolower($match[2][$i]);
-//	$pfs_js = (!$cfg['disable_pfs']) ? cot_build_pfs($usr['id'], "update", "rpage$field", $L['Mypfs']) : '';
-//	$pageedit_array[$tag] = $pfs_js;
-//}
-//unset($match);
-//preg_match_all("#\{(PAGEEDIT_FORM_PFS_([^\}]*?)_SITE)\}#", $tplskin, $match);
-//$numtags = count($match[0]);
-//for($i = 0; $i < $numtags; $i++)
-//{
-//	$tag = $match[1][$i];
-//	$field = strtolower($match[2][$i]);
-//	$pfs_js = (cot_auth('pfs', 'a', 'A')) ? ' '.cot_build_pfs(0, "update", "rpage$field", $L['SFS']) : '';
-//	$pageedit_array[$tag] = $pfs_js;
-//}
+
 $t->assign($pageedit_array);
 
 // Extra fields

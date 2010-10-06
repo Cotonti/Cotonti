@@ -190,50 +190,9 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 
 			$date_format = (!empty($date_format)) ? $date_format : $cfg['dateformat'];
 
-			switch ($page_data['page_type'])
-			{
-				case 1:
-					$pag_text = ((int)$textlength > 0) ? cot_string_truncate($page_data['page_text'], $textlength) : cot_cut_more($page_data['page_text']);
-					$cutted = (mb_strlen($page_data['page_text']) > mb_strlen($pag_text)) ? true : false;
-					$text = $pag_text;
-					break;
-
-				case 2:
-					if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-					{
-						ob_start();
-						eval($page_data['page_text']);
-						$text =  ob_get_clean();
-					}
-					else
-					{
-						$text =  "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\"."; // TODO - i18n
-					}
-					break;
-
-				default:
-
-					if ($cfg['parser_cache'])
-					{
-						if (empty($page_data['page_html']) && !empty($page_data['page_text']))
-						{
-							$page_data['page_html'] = cot_parse(htmlspecialchars($page_data['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-							cot_db_query("UPDATE $db_pages SET page_html = '".cot_db_prep($page_data['page_html'])."' WHERE page_id = " . $page_data['page_id']);
-						}
-						$html = $cfg['parsebbcodepages'] ? cot_post_parse($page_data['page_html']) : htmlspecialchars($page_data['page_text']);
-						$html = ((int)$textlength > 0) ? cot_string_truncate($html, $textlength) : cot_cut_more($html);
-						$cutted = (mb_strlen($page_data['page_html']) > mb_strlen($html)) ? true : false;
-						$text =  $html;
-					}
-					else
-					{
-						$text = cot_parse(htmlspecialchars($page_data['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-						$text = cot_post_parse($text, 'pages');
-						$text = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
-						$cutted = (mb_strlen($page_data['page_text']) > mb_strlen($text)) ? true : false;
-					}
-					break;
-			}
+			$text = cot_parse($page_data['page_text'], $cfg['module']['page']['markup']);
+			$text = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
+			$cutted = (mb_strlen($page_data['page_text']) > mb_strlen($text)) ? true : false;
 
 			$temp_array = array(
 				'URL' => $page_data['page_pageurl'],

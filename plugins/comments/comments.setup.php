@@ -26,6 +26,7 @@ commentsize=08:select:0,1024,2048,4096,8192,16384,32768,65536:0:Max. size of com
 countcomments=09:radio:0,1:1:Count comments, Display the count of comments near the icon
 parsebbcodecom=10:radio:0,1:1:Parse BBcode in comments
 parsesmiliescom=11:radio:0,1:1:Parse smilies in comments
+markup=12:radio::1:Enable markup in comments
 [END_COT_EXT_CONFIG]
 ==================== */
 

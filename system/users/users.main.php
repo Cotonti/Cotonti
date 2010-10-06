@@ -137,7 +137,7 @@ foreach (cot_getextplugins('users.query') as $pl)
 }
 /* ===== */
 
-$sql = cot_db_query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE $where");
+$sql = cot_db_query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where));
 $totalusers = cot_db_result($sql, 0, "COUNT(*)");
 $sql = cot_db_query("SELECT u.* $join_columns FROM $db_users AS u $join_condition  WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
 

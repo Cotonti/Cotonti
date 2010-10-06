@@ -112,7 +112,7 @@ if ($c == "topics")
 
 			$post_id = $row['fp_id'];
 			$items[$i]['title'] = $row['fp_postername'];
-			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
+			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);
 			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&q=$topic_id&d=$curpage", "#post$post_id", true);
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 			$i++;
@@ -170,7 +170,7 @@ elseif ($c == "section")
 				//$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? cot_url('forums', 'm=posts&id='.$post_id, "", true) : cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$post_url = cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
-				$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
+				$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);
 				$items[$i]['link'] = COT_ABSOLUTE_URL.$post_url;
 				$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 			}
@@ -209,7 +209,7 @@ elseif ($c == "forums")
 		if (!$flag_private AND cot_auth('forums', $forum_id, 'R'))
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
-			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text'], $row['fp_html']);
+			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);
 			$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('forums', "m=posts&p=$post_id", "#$post_id", true);
 			$items[$i]['pubDate'] = date('r', $row['fp_creation']);
 		}
@@ -250,7 +250,7 @@ elseif ($defult_c)
 		$items[$i]['title'] = $row['page_title'];
 		$items[$i]['link'] = COT_ABSOLUTE_URL . $row['page_pageurl'];
 		$items[$i]['pubDate'] = date('r', $row['page_date']);
-		$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
+		$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl']);
 
 		$i++;
 	}
@@ -296,7 +296,7 @@ if ($usr['id'] === 0 && $cot_cache)
 }
 echo $out_rss;
 
-function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_pageurl)
+function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 {
 	global $cfg, $db_pages, $usr;
 	switch($pag_type)
@@ -319,53 +319,23 @@ function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_page
 		break;
 
 		default:
-			if ($cfg['parser_cache'])
+			$pag_text = cot_parse($pag_text, $cfg['module']['page']['markup']);
+			$readmore = mb_strpos($pag_text, "<!--more-->");
+			if ($readmore > 0)
 			{
-				if (empty($pag_html))
-				{
-					$pag_html = cot_parse(htmlspecialchars($pag_text), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-					cot_db_query("UPDATE $db_pages SET page_html = '".cot_db_prep($pag_html)."' WHERE page_id = ".$pag_id);
-				}
-				$readmore = mb_strpos($pag_html, "<!--more-->");
-				if ($readmore > 0)
-				{
-					$pag_html = mb_substr($pag_html, 0, $readmore);
-					$pag_html .= " <span class=\"readmore\"><a href=\"".$pag_pageurl."\">".$L['ReadMore']."</a></span>";
-				}
-
-				$newpage = mb_strpos($pag_html, '[newpage]');
-
-				if ($newpage !== false)
-				{
-					$pag_html = mb_substr($pag_html, 0, $newpage);
-				}
-
-				$pag_html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_html);
-
-				$cfg['parsebbcodepages'] ? $text = cot_post_parse($pag_html, 'pages') : $text = htmlspecialchars($pag_text);
+				$pag_text = mb_substr($pag_text, 0, $readmore);
+				$pag_text .= " <span class=\"readmore\"><a href=\"".$pag_pageurl."\">".$L['ReadMore']."</a></span>";
 			}
-			else
+
+			$newpage = mb_strpos($pag_text, '[newpage]');
+
+			if ($newpage !== false)
 			{
-				$pag_text = cot_parse(htmlspecialchars($pag_text), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], 1);
-				$readmore = mb_strpos($pag_text, "<!--more-->");
-				if ($readmore > 0)
-				{
-					$pag_text = mb_substr($pag_text, 0, $readmore);
-					$pag_text .= " <span class=\"readmore\"><a href=\"".$pag_pageurl."\">".$L['ReadMore']."</a></span>";
-				}
-
-				$newpage = mb_strpos($pag_html, '[newpage]');
-
-				if ($newpage !== false)
-				{
-					$pag_html = mb_substr($pag_html, 0, $newpage);
-				}
-
-				$pag_html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_html);
-
-				$pag_text = cot_post_parse($pag_text, 'pages');
-				$text = $pag_text;
+				$pag_text = mb_substr($pag_text, 0, $newpage);
 			}
+
+			$pag_text = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_text);
+			$text = $pag_text;
 		break;
 	}
 	if ((int)$cfg['rss_pagemaxsymbols'] > 0)
@@ -375,23 +345,12 @@ function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_html, $pag_page
 	return $text;
 }
 
-function cot_parse_post_text($post_id, $post_text, $post_html)
+function cot_parse_post_text($post_id, $post_text)
 {
 	global $cfg, $db_forum_posts, $usr, $fs_allowbbcodes, $fs_allowsmilies;
-	if ($cfg['parser_cache'])
-	{
-		if (empty($post_html) && !empty($post_text))
-		{
-			$post_html = cot_parse($post_text, $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1);
-			cot_db_query("UPDATE $db_forum_posts SET fp_html = '".cot_db_prep($post_html)."' WHERE fp_id = ".$post_id);
-		}
-		$post_text = cot_post_parse($post_html, 'forums');
-	}
-	else
-	{
-		$post_text = cot_parse($post_text, ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1);
-		$post_text = cot_post_parse($post_text, 'forums');
-	}
+	
+	$post_text = cot_parse($post_text, ($cfg['module']['forums']['markup'] && $fs_allowbbcodes));
+
 	if ((int)$cfg['rss_postmaxsymbols'] > 0)
 	{
 		$post_text .= (cot_string_truncate($text, $cfg['rss_postmaxsymbols'])) ? '...' : '';

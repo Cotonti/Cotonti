@@ -32,7 +32,6 @@ if ($cfg['enable_obsolete'])
     cot_require_api('obsolete');
 }
 cot_require_api('cotemplate');
-cot_require_api('parser'); // TODO module-dependent parser selection/loading
 
 $e = cot_import('e', 'G', 'ALP');
 $o = cot_import('o', 'G', 'ALP');
