@@ -40,7 +40,6 @@ if ($a == 'add')
 	$rpage['cat'] = cot_import('rpagecat', 'P', 'TXT');
 	$rpage['key'] = cot_import('rpagekey', 'P', 'TXT');
 	$rpage['alias'] = cot_import('rpagealias', 'P', 'ALP');
-	$rpage['type'] = $usr['isadmin'] ? cot_import('rpagetype', 'P', 'INT') : 0;
 	$rpage['title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['desc'] = cot_import('rpagedesc', 'P', 'TXT');
 	$rpage['text'] = cot_import('rpagetext', 'P', 'HTM');
@@ -82,10 +81,6 @@ if ($a == 'add')
 			$sql = cot_db_query("SELECT page_id FROM $db_pages WHERE page_alias='".cot_db_prep($rpage['alias'])."'");
 			$rpage['alias'] = (cot_db_numrows($sql) > 0) ? $rpage['alias'].rand(1000, 9999) : $rpage['alias'];
 		}
-
-		$rpage['type'] = ($usr['maingrp'] != 5 && $rpage['type'] == 2) ? 0 : (int)$rpage['type'];
-
-		$rpage['html'] = ($cfg['parser_cache'] && $rpage['type'] != 1) ? cot_parse(htmlspecialchars($rpage['text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true, true) : '';
 
 		if ($usr['isadmin'] && $cfg['autovalidate'])
 		{
@@ -171,12 +166,6 @@ require_once $cfg['system_dir'].'/header.php';
 $mskin = cot_skinfile(array('page', 'add', $cot_cat[$rpage['cat']]['tpl']));
 $t = new XTemplate($mskin);
 
-// FIXME PFS dependency
-//$pfs = cot_build_pfs($usr['id'], 'rpage', 'rpagetext',$L['Mypfs']);
-//$pfs .= (cot_auth('pfs', 'a', 'A')) ? " &nbsp; ".cot_build_pfs(0, 'rpage', 'rpagetext', $L['SFS']) : '';
-//$pfs_form_url_myfiles = (!$cfg['disable_pfs']) ? cot_build_pfs($usr['id'], 'rpage', 'rpageurl', $L['Mypfs']) : '';
-//$pfs_form_url_myfiles .= (cot_auth('pfs', 'a', 'A')) ? ' '.cot_build_pfs(0, 'rpage', 'rpageurl', $L['SFS']) : '';
-
 $pageadd_array = array(
 	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
 	"PAGEADD_SUBTITLE" => $L['pagadd_subtitle'],
@@ -196,43 +185,9 @@ $pageadd_array = array(
 	"PAGEADD_FORM_FILE" => cot_selectbox($rpage['file'], 'rpagefile', range(0, 2), array($L['No'], $L['Yes'], $L['Members_only']), false),
 	"PAGEADD_FORM_URL" => cot_inputbox('text', 'rpageurl', $rpage['url'], array('size' => '56', 'maxlength' => '255')),
 	"PAGEADD_FORM_SIZE" => cot_inputbox('text', 'rpagesize', $rpage['size'], array('size' => '56', 'maxlength' => '255')),
-	"PAGEADD_FORM_TEXT" => cot_textarea('rpagetext', $rpage['text'], 24, 120, '', 'input_textarea_editor'),
-	"PAGEADD_FORM_MYPFS" => $pfs
+	"PAGEADD_FORM_TEXT" => cot_textarea('rpagetext', $rpage['text'], 24, 120, '', 'input_textarea_editor')
 );
 
-if ($usr['isadmin'])
-{
-	$page_type_options = array(0 => $L['Default'], 1 => 'HTML');
-	if ($usr['maingrp'] == 5 && $cfg['allowphp_pages'] && $cfg['allowphp_override'])
-	{
-		$page_type_options += array(2 => 'PHP');
-	}
-	$pageadd_array['PAGEADD_FORM_TYPE'] = cot_selectbox($rpage['type'], 'rpagetype', array_keys($page_type_options),
-		array_values($page_type_options), false);
-}
-
-// FIXME PFS dependency
-// PFS tags
-//$tplskin = file_get_contents($mskin);
-//preg_match_all("#\{(PAGEADD_FORM_PFS_([^\}]*?)_USER)\}#", $tplskin, $match);
-//$numtags = count($match[0]);
-//for ($i = 0; $i < $numtags; $i++)
-//{
-//	$tag = $match[1][$i];
-//	$field = strtolower($match[2][$i]);
-//	$pfs_js = (!$cfg['disable_pfs']) ? cot_build_pfs($usr['id'], "rpage", "rpage$field", $L['Mypfs']) : '';
-//	$pageadd_array[$tag] = $pfs_js;
-//}
-//unset($match);
-//preg_match_all("#\{(PAGEADD_FORM_PFS_([^\}]*?)_SITE)\}#", $tplskin, $match);
-//$numtags = count($match[0]);
-//for ($i = 0; $i < $numtags; $i++)
-//{
-//	$tag = $match[1][$i];
-//	$field = strtolower($match[2][$i]);
-//	$pfs_js = (cot_auth('pfs', 'a', 'A')) ? ' '.cot_build_pfs(0, "rpage", "rpage$field", $L['SFS']) : '';
-//	$pageadd_array[$tag] = $pfs_js;
-//}
 $t->assign($pageadd_array);
 
 // Extra fields

@@ -43,20 +43,8 @@ if ($c == 'comments')
 		while ($row = cot_db_fetchassoc($sql))
 		{
 			$items[$i]['title'] = $L['rss_comment_of_user']." ".$row['user_name'];
-			if ($cfg['parser_cache'])
-			{
-				if (empty($row['com_html']) && !empty($row['com_text']))
-				{
-					$row['com_html'] = cot_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
-					cot_db_query("UPDATE $db_com SET com_html = '".cot_db_prep($row['com_html'])."' WHERE com_id = ".$row['com_id']);
-				}
-				$text = $cfg['parsebbcodepages'] ? cot_post_parse($row['com_html']) : htmlspecialchars($row['com_text']);
-			}
-			else
-			{
-				$text = cot_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
-				$text = cot_post_parse($com_text, 'pages');
-			}
+
+			$text = cot_parse($row['com_text'], $cfg['plugins']['comments']['markup']);
 			if ((int)$cfg['plugin']['comments']['rss_commentmaxsymbols'] > 0)
 			{
 				$text .= (cot_string_truncate($text, $cfg['plugin']['comments']['rss_commentmaxsymbols'])) ? '...' : '';
@@ -93,20 +81,7 @@ if ($c == 'comments')
 				while ($row1 = cot_db_fetchassoc($sql))
 				{
 					$items[$i]['title'] = $L['rss_comment_of_user']." ".$row1['user_name'];
-					if ($cfg['parser_cache'])
-					{
-						if (empty($row1['com_html']) && !empty($row1['com_text']))
-						{
-							$row1['com_html'] = cot_parse(htmlspecialchars($row1['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
-							cot_db_query("UPDATE $db_com SET com_html = '".cot_db_prep($row1['com_html'])."' WHERE com_id = ".$row1['com_id']);
-						}
-						$text = $cfg['parsebbcodepages'] ? cot_post_parse($row1['com_html']) : htmlspecialchars($row1['com_text']);
-					}
-					else
-					{
-						$text = cot_parse(htmlspecialchars($row1['com_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], true);
-						$text = cot_post_parse($com_text, 'pages');
-					}
+					$text = cot_parse($row1['com_text'], $cfg['parsebbcodecom']);
 					if ((int)$cfg['plugin']['comments']['rss_commentmaxsymbols'] > 0)
 					{
 						$text .= (cot_string_truncate($text, $cfg['plugin']['comments']['rss_commentmaxsymbols'])) ? '...' : '';
@@ -119,7 +94,7 @@ if ($c == 'comments')
 				// Attach original page text as last item
 				$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']);
 				$items[$i]['title'] = $L['rss_original'];
-				$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_html'], $row['page_pageurl']);
+				$items[$i]['description'] = cot_parse_page_text($row['page_id'], $row['page_type'], $row['page_text'], $row['page_pageurl']);
 				$items[$i]['link'] = COT_ABSOLUTE_URL.cot_url('page', "id=$page_id", '', true);
 				$items[$i]['pubDate'] = date('r', $row['page_date']);
 			}

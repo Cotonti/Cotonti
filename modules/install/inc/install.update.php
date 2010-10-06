@@ -240,6 +240,16 @@ else
 		'UPDATE_FROM' => 'r' . $rev,
 		'UPDATE_TO' => is_int($new_rev) ? 'r' . $new_rev : 'r' . $rev
 	));
+
+	// BBcode2HTML
+	if ($cfg['bbcode2html'])
+	{
+		require_once './setup/siena/bbcode2html.inc';
+		cot_message('BBcode 2 HTML: OK');
+		$config_contents = file_get_contents($file['config']);
+		$config_contents = preg_replace("#^\\\$cfg\['bbcode2html'\]\s*=\s*.*?;#m", '$cfg[\'bbcode2html\'] = false;', $config_contents);
+		file_put_contents($file['config'], $config_contents);
+	}
 }
 
 cot_display_messages($t);

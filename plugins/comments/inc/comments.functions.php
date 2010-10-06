@@ -152,23 +152,7 @@ function cot_comments_display($area, $code, $cat = '')
 				)) : '';
 			$com_authorlink = cot_build_user($row['com_authorid'], $com_author);
 
-			if ($cfg['parser_cache'])
-			{
-				if (empty($row['com_html']) && !empty($row['com_text']))
-				{
-					$row['com_html'] = cot_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'],
-						$cfg['parsesmiliescom'], true);
-					cot_db_update($db_com, array('com_html' => $row['com_html']), "com_id = ".$row['com_id']);
-				}
-				$com_text = $cfg['parsebbcodepages'] ? cot_post_parse($row['com_html'])
-					: htmlspecialchars($row['com_text']);
-			}
-			else
-			{
-				$com_text = cot_parse(htmlspecialchars($row['com_text']), $cfg['parsebbcodecom'],
-					$cfg['parsesmiliescom'], true);
-				$com_text = cot_post_parse($com_text, 'pages');
-			}
+			$com_text = cot_parse($row['com_text'], $cfg['plugins']['comments']['markup']);
 
 			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60)) ? TRUE
 				: FALSE;

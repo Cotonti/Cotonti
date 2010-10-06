@@ -177,44 +177,9 @@ if ($usr['isadmin'])
 	));
 }
 
-switch($pag['page_type'])
-{
-	case '1':
-		$t->assign("PAGE_TEXT", $pag['page_text']);
-	break;
 
-	case '2':
-		if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-		{
-			ob_start();
-			eval($pag['page_text']);
-			$t->assign("PAGE_TEXT", ob_get_clean());
-		}
-		else
-		{
-			$t->assign("PAGE_TEXT", "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\"."); // TODO - i18n
-		}
-	break;
-
-	default:
-		if ($cfg['parser_cache'])
-		{
-			if (empty($pag['page_html']) && !empty($pag['page_text']))
-			{
-				$pag['page_html'] = cot_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
-				cot_db_query("UPDATE $db_pages SET page_html = '".cot_db_prep($pag['page_html'])."' WHERE page_id = " . $id);
-			}
-			$html = $cfg['parsebbcodepages'] ? cot_post_parse($pag['page_html']) : htmlspecialchars($pag['page_text']);
-			$t->assign('PAGE_TEXT', $html);
-		}
-		else
-		{
-			$text = cot_parse(htmlspecialchars($pag['page_text']), $cfg['parsebbcodepages'], $cfg['parsesmiliespages'], true);
-			$text = cot_post_parse($text, 'pages');
-			$t->assign('PAGE_TEXT', $text);
-		}
-	break;
-}
+$text = cot_parse($pag['page_text'], $cfg['module']['page']['markup']);
+$t->assign('PAGE_TEXT', $text);
 
 $pag['page_file'] = intval($pag['page_file']);
 if ($pag['page_file'] > 0)

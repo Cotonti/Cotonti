@@ -1564,40 +1564,6 @@ function cot_cache_clearall()
 }
 
 /**
- * Clears HTML-cache
- *
- * @todo Add trigger support here to clean non-standard html fields
- * @return bool
- */
-function cot_cache_clearhtml()
-{
-	global $cfg, $db_pages, $db_forum_posts, $db_pm;
-	$res = TRUE;
-	if ($cfg['module']['page'])
-	{
-		cot_require('page');
-		$res &= cot_db_query("UPDATE $db_pages SET page_html=''");
-	}
-	if ($cfg['module']['forums'])
-	{
-		cot_require('forums');
-		$res &= cot_db_query("UPDATE $db_forum_posts SET fp_html=''");
-	}
-	if ($cfg['module']['pm'])
-	{
-		cot_require('pm');
-		$res &= cot_db_query("UPDATE $db_pm SET pm_html = ''");
-	}
-	/* === Hook === */
-	foreach (cot_getextplugins('cache.clearhtml') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
-	return $res;
-}
-
-/**
  * Fetches cache value
  * @deprecated Deprecated since 0.7.0, use $cot_cache->db object instead
  * @param string $name Item name

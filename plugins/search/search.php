@@ -111,7 +111,7 @@ foreach (cot_getextplugins('search.first') as $pl)
 }
 /* ===== */
 
-if (($tab == 'pag' || empty($tab))  && !$cfg['disable_page'] && $cfg['plugin']['search']['pagesearch'])
+if (($tab == 'pag' || empty($tab))  && $cfg['module']['page'] && $cfg['plugin']['search']['pagesearch'])
 {
 	// Making the category list
 	$pages_cat_list['all'] = $L['plu_allcategories'];
@@ -144,7 +144,7 @@ if (($tab == 'pag' || empty($tab))  && !$cfg['disable_page'] && $cfg['plugin']['
 	}
 }
 
-if (($tab == 'frm' || empty($tab)) && !$cfg['disable_forums'] && $cfg['plugin']['search']['forumsearch'])
+if (($tab == 'frm' || empty($tab)) && is_array($cfg['modules']['forums']) && $cfg['plugin']['search']['forumsearch'])
 {
 	$sql1 = cot_db_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
 		LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
@@ -218,7 +218,7 @@ if (!empty($sq))
 		$touser = ($totalusers > 0 && !$cot_error) ? 'IN ('.implode(',', $touser_ids).')' : '';
 	}
 
-	if (($tab == 'pag' || empty($tab)) && !$cfg['disable_page'] && $cfg['plugin']['search']['pagesearch'] && !$cot_error)
+	if (($tab == 'pag' || empty($tab)) && $cfg['module']['page'] && $cfg['plugin']['search']['pagesearch'] && !$cot_error)
 	{
 		$where = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
 			"AND page_cat IN ('".cot_db_prep(implode("','", $rsearch['pag']['sub']))."')" : "AND page_cat IN ('".implode("','", $pag_catauth)."')";
@@ -269,7 +269,7 @@ if (!empty($sq))
 			$t->parse('MAIN.RESULTS.PAGES');
 		}
 	}
-	if (($tab == 'frm' || empty($tab)) && !$cfg['disable_forums'] && $cfg['plugin']['search']['forumsearch'] && !$cot_error)
+	if (($tab == 'frm' || empty($tab)) && is_array($cfg['modules']['forums']) && $cfg['plugin']['search']['forumsearch'] && !$cot_error)
 	{
 		$where = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
 			"AND s.fs_id IN ('".cot_db_prep(implode("','", $rsearch['frm']['sub']))."')" : "AND s.fs_id IN ('".implode("','", $frm_catauth)."')";

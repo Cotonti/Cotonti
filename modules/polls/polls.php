@@ -17,8 +17,6 @@ Hooks=module
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_dieifdisabled($cfg['disable_polls']);
-
 // Environment setup
 define('COT_POLLS', TRUE);
 $env['location'] = 'polls';
@@ -89,7 +87,7 @@ elseif ((int)$id > 0)
 	$poll_form = cot_poll_form($id);
 
 	$t->assign(array(
-		"POLLS_TITLE" => cot_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
+		"POLLS_TITLE" => cot_parse($poll_form['poll_text'], $cfg['module']['polls']['markup']),
 		"POLLS_FORM" => $poll_form['poll_block'],
 		"POLLS_VIEWALL" => cot_rc_link(cot_url('polls', 'id=viewall'), $L['polls_viewarchives'])
 	));
@@ -129,7 +127,7 @@ else
 		$t->assign(array(
 			"POLL_DATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
 			"POLL_HREF" => cot_url('polls', 'id='.$row['poll_id']),
-			"POLL_TEXT" => cot_parse(htmlspecialchars($row['poll_text']), 1, 1, 1),
+			"POLL_TEXT" => cot_parse($row['poll_text'], $cfg['module']['polls']['markup']),
 			"POLL_NUM" => $jj,
 			"POLL_ODDEVEN" => cot_build_oddeven($jj)
 		));

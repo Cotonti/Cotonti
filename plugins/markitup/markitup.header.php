@@ -32,13 +32,15 @@ if (!defined('COT_INDEX') && !defined('COT_LIST') && !defined('COT_MESSAGE'))
 		$smile_lang = './images/smilies/lang/en.lang.js';
 	}
 
+	$mkup_set = function_exists('cot_bbcode_parse') ? 'bbcode' : 'html';
+
 	$out['compopup'] .= <<<HTM
 <script type="text/javascript" src="$smile_lang"></script>
 <script type="text/javascript" src="./images/smilies/set.js"></script>
 <script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jquery.markitup.js"></script>
 <script type="text/javascript" src="$mkup_lang"></script>
 <script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jqModal.js"></script>
-<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/set.js"></script>
+<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/{$mkup_set}.set.js"></script>
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/{$cfg['plugin']['markitup']['skin']}/style.css" />
 <link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/style.css" />
 HTM;

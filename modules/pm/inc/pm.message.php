@@ -94,20 +94,7 @@ foreach (cot_getextplugins('pm.main') as $pl)
 }
 /* ===== */
 
-if($cfg['parser_cache'])
-{
-	if(empty($row['pm_html']) && !empty($row['pm_text']))
-	{
-		$row['pm_html'] = cot_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
-		cot_db_query("UPDATE $db_pm SET pm_html = '".cot_db_prep($row['pm_html'])."' WHERE pm_id = " . $row['pm_id']);
-	}
-	$pm_maindata = cot_post_parse($row['pm_html']);
-}
-else
-{
-	$pm_maindata = cot_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
-	$pm_maindata = cot_post_parse($pm_maindata);
-}
+$pm_maindata = cot_parse($row['pm_text'], $cfg['module']['pm']['markup']);
 
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(cot_skinfile('pm.message'));
@@ -152,20 +139,8 @@ if ($history)
 			$star_class = ($row2['pm_tostate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
 		}
 
-		if ($cfg['parser_cache'])
-		{
-			if (empty($row2['pm_html']) && !empty($row2['pm_text']))
-			{
-				$row2['pm_html'] = cot_parse(htmlspecialchars($row2['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
-				cot_db_query("UPDATE $db_pm SET pm_html = '".cot_db_prep($row2['pm_html'])."' WHERE pm_id = " . $row2['pm_id']);
-			}
-			$pm_data = cot_post_parse($row2['pm_html']);
-		}
-		else
-		{
-			$pm_data = cot_parse(htmlspecialchars($row2['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
-			$pm_data = cot_post_parse($pm_data);
-		}
+		$pm_data = cot_parse($row2['pm_text'], $cfg['module']['pm']['markup']);
+
 		$row2['pm_icon_delete'] = cot_rc_link(cot_url('pm', 'a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d),
 				$R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax'));
 		$row2['pm_icon_starred'] = cot_rc_link(cot_url('pm', '&a=star&id='.$row2['pm_id']),
@@ -223,17 +198,22 @@ if ($usr['auth_write'])
 	}
 	$newpmtext = (!empty($q)) ? '[quote]'.htmlspecialchars($row['pm_text']).'[/quote]' : '';
 	$onclick = "insertText(document, 'newlink', 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
-    // FIXME PFS dependency
-//	$pfs = cot_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
-//	$pfs .= (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
+
 	$t->assign(array(
 		"PM_QUOTE" => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$d), $L['Quote'], array('onclick' => $onclick)),
 		"PM_FORM_SEND" => cot_url('pm', 'm=send&a=send&to='.$to),
 		"PM_FORM_TITLE" => htmlspecialchars($newpmtitle),
 		"PM_FORM_TEXT" => $newpmtext,
-		"PM_FORM_PFS" => $pfs,
 		"PM_AJAX_MARKITUP" => (COT_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
 	));
+
+	/* === Hook === */
+	foreach (cot_getextplugins('pm.reply.tags') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	$t->parse("MAIN.REPLY");
 }
 if (!COT_AJAX)

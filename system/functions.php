@@ -51,6 +51,21 @@ if (!isset($cfg['dir_perms']))
 	$cfg['dir_perms'] = 0777;
 }
 
+/**
+ * Array of custom cot_import() filter callbacks
+ */
+$cot_import_filters = array();
+
+/**
+ * Custom e-mail send callbacks
+ */
+$cot_mail_senders = array();
+
+/**
+ * Custom parser functions registry
+ */
+$cot_parsers = array();
+
 /*
  * =========================== System Functions ===============================
 */
@@ -92,7 +107,9 @@ function cot_cutstring($res, $l)
  */
 function cot_getextplugins($hook, $cond='R')
 {
-	global $cot_plugins, $cot_cache;
+	global $cot_plugins, $cot_cache, $cot_current_hook;
+
+	$cot_current_hook = $hook;
 
 	$extplugins = array();
 
@@ -135,6 +152,8 @@ function cot_getextplugins($hook, $cond='R')
  */
 function cot_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 {
+	global $cot_import_filters;
+
 	switch($source)
 	{
 		case 'G':
@@ -189,6 +208,16 @@ function cot_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 	$pass = FALSE;
 	$defret = NULL;
 	$filter = ($filter=='STX') ? 'TXT' : $filter;
+
+	// Custom filter support
+	if (is_array($cot_import_filters[$filter]))
+	{
+		foreach ($cot_import_filters[$filter] as $func)
+		{
+			$v = $func($v, $name);
+		}
+		return $v;
+	}
 
 	switch($filter)
 	{
@@ -471,6 +500,58 @@ function cot_load_structure()
 			include $pl;
 		}
 		/* ===== */
+	}
+}
+
+/**
+ * Sends mail with standard PHP mail()
+ *
+ * @global $cfg
+ * @param string $fmail Recipient
+ * @param string $subject Subject
+ * @param string $body Message body
+ * @param string $headers Message headers
+ * @param string $additional_parameters Additional parameters passed to sendmail
+ * @return bool
+ */
+function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
+{
+	global $cfg, $cot_mail_senders;
+
+	if (is_array($cot_mail_senders))
+	{
+		foreach ($cot_mail_senders as $func)
+		{
+			$ret &= $func($fmail, $subject, $body, $headers, $additional_parameters);
+		}
+		return $ret;
+	}
+
+	if (empty($fmail))
+	{
+		return false;
+	}
+	else
+	{
+		$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
+
+		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
+		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
+
+		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
+		$headers .= "Content-Type: text/plain; charset=UTF-8\n";
+		$headers .= "Content-Transfer-Encoding: 8bit\n";
+		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
+		if (ini_get('safe_mode'))
+		{
+			mail($fmail, $subject, $body, $headers);
+		}
+		else
+		{
+			mail($fmail, $subject, $body, $headers, $additional_parameters);
+		}
+		cot_stat_inc('totalmailsent');
+		return true;
 	}
 }
 
@@ -1429,7 +1510,7 @@ function cot_build_usertext($text)
 			$text = preg_replace("#$bbcode#i", $bbcodehtml, $text);
 		}
 	}
-	return cot_parse($text, $cfg['parsebbcodeusertext'], $cfg['parsesmiliesusertext'], 1);
+	return cot_parse($text, $cfg['parsebbcodeusertext']);
 }
 
 /**
@@ -2675,8 +2756,231 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 }
 
 /*
+ * ============================== Text parsing API ============================
+ */
+
+/**
+ * Cuts the page after 'more' tag or after the first page (if multipage)
+ *
+ * @param string $html Page body
+ * @return string
+ */
+function cot_cut_more($html)
+{
+	$mpos = mb_strpos($html, '<!--more-->');
+	if ($mpos === false)
+	{
+		$mpos = mb_strpos($html, '[more]');
+	}
+	if ($mpos !== false)
+	{
+		$html = mb_substr($html, 0, $mpos);
+	}
+	$mpos = mb_strpos($html, '[newpage]');
+	if ($mpos !== false)
+	{
+		$html = mb_substr($html, 0, $mpos);
+	}
+	if (mb_strpos($html, '[title]'))
+	{
+		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
+	}
+	return $html;
+}
+
+/**
+ * Parses text body
+ *
+ * @param string $text Source text
+ * @return string
+ */
+function cot_parse($text, $enable_markup = true)
+{
+	global $cfg, $cot_parsers;
+
+	if ($enable_markup)
+	{
+		foreach ($cot_parsers as $func)
+		{
+			$text = $func($text);
+		}
+	}
+	else
+	{
+		$text = htmlspecialchars($text);
+	}
+
+	return $text;
+}
+
+/**
+ * Automatically detect and parse URLs in text into HTML
+ *
+ * @param string $text Text body
+ * @return string
+ */
+function cot_parse_autourls($text)
+{
+	$text = preg_replace('`(^|\s)(http|https|ftp)://([^\s"\'\[]+)`', '$1<a href="$2://$3">$2://$3</a>', $text);
+	return $text;
+}
+
+/**
+ * Truncates text.
+ *
+ * Cuts a string to the length of $length
+ *
+ * @param string  $text String to truncate.
+ * @param integer $length Length of returned string, including ellipsis.
+ * @param boolean $considerhtml If true, HTML tags would be handled correctly *
+ * @param boolean $exact If false, $text will not be cut mid-word
+ * @return string trimmed string.
+ */
+function cot_string_truncate($text, $length = 100, $considerhtml = true, $exact = false)
+{
+	if ($considerhtml)
+	{
+		// if the plain text is shorter than the maximum length, return the whole text
+		if (mb_strlen(preg_replace('/<.*?>/', '', $text)) <= $length)
+		{
+			return $text;
+		}
+		// splits all html-tags to scanable lines
+		preg_match_all('/(<.+?>)?([^<>]*)/s', $text, $lines, PREG_SET_ORDER);
+
+		$total_length = 0;
+		$open_tags = array();
+		$truncate = '';
+
+		foreach ($lines as $line_matchings)
+		{
+			// if there is any html-tag in this line, handle it and add it (uncounted) to the output
+			if (!empty($line_matchings[1]))
+			{
+				// if it's an "empty element" with or without xhtml-conform closing slash (f.e. <br/>)
+				if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1]))
+				{
+					// do nothing
+					// if tag is a closing tag (f.e. </b>)
+				}
+				elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings))
+				{
+					// delete tag from $open_tags list
+					$pos = array_search($tag_matchings[1], $open_tags);
+					if ($pos !== false)
+					{
+						unset($open_tags[$pos]);
+					}
+					// if tag is an opening tag (f.e. <b>)
+				}
+				elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings))
+				{
+					// add tag to the beginning of $open_tags list
+					array_unshift($open_tags, mb_strtolower($tag_matchings[1]));
+				}
+				// add html-tag to $truncate'd text
+				$truncate .= $line_matchings[1];
+			}
+
+			// calculate the length of the plain text part of the line; handle entities as one character
+			$content_length = mb_strlen(preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $line_matchings[2]));
+			if ($total_length+$content_length> $length)
+			{
+				// the number of characters which are left
+				$left = $length - $total_length;
+				$entities_length = 0;
+				// search for html entities
+				if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $line_matchings[2], $entities, PREG_OFFSET_CAPTURE))
+				{
+					// calculate the real length of all entities in the legal range
+					foreach ($entities[0] as $entity)
+					{
+						if ($entity[1]+1-$entities_length <= $left)
+						{
+							$left--;
+							$entities_length += mb_strlen($entity[0]);
+						}
+						else
+						{
+							// no more characters left
+							break;
+						}
+					}
+				}
+				$truncate .= mb_substr($line_matchings[2], 0, $left+$entities_length);
+				// maximum lenght is reached, so get off the loop
+				break;
+			}
+			else
+			{
+				$truncate .= $line_matchings[2];
+				$total_length += $content_length;
+			}
+
+			// if the maximum length is reached, get off the loop
+			if ($total_length >= $length)
+			{
+				break;
+			}
+		}
+	}
+	else
+	{
+		if (mb_strlen($text) <= $length)
+		{
+			return $text;
+		}
+		else
+		{
+			$truncate = mb_substr($text, 0, $length);
+		}
+	}
+
+	if (!$exact)
+	{
+		// ...search the last occurance of a space...
+		if (mb_strrpos($truncate, ' ') > 0)
+		{
+			$pos1 = mb_strrpos($truncate, ' ');
+			$pos2 = mb_strrpos($truncate, '>');
+			$spos = ($pos2 < $pos1) ? $pos1 : ($pos2+1);
+			if (isset($spos))
+			{
+				// ...and cut the text in this position
+				$truncate = mb_substr($truncate, 0, $spos);
+			}
+		}
+	}
+	if ($considerhtml)
+	{
+		// close all unclosed html-tags
+		foreach ($open_tags as $tag)
+		{
+			$truncate .= '</'.$tag.'>';
+		}
+	}
+	return $truncate;
+}
+
+/**
+ * Wraps text
+ *
+ * @param string $str Source text
+ * @param int $wrap Wrapping boundary
+ * @return string
+ */
+function cot_wraptext($str, $wrap = 80)
+{
+	if (!empty($str))
+	{
+		$str = preg_replace('/([^\n\r ?&\.\/<>\"\\-]{'.$wrap.'})/', " \\1\n", $str);
+	}
+	return $str;
+}
+
+/*
  * ============================== Resource Strings ============================
-*/
+ */
 
 /**
  * Resource string formatter function. Takes a string with predefined variable substitution, e.g.

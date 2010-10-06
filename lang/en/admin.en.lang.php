@@ -98,20 +98,6 @@ $L['cfg_smtp_uses_ssl'] = array('Use SSL', 'Set it if the type of sending E-mail
 
 /**
  * Config Section
- * Forums Subsection
- */
-
-$L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users from posting twice in a row in the same topic');	// New in 0.1.0
-$L['cfg_disable_forums'] = array('Disable the forums', '');
-$L['cfg_hideprivateforums'] = array('Hide private forums', '');
-$L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
-$L['cfg_maxtopicsperpage'] = array('Maximum topics per page', '');
-$L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');	// New in 0.1.0
-$L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');	// New in 0.1.0
-$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' '); // New in 0.0.6
-
-/**
- * Config Section
  * Lang Subsection
  */
 
@@ -170,35 +156,6 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
 
 /**
  * Config Section
- * Page Subsection
- */
-
-$L['cfg_allowphp_pages'] = array('Allow the PHP page type', 'Execution of PHP code in pages, use with caution!');
-$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');	// New in 0.0.2
-$L['cfg_count_admin'] = array('Count Administrators\' hits', '');	// New in 0.0.1
-$L['cfg_disable_page'] = array('Disable the pages', '');
-$L['cfg_maxrowsperpage'] = array('Max. lines in lists', ' ');
-$L['cfg_maxlistsperpage'] = array('Max. lists per page', ' '); // New in 0.0.6
-
-/**
- * Config Section
- * Parser Subsection
- */
-
-$L['cfg_parsebbcodepm'] = array('Parse BBcode in private messages', '');
-$L['cfg_parsebbcodeforums'] = array('Parse BBcode in forums', '');
-$L['cfg_parsebbcodepages'] = array('Parse BBcode in pages', '');
-$L['cfg_parsebbcodeusertext'] = array('Parse BBcode in user signature', '');
-$L['cfg_parser_cache'] = array('Enable HTML cache', ''); // New in 0.0.1
-$L['cfg_parser_custom'] = array('Enable custom parser', ''); // New in 0.0.1
-$L['cfg_parser_disable'] = array('Disable default parser', ''); // New in 0.0.3
-$L['cfg_parsesmiliespm'] = array('Parse smilies in private messages', '');
-$L['cfg_parsesmiliesforums'] = array('Parse smilies in forums', '');
-$L['cfg_parsesmiliespages'] = array('Parse smilies in pages', '');
-$L['cfg_parsesmiliesusertext'] = array('Parse smilies in user signature', '');
-
-/**
- * Config Section
  * Performance Subsection
  */
 
@@ -214,44 +171,10 @@ $L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache
 
 /**
  * Config Section
- * PFS Subsection
- */
-
-$L['cfg_disable_pfs'] = array('Disable the '.$L['PFS'], '');
-$L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');
-$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');	// New in 0.0.2
-$L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in 0.0.2
-$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in 0.0.2
-$L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/FOLDERNAME/... Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this.');
-$L['cfg_flashupload'] = array('Use flash uploader', 'Allows uploading many files at once.'); // New in 1.0.0
-$L['cfg_pfs_winclose'] = array('Close popup window after bbcode insertion');
-$L['cfg_th_amode'] = array('Thumbnails generation', '');
-$L['cfg_th_border'] = array('Thumbnails, border size', 'Default: 4 pixels');
-$L['cfg_th_colorbg'] = array('Thumbnails, border color', 'Default: 000000, hex color code');
-$L['cfg_th_colortext'] = array('Thumbnails, text color', 'Default: FFFFFF, hex color code');
-$L['cfg_th_dimpriority'] = array('Thumbnails, rescaling priority dimension', '');
-$L['cfg_th_jpeg_quality'] = array('Thumbnails, Jpeg quality', 'Default: 85');
-$L['cfg_th_keepratio'] = array('Thumbnail, keep ratio?', '');
-$L['cfg_th_textsize'] = array('Thumbnails, size of the text', '');
-$L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
-$L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Width x 0.75');
-
-/**
- * Config Section
  * Plugins Subsection
  */
 
 $L['cfg_disable_plug'] = array('Disable the plugins', '');
-
-/**
- * Config Section
- * Private Messages Subsection
- */
-
-$L['cfg_disable_pm'] = array('Disable the private messages', '');
-$L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
-$L['cfg_pm_maxsize'] = array('Maximum length for messages', 'Default: 10000 chars');
-$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in 0.0.6
 
 /**
  * Config Section
@@ -260,18 +183,6 @@ $L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in 0.0.6
 
 $L['cfg_disable_ratings'] = array('Disable the ratings', '');
 $L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enabled it will allow users to change their rating.');	// New in 0.0.2
-
-/**
- * Config Section
- * RSS Subsection
- */
-
-$L['cfg_disable_rss'] = array('Disable the RSS feeds', '');
-$L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' '); // New in 0.7.0
-$L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' '); // New in 0.7.0
-$L['cfg_rss_charset'] = array('RSS charset', ' '); // New in 0.7.0
-$L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
-$L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
 
 /**
  * Config Section
@@ -364,6 +275,12 @@ $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\'
 $L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300 chars');
 
 /**
+ * Config Section
+ * Common strings
+ */
+$L['cfg_markup'] = array('Enable markup', 'Enables HTML/BBcode or other parsing which is installed in your system');
+
+/**
  * Extension management
  */
 
@@ -390,37 +307,6 @@ $L['ext_up2date'] = '{$type} &quot;{$name}&quot; is up to date';
 $L['ext_update_error'] = 'Failed updating {$type} &quot;{$name}&quot;';
 $L['ext_updated'] = '{$type} &quot;{$name}&quot; has been updated to version {$ver}';
 $L['ext_updating'] = 'Updating {$type} &quot;{$name}&quot;';
-
-/**
- * Page Section
- */
-
-$L['addnewentry'] = 'Add a new entry';
-$L['adm_queue_deleted'] = 'Page was deleted in to trash can';
-$L['adm_valqueue'] = 'Waiting for validation';
-$L['adm_validated'] = 'Already validated';
-$L['adm_structure'] = 'Structure of the pages (categories)';
-$L['adm_extrafields_desc'] = 'Add/Edit extra fields';
-$L['adm_sort'] = 'Sort';
-$L['adm_sortingorder'] = 'Set a default sorting order for the categories';
-$L['adm_showall'] = 'Show all';
-$L['adm_help_page'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.';
-$L['adm_fileyesno'] = 'File (yes/no)';
-$L['adm_fileurl'] = 'File URL';
-$L['adm_filecount'] = 'File hit count';
-$L['adm_filesize'] = 'File size';
-
-/**
- * Page Section
- * Extrafields Subsection
- */
-
-$L['adm_help_pages_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br /><br />
-<b>New tags in tpl files:</b><br /><br />
-page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}<br /><br />
-page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}<br /><br />
-page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}<br /><br />
-list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}<br />';
 
 /**
   * Structure Section
@@ -450,38 +336,6 @@ $L['adm_help_structure_extrafield'] = '<b>Base HTML</b> set automaticaly if you 
 &nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: OPTIONS --&gt; {ADMIN_STRUCTURE_XXXXX}, {ADMIN_STRUCTURE_XXXXX_TITLE} &lt;!-- END: OPTIONS --&gt;<br /><br />
 &nbsp;&nbsp;&nbsp;&lt;!-- BEGIN: DEFULT --&gt; {ADMIN_STRUCTURE_FORMADD_XXXXX}, {ADMIN_STRUCTURE_FORMADD_XXXXX_TITLE} &lt;!-- END: DEFULT --&gt;<br /><br />
 <br />';
-
-/**
- * Forums Section
- */
-
-$L['adm_forum_structure'] = 'Structure of the forums (categories)';
-$L['adm_forum_emptytitle'] = 'Error: title empty';	// New in 0.1.0
-
-/**
-  * Forums Section
-  * Structure Subsection
- */
-
-$L['adm_defstate'] = 'Default state';
-$L['adm_defstate_0'] = 'Folded';
-$L['adm_defstate_1'] = 'Unfolded';
-
-/**
-  * Forums Section
-  * Forum Edit Subsection
- */
-
-$L['adm_forums_master'] = 'Master section';	// New in 0.0.1
-$L['adm_diplaysignatures'] = 'Display signatures';
-$L['adm_enablebbcodes'] = 'Enable BBcodes';
-$L['adm_enablesmilies'] = 'Enable smilies';
-$L['adm_enableprvtopics'] = 'Allow private topics';
-$L['adm_enableviewers'] = 'Enable Viewers';	// New in 0.0.2
-$L['adm_enablepolls'] = 'Enable Polls';	// New in 0.0.2
-$L['adm_countposts'] = 'Count posts';
-$L['adm_autoprune'] = 'Auto-prune topics after * days';
-$L['adm_postcounters'] = 'Check the counters';
 
 /**
  * Users Section
@@ -563,45 +417,6 @@ Restore: Put the item back in the live database<br />
 
 /**
  * Other Section
- * PFS Subsection
- */
-
-$L['adm_gd'] = 'GD graphical library';
-$L['adm_allpfs'] = 'All '.$L['PFS'];
-$L['adm_allfiles'] = 'All files';
-$L['adm_thumbnails'] = 'Thumbnails';
-$L['adm_orphandbentries'] = 'Orphan DB entries';
-$L['adm_orphanfiles'] = 'Orphan files';
-$L['adm_delallthumbs'] = 'Delete all thumbnails';
-$L['adm_rebuildallthumbs']= 'Delete and rebuild all thumbnails';
-$L['adm_help_allpfs'] = $L['PFS'].' of all registered users';
-$L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotonti won\'t be able to create thumbnails for images. Go for '.$L['Configuration'].' &gt; '.$L['PFS'].' and set &quot;Thumbnails generation&quot; to &quot;'.$L['Disabled'].'&quot;.';
-
-/**
- * Other Section
- * Polls Subsection
- */
-
-$L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.';	// New in 0.0.2
-$L['adm_polls_forumpolls'] = 'Polls from forums (recent at top):';	// New in 0.0.1
-$L['adm_polls_indexpolls'] = 'Index polls (recent at top):';	// New in 0.0.1
-$L['adm_polls_msg916_bump'] = 'Successfully bumped!';	// New in 0.0.3
-$L['adm_polls_msg916_deleted'] = 'Successfully deleted!';	// New in 0.0.3
-$L['adm_polls_msg916_reset'] = 'Successfully reset!';	// New in 0.0.3
-$L['adm_polls_on_page'] = 'on page';	// New in 0.0.2
-$L['adm_polls_polltopic'] = 'Poll topic';	// New in 0.0.1
-$L['adm_polls_nopolls'] = 'There is no polls'; // New in 0.7.0
-
-/**
- * Other Section
- * PM Subsection
- */
-
-$L['adm_pm_totaldb'] = 'Private messages in the database';
-$L['adm_pm_totalsent'] = 'Total of private messages ever sent';
-
-/**
- * Other Section
  * Ratings Subsection
  */
 
@@ -619,40 +434,6 @@ $L['adm_delcacheitem'] = 'Cache item removed';	// New in 0.0.2
 $L['adm_internalcache'] = 'Internal cache';
 $L['adm_purgeall_done'] = 'Cache cleared completely';	// New in 0.0.2
 $L['adm_diskcache'] = 'Disk cache';	// New in 0.6.1
-
-/**
- * Other Section
- * BBCode Subsection
- */
-
-$L['adm_bbcode'] = 'BBCode';
-$L['adm_bbcodes'] = 'BBCodes';
-$L['adm_bbcodes_added'] = 'Successfully added new bbcode.';
-$L['adm_bbcodes_clearcache'] = 'Clear HTML cache';
-$L['adm_bbcodes_clearcache_confirm'] = 'This will clear cache for all pages and posts, continue?';
-$L['adm_bbcodes_clearcache_done'] = 'HTML cache has been cleared.';
-$L['adm_bbcodes_confirm'] = 'Really delete this bbcode?';
-$L['adm_bbcodes_container'] = 'Container';
-$L['adm_bbcodes_mode'] = 'Mode';
-$L['adm_bbcodes_new'] = 'New BBCode';
-$L['adm_bbcodes_pattern'] = 'Pattern';
-$L['adm_bbcodes_postrender'] = 'Post-render';
-$L['adm_bbcodes_priority'] = 'Priority';
-$L['adm_bbcodes_removed'] = 'Successfully removed bbcode.';
-$L['adm_bbcodes_replacement'] = 'Replacement';
-$L['adm_bbcodes_updated'] = 'Successfully updated bbcode.';
-$L['adm_help_bbcodes'] = <<<HTM
-<ul>
-<li><strong>Name</strong> - BBcode name (use alphanumerics and underscores only)</li>
-<li><strong>Mode</strong> - Parsing mode, on of the following: 'str' (str_replace), 'ereg' (eregi_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)</li>
-<li><strong>Pattern</strong> - BBcode string or entire regular expression</li>
-<li><strong>Replacement</strong> - Replacement string or regular substitution or callback body</li>
-<li><strong>Container</strong> - Whether bbcode is container (like [bbcode]Something here[/bbcode])</li>
-<li><strong>Priority</strong> - BBcode priority from 0 to 255. Smaller priority bbcodes are parsed first, 128 is default medium priority.</li>
-<li><strong>Plugin</strong> - Plugin/part name this bbcode belongs to. Leave it blank, this is for plugins only.</li>
-<li><strong>Post-render</strong> - Whether this bbcode must be applied on a pre-rendered HTML cache. Use only if your callback does some per-request calculations.</li>
-</ul>
-HTM;
 
 /**
  * Other Section
@@ -822,9 +603,5 @@ $L['adm_help_cache'] = 'Not available';
 $L['adm_help_check1'] = 'Not available';
 $L['adm_help_check2'] = 'Not available';
 $L['adm_help_config']= 'Not available';
-$L['adm_help_forums'] = 'Not available';
-$L['adm_help_forums_structure'] = 'Not available';
-$L['adm_help_pfsfiles'] = 'Not available';
-$L['adm_help_pfsthumbs'] = 'Not available';
 
 ?>

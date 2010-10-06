@@ -395,7 +395,7 @@ function cot_load_forum_structure()
 
 // Preload forum structure
 
-if (!$cot_forums_str && !$cfg['disable_forums'])
+if (!$cot_forums_str)
 {
 	cot_load_forum_structure();
 	$cot_cache && $cot_cache->db->store('cot_forums_str', $cot_forums_str, 'system');

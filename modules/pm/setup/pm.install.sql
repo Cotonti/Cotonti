@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS `cot_pm` (
   `pm_touserid` int(11) NOT NULL default '0',
   `pm_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `pm_text` text collate utf8_unicode_ci NOT NULL,
-  `pm_html` text collate utf8_unicode_ci NOT NULL,
   `pm_fromstate` tinyint(2) NOT NULL default '0',
   `pm_tostate` tinyint(2) NOT NULL default '0',
   PRIMARY KEY  (`pm_id`),

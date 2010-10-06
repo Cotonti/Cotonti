@@ -42,14 +42,14 @@ if ($days > 0)
 cot_require('users');
 cot_require('recentitems', true);
 $totalrecent[] = 0;
-if ($cfg['plugin']['recentitems']['newpages'] && $cfg['module']['page'] && !$cfg['disable_page'] && (empty($mode) || $mode == 'pages'))
+if ($cfg['plugin']['recentitems']['newpages'] && $cfg['module']['page'] && (empty($mode) || $mode == 'pages'))
 {
 	cot_require('page');
 	$res = cot_build_recentpages('recentitems.pages', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $pagetitlelimit, $cfg['plugin']['recentitems']['newpagestext'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("RECENT_PAGES", $res);
 }
 
-if ($cfg['plugin']['recentitems']['newforums'] && $cfg['module']['forums'] && !$cfg['disable_forums'] && (empty($mode) || $mode == 'forums'))
+if ($cfg['plugin']['recentitems']['newforums'] && $cfg['module']['forums'] && (empty($mode) || $mode == 'forums'))
 {
 	cot_require('forums');
 	$res = cot_build_recentforums('recentitems.forums', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $forumtitlelimit, $cfg['plugin']['recentitems']['rightscan']);

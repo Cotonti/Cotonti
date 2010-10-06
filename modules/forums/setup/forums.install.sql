@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS `cot_forum_posts` (
   `fp_updater` varchar(100) collate utf8_unicode_ci NOT NULL DEFAULT '',
   `fp_text` text collate utf8_unicode_ci NOT NULL,
   `fp_posterip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
-  `fp_html` text collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`fp_id`),
   UNIQUE KEY `fp_topicid` (`fp_topicid`,`fp_id`),
   KEY `fp_updated` (`fp_creation`),

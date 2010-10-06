@@ -11,6 +11,20 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+/**
+ * Admin
+ */
+
+$L['adm_help_polls'] = 'Fill in the form and press &quot;Create&quot; button to start a new poll. Empty options will be ignored and removed. It is not recommended to edit the poll after it has been started because it may compromise poll results.';	// New in 0.0.2
+$L['adm_polls_forumpolls'] = 'Polls from forums (recent at top):';	// New in 0.0.1
+$L['adm_polls_indexpolls'] = 'Index polls (recent at top):';	// New in 0.0.1
+$L['adm_polls_msg916_bump'] = 'Successfully bumped!';	// New in 0.0.3
+$L['adm_polls_msg916_deleted'] = 'Successfully deleted!';	// New in 0.0.3
+$L['adm_polls_msg916_reset'] = 'Successfully reset!';	// New in 0.0.3
+$L['adm_polls_on_page'] = 'on page';	// New in 0.0.2
+$L['adm_polls_polltopic'] = 'Poll topic';	// New in 0.0.1
+$L['adm_polls_nopolls'] = 'There is no polls'; // New in 0.7.0
+
 $L['poll'] = 'Poll';	// New in 0.7.0
 $L['polls_alreadyvoted'] = 'You\'ve already voted for this poll.';
 $L['polls_created'] = 'The poll has been successfully created'; // New in 0.0.2

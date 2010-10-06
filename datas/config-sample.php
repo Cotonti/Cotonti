@@ -150,7 +150,6 @@ $db_x				= 'cot_'; // Default: cot_, prefix for extra fields' table(s)
 
 $db_auth			= $db_x.'auth';
 $db_banlist 		= $db_x.'banlist';
-$db_bbcode			= $db_x.'bbcode';
 $db_cache 			= $db_x.'cache';
 $db_cache_bindings	= $db_x.'cache_bindings';
 $db_core			= $db_x.'core';
@@ -164,7 +163,6 @@ $db_plugins 		= $db_x.'plugins';
 $db_rated 			= $db_x.'rated';
 $db_ratings 		= $db_x.'ratings';
 $db_referers 		= $db_x.'referers';
-$db_smilies 		= $db_x.'smilies';
 $db_stats 			= $db_x.'stats';
 $db_structure 		= $db_x.'structure';
 $db_tag_references	= $db_x.'tag_references';
@@ -172,5 +170,11 @@ $db_tags			= $db_x.'tags';
 $db_trash	 		= $db_x.'trash';
 $db_updates			= $db_x.'updates';
 $db_users 			= $db_x.'users';
+
+/**
+ * Set it TRUE if you want to convert your old BBcode database to HTML.
+ * Remove it otherwise.
+ */
+$cfg['bbcode2html'] = false;
 
 ?>

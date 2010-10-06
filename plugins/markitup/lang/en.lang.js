@@ -30,6 +30,7 @@ var L = {
 	link_text:	'Enter text for the link here...',
 	ol:			'Numbered list',
 	orange:		'Orange',
+	paragraph:	'Paragraph',
 	picture:	'Picture',
 	picture_url:'Enter image URL',
 	pre:		'Preformatted text',

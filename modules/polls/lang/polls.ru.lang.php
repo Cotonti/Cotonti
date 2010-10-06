@@ -11,6 +11,20 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+/**
+ * Admin
+ */
+
+$L['adm_help_polls'] = 'При создании опроса пустые ответы не учитываются и автоматически удаляются.<br />После создания опроса не рекомендуется редактировать его, так это может повлиять на ход голосования.';
+$L['adm_polls_forumpolls'] = 'Опросы в форумах (последние вверху) :';	// New in 0.0.1
+$L['adm_polls_indexpolls'] = 'Опросы на главной (последние вверху) :';	// New in 0.0.1
+$L['adm_polls_msg916_bump'] = 'Опрос поднят!';	// New in 0.0.3
+$L['adm_polls_msg916_deleted'] = 'Опрос удален!';	// New in 0.0.3
+$L['adm_polls_msg916_reset'] = 'Результаты опроса обнулены!';	// New in 0.0.3
+$L['adm_polls_on_page'] = 'на странице';	// New in 0.0.2
+$L['adm_polls_polltopic'] = 'Опрос';	// New in 0.0.1
+$L['adm_polls_nopolls'] = 'Опросов нет'; // New in 0.7.0
+
 $L['poll'] = 'Опрос';	// New in 0.7.0
 $L['polls_alreadyvoted'] = 'Вы уже проголосовали в этом опросе';
 $L['polls_created'] = 'Опрос создан'; // New in 0.0.2

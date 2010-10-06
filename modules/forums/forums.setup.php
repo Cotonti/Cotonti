@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=Forums
 Description=Cotonti Bulletin Board Module
-Version=0.7.0.4
-Date=2010-sep-11
+Version=0.7.0.5
+Date=2010-oct-05
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010
 Notes=BSD License
@@ -18,7 +18,7 @@ Admin_icon=img/adminmenu_forums.png
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-disable_forums=01:radio::0:
+markup=01:radio:0,1:1:
 hideprivateforums=02:radio::0:
 hottopictrigger=03:select:5,10,15,20,25,30,35,40,50:20:
 maxtopicsperpage=04:select:5,10,15,20,25,30,40,50,60,70,100,200,500:30:

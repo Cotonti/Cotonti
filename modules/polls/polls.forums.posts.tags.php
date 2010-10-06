@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 cot_poll_vote();
 $poll_form=cot_poll_form($q, cot_url('forums', 'm=posts&q='.$q), '', 'forum');
 $t->assign(array(
-	"POLLS_TITLE" => cot_parse(htmlspecialchars($poll_form['poll_text']), 1, 1, 1),
+	"POLLS_TITLE" => cot_parse($poll_form['poll_text'], $cfg['module']['polls']['markup']),
 	"POLLS_FORM" => $poll_form['poll_block'],
 ));
 

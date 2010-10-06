@@ -67,9 +67,7 @@ if ($m == 'edit' && $id > 0)
 
 		if (!$cot_error)
 		{
-			$comhtml = $cfg['parser_cache'] ? cot_parse(htmlspecialchars($comtext), $cfg['parsebbcodecom'],
-				$cfg['parsesmiliescom'], true) : '';
-			$sql = cot_db_update($db_com, array('com_text' => $comtext, 'com_html' => $comhtml), "com_id=$id AND com_code='$item'");
+			$sql = cot_db_update($db_com, array('com_text' => $comtext), "com_id=$id AND com_code='$item'");
 
 			if ($cfg['plugin']['comments']['mail'])
 			{
@@ -161,11 +159,8 @@ if ($a == 'send' && $usr['auth_write'])
 
 	if (!$cot_error)
 	{
-		$rhtml = $cfg['parser_cache'] ? cot_parse(htmlspecialchars($rtext), $cfg['parsebbcodecom'],
-			$cfg['parsesmiliescom'], true) : '';
-
 		$comarray += array('area' => $area, 'code' => $item, 'author' => $usr['name'], 'authorid' => (int)$usr['id'], 'authorip' => $usr['ip'],
-			'text' => $rtext, 'html' => $rhtml, 'date' => (int)$sys['now_offset']);
+			'text' => $rtext, 'date' => (int)$sys['now_offset']);
 		$sql = cot_db_insert($db_com, $comarray, 'com_');
 		$id = cot_db_insertid();
 

@@ -190,15 +190,6 @@ if ($a=='newpost')
 
 		if (!$merge)
 		{
-			if($cfg['parser_cache'])
-			{
-				$rhtml = cot_db_prep(cot_parse(htmlspecialchars($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
-			}
-			else
-			{
-				$rhtml = '';
-			}
-
 			$sql = cot_db_query("INSERT into $db_forum_posts
 			(fp_topicid,
 			fp_sectionid,
@@ -208,7 +199,6 @@ if ($a=='newpost')
 			fp_updated,
 			fp_updater,
 			fp_text,
-			fp_html,
 			fp_posterip)
 			VALUES
 			(".(int)$q.",
@@ -219,7 +209,6 @@ if ($a=='newpost')
 			".(int)$sys['now_offset'].",
 			0,
 			'".cot_db_prep($newmsg)."',
-			'$rhtml',
 			'".$usr['ip']."')");
 
 			$p = cot_db_insertid();
@@ -266,16 +255,7 @@ if ($a=='newpost')
 		}
 		else
 		{
-			if($cfg['parser_cache'])
-			{
-				$rhtml = cot_db_prep(cot_parse(htmlspecialchars($newmsg), $cfg['parsebbcodeforums'] && $fs_allowbbcodes, $cfg['parsesmiliesforums'] && $fs_allowsmilies, 1));
-			}
-			else
-			{
-				$rhtml = '';
-			}
-
-			$sql = cot_db_query("SELECT fp_id, fp_text, fp_html, fp_posterid, fp_creation, fp_updated, fp_updater FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
+			$sql = cot_db_query("SELECT fp_id, fp_text, fp_posterid, fp_creation, fp_updated, fp_updater FROM $db_forum_posts WHERE fp_topicid='".$q."' ORDER BY fp_creation DESC LIMIT 1");
 			$row = cot_db_fetcharray($sql);
 
 			$p = (int) $row['fp_id'];
@@ -284,11 +264,10 @@ if ($a=='newpost')
 			$updated = sprintf($L['for_mergetime'], cot_build_timegap($gap_base, $sys['now_offset']));
 
 			$newmsg = cot_db_prep($row['fp_text'])."\n\n[b]".$updated."[/b]\n\n".cot_db_prep($newmsg);
-			$newhtml = ($cfg['parser_cache']) ? cot_db_prep($row['fp_html'])."<br /><br /><b>".$updated."</b><br /><br />".$rhtml : '';
-
+			
 			$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
 
-			$sql = cot_db_query("UPDATE $db_forum_posts SET fp_updated='".$sys['now_offset']."', fp_updater='".cot_db_prep($rupdater)."', fp_text='".$newmsg."', fp_html='".$newhtml."', fp_posterip='".$usr['ip']."' WHERE fp_id='".$row['fp_id']."' LIMIT 1");
+			$sql = cot_db_query("UPDATE $db_forum_posts SET fp_updated='".$sys['now_offset']."', fp_updater='".cot_db_prep($rupdater)."', fp_text='".$newmsg."', fp_posterip='".$usr['ip']."' WHERE fp_id='".$row['fp_id']."' LIMIT 1");
 			$sql = cot_db_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
 
 			/* === Hook === */
@@ -630,7 +609,6 @@ $extp = cot_getextplugins('forums.posts.loop');
 
 while ($row = cot_db_fetcharray($sql))
 {
-	$row['fp_text'] = htmlspecialchars($row['fp_text']);
 	$row['fp_created'] = @date($cfg['dateformat'], $row['fp_creation'] + $usr['timezone'] * 3600);
 	$row['fp_updated_ago'] = cot_build_timegap($row['fp_updated'], $sys['now_offset']);
 	$row['fp_updated'] = @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600);
@@ -653,20 +631,6 @@ while ($row = cot_db_fetcharray($sql))
 	}
 
 	$row['fp_posterip'] = ($usr['isadmin']) ? cot_build_ipsearch($row['fp_posterip']) : '';
-	if($cfg['parser_cache'])
-	{
-		if(empty($row['fp_html']) && !empty($row['fp_text']))
-		{
-			$row['fp_html'] = cot_parse($row['fp_text'], $cfg['parsebbcodeforums']  && $fs_allowbbcodes, $cfg['parsesmiliesforums']  && $fs_allowsmilies, 1);
-			cot_db_query("UPDATE $db_forum_posts SET fp_html = '".cot_db_prep($row['fp_html'])."' WHERE fp_id = " . $row['fp_id']);
-		}
-		$row['fp_text'] = cot_post_parse($row['fp_html'], 'forums');
-	}
-	else
-	{
-		$row['fp_text'] = cot_parse($row['fp_text'], ($cfg['parsebbcodeforums'] && $fs_allowbbcodes), ($cfg['parsesmiliesforums'] && $fs_allowsmilies), 1);
-		$row['fp_text'] = cot_post_parse($row['fp_text'], 'forums');
-	}
 
 	if (!empty($row['fp_updater']))
 	{
@@ -683,7 +647,7 @@ while ($row = cot_db_fetcharray($sql))
 		"FORUMS_POSTS_ROW_UPDATED" => $row['fp_updated'],
 		"FORUMS_POSTS_ROW_UPDATER" => htmlspecialchars($row['fp_updater']),
 		"FORUMS_POSTS_ROW_UPDATEDBY" => $row['fp_updatedby'],
-		"FORUMS_POSTS_ROW_TEXT" => $row['fp_text'],
+		"FORUMS_POSTS_ROW_TEXT" => cot_parse($row['fp_text'], ($cfg['module']['forums']['markup'] && $fs_allowbbcodes)),
 		"FORUMS_POSTS_ROW_ANCHORLINK" => "<a name=\"post{$row['fp_id']}\" id=\"post{$row['fp_id']}\"></a>",
 		"FORUMS_POSTS_ROW_POSTERNAME" => cot_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
@@ -755,17 +719,12 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 		}
 	}
 
-	// FIXME PFS dependency
-	//$pfs = ($usr['id']>0) ? cot_build_pfs($usr['id'], "newpost", "newmsg", $L['Mypfs']) : '';
-	//$pfs .= (cot_auth('pfs', 'a', 'A')) ? " &nbsp; ".cot_build_pfs(0, "newpost", "newmsg", $L['SFS']) : '';
-
 	cot_require_api('forms');
 	$post_mark = "<a name=\"np\" id=\"np\"></a>";
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => cot_url('forums', "m=posts&a=newpost&s=".$s."&q=".$q),
-		"FORUMS_POSTS_NEWPOST_TEXT" => $post_mark . cot_textarea('newmsg', htmlspecialchars($newmsg), 16, 56, '', 'input_textarea_editor'),
-		"FORUMS_POSTS_NEWPOST_MYPFS" => $pfs
+		"FORUMS_POSTS_NEWPOST_TEXT" => $post_mark . cot_textarea('newmsg', htmlspecialchars($newmsg), 16, 56, '', 'input_textarea_editor')
 	));
 
 	cot_display_messages($t);

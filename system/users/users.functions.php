@@ -194,7 +194,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'MAINGRPICON' => cot_build_userimage($cot_groups[$user_data['user_maingrp']]['icon']),
 				'COUNTRY' => cot_build_country($user_data['user_country']),
 				'COUNTRYFLAG' => cot_build_flag($user_data['user_country']),
-				'TEXT' => $cfg['parsebbcodeusertext'] ? cot_bbcode_parse($user_data['user_text'], true) : $user_data['user_text'],
+				'TEXT' => $cfg['parsebbcodeusertext'] ? cot_parse($user_data['user_text'], true) : $user_data['user_text'],
 				'AVATAR' => cot_build_userimage($user_data['user_avatar'], 'avatar'),
 				'PHOTO' => cot_build_userimage($user_data['user_photo'], 'photo'),
 				'SIGNATURE' => cot_build_userimage($user_data['user_signature'], 'sig'),

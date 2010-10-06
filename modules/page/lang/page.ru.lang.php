@@ -12,6 +12,48 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
+ * Admin Page Section
+ */
+
+$L['addnewentry'] = 'Добавить новую запись';
+$L['adm_queue_deleted'] = 'Страница удалена в корзину';
+$L['adm_valqueue'] = 'В очереди на утверждение';
+$L['adm_validated'] = 'Утвержденные';
+$L['adm_structure'] = 'Структура страниц (категории)';
+$L['adm_extrafields_desc'] = 'Создание / правка дополнительных полей';
+$L['adm_sort'] = 'Сортировать';
+$L['adm_sortingorder'] = 'Порядок сортировки по умолчанию в категории';
+$L['adm_showall'] = 'Показать все';
+$L['adm_help_page'] = 'Страницы категории &laquo;system&raquo; не отображаются в списках страниц и являются отдельными, самостоятельными страницами';
+$L['adm_fileyesno'] = 'Файл (да/нет)';
+$L['adm_fileurl'] = 'URL файла';
+$L['adm_filecount'] = 'Количество загрузок';
+$L['adm_filesize'] = 'Размер файла';
+
+/**
+ * Page Section
+ * Extrafields Subsection
+ */
+
+$L['adm_help_pages_extrafield'] = 'HTML-код поля установится в значение по умолчанию автоматически, если его очистить и обновить<br /><br />
+<b>Новые тэги в tpl-файлах:</b><br /><br />
+page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}<br /><br />
+page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}<br /><br />
+page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}<br /><br />
+list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}<br />';
+
+/**
+ * Config Section
+ * Page Subsection
+ */
+
+$L['cfg_allowphp_pages'] = array('Разрешить страницы на PHP', 'Внимание: исполнение PHP кода в страницах может стать причиной некорректной работы или взлома сайта!');
+$L['cfg_autovalidate'] = array('Автоматическое утверждение страниц', 'Автоматически утверждать публикацию страниц, созданных пользователем с правом администрирования раздела'); // New in 0.0.2
+$L['cfg_count_admin'] = array('Считать посещения администраторов', 'Включить посещения администраторов в статистику посещаемости сайта'); // New in 0.0.1
+$L['cfg_maxrowsperpage'] = array('Макс. количество записей на страницу списка', ' ');
+$L['cfg_maxlistsperpage'] = array('Макс. количество категорий на странице', ' '); // New in 0.0.6
+
+/**
  * page.add.tpl
  */
 

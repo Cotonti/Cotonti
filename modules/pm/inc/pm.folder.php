@@ -153,20 +153,7 @@ while ($row = cot_db_fetcharray($sql))
 			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon_new'], array('title' => $L['pm_unread'], 'class'=>'ajax'))
 			: cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon'], array('title' => $L['pm_read'], 'class'=>'ajax'));
 
-	if ($cfg['parser_cache'])
-	{
-		if (empty($row['pm_html']) && !empty($row['pm_text']))
-		{
-			$row['pm_html'] = cot_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
-			cot_db_query("UPDATE $db_pm SET pm_html = '".cot_db_prep($row['pm_html'])."' WHERE pm_id = " . $row['pm_id']);
-		}
-		$pm_data = cot_post_parse($row['pm_html']);
-	}
-	else
-	{
-		$pm_data = cot_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodepm'], $cfg['parsesmiliespm'], 1);
-		$pm_data = cot_post_parse($pm_data);
-	}
+	$pm_data = cot_parse($row['pm_text'], $cfg['module']['pm']['markup']);
 	$pm_desc = $pm_data;
 	$pm_desc .= (cot_string_truncate($pm_desc)) ? "..." : "";
 
