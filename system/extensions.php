@@ -428,10 +428,10 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			}
 		}
 
-		if (file_exists(cot_incfile($name, 'install', !$is_module)))
+		if (file_exists($path . "/$name.install.php"))
 		{
 			// Run PHP install handler
-			$ret = include cot_incfile($name, 'install', !$is_module);
+			$ret = include $path . "/$name.install.php";
 			if ($ret !== false)
 			{
 				$msg = $ret == 1 ? 'OK' : $ret;
@@ -541,9 +541,9 @@ function cot_extension_uninstall($name, $is_module = false)
     }
 
     // Run handler part
-    if (file_exists(cot_incfile($name, 'uninstall', !$is_module)))
+    if (file_exists($path . "/$name.uninstall.php"))
     {
-        $ret = include cot_incfile($name, 'uninstall', !$is_module);
+        $ret = include $path . "/$name.uninstall.php";
         if ($ret !== false)
         {
             cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
