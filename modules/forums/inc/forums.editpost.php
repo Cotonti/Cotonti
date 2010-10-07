@@ -226,7 +226,7 @@ $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
 	"FORUMS_EDITPOST_SUBTITLE" => "#".$fp_posterid." ".$fp_postername." - ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
 	"FORUMS_EDITPOST_SEND" => cot_url('forums', "m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".cot_xg()),
-	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', htmlspecialchars($fp_text), 20, 56, '', 'input_textarea_editor')
+	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', $fp_text, 20, 56, '', 'input_textarea_editor')
 ));
 
 /* === Hook === */

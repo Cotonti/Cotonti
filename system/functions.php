@@ -683,6 +683,34 @@ function cot_outputfilters($output)
 }
 
 /**
+ * Removes a directory recursively
+ * @param string $dir Directory path
+ * @return int Number of files and folders removed
+ */
+function cot_rmdir($dir)
+{
+	static $cnt = 0;
+	$dp = opendir($dir);
+	while ($f = readdir($dp))
+	{
+		$path = $dir . '/' . $f;
+		if ($f != '.' && $f != '..' && is_dir($path))
+		{
+			cot_rmdir($path);
+		}
+		elseif ($f != '.' && $f != '..')
+		{
+			unlink($path);
+			$cnt++;
+		}
+	}
+	closedir($dp);
+	rmdir($dir);
+	$cnt++;
+	return $cnt;
+}
+
+/**
  * Sends standard HTTP headers and disables browser cache
  *
  * @param string $content_type Content-Type value (without charset)
