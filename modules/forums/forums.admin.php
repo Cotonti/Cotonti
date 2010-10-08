@@ -41,7 +41,7 @@ else
 	$adminpath[] = array(cot_url('admin', 'm=forums'), $L['Forums']);
 
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.forums.first') as $pl)
+	foreach (cot_getextplugins('forums.admin.first') as $pl)
 	{
 		include $pl;
 	}
@@ -71,7 +71,7 @@ else
 			$mastername = $rtitle;
 
 			/* === Hook === */
-			foreach (cot_getextplugins('admin.forums.update') as $pl)
+			foreach (cot_getextplugins('forums.admin.update') as $pl)
 			{
 				include $pl;
 			}
@@ -173,7 +173,7 @@ else
 			'ADMIN_FORUMS_EDIT_RESYNC_URL' => cot_url('admin', 'm=forums&n=edit&a=resync&id=' . $fs_id . '&' . cot_xg())
 		));
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.forums.edit') as $pl)
+		foreach (cot_getextplugins('forums.admin.edit') as $pl)
 		{
 			include $pl;
 		}
@@ -191,7 +191,7 @@ else
 			$row_cur = cot_db_fetcharray($sql);
 
 			/* === Hook === */
-			foreach (cot_getextplugins('admin.forums.order') as $pl)
+			foreach (cot_getextplugins('forums.admin.order') as $pl)
 			{
 				include $pl;
 			}
@@ -251,7 +251,7 @@ else
 				$forumid = cot_db_insertid();
 
 				/* === Hook === */
-				foreach (cot_getextplugins('admin.forums.add') as $pl)
+				foreach (cot_getextplugins('forums.admin.add') as $pl)
 				{
 					include $pl;
 				}
@@ -296,7 +296,7 @@ else
 			}
 
 			/* === Hook === */
-			foreach (cot_getextplugins('admin.forums.delete') as $pl)
+			foreach (cot_getextplugins('forums.admin.delete') as $pl)
 			{
 				include $pl;
 			}
@@ -318,7 +318,7 @@ else
 
 		$ii = 0;
 		/* === Hook - Part1 : Set === */
-		$extp = cot_getextplugins('admin.forums.loop');
+		$extp = cot_getextplugins('forums.admin.loop');
 		/* ===== */
 		while ($row = cot_db_fetcharray($sql))
 		{
@@ -437,7 +437,7 @@ else
 	));
 
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.forums.tags') as $pl)
+	foreach (cot_getextplugins('forums.admin.tags') as $pl)
 	{
 		include $pl;
 	}

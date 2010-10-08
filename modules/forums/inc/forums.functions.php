@@ -165,7 +165,7 @@ function cot_forum_info($id)
 }
 
 /**
- * Moves outdated topics to trash
+ * Deletes outdated topics
  *
  * @param string $mode Selection criteria
  * @param int $section Section
@@ -197,38 +197,17 @@ function cot_forum_prunetopics($mode, $section, $param)
 		{
 			$q = $row1['ft_id'];
 
-			if ($cfg['trash_forum'])
-			{
-				$sql = cot_db_query("SELECT * FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id DESC");
-
-				while ($row = cot_db_fetchassoc($sql))
-				{
-					cot_trash_put('forumpost', $L['Post']." #".$row['fp_id']." from topic #".$q, "p".$row['fp_id']."-q".$q, $row);
-				}
-			}
-
-			$sql = cot_db_query("DELETE FROM $db_forum_posts WHERE fp_topicid='$q'");
-			$num += cot_db_affectedrows();
-
-			if ($cfg['trash_forum'])
-			{
-				$sql = cot_db_query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
-
-				while ($row = cot_db_fetchassoc($sql))
-				{
-					cot_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row);
-				}
-			}
-
-			$sql = cot_db_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
-			$num1 += cot_db_affectedrows();
-
 			/* === Hook === */
 			foreach (cot_getextplugins('forums.functions.prunetopics') as $pl)
 			{
 				include $pl;
 			}
 			/* ===== */
+
+			$sql = cot_db_query("DELETE FROM $db_forum_posts WHERE fp_topicid='$q'");
+			$num += cot_db_affectedrows();
+			$sql = cot_db_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
+			$num1 += cot_db_affectedrows();
 
 		}
 

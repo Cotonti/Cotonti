@@ -71,7 +71,6 @@ $L['cfg_mail'] = array('Notify about new comments by email?');
 $L['cfg_markitup'] = array('Use markitup?'); // New in N-0.1.0
 $L['cfg_markup'] = array('Enable markup in comments');
 $L['cfg_time'] = array('Comments editable timeout for users', 'in minutes');
-$L['cfg_trash_comment'] = array('Use the trash can for the comments', '');
 $L['cfg_rss_commentmaxsymbols'] = array('Comments. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
 $L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default'); // New in N-0.0.2
 $L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' '); // New in N-0.0.6

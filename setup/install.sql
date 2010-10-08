@@ -176,10 +176,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','title','17','title_users_pasrec',1,'{PASSRECOVER}','{PASSRECOVER}','',''),
 ('core','title','18','title_header',1,'{SUBTITLE} - {MAINTITLE}','{SUBTITLE} - {MAINTITLE}','',''),
 ('core','title','19','title_header_index',1,'{MAINTITLE} - {DESCRIPTION}','{MAINTITLE} - {DESCRIPTION}','',''),
-('core','trash','01','trash_prunedelay',2,'7','7','0,1,2,3,4,5,7,10,15,20,30,45,60,90,120',''),
-('core','trash','11','trash_forum',3,'1','1','',''),
-('core','trash','12','trash_page',3,'1','1','',''),
-('core','trash','14','trash_user',3,'1','1','',''),
 ('core','users','01','disablereg',3,'0','0','',''),
 ('core','users','03','disablewhosonline',3,'0','0','',''),
 ('core','users','05','maxusersperpage',2,'50','50','5,10,15,20,25,30,40,50,60,70,100,200,500',''),
@@ -377,17 +373,6 @@ CREATE TABLE `cot_tag_references` (
   PRIMARY KEY  (`tag`,`tag_area`,`tag_item`),
   KEY `tag_item` (`tag_item`),
   KEY `tag_area` (`tag_area`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `cot_trash` (
-  `tr_id` int NOT NULL auto_increment,
-  `tr_date` int unsigned NOT NULL default '0',
-  `tr_type` varchar(24) collate utf8_unicode_ci NOT NULL default '',
-  `tr_title` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `tr_itemid` varchar(24) collate utf8_unicode_ci NOT NULL default '',
-  `tr_trashedby` int NOT NULL default '0',
-  `tr_datas` mediumblob,
-  PRIMARY KEY  (`tr_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `cot_updates` (

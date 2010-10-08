@@ -12,7 +12,6 @@
 		<li><a href="admin.php?m=forums">{PHP.L.Forums}</a></li>
 		<li><a href="admin.php?m=plug">{PHP.L.Plugins}</a></li>
 		<li><a href="admin.php?m=tools">{PHP.L.Tools}</a></li>
-		<li><a href="admin.php?m=trashcan">{PHP.L.Trashcan}</a></li>
 		<li><a href="admin.php?m=other">{PHP.L.Other}</a></li>
 	</ul>
 	<p>{PHP.out.copyright} {PHP.cfg.version}</p>

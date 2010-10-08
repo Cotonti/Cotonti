@@ -35,7 +35,7 @@ else
 	$adminhelp = $L['adm_help_pfs'];
 
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.pfs.first') as $pl)
+	foreach (cot_getextplugins('pfs.admin.first') as $pl)
 	{
 		include $pl;
 	}
@@ -69,7 +69,7 @@ else
 	));
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('admin.pfs.tags') as $pl)
+	foreach (cot_getextplugins('pfs.admin.tags') as $pl)
 	{
 		include $pl;
 	}

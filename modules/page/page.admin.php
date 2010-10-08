@@ -85,7 +85,7 @@ elseif ($filter == 'validated')
 }
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.page.first') as $pl)
+foreach (cot_getextplugins('page.admin.first') as $pl)
 {
 	include $pl;
 }
@@ -96,7 +96,7 @@ if ($a == 'validate')
 	cot_check_xg();
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('admin.page.validate') as $pl)
+	foreach (cot_getextplugins('page.admin.validate') as $pl)
 	{
 		include $pl;
 	}
@@ -137,7 +137,7 @@ elseif ($a == 'unvalidate')
 	cot_check_xg();
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('admin.page.unvalidate') as $pl)
+	foreach (cot_getextplugins('page.admin.unvalidate') as $pl)
 	{
 		include $pl;
 	}
@@ -178,7 +178,7 @@ elseif ($a == 'delete')
 	cot_check_xg();
 
 	/* === Hook  === */
-	foreach (cot_getextplugins('admin.page.delete') as $pl)
+	foreach (cot_getextplugins('page.admin.delete') as $pl)
 	{
 		include $pl;
 	}
@@ -187,10 +187,6 @@ elseif ($a == 'delete')
 	$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 	if ($row = cot_db_fetchassoc($sql))
 	{
-		if ($cfg['trash_page'])
-		{
-			cot_trash_put('page', $L['Page']." #".$id." ".$row['page_title'], $id, $row);
-		}
 		if ($row['page_state'] != 1)
 		{
 			$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
@@ -205,7 +201,7 @@ elseif ($a == 'delete')
 		cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'], 'adm');
 
 		/* === Hook === */
-		foreach (cot_getextplugins('admin.page.delete.done') as $pl)
+		foreach (cot_getextplugins('page.admin.delete.done') as $pl)
 		{
 			include $pl;
 		}
@@ -246,7 +242,7 @@ elseif ($a == 'update_cheked')
 			if ($s[$i] == '1' || $s[$i] == 'on')
 			{
 				/* === Hook  === */
-				foreach (cot_getextplugins('admin.page.cheked_validate') as $pl)
+				foreach (cot_getextplugins('page.admin.cheked_validate') as $pl)
 				{
 					include $pl;
 				}
@@ -300,7 +296,7 @@ elseif ($a == 'update_cheked')
 			if ($s[$i] == '1' || $s[$i] == 'on')
 			{
 				/* === Hook  === */
-				foreach (cot_getextplugins('admin.page.cheked_delete') as $pl)
+				foreach (cot_getextplugins('page.admin.cheked_delete') as $pl)
 				{
 					include $pl;
 				}
@@ -310,10 +306,6 @@ elseif ($a == 'update_cheked')
 				if ($row = cot_db_fetchassoc($sql))
 				{
 					$id = $row['page_id'];
-					if ($cfg['trash_page'])
-					{
-						cot_trash_put('page', $L['Page'].' #'.$id.' '.$row['page_title'], $id, $row);
-					}
 					if ($row['page_state'] != 1)
 					{
 						$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
@@ -333,7 +325,7 @@ elseif ($a == 'update_cheked')
 					}
 
 					/* === Hook === */
-					foreach (cot_getextplugins('admin.page.delete.done') as $pl)
+					foreach (cot_getextplugins('page.admin.delete.done') as $pl)
 					{
 						include $pl;
 					}
@@ -371,7 +363,7 @@ $sql = cot_db_query("SELECT p.*, u.user_name, u.user_avatar
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('admin.page.loop');
+$extp = cot_getextplugins('page.admin.loop');
 /* ===== */
 while ($row = cot_db_fetcharray($sql))
 {
@@ -445,7 +437,7 @@ $t->assign(array(
 cot_display_messages($t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.page.tags') as $pl)
+foreach (cot_getextplugins('page.admin.tags') as $pl)
 {
 	include $pl;
 }

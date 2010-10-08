@@ -340,7 +340,7 @@ function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 	}
 	if ((int)$cfg['rss_pagemaxsymbols'] > 0)
 	{
-		$text .= (cot_string_truncate($text, $cfg['rss_pagemaxsymbols'])) ? '...' : '';
+		$text = cot_string_truncate($text, $cfg['rss_pagemaxsymbols']) . '...';
 	}
 	return $text;
 }
@@ -353,7 +353,7 @@ function cot_parse_post_text($post_id, $post_text)
 
 	if ((int)$cfg['rss_postmaxsymbols'] > 0)
 	{
-		$post_text .= (cot_string_truncate($text, $cfg['rss_postmaxsymbols'])) ? '...' : '';
+		$post_text = cot_string_truncate($post_text, $cfg['rss_postmaxsymbols']) . '...';
 	}
 	return $post_text;
 }

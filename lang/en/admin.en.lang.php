@@ -81,7 +81,6 @@ $L['core_structure'] = &$L['Categories'];// New in 0.7.0
 $L['core_theme'] = &$L['Themes'];
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles (&lt;title&gt; tag)';
-$L['core_trash'] = &$L['Trashcan'];
 $L['core_users'] = &$L['Users'];
 
 /**
@@ -240,17 +239,6 @@ $L['cfg_title_users_pasrec'] = array('Users - password recovery', 'Options: {PAS
 
 /**
  * Config Section
- * Trash Subsection
- */
-
-$L['cfg_trash_forum'] = array('Use the trash can for the forums', '');
-$L['cfg_trash_page'] = array('Use the trash can for the pages', '');
-$L['cfg_trash_pm'] = array('Use the trash can for the private messages', '');
-$L['cfg_trash_prunedelay'] = array('Remove the items from the trash can after * days (Zero to keep forever)', '');
-$L['cfg_trash_user'] = array('Use the trash can for the users', '');
-
-/**
- * Config Section
  * Users Subsection
  */
 
@@ -403,17 +391,6 @@ $L['adm_opt_setup_missing'] = 'Error: setup file missing!';	// New in 0.0.6
  */
 
 $L['adm_listisempty'] = 'List is empty';
-
-/**
-  * TrashCan Section
- */
-
-$L['adm_help_trashcan'] = 'Here are listed the items recently deleted by the users and moderators.<br />
-Wipe: Delete the item forever<br />
-Restore: Put the item back in the live database<br />
-<b>Note</b>:<br />
-- restoring a forum topic will also restore all the posts that belongs to the topic<br />
-- restoring a post in a deleted topic will restore the whole topic (if available) and all the child posts.<br />';
 
 /**
  * Other Section

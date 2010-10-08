@@ -809,23 +809,6 @@ function cot_title($mask, $params = array())
 }
 
 /**
- * Sends item to trash
- *
- * @param string $type Item type
- * @param string $title Title
- * @param int $itemid Item ID
- * @param mixed $datas Item contents
- */
-function cot_trash_put($type, $title, $itemid, $datas)
-{
-	global $db_trash, $sys, $usr;
-
-	$sql = cot_db_query("INSERT INTO $db_trash (tr_date, tr_type, tr_title, tr_itemid, tr_trashedby, tr_datas)
-	VALUES
-	(".$sys['now_offset'].", '".cot_db_prep($type)."', '".cot_db_prep($title)."', '".cot_db_prep($itemid)."', ".$usr['id'].", '".cot_db_prep(serialize($datas))."')");
-}
-
-/**
  * Generates random string
  *
  * @param int $l Length

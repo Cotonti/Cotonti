@@ -36,7 +36,7 @@ $t->assign(array(
 ));
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.pm.tags') as $pl)
+foreach (cot_getextplugins('pm.admin.tags') as $pl)
 {
 	include $pl;
 }
