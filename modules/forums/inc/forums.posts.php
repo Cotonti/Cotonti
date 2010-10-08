@@ -323,10 +323,7 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 	if ($row = cot_db_fetchassoc($sql))
 	{
-		if ($cfg['trash_forum'])
-		{
-			cot_trash_put('forumpost', $L['Post']." #".$p." from topic #".$q, "p".$p."-q".$q, $row);
-		}
+
 	}
 	else
 	{
@@ -370,10 +367,6 @@ elseif ($a=='delete' && $usr['id']>0 && !empty($s) && !empty($q) && !empty($p) &
 
 		if ($row = cot_db_fetchassoc($sql))
 		{
-			if ($cfg['trash_forum'])
-			{
-				cot_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row);
-			}
 			$sql = cot_db_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 			$sql = cot_db_query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
 

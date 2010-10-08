@@ -1,0 +1,41 @@
+<?php
+/**
+ * Russian Language File for BBcode management
+ *
+ * @package bbcode
+ * @version 0.7.0
+ * @author Cotonti Translators Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
+
+defined('COT_CODE') or die('Wrong URL.');
+
+$L['Trash'] = 'Удаленное';
+$L['Trashcan'] = 'Корзина';
+$L['core_trash'] = &$L['Trashcan'];
+
+/**
+ * Config Section
+ * Trash Subsection
+ */
+
+$L['cfg_trash_forum'] = array('Удалять в корзину форумы', ' ');
+$L['cfg_trash_page'] = array('Удалять в корзину страницы', ' ');
+$L['cfg_trash_pm'] = array('Удалять в корзину личные сообщения', ' ');
+$L['cfg_trash_prunedelay'] = array('Очищать корзину через', 'дней (0 - отключить очистку корзины)');
+$L['cfg_trash_user'] = array('Удалять в корзину учетные записи пользователей', ' ');
+$L['cfg_trash_comment'] = array('Удалять в корзину комментарии', ' ');
+
+/**
+ * TrashCan Section
+ */
+
+$L['adm_help_trashcan'] = 'Записи, удаленные пользователями и модераторами<br />
+- удалить окончательно: окончательно удалить запись из базы данных<br />
+- восстановить: вернуть запись в базу данных<br />
+<b>Внимание:</b><br />
+- восстанавливая тему форума, вы восстанавливаете и все сообщения в ней<br />
+- восстанавливая сообщение в удаленной теме, вы восстанавливаете саму тему и (если это возможно) все дочерние сообщения';
+
+?>

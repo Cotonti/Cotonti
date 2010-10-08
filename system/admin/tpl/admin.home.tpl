@@ -109,7 +109,6 @@
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=menus">{PHP.L.home_ql_b1_4}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=lang">{PHP.L.home_ql_b1_5}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time">{PHP.L.home_ql_b1_6}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=trash">{PHP.L.Trash}</a></li>
 				</ul>
 			</div>
 			<div class="block">

@@ -198,12 +198,14 @@ elseif ($a == 'delete' && $usr['isadmin'])
 
 	if ($row = cot_db_fetchassoc($sql))
 	{
-		if ($cfg['plugin']['comments']['trash_comment'])
-		{
-			cot_trash_put('comment', $L['Comment']." #".$id." (".$row['com_author'].")", $id, $row);
-		}
-
 		$sql = cot_db_delete($db_com, "com_id='$id'");
+
+				/* == Hook == */
+		foreach (cot_getextplugins('comments.delete') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		cot_log('Deleted comment #'.$id.' in &quot;'.$item.'&quot;', 'adm');
 	}

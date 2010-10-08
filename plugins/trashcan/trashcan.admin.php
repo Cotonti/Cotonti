@@ -1,20 +1,30 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=tools
+[END_COT_EXT]
+==================== */
+
 /**
- * Administration panel - Trash can
+ * Trashcan interface
  *
- * @package Cotonti
- * @version 0.1.0
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @package trash
+ * @version 0.7.0
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
+
+defined('COT_CODE') or die('Wrong URL');
+cot_require('trashcan', true);
+cot_require_lang('trashcan', 'plug');
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_skinfile('admin.trashcan'));
+$tr_t = new XTemplate(cot_skinfile('trashcan.admin'), true);
 
 $adminpath[] = array(cot_url('admin', 'm=trashcan'), $L['Trashcan']);
 $adminhelp = $L['adm_help_trashcan'];
@@ -122,13 +132,15 @@ function cot_trash_restore($id)
 			break;
 
 		default:
-			return FALSE;
+			cot_db_insert($res['tr_type'], $res['tr_datas']);
+			cot_log("RES #".$res['tr_itemid']." restored from the trash can.", 'adm');
+			return TRUE;
 			break;
 	}
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.trashcan.first') as $pl)
+foreach (cot_getextplugins('trash.admin.first') as $pl)
 {
 	include $pl;
 }
@@ -138,7 +150,7 @@ if($a == 'wipe')
 {
 	cot_check_xg();
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.trashcan.wipe') as $pl)
+	foreach (cot_getextplugins('trash.admin.wipe') as $pl)
 	{
 		include $pl;
 	}
@@ -151,7 +163,7 @@ elseif($a == 'wipeall')
 {
 	cot_check_xg();
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.trashcan.wipeall') as $pl)
+	foreach (cot_getextplugins('trash.admin.wipeall') as $pl)
 	{
 		include $pl;
 	}
@@ -164,7 +176,7 @@ elseif($a == 'restore')
 {
 	cot_check_xg();
 	/* === Hook === */
-	foreach (cot_getextplugins('admin.trashcan.restore') as $pl)
+	foreach (cot_getextplugins('trash.admin.restore') as $pl)
 	{
 		include $pl;
 	}
@@ -186,7 +198,7 @@ $sql = cot_db_query("SELECT t.*, u.user_name FROM $db_trash AS t
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('admin.trashcan.loop');
+$extp = cot_getextplugins('trash.admin.loop');
 /* ===== */
 while($row = cot_db_fetcharray($sql))
 {
@@ -195,35 +207,35 @@ while($row = cot_db_fetcharray($sql))
 		case 'comment':
 			$icon = $R['admin_icon_comments'];
 			$typestr = $L['Comment'];
-		break;
+			break;
 
 		case 'forumpost':
 			$icon = $R['admin_icon_forums_posts'];
 			$typestr = $L['Post'];
-		break;
+			break;
 
 		case 'forumtopic':
 			$icon = $R['admin_icon_forums_topics'];
 			$typestr = $L['Topic'];
-		break;
+			break;
 
 		case 'page':
 			$icon = $R['admin_icon_page'];
 			$typestr = $L['Page'];
-		break;
+			break;
 
 		case 'user':
 			$icon = $R['admin_icon_user'];
 			$typestr = $L['User'];
-		break;
+			break;
 
 		default:
 			$icon = $R['admin_icon_tools'];
 			$typestr = $row['tr_type'];
-		break;
+			break;
 	}
 
-	$t->assign(array(
+	$tr_t->assign(array(
 		'ADMIN_TRASHCAN_DATE' => date($cfg['dateformat'], $row['tr_date'] + $usr['timezone'] * 3600),
 		'ADMIN_TRASHCAN_TYPESTR_ICON' => $icon,
 		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
@@ -240,11 +252,11 @@ while($row = cot_db_fetcharray($sql))
 	}
 	/* ===== */
 
-	$t->parse('MAIN.TRASHCAN_ROW');
+	$tr_t->parse('MAIN.TRASHCAN_ROW');
 	$ii++;
 }
 
-$t->assign(array(
+$tr_t->assign(array(
 	'ADMIN_TRASHCAN_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=trash'),
 	'ADMIN_TRASHCAN_WIPEALL_URL' => cot_url('admin', 'm=trashcan&a=wipeall&'.cot_xg()),
 	'ADMIN_TRASHCAN_PAGINATION_PREV' => $pagenav['prev'],
@@ -256,23 +268,17 @@ $t->assign(array(
 ));
 
 
-cot_display_messages($t);
+cot_display_messages($tr_t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.trashcan.tags') as $pl)
+foreach (cot_getextplugins('trash.admin.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-$t->parse('MAIN');
-if (COT_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
+$tr_t->parse('MAIN');
+
+$plugin_body = $tr_t->text('MAIN');
 
 ?>

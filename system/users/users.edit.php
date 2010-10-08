@@ -59,12 +59,9 @@ if ($a=='update')
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
 	if ($ruserdelete && $sys['user_istopadmin'] && !$sys['edited_istopadmin'])
 	{
-		if ($cfg['trash_user'])
-		{
-			$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id='$id'");
-			$row = cot_db_fetchassoc($sql);
-			cot_trash_put('user', $L['User']." #".$id." ".$row['user_name'], $id, $row);
-		}
+		$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id='$id'");
+		$row = cot_db_fetchassoc($sql);
+		
 		$sql = cot_db_delete($db_users, "user_id='$id'");
 		$sql = cot_db_delete($db_groups_users, "gru_userid='$id'");
 

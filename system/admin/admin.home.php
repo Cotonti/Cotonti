@@ -215,15 +215,4 @@ foreach (cot_getextplugins('admin.home', 'R') as $pl)
 }
 /* ===== */
 
-if ($cfg['trash_prunedelay'] > 0)
-{
-	$timeago = $sys['now_offset'] - ($cfg['trash_prunedelay'] * 86400);
-	$sqltmp = cot_db_query("DELETE FROM $db_trash WHERE tr_date<$timeago");
-	$deleted = cot_db_affectedrows();
-	if ($deleted > 0)
-	{
-		cot_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['trash_prunedelay'].' days', 'adm');
-	}
-}
-
 ?>

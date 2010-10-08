@@ -124,7 +124,7 @@ $indexheader = false;
 $forumheader = false;
 
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('admin.polls.loop');
+$extp = cot_getextplugins('polls.admin.loop');
 /* ===== */
 
 while($row = cot_db_fetcharray($sql))
@@ -239,7 +239,7 @@ $t->assign(array(
 ));
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.polls.tags') as $pl)
+foreach (cot_getextplugins('polls.admin.tags') as $pl)
 {
 	include $pl;
 }
