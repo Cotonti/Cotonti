@@ -202,6 +202,8 @@ function cot_bbcode_parse($text)
 	$text = htmlspecialchars($text);
 	$text = cot_parse_autourls($text);
 
+	$parse_smilies = $cfg['plugin']['bbcode']['smilies'];
+
 	if ($parse_smilies && is_array($cot_smilies))
 	{
 		foreach($cot_smilies as $k => $v)

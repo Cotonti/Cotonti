@@ -11,7 +11,10 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-// Remove plugin bbcodes
-cot_bbcode_remove(0, 'markitup');
-cot_bbcode_clearcache();
+if ($cfg['plugin']['bbcode'])
+{
+	// Remove plugin bbcodes
+	cot_bbcode_remove(0, 'markitup');
+	cot_bbcode_clearcache();
+}
 ?>

@@ -22,7 +22,6 @@ foreach (cot_getextplugins('header.first') as $pl)
 
 $out['logstatus'] = ($usr['id'] > 0) ? $L['hea_youareloggedas'].' '.$usr['name'] : $L['hea_youarenotlogged'];
 $out['userlist'] = (cot_auth('users', 'a', 'R')) ? cot_rc_link(cot_url('users'), $L['Users']) : '';
-$out['compopup'] = cot_javascript($morejavascript);
 
 unset($title_tags, $title_data);
 $title_params = array(
@@ -45,7 +44,7 @@ $out['meta_charset'] = 'UTF-8';
 $out['meta_desc'] = htmlspecialchars($out['desc']);
 $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
-$out['head_head'] = $out['head'];
+$out['head_head'] = cot_javascript($morejavascript) . $out['head'];
 
 if (isset($env['status']))
 {

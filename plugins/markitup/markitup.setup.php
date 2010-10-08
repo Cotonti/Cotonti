@@ -3,15 +3,15 @@
 [BEGIN_COT_EXT]
 Code=markitup
 Name=MarkItUp!
-Description=jQuery BBcode editor
-Version=0.7.0
+Description=Plain-source BBcode/HTML editor using jQuery
+Version=0.7.0.1
 Date=2009-jan-03
-Author=Jay Salvat
-Copyright=
-Notes=
+Author=Jay Salvat, http://markitup.jaysalvat.com
+Copyright=Copyright (C) 2007-2010 Jay Salvat
+Notes=Dual licensed under the MIT and GPL licenses.
 SQL=
 Auth_guests=R
-Lock_guests=W12345A
+Lock_guests=12345A
 Auth_members=RW
 Lock_members=12345A
 [END_COT_EXT]

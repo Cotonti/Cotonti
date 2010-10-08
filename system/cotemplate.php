@@ -89,6 +89,17 @@ class XTemplate
 	}
 
 	/**
+	 * Returns current template variable value
+	 *
+	 * @param string $name Variable name
+	 * @return mixed
+	 */
+	public function get($name)
+	{
+		return $this->vars[$name];
+	}
+
+	/**
 	 * restart() replace callback for FILE inclusion
 	 *
 	 * @param array $m PCRE matches

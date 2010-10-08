@@ -13,6 +13,11 @@
 defined('COT_CODE') or die('Wrong URL');
 
 /**
+ * Registers textarea instances to inform RichText editors that they need to be loaded
+ */
+$GLOBALS['cot_textarea_count'] = 0;
+
+/**
  * Generates a checkbox output
  * @param bool $chosen Checkbox state
  * @param string $name Input name
@@ -324,6 +329,8 @@ function cot_selectbox_lang($chosen, $name, $add_empty = false, $attrs = '')
  */
 function cot_textarea($name, $value, $rows, $cols, $attrs = '', $custom_rc = '')
 {
+	global $cot_textarea_count;
+	$cot_textarea_count++;
 	$input_attrs = cot_rc_attr_string($attrs);
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($custom_rc)
