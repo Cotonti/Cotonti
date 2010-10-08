@@ -376,7 +376,7 @@ switch ($a)
 	foreach($extrafields as $row)
 	{
 		$import = sed_import('ruser'.$row['field_name'],'P','HTM');
-		if($row['field_type'] == 'checkbox' && !is_null($import))
+		if($row['field_type'] == 'checkbox')
 		{
 			$import = $import != '';
 		}

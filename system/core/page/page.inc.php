@@ -45,10 +45,7 @@ WHERE page_id='$id'"); }
 sed_die(sed_sql_numrows($sql)==0);
 $pag = sed_sql_fetcharray($sql);
 
-$pag['page_date'] = @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600);
-$pag['page_begin_noformat'] = $pag['page_begin'];
-$pag['page_begin'] = @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600);
-$pag['page_expire'] = @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600);
+$pag['page_begin_noformat'] = $pag['page_date'];
 $pag['page_tab'] = (empty($pg)) ? 0 : $pg;
 $pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', "id=".$pag['page_id']) : sed_url('page', "al=".$pag['page_alias']);
 
@@ -180,9 +177,9 @@ $t->assign(array(
 	"PAGE_AUTHOR" => $pag['page_author'],
 	"PAGE_OWNER" => sed_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
 	"PAGE_AVATAR" => sed_build_userimage($pag['user_avatar'], 'avatar'),
-	"PAGE_DATE" => $pag['page_date'],
-	"PAGE_BEGIN" => $pag['page_begin'],
-	"PAGE_EXPIRE" => $pag['page_expire'],
+	"PAGE_DATE" => @date($cfg['dateformat'], $pag['page_date'] + $usr['timezone'] * 3600),
+	"PAGE_BEGIN" => @date($cfg['dateformat'], $pag['page_begin'] + $usr['timezone'] * 3600),
+	"PAGE_EXPIRE" => @date($cfg['dateformat'], $pag['page_expire'] + $usr['timezone'] * 3600),
 	"PAGE_ALIAS" => $pag['page_alias'],
 	"PAGE_COMMENTS" => $comments_link,
 	"PAGE_COMMENTS_DISPLAY" => $comments_display,

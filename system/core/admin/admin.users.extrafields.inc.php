@@ -133,7 +133,7 @@ else
 }
 
 $field_types = array('input', 'textarea', 'select', 'checkbox', 'radio');
-$res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users' LIMIT $d, ".$cfg['maxrowsperpage']);
+$res = sed_sql_query("SELECT * FROM $db_extra_fields WHERE field_location='users' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */

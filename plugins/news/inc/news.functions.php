@@ -14,7 +14,7 @@ defined('SED_CODE') or die('Wrong URL');
 function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=false, $d=0)
 {
     global $sed_cat, $db_pages, $db_users, $db_extra_fields, $sys, $cfg, $L, $t, $pag,
-           $usr, $sed_dbc, $sed_urltrans;
+           $usr, $sed_dbc, $sed_urltrans, $news_where;
     $jj = 0;
     $mtch = $sed_cat[$cat]['path'].".";
     $mtchlen = mb_strlen($mtch);
@@ -34,12 +34,12 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
     LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
     WHERE page_state=0 AND page_cat != 'system'
     AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
-    AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_".$order." ".$way." LIMIT $d, $limit" );
+    AND page_cat IN ('".implode("','", $catsub)."') $news_where ORDER BY page_".$order." ".$way." LIMIT $d, $limit" );
 
     $sql2 = sed_sql_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=0
     AND page_cat != 'system'
     AND	page_begin<'".$sys['now_offset']."' AND page_expire>'".$sys['now_offset']."'
-    AND page_cat IN ('".implode("','", $catsub)."')");
+    AND page_cat IN ('".implode("','", $catsub)."') $news_where");
 
     $totalnews = sed_sql_result($sql2,0,"COUNT(*)");
 
