@@ -40,13 +40,6 @@ $L['adm_help_bbcodes'] = <<<HTM
 </ul>
 HTM;
 
-$L['cfg_parsebbcodepm'] = array('Parse BBcode in private messages', '');
-$L['cfg_parsebbcodeforums'] = array('Parse BBcode in forums', '');
-$L['cfg_parsebbcodepages'] = array('Parse BBcode in pages', '');
-$L['cfg_parsebbcodeusertext'] = array('Parse BBcode in user signature', '');
-$L['cfg_parsesmiliespm'] = array('Parse smilies in private messages', '');
-$L['cfg_parsesmiliesforums'] = array('Parse smilies in forums', '');
-$L['cfg_parsesmiliespages'] = array('Parse smilies in pages', '');
-$L['cfg_parsesmiliesusertext'] = array('Parse smilies in user signature', '');
+$L['cfg_smilies'] = array('Enable smilies', '');
 
 ?>

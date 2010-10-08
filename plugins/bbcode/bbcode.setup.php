@@ -4,10 +4,10 @@
 Code=bbcode
 Name=BBcode Parser
 Description=Parses bbcodes and smilies
-Version=0.7.0
+Version=0.7.0.1
 Date=2010-sep-24
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2010
+Copyright=Copyright (c) Cotonti Team 2008-2010
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A
@@ -16,6 +16,10 @@ Lock_members=
 Recommends_modules=page,forums
 Recommends_plugins=markitup
 [END_COT_EXT]
+
+[BEGIN_COT_EXT_CONFIG]
+smilies=01:radio::1:Enable smilies
+[END_COT_EXT_CONFIG]
 ==================== */
 
 defined('COT_CODE') or die('Wrong URL');

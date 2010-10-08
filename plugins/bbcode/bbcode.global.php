@@ -20,7 +20,10 @@ defined('COT_CODE') or die('Wrong URL');
 cot_require('bbcode', true);
 
 cot_bbcode_load();
-cot_smilies_load();
+if ($cfg['plugin']['bbcode']['smilies'])
+{
+	cot_smilies_load();
+}
 
 $cot_parsers[] = 'cot_bbcode_parse';
 

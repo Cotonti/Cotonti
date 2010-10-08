@@ -40,13 +40,6 @@ $L['adm_help_bbcodes'] = <<<HTM
 </ul>
 HTM;
 
-$L['cfg_parsebbcodepm'] = array('Парсинг BBCode в личных сообщениях', ' ');
-$L['cfg_parsebbcodeforums'] = array('Парсинг BBCode в форумах', ' ');
-$L['cfg_parsebbcodepages'] = array('Парсинг BBCode в страницах', ' ');
-$L['cfg_parsebbcodeusertext'] = array('Парсинг BBCode в подписях пользователей', ' ');
-$L['cfg_parsesmiliespm'] = array('Парсинг смайликов в личных сообщениях', ' ');
-$L['cfg_parsesmiliesforums'] = array('Парсинг смайликов в форумах', ' ');
-$L['cfg_parsesmiliespages'] = array('Парсинг смайликов в страницах', ' ');
-$L['cfg_parsesmiliesusertext'] = array('Парсинг смайликов в подписях пользователей', ' ');
+$L['cfg_smilies'] = array('Включить смайлики', '');
 
 ?>

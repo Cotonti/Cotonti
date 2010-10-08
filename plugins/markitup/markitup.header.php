@@ -1,13 +1,13 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=header.main
-Tags=header.tpl:{HEADER_COMPOPUP}
+Hooks=header.tags
+Tags=header.tpl:{HEADER_HEAD}
 [END_COT_EXT]
 ==================== */
 
 /**
- * MarkItUp! connector for Seditio
+ * MarkItUp! connector for Cotonti
  *
  * @package markitup
  * @version 0.7.0
@@ -18,9 +18,8 @@ Tags=header.tpl:{HEADER_COMPOPUP}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if (!defined('COT_INDEX') && !defined('COT_LIST') && !defined('COT_MESSAGE'))
+if (function_exists('cot_textarea') && cot_auth('plug', 'markitup', 'W'))
 {
-
 	$mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
 	if (!file_exists($mkup_lang))
 	{
@@ -34,7 +33,7 @@ if (!defined('COT_INDEX') && !defined('COT_LIST') && !defined('COT_MESSAGE'))
 
 	$mkup_set = function_exists('cot_bbcode_parse') ? 'bbcode' : 'html';
 
-	$out['compopup'] .= <<<HTM
+	$markitup = <<<HTM
 <script type="text/javascript" src="$smile_lang"></script>
 <script type="text/javascript" src="./images/smilies/set.js"></script>
 <script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jquery.markitup.js"></script>
@@ -46,10 +45,10 @@ if (!defined('COT_INDEX') && !defined('COT_LIST') && !defined('COT_MESSAGE'))
 HTM;
 	if ($cfg['plugin']['markitup']['chili'])
 	{
-		$out['compopup'] .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/markitup/js/chili.js"></script>';
+		$markitup .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/markitup/js/chili.js"></script>';
 	}
 	$autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
-	$out['compopup'] .= '
+	$markitup .= '
 <script type="text/javascript">
 //<![CDATA[
 mySettings.previewAutorefresh = '.$autorefresh.';
@@ -62,6 +61,8 @@ $("textarea.minieditor").markItUp(mini);
 });
 //]]>
 </script>';
+
+	$t->assign('HEADER_HEAD', $t->get('HEADER_HEAD') . $markitup);
 }
 
 ?>
