@@ -1199,7 +1199,7 @@ function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), 
 			break;
 			case "radio":
 				$t2 = str_replace('<input','<input name="'.$importrowname.$row['field_name'].'"', $t2);
-				$options = "";
+				$buttons = "";
 				$opt_array = explode(",",$row['field_variants']);
 				if(count($opt_array)!=0)
 					foreach ($opt_array as $var)

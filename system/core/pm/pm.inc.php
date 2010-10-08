@@ -98,7 +98,7 @@ else
     sed_die();
 }
 
-$title .= ' '.$cfg['separator']." <a href=\"".sed_url('pm', 'id='.$id)."\">#".$id."</a>";
+$title .= ' '.$cfg['separator']." <a href=\"".sed_url('pm', 'id='.$id)."\">".htmlspecialchars($row['pm_title'])."</a>";
 
 $title_tags[] = array('{PM}', '{INBOX}', '{ARCHIVES}', '{SENTBOX}');
 $title_tags[] = array('%1$s', '%2$s', '%3$s', '%4$s');
@@ -127,7 +127,7 @@ else
     $pm_data = sed_parse(htmlspecialchars($row['pm_text']), $cfg['parsebbcodecom'], $cfg['parsesmiliescom'], 1);
     $pm_data = sed_post_parse($pm_data);
 }
-
+$mess_title = $row['pm_title'];
 if (preg_match("/Re(\(\d+\))?\:(.+)/", $row['pm_title'], $matches))
 {
     $matches[1] = empty($matches[1]) ? 2 : trim($matches[1], '()') + 1;
@@ -160,7 +160,7 @@ $t-> assign(array(
         "PM_FROMUSER" => sed_build_user($pm_fromuserid, $pm_fromuser),
         "PM_TOUSERID" => $pm_touserid,
         "PM_TOUSER" => sed_build_user($pm_touserid, $pm_touser),
-        "PM_TITLE" => "<a href=\"".sed_url('pm', 'id='.$row['pm_id'])."\">".htmlspecialchars($row['pm_title'])."</a>",
+        "PM_TITLE" => htmlspecialchars($mess_title),
         "PM_TEXT" => $pm_data,
         "PM_FROMORTOUSER" => $pm_fromortouser,
         "PM_ICON_ACTION" => $row['pm_icon_action'],
