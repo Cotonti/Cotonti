@@ -53,4 +53,11 @@ $L['cfg_maxpolls'] = array('Количество отображаемых опр
 $L['cfg_mode'] = array('Режим отображения опросов на главной', '&laquo;Последние&raquo; &mdash; отображение последнего опроса (опросов)<br />&laquo;Случайные&raquo; &mdash; отображение случайного опроса (опросов)');
 $L['cfg_mode_params'] = array('Последние', 'Случайные');
 
+/**
+ * Moved from theme.lang
+ */
+
+$L['polls_voterssince'] = 'проголосовавших с';
+$L['polls_allpolls'] = 'Все опросы';
+
 ?>

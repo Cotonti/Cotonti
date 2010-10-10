@@ -85,4 +85,13 @@ $L['pfs_title'] = 'Мои файлы';
 $L['pfs_totalsize'] = 'Общий объем';
 $L['pfs_uploadfiles'] = 'Загрузить файлы'; // New in N-0.7.0
 
+/**
+ * Moved from theme.lang
+ */
+
+$L['pfs_insertasthumbnail'] = 'Вставить миниатюру';
+$L['pfs_insertasimage'] = 'Вставить полноразмерное изображение';
+$L['pfs_insertaslink'] = 'Вставить в виде ссылки на файл';
+$L['pfs_dimensions'] = 'Размеры';
+
 ?>

@@ -86,4 +86,13 @@ $L['pfs_title'] = 'My Personal File Space';
 $L['pfs_totalsize'] = 'Total size';
 $L['pfs_uploadfiles'] = 'Upload Files'; // 0.7.0
 
+/**
+ * Moved from theme.lang
+ */
+
+$L['pfs_insertasthumbnail'] = 'Insert as thumbnail';
+$L['pfs_insertasimage'] = 'Insert as fullsize image';
+$L['pfs_insertaslink'] = 'Insert as a link to the file';
+$L['pfs_dimensions'] = 'Dimensions';
+
 ?>

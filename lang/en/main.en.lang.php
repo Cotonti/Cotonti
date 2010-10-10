@@ -80,6 +80,7 @@ $L['Description'] = 'Description';
 $L['Disabled'] = 'Disabled';
 $L['Done'] = 'Done'; // New in 0.0.6
 $L['Download'] = 'Download';
+$L['Downloaded'] = 'Downloaded';
 $L['Duplicate'] = 'Duplicate';
 $L['Duration'] = 'Duration';
 $L['Edit'] = 'Edit';
@@ -97,6 +98,7 @@ $L['Extrafield'] = 'Extra field';
 $L['Extrakey'] = 'Extra key (optional)'; // New in 0.1.0
 $L['File'] = 'File';
 $L['Files'] = 'Files';
+$L['Filesize'] = 'Filesize';
 $L['Filter'] = 'Filter';
 $L['Filters'] = 'Filters';
 $L['Fold'] = 'Fold';
@@ -194,6 +196,7 @@ $L['Notes'] = 'Notes';
 $L['No_items'] = 'No items found'; // New in 0.0.1
 $L['Occupation'] = 'Occupation';
 $L['Of'] = 'of';
+$L['Online'] = 'Online';
 $L['Ontop'] = 'Top'; // New in 0.0.1
 $L['Open'] = 'Open';
 $L['Option'] = 'Option';
@@ -289,6 +292,8 @@ $L['Subforums'] = 'Subforums'; // New in 0.1.0
 $L['Subject'] = 'Subject'; // New in 0.1.0
 $L['Submit'] = 'Submit';
 $L['Submitnew'] = 'Submit new page';
+$L['Submittedby'] = 'Submitted by';
+$L['Summary'] = 'Summary';
 $L['System'] = 'System';
 $L['Tag'] = 'Tag';
 $L['Tags'] = 'Tags';
@@ -344,13 +349,14 @@ $L['YIM'] = 'Yahoo Messenger';
  */
 
 $Ls['Days'] = array('days','day');
-$Ls['Hours'] = array('hours','hour');
-$Ls['Minutes'] = array('minutes','minute');
-$Ls['Seconds'] = array('seconds','second');
 $Ls['Guests'] = array('guests','guest');
+$Ls['Hours'] = array('hours','hour');
 $Ls['Members'] = array('members','member');
+$Ls['Minutes'] = array('minutes','minute');
 $Ls['Pages'] = array('pages','page');
 $Ls['Privatemessages'] = array('new private messages','new private message');
+$Ls['Seconds'] = array('seconds','second');
+$Ls['Times'] = array('times','time');
 
 /**
  * Months
