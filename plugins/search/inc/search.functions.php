@@ -13,6 +13,7 @@ defined('COT_CODE') || die('Wrong URL.');
 
 function cot_clear_mark($text, $type, $words)
 {
+	global $cfg;
 	$text = trim($text);
 	if (strlen($text))
 	{
@@ -20,7 +21,7 @@ function cot_clear_mark($text, $type, $words)
 		$text = preg_replace("'.\n'", " ", $text);
 		$text = preg_replace("'.\t'", " ", $text);
 		$text = preg_replace("' +'", " ", $text);
-		if ($type == 0 || $type == '')
+		if ($cfg['plugin']['bbcode'])
 		{// BB
 			$text = preg_replace("'\[img.*?/img\]'si", "", $text);
 			$text = preg_replace("'\[thumb.*?/thumb\]'si", "", $text);

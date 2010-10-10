@@ -449,7 +449,11 @@ function cot_load_structure()
 	{
 		if (!empty($row['structure_icon']))
 		{
-			$row['structure_icon'] = '<img src="'.$row['structure_icon'].'" alt="'.htmlspecialchars($row['structure_title']).'" title="'.htmlspecialchars($row['structure_title']).'" />'; // TODO - to resorses
+			$row['structure_icon'] = cot_rc('img_structure_cat', array(
+				'icon' => $row['structure_icon'],
+				'title' => htmlspecialchars($row['structure_title']),
+				'desc' => htmlspecialchars($row['structure_desc'])
+			));
 		}
 
 		$path2 = mb_strrpos($row['structure_path'], '.');
@@ -1504,24 +1508,7 @@ function cot_build_userimage($image, $type = 'none')
 function cot_build_usertext($text)
 {
 	global $cfg;
-	if (!$cfg['usertextimg'])
-	{
-		$bbcodes_img = array(
-			'\[img\]([^\[]*)\[/img\]' => '',
-			'\[thumb=([^\[]*)\[/thumb\]' => '',
-			'\[t=([^\[]*)\[/t\]' => '',
-			'\[list\]' => '',
-			'\[style=([^\[]*)\]' => '',
-			'\[quote' => '',
-			'\[code' => ''
-		);
-
-		foreach($bbcodes_img as $bbcode => $bbcodehtml)
-		{
-			$text = preg_replace("#$bbcode#i", $bbcodehtml, $text);
-		}
-	}
-	return cot_parse($text, $cfg['parsebbcodeusertext']);
+	return cot_parse($text, $cfg['usertextimg']);
 }
 
 /**

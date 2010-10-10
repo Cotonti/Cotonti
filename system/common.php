@@ -478,8 +478,6 @@ if (!$mscheme)
 	cot_diefatal('Default scheme not found.'); // TODO: Need translate
 }
 
-require_once cot_langfile('theme', 'core');
-
 $usr['def_theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme_raw'].'.en.lang.php';
 $usr['theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme_raw'].'.'.$usr['lang'].'.lang.php';
 if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
