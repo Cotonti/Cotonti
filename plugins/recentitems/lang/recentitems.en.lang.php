@@ -57,4 +57,7 @@ $L['Rec_posts_sticky_locked'] = 'Announcement';
 $L['Rec_posts_new_sticky_locked'] = 'New announcement';
 $L['Rec_posts_moved'] = 'Moved out of this section';
 
+$L['Rec_newinforums'] = 'New in forums';
+$L['Rec_recentadditions'] = 'Recent additions';
+
 ?>

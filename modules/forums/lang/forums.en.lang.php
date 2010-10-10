@@ -73,4 +73,35 @@ $L['for_polltooshort'] = 'Poll options must be equal, or greater than 2';	// 0.0
 $L['for_titletooshort'] = 'Topic title is too short or missing';	// 0.0.2
 $L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
 
+/**
+ * Moved from theme.lang
+ */
+
+$L['for_privatetopic1'] = 'Check this box to mark this topic as &quot;private&quot;';
+$L['for_privatetopic2'] = 'Only forums moderators and the starter of the topic (so you) will be allowed to read and reply';
+
+$L['for_privatetopic'] = 'This topic is private, only moderators and the starter of the topic can read and reply here.';
+$L['for_onlinestatus0'] = 'user is offline'; // New in 0.0.2
+$L['for_onlinestatus1'] = 'user is online'; // New in 0.0.2
+
+$L['for_searchinforums'] = 'Search in forums';
+$L['for_markasread'] = 'Mark all posts as read';
+$L['for_activity'] = 'Activity';
+$L['for_foldall'] = 'Fold all';
+$L['for_unfoldall'] = 'Unfold all';
+
+$L['for_newpoll'] = 'New poll';
+$L['for_viewers'] = 'Viewers';
+$L['for_nonewposts'] = 'No new posts';
+$L['for_newposts'] = 'New posts';
+$L['for_nonewpostspopular'] = 'No new posts (popular)';
+$L['for_newpostspopular'] = 'New posts (popular)';
+$L['for_sticky'] = 'Sticky';
+$L['for_newpostssticky'] = 'New posts (sticky)';
+$L['for_locked'] = 'Locked';
+$L['for_newpostslocked'] = 'New posts (locked)';
+$L['for_announcment'] = 'Announcement';
+$L['for_newannouncment'] = 'New announcement';
+$L['for_movedoutofthissection'] = 'Moved out of this section';
+
 ?>

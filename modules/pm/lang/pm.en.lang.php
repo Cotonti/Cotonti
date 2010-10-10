@@ -71,4 +71,14 @@ $L['pm_notify'] = 'Hi %1$s,
 You are receiving this e-mail because there is a new private message in your inbox from %2$s
 Click this link to read it: %3$s';
 
+/**
+ * Moved from theme.lang
+ */
+
+$L['pm_sendmessagetohint'] = '(up to 10 recipients, separated by commas)';
+$L['pm_newmessage'] = 'New message';
+$L['pm_sendtoarchives'] = 'Send to archives';
+$L['pm_selectall'] = 'Select all';
+$L['pm_unselectall'] = 'Unselect all';
+
 ?>

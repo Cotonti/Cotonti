@@ -55,4 +55,7 @@ $L['Rec_posts_sticky_locked'] = 'Обьявление';
 $L['Rec_posts_new_sticky_locked'] = 'Новые обьявления';
 $L['Rec_posts_moved'] = 'Перенесена в другой раздел';
 
+$L['Rec_newinforums'] = 'Новое на форумах';
+$L['Rec_recentadditions'] = 'Новое в разделах';
+
 ?>

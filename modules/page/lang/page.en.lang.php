@@ -79,4 +79,23 @@ $L['pag_titletooshort'] = 'The title is too short or missing';
 $L['pag_validation'] = 'Awaiting validation';
 $L['pag_validation_desc'] = 'Your pages which have not been validated by administrator yet';
 
+/**
+ * Moved from theme.lang
+ */
+
+$L['pag_linesperpage'] = 'Lines per page';
+$L['pag_linesinthissection'] = 'Lines in this section';
+
+$L['pag_file'] = 'File download?';
+$L['pag_filehint'] = '(Set &quot;Yes&quot; to enable the download module at bottom of the page, and fill up the 2 fields below)';
+$L['pag_urlhint'] = '(If File download = &quot;Yes&quot;)';
+$L['pag_filesize'] = 'Filesize (KB)';
+$L['pag_filesizehint'] = '(If File download = &quot;Yes&quot;)';
+$L['pag_filehitcount'] = 'File hit count';
+$L['pag_filehitcounthint'] = '(If File download = &quot;Yes&quot;)';
+
+$L['pag_formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section. Check all fields carefully. If you need to change something, you will be able to do that later. But submitting changes puts a page into validation queue again.';
+
+$L['pag_deletethispage'] = 'Delete this page';
+
 ?>
