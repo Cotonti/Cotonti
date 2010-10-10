@@ -186,8 +186,11 @@ elseif (defined('COT_PLUG'))
         }
 	}
 
-	$t->parse('MAIN');
-	$t->out('MAIN');
+	if (is_object($t))
+	{
+		$t->parse('MAIN');
+		$t->out('MAIN');
+	}
 
     if ($ext_display_header)
     {

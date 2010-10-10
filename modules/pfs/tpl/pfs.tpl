@@ -1,7 +1,6 @@
 <!-- BEGIN: MAIN -->
 
 <!-- BEGIN: STANDALONE_HEADER -->
-{PFS_DOCTYPE}
 <html>
 <head>
 <title>{PHP.cfg.maintitle}</title>
@@ -9,21 +8,7 @@
 {PFS_JAVASCRIPT}
 <script type="text/javascript">
 //<![CDATA[
-function help(rcode,c1,c2) {
-	// obsolete
-}
-function addthumb(gfile,c1,c2) {
-	insertText(opener.document, "{PFS_C1}", "{PFS_C2}", {PFS_ADDTHUMB});{PFS_WINCLOSE}
-}
-function addpix(gfile,c1,c2) {
-	insertText(opener.document, "{PFS_C1}", "{PFS_C2}", {PFS_ADDPIX});{PFS_WINCLOSE}
-}
-function addfile(gfile,c1,c2) {
-	insertText(opener.document, "{PFS_C1}", "{PFS_C2}", {PFS_ADDFILE});{PFS_WINCLOSE}
-}
-function picture(url,sx,sy) {
-	window.open("index.php?z=pfs&m=view&amp;id="+url,"Picture","toolbar=0,location=0,directories=0,menuBar=0,resizable=1,scrollbars=yes,width="+sx+",height="+sy+",left=0,top=0");
-}
+{PFS_HEADER_JAVASCRIPT}
 //]]>
 </script>
 <link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
@@ -94,8 +79,9 @@ function picture(url,sx,sy) {
 					<td class="centerall">{PFS_ROW_DATE}</td>
 					<td class="centerall">
 						<input type="checkbox" name="folderid[{PFS_ROW_ID}]" />
-						<a href="{PFS_ROW_DELETE_URL}">x</a>
+						<a href="{PFS_ROW_DELETE_URL}">{PHP.L.Delete}</a>
 						<a href="{PFS_ROW_EDIT_URL}">{PHP.L.Edit}</a>
+						<br />{PFS_ROW_INSERT}
 					</td>
 				</tr>
 			<!-- END: PFS_ROW -->

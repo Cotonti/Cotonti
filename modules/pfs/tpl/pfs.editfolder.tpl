@@ -1,11 +1,13 @@
 <!-- BEGIN: MAIN -->
 
 <!-- BEGIN: STANDALONE_HEADER -->
-{PFS_STANDALONE_HEADER1}
+<html>
+<head>
+<title>{PHP.cfg.maintitle}</title>
 <link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-	<!-- END: STANDALONE_HEADER -->
+<!-- END: STANDALONE_HEADER -->
 
 	<div class="block">
 		<h2 class="pfs">{PFS_TITLE}</h2>
@@ -54,13 +56,7 @@
 		</form>
 	</div>
 
-	<!-- BEGIN: STANDALONE_FOOTER -->
-	<div class="block">
-		{PHP.R.pfs_icon_pastethumb} {PHP.L.pfs_pastethumb} &nbsp; 
-		{PHP.R.pfs_icon_pasteimage} {PHP.L.pfs_pasteimage} &nbsp; 
-		{PHP.R.pfs_icon_pastefile} {PHP.L.pfs_pastefile}
-	</div>
-
+<!-- BEGIN: STANDALONE_FOOTER -->
 </body>
 </html>
 <!-- END: STANDALONE_FOOTER -->

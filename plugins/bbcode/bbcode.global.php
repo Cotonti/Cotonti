@@ -27,4 +27,14 @@ if ($cfg['plugin']['bbcode']['smilies'])
 
 $cot_parsers[] = 'cot_bbcode_parse';
 
+// Override markup resource strings
+// Forums
+$R['frm_code_quote'] = "[quote][url={\$url}]#{\$id}[/url] [b]{\$postername} :[/b]\n{\$text}\n[/quote]";
+$R['frm_code_quote_begin'] = '[quote';
+$R['frm_code_quote_close'] = '[/quote]';
+$R['frm_code_update'] = "\n\n[b]{\$updated}[/b]\n\n";
+// PFS
+$R['pfs_code_addfile'] = "'[url=".$cfg['pfs_path']."'+gfile+']'+gfile+'[/url]'";
+$R['pfs_code_addpix'] = "'[img]'+gfile+'[/img]'";
+$R['pfs_code_addthumb'] = "'[img=".$cfg['pfs_path']."'+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'";
 ?>

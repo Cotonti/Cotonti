@@ -4,7 +4,7 @@
 
 		<div class="block">
 			<h2 class="page">{PAGEADD_PAGETITLE}</h2>
-			<form action="{PAGEADD_FORM_SEND}" enctype="multipart/form-data" method="post" name="newpage">
+			<form action="{PAGEADD_FORM_SEND}" enctype="multipart/form-data" method="post" name="pageform">
 				<table class="cells">
 					<tr>
 						<td class="width30">{PHP.L.Category}:</td>
@@ -50,7 +50,9 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							{PAGEADD_FORM_TEXT}<!-- IF {PAGEADD_FORM_PFS_TEXT_USER} -->{PAGEADD_FORM_PFS_TEXT_USER}<!-- ENDIF --><!-- IF {PAGEADD_FORM_PFS_TEXT_SITE} --><span class="spaced">{PHP.cfg.separator}</span>{PAGEADD_FORM_PFS_TEXT_SITE}<!-- ENDIF -->
+							{PAGEADD_FORM_TEXT}
+							<!-- IF {PAGEADD_FORM_PFS} -->{PAGEADD_FORM_PFS}<!-- ENDIF -->
+							<!-- IF {PAGEADD_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span>{PAGEADD_FORM_SFS}<!-- ENDIF -->
 						</td>
 					</tr>			
 					<tr>

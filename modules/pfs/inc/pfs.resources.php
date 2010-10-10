@@ -3,13 +3,18 @@
 /**
  * PFS Icons
  */
-
+$R['pfs_code_addfile'] = '<a href="'.$cfg['pfs_path'].'\'+gfile+\'" title="\'+gdesc+\'">\'+gfile+\'</a>';
+$R['pfs_code_addpix'] = '<img src="'.$cfg['pfs_path'].'\'+gfile+\'" alt="\'+gdesc+\'" />';
+$R['pfs_code_addthumb'] = '<a href="'.$cfg['pfs_path'].'\'+gfile+\'" title="\'+gdesc+\'"><img src="'.$cfg['thumb_path'].'\'+gfile+\'" alt="\'+gdesc+\'" /></a>';
 $R['pfs_code_header_javascript'] = '
-function addthumb(gfile,c1,c2) {
-	insertText(opener.document, "{$c1}", "{$c2}", "[img='.$cfg['pfs_path'].'"+gfile+"]'.$cfg['pfs_thumbpath'].'"+gfile+"[/img]");
+function addfile(gfile, c1, c2, gdesc) {
+	insertText(opener.document, \'{$c1}\', \'{$c2}\', \''.$R['pfs_code_addfile'].'\');{$winclose}
 }
-function addpix(gfile,c1,c2) {
-	insertText(opener.document, "{$c1}", "{$c2}", "[img]"+gfile+"[/img]");
+function addthumb(gfile, c1, c2, gdesc) {
+	insertText(opener.document, \'{$c1}\', \'{$c2}\', \''.$R['pfs_code_addthumb'].'\');{$winclose}
+}
+function addpix(gfile, c1, c2, gdesc) {
+	insertText(opener.document, \'{$c1}\', \'{$c2}\', \''.$R['pfs_code_addpix'].'\');{$winclose}
 }';
 $R['pfs_link_thumbnail'] = 
 	'<a href="{$pfs_fullfile}"><img src="{$thumbpath}{$pfs_file}" title="{$pfs_file}"></a>';
@@ -39,11 +44,11 @@ $R['pfs_icon_pastethumb'] =
  */
 
 $R['pfs_link_addpix'] = 
-	'<a href="javascript:addpix(\''.$cfg['pfs_path'].'{$pfs_file}\',\'{$c1}\',\'{$c2}\')\">'.$R['pfs_icon_pasteimage'].'</a>';
+	'<a href="javascript:addpix(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pasteimage'].'</a>';
 $R['pfs_link_addthumb'] = 
-	'<a href="javascript:addthumb(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\')">'.$R['pfs_icon_pastethumb'].'</a>';
+	'<a href="javascript:addthumb(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pastethumb'].'</a>';
 $R['pfs_link_addfile'] = 
-	'<a href="javascript:addfile(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\')">'.$R['pfs_icon_pastefile'].'</a>';
+	'<a href="javascript:addfile(\'{$pfs_file}\',\'{$c1}\',\'{$c2}\',\'{$pfs_desc}\')">'.$R['pfs_icon_pastefile'].'</a>';
 
 
 /**
