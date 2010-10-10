@@ -15,6 +15,8 @@ defined('COT_CODE') or die('Wrong URL.');
  * Put your theme-specific language strings here
  */
 
-
+$L['Contact'] = 'Contact';
+$L['Follow_Twitter'] = 'Follow us on Twitter!';
+$L['Sitemap'] = 'Sitemap';
 
 ?>
