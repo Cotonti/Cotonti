@@ -4,7 +4,7 @@
 
 		<div class="block">
 			<h2 class="page">{PAGEEDIT_PAGETITLE}</h2>
-			<form action="{PAGEEDIT_FORM_SEND}" enctype="multipart/form-data" method="post" name="update">
+			<form action="{PAGEEDIT_FORM_SEND}" enctype="multipart/form-data" method="post" name="pageform">
 				<table class="cells">
 					<tr>
 						<td class="width30">{PHP.L.Category}:</td>
@@ -64,7 +64,9 @@
 					<!-- END: ADMIN -->
 					<tr>
 						<td colspan="2">
-							{PAGEEDIT_FORM_TEXT}<!-- IF {PAGEEDIT_FORM_PFS_TEXT_USER} -->{PAGEEDIT_FORM_PFS_TEXT_USER}<!-- ENDIF --><!-- IF {PAGEEDIT_FORM_PFS_TEXT_SITE} --><span class="spaced">{PHP.cfg.separator}</span>{PAGEEDIT_FORM_PFS_TEXT_SITE}<!-- ENDIF -->
+							{PAGEEDIT_FORM_TEXT}
+							<!-- IF {PAGEEDIT_FORM_PFS} -->{PAGEEDIT_FORM_PFS}<!-- ENDIF -->
+							<!-- IF {PAGEEDIT_FORM_SFS} --><span class="spaced">{PHP.cfg.separator}</span>{PAGEEDIT_FORM_SFS}<!-- ENDIF -->
 						</td>
 					</tr>
 					<tr>

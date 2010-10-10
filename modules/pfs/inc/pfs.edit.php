@@ -1,10 +1,4 @@
 <?php
-/* ====================
- Seditio - Website engine
- Copyright Neocrome
- http://www.neocrome.net
- ==================== */
-
 /**
  * Personal File Storage, edit
  *
@@ -55,7 +49,6 @@ foreach ($cot_extensions as $k => $line)
 
 if (!empty($c1) || !empty($c2))
 {
-	$morejavascript = cot_rc('pfs_code_header_javascript');
 	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
@@ -134,31 +127,6 @@ $t = new XTemplate(cot_skinfile('pfs.edit'));
 if ($standalone)
 {
 	cot_sendheaders();
-	
-	if ($c1 == 'newpage' && $c2 == 'newpageurl' || $c1 == 'update' && $c2 == 'rpageurl')
-	{
-		$addthumb = "'".$cfg['pfs_thumbpath']."' + gfile";
-		$addpix = 'gfile';
-		$addfile = "'".$cfg['pfs_path']."' + gfile";
-	}
-	else
-	{
-		$addthumb = "'[img=".$cfg['pfs_path']."'+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'";
-		$addpix = "'[img]'+gfile+'[/img]'";
-		$addfile = "'[url=".$cfg['pfs_path']."'+gfile+']'+gfile+'[/url]'";
-	}
-	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
-
-	$t->assign(array(
-		'PFS_DOCTYPE' => $cfg['doctype'],
-		'PFS_JAVASCRIPT' => cot_javascript(),
-		'PFS_C1' => $c1,
-		'PFS_C2' => $c2,
-		'PFS_ADDTHUMB' => $addthumb,
-		'PFS_ADDPIX' => $addpix,
-		'PFS_ADDFILE' => $addfile,
-		'PFS_WINCLOSE' => $winclose
-	));
 
 	$t->parse('MAIN.STANDALONE_HEADER');
 	$t->parse('MAIN.STANDALONE_FOOTER');

@@ -263,7 +263,7 @@ if ($a=='newpost')
 			$gap_base = empty($row['fp_updated']) ? $row['fp_creation'] : $row['fp_updated'];
 			$updated = sprintf($L['for_mergetime'], cot_build_timegap($gap_base, $sys['now_offset']));
 
-			$newmsg = cot_db_prep($row['fp_text'])."\n\n[b]".$updated."[/b]\n\n".cot_db_prep($newmsg);
+			$newmsg = cot_db_prep($row['fp_text']).cot_rc('frm_code_update', array('updated' => $updated)).cot_db_prep($newmsg);
 			
 			$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
 
@@ -552,18 +552,20 @@ while ($row1 = cot_db_fetcharray($sql1))
 }
 $jumpbox = cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"');
 
-$movebox =  ($usr['isadmin']) ? '<input type="submit" class="submit" value="'.$L['Move'].'" />'.cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false).' '. $L['for_keepmovedlink'].' '.cot_checkbox('1', 'ghost') : '';
-
 if ($usr['isadmin'])
 {
-	$adminoptions = "<form id=\"movetopic\" action=\"".cot_url('forums', "m=topics&a=move&".cot_xg()."&s=".$s."&q=".$q)."\" method=\"post\">";
-	$adminoptions .= $L['Topicoptions']." : <a href=\"".cot_url('forums', "m=topics&a=bump&".cot_xg()."&q=".$q."&s=".$s)."\">".$L['Bump'];
-	$adminoptions .= "</a> &nbsp; <a href=\"".cot_url('forums', "m=topics&a=lock&".cot_xg()."&q=".$q."&s=".$s)."\">".$L['Lock'];
-	$adminoptions .= "</a> &nbsp; <a href=\"".cot_url('forums', "m=topics&a=sticky&".cot_xg()."&q=".$q."&s=".$s)."\">".$L['Makesticky'];
-	$adminoptions .= "</a> &nbsp; <a href=\"".cot_url('forums', "m=topics&a=announcement&".cot_xg()."&q=".$q."&s=".$s)."\">".$L['Announcement'];
-	$adminoptions .= "</a> &nbsp; <a href=\"".cot_url('forums', "m=topics&a=private&".cot_xg()."&q=".$q."&s=".$s)."\">".$L['Private']." (#)";
-	$adminoptions .= "</a> &nbsp; <a href=\"".cot_url('forums', "m=topics&a=clear&".cot_xg()."&q=".$q."&s=".$s)."\">".$L['Default'];
-	$adminoptions .= "</a> &nbsp; &nbsp; ".$movebox." &nbsp; &nbsp; ".$L['Delete'].":[<a href=\"".cot_url('forums', "m=topics&a=delete&".cot_xg()."&s=".$s."&q=".$q)."\">x</a>]</form>";
+	$adminoptions = cot_rc('frm_code_adminoptions', array(
+		'move_url' => cot_url('forums', 'm=topics&a=move&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		'bump_url' => cot_url('forums', 'm=topics&a=bump&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		'lock_url' => cot_url('forums', 'm=topics&a=lock&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		'sticky_url' => cot_url('forums', 'm=topics&a=sticky&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		'announce_url' => cot_url('forums', 'm=topics&a=announcement&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		'private_url' => cot_url('forums', 'm=topics&a=private&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		'clear_url' => cot_url('forums', 'm=topics&a=clear&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		'delete_url' => cot_url('forums', 'm=topics&a=delete&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		'movebox_select' => cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false),
+		'movebox_keep' => cot_checkbox('0', 'ghost')
+	));
 }
 else
 { 
@@ -614,13 +616,17 @@ while ($row = cot_db_fetcharray($sql))
 	$rowquote  = ($usr['id']>0) ? cot_rc('frm_rowquote', array('url' => cot_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np"))) : '';
 	$rowedit   = (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? cot_rc('frm_rowedit', array('url' => cot_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".cot_xg()))) : '';
 	$rowdelete = ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? cot_rc('frm_rowdelete', array('url' => cot_url('forums', "m=posts&a=delete&".cot_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id']))) : '';
-	$rowdelete .= ($fp_num==$totalposts) ? "<a name=\"bottom\" id=\"bottom\"></a>" : '';
-	$adminoptions = $rowquote.' &nbsp; '.$rowedit.' &nbsp; '.$rowdelete;
+	$rowdelete .= ($fp_num==$totalposts) ? $R['frm_code_bottom'] : '';
+	$adminoptions = cot_rc('frm_code_post_adminoptions', array(
+		'quote' => $rowquote,
+		'edit' => $rowedit,
+		'delete' => $rowdelete
+	));
 
 	if ($usr['id']>0 && $n=='unread' && !$unread_done && $row['fp_creation']>$usr['lastvisit'])
 	{
 		$unread_done = TRUE;
-		$adminoptions .= "<a name=\"unread\" id=\"unread\"></a>";
+		$adminoptions .= $R['frm_code_unread'];
 	}
 
 	$row['fp_posterip'] = ($usr['isadmin']) ? cot_build_ipsearch($row['fp_posterip']) : '';
@@ -641,7 +647,7 @@ while ($row = cot_db_fetcharray($sql))
 		"FORUMS_POSTS_ROW_UPDATER" => htmlspecialchars($row['fp_updater']),
 		"FORUMS_POSTS_ROW_UPDATEDBY" => $row['fp_updatedby'],
 		"FORUMS_POSTS_ROW_TEXT" => cot_parse($row['fp_text'], ($cfg['module']['forums']['markup'] && $fs_allowbbcodes)),
-		"FORUMS_POSTS_ROW_ANCHORLINK" => "<a name=\"post{$row['fp_id']}\" id=\"post{$row['fp_id']}\"></a>",
+		"FORUMS_POSTS_ROW_ANCHORLINK" => cot_rc('frm_code_post_anchor', array('id' => $row['fp_id'])),
 		"FORUMS_POSTS_ROW_POSTERNAME" => cot_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
 		"FORUMS_POSTS_ROW_POSTERIP" => $row['fp_posterip'],
@@ -671,16 +677,16 @@ $allowreplybox = ($cfg['antibumpforums'] && $lastposterid>0 && $lastposterid==$u
 // Nested quote stripper by Spartan
 function cot_stripquote($string)
 {
-	global $sys;
+	global $sys, $R;
 	$starttime = $sys['now'];
-	$startindex = mb_stripos($string,'[quote');
+	$startindex = mb_stripos($string, $R['frm_code_quote_begin']);
 	while ($startindex>=0)
 	{
 		if (($sys['now']-$starttime)>2000)
 		{
 			break;
 		}
-		$stopindex = mb_strpos($string,'[/quote]');
+		$stopindex = mb_strpos($string, $R['frm_code_quote_close']);
 		if ($stopindex>0)
 		{
 			if (($sys['now']-$starttime)>3000)
@@ -689,13 +695,13 @@ function cot_stripquote($string)
 			}
 			$fragment = mb_substr($string,$startindex,($stopindex-$startindex+8));
 			$string = str_ireplace($fragment,'',$string);
-			$stopindex = mb_stripos($string,'[/quote]');
+			$stopindex = mb_stripos($string, $R['frm_code_quote_close']);
 		} else
 		{
 			break;
 		}
 		$string = trim($string);
-		$startindex = mb_stripos($string,'[quote');
+		$startindex = mb_stripos($string, $R['frm_code_quote_begin']);
 	}
 	return($string);
 }
@@ -708,16 +714,21 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 
 		if ($row4 = cot_db_fetcharray($sql4))
 		{
-			$newmsg = "[quote][url=forums.php?m=posts&p=".$row4['fp_id']."#".$row4['fp_id']."]#[/url] [b]".$row4['fp_postername']." :[/b]\n".cot_stripquote($row4['fp_text'])."\n[/quote]";
+			$newmsg = cot_rc('frm_code_quote', array(
+				'url' => cot_url('forums', 'm=posts&p=' . $row4['fp_id'] . '#' . $row4['fp_id']),
+				'id' => $row4['fp_id'],
+				'postername' => $row4['fp_postername'],
+				'text' => cot_stripquote($row4['fp_text'])
+			));
 		}
 	}
 
 	cot_require_api('forms');
-	$post_mark = "<a name=\"np\" id=\"np\"></a>";
+	$post_mark = $R['frm_code_newpost_mark'];
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => cot_url('forums', "m=posts&a=newpost&s=".$s."&q=".$q),
-		"FORUMS_POSTS_NEWPOST_TEXT" => $post_mark . cot_textarea('newmsg', htmlspecialchars($newmsg), 16, 56, '', 'input_textarea_editor')
+		"FORUMS_POSTS_NEWPOST_TEXT" => $post_mark . cot_textarea('newmsg', $newmsg, 16, 56, '', 'input_textarea_editor')
 	));
 
 	cot_display_messages($t);

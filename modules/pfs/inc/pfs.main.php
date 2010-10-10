@@ -70,7 +70,6 @@ if (($maxfile==0 || $maxtotal==0) && !$usr['isadmin'])
 
 if (!empty($c1) || !empty($c2))
 {
-	$morejavascript = cot_rc('pfs_code_header_javascript');
 	$more .= empty($more) ? 'c1='.$c1.'&c2='.$c2 : '&c1='.$c1.'&c2='.$c2;
 	$standalone = TRUE;
 }
@@ -339,7 +338,7 @@ if ($f>0)
 
 		$sql = cot_db_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
 		$sqll = cot_db_query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
-		$title .= " ".$cfg['separator']." <a href=\"".cot_url('pfs', 'f='.$pff_id.'&'.$more)."\">".$pff_title."</a>";
+		$title .= ' '.$cfg['separator'].' '.cot_rc_link(cot_url('pfs', 'f='.$pff_id.'&'.$more), $pff_title);
 	}
 	else
 	{ cot_die(); }
@@ -418,7 +417,7 @@ while ($row = cot_db_fetcharray($sqll))
 	$pfs_file = $row['pfs_file'];
 	$pfs_date = $row['pfs_date'];
 	$pfs_extension = $row['pfs_extension'];
-	$pfs_desc = $row['pfs_desc'];
+	$pfs_desc = htmlspecialchars($row['pfs_desc']);
 	$pfs_fullfile = $cfg['pfs_dir_user'].$pfs_file;
 	$pfs_filesize = floor($row['pfs_size']/1024);
 	$pfs_icon = $icon[$pfs_extension];
@@ -460,7 +459,7 @@ while ($row = cot_db_fetcharray($sqll))
 		'PFS_ROW_FILE' => $pfs_file,
 		'PFS_ROW_DATE' => date($cfg['dateformat'], $pfs_date + $usr['timezone'] * 3600),
 		'PFS_ROW_EXT' => $pfs_extension,
-		'PFS_ROW_DESC' => htmlspecialchars($pfs_desc),
+		'PFS_ROW_DESC' => $pfs_desc,
 		'PFS_ROW_TYPE' => $filedesc[$pfs_extension],
 		'PFS_ROW_FILE_URL' => $pfs_fullfile,
 		'PFS_ROW_SIZE' => $pfs_filesize,
@@ -468,7 +467,7 @@ while ($row = cot_db_fetcharray($sqll))
 		'PFS_ROW_DELETE_URL' => cot_url('pfs', 'a=delete&'.cot_xg().'&id='.$pfs_id.'&'.$more.'&opt='.$opt),
 		'PFS_ROW_EDIT_URL' => cot_url('pfs', 'm=edit&id='.$pfs_id.'&'.$more),
 		'PFS_ROW_COUNT' => $row['pfs_count'],
-		'PFS_ROW_INSERT' => $add_thumbnail.$add_image.$add_file
+		'PFS_ROW_INSERT' => $standalone ? $add_thumbnail.$add_image.$add_file : ''
 	));
 
 	$t->parse('MAIN.PFS_ROW');
@@ -517,7 +516,7 @@ if ($files_count>0 || $folders_count>0)
 
 // ========== Statistics =========
 
-$showthumbs .= ($opt!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? "<a href=\"".cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs')."\">".$L['Thumbnails']."</a>" : '';
+$showthumbs .= ($opt!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? cot_rc_link(cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs'), $L['Thumbnails']) : '';
 
 $t->assign(array(
 	'PFS_TOTALSIZE' => floor($pfs_totalsize/1024).$L['kb'],
@@ -594,17 +593,17 @@ if ($standalone)
 	}
 	else
 	{
-		$addthumb = "'[img=".$cfg['pfs_path']."'+gfile+']".$cfg['pfs_thumbpath']."'+gfile+'[/img]'";
-		$addpix = "'[img]'+gfile+'[/img]'";
-		$addfile = "'[url=".$cfg['pfs_path']."'+gfile+']'+gfile+'[/url]'";
+		$addthumb = $R['pfs_code_addthumb'];
+		$addpix = $R['pfs_code_addpix'];
+		$addfile = $R['pfs_code_addfile'];
 	}
 	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
 
 	cot_sendheaders();
 
 	$t->assign(array(
-		'PFS_DOCTYPE' => $cfg['doctype'],
 		'PFS_JAVASCRIPT' => cot_javascript(),
+		'PFS_HEADER_JAVASCRIPT' => cot_rc('pfs_code_header_javascript'),
 		'PFS_C1' => $c1,
 		'PFS_C2' => $c2,
 		'PFS_ADDTHUMB' => $addthumb,

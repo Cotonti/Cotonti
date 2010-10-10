@@ -21,6 +21,35 @@ $GLOBALS['db_pages'] = (isset($GLOBALS['db_pages'])) ? $GLOBALS['db_pages'] : $G
 
 $GLOBALS['cot_extrafields']['pages'] = (!empty($GLOBALS['cot_extrafields'][$GLOBALS['db_pages']]))
 	? $GLOBALS['cot_extrafields'][$GLOBALS['db_pages']] : array();
+	
+/**
+ * Cuts the page after 'more' tag or after the first page (if multipage)
+ *
+ * @param string $html Page body
+ * @return string
+ */
+function cot_cut_more($html)
+{
+	$mpos = mb_strpos($html, '<!--more-->');
+	if ($mpos === false)
+	{
+		$mpos = mb_strpos($html, '[more]');
+	}
+	if ($mpos !== false)
+	{
+		$html = mb_substr($html, 0, $mpos);
+	}
+	$mpos = mb_strpos($html, '[newpage]');
+	if ($mpos !== false)
+	{
+		$html = mb_substr($html, 0, $mpos);
+	}
+	if (mb_strpos($html, '[title]'))
+	{
+		$html = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $html);
+	}
+	return $html;
+}
 
 /**
  * Reads raw data from file

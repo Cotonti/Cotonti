@@ -48,11 +48,12 @@ HTM;
 		$markitup .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/markitup/js/chili.js"></script>';
 	}
 	$autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
+	$parserpath = cot_url('plug', 'r=markitup&x=' . $sys['xk'], '', true);
 	$markitup .= '
 <script type="text/javascript">
 //<![CDATA[
 mySettings.previewAutorefresh = '.$autorefresh.';
-mySettings.previewParserPath = "plug.php?r=markitup&'.cot_xg().'";
+mySettings.previewParserPath = "'.$parserpath.'";
 mini.previewAutorefresh = '.$autorefresh.';
 mini.previewParserPath = mySettings.previewParserPath;
 $(document).ready(function() {
