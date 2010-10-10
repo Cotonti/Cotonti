@@ -49,7 +49,7 @@ while ($row = cot_db_fetcharray($sql1))
 	if ($showavatars)
 	{
 		$user_avatar = '<a href="'.cot_url('users', 'm=details&id='.$row['online_userid'].'&u='.htmlspecialchars($row['online_name'])).'">';
-		$user_avatar .= (!empty($row['user_avatar'])) ? '<img src="'.$row['user_avatar'].'" width="'.$miniavatar_x.'" height="'.$miniavatar_y.'" alt="" /></a>' : cot_rc('img_pixel', array('x' => $miniavatar_x, 'y' => $miniavatar_y)) . '</a>';
+		$user_avatar .= (!empty($row['user_avatar'])) ? '<img src="'.$row['user_avatar'].'" width="'.$miniavatar_x.'" height="'.$miniavatar_y.'" alt="'.$L['Avatar'].'" /></a>' : cot_rc('img_pixel', array('x' => $miniavatar_x, 'y' => $miniavatar_y)) . '</a>';
 	}
 
 	$t->assign(array(

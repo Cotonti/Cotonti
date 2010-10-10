@@ -17,7 +17,7 @@ function addpix(gfile, c1, c2, gdesc) {
 	insertText(opener.document, \'{$c1}\', \'{$c2}\', \''.$R['pfs_code_addpix'].'\');{$winclose}
 }';
 $R['pfs_link_thumbnail'] = 
-	'<a href="{$pfs_fullfile}"><img src="{$thumbpath}{$pfs_file}" title="{$pfs_file}"></a>';
+	'<a href="{$pfs_fullfile}" title="{$pfs_desc}"><img src="{$thumbpath}{$pfs_file}" alt="{$pfs_desc}" /></a>';
 
 /**
  * PFS Folder Types
