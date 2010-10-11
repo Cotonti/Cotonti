@@ -11,7 +11,6 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_api('tags');
 cot_require_api('extrafields');
 cot_require('page');
 cot_require_lang('news', 'plug');
@@ -111,7 +110,7 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 
 		if ($cfg['plugin']['tags']['pages'])
 		{
-			require_once(cot_langfile('tags', 'plug'));
+			cot_require('tags', true);
 			$item_id = $pag['page_id'];
 			$tags = cot_tag_list($item_id);
 			if (count($tags) > 0)

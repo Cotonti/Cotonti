@@ -165,8 +165,6 @@ $db_ratings 		= $db_x.'ratings';
 $db_referers 		= $db_x.'referers';
 $db_stats 			= $db_x.'stats';
 $db_structure 		= $db_x.'structure';
-$db_tag_references	= $db_x.'tag_references';
-$db_tags			= $db_x.'tags';
 $db_updates			= $db_x.'updates';
 $db_users 			= $db_x.'users';
 
