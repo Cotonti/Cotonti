@@ -16,6 +16,9 @@ $GLOBALS['tc_styles'] = array(
 	20 => 'm',
 	50 => 'l',
 	999999999 => 'xl'
-)
+);
+
+$GLOBALS['db_tags']	= (isset($GLOBALS['db_tags'])) ? $GLOBALS['db_tags'] : $GLOBALS['db_x'] . 'tags';
+$GLOBALS['db_tag_references'] = (isset($GLOBALS['db_tag_references'])) ? $GLOBALS['db_tag_references'] : $GLOBALS['db_x'] . 'tag_references';
 
 ?>

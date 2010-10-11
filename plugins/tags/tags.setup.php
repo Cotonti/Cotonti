@@ -3,9 +3,9 @@
 [BEGIN_COT_EXT]
 Code=tags
 Name=Tags
-Description=Basic Tags implementation
+Description=Provides tags - site content keywords, tag clouds, tag search and API
 Version=0.7.0
-Date=2010-jan-22
+Date=2010-oct-12
 Author=Trustmaster
 Copyright=All rights reserved (c) Vladimir Sibirov 2008-2010
 Notes=BSD License.
