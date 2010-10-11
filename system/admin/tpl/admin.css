@@ -53,6 +53,10 @@ h4		{ font-weight:bold; }
 .lhn		{ line-height:normal!important; }
 .leftindent	{ text-indent:1em; }
 
+.lower		{ text-transform:lowercase; }
+.upper		{ text-transform:uppercase; }
+.capital	{ text-transform:capitalize; }
+
 .textleft		{ text-align:left; }
 .textcenter		{ text-align:center; }
 .textright		{ text-align:right; }
@@ -139,9 +143,9 @@ table.flat td	{ padding:0; border:0; }
 /* 8. Forms
 -------------------------------------------------- */
 
-form					{ }
-input, select, textarea	{ font:normal 1em Georgia; }
-input, select			{ padding:2px; }
+form							{ }
+input, select, textarea, button	{ font:normal 1em Georgia; }
+input, select, button			{ padding:2px; }
 
 /* 9. Pagination
 -------------------------------------------------- */

@@ -2,7 +2,7 @@
 
 		<div class="block">
 			<h2 class="forums">{FORUMS_EDITPOST_PAGETITLE}</h2>
-			<p class="small">{FORUMS_EDITPOST_SUBTITLE}</p>
+			<!-- IF {FORUMS_EDITPOST_SUBTITLE} --><p class="marginbottom10 small">{FORUMS_EDITPOST_SUBTITLE}</p><!-- ENDIF -->
 
 			{FILE ./themes/nemesis/warnings.tpl}
 
@@ -23,11 +23,11 @@
 					</tr>
 					<!-- BEGIN: POLL -->
 					<tr>
-	<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/poll.js"></script>
-	<script type="text/javascript">
-		var ansCount = {EDIT_POLL_OPTIONSCOUNT};
-		var ansMax = {PHP.cfg.max_options_polls};
-	</script>
+						<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/poll.js"></script>
+						<script type="text/javascript">
+							var ansCount = {EDIT_POLL_OPTIONSCOUNT};
+							var ansMax = {PHP.cfg.max_options_polls};
+						</script>
 						<td>{PHP.L.poll}:</td>
 						<td>
 							{EDIT_POLL_IDFIELD}
@@ -63,7 +63,7 @@
 					</tr>
 					<!-- END: FORUMS_EDITPOST_TAGS -->
 					<tr>
-						<td colspan="2" class="valid"><input type="submit" value="{PHP.L.Update}" /></td>
+						<td colspan="2" class="valid"><button type="submit">{PHP.L.Update}</button></td>
 					</tr>
 				</table>
 			</form>

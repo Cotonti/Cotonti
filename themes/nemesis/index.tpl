@@ -18,7 +18,7 @@
 				{INDEX_TAG_CLOUD}
 			</div>
 			<div class="block">
-				<h2 class="online">{PHP.themelang.index.Online}</h2>
+				<h2 class="online">{PHP.L.Online}</h2>
 				<p><a href="index.php?e=whosonline">{PHP.out.whosonline}</a><!-- IF {PHP.out.whosonline_reg_list} -->:<br />{PHP.out.whosonline_reg_list}<!-- ENDIF --></p>
 			</div>
 		</div>

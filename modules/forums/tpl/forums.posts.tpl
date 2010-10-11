@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 
 		<!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
-		<div class="error">{PHP.themelang.forumspost.privatetopic}</div>
+		<div class="error">{PHP.L.for_privatetopic}</div>
 		<!-- END: FORUMS_POSTS_TOPICPRIVATE -->
 
 		<!-- BEGIN: POLLS_VIEW -->
@@ -73,7 +73,7 @@
 				<td>{FORUMS_POSTS_NEWPOST_TEXT}</td>
 			</tr>
 			<tr>
-				<td class="valid"><input type="submit" value="{PHP.L.Reply}" /></td>
+				<td class="valid"><button type="submit">{PHP.L.Reply}</button></td>
 			</tr>
 		</table>
 		</form>

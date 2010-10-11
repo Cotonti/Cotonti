@@ -7,8 +7,8 @@
 				<tr>
 					<td class="coltop" class="width10">&nbsp;</td>
 					<td class="coltop" class="width40">
-						<a href="index.php?z=forums&amp;c=fold#top" rel="nofollow">{PHP.themelang.forumssections.FoldAll}</a> /
-						<a href="index.php?z=forums&amp;c=unfold#top" rel="nofollow">{PHP.themelang.forumssections.UnfoldAll}</a>
+						<a href="index.php?z=forums&amp;c=fold#top" rel="nofollow">{PHP.L.for_foldall}</a> /
+						<a href="index.php?z=forums&amp;c=unfold#top" rel="nofollow">{PHP.L.unfoldall}</a>
 					</td>
 					<td class="coltop" class="width20">{PHP.L.Lastpost}</td>
 					<td class="coltop" class="width10">{PHP.L.Topics}</td>

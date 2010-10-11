@@ -95,10 +95,10 @@ table.fico td img	{ margin-right:10px; vertical-align:middle; }
 /* 5. Forms
 -------------------------------------------------- */
 
-form					{ }
-input, select, textarea	{ font:normal 11px Georgia; }
-input, select			{ padding:2px; }
-label input			{ vertical-align:middle; }
+form							{ }
+input, select, textarea, button	{ font:normal 11px Georgia; }
+input, select, button			{ padding:2px; }
+label input						{ vertical-align:middle; }
 
 /* 6. Misc
 -------------------------------------------------- */
