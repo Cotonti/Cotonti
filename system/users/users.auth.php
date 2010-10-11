@@ -68,11 +68,13 @@ if ($a=='check')
 		$rusername = $row['user_name'];
 		if ($row['user_maingrp']==-1)
 		{
+			$env['status'] = '403 Forbidden';
 			cot_log("Log in attempt, user inactive : ".$rusername, 'usr');
 			cot_redirect(cot_url('message', 'msg=152', '', true));
 		}
 		if ($row['user_maingrp']==2)
 		{
+			$env['status'] = '403 Forbidden';
 			cot_log("Log in attempt, user inactive : ".$rusername, 'usr');
 			cot_redirect(cot_url('message', 'msg=152', '', true));
 		}
@@ -84,6 +86,7 @@ if ($a=='check')
 			}
 			else
 			{
+				$env['status'] = '403 Forbidden';
 				cot_log("Log in attempt, user banned : ".$rusername, 'usr');
 				cot_redirect(cot_url('message', 'msg=153&num='.$row['user_banexpire'], '', true));
 			}
@@ -122,6 +125,7 @@ if ($a=='check')
 	}
 	else
 	{
+		$env['status'] = '403 Forbidden';
 		cot_shield_update(7, "Log in");
 		cot_log("Log in failed, user : ".$rusername,'usr');
 		cot_redirect(cot_url('message', 'msg=151', '', true));

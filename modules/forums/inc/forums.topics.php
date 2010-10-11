@@ -106,6 +106,7 @@ cot_block($usr['auth_read']);
 
 if ($fs_state)
 {
+	$env['status'] = '403 Forbidden';
 	cot_redirect(cot_url('message', "msg=602", '', true));
 }
 

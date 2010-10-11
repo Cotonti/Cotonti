@@ -16,11 +16,6 @@ cot_require('pfs'); // FIXME hard PFS dependency
 
 @clearstatcache();
 
-if ($usr['id']<1)
-{
-	cot_redirect(cot_url('message', "msg=100&".$sys['url_redirect'], '', true));
-}
-
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 cot_block($usr['auth_write']);
 
