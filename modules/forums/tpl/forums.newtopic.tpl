@@ -17,10 +17,10 @@
 				</tr>
 				<!-- BEGIN: PRIVATE -->
 				<tr>
-					<td>{PHP.themelang.forumsnewtopic.privatetopic1}:</td>
+					<td>{PHP.L.for_privatetopic1}:</td>
 					<td>
 						{FORUMS_NEWTOPIC_ISPRIVATE}
-						<span class="small">({PHP.themelang.forumsnewtopic.privatetopic2})</span>
+						<span class="small">({PHP.L.for_privatetopic2})</span>
 					</td>
 				</tr>
 				<!-- END: PRIVATE -->
@@ -65,7 +65,7 @@
 				</tr>
 				<!-- END: FORUMS_NEWTOPIC_TAGS -->
 				<tr>
-					<td colspan="2" class="valid"><input type="submit" value="{PHP.L.Submit}" /></td>
+					<td colspan="2" class="valid"><button type="submit">{PHP.L.Submit}</button></td>
 				</tr>
 			</table>
 		</form>

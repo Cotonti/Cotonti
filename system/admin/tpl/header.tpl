@@ -22,7 +22,7 @@
 <div id="container">
 
 	<ul id="user">
-		<li id="hi">{PHP.L.hea_welcome}, <a href="users.php?m=profile">{PHP.usr.name}</a> &nbsp; | &nbsp; {HEADER_USER_PMREMINDER}</li>
+		<li id="hi">{PHP.L.hea_welcome}, <a href="users.php?m=profile">{PHP.usr.name}</a><span class="spaced">{PHP.cfg.separator}</span><a href="index.php?z=pm"><!-- IF {PHP.usr.messages} == 0 -->{PHP.L.Private_Messages}<!-- ELSE -->New messages: {PHP.usr.messages}<!-- ENDIF --></a><span class="spaced">{PHP.cfg.separator}</span>{PHP.out.loginout}</li>
 		<li><a href="{PHP.cfg.mainurl}">{PHP.L.hea_viewsite}</a></li>
 	</ul>
 

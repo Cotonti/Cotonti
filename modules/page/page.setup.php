@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Name=Page
+Name=Pages
 Description=Pages and Categories
 Version=0.7.0.2
 Date=2010-oct-05

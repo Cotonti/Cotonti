@@ -83,26 +83,24 @@
 			<table class="cells">
 				<tr>
 					<td class="coltop width5"></td>
-					<td class="coltop width25">{PHP.L.Section} {PHP.L.adm_clicktoedit}</td>
+					<td class="coltop width30">{PHP.L.Section} (<span class="lower">{PHP.L.Views}</span>)</td>
 					<td class="coltop width10">{PHP.L.Order}</td>
 					<td class="coltop width15">{PHP.L.adm_enableprvtopics}</td>
 					<td class="coltop width10">{PHP.L.Topics}</td>
 					<td class="coltop width10">{PHP.L.Posts}</td>
-					<td class="coltop width10">{PHP.L.Views}</td>
-					<td class="coltop width15">{PHP.L.Action}</td>
+					<td class="coltop width20">{PHP.L.Action}</td>
 				</tr>
 <!-- BEGIN: ROW -->
 				<!-- IF {PHP.show_fn} --><tr>
-					<td class="strong" colspan="8"><a href="{ADMIN_FORUMS_DEFAULT_ROW_FN_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FN_TITLE} ({ADMIN_FORUMS_DEFAULT_ROW_FN_PATH})</a></td>
+					<td class="strong" colspan="7"><a href="{ADMIN_FORUMS_DEFAULT_ROW_FN_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FN_TITLE} ({ADMIN_FORUMS_DEFAULT_ROW_FN_PATH})</a></td>
 				</tr><!-- ENDIF -->
 				<tr>
 					<td class="centerall">{PHP.R.icon_folder}</td>
-					<td><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a></td>
+					<td><a href="{ADMIN_FORUMS_DEFAULT_ROW_FS_EDIT_URL}">{ADMIN_FORUMS_DEFAULT_ROW_FS_TITLE}</a> ({ADMIN_FORUMS_DEFAULT_ROW_FS_VIEWCOUNT})</td>
 					<td class="centerall"><a title="{PHP.L.Up}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_UP_URL}" class="ajax">{PHP.cot_img_up}</a> <a title="{PHP.L.Down}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_ORDER_DOWN_URL}" class="ajax">{PHP.cot_img_down}</a></td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_ALLOWPRVTOPICS}</td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICCOUNT}</td>
 					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_POSTCOUNT}</td>
-					<td class="centerall">{ADMIN_FORUMS_DEFAULT_ROW_FS_VIEWCOUNT}</td>
 					<td class="centerall action">
 						<a title="{PHP.L.Rights}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
 						<a title="{PHP.L.Open}" href="{ADMIN_FORUMS_DEFAULT_ROW_FS_TOPICS_URL}">{PHP.R.admin_icon_jumpto}</a>
@@ -135,7 +133,7 @@
 			</table>
 		</form>
 		<p class="paging"><span class="a1"><!--//{PHP.L.Total}: {ADMIN_FORUMS_TOTALITEMS}, //-->{PHP.L.adm_polls_on_page}: {ADMIN_FORUMS_COUNTER_ROW}</span></p>
-		<h3>{PHP.L.addnewentry}:</h3>
+		<h3>{PHP.L.Add}:</h3>
 		<form name="addsection" id="addsection" action="{ADMIN_FORUMS_DEFAULT_FORM_ADD_URL}" method="post" class="ajax">
 			<table class="cells">
 				<tr>
@@ -155,7 +153,7 @@
 					<td>{ADMIN_FORUMS_DEFAULT_FORM_ADD_DESC}</td>
 				</tr>
 				<tr>
-					<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Add}" /></td>
+					<td class="valid" colspan="2"><button type="submit">{PHP.L.Add}</button></td>
 				</tr>
 			</table>
 		</form>
