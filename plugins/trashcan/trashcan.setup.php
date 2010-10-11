@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Code=trash
+Code=trashcan
 Name=Trashcan
 Description=Trashcan
 Version=0.7.0

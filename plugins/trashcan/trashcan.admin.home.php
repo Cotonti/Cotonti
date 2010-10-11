@@ -8,7 +8,7 @@ Hooks=admin.home
 /**
  * Trashcan delete old
  *
- * @package trash
+ * @package trashcan
  * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
