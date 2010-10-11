@@ -10,7 +10,7 @@
 						<p class="column">
 						<strong>{PHP.L.Tags}:</strong>
 						<!-- BEGIN: PAGE_TAGS_ROW -->
-							<!-- IF {PHP.tag_i} > 0 -->, <!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}" title="{PAGE_TAGS_ROW_TAG}">{PAGE_TAGS_ROW_TAG}</a>
+							<!-- IF {PHP.tag_i} > 0 -->, <!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}" title="{PAGE_TAGS_ROW_TAG}" rel="nofollow">{PAGE_TAGS_ROW_TAG}</a>
 						<!-- END: PAGE_TAGS_ROW -->
 						<!-- BEGIN: PAGE_NO_TAGS -->
 							{PAGE_NO_TAGS}

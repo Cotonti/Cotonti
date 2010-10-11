@@ -246,7 +246,7 @@ while ($fsn = cot_db_fetcharray($sql))
 
                 $fsnn['fs_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fs_lt_date'] + $usr['timezone'] * 3600);
 
-                $fsnn['lastpost'] = cot_rc_link(cot_url('forums', "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom"), cot_cutstring($fsnn['fs_lt_title'], 32));
+                $fsnn['lastpost'] = cot_rc_link(cot_url('forums', "m=posts&q=".$fsnn['fs_lt_id']."&n=last", "#bottom"), cot_cutstring($fsnn['fs_lt_title'], 32), 'rel="nofollow"');
 
                 $fsnn['fs_timago'] = cot_build_timegap($row['fs_lt_date'], $sys['now_offset']);
 

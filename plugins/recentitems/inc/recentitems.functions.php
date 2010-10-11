@@ -93,8 +93,8 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		{
 			$row['ft_url'] = cot_url('forums', 'm=posts&q=' . $row['ft_id']);
 			$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ?
-                cot_rc_link(cot_url('forums', 'm=posts&q='.$row['ft_id'].'&n=unread', '#unread'), $R['icon_unread'])
-                : cot_rc_link(cot_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom'), $R['icon_follow']);
+                cot_rc_link(cot_url('forums', 'm=posts&q='.$row['ft_id'].'&n=unread', '#unread'), $R['icon_unread'], 'rel="nofollow"')
+                : cot_rc_link(cot_url('forums', 'm=posts&q='.$row['ft_id'].'&n=last', '#bottom'), $R['icon_follow'], 'rel="nofollow"');
 			$row['ft_lastposturl'] .= @date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
 			$row['ft_timago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
 			$row['ft_replycount'] = $row['ft_postcount'] - 1;

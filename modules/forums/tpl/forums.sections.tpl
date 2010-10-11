@@ -7,8 +7,8 @@
 				<tr>
 					<td class="coltop" class="width10">&nbsp;</td>
 					<td class="coltop" class="width40">
-						<a href="index.php?z=forums&amp;c=fold#top">{PHP.themelang.forumssections.FoldAll}</a> /
-						<a href="index.php?z=forums&amp;c=unfold#top">{PHP.themelang.forumssections.UnfoldAll}</a>
+						<a href="index.php?z=forums&amp;c=fold#top" rel="nofollow">{PHP.themelang.forumssections.FoldAll}</a> /
+						<a href="index.php?z=forums&amp;c=unfold#top" rel="nofollow">{PHP.themelang.forumssections.UnfoldAll}</a>
 					</td>
 					<td class="coltop" class="width20">{PHP.L.Lastpost}</td>
 					<td class="coltop" class="width10">{PHP.L.Topics}</td>
@@ -61,7 +61,7 @@
 <!-- END: FORUMS_SECTIONS_ROW_CAT_FOOTER -->
 <!-- END: FORUMS_SECTIONS_ROW -->
 			</table>
-			<p class="paging"><span class="a1"><a href="index.php?e=search&amp;tab=frm">{PHP.themelang.forumssections.Searchinforums}</a></span><span class="a1"><a href="plug.php?e=forumstats">{PHP.L.Statistics}</a></span><span class="a1"><a href="forums.php?n=markall">{PHP.themelang.forumssections.Markasread}</a></span></p>
+			<p class="paging"><span class="a1"><a href="index.php?e=search&amp;tab=frm">{PHP.themelang.forumssections.Searchinforums}</a></span><span class="a1"><a href="plug.php?e=forumstats">{PHP.L.Statistics}</a></span><span class="a1"><a href="forums.php?n=markall"  rel="nofollow">{PHP.themelang.forumssections.Markasread}</a></span></p>
 		</div>
 
 		<div class="block">

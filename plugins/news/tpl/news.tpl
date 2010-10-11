@@ -10,7 +10,7 @@
 			<strong>{PHP.L.Tags}:</strong>
 <!-- BEGIN: PAGE_TAGS -->
 <!-- BEGIN: PAGE_TAGS_ROW -->
-			<!-- IF {PAGE_TAGS_ROW_TAG_COUNT} > 0 -->, <!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}" title="{PAGE_TAGS_ROW_TAG}">{PAGE_TAGS_ROW_TAG}</a>
+			<!-- IF {PAGE_TAGS_ROW_TAG_COUNT} > 0 -->, <!-- ENDIF --><a href="{PAGE_TAGS_ROW_URL}" title="{PAGE_TAGS_ROW_TAG}" rel="nofollow">{PAGE_TAGS_ROW_TAG}</a>
 <!-- END: PAGE_TAGS_ROW -->
 <!-- END: PAGE_TAGS -->
 <!-- BEGIN: PAGE_NO_TAGS -->
