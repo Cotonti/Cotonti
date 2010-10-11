@@ -90,14 +90,8 @@ else
 			$rsearch['set']['from'] = $sys['now_offset'] - 31536000;
 		break;
 		case 5:
-			$from_year = cot_import('ryear_from', 'P', 'INT');
-			$from_month = cot_import('rmonth_from', 'P', 'INT');
-			$from_day = cot_import('rday_from', 'P', 'INT');
-			$to_year = cot_import('ryear_to', 'P', 'INT');
-			$to_month = cot_import('rmonth_to', 'P', 'INT');
-			$to_day = cot_import('rday_to', 'P', 'INT');
-			$rsearch['set']['from'] = mktime(0, 0, 0, $from_month, $from_day, $from_year) - $usr['timezone'] * 3600;
-			$rsearch['set']['to'] = mktime(0, 0, 0, $to_month, $to_day, $to_year) - $usr['timezone'] * 3600;
+			$rsearch['set']['from'] = cot_import_date('rfrom');
+			$rsearch['set']['to'] = cot_import_date('rto');
 		break;
 		default: break;
 	}
@@ -144,7 +138,7 @@ if (($tab == 'pag' || empty($tab))  && $cfg['module']['page'] && $cfg['plugin'][
 	}
 }
 
-if (($tab == 'frm' || empty($tab)) && is_array($cfg['modules']['forums']) && $cfg['plugin']['search']['forumsearch'])
+if (($tab == 'frm' || empty($tab)) && is_array($cfg['module']['forums']) && $cfg['plugin']['search']['forumsearch'])
 {
 	$sql1 = cot_db_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
 		LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
@@ -220,32 +214,31 @@ if (!empty($sq))
 
 	if (($tab == 'pag' || empty($tab)) && $cfg['module']['page'] && $cfg['plugin']['search']['pagesearch'] && !$cot_error)
 	{
-		$where = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
-			"AND page_cat IN ('".cot_db_prep(implode("','", $rsearch['pag']['sub']))."')" : "AND page_cat IN ('".implode("','", $pag_catauth)."')";
-		$where .= ($rsearch['set']['limit'] > 0) ? " AND page_date >= ".$rsearch['set']['from']." AND page_date <= ".$rsearch['set']['to'] : "";
-		$where .= ($rsearch['pag']['file'] == 1) ? " AND page_file = '1'" : "";
-		$where .= (!empty($touser)) ? " page_ownerid ".$touser_ids : "";
+		$where_and['cat'] = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
+			"page_cat IN ('".cot_db_prep(implode("','", $rsearch['pag']['sub']))."')" : "page_cat IN ('".implode("','", $pag_catauth)."')"; 
+		$where_and['state'] = "page_state = '0'";
+		$where_and['notcat'] = "page_cat <> 'system'";
+		$where_and['date'] = "page_date <= ".(int)$sys['now_offset'];
+		$where_and['date2'] = ($rsearch['set']['limit'] > 0) ? "page_date >= ".$rsearch['set']['from']." AND page_date <= ".$rsearch['set']['to'] : "";
+		$where_and['file'] = ($rsearch['pag']['file'] == 1) ? "page_file = '1'" : "";
+		$where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser_ids : "";
 
-		$pagsql = ($rsearch['pag']['title'] == 1) ? "(page_title LIKE '".cot_db_prep($sqlsearch)."'" : "";
-		$pagsql .= (!empty($pagsql) && ($rsearch['pag']['desc'] == 1)) ? " OR " : "(";
-		$pagsql .= (($rsearch['pag']['desc'] == 1)) ? "page_desc LIKE '".cot_db_prep($sqlsearch)."'" : "";
-		$pagsql .= (!empty($pagsql) && ($rsearch['pag']['text'] == 1)) ? " OR " : "(";
-		$pagsql .= (($rsearch['pag']['text'] == 1)) ? "page_text LIKE '".cot_db_prep($sqlsearch)."'" : "";
+		$where_or['title'] = ($rsearch['pag']['title'] == 1) ? "page_title LIKE '".cot_db_prep($sqlsearch)."'" : "";
+		$where_or['desc'] = (($rsearch['pag']['desc'] == 1)) ? "page_desc LIKE '".cot_db_prep($sqlsearch)."'" : "";
+		$where_or['text'] = (($rsearch['pag']['text'] == 1)) ? "page_text LIKE '".cot_db_prep($sqlsearch)."'" : "";
 		// String query for addition pages fields.
-		$addfields = trim($cfg['plugin']['search']['addfields']);
-		if (!empty($addfields))
+		foreach (explode(',', trim($cfg['plugin']['search']['addfields'])) as $addfields_el)
 		{
-			$addfields_sql = '';
-			foreach (explode(',', $addfields) as $addfields_el)
-			{
-				$addfields_el = trim($addfields_el);
-				$addfields_sql .= ((!empty($addfields_el))) ? " OR ".$addfields_el." LIKE '".$sqlsearch."'" : "";
-			}
+			$addfields_el = trim($addfields_el);
+			$where_or[$addfields_el] .= ((!empty($addfields_el))) ? $addfields_el." LIKE '".$sqlsearch."'" : "";
 		}
-		$pagsql .= $addfields_sql.")";
+		$where_or = array_diff($where_or, array(''));
+		count($where_or) || $where_or['title'] = "page_title LIKE '".cot_db_prep($sqlsearch)."'";
+		$where_and['or'] = '('.implode(' OR ', $where_or).')';
+		$where_and = array_diff($where_and, array(''));
+		$where = implode(' AND ', $where_and);
 
-		$sql = cot_db_query("SELECT SQL_CALC_FOUND_ROWS * FROM $db_pages
-					WHERE $pagsql $where AND page_state = '0' AND page_cat <> 'system' AND page_date <= ".(int)$sys['now_offset']."
+		$sql = cot_db_query("SELECT SQL_CALC_FOUND_ROWS * FROM $db_pages WHERE $where
 					ORDER BY page_".$rsearch['pag']['sort']." ".$rsearch['pag']['sort2']." LIMIT $d, ".$cfg['plugin']['search']['maxitems']);
 		$items = cot_db_numrows($sql);
 		$totalitems[] = cot_db_foundrows();
@@ -271,21 +264,27 @@ if (!empty($sq))
 	}
 	if (($tab == 'frm' || empty($tab)) && is_array($cfg['modules']['forums']) && $cfg['plugin']['search']['forumsearch'] && !$cot_error)
 	{
-		$where = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
-			"AND s.fs_id IN ('".cot_db_prep(implode("','", $rsearch['frm']['sub']))."')" : "AND s.fs_id IN ('".implode("','", $frm_catauth)."')";
-		$where .= ($rsearch['frm']['reply'] == '1') ? " AND t.ft_postcount > 1" : "";
-		$where .= ($rsearch['set']['limit'] > 0) ? " AND p.fp_creation >= ".$rsearch['set']['from']." AND p.fp_updated <= ".$rsearch['set']['to'] : "";
-		$where .= (!empty($touser)) ? "AND p.fp_posterid ".$touser_ids : "";
-		$s_opt = ($rsearch['frm']['title'] == 1) ? "(t.ft_title LIKE '".cot_db_prep($sqlsearch)."'" : "";
-		$s_opt .= (!empty($s_opt) && ($rsearch['frm']['text'] == 1)) ? " OR " : "(";
-		$s_opt .= (($rsearch['frm']['text'] == 1)) ? "p.fp_text LIKE '".cot_db_prep($sqlsearch)."'" : "";
-		$s_opt .= ")";
+		$where_and['cat'] = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
+			"s.fs_id IN ('".cot_db_prep(implode("','", $rsearch['frm']['sub']))."')" : "s.fs_id IN ('".implode("','", $frm_catauth)."')";
+		$where_and['reply'] = ($rsearch['frm']['reply'] == '1') ? "t.ft_postcount > 1" : "";
+		$where_and['time'] = ($rsearch['set']['limit'] > 0) ? "p.fp_creation >= ".$rsearch['set']['from']." AND p.fp_updated <= ".$rsearch['set']['to'] : "";
+		$where_and['user'] .= (!empty($touser)) ? "p.fp_posterid ".$touser_ids : "";
+
+		$where_or['title'] = ($rsearch['frm']['title'] == 1) ? "(t.ft_title LIKE '".cot_db_prep($sqlsearch)."'" : "";
+		$where_or['text'] .= (($rsearch['frm']['text'] == 1)) ? "p.fp_text LIKE '".cot_db_prep($sqlsearch)."'" : "";
+
+		$where_or = array_diff($where_or, array(''));
+		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".cot_db_prep($sqlsearch)."'";
+		$where_and['or'] = '('.implode(' OR ', $where_or).')';
+		$where_and = array_diff($where_and, array(''));
+		$where = implode(' AND ', $where_and);
+
 		$maxitems = $cfg['plugin']['search']['maxitems'] - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
 
 		$sql = cot_db_query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*, s.*
 			 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-				WHERE $s_opt $where AND p.fp_topicid = t.ft_id AND p.fp_sectionid = s.fs_id
+				WHERE $where AND p.fp_topicid = t.ft_id AND p.fp_sectionid = s.fs_id
 				GROUP BY t.ft_id ORDER BY ft_".$rsearch['frm']['sort']." ".$rsearch['frm']['sort2']."
 				LIMIT $d, $maxitems");
 		$items = cot_db_numrows($sql);
@@ -333,21 +332,21 @@ if (!empty($sq))
 }
 
 // Search title
-$plugin_title  = cot_rc_link(cot_url('plug', 'e=search'), $L['plu_title_all']);
+$plugin_title  = cot_rc_link(cot_url('index', 'e=search'), $L['plu_title_all']);
 if (!empty($tab))
 {
-	$plugin_title .= ' '.$cfg['separator'].' '. cot_rc_link(cot_url('plug', 'e=search&tab='.$tab), $L['plu_title_'.$tab.'tab']);
+	$plugin_title .= ' '.$cfg['separator'].' '. cot_rc_link(cot_url('index', 'e=search&tab='.$tab), $L['plu_title_'.$tab.'tab']);
 	$L['plu_title'] = $L['plu_title_'.$tab.'tab'];
 }
 $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = empty($sq) ? $L['plu_title'] : htmlspecialchars(strip_tags($sq)).' - '.$L['plu_result'];
 $t->assign(array(
-	'PLUGIN_SEARCH_ACTION' => cot_url('plug', 'e=search&tab='.$tab),
+	'PLUGIN_SEARCH_ACTION' => cot_url('index', 'e=search&tab='.$tab),
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'rsq', htmlspecialchars($sq), 'size="32" maxlength="'.$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rsuser', htmlspecialchars($rsearch['set']['user']), 'id="rsuser" size="32"'),
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rsearch['set']['limit'], 'rwithin', range(0, 5), array($L['plu_any_date'], $L['plu_last_2_weeks'], $L['plu_last_1_month'], $L['plu_last_3_month'], $L['plu_last_1_year'], $L['plu_need_datas']), false),
-	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rsearch['set']['from'], 'short', '_from', date('Y', $sys['now_offset'])+1),
-	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rsearch['set']['to'], 'short', '_to', date('Y', $sys['now_offset'])+1),
+	'PLUGIN_SEARCH_DATE_FROM' => cot_selectbox_date($rsearch['set']['from'], 'short', 'rfrom', date('Y', $sys['now_offset'])+1),
+	'PLUGIN_SEARCH_DATE_TO' => cot_selectbox_date($rsearch['set']['to'], 'short', 'rto', date('Y', $sys['now_offset'])+1),
 	'PLUGIN_SEARCH_FOUND' => (array_sum($totalitems) > 0) ?  array_sum($totalitems) : '',
 	'PLUGIN_PAGEPREV' => $pagenav['prev'],
 	'PLUGIN_PAGENEXT' => $pagenav['next'],
