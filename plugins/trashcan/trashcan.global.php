@@ -6,9 +6,9 @@ Hooks=global
 ==================== */
 
 /**
- * Trasgcan for Siena
+ * Trashcan for Siena
  *
- * @package trash
+ * @package trashcan
  * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
@@ -17,6 +17,6 @@ Hooks=global
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('trash', true);
+cot_require('trashcan', true);
 
 ?>

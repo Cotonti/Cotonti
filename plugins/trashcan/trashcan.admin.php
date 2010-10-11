@@ -8,7 +8,7 @@ Hooks=tools
 /**
  * Trashcan interface
  *
- * @package trash
+ * @package trashcan
  * @version 0.7.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
@@ -24,7 +24,7 @@ cot_require_lang('trashcan', 'plug');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
-$tr_t = new XTemplate(cot_skinfile('trashcan.admin'), true);
+$tr_t = new XTemplate(cot_skinfile('trashcan.admin', true));
 
 $adminpath[] = array(cot_url('admin', 'm=trashcan'), $L['Trashcan']);
 $adminhelp = $L['adm_help_trashcan'];
@@ -140,7 +140,7 @@ function cot_trash_restore($id)
 }
 
 /* === Hook === */
-foreach (cot_getextplugins('trash.admin.first') as $pl)
+foreach (cot_getextplugins('trashcan.admin.first') as $pl)
 {
 	include $pl;
 }
@@ -150,7 +150,7 @@ if($a == 'wipe')
 {
 	cot_check_xg();
 	/* === Hook === */
-	foreach (cot_getextplugins('trash.admin.wipe') as $pl)
+	foreach (cot_getextplugins('trashcan.admin.wipe') as $pl)
 	{
 		include $pl;
 	}
@@ -163,7 +163,7 @@ elseif($a == 'wipeall')
 {
 	cot_check_xg();
 	/* === Hook === */
-	foreach (cot_getextplugins('trash.admin.wipeall') as $pl)
+	foreach (cot_getextplugins('trashcan.admin.wipeall') as $pl)
 	{
 		include $pl;
 	}
@@ -176,7 +176,7 @@ elseif($a == 'restore')
 {
 	cot_check_xg();
 	/* === Hook === */
-	foreach (cot_getextplugins('trash.admin.restore') as $pl)
+	foreach (cot_getextplugins('trashcan.admin.restore') as $pl)
 	{
 		include $pl;
 	}
@@ -198,7 +198,7 @@ $sql = cot_db_query("SELECT t.*, u.user_name FROM $db_trash AS t
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('trash.admin.loop');
+$extp = cot_getextplugins('trashcan.admin.loop');
 /* ===== */
 while($row = cot_db_fetcharray($sql))
 {
@@ -271,7 +271,7 @@ $tr_t->assign(array(
 cot_display_messages($tr_t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('trash.admin.tags') as $pl)
+foreach (cot_getextplugins('trashcan.admin.tags') as $pl)
 {
 	include $pl;
 }
