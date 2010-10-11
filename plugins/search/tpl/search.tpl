@@ -2,7 +2,7 @@
 <script type="text/javascript" src="js/jquery.autocomplete.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#rsuser").autocomplete("plug.php?r=search", {multiple: true, minChars: 3});
+		$("#rsuser").autocomplete("index.php?r=search", { multiple: true, minChars: 3 });
 	});
 </script>
 <div class="mboxHD">{PLUGIN_TITLE}</div>
@@ -12,9 +12,9 @@
 		<form id="search" name="search" action="{PLUGIN_SEARCH_ACTION}" method="post">
 			<input type="hidden" name="a" value="search" />
 			<div style="text-align:right;">
-				<a href="plug.php?e=search">{PHP.L.plu_tabs_all}</a> |
-				<a href="plug.php?e=search&amp;tab=frm">{PHP.L.plu_tabs_frm}</a> |
-				<a href="plug.php?e=search&amp;tab=pag">{PHP.L.plu_tabs_pag}</a>
+				<a href="index.php?e=search">{PHP.L.plu_tabs_all}</a> |
+				<a href="index.php?e=search&amp;tab=frm">{PHP.L.Forums}</a> |
+				<a href="index.php?e=search&amp;tab=pag">{PHP.L.Pages}</a>
 			</div>
 
 			<div class="tCap"></div>
@@ -23,7 +23,6 @@
 					<td>
 						<div style="padding:15px 0 6px 15px;">
 							{PHP.L.plu_search_req}: {PLUGIN_SEARCH_TEXT} <input type="submit" value="{PHP.L.plu_search_key}" />
-							<div style="padding-left:55px" class="desc">{PHP.L.plu_search_example}</div>
 						</div>
 					</td>
 				</tr>
