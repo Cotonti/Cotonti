@@ -191,26 +191,17 @@ if ($a=='newpost')
 
 		if (!$merge)
 		{
-			$sql = cot_db_query("INSERT into $db_forum_posts
-			(fp_topicid,
-			fp_sectionid,
-			fp_posterid,
-			fp_postername,
-			fp_creation,
-			fp_updated,
-			fp_updater,
-			fp_text,
-			fp_posterip)
-			VALUES
-			(".(int)$q.",
-			".(int)$s.",
-			".(int)$usr['id'].",
-			'".cot_db_prep($usr['name'])."',
-			".(int)$sys['now_offset'].",
-			".(int)$sys['now_offset'].",
-			0,
-			'".cot_db_prep($newmsg)."',
-			'".$usr['ip']."')");
+			cot_db_insert($db_forum_posts, array(
+				'topicid' => (int)$q,
+				'sectionid' => (int)$s,
+				'posterid' => (int)$usr['id'],
+				'postername' => $usr['name'],
+				'creation' => (int)$sys['now_offset'],
+				'updated' => (int)$sys['now_offset'],
+				'updater' => 0,
+				'text' => $newmsg,
+				'posterip' => $usr['ip']
+			), 'fp_');
 
 			$p = cot_db_insertid();
 
@@ -483,8 +474,8 @@ if (empty($d))
 }
 
 if ($usr['id']>0)
-{ 
-	$morejavascript .= cot_build_addtxt('newpost', 'newmsg');
+{
+	$morejavascript .= cot_rc('frm_code_addtxt', array('c1' => 'newpost', 'c2' => 'newmsg'));
 }
 
 
@@ -580,7 +571,7 @@ $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 $toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master);
 $toppath  = $toptitle;
 $toptitle .= ' ' . $cfg['separator'] . ' ' . $ft_title;
-$toptitle .= ($usr['isadmin']) ? " *" : '';
+$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
 
 $t->assign(array(
 	"FORUMS_POSTS_ID" => $q,

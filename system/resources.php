@@ -68,7 +68,7 @@ $R['msg_code_153_date'] = '<br />(-&gt; {$date}GMT)';
 $R['msg_code_redir_head'] = '<meta http-equiv="refresh" content="{$delay};url={$url}" />';
 
 /**
- * Misc
+ * Error handling
  */
 
 $R['code_error_separator'] = '<br />';
@@ -76,6 +76,11 @@ $R['code_msg_begin'] = '<ul class="{$class}">';
 $R['code_msg_end'] = '</ul>';
 $R['code_msg_line'] = '<li><span class="{$class}">{$text}</span></li>';
 $R['code_msg_inline'] = '<span class="{$class}">{$text}</span>';
+
+/**
+ * Misc
+ */
+
 $R['icon_flag'] = '<img class="flag" src="images/flags/{$code}.png" alt="{$alt}" />';
 $R['img_avatar'] = '<img src="{$src}" alt="'.$L['Avatar'].'" class="avatar" />';
 $R['img_avatar_default'] = '<img src="datas/defaultav/blank.png" alt="'.$L['Avatar'].'" class="avatar" />';

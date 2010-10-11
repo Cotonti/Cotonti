@@ -179,13 +179,13 @@ if ($row = cot_db_fetcharray($sql))
 	}
 }
 
-$morejavascript .= cot_build_addtxt('editpost', 'rtext');
+$morejavascript .= cot_rc('frm_code_addtxt', array('c1' => 'editpost', 'c2' => 'rtext'));
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
 $toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." ".cot_rc_link(cot_url('forums', "m=posts&p=".$p, "#".$p), htmlspecialchars($ft_fulltitle));
 $toptitle .= $cfg['separator']." ".cot_rc_link(cot_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".cot_xg()), $L['Edit']);
-$toptitle .= ($usr['isadmin']) ? " *" : '';
+$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
 
 $sys['sublocation'] = $fs_title;
 $title_params = array(

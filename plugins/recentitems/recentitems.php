@@ -67,8 +67,8 @@ if ($cfg['plugin']['recentitems']['newadditional'] && ($mode  != 'pages' || $mod
 }
 
 $totalpages = max($totalrecent);
-$days =($days > 0) ? "&amp;days=".$days : "";
-$mode=(!empty($mode)) ? "&amp;mode=".$mode : "";
+$days =($days > 0) ? "&days=".$days : "";
+$mode=(!empty($mode)) ? "&mode=".$mode : "";
 $pagenav = cot_pagenav('plug', 'e=recentitems'.$days.$mode, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage']);
 
 $t->assign(array(

@@ -22,23 +22,6 @@ $GLOBALS['db_forum_structure']	= (isset($GLOBALS['db_forum_structure'])) ? $GLOB
 $GLOBALS['db_forum_topics'] 	= (isset($GLOBALS['db_forum_topics']))    ? $GLOBALS['db_forum_topics']    : $GLOBALS['db_x'] . 'forum_topics';
 
 /**
- * Builds a javascript function for text insertion
- *
- * @param string $c1 Form name
- * @param string $c2 Field name
- * @return string
- */
-function cot_build_addtxt($c1, $c2)
-{
-	$result = "
-	function addtxt(text) {
-		insertText(document, '$c1', '$c2', text);
-	}
-		";
-	return($result);
-}
-
-/**
  * Returns forum thread path
  *
  * @param int $sectionid Section ID
@@ -337,7 +320,7 @@ function cot_load_forum_structure()
 	{
 		if (!empty($row['fn_icon']))
 		{
-			$row['fn_icon'] = "<img src=\"".$row['fn_icon']."\" alt=\"".$row['fn_desc']."\" />";
+			$row['fn_icon'] = cot_rc('frm_icon', array('src' => $row['fn_icon'], 'alt' => $row['fn_desc']));
 		}
 
 		$path2 = mb_strrpos($row['fn_path'], '.');

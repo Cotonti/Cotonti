@@ -16,7 +16,7 @@ cot_require_lang('recentitems', 'plug');
 
 function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
 {
-	global $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $theme, $usr, $sys;
+	global $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $theme, $usr, $sys, $R;
 	$recentitems = new XTemplate(cot_skinfile($template, true));
 	if ($rightprescan)
 	{
@@ -81,11 +81,11 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 			$row['ft_url'] = cot_url('forums', 'm=posts&q='.$row['ft_movedto']);
 			$row['ft_icon'] = $R['frm_icon_posts_moved'];
 			$row['ft_title'] = $L['Moved'].": ".$row['ft_title'];
-			$row['ft_lastpostername'] = "&nbsp;";
-			$row['ft_postcount'] = "&nbsp;";
-			$row['ft_replycount'] = "&nbsp;";
-			$row['ft_viewcount'] = "&nbsp;";
-			$row['ft_lastpostername'] = "&nbsp;";
+			$row['ft_lastpostername'] = $R['frm_code_post_empty'];
+			$row['ft_postcount'] = $R['frm_code_post_empty'];
+			$row['ft_replycount'] = $R['frm_code_post_empty'];
+			$row['ft_viewcount'] = $R['frm_code_post_empty'];
+			$row['ft_lastpostername'] = $R['frm_code_post_empty'];
 			$row['ft_lastposturl'] = cot_rc_link(cot_url('forums', 'm=posts&q='.$row['ft_movedto'].'&n=last', '#bottom'), $R['icon_follow']) . ' '. $L['Moved'];
 			$row['ft_timago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
 		}

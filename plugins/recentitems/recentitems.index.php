@@ -23,12 +23,14 @@ cot_require('recentitems', true);
 
 if ($cfg['plugin']['recentitems']['recentpages'] && $cfg['module']['page'])
 {
+	cot_require('page');
 	$res = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("PLUGIN_LATESTPAGES", $res);
 }
 
 if ($cfg['plugin']['recentitems']['recentforums'] && $cfg['modules']['forums'])
 {
+	cot_require('forums');
 	$res = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("PLUGIN_LATESTTOPICS", $res);
 }

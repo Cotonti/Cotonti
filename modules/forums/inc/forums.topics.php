@@ -192,44 +192,25 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			if ($ghost)
 			{
 				$row = cot_db_fetcharray($sql1);
-				$ft1_title = $row['ft_title'];
-				$ft1_mode = $row['ft_mode'];
-				$ft1_creationdate = $row['ft_creationdate'];
-				$ft1_firstposterid = $row['ft_firstposterid'];
-				$ft1_firstpostername = $row['ft_firstpostername'];
 
-				$sql = cot_db_query("INSERT into $db_forum_topics (
-				ft_state,
-				ft_mode,
-				ft_sticky,
-				ft_sectionid,
-				ft_title,
-				ft_desc,
-				ft_creationdate,
-				ft_updated,
-				ft_postcount,
-				ft_viewcount,
-				ft_firstposterid,
-				ft_firstpostername,
-				ft_lastposterid,
-				ft_lastpostername,
-				ft_movedto )
-				VALUES
-				(0,
-					".(int)$ft1_mode.",
-				 0,
-				 ".(int)$s.",
-				 '".cot_db_prep($ft1_title)."',
-				 '".cot_db_prep($ft1_desc)."',
-				 '".cot_db_prep($ft1_creationdate)."',
-				 ".(int)$sys['now_offset'].",
-				0,
-				0,
-					$ft1_firstposterid,
-				'".cot_db_prep($ft1_firstpostername)."',
-				 0,
-				 '-',
-				 ".(int)$q.")");
+				cot_db_insert($db_forum_topics, array(
+					'state' => 0,
+					'mode' => (int)$row['ft_mode'],
+					'sticky' => 0,
+					'sectionid' => (int)$s,
+					'title' => $row['ft_title'],
+					'desc' => $row['ft_desc'],
+					'preview' => $row['ft_preview'],
+					'creationdate' => $row['ft_creationdate'],
+					'updated' => (int)$sys['now_offset'],
+					'postcount' => 0,
+					'viewcount' => 0,
+					'firstposterid' => $row['ft_firstposterid'],
+					'firstpostername' => $row['ft_firstpostername'],
+					'lastposterid' => 0,
+					'lastpostername' => '-',
+					'movedto' => (int)$q
+				), 'ft_');
 			}
 
 			cot_forum_sectionsetlast($s);
@@ -416,8 +397,8 @@ while ($fsn = cot_db_fetcharray($sqql))
 		}
 		else
 		{
-			$fsn['lastpost'] = '&nbsp;';
-			$fsn['fs_lt_date'] = '&nbsp;';
+			$fsn['lastpost'] = $R['frm_code_post_empty'];
+			$fsn['fs_lt_date'] = $R['frm_code_post_empty'];
 			$fsn['fs_lt_postername'] = '';
 			$fsn['fs_lt_posterid'] = 0;
 		}
@@ -516,11 +497,11 @@ while ($row = cot_db_fetcharray($sql))
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_movedto']);
 		$row['ft_icon'] = $R['frm_icon_posts_moved'];
 		$row['ft_title']= $L['Moved'].": ".$row['ft_title'];
-		$row['ft_lastpostername'] = "&nbsp;";
-		$row['ft_postcount'] = "&nbsp;";
-		$row['ft_replycount'] = "&nbsp;";
-		$row['ft_viewcount'] = "&nbsp;";
-		$row['ft_lastpostername'] = "&nbsp;";
+		$row['ft_lastpostername'] = $R['frm_code_post_empty'];
+		$row['ft_postcount'] = $R['frm_code_post_empty'];
+		$row['ft_replycount'] = $R['frm_code_post_empty'];
+		$row['ft_viewcount'] = $R['frm_code_post_empty'];
+		$row['ft_lastpostername'] = $R['frm_code_post_empty'];
 		$row['ft_lastposturl'] = cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom"), $R['icon_follow'], 'rel="nofollow"') .$L['Moved'];
 		$row['ft_timago'] = cot_build_timegap($row['ft_updated'],$sys['now_offset']);
 	}
@@ -561,22 +542,11 @@ while ($row = cot_db_fetcharray($sql))
 
 	$row['ft_firstpostername'] = cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername']));
 
-	if ($row['ft_postcount']>$cfg['maxpostsperpage'])
+	if ($row['ft_postcount'] > $cfg['maxpostsperpage'])
 	{
-		/*$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
-			if($row['ft_maxpages'] > 5)
-			{
-				$address = $row['ft_url'] . ((mb_strpos($row['ft_url'], '?') !== false) ? '&amp;d=' : '?d=');
-				$last_n = ($row['ft_maxpages'] - 1) * $cfg['maxtopicsperpage'];
-				$last_page = '<span class="pagenav_last"><a href="'.$address.$last_n.'">'.$row['ft_maxpages'].'</a></span>';
-			}
-			else
-			{
-				$last_page = '';
-			}*/
 		$pn_q = $row['ft_movedto'] > 0 ? $row['ft_movedto'] : $row['ft_id'];
 		$pn = cot_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['maxpostsperpage'], 'd');
-		$row['ft_pages'] = $L['Pages'] . ': <span class="pagenav_small">' . $pn['main'] . $pn['last'] . '</span>';
+		$row['ft_pages'] = cot_rc('frm_code_topic_pages', array('main' => $pn['main'], 'first' => $pn['first'], 'last' => $pn['last']));
 	}
 
 	$t-> assign(array(
@@ -617,7 +587,7 @@ $pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
 $toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master);
-$toptitle .= ($usr['isadmin']) ? " *" : '';
+$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
 
 $t->assign(array(
 	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
