@@ -19,9 +19,11 @@
 					<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}">
 						<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>
 						<p class="small">{FORUMS_SECTIONS_ROW_DESC}</p>
-						<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
-						- {FORUMS_SECTIONS_ROW_SLAVE}
-						<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+						<ul class="subforums">
+							<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+							<li>{FORUMS_SECTIONS_ROW_SLAVE}</li>
+							<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
+						</ul>
 					</td>
 					<td class="centerall b1 {FORUMS_SECTIONS_ROW_ODDEVEN}">
 						{FORUMS_SECTIONS_ROW_LASTPOST}<br />
@@ -39,9 +41,9 @@
 			<!-- END: FORUMS_SECTIONS -->
 
 			<ul id="newf">
-				<li><a href="{FORUMS_TOPICS_NEWTOPICURL}"  rel="nofollow">{PHP.themelang.forumstopics.Newtopic}</a></li>
+				<li><a href="{FORUMS_TOPICS_NEWTOPICURL}" rel="nofollow">{PHP.L.for_newtopic}</a></li>
 				<!-- BEGIN: FORUMS_SECTIONS_POLLS -->
-				<li><a href="{FORUMS_TOPICS_NEWPOLLURL}">{PHP.themelang.forumstopics.Newpoll}</a></li>
+				<li><a href="{FORUMS_TOPICS_NEWPOLLURL}" rel="nofollow">{PHP.L.for_newpoll}</a></li>
 				<!-- END: FORUMS_SECTIONS_POLLS -->
 			</ul>
 
@@ -76,7 +78,7 @@
 
 			<p class="paging">
 				<!-- BEGIN: FORUMS_SECTIONS_VIEWERS -->
-				<span class="a1">{PHP.themelang.forumstopics.Viewers}: {FORUMS_TOPICS_VIEWERS} {FORUMS_TOPICS_VIEWER_NAMES}</span>
+				<span class="a1">{PHP.L.Viewers}: {FORUMS_TOPICS_VIEWERS} {FORUMS_TOPICS_VIEWER_NAMES}</span>
 				<!-- END: FORUMS_SECTIONS_VIEWERS -->
 				{FORUMS_TOPICS_PAGEPREV}{FORUMS_TOPICS_PAGES}{FORUMS_TOPICS_PAGENEXT}
 			</p>
@@ -87,22 +89,22 @@
 				<h2 class="info">Info</h2>
 				<table class="fico">
 					<tr>
-						<td>{PHP.R.frm_icon_posts}{PHP.themelang.forumstopics.Nonewposts}</td>
-						<td>{PHP.R.frm_icon_posts_new}{PHP.themelang.forumstopics.Newposts}</td>
-						<td>{PHP.R.frm_icon_posts_hot}{PHP.themelang.forumstopics.Nonewpostspopular}</td>
-						<td>{PHP.R.frm_icon_posts_new_hot}{PHP.themelang.forumstopics.Newpostspopular}</td>
+						<td>{PHP.R.frm_icon_posts}{PHP.L.for_nonewposts}</td>
+						<td>{PHP.R.frm_icon_posts_new}{PHP.L.for_newposts}</td>
+						<td>{PHP.R.frm_icon_posts_hot}{PHP.L.for_nonewpostspopular}</td>
+						<td>{PHP.R.frm_icon_posts_new_hot}{PHP.L.for_newpostspopular}</td>
 					</tr>
 					<tr>
-						<td>{PHP.R.frm_icon_posts_sticky}{PHP.themelang.forumstopics.Sticky}</td>
-						<td>{PHP.R.frm_icon_posts_new_sticky}{PHP.themelang.forumstopics.Newpostssticky}</td>
-						<td>{PHP.R.frm_icon_posts_locked}{PHP.themelang.forumstopics.Locked}</td>
-						<td>{PHP.R.frm_icon_posts_new_locked}{PHP.themelang.forumstopics.Newpostslocked}</td>
+						<td>{PHP.R.frm_icon_posts_sticky}{PHP.L.for_sticky}</td>
+						<td>{PHP.R.frm_icon_posts_new_sticky}{PHP.L.for_newpostssticky}</td>
+						<td>{PHP.R.frm_icon_posts_locked}{PHP.L.for_locked}</td>
+						<td>{PHP.R.frm_icon_posts_new_locked}{PHP.L.for_newpostslocked}</td>
 					</tr>
 					<tr>
-						<td>{PHP.R.frm_icon_posts_sticky_locked}{PHP.themelang.forumstopics.Announcment}</td>
-						<td>{PHP.R.frm_icon_posts_new_sticky_locked}{PHP.themelang.forumstopics.Newannouncment}</td>	
+						<td>{PHP.R.frm_icon_posts_sticky_locked}{PHP.L.for_announcment}</td>
+						<td>{PHP.R.frm_icon_posts_new_sticky_locked}{PHP.L.for_newannouncment}</td>	
 						<td colspan="2">
-							{PHP.R.frm_icon_posts_moved}{PHP.themelang.forumstopics.Movedoutofthissection}
+							{PHP.R.frm_icon_posts_moved}{PHP.L.for_movedoutofthissection}
 						</td>
 					</tr>
 				</table>
