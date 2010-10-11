@@ -39,25 +39,25 @@ sup			{ top:-.5em; }
 h2	{ color:#a01517; font-size:1.1em; text-shadow:0 1px 0 #fff; margin-bottom:15px; padding:8px 8px 8px 40px; background-color:#ccc; background-position:10px 9px; background-repeat: no-repeat; }
 h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-position:10px 9px; background-repeat: no-repeat; }
 
-.admin		{ background-image:url(/images/icons/default/prefs.png); }
-.comments	{ background-image:url(/images/icons/default/comments.png); }
-.folder		{ background-image:url(/images/icons/default/folder.png); }
-.forums		{ background-image:url(/images/icons/default/forums.png); }
-.info		{ background-image:url(/images/icons/default/info.png); }
-.message	{ background-image:url(/images/icons/default/message.png); }
-.news		{ background-image:url(/images/icons/default/news.png); }
-.online		{ background-image:url(/images/icons/default/online.png); }
-.page		{ background-image:url(/images/icons/default/page.png); }
-.pfs		{ background-image:url(/images/icons/default/pfs.png); }
-.plugin		{ background-image:url(/images/icons/default/plugin.png); }
-.polls		{ background-image:url(/images/icons/default/polls.png); }
-.prefs		{ background-image:url(/images/icons/default/prefs.png); }
-.queue		{ background-image:url(/images/icons/default/update.png); }
-.search		{ background-image:url(/images/icons/default/search.png); }
-.stats		{ background-image:url(/images/icons/default/stats.png); }
-.tags		{ background-image:url(/images/icons/default/tags.png); }
-.users		{ background-image:url(/images/icons/default/users.png); }
-.warning	{ background-image:url(/images/icons/default/warning.png); }
+.admin		{ background-image:url(../../../images/icons/default/prefs.png); }
+.comments	{ background-image:url(../../../images/icons/default/comments.png); }
+.folder		{ background-image:url(../../../images/icons/default/folder.png); }
+.forums		{ background-image:url(../../../images/icons/default/forums.png); }
+.info		{ background-image:url(../../../images/icons/default/info.png); }
+.message	{ background-image:url(../../../images/icons/default/message.png); }
+.news		{ background-image:url(../../../images/icons/default/news.png); }
+.online		{ background-image:url(../../../images/icons/default/online.png); }
+.page		{ background-image:url(../../../images/icons/default/page.png); }
+.pfs		{ background-image:url(../../../images/icons/default/pfs.png); }
+.plugin		{ background-image:url(../../../images/icons/default/plugin.png); }
+.polls		{ background-image:url(../../../images/icons/default/polls.png); }
+.prefs		{ background-image:url(../../../images/icons/default/prefs.png); }
+.queue		{ background-image:url(../../../images/icons/default/update.png); }
+.search		{ background-image:url(../../../images/icons/default/search.png); }
+.stats		{ background-image:url(../../../images/icons/default/stats.png); }
+.tags		{ background-image:url(../../../images/icons/default/tags.png); }
+.users		{ background-image:url(../../../images/icons/default/users.png); }
+.warning	{ background-image:url(../../../images/icons/default/warning.png); }
 
 div.error, div.warning, div.done, div.help		{ line-height:2em; margin:20px 0; padding:10px 50px; background-position:15px 50%; background-repeat:no-repeat; }
 div.error									{ color:#d8000c; background-color:#ffbaba; background-image:url(/images/icons/default/error.png); border:1px solid #d8000c; }
