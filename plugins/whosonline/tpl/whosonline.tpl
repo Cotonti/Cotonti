@@ -21,7 +21,7 @@
 			<tr>
 				<td class="centerall">{WHOSONlINE_ROW1_SHOWAVATARS}</td>
 				<td>{WHOSONlINE_ROW1_USER}</td>
-				<td><a href="{WHOSONlINE_ROW1_USER_MAINGRP_URL}">{WHOSONlINE_ROW1_USER_MAINGRP_TITLE}</a></td>
+				<td><a href="{WHOSONlINE_ROW1_USER_MAINGRP_URL}" rel="nofollow">{WHOSONlINE_ROW1_USER_MAINGRP_TITLE}</a></td>
 				<td class="centerall">{WHOSONlINE_ROW1_USER_COUNTRYFLAG}</td>
 				<td class="centerall">{WHOSONlINE_ROW1_USER_LOCATION}</td>
 				<td>{WHOSONlINE_ROW1_USER_ONLINE_LASTSEEN}</td>

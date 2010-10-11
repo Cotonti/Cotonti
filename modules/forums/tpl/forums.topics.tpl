@@ -39,7 +39,7 @@
 			<!-- END: FORUMS_SECTIONS -->
 
 			<ul id="newf">
-				<li><a href="{FORUMS_TOPICS_NEWTOPICURL}">{PHP.themelang.forumstopics.Newtopic}</a></li>
+				<li><a href="{FORUMS_TOPICS_NEWTOPICURL}"  rel="nofollow">{PHP.themelang.forumstopics.Newtopic}</a></li>
 				<!-- BEGIN: FORUMS_SECTIONS_POLLS -->
 				<li><a href="{FORUMS_TOPICS_NEWPOLLURL}">{PHP.themelang.forumstopics.Newpoll}</a></li>
 				<!-- END: FORUMS_SECTIONS_POLLS -->

@@ -157,7 +157,6 @@ foreach (cot_getextplugins('users.main') as $pl)
 }
 /* ===== */
 
-$plug_head .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 
 $t = new XTemplate($localskin);
