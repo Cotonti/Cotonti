@@ -4,6 +4,7 @@
  * Forums Icons
  */
 
+$R['frm_icon'] = '<img class="icon" src="{$src}" alt="{$alt}" />';
 $R['frm_icon_posts'] = '<img class="icon" src="images/icons/default/posts.png" alt="'.$L['for_nonewposts'].'" />';
 $R['frm_icon_posts_hot'] = '<img class="icon" src="images/icons/default/posts_hot.png" alt="'.$L['for_nonewpostspopular'].'" />';
 $R['frm_icon_posts_locked'] = '<img class="icon" src="images/icons/default/posts_locked.png" alt="'.$L['for_locked'].'" />';
@@ -54,5 +55,25 @@ $R['frm_code_update'] = '<p><strong>{$updated}</strong></p>';
 $R['frm_rowquote'] = '<a href="{$url}">'.$L['Quote'].'</a>';
 $R['frm_rowedit'] = '<a href="{$url}">'.$L['Edit'].'</a>';
 $R['frm_rowdelete'] = '<a href="{$url}">'.$L['Delete'].'</a>';
+
+/**
+ * Forum Sections
+ */
+$R['frm_code_tbody_begin'] = '<tbody id="blk_{$cat}" {$syle}>';
+$R['frm_code_tbody_end'] = '</tbody>';
+
+/**
+ * Forum topics
+ */
+$R['frm_code_topic_pages'] = $L['Pages'] . ': <span class="pagenav_small">{$main}{$last}</span>';
+
+/**
+ * Misc
+ */
+$R['frm_code_admin_mark'] = ' *';
+$R['frm_code_addtxt'] = 'function addtxt(text) {
+	insertText(document, "$c1", "$c2", text);
+}';
+$R['frm_code_post_empty'] = '&nbsp;';
 
 ?>

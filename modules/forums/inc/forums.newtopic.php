@@ -66,7 +66,7 @@ if ($fs_state)
 	cot_redirect(cot_url('message', "msg=602", '', true));
 }
 
-if ($a=='newtopic')
+if ($a == 'newtopic')
 {
 	cot_shield_protect();
 
@@ -101,60 +101,36 @@ if ($a=='newtopic')
 			$newtopictitle = str_replace('#', '', $newtopictitle);
 		}
 
-
-		$sql = cot_db_query("INSERT into $db_forum_topics
-		(ft_state,
-		ft_mode,
-		ft_sticky,
-		ft_sectionid,
-		ft_title,
-		ft_desc,
-		ft_preview,
-		ft_creationdate,
-		ft_updated,
-		ft_postcount,
-		ft_viewcount,
-		ft_firstposterid,
-		ft_firstpostername,
-		ft_lastposterid,
-		ft_lastpostername)
-		VALUES
-		(0,
-			".(int)$newprvtopic.",
-			0,
-			".(int)$s.",
-			'".cot_db_prep($newtopictitle)."',
-			'".cot_db_prep($newtopicdesc)."',
-			'".cot_db_prep($newtopicpreview)."',
-			".(int)$sys['now_offset'].",
-			".(int)$sys['now_offset'].",
-			1,
-			0,
-			".(int)$usr['id'].",
-			'".cot_db_prep($usr['name'])."',
-			".(int)$usr['id'].",
-			'".cot_db_prep($usr['name'])."')");
+		cot_db_insert($db_forum_topics, array(
+			'state' => 0,
+			'mode' => (int)$newprvtopic,
+			'sticky' => 0,
+			'sectionid' => (int)$s,
+			'title' => $newtopictitle,
+			'desc' => $newtopicdesc,
+			'preview' => $newtopicpreview,
+			'creationdate' => (int)$sys['now_offset'],
+			'updated' => (int)$sys['now_offset'],
+			'postcount' => 1,
+			'viewcount' => 0,
+			'firstposterid' => (int)$usr['id'],
+			'firstpostername' => $usr['name'],
+			'lastposterid' => (int)$usr['id'],
+			'lastpostername' => $usr['name']
+		), 'ft_');
 
 		$q = cot_db_insertid();
 
-		$sql = cot_db_query("INSERT into $db_forum_posts
-		(fp_topicid,
-		fp_sectionid,
-		fp_posterid,
-		fp_postername,
-		fp_creation,
-		fp_updated,
-		fp_text,
-		fp_posterip)
-		VALUES
-		(".(int)$q.",
-			".(int)$s.",
-			".(int)$usr['id'].",
-			'".cot_db_prep($usr['name'])."',
-			".(int)$sys['now_offset'].",
-			".(int)$sys['now_offset'].",
-			'".cot_db_prep($newmsg)."',
-		'".$usr['ip']."')");
+		cot_db_insert($db_forum_posts, array(
+			'topicid' => (int)$q,
+			'sectionid' => (int)$s,
+			'posterid' => (int)$usr['id'],
+			'postername' => $usr['name'],
+			'creation' => (int)$sys['now_offset'],
+			'updated' => (int)$sys['now_offset'],
+			'text' => $newmsg,
+			'posterip' => $usr['ip']
+		), 'fp_');
 
 		$sql = cot_db_query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
 		$row = cot_db_fetcharray($sql);
@@ -208,15 +184,15 @@ if ($a=='newtopic')
 	}
 }
 
-$morejavascript .= cot_build_addtxt('newtopic', 'newmsg');
+$morejavascript .= cot_rc('frm_code_addtxt', array('c1' => 'newtopic', 'c2' => 'newmsg'));
 
 $newtopicurl = cot_url('forums', "m=newtopic&a=newtopic&s=".$s);
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
 
-$toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." <a href=\"".cot_url('forums', "m=newtopic&s=".$s)."\">".$L['for_newtopic']."</a>";
-$toptitle .= ($usr['isadmin']) ? " *" : '';
+$toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master) . ' ' . $cfg['separator'] . ' ' . cot_rc_link(cot_url('forums', 'm=newtopic&s=' . $s), $L['for_newtopic']);
+$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
 
 $sys['sublocation'] = $fs_title;
 $title_params = array(

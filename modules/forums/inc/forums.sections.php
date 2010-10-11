@@ -138,17 +138,14 @@ while ($fsn = cot_db_fetcharray($sql))
         else
         { $fold = (!$cot_forums_str[$fsn['fs_category']]['defstate']) ? TRUE : FALSE; }
 
-        $fsn['toggle_state'] .= ($fold) ? " style=\"display:none;\"" : '';
-        $fsn['toggle_body'] = "<tbody id=\"blk_".$fsn['fs_category']."\" ".$fsn['toggle_state'].">";
-
         $t-> assign(array(
             "FORUMS_SECTIONS_ROW_CAT_TITLE" => $cattitle,
             "FORUMS_SECTIONS_ROW_CAT_ICON" => $fsn['fn_icon'],
             "FORUMS_SECTIONS_ROW_CAT_SHORTTITLE" => htmlspecialchars($fsn['fn_title']),
             "FORUMS_SECTIONS_ROW_CAT_DESC" => cot_parse_autourls($fsn['fn_desc']),
             "FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => htmlspecialchars($fsn['fn_defstate']),
-            "FORUMS_SECTIONS_ROW_CAT_TBODY" => $fsn['toggle_body'],
-            "FORUMS_SECTIONS_ROW_CAT_TBODY_END" => "</tbody>",
+            "FORUMS_SECTIONS_ROW_CAT_TBODY" => cot_rc('frm_code_tbody_begin', array('cat' => $fsn['fs_category'], 'style' => ($fold ? 'style="display:none"' : ''))),
+            "FORUMS_SECTIONS_ROW_CAT_TBODY_END" => $R['frm_code_tbody_end'],
             "FORUMS_SECTIONS_ROW_CAT_CODE" => $fsn['fs_category'],
             ));
         $t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_CAT");
@@ -180,8 +177,8 @@ while ($fsn = cot_db_fetcharray($sql))
         }
         else
         {
-            $fsn['lastpost'] = '&nbsp;';
-            $fsn['fs_lt_date'] = '&nbsp;';
+            $fsn['lastpost'] = $R['frm_code_post_empty'];
+            $fsn['fs_lt_date'] = $R['frm_code_post_empty'];
             $fsn['fs_lt_postername'] = '';
             $fsn['fs_lt_posterid'] = 0;
         }

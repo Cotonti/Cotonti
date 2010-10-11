@@ -43,7 +43,7 @@ if (!empty($poll_form['poll_text']))
 }
 
 $toptitle = $toppath.' ' . $cfg['separator'] . ' ' . $ft_title;
-$toptitle .= ($usr['isadmin']) ? " *" : '';
+$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
 $t->assign(array(
 	"FORUMS_POSTS_PAGETITLE" => $toptitle,
 	"FORUMS_POSTS_SHORTTITLE" => $ft_title

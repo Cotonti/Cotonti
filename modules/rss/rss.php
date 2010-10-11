@@ -299,45 +299,24 @@ echo $out_rss;
 function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 {
 	global $cfg, $db_pages, $usr;
-	switch($pag_type)
+
+	$pag_text = cot_parse($pag_text, $cfg['module']['page']['markup']);
+	$readmore = mb_strpos($pag_text, "<!--more-->");
+	if ($readmore > 0)
 	{
-		case '1':
-			$text = $pag_text;
-		break;
-
-		case '2':
-			if ($cfg['allowphp_pages'] && $cfg['allowphp_override'])
-			{
-				ob_start();
-				eval($pag_text);
-				$text = ob_get_clean();
-			}
-			else
-			{
-				$text = "The PHP mode is disabled for pages.<br />Please see the administration panel, then \"Configuration\", then \"Parsers\"."; // TODO: Need translate
-			}
-		break;
-
-		default:
-			$pag_text = cot_parse($pag_text, $cfg['module']['page']['markup']);
-			$readmore = mb_strpos($pag_text, "<!--more-->");
-			if ($readmore > 0)
-			{
-				$pag_text = mb_substr($pag_text, 0, $readmore);
-				$pag_text .= " <span class=\"readmore\"><a href=\"".$pag_pageurl."\">".$L['ReadMore']."</a></span>";
-			}
-
-			$newpage = mb_strpos($pag_text, '[newpage]');
-
-			if ($newpage !== false)
-			{
-				$pag_text = mb_substr($pag_text, 0, $newpage);
-			}
-
-			$pag_text = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_text);
-			$text = $pag_text;
-		break;
+		$pag_text = mb_substr($pag_text, 0, $readmore) . ' ';
+		$pag_text .= cot_rc('list_link_more', array('page_url' => $pag_pageurl));
 	}
+
+	$newpage = mb_strpos($pag_text, '[newpage]');
+
+	if ($newpage !== false)
+	{
+		$pag_text = mb_substr($pag_text, 0, $newpage);
+	}
+
+	$pag_text = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_text);
+	$text = $pag_text;
 	if ((int)$cfg['rss_pagemaxsymbols'] > 0)
 	{
 		$text = cot_string_truncate($text, $cfg['rss_pagemaxsymbols']) . '...';

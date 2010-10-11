@@ -25,8 +25,7 @@ $R['list_link_field_name'].= '<a href="{$list_link_url_up}" rel="nofollow">{$cot
 
 $R['list_link_row_admin'] = '<a href="{$unvalidate_url}">'.$L['Putinvalidationqueue'].'</a> &nbsp;<a href="{$edit_url}">'.$L['Edit'].'</a>';
 
-$R['list_link_page_html'] =' <span class="readmore"><a href="{$page_url}" /">'.$L['ReadMore'].'</a></span>';
-$R['list_link_page_text'] =' <span class="readmore"><a href="{$page_url}" />'.$L['ReadMore'].'</a></span>';
+$R['list_link_more'] =' <span class="readmore"><a href="{$page_url}" />'.$L['ReadMore'].'</a></span>';
 
 /**
  * Page Icons

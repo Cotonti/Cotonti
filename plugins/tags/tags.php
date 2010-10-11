@@ -39,7 +39,7 @@ foreach ($tag_orders as $order)
 {
 	$ord = mb_strtolower($order);
 	$selected = $ord == $o ? 'selected="selected"' : '';
-	$tag_order .= '<option value="' . $ord . '" ' . $selected . '>' . $L[$order] . '</option>';
+	$tag_order .= cot_rc('input_option', array('value' => $ord, 'selected' => $selected, 'title' => $L[$order]));
 }
 
 /* == Hook for the plugins == */

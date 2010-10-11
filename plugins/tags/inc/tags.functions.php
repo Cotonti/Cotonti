@@ -64,10 +64,10 @@ function cot_tag_parse_query($qs)
  */
 function cot_tag_search_form($area = 'all')
 {
-	global $d, $perpage, $tl, $qs, $t, $L, $cfg, $db_tag_references, $tc_styles;
+	global $d, $perpage, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
 	$limit = ($perpage > 0) ? "$d, $perpage" : NULL;
 	$tcloud = cot_tag_cloud($area, $cfg['plugin']['tags']['order'], $limit);
-	$tc_html = '<div class="tag_cloud">';
+	$tc_html = $R['tags_code_cloud_open'];
 	foreach ($tcloud as $tag => $cnt)
 	{
 		$tag_t = $cfg['plugin']['tags']['title'] ? cot_tag_title($tag) : $tag;
@@ -81,9 +81,13 @@ function cot_tag_search_form($area = 'all')
 				break;
 			}
 		}
-		$tc_html .= '<a href="'.cot_url('plug', 'e=tags&a='.$area.'&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a> ';
+		$tc_html .= cot_rc('tags_link_cloud_tag', array(
+			'url' => cot_url('plug', 'e=tags&a='.$area.'&t='.$tag_u.$tl),
+			'tag_title' => htmlspecialchars($tag_t),
+			'dim' => $dim
+		));
 	}
-	$tc_html .= '</div>';
+	$tc_html .= $R['tags_code_cloud_close'];
 	$t->assign('TAGS_CLOUD_BODY', $tc_html);
 	$t->parse('MAIN.TAGS_CLOUD');
 	if ($perpage > 0)
@@ -144,7 +148,7 @@ function cot_tag_search_pages($query)
 			$tag_u = cot_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 			if ($tag_i > 0) $tag_list .= ', ';
-			$tag_list .= '<a href="'.cot_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a>';
+			$tag_list .= cot_rc_link(cot_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl), htmlspecialchars($tag_t), 'rel="nofollow"');
 			$tag_i++;
 		}
 		$t->assign(array(
@@ -211,7 +215,7 @@ function cot_tag_search_forums($query)
 			$tag_u = cot_urlencode($tag, $cfg['plugin']['tags']['translit']);
 			$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
 			if ($tag_i > 0) $tag_list .= ', ';
-			$tag_list .= '<a href="'.cot_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'">'.htmlspecialchars($tag_t).'</a>';
+			$tag_list .= cot_rc_link(cot_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl), htmlspecialchars($tag_t), 'rel="nofollow"');
 			$tag_i++;
 		}
 		$master = ($row['fs_masterid'] > 0) ? array($row['fs_masterid'], $row['fs_mastername']) : false;
