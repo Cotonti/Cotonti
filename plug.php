@@ -18,6 +18,7 @@ require_once $cfg['system_dir'] . '/common.php';
 
 parse_str($_SERVER['QUERY_STRING'], $params);
 
-header('Location: '.cot_url('index', $params), true, 301);
+$env['status'] = '301 Moved Permanently';
+cot_redirect(cot_url('index', $params));
 
 ?>

@@ -934,7 +934,8 @@ function cot_block($allowed)
 {
 	if (!$allowed)
 	{
-		global $sys;
+		global $sys, $env;
+		$env['status'] = '403 Forbidden';
 		cot_redirect(cot_url('message', 'msg=930&'.$sys['url_redirect'], '', true));
 	}
 	return FALSE;
@@ -948,10 +949,11 @@ function cot_block($allowed)
  */
 function cot_blockguests()
 {
-	global $usr, $sys;
+	global $env, $usr, $sys;
 
 	if ($usr['id'] < 1)
 	{
+		$env['status'] = '403 Forbidden';
 		cot_redirect(cot_url('message', "msg=930&".$sys['url_redirect'], '', true));
 	}
 	return FALSE;
@@ -1912,8 +1914,10 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
  */
 function cot_dieifdisabled($disabled)
 {
+	global $env;
 	if ($disabled)
 	{
+		$env['status'] = '403 Forbidden';
 		cot_redirect(cot_url('message', "msg=940", '', true));
 	}
 }
@@ -3029,10 +3033,11 @@ function cot_rc_link($url, $text, $attrs = '')
  */
 function cot_check_xg()
 {
-	global $sys;
+	global $env, $sys;
 	$x = cot_import('x', 'G', 'ALP');
 	if ($x != $sys['xk'] && (empty($sys['xk_prev']) || $x != $sys['xk_prev']))
 	{
+		$env['status'] = '403 Forbidden';
 		cot_redirect(cot_url('message', 'msg=950', '', true));
 		return false;
 	}

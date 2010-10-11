@@ -104,6 +104,7 @@ if (defined('COT_MODULE'))
     }
     else
 	{
+		$env['status'] = '404 Not Found';
 		cot_redirect(cot_url('message', 'msg=907', '', true));
 	}
 }
@@ -137,6 +138,7 @@ elseif (defined('COT_PLUG'))
 
 	if ($empty)
 	{
+		$env['status'] = '404 Not Found';
 		cot_redirect(cot_url('message', 'msg=907', '', true));
 	}
 

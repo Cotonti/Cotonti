@@ -19,6 +19,7 @@ $y = cot_import('y','G','INT');
 
 if ($cfg['disablereg'])
 {
+	$env['status'] = '403 Forbidden';
 	cot_redirect(cot_url('message', 'msg=117', '', true));
 }
 
@@ -212,6 +213,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 	}
 	else
 	{
+		$env['status'] = '403 Forbidden';
 		cot_shield_update(7, "Account validation");
 		cot_log("Wrong validation URL", 'sec');
 		cot_redirect(cot_url('message', 'msg=157', '', true));
