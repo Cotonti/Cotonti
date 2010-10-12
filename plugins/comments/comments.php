@@ -91,7 +91,7 @@ if ($m == 'edit' && $id > 0)
 
 			$com_grp = ($usr['isadmin']) ? 'adm' : 'usr';
 			cot_log('Edited comment #'.$id, $com_grp);
-			cot_redirect($url.'#c'.$id);
+			cot_redirect(cot_url($url_area, $url_params, '#c'.$id, true));
 		}
 	}
 	$t->assign(array(
@@ -159,7 +159,7 @@ if ($a == 'send' && $usr['auth_write'])
 
 	if (!$cot_error)
 	{
-		$comarray += array('area' => $area, 'code' => $item, 'author' => $usr['name'], 'authorid' => (int)$usr['id'], 'authorip' => $usr['ip'],
+		$comarray = array('area' => $area, 'code' => $item, 'author' => $usr['name'], 'authorid' => (int)$usr['id'], 'authorip' => $usr['ip'],
 			'text' => $rtext, 'date' => (int)$sys['now_offset']);
 		$sql = cot_db_insert($db_com, $comarray, 'com_');
 		$id = cot_db_insertid();
@@ -188,7 +188,7 @@ if ($a == 'send' && $usr['auth_write'])
 		cot_message($L['com_commentadded']);
 
 		cot_shield_update(20, 'New comment');
-		cot_redirect($url.'#c'.$id);
+		cot_redirect(cot_url($url_area, $url_params, '#c'.$id, true));
 	}
 }
 elseif ($a == 'delete' && $usr['isadmin'])
@@ -209,7 +209,7 @@ elseif ($a == 'delete' && $usr['isadmin'])
 
 		cot_log('Deleted comment #'.$id.' in &quot;'.$item.'&quot;', 'adm');
 	}
-	cot_redirect($url.'#comments');
+	cot_redirect(cot_url($url_area, $url_params, '#comments', true));
 }
 elseif ($a == 'enable' && $usr['isadmin'])
 {
