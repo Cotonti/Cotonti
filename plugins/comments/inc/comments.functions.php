@@ -382,7 +382,7 @@ function cot_comments_remove($area, $code)
 {
 	global $db_com, $db_com_settings;
 	cot_db_delete($db_com, "com_area = '$area' AND com_code = '$code'");
-	cot_db_delete($db_com_settings, "com_area = '$area' AND com_code = '$code'");
+	cot_db_delete($db_com_settings, "coms_area = '$area' AND coms_code = '$code'");
 }
 
 ?>
