@@ -15,10 +15,10 @@
 		{FILE ./themes/nemesis/warnings.tpl}
 		<form id="editfolder" action="{PFS_ACTION}" method="post">
 			<table class="cells">
-				<tr>
+				<!--<tr>
 					<td class="width20">{PHP.L.pfs_parentfolder}:</td>
 					<td class="width80">{PFF_FOLDER}</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td>{PHP.L.Folder}:</td>
 					<td>{PFF_TITLE}</td>
