@@ -242,7 +242,6 @@ function cot_comments_display($area, $code, $cat = '')
 		}
 
 		$enablement_change = cot_radiobox((int) !$enabled, 'state', array(1, 0), array($L['Enable'], $L['Disable']));
-		$L['comments'] = lcfirst($L['Comments']);
 		$enablement_selection = cot_selectbox($enablement_type, 'area', array('item', 'cat', 'area'),
 			array($L['for_this_item'], $L['for_this_category'], $L['for_this_area']), false);
 
