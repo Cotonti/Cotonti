@@ -23,6 +23,7 @@ $L['plu_title'] = 'Comment Editing';
 
 $L['Comment'] = 'Comment';
 $L['Comments'] = 'Comments';
+$L['comments'] = 'comments';
 $L['Comments_are'] = 'Comments are';
 $L['comm_on_page'] = 'on page'; // New in N-0.0.2
 $L['com_closed'] = 'Adding comments has been disabled for this item'; // New in 0.1.0
