@@ -567,7 +567,7 @@ if ($usr['auth_write'])
 {
 	$t->assign(array(
 		'NEWFOLDER_FORM_ACTION' => cot_url('pfs', 'a=newfolder&'.$more),
-		'NEWFOLDER_FORM_INPUT_PARENT' => cot_selectbox_folders($userid, '', $f, 'nparentid'),
+//		'NEWFOLDER_FORM_INPUT_PARENT' => cot_selectbox_folders($userid, '', $f, 'nparentid'),
 	));
 	$t->parse('MAIN.PFS_NEWFOLDER_FORM');
 }

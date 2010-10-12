@@ -139,10 +139,10 @@
 				<td>{PHP.L.Description}:</td>
 				<td><input type="text" class="text" name="ndesc" value="" size="32" maxlength="255" /></td>
 			</tr>
-			<tr>
+			<!--<tr>
 				<td>{PHP.L.pfs_parentfolder}:</td>
 				<td>{NEWFOLDER_FORM_INPUT_PARENT}</td>
-			</tr>
+			</tr>-->
 			<tr>
 				<td>{PHP.L.pfs_ispublic}</td>
 				<td>
