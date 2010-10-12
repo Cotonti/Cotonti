@@ -43,7 +43,7 @@ function htmlpurifier_filter($value, $name)
 		{
 			$config->set('URI.MakeAbsolute', true);
 		}
-		$config->set('Cache.SerializerPath', realpath($cfg['cache_dir'] . '/htmlpurifier'));
+		$config->set('Cache.SerializerPath', realpath($cfg['cache_dir']) . '/htmlpurifier');
 
 		// Load preset
 		if ($usr['id'] > 0)
