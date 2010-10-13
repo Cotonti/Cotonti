@@ -4,8 +4,8 @@
 		<table class="cells">
 			<tr>
 				<td class="coltop width5">&nbsp;</td>
-				<td class="coltop width45">{PHP.L.Topics} / {PHP.L.Started}</td>
-				<td class="coltop width30">{PHP.L.Lastpost}</td>
+				<td class="coltop width50">{PHP.L.Topics} / {PHP.L.Started}</td>
+				<td class="coltop width25">{PHP.L.Lastpost}</td>
 				<td class="coltop width10">{PHP.L.Posts}</td>
 				<td class="coltop width10">{PHP.L.Views}</td>
 			</tr>
@@ -16,13 +16,11 @@
 					<h4><a href="{FORUM_ROW_URL}">{FORUM_ROW_TITLE}</a></h4>
 					<p class="small">{FORUM_ROW_PATH}</p>
 					<p class="small">
-						{FORUM_ROW_CREATIONDATE} {PHP.cfg.separator}
-						{FORUM_ROW_FIRSTPOSTER}
-						<!-- IF {FORUM_ROW_PAGES} -->{PHP.cfg.separator} {FORUM_ROW_PAGES}<!-- ENDIF -->
+						{FORUM_ROW_CREATIONDATE}<span class="spaced">{PHP.cfg.separator}</span>{FORUM_ROW_FIRSTPOSTER}<!-- IF {FORUM_ROW_PAGES} --><span class="spaced">{PHP.cfg.separator}</span>{FORUM_ROW_PAGES}<!-- ENDIF -->
 					</p>
 				</td>
 				<td class="centerall small {FORUM_ROW_ODDEVEN}">
-					{FORUM_ROW_UPDATED} {PHP.cfg.separator} {FORUM_ROW_LASTPOSTER}<br />
+					{FORUM_ROW_UPDATED}<span class="spaced">{PHP.cfg.separator}</span>{FORUM_ROW_LASTPOSTER}<br />
 					{FORUM_ROW_TIMEAGO}
 				</td>
 				<td class="centerall small {FORUM_ROW_ODDEVEN}">{FORUM_ROW_POSTCOUNT}</td>
@@ -31,7 +29,7 @@
 <!-- END: TOPICS_ROW -->
 <!-- BEGIN: NO_TOPICS_FOUND -->
 			<tr>
-				<td class="centerall small strong" colspan="5">{PHP.L.Rec_forum_nonew}</td>
+				<td class="centerall" colspan="5">{PHP.L.recentitems_nonewposts}</td>
 			</tr>
 <!-- END: NO_TOPICS_FOUND -->
 		</table>

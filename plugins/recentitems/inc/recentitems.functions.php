@@ -122,7 +122,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 				}
 			}
 
-			$row['ft_icon'] = cot_rc('frm_icon_topic_t', array('icon' => $row['ft_icon'], 'title' => $L['Rec_'.$row['ft_icon']]));
+			$row['ft_icon'] = cot_rc('frm_icon_topic_t', array('icon' => $row['ft_icon'], 'title' => $L['recentitems_'.$row['ft_icon']]));
 			$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 		}
 

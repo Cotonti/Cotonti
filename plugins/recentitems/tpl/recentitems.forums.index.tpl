@@ -24,7 +24,7 @@
 <!-- END: TOPICS_ROW -->
 <!-- BEGIN: NO_TOPICS_FOUND -->
 	<tr>
-		<td colspan="4"><div class="error">{PHP.L.Rec_forum_nonew}</div></td>
+		<td colspan="4">{PHP.L.recentitems_nonewposts}</td>
 	</tr>
 <!-- END: NO_TOPICS_FOUND -->
 </table>

@@ -29,35 +29,36 @@ $L['cfg_recentpagestext'] = array('Recent pages text length limit', 'This will d
 $L['cfg_recentforumstitle'] = array('Recent forums title length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
 $L['cfg_newpagestext'] = array('New pages text length limit', 'This will display only specified number characters with paragraphs from the beginning. By default the cutting option is disabled.');
 
-
 /**
  * Plugin Body
  */
 
-$L['Recentitems'] = 'New on Site';
-$L['Rec_shownew'] = 'Show new';
-$L['Rec_from_lastvisit'] = 'from my last visit';
-$L['Rec_1day'] = 'for 1 day';
-$L['Rec_2days'] = 'for 2 days';
-$L['Rec_3days'] = 'for 3 days';
-$L['Rec_1week'] = 'for 1 week';
-$L['Rec_2weeks'] = 'for 2 weeks';
-$L['Rec_1month'] = 'for 1 month';
-$L['Rec_forum_nonew'] = "Nothing new for this period";
+$L['recentitems_title'] = 'Recent Items';
+$L['recentitems_forums'] = 'New in forums';
+$L['recentitems_pages'] = 'New pages';
 
-$L['Rec_posts'] = 'No new posts';
-$L['Rec_posts_new'] = 'New posts';
-$L['Rec_posts_hot'] = 'No new posts (popular)';
-$L['Rec_posts_new_hot'] = 'New posts (popular)';
-$L['Rec_posts_sticky'] = 'Sticky';
-$L['Rec_posts_new_sticky'] = 'New posts (sticky)';
-$L['Rec_posts_locked'] = 'Locked';
-$L['Rec_posts_new_locked'] = 'New posts (locked)';
-$L['Rec_posts_sticky_locked'] = 'Announcement';
-$L['Rec_posts_new_sticky_locked'] = 'New announcement';
-$L['Rec_posts_moved'] = 'Moved out of this section';
+$L['recentitems_nonewpages'] = 'No new pages';
+$L['recentitems_nonewposts'] = 'No new posts';
 
-$L['Rec_newinforums'] = 'New in forums';
-$L['Rec_recentadditions'] = 'Recent additions';
+$L['recentitems_shownew'] = 'Show new items';
+$L['recentitems_fromlastvisit'] = 'from my last visit';
+$L['recentitems_1day'] = 'since yesterday';
+$L['recentitems_2days'] = 'since 2 days';
+$L['recentitems_3days'] = 'since 3 days';
+$L['recentitems_1week'] = 'since 1 week';
+$L['recentitems_2weeks'] = 'since 2 weeks';
+$L['recentitems_1month'] = 'since 1 month';
+
+$L['recentitems_posts'] = 'No new posts';
+$L['recentitems_posts_new'] = 'New posts';
+$L['recentitems_posts_hot'] = 'No new posts (popular)';
+$L['recentitems_posts_new_hot'] = 'New posts (popular)';
+$L['recentitems_posts_sticky'] = 'Sticky';
+$L['recentitems_posts_new_sticky'] = 'New posts (sticky)';
+$L['recentitems_posts_locked'] = 'Locked';
+$L['recentitems_posts_new_locked'] = 'New posts (locked)';
+$L['recentitems_posts_sticky_locked'] = 'Announcement';
+$L['recentitems_posts_new_sticky_locked'] = 'New announcement';
+$L['recentitems_posts_moved'] = 'Moved out of this section';
 
 ?>

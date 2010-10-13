@@ -304,6 +304,7 @@ $L['Thumbnail'] = 'Thumbnail';
 $L['Thumbnails'] = 'Thumbnails';
 $L['Timezone'] = 'Timezone';
 $L['Title'] = 'Title';
+$L['Today'] = 'Today';
 $L['Tool'] = 'Tool';
 $L['Tools'] = 'Tools';
 $L['Topic'] = 'Topic';
