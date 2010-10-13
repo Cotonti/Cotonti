@@ -2501,9 +2501,15 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			$ajax, $target_div, $ajax_module, $ajax_params);
 	}
 
+	$onpage = $entries - $current;
+	if ($onpage > $perpage) $onpage = $perpage;
+
 	if ($entries <= $perpage)
 	{
-		return '';
+		return array(
+			'onpage' => $onpage,
+			'entries' => $entries
+		);
 	}
 
 	global $L, $R;
@@ -2753,7 +2759,11 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		'prev' => $first.$prev,
 		'main' => $pages,
 		'next' => $next.$last,
-		'last' => $lastn
+		'last' => $lastn,
+		'current' => $currentpage,
+		'total' => $totalpages,
+		'onpage' => $onpage,
+		'entries' => $entries
 	);
 }
 
