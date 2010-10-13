@@ -47,7 +47,7 @@ $GLOBALS['cot_auth_default_lock'] = array(
  */
 function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
 {
-	global $db_auth, $usr;
+	global $cot_db, $db_auth, $usr;
 	if ($group_id <= COT_GROUP_SUPERADMINS)
 	{
 		return false;
@@ -56,7 +56,7 @@ function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
 	{
 		$base_group_id = COT_GROUP_MEMBERS;
 	}
-	cot_db_query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid)
+	$cot_db->query("INSERT INTO $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid)
 		SELECT $group_id, auth_code, auth_option, auth_rights, auth_rights_lock, {$usr['id']}
 			FROM $db_auth WHERE auth_groupid = $base_group_id");
 	cot_auth_reorder();
@@ -93,7 +93,7 @@ function cot_auth_add_group($group_id, $base_group_id = COT_GROUP_MEMBERS)
  */
 function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth_lock = array())
 {
-	global $cot_groups, $db_auth, $usr, $cot_auth_default_permit, $cot_auth_default_lock;
+	global $cot_db, $cot_groups, $db_auth, $usr, $cot_auth_default_permit, $cot_auth_default_lock;
 	$auth_permit = $auth_permit + $cot_auth_default_permit;
 	$auth_lock = $auth_lock + $cot_auth_default_lock;
 	$ins_array = array();
@@ -109,7 +109,7 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
 			'setbyuserid' => $usr['id']
 		);
 	}
-	$res = cot_db_insert($db_auth, $ins_array, 'auth_');
+	$res = $cot_db->insert($db_auth, $ins_array, 'auth_');
 	cot_auth_reorder();
 	cot_auth_clear('all');
 	return $res;
@@ -123,18 +123,18 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
  */
 function cot_auth_clear($id = 'all')
 {
-	global $db_users, $cfg, $cot_cache;
+	global $cot_db, $db_users, $cfg, $cot_cache;
 
 	if ($id == 'all')
 	{
-		cot_db_query("UPDATE $db_users SET user_auth=''");
+		$cot_db->query("UPDATE $db_users SET user_auth=''");
 		$cot_cache && $cot_cache->db->remove('cot_guest_auth', 'system');
 	}
 	else
 	{
-		cot_db_query("UPDATE $db_users SET user_auth='' WHERE user_id='$id'");
+		$cot_db->query("UPDATE $db_users SET user_auth='' WHERE user_id='$id'");
 	}
-	return cot_db_affectedrows();
+	return $cot_db->affectedRows;
 }
 
 /**
@@ -192,10 +192,10 @@ function cot_auth_getvalue($mask)
  */
 function cot_auth_remove_group($group_id)
 {
-	global $db_auth;
+	global $cot_db, $db_auth;
 
-	cot_db_query("DELETE FROM $db_auth WHERE auth_groupid=$group_id");
-	return cot_db_affectedrows();
+	$cot_db->query("DELETE FROM $db_auth WHERE auth_groupid=$group_id");
+	return $cot_db->affectedRows;
 }
 
 /**
@@ -207,11 +207,11 @@ function cot_auth_remove_group($group_id)
  */
 function cot_auth_remove_item($module_name, $item_id = null)
 {
-	global $db_auth;
+	global $cot_db, $db_auth;
 
 	$opt = is_null($item_id) ? '' : "AND auth_option='$item_id'";
-	cot_db_query("DELETE FROM $db_auth WHERE auth_code='$module_name' $opt");
-	return cot_db_affectedrows();
+	$cot_db->query("DELETE FROM $db_auth WHERE auth_code='$module_name' $opt");
+	return $cot_db->affectedRows;
 }
 
 /**
@@ -219,8 +219,8 @@ function cot_auth_remove_item($module_name, $item_id = null)
  */
 function cot_auth_reorder()
 {
-    global $db_auth;
+    global $cot_db, $db_auth;
 
-    $sql = cot_db_query("ALTER TABLE $db_auth ORDER BY auth_code ASC, auth_option ASC, auth_groupid ASC, auth_code ASC");
+    $sql = $cot_db->query("ALTER TABLE $db_auth ORDER BY auth_code ASC, auth_option ASC, auth_groupid ASC, auth_code ASC");
 }
 ?>

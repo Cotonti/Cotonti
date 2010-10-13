@@ -112,9 +112,9 @@ if(empty($sql_string))
 		WHERE ".implode(" AND ", $where)."
 		ORDER BY page_$s $w LIMIT $d, ".$cfg['maxrowsperpage'];
 }
-$sql = cot_db_query($sql_count);
-$totallines = cot_db_result($sql, 0, 0);
-$sql = cot_db_query($sql_string);
+$sql = $cot_db->query($sql_count);
+$totallines = $sql->fetchColumn();
+$sql = $cot_db->query($sql_string);
 
 /*
 $incl = "datas/content/list.$c.txt";
@@ -255,9 +255,9 @@ while (list($i, $x) = each($cot_cat))
 	}
 	elseif (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $kk < $cfg['maxlistsperpage'])
 	{
-		$sql4 = cot_db_query("SELECT SUM(structure_pagecount) FROM $db_structure
+		$sql4 = $cot_db->query("SELECT SUM(structure_pagecount) FROM $db_structure
 			WHERE structure_path LIKE '".$cot_cat[$i]['rpath']."%' ");
-		$sub_count = cot_db_result($sql4, 0, "SUM(structure_pagecount)");
+		$sub_count = $sql4->fetchColumn();
 
 		$t->assign(array(
 			"LIST_ROWCAT_URL" => cot_url('page', 'c='.$i),
@@ -306,7 +306,7 @@ $t->assign(array(
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.loop');
 /* ===== */
-while ($pag = cot_db_fetcharray($sql) and ($jj <= $cfg['maxrowsperpage']))
+while ($pag = $sql->fetch() and ($jj <= $cfg['maxrowsperpage']))
 {
 	$jj++;
 	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));

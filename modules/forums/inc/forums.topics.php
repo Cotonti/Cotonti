@@ -77,9 +77,9 @@ if (empty($w))
 	$w = 'desc';
 }
 
-$sql = cot_db_query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
+$sql = $cot_db->query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
-if ($row = cot_db_fetcharray($sql))
+if ($row = $sql->fetch())
 {
 	$fs_id = $row['fs_id'];
 	$fs_state = $row['fs_state'];
@@ -148,52 +148,52 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$ns = cot_import('ns','P','INT');
 			$ghost = cot_import('ghost','P','BOL');
 
-			$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$s' and fp_topicid='$q'");
-			$num = cot_db_result($sql, 0, "COUNT(*)");
+			$sql = $cot_db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$s' and fp_topicid='$q'");
+			$num = $sql->fetchColumn();
 
 			if ($num<1 || $s==$ns)
 			{
 				cot_die();
 			}
 
-			$sql = cot_db_query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
+			$sql = $cot_db->query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 
 			if ($ghost)
 			{
-				$sql1 = cot_db_query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id='$q' and ft_sectionid='$s'");
+				$sql1 = $cot_db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id='$q' and ft_sectionid='$s'");
 			}
 
-			$sql = cot_db_query("UPDATE $db_forum_topics SET ft_sectionid='$ns' WHERE ft_id='$q' and ft_sectionid='$s'");
-			$sql = cot_db_query("UPDATE $db_forum_posts SET fp_sectionid='$ns' WHERE fp_sectionid='$s' and fp_topicid='$q'");
-			$sql = cot_db_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-1 WHERE fs_id='$s'");
-			$sql = cot_db_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount+1 WHERE fs_id='$ns'");
-			$sql = cot_db_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$s'");
-			$sql = cot_db_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+'$num' WHERE fs_id='$ns'");
+			$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_sectionid='$ns' WHERE ft_id='$q' and ft_sectionid='$s'");
+			$sql = $cot_db->query("UPDATE $db_forum_posts SET fp_sectionid='$ns' WHERE fp_sectionid='$s' and fp_topicid='$q'");
+			$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-1 WHERE fs_id='$s'");
+			$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount+1 WHERE fs_id='$ns'");
+			$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$s'");
+			$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+'$num' WHERE fs_id='$ns'");
 
 			if ($fs_masterid>0)
 			{
-				$sql = cot_db_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-1 WHERE fs_id='$fs_masterid'");
-				$sql = cot_db_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$fs_masterid'");
+				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-1 WHERE fs_id='$fs_masterid'");
+				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$fs_masterid'");
 
 			}
 
-			$sqll = cot_db_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$ns' ");
-			$roww = cot_db_fetcharray($sqll);
+			$sqll = $cot_db->query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$ns' ");
+			$roww = $sqll->fetch();
 
 			$ns_master = $roww['fs_masterid'];
 
 			if ($ns_master>0)
 			{
-				$sql = cot_db_query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount+1 WHERE fs_id='$ns_master'");
-				$sql = cot_db_query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+'$num' WHERE fs_id='$ns_master'");
+				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount+1 WHERE fs_id='$ns_master'");
+				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount+'$num' WHERE fs_id='$ns_master'");
 			}
 
 
 			if ($ghost)
 			{
-				$row = cot_db_fetcharray($sql1);
+				$row = $sql1->fetch();
 
-				cot_db_insert($db_forum_topics, array(
+				$cot_db->insert($db_forum_topics, array(
 					'state' => 0,
 					'mode' => (int)$row['ft_mode'],
 					'sticky' => 0,
@@ -216,8 +216,8 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			cot_forum_sectionsetlast($s);
 			cot_forum_sectionsetlast($ns);
 
-			$sqql = cot_db_query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$s' ");
-			$roww = cot_db_fetcharray($sqql);
+			$sqql = $cot_db->query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$s' ");
+			$roww = $sqql->fetch();
 
 			if ($roww['fs_masterid']>0)
 			{
@@ -232,7 +232,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		case 'lock':
 
 			cot_check_xg();
-			$sql = cot_db_query("UPDATE $db_forum_topics SET ft_state=1, ft_sticky=0 WHERE ft_id='$q'");
+			$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_state=1, ft_sticky=0 WHERE ft_id='$q'");
 			cot_log("Locked topic #".$q, 'for');
 			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
@@ -240,7 +240,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		case 'sticky':
 
 			cot_check_xg();
-			$sql = cot_db_query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=0 WHERE ft_id='$q'");
+			$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=0 WHERE ft_id='$q'");
 			cot_log("Pinned topic #".$q, 'for');
 			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
@@ -248,7 +248,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		case 'announcement':
 
 			cot_check_xg();
-			$sql = cot_db_query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=1 WHERE ft_id='$q'");
+			$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=1 WHERE ft_id='$q'");
 			cot_log("Announcement topic #".$q, 'for');
 			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
@@ -256,7 +256,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 		case 'bump':
 
 			cot_check_xg();
-			$sql = cot_db_query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
+			$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
 			cot_forum_sectionsetlast($s);
 			cot_log("Bumped topic #".$q, 'for');
 			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
@@ -266,7 +266,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 
 			cot_check_xg();
 			cot_log("Made topic #".$q." private", 'for');
-			$sql = cot_db_query("UPDATE $db_forum_topics SET ft_mode='1' WHERE ft_id='$q'");
+			$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_mode='1' WHERE ft_id='$q'");
 			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
@@ -274,7 +274,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 
 			cot_check_xg();
 			cot_log("Resetted topic #".$q, 'for');
-			$sql = cot_db_query("UPDATE $db_forum_topics SET ft_sticky=0, ft_state=0, ft_mode=0 WHERE ft_id='$q'");
+			$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_sticky=0, ft_state=0, ft_mode=0 WHERE ft_id='$q'");
 			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
@@ -285,7 +285,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 	}
 }
 
-$sql1 = cot_db_query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername FROM $db_forum_sections AS s LEFT JOIN
+$sql1 = $cot_db->query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername FROM $db_forum_sections AS s LEFT JOIN
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_masterid, fs_order ASC");
 
@@ -293,7 +293,7 @@ cot_require_api('forms');
 
 $jumpbox[cot_url('forums')] = $L['Forums'];
 
-while ($row1 = cot_db_fetcharray($sql1))
+while ($row1 = $sql1->fetch())
 {
 	if (cot_auth('forums', $row1['fs_id'], 'R'))
 	{
@@ -333,8 +333,8 @@ if ($fs_allowviewers)
 {
 
 	$v = 0;
-	$sqlv = cot_db_query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' and online_subloc='".cot_db_prep($fs_title)."' ");
-	while ($rowv = cot_db_fetcharray($sqlv))
+	$sqlv = $cot_db->query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' and online_subloc='".$cot_db->prep($fs_title)."' ");
+	while ($rowv = $sqlv->fetch())
 	{
 		if ($rowv['online_name'] != 'v')
 		{
@@ -353,7 +353,7 @@ if ($fs_allowviewers)
 
 }
 
-$sqql = cot_db_query("SELECT s.*, n.* FROM $db_forum_sections AS s, $db_forum_structure AS n
+$sqql = $cot_db->query("SELECT s.*, n.* FROM $db_forum_sections AS s, $db_forum_structure AS n
 						   WHERE s.fs_masterid=".$s." AND n.fn_code=s.fs_category
 						   ORDER BY fs_masterid DESC, fn_path ASC, fs_order ASC");
 
@@ -363,7 +363,7 @@ $catnum = 1;
 $extp = cot_getextplugins('forums.topics.sections.loop');
 /* ===== */
 
-while ($fsn = cot_db_fetcharray($sqql))
+while ($fsn = $sqql->fetch())
 {
 
 	if (cot_auth('forums', $fsn['fs_id'], 'R'))
@@ -467,12 +467,12 @@ foreach (cot_getextplugins('forums.topics.query') as $pl)
 }
 /* ===== */
 
-$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where_count AND ft_mode=1");
-$prvtopics = cot_db_result($sql, 0, "COUNT(*)");
-$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where_count");
-$totaltopics = cot_db_result($sql, 0, "COUNT(*)");
+$sql = $cot_db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where_count AND ft_mode=1");
+$prvtopics = $sql->fetchColumn();
+$sql = $cot_db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE $sqql_where_count");
+$totaltopics = $sql->fetchColumn();
 
-$sql = cot_db_query("SELECT $sqql_select $sqql_join_ratings_columns FROM $db_forum_topics AS t $sqql_join_ratings_condition
+$sql = $cot_db->query("SELECT $sqql_select $sqql_join_ratings_columns FROM $db_forum_topics AS t $sqql_join_ratings_condition
 	WHERE $sqql_where ORDER BY $sqql_order LIMIT $sqql_limit");
 
 /* === Hook - Part1 : Set === */
@@ -480,7 +480,7 @@ $extp = cot_getextplugins('forums.topics.loop');
 /* ===== */
 
 
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	$row['ft_icon'] = 'posts';
 	$row['ft_postisnew'] = FALSE;

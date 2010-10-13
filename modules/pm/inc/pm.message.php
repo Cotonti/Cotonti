@@ -34,9 +34,9 @@ foreach (cot_getextplugins('pm.first') as $pl)
 /* ===== */
 
 list($totalsentbox, $totalinbox) = cot_message_count($usr['id']);
-$sql = cot_db_query("SELECT * FROM $db_pm WHERE pm_id = '".$id."' LIMIT 1");
-cot_die(cot_db_numrows($sql) == 0);
-$row = cot_db_fetcharray($sql);
+$sql = $cot_db->query("SELECT * FROM $db_pm WHERE pm_id = '".$id."' LIMIT 1");
+cot_die($sql->rowCount() == 0);
+$row = $sql->fetch();
 
 $title = cot_rc_link(cot_url('pm'), $L['Private_Messages']) ." ".$cfg['separator'];
 
@@ -44,11 +44,11 @@ if ($row['pm_touserid'] == $usr['id'])
 {
 	if ($row['pm_tostate'] == 0)
 	{
-		$sql = cot_db_query("UPDATE $db_pm SET pm_tostate = 1 WHERE pm_id = '".$id."'");
-		$sql = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$usr['id']."' AND pm_tostate = 0");
-		if (cot_db_result($sql,0,'COUNT(*)') == 0)
+		$sql = $cot_db->query("UPDATE $db_pm SET pm_tostate = 1 WHERE pm_id = '".$id."'");
+		$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$usr['id']."' AND pm_tostate = 0");
+		if ($sql->fetchColumn() == 0)
 		{
-			$sql = cot_db_query("UPDATE $db_users SET user_newpm = 0 WHERE user_id = '".$usr['id']."'");
+			$sql = $cot_db->query("UPDATE $db_users SET user_newpm = 0 WHERE user_id = '".$usr['id']."'");
 		}
 	}
 	$f = 'inbox';
@@ -70,8 +70,8 @@ else
 {
 	cot_die();
 }
-$sql_user = cot_db_query("SELECT * FROM $db_users WHERE user_id = '".$to."' LIMIT 1");
-$row_user = cot_db_fetcharray($sql_user);
+$sql_user = $cot_db->query("SELECT * FROM $db_users WHERE user_id = '".$to."' LIMIT 1");
+$row_user = $sql_user->fetch();
 
 
 $star = '<div class="'.$star_class.'">'.$row['pm_icon_starred'].'</div>';
@@ -101,11 +101,11 @@ $t = new XTemplate(cot_skinfile('pm.message'));
 
 if ($history)
 {
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
 						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)");
-	$totallines = cot_db_result($sql, 0, "COUNT(*)");
+	$totallines = $sql->fetchColumn();
 	$d = ($d >= $totallines) ? (floor($totallines / $cfg['maxpmperpage']))*$cfg['maxpmperpage'] : $d;
-	$sql = cot_db_query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id = p.pm_touserid
+	$sql = $cot_db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id = p.pm_touserid
 						WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
 						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
 						ORDER BY pm_date DESC LIMIT $d,".$cfg['maxpmperpage']);
@@ -118,7 +118,7 @@ if ($history)
 	$extp = cot_getextplugins('pm.history.loop');
 	/* ===== */
 	$jj = 0;
-	while ($row2 = cot_db_fetcharray($sql))
+	while ($row2 = $sql->fetch())
 	{
 		$jj++;
 		$row2['pm_icon_readstatus'] = ($row2['pm_tostate'] == '0') ?

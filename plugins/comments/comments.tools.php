@@ -39,24 +39,24 @@ foreach (cot_getextplugins('admin.comments.first') as $pl)
 if ($a == 'delete')
 {
 	cot_check_xg();
-	cot_db_delete($db_com, "com_id='$id'");
+	$cot_db->delete($db_com, "com_id='$id'");
 
 	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
 }
 
 $is_adminwarnings = isset($adminwarnings);
 
-$totalitems = cot_db_rowcount($db_com);
+$totalitems = $cot_db->countRows($db_com);
 
 $pagenav = cot_pagenav('admin', 'm=tools&p=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = cot_db_query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $cot_db->query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.comments.loop');
 /* ===== */
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	$row['com_text'] = htmlspecialchars(cot_cutstring($row['com_text'], 40));
 	$row['com_type'] = mb_substr($row['com_code'], 0, 1);

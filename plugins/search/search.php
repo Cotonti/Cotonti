@@ -26,7 +26,7 @@ $rsq = cot_import('rsq', 'P', 'TXT', $cfg['plugin']['search']['maxsigns']);
 $sq = cot_import('sq', 'G', 'TXT');
 $sq = (!empty($sq)) ? $sq : $rsq;
 $sq = preg_replace('/ +/', ' ', trim($sq));
-$sq = cot_db_prep($sq);
+$sq = $cot_db->prep($sq);
 $hl = urlencode(mb_strtoupper($sq));
 $tab = cot_import('tab', 'G', 'ALP');
 $d = cot_import('d', 'G', 'INT');
@@ -47,7 +47,7 @@ else
 	$rsearch['pag']['file'] = cot_import('rpagfile', 'P', 'INT');
 	$rsearch['pag']['sort'] = cot_import('rpagsort', 'P', 'TXT');
 	$rsearch['pag']['sort'] = (empty($rsearch['pag']['sort'])) ? 'date' : $rsearch['pag']['sort'];
-	$rsearch['pag']['sort2'] = cot_db_prep(cot_import('rpagsort2', 'P', 'TXT'));
+	$rsearch['pag']['sort2'] = $cot_db->prep(cot_import('rpagsort2', 'P', 'TXT'));
 	$rsearch['pag']['sort2'] = (empty($rsearch['pag']['sort2'])) ? 'DESC' : $rsearch['pag']['sort2'];
 	$rsearch['pag']['sub'] = cot_import('rpagsub', 'P', 'ARR');
 
@@ -56,7 +56,7 @@ else
 	$rsearch['frm']['reply'] = cot_import('rfrmreply', 'P', 'INT');
 	$rsearch['frm']['sort'] = cot_import('sea_frmsort', 'P', 'TXT');
 	$rsearch['frm']['sort'] = (empty($rsearch['frm']['sort'])) ? 'updated' : $rsearch['frm']['sort'];
-	$rsearch['frm']['sort2'] = cot_db_prep(cot_import('rfrmsort2', 'P', 'TXT'));
+	$rsearch['frm']['sort2'] = $cot_db->prep(cot_import('rfrmsort2', 'P', 'TXT'));
 	$rsearch['frm']['sort2'] = (empty($rsearch['frm']['sort2'])) ? 'DESC' : $rsearch['frm']['sort2'];
 	$rsearch['frm']['sub'] = cot_import('rfrmsub', 'P', 'ARR');
 
@@ -114,7 +114,7 @@ if (($tab == 'pag' || empty($tab))  && $cfg['module']['page'] && $cfg['plugin'][
 		if ($cat != 'all' && $cat != 'system' && cot_auth('page', $cat, 'R') && $x['group'] == 0)
 		{
 			$pages_cat_list[$cat] = $x['tpath'];
-			$pag_catauth[] = cot_db_prep($cat);
+			$pag_catauth[] = $cot_db->prep($cat);
 		}
 	}
 	if ($rsearch['pag']['sub'][0] == 'all' || !is_array($rsearch['pag']['sub']))
@@ -140,17 +140,17 @@ if (($tab == 'pag' || empty($tab))  && $cfg['module']['page'] && $cfg['plugin'][
 
 if (($tab == 'frm' || empty($tab)) && is_array($cfg['module']['forums']) && $cfg['plugin']['search']['forumsearch'])
 {
-	$sql1 = cot_db_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
+	$sql1 = $cot_db->query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
 		LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
 		ORDER by fn_path ASC, fs_order ASC");
 
 	$forum_cat_list['all'] = $L['plu_allsections'];
-	while ($row1 = cot_db_fetcharray($sql1))
+	while ($row1 = $sql1->fetch())
 	{
 		if (cot_auth('forums', $row1['fs_id'], 'R'))
 		{
 			$forum_cat_list[$row1['fs_id']] = cot_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE);
-			$frm_catauth[] = cot_db_prep($row1['fs_id']);
+			$frm_catauth[] = $cot_db->prep($row1['fs_id']);
 		}
 	}
 	if ($rsearch['frm']['sub'][0] == 'all' || !is_array($rsearch['frm']['sub']))
@@ -195,13 +195,13 @@ if (!empty($sq))
 			$user_name=trim(cot_import($i, 'D', 'TXT'));
 			if (!empty($user_name))
 			{
-				$touser_sql[] = "'".cot_db_prep($user_name)."'";
+				$touser_sql[] = "'".$cot_db->prep($user_name)."'";
 			}
 		}
 		$touser_sql = '('.implode(',', $touser_sql).')';
-		$sql = cot_db_query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
-		$totalusers = cot_db_numrows($sql);
-		while ($row = cot_db_fetcharray($sql))
+		$sql = $cot_db->query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
+		$totalusers = $sql->rowCount();
+		while ($row = $sql->fetch())
 		{
 			$touser_ids[] = $row['user_id'];
 		}
@@ -215,7 +215,7 @@ if (!empty($sq))
 	if (($tab == 'pag' || empty($tab)) && $cfg['module']['page'] && $cfg['plugin']['search']['pagesearch'] && !$cot_error)
 	{
 		$where_and['cat'] = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
-			"page_cat IN ('".cot_db_prep(implode("','", $rsearch['pag']['sub']))."')" : "page_cat IN ('".implode("','", $pag_catauth)."')"; 
+			"page_cat IN ('".$cot_db->prep(implode("','", $rsearch['pag']['sub']))."')" : "page_cat IN ('".implode("','", $pag_catauth)."')"; 
 		$where_and['state'] = "page_state = '0'";
 		$where_and['notcat'] = "page_cat <> 'system'";
 		$where_and['date'] = "page_date <= ".(int)$sys['now_offset'];
@@ -223,9 +223,9 @@ if (!empty($sq))
 		$where_and['file'] = ($rsearch['pag']['file'] == 1) ? "page_file = '1'" : "";
 		$where_and['users'] = (!empty($touser)) ? "page_ownerid ".$touser_ids : "";
 
-		$where_or['title'] = ($rsearch['pag']['title'] == 1) ? "page_title LIKE '".cot_db_prep($sqlsearch)."'" : "";
-		$where_or['desc'] = (($rsearch['pag']['desc'] == 1)) ? "page_desc LIKE '".cot_db_prep($sqlsearch)."'" : "";
-		$where_or['text'] = (($rsearch['pag']['text'] == 1)) ? "page_text LIKE '".cot_db_prep($sqlsearch)."'" : "";
+		$where_or['title'] = ($rsearch['pag']['title'] == 1) ? "page_title LIKE '".$cot_db->prep($sqlsearch)."'" : "";
+		$where_or['desc'] = (($rsearch['pag']['desc'] == 1)) ? "page_desc LIKE '".$cot_db->prep($sqlsearch)."'" : "";
+		$where_or['text'] = (($rsearch['pag']['text'] == 1)) ? "page_text LIKE '".$cot_db->prep($sqlsearch)."'" : "";
 		// String query for addition pages fields.
 		foreach (explode(',', trim($cfg['plugin']['search']['addfields'])) as $addfields_el)
 		{
@@ -233,17 +233,17 @@ if (!empty($sq))
 			$where_or[$addfields_el] .= ((!empty($addfields_el))) ? $addfields_el." LIKE '".$sqlsearch."'" : "";
 		}
 		$where_or = array_diff($where_or, array(''));
-		count($where_or) || $where_or['title'] = "page_title LIKE '".cot_db_prep($sqlsearch)."'";
+		count($where_or) || $where_or['title'] = "page_title LIKE '".$cot_db->prep($sqlsearch)."'";
 		$where_and['or'] = '('.implode(' OR ', $where_or).')';
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
 
-		$sql = cot_db_query("SELECT SQL_CALC_FOUND_ROWS * FROM $db_pages WHERE $where
+		$sql = $cot_db->query("SELECT SQL_CALC_FOUND_ROWS * FROM $db_pages WHERE $where
 					ORDER BY page_".$rsearch['pag']['sort']." ".$rsearch['pag']['sort2']." LIMIT $d, ".$cfg['plugin']['search']['maxitems']);
-		$items = cot_db_numrows($sql);
-		$totalitems[] = cot_db_foundrows();
+		$items = $sql->rowCount();
+		$totalitems[] = $cot_db->query('SELECT FOUND_ROWS()')->fetchColumn();
 		$jj = 0;
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$page_url = empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
 			$t->assign(array(
@@ -265,16 +265,16 @@ if (!empty($sq))
 	if (($tab == 'frm' || empty($tab)) && is_array($cfg['modules']['forums']) && $cfg['plugin']['search']['forumsearch'] && !$cot_error)
 	{
 		$where_and['cat'] = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
-			"s.fs_id IN ('".cot_db_prep(implode("','", $rsearch['frm']['sub']))."')" : "s.fs_id IN ('".implode("','", $frm_catauth)."')";
+			"s.fs_id IN ('".$cot_db->prep(implode("','", $rsearch['frm']['sub']))."')" : "s.fs_id IN ('".implode("','", $frm_catauth)."')";
 		$where_and['reply'] = ($rsearch['frm']['reply'] == '1') ? "t.ft_postcount > 1" : "";
 		$where_and['time'] = ($rsearch['set']['limit'] > 0) ? "p.fp_creation >= ".$rsearch['set']['from']." AND p.fp_updated <= ".$rsearch['set']['to'] : "";
 		$where_and['user'] .= (!empty($touser)) ? "p.fp_posterid ".$touser_ids : "";
 
-		$where_or['title'] = ($rsearch['frm']['title'] == 1) ? "(t.ft_title LIKE '".cot_db_prep($sqlsearch)."'" : "";
-		$where_or['text'] .= (($rsearch['frm']['text'] == 1)) ? "p.fp_text LIKE '".cot_db_prep($sqlsearch)."'" : "";
+		$where_or['title'] = ($rsearch['frm']['title'] == 1) ? "(t.ft_title LIKE '".$cot_db->prep($sqlsearch)."'" : "";
+		$where_or['text'] .= (($rsearch['frm']['text'] == 1)) ? "p.fp_text LIKE '".$cot_db->prep($sqlsearch)."'" : "";
 
 		$where_or = array_diff($where_or, array(''));
-		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".cot_db_prep($sqlsearch)."'";
+		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".$cot_db->prep($sqlsearch)."'";
 		$where_and['or'] = '('.implode(' OR ', $where_or).')';
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
@@ -282,15 +282,15 @@ if (!empty($sq))
 		$maxitems = $cfg['plugin']['search']['maxitems'] - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
 
-		$sql = cot_db_query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*, s.*
+		$sql = $cot_db->query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*, s.*
 			 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
 				WHERE $where AND p.fp_topicid = t.ft_id AND p.fp_sectionid = s.fs_id
 				GROUP BY t.ft_id ORDER BY ft_".$rsearch['frm']['sort']." ".$rsearch['frm']['sort2']."
 				LIMIT $d, $maxitems");
-		$items = cot_db_numrows($sql);
-		$totalitems[] = cot_db_foundrows();
+		$items = $sql->rowCount();
+		$totalitems[] = $cot_db->query('SELECT FOUND_ROWS()')->fetchColumn();
 		$jj = 0;
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			if ($row['ft_updated'] > 0)
 			{

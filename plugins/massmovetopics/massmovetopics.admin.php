@@ -28,8 +28,8 @@ $t = new XTemplate(cot_skinfile('massmovetopics', true));
 
 if ($a == 'move')
 {
-	$sql = cot_db_query("UPDATE $db_forum_topics SET ft_sectionid='$targetid' WHERE ft_sectionid='$sourceid'");
-	$sql = cot_db_query("UPDATE $db_forum_posts SET fp_sectionid='$targetid' WHERE fp_sectionid='$sourceid'");
+	$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_sectionid='$targetid' WHERE ft_sectionid='$sourceid'");
+	$sql = $cot_db->query("UPDATE $db_forum_posts SET fp_sectionid='$targetid' WHERE fp_sectionid='$sourceid'");
 	cot_forum_sectionsetlast($sourceid);
 	cot_forum_sectionsetlast($targetid);
 	cot_forum_resync($sourceid);
@@ -37,11 +37,11 @@ if ($a == 'move')
 	$t->parse('MAIN.MASSMOVETOPICS_MOVE_DONE');
 }
 
-$sql = cot_db_query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
+$sql = $cot_db->query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
 LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
 ORDER by fn_path ASC, fs_order ASC");
 
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	$t->assign(array(
 		'MASSMOVETOPICS_SELECT_SOURCE_NAME' => cot_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),

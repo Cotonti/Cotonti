@@ -68,7 +68,7 @@ elseif($a == 'lock')
 elseif($a == 'bump')
 {
 	cot_check_xg();
-	$sql = cot_db_query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
+	$sql = $cot_db->query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
 
 	$adminwarnings = $L['adm_polls_msg916_bump'];
 }
@@ -112,11 +112,11 @@ else
     $poll_filter = '"&filter='.$filter;
 }
 
-$sql = cot_db_query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
-$totalitems = cot_db_result($sql, 0, "COUNT(*)");
+$sql = $cot_db->query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
+$totalitems = $sql->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = cot_db_query("SELECT * FROM $db_polls
+$sql = $cot_db->query("SELECT * FROM $db_polls
 					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
@@ -127,7 +127,7 @@ $forumheader = false;
 $extp = cot_getextplugins('polls.admin.loop');
 /* ===== */
 
-while($row = cot_db_fetcharray($sql))
+while($row = $sql->fetch())
 {
 	$id = $row['poll_id'];
 	$type = $row['poll_type'];
@@ -143,8 +143,8 @@ while($row = cot_db_fetcharray($sql))
 
 	$poll_state = ($row['poll_state']) ? '[-] ' : '';
 
-    $sql2 = cot_db_query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
-    $totalvotes = cot_db_result($sql2, 0, "SUM(po_count)");
+    $sql2 = $cot_db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
+    $totalvotes = $sql2->fetchColumn();
 
 	$t->assign(array(
 		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => date($cfg['formatyearmonthday'], $row['poll_creationdate']),

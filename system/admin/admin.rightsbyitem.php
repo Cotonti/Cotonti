@@ -53,7 +53,7 @@ if ($a == 'update')
 	}
 	/* ===== */
 
-	cot_db_update($db_auth, array('auth_rights' => 0), "auth_code='$ic' AND auth_option='$io'");
+	$cot_db->update($db_auth, array('auth_rights' => 0), "auth_code='$ic' AND auth_option='$io'");
 
 	foreach ($auth as $i => $j)
 	{
@@ -64,7 +64,7 @@ if ($a == 'update')
 			{
 				$mask += cot_auth_getvalue($l);
 			}
-			cot_db_update($db_auth, array('auth_rights' => $mask),
+			$cot_db->update($db_auth, array('auth_rights' => $mask),
 				"auth_groupid=$i AND auth_code='$ic' AND auth_option='$io'");
 		}
 	}
@@ -75,12 +75,12 @@ if ($a == 'update')
 	cot_message('Updated');
 }
 
-$sql = cot_db_query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
+$sql = $cot_db->query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_groups AS g ON g.grp_id=a.auth_groupid
 	WHERE auth_code='$ic' AND auth_option='$io' ORDER BY grp_level DESC");
 
-cot_die(cot_db_numrows($sql) == 0);
+cot_die($sql->rowCount() == 0);
 
 switch($ic)
 {
@@ -111,7 +111,7 @@ $adv_columns = (!$advanced && $ic == 'page') ? 4 : $adv_columns;
 
 $l_custom1 = ($ic == 'page') ? $L['Download'] : $L['Custom'].' #1';
 
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	$link = cot_url('admin', 'm=rights&g='.$row['auth_groupid']);
 	$title = htmlspecialchars($row['grp_title']);

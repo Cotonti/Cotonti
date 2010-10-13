@@ -49,10 +49,10 @@ if ($a == 'search')
 	$res_host = @gethostbyaddr($id);
 	$res_dns = ($res_host == $id) ? 'Unknown' : $res_host;
 
-	$sql = cot_db_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip='$ipmask1' ");
-	$totalmatches1 = cot_db_numrows($sql);
+	$sql = $cot_db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip='$ipmask1' ");
+	$totalmatches1 = $sql->rowCount();
 
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		$t->assign(array(
 			'IPSEARCH_USER_IPMASK1' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
@@ -61,10 +61,10 @@ if ($a == 'search')
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK1');
 	}
 
-	$sql = cot_db_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
-	$totalmatches2 = cot_db_numrows($sql);
+	$sql = $cot_db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask2.%' ");
+	$totalmatches2 = $sql->rowCount();
 
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		$t->assign(array(
 			'IPSEARCH_USER_IPMASK2' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),
@@ -73,10 +73,10 @@ if ($a == 'search')
 		$t->parse('MAIN.IPSEARCH_RESULTS.IPSEARCH_IPMASK2');
 	}
 
-	$sql = cot_db_query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
-	$totalmatches3 = cot_db_numrows($sql);
+	$sql = $cot_db->query("SELECT user_id, user_name, user_lastip FROM $db_users WHERE user_lastip LIKE '$ipmask3.%.%' ");
+	$totalmatches3 = $sql->rowCount();
 
-	while($row = cot_db_fetcharray($sql))
+	while($row = $sql->fetch())
 	{
 		$t->assign(array(
 			'IPSEARCH_USER_IPMASK3' => cot_build_user($row['user_id'], htmlspecialchars($row['user_name'])),

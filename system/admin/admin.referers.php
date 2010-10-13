@@ -32,21 +32,21 @@ foreach (cot_getextplugins('admin.referers.first') as $pl)
 
 if($a == 'prune' && $usr['isadmin'])
 {
-	cot_db_query("TRUNCATE $db_referers") ? cot_message('adm_ref_prune') : cot_message('Error');
+	$cot_db->query("TRUNCATE $db_referers") ? cot_message('adm_ref_prune') : cot_message('Error');
 }
 elseif($a == 'prunelowhits' && $usr['isadmin'])
 {
-	cot_db_delete($db_referers, 'ref_count < 6') ? cot_message('adm_ref_prunelowhits') : cot_message('Error');
+	$cot_db->delete($db_referers, 'ref_count < 6') ? cot_message('adm_ref_prunelowhits') : cot_message('Error');
 }
 
-$totalitems = cot_db_rowcount($db_referers);
+$totalitems = $cot_db->countRows($db_referers);
 $pagenav = cot_pagenav('admin', 'm=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = cot_db_query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $cot_db->query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
-if(cot_db_numrows($sql) > 0)
+if($sql->rowCount() > 0)
 {
-	while($row = cot_db_fetcharray($sql))
+	while($row = $sql->fetch())
 	{
 		preg_match("#//([^/]+)/#", $row['ref_url'], $a);
 		$host = preg_replace('#^www\.#i', '', $a[1]);

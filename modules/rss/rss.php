@@ -78,10 +78,10 @@ if ($c == "topics")
 	$topic_id = ($id == 'all') ? 0 : $id;
 
 	$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-	$res = cot_db_query($sql);
-	if (cot_db_affectedrows() > 0)
+	$res = $cot_db->query($sql);
+	if ($cot_db->affectedRows > 0)
 	{
-		$row = cot_db_fetchassoc($res);
+		$row = $res->fetch();
 		if ($row['ft_mode'] == '1')
 		{
 			die('This topic is private'); // TODO: Need translate
@@ -99,13 +99,13 @@ if ($c == "topics")
 
 		// get number of posts in topic
 		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
-		$res = cot_db_query($sql);
-		$totalposts = cot_db_result($res, 0, "COUNT(*)");
+		$res = $cot_db->query($sql);
+		$totalposts = $res->fetchColumn();
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid='$topic_id' ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-		$res = cot_db_query($sql);
+		$res = $cot_db->query($sql);
 		$i = 0;
-		while ($row = cot_db_fetchassoc($res))
+		while ($row = $res->fetch())
 		{
 			$totalposts--;
 			$curpage = $cfg['maxtopicsperpage'] * floor($totalposts / $cfg['maxtopicsperpage']);
@@ -127,10 +127,10 @@ elseif ($c == "section")
 	$forum_id = ($id == 'all') ? 0 : $id;;
 
 	$sql = "SELECT * FROM $db_forum_sections WHERE fs_id = '$forum_id'";
-	$res = cot_db_query($sql);
-	if (cot_db_affectedrows() > 0)
+	$res = $cot_db->query($sql);
+	if ($cot_db->affectedRows > 0)
 	{
-		$row = cot_db_fetchassoc($res);
+		$row = $res->fetch();
 		$section_title = $row['fs_title'];
 		$section_desc = $row['fs_desc'];
 		$rss_title = $section_title;
@@ -140,25 +140,25 @@ elseif ($c == "section")
 		// get subsections
 		unset($subsections);
 		$sql = "SELECT fs_id FROM $db_forum_sections WHERE fs_mastername = '$section_title'";
-		$res = cot_db_query($sql);
-		while ($row = cot_db_fetchassoc($res))
+		$res = $cot_db->query($sql);
+		while ($row = $res->fetch())
 		{
 			$where .= " OR fp_sectionid ='{$row['fs_id']}'";
 		}
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-		$res = cot_db_query($sql);
+		$res = $cot_db->query($sql);
 		$i = 0;
 
-		while ($row = cot_db_fetchassoc($res))
+		while ($row = $res->fetch())
 		{
 			$post_id = $row['fp_id'];
 			$topic_id = $row['fp_topicid'];
 
 			$flag_private = 0;
 			$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-			$res2 = cot_db_query($sql);
-			$row2 = cot_db_fetchassoc($res2);
+			$res2 = $cot_db->query($sql);
+			$row2 = $res2->fetch();
 			$topic_title = $row2['ft_title'];
 			if ($row2['ft_mode'] == '1')
 			{
@@ -188,9 +188,9 @@ elseif ($c == "forums")
 	$rss_description = "";
 
 	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-	$res = cot_db_query($sql);
+	$res = $cot_db->query($sql);
 	$i = 0;
-	while ($row = cot_db_fetchassoc($res))
+	while ($row = $res->fetch())
 	{
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
@@ -198,8 +198,8 @@ elseif ($c == "forums")
 
 		$flag_private = 0;
 		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-		$res2 = cot_db_query($sql);
-		$row2 = cot_db_fetchassoc($res2);
+		$res2 = $cot_db->query($sql);
+		$row2 = $res2->fetch();
 		$topic_title = $row2['ft_title'];
 		if ($row2['ft_mode'] == '1')
 		{
@@ -236,14 +236,14 @@ elseif ($defult_c)
 			}
 		}
 
-		$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	else
 	{
-		$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	$i = 0;
-	while ($row = cot_db_fetchassoc($sql))
+	while ($row = $sql->fetch())
 	{
 		$row['page_pageurl'] = (empty($row['page_alias'])) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']);
 
@@ -298,7 +298,7 @@ echo $out_rss;
 
 function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 {
-	global $cfg, $db_pages, $usr;
+	global $cot_db, $cfg, $db_pages, $usr;
 
 	$pag_text = cot_parse($pag_text, $cfg['module']['page']['markup']);
 	$readmore = mb_strpos($pag_text, "<!--more-->");
@@ -326,7 +326,7 @@ function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 
 function cot_parse_post_text($post_id, $post_text)
 {
-	global $cfg, $db_forum_posts, $usr, $fs_allowbbcodes, $fs_allowsmilies;
+	global $cot_db, $cfg, $db_forum_posts, $usr, $fs_allowbbcodes, $fs_allowsmilies;
 	
 	$post_text = cot_parse($post_text, ($cfg['module']['forums']['markup'] && $fs_allowbbcodes));
 

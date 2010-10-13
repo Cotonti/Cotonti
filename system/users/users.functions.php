@@ -55,11 +55,11 @@ function cot_build_group($grpid)
  */
 function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 {
-	global $db_groups_users, $cot_groups, $L, $usr, $R;
+	global $cot_db, $db_groups_users, $cot_groups, $L, $usr, $R;
 
-	$sql = cot_db_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
+	$sql = $cot_db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
 
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		$member[$row['gru_groupid']] = TRUE;
 	}
@@ -159,7 +159,7 @@ function cot_userisonline($id)
  */
 function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false)
 {
-	global $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $cache, $db_users, $usr;
+	global $cot_db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $cache, $db_users, $usr;
 	if (is_array($user_data) && is_array($cache['user_' . $user_data['user_id']]))
 	{	
 		$temp_array = $cache['user_' . $user_data['user_id']];
@@ -172,8 +172,8 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	{
 		if (!is_array($user_data))
 		{
-			$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id = '" . (int) $user_data . "' LIMIT 1");
-			$user_data = cot_db_fetchassoc($sql);
+			$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id = '" . (int) $user_data . "' LIMIT 1");
+			$user_data = $sql->fetch();
 		}
 
 		if ($user_data['user_id'] > 0 && !empty($user_data['user_name']))

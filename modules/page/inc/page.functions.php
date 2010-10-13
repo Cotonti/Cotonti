@@ -70,7 +70,7 @@ function cot_readraw($file)
  * @param bool $allsublev All sublevels array
  * @param bool $firstcat Add main cat
  * @param bool $userrights Check userrights
- * @param bool $sqlprep use cot_db_prep function
+ * @param bool $sqlprep use $cot_db->prep function
  * @return array
  */
 function cot_structure_children($cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
@@ -94,7 +94,7 @@ function cot_structure_children($cat, $allsublev = true,  $firstcat = true, $use
 			$subcat = mb_substr($x['path'], $mtchlen + 1);
 			if($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
 			{
-				$i = ($sqlprep) ? cot_db_prep($i) : $i;
+				$i = ($sqlprep) ? $cot_db->prep($i) : $i;
 				$catsub[] = $i;
 			}
 		}
@@ -139,7 +139,7 @@ function cot_structure_parents($cat, $type = 'full')
  */
 function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = true)
 {
-	global $db_structure, $usr, $cot_cat, $L, $R;
+	global $cot_db, $db_structure, $usr, $cot_cat, $L, $R;
 
 	foreach ($cot_cat as $i => $x)
 	{
@@ -175,7 +175,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  */
 function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = 0, $dateformat='', $emptytitle='')
 {
-	global $cot_extrafields, $cfg, $L, $R, $cache, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
+	global $cot_db, $cot_extrafields, $cfg, $L, $R, $cache, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
 	if (is_array($page_data) && is_array($cache['page_' . $page_data['page_id']]))
 	{
 		$temp_array = $cache['page_' . $page_data['page_id']];
@@ -188,8 +188,8 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 	{
 		if (!is_array($page_data))
 		{
-			$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_id = '" . (int) $page_data . "' LIMIT 1");
-			$page_data = cot_db_fetchassoc($sql);
+			$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id = '" . (int) $page_data . "' LIMIT 1");
+			$page_data = $sql->fetch();
 		}
 
 		if ($page_data['user_id'] > 0 && !empty($page_data['user_name']))

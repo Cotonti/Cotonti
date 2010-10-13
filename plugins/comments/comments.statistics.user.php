@@ -20,8 +20,8 @@ defined('COT_CODE') or die('Wrong URL');
 
 cot_require('comments', true);
 
-$sql = cot_db_query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='".$usr['id']."'");
-$user_comments = cot_db_result($sql, 0, "COUNT(*)");
+$sql = $cot_db->query("SELECT COUNT(*) FROM $db_com WHERE com_authorid='".$usr['id']."'");
+$user_comments = $sql->fetchColumn();
 $t->assign(array(
 	'STATISTICS_USER_COMMENTS' => $user_comments
 ));

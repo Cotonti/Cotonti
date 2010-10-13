@@ -23,17 +23,17 @@ $showavatars = $cfg['plugin']['whosonline']['showavatars'];
 $miniavatar_x = $cfg['plugin']['whosonline']['miniavatar_x'];
 $miniavatar_y = $cfg['plugin']['whosonline']['miniavatar_y'];
 
-$sql1 = cot_db_query("SELECT DISTINCT u.*, o.* FROM $db_online AS o LEFT JOIN $db_users AS u ON u.user_id=o.online_userid WHERE online_name!='v' ORDER BY u.user_name ASC");
-$sql2 = cot_db_query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_name = 'v' ORDER BY online_lastseen DESC");
-$sql3 = cot_db_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-$total1 = cot_db_numrows($sql1);
-$total2 = cot_db_numrows($sql2);
-$row = cot_db_fetcharray($sql3);
+$sql1 = $cot_db->query("SELECT DISTINCT u.*, o.* FROM $db_online AS o LEFT JOIN $db_users AS u ON u.user_id=o.online_userid WHERE online_name!='v' ORDER BY u.user_name ASC");
+$sql2 = $cot_db->query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_name = 'v' ORDER BY online_lastseen DESC");
+$sql3 = $cot_db->query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
+$total1 = $sql1->rowCount();
+$total2 = $sql2->rowCount();
+$row = $sql3->fetch();
 $maxusers = $row[0];
 $visitornum = 0;
 $visituser = 0;
 
-while ($row = cot_db_fetcharray($sql1))
+while ($row = $sql1->fetch())
 {
 	$visituser++;
 	if ($usr['isadmin'])
@@ -61,7 +61,7 @@ while ($row = cot_db_fetcharray($sql1))
 	$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW1');
 }
 
-while ($row = cot_db_fetcharray($sql2))
+while ($row = $sql2->fetch())
 {
 	$visitornum++;
 	$online_location = $L[$row['online_location']];//This line is needed?

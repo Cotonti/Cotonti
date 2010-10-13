@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 cot_require('tags', true);
 $q = strtolower(cot_import('q', 'G', 'TXT'));
-$q = cot_db_prep(urldecode($q));
+$q = $cot_db->prep(urldecode($q));
 if (!$q) return;
 
 $tagslist = cot_tag_complete($q, $cfg['plugin']['tags']['autocomplete']);

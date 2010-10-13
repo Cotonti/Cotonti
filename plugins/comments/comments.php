@@ -47,9 +47,9 @@ if ($m == 'edit' && $id > 0)
 		}
 		/* ===== */
 
-		$sql1 = cot_db_query("SELECT * FROM $db_com WHERE com_id=$id AND com_code='$item' LIMIT 1");
-		cot_die(cot_db_numrows($sql1) == 0);
-		$row = cot_db_fetcharray($sql1);
+		$sql1 = $cot_db->query("SELECT * FROM $db_com WHERE com_id=$id AND com_code='$item' LIMIT 1");
+		cot_die($sql1->rowCount() == 0);
+		$row = $sql1->fetch();
 
 		$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
 		$usr['isowner'] = $time_limit
@@ -67,17 +67,17 @@ if ($m == 'edit' && $id > 0)
 
 		if (!$cot_error)
 		{
-			$sql = cot_db_update($db_com, array('com_text' => $comtext), "com_id=$id AND com_code='$item'");
+			$sql = $cot_db->update($db_com, array('com_text' => $comtext), "com_id=$id AND com_code='$item'");
 
 			if ($cfg['plugin']['comments']['mail'])
 			{
-				$sql2 = cot_db_query("SELECT * FROM $db_users WHERE user_maingrp=5");
+				$sql2 = $cot_db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 
 				$email_title = $L['plu_comlive'].$cfg['main_url'];
 				$email_body  = $L['User']." ".$usr['name'].", ".$L['plu_comlive3'];
 				$email_body .= $url . $sep . 'comments=1#c' . $id . "\n\n";
 
-				while ($adm = cot_db_fetcharray($sql2))
+				while ($adm = $sql2->fetch())
 				{
 					cot_mail($adm['user_email'], $email_title, $email_body);
 				}
@@ -100,9 +100,9 @@ if ($m == 'edit' && $id > 0)
 	));
 	$t->parse('MAIN.COMMENTS_TITLE');
 
-	$sql = cot_db_query("SELECT * FROM $db_com WHERE com_id=$id AND com_code='$item' AND com_area='$area'");
-	cot_die(cot_db_numrows($sql) != 1);
-	$com = cot_db_fetcharray($sql);
+	$sql = $cot_db->query("SELECT * FROM $db_com WHERE com_id=$id AND com_code='$item' AND com_area='$area'");
+	cot_die($sql->rowCount() != 1);
+	$com = $sql->fetch();
 
 	$com_limit = ($sys['now_offset'] < ($com['com_date'] + $cfg['plugin']['comments']['time'] * 60)) ? TRUE : FALSE;
 	$usr['isowner'] = $com_limit
@@ -161,17 +161,17 @@ if ($a == 'send' && $usr['auth_write'])
 	{
 		$comarray = array('area' => $area, 'code' => $item, 'author' => $usr['name'], 'authorid' => (int)$usr['id'], 'authorip' => $usr['ip'],
 			'text' => $rtext, 'date' => (int)$sys['now_offset']);
-		$sql = cot_db_insert($db_com, $comarray, 'com_');
-		$id = cot_db_insertid();
+		$sql = $cot_db->insert($db_com, $comarray, 'com_');
+		$id = $cot_db->lastInsertId();
 
 		if ($cfg['plugin']['comments']['mail'])
 		{
-			$sql = cot_db_query("SELECT * FROM $db_users WHERE user_maingrp=5");
+			$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_maingrp=5");
 			$email_title = $L['plu_comlive'] . $cfg['main_url'];
 			$email_body  = $L['User'] .' ' . $usr['name'] . ', ' . $L['plu_comlive2'];
 			$sep = (mb_strpos($url, '?') !== false) ? '&' : '?';
 			$email_body .= $url . $sep . 'comments=1#c' . $id . "\n\n";
-			while ($adm = cot_db_fetcharray($sql))
+			while ($adm = $sql->fetch())
 			{
 				cot_mail($adm['user_email'], $email_title, $email_body);
 			}
@@ -194,11 +194,11 @@ if ($a == 'send' && $usr['auth_write'])
 elseif ($a == 'delete' && $usr['isadmin'])
 {
 	cot_check_xg();
-	$sql = cot_db_query("SELECT * FROM $db_com WHERE com_id=$id AND com_area='$area' LIMIT 1");
+	$sql = $cot_db->query("SELECT * FROM $db_com WHERE com_id=$id AND com_area='$area' LIMIT 1");
 
-	if ($row = cot_db_fetchassoc($sql))
+	if ($row = $sql->fetch())
 	{
-		$sql = cot_db_delete($db_com, "com_id='$id'");
+		$sql = $cot_db->delete($db_com, "com_id='$id'");
 
 				/* == Hook == */
 		foreach (cot_getextplugins('comments.delete') as $pl)

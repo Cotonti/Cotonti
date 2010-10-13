@@ -39,8 +39,8 @@ session_destroy();
 
 if ($usr['id'] > 0)
 {
-	cot_db_query("UPDATE $db_users SET user_lastvisit = {$sys['now_offset']} WHERE user_id = " . $usr['id']);
-	cot_db_query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
+	$cot_db->query("UPDATE $db_users SET user_lastvisit = {$sys['now_offset']} WHERE user_id = " . $usr['id']);
+	$cot_db->query("DELETE FROM $db_online WHERE online_ip='{$usr['ip']}'");
 	cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
 }
 else

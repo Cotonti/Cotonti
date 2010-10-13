@@ -135,11 +135,11 @@ else
  */
 function cot_tag_search_pages($query)
 {
-	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
-	$totalitems = cot_db_result(cot_db_query("SELECT COUNT(*)
+	global $cot_db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
+	$totalitems = $cot_db->query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
-		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0"), 0, 0);
+		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0")->fetchColumn();
 	switch($o)
 	{
 		case 'title':
@@ -154,14 +154,14 @@ function cot_tag_search_pages($query)
 		default:
 			$order = '';
 	}
-	$sql = cot_db_query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
+	$sql = $cot_db->query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
-	while ($row = cot_db_fetchassoc($sql))
+	while ($row = $sql->fetch())
 	{
 		$tags = cot_tag_list($row['page_id']);
 		$tag_list = '';
@@ -183,7 +183,7 @@ function cot_tag_search_pages($query)
 		));
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 	}
-	cot_db_freeresult($sql);
+	$sql->closeCursor();
 	$pagenav = cot_pagenav('plug','e=tags&a=pages&t=' . urlencode($qs), $d, $totalitems, $cfg['maxrowsperpage']);
 	$t->assign(array(
 		'TAGS_PAGEPREV' => $pagenav['prev'],
@@ -200,11 +200,11 @@ function cot_tag_search_pages($query)
  */
 function cot_tag_search_forums($query)
 {
-	global $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
-	$totalitems = cot_db_result(cot_db_query("SELECT COUNT(*)
+	global $cot_db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
+	$totalitems = $cot_db->query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
-		WHERE r.tag_area = 'forums' AND ($query)"), 0, 0);
+		WHERE r.tag_area = 'forums' AND ($query)")->fetchColumn();
 	switch($o)
 	{
 		case 'title':
@@ -219,7 +219,7 @@ function cot_tag_search_forums($query)
 		default:
 			$order = '';
 	}
-	$sql = cot_db_query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
+	$sql = $cot_db->query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 		LEFT JOIN $db_forum_sections AS s
@@ -228,7 +228,7 @@ function cot_tag_search_forums($query)
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_forums']);
-	while ($row = cot_db_fetchassoc($sql))
+	while ($row = $sql->fetch())
 	{
 		$tags = cot_tag_list($row['ft_id'], 'forums');
 		$tag_list = '';
@@ -251,7 +251,7 @@ function cot_tag_search_forums($query)
 		));
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 	}
-	cot_db_freeresult($sql);
+	$sql->closeCursor();
 	$pagenav = cot_pagenav('plug','e=tags&a=forums&t='.urlencode($qs), $d, $totalitems, $cfg['maxrowsperpage']);
 	$t->assign(array(
 		'TAGS_PAGEPREV' => $pagenav['prev'],

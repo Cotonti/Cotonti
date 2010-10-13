@@ -55,12 +55,12 @@ if($n == 'options')
 			$rtpl = cot_import('rtplforced','P','ALP');
 		}*/
 
-		$sql = cot_db_query("UPDATE $db_forum_structure SET
-			fn_path='".cot_db_prep($rpath)."',
-			fn_tpl='".cot_db_prep($rtpl)."',
-			fn_title='".cot_db_prep($rtitle)."',
-			fn_desc='".cot_db_prep($rdesc)."',
-			fn_icon='".cot_db_prep($ricon)."',
+		$sql = $cot_db->query("UPDATE $db_forum_structure SET
+			fn_path='".$cot_db->prep($rpath)."',
+			fn_tpl='".$cot_db->prep($rtpl)."',
+			fn_title='".$cot_db->prep($rtitle)."',
+			fn_desc='".$cot_db->prep($rdesc)."',
+			fn_icon='".$cot_db->prep($ricon)."',
 			fn_defstate='".$rdefstate."'
 			WHERE fn_id='".$id."'");
 
@@ -78,8 +78,8 @@ if($n == 'options')
 		cot_redirect(cot_url('admin', 'm=forums&s=structure&d='.$d.$additionsforurl, '', true));
 	}
 
-	$sql = cot_db_query("SELECT * FROM $db_forum_structure WHERE fn_id='$id' LIMIT 1");
-	cot_die(cot_db_numrows($sql) == 0);
+	$sql = $cot_db->query("SELECT * FROM $db_forum_structure WHERE fn_id='$id' LIMIT 1");
+	cot_die($sql->rowCount() == 0);
 
 	$handle = opendir('./themes/'.$cfg['defaultskin'].'/');
 	$allskinfiles = array();
@@ -95,7 +95,7 @@ if($n == 'options')
 
 	$allskinfiles = implode(',', $allskinfiles);
 
-	$row = cot_db_fetcharray($sql);
+	$row = $sql->fetch();
 
 	$fn_id = $row['fn_id'];
 	$fn_code = $row['fn_code'];
@@ -147,7 +147,7 @@ else
 
 		foreach($s as $i => $k)
 		{
-			$sql1 = cot_db_query("UPDATE $db_forum_structure SET
+			$sql1 = $cot_db->query("UPDATE $db_forum_structure SET
 				fn_path='".$s[$i]['rpath']."',
 				fn_title='".$s[$i]['rtitle']."',
 				fn_defstate='".$s[$i]['rdefstate']."'
@@ -174,10 +174,10 @@ else
 
 		if(!empty($ntitle) && !empty($ncode) && !empty($npath) && $ncode != 'all')
 		{
-			$sql = cot_db_query("SELECT fn_code FROM $db_forum_structure WHERE fn_code='".cot_db_prep($ncode)."' LIMIT 1");
-			$ncode .= (cot_db_numrows($sql)>0) ? "_".rand(100,999) : '';
+			$sql = $cot_db->query("SELECT fn_code FROM $db_forum_structure WHERE fn_code='".$cot_db->prep($ncode)."' LIMIT 1");
+			$ncode .= ($sql->rowCount()>0) ? "_".rand(100,999) : '';
 
-			$sql = cot_db_query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('$ncode', '$npath', '$ntitle', '$ndesc', '$nicon', ".(int)$ndefstate.")");
+			$sql = $cot_db->query("INSERT INTO $db_forum_structure (fn_code, fn_path, fn_title, fn_desc, fn_icon, fn_defstate) VALUES ('$ncode', '$npath', '$ntitle', '$ndesc', '$nicon', ".(int)$ndefstate.")");
 		}
 
 		if ($cot_cache)
@@ -194,7 +194,7 @@ else
 	elseif($a == 'delete')
 	{
 		cot_check_xg();
-		$sql = cot_db_query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
+		$sql = $cot_db->query("DELETE FROM $db_forum_structure WHERE fn_id='$id'");
 
 		if ($cot_cache)
 		{
@@ -208,24 +208,24 @@ else
 		cot_message('Deleted');
 	}
 
-	$sql = cot_db_query("SELECT DISTINCT(fs_category), COUNT(*) FROM $db_forum_sections WHERE 1 GROUP BY fs_category");
+	$sql = $cot_db->query("SELECT DISTINCT(fs_category), COUNT(*) FROM $db_forum_sections WHERE 1 GROUP BY fs_category");
 
-	while($row = cot_db_fetcharray($sql))
+	while($row = $sql->fetch())
 	{
 		$sectioncount[$row['fs_category']] = $row['COUNT(*)'];
 	}
 
-	$totalitems = cot_db_rowcount($db_forum_structure);
+	$totalitems = $cot_db->countRows($db_forum_structure);
 
 	$pagenav = cot_pagenav('admin', 'm=forums&s=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-	$sql = cot_db_query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = $cot_db->query("SELECT * FROM $db_forum_structure ORDER by fn_path ASC, fn_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.forums.structure.loop');
 	/* ===== */
-	while($row = cot_db_fetcharray($sql))
+	while($row = $sql->fetch())
 	{
 		$jj++;
 		$fn_id = $row['fn_id'];

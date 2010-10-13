@@ -39,9 +39,9 @@ switch($n)
 		if ($a == 'update')
 		{
 			
-			$sql = cot_db_query("SELECT config_name FROM $db_config
+			$sql = $cot_db->query("SELECT config_name FROM $db_config
 				WHERE config_owner='$o' AND config_cat='$p'");
-			while ($row = cot_db_fetcharray($sql))
+			while ($row = $sql->fetch())
 			{
 				$cfg_value = trim(cot_import($row['config_name'], 'P', 'NOC'));
 				if ($o == 'core' && $p == 'users'
@@ -49,23 +49,23 @@ switch($n)
 				{
 					$cfg_value = min($cfg_value, cot_get_uploadmax() * 1024);
 				}
-				cot_db_update($db_config, array('config_value' => $cfg_value),
+				$cot_db->update($db_config, array('config_value' => $cfg_value),
 					"config_name='" . $row['config_name'] . "' AND config_owner='$o' AND config_cat='$p'");
 			}
-			cot_db_freeresult($sql);
+			$sql->closeCursor();
 			$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
 			cot_message('Updated');
 		}
 		elseif ($a == 'reset' && !empty($v))
 		{
-			cot_db_query("UPDATE $db_config
+			$cot_db->query("UPDATE $db_config
 				SET config_value=config_default WHERE config_name='$v' AND config_owner='$o'");
 			$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
 		}
 		
-		$sql = cot_db_query("SELECT * FROM $db_config
+		$sql = $cot_db->query("SELECT * FROM $db_config
 			WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
-		cot_die(cot_db_numrows($sql) == 0);
+		cot_die($sql->rowCount() == 0);
 		
 		if ($o == 'core')
 		{
@@ -87,7 +87,7 @@ switch($n)
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('admin.config.edit.loop');
 		/* ===== */
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$config_owner = $row['config_owner'];
 			$config_cat = $row['config_cat'];
@@ -173,9 +173,9 @@ switch($n)
 		break;
 	
 	default:
-		$sql = cot_db_query("SELECT DISTINCT(config_cat) FROM $db_config
+		$sql = $cot_db->query("SELECT DISTINCT(config_cat) FROM $db_config
 			WHERE config_owner='core' ORDER BY config_cat ASC");
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			if($L['core_'.$row['config_cat']])
 			{
@@ -186,11 +186,11 @@ switch($n)
 				$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 			}
 		}
-		cot_db_freeresult($sql);
+		$sql->closeCursor();
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
-		$sql = cot_db_query("SELECT DISTINCT(config_cat) FROM $db_config
+		$sql = $cot_db->query("SELECT DISTINCT(config_cat) FROM $db_config
 			WHERE config_owner='module' ORDER BY config_cat ASC");
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=module&p='.$row['config_cat']),
@@ -198,11 +198,11 @@ switch($n)
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
-		cot_db_freeresult($sql);
+		$sql->closeCursor();
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
-		$sql = cot_db_query("SELECT DISTINCT(config_cat) FROM $db_config
+		$sql = $cot_db->query("SELECT DISTINCT(config_cat) FROM $db_config
 			WHERE config_owner='plug' ORDER BY config_cat ASC");
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$t->assign(array(
 				'ADMIN_CONFIG_ROW_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p='.$row['config_cat']),
@@ -210,7 +210,7 @@ switch($n)
 			));
 			$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL.ADMIN_CONFIG_ROW');
 		}
-		cot_db_freeresult($sql);
+		$sql->closeCursor();
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
 		/* === Hook  === */
 		foreach (cot_getextplugins('admin.config.default.tags') as $pl)

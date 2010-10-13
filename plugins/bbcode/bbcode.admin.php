@@ -88,7 +88,7 @@ elseif ($a == 'clearcache')
 	cot_cache_clearhtml() ? cot_message('adm_bbcodes_clearcache_done') : cot_message('Error');
 }
 
-$totalitems = cot_db_rowcount($db_bbcode);
+$totalitems = $cot_db->countRows($db_bbcode);
 
 // FIXME AJAX-based pagination doesn't work because of some strange PHP bug
 // Xtpl_block->text() returns 'str' instead of a long string which it has in $text
@@ -96,7 +96,7 @@ $totalitems = cot_db_rowcount($db_bbcode);
 $pagenav = cot_pagenav('admin', 'm=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd');
 
 $bbc_modes = array('str', 'pcre', 'callback');
-$res = cot_db_query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
+$res = $cot_db->query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
 
 
 
@@ -104,7 +104,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.banlist.loop');
 /* ===== */
-while ($row = cot_db_fetchassoc($res))
+while ($row = $res->fetch())
 {
 
 	$bb_t->assign(array(
@@ -132,7 +132,7 @@ while ($row = cot_db_fetchassoc($res))
 	$bb_t->parse('MAIN.ADMIN_BBCODE_ROW');
 	$ii++;
 }
-cot_db_freeresult($res);
+$res->closeCursor();
 
 $bb_t->assign(array(
 	'ADMIN_BBCODE_PAGINATION_PREV' => $pagenav['prev'],

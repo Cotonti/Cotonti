@@ -52,7 +52,7 @@ function cot_build_pfs($id, $c1, $c2, $title)
  */
 function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispublic='', $isgallery='')
 {
-	global $db_pfs_folders, $cfg, $sys, $L, $err_msg;
+	global $cot_db, $db_pfs_folders, $cfg, $sys, $L, $err_msg;
 
 	if ($title==='') 		$title = cot_import('ntitle','P','TXT');
 	if ($desc==='') 		$desc = cot_import('ndesc','P','TXT');
@@ -71,8 +71,8 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 	{
 		$newpath = cot_pfs_folderpath($parentid, TRUE).$newpath;
 
-		$sql = cot_db_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid=".(int)$ownerid." AND pff_id=".(int)$parentid);
-		cot_db_numrows($sql)>0 or cot_die();
+		$sql = $cot_db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid=".(int)$ownerid." AND pff_id=".(int)$parentid);
+		$sql->rowCount()>0 or cot_die();
 	}
 	if ($cfg['pfsuserfolder'])
 	{
@@ -80,7 +80,7 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 		cot_pfs_mkdir($cfg['pfs_thumbpath'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
 	}
 
-	$sql = cot_db_query("INSERT INTO $db_pfs_folders
+	$sql = $cot_db->query("INSERT INTO $db_pfs_folders
 		(pff_parentid,
 		pff_userid,
 		pff_title,
@@ -94,16 +94,16 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 		VALUES
 		(".(int)$parentid.",
 		".(int)$ownerid.",
-		'".cot_db_prep($title)."',
+		'".$cot_db->prep($title)."',
 		".(int)$sys['now'].",
 		".(int)$sys['now'].",
-		'".cot_db_prep($desc)."',
-		'".cot_db_prep($newpath)."',
+		'".$cot_db->prep($desc)."',
+		'".$cot_db->prep($newpath)."',
 		".(int)$ispublic.",
 		".(int)$isgallery.",
 		0)"
 	);
-	return cot_db_insertid();
+	return $cot_db->lastInsertId();
 }
 
 /**
@@ -115,11 +115,11 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
  */
 function cot_pfs_deletefile($userid, $id)
 {
-	global $db_pfs, $cfg;
+	global $cot_db, $db_pfs, $cfg;
 
-	$sql = cot_db_query("SELECT pfs_id FROM $db_pfs WHERE pfs_userid=".(int)$userid." AND pfs_id=".(int)$id." LIMIT 1");
+	$sql = $cot_db->query("SELECT pfs_id FROM $db_pfs WHERE pfs_userid=".(int)$userid." AND pfs_id=".(int)$id." LIMIT 1");
 
-	if (cot_db_numrows($sql)>0)
+	if ($sql->rowCount()>0)
 	{
 		$fpath = cot_pfs_filepath($id);
 
@@ -136,7 +136,7 @@ function cot_pfs_deletefile($userid, $id)
 			return FALSE;
 		}
 
-		cot_db_query("DELETE FROM $db_pfs WHERE pfs_id=".(int)$id);
+		$cot_db->query("DELETE FROM $db_pfs WHERE pfs_id=".(int)$id);
 		return TRUE;
 	}
 	else
@@ -154,32 +154,32 @@ function cot_pfs_deletefile($userid, $id)
  */
 function cot_pfs_deletefolder($userid, $folderid)
 {
-	global $db_pfs_folders, $db_pfs, $cfg;
+	global $cot_db, $db_pfs_folders, $db_pfs, $cfg;
 
-	$sql = cot_db_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_userid=".(int)$userid." AND pff_id=".(int)$folderid." LIMIT 1");
-	if($row = cot_db_fetcharray($sql))
+	$sql = $cot_db->query("SELECT pff_path FROM $db_pfs_folders WHERE pff_userid=".(int)$userid." AND pff_id=".(int)$folderid." LIMIT 1");
+	if($row = $sql->fetch())
 	{
 		$fpath = $row['pff_path'];
 
 		// Remove files
-		$sql = cot_db_query("SELECT pfs_id FROM $db_pfs WHERE pfs_folderid IN (SELECT pff_id FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%')");
-		while($row = cot_db_fetcharray($sql))
+		$sql = $cot_db->query("SELECT pfs_id FROM $db_pfs WHERE pfs_folderid IN (SELECT pff_id FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%')");
+		while($row = $sql->fetch())
 		{
 			cot_pfs_deletefile($row['pfs_id']);
 		}
 
 		// Remove folders
-		$sql = cot_db_query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%' ORDER BY CHAR_LENGTH(pff_path) DESC");
-		while($row = cot_db_fetcharray($sql))
+		$sql = $cot_db->query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%' ORDER BY CHAR_LENGTH(pff_path) DESC");
+		while($row = $sql->fetch())
 		{
 			if($cfg['pfsuserfolder'])
 			{
 				@rmdir($cfg['pfs_path'].$row['pff_path']);
 				@rmdir($cfg['pfs_thumbpath'].$row['pff_path']);
 			}
-			cot_db_query("DELETE FROM $db_pfs_folders WHERE pff_id=".(int)$row['pff_id']);
+			$cot_db->query("DELETE FROM $db_pfs_folders WHERE pff_id=".(int)$row['pff_id']);
 		}
-		if(cot_db_numrows($sql)>0)
+		if($sql->rowCount()>0)
 		{
 			return TRUE;
 		}
@@ -203,15 +203,15 @@ function cot_pfs_deletefolder($userid, $folderid)
  */
 function cot_pfs_deleteall($userid)
 {
-	global $db_pfs_folders, $db_pfs, $cfg;
+	global $cot_db, $db_pfs_folders, $db_pfs, $cfg;
 
 	if (!$userid)
 	{
 		return 0;
 	}
-	$sql = cot_db_query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid'");
+	$sql = $cot_db->query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid'");
 
-	while($row = cot_db_fetcharray($sql))
+	while($row = $sql->fetch())
 	{
 		$pfs_file = $row['pfs_file'];
 		$f = $row['pfs_folderid'];
@@ -226,10 +226,10 @@ function cot_pfs_deleteall($userid)
 			}
 		}
 	}
-	$sql = cot_db_query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid'");
-	$num = $num + cot_db_affectedrows();
-	$sql = cot_db_query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
-	$num = $num + cot_db_affectedrows();
+	$sql = $cot_db->query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid'");
+	$num = $num + $cot_db->affectedRows;
+	$sql = $cot_db->query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
+	$num = $num + $cot_db->affectedRows;
 
 	if ($cfg['pfsuserfolder'] && $userid>0)
 	{
@@ -249,10 +249,10 @@ function cot_pfs_deleteall($userid)
  */
 function cot_pfs_filepath($id)
 {
-	global $db_pfs_folders, $db_pfs, $cfg;
+	global $cot_db, $db_pfs_folders, $db_pfs, $cfg;
 
-	$sql = cot_db_query("SELECT p.pfs_file AS file, f.pff_path AS path FROM $db_pfs AS p LEFT JOIN $db_pfs_folders AS f ON p.pfs_folderid=f.pff_id WHERE p.pfs_id=".(int)$id." LIMIT 1");
-	if($row = cot_db_fetcharray($sql))
+	$sql = $cot_db->query("SELECT p.pfs_file AS file, f.pff_path AS path FROM $db_pfs AS p LEFT JOIN $db_pfs_folders AS f ON p.pfs_folderid=f.pff_id WHERE p.pfs_id=".(int)$id." LIMIT 1");
+	if($row = $sql->fetch())
 	{
 		return ($cfg['pfsuserfolder'] && $row['path']!='') ? $row['path'].'/'.$row['file'] : $row['file'];
 	}
@@ -271,20 +271,20 @@ function cot_pfs_filepath($id)
  */
 function cot_pfs_folderpath($folderid, $fullpath='')
 {
-	global $db_pfs_folders, $cfg;
+	global $cot_db, $db_pfs_folders, $cfg;
 
 	if($fullpath==='') $fullpath = $cfg['pfsuserfolder'];
 
 	if($fullpath && $folderid>0)
 	{
-		$sql = cot_db_query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid);
-		if(cot_db_numrows($sql)==0)
+		$sql = $cot_db->query("SELECT pff_path FROM $db_pfs_folders WHERE pff_id=".(int)$folderid);
+		if($sql->rowCount()==0)
 		{
 			return FALSE;
 		}
 		else
 		{
-			return cot_db_result($sql, 0, 'pff_path').'/';
+			return $sql->fetchColumn().'/';
 		}
 	}
 	else
@@ -301,13 +301,13 @@ function cot_pfs_folderpath($folderid, $fullpath='')
  */
 function cot_pfs_limits($userid)
 {
-	global $db_groups, $db_groups_users;
+	global $cot_db, $db_groups, $db_groups_users;
 
 	$maxfile = 0;
 	$maxtotal = 0;
-	$sql = cot_db_query("SELECT MAX(grp_pfs_maxfile) AS maxfile, MAX(grp_pfs_maxtotal) AS maxtotal
+	$sql = $cot_db->query("SELECT MAX(grp_pfs_maxfile) AS maxfile, MAX(grp_pfs_maxtotal) AS maxtotal
 	FROM $db_groups	WHERE grp_id IN (SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=".(int)$userid.")");
-	if ($row = cot_db_fetcharray($sql))
+	if ($row = $sql->fetch())
 	{
 		$maxfile = min($row['maxfile'], cot_get_uploadmax());
 		$maxtotal = $row['maxtotal'];
@@ -414,7 +414,7 @@ function cot_pfs_thumbpath($userid)
 
 function cot_pfs_upload($userid, $folderid='')
 {
-	global $cfg, $sys, $cot_extensions, $gd_supported, $maxfile, $maxtotal, $db_pfs, $db_pfs_folders, $L, $err_msg;
+	global $cot_db, $cfg, $sys, $cot_extensions, $gd_supported, $maxfile, $maxtotal, $db_pfs, $db_pfs_folders, $L, $err_msg;
 
 	if($folderid==='') $folderid = cot_import('folderid','P','INT');
 	$ndesc = cot_import('ndesc','P','ARR');
@@ -458,7 +458,7 @@ function cot_pfs_upload($userid, $folderid='')
 			}
 
 			$u_newname = cot_safename($u_name, true);
-			$u_sqlname = cot_db_prep($u_newname);
+			$u_sqlname = $cot_db->prep($u_newname);
 
 			if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
 			{
@@ -507,7 +507,7 @@ function cot_pfs_upload($userid, $folderid='')
 							}
 							/* ===== */
 
-							$sql = cot_db_query("INSERT INTO $db_pfs
+							$sql = $cot_db->query("INSERT INTO $db_pfs
 							(pfs_userid,
 							pfs_date,
 							pfs_file,
@@ -519,14 +519,14 @@ function cot_pfs_upload($userid, $folderid='')
 							VALUES
 							(".(int)$userid.",
 							".(int)$sys['now_offset'].",
-							'".cot_db_prep($u_sqlname)."',
-							'".cot_db_prep($f_extension)."',
+							'".$cot_db->prep($u_sqlname)."',
+							'".$cot_db->prep($f_extension)."',
 							".(int)$folderid.",
-							'".cot_db_prep($desc)."',
+							'".$cot_db->prep($desc)."',
 							".(int)$u_size.",
 							0) ");
 
-							$sql = cot_db_query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."'
+							$sql = $cot_db->query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."'
 								WHERE pff_id='$folderid'");
 							$disp_errors .= $L['Yes'];
 							$pfs_totalsize += $u_size;
@@ -618,9 +618,9 @@ function cot_safename($basename, $underscore = true, $postfix = '')
  */
 function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 {
-	global $db_pfs_folders, $R;
+	global $cot_db, $db_pfs_folders, $R;
 
-	$sql = cot_db_query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
+	$sql = $cot_db->query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
 
 	$check = (empty($check) || $check == '/') ? '0' : $check;
 
@@ -631,7 +631,7 @@ function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 		$result_arr[0] = '/';
 	}
 	
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		if ($skip != $row['pff_id'])
 		{
@@ -652,10 +652,10 @@ function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
  */
 function cot_userinfo($id)
 {
-	global $db_users;
+	global $cot_db, $db_users;
 
-	$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id='$id'");
-	if ($res = cot_db_fetcharray($sql))
+	$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id='$id'");
+	if ($res = $sql->fetch())
 	{
 		return ($res);
 	}

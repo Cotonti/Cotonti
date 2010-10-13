@@ -123,8 +123,8 @@ switch($a)
 
 			$isinstalled = $is_module ? cot_module_installed($code) : cot_plugin_installed($code);
 
-			$sql = cot_db_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code'");
-			$totalconfig = cot_db_result($sql);
+			$sql = $cot_db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code'");
+			$totalconfig = $sql->fetchColumn();
 
 			$info['Auth_members'] = cot_auth_getvalue($info['Auth_members']);
 			$info['Lock_members'] = cot_auth_getvalue($info['Lock_members']);
@@ -153,10 +153,10 @@ switch($a)
 					}
 					else
 					{
-						$sql = cot_db_query("SELECT pl_active, pl_id FROM $db_plugins
+						$sql = $cot_db->query("SELECT pl_active, pl_id FROM $db_plugins
 							WHERE pl_code='$code' AND pl_part='".$info_part."' LIMIT 1");
 
-						if($row = cot_db_fetcharray($sql))
+						if($row = $sql->fetch())
 						{
 							$info_file['Status'] = $row['pl_active'];
 						}
@@ -365,13 +365,13 @@ switch($a)
 	default:
 		foreach (array('module', 'plug') as $type)
 		{
-			$sql = cot_db_query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
+			$sql = $cot_db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
 			WHERE config_owner='$type' GROUP BY config_cat");
-			while ($row = cot_db_fetchrow($sql))
+			while ($row = $sql->fetch(PDO::FETCH_NUM))
 			{
 				$cfgentries[$row['config_cat']] = $row[0];
 			}
-			cot_db_freeresult($sql);
+			$sql->closeCursor();
 
 			$dir = $type == 'module' ? $cfg['modules_dir'] : $cfg['plugins_dir'];
 			$extensions = array();
@@ -406,22 +406,22 @@ switch($a)
 			if ($type == 'plug')
 			{
 				$standalone = array();
-				$sql3 = cot_db_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
-				while ($row3 = cot_db_fetcharray($sql3))
+				$sql3 = $cot_db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
+				while ($row3 = $sql3->fetch())
 				{
 					$standalone[$row3['pl_code']] = TRUE;
 				}
-				cot_db_freeresult($sql3);
+				$sql3->closeCursor();
 			}
 
 			$tools = array();
 			$tool_hook = $type == 'plug' ? 'tools' : 'admin';
-			$sql3 = cot_db_query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook'");
-			while ($row3 = cot_db_fetcharray($sql3))
+			$sql3 = $cot_db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook'");
+			while ($row3 = $sql3->fetch())
 			{
 				$tools[$row3['pl_code']] = TRUE;
 			}
-			cot_db_freeresult($sql3);
+			$sql3->closeCursor();
 			/* === Hook - Part1 : Set === */
 			$extp = cot_getextplugins("admin.extensions.$type.list.loop");
 			/* ===== */
@@ -443,10 +443,10 @@ switch($a)
 					}
 					else
 					{
-						$sql1 = cot_db_query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
-						$sql2 = cot_db_query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
-						$totalactive = cot_db_result($sql1, 0, "SUM(pl_active)");
-						$totalinstalled = cot_db_result($sql2, 0, "COUNT(*)");
+						$sql1 = $cot_db->query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
+						$sql2 = $cot_db->query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
+						$totalactive = $sql1->fetchColumn();
+						$totalinstalled = $sql2->fetchColumn();
 						$cnt_parts += $totalinstalled;
 
 						if ($totalinstalled == 0)
@@ -528,14 +528,14 @@ switch($a)
 
 		if($o == 'code')
 		{
-			$sql = cot_db_query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC");
+			$sql = $cot_db->query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC");
 		}
 		else
 		{
-			$sql = cot_db_query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
+			$sql = $cot_db->query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
 		}
 
-		while($row = cot_db_fetcharray($sql))
+		while($row = $sql->fetch())
 		{
 			$t->assign(array(
 				'ADMIN_EXTENSIONS_HOOK' => $row['pl_hook'],
@@ -547,7 +547,7 @@ switch($a)
 		}
 
 		$t->assign(array(
-			'ADMIN_EXTENSIONS_CNT_HOOK' => cot_db_numrows($sql)
+			'ADMIN_EXTENSIONS_CNT_HOOK' => $sql->rowCount()
 		));
 		$t->parse('MAIN.DEFAULT');
 	break;
