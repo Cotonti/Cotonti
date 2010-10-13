@@ -76,8 +76,8 @@ if ($a == 'update')
 	}
 	$rpagedelete = cot_import('rpagedelete', 'P', 'BOL');
 
-	if (empty($rpage['cat'])) cot_error('pag_catmissing', 'rpagecat');
-	if (mb_strlen($rpage['title']) < 2) cot_error('pag_titletooshort', 'rpagetitle');
+	if (empty($rpage['cat'])) cot_error('page_catmissing', 'rpagecat');
+	if (mb_strlen($rpage['title']) < 2) cot_error('page_titletooshort', 'rpagetitle');
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.edit.update.error') as $pl)
@@ -202,7 +202,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 
 cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);
 
 $title_params = array(
-	'TITLE' => $L['paged_title'],
+	'TITLE' => $L['page_edittitle'],
 	'CATEGORY' => $cot_cat[$c]['title']
 );
 $out['subtitle'] = cot_title('title_page', $title_params);
@@ -223,8 +223,8 @@ $mskin = cot_skinfile(array('page', 'edit', $cot_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 $pageedit_array = array(
-	"PAGEEDIT_PAGETITLE" => $L['paged_title'],
-	"PAGEEDIT_SUBTITLE" => $L['paged_subtitle'],
+	"PAGEEDIT_PAGETITLE" => $L['page_edittitle'],
+	"PAGEEDIT_SUBTITLE" => $L['page_editsubtitle'],
 	"PAGEEDIT_FORM_SEND" => cot_url('page', "m=edit&a=update&id=".$pag['page_id']),
 	"PAGEEDIT_FORM_ID" => $pag['page_id'],
 	"PAGEEDIT_FORM_STATE" => $pag['page_state'],

@@ -19,9 +19,9 @@
 			</li>
 			<li>
 <!-- IF {PHP.lincif_page} -->
-				<a href="{ADMIN_PAGE_URL_ADD}">{PHP.L.addnewentry}</a>
+				<a href="{ADMIN_PAGE_URL_ADD}">{PHP.L.page_addtitle}</a>
 <!-- ELSE -->
-				{PHP.L.addnewentry}
+				{PHP.L.page_addtitle}
 <!-- ENDIF -->
 			</li>
 			<li>

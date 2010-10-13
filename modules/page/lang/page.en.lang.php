@@ -12,10 +12,32 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
+ * Module Config
+ */
+
+$L['cfg_allowphp_pages'] = array('Allow the PHP page type', 'Execution of PHP code in pages, use with caution!');
+$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');
+$L['cfg_count_admin'] = array('Count Administrators\' hits', '');
+$L['cfg_maxrowsperpage'] = array('Max. lines in lists', ' ');
+$L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');
+
+/**
+ * Extrafields Subsection
+ */
+
+$L['adm_help_pages_extrafield'] = '<p><em>Base HTML</em> is set automaticaly if you leave it blank</p>
+<p class="margintop10"><b>New tags in tpl files:</b></p>
+<ul class="follow">
+<li>page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}</li>
+<li>page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}</li>
+<li>page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}</li>
+<li>list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}</li>
+</ul>';
+
+/**
  * Admin Page Section
  */
 
-$L['addnewentry'] = 'Add a new entry';
 $L['adm_queue_deleted'] = 'Page was deleted in to trash can';
 $L['adm_valqueue'] = 'Waiting for validation';
 $L['adm_validated'] = 'Already validated';
@@ -31,53 +53,32 @@ $L['adm_filecount'] = 'File hit count';
 $L['adm_filesize'] = 'File size';
 
 /**
- * Page Section
- * Extrafields Subsection
+ * Page add and edit
  */
 
-$L['adm_help_pages_extrafield'] = '<b>Base HTML</b> set automaticaly if you leave it blank<br /><br />
-<b>New tags in tpl files:</b><br /><br />
-page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}<br /><br />
-page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}<br /><br />
-page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}<br /><br />
-list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}<br />';
+$L['page_addtitle'] = 'Submit new page';
+$L['page_addsubtitle'] = 'Fill out all required fields and hit "Sumbit" to continue';
+$L['page_edittitle'] = 'Page properties';
+$L['page_editsubtitle'] = 'Edit all required fields and hit "Sumbit" to continue';
 
-/**
- * Config Section
- * Page Subsection
- */
+$L['page_catmissing'] = 'The category code is missing';
+$L['page_notavailable'] = 'This page will be published in ';
+$L['page_titletooshort'] = 'The title is too short or missing';
+$L['page_validation'] = 'Awaiting validation';
+$L['page_validation_desc'] = 'Your pages which have not been validated by administrator yet';
 
-$L['cfg_allowphp_pages'] = array('Allow the PHP page type', 'Execution of PHP code in pages, use with caution!');
-$L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster have admin rights for page category');	// New in 0.0.2
-$L['cfg_count_admin'] = array('Count Administrators\' hits', '');	// New in 0.0.1
-$L['cfg_maxrowsperpage'] = array('Max. lines in lists', ' ');
-$L['cfg_maxlistsperpage'] = array('Max. lists per page', ' '); // New in 0.0.6
+$L['page_file'] = 'File download';
+$L['page_filehint'] = '(Set &quot;Yes&quot; to enable the download module at bottom of the page, and fill up the two fields below)';
+$L['page_urlhint'] = '(If File download enabled)';
+$L['page_filesize'] = 'Filesize, kB';
+$L['page_filesizehint'] = '(If File download enabled)';
+$L['page_filehitcount'] = 'File hit count';
+$L['page_filehitcounthint'] = '(If File download enabled)';
 
-/**
- * page.add.tpl
- */
+$L['page_formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section. Check all fields carefully. If you need to change something, you will be able to do that later. But submitting changes puts a page into validation queue again.';
 
-$L['pagadd_subtitle'] = 'Submit a new page';
-$L['pagadd_title'] = 'New page submission form';
-
-/**
- * page.edit.tpl
- */
-
-$L['paged_subtitle'] = 'Update values for this page';
-$L['paged_title'] = 'Page properties';
-
-/**
- * page.tpl
- */
-
-$L['pag_authortooshort'] = 'The author name is too short or missing';
-$L['pag_catmissing'] = 'The category code is missing';
-$L['pag_desctooshort'] = 'The description is too short or missing';
-$L['pag_notavailable'] = 'This page will be published in '; // New in N-0.0.2
-$L['pag_titletooshort'] = 'The title is too short or missing';
-$L['pag_validation'] = 'Awaiting validation';
-$L['pag_validation_desc'] = 'Your pages which have not been validated by administrator yet';
+$L['page_pageid'] = 'Page ID';
+$L['page_deletepage'] = 'Delete this page';
 
 /**
  * Moved from theme.lang
@@ -85,17 +86,5 @@ $L['pag_validation_desc'] = 'Your pages which have not been validated by adminis
 
 $L['pag_linesperpage'] = 'Lines per page';
 $L['pag_linesinthissection'] = 'Lines in this section';
-
-$L['pag_file'] = 'File download?';
-$L['pag_filehint'] = '(Set &quot;Yes&quot; to enable the download module at bottom of the page, and fill up the 2 fields below)';
-$L['pag_urlhint'] = '(If File download = &quot;Yes&quot;)';
-$L['pag_filesize'] = 'Filesize (KB)';
-$L['pag_filesizehint'] = '(If File download = &quot;Yes&quot;)';
-$L['pag_filehitcount'] = 'File hit count';
-$L['pag_filehitcounthint'] = '(If File download = &quot;Yes&quot;)';
-
-$L['pag_formhint'] = 'Once your submission is done, the page will be placed in the validation queue and will be hidden, awaiting confirmation from a site administrator or global moderator before being displayed in the right section. Check all fields carefully. If you need to change something, you will be able to do that later. But submitting changes puts a page into validation queue again.';
-
-$L['pag_deletethispage'] = 'Delete this page';
 
 ?>
