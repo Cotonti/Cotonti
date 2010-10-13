@@ -10,7 +10,7 @@
 	<ul class="follow">
 		<li><a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration}</a></li>
 	</ul>
-	<h3>{PHP.L.editdeleteentries}:</h3>
+	<h3>{PHP.L.poll}:</h3>
 	<select name="jumpbox" size="1" onchange="redirect(this)" class="marginbottom10 margintop10">
 			<!-- BEGIN: POLLS_ROW_FILTER -->
 			<option value="{ADMIN_POLLS_ROW_FILTER_VALUE}"{ADMIN_POLLS_ROW_FILTER_CHECKED}>{ADMIN_POLLS_ROW_FILTER_NAME}</option>

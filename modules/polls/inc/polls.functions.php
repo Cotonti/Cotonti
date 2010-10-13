@@ -29,7 +29,7 @@ $GLOBALS['db_polls_voters']  = (isset($GLOBALS['db_polls_voters'])) ? $GLOBALS['
  * @param string $type Poll type
  * @return bool
  */
-function cot_poll_edit_form($id, $t = '', $block = '', $type = '')
+function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 {
 	global $cfg, $db_polls, $db_polls_options, $cot_error, $poll_id, $R, $L;
 	if (gettype($t) != 'object')
@@ -38,7 +38,6 @@ function cot_poll_edit_form($id, $t = '', $block = '', $type = '')
 		$block = "EDIT_POLL_FORM";
 		$poll_full_template = true;
 	}
-	$block = (!empty($block)) ? $block."." : "";
 	$counter = 0;
 	if ($cot_error && !empty($poll_id))
 	{
@@ -69,7 +68,7 @@ function cot_poll_edit_form($id, $t = '', $block = '', $type = '')
 			{
 				$counter++;
 				$t->assign("EDIT_POLL_OPTION_TEXT", cot_inputbox('text', 'poll_option[id'.$row1['po_id'].']', htmlspecialchars($row1['po_text']), 'size="40" maxlength="128"'));
-				$t->parse($block."OPTIONS");
+				$t->parse($block.".OPTIONS");
 			}
 		}
 	}
@@ -78,14 +77,14 @@ function cot_poll_edit_form($id, $t = '', $block = '', $type = '')
 	{
 		$counter++;
 		$t->assign("EDIT_POLL_OPTION_TEXT", cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
-		$t->parse($block."OPTIONS");
+		$t->parse($block.".OPTIONS");
 	}
 
 	if ($counter < $cfg['max_options_polls'])
 	{
 		$counter++;
 		$t->assign("EDIT_POLL_OPTION_TEXT", cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
-		$t->parse($block."OPTIONS");
+		$t->parse($block.".OPTIONS");
 	}
 
 	if ((int)$id > 0)
@@ -95,7 +94,7 @@ function cot_poll_edit_form($id, $t = '', $block = '', $type = '')
 			"EDIT_POLL_RESET" => cot_checkbox(0, 'poll_reset' , $L['Reset']),
 			"EDIT_POLL_DELETE" => cot_checkbox(0, 'poll_delete' , $L['Delete']),
 		));
-		$t->parse($block."EDIT");
+		$t->parse($block.".EDIT");
 	}
 
 	$t->assign(array(

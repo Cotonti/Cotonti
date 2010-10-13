@@ -219,10 +219,10 @@ foreach($variants as $val)
 		'ADMIN_POLLS_ROW_FILTER_CHECKED' => $checked,
 		'ADMIN_POLLS_ROW_FILTER_NAME' => $val[0]
 	));
-	$t->parse('POLLS.POLLS_ROW_FILTER');
+	$t->parse('MAIN.POLLS_ROW_FILTER');
 }
 
-cot_poll_edit_form($poll_id, $t, 'POLLS');
+cot_poll_edit_form($poll_id, $t, 'MAIN');
 
 $t->assign(array(
 	'ADMIN_POLLS_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=polls'),
