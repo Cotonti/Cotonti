@@ -27,7 +27,7 @@ $R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}"{$
 $R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_minieditor'] =  '<textarea class="minieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 
-$R['input_date'] =  '{$day} {$month} {$year} {$hour} : {$minute}';
+$R['input_date'] =  '{$day} {$month} {$year} {$hour}: {$minute}';
 $R['input_date_short'] =  '{$day} {$month} {$year}';
 
 /**

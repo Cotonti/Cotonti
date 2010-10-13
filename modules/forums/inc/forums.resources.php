@@ -35,7 +35,7 @@ $R['frm_icon_topic_t'] = '<img class="icon" src="images/icons/default/{$icon}.pn
  * Post Management
  */
 $R['frm_code_adminoptions'] = '<form id="movetopic" action="{$move_url}" method="post">'
-	.$L['Topicoptions'].' : <a href="{$bump_url}">'.$L['Bump']
+	.$L['Topicoptions'].': <a href="{$bump_url}">'.$L['Bump']
 	.'</a> &nbsp; <a href="{$lock_url}">'.$L['Lock'].'</a> &nbsp; <a href="{$sticky_url}">'
 	.$L['Makesticky'].'</a> &nbsp; <a href="{$announce_url}">'.$L['Announcement']
 	.'</a> &nbsp; <a href="{$private_url}">'.$L['Private'].' (#)</a> &nbsp; <a href="{$clear_url}">'

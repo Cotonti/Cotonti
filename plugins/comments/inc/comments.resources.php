@@ -11,7 +11,7 @@
 
 $R['comments_code_admin'] = $L['Ip'].':{$ipsearch} &nbsp;'.$L['Delete'].':[<a href="{$delete_url}">x</a>]';
 $R['comments_code_edit'] = '<a href="{$edit_url}">'.$L['Edit'].'</a> {$allowed_time}';
-$R['comments_code_pages_info'] = $L['Total'].' : {$totalitems}, '.$L['comm_on_page'].': {$onpage}';
+$R['comments_code_pages_info'] = $L['Total'].': {$totalitems}, '.$L['comm_on_page'].': {$onpage}';
 $R['comments_link'] = '<a href="{$url}" class="comments_link" alt="'.$L['Comments'].'">'.$R['icon_comments']
 	.' ({$count})</a>';
 
