@@ -148,11 +148,11 @@ function cot_comments_display($area, $code, $cat = '')
 
 			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
 					'ipsearch' => cot_build_ipsearch($row['com_authorip']),
-					'delete_url' => cot_url('plug', 'e=comments&a=delete&id='.$row['com_id'].'&'.cot_xg())
+					'delete_url' => cot_url('plug', 'e=comments&a=delete&cat='.$cat.'&id='.$row['com_id'].'&'.cot_xg())
 				)) : '';
 			$com_authorlink = cot_build_user($row['com_authorid'], $com_author);
 
-			$com_text = cot_parse($row['com_text'], $cfg['plugins']['comments']['markup']);
+			$com_text = cot_parse($row['com_text'], $cfg['plugin']['comments']['markup']);
 
 			$time_limit = ($sys['now_offset'] < ($row['com_date'] + $cfg['plugin']['comedit']['time'] * 60)) ? TRUE
 				: FALSE;
@@ -162,7 +162,7 @@ function cot_comments_display($area, $code, $cat = '')
 			$allowed_time = ($usr['isowner_com'] && !$usr['isadmin']) ? ' - '
 				. cot_build_timegap($sys['now_offset'] + $com_gup, $sys['now_offset']) . $L['plu_comgup'] : '';
 			$com_edit = ($auth_admin || $usr['isowner_com']) ? cot_rc('comments_code_edit', array(
-					'edit_url' => cot_url('plug', 'e=comedit&m=edit&amp;pid=' . $code . '&amp;cid=' . $row['com_id']),
+					'edit_url' => cot_url('plug', 'e=comments&m=edit&cat='.$cat.'&id='.$row['com_id']),
 					'allowed_time' => $allowed_time
 				)) : '';
 			
