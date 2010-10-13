@@ -21,20 +21,20 @@ cot_require('forums');
 
 $plugin_title = $L['plu_title'];
 
-$totalsections = cot_db_rowcount($db_forum_sections);
-$totaltopics = cot_db_rowcount($db_forum_topics);
-$totalposts = cot_db_rowcount($db_forum_posts);
+$totalsections = $cot_db->countRows($db_forum_sections);
+$totaltopics = $cot_db->countRows($db_forum_topics);
+$totalposts = $cot_db->countRows($db_forum_posts);
 
-$sql = cot_db_query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
-$totalviews = cot_db_result($sql, 0, "SUM(fs_viewcount)");
+$sql = $cot_db->query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
+$totalviews = $sql->fetchColumn();
 
-$sql = cot_db_query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
-$totaltopics += cot_db_result($sql, 0, "SUM(fs_topiccount_pruned)");
+$sql = $cot_db->query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
+$totaltopics += $sql->fetchColumn();
 
-$sql = cot_db_query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
-$totalposts += cot_db_result($sql, 0, "SUM(fs_postcount_pruned)");
+$sql = $cot_db->query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
+$totalposts += $sql->fetchColumn();
 
-$sql = cot_db_query("SELECT t.ft_id, t.ft_title, t.ft_postcount, t.ft_sticky, t.ft_state,
+$sql = $cot_db->query("SELECT t.ft_id, t.ft_title, t.ft_postcount, t.ft_sticky, t.ft_state,
 s.fs_id, s.fs_title, s.fs_category
 FROM $db_forum_topics t
 LEFT JOIN $db_forum_sections s ON t.ft_sectionid=s.fs_id
@@ -43,7 +43,7 @@ ORDER BY ft_postcount DESC LIMIT 10");
 
 $ii = 0;
 
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	if (cot_auth('forums', $row['fs_id'], 'R'))
 	{
@@ -72,7 +72,7 @@ while ($row = cot_db_fetcharray($sql))
 	}
 }
 
-$sql = cot_db_query("SELECT t.ft_id, t.ft_title, t.ft_viewcount, t.ft_sticky, t.ft_state,
+$sql = $cot_db->query("SELECT t.ft_id, t.ft_title, t.ft_viewcount, t.ft_sticky, t.ft_state,
 s.fs_id, s.fs_title, s.fs_category
 FROM $db_forum_topics AS t
 LEFT JOIN  $db_forum_sections AS s ON t.ft_sectionid=s.fs_id
@@ -81,7 +81,7 @@ ORDER BY ft_viewcount DESC LIMIT 10");
 
 $ii = 0;
 
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	if (cot_auth('forums', $row['fs_id'], 'R'))
 	{
@@ -113,12 +113,12 @@ while ($row = cot_db_fetcharray($sql))
 
 $ii = 0;
 $tmpstats = '';
-$sql = cot_db_query("SELECT user_id, user_name, user_postcount
+$sql = $cot_db->query("SELECT user_id, user_name, user_postcount
 FROM $db_users
 WHERE 1 ORDER by user_postcount DESC
 LIMIT 10");
 
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	$ii++;
 	$t->assign(array(

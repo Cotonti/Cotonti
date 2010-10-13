@@ -87,8 +87,8 @@ if ($n == 'options')
 		$rtplmode = cot_import('rstructuretplmode', 'P', 'INT');
 		$rstructure['tpl'] = ($rtplmode == 1) ? '' : (($rtplmode == 3) ? 'same_as_parent' : cot_import('rtplforced', 'P', 'ALP'));
 
-		$sqql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
-		$roww = cot_db_fetcharray($sqql);
+		$sqql = $cot_db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
+		$roww = $sqql->fetch();
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.options.update') as $pl)
@@ -99,15 +99,15 @@ if ($n == 'options')
 
 		if ($roww['structure_code'] != $rstructure['code'])
 		{
-			$sql = cot_db_update($db_structure, array("structure_code" => $rstructure['code']), "structure_code='".cot_db_prep($roww['structure_code'])."'");
-			$sql = cot_db_update($db_auth, array("auth_option" => $rstructure['code']), "auth_code='page' AND auth_option='".cot_db_prep($roww['structure_code'])."'");
-			$sql = cot_db_update($db_pages, array("page_cat" => $rstructure['code']), "page_cat='".cot_db_prep($roww['structure_code'])."'");
+			$sql = $cot_db->update($db_structure, array("structure_code" => $rstructure['code']), "structure_code='".$cot_db->prep($roww['structure_code'])."'");
+			$sql = $cot_db->update($db_auth, array("auth_option" => $rstructure['code']), "auth_code='page' AND auth_option='".$cot_db->prep($roww['structure_code'])."'");
+			$sql = $cot_db->update($db_pages, array("page_cat" => $rstructure['code']), "page_cat='".$cot_db->prep($roww['structure_code'])."'");
 
 			cot_auth_reorder();
 			cot_auth_clear('all');
 		}
 
-		cot_db_update($db_structure, $rstructure, "structure_id='".$id."'", "structure_");
+		$cot_db->update($db_structure, $rstructure, "structure_id='".$id."'", "structure_");
 
 		if ($cot_cache)
 		{
@@ -126,8 +126,8 @@ if ($n == 'options')
 		($cot_cache && $cfg['cache_page']) && $cot_cache->page->clear('page');
 	}
 
-	$sql = cot_db_query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
-	cot_die(cot_db_numrows($sql) == 0);
+	$sql = $cot_db->query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
+	cot_die($sql->rowCount() == 0);
 
 	$handle = opendir('./themes/'.$cfg['defaultskin'].'/');
 	$allskinfiles = array();
@@ -143,7 +143,7 @@ if ($n == 'options')
 
 	$allskinfiles = implode(',', $allskinfiles);
 
-	$row = cot_db_fetcharray($sql);
+	$row = $sql->fetch();
 
 	$raw = explode('.', $row['structure_order']);
 	$sort = $raw[0];
@@ -251,8 +251,8 @@ else
 				$rstructure[$row['field_name']] = cot_import_extrafields($rstructurearray[$row['field_name']][$i], $row, 'D');
 			}
 
-			$sqql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
-			$roww = cot_db_fetcharray($sqql);
+			$sqql = $cot_db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ");
+			$roww = $sqql->fetch();
 
 			/* === Hook === */
 			foreach (cot_getextplugins('admin.structure.update') as $pl)
@@ -263,14 +263,14 @@ else
 
 			if ($roww['structure_code'] != $rstructure['code'])
 			{
-				$sql = cot_db_update($db_structure, array("structure_code" => $rstructure['code']), "structure_code='".cot_db_prep($roww['structure_code'])."'");
-				$sql = cot_db_update($db_auth, array("auth_option" => $rstructure['code']), "auth_code='page' AND auth_option='".cot_db_prep($roww['structure_code'])."'");
-				$sql = cot_db_update($db_pages, array("page_cat" => $rstructure['code']), "page_cat='".cot_db_prep($roww['structure_code'])."'");
+				$sql = $cot_db->update($db_structure, array("structure_code" => $rstructure['code']), "structure_code='".$cot_db->prep($roww['structure_code'])."'");
+				$sql = $cot_db->update($db_auth, array("auth_option" => $rstructure['code']), "auth_code='page' AND auth_option='".$cot_db->prep($roww['structure_code'])."'");
+				$sql = $cot_db->update($db_pages, array("page_cat" => $rstructure['code']), "page_cat='".$cot_db->prep($roww['structure_code'])."'");
 
 				cot_auth_reorder();
 				cot_auth_clear('all');
 			}
-			$sql1 = cot_db_update($db_structure, $rstructure, "structure_id='".$i."'", 'structure_');
+			$sql1 = $cot_db->update($db_structure, $rstructure, "structure_id='".$i."'", 'structure_');
 		}
 
 		cot_auth_clear('all');
@@ -310,13 +310,13 @@ else
 
 		if (!empty($rstructure['title']) && !empty($rstructure['code']) && !empty($rstructure['path']) && $rstructure['code'] != 'all')
 		{
-			$sql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_code='".cot_db_prep($rstructure['code'])."' LIMIT 1");
-			if (cot_db_numrows($sql) == 0)
+			$sql = $cot_db->query("SELECT structure_code FROM $db_structure WHERE structure_code='".$cot_db->prep($rstructure['code'])."' LIMIT 1");
+			if ($sql->rowCount() == 0)
 			{
 				$colname = '';
 				$colvalue = '';
 
-				$sql = cot_db_insert($db_structure, $rstructure, 'structure_');
+				$sql = $cot_db->insert($db_structure, $rstructure, 'structure_');
 				$auth_permit = array(COT_GROUP_DEFAULT => 7, COT_GROUP_GUESTS => 5, COT_GROUP_MEMBERS => 7);
 				$auth_lock = array(COT_GROUP_DEFAULT => 0, COT_GROUP_GUESTS => 250, COT_GROUP_MEMBERS => 128);
 				cot_auth_add_item('page', $rstructure['code'], $auth_permit, $auth_lock);
@@ -358,23 +358,23 @@ else
 		($cot_cache && $cfg['cache_page']) && $cot_cache->page->clear('page');
 	}
 
-	$sql = cot_db_query("SELECT DISTINCT(page_cat), COUNT(*) FROM $db_pages WHERE 1 GROUP BY page_cat");
+	$sql = $cot_db->query("SELECT DISTINCT(page_cat), COUNT(*) FROM $db_pages WHERE 1 GROUP BY page_cat");
 
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		$pagecount[$row['page_cat']] = $row['COUNT(*)'];
 	}
 
-	$totalitems = cot_db_rowcount($db_structure);
+	$totalitems = $cot_db->countRows($db_structure);
 	$pagenav = cot_pagenav('admin', 'm=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-	$sql = cot_db_query("SELECT * FROM $db_structure ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = $cot_db->query("SELECT * FROM $db_structure ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.structure.loop');
 	/* ===== */
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		$jj++;
 		$structure_id = $row['structure_id'];

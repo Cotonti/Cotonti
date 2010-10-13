@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
 	cot_require('tags', true);
-	$item_id = cot_db_result(cot_db_query("SELECT LAST_INSERT_ID()"), 0, 0);
+	$item_id = $cot_db->query("SELECT LAST_INSERT_ID()")->fetchColumn();
 	$rtags = cot_import('rtags', 'P', 'TXT');
 	$tags = cot_tag_parse($rtags);
 	$cnt = 0;

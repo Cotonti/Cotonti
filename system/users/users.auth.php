@@ -52,7 +52,7 @@ if ($a=='check')
 	 * Sets user selection criteria for authentication. Override this string in your plugin
 	 * hooking into users.auth.check.query to provide other authentication methods.
 	 */
-	$user_select_condition = "user_password='$rmdpass' AND $login_param='".cot_db_prep($rusername)."'";
+	$user_select_condition = "user_password='$rmdpass' AND $login_param='".$cot_db->prep($rusername)."'";
 
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('users.auth.check.query') as $pl)
@@ -61,9 +61,9 @@ if ($a=='check')
 	}
 	/* ===== */
 
-	$sql = cot_db_query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang FROM $db_users WHERE $user_select_condition");
+	$sql = $cot_db->query("SELECT user_id, user_name, user_maingrp, user_banexpire, user_theme, user_scheme, user_lang FROM $db_users WHERE $user_select_condition");
 
-	if ($row = cot_db_fetcharray($sql))
+	if ($row = $sql->fetch())
 	{
 		$rusername = $row['user_name'];
 		if ($row['user_maingrp']==-1)
@@ -82,7 +82,7 @@ if ($a=='check')
 		{
 			if ($sys['now'] > $row['user_banexpire'] && $row['user_banexpire']>0)
 			{
-				$sql = cot_db_query("UPDATE $db_users SET user_maingrp='4' WHERE user_id={$row['user_id']}");
+				$sql = $cot_db->query("UPDATE $db_users SET user_maingrp='4' WHERE user_id={$row['user_id']}");
 			}
 			else
 			{
@@ -99,7 +99,7 @@ if ($a=='check')
 		$token = cot_unique(16);
 		$sid = cot_unique(32);
 
-		cot_db_query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token', user_sid = '$sid' WHERE user_id={$row['user_id']}");
+		$cot_db->query("UPDATE $db_users SET user_lastip='{$usr['ip']}', user_lastlog = {$sys['now_offset']}, user_logcount = user_logcount + 1, user_token = '$token', user_sid = '$sid' WHERE user_id={$row['user_id']}");
 
 		$u = $ruserid.':'.$sid;
 
@@ -119,7 +119,7 @@ if ($a=='check')
 		}
 		/* ===== */
 
-		$sql = cot_db_query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
+		$sql = $cot_db->query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
 		cot_uriredir_apply($cfg['redirbkonlogin']);
 		cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
 	}

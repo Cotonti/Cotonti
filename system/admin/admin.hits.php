@@ -33,9 +33,9 @@ foreach (cot_getextplugins('admin.hits.first') as $pl)
 if($f == 'year' || $f == 'month')
 {
     $adminpath[] = array(cot_url('admin', 'm=hits&f='.$f.'&v='.$v), '('.$v.')');
-    $sql = cot_db_query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
+    $sql = $cot_db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
 
-    while($row = cot_db_fetcharray($sql))
+    while($row = $sql->fetch())
     {
         $y = mb_substr($row['stat_name'], 0, 4);
         $m = mb_substr($row['stat_name'], 5, 2);
@@ -74,11 +74,11 @@ if($f == 'year' || $f == 'month')
 }
 else
 {
-    $sql = cot_db_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
-    $sqlmax = cot_db_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
-	if (cot_db_numrows($sql) > 0 && cot_db_numrows($sqlmax) > 0)
+    $sql = $cot_db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
+    $sqlmax = $cot_db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
+	if ($sql->rowCount() > 0 && $sqlmax->rowCount() > 0)
 	{
-		$rowmax = cot_db_fetcharray($sqlmax);
+		$rowmax = $sqlmax->fetch();
 		$max_date = $rowmax['stat_name'];
 		$max_hits = $rowmax['stat_value'];
 
@@ -86,7 +86,7 @@ else
 		$hits_m = array();
 		$hits_w = array();
 
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$y = mb_substr($row['stat_name'], 0, 4);
 			$m = mb_substr($row['stat_name'], 5, 2);

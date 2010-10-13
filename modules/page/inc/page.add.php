@@ -78,8 +78,8 @@ if ($a == 'add')
 	{
 		if (!empty($rpage['alias']))
 		{
-			$sql = cot_db_query("SELECT page_id FROM $db_pages WHERE page_alias='".cot_db_prep($rpage['alias'])."'");
-			$rpage['alias'] = (cot_db_numrows($sql) > 0) ? $rpage['alias'].rand(1000, 9999) : $rpage['alias'];
+			$sql = $cot_db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$cot_db->prep($rpage['alias'])."'");
+			$rpage['alias'] = ($sql->rowCount() > 0) ? $rpage['alias'].rand(1000, 9999) : $rpage['alias'];
 		}
 
 		if ($usr['isadmin'] && $cfg['autovalidate'])
@@ -88,7 +88,7 @@ if ($a == 'add')
 			if ($rpublish == 'OK')
 			{
 				$rpage['state'] = 0;
-				cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".cot_db_prep($rpage['cat'])."' ");
+				$cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$cot_db->prep($rpage['cat'])."' ");
 			}
 			else
 			{
@@ -107,8 +107,8 @@ if ($a == 'add')
 		}
 		/* ===== */
 
-		$sql = cot_db_insert($db_pages, $rpage, 'page_');
-		$id = cot_db_insertid();
+		$sql = $cot_db->insert($db_pages, $rpage, 'page_');
+		$id = $cot_db->lastInsertId();
 		$r_url = (!$rpage['state']) ? cot_url('page', "id=".$id, '', true) : cot_url('message', "msg=300", '', true);
 
 		/* === Hook === */

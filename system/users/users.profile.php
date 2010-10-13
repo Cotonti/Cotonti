@@ -29,9 +29,9 @@ foreach (cot_getextplugins('profile.first') as $pl)
 $id = cot_import('id','G','TXT');
 $a = cot_import('a','G','ALP');
 
-$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIMIT 1");
-cot_die(cot_db_numrows($sql)==0);
-$urr = cot_db_fetcharray($sql);
+$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIMIT 1");
+cot_die($sql->rowCount()==0);
+$urr = $sql->fetch();
 
 switch ($a)
 {
@@ -46,7 +46,7 @@ switch ($a)
 		{
 			unlink($filepath);
 		}
-		$sql = cot_db_update($db_users, array('user_avatar' => ''), "user_id='".$usr['id']."'");
+		$sql = $cot_db->update($db_users, array('user_avatar' => ''), "user_id='".$usr['id']."'");
 		cot_redirect(cot_url('users', "m=profile", '#avatar', true));
 		break;
 
@@ -61,7 +61,7 @@ switch ($a)
 		{
 			unlink($photopath);
 		}
-		$sql = cot_db_update($db_users, array('user_photo' => ''), "user_id='".$usr['id']."'");
+		$sql = $cot_db->update($db_users, array('user_photo' => ''), "user_id='".$usr['id']."'");
 		cot_redirect(cot_url('users', "m=profile", '#photo', true));
 		break;
 
@@ -77,7 +77,7 @@ switch ($a)
 			unlink($signaturepath);
 		}
 
-		$sql = cot_db_update($db_users, array('user_signature' => ''), "user_id='".$usr['id']."'");
+		$sql = $cot_db->update($db_users, array('user_signature' => ''), "user_id='".$usr['id']."'");
 		cot_redirect(cot_url('users', "m=profile", '#signature', true));
 		break;
 
@@ -90,7 +90,7 @@ switch ($a)
 		$filename = str_replace(array("'", ",", chr(0x00)), "", $filename);
 		if (file_exists($filename))
 		{
-			$sql = cot_db_update($db_users, array('user_avatar' => $filename), "user_id='".$usr['id']."'");
+			$sql = $cot_db->update($db_users, array('user_avatar' => $filename), "user_id='".$usr['id']."'");
 		}
 		cot_redirect(cot_url('users', "m=profile", '#avatar', true));
 		break;
@@ -168,7 +168,7 @@ switch ($a)
 						$userpic[$key]['size'] = filesize($filepath);
 						if ($userpic[$key]['size'] <= $cfg[$key.'_maxsize'])
 						{
-							$sql = cot_db_update($db_users, array( "user_".$picfull[$key] => $filepath), "user_id='".$usr['id']."'");
+							$sql = $cot_db->update($db_users, array( "user_".$picfull[$key] => $filepath), "user_id='".$usr['id']."'");
 						}
 						else
 						{
@@ -226,15 +226,15 @@ switch ($a)
 
 			if (!$cot_error)
 			{
-				cot_db_update($db_users, array('user_password' => md5($rnewpass1)), "user_id='".$usr['id']."'");
+				$cot_db->update($db_users, array('user_password' => md5($rnewpass1)), "user_id='".$usr['id']."'");
 			}
 		}
 
 		if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['user_email_noprotection']) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
 		{
 
-			$sqltmp = cot_db_query("SELECT COUNT(*) FROM $db_users WHERE user_email='".cot_db_prep($ruseremail)."'");
-			$res = cot_db_result($sqltmp, 0, "COUNT(*)");
+			$sqltmp = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$cot_db->prep($ruseremail)."'");
+			$res = $sqltmp->fetchColumn();
 
 			if (!$cfg['user_email_noprotection'])
 			{
@@ -251,7 +251,7 @@ switch ($a)
 				if (!$cfg['user_email_noprotection'])
 				{
 					$validationkey = md5(microtime());
-					cot_db_update($db_users, array('user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
+					$cot_db->update($db_users, array('user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
 
 					$rsubject = $cfg['maintitle']." - ".$L['aut_mailnoticetitle'];
 					$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
@@ -269,12 +269,12 @@ switch ($a)
 						session_unset();
 						session_destroy();
 					}
-					cot_db_delete($db_online, "online_ip='{$usr['ip']}'");
+					$cot_db->delete($db_online, "online_ip='{$usr['ip']}'");
 					cot_redirect(cot_url('message', 'msg=102', '', true));
 				}
 				else
 				{
-					cot_db_update($db_users, array('user_email' => $ruseremail), "user_id='".$usr['id']."'");
+					$cot_db->update($db_users, array('user_email' => $ruseremail), "user_id='".$usr['id']."'");
 				}
 			}
 		}
@@ -285,7 +285,7 @@ switch ($a)
 			$ruser['birthdate'] = ($ruser['birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['birthdate'];
 			$ruser['birthdate'] = ($ruser['birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['birthdate']);
 			$ruser['auth'] ='';
-			cot_db_update($db_users, $ruser, "user_id='".$usr['id']."'", 'user_');
+			$cot_db->update($db_users, $ruser, "user_id='".$usr['id']."'", 'user_');
 
 			/* === Hook === */
 			foreach (cot_getextplugins('profile.update.done') as $pl)
@@ -306,8 +306,8 @@ switch ($a)
 
 }
 
-$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIMIT 1");
-$urr = cot_db_fetcharray($sql);
+$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIMIT 1");
+$urr = $sql->fetch();
 
 $title_params = array(
 	'PROFILE' => $L['Profile'],

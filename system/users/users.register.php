@@ -59,18 +59,18 @@ if ($a=='add')
 	}
 	$ruser['birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
-	$sql = cot_db_query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
+	$sql = $cot_db->query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
 
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		if (mb_strpos($row['banlist_email'], $ruser['email']) !== false)
 			$bannedreason = $row['banlist_reason'];
 	}
 
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_users WHERE user_name='".cot_db_prep($ruser['name'])."'");
-	$res1 = cot_db_result($sql,0,"COUNT(*)");
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_users WHERE user_email='".cot_db_prep($ruser['email'])."'");
-	$res2 = cot_db_result($sql,0,"COUNT(*)");
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE user_name='".$cot_db->prep($ruser['name'])."'");
+	$res1 = $sql->fetchColumn();
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$cot_db->prep($ruser['email'])."'");
+	$res2 = $sql->fetchColumn();
 
 	if (preg_match('/&#\d+;/', $ruser['name']) || preg_match('/[<>#\'"\/]/', $ruser['name'])) cot_error('aut_invalidloginchars', 'rusername');
 	if (!empty($bannedreason)) cot_error($L['aut_emailbanned'].$bannedreason);
@@ -84,7 +84,7 @@ if ($a=='add')
 
 	if (!$cot_error)
 	{
-		if (cot_db_rowcount($db_users)==0)
+		if ($cot_db->countRows($db_users)==0)
 		{
 			$ruser['maingrp'] = 5;
 		}
@@ -110,11 +110,11 @@ if ($a=='add')
 		$ruser['logcount'] = 0;
 		$ruser['lastip'] = $usr['ip'];
 
-		cot_db_insert($db_users, $ruser, 'user_');
+		$cot_db->insert($db_users, $ruser, 'user_');
 
-		$userid = cot_db_insertid();
+		$userid = $cot_db->lastInsertId();
 
-		cot_db_insert($db_groups_users, array('gru_userid' => (int)$userid, 'gru_groupid' => (int)$ruser['maingrp']));
+		$cot_db->insert($db_groups_users, array('gru_userid' => (int)$userid, 'gru_groupid' => (int)$ruser['maingrp']));
 	
 		/* === Hook for the plugins === */
 		foreach (cot_getextplugins('users.register.add.done') as $pl)
@@ -168,16 +168,16 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 	/* ===== */
 
 	cot_shield_protect();
-	$sql = cot_db_query("SELECT user_id, user_maingrp, user_sid FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') ");
+	$sql = $cot_db->query("SELECT user_id, user_maingrp, user_sid FROM $db_users WHERE user_lostpass='$v' AND (user_maingrp=2 OR user_maingrp='-1') ");
 
-	if ($row = cot_db_fetcharray($sql))
+	if ($row = $sql->fetch())
 	{
 		if ($row['user_maingrp'] == 2)
 		{
 			if ($y == 1)
 			{
-				$sql = cot_db_update($db_users, array('user_maingrp' => 4), "user_id='".$row['user_id']."' AND user_lostpass='$v'");
-				$sql = cot_db_update($db_groups_users, array('gru_groupid' => 4), "gru_groupid=2 AND gru_userid='".$row['user_id']."'");
+				$sql = $cot_db->update($db_users, array('user_maingrp' => 4), "user_id='".$row['user_id']."' AND user_lostpass='$v'");
+				$sql = $cot_db->update($db_groups_users, array('gru_groupid' => 4), "gru_groupid=2 AND gru_userid='".$row['user_id']."'");
 
 				/* === Hook for the plugins === */
 				foreach (cot_getextplugins('users.register.validate.done') as $pl)
@@ -191,9 +191,9 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 			}
 			elseif ($y == 0)
 			{
-				$sql = cot_db_delete($db_users, "user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
-				$sql = cot_db_delete($db_users, "user_id='".$row['user_id']."'");
-				$sql = cot_db_delete($db_groups_users, "gru_userid='".$row['user_id']."'");
+				$sql = $cot_db->delete($db_users, "user_maingrp='2' AND user_lastlog='0' AND user_id='".$row['user_id']."' ");
+				$sql = $cot_db->delete($db_users, "user_id='".$row['user_id']."'");
+				$sql = $cot_db->delete($db_groups_users, "gru_userid='".$row['user_id']."'");
 
 				/* === Hook for the plugins === */
 				foreach (cot_getextplugins('users.register.validate.rejected') as $pl)
@@ -207,7 +207,7 @@ elseif ($a == 'validate' && mb_strlen($v) == 32)
 		}
 		elseif ($row['user_maingrp'] == -1)
 		{
-			$sql = cot_db_update($db_users, array('user_maingrp' => $row['user_sid']), "user_id='".$row['user_id']."' AND user_lostpass='$v'");
+			$sql = $cot_db->update($db_users, array('user_maingrp' => $row['user_sid']), "user_id='".$row['user_id']."' AND user_lostpass='$v'");
 			cot_redirect(cot_url('message', 'msg=106', '', true));
 		}
 	}

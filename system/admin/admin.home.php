@@ -20,15 +20,15 @@ unset($revmatch);
 if ($cfg['svnrevision'] > $cfg['revision'])
 {
 	$cfg['revision'] = $cfg['svnrevision'];
-	cot_db_query("UPDATE ".$db_config." SET `config_value`= ".(int)$cfg['svnrevision']." WHERE `config_owner` = 'core' AND `config_cat` = 'version' AND `config_name` = 'revision' LIMIT 1");
+	$cot_db->query("UPDATE ".$db_config." SET `config_value`= ".(int)$cfg['svnrevision']." WHERE `config_owner` = 'core' AND `config_cat` = 'version' AND `config_name` = 'revision' LIMIT 1");
 }
 
 $t = new XTemplate(cot_skinfile('admin.home'));
 
 $adminpath[] = array(cot_url('admin', 'm=home'), $L['Home']);
 
-$pagesqueued = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
-$pagesqueued = cot_db_result($pagesqueued, 0, "COUNT(*)");
+$pagesqueued = $cot_db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
+$pagesqueued = $pagesqueued->fetchColumn();
 
 if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 {
@@ -79,8 +79,8 @@ if (!$cfg['disablehitstats'])
 {
 	$timeback_stats = 15;// 15 days
 
-	$sql = cot_db_query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_stats);
-	while ($row = cot_db_fetcharray($sql))
+	$sql = $cot_db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC LIMIT ".$timeback_stats);
+	while ($row = $sql->fetch())
 	{
 		$year = mb_substr($row['stat_name'], 0, 4);
 		$mons = mb_substr($row['stat_name'], 5, 2);
@@ -112,19 +112,19 @@ if (!$cfg['disableactivitystats'])
 {
 	$timeback = $sys['now_offset'] - (7 * 86400);// 7 days
 
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_users WHERE user_regdate>'$timeback'");
-	$newusers = cot_db_result($sql, 0, "COUNT(*)");
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE user_regdate>'$timeback'");
+	$newusers = $sql->fetchColumn();
 
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_date >'$timeback'");
-	$newpages = cot_db_result($sql, 0, "COUNT(*)");
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pages WHERE page_date >'$timeback'");
+	$newpages = $sql->fetchColumn();
 
 	cot_require('forums');
 
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
-	$newtopics = cot_db_result($sql, 0, "COUNT(*)");
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
+	$newtopics = $sql->fetchColumn();
 
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
-	$newposts = cot_db_result($sql, 0, "COUNT(*)");
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
+	$newposts = $sql->fetchColumn();
 
 	if (function_exists('cot_get_newcomments'))
 	{
@@ -134,8 +134,8 @@ if (!$cfg['disableactivitystats'])
 	if ($cfg['module']['pm'])
 	{
 	 cot_require('pm');
-		$sql = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
-		$newpms = cot_db_result($sql, 0, "COUNT(*)");
+		$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
+		$newpms = $sql->fetchColumn();
 	}
 
 	$t->assign(array(
@@ -156,13 +156,13 @@ if (!$cfg['disableactivitystats'])
 //Show db stats
 if (!$cfg['disabledbstats'])
 {
-	$sql = cot_db_query("SHOW TABLES");
+	$sql = $cot_db->query("SHOW TABLES");
 
-	while ($row = cot_db_fetchrow($sql))
+	while ($row = $sql->fetch(PDO::FETCH_NUM))
 	{
 		$table_name = $row[0];
-		$status = cot_db_query("SHOW TABLE STATUS LIKE '$table_name'");
-		$status1 = cot_db_fetcharray($status);
+		$status = $cot_db->query("SHOW TABLE STATUS LIKE '$table_name'");
+		$status1 = $status->fetch();
 		$tables[] = $status1;
 	}
 
@@ -175,11 +175,11 @@ if (!$cfg['disabledbstats'])
 		$total_data_length += $dat['Data_length'];
 	}
 
-	$sql = cot_db_query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code");
-	$totalplugins = cot_db_numrows($sql);
+	$sql = $cot_db->query("SELECT DISTINCT(pl_code) FROM $db_plugins WHERE 1 GROUP BY pl_code");
+	$totalplugins = $sql->rowCount();
 
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_plugins");
-	$totalhooks = cot_db_result($sql, 0, "COUNT(*)");
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_plugins");
+	$totalhooks = $sql->fetchColumn();
 
 	$t->assign(array(
 		'ADMIN_HOME_DB_TOTAL_ROWS' => $total_rows,

@@ -27,16 +27,16 @@ foreach (cot_getextplugins('page.first') as $pl)
 /* ===== */
 
 $where = (!empty($al)) ? "page_alias='".$al."'" : "page_id='".$id."'";
-$sql = cot_db_query("SELECT p.*, u.* FROM $db_pages AS p
+$sql = $cot_db->query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE $where LIMIT 1");
 	
-if(cot_db_numrows($sql) == 0)
+if($sql->rowCount() == 0)
 {
 	$env['status'] = '404 Not Found';
 	cot_redirect(cot_url('message', 'msg=404', '', true));
 }
-$pag = cot_db_fetcharray($sql);
+$pag = $sql->fetch();
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin'], $usr['auth_download']) = cot_auth('page', $pag['page_cat'], 'RWA1');
 cot_block($usr['auth_read']);
@@ -62,7 +62,7 @@ if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 {
 	$env['status'] = '303 See Other';
 	$redir = trim(str_replace('redir:', '', $pag['page_text']));
-	$sql = cot_db_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$id."'");
+	$sql = $cot_db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$id."'");
 	header('Location: ' . (preg_match('#^(http|ftp)s?://#', $redir) ? '' : COT_ABSOLUTE_URL) . $redir);
 	exit;
 }
@@ -92,7 +92,7 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_do
 	if (!$usr['isadmin'] || $cfg['count_admin'])
 	{
 		$pag['page_filecount']++;
-		$sql = cot_db_query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$id);
+		$sql = $cot_db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$id);
 	}
 	$redir = (preg_match('#^(http|ftp)s?://#', $pag['page_url']) ? '' : COT_ABSOLUTE_URL) . $pag['page_url'];
 	header('Location: ' . $redir);
@@ -102,7 +102,7 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_do
 if (!$usr['isadmin'] || $cfg['count_admin'])
 {
 	$pag['page_count']++;
-	$sql = (!$cfg['disablehitstats']) ? cot_db_query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'") : '';
+	$sql = (!$cfg['disablehitstats']) ? $cot_db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'") : '';
 }
 
 $catpath = cot_build_catpath($pag['page_cat']);

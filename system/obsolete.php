@@ -441,4 +441,213 @@ function utf8ToUnicode(&$str)
 	}
 	return $out;
 }
+
+/**
+ * Returns number of rows affected by last query
+ *
+ * @return int
+ */
+function sed_sql_affectedrows($conn = null)
+{
+	global $cot_db;
+
+	return $cot_db->affectedRows;
+}
+
+/**
+ * Returns last error number
+ *
+ * @return int
+ */
+function sed_sql_errno()
+{
+	global $cot_db;
+
+	return $cot_db->errno;
+}
+
+/**
+ * Returns last SQL error message
+ *
+ * @return string
+ */
+function sed_sql_error()
+{
+	global $cot_db;
+
+	return $cot_db->error;
+}
+
+/**
+ * Fetches result row as mixed numeric/associative array
+ *
+ * @param PDOStatement $res Query result
+ * @return array
+ */
+function sed_sql_fetcharray($res)
+{
+	return $res->fetch();
+}
+
+/**
+ * Returns result row as associative array
+ *
+ * @param PDOStatement $res Query result
+ * @return array
+ */
+function sed_sql_fetchassoc($res)
+{
+	return $res->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Returns result row as numeric array
+ *
+ * @param PDOStatement $res Query result
+ * @return array
+ */
+function sed_sql_fetchrow($res)
+{
+	return $res->fetch(PDO::FETCH_NUM);
+}
+
+/**
+ * Returns number of records total for last query with SQL_CALC_FOUND_ROWS
+ *
+ * @param PDO $conn Custom connection
+ * @return int
+ */
+function sed_sql_foundrows($conn = NULL)
+{
+	global $cot_db;
+	return (int) $cot_db->query('SELECT FOUND_ROWS()')->fetchColumn();
+}
+
+/**
+ * Frees result resources
+ *
+ * @param PDOStatement $res Query result
+ */
+function sed_sql_freeresult($res)
+{
+	$res = null;
+}
+
+/**
+ * Returns ID of last INSERT query
+ *
+ * @return int
+ */
+function sed_sql_insertid()
+{
+	global $cot_db;
+
+	return $cot_db->lastInsertId();
+}
+
+/**
+ * Returns list of tables for a database. Use cot_db_fetcharray() to get table names from result
+ *
+ * @param string $db_name Database name
+ * @return PDOStatement
+ */
+function sed_sql_listtables($db_name)
+{
+	global $cot_db;
+
+	return $cot_db->query("SHOW TABLES");
+}
+
+/**
+ * Returns number of rows in result set
+ *
+ * @param PDOStatement $res Query result
+ * @return int
+ */
+function sed_sql_numrows($res)
+{
+	return $res->rowCount();
+}
+
+/**
+ * Escapes potentially insecure sequences in string
+ *
+ * @param string $str
+ * @return string
+ */
+function sed_sql_prep($str)
+{
+	global $cot_db;
+
+	return preg_replace("#^'(.*)'\$#", '$1', $cot_db->quote($str));
+}
+
+/**
+ * Executes SQL query
+ *
+ * @global $sys
+ * @global $cfg
+ * @global $usr
+ * @param string $query SQL query
+ * @return PDOStatement
+ */
+function sed_sql_query($query)
+{
+	global $cot_db;
+
+	return $cot_db->query($query);
+}
+
+/**
+ * Fetches a single cell from result
+ *
+ * @param PDOStatement $res Result set
+ * @param int $row Row number
+ * @param mixed $col Column name or index (null-based)
+ * @return mixed
+ */
+function sed_sql_result($res, $row = 0, $col = 0)
+{
+	$r = $res->fetch(PDO::FETCH_BOTH, PDO::FETCH_ORI_ABS, $row);
+	return $r[$col];
+}
+
+function sed_sql_rowcount($table)
+{
+	global $cot_db;
+
+	return (int) $cot_db->query("SELECT COUNT(*) FROM $table")->fetchColumn();
+}
+
+function sed_sql_runscript($script)
+{
+	global $cot_db;
+
+	return $cot_db->runScript($script);
+}
+
+
+function sed_sql_insert($table_name, $data, $prefix = '')
+{
+	global $cot_db;
+
+	return $cot_db->insert($table_name, $data, $prefix);
+}
+
+
+function sed_sql_delete($table_name, $condition = '')
+{
+	global $cot_db;
+
+	return $cot_db->delete($table_name, $condition);
+}
+
+
+function sed_sql_update($table_name, $condition, $data, $prefix = '', $update_null = false)
+{
+	global $cot_db;
+
+	return $cot_db->update($table_name, $data, $condition, $prefix, $update_null);
+}
+
 ?>

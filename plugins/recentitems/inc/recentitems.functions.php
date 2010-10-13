@@ -16,17 +16,17 @@ cot_require_lang('recentitems', 'plug');
 
 function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
 {
-	global $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $theme, $usr, $sys, $R;
+	global $cot_db, $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $theme, $usr, $sys, $R;
 	$recentitems = new XTemplate(cot_skinfile($template, true));
 	if ($rightprescan)
 	{
 		// творим чудеса - читаем список разделов и к каким из них юзер имеет доступ
-		$sql = cot_db_query("SELECT * FROM $db_forum_sections
+		$sql = $cot_db->query("SELECT * FROM $db_forum_sections
 			ORDER by fs_masterid DESC, fs_order ASC");
 		unset($catsub);
 		$catsub = array();
 		$catsub[] = $cat;
-		while ($fsn = cot_db_fetcharray($sql))
+		while ($fsn = $sql->fetch())
 		{
 			if (cot_auth('forums', $fsn['fs_id'], 'R'))
 			{
@@ -41,7 +41,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 	if ($mode == 'recent')
 	{
-		$sql = cot_db_query("SELECT * FROM $db_forum_topics
+		$sql = $cot_db->query("SELECT * FROM $db_forum_topics
 			WHERE ft_movedto=0 AND ft_mode=0 ".$incat."
 			ORDER by ft_updated DESC LIMIT $maxperpage");
 		$totalrecent['topics'] = $maxperpage;
@@ -49,12 +49,12 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 	else
 	{
 		$where = "WHERE ft_updated >= $mode ".$incat;
-		$sql = cot_db_query("SELECT COUNT(*) FROM $db_forum_topics ".$where);
-		$totalrecent['topics'] = cot_db_result($sql, 0, "COUNT(*)");
-		$sql = cot_db_query("SELECT * FROM $db_forum_topics ".$where." ORDER by ft_updated desc LIMIT $d, ".$maxperpage);
+		$sql = $cot_db->query("SELECT COUNT(*) FROM $db_forum_topics ".$where);
+		$totalrecent['topics'] = $sql->fetchColumn();
+		$sql = $cot_db->query("SELECT * FROM $db_forum_topics ".$where." ORDER by ft_updated desc LIMIT $d, ".$maxperpage);
 	}
 	$ft_num = 0;
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		$row['ft_icon'] = 'posts';
 		$row['ft_postisnew'] = FALSE;
@@ -181,7 +181,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $textlength = 0, $rightprescan = true, $cat = '')
 {
-	global $cot_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $cot_extrafields, $usr;
+	global $cot_db, $cot_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $cot_extrafields, $usr;
 	$recentitems = new XTemplate(cot_skinfile($template, true));
 
 	if ($rightprescan || $cat)
@@ -214,11 +214,11 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	{
 		//and ft_lastposterid!=".$usr['id']."
 		$where = "WHERE page_date >= $mode AND page_date <= ".(int)$sys['now_offset']." AND page_state=0 AND page_cat <> 'system' ".$incat;
-		$sql = cot_db_query("SELECT COUNT(*) FROM $db_pages ".$where);
+		$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pages ".$where);
 		$totalrecent['pages'] = $maxperpage;
 	}
 
-	$sql = cot_db_query("SELECT p.*, u.* FROM $db_pages AS p
+	$sql = $cot_db->query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid ".$where." ORDER by page_date desc LIMIT $d, ".$maxperpage);
 
 	$jj = 0;
@@ -226,7 +226,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('recentitems.recentpages.tags');
 	/* ===== */
-	while ($pag = cot_db_fetcharray($sql))
+	while ($pag = $sql->fetch())
 	{
 		$jj++;
 		$catpath = cot_build_catpath($pag['page_cat']);

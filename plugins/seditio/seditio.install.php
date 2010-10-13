@@ -20,9 +20,9 @@ defined('COT_CODE') or die('Wrong URL.');
  */
 function sedc_detect_bbcode($name)
 {
-	global $db_bbcode;
+	global $cot_db, $db_bbcode, $cot_db;
 
-	return cot_db_numrows(cot_db_query("SELECT bbc_name FROM $db_bbcode WHERE bbc_name = '$name' LIMIT 1")) > 0;
+	return $cot_db->query("SELECT bbc_name FROM $db_bbcode WHERE bbc_name = '$name' LIMIT 1")->rowCount() > 0;
 }
 
 // Installing new bbcodes

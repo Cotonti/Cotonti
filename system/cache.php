@@ -605,20 +605,20 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function  __destruct()
 	{
-		global $db_cache, $sys;
+		global $cot_db, $db_cache, $sys;
 		if (count($this->removed_data) > 0)
 		{
 			$q = "DELETE FROM $db_cache WHERE";
 			$i = 0;
 			foreach ($this->removed_data as $entry)
 			{
-				$c_name = cot_db_prep($entry['id']);
-				$c_realm = cot_db_prep($entry['realm']);
+				$c_name = $cot_db->prep($entry['id']);
+				$c_realm = $cot_db->prep($entry['realm']);
 				$or = $i == 0 ? '' : ' OR';
 				$q .= $or." (c_name = '$c_name' AND c_realm = '$c_realm')";
 				$i++;
 			}
-			cot_db_query($q);
+			$cot_db->query($q);
 		}
 		if (count($this->writeback_data) > 0)
 		{
@@ -626,16 +626,16 @@ class MySQL_cache extends Db_cache_driver
 			$i = 0;
 			foreach ($this->writeback_data as $entry)
 			{
-				$c_name = cot_db_prep($entry['id']);
-				$c_realm = cot_db_prep($entry['realm']);
+				$c_name = $cot_db->prep($entry['id']);
+				$c_realm = $cot_db->prep($entry['realm']);
 				$c_expire = $entry['ttl'] > 0 ? $sys['now'] + $entry['ttl'] : 0;
-				$c_value = cot_db_prep(serialize($entry['data']));
+				$c_value = $cot_db->prep(serialize($entry['data']));
 				$comma = $i == 0 ? '' : ',';
 				$q .= $comma."('$c_name', '$c_realm', $c_expire, '$c_value')";
 				$i++;
 			}
 			$q .= " ON DUPLICATE KEY UPDATE c_value=VALUES(c_value), c_expire=VALUES(c_expire)";
-			cot_db_query($q);
+			$cot_db->query($q);
 		}
 	}
 
@@ -644,14 +644,14 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function clear($realm = '')
 	{
-		global $db_cache;
+		global $cot_db, $db_cache;
 		if (empty($realm))
 		{
-			cot_db_query("TRUNCATE $db_cache");
+			$cot_db->query("TRUNCATE $db_cache");
 		}
 		else
 		{
-			cot_db_query("DELETE FROM $db_cache WHERE c_realm = '$realm'");
+			$cot_db->query("DELETE FROM $db_cache WHERE c_realm = '$realm'");
 		}
 		$this->buffer = array();
 		return TRUE;
@@ -662,12 +662,12 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function exists($id, $realm = COT_DEFAULT_REALM)
 	{
-		global $db_cache;
-		$sql = cot_db_query("SELECT c_value FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
-		$res = cot_db_numrows($sql) == 1;
+		global $cot_db, $db_cache;
+		$sql = $cot_db->query("SELECT c_value FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
+		$res = $sql->rowCount() == 1;
 		if ($res)
 		{
-			$this->buffer[$realm][$id] = unserialize(cot_db_result($sql, 0, 0));
+			$this->buffer[$realm][$id] = unserialize($sql->fetchColumn());
 		}
 		return $res;
 	}
@@ -678,9 +678,9 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	private function gc()
 	{
-		global $db_cache, $sys;
-		cot_db_query("DELETE FROM $db_cache WHERE c_expire > 0 AND c_expire < ".$sys['now']);
-		return cot_db_affectedrows();
+		global $cot_db, $db_cache, $sys;
+		$cot_db->query("DELETE FROM $db_cache WHERE c_expire > 0 AND c_expire < ".$sys['now']);
+		return $cot_db->affectedRows;
 	}
 
 	/**
@@ -688,7 +688,7 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function get($id, $realm = COT_DEFAULT_REALM)
 	{
-		global $db_cache;
+		global $cot_db, $db_cache;
 		if(!$this->exists($id, $realm))
 		{
 			return $this->buffer[$realm][$id];
@@ -704,7 +704,7 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function get_all($realms = COT_DEFAULT_REALM)
 	{
-		global $db_cache;
+		global $cot_db, $db_cache;
 		if (is_array($realms))
 		{
 			$r_where = "c_realm IN(";
@@ -712,18 +712,18 @@ class MySQL_cache extends Db_cache_driver
 			foreach ($realms as $realm)
 			{
 				$glue = $i == 0 ? "'" : ",'";
-				$r_where .= $glue.cot_db_prep($realm)."'";
+				$r_where .= $glue.$cot_db->prep($realm)."'";
 				$i++;
 			}
 			$r_where .= ')';
 		}
 		else
 		{
-			$r_where = "c_realm = '".cot_db_prep($realms)."'";
+			$r_where = "c_realm = '".$cot_db->prep($realms)."'";
 		}
-		$sql = cot_db_query("SELECT c_name, c_value FROM `$db_cache` WHERE c_auto=1 AND $r_where");
+		$sql = $cot_db->query("SELECT c_name, c_value FROM `$db_cache` WHERE c_auto=1 AND $r_where");
 		$i = 0;
-		while ($row = cot_db_fetchassoc($sql))
+		while ($row = $sql->fetch())
 		{
 			global ${$row['c_name']};
 			${$row['c_name']} = unserialize($row['c_value']);
@@ -737,10 +737,10 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function remove_now($id, $realm = COT_DEFAULT_REALM)
 	{
-		global $db_cache;
-		cot_db_query("DELETE FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
+		global $cot_db, $db_cache;
+		$cot_db->query("DELETE FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
 		unset($this->buffer[$realm][$id]);
-		return cot_db_affectedrows() == 1;
+		return $cot_db->affectedRows == 1;
 	}
 
 	/**
@@ -754,15 +754,15 @@ class MySQL_cache extends Db_cache_driver
 	 */
 	public function store_now($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 	{
-		global $db_cache;
-		$c_name = cot_db_prep($id);
-		$c_realm = cot_db_prep($realm);
+		global $cot_db, $db_cache;
+		$c_name = $cot_db->prep($id);
+		$c_realm = $cot_db->prep($realm);
 		$c_expire = $ttl > 0 ? $sys['now'] + $ttl : 0;
-		$c_value = cot_db_prep(serialize($data));
-		cot_db_query("INSERT INTO $db_cache (c_name, c_realm, c_expire, c_value)
+		$c_value = $cot_db->prep(serialize($data));
+		$cot_db->query("INSERT INTO $db_cache (c_name, c_realm, c_expire, c_value)
 			VALUES ('$c_name', '$c_realm', $c_expire, '$c_value')");
 		$this->buffer[$realm][$id] = $data;
-		return cot_db_affectedrows() == 1;
+		return $cot_db->affectedRows == 1;
 	}
 }
 
@@ -1291,14 +1291,14 @@ class Cache
 	 */
 	private function resync_bindings()
 	{
-		global $db_cache_bindings;
+		global $cot_db, $db_cache_bindings;
 		$this->bindings = array();
-		$sql = cot_db_query("SELECT * FROM `$db_cache_bindings`");
-		while ($row = cot_db_fetchassoc($sql))
+		$sql = $cot_db->query("SELECT * FROM `$db_cache_bindings`");
+		while ($row = $sql->fetch())
 		{
 			$this->bindings[$row['c_event']][] = array('id' => $row['c_id'], 'realm' => $row['c_realm']);
 		}
-		cot_db_freeresult($sql);
+		$sql->closeCursor();
 		$this->db->store('cot_cache_bindings', $this->bindings, 'system');
 	}
 
@@ -1312,14 +1312,14 @@ class Cache
 	 */
 	public function bind($event, $id, $realm = COT_DEFAULT_REALM, $type = COT_CACHE_TYPE_DEFAULT)
 	{
-		global $db_cache_bindings;
-		$c_event = cot_db_prep($event);
-		$c_id = cot_db_prep($id);
-		$c_realm = cot_db_prep($realm);
+		global $cot_db, $db_cache_bindings;
+		$c_event = $cot_db->prep($event);
+		$c_id = $cot_db->prep($id);
+		$c_realm = $cot_db->prep($realm);
 		$c_type = (int) $type;
-		cot_db_query("INSERT INTO `$db_cache_bindings` (c_event, c_id, c_realm, c_type)
+		$cot_db->query("INSERT INTO `$db_cache_bindings` (c_event, c_id, c_realm, c_type)
 			VALUES ('$c_event', '$c_id', '$c_realm', $c_type)");
-		$res = cot_db_affectedrows() == 1;
+		$res = $cot_db->affectedRows == 1;
 		if ($res)
 		{
 			$this->resync_on_exit = true;
@@ -1340,20 +1340,20 @@ class Cache
 	 */
 	public function bind_array($bindings)
 	{
-		global $db_cache_bindings;
+		global $cot_db, $db_cache_bindings;
 		$q = "INSERT INTO `$db_cache_bindings` (c_event, c_id, c_realm, c_type) VALUES ";
 		$i = 0;
 		foreach ($bindings as $entry)
 		{
-			$c_event = cot_db_prep($entry['event']);
-			$c_id = cot_db_prep($entry['id']);
-			$c_realm = cot_db_prep($entry['realm']);
+			$c_event = $cot_db->prep($entry['event']);
+			$c_id = $cot_db->prep($entry['id']);
+			$c_realm = $cot_db->prep($entry['realm']);
 			$c_type = (int) $entry['type'];
 			$comma = $i == 0 ? '' : ',';
 			$q .= $comma."('$c_event', '$c_id', '$c_realm', $c_type)";
 		}
-		cot_db_query($q);
-		$res = cot_db_affectedrows();
+		$cot_db->query($q);
+		$res = $cot_db->affectedRows;
 		if ($res > 0)
 		{
 			$this->resync_on_exit = true;
@@ -1514,16 +1514,16 @@ class Cache
 	 */
 	public function unbind($realm, $id = '')
 	{
-		global $db_cache_bindings;
-		$c_realm = cot_db_prep($realm);
+		global $cot_db, $db_cache_bindings;
+		$c_realm = $cot_db->prep($realm);
 		$q = "DELETE FROM `$db_cache_bindings` WHERE c_realm = '$c_realm'";
 		if (!empty($id))
 		{
-			$c_id = cot_db_prep($id);
+			$c_id = $cot_db->prep($id);
 			$q .= " AND c_id = '$c_id'";
 		}
-		cot_db_query($q);
-		$res = cot_db_affectedrows();
+		$cot_db->query($q);
+		$res = $cot_db->affectedRows;
 		if ($res > 0)
 		{
 			$this->resync_on_exit = true;
@@ -1544,9 +1544,9 @@ class Cache
  */
 function cot_cache_clear($name)
 {
-	global $db_cache;
+	global $cot_db, $db_cache;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
-	cot_db_query("DELETE FROM $db_cache WHERE c_name='$name'");
+	$cot_db->query("DELETE FROM $db_cache WHERE c_name='$name'");
 	return(TRUE);
 }
 
@@ -1557,9 +1557,9 @@ function cot_cache_clear($name)
  */
 function cot_cache_clearall()
 {
-	global $db_cache;
+	global $cot_db, $db_cache;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
-	cot_db_query("DELETE FROM $db_cache");
+	$cot_db->query("DELETE FROM $db_cache");
 	return TRUE;
 }
 
@@ -1571,10 +1571,10 @@ function cot_cache_clearall()
  */
 function cot_cache_get($name)
 {
-	global $cfg, $sys, $db_cache;
+	global $cot_db, $cfg, $sys, $db_cache;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
-	$sql = cot_db_query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
-	if ($row = cot_db_fetcharray($sql))
+	$sql = $cot_db->query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
+	if ($row = $sql->fetch())
 	{
 		return(unserialize($row['c_value']));
 	}
@@ -1592,18 +1592,18 @@ function cot_cache_get($name)
  */
 function cot_cache_getall($auto = 1)
 {
-	global $cfg, $sys, $db_cache;
+	global $cot_db, $cfg, $sys, $db_cache;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
-	$sql = cot_db_query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
+	$sql = $cot_db->query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
 	if ($auto)
 	{
-		$sql = cot_db_query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1");
+		$sql = $cot_db->query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1");
 	}
 	else
 	{
-		$sql = cot_db_query("SELECT c_name, c_value FROM $db_cache");
+		$sql = $cot_db->query("SELECT c_name, c_value FROM $db_cache");
 	}
-	if (cot_db_numrows($sql) > 0)
+	if ($sql->rowCount() > 0)
 	{
 		return($sql);
 	}
@@ -1624,10 +1624,10 @@ function cot_cache_getall($auto = 1)
  */
 function cot_cache_store($name, $value, $expire, $auto = "1")
 {
-	global $db_cache, $sys, $cfg;
+	global $cot_db, $db_cache, $sys, $cfg;
 	//trigger_error('Deprecated since 0.7.0, use $cot_cache->db object instead');
 	if (!$cfg['cache']) return(FALSE);
-	$sql = cot_db_query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".cot_db_prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
+	$sql = $cot_db->query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".$cot_db->prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
 	return(TRUE);
 }
 

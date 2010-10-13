@@ -71,8 +71,17 @@ else
 
 /* ======== Connect to the SQL DB======== */
 
-require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
-$cot_dbc = cot_db_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
+require_once $cfg['system_dir'].'/database.php';
+try
+{
+	$cot_db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']/*, array(PDO::ATTR_PERSISTENT => true)*/);
+}
+catch (PDOException $e)
+{
+	cot_diefatal('Could not connect to database !<br />
+		Please check your settings in the file datas/config.php<br />
+		MySQL error : '.$e->getMessage());
+}
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 $cot_cache && $cot_cache->init();
@@ -86,9 +95,9 @@ if ($cot_cache && $cot_cfg)
 }
 else
 {
-	$sql_config = cot_db_query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
+	$sql_config = $cot_db->query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
 
-	while ($row = cot_db_fetcharray($sql_config))
+	while ($row = $sql_config->fetch())
 	{
 		if ($row['config_owner'] == 'core')
 		{
@@ -155,15 +164,15 @@ define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER[
 
 if (!$cot_plugins)
 {
-	$sql = cot_db_query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
+	$sql = $cot_db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
-	if (cot_db_numrows($sql) > 0)
+	if ($sql->rowCount() > 0)
 	{
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$cot_plugins[$row['pl_hook']][] = $row;
 		}
-        cot_db_freeresult($sql);
+        $sql->closeCursor();
 	}
 	$cot_cache && $cot_cache->db->store('cot_plugins', $cot_plugins, 'system');
 }
@@ -176,18 +185,18 @@ if (!is_array($cot_urltrans))
 
 if (!$cot_modules)
 {
-    $sql = cot_db_query("SELECT ct_code, ct_title FROM $db_core
+    $sql = $cot_db->query("SELECT ct_code, ct_title FROM $db_core
 		WHERE ct_state = 1 AND ct_lock = 0");
-	if (cot_db_numrows($sql) > 0)
+	if ($sql->rowCount() > 0)
 	{
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$cot_modules[$row['ct_code']] = array(
                 'code' => $row['ct_code'],
                 'title' => $row['ct_title']
             );
 		}
-        cot_db_freeresult($sql);
+        $sql->closeCursor();
 	}
 	$cot_cache && $cot_cache->db->store('cot_modules', $cot_modules, 'system');
 }
@@ -212,14 +221,14 @@ if (!$cfg['disablebanlist'])
 	$userip = explode('.', $usr['ip']);
 	$ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";
 
-	$sql = cot_db_query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
+	$sql = $cot_db->query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
 
-	if (cot_db_numrows($sql) > 0)
+	if ($sql->rowCount() > 0)
 	{
-		$row = cot_db_fetcharray($sql);
+		$row = $sql->fetch();
 		if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
 		{
-			$sql = cot_db_query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
+			$sql = $cot_db->query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
 		}
 		else
 		{
@@ -235,11 +244,11 @@ if (!$cfg['disablebanlist'])
 
 if (!$cot_groups )
 {
-	$sql = cot_db_query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
+	$sql = $cot_db->query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
-	if (cot_db_numrows($sql) > 0)
+	if ($sql->rowCount() > 0)
 	{
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$cot_groups[$row['grp_id']] = array(
 				'id' => $row['grp_id'],
@@ -289,9 +298,9 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 	$u_sid = cot_import($u[1], 'D', 'ALP');
 	if ($u_id > 0)
 	{
-		$sql = cot_db_query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
+		$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
 
-		if ($row = cot_db_fetcharray($sql))
+		if ($row = $sql->fetch())
 		{
 			if ($row['user_maingrp'] > 3
 				&& ($cfg['ipcheck'] == FALSE || $row['user_lastip'] == $usr['ip']))
@@ -340,7 +349,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					if($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
 				}
 
-				cot_db_query("UPDATE $db_users
+				$cot_db->query("UPDATE $db_users
 					SET user_lastlog = {$sys['now_offset']} $update_lastvisit $update_token $update_auth
 					WHERE user_id='{$usr['id']}'");
 
@@ -384,8 +393,8 @@ foreach (cot_getextplugins('input') as $pl)
 
 if ($cfg['maintenance'])
 {
-	$sqll = cot_db_query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
-	$roow = cot_db_fetcharray($sqll);
+	$sqll = $cot_db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
+	$roow = $sqll->fetch();
 
 	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
 	{
@@ -408,9 +417,9 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 {
 	if ($usr['id'] > 0)
 	{
-		$sql = cot_db_query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
+		$sql = $cot_db->query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
 
-		if ($row = cot_db_fetcharray($sql))
+		if ($row = $sql->fetch())
 		{
 			$online_count = 1;
 			$sys['online_location'] = $row['online_location'];
@@ -426,12 +435,12 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 	}
 	else
 	{
-		$sql = cot_db_query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
-		$online_count = cot_db_numrows($sql);
+		$sql = $cot_db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
+		$online_count = $sql->rowCount();
 
 		if ($online_count > 0)
 		{
-			if ($row = cot_db_fetcharray($sql))
+			if ($row = $sql->fetch())
 			{
 				$sys['online_location'] = $row['online_location'];
 				$sys['online_subloc'] = $row['online_subloc'];
@@ -537,10 +546,10 @@ if (!$cfg['disablehitstats'])
 		&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === false
 		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === false)
 	{
-		cot_db_query("INSERT INTO $db_referers
+		$cot_db->query("INSERT INTO $db_referers
 				(ref_url, ref_count, ref_date)
 			VALUES
-				('".cot_db_prep($sys['referer'])."', 1, {$sys['now_offset']})
+				('".$cot_db->prep($sys['referer'])."', 1, {$sys['now_offset']})
 			ON DUPLICATE KEY UPDATE
 				ref_count=ref_count+1, ref_date={$sys['now_offset']}");
 	}

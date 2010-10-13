@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				file_put_contents($file['config'], $config_contents);
 
 				$sql_file = file_get_contents($file['sql']);
-				$error = cot_db_runscript($sql_file);
+				$error = $cot_db->runScript($sql_file);
 
 				if ($error)
 				{
@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 				file_put_contents($file['config'], $config_contents);
 
-				if (cot_db_insert($db_x . 'users', array(
+				if ($cot_db->insert($db_x . 'users', array(
 						'name' => $user['name'],
 						'password' => md5($user['pass']),
 						'maingrp' => COT_GROUP_SUPERADMINS,
@@ -217,16 +217,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 					), 'user_') == 1)
 				{
 
-					$user['id'] = cot_db_insertid();
+					$user['id'] = $cot_db->lastInsertId();
 
-					cot_db_insert($db_x . 'groups_users', array(
+					$cot_db->insert($db_x . 'groups_users', array(
 						'userid' => (int) $user['id'],
 						'groupid' => COT_GROUP_SUPERADMINS
 					), 'gru_');
 				}
 				else
 				{
-					cot_error(cot_rc('install_error_sql_script', array('msg' => cot_db_error())));
+					cot_error(cot_rc('install_error_sql_script', array('msg' => $cot_db->error)));
 				}
 			}
 
@@ -247,9 +247,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				// Load groups
 				$cot_groups = array();
-				$res = cot_db_query("SELECT grp_id FROM $db_groups
+				$res = $cot_db->query("SELECT grp_id FROM $db_groups
 					WHERE grp_disabled=0 ORDER BY grp_level DESC");
-				while ($row = cot_db_fetchassoc($res))
+				while ($row = $res->fetch())
 				{
 					$cot_groups[$row['grp_id']] = array(
 						'id' => $row['grp_id'],
@@ -261,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 						'title' => htmlspecialchars($row['grp_title'])
 					);
 				}
-				cot_db_freeresult($res);
+				$res->closeCursor();
 				$usr['id'] = 1;
 				// Install all at once
 				// Note: installation statuses are ignored in this installer

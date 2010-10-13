@@ -33,9 +33,9 @@ if ($a == 'purge' && $cot_cache)
 elseif ($a == 'delete')
 {
 	cot_check_xg();
-	$name = cot_db_prep(cot_import('name', 'G', 'TXT'));
+	$name = $cot_db->prep(cot_import('name', 'G', 'TXT'));
 
-	cot_db_delete($db_cache, "c_name = '$name'") ? cot_message('adm_delcacheitem') : cot_error('Error');
+	$cot_db->delete($db_cache, "c_name = '$name'") ? cot_message('adm_delcacheitem') : cot_error('Error');
 }
 
 if ($cot_cache && $cot_cache->mem)
@@ -54,14 +54,14 @@ if ($cot_cache && $cot_cache->mem)
 	$t->parse('MAIN.ADMIN_CACHE_MEMORY');
 }
 
-$sql = cot_db_query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
+$sql = $cot_db->query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
 $cachesize = 0;
 $ii = 0;
 
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.cache.loop');
 /* ===== */
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	$row['c_value'] = htmlspecialchars($row['c_value']);
 	$row['size'] = mb_strlen($row['c_value']);

@@ -125,9 +125,9 @@ function cot_loaddoctypes()
  */
 function cot_structure_delcat($id, $c)
 {
-	global $db_structure, $db_auth, $cfg, $cot_cache;
+	global $cot_db, $db_structure, $db_auth, $cfg, $cot_cache;
 
-	$sql = cot_db_query("DELETE FROM $db_structure WHERE structure_id='$id'");
+	$sql = $cot_db->query("DELETE FROM $db_structure WHERE structure_id='$id'");
 	cot_auth_remove_item('page', $c);
 	$cot_cache && $cot_cache->db->remove('cot_cat', 'system');
 }
@@ -140,14 +140,14 @@ function cot_structure_delcat($id, $c)
  */
 function cot_structure_resync($id)
 {
-	global $db_structure, $db_pages;
+	global $cot_db, $db_structure, $db_pages;
 
-	$sql = cot_db_query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
-	$row = cot_db_fetcharray($sql);
-	$sql = cot_db_query("SELECT COUNT(*) FROM $db_pages
+	$sql = $cot_db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
+	$row = $sql->fetch();
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pages
 		WHERE page_cat='".$row['structure_code']."' AND (page_state = 0 OR page_state=2)");
-	$num = (int) cot_db_result($sql, 0, 0);
-	return (bool) cot_db_query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
+	$num = (int) $sql->fetchColumn();
+	return (bool) $cot_db->query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
 }
 
 /**
@@ -158,15 +158,15 @@ function cot_structure_resync($id)
  */
 function cot_structure_resyncall()
 {
-	global $db_structure;
+	global $cot_db, $db_structure;
 
 	$res = TRUE;
-	$sql = cot_db_query("SELECT structure_id FROM $db_structure");
-	while ($row = cot_db_fetchassoc($sql))
+	$sql = $cot_db->query("SELECT structure_id FROM $db_structure");
+	while ($row = $sql->fetch())
 	{
 		$res &= cot_structure_resync($row['structure_id']);
 	}
-	cot_db_freeresult($sql);
+	$sql->closeCursor();
 	return $res;
 }
 
@@ -230,21 +230,21 @@ function cot_default_html_construction($type)
  */
 function cot_extrafield_add($location, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $noalter = false)
 {
-	global $db_extra_fields;
-	$fieldsres = cot_db_query("SELECT field_name FROM $db_extra_fields WHERE field_location='$location'");
-	while($row = cot_db_fetchassoc($fieldsres))
+	global $cot_db, $db_extra_fields;
+	$fieldsres = $cot_db->query("SELECT field_name FROM $db_extra_fields WHERE field_location='$location'");
+	while($row = $fieldsres->fetch())
 	{
 		$extrafieldsnames[] = $row['field_name'];
 	}
 	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
 
 	// Check table cot_$sql_table - if field with same name exists - exit.
-	if (cot_db_numrows(cot_db_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0 && !$noalter)
+	if ($cot_db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0 && !$noalter)
 	{
 		return false;
 	}
-	$fieldsres = cot_db_query("SHOW COLUMNS FROM $location");
-	while ($fieldrow = cot_db_fetchassoc($fieldsres))
+	$fieldsres = $cot_db->query("SHOW COLUMNS FROM $location");
+	while ($fieldrow = $fieldsres->fetch())
 	{
 		$column = $fieldrow['Field'];
 		// get column prefix in this table
@@ -265,7 +265,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
 	$extf['description'] = is_null($description) ? '' : $description;
 
-	$step1 = cot_db_insert($db_extra_fields, $extf, 'field_') == 1;
+	$step1 = $cot_db->insert($db_extra_fields, $extf, 'field_') == 1;
 	if ($noalter)
 	{
 		return $step1;
@@ -286,7 +286,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 			break;
 	}
 	$sql = "ALTER TABLE $location ADD ".$column_prefix."_$name $sqltype ";
-	$step2 = cot_db_query($sql);
+	$step2 = $cot_db->query($sql);
 	return $step1 && $step2;
 }
 
@@ -309,19 +309,19 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
  */
 function cot_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="")
 {
-	global $db_extra_fields;
-	$fieldsres = cot_db_query("SELECT COUNT(*) FROM $db_extra_fields
+	global $cot_db, $db_extra_fields;
+	$fieldsres = $cot_db->query("SELECT COUNT(*) FROM $db_extra_fields
 			WHERE field_name = '$oldname' AND field_location='$location'");
-	if (cot_db_numrows($fieldsres) <= 0
+	if ($fieldsres->rowCount() <= 0
 		|| $name != $oldname
-		&& cot_db_numrows(cot_db_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0)
+		&& $cot_db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0)
 	{
 		// Attempt to edit non-extra field or override an existing field
 		return false;
 	}
-	$field = cot_db_fetchassoc($fieldsres);
-	$fieldsres = cot_db_query("SHOW COLUMNS FROM $location");
-	$fieldrow = cot_db_fetchassoc($fieldsres);
+	$field = $fieldsres->fetch();
+	$fieldsres = $cot_db->query("SHOW COLUMNS FROM $location");
+	$fieldrow = $fieldsres->fetch();
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$alter = false;
@@ -343,7 +343,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 	$extf['required'] = ($required > 0) ? 1 : 0;
 	$extf['description'] = is_null($description) ? '' : $description;
 
-	$step1 = cot_db_update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'", 'field_') == 1;
+	$step1 = $cot_db->update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'", 'field_') == 1;
 
 	if (!$alter) return $step1;
 
@@ -363,7 +363,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 			break;
 	}
 	$sql = "ALTER TABLE $location CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
-	$step2 = cot_db_query($sql);
+	$step2 = $cot_db->query($sql);
 
 	return $step1 && $step2;
 }
@@ -378,20 +378,20 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
  */
 function cot_extrafield_remove($location, $name)
 {
-	global $db_extra_fields;
-	if ((int) cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_extra_fields
-		WHERE field_name = '$name' AND field_location='$location'"), 0, 0) <= 0)
+	global $cot_db, $db_extra_fields;
+	if ((int) $cot_db->query("SELECT COUNT(*) FROM $db_extra_fields
+		WHERE field_name = '$name' AND field_location='$location'")->fetchColumn() <= 0)
 	{
 		// Attempt to remove non-extra field
 		return false;
 	}
-	$fieldsres = cot_db_query("SHOW COLUMNS FROM $location");
-	$fieldrow = cot_db_fetchassoc($fieldsres);
+	$fieldsres = $cot_db->query("SHOW COLUMNS FROM $location");
+	$fieldrow = $fieldsres->fetch();
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
-	$step1 = cot_db_delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
+	$step1 = $cot_db->delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
 	$sql = "ALTER TABLE $location DROP ".$column_prefix."_".$name;
-	$step2 = cot_db_query($sql);
+	$step2 = $cot_db->query($sql);
 	return $step1 && $step2;
 }
 

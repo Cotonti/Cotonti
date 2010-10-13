@@ -48,14 +48,14 @@ if ($cfg['plugin']['tags']['pages'])
 			$order = 'RAND()';
 	}
 
-	$tc_res = cot_db_query("SELECT r.tag AS tag, COUNT(r.tag_item) AS cnt
+	$tc_res = $cot_db->query("SELECT r.tag AS tag, COUNT(r.tag_item) AS cnt
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 		ON r.tag_item = p.page_id
 		WHERE r.tag_area = 'pages' AND p.page_cat IN ($tc_cats) AND p.page_state = 0
 		GROUP BY r.tag
 		ORDER BY $order $limit");
 	$tc_html = $R['tags_code_cloud_open'];
-	while ($tc_row = cot_db_fetchassoc($tc_res))
+	while ($tc_row = $tc_res->fetch())
 	{
 		$tag_count++;
 		$tag = $tc_row['tag'];
@@ -77,7 +77,7 @@ if ($cfg['plugin']['tags']['pages'])
 			'dim' => $dim
 		));
 	}
-	cot_db_freeresult($tc_res);
+	$tc_res->closeCursor();
 	if ($cfg['plugin']['tags']['more'] && !empty($limit))
 	{
 		$tc_html .= cot_rc('tags_code_cloud_more', array('url' => cot_url('plug', 'e=tags&a=pages')));

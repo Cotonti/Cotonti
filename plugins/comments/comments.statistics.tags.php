@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 cot_require('comments', true);
 
-$totaldbcomments = cot_db_rowcount($db_com);
+$totaldbcomments = $cot_db->countRows($db_com);
 $t->assign(array(
 	'STATISTICS_TOTALDBCOMMENTS' => $totaldbcomments
 ));

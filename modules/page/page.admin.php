@@ -102,14 +102,14 @@ if ($a == 'validate')
 	}
 	/* ===== */
 
-	$sql = cot_db_query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
-	if ($row = cot_db_fetcharray($sql))
+	$sql = $cot_db->query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
+	if ($row = $sql->fetch())
 	{
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql = cot_db_query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
-		$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+		$sql = $cot_db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
+		$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
@@ -143,14 +143,14 @@ elseif ($a == 'unvalidate')
 	}
 	/* ===== */
 
-	$sql = cot_db_query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
-	if ($row = cot_db_fetcharray($sql))
+	$sql = $cot_db->query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
+	if ($row = $sql->fetch())
 	{
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql = cot_db_query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
-		$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+		$sql = $cot_db->query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
+		$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_unvalidated'], 'adm');
 
@@ -184,19 +184,19 @@ elseif ($a == 'delete')
 	}
 	/* ===== */
 
-	$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
-	if ($row = cot_db_fetchassoc($sql))
+	$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	if ($row = $sql->fetch())
 	{
 		if ($row['page_state'] != 1)
 		{
-			$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+			$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 		}
 
 		$id2 = 'p'.$id;
-		$sql = cot_db_query("DELETE FROM $db_pages WHERE page_id='$id'");
-		$sql = cot_db_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
-		$sql = cot_db_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-		$sql = cot_db_query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
+		$sql = $cot_db->query("DELETE FROM $db_pages WHERE page_id='$id'");
+		$sql = $cot_db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
+		$sql = $cot_db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
+		$sql = $cot_db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'], 'adm');
 
@@ -248,15 +248,15 @@ elseif ($a == 'update_cheked')
 				}
 				/* ===== */
 
-				$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_id='".$i."'");
-				if ($row = cot_db_fetcharray($sql))
+				$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='".$i."'");
+				if ($row = $sql->fetch())
 				{
 					$id = $row['page_id'];
 					$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 					cot_block($usr['isadmin_local']);
 
-					$sql = cot_db_query("UPDATE $db_pages SET page_state=0 WHERE page_id='".$id."'");
-					$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+					$sql = $cot_db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='".$id."'");
+					$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
@@ -302,20 +302,20 @@ elseif ($a == 'update_cheked')
 				}
 				/* ===== */
 
-				$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_id='".$i."' LIMIT 1");
-				if ($row = cot_db_fetchassoc($sql))
+				$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='".$i."' LIMIT 1");
+				if ($row = $sql->fetch())
 				{
 					$id = $row['page_id'];
 					if ($row['page_state'] != 1)
 					{
-						$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+						$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 					}
 
 					$id2 = 'p'.$id;
-					$sql = cot_db_query("DELETE FROM $db_pages WHERE page_id='$id'");
-					$sql = cot_db_query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
-					$sql = cot_db_query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-					$sql = cot_db_query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
+					$sql = $cot_db->query("DELETE FROM $db_pages WHERE page_id='$id'");
+					$sql = $cot_db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
+					$sql = $cot_db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
+					$sql = $cot_db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'],'adm');
 
@@ -351,10 +351,10 @@ elseif ($a == 'update_cheked')
 	}
 }
 
-$totalitems = cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere), 0, 0);
+$totalitems = $cot_db->query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere)->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=page&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = cot_db_query("SELECT p.*, u.user_name, u.user_avatar
+$sql = $cot_db->query("SELECT p.*, u.user_name, u.user_avatar
 	FROM $db_pages as p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE $sqlwhere
@@ -365,7 +365,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.admin.loop');
 /* ===== */
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	if ($row['page_type'] == 0)
 	{
@@ -384,8 +384,8 @@ while ($row = cot_db_fetcharray($sql))
 	$row['page_pageurl'] = cot_url('page', $page_urlp);
 	$catpath = cot_build_catpath($row['page_cat']);
 	$row['page_fulltitle'] = $catpath.' '.$cfg['separator'].' <a href="'.$row['page_pageurl'].'">'.htmlspecialchars($row['page_title']).'</a>';
-	$sql4 = cot_db_query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$cot_cat[$row["page_cat"]]['rpath']."%' ");
-	$sub_count = cot_db_result($sql4, 0, "SUM(structure_pagecount)");
+	$sql4 = $cot_db->query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$cot_cat[$row["page_cat"]]['rpath']."%' ");
+	$sub_count = $sql4->fetchColumn();
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
 	$t->assign(array(
@@ -412,11 +412,11 @@ while ($row = cot_db_fetcharray($sql))
 	$ii++;
 }
 
-$is_row_empty = (cot_db_numrows($sql) == 0) ? true : false ;
+$is_row_empty = ($sql->rowCount() == 0) ? true : false ;
 
-$totaldbpages = cot_db_rowcount($db_pages);
-$sql = cot_db_query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
-$sys['pagesqueued'] = cot_db_result($sql, 0, 'COUNT(*)');
+$totaldbpages = $cot_db->countRows($db_pages);
+$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
+$sys['pagesqueued'] = $sql->fetchColumn();
 
 $t->assign(array(
 	'ADMIN_PAGE_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=core&p=page'),

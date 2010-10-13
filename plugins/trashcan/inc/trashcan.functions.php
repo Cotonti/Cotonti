@@ -23,11 +23,11 @@ $GLOBALS['db_trash'] = (isset($GLOBALS['db_trash'])) ? $GLOBALS['db_trash'] : $G
  */
 function cot_trash_put($type, $title, $itemid, $datas)
 {
-	global $db_trash, $sys, $usr;
+	global $cot_db, $db_trash, $sys, $usr;
 
-	$sql = cot_db_query("INSERT INTO $db_trash (tr_date, tr_type, tr_title, tr_itemid, tr_trashedby, tr_datas)
+	$sql = $cot_db->query("INSERT INTO $db_trash (tr_date, tr_type, tr_title, tr_itemid, tr_trashedby, tr_datas)
 	VALUES
-	(".$sys['now_offset'].", '".cot_db_prep($type)."', '".cot_db_prep($title)."', '".cot_db_prep($itemid)."', ".$usr['id'].", '".cot_db_prep(serialize($datas))."')");
+	(".$sys['now_offset'].", '".$cot_db->prep($type)."', '".$cot_db->prep($title)."', '".$cot_db->prep($itemid)."', ".$usr['id'].", '".$cot_db->prep(serialize($datas))."')");
 }
 
 /**
@@ -38,13 +38,13 @@ function cot_trash_put($type, $title, $itemid, $datas)
  */
 function cot_trash_restore($id)
 {
-	global $db_forum_topics, $db_forum_posts, $db_trash;
+	global $cot_db, $db_forum_topics, $db_forum_posts, $db_trash;
 
 	$columns = array();
 	$datas = array();
 
-	$tsql = cot_db_query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
-	if ($res = cot_db_fetchassoc($tsql))
+	$tsql = $cot_db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
+	if ($res = $tsql->fetch())
 	{
 		$res['tr_datas'] = unserialize($res['tr_datas']);
 	}
@@ -52,19 +52,19 @@ function cot_trash_restore($id)
 	switch($res['tr_type'])
 	{
 		case 'comment':
-			global $db_com;
-			cot_db_insert($db_com, $res['tr_datas']);
+			global $cot_db, $db_com;
+			$cot_db->insert($db_com, $res['tr_datas']);
 			cot_log("Comment #".$res['tr_itemid']." restored from the trash can.", 'adm');
 			return (TRUE);
 			break;
 
 		case 'forumpost':
-			global $db_forum_posts;
-			$sql = cot_db_query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$res['tr_datas']['fp_topicid']."'");
+			global $cot_db, $db_forum_posts;
+			$sql = $cot_db->query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$res['tr_datas']['fp_topicid']."'");
 
-			if ($row = cot_db_fetcharray($sql))
+			if ($row = $sql->fetch())
 			{
-				cot_db_insert($db_forum_posts, $res['tr_datas']);
+				$cot_db->insert($db_forum_posts, $res['tr_datas']);
 				cot_log("Post #".$res['tr_itemid']." restored from the trash can.", 'adm');
 				cot_forum_resynctopic($res['tr_datas']['fp_topicid']);
 				cot_forum_sectionsetlast($res['tr_datas']['fp_sectionid']);
@@ -73,31 +73,31 @@ function cot_trash_restore($id)
 			}
 			else
 			{
-				$sql1 = cot_db_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumtopic' AND tr_itemid='q".$res['tr_datas']['fp_topicid']."'");
-				if ($row1 = cot_db_fetcharray($sql1))
+				$sql1 = $cot_db->query("SELECT tr_id FROM $db_trash WHERE tr_type='forumtopic' AND tr_itemid='q".$res['tr_datas']['fp_topicid']."'");
+				if ($row1 = $sql1->fetch())
 				{
 					cot_trash_restore($row1['tr_id']);
-					cot_db_delete($db_trash, "tr_id='".$row1['tr_id']."'");
+					$cot_db->delete($db_trash, "tr_id='".$row1['tr_id']."'");
 				}
 			}
 			break;
 
 		case 'forumtopic':
-			global $db_forum_topics;
-			cot_db_insert($db_forum_topics, $res['tr_datas']);
+			global $cot_db, $db_forum_topics;
+			$cot_db->insert($db_forum_topics, $res['tr_datas']);
 			cot_log("Topic #".$res['tr_datas']['ft_id']." restored from the trash can.", 'adm');
 
-			$sql = cot_db_query("SELECT tr_id FROM $db_trash WHERE tr_type='forumpost' AND tr_itemid LIKE '%-".$res['tr_itemid']."'");
+			$sql = $cot_db->query("SELECT tr_id FROM $db_trash WHERE tr_type='forumpost' AND tr_itemid LIKE '%-".$res['tr_itemid']."'");
 
-			while ($row = cot_db_fetcharray($sql))
+			while ($row = $sql->fetch())
 			{
-				$tsql = cot_db_query("SELECT * FROM $db_trash WHERE tr_id='{$row['tr_id']}' LIMIT 1");
-				if ($res2 = cot_db_fetchassoc($tsql))
+				$tsql = $cot_db->query("SELECT * FROM $db_trash WHERE tr_id='{$row['tr_id']}' LIMIT 1");
+				if ($res2 = $tsql->fetch())
 				{
 					$res2['tr_datas'] = unserialize($res2['tr_datas']);
 				}
-				cot_db_insert($db_forum_posts, $res2['tr_datas']);
-				cot_db_delete($db_trash, "tr_id='".$row['tr_id']."'");
+				$cot_db->insert($db_forum_posts, $res2['tr_datas']);
+				$cot_db->delete($db_trash, "tr_id='".$row['tr_id']."'");
 				cot_log("Post #".$res2['tr_datas']['fp_id']." restored from the trash can (belongs to topic #".$res2['tr_datas']['fp_topicid'].").", 'adm');
 			}
 
@@ -108,28 +108,28 @@ function cot_trash_restore($id)
 			break;
 
 		case 'page':
-			global $db_pages, $db_structure;
-			cot_db_insert($db_pages, $res['tr_datas']);
+			global $cot_db, $db_pages, $db_structure;
+			$cot_db->insert($db_pages, $res['tr_datas']);
 			cot_log("Page #".$res['tr_itemid']." restored from the trash can.", 'adm');
-			$sql = cot_db_query("SELECT page_cat FROM $db_pages WHERE page_id='".$res['tr_itemid']."'");
-			$row = cot_db_fetcharray($sql);
-			$sql = cot_db_query("SELECT structure_id FROM $db_structure WHERE structure_code='".$row['page_cat']."'");
-			if (cot_db_numrows($sql) == 0)
+			$sql = $cot_db->query("SELECT page_cat FROM $db_pages WHERE page_id='".$res['tr_itemid']."'");
+			$row = $sql->fetch();
+			$sql = $cot_db->query("SELECT structure_id FROM $db_structure WHERE structure_code='".$row['page_cat']."'");
+			if ($sql->rowCount() == 0)
 			{
-				$sql = cot_db_query("UPDATE $db_pages SET page_cat='restored' WHERE page_id='".$res['tr_itemid']."'");
+				$sql = $cot_db->query("UPDATE $db_pages SET page_cat='restored' WHERE page_id='".$res['tr_itemid']."'");
 			}
 			return TRUE;
 			break;
 
 		case 'user':
-			global $db_users;
-			cot_db_insert($db_users, $res['tr_datas']);
+			global $cot_db, $db_users;
+			$cot_db->insert($db_users, $res['tr_datas']);
 			cot_log("User #".$res['tr_itemid']." restored from the trash can.", 'adm');
 			return TRUE;
 			break;
 
 		default:
-			cot_db_insert($res['tr_type'], $res['tr_datas']);
+			$cot_db->insert($res['tr_type'], $res['tr_datas']);
 			cot_log("RES #".$res['tr_itemid']." restored from the trash can.", 'adm');
 			return TRUE;
 			break;

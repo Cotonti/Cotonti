@@ -30,10 +30,10 @@ foreach (cot_getextplugins('admin.pfs.allpfs.first') as $pl)
 
 unset($disp_list);
 
-$totalitems = cot_db_result(cot_db_query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid>=0"), 0, "COUNT(DISTINCT pfs_userid)");
+$totalitems = $cot_db->query("SELECT COUNT(DISTINCT pfs_userid) FROM $db_pfs WHERE pfs_folderid>=0")->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=pfs&s=allpfs', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = cot_db_query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COUNT(*) FROM $db_pfs AS p
+$sql = $cot_db->query("SELECT DISTINCT p.pfs_userid, u.user_name, u.user_id, COUNT(*) FROM $db_pfs AS p
 	LEFT JOIN $db_users AS u ON p.pfs_userid=u.user_id
 	WHERE pfs_folderid>=0 GROUP BY p.pfs_userid ORDER BY u.user_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -41,7 +41,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.pfs.allpfs.loop');
 /* ===== */
-while($row = cot_db_fetcharray($sql))
+while($row = $sql->fetch())
 {
 	$row['user_name'] = ($row['user_id'] == 0) ? $L['SFS'] : $row['user_name'];
 	$row['user_id'] = ($row['user_id'] == 0) ? '0' : $row['user_id'];

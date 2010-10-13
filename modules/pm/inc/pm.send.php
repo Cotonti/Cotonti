@@ -33,12 +33,12 @@ foreach (cot_getextplugins('pm.send.first') as $pl)
 if ($a == 'getusers')
 {
 	$q = strtolower(cot_import('q', 'G', 'TXT'));
-	$q = cot_db_prep(urldecode($q));
+	$q = $cot_db->prep(urldecode($q));
 	if (!empty($q))
 	{
 		$res = array();
-		$sql = cot_db_query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
-		while($row = cot_db_fetchassoc($sql))
+		$sql = $cot_db->query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
+		while($row = $sql->fetch())
 		{
 			$res[] = $row['user_name'];
 		}
@@ -78,8 +78,8 @@ elseif ($a == 'send')
 	{
 		if (!$cot_error)
 		{
-			$sql = cot_db_query("UPDATE $db_pm SET
-				pm_title = '".cot_db_prep($newpmtitle)."', pm_text = '".cot_db_prep($newpmtext)."',
+			$sql = $cot_db->query("UPDATE $db_pm SET
+				pm_title = '".$cot_db->prep($newpmtitle)."', pm_text = '".$cot_db->prep($newpmtext)."',
 				pm_date = '".$sys['now_offset']."', pm_fromstate = '".$fromstate."' 
 				WHERE pm_id = '$id' AND pm_fromuserid = '".$usr['id']."' AND pm_tostate = '0'");
 		}
@@ -103,7 +103,7 @@ elseif ($a == 'send')
 				$user_name=trim(cot_import($i, 'D', 'TXT'));
 				if(!empty($user_name))
 				{
-					$touser_sql[] = "'".cot_db_prep($user_name)."'";
+					$touser_sql[] = "'".$cot_db->prep($user_name)."'";
 				}
 				else
 				{
@@ -111,9 +111,9 @@ elseif ($a == 'send')
 				}
 			}
 			$touser_sql = '('.implode(',', $touser_sql).')';
-			$sql = cot_db_query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
-			$totalrecipients = cot_db_numrows($sql);
-			while($row = cot_db_fetcharray($sql))
+			$sql = $cot_db->query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
+			$totalrecipients = $sql->rowCount();
+			while($row = $sql->fetch())
 			{
 				$touser_ids[] = $row['user_id'];
 				$touser_names[] = htmlspecialchars($row['user_name']);
@@ -143,24 +143,24 @@ elseif ($a == 'send')
 		{
 			foreach ($touser_ids as $k => $userid)
 			{
-				$sql = cot_db_query("INSERT into $db_pm
+				$sql = $cot_db->query("INSERT into $db_pm
 					(pm_date, pm_fromuserid, pm_fromuser,
 					pm_touserid, pm_title, pm_text,
 					pm_fromstate, pm_tostate)
 					VALUES
-					(".(int)$sys['now_offset'].", ".(int)$usr['id'].", '".cot_db_prep($usr['name'])."',
-					".(int)$userid.", '".cot_db_prep($newpmtitle)."', '".cot_db_prep($newpmtext)."',
+					(".(int)$sys['now_offset'].", ".(int)$usr['id'].", '".$cot_db->prep($usr['name'])."',
+					".(int)$userid.", '".$cot_db->prep($newpmtitle)."', '".$cot_db->prep($newpmtext)."',
 					'".(int)$fromstate."', 0)");
 
-				$sql = cot_db_query("UPDATE $db_users SET user_newpm = 1 WHERE user_id = '".$userid."'");
+				$sql = $cot_db->query("UPDATE $db_users SET user_newpm = 1 WHERE user_id = '".$userid."'");
 
 				if ($cfg['pm_allownotifications'])
 				{
-					$sql = cot_db_query("SELECT user_email, user_name, user_lang
+					$sql = $cot_db->query("SELECT user_email, user_name, user_lang
 						FROM $db_users
 						WHERE user_id = '$userid' AND user_pmnotify = 1 AND user_maingrp > 3");
 
-					if ($row = cot_db_fetcharray($sql))
+					if ($row = $sql->fetch())
 					{
 						cot_send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
 						cot_stat_inc('totalmailpmnot');
@@ -189,7 +189,7 @@ if (!empty($to))
 		$group = cot_import(mb_substr($to, 1, 8), 'D', 'INT');
 		if ($group > 1)
 		{
-			$sql = cot_db_query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp = '$group' ORDER BY user_name ASC");
+			$sql = $cot_db->query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp = '$group' ORDER BY user_name ASC");
 		}
 	}
 	else
@@ -208,13 +208,13 @@ if (!empty($to))
 		{
 			$touser_sql = implode(',', $touser_sql);
 			$touser_sql = '('.$touser_sql.')';
-			$sql = cot_db_query("SELECT user_id, user_name FROM $db_users WHERE user_id IN $touser_sql");
+			$sql = $cot_db->query("SELECT user_id, user_name FROM $db_users WHERE user_id IN $touser_sql");
 		}
 	}
-	$totalrecipients = cot_db_numrows($sql);
+	$totalrecipients = $sql->rowCount();
 	if ($totalrecipients > 0)
 	{
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$touser_ids[] = $row['user_id'];
 			$touser_names[] = htmlspecialchars($row['user_name']);
@@ -254,10 +254,10 @@ foreach (cot_getextplugins('pm.send.main') as $pl)
 /* ===== */
 if ($id)
 {
-	$sql = cot_db_query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id='".$id."' AND pm_tostate=0 LIMIT 1");
-	if (cot_db_numrows($sql)!=0)
+	$sql = $cot_db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id='".$id."' AND pm_tostate=0 LIMIT 1");
+	if ($sql->rowCount()!=0)
 	{
-		$row = cot_db_fetcharray($sql);
+		$row = $sql->fetch();
 		$newpmtitle = (!empty($newpmtitle)) ? $newpmtitle : $row['pm_title'];
 		$newpmtext = (!empty($newpmtitle)) ? $newpmtext : $row['pm_text'];
 		$idurl = '&id='.$id;

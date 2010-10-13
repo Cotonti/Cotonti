@@ -35,12 +35,12 @@ if ($c == 'comments')
 		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 		$rss_description = $L['rss_comments_item_desc'];
 
-		$sql = cot_db_query("SELECT c.*, u.user_name
+		$sql = $cot_db->query("SELECT c.*, u.user_name
 			FROM $db_com AS c
 				LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
 			WHERE com_area = 'page' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
 		$i = 0;
-		while ($row = cot_db_fetchassoc($sql))
+		while ($row = $sql->fetch())
 		{
 			$items[$i]['title'] = $L['rss_comment_of_user']." ".$row['user_name'];
 
@@ -62,23 +62,23 @@ if ($c == 'comments')
 
 		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 
-		$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
-		if (cot_db_affectedrows() > 0)
+		$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
+		if ($cot_db->affectedRows > 0)
 		{
-			$row = cot_db_fetchassoc($sql);
+			$row = $sql->fetch();
 			if (cot_auth('page', $row['page_cat'], 'R'))
 			{
 				$rss_title = $row['page_title'];
 				$rss_description = $L['rss_comments_item_desc'];
 				$page_args = empty($row['page_alias']) ? "id=$page_id" : 'al=' . $row['page_alias'];
 
-				$sql = cot_db_query("SELECT c.*, u.user_name
+				$sql = $cot_db->query("SELECT c.*, u.user_name
 					FROM $db_com AS c
 						LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
 					WHERE com_area = 'page' AND com_code='$page_id'
 					ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
 				$i = 0;
-				while ($row1 = cot_db_fetchassoc($sql))
+				while ($row1 = $sql->fetch())
 				{
 					$items[$i]['title'] = $L['rss_comment_of_user']." ".$row1['user_name'];
 					$text = cot_parse($row1['com_text'], $cfg['parsebbcodecom']);

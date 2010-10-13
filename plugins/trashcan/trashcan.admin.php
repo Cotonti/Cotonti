@@ -49,7 +49,7 @@ if($a == 'wipe')
 		include $pl;
 	}
 	/* ===== */
-	$sql = cot_db_query("DELETE FROM $db_trash WHERE tr_id='$id'");
+	$sql = $cot_db->query("DELETE FROM $db_trash WHERE tr_id='$id'");
 
 	cot_message('adm_trashcan_deleted');
 }
@@ -62,7 +62,7 @@ elseif($a == 'wipeall')
 		include $pl;
 	}
 	/* ===== */
-	$sql = cot_db_query("TRUNCATE $db_trash");
+	$sql = $cot_db->query("TRUNCATE $db_trash");
 
 	cot_message('adm_trashcan_prune');
 }
@@ -77,16 +77,16 @@ elseif($a == 'restore')
 	/* ===== */
 	if(cot_trash_restore($id))
 	{
-		cot_db_delete($db_trash, "tr_id='$id'");
+		$cot_db->delete($db_trash, "tr_id='$id'");
 	}
 
 	cot_message('adm_trashcan_restored');
 }
 
-$totalitems = cot_db_rowcount($db_trash);
+$totalitems = $cot_db->countRows($db_trash);
 $pagenav = cot_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = cot_db_query("SELECT t.*, u.user_name FROM $db_trash AS t
+$sql = $cot_db->query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
 	WHERE 1 ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -94,7 +94,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('trashcan.admin.loop');
 /* ===== */
-while($row = cot_db_fetcharray($sql))
+while($row = $sql->fetch())
 {
 	switch($row['tr_type'])
 	{

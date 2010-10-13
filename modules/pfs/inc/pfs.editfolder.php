@@ -73,9 +73,9 @@ if ($userid!=$usr['id'])
 
 $title .= " ".$cfg['separator']." ".$L['Edit'];
 
-$sql = cot_db_query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
+$sql = $cot_db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
 
-if ($row = cot_db_fetcharray($sql))
+if ($row = $sql->fetch())
 {
 	$pff_id=$row['pff_id'];
 	$pff_date = $row['pff_date'];
@@ -99,13 +99,13 @@ if ($a=='update' && !empty($f))
 	$folderid = cot_import('folderid','P','INT');
 	$rispublic = cot_import('rispublic','P','BOL');
 	$risgallery = cot_import('risgallery','P','BOL');
-	$sql = cot_db_query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
-	cot_die(cot_db_numrows($sql)==0);
+	$sql = $cot_db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
+	cot_die($sql->rowCount()==0);
 
-	$sql = cot_db_query("UPDATE $db_pfs_folders SET
-		pff_title='".cot_db_prep($rtitle)."',
+	$sql = $cot_db->query("UPDATE $db_pfs_folders SET
+		pff_title='".$cot_db->prep($rtitle)."',
 		pff_updated='".$sys['now']."',
-		pff_desc='".cot_db_prep($rdesc)."',
+		pff_desc='".$cot_db->prep($rdesc)."',
 		pff_ispublic='$rispublic',
 		pff_isgallery='$risgallery'
 		WHERE pff_userid='$userid' AND pff_id='$f' " );

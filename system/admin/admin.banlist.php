@@ -34,11 +34,11 @@ if ($a == 'update')
 {
 	$id = cot_import('id', 'G', 'INT');
 	$rbanlistip = cot_import('rbanlistip', 'P', 'TXT');
-	$rbanlistemail = cot_db_prep(cot_import('rbanlistemail', 'P', 'TXT'));
-	$rbanlistreason = cot_db_prep(cot_import('rbanlistreason', 'P', 'TXT'));
+	$rbanlistemail = $cot_db->prep(cot_import('rbanlistemail', 'P', 'TXT'));
+	$rbanlistreason = $cot_db->prep(cot_import('rbanlistreason', 'P', 'TXT'));
 
 	$sql = (!empty($rbanlistip) || !empty($rbanlistemail))
-		? cot_db_update($db_banlist, array(
+		? $cot_db->update($db_banlist, array(
 			'ip' => $rbanlistip,
 			'email' => $rbanlistemail,
 			'reason' => $rbanlistreason
@@ -50,8 +50,8 @@ if ($a == 'update')
 elseif ($a == 'add')
 {
 	$nbanlistip = cot_import('nbanlistip', 'P', 'TXT');
-	$nbanlistemail = cot_db_prep(cot_import('nbanlistemail', 'P', 'TXT'));
-	$nbanlistreason = cot_db_prep(cot_import('nbanlistreason', 'P', 'TXT'));
+	$nbanlistemail = $cot_db->prep(cot_import('nbanlistemail', 'P', 'TXT'));
+	$nbanlistreason = $cot_db->prep(cot_import('nbanlistreason', 'P', 'TXT'));
 	$nexpire = cot_import('nexpire', 'P', 'INT');
 
 	$nbanlistip_cnt = explode('.', $nbanlistip);
@@ -62,7 +62,7 @@ elseif ($a == 'add')
 		$nexpire += $sys['now'];
 	}
 	$sql = (!empty($nbanlistip) || !empty($nbanlistemail))
-		? cot_db_insert($db_banlist, array(
+		? $cot_db->insert($db_banlist, array(
 			'ip' => $nbanlistip,
 			'email' => $nbanlistemail,
 			'reason' => $nbanlistreason,
@@ -77,14 +77,14 @@ elseif ($a == 'delete')
 	cot_check_xg();
 	$id = cot_import('id', 'G', 'INT');
 
-	cot_db_delete($db_banlist, "banlist_id=$id") ? cot_message('alreadydeletednewentry') : cot_message('Error');
+	$cot_db->delete($db_banlist, "banlist_id=$id") ? cot_message('alreadydeletednewentry') : cot_message('Error');
 }
 
-$totalitems = cot_db_rowcount($db_banlist);
+$totalitems = $cot_db->countRows($db_banlist);
 
 $pagenav = cot_pagenav('admin', 'm=banlist', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = cot_db_query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $cot_db->query("SELECT * FROM $db_banlist ORDER by banlist_expire DESC, banlist_ip LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 
@@ -94,7 +94,7 @@ $extp = cot_getextplugins('admin.banlist.loop');
 
 
 
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	$t->assign(array(
 		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],

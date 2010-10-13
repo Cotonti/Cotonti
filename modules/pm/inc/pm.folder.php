@@ -115,11 +115,11 @@ $out['head'] .= $R['code_noindex'];
 cot_online_update();
 /* === Title === */
 
-$sql = cot_db_query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter");
-$totallines = cot_db_result($sql, 0, "COUNT(*)");
+$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter");
+$totallines = $sql->fetchColumn();
 $d = ($d >= $totallines) ? (floor($totallines / $cfg['maxpmperpage'])) * $cfg['maxpmperpage'] : $d;
 $elem = ($f == 'sentbox') ? 'pm_touserid' : 'pm_fromuserid';
-$sql = cot_db_query("SELECT p.*, u.* FROM $db_pm AS p
+$sql = $cot_db->query("SELECT p.*, u.* FROM $db_pm AS p
 		LEFT JOIN $db_users AS u
 		ON u.user_id = p.$elem
 		WHERE $sqlfilter
@@ -146,7 +146,7 @@ $jj = 0;
 $extp = cot_getextplugins('pm.list.loop');
 /* ===== */
 
-while ($row = cot_db_fetcharray($sql))
+while ($row = $sql->fetch())
 {
 	$jj++;
 	$row['pm_icon_readstatus'] = ($row['pm_tostate'] == '0') ?

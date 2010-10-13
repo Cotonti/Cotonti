@@ -441,11 +441,11 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
  */
 function cot_load_structure()
 {
-	global $db_structure, $db_extra_fields, $cfg, $L, $cot_cat, $cot_extrafields;
+	global $cot_db, $db_structure, $db_extra_fields, $cfg, $L, $cot_cat, $cot_extrafields;
 	$cot_cat = array();
-	$sql = cot_db_query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
+	$sql = $cot_db->query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
 
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		if (!empty($row['structure_icon']))
 		{
@@ -572,7 +572,7 @@ function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters =
  */
 function cot_online_update()
 {
-	global $cfg, $sys, $usr, $out, $db_online, $db_stats, $cot_cache, $cot_usersonline, $env, $Ls;
+	global $cot_db, $cfg, $sys, $usr, $out, $db_online, $db_stats, $cot_cache, $cot_usersonline, $env, $Ls;
 	if (!$cfg['disablewhosonline'])
 	{
 		if ($env['location'] != $sys['online_location']
@@ -582,24 +582,24 @@ function cot_online_update()
 			{
 				if (empty($sys['online_location']))
 				{
-					cot_db_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
-						VALUES ('".$usr['ip']."', '".cot_db_prep($usr['name'])."', ".(int)$sys['now'].", '".cot_db_prep($env['location'])."',  '".cot_db_prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
+					$cot_db->query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
+						VALUES ('".$usr['ip']."', '".$cot_db->prep($usr['name'])."', ".(int)$sys['now'].", '".$cot_db->prep($env['location'])."',  '".$cot_db->prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
 				}
 				else
 				{
-					cot_db_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".cot_db_prep($env['location'])."', online_subloc='".cot_db_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
+					$cot_db->query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$cot_db->prep($env['location'])."', online_subloc='".$cot_db->prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
 				}
 			}
 			else
 			{
 				if (empty($sys['online_location']))
 				{
-					cot_db_query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
-						VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".cot_db_prep($env['location'])."', '".cot_db_prep($sys['sublocation'])."', -1, 0, 0)");
+					$cot_db->query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
+						VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".$cot_db->prep($env['location'])."', '".$cot_db->prep($sys['sublocation'])."', -1, 0, 0)");
 				}
 				else
 				{
-					cot_db_query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$env['location']."', online_subloc='".cot_db_prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
+					$cot_db->query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$env['location']."', online_subloc='".$cot_db->prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
 				}
 			}
 		}
@@ -614,19 +614,19 @@ function cot_online_update()
 		else
 		{
 			$online_timedout = $sys['now'] - $cfg['timedout'];
-			cot_db_query("DELETE FROM $db_online WHERE online_lastseen < $online_timedout");
-			$sys['whosonline_vis_count'] = cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'"), 0, 0);
-			$sql_o = cot_db_query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
-			$sys['whosonline_reg_count'] = cot_db_numrows($sql_o);
+			$cot_db->query("DELETE FROM $db_online WHERE online_lastseen < $online_timedout");
+			$sys['whosonline_vis_count'] = $cot_db->query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'")->fetchColumn();
+			$sql_o = $cot_db->query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
+			$sys['whosonline_reg_count'] = $sql_o->rowCount();
 			$ii_o = 0;
-			while ($row_o = cot_db_fetcharray($sql_o))
+			while ($row_o = $sql_o->fetch())
 			{
 				$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
 				$out['whosonline_reg_list'] .= cot_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
 				$cot_usersonline[] = $row_o['online_userid'];
 				$ii_o++;
 			}
-			cot_db_freeresult($sql_o);
+			$sql_o->closeCursor();
 			unset($ii_o, $sql_o, $row_o);
 			if ($cot_cache && $cot_cache->mem)
 			{
@@ -650,14 +650,14 @@ function cot_online_update()
 			}
 			else
 			{
-				$sql = cot_db_query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-				$maxusers = (int) @cot_db_result($sql, 0, 0);
+				$sql = $cot_db->query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
+				$maxusers = (int) @$sql->fetchColumn();
 				$cot_cache && $cot_cache->mem && $cot_cache->mem->store('maxusers', $maxusers, 'system', 0);
 			}
 
 			if ($maxusers < $sys['whosonline_all_count'])
 			{
-				$sql = cot_db_query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
+				$sql = $cot_db->query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
 					WHERE stat_name='maxusers'");
 			}
 		}
@@ -786,7 +786,7 @@ function cot_shutdown()
 		ob_end_flush();
 	}
 	$cot_cache = null; // Need to destroy before DB connection is lost
-	cot_db_close();
+	$cot_db = null;
 }
 
 /**
@@ -892,7 +892,7 @@ function cot_auth($area, $option, $mask = 'RWA')
  */
 function cot_auth_build($userid, $maingrp = 0)
 {
-	global $db_auth, $db_groups_users;
+	global $cot_db, $db_auth, $db_groups_users;
 
 	$groups = array();
 	$authgrid = array();
@@ -905,18 +905,18 @@ function cot_auth_build($userid, $maingrp = 0)
 	else
 	{
 		$groups[] = $maingrp;
-		$sql = cot_db_query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
+		$sql = $cot_db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
 
-		while ($row = cot_db_fetcharray($sql))
+		while ($row = $sql->fetch())
 		{
 			$groups[] = $row['gru_groupid'];
 		}
 	}
 
 	$sql_groups = implode(',', $groups);
-	$sql = cot_db_query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN (".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
+	$sql = $cot_db->query("SELECT auth_code, auth_option, auth_rights FROM $db_auth WHERE auth_groupid IN (".$sql_groups.") ORDER BY auth_code ASC, auth_option ASC");
 
-	while ($row = cot_db_fetcharray($sql))
+	while ($row = $sql->fetch())
 	{
 		$authgrid[$row['auth_code']][$row['auth_option']] |= $row['auth_rights'];
 	}
@@ -1127,7 +1127,7 @@ function cot_build_oddeven($number)
  */
 function cot_build_ratings($code, $url, $display)
 {
-	global $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L, $R;
+	global $cot_db, $db_ratings, $db_rated, $db_users, $cfg, $usr, $sys, $L, $R;
 	static $called = false;
 
 	list($usr['auth_read_rat'], $usr['auth_write_rat'], $usr['isadmin_rat']) = cot_auth('ratings', 'a');
@@ -1146,9 +1146,9 @@ function cot_build_ratings($code, $url, $display)
 		}
 	}
 
-	$sql = cot_db_query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
+	$sql = $cot_db->query("SELECT * FROM $db_ratings WHERE rating_code='$code' LIMIT 1");
 
-	if ($row = cot_db_fetcharray($sql))
+	if ($row = $sql->fetch())
 	{
 		$rating_average = $row['rating_average'];
 		$yetrated = TRUE;
@@ -1198,7 +1198,7 @@ function cot_build_ratings($code, $url, $display)
 
 	if (!$cfg['ratings_allowchange'])
 	{
-		$alr_rated = cot_db_result(cot_db_query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".cot_db_prep($code)."'"), 0, 'COUNT(*)');
+		$alr_rated = $cot_db->query("SELECT COUNT(*) FROM ".$db_rated." WHERE rated_userid=".$usr['id']." AND rated_code = '".$cot_db->prep($code)."'")->fetchColumn();
 	}
 	else
 	{
@@ -1214,24 +1214,24 @@ function cot_build_ratings($code, $url, $display)
 		}
 		/* ===== */
 
-		$sql = cot_db_query("DELETE FROM $db_rated WHERE rated_code='".cot_db_prep($code)."' AND rated_userid='".$usr['id']."' ");
+		$sql = $cot_db->query("DELETE FROM $db_rated WHERE rated_code='".$cot_db->prep($code)."' AND rated_userid='".$usr['id']."' ");
 
 		if (!$yetrated)
 		{
-			$sql = cot_db_query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('".cot_db_prep($code)."', 0, ".(int)$newrate.", ".(int)$sys['now_offset'].", '') ");
+			$sql = $cot_db->query("INSERT INTO $db_ratings (rating_code, rating_state, rating_average, rating_creationdate, rating_text) VALUES ('".$cot_db->prep($code)."', 0, ".(int)$newrate.", ".(int)$sys['now_offset'].", '') ");
 		}
 
-		$sql = ($newrate) ? cot_db_query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".cot_db_prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")") : '';
-		$sql = cot_db_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
-		$rating_voters = cot_db_result($sql, 0, "COUNT(*)");
+		$sql = ($newrate) ? $cot_db->query("INSERT INTO $db_rated (rated_code, rated_userid, rated_value) VALUES ('".$cot_db->prep($code)."', ".(int)$usr['id'].", ".(int)$newrate.")") : '';
+		$sql = $cot_db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code'");
+		$rating_voters = $sql->fetchColumn();
 		if ($rating_voters > 0)
 		{
-			$ratingnewaverage = cot_db_result(cot_db_query("SELECT AVG(rated_value) FROM $db_rated WHERE rated_code='$code'"), 0, "AVG(rated_value)");
-			$sql = cot_db_query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
+			$ratingnewaverage = $cot_db->query("SELECT AVG(rated_value) FROM $db_rated WHERE rated_code='$code'")->fetchColumn();
+			$sql = $cot_db->query("UPDATE $db_ratings SET rating_average='$ratingnewaverage' WHERE rating_code='$code'");
 		}
 		else
 		{
-			$sql = cot_db_query("DELETE FROM $db_ratings WHERE rating_code='$code' ");
+			$sql = $cot_db->query("DELETE FROM $db_ratings WHERE rating_code='$code' ");
 		}
 
 		/* == Hook for the plugins == */
@@ -1246,9 +1246,9 @@ function cot_build_ratings($code, $url, $display)
 
 	if ($usr['id'] > 0)
 	{
-		$sql1 = cot_db_query("SELECT rated_value FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' LIMIT 1");
+		$sql1 = $cot_db->query("SELECT rated_value FROM $db_rated WHERE rated_code='$code' AND rated_userid='".$usr['id']."' LIMIT 1");
 
-		if ($row1 = cot_db_fetcharray($sql1))
+		if ($row1 = $sql1->fetch())
 		{
 			$alreadyvoted = ($cfg['ratings_allowchange']) ? FALSE : TRUE;
 			$rating_uservote = $L['rat_alreadyvoted']." (".$row1['rated_value'].")";
@@ -1276,8 +1276,8 @@ function cot_build_ratings($code, $url, $display)
 
 	if ($yetrated)
 	{
-		$sql = cot_db_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
-		$rating_voters = cot_db_result($sql, 0, "COUNT(*)");
+		$sql = $cot_db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
+		$rating_voters = $sql->fetchColumn();
 		$rating_average = $row['rating_average'];
 		$rating_since = $L['rat_since']." ".date($cfg['dateformat'], $row['rating_creationdate'] + $usr['timezone'] * 3600);
 		if ($rating_average<1)
@@ -1291,8 +1291,8 @@ function cot_build_ratings($code, $url, $display)
 
 		$rating = round($rating_average,0);
 		$rating_averageimg = cot_rc('icon_rating_stars', array('val' => $rating));
-		$sql = cot_db_query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
-		$rating_voters = cot_db_result($sql, 0, "COUNT(*)");
+		$sql = $cot_db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$code' ");
+		$rating_voters = $sql->fetchColumn();
 	}
 	else
 	{
@@ -2080,9 +2080,9 @@ function cot_implode_messages($src = 'default', $class = '')
  */
 function cot_log($text, $group='def')
 {
-	global $db_logger, $sys, $usr, $_SERVER;
+	global $cot_db, $db_logger, $sys, $usr, $_SERVER;
 
-	$sql = cot_db_query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (".(int)$sys['now_offset'].", '".$usr['ip']."', '".cot_db_prep($usr['name'])."', '$group', '".cot_db_prep($text.' - '.$_SERVER['REQUEST_URI'])."')");
+	$sql = $cot_db->query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (".(int)$sys['now_offset'].", '".$usr['ip']."', '".$cot_db->prep($usr['name'])."', '$group', '".$cot_db->prep($text.' - '.$_SERVER['REQUEST_URI'])."')");
 }
 
 /**
@@ -3071,9 +3071,9 @@ function cot_check_xp()
  */
 function cot_shield_clearaction()
 {
-	global  $db_online, $usr;
+	global $cot_db, $db_online, $usr;
 
-	$sql = cot_db_query("UPDATE $db_online SET online_action='' WHERE online_ip='".$usr['ip']."'");
+	$sql = $cot_db->query("UPDATE $db_online SET online_action='' WHERE online_ip='".$usr['ip']."'");
 }
 
 /**
@@ -3137,11 +3137,11 @@ function cot_shield_protect()
  */
 function cot_shield_update($shield_add, $shield_newaction)
 {
-	global $cfg, $usr, $sys, $db_online;
+	global $cot_db, $cfg, $usr, $sys, $db_online;
 	if ($cfg['shieldenabled'])
 	{
 		$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] /100);
-		$sql = cot_db_query("UPDATE $db_online SET online_shield='$shield_newlimit', online_action='$shield_newaction' WHERE online_ip='".$usr['ip']."'");
+		$sql = $cot_db->query("UPDATE $db_online SET online_shield='$shield_newlimit', online_action='$shield_newaction' WHERE online_ip='".$usr['ip']."'");
 	}
 }
 
@@ -3179,9 +3179,9 @@ function cot_xp()
  */
 function cot_stat_create($name)
 {
-	global $db_stats;
+	global $cot_db, $db_stats;
 
-	cot_db_query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".cot_db_prep($name)."', 1)");
+	$cot_db->query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".$cot_db->prep($name)."', 1)");
 }
 
 /**
@@ -3192,10 +3192,10 @@ function cot_stat_create($name)
  */
 function cot_stat_get($name)
 {
-	global $db_stats;
+	global $cot_db, $db_stats;
 
-	$sql = cot_db_query("SELECT stat_value FROM $db_stats where stat_name='$name' LIMIT 1");
-	return (cot_db_numrows($sql) > 0) ? (int) cot_db_result($sql, 0, 'stat_value') : FALSE;
+	$sql = $cot_db->query("SELECT stat_value FROM $db_stats where stat_name='$name' LIMIT 1");
+	return ($sql->rowCount() > 0) ? (int) $sql->fetchColumn() : FALSE;
 }
 
 /**
@@ -3206,8 +3206,8 @@ function cot_stat_get($name)
  */
 function cot_stat_inc($name, $value = 1)
 {
-	global $db_stats;
-	cot_db_query("UPDATE $db_stats SET stat_value=stat_value+$value WHERE stat_name='$name'");
+	global $cot_db, $db_stats;
+	$cot_db->query("UPDATE $db_stats SET stat_value=stat_value+$value WHERE stat_name='$name'");
 }
 
 /**
@@ -3218,9 +3218,9 @@ function cot_stat_inc($name, $value = 1)
  */
 function cot_stat_update($name, $value = 1)
 {
-	global $db_stats;
-	cot_db_query("INSERT INTO $db_stats (stat_name, stat_value)
-		VALUES ('".cot_db_prep($name)."', 1)
+	global $cot_db, $db_stats;
+	$cot_db->query("INSERT INTO $db_stats (stat_name, stat_value)
+		VALUES ('".$cot_db->prep($name)."', 1)
 		ON DUPLICATE KEY UPDATE stat_value=stat_value+$value");
 }
 

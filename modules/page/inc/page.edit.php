@@ -29,9 +29,9 @@ cot_block($usr['auth_read']);
 
 if ($a == 'update')
 {
-	$sql1 = cot_db_query("SELECT page_cat, page_ownerid FROM $db_pages WHERE page_id='$id' LIMIT 1");
-	cot_die(cot_db_numrows($sql1) == 0);
-	$row1 = cot_db_fetcharray($sql1);
+	$sql1 = $cot_db->query("SELECT page_cat, page_ownerid FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	cot_die($sql1->rowCount() == 0);
+	$row1 = $sql1->fetch();
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $row1['page_cat']);
 
@@ -88,19 +88,19 @@ if ($a == 'update')
 
 	if($rpagedelete)
 	{
-		$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+		$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 
-		if ($row = cot_db_fetchassoc($sql))
+		if ($row = $sql->fetch())
 		{
 			if ($row['page_state'] != 1)
 			{
-				$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+				$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 			}
 
 			$id2 = "p".$id;
-			$sql = cot_db_delete($db_pages, "page_id='$id'");
-			$sql = cot_db_delete($db_ratings, "rating_code='$id2'");
-			$sql = cot_db_delete($db_rated, "rated_code='$id2'");
+			$sql = $cot_db->delete($db_pages, "page_id='$id'");
+			$sql = $cot_db->delete($db_ratings, "rating_code='$id2'");
+			$sql = $cot_db->delete($db_rated, "rated_code='$id2'");
 			cot_log("Deleted page #".$id,'adm');
 			/* === Hook === */
 			foreach (cot_getextplugins('page.edit.delete.done') as $pl)
@@ -126,17 +126,17 @@ if ($a == 'update')
 	{
 		if (!empty($rpage['alias']))
 		{
-			$sql = cot_db_query("SELECT page_id FROM $db_pages WHERE page_alias='".cot_db_prep($rpage['alias'])."' AND page_id!='".$id."'");
-			$rpage['alias'] = (cot_db_numrows($sql) > 0) ? $rpage['alias'].rand(1000, 9999) : $rpage['alias'];
+			$sql = $cot_db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$cot_db->prep($rpage['alias'])."' AND page_id!='".$id."'");
+			$rpage['alias'] = ($sql->rowCount() > 0) ? $rpage['alias'].rand(1000, 9999) : $rpage['alias'];
 		}
 
-		$sql = cot_db_query("SELECT page_cat, page_state FROM $db_pages WHERE page_id='$id' ");
-		$row = cot_db_fetcharray($sql);
+		$sql = $cot_db->query("SELECT page_cat, page_state FROM $db_pages WHERE page_id='$id' ");
+		$row = $sql->fetch();
 
 		if ($row['page_cat'] != $rpage['cat'] /*&& ($row['page_state'] == 0 || $row['page_state'] == 2)*/)
 		{
-			$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".cot_db_prep($row['page_cat'])."' ");
-			//$sql = cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".cot_db_prep($rpage['cat)."' ");
+			$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$cot_db->prep($row['page_cat'])."' ");
+			//$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$cot_db->prep($rpage['cat)."' ");
 		}
 
 		//$usr['isadmin'] = cot_auth('page', $rpage['cat'], 'A');
@@ -148,7 +148,7 @@ if ($a == 'update')
 				$rpage['state'] = 0;
 				if ($row['page_state'] == 1)
 				{
-					cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".cot_db_prep($rpage['cat'])."' ");
+					$cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$cot_db->prep($rpage['cat'])."' ");
 				}
 			}
 			else
@@ -162,10 +162,10 @@ if ($a == 'update')
 		}
 		if ($rpage['state'] == 1 && $row['page_state'] != 1)
 		{
-			cot_db_query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".cot_db_prep($rpage['cat'])."' ");
+			$cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$cot_db->prep($rpage['cat'])."' ");
 		}
 
-		$sql = cot_db_update($db_pages, $rpage, "page_id='$id'", 'page_');
+		$sql = $cot_db->update($db_pages, $rpage, "page_id='$id'", 'page_');
 		/* === Hook === */
 		foreach (cot_getextplugins('page.edit.update.done') as $pl)
 		{
@@ -194,9 +194,9 @@ if ($a == 'update')
 	}
 }
 
-$sql = cot_db_query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
-cot_die(cot_db_numrows($sql) == 0);
-$pag = cot_db_fetcharray($sql);
+$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+cot_die($sql->rowCount() == 0);
+$pag = $sql->fetch();
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $pag['page_cat']);
 cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);

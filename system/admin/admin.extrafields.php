@@ -166,8 +166,8 @@ elseif ($a == 'del' && isset($name))
 
 $cfg['cache'] && $cot_cache->db->remove('cot_extrafields', 'system');
 
-$totalitems = cot_db_result(cot_db_query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$location'"), 0, 0);
-$res = cot_db_query("SELECT * FROM $db_extra_fields WHERE field_location = '$location' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+$totalitems = $cot_db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$location'")->fetchColumn();
+$res = $cot_db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$location' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $pagenav = cot_pagenav('admin',$extra_path, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
@@ -177,7 +177,7 @@ $ii = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('admin.extrafields.loop');
 /* ===== */
-while ($row = cot_db_fetchassoc($res))
+while ($row = $res->fetch())
 {
 	$t->assign(array(
 		'ADMIN_EXTRAFIELDS_ROW_NAME' => cot_inputbox('text', 'field_name['.$row['field_name'].']', $row['field_name']),

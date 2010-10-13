@@ -40,24 +40,24 @@ foreach (cot_getextplugins('forums.sections.first') as $pl)
 
 if ($n=='markall' && $usr['id']>0)
 {
-    $sql = cot_db_query("UPDATE $db_users set user_lastvisit='".$sys['now_offset']."' WHERE user_id='".$usr['id']."'");
+    $sql = $cot_db->query("UPDATE $db_users set user_lastvisit='".$sys['now_offset']."' WHERE user_id='".$usr['id']."'");
     $usr['lastvisit'] = $sys['now_offset'];
 }
 
-$sql = cot_db_query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
+$sql = $cot_db->query("SELECT s.*, n.* FROM $db_forum_sections AS s LEFT JOIN
     $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid='0'
 ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC");
 
 if (!$cot_sections_act)
 {
     $timeback = $sys['now'] - 604800;
-    $sqlact = cot_db_query("SELECT fs_id FROM $db_forum_sections");
+    $sqlact = $cot_db->query("SELECT fs_id FROM $db_forum_sections");
 
-    while ($tmprow = cot_db_fetcharray($sqlact))
+    while ($tmprow = $sqlact->fetch())
     {
         $section = $tmprow['fs_id'];
-        $sqltmp = cot_db_query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_creation>'$timeback' AND fp_sectionid='$section'");
-        $cot_sections_act[$section] = cot_db_result($sqltmp, 0, "COUNT(*)");
+        $sqltmp = $cot_db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_creation>'$timeback' AND fp_sectionid='$section'");
+        $cot_sections_act[$section] = $sqltmp->fetchColumn();
     }
     $cot_cache && $cot_cache->db->store('cot_sections_act', $cot_sections_act, 'system', 600);
 }
@@ -65,9 +65,9 @@ if (!$cot_sections_act)
 $cot_cache && $cot_cache->mem && $cot_sections_vw = $cot_cache->mem->get('sections_wv', 'forums');
 if (!$cot_sections_vw)
 {
-    $sqltmp = cot_db_query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
+    $sqltmp = $cot_db->query("SELECT online_subloc, COUNT(*) FROM $db_online WHERE online_location='Forums' GROUP BY online_subloc");
 
-    while ($tmprow = cot_db_fetcharray($sqltmp))
+    while ($tmprow = $sqltmp->fetch())
     {
         $cot_sections_vw[$tmprow['online_subloc']] = $tmprow['COUNT(*)'];
     }
@@ -115,15 +115,15 @@ $extp = cot_getextplugins('forums.sections.loop');
 /* ===== */
 
 
-while ($fsn = cot_db_fetcharray($sql))
+while ($fsn = $sql->fetch())
 {
 
     $latestp = $fsn['fs_lt_date'];
     if ($pcat!=$fsn['fs_category'])
     {
         $pcat = $fsn['fs_category'];
-        $sql2 = cot_db_query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat'");
-        $catnum = cot_db_result($sql2, 0, "COUNT(*)");
+        $sql2 = $cot_db->query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat'");
+        $catnum = $sql2->fetchColumn();
 
         $cattitle = cot_rc_link(cot_url('forums'), htmlspecialchars($cot_forums_str[$fsn['fs_category']]['tpath']),  "onclick=\"return toggleblock('blk_".$fsn['fs_category']."')'\"");
 
@@ -232,14 +232,14 @@ while ($fsn = cot_db_fetcharray($sql))
             ));
 
         $ii = 0;
-        $sql1 = cot_db_query("SELECT fs_id, fs_title, fs_lt_date FROM $db_forum_sections WHERE fs_masterid='".$fsn['fs_id']."' ");
-        while ($row = cot_db_fetcharray($sql1))
+        $sql1 = $cot_db->query("SELECT fs_id, fs_title, fs_lt_date FROM $db_forum_sections WHERE fs_masterid='".$fsn['fs_id']."' ");
+        while ($row = $sql1->fetch())
         {
 
             if ($row['fs_lt_date']>$latestp)
             {
-                $sql0 = cot_db_query("SELECT fs_lt_id, fs_lt_title, fs_lt_posterid, fs_lt_postername FROM $db_forum_sections WHERE fs_id='".$row['fs_id']."' ");
-                $fsnn = cot_db_fetcharray($sql0);
+                $sql0 = $cot_db->query("SELECT fs_lt_id, fs_lt_title, fs_lt_posterid, fs_lt_postername FROM $db_forum_sections WHERE fs_id='".$row['fs_id']."' ");
+                $fsnn = $sql0->fetch();
 
                 $fsnn['fs_lt_date'] = @date($cfg['formatmonthdayhourmin'], $row['fs_lt_date'] + $usr['timezone'] * 3600);
 

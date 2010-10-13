@@ -184,17 +184,17 @@ function cot_build_extrafields_data($name, $extrafield, $value)
  */
 function cot_load_extrafields()
 {
-	global $cot_dbc, $cot_extrafields, $db_extra_fields, $cot_cache;
+	global $cot_db, $cot_dbc, $cot_extrafields, $db_extra_fields, $cot_cache;
 	if (!$cot_extrafields && $cot_dbc)
 	{
 		$cot_extrafields = array();
-		$fieldsres = cot_db_query("SELECT * FROM $db_extra_fields WHERE 1");
-		while ($row = cot_db_fetchassoc($fieldsres))
+		$fieldsres = $cot_db->query("SELECT * FROM $db_extra_fields WHERE 1");
+		while ($row = $fieldsres->fetch())
 		{
 			$cot_extrafields[$row['field_location']][$row['field_name']] = $row;
 		}
 
-		cot_db_freeresult($fieldsres);
+		$fieldsres->closeCursor();
 		$cot_cache && $cot_cache->db->store('cot_extrafields', $cot_extrafields, 'system');
 	}
 }

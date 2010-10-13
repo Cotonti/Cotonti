@@ -100,15 +100,15 @@ else
 
 $cot_dbc = cot_db_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
 
-$sql = @cot_db_query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
-$sql2 = @cot_db_query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
-$old_branch = @cot_db_result($sql2, 0, 0);
+$sql = @$cot_db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
+$sql2 = @$cot_db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
+$old_branch = @$sql2->fetchColumn();
 
-if (cot_db_errno() > 0 || cot_db_numrows($sql) != 1)
+if ($cot_db->errno > 0 || $sql->rowCount() != 1)
 {
 	// Is Genoa, perform upgrade
 	$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
-	$error = cot_db_runscript($script);
+	$error = $cot_db->runScript($script);
 	if (empty($error))
 	{
 		cot_message(cot_rc('install_update_patch_applied',
@@ -141,7 +141,7 @@ if (cot_db_errno() > 0 || cot_db_numrows($sql) != 1)
 	if (!$cot_error)
 	{
 		// Success
-		cot_db_query("UPDATE $db_updates SET upd_value = '$branch'
+		$cot_db->query("UPDATE $db_updates SET upd_value = '$branch'
 			WHERE upd_param = 'branch'");
 		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
 	}
@@ -163,7 +163,7 @@ elseif ($old_branch != $branch)
 else
 {
 	// Update the core
-	$upd_rev = cot_db_result($sql, 0, 0);
+	$upd_rev = $sql->fetchColumn();
 	preg_match('#\$Rev: (\d+) \$#', $upd_rev, $mt);
 	$rev = (int) $mt[1];
 	$new_rev = cot_apply_patches("./setup/$branch", 'r' . $rev);
@@ -190,13 +190,13 @@ else
 		}
 	}
 	$installed_plugs = array();
-	$res = cot_db_query("SELECT DISTINCT(pl_code) FROM $db_plugins
+	$res = $cot_db->query("SELECT DISTINCT(pl_code) FROM $db_plugins
 		WHERE pl_module = 0 AND pl_active = 1");
-	while ($row = cot_db_fetchrow($res))
+	while ($row = $res->fetch(PDO::FETCH_NUM))
 	{
 		$installed_plugs[] = $row[0];
 	}
-	cot_db_freeresult($res);
+	$res->closeCursor();
 	foreach ($installed_plugs as $code)
 	{
 		$ret = cot_extension_install($code, false, true);
@@ -230,7 +230,7 @@ else
 		}
 		else
 		{
-			cot_db_query("UPDATE $db_updates SET upd_value = '\$Rev: $new_rev \$'
+			$cot_db->query("UPDATE $db_updates SET upd_value = '\$Rev: $new_rev \$'
 				WHERE upd_param = 'revision'");
 		}
 		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', array('rev' => $new_rev)));
