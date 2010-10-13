@@ -1,8 +1,7 @@
 <!-- BEGIN: MAIN -->
+
 <!-- BEGIN: COMMENTS_TITLE -->
-<div id="title">
-	<a href="{COMMENTS_TITLE_URL}">{COMMENTS_TITLE}</a>
-</div>
+<h2><a href="{COMMENTS_TITLE_URL}">{COMMENTS_TITLE}</a></h2>
 <!-- END: COMMENTS_TITLE -->
 
 {FILE ./themes/nemesis/warnings.tpl}
@@ -10,10 +9,10 @@
 <!-- BEGIN: COMMENTS_FORM_EDIT -->
 <div class="block">
 	<form id="comments" name="comments" action="{COMMENTS_FORM_POST}" method="post">
-	<table class="cells" style="width:100%;">
+	<table class="cells">
 	<tr>
-		<td width="20%"><b>{COMMENTS_POSTER_TITLE}:</b></td>
-		<td width="80%">{COMMENTS_POSTER}</td>
+		<td class="width20"><b>{COMMENTS_POSTER_TITLE}:</b></td>
+		<td class="width80">{COMMENTS_POSTER}</td>
 	</tr>
 	<tr>
 		<td><b>{COMMENTS_IP_TITLE}:</b></td>
@@ -38,31 +37,40 @@
 </div>
 <!-- END: COMMENTS_FORM_EDIT -->
 
-<!-- BEGIN: COMMENTS_EMPTY -->
-<div class="block">
-	<b>{GUESTBOOK_EMPTYTEXT}</b>
-</div>
-<!-- END: COMMENTS_EMPTY -->
-<br />
 <!-- END: MAIN -->
 
 <!-- BEGIN: COMMENTS -->
-<a name="comments">&nbsp;</a>
-<div class="comments" style="display:{COMMENTS_DISPLAY}">
+
+<a name="comments"></a>
+
+<div style="display:{COMMENTS_DISPLAY}">
+
 <!-- BEGIN: COMMENTS_ROW -->
-<span class="title">
-<a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}">{PHP.R.icon_comments} {COMMENTS_ROW_ORDER}.</a>
- &nbsp; {PHP.themelang.comments.Postedby} {COMMENTS_ROW_AUTHOR}</span> &nbsp; {COMMENTS_ROW_DATE} &nbsp; {COMMENTS_ROW_ADMIN} &nbsp; {COMMENTS_ROW_EDIT}
-
-<p>{COMMENTS_ROW_TEXT}</p>
-
-<hr />
+	<div class="comments1">
+		<p>{COMMENTS_ROW_AVATAR}</p>
+		<p><a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}">{COMMENTS_ROW_ORDER}.</a> {COMMENTS_ROW_AUTHOR}</p>
+		<p>{COMMENTS_ROW_DATE}</p>
+	</div>
+	<div class="comments2">
+		<p>{COMMENTS_ROW_TEXT}</p>
+		{COMMENTS_ROW_EDIT} {COMMENTS_ROW_ADMIN}
+	</div>
+	<hr class="clear" />
 <!-- END: COMMENTS_ROW -->
 
 <!-- BEGIN: PAGNAVIGATOR -->
-<div class="pagnav">{COMMENTS_PAGES_PAGESPREV} {COMMENTS_PAGES_PAGNAV} {COMMENTS_PAGES_PAGESNEXT}</div>
-<p>{COMMENTS_PAGES_INFO}</p>
+<p class="paging">{COMMENTS_PAGES_PAGESPREV}{COMMENTS_PAGES_PAGNAV}{COMMENTS_PAGES_PAGESNEXT}</p>
+<p class="paging"><span class="a1">{COMMENTS_PAGES_INFO}</span></p>
 <!-- END: PAGNAVIGATOR -->
+
+<!-- BEGIN: COMMENTS_NEWCOMMENT -->
+	<h2 class="comments">{PHP.L.Newcomment}</h2>
+	<form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
+		<div>{COMMENTS_FORM_TEXT}</div>
+		<div class="valid"><button type="submit">{PHP.L.Submit}</button></div>
+	</form>
+	<div class="help">{COMMENTS_FORM_HINT}</div>
+<!-- END: COMMENTS_NEWCOMMENT -->
 
 <!-- BEGIN: COMMENTS_EMPTY -->
 <div class="block">{COMMENTS_EMPTYTEXT}</div>
@@ -72,26 +80,19 @@
 <div class="error">{COMMENTS_ERROR_BODY}</div>
 <!-- END: COMMENTS_ERROR -->
 
-<!-- BEGIN: COMMENTS_NEWCOMMENT -->
-<form action="{COMMENTS_FORM_SEND}" method="post" name="newcomment">
-	<h4>{PHP.themelang.comments.Comment}:</h4>
-	<div style="width:100%;">{COMMENTS_FORM_TEXT}<br />{COMMENTS_FORM_HINT}</div>
-	<p><input type="submit" value="{PHP.L.Submit}" /></p>
-</form>
-<!-- END: COMMENTS_NEWCOMMENT -->
-
 <!-- BEGIN: COMMENTS_CLOSED -->
 <div class="error">{COMMENTS_CLOSED}</div>
 <!-- END: COMMENTS_CLOSED -->
 
 <!-- BEGIN: COMMENTS_ENABLEMENT -->
-<div class="block">
+<div class="warning">
 	<form action="{COMMENTS_ENABLEMENT_ACTION}" method="post">
 	{PHP.L.Comments_are} {COMMENTS_ENABLEMENT_STATE} {COMMENTS_ENABLEMENT_AREA}<br />
-	{COMMENTS_ENABLEMENT_CHANGE} {PHP.L.comments} {COMMENTS_ENABLEMENT_AREA_SELECTION}
-	<input type="submit" value="{PHP.L.Update}" />
+	{COMMENTS_ENABLEMENT_CHANGE} <span class="lower">{PHP.L.Comments}</span> {COMMENTS_ENABLEMENT_AREA_SELECTION} <button type="submit">{PHP.L.Update}</button>
 	</form>
 </div>
 <!-- END: COMMENTS_ENABLEMENT -->
+
 </div>
+
 <!-- END: COMMENTS -->
