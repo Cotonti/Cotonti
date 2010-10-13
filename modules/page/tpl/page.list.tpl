@@ -7,6 +7,8 @@
 					<h3>{LIST_ROW_TITLE}</h3>
 					<!-- IF {LIST_ROW_DESC} --><p class="small marginbottom10">{LIST_ROW_DESC}</p><!-- ENDIF -->
 					<!-- IF {PHP.usr.isadmin} --><p class="small marginbottom10">{LIST_ROW_ADMIN} ({LIST_ROW_COUNT})</p><!-- ENDIF -->
+					<div>{LIST_ROW_TEXT}</div>
+					<!-- IF {LIST_ROW_MORE} -->{PHP.R.list_more}<!-- ENDIF -->
 					<hr />
 				<!-- END: LIST_ROW -->
 			</div>

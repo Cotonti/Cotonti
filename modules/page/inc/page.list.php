@@ -78,8 +78,8 @@ if ($c == 'unvalidated')
 {
 	$where['state'] = "page_state = 1";
 	$where['ownerid'] = "page_ownerid = " . $usr['id'];
-	$cat['title'] = $L['pag_validation'];
-	$cat['desc'] = $L['pag_validation_desc'];
+	$cat['title'] = $L['page_validation'];
+	$cat['desc'] = $L['page_validation_desc'];
 }
 elseif ($c != 'all')
 {

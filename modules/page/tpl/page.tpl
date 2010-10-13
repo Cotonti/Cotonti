@@ -29,8 +29,8 @@
 							<!-- BEGIN: DOWNLOAD -->
 							<p>{PHP.L.Download}: <a class="strong" href="{PAGE_FILE_URL}">{PAGE_SHORTTITLE}</a></p>
 							<!-- END: DOWNLOAD -->
-							<p>{PHP.themelang.page.Filesize}: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
-							<p>{PHP.themelang.page.downloaded}: {PAGE_FILE_COUNT} {PHP.themelang.page.times}</p>
+							<p>{PHP.L.Filesize}, kB: {PAGE_FILE_SIZE}{PHP.L.kb}</p>
+							<p>{PHP.L.Downloaded}: {PAGE_FILE_COUNT}</p>
 						</div>
 					<!-- END: PAGE_FILE -->
 			</div>
@@ -44,7 +44,7 @@
 {FILE "themes/nemesis/inc/contact.tpl"}
 			<!-- BEGIN: PAGE_MULTI -->
 			<div class="block">
-				<h2 class="info">{PHP.themelang.page.Summary}:</h2>
+				<h2 class="info">{PHP.L.Summary}:</h2>
 				{PAGE_MULTI_TABTITLES}
 				<p class="paging">{PAGE_MULTI_TABNAV}</p>
 			</div>

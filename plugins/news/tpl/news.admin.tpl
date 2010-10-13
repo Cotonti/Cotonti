@@ -12,8 +12,8 @@
 			<td class="coltop width10">{PHP.L.NewsCount}</td>
 			<td class="coltop width10">{PHP.L.Newsautocut} *</td>
 			<td class="coltop width25">{PHP.L.Tag}</td>
-			<td class="coltop width20">{PHP.L.Template} **</td>
-			<td class="coltop width5">&nbsp;</td>
+			<td class="coltop width15">{PHP.L.Template} **</td>
+			<td class="coltop width10">&nbsp;</td>
 		</tr>
 		<tr>
 			<td  class="strong" colspan="6">{PHP.L.Maincat}</td>
@@ -45,29 +45,29 @@
 		</tr>
 		<!-- END: ADDITIONAL -->
 		<tr id="addtr">
-			<td class="valid" colspan="6"><input  name="addoption" value="{PHP.L.Add}" id="addoption" type="button" /></td>
+			<td class="valid" colspan="6"><button name="addoption" id="addoption" type="button">{PHP.L.Add}</button></td>
 		</tr>
 	</table>
 
-	<h3>{PHP.L.Settings}</h3>
+	<h2>{PHP.L.Settings}</h2>
 	<table class="cells">
 		<tr>
-			<td class="coltop" style="width:40%;">{PHP.L.Parameter}</td>
-			<td class="coltop" style="width:50%;">{PHP.L.Value}</td>
+			<td class="coltop" style="width:75%;">{PHP.L.Parameter}</td>
+			<td class="coltop" style="width:15%;">{PHP.L.Value}</td>
 			<td class="coltop" style="width:10%;">{PHP.L.Reset}</td>
 		</tr>
 		<tr>
 			<td>{PHP.L.Unsetadd}</td>
-			<td><label><input type="checkbox" value="1" name="newsmaincac" {UNSETADD} /></label></td>
+			<td class="centerall"><label><input type="checkbox" value="1" name="newsmaincac" {UNSETADD} /></label></td>
 			<td class="centerall">{PHP.R.icon_reset}</td>
 		</tr>
 		<tr>
 			<td>{PHP.L.cfg_syncpagination.0}:</td>
-			<td><span id="syncpag"> &nbsp; </span></td>
+			<td class="centerall"><span id="syncpag"> &nbsp; </span></td>
 			<td class="centerall">{PHP.R.icon_reset}</td>
 		</tr>
 		<tr>
-			<td class="valid" colspan="3"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
+			<td class="valid" colspan="3"><button type="submit">{PHP.L.Update}</button></td>
 		</tr>
 	</table>
 

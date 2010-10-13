@@ -54,10 +54,6 @@
 						<td>{PAGEEDIT_FORM_OWNERID}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.Parser}:</td>
-						<td>{PAGEEDIT_FORM_TYPE}</td>
-					</tr>
-					<tr>
 						<td>{PHP.L.Hits}:</td>
 						<td>{PAGEEDIT_FORM_PAGECOUNT}</td>
 					</tr>
@@ -70,28 +66,28 @@
 						</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.pageedit.File}:<br />
+						<td>{PHP.L.page_file}:<br />
 						{PHP.themelang.pageadd.Filehint}</td>
 						<td>{PAGEEDIT_FORM_FILE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.L.URL}:<br />{PHP.themelang.pageedit.URLhint}</td>
+						<td>{PHP.L.URL}:<br />{PHP.L.page_urlhint}</td>
 						<td>{PAGEEDIT_FORM_URL}<br />{PAGEEDIT_FORM_PFS_URL_USER} &nbsp; {PAGEEDIT_FORM_PFS_URL_SITE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.pageedit.Filesize}:<br />{PHP.themelang.pageedit.Filesizehint}</td>
+						<td>{PHP.L.page_filesize}:<br />{PHP.L.page_filesizehint}</td>
 						<td>{PAGEEDIT_FORM_SIZE}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.pageedit.Filehitcount}:<br />{PHP.themelang.pageedit.Filehitcounthint}</td>
+						<td>{PHP.L.page_filehitcount}:<br />{PHP.L.page_filehitcounthint}</td>
 						<td>{PAGEEDIT_FORM_FILECOUNT}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.pageedit.Pageid}:</td>
+						<td>{PHP.L.page_pageid}:</td>
 						<td>#{PAGEEDIT_FORM_ID}</td>
 					</tr>
 					<tr>
-						<td>{PHP.themelang.pageedit.Deletethispage}:</td>
+						<td>{PHP.L.page_deletepage}:</td>
 						<td>{PAGEEDIT_FORM_DELETE}</td>
 					</tr>
 					<tr>

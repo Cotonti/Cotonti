@@ -64,8 +64,8 @@ if ($a == 'add')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $rpage['cat']);
 	cot_block($usr['auth_write']);
 
-	if (empty($rpage['cat'])) cot_error('pag_catmissing', 'rpagecat');
-	if (mb_strlen($rpage['title']) < 2) cot_error('pag_titletooshort', 'rpagetitle');
+	if (empty($rpage['cat'])) cot_error('page_catmissing', 'rpagecat');
+	if (mb_strlen($rpage['title']) < 2) cot_error('page_titletooshort', 'rpagetitle');
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.add.add.error') as $pl)
@@ -145,7 +145,7 @@ if (empty($rpage['cat']) && !empty($c))
 }
 
 $title_params = array(
-	'TITLE' => $L['pagadd_subtitle'],
+	'TITLE' => $L['page_addsubtitle'],
 	'CATEGORY' => $cot_cat[$c]['title']
 );
 
@@ -167,8 +167,8 @@ $mskin = cot_skinfile(array('page', 'add', $cot_cat[$rpage['cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 $pageadd_array = array(
-	"PAGEADD_PAGETITLE" => $L['pagadd_title'],
-	"PAGEADD_SUBTITLE" => $L['pagadd_subtitle'],
+	"PAGEADD_PAGETITLE" => $L['page_addtitle'],
+	"PAGEADD_SUBTITLE" => $L['page_addsubtitle'],
 	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
 	"PAGEADD_FORM_SEND" => cot_url('page', 'm=add&a=add'),
 	"PAGEADD_FORM_CAT" => cot_selectbox_categories($rpage['cat'], 'rpagecat'),
