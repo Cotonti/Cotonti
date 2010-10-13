@@ -11,6 +11,7 @@ $(".deloption").live("click",function () {
 	}
 	return false;
 });
+
 $(document).ready(function(){
 	$("#addoption").click(function () {
 		if (ansCount<ansMax)
@@ -27,5 +28,3 @@ $(document).ready(function(){
 	$('#addoption').show();
 	$('.deloption').show();
 });
-
-var five = "Подключил!";
