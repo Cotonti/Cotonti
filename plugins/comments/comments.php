@@ -18,15 +18,28 @@ Hooks=standalone
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
 cot_require('comments', true);
+cot_require_api('forms');
 
 $m = cot_import('m', 'G', 'ALP');
 $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');
-$item = cot_import('item', 'G', 'TXT');
-$cat = cot_import('cat', 'G', 'TXT');
+$item = cot_import('item', 'G', 'ALP');
+$cat = cot_import('cat', 'G', 'ALP');
 $area = cot_import('area', 'G', 'ALP');
 
 $plugin_title = $L['plu_title'];
+
+// Get area/item/cat by id
+if ($id > 0)
+{
+	$res = $cot_db->query("SELECT com_code, com_area FROM $db_com WHERE com_id = $id");
+	if ($res->rowCount() == 1)
+	{
+		$row = $res->fetch();
+		$area = $row['com_area'];
+		$item = $row['com_code'];
+	}
+}
 
 // Check if comments are enabled for specific category/item
 cot_block(!empty($area) && !empty($item) && cot_comments_enabled($area, $cat, $item));
@@ -39,7 +52,6 @@ if ($m == 'edit' && $id > 0)
 {
 	if ($a == 'update' && $id > 0)
 	{
-		cot_check_xg();
 		/* == Hook == */
 		foreach (cot_getextplugins('comments.edit.update.first') as $pl)
 		{
@@ -58,7 +70,7 @@ if ($m == 'edit' && $id > 0)
 		$usr['allow_write'] = ($usr['isadmin'] || $usr['isowner']);
 		cot_block($usr['allow_write']);
 
-		$comtext = cot_import('comtext', 'P', 'TXT');
+		$comtext = cot_import('comtext', 'P', 'HTM');
 
 		if (empty($comtext))
 		{
@@ -114,8 +126,7 @@ if ($m == 'edit' && $id > 0)
 	$com_date = @date($cfg['dateformat'], $com['com_date'] + $usr['timezone'] * 3600);
 
 	$t->assign(array(
-		'COMMENTS_FORM_POST' => cot_url('plug', 'e=comments&m=edit&a=update&area='.$area
-			.'&item='.$com['com_code'].'&id='.$com['com_id']),
+		'COMMENTS_FORM_POST' => cot_url('plug', 'e=comments&m=edit&a=update&area='.$area.'&cat='.$cat.'&item='.$com['com_code'].'&id='.$com['com_id']),
 		'COMMENTS_POSTER_TITLE' => $L['Poster'],
 		'COMMENTS_POSTER' => $com['com_author'],
 		'COMMENTS_IP_TITLE' => $L['Ip'],
