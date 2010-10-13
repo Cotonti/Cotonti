@@ -25,7 +25,7 @@ $R['users_code_avatar'] = '{$avatar_existing}'.$L['pro_avatarsupload'].' ('.$cfg
 $R['users_code_avatar_existing'] = '<img src="{$avatar_url}" alt="'.$L['Avatar'].'" /><br />'.$L['Delete']
 	.' [<a href="{$delete_url}">x</a>]<br />&nbsp;<br />';
 
-$R['users_code_avatarchoose_title'] = '<a name="list" id="list"></a><h4>'.$L['pro_avatarschoose'].' :</h4>';
+$R['users_code_avatarchoose_title'] = '<a name="list" id="list"></a><h4>'.$L['pro_avatarschoose'].':</h4>';
 
 $R['users_code_photo'] = '{$photo_existing}'.$L['pro_photoupload'].' ('.$cfg['ph_maxx'].'x'.$cfg['ph_maxy'].'x'
 	.$cfg['ph_maxsize'].$L['b'].')<br />{$input_maxsize}{$input_file}<br />';
