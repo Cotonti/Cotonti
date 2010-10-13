@@ -23,17 +23,20 @@
 			</div>
 		</div>
 
-<!-- IF {PHP.cfg.plugin.recentitems.recentpages} AND !{PHP.cfg.disable_page} -->
 		<div class="clear block">
-			<h2 class="page">{PHP.themelang.index.Recentadditions}</h2>
-			<div>{PLUGIN_LATESTPAGES}</div>
+			<h2 class="warning"><a href="index.php?z=index&e=recentitems">{PHP.L.recentitems_title}</a></h2>
+				<!-- IF {PLUGIN_LATESTPAGES} -->
+				<h3>{PHP.L.recentitems_pages}</h3>
+				{PLUGIN_LATESTPAGES}
+				<!-- ELSE -->
+				<div class="warning">{PHP.L.recentitems_nonewpages}</div>
+				<!-- ENDIF -->
+				<!-- IF {PLUGIN_LATESTTOPICS} -->
+				<h3>{PHP.L.recentitems_forums}</h3>
+				{PLUGIN_LATESTTOPICS}
+				<!-- ELSE -->
+				<div class="warning">{PHP.L.recentitems_nonewposts}</div>
+				<!-- ENDIF -->
 		</div>
-<!-- ENDIF -->
-<!-- IF {PHP.cfg.plugin.recentitems.recentforums} AND !{PHP.cfg.disable_forums} -->
-		<div class="clear block">
-			<h2 class="forums">{PHP.themelang.index.Newinforums}</h2>
-			<div>{PLUGIN_LATESTTOPICS}</div>
-		</div>
-<!-- ENDIF -->
 
 <!-- END: MAIN -->

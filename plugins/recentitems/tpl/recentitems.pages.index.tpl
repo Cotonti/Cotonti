@@ -20,7 +20,7 @@
 <!-- END: PAGE_ROW -->
 <!-- BEGIN: NO_PAGES_FOUND -->
 	<tr>
-		<td colspan="2"><div class="error">{PHP.L.Rec_forum_nonew}</div></td>
+		<td colspan="4">{PHP.L.recentitems_nonewpages}</td>
 	</tr>
 <!-- END: NO_PAGES_FOUND -->
 </table>
