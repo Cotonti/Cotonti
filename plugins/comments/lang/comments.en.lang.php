@@ -12,10 +12,20 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Plugin Title & Subtitle
+ * Plugin Config
  */
 
-$L['plu_title'] = 'Comment Editing';
+$L['cfg_mail'] = array('Notify about new comments by email');
+$L['cfg_markitup'] = array('Use markitup'); // New in N-0.1.0
+$L['cfg_markup'] = array('Enable markup in comments');
+$L['cfg_time'] = array('Comments editable timeout for users', 'in minutes');
+$L['cfg_rss_commentmaxsymbols'] = array('Comments. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
+$L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default'); // New in N-0.0.2
+$L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' '); // New in N-0.0.6
+$L['cfg_commentsize'] = array('Max. size of comment, bytes', '0 for unlimited size'); // New in N-0.0.6
+$L['cfg_countcomments'] = array('Count comments', 'Display number of comments near the icon');
+$L['cfg_parsebbcodecom'] = array('Parse BBcodes in comments', '');
+$L['cfg_parsesmiliescom'] = array('Parse smilies in comments', '');
 
 /**
  * Plugin Body
@@ -23,22 +33,27 @@ $L['plu_title'] = 'Comment Editing';
 
 $L['Comment'] = 'Comment';
 $L['Comments'] = 'Comments';
-$L['comments'] = 'comments';
+$L['Newcomment'] = 'New comment';
+
 $L['Comments_are'] = 'Comments are';
 $L['comm_on_page'] = 'on page'; // New in N-0.0.2
+
 $L['com_closed'] = 'Adding comments has been disabled for this item'; // New in 0.1.0
 $L['com_commentadded'] = 'Done, comment added';
 $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commenttooshort'] = 'The comment is too short or missing';
 $L['com_nocommentsyet'] = 'No comments yet';
 $L['com_regonly'] = 'Only registered users can post new comments';
+
 $L['Disable'] = 'Disable';
 $L['Enable'] = 'Enable';
 $L['for_this_area'] = 'for this module/plugin';
 $L['for_this_category'] = 'for this category';
 $L['for_this_item'] = 'for this item';
+
 $L['plu_comgup'] = ' left';
-$L['plu_comhint'] = '* Your comment will be available for editing for %1$s';
+$L['plu_comhint'] = 'Your comment will be available for editing for %1$s';
+
 $L['plu_comlive'] = 'New comment on our site'; // New in N-0.1.0
 $L['plu_comlive1'] = 'Edited comment on the site'; // New in N-0.1.0
 $L['plu_comlive2'] = 'left a comment:'; // New in N-0.1.0
@@ -50,12 +65,6 @@ $L['rss_comments_item_desc'] = 'Last comments on page';	// New in N-0.0.2
 $L['rss_original'] = 'Original message'; // New in N-0.0.2
 
 /**
- * cot_declension arrays
- */
-
-$Ls['Comments'] = array('comments','comment');
-
-/**
  * Admin Section
  */
 
@@ -65,19 +74,15 @@ $L['adm_enablecomments'] = 'Enable comments'; // New in N-0.1.0
 $L['adm_comm_already_del'] = 'Comment deleted'; // New in N-0.0.2
 
 /**
- * Plugin Config
+ * cot_declension Arrays
  */
 
-$L['cfg_mail'] = array('Notify about new comments by email?');
-$L['cfg_markitup'] = array('Use markitup?'); // New in N-0.1.0
-$L['cfg_markup'] = array('Enable markup in comments');
-$L['cfg_time'] = array('Comments editable timeout for users', 'in minutes');
-$L['cfg_rss_commentmaxsymbols'] = array('Comments. Cut element description longer than N symbols', 'Disabled by default'); // New in N-0.7.0
-$L['cfg_expand_comments'] = array('Expand comments', 'Show comments expanded by default'); // New in N-0.0.2
-$L['cfg_maxcommentsperpage'] = array('Max. comments on page', ' '); // New in N-0.0.6
-$L['cfg_commentsize'] = array('Max. size of comment', 'In bytes (zero for unlimited size). Default: 0'); // New in N-0.0.6
-$L['cfg_countcomments'] = array('Count comments', 'Display the count of comments near the icon');
-$L['cfg_parsebbcodecom'] = array('Parse BBcode in comments', '');
-$L['cfg_parsesmiliescom'] = array('Parse smilies in comments', '');
+$Ls['Comments'] = array('comments','comment');
+
+/**
+ * Comedit
+ */
+
+$L['plu_title'] = 'Comment Editing';
 
 ?>
