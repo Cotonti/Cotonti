@@ -28,7 +28,7 @@ cot_require('users');
 // Mode choice
 if (!in_array($m, array('send', 'message')))
 {
-	$m = 'folder';
+	$m = 'list';
 }
 
 require_once cot_incfile($z, $m);

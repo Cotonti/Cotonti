@@ -20,6 +20,8 @@ Hooks=admin
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a');
 cot_block($usr['isadmin']);
 
+cot_require('pm');
+
 $t = new XTemplate(cot_skinfile('pm.admin', 'module'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);

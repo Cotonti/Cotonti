@@ -89,15 +89,15 @@ function cot_remove_pm($message_id)
 					($row['pm_touserid'] == $usr['id'] && $row['pm_fromstate'] == 3) ||
 					($row['pm_fromuserid'] == $usr['id'] && $row['pm_touserid'] == $usr['id']))
 			{
-				$sql2 = $cot_db->query("DELETE FROM $db_pm WHERE pm_id = '$id'");
+				$sql2 = $cot_db->delete($db_pm, "pm_id = '$id'");
 			}
 			elseif($row['pm_fromuserid'] == $usr['id'] && ($row['pm_tostate'] != 3 || $row['pm_tostate'] != 0))
 			{
-				$sql2 = $cot_db->query("UPDATE $db_pm SET pm_fromstate = 3 WHERE pm_id = '$id'");
+				$sql2 = $cot_db->update($db_pm, array('pm_fromstate' => '3'), "pm_id = '".$id."'");
 			}
 			elseif($row['pm_touserid'] == $usr['id'] && $row['pm_fromstate'] != 3)
 			{
-				$sql2 = $cot_db->query("UPDATE $db_pm SET pm_tostate = 3 WHERE pm_id = '$id'");
+				$sql2 = $cot_db->update($db_pm, array('pm_tostate' => '3'), "pm_id = '".$id."'");
 			}
 		}
 	}
@@ -134,17 +134,18 @@ function cot_star_pm($message_id)
 			if ($row['pm_fromuserid'] == $usr['id'] && $row['pm_touserid'] == $usr['id'])
 			{
 				$fromstate = ($row['pm_fromstate'] == 2) ?  1 : 2;
+				$sql2 = $cot_db->update($db_pm, array('pm_tostate' => (int)$fromstate, 'pm_fromstate' => (int)$fromstate), "pm_id = '".$id."'");
 				$sql2 = $cot_db->query("UPDATE $db_pm SET pm_tostate = ".(int)$fromstate.", pm_fromstate = ".(int)$fromstate." WHERE pm_id = '$id'");
 			}
 			elseif ($row['pm_touserid'] == $usr['id'])
 			{
 				$tostate = ($row['pm_tostate'] == 2) ?  1 : 2;
-				$sql2 = $cot_db->query("UPDATE $db_pm SET pm_tostate = ".(int)$tostate." WHERE pm_id = '$id'");
+				$sql2 = $cot_db->update($db_pm, array('pm_tostate' => (int)$tostate), "pm_id = '".$id."'");
 			}
 			elseif ($row['pm_fromuserid'] == $usr['id'])
 			{
 				$fromstate = ($row['pm_fromstate'] == 2) ?  1 : 2;
-				$sql2 = $cot_db->query("UPDATE $db_pm SET pm_fromstate = ".(int)$fromstate." WHERE pm_id = '$id'");
+				$sql2 = $cot_db->update($db_pm, array('pm_fromstate' => (int)$fromstate), "pm_id = '".$id."'");
 			}
 		}
 	}

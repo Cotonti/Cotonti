@@ -38,11 +38,11 @@
 			<table class="cells">
 				<tr>
 					<td class="width15">{PHP.L.Subject}:</td>
-					<td class="width85"><input type="text" class="text" name="newpmtitle" value="{PM_FORM_TITLE}" size="56" maxlength="255" /></td>
+					<td class="width85">{PM_FORM_TITLE}</td>
 				</tr>
 				<tr>
 					<td>{PHP.L.Message}:</td>
-					<td><textarea class="editor" name="newpmtext" rows="8" cols="56">{PM_FORM_TEXT}</textarea>{PM_FORM_PFS}</td>
+					<td>{PM_FORM_TEXT}</td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>

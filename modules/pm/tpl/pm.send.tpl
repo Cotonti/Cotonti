@@ -17,21 +17,18 @@
 					<tr>
 						<td class="width20">{PHP.L.Recipients}:</td>
 						<td>
-							<textarea name="newpmrecipient" id="newpmrecipient" rows="3" cols="56">{PMSEND_FORM_TOUSER}</textarea>
+							{PMSEND_FORM_TOUSER}
 							<p class="small">{PHP.themelang.pmsend.Sendmessagetohint}</p>
 						</td>
 					</tr>
 					<!-- END: PMSEND_USERLIST -->
 					<tr>
 						<td>{PHP.L.Subject}:</td>
-						<td><input type="text" class="text" name="newpmtitle" value="{PMSEND_FORM_TITLE}" size="56" maxlength="255" /></td>
+						<td>{PMSEND_FORM_TITLE}</td>
 					</tr>
 					<tr>
 						<td>{PHP.L.Message}:</td>
-						<td>
-							<textarea class="editor" name="newpmtext" rows="16" cols="56">{PMSEND_FORM_TEXT}</textarea>
-							{PMSEND_FORM_PFS}
-						</td>
+						<td>{PMSEND_FORM_TEXT}</td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
