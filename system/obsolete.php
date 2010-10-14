@@ -647,7 +647,12 @@ function sed_sql_update($table_name, $condition, $data, $prefix = '', $update_nu
 {
 	global $cot_db;
 
-	return $cot_db->update($table_name, $data, $condition, $prefix, $update_null);
+	$data_tmp = array();
+	foreach ($data as $key => $val)
+	{
+		$data_tmp[$prefix.$key] = $val;
+	}
+	return $cot_db->update($table_name, $data_tmp, $condition, array(), $update_null);
 }
 
 ?>

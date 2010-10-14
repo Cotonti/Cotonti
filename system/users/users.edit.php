@@ -85,24 +85,24 @@ if ($a=='update')
 		cot_redirect(cot_url('message', "msg=930", '', true));
 	}
 
-	$ruser['name'] = cot_import('rusername','P','TXT');
-	$ruser['maingrp'] = cot_import('rusermaingrp','P','INT');
-	$ruser['banexpire'] = cot_import('ruserbanexpire','P','INT');
-	$ruser['country'] = cot_import('rusercountry','P','ALP');
-	$ruser['avatar'] = cot_import('ruseravatar','P','TXT');
-	$ruser['photo'] = cot_import('ruserphoto','P','TXT');
-	$ruser['signature'] = cot_import('rusersignature','P','TXT');
-	$ruser['text'] = cot_import('rusertext','P','TXT');
-	$ruser['email'] = cot_import('ruseremail','P','TXT');
-	$ruser['hideemail'] = cot_import('ruserhideemail','P','INT');
-	$ruser['pmnotify'] = cot_import('ruserpmnotify','P','INT');
-	$ruser['theme'] = cot_import('rusertheme','P','TXT');
-	$ruser['lang'] = cot_import('ruserlang','P','ALP');
-	$ruser['gender'] = cot_import('rusergender','P','TXT');
+	$ruser['user_name'] = cot_import('rusername','P','TXT');
+	$ruser['user_maingrp'] = cot_import('rusermaingrp','P','INT');
+	$ruser['user_banexpire'] = cot_import('ruserbanexpire','P','INT');
+	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
+	$ruser['user_avatar'] = cot_import('ruseravatar','P','TXT');
+	$ruser['user_photo'] = cot_import('ruserphoto','P','TXT');
+	$ruser['user_signature'] = cot_import('rusersignature','P','TXT');
+	$ruser['user_text'] = cot_import('rusertext','P','TXT');
+	$ruser['user_email'] = cot_import('ruseremail','P','TXT');
+	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','INT');
+	$ruser['user_pmnotify'] = cot_import('ruserpmnotify','P','INT');
+	$ruser['user_theme'] = cot_import('rusertheme','P','TXT');
+	$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
+	$ruser['user_gender'] = cot_import('rusergender','P','TXT');
 
-	$ruser['birthdate'] = (int)cot_import_date('ruserbirthdate', false);
+	$ruser['user_birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
-	$ruser['timezone'] = (float) cot_import('rusertimezone','P','TXT');
+	$ruser['user_timezone'] = (float) cot_import('rusertimezone','P','TXT');
 	$rusernewpass = cot_import('rusernewpass','P','TXT', 16);
 
 	// Extra fields
@@ -113,7 +113,7 @@ if ($a=='update')
 
 	$rusergroupsms = cot_import('rusergroupsms', 'P', 'ARR');
 
-	if (mb_strlen($ruser['name']) < 2 || mb_strpos($ruser['name'], ',') !== false || mb_strpos($ruser['name'], "'") !== false)
+	if (mb_strlen($ruser['user_name']) < 2 || mb_strpos($ruser['user_name'], ',') !== false || mb_strpos($ruser['user_name'], "'") !== false)
 	{
 		cot_error('aut_usernametooshort', 'rusername');
 	}
@@ -124,26 +124,26 @@ if ($a=='update')
 
 	if (!$cot_error)
 	{
-		$ruser['password'] = (mb_strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
+		$ruser['user_password'] = (mb_strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
 
-		$ruser['name'] = ($ruser['name']=='') ? $urr['user_name'] : $ruser['name'];
+		$ruser['user_name'] = ($ruser['user_name']=='') ? $urr['user_name'] : $ruser['user_name'];
 
-		$ruser['birthdate'] = ($ruser['birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['birthdate'];
-		$ruser['birthdate'] = ($ruser['birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['birthdate']);
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 
 		if (!$ruserbanned)
 		{
-			$ruser['banexpire'] = 0;
+			$ruser['user_banexpire'] = 0;
 		}
-		if ($ruserbanned && $ruser['banexpire']>0)
+		if ($ruserbanned && $ruser['user_banexpire']>0)
 		{
-			$ruser['banexpire'] += $sys['now'];
+			$ruser['user_banexpire'] += $sys['now'];
 		}
 
-		if ($ruser['name'] != $urr['user_name'])
+		if ($ruser['user_name'] != $urr['user_name'])
 		{
 			$oldname = $cot_db->prep($urr['user_name']);
-			$newname = $cot_db->prep($ruser['name']);
+			$newname = $cot_db->prep($ruser['user_name']);
 			if ($cfg['module']['forums'])
 			{
 				cot_require('forums');
@@ -169,19 +169,19 @@ if ($a=='update')
 			$cot_db->update($db_online, array('online_name' => $newname), 'online_name="'.$oldname.'"');
 		}
 
-		$ruser['auth'] = '';
+		$ruser['user_auth'] = '';
 
-		$sql = $cot_db->update($db_users, $ruser, 'user_id='.$id, 'user_');
+		$sql = $cot_db->update($db_users, $ruser, 'user_id='.$id);
 		
-		$ruser['maingrp'] = ($ruser['maingrp'] < COT_GROUP_MEMBERS && $id==1) ? COT_GROUP_SUPERADMINS : $ruser['maingrp'];
+		$ruser['user_maingrp'] = ($ruser['user_maingrp'] < COT_GROUP_MEMBERS && $id==1) ? COT_GROUP_SUPERADMINS : $ruser['user_maingrp'];
 
-		if($usr['level'] >= $cot_groups[$ruser['maingrp']]['level'])
+		if($usr['level'] >= $cot_groups[$ruser['user_maingrp']]['level'])
 		{
-			if (!$rusergroupsms[$ruser['maingrp']])
+			if (!$rusergroupsms[$ruser['user_maingrp']])
 			{
-				$rusergroupsms[$ruser['maingrp']] = 1;
+				$rusergroupsms[$ruser['user_maingrp']] = 1;
 			}
-			$cot_db->update($db_users, array('user_maingrp' => $ruser['maingrp']), 'user_id='.$id);
+			$cot_db->update($db_users, array('user_maingrp' => $ruser['user_maingrp']), 'user_id='.$id);
 		}
 
 		foreach($cot_groups as $k => $i)
@@ -200,7 +200,7 @@ if ($a=='update')
 			}
 		}
 
-		if ($ruser['maingrp'] == COT_GROUP_MEMBERS && $urr['user_maingrp'] == COT_GROUP_INACTIVE)
+		if ($ruser['user_maingrp'] == COT_GROUP_MEMBERS && $urr['user_maingrp'] == COT_GROUP_INACTIVE)
 		{
 			$rsubject = $cfg['maintitle']." - ".$L['useed_accountactivated'];
 			$rbody = $L['Hi']." ".$urr['user_name'].",\n\n";

@@ -79,7 +79,7 @@ if ($a == 'update')
 						$mask += cot_auth_getvalue($l);
 					}
 					$cot_db->update($db_auth, array('auth_rights' => $mask),
-						"auth_groupid='$g' AND auth_code='$k' AND auth_option='$i'");
+						"auth_groupid=? AND auth_code=? AND auth_option=?", array($g, $k, $i));
 				}
 			}
 		}

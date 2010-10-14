@@ -320,8 +320,8 @@ function cot_extension_install($name, $is_module = false, $update = false)
 	{
 		// Only update auth locks
 		$lock_guests = cot_auth_getvalue($info['Lock_guests']);
-		$cot_db->update($db_auth, array('rights_lock' => $lock_guests), 'auth_groupid = ' . COT_GROUP_GUESTS
-				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE, 'auth_');
+		$cot_db->update($db_auth, array('auth_rights_lock' => $lock_guests), 'auth_groupid = ' . COT_GROUP_GUESTS
+				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE);
 
 		$lock_members = cot_auth_getvalue($info['Lock_members']);
 		$ingore_groups = implode(',', array(
@@ -330,8 +330,8 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			COT_GROUP_BANNED,
 			COT_GROUP_SUPERADMINS
 		));
-		$cot_db->update($db_auth, array('rights_lock' => $lock_members),
-			"auth_groupid NOT IN ($ingore_groups)", 'auth_');
+		$cot_db->update($db_auth, array('auth_rights_lock' => $lock_members),
+			"auth_groupid NOT IN ($ingore_groups)");
 
 		cot_message('ext_auth_locks_updated');
 	}
@@ -393,7 +393,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 		}
 		if ($cot_db->insert($db_auth, $insert_rows, 'auth_'))
 		{
-			$cot_db->update($db_users, array('auth' => ''), '1', 'user_');
+			$cot_db->update($db_users, array('user_auth' => ''));
 			cot_message('ext_auth_installed');
 		}
 	}
@@ -466,7 +466,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
     {
         if ($update)
 		{
-			$cot_db->update($db_updates, array('value' => $new_ver), "upd_param = '$name.ver'", 'upd_');
+			$cot_db->update($db_updates, array('upd_value' => $new_ver), "upd_param = '$name.ver'");
 			cot_message(cot_rc('ext_updated', array(
 				'type' => $L['Plugin'],
 				'name' => $name,
@@ -523,7 +523,7 @@ function cot_extension_uninstall($name, $is_module = false)
     // Clear cache
     $cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
 	$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
-    $cot_db->update($db_users, array('auth' => ''), '1', 'user_');
+    $cot_db->update($db_users, array('user_auth' => ''));
 
     // Run SQL script if present
     if (file_exists($path . "/setup/$name.uninstall.sql"))
@@ -693,7 +693,7 @@ function cot_module_pause($name)
 {
     global $cot_db, $db_core;
 
-    return $cot_db->update($db_core, array('state' => 0), "ct_code = '$name'", 'ct_') == 1;
+    return $cot_db->update($db_core, array('ct_state' => 0), "ct_code = '$name'") == 1;
 }
 
 /**
@@ -719,7 +719,7 @@ function cot_module_resume($name)
 {
     global $cot_db, $db_core;
 
-    return $cot_db->update($db_core, array('state' => 1), "ct_code = '$name'", 'ct_') == 1;
+    return $cot_db->update($db_core, array('ct_state' => 1), "ct_code = '$name'") == 1;
 }
 
 /**
@@ -733,7 +733,7 @@ function cot_module_update($name, $version)
 {
     global $cot_db, $db_core;
 
-    return $cot_db->update($db_core, array('version' => $version), "ct_code = '$name'", 'ct_');
+    return $cot_db->update($db_core, array('ct_version' => $version), "ct_code = '$name'");
 }
 
 /**
@@ -821,7 +821,7 @@ function cot_plugin_pause($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return $cot_db->update($db_plugins, array('active' => 0), $condition, 'pl_');
+    return $cot_db->update($db_plugins, array('pl_active' => 0), $condition);
 }
 
 /**
@@ -861,7 +861,7 @@ function cot_plugin_resume($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return $cot_db->update($db_plugins, array('active' => 1), $condition, 'pl_');
+    return $cot_db->update($db_plugins, array('pl_active' => 1), $condition);
 }
 
 ?>

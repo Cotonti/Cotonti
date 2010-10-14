@@ -79,7 +79,7 @@ if ($m == 'edit' && $id > 0)
 
 		if (!$cot_error)
 		{
-			$sql = $cot_db->update($db_com, array('com_text' => $comtext), "com_id=$id AND com_code='$item'");
+			$sql = $cot_db->update($db_com, array('com_text' => $comtext), 'com_id=? AND com_code=?', array($id, $item));
 
 			if ($cfg['plugin']['comments']['mail'])
 			{

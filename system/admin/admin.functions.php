@@ -255,15 +255,15 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 		$i++;
 	}
 
-	$extf['location'] = $location;
-	$extf['name'] = $name;
-	$extf['type'] = $type;
-	$extf['html'] = $html;
-	$extf['variants'] = is_null($variants) ? '' : $variants;
-	$extf['default'] = is_null($default) ? '' : $default;
-	$extf['required'] = ($required > 0) ? 1 : 0;
-	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
-	$extf['description'] = is_null($description) ? '' : $description;
+	$extf['field_location'] = $location;
+	$extf['field_name'] = $name;
+	$extf['field_type'] = $type;
+	$extf['field_html'] = $html;
+	$extf['field_variants'] = is_null($variants) ? '' : $variants;
+	$extf['field_default'] = is_null($default) ? '' : $default;
+	$extf['field_required'] = ($required > 0) ? 1 : 0;
+	$extf['field_parse'] = is_null($parse) ? 'HTML' : $parse;
+	$extf['field_description'] = is_null($description) ? '' : $description;
 
 	$step1 = $cot_db->insert($db_extra_fields, $extf, 'field_') == 1;
 	if ($noalter)
@@ -327,23 +327,23 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 	$alter = false;
 	if ($name != $field['field_name'])
 	{
-		$extf['name'] = $name;
+		$extf['field_name'] = $name;
 		$alter = true;
 	}
 	if ($type != $field['field_type'])
 	{
-		$extf['type'] = $type;
+		$extf['field_type'] = $type;
 		$alter = true;
 	}
 
-	$extf['html'] = $html;
-	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
-	$extf['variants'] = is_null($variants) ? '' : $variants;
-	$extf['default'] = is_null($default) ? '' : $default;
-	$extf['required'] = ($required > 0) ? 1 : 0;
-	$extf['description'] = is_null($description) ? '' : $description;
+	$extf['field_html'] = $html;
+	$extf['field_parse'] = is_null($parse) ? 'HTML' : $parse;
+	$extf['field_variants'] = is_null($variants) ? '' : $variants;
+	$extf['field_default'] = is_null($default) ? '' : $default;
+	$extf['field_required'] = ($required > 0) ? 1 : 0;
+	$extf['field_description'] = is_null($description) ? '' : $description;
 
-	$step1 = $cot_db->update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'", 'field_') == 1;
+	$step1 = $cot_db->update($db_extra_fields, $extf, "field_name = ? AND field_location=?", array($oldname, $location)) == 1;
 
 	if (!$alter) return $step1;
 

@@ -100,9 +100,25 @@ class CotDB extends PDO {
 	}
 
 	/**
+	 * Binds parameters to a statement
+	 *
+	 * @param PDOStatement $statement PDO statement
+	 * @param array $parameters Array of parameters, numeric or associative
+	 */
+	private function _bindParams($statement, $parameters)
+	{
+		$is_numeric = is_int(key($parameters));
+		foreach ($parameters as $key => $val)
+		{
+			$type = is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR;
+			$is_numeric ? $statement->bindParam($key + 1, $val, $type) : $statement->bindParam($key, $val, $type);
+		}
+	}
+
+	/**
 	 * Starts query execution timer
 	 */
-	private function _start_timer()
+	private function _startTimer()
 	{
 		$this->_count++;
 		$this->_xtime = microtime();
@@ -111,7 +127,7 @@ class CotDB extends PDO {
 	/**
 	 * Stops query execution timer
 	 */
-	private function _stop_timer($query)
+	private function _stopTimer($query)
 	{
 		global $cfg, $usr, $sys;
 		$ytime = microtime();
@@ -146,17 +162,18 @@ class CotDB extends PDO {
 	public function delete($table_name, $condition = '', $parameters = array())
 	{
 		$query = empty($condition) ? "DELETE FROM `$table_name`" : "DELETE FROM `$table_name` WHERE $condition";
-		$this->_start_timer();
+		$this->_startTimer();
 		if (count($parameters) > 0)
 		{
 			$stmt = $this->prepare($query);
-			$res = ($stmt->execute($parameters)) ? $stmt->rowCount() : false;
+			$this->_bindParams($stmt, $parameters);
+			$res = $stmt->execute() ? $stmt->rowCount() : false;
 		}
 		else
 		{
 			$res = $this->exec($query);
 		}
-		$this->_stop_timer($query);
+		$this->_stopTimer($query);
 		return $res;
 	}
 
@@ -236,9 +253,9 @@ class CotDB extends PDO {
 		if (!empty($keys) && !empty($vals))
 		{
 			$query = "INSERT INTO `$table_name` ($keys) VALUES $vals";
-			$this->_start_timer();
+			$this->_startTimer();
 			$res = $this->query($query);
-			$this->_stop_timer($query);
+			$this->_stopTimer($query);
 			return $res->rowCount();
 		}
 		return 0;
@@ -284,33 +301,35 @@ class CotDB extends PDO {
 	}
 
 	/**
-	 * 1) If called with one parameter or second parameter as integer/PDO::FETCH_*:
+	 * 1) If called with one parameter:
 	 * Works like PDO::query()
 	 * Executes an SQL statement in a single function call, returning the result set (if any) returned by the statement as a PDOStatement object.
-	 * The second parameter controls how the next row will be returned to the caller. This value must be one of the PDO::FETCH_* constants, defaulting to PDO::FETCH_ASSOC.
 	 * 2) If called with second parameter as array of input parameter bindings:
 	 * Works like PDO::prepare()->execute()
 	 * Prepares an SQL statement and executes it.
-	 * The second parameter is an array of values with as many elements as there are bound parameters in the SQL statement being executed. All values are treated as PDO::PARAM_STR.
 	 * @see http://www.php.net/manual/en/pdo.query.php
-	 * @see
+	 * @see http://www.php.net/manual/en/pdo.prepare.php
 	 * @param string $query The SQL statement to prepare and execute.
-	 * @param mixed $fetch_mode_or_input_parameters
+	 * @param array $parameters An array of values to be binded as input parameters to the query. PHP int parameters will beconsidered as PDO::PARAM_INT, others as PDO::PARAM_STR.
 	 * @return PDOStatement
 	 */
-	public function query($query, $fetch_mode_or_input_parameters = PDO::FETCH_ASSOC)
+	public function query($query, $parameters = array())
 	{
-		$this->_start_timer();
-		if (is_array($fetch_mode_or_input_parameters))
+		$this->_startTimer();
+		if (count($parameters) > 0)
 		{
+			
 			$result = parent::prepare($query);
-			$result->execute($fetch_mode_or_input_parameters);
+			$this->_bindParams($result, $parameters);
+			$result->execute();
 		}
 		else
 		{
-			$result = parent::query($query, $fetch_mode_or_input_parameters) OR cot_diefatal('SQL error : '.$this->error);
+			$result = parent::query($query) OR cot_diefatal('SQL error : '.$this->error);
 		}
-		$this->_stop_timer($query);
+		$this->_stopTimer($query);
+		// In Cotonti we use PDO::FETCH_ASSOC by default to save memory
+		$result->setFetchMode(PDO::FETCH_ASSOC);
 		$this->_affected_rows = $result->rowCount();
 		return $result;
 	}
@@ -326,12 +345,11 @@ class CotDB extends PDO {
 	 * @param string $table_name Table name
 	 * @param array $data Associative array containing data for update
 	 * @param string $condition Body of SQL WHERE clause
-	 * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key
-	 * @param bool $update_null Nullify cells which have null values in the array. By default they are skipped
 	 * @param array $parameters Array of statement input parameters, see http://www.php.net/manual/en/pdostatement.execute.php
+	 * @param bool $update_null Nullify cells which have null values in the array. By default they are skipped
 	 * @return int The number of affected records or FALSE on error
 	 */
-	public function update($table_name, $data, $condition, $prefix = '', $update_null = false, $parameters = array())
+	public function update($table_name, $data, $condition, $parameters = array(), $update_null = false)
 	{
 		if(!is_array($data))
 		{
@@ -345,7 +363,7 @@ class CotDB extends PDO {
 			{
 				continue;
 			}
-			$upd .= "`{$prefix}$key`=";
+			$upd .= "`$key`=";
 			if (is_null($val))
 			{
 				$upd .= 'NULL,';
@@ -368,17 +386,18 @@ class CotDB extends PDO {
 		{
 			$upd = mb_substr($upd, 0, -1);
 			$query = "UPDATE `$table_name` SET $upd $condition";
-			$this->_start_timer();
+			$this->_startTimer();
 			if (count($parameters) > 0)
 			{
-				$stm = $this->prepare($query);
-				$res = ($stm->execute($parameters)) ? $stm->rowCount() : false;
+				$stmt = $this->prepare($query);
+				$this->_bindParams($stmt, $parameters);
+				$res = $stmt->execute() ? $stmt->rowCount() : false;
 			}
 			else
 			{
 				$res = $this->exec($query);
 			}
-			$this->_stop_timer($query);
+			$this->_stopTimer($query);
 			return $res;
 		}
 		return 0;

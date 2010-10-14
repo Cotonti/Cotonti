@@ -95,27 +95,27 @@ function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
 	$bbc['enabled'] = empty($enabled) ? 0 : 1;
 	if (!empty($name))
 	{
-		$bbc['name'] = $name;
+		$bbc['bbc_name'] = $name;
 	}
 	if (!empty($mode))
 	{
-		$bbc['mode'] = $mode;
+		$bbc['bbc_mode'] = $mode;
 	}
 	if (!empty($pattern))
 	{
-		$bbc['pattern'] = $pattern;
+		$bbc['bbc_pattern'] = $pattern;
 	}
 	if (!empty($replacement))
 	{
-		$bbc['replacement'] = $replacement;
+		$bbc['bbc_replacement'] = $replacement;
 	}
 	if ($priority >= 0 && $priority < 256)
 	{
-		$bbc['priority'] = $priority;
+		$bbc['bbc_priority'] = $priority;
 	}
-	$bbc['container'] = empty($container) ? 0 : 1;
-	$bbc['postrender'] = empty($postrender) ? 0 : 1;
-	return $cot_db->update($db_bbcode, $bbc, "bbc_id = $id", 'bbc_') == 1;
+	$bbc['bbc_container'] = empty($container) ? 0 : 1;
+	$bbc['bbc_postrender'] = empty($postrender) ? 0 : 1;
+	return $cot_db->update($db_bbcode, $bbc, 'bbc_id = ?', array($id)) == 1;
 }
 
 /**

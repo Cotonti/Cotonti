@@ -70,14 +70,14 @@ if ($n == 'options')
 {
 	if ($a == 'update')
 	{
-		$rstructure['code'] = cot_import('rstructurecode', 'P', 'TXT');
-		$rstructure['path'] = cot_import('rstructurepath', 'P', 'TXT');
-		$rstructure['title'] = cot_import('rstructuretitle', 'P', 'TXT');
-		$rstructure['desc'] = cot_import('rstructuredesc', 'P', 'TXT');
-		$rstructure['icon'] = cot_import('rstructureicon', 'P', 'TXT');
-		$rstructure['group'] = (cot_import('rstructuregroup', 'P', 'BOL')) ? 1 : 0;
-		$rstructure['order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rstructureway', 'P', 'ALP');
-		$rstructure['ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
+		$rstructure['structure_code'] = cot_import('rstructurecode', 'P', 'TXT');
+		$rstructure['structure_path'] = cot_import('rstructurepath', 'P', 'TXT');
+		$rstructure['structure_title'] = cot_import('rstructuretitle', 'P', 'TXT');
+		$rstructure['structure_desc'] = cot_import('rstructuredesc', 'P', 'TXT');
+		$rstructure['structure_icon'] = cot_import('rstructureicon', 'P', 'TXT');
+		$rstructure['structure_group'] = (cot_import('rstructuregroup', 'P', 'BOL')) ? 1 : 0;
+		$rstructure['structure_order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rstructureway', 'P', 'ALP');
+		$rstructure['structure_ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
 
 		foreach ($cot_extrafields['structure'] as $row)
 		{
@@ -85,7 +85,7 @@ if ($n == 'options')
 		}
 
 		$rtplmode = cot_import('rstructuretplmode', 'P', 'INT');
-		$rstructure['tpl'] = ($rtplmode == 1) ? '' : (($rtplmode == 3) ? 'same_as_parent' : cot_import('rtplforced', 'P', 'ALP'));
+		$rstructure['structure_tpl'] = ($rtplmode == 1) ? '' : (($rtplmode == 3) ? 'same_as_parent' : cot_import('rtplforced', 'P', 'ALP'));
 
 		$sqql = $cot_db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
 		$roww = $sqql->fetch();
@@ -97,17 +97,17 @@ if ($n == 'options')
 		}
 		/* ===== */
 
-		if ($roww['structure_code'] != $rstructure['code'])
+		if ($roww['structure_code'] != $rstructure['structure_code'])
 		{
-			$sql = $cot_db->update($db_structure, array("structure_code" => $rstructure['code']), "structure_code='".$cot_db->prep($roww['structure_code'])."'");
-			$sql = $cot_db->update($db_auth, array("auth_option" => $rstructure['code']), "auth_code='page' AND auth_option='".$cot_db->prep($roww['structure_code'])."'");
-			$sql = $cot_db->update($db_pages, array("page_cat" => $rstructure['code']), "page_cat='".$cot_db->prep($roww['structure_code'])."'");
+			$sql = $cot_db->update($db_structure, array("structure_code" => $rstructure['structure_code']), "structure_code='".$cot_db->prep($roww['structure_code'])."'");
+			$sql = $cot_db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='page' AND auth_option='".$cot_db->prep($roww['structure_code'])."'");
+			$sql = $cot_db->update($db_pages, array("page_cat" => $rstructure['structure_code']), "page_cat='".$cot_db->prep($roww['structure_code'])."'");
 
 			cot_auth_reorder();
 			cot_auth_clear('all');
 		}
 
-		$cot_db->update($db_structure, $rstructure, "structure_id='".$id."'", "structure_");
+		$cot_db->update($db_structure, $rstructure, "structure_id='".$id."'");
 
 		if ($cot_cache)
 		{
@@ -237,14 +237,14 @@ else
 
 		foreach ($rstructurecode as $i => $k)
 		{
-			$rstructure['code'] = cot_import($rstructurecode[$i], 'D', 'TXT');
-			$rstructure['path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
-			$rstructure['title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
-			$rstructure['desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
-			$rstructure['icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
-			$rstructure['group'] = (cot_import($rstructuregroup[$i], 'D', 'BOL')) ? 1 : 0;
-			$rstructure['order'] = cot_import($rstructureorder[$i], 'D', 'TXT').".".cot_import($rstructureway[$i], 'D', 'ALP');
-			$rstructure['ratings'] = cot_import($rstructureratings[$i], 'D', 'BOL');
+			$rstructure['structure_code'] = cot_import($rstructurecode[$i], 'D', 'TXT');
+			$rstructure['structure_path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
+			$rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
+			$rstructure['structure_desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
+			$rstructure['structure_icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
+			$rstructure['structure_group'] = (cot_import($rstructuregroup[$i], 'D', 'BOL')) ? 1 : 0;
+			$rstructure['structure_order'] = cot_import($rstructureorder[$i], 'D', 'TXT').".".cot_import($rstructureway[$i], 'D', 'ALP');
+			$rstructure['structure_ratings'] = cot_import($rstructureratings[$i], 'D', 'BOL');
 
 			foreach ($cot_extrafields['structure'] as $row)
 			{
@@ -261,16 +261,16 @@ else
 			}
 			/* ===== */
 
-			if ($roww['structure_code'] != $rstructure['code'])
+			if ($roww['structure_code'] != $rstructure['structure_code'])
 			{
-				$sql = $cot_db->update($db_structure, array("structure_code" => $rstructure['code']), "structure_code='".$cot_db->prep($roww['structure_code'])."'");
-				$sql = $cot_db->update($db_auth, array("auth_option" => $rstructure['code']), "auth_code='page' AND auth_option='".$cot_db->prep($roww['structure_code'])."'");
-				$sql = $cot_db->update($db_pages, array("page_cat" => $rstructure['code']), "page_cat='".$cot_db->prep($roww['structure_code'])."'");
+				$sql = $cot_db->update($db_structure, array("structure_code" => $rstructure['structure_code']), "structure_code='".$cot_db->prep($roww['structure_code'])."'");
+				$sql = $cot_db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='page' AND auth_option='".$cot_db->prep($roww['structure_code'])."'");
+				$sql = $cot_db->update($db_pages, array("page_cat" => $rstructure['structure_code']), "page_cat='".$cot_db->prep($roww['structure_code'])."'");
 
 				cot_auth_reorder();
 				cot_auth_clear('all');
 			}
-			$sql1 = $cot_db->update($db_structure, $rstructure, "structure_id='".$i."'", 'structure_');
+			$sql1 = $cot_db->update($db_structure, $rstructure, "structure_id='".$i."'");
 		}
 
 		cot_auth_clear('all');
@@ -284,14 +284,14 @@ else
 	}
 	elseif ($a == 'add')
 	{
-		$rstructure['code'] = cot_import('rstructurecode', 'P', 'TXT');
-		$rstructure['path'] = cot_import('rstructurepath', 'P', 'TXT');
-		$rstructure['title'] = cot_import('rstructuretitle', 'P', 'TXT');
-		$rstructure['desc'] = cot_import('rstructuredesc', 'P', 'TXT');
-		$rstructure['icon'] = cot_import('rstructureicon', 'P', 'TXT');
-		$rstructure['group'] = (cot_import('rstructuregroup', 'P', 'BOL')) ? 1 : 0;
-		$rstructure['order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rstructureway', 'P', 'ALP');
-		$rstructure['ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
+		$rstructure['structure_code'] = cot_import('rstructurecode', 'P', 'TXT');
+		$rstructure['structure_path'] = cot_import('rstructurepath', 'P', 'TXT');
+		$rstructure['structure_title'] = cot_import('rstructuretitle', 'P', 'TXT');
+		$rstructure['structure_desc'] = cot_import('rstructuredesc', 'P', 'TXT');
+		$rstructure['structure_icon'] = cot_import('rstructureicon', 'P', 'TXT');
+		$rstructure['structure_group'] = (cot_import('rstructuregroup', 'P', 'BOL')) ? 1 : 0;
+		$rstructure['structure_order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rstructureway', 'P', 'ALP');
+		$rstructure['structure_ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
 
 		foreach ($cot_extrafields['structure'] as $row)
 		{
@@ -299,7 +299,7 @@ else
 		}
 
 		$rtplmode = cot_import('rtplmode', 'P', 'INT');
-		$rstructure['tpl'] = ($rtplmode == 1) ? '' : (($rtplmode == 3) ? 'same_as_parent' : cot_import('rtplforced', 'P', 'ALP'));
+		$rstructure['structure_tpl'] = ($rtplmode == 1) ? '' : (($rtplmode == 3) ? 'same_as_parent' : cot_import('rtplforced', 'P', 'ALP'));
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.structure.add') as $pl)
@@ -308,9 +308,9 @@ else
 		}
 		/* ===== */
 
-		if (!empty($rstructure['title']) && !empty($rstructure['code']) && !empty($rstructure['path']) && $rstructure['code'] != 'all')
+		if (!empty($rstructure['structure_title']) && !empty($rstructure['structure_code']) && !empty($rstructure['structure_path']) && $rstructure['structure_code'] != 'all')
 		{
-			$sql = $cot_db->query("SELECT structure_code FROM $db_structure WHERE structure_code='".$cot_db->prep($rstructure['code'])."' LIMIT 1");
+			$sql = $cot_db->query("SELECT structure_code FROM $db_structure WHERE structure_code='".$cot_db->prep($rstructure['structure_code'])."' LIMIT 1");
 			if ($sql->rowCount() == 0)
 			{
 				$colname = '';
@@ -319,7 +319,7 @@ else
 				$sql = $cot_db->insert($db_structure, $rstructure, 'structure_');
 				$auth_permit = array(COT_GROUP_DEFAULT => 7, COT_GROUP_GUESTS => 5, COT_GROUP_MEMBERS => 7);
 				$auth_lock = array(COT_GROUP_DEFAULT => 0, COT_GROUP_GUESTS => 250, COT_GROUP_MEMBERS => 128);
-				cot_auth_add_item('page', $rstructure['code'], $auth_permit, $auth_lock);
+				cot_auth_add_item('page', $rstructure['structure_code'], $auth_permit, $auth_lock);
 				$cot_cache && $cot_cache->db->remove('cot_cat', 'system');
 				cot_message('Added');
 			}

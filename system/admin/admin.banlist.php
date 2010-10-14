@@ -39,10 +39,10 @@ if ($a == 'update')
 
 	$sql = (!empty($rbanlistip) || !empty($rbanlistemail))
 		? $cot_db->update($db_banlist, array(
-			'ip' => $rbanlistip,
-			'email' => $rbanlistemail,
-			'reason' => $rbanlistreason
-			), "banlist_id=$id", 'banlist_')
+			'banlist_ip' => $rbanlistip,
+			'banlist_email' => $rbanlistemail,
+			'banlist_reason' => $rbanlistreason
+			), "banlist_id=$id")
 		: '';
 
 	($sql) ? cot_message('alreadyupdatednewentry') : cot_message('Error');
