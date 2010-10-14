@@ -33,14 +33,23 @@ cot_block($usr['auth_read']);
 
 $mode = cot_import('mode', 'G', 'ALP');
 
-if ($mode == 'ajax')
+if ($mode == 'ajax' || 'COT_AJAX')
 {
-	$theme = cot_import('poll_skin', 'G', 'TXT');
+	
+	/* === Hook === */
+	foreach (cot_getextplugins('polls.ajax') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	$theme = cot_import('poll_theme', 'G', 'TXT');
 	$id = cot_import('poll_id', 'P', 'INT');
+	
 	cot_sendheaders();
 	cot_poll_vote();
-	list($polltitle, $poll_form) = cot_poll_form($id, '', $theme);
-	echo $poll_form;
+	$poll_form = cot_poll_form($id, '', $theme);
+	echo $poll_form['poll_block'];
 	exit;
 }
 

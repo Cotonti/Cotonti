@@ -299,8 +299,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$sql2 = $cot_db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = '$id' AND $where LIMIT 1");
 	$alreadyvoted = ($sql2->rowCount() == 1) ? 1 : 0;
 
-	$themeinput = $themefile;
-	$themefile = (empty($themefile)) ? cot_skinfile('polls') : cot_skinfile($themefile, true);
+	$themefile = (is_string($theme)) ? cot_skinfile(array('polls', $theme), 'module') : cot_skinfile($theme, 'module');
 	$t = new XTemplate($themefile);
 
 	if ($alreadyvoted) $poll_block = "POLL_VIEW_VOTED";
