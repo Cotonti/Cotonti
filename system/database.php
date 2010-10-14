@@ -167,11 +167,16 @@ class CotDB extends PDO {
 		{
 			$stmt = $this->prepare($query);
 			$this->_bindParams($stmt, $parameters);
-			$res = $stmt->execute() ? $stmt->rowCount() : cot_diefatal('SQL error: '.$this->error);
+			$res = $stmt->execute();
+			$res === false ? cot_diefatal('SQL error: '.$this->error) : $res = $stmt->rowCount();
 		}
 		else
 		{
-			$res = $this->exec($query) or cot_diefatal('SQL error: '.$this->error);
+			$res = $this->exec($query);
+			if ($res === false)
+			{
+				cot_diefatal('SQL error: '.$this->error);
+			}
 		}
 		$this->_stopTimer($query);
 		return $res;
@@ -253,7 +258,11 @@ class CotDB extends PDO {
 		{
 			$query = "INSERT INTO `$table_name` ($keys) VALUES $vals";
 			$this->_startTimer();
-			$res = $this->exec($query) or cot_diefatal('SQL error: '.$this->error);
+			$res = $this->exec($query);
+			if ($res === false)
+			{
+				cot_diefatal('SQL error: '.$this->error);
+			}
 			$this->_stopTimer($query);
 			return $res;
 		}
@@ -320,11 +329,18 @@ class CotDB extends PDO {
 			
 			$result = parent::prepare($query);
 			$this->_bindParams($result, $parameters);
-			$result->execute() OR cot_diefatal('SQL error: '.$this->error);
+			if ($result->execute() === false)
+			{
+				cot_diefatal('SQL error: '.$this->error);
+			}
 		}
 		else
 		{
-			$result = parent::query($query) OR cot_diefatal('SQL error: '.$this->error);
+			$result = parent::query($query);
+			if ($result === false)
+			{
+				cot_diefatal('SQL error: '.$this->error);
+			}
 		}
 		$this->_stopTimer($query);
 		// In Cotonti we use PDO::FETCH_ASSOC by default to save memory
@@ -390,11 +406,16 @@ class CotDB extends PDO {
 			{
 				$stmt = $this->prepare($query);
 				$this->_bindParams($stmt, $parameters);
-				$res = $stmt->execute() ? $stmt->rowCount() : cot_diefatal('SQL error: '.$this->error);
+				$res = $stmt->execute();
+				$res === false ? cot_diefatal('SQL error: '.$this->error) : $res = $stmt->rowCount();
 			}
 			else
 			{
-				$res = $this->exec($query) or cot_diefatal('SQL error: '.$this->error);
+				$res = $this->exec($query);
+				if ($res === false)
+				{
+					cot_diefatal('SQL error: '.$this->error);
+				}
 			}
 			$this->_stopTimer($query);
 			return $res;
