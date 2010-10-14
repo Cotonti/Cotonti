@@ -1,81 +1,84 @@
 <!-- BEGIN: POLL_VIEW -->
-	{POLL_FORM_BEGIN}
-	<ul>
-<!-- BEGIN: POLLTABLE -->
-		<li><label>{POLL_INPUT}{POLL_OPTIONS}</label></li>
-<!-- END: POLLTABLE -->
-		<li>{POLL_FORM_BUTTON}</li>
-	</ul>
-	{POLL_FORM_END}
+<div id = "poll_{POLL_ID}">
+	<form action="{POLL_FORM_URL}" method="post" id="poll_form_{POLL_ID}" class="ajax post-poll_{POLL_ID};index.php;z=polls&amp;mode=ajax&amp;poll_theme=index">
+		<input type="hidden" name="poll_id" value="{POLL_ID}" />
+		<ul>
+			<!-- BEGIN: POLLTABLE -->
+			<li><label>{POLL_INPUT}{POLL_OPTIONS}</label></li>
+			<!-- END: POLLTABLE -->
+			<li><input type="submit" class="submit" value="{PHP.L.polls_Vote}" title="{PHP.L.polls_Vote}" /></li>
+		</ul>
+	</form>
+</div>
 <!-- END: POLL_VIEW -->
 
 <!-- BEGIN: POLL_VIEW_VOTED -->
-	<table class="main">
-<!-- BEGIN: POLLTABLE -->
-		<tr class="small">
-			<td>{POLL_OPTIONS}</td>
-			<td class="textright">{POLL_PER}% ({POLL_COUNT})</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<div class="bar_back">
-					<div class="bar_front" style="width:{POLL_PER}%;"></div>
-				</div>
-			</td>
-		</tr>
-<!-- END: POLLTABLE -->
-	</table>
-	<script type="text/javascript">
-		function anim(){
-			$(".bar_front").each(function(){
-				var percentage = $(this).width();
-				if (percentage!=""){$(this).width(0).animate({width: percentage}, "slow");}
-			});
-		}
-		anim();
-	</script>
-	<p class="small textcenter">{PHP.themelang.ratings.Votes}: {POLL_VOTERS}</p>
+<table class="main">
+	<!-- BEGIN: POLLTABLE -->
+	<tr class="small">
+		<td>{POLL_OPTIONS}</td>
+		<td class="textright">{POLL_PER}% ({POLL_COUNT})</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<div class="bar_back">
+				<div class="bar_front" style="width:{POLL_PER}%;"></div>
+			</div>
+		</td>
+	</tr>
+	<!-- END: POLLTABLE -->
+</table>
+<script type="text/javascript">
+	function anim(){
+		$(".bar_front").each(function(){
+			var percentage = $(this).width();
+			if (percentage!=""){$(this).width(0).animate({width: percentage}, "slow");}
+		});
+	}
+	anim();
+</script>
+<p class="small textcenter">{PHP.themelang.ratings.Votes}: {POLL_VOTERS}</p>
 <!-- END: POLL_VIEW_VOTED -->
 
 <!-- BEGIN: POLL_VIEW_DISABLED -->
-	<table>
-<!-- BEGIN: POLLTABLE -->
-		<tr>
-			<td>{POLL_OPTIONS}</td>
-		</tr>
-<!-- END: POLLTABLE -->
-		<tr>
-			<td>{PHP.L.rat_registeredonly}</td>
-		</tr>
-	</table>
+<table>
+	<!-- BEGIN: POLLTABLE -->
+	<tr>
+		<td>{POLL_OPTIONS}</td>
+	</tr>
+	<!-- END: POLLTABLE -->
+	<tr>
+		<td>{PHP.L.rat_registeredonly}</td>
+	</tr>
+</table>
 <!-- END: POLL_VIEW_DISABLED -->
 
 <!-- BEGIN: POLL_VIEW_LOCKED -->
-	<table>
-<!-- BEGIN: POLLTABLE -->
-		<tr>
-			<td>{POLL_OPTIONS}</td>
-			<td class="textright">{POLL_PER}% ({POLL_COUNT})</td>
-		</tr>
-		<tr>
-			<td colspan="2" class="textright">
-				<div class="bar_back">
-					<div class="bar_front" style="width:{POLL_PER}%;"></div>
-				</div>
-			</td>
-		</tr>
-<!-- END: POLLTABLE -->
-	</table>
-	<p>{PHP.themelang.page.Date} {POLL_SINCE_SHORT} {PHP.themelang.ratings.Votes} {POLL_VOTERS} </p>
+<table>
+	<!-- BEGIN: POLLTABLE -->
+	<tr>
+		<td>{POLL_OPTIONS}</td>
+		<td class="textright">{POLL_PER}% ({POLL_COUNT})</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="textright">
+			<div class="bar_back">
+				<div class="bar_front" style="width:{POLL_PER}%;"></div>
+			</div>
+		</td>
+	</tr>
+	<!-- END: POLLTABLE -->
+</table>
+<p>{PHP.themelang.page.Date} {POLL_SINCE_SHORT} {PHP.themelang.ratings.Votes} {POLL_VOTERS} </p>
 <!-- END: POLL_VIEW_LOCKED -->
 
 <!-- BEGIN: INDEXPOLLS -->
 <!-- BEGIN: POLL -->
-	<a class="strong" href="{IPOLLS_URL}">{IPOLLS_TITLE}</a>
+<a class="strong" href="{IPOLLS_URL}">{IPOLLS_TITLE}</a>
 	{IPOLLS_FORM}
 <!-- END: POLL -->
 <!-- BEGIN: ERROR -->
-	<p class="small strong textcenter">{IPOLLS_ERROR}</p>
+<p class="small strong textcenter">{IPOLLS_ERROR}</p>
 <!-- END: ERROR -->
 <p class="small textcenter"><a href="{IPOLLS_ALL}">{PHP.L.polls_viewarchives}</a></p>
 <!-- END: INDEXPOLLS -->

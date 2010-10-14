@@ -37,15 +37,11 @@ if ($cfg['module']['polls']['maxpolls'] > 0)
 	while ($row_p = $sql_p->fetch())
 	{
 		$res++;
-		$poll_id = $row_p['poll_id'];
-
-		$poll_form = cot_poll_form($row_p, cot_url('index', ''), 'indexpolls');
-		$pollurl = cot_url('polls', 'id='.$poll_id);
-
+		$poll_form = cot_poll_form($row_p, cot_url('index', ''), 'index');
 		$indexpolls->assign(array(
-			'IPOLLS_ID' => $poll_id,
-			'IPOLLS_TITLE' => cot_parse($row['poll_text'], $cfg['module']['polls']['markup']),
-			'IPOLLS_URL' => $pollurl,
+			'IPOLLS_ID' => $row_p['poll_id'],
+			'IPOLLS_TITLE' => cot_parse($row_p['poll_text'], $cfg['module']['polls']['markup']),
+			'IPOLLS_URL' => cot_url('polls', 'id='.$row_p['poll_id']),
 			'IPOLLS_FORM' => $poll_form['poll_block']
 		));
 
@@ -72,7 +68,5 @@ if ($cfg['module']['polls']['maxpolls'] > 0)
 	$indexpolls->parse('INDEXPOLLS');
 	$t->assign('INDEX_POLLS', $indexpolls->text('INDEXPOLLS'));
 }
-
-
 
 ?>
