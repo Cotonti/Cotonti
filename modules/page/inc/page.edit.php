@@ -43,24 +43,24 @@ if ($a == 'update')
 	/* ===== */
 	cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row1['page_ownerid']);
 
-	$rpage['key'] = cot_import('rpagekey', 'P', 'TXT');
-	$rpage['alias'] = cot_import('rpagealias', 'P', 'ALP');
-	$rpage['title'] = cot_import('rpagetitle', 'P', 'TXT');
-	$rpage['desc'] = cot_import('rpagedesc', 'P', 'TXT');
-	$rpage['text'] = cot_import('rpagetext', 'P', 'HTM');
-	$rpage['author'] = cot_import('rpageauthor', 'P', 'TXT');
-	$rpage['file'] = cot_import('rpagefile', 'P', 'INT');
-	$rpage['url'] = cot_import('rpageurl', 'P', 'TXT');
-	$rpage['size'] = cot_import('rpagesize', 'P', 'TXT');
-	$rpage['file'] = ($rpage['file'] == 0 && !empty($rpage['url'])) ? 1 : $rpage['file'];
+	$rpage['page_key'] = cot_import('rpagekey', 'P', 'TXT');
+	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'ALP');
+	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
+	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
+	$rpage['page_text'] = cot_import('rpagetext', 'P', 'HTM');
+	$rpage['page_author'] = cot_import('rpageauthor', 'P', 'TXT');
+	$rpage['page_file'] = cot_import('rpagefile', 'P', 'INT');
+	$rpage['page_url'] = cot_import('rpageurl', 'P', 'TXT');
+	$rpage['page_size'] = cot_import('rpagesize', 'P', 'TXT');
+	$rpage['page_file'] = ($rpage['page_file'] == 0 && !empty($rpage['page_url'])) ? 1 : $rpage['page_file'];
 
-	$rpage['cat'] = cot_import('rpagecat', 'P', 'TXT');
+	$rpage['page_cat'] = cot_import('rpagecat', 'P', 'TXT');
 
 	$rpagedatenow = cot_import('rpagedatenow', 'P', 'BOL');
-	$rpage['date'] = ($rpagedatenow) ? $sys['now_offset'] : (int)cot_import_date('rpagedate');
-	$rpage['begin'] = (int)cot_import_date('rpagebegin');
-	$rpage['expire'] = (int)cot_import_date('rpageexpire');
-	$rpage['expire'] = ($rpage['expire'] <= $rpage['begin']) ? $rpage['begin'] + 31536000 : $rpage['expire'];
+	$rpage['page_date'] = ($rpagedatenow) ? $sys['now_offset'] : (int)cot_import_date('rpagedate');
+	$rpage['page_begin'] = (int)cot_import_date('rpagebegin');
+	$rpage['page_expire'] = (int)cot_import_date('rpageexpire');
+	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? $rpage['page_begin'] + 31536000 : $rpage['page_expire'];
 
 	// Extra fields
 	foreach ($cot_extrafields['pages'] as $row)
@@ -70,14 +70,14 @@ if ($a == 'update')
 
 	if ($usr['isadmin'])
 	{
-		$rpage['count'] = cot_import('rpagecount', 'P', 'INT');
-		$rpage['ownerid'] = cot_import('rpageownerid', 'P', 'INT');
-		$rpage['filecount'] = cot_import('rpagefilecount', 'P', 'INT');
+		$rpage['page_count'] = cot_import('rpagecount', 'P', 'INT');
+		$rpage['page_ownerid'] = cot_import('rpageownerid', 'P', 'INT');
+		$rpage['page_filecount'] = cot_import('rpagefilecount', 'P', 'INT');
 	}
 	$rpagedelete = cot_import('rpagedelete', 'P', 'BOL');
 
-	if (empty($rpage['cat'])) cot_error('page_catmissing', 'rpagecat');
-	if (mb_strlen($rpage['title']) < 2) cot_error('page_titletooshort', 'rpagetitle');
+	if (empty($rpage['page_cat'])) cot_error('page_catmissing', 'rpagecat');
+	if (mb_strlen($rpage['page_title']) < 2) cot_error('page_titletooshort', 'rpagetitle');
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.edit.update.error') as $pl)
@@ -124,48 +124,48 @@ if ($a == 'update')
 	}
 	elseif (!$cot_error)
 	{
-		if (!empty($rpage['alias']))
+		if (!empty($rpage['page_alias']))
 		{
-			$sql = $cot_db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$cot_db->prep($rpage['alias'])."' AND page_id!='".$id."'");
-			$rpage['alias'] = ($sql->rowCount() > 0) ? $rpage['alias'].rand(1000, 9999) : $rpage['alias'];
+			$sql = $cot_db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$cot_db->prep($rpage['page_alias'])."' AND page_id!='".$id."'");
+			$rpage['page_alias'] = ($sql->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
 		}
 
 		$sql = $cot_db->query("SELECT page_cat, page_state FROM $db_pages WHERE page_id='$id' ");
 		$row = $sql->fetch();
 
-		if ($row['page_cat'] != $rpage['cat'] /*&& ($row['page_state'] == 0 || $row['page_state'] == 2)*/)
+		if ($row['page_cat'] != $rpage['page_cat'] /*&& ($row['page_state'] == 0 || $row['page_state'] == 2)*/)
 		{
 			$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$cot_db->prep($row['page_cat'])."' ");
-			//$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$cot_db->prep($rpage['cat)."' ");
+			//$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$cot_db->prep($rpage['page_cat)."' ");
 		}
 
-		//$usr['isadmin'] = cot_auth('page', $rpage['cat'], 'A');
+		//$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
 		if ($usr['isadmin'] && $cfg['autovalidate'])
 		{
 			$rpublish = cot_import('rpublish', 'P', 'ALP');
 			if ($rpublish == 'OK' )
 			{
-				$rpage['state'] = 0;
+				$rpage['page_state'] = 0;
 				if ($row['page_state'] == 1)
 				{
-					$cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$cot_db->prep($rpage['cat'])."' ");
+					$cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$cot_db->prep($rpage['page_cat'])."' ");
 				}
 			}
 			else
 			{
-				$rpage['state'] = 1;
+				$rpage['page_state'] = 1;
 			}
 		}
 		else
 		{
-			$rpage['state'] = 1;
+			$rpage['page_state'] = 1;
 		}
-		if ($rpage['state'] == 1 && $row['page_state'] != 1)
+		if ($rpage['page_state'] == 1 && $row['page_state'] != 1)
 		{
-			$cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$cot_db->prep($rpage['cat'])."' ");
+			$cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$cot_db->prep($rpage['page_cat'])."' ");
 		}
 
-		$sql = $cot_db->update($db_pages, $rpage, "page_id='$id'", 'page_');
+		$sql = $cot_db->update($db_pages, $rpage, 'page_id=?', array($id));
 		/* === Hook === */
 		foreach (cot_getextplugins('page.edit.update.done') as $pl)
 		{
@@ -173,11 +173,11 @@ if ($a == 'update')
 		}
 		/* ===== */
 
-		if ($rpage['state'] == 0 && $cot_cache)
+		if ($rpage['page_state'] == 0 && $cot_cache)
 		{
 			if ($cfg['cache_page'])
 			{
-				$cot_cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$rpage['cat']]['path']));
+				$cot_cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$rpage['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{

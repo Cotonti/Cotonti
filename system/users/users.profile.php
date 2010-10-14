@@ -188,22 +188,22 @@ switch ($a)
 			}
 		}
 
-		$ruser['text'] = cot_import('rusertext','P','TXT', $cfg['usertextmax']);
-		$ruser['country'] = cot_import('rusercountry','P','ALP');
+		$ruser['user_text'] = cot_import('rusertext','P','TXT', $cfg['usertextmax']);
+		$ruser['user_country'] = cot_import('rusercountry','P','ALP');
 		$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
-		$ruser['theme'] = $rtheme[0];
+		$ruser['user_theme'] = $rtheme[0];
 		$ruset['scheme'] = $rtheme[1];
-		$ruser['lang'] = cot_import('ruserlang','P','ALP');
-		$ruser['gender'] = cot_import('rusergender','P','ALP');
-		$ruser['timezone'] = (float) cot_import('rusertimezone','P','TXT',5);	
-		$ruser['hideemail'] = cot_import('ruserhideemail','P','BOL');
-		$ruser['pmnotify'] = cot_import('ruserpmnotify','P','BOL');
+		$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
+		$ruser['user_gender'] = cot_import('rusergender','P','ALP');
+		$ruser['user_timezone'] = (float) cot_import('rusertimezone','P','TXT',5);
+		$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
+		$ruser['user_pmnotify'] = cot_import('ruserpmnotify','P','BOL');
 		// Extra fields
 		foreach($cot_extrafields['users'] as $row)
 		{
 			$ruser[$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
 		}
-		$ruser['birthdate'] = (int) cot_import_date('ruserbirthdate', false);
+		$ruser['user_birthdate'] = (int) cot_import_date('ruserbirthdate', false);
 		
 		$roldpass = cot_import('roldpass','P','PSW');
 		$rnewpass1 = cot_import('rnewpass1','P','PSW');
@@ -211,7 +211,7 @@ switch ($a)
 		$rmailpass = cot_import('rmailpass','P','TXT');
 		$ruseremail = cot_import('ruseremail','P','TXT');
 
-		//$ruser['scheme'] = ($ruser['theme'] != $urr['user_theme']) ? $ruser['theme'] : $ruser['scheme'];
+		//$ruser['user_scheme'] = ($ruser['user_theme'] != $urr['user_theme']) ? $ruser['user_theme'] : $ruser['user_scheme'];
 
 		if (!empty($rnewpass1) && !empty($rnewpass2) && !empty($roldpass))
 		{
@@ -282,10 +282,10 @@ switch ($a)
 
 		if (!$cot_error)
 		{
-			$ruser['birthdate'] = ($ruser['birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['birthdate'];
-			$ruser['birthdate'] = ($ruser['birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['birthdate']);
-			$ruser['auth'] ='';
-			$cot_db->update($db_users, $ruser, "user_id='".$usr['id']."'", 'user_');
+			$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
+			$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
+			$ruser['user_auth'] ='';
+			$cot_db->update($db_users, $ruser, "user_id='".$usr['id']."'");
 
 			/* === Hook === */
 			foreach (cot_getextplugins('profile.update.done') as $pl)

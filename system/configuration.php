@@ -168,10 +168,10 @@ function cot_config_modify($name, $options, $is_module = false)
 
 	foreach ($options as $opt)
 	{
-		$config_name = $opt['name'];
-		unset($opt['name']);
-		$affected += $cot_db->update($db_config, $opt, "config_owner = '$type'
-			AND config_cat = '$name' AND config_name = '$config_name'", 'config_');
+		$config_name = $opt['config_name'];
+		unset($opt['config_name']);
+		$affected += $cot_db->update($db_config, $opt, "config_owner = ?
+			AND config_cat = ? AND config_name = ?", array($type, $name, $config_name));
 	}
 
 	return $affected;

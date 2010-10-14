@@ -225,6 +225,7 @@ function cot_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			if (is_numeric($v) && floor($v)==$v)
 			{
 				$pass = TRUE;
+				$v = (int) $v;
 			}
 			break;
 
