@@ -12,6 +12,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+cot_require_api('forms');
+
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a');
 cot_block($usr['auth_read']);
 
@@ -44,11 +46,11 @@ if ($row['pm_touserid'] == $usr['id'])
 {
 	if ($row['pm_tostate'] == 0)
 	{
-		$sql = $cot_db->query("UPDATE $db_pm SET pm_tostate = 1 WHERE pm_id = '".$id."'");
+		$sql = $cot_db->update($db_pm, array('pm_tostate' => '1'), "pm_id = '".$id."'");
 		$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$usr['id']."' AND pm_tostate = 0");
 		if ($sql->fetchColumn() == 0)
 		{
-			$sql = $cot_db->query("UPDATE $db_users SET user_newpm = 0 WHERE user_id = '".$usr['id']."'");
+			$sql = $cot_db->update($db_users, array('user_newpm' => '0'), "user_id = '".$usr['id']."'");
 		}
 	}
 	$f = 'inbox';
@@ -202,8 +204,8 @@ if ($usr['auth_write'])
 	$t->assign(array(
 		"PM_QUOTE" => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$d), $L['Quote'], array('onclick' => $onclick)),
 		"PM_FORM_SEND" => cot_url('pm', 'm=send&a=send&to='.$to),
-		"PM_FORM_TITLE" => htmlspecialchars($newpmtitle),
-		"PM_FORM_TEXT" => $newpmtext,
+		"PM_FORM_TITLE" => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
+		"PM_FORM_TEXT" => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
 		"PM_AJAX_MARKITUP" => (COT_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
 	));
 

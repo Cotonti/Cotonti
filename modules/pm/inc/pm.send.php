@@ -12,6 +12,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+cot_require_api('forms');
+
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a');
 cot_block($usr['auth_write']);
 
@@ -78,10 +80,12 @@ elseif ($a == 'send')
 	{
 		if (!$cot_error)
 		{
-			$sql = $cot_db->query("UPDATE $db_pm SET
-				pm_title = '".$cot_db->prep($newpmtitle)."', pm_text = '".$cot_db->prep($newpmtext)."',
-				pm_date = '".$sys['now_offset']."', pm_fromstate = '".$fromstate."' 
-				WHERE pm_id = '$id' AND pm_fromuserid = '".$usr['id']."' AND pm_tostate = '0'");
+			$pm['pm_title'] = $newpmtitle;
+			$pm['pm_date'] = (int)$sys['now_offset'];
+			$pm['pm_text'] = $newpmtext;
+			$pm['pm_fromstate'] = $fromstate;
+
+			$sql = $cot_db->update($db_pm, $pm, "pm_id = '$id' AND pm_fromuserid = '".$usr['id']."' AND pm_tostate = '0'");
 		}
 		/* === Hook === */
 		foreach (cot_getextplugins('pm.send.update.done') as $pl)
@@ -143,22 +147,21 @@ elseif ($a == 'send')
 		{
 			foreach ($touser_ids as $k => $userid)
 			{
-				$sql = $cot_db->query("INSERT into $db_pm
-					(pm_date, pm_fromuserid, pm_fromuser,
-					pm_touserid, pm_title, pm_text,
-					pm_fromstate, pm_tostate)
-					VALUES
-					(".(int)$sys['now_offset'].", ".(int)$usr['id'].", '".$cot_db->prep($usr['name'])."',
-					".(int)$userid.", '".$cot_db->prep($newpmtitle)."', '".$cot_db->prep($newpmtext)."',
-					'".(int)$fromstate."', 0)");
-
-				$sql = $cot_db->query("UPDATE $db_users SET user_newpm = 1 WHERE user_id = '".$userid."'");
+				$pm['pm_title'] = $newpmtitle;
+				$pm['pm_date'] = (int)$sys['now_offset'];
+				$pm['pm_text'] = $newpmtext;
+				$pm['pm_fromstate'] = $fromstate;
+				$pm['pm_fromuserid'] = (int)$usr['id'];
+				$pm['pm_fromuser'] = $usr['name'];
+				$pm['pm_touserid'] = (int)$userid;
+				$pm['pm_tostate'] = 0;
+				$sql = $cot_db->insert($db_pm, $pm);
+				$sql = $cot_db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
 
 				if ($cfg['pm_allownotifications'])
 				{
 					$sql = $cot_db->query("SELECT user_email, user_name, user_lang
-						FROM $db_users
-						WHERE user_id = '$userid' AND user_pmnotify = 1 AND user_maingrp > 3");
+						FROM $db_users WHERE user_id = '$userid' AND user_pmnotify = 1 AND user_maingrp > 3");
 
 					if ($row = $sql->fetch())
 					{
@@ -231,10 +234,6 @@ if (!empty($to))
 	}
 }
 
-// FIXME PFS dependency
-//$pfs = cot_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
-//$pfs .= (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';
-
 list($totalsentbox, $totalinbox) = cot_message_count($usr['id']);
 
 $title_params = array(
@@ -285,25 +284,22 @@ $title .= (!$id) ? $L['pmsend_title'] : $L['Edit'].' #'.$id;
 
 if (!$id)
 {
-	$t->assign(array(
-			"PMSEND_FORM_TOUSER" => $touser,
-	));
 	$t->parse("MAIN.PMSEND_USERLIST");
 }
 
 $t->assign(array(
-		"PMSEND_TITLE" => $title,
-		"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
-		"PMSEND_SENDNEWPM" => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
-		"PMSEND_INBOX" => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
-		"PMSEND_INBOX_COUNT" => $totalinbox,
-		"PMSEND_SENTBOX" => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
-		"PMSEND_SENTBOX_COUNT" => $totalsentbox,
-		"PMSEND_FORM_SEND" => cot_url('pm', 'm=send&a=send'.$idurl),
-		"PMSEND_FORM_TITLE" => htmlspecialchars($newpmtitle),
-		"PMSEND_FORM_TEXT" => htmlspecialchars($newpmtext),
-		"PMSEND_FORM_TOUSER" => $touser,
-		"PMSEND_AJAX_MARKITUP" => (COT_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
+	"PMSEND_TITLE" => $title,
+	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
+	"PMSEND_SENDNEWPM" => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
+	"PMSEND_INBOX" => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
+	"PMSEND_INBOX_COUNT" => $totalinbox,
+	"PMSEND_SENTBOX" => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
+	"PMSEND_SENTBOX_COUNT" => $totalsentbox,
+	"PMSEND_FORM_SEND" => cot_url('pm', 'm=send&a=send'.$idurl),
+	"PMSEND_FORM_TITLE" => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
+	"PMSEND_FORM_TEXT" => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
+	"PMSEND_FORM_TOUSER" => cot_textarea('newpmrecipient', $touser, 3, 56),
+	"PMSEND_AJAX_MARKITUP" => (COT_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
 ));
 
 /* === Hook === */
