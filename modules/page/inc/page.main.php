@@ -206,7 +206,8 @@ if ($pag['page_file'] > 0)
 			"PAGE_FILE_SIZE" => $pag['page_size'],
 			"PAGE_FILE_COUNT" => $pag['page_filecount'],
 			"PAGE_FILE_ICON" => $pag['page_fileicon'],
-			"PAGE_FILE_NAME" => basename($pag['page_url'])
+			"PAGE_FILE_NAME" => basename($pag['page_url']),
+			"PAGE_FILE_COUNTTIMES" => cot_declension($pag['page_filecount'], $Ls['Times'])
 		));
 
 		if (($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))
