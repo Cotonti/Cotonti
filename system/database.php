@@ -167,11 +167,11 @@ class CotDB extends PDO {
 		{
 			$stmt = $this->prepare($query);
 			$this->_bindParams($stmt, $parameters);
-			$res = $stmt->execute() ? $stmt->rowCount() : false;
+			$res = $stmt->execute() ? $stmt->rowCount() : cot_diefatal('SQL error: '.$this->error);
 		}
 		else
 		{
-			$res = $this->exec($query);
+			$res = $this->exec($query) or cot_diefatal('SQL error: '.$this->error);
 		}
 		$this->_stopTimer($query);
 		return $res;
@@ -189,10 +189,9 @@ class CotDB extends PDO {
 	 *
 	 * @param string $table_name Table name
 	 * @param array $data Associative or 2D array containing data for insertion.
-	 * @param string $prefix Optional key prefix, e.g. 'page_' prefix will result into 'page_name' key.
 	 * @return int The number of affected records
 	 */
-	public function insert($table_name, $data, $prefix = '')
+	public function insert($table_name, $data)
 	{
 		if (!is_array($data))
 		{
@@ -230,7 +229,7 @@ class CotDB extends PDO {
 					if (!$keys_built)
 					{
 						if ($j > 0) $keys .= ',';
-						$keys .= "`{$prefix}$key`";
+						$keys .= "`$key`";
 					}
 					if ($val === 'NOW()')
 					{
@@ -254,9 +253,9 @@ class CotDB extends PDO {
 		{
 			$query = "INSERT INTO `$table_name` ($keys) VALUES $vals";
 			$this->_startTimer();
-			$res = $this->query($query);
+			$res = $this->exec($query) or cot_diefatal('SQL error: '.$this->error);
 			$this->_stopTimer($query);
-			return $res->rowCount();
+			return $res;
 		}
 		return 0;
 	}
@@ -321,11 +320,11 @@ class CotDB extends PDO {
 			
 			$result = parent::prepare($query);
 			$this->_bindParams($result, $parameters);
-			$result->execute();
+			$result->execute() OR cot_diefatal('SQL error: '.$this->error);
 		}
 		else
 		{
-			$result = parent::query($query) OR cot_diefatal('SQL error : '.$this->error);
+			$result = parent::query($query) OR cot_diefatal('SQL error: '.$this->error);
 		}
 		$this->_stopTimer($query);
 		// In Cotonti we use PDO::FETCH_ASSOC by default to save memory
@@ -391,11 +390,11 @@ class CotDB extends PDO {
 			{
 				$stmt = $this->prepare($query);
 				$this->_bindParams($stmt, $parameters);
-				$res = $stmt->execute() ? $stmt->rowCount() : false;
+				$res = $stmt->execute() ? $stmt->rowCount() : cot_diefatal('SQL error: '.$this->error);
 			}
 			else
 			{
-				$res = $this->exec($query);
+				$res = $this->exec($query) or cot_diefatal('SQL error: '.$this->error);
 			}
 			$this->_stopTimer($query);
 			return $res;
