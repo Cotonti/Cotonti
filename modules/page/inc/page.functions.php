@@ -175,7 +175,7 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  */
 function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = 0, $dateformat='', $emptytitle='')
 {
-	global $cot_db, $cot_extrafields, $cfg, $L, $R, $cache, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
+	global $cot_db, $cot_extrafields, $cfg, $L, $Ls, $R, $cache, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
 	if (is_array($page_data) && is_array($cache['page_' . $page_data['page_id']]))
 	{
 		$temp_array = $cache['page_' . $page_data['page_id']];
@@ -251,6 +251,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'FILE_SIZE' => $page_data['page_size'],
 				'FILE_ICON' => $page_data['page_fileicon'],
 				'FILE_COUNT' => $page_data['page_filecount'],
+				"FILE_COUNTTIMES" => cot_declension($page_data['page_filecount'], $Ls['Times']),
 				'FILE_NAME' => basename($page_data['page_url']),
 				'COUNT' => $page_data['page_count'],
 				'RATINGS' => $page_data['page_ratings'],
