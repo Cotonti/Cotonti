@@ -18,11 +18,7 @@
 				<a title="{PHP.L.Configuration}" href="{ADMIN_PAGE_URL_CONFIG}">{PHP.L.Configuration}</a>
 			</li>
 			<li>
-<!-- IF {PHP.lincif_page} -->
 				<a href="{ADMIN_PAGE_URL_ADD}">{PHP.L.page_addtitle}</a>
-<!-- ELSE -->
-				{PHP.L.page_addtitle}
-<!-- ENDIF -->
 			</li>
 			<li>
 				<a href="{ADMIN_PAGE_URL_EXTRAFIELDS}">{PHP.L.adm_extrafields_desc}</a>

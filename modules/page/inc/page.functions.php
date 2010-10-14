@@ -192,7 +192,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			$page_data = $sql->fetch();
 		}
 
-		if ($page_data['user_id'] > 0 && !empty($page_data['user_name']))
+		if ($page_data['page_id'] > 0 && !empty($page_data['page_title']))
 		{
 			$catpath = cot_build_catpath($page_data['page_cat']);
 			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'id='.$page_data['page_id']) : cot_url('page', 'al='.$page_data['page_alias']);

@@ -179,6 +179,237 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 }
 
 /**
+ * Extra fields - Return default base html-construction for various types of fields (without value= and name=)
+ *
+ * @access private
+ * @param string $type Type of field (input, textarea etc)
+ * @return string
+ *
+ */
+function cot_default_html_construction($type)
+{
+	global $R;
+	$html = '';
+	switch($type)
+	{
+		case 'input':
+			$html = $R['input_text'];
+			break;
+
+		case 'textarea':
+			$html = $R['input_textarea'];
+			break;
+
+		case 'select':
+			$html = $R['input_select'];
+			break;
+
+		case 'checkbox':
+			$html = $R['input_checkbox'];
+			break;
+
+		case 'radio':
+			$html = $R['input_radio'];
+			break;
+
+		case 'datetime':
+			$html = $R['input_date'];
+			break;
+	}
+	return $html;
+}
+
+/**
+ * Add extra field for pages
+ *
+ * @param string $location Table for adding extrafield
+ * @param string $name Field name (unique)
+ * @param string $type Field type (input, textarea etc)
+ * @param string $html HTML Resource string
+ * @param string $variants Variants of values (for radiobuttons, selectors etc)
+ * @param string $default Default value
+ * @param bool $required Required field
+ * @param string $parse Parsing Type (HTML, BBCodes)
+ * @param string $description Description of field (optional, for admin)
+ * @param bool $noalter Do not ALTER the table, just register the extra field
+ * @return bool
+ *
+ */
+function cot_extrafield_add($location, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $noalter = false)
+{
+	global $cot_db, $db_extra_fields;
+	$fieldsres = $cot_db->query("SELECT field_name FROM $db_extra_fields WHERE field_location='$location'");
+	while($row = $fieldsres->fetch())
+	{
+		$extrafieldsnames[] = $row['field_name'];
+	}
+	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
+
+	// Check table cot_$sql_table - if field with same name exists - exit.
+	if ($cot_db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0 && !$noalter)
+	{
+		return false;
+	}
+	$fieldsres = $cot_db->query("SHOW COLUMNS FROM $location");
+	while ($fieldrow = $fieldsres->fetch())
+	{
+		$column = $fieldrow['Field'];
+		// get column prefix in this table
+		$column_prefix = substr($column, 0, strpos($column, "_"));
+
+		preg_match("#.*?_$name$#",$column,$match);
+		if($match[1]!="" && !$noalter) return false; // No adding - fields already exist
+		$i++;
+	}
+
+	$extf['location'] = $location;
+	$extf['name'] = $name;
+	$extf['type'] = $type;
+	$extf['html'] = $html;
+	$extf['variants'] = is_null($variants) ? '' : $variants;
+	$extf['default'] = is_null($default) ? '' : $default;
+	$extf['required'] = ($required > 0) ? 1 : 0;
+	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
+	$extf['description'] = is_null($description) ? '' : $description;
+
+	$step1 = $cot_db->insert($db_extra_fields, $extf, 'field_') == 1;
+	if ($noalter)
+	{
+		return $step1;
+	}
+	switch($type)
+	{
+		case 'input': $sqltype = "VARCHAR(255)";
+			break;
+		case 'textarea': $sqltype = "TEXT";
+			break;
+		case 'select': $sqltype = "VARCHAR(255)";
+			break;
+		case 'checkbox': $sqltype = "BOOL";
+			break;
+		case 'radio': $sqltype = "VARCHAR(255)";
+			break;
+		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
+			break;
+		case 'file': $sqltype = "VARCHAR(255)";
+			break;
+	}
+	$sql = "ALTER TABLE $location ADD ".$column_prefix."_$name $sqltype ";
+	$step2 = $cot_db->query($sql);
+	$step3 = true;
+	if ($type = 'file')
+	{
+
+	}
+	return $step1 && $step2 && $step3;
+}
+
+/**
+ * Update extra field for pages
+ *
+ * @param string $location Table contains extrafield
+ * @param string $oldname Exist name of field
+ * @param string $name Field name (unique)
+ * @param string $html HTML Resource string
+ * @param string $variants Variants of values (for radiobuttons, selectors etc)
+ * @param string $default Default value
+ * @param bool $required Required field
+ * @param string $parse Parsing Type (HTML, BBCodes)
+ * @param string $html HTML Resource string
+ * @param string $variants Variants of values (for radiobuttons, selectors etc)
+ * @param string $description Description of field (optional, for admin)
+ * @return bool
+ *
+ */
+function cot_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="")
+{
+	global $cot_db, $db_extra_fields;
+	$fieldsres = $cot_db->query("SELECT COUNT(*) FROM $db_extra_fields
+			WHERE field_name = '$oldname' AND field_location='$location'");
+	if (cot_db_numrows($fieldsres) <= 0  || $name != $oldname && cot_db_numrows(cot_db_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0)
+	{
+		// Attempt to edit non-extra field or override an existing field
+		return false;
+	}
+	$field = $fieldsres->fetch();
+	$fieldsres = $cot_db->query("SHOW COLUMNS FROM $location");
+	$fieldrow = $fieldsres->fetch();
+	$column = $fieldrow['Field'];
+	$column_prefix = substr($column, 0, strpos($column, "_"));
+	$alter = false;
+	if ($name != $field['field_name'])
+	{
+		$extf['name'] = $name;
+		$alter = true;
+	}
+	if ($type != $field['field_type'])
+	{
+		$extf['type'] = $type;
+		$alter = true;
+	}
+
+	$extf['html'] = $html;
+	$extf['parse'] = is_null($parse) ? 'HTML' : $parse;
+	$extf['variants'] = is_null($variants) ? '' : $variants;
+	$extf['default'] = is_null($default) ? '' : $default;
+	$extf['required'] = ($required > 0) ? 1 : 0;
+	$extf['description'] = is_null($description) ? '' : $description;
+
+	$step1 = $cot_db->update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'", 'field_') == 1;
+
+	if (!$alter) return $step1;
+
+	switch ($type)
+	{
+		case 'input': $sqltype = "VARCHAR(255)";
+			break;
+		case 'textarea': $sqltype = "TEXT";
+			break;
+		case 'select': $sqltype = "VARCHAR(255)";
+			break;
+		case 'checkbox': $sqltype = "BOOL";
+			break;
+		case 'radio': $sqltype = "VARCHAR(255)";
+			break;
+		case 'datetime': $sqltype = "int(11) NOT NULL default '0'";
+			break;
+		case 'file': $sqltype = "VARCHAR(255)";
+			break;
+	}
+	$sql = "ALTER TABLE $location CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
+	$step2 = $cot_db->query($sql);
+
+	return $step1 && $step2;
+}
+
+/**
+ * Delete extra field
+ *
+ * @param string $location Table contains extrafield
+ * @param string $name Name of extra field
+ * @return bool
+ *
+ */
+function cot_extrafield_remove($location, $name)
+{
+	global $cot_db, $db_extra_fields;
+	if ((int) $cot_db->query("SELECT COUNT(*) FROM $db_extra_fields
+		WHERE field_name = '$name' AND field_location='$location'")->fetchColumn() <= 0)
+	{
+		// Attempt to remove non-extra field
+		return false;
+	}
+	$fieldsres = $cot_db->query("SHOW COLUMNS FROM $location");
+	$fieldrow = $fieldsres->fetch();
+	$column = $fieldrow['Field'];
+	$column_prefix = substr($column, 0, strpos($column, "_"));
+	$step1 = $cot_db->delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
+	$sql = "ALTER TABLE $location DROP ".$column_prefix."_".$name;
+	$step2 = $cot_db->query($sql);
+	return $step1 && $step2;
+}
+
+/**
  * Loads extrafields data into global
  * @global array $cot_extrafields
  */

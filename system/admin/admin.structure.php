@@ -316,7 +316,7 @@ else
 				$colname = '';
 				$colvalue = '';
 
-				$sql = $cot_db->insert($db_structure, $rstructure, 'structure_');
+				$sql = $cot_db->insert($db_structure, $rstructure);
 				$auth_permit = array(COT_GROUP_DEFAULT => 7, COT_GROUP_GUESTS => 5, COT_GROUP_MEMBERS => 7);
 				$auth_lock = array(COT_GROUP_DEFAULT => 0, COT_GROUP_GUESTS => 250, COT_GROUP_MEMBERS => 128);
 				cot_auth_add_item('page', $rstructure['structure_code'], $auth_permit, $auth_lock);
@@ -479,7 +479,6 @@ else
 		$t->assign('ADMIN_STRUCTURE_EXTRAFLD_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
 		$t->parse('MAIN.DEFULT.EXTRAFLD');
 	}
-
 	$t->parse('MAIN.DEFULT');
 }
 
