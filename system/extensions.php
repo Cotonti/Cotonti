@@ -371,27 +371,27 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			if ($is_module)
 			{
 				$insert_rows[] = array(
-					'groupid' => $v['id'],
-					'code' => $name,
-					'option' => 'a',
-					'rights' => $ins_auth,
-					'rights_lock' => $ins_lock,
-					'setbyuserid' => $usr['id']
+					'auth_groupid' => $v['id'],
+					'auth_code' => $name,
+					'auth_option' => 'a',
+					'auth_rights' => $ins_auth,
+					'auth_rights_lock' => $ins_lock,
+					'auth_setbyuserid' => $usr['id']
 				);
 			}
 			else
 			{
 				$insert_rows[] = array(
-					'groupid' => $v['id'],
-					'code' => 'plug',
-					'option' => $name,
-					'rights' => $ins_auth,
-					'rights_lock' => $ins_lock,
-					'setbyuserid' => $usr['id']
+					'auth_groupid' => $v['id'],
+					'auth_code' => 'plug',
+					'auth_option' => $name,
+					'auth_rights' => $ins_auth,
+					'auth_rights_lock' => $ins_lock,
+					'auth_setbyuserid' => $usr['id']
 				);
 			}
 		}
-		if ($cot_db->insert($db_auth, $insert_rows, 'auth_'))
+		if ($cot_db->insert($db_auth, $insert_rows))
 		{
 			$cot_db->update($db_users, array('user_auth' => ''));
 			cot_message('ext_auth_installed');
@@ -475,8 +475,8 @@ function cot_extension_install($name, $is_module = false, $update = false)
 		}
 		else
 		{
-			$cot_db->insert($db_updates, array('param' => "$name.ver",
-				'value' => $info['Version']), 'upd_');
+			$cot_db->insert($db_updates, array('upd_param' => "$name.ver",
+				'upd_value' => $info['Version']));
 		}
     }
 
@@ -662,8 +662,8 @@ function cot_module_add($name, $title, $version = '1.0.0')
 {
     global $cot_db, $db_core;
 
-    $res = $cot_db->insert($db_core, array('code' => $name, 'title' => $title,
-		'version' => $version), 'ct_');
+    $res = $cot_db->insert($db_core, array('ct_code' => $name, 'ct_title' => $title,
+		'ct_version' => $version));
 
     return false;
 }
@@ -776,17 +776,17 @@ function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
     foreach ($hook_bindings as $binding)
     {
         $insert_rows[] = array(
-            'hook' => $binding['hook'],
-            'code' => $name,
-            'part' => $binding['part'],
-            'title' => $title,
-            'file' => empty($binding['file']) ? "$path/$name.{$binding['part']}.php" : $path . '/' . $binding['file'],
-            'order' => $binding['order'],
-            'active' => 1,
-            'module' => (int) $is_module
+            'pl_hook' => $binding['hook'],
+            'pl_code' => $name,
+            'pl_part' => $binding['part'],
+            'pl_title' => $title,
+            'pl_file' => empty($binding['file']) ? "$path/$name.{$binding['part']}.php" : $path . '/' . $binding['file'],
+            'pl_order' => $binding['order'],
+            'pl_active' => 1,
+            'pl_module' => (int) $is_module
         );
     }
-    return $cot_db->insert($db_plugins, $insert_rows, 'pl_');
+    return $cot_db->insert($db_plugins, $insert_rows);
 }
 
 /**
