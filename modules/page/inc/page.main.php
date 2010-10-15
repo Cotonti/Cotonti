@@ -150,7 +150,7 @@ cot_require('users');
 $mskin = cot_skinfile(array('page', $cat['tpl']));
 $t = new XTemplate($mskin);
 
-$t->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', 0, $usr['isadmin']));
+$t->assign(cot_generate_pagetags($pag, 'PAGE_', 0, $usr['isadmin']));
 $t->assign('PAGE_OWNER', cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])));
 $t->assign(cot_generate_usertags($pag, "PAGE_ROW_OWNER_"));
 
