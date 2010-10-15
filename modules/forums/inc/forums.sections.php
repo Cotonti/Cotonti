@@ -122,7 +122,7 @@ while ($fsn = $sql->fetch())
     if ($pcat!=$fsn['fs_category'])
     {
         $pcat = $fsn['fs_category'];
-        $sql2 = $cot_db->query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat'");
+        $sql2 = $cot_db->query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_category='$pcat' AND fs_masterid=0");
         $catnum = $sql2->fetchColumn();
 
         $cattitle = cot_rc_link(cot_url('forums'), htmlspecialchars($cot_forums_str[$fsn['fs_category']]['tpath']),  "onclick=\"return toggleblock('blk_".$fsn['fs_category']."')'\"");
