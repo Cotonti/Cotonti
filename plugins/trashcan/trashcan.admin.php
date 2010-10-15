@@ -49,8 +49,7 @@ if($a == 'wipe')
 		include $pl;
 	}
 	/* ===== */
-	$sql = $cot_db->query("DELETE FROM $db_trash WHERE tr_id='$id'");
-
+	cot_trash_delete($id);
 	cot_message('adm_trashcan_deleted');
 }
 elseif($a == 'wipeall')
@@ -75,10 +74,7 @@ elseif($a == 'restore')
 		include $pl;
 	}
 	/* ===== */
-	if(cot_trash_restore($id))
-	{
-		$cot_db->delete($db_trash, "tr_id='$id'");
-	}
+	cot_trash_restore($id);
 
 	cot_message('adm_trashcan_restored');
 }
@@ -88,7 +84,7 @@ $pagenav = cot_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperp
 
 $sql = $cot_db->query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
-	WHERE 1 ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+	WHERE tr_parentid='0' ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */

@@ -364,7 +364,7 @@ class CotDB extends PDO {
 	 * @param bool $update_null Nullify cells which have null values in the array. By default they are skipped
 	 * @return int The number of affected records or FALSE on error
 	 */
-	public function update($table_name, $data, $condition, $parameters = array(), $update_null = false)
+	public function update($table_name, $data, $condition ='', $parameters = array(), $update_null = false)
 	{
 		if(!is_array($data))
 		{
