@@ -49,7 +49,7 @@ function cot_apply_patches($directory, $from_ver,
 	$sql_pattern = '(sql)_([\w\.\-\_]+)\.sql',
 	$php_pattern = '(php)_([\w\.\-\_]+)\.inc')
 {
-	global $L;
+	global $L, $cot_db;
 
 	// Find new patches
 	$dp = opendir($directory);
@@ -190,7 +190,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
 function cot_extension_install($name, $is_module = false, $update = false)
 {
     global $cfg, $L, $cot_error, $cot_cache, $usr, $db_auth, $db_users,
-		$db_updates, $db_core, $cot_groups, $cot_ext_ignore_parts;
+		$db_updates, $db_core, $cot_groups, $cot_ext_ignore_parts, $cot_db;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
@@ -495,7 +495,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 function cot_extension_uninstall($name, $is_module = false)
 {
     global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cot_cache,
-		$cot_error;
+		$cot_error, $cot_db;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
