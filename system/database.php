@@ -283,6 +283,7 @@ class CotDB extends PDO {
 	 */
 	public function runScript($script)
 	{
+		global $db_x;
 		$error = '';
 		// Remove comments
 		$script = preg_replace('#^/\*.*?\*/#m', '', $script);
