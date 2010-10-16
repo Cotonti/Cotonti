@@ -11,7 +11,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 // Modules and plugins checked by default
 $default_modules = array('index', 'page', 'rss');
-$default_plugins = array('cleaner', 'ipsearch', 'markitup', 'news');
+$default_plugins = array('ckeditor', 'cleaner', 'htmlpurifier', 'ipsearch', 'news');
 
 $step = empty($_SESSION['cot_inst_lang']) ? 0 : (int) $cfg['new_install'];
 
