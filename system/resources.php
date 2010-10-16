@@ -78,6 +78,22 @@ $R['code_msg_line'] = '<li><span class="{$class}">{$text}</span></li>';
 $R['code_msg_inline'] = '<span class="{$class}">{$text}</span>';
 
 /**
+ * Head resources
+ */
+$R['code_headrc_css_embed'] = '<style type="text/css">
+/*<![CDATA[*/
+{$code}
+/*]]>*/
+</style>';
+$R['code_headrc_css_file'] = '<link href="{$url}" type="text/css" rel="stylesheet" />';
+$R['code_headrc_js_embed'] = '<script type="text/javascript">
+//<![CDATA[
+{$code}
+//]]>
+</script>';
+$R['code_headrc_js_file'] = '<script src="{$url}" type="text/javascript"></script>';
+
+/**
  * Misc
  */
 

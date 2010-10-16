@@ -80,6 +80,7 @@ else
 	$extname = $z;
 	$exttype = 'module';
 }
+$env['ext'] = $extname;
 
 $req_files = array();
 $req_files[] = cot_langfile($extname, $exttype);
