@@ -343,7 +343,7 @@ function cot_comments_enabled($area, $cat = '', $code = '', $return_row = false)
  */
 function cot_comments_link($link_area, $link_params, $area, $code, $cat = '')
 {
-	global $db, $R, $L, $db_com;
+	global $cfg, $db, $R, $L, $db_com;
 
 	if (!cot_comments_enabled($area, $cat, $code))
 	{
