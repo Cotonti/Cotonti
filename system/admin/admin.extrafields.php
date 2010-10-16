@@ -164,10 +164,10 @@ elseif ($a == 'del' && isset($name))
 	}
 }
 
-$cfg['cache'] && $cot_cache->db->remove('cot_extrafields', 'system');
+$cfg['cache'] && $cache->db->remove('cot_extrafields', 'system');
 
-$totalitems = $cot_db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$location'")->fetchColumn();
-$res = $cot_db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$location' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
+$totalitems = $db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_location = '$location'")->fetchColumn();
+$res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$location' ORDER BY field_name ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $pagenav = cot_pagenav('admin',$extra_path, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 

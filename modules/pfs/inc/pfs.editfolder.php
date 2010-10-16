@@ -73,7 +73,7 @@ if ($userid!=$usr['id'])
 
 $title .= " ".$cfg['separator']." ".$L['Edit'];
 
-$sql = $cot_db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
+$sql = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
 
 if ($row = $sql->fetch())
 {
@@ -99,13 +99,13 @@ if ($a=='update' && !empty($f))
 	$folderid = cot_import('folderid','P','INT');
 	$rispublic = cot_import('rispublic','P','BOL');
 	$risgallery = cot_import('risgallery','P','BOL');
-	$sql = $cot_db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
+	$sql = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
 	cot_die($sql->rowCount()==0);
 
-	$sql = $cot_db->query("UPDATE $db_pfs_folders SET
-		pff_title='".$cot_db->prep($rtitle)."',
+	$sql = $db->query("UPDATE $db_pfs_folders SET
+		pff_title='".$db->prep($rtitle)."',
 		pff_updated='".$sys['now']."',
-		pff_desc='".$cot_db->prep($rdesc)."',
+		pff_desc='".$db->prep($rdesc)."',
 		pff_ispublic='$rispublic',
 		pff_isgallery='$risgallery'
 		WHERE pff_userid='$userid' AND pff_id='$f' " );

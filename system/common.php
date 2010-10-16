@@ -53,20 +53,20 @@ session_start();
 if ($cfg['cache'] && !$cfg['devmode'])
 {
 	require_once $cfg['system_dir'].'/cache.php';
-	$cot_cache = new Cache();
+	$cache = new Cache();
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$site_id]) && empty($_SESSION[$site_id]))
 	{
 		$cache_z = ($z == 'list') ? 'page' : $z;
 		if ($cfg["cache_$cache_z"])
 		{
-			$cot_cache->page->init($cache_z, $cfg['defaulttheme']);
-			$cot_cache->page->read();
+			$cache->page->init($cache_z, $cfg['defaulttheme']);
+			$cache->page->read();
 		}
 	}
 }
 else
 {
-	$cot_cache = false;
+	$cache = false;
 }
 
 /* ======== Connect to the SQL DB======== */
@@ -74,7 +74,7 @@ else
 require_once $cfg['system_dir'].'/database.php';
 try
 {
-	$cot_db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']/*, array(PDO::ATTR_PERSISTENT => true)*/);
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']/*, array(PDO::ATTR_PERSISTENT => true)*/);
 }
 catch (PDOException $e)
 {
@@ -84,18 +84,18 @@ catch (PDOException $e)
 }
 unset($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
-$cot_cache && $cot_cache->init();
+$cache && $cache->init();
 
 /* ======== Configuration settings ======== */
 
-if ($cot_cache && $cot_cfg)
+if ($cache && $cot_cfg)
 {
 	$cfg = array_merge($cot_cfg, $cfg);
 	unset($cot_cfg);
 }
 else
 {
-	$sql_config = $cot_db->query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
+	$sql_config = $db->query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
 
 	while ($row = $sql_config->fetch())
 	{
@@ -115,7 +115,7 @@ else
 	}
 	$cfg['css'] = $cfg['defaulttheme'];
 
-	$cot_cache && $cot_cache->db->store('cot_cfg', $cfg, 'system');
+	$cache && $cache->db->store('cot_cfg', $cfg, 'system');
 }
 // Mbstring options
 mb_internal_encoding('UTF-8');
@@ -164,7 +164,7 @@ define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER[
 
 if (!$cot_plugins)
 {
-	$sql = $cot_db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
+	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
 	if ($sql->rowCount() > 0)
 	{
@@ -174,18 +174,18 @@ if (!$cot_plugins)
 		}
         $sql->closeCursor();
 	}
-	$cot_cache && $cot_cache->db->store('cot_plugins', $cot_plugins, 'system');
+	$cache && $cache->db->store('cot_plugins', $cot_plugins, 'system');
 }
 
 if (!is_array($cot_urltrans))
 {
 	cot_load_urltrans();
-	$cot_cache && $cot_cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
+	$cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
 }
 
 if (!$cot_modules)
 {
-    $sql = $cot_db->query("SELECT ct_code, ct_title FROM $db_core
+    $sql = $db->query("SELECT ct_code, ct_title FROM $db_core
 		WHERE ct_state = 1 AND ct_lock = 0");
 	if ($sql->rowCount() > 0)
 	{
@@ -198,7 +198,7 @@ if (!$cot_modules)
 		}
         $sql->closeCursor();
 	}
-	$cot_cache && $cot_cache->db->store('cot_modules', $cot_modules, 'system');
+	$cache && $cache->db->store('cot_modules', $cot_modules, 'system');
 }
 
 /* ======== Gzip and output filtering ======== */
@@ -221,14 +221,14 @@ if (!$cfg['disablebanlist'])
 	$userip = explode('.', $usr['ip']);
 	$ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";
 
-	$sql = $cot_db->query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
+	$sql = $db->query("SELECT banlist_id, banlist_ip, banlist_reason, banlist_expire FROM $db_banlist WHERE banlist_ip IN ".$ipmasks);
 
 	if ($sql->rowCount() > 0)
 	{
 		$row = $sql->fetch();
 		if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
 		{
-			$sql = $cot_db->query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
+			$sql = $db->query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
 		}
 		else
 		{
@@ -244,7 +244,7 @@ if (!$cfg['disablebanlist'])
 
 if (!$cot_groups )
 {
-	$sql = $cot_db->query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
+	$sql = $db->query("SELECT * FROM $db_groups WHERE grp_disabled=0 ORDER BY grp_level DESC");
 
 	if ($sql->rowCount() > 0)
 	{
@@ -271,7 +271,7 @@ if (!$cot_groups )
 		cot_diefatal('No groups found.'); // TODO: Need translate
 	}
 
-	$cot_cache && $cot_cache->db->store('cot_groups', $cot_groups, 'system');
+	$cache && $cache->db->store('cot_groups', $cot_groups, 'system');
 }
 
 /* ======== User/Guest ======== */
@@ -298,7 +298,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 	$u_sid = cot_import($u[1], 'D', 'ALP');
 	if ($u_id > 0)
 	{
-		$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
+		$sql = $db->query("SELECT * FROM $db_users WHERE user_id = $u_id AND user_sid = '$u_sid'");
 
 		if ($row = $sql->fetch())
 		{
@@ -349,7 +349,7 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					if($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
 				}
 
-				$cot_db->query("UPDATE $db_users
+				$db->query("UPDATE $db_users
 					SET user_lastlog = {$sys['now_offset']} $update_lastvisit $update_token $update_auth
 					WHERE user_id='{$usr['id']}'");
 
@@ -371,7 +371,7 @@ if ($usr['id'] == 0)
 	if (!$cot_guest_auth)
 	{
 		$cot_guest_auth = cot_auth_build(0);
-		$cot_cache && $cot_cache->db->store('cot_guest_auth', $cot_guest_auth, 'system');
+		$cache && $cache->db->store('cot_guest_auth', $cot_guest_auth, 'system');
 	}
 	$usr['auth'] = $cot_guest_auth;
 	unset($cot_guest_auth);
@@ -393,7 +393,7 @@ foreach (cot_getextplugins('input') as $pl)
 
 if ($cfg['maintenance'])
 {
-	$sqll = $cot_db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
+	$sqll = $db->query("SELECT grp_maintenance FROM $db_groups WHERE grp_id='".$usr['maingrp']."' ");
 	$roow = $sqll->fetch();
 
 	if (!$roow['grp_maintenance'] && !defined('COT_AUTH'))
@@ -417,7 +417,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 {
 	if ($usr['id'] > 0)
 	{
-		$sql = $cot_db->query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
+		$sql = $db->query("SELECT * FROM $db_online WHERE online_userid=".$usr['id']);
 
 		if ($row = $sql->fetch())
 		{
@@ -435,7 +435,7 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 	}
 	else
 	{
-		$sql = $cot_db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
+		$sql = $db->query("SELECT * FROM $db_online WHERE online_ip='".$usr['ip']."'");
 		$online_count = $sql->rowCount();
 
 		if ($online_count > 0)
@@ -522,9 +522,9 @@ $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." 
 
 if (!$cfg['disablehitstats'])
 {
-	if ($cot_cache && $cot_cache->mem)
+	if ($cache && $cache->mem)
 	{
-		$hits = $cot_cache->mem->inc('hits', 'system');
+		$hits = $cache->mem->inc('hits', 'system');
 		$cfg['hit_precision'] > 0 || $cfg['hit_precision'] = 100;
 		if ($hits % $cfg['hit_precision'] == 0)
 		{
@@ -546,10 +546,10 @@ if (!$cfg['disablehitstats'])
 		&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === false
 		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === false)
 	{
-		$cot_db->query("INSERT INTO $db_referers
+		$db->query("INSERT INTO $db_referers
 				(ref_url, ref_count, ref_date)
 			VALUES
-				('".$cot_db->prep($sys['referer'])."', 1, {$sys['now_offset']})
+				('".$db->prep($sys['referer'])."', 1, {$sys['now_offset']})
 			ON DUPLICATE KEY UPDATE
 				ref_count=ref_count+1, ref_date={$sys['now_offset']}");
 	}
@@ -560,7 +560,7 @@ if (!$cfg['disablehitstats'])
 if (!$cot_cat)
 {
 	cot_load_structure();
-	$cot_cache && $cot_cache->db->store('cot_cat', $cot_cat, 'system');
+	$cache && $cache->db->store('cot_cat', $cot_cat, 'system');
 }
 
 /* ======== Various ======== */

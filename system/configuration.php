@@ -87,7 +87,7 @@ define('COT_CONFIG_TYPE_HIDDEN', 5);
  */
 function cot_config_add($name, $options, $is_module = false)
 {
-    global $cot_db, $cfg, $db_config;
+    global $db, $cfg, $db_config;
     $cnt = count($options);
     $type = $is_module ? 'module' : 'plug';
     // Check the arguments
@@ -106,18 +106,18 @@ function cot_config_add($name, $options, $is_module = false)
             $query .= ',';
 		}
         $order = isset($options[$i]['order'])
-			? $cot_db->prep($options[$i]['order'])
+			? $db->prep($options[$i]['order'])
 			: str_pad($i, 2, 0, STR_PAD_LEFT);
         $query .= "('$type', '$name', '$order', '"
-			. $cot_db->prep($options[$i]['name']) . "', "
+			. $db->prep($options[$i]['name']) . "', "
 			. (int) $options[$i]['type'] . ", '"
-			. $cot_db->prep($options[$i]['default']) . "', '"
-            . $cot_db->prep($options[$i]['default']) . "', '"
-			. $cot_db->prep($options[$i]['variants']) . "', '"
-            . $cot_db->prep($options[$i]['text']) . "')";
+			. $db->prep($options[$i]['default']) . "', '"
+            . $db->prep($options[$i]['default']) . "', '"
+			. $db->prep($options[$i]['variants']) . "', '"
+            . $db->prep($options[$i]['text']) . "')";
     }
-    $cot_db->query($query);
-    return $cot_db->affectedRows == $cnt;
+    $db->query($query);
+    return $db->affectedRows == $cnt;
 }
 
 /**
@@ -129,11 +129,11 @@ function cot_config_add($name, $options, $is_module = false)
  */
 function cot_config_load($name, $is_module = false)
 {
-	global $cot_db, $db_config;
+	global $db, $db_config;
 	$options = array();
 	$type = $is_module ? 'module' : 'plug';
 
-	$res = $cot_db->query("SELECT config_name, config_type, config_value,
+	$res = $db->query("SELECT config_name, config_type, config_value,
 			config_default, config_variants, config_order
 		FROM $db_config WHERE config_owner = '$type' AND config_cat = '$name'");
 	while ($row = $res->fetch())
@@ -162,7 +162,7 @@ function cot_config_load($name, $is_module = false)
  */
 function cot_config_modify($name, $options, $is_module = false)
 {
-	global $cot_db, $db_config;
+	global $db, $db_config;
 	$type = $is_module ? 'module' : 'plug';
 	$affected = 0;
 
@@ -170,7 +170,7 @@ function cot_config_modify($name, $options, $is_module = false)
 	{
 		$config_name = $opt['config_name'];
 		unset($opt['config_name']);
-		$affected += $cot_db->update($db_config, $opt, "config_owner = ?
+		$affected += $db->update($db_config, $opt, "config_owner = ?
 			AND config_cat = ? AND config_name = ?", array($type, $name, $config_name));
 	}
 
@@ -237,7 +237,7 @@ function cot_config_parse($info_cfg)
  */
 function cot_config_remove($name, $is_module = false, $option = '')
 {
-    global $cot_db, $db_config;
+    global $db, $db_config;
     $type = $is_module ? 'module' : 'plug';
     $where = "config_owner = '$type' AND config_cat = '$name'";
     if (is_array($option))
@@ -254,16 +254,16 @@ function cot_config_remove($name, $is_module = false, $option = '')
             {
                 if ($i > 0)
                     $where .= ',';
-                $where .= "'" . $cot_db->prep($option[$i]) . "'";
+                $where .= "'" . $db->prep($option[$i]) . "'";
             }
             unset($option);
         }
     }
     if (!empty($option))
     {
-        $where .= " AND config_name = '" . $cot_db->prep($option) . "'";
+        $where .= " AND config_name = '" . $db->prep($option) . "'";
     }
-    return $cot_db->delete($db_config, $where);
+    return $db->delete($db_config, $where);
 }
 
 /**
@@ -286,16 +286,16 @@ function cot_config_remove($name, $is_module = false, $option = '')
  */
 function cot_config_set($name, $options, $is_module = false)
 {
-    global $cot_db, $db_config;
+    global $db, $db_config;
     $type = $is_module ? 'module' : 'plug';
     $upd_cnt = 0;
     foreach ($options as $key => $val)
     {
         $where = "config_owner = '$type' AND config_name = '"
-			. $cot_db->prep($key) . "'";
+			. $db->prep($key) . "'";
         if (!empty($name))
             $where .= " AND config_cat = '$name'";
-        $upd_cnt += $cot_db->update($db_config, array('config_value' => $val), $where);
+        $upd_cnt += $db->update($db_config, array('config_value' => $val), $where);
     }
     return $upd_cnt;
 }

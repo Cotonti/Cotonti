@@ -31,7 +31,7 @@ $GLOBALS['db_polls_voters']  = (isset($GLOBALS['db_polls_voters'])) ? $GLOBALS['
  */
 function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 {
-	global $cot_db, $cfg, $db_polls, $db_polls_options, $cot_error, $poll_id, $R, $L;
+	global $db, $cfg, $db_polls, $db_polls_options, $cot_error, $poll_id, $R, $L;
 	if (gettype($t) != 'object')
 	{
 		$t = new XTemplate(cot_skinfile('polls'));
@@ -56,14 +56,14 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 	}
 	elseif ((int)$id > 0)
 	{
-		$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".$cot_db->prep($type)."' AND poll_code = '$id'";
-		$sql = $cot_db->query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
+		$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".$db->prep($type)."' AND poll_code = '$id'";
+		$sql = $db->query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
 		if ($row = $sql->fetch())
 		{
 			$id = $row["poll_id"];
 			$poll_text = htmlspecialchars($row["poll_text"]);
 
-			$sql1 = $cot_db->query("SELECT * FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
+			$sql1 = $db->query("SELECT * FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
 			while ($row1 = $sql1->fetch())
 			{
 				$counter++;
@@ -171,20 +171,20 @@ function cot_poll_check()
  */
 function cot_poll_save($type = 'index', $code = '')
 {
-	global $cot_db, $sys, $db_polls, $db_polls_options, $cot_error, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
+	global $db, $sys, $db_polls, $db_polls_options, $cot_error, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
 
 	if (!empty($poll_id) && !$cot_error)
 	{
 		if ((int)$poll_id > 0)
 		{
-			$sql = $cot_db->query("UPDATE $db_polls SET  poll_state = '".(int)$poll_state."', poll_text = '".$cot_db->prep($poll_text)."', poll_multiple = '".(int)$poll_multiple."' WHERE poll_id = '$poll_id'");
+			$sql = $db->query("UPDATE $db_polls SET  poll_state = '".(int)$poll_state."', poll_text = '".$db->prep($poll_text)."', poll_multiple = '".(int)$poll_multiple."' WHERE poll_id = '$poll_id'");
 			$newpoll_id = $poll_id;
 		}
 		else
 		{
-			$sql = $cot_db->query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple, poll_code)
-				VALUES ('".$cot_db->prep($type)."', ".(int)$poll_state.", ".(int)$sys['now_offset'].", '".$cot_db->prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
-			$newpoll_id = $cot_db->lastInsertId();
+			$sql = $db->query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple, poll_code)
+				VALUES ('".$db->prep($type)."', ".(int)$poll_state.", ".(int)$sys['now_offset'].", '".$db->prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
+			$newpoll_id = $db->lastInsertId();
 		}
 
 		foreach ($poll_options as $key => $val)
@@ -194,20 +194,20 @@ function cot_poll_save($type = 'index', $code = '')
 				$key = mb_substr($key, 2);
 				if ((int)$key > 0 &&(int)$poll_id > 0)
 				{
-					$sql2 = $cot_db->query("UPDATE $db_polls_options SET po_text = '".$cot_db->prep($val)."' WHERE po_id = '".(int)$key."'");
+					$sql2 = $db->query("UPDATE $db_polls_options SET po_text = '".$db->prep($val)."' WHERE po_id = '".(int)$key."'");
 					$ids[] = $key;
 				}
 				else
 				{
-					$sql2 = $cot_db->query( "INSERT into $db_polls_options (po_pollid, po_text, po_count) VALUES ('$newpoll_id', '".$cot_db->prep($val)."', '0')");
-					$ids[] = $cot_db->lastInsertId();
+					$sql2 = $db->query( "INSERT into $db_polls_options (po_pollid, po_text, po_count) VALUES ('$newpoll_id', '".$db->prep($val)."', '0')");
+					$ids[] = $db->lastInsertId();
 				}
 
 			}
 		}
 		if ((int)$poll_id > 0 && count($ids) > 0)
 		{
-			$sql2 = $cot_db->query("DELETE FROM $db_polls_options WHERE po_pollid = '".(int)$newpoll_id."' AND po_id NOT IN ('".implode("','", $ids)."')");
+			$sql2 = $db->query("DELETE FROM $db_polls_options WHERE po_pollid = '".(int)$newpoll_id."' AND po_id NOT IN ('".implode("','", $ids)."')");
 		}
 		return ($newpoll_id);
 	}
@@ -219,7 +219,7 @@ function cot_poll_save($type = 'index', $code = '')
  */
 function cot_poll_vote()
 {
-	global $cot_db, $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr;
+	global $db, $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 
 	$vote = cot_import('vote', 'P', 'ARR');
 	$id = (int) cot_import('poll_id', 'P', 'INT');
@@ -227,7 +227,7 @@ function cot_poll_vote()
 	if (count($vote) > 0)
 	{
 		$alreadyvoted = 0;
-		$sql = $cot_db->query("SELECT * FROM $db_polls WHERE poll_id = '$id'");
+		$sql = $db->query("SELECT * FROM $db_polls WHERE poll_id = '$id'");
 		if ($row = $sql->fetch())
 		{
 			if ($cfg['ip_id_polls'] == 'id' && $usr['id'] > 0)
@@ -238,17 +238,17 @@ function cot_poll_vote()
 			{
 				$where = ($usr['id'] > 0) ? "(pv_userid = '".$usr['id']."' OR pv_userip = '".$usr['ip']."')" : "pv_userip = '".$usr['ip']."'";
 			}
-			$sql2 = $cot_db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = '$id' AND $where LIMIT 1");
+			$sql2 = $db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = '$id' AND $where LIMIT 1");
 			$alreadyvoted = ($sql2->rowCount() == 1) ? 1 : 0;
 			if ($alreadyvoted != 1)
 			{
 				foreach ($vote as $val)
 				{
-					$sql2 = $cot_db->query("UPDATE $db_polls_options SET po_count = po_count+1 WHERE po_pollid = '$id' AND po_id = '".(int)$val."'");
+					$sql2 = $db->query("UPDATE $db_polls_options SET po_count = po_count+1 WHERE po_pollid = '$id' AND po_id = '".(int)$val."'");
 				}
-				if ($cot_db->affectedRows > 0)
+				if ($db->affectedRows > 0)
 				{
-					$sql2 = $cot_db->query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
+					$sql2 = $db->query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
 				}
 			}
 		}
@@ -266,14 +266,14 @@ function cot_poll_vote()
  */
 function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 {
-	global $cot_db, $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr;
+	global $db, $cfg, $db_polls, $db_polls_options, $db_polls_voters, $usr;
 	$canvote = false;
 
 	if (!is_array($id))
 	{
 		$id = (int) $id;
-		$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".$cot_db->prep($type)."' AND poll_code = '$id'";
-		$sql = $cot_db->query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
+		$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".$db->prep($type)."' AND poll_code = '$id'";
+		$sql = $db->query("SELECT * FROM $db_polls WHERE $where LIMIT 1");
 		if (!$row = $sql->fetch())
 		{
 			return false;
@@ -296,7 +296,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 		$where = ($usr['id'] > 0) ? "(pv_userid = '".$usr['id']."' OR pv_userip = '".$usr['ip']."')" : "pv_userip = '".$usr['ip']."'";
 		$canvote = true;
 	}
-	$sql2 = $cot_db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = '$id' AND $where LIMIT 1");
+	$sql2 = $db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = '$id' AND $where LIMIT 1");
 	$alreadyvoted = ($sql2->rowCount() == 1) ? 1 : 0;
 
 	$themefile = (is_string($theme)) ? cot_skinfile(array('polls', $theme), 'module') : cot_skinfile($theme, 'module');
@@ -307,10 +307,10 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	elseif ($row['poll_state']) $poll_block = "POLL_VIEW_LOCKED";
 	else $poll_block = "POLL_VIEW";
 
-	$sql2 = $cot_db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid = '$id'");
+	$sql2 = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid = '$id'");
 	$totalvotes = $sql2->fetchColumn();
 
-	$sql1 = $cot_db->query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
+	$sql1 = $db->query("SELECT po_id, po_text, po_count FROM $db_polls_options WHERE po_pollid = '$id' ORDER by po_id ASC");
 	while ($row1 = $sql1->fetch())
 	{
 		$po_id = $row1['po_id'];
@@ -357,18 +357,18 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
  */
 function cot_poll_delete($id, $type = '')
 {
-	global $cot_db, $db_polls, $db_polls_options, $db_polls_voters;
+	global $db, $db_polls, $db_polls_options, $db_polls_voters;
 
 	if ($type)
 	{
-		$sql = $cot_db->query("SELECT poll_id FROM $db_polls WHERE poll_type = '".$cot_db->prep($type)."' AND poll_code = '$id' LIMIT 1");
+		$sql = $db->query("SELECT poll_id FROM $db_polls WHERE poll_type = '".$db->prep($type)."' AND poll_code = '$id' LIMIT 1");
 		$id = ($row = $sql->fetch()) ? $row['poll_id'] : 0;
 	}
 	if ((int)$id > 0)
 	{
-		$sql = $cot_db->query("DELETE FROM $db_polls WHERE poll_id = ".$id);
-		$sql = $cot_db->query("DELETE FROM $db_polls_options WHERE po_pollid = ".$id);
-		$sql = $cot_db->query("DELETE FROM $db_polls_voters WHERE pv_pollid = ".$id);
+		$sql = $db->query("DELETE FROM $db_polls WHERE poll_id = ".$id);
+		$sql = $db->query("DELETE FROM $db_polls_options WHERE po_pollid = ".$id);
+		$sql = $db->query("DELETE FROM $db_polls_voters WHERE pv_pollid = ".$id);
 
 		/* === Hook === */
 		foreach (cot_getextplugins('polls.functions.delete') as $pl)
@@ -395,22 +395,22 @@ function cot_poll_delete($id, $type = '')
  */
 function cot_poll_lock($id, $state, $type = '')
 {
-	global $cot_db, $db_polls;
+	global $db, $db_polls;
 
 	$id = (int) $id;
-	$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".$cot_db->prep($type)."' AND poll_code = '$id'";
+	$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".$db->prep($type)."' AND poll_code = '$id'";
 	if ($state == 3)
 	{
-		$sql = $cot_db->query("SELECT poll_state FROM $db_polls WHERE  $where LIMIT 1");
+		$sql = $db->query("SELECT poll_state FROM $db_polls WHERE  $where LIMIT 1");
 		$rstate = ($row = $sql->fetch()) ? $row['poll_state'] : 0;
 		$state = ($rstate) ? 0 : 1;
 	}
 	if ((int)$id > 0)
 	{
-		$sql = $cot_db->query("UPDATE $db_polls SET poll_state = '".(int)$state."' WHERE $where");
+		$sql = $db->query("UPDATE $db_polls SET poll_state = '".(int)$state."' WHERE $where");
 	}
 
-	return (($cot_db->affectedRows > 0) ? true : false);
+	return (($db->affectedRows > 0) ? true : false);
 }
 
 /**
@@ -422,20 +422,20 @@ function cot_poll_lock($id, $state, $type = '')
  */
 function cot_poll_reset($id, $type = '')
 {
-	global $cot_db, $db_polls, $db_polls_options, $db_polls_voters;
+	global $db, $db_polls, $db_polls_options, $db_polls_voters;
 	$id = (int) $id;
 	if ($type)
 	{
-		$sql = $cot_db->query("SELECT poll_id FROM $db_polls WHERE poll_type = '".$cot_db->prep($type)."' AND poll_code = '$id' LIMIT 1");
+		$sql = $db->query("SELECT poll_id FROM $db_polls WHERE poll_type = '".$db->prep($type)."' AND poll_code = '$id' LIMIT 1");
 		$id = ($row = $sql->fetch()) ? $row['poll_id'] : 0;
 	}
 	if ((int)$id > 0)
 	{
-		$sql = $cot_db->query("DELETE FROM $db_polls_voters WHERE pv_pollid = '$id'");
-		$sql = $cot_db->query("UPDATE $db_polls_options SET po_count = 0 WHERE po_pollid = '$id'");
+		$sql = $db->query("DELETE FROM $db_polls_voters WHERE pv_pollid = '$id'");
+		$sql = $db->query("UPDATE $db_polls_options SET po_count = 0 WHERE po_pollid = '$id'");
 	}
 
-	return (($cot_db->affectedRows > 0) ? true : false);
+	return (($db->affectedRows > 0) ? true : false);
 }
 
 /**
@@ -447,11 +447,11 @@ function cot_poll_reset($id, $type = '')
  */
 function cot_poll_exists($id, $type = '')
 {
-	global $cot_db, $db_polls;
+	global $db, $db_polls;
 
 	$id = (int) $id;
-	$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".$cot_db->prep($type)."' AND poll_code = '$id'";
-	$sql = $cot_db->query("SELECT COUNT(*)  FROM $db_polls WHERE $where LIMIT 1");
+	$where = (!$type) ? "poll_id = '$id'" : "poll_type = '".$db->prep($type)."' AND poll_code = '$id'";
+	$sql = $db->query("SELECT COUNT(*)  FROM $db_polls WHERE $where LIMIT 1");
 
 	return ($sql->fetchColumn());
 }

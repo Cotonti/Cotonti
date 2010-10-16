@@ -28,7 +28,7 @@ $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=pm'), $L['Private_Messages']);
 $adminhelp = $L['adm_help_pm'];
 
-$totalpmdb = $cot_db->countRows($db_pm);
+$totalpmdb = $db->countRows($db_pm);
 $totalpmsent = cot_stat_get('totalpms');
 
 $t->assign(array(

@@ -35,7 +35,7 @@ if ($c == 'comments')
 		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 		$rss_description = $L['rss_comments_item_desc'];
 
-		$sql = $cot_db->query("SELECT c.*, u.user_name
+		$sql = $db->query("SELECT c.*, u.user_name
 			FROM $db_com AS c
 				LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
 			WHERE com_area = 'page' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
@@ -62,8 +62,8 @@ if ($c == 'comments')
 
 		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 
-		$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
-		if ($cot_db->affectedRows > 0)
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
+		if ($db->affectedRows > 0)
 		{
 			$row = $sql->fetch();
 			if (cot_auth('page', $row['page_cat'], 'R'))
@@ -72,7 +72,7 @@ if ($c == 'comments')
 				$rss_description = $L['rss_comments_item_desc'];
 				$page_args = empty($row['page_alias']) ? "id=$page_id" : 'al=' . $row['page_alias'];
 
-				$sql = $cot_db->query("SELECT c.*, u.user_name
+				$sql = $db->query("SELECT c.*, u.user_name
 					FROM $db_com AS c
 						LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
 					WHERE com_area = 'page' AND com_code='$page_id'

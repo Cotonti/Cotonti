@@ -64,9 +64,9 @@ else
 			$rallowviewers = cot_import('rallowviewers', 'P', 'BOL');
 			$rallowpolls = cot_import('rallowpolls', 'P', 'BOL');
 			$rcountposts = cot_import('rcountposts', 'P', 'BOL');
-			$rtitle = $cot_db->prep($rtitle);
-			$rdesc = $cot_db->prep($rdesc);
-			$rcat = $cot_db->prep($rcat);
+			$rtitle = $db->prep($rtitle);
+			$rdesc = $db->prep($rdesc);
+			$rcat = $db->prep($rcat);
 			$rmaster = cot_import('rmaster', 'P', 'INT');
 			$mastername = $rtitle;
 
@@ -77,23 +77,23 @@ else
 			}
 			/* ===== */
 
-			$sql = $cot_db->query("SELECT fs_id, fs_masterid, fs_order, fs_category FROM $db_forum_sections WHERE fs_id=$id ");
+			$sql = $db->query("SELECT fs_id, fs_masterid, fs_order, fs_category FROM $db_forum_sections WHERE fs_id=$id ");
 			cot_die($sql->rowCount() == 0);
 			$row_cur = $sql->fetch();
 
 			if ($rmaster != '' && $row_cur['fs_masterid'] != $rmaster || empty($row_cur['fs_mastername']))
 			{
-				$sql1 = $cot_db->query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='$rmaster' ");
+				$sql1 = $db->query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='$rmaster' ");
 				$row1 = $sql1->fetch();
 
-				$master = $cot_db->prep($row1['fs_title']);
+				$master = $db->prep($row1['fs_title']);
 
-				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_masterid='" . $rmaster . "', fs_mastername='" . $master . "' WHERE fs_id='" . $id . "' ");
+				$sql = $db->query("UPDATE $db_forum_sections SET fs_masterid='" . $rmaster . "', fs_mastername='" . $master . "' WHERE fs_id='" . $id . "' ");
 			}
 
 			if ($row_cur['fs_category'] != $rcat)
 			{
-				$sql = $cot_db->query("SELECT fs_order FROM $db_forum_sections WHERE fs_category='" . $rcat . "' ORDER BY fs_order DESC LIMIT 1");
+				$sql = $db->query("SELECT fs_order FROM $db_forum_sections WHERE fs_category='" . $rcat . "' ORDER BY fs_order DESC LIMIT 1");
 
 				if ($sql->rowCount() > 0)
 				{
@@ -105,19 +105,19 @@ else
 					$rorder = 100;
 				}
 
-				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_order=fs_order-1 WHERE fs_category='" . $row_cur['fs_category'] . "' AND fs_order>" . $row_cur['fs_order']);
-				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_order='$rorder' WHERE fs_id='$id'");
+				$sql = $db->query("UPDATE $db_forum_sections SET fs_order=fs_order-1 WHERE fs_category='" . $row_cur['fs_category'] . "' AND fs_order>" . $row_cur['fs_order']);
+				$sql = $db->query("UPDATE $db_forum_sections SET fs_order='$rorder' WHERE fs_id='$id'");
 			}
 
 			if (!empty($rtitle))
 			{
-				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_allowpolls='$rallowpolls', fs_countposts='$rcountposts' WHERE fs_id='$id'");
-				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_mastername='" . $mastername . "' WHERE fs_masterid='$id' ");
+				$sql = $db->query("UPDATE $db_forum_sections SET fs_state='$rstate', fs_title='$rtitle', fs_desc='$rdesc', fs_category='$rcat' , fs_icon='$ricon', fs_autoprune='$rautoprune', fs_allowusertext='$rallowusertext', fs_allowbbcodes='$rallowbbcodes', fs_allowsmilies='$rallowsmilies', fs_allowprvtopics='$rallowprvtopics', fs_allowviewers='$rallowviewers', fs_allowpolls='$rallowpolls', fs_countposts='$rcountposts' WHERE fs_id='$id'");
+				$sql = $db->query("UPDATE $db_forum_sections SET fs_mastername='" . $mastername . "' WHERE fs_masterid='$id' ");
 			}
 
-			if ($cot_cache && $cfg['cache_forums'])
+			if ($cache && $cfg['cache_forums'])
 			{
-				$cot_cache->page->clear('forums');
+				$cache->page->clear('forums');
 			}
 
 			cot_redirect(cot_url('admin', 'm=forums&d=' . $d . $additionsforurl, '', true));
@@ -127,15 +127,15 @@ else
 			cot_check_xg();
 			cot_forum_resync($id);
 
-			if ($cot_cache && $cfg['cache_forums'])
+			if ($cache && $cfg['cache_forums'])
 			{
-				$cot_cache->page->clear('forums');
+				$cache->page->clear('forums');
 			}
 
 			cot_message('Resynced');
 		}
 
-		$sql = $cot_db->query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
+		$sql = $db->query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
 		cot_die($sql->rowCount() == 0);
 		$row = $sql->fetch();
 
@@ -143,10 +143,10 @@ else
 
 		$adminpath[] = array(cot_url('admin', 'm=forums&n=edit&id=' . $id), htmlspecialchars($fs_title));
 
-		$sqlc = $cot_db->query("SELECT fs_id FROM $db_forum_sections WHERE fs_masterid='" . $id . "' ");
+		$sqlc = $db->query("SELECT fs_id FROM $db_forum_sections WHERE fs_masterid='" . $id . "' ");
 		if (!$sqlc->rowCount())
 		{
-			$sqla = $cot_db->query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='" . $fs_category . "' ORDER by fn_path ASC, fs_order ASC");
+			$sqla = $db->query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_id<>$id AND fs_masterid<1 AND fs_category='" . $fs_category . "' ORDER by fn_path ASC, fs_order ASC");
 			while ($rowa = $sqla->fetch())
 			{
 				$forumslist[$rowa['fs_id']] = cot_build_forums($rowa['fs_id'], $rowa['fs_title'], $rowa['fs_category'], FALSE);
@@ -186,7 +186,7 @@ else
 		{
 			$w = cot_import('w', 'G', 'ALP', 4);
 
-			$sql = $cot_db->query("SELECT fs_order, fs_category FROM $db_forum_sections WHERE fs_id='" . $id . "'");
+			$sql = $db->query("SELECT fs_order, fs_category FROM $db_forum_sections WHERE fs_id='" . $id . "'");
 			cot_die($sql->rowCount() == 0);
 			$row_cur = $sql->fetch();
 
@@ -199,21 +199,21 @@ else
 
 			if ($w == 'up')
 			{
-				$sql = $cot_db->query("SELECT fs_id, fs_order FROM $db_forum_sections WHERE fs_category='" . $row_cur['fs_category'] . "' AND fs_order<'" . $row_cur['fs_order'] . "' ORDER BY fs_order DESC LIMIT 1");
+				$sql = $db->query("SELECT fs_id, fs_order FROM $db_forum_sections WHERE fs_category='" . $row_cur['fs_category'] . "' AND fs_order<'" . $row_cur['fs_order'] . "' ORDER BY fs_order DESC LIMIT 1");
 			}
 			else
 			{
-				$sql = $cot_db->query("SELECT fs_id, fs_order FROM $db_forum_sections WHERE fs_category='" . $row_cur['fs_category'] . "' AND fs_order>'" . $row_cur['fs_order'] . "' ORDER BY fs_order ASC LIMIT 1");
+				$sql = $db->query("SELECT fs_id, fs_order FROM $db_forum_sections WHERE fs_category='" . $row_cur['fs_category'] . "' AND fs_order>'" . $row_cur['fs_order'] . "' ORDER BY fs_order ASC LIMIT 1");
 			}
 			if ($sql->rowCount() > 0)
 			{
 				$row_oth = $sql->fetch();
-				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_order='" . $row_oth['fs_order'] . "' WHERE fs_id='" . $id . "'");
-				$sql = $cot_db->query("UPDATE $db_forum_sections SET fs_order='" . $row_cur['fs_order'] . "' WHERE fs_id='" . $row_oth['fs_id'] . "'");
+				$sql = $db->query("UPDATE $db_forum_sections SET fs_order='" . $row_oth['fs_order'] . "' WHERE fs_id='" . $id . "'");
+				$sql = $db->query("UPDATE $db_forum_sections SET fs_order='" . $row_cur['fs_order'] . "' WHERE fs_id='" . $row_oth['fs_id'] . "'");
 
-				if ($cot_cache && $cfg['cache_forums'])
+				if ($cache && $cfg['cache_forums'])
 				{
-					$cot_cache->page->clear('forums');
+					$cache->page->clear('forums');
 				}
 			}
 
@@ -228,7 +228,7 @@ else
 
 			if (!empty($ntitle))
 			{
-				$sql1 = $cot_db->query("SELECT fs_order FROM $db_forum_sections WHERE fs_category='" . $cot_db->prep($ncat) . "' ORDER BY fs_order DESC LIMIT 1");
+				$sql1 = $db->query("SELECT fs_order FROM $db_forum_sections WHERE fs_category='" . $db->prep($ncat) . "' ORDER BY fs_order DESC LIMIT 1");
 				if ($row1 = $sql1->fetch())
 				{
 					$nextorder = $row1['fs_order'] + 1;
@@ -240,15 +240,15 @@ else
 
 				if (!empty($nmaster))
 				{
-					$sql2 = $cot_db->query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='" . $nmaster . "' ");
+					$sql2 = $db->query("SELECT fs_title FROM $db_forum_sections WHERE fs_id='" . $nmaster . "' ");
 					$row2 = $sql2->fetch();
 
-					$mastername = $cot_db->prep($row2['fs_title']);
+					$mastername = $db->prep($row2['fs_title']);
 				}
 
-				$sql = $cot_db->query("INSERT INTO $db_forum_sections (fs_masterid, fs_mastername, fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('" . (int) $nmaster . "', '" . $mastername . "', '" . (int) $nextorder . "', '" . $cot_db->prep($ntitle) . "', '" . $cot_db->prep($ndesc) . "', '" . $cot_db->prep($ncat) . "', 'images/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
+				$sql = $db->query("INSERT INTO $db_forum_sections (fs_masterid, fs_mastername, fs_order, fs_title, fs_desc, fs_category, fs_icon, fs_autoprune, fs_allowusertext, fs_allowbbcodes, fs_allowsmilies, fs_allowprvtopics, fs_countposts) VALUES ('" . (int) $nmaster . "', '" . $mastername . "', '" . (int) $nextorder . "', '" . $db->prep($ntitle) . "', '" . $db->prep($ndesc) . "', '" . $db->prep($ncat) . "', 'images/admin/forums.gif', 0, 1, 1, 1, 0, 1)");
 
-				$forumid = $cot_db->lastInsertId();
+				$forumid = $db->lastInsertId();
 
 				/* === Hook === */
 				foreach (cot_getextplugins('forums.admin.add') as $pl)
@@ -270,9 +270,9 @@ else
 
 				cot_auth_add_item('forums', $forumid, $auth_permit, $auth_lock);
 
-				if ($cot_cache && $cfg['cache_forums'])
+				if ($cache && $cfg['cache_forums'])
 				{
-					$cot_cache->page->clear('forums');
+					$cache->page->clear('forums');
 				}
 
 				cot_message('Added');
@@ -287,12 +287,12 @@ else
 			cot_check_xg();
 			cot_auth_clear('all');
 			$num = cot_forum_deletesection($id);
-			$sql1 = $cot_db->query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='" . $id . "' ");
+			$sql1 = $db->query("UPDATE $db_forum_sections SET fs_masterid='0', fs_mastername='' WHERE fs_masterid='" . $id . "' ");
 			//$num = $sql1->rowCount();
 
-			if ($cot_cache && $cfg['cache_forums'])
+			if ($cache && $cfg['cache_forums'])
 			{
-				$cot_cache->page->clear('forums');
+				$cache->page->clear('forums');
 			}
 
 			/* === Hook === */
@@ -305,10 +305,10 @@ else
 			cot_message('Deleted');
 		}
 		/*
-		  $totalitems = $cot_db->countRows($db_forum_sections)+$cot_db->countRows($db_forum_structure);
+		  $totalitems = $db->countRows($db_forum_sections)+$db->countRows($db_forum_structure);
 		  $pagenav = cot_pagenav('admin','m=forums', $d, $totalitems, $cfg['maxrowsperpage']);
 		 */
-		$sql = $cot_db->query("SELECT s.*, n.*
+		$sql = $db->query("SELECT s.*, n.*
 		FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
 		ORDER by fs_masterid DESC, fn_path ASC, fs_order ASC, fs_title ASC");
 
@@ -406,7 +406,7 @@ else
 			}
 		}
 
-		$sqla = $cot_db->query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid<1 ORDER by fn_path ASC, fs_order ASC");
+		$sqla = $db->query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category WHERE fs_masterid<1 ORDER by fn_path ASC, fs_order ASC");
 
 		while ($rowa = $sqla->fetch())
 		{

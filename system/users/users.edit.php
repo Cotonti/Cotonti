@@ -31,11 +31,11 @@ foreach (cot_getextplugins('users.edit.first') as $pl)
 }
 /* ===== */
 
-$sql = $cot_db->query("SELECT user_name, user_password, user_maingrp, user_email  FROM $db_users WHERE user_id='$id' LIMIT 1");
+$sql = $db->query("SELECT user_name, user_password, user_maingrp, user_email  FROM $db_users WHERE user_id='$id' LIMIT 1");
 cot_die($sql->rowCount()==0);
 $urr = $sql->fetch();
 
-$sql1 = $cot_db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$id' and gru_groupid='".COT_GROUP_SUPERADMINS."'");
+$sql1 = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$id' and gru_groupid='".COT_GROUP_SUPERADMINS."'");
 $sys['edited_istopadmin'] = ($sql1->rowCount()>0) ? TRUE : FALSE;
 $sys['user_istopadmin'] = cot_auth('admin', 'a', 'A');
 $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
@@ -59,11 +59,11 @@ if ($a=='update')
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
 	if ($ruserdelete && $sys['user_istopadmin'] && !$sys['edited_istopadmin'])
 	{
-		$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id='$id'");
+		$sql = $db->query("SELECT * FROM $db_users WHERE user_id='$id'");
 		$row = $sql->fetch();
 		
-		$sql = $cot_db->delete($db_users, "user_id='$id'");
-		$sql = $cot_db->delete($db_groups_users, "gru_userid='$id'");
+		$sql = $db->delete($db_users, "user_id='$id'");
+		$sql = $db->delete($db_groups_users, "gru_userid='$id'");
 
 		if (cot_import('ruserdelpfs','P','BOL'))// TODO PFS SEPARATE
 		{
@@ -142,36 +142,36 @@ if ($a=='update')
 
 		if ($ruser['user_name'] != $urr['user_name'])
 		{
-			$oldname = $cot_db->prep($urr['user_name']);
-			$newname = $cot_db->prep($ruser['user_name']);
+			$oldname = $db->prep($urr['user_name']);
+			$newname = $db->prep($ruser['user_name']);
 			if ($cfg['module']['forums'])
 			{
 				cot_require('forums');
-				$cot_db->update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername="'.$oldname.'"');
-				$cot_db->update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername="'.$oldname.'"');
-				$cot_db->update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername="'.$oldname.'"');
+				$db->update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername="'.$oldname.'"');
+				$db->update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername="'.$oldname.'"');
+				$db->update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername="'.$oldname.'"');
 			}
 			if ($cfg['module']['page'])
 			{
 				cot_require('page');
-				$cot_db->update($db_pages, array('page_author' => $newname), 'page_author="'.$oldname.'"');
+				$db->update($db_pages, array('page_author' => $newname), 'page_author="'.$oldname.'"');
 			}
 			if ($cfg['plugin']['comments'])
 			{
 				cot_require('comments', true);
-				$cot_db->update($db_com, array('com_author' => $newname), 'com_author="'.$oldname.'"');
+				$db->update($db_com, array('com_author' => $newname), 'com_author="'.$oldname.'"');
 			}
 			if ($cfg['module']['pm'])
 			{
 				cot_require('pm');
-				$cot_db->update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser="'.$oldname.'"');
+				$db->update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser="'.$oldname.'"');
 			}
-			$cot_db->update($db_online, array('online_name' => $newname), 'online_name="'.$oldname.'"');
+			$db->update($db_online, array('online_name' => $newname), 'online_name="'.$oldname.'"');
 		}
 
 		$ruser['user_auth'] = '';
 
-		$sql = $cot_db->update($db_users, $ruser, 'user_id='.$id);
+		$sql = $db->update($db_users, $ruser, 'user_id='.$id);
 		
 		$ruser['user_maingrp'] = ($ruser['user_maingrp'] < COT_GROUP_MEMBERS && $id==1) ? COT_GROUP_SUPERADMINS : $ruser['user_maingrp'];
 
@@ -181,22 +181,22 @@ if ($a=='update')
 			{
 				$rusergroupsms[$ruser['user_maingrp']] = 1;
 			}
-			$cot_db->update($db_users, array('user_maingrp' => $ruser['user_maingrp']), 'user_id='.$id);
+			$db->update($db_users, array('user_maingrp' => $ruser['user_maingrp']), 'user_id='.$id);
 		}
 
 		foreach($cot_groups as $k => $i)
 		{
 			if (isset($rusergroupsms[$k]) && $usr['level'] >= $cot_groups[$k]['level'])
 			{
-				$sql = $cot_db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'");
+				$sql = $db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'");
 				if ($sql->rowCount() == 0 && !(($id == 1 && $k == COT_GROUP_BANNED) || ($id == 1 && $k == COT_GROUP_INACTIVE)))
 				{
-					$sql = $cot_db->insert($db_groups_users, array('gru_userid' => (int)$id, 'gru_groupid' => (int)$k));
+					$sql = $db->insert($db_groups_users, array('gru_userid' => (int)$id, 'gru_groupid' => (int)$k));
 				}
 			}
 			elseif (!($id == 1 && $k == COT_GROUP_SUPERADMINS))
 			{
-				$sql = $cot_db->delete($db_groups_users, "gru_userid='$id' AND gru_groupid='$k'");
+				$sql = $db->delete($db_groups_users, "gru_userid='$id' AND gru_groupid='$k'");
 			}
 		}
 
@@ -226,7 +226,7 @@ if ($a=='update')
 	}
 }
 
-$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
+$sql = $db->query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
 $urr = $sql->fetch();
 
 $title_params = array(

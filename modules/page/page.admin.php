@@ -102,26 +102,26 @@ if ($a == 'validate')
 	}
 	/* ===== */
 
-	$sql = $cot_db->query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
+	$sql = $db->query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
 	if ($row = $sql->fetch())
 	{
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql = $cot_db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
-		$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+		$sql = $db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
+		$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
-		if ($cot_cache)
+		if ($cache)
 		{
 			if ($cfg['cache_page'])
 			{
-				$cot_cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
-				$cot_cache->page->clear('index');
+				$cache->page->clear('index');
 			}
 		}
 
@@ -143,26 +143,26 @@ elseif ($a == 'unvalidate')
 	}
 	/* ===== */
 
-	$sql = $cot_db->query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
+	$sql = $db->query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
 	if ($row = $sql->fetch())
 	{
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql = $cot_db->query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
-		$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+		$sql = $db->query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
+		$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_unvalidated'], 'adm');
 
-		if ($cot_cache)
+		if ($cache)
 		{
 			if ($cfg['cache_page'])
 			{
-				$cot_cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
-				$cot_cache->page->clear('index');
+				$cache->page->clear('index');
 			}
 		}
 
@@ -184,19 +184,19 @@ elseif ($a == 'delete')
 	}
 	/* ===== */
 
-	$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	$sql = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 	if ($row = $sql->fetch())
 	{
 		if ($row['page_state'] != 1)
 		{
-			$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+			$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 		}
 
 		$id2 = 'p'.$id;
-		$sql = $cot_db->query("DELETE FROM $db_pages WHERE page_id='$id'");
-		$sql = $cot_db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
-		$sql = $cot_db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-		$sql = $cot_db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
+		$sql = $db->query("DELETE FROM $db_pages WHERE page_id='$id'");
+		$sql = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
+		$sql = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
+		$sql = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'], 'adm');
 
@@ -207,15 +207,15 @@ elseif ($a == 'delete')
 		}
 		/* ===== */
 
-		if ($cot_cache)
+		if ($cache)
 		{
 			if ($cfg['cache_page'])
 			{
-				$cot_cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
-				$cot_cache->page->clear('index');
+				$cache->page->clear('index');
 			}
 		}
 
@@ -248,21 +248,21 @@ elseif ($a == 'update_cheked')
 				}
 				/* ===== */
 
-				$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='".$i."'");
+				$sql = $db->query("SELECT * FROM $db_pages WHERE page_id='".$i."'");
 				if ($row = $sql->fetch())
 				{
 					$id = $row['page_id'];
 					$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 					cot_block($usr['isadmin_local']);
 
-					$sql = $cot_db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='".$id."'");
-					$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+					$sql = $db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='".$id."'");
+					$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
-					if ($cot_cache && $cfg['cache_page'])
+					if ($cache && $cfg['cache_page'])
 					{
-						$cot_cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+						$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
 					}
 
 					$perelik .= '#'.$id.', ';
@@ -274,9 +274,9 @@ elseif ($a == 'update_cheked')
 			}
 		}
 
-		if ($cot_cache && $cfg['cache_index'])
+		if ($cache && $cfg['cache_index'])
 		{
-			$cot_cache->page->clear('index');
+			$cache->page->clear('index');
 		}
 
 		if (!empty($perelik))
@@ -302,26 +302,26 @@ elseif ($a == 'update_cheked')
 				}
 				/* ===== */
 
-				$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_id='".$i."' LIMIT 1");
+				$sql = $db->query("SELECT * FROM $db_pages WHERE page_id='".$i."' LIMIT 1");
 				if ($row = $sql->fetch())
 				{
 					$id = $row['page_id'];
 					if ($row['page_state'] != 1)
 					{
-						$sql = $cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+						$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
 					}
 
 					$id2 = 'p'.$id;
-					$sql = $cot_db->query("DELETE FROM $db_pages WHERE page_id='$id'");
-					$sql = $cot_db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
-					$sql = $cot_db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-					$sql = $cot_db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
+					$sql = $db->query("DELETE FROM $db_pages WHERE page_id='$id'");
+					$sql = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
+					$sql = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
+					$sql = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'],'adm');
 
-					if ($cot_cache && $cfg['cache_page'])
+					if ($cache && $cfg['cache_page'])
 					{
-						$cot_cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+						$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
 					}
 
 					/* === Hook === */
@@ -339,9 +339,9 @@ elseif ($a == 'update_cheked')
 			}
 		}
 
-		if ($cot_cache && $cfg['cache_index'])
+		if ($cache && $cfg['cache_index'])
 		{
-			$cot_cache->page->clear('index');
+			$cache->page->clear('index');
 		}
 
 		if (!empty($perelik))
@@ -351,10 +351,10 @@ elseif ($a == 'update_cheked')
 	}
 }
 
-$totalitems = $cot_db->query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere)->fetchColumn();
+$totalitems = $db->query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere)->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=page&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $cot_db->query("SELECT p.*, u.user_name, u.user_avatar
+$sql = $db->query("SELECT p.*, u.user_name, u.user_avatar
 	FROM $db_pages as p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE $sqlwhere
@@ -384,7 +384,7 @@ while ($row = $sql->fetch())
 	$row['page_pageurl'] = cot_url('page', $page_urlp);
 	$catpath = cot_build_catpath($row['page_cat']);
 	$row['page_fulltitle'] = $catpath.' '.$cfg['separator'].' <a href="'.$row['page_pageurl'].'">'.htmlspecialchars($row['page_title']).'</a>';
-	$sql4 = $cot_db->query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$cot_cat[$row["page_cat"]]['rpath']."%' ");
+	$sql4 = $db->query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$cot_cat[$row["page_cat"]]['rpath']."%' ");
 	$sub_count = $sql4->fetchColumn();
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
@@ -414,8 +414,8 @@ while ($row = $sql->fetch())
 
 $is_row_empty = ($sql->rowCount() == 0) ? true : false ;
 
-$totaldbpages = $cot_db->countRows($db_pages);
-$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
+$totaldbpages = $db->countRows($db_pages);
+$sql = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state=1");
 $sys['pagesqueued'] = $sql->fetchColumn();
 
 $t->assign(array(

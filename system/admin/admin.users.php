@@ -48,8 +48,8 @@ if($n == 'add')
 	$nhidden = cot_import('nhidden', 'P', 'BOL');
 	$nmtmode = cot_import('nmtmode', 'P', 'BOL');
 
-	$sql = (!empty($ntitle)) ? $cot_db->query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden,  grp_maintenance, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".$cot_db->prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.",  ".(int)$nmtmode.", '".$cot_db->prep($ntitle)."', '".$cot_db->prep($ndesc)."', '".$cot_db->prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
-	$grp_id = $cot_db->lastInsertId();
+	$sql = (!empty($ntitle)) ? $db->query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden,  grp_maintenance, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".$db->prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.",  ".(int)$nmtmode.", '".$db->prep($ntitle)."', '".$db->prep($ndesc)."', '".$db->prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
+	$grp_id = $db->lastInsertId();
 
 	/* === Hook === */
 	foreach (cot_getextplugins('admin.users.add') as $pl)
@@ -60,7 +60,7 @@ if($n == 'add')
 
 	cot_auth_add_group($grp_id, $ncopyrightsfrom);
 
-	$cot_cache->db->remove('cot_groups', 'system');
+	$cache->db->remove('cot_groups', 'system');
 
 	cot_message('Added');
 }
@@ -86,22 +86,22 @@ elseif($n == 'edit')
 		}
 		/* ===== */
 
-		$rtitle = $cot_db->prep($rtitle);
-	   	$rdesc = $cot_db->prep($rdesc);
-	   	$ricon = $cot_db->prep($ricon);
-	   	$ralias = $cot_db->prep($ralias);
+		$rtitle = $db->prep($rtitle);
+	   	$rdesc = $db->prep($rdesc);
+	   	$ricon = $db->prep($ricon);
+	   	$ralias = $db->prep($ralias);
 
-		$sql = (!empty($rtitle)) ? $cot_db->query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden', grp_maintenance='$rmtmode' WHERE grp_id='$g'") : '';
+		$sql = (!empty($rtitle)) ? $db->query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden', grp_maintenance='$rmtmode' WHERE grp_id='$g'") : '';
 
-		$cot_cache->db->remove('cot_groups', 'system');
+		$cache->db->remove('cot_groups', 'system');
 
 		cot_message('Updated');
 	}
 	elseif($a == 'delete' && $g > 5)
 	{
-		$sql = $cot_db->query("DELETE FROM $db_groups WHERE grp_id='$g'");
+		$sql = $db->query("DELETE FROM $db_groups WHERE grp_id='$g'");
 		cot_auth_remove_group($g);
-		$sql = $cot_db->query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
+		$sql = $db->query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.users.delete') as $pl)
@@ -110,7 +110,7 @@ elseif($n == 'edit')
 		}
 		/* ===== */
 		cot_auth_clear('all');
-		$cot_cache->db->remove('cot_groups', 'system');
+		$cache->db->remove('cot_groups', 'system');
 
 		cot_message('Deleted');
 	}
@@ -118,11 +118,11 @@ elseif($n == 'edit')
 	{
        	$showdefault = false;
 
-	    $sql = $cot_db->query("SELECT * FROM $db_groups WHERE grp_id='$g'");
+	    $sql = $db->query("SELECT * FROM $db_groups WHERE grp_id='$g'");
 		cot_die($sql->rowCount() == 0);
 		$row = $sql->fetch();
 
-		$sql1 = $cot_db->query("SELECT COUNT(*) FROM $db_groups_users WHERE gru_groupid='$g'");
+		$sql1 = $db->query("SELECT COUNT(*) FROM $db_groups_users WHERE gru_groupid='$g'");
 		$row['grp_memberscount'] = $sql1->fetchColumn();
 
 		$row['grp_title'] = htmlspecialchars($row['grp_title']);
@@ -158,13 +158,13 @@ elseif($n == 'edit')
 
 if(!isset($showdefault) OR $showdefault == true)
 {
-	$sql = $cot_db->query("SELECT DISTINCT(gru_groupid), COUNT(*) FROM $db_groups_users WHERE 1 GROUP BY gru_groupid");
+	$sql = $db->query("SELECT DISTINCT(gru_groupid), COUNT(*) FROM $db_groups_users WHERE 1 GROUP BY gru_groupid");
 	while($row = $sql->fetch())
 	{
 		$members[$row['gru_groupid']] = $row['COUNT(*)'];
 	}
 
-	$sql = $cot_db->query("SELECT grp_id, grp_title, grp_disabled, grp_hidden FROM $db_groups WHERE 1 order by grp_level DESC, grp_id DESC");
+	$sql = $db->query("SELECT grp_id, grp_title, grp_disabled, grp_hidden FROM $db_groups WHERE 1 order by grp_level DESC, grp_id DESC");
 
 	if($sql->rowCount() > 0)
 	{

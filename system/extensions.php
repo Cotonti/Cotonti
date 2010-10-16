@@ -49,7 +49,7 @@ function cot_apply_patches($directory, $from_ver,
 	$sql_pattern = '(sql)_([\w\.\-\_]+)\.sql',
 	$php_pattern = '(php)_([\w\.\-\_]+)\.inc')
 {
-	global $L, $cot_db;
+	global $L, $db;
 
 	// Find new patches
 	$dp = opendir($directory);
@@ -80,7 +80,7 @@ function cot_apply_patches($directory, $from_ver,
 	{
 		if (isset($val['sql']))
 		{
-			$error = $cot_db->runScript(file_get_contents($val['sql']));
+			$error = $db->runScript(file_get_contents($val['sql']));
 			if (empty($error))
 			{
 				cot_message(cot_rc('ext_patch_applied',
@@ -189,8 +189,8 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
  */
 function cot_extension_install($name, $is_module = false, $update = false)
 {
-    global $cfg, $L, $cot_error, $cot_cache, $usr, $db_auth, $db_users,
-		$db_updates, $db_core, $cot_groups, $cot_ext_ignore_parts, $cot_db;
+    global $cfg, $L, $cot_error, $cache, $usr, $db_auth, $db_users,
+		$db_updates, $db_core, $cot_groups, $cot_ext_ignore_parts, $db;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
 
@@ -211,12 +211,12 @@ function cot_extension_install($name, $is_module = false, $update = false)
 	// Check versions
 	if ($is_module)
 	{
-		$res = $cot_db->query("SELECT ct_version FROM $db_core
+		$res = $db->query("SELECT ct_version FROM $db_core
 			WHERE ct_code = '$name'");
 	}
 	else
 	{
-		$res = $cot_db->query("SELECT upd_value FROM $db_updates
+		$res = $db->query("SELECT upd_value FROM $db_updates
 			WHERE upd_param = '$name.ver'");
 	}
 	if ($res->rowCount() == 1)
@@ -320,7 +320,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 	{
 		// Only update auth locks
 		$lock_guests = cot_auth_getvalue($info['Lock_guests']);
-		$cot_db->update($db_auth, array('auth_rights_lock' => $lock_guests), 'auth_groupid = ' . COT_GROUP_GUESTS
+		$db->update($db_auth, array('auth_rights_lock' => $lock_guests), 'auth_groupid = ' . COT_GROUP_GUESTS
 				. ' OR auth_groupid = ' . COT_GROUP_INACTIVE);
 
 		$lock_members = cot_auth_getvalue($info['Lock_members']);
@@ -330,7 +330,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			COT_GROUP_BANNED,
 			COT_GROUP_SUPERADMINS
 		));
-		$cot_db->update($db_auth, array('auth_rights_lock' => $lock_members),
+		$db->update($db_auth, array('auth_rights_lock' => $lock_members),
 			"auth_groupid NOT IN ($ingore_groups)");
 
 		cot_message('ext_auth_locks_updated');
@@ -391,9 +391,9 @@ function cot_extension_install($name, $is_module = false, $update = false)
 				);
 			}
 		}
-		if ($cot_db->insert($db_auth, $insert_rows))
+		if ($db->insert($db_auth, $insert_rows))
 		{
-			$cot_db->update($db_users, array('user_auth' => ''));
+			$db->update($db_users, array('user_auth' => ''));
 			cot_message('ext_auth_installed');
 		}
 	}
@@ -416,7 +416,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 		if (file_exists($path . "/setup/$name.install.sql"))
 		{
 			// Run SQL install script
-			$sql_err = $cot_db->runScript(
+			$sql_err = $db->runScript(
 				file_get_contents("$path/setup/$name.install.sql"));
 			if (empty($sql_err))
 			{
@@ -466,7 +466,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
     {
         if ($update)
 		{
-			$cot_db->update($db_updates, array('upd_value' => $new_ver), "upd_param = '$name.ver'");
+			$db->update($db_updates, array('upd_value' => $new_ver), "upd_param = '$name.ver'");
 			cot_message(cot_rc('ext_updated', array(
 				'type' => $L['Plugin'],
 				'name' => $name,
@@ -475,14 +475,14 @@ function cot_extension_install($name, $is_module = false, $update = false)
 		}
 		else
 		{
-			$cot_db->insert($db_updates, array('upd_param' => "$name.ver",
+			$db->insert($db_updates, array('upd_param' => "$name.ver",
 				'upd_value' => $info['Version']));
 		}
     }
 
     // Cleanup
     cot_auth_reorder();
-    $cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
+    $cache && $cache->db->remove('cot_plugins', 'system');
 
     return !$cot_error;
 }
@@ -494,8 +494,8 @@ function cot_extension_install($name, $is_module = false, $update = false)
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
-    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cot_cache,
-		$cot_error, $cot_db;
+    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache,
+		$cot_error, $db;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";
@@ -506,29 +506,29 @@ function cot_extension_uninstall($name, $is_module = false)
     // Drop auth and config
     if ($is_module)
     {
-        $cot_db->delete($db_config, "config_owner = 'module'
+        $db->delete($db_config, "config_owner = 'module'
 			AND config_cat = '$name'");
-        $cot_db->delete($db_auth, "auth_code = '$name'");
+        $db->delete($db_auth, "auth_code = '$name'");
     }
     else
     {
-        $cot_db->delete($db_config, "config_owner = 'plug'
+        $db->delete($db_config, "config_owner = 'plug'
 			AND config_cat = '$name'");
-        $cot_db->delete($db_auth, "auth_code = 'plug'
+        $db->delete($db_auth, "auth_code = 'plug'
 			AND auth_option = '$name'");
     }
     cot_message('ext_auth_uninstalled');
     cot_message('ext_config_uninstalled');
 
     // Clear cache
-    $cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
-	$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
-    $cot_db->update($db_users, array('user_auth' => ''));
+    $cache && $cache->db->remove('cot_plugins', 'system');
+	$cache && $cache->db->remove('cot_cfg', 'system');
+    $db->update($db_users, array('user_auth' => ''));
 
     // Run SQL script if present
     if (file_exists($path . "/setup/$name.uninstall.sql"))
     {
-        $sql_err = $cot_db->runScript(
+        $sql_err = $db->runScript(
 			file_get_contents("$path/setup/$name.uninstall.sql"));
         if (empty($sql_err))
         {
@@ -562,7 +562,7 @@ function cot_extension_uninstall($name, $is_module = false)
 	else
     {
         // Unregister from updates table
-        $cot_db->delete($db_updates, "upd_param = '$name.ver'");
+        $db->delete($db_updates, "upd_param = '$name.ver'");
     }
 }
 
@@ -660,9 +660,9 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
  */
 function cot_module_add($name, $title, $version = '1.0.0')
 {
-    global $cot_db, $db_core;
+    global $db, $db_core;
 
-    $res = $cot_db->insert($db_core, array('ct_code' => $name, 'ct_title' => $title,
+    $res = $db->insert($db_core, array('ct_code' => $name, 'ct_title' => $title,
 		'ct_version' => $version));
 
     return false;
@@ -676,9 +676,9 @@ function cot_module_add($name, $title, $version = '1.0.0')
  */
 function cot_module_installed($name)
 {
-    global $cot_db, $db_core, $cfg;
+    global $db, $db_core, $cfg;
 
-    $cnt = $cot_db->query("SELECT COUNT(*) FROM $db_core
+    $cnt = $db->query("SELECT COUNT(*) FROM $db_core
 		WHERE ct_code = '$name'")->fetchColumn();
     return $cnt > 0 && file_exists($cfg['modules_dir'] . '/' . $name);
 }
@@ -691,9 +691,9 @@ function cot_module_installed($name)
  */
 function cot_module_pause($name)
 {
-    global $cot_db, $db_core;
+    global $db, $db_core;
 
-    return $cot_db->update($db_core, array('ct_state' => 0), "ct_code = '$name'") == 1;
+    return $db->update($db_core, array('ct_state' => 0), "ct_code = '$name'") == 1;
 }
 
 /**
@@ -704,9 +704,9 @@ function cot_module_pause($name)
  */
 function cot_module_remove($name)
 {
-    global $cot_db, $db_core, $db_updates;
+    global $db, $db_core, $db_updates;
 
-    return $cot_db->delete($db_core, "ct_code = '$name'");
+    return $db->delete($db_core, "ct_code = '$name'");
 }
 
 /**
@@ -717,9 +717,9 @@ function cot_module_remove($name)
  */
 function cot_module_resume($name)
 {
-    global $cot_db, $db_core;
+    global $db, $db_core;
 
-    return $cot_db->update($db_core, array('ct_state' => 1), "ct_code = '$name'") == 1;
+    return $db->update($db_core, array('ct_state' => 1), "ct_code = '$name'") == 1;
 }
 
 /**
@@ -731,9 +731,9 @@ function cot_module_resume($name)
  */
 function cot_module_update($name, $version)
 {
-    global $cot_db, $db_core;
+    global $db, $db_core;
 
-    return $cot_db->update($db_core, array('ct_version' => $version), "ct_code = '$name'");
+    return $db->update($db_core, array('ct_version' => $version), "ct_code = '$name'");
 }
 
 /**
@@ -764,7 +764,7 @@ function cot_module_update($name, $version)
  */
 function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
 {
-    global $cot_db, $db_plugins, $cfg;
+    global $db, $db_plugins, $cfg;
 
     if (empty($title))
     {
@@ -786,7 +786,7 @@ function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
             'pl_module' => (int) $is_module
         );
     }
-    return $cot_db->insert($db_plugins, $insert_rows);
+    return $db->insert($db_plugins, $insert_rows);
 }
 
 /**
@@ -797,9 +797,9 @@ function cot_plugin_add($hook_bindings, $name, $title, $is_module = false)
  */
 function cot_plugin_installed($name)
 {
-    global $cot_db, $db_plugins, $cfg;
+    global $db, $db_plugins, $cfg;
 
-    $cnt = $cot_db->query("SELECT COUNT(*) FROM $db_plugins
+    $cnt = $db->query("SELECT COUNT(*) FROM $db_plugins
 		WHERE pl_code = '$name'")->fetchColumn();
     return $cnt > 0 && file_exists($cfg['plugins_dir'] . '/' . $name);
 }
@@ -813,7 +813,7 @@ function cot_plugin_installed($name)
  */
 function cot_plugin_pause($name, $binding_id = 0)
 {
-    global $cot_db, $db_plugins;
+    global $db, $db_plugins;
 
     $condition = "pl_code = '$name'";
     if ($binding_id > 0)
@@ -821,7 +821,7 @@ function cot_plugin_pause($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return $cot_db->update($db_plugins, array('pl_active' => 0), $condition);
+    return $db->update($db_plugins, array('pl_active' => 0), $condition);
 }
 
 /**
@@ -833,7 +833,7 @@ function cot_plugin_pause($name, $binding_id = 0)
  */
 function cot_plugin_remove($name, $binding_id = 0)
 {
-    global $cot_db, $db_plugins;
+    global $db, $db_plugins;
 
     $condition = "pl_code = '$name'";
     if ($binding_id > 0)
@@ -841,7 +841,7 @@ function cot_plugin_remove($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return $cot_db->delete($db_plugins, $condition);
+    return $db->delete($db_plugins, $condition);
 }
 
 /**
@@ -853,7 +853,7 @@ function cot_plugin_remove($name, $binding_id = 0)
  */
 function cot_plugin_resume($name, $binding_id = 0)
 {
-    global $cot_db, $db_plugins;
+    global $db, $db_plugins;
 
     $condition = "pl_code = '$name'";
     if ($binding_id > 0)
@@ -861,7 +861,7 @@ function cot_plugin_resume($name, $binding_id = 0)
         $condition .= " AND pl_id = $binding_id";
     }
 
-    return $cot_db->update($db_plugins, array('pl_active' => 1), $condition);
+    return $db->update($db_plugins, array('pl_active' => 1), $condition);
 }
 
 ?>

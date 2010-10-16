@@ -18,7 +18,7 @@ $GLOBALS['db_bbcode'] = (isset($GLOBALS['db_bbcode'])) ? $GLOBALS['db_bbcode'] :
  * takes $input array of matches as parameter and must return a replacement string. These
  * variables are also imported as globals in callback function: $cfg, $sys, $usr, $L, $theme, $cot_groups
  *
- * @global $cot_db, $db_bbcode;
+ * @global $db, $db_bbcode;
  * @param string $name BBcode name
  * @param string $mode Parsing mode, on of the following: 'str' (str_replace), 'pcre' (preg_replace) and 'callback' (preg_replace_callback)
  * @param string $pattern Bbcode string or entire regular expression
@@ -31,7 +31,7 @@ $GLOBALS['db_bbcode'] = (isset($GLOBALS['db_bbcode'])) ? $GLOBALS['db_bbcode'] :
  */
 function cot_bbcode_add($name, $mode, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
 {
-	global $cot_db, $db_bbcode;
+	global $db, $db_bbcode;
 	$bbc['bbc_name'] = $name;
 	$bbc['bbc_mode'] = $mode;
 	$bbc['bbc_pattern'] = $pattern;
@@ -46,7 +46,7 @@ function cot_bbcode_add($name, $mode, $pattern, $replacement, $container = true,
 		$bbc['bbc_plug'] = $plug;
 	}
 	$bbc['bbc_postrender'] = empty($postrender) ? 0 : 1;
-	return $cot_db->insert($db_bbcode, $bbc) == 1;
+	return $db->insert($db_bbcode, $bbc) == 1;
 }
 
 /**
@@ -59,25 +59,25 @@ function cot_bbcode_add($name, $mode, $pattern, $replacement, $container = true,
  */
 function cot_bbcode_remove($id = 0, $plug = '')
 {
-	global $cot_db, $db_bbcode;
+	global $db, $db_bbcode;
 	if ($id > 0)
 	{
-		return $cot_db->delete($db_bbcode, "bbc_id = $id") == 1;
+		return $db->delete($db_bbcode, "bbc_id = $id") == 1;
 	}
 	elseif (!empty($plug))
 	{
-		return $cot_db->delete($db_bbcode, "bbc_plug = '".$cot_db->prep($plug)."'");
+		return $db->delete($db_bbcode, "bbc_plug = '".$db->prep($plug)."'");
 	}
 	else
 	{
-		return $cot_db->delete($db_bbcode) > 0;
+		return $db->delete($db_bbcode) > 0;
 	}
 }
 
 /**
  * Updates bbcode data in parser database.
  *
- * @global $cot_db, $db_bbcode;
+ * @global $db, $db_bbcode;
  * @param int $id BBCode ID
  * @param bool $enabled Enable the bbcode
  * @param string $name BBcode name
@@ -91,7 +91,7 @@ function cot_bbcode_remove($id = 0, $plug = '')
  */
 function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority = 128, $postrender = false)
 {
-	global $cot_db, $db_bbcode;
+	global $db, $db_bbcode;
 	$bbc['enabled'] = empty($enabled) ? 0 : 1;
 	if (!empty($name))
 	{
@@ -115,7 +115,7 @@ function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
 	}
 	$bbc['bbc_container'] = empty($container) ? 0 : 1;
 	$bbc['bbc_postrender'] = empty($postrender) ? 0 : 1;
-	return $cot_db->update($db_bbcode, $bbc, 'bbc_id = ?', array($id)) == 1;
+	return $db->update($db_bbcode, $bbc, 'bbc_id = ?', array($id)) == 1;
 }
 
 /**
@@ -126,7 +126,7 @@ function cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, 
  */
 function cot_bbcode_load()
 {
-	global $cot_db, $db_bbcode, $cot_bbcodes, $cot_bbcode_containers;
+	global $db, $db_bbcode, $cot_bbcodes, $cot_bbcode_containers;
 	if (is_array($cot_bbcodes))
 	{
 		// Loaded from cache, exit
@@ -137,7 +137,7 @@ function cot_bbcode_load()
 	$bbc_cntr = array();
 	$i = 0;
 	$j = 0;
-	$res = $cot_db->query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
+	$res = $db->query("SELECT * FROM $db_bbcode WHERE bbc_enabled = 1 ORDER BY bbc_priority");
 	while ($row = $res->fetch())
 	{
 		if ($row['bbc_postrender'] == 1)
@@ -167,10 +167,10 @@ function cot_bbcode_load()
 	{
 		$cot_bbcode_containers = mb_substr($cot_bbcode_containers, 0, -1);
 	}
-	if ($cot_cache)
+	if ($cache)
 	{
-		$cot_cache->db->store('cot_bbcodes', $cot_bbcodes, 'system');
-		$cot_cache->db->store('cot_bbcode_containers', $cot_bbcode_containers, 'sysem');
+		$cache->db->store('cot_bbcodes', $cot_bbcodes, 'system');
+		$cache->db->store('cot_bbcode_containers', $cot_bbcode_containers, 'sysem');
 	}
 }
 
@@ -179,9 +179,9 @@ function cot_bbcode_load()
  */
 function cot_bbcode_clearcache()
 {
-	global $cot_cache;
-	$cot_cache->db->remove('cot_bbcodes', 'system');
-	$cot_cache->db->remove('cot_bbcode_containers', 'system');
+	global $cache;
+	$cache->db->remove('cot_bbcodes', 'system');
+	$cache->db->remove('cot_bbcode_containers', 'system');
 }
 
 /**
@@ -352,7 +352,7 @@ function cot_smilies($res)
  */
 function cot_smilies_load()
 {
-	global $cot_smilies, $lang, $cot_cache;
+	global $cot_smilies, $lang, $cache;
 
 	if (is_array($cot_smilies))
 	{
@@ -405,7 +405,7 @@ function cot_smilies_load()
 			}
 		}
 	}
-	$cot_cache && $cot_cache->db->store('cot_smilies', $cot_smilies, 'system');
+	$cache && $cache->db->store('cot_smilies', $cot_smilies, 'system');
 }
 
 ?>

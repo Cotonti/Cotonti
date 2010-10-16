@@ -27,19 +27,19 @@ $GLOBALS['db_com_settings'] = (isset($GLOBALS['db_com_settings'])) ? $GLOBALS['d
  */
 function cot_comments_count($area, $code)
 {
-	global $cot_db, $db_com;
-	static $cache = array();
+	global $db, $db_com;
+	static $com_cache = array();
 
-	if (isset($cache[$area][$code]))
+	if (isset($com_cache[$area][$code]))
 	{
-		return $cache[$area][$code];
+		return $com_cache[$area][$code];
 	}
 
-	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_com WHERE com_area='$area' AND com_code='$code'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_area='$area' AND com_code='$code'");
 
 	if ($row = $sql->fetch(PDO::FETCH_NUM))
 	{
-		$cache[$area][$code] = (int) $row[0];
+		$com_cache[$area][$code] = (int) $row[0];
 		return (int) $row[0];
 	}
 	else
@@ -58,7 +58,7 @@ function cot_comments_count($area, $code)
  */
 function cot_comments_display($area, $code, $cat = '')
 {
-	global $cot_db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $z;
+	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $z;
 
 	// Check permissions and enablement
 	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'comments');
@@ -128,7 +128,7 @@ function cot_comments_display($area, $code, $cat = '')
 		$t->parse('COMMENTS.COMMENTS_CLOSED');
 	}
 
-	$sql = $cot_db->query("SELECT c.*, u.* FROM $db_com AS c
+	$sql = $db->query("SELECT c.*, u.* FROM $db_com AS c
 		LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
 		WHERE com_area='$area' AND com_code='$code' ORDER BY com_id ASC LIMIT $d, "
 		.$cfg['plugin']['comments']['maxcommentsperpage']);
@@ -190,7 +190,7 @@ function cot_comments_display($area, $code, $cat = '')
 			$t->parse('COMMENTS.COMMENTS_ROW');
 		}
 
-		$totalitems = $cot_db->query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'")->fetchColumn();
+		$totalitems = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'")->fetchColumn();
 		$pagenav = cot_pagenav($link_area, $link_params, $d, $totalitems,
 			$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
 			$cfg['jquery'] && $cfg['ajax_enabled'], 'comments', 'plug', "e=comments&area=$area&cat=$cat&item=$code");
@@ -281,18 +281,18 @@ function cot_comments_display($area, $code, $cat = '')
  */
 function cot_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 {
-	global $cot_db, $db_com_settings;
+	global $db, $db_com_settings;
 	// A static call cache saves us from duplicate queries
-	static $cache = array();
+	static $com_cache = array();
 	// FIXME row cache and cache per item
-	if (isset($cache[$area][$cat]) && !$return_row)
+	if (isset($com_cache[$area][$cat]) && !$return_row)
 	{
-		return $cache[$area][$cat];
+		return $com_cache[$area][$cat];
 	}
 
 	if (!cot_auth('plug', 'comments', 'R'))
 	{
-		$cache[$area][$cat] = false;
+		$com_cache[$area][$cat] = false;
 		return false;
 	}
 
@@ -306,7 +306,7 @@ function cot_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 	{
 		$extra_where = "OR coms_area = '$area' AND coms_cat = '' AND coms_code = ''";
 	}
-	$res = $cot_db->query("SELECT coms_enabled, coms_area, coms_cat, coms_code FROM $db_com_settings
+	$res = $db->query("SELECT coms_enabled, coms_area, coms_cat, coms_code FROM $db_com_settings
 		WHERE coms_area = '$area' AND coms_cat = '$cat' AND coms_code = '$code' $extra_where
 		ORDER BY coms_code DESC, coms_cat DESC LIMIT 1");
 	if ($row = $res->fetch())
@@ -315,7 +315,7 @@ function cot_comments_enabled($area, $cat = '', $code = '', $return_row = false)
 	}
 	$res->closeCursor();
 
-	$cache[$area][$cat] = $enabled;
+	$com_cache[$area][$cat] = $enabled;
 	if ($return_row)
 	{
 		if (!$row)
@@ -343,7 +343,7 @@ function cot_comments_enabled($area, $cat = '', $code = '', $return_row = false)
  */
 function cot_comments_link($link_area, $link_params, $area, $code, $cat = '')
 {
-	global $cot_db, $R, $L, $db_com;
+	global $db, $R, $L, $db_com;
 
 	if (!cot_comments_enabled($area, $cat, $code))
 	{
@@ -365,9 +365,9 @@ function cot_comments_link($link_area, $link_params, $area, $code, $cat = '')
  */
 function cot_comments_newcount($timeback)
 {
-	global $cot_db, $db_com;
+	global $db, $db_com;
 
-	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'");
 	$newcomments = $sql->fetchColumn();
 	return $newcomments;
 }
@@ -380,9 +380,9 @@ function cot_comments_newcount($timeback)
  */
 function cot_comments_remove($area, $code)
 {
-	global $cot_db, $db_com, $db_com_settings;
-	$cot_db->delete($db_com, "com_area = '$area' AND com_code = '$code'");
-	$cot_db->delete($db_com_settings, "coms_area = '$area' AND coms_code = '$code'");
+	global $db, $db_com, $db_com_settings;
+	$db->delete($db_com, "com_area = '$area' AND com_code = '$code'");
+	$db->delete($db_com_settings, "coms_area = '$area' AND coms_code = '$code'");
 }
 
 ?>

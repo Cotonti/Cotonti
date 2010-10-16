@@ -19,11 +19,11 @@ Hooks=ajax
 defined('COT_CODE') or die('Wrong URL');
 
 $q = strtolower(cot_import('q', 'G', 'TXT'));
-$q = $cot_db->prep(urldecode($q));
+$q = $db->prep(urldecode($q));
 if (!empty($q))
 {
 	$res = array();
-	$sql = $cot_db->query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
+	$sql = $db->query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
 	while ($row = $sql->fetch())
 	{
 		$res[] = $row['user_name'];

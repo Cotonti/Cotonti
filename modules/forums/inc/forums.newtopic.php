@@ -30,7 +30,7 @@ foreach (cot_getextplugins('forums.newtopic.first') as $pl)
 }
 /* ===== */
 
-$sql = $cot_db->query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
+$sql = $db->query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
 
 if ($row = $sql->fetch())
 {
@@ -101,7 +101,7 @@ if ($a == 'newtopic')
 			$newtopictitle = str_replace('#', '', $newtopictitle);
 		}
 
-		$cot_db->insert($db_forum_topics, array(
+		$db->insert($db_forum_topics, array(
 			'ft_state' => 0,
 			'ft_mode' => (int)$newprvtopic,
 			'ft_sticky' => 0,
@@ -119,9 +119,9 @@ if ($a == 'newtopic')
 			'ft_lastpostername' => $usr['name']
 		));
 
-		$q = $cot_db->lastInsertId();
+		$q = $db->lastInsertId();
 
-		$cot_db->insert($db_forum_posts, array(
+		$db->insert($db_forum_posts, array(
 			'fp_topicid' => (int)$q,
 			'fp_sectionid' => (int)$s,
 			'fp_posterid' => (int)$usr['id'],
@@ -132,17 +132,17 @@ if ($a == 'newtopic')
 			'fp_posterip' => $usr['ip']
 		));
 
-		$sql = $cot_db->query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
+		$sql = $db->query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
 		$row = $sql->fetch();
 		$p = $row['fp_id'];
 
-		$sql = $cot_db->query("UPDATE $db_forum_sections SET
+		$sql = $db->query("UPDATE $db_forum_sections SET
 		fs_postcount=fs_postcount+1,
 		fs_topiccount=fs_topiccount+1
 		WHERE fs_id='$s'");
 
 		if ($fs_masterid>0)
-		{ $sql = $cot_db->query("UPDATE $db_forum_sections SET
+		{ $sql = $db->query("UPDATE $db_forum_sections SET
 		fs_postcount=fs_postcount+1,
 		fs_topiccount=fs_topiccount+1
 		WHERE fs_id='$fs_masterid'"); }
@@ -153,7 +153,7 @@ if ($a == 'newtopic')
 		}
 
 		if ($fs_countposts)
-		{ $sql = $cot_db->query("UPDATE $db_users SET
+		{ $sql = $db->query("UPDATE $db_users SET
 		user_postcount=user_postcount+1
 		WHERE user_id='".$usr['id']."'"); }
 
@@ -167,15 +167,15 @@ if ($a == 'newtopic')
 		}
 		/* ===== */
 
-		if ($cot_cache)
+		if ($cache)
 		{
 			if ($cfg['cache_forums'])
 			{
-				$cot_cache->page->clear('forums');
+				$cache->page->clear('forums');
 			}
 			if ($cfg['cache_index'])
 			{
-				$cot_cache->page->clear('index');
+				$cache->page->clear('index');
 			}
 		}
 

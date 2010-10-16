@@ -56,7 +56,7 @@ $cfg['pfs_dir_user'] = cot_pfs_path($userid);
 $cfg['th_dir_user'] = cot_pfs_thumbpath($userid);
 $cfg['rel_dir_user'] = cot_pfs_relpath($userid);
 
-$sql = $cot_db->query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id='$maingroup'");
+$sql = $db->query("SELECT grp_pfs_maxfile, grp_pfs_maxtotal FROM $db_groups WHERE grp_id='$maingroup'");
 if ($row = $sql->fetch())
 {
 	$maxfile = min($row['grp_pfs_maxfile'], cot_get_uploadmax());
@@ -98,7 +98,7 @@ foreach (cot_getextplugins('pfs.first') as $pl)
 /* ===== */
 
 $u_totalsize=0;
-$sql = $cot_db->query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' ");
+$sql = $db->query("SELECT SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' ");
 $pfs_totalsize = $sql->fetchColumn();
 
 $err_msg = array();
@@ -118,7 +118,7 @@ if ($a=='upload')
 
 	if (!empty($folderid))
 	{
-		$sql = $cot_db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid' ");
+		$sql = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid' ");
 		cot_die($sql->rowCount()==0);
 	}
 
@@ -148,7 +148,7 @@ if ($a=='upload')
 			{
 				$u_newname = cot_safename($u_name, true, '_' . $userid);
 			}
-			$u_sqlname = $cot_db->prep($u_newname);
+			$u_sqlname = $db->prep($u_newname);
 
 			if ($f_extension!='php' && $f_extension!='php3' && $f_extension!='php4' && $f_extension!='php5')
 			{
@@ -190,7 +190,7 @@ if ($a=='upload')
 							}
 							/* ===== */
 
-							$sql = $cot_db->query("INSERT INTO $db_pfs
+							$sql = $db->query("INSERT INTO $db_pfs
 							(pfs_userid,
 							pfs_date,
 							pfs_file,
@@ -202,14 +202,14 @@ if ($a=='upload')
 							VALUES
 							(".(int)$userid.",
 							".(int)$sys['now_offset'].",
-							'".$cot_db->prep($u_sqlname)."',
-							'".$cot_db->prep($f_extension)."',
+							'".$db->prep($u_sqlname)."',
+							'".$db->prep($f_extension)."',
 							".(int)$folderid.",
-							'".$cot_db->prep($desc)."',
+							'".$db->prep($desc)."',
 							".(int)$u_size.",
 							0) ");
 
-							$sql = $cot_db->query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
+							$sql = $db->query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
 							$disp_errors .= $L['Yes'];
 							$pfs_totalsize += $u_size;
 
@@ -260,7 +260,7 @@ elseif ($a=='delete')
 {
 	cot_block($usr['auth_write']);
 	cot_check_xg();
-	$sql = $cot_db->query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
+	$sql = $db->query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
 
 	if ($row = $sql->fetch())
 	{
@@ -277,7 +277,7 @@ elseif ($a=='delete')
 			}
 		}
 
-		$sql = $cot_db->query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
+		$sql = $db->query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
 	}
 }
 elseif ($a=='newfolder')
@@ -289,7 +289,7 @@ elseif ($a=='newfolder')
 	$nisgallery = cot_import('nisgallery','P','BOL');
 	$ntitle = (empty($ntitle)) ? '???' : $ntitle;
 
-	$sql = $cot_db->query("INSERT INTO $db_pfs_folders
+	$sql = $db->query("INSERT INTO $db_pfs_folders
 	(pff_userid,
 	pff_title,
 	pff_date,
@@ -300,10 +300,10 @@ elseif ($a=='newfolder')
 	pff_count)
 	VALUES
 	(".(int)$userid.",
-		'".$cot_db->prep($ntitle)."',
+		'".$db->prep($ntitle)."',
 		".(int)$sys['now'].",
 		".(int)$sys['now'].",
-		'".$cot_db->prep($ndesc)."',
+		'".$db->prep($ndesc)."',
 		".(int)$nispublic.",
 		".(int)$nisgallery.",
 		0)");
@@ -313,8 +313,8 @@ elseif ($a=='deletefolder')
 {
 	cot_block($usr['auth_write']);
 	cot_check_xg();
-	$sql = $cot_db->query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$id' ");
-	$sql = $cot_db->query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$id' ");
+	$sql = $db->query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$id' ");
+	$sql = $db->query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$id' ");
 }
 
 $f = (empty($f)) ? '0' : $f;
@@ -325,7 +325,7 @@ $t = new XTemplate($mskin);
 
 if ($f>0)
 {
-	$sql1 = $cot_db->query("SELECT * FROM $db_pfs_folders WHERE pff_id='$f' AND pff_userid='$userid'");
+	$sql1 = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_id='$f' AND pff_userid='$userid'");
 	if ($row1 = $sql1->fetch())
 	{
 		$pff_id = $row1['pff_id'];
@@ -336,8 +336,8 @@ if ($f>0)
 		$pff_isgallery = $row1['pff_isgallery'];
 		$pff_count = $row1['pff_count'];
 
-		$sql = $cot_db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
-		$sqll = $cot_db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
+		$sql = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
+		$sqll = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
 		$title .= ' '.$cfg['separator'].' '.cot_rc_link(cot_url('pfs', 'f='.$pff_id.'&'.$more), $pff_title);
 	}
 	else
@@ -346,11 +346,11 @@ if ($f>0)
 }
 else
 {
-	$sql = $cot_db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC");
-	$sqll = $cot_db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
-	$sql1 = $cot_db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC");
-	$sql1l = $cot_db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['maxpfsperpage']);
-	$sql3 = $cot_db->query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
+	$sql = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC");
+	$sqll = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
+	$sql1 = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC");
+	$sql1l = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['maxpfsperpage']);
+	$sql3 = $db->query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
 
 	while ($row3 = $sql3->fetch())
 	{
@@ -360,7 +360,7 @@ else
 
 	$folders_count = $sql1->rowCount();
 	$movebox = cot_selectbox_folders($userid,"/","");
-	$sql2 = $cot_db->query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_folderid>0 AND pfs_userid='$userid'");
+	$sql2 = $db->query("SELECT COUNT(*) FROM $db_pfs WHERE pfs_folderid>0 AND pfs_userid='$userid'");
 	$subfiles_count = $sql2->fetchColumn();
 
 	$iki=0;
@@ -429,7 +429,7 @@ while ($row = $sqll->fetch())
 
 	if ($pfs_extension!=$pfs_realext)
 	{
-		$sql1 = $cot_db->query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' " );
+		$sql1 = $db->query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' " );
 		$pfs_extension = $pfs_realext;
 	}
 

@@ -27,7 +27,7 @@ $trash_types = array('comment' => $db_com, 'forumpost' => $db_forum_posts, 'foru
  */
 function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 {
-	global $cot_db, $db_trash, $sys, $usr, $trash_types;
+	global $db, $db_trash, $sys, $usr, $trash_types;
 
 	$trash = array('tr_date' => $sys['now_offset'], 'tr_type' => $type, 'tr_title' => $title, 'tr_itemid' => $itemid,
 		'tr_trashedby' => (int)$usr['id'], 'tr_parentid' => $parentid);
@@ -36,20 +36,20 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 	{
 		$i++;
 		$trash['tr_datas'] = serialize($datas);
-		$sql = $cot_db->insert($db_trash, $trash);
+		$sql = $db->insert($db_trash, $trash);
 	}
 	else
 	{
 		$databasename = isset($trash_types[$type]) ? $trash_types[$type] : $type;
-		$sql_s = $cot_db->query("SELECT * FROM $databasename WHERE $datas");
+		$sql_s = $db->query("SELECT * FROM $databasename WHERE $datas");
 		while ($row_s = $sql_s->fetch())
 		{
 			$i++;
 			$trash['tr_datas'] = serialize($row_s);
-			$sql = $cot_db->insert($db_trash, $trash);
+			$sql = $db->insert($db_trash, $trash);
 		}
 	}
-	$id = ($i) ? $cot_db->lastInsertId() : false;
+	$id = ($i) ? $db->lastInsertId() : false;
 	return $id;
 }
 
@@ -61,9 +61,9 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
  */
 function cot_trash_restore($id)
 {
-	global $cot_db, $db_trash, $trash_types;
+	global $db, $db_trash, $trash_types;
 	
-	$tsql = $cot_db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
+	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
 	if ($res = $tsql->fetch())
 	{
 		$data = unserialize($res['tr_datas']);
@@ -76,7 +76,7 @@ function cot_trash_restore($id)
 			$restore = $check($data);
 		}
 
-		$rsql = $cot_db->query("SELECT * FROM $databasename WHERE 1 LIMIT 1");
+		$rsql = $db->query("SELECT * FROM $databasename WHERE 1 LIMIT 1");
 		if ($rrow = $rsql2->fetch())
 		{
 			$arraydiff = array_diff_key($data, $rrow);
@@ -91,7 +91,7 @@ function cot_trash_restore($id)
 		}		
 		if ($restore)
 		{
-			$sql = $cot_db->insert($databasename, $data);
+			$sql = $db->insert($databasename, $data);
 			cot_log("$type #".$res['tr_itemid']." restored from the trash can.", 'adm');
 
 			if(isset($trash_types[$type]) && function_exists('cot_trash'.$type.'_sync'))
@@ -102,8 +102,8 @@ function cot_trash_restore($id)
 
 			if ($sql > 0)
 			{
-				$cot_db->delete($db_trash, "tr_id='".$row['tr_id']."'");
-				$sql2 = $cot_db->query("SELECT tr_id FROM $db_trash WHERE tr_parentid='".(int)$res['tr_id'] ."'");
+				$db->delete($db_trash, "tr_id='".$row['tr_id']."'");
+				$sql2 = $db->query("SELECT tr_id FROM $db_trash WHERE tr_parentid='".(int)$res['tr_id'] ."'");
 				while ($row2 = $sql2->fetch())
 				{
 					cot_trash_restore($row2['tr_id']);
@@ -123,13 +123,13 @@ function cot_trash_restore($id)
  */
 function cot_trash_delete($id)
 {
-	global $cot_db, $db_trash;
+	global $db, $db_trash;
 
-	$tsql = $cot_db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
+	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
 	if ($res = $tsql->fetch())
 	{
-		$cot_db->delete($db_trash, "tr_id='".$row['tr_id']."'");
-		$sql2 = $cot_db->query("SELECT tr_id FROM $db_trash WHERE tr_parentid='".(int)$res['tr_id'] ."'");
+		$db->delete($db_trash, "tr_id='".$row['tr_id']."'");
+		$sql2 = $db->query("SELECT tr_id FROM $db_trash WHERE tr_parentid='".(int)$res['tr_id'] ."'");
 		while ($row2 = $sql2->fetch())
 		{
 			cot_trash_delete($row2['tr_id']);
@@ -147,7 +147,7 @@ function cot_trash_delete($id)
 function cot_trashpage_sync($data)
 {
 	cot_structure_resync($id);
-	($cot_cache && $cfg['cache_page']) && $cot_cache->page->clear('page');
+	($cache && $cfg['cache_page']) && $cache->page->clear('page');
 	return true;
 }
 
@@ -160,7 +160,7 @@ function cot_trashpage_sync($data)
 function cot_trashforumpost_check($data)
 {
 	global $db_forum_posts;
-	$sql = $cot_db->query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$data['fp_topicid']."'");
+	$sql = $db->query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$data['fp_topicid']."'");
 	if ($row = $sql->fetch())
 	{
 		return true;

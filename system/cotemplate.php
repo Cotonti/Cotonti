@@ -147,9 +147,9 @@ class XTemplate
 			return false;
 		}
 		$this->filename = $path;
-		$cache = $cfg['cache_dir'] . '/templates/' . str_replace(array('./', '/'), '_', $path);
-		$cache_idx = $cache . '.idx';
-		if (!$cfg['xtpl_cache'] || !file_exists($cache) || filemtime($path) > filemtime($cache))
+		$cache_path = $cfg['cache_dir'] . '/templates/' . str_replace(array('./', '/'), '_', $path);
+		$cache_idx = $cache_path . '.idx';
+		if (!$cfg['xtpl_cache'] || !file_exists($cache_path) || filemtime($path) > filemtime($cache_path))
 		{
 			$this->blocks = array();
 			$this->index = array();
@@ -170,7 +170,7 @@ class XTemplate
 			{
 				if (is_writeable($cfg['cache_dir'] . '/templates/'))
 				{
-					file_put_contents($cache, serialize($this->blocks));
+					file_put_contents($cache_path, serialize($this->blocks));
 					file_put_contents($cache_idx, serialize($this->index));
 				}
 				else
@@ -181,7 +181,7 @@ class XTemplate
 		}
 		else
 		{
-			$this->blocks = unserialize(file_get_contents($cache));
+			$this->blocks = unserialize(file_get_contents($cache_path));
 			$this->index = unserialize(file_get_contents($cache_idx));
 		}
 	}

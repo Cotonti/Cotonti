@@ -39,7 +39,7 @@ switch($n)
 		if ($a == 'update')
 		{
 			
-			$sql = $cot_db->query("SELECT config_name FROM $db_config
+			$sql = $db->query("SELECT config_name FROM $db_config
 				WHERE config_owner='$o' AND config_cat='$p'");
 			while ($row = $sql->fetch())
 			{
@@ -49,21 +49,21 @@ switch($n)
 				{
 					$cfg_value = min($cfg_value, cot_get_uploadmax() * 1024);
 				}
-				$cot_db->update($db_config, array('config_value' => $cfg_value),
+				$db->update($db_config, array('config_value' => $cfg_value),
 					"config_name=? AND config_owner=? AND config_cat=?", array($row['config_name'], $o, $p));
 			}
 			$sql->closeCursor();
-			$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
+			$cache && $cache->db->remove('cot_cfg', 'system');
 			cot_message('Updated');
 		}
 		elseif ($a == 'reset' && !empty($v))
 		{
-			$cot_db->query("UPDATE $db_config
+			$db->query("UPDATE $db_config
 				SET config_value=config_default WHERE config_name='$v' AND config_owner='$o'");
-			$cot_cache && $cot_cache->db->remove('cot_cfg', 'system');
+			$cache && $cache->db->remove('cot_cfg', 'system');
 		}
 		
-		$sql = $cot_db->query("SELECT * FROM $db_config
+		$sql = $db->query("SELECT * FROM $db_config
 			WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
 		cot_die($sql->rowCount() == 0);
 		
@@ -173,7 +173,7 @@ switch($n)
 		break;
 	
 	default:
-		$sql = $cot_db->query("SELECT DISTINCT(config_cat) FROM $db_config
+		$sql = $db->query("SELECT DISTINCT(config_cat) FROM $db_config
 			WHERE config_owner='core' ORDER BY config_cat ASC");
 		while ($row = $sql->fetch())
 		{
@@ -188,7 +188,7 @@ switch($n)
 		}
 		$sql->closeCursor();
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
-		$sql = $cot_db->query("SELECT DISTINCT(config_cat) FROM $db_config
+		$sql = $db->query("SELECT DISTINCT(config_cat) FROM $db_config
 			WHERE config_owner='module' ORDER BY config_cat ASC");
 		while ($row = $sql->fetch())
 		{
@@ -200,7 +200,7 @@ switch($n)
 		}
 		$sql->closeCursor();
 		$t->parse('MAIN.DEFAULT.ADMIN_CONFIG_COL');
-		$sql = $cot_db->query("SELECT DISTINCT(config_cat) FROM $db_config
+		$sql = $db->query("SELECT DISTINCT(config_cat) FROM $db_config
 			WHERE config_owner='plug' ORDER BY config_cat ASC");
 		while ($row = $sql->fetch())
 		{

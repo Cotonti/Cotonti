@@ -68,7 +68,7 @@ elseif($a == 'lock')
 elseif($a == 'bump')
 {
 	cot_check_xg();
-	$sql = $cot_db->query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
+	$sql = $db->query("UPDATE $db_polls SET poll_creationdate='".$sys['now_offset']."' WHERE poll_id='$id'");
 
 	$adminwarnings = $L['adm_polls_msg916_bump'];
 }
@@ -88,9 +88,9 @@ if (!$cot_error)
 		$adminwarnings = $L['polls_updated'];
 	}
 
-	if ($cot_cache && $cfg['cache_index'])
+	if ($cache && $cfg['cache_index'])
 	{
-		$cot_cache->page->clear('index');
+		$cache->page->clear('index');
 	}
 }
 else
@@ -112,11 +112,11 @@ else
     $poll_filter = '"&filter='.$filter;
 }
 
-$sql = $cot_db->query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
+$sql = $db->query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
 $totalitems = $sql->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $cot_db->query("SELECT * FROM $db_polls
+$sql = $db->query("SELECT * FROM $db_polls
 					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
@@ -143,7 +143,7 @@ while($row = $sql->fetch())
 
 	$poll_state = ($row['poll_state']) ? '[-] ' : '';
 
-    $sql2 = $cot_db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
+    $sql2 = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
     $totalvotes = $sql2->fetchColumn();
 
 	$t->assign(array(

@@ -90,7 +90,7 @@ if($f == 'search' && mb_strlen($y) > 1)
 {
 	$sq = $y;
 	$title .= $cfg['separator']." ". $L['Search']." '".htmlspecialchars($y)."'";
-	$where['namelike'] = "user_name LIKE '%".$cot_db->prep($y)."%'";
+	$where['namelike'] = "user_name LIKE '%".$db->prep($y)."%'";
 }
 elseif($g > 1)
 {
@@ -137,9 +137,9 @@ foreach (cot_getextplugins('users.query') as $pl)
 }
 /* ===== */
 
-$sql = $cot_db->query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where));
+$sql = $db->query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where));
 $totalusers = $sql->fetchColumn();
-$sql = $cot_db->query("SELECT u.* $join_columns FROM $db_users AS u $join_condition  WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
+$sql = $db->query("SELECT u.* $join_columns FROM $db_users AS u $join_condition  WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;

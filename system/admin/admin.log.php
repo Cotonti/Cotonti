@@ -50,10 +50,10 @@ if($a == 'purge' && $usr['isadmin'])
 	}
 	/* ===== */
 
-	$cot_db->query("TRUNCATE $db_logger") ? cot_message('adm_ref_prune') : cot_message('Error');
+	$db->query("TRUNCATE $db_logger") ? cot_message('adm_ref_prune') : cot_message('Error');
 }
 
-$totaldblog = $cot_db->countRows($db_logger);
+$totaldblog = $db->countRows($db_logger);
 
 $n = (empty($n)) ? 'all' : $n;
 
@@ -71,16 +71,16 @@ foreach($log_groups as $grp_code => $grp_name)
 
 $is_adminwarnings = isset($adminwarnings);
 
-$totalitems = ($n == 'all') ? $totaldblog : $cot_db->query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'")->fetchColumn();
+$totalitems = ($n == 'all') ? $totaldblog : $db->query("SELECT COUNT(*) FROM $db_logger WHERE log_group='$n'")->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=log&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 if($n == 'all')
 {
-	$sql = $cot_db->query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = $db->query("SELECT * FROM $db_logger WHERE 1 ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 }
 else
 {
-	$sql = $cot_db->query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+	$sql = $db->query("SELECT * FROM $db_logger WHERE log_group='$n' ORDER by log_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 }
 
 $ii = 0;

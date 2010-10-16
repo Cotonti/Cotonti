@@ -34,17 +34,17 @@ foreach (cot_getextplugins('admin.ratings.first') as $pl)
 if($a == 'delete')
 {
 	cot_check_xg();
-	$cot_db->delete($db_ratings, "rating_code = '$id'");
-	$cot_db->delete($db_rated, "rated_code = '$id'");
+	$db->delete($db_ratings, "rating_code = '$id'");
+	$db->delete($db_rated, "rated_code = '$id'");
 
 	cot_message('adm_ratings_already_del');
 }
 
 
-$totalitems = $cot_db->countRows($db_ratings);
+$totalitems = $db->countRows($db_ratings);
 $pagenav = cot_pagenav('admin', 'm=ratings', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $cot_db->query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $db->query("SELECT * FROM $db_ratings WHERE 1 ORDER by rating_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 $jj = 0;
@@ -54,7 +54,7 @@ $extp = cot_getextplugins('admin.ratings.loop');
 while($row = $sql->fetch())
 {
 	$id2 = $row['rating_code'];
-	$sql1 = $cot_db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$id2'");
+	$sql1 = $db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$id2'");
 	$votes = $sql1->fetchColumn();
 
 	$rat_type = mb_substr($row['rating_code'], 0, 1);
