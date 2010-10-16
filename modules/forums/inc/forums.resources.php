@@ -59,7 +59,7 @@ $R['frm_rowdelete'] = '<a href="{$url}">'.$L['Delete'].'</a>';
 /**
  * Forum Sections
  */
-$R['frm_code_tbody_begin'] = '<tbody id="blk_{$cat}" {$syle}>';
+$R['frm_code_tbody_begin'] = '<tbody id="blk_{$cat}" {$style}>';
 $R['frm_code_tbody_end'] = '</tbody>';
 
 /**
