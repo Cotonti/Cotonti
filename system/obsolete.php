@@ -546,7 +546,7 @@ function sed_sql_insertid()
 }
 
 /**
- * Returns list of tables for a database. Use cot_db_fetcharray() to get table names from result
+ * Returns list of tables for a database. Use sed_sql_fetcharray() to get table names from result
  *
  * @param string $db_name Database name
  * @return PDOStatement
@@ -631,7 +631,12 @@ function sed_sql_insert($table_name, $data, $prefix = '')
 {
 	global $cot_db;
 
-	return $cot_db->insert($table_name, $data, $prefix);
+	$data_tmp = array();
+	foreach ($data as $key => $val)
+	{
+		$data_tmp[$prefix.$key] = $val;
+	}
+	return $cot_db->insert($table_name, $data);
 }
 
 

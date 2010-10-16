@@ -31,7 +31,7 @@ define('COT_ABSOLUTE_URL', $site_url . '/');
 
 if ($step != 2)
 {
-	$cot_dbc = cot_db_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
+	$cot_db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
 
 // Import section
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error(cot_rc('install_error_missing_file', array('file' => $file['sql'])));
 			}
-			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.2.0', '>='))
+			if (function_exists('version_compare') && !version_compare(PHP_VERSION, '5.2.3', '>='))
 			{
 				cot_error(cot_rc('install_error_php_ver', array('ver' => PHP_VERSION)));
 			}
@@ -109,14 +109,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error('install_error_mbstring');
 			}
-			if (!extension_loaded('mysql'))
+			if (!extension_loaded('pdo_mysql'))
 			{
-				cot_error('install_error_mysql_ext');
+				cot_error('install_error_sql_ext');
 			}
-			if ($cot_dbc != 1 && $cot_dbc != 2 && function_exists('version_compare')
-				&& !version_compare(@mysql_get_server_info($cot_dbc), '4.1.0', '>='))
+			if (empty($cot_db->error) && function_exists('version_compare')
+				&& !version_compare($cot_db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.0', '>='))
 			{
-				cot_error(cot_rc('install_error_mysql_ver', array('ver' => @mysql_get_server_info($cot_dbc))));
+				cot_error(cot_rc('install_error_sql_ver', array('ver' => $cot_db->getAttribute(PDO::ATTR_SERVER_VERSION))));
 			}
 
 			if (!file_exists($file['config']))
@@ -131,14 +131,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			// Database setup
 			$db_x = cot_import('db_x', 'P', 'TXT');
 			
-			$cot_dbc = cot_db_connect($db_host, $db_user, $db_pass, $db_name);
-			if ($cot_dbc == 1)
+			try
+			{
+				$cot_db = new CotDB('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pass);
+			}
+			catch (PDOException $e)
 			{
 				cot_error('install_error_sql', 'db_host');
-			}
-			if ($cot_dbc == 2)
-			{
-				cot_error('install_error_sql_db', 'db_name');
 			}
 
 			if (!$cot_error)
@@ -204,25 +203,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				file_put_contents($file['config'], $config_contents);
 
 				if ($cot_db->insert($db_x . 'users', array(
-						'name' => $user['name'],
-						'password' => md5($user['pass']),
-						'maingrp' => COT_GROUP_SUPERADMINS,
-						'country' => (string) $user['country'],
-						'email' => $user['email'],
-						'theme' => $rtheme,
-						'scheme' => $rscheme,
-						'lang' => $rlang,
-						'regdate' => time(),
-						'lastip' => $_SERVER['REMOTE_ADDR']
-					), 'user_') == 1)
+						'user_name' => $user['name'],
+						'user_password' => md5($user['pass']),
+						'user_maingrp' => COT_GROUP_SUPERADMINS,
+						'user_country' => (string) $user['country'],
+						'user_email' => $user['email'],
+						'user_theme' => $rtheme,
+						'user_scheme' => $rscheme,
+						'user_lang' => $rlang,
+						'user_regdate' => time(),
+						'user_lastip' => $_SERVER['REMOTE_ADDR']
+					)) == 1)
 				{
 
 					$user['id'] = $cot_db->lastInsertId();
 
 					$cot_db->insert($db_x . 'groups_users', array(
-						'userid' => (int) $user['id'],
-						'groupid' => COT_GROUP_SUPERADMINS
-					), 'gru_');
+						'gru_userid' => (int) $user['id'],
+						'gru_groupid' => COT_GROUP_SUPERADMINS
+					));
 				}
 				else
 				{
@@ -436,21 +435,21 @@ switch ($step)
 		{
 			$status['sql_file'] = $R['install_code_not_found'];
 		}
-		$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.2.0', '>='))
+		$status['php_ver'] = (function_exists('version_compare') && version_compare(PHP_VERSION, '5.2.3', '>='))
 			? cot_rc('install_code_valid', array('text' =>
 				cot_rc('install_ver_valid', array('ver' => PHP_VERSION))))
 			: cot_rc('install_code_invalid', array('text' =>
 				cot_rc('install_ver_invalid', array('ver' => PHP_VERSION))));
 		$status['mbstring'] = (extension_loaded('mbstring'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
-		$status['mysql'] = (extension_loaded('mysql'))
+		$status['mysql'] = (extension_loaded('pdo_mysql'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
 //		$status['mysql_ver'] = '/ '
-//		. ($cot_dbc && function_exists('version_compare')
-//				&& version_compare(@mysql_get_server_info($cot_dbc), '4.1.0', '>='))
+//		. ($cot_db && function_exists('version_compare')
+//				&& version_compare(@mysql_get_server_info($cot_db), '5.0.0', '>='))
 //			? cot_rc('install_code_valid',
 //				array('text' => cot_rc('install_ver_valid',
-//					array('ver' => mysql_get_server_info($cot_dbc)))))
+//					array('ver' => mysql_get_server_info($cot_db)))))
 //			: $R['install_code_not_available'];
 
 		$t->assign(array(

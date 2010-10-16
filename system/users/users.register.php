@@ -42,41 +42,41 @@ if ($a=='add')
 	}
 	/* ===== */
 
-	$ruser['name'] = cot_import('rusername','P','TXT', 100, TRUE);
-	$ruser['email'] = cot_import('ruseremail','P','TXT',64, TRUE);
+	$ruser['user_name'] = cot_import('rusername','P','TXT', 100, TRUE);
+	$ruser['user_email'] = cot_import('ruseremail','P','TXT',64, TRUE);
 	$rpassword1 = cot_import('rpassword1','P','TXT',16);
 	$rpassword2 = cot_import('rpassword2','P','TXT',16);
-	$ruser['country'] = cot_import('rcountry','P','TXT');
-	$ruser['timezone'] = cot_import('rtimezone','P','TXT',5);
-	$ruser['timezone'] = is_null($ruser['timezone']) ? $cfg['defaulttimezone'] : (float) $ruser['timezone'];
-	$ruser['gender'] = cot_import('rusergender','P','TXT');
-	$ruser['email'] = mb_strtolower($ruser['email']);
+	$ruser['user_country'] = cot_import('rcountry','P','TXT');
+	$ruser['user_timezone'] = cot_import('rtimezone','P','TXT',5);
+	$ruser['user_timezone'] = is_null($ruser['user_timezone']) ? $cfg['defaulttimezone'] : (float) $ruser['user_timezone'];
+	$ruser['user_gender'] = cot_import('rusergender','P','TXT');
+	$ruser['user_email'] = mb_strtolower($ruser['user_email']);
 
 	// Extra fields
 	foreach($cot_extrafields['users'] as $row)
 	{
 		$ruser[$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
 	}
-	$ruser['birthdate'] = (int)cot_import_date('ruserbirthdate', false);
+	$ruser['user_birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
 	$sql = $cot_db->query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
 
 	while ($row = $sql->fetch())
 	{
-		if (mb_strpos($row['banlist_email'], $ruser['email']) !== false)
+		if (mb_strpos($row['banlist_email'], $ruser['user_email']) !== false)
 			$bannedreason = $row['banlist_reason'];
 	}
 
-	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE user_name='".$cot_db->prep($ruser['name'])."'");
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE user_name='".$cot_db->prep($ruser['user_name'])."'");
 	$res1 = $sql->fetchColumn();
-	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$cot_db->prep($ruser['email'])."'");
+	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$cot_db->prep($ruser['user_email'])."'");
 	$res2 = $sql->fetchColumn();
 
-	if (preg_match('/&#\d+;/', $ruser['name']) || preg_match('/[<>#\'"\/]/', $ruser['name'])) cot_error('aut_invalidloginchars', 'rusername');
+	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) cot_error('aut_invalidloginchars', 'rusername');
 	if (!empty($bannedreason)) cot_error($L['aut_emailbanned'].$bannedreason);
-	if (mb_strlen($ruser['name']) < 2) cot_error('aut_usernametooshort', 'rusername');
+	if (mb_strlen($ruser['user_name']) < 2) cot_error('aut_usernametooshort', 'rusername');
 	if (mb_strlen($rpassword1) < 4 || cot_alphaonly($rpassword1) != $rpassword1) cot_error('aut_passwordtooshort', 'rpassword1');
-	if (mb_strlen($ruser['email']) < 4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruser['email']))
+	if (mb_strlen($ruser['user_email']) < 4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruser['user_email']))
 		cot_error('aut_emailtooshort', 'ruseremail');
 	if ($res1>0) cot_error('aut_usernamealreadyindb', 'rusername');
 	if ($res2>0) cot_error('aut_emailalreadyindb', 'ruseremail');
@@ -86,35 +86,35 @@ if ($a=='add')
 	{
 		if ($cot_db->countRows($db_users)==0)
 		{
-			$ruser['maingrp'] = 5;
+			$ruser['user_maingrp'] = 5;
 		}
 		else
 		{
-			$ruser['maingrp'] = ($cfg['regnoactivation']) ? 4 : 2;
+			$ruser['user_maingrp'] = ($cfg['regnoactivation']) ? 4 : 2;
 		}
 
-		$ruser['password'] = md5($rpassword1);
-		$ruser['birthdate'] = ($ruser['birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['birthdate'];
-		$ruser['birthdate'] = ($ruser['birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['birthdate']);
+		$ruser['user_password'] = md5($rpassword1);
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 
-		$ruser['lostpass'] = md5(microtime());
+		$ruser['user_lostpass'] = md5(microtime());
 		cot_shield_update(20, "Registration");
 
-		$ruser['hideemail'] = 1;
-		$ruser['pmnotify'] = 0;
+		$ruser['user_hideemail'] = 1;
+		$ruser['user_pmnotify'] = 0;
 
-		$ruser['theme'] = $cfg['defaulttheme'];
-		$ruser['scheme'] = $cfg['defaultscheme'];
-		$ruser['lang'] = $cfg['defaultlang'];
-		$ruser['regdate'] = (int)$sys['now_offset'];
-		$ruser['logcount'] = 0;
-		$ruser['lastip'] = $usr['ip'];
+		$ruser['user_theme'] = $cfg['defaulttheme'];
+		$ruser['user_scheme'] = $cfg['defaultscheme'];
+		$ruser['user_lang'] = $cfg['defaultlang'];
+		$ruser['user_regdate'] = (int)$sys['now_offset'];
+		$ruser['user_logcount'] = 0;
+		$ruser['user_lastip'] = $usr['ip'];
 
-		$cot_db->insert($db_users, $ruser, 'user_');
+		$cot_db->insert($db_users, $ruser);
 
 		$userid = $cot_db->lastInsertId();
 
-		$cot_db->insert($db_groups_users, array('gru_userid' => (int)$userid, 'gru_groupid' => (int)$ruser['maingrp']));
+		$cot_db->insert($db_groups_users, array('gru_userid' => (int)$userid, 'gru_groupid' => (int)$ruser['user_maingrp']));
 	
 		/* === Hook for the plugins === */
 		foreach (cot_getextplugins('users.register.add.done') as $pl)
@@ -123,7 +123,7 @@ if ($a=='add')
 		}
 		/* ===== */
 
-		if ($cfg['regnoactivation'] || $ruser['maingrp']==5)
+		if ($cfg['regnoactivation'] || $ruser['user_maingrp']==5)
 		{
 			cot_redirect(cot_url('message', 'msg=106', '', true));
 		}
@@ -131,24 +131,24 @@ if ($a=='add')
 		if ($cfg['regrequireadmin'])
 		{
 			$rsubject = $cfg['maintitle']." - ".$L['aut_regrequesttitle'];
-			$rbody = sprintf($L['aut_regrequest'], $ruser['name'], $rpassword1);
+			$rbody = sprintf($L['aut_regrequest'], $ruser['user_name'], $rpassword1);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
-			cot_mail ($ruser['email'], $rsubject, $rbody);
+			cot_mail ($ruser['user_email'], $rsubject, $rbody);
 
 			$rsubject = $cfg['maintitle']." - ".$L['aut_regreqnoticetitle'];
 			$rinactive = $cfg['mainurl'].'/'.cot_url('users', 'gm=2&s=regdate&w=desc', '', true);
-			$rbody = sprintf($L['aut_regreqnotice'], $ruser['name'], $rinactive);
+			$rbody = sprintf($L['aut_regreqnotice'], $ruser['user_name'], $rinactive);
 			cot_mail ($cfg['adminemail'], $rsubject, $rbody);
 			cot_redirect(cot_url('message', 'msg=118', '', true));
 		}
 		else
 		{
 			$rsubject = $cfg['maintitle']." - ".$L['Registration'];
-			$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['lostpass'].'&y=1', '', true);
-			$rdeactivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['lostpass'].'&y=0', '', true);
-			$rbody = sprintf($L['aut_emailreg'], $ruser['name'], $rpassword1, $ractivate, $rdeactivate);
+			$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=1', '', true);
+			$rdeactivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$ruser['user_lostpass'].'&y=0', '', true);
+			$rbody = sprintf($L['aut_emailreg'], $ruser['user_name'], $rpassword1, $ractivate, $rdeactivate);
 			$rbody .= "\n\n".$L['aut_contactadmin'];
-			cot_mail ($ruser['email'], $rsubject, $rbody);
+			cot_mail ($ruser['user_email'], $rsubject, $rbody);
 			cot_redirect(cot_url('message', 'msg=105', '', true));
 		}
 	}
@@ -239,7 +239,7 @@ foreach($timezonelist as $x)
 {
 	$timezonename[] = 'GMT ' . $x;
 }
-$form_timezone = cot_selectbox($ruser['timezone'], 'rtimezone', $timezonelist, $timezonename, false);
+$form_timezone = cot_selectbox($ruser['user_timezone'], 'rtimezone', $timezonelist, $timezonename, false);
 $form_timezone .= ' '.$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
 
 $useredit_array = array(
@@ -247,13 +247,13 @@ $useredit_array = array(
 	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
 	"USERS_REGISTER_ADMINEMAIL" => $cot_adminemail,
 	"USERS_REGISTER_SEND" => cot_url('users', 'm=register&a=add'),
-	"USERS_REGISTER_USER" => cot_inputbox('text', 'rusername', $ruser['name'], array('size' => 24, 'maxlength' => 100)),
-	"USERS_REGISTER_EMAIL" => cot_inputbox('text', 'ruseremail', $ruser['email'], array('size' => 24, 'maxlength' => 64)),
+	"USERS_REGISTER_USER" => cot_inputbox('text', 'rusername', $ruser['user_name'], array('size' => 24, 'maxlength' => 100)),
+	"USERS_REGISTER_EMAIL" => cot_inputbox('text', 'ruseremail', $ruser['user_email'], array('size' => 24, 'maxlength' => 64)),
 	"USERS_REGISTER_PASSWORD" => cot_inputbox('password', 'rpassword1', '', array('size' => 8, 'maxlength' => 32)),
 	"USERS_REGISTER_PASSWORDREPEAT" => cot_inputbox('password', 'rpassword2', '', array('size' => 8, 'maxlength' => 32)),
-	"USERS_REGISTER_COUNTRY" => cot_selectbox_countries($ruser['country'], 'rcountry'),
+	"USERS_REGISTER_COUNTRY" => cot_selectbox_countries($ruser['user_country'], 'rcountry'),
 	"USERS_REGISTER_TIMEZONE" => $form_timezone,
-	"USERS_REGISTER_GENDER" => cot_selectbox_gender($ruser['gender'],'rusergender'),
+	"USERS_REGISTER_GENDER" => cot_selectbox_gender($ruser['user_gender'],'rusergender'),
 	"USERS_REGISTER_BIRTHDATE" => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
 );
 $t->assign($useredit_array);
@@ -261,7 +261,7 @@ $t->assign($useredit_array);
 // Extra fields
 foreach($cot_extrafields['users'] as $i => $row)
 {
-	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'],  $row, htmlspecialchars($ruser['extrafields'][$row['field_name']])));
+	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']), cot_build_extrafields('ruser'.$row['field_name'],  $row, htmlspecialchars($ruser['user_extrafields'][$row['field_name']])));
 	$t->assign('USERS_REGISTER_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 

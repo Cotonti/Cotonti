@@ -102,35 +102,35 @@ if ($a == 'newtopic')
 		}
 
 		$cot_db->insert($db_forum_topics, array(
-			'state' => 0,
-			'mode' => (int)$newprvtopic,
-			'sticky' => 0,
-			'sectionid' => (int)$s,
-			'title' => $newtopictitle,
-			'desc' => $newtopicdesc,
-			'preview' => $newtopicpreview,
-			'creationdate' => (int)$sys['now_offset'],
-			'updated' => (int)$sys['now_offset'],
-			'postcount' => 1,
-			'viewcount' => 0,
-			'firstposterid' => (int)$usr['id'],
-			'firstpostername' => $usr['name'],
-			'lastposterid' => (int)$usr['id'],
-			'lastpostername' => $usr['name']
-		), 'ft_');
+			'ft_state' => 0,
+			'ft_mode' => (int)$newprvtopic,
+			'ft_sticky' => 0,
+			'ft_sectionid' => (int)$s,
+			'ft_title' => $newtopictitle,
+			'ft_desc' => $newtopicdesc,
+			'ft_preview' => $newtopicpreview,
+			'ft_creationdate' => (int)$sys['now_offset'],
+			'ft_updated' => (int)$sys['now_offset'],
+			'ft_postcount' => 1,
+			'ft_viewcount' => 0,
+			'ft_firstposterid' => (int)$usr['id'],
+			'ft_firstpostername' => $usr['name'],
+			'ft_lastposterid' => (int)$usr['id'],
+			'ft_lastpostername' => $usr['name']
+		));
 
 		$q = $cot_db->lastInsertId();
 
 		$cot_db->insert($db_forum_posts, array(
-			'topicid' => (int)$q,
-			'sectionid' => (int)$s,
-			'posterid' => (int)$usr['id'],
-			'postername' => $usr['name'],
-			'creation' => (int)$sys['now_offset'],
-			'updated' => (int)$sys['now_offset'],
-			'text' => $newmsg,
-			'posterip' => $usr['ip']
-		), 'fp_');
+			'fp_topicid' => (int)$q,
+			'fp_sectionid' => (int)$s,
+			'fp_posterid' => (int)$usr['id'],
+			'fp_postername' => $usr['name'],
+			'fp_creation' => (int)$sys['now_offset'],
+			'fp_updated' => (int)$sys['now_offset'],
+			'fp_text' => $newmsg,
+			'fp_posterip' => $usr['ip']
+		));
 
 		$sql = $cot_db->query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
 		$row = $sql->fetch();
