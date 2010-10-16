@@ -39,7 +39,7 @@ require_once 'system/debug.php';
 
 if ($cfg['new_install'])
 {
-	require_once $cfg['system_dir'].'/database.'.$cfg['sqldb'].'.php';
+	require_once $cfg['system_dir'].'/database.php';
 
 	// A Few basics from common.php
 	if (version_compare(PHP_VERSION, '6.0.0', '<='))

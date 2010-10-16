@@ -295,8 +295,7 @@ function cot_config_set($name, $options, $is_module = false)
 			. $cot_db->prep($key) . "'";
         if (!empty($name))
             $where .= " AND config_cat = '$name'";
-        $upd_cnt += $cot_db->update($db_config, $where, array('value' => $val),
-			'config_');
+        $upd_cnt += $cot_db->update($db_config, array('config_value' => $val), $where);
     }
     return $upd_cnt;
 }

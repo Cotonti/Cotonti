@@ -192,16 +192,16 @@ if ($a=='newpost')
 		if (!$merge)
 		{
 			$cot_db->insert($db_forum_posts, array(
-				'topicid' => (int)$q,
-				'sectionid' => (int)$s,
-				'posterid' => (int)$usr['id'],
-				'postername' => $usr['name'],
-				'creation' => (int)$sys['now_offset'],
-				'updated' => (int)$sys['now_offset'],
-				'updater' => 0,
-				'text' => $newmsg,
-				'posterip' => $usr['ip']
-			), 'fp_');
+				'fp_topicid' => (int)$q,
+				'fp_sectionid' => (int)$s,
+				'fp_posterid' => (int)$usr['id'],
+				'fp_postername' => $usr['name'],
+				'fp_creation' => (int)$sys['now_offset'],
+				'fp_updated' => (int)$sys['now_offset'],
+				'fp_updater' => 0,
+				'fp_text' => $newmsg,
+				'fp_posterip' => $usr['ip']
+			));
 
 			$p = $cot_db->lastInsertId();
 

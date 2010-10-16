@@ -170,9 +170,16 @@ if ($a == 'send' && $usr['auth_write'])
 
 	if (!$cot_error)
 	{
-		$comarray = array('area' => $area, 'code' => $item, 'author' => $usr['name'], 'authorid' => (int)$usr['id'], 'authorip' => $usr['ip'],
-			'text' => $rtext, 'date' => (int)$sys['now_offset']);
-		$sql = $cot_db->insert($db_com, $comarray, 'com_');
+		$comarray = array(
+			'com_area' => $area,
+			'com_code' => $item,
+			'com_author' => $usr['name'],
+			'com_authorid' => (int)$usr['id'],
+			'com_authorip' => $usr['ip'],
+			'com_text' => $rtext,
+			'com_date' => (int)$sys['now_offset']
+		);
+		$sql = $cot_db->insert($db_com, $comarray);
 		$id = $cot_db->lastInsertId();
 
 		if ($cfg['plugin']['comments']['mail'])

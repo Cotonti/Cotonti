@@ -194,23 +194,23 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 				$row = $sql1->fetch();
 
 				$cot_db->insert($db_forum_topics, array(
-					'state' => 0,
-					'mode' => (int)$row['ft_mode'],
-					'sticky' => 0,
-					'sectionid' => (int)$s,
-					'title' => $row['ft_title'],
-					'desc' => $row['ft_desc'],
-					'preview' => $row['ft_preview'],
-					'creationdate' => $row['ft_creationdate'],
-					'updated' => (int)$sys['now_offset'],
-					'postcount' => 0,
-					'viewcount' => 0,
-					'firstposterid' => $row['ft_firstposterid'],
-					'firstpostername' => $row['ft_firstpostername'],
-					'lastposterid' => 0,
-					'lastpostername' => '-',
-					'movedto' => (int)$q
-				), 'ft_');
+					'ft_state' => 0,
+					'ft_mode' => (int)$row['ft_mode'],
+					'ft_sticky' => 0,
+					'ft_sectionid' => (int)$s,
+					'ft_title' => $row['ft_title'],
+					'ft_desc' => $row['ft_desc'],
+					'ft_preview' => $row['ft_preview'],
+					'ft_creationdate' => $row['ft_creationdate'],
+					'ft_updated' => (int)$sys['now_offset'],
+					'ft_postcount' => 0,
+					'ft_viewcount' => 0,
+					'ft_firstposterid' => $row['ft_firstposterid'],
+					'ft_firstpostername' => $row['ft_firstpostername'],
+					'ft_lastposterid' => 0,
+					'ft_lastpostername' => '-',
+					'ft_movedto' => (int)$q
+				));
 			}
 
 			cot_forum_sectionsetlast($s);

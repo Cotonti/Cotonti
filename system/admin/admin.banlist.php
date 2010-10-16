@@ -63,11 +63,11 @@ elseif ($a == 'add')
 	}
 	$sql = (!empty($nbanlistip) || !empty($nbanlistemail))
 		? $cot_db->insert($db_banlist, array(
-			'ip' => $nbanlistip,
-			'email' => $nbanlistemail,
-			'reason' => $nbanlistreason,
-			'expire' => (int) $nexpire
-			), 'banlist_')
+			'banlist_ip' => $nbanlistip,
+			'banlist_email' => $nbanlistemail,
+			'banlist_reason' => $nbanlistreason,
+			'banlist_expire' => (int) $nexpire
+			))
 		: '';
 
 	($sql) ? cot_message('alreadyaddnewentry') : cot_message('Error');

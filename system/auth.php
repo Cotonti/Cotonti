@@ -101,15 +101,15 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
 	{
 		$base_grp = $k > COT_GROUP_SUPERADMINS ? COT_GROUP_DEFAULT : $k;
 		$ins_array[] = array(
-			'groupid' => $k,
-			'code' => $module_name,
-			'option' => $item_id,
-			'rights' => cot_auth_getvalue($auth_permit[$base_grp]),
-			'rights_lock' => cot_auth_getvalue($auth_lock[$base_grp]),
-			'setbyuserid' => $usr['id']
+			'auth_groupid' => $k,
+			'auth_code' => $module_name,
+			'auth_option' => $item_id,
+			'auth_rights' => cot_auth_getvalue($auth_permit[$base_grp]),
+			'auth_rights_lock' => cot_auth_getvalue($auth_lock[$base_grp]),
+			'auth_setbyuserid' => $usr['id']
 		);
 	}
-	$res = $cot_db->insert($db_auth, $ins_array, 'auth_');
+	$res = $cot_db->insert($db_auth, $ins_array);
 	cot_auth_reorder();
 	cot_auth_clear('all');
 	return $res;

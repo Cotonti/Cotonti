@@ -32,21 +32,21 @@ $GLOBALS['db_bbcode'] = (isset($GLOBALS['db_bbcode'])) ? $GLOBALS['db_bbcode'] :
 function cot_bbcode_add($name, $mode, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
 {
 	global $cot_db, $db_bbcode;
-	$bbc['name'] = $name;
-	$bbc['mode'] = $mode;
-	$bbc['pattern'] = $pattern;
-	$bbc['replacement'] = $replacement;
-	$bbc['container'] = empty($container) ? 0 : 1;
+	$bbc['bbc_name'] = $name;
+	$bbc['bbc_mode'] = $mode;
+	$bbc['bbc_pattern'] = $pattern;
+	$bbc['bbc_replacement'] = $replacement;
+	$bbc['bbc_container'] = empty($container) ? 0 : 1;
 	if ($priority >= 0 && $priority < 256)
 	{
-		$bbc['priority'] = (int) $priority;
+		$bbc['bbc_priority'] = (int) $priority;
 	}
 	if (!empty($plug))
 	{
-		$bbc['plug'] = $plug;
+		$bbc['bbc_plug'] = $plug;
 	}
-	$bbc['postrender'] = empty($postrender) ? 0 : 1;
-	return $cot_db->insert($db_bbcode, $bbc, 'bbc_') == 1;
+	$bbc['bbc_postrender'] = empty($postrender) ? 0 : 1;
+	return $cot_db->insert($db_bbcode, $bbc) == 1;
 }
 
 /**

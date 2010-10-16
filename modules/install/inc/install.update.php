@@ -98,7 +98,7 @@ else
 	cot_error('install_update_config_error');
 }
 
-$cot_dbc = cot_db_connect($cfg['mysqlhost'], $cfg['mysqluser'], $cfg['mysqlpassword'], $cfg['mysqldb']);
+$cot_db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
 $sql = @$cot_db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
 $sql2 = @$cot_db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");

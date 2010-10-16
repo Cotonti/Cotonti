@@ -326,7 +326,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 	global $cot_db, $db_extra_fields;
 	$fieldsres = $cot_db->query("SELECT COUNT(*) FROM $db_extra_fields
 			WHERE field_name = '$oldname' AND field_location='$location'");
-	if (cot_db_numrows($fieldsres) <= 0  || $name != $oldname && cot_db_numrows(cot_db_query("SHOW COLUMNS FROM $location LIKE '%\_$name'")) > 0)
+	if ($fieldsres->rowCount() <= 0  || $name != $oldname && $cot_db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0)
 	{
 		// Attempt to edit non-extra field or override an existing field
 		return false;
