@@ -1648,6 +1648,162 @@ function cot_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
 }
 
 /**
+ * Consolidates local JS and CSS resources used during script execution,
+ * prepares cache images and links to them
+ *
+ * @global array $cot_headrc Head resource registry
+ * @global array $env Environment strings
+ * @global array $usr User object
+ * @return string HTML tags to be included in head of the document
+ */
+function cot_headrc_consolidate()
+{
+	global $cot_headrc, $env, $usr;
+	$output = '';
+	foreach ($cot_headrc as $scope => $scope_data)
+	{
+		foreach ($scope_data as $type => $data)
+		{
+			// Select cache files
+			switch ($scope)
+			{
+				case 'global':
+					$files_target = 'common' ;
+					$embed_target = 'common';
+					break;
+				case 'extension':
+					$files_target = $env['ext'];
+					$embed_target = $env['ext'];
+					break;
+				case 'user':
+					$files_target = $usr['id'];
+					$embed_target = $usr['id'];
+					break;
+				default:
+					// Direct output
+					foreach ($data['files'] as $path)
+					{
+						$output .= cot_rc("code_headrc_{$type}_file", array('url' => $path));
+					}
+					if (!empty($data['embed']))
+					{
+						$output .= cot_rc("code_headrc_{$type}_embed", array('code' => $data['embed']));
+					}
+					continue;
+					break;
+			}
+
+			$files_target_path = $cfg['cache_dir'] . '/static/' . $files_target . '.' . $type;
+			$embed_target_path = $cfg['cache_dir'] . '/static/' . $embed_target . '.embed.' . $type;
+
+			if (is_array($data['files']))
+			{
+				$modified = false;
+				if (file_exists($files_target_path))
+				{
+					// Check modification time for each file
+					foreach ($data['files'] as $path)
+					{
+						if (filemtime($path) >= filemtime($files_target_path))
+						{
+							$modified = true;
+							break;
+						}
+					}
+				}
+				else
+				{
+					$modified = true;
+				}
+
+				if ($modified)
+				{
+					// Reconsolidate cache
+					$code = '';
+					foreach ($data['files'] as $path)
+					{
+						$code .= file_get_contents($path) . "\n";
+					}
+					file_put_contents($files_target_path, $code);
+				}
+				
+				$rc_url = 'rc.php?'.$type.'='.$files_target;
+				$output .= cot_rc("code_headrc_{$type}_file", array('url' => $rc_url));
+			}
+			if (!empty($data['embed']))
+			{
+				// Maybe should compare checksums here, but size/length is much faster
+				if (!file_exists($embed_target_path) || strlen($data['embed']) != filesize($embed_target))
+				{
+					// Rebuild the embed cache
+					file_put_contents($embed_target, $data['embed']);
+				}
+
+				$rc_url = 'rc.php?'.$type.'='.$embed_target;
+				$output .= cot_rc("code_headrc_{$type}_file", array('url' => $rc_url));
+			}
+		}
+	}
+	return $output;
+}
+
+/**
+ * Puts a portion of embedded code into the head resource registry.
+ *
+ * It is strongly recommended to use files for CSS/JS whenever possible
+ * and call cot_headrc_file() function for them instead of embedding code
+ * into the page and using this function. This function should be used for
+ * dynamically generated code, which cannot be stored in static files.
+ *
+ * @see cot_headrc_file()
+ * @global array $cot_headrc Head resource registry
+ * @param string $code Embedded script code or stylesheet code
+ * @param string $scope Resource scope: 'global', 'module', 'plugin', 'user' or 'request'.
+ * See description of this parameter in cot_headrc_file() docs.
+ * @param string $type Resource type: 'js' or 'css'
+ * @return bool This function always returns TRUE
+ */
+function cot_headrc_embed($code, $scope = 'global', $type = 'js')
+{
+	global $cot_headrc;
+
+	$cot_headrc[$scope][$type]['embeds'] .= $code . "\n";
+	return true;
+}
+
+/**
+ * Puts a JS or CSS file into the head resource registry to be consolidated with other
+ * such resources, cached and sent back to a visitor.
+ *
+ * It is recommened to use files instead of embedded code and use this function
+ * instead of cot_headrc_embed(). Use this way for any sort of static JavaScript or
+ * CSS linking.
+ *
+ * @global array $cot_headrc Head resource registry
+ * @param string $path Path to a script or stylesheet file
+ * @param string $scope Resource scope: 'global', 'extension', 'user' or 'request'. These scopes mean:
+ *	'global' - global for entire site, will be included everywhere, this is the most static and persistent scope;
+ *	'extension' - is attached to current module or standalone plugin only, use it for resources that won't be
+ *	used in other modules or plugins or elsewhere on site;
+ *	'user' - only for current user or if $usr['id'] is 0 for all guests, use it for user-specific pieces of code;
+ *	'request' or any other value - is specific to current request only, it won't be cached or consolidated.
+ * Tend to use the global scope whenever possible because it has best caching effect. Use user scope for
+ * user-specific and private code and data, use request scope for temporary embeds ( with cot_headrc_embed()).
+ * @param string $type Resource type: 'js' or 'css'
+ * @return bool This function always returns TRUE
+ */
+function cot_headrc_file($path, $scope = 'global', $type = 'js')
+{
+	global $cot_headrc;
+	if (!file_exists($path))
+	{
+		return false;
+	}
+	$cot_headrc[$scope][$type]['files'][] = $path;
+	return true;
+}
+
+/**
  * Outputs standard javascript
  *
  * @param string $more Extra javascript
@@ -1659,7 +1815,6 @@ function cot_javascript($more='')
 	global $cfg, $lang;
 	if ($cfg['jquery'])
 	{
-		$result .= '<script type="text/javascript" src="js/jquery.js"></script>';
 		if ($cfg['turnajax'])
 		{
 			$result .= '<script type="text/javascript" src="js/jquery.history.js"></script>';
