@@ -2396,14 +2396,32 @@ function cot_require_lang($name, $type = 'plug', $default = 'en')
  */
 function cot_require_rc($name, $is_plugin = false)
 {
-	global $cfg, $L, $Ls, $R, $themelang, $usr;
+	global $cfg, $L, $Ls, $R, $themeR, $usr;
 	$rc_file = cot_incfile($name, 'resources', $is_plugin);
 	if(file_exists($rc_file))
 	{
 		require_once $rc_file;
 	}
 	// Theme resources override
-	include('./themes/'.$usr['theme'].'/'.$usr['theme'].'.php');
+	$R = array_merge($R, $themeR);
+}
+
+/**
+ * Auxilliary function that loads theme resources file into an array.
+ * Used by cot_require_rc()
+ * 
+ * @see cot_require_rc()
+ * @return array Theme resource strings
+ */
+function cot_require_rc_theme()
+{
+	global $usr;
+	$R = array();
+	if (file_exists('./themes/'.$usr['theme'].'/'.$usr['theme'].'.php'))
+	{
+		include './themes/'.$usr['theme'].'/'.$usr['theme'].'.php';
+	}
+	return $R;
 }
 
 /**
