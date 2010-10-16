@@ -504,7 +504,8 @@ $scheme = $usr['scheme'];
 // Resource strings
 require_once $cfg['system_dir'].'/resources.php';
 // Theme resources
-require_once './themes/'.$usr['theme'].'/'.$usr['theme'].'.php';
+$themeR = cot_require_rc_theme();
+$R = array_merge($R, $themeR);
 // Iconpack
 if (empty($cfg['defaulticons']))
 {
