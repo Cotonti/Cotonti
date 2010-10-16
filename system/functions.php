@@ -2396,8 +2396,14 @@ function cot_require_lang($name, $type = 'plug', $default = 'en')
  */
 function cot_require_rc($name, $is_plugin = false)
 {
-	global $cfg, $L, $Ls, $R, $themelang;
-	require_once cot_incfile($name, 'resources', $is_plugin);
+	global $cfg, $L, $Ls, $R, $themelang, $usr;
+	$rc_file = cot_incfile($name, 'resources', $is_plugin);
+	if(file_exists($rc_file))
+	{
+		require_once $rc_file;
+	}
+	// Theme resources override
+	include('./themes/'.$usr['theme'].'/'.$usr['theme'].'.php');
 }
 
 /**

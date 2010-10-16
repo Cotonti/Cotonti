@@ -85,7 +85,6 @@ $env['ext'] = $extname;
 $req_files = array();
 $req_files[] = cot_langfile($extname, $exttype);
 $req_files[] = cot_incfile($extname, 'functions', $exttype == 'plug');
-$req_files[] = cot_incfile($extname, 'resources', $exttype == 'plug');
 
 foreach ($req_files as $req_file)
 {
@@ -94,6 +93,8 @@ foreach ($req_files as $req_file)
 		require_once $req_file;
 	}
 }
+
+cot_require_rc($extname, $exttype == 'plug');
 
 if (defined('COT_MODULE'))
 {
