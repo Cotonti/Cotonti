@@ -25,13 +25,13 @@ cot_require_rc('tags', true);
  */
 function cot_tag($tag, $item, $area = 'pages')
 {
-	global $cot_db, $db_tag_references;
+	global $db, $db_tag_references;
 	$item = (int) $item;
 	if (cot_tag_isset($tag, $item, $area))
 	{
 		return false;
 	}
-	$cot_db->query("INSERT INTO $db_tag_references VALUES('$tag', $item, '$area')");
+	$db->query("INSERT INTO $db_tag_references VALUES('$tag', $item, '$area')");
 	cot_tag_register($tag);
 	return true;
 }
@@ -47,7 +47,7 @@ function cot_tag($tag, $item, $area = 'pages')
  */
 function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 {
-	global $cot_db, $db_tag_references;
+	global $db, $db_tag_references;
 	$res = array();
 	$limit = is_null($limit) ? '' : ' LIMIT '.$limit;
 	switch($order)
@@ -64,7 +64,7 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
 			$order = 'RAND()';
 	}
 	$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
-	$sql = $cot_db->query("SELECT `tag`, COUNT(*) AS `cnt`
+	$sql = $db->query("SELECT `tag`, COUNT(*) AS `cnt`
 		FROM $db_tag_references
 		$where
 		GROUP BY `tag`
@@ -86,13 +86,13 @@ function cot_tag_cloud($area = 'all', $order = 'tag', $limit = null)
  */
 function cot_tag_complete($tag, $min_length = 3)
 {
-	global $cot_db, $db_tags;
+	global $db, $db_tags;
 	if (mb_strlen($tag) < $min_length)
 	{
 		return false;
 	}
 	$res = array();
-	$sql = $cot_db->query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE '$tag%'");
+	$sql = $db->query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE '$tag%'");
 	while ($row = $sql->fetch())
 	{
 		$res[] = $row['tag'];
@@ -110,13 +110,13 @@ function cot_tag_complete($tag, $min_length = 3)
  */
 function cot_tag_count($tag, $area = '')
 {
-	global $cot_db, $db_tag_references;
+	global $db, $db_tag_references;
 	$query = "SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag'";
 	if (!empty($area))
 	{
 		$query .= " AND tag_area = '$area'";
 	}
-	return (int) $cot_db->query($query)->fetchColumn();
+	return (int) $db->query($query)->fetchColumn();
 }
 
 /**
@@ -127,8 +127,8 @@ function cot_tag_count($tag, $area = '')
  */
 function cot_tag_exists($tag)
 {
-	global $cot_db, $db_tags;
-	return $cot_db->query("SELECT COUNT(*) FROM $db_tags WHERE `tag` = '$tag'")->fetchColumn() == 1;
+	global $db, $db_tags;
+	return $db->query("SELECT COUNT(*) FROM $db_tags WHERE `tag` = '$tag'")->fetchColumn() == 1;
 }
 
 /**
@@ -141,9 +141,9 @@ function cot_tag_exists($tag)
  */
 function cot_tag_isset($tag, $item, $area = 'pages')
 {
-	global $cot_db, $db_tag_references;
+	global $db, $db_tag_references;
 	$item = (int) $item;
-	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
 	return $sql->fetchColumn() == 1;
 }
 
@@ -156,9 +156,9 @@ function cot_tag_isset($tag, $item, $area = 'pages')
  */
 function cot_tag_list($item, $area = 'pages')
 {
-	global $cot_db, $db_tag_references;
+	global $db, $db_tag_references;
 	$res = array();
-	$sql = $cot_db->query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
+	$sql = $db->query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
 	while ($row = $sql->fetch())
 	{
 		$res[] = $row['tag'];
@@ -240,8 +240,8 @@ function cot_tag_parse_query($qs)
  */
 function cot_tag_prep($tag)
 {
-	global $cot_db;
-	return $cot_db->prep(mb_strtolower($tag));
+	global $db;
+	return $db->prep(mb_strtolower($tag));
 }
 
 /**
@@ -251,8 +251,8 @@ function cot_tag_prep($tag)
  */
 function cot_tag_register($tag)
 {
-	global $cot_db, $db_tags;
-	$cot_db->query("INSERT IGNORE INTO $db_tags VALUES('$tag')");
+	global $db, $db_tags;
+	$db->query("INSERT IGNORE INTO $db_tags VALUES('$tag')");
 }
 
 /**
@@ -265,10 +265,10 @@ function cot_tag_register($tag)
  */
 function cot_tag_remove($tag, $item, $area = 'pages')
 {
-	global $cot_db, $db_tag_references;
+	global $db, $db_tag_references;
 	if (cot_tag_isset($tag, $item, $area))
 	{
-		$cot_db->query("DELETE FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
+		$db->query("DELETE FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
 		return true;
 	}
 	return false;
@@ -284,16 +284,16 @@ function cot_tag_remove($tag, $item, $area = 'pages')
  */
 function cot_tag_remove_all($item = 0, $area = 'pages')
 {
-	global $cot_db, $db_tag_references;
+	global $db, $db_tag_references;
 	if ($item == 0)
 	{
-		$cot_db->query("DELETE FROM $db_tag_references WHERE tag_area = '$area'");
+		$db->query("DELETE FROM $db_tag_references WHERE tag_area = '$area'");
 	}
 	else
 	{
-		$cot_db->query("DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
+		$db->query("DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
 	}
-	return $cot_db->affectedRows;
+	return $db->affectedRows;
 }
 
 /**
@@ -314,8 +314,8 @@ function cot_tag_title($tag)
  */
 function cot_tag_unregister($tag)
 {
-	global $cot_db, $db_tags;
-	$cot_db->query("DELETE FROM $db_tags WHERE `tag` = '$tag'");
+	global $db, $db_tags;
+	$db->query("DELETE FROM $db_tags WHERE `tag` = '$tag'");
 }
 
 /**
@@ -325,7 +325,7 @@ function cot_tag_unregister($tag)
  */
 function cot_tag_search_form($area = 'all')
 {
-	global $cot_db, $d, $perpage, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
+	global $db, $d, $perpage, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
 	$limit = ($perpage > 0) ? "$d, $perpage" : NULL;
 	$tcloud = cot_tag_cloud($area, $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = $R['tags_code_cloud_open'];
@@ -354,7 +354,7 @@ function cot_tag_search_form($area = 'all')
 	if ($perpage > 0)
 	{
 		$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
-		$sql = $cot_db->query("SELECT COUNT(DISTINCT `tag`) FROM $db_tag_references $where");
+		$sql = $db->query("SELECT COUNT(DISTINCT `tag`) FROM $db_tag_references $where");
 		$totalitems = (int) $sql->fetchColumn();
 		$pagenav = cot_pagenav('plug','e=tags&a=' . $area, $d, $totalitems, $perpage);
 		$t->assign(array(

@@ -449,9 +449,9 @@ function utf8ToUnicode(&$str)
  */
 function sed_sql_affectedrows($conn = null)
 {
-	global $cot_db;
+	global $db;
 
-	return $cot_db->affectedRows;
+	return $db->affectedRows;
 }
 
 /**
@@ -461,9 +461,9 @@ function sed_sql_affectedrows($conn = null)
  */
 function sed_sql_errno()
 {
-	global $cot_db;
+	global $db;
 
-	return $cot_db->errno;
+	return $db->errno;
 }
 
 /**
@@ -473,9 +473,9 @@ function sed_sql_errno()
  */
 function sed_sql_error()
 {
-	global $cot_db;
+	global $db;
 
-	return $cot_db->error;
+	return $db->error;
 }
 
 /**
@@ -519,8 +519,8 @@ function sed_sql_fetchrow($res)
  */
 function sed_sql_foundrows($conn = NULL)
 {
-	global $cot_db;
-	return (int) $cot_db->query('SELECT FOUND_ROWS()')->fetchColumn();
+	global $db;
+	return (int) $db->query('SELECT FOUND_ROWS()')->fetchColumn();
 }
 
 /**
@@ -540,9 +540,9 @@ function sed_sql_freeresult($res)
  */
 function sed_sql_insertid()
 {
-	global $cot_db;
+	global $db;
 
-	return $cot_db->lastInsertId();
+	return $db->lastInsertId();
 }
 
 /**
@@ -553,9 +553,9 @@ function sed_sql_insertid()
  */
 function sed_sql_listtables($db_name)
 {
-	global $cot_db;
+	global $db;
 
-	return $cot_db->query("SHOW TABLES");
+	return $db->query("SHOW TABLES");
 }
 
 /**
@@ -577,9 +577,9 @@ function sed_sql_numrows($res)
  */
 function sed_sql_prep($str)
 {
-	global $cot_db;
+	global $db;
 
-	return preg_replace("#^'(.*)'\$#", '$1', $cot_db->quote($str));
+	return preg_replace("#^'(.*)'\$#", '$1', $db->quote($str));
 }
 
 /**
@@ -593,9 +593,9 @@ function sed_sql_prep($str)
  */
 function sed_sql_query($query)
 {
-	global $cot_db;
+	global $db;
 
-	return $cot_db->query($query);
+	return $db->query($query);
 }
 
 /**
@@ -614,50 +614,50 @@ function sed_sql_result($res, $row = 0, $col = 0)
 
 function sed_sql_rowcount($table)
 {
-	global $cot_db;
+	global $db;
 
-	return (int) $cot_db->query("SELECT COUNT(*) FROM $table")->fetchColumn();
+	return (int) $db->query("SELECT COUNT(*) FROM $table")->fetchColumn();
 }
 
 function sed_sql_runscript($script)
 {
-	global $cot_db;
+	global $db;
 
-	return $cot_db->runScript($script);
+	return $db->runScript($script);
 }
 
 
 function sed_sql_insert($table_name, $data, $prefix = '')
 {
-	global $cot_db;
+	global $db;
 
 	$data_tmp = array();
 	foreach ($data as $key => $val)
 	{
 		$data_tmp[$prefix.$key] = $val;
 	}
-	return $cot_db->insert($table_name, $data);
+	return $db->insert($table_name, $data);
 }
 
 
 function sed_sql_delete($table_name, $condition = '')
 {
-	global $cot_db;
+	global $db;
 
-	return $cot_db->delete($table_name, $condition);
+	return $db->delete($table_name, $condition);
 }
 
 
 function sed_sql_update($table_name, $condition, $data, $prefix = '', $update_null = false)
 {
-	global $cot_db;
+	global $db;
 
 	$data_tmp = array();
 	foreach ($data as $key => $val)
 	{
 		$data_tmp[$prefix.$key] = $val;
 	}
-	return $cot_db->update($table_name, $data_tmp, $condition, array(), $update_null);
+	return $db->update($table_name, $data_tmp, $condition, array(), $update_null);
 }
 
 ?>

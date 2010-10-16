@@ -21,8 +21,8 @@ cot_require('trashcan', true);
 if ($cfg['plugin']['trashcan']['trash_prunedelay'] > 0)
 {
 	$timeago = $sys['now_offset'] - ($cfg['trash_prunedelay'] * 86400);
-	$sqltmp = $cot_db->query("DELETE FROM $db_trash WHERE tr_date<$timeago");
-	$deleted = $cot_db->affectedRows;
+	$sqltmp = $db->query("DELETE FROM $db_trash WHERE tr_date<$timeago");
+	$deleted = $db->affectedRows;
 	if ($deleted > 0)
 	{
 		cot_log($deleted.' old item(s) removed from the trashcan, older than '.$cfg['trash_prunedelay'].' days', 'adm');

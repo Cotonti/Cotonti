@@ -125,11 +125,11 @@ function cot_loaddoctypes()
  */
 function cot_structure_delcat($id, $c)
 {
-	global $cot_db, $db_structure, $db_auth, $cfg, $cot_cache;
+	global $db, $db_structure, $db_auth, $cfg, $cache;
 
-	$sql = $cot_db->query("DELETE FROM $db_structure WHERE structure_id='$id'");
+	$sql = $db->query("DELETE FROM $db_structure WHERE structure_id='$id'");
 	cot_auth_remove_item('page', $c);
-	$cot_cache && $cot_cache->db->remove('cot_cat', 'system');
+	$cache && $cache->db->remove('cot_cat', 'system');
 }
 
 /**
@@ -140,14 +140,14 @@ function cot_structure_delcat($id, $c)
  */
 function cot_structure_resync($id)
 {
-	global $cot_db, $db_structure, $db_pages;
+	global $db, $db_structure, $db_pages;
 
-	$sql = $cot_db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
+	$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
 	$row = $sql->fetch();
-	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_pages
+	$sql = $db->query("SELECT COUNT(*) FROM $db_pages
 		WHERE page_cat='".$row['structure_code']."' AND (page_state = 0 OR page_state=2)");
 	$num = (int) $sql->fetchColumn();
-	return (bool) $cot_db->query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
+	return (bool) $db->query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
 }
 
 /**
@@ -158,10 +158,10 @@ function cot_structure_resync($id)
  */
 function cot_structure_resyncall()
 {
-	global $cot_db, $db_structure;
+	global $db, $db_structure;
 
 	$res = TRUE;
-	$sql = $cot_db->query("SELECT structure_id FROM $db_structure");
+	$sql = $db->query("SELECT structure_id FROM $db_structure");
 	while ($row = $sql->fetch())
 	{
 		$res &= cot_structure_resync($row['structure_id']);

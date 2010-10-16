@@ -20,7 +20,7 @@ cot_require('trashcan', true);
 
 if ($cfg['plugin']['trashcan']['trash_forum'])
 {
-	$sql = $cot_db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
+	$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
 	while ($row = $sql->fetch())
 	{
 		$parenttrashid = cot_trash_put('forumtopic', $L['Topic']." #".$q." (no post left)", "q".$q, $row);

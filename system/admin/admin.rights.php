@@ -54,7 +54,7 @@ if ($a == 'update')
 
 	if ($ncopyrightsconf && !empty($cot_groups[$ncopyrightsfrom]['title']) && $g > 5)
 	{
-		$cot_db->delete($db_auth, "auth_groupid=$g");
+		$db->delete($db_auth, "auth_groupid=$g");
 		cot_auth_add_group($g, $ncopyrightsfrom);
 		cot_auth_clear('all');
 
@@ -65,7 +65,7 @@ if ($a == 'update')
 		$mask = array();
 		$auth = cot_import('auth', 'P', 'ARR');
 
-		$cot_db->update($db_auth, array('auth_rights' => 0), "auth_groupid=$g");
+		$db->update($db_auth, array('auth_rights' => 0), "auth_groupid=$g");
 
 		foreach ($auth as $k => $v)
 		{
@@ -78,7 +78,7 @@ if ($a == 'update')
 					{
 						$mask += cot_auth_getvalue($l);
 					}
-					$cot_db->update($db_auth, array('auth_rights' => $mask),
+					$db->update($db_auth, array('auth_rights' => $mask),
 						"auth_groupid=? AND auth_code=? AND auth_option=?", array($g, $k, $i));
 				}
 			}
@@ -123,7 +123,7 @@ foreach ($cot_modules as $code => $mod)
 }
 
 // The core and modules top-level
-$sql = $cot_db->query("SELECT a.*, u.user_name FROM $db_core AS c
+$sql = $db->query("SELECT a.*, u.user_name FROM $db_core AS c
 LEFT JOIN $db_auth AS a ON c.ct_code=a.auth_code
 LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 WHERE auth_groupid='$g' AND auth_option = 'a'
@@ -153,7 +153,7 @@ $t->parse('MAIN.RIGHTS_SECTION');
 
 
 // Structure permissions
-$sql = $cot_db->query("SELECT a.*, u.user_name, s.structure_path FROM $db_auth as a
+$sql = $db->query("SELECT a.*, u.user_name, s.structure_path FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_structure AS s ON s.structure_code=a.auth_option
 	WHERE auth_groupid='$g' AND auth_code='page' AND auth_option != 'a'
@@ -177,7 +177,7 @@ foreach (cot_getextplugins('admin.rights.modules') as $pl)
 /* ===== */
 
 // Plugin permissions
-$sql = $cot_db->query("SELECT a.*, u.user_name FROM $db_auth as a
+$sql = $db->query("SELECT a.*, u.user_name FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	WHERE auth_groupid='$g' AND auth_code='plug'
 	ORDER BY auth_option ASC");

@@ -39,18 +39,18 @@ foreach (cot_getextplugins('admin.comments.first') as $pl)
 if ($a == 'delete')
 {
 	cot_check_xg();
-	$cot_db->delete($db_com, "com_id='$id'");
+	$db->delete($db_com, "com_id='$id'");
 
 	$adminwarnings = ($sql) ? $L['adm_comm_already_del'] : $L['Error'];
 }
 
 $is_adminwarnings = isset($adminwarnings);
 
-$totalitems = $cot_db->countRows($db_com);
+$totalitems = $db->countRows($db_com);
 
 $pagenav = cot_pagenav('admin', 'm=tools&p=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $cot_db->query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $db->query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
 /* === Hook - Part1 : Set === */

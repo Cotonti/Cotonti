@@ -19,7 +19,7 @@ Hooks=admin.rights.modules
 
 cot_require('forums');
 
-$sql = $cot_db->query("SELECT a.*, u.user_name, f.fs_id, f.fs_title, f.fs_category FROM $db_auth as a
+$sql = $db->query("SELECT a.*, u.user_name, f.fs_id, f.fs_title, f.fs_category FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_forum_sections AS f ON f.fs_id=a.auth_option
 	LEFT JOIN $db_forum_structure AS n ON n.fn_code=f.fs_category

@@ -55,9 +55,9 @@ function cot_build_group($grpid)
  */
 function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 {
-	global $cot_db, $db_groups_users, $cot_groups, $L, $usr, $R;
+	global $db, $db_groups_users, $cot_groups, $L, $usr, $R;
 
-	$sql = $cot_db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
+	$sql = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
 
 	while ($row = $sql->fetch())
 	{
@@ -159,20 +159,20 @@ function cot_userisonline($id)
  */
 function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false)
 {
-	global $cot_db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $cache, $db_users, $usr;
-	if (is_array($user_data) && is_array($cache['user_' . $user_data['user_id']]))
+	global $db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
+	if (is_array($user_data) && is_array($user_cache['user_' . $user_data['user_id']]))
 	{	
-		$temp_array = $cache['user_' . $user_data['user_id']];
+		$temp_array = $user_cache['user_' . $user_data['user_id']];
 	}
-	elseif (is_array($cache['user_' . $user_data]))
+	elseif (is_array($user_cache['user_' . $user_data]))
 	{
-		$temp_array = $cache['user_' . $user_data];
+		$temp_array = $user_cache['user_' . $user_data];
 	}
 	else
 	{
 		if (!is_array($user_data))
 		{
-			$sql = $cot_db->query("SELECT * FROM $db_users WHERE user_id = '" . (int) $user_data . "' LIMIT 1");
+			$sql = $db->query("SELECT * FROM $db_users WHERE user_id = '" . (int) $user_data . "' LIMIT 1");
 			$user_data = $sql->fetch();
 		}
 
@@ -226,7 +226,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				$temp_array[strtoupper($row['field_name']) . '_TITLE'] = isset($L['user_' . $row['field_name'] . '_title']) ? $L['user_' . $row['field_name'] . '_title'] : $row['field_description'];
 			}
 
-			$cache['user_' . $user_data['user_id']] = $temp_array;
+			$user_cache['user_' . $user_data['user_id']] = $temp_array;
 		}
 		else
 		{

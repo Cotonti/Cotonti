@@ -46,12 +46,12 @@ $id = empty($id) ? "all" : $id;
 header('Content-type: text/xml; charset=' . $cfg['module']['rss']['charset']);
 $sys['now'] = time();
 
-if ($usr['id'] === 0 && $cot_cache)
+if ($usr['id'] === 0 && $cache)
 {
-	$cache = $cot_cache->db->get($c . $id, 'rss');
-	if ($cache)
+	$rss_cache = $cache->db->get($c . $id, 'rss');
+	if ($rss_cache)
 	{
-		echo $cache;
+		echo $rss_cache;
 		exit;
 	}
 }
@@ -78,8 +78,8 @@ if ($c == "topics")
 	$topic_id = ($id == 'all') ? 0 : $id;
 
 	$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-	$res = $cot_db->query($sql);
-	if ($cot_db->affectedRows > 0)
+	$res = $db->query($sql);
+	if ($db->affectedRows > 0)
 	{
 		$row = $res->fetch();
 		if ($row['ft_mode'] == '1')
@@ -99,11 +99,11 @@ if ($c == "topics")
 
 		// get number of posts in topic
 		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
-		$res = $cot_db->query($sql);
+		$res = $db->query($sql);
 		$totalposts = $res->fetchColumn();
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid='$topic_id' ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-		$res = $cot_db->query($sql);
+		$res = $db->query($sql);
 		$i = 0;
 		while ($row = $res->fetch())
 		{
@@ -127,8 +127,8 @@ elseif ($c == "section")
 	$forum_id = ($id == 'all') ? 0 : $id;;
 
 	$sql = "SELECT * FROM $db_forum_sections WHERE fs_id = '$forum_id'";
-	$res = $cot_db->query($sql);
-	if ($cot_db->affectedRows > 0)
+	$res = $db->query($sql);
+	if ($db->affectedRows > 0)
 	{
 		$row = $res->fetch();
 		$section_title = $row['fs_title'];
@@ -140,14 +140,14 @@ elseif ($c == "section")
 		// get subsections
 		unset($subsections);
 		$sql = "SELECT fs_id FROM $db_forum_sections WHERE fs_mastername = '$section_title'";
-		$res = $cot_db->query($sql);
+		$res = $db->query($sql);
 		while ($row = $res->fetch())
 		{
 			$where .= " OR fp_sectionid ='{$row['fs_id']}'";
 		}
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-		$res = $cot_db->query($sql);
+		$res = $db->query($sql);
 		$i = 0;
 
 		while ($row = $res->fetch())
@@ -157,7 +157,7 @@ elseif ($c == "section")
 
 			$flag_private = 0;
 			$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-			$res2 = $cot_db->query($sql);
+			$res2 = $db->query($sql);
 			$row2 = $res2->fetch();
 			$topic_title = $row2['ft_title'];
 			if ($row2['ft_mode'] == '1')
@@ -188,7 +188,7 @@ elseif ($c == "forums")
 	$rss_description = "";
 
 	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
-	$res = $cot_db->query($sql);
+	$res = $db->query($sql);
 	$i = 0;
 	while ($row = $res->fetch())
 	{
@@ -198,7 +198,7 @@ elseif ($c == "forums")
 
 		$flag_private = 0;
 		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
-		$res2 = $cot_db->query($sql);
+		$res2 = $db->query($sql);
 		$row2 = $res2->fetch();
 		$topic_title = $row2['ft_title'];
 		if ($row2['ft_mode'] == '1')
@@ -236,11 +236,11 @@ elseif ($defult_c)
 			}
 		}
 
-		$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	else
 	{
-		$sql = $cot_db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
 	}
 	$i = 0;
 	while ($row = $sql->fetch())
@@ -290,15 +290,15 @@ foreach (cot_getextplugins('rss.output') as $pl)
 $t->parse("MAIN");
 $out_rss = $t->out("MAIN");
 
-if ($usr['id'] === 0 && $cot_cache)
+if ($usr['id'] === 0 && $cache)
 {
-	$cot_cache->db->store($c . $id, $out_rss, 'rss', $cfg['rss_timetolive']);
+	$cache->db->store($c . $id, $out_rss, 'rss', $cfg['rss_timetolive']);
 }
 echo $out_rss;
 
 function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 {
-	global $cot_db, $cfg, $db_pages, $usr;
+	global $db, $cfg, $db_pages, $usr;
 
 	$pag_text = cot_parse($pag_text, $cfg['module']['page']['markup']);
 	$readmore = mb_strpos($pag_text, "<!--more-->");
@@ -326,7 +326,7 @@ function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 
 function cot_parse_post_text($post_id, $post_text)
 {
-	global $cot_db, $cfg, $db_forum_posts, $usr, $fs_allowbbcodes, $fs_allowsmilies;
+	global $db, $cfg, $db_forum_posts, $usr, $fs_allowbbcodes, $fs_allowsmilies;
 	
 	$post_text = cot_parse($post_text, ($cfg['module']['forums']['markup'] && $fs_allowbbcodes));
 

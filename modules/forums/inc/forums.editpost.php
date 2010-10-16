@@ -29,7 +29,7 @@ foreach (cot_getextplugins('forums.editpost.first') as $pl)
 cot_blockguests();
 cot_check_xg();
 
-$sql = $cot_db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_sectionid='$s' LIMIT 1");
+$sql = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_sectionid='$s' LIMIT 1");
 
 if ($row = $sql->fetch())
 {
@@ -60,7 +60,7 @@ if ($row = $sql->fetch())
 else
 { cot_die(); }
 
-$sql = $cot_db->query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies, fs_masterid, fs_mastername FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
+$sql = $db->query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies, fs_masterid, fs_mastername FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
 
 if ($row = $sql->fetch())
 {
@@ -79,7 +79,7 @@ if ($row = $sql->fetch())
 else
 { cot_die(); }
 
-$sql = $cot_db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
+$sql = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
 
 if ($row = $sql->fetch())
 {
@@ -111,14 +111,14 @@ if ($a=='update')
 
 	if(!empty($rtext))
 	{
-		$rtext = $cot_db->prep($rtext);
-		$sql = $cot_db->query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_updated='".$sys['now_offset']."', fp_updater='".$cot_db->prep($rupdater)."' WHERE fp_id='$p'");
+		$rtext = $db->prep($rtext);
+		$sql = $db->query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_updated='".$sys['now_offset']."', fp_updater='".$db->prep($rupdater)."' WHERE fp_id='$p'");
 	}
 
 	$is_first_post = false;
 	if (!empty($rtopictitle))
 	{
-		$sql = $cot_db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
+		$sql = $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
 		if ($row = $sql->fetch())
 		{
 			$fp_idp = $row['fp_id'];
@@ -126,7 +126,7 @@ if ($a=='update')
 			{
 				if (mb_substr($rtopictitle, 0 ,1)=="#")
 				{ $rtopictitle = str_replace('#', '', $rtopictitle); }
-				$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_title='".$cot_db->prep($rtopictitle)."', ft_desc='".$cot_db->prep($rtopicdesc)."' WHERE ft_id='$q'");
+				$sql = $db->query("UPDATE $db_forum_topics SET ft_title='".$db->prep($rtopictitle)."', ft_desc='".$db->prep($rtopicdesc)."' WHERE ft_id='$q'");
 				$is_first_post = true;
 			}
 		}
@@ -135,7 +135,7 @@ if ($a=='update')
 	if (!empty($rtopictitle) && !empty($rtext))
 	{
 		$rtopicpreview = mb_substr(htmlspecialchars($rtext), 0, 128);
-		$sql = $cot_db->query("UPDATE $db_forum_topics SET ft_preview='".$cot_db->prep($rtopicpreview)."' WHERE ft_id='$q'");
+		$sql = $db->query("UPDATE $db_forum_topics SET ft_preview='".$db->prep($rtopicpreview)."' WHERE ft_id='$q'");
 	}
 
 	/* === Hook === */
@@ -147,22 +147,22 @@ if ($a=='update')
 
 	cot_forum_sectionsetlast($fp_sectionid);
 
-	if ($cot_cache)
+	if ($cache)
 	{
 		if ($cfg['cache_forums'])
 		{
-			$cot_cache->page->clear('forums');
+			$cache->page->clear('forums');
 		}
 		if ($cfg['cache_index'])
 		{
-			$cot_cache->page->clear('index');
+			$cache->page->clear('index');
 		}
 	}
 
 	cot_redirect(cot_url('forums', "m=posts&p=".$p, '#'.$p, true));
 }
 
-$sql = $cot_db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
+$sql = $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
 
 $is_first_post = false;
 

@@ -78,7 +78,7 @@ if ($a == 'add')
 	{
 		if (!empty($rpage['page_alias']))
 		{
-			$sql = $cot_db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$cot_db->prep($rpage['page_alias'])."'");
+			$sql = $db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$db->prep($rpage['page_alias'])."'");
 			$rpage['page_alias'] = ($sql->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
 		}
 
@@ -88,7 +88,7 @@ if ($a == 'add')
 			if ($rpublish == 'OK')
 			{
 				$rpage['page_state'] = 0;
-				$cot_db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$cot_db->prep($rpage['page_cat'])."' ");
+				$db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
 			}
 			else
 			{
@@ -107,8 +107,8 @@ if ($a == 'add')
 		}
 		/* ===== */
 
-		$sql = $cot_db->insert($db_pages, $rpage);
-		$id = $cot_db->lastInsertId();
+		$sql = $db->insert($db_pages, $rpage);
+		$id = $db->lastInsertId();
 		$r_url = (!$rpage['page_state']) ? cot_url('page', "id=".$id, '', true) : cot_url('message', "msg=300", '', true);
 
 		/* === Hook === */
@@ -118,15 +118,15 @@ if ($a == 'add')
 		}
 		/* ===== */
 
-		if ($rpage['page_state'] == 0 && $cot_cache)
+		if ($rpage['page_state'] == 0 && $cache)
 		{
 			if ($cfg['cache_page'])
 			{
-				$cot_cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$rpage['page_cat']]['path']));
+				$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$rpage['page_cat']]['path']));
 			}
 			if ($cfg['cache_index'])
 			{
-				$cot_cache->page->clear('index');
+				$cache->page->clear('index');
 			}
 		}
 		cot_shield_update(30, "r page");

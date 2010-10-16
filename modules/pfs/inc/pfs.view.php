@@ -19,7 +19,7 @@ http://www.neocrome.net
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id','G','INT');
-$v = $cot_db->prep(cot_import('v','G','TXT'));
+$v = $db->prep(cot_import('v','G','TXT'));
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
@@ -38,7 +38,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported)
 	$pfs_header2 = $R['code_pfs_header_end'];
 	$pfs_footer = $R['code_pfs_footer'];
 
-	$sql = $cot_db->query("SELECT p.*, u.user_name FROM $db_pfs p, $db_users u WHERE p.pfs_file='$v' AND p.pfs_userid=u.user_id LIMIT 1");
+	$sql = $db->query("SELECT p.*, u.user_name FROM $db_pfs p, $db_users u WHERE p.pfs_file='$v' AND p.pfs_userid=u.user_id LIMIT 1");
 	if(!$row = $sql->fetch())
 	{
 		$pfs_owner = $L['SFS'];
@@ -51,7 +51,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported)
 	$pfs_img = "<img src=\"".$imgpath."\" alt=\"".$row['pfs_desc']."\" />";
 	$pfs_imgsize = @getimagesize($imgpath);
 
-	$sql = $cot_db->query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
+	$sql = $db->query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
 }
 else
 { cot_die(); }

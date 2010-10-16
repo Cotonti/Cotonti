@@ -17,7 +17,7 @@ cot_require_lang('news', 'plug');
 
 function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textlength = 0, $deftag = false)
 {
-	global $cot_db, $cot_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $cot_extrafields, $usr, $cot_dbc, $cot_urltrans, $c;
+	global $db, $cot_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $cot_extrafields, $usr, $cot_dbc, $cot_urltrans, $c;
 	static $news_extp, $news_tags_extp, $news_first_extp;
 	/* === Hook - Part1 : Set === FIRST === */
 	if (!$news_first_extp)
@@ -63,12 +63,12 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 		include $pl;
 	}
 	/* ===== */
-	$sql = $cot_db->query("SELECT p.*, u.* FROM $db_pages AS p
+	$sql = $db->query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE ".$where."
 		ORDER BY page_".$order." ".$way." LIMIT $d, ".$limit);
 
-	$sql2 = $cot_db->query("SELECT COUNT(*) FROM $db_pages
+	$sql2 = $db->query("SELECT COUNT(*) FROM $db_pages
 		WHERE ".$where);
 
 	$totalnews = $sql2->fetchColumn();

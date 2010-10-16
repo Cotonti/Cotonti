@@ -81,7 +81,7 @@ switch($a)
 					cot_module_pause($code);
 				}
 				cot_plugin_pause($code);
-				$cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
+				$cache && $cache->db->remove('cot_plugins', 'system');
 				cot_message('adm_paused');
 			break;
 			case 'unpause':
@@ -90,17 +90,17 @@ switch($a)
 					cot_module_resume($code);
 				}
 				cot_plugin_resume($code);
-				$cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
+				$cache && $cache->db->remove('cot_plugins', 'system');
 				cot_message('adm_running');
 			break;
 			case 'pausepart':
 				cot_plugin_pause($code, $part);
-				$cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
+				$cache && $cache->db->remove('cot_plugins', 'system');
 				cot_message('adm_partstopped');
 			break;
 			case 'unpausepart':
 				cot_plugin_resume($code, $part);
-				$cot_cache && $cot_cache->db->remove('cot_plugins', 'system');
+				$cache && $cache->db->remove('cot_plugins', 'system');
 				cot_message('adm_partrunning');
 			break;
 		}
@@ -123,7 +123,7 @@ switch($a)
 
 			$isinstalled = $is_module ? cot_module_installed($code) : cot_plugin_installed($code);
 
-			$sql = $cot_db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code'");
+			$sql = $db->query("SELECT COUNT(*) FROM $db_config WHERE config_owner='$type' AND config_cat='$code'");
 			$totalconfig = $sql->fetchColumn();
 
 			$info['Auth_members'] = cot_auth_getvalue($info['Auth_members']);
@@ -153,7 +153,7 @@ switch($a)
 					}
 					else
 					{
-						$sql = $cot_db->query("SELECT pl_active, pl_id FROM $db_plugins
+						$sql = $db->query("SELECT pl_active, pl_id FROM $db_plugins
 							WHERE pl_code='$code' AND pl_part='".$info_part."' LIMIT 1");
 
 						if($row = $sql->fetch())
@@ -353,11 +353,11 @@ switch($a)
 				cot_die();
 			break;
 		}
-		if ($cot_cache)
+		if ($cache)
 		{
-			$cot_cache->db->remove('cot_plugins', 'system');
-			$cot_cache->db->remove('cot_modules', 'system');
-			$cot_cache->db->remove('cot_cfg', 'system');
+			$cache->db->remove('cot_plugins', 'system');
+			$cache->db->remove('cot_modules', 'system');
+			$cache->db->remove('cot_cfg', 'system');
 		}
 		cot_clear_messages();
 		$t->parse('MAIN.EDIT');
@@ -365,7 +365,7 @@ switch($a)
 	default:
 		foreach (array('module', 'plug') as $type)
 		{
-			$sql = $cot_db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
+			$sql = $db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
 			WHERE config_owner='$type' GROUP BY config_cat");
 			while ($row = $sql->fetch(PDO::FETCH_NUM))
 			{
@@ -406,7 +406,7 @@ switch($a)
 			if ($type == 'plug')
 			{
 				$standalone = array();
-				$sql3 = $cot_db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
+				$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='standalone'");
 				while ($row3 = $sql3->fetch())
 				{
 					$standalone[$row3['pl_code']] = TRUE;
@@ -416,7 +416,7 @@ switch($a)
 
 			$tools = array();
 			$tool_hook = $type == 'plug' ? 'tools' : 'admin';
-			$sql3 = $cot_db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook'");
+			$sql3 = $db->query("SELECT pl_code FROM $db_plugins WHERE pl_hook='$tool_hook'");
 			while ($row3 = $sql3->fetch())
 			{
 				$tools[$row3['pl_code']] = TRUE;
@@ -443,8 +443,8 @@ switch($a)
 					}
 					else
 					{
-						$sql1 = $cot_db->query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
-						$sql2 = $cot_db->query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
+						$sql1 = $db->query("SELECT SUM(pl_active) FROM $db_plugins WHERE pl_code='$x'");
+						$sql2 = $db->query("SELECT COUNT(*) FROM $db_plugins WHERE pl_code='$x'");
 						$totalactive = $sql1->fetchColumn();
 						$totalinstalled = $sql2->fetchColumn();
 						$cnt_parts += $totalinstalled;
@@ -528,11 +528,11 @@ switch($a)
 
 		if($o == 'code')
 		{
-			$sql = $cot_db->query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC");
+			$sql = $db->query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC");
 		}
 		else
 		{
-			$sql = $cot_db->query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
+			$sql = $db->query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
 		}
 
 		while($row = $sql->fetch())

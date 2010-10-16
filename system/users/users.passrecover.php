@@ -26,7 +26,7 @@ $msg = '';
 if ($a == 'request' && $email != '')
 {
 	cot_shield_protect();
-	$sql = $cot_db->query("SELECT user_id, user_name, user_lostpass FROM $db_users WHERE user_email='".$cot_db->prep($email)."' ORDER BY user_id ASC LIMIT 1");
+	$sql = $db->query("SELECT user_id, user_name, user_lostpass FROM $db_users WHERE user_email='".$db->prep($email)."' ORDER BY user_id ASC LIMIT 1");
 
 	if ($row = $sql->fetch())
 	{
@@ -37,7 +37,7 @@ if ($a == 'request' && $email != '')
 		if (empty($validationkey) || $validationkey == "0")
 		{
 			$validationkey = md5(microtime());
-			$sql = $cot_db->query("UPDATE $db_users SET user_lostpass='$validationkey', user_lastip='".$usr['ip']."' WHERE user_id='$ruserid'");
+			$sql = $db->query("UPDATE $db_users SET user_lostpass='$validationkey', user_lastip='".$usr['ip']."' WHERE user_id='$ruserid'");
 
 		}
 
@@ -64,7 +64,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 {
 	cot_shield_protect();
 
-	$sql = $cot_db->query("SELECT user_name, user_id, user_email, user_password, user_maingrp, user_banexpire FROM $db_users WHERE user_lostpass='".$cot_db->prep($v)."'");
+	$sql = $db->query("SELECT user_name, user_id, user_email, user_password, user_maingrp, user_banexpire FROM $db_users WHERE user_lostpass='".$db->prep($v)."'");
 
 	if ($row = $sql->fetch())
 	{
@@ -89,7 +89,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 
 		$validationkey = md5(microtime());
 		$newpass = cot_randompass();
-		$sql = $cot_db->query("UPDATE $db_users SET user_password='".md5($newpass)."', user_lostpass='$validationkey' WHERE user_id='$ruserid'");
+		$sql = $db->query("UPDATE $db_users SET user_password='".md5($newpass)."', user_lostpass='$validationkey' WHERE user_id='$ruserid'");
 
 		$rsubject = $cfg['maintitle']." - ".$L['pasrec_title'];
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['pasrec_email2']."\n\n".$newpass."\n\n".$L['aut_contactadmin'];

@@ -98,17 +98,17 @@ else
 	cot_error('install_update_config_error');
 }
 
-$cot_db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
-$sql = @$cot_db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
-$sql2 = @$cot_db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
+$sql = @$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
+$sql2 = @$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
 $old_branch = @$sql2->fetchColumn();
 
-if ($cot_db->errno > 0 || $sql->rowCount() != 1)
+if ($db->errno > 0 || $sql->rowCount() != 1)
 {
 	// Is Genoa, perform upgrade
 	$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
-	$error = $cot_db->runScript($script);
+	$error = $db->runScript($script);
 	if (empty($error))
 	{
 		cot_message(cot_rc('install_update_patch_applied',
@@ -141,7 +141,7 @@ if ($cot_db->errno > 0 || $sql->rowCount() != 1)
 	if (!$cot_error)
 	{
 		// Success
-		$cot_db->query("UPDATE $db_updates SET upd_value = '$branch'
+		$db->query("UPDATE $db_updates SET upd_value = '$branch'
 			WHERE upd_param = 'branch'");
 		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
 	}
@@ -190,7 +190,7 @@ else
 		}
 	}
 	$installed_plugs = array();
-	$res = $cot_db->query("SELECT DISTINCT(pl_code) FROM $db_plugins
+	$res = $db->query("SELECT DISTINCT(pl_code) FROM $db_plugins
 		WHERE pl_module = 0 AND pl_active = 1");
 	while ($row = $res->fetch(PDO::FETCH_NUM))
 	{
@@ -230,7 +230,7 @@ else
 		}
 		else
 		{
-			$cot_db->query("UPDATE $db_updates SET upd_value = '\$Rev: $new_rev \$'
+			$db->query("UPDATE $db_updates SET upd_value = '\$Rev: $new_rev \$'
 				WHERE upd_param = 'revision'");
 		}
 		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', array('rev' => $new_rev)));

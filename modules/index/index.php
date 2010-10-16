@@ -56,9 +56,9 @@ $t->out('MAIN');
 
 require_once $cfg['system_dir'].'/footer.php';
 
-if ($cot_cache && $usr['id'] === 0 && $cfg['cache_index'])
+if ($cache && $usr['id'] === 0 && $cfg['cache_index'])
 {
-	$cot_cache->page->write();
+	$cache->page->write();
 }
 
 ?>

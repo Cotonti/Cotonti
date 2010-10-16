@@ -31,7 +31,7 @@ define('COT_ABSOLUTE_URL', $site_url . '/');
 
 if ($step != 2)
 {
-	$cot_db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
 
 // Import section
@@ -113,10 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error('install_error_sql_ext');
 			}
-			if (empty($cot_db->error) && function_exists('version_compare')
-				&& !version_compare($cot_db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.0', '>='))
+			if (empty($db->error) && function_exists('version_compare')
+				&& !version_compare($db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.0', '>='))
 			{
-				cot_error(cot_rc('install_error_sql_ver', array('ver' => $cot_db->getAttribute(PDO::ATTR_SERVER_VERSION))));
+				cot_error(cot_rc('install_error_sql_ver', array('ver' => $db->getAttribute(PDO::ATTR_SERVER_VERSION))));
 			}
 
 			if (!file_exists($file['config']))
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			
 			try
 			{
-				$cot_db = new CotDB('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pass);
+				$db = new CotDB('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pass);
 			}
 			catch (PDOException $e)
 			{
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				file_put_contents($file['config'], $config_contents);
 
 				$sql_file = file_get_contents($file['sql']);
-				$error = $cot_db->runScript($sql_file);
+				$error = $db->runScript($sql_file);
 
 				if ($error)
 				{
@@ -202,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 				file_put_contents($file['config'], $config_contents);
 
-				if ($cot_db->insert($db_x . 'users', array(
+				if ($db->insert($db_x . 'users', array(
 						'user_name' => $user['name'],
 						'user_password' => md5($user['pass']),
 						'user_maingrp' => COT_GROUP_SUPERADMINS,
@@ -216,16 +216,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 					)) == 1)
 				{
 
-					$user['id'] = $cot_db->lastInsertId();
+					$user['id'] = $db->lastInsertId();
 
-					$cot_db->insert($db_x . 'groups_users', array(
+					$db->insert($db_x . 'groups_users', array(
 						'gru_userid' => (int) $user['id'],
 						'gru_groupid' => COT_GROUP_SUPERADMINS
 					));
 				}
 				else
 				{
-					cot_error(cot_rc('install_error_sql_script', array('msg' => $cot_db->error)));
+					cot_error(cot_rc('install_error_sql_script', array('msg' => $db->error)));
 				}
 			}
 
@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				// Load groups
 				$cot_groups = array();
-				$res = $cot_db->query("SELECT grp_id FROM $db_groups
+				$res = $db->query("SELECT grp_id FROM $db_groups
 					WHERE grp_disabled=0 ORDER BY grp_level DESC");
 				while ($row = $res->fetch())
 				{
@@ -445,11 +445,11 @@ switch ($step)
 		$status['mysql'] = (extension_loaded('pdo_mysql'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
 //		$status['mysql_ver'] = '/ '
-//		. ($cot_db && function_exists('version_compare')
-//				&& version_compare(@mysql_get_server_info($cot_db), '5.0.0', '>='))
+//		. ($db && function_exists('version_compare')
+//				&& version_compare(@mysql_get_server_info($db), '5.0.0', '>='))
 //			? cot_rc('install_code_valid',
 //				array('text' => cot_rc('install_ver_valid',
-//					array('ver' => mysql_get_server_info($cot_db)))))
+//					array('ver' => mysql_get_server_info($db)))))
 //			: $R['install_code_not_available'];
 
 		$t->assign(array(

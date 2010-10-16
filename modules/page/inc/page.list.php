@@ -112,9 +112,9 @@ if(empty($sql_string))
 		WHERE ".implode(" AND ", $where)."
 		ORDER BY page_$s $w LIMIT $d, ".$cfg['maxrowsperpage'];
 }
-$sql = $cot_db->query($sql_count);
+$sql = $db->query($sql_count);
 $totallines = $sql->fetchColumn();
-$sql = $cot_db->query($sql_string);
+$sql = $db->query($sql_string);
 
 /*
 $incl = "datas/content/list.$c.txt";
@@ -255,7 +255,7 @@ while (list($i, $x) = each($cot_cat))
 	}
 	elseif (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $kk < $cfg['maxlistsperpage'])
 	{
-		$sql4 = $cot_db->query("SELECT SUM(structure_pagecount) FROM $db_structure
+		$sql4 = $db->query("SELECT SUM(structure_pagecount) FROM $db_structure
 			WHERE structure_path LIKE '".$cot_cat[$i]['rpath']."%' ");
 		$sub_count = $sql4->fetchColumn();
 
@@ -338,9 +338,9 @@ $t->out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
 
-if ($cot_cache && $usr['id'] === 0 && $cfg['cache_page'])
+if ($cache && $usr['id'] === 0 && $cfg['cache_page'])
 {
-	$cot_cache->page->write();
+	$cache->page->write();
 }
 
 ?>

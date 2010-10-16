@@ -32,17 +32,17 @@ foreach (cot_getextplugins('admin.referers.first') as $pl)
 
 if($a == 'prune' && $usr['isadmin'])
 {
-	$cot_db->query("TRUNCATE $db_referers") ? cot_message('adm_ref_prune') : cot_message('Error');
+	$db->query("TRUNCATE $db_referers") ? cot_message('adm_ref_prune') : cot_message('Error');
 }
 elseif($a == 'prunelowhits' && $usr['isadmin'])
 {
-	$cot_db->delete($db_referers, 'ref_count < 6') ? cot_message('adm_ref_prunelowhits') : cot_message('Error');
+	$db->delete($db_referers, 'ref_count < 6') ? cot_message('adm_ref_prunelowhits') : cot_message('Error');
 }
 
-$totalitems = $cot_db->countRows($db_referers);
+$totalitems = $db->countRows($db_referers);
 $pagenav = cot_pagenav('admin', 'm=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $cot_db->query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+$sql = $db->query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 if($sql->rowCount() > 0)
 {

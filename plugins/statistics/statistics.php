@@ -29,52 +29,52 @@ $s = cot_import('s', 'G', 'TXT');
 
 $plugin_title = $L['plu_title'];
 
-$totaldbpages = $cot_db->countRows($db_pages);
-$totaldbratings = $cot_db->countRows($db_ratings);
-$totaldbratingsvotes = $cot_db->countRows($db_rated);
-$totaldbpolls = $cot_db->countRows($db_polls);
-$totaldbpollsvotes = $cot_db->countRows($db_polls_voters);
-$totaldbposts = $cot_db->countRows($db_forum_posts);
-$totaldbtopics = $cot_db->countRows($db_forum_topics);
-$totaldbfiles = $cot_db->countRows($db_pfs);
-$totaldbusers = $cot_db->countRows($db_users);
+$totaldbpages = $db->countRows($db_pages);
+$totaldbratings = $db->countRows($db_ratings);
+$totaldbratingsvotes = $db->countRows($db_rated);
+$totaldbpolls = $db->countRows($db_polls);
+$totaldbpollsvotes = $db->countRows($db_polls_voters);
+$totaldbposts = $db->countRows($db_forum_posts);
+$totaldbtopics = $db->countRows($db_forum_topics);
+$totaldbfiles = $db->countRows($db_pfs);
+$totaldbusers = $db->countRows($db_users);
 
 $totalpages = cot_stat_get('totalpages');
 $totalmailsent = cot_stat_get('totalmailsent');
 $totalpmsent = cot_stat_get('totalpms');
 
-$totaldbviews = $cot_db->query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
+$totaldbviews = $db->query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
 $totaldbviews = $totaldbviews->fetchColumn();
 
-$sql = $cot_db->query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
+$sql = $db->query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
 $totaldbtopicspruned = $sql->fetchColumn();
 
-$sql = $cot_db->query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
+$sql = $db->query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
 $totaldbpostspruned = $sql->fetchColumn();
 
-$totaldbfilesize = $cot_db->query("SELECT SUM(pfs_size) FROM $db_pfs");
+$totaldbfilesize = $db->query("SELECT SUM(pfs_size) FROM $db_pfs");
 $totaldbfilesize = $totaldbfilesize->fetchColumn();
 
-$totalpmactive = $cot_db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate<2");
+$totalpmactive = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate<2");
 $totalpmactive = $totalpmactive->fetchColumn();
 
-$totalpmarchived = $cot_db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate=2");
+$totalpmarchived = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate=2");
 $totalpmarchived = $totalpmarchived->fetchColumn();
 
-$sql = $cot_db->query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");
+$sql = $db->query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");
 $row = $sql->fetch();
 $since = $row['stat_name'];
 
-$sql = $cot_db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
+$sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
 $row = $sql->fetch();
 $max_date = $row['stat_name'];
 $max_hits = $row['stat_value'];
 
 if ($usr['id'] > 0)
 {
-	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='".$usr['id']."'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_posterid='".$usr['id']."'");
 	$user_postscount = $sql->fetchColumn();
-	$sql = $cot_db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='".$usr['id']."'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_firstposterid='".$usr['id']."'");
 	$user_topicscount = $sql->fetchColumn();
 
 	$t->assign(array(
@@ -98,17 +98,17 @@ else
 
 if ($s == 'usercount')
 {
-	$sql1 = $cot_db->query("DROP TEMPORARY TABLE IF EXISTS tmp1");
-	$sql = $cot_db->query("CREATE TEMPORARY TABLE tmp1 SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country");
-	$sql = $cot_db->query("SELECT * FROM tmp1 WHERE 1 ORDER by usercount DESC");
-	$sql1 = $cot_db->query("DROP TEMPORARY TABLE IF EXISTS tmp1");
+	$sql1 = $db->query("DROP TEMPORARY TABLE IF EXISTS tmp1");
+	$sql = $db->query("CREATE TEMPORARY TABLE tmp1 SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country");
+	$sql = $db->query("SELECT * FROM tmp1 WHERE 1 ORDER by usercount DESC");
+	$sql1 = $db->query("DROP TEMPORARY TABLE IF EXISTS tmp1");
 }
 else
 {
-	$sql = $cot_db->query("SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country ASC");
+	$sql = $db->query("SELECT user_country, COUNT(*) as usercount FROM $db_users GROUP BY user_country ASC");
 }
 
-$sqltotal = $cot_db->query("SELECT COUNT(*) FROM $db_users WHERE 1");
+$sqltotal = $db->query("SELECT COUNT(*) FROM $db_users WHERE 1");
 $totalusers = $sqltotal->fetchColumn();
 
 $ii = 0;

@@ -26,27 +26,27 @@ foreach (cot_getextplugins('admin.cache.first') as $pl)
 }
 /* ===== */
 
-if ($a == 'purge' && $cot_cache)
+if ($a == 'purge' && $cache)
 {
-	(cot_check_xg() && $cot_cache->clear()) ? cot_message('adm_purgeall_done') : cot_error('Error');
+	(cot_check_xg() && $cache->clear()) ? cot_message('adm_purgeall_done') : cot_error('Error');
 }
 elseif ($a == 'delete')
 {
 	cot_check_xg();
-	$name = $cot_db->prep(cot_import('name', 'G', 'TXT'));
+	$name = $db->prep(cot_import('name', 'G', 'TXT'));
 
-	$cot_db->delete($db_cache, "c_name = '$name'") ? cot_message('adm_delcacheitem') : cot_error('Error');
+	$db->delete($db_cache, "c_name = '$name'") ? cot_message('adm_delcacheitem') : cot_error('Error');
 }
 
-if ($cot_cache && $cot_cache->mem)
+if ($cache && $cache->mem)
 {
-	$info = $cot_cache->get_info();
+	$info = $cache->get_info();
 	if ($info['available'] < 0)
 	{
 		$info['available'] = '?';
 	}
 	$t->assign(array(
-		'ADMIN_CACHE_MEMORY_DRIVER' => str_replace('_driver', '', $cot_cache->mem_driver),
+		'ADMIN_CACHE_MEMORY_DRIVER' => str_replace('_driver', '', $cache->mem_driver),
 		'ADMIN_CACHE_MEMORY_PERCENTBAR' => ceil(($info['occupied'] / $info['max']) * 100),
 		'ADMIN_CACHE_MEMORY_AVAILABLE' => $info['available'],
 		'ADMIN_CACHE_MEMORY_MAX' => $info['max']
@@ -54,7 +54,7 @@ if ($cot_cache && $cot_cache->mem)
 	$t->parse('MAIN.ADMIN_CACHE_MEMORY');
 }
 
-$sql = $cot_db->query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
+$sql = $db->query("SELECT * FROM $db_cache WHERE 1 ORDER by c_name ASC");
 $cachesize = 0;
 $ii = 0;
 

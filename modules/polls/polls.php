@@ -88,7 +88,7 @@ if (cot_check_messages())
 elseif ((int)$id > 0)
 {
 	$id = cot_import($id, 'D', 'INT');
-	if ((int) $cot_db->query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index' ")->fetchColumn() != 1)
+	if ((int) $db->query("SELECT COUNT(*) FROM $db_polls WHERE poll_id=$id AND poll_type='index' ")->fetchColumn() != 1)
 	{
 		$env['status'] = '404 Not Found';
 		cot_redirect(cot_url('message', 'msg=404', '', TRUE));
@@ -126,7 +126,7 @@ elseif ((int)$id > 0)
 else
 {
 	$jj = 0;
-	$sql = $cot_db->query("SELECT * FROM $db_polls WHERE poll_state = 0 AND poll_type = 'index' ORDER BY poll_id DESC");
+	$sql = $db->query("SELECT * FROM $db_polls WHERE poll_state = 0 AND poll_type = 'index' ORDER BY poll_id DESC");
 
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('polls.viewall.tags');

@@ -88,7 +88,7 @@ elseif ($a == 'clearcache')
 	cot_cache_clearhtml() ? cot_message('adm_bbcodes_clearcache_done') : cot_message('Error');
 }
 
-$totalitems = $cot_db->countRows($db_bbcode);
+$totalitems = $db->countRows($db_bbcode);
 
 // FIXME AJAX-based pagination doesn't work because of some strange PHP bug
 // Xtpl_block->text() returns 'str' instead of a long string which it has in $text
@@ -96,7 +96,7 @@ $totalitems = $cot_db->countRows($db_bbcode);
 $pagenav = cot_pagenav('admin', 'm=bbcode', $d, $totalitems, $cfg['maxrowsperpage'], 'd');
 
 $bbc_modes = array('str', 'pcre', 'callback');
-$res = $cot_db->query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
+$res = $db->query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$cfg['maxrowsperpage']);
 
 
 

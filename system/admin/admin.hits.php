@@ -33,7 +33,7 @@ foreach (cot_getextplugins('admin.hits.first') as $pl)
 if($f == 'year' || $f == 'month')
 {
     $adminpath[] = array(cot_url('admin', 'm=hits&f='.$f.'&v='.$v), '('.$v.')');
-    $sql = $cot_db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
+    $sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
 
     while($row = $sql->fetch())
     {
@@ -74,8 +74,8 @@ if($f == 'year' || $f == 'month')
 }
 else
 {
-    $sql = $cot_db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
-    $sqlmax = $cot_db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
+    $sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name DESC");
+    $sqlmax = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_value DESC LIMIT 1");
 	if ($sql->rowCount() > 0 && $sqlmax->rowCount() > 0)
 	{
 		$rowmax = $sqlmax->fetch();

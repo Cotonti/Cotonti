@@ -135,8 +135,8 @@ else
  */
 function cot_tag_search_pages($query)
 {
-	global $cot_db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
-	$totalitems = $cot_db->query("SELECT COUNT(*)
+	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
+	$totalitems = $db->query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_state = 0")->fetchColumn();
@@ -154,7 +154,7 @@ function cot_tag_search_pages($query)
 		default:
 			$order = '';
 	}
-	$sql = $cot_db->query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
+	$sql = $db->query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
 		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0
@@ -200,8 +200,8 @@ function cot_tag_search_pages($query)
  */
 function cot_tag_search_forums($query)
 {
-	global $cot_db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
-	$totalitems = $cot_db->query("SELECT COUNT(*)
+	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
+	$totalitems = $db->query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 		WHERE r.tag_area = 'forums' AND ($query)")->fetchColumn();
@@ -219,7 +219,7 @@ function cot_tag_search_forums($query)
 		default:
 			$order = '';
 	}
-	$sql = $cot_db->query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
+	$sql = $db->query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 		LEFT JOIN $db_forum_sections AS s
