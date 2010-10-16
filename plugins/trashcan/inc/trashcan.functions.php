@@ -62,7 +62,7 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 function cot_trash_restore($id)
 {
 	global $cot_db, $db_trash, $trash_types;
-
+	
 	$tsql = $cot_db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
 	if ($res = $tsql->fetch())
 	{
@@ -75,6 +75,20 @@ function cot_trash_restore($id)
 			$check = 'cot_trash'.$type.'_check';
 			$restore = $check($data);
 		}
+
+		$rsql = $cot_db->query("SELECT * FROM $databasename WHERE 1 LIMIT 1");
+		if ($rrow = $rsql2->fetch())
+		{
+			$arraydiff = array_diff_key($data, $rrow);
+			foreach ($arraydiff as $key => $val)
+			{
+				unset($data[$key]);
+			}
+			if (count($data) == 0 && $restore)
+			{
+				$restore = false;
+			}
+		}		
 		if ($restore)
 		{
 			$sql = $cot_db->insert($databasename, $data);

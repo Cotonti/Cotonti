@@ -15,23 +15,26 @@ Hooks=tools
  * @license BSD
  */
 
-defined('COT_CODE') or die('Wrong URL');
-cot_require('trashcan', true);
-cot_require_lang('trashcan', 'plug');
-
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
-$tr_t = new XTemplate(cot_skinfile('trashcan.admin', true));
+cot_require('trashcan', true);
+cot_require_lang('trashcan', 'plug');
 
-$adminpath[] = array(cot_url('admin', 'm=trashcan'), $L['Trashcan']);
+cot_require('users');
+$cfg['module']['page'] && cot_require('page');
+$cfg['module']['forums'] && cot_require('forums');
+$cfg['plugin']['comments'] && cot_require('comments', true);
+
+$adminpath[] = array(cot_url('admin', 'm=other&p=trashcan'), $L['Trashcan']);
 $adminhelp = $L['adm_help_trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
 $d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
+$info = cot_import('info', 'G', 'BOL') ? 1 : 0;
 
 /* === Hook === */
 foreach (cot_getextplugins('trashcan.admin.first') as $pl)
@@ -79,12 +82,14 @@ elseif($a == 'restore')
 	cot_message('adm_trashcan_restored');
 }
 
+$tr_t = new XTemplate(cot_skinfile(($info) ? 'trashcan.info.admin' : 'trashcan.admin', true));
 $totalitems = $cot_db->countRows($db_trash);
 $pagenav = cot_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
+$sql_query = ($info) ? "AND tr_id='0' LIMIT 1" : "ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage'];
 $sql = $cot_db->query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
-	WHERE tr_parentid='0' ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
+	WHERE tr_parentid='0' $sql_query");
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
@@ -92,6 +97,7 @@ $extp = cot_getextplugins('trashcan.admin.loop');
 /* ===== */
 while($row = $sql->fetch())
 {
+	$ii++;
 	switch($row['tr_type'])
 	{
 		case 'comment':
@@ -131,8 +137,9 @@ while($row = $sql->fetch())
 		'ADMIN_TRASHCAN_TYPESTR' => $typestr,
 		'ADMIN_TRASHCAN_TITLE' => htmlspecialchars($row['tr_title']),
 		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ? $L['System'] : cot_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
-		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_url('admin', 'm=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg()),
-		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=trashcan&a=restore&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg())
+		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_url('admin', 'm=other&p=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg()),
+		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=other&p=trashcan&a=restore&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg()),
+
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -141,14 +148,33 @@ while($row = $sql->fetch())
 		include $pl;
 	}
 	/* ===== */
+	if($info)
+	{
+		$data = unserialize($row['tr_datas']);
+		{
+			foreach($data as $key => $val)
+			{
+				$tr_t->assign(array(
+					'ADMIN_TRASHCAN_INFO_ROW' => htmlspecialchars($key),
+					'ADMIN_TRASHCAN_INFO_VALUE' => $val,
+				));
+				$tr_t->parse('MAIN.TRASHCAN_ROW.TRASHCAN_INFOROW');
+			}
+		}
 
+	}
 	$tr_t->parse('MAIN.TRASHCAN_ROW');
-	$ii++;
+}
+if($ii == 0)
+{
+	$tr_t->parse('MAIN.TRASHCAN_EMPTY');
 }
 
+
+
 $tr_t->assign(array(
-	'ADMIN_TRASHCAN_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=trash'),
-	'ADMIN_TRASHCAN_WIPEALL_URL' => cot_url('admin', 'm=trashcan&a=wipeall&'.cot_xg()),
+	'ADMIN_TRASHCAN_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=plug&p=trashcan'),
+	'ADMIN_TRASHCAN_WIPEALL_URL' => cot_url('admin', 'm=other&p=trashcan&a=wipeall&'.cot_xg()),
 	'ADMIN_TRASHCAN_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_TRASHCAN_PAGNAV' => $pagenav['main'],
 	'ADMIN_TRASHCAN_PAGINATION_NEXT' => $pagenav['next'],
