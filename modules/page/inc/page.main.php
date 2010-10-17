@@ -152,7 +152,7 @@ $t = new XTemplate($mskin);
 
 $t->assign(cot_generate_pagetags($pag, 'PAGE_', 0, $usr['isadmin']));
 $t->assign('PAGE_OWNER', cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])));
-$t->assign(cot_generate_usertags($pag, "PAGE_ROW_OWNER_"));
+$t->assign(cot_generate_usertags($pag, "PAGE_OWNER_"));
 
 if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])
 {
