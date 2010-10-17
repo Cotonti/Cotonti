@@ -87,8 +87,6 @@ $title_params = array(
 $out['subtitle'] = cot_title('title_pm_main', $title_params);
 $out['head'] .= $R['code_noindex'];
 
-cot_online_update();
-
 /* === Hook === */
 foreach (cot_getextplugins('pm.main') as $pl)
 {

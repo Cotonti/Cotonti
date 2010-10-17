@@ -196,8 +196,6 @@ $title_params = array(
 $out['subtitle'] = cot_title('title_forum_editpost', $title_params);
 $out['head'] .= $R['code_noindex'];
 
-cot_online_update();
-
 /* === Hook === */
 foreach (cot_getextplugins('forums.editpost.main') as $pl)
 {

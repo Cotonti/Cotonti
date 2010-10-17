@@ -208,7 +208,6 @@ $title_params = array(
 $out['subtitle'] = cot_title('title_page', $title_params);
 $out['head'] .= $R['code_noindex'];
 $sys['sublocation'] = $cot_cat[$c]['title'];
-cot_online_update();
 
 /* === Hook === */
 foreach (cot_getextplugins('page.edit.main') as $pl)

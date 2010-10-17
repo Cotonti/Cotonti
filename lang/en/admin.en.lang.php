@@ -23,9 +23,6 @@ $L['Extensions'] = 'Extensions';
  * Home Section
  */
 
-$L['home_hitsmonth'] = 'Hits for the past 15 days';
-$L['home_pastdays'] = 'Activity for the past 7 days';
-
 $L['home_newusers'] = 'New members';
 $L['home_newpages'] = 'New pages';
 $L['home_newtopics'] = 'New topics';
@@ -161,11 +158,7 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
 $L['cfg_cache_forums'] = array('Page cache in forums', 'Caches entire pages output for guests'); // New in 0.7.0
 $L['cfg_cache_index'] = array('Page cache on index', 'Index will be static for all guests'); // New in 0.7.0
 $L['cfg_cache_page'] = array('Page cache in page and list', 'Caches entire pages for guests'); // New in 0.7.0
-$L['cfg_disablehitstats'] = array('Disable hit statistics', 'Referers and hits per day');
-$L['cfg_disableactivitystats'] = array('Do not display statistics of activity', 'Activity for the last 7 days<br />Displayed on the home page administration panel');
-$L['cfg_disabledbstats'] = array('Do not display database statistics', 'Displayed on the home page administration panel');
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
-$L['cfg_hit_percision'] = array('Optimized hit counter precision', ''); // New in 0.7.0
 $L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // New in 0.7.0
 
 /**
@@ -467,26 +460,6 @@ $L['alreadydeletednewentry'] = 'Entry deleted';	//N-0.0.2
 
 /**
  * Other Section
- * Hits Subsection
- */
-
-$L['adm_byyear'] = 'By year';
-$L['adm_bymonth'] = 'By month';
-$L['adm_byweek'] = 'By week';
-
-$L['adm_ref_lowhits'] = 'Purge entries where hits are lower than 5';
-$L['adm_maxhits'] = 'Maximum hitcount was reached %1$s, %2$s pages displayed this day.';
-
-/**
- * Other Section
- * Referers Subsection
- */
-
-$L['adm_ref_prune'] = 'Cleaned';
-$L['adm_ref_prunelowhits'] = 'Referers with the number of visitors is less 5 successfully removed';
-
-/**
- * Other Section
  * Log Subsection
  */
 
@@ -499,7 +472,6 @@ $L['adm_checkingcore'] = 'Checking core files...';
 $L['adm_checkthemes'] = 'Check if all files are present in themes';
 $L['adm_checktheme'] = 'Check TPL files for the theme';
 $L['adm_checkingtheme'] = 'Checking the theme...';
-$L['adm_hits'] = 'Hits';
 $L['adm_check_ok'] = 'Ok';
 $L['adm_check_missing'] = 'Missing';
 

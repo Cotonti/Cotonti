@@ -147,8 +147,6 @@ elseif (defined('COT_PLUG'))
 	$out['subtitle'] = empty($out['subtitle']) ? $L['plu_title'] : $out['subtitle'];
 	$sys['sublocation'] = $out['subtitle'];
 
-	cot_online_update();
-
     if ($ext_display_header)
     {
         require_once $cfg['system_dir'] . '/header.php';

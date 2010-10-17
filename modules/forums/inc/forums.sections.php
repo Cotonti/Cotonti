@@ -29,8 +29,6 @@ $c = cot_import('c','G','ALP');
 $ce = explode('_', $s);
 $sys['sublocation'] = $L['Home'];
 
-cot_online_update();
-
 /* === Hook === */
 foreach (cot_getextplugins('forums.sections.first') as $pl)
 {

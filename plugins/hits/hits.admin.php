@@ -3,7 +3,7 @@
  * Administration panel - Hits
  *
  * @package Cotonti
- * @version 0.1.0
+ * @version 0.9.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -11,20 +11,20 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'hits');
 cot_block($usr['auth_read']);
 
-$t = new XTemplate(cot_skinfile('admin.hits'));
+cot_require_lang('hits', 'plug');
+cot_require('hits', true);
+$tt = new XTemplate(cot_skinfile('hits.admin', true));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=hits'), $L['Hits']);
 $adminhelp = $L['adm_help_hits'];
 
 $f = cot_import('f', 'G', 'TXT');
 $v = cot_import('v', 'G', 'TXT');
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.hits.first') as $pl)
+foreach (cot_getextplugins('hits.admin.first') as $pl)
 {
 	include $pl;
 }
@@ -47,12 +47,12 @@ if($f == 'year' || $f == 'month')
     $hits_d_max = max($hits_d);
     $ii = 0;
     /* === Hook - Part1 : Set === */
-    $extp = cot_getextplugins('admin.hits.loop');
+    $extp = cot_getextplugins('hits.admin.loop');
     /* ===== */
     foreach($hits_d as $day => $hits)
     {
         $percentbar = floor(($hits / $hits_d_max) * 100);
-        $t->assign(array(
+        $tt->assign(array(
             'ADMIN_HITS_ROW_DAY' => $day,
             'ADMIN_HITS_ROW_HITS' => $hits,
             'ADMIN_HITS_ROW_PERCENTBAR' => $percentbar,
@@ -66,11 +66,11 @@ if($f == 'year' || $f == 'month')
         }
         /* ===== */
 
-        $t->parse('MAIN.YEAR_OR_MONTH.ROW');
+        $tt->parse('MAIN.YEAR_OR_MONTH.ROW');
         $ii++;
     }
 
-    $t->parse('MAIN.YEAR_OR_MONTH');
+    $tt->parse('MAIN.YEAR_OR_MONTH');
 }
 else
 {
@@ -101,13 +101,13 @@ else
 		$hits_m_max = max($hits_m);
 		$hits_y_max = max($hits_y);
 		/* === Hook - Part1 : Set === */
-		$extp = cot_getextplugins('admin.hits.loop');
+		$extp = cot_getextplugins('hits.admin.loop');
 		/* ===== */
 		$ii = 0;
 		foreach ($hits_y as $year => $hits)
 		{
 			$percentbar = floor(($hits / $hits_y_max) * 100);
-			$t->assign(array(
+			$tt->assign(array(
 				'ADMIN_HITS_ROW_YEAR_URL' => cot_url('admin', 'm=hits&f=year&v=' . $year),
 				'ADMIN_HITS_ROW_YEAR' => $year,
 				'ADMIN_HITS_ROW_YEAR_HITS' => $hits,
@@ -118,14 +118,14 @@ else
 				include $pl;
 			}
 			/* ===== */
-			$t->parse('MAIN.DEFAULT.ROW_YEAR');
+			$tt->parse('MAIN.DEFAULT.ROW_YEAR');
 			$ii++;
 		}
 		$ii = 0;
 		foreach ($hits_m as $month => $hits)
 		{
 			$percentbar = floor(($hits / $hits_m_max) * 100);
-			$t->assign(array(
+			$tt->assign(array(
 				'ADMIN_HITS_ROW_MONTH_URL' => cot_url('admin', 'm=hits&f=month&v=' . $month),
 				'ADMIN_HITS_ROW_MONTH' => $month,
 				'ADMIN_HITS_ROW_MONTH_HITS' => $hits,
@@ -136,7 +136,7 @@ else
 				include $pl;
 			}
 			/* ===== */
-			$t->parse('MAIN.DEFAULT.ROW_MONTH');
+			$tt->parse('MAIN.DEFAULT.ROW_MONTH');
 			$ii++;
 		}
 		$ii = 0;
@@ -144,7 +144,7 @@ else
 		{
 			$ex = explode('-W', $week);
 			$percentbar = floor(($hits / $hits_w_max) * 100);
-			$t->assign(array(
+			$tt->assign(array(
 				'ADMIN_HITS_ROW_WEEK' => $week,
 				'ADMIN_HITS_ROW_WEEK_HITS' => $hits,
 				'ADMIN_HITS_ROW_WEEK_PERCENTBAR' => $percentbar
@@ -154,32 +154,25 @@ else
 				include $pl;
 			}
 			/* ===== */
-			$t->parse('MAIN.DEFAULT.ROW_WEEK');
+			$tt->parse('MAIN.DEFAULT.ROW_WEEK');
 			$ii++;
 		}
 
-		$t->assign(array(
+		$tt->assign(array(
 			'ADMIN_HITS_MAXHITS' => sprintf($L['adm_maxhits'], $max_date, $max_hits)
 		));
 	}
-    $t->parse('MAIN.DEFAULT');
+    $tt->parse('MAIN.DEFAULT');
 }
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.hits.tags') as $pl)
+foreach (cot_getextplugins('hits.admin.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-$t->parse('MAIN');
-if (COT_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
+$tt->parse('MAIN');
+$plugin_body = $tt->text('MAIN');
 
 ?>

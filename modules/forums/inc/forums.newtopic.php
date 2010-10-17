@@ -203,8 +203,6 @@ $title_params = array(
 $out['subtitle'] = cot_title('title_forum_newtopic', $title_params);
 $out['head'] .= $R['code_noindex'];
 
-cot_online_update();
-
 /* === Hook === */
 foreach (cot_getextplugins('forums.newtopic.main') as $pl)
 {

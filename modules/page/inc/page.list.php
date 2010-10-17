@@ -63,7 +63,6 @@ $d = empty($d) ? 0 : (int) $d;
 $dc = empty($dc) ? 0 : (int) $dc;
 
 $sys['sublocation'] = $cat['title'];
-cot_online_update();
 
 $cfg['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['maxrowsperpage'] * 2 : $cfg['maxrowsperpage'];
 

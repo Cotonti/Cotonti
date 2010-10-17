@@ -28,8 +28,6 @@ foreach (cot_getextplugins('index.first') as $pl)
 }
 /* ===== */
 
-cot_online_update();
-
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('index', 'a');
 
 /* === Hook === */

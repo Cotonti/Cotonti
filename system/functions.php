@@ -573,7 +573,7 @@ function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters =
  */
 function cot_online_update()
 {
-	global $db, $cfg, $sys, $usr, $out, $db_online, $db_stats, $cache, $cot_usersonline, $env, $Ls;
+	global $db, $cfg, $sys, $usr, $out, $db_online, $cache, $cot_usersonline, $env, $Ls;
 	if (!$cfg['disablewhosonline'])
 	{
 		if ($env['location'] != $sys['online_location']
@@ -641,27 +641,6 @@ function cot_online_update()
 		}
 		$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
 		$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : cot_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.cot_declension($sys['whosonline_vis_count'], $Ls['Guests']);
-
-		/* ======== Max users ======== */
-		if (!$cfg['disablehitstats'])
-		{
-			if ($cache && $cache->mem && $cache->mem->exists('maxusers', 'system'))
-			{
-				$maxusers = $cache->mem->get('maxusers', 'system');
-			}
-			else
-			{
-				$sql = $db->query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-				$maxusers = (int) @$sql->fetchColumn();
-				$cache && $cache->mem && $cache->mem->store('maxusers', $maxusers, 'system', 0);
-			}
-
-			if ($maxusers < $sys['whosonline_all_count'])
-			{
-				$sql = $db->query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
-					WHERE stat_name='maxusers'");
-			}
-		}
 	}
 }
 
@@ -3369,63 +3348,6 @@ function cot_xp()
 {
 	global $sys;
 	return '<div style="display:inline;margin:0;padding:0"><input type="hidden" name="x" value="'.$sys['xk'].'" /></div>';
-}
-
-
-/*
- * =============================== Statistics API =============================
-*/
-
-/**
- * Creates new stats parameter
- *
- * @param string $name Parameter name
- */
-function cot_stat_create($name)
-{
-	global $db, $db_stats;
-
-	$db->query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".$db->prep($name)."', 1)");
-}
-
-/**
- * Returns statistics parameter
- *
- * @param string $name Parameter name
- * @return int
- */
-function cot_stat_get($name)
-{
-	global $db, $db_stats;
-
-	$sql = $db->query("SELECT stat_value FROM $db_stats where stat_name='$name' LIMIT 1");
-	return ($sql->rowCount() > 0) ? (int) $sql->fetchColumn() : FALSE;
-}
-
-/**
- * Increments stats
- *
- * @param string $name Parameter name
- * @param int $value Increment step
- */
-function cot_stat_inc($name, $value = 1)
-{
-	global $db, $db_stats;
-	$db->query("UPDATE $db_stats SET stat_value=stat_value+$value WHERE stat_name='$name'");
-}
-
-/**
- * Inserts new stat or increments value if it already exists
- *
- * @param string $name Parameter name
- * @param int $value Increment step
- */
-function cot_stat_update($name, $value = 1)
-{
-	global $db, $db_stats;
-	$db->query("INSERT INTO $db_stats (stat_name, stat_value)
-		VALUES ('".$db->prep($name)."', 1)
-		ON DUPLICATE KEY UPDATE stat_value=stat_value+$value");
 }
 
 /*
