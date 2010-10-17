@@ -19,6 +19,6 @@ defined('COT_CODE') or die('Wrong URL');
 cot_require('trashcan', true);
 if ($cfg['plugin']['trashcan']['trash_forum'])
 {
-	cot_trash_put('forumpost', $L['Post']." #".$p." from topic #".$q, "p".$p."-q".$q, $row);
+	cot_trash_put('forumpost', $L['Post']." #".$p." from topic #".$q, $p, $row);
 }
 ?>

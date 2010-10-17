@@ -432,7 +432,7 @@ else
 	$lincif_conf = cot_auth('admin', 'a', 'A');
 
 	$t->assign(array(
-		'ADMIN_FORUMS_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=forums'),
+		'ADMIN_FORUMS_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=forums'),
 		'ADMIN_FORUMS_CONF_STRUCTURE_URL' => cot_url('admin', 'm=forums&s=structure'),
 	));
 

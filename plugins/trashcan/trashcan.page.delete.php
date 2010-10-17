@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=page.admin.delete.done, page.edit.delete.done
+Hooks=page.admin.delete.done,page.edit.delete.done
 [END_COT_EXT]
 ==================== */
 

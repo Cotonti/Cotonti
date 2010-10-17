@@ -18,7 +18,15 @@
 		</div>
 
 		<div id="side" class="column">
-<!-- IF {PHP.usr.isadmin} -->{FILE "themes/nemesis/inc/admin-list.tpl"}<!-- ENDIF -->
+<!-- IF {PHP.usr.isadmin} -->
+			<div class="block">
+				<h2 class="admin">{PHP.L.Admin}</h2>
+				<ul class="bullets">
+					<li><a href="admin.php">{PHP.L.Adminpanel}</a></li>
+					<li>{LIST_SUBMITNEWPAGE}</li>
+				</ul>
+			</div>
+<!-- ENDIF -->
 			<div class="block">
 				<h2 class="tags">{PHP.L.Tags}</h2>
 				{LIST_TAG_CLOUD}

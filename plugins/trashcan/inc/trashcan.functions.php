@@ -13,7 +13,8 @@ defined('COT_CODE') or die('Wrong URL');
 
 $GLOBALS['db_trash'] = (isset($GLOBALS['db_trash'])) ? $GLOBALS['db_trash'] : $GLOBALS['db_x'] . 'trash';
 
-$trash_types = array('comment' => $db_com, 'forumpost' => $db_forum_posts, 'forumtopic' => $db_forum_topics, 'page' => $db_pages, 'user' => $db_users);
+$GLOBALS['trash_types'] = array('comment' => $GLOBALS['db_com'], 'forumpost' => $GLOBALS['db_forum_posts'],
+	'forumtopic' => $GLOBALS['db_forum_topics'], 'page' => $GLOBALS['db_pages'], 'user' => $GLOBALS['db_users']);
 
 /**
  * Sends item to trash
@@ -59,10 +60,11 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
  * @param int $id Trash item ID
  * @return bool Operation success or failure
  */
+
 function cot_trash_restore($id)
 {
 	global $db, $db_trash, $trash_types;
-	
+
 	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
 	if ($res = $tsql->fetch())
 	{
@@ -77,7 +79,7 @@ function cot_trash_restore($id)
 		}
 
 		$rsql = $db->query("SELECT * FROM $databasename WHERE 1 LIMIT 1");
-		if ($rrow = $rsql2->fetch())
+		if ($rrow = $rsql->fetch())
 		{
 			$arraydiff = array_diff_key($data, $rrow);
 			foreach ($arraydiff as $key => $val)
@@ -102,7 +104,7 @@ function cot_trash_restore($id)
 
 			if ($sql > 0)
 			{
-				$db->delete($db_trash, "tr_id='".$row['tr_id']."'");
+				$db->delete($db_trash, "tr_id='".$res['tr_id']."'");
 				$sql2 = $db->query("SELECT tr_id FROM $db_trash WHERE tr_parentid='".(int)$res['tr_id'] ."'");
 				while ($row2 = $sql2->fetch())
 				{
@@ -146,6 +148,7 @@ function cot_trash_delete($id)
  */
 function cot_trashpage_sync($data)
 {
+	global $cache, $cfg;
 	cot_structure_resync($id);
 	($cache && $cfg['cache_page']) && $cache->page->clear('page');
 	return true;
@@ -159,7 +162,7 @@ function cot_trashpage_sync($data)
  */
 function cot_trashforumpost_check($data)
 {
-	global $db_forum_posts;
+	global $db_forum_posts, $db_forum_topics, $db;
 	$sql = $db->query("SELECT ft_id FROM $db_forum_topics WHERE ft_id='".$data['fp_topicid']."'");
 	if ($row = $sql->fetch())
 	{
@@ -190,7 +193,7 @@ function cot_trashforumpost_sync($data)
  */
 function cot_trashforumtopic_sync($data)
 {
-	cot_forum_resynctopic($res['tr_itemid']);
+	cot_forum_resynctopic($data['ft_id']);
 	cot_forum_sectionsetlast($data['ft_sectionid']);
 	cot_forum_resync($data['ft_sectionid']);
 	return TRUE;

@@ -20,21 +20,20 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
-cot_require('trashcan', true);
-cot_require_lang('trashcan', 'plug');
-
 cot_require('users');
 $cfg['module']['page'] && cot_require('page');
 $cfg['module']['forums'] && cot_require('forums');
 $cfg['plugin']['comments'] && cot_require('comments', true);
 
-$adminpath[] = array(cot_url('admin', 'm=other&p=trashcan'), $L['Trashcan']);
+cot_require('trashcan', true);
+cot_require_lang('trashcan', 'plug');
+
 $adminhelp = $L['adm_help_trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
 $d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
-$info = cot_import('info', 'G', 'BOL') ? 1 : 0;
+$info = ($a == 'info') ? 1 : 0;
 
 /* === Hook === */
 foreach (cot_getextplugins('trashcan.admin.first') as $pl)
@@ -54,6 +53,7 @@ if($a == 'wipe')
 	/* ===== */
 	cot_trash_delete($id);
 	cot_message('adm_trashcan_deleted');
+	cot_redirect(cot_url('admin', 'm=other&p=trashcan', '', true));
 }
 elseif($a == 'wipeall')
 {
@@ -67,6 +67,7 @@ elseif($a == 'wipeall')
 	$sql = $db->query("TRUNCATE $db_trash");
 
 	cot_message('adm_trashcan_prune');
+	cot_redirect(cot_url('admin', 'm=other&p=trashcan', '', true));
 }
 elseif($a == 'restore')
 {
@@ -80,13 +81,14 @@ elseif($a == 'restore')
 	cot_trash_restore($id);
 
 	cot_message('adm_trashcan_restored');
+	cot_redirect(cot_url('admin', 'm=other&p=trashcan', '', true));
 }
 
 $tr_t = new XTemplate(cot_skinfile(($info) ? 'trashcan.info.admin' : 'trashcan.admin', true));
 $totalitems = $db->countRows($db_trash);
 $pagenav = cot_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql_query = ($info) ? "AND tr_id='0' LIMIT 1" : "ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage'];
+$sql_query = ($info) ? "AND tr_id='$id' LIMIT 1" : "ORDER by tr_id DESC LIMIT $d, ".$cfg['maxrowsperpage'];
 $sql = $db->query("SELECT t.*, u.user_name FROM $db_trash AS t
 	LEFT JOIN $db_users AS u ON t.tr_trashedby=u.user_id
 	WHERE tr_parentid='0' $sql_query");
@@ -103,31 +105,37 @@ while($row = $sql->fetch())
 		case 'comment':
 			$icon = $R['admin_icon_comments'];
 			$typestr = $L['Comment'];
+			$enabled = ($cfg['plugin']['comments']) ? 1 : 0;
 			break;
 
 		case 'forumpost':
 			$icon = $R['admin_icon_forums_posts'];
 			$typestr = $L['Post'];
+			$enabled = ($cfg['module']['forums']) ? 1 : 0;
 			break;
 
 		case 'forumtopic':
 			$icon = $R['admin_icon_forums_topics'];
 			$typestr = $L['Topic'];
+			$enabled = ($cfg['module']['forums']) ? 1 : 0;
 			break;
 
 		case 'page':
 			$icon = $R['admin_icon_page'];
 			$typestr = $L['Page'];
+			$enabled = ($cfg['module']['page']) ? 1 : 0;
 			break;
 
 		case 'user':
 			$icon = $R['admin_icon_user'];
 			$typestr = $L['User'];
+			$enabled = 1;
 			break;
 
 		default:
 			$icon = $R['admin_icon_tools'];
 			$typestr = $row['tr_type'];
+			$enabled = 1;
 			break;
 	}
 
@@ -139,7 +147,8 @@ while($row = $sql->fetch())
 		'ADMIN_TRASHCAN_TRASHEDBY' => ($row['tr_trashedby'] == 0) ? $L['System'] : cot_build_user($row['tr_trashedby'], htmlspecialchars($row['user_name'])),
 		'ADMIN_TRASHCAN_ROW_WIPE_URL' => cot_url('admin', 'm=other&p=trashcan&a=wipe&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg()),
 		'ADMIN_TRASHCAN_ROW_RESTORE_URL' => cot_url('admin', 'm=other&p=trashcan&a=restore&id='.$row['tr_id'].'&d='.$d.'&'.cot_xg()),
-
+		'ADMIN_TRASHCAN_ROW_INFO_URL' => cot_url('admin', 'm=other&p=trashcan&a=info&id='.$row['tr_id']),
+		'ADMIN_TRASHCAN_ROW_RESTORE_ENABLED' => $enabled,
 	));
 
 	/* === Hook - Part2 : Include === */
@@ -150,6 +159,7 @@ while($row = $sql->fetch())
 	/* ===== */
 	if($info)
 	{
+		$adminpath[] = array(cot_url('admin', 'm=other&p=trashcan&a=info&id='.$id), $row['tr_title']);
 		$data = unserialize($row['tr_datas']);
 		{
 			foreach($data as $key => $val)
