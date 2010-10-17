@@ -1,4 +1,9 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=tools
+[END_COT_EXT]
+==================== */
 /**
  * Administration panel - Hits
  *
