@@ -28,7 +28,7 @@ if ($cfg['plugin']['recentitems']['recentpages'] && $cfg['module']['page'])
 	$t->assign("PLUGIN_LATESTPAGES", $res);
 }
 
-if ($cfg['plugin']['recentitems']['recentforums'] && $cfg['modules']['forums'])
+if ($cfg['plugin']['recentitems']['recentforums'] && $cfg['module']['forums'])
 {
 	cot_require('forums');
 	$res = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
