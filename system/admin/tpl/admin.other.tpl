@@ -30,18 +30,6 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="centerall">{PHP.R.icon_stats}</td>
-			<td>
-				<a href="{ADMIN_OTHER_URL_HITS}">{PHP.L.Hits}</a>
-			</td>
-		</tr>
-		<tr>
-			<td class="centerall">{PHP.R.icon_stats}</td>
-			<td>
-				<a href="{ADMIN_OTHER_URL_REFERS}">{PHP.L.Referers}</a>
-			</td>
-		</tr>
-		<tr>
 			<td class="centerall">{PHP.R.icon_page}</td>
 			<td>
 				<a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a>

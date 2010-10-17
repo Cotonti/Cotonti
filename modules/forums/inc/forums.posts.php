@@ -140,7 +140,6 @@ else
 }
 
 $sys['sublocation'] = $fs_title;
-cot_online_update();
 
 $cat = $cot_forums_str[$s];
 

@@ -68,8 +68,6 @@ $ratings = cot_import('ratings', 'G', 'BOL');
 
 $out['subtitle'] = $L['Polls'];
 
-cot_online_update();
-
 /* === Hook === */
 foreach (cot_getextplugins('polls.main') as $pl)
 {

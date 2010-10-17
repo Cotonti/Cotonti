@@ -1,9 +1,14 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=tools
+[END_COT_EXT]
+==================== */
 /**
  * Administration panel - Referers manager
  *
- * @package Cotonti
- * @version 0.1.0
+ * @package Referers
+ * @version 0.9.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -11,20 +16,20 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'referers');
 cot_block($usr['auth_read']);
 
-$t = new XTemplate(cot_skinfile('admin.referers'));
+$tt = new XTemplate(cot_skinfile('referers.admin', true));
 
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=referers'), $L['Referers']);
+$GLOBALS['db_referers'] = (isset($GLOBALS['db_referers'])) ? $GLOBALS['db_referers'] : $GLOBALS['db_x'] . 'referers';
+cot_require_lang('referers', 'plug');
 $adminhelp = $L['adm_help_referers'];
 
 $d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.referers.first') as $pl)
+foreach (cot_getextplugins('referers.admin.first') as $pl)
 {
 	include $pl;
 }
@@ -55,16 +60,16 @@ if($sql->rowCount() > 0)
 
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
-	$extp = cot_getextplugins('admin.referers.loop');
+	$extp = cot_getextplugins('referers.admin.loop');
 	/* ===== */
 	foreach($referers as $referer => $url)
 	{
 
-		$t->assign('ADMIN_REFERERS_REFERER', htmlspecialchars($referer));
+		$tt->assign('ADMIN_REFERERS_REFERER', htmlspecialchars($referer));
 		
 		foreach($url as $uri => $count)
 		{
-			$t->assign(array(
+			$tt->assign(array(
 				'ADMIN_REFERERS_URI' => htmlspecialchars(cot_cutstring($uri, 128)),
 				'ADMIN_REFERERS_COUNT' => $count,
 				'ADMIN_REFERERS_ODDEVEN' => cot_build_oddeven($ii)
@@ -75,9 +80,9 @@ if($sql->rowCount() > 0)
 				include $pl;
 			}
 			/* ===== */
-			$t->parse('MAIN.REFERERS_ROW.REFERERS_URI');
+			$tt->parse('MAIN.REFERERS_ROW.REFERERS_URI');
 		}
-		$t->parse("MAIN.REFERERS_ROW");
+		$tt->parse("MAIN.REFERERS_ROW");
 		$ii++;
 	}
 	$is_ref_empty = true;
@@ -87,7 +92,7 @@ else
 	$is_ref_empty = false;
 }
 
-$t->assign(array(
+$tt->assign(array(
 	'ADMIN_REFERERS_URL_PRUNE' => cot_url('admin', 'm=referers&a=prune&'.cot_xg()),
 	'ADMIN_REFERERS_URL_PRUNELOWHITS' => cot_url('admin', 'm=referers&a=prunelowhits&'.cot_xg()),
 	'ADMIN_REFERERS_PAGINATION_PREV' => $pagenav['prev'],
@@ -97,23 +102,16 @@ $t->assign(array(
 	'ADMIN_REFERERS_ON_PAGE' => $ii
 ));
 
-cot_display_messages($t);
+cot_display_messages($tt);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.referers.tags') as $pl)
+foreach (cot_getextplugins('referers.admin.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
 
-$t->parse('MAIN');
-if (COT_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
+$tt->parse('MAIN');
+$plugin_body = $tt->text('MAIN');
 
 ?>

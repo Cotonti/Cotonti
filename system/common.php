@@ -519,43 +519,6 @@ require_once './images/icons/' . $usr['icons'] . '/resources.php';
 
 $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
 
-/* ======== Basic statistics ======== */
-
-if (!$cfg['disablehitstats'])
-{
-	if ($cache && $cache->mem)
-	{
-		$hits = $cache->mem->inc('hits', 'system');
-		$cfg['hit_precision'] > 0 || $cfg['hit_precision'] = 100;
-		if ($hits % $cfg['hit_precision'] == 0)
-		{
-			cot_stat_inc('totalpages', $cfg['hit_precision']);
-			cot_stat_inc($sys['day'], $cfg['hit_precision']);
-		}
-	}
-	else
-	{
-		cot_stat_inc('totalpages');
-		cot_stat_update($sys['day']);
-	}
-
-	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
-
-	if (!empty($sys['referer'])
-		&& mb_stripos($sys['referer'], $cfg['mainurl']) === false
-		&& mb_stripos($sys['referer'], $cfg['hostip']) === false
-		&& mb_stripos($sys['referer'], str_ireplace('//www.', '//', $cfg['mainurl'])) === false
-		&& mb_stripos(str_ireplace('//www.', '//', $sys['referer']), $cfg['mainurl']) === false)
-	{
-		$db->query("INSERT INTO $db_referers
-				(ref_url, ref_count, ref_date)
-			VALUES
-				('".$db->prep($sys['referer'])."', 1, {$sys['now_offset']})
-			ON DUPLICATE KEY UPDATE
-				ref_count=ref_count+1, ref_date={$sys['now_offset']}");
-	}
-}
-
 /* ======== Categories ======== */
 
 if (!$cot_cat)

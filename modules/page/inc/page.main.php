@@ -46,7 +46,6 @@ $id = (int) $pag['page_id'];
 $cat = $cot_cat[$pag['page_cat']];
 
 $sys['sublocation'] = $pag['page_title'];
-cot_online_update();
 
 $pag['page_begin_noformat'] = $pag['page_date'];
 $pag['page_tab'] = (empty($pg)) ? 0 : $pg;

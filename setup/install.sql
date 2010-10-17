@@ -131,10 +131,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','menus','20','freetext8',0,'','','',''),
 ('core','menus','20','freetext9',0,'','','',''),
 ('core','performance','06','gzip',3,'1','1','',''),
-('core','performance','12','disablehitstats',3,'0','0','',''),
-('core','performance','13','disableactivitystats',3,'0','0','',''),
-('core','performance','14','disabledbstats',3,'0','0','',''),
-('core','performance','20','hit_percision',2,'100','10,100,1000','','Optimized hit counter precision'),
 ('core','performance','31','cache_page',3,'0','0','',''),
 ('core','performance','32','cache_index',3,'0','0','',''),
 ('core','performance','33','cache_forums',3,'0','0','',''),
@@ -322,28 +318,6 @@ CREATE TABLE `cot_ratings` (
   PRIMARY KEY  (`rating_id`),
   KEY `rating_code` (`rating_code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `cot_referers` (
-  `ref_url` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `ref_date` int unsigned NOT NULL default '0',
-  `ref_count` int NOT NULL default '0',
-  PRIMARY KEY  (`ref_url`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `cot_stats` (
-  `stat_name` varchar(32) collate utf8_unicode_ci NOT NULL default '',
-  `stat_value` int NOT NULL default '0',
-  PRIMARY KEY  (`stat_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `cot_stats` (`stat_name`, `stat_value`) VALUES
-('totalpages', 0),
-('totalmailsent', 0),
-('totalmailpmnot', 0),
-('totalpms', 0),
-('totalantihammer', 0),
-('textboxerprev', 0),
-('version', 999);
 
 CREATE TABLE `cot_structure` (
   `structure_id` mediumint NOT NULL auto_increment,

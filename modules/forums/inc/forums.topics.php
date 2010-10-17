@@ -118,7 +118,6 @@ foreach (cot_getextplugins('forums.topics.first') as $pl)
 /* ===== */
 
 $sys['sublocation'] = $fs_title;
-cot_online_update();
 
 $cat = $cot_forums_str[$fs_id];
 
