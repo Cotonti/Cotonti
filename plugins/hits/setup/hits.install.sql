@@ -1,5 +1,5 @@
 
-CREATE TABLE `cot_stats` (
+CREATE TABLE  IF NOT EXISTS `cot_stats` (
   `stat_name` varchar(32) collate utf8_unicode_ci NOT NULL default '',
   `stat_value` int NOT NULL default '0',
   PRIMARY KEY  (`stat_name`)
