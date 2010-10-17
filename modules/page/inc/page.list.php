@@ -138,7 +138,7 @@ else
 $totalpages = ceil($totallines / $cfg['maxrowsperpage']);
 $currentpage= ceil($d / $cfg['maxrowsperpage']) + 1;
 
-$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? cot_rc('page_link_submitnewpage', array('sub_url' => cot_url('page', 'm=add&c='.$c))) : ''; // TODO - to resorses OR move to tpl with logic {if}
+$submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? cot_rc('page_submitnewpage', array('sub_url' => cot_url('page', 'm=add&c='.$c))) : ''; // TODO - to resorses OR move to tpl with logic {if}
 
 $pagenav = cot_pagenav('list', $list_url_path + array('dc' => $dc), $d, $totallines, $cfg['maxrowsperpage']);
 

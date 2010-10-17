@@ -225,7 +225,7 @@ foreach($variants as $val)
 cot_poll_edit_form($poll_id, $t, 'MAIN');
 
 $t->assign(array(
-	'ADMIN_POLLS_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=core&p=polls'),
+	'ADMIN_POLLS_CONF_URL' => cot_url('admin', 'm=config&n=edit&o=module&p=polls'),
 	'ADMIN_POLLS_ADMINWARNINGS' => $adminwarnings,
 	'ADMIN_POLLS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_POLLS_PAGNAV' => $pagenav['main'],

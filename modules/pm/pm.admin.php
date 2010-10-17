@@ -32,7 +32,7 @@ $totalpmdb = $db->countRows($db_pm);
 $totalpmsent = cot_stat_get('totalpms');
 
 $t->assign(array(
-	'ADMIN_PM_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=core&p=pm'),
+	'ADMIN_PM_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=module&p=pm'),
 	'ADMIN_PM_TOTALPMDB' => $totalpmdb,
 	'ADMIN_PM_TOTALPMSENT' => $totalpmsent
 ));

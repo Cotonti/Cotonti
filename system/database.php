@@ -406,8 +406,7 @@ class CotDB extends PDO {
 			if (count($parameters) > 0)
 			{
 				$stmt = $this->prepare($query);
-				$this->_bindParams($stmt, $parameters);
-				$res = $stmt->execute();
+				$res = $stmt->execute($parameters);
 				$res === false ? cot_diefatal('SQL error: '.$this->error) : $res = $stmt->rowCount();
 			}
 			else

@@ -50,7 +50,7 @@ switch($n)
 					$cfg_value = min($cfg_value, cot_get_uploadmax() * 1024);
 				}
 				$db->update($db_config, array('config_value' => $cfg_value),
-					"config_name=? AND config_owner=? AND config_cat=?", array($row['config_name'], $o, $p));
+					"config_name = :n AND config_owner = :o AND config_cat = :p", array(':n' => $row['config_name'], ':o' => $o, ':p' => $p));
 			}
 			$sql->closeCursor();
 			$cache && $cache->db->remove('cot_cfg', 'system');

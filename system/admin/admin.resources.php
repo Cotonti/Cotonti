@@ -51,8 +51,8 @@ $R['admin_icon_events'] = '<img class="icon" src="system/admin/img/events.png" a
 $R['admin_icon_folder'] = '<img class="icon" src="system/admin/img/folder.png" alt="" />';
 $R['admin_icon_subfolder'] = '<img class="icon" src="system/admin/img/subfolder.png" alt="" />';
 $R['admin_icon_forums'] = '<img class="icon" src="system/admin/img/forums.png" alt="" />';
-$R['admin_icon_forums_posts'] = '<img class="icon" src="system/admin/img/forums.png" alt="" />';
-$R['admin_icon_forums_topics'] = '<img class="icon" src="system/admin/img/forums.png" alt="" />';
+$R['admin_icon_forums_posts'] = '<img class="icon" src="system/admin/img/forums.png" title="'.$L['Post'].'" alt="'.$L['Post'].'" />';
+$R['admin_icon_forums_topics'] = '<img class="icon" src="system/admin/img/forums.png" title="'.$L['Topic'].'" alt="'.$L['Topic'].'" />';
 $R['admin_icon_gallery'] = '<img class="icon" src="system/admin/img/gallery.png" alt="" />';
 $R['admin_icon_groups'] = '<img class="icon" src="system/admin/img/groups.png" alt="" />';
 $R['admin_icon_hits'] = '<img class="icon" src="system/admin/img/statistics.png" alt="" />';
@@ -75,8 +75,8 @@ $R['admin_icon_manual'] = '<img class="icon" src="system/admin/img/manual.png" a
 $R['admin_icon_message'] = '<img class="icon" src="system/admin/img/message.png" alt="" />';
 $R['admin_icon_news'] = '<img class="icon" src="system/admin/img/news.png" alt="" />';
 $R['admin_icon_other'] = '<img class="icon" src="system/admin/img/folder.png" alt="" />';
-$R['admin_icon_page'] = '<img class="icon" src="system/admin/img/page.png" alt="" />';
-$R['admin_icon_pages'] = '<img class="icon" src="system/admin/img/pages.png" alt="" />';
+$R['admin_icon_page'] = '<img class="icon" src="system/admin/img/page.png" title="'.$L['Page'].'" alt="'.$L['Page'].'" />';
+$R['admin_icon_pages'] = '<img class="icon" src="system/admin/img/pages.png" title="'.$L['Pages'].'" alt="'.$L['Pages'].'" />';
 $R['admin_icon_pfs'] = '<img class="icon" src="system/admin/img/pfs.png" alt="" />';
 $R['admin_icon_plug'] = '<img class="icon" src="system/admin/img/plug.png" alt="" />';
 $R['admin_icon_plugins'] = '<img class="icon" src="system/admin/img/plugins.png" alt="" />';
@@ -99,8 +99,8 @@ $R['admin_icon_themes'] = '<img class="icon" src="system/admin/img/themes.png" a
 $R['admin_icon_tools'] = '<img class="icon" src="../../images/icons/default/prefs.png" alt="" />';
 $R['admin_icon_trash'] = '<img class="icon" src="system/admin/img/trash.png" alt="" />';
 $R['admin_icon_urls'] = '<img class="icon" src="system/admin/img/info.png" alt="" />';
-$R['admin_icon_user'] = '<img class="icon" src="system/admin/img/user.png" alt="" />';
-$R['admin_icon_users'] = '<img class="icon" src="system/admin/img/users.png" alt="" />';
+$R['admin_icon_user'] = '<img class="icon" src="system/admin/img/user.png" title="'.$L['User'].'" alt="'.$L['User'].'" />';
+$R['admin_icon_users'] = '<img class="icon" src="system/admin/img/users.png" title="'.$L['Users'].'" alt="'.$L['Users'].'" />';
 $R['admin_icon_versions'] = '<img class="icon" src="system/admin/img/versions.png" alt="" />';
 
 // Admin Menu
