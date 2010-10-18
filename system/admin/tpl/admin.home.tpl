@@ -20,7 +20,7 @@
 						<td>{PHP.L.Database}</td>
 						<td class="textcenter">{ADMIN_HOME_DB_VERSION}</td>
 					</tr>
-					<!-- IF !{PHP.cfg.plugin.hits.disabledbstats} --><tr>
+					<!-- IF !{PHP.cfg.plugin.hits.disabledbstats} AND {PHP.cfg.plugin.hits}  --><tr>
 						<td>{PHP.L.home_db_rows}</td>
 						<td class="textcenter">{ADMIN_HOME_DB_TOTAL_ROWS}</td>
 					</tr>
