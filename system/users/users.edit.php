@@ -92,7 +92,7 @@ if ($a=='update')
 	$ruser['user_avatar'] = cot_import('ruseravatar','P','TXT');
 	$ruser['user_photo'] = cot_import('ruserphoto','P','TXT');
 	$ruser['user_signature'] = cot_import('rusersignature','P','TXT');
-	$ruser['user_text'] = cot_import('rusertext','P','TXT');
+	$ruser['user_text'] = cot_import('rusertext','P','HTM');
 	$ruser['user_email'] = cot_import('ruseremail','P','TXT');
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','INT');
 	$ruser['user_pmnotify'] = cot_import('ruserpmnotify','P','INT');

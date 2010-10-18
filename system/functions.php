@@ -380,7 +380,7 @@ function cot_import_buffered($name, $value)
 	{
 		if (isset($_SESSION['cot_buffer'][$name]))
 		{
-			return htmlspecialchars($_SESSION['cot_buffer'][$name]);
+			return $_SESSION['cot_buffer'][$name];
 		}
 		else
 		{

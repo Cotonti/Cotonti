@@ -188,7 +188,7 @@ switch ($a)
 			}
 		}
 
-		$ruser['user_text'] = cot_import('rusertext','P','TXT', $cfg['usertextmax']);
+		$ruser['user_text'] = cot_import('rusertext','P','HTM', $cfg['usertextmax']);
 		$ruser['user_country'] = cot_import('rusercountry','P','ALP');
 		$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
 		$ruser['user_theme'] = $rtheme[0];
