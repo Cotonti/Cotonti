@@ -111,7 +111,7 @@ class CotDB extends PDO {
 		foreach ($parameters as $key => $val)
 		{
 			$type = is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR;
-			$is_numeric ? $statement->bindParam($key + 1, $val, $type) : $statement->bindParam($key, $val, $type);
+			$is_numeric ? $statement->bindValue($key + 1, $val, $type) : $statement->bindValue($key, $val, $type);
 		}
 	}
 
@@ -406,7 +406,8 @@ class CotDB extends PDO {
 			if (count($parameters) > 0)
 			{
 				$stmt = $this->prepare($query);
-				$res = $stmt->execute($parameters);
+				$this->_bindParams($stmt, $parameters);
+				$res = $stmt->execute();
 				$res === false ? cot_diefatal('SQL error: '.$this->error) : $res = $stmt->rowCount();
 			}
 			else

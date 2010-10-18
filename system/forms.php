@@ -33,7 +33,7 @@ function cot_checkbox($chosen, $name, $title = '', $attrs = '', $value = '1')
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
 	$rc = empty($R["input_checkbox_{$rc_name}"]) ? 'input_checkbox' : "input_checkbox_{$rc_name}";
 	return cot_rc($rc, array(
-		'value' => cot_import_buffered($name, $value),
+		'value' => htmlspecialchars(cot_import_buffered($name, $value)),
 		'name' => $name,
 		'checked' => $checked,
 		'title' => $title,
@@ -97,7 +97,7 @@ function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = cot_rc_attr_string($attrs);
-	$chosen = cot_import_buffered($name, $chosen);
+	$chosen = htmlspecialchars(cot_import_buffered($name, $chosen));
 	if (empty($separator))
 	{
 		$separator = $R['input_radio_separator'];
@@ -151,7 +151,7 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = cot_rc_attr_string($attrs);
-	$chosen = cot_import_buffered($name, $chosen);
+	$chosen = htmlspecialchars(cot_import_buffered($name, $chosen));
 	$multi = is_array($chosen) && isset($input_attrs['multiple']);
 	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;
