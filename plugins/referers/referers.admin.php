@@ -45,7 +45,7 @@ elseif($a == 'prunelowhits' && $usr['isadmin'])
 }
 
 $totalitems = $db->countRows($db_referers);
-$pagenav = cot_pagenav('admin', 'm=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=other&p=referers', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = $db->query("SELECT * FROM $db_referers ORDER BY ref_count DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -93,8 +93,8 @@ else
 }
 
 $tt->assign(array(
-	'ADMIN_REFERERS_URL_PRUNE' => cot_url('admin', 'm=referers&a=prune&'.cot_xg()),
-	'ADMIN_REFERERS_URL_PRUNELOWHITS' => cot_url('admin', 'm=referers&a=prunelowhits&'.cot_xg()),
+	'ADMIN_REFERERS_URL_PRUNE' => cot_url('admin', 'm=other&p=referers&a=prune&'.cot_xg()),
+	'ADMIN_REFERERS_URL_PRUNELOWHITS' => cot_url('admin', 'm=other&p=referers&a=prunelowhits&'.cot_xg()),
 	'ADMIN_REFERERS_PAGINATION_PREV' => $pagenav['prev'],
 	'ADMIN_REFERERS_PAGNAV' => $pagenav['main'],
 	'ADMIN_REFERERS_PAGINATION_NEXT' => $pagenav['next'],
