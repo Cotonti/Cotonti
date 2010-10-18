@@ -32,7 +32,6 @@ foreach (cot_getextplugins('users.register.first') as $pl)
 
 if ($a=='add')
 {
-	$bannedreason = FALSE;
 	cot_shield_protect();
 
 	/* === Hook for the plugins === */
@@ -59,21 +58,12 @@ if ($a=='add')
 	}
 	$ruser['user_birthdate'] = (int)cot_import_date('ruserbirthdate', false);
 
-	$sql = $db->query("SELECT banlist_reason, banlist_email FROM $db_banlist WHERE banlist_email!=''");
-
-	while ($row = $sql->fetch())
-	{
-		if (mb_strpos($row['banlist_email'], $ruser['user_email']) !== false)
-			$bannedreason = $row['banlist_reason'];
-	}
-
 	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_name='".$db->prep($ruser['user_name'])."'");
 	$res1 = $sql->fetchColumn();
 	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$db->prep($ruser['user_email'])."'");
 	$res2 = $sql->fetchColumn();
 
 	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) cot_error('aut_invalidloginchars', 'rusername');
-	if (!empty($bannedreason)) cot_error($L['aut_emailbanned'].$bannedreason);
 	if (mb_strlen($ruser['user_name']) < 2) cot_error('aut_usernametooshort', 'rusername');
 	if (mb_strlen($rpassword1) < 4 || cot_alphaonly($rpassword1) != $rpassword1) cot_error('aut_passwordtooshort', 'rpassword1');
 	if (mb_strlen($ruser['user_email']) < 4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruser['user_email']))

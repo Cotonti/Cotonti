@@ -43,16 +43,6 @@ INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 (5, 'structure', 'a', 255, 255, 1),
 (6, 'structure', 'a', 1, 0, 1);
 
-CREATE TABLE `cot_banlist` (
-  `banlist_id` int NOT NULL auto_increment,
-  `banlist_ip` varchar(15) collate utf8_unicode_ci NOT NULL default '',
-  `banlist_email` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `banlist_reason` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `banlist_expire` int default '0',
-  PRIMARY KEY  (`banlist_id`),
-  KEY `banlist_ip` (`banlist_ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 CREATE TABLE `cot_cache` (
   `c_name` varchar(120) collate utf8_unicode_ci NOT NULL,
   `c_realm` varchar(80) collate utf8_unicode_ci NOT NULL default 'cot',

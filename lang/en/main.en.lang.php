@@ -40,7 +40,6 @@ $L['Author'] = 'Author';
 $L['Available'] = 'Available'; // New in 0.7.0
 $L['Avatar'] = 'Avatar'; // New in 0.1.0
 $L['Avatars'] = 'Avatars'; // New in 0.1.0
-$L['Banlist'] = 'Banlist';
 $L['Banned'] = 'Banned';
 $L['BBcode'] = 'BBcode';
 $L['BBcodes'] = 'BBcodes';

@@ -148,7 +148,6 @@ define('COT_SHIELD_FORCE', FALSE);
 $db_x				= 'cot_'; // Default: cot_, prefix for extra fields' table(s)
 
 $db_auth			= $db_x.'auth';
-$db_banlist 		= $db_x.'banlist';
 $db_cache 			= $db_x.'cache';
 $db_cache_bindings	= $db_x.'cache_bindings';
 $db_core			= $db_x.'core';
