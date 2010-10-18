@@ -24,12 +24,6 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="centerall">{PHP.R.icon_stop}</td>
-			<td>
-				<a href="{ADMIN_OTHER_URL_BANLIST}">{PHP.L.Banlist}</a>
-			</td>
-		</tr>
-		<tr>
 			<td class="centerall">{PHP.R.icon_page}</td>
 			<td>
 				<a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a>

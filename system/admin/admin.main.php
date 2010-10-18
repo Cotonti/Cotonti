@@ -34,7 +34,7 @@ foreach (cot_getextplugins('admin.main') as $pl)
 }
 /* ===== */
 
-$standard_admin = array('banlist', 'cache.disk', 'cache', 'config', 'extrafields', 'home', 'infos',
+$standard_admin = array('cache.disk', 'cache', 'config', 'extrafields', 'home', 'infos',
 	'log', 'other', 'extensions', 'ratings', 'rights', 'rightsbyitem', 'structure', 'urls', 'users');
 
 $inc_file = (empty($m)) ? 'home' : $m;

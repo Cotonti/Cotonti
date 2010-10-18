@@ -30,7 +30,7 @@ $d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
 /* === Hook === */
-foreach (cot_getextplugins('admin.bbcode.first') as $pl)
+foreach (cot_getextplugins('bbcode.admin.first') as $pl)
 {
 	include $pl;
 }
@@ -102,7 +102,7 @@ $res = $db->query("SELECT * FROM $db_bbcode ORDER BY bbc_priority LIMIT $d, ".$c
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
-$extp = cot_getextplugins('admin.banlist.loop');
+$extp = cot_getextplugins('bbcode.admin.loop');
 /* ===== */
 while ($row = $res->fetch())
 {
@@ -155,7 +155,7 @@ $bb_t->assign(array(
 cot_display_messages($bb_t);
 
 /* === Hook  === */
-foreach (cot_getextplugins('admin.bbcode.tags') as $pl)
+foreach (cot_getextplugins('bbcode.admin.tags') as $pl)
 {
 	include $pl;
 }
