@@ -81,7 +81,6 @@ switch($a)
 					cot_module_pause($code);
 				}
 				cot_plugin_pause($code);
-				$cache && $cache->db->remove('cot_plugins', 'system');
 				cot_message('adm_paused');
 			break;
 			case 'unpause':
@@ -90,19 +89,34 @@ switch($a)
 					cot_module_resume($code);
 				}
 				cot_plugin_resume($code);
-				$cache && $cache->db->remove('cot_plugins', 'system');
 				cot_message('adm_running');
 			break;
 			case 'pausepart':
 				cot_plugin_pause($code, $part);
-				$cache && $cache->db->remove('cot_plugins', 'system');
 				cot_message('adm_partstopped');
 			break;
 			case 'unpausepart':
 				cot_plugin_resume($code, $part);
-				$cache && $cache->db->remove('cot_plugins', 'system');
 				cot_message('adm_partrunning');
 			break;
+		}
+		if (!empty($b) && $cache)
+		{
+			$cache->db->remove('cot_plugins', 'system');
+			$cache->db->remove('cot_modules', 'system');
+			$cache->db->remove('cot_cfg', 'system');
+			if ($cfg['cache_page'])
+			{
+				$cache->page->clear('page');
+			}
+			if ($cfg['cache_index'])
+			{
+				$cache->page->clear('index');
+			}
+			if ($cfg['cache_forums'])
+			{
+				$cache->page->clear('forums');
+			}
 		}
 		if(file_exists($ext_info))
 		{
@@ -359,6 +373,18 @@ switch($a)
 			$cache->db->remove('cot_plugins', 'system');
 			$cache->db->remove('cot_modules', 'system');
 			$cache->db->remove('cot_cfg', 'system');
+			if ($cfg['cache_page'])
+			{
+				$cache->page->clear('page');
+			}
+			if ($cfg['cache_index'])
+			{
+				$cache->page->clear('index');
+			}
+			if ($cfg['cache_forums'])
+			{
+				$cache->page->clear('forums');
+			}
 		}
 		cot_clear_messages();
 		$t->parse('MAIN.EDIT');
