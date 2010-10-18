@@ -43,7 +43,6 @@ if ($a == 'add')
 	$rpage['page_title'] = cot_import('rpagetitle', 'P', 'TXT');
 	$rpage['page_desc'] = cot_import('rpagedesc', 'P', 'TXT');
 	$rpage['page_text'] = cot_import('rpagetext', 'P', 'HTM');
-	cot_watch($rpage['page_text']);
 	$rpage['page_author'] = cot_import('rpageauthor', 'P', 'TXT');
 	$rpage['page_file'] = intval(cot_import('rpagefile', 'P', 'INT'));
 	$rpage['page_url'] = cot_import('rpageurl', 'P', 'TXT');
@@ -108,7 +107,6 @@ if ($a == 'add')
 		}
 		/* ===== */
 
-		cot_watch($rpage['page_text']);
 		$sql = $db->insert($db_pages, $rpage);
 		$id = $db->lastInsertId();
 		$r_url = (!$rpage['page_state']) ? cot_url('page', "id=".$id, '', true) : cot_url('message', "msg=300", '', true);
