@@ -2406,7 +2406,10 @@ function cot_require_rc($name, $is_plugin = false)
 		require_once $rc_file;
 	}
 	// Theme resources override
-	$R = array_merge($R, $themeR);
+	if($themeR)
+	{
+		$R = array_merge($R, $themeR);
+	}
 }
 
 /**
