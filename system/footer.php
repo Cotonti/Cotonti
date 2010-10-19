@@ -39,7 +39,7 @@ if ($cfg['devmode'] && cot_auth('admin', 'a', 'A'))
 	}
 	$out['devmode'] .= "<tr><td colspan=\"2\">END</td>";
 	$out['devmode'] .= "<td style=\"text-align:right;\">".sprintf("%.3f", $sys['creationtime'])." ms</td><td>&nbsp;</td></tr>";
-	$out['devmode'] .= "</table><br />Total:".round($sys['tcount'], 4)."s - Queries:".$sys['qcount']. " - Average:".round(($sys['tcount'] / $sys['qcount']), 5)."s/q";
+	$out['devmode'] .= "</table><br />Total:".round($db->tcount, 4)."s - Queries:".$db->count. " - Average:".round(($db->tcount / $db->count), 5)."s/q";
 }
 
 /*
