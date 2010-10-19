@@ -96,27 +96,24 @@ function cot_config_add($name, $options, $is_module = false)
         return false;
     }
     // Build the SQL query
-    $query = "INSERT INTO `$db_config` (`config_owner`, `config_cat`,
-		`config_order`, `config_name`, `config_type`, `config_value`,
-		`config_default`, `config_variants`, `config_text`) VALUES ";
-    for ($i = 0; $i < $cnt; $i++)
-    {
-        if ($i > 0)
-		{
-            $query .= ',';
-		}
-        $order = isset($options[$i]['order'])
-			? $db->prep($options[$i]['order'])
-			: str_pad($i, 2, 0, STR_PAD_LEFT);
-        $query .= "('$type', '$name', '$order', '"
-			. $db->prep($options[$i]['name']) . "', "
-			. (int) $options[$i]['type'] . ", '"
-			. $db->prep($options[$i]['default']) . "', '"
-            . $db->prep($options[$i]['default']) . "', '"
-			. $db->prep($options[$i]['variants']) . "', '"
-            . $db->prep($options[$i]['text']) . "')";
-    }
-    $db->query($query);
+	$option_set = array();
+	for ($i = 0; $i < $cnt; $i++)
+	{
+		$opt = $options[$i];
+		$option_set[] = array(
+			'config_owner' => $type,
+			'config_cat' => $name,
+			'config_order' => isset($opt['order']) ? $opt['order'] : str_pad($i, 2, 0, STR_PAD_LEFT),
+			'config_name' => $opt['name'],
+			'config_type' => (int) $opt['type'],
+			'config_value' => $opt['default'],
+			'config_default' => $opt['default'],
+			'config_variants' => $opt['variants'],
+			'config_text' => $opt['text']
+		);
+	}
+   
+    $db->insert($db_config, $option_set);
     return $db->affectedRows == $cnt;
 }
 
@@ -170,7 +167,12 @@ function cot_config_modify($name, $options, $is_module = false)
 	{
 		$config_name = $opt['config_name'];
 		unset($opt['config_name']);
-		$affected += $db->update($db_config, $opt, "config_owner = ?
+		$opt_row = array();
+		foreach ($opt as $key => $val)
+		{
+			$opt_row['config_' . $key] = $val;
+		}
+		$affected += $db->update($db_config, $opt_row, "config_owner = ?
 			AND config_cat = ? AND config_name = ?", array($type, $name, $config_name));
 	}
 
