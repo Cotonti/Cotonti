@@ -505,10 +505,6 @@ if (!$cot_cat)
 
 $cot_yesno[0] = $L['No'];
 $cot_yesno[1] = $L['Yes'];
-$cot_img_up = $R['icon_up'];
-$cot_img_down = $R['icon_down'];
-$cot_img_left = $R['icon_left'];
-$cot_img_right = $R['icon_right'];
 
 /* ======== Local/GMT time ======== */
 

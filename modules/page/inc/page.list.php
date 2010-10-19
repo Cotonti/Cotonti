@@ -201,8 +201,8 @@ $arrows = array();
 $params = array('title','key','date','author','owner','count','filecount');
 foreach($params as $val)
 {
-    $arrows[$val]['asc']  = $cot_img_down;
-    $arrows[$val]['desc'] = $cot_img_up;
+    $arrows[$val]['asc']  = $R['icon_down'];
+    $arrows[$val]['desc'] = $R['icon_up'];
 }
 $arrows[$s][$w]  = $R['icon_vert_active'][$w];
 
@@ -227,8 +227,8 @@ if (!$cat['group'])
 	foreach ($cot_extrafields['pages'] as $row_p)
 	{
 		$uname = strtoupper($row_p['field_name']);
-	    $arrows[$row_p['field_name']]['asc']  = $cot_img_down;
-		$arrows[$row_p['field_name']]['desc'] = $cot_img_up;
+	    $arrows[$row_p['field_name']]['asc']  = $R['icon_down'];
+		$arrows[$row_p['field_name']]['desc'] = $R['icon_up'];
 	    $arrows[$s][$w]  = $R['icon_vert_active'][$w];
 		isset($L['page_'.$row_p['field_name'].'_title']) ? $extratitle = $L['page_'.$row_p['field_name'].'_title'] : $extratitle = $row_p['field_description'];
 		$t->assign('LIST_TOP_'.$uname, cot_rc('list_link_field_name', array('cot_img_down'=>$arrows[$row_p['field_name']]['asc'],'cot_img_up'=>$arrows[$row_p['field_name']]['desc'],'list_link_url_down' => cot_url('page',  array('s' => $row['field_name'], 'w' => 'asc') + $list_url_path), 'list_link_url_up' => cot_url('page', array('s' => $row['field_name'], 'w' => 'desc') + $list_url_path))));

@@ -52,14 +52,14 @@ function cursort($trigger, $way)
 {
 	if ($trigger)
 	{
-		global $cot_img_up, $cot_img_down;
+		global $R;
 		if ($way=='asc')
 		{
-			return ($cot_img_down);
+			return ($R['icon_down']);
 		}
 		else
 		{
-			return ($cot_img_up);
+			return ($R['icon_up']);
 		}
 	}
 	else
