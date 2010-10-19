@@ -180,7 +180,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 		{
 
 			$user_data['user_birthdate'] = cot_date2stamp($user_data['user_birthdate']);
-			$user_data['user_text'] = cot_build_usertext(htmlspecialchars($user_data['user_text']));
+			$user_data['user_text'] = cot_build_usertext($user_data['user_text']);
 			
 			$temp_array = array(
 				'ID' => $user_data['user_id'],
