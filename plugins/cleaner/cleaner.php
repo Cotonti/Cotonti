@@ -47,7 +47,7 @@ if ($cfg['plugin']['cleaner']['logprune'] > 0)
 	}
 }
 
-if ($cfg['plugin']['cleaner']['refprune'] > 0)
+if ($cfg['plugin']['cleaner']['refprune'] > 0 && $cot_plugins['tools']['referers'])
 {
 	$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['refprune'] * 86400);
 	$sqltmp = $db->query("DELETE FROM $db_referers WHERE ref_date<$timeago");
