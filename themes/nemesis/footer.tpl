@@ -2,7 +2,7 @@
 
 	</div>
 
-	<div id="footer" class="clear">
+	<div id="footer" class="body clear">
 		<ul class="column">
 			<li><strong>Stay tuned!</strong></li>
 			<li>{PHP.R.icon_rss} <a href="index.php?z=rss" title="{PHP.L.RSS_Feeds}">RSS</a></li>
@@ -35,6 +35,10 @@
 			<li>{PHP.out.loginout}</li>
 <!-- END: USER -->
 		</ul>
+		<hr />
+<!-- While keeping copyright notice is optional, you can place a backlink to cotonti.com to support the Developers Team -->
+		<div id="powered">{FOOTER_COPYRIGHT}</div>
+<!-- Thanks! -->
 	</div>
 
 	<div id="magnifier">
@@ -47,11 +51,7 @@
 		</form>
 	</div>
 
-<!-- While keeping copyright notice is optional, you can place a backlink to cotonti.com to support the Developers Team -->
-	<div id="powered">{FOOTER_COPYRIGHT}</div>
-<!-- Thanks! -->
 
-</div>
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 /* 1. Footer
 -------------------------------------------------- */
 
-#footer				{ font-size:.9em; color:#f8f8f8; margin:0 0 10px; padding:20px 40px; background:#667e72; overflow:auto; }
+#footer				{ font-size:.9em; color:#f8f8f8; margin-bottom:10px; padding:20px 40px; width:880px; background:#667e72; }
 #footer a			{ color:#fff; }
 #footer strong		{ color:#a1b3aa; text-shadow:0 -1px 0 #000; margin-bottom:5px; border-bottom:1px solid; display:block; }
 
@@ -10,7 +10,16 @@
 #footer ul#account		{ width:420px; }
 #footer ul#account img	{ margin-top:3px; }
 
-/* 2. Powered by Cotonti (optional)
+#footer hr			{ border:0!important; }
+
+/* 2. Quicksearch
+-------------------------------------------------- */
+
+#magnifier		{ margin:0 0 0 170px; height:36px; width:310px; position:absolute; left:50%; top:76px; }
+#magnifier #s1	{ float:left; padding:6px 10px; border:0; height:24px; line-height:24px; width:240px; background:#fff; }
+#magnifier #s2	{ text-indent:-9999px; line-height:0; float:left; height:36px; width:40px; border:0; background:#fff url(../../../images/icons/default/search.png) no-repeat 50% 50%; cursor:pointer; }
+
+/* 3. Powered by Cotonti (optional)
 -------------------------------------------------- */
 
 #powered	{ margin-top:-145px; background:url(../img/powered-by-cotonti.png) no-repeat 0 0; height:120px; width:157px; position:absolute; left:814px; top:100%; }
