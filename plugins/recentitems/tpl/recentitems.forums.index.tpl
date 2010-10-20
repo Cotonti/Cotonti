@@ -15,7 +15,7 @@
 			<p class="strong"><a href="{FORUM_ROW_URL}">{FORUM_ROW_TITLE}</a></p>
 			<p class="small">{FORUM_ROW_PATH}</p>
 		</td>
-		<td class="centerall {FORUM_ROW_ODDEVEN}">
+		<td class="centerall b1 {FORUM_ROW_ODDEVEN}">
 			{FORUM_ROW_UPDATED} {FORUM_ROW_LASTPOSTER}<br />
 			{FORUM_ROW_TIMEAGO}
 		</td>

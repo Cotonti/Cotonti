@@ -23,12 +23,12 @@
 
 <body>
 
-<div id="container">
+	<div id="header" class="body">
+		<h1><a href="{PHP.cfg.mainurl}" title="{PHP.cfg.maintitle} {PHP.cfg.separator} {PHP.cfg.subtitle}">{PHP.cfg.maintitle}</a></h1>
+		<p class="small subtitle">{PHP.cfg.subtitle}</p>
+	</div>
 
-	<h1><a href="{PHP.cfg.mainurl}" title="{PHP.cfg.maintitle} {PHP.cfg.separator} {PHP.cfg.subtitle}">{PHP.cfg.maintitle}</a></h1>
-	<p class="small subtitle">{PHP.cfg.subtitle}</p>
-
-	<ul id="nav">
+	<ul id="nav" class="body">
 		<li>
 			<a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">
 				{PHP.L.Home}
@@ -55,8 +55,12 @@
 		</li>
 	</ul>
 
-	<!-- IF {PHP.z} == "index" --><img src="themes/{PHP.theme}/img/front_image.png" alt="" id="front_image" /><!-- ENDIF -->
+	<!-- IF {PHP.z} == "index" -->
+	<div id="slider" class="body">
+		<img src="themes/{PHP.theme}/img/front_image.png" alt="" id="front_image" />
+	</div>
+	<!-- ENDIF -->
 
-	<div id="main">
+	<div id="main" class="body">
 
 <!-- END: HEADER -->
