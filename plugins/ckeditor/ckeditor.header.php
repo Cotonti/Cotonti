@@ -1,8 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=header.tags
-Tags=header.tpl:{HEADER_HEAD}
+Hooks=header.main
 [END_COT_EXT]
 ==================== */
 
@@ -21,15 +20,21 @@ defined('COT_CODE') or die('Wrong URL');
 if (function_exists('cot_textarea') && cot_auth('plug', 'ckeditor', 'W'))
 {
 	// Main CKEditor file
-	$ckeditor = <<<HTM
-<script type="text/javascript" src="{$cfg['plugins_dir']}/ckeditor/lib/ckeditor.js"></script>
-HTM;
-	// Optional jQuery adapter
-	if ($cfg['jquery'])
+	if ($cfg['plugin']['ckeditor']['cdn'])
 	{
-		$ckeditor .= <<<HTM
-<script type="text/javascript" src="{$cfg['plugins_dir']}/ckeditor/lib/adapters/jquery.js"></script>
-HTM;
+		cot_headrc_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/ckeditor.js', 'request', 'js', true);
+		if ($cfg['jquery'])
+		{
+			cot_headrc_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/adapters/jquery.js', 'request');
+		}
+	}
+	else
+	{
+		cot_headrc_file($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js', 'request', 'js', true);
+		if ($cfg['jquery'])
+		{
+			cot_headrc_file($cfg['plugins_dir'] . '/ckeditor/lib/adapters/jquery.js');
+		}
 	}
 	// Load preset and connector
 	if ($usr['id'] > 0)
@@ -45,11 +50,7 @@ HTM;
 		$preset_name = file_exists($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.group_1.set.js") ? 'group_1'
 			: 'default';
 	}
-	$ckeditor .= <<<HTM
-<script type="text/javascript" src="{$cfg['plugins_dir']}/ckeditor/presets/ckeditor.$preset_name.set.js"></script>
-HTM;
-
-	$t->assign('HEADER_HEAD', $t->get('HEADER_HEAD') . $ckeditor);
+	cot_headrc_file($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js", 'request');
 }
 
 ?>

@@ -436,13 +436,6 @@ require_once cot_langfile('main', 'core');
 
 /* ======== Theme / color scheme ======== */
 
-$usr['theme_raw'] = $usr['theme'];
-
-if (@file_exists('./themes/'.$usr['theme'].'.'.$usr['lang'].'/header.tpl'))
-{
-	$usr['theme'] = $usr['theme'].'.'.$usr['lang'];
-}
-
 $mtheme = './themes/'.$usr['theme'].'/header.tpl';
 if (!file_exists($mtheme))
 {
@@ -461,8 +454,8 @@ if (!$mscheme)
 	cot_diefatal('Default scheme not found.'); // TODO: Need translate
 }
 
-$usr['def_theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme_raw'].'.en.lang.php';
-$usr['theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme_raw'].'.'.$usr['lang'].'.lang.php';
+$usr['def_theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme'].'.en.lang.php';
+$usr['theme_lang'] = './themes/'.$usr['theme'].'/'.$usr['theme'].'.'.$usr['lang'].'.lang.php';
 if ($usr['theme_lang'] != $usr['def_theme_lang'] && @file_exists($usr['theme_lang']))
 {
 	require_once $usr['theme_lang'];

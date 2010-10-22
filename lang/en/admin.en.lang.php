@@ -159,7 +159,11 @@ $L['cfg_cache_forums'] = array('Page cache in forums', 'Caches entire pages outp
 $L['cfg_cache_index'] = array('Page cache on index', 'Index will be static for all guests'); // New in 0.7.0
 $L['cfg_cache_page'] = array('Page cache in page and list', 'Caches entire pages for guests'); // New in 0.7.0
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
+$L['cfg_headrc_consolidate'] = array('Consolidate &lt;head&gt; resources (JS/CSS)');
+$L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
+$L['cfg_jquery_cdn'] = array('Use jQuery from Google Ajax APIs CDN');
 $L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // New in 0.7.0
+$L['cfg_theme_consolidate'] = array('Include theme CSS in consolidated CSS', 'Works only if the default theme is forced for all users');
 
 /**
  * Config Section

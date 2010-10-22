@@ -4,7 +4,7 @@
 Code=ckeditor
 Name=CKEditor
 Description=WYSIWYG HTML editor
-Version=0.7.0-3.4.1
+Version=0.7.0.1-3.4.1
 Date=2010-oct-08
 Author=CKSource, http://ckeditor.com/
 Copyright=(c) 2003 - 2010 CKSource - Frederico Knabben.
@@ -17,7 +17,8 @@ Lock_members=12345A
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
-skin=01:string::kama:Skin of the editor (plugins/ckeditor/lib/skins/xxxxx)
+cdn=01:radio::0:Use CDN-hosted CKEditor
+cdn_url=02:string::ckeditor-fluid.appspot.com:CDN URL (without protocol part and trailing slash)
 [END_COT_EXT_CONFIG]
 ==================== */
 

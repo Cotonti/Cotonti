@@ -31,6 +31,18 @@ $known_content_types = array(
 	'png' => 'image/png'
 );
 
+// Static resource cache support
+if (isset($_GET['rc']) && preg_match('#^[\w\.\-]+\.(js|css)$#', $_GET['rc'], $mt))
+{
+	$_GET['uri'] = $cfg['cache_dir'] . '/static/' . $_GET['rc'];
+	$static_rc_output = true;
+	$content_type = $known_content_types[$mt[1]];
+}
+else
+{
+	$static_rc_output = false;
+}
+
 /*
  * Get the path of the target file.
  */
@@ -95,6 +107,28 @@ if (function_exists('http_match_etag') && function_exists('http_match_modified')
 else
 {
 	error_log('The HTTP extensions to PHP does not seem to be installed...'); // TODO: Need translate
+}
+
+/*
+ *  Cotonti Static Resources Cache
+ */
+if ($static_rc_output)
+{
+	header('Content-Type: '.$content_type);
+	if (@strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') === FALSE)
+	{
+		readfile($src_uri);
+	}
+	else
+	{
+		header('Content-Encoding: gzip');
+		if (!file_exists($src_uri . '.gz'))
+		{
+			file_put_contents($src_uri . '.gz', gzencode(file_get_contents($src_uri)));
+		}
+		echo file_get_contents($src_uri . '.gz');
+	}
+	exit;
 }
 
 /*

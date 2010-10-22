@@ -4,7 +4,7 @@
 Code=markitup
 Name=MarkItUp!
 Description=Plain-source BBcode/HTML editor using jQuery
-Version=0.7.0.1
+Version=0.7.0.2
 Date=2009-jan-03
 Author=Jay Salvat, http://markitup.jaysalvat.com
 Copyright=Copyright (C) 2007-2010 Jay Salvat
