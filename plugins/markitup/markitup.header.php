@@ -1,8 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=header.tags
-Tags=header.tpl:{HEADER_HEAD}
+Hooks=header.main
 [END_COT_EXT]
 ==================== */
 
@@ -20,6 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (function_exists('cot_textarea') && cot_auth('plug', 'markitup', 'W'))
 {
+	// Language selection
 	$mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
 	if (!file_exists($mkup_lang))
 	{
@@ -31,39 +31,34 @@ if (function_exists('cot_textarea') && cot_auth('plug', 'markitup', 'W'))
 		$smile_lang = './images/smilies/lang/en.lang.js';
 	}
 
+	// BBcode or HTML preset
 	$mkup_set = function_exists('cot_bbcode_parse') ? 'bbcode' : 'html';
 
-	$markitup = <<<HTM
-<script type="text/javascript" src="$smile_lang"></script>
-<script type="text/javascript" src="./images/smilies/set.js"></script>
-<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jquery.markitup.js"></script>
-<script type="text/javascript" src="$mkup_lang"></script>
-<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/jqModal.js"></script>
-<script type="text/javascript" src="{$cfg['plugins_dir']}/markitup/js/{$mkup_set}.set.js"></script>
-<link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/skins/{$cfg['plugin']['markitup']['skin']}/style.css" />
-<link rel="stylesheet" type="text/css" href="{$cfg['plugins_dir']}/markitup/style.css" />
-HTM;
+	// Load head resources
+	cot_headrc_file($smile_lang, 'user');
+	cot_headrc_file('images/smilies/set.js');
+	cot_headrc_file($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.js');
+	cot_headrc_file($mkup_lang, 'user');
+	cot_headrc_file($cfg['plugins_dir'] . '/markitup/js/jqModal.js');
+	cot_headrc_file($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
+	cot_headrc_file($cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css', 'global', 'css');
+	cot_headrc_file($cfg['plugins_dir'] . '/markitup/style.css', 'global', 'css');
 	if ($cfg['plugin']['markitup']['chili'])
 	{
-		$markitup .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/markitup/js/chili.js"></script>';
+		cot_headrc_file($cfg['plugins_dir'].'/markitup/js/chili.js');
 	}
+
+	// User-specific setup
 	$autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
 	$parserpath = cot_url('plug', 'r=markitup&x=' . $sys['xk'], '', true);
-	$markitup .= '
-<script type="text/javascript">
-//<![CDATA[
-mySettings.previewAutorefresh = '.$autorefresh.';
+	cot_headrc_embed('markitup.set', 'mySettings.previewAutorefresh = '.$autorefresh.';
 mySettings.previewParserPath = "'.$parserpath.'";
 mini.previewAutorefresh = '.$autorefresh.';
 mini.previewParserPath = mySettings.previewParserPath;
 $(document).ready(function() {
 $("textarea.editor").markItUp(mySettings);
 $("textarea.minieditor").markItUp(mini);
-});
-//]]>
-</script>';
-
-	$t->assign('HEADER_HEAD', $t->get('HEADER_HEAD') . $markitup);
+});', 'user');
 }
 
 ?>

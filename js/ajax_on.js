@@ -1,0 +1,1 @@
+ajaxEnabled = true;

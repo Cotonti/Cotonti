@@ -480,3 +480,13 @@ UPDATE `cot_bbcode` SET `bbc_replacement` = 'return cot_obfuscate(''<a href="mai
 	WHERE `bbc_name` = 'email';
 UPDATE `cot_bbcode` SET `bbc_replacement` = 'return ''<pre class="code">''.cot_bbcode_cdata($input[1]).''</pre>'';'
 	WHERE `bbc_name` = 'code';
+
+/* r1370 Remove obsolete parser configs */
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'parser';
+
+/* r1446 JS/CSS consolidator settings */
+INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
+('core','performance','21','headrc_consolidate',3,'0','0','',''),
+('core','performance','22','headrc_minify',3,'1','1','',''),
+('core','performance','23','jquery_cdn',3,'0','0','',''),
+('core','performance','24','theme_consolidate',3,'0','0','','');

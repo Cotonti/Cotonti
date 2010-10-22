@@ -40,13 +40,21 @@ else
 	$out['fulltitle'] = cot_title('title_header', $title_params);
 }
 
+cot_javascript();
+
+if ($cfg['theme_consolidate'] && $cfg['forcedefaulttheme'])
+{
+	cot_headrc_file(cot_schemefile(), 'global', 'css');
+}
+
+
 $out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
 $out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = 'UTF-8';
 $out['meta_desc'] = htmlspecialchars($out['desc']);
 $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
-$out['head_head'] = cot_javascript($morejavascript) . $out['head'];
+$out['head_head'] = $out['head'];
 
 if (isset($env['status']))
 {
@@ -87,7 +95,7 @@ if (!COT_AJAX)
 		'HEADER_META_DESCRIPTION' => $out['meta_desc'],
 		'HEADER_META_KEYWORDS' => $out['meta_keywords'],
 		'HEADER_META_LASTMODIFIED' => $out['meta_lastmod'],
-		'HEADER_HEAD' => $out['head_head']
+		'HEADER_HEAD' => cot_headrc_consolidate() . $out['head_head']
 	));
 
 	/* === Hook === */
@@ -112,6 +120,13 @@ if (!COT_AJAX)
 			'HEADER_USER_MESSAGES' => $usr['messages']
 		));
 
+		/* === Hook === */
+		foreach (cot_getextplugins('header.user.tags') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
 		$t->parse('HEADER.USER');
 	}
 	else
@@ -129,6 +144,13 @@ if (!COT_AJAX)
 			'HEADER_GUEST_REGISTER' => $out['guest_register'],
 			'HEADER_GUEST_COOKIETTL' => $out['guest_cookiettl']
 		));
+
+		/* === Hook === */
+		foreach (cot_getextplugins('header.guest.tags') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		$t->parse('HEADER.GUEST');
 	}

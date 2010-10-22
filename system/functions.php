@@ -1658,16 +1658,30 @@ function cot_headrc_consolidate()
 					break;
 				case 'request':
 					// Direct output
-					foreach ($data['files'] as $path)
+					foreach ($data['files'] as $file_data)
 					{
-						$output .= cot_rc("code_headrc_{$type}_file", array('url' => $path));
+						$path = $file_data[0];
+						$prepend = $file_data[1];
+						if ($prepend)
+						{
+							$output = cot_rc("code_headrc_{$type}_file", array('url' => $path)) . $output;
+						}
+						else
+						{
+							$output .= cot_rc("code_headrc_{$type}_file", array('url' => $path));
+						}
 					}
 					if (!empty($data['embed']))
 					{
 						$output .= cot_rc("code_headrc_{$type}_embed", array('code' => $data['embed']));
 					}
-					continue;
+					unset($data);
 					break;
+			}
+
+			if ($scope == 'request')
+			{
+				continue;
 			}
 
 			$target_path = $cfg['cache_dir'] . '/static/' . $target . '.' . $type;
@@ -1678,10 +1692,6 @@ function cot_headrc_consolidate()
 			if (!file_exists($target_path))
 			{
 				// Just compile a new cache file
-				foreach ($data as $path)
-				{
-					$code .= file_get_contents($path) . "\n";
-				}
 				$file_list = $data;
 				$modified = true;
 			}
@@ -1704,24 +1714,77 @@ function cot_headrc_consolidate()
 						$modified = true;
 					}
 				}
-
-				if ($modified)
-				{
-					// Reconsolidate cache
-					foreach ($file_list as $path)
-					{
-						$code .= file_get_contents($path) . "\n";
-					}
-				}	
 			}
 			
 			if ($modified)
 			{
+				// Reconsolidate cache
+				$separator = $type == 'js' ? "\n;" : "\n";
+				$current_path = realpath('.');
+				foreach ($file_list as $path)
+				{
+					$file_code = str_replace(pack('CCC',0xef,0xbb,0xbf), '', file_get_contents($path));
+					$file_path = dirname(realpath($path));
+					$relative_path = str_replace($current_path, '', $file_path);
+					if ($relative_path[0] === '/')
+					{
+						$relative_path = mb_substr($relative_path, 1);
+					}
+					if ($type == 'css')
+					{
+						// Apply CSS imports
+						if (preg_match_all('#@import\s+url\((\'|")?(.+?\.css)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
+						{
+							foreach ($mt as $m)
+							{
+								$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
+								$file_code = str_replace($m[0], file_get_contents($filename), $file_code);
+							}
+						}
+						// Fix URLs
+						if (preg_match_all('#\burl\((\'|")?(.+?)\1?\)#i', $file_code, $mt, PREG_SET_ORDER))
+						{
+							foreach ($mt as $m)
+							{
+								$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
+								$filename = str_replace($current_path, '', realpath($filename));
+								if (!$filename)
+								{
+									continue;
+								}
+								if ($filename[0] === '/')
+								{
+									$filename = mb_substr($filename, 1);
+								}
+								$file_code = str_replace($m[0], 'url("'.$filename.'")', $file_code);
+							}
+						}
+					}
+					$code .= $file_code . $separator;
+				}
+
+				if ($cfg['headrc_minify'])
+				{
+					if ($type == 'js')
+					{
+						require_once './lib/jsmin.php';
+						$code = JSMin::minify($code);
+					}
+					elseif ($type == 'css')
+					{
+						require_once './lib/cssmin.php';
+						$code = CssMin::minify($code);
+					}
+				}
 				file_put_contents($target_path, $code);
+				if ($cfg['gzip'])
+				{
+					file_put_contents("$target_path.gz", gzencode($code));
+				}
 				file_put_contents("$target_path.idx", serialize($file_list));
 			}
 			
-			$rc_url = 'rc.php?'.$type.'='.$files_target;
+			$rc_url = "rc.php?rc=$target.$type";
 			$output .= cot_rc("code_headrc_{$type}_file", array('url' => $rc_url));
 		}
 	}
@@ -1748,10 +1811,16 @@ function cot_headrc_consolidate()
 function cot_headrc_embed($identifier, $code, $scope = 'global', $type = 'js')
 {
 	global $cfg, $cot_headrc;
+
+	if (!$cfg['headrc_consolidate'])
+	{
+		$scope = 'request';
+	}
 	
 	if ($scope == 'request')
 	{
-		$cot_headrc[$scope][$type]['embed'] .= $code . "\n";
+		$separator = $type == 'js' ? "\n;" : "\n";
+		$cot_headrc[$scope][$type]['embed'] .= $code . $separator;
 	}
 	else
 	{
@@ -1785,19 +1854,25 @@ function cot_headrc_embed($identifier, $code, $scope = 'global', $type = 'js')
  * Tend to use the global scope whenever possible because it has best caching effect. Use user scope for
  * user-specific and private code and data, use request scope for temporary embeds ( with cot_headrc_embed()).
  * @param string $type Resource type: 'js' or 'css'
+ * @param bool $prepend For 'request' scope - prepend this file before other resources
  * @return bool This function always returns TRUE
  */
-function cot_headrc_file($path, $scope = 'global', $type = 'js')
+function cot_headrc_file($path, $scope = 'global', $type = 'js', $prepend = false)
 {
-	global $cot_headrc;
+	global $cfg, $cot_headrc;
 	if (!file_exists($path))
 	{
 		return false;
 	}
 
+	if (!$cfg['headrc_consolidate'])
+	{
+		$scope = 'request';
+	}
+
 	if ($scope == 'request')
 	{
-		$cot_headrc[$scope][$type]['files'][] = $path;
+		$cot_headrc[$scope][$type]['files'][] = array($path, $prepend);
 	}
 	else
 	{
@@ -1808,32 +1883,30 @@ function cot_headrc_file($path, $scope = 'global', $type = 'js')
 
 /**
  * Outputs standard javascript
- *
- * @param string $more Extra javascript
- * @return string
  */
-function cot_javascript($more='')
+function cot_javascript()
 {
-	// TODO replace this function with JS/CSS proxy
-	global $cfg, $lang;
+	global $cfg;
+	
 	if ($cfg['jquery'])
 	{
-		if ($cfg['turnajax'])
+		if ($cfg['jquery_cdn'])
 		{
-			$result .= '<script type="text/javascript" src="js/jquery.history.js"></script>';
-			$more .= empty($more) ? 'ajaxEnabled = true;' : "\najaxEnabled = true;";
+			cot_headrc_file('https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js', 'request', 'js', true);
+		}
+		else
+		{
+			cot_headrc_file('js/jquery.js');
 		}
 	}
-	$result .= '<script type="text/javascript" src="js/base.js"></script>';
-	if (!empty($more))
+
+	cot_headrc_file('js/base.js');
+
+	if ($cfg['jquery'] && $cfg['turnajax'])
 	{
-		$result .= '<script type="text/javascript">
-//<![CDATA[
-'.$more.'
-//]]>
-</script>';
+		cot_headrc_file('js/jquery.history.js');
+		cot_headrc_file('js/ajax_on.js');
 	}
-	return $result;
 }
 
 /**

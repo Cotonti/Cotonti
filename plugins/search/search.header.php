@@ -18,16 +18,17 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (!empty($highlight))
 {
-	$out['compopup'] .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/search/js/hl.js"></script>
-		<script type="text/javascript">$(document).ready(function() {$("div.fmsg").each(function() {';
+	cot_headrc_file($cfg['plugins_dir'].'/search/js/hl.js');
+	$search_embed = '$(document).ready(function() {$("div.fmsg").each(function() {';
 
 	$highlight = explode(' ', $highlight);
 	foreach ($highlight as $key=>$value)
 	{
-		$out['compopup'] .= '$.highlight(this, \''.strtoupper($value).'\');';
+		$search_embed .= '$.highlight(this, \''.strtoupper($value).'\');';
 	}
 
-	$out['compopup'] .= '});});</script>';
+	$search_embed .= '});});';
+	cot_headrc_embed('search.highlight', $search_embed, 'request');
 }
 
 ?>

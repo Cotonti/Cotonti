@@ -97,7 +97,7 @@ function cot_radiobox($chosen, $name, $values, $titles = array(), $attrs = '', $
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = cot_rc_attr_string($attrs);
-	$chosen = htmlspecialchars(cot_import_buffered($name, $chosen));
+	$chosen = cot_import_buffered($name, $chosen);
 	if (empty($separator))
 	{
 		$separator = $R['input_radio_separator'];
@@ -151,7 +151,7 @@ function cot_selectbox($chosen, $name, $values, $titles = array(), $add_empty = 
 	}
 	$use_titles = count($values) == count($titles);
 	$input_attrs = cot_rc_attr_string($attrs);
-	$chosen = htmlspecialchars(cot_import_buffered($name, $chosen));
+	$chosen = cot_import_buffered($name, $chosen);
 	$multi = is_array($chosen) && isset($input_attrs['multiple']);
 	$error = $cfg['msg_separate'] ? cot_implode_messages($name, 'error') : '';
 	$rc_name = preg_match('#^(\w+)\[(.*?)\]$#', $name, $mt) ? $mt[1] : $name;

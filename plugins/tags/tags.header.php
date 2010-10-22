@@ -29,14 +29,10 @@ if ($cfg['plugin']['tags']['pages']
 		&& in_array($m, array('edit', 'editpost', 'posts', 'newtopic'))
 		&& cot_auth('plug', 'tags', 'W'))
 	{
-		$out['compopup'] .= '<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
+		cot_headrc_file('js/jquery.autocomplete.js');
+		cot_headrc_embed('tags.autocomplete', '$(document).ready(function(){
 $(".autotags").autocomplete("'.cot_url('plug', 'r=tags').'", {multiple: true, minChars: '.$cfg['plugin']['tags']['autocomplete'].'});
-});
-//]]>
-</script>';
+});');
 	}
 }
 
