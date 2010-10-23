@@ -39,8 +39,8 @@ else
 $out['meta_contenttype'] = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
 $out['basehref'] = '<base href="'.$cfg['mainurl'].'/" />';
 $out['meta_charset'] = $cfg['charset'];
-$out['meta_desc'] = $plug_desc.htmlspecialchars($cfg['maintitle'])." - ".htmlspecialchars($cfg['subtitle']);
-$out['meta_keywords'] = $plug_keywords.$cfg['metakeywords'];
+$out['meta_desc'] = empty($plug_desc) ? htmlspecialchars($cfg['maintitle'])." - ".htmlspecialchars($cfg['subtitle']) : $plug_desc;
+$out['meta_keywords'] = empty($plug_keywords) ? $cfg['metakeywords'] : $plug_keywords;
 $out['meta_lastmod'] = gmdate("D, d M Y H:i:s");
 $out['head_head'] = $plug_head;
 
