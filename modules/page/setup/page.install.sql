@@ -62,9 +62,9 @@ INSERT INTO `cot_pages` (`page_state`, `page_cat`, `page_key`, `page_title`, `pa
 (0, 'news', '', 'Welcome !', '...', 'Congratulations, your website is up and running!\r\nNow create your account, go [url=users.php?m=auth]there[/url], then log-in with the link at the top.\r\nNote that the first user to register is automatically activated and assigned to the group "Administrators". Then, by default, all the next visitors will have to validate their account by clicking a link in an email sent by Cotonti.\r\nNext step is to go in the [url=admin.php]Administration panel[/url], tab [url=admin.php?m=config]Configuration[/url], and there tweak the settings for the system.', '', 1, 1232998830, 1232998830, 1420110000, 0, '', '', 27, '0.00', 0, '');
 
 -- Default page categories
-INSERT INTO `cot_structure` (`structure_code`, `structure_path`, `structure_tpl`, `structure_title`,
+INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`,
    `structure_desc`, `structure_icon`, `structure_group`, `structure_order`, `structure_pagecount`) VALUES
-('articles', '1', '', 'Articles', '', '', 0, 'title.asc', 0),
-('links', '2', '', 'Links', '', '', 0, 'title.asc', 0),
-('events', '3', '', 'Events', '', '', 0, 'date.asc', 0),
-('news', '4', '', 'News', '', '', 0, 'date.desc', 1);
+('page', 'articles', '1', '', 'Articles', '', '', 0, 'title.asc', 0),
+('page', 'links', '2', '', 'Links', '', '', 0, 'title.asc', 0),
+('page', 'events', '3', '', 'Events', '', '', 0, 'date.asc', 0),
+('page', 'news', '4', '', 'News', '', '', 0, 'date.desc', 1);
