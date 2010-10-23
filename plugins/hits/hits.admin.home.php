@@ -63,16 +63,19 @@ if (!$cfg['plugin']['hits']['disableactivitystats'])
 	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_regdate>'$timeback'");
 	$newusers = $sql->fetchColumn();
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_date >'$timeback'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_date > '$timeback'");
 	$newpages = $sql->fetchColumn();
 
-	cot_require('forums');
+	if ($cfg['module']['forums'])
+	{
+		cot_require('forums');
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
-	$newtopics = $sql->fetchColumn();
+		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
+		$newtopics = $sql->fetchColumn();
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
-	$newposts = $sql->fetchColumn();
+		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
+		$newposts = $sql->fetchColumn();
+	}
 
 	if (function_exists('cot_get_newcomments'))
 	{

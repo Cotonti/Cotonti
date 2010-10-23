@@ -315,6 +315,7 @@ CREATE TABLE `cot_ratings` (
 
 CREATE TABLE `cot_structure` (
   `structure_id` mediumint NOT NULL auto_increment,
+  `structure_area` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `structure_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `structure_path` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `structure_tpl` varchar(128) collate utf8_unicode_ci NOT NULL default '',
