@@ -280,11 +280,6 @@ $bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars(
 $title = $bhome . cot_rc_link(cot_url('pm'), $L['Private_Messages']).' '.$cfg['separator'].' ';
 $title .= (!$id) ? $L['pmsend_title'] : $L['Edit'].' #'.$id;
 
-if (!$id)
-{
-	$t->parse("MAIN.PMSEND_USERLIST");
-}
-
 $t->assign(array(
 	"PMSEND_TITLE" => $title,
 	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
@@ -299,6 +294,11 @@ $t->assign(array(
 	"PMSEND_FORM_TOUSER" => cot_textarea('newpmrecipient', $touser, 3, 56),
 	"PMSEND_AJAX_MARKITUP" => (COT_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
 ));
+
+if (!$id)
+{
+	$t->parse("MAIN.PMSEND_USERLIST");
+}
 
 /* === Hook === */
 foreach (cot_getextplugins('pm.send.tags') as $pl)
