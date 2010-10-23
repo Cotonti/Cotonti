@@ -145,6 +145,7 @@ elseif ($a == 'send')
 
 		if (!$cot_error)
 		{
+			$stats_enabled = function_exists('cot_stat_inc');
 			foreach ($touser_ids as $k => $userid)
 			{
 				$pm['pm_title'] = $newpmtitle;
@@ -166,7 +167,7 @@ elseif ($a == 'send')
 					if ($row = $sql->fetch())
 					{
 						cot_send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
-						cot_stat_inc('totalmailpmnot');
+						if($stats_enabled) { cot_stat_inc('totalmailpmnot'); }
 					}
 				}
 			}
@@ -178,7 +179,7 @@ elseif ($a == 'send')
 			}
 			/* ===== */
 
-			cot_stat_inc('totalpms');
+			if($stats_enabled) { cot_stat_inc('totalpms'); }
 			cot_shield_update(30, "New private message (".$totalrecipients.")");
 			cot_redirect(cot_url('pm', 'f=sentbox'));
 		}
