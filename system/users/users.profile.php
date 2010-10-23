@@ -192,7 +192,7 @@ switch ($a)
 		$ruser['user_country'] = cot_import('rusercountry','P','ALP');
 		$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
 		$ruser['user_theme'] = $rtheme[0];
-		$ruset['scheme'] = $rtheme[1];
+		$ruser['user_scheme'] = $rtheme[1];
 		$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
 		$ruser['user_gender'] = cot_import('rusergender','P','ALP');
 		$ruser['user_timezone'] = (float) cot_import('rusertimezone','P','TXT',5);
