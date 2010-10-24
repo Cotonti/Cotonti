@@ -27,7 +27,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', '
 
 $pos = mb_strlen(stristr($v, '-'));
 $fid = mb_substr($v, 0, -$pos);
-$imgpath = ($cfg['pfsuserfolder']) ? $cfg['pfs_dir'].$fid.'/'.$v : $cfg['pfs_dir'].$v;
+$imgpath = ($cfg['pfs']['pfsuserfolder']) ? $cfg['pfs_dir'].$fid.'/'.$v : $cfg['pfs_dir'].$v;
 
 $dotpos = strrpos($imgpath, '.')+1;
 $f_extension = strtolower(mb_substr($imgpath, $dotpos,4));

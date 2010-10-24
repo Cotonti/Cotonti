@@ -455,7 +455,7 @@ $sqql_select = 't.*';
 $sqql_where = "ft_sectionid='$s' $cond";
 $sqql_where_count = "ft_sectionid='$s' $cond";
 $sqql_order = "ft_sticky DESC, ft_$o $w";
-$sqql_limit = "$d, ".$cfg['maxtopicsperpage'];
+$sqql_limit = "$d, ".$cfg['forums']['maxtopicsperpage'];
 $sqql_join_ratings_columns = '';
 $sqql_join_ratings_condition = '';
 
@@ -518,7 +518,7 @@ while ($row = $sql->fetch())
 			$row['ft_postisnew'] = TRUE;
 		}
 
-		if ($row['ft_postcount']>=$cfg['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
+		if ($row['ft_postcount']>=$cfg['forums']['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
 		{
 			$row['ft_icon'] = ($row['ft_postisnew']) ? 'posts_new_hot' : 'posts_hot';
 		}
@@ -541,10 +541,10 @@ while ($row = $sql->fetch())
 
 	$row['ft_firstpostername'] = cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername']));
 
-	if ($row['ft_postcount'] > $cfg['maxpostsperpage'])
+	if ($row['ft_postcount'] > $cfg['forums']['maxpostsperpage'])
 	{
 		$pn_q = $row['ft_movedto'] > 0 ? $row['ft_movedto'] : $row['ft_id'];
-		$pn = cot_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['maxpostsperpage'], 'd');
+		$pn = cot_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['forums']['maxpostsperpage'], 'd');
 		$row['ft_pages'] = cot_rc('forums_code_topic_pages', array('main' => $pn['main'], 'first' => $pn['first'], 'last' => $pn['last']));
 	}
 
@@ -581,7 +581,7 @@ while ($row = $sql->fetch())
 	$t->parse("MAIN.FORUMS_TOPICS_ROW");
 }
 
-$pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, $cfg['maxtopicsperpage']);
+$pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, $cfg['forums']['maxtopicsperpage']);
 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 

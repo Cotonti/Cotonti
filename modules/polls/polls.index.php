@@ -18,16 +18,16 @@ Tags=index.tpl:{INDEX_POLLS}
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['module']['polls']['maxpolls'] > 0)
+if ($cfg['polls']['maxpolls'] > 0)
 {
 	cot_require('polls');
 
 	cot_poll_vote();
 	$indexpolls = new XTemplate(cot_skinfile(array('polls', 'index'), false));
 
-	$sqlmode = ($cfg['module']['polls']['mode'] == 'Recent polls') ? 'poll_creationdate DESC' :'RAND()';
+	$sqlmode = ($cfg['polls']['mode'] == 'Recent polls') ? 'poll_creationdate DESC' :'RAND()';
 	$res = 0;
-	$sql_p = $db->query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode LIMIT ".$cfg['module']['polls']['maxpolls']);
+	$sql_p = $db->query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode LIMIT ".$cfg['polls']['maxpolls']);
 
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('polls.index.tags');
@@ -38,7 +38,7 @@ if ($cfg['module']['polls']['maxpolls'] > 0)
 		$poll_form = cot_poll_form($row_p, cot_url('index', ''), 'index');
 		$indexpolls->assign(array(
 			'IPOLLS_ID' => $row_p['poll_id'],
-			'IPOLLS_TITLE' => cot_parse($row_p['poll_text'], $cfg['module']['polls']['markup']),
+			'IPOLLS_TITLE' => cot_parse($row_p['poll_text'], $cfg['polls']['markup']),
 			'IPOLLS_URL' => cot_url('polls', 'id='.$row_p['poll_id']),
 			'IPOLLS_FORM' => $poll_form['poll_block']
 		));

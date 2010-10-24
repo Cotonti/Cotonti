@@ -21,8 +21,8 @@ cot_require('hits', true);
 if ($cache && $cache->mem)
 {
 	$hits = $cache->mem->inc('hits', 'system');
-	$cfg['hit_precision'] > 0 || $cfg['plugin']['hits']['hit_precision'] = 100;
-	if ($hits % $cfg['hit_precision'] == 0)
+	$cfg['plugin']['hits']['hit_precision'] > 0 || $cfg['plugin']['hits']['hit_precision'] = 100;
+	if ($hits % $cfg['plugin']['hits']['hit_precision'] == 0)
 	{
 		cot_stat_inc('totalpages', $cfg['plugin']['hits']['hit_precision']);
 		cot_stat_inc($sys['day'], $cfg['plugin']['hits']['hit_precision']);

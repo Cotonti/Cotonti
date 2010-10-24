@@ -94,7 +94,7 @@ foreach (cot_getextplugins('pm.main') as $pl)
 }
 /* ===== */
 
-$pm_maindata = cot_parse($row['pm_text'], $cfg['module']['pm']['markup']);
+$pm_maindata = cot_parse($row['pm_text'], $cfg['pm']['markup']);
 
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(cot_skinfile('pm.message'));
@@ -104,15 +104,15 @@ if ($history)
 	$sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
 						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)");
 	$totallines = $sql->fetchColumn();
-	$d = ($d >= $totallines) ? (floor($totallines / $cfg['maxpmperpage']))*$cfg['maxpmperpage'] : $d;
+	$d = ($d >= $totallines) ? (floor($totallines / $cfg['pm']['maxpmperpage']))*$cfg['pm']['maxpmperpage'] : $d;
 	$sql = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id = p.pm_touserid
 						WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
 						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
 						ORDER BY pm_date DESC LIMIT $d,".$cfg['maxpmperpage']);
 
-	$pm_totalpages = ceil($totallines / $cfg['maxpmperpage']);
-	$pm_currentpage = ceil ($d / $cfg['maxpmperpage'])+1;
-	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.$history.'&q='.$q, $d, $totallines, $cfg['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax'], 'ajaxHistory');
+	$pm_totalpages = ceil($totallines / $cfg['pm']['maxpmperpage']);
+	$pm_currentpage = ceil ($d / $cfg['pm']['maxpmperpage'])+1;
+	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.$history.'&q='.$q, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax'], 'ajaxHistory');
 
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('pm.history.loop');
@@ -139,7 +139,7 @@ if ($history)
 			$star_class = ($row2['pm_tostate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
 		}
 
-		$pm_data = cot_parse($row2['pm_text'], $cfg['module']['pm']['markup']);
+		$pm_data = cot_parse($row2['pm_text'], $cfg['pm']['markup']);
 
 		$row2['pm_icon_delete'] = cot_rc_link(cot_url('pm', 'a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d),
 				$R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax'));
@@ -204,7 +204,7 @@ if ($usr['auth_write'])
 		"PM_FORM_SEND" => cot_url('pm', 'm=send&a=send&to='.$to),
 		"PM_FORM_TITLE" => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 		"PM_FORM_TEXT" => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
-		"PM_AJAX_MARKITUP" => (COT_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
+		"PM_AJAX_MARKITUP" => (COT_AJAX && $cfg['plugin']['markitup'] && $cfg['jquery'] && $cfg['turnajax'])
 	));
 
 	/* === Hook === */

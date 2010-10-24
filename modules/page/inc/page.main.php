@@ -88,7 +88,7 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_do
 	unset($_SESSION['dl']);
 
 	$file_size = @filesize($row['page_url']);
-	if (!$usr['isadmin'] || $cfg['count_admin'])
+	if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 	{
 		$pag['page_filecount']++;
 		$sql = $db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$id);
@@ -98,10 +98,10 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_do
 	echo cot_rc('page_code_redir');
 	exit;
 }
-if (!$usr['isadmin'] || $cfg['count_admin'])
+if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 {
 	$pag['page_count']++;
-	$sql = (!$cfg['disablehitstats']) ? $db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'") : '';
+	$sql =  $db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'");
 }
 
 $catpath = cot_build_catpath($pag['page_cat']);
@@ -177,7 +177,7 @@ if ($usr['isadmin'])
 }
 
 
-$text = cot_parse($pag['page_text'], $cfg['module']['page']['markup']);
+$text = cot_parse($pag['page_text'], $cfg['markup']);
 $t->assign('PAGE_TEXT', $text);
 
 $pag['page_file'] = intval($pag['page_file']);

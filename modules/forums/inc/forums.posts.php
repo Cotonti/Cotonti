@@ -155,8 +155,8 @@ if ($a=='newpost')
 		{
 			cot_die();
 		}
-		$merge = (!$cfg['antibumpforums'] && $cfg['mergeforumposts'] && $row['ft_lastposterid']==$usr['id']) ? true : false;
-		if ($merge && $cfg['mergetimeout']>0 && ( ($sys['now_offset']-$row['ft_updated'])>($cfg['mergetimeout']*3600) ) )
+		$merge = (!$cfg['forums']['antibumpforums'] && $cfg['forums']['mergeforumposts'] && $row['ft_lastposterid']==$usr['id']) ? true : false;
+		if ($merge && $cfg['forums']['mergetimeout']>0 && ( ($sys['now_offset']-$row['ft_updated'])>($cfg['forums']['mergetimeout']*3600) ) )
 		{
 			$merge = false;
 		}
@@ -166,7 +166,7 @@ if ($a=='newpost')
 
 	if ($row = $sql->fetch())
 	{
-		if ($cfg['antibumpforums'] && ( ($usr['id']==0 && $row['fp_posterid']==0 && $row['fp_posterip']==$usr['ip']) || ($row['fp_posterid']>0 && $row['fp_posterid']==$usr['id']) ))
+		if ($cfg['forums']['antibumpforums'] && ( ($usr['id']==0 && $row['fp_posterid']==0 && $row['fp_posterip']==$usr['ip']) || ($row['fp_posterid']>0 && $row['fp_posterid']==$usr['id']) ))
 		{
 			cot_die();
 		}
@@ -464,7 +464,7 @@ if (!empty($p))
 {
 	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid = $q and fp_id < $p");
 	$postsbefore = $sql->fetchColumn();
-	$d = $cfg['maxpostsperpage'] * floor($postsbefore / $cfg['maxpostsperpage']);
+	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
 }
 
 if (empty($d))
@@ -489,7 +489,7 @@ else
 	$sql = $db->query("SELECT p.*, u.*
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid
 	WHERE fp_topicid='$q'
-	ORDER BY fp_id LIMIT $d, ".$cfg['maxpostsperpage']);
+	ORDER BY fp_id LIMIT $d, ".$cfg['forums']['maxpostsperpage']);
 }
 
 $title_params = array(
@@ -512,11 +512,11 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = cot_skinfile(array('forums', 'posts', $fs_category, $s));
 $t = new XTemplate($mskin);
 
-$nbpages = ceil($totalposts / $cfg['maxpostsperpage']);
-$curpage = $d / $cfg['maxpostsperpage'];
-$notlastpage = (($d + $cfg['maxpostsperpage'])<$totalposts) ? TRUE : FALSE;
+$nbpages = ceil($totalposts / $cfg['forums']['maxpostsperpage']);
+$curpage = $d / $cfg['forums']['maxpostsperpage'];
+$notlastpage = (($d + $cfg['forums']['maxpostsperpage'])<$totalposts) ? TRUE : FALSE;
 
-$pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['maxpostsperpage']);
+$pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['forums']['maxpostsperpage']);
 
 $sql1 = $db->query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername, s.fs_allowpolls FROM $db_forum_sections AS s LEFT JOIN
 	$db_forum_structure AS n ON n.fn_code=s.fs_category
@@ -633,7 +633,7 @@ while ($row = $sql->fetch())
 		"FORUMS_POSTS_ROW_UPDATED" => $row['fp_updated'],
 		"FORUMS_POSTS_ROW_UPDATER" => htmlspecialchars($row['fp_updater']),
 		"FORUMS_POSTS_ROW_UPDATEDBY" => $row['fp_updatedby'],
-		"FORUMS_POSTS_ROW_TEXT" => cot_parse($row['fp_text'], ($cfg['module']['forums']['markup'] && $fs_allowbbcodes)),
+		"FORUMS_POSTS_ROW_TEXT" => cot_parse($row['fp_text'], ($cfg['forums']['markup'] && $fs_allowbbcodes)),
 		"FORUMS_POSTS_ROW_ANCHORLINK" => cot_rc('forums_code_post_anchor', array('id' => $row['fp_id'])),
 		"FORUMS_POSTS_ROW_POSTERNAME" => cot_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
@@ -658,8 +658,8 @@ while ($row = $sql->fetch())
 	$t->parse("MAIN.FORUMS_POSTS_ROW");
 }
 
-$allowreplybox = (!$cfg['antibumpforums']) ? TRUE : FALSE;
-$allowreplybox = ($cfg['antibumpforums'] && $lastposterid>0 && $lastposterid==$usr['id'] && $usr['auth_write']) ? FALSE : TRUE;
+$allowreplybox = (!$cfg['forums']['antibumpforums']) ? TRUE : FALSE;
+$allowreplybox = ($cfg['forums']['antibumpforums'] && $lastposterid>0 && $lastposterid==$usr['id'] && $usr['auth_write']) ? FALSE : TRUE;
 
 // Nested quote stripper by Spartan
 function cot_stripquote($string)

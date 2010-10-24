@@ -140,7 +140,7 @@ if ($a=='upload')
 			$f_extension = mb_substr($u_name, $dotpos);
 			$f_extension_ok = 0;
 			$desc = $ndesc[$ii];
-			if($cfg['pfstimename'])
+			if($cfg['pfs']['pfstimename'])
 			{
 				$u_newname = time() . '_' . cot_unique(6) . '_' . $userid . '.' . $f_extension;
 			}
@@ -168,7 +168,7 @@ if ($a=='upload')
 					{
 						$is_moved = true;
 
-						if ($cfg['pfsuserfolder'])
+						if ($cfg['pfs']['pfsuserfolder'])
 						{
 							if (!is_dir($cfg['pfs_dir_user']))
 							{ $is_moved &= mkdir($cfg['pfs_dir_user'], $cfg['dir_perms']); }
@@ -220,12 +220,12 @@ if ($a=='upload')
 							}
 							/* ===== */
 
-							if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled' && file_exists($cfg['pfs_dir_user'].$u_newname))
+							if (in_array($f_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled' && file_exists($cfg['pfs_dir_user'].$u_newname))
 							{
 								@unlink($cfg['th_dir_user'].$u_newname);
-								$th_colortext = array(hexdec(substr($cfg['th_colortext'],0,2)), hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
-								$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)), hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
-								cot_createthumb($cfg['pfs_dir_user'].$u_newname, $cfg['th_dir_user'].$u_newname, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
+								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)), hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
+								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
+								cot_createthumb($cfg['pfs_dir_user'].$u_newname, $cfg['th_dir_user'].$u_newname, $cfg['pfs']['th_x'],$cfg['pfs']['th_y'], $cfg['pfs']['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext, $cfg['pfs']['th_textsize'], $th_colorbg, $cfg['pfs']['th_border'], $cfg['pfs']['th_jpeg_quality'], $cfg['pfs']['th_dimpriority']);
 							}
 						}
 						else
@@ -406,8 +406,8 @@ else
 
 $files_count = $sql->rowCount();
 $movebox = (empty($f)) ? cot_selectbox_folders($userid,"/","") : cot_selectbox_folders($userid,"$f","");
-$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
-$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
+$th_colortext = array(hexdec(mb_substr($cfg['pfs']['th_colortext'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],4,2)));
+$th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],4,2)));
 
 $iji=0;
 
@@ -433,13 +433,13 @@ while ($row = $sqll->fetch())
 		$pfs_extension = $pfs_realext;
 	}
 
-	if (in_array($pfs_extension, $gd_supported) && $cfg['th_amode']!='Disabled')
+	if (in_array($pfs_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled')
 	{
 		if (!file_exists($cfg['th_dir_user'].$pfs_file) && file_exists($cfg['pfs_dir_user'].$pfs_file))
 		{
-			$th_colortext = array(hexdec(mb_substr($cfg['th_colortext'],0,2)), hexdec(mb_substr($cfg['th_colortext'],2,2)), hexdec(mb_substr($cfg['th_colortext'],4,2)));
-			$th_colorbg = array(hexdec(mb_substr($cfg['th_colorbg'],0,2)), hexdec(mb_substr($cfg['th_colorbg'],2,2)), hexdec(mb_substr($cfg['th_colorbg'],4,2)));
-			cot_createthumb($cfg['pfs_dir_user'].$pfs_file, $cfg['th_dir_user'].$pfs_file, $cfg['th_x'],$cfg['th_y'], $cfg['th_keepratio'], $pfs_extension, $pfs_file, $pfs_filesize, $th_colortext, $cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'], $cfg['th_dimpriority']);
+			$th_colortext = array(hexdec(mb_substr($cfg['pfs']['th_colortext'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],4,2)));
+			$th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],4,2)));
+			cot_createthumb($cfg['pfs_dir_user'].$pfs_file, $cfg['pfs']['th_dir_user'].$pfs_file, $cfg['pfs']['th_x'],$cfg['pfs']['th_y'], $cfg['pfs']['th_keepratio'], $pfs_extension, $pfs_file, $pfs_filesize, $th_colortext, $cfg['pfs']['th_textsize'], $th_colorbg, $cfg['pfs']['th_border'], $cfg['pfs']['th_jpeg_quality'], $cfg['pfs']['th_dimpriority']);
 		}
 
 		if ($standalone)
@@ -481,7 +481,7 @@ if ($files_count>0 || $folders_count>0)
 	if ($folders_count>0)
 	{
 		$totalitemsf = $folders_count;
-		$pagenav = cot_pagenav('pfs', 'userid='.$usr['id'].$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['maxpfsperpage'], 'df');
+		$pagenav = cot_pagenav('pfs', 'userid='.$usr['id'].$pn_c1.$pn_c2, $df, $totalitemsf, $cfg['pfs']['maxpfsperpage'], 'df');
 
 		$t->assign(array(
 			'PFF_FOLDERCOUNT' => $folders_count,
@@ -499,7 +499,7 @@ if ($files_count>0 || $folders_count>0)
 		$thumbspagination = ($opt == 'thumbs') ? '&opt=thumbs' : '';
 		$totalitems = $files_count;
 		$pagenav = cot_pagenav('pfs', 'f='.$f.'&userid='.$usr['id'].$pn_c1.$pn_c2.$thumbspagination, $d,
-			$totalitems, $cfg['maxpfsperpage']);
+			$totalitems, $cfg['pfs']['maxpfsperpage']);
 
 		$filesinfolder .= ($f>0) ? $L['pfs_filesinthisfolder'] : $L['pfs_filesintheroot'];
 
@@ -516,7 +516,7 @@ if ($files_count>0 || $folders_count>0)
 
 // ========== Statistics =========
 
-$showthumbs .= ($opt!='thumbs' && $files_count>0 && $cfg['th_amode']!='Disabled') ? cot_rc_link(cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs'), $L['Thumbnails']) : '';
+$showthumbs .= ($opt!='thumbs' && $files_count>0 && $cfg['pfs']['th_amode']!='Disabled') ? cot_rc_link(cot_url('pfs', 'f='.$f.'&'.$more.'&opt=thumbs'), $L['Thumbnails']) : '';
 
 $t->assign(array(
 	'PFS_TOTALSIZE' => floor($pfs_totalsize/1024).$L['kb'],
@@ -538,7 +538,7 @@ $t->assign(array(
 	'PFS_UPLOAD_FORM_FOLDERS' => cot_selectbox_folders($userid, '', $f),
 ));
 
-for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
+for ($ii = 0; $ii < $cfg['pfs']['pfsmaxuploads']; $ii++)
 {
 	$t->assign(array(
 		'PFS_UPLOAD_FORM_ROW_ID' => $ii,

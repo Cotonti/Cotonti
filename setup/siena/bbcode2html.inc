@@ -16,7 +16,7 @@ defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
 $bbcode_installed = cot_plugin_installed('bbcode');
 
-if (cot_module_installed('page') && $cfg['module']['page']['markup'])
+if (cot_module_installed('page') && $cfg['page']['markup'])
 {
 	cot_require('page');
 	// Attempt to override from HTML cache
@@ -37,7 +37,7 @@ if (cot_module_installed('page') && $cfg['module']['page']['markup'])
 	cot_db_query("ALTER TABLE $db_pages DROP COLUMN page_type");
 }
 
-if (cot_module_installed('forums') && $cfg['module']['forums']['markup'])
+if (cot_module_installed('forums') && $cfg['forums']['markup'])
 {
 	cot_require('forums');
 	// Attempt to override from HTML cache
@@ -57,7 +57,7 @@ if (cot_module_installed('forums') && $cfg['module']['forums']['markup'])
 	cot_db_query("ALTER TABLE $db_forum_posts DROP COLUMN fp_html");
 }
 
-if (cot_module_installed('pm') && $cfg['module']['pm']['markup'])
+if (cot_module_installed('pm') && $cfg['pm']['markup'])
 {
 	cot_require('pm');
 	// Attempt to override from HTML cache

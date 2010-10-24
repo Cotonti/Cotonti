@@ -95,7 +95,7 @@ elseif ((int)$id > 0)
 	$poll_form = cot_poll_form($id);
 
 	$t->assign(array(
-		"POLLS_TITLE" => cot_parse($poll_form['poll_text'], $cfg['module']['polls']['markup']),
+		"POLLS_TITLE" => cot_parse($poll_form['poll_text'], $cfg['polls']['markup']),
 		"POLLS_FORM" => $poll_form['poll_block'],
 		"POLLS_VIEWALL" => cot_rc_link(cot_url('polls', 'id=viewall'), $L['polls_viewarchives'])
 	));
@@ -135,7 +135,7 @@ else
 		$t->assign(array(
 			"POLL_DATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
 			"POLL_HREF" => cot_url('polls', 'id='.$row['poll_id']),
-			"POLL_TEXT" => cot_parse($row['poll_text'], $cfg['module']['polls']['markup']),
+			"POLL_TEXT" => cot_parse($row['poll_text'], $cfg['polls']['markup']),
 			"POLL_NUM" => $jj,
 			"POLL_ODDEVEN" => cot_build_oddeven($jj)
 		));

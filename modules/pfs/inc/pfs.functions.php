@@ -74,7 +74,7 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 		$sql = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid=".(int)$ownerid." AND pff_id=".(int)$parentid);
 		$sql->rowCount()>0 or cot_die();
 	}
-	if ($cfg['pfsuserfolder'])
+	if ($cfg['pfs']['pfsuserfolder'])
 	{
 		cot_pfs_mkdir($cfg['pfs_path'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
 		cot_pfs_mkdir($cfg['pfs_thumbpath'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
@@ -273,7 +273,7 @@ function cot_pfs_folderpath($folderid, $fullpath='')
 {
 	global $db, $db_pfs_folders, $cfg;
 
-	if($fullpath==='') $fullpath = $cfg['pfsuserfolder'];
+	if($fullpath==='') $fullpath = $cfg['pfs']['pfsuserfolder'];
 
 	if($fullpath && $folderid>0)
 	{
@@ -374,7 +374,7 @@ function cot_pfs_relpath($userid)
 {
 	global $cfg;
 
-	if ($cfg['pfsuserfolder'])
+	if ($cfg['pfs']['pfsuserfolder'])
 	{
 		return($userid.'/');
 	}
@@ -394,7 +394,7 @@ function cot_pfs_thumbpath($userid)
 {
 	global $cfg;
 
-	if ($cfg['pfsuserfolder'])
+	if ($cfg['pfs']['pfsuserfolder'])
 	{
 		return($cfg['th_dir'].$userid.'/');
 	}
@@ -542,15 +542,15 @@ function cot_pfs_upload($userid, $folderid='')
 								&& file_exists($cfg['pfs_path'].$u_newname))
 							{
 								@unlink($cfg['pfs_thumbpath'].$npath.$u_newname);
-								$th_colortext = array(hexdec(substr($cfg['th_colortext'],0,2)),
-									hexdec(substr($cfg['th_colortext'],2,2)), hexdec(substr($cfg['th_colortext'],4,2)));
-								$th_colorbg = array(hexdec(substr($cfg['th_colorbg'],0,2)),
-									hexdec(substr($cfg['th_colorbg'],2,2)), hexdec(substr($cfg['th_colorbg'],4,2)));
+								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)),
+									hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
+								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)),
+									hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
 								cot_createthumb($cfg['pfs_path'].$npath.$u_newname,
-									$cfg['pfs_thumbpath'].$npath.$u_newname, $cfg['th_x'],$cfg['th_y'],
-									$cfg['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext,
-									$cfg['th_textsize'], $th_colorbg, $cfg['th_border'], $cfg['th_jpeg_quality'],
-									$cfg['th_dimpriority']);
+									$cfg['pfs']['pfs_thumbpath'].$npath.$u_newname, $cfg['pfs']['th_x'],$cfg['pfs']['th_y'],
+									$cfg['pfs']['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext,
+									$cfg['pfs']['th_textsize'], $th_colorbg, $cfg['pfs']['th_border'], $cfg['pfs']['th_jpeg_quality'],
+									$cfg['pfs']['th_dimpriority']);
 							}
 						}
 						else

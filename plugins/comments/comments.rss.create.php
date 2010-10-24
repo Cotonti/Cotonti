@@ -38,7 +38,7 @@ if ($c == 'comments')
 		$sql = $db->query("SELECT c.*, u.user_name
 			FROM $db_com AS c
 				LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
-			WHERE com_area = 'page' ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
+			WHERE com_area = 'page' ORDER BY com_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 		$i = 0;
 		while ($row = $sql->fetch())
 		{
@@ -76,12 +76,12 @@ if ($c == 'comments')
 					FROM $db_com AS c
 						LEFT JOIN $db_users AS u ON c.com_authorid = u.user_id
 					WHERE com_area = 'page' AND com_code='$page_id'
-					ORDER BY com_date DESC LIMIT ".$cfg['rss_maxitems']);
+					ORDER BY com_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 				$i = 0;
 				while ($row1 = $sql->fetch())
 				{
 					$items[$i]['title'] = $L['rss_comment_of_user']." ".$row1['user_name'];
-					$text = cot_parse($row1['com_text'], $cfg['parsebbcodecom']);
+					$text = cot_parse($row1['com_text'], $cfg['plugin']['comments']['parsebbcodecom']);
 					if ((int)$cfg['plugin']['comments']['rss_commentmaxsymbols'] > 0)
 					{
 						$text .= (cot_string_truncate($text, $cfg['plugin']['comments']['rss_commentmaxsymbols'])) ? '...' : '';

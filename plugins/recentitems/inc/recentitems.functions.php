@@ -105,7 +105,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 				$row['ft_postisnew'] = TRUE;
 			}
 
-			if ($row['ft_postcount']>=$cfg['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
+			if ($row['ft_postcount']>=$cfg['forums']['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
 			{
 				$row['ft_icon'] = ($row['ft_postisnew']) ? 'posts_new_hot' : 'posts_hot';
 			}
@@ -128,9 +128,9 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 
 		$row['ft_firstpostername'] = cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername']));
 
-		if ($row['ft_postcount'] > $cfg['maxtopicsperpage'])
+		if ($row['ft_postcount'] > $cfg['forums']['maxtopicsperpage'])
 		{
-			$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['maxtopicsperpage']);
+			$row['ft_maxpages'] = ceil($row['ft_postcount'] / $cfg['forums']['maxtopicsperpage']);
 			$row['ft_pages'] = $L['Pages'].":";
 		}
 
