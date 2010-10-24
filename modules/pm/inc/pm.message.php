@@ -239,7 +239,7 @@ $t->assign(array(
 	"PM_ICON_STARRED" => $row['pm_icon_starred'],
 	"PM_DELETE" => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
 	"PM_EDIT" => $row['pm_icon_edit'],
-	"PM_HISTORY" => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messagehistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
+	"PM_HISTORY" => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messageshistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
 	"PM_SENT_TYPE" => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
 ));
 $t->assign(cot_generate_usertags($row_user, "PM_USER_"));
