@@ -144,14 +144,14 @@ if ($a=='update')
 		{
 			$oldname = $db->prep($urr['user_name']);
 			$newname = $db->prep($ruser['user_name']);
-			if ($cfg['module']['forums'])
+			if ($cfg['forums'])
 			{
 				cot_require('forums');
 				$db->update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername="'.$oldname.'"');
 				$db->update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername="'.$oldname.'"');
 				$db->update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername="'.$oldname.'"');
 			}
-			if ($cfg['module']['page'])
+			if ($cfg['page'])
 			{
 				cot_require('page');
 				$db->update($db_pages, array('page_author' => $newname), 'page_author="'.$oldname.'"');
@@ -161,7 +161,7 @@ if ($a=='update')
 				cot_require('comments', true);
 				$db->update($db_com, array('com_author' => $newname), 'com_author="'.$oldname.'"');
 			}
-			if ($cfg['module']['pm'])
+			if ($cfg['pm'])
 			{
 				cot_require('pm');
 				$db->update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser="'.$oldname.'"');

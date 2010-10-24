@@ -59,7 +59,7 @@ if ($cfg['plugin']['cleaner']['refprune'] > 0 && $cot_plugins['tools']['referers
 	}
 }
 
-if ($cfg['module']['pm'])
+if ($cfg['pm'])
 {
 	cot_require('pm');
 	if ($cfg['plugin']['cleaner']['pmnotread'] > 0)

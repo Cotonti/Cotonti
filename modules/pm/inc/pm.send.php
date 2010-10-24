@@ -62,7 +62,7 @@ elseif ($a == 'send')
 	{
 		cot_error('pm_bodytooshort', 'newpmtext');
 	}
-	if (mb_strlen($newpmtext) > $cfg['pm_maxsize'])
+	if (mb_strlen($newpmtext) > $cfg['pm']['pm_maxsize'])
 	{
 		cot_error('pm_bodytoolong', 'newpmtext');
 	}
@@ -159,7 +159,7 @@ elseif ($a == 'send')
 				$sql = $db->insert($db_pm, $pm);
 				$sql = $db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
 
-				if ($cfg['pm_allownotifications'])
+				if ($cfg['pm']['pm_allownotifications'])
 				{
 					$sql = $db->query("SELECT user_email, user_name, user_lang
 						FROM $db_users WHERE user_id = '$userid' AND user_pmnotify = 1 AND user_maingrp > 3");
@@ -293,7 +293,7 @@ $t->assign(array(
 	"PMSEND_FORM_TITLE" => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 	"PMSEND_FORM_TEXT" => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
 	"PMSEND_FORM_TOUSER" => cot_textarea('newpmrecipient', $touser, 3, 56),
-	"PMSEND_AJAX_MARKITUP" => (COT_AJAX && count($cfg['plugin']['markitup'])>0 && $cfg['jquery'] && $cfg['turnajax'])
+	"PMSEND_AJAX_MARKITUP" => (COT_AJAX && $cfg['plugin']['markitup'] && $cfg['jquery'] && $cfg['turnajax'])
 ));
 
 if (!$id)

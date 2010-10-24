@@ -105,8 +105,7 @@ else
 		}
 		elseif ($row['config_owner'] == 'module')
 		{
-			$cfg[$row['config_name']] = $row['config_value']; // TODO use ['module'] in modules instead
-			$cfg['module'][$row['config_cat']][$row['config_name']] = $row['config_value'];
+			$cfg[$row['config_cat']][$row['config_name']] = $row['config_value'];
 		}
 		else
 		{

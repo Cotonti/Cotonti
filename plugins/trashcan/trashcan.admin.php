@@ -21,9 +21,9 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 
 cot_block($usr['isadmin']);
 
 cot_require('users');
-$cfg['module']['page'] && cot_require('page');
-$cfg['module']['forums'] && cot_require('forums');
-$cfg['plugin']['comments'] && cot_require('comments', true);
+$cfg['page'] && cot_require('page');
+$cfg['forums'] && cot_require('forums');
+$cfg['comments'] && cot_require('comments', true);
 
 cot_require('trashcan', true);
 cot_require_lang('trashcan', 'plug');
@@ -111,19 +111,19 @@ while($row = $sql->fetch())
 		case 'forumpost':
 			$icon = $R['admin_icon_forums_posts'];
 			$typestr = $L['Post'];
-			$enabled = ($cfg['module']['forums']) ? 1 : 0;
+			$enabled = ($cfg['forums']) ? 1 : 0;
 			break;
 
 		case 'forumtopic':
 			$icon = $R['admin_icon_forums_topics'];
 			$typestr = $L['Topic'];
-			$enabled = ($cfg['module']['forums']) ? 1 : 0;
+			$enabled = ($cfg['forums']) ? 1 : 0;
 			break;
 
 		case 'page':
 			$icon = $R['admin_icon_page'];
 			$typestr = $L['Page'];
-			$enabled = ($cfg['module']['page']) ? 1 : 0;
+			$enabled = ($cfg['page']) ? 1 : 0;
 			break;
 
 		case 'user':

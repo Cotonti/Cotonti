@@ -140,7 +140,7 @@ if ($a == 'update')
 		}
 
 		//$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
-		if ($usr['isadmin'] && $cfg['autovalidate'])
+		if ($usr['isadmin'] && $cfg['page']['autovalidate'])
 		{
 			$rpublish = cot_import('rpublish', 'P', 'ALP');
 			if ($rpublish == 'OK' )
@@ -275,7 +275,7 @@ foreach (cot_getextplugins('page.edit.tags') as $pl)
 
 if ($usr['isadmin'])
 {
-	if ($cfg['autovalidate']) $usr_can_publish = TRUE;
+	if ($cfg['page']['autovalidate']) $usr_can_publish = TRUE;
 	$t->parse('MAIN.ADMIN');
 }
 

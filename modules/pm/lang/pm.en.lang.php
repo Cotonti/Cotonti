@@ -35,7 +35,7 @@ $L['pmsend_title'] = 'Send a new private message';
 
 $L['pm_archives'] = 'Archives';
 $L['pm_arcsubtitle'] = 'Old messages, newest is at top';
-$L['pm_bodytoolong'] = 'The body of the private message is too long, '.$cfg['pm_maxsize'].' chars maximum';
+$L['pm_bodytoolong'] = 'The body of the private message is too long, '.$cfg['pm']['pm_maxsize'].' chars maximum';
 $L['pm_bodytooshort'] = 'The body of the private message is too short or missing';
 $L['pm_inbox'] = 'Inbox';
 $L['pm_inboxsubtitle'] = 'Private messages, newest is at top';

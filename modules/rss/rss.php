@@ -36,14 +36,12 @@ rss.php
 define('COT_RSS', TRUE);
 $env['location'] = 'rss';
 
-cot_dieifdisabled($cfg['disable_rss']);
-
 $c = cot_import('c', 'G', 'ALP');
 $id = cot_import('id', 'G', 'ALP');
 $c = empty($c) ? "pages" : $c;
 $id = empty($id) ? "all" : $id;
 
-header('Content-type: text/xml; charset=' . $cfg['module']['rss']['charset']);
+header('Content-type: text/xml; charset=' . $cfg['rss']['charset']);
 $sys['now'] = time();
 
 if ($usr['id'] === 0 && $cache)
@@ -108,7 +106,7 @@ if ($c == "topics")
 		while ($row = $res->fetch())
 		{
 			$totalposts--;
-			$curpage = $cfg['maxtopicsperpage'] * floor($totalposts / $cfg['maxtopicsperpage']);
+			$curpage = $cfg['forums']['maxtopicsperpage'] * floor($totalposts / $cfg['forums']['maxtopicsperpage']);
 
 			$post_id = $row['fp_id'];
 			$items[$i]['title'] = $row['fp_postername'];
@@ -146,7 +144,7 @@ elseif ($c == "section")
 			$where .= " OR fp_sectionid ='{$row['fs_id']}'";
 		}
 
-		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
+		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
 		$res = $db->query($sql);
 		$i = 0;
 
@@ -187,7 +185,7 @@ elseif ($c == "forums")
 	$rss_title = $domain." : ".$L['rss_allforums_item_title'];
 	$rss_description = "";
 
-	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
+	$sql = "SELECT * FROM $db_forum_posts ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
 	$res = $db->query($sql);
 	$i = 0;
 	while ($row = $res->fetch())
@@ -236,11 +234,11 @@ elseif ($defult_c)
 			}
 		}
 
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 	}
 	else
 	{
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss_maxitems']);
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' ORDER BY page_date DESC LIMIT ".$cfg['rss']['rss_maxitems']);
 	}
 	$i = 0;
 	while ($row = $sql->fetch())
@@ -258,7 +256,7 @@ elseif ($defult_c)
 
 $t = new XTemplate(cot_skinfile('rss'));
 $t->assign(array(
-	"RSS_ENCODING" => $cfg['rss_charset'],
+	"RSS_ENCODING" => $cfg['rss']['rss_charset'],
 	"RSS_TITLE" => htmlspecialchars($rss_title),
 	"RSS_LINK" => $rss_link,
 	"RSS_LANG" => $cfg['defaultlang'],
@@ -292,7 +290,7 @@ $out_rss = $t->out("MAIN");
 
 if ($usr['id'] === 0 && $cache)
 {
-	$cache->db->store($c . $id, $out_rss, 'rss', $cfg['rss_timetolive']);
+	$cache->db->store($c . $id, $out_rss, 'rss', $cfg['rss']['rss_timetolive']);
 }
 echo $out_rss;
 
@@ -300,7 +298,7 @@ function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 {
 	global $db, $cfg, $db_pages, $usr;
 
-	$pag_text = cot_parse($pag_text, $cfg['module']['page']['markup']);
+	$pag_text = cot_parse($pag_text, $cfg['page']['markup']);
 	$readmore = mb_strpos($pag_text, "<!--more-->");
 	if ($readmore > 0)
 	{
@@ -317,9 +315,9 @@ function cot_parse_page_text($pag_id, $pag_type, $pag_text, $pag_pageurl)
 
 	$pag_text = preg_replace('#\[title\](.*?)\[/title\][\s\r\n]*(<br />)?#i', '', $pag_text);
 	$text = $pag_text;
-	if ((int)$cfg['rss_pagemaxsymbols'] > 0)
+	if ((int)$cfg['rss']['rss_pagemaxsymbols'] > 0)
 	{
-		$text = cot_string_truncate($text, $cfg['rss_pagemaxsymbols']) . '...';
+		$text = cot_string_truncate($text, $cfg['rss']['rss_pagemaxsymbols']) . '...';
 	}
 	return $text;
 }
@@ -328,11 +326,11 @@ function cot_parse_post_text($post_id, $post_text)
 {
 	global $db, $cfg, $db_forum_posts, $usr, $fs_allowbbcodes, $fs_allowsmilies;
 	
-	$post_text = cot_parse($post_text, ($cfg['module']['forums']['markup'] && $fs_allowbbcodes));
+	$post_text = cot_parse($post_text, ($cfg['forums']['markup'] && $fs_allowbbcodes));
 
-	if ((int)$cfg['rss_postmaxsymbols'] > 0)
+	if ((int)$cfg['rss']['rss_postmaxsymbols'] > 0)
 	{
-		$post_text = cot_string_truncate($post_text, $cfg['rss_postmaxsymbols']) . '...';
+		$post_text = cot_string_truncate($post_text, $cfg['rss']['rss_postmaxsymbols']) . '...';
 	}
 	return $post_text;
 }

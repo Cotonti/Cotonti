@@ -116,17 +116,17 @@ $out['head'] .= $R['code_noindex'];
 
 $sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter");
 $totallines = $sql->fetchColumn();
-$d = ($d >= $totallines) ? (floor($totallines / $cfg['maxpmperpage'])) * $cfg['maxpmperpage'] : $d;
+$d = ($d >= $totallines) ? (floor($totallines / $cfg['pm']['maxpmperpage'])) * $cfg['pm']['maxpmperpage'] : $d;
 $elem = ($f == 'sentbox') ? 'pm_touserid' : 'pm_fromuserid';
 $sql = $db->query("SELECT p.*, u.* FROM $db_pm AS p
 		LEFT JOIN $db_users AS u
 		ON u.user_id = p.$elem
 		WHERE $sqlfilter
-		ORDER BY pm_date DESC LIMIT  $d,".$cfg['maxpmperpage']);
+		ORDER BY pm_date DESC LIMIT  $d,".$cfg['pm']['maxpmperpage']);
 
-$totalpages = ceil($totallines / $cfg['maxpmperpage']);
-$currentpage = ceil($d / $cfg['maxpmperpage'])+1;
-$pagenav = cot_pagenav('pm', 'f='.$f.'&filter='.$filter, $d, $totallines, $cfg['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$totalpages = ceil($totallines / $cfg['pm']['maxpmperpage']);
+$currentpage = ceil($d / $cfg['pm']['maxpmperpage'])+1;
+$pagenav = cot_pagenav('pm', 'f='.$f.'&filter='.$filter, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 /* === Hook === */
 foreach (cot_getextplugins('pm.list.main') as $pl)
@@ -152,7 +152,7 @@ while ($row = $sql->fetch())
 			cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon_new'], array('title' => $L['pm_unread'], 'class'=>'ajax'))
 			: cot_rc_link(cot_url('pm', 'm=message&id='.$row['pm_id']), $R['pm_icon'], array('title' => $L['pm_read'], 'class'=>'ajax'));
 
-	$pm_data = cot_parse($row['pm_text'], $cfg['module']['pm']['markup']);
+	$pm_data = cot_parse($row['pm_text'], $cfg['pm']['markup']);
 	$pm_desc = $pm_data;
 	$pm_desc .= (cot_string_truncate($pm_desc)) ? "..." : "";
 

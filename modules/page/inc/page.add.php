@@ -82,7 +82,7 @@ if ($a == 'add')
 			$rpage['page_alias'] = ($sql->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
 		}
 
-		if ($usr['isadmin'] && $cfg['autovalidate'])
+		if ($usr['isadmin'] && $cfg['page']['autovalidate'])
 		{
 			$rpublish = cot_import('rpublish', 'P', 'ALP');
 			if ($rpublish == 'OK')
@@ -209,7 +209,7 @@ foreach (cot_getextplugins('page.add.tags') as $pl)
 
 if ($usr['isadmin'])
 {
-	if ($cfg['autovalidate']) $usr_can_publish = TRUE;
+	if ($cfg['page']['autovalidate']) $usr_can_publish = TRUE;
 	$t->parse('MAIN.ADMIN');
 }
 

@@ -80,7 +80,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 		$t->parse($block.".OPTIONS");
 	}
 
-	if ($counter < $cfg['max_options_polls'])
+	if ($counter < $cfg['polls']['max_options_polls'])
 	{
 		$counter++;
 		$t->assign("EDIT_POLL_OPTION_TEXT", cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
@@ -147,7 +147,7 @@ function cot_poll_check()
 			}
 		}
 		$poll_options = $poll_options_temp;
-		if (is_int($poll_id) || $cfg['del_dup_options'])
+		if (is_int($poll_id) || $cfg['polls']['del_dup_options'])
 		{
 			$poll_options = array_unique($poll_options);
 		}
@@ -230,11 +230,11 @@ function cot_poll_vote()
 		$sql = $db->query("SELECT * FROM $db_polls WHERE poll_id = '$id'");
 		if ($row = $sql->fetch())
 		{
-			if ($cfg['ip_id_polls'] == 'id' && $usr['id'] > 0)
+			if ($cfg['polls']['ip_id_polls'] == 'id' && $usr['id'] > 0)
 			{
 				$where = "pv_userid = '".$usr['id']."'";
 			}
-			elseif ($cfg['ip_id_polls'] == 'ip')
+			elseif ($cfg['polls']['ip_id_polls'] == 'ip')
 			{
 				$where = ($usr['id'] > 0) ? "(pv_userid = '".$usr['id']."' OR pv_userip = '".$usr['ip']."')" : "pv_userip = '".$usr['ip']."'";
 			}
@@ -286,12 +286,12 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$id = $row['poll_id'];
 
 	$alreadyvoted = 0;
-	if ($cfg['ip_id_polls'] == 'id' && $usr['id'] > 0)
+	if ($cfg['polls']['ip_id_polls'] == 'id' && $usr['id'] > 0)
 	{
 		$where = "pv_userid = '".$usr['id']."'";
 		$canvote = true;
 	}
-	elseif ($cfg['ip_id_polls'] == 'ip')
+	elseif ($cfg['polls']['ip_id_polls'] == 'ip')
 	{
 		$where = ($usr['id'] > 0) ? "(pv_userid = '".$usr['id']."' OR pv_userip = '".$usr['ip']."')" : "pv_userip = '".$usr['ip']."'";
 		$canvote = true;
@@ -319,7 +319,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 
 		$input_type = $row['poll_multiple'] ? 'checkbox' : 'radio';
 		$polloptions_input = ($alreadyvoted || !$canvote) ? "" : '<input type="'.$input_type.'" name="vote[]" value="'.$po_id.'" />&nbsp;'; // TODO - to resorses
-		$polloptions = cot_parse($row1['po_text'], $cfg['module']['polls']['markup']);
+		$polloptions = cot_parse($row1['po_text'], $cfg['polls']['markup']);
 
 		$t->assign(array(
 			"POLL_OPTIONS" => $polloptions,
@@ -334,7 +334,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 		"POLL_VOTERS" => $totalvotes,
 		"POLL_SINCE" => date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
 		"POLL_SINCE_SHORT" => date($cfg['formatmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
-		"POLL_TITLE" => cot_parse($row['poll_text'], $cfg['module']['polls']['markup']),
+		"POLL_TITLE" => cot_parse($row['poll_text'], $cfg['polls']['markup']),
 		"POLL_ID" => $id,
 		"POLL_FORM_URL" => (empty($formlink)) ? cot_url('polls', 'id='.$id) : $formlink,
 		"POLL_FORM_BUTTON" => $pollbutton
