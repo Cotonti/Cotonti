@@ -1,7 +1,7 @@
 <!-- BEGIN: MAIN -->
 
 		<!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
-		<div class="error">{PHP.L.for_privatetopic}</div>
+		<div class="error">{PHP.L.forums_privatetopic}</div>
 		<!-- END: FORUMS_POSTS_TOPICPRIVATE -->
 
 		<!-- BEGIN: POLLS_VIEW -->
@@ -13,7 +13,6 @@
 
 		<div class="block">
 			<h2 class="forums">{FORUMS_POSTS_PAGETITLE}</h2>
-			<!-- IF {FORUMS_POSTS_SUBTITLE} --><p class="small">{FORUMS_POSTS_SUBTITLE}</p><!-- ENDIF -->
 			<table class="cells">
 				<tr>
 					<td class="coltop width20">{PHP.L.Author}</td>
@@ -55,6 +54,8 @@
 			</table>
 		</div>
 		<p class="paging">{FORUMS_POSTS_PAGEPREV}{FORUMS_POSTS_PAGENEXT}{FORUMS_POSTS_PAGES}</p>
+
+		<!-- IF {FORUMS_POSTS_OPTIONS} --><div class="done">{FORUMS_POSTS_OPTIONS}</div><!-- ENDIF -->
 
 		<!-- BEGIN: FORUMS_POSTS_TOPICLOCKED -->
 		<div class="error">{FORUMS_POSTS_TOPICLOCKED_BODY}</div>

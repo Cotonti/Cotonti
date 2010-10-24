@@ -7,7 +7,7 @@
 				<tr>
 					<td class="coltop" class="width10">&nbsp;</td>
 					<td class="coltop" class="width40">
-						<a href="index.php?z=forums&amp;c=fold#top" rel="nofollow">{PHP.L.for_foldall}</a><span class="spaced">/</span><a href="index.php?z=forums&amp;c=unfold#top" rel="nofollow">{PHP.L.unfoldall}</a>
+						<a href="index.php?z=forums&amp;c=fold#top" rel="nofollow">{PHP.L.forums_foldall}</a><span class="spaced">/</span><a href="index.php?z=forums&amp;c=unfold#top" rel="nofollow">{PHP.L.forums_unfoldall}</a>
 					</td>
 					<td class="coltop" class="width20">{PHP.L.Lastpost}</td>
 					<td class="coltop" class="width10">{PHP.L.Topics}</td>
@@ -42,7 +42,7 @@
 						<!-- ENDIF -->
 						<ul class="subforums">
 <!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
-							<li>{PHP.R.frm_icon_subforum}{FORUMS_SECTIONS_ROW_SLAVEI}</li>
+							<li>{PHP.R.forums_icon_subforum}{FORUMS_SECTIONS_ROW_SLAVEI}</li>
 <!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
 						</ul>
 					</td>
@@ -60,7 +60,7 @@
 <!-- END: FORUMS_SECTIONS_ROW_CAT_FOOTER -->
 <!-- END: FORUMS_SECTIONS_ROW -->
 			</table>
-			<p class="paging"><span class="a1"><a href="index.php?e=search&amp;tab=frm">{PHP.L.for_searchinforums}</a></span><span class="a1"><a href="plug.php?e=forumstats">{PHP.L.Statistics}</a></span><span class="a1"><a href="forums.php?n=markall" rel="nofollow">{PHP.L.for_markasread}</a></span></p>
+			<p class="paging"><span class="a1"><a href="index.php?e=search&amp;tab=frm">{PHP.L.forums_searchinforums}</a></span><span class="a1"><a href="plug.php?e=forumstats">{PHP.L.Statistics}</a></span><span class="a1"><a href="forums.php?n=markall" rel="nofollow">{PHP.L.forums_markasread}</a></span></p>
 		</div>
 
 		<div class="block">

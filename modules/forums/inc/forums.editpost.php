@@ -179,13 +179,13 @@ if ($row = $sql->fetch())
 	}
 }
 
-$morejavascript .= cot_rc('frm_code_addtxt', array('c1' => 'editpost', 'c2' => 'rtext'));
+$morejavascript .= cot_rc('forums_code_addtxt', array('c1' => 'editpost', 'c2' => 'rtext'));
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
 $toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." ".cot_rc_link(cot_url('forums', "m=posts&p=".$p, "#".$p), htmlspecialchars($ft_fulltitle));
 $toptitle .= $cfg['separator']." ".cot_rc_link(cot_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".cot_xg()), $L['Edit']);
-$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
+$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $sys['sublocation'] = $fs_title;
 $title_params = array(
@@ -222,7 +222,7 @@ $t->assign(array(
 
 $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
-	"FORUMS_EDITPOST_SUBTITLE" => $L['for_postedby'].": <a href=\"users.php?m=details&id=".$fp_posterid."\">".$fp_postername."</a> @ ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
+	"FORUMS_EDITPOST_SUBTITLE" => $L['forums_postedby'].": <a href=\"users.php?m=details&id=".$fp_posterid."\">".$fp_postername."</a> @ ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
 	"FORUMS_EDITPOST_SEND" => cot_url('forums', "m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".cot_xg()),
 	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', $fp_text, 20, 56, '', 'input_textarea_editor')
 ));

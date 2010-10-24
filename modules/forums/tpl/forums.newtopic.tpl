@@ -17,10 +17,10 @@
 				</tr>
 				<!-- BEGIN: PRIVATE -->
 				<tr>
-					<td>{PHP.L.for_privatetopic1}:</td>
+					<td>{PHP.L.forums_privatetopic1}:</td>
 					<td>
 						{FORUMS_NEWTOPIC_ISPRIVATE}
-						<span class="small">({PHP.L.for_privatetopic2})</span>
+						<span class="small">({PHP.L.forums_privatetopic2})</span>
 					</td>
 				</tr>
 				<!-- END: PRIVATE -->

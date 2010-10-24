@@ -74,7 +74,7 @@ if (!$cot_sections_vw)
 
 unset($pcat);
 $secact_max = max($cot_sections_act);
-$out['markall'] = ($usr['id']>0) ? cot_rc_link(cot_url('forums', "n=markall"), $L['for_markallasread']) : '';
+$out['markall'] = ($usr['id']>0) ? cot_rc_link(cot_url('forums', "n=markall"), $L['forums_markallasread']) : '';
 
 $title_params = array(
 	'FORUM' => $L['Forums']
@@ -142,8 +142,8 @@ while ($fsn = $sql->fetch())
             "FORUMS_SECTIONS_ROW_CAT_SHORTTITLE" => htmlspecialchars($fsn['fn_title']),
             "FORUMS_SECTIONS_ROW_CAT_DESC" => cot_parse_autourls($fsn['fn_desc']),
             "FORUMS_SECTIONS_ROW_CAT_DEFSTATE" => htmlspecialchars($fsn['fn_defstate']),
-            "FORUMS_SECTIONS_ROW_CAT_TBODY" => cot_rc('frm_code_tbody_begin', array('cat' => $fsn['fs_category'], 'style' => ($fold ? 'style="display:none"' : ''))),
-            "FORUMS_SECTIONS_ROW_CAT_TBODY_END" => $R['frm_code_tbody_end'],
+            "FORUMS_SECTIONS_ROW_CAT_TBODY" => cot_rc('forums_code_tbody_begin', array('cat' => $fsn['fs_category'], 'style' => ($fold ? 'style="display:none"' : ''))),
+            "FORUMS_SECTIONS_ROW_CAT_TBODY_END" => $R['forums_code_tbody_end'],
             "FORUMS_SECTIONS_ROW_CAT_CODE" => $fsn['fs_category'],
             ));
         $t->parse("MAIN.FORUMS_SECTIONS_ROW.FORUMS_SECTIONS_ROW_CAT");
@@ -175,8 +175,8 @@ while ($fsn = $sql->fetch())
         }
         else
         {
-            $fsn['lastpost'] = $R['frm_code_post_empty'];
-            $fsn['fs_lt_date'] = $R['frm_code_post_empty'];
+            $fsn['lastpost'] = $R['forums_code_post_empty'];
+            $fsn['fs_lt_date'] = $R['forums_code_post_empty'];
             $fsn['fs_lt_postername'] = '';
             $fsn['fs_lt_posterid'] = 0;
         }
@@ -196,7 +196,7 @@ while ($fsn = $sql->fetch())
             $secact_num = round(6.25 * $cot_sections_act[$fsn['fs_id']] / $secact_max);
             if ($secact_num>5) { $secact_num = 5; }
             if (!$secact_num && $cot_sections_act[$fsn['fs_id']]>1) { $secact_num = 1; }
-            $section_activity_img = cot_rc('frm_icon_section_activity');
+            $section_activity_img = cot_rc('forums_icon_section_activity');
         }
 
         $fs_num++;

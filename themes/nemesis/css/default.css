@@ -72,10 +72,10 @@ div.help										{ color:#00529b; background-color:#bde5f8; background-image:ur
 table td 	{ vertical-align:top; }
 
 table.flat	{ border-collapse:collapse; width:100%; }
-table.flat td 	{ padding:5px 0; margin:0; border:0; }
+table.flat td 	{ padding:2px; margin:0; border:0; }
 
 table.main 	{ border-collapse:collapse; width:100%; }
-table.main td 	{ padding:1px 0; margin:0; border:0; }
+table.main td 	{ padding:2px 0; margin:0; border:0; }
 
 table.cells 	{ border-collapse:collapse; width:100%; }
 table.cells td	{ padding:4px 8px; border:1px solid #e7e7e7; }
@@ -86,7 +86,6 @@ table.list td 	{ padding:5px 5px 5px 0; border-bottom:1px dashed #ccc; }
 table.fico 		{ border-collapse:collapse; width:100%; }
 table.fico td		{ padding:5px 0; margin:0; border:0; }
 table.fico td img	{ margin-right:10px; vertical-align:middle; }
-
 
 .coltop		{ text-align:center; vertical-align:middle; font-size:.9em; background-color:#ddd!important; color:#000; }
 .coltop img	{ vertical-align:middle; }

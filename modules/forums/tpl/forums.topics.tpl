@@ -41,9 +41,9 @@
 			<!-- END: FORUMS_SECTIONS -->
 
 			<ul id="newf">
-				<li><a href="{FORUMS_TOPICS_NEWTOPICURL}" rel="nofollow">{PHP.L.for_newtopic}</a></li>
+				<li><a href="{FORUMS_TOPICS_NEWTOPICURL}" rel="nofollow">{PHP.L.forums_newtopic}</a></li>
 				<!-- BEGIN: FORUMS_SECTIONS_POLLS -->
-				<li><a href="{FORUMS_TOPICS_NEWPOLLURL}" rel="nofollow">{PHP.L.for_newpoll}</a></li>
+				<li><a href="{FORUMS_TOPICS_NEWPOLLURL}" rel="nofollow">{PHP.L.forums_newpoll}</a></li>
 				<!-- END: FORUMS_SECTIONS_POLLS -->
 			</ul>
 
@@ -89,22 +89,22 @@
 				<h2 class="info">Info</h2>
 				<table class="fico">
 					<tr>
-						<td>{PHP.R.frm_icon_posts}{PHP.L.for_nonewposts}</td>
-						<td>{PHP.R.frm_icon_posts_new}{PHP.L.for_newposts}</td>
-						<td>{PHP.R.frm_icon_posts_hot}{PHP.L.for_nonewpostspopular}</td>
-						<td>{PHP.R.frm_icon_posts_new_hot}{PHP.L.for_newpostspopular}</td>
+						<td>{PHP.R.forums_icon_posts}{PHP.L.forums_nonewposts}</td>
+						<td>{PHP.R.forums_icon_posts_new}{PHP.L.forums_newposts}</td>
+						<td>{PHP.R.forums_icon_posts_hot}{PHP.L.forums_nonewpostspopular}</td>
+						<td>{PHP.R.forums_icon_posts_new_hot}{PHP.L.forums_newpostspopular}</td>
 					</tr>
 					<tr>
-						<td>{PHP.R.frm_icon_posts_sticky}{PHP.L.for_sticky}</td>
-						<td>{PHP.R.frm_icon_posts_new_sticky}{PHP.L.for_newpostssticky}</td>
-						<td>{PHP.R.frm_icon_posts_locked}{PHP.L.for_locked}</td>
-						<td>{PHP.R.frm_icon_posts_new_locked}{PHP.L.for_newpostslocked}</td>
+						<td>{PHP.R.forums_icon_posts_sticky}{PHP.L.forums_sticky}</td>
+						<td>{PHP.R.forums_icon_posts_new_sticky}{PHP.L.forums_newpostssticky}</td>
+						<td>{PHP.R.forums_icon_posts_locked}{PHP.L.forums_locked}</td>
+						<td>{PHP.R.forums_icon_posts_new_locked}{PHP.L.forums_newpostslocked}</td>
 					</tr>
 					<tr>
-						<td>{PHP.R.frm_icon_posts_sticky_locked}{PHP.L.for_announcment}</td>
-						<td>{PHP.R.frm_icon_posts_new_sticky_locked}{PHP.L.for_newannouncment}</td>	
+						<td>{PHP.R.forums_icon_posts_sticky_locked}{PHP.L.forums_announcment}</td>
+						<td>{PHP.R.forums_icon_posts_new_sticky_locked}{PHP.L.forums_newannouncment}</td>	
 						<td colspan="2">
-							{PHP.R.frm_icon_posts_moved}{PHP.L.for_movedoutofthissection}
+							{PHP.R.forums_icon_posts_moved}{PHP.L.forums_movedoutofthissection}
 						</td>
 					</tr>
 				</table>

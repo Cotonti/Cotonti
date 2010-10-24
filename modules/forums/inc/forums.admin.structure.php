@@ -127,7 +127,7 @@ if($n == 'options')
 		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_DESC' => cot_inputbox('text', 'rdesc', $fn_desc, 'size="64"'),
 		'ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON' => cot_inputbox('text', 'ricon', $fn_icon, 'size="64" maxlength="128"'),
 		'ADMIN_FORUMS_STRUCTURE_OPTIONS_CHECK' => cot_radiobox($check, 'rtplmode', array(1, 3), array($L['adm_tpl_empty'], $L['adm_tpl_parent']), '', '<br />'),
-		'ADMIN_FORUMS_STRUCTURE_OPTIONS_SELECT' => cot_selectbox($selected, 'rdefstate', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false)
+		'ADMIN_FORUMS_STRUCTURE_OPTIONS_SELECT' => cot_selectbox($selected, 'rdefstate', array(0, 1), array($L['forums_defstate_0'], $L['forums_defstate_1']), false)
 	));
 
 	/* === Hook === */
@@ -257,7 +257,7 @@ else
 			'FORUMS_STRUCTURE_ROW_DEL_URL' => cot_url('admin', 'm=forums&s=structure&a=delete&id='.$fn_id.'&c='.$row['fn_code'].'&d='.$d.'&'.cot_xg()),
 			'FORUMS_STRUCTURE_ROW_FN_CODE' => $fn_code,
 			'FORUMS_STRUCTURE_ROW_FN_PATH' => cot_inputbox('text', 's['.$fn_id.'][rpath]', $fn_path, 'size="'.((mb_strpos($fn_path, '.') == 0) ? 3 : 9).'" maxlength="24"'),
-			'FORUMS_STRUCTURE_ROW_SELECT' => cot_selectbox($selected,  's['.$fn_id.'][rdefstate]', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false),
+			'FORUMS_STRUCTURE_ROW_SELECT' => cot_selectbox($selected,  's['.$fn_id.'][rdefstate]', array(0, 1), array($L['forums_defstate_0'], $L['forums_defstate_1']), false),
 			'FORUMS_STRUCTURE_ROW_FN_TPL_SYM' => $fn_tpl_sym,
 			'FORUMS_STRUCTURE_ROW_FN_TITLE' => cot_inputbox('text', 's['.$fn_id.'][rtitle]', $fn_title, 'size="24" maxlength="100"'),
 			'FORUMS_STRUCTURE_ROW_SECTIONCOUNT' => $sectioncount[$fn_code],
@@ -282,7 +282,7 @@ else
 		'ADMIN_FORUMS_STRUCTURE_TITLE' => cot_inputbox('text', 'ntitle', '', 'size="64" maxlength="100"'),
 		'ADMIN_FORUMS_STRUCTURE_DESC' => cot_inputbox('text', 'ndesc', '', 'size="64"'),
 		'ADMIN_FORUMS_STRUCTURE_ICON' => cot_inputbox('text', 'nicon', '', 'size="64" maxlength="128"'),
-		'ADMIN_FORUMS_STRUCTURE_SELECT' => cot_selectbox('1', 'ndefstate', array(0, 1), array($L['adm_defstate_0'], $L['adm_defstate_1']), false),
+		'ADMIN_FORUMS_STRUCTURE_SELECT' => cot_selectbox('1', 'ndefstate', array(0, 1), array($L['forums_defstate_0'], $L['forums_defstate_1']), false),
 		'ADMIN_FORUMS_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
 		'ADMIN_FORUMS_STRUCTURE_PAGNAV' => $pagenav['main'],
 		'ADMIN_FORUMS_STRUCTURE_PAGINATION_NEXT' => $pagenav['next'],
