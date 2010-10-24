@@ -87,11 +87,11 @@ if ($a == 'newtopic')
 
 	if (strlen($newtopictitle) < 2)
 	{
-		cot_error('for_titletooshort', 'newtopictitle');
+		cot_error('forums_titletooshort', 'newtopictitle');
 	}
 	if (strlen($newmsg) < 5)
 	{
-		cot_error('for_messagetooshort', 'newmsg');
+		cot_error('forums_messagetooshort', 'newmsg');
 	}
 
 	if (!$cot_error)
@@ -184,21 +184,21 @@ if ($a == 'newtopic')
 	}
 }
 
-$morejavascript .= cot_rc('frm_code_addtxt', array('c1' => 'newtopic', 'c2' => 'newmsg'));
+$morejavascript .= cot_rc('forums_code_addtxt', array('c1' => 'newtopic', 'c2' => 'newmsg'));
 
 $newtopicurl = cot_url('forums', "m=newtopic&a=newtopic&s=".$s);
 
 $master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
 
 
-$toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master) . ' ' . $cfg['separator'] . ' ' . cot_rc_link(cot_url('forums', 'm=newtopic&s=' . $s), $L['for_newtopic']);
-$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
+$toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master) . ' ' . $cfg['separator'] . ' ' . cot_rc_link(cot_url('forums', 'm=newtopic&s=' . $s), $L['forums_newtopic']);
+$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $sys['sublocation'] = $fs_title;
 $title_params = array(
 	'FORUM' => $L['Forums'],
 	'SECTION' => $fs_title,
-	'NEWTOPIC' => $L['for_newtopic']
+	'NEWTOPIC' => $L['forums_newtopic']
 );
 $out['subtitle'] = cot_title('title_forum_newtopic', $title_params);
 $out['head'] .= $R['code_noindex'];

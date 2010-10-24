@@ -12,97 +12,96 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Admin Forums Section
+ * Forums Config
  */
 
-$L['adm_forum_structure'] = 'Structure of the forums (categories)';
-$L['adm_forum_emptytitle'] = 'Error: title empty';	// New in 0.1.0
-
-/**
-  * Forums Section
-  * Structure Subsection
- */
-
-$L['adm_defstate'] = 'Default state';
-$L['adm_defstate_0'] = 'Folded';
-$L['adm_defstate_1'] = 'Unfolded';
-
-/**
-  * Forums Section
-  * Forum Edit Subsection
- */
-
-$L['adm_forums_master'] = 'Master section';	// New in 0.0.1
-$L['adm_diplaysignatures'] = 'Display signatures';
-$L['adm_enablebbcodes'] = 'Enable BBcodes';
-$L['adm_enablesmilies'] = 'Enable smilies';
-$L['adm_enableprvtopics'] = 'Allow private topics';
-$L['adm_enableviewers'] = 'Enable Viewers';	// New in 0.0.2
-$L['adm_enablepolls'] = 'Enable Polls';	// New in 0.0.2
-$L['adm_countposts'] = 'Count posts';
-$L['adm_autoprune'] = 'Auto-prune topics after * days';
-$L['adm_postcounters'] = 'Check the counters';
-
-$L['adm_help_forums'] = 'Not available';
-$L['adm_help_forums_structure'] = 'Not available';
-
-/**
- * Config Section
- * Forums Subsection
- */
-
-$L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users from posting twice in a row in the same topic');	// New in 0.1.0
+$L['cfg_antibumpforums'] = array('Anti-bump protection', 'Will prevent users from posting twice in a row in the same topic');
 $L['cfg_hideprivateforums'] = array('Hide private forums', '');
 $L['cfg_hottopictrigger'] = array('Posts for a topic to be \'hot\'', '');
 $L['cfg_maxtopicsperpage'] = array('Maximum topics per page', '');
-$L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');	// New in 0.1.0
-$L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');	// New in 0.1.0
-$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' '); // New in 0.0.6
+$L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s posts if they are sent consecutively, anti-bump must be off');
+$L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');
+$L['cfg_maxpostsperpage'] = array('Max. posts per page', ' ');
+
+/**
+ * Forums Administration
+ */
+
+$L['forums_structure'] = 'Structure of the forums (categories)';
+$L['forums_emptytitle'] = 'Error: title empty';
+
+$L['forums_defstate'] = 'Default state';
+$L['forums_defstate_0'] = 'Folded';
+$L['forums_defstate_1'] = 'Unfolded';
+
+$L['forums_master'] = 'Master section';
+$L['forums_diplaysignatures'] = 'Display signatures';
+$L['forums_enablebbcodes'] = 'Enable BBcodes';
+$L['forums_enablesmilies'] = 'Enable smilies';
+$L['forums_enableprvtopics'] = 'Allow private topics';
+$L['forums_enableviewers'] = 'Enable Viewers';
+$L['forums_enablepolls'] = 'Enable Polls';
+$L['forums_countposts'] = 'Count posts';
+$L['forums_autoprune'] = 'Auto-prune topics after * days';
+$L['forums_postcounters'] = 'Check the counters';
 
 /**
  * Main
  */
 
-$L['for_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';	// 0.0.6
-$L['for_keepmovedlink'] = 'Keep a Moved Topic link'; // 0.6.6
-$L['for_markallasread'] = 'Mark all posts as read';
-$L['for_mergetime'] = 'Added %1$s later:'; // 0.0.6
-$L['for_messagetooshort'] = 'Topic message is too short';	// 0.0.2
-$L['for_newtopic'] = 'New topic';
-$L['for_polltooshort'] = 'Poll options must be equal, or greater than 2';	// 0.0.2
-$L['for_titletooshort'] = 'Topic title is too short or missing';	// 0.0.2
-$L['for_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
+$L['forums_topic'] = 'Topic';
+$L['forums_topic'] = 'Topics';
+ 
+$L['forums_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';
+$L['forums_keepmovedlink'] = 'Keep a Moved Topic link';
+$L['forums_markallasread'] = 'Mark all posts as read';
+$L['forums_mergetime'] = 'Added %1$s later:';
+$L['forums_messagetooshort'] = 'Topic message is too short';
+$L['forums_newtopic'] = 'New topic';
+$L['forums_newpoll'] = 'New poll';
+$L['forums_titletooshort'] = 'Topic title is too short or missing';
+$L['forums_topiclocked'] = 'This topic is locked, new posts are not allowed.';
+$L['forums_topicoptions'] = 'Topic options';
+$L['forums_updatedby'] = '<br /><em>This post was edited by %1$s (%2$s, %3$s ago)</em>';
+$L['forums_postedby'] = 'Posted by';
 
-$L['for_postedby'] = 'Posted by';
+$L['forums_privatetopic1'] = 'Mark this topic as private';
+$L['forums_privatetopic2'] = 'only forums moderators and the starter of the topic (you) will be allowed to read and reply';
+$L['forums_privatetopic'] = 'This topic is private, only moderators and the starter of the topic can read and reply here.';
+
+$L['forums_searchinforums'] = 'Search in forums';
+$L['forums_markasread'] = 'Mark all posts as read';
+$L['forums_foldall'] = 'Fold all';
+$L['forums_unfoldall'] = 'Unfold all';
+
+$L['forums_nonewposts'] = 'No new posts';
+$L['forums_newposts'] = 'New posts';
+$L['forums_nonewpostspopular'] = 'No new posts (popular)';
+$L['forums_newpostspopular'] = 'New posts (popular)';
+$L['forums_sticky'] = 'Sticky';
+$L['forums_newpostssticky'] = 'New posts (sticky)';
+$L['forums_locked'] = 'Locked';
+$L['forums_newpostslocked'] = 'New posts (locked)';
+$L['forums_announcment'] = 'Announcement';
+$L['forums_newannouncment'] = 'New announcement';
+$L['forums_movedoutofthissection'] = 'Moved out of this section';
+
+$L['forums_explain1'] = 'Make topic first in the topics list (until another topic is updated)';
+$L['forums_explain2'] = 'Lock topic (disable new posts)';
+$L['forums_explain3'] = 'Keep topic first in the topics list (until topic is reset to default status)';
+$L['forums_explain4'] = 'Mark topic as announcement';
+$L['forums_explain5'] = 'Mark topic as private (access for moderator(s) and topic starter only)';
+$L['forums_explain6'] = 'Reset topic to default status';
+$L['forums_explain7'] = 'Delete topic';
 
 /**
- * Moved from theme.lang
+ * Unused?
  */
 
-$L['for_privatetopic1'] = 'Mark this topic as &quot;private&quot;';
-$L['for_privatetopic2'] = 'only forums moderators and the starter of the topic (you) will be allowed to read and reply';
-
-$L['for_privatetopic'] = 'This topic is private, only moderators and the starter of the topic can read and reply here.';
-$L['for_onlinestatus0'] = 'user is offline'; // New in 0.0.2
-$L['for_onlinestatus1'] = 'user is online'; // New in 0.0.2
-
-$L['for_searchinforums'] = 'Search in forums';
-$L['for_markasread'] = 'Mark all posts as read';
-$L['for_foldall'] = 'Fold all';
-$L['for_unfoldall'] = 'Unfold all';
-
-$L['for_newpoll'] = 'New poll';
-$L['for_viewers'] = 'Viewers';
-$L['for_nonewposts'] = 'No new posts';
-$L['for_newposts'] = 'New posts';
-$L['for_nonewpostspopular'] = 'No new posts (popular)';
-$L['for_newpostspopular'] = 'New posts (popular)';
-$L['for_sticky'] = 'Sticky';
-$L['for_newpostssticky'] = 'New posts (sticky)';
-$L['for_locked'] = 'Locked';
-$L['for_newpostslocked'] = 'New posts (locked)';
-$L['for_announcment'] = 'Announcement';
-$L['for_newannouncment'] = 'New announcement';
-$L['for_movedoutofthissection'] = 'Moved out of this section';
+$L['adm_help_forums'] = 'Not available';
+$L['adm_help_forums_structure'] = 'Not available';
+$L['forums_polltooshort'] = 'Poll options must be equal, or greater than 2';
+$L['for_onlinestatus0'] = 'user is offline';
+$L['for_onlinestatus1'] = 'user is online';
 
 ?>

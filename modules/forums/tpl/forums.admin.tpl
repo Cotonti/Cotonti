@@ -4,7 +4,7 @@
 		{FILE ./themes/nemesis/warnings.tpl}
 		<ul class="follow">
 			<li><a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration}</a></li>
-			<!-- IF {PHP.lincif_conf} --><li><a href="{ADMIN_FORUMS_CONF_STRUCTURE_URL}">{PHP.L.adm_forum_structure}</a></li><!-- ELSE --><li>{PHP.L.adm_forum_structure}</li><!-- ENDIF -->
+			<!-- IF {PHP.lincif_conf} --><li><a href="{ADMIN_FORUMS_CONF_STRUCTURE_URL}">{PHP.L.forums_structure}</a></li><!-- ELSE --><li>{PHP.L.forums_structure}</li><!-- ENDIF -->
 		</ul>
 <!-- BEGIN: EDIT -->
 		<form id="updatesection" action="{ADMIN_FORUMS_EDIT_FORM_URL}" method="post">
@@ -14,7 +14,7 @@
 				<td class="width70">{ADMIN_FORUMS_EDIT_FS_ID}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_forums_master}:</td>
+				<td>{PHP.L.forums_master}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_MASTER}</td>
 			</tr>
 			<tr>
@@ -33,30 +33,30 @@
 				<td>{ADMIN_FORUMS_EDIT_FS_ICON}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_diplaysignatures}:</td>
+				<td>{PHP.L.forums_diplaysignatures}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_ALLOWUSERTEXT}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_enablebbcodes}:</td>
+				<td>{PHP.L.forums_enablebbcodes}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_ALLOWBBCODES}</td>
 			<tr>
-				<td>{PHP.L.adm_enablesmilies}:</td>
+				<td>{PHP.L.forums_enablesmilies}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_ALLOWSMILES}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_enableprvtopics}:</td>
+				<td>{PHP.L.forums_enableprvtopics}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_ALLOWPRVTOPICS}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_enableviewers}:</td>
+				<td>{PHP.L.forums_enableviewers}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_ALLOWVIEWERS}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_enablepolls}:</td>
+				<td>{PHP.L.forums_enablepolls}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_ALLOWPOLLS}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_countposts}:</td>
+				<td>{PHP.L.forums_countposts}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_COUNTPOSTS}</td>
 			</tr>
 			<tr>
@@ -64,11 +64,11 @@
 				<td>{ADMIN_FORUMS_EDIT_FS_STATE}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_autoprune}:</td>
+				<td>{PHP.L.forums_autoprune}:</td>
 				<td>{ADMIN_FORUMS_EDIT_FS_AUTOPRUNE}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.adm_postcounters}:</td>
+				<td>{PHP.L.forums_postcounters}:</td>
 				<td><a href="{ADMIN_FORUMS_EDIT_RESYNC_URL}">{PHP.L.Resync}</a></td>
 			</tr>
 			<tr>
@@ -85,7 +85,7 @@
 					<td class="coltop width5"></td>
 					<td class="coltop width30">{PHP.L.Section} (<span class="lower">{PHP.L.Views}</span>)</td>
 					<td class="coltop width10">{PHP.L.Order}</td>
-					<td class="coltop width15">{PHP.L.adm_enableprvtopics}</td>
+					<td class="coltop width15">{PHP.L.forums_enableprvtopics}</td>
 					<td class="coltop width10">{PHP.L.Topics}</td>
 					<td class="coltop width10">{PHP.L.Posts}</td>
 					<td class="coltop width20">{PHP.L.Action}</td>
@@ -141,7 +141,7 @@
 					<td class="width70">{ADMIN_FORUMS_DEFAULT_FORM_ADD_SELECTBOX_FORUMCAT}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.adm_forums_master}:</td>
+					<td>{PHP.L.forums_master}:</td>
 					<td>{ADMIN_FORUMS_DEFAULT_FORM_ADD_MASTER}</td>
 				</tr>
 				<tr>

@@ -5,9 +5,9 @@
 		<ul class="follow">
 			<li><a title="{PHP.L.Configuration}" href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration}</a></li>
 <!-- IF {PHP.lincif_conf} -->
-			<li><a href="{ADMIN_FORUMS_CONF_STRUCTURE_URL}">{PHP.L.adm_forum_structure}</a></li>
+			<li><a href="{ADMIN_FORUMS_CONF_STRUCTURE_URL}">{PHP.L.forums_structure}</a></li>
 <!-- ELSE -->
-			<li>{PHP.L.adm_forum_structure}</li>
+			<li>{PHP.L.forums_structure}</li>
 <!-- ENDIF -->
 		</ul>
 <!-- BEGIN: OPTIONS -->
@@ -34,7 +34,7 @@
 					<td>{ADMIN_FORUMS_STRUCTURE_OPTIONS_FN_ICON}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.adm_defstate}:</td>
+					<td>{PHP.L.forums_defstate}:</td>
 					<td>{ADMIN_FORUMS_STRUCTURE_OPTIONS_SELECT}</td>
 				</tr>
 				<tr>
@@ -55,7 +55,7 @@
 					<td class="coltop width25">{PHP.L.Title}</td>
 					<td class="coltop width10">{PHP.L.Code}</td>
 					<td class="coltop width10">{PHP.L.Path}</td>
-					<td class="coltop width15">{PHP.L.adm_defstate}</td>
+					<td class="coltop width15">{PHP.L.forums_defstate}</td>
 					<td class="coltop width10">{PHP.L.TPL}</td>
 					<td class="coltop width10">{PHP.L.Sections}</td>
 					<td class="coltop width20">{PHP.L.Action}</td>
@@ -102,7 +102,7 @@
 					<td>{ADMIN_FORUMS_STRUCTURE_PATH} {PHP.L.adm_required}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.adm_defstate}:</td>
+					<td>{PHP.L.forums_defstate}:</td>
 					<td>{ADMIN_FORUMS_STRUCTURE_SELECT}</td>
 				</tr>
 				<tr>

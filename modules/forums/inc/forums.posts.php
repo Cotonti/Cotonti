@@ -252,9 +252,9 @@ if ($a=='newpost')
 			$p = (int) $row['fp_id'];
 
 			$gap_base = empty($row['fp_updated']) ? $row['fp_creation'] : $row['fp_updated'];
-			$updated = sprintf($L['for_mergetime'], cot_build_timegap($gap_base, $sys['now_offset']));
+			$updated = sprintf($L['forums_mergetime'], cot_build_timegap($gap_base, $sys['now_offset']));
 
-			$newmsg = $db->prep($row['fp_text']).cot_rc('frm_code_update', array('updated' => $updated)).$db->prep($newmsg);
+			$newmsg = $db->prep($row['fp_text']).cot_rc('forums_code_update', array('updated' => $updated)).$db->prep($newmsg);
 			
 			$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $row['fp_updated'] + 300) && empty($row['fp_updater']) ) ? '' : $usr['name'];
 
@@ -474,7 +474,7 @@ if (empty($d))
 
 if ($usr['id']>0)
 {
-	$morejavascript .= cot_rc('frm_code_addtxt', array('c1' => 'newpost', 'c2' => 'newmsg'));
+	$morejavascript .= cot_rc('forums_code_addtxt', array('c1' => 'newpost', 'c2' => 'newmsg'));
 }
 
 
@@ -545,7 +545,7 @@ $jumpbox = cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jump
 
 if ($usr['isadmin'])
 {
-	$adminoptions = cot_rc('frm_code_adminoptions', array(
+	$postsoptions = cot_rc('forums_adminoptions', array(
 		'move_url' => cot_url('forums', 'm=topics&a=move&s='.$s.'&q='.$q.'&x='.$sys['xk']),
 		'bump_url' => cot_url('forums', 'm=topics&a=bump&s='.$s.'&q='.$q.'&x='.$sys['xk']),
 		'lock_url' => cot_url('forums', 'm=topics&a=lock&s='.$s.'&q='.$q.'&x='.$sys['xk']),
@@ -558,10 +558,6 @@ if ($usr['isadmin'])
 		'movebox_keep' => cot_checkbox('0', 'ghost')
 	));
 }
-else
-{ 
-	$adminoptions = "&nbsp;";
-}
 
 $ft_title = ($ft_mode == 1) ? "# ".htmlspecialchars($ft_title) : htmlspecialchars($ft_title);
 
@@ -570,7 +566,7 @@ $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 $toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master);
 $toppath  = $toptitle;
 $toptitle .= ' ' . $cfg['separator'] . ' ' . $ft_title;
-$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
+$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $t->assign(array(
 	"FORUMS_POSTS_ID" => $q,
@@ -579,7 +575,7 @@ $t->assign(array(
 	"FORUMS_POSTS_TOPICDESC" => htmlspecialchars($ft_desc),
 	"FORUMS_POSTS_SHORTTITLE" => $ft_title,
 	"FORUMS_POSTS_PATH" => $toppath,
-	"FORUMS_POSTS_SUBTITLE" => $adminoptions,
+	"FORUMS_POSTS_OPTIONS" => $postsoptions,
 	"FORUMS_POSTS_PAGES" => $pagenav['main'],
 	"FORUMS_POSTS_PAGEPREV" => $pagenav['prev'],
 	"FORUMS_POSTS_PAGENEXT" => $pagenav['next'],
@@ -604,11 +600,11 @@ while ($row = $sql->fetch())
 	$fp_num++;
 	$i = empty($id) ? $d + $fp_num : $id;
 
-	$rowquote  = ($usr['id']>0) ? cot_rc('frm_rowquote', array('url' => cot_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np"))) : '';
-	$rowedit   = (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? cot_rc('frm_rowedit', array('url' => cot_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".cot_xg()))) : '';
-	$rowdelete = ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? cot_rc('frm_rowdelete', array('url' => cot_url('forums', "m=posts&a=delete&".cot_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id']))) : '';
-	$rowdelete .= ($fp_num==$totalposts) ? $R['frm_code_bottom'] : '';
-	$adminoptions = cot_rc('frm_code_post_adminoptions', array(
+	$rowquote  = ($usr['id']>0) ? cot_rc('forums_rowquote', array('url' => cot_url('forums', "m=posts&s=".$s."&q=".$q."&quote=".$row['fp_id']."&n=last", "#np"))) : '';
+	$rowedit   = (($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && $usr['id']>0) ? cot_rc('forums_rowedit', array('url' => cot_url('forums', "m=editpost&s=".$s."&q=".$q."&p=".$row['fp_id']."&".cot_xg()))) : '';
+	$rowdelete = ($usr['id']>0 && ($usr['isadmin'] || $row['fp_posterid']==$usr['id']) && !($post12[0]==$row['fp_id'] && $post12[1]>0)) ? cot_rc('forums_rowdelete', array('url' => cot_url('forums', "m=posts&a=delete&".cot_xg()."&s=".$s."&q=".$q."&p=".$row['fp_id']))) : '';
+	$rowdelete .= ($fp_num==$totalposts) ? $R['forums_code_bottom'] : '';
+	$adminoptions = cot_rc('forums_code_post_adminoptions', array(
 		'quote' => $rowquote,
 		'edit' => $rowedit,
 		'delete' => $rowdelete
@@ -617,14 +613,14 @@ while ($row = $sql->fetch())
 	if ($usr['id']>0 && $n=='unread' && !$unread_done && $row['fp_creation']>$usr['lastvisit'])
 	{
 		$unread_done = TRUE;
-		$adminoptions .= $R['frm_code_unread'];
+		$adminoptions .= $R['forums_code_unread'];
 	}
 
 	$row['fp_posterip'] = ($usr['isadmin']) ? cot_build_ipsearch($row['fp_posterip']) : '';
 
 	if (!empty($row['fp_updater']))
 	{
-		$row['fp_updatedby'] = sprintf($L['for_updatedby'], htmlspecialchars($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']);
+		$row['fp_updatedby'] = sprintf($L['forums_updatedby'], htmlspecialchars($row['fp_updater']), $row['fp_updated'], $row['fp_updated_ago']);
 	}
 
 	$t->assign(cot_generate_usertags($row, "FORUMS_POSTS_ROW_USER"));
@@ -638,7 +634,7 @@ while ($row = $sql->fetch())
 		"FORUMS_POSTS_ROW_UPDATER" => htmlspecialchars($row['fp_updater']),
 		"FORUMS_POSTS_ROW_UPDATEDBY" => $row['fp_updatedby'],
 		"FORUMS_POSTS_ROW_TEXT" => cot_parse($row['fp_text'], ($cfg['module']['forums']['markup'] && $fs_allowbbcodes)),
-		"FORUMS_POSTS_ROW_ANCHORLINK" => cot_rc('frm_code_post_anchor', array('id' => $row['fp_id'])),
+		"FORUMS_POSTS_ROW_ANCHORLINK" => cot_rc('forums_code_post_anchor', array('id' => $row['fp_id'])),
 		"FORUMS_POSTS_ROW_POSTERNAME" => cot_build_user($row['fp_posterid'], htmlspecialchars($row['fp_postername'])),
 		"FORUMS_POSTS_ROW_POSTERID" => $row['fp_posterid'],
 		"FORUMS_POSTS_ROW_POSTERIP" => $row['fp_posterip'],
@@ -670,14 +666,14 @@ function cot_stripquote($string)
 {
 	global $sys, $R;
 	$starttime = $sys['now'];
-	$startindex = mb_stripos($string, $R['frm_code_quote_begin']);
+	$startindex = mb_stripos($string, $R['forums_code_quote_begin']);
 	while ($startindex>=0)
 	{
 		if (($sys['now']-$starttime)>2000)
 		{
 			break;
 		}
-		$stopindex = mb_strpos($string, $R['frm_code_quote_close']);
+		$stopindex = mb_strpos($string, $R['forums_code_quote_close']);
 		if ($stopindex>0)
 		{
 			if (($sys['now']-$starttime)>3000)
@@ -686,13 +682,13 @@ function cot_stripquote($string)
 			}
 			$fragment = mb_substr($string,$startindex,($stopindex-$startindex+8));
 			$string = str_ireplace($fragment,'',$string);
-			$stopindex = mb_stripos($string, $R['frm_code_quote_close']);
+			$stopindex = mb_stripos($string, $R['forums_code_quote_close']);
 		} else
 		{
 			break;
 		}
 		$string = trim($string);
-		$startindex = mb_stripos($string, $R['frm_code_quote_begin']);
+		$startindex = mb_stripos($string, $R['forums_code_quote_begin']);
 	}
 	return($string);
 }
@@ -705,7 +701,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 
 		if ($row4 = $sql4->fetch())
 		{
-			$newmsg = cot_rc('frm_code_quote', array(
+			$newmsg = cot_rc('forums_code_quote', array(
 				'url' => cot_url('forums', 'm=posts&p=' . $row4['fp_id'] . '#' . $row4['fp_id']),
 				'id' => $row4['fp_id'],
 				'postername' => $row4['fp_postername'],
@@ -715,7 +711,7 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 	}
 
 	cot_require_api('forms');
-	$post_mark = $R['frm_code_newpost_mark'];
+	$post_mark = $R['forums_code_newpost_mark'];
 
 	$t->assign(array(
 		"FORUMS_POSTS_NEWPOST_SEND" => cot_url('forums', "m=posts&a=newpost&s=".$s."&q=".$q),
@@ -736,13 +732,13 @@ if (!$notlastpage && !$ft_state && $usr['id']>0 && $allowreplybox && $usr['auth_
 
 elseif ($ft_state)
 {
-	$t->assign("FORUMS_POSTS_TOPICLOCKED_BODY", $L['Topiclocked']);
+	$t->assign("FORUMS_POSTS_TOPICLOCKED_BODY", $L['forums_topiclocked']);
 	$t->parse("MAIN.FORUMS_POSTS_TOPICLOCKED");
 }
 
 elseif(!$allowreplybox && !$notlastpage && !$ft_state && $usr['id']>0)
 {
-	$t->assign("FORUMS_POSTS_ANTIBUMP_BODY", $L['for_antibump']);
+	$t->assign("FORUMS_POSTS_ANTIBUMP_BODY", $L['forums_antibump']);
 	$t->parse("MAIN.FORUMS_POSTS_ANTIBUMP");
 }
 

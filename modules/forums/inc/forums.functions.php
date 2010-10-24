@@ -320,7 +320,7 @@ function cot_load_forum_structure()
 	{
 		if (!empty($row['fn_icon']))
 		{
-			$row['fn_icon'] = cot_rc('frm_icon', array('src' => $row['fn_icon'], 'alt' => $row['fn_desc']));
+			$row['fn_icon'] = cot_rc('forums_icon', array('src' => $row['fn_icon'], 'alt' => $row['fn_desc']));
 		}
 
 		$path2 = mb_strrpos($row['fn_path'], '.');

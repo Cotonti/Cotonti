@@ -79,13 +79,13 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		if ($row['ft_movedto'] > 0)
 		{
 			$row['ft_url'] = cot_url('forums', 'm=posts&q='.$row['ft_movedto']);
-			$row['ft_icon'] = $R['frm_icon_posts_moved'];
+			$row['ft_icon'] = $R['forums_icon_posts_moved'];
 			$row['ft_title'] = $L['Moved'].": ".$row['ft_title'];
-			$row['ft_lastpostername'] = $R['frm_code_post_empty'];
-			$row['ft_postcount'] = $R['frm_code_post_empty'];
-			$row['ft_replycount'] = $R['frm_code_post_empty'];
-			$row['ft_viewcount'] = $R['frm_code_post_empty'];
-			$row['ft_lastpostername'] = $R['frm_code_post_empty'];
+			$row['ft_lastpostername'] = $R['forums_code_post_empty'];
+			$row['ft_postcount'] = $R['forums_code_post_empty'];
+			$row['ft_replycount'] = $R['forums_code_post_empty'];
+			$row['ft_viewcount'] = $R['forums_code_post_empty'];
+			$row['ft_lastpostername'] = $R['forums_code_post_empty'];
 			$row['ft_lastposturl'] = cot_rc_link(cot_url('forums', 'm=posts&q='.$row['ft_movedto'].'&n=last', '#bottom'), $R['icon_follow']) . ' '. $L['Moved'];
 			$row['ft_timago'] = cot_build_timegap($row['ft_updated'], $sys['now_offset']);
 		}
@@ -122,7 +122,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 				}
 			}
 
-			$row['ft_icon'] = cot_rc('frm_icon_topic_t', array('icon' => $row['ft_icon'], 'title' => $L['recentitems_'.$row['ft_icon']]));
+			$row['ft_icon'] = cot_rc('forums_icon_topic_t', array('icon' => $row['ft_icon'], 'title' => $L['recentitems_'.$row['ft_icon']]));
 			$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 		}
 

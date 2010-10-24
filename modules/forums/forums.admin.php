@@ -279,7 +279,7 @@ else
 			}
 			else
 			{
-				cot_error('adm_forum_emptytitle', 'ntitle');
+				cot_error('forums_emptytitle', 'ntitle');
 			}
 		}
 		elseif ($a == 'delete')

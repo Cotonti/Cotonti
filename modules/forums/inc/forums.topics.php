@@ -381,12 +381,12 @@ while ($fsn = $sqql->fetch())
 
 		if ($usr['id']>0 && $fsn['fs_lt_date']>$usr['lastvisit'] && $fsn['fs_lt_posterid']!=$usr['id'])
 		{
-			$fsn['fs_newposts'] = $R['frm_icon_posts_new_path'];
+			$fsn['fs_newposts'] = $R['forums_icon_posts_new_path'];
 		}
 
 		else
 		{
-			$fsn['fs_newposts'] = $R['frm_icon_posts_path'];
+			$fsn['fs_newposts'] = $R['forums_icon_posts_path'];
 		}
 
 
@@ -396,8 +396,8 @@ while ($fsn = $sqql->fetch())
 		}
 		else
 		{
-			$fsn['lastpost'] = $R['frm_code_post_empty'];
-			$fsn['fs_lt_date'] = $R['frm_code_post_empty'];
+			$fsn['lastpost'] = $R['forums_code_post_empty'];
+			$fsn['fs_lt_date'] = $R['forums_code_post_empty'];
 			$fsn['fs_lt_postername'] = '';
 			$fsn['fs_lt_posterid'] = 0;
 		}
@@ -494,13 +494,13 @@ while ($row = $sql->fetch())
 	if ($row['ft_movedto']>0)
 	{
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_movedto']);
-		$row['ft_icon'] = $R['frm_icon_posts_moved'];
+		$row['ft_icon'] = $R['forums_icon_posts_moved'];
 		$row['ft_title']= $L['Moved'].": ".$row['ft_title'];
-		$row['ft_lastpostername'] = $R['frm_code_post_empty'];
-		$row['ft_postcount'] = $R['frm_code_post_empty'];
-		$row['ft_replycount'] = $R['frm_code_post_empty'];
-		$row['ft_viewcount'] = $R['frm_code_post_empty'];
-		$row['ft_lastpostername'] = $R['frm_code_post_empty'];
+		$row['ft_lastpostername'] = $R['forums_code_post_empty'];
+		$row['ft_postcount'] = $R['forums_code_post_empty'];
+		$row['ft_replycount'] = $R['forums_code_post_empty'];
+		$row['ft_viewcount'] = $R['forums_code_post_empty'];
+		$row['ft_lastpostername'] = $R['forums_code_post_empty'];
 		$row['ft_lastposturl'] = cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom"), $R['icon_follow'], 'rel="nofollow"') .$L['Moved'];
 		$row['ft_timago'] = cot_build_timegap($row['ft_updated'],$sys['now_offset']);
 	}
@@ -535,7 +535,7 @@ while ($row = $sql->fetch())
 			}
 		}
 
-		$row['ft_icon'] = cot_rc('frm_icon_topic', array('icon' => $row['ft_icon']));
+		$row['ft_icon'] = cot_rc('forums_icon_topic', array('icon' => $row['ft_icon']));
 		$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 	}
 
@@ -545,7 +545,7 @@ while ($row = $sql->fetch())
 	{
 		$pn_q = $row['ft_movedto'] > 0 ? $row['ft_movedto'] : $row['ft_id'];
 		$pn = cot_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['maxpostsperpage'], 'd');
-		$row['ft_pages'] = cot_rc('frm_code_topic_pages', array('main' => $pn['main'], 'first' => $pn['first'], 'last' => $pn['last']));
+		$row['ft_pages'] = cot_rc('forums_code_topic_pages', array('main' => $pn['main'], 'first' => $pn['first'], 'last' => $pn['last']));
 	}
 
 	$t-> assign(array(
@@ -586,7 +586,7 @@ $pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, 
 $master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
 
 $toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master);
-$toptitle .= ($usr['isadmin']) ? $R['frm_code_admin_mark'] : '';
+$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $t->assign(array(
 	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
@@ -600,7 +600,7 @@ $t->assign(array(
 	"FORUMS_TOPICS_PAGENEXT" => $pagenav['next'],
 	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
 	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
-	"FORUMS_TOPICS_TITLE_TOPICS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=title&w=".rev($w)), $L['Topics'].' '.cursort($o == 'title', $w), 'rel="nofollow"'),
+	"FORUMS_TOPICS_TITLE_TOPICS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=title&w=".rev($w)), $L['forums_topics'].' '.cursort($o == 'title', $w), 'rel="nofollow"'),
 	"FORUMS_TOPICS_TITLE_VIEWS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=viewcount&w=".rev($w)), $L['Views']." ".cursort($o == 'viewcount', $w), 'rel="nofollow"'),
 	"FORUMS_TOPICS_TITLE_POSTS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Posts']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
 	"FORUMS_TOPICS_TITLE_REPLIES" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Replies']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
