@@ -1897,7 +1897,7 @@ function cot_headrc_consolidate()
 	}
 
 	// Save the output
-	$cache->db->store('cot_headrc', $cot_headrc);
+	$cache && $cache->db->store('cot_headrc', $cot_headrc);
 }
 
 /**

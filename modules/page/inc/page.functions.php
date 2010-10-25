@@ -226,4 +226,32 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 	return $return_array;
 }
 
+/**
+ * Recalculates page category counters
+ *
+ * @param string $cat Cat code
+ * @return bool
+ */
+function cot_page_resync($cat)
+{
+	global $db, $db_structure, $db_pages;
+	$sql = $db->query("SELECT COUNT(*) FROM $db_pages
+		WHERE page_cat='".$db->prep($cat)."' AND (page_state = 0 OR page_state=2)");
+	$num = (int) $sql->fetchColumn();
+	return (bool) $db->query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_code='".$db->prep($cat)."' AND structure_area='page'");
+}
+
+/**
+ * Update page category code
+ *
+ * @param string $oldcat Old Cat code
+ * @param string $newcat New Cat code
+ * @return bool
+ */
+function cot_page_updatecat($oldcat, $newcat)
+{
+	global $db, $db_structure, $db_pages;
+	return (bool) $db->update($db_pages, array("page_cat" => $newcat), "page_cat='".$db->prep($oldcat)."'");
+}
+
 ?>
