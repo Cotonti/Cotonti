@@ -120,8 +120,12 @@ class CotDB extends PDO {
 	 */
 	private function _startTimer()
 	{
+		global $cfg;
 		$this->_count++;
-		$this->_xtime = microtime();
+		if ($cfg['showsqlstats'])
+		{
+			$this->_xtime = microtime();
+		}
 	}
 
 	/**
@@ -130,14 +134,17 @@ class CotDB extends PDO {
 	private function _stopTimer($query)
 	{
 		global $cfg, $usr, $sys;
-		$ytime = microtime();
-		$xtime = explode(' ',$xtime);
-		$ytime = explode(' ',$ytime);
-		$this->_tcount += $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
-		if ($cfg['devmode'] && $usr['isadmin'])
+		if ($cfg['showsqlstats'])
 		{
-			$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query);
-			$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - $sys['starttime'];
+			$ytime = microtime();
+			$xtime = explode(' ',$xtime);
+			$ytime = explode(' ',$ytime);
+			$this->_tcount += $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0];
+			if ($cfg['devmode'] && $usr['isadmin'])
+			{
+				$sys['devmode']['queries'][] = array ($this->_count, $ytime[1] + $ytime[0] - $xtime[1] - $xtime[0], $query);
+				$sys['devmode']['timeline'][] = $xtime[1] + $xtime[0] - $sys['starttime'];
+			}
 		}
 	}
 

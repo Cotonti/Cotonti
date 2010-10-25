@@ -2,11 +2,13 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=header.main
-Tags=header.tpl:{HEADER_COMPOPUP}
+Tags=header.tpl:{HEADER_HEAD}
 [END_COT_EXT]
 ==================== */
 
 /**
+ * Dynamic head resources for search
+ *
  * @package search
  * @version 0.7.0
  * @author oc
@@ -18,7 +20,6 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (!empty($highlight))
 {
-	cot_headrc_file($cfg['plugins_dir'].'/search/js/hl.js');
 	$search_embed = '$(document).ready(function() {$("div.fmsg").each(function() {';
 
 	$highlight = explode(' ', $highlight);
@@ -28,7 +29,7 @@ if (!empty($highlight))
 	}
 
 	$search_embed .= '});});';
-	cot_headrc_embed('search.highlight', $search_embed, 'request');
+	cot_headrc_output_embed($search_embed);
 }
 
 ?>

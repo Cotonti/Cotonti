@@ -28,7 +28,15 @@ foreach (cot_getextplugins('admin.cache.first') as $pl)
 
 if ($a == 'purge' && $cache)
 {
-	(cot_check_xg() && $cache->clear()) ? cot_message('adm_purgeall_done') : cot_error('Error');
+	if (cot_check_xg() && $cache->clear())
+	{
+		cot_headrc_consolidate();
+		cot_message('adm_purgeall_done');
+	}
+	else
+	{
+		cot_error('Error');
+	}
 }
 elseif ($a == 'delete')
 {

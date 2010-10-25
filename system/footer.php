@@ -21,7 +21,7 @@ $sys['endtime'] = $i[1] + $i[0];
 $sys['creationtime'] = round(($sys['endtime'] - $sys['starttime']), 3);
 
 $out['creationtime'] = (!$cfg['disablesysinfos']) ? $L['foo_created'].' '.cot_declension($sys['creationtime'], $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
-$out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.cot_declension(round($sys['tcount'], 3), $Ls['Seconds'], $onlyword = false, $canfrac = true).' - '.$L['foo_sqlqueries'].': '.$sys['qcount']. ' - '.$L['foo_sqlaverage'].': '.cot_declension(round(($sys['tcount'] / $sys['qcount']), 5), $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
+$out['sqlstatistics'] = ($cfg['showsqlstats']) ? $L['foo_sqltotal'].': '.cot_declension(round($db->tcount, 3), $Ls['Seconds'], $onlyword = false, $canfrac = true).' - '.$L['foo_sqlqueries'].': '.$db->count. ' - '.$L['foo_sqlaverage'].': '.cot_declension(round(($db->tcount / $db->count), 5), $Ls['Seconds'], $onlyword = false, $canfrac = true) : '';
 $out['bottomline'] = $cfg['bottomline'];
 $out['bottomline'] .= ($cfg['keepcrbottom']) ? $out['copyright'] : '';
 

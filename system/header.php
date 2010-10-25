@@ -40,14 +40,6 @@ else
 	$out['fulltitle'] = cot_title('title_header', $title_params);
 }
 
-cot_javascript();
-
-if ($cfg['theme_consolidate'] && $cfg['forcedefaulttheme'])
-{
-	cot_headrc_file(cot_schemefile(), 'global', 'css');
-}
-
-
 $out['meta_contenttype'] = $cfg['xmlclient'] ? 'application/xml' : 'text/html';
 $out['basehref'] = $R['code_basehref'];
 $out['meta_charset'] = 'UTF-8';
@@ -55,6 +47,12 @@ $out['meta_desc'] = htmlspecialchars($out['desc']);
 $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] = $out['head'];
+
+cot_headrc_output();
+if ($cfg['jquery'] && $cfg['jquery_cdn'])
+{
+	cot_headrc_output_file('https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js');
+}
 
 if (isset($env['status']))
 {
@@ -95,7 +93,7 @@ if (!COT_AJAX)
 		'HEADER_META_DESCRIPTION' => $out['meta_desc'],
 		'HEADER_META_KEYWORDS' => $out['meta_keywords'],
 		'HEADER_META_LASTMODIFIED' => $out['meta_lastmod'],
-		'HEADER_HEAD' => cot_headrc_consolidate() . $out['head_head']
+		'HEADER_HEAD' => $out['head_head']
 	));
 
 	/* === Hook === */

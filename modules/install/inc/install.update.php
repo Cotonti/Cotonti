@@ -241,6 +241,13 @@ else
 		'UPDATE_TO' => is_int($new_rev) ? 'r' . $new_rev : 'r' . $rev
 	));
 
+	// Clear cache
+	if ($updated_ext && $cache)
+	{
+		$cache->clear();
+		cot_headrc_consolidate();
+	}
+
 	// BBcode2HTML
 	if ($cfg['bbcode2html'])
 	{

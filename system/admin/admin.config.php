@@ -53,14 +53,14 @@ switch($n)
 					"config_name = :n AND config_owner = :o AND config_cat = :p", array(':n' => $row['config_name'], ':o' => $o, ':p' => $p));
 			}
 			$sql->closeCursor();
-			$cache && $cache->db->remove('cot_cfg', 'system');
+			$cache && $cache->clear();
 			cot_message('Updated');
 		}
 		elseif ($a == 'reset' && !empty($v))
 		{
 			$db->query("UPDATE $db_config
 				SET config_value=config_default WHERE config_name='$v' AND config_owner='$o'");
-			$cache && $cache->db->remove('cot_cfg', 'system');
+			$cache && $cache->clear();
 		}
 		
 		$sql = $db->query("SELECT * FROM $db_config

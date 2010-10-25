@@ -516,6 +516,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('COT_NO_ANTIXSS') && !defin
 	cot_redirect(cot_url('message', 'msg=950', '', true));
 }
 
+/* ============ Head Resources ===========*/
+if (!$cot_headrc)
+{
+	cot_headrc_consolidate();
+}
+
 /* ======== Global hook ======== */
 
 foreach (cot_getextplugins('global') as $pl)
