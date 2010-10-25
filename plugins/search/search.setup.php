@@ -4,7 +4,7 @@
 Code=search
 Name=Search
 Description=Search with extended features
-Version=4.00
+Version=4.0.1
 Date=2010-mar-10
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2010

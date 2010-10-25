@@ -2,11 +2,15 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=header.main
+Tags=header.tpl:{HEADER_HEAD}
 [END_COT_EXT]
 ==================== */
 
 /**
- * CKEditor connector for Cotonti
+ * CKEditor connector for Cotonti.
+ * Uses direct header output rather than consolidated cache
+ * because CKEditor uses dynamic AJAX component loading and
+ * does not support consolidation.
  *
  * @package ckeditor
  * @version 0.7.0
@@ -22,18 +26,18 @@ if (function_exists('cot_textarea') && cot_auth('plug', 'ckeditor', 'W'))
 	// Main CKEditor file
 	if ($cfg['plugin']['ckeditor']['cdn'])
 	{
-		cot_headrc_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/ckeditor.js', 'request', 'js', true);
+		cot_headrc_output_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/ckeditor.js', 'js', true);
 		if ($cfg['jquery'])
 		{
-			cot_headrc_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/adapters/jquery.js', 'request');
+			cot_headrc_output_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/adapters/jquery.js');
 		}
 	}
 	else
 	{
-		cot_headrc_file($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js', 'request', 'js', true);
+		cot_headrc_output_file($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js', 'js', true);
 		if ($cfg['jquery'])
 		{
-			cot_headrc_file($cfg['plugins_dir'] . '/ckeditor/lib/adapters/jquery.js');
+			cot_headrc_output_file($cfg['plugins_dir'] . '/ckeditor/lib/adapters/jquery.js');
 		}
 	}
 	// Load preset and connector
@@ -50,7 +54,7 @@ if (function_exists('cot_textarea') && cot_auth('plug', 'ckeditor', 'W'))
 		$preset_name = file_exists($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.group_1.set.js") ? 'group_1'
 			: 'default';
 	}
-	cot_headrc_file($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js", 'request');
+	cot_headrc_output_file($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js");
 }
 
 ?>

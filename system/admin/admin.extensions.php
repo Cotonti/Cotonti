@@ -102,21 +102,8 @@ switch($a)
 		}
 		if (!empty($b) && $cache)
 		{
-			$cache->db->remove('cot_plugins', 'system');
-			$cache->db->remove('cot_modules', 'system');
-			$cache->db->remove('cot_cfg', 'system');
-			if ($cfg['cache_page'])
-			{
-				$cache->page->clear('page');
-			}
-			if ($cfg['cache_index'])
-			{
-				$cache->page->clear('index');
-			}
-			if ($cfg['cache_forums'])
-			{
-				$cache->page->clear('forums');
-			}
+			$cache->clear();
+			cot_headrc_consolidate();
 		}
 		if(file_exists($ext_info))
 		{
@@ -370,21 +357,8 @@ switch($a)
 		}
 		if ($cache)
 		{
-			$cache->db->remove('cot_plugins', 'system');
-			$cache->db->remove('cot_modules', 'system');
-			$cache->db->remove('cot_cfg', 'system');
-			if ($cfg['cache_page'])
-			{
-				$cache->page->clear('page');
-			}
-			if ($cfg['cache_index'])
-			{
-				$cache->page->clear('index');
-			}
-			if ($cfg['cache_forums'])
-			{
-				$cache->page->clear('forums');
-			}
+			$cache->clear();
+			cot_headrc_consolidate();
 		}
 		cot_clear_messages();
 		$t->parse('MAIN.EDIT');

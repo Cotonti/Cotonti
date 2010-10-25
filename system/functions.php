@@ -1735,165 +1735,169 @@ function cot_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $
  * Consolidates local JS and CSS resources used during script execution,
  * prepares cache images and links to them
  *
- * @global array $cot_headrc Head resource registry
+ * @global array $cot_headrc Blocks of HTML tags to be included in head of the document
+ * @global array $cot_headrc_reg Head resource registry
  * @global array $cfg Configuration
  * @global array $env Environment strings
- * @global array $usr User object
- * @return string HTML tags to be included in head of the document
+ * @global array $usr User object 
  */
 function cot_headrc_consolidate()
 {
-	global $cfg, $cot_headrc, $env, $usr;
-	$output = '';
-	foreach ($cot_headrc as $scope => $scope_data)
+	global $cache, $cfg, $cot_headrc, $cot_headrc_reg, $env, $L, $R, $sys, $usr;
+	
+	// Load standard resources
+	cot_headrc_load_standard();
+	
+	// Invoke headrc handlers
+	foreach (cot_getextplugins('headrc') as $pl)
 	{
-		foreach ($scope_data as $type => $data)
+		include $pl;
+	}
+	
+	if (!is_array($cot_headrc_reg))
+	{
+		return false;
+	}
+
+	clearstatcache();
+
+	// Build the head outputs
+	$cot_headrc = array();
+
+	if ($cfg['headrc_consolidate'])
+	{
+		// Consolidate resources
+		foreach ($cot_headrc_reg as $scope => $scope_data)
 		{
-			// Select cache files
-			switch ($scope)
+			foreach ($scope_data as $type => $files)
 			{
-				case 'global':
-					$target = 'common' ;
-					break;
-				case 'extension':
-					$target = $env['ext'];
-					break;
-				case 'user':
-					$target = $usr['id'];
-					break;
-				case 'request':
-					// Direct output
-					foreach ($data['files'] as $file_data)
-					{
-						$path = $file_data[0];
-						$prepend = $file_data[1];
-						if ($prepend)
-						{
-							$output = cot_rc("code_headrc_{$type}_file", array('url' => $path)) . $output;
-						}
-						else
-						{
-							$output .= cot_rc("code_headrc_{$type}_file", array('url' => $path));
-						}
-					}
-					if (!empty($data['embed']))
-					{
-						$output .= cot_rc("code_headrc_{$type}_embed", array('code' => $data['embed']));
-					}
-					unset($data);
-					break;
-			}
+				$target_path = $cfg['cache_dir'] . '/static/' . $scope . '.' . $type;
 
-			if ($scope == 'request')
-			{
-				continue;
-			}
+				$code = '';
+				$modified = false;
 
-			$target_path = $cfg['cache_dir'] . '/static/' . $target . '.' . $type;
-			
-			$modified = false;
-			$code = '';
-			
-			if (!file_exists($target_path))
-			{
-				// Just compile a new cache file
-				$file_list = $data;
-				$modified = true;
-			}
-			else
-			{
-				// Load the list of files already cached
-				$file_list = unserialize(file_get_contents("$target_path.idx"));
-				$code = file_get_contents($target_path);
-
-				// Check presense or modification time for each file
-				foreach ($data as $path)
+				if (!file_exists($target_path))
 				{
-					if (!in_array($path, $file_list))
+					// Just compile a new cache file
+					$file_list = $files;
+					$modified = true;
+				}
+				else
+				{
+					// Load the list of files already cached
+					$file_list = unserialize(file_get_contents("$target_path.idx"));
+					$code = file_get_contents($target_path);
+
+					// Check presense or modification time for each file
+					foreach ($files as $path)
 					{
-						$file_list[] = $path;
-						$modified = true;
-					}
-					elseif (filemtime($path) >= filemtime($target_path))
-					{
-						$modified = true;
+						if (!in_array($path, $file_list) || filemtime($path) >= filemtime($target_path))
+						{
+							$modified = true;
+							break;
+						}
 					}
 				}
-			}
-			
-			if ($modified)
-			{
-				// Reconsolidate cache
-				$separator = $type == 'js' ? "\n;" : "\n";
-				$current_path = realpath('.');
-				foreach ($file_list as $path)
+
+				if ($modified)
 				{
-					$file_code = str_replace(pack('CCC',0xef,0xbb,0xbf), '', file_get_contents($path));
-					$file_path = dirname(realpath($path));
-					$relative_path = str_replace($current_path, '', $file_path);
-					if ($relative_path[0] === '/')
+					// Reconsolidate cache
+					$separator = $type == 'js' ? "\n;" : "\n";
+					$current_path = realpath('.');
+					foreach ($files as $path)
 					{
-						$relative_path = mb_substr($relative_path, 1);
-					}
-					if ($type == 'css')
-					{
-						// Apply CSS imports
-						if (preg_match_all('#@import\s+url\((\'|")?(.+?\.css)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
+						$file_code = str_replace(pack('CCC',0xef,0xbb,0xbf), '', file_get_contents($path));
+						$file_path = dirname(realpath($path));
+						$relative_path = str_replace($current_path, '', $file_path);
+						if ($relative_path[0] === '/')
 						{
-							foreach ($mt as $m)
+							$relative_path = mb_substr($relative_path, 1);
+						}
+						if ($type == 'css')
+						{
+							// Apply CSS imports
+							if (preg_match_all('#@import\s+url\((\'|")?(.+?\.css)\1?\);#i', $file_code, $mt, PREG_SET_ORDER))
 							{
-								$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
-								$file_code = str_replace($m[0], file_get_contents($filename), $file_code);
+								foreach ($mt as $m)
+								{
+									$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
+									$file_code = str_replace($m[0], file_get_contents($filename), $file_code);
+								}
+							}
+							// Fix URLs
+							if (preg_match_all('#\burl\((\'|")?(.+?)\1?\)#i', $file_code, $mt, PREG_SET_ORDER))
+							{
+								foreach ($mt as $m)
+								{
+									$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
+									$filename = str_replace($current_path, '', realpath($filename));
+									if (!$filename)
+									{
+										continue;
+									}
+									if ($filename[0] === '/')
+									{
+										$filename = mb_substr($filename, 1);
+									}
+									$file_code = str_replace($m[0], 'url("'.$filename.'")', $file_code);
+								}
 							}
 						}
-						// Fix URLs
-						if (preg_match_all('#\burl\((\'|")?(.+?)\1?\)#i', $file_code, $mt, PREG_SET_ORDER))
+						$code .= $file_code . $separator;
+					}
+
+					if ($cfg['headrc_minify'])
+					{
+						if ($type == 'js')
 						{
-							foreach ($mt as $m)
-							{
-								$filename = empty($relative_path) ? $m[2] : $relative_path . '/' . $m[2];
-								$filename = str_replace($current_path, '', realpath($filename));
-								if (!$filename)
-								{
-									continue;
-								}
-								if ($filename[0] === '/')
-								{
-									$filename = mb_substr($filename, 1);
-								}
-								$file_code = str_replace($m[0], 'url("'.$filename.'")', $file_code);
-							}
+							require_once './lib/jsmin.php';
+							$code = JSMin::minify($code);
+						}
+						elseif ($type == 'css')
+						{
+							require_once './lib/cssmin.php';
+							$code = CssMin::minify($code);
 						}
 					}
-					$code .= $file_code . $separator;
+					file_put_contents($target_path, $code);
+					if ($cfg['gzip'])
+					{
+						file_put_contents("$target_path.gz", gzencode($code));
+					}
+					file_put_contents("$target_path.idx", serialize($files));
 				}
 
-				if ($cfg['headrc_minify'])
-				{
-					if ($type == 'js')
-					{
-						require_once './lib/jsmin.php';
-						$code = JSMin::minify($code);
-					}
-					elseif ($type == 'css')
-					{
-						require_once './lib/cssmin.php';
-						$code = CssMin::minify($code);
-					}
-				}
-				file_put_contents($target_path, $code);
-				if ($cfg['gzip'])
-				{
-					file_put_contents("$target_path.gz", gzencode($code));
-				}
-				file_put_contents("$target_path.idx", serialize($file_list));
+				$rc_url = "rc.php?rc=$scope.$type";
+				$cot_headrc[$scope] .= cot_rc("code_headrc_{$type}_file", array('url' => $rc_url));
 			}
-			
-			$rc_url = "rc.php?rc=$target.$type";
-			$output .= cot_rc("code_headrc_{$type}_file", array('url' => $rc_url));
 		}
 	}
-	return $output;
+	else
+	{
+		if (is_array($cot_headrc_reg['files']))
+		{
+			foreach ($cot_headrc_reg['files'] as $scope => $scope_data)
+			{
+				foreach ($scope_data as $file)
+				{
+					$cot_headrc[$scope] .= cot_rc('code_headrc_' . $file[1] . '_file', array('url' => $file[0]));
+				}
+			}
+		}
+		if (is_array($cot_headrc_reg['embed']))
+		{
+			foreach ($cot_headrc_reg['embed'] as $scope => $scope_data)
+			{
+				foreach ($scope_data as $type => $code)
+				{
+					$cot_headrc[$scope] .= cot_rc("code_headrc_{$type}_embed", array('code' => $code));
+				}
+			}
+		}
+	}
+
+	// Save the output
+	$cache->db->store('cot_headrc', $cot_headrc);
 }
 
 /**
@@ -1905,29 +1909,20 @@ function cot_headrc_consolidate()
  * dynamically generated code, which cannot be stored in static files.
  *
  * @see cot_headrc_file()
- * @global array $cot_headrc Head resource registry
+ * @global array $cot_headrc_reg Head resource registry
  * @param string $identifier Alphanumeric identifier for the piece, used to control updates, etc.
  * @param string $code Embedded script code or stylesheet code
- * @param string $scope Resource scope: 'global', 'module', 'plugin', 'user' or 'request'.
- * See description of this parameter in cot_headrc_file() docs.
+ * @param string $scope Resource scope. See description of this parameter in cot_headrc_load_file() docs.
  * @param string $type Resource type: 'js' or 'css'
  * @return bool This function always returns TRUE
+ * @see cot_headrc_load_file()
+ * @see cot_headrc_output_embed()
  */
-function cot_headrc_embed($identifier, $code, $scope = 'global', $type = 'js')
+function cot_headrc_load_embed($identifier, $code, $scope = 'global', $type = 'js')
 {
-	global $cfg, $cot_headrc;
+	global $cfg, $cot_headrc_reg;
 
-	if (!$cfg['headrc_consolidate'])
-	{
-		$scope = 'request';
-	}
-	
-	if ($scope == 'request')
-	{
-		$separator = $type == 'js' ? "\n;" : "\n";
-		$cot_headrc[$scope][$type]['embed'] .= $code . $separator;
-	}
-	else
+	if ($cfg['headrc_consolidate'])
 	{
 		// Save as file
 		$path = $cfg['cache_dir'] . '/static/' . $identifier . '.' . $type;
@@ -1935,83 +1930,152 @@ function cot_headrc_embed($identifier, $code, $scope = 'global', $type = 'js')
 		{
 			file_put_contents($path, $code);
 		}
-		$cot_headrc[$scope][$type][] = $path;
+		$cot_headrc_reg[$scope][$type][] = $path;
+	}
+	else
+	{
+		$separator = $type == 'js' ? "\n;" : "\n";
+		$cot_headrc_reg['embed'][$scope][$type] .= $code . $separator;
 	}
 	return true;
 }
 
 /**
  * Puts a JS or CSS file into the head resource registry to be consolidated with other
- * such resources, cached and sent back to a visitor.
+ * such resources and stored in cache.
  *
  * It is recommened to use files instead of embedded code and use this function
  * instead of cot_headrc_embed(). Use this way for any sort of static JavaScript or
  * CSS linking.
  *
- * @global array $cot_headrc Head resource registry
+ * Do not put any private data in any of resource files - it is not secure. If you really need it,
+ * then use direct output instead.
+ *
+ * @global array $cot_headrc_reg Head resource registry
  * @param string $path Path to a script or stylesheet file
- * @param string $scope Resource scope: 'global', 'extension', 'user' or 'request'. These scopes mean:
+ * @param string $scope Resource scope. Scope is a selector of domain where resource is used. Valid scopes are:
  *	'global' - global for entire site, will be included everywhere, this is the most static and persistent scope;
- *	'extension' - is attached to current module or standalone plugin only, use it for resources that won't be
- *	used in other modules or plugins or elsewhere on site;
- *	'user' - only for current user or if $usr['id'] is 0 for all guests, use it for user-specific pieces of code;
- *	'request' - is specific to current request only, it won't be cached or consolidated.
- * Tend to use the global scope whenever possible because it has best caching effect. Use user scope for
- * user-specific and private code and data, use request scope for temporary embeds ( with cot_headrc_embed()).
+ *	'guest' - for unregistered visitors only;
+ *	'user' - for registered members only;
+ *	'group_123' - for members of a specific group (maingrp), in this example of group with id=123.
+ * You can combine ext scope with other scopes, e.g. 'user&ext=forums' means "for registered users in forums".
+ * It is recommended to use 'global' scope whenever possible because it delivers best caching opportunities.
  * @param string $type Resource type: 'js' or 'css'
- * @param bool $prepend For 'request' scope - prepend this file before other resources
  * @return bool This function always returns TRUE
+ * @see cot_headrc_load_embed()
+ * @see cot_headrc_output_file()
  */
-function cot_headrc_file($path, $scope = 'global', $type = 'js', $prepend = false)
+function cot_headrc_load_file($path, $scope = 'global', $type = 'js')
 {
-	global $cfg, $cot_headrc;
+	global $cfg, $cot_headrc_reg;
 	if (!file_exists($path))
 	{
 		return false;
 	}
 
-	if (!$cfg['headrc_consolidate'])
+	if ($cfg['headrc_consolidate'])
 	{
-		$scope = 'request';
-	}
-
-	if ($scope == 'request')
-	{
-		$cot_headrc[$scope][$type]['files'][] = array($path, $prepend);
+		$cot_headrc_reg[$scope][$type][] = $path;
 	}
 	else
 	{
-		$cot_headrc[$scope][$type][] = $path;
+		$cot_headrc_reg['files'][$scope][] = array($path, $type);
 	}
 	return true;
 }
 
 /**
- * Outputs standard javascript
+ * Registers standard head resources
  */
-function cot_javascript()
+function cot_headrc_load_standard()
 {
 	global $cfg;
-	
-	if ($cfg['jquery'])
+
+	if ($cfg['jquery'] && !$cfg['jquery_cdn'])
 	{
-		if ($cfg['jquery_cdn'])
-		{
-			cot_headrc_file('https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js', 'request', 'js', true);
-		}
-		else
-		{
-			cot_headrc_file('js/jquery.js');
-		}
+		cot_headrc_load_file('js/jquery.js');
 	}
 
-	cot_headrc_file('js/base.js');
+	cot_headrc_load_file('js/base.js');
 
 	if ($cfg['jquery'] && $cfg['turnajax'])
 	{
-		cot_headrc_file('js/jquery.history.js');
-		cot_headrc_file('js/ajax_on.js');
+		cot_headrc_load_file('js/jquery.history.js');
+		cot_headrc_load_file('js/ajax_on.js');
 	}
+
+	if ($cfg['theme_consolidate'] && $cfg['forcedefaulttheme'])
+	{
+		cot_headrc_load_file(cot_schemefile(), 'global', 'css');
+	}
+}
+
+/**
+ * Sends registered head resources to head output
+ * @global array $out
+ */
+function cot_headrc_output()
+{
+	global $cot_headrc, $out, $usr;
+	if (is_array($cot_headrc))
+	{
+		foreach ($cot_headrc as $scope => $html)
+		{
+			switch ($scope)
+			{
+				case 'global':
+					$pass = true;
+					break;
+				case 'guest':
+					$pass = $usr['id'] == 0;
+					break;
+				case 'user':
+					$pass = $usr['id'] > 0;
+					break;
+				default:
+					$parts = explode('_', $scope);
+					$pass = count($parts) == 2 && $parts[0] == 'group' && $parts[1] == $usr['maingrp'];
+			}
+			if ($pass)
+			{
+				$out['head_head'] .= $html;
+			}
+		}
+	}
+}
+
+/**
+ * A shortcut for plain output of an embedded script/stylesheet in page's head
+ *
+ * @global array $out Output snippets
+ * @param string $path Path to a script or stylesheet file
+ * @param string $type Resource type: 'js' or 'css'
+ * @param bool $prepend Prepend this file before other head outputs
+ * @see cot_headrc_load_embed()
+ * @see cot_headrc_output_file()
+ */
+function cot_headrc_output_embed($code, $type = 'js', $prepend = false)
+{
+	global $out;
+	$embed = cot_rc("code_headrc_{$type}_embed", array('code' => $code));
+	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
+}
+
+/**
+ * A shortcut for plain output of a link to a js/css file in page's head
+ *
+ * @global array $out Output snippets
+ * @param string $code Script or stylesheet code
+ * @param string $type Resource type: 'js' or 'css'
+ * @param bool $prepend Prepend this file before other head outputs
+ * @see cot_headrc_load_file()
+ * @see cot_headrc_output_embed()
+ */
+function cot_headrc_output_file($path, $type = 'js', $prepend = false)
+{
+	global $out;
+	$embed = cot_rc("code_headrc_{$type}_file", array('url' => $path));
+	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
 }
 
 /**
