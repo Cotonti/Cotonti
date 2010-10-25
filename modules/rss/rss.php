@@ -41,7 +41,7 @@ $id = cot_import('id', 'G', 'ALP');
 $c = empty($c) ? "pages" : $c;
 $id = empty($id) ? "all" : $id;
 
-header('Content-type: text/xml; charset=' . $cfg['rss']['charset']);
+header('Content-type: text/xml; charset=UTF-8');
 $sys['now'] = time();
 
 if ($usr['id'] === 0 && $cache)
@@ -100,7 +100,7 @@ if ($c == "topics")
 		$res = $db->query($sql);
 		$totalposts = $res->fetchColumn();
 
-		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid='$topic_id' ORDER BY fp_creation DESC LIMIT ".$cfg['rss_maxitems'];
+		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid='$topic_id' ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
 		$res = $db->query($sql);
 		$i = 0;
 		while ($row = $res->fetch())

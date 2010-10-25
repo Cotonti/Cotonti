@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=Pages
 Description=Pages and Categories
-Version=0.7.0.2
+Version=0.7.0.3
 Date=2010-oct-05
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010
@@ -17,7 +17,6 @@ Admin_icon=img/adminmenu_page.png
 
 [BEGIN_COT_EXT_CONFIG]
 markup=01:radio::1:
-allowphp_pages=02:radio::0:
 count_admin=03:radio::0:
 autovalidate=04:radio::1:
 [END_COT_EXT_CONFIG]
