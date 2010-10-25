@@ -21,13 +21,11 @@ cot_require('page');
 
 $t = new XTemplate(cot_skinfile('admin.structure'));
 
-$adminpath[] = array (cot_url('admin', 'm=structure'), $L['Categories']);
-$adminhelp = $L['adm_help_structure'];
-
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
 $d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
+$area = cot_import('area', 'G', 'ALP');
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.structure.first') as $pl)
@@ -35,6 +33,11 @@ foreach (cot_getextplugins('admin.structure.first') as $pl)
 	include $pl;
 }
 /* ===== */
+
+if (empty($area))
+{
+	cot_redirect(cot_url('message', 'msg=950', '', true));
+}
 
 $options_sort = array(
 	'id' => $L['Id'],
@@ -99,8 +102,9 @@ if ($n == 'options')
 
 		if ($roww['structure_code'] != $rstructure['structure_code'])
 		{
-			$sql = $db->update($db_structure, array("structure_code" => $rstructure['structure_code']), "structure_code='".$db->prep($roww['structure_code'])."'");
-			$sql = $db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='page' AND auth_option='".$db->prep($roww['structure_code'])."'");
+			$sql = $db->update($db_structure, array("structure_code" => $rstructure['structure_code']), "structure_code='".$db->prep($roww['structure_code'])."' AND structure_area='".$db->prep($area)."'");
+			$sql = $db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($area)."' AND auth_option='".$db->prep($roww['structure_code'])."'");
+// TODO: Page sep
 			$sql = $db->update($db_pages, array("page_cat" => $rstructure['structure_code']), "page_cat='".$db->prep($roww['structure_code'])."'");
 
 			cot_auth_reorder();
@@ -111,19 +115,20 @@ if ($n == 'options')
 
 		if ($cache)
 		{
-			$cache->db->remove('cot_cat', 'system');
-			$cfg['cache_page'] && $cache->page->clear('page');
+			$cache->db->remove('structure', 'system');
+			$cfg['cache_'.$area] && $cache->page->clear($area);
 		}
 
 		cot_message('Updated');
 
-		cot_redirect(cot_url('admin', 'm=structure&d='.$d.$additionsforurl, '', true));
+		cot_redirect(cot_url('admin', 'm=structure&area='.$area.'&d='.$d.$additionsforurl, '', true));
 	}
 	elseif ($a == 'resync')
 	{
 		cot_check_xg();
+		// TODO: Page sep
 		cot_structure_resync($id) ? cot_message('Resynced') : cot_message('Error');
-		($cache && $cfg['cache_page']) && $cache->page->clear('page');
+		($cache && $cfg['cache_'.$area]) && $cache->page->clear($area);
 	}
 
 	$sql = $db->query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
@@ -167,9 +172,9 @@ if ($n == 'options')
 		$check_tpl = "3";
 	}
 
-	$adminpath[] = array (cot_url('admin', "m=structure&n=options&id=".$id), htmlspecialchars($row['structure_title']));
+	$adminpath[] = array (cot_url('admin', "m=structure&area='.$area.'&n=options&id=".$id), htmlspecialchars($row['structure_title']));
 
-	foreach ($cot_cat as $i => $x)
+	foreach ($structure[$area] as $i => $x)
 	{
 		if ($i != 'all')
 		{
@@ -263,8 +268,9 @@ else
 
 			if ($roww['structure_code'] != $rstructure['structure_code'])
 			{
-				$sql = $db->update($db_structure, array("structure_code" => $rstructure['structure_code']), "structure_code='".$db->prep($roww['structure_code'])."'");
-				$sql = $db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='page' AND auth_option='".$db->prep($roww['structure_code'])."'");
+				$sql = $db->update($db_structure, array("structure_code" => $rstructure['structure_code']), "structure_code='".$db->prep($roww['structure_code'])."' AND structure_area='".$db->prep($area)."'");
+				$sql = $db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($area)."' AND auth_option='".$db->prep($roww['structure_code'])."'");
+			// TODO: Page sep
 				$sql = $db->update($db_pages, array("page_cat" => $rstructure['structure_code']), "page_cat='".$db->prep($roww['structure_code'])."'");
 
 				cot_auth_reorder();
@@ -276,8 +282,9 @@ else
 		cot_auth_clear('all');
 		if ($cache)
 		{
-			$cache->db->remove('cot_cat', 'system');
-			$cfg['cache_page'] && $cache->page->clear('page');
+			$cache->db->remove('structure', 'system');
+			// TODO: Page sep
+			$cfg['cache_'.$area] &&  $cache->page->clear($area);
 		}
 
 		cot_message('Updated');
@@ -292,6 +299,7 @@ else
 		$rstructure['structure_group'] = (cot_import('rstructuregroup', 'P', 'BOL')) ? 1 : 0;
 		$rstructure['structure_order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rstructureway', 'P', 'ALP');
 		$rstructure['structure_ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
+		$rstructure['structure_area'] = $area;
 
 		foreach ($cot_extrafields['structure'] as $row)
 		{
@@ -319,8 +327,8 @@ else
 				$sql = $db->insert($db_structure, $rstructure);
 				$auth_permit = array(COT_GROUP_DEFAULT => 7, COT_GROUP_GUESTS => 5, COT_GROUP_MEMBERS => 7);
 				$auth_lock = array(COT_GROUP_DEFAULT => 0, COT_GROUP_GUESTS => 250, COT_GROUP_MEMBERS => 128);
-				cot_auth_add_item('page', $rstructure['structure_code'], $auth_permit, $auth_lock);
-				$cache && $cache->db->remove('cot_cat', 'system');
+				cot_auth_add_item($area, $rstructure['structure_code'], $auth_permit, $auth_lock);
+				$cache && $cache->db->remove('structure', 'system');
 				cot_message('Added');
 			}
 			else
@@ -332,7 +340,7 @@ else
 		{
 			cot_message('Error');
 		}
-		($cache && $cfg['cache_page']) && $cache->page->clear('page');
+		($cache && $cfg['cache_'.$area]) && $cache->page->clear($area);
 
 	}
 	elseif ($a == 'delete')
@@ -345,19 +353,32 @@ else
 			include $pl;
 		}
 		/* ===== */
-
-		cot_structure_delcat($id, $c);
-		($cache && $cfg['cache_page']) && $cache->page->clear('page');
-
+// TODO: no ID!
+		$sql = $db->delete($db_structure, "structure_code='".$db->prep($c)."' AND structure_area='".$db->prep($area)."' AND structure_id='$id'");
+		cot_auth_remove_item($area, $c);
+		if ($cache)
+		{
+			$cache->db->remove('structure', 'system');
+			$cfg['cache_'.$area] && $cache->page->clear($area);
+		}
 		cot_message('Deleted');
 	}
 	elseif ($a == 'resyncall')
 	{
 		cot_check_xg();
-		cot_structure_resyncall() ? cot_message('Resynced') : cot_message('Error');
-		($cache && $cfg['cache_page']) && $cache->page->clear('page');
-	}
 
+		$res = TRUE;
+		$sql = $db->query("SELECT structure_id FROM $db_structure WHERE structure_area='".$db->prep($area)."'");
+		while ($row = $sql->fetch())
+		{
+			$res &= cot_structure_resync($row['structure_id']);
+		}
+		$sql->closeCursor();
+		$res ? cot_message('Resynced') : cot_message('Error');
+		($cache && $cfg['cache_'.$area]) && $cache->page->clear($area);
+	}
+	
+// TODO: Page sep
 	$sql = $db->query("SELECT DISTINCT(page_cat), COUNT(*) FROM $db_pages WHERE 1 GROUP BY page_cat");
 
 	while ($row = $sql->fetch())
@@ -365,11 +386,10 @@ else
 		$pagecount[$row['page_cat']] = $row['COUNT(*)'];
 	}
 
-	$totalitems = $db->countRows($db_structure);
-	$pagenav = cot_pagenav('admin', 'm=structure', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+	$totalitems = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area='".$db->prep($area)."'")->fetchColumn();
+	$sql = $db->query("SELECT * FROM $db_structure WHERE structure_area='".$db->prep($area)."' ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
 
-	$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_path ASC, structure_code ASC LIMIT $d, ".$cfg['maxrowsperpage']);
-
+	$pagenav = cot_pagenav('admin', 'm=structure&area='.$area, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 	$ii = 0;
 	/* === Hook - Part1 : Set === */
 	$extp = cot_getextplugins('admin.structure.loop');
@@ -407,7 +427,7 @@ else
 		$dozvil = ($pagecount[$structure_code] > 0) ? false : true;
 
 		$t->assign(array(
-			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_url('admin', 'm=structure&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.cot_xg()),
+			'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_url('admin', 'm=structure&area='.$area.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.cot_xg()),
 			'ADMIN_STRUCTURE_ID' => $structure_id,
 			'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="8" maxlength="255"'),
 			'ADMIN_STRUCTURE_PATHFIELDIMG' => $pathfieldimg,
@@ -420,9 +440,9 @@ else
 			'ADMIN_STRUCTURE_ORDER' => cot_selectbox($sort, 'rstructureorder['.$structure_id.']', array_keys($options_sort), array_values($options_sort), false, 'style="width:85px;"'),
 			'ADMIN_STRUCTURE_GROUP' => cot_checkbox($row['structure_group'], 'rstructuregroup['.$structure_id.']'),
 			'ADMIN_STRUCTURE_PAGECOUNT' => $pagecount[$structure_code],
-			'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url('page', 'c='.$structure_code),
-			'ADMIN_STRUCTURE_RIGHTS_URL' => cot_url('admin', 'm=rightsbyitem&ic=page&io='.$structure_code),
-			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n=options&id='.$structure_id.'&'.cot_xg()),
+	/*TODO*/		'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url('page', 'c='.$structure_code),
+			'ADMIN_STRUCTURE_RIGHTS_URL' => cot_url('admin', 'm=rightsbyitem&ic='.$area.'&io='.$structure_code),
+			'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&area='.$area.'&n=options&id='.$structure_id.'&'.cot_xg()),
 			'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii)
 		));
 
@@ -448,14 +468,14 @@ else
 	reset($options_way);
 
 	$t->assign(array(
-		'ADMIN_STRUCTURE_UPDATE_FORM_URL' => cot_url('admin', 'm=structure&a=update&d='.$d),
+		'ADMIN_STRUCTURE_UPDATE_FORM_URL' => cot_url('admin', 'm=structure&area='.$area.'&a=update&d='.$d),
 		'ADMIN_STRUCTURE_PAGINATION_PREV' => $pagenav['prev'],
 		'ADMIN_STRUCTURE_PAGNAV' => $pagenav['main'],
 		'ADMIN_STRUCTURE_PAGINATION_NEXT' => $pagenav['next'],
 		'ADMIN_STRUCTURE_TOTALITEMS' => $totalitems,
 		'ADMIN_STRUCTURE_COUNTER_ROW' => $ii,
-		'ADMIN_PAGE_STRUCTURE_RESYNCALL' => cot_url('admin', 'm=structure&a=resyncall&'.cot_xg().'&d='.$d),
-		'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&a=add'),
+		'ADMIN_PAGE_STRUCTURE_RESYNCALL' => cot_url('admin', 'm=structure&area='.$area.'&a=resyncall&'.cot_xg().'&d='.$d),
+		'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&area='.$area.'&a=add'),
 		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode', '', 'size="16"'),
 		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath', '', 'size="16" maxlength="16"'),
 		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', '', 'size="64" maxlength="100"'),

@@ -442,8 +442,8 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
  */
 function cot_load_structure()
 {
-	global $db, $db_structure, $db_extra_fields, $cfg, $L, $cot_cat, $cot_extrafields;
-	$cot_cat = array();
+	global $db, $db_structure, $db_extra_fields, $cfg, $L, $cot_extrafields, $structure;
+	$structure = array();
 	$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
 
 	while ($row = $sql->fetch())
@@ -477,7 +477,7 @@ function cot_load_structure()
 		$order = explode('.', $row['structure_order']);
 		$parent_tpl = $row['structure_tpl'];
 
-		$cot_cat[$row['structure_code']] = array(
+		$structure[$row['structure_area']][$row['structure_code']] = array(
 			'path' => $path[$row['structure_path']],
 			'tpath' => $tpath[$row['structure_path']],
 			'rpath' => $row['structure_path'],
@@ -495,7 +495,7 @@ function cot_load_structure()
 		{
 			foreach ($cot_extrafields['structure'] as $row_c)
 			{
-				$cot_cat[$row['structure_code']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
+				$structure[$row['structure_area']][$row_c['field_name']] = $row['structure_'.$row_c['field_name']];
 			}
 		}
 
@@ -506,6 +506,110 @@ function cot_load_structure()
 		}
 		/* ===== */
 	}
+}
+/**
+ * Structure functions
+ */
+
+/**
+ * Gets an array of category children
+ *
+ * @param string $area Area code
+ * @param string $cat Cat code
+ * @param bool $allsublev All sublevels array
+ * @param bool $firstcat Add main cat
+ * @param bool $userrights Check userrights
+ * @param bool $sqlprep use $db->prep function
+ * @return array
+ */
+function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
+{
+	global $structure, $sys, $cfg;
+
+	$mtch = $structure[$area][$cat]['path'].'.';
+	$mtchlen = mb_strlen($mtch);
+	$mtchlvl = mb_substr_count($mtch,".");
+
+	$catsub = array();
+	if ($firstcat && (($userrights && cot_auth($area, $cat, 'R') || !$userrights)))
+	{
+		$catsub[] = $cat;
+	}
+
+	foreach($structure[$area] as $i => $x)
+	{
+		if(mb_substr($x['path'], 0, $mtchlen) == $mtch && (($userrights && cot_auth($area, $i, 'R') || !$userrights)))
+		{
+			$subcat = mb_substr($x['path'], $mtchlen + 1);
+			if($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
+			{
+				$i = ($sqlprep) ? $db->prep($i) : $i;
+				$catsub[] = $i;
+			}
+		}
+	}
+	return($catsub);
+}
+
+/**
+ * Gets an array of category parents
+ *
+ * @param string $area Area code
+ * @param string $cat Cat code
+ * @param string $type Type 'full', 'first', 'last'
+ * @return mixed
+ */
+function cot_structure_parents($area, $cat, $type = 'full')
+{
+	global $structure, $cfg;
+	$pathcodes = explode('.', $structure[$area][$cat]['path']);
+
+	if ($type == 'first')
+	{
+		reset($pathcodes);
+		$pathcodes = current($pathcodes);
+	}
+	elseif ($type == 'last')
+	{
+		$pathcodes = end($pathcodes);
+	}
+
+	return $pathcodes;
+}
+
+
+/**
+ * Renders category dropdown
+ *
+ * @param string $area Area code
+ * @param string $check Seleced value
+ * @param string $name Dropdown name
+ * @param string $subcat Show only subcats of selected category
+ * @param bool $hideprivate Hide private categories
+ * @return string
+ */
+function cot_selectbox_structure($area, $check, $name, $subcat = '', $hideprivate = true)
+{
+	global $db, $db_structure, $usr, $L, $R, $structure;
+
+	foreach ($structure[$area] as $i => $x)
+	{
+		$display = ($hideprivate) ? cot_auth($area, $i, 'W') : true;
+		if ($display && !empty($subcat) && isset($structure[$area][$subcat]) && !(empty($check)))
+		{
+			$mtch = $structure[$area][$subcat]['path'].".";
+			$mtchlen = mb_strlen($mtch);
+			$display = (mb_substr($x['path'], 0, $mtchlen) == $mtch || $i == $check) ? true : false;
+		}
+
+		if (cot_auth($area, $i, 'R') && $i!='all' && $display)
+		{
+			$result_array[$i] = $x['tpath'];
+		}
+	}
+	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
+
+	return($result);
 }
 
 /**
@@ -984,13 +1088,14 @@ function cot_build_age($birth)
 /**
  * Builds category path
  *
+ * @param string $area Area code
  * @param string $cat Category code
  * @param string $mask Format mask
  * @return string
  */
-function cot_build_catpath($cat, $mask = 'link_catpath')
+function cot_build_catpath($area, $cat, $mask = 'link_catpath')
 {
-	global $cot_cat, $cfg;
+	global $structure, $cfg;
 	$mask = str_replace('%1$s', '{$url}', $mask);
 	$mask = str_replace('%2$s', '{$title}', $mask);
 	if ($cfg['homebreadcrumb'])
@@ -1000,17 +1105,17 @@ function cot_build_catpath($cat, $mask = 'link_catpath')
 			'title' => htmlspecialchars($cfg['maintitle'])
 		));
 	}
-	$pathcodes = explode('.', $cot_cat[$cat]['path']);
+	$pathcodes = explode('.', $$structure[$area][$cat]['path']);
 	$last = count($pathcodes) - 1;
 	$list = defined('COT_LIST');
 	foreach ($pathcodes as $k => $x)
 	{
 		if ($x != 'system')
 		{
-			$tmp[] = ($list && $k === $last) ? htmlspecialchars($cot_cat[$x]['title'])
+			$tmp[] = ($list && $k === $last) ? htmlspecialchars($$structure[$area][$x]['title'])
 				: cot_rc($mask, array(
-				'url' => cot_url('page', 'c='.$x),
-				'title' => htmlspecialchars($cot_cat[$x]['title'])
+				'url' => cot_url($area, 'c='.$x),
+				'title' => htmlspecialchars($$structure[$area][$x]['title'])
 			));
 		}
 	}

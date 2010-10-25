@@ -229,7 +229,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	while ($pag = $sql->fetch())
 	{
 		$jj++;
-		$catpath = cot_build_catpath($pag['page_cat']);
+		$catpath = cot_build_catpath('page', $pag['page_cat']);
 		if ((int)$titlelength > 0)
 		{
 			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titlelength, false))."...";
