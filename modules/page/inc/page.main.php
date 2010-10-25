@@ -177,7 +177,7 @@ if ($usr['isadmin'])
 }
 
 
-$text = cot_parse($pag['page_text'], $cfg['markup']);
+$text = cot_parse($pag['page_text'], $cfg['page']['markup']);
 $t->assign('PAGE_TEXT', $text);
 
 $pag['page_file'] = intval($pag['page_file']);

@@ -25,16 +25,17 @@ $GLOBALS['db_pfs_folders'] = (isset($GLOBALS['db_pfs_folders'])) ? $GLOBALS['db_
 function cot_build_pfs($id, $c1, $c2, $title)
 {
 	global $L, $cfg, $usr, $cot_groups;
-	if ($cfg['disable_pfs'])
-	{ $res = ''; }
+	if ($id == 0)
+	{
+		$res = "<a href=\"javascript:pfs('0','" . $c1 . "','" . $c2 . "')\">" . $title . "</a>";
+	}
+	elseif ($cot_groups[$usr['maingrp']]['pfs_maxtotal'] > 0 && $cot_groups[$usr['maingrp']]['pfs_maxfile'] > 0 && cot_auth('pfs', 'a', 'R'))
+	{
+		$res = "<a href=\"javascript:pfs('" . $id . "','" . $c1 . "','" . $c2 . "')\">" . $title . "</a>";
+	}
 	else
 	{
-		if ($id==0)
-		{ $res = "<a href=\"javascript:pfs('0','".$c1."','".$c2."')\">".$title."</a>"; }
-		elseif ($cot_groups[$usr['maingrp']]['pfs_maxtotal']>0 && $cot_groups[$usr['maingrp']]['pfs_maxfile']>0 && cot_auth('pfs', 'a', 'R'))
-		{ $res = "<a href=\"javascript:pfs('".$id."','".$c1."','".$c2."')\">".$title."</a>"; }
-		else
-		{ $res = ''; }
+		$res = '';
 	}
 	return($res);
 }
@@ -172,7 +173,7 @@ function cot_pfs_deletefolder($userid, $folderid)
 		$sql = $db->query("SELECT pff_id, pff_path FROM $db_pfs_folders WHERE pff_path LIKE '".$fpath."%' ORDER BY CHAR_LENGTH(pff_path) DESC");
 		while($row = $sql->fetch())
 		{
-			if($cfg['pfsuserfolder'])
+			if($cfg['pfs']['pfsuserfolder'])
 			{
 				@rmdir($cfg['pfs_path'].$row['pff_path']);
 				@rmdir($cfg['pfs_thumbpath'].$row['pff_path']);
@@ -231,7 +232,7 @@ function cot_pfs_deleteall($userid)
 	$sql = $db->query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
 	$num = $num + $db->affectedRows;
 
-	if ($cfg['pfsuserfolder'] && $userid>0)
+	if ($cfg['pfs']['pfsuserfolder'] && $userid>0)
 	{
 		@rmdir($cfg['pfs_dir_user']);
 		@rmdir($cfg['th_dir_user']);
@@ -254,7 +255,7 @@ function cot_pfs_filepath($id)
 	$sql = $db->query("SELECT p.pfs_file AS file, f.pff_path AS path FROM $db_pfs AS p LEFT JOIN $db_pfs_folders AS f ON p.pfs_folderid=f.pff_id WHERE p.pfs_id=".(int)$id." LIMIT 1");
 	if($row = $sql->fetch())
 	{
-		return ($cfg['pfsuserfolder'] && $row['path']!='') ? $row['path'].'/'.$row['file'] : $row['file'];
+		return ($cfg['pfs']['pfsuserfolder'] && $row['path']!='') ? $row['path'].'/'.$row['file'] : $row['file'];
 	}
 	else
 	{
@@ -354,7 +355,7 @@ function cot_pfs_path($userid)
 {
 	global $cfg;
 
-	if ($cfg['pfsuserfolder'])
+	if ($cfg['pfs']['pfsuserfolder'])
 	{
 		return($cfg['pfs_dir'].$userid.'/');
 	}
@@ -448,11 +449,11 @@ function cot_pfs_upload($userid, $folderid='')
 			$f_extension_ok = 0;
 			$desc = $ndesc[$ii];
 
-			if($cfg['pfstimename'])
+			if($cfg['pfs']['pfstimename'])
 			{
 				$u_name = time().'_'.$u_name;
 			}
-			if(!$cfg['pfsuserfolder'])
+			if(!$cfg['pfs']['pfsuserfolder'])
 			{
 				$u_name = $usr['id'].'_'.$u_name;
 			}
@@ -481,7 +482,7 @@ function cot_pfs_upload($userid, $folderid='')
 					{
 						$is_moved = true;
 
-						if ($cfg['pfsuserfolder'])
+						if ($cfg['pfs']['pfsuserfolder'])
 						{
 							if (!is_dir($cfg['pfs_path']))
 							{
@@ -538,7 +539,7 @@ function cot_pfs_upload($userid, $folderid='')
 							}
 							/* ===== */
 
-							if (in_array($f_extension, $gd_supported) && $cfg['th_amode']!='Disabled'
+							if (in_array($f_extension, $gd_supported) && $cfg['pfs']['th_amode']!='Disabled'
 								&& file_exists($cfg['pfs_path'].$u_newname))
 							{
 								@unlink($cfg['pfs_thumbpath'].$npath.$u_newname);

@@ -337,7 +337,7 @@ if ($f>0)
 		$pff_count = $row1['pff_count'];
 
 		$sql = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC");
-		$sqll = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
+		$sqll = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid='$f' ORDER BY pfs_file ASC LIMIT $d, ".$cfg['pfs']['maxpfsperpage']);
 		$title .= ' '.$cfg['separator'].' '.cot_rc_link(cot_url('pfs', 'f='.$pff_id.'&'.$more), $pff_title);
 	}
 	else
@@ -347,9 +347,9 @@ if ($f>0)
 else
 {
 	$sql = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC");
-	$sqll = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['maxpfsperpage']);
+	$sqll = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_folderid=0 ORDER BY pfs_file ASC LIMIT $d, ".$cfg['pfs']['maxpfsperpage']);
 	$sql1 = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC");
-	$sql1l = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['maxpfsperpage']);
+	$sql1l = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' ORDER BY pff_isgallery ASC, pff_title ASC LIMIT $df, ".$cfg['pfs']['maxpfsperpage']);
 	$sql3 = $db->query("SELECT pfs_folderid, COUNT(*), SUM(pfs_size) FROM $db_pfs WHERE pfs_userid='$userid' GROUP BY pfs_folderid");
 
 	while ($row3 = $sql3->fetch())
@@ -597,7 +597,7 @@ if ($standalone)
 		$addpix = $R['pfs_code_addpix'];
 		$addfile = $R['pfs_code_addfile'];
 	}
-	$winclose = $cfg['pfs_winclose'] ? "\nwindow.close();" : '';
+	$winclose = $cfg['pfs']['pfs_winclose'] ? "\nwindow.close();" : '';
 
 	cot_sendheaders();
 

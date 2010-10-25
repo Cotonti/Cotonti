@@ -108,7 +108,7 @@ if ($history)
 	$sql = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id = p.pm_touserid
 						WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
 						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
-						ORDER BY pm_date DESC LIMIT $d,".$cfg['maxpmperpage']);
+						ORDER BY pm_date DESC LIMIT $d,".$cfg['pm']['maxpmperpage']);
 
 	$pm_totalpages = ceil($totallines / $cfg['pm']['maxpmperpage']);
 	$pm_currentpage = ceil ($d / $cfg['pm']['maxpmperpage'])+1;
