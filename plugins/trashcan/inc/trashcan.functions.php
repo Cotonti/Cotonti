@@ -149,7 +149,7 @@ function cot_trash_delete($id)
 function cot_trashpage_sync($data)
 {
 	global $cache, $cfg;
-	cot_structure_resync($id);
+	cot_page_resync($data['page_cat']);
 	($cache && $cfg['cache_page']) && $cache->page->clear('page');
 	return true;
 }

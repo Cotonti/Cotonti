@@ -118,25 +118,6 @@ function cot_loaddoctypes()
 }
 
 /**
- * Recalculates category counters
- *
- * @param int $id Category ID
- * @return bool
- */
-function cot_structure_resync($id)
-{
-	global $db, $db_structure, $db_pages;
-
-	$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$id."' ");
-	$row = $sql->fetch();
-	$sql = $db->query("SELECT COUNT(*) FROM $db_pages
-		WHERE page_cat='".$row['structure_code']."' AND (page_state = 0 OR page_state=2)");
-	$num = (int) $sql->fetchColumn();
-	return (bool) $db->query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
-}
-
-
-/**
  * Returns forum category dropdown code
  *
  * @param int $check Selected category

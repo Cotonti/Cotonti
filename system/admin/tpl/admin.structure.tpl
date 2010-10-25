@@ -41,8 +41,8 @@
 				<td>{ADMIN_STRUCTURE_ICON}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.Group}:</td>
-				<td>{ADMIN_STRUCTURE_GROUP}</td>
+				<td>{PHP.L.Locked}:</td>
+				<td>{ADMIN_STRUCTURE_LOCKED}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.adm_tpl_mode}:</td>
@@ -79,7 +79,7 @@
 				<td class="coltop width10">{PHP.L.Code}</td>
 				<td class="coltop width20">{PHP.L.Title}</td>
 				<td class="coltop width5">{PHP.L.TPL}</td>
-				<td class="coltop width10">{PHP.L.Group}</td>
+				<td class="coltop width10">{PHP.L.Locked}</td>
 				<td class="coltop width15">{PHP.L.Order}</td>
 				<td class="coltop width10">{PHP.L.Pages}</td>
 				<td class="coltop width20">{PHP.L.Action}</td>
@@ -90,7 +90,7 @@
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_SYM}</td>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_GROUP}</td>
+				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_LOCKED}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">
 					{ADMIN_STRUCTURE_ORDER}
 					<br />
@@ -134,8 +134,8 @@
 				<td>{ADMIN_STRUCTURE_ICON}</td>
 			</tr>
 			<tr>
-				<td>{PHP.L.Group}:</td>
-				<td>{ADMIN_STRUCTURE_GROUP}</td>
+				<td>{PHP.L.Locked}:</td>
+				<td>{ADMIN_STRUCTURE_LOCKED}</td>
 			</tr>
 			<tr>
 				<td>{PHP.L.Order}:</td>

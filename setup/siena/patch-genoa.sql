@@ -490,3 +490,15 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','performance','22','headrc_minify',3,'1','1','',''),
 ('core','performance','23','jquery_cdn',3,'0','0','',''),
 ('core','performance','24','theme_consolidate',3,'0','0','','');
+
+/* r1447 structure change */
+ALTER TABLE `cot_structure` ADD COLUMN `structure_area` varchar(64) collate utf8_unicode_ci NOT NULL default '';
+UPDATE `cot_structure` SET `structure_area` = 'page' WHERE 1;
+
+/* r1458 structure change */
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND (`config_name` = 'disablehitstats' OR `config_name` = 'hit_precision'
+	OR `config_name` = 'disableactivitystats' OR `config_name` = 'disabledbstats');
+ALTER TABLE `cot_structure` ADD COLUMN `structure_locked` tinyint NOT NULL default '0';
+ALTER TABLE `cot_structure` DROP `structure_group`;
+INSERT INTO `cot_plugins` (`pl_hook` , `pl_code` , `pl_part` , `pl_title` , `pl_file` , `pl_order` , `pl_active` , `pl_module` )
+	VALUES ('admin.structure.first', 'page', 'structure', 'Page', './modules/page/page.structure.php', '10', '1', '1');

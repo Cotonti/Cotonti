@@ -322,7 +322,7 @@ CREATE TABLE `cot_structure` (
   `structure_title` varchar(128) collate utf8_unicode_ci NOT NULL,
   `structure_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `structure_icon` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `structure_group` tinyint NOT NULL default '0',
+  `structure_locked` tinyint NOT NULL default '0',
   `structure_order` varchar(32) collate utf8_unicode_ci NOT NULL default 'title.asc',
   `structure_pagecount` mediumint NOT NULL default '0',
   `structure_ratings` tinyint NOT NULL default 1,
