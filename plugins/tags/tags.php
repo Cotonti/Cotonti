@@ -178,7 +178,7 @@ function cot_tag_search_pages($query)
 		$t->assign(array(
 			'TAGS_RESULT_ROW_URL' => empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id']) : cot_url('page', 'al='.$row['page_alias']),
 			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['page_title']),
-			'TAGS_RESULT_ROW_PATH' => cot_build_catpath($row['page_cat']),
+			'TAGS_RESULT_ROW_PATH' => cot_build_catpath('page', $row['page_cat']),
 			'TAGS_RESULT_ROW_TAGS' => $tag_list
 		));
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');

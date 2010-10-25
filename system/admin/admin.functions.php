@@ -118,21 +118,6 @@ function cot_loaddoctypes()
 }
 
 /**
- * Removes a category
- *
- * @param int $id Category ID
- * @param string $c Category code
- */
-function cot_structure_delcat($id, $c)
-{
-	global $db, $db_structure, $db_auth, $cfg, $cache;
-
-	$sql = $db->query("DELETE FROM $db_structure WHERE structure_id='$id'");
-	cot_auth_remove_item('page', $c);
-	$cache && $cache->db->remove('cot_cat', 'system');
-}
-
-/**
  * Recalculates category counters
  *
  * @param int $id Category ID
@@ -150,25 +135,6 @@ function cot_structure_resync($id)
 	return (bool) $db->query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_id='$id'");
 }
 
-/**
- * Recalculates counters
- *
- * @param int $id Category ID
- * @return bool
- */
-function cot_structure_resyncall()
-{
-	global $db, $db_structure;
-
-	$res = TRUE;
-	$sql = $db->query("SELECT structure_id FROM $db_structure");
-	while ($row = $sql->fetch())
-	{
-		$res &= cot_structure_resync($row['structure_id']);
-	}
-	$sql->closeCursor();
-	return $res;
-}
 
 /**
  * Returns forum category dropdown code

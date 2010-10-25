@@ -486,13 +486,12 @@ require_once './images/icons/' . $usr['icons'] . '/resources.php';
 $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
 
 /* ======== Categories ======== */
-
-if (!$cot_cat)
+if (!$structure)
 {
 	cot_load_structure();
-	$cache && $cache->db->store('cot_cat', $cot_cat, 'system');
+	$cache && $cache->db->store('structure', $structure, 'system');
 }
-
+$cot_cat = $structure['page'];
 /* ======== Various ======== */
 
 $cot_yesno[0] = $L['No'];

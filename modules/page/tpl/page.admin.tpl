@@ -23,6 +23,9 @@
 			<li>
 				<a href="{ADMIN_PAGE_URL_EXTRAFIELDS}">{PHP.L.adm_extrafields_desc}</a>
 			</li>
+			<li>
+				<a href="{ADMIN_PAGE_URL_STRUCTURE}">{PHP.L.Categories}</a>
+			</li>
 		</ul>
 		<h3>{PHP.L.Pages}:</h3>
 		<form id="form_valqueue" name="form_valqueue" method="post" action="{ADMIN_PAGE_FORM_URL}">

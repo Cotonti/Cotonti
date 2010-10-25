@@ -99,14 +99,6 @@ if (!COT_AJAX)
 			'class' => $m == 'extensions' ? 'sel' : ''
 		);
 	}
-	if ($usr['admin_structure'])
-	{
-		$admin_menu[] = array(
-			'url' => cot_url('admin', 'm=structure'),
-			'icon' => $R['admin_menu_icon_structure'],
-			'class' => $m == 'structure' ? 'sel' : ''
-		);
-	}
 	if ($usr['admin_users'])
 	{
 		$admin_menu[] = array(

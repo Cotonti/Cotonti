@@ -104,7 +104,7 @@ if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 	$sql =  $db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'");
 }
 
-$catpath = cot_build_catpath($pag['page_cat']);
+$catpath = cot_build_catpath('page', $pag['page_cat']);
 $pag['page_fulltitle'] = empty($catpath) ? '' : $catpath .' ' . $cfg['separator']. ' ';
 $pag['page_fulltitle'] .= htmlspecialchars($pag['page_title']);
 $pag['page_fulltitle'] .= ($pag['page_totaltabs'] > 1 && !empty($pag['page_tabtitle'][$pag['page_tab'] - 1])) ? " (".$pag['page_tabtitle'][$pag['page_tab'] - 1].")" : '';// page_totaltabs - Not found befor this line bur after .... see

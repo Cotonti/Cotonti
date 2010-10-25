@@ -64,71 +64,6 @@ function cot_readraw($file)
 
 
 /**
- * Gets an array of category children
- *
- * @param string $cat Cat code
- * @param bool $allsublev All sublevels array
- * @param bool $firstcat Add main cat
- * @param bool $userrights Check userrights
- * @param bool $sqlprep use $db->prep function
- * @return array
- */
-function cot_structure_children($cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
-{
-	global $cot_cat, $sys, $cfg;
-
-	$mtch = $cot_cat[$cat]['path'].'.';
-	$mtchlen = mb_strlen($mtch);
-	$mtchlvl = mb_substr_count($mtch,".");
-
-	$catsub = array();
-	if ($firstcat && (($userrights && cot_auth('page', $cat, 'R') || !$userrights)))
-	{
-		$catsub[] = $cat;
-	}
-
-	foreach($cot_cat as $i => $x)
-	{
-		if(mb_substr($x['path'], 0, $mtchlen) == $mtch && (($userrights && cot_auth('page', $i, 'R') || !$userrights)))
-		{
-			$subcat = mb_substr($x['path'], $mtchlen + 1);
-			if($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
-			{
-				$i = ($sqlprep) ? $db->prep($i) : $i;
-				$catsub[] = $i;
-			}
-		}
-	}
-	return($catsub);
-}
-
-/**
- * Gets an array of category parents
- *
- * @param string $cat Cat code
- * @param string $type Type 'full', 'first', 'last'
- * @return mixed
- */
-function cot_structure_parents($cat, $type = 'full')
-{
-	global $cot_cat, $cfg;
-	$pathcodes = explode('.', $cot_cat[$cat]['path']);
-
-	if ($type == 'first')
-	{
-		reset($pathcodes);
-		$pathcodes = current($pathcodes);
-	}
-	elseif ($type == 'last')
-	{
-		$pathcodes = end($pathcodes);
-	}
-
-	return $pathcodes;
-}
-
-
-/**
  * Renders category dropdown
  *
  * @param string $check Seleced value
@@ -194,7 +129,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 
 		if ($page_data['page_id'] > 0 && !empty($page_data['page_title']))
 		{
-			$catpath = cot_build_catpath($page_data['page_cat']);
+			$catpath = cot_build_catpath('page', $page_data['page_cat']);
 			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'id='.$page_data['page_id']) : cot_url('page', 'al='.$page_data['page_alias']);
 			$page_data['page_fulltitle'] = $catpath." ".$cfg['separator'].' '.cot_rc_link($page_data['page_pageurl'], htmlspecialchars($page_data['page_title']));
 

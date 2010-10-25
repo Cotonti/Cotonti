@@ -90,7 +90,7 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 	while ($pag = $sql->fetch())
 	{
 		$jj++;
-		$catpath = cot_build_catpath($pag['page_cat']);
+		$catpath = cot_build_catpath('page', $pag['page_cat']);
 		$news->assign(cot_generate_pagetags($pag, "PAGE_ROW_", $textlength));
 		$news->assign(array(
 			"PAGE_ROW_NEWSPATH" => cot_rc_link(cot_url('index', 'c='.$pag['page_cat']), htmlspecialchars($cot_cat[$row['page_cat']]['title'])),
@@ -142,7 +142,7 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 		$news->parse("NEWS.PAGE_ROW");
 	}
 
-	$catpath = cot_build_catpath($cat);
+	$catpath = cot_build_catpath('page', $cat);
 	$news->assign(array(
 		"PAGE_PAGENAV" => $pagenav['main'],
 		"PAGE_PAGEPREV" => $pagenav['prev'],
