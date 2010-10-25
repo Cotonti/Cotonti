@@ -134,6 +134,9 @@ table.flat td	{ padding:0; border:0; }
 .centerall 	{ text-align:center; vertical-align:middle; }
 .valid 		{ height:48px; text-align:center; vertical-align:middle; border:0!important; }
 
+td.group_begin { border: none; background-color: #88bfef; padding: 3px 10px 1px 10px!important; text-align: center; color: #663f3f; }
+td.group_end { border: none; background-color: #4488bb; padding: 0!important; font-size: 4px; }
+
 /* 7. Polls
 -------------------------------------------------- */
 

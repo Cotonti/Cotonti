@@ -47,6 +47,7 @@ $L['cfg_th_colortext'] = array('Thumbnails, text color', 'Default: FFFFFF, hex c
 $L['cfg_th_dimpriority'] = array('Thumbnails, rescaling priority dimension', '');
 $L['cfg_th_jpeg_quality'] = array('Thumbnails, Jpeg quality', 'Default: 85');
 $L['cfg_th_keepratio'] = array('Thumbnail, keep ratio?', '');
+$L['cfg_th_separator'] = 'Thumbnail Options';
 $L['cfg_th_textsize'] = array('Thumbnails, size of the text', '');
 $L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
 $L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Width x 0.75');

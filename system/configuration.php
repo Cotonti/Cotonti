@@ -38,6 +38,14 @@ define('COT_CONFIG_TYPE_CALLBACK', 4);
  * Hidden config. It is actually a text string, but it is not displayed anywhere
  */
 define('COT_CONFIG_TYPE_HIDDEN', 5);
+/**
+ * Visual separator/fieldset
+ */
+define('COT_CONFIG_TYPE_SEPARATOR', 6);
+/**
+ * Integer range
+ */
+define('COT_CONFIG_TYPE_RANGE', 7);
 
 /**
  * Registers a set of configuration entries at once.
@@ -206,8 +214,17 @@ function cot_config_parse($info_cfg)
 					case 'radio':
 						$line['Type'] = COT_CONFIG_TYPE_RADIO;
 						break;
+					case 'callback':
+						$line['Type'] = COT_CONFIG_TYPE_CALLBACK;
+						break;
 					case 'hidden':
 						$line['Type'] = COT_CONFIG_TYPE_HIDDEN;
+						break;
+					case 'separator':
+						$line['Type'] = COT_CONFIG_TYPE_SEPARATOR;
+						break;
+					case 'range':
+						$line['Type'] = COT_CONFIG_TYPE_RANGE;
 						break;
 					default:
 						$line['Type'] = COT_CONFIG_TYPE_TEXT;

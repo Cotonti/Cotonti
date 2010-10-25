@@ -11,6 +11,14 @@
 				<td class="coltop width10">{PHP.L.Reset}</td>
 			</tr>
 <!-- BEGIN: ADMIN_CONFIG_ROW -->
+<!-- BEGIN: ADMIN_CONFIG_FIELDSET_BEGIN -->
+			<tr>
+				<td class="group_begin" colspan="3">
+					<h4>{ADMIN_CONFIG_FIELDSET_TITLE}</h4>
+				</td>
+			</tr>
+<!-- END: ADMIN_CONFIG_FIELDSET_BEGIN -->
+<!-- BEGIN: ADMIN_CONFIG_ROW_OPTION -->
 			<tr>
 				<td>{ADMIN_CONFIG_ROW_CONFIG_TITLE}:</td>
 				<td>
@@ -23,6 +31,12 @@
 					</a>
 				</td>
 			</tr>
+<!-- END: ADMIN_CONFIG_ROW_OPTION -->
+<!-- BEGIN: ADMIN_CONFIG_FIELDSET_END -->
+			<tr>
+				<td class="group_end" colspan="3"></td>
+			</tr>
+<!-- END: ADMIN_CONFIG_FIELDSET_END -->
 <!-- END: ADMIN_CONFIG_ROW -->
 			<tr>
 				<td class="valid" colspan="3">
