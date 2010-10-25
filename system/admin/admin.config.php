@@ -83,7 +83,8 @@ switch($n)
 		{
 			cot_require_lang($p, $o);
 		}
-		
+
+		$inside_fieldset = false;
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('admin.config.edit.loop');
 		/* ===== */
@@ -123,40 +124,87 @@ switch($n)
 			}
 			elseif ($config_type == COT_CONFIG_TYPE_CALLBACK)
 			{
-				// TODO implement callback config type
-//				$varname = 'cot_select_'.$config_name;
-//				reset($$varname);
-//				$vararray = array();
-//				foreach ($$varname as $key => $value)
-//				{
-//					$vararray[$value[1]] = $value[0];
-//				}
-//				$config_input = cot_selectbox($config_value, $config_name, array_keys($vararray),
-//				 array_values($vararray), false);
+				if ((preg_match('#^(\w+)\((.*?)\)$#', $row['config_variants'], $mt) && function_exists($mt[1])))
+				{
+					$callback_params = preg_split('#\s*,\s*#', $mt[2]);
+					if (count($callback_params) > 0 && !empty($callback_params[0]))
+					{
+						for ($i = 0; $i < count($callback_params); $i++)
+						{
+							$callback_params[$i] = str_replace("'", '', $callback_params[$i]);
+							$callback_params[$i] = str_replace('"', '', $callback_params[$i]);
+						}
+						$cfg_params = call_user_func_array($mt[1], $callback_params);
+					}
+					else
+					{
+						$cfg_params = call_user_func($mt[1]);
+					}
+					$cfg_params_titles = (isset($L['cfg_'.$config_name.'_params'])
+						&& is_array($L['cfg_'.$config_name.'_params']))
+							? $L['cfg_'.$config_name.'_params'] : $cfg_params;
+					$config_input = cot_selectbox($config_value, $config_name, $cfg_params, $cfg_params_titles, false);
+				}
+				else
+				{
+					$config_input = '';
+				}
 			}
 			elseif ($config_type == COT_CONFIG_TYPE_HIDDEN)
 			{
 				continue;
 			}
+			elseif ($config_type == COT_CONFIG_TYPE_SEPARATOR)
+			{
+				if ($inside_fieldset)
+				{
+					// Close previous fieldset
+					$t->parse('MAIN.EDIT.ADMIN_CONFIG_FIELDSET_END');
+				}
+				$inside_fieldset = true;
+			}
+			elseif ($config_type == COT_CONFIG_TYPE_RANGE)
+			{
+				$range_params = preg_split('#\s*,\s*#', $row['config_variants']);
+				$cfg_params = count($range_params == 3) ? range($range_params[0], $range_params[1], $range_params[2])
+					: range($range_params[0], $range_params[1]);
+				$config_input = cot_selectbox($config_value, $config_name, $cfg_params, $cfg_params, false);
+			}
 			else
 			{
 				$config_input = cot_textarea($config_name, $config_value, 8, 56);
 			}
-			
-			$t->assign(array(
-				'ADMIN_CONFIG_ROW_CONFIG' => $config_input,
-				'ADMIN_CONFIG_ROW_CONFIG_TITLE' => (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text))
-					? $config_text : $config_title,
-				'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' =>
-					cot_url('admin', "m=config&n=edit&o=$o&p=$p&a=reset&v=$config_name"),
-				'ADMIN_CONFIG_ROW_CONFIG_MORE' => $config_more
-			));
-			/* === Hook - Part2 : Include === */
-			foreach ($extp as $pl)
+
+			if ($config_type == COT_CONFIG_TYPE_SEPARATOR)
 			{
-				include $pl;
+				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $L['cfg_' . $row['config_name']]);
+				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
 			}
-			/* ===== */
+			else
+			{
+				$t->assign(array(
+					'ADMIN_CONFIG_ROW_CONFIG' => $config_input,
+					'ADMIN_CONFIG_ROW_CONFIG_TITLE' => (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text))
+						? $config_text : $config_title,
+					'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' =>
+						cot_url('admin', "m=config&n=edit&o=$o&p=$p&a=reset&v=$config_name"),
+					'ADMIN_CONFIG_ROW_CONFIG_MORE' => $config_more
+				));
+				/* === Hook - Part2 : Include === */
+				foreach ($extp as $pl)
+				{
+					include $pl;
+				}
+				/* ===== */
+				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_OPTION');
+			}
+			$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW');
+		}
+
+		if ($inside_fieldset)
+		{
+			// Close the last fieldset
+			$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_END');
 			$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW');
 		}
 		
