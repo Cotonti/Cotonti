@@ -94,7 +94,7 @@ if ($a == 'update')
 		{
 			if ($row['page_state'] != 1)
 			{
-				$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+				$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
 			}
 
 			$id2 = "p".$id;
@@ -135,8 +135,8 @@ if ($a == 'update')
 
 		if ($row['page_cat'] != $rpage['page_cat'] /*&& ($row['page_state'] == 0 || $row['page_state'] == 2)*/)
 		{
-			$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$db->prep($row['page_cat'])."' ");
-			//$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$db->prep($rpage['page_cat)."' ");
+			$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($row['page_cat'])."' ");
+			//$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat)."' ");
 		}
 
 		//$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
@@ -148,7 +148,7 @@ if ($a == 'update')
 				$rpage['page_state'] = 0;
 				if ($row['page_state'] == 1)
 				{
-					$db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
+					$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
 				}
 			}
 			else
@@ -162,7 +162,7 @@ if ($a == 'update')
 		}
 		if ($rpage['page_state'] == 1 && $row['page_state'] != 1)
 		{
-			$db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
+			$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
 		}
 
 		$sql = $db->update($db_pages, $rpage, 'page_id=?', array($id));

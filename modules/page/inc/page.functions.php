@@ -230,15 +230,14 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
  * Recalculates page category counters
  *
  * @param string $cat Cat code
- * @return bool
+ * @return array
  */
-function cot_page_resync($cat)
+function cot_page_count($cat)
 {
 	global $db, $db_structure, $db_pages;
 	$sql = $db->query("SELECT COUNT(*) FROM $db_pages
 		WHERE page_cat='".$db->prep($cat)."' AND (page_state = 0 OR page_state=2)");
-	$num = (int) $sql->fetchColumn();
-	return (bool) $db->query("UPDATE $db_structure SET structure_pagecount=$num WHERE structure_code='".$db->prep($cat)."' AND structure_area='page'");
+	return (int) $sql->fetchColumn();
 }
 
 /**

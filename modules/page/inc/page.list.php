@@ -64,7 +64,7 @@ $dc = empty($dc) ? 0 : (int) $dc;
 
 $sys['sublocation'] = $cat['title'];
 
-$cfg['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['maxrowsperpage'] * 2 : $cfg['maxrowsperpage'];
+$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['page']['maxrowsperpage'] * 2 : $cfg['page']['maxrowsperpage'];
 
 $join_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
 $join_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_ratings as r ON r.rating_code=CONCAT('p',p.page_id)";
@@ -109,7 +109,7 @@ if(empty($sql_string))
 		FROM $db_pages as p ".$join_condition."
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE ".implode(" AND ", $where)."
-		ORDER BY page_$s $w LIMIT $d, ".$cfg['maxrowsperpage'];
+		ORDER BY page_$s $w LIMIT $d, ".$cfg['page']['maxrowsperpage'];
 }
 $sql = $db->query($sql_count);
 $totallines = $sql->fetchColumn();
@@ -134,12 +134,12 @@ else
 	$catpath = cot_build_catpath('page', $c);
 }
 
-$totalpages = ceil($totallines / $cfg['maxrowsperpage']);
-$currentpage= ceil($d / $cfg['maxrowsperpage']) + 1;
+$totalpages = ceil($totallines / $cfg['page']['maxrowsperpage']);
+$currentpage= ceil($d / $cfg['page']['maxrowsperpage']) + 1;
 
 $submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? cot_rc('page_submitnewpage', array('sub_url' => cot_url('page', 'm=add&c='.$c))) : ''; // TODO - to resorses OR move to tpl with logic {if}
 
-$pagenav = cot_pagenav('list', $list_url_path + array('dc' => $dc), $d, $totallines, $cfg['maxrowsperpage']);
+$pagenav = cot_pagenav('list', $list_url_path + array('dc' => $dc), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
 list($list_ratings, $list_ratings_display) = cot_build_ratings($item_code, cot_url('page', 'c=' . $c), $cat['ratings']);
 
@@ -203,7 +203,7 @@ $arrows[$s][$w]  = $R['icon_vert_active'][$w];
 $t->assign(array(
 	"LIST_TOP_CURRENTPAGE" => $currentpage,
 	"LIST_TOP_TOTALLINES" => $totallines,
-	"LIST_TOP_MAXPERPAGE" => $cfg['maxrowsperpage'],
+	"LIST_TOP_MAXPERPAGE" => $cfg['page']['maxrowsperpage'],
 	"LIST_TOP_TOTALPAGES" => $totalpages,
 	"LIST_TOP_TITLE" => cot_rc('list_link_title', array('cot_img_down'=>$arrows['title']['asc'],'cot_img_up'=>$arrows['title']['desc'],'list_link_url_down' => cot_url('page', array('s' => 'title', 'w' => 'asc') + $list_url_path), 'list_link_url_up' => cot_url('page', array('s' => 'title', 'w' => 'desc') + $list_url_path))),
 	"LIST_TOP_KEY" => cot_rc('list_link_key', array('cot_img_down'=>$arrows['key']['asc'],'cot_img_up'=>$arrows['key']['desc'],'list_link_key_url_down' => cot_url('page', array('s' => 'key', 'w' => 'asc') + $list_url_path), 'list_link_key_url_up' => cot_url('page', array('s' => 'key', 'w' => 'desc') + $list_url_path))),
@@ -244,9 +244,9 @@ while (list($i, $x) = each($cot_cat))
 		$mm++;
 		$ii++;
 	}
-	elseif (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $kk < $cfg['maxlistsperpage'])
+	elseif (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $kk < $cfg['page']['maxlistsperpage'])
 	{
-		$sql4 = $db->query("SELECT SUM(structure_pagecount) FROM $db_structure
+		$sql4 = $db->query("SELECT SUM(structure_count) FROM $db_structure
 			WHERE structure_path LIKE '".$cot_cat[$i]['rpath']."%' ");
 		$sub_count = $sql4->fetchColumn();
 
@@ -286,7 +286,7 @@ while (list($i, $x) = each($cot_cat))
 }
 
 $totalitems = $ii + $kk;
-$pagenav = cot_pagenav('list', $list_url_path + array('d' => $d), $dc, $totalitems, $cfg['maxlistsperpage'], 'dc');
+$pagenav = cot_pagenav('list', $list_url_path + array('d' => $d), $dc, $totalitems, $cfg['page']['maxlistsperpage'], 'dc');
 
 $t->assign(array(
 	"LISTCAT_PAGEPREV" => $pagenav['prev'],
@@ -297,7 +297,7 @@ $t->assign(array(
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.loop');
 /* ===== */
-while ($pag = $sql->fetch() and ($jj <= $cfg['maxrowsperpage']))
+while ($pag = $sql->fetch() and ($jj <= $cfg['page']['maxrowsperpage']))
 {
 	$jj++;
 	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));

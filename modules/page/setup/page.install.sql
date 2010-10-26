@@ -63,7 +63,7 @@ INSERT INTO `cot_pages` (`page_state`, `page_cat`, `page_key`, `page_title`, `pa
 
 -- Default page categories
 INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`,
-   `structure_desc`, `structure_icon`, `structure_group`, `structure_order`, `structure_pagecount`) VALUES
+   `structure_desc`, `structure_icon`, `structure_group`, `structure_order`, `structure_count`) VALUES
 ('page', 'articles', '1', '', 'Articles', '', '', 0, 'title.asc', 0),
 ('page', 'links', '2', '', 'Links', '', '', 0, 'title.asc', 0),
 ('page', 'events', '3', '', 'Events', '', '', 0, 'date.asc', 0),

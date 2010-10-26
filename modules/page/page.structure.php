@@ -17,7 +17,7 @@ Hooks=admin.structure.first
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($area == 'page')
+if ($n == 'page')
 {
 	cot_require('page');
 	$adminpath[] = array(cot_url('admin', 'm=page'), $L['Page']);

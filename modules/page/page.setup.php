@@ -19,6 +19,8 @@ Admin_icon=img/adminmenu_page.png
 markup=01:radio::1:
 count_admin=03:radio::0:
 autovalidate=04:radio::1:
+maxrowsperpage=05:select:5,10,15,20,25,30,40,50,60,70,100,200,500:30:
+maxlistsperpage=06:select:5,10,15,20,25,30,40,50,60,70,100,200,500:30:
 [END_COT_EXT_CONFIG]
 ==================== */
 
