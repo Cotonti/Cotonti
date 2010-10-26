@@ -29,7 +29,10 @@ $adminpath[] = array(cot_url('admin', 'm=pm'), $L['Private_Messages']);
 $adminhelp = $L['adm_help_pm'];
 
 $totalpmdb = $db->countRows($db_pm);
-$totalpmsent = cot_stat_get('totalpms');
+if(function_exists('cot_stat_get'))
+{
+	$totalpmsent = cot_stat_get('totalpms');
+}
 
 $t->assign(array(
 	'ADMIN_PM_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=module&p=pm'),
