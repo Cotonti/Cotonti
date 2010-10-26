@@ -88,7 +88,7 @@ if ($a == 'add')
 			if ($rpublish == 'OK')
 			{
 				$rpage['page_state'] = 0;
-				$db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
+				$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
 			}
 			else
 			{

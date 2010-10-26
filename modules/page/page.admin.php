@@ -109,7 +109,7 @@ if ($a == 'validate')
 		cot_block($usr['isadmin_local']);
 
 		$sql = $db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
-		$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+		$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$row['page_cat']."' ");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
@@ -150,7 +150,7 @@ elseif ($a == 'unvalidate')
 		cot_block($usr['isadmin_local']);
 
 		$sql = $db->query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
-		$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+		$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_unvalidated'], 'adm');
 
@@ -189,7 +189,7 @@ elseif ($a == 'delete')
 	{
 		if ($row['page_state'] != 1)
 		{
-			$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+			$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
 		}
 
 		$id2 = 'p'.$id;
@@ -256,7 +256,7 @@ elseif ($a == 'update_cheked')
 					cot_block($usr['isadmin_local']);
 
 					$sql = $db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='".$id."'");
-					$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount+1 WHERE structure_code='".$row['page_cat']."' ");
+					$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$row['page_cat']."' ");
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
@@ -308,7 +308,7 @@ elseif ($a == 'update_cheked')
 					$id = $row['page_id'];
 					if ($row['page_state'] != 1)
 					{
-						$sql = $db->query("UPDATE $db_structure SET structure_pagecount=structure_pagecount-1 WHERE structure_code='".$row['page_cat']."' ");
+						$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
 					}
 
 					$id2 = 'p'.$id;
@@ -384,7 +384,7 @@ while ($row = $sql->fetch())
 	$row['page_pageurl'] = cot_url('page', $page_urlp);
 	$catpath = cot_build_catpath('page', $row['page_cat']);
 	$row['page_fulltitle'] = $catpath.' '.$cfg['separator'].' <a href="'.$row['page_pageurl'].'">'.htmlspecialchars($row['page_title']).'</a>';
-	$sql4 = $db->query("SELECT SUM(structure_pagecount) FROM $db_structure WHERE structure_path LIKE '".$cot_cat[$row["page_cat"]]['rpath']."%' ");
+	$sql4 = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '".$cot_cat[$row["page_cat"]]['rpath']."%' ");
 	$sub_count = $sql4->fetchColumn();
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));
@@ -422,7 +422,7 @@ $t->assign(array(
 	'ADMIN_PAGE_URL_CONFIG' => cot_url('admin', 'm=config&n=edit&o=module&p=page'),
 	'ADMIN_PAGE_URL_ADD' => cot_url('page', 'm=add'),
 	'ADMIN_PAGE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=page'),
-	'ADMIN_PAGE_URL_STRUCTURE' => cot_url('admin', 'm=structure&area=page'),
+	'ADMIN_PAGE_URL_STRUCTURE' => cot_url('admin', 'm=structure&n=page'),
 	'ADMIN_PAGE_FORM_URL' => cot_url('admin', 'm=page&a=update_cheked&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter.'&d='.$d),
 	'ADMIN_PAGE_ORDER' => cot_selectbox($sorttype, 'sorttype', array_keys($sort_type), array_values($sort_type), false),
 	'ADMIN_PAGE_WAY' => cot_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),

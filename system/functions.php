@@ -481,6 +481,7 @@ function cot_load_structure()
 			'path' => $path[$row['structure_path']],
 			'tpath' => $tpath[$row['structure_path']],
 			'rpath' => $row['structure_path'],
+			'id' => $row['structure_id'],
 			'tpl' => $row['structure_tpl'],
 			'title' => $row['structure_title'],
 			'desc' => $row['structure_desc'],

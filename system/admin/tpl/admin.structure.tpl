@@ -4,17 +4,10 @@
 		{FILE ./themes/nemesis/warnings.tpl}
 		<ul class="follow">
 			<li>
-				<a title="{PHP.L.Configuration}" href="{ADMIN_STRUCTURE_URL_CONFIG}">{PHP.L.Configuration}</a>
-			</li>
-			<li>
 				<a href="{ADMIN_STRUCTURE_URL_EXTRAFIELDS}">{PHP.L.adm_extrafields_desc}</a>
 			</li>
 			<li>
-<!-- IF !{PHP.n} -->
 				<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
-<!-- ELSE -->
-				<a href="{ADMIN_STRUCTURE_RESYNC}" class="ajax" title="{PHP.L.adm_tpl_resynctitle}">{PHP.L.Resync}</a>
-<!-- ENDIF -->
 			</li>
 		</ul>
 <!-- BEGIN: OPTIONS -->
@@ -96,7 +89,7 @@
 					<br />
 					{ADMIN_STRUCTURE_WAY}
 				</td>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_PAGECOUNT}</td>
+				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
 				<td class="centerall action {ADMIN_STRUCTURE_ODDEVEN}">
 					<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a><a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax">{PHP.R.admin_icon_config}</a><!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF --><a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" >{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
@@ -109,7 +102,8 @@
 		<p class="paging">
 			{ADMIN_STRUCTURE_PAGINATION_PREV}{ADMIN_STRUCTURE_PAGNAV}{ADMIN_STRUCTURE_PAGINATION_NEXT} <span class="a1">{PHP.L.Total}: {ADMIN_STRUCTURE_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_STRUCTURE_COUNTER_ROW}</span>
 		</p>
-
+<!-- END: DEFULT -->
+<!-- BEGIN: NEWCAT -->
 		<h3>{PHP.L.addnewentry}:</h3>
 		<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax">
 		<table class="cells">
@@ -154,6 +148,7 @@
 			</tr>
 		</table>
 		</form>
-<!-- END: DEFULT -->
+<!-- END: NEWCAT -->
+
 	</div>
 <!-- END: MAIN -->
