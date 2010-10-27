@@ -1,5 +1,4 @@
 <!-- BEGIN: CACHE -->
-		<div id="{ADMIN_CACHE_AJAX_OPENDIVID}">
 			<p>
 				<a href="{ADMIN_CACHE_URL_REFRESH}"{ADMIN_CACHE_URL_REFRESH_AJAX}>{PHP.L.Refresh}</a> |
 				<a href="{ADMIN_CACHE_URL_PURGE}"{ADMIN_CACHE_URL_PURGE_AJAX}>{PHP.L.adm_purgeall}</a> |
@@ -32,5 +31,4 @@
 				<td>&nbsp;</td>
 			</tr>
 			</table>
-		</div>
 <!-- END: CACHE -->

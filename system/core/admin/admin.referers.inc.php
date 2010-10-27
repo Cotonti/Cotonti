@@ -113,7 +113,6 @@ else
 }
 
 $t -> assign(array(
-	"ADMIN_REFERERS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_REFERERS_URL_PRUNE" => sed_url('admin', "m=referers&a=prune&".sed_xg()),
 	"ADMIN_REFERERS_URL_PRUNELOWHITS" => sed_url('admin', "m=referers&a=prunelowhits&".sed_xg()),
 	"ADMIN_REFERERS_ADMINWARNINGS" => $adminwarnings,

@@ -1,5 +1,4 @@
 <!-- BEGIN: POLLS -->
-		<div id="{ADMIN_POLLS_AJAX_OPENDIVID}">
 			<ul>
 				<li><a href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
 			</ul>
@@ -79,5 +78,4 @@
 				</tr>
 				</table>
 			</form>
-		</div>
 <!-- END: POLLS -->

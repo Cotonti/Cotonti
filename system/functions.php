@@ -4529,7 +4529,14 @@ function sed_title($mask, $tags, $data)
 	$cnt = count($data);
 	for ($i = 0; $i < $cnt; $i++)
 	{
-		$data[$i] = htmlspecialchars($data[$i], ENT_COMPAT, 'UTF-8', false);
+		if (version_compare(PHP_VERSION, '5.2.2', '<='))
+		{
+			$data[$i] = htmlspecialchars($data[$i], ENT_COMPAT, 'UTF-8');
+		}
+		else
+		{
+			$data[$i] = htmlspecialchars($data[$i], ENT_COMPAT, 'UTF-8', false);
+		}
 	}
 	$title = vsprintf($mask, $data);
 	return $title;

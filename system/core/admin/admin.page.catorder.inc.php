@@ -135,7 +135,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_PAG_CATORDER_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PAG_CATORDER_URL_FORM" => sed_url('admin', "m=page&s=catorder&a=update&d=".$d),
 	"ADMIN_PAG_CATORDER_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_PAG_CATORDER_PAGINATION_PREV" => $pagination_prev,

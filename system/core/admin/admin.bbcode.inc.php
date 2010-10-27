@@ -171,7 +171,6 @@ for($i = 1; $i < 256; $i++)
 }
 
 $t -> assign(array(
-	"ADMIN_BBCODE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_BBCODE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_BBCODE_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_BBCODE_PAGNAV" => $pagnav,

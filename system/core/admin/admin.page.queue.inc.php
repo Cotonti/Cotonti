@@ -154,7 +154,6 @@ while($row = sed_sql_fetcharray($sql))
 $is_row_empty = (sed_sql_numrows($sql) == 0) ? true : false ;
 
 $t -> assign(array(
-	"ADMIN_PAGE_QUEUE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PAGE_QUEUE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_PAGE_QUEUE_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_PAGE_QUEUE_PAGNAV" => $pagnav,

@@ -74,7 +74,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_ALLPFS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_ALLPFS_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_ALLPFS_PAGNAV" => $pagnav,
 	"ADMIN_ALLPFS_PAGINATION_NEXT" => $pagination_next,

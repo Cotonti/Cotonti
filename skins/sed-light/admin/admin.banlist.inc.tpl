@@ -1,5 +1,4 @@
 <!-- BEGIN: BANLIST -->
-		<div id="{ADMIN_BANLIST_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_BANLIST_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -78,5 +77,4 @@
 				</tr>
 				</table>
 			</form>
-		</div>
 <!-- END: BANLIST -->

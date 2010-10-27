@@ -110,7 +110,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_RATINGS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_RATINGS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_RATINGS_URL_CONFIG" => sed_url('admin', "m=config&n=edit&o=core&p=ratings"),
 	"ADMIN_RATINGS_PAGINATION_PREV" => $pagination_prev,

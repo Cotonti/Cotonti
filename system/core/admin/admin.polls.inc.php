@@ -226,7 +226,6 @@ foreach($variants as $val)
 sed_poll_edit_form($poll_id, $t, "POLLS");
 
 $t -> assign(array(
-	"ADMIN_POLLS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_POLLS_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=polls"),
 	"ADMIN_POLLS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_POLLS_PAGINATION_PREV" => $pagination_prev,

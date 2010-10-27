@@ -153,7 +153,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_TRASHCAN_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_TRASHCAN_CONF_URL" => sed_url('admin', "m=config&n=edit&o=core&p=trash"),
 	"ADMIN_TRASHCAN_WIPEALL_URL" => sed_url('admin', "m=trashcan&a=wipeall&".sed_xg()),
 	"ADMIN_TRASHCAN_ADMINWARNINGS" => $adminwarnings,

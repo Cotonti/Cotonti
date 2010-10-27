@@ -1,5 +1,4 @@
 <!-- BEGIN: URLS -->
-<div id="{ADMIN_URLS_AJAX_OPENDIVID}">
     <!-- IF {PHP.is_adminwarnings} -->
     <div class="error">{ADMIN_URLS_ADMINWARNINGS}</div>
     <!-- ENDIF -->
@@ -76,5 +75,4 @@
         <br />
         <input type="submit" value="{PHP.L.adm_urls_save}" />
     </form>
-</div>
 <!-- END: URLS -->

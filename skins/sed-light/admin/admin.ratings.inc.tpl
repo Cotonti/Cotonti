@@ -1,5 +1,4 @@
 <!-- BEGIN: RATINGS -->
-		<div id="{ADMIN_RATINGS_AJAX_OPENDIVID}">
 			<ul>
 				<li><a href="{ADMIN_RATINGS_URL_CONFIG}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
 			</ul>
@@ -37,5 +36,4 @@
 				<td colspan="6">{PHP.L.adm_ratings_totalvotes} : {ADMIN_RATINGS_TOTALVOTES}</td>
 			</tr>
 			</table>
-		</div>
 <!-- END: RATINGS -->

@@ -180,7 +180,6 @@ foreach($field_types as $val)
 }
 
 $t -> assign(array(
-	"ADMIN_USER_EXTRAFIELDS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_USER_EXTRAFIELDS_URL_FORM_ADD" => sed_url('admin', 'm=users&s=extrafields&a=add&d='.$d),
 	"ADMIN_USER_EXTRAFIELDS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_USER_EXTRAFIELDS_PAGINATION_PREV" => $pagination_prev,

@@ -6,7 +6,9 @@
 			{ADMIN_MENU}
 		</div>
 		<hr />
+		<div id="pagtab">
 		{ADMIN_MAIN}
+		</div>
 		<hr />
 		<strong>{PHP.skinlang.admin.Help}&nbsp;</strong>
 		<hr />

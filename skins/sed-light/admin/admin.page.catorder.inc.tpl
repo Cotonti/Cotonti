@@ -1,5 +1,4 @@
 <!-- BEGIN: PAG_CATORDER -->
-		<div id="{ADMIN_PAG_CATORDER_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_PAG_CATORDER_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -43,5 +42,4 @@
 				</tr>
 				</table>
 			</form>
-		</div>
 <!-- END: PAG_CATORDER -->

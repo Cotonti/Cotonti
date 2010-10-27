@@ -1,5 +1,4 @@
 <!-- BEGIN: FORUMS -->
-		<div id="{ADMIN_FORUMS_AJAX_OPENDIVID}">
 			<ul>
 				<li><a href="{ADMIN_FORUMS_CONF_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
 <!-- IF {PHP.lincif_conf} -->
@@ -242,5 +241,4 @@
 				</table>
 			</form>
 <!-- END: DEFULT -->
-		</div>
 <!-- END: FORUMS -->

@@ -1,5 +1,4 @@
 <!-- BEGIN: PAGE_QUEUE -->
-		<div id="{ADMIN_PAGE_QUEUE_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_PAGE_QUEUE_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -24,5 +23,4 @@
 			</ul>
 			<div class="pagnav">{ADMIN_PAGE_QUEUE_PAGINATION_PREV} {ADMIN_PAGE_QUEUE_PAGNAV} {ADMIN_PAGE_QUEUE_PAGINATION_NEXT}</div>
 			<div>{PHP.L.Total} : {ADMIN_PAGE_QUEUE_TOTALITEMS}, {PHP.L.adm_polls_on_page} : {ADMIN_PAGE_QUEUE_ON_PAGE}</div>
-		</div>
 <!-- END: PAGE_QUEUE -->

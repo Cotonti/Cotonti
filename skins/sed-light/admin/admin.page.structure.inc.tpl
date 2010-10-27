@@ -1,5 +1,4 @@
 <!-- BEGIN: PAGE_STRUCTURE -->
-		<div id="{ADMIN_PAGE_STRUCTURE_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_PAGE_STRUCTURE_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -149,5 +148,4 @@
 				</table>
 			</form>
 <!-- END: DEFULT -->
-		</div>
 <!-- END: PAGE_STRUCTURE -->

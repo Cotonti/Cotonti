@@ -1,5 +1,4 @@
 <!-- BEGIN: ALLPFS -->
-		<div id="{ADMIN_ALLPFS_AJAX_OPENDIVID}">
 			<table class="cells">
 			<tr>
 				<td class="coltop">{PHP.L.Edit}</td>
@@ -22,5 +21,4 @@
 				<td colspan="3">{PHP.L.Total} : {ADMIN_ALLPFS_TOTALITEMS}, {PHP.L.comm_on_page}: {ADMIN_ALLPFS_ON_PAGE}</td>
 			</tr>
 			</table>
-		</div>
 <!-- END: ALLPFS -->
