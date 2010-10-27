@@ -66,13 +66,16 @@ CREATE TABLE `cot_cache_bindings` (
 CREATE TABLE `cot_config` (
   `config_owner` varchar(24) collate utf8_unicode_ci NOT NULL default 'core',
   `config_cat` varchar(64) collate utf8_unicode_ci NOT NULL default '',
+  `config_subcat` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `config_order` char(2) collate utf8_unicode_ci NOT NULL default '00',
   `config_name` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `config_type` tinyint NOT NULL default '0',
   `config_value` text collate utf8_unicode_ci NOT NULL,
   `config_default` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `config_variants` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `config_text` varchar(255) collate utf8_unicode_ci NOT NULL default ''
+  `config_text` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  KEY (`config_owner`, `config_cat`),
+  KEY (`config_owner`, `config_cat`, `config_name`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
@@ -322,10 +325,9 @@ CREATE TABLE `cot_structure` (
   `structure_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `structure_icon` varchar(128) collate utf8_unicode_ci NOT NULL default '',
   `structure_locked` tinyint NOT NULL default '0',
-  `structure_order` varchar(32) collate utf8_unicode_ci NOT NULL default 'title.asc',
   `structure_count` mediumint NOT NULL default '0',
-  `structure_ratings` tinyint NOT NULL default 1,
   PRIMARY KEY  (`structure_id`),
+  KEY `structure_code` (`structure_code`),
   KEY `structure_path` (`structure_path`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

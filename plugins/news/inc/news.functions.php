@@ -52,8 +52,8 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 	{
 		$limit = $cfg['plugin']['news']['maxpages'];
 	}
-	$order = $cot_cat[$cat]['order'];
-	$way = $cot_cat[$cat]['way'];
+	$order = $cfg['page'][$cat]['order'];
+	$way = $cfg['page'][$cat]['way'];
 
 	$where = "page_state=0 AND page_cat <> 'system' AND page_begin<'".$sys['now_offset']."'
 		AND page_expire>'".$sys['now_offset']."' AND page_date <= ".(int)$sys['now_offset']." AND page_cat IN ('".implode("','", $catsub)."')";

@@ -511,3 +511,14 @@ UPDATE `cot_config` SET `config_owner`= 'module', `config_cat` = 'page' WHERE `c
 
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
 ('module','page','05','maxrowsperpage',2,'15','15','5,10,15,20,25,30,40,50,60,70,100,200,500','');
+
+/* r1463 Config options for structure categories */
+ALTER TABLE `cot_config` ADD COLUMN `config_subcat` varchar(255) collate utf8_unicode_ci NOT NULL default '';
+ALTER TABLE `cot_config` ADD KEY (`config_owner`, `config_cat`);
+ALTER TABLE `cot_config` ADD KEY (`config_owner`, `config_cat`, `config_name`);
+
+ALTER TABLE `cot_structure` DROP COLUMN `structure_order`;
+ALTER TABLE `cot_structure` DROP COLUMN `structure_ratings`;
+ALTER TABLE `cot_structure` ADD KEY (`structure_code`);
+
+TRUNCATE TABLE `cot_cache`;

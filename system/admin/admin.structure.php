@@ -41,9 +41,6 @@ if ($a == 'update')
 	$rstructuredesc = cot_import('rstructuredesc', 'P', 'ARR');
 	$rstructureicon = cot_import('rstructureicon', 'P', 'ARR');
 	$rstructurelocked = cot_import('rstructurelocked', 'P', 'ARR');
-	$rstructureorder = cot_import('rstructureorder', 'P', 'ARR');
-	$rstructureway =	cot_import('rstructureway', 'P', 'ARR');
-	$rstructureratings = cot_import('rstructureallowratings', 'P', 'ARR');
 	foreach ($cot_extrafields['structure'] as $row)
 	{
 		$rstructurearray[$row['field_name']] = cot_import('rstructure'.$row['field_name'], 'P', 'ARR');
@@ -59,8 +56,6 @@ if ($a == 'update')
 		$rstructure['structure_desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
 		$rstructure['structure_icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
 		$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
-		$rstructure['structure_order'] = cot_import($rstructureorder[$i], 'D', 'TXT').".".cot_import($rstructureway[$i], 'D', 'ALP');
-		$rstructure['structure_ratings'] = cot_import($rstructureratings[$i], 'D', 'BOL');
 		foreach ($cot_extrafields['structure'] as $row)
 		{
 			$rstructure[$row['field_name']] = cot_import_extrafields($rstructurearray[$row['field_name']][$i], $row, 'D');
@@ -108,8 +103,6 @@ elseif ($a == 'add')
 	$rstructure['structure_desc'] = cot_import('rstructuredesc', 'P', 'TXT');
 	$rstructure['structure_icon'] = cot_import('rstructureicon', 'P', 'TXT');
 	$rstructure['structure_locked'] = (cot_import('rstructurelocked', 'P', 'BOL')) ? 1 : 0;
-	$rstructure['structure_order'] = cot_import('rstructureorder', 'P', 'ALP').".".cot_import('rstructureway', 'P', 'ALP');
-	$rstructure['structure_ratings'] = cot_import('rstructureallowratings', 'P', 'BOL');
 	$rstructure['structure_area'] = $n;
 
 	foreach ($cot_extrafields['structure'] as $row)
@@ -225,7 +218,6 @@ while ($row = $sql->fetch())
 	$structure_id = $row['structure_id'];
 	$structure_code = $row['structure_code'];
 	$pathfielddep = count(explode(".", $row['structure_path']));
-	list($sort, $way) = explode('.', $row['structure_order']);
 	$dozvil = ($row['structure_count'] > 0) ? false : true;
 	
 	if (empty($row['structure_tpl']))
@@ -264,11 +256,8 @@ while ($row = $sql->fetch())
 		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="18" maxlength="100"'),
 		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
 		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
-		'ADMIN_STRUCTURE_WAY' => cot_selectbox($way, 'rstructureway['.$structure_id.']', array_keys($options_way), array_values($options_way), false, 'style="width:85px;"'),
-		'ADMIN_STRUCTURE_ORDER' => cot_selectbox($sort, 'rstructureorder['.$structure_id.']', array_keys($options_sort), array_values($options_sort), false, 'style="width:85px;"'),
 		'ADMIN_STRUCTURE_LOCKED' => cot_checkbox($row['structure_locked'], 'rstructurelocked['.$structure_id.']'),
 		'ADMIN_STRUCTURE_SELECT' => $cat_selectbox,
-		'ADMIN_STRUCTURE_RATINGS' => cot_radiobox($row['structure_ratings'], 'rallowratings['.$structure_id.']', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_STRUCTURE_COUNT' => $row['structure_count'],
 		/*TODO*/		'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url($n, 'c='.$structure_code),
 		'ADMIN_STRUCTURE_RIGHTS_URL' => cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$structure_code),
@@ -314,10 +303,7 @@ if(!$id)
 		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle', '', 'size="64" maxlength="100"'),
 		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc', '', 'size="64" maxlength="255"'),
 		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon', '', 'size="64" maxlength="128"'),
-		'ADMIN_STRUCTURE_LOCKED' => cot_checkbox(0, 'rstructurelocked'),
-		'ADMIN_STRUCTURE_WAY' => cot_selectbox('asc', 'rstructureway', array_keys($options_way), array_values($options_way), false),
-		'ADMIN_STRUCTURE_ORDER' => cot_selectbox('title', 'rstructureorder', array_keys($options_sort), array_values($options_sort), false),
-		'ADMIN_STRUCTURE_RATINGS' => cot_radiobox(1, 'rstructureallowratings', array(1, 0), array($L['Yes'], $L['No']))
+		'ADMIN_STRUCTURE_LOCKED' => cot_checkbox(0, 'rstructurelocked')
 	));
 
 	// Extra fields

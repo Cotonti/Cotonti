@@ -315,6 +315,40 @@ function cot_extension_install($name, $is_module = false, $update = false)
 		}
 	}
 
+	// Install structure config if present
+	$info_cfg = cot_infoget($setup_file, 'COT_EXT_CONFIG_STRUCTURE');
+	if ($info_cfg)
+	{
+		$options = cot_config_parse($info_cfg, $is_module);
+		if ($update)
+		{
+			if (cot_config_update($name, $options, $is_module, '__default') > 0)
+			{
+				// Update all nested categories
+				$type = $is_module ? 'module' : 'plug';
+				$res = $db->query("SELECT DISTINCT config_subcat FROM $db_config
+					WHERE config_owner = '$type' AND config_cat = '$name'
+						AND config_subcat != '' AND config_subcat != '__default'");
+				$cat_list = $res->fetchAll(PDO::FETCH_COLUMN, 0);
+				foreach ($cat_list as $cat)
+				{
+					cot_config_update($name, $options, $is_module, $cat);
+				}
+				cot_message('ext_config_struct_updated');
+			}
+		}
+		elseif (count($options) > 0)
+		{
+			if (cot_config_add($name, $options, $is_module, '__default'))
+			{
+				cot_message('ext_config_struct_installed');
+			}
+			else
+			{
+				cot_error('ext_config_struct_error');
+			}
+		}
+	}
 
 	if ($update)
 	{
