@@ -235,7 +235,6 @@ if(!isset($showdefault) OR $showdefault == true)
 $is_adminwarnings = isset($adminwarnings);
 
 $t -> assign(array(
-	"ADMIN_USERS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_USERS_URL" => sed_url('admin', "m=config&n=edit&o=core&p=users"),
 	"ADMIN_USERS_EXTRAFIELDS_URL" => sed_url('admin', 'm=users&s=extrafields'),
 	"ADMIN_USERS_ADMINWARNINGS" => $adminwarnings

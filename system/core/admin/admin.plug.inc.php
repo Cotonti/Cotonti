@@ -346,7 +346,7 @@ switch($a)
 								}
 								elseif ($ko)
 								{
-									$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$pl' AND config_name='".$line[0]."' ");
+									$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_config WHERE config_owner='plug' AND config_cat='$pl' AND config_name='".$i."' ");
 									$if = sed_sql_result($sqltmp, 0, "COUNT(*)");
 
 									$sql = (!$if) ? sed_sql_query("INSERT into $db_config (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES ('plug', '".$pl."', ".$line[0].", '".$i."', ".(int)$line['Type'].", '".$line[3]."', '".$line[2]."', '".sed_sql_prep($line[4])."')") : '';
@@ -417,7 +417,7 @@ switch($a)
 					{
 						$sql = sed_sql_query("INSERT into $db_auth (auth_groupid, auth_code, auth_option, auth_rights, auth_rights_lock, auth_setbyuserid) VALUES (".(int)$v['id'].", 'plug', '$pl', ".(int)$ins_auth.", ".(int)$ins_lock.", ".(int)$usr['id'].")");
 					}
-					elseif(!$ko)
+					elseif($ko)
 					{
 						$sqltmp = sed_sql_query("SELECT COUNT(*) FROM $db_auth WHERE auth_code='plug' AND auth_groupid='".(int)$v['id']."' AND auth_option='$pl' ");
 						$if = sed_sql_result($sqltmp, 0, "COUNT(*)");
@@ -684,7 +684,6 @@ $if_conf_url = (!empty($pl) && $b == 'install' && $totalconfig > 0) ? true : fal
 $is_adminwarnings = isset($adminwarnings);
 
 $t -> assign(array(
-	"ADMIN_PLUG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PLUG_CONFIG_URL" => sed_url('admin', "m=config&n=edit&o=plug&p=".$pl),
 	"ADMIN_PLUG_ADMINWARNINGS" => $adminwarnings
 ));

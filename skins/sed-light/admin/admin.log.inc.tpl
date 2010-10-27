@@ -1,5 +1,4 @@
 <!-- BEGIN: LOG -->
-		<div id="{ADMIN_LOG_AJAX_OPENDIVID}">
 <!-- IF {PHP.usr.isadmin} -->
 			<ul>
 				<li>{PHP.L.adm_purgeall} ({ADMIN_LOG_TOTALDBLOG}) : [<a href="{ADMIN_LOG_URL_PRUNE}"{ADMIN_LOG_URL_PRUNE_AJAX}>x</a>]</li>
@@ -44,5 +43,4 @@
 				<td colspan="6">{PHP.L.Total} : {ADMIN_LOG_TOTALITEMS}, {PHP.L.adm_polls_on_page} : {ADMIN_LOG_ON_PAGE}</td>
 			</tr>
 			</table>
-		</div>
 <!-- END: LOG -->

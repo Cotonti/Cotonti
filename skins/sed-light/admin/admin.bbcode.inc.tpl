@@ -1,5 +1,4 @@
 <!-- BEGIN: BBCODE -->
-		<div id="{ADMIN_BBCODE_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_BBCODE_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -94,5 +93,4 @@
 				</table>
 			</form>
 			<a href="{ADMIN_BBCODE_URL_CLEAR_CACHE}" onclick="return confirm('{PHP.L.adm_bbcodes_clearcache_confirm}')">{PHP.L.adm_bbcodes_clearcache}</a>
-		</div>
 <!-- END: BBCODE -->

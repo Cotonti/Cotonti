@@ -1,5 +1,4 @@
 <!-- BEGIN: RIGHTSBYITEM -->
-		<div id="{ADMIN_RIGHTSBYITEM_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_RIGHTSBYITEM_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -52,7 +51,6 @@
 				</table>
 			</form>
 			<a href="{ADMIN_RIGHTSBYITEM_ADVANCED_URL}">{PHP.L.More}</a>
-		</div>
 <!-- END: RIGHTSBYITEM -->
 
 <!-- BEGIN: RIGHTSBYITEM_HELP -->

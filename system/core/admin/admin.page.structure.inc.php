@@ -409,7 +409,6 @@ else
 $is_adminwarnings = isset($adminwarnings);
 
 $t -> assign(array(
-	"ADMIN_PAGE_STRUCTURE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_PAGE_STRUCTURE_ADMINWARNINGS" => $adminwarnings
 ));
 

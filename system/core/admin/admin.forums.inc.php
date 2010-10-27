@@ -418,7 +418,6 @@ $is_adminwarnings = isset($adminwarnings);
 $lincif_conf = sed_auth('admin', 'a', 'A');
 
 $t -> assign(array(
-	"ADMIN_FORUMS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_FORUMS_CONF_URL" => sed_url('admin', 'm=config&n=edit&o=core&p=forums'),
 	"ADMIN_FORUMS_CONF_STRUCTURE_URL" => sed_url('admin', 'm=forums&s=structure'),
 	"ADMIN_FORUMS_ADMINWARNINGS" => $adminwarnings

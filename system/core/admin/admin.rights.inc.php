@@ -246,7 +246,6 @@ $is_adminwarnings = isset($adminwarnings);
 $adv_for_url = ($advanced) ? '&advanced=1' : '';
 
 $t -> assign(array(
-	"ADMIN_RIGHTS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_RIGHTS_FORM_URL" => sed_url('admin', "m=rights&a=update&g=".$g.$adv_for_url),
 	"ADMIN_RIGHTS_FORM_URL_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onsubmit=\"return ajaxSend({method: 'POST', formId: 'saverights', url: '".sed_url('admin','m=rights&ajax=1&a=update&g='.$g.$adv_for_url)."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_RIGHTS_ADVANCED_URL" => sed_url('admin', 'm=rights&g='.$g.'&advanced=1'),

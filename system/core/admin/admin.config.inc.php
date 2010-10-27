@@ -294,7 +294,6 @@ switch($n)
 $is_adminwarnings = isset($adminwarnings);
 
 $t -> assign(array(
-	"ADMIN_CONFIG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_CONFIG_ADMINWARNINGS" => $adminwarnings
 ));
 

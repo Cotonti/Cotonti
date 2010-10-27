@@ -1,5 +1,4 @@
 <!-- BEGIN: CONFIG -->
-		<div id="{ADMIN_CONFIG_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_CONFIG_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -80,5 +79,4 @@
 <!-- END: ADMIN_CONFIG_ROW_PLUG -->
 			</ul>
 <!-- END: DEFAULT -->
-		</div>
 <!-- END: CONFIG -->

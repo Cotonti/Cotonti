@@ -1,5 +1,4 @@
 <!-- BEGIN: PLUG -->
-		<div id="{ADMIN_PLUG_AJAX_OPENDIVID}">
 <!-- IF {PHP.if_conf_url} -->
 			<ul>
 				<li><a href="{ADMIN_PLUG_CONFIG_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
@@ -315,5 +314,4 @@
 				<a href="{ADMIN_PLUG_EDIT_CONTINUE_URL}"{ADMIN_PLUG_EDIT_CONTINUE_URL_AJAX}>{PHP.L.Clickhere}</a>
 <!-- END: UNINSTALL -->
 <!-- END: EDIT -->
-		</div>
 <!-- END: PLUG -->

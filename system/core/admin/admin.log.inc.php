@@ -119,7 +119,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_LOG_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_LOG_URL_PRUNE" => sed_url('admin', "m=log&a=purge&".sed_xg()),
 	"ADMIN_LOG_URL_PRUNE_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=log&a=purge&ajax=1&'.sed_xg())."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
 	"ADMIN_LOG_TOTALDBLOG" => $totaldblog,

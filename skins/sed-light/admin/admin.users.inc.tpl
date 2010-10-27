@@ -1,5 +1,4 @@
 <!-- BEGIN: USERS -->
-		<div id="{ADMIN_USERS_AJAX_OPENDIVID}">
 			<ul>
 				<li><a href="{ADMIN_USERS_URL}">{PHP.L.Configuration}: <img src="images/admin/config.gif" alt="" /></a></li>
 <!-- IF {PHP.lincif_extfld} -->
@@ -197,5 +196,4 @@
 				</table>
 			</form>
 <!-- END: ADMIN_USERS_EDIT -->
-		</div>
 <!-- END: USERS -->

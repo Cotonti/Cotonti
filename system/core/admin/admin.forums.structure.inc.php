@@ -283,7 +283,6 @@ else
 $is_adminwarnings = isset($adminwarnings);
 
 $t -> assign(array(
-	"ADMIN_FORUMS_STRUCTURE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_FORUMS_STRUCTURE_ADMINWARNINGS" => $adminwarnings
 ));
 

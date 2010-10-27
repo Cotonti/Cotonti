@@ -1,5 +1,4 @@
 <!-- BEGIN: RIGHTS -->
-		<div id="{ADMIN_RIGHTS_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_RIGHTS_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -184,7 +183,6 @@
 				</table>
 			</form>
 			<a href="{ADMIN_RIGHTS_ADVANCED_URL}">{PHP.L.More}</a>
-		</div>
 <!-- END: RIGHTS -->
 
 <!-- BEGIN: RIGHTS_HELP -->

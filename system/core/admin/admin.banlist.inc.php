@@ -127,7 +127,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_BANLIST_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_BANLIST_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_BANLIST_PAGINATION_PREV" => $pagination_prev,
 	"ADMIN_BANLIST_PAGNAV" => $pagnav,

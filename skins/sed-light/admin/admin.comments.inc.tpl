@@ -1,5 +1,4 @@
 <!-- BEGIN: COMMENTS -->
-		<div id="{ADMIN_COMMENTS_AJAX_OPENDIVID}">
 			<ul>
 				<li><a href="{ADMIN_COMMENTS_CONFIG_URL}">{PHP.L.Configuration} : <img src="images/admin/config.gif" alt="" /></a></li>
 			</ul>
@@ -41,5 +40,4 @@
 				<td>{PHP.L.Total} : {ADMIN_COMMENTS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_COMMENTS_COUNTER_ROW}</td>
 			</tr>
 			</table>
-		</div>
 <!-- END: COMMENTS -->

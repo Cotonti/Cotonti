@@ -126,7 +126,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_COMMENTS_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_COMMENTS_CONFIG_URL" => sed_url('admin', 'm=config&n=edit&o=core&p=comments'),
 	"ADMIN_COMMENTS_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_COMMENTS_PAGINATION_PREV" => $pagination_prev,

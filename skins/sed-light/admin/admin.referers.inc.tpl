@@ -1,5 +1,4 @@
 <!-- BEGIN: REFERERS -->
-		<div id="{ADMIN_REFERERS_AJAX_OPENDIVID}">
 <!-- IF {PHP.usr.isadmin} -->
 			<ul>
 				<li>{PHP.L.adm_purgeall} : [<a href="{ADMIN_REFERERS_URL_PRUNE}">x</a>]</li>
@@ -46,5 +45,4 @@
 				</tr>
 			</table>
 <!-- ENDIF -->
-		</div>
 <!-- END: REFERERS -->

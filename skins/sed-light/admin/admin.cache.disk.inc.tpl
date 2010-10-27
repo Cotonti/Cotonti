@@ -1,5 +1,4 @@
 <!-- BEGIN: DISKCACHE -->
-		<div id="{ADMIN_DISKCACHE_AJAX_OPENDIVID}">
 			<p>
 				<a href="{ADMIN_DISKCACHE_URL_REFRESH}"{ADMIN_DISKCACHE_URL_REFRESH_AJAX}>{PHP.L.Refresh}</a> |
 				<a href="{ADMIN_DISKCACHE_URL_PURGE}"{ADMIN_DISKCACHE_URL_PURGE_AJAX}>{PHP.L.adm_purgeall}</a>
@@ -28,5 +27,4 @@
 				<td style="text-align:right;">{ADMIN_DISKCACHE_CACHESIZE}</td>
 			</tr>
 			</table>
-		</div>
 <!-- END: DISKCACHE -->

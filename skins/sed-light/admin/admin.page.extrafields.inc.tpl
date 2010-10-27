@@ -1,5 +1,4 @@
 <!-- BEGIN: PAG_EXTRAFIELDS -->
-		<div id="{ADMIN_PAG_EXTRAFIELDS_AJAX_OPENDIVID}">
 <!-- IF {PHP.is_adminwarnings} -->
 			<div class="error">{ADMIN_PAG_EXTRAFIELDS_ADMINWARNINGS}</div>
 <!-- ENDIF -->
@@ -95,5 +94,4 @@
 				</tr>
 				</table>
 			</form>
-		</div>
 <!-- END: PAG_EXTRAFIELDS -->

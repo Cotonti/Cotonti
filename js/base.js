@@ -80,7 +80,7 @@ function ajaxSend(settings) {
 		},
 		success: function(msg) {
 			$('#loading').remove();
-			$('#' + settings.divId).fadeOut().replaceWith(msg).fadeIn();
+			$('#' + settings.divId).hide().html(msg).fadeIn(500);
 		},
 		error: function(msg) {
 			$('#loading').remove();

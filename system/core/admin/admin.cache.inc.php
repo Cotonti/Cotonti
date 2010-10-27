@@ -89,7 +89,6 @@ while($row = sed_sql_fetcharray($sql))
 }
 
 $t -> assign(array(
-	"ADMIN_CACHE_AJAX_OPENDIVID" => 'pagtab',
 	"ADMIN_CACHE_ADMINWARNINGS" => $adminwarnings,
 	"ADMIN_CACHE_URL_REFRESH" => sed_url('admin', 'm=cache'),
 	"ADMIN_CACHE_URL_REFRESH_AJAX" => ($cfg['jquery'] AND $cfg['turnajax']) ? " onclick=\"return ajaxSend({url: '".sed_url('admin', 'm=cache&ajax=1')."', divId: 'pagtab', errMsg: '".$L['ajaxSenderror']."'});\"" : "",
