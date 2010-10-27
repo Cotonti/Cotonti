@@ -20,6 +20,16 @@ $L['cfg_autovalidate'] = array('Autovalidate page', 'Autovalidate page if poster
 $L['cfg_count_admin'] = array('Count Administrators\' hits', '');
 $L['cfg_maxrowsperpage'] = array('Max. lines in lists', ' ');
 $L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');
+$L['cfg_order'] = array('Sorting column');
+$L['cfg_ratings'] = array('Enable ratings');
+$L['cfg_way'] = array('Sorting direction');
+
+/**
+ * Structure Confing
+ */
+
+$L['cfg_order_params'] = array(); // Redefined in cot_page_config_order()
+$L['cfg_way_params'] = array($L['Ascending'], $L['Descending']);
 
 /**
  * Extrafields Subsection

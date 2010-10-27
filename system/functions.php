@@ -437,6 +437,10 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 	return $result;
 }
 
+/*
+ * =========================== Structure functions ===========================
+ */
+
 /**
  * Loads comlete category structure into array
  */
@@ -445,6 +449,10 @@ function cot_load_structure()
 	global $db, $db_structure, $db_extra_fields, $cfg, $L, $cot_extrafields, $structure;
 	$structure = array();
 	$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
+
+	/* == Hook: Part 1 ==*/
+	$extp = cot_getextplugins('structure');
+	/* ================= */
 
 	while ($row = $sql->fetch())
 	{
@@ -474,7 +482,6 @@ function cot_load_structure()
 			$tpath[$row['structure_path']] = $row['structure_title'];
 		}
 
-		$order = explode('.', $row['structure_order']);
 		$parent_tpl = $row['structure_tpl'];
 
 		$structure[$row['structure_area']][$row['structure_code']] = array(
@@ -486,10 +493,7 @@ function cot_load_structure()
 			'title' => $row['structure_title'],
 			'desc' => $row['structure_desc'],
 			'icon' => $row['structure_icon'],
-			'group' => $row['structure_group'],
-			'ratings' => $row['structure_ratings'],
-			'order' => $order[0],
-			'way' => $order[1]
+			'locked' => $row['structure_locked']
 		);
 
 		if (is_array($cot_extrafields['structure']))
@@ -500,17 +504,14 @@ function cot_load_structure()
 			}
 		}
 
-		/* == Hook == */
-		foreach (cot_getextplugins('structure') as $pl)
+		/* == Hook: Part 2 ==*/
+		foreach ($extp as $pl)
 		{
 			include $pl;
 		}
-		/* ===== */
+		/* ================= */
 	}
 }
-/**
- * Structure functions
- */
 
 /**
  * Gets an array of category children
@@ -1046,7 +1047,7 @@ function cot_blockguests()
 
 /*
  * =========================== Output forming functions ===========================
-*/
+ */
 
 /**
  * Calculates age out of D.O.B.

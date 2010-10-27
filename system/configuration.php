@@ -91,9 +91,10 @@ define('COT_CONFIG_TYPE_RANGE', 7);
  * 		e.g. '04'. Or will be assigned automatically if omitted
  * 'text' => Textual description. It is usually omitted and stored in langfiles
  * @param bool $is_module Flag indicating if it is module or plugin config
+ * @param string $category Structure category code. Only for per-category config options
  * @return bool Operation status
  */
-function cot_config_add($name, $options, $is_module = false)
+function cot_config_add($name, $options, $is_module = false, $category = '')
 {
     global $db, $cfg, $db_config;
     $cnt = count($options);
@@ -111,6 +112,7 @@ function cot_config_add($name, $options, $is_module = false)
 		$option_set[] = array(
 			'config_owner' => $type,
 			'config_cat' => $name,
+			'config_subcat' => $category,
 			'config_order' => isset($opt['order']) ? $opt['order'] : str_pad($i, 2, 0, STR_PAD_LEFT),
 			'config_name' => $opt['name'],
 			'config_type' => (int) $opt['type'],
@@ -129,18 +131,28 @@ function cot_config_add($name, $options, $is_module = false)
  * Loads config structure from database into an array
  * @param string $name Extension code
  * @param bool $is_module TRUE if module, FALSE if plugin
+ * @param string $category Structure category code. Only for per-category config options
  * @return array Config options structure
  * @see cot_config_add()
  */
-function cot_config_load($name, $is_module = false)
+function cot_config_load($name, $is_module = false, $category = '')
 {
 	global $db, $db_config;
 	$options = array();
 	$type = $is_module ? 'module' : 'plug';
 
-	$res = $db->query("SELECT config_name, config_type, config_value,
+	$query = "SELECT config_name, config_type, config_value,
 			config_default, config_variants, config_order
-		FROM $db_config WHERE config_owner = '$type' AND config_cat = '$name'");
+		FROM $db_config WHERE config_owner = ? AND config_cat = ?";
+	$params = array($type, $name);
+
+	if (!empty($category))
+	{
+		$query .= " AND config_subcat = ?";
+		$params[] = $category;
+	}
+
+	$res = $db->query($query, $params);
 	while ($row = $res->fetch())
 	{
 		$options[] = array(
@@ -163,13 +175,21 @@ function cot_config_load($name, $is_module = false)
  * @param string $name Extension code
  * @param array $options Configuration entries
  * @param bool $is_module TRUE if module, FALSE if plugin
+ * @param string $category Structure category code. Only for per-category config options
  * @return int Number of entries updated
  */
-function cot_config_modify($name, $options, $is_module = false)
+function cot_config_modify($name, $options, $is_module = false, $category = '')
 {
 	global $db, $db_config;
 	$type = $is_module ? 'module' : 'plug';
 	$affected = 0;
+
+	$where = "config_owner = ? AND config_cat = ? AND config_name = ?";
+
+	if (!empty($category))
+	{
+		$where .= " AND config_subcat = ?";
+	}
 
 	foreach ($options as $opt)
 	{
@@ -180,8 +200,8 @@ function cot_config_modify($name, $options, $is_module = false)
 		{
 			$opt_row['config_' . $key] = $val;
 		}
-		$affected += $db->update($db_config, $opt_row, "config_owner = ?
-			AND config_cat = ? AND config_name = ?", array($type, $name, $config_name));
+		$affected += $db->update($db_config, $opt_row, $where,
+			empty($category) ? array($type, $name, $config_name) : array($type, $name, $config_name, $category));
 	}
 
 	return $affected;
@@ -252,13 +272,20 @@ function cot_config_parse($info_cfg)
  * @param mixed $option String name of a single configuration option.
  * Or pass an array of option names to remove them at once. If empty or omitted,
  * all options from selected module/plugin will be removed
+ * @param string $category Structure category code. Only for per-category config options
  * @return int Number of options actually removed
  */
-function cot_config_remove($name, $is_module = false, $option = '')
+function cot_config_remove($name, $is_module = false, $option = '', $category = '')
 {
     global $db, $db_config;
+
     $type = $is_module ? 'module' : 'plug';
     $where = "config_owner = '$type' AND config_cat = '$name'";
+	if (!empty($category))
+	{
+		$where .= " AND config_subcat = '$category'";
+	}
+	
     if (is_array($option))
     {
         $cnt = count($option);
@@ -301,21 +328,34 @@ function cot_config_remove($name, $is_module = false, $option = '')
  * @param string $name Extension name config belongs to
  * @param array $options Array of options as 'option name' => 'option value'
  * @param bool $is_module Flag indicating if it is module or plugin config
+ * @param string $category Structure category code. Only for per-category config options
  * @return int Number of entries updated
  */
-function cot_config_set($name, $options, $is_module = false)
+function cot_config_set($name, $options, $is_module = false, $category = '')
 {
     global $db, $db_config;
     $type = $is_module ? 'module' : 'plug';
     $upd_cnt = 0;
-    foreach ($options as $key => $val)
-    {
-        $where = "config_owner = '$type' AND config_name = '"
-			. $db->prep($key) . "'";
-        if (!empty($name))
-            $where .= " AND config_cat = '$name'";
-        $upd_cnt += $db->update($db_config, array('config_value' => $val), $where);
-    }
+
+	$where = 'config_owner = ? AND config_cat = ? AND config_name = ?';
+	if (!empty($category))
+	{
+		$where .= ' AND config_subcat = ?';
+		if ($category != '__default')
+		{
+			$default_options = cot_config_load($name, $is_module, '__default');
+		}
+	}
+
+	foreach ($options as $key => $val)
+	{
+		if (empty($category) || $category == '__default' || $val != $default_options[$key])
+		{
+			$params = empty($category) ? array($type, $name, $key) : array($type, $name, $key, $category);
+			$upd_cnt += $db->update($db_config, array('config_value' => $val), $where, $params);
+		}
+	}
+	
     return $upd_cnt;
 }
 
@@ -326,12 +366,13 @@ function cot_config_set($name, $options, $is_module = false)
  * @param string $name Extension code
  * @param array $options Configuration options
  * @param bool $is_module TRUE for modules, FALSE for plugins
+ * @param string $category Structure category code. Only for per-category config options
  * @return int Number of entries affected
  */
-function cot_config_update($name, $options, $is_module = false)
+function cot_config_update($name, $options, $is_module = false, $category = '')
 {
 	$affected = 0;
-	$old_options = cot_config_load($name, $is_module);
+	$old_options = cot_config_load($name, $is_module, $category);
 
 	// Find and remove options which no longer exist
 	$remove_opts = array();
@@ -353,7 +394,7 @@ function cot_config_update($name, $options, $is_module = false)
 	}
 	if (count($remove_opts) > 0)
 	{
-		$affected += cot_config_remove($name, $is_module, $remove_opts);
+		$affected += cot_config_remove($name, $is_module, $remove_opts, $category);
 	}
 
 	// Find new options and options which have been modified
@@ -387,11 +428,11 @@ function cot_config_update($name, $options, $is_module = false)
 	}
 	if (count($new_options) > 0)
 	{
-		$affected += cot_config_add($name, $new_options, $is_module);
+		$affected += cot_config_add($name, $new_options, $is_module, $category);
 	}
 	if (count($upd_options) > 0)
 	{
-		$affected += cot_config_modify($name, $upd_options, $is_module);
+		$affected += cot_config_modify($name, $upd_options, $is_module, $category);
 	}
 
 	return $affected;

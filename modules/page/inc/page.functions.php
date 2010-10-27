@@ -227,6 +227,40 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 }
 
 /**
+ * Returns possible values for category sorting order
+ */
+function cot_page_config_order()
+{
+	global $cot_extrafields, $L;
+
+	$options_sort = array(
+		'id' => $L['Id'],
+		'type' => $L['Type'],
+		'key' => $L['Key'],
+		'title' => $L['Title'],
+		'desc' => $L['Description'],
+		'text' => $L['Body'],
+		'author' => $L['Author'],
+		'ownerid' => $L['Owner'],
+		'date' => $L['Date'],
+		'begin' => $L['Begin'],
+		'expire' => $L['Expire'],
+		'file' => $L['adm_fileyesno'],
+		'url' => $L['adm_fileurl'],
+		'size' => $L['adm_filesize'],
+		'filecount' => $L['adm_filecount']
+	);
+
+	foreach($cot_extrafields['pages'] as $row)
+	{
+		$options_sort[$row['field_name']] = isset($L['page_'.$row['field_name'].'_title']) ? $L['page_'.$row['field_name'].'_title'] : $row['field_description'];
+	}
+
+	$L['cfg_order_params'] = array_values($options_sort);
+	return array_keys($options_sort);
+}
+
+/**
  * Recalculates page category counters
  *
  * @param string $cat Cat code

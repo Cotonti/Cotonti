@@ -20,6 +20,18 @@ $t = new XTemplate(cot_skinfile('admin.config'));
 
 $adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
 
+$sub = cot_import('sub', 'G', 'TXT');
+if (empty($sub))
+{
+	$where_cat = "AND (config_subcat = '' OR config_subcat = '__default')";
+	$sub_param = array();
+}
+else
+{
+	$where_cat = "AND config_subcat = ?";
+	$sub_param = array($sub);
+}
+
 /* === Hook === */
 foreach (cot_getextplugins('admin.config.first') as $pl)
 {
@@ -35,12 +47,37 @@ switch($n)
 		$v = cot_import('v', 'G', 'ALP');
 		$o = empty($o) ? 'core' : $o;
 		$p = empty($p) ? 'global' : $p;
-		
+
+		// For a subcat, load default category config
+		if (!empty($sub) && $sub != '__default')
+		{
+			$default_set = array();
+			try
+			{
+				// Attempt to fetch the entire rowset indexed by config_name
+				$sql = $db->query("SELECT * FROM $db_config
+					WHERE config_owner = ? AND config_cat = ? AND config_subcat = ?
+					ORDER BY config_subcat ASC, config_order ASC, config_name ASC", array($o, $p, '__default'));
+				$rs = $sql->fetchAll(PDO::FETCH_ASSOC);
+				foreach ($rs as $row)
+				{
+					$default_set[$row['config_name']] = $row;
+				}
+				unset($rs);
+			}
+			catch (PDOException $excpt)
+			{
+				// $default_set = array();
+			}
+		}
+
 		if ($a == 'update')
 		{
-			
+			// Update only those options which have been changed
+			$overriden = array();
 			$sql = $db->query("SELECT config_name FROM $db_config
-				WHERE config_owner='$o' AND config_cat='$p'");
+				WHERE config_owner = ? AND config_cat= ? $where_cat",
+				array_merge(array($o, $p), $sub_param));
 			while ($row = $sql->fetch())
 			{
 				$cfg_value = trim(cot_import($row['config_name'], 'P', 'NOC'));
@@ -50,33 +87,110 @@ switch($n)
 					$cfg_value = min($cfg_value, cot_get_uploadmax() * 1024);
 				}
 				$db->update($db_config, array('config_value' => $cfg_value),
-					"config_name = :n AND config_owner = :o AND config_cat = :p", array(':n' => $row['config_name'], ':o' => $o, ':p' => $p));
+					"config_name = ? AND config_owner = ? AND config_cat = ? $where_cat",
+					array_merge(array($row['config_name'], $o, $p), $sub_param));
+				$overriden[] = $row['config_name'];
 			}
 			$sql->closeCursor();
+			if (!empty($sub))
+			{
+				// Compare to default, override if not modified in self and differs from default
+				foreach ($default_set as $key => $row)
+				{
+					$cfg_value = trim(cot_import($key, 'P', 'NOC'));
+					if (!in_array($key, $overriden) && $cfg_value != $row['config_value'])
+					{
+						$row['config_subcat'] = $sub;
+						$row['config_value'] = $cfg_value;
+						$db->insert($db_config, $row);
+					}
+				}
+			}
 			$cache && $cache->clear();
 			cot_message('Updated');
 		}
 		elseif ($a == 'reset' && !empty($v))
 		{
-			$db->query("UPDATE $db_config
-				SET config_value=config_default WHERE config_name='$v' AND config_owner='$o'");
+			$update = true;
+			if (!empty($sub))
+			{
+				// Check if overriden
+				$sql = $db->query("SELECT COUNT(*) FROM $db_config
+					WHERE config_name = ? AND config_owner = ? AND config_cat = ? $where_cat",
+					array_merge(array($v, $o, $p), $sub_param));
+				$count = $sql->fetchColumn();
+				if ($count == 0 && $default_set[$v]['config_value'] != $default_set[$v]['config_default'])
+				{
+					// Reset this particular option to config_default
+					$row = $default_set[$v];
+					$row['config_subcat'] = $sub;
+					$row['config_value'] = $row['config_default'];
+					$db->insert($db_config, $row);
+					$update = false;
+				}
+				elseif ($count > 0 && $default_set[$v]['config_value'] == $default_set[$v]['config_default'])
+				{
+					// Just remove
+					$db->delete($db_config, "config_name = ? AND config_owner = ? AND config_cat = ?
+						AND config_subcat = ?",
+						array($v, $o, $p, $sub));
+				}
+			}
+			if ($exists)
+			{
+				$db->query("UPDATE $db_config SET config_value = config_default
+					WHERE config_name = ?' AND config_owner = ? AND config_cat = ? $where_cat",
+					array_merge(array($v, $o, $p), $sub_param));
+			}
 			$cache && $cache->clear();
 		}
-		
-		$sql = $db->query("SELECT * FROM $db_config
-			WHERE config_owner='$o' AND config_cat='$p' ORDER BY config_cat ASC, config_order ASC, config_name ASC");
-		cot_die($sql->rowCount() == 0);
+
+		$rowset = array();
+		try
+		{
+			// Attempt to fetch the entire rowset indexed by config_name
+			$sql = $db->query("SELECT * FROM $db_config
+				WHERE config_owner = ? AND config_cat = ? $where_cat
+				ORDER BY config_subcat ASC, config_order ASC, config_name ASC", array_merge(array($o, $p), $sub_param));
+			$rs = $sql->fetchAll(PDO::FETCH_ASSOC);
+			foreach ($rs as $row)
+			{
+				$rowset[$row['config_name']] = $row;
+			}
+			unset($rs);
+		}
+		catch (PDOException $excpt)
+		{
+			if (empty($sub))
+			{
+				// No items found and not in a subcategory
+				cot_die();
+			}
+		}
+		if (!empty($sub))
+		{
+			// Load missing options from __default config
+			foreach ($default_set as $key => $row)
+			{
+				if (!isset($rowset[$key]))
+				{
+					$row['config_subcat'] = $sub;
+					$rowset[$key] = $row;
+				}
+			}
+		}
 		
 		if ($o == 'core')
 		{
-			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['core_'.$p]);
+			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['core_'.$p]);
 		}
 		else
 		{
 			$plmod = $o == 'module' ? 'mod' : 'pl';
 			$plmod_title = $o == 'module' ? $L['Module'] : $L['Plugin'];
 			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$plmod=$p"), $plmod_title.' ('.$o.':'.$p.')');
-			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p), $L['Edit']);
+			$edit_title = empty($sub) ? $L['Edit'] : $structure[$p][$sub]['title'] . ' - ' . $L['Edit'];
+			$adminpath[] = array(cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub), $L['Edit']);
 		}
 		
 		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
@@ -88,10 +202,11 @@ switch($n)
 		/* === Hook - Part1 : Set === */
 		$extp = cot_getextplugins('admin.config.edit.loop');
 		/* ===== */
-		while ($row = $sql->fetch())
+		foreach ($rowset as $key => $row)
 		{
-			$config_owner = $row['config_owner'];
-			$config_cat = $row['config_cat'];
+			$config_owner = $o;
+			$config_cat = $p;
+			$config_subcat = $row['config_subcat'];
 			$config_name = $row['config_name'];
 			$config_value = $row['config_value'];
 			$config_default = $row['config_default'];
@@ -100,6 +215,18 @@ switch($n)
 			$config_text = htmlspecialchars($row['config_text']);
 			$config_more = $L['cfg_'.$config_name][1];
 			$if_config_more = (!empty($config_more)) ? true : false;
+
+			if ($config_subcat == '__default' && $prev_subcat == '' && $config_type != COT_CONFIG_TYPE_SEPARATOR)
+			{
+				if ($inside_fieldset)
+				{
+					// Close previous fieldset
+					$t->parse('MAIN.EDIT.ADMIN_CONFIG_FIELDSET_END');
+				}
+				$inside_fieldset = true;
+				$t->assign('ADMIN_CONFIG_FIELDSET_TITLE', $L['cfg_struct_defaults']);
+				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_FIELDSET_BEGIN');
+			}
 					
 			if ($config_type == COT_CONFIG_TYPE_STRING)
 			{
@@ -124,6 +251,12 @@ switch($n)
 			}
 			elseif ($config_type == COT_CONFIG_TYPE_CALLBACK)
 			{
+				// Preload module/plugin functions
+				$is_plug = $config_owner == 'plug';
+				if (file_exists(cot_incfile($config_cat, 'functions', $is_plug)))
+				{
+					require_once cot_incfile($config_cat, 'functions', $is_plug);
+				}
 				if ((preg_match('#^(\w+)\((.*?)\)$#', $row['config_variants'], $mt) && function_exists($mt[1])))
 				{
 					$callback_params = preg_split('#\s*,\s*#', $mt[2]);
@@ -187,7 +320,7 @@ switch($n)
 					'ADMIN_CONFIG_ROW_CONFIG_TITLE' => (empty($L['cfg_'.$row['config_name']][0]) && !empty($config_text))
 						? $config_text : $config_title,
 					'ADMIN_CONFIG_ROW_CONFIG_MORE_URL' =>
-						cot_url('admin', "m=config&n=edit&o=$o&p=$p&a=reset&v=$config_name"),
+						cot_url('admin', "m=config&n=edit&o=$o&p=$p&a=reset&v=$config_name&sub=$sub"),
 					'ADMIN_CONFIG_ROW_CONFIG_MORE' => $config_more
 				));
 				/* === Hook - Part2 : Include === */
@@ -199,6 +332,8 @@ switch($n)
 				$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW.ADMIN_CONFIG_ROW_OPTION');
 			}
 			$t->parse('MAIN.EDIT.ADMIN_CONFIG_ROW');
+			
+			$prev_subcat = $config_subcat;
 		}
 
 		if ($inside_fieldset)
@@ -209,7 +344,7 @@ switch($n)
 		}
 		
 		$t->assign(array(
-			'ADMIN_CONFIG_FORM_URL' => cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&a=update')
+			'ADMIN_CONFIG_FORM_URL' => cot_url('admin', 'm=config&n=edit&o='.$o.'&p='.$p.'&sub='.$sub.'&a=update')
 		));
 		/* === Hook  === */
 		foreach (cot_getextplugins('admin.config.edit.tags') as $pl)

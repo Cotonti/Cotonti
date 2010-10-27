@@ -78,7 +78,6 @@ if (!COT_AJAX)
 	$t->assign(array(
 		'HEADER_TITLE' => $plug_title . $out['fulltitle'],
 		'HEADER_DOCTYPE' => $cfg['doctype'],
-		'HEADER_CSS' => $cfg['css'],
 		'HEADER_COMPOPUP' => $out['compopup'],
 		'HEADER_LOGSTATUS' => $out['logstatus'],
 		'HEADER_WHOSONLINE' => $out['whosonline'],

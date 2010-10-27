@@ -80,6 +80,8 @@ $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles (&lt;title&gt; tag)';
 $L['core_users'] = &$L['Users'];
 
+$L['cfg_struct_defaults'] = 'Structure Defaults';
+
 /**
  * Config Section
  * E-mail Subsection
@@ -279,6 +281,9 @@ $L['ext_config_error'] = 'Configuration setup failed';
 $L['ext_config_installed'] = 'Installed configuration';
 $L['ext_config_uninstalled'] = 'Uninstalled configuration';
 $L['ext_config_updated'] = 'Updated configuration options';
+$L['ext_config_struct_error'] = 'Structure configuration setup failed';
+$L['ext_config_struct_installed'] = 'Installed structure configuration';
+$L['ext_config_struct_updated'] = 'Updated structure configuration options';
 $L['ext_dependency_error'] = '{$dep_type} &quot;{$dep_name}&quot; required by {$type} &quot;{$name}&quot; is neither installed nor selected for installation';
 $L['ext_executed_php'] = 'Executed PHP handler part: {$ret}';
 $L['ext_executed_sql'] = 'Executed SQL handler part: {$ret}';

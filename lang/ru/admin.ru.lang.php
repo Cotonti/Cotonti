@@ -80,6 +80,8 @@ $L['core_time'] = 'Время и дата';
 $L['core_title'] = 'Заголовки (тэг &lt;title&gt;)';
 $L['core_users'] = &$L['Users'];
 
+$L['cfg_struct_defaults'] = 'Настройки по умолчанию для структуры';
+
 /**
  * Config Section
  * E-mail Subsection
@@ -279,6 +281,9 @@ $L['ext_config_error'] = 'Ошибка настройки конфигураци
 $L['ext_config_installed'] = 'Конфигурация установлена';
 $L['ext_config_uninstalled'] = 'Конфигурация удалена';
 $L['ext_config_updated'] = 'Опции конфигурации обновлены';
+$L['ext_config_struct_error'] = 'Ошибка настройки конфигурации структуры';
+$L['ext_config_struct_installed'] ='Конфигурация структуры установлена';
+$L['ext_config_struct_updated'] = 'Опции конфигурации структуры обновлены';
 $L['ext_dependency_error'] = '{$dep_type} &quot;{$dep_name}&quot; required by {$type} &quot;{$name}&quot; is neither installed nor selected for installation';
 $L['ext_executed_php'] = 'Выполнена часть PHP-хэндлера: {$ret}';
 $L['ext_executed_sql'] = 'Выполнена часть SQL-хэндлера: {$ret}';

@@ -91,12 +91,12 @@ $cache && $cache->init();
 if ($cache && $cot_cfg)
 {
 	$cfg = array_merge($cot_cfg, $cfg);
-	unset($cot_cfg);
 }
 else
 {
-	$sql_config = $db->query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config");
-
+	// Part 1: Load main configuration
+	$sql_config = $db->query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config
+		WHERE config_subcat = ''");
 	while ($row = $sql_config->fetch())
 	{
 		if ($row['config_owner'] == 'core')
@@ -112,9 +112,7 @@ else
 			$cfg['plugin'][$row['config_cat']][$row['config_name']] = $row['config_value'];
 		}
 	}
-	$cfg['css'] = $cfg['defaulttheme'];
-
-	$cache && $cache->db->store('cot_cfg', $cfg, 'system');
+	$sql_config->closeCursor();
 }
 // Mbstring options
 mb_internal_encoding('UTF-8');
@@ -384,6 +382,52 @@ $n = cot_import('n', 'G', 'ALP', 24);
 $a = cot_import('a', 'G', 'ALP', 24);
 $b = cot_import('b', 'G', 'ALP', 24);
 
+/* ======== Language ======== */
+$lang = $usr['lang'];
+require_once cot_langfile('main', 'core');
+
+/* ======== Category Structure ======== */
+if (!$structure)
+{
+	cot_load_structure();
+	$cache && $cache->db->store('structure', $structure, 'system');
+}
+$cot_cat = $structure['page'];
+
+if (!$cache || !$cot_cfg)
+{
+	// Load structure configuration
+	$sql_config = $db->query("SELECT config_owner, config_cat, config_subcat, config_name, config_value FROM $db_config
+		WHERE config_owner = 'module' AND config_subcat != ''");
+	while ($row = $sql_config->fetch())
+	{
+		$cfg[$row['config_cat']][$row['config_subcat']][$row['config_name']] = $row['config_value'];
+	}
+	$sql_config->closeCursor();
+
+	// Fill missing options with default values
+	foreach ($structure as $module => $mod_struct)
+	{
+		if (is_array($cfg[$module]['__default']))
+		{
+			foreach ($mod_struct as $cat => $row)
+			{
+				foreach ($cfg[$module]['__default'] as $key => $val)
+				{
+					if (!isset($cfg[$module][$cat][$key]))
+					{
+						$cfg[$module][$cat][$key] = $val;
+					}
+				}
+			}
+		}
+	}
+
+	// Save configuration at this point
+	$cache && $cache->db->store('cot_cfg', $cfg, 'system');
+}
+unset($cot_cfg);
+
 /* ======== Who's online (part 1) and shield protection ======== */
 
 if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
@@ -428,10 +472,6 @@ if (!$cfg['disablewhosonline'] || $cfg['shieldenabled'])
 		}
 	}
 }
-
-/* ======== Language ======== */
-$lang = $usr['lang'];
-require_once cot_langfile('main', 'core');
 
 /* ======== Theme / color scheme ======== */
 
@@ -485,13 +525,6 @@ require_once './images/icons/' . $usr['icons'] . '/resources.php';
 
 $out['copyright'] = "<a href=\"http://www.cotonti.com\">".$L['foo_poweredby']." Cotonti</a>";
 
-/* ======== Categories ======== */
-if (!$structure)
-{
-	cot_load_structure();
-	$cache && $cache->db->store('structure', $structure, 'system');
-}
-$cot_cat = $structure['page'];
 /* ======== Various ======== */
 
 $cot_yesno[0] = $L['No'];
