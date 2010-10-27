@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.Rights}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 			<form name="saverightsbyitem" id="saverightsbyitem" action="{ADMIN_RIGHTSBYITEM_FORM_URL}" method="post" class="ajax">
@@ -49,7 +48,6 @@
 					</tr>
 				</table>
 			</form>
-	</div>
 <!-- END: MAIN -->
 
 <!-- BEGIN: RIGHTSBYITEM_HELP -->

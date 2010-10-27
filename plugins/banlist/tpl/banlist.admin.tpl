@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.Banlist}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 			<h3>{PHP.L.editdeleteentries}:</h3>
@@ -52,5 +51,4 @@
 				</tr>
 			</table>
 			</form>
-	</div>
 <!-- END: MAIN -->

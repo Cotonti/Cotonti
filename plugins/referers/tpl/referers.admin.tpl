@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.Referers}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 <!-- IF {PHP.usr.isadmin} -->
@@ -40,5 +39,5 @@
 				</tr>
 			</table>
 <!-- ENDIF -->
-	</div>
+
 <!-- END: MAIN -->

@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-<div id="ajaxBlock">
 	<h2>{PHP.L.Trashcan}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 	<ul class="follow">
@@ -42,5 +41,4 @@
 	</table>
 	<!-- END: TRASHCAN_ROW -->
 	<span class="a1">{PHP.L.Total}: {ADMIN_TRASHCAN_TOTALITEMS}</span>
-</div>
 <!-- END: MAIN -->

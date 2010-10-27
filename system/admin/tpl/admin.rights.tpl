@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.Rights}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 		<form name="saverights" id="saverights" action="{ADMIN_RIGHTS_FORM_URL}" method="post" class="ajax">
@@ -61,7 +60,6 @@
 				<input type="submit" class="submit" value="{PHP.L.Update}" />
 			</div>
 		</form>
-	</div>
 <!-- END: MAIN -->
 
 <!-- BEGIN: RIGHTS_HELP -->

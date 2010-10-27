@@ -10,7 +10,7 @@
 			});
 		});
 	</script>
-	<div id="ajaxBlock">
+
 		<h2>{PHP.L.Pages} ({ADMIN_PAGE_TOTALDBPAGES})</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 		<ul class="follow">
@@ -101,5 +101,4 @@
 				{ADMIN_PAGE_PAGINATION_PREV}{ADMIN_PAGE_PAGNAV}{ADMIN_PAGE_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_PAGE_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_PAGE_ON_PAGE}</span>
 			</p>
 		</form>
-	</div>
 <!-- END: MAIN -->

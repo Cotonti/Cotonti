@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.Forums}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 		<ul class="follow">
@@ -158,5 +157,5 @@
 			</table>
 		</form>
 <!-- END: DEFULT -->
-	</div>
+
 <!-- END: MAIN -->

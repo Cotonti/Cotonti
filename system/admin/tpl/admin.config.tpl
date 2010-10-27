@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.Configuration}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 <!-- BEGIN: EDIT -->
@@ -67,5 +66,4 @@
 			</tr>
 		</table>
 <!-- END: DEFAULT -->
-	</div>
 <!-- END: MAIN -->

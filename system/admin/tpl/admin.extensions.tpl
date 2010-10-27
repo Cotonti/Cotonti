@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 	{FILE ./themes/nemesis/warnings.tpl}
 <!-- BEGIN: CONFIG_URL -->
 	<ul>
@@ -265,5 +264,4 @@
 			<li><a href="{ADMIN_EXTENSIONS_EDIT_CONTINUE_URL}" class="ajax">{PHP.L.Clickhere}</a></li>
 		</ul>
 <!-- END: EDIT -->
-	</div>
 <!-- END: MAIN -->
