@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.Ratings}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 			<ul class="follow">
@@ -28,5 +27,4 @@
 			</table>
 			<p class="paging">{ADMIN_RATINGS_PAGINATION_PREV}{ADMIN_RATINGS_PAGNAV}{ADMIN_RATINGS_PAGINATION_NEXT}<span class="a1">{PHP.L.adm_ratings_totalitems}: {ADMIN_RATINGS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_RATINGS_ON_PAGE}</span><span class="a1">{PHP.L.adm_ratings_totalvotes}: {ADMIN_RATINGS_TOTALVOTES}</span></p>
 			</tr>
-	</div>
 <!-- END: MAIN -->

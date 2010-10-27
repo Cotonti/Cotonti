@@ -12,7 +12,9 @@
 	<h1>{PHP.L.Crumbs}: {ADMIN_TITLE}</h1>
 
 	<div id="main" class="clear">
+		<div id="ajaxBlock">
 		{ADMIN_MAIN}
+		</div>
 	</div>
 
 	<div class="help">

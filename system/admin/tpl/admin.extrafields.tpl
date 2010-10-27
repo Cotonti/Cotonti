@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_extrafields}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 		<form action="{ADMIN_EXTRAFIELDS_URL_FORM_EDIT}" method="post">
@@ -105,6 +104,4 @@
 				</tr>
 			</table>
 		</form>
-	</div>
-
 <!-- END: MAIN -->

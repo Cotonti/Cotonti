@@ -100,11 +100,11 @@ function ajaxSend(settings) {
 		url: url,
 		data: data,
 		beforeSend: function() {
-			$('#' + settings.divId).append('<span style="position:relative;left:' + ($('#' + settings.divId).width()/2 - 16) + 'px;top:-' + ($('#' + settings.divId).height()/2 - 16) + 'px;" class="loading" id="loading"><img src="images/spinner.gif" alt="loading"/></span>');
+			$('#' + settings.divId).append('<span style="position:relative;left:' + ($('#' + settings.divId).width()/2 - 16) + 'px;top:-' + ($('#' + settings.divId).height()/2 - 16) + 'px;" class="loading" id="loading"><img src="images/spinner_bigger.gif" alt="loading"/></span>');
 		},
 		success: function(msg) {
 			$('#loading').remove();
-			$('#' + settings.divId).fadeOut().replaceWith(msg).fadeIn();
+			$('#' + settings.divId).hide().html(msg).fadeIn(500);
 		},
 		error: function(msg) {
 			$('#loading').remove();

@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>BBCodes</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 			<h3>{PHP.L.editdeleteentries}:</h3>
@@ -67,5 +66,4 @@
 				</tr>
 				</form>
 			</table>
-	</div>
 <!-- END: MAIN -->

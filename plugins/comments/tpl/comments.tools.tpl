@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.Comments}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 			<ul class="follow">
@@ -30,5 +29,4 @@
 <!-- END: ADMIN_COMMENTS_ROW -->
 			</table>
 			<p class="paging">{ADMIN_COMMENTS_PAGINATION_PREV}{ADMIN_COMMENTS_PAGNAV}{ADMIN_COMMENTS_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_COMMENTS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_COMMENTS_COUNTER_ROW}</span></p>
-	</div>
 <!-- END: MAIN -->

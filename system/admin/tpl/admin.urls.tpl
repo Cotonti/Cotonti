@@ -1,5 +1,4 @@
 <!-- BEGIN: MAIN -->
-	<div id="ajaxBlock">
 		<h2>{PHP.L.adm_urls_rules}</h2>
 		{FILE ./themes/nemesis/warnings.tpl}
 <!-- BEGIN: HTA -->
@@ -68,5 +67,4 @@
 			</tr>
 		</table>
 		</form>
-	</div>
 <!-- END: MAIN -->
