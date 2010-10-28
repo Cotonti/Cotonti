@@ -48,6 +48,13 @@ switch($n)
 		$o = empty($o) ? 'core' : $o;
 		$p = empty($p) ? 'global' : $p;
 
+		/* === Hook  === */
+		foreach (cot_getextplugins('admin.config.edit.first') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
 		// For a subcat, load default category config
 		if (!empty($sub) && $sub != '__default')
 		{
@@ -106,6 +113,12 @@ switch($n)
 					}
 				}
 			}
+			/* === Hook  === */
+			foreach (cot_getextplugins('admin.config.edit.update.done') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			$cache && $cache->clear();
 			cot_message('Updated');
 		}
@@ -142,6 +155,12 @@ switch($n)
 					WHERE config_name = ?' AND config_owner = ? AND config_cat = ? $where_cat",
 					array_merge(array($v, $o, $p), $sub_param));
 			}
+			/* === Hook  === */
+			foreach (cot_getextplugins('admin.config.edit.reset.done') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			$cache && $cache->clear();
 		}
 
@@ -197,6 +216,13 @@ switch($n)
 		{
 			cot_require_lang($p, $o);
 		}
+
+		/* === Hook  === */
+		foreach (cot_getextplugins('admin.config.edit.main') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 
 		$inside_fieldset = false;
 		/* === Hook - Part1 : Set === */
