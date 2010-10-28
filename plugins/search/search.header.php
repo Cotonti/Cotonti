@@ -28,7 +28,7 @@ if (!empty($highlight))
 	$highlight = explode(' ', $highlight);
 	foreach ($highlight as $key=>$value)
 	{
-		$out['compopup'] .= '$.highlight(this, \''.strtoupper($value).'\');';
+		$out['compopup'] .= '$.highlight(this, \''.mb_strtoupper($value).'\');';
 	}
 
 	$out['compopup'] .= '});});</script>';
