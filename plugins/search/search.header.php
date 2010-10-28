@@ -25,7 +25,7 @@ if (!empty($highlight))
 	$highlight = explode(' ', $highlight);
 	foreach ($highlight as $key=>$value)
 	{
-		$search_embed .= '$.highlight(this, \''.strtoupper($value).'\');';
+		$search_embed .= '$.highlight(this, \''.mb_strtoupper($value).'\');';
 	}
 
 	$search_embed .= '});});';

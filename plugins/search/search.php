@@ -261,6 +261,7 @@ if (!empty($sq))
 		{
 			$t->parse('MAIN.RESULTS.PAGES');
 		}
+		unset($where_and, $where_or, $where);
 	}
 	if (($tab == 'frm' || empty($tab)) && is_array($cfg['forums']) && $cfg['plugin']['search']['forumsearch'] && !$cot_error)
 	{
@@ -268,10 +269,10 @@ if (!empty($sq))
 			"s.fs_id IN ('".$db->prep(implode("','", $rsearch['frm']['sub']))."')" : "s.fs_id IN ('".implode("','", $frm_catauth)."')";
 		$where_and['reply'] = ($rsearch['frm']['reply'] == '1') ? "t.ft_postcount > 1" : "";
 		$where_and['time'] = ($rsearch['set']['limit'] > 0) ? "p.fp_creation >= ".$rsearch['set']['from']." AND p.fp_updated <= ".$rsearch['set']['to'] : "";
-		$where_and['user'] .= (!empty($touser)) ? "p.fp_posterid ".$touser_ids : "";
+		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser_ids : "";
 
-		$where_or['title'] = ($rsearch['frm']['title'] == 1) ? "(t.ft_title LIKE '".$db->prep($sqlsearch)."'" : "";
-		$where_or['text'] .= (($rsearch['frm']['text'] == 1)) ? "p.fp_text LIKE '".$db->prep($sqlsearch)."'" : "";
+		$where_or['title'] = ($rsearch['frm']['title'] == 1) ? "t.ft_title LIKE '".$db->prep($sqlsearch)."'" : "";
+		$where_or['text'] = (($rsearch['frm']['text'] == 1)) ? "p.fp_text LIKE '".$db->prep($sqlsearch)."'" : "";
 
 		$where_or = array_diff($where_or, array(''));
 		count($where_or) || $where_or['title'] = "(t.ft_title LIKE '".$db->prep($sqlsearch)."'";
