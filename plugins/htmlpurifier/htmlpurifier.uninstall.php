@@ -11,6 +11,9 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-@cot_rmdir($cfg['cache_dir'] . '/htmlpurifier');
+if (file_exists($cfg['cache_dir'] . '/htmlpurifier'))
+{
+	cot_rmdir($cfg['cache_dir'] . '/htmlpurifier');
+}
 
 ?>
