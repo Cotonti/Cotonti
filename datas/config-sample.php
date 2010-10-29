@@ -80,6 +80,8 @@ $cfg['authcache'] = TRUE;			// Auth cache in SQL tables. Set it FALSE if your hu
 $cfg['customfuncs'] = FALSE;		// Includes file named functions.custom.php
 $cfg['new_install'] = 1;			// This setting denotes a new install step and redirects you to the install page
 									// If you already have Cotonti installed then set it to FALSE or remove it
+$cfg['enable_obsolete'] = FALSE;	// Set this true to enable Genoa/Seditio compatibility layer
+									// by the cost of lower performance.
 
 // ========================
 // Directory paths

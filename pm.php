@@ -1,6 +1,6 @@
 <?php
 /**
- * Private messages loader
+ * Private messages module
  *
  * @package Cotonti
  * @version 0.7.0
@@ -10,14 +10,31 @@
  * @deprecated Deprecated since Cotonti Siena
  */
 
+// Environment setup
 define('COT_CODE', true);
+define('COT_MODULE', true);
+define('COT_PM', true);
+$env['ext'] = 'pm';
+$env['location'] = 'private_messages';
 
+// Basic requirements
 require_once './datas/config.php';
-require_once $cfg['system_dir'].'/functions.php';
+require_once $cfg['system_dir'] . '/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
+require_once $cfg['system_dir'] . '/cotemplate.php';
 
-parse_str($_SERVER['QUERY_STRING'], $params);
+// Additional API requirements
+cot_require_api('extrafields');
+cot_require('users');
 
-$env['status'] = '301 Moved Permanently';
-cot_redirect(cot_url('pm', $params));
+// Self requirements
+cot_require('pm');
+
+// Mode choice
+if (!in_array($m, array('send', 'message')))
+{
+	$m = 'list';
+}
+
+require_once cot_incfile('pm', $m);
 ?>

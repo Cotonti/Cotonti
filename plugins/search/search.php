@@ -333,16 +333,16 @@ if (!empty($sq))
 }
 
 // Search title
-$plugin_title  = cot_rc_link(cot_url('index', 'e=search'), $L['plu_title_all']);
+$plugin_title  = cot_rc_link(cot_url('plug', 'e=search'), $L['plu_title_all']);
 if (!empty($tab))
 {
-	$plugin_title .= ' '.$cfg['separator'].' '. cot_rc_link(cot_url('index', 'e=search&tab='.$tab), $L['plu_title_'.$tab.'tab']);
+	$plugin_title .= ' '.$cfg['separator'].' '. cot_rc_link(cot_url('plug', 'e=search&tab='.$tab), $L['plu_title_'.$tab.'tab']);
 	$L['plu_title'] = $L['plu_title_'.$tab.'tab'];
 }
 $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = empty($sq) ? $L['plu_title'] : htmlspecialchars(strip_tags($sq)).' - '.$L['plu_result'];
 $t->assign(array(
-	'PLUGIN_SEARCH_ACTION' => cot_url('index', 'e=search&tab='.$tab),
+	'PLUGIN_SEARCH_ACTION' => cot_url('plug', 'e=search&tab='.$tab),
 	'PLUGIN_SEARCH_TEXT' => cot_inputbox('text', 'rsq', htmlspecialchars($sq), 'size="32" maxlength="'.$cfg['plugin']['search']['maxsigns'].'"'),
 	'PLUGIN_SEARCH_USER' => cot_inputbox('text', 'rsuser', htmlspecialchars($rsearch['set']['user']), 'id="rsuser" size="32"'),
 	'PLUGIN_SEARCH_DATE_SELECT' => cot_selectbox($rsearch['set']['limit'], 'rwithin', range(0, 5), array($L['plu_any_date'], $L['plu_last_2_weeks'], $L['plu_last_1_month'], $L['plu_last_3_month'], $L['plu_last_1_year'], $L['plu_need_datas']), false),

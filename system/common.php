@@ -41,12 +41,6 @@ $sys['now_offset'] = $sys['now'] - $cfg['servertimezone']*3600;
 $site_id = 'ct'.substr(md5(empty($cfg['site_id']) ? $cfg['mainurl'] : $cfg['site_id']), 0, 16);
 $sys['site_id'] = $site_id;
 
-if (empty($z))
-{
-	$z = cot_import('z', 'G', 'ALP');
-	$z = empty($z) ? 'index' : $z;
-}
-
 session_start();
 
 /* =========== Early page cache ==========*/
@@ -56,10 +50,9 @@ if ($cfg['cache'] && !$cfg['devmode'])
 	$cache = new Cache();
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' && empty($_COOKIE[$site_id]) && empty($_SESSION[$site_id]))
 	{
-		$cache_z = ($z == 'list') ? 'page' : $z;
-		if ($cfg["cache_$cache_z"])
+		if ($cfg['cache_' . $env['ext']])
 		{
-			$cache->page->init($cache_z, $cfg['defaulttheme']);
+			$cache->page->init($env['ext'], $cfg['defaulttheme']);
 			$cache->page->read();
 		}
 	}
@@ -375,8 +368,6 @@ if ($cfg['maintenance'])
 
 /* ======== Zone variables ======== */
 
-$z_tmp = cot_import('z', 'G', 'ALP', 32);
-$z = empty($z_tmp) ? $z : $z_tmp;
 $m = cot_import('m', 'G', 'ALP', 24);
 $n = cot_import('n', 'G', 'ALP', 24);
 $a = cot_import('a', 'G', 'ALP', 24);

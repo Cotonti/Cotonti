@@ -9,7 +9,7 @@
 					<td class="width20">{PHP.L.plu_search_req}:</td>
 					<td class="width80">
 						{PLUGIN_SEARCH_TEXT} <input type="submit" value="{PHP.L.plu_search_key}" />
-						<p class="lower small"><a href="index.php?e=search">{PHP.L.plu_tabs_all}</a> {PHP.cfg.separator} <a href="index.php?e=search&amp;tab=pag">{PHP.L.Pages}</a> {PHP.cfg.separator} <a href="index.php?e=search&amp;tab=frm">{PHP.L.Forums}</a></p>
+						<p class="lower small"><a href="plug.php?e=search">{PHP.L.plu_tabs_all}</a> {PHP.cfg.separator} <a href="plug.php?e=search&amp;tab=pag">{PHP.L.Pages}</a> {PHP.cfg.separator} <a href="plug.php?e=search&amp;tab=frm">{PHP.L.Forums}</a></p>
 					</td>
 				</tr>
 				<tr>

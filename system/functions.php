@@ -2644,11 +2644,7 @@ function cot_require_lang($name, $type = 'plug', $default = 'en')
 function cot_require_rc($name, $is_plugin = false)
 {
 	global $cfg, $L, $Ls, $R, $themeR, $usr;
-	$rc_file = cot_incfile($name, 'resources', $is_plugin);
-	if(file_exists($rc_file))
-	{
-		require_once $rc_file;
-	}
+	require_once cot_incfile($name, 'resources', $is_plugin);
 	// Theme resources override
 	if($themeR)
 	{
@@ -3987,9 +3983,14 @@ function cot_get_plural($plural, $lang, $is_frac = false)
  * ============================================================================
 */
 
-if ($cfg['customfuncs'])
+if (isset($cfg['customfuncs']) && $cfg['customfuncs'])
 {
-	require_once($cfg['system_dir'].'/functions.custom.php');
+	require_once $cfg['system_dir'] . '/functions.custom.php';
+}
+
+if (isset($cfg['enable_obsolete']) && $cfg['enable_obsolete'])
+{
+    require_once $cfg['system_dir'] . '/obsolete.php';
 }
 
 ?>

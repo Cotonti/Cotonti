@@ -14,7 +14,7 @@ define('COT_CODE', TRUE);
 define('COT_INSTALL', TRUE);
 //define('COT_ADMIN', TRUE);
 $env['location'] = 'install';
-$z = 'install';
+$env['ext'] = 'install';
 
 if (file_exists('./datas/config.php'))
 {
@@ -100,11 +100,11 @@ $file['sql'] = './setup/install.sql';
 
 if (!$cfg['new_install'])
 {
-	include cot_incfile($z, 'update');
+	include cot_incfile('install', 'update');
 }
 else
 {
-	include cot_incfile($z, 'install');
+	include cot_incfile('install', 'install');
 }
 
 ?>

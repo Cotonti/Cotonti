@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=View
 Description=Views static contents from datas/html
-Version=0.7.0.1
+Version=0.7.0.2
 Date=2010-jun-22
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010

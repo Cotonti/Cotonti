@@ -16,7 +16,7 @@ Hooks=header.main
  */
 
 defined('COT_CODE') or die('Wrong URL');
-if($cfg['plugin']['hits'] && $z != 'admin')
+if($cfg['plugin']['hits'] && $env['ext'] != 'admin')
 {
 	cot_require('hits', true);
 

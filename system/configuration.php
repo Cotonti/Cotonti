@@ -327,12 +327,13 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
         else
         {
             $where .= " AND config_name IN (";
-            for ($i = 0; $i < 0; $i++)
+            for ($i = 0; $i < $cnt; $i++)
             {
                 if ($i > 0)
                     $where .= ',';
                 $where .= "'" . $db->prep($option[$i]) . "'";
             }
+			$where .= ')';
             unset($option);
         }
     }

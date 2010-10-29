@@ -13,12 +13,12 @@ define('COT_CODE', TRUE);
 define('COT_ADMIN', TRUE);
 define('COT_CORE', TRUE);
 $env['location'] = 'administration';
-$z = 'admin';
+$env['ext'] = 'admin';
 
 require_once './datas/config.php';
-require_once $cfg['system_dir'].'/functions.php';
+require_once $cfg['system_dir'] . '/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
-cot_require_api('cotemplate');
+require_once $cfg['system_dir'] . '/cotemplate.php';
 
 cot_require('admin');
 

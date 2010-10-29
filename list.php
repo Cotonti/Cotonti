@@ -1,9 +1,10 @@
 <?php
 /**
- * List loader
+ * List loader. Permanently (SE-safely) redirects to page module.
  *
  * @package Cotonti
  * @version 0.7.0
+ * @deprecated List module no longer exists since Cotonti Siena
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD

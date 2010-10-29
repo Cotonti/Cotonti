@@ -13,12 +13,12 @@ define('COT_CODE', TRUE);
 define('COT_MESSAGE', TRUE);
 define('COT_CORE', TRUE);
 $env['location'] = 'messages';
-$z = 'message';
+$env['ext'] = 'message';
 
 require_once './datas/config.php';
-require_once $cfg['system_dir'].'/functions.php';
+require_once $cfg['system_dir'] . '/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
-cot_require_api('cotemplate');
+require_once $cfg['system_dir'] . '/cotemplate.php';
 
 require_once cot_langfile('message', 'core');
 
