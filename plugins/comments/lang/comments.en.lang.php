@@ -14,7 +14,7 @@ defined('COT_CODE') or die('Wrong URL.');
 /**
  * Plugin Config
  */
-
+$L['cfg_enable_comments'] = array('Enable comments');
 $L['cfg_mail'] = array('Notify about new comments by email');
 $L['cfg_markitup'] = array('Use markitup'); // New in N-0.1.0
 $L['cfg_markup'] = array('Enable markup in comments');
@@ -35,7 +35,6 @@ $L['Comment'] = 'Comment';
 $L['Comments'] = 'Comments';
 $L['Newcomment'] = 'New comment';
 
-$L['Comments_are'] = 'Comments are';
 $L['comm_on_page'] = 'on page'; // New in N-0.0.2
 
 $L['com_closed'] = 'Adding comments has been disabled for this item'; // New in 0.1.0
@@ -44,12 +43,6 @@ $L['com_commenttoolong'] = 'The comment is too long';
 $L['com_commenttooshort'] = 'The comment is too short or missing';
 $L['com_nocommentsyet'] = 'No comments yet';
 $L['com_regonly'] = 'Only registered users can post new comments';
-
-$L['Disable'] = 'Disable';
-$L['Enable'] = 'Enable';
-$L['for_this_area'] = 'for this module/plugin';
-$L['for_this_category'] = 'for this category';
-$L['for_this_item'] = 'for this item';
 
 $L['plu_comgup'] = ' left';
 $L['plu_comhint'] = 'Your comment will be available for editing for %1$s';
@@ -70,7 +63,6 @@ $L['rss_original'] = 'Original message'; // New in N-0.0.2
 
 $L['home_newcomments'] = 'New comments';
 $L['core_comments'] = &$L['Comments'];
-$L['adm_enablecomments'] = 'Enable comments'; // New in N-0.1.0
 $L['adm_comm_already_del'] = 'Comment deleted'; // New in N-0.0.2
 
 /**

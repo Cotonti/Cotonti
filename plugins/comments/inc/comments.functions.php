@@ -16,31 +16,31 @@ cot_require_rc('comments', true);
 
 // Table name globals
 $GLOBALS['db_com'] = (isset($GLOBALS['db_com'])) ? $GLOBALS['db_com'] : $GLOBALS['db_x'] . 'com';
-$GLOBALS['db_com_settings'] = (isset($GLOBALS['db_com_settings'])) ? $GLOBALS['db_com_settings'] : $GLOBALS['db_x'] . 'com_settings';
 
 /**
  * Returns number of comments for item
  *
- * @param string $area Site area
+ * @param string $ext_name Target extension name
  * @param string $code Item code
  * @return int
  */
-function cot_comments_count($area, $code)
+function cot_comments_count($ext_name, $code)
 {
 	global $db, $db_com;
 	static $com_cache = array();
 
-	if (isset($com_cache[$area][$code]))
+	if (isset($com_cache[$ext_name][$code]))
 	{
-		return $com_cache[$area][$code];
+		return $com_cache[$ext_name][$code];
 	}
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_area='$area' AND com_code='$code'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_area = ? AND com_code = ?", array($ext_name, $code));
 
-	if ($row = $sql->fetch(PDO::FETCH_NUM))
+	if ($sql->rowCount() == 1)
 	{
-		$com_cache[$area][$code] = (int) $row[0];
-		return (int) $row[0];
+		$cnt = (int) $sql->fetchColumn();
+		$com_cache[$ext_name][$code] = $cnt;
+		return $cnt;
 	}
 	else
 	{
@@ -51,20 +51,19 @@ function cot_comments_count($area, $code)
 /**
  * Generates comments display for a given item
  *
- * @param string $area Module or plugin code
+ * @param string $ext_name Module or plugin code
  * @param string $code Item identifier
  * @param string $cat Item category code (optional)
  * @return string Rendered HTML output for comments
  */
-function cot_comments_display($area, $code, $cat = '')
+function cot_comments_display($ext_name, $code, $cat = '')
 {
 	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $z;
 
 	// Check permissions and enablement
 	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'comments');
 
-	$enabled_row = cot_comments_enabled($area, $cat, $code, true);
-	$enabled = $enabled_row['coms_enabled'];
+	$enabled = cot_comments_enabled($ext_name, $cat, $code);
 
 	if (!$auth_read || !$enabled && !$auth_admin)
 	{
@@ -75,7 +74,7 @@ function cot_comments_display($area, $code, $cat = '')
 	$link_area = $z;
 	$link_params = $_SERVER['QUERY_STRING'];
 
-	$_SESSION['cot_com_back'][$area][$cat][$code] = array($link_area, $link_params);
+	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = array($link_area, $link_params);
 
 	$d_var = 'dcm';
 	$d = cot_import($d_var, 'G', 'INT');
@@ -97,7 +96,7 @@ function cot_comments_display($area, $code, $cat = '')
 
 	$t->assign(array(
 		'COMMENTS_CODE' => $code,
-		'COMMENTS_FORM_SEND' => cot_url('plug', "e=comments&a=send&area=$area&cat=$cat&item=$code"),
+		'COMMENTS_FORM_SEND' => cot_url('plug', "e=comments&a=send&area=$ext_name&cat=$cat&item=$code"),
 		'COMMENTS_FORM_AUTHOR' => $usr['name'],
 		'COMMENTS_FORM_AUTHORID' => $usr['id'],
 		'COMMENTS_FORM_TEXT' => $auth_write && $enabled ? cot_textarea('rtext', $rtext, 10, 120, '', 'input_textarea_minieditor')
@@ -128,11 +127,11 @@ function cot_comments_display($area, $code, $cat = '')
 		$t->parse('COMMENTS.COMMENTS_CLOSED');
 	}
 
-	$sql = $db->query("SELECT c.*, u.* FROM $db_com AS c
-		LEFT JOIN $db_users AS u ON u.user_id=c.com_authorid
-		WHERE com_area='$area' AND com_code='$code' ORDER BY com_id ASC LIMIT $d, "
-		.$cfg['plugin']['comments']['maxcommentsperpage']);
-
+	$sql = $db->query("SELECT c.*, u.*
+		FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid
+		WHERE com_area = ? AND com_code = ? ORDER BY com_id ASC LIMIT ?, ?",
+		array($ext_name, $code, (int) $d, (int) $cfg['plugin']['comments']['maxcommentsperpage']));
+	cot_watch($sql->rowCount(), $ext_name, $code);
 	if ($sql->rowCount() > 0 && $enabled)
 	{
 		$i = $d;
@@ -190,10 +189,10 @@ function cot_comments_display($area, $code, $cat = '')
 			$t->parse('COMMENTS.COMMENTS_ROW');
 		}
 
-		$totalitems = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_code='$code'")->fetchColumn();
+		$totalitems = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_code = ?", array($code))->fetchColumn();
 		$pagenav = cot_pagenav($link_area, $link_params, $d, $totalitems,
 			$cfg['plugin']['comments']['maxcommentsperpage'], $d_var, '#comments',
-			$cfg['jquery'] && $cfg['ajax_enabled'], 'comments', 'plug', "e=comments&area=$area&cat=$cat&item=$code");
+			$cfg['jquery'] && $cfg['ajax_enabled'], 'comments', 'plug', "e=comments&area=$ext_name&cat=$cat&item=$code");
 		if (!$cfg['plugin']['comments']['expand_comments'])
 		{
 			// A dirty fix for pagination anchors
@@ -221,40 +220,6 @@ function cot_comments_display($area, $code, $cat = '')
 		$t->parse('COMMENTS.COMMENTS_EMPTY');
 	}
 
-	if ($auth_admin)
-	{
-		// Enable/disable comments for this item/category/module
-
-		if (!empty($enabled_row['coms_code']))
-		{
-			$enablement_area = $L['for_this_item'];
-			$enablement_type = 'item';
-		}
-		elseif (!empty($enabled_row['coms_cat']))
-		{
-			$enablement_area = $L['for_this_category'];
-			$enablement_type = 'cat';
-		}
-		else
-		{
-			$enablement_area = $L['for_this_area'];
-			$enablement_type = 'area';
-		}
-
-		$enablement_change = cot_radiobox((int) !$enabled, 'state', array(1, 0), array($L['Enable'], $L['Disable']));
-		$enablement_selection = cot_selectbox($enablement_type, 'area', array('item', 'cat', 'area'),
-			array($L['for_this_item'], $L['for_this_category'], $L['for_this_area']), false);
-
-		$t->assign(array(
-			'COMMENTS_ENABLEMENT_ACTION' => cot_url('plug', "e=comments&a=enable&area=$area&cat=$cat&item=$code"),
-			'COMMENTS_ENABLEMENT_STATE' => $enabled ? $L['Enabled'] : $L['Disabled'],
-			'COMMENTS_ENABLEMENT_AREA' => $enablement_area,
-			'COMMENTS_ENABLEMENT_CHANGE' => $enablement_change,
-			'COMMENTS_ENABLEMENT_AREA_SELECTION' => $enablement_selection
-		));
-		$t->parse('COMMENTS.COMMENTS_ENABLEMENT');
-	}
-
 	cot_display_messages($t);
 
 	/* == Hook == */
@@ -271,63 +236,25 @@ function cot_comments_display($area, $code, $cat = '')
 }
 
 /**
- * Checks if comments are enabled for specific area and category
+ * Checks if comments are enabled for specific extension and category
  *
- * @param string $area Area name
+ * @param string $ext_name Extension name
  * @param string $cat Category name or empty if checking the entire area
- * @param string $code Item code
- * @param bool $return_row If true returns the matching row instead of bool result, used to detect the enablement type
+ * @param string $item Item code, not yet supported
  * @return bool
  */
-function cot_comments_enabled($area, $cat = '', $code = '', $return_row = false)
+function cot_comments_enabled($ext_name, $cat = '', $item = '')
 {
-	global $db, $db_com_settings;
-	// A static call cache saves us from duplicate queries
-	static $com_cache = array();
-	// FIXME row cache and cache per item
-	if (isset($com_cache[$area][$cat]) && !$return_row)
+	global $cfg, $cot_modules;
+	
+	if (isset($cot_modules[$ext_name]))
 	{
-		return $com_cache[$area][$cat];
-	}
-
-	if (!cot_auth('plug', 'comments', 'R'))
-	{
-		$com_cache[$area][$cat] = false;
-		return false;
-	}
-
-	$enabled = true;
-	if (!empty($cat) && !empty($code))
-	{
-		$extra_where = "OR coms_area = '$area' AND coms_cat = '$cat' AND coms_code = ''
-			OR coms_area = '$area' AND coms_cat = '' AND coms_code = ''";
-	}
-	elseif (!empty($cat) || !empty($code))
-	{
-		$extra_where = "OR coms_area = '$area' AND coms_cat = '' AND coms_code = ''";
-	}
-	$res = $db->query("SELECT coms_enabled, coms_area, coms_cat, coms_code FROM $db_com_settings
-		WHERE coms_area = '$area' AND coms_cat = '$cat' AND coms_code = '$code' $extra_where
-		ORDER BY coms_code DESC, coms_cat DESC LIMIT 1");
-	if ($row = $res->fetch())
-	{
-		$enabled &= (bool) $row['coms_enabled'];
-	}
-	$res->closeCursor();
-
-	$com_cache[$area][$cat] = $enabled;
-	if ($return_row)
-	{
-		if (!$row)
-		{
-			$row['coms_enabled'] = $enabled;
-			$row['coms_area'] = $area;
-		}
-		return $row;
+		return (bool) (isset($cfg[$ext_name][$cat]['enable_comments']) ? $cfg[$ext_name][$cat]['enable_comments']
+			: $cfg[$ext_name]['enable_comments']);
 	}
 	else
 	{
-		return $enabled;
+		return (bool) $cfg['plugin'][$ext_name]['enable_comments'];
 	}
 }
 
@@ -336,23 +263,24 @@ function cot_comments_enabled($area, $cat = '', $code = '', $return_row = false)
  *
  * @param string $link_area Target URL area for cot_url()
  * @param string $link_params Target URL params for cot_url()
- * @param string $area Module or plugin code
+ * @param string $ext_name Module or plugin code
  * @param string $code Item identifier
  * @param string $cat Item category code (optional)
  * @return string Rendered HTML output for comments
+ * @see cot_comments_count()
  */
-function cot_comments_link($link_area, $link_params, $area, $code, $cat = '')
+function cot_comments_link($link_area, $link_params, $ext_name, $code, $cat = '')
 {
 	global $cfg, $db, $R, $L, $db_com;
 
-	if (!cot_comments_enabled($area, $cat, $code))
+	if (!cot_comments_enabled($ext_name, $cat, $code))
 	{
 		return '';
 	}
 
 	$res = cot_rc('comments_link', array(
 		'url' => cot_url($link_area, $link_params, '#comments'),
-		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($area, $code) : ''
+		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($ext_name, $code) : ''
 	));
 	return $res;
 }
@@ -367,7 +295,7 @@ function cot_comments_newcount($timeback)
 {
 	global $db, $db_com;
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_date>'$timeback'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_com WHERE com_date > ?", array($timeback));
 	$newcomments = $sql->fetchColumn();
 	return $newcomments;
 }
@@ -380,9 +308,9 @@ function cot_comments_newcount($timeback)
  */
 function cot_comments_remove($area, $code)
 {
-	global $db, $db_com, $db_com_settings;
-	$db->delete($db_com, "com_area = '$area' AND com_code = '$code'");
-	$db->delete($db_com_settings, "coms_area = '$area' AND coms_code = '$code'");
+	global $db, $db_com;
+
+	$db->delete($db_com, 'com_area = ? AND com_code = ?', array($area, $code));
 }
 
 ?>

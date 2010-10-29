@@ -337,7 +337,7 @@ class CotDB extends PDO {
 			
 			$result = parent::prepare($query);
 			$this->_bindParams($result, $parameters);
-			if ($result->execute() === false)
+			if ($result->execute() === false && $this->errorCode() > 0)
 			{
 				cot_diefatal('SQL error: '.$this->error);
 			}
@@ -345,7 +345,7 @@ class CotDB extends PDO {
 		else
 		{
 			$result = parent::query($query);
-			if ($result === false)
+			if ($result === false && $this->errorCode() > 0)
 			{
 				cot_diefatal('SQL error: '.$this->error);
 			}

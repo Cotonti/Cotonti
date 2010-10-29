@@ -128,6 +128,37 @@ function cot_config_add($name, $options, $is_module = false, $category = '')
 }
 
 /**
+ * Implants given options into module configuration if they are not already there.
+ * Used by plugins which extend module behavior and need per-module or per-category
+ * options.
+ *
+ * @global array $cfg Configuration
+ * @param string $module_name Target module code
+ * @param array $options Array of implantable options, described in cot_config_add()
+ * @param bool $into_struct A flag indicating that config options should be implanted into
+ * module categories configuration rather than the module root configuration
+ * @return int Number of options actually implanted
+ * @see cot_config_add()
+ */
+function cot_config_implant($module_name, $options, $into_struct = false)
+{
+	global $cfg;
+
+	$category = $into_struct ? '__default' : '';
+	$add_options = array();
+	foreach ($options as $opt)
+	{
+		if (!$into_struct && !isset($cfg[$module_name][$opt['name']])
+			|| $into_struct && !isset($cfg[$module_name]['__default'][$opt['name']]))
+		{
+			$add_options[] = $opt;
+		}
+	}
+
+	return cot_config_add($module_name, $add_options, true, $category);
+}
+
+/**
  * Loads config structure from database into an array
  * @param string $name Extension code
  * @param bool $is_module TRUE if module, FALSE if plugin
