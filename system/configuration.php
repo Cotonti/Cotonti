@@ -123,8 +123,8 @@ function cot_config_add($name, $options, $is_module = false, $category = '')
 		);
 	}
    
-    $db->insert($db_config, $option_set);
-    return $db->affectedRows == $cnt;
+    $ins_cnt = $db->insert($db_config, $option_set);
+    return $ins_cnt == $cnt;
 }
 
 /**

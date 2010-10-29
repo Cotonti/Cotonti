@@ -242,11 +242,6 @@ function cot_extension_install($name, $is_module = false, $update = false)
 		}
 	}
 
-    if ($cot_error)
-    {
-        return false;
-    }
-
 	if ($update)
 	{
 		// Safely drop existing bindings
@@ -312,6 +307,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 		else
 		{
 			cot_error('ext_config_error');
+			return false;
 		}
 	}
 
@@ -346,6 +342,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			else
 			{
 				cot_error('ext_config_struct_error');
+				return false;
 			}
 		}
 	}
@@ -459,6 +456,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			else
 			{
 				cot_error(cot_rc('ext_executed_sql', array('ret' => $sql_err)));
+				return false;
 			}
 		}
 
@@ -475,6 +473,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			{
 				cot_error(cot_rc('ext_executed_php',
 					array('ret' => $L['Error'])));
+				return false;
 			}
 		}
 	}
@@ -518,7 +517,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
     cot_auth_reorder();
     $cache && $cache->db->remove('cot_plugins', 'system');
 
-    return !$cot_error;
+    return true;
 }
 
 /**
