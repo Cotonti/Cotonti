@@ -1,13 +1,12 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=list.loop
-Tags=list.tpl:{LIST_ROW_COMMENTS}
+Hooks=admin.config.edit.main
 [END_COT_EXT]
 ==================== */
 
 /**
- * Comments system for Cotonti
+ * Loads language string for comments_enable option in Admin/Config
  *
  * @package comments
  * @version 0.7.0
@@ -18,8 +17,6 @@ Tags=list.tpl:{LIST_ROW_COMMENTS}
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('comments', true);
-
-$t->assign('LIST_ROW_COMMENTS', cot_comments_link('page', $page_urlp, 'page', $pag['page_id'], $c));
+cot_require_lang('comments', $type);
 
 ?>

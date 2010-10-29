@@ -84,15 +84,6 @@
 <div class="error">{COMMENTS_CLOSED}</div>
 <!-- END: COMMENTS_CLOSED -->
 
-<!-- BEGIN: COMMENTS_ENABLEMENT -->
-<div class="warning">
-	<form action="{COMMENTS_ENABLEMENT_ACTION}" method="post">
-	{PHP.L.Comments_are} {COMMENTS_ENABLEMENT_STATE} {COMMENTS_ENABLEMENT_AREA}<br />
-	{COMMENTS_ENABLEMENT_CHANGE} <span class="lower">{PHP.L.Comments}</span> {COMMENTS_ENABLEMENT_AREA_SELECTION} <button type="submit">{PHP.L.Update}</button>
-	</form>
-</div>
-<!-- END: COMMENTS_ENABLEMENT -->
-
 </div>
 
 <!-- END: COMMENTS -->

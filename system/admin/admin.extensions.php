@@ -326,7 +326,7 @@ switch($a)
 					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
 				));
 				/* === Hook  === */
-				foreach (cot_getextplugins('admin.extensions.install.tags') as $pl)
+				foreach (cot_getextplugins('admin.extensions.update.tags') as $pl)
 				{
 					include $pl;
 				}

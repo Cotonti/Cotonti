@@ -15,6 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Config
  */
 
+$L['cfg_enable_comments'] = array('Включить комментарии');
 $L['cfg_mail'] = array('Отсылать email-уведомления администратору о новых комментариях');
 $L['cfg_markitup'] = array('Использовать markitup'); // New in N-0.1.0
 $L['cfg_markup'] = array('Включить разметку в комментариях');
@@ -35,7 +36,6 @@ $L['Comment'] = 'Комментарий';
 $L['Comments'] = 'Комментарии';
 $L['Newcomment'] = 'Новый комментарии';
 
-$L['Comments_are'] = 'Comments are';
 $L['comm_on_page'] = 'на странице'; // New in N-0.0.2
 
 $L['com_closed'] = 'Для этого элемента нельзя добавлять комментарии'; // New in 0.1.0
@@ -44,12 +44,6 @@ $L['com_commenttoolong'] = 'Комментарий слишком длинный
 $L['com_commenttooshort'] = 'Комментарий слишком короткий либо отсутствует';
 $L['com_nocommentsyet'] = 'Комментарии отсутствуют';
 $L['com_regonly'] = 'Добавление комментариев доступно только зарегистрированным пользователям';
-
-$L['Disable'] = 'Disable';
-$L['Enable'] = 'Enable';
-$L['for_this_area'] = 'for this module/plugin';
-$L['for_this_category'] = 'for this category';
-$L['for_this_item'] = 'for this item';
 
 $L['plu_comgup'] = ' осталось';
 $L['plu_comhint'] = 'Ваш комментарий будет доступен для редактирования в течение %1$s';
@@ -70,7 +64,6 @@ $L['rss_original'] = 'Комментируемая страница'; // New in 
 
 $L['home_newcomments'] = 'Новые комментарии';
 $L['core_comments'] = &$L['Comments'];
-$L['adm_enablecomments'] = 'Включить комментарии'; // New in N-0.1.0
 $L['adm_comm_already_del'] = 'Комментарий удален'; // New in N-0.0.2
 
 /**

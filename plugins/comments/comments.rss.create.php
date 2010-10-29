@@ -58,11 +58,11 @@ if ($c == 'comments')
 	}
 	else
 	{
-		$page_id = $id;
+		$page_id = (int) $id;
 
 		$rss_title = $L['rss_comments']." ".$cfg['maintitle'];
 
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_id='$page_id' LIMIT 1");
+		$sql = $db->query("SELECT * FROM $db_pages WHERE page_id = $page_id LIMIT 1");
 		if ($db->affectedRows > 0)
 		{
 			$row = $sql->fetch();
