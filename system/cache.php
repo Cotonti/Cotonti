@@ -1248,13 +1248,13 @@ class Cache
      */
     public function init()
     {
-        global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $z, $usr;
+        global $cfg, $cot_cache_autoload, $cot_cache_drivers, $cot_cache_bindings, $env, $usr;
 
         $this->disk = new File_cache($cfg['cache_dir']);
 		$this->db = new MySQL_cache();
 		$cot_cache_autoload = is_array($cot_cache_autoload)
-			? array_merge(array('system', 'cot', $z), $cot_cache_autoload)
-				: array('system', 'cot', $z);
+			? array_merge(array('system', 'cot', $env['ext']), $cot_cache_autoload)
+				: array('system', 'cot', $env['ext']);
 		$this->db->get_all($cot_cache_autoload);
 
 		$cfg['cache_drv'] .= '_driver';

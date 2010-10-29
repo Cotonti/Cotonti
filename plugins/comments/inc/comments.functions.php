@@ -58,7 +58,7 @@ function cot_comments_count($ext_name, $code)
  */
 function cot_comments_display($ext_name, $code, $cat = '')
 {
-	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $z;
+	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $env;
 
 	// Check permissions and enablement
 	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'comments');
@@ -71,7 +71,7 @@ function cot_comments_display($ext_name, $code, $cat = '')
 	}
 
 	// Get the URL and parameters
-	$link_area = $z;
+	$link_area = $env['ext'];
 	$link_params = $_SERVER['QUERY_STRING'];
 
 	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = array($link_area, $link_params);

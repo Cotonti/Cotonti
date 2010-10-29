@@ -13,7 +13,7 @@ define('COT_CODE', TRUE);
 define('COT_USERS', TRUE);
 define('COT_CORE', TRUE);
 $env['location'] = 'users';
-$z = 'users';
+$env['ext'] = 'users';
 
 if (isset($_GET['m']) && $_GET['m'] == 'auth')
 {
@@ -21,9 +21,9 @@ if (isset($_GET['m']) && $_GET['m'] == 'auth')
 }
 
 require_once './datas/config.php';
-require_once $cfg['system_dir'].'/functions.php';
+require_once $cfg['system_dir'] . '/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
-cot_require_api('cotemplate');
+require_once $cfg['system_dir'] . '/cotemplate.php';
 
 cot_require('users');
 

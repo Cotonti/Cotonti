@@ -106,7 +106,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','menus','01','topline',0,'','','',''),
 ('core','menus','02','banner',0,'','','',''),
 ('core','menus','03','bottomline',0,'','','',''),
-('core','menus','11','menu1',0,'<ul>\n<li><a href=\"index.php\">Home</a></li>\n<li><a href=\"index.php?z=forums\">Forums</a></li>\n<li><a href=\"index.php?z=page&amp;c=articles\">Articles</a></li>\n<li><a href=\"index.php?e=search\">Search</a></li>\n</ul>','<ul>\n<li><a href=\"index.php\">Home</a></li>\n<li><a href=\"index.php?z=forums\">Forums</a></li>\n<li><a href=\"index.php?z=page&c=articles\">Articles</a></li>\n<li><a href=\"index.php?e=search\">Search</a></li>\n</ul>','',''),
+('core','menus','11','menu1',0,'<ul>\n<li><a href=\"index.php\">Home</a></li>\n<li><a href=\"forums.php\">Forums</a></li>\n<li><a href=\"page.php?c=articles\">Articles</a></li>\n<li><a href=\"plug.php?e=search\">Search</a></li>\n</ul>','<ul>\n<li><a href=\"index.php\">Home</a></li>\n<li><a href=\"forums.php\">Forums</a></li>\n<li><a href=\"page?c=articles\">Articles</a></li>\n<li><a href=\"plug.php?e=search\">Search</a></li>\n</ul>','',''),
 ('core','menus','12','menu2',0,'','','',''),
 ('core','menus','13','menu3',0,'','','',''),
 ('core','menus','14','menu4',0,'','','',''),

@@ -478,13 +478,13 @@ switch($a)
 
 						if ($type == 'module')
 						{
+							$jump_url = cot_url($x);
 							$arg = 'mod';
-							$ze = 'z';
 						}
 						else
 						{
+							$jump_url = cot_url('plug', 'e=' . $x);
 							$arg = 'pl';
-							$ze = 'e';
 						}
 
 						$t->assign(array(
@@ -500,7 +500,7 @@ switch($a)
 								: cot_url('admin', "m=rightsbyitem&ic=$type&io=$x"),
 							'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=tools&p=$x")
 								: cot_url('admin', "m=$x"),
-							'ADMIN_EXTENSIONS_JUMPTO_URL' => cot_url('index', "$ze=$x"),
+							'ADMIN_EXTENSIONS_JUMPTO_URL' => $jump_url,
 							'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i)
 						));
 						/* === Hook - Part2 : Include === */

@@ -34,19 +34,19 @@
 			</a>
 		</li>
 		<li>
-			<a href="index.php?z=forums" title="{PHP.L.Forums}">
+			<a href="forums.php" title="{PHP.L.Forums}">
 				{PHP.L.Forums}
 				<span>Discussions</span>
 			</a>
 		</li>
 		<li>
-			<a href="index.php?z=page&amp;c=news" title="{PHP.L.News}">
+			<a href="page.php?c=news" title="{PHP.L.News}">
 				{PHP.L.News}
 				<span>Our updates</span>
 			</a>
 		</li>
 		<li>
-			<a href="index.php?z=rss" title="{PHP.L.RSS_Feeds}">
+			<a href="rss.php" title="{PHP.L.RSS_Feeds}">
 				RSS
 				<span>Subscribe me</span>
 			</a>
