@@ -131,7 +131,6 @@ function cot_comments_display($ext_name, $code, $cat = '')
 		FROM $db_com AS c LEFT JOIN $db_users AS u ON u.user_id = c.com_authorid
 		WHERE com_area = ? AND com_code = ? ORDER BY com_id ASC LIMIT ?, ?",
 		array($ext_name, $code, (int) $d, (int) $cfg['plugin']['comments']['maxcommentsperpage']));
-	cot_watch($sql->rowCount(), $ext_name, $code);
 	if ($sql->rowCount() > 0 && $enabled)
 	{
 		$i = $d;
