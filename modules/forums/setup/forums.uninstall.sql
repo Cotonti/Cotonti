@@ -3,6 +3,5 @@
  */
 
 DROP TABLE IF EXISTS `cot_forum_posts`;
-DROP TABLE IF EXISTS `cot_forum_sections`;
-DROP TABLE IF EXISTS `cot_forum_structure`;
 DROP TABLE IF EXISTS `cot_forum_topics`;
+DROP TABLE IF EXISTS `cot_forum_stats`;

@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=Forums
 Description=Cotonti Bulletin Board Module
-Version=0.7.0.6
+Version=0.7.0.7
 Date=2010-oct-05
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010
@@ -27,6 +27,18 @@ mergeforumposts=06:radio::1:
 mergetimeout=07:select:0,1,2,3,6,12,24,36,48,72:0:
 maxpostsperpage=08:select:5,10,15,20,25,30,40,50,60,70,100,200,500:15:
 [END_COT_EXT_CONFIG]
+
+[BEGIN_COT_EXT_CONFIG_STRUCTURE]
+allowusertext=01:radio::1:
+allowbbcodes=03:select:asc,desc:asc:
+allowsmilies=04:radio::1:
+allowprvtopics=05:radio::1:
+allowviewers=06:radio::1:
+countposts=07:radio::1:
+allowpolls=08:radio::1:
+autoprune=09:string::365:
+defstate=10:radio::1:
+[END_COT_EXT_CONFIG_STRUCTURE]
 ==================== */
 
 /**
