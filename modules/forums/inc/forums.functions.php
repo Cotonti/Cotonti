@@ -20,6 +20,7 @@ $GLOBALS['db_forum_posts']		= (isset($GLOBALS['db_forum_posts']))     ? $GLOBALS
 $GLOBALS['db_forum_sections'] 	= (isset($GLOBALS['db_forum_sections']))  ? $GLOBALS['db_forum_sections']  : $GLOBALS['db_x'] . 'forum_sections';
 $GLOBALS['db_forum_structure']	= (isset($GLOBALS['db_forum_structure'])) ? $GLOBALS['db_forum_structure'] : $GLOBALS['db_x'] . 'forum_structure';
 $GLOBALS['db_forum_topics'] 	= (isset($GLOBALS['db_forum_topics']))    ? $GLOBALS['db_forum_topics']    : $GLOBALS['db_x'] . 'forum_topics';
+$GLOBALS['db_forum_stats']		= (isset($GLOBALS['db_forum_stats']))     ? $GLOBALS['db_forum_stats']     : $GLOBALS['db_x'] . 'forum_stats';
 
 /**
  * Returns forum thread path

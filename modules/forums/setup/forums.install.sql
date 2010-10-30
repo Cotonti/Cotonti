@@ -5,18 +5,24 @@
 -- Install auth for default forums
 INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`,
 	`auth_rights`, `auth_rights_lock`, `auth_setbyuserid`) VALUES
-(1, 'forums', '1', 1, 254, 1),
-(2, 'forums', '1', 1, 254, 1),
-(3, 'forums', '1', 0, 255, 1),
-(4, 'forums', '1', 3, 128, 1),
-(5, 'forums', '1', 255, 255, 1),
-(1, 'forums', '2', 1, 254, 1),
-(2, 'forums', '2', 1, 254, 1),
-(3, 'forums', '2', 0, 255, 1),
-(4, 'forums', '2', 3, 128, 1),
-(5, 'forums', '2', 255, 255, 1),
-(6, 'forums', '1', 131, 0, 1),
-(6, 'forums', '2', 131, 0, 1);
+(1, 'forums', 'pub', 1, 254, 1),
+(2, 'forums', 'pub', 1, 254, 1),
+(3, 'forums', 'pub', 0, 255, 1),
+(4, 'forums', 'pub', 3, 128, 1),
+(5, 'forums', 'pub', 255, 255, 1),
+(6, 'forums', 'pub', 131, 0, 1),
+(1, 'forums', 'general', 1, 254, 1),
+(2, 'forums', 'general', 1, 254, 1),
+(3, 'forums', 'general', 0, 255, 1),
+(4, 'forums', 'general', 3, 128, 1),
+(5, 'forums', 'general', 255, 255, 1),
+(6, 'forums', 'general', 131, 0, 1),
+(1, 'forums', 'offtopic', 1, 254, 1),
+(2, 'forums', 'offtopic', 1, 254, 1),
+(3, 'forums', 'offtopic', 0, 255, 1),
+(4, 'forums', 'offtopic', 3, 128, 1),
+(5, 'forums', 'offtopic', 255, 255, 1),
+(6, 'forums', 'offtopic', 131, 0, 1);
 
 -- Forum posts
 CREATE TABLE IF NOT EXISTS `cot_forum_posts` (
@@ -37,60 +43,22 @@ CREATE TABLE IF NOT EXISTS `cot_forum_posts` (
   KEY `fp_sectionid` (`fp_sectionid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Forum sections
-CREATE TABLE IF NOT EXISTS `cot_forum_sections` (
-  `fs_id` smallint(5) unsigned NOT NULL auto_increment,
-  `fs_state` tinyint(1) unsigned NOT NULL default '0',
-  `fs_order` smallint(5) unsigned NOT NULL default '0',
-  `fs_title` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `fs_category` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `fs_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `fs_icon` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+-- Forum stats
+CREATE TABLE IF NOT EXISTS `cot_forum_stats` (
+  `fs_id` int(11) unsigned NOT NULL auto_increment,
+  `fs_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `fs_lt_id` int(11) NOT NULL default '0',
   `fs_lt_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `fs_lt_date` int(11) NOT NULL default '0',
   `fs_lt_posterid` int(11) NOT NULL default '-1',
   `fs_lt_postername` varchar(100) collate utf8_unicode_ci NOT NULL,
-  `fs_autoprune` int(11) NOT NULL default '0',
-  `fs_allowusertext` tinyint(1) NOT NULL default '1',
-  `fs_allowbbcodes` tinyint(1) NOT NULL default '1',
-  `fs_allowsmilies` tinyint(1) NOT NULL default '1',
-  `fs_allowprvtopics` tinyint(1) NOT NULL default '0',
-  `fs_countposts` tinyint(1) NOT NULL default '1',
-  `fs_topiccount` mediumint(8) NOT NULL default '0',
+  `fs_topiccount` int(11) NOT NULL default '0',
   `fs_topiccount_pruned` int(11) default '0',
-  `fs_postcount` mediumint(8) NOT NULL default '0',
+  `fs_postcount` int(11) NOT NULL default '0',
   `fs_postcount_pruned` int(11) default '0',
-  `fs_viewcount` mediumint(8) NOT NULL default '0',
-  `fs_masterid` smallint(5) unsigned NOT NULL default '0',
-  `fs_mastername` varchar(128) collate utf8_unicode_ci NOT NULL,
-  `fs_allowviewers` tinyint(1) NOT NULL default '1',
-  `fs_allowpolls` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`fs_id`),
-  KEY `fs_order` (`fs_order`)
+  `fs_viewcount` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`fs_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Default sections
-INSERT INTO `cot_forum_sections` (`fs_state`, `fs_order`, `fs_title`, `fs_category`, `fs_desc`, `fs_icon`, `fs_lt_id`, `fs_lt_title`, `fs_lt_date`, `fs_lt_posterid`, `fs_lt_postername`, `fs_autoprune`, `fs_allowusertext`, `fs_allowbbcodes`, `fs_allowsmilies`, `fs_allowprvtopics`, `fs_countposts`, `fs_topiccount`, `fs_topiccount_pruned`, `fs_postcount`, `fs_postcount_pruned`, `fs_viewcount`, `fs_masterid`, `fs_mastername`, `fs_allowviewers`, `fs_allowpolls`) VALUES
-(0, 100, 'General discussion', 'pub', 'General chat.', 'images/icons/default/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, '', 1, 0),
-(0, 101, 'Off-topic', 'pub', 'Various and off-topic.', 'images/icons/default/forums.png', 0, '', 0, 0, '', 365, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, '', 1, 0);
-
--- Forum structure
-CREATE TABLE IF NOT EXISTS `cot_forum_structure` (
-  `fn_id` mediumint(8) NOT NULL auto_increment,
-  `fn_path` varchar(16) collate utf8_unicode_ci NOT NULL default '',
-  `fn_code` varchar(16) collate utf8_unicode_ci NOT NULL default '',
-  `fn_tpl` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `fn_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `fn_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `fn_icon` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  `fn_defstate` tinyint(1) NOT NULL default '1',
-  PRIMARY KEY  (`fn_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Default categories
-INSERT INTO `cot_forum_structure` (`fn_path`, `fn_code`, `fn_tpl`, `fn_title`, `fn_desc`, `fn_icon`, `fn_defstate`) VALUES
-('1', 'pub', '', 'Public', '', '', 1);
 
 -- Forum topics
 CREATE TABLE IF NOT EXISTS `cot_forum_topics` (
@@ -121,3 +89,10 @@ CREATE TABLE IF NOT EXISTS `cot_forum_topics` (
   KEY `ft_sectionid` (`ft_sectionid`),
   KEY `ft_movedto` (`ft_movedto`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Default forums categories
+INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`,
+   `structure_desc`, `structure_icon`, `structure_locked`, `structure_count`) VALUES
+('forums', 'pub', '1', '', 'Articles', '', 'images/icons/default/forums.png', 0, 0),
+('forums', 'general', '1.1', '', 'General discussion', 'General discussion', 'images/icons/default/forums.png', 0, 0),
+('forums', 'offtopic', '1.2', '', 'Off-topic', 'Various and off-topic', 'images/icons/default/forums.png', 0, 0);
