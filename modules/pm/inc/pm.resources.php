@@ -13,4 +13,6 @@ $R['pm_icon_trashcan'] =
 $R['pm_icon_edit'] = 
 	'<img class="icon" src="images/icons/default/pm-edit.png" alt="'.$L['Edit'].'" />';
 
+$R['pm_link'] = '<a href="{$url}">'.$R['pm_icon'].'</a>';
+
 ?>
