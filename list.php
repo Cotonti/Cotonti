@@ -20,6 +20,6 @@ require_once $cfg['system_dir'] . '/common.php';
 parse_str($_SERVER['QUERY_STRING'], $params);
 
 $env['status'] = '301 Moved Permanently';
-cot_redirect(cot_url('page', $params));
+cot_redirect(cot_url('page', $params, '', true));
 
 ?>
