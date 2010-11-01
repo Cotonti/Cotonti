@@ -103,6 +103,7 @@ function cot_remove_pm($message_id)
 	}
 	return true;
 }
+
 /**
  * Star/Unstar private messages
  *
@@ -168,5 +169,16 @@ function cot_message_count($user_id=0)
 	return array($totalsentbox, $totalinbox);
 }
 
+/**
+ * Returns user PM link
+ *
+ * @param int $user User ID
+ * @return string
+ */
+function cot_build_pm($user)
+{
+	global $L;
+	return cot_rc('pm_link', array('url' => cot_url('pm', 'm=send&to='.$user).'" title="'.$L['pm_sendnew']));
+}
 
 ?>
