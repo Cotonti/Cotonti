@@ -160,6 +160,14 @@ function cot_userisonline($id)
 function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false)
 {
 	global $db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
+
+	/* === Hook === */
+	foreach (cot_getextplugins('usertags.first') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	if (is_array($user_data) && is_array($user_cache['user_' . $user_data['user_id']]))
 	{	
 		$temp_array = $user_cache['user_' . $user_data['user_id']];
@@ -184,7 +192,6 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 			
 			$temp_array = array(
 				'ID' => $user_data['user_id'],
-				'PM' => function_exists('cot_build_pm') ? cot_build_pm($user_data['user_id']) : '',
 				'NAME' => cot_build_user($user_data['user_id'], htmlspecialchars($user_data['user_name'])),
 				'NICKNAME' => htmlspecialchars($user_data['user_name']),
 				'DETAILSLINK' => cot_url('users', 'm=details&id=' . $user_data['user_id']),
@@ -197,9 +204,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				'TEXT' => $cfg['parsebbcodeusertext'] ? cot_parse($user_data['user_text'], true) : $user_data['user_text'],
 				'AVATAR' => cot_build_userimage($user_data['user_avatar'], 'avatar'),
 				'PHOTO' => cot_build_userimage($user_data['user_photo'], 'photo'),
-				'SIGNATURE' => cot_build_userimage($user_data['user_signature'], 'sig'),
 				'EMAIL' => cot_build_email($user_data['user_email'], $user_data['user_hideemail']),
-				'PMNOTIFY' => $cot_yesno[$urr['user_pmnotify']],
 				'THEME' => $user_data['user_theme'],
 				'SCHEME' => $user_data['user_scheme'],
 				'GENDER' => ($user_data['user_gender'] == '' || $user_data['user_gender'] == 'U') ? '' : $L['Gender_' . $user_data['user_gender']],
@@ -225,6 +230,13 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 				$temp_array[strtoupper($row['field_name'])] = cot_build_extrafields_data('user', $row, $user_data['user_' . $row['field_name']]);
 				$temp_array[strtoupper($row['field_name']) . '_TITLE'] = isset($L['user_' . $row['field_name'] . '_title']) ? $L['user_' . $row['field_name'] . '_title'] : $row['field_description'];
 			}
+
+			/* === Hook === */
+			foreach (cot_getextplugins('usertags.main') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 
 			$user_cache['user_' . $user_data['user_id']] = $temp_array;
 		}
