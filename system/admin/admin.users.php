@@ -165,6 +165,9 @@ if(!isset($showdefault) OR $showdefault == true)
 
 	if($sql->rowCount() > 0)
 	{
+		/* === Hook - Part1 : Set === */
+		$extp = cot_getextplugins('admin.users.row.tags');
+		/* ===== */
 		while($row = $sql->fetch())
 		{
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
@@ -177,8 +180,8 @@ if(!isset($showdefault) OR $showdefault == true)
 				'ADMIN_USERS_ROW_GRP_RIGHTS_URL' => cot_url('admin', 'm=rights&g='.$row['grp_id']),
 				'ADMIN_USERS_ROW_GRP_JUMPTO_URL' => cot_url('users', 'g='.$row['grp_id'])
 			));
-			/* === Hook === */
-			foreach (cot_getextplugins('admin.users.row.tags') as $pl)
+			/* === Hook - Part2 : Include === */
+			foreach ($extp as $pl)
 			{
 				include $pl;
 			}
