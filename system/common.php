@@ -88,8 +88,7 @@ if ($cache && $cot_cfg)
 else
 {
 	// Part 1: Load main configuration
-	$sql_config = $db->query("SELECT config_owner, config_cat, config_name, config_value FROM $db_config
-		WHERE config_subcat = ''");
+	$sql_config = $db->query("SELECT * FROM $db_config");
 	while ($row = $sql_config->fetch())
 	{
 		if ($row['config_owner'] == 'core')
@@ -98,7 +97,14 @@ else
 		}
 		elseif ($row['config_owner'] == 'module')
 		{
-			$cfg[$row['config_cat']][$row['config_name']] = $row['config_value'];
+			if (empty($row['config_subcat']))
+			{
+				$cfg[$row['config_cat']][$row['config_name']] = $row['config_value'];
+			}
+			else
+			{
+				$cfg[$row['config_cat']][$row['config_subcat']][$row['config_name']] = $row['config_value'];
+			}
 		}
 		else
 		{
@@ -387,15 +393,6 @@ $cot_cat = $structure['page'];
 
 if (!$cache || !$cot_cfg)
 {
-	// Load structure configuration
-	$sql_config = $db->query("SELECT config_owner, config_cat, config_subcat, config_name, config_value FROM $db_config
-		WHERE config_owner = 'module' AND config_subcat != ''");
-	while ($row = $sql_config->fetch())
-	{
-		$cfg[$row['config_cat']][$row['config_subcat']][$row['config_name']] = $row['config_value'];
-	}
-	$sql_config->closeCursor();
-
 	// Fill missing options with default values
 	foreach ($structure as $module => $mod_struct)
 	{
