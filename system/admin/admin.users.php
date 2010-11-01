@@ -45,10 +45,9 @@ if($n == 'add')
 	$nmaxtotal = cot_import('nmaxtotal', 'P', 'INT');
 	$ncopyrightsfrom = cot_import('ncopyrightsfrom', 'P', 'INT');
 	$ndisabled = cot_import('ndisabled', 'P', 'BOL');
-	$nhidden = cot_import('nhidden', 'P', 'BOL');
 	$nmtmode = cot_import('nmtmode', 'P', 'BOL');
 
-	$sql = (!empty($ntitle)) ? $db->query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_hidden,  grp_maintenance, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".$db->prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nhidden.",  ".(int)$nmtmode.", '".$db->prep($ntitle)."', '".$db->prep($ndesc)."', '".$db->prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
+	$sql = (!empty($ntitle)) ? $db->query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_maintenance, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".$db->prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nmtmode.", '".$db->prep($ntitle)."', '".$db->prep($ndesc)."', '".$db->prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
 	$grp_id = $db->lastInsertId();
 
 	/* === Hook === */
@@ -76,7 +75,6 @@ elseif($n == 'edit')
 		$rmaxfile = min(cot_import('rmaxfile', 'P', 'INT'), cot_get_uploadmax());
 		$rmaxtotal = cot_import('rmaxtotal', 'P', 'INT');
 		$rdisabled = ($g < 6) ? 0 : cot_import('rdisabled', 'P', 'BOL');
-		$rhidden = ($g == 4) ? 0 : cot_import('rhidden', 'P', 'BOL');
 		$rmtmode = cot_import('rmtmode', 'P', 'BOL');
 
 		/* === Hook === */
@@ -91,7 +89,7 @@ elseif($n == 'edit')
 	   	$ricon = $db->prep($ricon);
 	   	$ralias = $db->prep($ralias);
 
-		$sql = (!empty($rtitle)) ? $db->query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_hidden='$rhidden', grp_maintenance='$rmtmode' WHERE grp_id='$g'") : '';
+		$sql = (!empty($rtitle)) ? $db->query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_maintenance='$rmtmode' WHERE grp_id='$g'") : '';
 
 		$cache->db->remove('cot_groups', 'system');
 
@@ -138,7 +136,6 @@ elseif($n == 'edit')
 			'ADMIN_USERS_EDITFORM_GRP_PFS_MAXFILE' => cot_inputbox('text', 'rmaxfile', htmlspecialchars($row['grp_pfs_maxfile']), 'size="16" maxlength="16"'),
 			'ADMIN_USERS_EDITFORM_GRP_PFS_MAXTOTAL' => cot_inputbox('text', 'rmaxtotal', htmlspecialchars($row['grp_pfs_maxtotal']), 'size="16" maxlength="16"'),
 			'ADMIN_USERS_EDITFORM_GRP_DISABLED' => ($g <= 5) ? $L['No'] : cot_radiobox($row['grp_disabled'], 'rdisabled', array(1, 0), array($L['Yes'], $L['No'])),
-			'ADMIN_USERS_EDITFORM_GRP_HIDDEN' => ($g == 4) ? $L['No'] : cot_radiobox($row['grp_hidden'], 'rhidden', array(1, 0), array($L['Yes'], $L['No'])),
 			'ADMIN_USERS_EDITFORM_GRP_MAINTENANCE' => cot_radiobox($row['grp_maintenance'], 'rmtmode', array(1, 0), array($L['Yes'], $L['No'])),
 			'ADMIN_USERS_EDITFORM_GRP_RLEVEL' => cot_selectbox($row['grp_level'], 'rlevel', range(0, 99), range(0, 99), false),
 			'ADMIN_USERS_EDITFORM_GRP_MEMBERSCOUNT' => $row['grp_memberscount'],
@@ -164,13 +161,12 @@ if(!isset($showdefault) OR $showdefault == true)
 		$members[$row['gru_groupid']] = $row['COUNT(*)'];
 	}
 
-	$sql = $db->query("SELECT grp_id, grp_title, grp_disabled, grp_hidden FROM $db_groups WHERE 1 order by grp_level DESC, grp_id DESC");
+	$sql = $db->query("SELECT grp_id, grp_title, grp_disabled FROM $db_groups WHERE 1 ORDER BY grp_level DESC, grp_id DESC");
 
 	if($sql->rowCount() > 0)
 	{
 		while($row = $sql->fetch())
 		{
-			$row['grp_hidden'] = ($row['grp_hidden']) ? '1' : '0';
 			$members[$row['grp_id']] = (empty($members[$row['grp_id']])) ? '0' : $members[$row['grp_id']];
 			$t->assign(array(
 				'ADMIN_USERS_ROW_GRP_TITLE_URL' => cot_url('admin', 'm=users&n=edit&g='.$row['grp_id']),
@@ -178,10 +174,15 @@ if(!isset($showdefault) OR $showdefault == true)
 				'ADMIN_USERS_ROW_GRP_ID' => $row['grp_id'],
 				'ADMIN_USERS_ROW_GRP_COUNT_MEMBERS' => $members[$row['grp_id']],
 				'ADMIN_USERS_ROW_GRP_DISABLED' => $cot_yesno[!$row['grp_disabled']],
-				'ADMIN_USERS_ROW_GRP_HIDDEN' => $cot_yesno[$row['grp_hidden']],
 				'ADMIN_USERS_ROW_GRP_RIGHTS_URL' => cot_url('admin', 'm=rights&g='.$row['grp_id']),
 				'ADMIN_USERS_ROW_GRP_JUMPTO_URL' => cot_url('users', 'g='.$row['grp_id'])
 			));
+			/* === Hook === */
+			foreach (cot_getextplugins('admin.users.row.tags') as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			$t->parse('MAIN.ADMIN_USERS_DEFAULT.USERS_ROW');
 		}
 	}
@@ -195,11 +196,16 @@ if(!isset($showdefault) OR $showdefault == true)
 		'ADMIN_USERS_NGRP_PFS_MAXFILE' => cot_inputbox('text', 'nmaxfile', '', 'size="16" maxlength="16"'),
 		'ADMIN_USERS_NGRP_PFS_MAXTOTAL' => cot_inputbox('text', 'nmaxtotal', '', 'size="16" maxlength="16"'),
 		'ADMIN_USERS_NGRP_DISABLED' => cot_radiobox(0, 'ndisabled', array(1, 0), array($L['Yes'], $L['No'])),
-		'ADMIN_USERS_NGRP_HIDDEN' => cot_radiobox(0, 'nhidden', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_USERS_NGRP_MAINTENANCE' => cot_radiobox(0, 'nmtmode', array(1, 0), array($L['Yes'], $L['No'])),
 		'ADMIN_USERS_NGRP_RLEVEL' => cot_selectbox(50, 'nlevel', range(0, 99), range(0, 99), false),
 		'ADMIN_USERS_FORM_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'ncopyrightsfrom', array('5'))
 	));
+	/* === Hook === */
+	foreach (cot_getextplugins('admin.users.add.tags') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 	$t->parse('MAIN.ADMIN_USERS_DEFAULT');
 }
 
