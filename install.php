@@ -37,6 +37,7 @@ if (empty($cfg['lang_dir']))
 require_once $cfg['system_dir'].'/functions.php';
 require_once 'system/debug.php';
 
+$cfg['cache'] = false;
 if ($cfg['new_install'])
 {
 	require_once $cfg['system_dir'].'/database.php';
