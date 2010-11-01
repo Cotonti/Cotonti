@@ -3,8 +3,8 @@
 [BEGIN_COT_EXT]
 Name=Private Messages
 Description=On-site user communication like e-mail
-Version=0.7.0.4
-Date=2010-oct-05
+Version=0.7.0.5
+Date=2010-nov-01
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010
 Notes=BSD License
@@ -31,4 +31,5 @@ maxpmperpage=04:select:5,10,15,20,25,30,40,50,60,70,100,200,50:15:
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
+
 ?>
