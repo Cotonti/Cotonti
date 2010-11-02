@@ -28,8 +28,8 @@ $t = new XTemplate(cot_skinfile('massmovetopics', true));
 
 if ($a == 'move')
 {
-	$sql = $db->query("UPDATE $db_forum_topics SET ft_sectionid='$targetid' WHERE ft_sectionid='$sourceid'");
-	$sql = $db->query("UPDATE $db_forum_posts SET fp_sectionid='$targetid' WHERE fp_sectionid='$sourceid'");
+	$sql = $db->query("UPDATE $db_forum_topics SET ft_cat='$targetid' WHERE ft_cat='$sourceid'");
+	$sql = $db->query("UPDATE $db_forum_posts SET fp_cat='$targetid' WHERE fp_cat='$sourceid'");
 	cot_forum_sectionsetlast($sourceid);
 	cot_forum_sectionsetlast($targetid);
 	cot_forum_resync($sourceid);

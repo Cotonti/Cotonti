@@ -214,16 +214,16 @@ function cot_tag_search_forums($query)
 			$order = 'ORDER BY `ft_updated` DESC';
 		break;
 		case 'category':
-			$order = 'ORDER BY `ft_sectionid`';
+			$order = 'ORDER BY `ft_cat`';
 		break;
 		default:
 			$order = '';
 	}
-	$sql = $db->query("SELECT t.ft_id, t.ft_sectionid, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
+	$sql = $db->query("SELECT t.ft_id, t.ft_cat, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
 		LEFT JOIN $db_forum_sections AS s
-			ON t.ft_sectionid = s.fs_id
+			ON t.ft_cat = s.fs_id
 		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");

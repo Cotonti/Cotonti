@@ -34,7 +34,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 				$forum_cats[$fsn['fs_id']] = $fsn;
 			}
 		}
-		$incat = "AND ft_sectionid IN ('".implode("','", $catsub)."')";
+		$incat = "AND ft_cat IN ('".implode("','", $catsub)."')";
 	}
 
 	//and ft_lastposterid!=".$usr['id']."
@@ -67,9 +67,9 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 				$row['ft_title'] .= "...";
 			}
 		}
-		$build_forum = cot_build_forums($row['ft_sectionid'], cot_cutstring($forum_cats[$row['ft_sectionid']]['fs_title'], 24), cot_cutstring($forum_cats[$row['ft_sectionid']]['fs_category'], 16));
-		$build_forum_full = cot_build_forums($row['ft_sectionid'], cot_cutstring($forum_cats[$row['ft_sectionid']]['fs_title'], 24), cot_cutstring($forum_cats[$row['ft_sectionid']]['fs_category'], 16), true, array($forum_cats[$row['ft_sectionid']]['fs_masterid'], $forum_cats[$row['ft_sectionid']]['fs_mastername']));
-		$build_forum_short = cot_rc_link(cot_url('forums', 'm=topics&s='.$row['ft_sectionid']), htmlspecialchars(cot_cutstring(stripslashes($forum_cats[$row['ft_sectionid']]['fs_title']), 16)));
+		$build_forum = cot_build_forums($row['ft_cat'], cot_cutstring($forum_cats[$row['ft_cat']]['fs_title'], 24), cot_cutstring($forum_cats[$row['ft_cat']]['fs_category'], 16));
+		$build_forum_full = cot_build_forums($row['ft_cat'], cot_cutstring($forum_cats[$row['ft_cat']]['fs_title'], 24), cot_cutstring($forum_cats[$row['ft_cat']]['fs_category'], 16), true, array($forum_cats[$row['ft_cat']]['fs_masterid'], $forum_cats[$row['ft_cat']]['fs_mastername']));
+		$build_forum_short = cot_rc_link(cot_url('forums', 'm=topics&s='.$row['ft_cat']), htmlspecialchars(cot_cutstring(stripslashes($forum_cats[$row['ft_cat']]['fs_title']), 16)));
 
 		if ($row['ft_mode'] == 1)
 		{

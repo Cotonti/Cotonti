@@ -95,7 +95,7 @@ if ($c == "topics")
 		$rss_description = $L['rss_topic_item_desc'];
 
 		// check forum read permission for guests
-		$forum_id = $row['ft_sectionid'];
+		$forum_id = $row['ft_cat'];
 		if (!cot_auth('forums', $forum_id, 'R'))
 		{
 			die('Not readable for guests'); // TODO: Need translate
@@ -140,14 +140,14 @@ elseif ($c == "section")
 		$rss_title = $section_title;
 		$rss_description = $section_desc;
 
-		$where = "fp_sectionid = '$forum_id'";
+		$where = "fp_cat = '$forum_id'";
 		// get subsections
 		unset($subsections);
 		$sql = "SELECT fs_id FROM $db_forum_sections WHERE fs_mastername = '$section_title'";
 		$res = $db->query($sql);
 		while ($row = $res->fetch())
 		{
-			$where .= " OR fp_sectionid ='{$row['fs_id']}'";
+			$where .= " OR fp_cat ='{$row['fs_id']}'";
 		}
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
@@ -198,7 +198,7 @@ elseif ($c == "forums")
 	{
 		$post_id = $row['fp_id'];
 		$topic_id = $row['fp_topicid'];
-		$forum_id = $row['fp_sectionid'];
+		$forum_id = $row['fp_cat'];
 
 		$flag_private = 0;
 		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";

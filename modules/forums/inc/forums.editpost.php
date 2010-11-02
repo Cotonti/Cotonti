@@ -29,14 +29,14 @@ foreach (cot_getextplugins('forums.editpost.first') as $pl)
 cot_blockguests();
 cot_check_xg();
 
-$sql = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_sectionid='$s' LIMIT 1");
+$sql = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_cat='$s' LIMIT 1");
 
 if ($row = $sql->fetch())
 {
 	$fp_text = $row['fp_text'];
 	$fp_posterid = $row['fp_posterid'];
 	$fp_postername = $row['fp_postername'];
-	$fp_sectionid = $row['fp_sectionid'];
+	$fp_cat = $row['fp_cat'];
 	$fp_topicid = $row['fp_topicid'];
 	$fp_updated = $row['fp_updated'];
 	$fp_updater = $row['fp_updater'];
@@ -145,7 +145,7 @@ if ($a=='update')
 	}
 	/* ===== */
 
-	cot_forum_sectionsetlast($fp_sectionid);
+	cot_forum_sectionsetlast($fp_cat);
 
 	if ($cache)
 	{
@@ -205,7 +205,7 @@ foreach (cot_getextplugins('forums.editpost.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_skinfile(array('forums', 'editpost', $fs_category, $fp_sectionid));
+$mskin = cot_skinfile(array('forums', 'editpost', $fs_category, $fp_cat));
 $t = new XTemplate($mskin);
 
 cot_display_messages($t);

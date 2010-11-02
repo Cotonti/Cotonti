@@ -46,12 +46,6 @@ $totalpmsent = cot_stat_get('totalpms');
 $totaldbviews = $db->query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
 $totaldbviews = $totaldbviews->fetchColumn();
 
-$sql = $db->query("SELECT SUM(fs_topiccount_pruned) FROM $db_forum_sections");
-$totaldbtopicspruned = $sql->fetchColumn();
-
-$sql = $db->query("SELECT SUM(fs_postcount_pruned) FROM $db_forum_sections");
-$totaldbpostspruned = $sql->fetchColumn();
-
 $totaldbfilesize = $db->query("SELECT SUM(pfs_size) FROM $db_pfs");
 $totaldbfilesize = $totaldbfilesize->fetchColumn();
 
@@ -143,10 +137,8 @@ $t->assign(array(
 	'STATISTICS_TOTALPMACTIVE' => $totalpmactive,
 	'STATISTICS_TOTALPMARCHIVED' => $totalpmarchived,
 	'STATISTICS_TOTALDBVIEWS' => $totaldbviews,
-	'STATISTICS_TOTALDBPOSTS_AND_TOTALDBPOSTSPRUNED' => ($totaldbposts + $totaldbpostspruned),
 	'STATISTICS_TOTALDBPOSTS' => $totaldbposts,
 	'STATISTICS_TOTALDBPOSTSPRUNED' => $totaldbpostspruned,
-	'STATISTICS_TOTALDBTOPICS_AND_TOTALDBTOPICSPRUNED' => ($totaldbtopics + $totaldbtopicspruned),
 	'STATISTICS_TOTALDBTOPICS' => $totaldbtopics,
 	'STATISTICS_TOTALDBTOPICSPRUNED' => $totaldbtopicspruned,
 	'STATISTICS_TOTALDBRATINGS' => $totaldbratings,
