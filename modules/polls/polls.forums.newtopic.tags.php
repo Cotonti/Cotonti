@@ -18,7 +18,7 @@ Tags=
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($fs_allowpolls)
+if ($cfg['forums'][$s]['allowpolls'])
 {
 	cot_poll_edit_form('new', $t, 'MAIN.POLL');
 	$t->parse('MAIN.POLL');

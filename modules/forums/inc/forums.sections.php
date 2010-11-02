@@ -61,14 +61,14 @@ if (!$cot_sections_vw)
 $sql = $db->query("SELECT * FROM $db_forum_stats WHERE 1 ORDER by fs_cat DESC");
 while ($row = $sql->fetch())
 {
-	if (!$cat_top[$row['fs_code']]['fs_lt_id'])
+	if (!$cat_top[$row['fs_cat']]['fs_lt_id'])
 	{
 		cot_forum_sectionsetlast($row['fs_code']);
 	}
-	$cat_top[$row['fs_code']] = $row;
-	$cat_top[$row['fs_code']]['topiccount'] = $cat_top['fs_code']['fs_topiccount'];
-	$cat_top[$row['fs_code']]['postcount'] = $cat_top['fs_code']['fs_topiccount'];
-	$cat_top[$row['fs_code']]['viewcount'] = $cat_top['fs_code']['fs_topiccount'];
+	$cat_top[$row['fs_cat']] = $row;
+	$cat_top[$row['fs_cat']]['topiccount'] = $cat_top[$row['fs_cat']]['fs_topiccount'];
+	$cat_top[$row['fs_cat']]['postcount'] = $cat_top[$row['fs_cat']]['fs_postcount'];
+	$cat_top[$row['fs_cat']]['viewcount'] = $cat_top[$row['fs_cat']]['fs_topiccount'];
 }
 
 $fstlvl = array();
@@ -77,19 +77,20 @@ foreach ($structure['forums'] as $i => $x)
 {
 	$parents = explode('.', $x['path']);
 	$depth = count($parents);
-	if (cot_auth('page', $i, 'R'))
+	if (cot_auth('forums', $i, 'R'))
 	{
-		if ($depth == 1)
+		if ($depth < 2)
 		{
-			$fstlvl[] = $i;
+			$fstlvl[$i] = $i;
 		}
 		elseif($depth < 4)
 		{
-			$nxtlvl[$parents[$depth-2]][] = $i;
+			$nxtlvl[$parents[$depth-2]][$i] = $i;
 		}
-		for ($ii = 0; $ii < ($depth < 4) ? $depth - 1 : 3; $ii++)
+		$depmax = ($depth < 4) ? ($depth - 1) : 3;
+		for ($ii = 0; $ii < $depmax; $ii++)
 		{
-			if($cat_top[$i]['fs_lt_date'] > $cat_top[$parents[$ii]]['fs_lt_date'])
+			if($cat_top[$i]['fs_lt_date'] > $cat_top[$parents[$ii]]['fs_lt_date'] || !isset($cat_top[$parents[$ii]]['fs_lt_date']))
 			{
 				$cat_top[$parents[$ii]]['fs_lt_id'] = $cat_top[$i]['fs_lt_id'];
 				$cat_top[$parents[$ii]]['fs_lt_title'] = $cat_top[$i]['fs_lt_title'];
@@ -148,7 +149,7 @@ $extpss = cot_getextplugins('forums.sections.loop.subsections');
 foreach ($fstlvl as $x)
 {
 	if (is_array($nxtlvl[$x]))
-	{// проверить свернуто /несвернуто
+	{
 		$yy = 0;
 		foreach ($nxtlvl[$x] as $y)
 		{
