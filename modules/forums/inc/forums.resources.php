@@ -87,4 +87,6 @@ $R['forums_code_addtxt'] = 'function addtxt(text) {
 	insertText(document, "$c1", "$c2", text);
 }';
 
+$R['forums_code_post_empty'] = '&nbsp;';
+
 ?>

@@ -13,10 +13,11 @@
 defined('COT_CODE') or die('Wrong URL');
 
 $id = cot_import('id','G','INT');
-$s = cot_import('s','G','INT');
+$s = cot_import('s','G','ALP');
 $q = cot_import('q','G','INT');
 $p = cot_import('p','G','INT');
 $d = cot_import('d','G','INT');
+$d = ((int)$d > 0) ? (int)$d : 0;
 $quote = cot_import('quote','G','INT');
 $unread_done = FALSE;
 $fp_num = 0;
@@ -461,10 +462,6 @@ if (!empty($p))
 	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
 }
 
-if (empty($d))
-{ 
-	$d = '0';
-}
 
 if ($usr['id']>0)
 {
@@ -512,27 +509,18 @@ $notlastpage = (($d + $cfg['forums']['maxpostsperpage'])<$totalposts) ? TRUE : F
 
 $pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['forums']['maxpostsperpage']);
 
-$sql1 = $db->query("SELECT s.fs_id, s.fs_title, s.fs_category, s.fs_masterid, s.fs_mastername, s.fs_allowpolls FROM $db_forum_sections AS s LEFT JOIN
-	$db_forum_structure AS n ON n.fn_code=s.fs_category
-ORDER by fn_path ASC, fs_masterid, fs_order ASC");
-
 cot_require_api('forms');
 
 $jumpbox[cot_url('forums')] = $L['Forums'];
-while ($row1 = $sql1->fetch())
+foreach($structure['forums'] as $key => $val)
 {
-	if (cot_auth('forums', $row1['fs_id'], 'R'))
+	if (cot_auth('forums', $key, 'R'))
 	{
-		$master = ($row1['fs_masterid'] > 0) ? array($row1['fs_masterid'], $row1['fs_mastername']) : false;
-
-		$cfs = cot_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE, $master);
-
-		if ($row1['fs_id'] != $s)
+		if ($val['tpath'] != $s)
 		{
-			$movebox[$row1['fs_id']] = $cfs;
+			$movebox[$key] = $val['tpath'];
 		}
-
-		$jumpbox[cot_url('forums', "m=topics&s=".$row1['fs_id'], '', true)] = $cfs;
+		$jumpbox[cot_url('forums', "m=topics&s=".$key, '', true)] = $val['tpath'];
 	}
 }
 $jumpbox = cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"');
@@ -555,9 +543,7 @@ if ($usr['isadmin'])
 
 $ft_title = ($ft_mode == 1) ? "# ".htmlspecialchars($ft_title) : htmlspecialchars($ft_title);
 
-$master = ($fs_masterid > 0) ? array($fs_masterid, $fs_mastername) : false;
-
-$toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master);
+$toptitle = cot_build_forumpath($s);
 $toppath  = $toptitle;
 $toptitle .= ' ' . $cfg['separator'] . ' ' . $ft_title;
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';

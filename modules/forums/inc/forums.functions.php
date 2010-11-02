@@ -23,67 +23,51 @@ $GLOBALS['db_forum_topics'] 	= (isset($GLOBALS['db_forum_topics']))    ? $GLOBAL
 $GLOBALS['db_forum_stats']		= (isset($GLOBALS['db_forum_stats']))     ? $GLOBALS['db_forum_stats']     : $GLOBALS['db_x'] . 'forum_stats';
 
 /**
- * Returns forum thread path
+ * Builds forum category path
  *
- * @param int $sectionid Section ID
- * @param string $title Thread title
- * @param string $category Category code
- * @param string $link Display as links
- * @param mixed $master Master section
+ * @param string $cat Category code
+ * @param string $mask Format mask
  * @return string
  */
-function cot_build_forums($sectionid, $title, $category, $link = TRUE, $master = false)
+function cot_build_forumpath($cat, $mask = 'link_catpath')
 {
-	global $db, $cot_forums_str, $cfg, $db_forum_sections, $L, $q;
-	$pathcodes = explode('.', $cot_forums_str[$category]['path']);
-
-	if($link)
+	global $structure, $cfg, $L;
+	$mask = str_replace('%1$s', '{$url}', $mask);
+	$mask = str_replace('%2$s', '{$title}', $mask);
+	if ($cfg['homebreadcrumb'])
 	{
-		if($cfg['homebreadcrumb'])
-		{
-			$tmp[] = cot_rc('link_catpath', array(
-				'url' => $cfg['mainurl'],
-				'title' => htmlspecialchars($cfg['maintitle'])
-			));
-		}
-		$tmp[] = cot_rc('link_catpath', array(
-			'url' => cot_url('forums'),
-			'title' => $L['Forums']
+		$tmp[] = cot_rc($mask, array(
+			'url' => $cfg['mainurl'],
+			'title' => htmlspecialchars($cfg['maintitle'])
 		));
-		foreach($pathcodes as $k => $x)
+	}
+	$tmp[] = cot_rc($mask, array(
+		'url' => cot_url('forums'),
+		'title' => $L['Forums']
+	));
+
+	$pathcodes = explode('.', $$structure['forums'][$cat]['path']);
+	$last = count($pathcodes) - 1;
+	$list = defined('COT_LIST');
+	foreach ($pathcodes as $k => $x)
+	{
+		if ($k == 0)
 		{
-			$tmp[] = cot_rc('link_catpath', array(
+			$tmp[] = cot_rc($mask, array(
 				'url' => cot_url('forums', 'c='.$x, '#'.$x),
 				'title' => htmlspecialchars($cot_forums_str[$x]['title'])
 			));
 		}
-		if(is_array($master))
+		else
 		{
-			$tmp[] = cot_rc('link_catpath', array(
-				'url' => cot_url('forums', 'm=topics&s='.$master[0]),
-				'title' => htmlspecialchars($master[1])
+			$tmp[] = ($k === $last) ? htmlspecialchars($$structure['forums'][$x]['title'])
+				: cot_rc($mask, array(
+				'url' => cot_url('forums', 'm=topics&s='.$x),
+				'title' => htmlspecialchars($$structure['forums'][$x]['title'])
 			));
 		}
-		$tmp[] = empty($q) ? htmlspecialchars($title)
-			: cot_rc('link_catpath', array(
-			'url' => cot_url('forums', 'm=topics&s='.$sectionid),
-			'title' =>  htmlspecialchars($title)
-		));
 	}
-	else
-	{
-		foreach($pathcodes as $k => $x)
-		{
-			$tmp[]= htmlspecialchars($cot_forums_str[$x]['title']);
-		}
-		if(is_array($master))
-		{
-			$tmp[] = htmlspecialchars($master[1]);
-		}
-		$tmp[] = htmlspecialchars($title);
-	}
-
-	return implode(' '.$cfg['separator'].' ', $tmp);
+	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
 }
 
 /*
@@ -152,13 +136,13 @@ function cot_forum_info($id)
  * Deletes outdated topics
  *
  * @param string $mode Selection criteria
- * @param int $section Section
+ * @param string $section Section
  * @param int $param Selection parameter value
  * @return int
  */
 function cot_forum_prunetopics($mode, $section, $param)
 {
-	global $db, $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_sections, $L;
+	global $db, $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_stats, $L;
 
 	$num = 0;
 	$num1 = 0;
@@ -196,14 +180,7 @@ function cot_forum_prunetopics($mode, $section, $param)
 		}
 
 		$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
-		$sql = $db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num' WHERE fs_id='$section'");
-
-		$sql = $db->query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$section' ");
-		$row = $sql->fetch();
-
-		$fs_masterid = $row['fs_masterid'];
-
-		$sql = ($fs_masterid>0) ? $db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num' WHERE fs_id='$fs_masterid'") : '';
+		$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num' WHERE fs_cat='$section'");
 	}
 	$num1 = ($num1=='') ? '0' : $num1;
 	return($num1);
@@ -212,37 +189,17 @@ function cot_forum_prunetopics($mode, $section, $param)
 /**
  * Recounts all counters for a given section
  *
- * @param int $id Section ID
+ * @param string $section Section Code
  */
-function cot_forum_resync($id)
+function cot_forum_resync($section)
 {
-	global $db, $db_forum_topics, $db_forum_posts, $db_forum_sections;
+	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats;
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_sections WHERE fs_masterid='$id' ");
-	$result = $sql->fetchColumn();
-
-	if (!$result)
-	{
-		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat='$id'");
-		$num = $sql->fetchColumn();
-		$sql = $db->query("UPDATE $db_forum_sections SET fs_topiccount='$num' WHERE fs_id='$id'");
-		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='$id'");
-		$num = $sql->fetchColumn();
-		$sql = $db->query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
-	}
-	else
-	{
-		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat='$id'");
-		$num = $sql->fetchColumn();
-		$sql = $db->query("SELECT SUM(fs_topiccount) FROM $db_forum_sections WHERE fs_masterid='$id'");
-		$num = $num + $sql->fetchColumn();
-		$sql = $db->query("UPDATE $db_forum_sections SET fs_topiccount='$num' WHERE fs_id='$id'");
-		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='$id'");
-		$num = $sql->fetchColumn();
-		$sql = $db->query("SELECT SUM(fs_postcount) FROM $db_forum_sections WHERE fs_masterid='$id'");
-		$num = $num + $sql->fetchColumn();
-		$sql = $db->query("UPDATE $db_forum_sections SET fs_postcount='$num' WHERE fs_id='$id'");
-	}
+	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat='$section'");
+	$num1 = $sql->fetchColumn();
+	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='$section'");
+	$num = $sql->fetchColumn();
+	$sql = $db->query("UPDATE $db_forum_stats SET fs_postcount='$num', fs_topiccount='$num1' WHERE fs_cat='$section'");
 }
 
 /**
@@ -291,20 +248,14 @@ function cot_forum_resyncall()
 /**
  * Changes last message for the section
  *
- * @param int $id Section ID
+ * @param string $cat Section cat
  */
-function cot_forum_sectionsetlast($id)
+function cot_forum_sectionsetlast($cat)
 {
-	global $db, $db_forum_topics, $db_forum_sections;
-	$sql = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_cat='$id' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
+	global $db, $db_forum_topics, $db_forum_stats;
+	$sql = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_cat='$cat' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
 	$row = $sql->fetch();
-	$sql = $db->query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".$db->prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".$db->prep($row['ft_lastpostername'])."' WHERE fs_id='$id'");
-
-	$sqll = $db->query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$id' ");
-	$roww = $sqll->fetch();
-	$fs_masterid = $roww['fs_masterid'];
-
-	$sql = ($fs_masterid>0) ? $db->query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".$db->prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".$db->prep($row['ft_lastpostername'])."' WHERE fs_id='$fs_masterid'") : '';
+	$sql = $db->query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".$db->prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".$db->prep($row['ft_lastpostername'])."' WHERE fs_cat='$cat'");
 }
 
 /**

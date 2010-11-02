@@ -446,7 +446,7 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
  */
 function cot_load_structure()
 {
-	global $db, $db_structure, $db_extra_fields, $cfg, $L, $cot_extrafields, $structure;
+	global $db, $db_structure, $db_extra_fields, $cfg, $L, $cot_extrafields, $structure, $R;
 	$structure = array();
 	$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
 

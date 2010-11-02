@@ -18,7 +18,7 @@ if (cot_module_installed('forums'))
 
 		$auth_permit = array(COT_GROUP_DEFAULT => 7, COT_GROUP_GUESTS => 5, COT_GROUP_MEMBERS => 7);
 		$auth_lock = array(COT_GROUP_DEFAULT => 0, COT_GROUP_GUESTS => 250, COT_GROUP_MEMBERS => 128);
-		cot_auth_add_item($n, $rstructure['structure_code'], $auth_permit, $auth_lock);
+		cot_auth_add_item('forums', $row['fn_code'], $auth_permit, $auth_lock);
 	}
 
 	$sql = $db->query("CREATE TABLE IF NOT EXISTS `$db_forum_stats` (
