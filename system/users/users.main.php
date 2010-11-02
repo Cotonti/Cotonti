@@ -139,7 +139,7 @@ foreach (cot_getextplugins('users.query') as $pl)
 
 $sql = $db->query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where));
 $totalusers = $sql->fetchColumn();
-$sql = $db->query("SELECT u.* $join_columns FROM $db_users AS u $join_condition  WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
+$sql = $db->query("SELECT u.* $join_columns FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
@@ -200,10 +200,10 @@ foreach($cot_groups as $k => $i)
 		$filter_values[] = cot_url('users', 'gm='.$k);
 	}
 }
-$maingrpfilters = cot_selectbox($gm, 'bymaingroup', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
+$maingrpfilters = cot_selectbox($g, 'bymaingroup', $filter_values_g, $filter_titles, false, array('onchange' => 'redirect(this)'));
 
 $filter_titles[0] = $L['Group'];
-$grpfilters = cot_selectbox($g, 'bygroupms', $filter_values_g, $filter_titles, false, array('onchange' => 'redirect(this)'));
+$grpfilters = cot_selectbox($g, 'bygroupms', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
 
 /*=========*/
 
