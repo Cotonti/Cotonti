@@ -25,15 +25,6 @@ $R['forums_icon_section_activity'] = '<img class="icon" src="modules/forums/img/
 $R['forums_icon_topic'] = '<img class="icon" src="images/icons/default/{$icon}.png" alt="'.$L['forums_topic'].'" />';
 $R['forums_icon_topic_t'] = '<img class="icon" src="images/icons/default/{$icon}.png" alt="'.$L['forums_topic'].'" title="{$title}" />';
 
-
-/**
- * Forums Sections
- */
-
-$R['forums_code_tbody_begin'] = '<tbody id="blk_{$cat}" {$style}>';
-$R['forums_code_tbody_end'] = '</tbody>';
-
-
 /**
  * Forums Topics
  */
@@ -95,6 +86,5 @@ $R['forums_code_admin_mark'] = ' *';
 $R['forums_code_addtxt'] = 'function addtxt(text) {
 	insertText(document, "$c1", "$c2", text);
 }';
-$R['forums_code_post_empty'] = '&nbsp;';
 
 ?>

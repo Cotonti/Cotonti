@@ -105,7 +105,7 @@ if ($a == 'newtopic')
 			'ft_state' => 0,
 			'ft_mode' => (int)$newprvtopic,
 			'ft_sticky' => 0,
-			'ft_sectionid' => (int)$s,
+			'ft_cat' => (int)$s,
 			'ft_title' => $newtopictitle,
 			'ft_desc' => $newtopicdesc,
 			'ft_preview' => $newtopicpreview,
@@ -123,7 +123,7 @@ if ($a == 'newtopic')
 
 		$db->insert($db_forum_posts, array(
 			'fp_topicid' => (int)$q,
-			'fp_sectionid' => (int)$s,
+			'fp_cat' => (int)$s,
 			'fp_posterid' => (int)$usr['id'],
 			'fp_postername' => $usr['name'],
 			'fp_creation' => (int)$sys['now_offset'],

@@ -147,7 +147,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$ns = cot_import('ns','P','INT');
 			$ghost = cot_import('ghost','P','BOL');
 
-			$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_sectionid='$s' and fp_topicid='$q'");
+			$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='$s' and fp_topicid='$q'");
 			$num = $sql->fetchColumn();
 
 			if ($num<1 || $s==$ns)
@@ -159,11 +159,11 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 
 			if ($ghost)
 			{
-				$sql1 = $db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id='$q' and ft_sectionid='$s'");
+				$sql1 = $db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id='$q' and ft_cat='$s'");
 			}
 
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_sectionid='$ns' WHERE ft_id='$q' and ft_sectionid='$s'");
-			$sql = $db->query("UPDATE $db_forum_posts SET fp_sectionid='$ns' WHERE fp_sectionid='$s' and fp_topicid='$q'");
+			$sql = $db->query("UPDATE $db_forum_topics SET ft_cat='$ns' WHERE ft_id='$q' and ft_cat='$s'");
+			$sql = $db->query("UPDATE $db_forum_posts SET fp_cat='$ns' WHERE fp_cat='$s' and fp_topicid='$q'");
 			$sql = $db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-1 WHERE fs_id='$s'");
 			$sql = $db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount+1 WHERE fs_id='$ns'");
 			$sql = $db->query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-'$num' WHERE fs_id='$s'");
@@ -196,7 +196,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 					'ft_state' => 0,
 					'ft_mode' => (int)$row['ft_mode'],
 					'ft_sticky' => 0,
-					'ft_sectionid' => (int)$s,
+					'ft_cat' => (int)$s,
 					'ft_title' => $row['ft_title'],
 					'ft_desc' => $row['ft_desc'],
 					'ft_preview' => $row['ft_preview'],
@@ -367,8 +367,6 @@ while ($fsn = $sqql->fetch())
 
 	if (cot_auth('forums', $fsn['fs_id'], 'R'))
 	{
-		$fsn['fs_topiccount_all'] = $fsn['fs_topiccount'] + $fsn['fs_topiccount_pruned'];
-		$fsn['fs_postcount_all'] = $fsn['fs_postcount'] + $fsn['fs_postcount_pruned'];
 		$fsn['fs_desc'] = htmlspecialchars($fsn['fs_desc']);
 		$fsn['fs_desc'] .= ($fsn['fs_state']) ? " ".$L['Locked'] : '';
 
@@ -419,8 +417,6 @@ while ($fsn = $sqql->fetch())
 			"FORUMS_SECTIONS_ROW_ICON" => $fsn['fs_icon'],
 			"FORUMS_SECTIONS_ROW_TOPICCOUNT" => $fsn['fs_topiccount'],
 			"FORUMS_SECTIONS_ROW_POSTCOUNT" => $fsn['fs_postcount'],
-			"FORUMS_SECTIONS_ROW_TOPICCOUNT_ALL" => $fsn['fs_topiccount_all'],
-			"FORUMS_SECTIONS_ROW_POSTCOUNT_ALL" => $fsn['fs_postcount_all'],
 			"FORUMS_SECTIONS_ROW_VIEWCOUNT" => $fsn['fs_viewcount'],
 			"FORUMS_SECTIONS_ROW_VIEWCOUNT_SHORT" => $fsn['fs_viewcount_short'],
 			"FORUMS_SECTIONS_ROW_URL" => cot_url('forums', "m=topics&s=".$fsn['fs_id']),
@@ -452,8 +448,8 @@ if ($catnum>1)
 
 $cond = ($usr['isadmin']) ? '' : "AND ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".$usr['id'].")";
 $sqql_select = 't.*';
-$sqql_where = "ft_sectionid='$s' $cond";
-$sqql_where_count = "ft_sectionid='$s' $cond";
+$sqql_where = "ft_cat='$s' $cond";
+$sqql_where_count = "ft_cat='$s' $cond";
 $sqql_order = "ft_sticky DESC, ft_$o $w";
 $sqql_limit = "$d, ".$cfg['forums']['maxtopicsperpage'];
 $sqql_join_ratings_columns = '';

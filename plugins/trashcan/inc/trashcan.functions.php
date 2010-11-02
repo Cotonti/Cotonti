@@ -180,8 +180,8 @@ function cot_trashforumpost_check($data)
 function cot_trashforumpost_sync($data)
 {
 	cot_forum_resynctopic($data['fp_topicid']);
-	cot_forum_sectionsetlast($data['fp_sectionid']);
-	cot_forum_resync($data['fp_sectionid']);
+	cot_forum_sectionsetlast($data['fp_cat']);
+	cot_forum_resync($data['fp_cat']);
 	return TRUE;
 }
 
@@ -194,8 +194,8 @@ function cot_trashforumpost_sync($data)
 function cot_trashforumtopic_sync($data)
 {
 	cot_forum_resynctopic($data['ft_id']);
-	cot_forum_sectionsetlast($data['ft_sectionid']);
-	cot_forum_resync($data['ft_sectionid']);
+	cot_forum_sectionsetlast($data['ft_cat']);
+	cot_forum_resync($data['ft_cat']);
 	return TRUE;
 }
 

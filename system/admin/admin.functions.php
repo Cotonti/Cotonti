@@ -118,28 +118,6 @@ function cot_loaddoctypes()
 }
 
 /**
- * Returns forum category dropdown code
- *
- * @param int $check Selected category
- * @param string $name Dropdown name
- * @return string
- */
-function cot_selectbox_forumcat($check, $name)
-{
-	global $usr, $cot_forums_str, $L;
-
-	$result =  "<select name=\"$name\" size=\"1\">";
-	if (is_array($cot_forums_str))
-		foreach($cot_forums_str as $i => $x)
-		{
-			$selected = ($i==$check) ? "selected=\"selected\"" : '';
-			$result .= "<option value=\"".$i."\" $selected> ".$x['tpath']."</option>";
-		}
-	$result .= "</select>";
-	return $result;
-}
-
-/**
  * Returns group selection dropdown code
  *
  * @param string $check Seleced value

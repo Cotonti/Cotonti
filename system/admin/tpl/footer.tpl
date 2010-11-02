@@ -8,7 +8,6 @@
 		<li><a href="admin.php?m=config">{PHP.L.Configuration}</a></li>
 		<li><a href="admin.php?m=page">{PHP.L.Pages}</a></li>
 		<li><a href="admin.php?m=users">{PHP.L.Users}</a></li>
-		<li><a href="admin.php?m=forums">{PHP.L.Forums}</a></li>
 		<li><a href="admin.php?m=plug">{PHP.L.Plugins}</a></li>
 		<li><a href="admin.php?m=tools">{PHP.L.Tools}</a></li>
 		<li><a href="admin.php?m=other">{PHP.L.Other}</a></li>
