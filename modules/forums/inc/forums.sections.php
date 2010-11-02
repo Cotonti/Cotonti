@@ -107,7 +107,7 @@ foreach ($structure['forums'] as $i => $x)
 		}
 	}
 }
-$secact_max = max($cot_act);
+$secact_max = is_array($cot_act) ? (max($cot_act)) : 0;
 
 $title_params = array(
 	'FORUM' => $L['Forums']
