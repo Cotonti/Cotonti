@@ -325,7 +325,7 @@ switch($n)
 			elseif ($config_type == COT_CONFIG_TYPE_RANGE)
 			{
 				$range_params = preg_split('#\s*,\s*#', $row['config_variants']);
-				$cfg_params = count($range_params == 3) ? range($range_params[0], $range_params[1], $range_params[2])
+				$cfg_params = count($range_params) == 3 ? range($range_params[0], $range_params[1], $range_params[2])
 					: range($range_params[0], $range_params[1]);
 				$config_input = cot_selectbox($config_value, $config_name, $cfg_params, $cfg_params, false);
 			}

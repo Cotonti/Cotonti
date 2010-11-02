@@ -1,25 +1,31 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=tools
+[END_COT_EXT]
+==================== */
+
 /**
- * URL Transformation Rules editor.
+ * Overloads standard cot_url() function and loads URL
+ * transformation rules
  *
- * @package Cotonti
- * @version 0.1.0
+ * @package urleditor
+ * @version 0.7.0
  * @author Trustmaster
- * @copyright Copyright (c) 2008 Cotonti Team
- * @license BSD License
+ * @copyright Copyright (c) Cotonti Team 2010
+ * @license BSD
  */
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'urleditor');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_skinfile('admin.urls'));
+$t = new XTemplate(cot_skinfile('urleditor.admin', true));
 
+cot_require_api('forms');
+cot_require_lang('urleditor', 'plug');
 
-
-$adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
-$adminpath[] = array(cot_url('admin', 'm=urls'), $L['adm_urls']);
 $adminhelp = $L['adm_help_urls'];
 
 $a = cot_import('a', 'G', 'ALP');
@@ -374,7 +380,7 @@ cot_display_messages($t);
 
 $t->assign(array(
 	'ADMIN_URLS_II' => $ii,
-	'ADMIN_URLS_FORM_URL' => cot_url('admin', 'm=urls&a=save'),
+	'ADMIN_URLS_FORM_URL' => cot_url('admin', 'm=other&p=urleditor&a=save'),
 	'ADMIN_URLS_ROW_AREAS' => cot_selectbox('*', 'area[]', $areas, $areas, false),
 	'ADMIN_URLS_ROW_PARTS1' => cot_inputbox('text', 'params[]', ''),
 	'ADMIN_URLS_ROW_PARTS2' => cot_inputbox('text', 'format[]', ''),
