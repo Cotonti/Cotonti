@@ -40,10 +40,10 @@ while ($row = $sql1->fetch())
 	{
 		$sublock = (!empty($row['online_subloc'])) ? ' '.$cfg['separator'].' '.htmlspecialchars($row['online_subloc']) : '';
 		$t->assign(array(
-			'WHOSONlINE_ROW1_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
-			'WHOSONlINE_ROW1_USER_ONLINE_IP'=> cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()), $row['online_ip'])
+			'WHOSONLINE_ROW1_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
+			'WHOSONLINE_ROW1_USER_ONLINE_IP'=> cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()), $row['online_ip'])
 		));
-		$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW1.WHOSONlINE_ROW1_IS_ADMIN');
+		$t->parse('MAIN.NOT_EMPTY.WHOSONLINE_ROW1.WHOSONLINE_ROW1_IS_ADMIN');
 	}
 
 	if ($showavatars)
@@ -53,12 +53,12 @@ while ($row = $sql1->fetch())
 	}
 
 	$t->assign(array(
-		'WHOSONlINE_ROW1_SHOWAVATARS' => ($showavatars) ? $user_avatar : '',
-		'WHOSONlINE_ROW1_USER' => cot_build_user($row['online_userid'], htmlspecialchars($row['online_name'])),
+		'WHOSONLINE_ROW1_SHOWAVATARS' => ($showavatars) ? $user_avatar : '',
+		'WHOSONLINE_ROW1_USER' => cot_build_user($row['online_userid'], htmlspecialchars($row['online_name'])),
 	));
-	$t->assign(cot_generate_usertags($row, "WHOSONlINE_ROW1_USER_", $L['Guest']));
+	$t->assign(cot_generate_usertags($row, "WHOSONLINE_ROW1_USER_", $L['Guest']));
 
-	$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW1');
+	$t->parse('MAIN.NOT_EMPTY.WHOSONLINE_ROW1');
 }
 
 while ($row = $sql2->fetch())
@@ -70,19 +70,19 @@ while ($row = $sql2->fetch())
 	{
 		$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator'].' '.htmlspecialchars($row['online_subloc']) : '';
 		$t->assign(array(
-			'WHOSONlINE_ROW2_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
-			'WHOSONlINE_ROW2_USER_ONLINE_IP'=> cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()), $row['online_ip'])
+			'WHOSONLINE_ROW2_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
+			'WHOSONLINE_ROW2_USER_ONLINE_IP'=> cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()), $row['online_ip'])
 		));
-		$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW2.WHOSONlINE_ROW2_IS_ADMIN');
+		$t->parse('MAIN.NOT_EMPTY.WHOSONLINE_ROW2.WHOSONLINE_ROW2_IS_ADMIN');
 	}
 
 	$t->assign(array(
-		'WHOSONlINE_ROW2_SHOWAVATARS' => ($showavatars) ? '&nbsp;' : '',
-		'WHOSONlINE_ROW2_USER' => $L['plu_visitor'].' #'.$visitornum,
-		'WHOSONlINE_ROW2_USER_ONLINE_LASTSEEN'=> cot_build_timegap($row['online_lastseen'],$sys['now']),
+		'WHOSONLINE_ROW2_SHOWAVATARS' => ($showavatars) ? '&nbsp;' : '',
+		'WHOSONLINE_ROW2_USER' => $L['plu_visitor'].' #'.$visitornum,
+		'WHOSONLINE_ROW2_USER_ONLINE_LASTSEEN'=> cot_build_timegap($row['online_lastseen'],$sys['now']),
 
 	));
-	$t->parse('MAIN.NOT_EMPTY.WHOSONlINE_ROW2');
+	$t->parse('MAIN.NOT_EMPTY.WHOSONLINE_ROW2');
 }
 
 if ($visitornum > 0 || $visituser > 0)
@@ -90,20 +90,20 @@ if ($visitornum > 0 || $visituser > 0)
 	if ($usr['isadmin'])
 	{
 		$t->assign(array(
-			'WHOSONlINE_IN' => $L['plu_in'],
-			'WHOSONlINE_IP' => $L['Ip']
+			'WHOSONLINE_IN' => $L['plu_in'],
+			'WHOSONLINE_IP' => $L['Ip']
 		));
 		$t->parse('MAIN.NOT_EMPTY.IS_ADMIN');
 	}
 
 	$t->assign(array(
-		'WHOSONlINE_TITLE' => $L['plu_title'],
-		'WHOSONlINE_MAXUSERS' => $maxusers,
-		'WHOSONlINE_VISITORS' => $total2,
-		'WHOSONlINE_MEMBERS' => $total1,
-		'WHOSONlINE_TEXTVISITORS' => cot_declension($total2, $Ls['Guests'], true),
-		'WHOSONlINE_TEXTMEMBERS' => cot_declension($total1, $Ls['Members'], true),
-		'WHOSONlINE_USER_AVATAR' => ($showavatars) ? $L['Avatar'] : ''
+		'WHOSONLINE_TITLE' => $L['plu_title'],
+		'WHOSONLINE_MAXUSERS' => $maxusers,
+		'WHOSONLINE_VISITORS' => $total2,
+		'WHOSONLINE_MEMBERS' => $total1,
+		'WHOSONLINE_TEXTVISITORS' => cot_declension($total2, $Ls['Guests'], true),
+		'WHOSONLINE_TEXTMEMBERS' => cot_declension($total1, $Ls['Members'], true),
+		'WHOSONLINE_USER_AVATAR' => ($showavatars) ? $L['Avatar'] : ''
 	));
 	$t->parse('MAIN.NOT_EMPTY');
 }
