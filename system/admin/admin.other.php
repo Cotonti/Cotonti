@@ -11,9 +11,6 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
-cot_block($usr['auth_read']);
-
 $t = new XTemplate(cot_skinfile('admin.other'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
@@ -29,6 +26,9 @@ foreach (cot_getextplugins('admin.other.first') as $pl)
 
 if(!empty($p))
 {
+	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', $p);
+	cot_block($usr['isadmin']);
+
 	if (file_exists(cot_langfile($p, 'plug')))
 	{
 		cot_require_lang($p, 'plug');
@@ -78,6 +78,9 @@ if(!empty($p))
 }
 else
 {
+	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
+	cot_block($usr['auth_read']);
+
 	$target = array();
 
 	function cot_admin_other_cmp($pl_a, $pl_b)

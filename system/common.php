@@ -173,12 +173,6 @@ if (!$cot_plugins)
 	$cache && $cache->db->store('cot_plugins', $cot_plugins, 'system');
 }
 
-if (!is_array($cot_urltrans))
-{
-	cot_load_urltrans();
-	$cache && $cache->db->store('cot_urltrans', $cot_urltrans, 'system', 1200);
-}
-
 if (!$cot_modules)
 {
     $sql = $db->query("SELECT ct_code, ct_title FROM $db_core
