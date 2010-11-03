@@ -6,11 +6,11 @@ Hooks=standalone
 ==================== */
 
 /**
- * Displays users who are currently online
+ * Displays users and guests which are currently online
  *
  * @package whosonline
- * @version 0.7.0
- * @author Neocrome, Cotonti Team
+ * @version 0.9.0
+ * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
@@ -18,94 +18,51 @@ Hooks=standalone
 (defined('COT_CODE') || defined('COT_PLUG')) or die('Wrong URL.');
 
 cot_require('users');
+cot_require('hits', true);
 
-$showavatars = $cfg['plugin']['whosonline']['showavatars'];
-$miniavatar_x = $cfg['plugin']['whosonline']['miniavatar_x'];
-$miniavatar_y = $cfg['plugin']['whosonline']['miniavatar_y'];
-
-$sql1 = $db->query("SELECT DISTINCT u.*, o.* FROM $db_online AS o LEFT JOIN $db_users AS u ON u.user_id=o.online_userid WHERE online_name!='v' ORDER BY u.user_name ASC");
-$sql2 = $db->query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_name = 'v' ORDER BY online_lastseen DESC");
-$sql3 = $db->query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
-$total1 = $sql1->rowCount();
-$total2 = $sql2->rowCount();
-$row = $sql3->fetch();
-$maxusers = $row[0];
+$sql_users = $db->query("SELECT DISTINCT u.*, o.* FROM $db_online AS o INNER JOIN $db_users AS u ON u.user_id=o.online_userid ORDER BY online_lastseen DESC");
+$sql_guests = $db->query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_userid = -1 ORDER BY online_lastseen DESC");
+$sql_stats = $db->query("SELECT stat_value FROM $db_stats where stat_name='maxusers' LIMIT 1");
+$total_users = $sql_users->rowCount();
+$total_guests = $sql_guests->rowCount();
+$stats = $sql_stats->fetch();
+$maxusers = $stats[0];
 $visitornum = 0;
 $visituser = 0;
 
-while ($row = $sql1->fetch())
+while ($row = $sql_users->fetch())
 {
 	$visituser++;
-	if ($usr['isadmin'])
-	{
-		$sublock = (!empty($row['online_subloc'])) ? ' '.$cfg['separator'].' '.htmlspecialchars($row['online_subloc']) : '';
-		$t->assign(array(
-			'WHOSONLINE_ROW1_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
-			'WHOSONLINE_ROW1_USER_ONLINE_IP'=> cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()), $row['online_ip'])
-		));
-		$t->parse('MAIN.NOT_EMPTY.WHOSONLINE_ROW1.WHOSONLINE_ROW1_IS_ADMIN');
-	}
-
-	if ($showavatars)
-	{
-		$user_avatar = '<a href="'.cot_url('users', 'm=details&id='.$row['online_userid'].'&u='.htmlspecialchars($row['online_name'])).'">';
-		$user_avatar .= (!empty($row['user_avatar'])) ? '<img src="'.$row['user_avatar'].'" width="'.$miniavatar_x.'" height="'.$miniavatar_y.'" alt="'.$L['Avatar'].'" /></a>' : cot_rc('img_pixel', array('x' => $miniavatar_x, 'y' => $miniavatar_y)) . '</a>';
-	}
-
 	$t->assign(array(
-		'WHOSONLINE_ROW1_SHOWAVATARS' => ($showavatars) ? $user_avatar : '',
-		'WHOSONLINE_ROW1_USER' => cot_build_user($row['online_userid'], htmlspecialchars($row['online_name'])),
+		'USER_LOCATION' => htmlspecialchars($row['online_location']),
+		'USER_SUBLOCATION' => htmlspecialchars($row['online_subloc']),
+		'USER_IP' => cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()), $row['online_ip']),
+		'USER_LINK' => cot_build_user($row['online_userid'], htmlspecialchars($row['online_name'])),
+		'USER_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
 	));
-	$t->assign(cot_generate_usertags($row, "WHOSONLINE_ROW1_USER_", $L['Guest']));
-
-	$t->parse('MAIN.NOT_EMPTY.WHOSONLINE_ROW1');
+	$t->assign(cot_generate_usertags($row, "USER_"));
+	$t->parse('MAIN.USERS');
 }
 
-while ($row = $sql2->fetch())
+while ($row = $sql_guests->fetch())
 {
 	$visitornum++;
-	$online_location = $L[$row['online_location']];//This line is needed?
-
-	if($usr['isadmin'])
-	{
-		$sublock = (!empty($row['online_subloc'])) ? " ".$cfg['separator'].' '.htmlspecialchars($row['online_subloc']) : '';
-		$t->assign(array(
-			'WHOSONLINE_ROW2_USER_ONLINE_LOCATION'=> $L[$row['online_location']].$sublock,
-			'WHOSONLINE_ROW2_USER_ONLINE_IP'=> cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()), $row['online_ip'])
-		));
-		$t->parse('MAIN.NOT_EMPTY.WHOSONLINE_ROW2.WHOSONLINE_ROW2_IS_ADMIN');
-	}
-
 	$t->assign(array(
-		'WHOSONLINE_ROW2_SHOWAVATARS' => ($showavatars) ? '&nbsp;' : '',
-		'WHOSONLINE_ROW2_USER' => $L['plu_visitor'].' #'.$visitornum,
-		'WHOSONLINE_ROW2_USER_ONLINE_LASTSEEN'=> cot_build_timegap($row['online_lastseen'],$sys['now']),
-
+		'GUEST_LOCATION' => htmlspecialchars($row['online_location']),
+		'GUEST_SUBLOCATION' => htmlspecialchars($row['online_subloc']),
+		'GUEST_IP' => cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['online_ip'].'&'.cot_xg()), $row['online_ip']),
+		'GUEST_NUMBER' => $visitornum,
+		'GUEST_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
 	));
-	$t->parse('MAIN.NOT_EMPTY.WHOSONLINE_ROW2');
+	$t->parse('MAIN.GUESTS');
 }
 
-if ($visitornum > 0 || $visituser > 0)
-{
-	if ($usr['isadmin'])
-	{
-		$t->assign(array(
-			'WHOSONLINE_IN' => $L['plu_in'],
-			'WHOSONLINE_IP' => $L['Ip']
-		));
-		$t->parse('MAIN.NOT_EMPTY.IS_ADMIN');
-	}
-
-	$t->assign(array(
-		'WHOSONLINE_TITLE' => $L['plu_title'],
-		'WHOSONLINE_MAXUSERS' => $maxusers,
-		'WHOSONLINE_VISITORS' => $total2,
-		'WHOSONLINE_MEMBERS' => $total1,
-		'WHOSONLINE_TEXTVISITORS' => cot_declension($total2, $Ls['Guests'], true),
-		'WHOSONLINE_TEXTMEMBERS' => cot_declension($total1, $Ls['Members'], true),
-		'WHOSONLINE_USER_AVATAR' => ($showavatars) ? $L['Avatar'] : ''
-	));
-	$t->parse('MAIN.NOT_EMPTY');
-}
+$t->assign(array(
+	'STAT_MAXUSERS' => $maxusers,
+	'STAT_COUNT_GUESTS' => $total_guests,
+	'STAT_COUNT_USERS' => $total_users,
+	'GUESTS' => cot_declension($total_guests, $Ls['Guests'], true),
+	'USERS' => cot_declension($total_users, $Ls['Members'], true)
+));
 
 ?>
