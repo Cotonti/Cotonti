@@ -9,7 +9,7 @@
 						<th>{PHP.L.Group}</th>
 						<th>{PHP.L.Location}</th>
 						<th>{PHP.L.LastSeen}</th>
-						<th>{PHP.L.IPaddress}</th>
+						<!-- IF {PHP.usr.isadmin} --><th>{PHP.L.IPaddress}</th><!-- ENDIF -->
 					</tr>
 				</thead>
 				<tbody>
@@ -19,7 +19,7 @@
 						<td>{USER_MAINGRP}</td>
 						<td>{USER_LOCATION} {USER_SUBLOCATION}</td>
 						<td>{USER_LASTSEEN}</td>
-						<td>{USER_IP}</td>
+						<!-- IF {PHP.usr.isadmin} --><td>{USER_IP}</td><!-- ENDIF -->
 					</tr>
 					<!-- END: USERS -->
 					<!-- BEGIN: GUESTS -->
