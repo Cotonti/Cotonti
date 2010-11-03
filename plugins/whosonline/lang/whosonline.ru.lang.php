@@ -15,24 +15,17 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Title & Subtitle
  */
 
-$L['plu_title'] = 'Сейчас онлайн';
+$L['WhosOnline'] = 'Сейчас онлайн';
 
 /**
  * Plugin Body
  */
 
-$L['plu_mostonline'] = 'Самое большое количество посетителей в онлайне';
-$L['plu_therescurrently'] = 'Сейчас на сайте';
-$L['plu_lastseen1'] = 'Дата и время';
-$L['plu_in'] = 'Раздел сайта';
-$L['plu_visitor'] = 'Гость';
-
-/**
- * Plugin Config
- */
-
-$L['cfg_miniavatar_x'] = array('Размер мини-аватара по оси x', 'в пикселях');
-$L['cfg_miniavatar_y'] = array('Размер мини-аватара по оси y', 'в пикселях');
-$L['cfg_showavatars'] = array('Включить отображение аватаров пользователей');
+$L['MostOnline'] = 'Самое большое количество посетителей в онлайне';
+$L['NowOnline'] = 'Сейчас на сайте';
+$L['LastSeen'] = 'Дата и время';
+$L['Location'] = 'Раздел сайта';
+$L['IPaddress'] = 'IP address';
+$L['Visitor'] = 'Гость';
 
 ?>

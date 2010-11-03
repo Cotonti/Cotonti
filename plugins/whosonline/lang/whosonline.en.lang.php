@@ -15,24 +15,17 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Title & Subtitle
  */
 
-$L['plu_title'] = 'Who\'s Online';
+$L['WhosOnline'] = 'Who\'s Online';
 
 /**
  * Plugin Body
  */
 
-$L['plu_mostonline'] = 'Most users ever online';
-$L['plu_therescurrently'] = 'Now online';
-$L['plu_lastseen1'] = 'Date and time';
-$L['plu_in'] = 'Location';
-$L['plu_visitor'] = 'Visitor';
-
-/**
- * Plugin Config
- */
-
-$L['cfg_miniavatar_x'] = array('V-size of mini-avatars', 'pixels');
-$L['cfg_miniavatar_y'] = array('H-size of mini-avatars', 'pixels');
-$L['cfg_showavatars'] = array('Display user avatars');
+$L['MostOnline'] = 'Most users ever online';
+$L['NowOnline'] = 'Now online';
+$L['LastSeen'] = 'Last seen';
+$L['Location'] = 'Location';
+$L['IPaddress'] = 'IP address';
+$L['Visitor'] = 'Visitor';
 
 ?>
