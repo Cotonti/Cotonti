@@ -70,10 +70,6 @@ function cot_build_forumpath($cat, $mask = 'link_catpath')
 	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
 }
 
-/*
- * ==================================== Forum Functions ==================================
-*/
-
 /**
  * Removes a forum section and all its contents
  *
@@ -109,27 +105,6 @@ function cot_forum_deletesection($id)
 	$num += $db->affectedRows;
 	$num += cot_auth_remove_item('forums', $id);
 	return $num;
-}
-
-/**
- * Gets details for forum section
- *
- * @param int $id Section ID
- * @return mixed
- */
-function cot_forum_info($id)
-{
-	global $db, $db_forum_sections;
-
-	$sql = $db->query("SELECT * FROM $db_forum_sections WHERE fs_id='$id'");
-	if($res = $sql->fetch())
-	{
-		return ($res);
-	}
-	else
-	{
-		return ('');
-	}
 }
 
 /**
@@ -313,6 +288,37 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 	}
 
 	return $sections;
+}
+
+
+/**
+ * Strip quotes
+ *
+ * @param string $string String
+ *
+ * @return string
+ */
+function cot_stripquote($string)
+{
+	global $R;
+	$startindex = mb_stripos($string, $R['forums_code_quote_begin']);
+	while ($startindex >= 0)
+	{
+		$stopindex = mb_strpos($string, $R['forums_code_quote_close']);
+		if ($stopindex > 0)
+		{
+			$fragment = mb_substr($string,$startindex,($stopindex-$startindex+8));
+			$string = str_ireplace($fragment,'',$string);
+			$stopindex = mb_stripos($string, $R['forums_code_quote_close']);
+		}
+		else
+		{
+			break;
+		}
+		$string = trim($string);
+		$startindex = mb_stripos($string, $R['forums_code_quote_begin']);
+	}
+	return($string);
 }
 
 ?>

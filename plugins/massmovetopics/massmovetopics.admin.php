@@ -37,20 +37,16 @@ if ($a == 'move')
 	$t->parse('MAIN.MASSMOVETOPICS_MOVE_DONE');
 }
 
-$sql = $db->query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
-LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
-ORDER by fn_path ASC, fs_order ASC");
-
-while ($row = $sql->fetch())
+foreach($structure['forums'] as $key => $val)
 {
 	$t->assign(array(
-		'MASSMOVETOPICS_SELECT_SOURCE_NAME' => cot_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
-		'MASSMOVETOPICS_SELECT_SOURCE_FS_ID' => $row['fs_id']
+		'MASSMOVETOPICS_SELECT_SOURCE_NAME' => $val['tpath'],
+		'MASSMOVETOPICS_SELECT_SOURCE_FS_ID' => $key
 	));
 	$t->parse('MAIN.MASSMOVETOPICS_SELECT_SOURCE');
 	$t->assign(array(
-		'MASSMOVETOPICS_SELECT_TARGET_NAME' => cot_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
-		'MASSMOVETOPICS_SELECT_TARGET_FS_ID' => $row['fs_id']
+		'MASSMOVETOPICS_SELECT_TARGET_NAME' => $val['tpath'],
+		'MASSMOVETOPICS_SELECT_TARGET_FS_ID' => $key
 	));
 	$t->parse('MAIN.MASSMOVETOPICS_SELECT_TARGET');
 }

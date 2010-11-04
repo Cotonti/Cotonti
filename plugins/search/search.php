@@ -140,19 +140,16 @@ if (($tab == 'pag' || empty($tab))  && $cfg['page'] && $cfg['plugin']['search'][
 
 if (($tab == 'frm' || empty($tab)) && is_array($cfg['forums']) && $cfg['plugin']['search']['forumsearch'])
 {
-	$sql1 = $db->query("SELECT s.fs_id, s.fs_title, s.fs_category FROM $db_forum_sections AS s
-		LEFT JOIN $db_forum_structure AS n ON n.fn_code=s.fs_category
-		ORDER by fn_path ASC, fs_order ASC");
-
 	$forum_cat_list['all'] = $L['plu_allsections'];
-	while ($row1 = $sql1->fetch())
+	foreach($structure['forums'] as $key => $val)
 	{
-		if (cot_auth('forums', $row1['fs_id'], 'R'))
+		if (cot_auth('forums', $key, 'R'))
 		{
-			$forum_cat_list[$row1['fs_id']] = cot_build_forums($row1['fs_id'], $row1['fs_title'], $row1['fs_category'], FALSE);
-			$frm_catauth[] = $db->prep($row1['fs_id']);
+			$forum_cat_list[$key] = $val['tpath'];
+			$frm_catauth[] = $db->prep($key);
 		}
 	}
+
 	if ($rsearch['frm']['sub'][0] == 'all' || !is_array($rsearch['frm']['sub']))
 	{
 		$rsearch['frm']['sub'] = array();
@@ -283,9 +280,9 @@ if (!empty($sq))
 		$maxitems = $cfg['plugin']['search']['maxitems'] - $items;
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
 
-		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*, s.*
-			 	FROM $db_forum_posts p, $db_forum_topics t, $db_forum_sections s
-				WHERE $where AND p.fp_topicid = t.ft_id AND p.fp_sectionid = s.fs_id
+		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*
+			 	FROM $db_forum_posts p, $db_forum_topics t
+				WHERE $where AND p.fp_topicid = t.ft_id
 				GROUP BY t.ft_id ORDER BY ft_".$rsearch['frm']['sort']." ".$rsearch['frm']['sort2']."
 				LIMIT $d, $maxitems");
 		$items = $sql->rowCount();
@@ -297,7 +294,7 @@ if (!empty($sq))
 			{
 				$post_url = ($cfg['plugin']['search']['searchurl'] == 'Single') ? cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 				$t->assign(array(
-					'PLUGIN_FR_CATEGORY' => cot_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category'], TRUE),
+					'PLUGIN_FR_CATEGORY' => cot_build_forumpath($row['ft_cat']),
 					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
 					'PLUGIN_FR_TEXT' => cot_clear_mark($row['fp_text'], 0, $words),
 					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600),

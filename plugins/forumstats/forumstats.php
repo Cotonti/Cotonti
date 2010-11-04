@@ -21,25 +21,19 @@ cot_require('forums');
 
 $plugin_title = $L['plu_title'];
 
-$totalsections = $db->countRows($db_forum_sections);
+$totalsections = $db->countRows($db_forum_stats); // remake
 $totaltopics = $db->countRows($db_forum_topics);
 $totalposts = $db->countRows($db_forum_posts);
 
-$sql = $db->query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
+$sql = $db->query("SELECT SUM(fs_viewcount) FROM $db_forum_stats");
 $totalviews = $sql->fetchColumn();
 
-$sql = $db->query("SELECT t.ft_id, t.ft_title, t.ft_postcount, t.ft_sticky, t.ft_state,
-s.fs_id, s.fs_title, s.fs_category
-FROM $db_forum_topics t
-LEFT JOIN $db_forum_sections s ON t.ft_cat=s.fs_id
-WHERE 1
-ORDER BY ft_postcount DESC LIMIT 10");
-
+$sql = $db->query("SELECT * FROM $db_forum_topics WHERE 1 ORDER BY ft_postcount DESC LIMIT 10");
 $ii = 0;
 
 while ($row = $sql->fetch())
 {
-	if (cot_auth('forums', $row['fs_id'], 'R'))
+	if (cot_auth('forums', $row['ft_cat'], 'R'))
 	{
 		$ii++;
 		$ft_title = $row['ft_title'];
@@ -47,7 +41,7 @@ while ($row = $sql->fetch())
 		$ft_title .= ($row['ft_state']) ? " (x)" : '';
 		$t->assign(array(
 			'FORUMSTATS_REPLIEDTOP_II' => $ii,
-			'FORUMSTATS_REPLIEDTOP_FORUMS' => cot_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
+			'FORUMSTATS_REPLIEDTOP_FORUMS' => cot_build_forumpath($row['ft_cat']),
 			'FORUMSTATS_REPLIEDTOP_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 			'FORUMSTATS_REPLIEDTOP_TITLE' => htmlspecialchars($ft_title),
 			'FORUMSTATS_REPLIEDTOP_POSTCOUNT' => $row['ft_postcount']
@@ -59,25 +53,20 @@ while ($row = $sql->fetch())
 		$ii++;
 		$t->assign(array(
 			'FORUMSTATS_REPLIEDTOP_II' => $ii,
-			'FORUMSTATS_REPLIEDTOP_FORUMS' => cot_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
+			'FORUMSTATS_REPLIEDTOP_FORUMS' => cot_build_forumpath($row['ft_cat']),
 			'FORUMSTATS_REPLIEDTOP_POSTCOUNT' => $row['ft_postcount']
 		));
 		$t->parse('MAIN.FORUMSTATS_REPLIEDTOP_NO_USER');
 	}
 }
 
-$sql = $db->query("SELECT t.ft_id, t.ft_title, t.ft_viewcount, t.ft_sticky, t.ft_state,
-s.fs_id, s.fs_title, s.fs_category
-FROM $db_forum_topics AS t
-LEFT JOIN  $db_forum_sections AS s ON t.ft_cat=s.fs_id
-WHERE 1
-ORDER BY ft_viewcount DESC LIMIT 10");
+$sql = $db->query("SELECT * FROM $db_forum_topics WHERE 1 ORDER BY ft_viewcount DESC LIMIT 10");
 
 $ii = 0;
 
 while ($row = $sql->fetch())
 {
-	if (cot_auth('forums', $row['fs_id'], 'R'))
+	if (cot_auth('forums', $row['ft_cat'], 'R'))
 	{
 		$ii++;
 		$ft_title = $row['ft_title'];
@@ -86,7 +75,7 @@ while ($row = $sql->fetch())
 		$ft_title .= ($row['ft_state'] && !$row['ft_sticky']) ? " (x)" : '';
 		$t->assign(array(
 			'FORUMSTATS_VIEWEDTOP_II' => $ii,
-			'FORUMSTATS_VIEWEDTOP_FORUMS' => cot_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
+			'FORUMSTATS_VIEWEDTOP_FORUMS' => cot_build_forumpath($row['ft_cat']),
 			'FORUMSTATS_VIEWEDTOP_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 			'FORUMSTATS_VIEWEDTOP_TITLE' => htmlspecialchars($ft_title),
 			'FORUMSTATS_VIEWEDTOP_VIEWCOUNT' => $row['ft_viewcount']
@@ -98,7 +87,7 @@ while ($row = $sql->fetch())
 		$ii++;
 		$t->assign(array(
 			'FORUMSTATS_VIEWEDTOP_II' => $ii,
-			'FORUMSTATS_VIEWEDTOP_FORUMS' => cot_build_forums($row['fs_id'], $row['fs_title'], $row['fs_category']),
+			'FORUMSTATS_VIEWEDTOP_FORUMS' => cot_build_forumpath($row['ft_cat']),
 			'FORUMSTATS_VIEWEDTOP_VIEWCOUNT' => $row['ft_viewcount']
 		));
 		$t->parse('MAIN.FORUMSTATS_VIEWEDTOP_NO_USER');

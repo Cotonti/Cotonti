@@ -19,11 +19,6 @@
 					<td class="{FORUMS_SECTIONS_ROW_ODDEVEN}">
 						<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>
 						<p class="small">{FORUMS_SECTIONS_ROW_DESC}</p>
-						<ul class="subforums">
-							<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
-							<li>{FORUMS_SECTIONS_ROW_SLAVE}</li>
-							<!-- END: FORUMS_SECTIONS_ROW_SECTION_SLAVES -->
-						</ul>
 					</td>
 					<td class="centerall b1 {FORUMS_SECTIONS_ROW_ODDEVEN}">
 						{FORUMS_SECTIONS_ROW_LASTPOST}<br />

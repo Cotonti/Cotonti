@@ -219,11 +219,9 @@ function cot_tag_search_forums($query)
 		default:
 			$order = '';
 	}
-	$sql = $db->query("SELECT t.ft_id, t.ft_cat, t.ft_title, s.fs_id, s.fs_masterid, s.fs_mastername, s.fs_title, s.fs_category
+	$sql = $db->query("SELECT t.ft_id, t.ft_cat, t.ft_title
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
-		LEFT JOIN $db_forum_sections AS s
-			ON t.ft_cat = s.fs_id
 		WHERE r.tag_area = 'forums' AND ($query) AND t.ft_id IS NOT NULL
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
@@ -246,7 +244,7 @@ function cot_tag_search_forums($query)
 		$t->assign(array(
 			'TAGS_RESULT_ROW_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 			'TAGS_RESULT_ROW_TITLE' => htmlspecialchars($row['ft_title']),
-			'TAGS_RESULT_ROW_PATH' => cot_build_forums($row['fs_id'], cot_cutstring($row['fs_title'], 24), cot_cutstring($row['fs_category'], 16), true, $master),
+			'TAGS_RESULT_ROW_PATH' => cot_build_forumpath($row['ft_cat']),
 			'TAGS_RESULT_ROW_TAGS' => $tag_list
 		));
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
