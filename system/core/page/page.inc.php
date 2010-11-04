@@ -45,7 +45,7 @@ WHERE page_id='$id'"); }
 sed_die(sed_sql_numrows($sql)==0);
 $pag = sed_sql_fetcharray($sql);
 
-$pag['page_begin_noformat'] = $pag['page_date'];
+$pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_tab'] = (empty($pg)) ? 0 : $pg;
 $pag['page_pageurl'] = (empty($pag['page_alias'])) ? sed_url('page', "id=".$pag['page_id']) : sed_url('page', "al=".$pag['page_alias']);
 
