@@ -12,9 +12,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$s = cot_import('s','G','INT');
-$q = cot_import('q','G','INT');
-$p = cot_import('p','G','INT');
+$s = cot_import('s','G','ALP'); // saction cat
 
 cot_blockguests();
 cot_die(empty($s));
@@ -26,38 +24,18 @@ foreach (cot_getextplugins('forums.newtopic.first') as $pl)
 }
 /* ===== */
 
-$sql = $db->query("SELECT * FROM $db_forum_sections WHERE fs_id='$s'");
+isset($structure['forums'][$s]) || cot_die();
 
-if ($row = $sql->fetch())
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
+/* === Hook === */
+foreach (cot_getextplugins('forums.newtopic.rights') as $pl)
 {
-	$fs_state = $row['fs_state'];
-	$fs_minlevel = $row['fs_minlevel'];
-	$fs_title = $row['fs_title'];
-	$fs_category = $row['fs_category'];
-	$fs_desc = $row['fs_desc'];
-	$fs_autoprune = $row['fs_autoprune'];
-	$fs_allowusertext = $row['fs_allowusertext'];
-	$fs_allowbbcodes = $row['fs_allowbbcodes'];
-	$fs_allowsmilies = $row['fs_allowsmilies'];
-	$fs_allowprvtopics = $row['fs_allowprvtopics'];
-	$fs_allowpolls = $row['fs_allowpolls'];
-	$fs_countposts = $row['fs_countposts'];
-
-	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
-	/* === Hook === */
-	foreach (cot_getextplugins('forums.newtopic.rights') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
-	cot_block($usr['auth_write']);
+	include $pl;
 }
-else
-{ 
-	cot_die();
-}
+/* ===== */
+cot_block($usr['auth_write']);
 
-if ($fs_state)
+if ($cfg['forums'][$s]['defstate'])
 {
 	cot_redirect(cot_url('message', "msg=602", '', true));
 }
@@ -65,22 +43,20 @@ if ($fs_state)
 if ($a == 'newtopic')
 {
 	cot_shield_protect();
-
+	
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.newtopic.newtopic.first') as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-
+	
 	$newtopictitle = cot_import('newtopictitle','P','TXT', 255);
 	$newtopicdesc = cot_import('newtopicdesc','P','TXT', 255);
-	$newprvtopic = cot_import('newprvtopic','P','BOL');
+	$newprvtopic = (cot_import('newprvtopic','P','BOL') && $cfg['forums'][$s]['allowprvtopics']) ? 1 : 0;
 	$newmsg = cot_import('newmsg','P','HTM');
 	$newtopicpreview = mb_substr(htmlspecialchars($newmsg), 0, 128);
-	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
-
-
+	
 	if (strlen($newtopictitle) < 2)
 	{
 		cot_error('forums_titletooshort', 'newtopictitle');
@@ -89,14 +65,14 @@ if ($a == 'newtopic')
 	{
 		cot_error('forums_messagetooshort', 'newmsg');
 	}
-
+	
 	if (!$cot_error)
 	{
-		if (mb_substr($newtopictitle, 0 ,1)=="#")
+		if (mb_substr($newtopictitle, 0 ,1) == "#")
 		{
 			$newtopictitle = str_replace('#', '', $newtopictitle);
 		}
-
+		
 		$db->insert($db_forum_topics, array(
 			'ft_state' => 0,
 			'ft_mode' => (int)$newprvtopic,
@@ -114,9 +90,9 @@ if ($a == 'newtopic')
 			'ft_lastposterid' => (int)$usr['id'],
 			'ft_lastpostername' => $usr['name']
 		));
-
+		
 		$q = $db->lastInsertId();
-
+		
 		$db->insert($db_forum_posts, array(
 			'fp_topicid' => (int)$q,
 			'fp_cat' => (int)$s,
@@ -128,58 +104,50 @@ if ($a == 'newtopic')
 			'fp_posterip' => $usr['ip']
 		));
 
-		$sql = $db->query("SELECT fp_id FROM $db_forum_posts WHERE 1 ORDER BY fp_id DESC LIMIT 1");
-		$row = $sql->fetch();
-		$p = $row['fp_id'];
-
-		$sql = $db->query("UPDATE $db_forum_sections SET
-		fs_postcount=fs_postcount+1,
-		fs_topiccount=fs_topiccount+1
-		WHERE fs_id='$s'");
-
-		if ($fs_autoprune>0)
+		$p = $db->lastInsertId();
+		
+		$sql = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount+1, fs_topiccount=fs_topiccount+1 WHERE fs_cat='$s'");
+		
+		if ($cfg['forums'][$s]['autoprune'] > 0)
 		{
-			cot_forum_prunetopics('updated', $s, $fs_autoprune);
+			cot_forum_prunetopics('updated', $s, $cfg['forums'][$s]['autoprune']);
 		}
-
-		if ($fs_countposts)
+		
+		if ($cfg['forums'][$s]['countposts'])
 		{
 			$sql = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'");
 		}
-
+		
 		if (!$newprvtopic)
 		{
 			cot_forum_sectionsetlast($s);
 		}
-
+		
 		/* === Hook === */
 		foreach (cot_getextplugins('forums.newtopic.newtopic.done') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-
+		
 		if ($cache)
 		{
 			($cfg['cache_forums']) && $cache->page->clear('forums');
 			($cfg['cache_index']) && $cache->page->clear('index');
 		}
-
+		
 		cot_shield_update(45, "New topic");
 		cot_redirect(cot_url('forums', "m=posts&q=$q&n=last", '#bottom', true));
 	}
 }
 
-
-$newtopicurl = cot_url('forums', "m=newtopic&a=newtopic&s=".$s);
-
 $toptitle = cot_build_forumpath($s);
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
-$sys['sublocation'] = $fs_title;
+$sys['sublocation'] = $structure['forums'][$s]['title'];
 $title_params = array(
 	'FORUM' => $L['Forums'],
-	'SECTION' => $fs_title,
+	'SECTION' => htmlspecialchars($structure['forums'][$s]['title']),
 	'NEWTOPIC' => $L['forums_newtopic']
 );
 $out['subtitle'] = cot_title('title_forum_newtopic', $title_params);
@@ -194,23 +162,22 @@ foreach (cot_getextplugins('forums.newtopic.main') as $pl)
 cot_require_api('forms');
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_skinfile(array('forums', 'newtopic', $fs_category, $s));
+$mskin = cot_skinfile(array('forums', 'newtopic', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
 cot_display_messages($t);
 
 $t->assign(array(
 	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
-	"FORUMS_NEWTOPIC_SUBTITLE" => htmlspecialchars($fs_desc),
-	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
+	"FORUMS_NEWTOPIC_SUBTITLE" => htmlspecialchars(cot_parse_autourls($structure['forums'][$s]['desc'])),
+	"FORUMS_NEWTOPIC_SEND" => cot_url('forums', "m=newtopic&a=newtopic&s=".$s),
 	"FORUMS_NEWTOPIC_TITLE" => cot_inputbox('text', 'newtopictitle', htmlspecialchars($newtopictitle), array('size' => 56, 'maxlength' => 255)),
 	"FORUMS_NEWTOPIC_DESC" => cot_inputbox('text', 'newtopicdesc', htmlspecialchars($newtopicdesc), array('size' => 56, 'maxlength' => 255)),
 	"FORUMS_NEWTOPIC_TEXT" => cot_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor')
 ));
 
-if ($fs_allowprvtopics)
+if ($cfg['forums'][$s]['allowprvtopics'])
 {
-
 	$t->assign("FORUMS_NEWTOPIC_ISPRIVATE", cot_checkbox($newprvtopic, newprvtopic));
 	$t->parse("MAIN.PRIVATE");
 }

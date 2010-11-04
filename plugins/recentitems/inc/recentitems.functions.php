@@ -16,28 +16,21 @@ cot_require_lang('recentitems', 'plug');
 
 function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
 {
-	global $db, $totalrecent, $L, $cfg, $db_forum_sections, $db_forum_topics, $theme, $usr, $sys, $R;
+	global $db, $totalrecent, $L, $cfg, $db_forum_topics, $theme, $usr, $sys, $R, $structure;
 	$recentitems = new XTemplate(cot_skinfile($template, true));
+
 	if ($rightprescan)
 	{
-		// творим чудеса - читаем список разделов и к каким из них юзер имеет доступ
-		$sql = $db->query("SELECT * FROM $db_forum_sections
-			ORDER by fs_masterid DESC, fs_order ASC");
-		unset($catsub);
 		$catsub = array();
-		$catsub[] = $cat;
-		while ($fsn = $sql->fetch())
+		foreach ($structure['forums'] as $i => $x)
 		{
-			if (cot_auth('forums', $fsn['fs_id'], 'R'))
+			if (cot_auth('forums', $i, 'R') && (mb_substr($x['path'], 0, $mtchlen) == $mtch || empty($cat)))
 			{
-				$catsub[] = $fsn['fs_id'];
-				$forum_cats[$fsn['fs_id']] = $fsn;
+				$catsub[] = $i;
 			}
 		}
 		$incat = "AND ft_cat IN ('".implode("','", $catsub)."')";
 	}
-
-	//and ft_lastposterid!=".$usr['id']."
 
 	if ($mode == 'recent')
 	{

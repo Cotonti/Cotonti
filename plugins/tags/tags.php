@@ -200,7 +200,7 @@ function cot_tag_search_pages($query)
  */
 function cot_tag_search_forums($query)
 {
-	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $db_forum_sections, $o, $row;
+	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $o, $row;
 	$totalitems = $db->query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id

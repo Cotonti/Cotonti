@@ -433,7 +433,7 @@ if (!$notlastpage && !$rowt['ft_state'] && $usr['id'] > 0 && $allowreplybox && $
 				'url' => cot_url('forums', 'm=posts&p=' . $row4['fp_id'] . '#' . $row4['fp_id']),
 				'id' => $row4['fp_id'],
 				'postername' => $row4['fp_postername'],
-				'text' => cot_stripquote($row4['fp_text'])
+				'text' => str_ireplace(array($R['forums_code_quote_begin'], $R['forums_code_quote_close']) , '' ,$row4['fp_text'])
 			));
 		}
 	}

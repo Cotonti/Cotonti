@@ -19,7 +19,6 @@ Hooks=admin.rightsbyitem.case
 
 cot_require('forums');
 
-$forum = $db->query("SELECT * FROM $db_forum_sections WHERE fs_id='$io'")->fetch();
-$title = ' : '.htmlspecialchars($forum['fs_title'])." (#".$io.")";
+$title = ' : '.$structure['forums'][$io]['title']." (#".$io.")";
 
 ?>

@@ -12,9 +12,9 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$s = cot_import('s','G','INT');
-$q = cot_import('q','G','INT');
-$p = cot_import('p','G','INT');
+$s = cot_import('s','G','ALP'); // saction cat
+$q = cot_import('q','G','INT');  // topic id
+$p = cot_import('p','G','INT'); // post id
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.editpost.first') as $pl)
@@ -26,18 +26,11 @@ foreach (cot_getextplugins('forums.editpost.first') as $pl)
 cot_blockguests();
 cot_check_xg();
 
-$sql = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_cat='$s' LIMIT 1");
+isset($structure['forums'][$s]) || cot_die();
 
+$sql = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_cat='$s' LIMIT 1");
 if ($row = $sql->fetch())
 {
-	$fp_text = $row['fp_text'];
-	$fp_posterid = $row['fp_posterid'];
-	$fp_postername = $row['fp_postername'];
-	$fp_cat = $row['fp_cat'];
-	$fp_topicid = $row['fp_topicid'];
-	$fp_updated = $row['fp_updated'];
-	$fp_updater = $row['fp_updater'];
-
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
 
 	/* === Hook === */
@@ -47,7 +40,7 @@ if ($row = $sql->fetch())
 	}
 	/* ===== */
 
-	if (!$usr['isadmin'] && $fp_posterid!=$usr['id'])
+	if (!$usr['isadmin'] && $row['fp_posterid'] != $usr['id'])
 	{
 		cot_log("Attempt to edit a post without rights", 'sec');
 		cot_die();
@@ -59,44 +52,21 @@ else
 	cot_die();
 }
 
-$sql = $db->query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
-
-if ($row = $sql->fetch())
-{
-	if ($row['fs_state'])
-	{
-		cot_redirect(cot_url('message', "msg=602", '', true));
-	}
-
-	$fs_title = $row['fs_title'];
-	$fs_category = $row['fs_category'];
-	$fs_allowbbcodes = $row['fs_allowbbcodes'];
-	$fs_allowsmilies = $row['fs_allowsmilies'];
-}
-else
-{ 
-	cot_die();
-}
-
 $sql = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
 
-if ($row = $sql->fetch())
+if ($rowt = $sql->fetch())
 {
-	if ($row['ft_state'] && !$usr['isadmin'])
+	if ($rowt['ft_state'] && !$usr['isadmin'])
 	{
 		cot_redirect(cot_url('message', "msg=603", '', true));
 	}
-	$ft_title = $row['ft_title'];
-	$ft_desc = $row['ft_desc'];
-	$ft_fulltitle = ($row['ft_mode']==1) ? "# ".$ft_title : $ft_title;
-	$sys['sublocation'] = 'q'.$q;
 }
 else
 { 
 	cot_die();
 }
 
-if ($a=='update')
+if ($a == 'update')
 {
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.editpost.update.first') as $pl)
@@ -108,7 +78,7 @@ if ($a=='update')
 	$rtext = cot_import('rtext','P','HTM');
 	$rtopictitle = cot_import('rtopictitle','P','TXT', 255);
 	$rtopicdesc = cot_import('rtopicdesc','P','TXT', 255);
-	$rupdater = ($fp_posterid == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
+	$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
 
 	if(!empty($rtext))
 	{
@@ -116,23 +86,13 @@ if ($a=='update')
 		$sql = $db->query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_updated='".$sys['now_offset']."', fp_updater='".$db->prep($rupdater)."' WHERE fp_id='$p'");
 	}
 
-	$is_first_post = false;
-	if (!empty($rtopictitle))
+	if (!empty($rtopictitle) && $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 	{
-		$sql = $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
-		if ($row = $sql->fetch())
+		if (mb_substr($rtopictitle, 0 ,1) == "#")
 		{
-			$fp_idp = $row['fp_id'];
-			if ($fp_idp==$p)
-			{
-				if (mb_substr($rtopictitle, 0 ,1)=="#")
-				{
-					$rtopictitle = str_replace('#', '', $rtopictitle);
-				}
-				$sql = $db->query("UPDATE $db_forum_topics SET ft_title='".$db->prep($rtopictitle)."', ft_desc='".$db->prep($rtopicdesc)."' WHERE ft_id='$q'");
-				$is_first_post = true;
-			}
+			$rtopictitle = str_replace('#', '', $rtopictitle);
 		}
+		$sql = $db->query("UPDATE $db_forum_topics SET ft_title='".$db->prep($rtopictitle)."', ft_desc='".$db->prep($rtopicdesc)."' WHERE ft_id='$q'");
 	}
 
 	if (!empty($rtopictitle) && !empty($rtext))
@@ -158,32 +118,16 @@ if ($a=='update')
 
 	cot_redirect(cot_url('forums', "m=posts&p=".$p, '#'.$p, true));
 }
-
-$sql = $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1");
-
-$is_first_post = false;
-
 cot_require_api('forms');
 
-if ($row = $sql->fetch())
-{
-	$fp_idp = $row['fp_id'];
-	if ($fp_idp==$p)
-	{
-		$edittopictitle = cot_inputbox('text', 'rtopictitle', htmlspecialchars($ft_title), array('size' => 56, 'maxlength' => 255));
-		$topicdescription = cot_inputbox('text', 'rtopicdesc', htmlspecialchars($ft_desc), array('size' => 56, 'maxlength' => 255));
-		$is_first_post = true;
-	}
-}
-
-$toptitle = cot_build_forumpath($s)." ".$cfg['separator']." ".cot_rc_link(cot_url('forums', "m=posts&p=".$p, "#".$p), htmlspecialchars($ft_fulltitle));
+$toptitle = cot_build_forumpath($s)." ".$cfg['separator']." ".cot_rc_link(cot_url('forums', "m=posts&p=".$p, "#".$p), (($rowt['ft_mode'] == 1) ? '# ' : '').htmlspecialchars($rowt['ft_title']));
 $toptitle .= $cfg['separator']." ".cot_rc_link(cot_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".cot_xg()), $L['Edit']);
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
-$sys['sublocation'] = $fs_title;
+$sys['sublocation'] = $structure['forums'][$s]['title'];
 $title_params = array(
 	'FORUM' => $L['Forums'],
-	'SECTION' => $fs_title,
+	'SECTION' => $structure['forums'][$s]['title'],
 	'EDIT' => $L['Edit']
 );
 $out['subtitle'] = cot_title('title_forum_editpost', $title_params);
@@ -198,16 +142,16 @@ foreach (cot_getextplugins('forums.editpost.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_skinfile(array('forums', 'editpost', $fs_category, $fp_cat));
+$mskin = cot_skinfile(array('forums', 'editpost', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
 cot_display_messages($t);
 
-if ($is_first_post)
+if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 {
 	$t->assign(array(
-		"FORUMS_EDITPOST_TOPICTITTLE" => $edittopictitle,
-		"FORUMS_EDITPOST_TOPICDESCRIPTION" => $topicdescription,
+		"FORUMS_EDITPOST_TOPICTITTLE" => cot_inputbox('text', 'rtopictitle', htmlspecialchars($rowt['ft_title']), array('size' => 56, 'maxlength' => 255)),
+		"FORUMS_EDITPOST_TOPICDESCRIPTION" => cot_inputbox('text', 'rtopicdesc', htmlspecialchars($ft_desc), array('size' => 56, 'maxlength' => 255)),
 	));
 	$t->parse("MAIN.FORUMS_EDITPOST_FIRSTPOST");
 }
@@ -215,9 +159,9 @@ if ($is_first_post)
 
 $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
-	"FORUMS_EDITPOST_SUBTITLE" => $L['forums_postedby'].": <a href=\"users.php?m=details&id=".$fp_posterid."\">".$fp_postername."</a> @ ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
+	"FORUMS_EDITPOST_SUBTITLE" => $L['forums_postedby'].": <a href=\"users.php?m=details&id=".$row['fp_posterid']."\">".$row['fp_postername']."</a> @ ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
 	"FORUMS_EDITPOST_SEND" => cot_url('forums', "m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".cot_xg()),
-	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', $fp_text, 20, 56, '', 'input_textarea_editor')
+	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', $row['fp_text'], 20, 56, '', 'input_textarea_editor')
 ));
 
 /* === Hook === */
