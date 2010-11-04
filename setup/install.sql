@@ -45,7 +45,7 @@ INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 
 CREATE TABLE `cot_cache` (
   `c_name` varchar(120) collate utf8_unicode_ci NOT NULL,
-  `c_realm` varchar(80) collate utf8_unicode_ci NOT NULL default 'cot',
+  `c_realm` varchar(64) collate utf8_unicode_ci NOT NULL default 'cot',
   `c_expire` int NOT NULL default '0',
   `c_auto` tinyint NOT NULL default '1',
   `c_value` text collate utf8_unicode_ci,
@@ -56,9 +56,9 @@ CREATE TABLE `cot_cache` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `cot_cache_bindings` (
-  `c_event` VARCHAR(80) collate utf8_unicode_ci NOT NULL,
+  `c_event` VARCHAR(64) collate utf8_unicode_ci NOT NULL,
   `c_id` VARCHAR(120) collate utf8_unicode_ci NOT NULL,
-  `c_realm` VARCHAR(80) collate utf8_unicode_ci NOT NULL DEFAULT 'cot',
+  `c_realm` VARCHAR(64) collate utf8_unicode_ci NOT NULL DEFAULT 'cot',
   `c_type` TINYINT NOT NULL DEFAULT '0',
   PRIMARY KEY (`c_event`, `c_id`, `c_realm`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -284,7 +284,7 @@ CREATE TABLE `cot_online` (
 CREATE TABLE `cot_plugins` (
   `pl_id` mediumint NOT NULL auto_increment,
   `pl_hook` varchar(64) collate utf8_unicode_ci NOT NULL default '',
-  `pl_code` varchar(32) collate utf8_unicode_ci NOT NULL default '',
+  `pl_code` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `pl_part` varchar(32) collate utf8_unicode_ci NOT NULL default '',
   `pl_title` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `pl_file` varchar(255) collate utf8_unicode_ci NOT NULL default '',
