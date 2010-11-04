@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=usertags.main
+Hooks=users.usertags.main
 [END_COT_EXT]
 ==================== */
 
@@ -9,8 +9,8 @@ Hooks=usertags.main
  * PM user tags
  *
  * @package pm
- * @version 0.7.0
- * @author Neocrome, Cotonti Team
+ * @version 0.9.0
+ * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
  */

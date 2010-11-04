@@ -139,7 +139,7 @@ foreach (cot_getextplugins('users.query') as $pl)
 
 $sql = $db->query("SELECT COUNT(*) FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where));
 $totalusers = $sql->fetchColumn();
-$sql = $db->query("SELECT u.* $join_columns FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
+$sqlusers = $db->query("SELECT u.* $join_columns FROM $db_users AS u $join_condition WHERE ".implode(" AND ", $where)." ORDER BY $sqlorder LIMIT $d,{$cfg['maxusersperpage']}");
 
 $totalpage = ceil($totalusers / $cfg['maxusersperpage']);
 $currentpage = ceil($d / $cfg['maxusersperpage']) + 1;
@@ -164,48 +164,45 @@ $t = new XTemplate($localskin);
 cot_require_api('forms');
 require_once cot_langfile('countries', 'core');
 
-$filter_titles = array();
-$filter_values = array();
+$countryfilters_titles = array();
+$countryfilters_values = array();
 foreach($cot_countries as $i => $x)
 {
 	if($i == '00')
 	{
-		$filter_titles[] = $L['Country'];
-		$filter_values[] = cot_url('users');
-		$filter_titles[] = $L['None'];
-		$filter_values[] = cot_url('users', 'f=country_00');
+		$countryfilters_titles[] = $L['Country'];
+		$countryfilters_values[] = cot_url('users');
+		$countryfilters_titles[] = $L['None'];
+		$countryfilters_values[] = cot_url('users', 'f=country_00');
 	}
 	else
 	{
-		$filter_titles[] = cot_cutstring($x,23);
-		$filter_values[] = cot_url('users', 'f=country_'.$i);
+		$countryfilters_titles[] = cot_cutstring($x,23);
+		$countryfilters_values[] = cot_url('users', 'f=country_'.$i);
 	}
 }
-$countryfilters = cot_selectbox($f, 'bycountry', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
+$countryfilters = cot_selectbox($f, 'bycountry', $countryfilters_values, $countryfilters_titles, false, array('onchange' => 'redirect(this)'));
 
-/*=========*/
-
-$filter_titles = array();
-$filter_values = array();
-$filter_values_g = array();
-$filter_titles[] = $L['Maingroup'];
-$filter_values[] = cot_url('users');
-$filter_values_g[] = cot_url('users');
+$grpfilters_titles = array($L['Maingroup']);
+$grpfilters_group_values = array(cot_url('users'));
+$grpfilters_maingrp_values = array(cot_url('users'));
 foreach($cot_groups as $k => $i)
 {
-	if(!$cot_groups[$k]['hidden'] || cot_auth('users', 'a', 'A'))
-	{
-		$filter_titles[] = $cot_groups[$k]['title'] . ($cot_groups[$k]['hidden'] ?  ' ('.$L['Hidden'].')' : '');
-		$filter_values_g[] = cot_url('users', 'g='.$k);
-		$filter_values[] = cot_url('users', 'gm='.$k);
+	$grpfilters_titles[] = $cot_groups[$k]['title'];
+	$grpfilters_maingrp_values[] = cot_url('users', 'g='.$k);
+	$grpfilters_group_values[] = cot_url('users', 'gm='.$k);
 	}
+$maingrpfilters = cot_selectbox($g, 'bymaingroup', $grpfilters_maingrp_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'));
+
+$grpfilters_titles[0] = $L['Group'];
+$grpfilters = cot_selectbox($g, 'bygroupms', $grpfilters_group_values, $grpfilters_titles, false, array('onchange' => 'redirect(this)'));
+
+/* === Hook === */
+foreach (cot_getextplugins('users.filters') as $pl)
+{
+	include $pl;
 }
-$maingrpfilters = cot_selectbox($g, 'bymaingroup', $filter_values_g, $filter_titles, false, array('onchange' => 'redirect(this)'));
-
-$filter_titles[0] = $L['Group'];
-$grpfilters = cot_selectbox($g, 'bygroupms', $filter_values, $filter_titles, false, array('onchange' => 'redirect(this)'));
-
-/*=========*/
+/* ===== */
 
 $t->assign(array(
 	"USERS_TITLE" => $title,
@@ -257,7 +254,7 @@ $jj = 0;
 $extp = cot_getextplugins('users.loop');
 /* ===== */
 
-while($urr = $sql->fetch())
+while($urr = $sqlusers->fetch())
 {
 	$jj++;
 	$t->assign(array(

@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=users.query
+Hooks=global
 [END_COT_EXT]
 ==================== */
 
@@ -9,7 +9,7 @@ Hooks=users.query
  * Hidden groups
  *
  * @package Cotonti
- * @version 0.9.6
+ * @version 0.9.5
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
@@ -17,15 +17,10 @@ Hooks=users.query
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_require('hiddengroups', true);
-
-if(!cot_auth('plug', 'hiddengroups', '1'))
+$sql = $db->query("SELECT * FROM $db_groups WHERE grp_disabled=0");
+while ($row = $sql->fetch())
 {
-	$hiddenusers = implode(',', cot_hiddengroups_get(cot_hiddengroups_mode(), $type='users'));
-	if($hiddenusers)
-	{
-		$where[] = "u.user_id NOT IN (".$hiddenusers.")";
-	}
+	$cot_groups[$row['grp_id']]['hidden'] = $row['grp_hidden'];
 }
 
 ?>
