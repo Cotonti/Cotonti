@@ -130,25 +130,13 @@ elseif ($c == "section")
 	$defult_c = false;
 	$forum_id = ($id == 'all') ? 0 : $id;;
 
-	$sql = "SELECT * FROM $db_forum_sections WHERE fs_id = '$forum_id'";
-	$res = $db->query($sql);
-	if ($db->affectedRows > 0)
+	if (isset($structure['forums'][$forum_id]))
 	{
-		$row = $res->fetch();
-		$section_title = $row['fs_title'];
-		$section_desc = $row['fs_desc'];
-		$rss_title = $section_title;
-		$rss_description = $section_desc;
+		$rss_title = $structure['forums'][$s]['title'];
+		$rss_description = $structure['forums'][$s]['desc'];
 
-		$where = "fp_cat = '$forum_id'";
-		// get subsections
-		unset($subsections);
-		$sql = "SELECT fs_id FROM $db_forum_sections WHERE fs_mastername = '$section_title'";
-		$res = $db->query($sql);
-		while ($row = $res->fetch())
-		{
-			$where .= " OR fp_cat ='{$row['fs_id']}'";
-		}
+		$all = cot_structure_children('forums', $forum_id);
+		$where = "fs_cat IN (".implode(', ', $all).")";
 
 		$sql = "SELECT * FROM $db_forum_posts WHERE $where ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
 		$res = $db->query($sql);
@@ -169,7 +157,7 @@ elseif ($c == "section")
 				$flag_private = 1;
 			}
 
-			if (!$flag_private AND cot_auth('forums', $forum_id, 'R'))
+			if (!$flag_private && cot_auth('forums', $forum_id, 'R'))
 			{
 				//$post_url = ($cfg['plugin']['search']['searchurls'] == 'Single') ? cot_url('forums', 'm=posts&id='.$post_id, "", true) : cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
 				$post_url = cot_url('forums', 'm=posts&p='.$post_id, '#'.$post_id, true);
@@ -210,7 +198,7 @@ elseif ($c == "forums")
 			$flag_private = 1;
 		}
 
-		if (!$flag_private AND cot_auth('forums', $forum_id, 'R'))
+		if (!$flag_private && cot_auth('forums', $forum_id, 'R'))
 		{
 			$items[$i]['title'] = $row['fp_postername']." - ".$topic_title;
 			$items[$i]['description'] = cot_parse_post_text($post_id, $row['fp_text']);

@@ -43,17 +43,11 @@ $totalpages = cot_stat_get('totalpages');
 $totalmailsent = cot_stat_get('totalmailsent');
 $totalpmsent = cot_stat_get('totalpms');
 
-$totaldbviews = $db->query("SELECT SUM(fs_viewcount) FROM $db_forum_sections");
-$totaldbviews = $totaldbviews->fetchColumn();
+$totaldbviews = $db->query("SELECT SUM(fs_viewcount) FROM $db_forum_stats")->fetchColumn();
+$totaldbfilesize = $db->query("SELECT SUM(pfs_size) FROM $db_pfs")->fetchColumn();
+$totalpmactive = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate<2")->fetchColumn();
+$totalpmarchived = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate=2")->fetchColumn();
 
-$totaldbfilesize = $db->query("SELECT SUM(pfs_size) FROM $db_pfs");
-$totaldbfilesize = $totaldbfilesize->fetchColumn();
-
-$totalpmactive = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate<2");
-$totalpmactive = $totalpmactive->fetchColumn();
-
-$totalpmarchived = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_tostate=2");
-$totalpmarchived = $totalpmarchived->fetchColumn();
 
 $sql = $db->query("SELECT stat_name FROM $db_stats WHERE stat_name LIKE '20%' ORDER BY stat_name ASC LIMIT 1");
 $row = $sql->fetch();

@@ -17,8 +17,6 @@ cot_require_rc('forums');
 
 // Global variables
 $GLOBALS['db_forum_posts']		= (isset($GLOBALS['db_forum_posts']))     ? $GLOBALS['db_forum_posts']     : $GLOBALS['db_x'] . 'forum_posts';
-$GLOBALS['db_forum_sections'] 	= (isset($GLOBALS['db_forum_sections']))  ? $GLOBALS['db_forum_sections']  : $GLOBALS['db_x'] . 'forum_sections';
-$GLOBALS['db_forum_structure']	= (isset($GLOBALS['db_forum_structure'])) ? $GLOBALS['db_forum_structure'] : $GLOBALS['db_x'] . 'forum_structure';
 $GLOBALS['db_forum_topics'] 	= (isset($GLOBALS['db_forum_topics']))    ? $GLOBALS['db_forum_topics']    : $GLOBALS['db_x'] . 'forum_topics';
 $GLOBALS['db_forum_stats']		= (isset($GLOBALS['db_forum_stats']))     ? $GLOBALS['db_forum_stats']     : $GLOBALS['db_x'] . 'forum_stats';
 
@@ -73,37 +71,20 @@ function cot_build_forumpath($cat, $mask = 'link_catpath')
 /**
  * Removes a forum section and all its contents
  *
- * @param int $id Section ID
+ * @param int $cat Section cat
  * @return int Total number of records removed
  */
-function cot_forum_deletesection($id)
+function cot_forum_deletesection($cat)
 {
-	global $db, $db_forum_topics, $db_forum_posts, $db_forum_sections, $db_auth;
+	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats, $db_auth;
 
-	$sql = $db->query("SELECT fs_masterid FROM $db_forum_sections WHERE fs_id='$id' ");
-	$row = $sql->fetch();
-
-	if ($row['fs_masterid'] > 0)
-	{
-		$sqql = $db->query("SELECT fs_masterid, fs_topiccount, fs_postcount FROM $db_forum_sections WHERE fs_id='$id' ");
-		$roww = $sqql->fetch();
-
-		$sc_posts = $roww['fs_postcount'];
-		$sc_topics = $roww['fs_topiccount'];
-
-		$sql = $db->query("UPDATE $db_forum_sections SET fs_postcount=fs_postcount-".$sc_posts." WHERE fs_id='".$roww['fs_masterid']."' ");
-		$sql = $db->query("UPDATE $db_forum_sections SET fs_topiccount=fs_topiccount-".$sc_topics." WHERE fs_id='".$roww['fs_masterid']."' ");
-
-		cot_forum_sectionsetlast($row['fs_masterid']);
-	}
-
-	$sql = $db->query("DELETE FROM $db_forum_posts WHERE fp_cat='$id'");
+	$sql = $db->query("DELETE FROM $db_forum_posts WHERE fp_cat='$cat'");
 	$num = $db->affectedRows;
-	$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_cat='$id'");
+	$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_cat='$cat'");
 	$num += $db->affectedRows;
-	$sql = $db->query("DELETE FROM $db_forum_sections WHERE fs_id='$id'");
+	$sql = $db->query("DELETE FROM $$db_forum_stats WHERE fs_id='$cat'");
 	$num += $db->affectedRows;
-	$num += cot_auth_remove_item('forums', $id);
+	$num += cot_auth_remove_item('forums', $cat);
 	return $num;
 }
 
@@ -211,12 +192,12 @@ function cot_forum_resynctopic($id)
  */
 function cot_forum_resyncall()
 {
-	global $db, $db_forum_sections;
+	global $db, $db_forum_stats;
 
-	$sql = $db->query("SELECT fs_id FROM $db_forum_sections");
+	$sql = $db->query("SELECT fs_cat FROM $db_forum_stats");
 	while ($row = $sql->fetch())
 	{
-		cot_forum_resync($row['fs_id']);
+		cot_forum_resync($row['fs_cat']);
 	}
 }
 
@@ -230,7 +211,7 @@ function cot_forum_sectionsetlast($cat)
 	global $db, $db_forum_topics, $db_forum_stats;
 	$sql = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_cat='$cat' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
 	$row = $sql->fetch();
-	$sql = $db->query("UPDATE $db_forum_sections SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".$db->prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".$db->prep($row['ft_lastpostername'])."' WHERE fs_cat='$cat'");
+	$sql = $db->query("UPDATE $db_forum_stats SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".$db->prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".$db->prep($row['ft_lastpostername'])."' WHERE fs_cat='$cat'");
 }
 
 /**
@@ -288,37 +269,6 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 	}
 
 	return $sections;
-}
-
-
-/**
- * Strip quotes
- *
- * @param string $string String
- *
- * @return string
- */
-function cot_stripquote($string)
-{
-	global $R;
-	$startindex = mb_stripos($string, $R['forums_code_quote_begin']);
-	while ($startindex >= 0)
-	{
-		$stopindex = mb_strpos($string, $R['forums_code_quote_close']);
-		if ($stopindex > 0)
-		{
-			$fragment = mb_substr($string,$startindex,($stopindex-$startindex+8));
-			$string = str_ireplace($fragment,'',$string);
-			$stopindex = mb_stripos($string, $R['forums_code_quote_close']);
-		}
-		else
-		{
-			break;
-		}
-		$string = trim($string);
-		$startindex = mb_stripos($string, $R['forums_code_quote_begin']);
-	}
-	return($string);
 }
 
 ?>
