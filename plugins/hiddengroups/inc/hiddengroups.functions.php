@@ -38,6 +38,11 @@ function cot_hiddengroups_get($mode, $type='groups')
 	global $db, $db_users, $db_groups_users, $cot_groups;
 	if($mode !== 1 && $mode !== 2) return array();
 
+	if($type == 'users' && $cache && $cache->db->exists('hiddenusers', 'system'))
+	{
+		return $cache->db->get('test', 'myrealm');
+	}
+
 	$hiddengroups = array();
 	foreach ($cot_groups as $grp)
 	{
@@ -60,6 +65,7 @@ function cot_hiddengroups_get($mode, $type='groups')
 		{
 			$hiddenusers[] = (int)$row['user_id'];
 		}
+		$cache && $cache->db->store('hiddenusers', $hiddenusers, 'system');
 		return $hiddenusers;
 	}
 	return array();
