@@ -4,10 +4,10 @@
 Code=whosonline
 Name=Who's online
 Description=Lists the members online
-Version=0.9.0
-Date=2010-nov-03
-Author=Koradhil, Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2008-2010
+Version=0.7.0
+Date=2010-jan-03
+Author=Neocrome & Cotonti Team
+Copyright=Partial copyright (c) Cotonti Team 2008-2010
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -18,11 +18,11 @@ Lock_members=W12345A
 ==================== */
 
 /**
- * Displays users and guests which are currently online
+ * Lists the members online
  *
  * @package whosonline
- * @version 0.9.0
- * @author Koradhil, Cotonti Team
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */

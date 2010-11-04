@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * Hidden groups
+ *
+ * @package Cotonti
+ * @version 0.9.2
+ * @author Koradhil, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
+
+(defined('COT_CODE') || defined('COT_PLUG')) or die('Wrong URL.');
+
+/**
+ * Get hiding mode as integer.
+ *
+ * @return int 0, 1 or 2
+ */
+function cot_hiddengroups_mode()
+{
+	global $cfg;
+	$mode = $cfg['plugin']['hiddengroups']['mode'];
+	if($mode == 'Group + Users (maingroup)') return 1;
+	if($mode == 'Group + Users (subgroup)') return 2;
+	return 0;
+}
+
+/**
+ * Get an array of hidden group IDs or hidden user IDs
+ *
+ * @param int $mode 0, 1 or 2 from cot_hiddengroups_mode()
+ * @param string $type 'groups' or 'users'
+ * @return array
+ */
+function cot_hiddengroups_get($mode, $type='groups')
+{
+	global $db, $db_users, $db_groups_users, $cot_groups;
+	if($mode !== 1 && $mode !== 2) return array();
+
+	$hiddengroups = array();
+	foreach ($cot_groups as $grp)
+	{
+		if($grp['hidden']) $hiddengroups[] = (int)$grp['id'];
+	}
+	if($type == 'groups') return $hiddengroups;
+	
+	if($type == 'users' && !empty($hiddengroups))
+	{
+		if($mode == 1)
+		{
+			$sql = $db->query("SELECT user_id FROM $db_users WHERE user_maingrp IN (".implode(',', $hiddengroups).")");
+		}
+		if($mode == 2)
+		{
+			$sql = $db->query("SELECT DISTINCT(gru_userid) AS user_id FROM $db_groups_users WHERE gru_groupid IN (".implode(',', $hiddengroups).")");
+		}
+		$hiddenusers = array();
+		while($row = $sql->fetch())
+		{
+			$hiddenusers[] = (int)$row['user_id'];
+		}
+		return $hiddenusers;
+	}
+	return array();
+}
+
+?>

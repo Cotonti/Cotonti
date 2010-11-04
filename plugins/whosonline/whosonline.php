@@ -6,11 +6,11 @@ Hooks=standalone
 ==================== */
 
 /**
- * Displays users and guests which are currently online
+ * Displays users who are currently online
  *
  * @package whosonline
- * @version 0.9.0
- * @author Koradhil, Cotonti Team
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
@@ -19,6 +19,12 @@ Hooks=standalone
 
 cot_require('users');
 cot_require('hits', true);
+
+if($cfg['plugin']['hiddengroups'])
+{
+	cot_require('hiddengroups', true);
+	$mode = cot_hiddengroups_mode();
+}
 
 $sql_users = $db->query("SELECT DISTINCT u.*, o.* FROM $db_online AS o INNER JOIN $db_users AS u ON u.user_id=o.online_userid ORDER BY online_lastseen DESC");
 $sql_guests = $db->query("SELECT online_ip, online_lastseen, online_location, online_subloc FROM $db_online WHERE online_userid = -1 ORDER BY online_lastseen DESC");

@@ -17,14 +17,15 @@ Hooks=users.query
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_require('hiddengroups', true);
-
-if(!cot_auth('plug', 'hiddengroups', '1'))
+if($cot_groups[$grpid]['hidden'])
 {
-	$hiddenusers = implode(',', cot_hiddengroups_get(cot_hiddengroups_mode(), $type='users'));
-	if($hiddenusers)
+	if(cot_auth('users', 'a', 'A'))
 	{
-		$where[] = "u.user_id NOT IN (".$hiddenusers.")";
+		return cot_rc_link(cot_url('users', 'gm='.$grpid), $cot_groups[$grpid]['title'].' ('.$L['Hidden'].')');
+	}
+	elseif(!cot_auth('plug', 'hiddengroups', '1'))
+	{
+		return $L['Hidden'];
 	}
 }
 
