@@ -28,7 +28,7 @@ $sql = $db->query("SELECT a.*, u.user_name, f.fs_id, f.fs_title, f.fs_category F
 while ($row = $sql->fetch())
 {
 	$link = cot_url('admin', 'm=forums&n=edit&id='.$row['auth_option']);
-	$title = htmlspecialchars(cot_build_forums($row['fs_id'], cot_cutstring($row['fs_title'], 24), cot_cutstring($row['fs_category'], 32), FALSE));
+	$title = htmlspecialchars(cot_build_forumpath($row['fs_cat']));
 	cot_rights_parseline($row, $title, $link);
 }
 $sql->closeCursor();

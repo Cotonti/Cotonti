@@ -1,18 +1,14 @@
 <?php
 
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=forums.php
-Version=125
-Updated=2008-feb-27
-Type=Core
-Author=Neocrome
-Description=Forums
-[END_SED]
-==================== */
+/**
+ * Forums posts display.
+ *
+ * @package forums
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @license BSD License
+ */
 
 defined('COT_CODE') or die('Wrong URL');
 
@@ -46,8 +42,6 @@ if ($row = $sql->fetch())
 	$fs_allowprvtopics = $row['fs_allowprvtopics'];
 	$fs_allowpolls = $row['fs_allowpolls'];
 	$fs_countposts = $row['fs_countposts'];
-	$fs_masterid = $row['fs_masterid'];
-	$fs_mastername = $row['fs_mastername'];
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
 	/* === Hook === */
@@ -59,7 +53,9 @@ if ($row = $sql->fetch())
 	cot_block($usr['auth_write']);
 }
 else
-{ cot_die(); }
+{ 
+	cot_die();
+}
 
 if ($fs_state)
 {
@@ -141,24 +137,20 @@ if ($a == 'newtopic')
 		fs_topiccount=fs_topiccount+1
 		WHERE fs_id='$s'");
 
-		if ($fs_masterid>0)
-		{ $sql = $db->query("UPDATE $db_forum_sections SET
-		fs_postcount=fs_postcount+1,
-		fs_topiccount=fs_topiccount+1
-		WHERE fs_id='$fs_masterid'"); }
-		
 		if ($fs_autoprune>0)
 		{
 			cot_forum_prunetopics('updated', $s, $fs_autoprune);
 		}
 
 		if ($fs_countposts)
-		{ $sql = $db->query("UPDATE $db_users SET
-		user_postcount=user_postcount+1
-		WHERE user_id='".$usr['id']."'"); }
+		{
+			$sql = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'");
+		}
 
 		if (!$newprvtopic)
-		{ cot_forum_sectionsetlast($s); }
+		{
+			cot_forum_sectionsetlast($s);
+		}
 
 		/* === Hook === */
 		foreach (cot_getextplugins('forums.newtopic.newtopic.done') as $pl)
@@ -169,14 +161,8 @@ if ($a == 'newtopic')
 
 		if ($cache)
 		{
-			if ($cfg['cache_forums'])
-			{
-				$cache->page->clear('forums');
-			}
-			if ($cfg['cache_index'])
-			{
-				$cache->page->clear('index');
-			}
+			($cfg['cache_forums']) && $cache->page->clear('forums');
+			($cfg['cache_index']) && $cache->page->clear('index');
 		}
 
 		cot_shield_update(45, "New topic");
@@ -184,14 +170,10 @@ if ($a == 'newtopic')
 	}
 }
 
-$morejavascript .= cot_rc('forums_code_addtxt', array('c1' => 'newtopic', 'c2' => 'newmsg'));
 
 $newtopicurl = cot_url('forums', "m=newtopic&a=newtopic&s=".$s);
 
-$master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
-
-
-$toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master) . ' ' . $cfg['separator'] . ' ' . cot_rc_link(cot_url('forums', 'm=newtopic&s=' . $s), $L['forums_newtopic']);
+$toptitle = cot_build_forumpath($s);
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $sys['sublocation'] = $fs_title;

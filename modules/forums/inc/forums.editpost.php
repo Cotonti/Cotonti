@@ -1,16 +1,13 @@
 <?php
 
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
 /**
+ * Forums posts display.
+ *
  * @package forums
- * @version 0.0.3
- * @copyright Copyright (c) 2008-2009 Cotonti Team
- * @license BSD
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @license BSD License
  */
 
 defined('COT_CODE') or die('Wrong URL');
@@ -42,7 +39,7 @@ if ($row = $sql->fetch())
 	$fp_updater = $row['fp_updater'];
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
-	
+
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.editpost.rights') as $pl)
 	{
@@ -58,9 +55,11 @@ if ($row = $sql->fetch())
 	cot_block($usr['auth_read']);
 }
 else
-{ cot_die(); }
+{ 
+	cot_die();
+}
 
-$sql = $db->query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies, fs_masterid, fs_mastername FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
+$sql = $db->query("SELECT fs_state, fs_title, fs_category, fs_allowbbcodes, fs_allowsmilies FROM $db_forum_sections WHERE fs_id='$s' LIMIT 1");
 
 if ($row = $sql->fetch())
 {
@@ -73,11 +72,11 @@ if ($row = $sql->fetch())
 	$fs_category = $row['fs_category'];
 	$fs_allowbbcodes = $row['fs_allowbbcodes'];
 	$fs_allowsmilies = $row['fs_allowsmilies'];
-	$fs_masterid = $row['fs_masterid'];
-	$fs_mastername = $row['fs_mastername'];
 }
 else
-{ cot_die(); }
+{ 
+	cot_die();
+}
 
 $sql = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
 
@@ -93,7 +92,9 @@ if ($row = $sql->fetch())
 	$sys['sublocation'] = 'q'.$q;
 }
 else
-{ cot_die(); }
+{ 
+	cot_die();
+}
 
 if ($a=='update')
 {
@@ -125,7 +126,9 @@ if ($a=='update')
 			if ($fp_idp==$p)
 			{
 				if (mb_substr($rtopictitle, 0 ,1)=="#")
-				{ $rtopictitle = str_replace('#', '', $rtopictitle); }
+				{
+					$rtopictitle = str_replace('#', '', $rtopictitle);
+				}
 				$sql = $db->query("UPDATE $db_forum_topics SET ft_title='".$db->prep($rtopictitle)."', ft_desc='".$db->prep($rtopicdesc)."' WHERE ft_id='$q'");
 				$is_first_post = true;
 			}
@@ -149,14 +152,8 @@ if ($a=='update')
 
 	if ($cache)
 	{
-		if ($cfg['cache_forums'])
-		{
-			$cache->page->clear('forums');
-		}
-		if ($cfg['cache_index'])
-		{
-			$cache->page->clear('index');
-		}
+		($cfg['cache_forums']) && $cache->page->clear('forums');
+		($cfg['cache_index']) && $cache->page->clear('index');
 	}
 
 	cot_redirect(cot_url('forums', "m=posts&p=".$p, '#'.$p, true));
@@ -173,17 +170,13 @@ if ($row = $sql->fetch())
 	$fp_idp = $row['fp_id'];
 	if ($fp_idp==$p)
 	{
-	 	$edittopictitle = cot_inputbox('text', 'rtopictitle', htmlspecialchars($ft_title), array('size' => 56, 'maxlength' => 255));
-	 	$topicdescription = cot_inputbox('text', 'rtopicdesc', htmlspecialchars($ft_desc), array('size' => 56, 'maxlength' => 255));
-	 	$is_first_post = true;
+		$edittopictitle = cot_inputbox('text', 'rtopictitle', htmlspecialchars($ft_title), array('size' => 56, 'maxlength' => 255));
+		$topicdescription = cot_inputbox('text', 'rtopicdesc', htmlspecialchars($ft_desc), array('size' => 56, 'maxlength' => 255));
+		$is_first_post = true;
 	}
 }
 
-$morejavascript .= cot_rc('forums_code_addtxt', array('c1' => 'editpost', 'c2' => 'rtext'));
-
-$master = ($fs_masterid>0) ? array($fs_masterid, $fs_mastername) : false;
-
-$toptitle = cot_build_forums($s, $fs_title, $fs_category, true, $master)." ".$cfg['separator']." ".cot_rc_link(cot_url('forums', "m=posts&p=".$p, "#".$p), htmlspecialchars($ft_fulltitle));
+$toptitle = cot_build_forumpath($s)." ".$cfg['separator']." ".cot_rc_link(cot_url('forums', "m=posts&p=".$p, "#".$p), htmlspecialchars($ft_fulltitle));
 $toptitle .= $cfg['separator']." ".cot_rc_link(cot_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".cot_xg()), $L['Edit']);
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
@@ -212,10 +205,10 @@ cot_display_messages($t);
 
 if ($is_first_post)
 {
-$t->assign(array(
-	"FORUMS_EDITPOST_TOPICTITTLE" => $edittopictitle,
-	"FORUMS_EDITPOST_TOPICDESCRIPTION" => $topicdescription,
-));
+	$t->assign(array(
+		"FORUMS_EDITPOST_TOPICTITTLE" => $edittopictitle,
+		"FORUMS_EDITPOST_TOPICDESCRIPTION" => $topicdescription,
+	));
 	$t->parse("MAIN.FORUMS_EDITPOST_FIRSTPOST");
 }
 

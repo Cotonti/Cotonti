@@ -42,12 +42,10 @@ cot_block($usr['auth_read']);
 
 if ($usr['isadmin'] && !empty($q) && !empty($a))
 {
+	cot_check_xg();
 	switch($a)
 	{
-		case 'delete':
-
-			cot_check_xg();
-
+		case 'delete':		
 			cot_forum_prunetopics('single', $s, $q);
 			cot_log("Deleted topic #".$q, 'for');
 			cot_forum_sectionsetlast($s);
@@ -57,37 +55,23 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 				include $pl;
 			}
 			/* ===== */
-			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
-
+		
 		case 'move':
-
-			cot_check_xg();
 			$ns = cot_import('ns','P','ALP');
 			$ghost = cot_import('ghost','P','BOL');
-
-			$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='$s' and fp_topicid='$q'");
-			$num = $sql->fetchColumn();
-
+			
+			$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='$s' and fp_topicid='$q'")->fetchColumn();
 			if ($num < 1 || $s == $ns)
 			{
 				cot_die();
 			}
-
+			
 			$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
-
+			
 			if ($ghost)
 			{
 				$sql1 = $db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id='$q' and ft_cat='$s'");
-			}
-
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_cat='$ns' WHERE ft_id='$q' and ft_cat='$s'");
-			$sql = $db->query("UPDATE $db_forum_posts SET fp_cat='$ns' WHERE fp_cat='$s' and fp_topicid='$q'");
-			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-'$num' WHERE fs_cat='$s'");
-			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount+1, fs_postcount=fs_postcount+'$num' WHERE fs_cat='$ns'");
-
-			if ($ghost)
-			{
 				$row = $sql1->fetch();
 
 				$db->insert($db_forum_topics, array(
@@ -109,86 +93,50 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 					'ft_movedto' => (int)$q
 				));
 			}
-
+			
+			$sql = $db->query("UPDATE $db_forum_topics SET ft_cat='$ns' WHERE ft_id='$q' and ft_cat='$s'");
+			$sql = $db->query("UPDATE $db_forum_posts SET fp_cat='$ns' WHERE fp_cat='$s' and fp_topicid='$q'");
+			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-'$num' WHERE fs_cat='$s'");
+			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount+1, fs_postcount=fs_postcount+'$num' WHERE fs_cat='$ns'");
+			
 			cot_forum_sectionsetlast($s);
-			cot_forum_sectionsetlast($ns);
-
+			cot_forum_sectionsetlast($ns);			
 			cot_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
-			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
-
+		
 		case 'lock':
-
-			cot_check_xg();
 			$sql = $db->query("UPDATE $db_forum_topics SET ft_state=1, ft_sticky=0 WHERE ft_id='$q'");
 			cot_log("Locked topic #".$q, 'for');
-			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'sticky':
-
-			cot_check_xg();
 			$sql = $db->query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=0 WHERE ft_id='$q'");
 			cot_log("Pinned topic #".$q, 'for');
-			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
-
+		
 		case 'announcement':
-
-			cot_check_xg();
 			$sql = $db->query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=1 WHERE ft_id='$q'");
 			cot_log("Announcement topic #".$q, 'for');
-			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
-
+		
 		case 'bump':
-
 			cot_check_xg();
 			$sql = $db->query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
 			cot_forum_sectionsetlast($s);
 			cot_log("Bumped topic #".$q, 'for');
-			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
 
 		case 'private':
-
-			cot_check_xg();
 			cot_log("Made topic #".$q." private", 'for');
 			$sql = $db->query("UPDATE $db_forum_topics SET ft_mode='1' WHERE ft_id='$q'");
-			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 			break;
-
+		
 		case 'clear':
-
-			cot_check_xg();
 			cot_log("Resetted topic #".$q, 'for');
 			$sql = $db->query("UPDATE $db_forum_topics SET ft_sticky=0, ft_state=0, ft_mode=0 WHERE ft_id='$q'");
-			cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
-			break;
-
-		default:
-
-			cot_die();
 			break;
 	}
-}
-
-function rev($sway)
-{
-	return (($sway == 'desc') ? 'asc' : 'desc');
-}
-
-function cursort($trigger, $way)
-{
-	if ($trigger)
-	{
-		global $R;
-		return (($way == 'asc') ? $R['icon_down'] : $R['icon_up']);
-	}
-	else
-	{
-		return ('');
-	}
+	cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
 }
 
 /* === Hook === */
@@ -219,12 +167,12 @@ foreach (cot_getextplugins('forums.topics.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_skinfile(array('page' ,'list', $structure['forums'][$s]['tpl']));
+$mskin = cot_skinfile(array('forums' ,'topics', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
 if ($cfg['forums'][$s]['allowviewers'])
 {
-
+	
 	$v = 0;
 	$sqlv = $db->query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' and online_subloc='".$db->prep($structure['forums'][$s]['title'])."' ");
 	while ($rowv = $sqlv->fetch())
@@ -237,13 +185,13 @@ if ($cfg['forums'][$s]['allowviewers'])
 		}
 	}
 	$fs_viewers = $v;
-
+	
 	$t->assign(array(
 		"FORUMS_TOPICS_VIEWERS" => $fs_viewers,
 		"FORUMS_TOPICS_VIEWER_NAMES" => $fs_viewers_names
 	));
 	$t->parse("MAIN.FORUMS_SECTIONS_VIEWERS");
-
+	
 }
 
 $arraychilds = cot_structure_children('forums', $s, false, false);
@@ -256,7 +204,7 @@ if (count($arraychilds) > 0)
 	foreach($arraychilds as $cat)
 	{
 		$jj++;
-
+		
 		$all = cot_structure_children('forums', $cat);
 		$stat = $db->query("SELECT SUM(fs_topiccount) AS topiccount, SUM(fs_postcount) AS postcount, SUM(fs_viewcount) AS viewcount,
 				fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername FROM $db_forum_stats
@@ -266,21 +214,20 @@ if (count($arraychilds) > 0)
 			"FORUMS_SECTIONS_ROW_ODDEVEN" => cot_build_oddeven($jj),
 			"FORUMS_SECTIONS_ROW_NUM" => $jj
 		));
-
+		
 		/* === Hook - Part2 : Include === */
 		foreach ($extp as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
-
+		
 		$t->parse("MAIN.FORUMS_SECTIONS.FORUMS_SECTIONS_ROW_SECTION");
 	}
 	$t->parse("MAIN.FORUMS_SECTIONS");
 }
 
-$where['cat'] = "ft_cat='$s'".($usr['isadmin']) ? '' : "AND ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".$usr['id'].")";
-
+$where['cat'] = "ft_cat='".$db->prep($s)."'".($usr['isadmin']) ? '' : "AND ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".(int)$usr['id'].")";
 $order = "ft_sticky DESC, ft_$o $w";
 $join_columns = '';
 $join_condition = '';
@@ -302,77 +249,62 @@ $sql = $db->query("SELECT t.* $join_columns FROM $db_forum_topics AS t $join_con
 $extp = cot_getextplugins('forums.topics.loop');
 /* ===== */
 
-
+$ft_num = 0;
 while ($row = $sql->fetch())
 {
 	$row['ft_icon'] = 'posts';
 	$row['ft_postisnew'] = FALSE;
 	$row['ft_pages'] = '';
 	$ft_num++;
-
-	if ($row['ft_mode'] == 1)
-	{
-		$row['ft_title'] = "# ".$row['ft_title'];
-	}
-
-	if ($row['ft_movedto']>0)
+	
+	$row['ft_title'] = ($row['ft_mode'] == 1) ? "# ".$row['ft_title'] : $row['ft_title'];
+	
+	if ($row['ft_movedto'] > 0)
 	{
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_movedto']);
 		$row['ft_icon'] = $R['forums_icon_posts_moved'];
 		$row['ft_title']= $L['Moved'].": ".$row['ft_title'];
-		$row['ft_lastpostername'] = $R['forums_code_post_empty'];
 		$row['ft_postcount'] = $R['forums_code_post_empty'];
 		$row['ft_replycount'] = $R['forums_code_post_empty'];
 		$row['ft_viewcount'] = $R['forums_code_post_empty'];
 		$row['ft_lastpostername'] = $R['forums_code_post_empty'];
 		$row['ft_lastposturl'] = cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_movedto']."&n=last", "#bottom"), $R['icon_follow'], 'rel="nofollow"') .$L['Moved'];
-		$row['ft_timago'] = cot_build_timegap($row['ft_updated'],$sys['now_offset']);
 	}
 	else
 	{
 		$row['ft_url'] = cot_url('forums', "m=posts&q=".$row['ft_id']);
-		$row['ft_lastposturl'] = ($usr['id']>0 && $row['ft_updated'] > $usr['lastvisit']) ? cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread"), $R['icon_unread'], 'rel="nofollow"') : cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom"), $R['icon_follow'], 'rel="nofollow"');
+		$row['ft_lastposturl'] = ($usr['id'] > 0 && $row['ft_updated'] > $usr['lastvisit']) ? cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_id']."&n=unread", "#unread"), $R['icon_unread'], 'rel="nofollow"') : cot_rc_link(cot_url('forums', "m=posts&q=".$row['ft_id']."&n=last", "#bottom"), $R['icon_follow'], 'rel="nofollow"');
 		$row['ft_lastposturl'] .= @date($cfg['formatmonthdayhourmin'], $row['ft_updated'] + $usr['timezone'] * 3600);
-		$row['ft_timago'] = cot_build_timegap($row['ft_updated'],$sys['now_offset']);
 		$row['ft_replycount'] = $row['ft_postcount'] - 1;
-
-		if ($row['ft_updated']>$usr['lastvisit'] && $usr['id']>0)
+		
+		if ($row['ft_updated'] > $usr['lastvisit'] && $usr['id']>0)
 		{
 			$row['ft_icon'] .= '_new';
 			$row['ft_postisnew'] = TRUE;
 		}
-
-		if ($row['ft_postcount']>=$cfg['forums']['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
+		
+		if ($row['ft_postcount'] >= $cfg['forums']['hottopictrigger'] && !$row['ft_state'] && !$row['ft_sticky'])
 		{
 			$row['ft_icon'] = ($row['ft_postisnew']) ? 'posts_new_hot' : 'posts_hot';
 		}
 		else
 		{
-			if ($row['ft_sticky'])
-			{
-				$row['ft_icon'] .= '_sticky';
-			}
-
-			if ($row['ft_state'])
-			{
-				$row['ft_icon'] .= '_locked';
-			}
+			$row['ft_icon'] .= ($row['ft_sticky']) ? '_sticky' : $row['ft_icon'];
+			$row['ft_icon'] .=  ($row['ft_state']) ? '_locked' : $row['ft_icon'];
 		}
-
+		
 		$row['ft_icon'] = cot_rc('forums_icon_topic', array('icon' => $row['ft_icon']));
 		$row['ft_lastpostername'] = cot_build_user($row['ft_lastposterid'], htmlspecialchars($row['ft_lastpostername']));
 	}
-
-	$row['ft_firstpostername'] = cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername']));
-
-	if ($row['ft_postcount'] > $cfg['forums']['maxpostsperpage'])
+	
+	if ($row['ft_postcount'] > $cfg['forums']['maxpostsperpage'] && !$row['ft_movedto'])
 	{
 		$pn_q = $row['ft_movedto'] > 0 ? $row['ft_movedto'] : $row['ft_id'];
 		$pn = cot_pagenav('forums', 'm=posts&q='.$pn_q, 0, $row['ft_postcount'], $cfg['forums']['maxpostsperpage'], 'd');
 		$row['ft_pages'] = cot_rc('forums_code_topic_pages', array('main' => $pn['main'], 'first' => $pn['first'], 'last' => $pn['last']));
 	}
-
-	$t-> assign(array(
+	
+	$t->assign(array(
 		"FORUMS_TOPICS_ROW_ID" => $row['ft_id'],
 		"FORUMS_TOPICS_ROW_STATE" => $row['ft_state'],
 		"FORUMS_TOPICS_ROW_ICON" => $row['ft_icon'],
@@ -380,11 +312,11 @@ while ($row = $sql->fetch())
 		"FORUMS_TOPICS_ROW_DESC" => htmlspecialchars($row['ft_desc']),
 		"FORUMS_TOPICS_ROW_CREATIONDATE" => @date($cfg['formatmonthdayhourmin'], $row['ft_creationdate'] + $usr['timezone'] * 3600),
 		"FORUMS_TOPICS_ROW_UPDATED" => $row['ft_lastposturl'],
-		"FORUMS_TOPICS_ROW_TIMEAGO" => $row['ft_timago'],
+		"FORUMS_TOPICS_ROW_TIMEAGO" => cot_build_timegap($row['ft_updated'],$sys['now_offset']),
 		"FORUMS_TOPICS_ROW_POSTCOUNT" => $row['ft_postcount'],
 		"FORUMS_TOPICS_ROW_REPLYCOUNT" => $row['ft_replycount'],
 		"FORUMS_TOPICS_ROW_VIEWCOUNT" => $row['ft_viewcount'],
-		"FORUMS_TOPICS_ROW_FIRSTPOSTER" => $row['ft_firstpostername'],
+		"FORUMS_TOPICS_ROW_FIRSTPOSTER" => cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername'])),
 		"FORUMS_TOPICS_ROW_LASTPOSTER" => $row['ft_lastpostername'],
 		"FORUMS_TOPICS_ROW_URL" => $row['ft_url'],
 		"FORUMS_TOPICS_ROW_PREVIEW" => $row['ft_preview'].'...',
@@ -394,14 +326,14 @@ while ($row = $sql->fetch())
 		"FORUMS_TOPICS_ROW_NUM" => $ft_num,
 		"FORUMS_TOPICS_ROW" => $row,
 	));
-
+	
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{
 		include $pl;
 	}
 	/* ===== */
-
+	
 	$t->parse("MAIN.FORUMS_TOPICS_ROW");
 }
 
@@ -418,7 +350,21 @@ foreach($structure['forums'] as $key => $val)
 		$jumpbox[cot_url('forums', "m=topics&s=".$key, '', true)] = $val['tpath'];
 	}
 }
-$jumpbox = cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"');
+
+function rev($sway)
+{
+	return (($sway == 'desc') ? 'asc' : 'desc');
+}
+
+function cursort($trigger, $way)
+{
+	global $R;
+	if ($trigger)
+	{
+		return (($way == 'asc') ? $R['icon_down'] : $R['icon_up']);
+	}
+	return ('');
+}
 
 $t->assign(array(
 	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
@@ -431,7 +377,7 @@ $t->assign(array(
 	"FORUMS_TOPICS_PAGEPREV" => $pagenav['prev'],
 	"FORUMS_TOPICS_PAGENEXT" => $pagenav['next'],
 	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
-	"FORUMS_TOPICS_JUMPBOX" => $jumpbox,
+	"FORUMS_TOPICS_JUMPBOX" => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
 	"FORUMS_TOPICS_TITLE_TOPICS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=title&w=".rev($w)), $L['forums_topics'].' '.cursort($o == 'title', $w), 'rel="nofollow"'),
 	"FORUMS_TOPICS_TITLE_VIEWS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=viewcount&w=".rev($w)), $L['Views']." ".cursort($o == 'viewcount', $w), 'rel="nofollow"'),
 	"FORUMS_TOPICS_TITLE_POSTS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Posts']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
