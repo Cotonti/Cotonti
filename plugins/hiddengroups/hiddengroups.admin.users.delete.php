@@ -17,13 +17,6 @@ Hooks=admin.users.update
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-$rhidden = cot_import('rhidden', 'P', 'BOL');
-
-if(!empty($rtitle))
-{
-	$db->query("UPDATE $db_groups SET grp_hidden = ".(int)$rhidden." WHERE grp_id = ".(int)$g);
-}
-
 $cache && $cache->db->remove('hiddenusers', 'system');
 
 ?>
