@@ -22,14 +22,17 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 	if ($rightprescan)
 	{
 		$catsub = array();
-		foreach ($structure['forums'] as $i => $x)
+		if (is_array($structure['forums']))
 		{
-			if (cot_auth('forums', $i, 'R') && (mb_substr($x['path'], 0, $mtchlen) == $mtch || empty($cat)))
+			foreach ($structure['forums'] as $i => $x)
 			{
-				$catsub[] = $i;
+				if (cot_auth('forums', $i, 'R') && (mb_substr($x['path'], 0, $mtchlen) == $mtch || empty($cat)))
+				{
+					$catsub[] = $i;
+				}
 			}
+			$incat = "AND ft_cat IN ('".implode("','", $catsub)."')";
 		}
-		$incat = "AND ft_cat IN ('".implode("','", $catsub)."')";
 	}
 
 	if ($mode == 'recent')
