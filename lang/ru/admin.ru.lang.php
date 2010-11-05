@@ -472,6 +472,10 @@ $L['adm_warnings'] = 'Предупреждения';
 $L['editdeleteentries'] = 'Правка / удаление';
 $L['viewdeleteentries'] = 'Просмотр / удаление';
 
+$L['alreadyaddnewentry'] = 'Новая запись добавлена';
+$L['alreadyupdatednewentry'] = 'Запись обновлена';
+$L['alreadydeletednewentry'] = 'Запись удалена';
+
 /**
  * Extra Fields (Common Entries for Pages & Structure & Users)
  */

@@ -23,7 +23,7 @@ $tt = new XTemplate(cot_skinfile('banlist.admin', true));
 cot_require_lang('banlist', 'plug');
 
 $GLOBALS['db_banlist'] = (isset($GLOBALS['db_banlist'])) ? $GLOBALS['db_banlist'] : $GLOBALS['db_x'] . 'banlist';
-$adminhelp = $L['adm_help_banlist'];
+$adminhelp = $L['banlist_help'];
 
 $d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
@@ -105,7 +105,7 @@ while ($row = $sql->fetch())
 		'ADMIN_BANLIST_ROW_ID' => $row['banlist_id'],
 		'ADMIN_BANLIST_ROW_URL' => cot_url('admin', 'm=other&p=banlist&a=update&id='.$row['banlist_id'].'&d='.$d),
 		'ADMIN_BANLIST_ROW_DELURL' => cot_url('admin', 'm=other&p=banlist&a=delete&id='.$row['banlist_id'].'&'.cot_xg()),
-		'ADMIN_BANLIST_ROW_EXPIRE' => ($row['banlist_expire'] > 0) ? date($cfg['dateformat'], $row['banlist_expire']).' GMT' : $L['adm_neverexpire'],
+		'ADMIN_BANLIST_ROW_EXPIRE' => ($row['banlist_expire'] > 0) ? date($cfg['dateformat'], $row['banlist_expire']).' GMT' : $L['banlist_neverexpire'],
 		'ADMIN_BANLIST_ROW_IP' => cot_inputbox('text', 'rbanlistip', $row['banlist_ip'], 'size="18" maxlength="16"'),
 		'ADMIN_BANLIST_ROW_EMAIL' => cot_inputbox('text', 'rbanlistemail', $row['banlist_email'], 'size="10" maxlength="64"'),
 		'ADMIN_BANLIST_ROW_REASON' => cot_inputbox('text', 'rbanlistreason', $row['banlist_reason'], 'size="22" maxlength="64"'),
