@@ -472,6 +472,10 @@ $L['adm_warnings'] = 'Warnings';
 $L['editdeleteentries'] = 'Edit or delete entries';
 $L['viewdeleteentries'] = 'View or delete entries';
 
+$L['alreadyaddnewentry'] = 'New entry added';
+$L['alreadyupdatednewentry'] = 'Entry updated';
+$L['alreadydeletednewentry'] = 'Entry deleted';
+
 /**
  * Extra Fields (Common Entries for Pages & Structure & Users)
  */

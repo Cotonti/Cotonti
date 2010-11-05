@@ -11,23 +11,17 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['Banlist'] = 'Список заблокированных учетных записей';
-
 /**
- * Other Section
- * Banlist Subsection
+ * Plugin Body
  */
 
-$L['adm_ipmask'] = 'IP-маска';
-$L['adm_emailmask'] = 'E-mail маска';
-$L['adm_neverexpire'] = 'Без срока действия';
-$L['adm_help_banlist'] = 'Образцы IP-масок: 194.31.13.41, 194.31.13.*, 194.31.*.*, 194.*.*.*<br />Образцы e-mail масок: @hotmail.com, @yahoo (шаблоны (wildcards) не поддерживаются)<br />Запись может содержать одну IP-маску, одну e-mail маску или обе маски.<br />IP-адреса фильтруются для всех без исключения страниц, e-mail маски применяются только при регистрации пользователей.';
+$L['banlist_title'] = 'Банлист';
+$L['banlist_ipmask'] = 'IP маска';
+$L['banlist_emailmask'] = 'E-mail маска';
+$L['banlist_reason'] = 'Причина';
+$L['banlist_duration'] = 'Срок';
+$L['banlist_neverexpire'] = 'Без срока';
 
-$L['adm_searchthisuser'] = 'Поиск данного IP-адреса в базе данных пользователей';
-$L['adm_dnsrecord'] = 'DNS-запись для данного адреса';
-
-$L['alreadyaddnewentry'] = 'Новая запись добавлена';	// New in 0.0.2
-$L['alreadyupdatednewentry'] = 'Запись обновлена';	// New in 0.0.2
-$L['alreadydeletednewentry'] = 'Запись удалена';	// New in 0.0.2
+$L['banlist_help'] = 'Образцы IP-масок: 194.31.13.41, 194.31.13.*, 194.31.*.*, 194.*.*.*<br />Образцы e-mail масок: @hotmail.com, @yahoo (шаблоны (wildcards) не поддерживаются)<br />Запись может содержать одну IP-маску, одну e-mail маску или обе маски.<br />IP-адреса фильтруются для всех без исключения страниц, e-mail маски применяются только при регистрации пользователей.';
 
 ?>

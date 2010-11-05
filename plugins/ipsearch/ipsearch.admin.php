@@ -17,7 +17,7 @@ Hooks=tools
 
 defined('COT_CODE') or die('Wrong URL');
 
-$plugin_title = "IP search";
+$adminhelp = $L['ipsearch_help'];
 
 $t = new XTemplate(cot_skinfile('ipsearch', true));
 $t->assign(array(
