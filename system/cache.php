@@ -689,7 +689,7 @@ class MySQL_cache extends Db_cache_driver
 	public function get($id, $realm = COT_DEFAULT_REALM)
 	{
 		global $db, $db_cache;
-		if(!$this->exists($id, $realm))
+		if($this->exists($id, $realm))
 		{
 			return $this->buffer[$realm][$id];
 		}

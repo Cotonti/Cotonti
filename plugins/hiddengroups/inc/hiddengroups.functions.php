@@ -35,12 +35,13 @@ function cot_hiddengroups_mode()
  */
 function cot_hiddengroups_get($mode, $type='groups')
 {
-	global $db, $db_users, $db_groups_users, $cot_groups;
+	global $cache, $db, $db_users, $db_groups_users, $cot_groups;
 	if($mode !== 1 && $mode !== 2) return array();
 
-	if($type == 'users' && $cache && $cache->db->exists('hiddenusers', 'system'))
+	if($type == 'users' && $cache && $cache->db->exists('cot_hiddenusers', 'system'))
 	{
-		return $cache->db->get('test', 'myrealm');
+		$cachedata = $cache->db->get('cot_hiddenusers', 'system');
+		if(is_array($cachedata)) return $cachedata;
 	}
 
 	$hiddengroups = array();
@@ -49,7 +50,7 @@ function cot_hiddengroups_get($mode, $type='groups')
 		if($grp['hidden']) $hiddengroups[] = (int)$grp['id'];
 	}
 	if($type == 'groups') return $hiddengroups;
-	
+
 	if($type == 'users' && !empty($hiddengroups))
 	{
 		if($mode == 1)
@@ -65,7 +66,7 @@ function cot_hiddengroups_get($mode, $type='groups')
 		{
 			$hiddenusers[] = (int)$row['user_id'];
 		}
-		$cache && $cache->db->store('hiddenusers', $hiddenusers, 'system');
+		$cache && $cache->db->store('cot_hiddenusers', $hiddenusers, 'system');
 		return $hiddenusers;
 	}
 	return array();
