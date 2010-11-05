@@ -6,8 +6,14 @@
 defined('COT_CODE') && defined('COT_UPDATE') or die('Wrong URL');
 
 if (cot_module_installed('forums'))
-{
+{	
 	cot_require('forums');
+
+	global $db_structure, $db_forum_stats;
+
+	// Old forum table names, required for update
+	$db_forum_structure	= (isset($GLOBALS['db_forum_structure'])) ? $GLOBALS['db_forum_structure'] : $GLOBALS['db_x'] . 'forum_structure';
+	$db_forum_sections = (isset($GLOBALS['db_forum_sections'])) ? $GLOBALS['db_forum_sections'] : $GLOBALS['db_x'] . 'forum_sections';
 
 	$sql = $db->query("SELECT * FROM `$db_forum_structure` WHERE 1");
 	while ($row = $sql->fetch())
