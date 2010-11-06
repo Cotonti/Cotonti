@@ -47,7 +47,7 @@ $cat = $cot_cat[$pag['page_cat']];
 
 $sys['sublocation'] = $pag['page_title'];
 
-$pag['page_begin_noformat'] = $pag['page_date'];
+$pag['page_begin_noformat'] = $pag['page_begin'];
 $pag['page_tab'] = (empty($pg)) ? 0 : $pg;
 $pag['page_pageurl'] = (empty($al)) ? cot_url('page', 'id='.$id) : cot_url('page', 'al='.$al);
 

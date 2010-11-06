@@ -345,6 +345,8 @@ if ($usr['id'] == 0)
 	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['abs_url']))); // Site related key for guests
 }
 
+$lang = $usr['lang'];
+
 /* === Hook === */
 foreach (cot_getextplugins('input') as $pl)
 {
@@ -374,7 +376,7 @@ $a = cot_import('a', 'G', 'ALP', 24);
 $b = cot_import('b', 'G', 'ALP', 24);
 
 /* ======== Language ======== */
-$lang = $usr['lang'];
+
 require_once cot_langfile('main', 'core');
 
 /* ======== Category Structure ======== */

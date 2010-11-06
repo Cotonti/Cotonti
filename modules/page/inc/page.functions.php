@@ -111,6 +111,22 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
 function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = 0, $dateformat='', $emptytitle='')
 {
 	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $pag_cache, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
+	
+	static $extp_first = null, $extp_main = null;
+
+	if (is_null($extp_first))
+	{
+		$extp_first = cot_getextplugins('pagetags.first');
+		$extp_main = cot_getextplugins('pagetags.main');
+	}
+
+	/* === Hook === */
+	foreach ($extp_first as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	if (is_array($page_data) && is_array($pag_cache['page_' . $page_data['page_id']]))
 	{
 		$temp_array = $pag_cache['page_' . $page_data['page_id']];
@@ -209,6 +225,13 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				$temp_array['CAT_'.$uname.'_TITLE'] = isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description'];
 				$temp_array['CAT_'.$uname] = cot_build_extrafields_data('structure', $row_c['field_type'], $row_c['field_name'], $cot_cat[$row['page_cat']][$row_c['field_name']]);
 			}
+
+			/* === Hook === */
+			foreach ($extp_main as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 		}
 		else
 		{
