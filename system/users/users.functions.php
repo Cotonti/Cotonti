@@ -161,8 +161,16 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 {
 	global $db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
 
+	static $extp_first = null, $extp_main = null;
+
+	if (is_null($extp_first))
+	{
+		$extp_first = cot_getextplugins('usertags.first');
+		$extp_main = cot_getextplugins('usertags.main');
+	}
+
 	/* === Hook === */
-	foreach (cot_getextplugins('usertags.first') as $pl)
+	foreach ($extp_first as $pl)
 	{
 		include $pl;
 	}
@@ -232,7 +240,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 			}
 
 			/* === Hook === */
-			foreach (cot_getextplugins('usertags.main') as $pl)
+			foreach ($extp_main as $pl)
 			{
 				include $pl;
 			}
