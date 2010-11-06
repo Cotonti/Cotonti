@@ -153,8 +153,8 @@ HTM;
 
 
 $html_code_date = "
-<div>
-	<select class='search' size='4' onchange='evaluateDates()' name='within' style='width:220px'>
+<div style='margin:0 0 10px;'>
+	<select class='search' size='4' onchange='evaluateDates()' name='within'>
 	<option value='0'".(($within==0 || !isset($within))?" selected":"").">".$L['plu_any_date']."</option>
 	<option value='1'".(($within==1)?" selected":"").">".$L['plu_last_2_weeks']."</option>
 	<option value='2'".(($within==2)?" selected":"").">".$L['plu_last_1_month']."</option>
@@ -163,19 +163,34 @@ $html_code_date = "
 	<option value='777'".(($within==777)?" selected":"").">".$L['plu_need_datas']."</option>
 	</select>
 </div>
-<div style='padding-top:10px'>
-<table>
-<tr>
-	<td><div style='padding-right:3px'><input style='width:20px' maxlength='2' size='2' type='text' name='from_day' value='".$from_day."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_day(this)' /></div><div class='cells_com'>".$L['plu_need_dd']."</div></td>
-	<td><div style='padding-right:3px'><input style='width:20px' maxlength='2' size='2' type='text' name='from_month' value='".$from_month."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_month(this)' /></div><div class='cells_com'>".$L['plu_need_mm']."</div></td>
-	<td><div><input style='width:34px' maxlength='4' size='4' type='text' name='from_year' value='".$from_year."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_year(this)' /></div><div class='cells_com'>".$L['plu_need_yy']."</div></td>
-	<td style='padding:0 6px 20px 6px'></td>
-	<td><div style='padding-right:3px'><input style='width:20px' maxlength='2' size='2' type='text' name='to_day' value='".$to_day."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_day(this)' /></div><div class='cells_com'>".$L['plu_need_dd']."</div></td>
-	<td><div style='padding-right:3px'><input style='width:20px' maxlength='2' size='2' type='text' name='to_month' value='".$to_month."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_month(this)' /></div><div class='cells_com'>".$L['plu_need_mm']."</div></td>
-	<td><div><input style='width:34px' maxlength='4' size='4' type='text' name='to_year' value='".$to_year."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_year(this)' /></div><div class='cells_com'>".$L['plu_need_yy']."</div></td>
-</tr>
+<table class='srch'>
+	<tr>
+		<td>
+			<input maxlength='2' size='2' type='text' name='from_day' value='".$from_day."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_day(this)' />
+			<div>".$L['plu_need_dd']."</div>
+		</td>
+		<td>
+			<input maxlength='2' size='2' type='text' name='from_month' value='".$from_month."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_month(this)' />
+			<div>".$L['plu_need_mm']."</div>
+		</td>
+		<td>
+			<input maxlength='4' size='4' type='text' name='from_year' value='".$from_year."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_year(this)' />
+			<div>".$L['plu_need_yy']."</div>
+		</td>
+		<td>
+			<input maxlength='2' size='2' type='text' name='to_day' value='".$to_day."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_day(this)' />
+			<div>".$L['plu_need_dd']."</div>
+		</td>
+		<td>
+			<input maxlength='2' size='2' type='text' name='to_month' value='".$to_month."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_month(this)' />
+			<div>".$L['plu_need_mm']."</div>
+		</td>
+		<td>
+			<input maxlength='4' size='4' type='text' name='to_year' value='".$to_year."' onkeypress='return numeralsOnly(event)' onChange='custom_range(this)' onBlur='validate_year(this)' />
+			<div>".$L['plu_need_yy']."</div>
+		</td>
+	</tr>
 </table>
-</div>
 <script type=\"text/javascript\">getdate();</script>
 
 ";

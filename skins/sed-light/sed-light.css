@@ -207,3 +207,24 @@ div.star-rating-readonly a{cursor:default !important}
 /* Partial Star CSS */
 div.star-rating{background:transparent!important;overflow:hidden!important}
 /* END jQuery.Rating Plugin CSS */
+
+/* ============== Search ============== */
+
+#sea_pagtitle, #sea_pagdesc, #sea_pagtext, #sea_frmtitle, #sea_frmtext, #sea_frmreply, #sea_pagfile	{ margin:0 10px 0 0; }
+
+select[name*=sea_frmsub]	{ width:300px; }
+select[name*=sea_frmsort]	{ margin:0 0 5px; width:200px; }
+
+select[name*=sea_pagsub]	{ width:300px; }
+select[name*=sea_pagsort]	{ margin:0 0 5px; width:200px; }
+
+select[name=within]		{ width:200px; }
+
+input[name=sq]	{  }
+
+table.srch				{ border-collapse:collapse; width:100%; }
+table.srch td 				{ padding:5px; margin:0; border:0; }
+table.srch td:first-child 	{ padding:5px 5px 5px 0; }
+
+input[id*=pagsort2_], input[id*=frmsort2_]		{ margin:0 5px 0 0; }
+label[for*=pagsort2_], label[for*=frmsort2_]	{ margin:0 15px 0 0; }
