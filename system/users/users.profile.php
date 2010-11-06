@@ -147,6 +147,7 @@ switch ($a)
 							$percentage = 100;
 
 							cot_createthumb($filepath, $filepath, $cfg['av_maxx'],$cfg['av_maxy'], 1, $f_extension, $filename, 0, 0, 0, 0, 0, $percentage, $prior);
+							//cot_imageresize($filepath, $filepath, $cfg[$type.'_maxx'], $cfg[$type.'_maxy'], 'fit', '', 100);
 
 							while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($userpic[$key]['size'] > $cfg[$key.'_maxsize']))
 							{

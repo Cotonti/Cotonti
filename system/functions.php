@@ -2081,6 +2081,163 @@ function cot_headrc_output_file($path, $type = 'js', $prepend = false)
 }
 
 /**
+ * Resize an image
+ *
+ * @param string $source Original image path.
+ * @param string $target Target path for saving, or 'return' to return the resized image data directly.
+ * @param int $target_width Maximum width of resized image.
+ * @param int $target_height Maximum height of resized image.
+ * @param string $crop Crop the image to a certain ratio. Set to 'fit' to calculate ratio from target width and height.
+ * @param string $fillcolor Color fill a transparent gif or png.
+ * @param bool $sharpen Sharpen JPEG image after resize.
+ * @return mixed Boolean or image resource, depending on $target
+ */
+function cot_imageresize($source, $target='return', $target_width=99999, $target_height=99999, $crop='', $fillcolor='', $quality=90, $sharpen=true)
+{
+	if (!file_exists($source)) return;
+	$source_size = getimagesize($source);
+	if(!$source_size) return;
+	$mimetype = $source_size['mime'];
+	if (substr($mimetype, 0, 6) != 'image/') return;
+
+	$source_width = $source_size[0];
+	$source_height = $source_size[1];
+	if($target_width > $source_width) $target_width = $source_width; $noscaling_x = true;
+	if($target_height > $source_height) $target_height = $source_height; $noscaling_y = true;
+
+	$fillcolor = preg_replace('/[^0-9a-fA-F]/', '', (string)$fillcolor);
+	if (!$fillcolor && $noscaling_x && $noscaling_y)
+	{
+		$data = file_get_contents($source);
+		if($target == 'return') return $data;
+	}
+
+	$offsetX = 0;
+	$offsetY = 0;
+
+	if($crop)
+	{
+		$crop = ($crop == 'fit') ? array($target_width, $target_height) : explode(':', (string)$crop);
+		if(count($crop) == 2)
+		{
+			$source_ratio = $source_width / $source_height;
+			$target_ratio = (float)$crop[0] / (float)$crop[1];
+
+			if ($source_ratio < $target_ratio)
+			{
+				$temp = $source_height;
+				$source_height = $source_width / $target_ratio;
+				$offsetY = ($temp - $source_height) / 2;
+			}
+			if ($source_ratio > $target_ratio)
+			{
+				$temp = $source_width;
+				$source_width = $source_height * $target_ratio;
+				$offsetX = ($temp - $source_width) / 2;
+			}
+		}
+	}
+
+	$width_ratio = $target_width / $source_width;
+	$height_ratio = $target_height / $source_height;
+	if ($width_ratio * $source_height < $target_height)
+	{
+		$target_height = ceil($width_ratio * $source_height);
+	}
+	else
+	{
+		$target_width = ceil($height_ratio * $source_width);
+	}
+
+	ini_set('memory_limit', '100M');
+	$canvas = imagecreatetruecolor($target_width, $target_height);
+
+	switch($mimetype)
+	{
+		case 'image/gif':
+			$fn_create = 'imagecreatefromgif';
+			$fn_output = 'imagegif';
+			$mimetype = 'image/gif';
+			//$quality = round(10 - ($quality / 10));
+			$sharpen = false;
+		break;
+
+		case 'image/x-png':
+		case 'image/png':
+			$fn_create = 'imagecreatefrompng';
+			$fn_output = 'imagepng';
+			$quality = round(10 - ($quality / 10));
+			$sharpen = false;
+		break;
+
+		default:
+			$fn_create = 'imagecreatefromjpeg';
+			$fn_output = 'imagejpeg';
+		break;
+	}
+	$source_data = $fn_create($source);
+
+	if (in_array($size['mime'], array('image/gif', 'image/png')))
+	{
+		if (!$fillcolor)
+		{
+			imagealphablending($canvas, false);
+			imagesavealpha($canvas, true);
+		}
+		elseif(strlen($fillcolor) == 6 || strlen($fillcolor) == 3)
+		{
+			$background	= (strlen($fillcolor) == 6) ?
+				imagecolorallocate($canvas, hexdec($fillcolor[0].$fillcolor[1]), hexdec($fillcolor[2].$fillcolor[3]), hexdec($fillcolor[4].$fillcolor[5])):
+				imagecolorallocate($canvas, hexdec($fillcolor[0].$fillcolor[0]), hexdec($fillcolor[1].$fillcolor[1]), hexdec($fillcolor[2].$fillcolor[2]));
+			imagefill($canvas, 0, 0, $background);
+		}
+	}
+	imagecopyresampled($canvas, $source_data, 0, 0, $offsetX, $offsetY, $target_width, $target_height, $source_width, $source_height);
+	imagedestroy($source_data);
+	$canvas = ($sharpen) ? cot_imagesharpen($canvas, $source_width, $target_width) : $canvas;
+
+	if($target == 'return')
+	{
+		ob_start();
+		$fn_output($canvas, null, $quality);
+		$data = ob_get_contents();
+		ob_end_clean();
+		imagedestroy($canvas);
+		return $data;
+	}
+	else
+	{
+		$result = $fn_output($canvas, $target, $quality);
+		imagedestroy($canvas);
+		return $result;
+	}
+}
+
+/**
+ * Sharpen an image after resize
+ *
+ * @param image resource $imgdata Image resource from an image creation function
+ * @param int $source_width Width of image before resize
+ * @param int $target_width Width of image to sharpen (after resize)
+ * @return image resource
+ */
+function cot_imagesharpen($imgdata, $source_width, $target_width)
+{
+	$s = $target_width * (750.0 / $source_width);
+	$a = 52;
+	$b = -0.27810650887573124;
+	$c = .00047337278106508946;
+	$sharpness = max(round($a+$b*$s+$c*$s*$s), 0);
+	$sharpenmatrix = array(
+		array(-1, -2, -1),
+		array(-2, $sharpness + 12, -2),
+		array(-1, -2, -1)
+	);
+	imageconvolution($imgdata, $sharpenmatrix, $sharpness, 0);
+	return $imgdata;
+}
+
+/**
  * Returns Theme/Scheme selection dropdown
  *
  * @param string $selected_theme Seleced theme
