@@ -69,7 +69,7 @@ if($a=='search')
 	// Query too short message
 	if(mb_strlen($sq) < $cfg['plugin']['search']['minsigns'])
 	{
-		$error_string .= "<div>".$L['plu_querytooshort']."</div>";
+		$error_string .= "<p>".$L['plu_querytooshort']."</p>";
 		unset($a);
 	}
 
@@ -80,7 +80,7 @@ if($a=='search')
 	// Too many words error message
 	if($words_count > $cfg['plugin']['search']['maxwords'])
 	{
-		$error_string .= "<div>".$L['plu_toomanywords']." ".$cfg['plugin']['search']['maxwords'].".</div>";
+		$error_string .= "<p>".$L['plu_toomanywords']." ".$cfg['plugin']['search']['maxwords'].".</p>";
 		unset($a);
 	}
 
@@ -146,7 +146,7 @@ if($tab=='frm' && !$cfg['disable_forums'])
 		ORDER by fn_path ASC, fs_order ASC");
 
 	// Making the sections list
-	$plugin_forum_sec_list  = "<select multiple name='sea_frmsub[]' size='10' style='width:385px'>";
+	$plugin_forum_sec_list  = "<select multiple name='sea_frmsub[]' size='10'>";
 	$plugin_forum_sec_list .= "<option value='all'".(($sea_frmsub[0]=='all' || count($sea_frmsub)==0)?" selected='selected'":"").">".$L['plu_allsections']."</option>";
 	while($row1 = mysql_fetch_array($sql1))
 	{
@@ -169,7 +169,7 @@ if($tab=='frm' && !$cfg['disable_forums'])
 	$plugin_forum_sec_list .= "</select>";
 
 	// Making the list for ordering
-	$plugin_forum_res_sort  = "<select style='width:160px' name='sea_frmsort'>";
+	$plugin_forum_res_sort  = "<select name='sea_frmsort'>";
 	$plugin_forum_res_sort .= "<option value='1'".(($sea_frmsort==1 || !isset($sea_frmsort))?" selected":"").">".$L['plu_frm_res_sort1']."</option>";
 	$plugin_forum_res_sort .= "<option value='2'".($sea_frmsort==2?" selected":"").">".$L['plu_frm_res_sort2']."</option>";
 	$plugin_forum_res_sort .= "<option value='3'".($sea_frmsort==3?" selected":"").">".$L['plu_frm_res_sort3']."</option>";
@@ -178,13 +178,13 @@ if($tab=='frm' && !$cfg['disable_forums'])
 	$plugin_forum_res_sort .= "</select>";
 
 	// Ordering params
-	$plugin_forum_res_desc = "<input type='radio' name='sea_frmsort2' value='DESC' id='frmsort2_DESC'".($sea_frmsort2=='ASC'?"":" checked")." /> <label for='frmsort2_DESC'>".$L['plu_sort_desc']."</label>";
-	$plugin_forum_res_asc = "<input type='radio' name='sea_frmsort2' value='ASC' id='frmsort2_ASC'".($sea_frmsort2=='ASC'?" checked":"")." /> <label for='frmsort2_ASC'>".$L['plu_sort_asc']."</label>";
+	$plugin_forum_res_desc = "<input type='radio' name='sea_frmsort2' value='DESC' id='frmsort2_DESC'".($sea_frmsort2=='ASC'?"":" checked")." /><label for='frmsort2_DESC'>".$L['plu_sort_desc']."</label>";
+	$plugin_forum_res_asc = "<input type='radio' name='sea_frmsort2' value='ASC' id='frmsort2_ASC'".($sea_frmsort2=='ASC'?" checked":"")." /><label for='frmsort2_ASC'>".$L['plu_sort_asc']."</label>";
 
 	// Extra search options
-	$plugin_forum_search_names = "<input type='checkbox' name='sea_frmtitle' id='sea_frmtitle'".(($sea_frmtitle==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_frmtitle'>".$L['plu_frm_search_names']."</label>";
-	$plugin_forum_search_post = "<input type='checkbox' name='sea_frmtext' id='sea_frmtext'".(($sea_frmtext==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_frmtext'>".$L['plu_frm_search_post']."</label>";
-	$plugin_forum_search_answ = "<input type='checkbox' name='sea_frmreply' id='sea_frmreply'".($sea_frmreply==1?" checked='true'":"")." value='1' /> <label for='sea_frmreply'>".$L['plu_frm_search_answ']."</label>";
+	$plugin_forum_search_names = "<input type='checkbox' name='sea_frmtitle' id='sea_frmtitle'".(($sea_frmtitle==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /><label for='sea_frmtitle'>".$L['plu_frm_search_names']."</label>";
+	$plugin_forum_search_post = "<input type='checkbox' name='sea_frmtext' id='sea_frmtext'".(($sea_frmtext==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /><label for='sea_frmtext'>".$L['plu_frm_search_post']."</label>";
+	$plugin_forum_search_answ = "<input type='checkbox' name='sea_frmreply' id='sea_frmreply'".($sea_frmreply==1?" checked='true'":"")." value='1' /><label for='sea_frmreply'>".$L['plu_frm_search_answ']."</label>";
 
 	// Output data array
 	$t->assign(array(
@@ -310,7 +310,7 @@ if($tab=='frm' && !$cfg['disable_forums'])
 		// Othewise error message
 		else
 		{
-			$error_string .= "<div>".$L['plu_notseltopmes']."</div>";
+			$error_string .= "<p>".$L['plu_notseltopmes']."</p>";
 			unset($a);
 			$items = 0;
 		}
@@ -373,7 +373,7 @@ if($tab=='frm' && !$cfg['disable_forums'])
 		// Othewise tell that nothing was found
 		else
 		{
-			$error_string .= "<div>".$L['plu_noneresult']."</div>";
+			$error_string .= "<p>".$L['plu_noneresult']."</p>";
 		}
 	}
 }
@@ -419,7 +419,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 	}
 
 	// Making the category list
-	$plugin_page_sec_list  = "<select multiple name='sea_pagsub[]' size='10' style='width:385px'>";
+	$plugin_page_sec_list  = "<select multiple name='sea_pagsub[]' size='10'>";
 	$plugin_page_sec_list .= "<option value='all'".(($sea_pagsub[0]=='all' || count($sea_pagsub)==0)?" selected='selected'":"").">".$L['plu_allcategories']."</option>";
 	foreach($sed_cat as $i =>$x)
 	{
@@ -445,21 +445,21 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 	$plugin_page_sec_list .= "</select>";
 
 	// Result ordering list
-	$plugin_page_res_sort  = "<select style='width:160px' name='sea_pagsort'>";
+	$plugin_page_res_sort  = "<select name='sea_pagsort'>";
 	$plugin_page_res_sort .= "<option value='1'".(($sea_pagsort==1 || !isset($sea_pagsort))?" selected":"").">".$L['plu_pag_res_sort1']."</option>";
 	$plugin_page_res_sort .= "<option value='2'".($sea_pagsort==2?" selected":"").">".$L['plu_pag_res_sort2']."</option>";
 	$plugin_page_res_sort .= "<option value='3'".($sea_pagsort==3?" selected":"").">".$L['plu_pag_res_sort3']."</option>";
 	$plugin_page_res_sort .= "</select>";
 
 	// Result ordering param
-	$plugin_page_res_desc = "<input type='radio' name='sea_pagsort2' value='DESC' id='pagsort2_DESC'".($sea_pagsort2=='ASC'?"":" checked")." /> <label for='pagsort2_DESC'>".$L['plu_sort_desc']."</label>";
-	$plugin_page_res_asc = "<input type='radio' name='sea_pagsort2' value='ASC' id='pagsort2_ASC'".($sea_pagsort2=='ASC'?" checked":"")." /> <label for='pagsort2_ASC'>".$L['plu_sort_asc']."</label>";
+	$plugin_page_res_desc = "<input type='radio' name='sea_pagsort2' value='DESC' id='pagsort2_DESC'".($sea_pagsort2=='ASC'?"":" checked")." /><label for='pagsort2_DESC'>".$L['plu_sort_desc']."</label>";
+	$plugin_page_res_asc = "<input type='radio' name='sea_pagsort2' value='ASC' id='pagsort2_ASC'".($sea_pagsort2=='ASC'?" checked":"")." /><label for='pagsort2_ASC'>".$L['plu_sort_asc']."</label>";
 
 	// Extra search options
-	$plugin_page_search_names = "<input type='checkbox' name='sea_pagtitle' id='sea_pagtitle'".(($sea_pagtitle==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_pagtitle'>".$L['plu_pag_search_names']."</label>";
-	$plugin_page_search_desc = "<input type='checkbox' name='sea_pagdesc' id='sea_pagdesc'".(($sea_pagdesc==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_pagdesc'>".$L['plu_pag_search_desc']."</label>";
-	$plugin_page_search_text = "<input type='checkbox' name='sea_pagtext' id='sea_pagtext'".(($sea_pagtext==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_pagtext'>".$L['plu_pag_search_text']."</label>";
-	$plugin_page_search_file = "<input type='checkbox' name='sea_pagfile' id='sea_pagfile'".($sea_pagfile==1?" checked='true'":"")." value='1' /> <label for='sea_pagfile'>".$L['plu_pag_search_file']."</label>";
+	$plugin_page_search_names = "<input type='checkbox' name='sea_pagtitle' id='sea_pagtitle'".(($sea_pagtitle==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /><label for='sea_pagtitle'>".$L['plu_pag_search_names']."</label>";
+	$plugin_page_search_desc = "<input type='checkbox' name='sea_pagdesc' id='sea_pagdesc'".(($sea_pagdesc==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /><label for='sea_pagdesc'>".$L['plu_pag_search_desc']."</label>";
+	$plugin_page_search_text = "<input type='checkbox' name='sea_pagtext' id='sea_pagtext'".(($sea_pagtext==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /><label for='sea_pagtext'>".$L['plu_pag_search_text']."</label>";
+	$plugin_page_search_file = "<input type='checkbox' name='sea_pagfile' id='sea_pagfile'".($sea_pagfile==1?" checked='true'":"")." value='1' /><label for='sea_pagfile'>".$L['plu_pag_search_file']."</label>";
 
 	// Output array
 	$t->assign(array(
@@ -537,7 +537,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 		// Otherwise error message
 		else
 		{
-			$error_string .= "<div>".$L['plu_notseloption']."</div>";
+			$error_string .= "<p>".$L['plu_notseloption']."</p>";
 			unset($a, $pagsql);
 		}
 
@@ -648,7 +648,7 @@ elseif($tab=='pag' && !$cfg['disable_page'])
 		// Otherwise nothing was found message
 		else
 		{
-			$error_string .= "<div>".$L['plu_noneresult']."</div>";
+			$error_string .= "<p>".$L['plu_noneresult']."</p>";
 		}
 	}
 }
@@ -745,7 +745,7 @@ else
 			ORDER by fn_path ASC, fs_order ASC");
 
 		// Sections list
-		$plugin_forum_sec_list  = "<select multiple name='sea_frmsub[]' size='6' style='width:385px'>";
+		$plugin_forum_sec_list  = "<select multiple name='sea_frmsub[]' size='6'>";
 		$plugin_forum_sec_list .= "<option value='all'".(($sea_frmsub[0]=='all' || count($sea_frmsub)==0)?" selected='selected'":"").">".$L['plu_allsections']."</option>";
 		while($row1 = mysql_fetch_array($sql1))
 		{
@@ -768,8 +768,8 @@ else
 		$plugin_forum_sec_list .= "</select>";
 
 		// Extra options
-		$plugin_forum_search_names = "<input type='checkbox' name='sea_frmtitle' id='sea_frmtitle'".(($sea_frmtitle==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_frmtitle'>".$L['plu_frm_search_names']."</label>";
-		$plugin_forum_search_post = "<input type='checkbox' name='sea_frmtext' id='sea_frmtext'".(($sea_frmtext==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_frmtext'>".$L['plu_frm_search_post']."</label>";
+		$plugin_forum_search_names = "<input type='checkbox' name='sea_frmtitle' id='sea_frmtitle'".(($sea_frmtitle==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /><label for='sea_frmtitle'>".$L['plu_frm_search_names']."</label>";
+		$plugin_forum_search_post = "<input type='checkbox' name='sea_frmtext' id='sea_frmtext'".(($sea_frmtext==1 || count($sea_frmsub)==0)?" checked='true'":"")." value='1' /><label for='sea_frmtext'>".$L['plu_frm_search_post']."</label>";
 
 		// Output
 		$t->assign(array(
@@ -783,7 +783,7 @@ else
 	if(!$cfg['disable_page'])
 	{
 		// Category list
-		$plugin_page_sec_list  = "<select multiple name='sea_pagsub[]' size='6' style='width:385px'>";
+		$plugin_page_sec_list  = "<select multiple name='sea_pagsub[]' size='6'>";
 		$plugin_page_sec_list .= "<option value='all'".(($sea_pagsub[0]=='all' || count($sea_pagsub)==0)?" selected='selected'":"").">".$L['plu_allcategories']."</option>";
 		foreach($sed_cat as $i =>$x)
 		{
@@ -809,9 +809,9 @@ else
 		$plugin_page_sec_list .= "</select>";
 
 		// Extra options
-		$plugin_page_search_names = "<input type='checkbox' name='sea_pagtitle' id='sea_pagtitle'".(($sea_pagtitle==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_pagtitle'>".$L['plu_pag_search_names']."</label>";
-		$plugin_page_search_desc = "<input type='checkbox' name='sea_pagdesc' id='sea_pagdesc'".(($sea_pagdesc==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_pagdesc'>".$L['plu_pag_search_desc']."</label>";
-		$plugin_page_search_text = "<input type='checkbox' name='sea_pagtext' id='sea_pagtext'".(($sea_pagtext==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /> <label for='sea_pagtext'>".$L['plu_pag_search_text']."</label>";
+		$plugin_page_search_names = "<input type='checkbox' name='sea_pagtitle' id='sea_pagtitle'".(($sea_pagtitle==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /><label for='sea_pagtitle'>".$L['plu_pag_search_names']."</label>";
+		$plugin_page_search_desc = "<input type='checkbox' name='sea_pagdesc' id='sea_pagdesc'".(($sea_pagdesc==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /><label for='sea_pagdesc'>".$L['plu_pag_search_desc']."</label>";
+		$plugin_page_search_text = "<input type='checkbox' name='sea_pagtext' id='sea_pagtext'".(($sea_pagtext==1 || count($sea_pagsub)==0)?" checked='true'":"")." value='1' /><label for='sea_pagtext'>".$L['plu_pag_search_text']."</label>";
 
 		// Output array
 		$t->assign(array(
@@ -901,7 +901,7 @@ else
 			// Otherwise error message
 			else
 			{
-				$error_string .= "<div>".$L['plu_notseltopmes']."</div>";
+				$error_string .= "<p>".$L['plu_notseltopmes']."</p>";
 				unset($a);
 				$items1 = 0;
 			}
@@ -998,7 +998,7 @@ else
 			// Otherwise error message
 			else
 			{
-				$error_string .= "<div>".$L['plu_notseloption']."</div>";
+				$error_string .= "<p>".$L['plu_notseloption']."</p>";
 				unset($a, $pagsql);
 			}
 
@@ -1056,7 +1056,7 @@ else
 		// Common "nothing was found" message
 		if(!$items1 > 0 && !$items2 > 0)
 		{
-			$error_string .= "<div>".$L['plu_noneresult']."</div>";
+			$error_string .= "<p>".$L['plu_noneresult']."</p>";
 		}
 		else
 		{
@@ -1095,8 +1095,8 @@ else
 $t->assign(array(
 	"PLUGIN_TITLE" => $plugin_title,
 	"PLUGIN_SEARCH_ACTION" => empty($tab) ? sed_url('plug', 'e=search') : sed_url('plug', 'e=search&tab=' . $tab),
-	"PLUGIN_SEARCH_TEXT" => "<input type='text' name='sq' style='width:310px; padding:2px 0; margin:0' value='".htmlspecialchars($sq)."' size='32' maxlength='".$cfg['plugin']['search']['maxsigns']."' />",
-	"PLUGIN_SEARCH_KEY" => "<input type='submit' value='".$L['plu_search_key']."' style='width:70px' />",
+	"PLUGIN_SEARCH_TEXT" => "<input type='text' name='sq' value='".htmlspecialchars($sq)."' size='32' maxlength='".$cfg['plugin']['search']['maxsigns']."' />",
+	"PLUGIN_SEARCH_KEY" => "<button type='submit'>".$L['plu_search_key']."</button>",
 	"PLUGIN_ERROR" => $error_string
 ));
 
