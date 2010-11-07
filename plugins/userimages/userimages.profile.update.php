@@ -20,11 +20,10 @@ defined('COT_CODE') or die('Wrong URL');
 
 $userpic['av'] = $_FILES['userfile'];
 $userpic['ph'] = $_FILES['userphoto'];
-$userpic['sig'] = $_FILES['usersig'];
-$picfull = array('av' =>'avatar', 'ph' => 'photo', 'sig' => 'signature');
-$gd_graf = array('jpeg', 'jpg', 'jpg', 'png');
+$picfull = array('av' =>'avatar', 'ph' => 'photo');
+$gd_graf = array('jpeg', 'jpg', 'jpg', 'png', 'gif');
 
-if (!empty($userpic['av']['tmp_name']) || !empty($userpic['ph']['tmp_name']) || !empty($userpic['sig']['tmp_name']))
+if (!empty($userpic['av']['tmp_name']) || !empty($userpic['ph']['tmp_name']))
 {
 	@clearstatcache();
 }

@@ -33,196 +33,120 @@ $sql = $db->query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIMIT 
 cot_die($sql->rowCount()==0);
 $urr = $sql->fetch();
 
-switch ($a)
+if($a == 'update')
 {
-	/* ============= */
-	case 'avatardelete':
-	/* ============= */
+	cot_check_xg();
 
-		cot_check_xg();
-		$filename = $usr['id']."-avatar.gif";
-		$filepath = $cfg['av_dir'].$filename;
-		if (file_exists($filepath))
+	/* === Hook === */
+	foreach (cot_getextplugins('profile.update.first') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	$ruser['user_text'] = cot_import('rusertext','P','HTM', $cfg['usertextmax']);
+	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
+	$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
+	$ruser['user_theme'] = $rtheme[0];
+	$ruser['user_scheme'] = $rtheme[1];
+	$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
+	$ruser['user_gender'] = cot_import('rusergender','P','ALP');
+	$ruser['user_timezone'] = (float) cot_import('rusertimezone','P','TXT',5);
+	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
+	$ruser['user_pmnotify'] = cot_import('ruserpmnotify','P','BOL');
+	// Extra fields
+	foreach($cot_extrafields['users'] as $row)
+	{
+		$ruser[$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
+	}
+	$ruser['user_birthdate'] = (int) cot_import_date('ruserbirthdate', false);
+
+	$roldpass = cot_import('roldpass','P','PSW');
+	$rnewpass1 = cot_import('rnewpass1','P','PSW');
+	$rnewpass2 = cot_import('rnewpass2','P','PSW');
+	$rmailpass = cot_import('rmailpass','P','TXT');
+	$ruseremail = cot_import('ruseremail','P','TXT');
+
+	//$ruser['user_scheme'] = ($ruser['user_theme'] != $urr['user_theme']) ? $ruser['user_theme'] : $ruser['user_scheme'];
+
+	if (!empty($rnewpass1) && !empty($rnewpass2) && !empty($roldpass))
+	{
+		if ($rnewpass1 != $rnewpass2) cot_error('pro_passdiffer', 'rnewpass2');
+		if (mb_strlen($rnewpass1) < 4 || cot_alphaonly($rnewpass1) != $rnewpass2) cot_error('pro_passtoshort', 'rnewpass1');
+		if (md5($roldpass) != $urr['user_password']) cot_error('pro_wrongpass', 'roldpass');
+
+		if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
 		{
-			unlink($filepath);
+			cot_error('pro_emailandpass', 'ruseremail');
 		}
-		$sql = $db->update($db_users, array('user_avatar' => ''), "user_id='".$usr['id']."'");
-		cot_redirect(cot_url('users', "m=profile", '#avatar', true));
-		break;
-
-	/* ============= */
-	case 'phdelete':
-	/* ============= */
-
-		cot_check_xg();
-		$photo = $usr['id']."-photo.gif";
-		$photopath = $cfg['photos_dir'].$photo;
-		if (file_exists($photopath))
+		if (!$cot_error)
 		{
-			unlink($photopath);
+			$db->update($db_users, array('user_password' => md5($rnewpass1)), "user_id='".$usr['id']."'");
 		}
-		$sql = $db->update($db_users, array('user_photo' => ''), "user_id='".$usr['id']."'");
-		cot_redirect(cot_url('users', "m=profile", '#photo', true));
-		break;
+	}
+	if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['user_email_noprotection']) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
+	{
+		$sqltmp = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$db->prep($ruseremail)."'");
+		$res = $sqltmp->fetchColumn();
 
-	/* ============= */
-	case 'sigdelete':
-	/* ============= */
-
-		cot_check_xg();
-		$signature = $usr['id']."-signature.gif";
-		$signaturepath = $cfg['sig_dir'].$signature;
-		if (file_exists($signaturepath))
+		if (!$cfg['user_email_noprotection'])
 		{
-			unlink($signaturepath);
+			$rmailpass = md5($rmailpass);
+			if ($rmailpass != $urr['user_password']) cot_error('pro_wrongpass', 'rmailpass');
 		}
 
-		$sql = $db->update($db_users, array('user_signature' => ''), "user_id='".$usr['id']."'");
-		cot_redirect(cot_url('users', "m=profile", '#signature', true));
-		break;
+		if (mb_strlen($ruseremail) < 4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail))
+			cot_error('aut_emailtooshort', 'ruseremail');
+		if ($res > 0) cot_error('aut_emailalreadyindb', 'ruseremail');
 
-	/* ============= */
-	case 'avatarselect':
-	/* ============= */
-
-		cot_check_xg();
-		$filename = $cfg['defav_dir'].urldecode($id);
-		$filename = str_replace(array("'", ",", chr(0x00)), "", $filename);
-		if (file_exists($filename))
+		if (!$cot_error)
 		{
-			$sql = $db->update($db_users, array('user_avatar' => $filename), "user_id='".$usr['id']."'");
+			if (!$cfg['user_email_noprotection'])
+			{
+				$validationkey = md5(microtime());
+				$db->update($db_users, array('user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
+
+				$rsubject = $cfg['maintitle']." - ".$L['aut_mailnoticetitle'];
+				$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
+				$rbody = sprintf($L['aut_emailchange'], $usr['name'], $ractivate);
+				$rbody .= "\n\n".$L['aut_contactadmin'];
+				cot_mail($ruseremail, $rsubject, $rbody);
+
+				if(!empty($_COOKIE[$sys['site_id']]))
+				{
+					cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
+				}
+
+				if (!empty($_SESSION[$sys['site_id']]))
+				{
+					session_unset();
+					session_destroy();
+				}
+				$db->delete($db_online, "online_ip='{$usr['ip']}'");
+				cot_redirect(cot_url('message', 'msg=102', '', true));
+			}
+			else
+			{
+				$db->update($db_users, array('user_email' => $ruseremail), "user_id='".$usr['id']."'");
+			}
 		}
-		cot_redirect(cot_url('users', "m=profile", '#avatar', true));
-		break;
-
-	/* ============= */
-	case 'update':
-	/* ============= */
-
-		cot_check_xg();
+	}
+	if (!$cot_error)
+	{
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
+		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
+		$ruser['user_auth'] ='';
+		$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
 
 		/* === Hook === */
-		foreach (cot_getextplugins('profile.update.first') as $pl)
+		foreach (cot_getextplugins('profile.update.done') as $pl)
 		{
 			include $pl;
 		}
 		/* ===== */
 
-		$ruser['user_text'] = cot_import('rusertext','P','HTM', $cfg['usertextmax']);
-		$ruser['user_country'] = cot_import('rusercountry','P','ALP');
-		$rtheme = explode(':', cot_import('rusertheme','P','TXT'));
-		$ruser['user_theme'] = $rtheme[0];
-		$ruser['user_scheme'] = $rtheme[1];
-		$ruser['user_lang'] = cot_import('ruserlang','P','ALP');
-		$ruser['user_gender'] = cot_import('rusergender','P','ALP');
-		$ruser['user_timezone'] = (float) cot_import('rusertimezone','P','TXT',5);
-		$ruser['user_hideemail'] = cot_import('ruserhideemail','P','BOL');
-		$ruser['user_pmnotify'] = cot_import('ruserpmnotify','P','BOL');
-		// Extra fields
-		foreach($cot_extrafields['users'] as $row)
-		{
-			$ruser[$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
-		}
-		$ruser['user_birthdate'] = (int) cot_import_date('ruserbirthdate', false);
-		
-		$roldpass = cot_import('roldpass','P','PSW');
-		$rnewpass1 = cot_import('rnewpass1','P','PSW');
-		$rnewpass2 = cot_import('rnewpass2','P','PSW');
-		$rmailpass = cot_import('rmailpass','P','TXT');
-		$ruseremail = cot_import('ruseremail','P','TXT');
-
-		//$ruser['user_scheme'] = ($ruser['user_theme'] != $urr['user_theme']) ? $ruser['user_theme'] : $ruser['user_scheme'];
-
-		if (!empty($rnewpass1) && !empty($rnewpass2) && !empty($roldpass))
-		{
-			if ($rnewpass1 != $rnewpass2) cot_error('pro_passdiffer', 'rnewpass2');
-			if (mb_strlen($rnewpass1) < 4 || cot_alphaonly($rnewpass1) != $rnewpass2) cot_error('pro_passtoshort', 'rnewpass1');
-			if (md5($roldpass) != $urr['user_password']) cot_error('pro_wrongpass', 'roldpass');
-
-			if (!empty($ruseremail) && !empty($rmailpass) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
-			{
-				cot_error('pro_emailandpass', 'ruseremail');
-			}
-
-			if (!$cot_error)
-			{
-				$db->update($db_users, array('user_password' => md5($rnewpass1)), "user_id='".$usr['id']."'");
-			}
-		}
-
-		if (!empty($ruseremail) && (!empty($rmailpass) || $cfg['user_email_noprotection']) && $cfg['useremailchange'] && $ruseremail != $urr['user_email'])
-		{
-			$sqltmp = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_email='".$db->prep($ruseremail)."'");
-			$res = $sqltmp->fetchColumn();
-
-			if (!$cfg['user_email_noprotection'])
-			{
-				$rmailpass = md5($rmailpass);
-				if ($rmailpass != $urr['user_password']) cot_error('pro_wrongpass', 'rmailpass');
-			}
-
-			if (mb_strlen($ruseremail) < 4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail))
-				cot_error('aut_emailtooshort', 'ruseremail');
-			if ($res > 0) cot_error('aut_emailalreadyindb', 'ruseremail');
-
-			if (!$cot_error)
-			{
-				if (!$cfg['user_email_noprotection'])
-				{
-					$validationkey = md5(microtime());
-					$db->update($db_users, array('user_lostpass' => $validationkey, 'user_maingrp' => '-1', 'user_sid' => $urr['user_maingrp']), "user_id='".$usr['id']."'");
-
-					$rsubject = $cfg['maintitle']." - ".$L['aut_mailnoticetitle'];
-					$ractivate = $cfg['mainurl'].'/'.cot_url('users', 'm=register&a=validate&v='.$validationkey, '', true);
-					$rbody = sprintf($L['aut_emailchange'], $usr['name'], $ractivate);
-					$rbody .= "\n\n".$L['aut_contactadmin'];
-					cot_mail($ruseremail, $rsubject, $rbody);
-
-					if(!empty($_COOKIE[$sys['site_id']]))
-					{
-						cot_setcookie($sys['site_id'], '', time()-63072000, $cfg['cookiepath'], $cfg['cookiedomain'], $sys['secure'], true);
-					}
-
-					if (!empty($_SESSION[$sys['site_id']]))
-					{
-						session_unset();
-						session_destroy();
-					}
-					$db->delete($db_online, "online_ip='{$usr['ip']}'");
-					cot_redirect(cot_url('message', 'msg=102', '', true));
-				}
-				else
-				{
-					$db->update($db_users, array('user_email' => $ruseremail), "user_id='".$usr['id']."'");
-				}
-			}
-		}
-
-
-		if (!$cot_error)
-		{
-			$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
-			$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
-			$ruser['user_auth'] ='';
-			$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
-
-			/* === Hook === */
-			foreach (cot_getextplugins('profile.update.done') as $pl)
-			{
-				include $pl;
-			}
-			/* ===== */
-
-			cot_redirect(cot_url('users', 'm=profile'));
-		}
-		break;
-
-	/* ============= */
-	default:
-	/* ============= */
-
-		break;
-
+		cot_redirect(cot_url('users', 'm=profile'));
+	}
 }
 
 $sql = $db->query("SELECT * FROM $db_users WHERE user_id='".$usr['id']."' LIMIT 1");
@@ -249,10 +173,6 @@ $t = new XTemplate($mskin);
 
 cot_require_api('forms');
 
-$profile_form_avatar = $R['users_link_avatar'];
-$profile_form_photo = $R['users_link_photo'];
-$profile_form_signature = $R['users_link_signature'];
-
 $timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 foreach($timezonelist as $x)
 {
@@ -265,60 +185,6 @@ $protected = !$cfg['useremailchange'] ? array('disabled' => 'disabled') : array(
 $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)
 	+ $protected);
 
-$profile_form_avatar_existing = !empty($urr['user_avatar']) ? cot_rc('users_code_avatar_existing', array(
-	'avatar_url' => $urr['user_avatar'],
-	'delete_url' => cot_url('users', 'm=profile&a=avatardelete&'.cot_xg())
-	)) : '';
-$profile_form_avatar = cot_rc('users_code_avatar', array(
-	'avatar_existing' => $profile_form_avatar_existing,
-	'input_maxsize' => cot_inputbox('hidden', 'MAX_FILE_SIZE', $cfg['av_maxsize']*1024),
-	'input_file' => cot_inputbox('file', 'userfile', '', array('size' => 24))
-));
-
-$profile_form_photo_existing = !empty($urr['user_photo']) ? cot_rc('users_code_photo_existing', array(
-	'photo_url' => $urr['user_photo'],
-	'delete_url' => cot_url('users', 'm=profile&a=phdelete&'.cot_xg())
-	)) : '';
-$profile_form_photo = cot_rc('users_code_photo', array(
-	'photo_existing' => $profile_form_photo_existing,
-	'input_maxsize' => cot_inputbox('hidden', 'MAX_FILE_SIZE', $cfg['ph_maxsize']*1024),
-	'input_file' => cot_inputbox('file', 'userphoto', '', array('size' => 24))
-));
-
-$profile_form_signature_existing = !empty($urr['user_signature']) ? cot_rc('users_code_signature_existing', array(
-	'signature_url' => $urr['user_signature'],
-	'delete_url' => cot_url('users', 'm=profile&a=sigdelete&'.cot_xg())
-	)) : '';
-$profile_form_signature = cot_rc('users_code_signature', array(
-	'signature_existing' => $profile_form_signature_existing,
-	'input_maxsize' => cot_inputbox('hidden', 'MAX_FILE_SIZE', $cfg['sig_maxsize']*1024),
-	'input_file' => cot_inputbox('file', 'usersig', '', array('size' => 24))
-));
-
-if ($a=='avatarchoose')
-{
-	cot_check_xg();
-	$profile_form_avatar .= $R['users_code_avatarchoose_title'];
-	$handle = opendir($cfg['defav_dir']);
-	while ($f = readdir($handle))
-	{
-		if ($f != "." && $f != "..")
-		{
-			$profile_form_avatar .= cot_rc('users_link_avatarselect', array(
-				'url' => cot_url('users', 'm=profile&a=avatarselect&'.cot_xg().'&id='.urlencode($f), '#avatar'),
-				'f' => $f
-			));
-		}
-	}
-	closedir($handle);
-}
-else
-{
-	$profile_form_avatar .= cot_rc('users_link_avatarchoose', array(
-		'url' => cot_url('users', 'm=profile&a=avatarchoose&'.cot_xg(), '#list')
-	));
-}
-
 $editor_class = $cfg['parsebbcodeusertext'] ? 'minieditor' : '';
 
 $useredit_array = array(
@@ -330,9 +196,6 @@ $useredit_array = array(
 	"USERS_PROFILE_MAINGRP" => cot_build_group($urr['user_maingrp']),
 	"USERS_PROFILE_GROUPS" => cot_build_groupsms($urr['user_id'], FALSE, $urr['user_maingrp']),
 	"USERS_PROFILE_COUNTRY" => cot_selectbox_countries($urr['user_country'], 'rusercountry'),
-	"USERS_PROFILE_AVATAR" => $profile_form_avatar,
-	"USERS_PROFILE_PHOTO" => $profile_form_photo,
-	"USERS_PROFILE_SIGNATURE" => $profile_form_signature,
 	"USERS_PROFILE_TEXT" => cot_textarea('rusertext', $urr['user_text'], 8, 56, array('class' => $editor_class)),
 	"USERS_PROFILE_EMAIL" => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No'])),
 	"USERS_PROFILE_EMAILPASS" => cot_inputbox('password', 'rmailpass', '', array('size' => 12, 'maxlength' => 32)),
@@ -360,15 +223,15 @@ foreach($cot_extrafields['users'] as $i => $row)
 	$t->assign('USERS_PROFILE_'.strtoupper($row['field_name']).'_TITLE', isset($L['user_'.$row['field_name'].'_title']) ? $L['user_'.$row['field_name'].'_title'] : $row['field_description']);
 }
 
-// Error handling
-cot_display_messages($t);
-
 /* === Hook === */
 foreach (cot_getextplugins('profile.tags') as $pl)
 {
 	include $pl;
 }
 /* ===== */
+
+// Error handling
+cot_display_messages($t);
 
 if ($cfg['useremailchange'])
 {
