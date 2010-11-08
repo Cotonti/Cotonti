@@ -38,7 +38,7 @@ $R['users_code_signature_existing'] = '<img src="{$signature_url}" alt="'.$L['Si
 	.' [<a href="{$delete_url}">x</a>]<br />&nbsp;<br />';
 
 $R['users_link_avatar'] = '<a name="avatar" id="avatar"></a>';
-$L['users_link_avatarchoose'] = '<a href="{$url}">'.$L['pro_avatarspreset'].'</a>';
+$R['users_link_avatarchoose'] = '<a href="{$url}">'.$L['pro_avatarspreset'].'</a>';
 $R['users_link_avatarselect'] = '<a href="{$url}"><img src="'.$cfg['defav_dir'].'{$f}" alt="'.$L['Avatar'].'" /></a>';
 $R['users_link_photo'] = '<a name="photo" id="photo"></a>';
 $R['users_link_signature'] = '<a name="signature" id="signature"></a>';

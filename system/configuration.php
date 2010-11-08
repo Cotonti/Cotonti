@@ -160,6 +160,7 @@ function cot_config_implant($module_name, $options, $into_struct = false)
 
 /**
  * Loads config structure from database into an array
+ * 
  * @param string $name Extension code
  * @param bool $is_module TRUE if module, FALSE if plugin
  * @param string $category Structure category code. Only for per-category config options
@@ -392,7 +393,7 @@ function cot_config_set($name, $options, $is_module = false, $category = '')
 }
 
 /**
- * Updates existing configuration map removing obosolete options, adding new
+ * Updates existing configuration map removing obsolete options, adding new
  * options and tweaking options which need to be updated.
  *
  * @param string $name Extension code
