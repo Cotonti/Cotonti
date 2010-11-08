@@ -18,82 +18,54 @@ Tags=users.profile.tpl:
 
 defined('COT_CODE') or die('Wrong URL');
 
-$userpic['av'] = $_FILES['userfile'];
-$userpic['ph'] = $_FILES['userphoto'];
-$picfull = array('av' =>'avatar', 'ph' => 'photo');
-$gd_graf = array('jpeg', 'jpg', 'jpg', 'png', 'gif');
+cot_require('userimages', true);
+$userimages = cot_userimages_config_get();
 
-if (!empty($userpic['av']['tmp_name']) || !empty($userpic['ph']['tmp_name']))
+if($_FILES)
 {
 	@clearstatcache();
-}
-
-foreach($userpic as $key => $val)
-{
-	if (!empty($userpic[$key]['tmp_name']) && $userpic[$key]['size']>0)
+	foreach($userimages as $code => $settings)
 	{
-		$f_extension = end(explode(".", $userpic[$key]['name']));
-		$fcheck = cot_file_check($userpic[$key]['tmp_name'], $userpic[$key]['name'], $f_extension);
-		if($fcheck == 1)
+		if(!$_FILES[$code]) continue;
+		$file = $_FILES[$code];
+		if (!empty($file['tmp_name']) && $file['size'] > 0 && is_uploaded_file($file['tmp_name']))
 		{
-			if (is_uploaded_file($userpic[$key]['tmp_name']) && $userpic[$key]['size']>0 && in_array($f_extension, $gd_graf))
+			$gd_supported = array('jpg', 'jpeg', 'png', 'gif');
+			$file_ext = strtolower(end(explode(".", $file['name'])));
+			$fcheck = cot_file_check($file['tmp_name'], $file['name'], $file_ext);
+			if(in_array($file_ext, $gd_supported) && $fcheck == 1)
 			{
-				list($w, $h) = @getimagesize($userpic[$key]['tmp_name']);
+				$filename_full = $usr['id'].'-'.strtolower($file['name']);
+				$filepath = ($code == 'avatar') ?
+					$cfg['av_dir'].$filename_full:
+					$cfg['photos_dir'].$filename_full;
 
-				$filename = $usr['id']."-".$picfull[$key].".gif";
-				$filepath = (($key == 'ph') ? $cfg['photos_dir'] : $cfg[$key.'_dir']).$filename;
-
-				if (file_exists($filepath))
+				if(file_exists($filepath))
 				{
 					unlink($filepath);
 				}
 
-				move_uploaded_file($userpic[$key]['tmp_name'], $filepath);
-
-				if ($w > $cfg[$key.'_maxx'] || $h > $cfg[$key.'_maxy'] || $userpic[$key]['size'] > $cfg[$key.'_maxsize'])
-				{
-					$prior = ($w > $h) ? 'Width' : 'Height';
-					$percentage = 100;
-
-					cot_createthumb($filepath, $filepath, $cfg['av_maxx'],$cfg['av_maxy'], 1, $f_extension, $filename, 0, 0, 0, 0, 0, $percentage, $prior);
-					//cot_imageresize($filepath, $filepath, $cfg[$type.'_maxx'], $cfg[$type.'_maxy'], 'fit', '', 100);
-
-					while ( ($f_extension == 'jpeg' || $f_extension == 'jpg') && ($userpic[$key]['size'] > $cfg[$key.'_maxsize']))
-					{
-						$percentage -= 5;
-						cot_createthumb($filepath, $filepath, $cfg[$key.'_maxx'],$cfg[$key.'_maxy'], 1, $f_extension, $filename, 0, 0, 0, 0, 0, $percentage, $prior);
-
-						clearstatcache();
-						$userpic[$key]['size'] = filesize($filepath);
-					}
-				}
+				move_uploaded_file($file['tmp_name'], $filepath);
+				cot_imageresize($filepath, $filepath, $settings['width'], $settings['height'], $settings['crop'], '', 100);
+				@chmod($filepath, $cfg['file_perms']);
 
 				/* === Hook === */
-				foreach (cot_getextplugins('profile.update.'.$picfull[$key]) as $pl)
+				foreach (cot_getextplugins('profile.update.'.$code) as $pl)
 				{
 					include $pl;
 				}
 				/* ===== */
 
-				$userpic[$key]['size'] = filesize($filepath);
-				if ($userpic[$key]['size'] <= $cfg[$key.'_maxsize'])
-				{
-					$sql = $db->update($db_users, array( "user_".$picfull[$key] => $filepath), "user_id='".$usr['id']."'");
-				}
-				else
-				{
-					unlink($filepath);
-				}
-				@chmod($filepath, $cfg['file_perms']);
+				$sql = $db->update($db_users, array("user_".$code => $filepath), "user_id='".$usr['id']."'");
 			}
-		}
-		elseif($fcheck == 2)
-		{
-			cot_error(sprintf($L['pfs_filemimemissing'], $f_extension), 'userfile');
-		}
-		else
-		{
-			cot_error(sprintf($L['pro_'.$picfull[$key].'notvalid'], $f_extension), 'userfile');
+			elseif($fcheck == 2)
+			{
+				cot_error(sprintf($L['pfs_filemimemissing'], $file_ext), $code);
+			}
+			else
+			{
+				cot_error(sprintf($L['pro_'.$code.'notvalid'], $file_ext), $code);
+			}
 		}
 	}
 }

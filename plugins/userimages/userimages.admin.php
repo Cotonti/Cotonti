@@ -22,6 +22,7 @@ cot_block($usr['isadmin']);
 
 $tt = new XTemplate(cot_skinfile('userimages.admin', true));
 cot_require_lang('userimages', 'plug');
+cot_require_api('configuration');
 
 $adminhelp = $L['userimages_help'];
 

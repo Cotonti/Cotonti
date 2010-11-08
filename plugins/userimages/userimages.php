@@ -17,42 +17,27 @@ Hooks=standalone
 
 defined('COT_CODE') or die('Wrong URL');
 
+cot_require('userimages', true);
+
 switch ($a)
 {
-	case 'avatardelete':
+	case 'delete':
 		cot_check_xg();
-		$filename = $usr['id']."-avatar.gif";
-		$filepath = $cfg['av_dir'].$filename;
-		if (file_exists($filepath))
+		$code = strtolower(cot_import('code', 'G', 'ALP'));
+		if(in_array($code, array_keys(cot_userimages_config_get())))
 		{
-			unlink($filepath);
+			$sql = $db->query("SELECT user_".$db->prep($code)." FROM $db_users WHERE user_id=".$usr['id']);
+			if($filepath = $sql->fetchColumn())
+			{
+				if (file_exists($filepath))
+				{
+					unlink($filepath);
+				}
+				$sql = $db->update($db_users, array('user_'.$db->prep($code) => ''), "user_id=".$usr['id']);
+			}
 		}
-		$sql = $db->update($db_users, array('user_avatar' => ''), "user_id='".$usr['id']."'");
-		cot_redirect(cot_url('users', "m=profile", '#avatar', true));
-		break;
-
-	case 'phdelete':
-		cot_check_xg();
-		$photo = $usr['id']."-photo.gif";
-		$photopath = $cfg['photos_dir'].$photo;
-		if (file_exists($photopath))
-		{
-			unlink($photopath);
-		}
-		$sql = $db->update($db_users, array('user_photo' => ''), "user_id='".$usr['id']."'");
-		cot_redirect(cot_url('users', "m=profile", '#photo', true));
-		break;
-
-	case 'avatarselect':
-		cot_check_xg();
-		$filename = $cfg['defav_dir'].urldecode($id);
-		$filename = str_replace(array("'", ",", chr(0x00)), "", $filename);
-		if (file_exists($filename))
-		{
-			$sql = $db->update($db_users, array('user_avatar' => $filename), "user_id='".$usr['id']."'");
-		}
-		cot_redirect(cot_url('users', "m=profile", '#avatar', true));
 		break;
 }
+cot_redirect(cot_url('users', "m=profile", '', true));
 
 ?>
