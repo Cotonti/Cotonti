@@ -9,11 +9,11 @@ cot_require_api('configuration');
  *
  * @return array
  */
-function cot_userimages_config_get()
+function cot_userimages_config_get($ignorecache=false)
 {
 	global $cache;
 
-	if($cache && $cache->db->exists('cot_userimages_config', 'users'))
+	if($cache && !$ignorecache && $cache->db->exists('cot_userimages_config', 'users'))
 	{
 		$cfg = $cache->db->get('cot_userimages_config', 'users');
 		if(is_array($cfg)) return $cfg;
@@ -45,12 +45,15 @@ function cot_userimages_config_get()
  */
 function cot_userimages_config_add($code, $width, $height, $crop='')
 {
-	$cfg = array($width, $height);
+	$cfg = array(strval($width), strval($height));
 	if($crop) $cfg[] = $crop;
-	$options = array(
-		strtolower($code) => implode('x', $cfg)
-	);
-	$result = cot_config_set('userimages', $options);
+	$options = array(array(
+		'name' => strtolower($code),
+		'type' => 1,
+		'default' => implode('x', $cfg),
+		'text' => $code
+	));
+	$result = cot_config_add('userimages', $options);
 	$cache && $cache->db->remove('cot_userimages_config', 'users');
 	return $result;
 }
