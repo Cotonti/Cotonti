@@ -18,12 +18,6 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="centerall">{PHP.R.icon_info}</td>
-			<td>
-				<a href="{ADMIN_OTHER_URL_URLS}">{PHP.L.adm_urls}</a>
-			</td>
-		</tr>
-		<tr>
 			<td class="centerall">{PHP.R.icon_page}</td>
 			<td>
 				<a href="{ADMIN_OTHER_URL_LOG}">{PHP.L.adm_log}</a>
