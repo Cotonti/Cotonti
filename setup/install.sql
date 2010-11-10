@@ -176,17 +176,8 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','users','06','useremailchange',3,'0','0','',''),
 ('core','users','07','user_email_noprotection',3,'0','0','',''),
 ('core','users','08','usertextimg',3,'0','0','',''),
-('core','users','09','av_maxsize',1,'8000','8000','',''),
-('core','users','10','av_maxx',1,'64','64','',''),
-('core','users','11','av_maxy',1,'64','64','',''),
-('core','users','12','usertextmax',1,'300','300','',''),
-('core','users','13','sig_maxsize',1,'32000','32000','',''),
-('core','users','14','sig_maxx',1,'550','550','',''),
-('core','users','15','sig_maxy',1,'100','100','',''),
-('core','users','16','ph_maxsize',1,'32000','32000','',''),
-('core','users','17','ph_maxx',1,'128','128','',''),
-('core','users','18','ph_maxy',1,'128','128','',''),
-('core','users','19','forcerememberme',3,'0','0','',''),
+('core','users','09','usertextmax',1,'300','300','',''),
+('core','users','10','forcerememberme',3,'0','0','',''),
 ('core','version','01','revision',0,'','','','');
 
 CREATE TABLE `cot_core` (
