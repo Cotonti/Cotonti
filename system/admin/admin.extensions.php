@@ -498,7 +498,7 @@ switch($a)
 							'ADMIN_EXTENSIONS_RIGHTS_URL' => $type == 'module'
 								? cot_url('admin', "m=rightsbyitem&ic=$x&io=a")
 								: cot_url('admin', "m=rightsbyitem&ic=$type&io=$x"),
-							'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=tools&p=$x")
+							'ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS' => $type == 'plug' ? cot_url('admin', "m=other&p=$x")
 								: cot_url('admin', "m=$x"),
 							'ADMIN_EXTENSIONS_JUMPTO_URL' => $jump_url,
 							'ADMIN_EXTENSIONS_ODDEVEN' => cot_build_oddeven($i)
