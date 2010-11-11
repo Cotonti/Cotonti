@@ -1107,17 +1107,17 @@ function cot_build_catpath($area, $cat, $mask = 'link_catpath')
 			'title' => htmlspecialchars($cfg['maintitle'])
 		));
 	}
-	$pathcodes = explode('.', $$structure[$area][$cat]['path']);
+	$pathcodes = explode('.', $structure[$area][$cat]['path']);
 	$last = count($pathcodes) - 1;
 	$list = defined('COT_LIST');
 	foreach ($pathcodes as $k => $x)
 	{
 		if ($x != 'system')
 		{
-			$tmp[] = ($list && $k === $last) ? htmlspecialchars($$structure[$area][$x]['title'])
+			$tmp[] = ($list && $k === $last) ? htmlspecialchars($structure[$area][$x]['title'])
 				: cot_rc($mask, array(
 				'url' => cot_url($area, 'c='.$x),
-				'title' => htmlspecialchars($$structure[$area][$x]['title'])
+				'title' => htmlspecialchars($structure[$area][$x]['title'])
 			));
 		}
 	}
