@@ -24,14 +24,14 @@ $d = empty($d) ? 0 : (int) $d;
 $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_skinfile(array('admin', 'structure', $n)));
+$adminpath[] = array(cot_url('admin', 'm=structure'), $L['Structure']);
+
 /* === Hook === */
 foreach (cot_getextplugins('admin.structure.first') as $pl)
 {
 	include $pl;
 }
 /* ===== */
-
-(empty($n)) && cot_redirect(cot_url('message', 'msg=950', '', true));
 
 if ($a == 'update')
 {

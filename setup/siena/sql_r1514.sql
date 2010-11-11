@@ -1,3 +1,4 @@
+/* Remove obsolete configuration fields for avatar/photo/signature */
 DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'av_maxsize';
 DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'av_maxx';
 DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'av_maxy';
