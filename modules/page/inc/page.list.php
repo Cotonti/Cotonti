@@ -33,7 +33,7 @@ elseif ($c == 'unvalidated')
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 'any');
 	cot_block($usr['auth_write']);
 }
-elseif (!isset($cot_cat[$c]))
+elseif (!isset($structure['page'][$c]))
 {
 	cot_die(true);
 }
@@ -50,7 +50,7 @@ foreach (cot_getextplugins('page.list.first') as $pl)
 }
 /* ===== */
 
-$cat = $cot_cat[$c];
+$cat = &$structure['page'][$c];
 
 if (empty($s))
 {
@@ -69,8 +69,8 @@ $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['page'][
 $join_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
 $join_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_ratings as r ON r.rating_code=CONCAT('p',p.page_id)";
 
-$c = (empty($cot_cat[$c]['title'])) ? 'all' : $c;
-cot_die((empty($cot_cat[$c]['title'])) && !$usr['isadmin']);
+$c = (empty($cat['title'])) ? 'all' : $c;
+cot_die((empty($cat['title'])) && !$usr['isadmin']);
 
 $where['state'] = "(page_state=0 OR page_state=2)";
 if ($c == 'unvalidated')
@@ -237,7 +237,7 @@ $mtchlvl = mb_substr_count($mtch, ".");
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.rowcat.loop');
 /* ===== */
-while (list($i, $x) = each($cot_cat))
+foreach ($structure['page'] as $i => $x)
 {
 	if (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $mm < $dc)
 	{
@@ -247,7 +247,7 @@ while (list($i, $x) = each($cot_cat))
 	elseif (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $kk < $cfg['page']['maxlistsperpage'])
 	{
 		$sql4 = $db->query("SELECT SUM(structure_count) FROM $db_structure
-			WHERE structure_path LIKE '".$cot_cat[$i]['rpath']."%' ");
+			WHERE structure_path LIKE '".$x['rpath']."%' ");
 		$sub_count = $sql4->fetchColumn();
 
 		$t->assign(array(
