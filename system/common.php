@@ -385,7 +385,7 @@ if (!$structure)
 	cot_load_structure();
 	$cache && $cache->db->store('structure', $structure, 'system');
 }
-$cot_cat = $structure['page'];
+$cot_cat = &$structure['page'];
 
 if (!$cache || !$cot_cfg)
 {

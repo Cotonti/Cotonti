@@ -3,6 +3,13 @@
 		<div id="center" class="column">
 			<div class="block">
 				<h2 class="folder">{LIST_CATTITLE}</h2>
+				<!-- BEGIN: LIST_ROWCAT -->
+					<h3><a href="{LIST_ROWCAT_URL}" title="{LIST_ROWCAT_TITLE}">{LIST_ROWCAT_TITLE}</a> ({LIST_ROWCAT_COUNT})</h3>
+					<!-- IF {LIST_ROWCAT_DESC} -->
+					<p class="small">{LIST_ROWCAT_DESC}</p>
+					<!-- ENDIF -->
+				<!-- END: LIST_ROWCAT -->
+
 				<!-- BEGIN: LIST_ROW -->
 					<h3>{LIST_ROW_TITLE}</h3>
 					<!-- IF {LIST_ROW_DESC} --><p class="small marginbottom10">{LIST_ROW_DESC}</p><!-- ENDIF -->
