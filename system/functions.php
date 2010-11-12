@@ -526,7 +526,7 @@ function cot_load_structure()
  */
 function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = true, $userrights = true, $sqlprep = true)
 {
-	global $structure, $sys, $cfg;
+	global $structure, $sys, $cfg, $db;
 
 	$mtch = $structure[$area][$cat]['path'].'.';
 	$mtchlen = mb_strlen($mtch);

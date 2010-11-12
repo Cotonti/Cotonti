@@ -151,30 +151,33 @@ $sql->closeCursor();
 $t->assign('RIGHTS_SECTION_TITLE', $L['Core'] . ' &amp; ' . $L['Modules']);
 $t->parse('MAIN.RIGHTS_SECTION');
 
+$area = '';
 
 // Structure permissions
-$sql = $db->query("SELECT a.*, u.user_name, s.structure_path FROM $db_auth as a
+$sql = $db->query("SELECT a.*, u.user_name, s.structure_path, s.structure_area FROM $db_auth as a
 	LEFT JOIN $db_users AS u ON u.user_id=a.auth_setbyuserid
 	LEFT JOIN $db_structure AS s ON s.structure_code=a.auth_option
-	WHERE auth_groupid='$g' AND auth_code='page' AND auth_option != 'a'
-	ORDER BY structure_path ASC");
+	WHERE auth_groupid='$g' AND auth_option != 'a'
+	ORDER BY structure_area ASC, structure_path ASC");
 while ($row = $sql->fetch())
 {
-	$link = cot_url('admin', 'm=page');
-	$title = $cot_cat[$row['auth_option']]['tpath'];
+	if($area != $row['structure_area'] && !empty($area))
+	{
+
+		$t->assign('RIGHTS_SECTION_TITLE', $area);
+		$t->parse('MAIN.RIGHTS_SECTION');
+	}
+	$area = $row['structure_area'];
+	$link = cot_url('admin', 'm='.$area);
+	$title = $structure[$row['structure_area']][$row['auth_option']]['tpath'];
 	cot_rights_parseline($row, $title, $link);
 }
-$sql->closeCursor();
-$t->assign('RIGHTS_SECTION_TITLE', $L['Structure']);
-$t->parse('MAIN.RIGHTS_SECTION');
-
-// Module items permissions are pluggable
-/* === Hook for the plugins === */
-foreach (cot_getextplugins('admin.rights.modules') as $pl)
+if(!empty($area))
 {
-	include $pl;
+	$t->assign('RIGHTS_SECTION_TITLE', $area);
+	$t->parse('MAIN.RIGHTS_SECTION');
 }
-/* ===== */
+$sql->closeCursor();
 
 // Plugin permissions
 $sql = $db->query("SELECT a.*, u.user_name FROM $db_auth as a

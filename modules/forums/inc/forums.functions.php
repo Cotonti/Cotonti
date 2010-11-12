@@ -43,25 +43,23 @@ function cot_build_forumpath($cat, $mask = 'link_catpath')
 		'url' => cot_url('forums'),
 		'title' => $L['Forums']
 	));
-
-	$pathcodes = explode('.', $$structure['forums'][$cat]['path']);
+	$pathcodes = explode('.', $structure['forums'][$cat]['path']);
 	$last = count($pathcodes) - 1;
-	$list = defined('COT_LIST');
 	foreach ($pathcodes as $k => $x)
 	{
 		if ($k == 0)
 		{
 			$tmp[] = cot_rc($mask, array(
 				'url' => cot_url('forums', 'c='.$x, '#'.$x),
-				'title' => htmlspecialchars($cot_forums_str[$x]['title'])
+				'title' => htmlspecialchars($structure['forums'][$x]['title'])
 			));
 		}
 		else
 		{
-			$tmp[] = ($k === $last) ? htmlspecialchars($$structure['forums'][$x]['title'])
+			$tmp[] = ($k === $last) ? htmlspecialchars($structure['forums'][$x]['title'])
 				: cot_rc($mask, array(
 				'url' => cot_url('forums', 'm=topics&s='.$x),
-				'title' => htmlspecialchars($$structure['forums'][$x]['title'])
+				'title' => htmlspecialchars($structure['forums'][$x]['title'])
 			));
 		}
 	}

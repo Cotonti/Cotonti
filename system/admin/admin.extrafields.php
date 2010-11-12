@@ -24,7 +24,7 @@ $name = cot_import('name', 'G', 'ALP');
 $d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 
-$parse_type = array('HTML', 'BBCode', 'Text');
+$parse_type = array('HTML', 'Text');
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.extrafields.first') as $pl)
@@ -171,7 +171,7 @@ $res = $db->query("SELECT * FROM $db_extra_fields WHERE field_location = '$locat
 
 $pagenav = cot_pagenav('admin',$extra_path, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$field_types = array('input', 'textarea', 'select', 'checkbox', 'radio', 'datetime');
+$field_types = array('input', 'inputint', 'currency', 'textarea', 'select', 'checkbox', 'radio', 'datetime', 'file', 'filesize');
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
