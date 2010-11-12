@@ -206,10 +206,12 @@ if (count($arraychilds) > 0)
 		$jj++;
 		
 		$all = cot_structure_children('forums', $cat);
-		$stat = $db->query("SELECT SUM(fs_topiccount) AS topiccount, SUM(fs_postcount) AS postcount, SUM(fs_viewcount) AS viewcount,
-				fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername FROM $db_forum_stats
-				WHERE fs_cat IN (".implode(', ', $all).") ORDER BY fs_lt_date DESC")->fetch();
-		$t->assign(cot_generate_sectiontags($cat, 'FORUMS_SECTIONS_ROW_', $stat));
+		$last = $db->query("SELECT fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername FROM $db_forum_stats
+				WHERE fs_cat IN (\"".implode('", "', $all)."\") ORDER BY fs_lt_date DESC LIMIT 1")->fetch();
+		$stat = $db->query("SELECT SUM(fs_topiccount) AS topiccount, SUM(fs_postcount) AS postcount, SUM(fs_viewcount) AS viewcount
+				FROM $db_forum_stats
+				WHERE fs_cat IN (\"".implode('", "', $all)."\") ORDER BY fs_lt_date DESC")->fetch();
+		$t->assign(cot_generate_sectiontags($cat, 'FORUMS_SECTIONS_ROW_', $stat + $last));
 		$t->assign(array(
 			"FORUMS_SECTIONS_ROW_ODDEVEN" => cot_build_oddeven($jj),
 			"FORUMS_SECTIONS_ROW_NUM" => $jj
@@ -238,9 +240,9 @@ foreach (cot_getextplugins('forums.topics.query') as $pl)
 	include $pl;
 }
 /* ===== */
-
-$prvtopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE $sqql_where_count AND ft_mode=1")->fetchColumn();
-$totaltopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE $sqql_where_count")->fetchColumn();
+$where = array_diff($where,array(''));
+$prvtopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(" AND ", $where)." AND ft_mode=1")->fetchColumn();
+$totaltopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(" AND ", $where))->fetchColumn();
 
 $sql = $db->query("SELECT t.* $join_columns FROM $db_forum_topics AS t $join_condition
 	WHERE ".implode(" AND ", $where)." ORDER BY $order LIMIT $d, ".$cfg['forums']['maxtopicsperpage']);

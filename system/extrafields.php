@@ -26,17 +26,19 @@ function cot_build_extrafields($name, $extrafield, $data)
 
 	switch($extrafield['field_type'])
 	{
-		case "input":
+		case 'input':
+		case 'inputint':
+		case 'currency':
 			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
 			$result = cot_inputbox('text', $name, htmlspecialchars($data));
 			break;
 
-		case "textarea":
+		case 'textarea':
 			$R["input_textarea_{$rc_name}"] =(!empty($R["input_textarea_{$rc_name}"])) ? $R["input_textarea_{$rc_name}"] : $extrafield['field_html'];
 			$result = cot_textarea($name, htmlspecialchars($data), 4, 56);
 			break;
 
-		case "select":
+		case 'select':
 			$R["input_select_{$rc_name}"] = (!empty($R["input_select_{$rc_name}"])) ? $R["input_select_{$rc_name}"] : $extrafield['field_html'];
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
@@ -50,7 +52,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 			$result = cot_selectbox(trim($data), $name, $options_values, $options_titles, false);
 			break;
 
-		case "radio":
+		case 'radio':
 			$R["input_radio_{$rc_name}"] = (!empty($R["input_radio_{$rc_name}"])) ? $R["input_radio_{$rc_name}"] :  $extrafield['field_html'];
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", $extrafield['field_variants']);
@@ -67,14 +69,26 @@ function cot_build_extrafields($name, $extrafield, $data)
 			$result = cot_radiobox(trim($data), $name, $options_values, $options_titles);
 			break;
 
-		case "checkbox":
+		case 'checkbox':
 			$R["input_checkbox_{$rc_name}"] = (!empty($R["input_checkbox_{$rc_name}"])) ? $R["input_checkbox_{$rc_name}"] : $extrafield['field_html'];
 			$result = cot_checkbox($data, $name, $extrafield['field_description']);
 			break;
 
-		case "datetime":
+		case 'datetime':
 			$R["input_date_{$rc_name}"] = (!empty($R["input_date_{$rc_name}"])) ? $R["input_date_{$rc_name}"] : $extrafield['field_html'];
 			$result = cot_selectbox_date($data, 'long', $name);
+			break;
+
+		case 'file':
+			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
+
+			$result['FILE'] = cot_inputbox('file', $name.'[file]', htmlspecialchars($data));
+			$result['DELETE'] = cot_checkbox($data, $name.'[delete]', $L['Delete']);
+			$result['LINK'] = htmlspecialchars($data);
+			break;
+		
+		default:
+			$result = '';
 			break;
 	}
 	return $result;
@@ -86,14 +100,15 @@ function cot_build_extrafields($name, $extrafield, $data)
  * @param string $name Variable name
  * @param array $extrafields Extra fields data
  * @param string $source Source type: G (GET), P (POST), C (COOKIE) or D (variable filtering)
+ * @param string $oldvalue Old value of extrafield
  * @return string
  */
-function cot_import_extrafields($name, $extrafield, $source='P')
+function cot_import_extrafields($name, $extrafield, $source='P', $oldvalue='')
 {
 	global $L;
 	switch($extrafield['field_type'])
 	{
-		case "input":
+		case 'input':
 			$import = cot_import($inputname, $source, 'HTM');
 			if (!empty($extrafield['field_variants']) && !is_null($import) && !preg_match($extrafield['field_variants'], $import))
 			{
@@ -102,12 +117,21 @@ function cot_import_extrafields($name, $extrafield, $source='P')
 			}
 			break;
 
-		case "textarea":
+		case 'inputint':
+			$import = cot_import($inputname, $source, 'INT');
+			$import = ((int)$import > 0) ? (int)$import : 0;
+			break;
+		case 'currency':
+			$import = cot_import($inputname, $source, 'TXT');
+			$import = (doubleval($import) != 0) ? doubleval($import) : 0;
+			break;
+
+		case 'textarea':
 			$import = cot_import($inputname, $source, 'HTM');
 			break;
 
-		case "select":
-		case "radio":
+		case 'select':
+		case 'radio':
 			$extrafield['field_variants'] = str_replace(array(' , ', ', ', ' ,'), ',', $extrafield['field_variants']);
 			$opt_array = explode(",", trim($extrafield['field_variants']));
 			$import = cot_import($inputname, $source, 'HTM');
@@ -118,13 +142,20 @@ function cot_import_extrafields($name, $extrafield, $source='P')
 			}
 			break;
 
-		case "checkbox":
+		case 'checkbox':
 			$import = cot_import($inputname, $source, 'BOL') ? 1 : 0;
 			break;
 
-		case "datetime":
+		case 'datetime':
 			$import = cot_import_date($inputname, true, false, $source);
 			break;
+		
+		case 'file':
+			if ($source == 'P')
+			{
+				$import = cot_import_date($inputname, true, false, $source);
+			}
+			break;		
 	}
 	if (is_null($import) && $extrafield['field_required'])
 	{
@@ -149,30 +180,28 @@ function cot_build_extrafields_data($name, $extrafield, $value)
 	$parse_type = array('HTML', 'BBCode', 'Text');
 	switch($extrafield['field_type'])
 	{
-		case "input":
-		case "textarea":
-			if($extrafield['field_parse'] == 'BBCode')
-			{
-				$value = cot_parse($value);
-			}
+		case 'input':
+		case 'inputint':
+		case 'currency':
+		case 'textarea':
 			if($extrafield['field_parse'] == 'Text')
 			{
-				$value = htmlspecialchars($value);
+				$value = cot_parse($value, true);
 			}
 			return $value;
 			break;
 
-		case "select":
-		case "radio":
+		case 'select':
+		case 'radio':
 			$value = htmlspecialchars($value);
 			return (!empty($L[$name.'_'.$extrafield['field_name'].'_'.$value])) ? $L[$name.'_'.$extrafield['field_name'].'_'.$value] : $value;
 			break;
 
-		case "checkbox":
+		case 'checkbox':
 			return $value;
 			break;
 
-		case "datetime":
+		case 'datetime':
 			return @date($cfg['dateformat'], $value + $usr['timezone'] * 3600);
 			break;
 	}
@@ -193,6 +222,8 @@ function cot_default_html_construction($type)
 	switch($type)
 	{
 		case 'input':
+		case 'inputint':
+		case 'currency':
 			$html = $R['input_text'];
 			break;
 
@@ -214,6 +245,14 @@ function cot_default_html_construction($type)
 
 		case 'datetime':
 			$html = $R['input_date'];
+			break;
+
+		case 'file':
+			$html = $R['input_text'].'|'.$R['input_checkbox'];
+			break;
+		
+		case 'filesize':
+			$html = '';
 			break;
 	}
 	return $html;
@@ -238,13 +277,10 @@ function cot_default_html_construction($type)
 function cot_extrafield_add($location, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="", $noalter = false)
 {
 	global $db, $db_extra_fields;
-	$fieldsres = $db->query("SELECT field_name FROM $db_extra_fields WHERE field_location='$location'");
-	while($row = $fieldsres->fetch())
+	if ($db->query("SELECT field_name FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->rowCount() > 0);
 	{
-		$extrafieldsnames[] = $row['field_name'];
+		return false; // No adding - fields already exist
 	}
-	if(count($extrafieldsnames)>0) if (in_array($name,$extrafieldsnames)) return 0; // No adding - fields already exist
-
 	// Check table cot_$sql_table - if field with same name exists - exit.
 	if ($db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0 && !$noalter)
 	{
@@ -281,6 +317,10 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 	{
 		case 'input': $sqltype = "VARCHAR(255)";
 			break;
+		case 'inputint': $sqltype = "int(11) NOT NULL default '0'";
+			break;
+		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
+			break;
 		case 'textarea': $sqltype = "TEXT";
 			break;
 		case 'select': $sqltype = "VARCHAR(255)";
@@ -293,14 +333,11 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 			break;
 		case 'file': $sqltype = "VARCHAR(255)";
 			break;
+		case 'filesize': $sqltype = "int(11) NOT NULL";
+			break;
 	}
-	$sql = "ALTER TABLE $location ADD ".$column_prefix."_$name $sqltype ";
-	$step2 = $db->query($sql);
-	$step3 = true;
-	if ($type = 'file')
-	{
+	$step2 = $db->query("ALTER TABLE $location ADD ".$column_prefix."_$name $sqltype ");
 
-	}
 	return $step1 && $step2 && $step3;
 }
 
@@ -324,8 +361,7 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 function cot_extrafield_update($location, $oldname, $name, $type, $html, $variants="", $default="", $required=0, $parse='HTML', $description="")
 {
 	global $db, $db_extra_fields;
-	$fieldsres = $db->query("SELECT COUNT(*) FROM $db_extra_fields
-			WHERE field_name = '$oldname' AND field_location='$location'");
+	$fieldsres = $db->query("SELECT * FROM $db_extra_fields WHERE field_name = '$oldname' AND field_location='$location'");
 	if ($fieldsres->rowCount() <= 0  || $name != $oldname && $db->query("SHOW COLUMNS FROM $location LIKE '%\_$name'")->rowCount() > 0)
 	{
 		// Attempt to edit non-extra field or override an existing field
@@ -357,11 +393,18 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 
 	$step1 = $db->update($db_extra_fields, $extf, "field_name = '$oldname' AND field_location='$location'") == 1;
 
-	if (!$alter) return $step1;
+	if (!$alter)
+	{
+		return $step1;
+	}
 
 	switch ($type)
 	{
 		case 'input': $sqltype = "VARCHAR(255)";
+			break;
+		case 'inputint': $sqltype = "int(11) NOT NULL default '0'";
+			break;
+		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
 			break;
 		case 'textarea': $sqltype = "TEXT";
 			break;
@@ -375,11 +418,13 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 			break;
 		case 'file': $sqltype = "VARCHAR(255)";
 			break;
+		case 'filesize': $sqltype = "int(11) NOT NULL";
+			break;
 	}
 	$sql = "ALTER TABLE $location CHANGE ".$column_prefix."_$oldname ".$column_prefix."_$name $sqltype ";
 	$step2 = $db->query($sql);
 
-	return $step1 && $step2;
+	return $step1 && $step2 && $step3;
 }
 
 /**
@@ -393,8 +438,7 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 function cot_extrafield_remove($location, $name)
 {
 	global $db, $db_extra_fields;
-	if ((int) $db->query("SELECT COUNT(*) FROM $db_extra_fields
-		WHERE field_name = '$name' AND field_location='$location'")->fetchColumn() <= 0)
+	if ((int) $db->query("SELECT COUNT(*) FROM $db_extra_fields WHERE field_name = '$name' AND field_location='$location'")->fetchColumn() <= 0)
 	{
 		// Attempt to remove non-extra field
 		return false;
@@ -404,9 +448,9 @@ function cot_extrafield_remove($location, $name)
 	$column = $fieldrow['Field'];
 	$column_prefix = substr($column, 0, strpos($column, "_"));
 	$step1 = $db->delete($db_extra_fields, "field_name = '$name' AND field_location='$location'") == 1;
-	$sql = "ALTER TABLE $location DROP ".$column_prefix."_".$name;
-	$step2 = $db->query($sql);
-	return $step1 && $step2;
+	$step2 = $db->query("ALTER TABLE $location DROP ".$column_prefix."_".$name);
+
+	return $step1 && $step2 && $step3;
 }
 
 /**

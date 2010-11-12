@@ -82,19 +82,13 @@ $sql = $db->query("SELECT a.*, u.user_name, g.grp_title, g.grp_level FROM $db_au
 
 cot_die($sql->rowCount() == 0);
 
-switch($ic)
+if($ic == 'plug')
 {
-	case 'page':
-		$title = ' : '.$cot_cat[$io]['title'];
-	break;
-
-	case 'plug':
-		$title = ' : '.$io;
-	break;
-
-	default:
-		$title = ($io == 'a') ? '' : $io;
-	break;
+	$title = ' : '.$io;
+}
+elseif($io != 'a' && !empty($ic))
+{
+	$title = ' : '.$ic.' '.$structure[$ic][$io]['title']." (".$io.")";
 }
 
 /* === Hook for the plugins === */
