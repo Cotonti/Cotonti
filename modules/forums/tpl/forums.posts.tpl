@@ -17,7 +17,7 @@
 		</tr>
 		<tr>
 			<td class="textright">{PHP.L.Move}:</td>
-			<td>{FORUMS_POSTS_MOVEBOX_SELECT}<span class="small spaced">{FORUMS_POSTS_MOVEBOX_KEEP} {PHP.L.forums_keepmovedlink}</span><button type="submit">{PHP.L.Move}</button>';
+			<td>{FORUMS_POSTS_MOVEBOX_SELECT}<span class="small spaced">{FORUMS_POSTS_MOVEBOX_KEEP} {PHP.L.forums_keepmovedlink}</span><button type="submit">{PHP.L.Move}</button>
 			</td>
 		</tr>
 	</table>

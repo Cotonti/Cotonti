@@ -341,7 +341,7 @@ while ($row = $sql->fetch())
 
 $pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, $cfg['forums']['maxtopicsperpage']);
 
-$toptitle = cot_build_forumpath($s);
+$toptitle = cot_build_forumpath($s, true);
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $jumpbox[cot_url('forums')] = $L['Forums'];

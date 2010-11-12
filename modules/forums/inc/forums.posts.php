@@ -265,33 +265,6 @@ else
 $sql = $db->query("UPDATE $db_forum_topics SET ft_viewcount=ft_viewcount+1 WHERE ft_id='$q'");
 $sql = $db->query("UPDATE $db_forum_stats SET fs_viewcount=fs_viewcount+1 WHERE fs_cat='$s'");
 
-$where['topicid'] = "fp_topicid='$q'";
-if (!empty($id))
-{
-	$where['id'] = "fp_id='$id'";
-}
-$order = "fp_id ASC";
-$join_columns = '';
-$join_condition = '';
-
-/* === Hook === */
-foreach (cot_getextplugins('forums.posts.query') as $pl)
-{
-	include $pl;
-}
-/* ===== */
-
-$totalposts = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE ".implode(" AND ", $where))->fetchColumn();
-if (!empty($p))
-{
-	$postsbefore = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE ".implode(" AND ", $where)." AND fp_id < $p")->fetchColumn();
-	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
-}
-
-$sql = $db->query("SELECT p.*, u.* $join_columns
-	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid $join_condition
-	WHERE ".implode(" AND ", $where)." ORDER BY $order LIMIT $d, ".$cfg['forums']['maxpostsperpage']);
-
 $title_params = array(
 	'FORUM' => $L['Forums'],
 	'SECTION' => $structure['forums'][$s]['title'],
@@ -312,59 +285,32 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = cot_skinfile(array('forums' ,'posts', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
-$notlastpage = (($d + $cfg['forums']['maxpostsperpage']) < $totalposts) ? TRUE : FALSE;
-$pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['forums']['maxpostsperpage']);
-
-$jumpbox[cot_url('forums')] = $L['Forums'];
-foreach($structure['forums'] as $key => $val)
+$where['topicid'] = "fp_topicid='$q'";
+if (!empty($id))
 {
-	if (cot_auth('forums', $key, 'R'))
-	{
-		($val['tpath'] == $s) || $movebox[$key] = $val['tpath'];
-		$jumpbox[cot_url('forums', "m=topics&s=".$key, '', true)] = $val['tpath'];
-	}
+	$where['id'] = "fp_id='$id'";
+}
+$order = "fp_id ASC";
+$join_columns = '';
+$join_condition = '';
+
+/* === Hook === */
+foreach (cot_getextplugins('forums.posts.query') as $pl)
+{
+	include $pl;
+}
+/* ===== */
+$where = array_diff($where,array(''));
+$totalposts = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE ".implode(" AND ", $where))->fetchColumn();
+if (!empty($p))
+{
+	$postsbefore = $db->query("SELECT COUNT(*) FROM $db_forum_posts AS p $join_condition WHERE ".implode(" AND ", $where)." AND fp_id < $p")->fetchColumn();
+	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
 }
 
-if ($usr['isadmin'])
-{
-	$t->assign(array(
-		"FORUMS_POSTS_MOVE_URL" => cot_url('forums', 'm=topics&a=move&s='.$s.'&q='.$q.'&x='.$sys['xk']),
-		"FORUMS_POSTS_BUMP_URL" => cot_url('forums', 'm=topics&a=bump&s='.$s.'&q='.$q.'&x='.$sys['xk']),
-		"FORUMS_POSTS_LOCK_URL" => cot_url('forums', 'm=topics&a=lock&s='.$s.'&q='.$q.'&x='.$sys['xk']),
-		"FORUMS_POSTS_STICKY_URL" => cot_url('forums', 'm=topics&a=sticky&s='.$s.'&q='.$q.'&x='.$sys['xk']),
-		"FORUMS_POSTS_ANNOUNCE_URL" => cot_url('forums', 'm=topics&a=announcement&s='.$s.'&q='.$q.'&x='.$sys['xk']),
-		"FORUMS_POSTS_PRIVATE_URL" => cot_url('forums', 'm=topics&a=private&s='.$s.'&q='.$q.'&x='.$sys['xk']),
-		"FORUMS_POSTS_CLEAR_URL" => cot_url('forums', 'm=topics&a=clear&s='.$s.'&q='.$q.'&x='.$sys['xk']),
-		"FORUMS_POSTS_DELETE_URL" => cot_url('forums', 'm=topics&a=delete&s='.$s.'&q='.$q.'&x='.$sys['xk']),
-		"FORUMS_POSTS_MOVEBOX_SELECT" => cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false),
-		"FORUMS_POSTS_MOVEBOX_KEEP" => cot_checkbox('0', 'ghost')
-		));
-	$t->parse("MAIN.FORUMS_POSTS_ADMIN");
-}
-
-$rowt['ft_title'] = (($rowt['ft_mode'] == 1) ? "# " : '').htmlspecialchars($rowt['ft_title']);
-
-$toptitle = cot_build_forumpath($s);
-$toppath  = $toptitle;
-$toptitle .= ' ' . $cfg['separator'] . ' ' . $rowt['ft_title'];
-$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
-
-$t->assign(array(
-	"FORUMS_POSTS_ID" => $q,
-	"FORUMS_POSTS_RSS" => cot_url('rss', "c=topics&id=$q"),
-	"FORUMS_POSTS_PAGETITLE" => $toptitle,
-	"FORUMS_POSTS_TOPICDESC" => htmlspecialchars($rowt['ft_desc']),
-	"FORUMS_POSTS_SHORTTITLE" => $rowt['ft_title'],
-	"FORUMS_POSTS_PATH" => $toppath,
-	"FORUMS_POSTS_PAGES" => $pagenav['main'],
-	"FORUMS_POSTS_PAGEPREV" => $pagenav['prev'],
-	"FORUMS_POSTS_PAGENEXT" => $pagenav['next'],
-	"FORUMS_POSTS_CURRENTPAGE" => $d / $cfg['forums']['maxpostsperpage'],
-	"FORUMS_POSTS_TOTALPAGES" => ceil($totalposts / $cfg['forums']['maxpostsperpage']),
-	"FORUMS_POSTS_JUMPBOX" => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
-));
-
-$totalposts = $sql->rowCount();
+$sql = $db->query("SELECT p.*, u.* $join_columns
+	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid $join_condition
+	WHERE ".implode(" AND ", $where)." ORDER BY $order LIMIT $d, ".$cfg['forums']['maxpostsperpage']);
 
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('forums.posts.loop');
@@ -420,6 +366,36 @@ while ($row = $sql->fetch())
 	$t->parse("MAIN.FORUMS_POSTS_ROW");
 }
 
+$notlastpage = (($d + $cfg['forums']['maxpostsperpage']) < $totalposts) ? TRUE : FALSE;
+$pagenav = cot_pagenav('forums', "m=posts&q=$q", $d, $totalposts, $cfg['forums']['maxpostsperpage']);
+
+$jumpbox[cot_url('forums')] = $L['Forums'];
+foreach($structure['forums'] as $key => $val)
+{
+	if (cot_auth('forums', $key, 'R'))
+	{
+		($val['tpath'] == $s) || $movebox[$key] = $val['tpath'];
+		$jumpbox[cot_url('forums', "m=topics&s=".$key, '', true)] = $val['tpath'];
+	}
+}
+
+if ($usr['isadmin'])
+{
+	$t->assign(array(
+		"FORUMS_POSTS_MOVE_URL" => cot_url('forums', 'm=topics&a=move&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		"FORUMS_POSTS_BUMP_URL" => cot_url('forums', 'm=topics&a=bump&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		"FORUMS_POSTS_LOCK_URL" => cot_url('forums', 'm=topics&a=lock&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		"FORUMS_POSTS_STICKY_URL" => cot_url('forums', 'm=topics&a=sticky&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		"FORUMS_POSTS_ANNOUNCE_URL" => cot_url('forums', 'm=topics&a=announcement&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		"FORUMS_POSTS_PRIVATE_URL" => cot_url('forums', 'm=topics&a=private&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		"FORUMS_POSTS_CLEAR_URL" => cot_url('forums', 'm=topics&a=clear&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		"FORUMS_POSTS_DELETE_URL" => cot_url('forums', 'm=topics&a=delete&s='.$s.'&q='.$q.'&x='.$sys['xk']),
+		"FORUMS_POSTS_MOVEBOX_SELECT" => cot_selectbox('', 'ns', array_keys($movebox), array_values($movebox), false),
+		"FORUMS_POSTS_MOVEBOX_KEEP" => cot_checkbox('0', 'ghost')
+		));
+	$t->parse("MAIN.FORUMS_POSTS_ADMIN");
+}
+
 $allowreplybox = ($cfg['forums']['antibumpforums'] && $row['fp_posterid'] > 0 && $row['fp_posterid'] == $usr['id'] && $usr['auth_write']) ? FALSE : TRUE;
 
 if (!$notlastpage && !$rowt['ft_state'] && $usr['id'] > 0 && $allowreplybox && $usr['auth_write'])
@@ -471,6 +447,29 @@ if ($rowt['ft_mode'] == 1)
 {
 	$t->parse("MAIN.FORUMS_POSTS_TOPICPRIVATE");
 }
+
+
+$rowt['ft_title'] = (($rowt['ft_mode'] == 1) ? "# " : '').htmlspecialchars($rowt['ft_title']);
+
+$toptitle = cot_build_forumpath($s);
+$toppath  = $toptitle;
+$toptitle .= ' ' . $cfg['separator'] . ' ' . $rowt['ft_title'];
+$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
+
+$t->assign(array(
+	"FORUMS_POSTS_ID" => $q,
+	"FORUMS_POSTS_RSS" => cot_url('rss', "c=topics&id=$q"),
+	"FORUMS_POSTS_PAGETITLE" => $toptitle,
+	"FORUMS_POSTS_TOPICDESC" => htmlspecialchars($rowt['ft_desc']),
+	"FORUMS_POSTS_SHORTTITLE" => $rowt['ft_title'],
+	"FORUMS_POSTS_PATH" => $toppath,
+	"FORUMS_POSTS_PAGES" => $pagenav['main'],
+	"FORUMS_POSTS_PAGEPREV" => $pagenav['prev'],
+	"FORUMS_POSTS_PAGENEXT" => $pagenav['next'],
+	"FORUMS_POSTS_CURRENTPAGE" => $d / $cfg['forums']['maxpostsperpage'],
+	"FORUMS_POSTS_TOTALPAGES" => ceil($totalposts / $cfg['forums']['maxpostsperpage']),
+	"FORUMS_POSTS_JUMPBOX" => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
+));
 
 /* === Hook  === */
 foreach (cot_getextplugins('forums.posts.tags') as $pl)
