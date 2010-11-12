@@ -35,7 +35,7 @@ foreach (cot_getextplugins('forums.newtopic.rights') as $pl)
 /* ===== */
 cot_block($usr['auth_write']);
 
-if ($cfg['forums'][$s]['defstate'])
+if (!$cfg['forums'][$s]['defstate'])
 {
 	cot_redirect(cot_url('message', "msg=602", '', true));
 }

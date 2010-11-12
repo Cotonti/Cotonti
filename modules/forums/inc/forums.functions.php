@@ -24,10 +24,11 @@ $GLOBALS['db_forum_stats']		= (isset($GLOBALS['db_forum_stats']))     ? $GLOBALS
  * Builds forum category path
  *
  * @param string $cat Category code
+ * @param bool $nolast Last link as simple text
  * @param string $mask Format mask
  * @return string
  */
-function cot_build_forumpath($cat, $mask = 'link_catpath')
+function cot_build_forumpath($cat, $nolast=false, $mask = 'link_catpath')
 {
 	global $structure, $cfg, $L;
 	$mask = str_replace('%1$s', '{$url}', $mask);
@@ -56,7 +57,7 @@ function cot_build_forumpath($cat, $mask = 'link_catpath')
 		}
 		else
 		{
-			$tmp[] = ($k === $last) ? htmlspecialchars($structure['forums'][$x]['title'])
+			$tmp[] = ($k === $last && $nolast) ? htmlspecialchars($structure['forums'][$x]['title'])
 				: cot_rc($mask, array(
 				'url' => cot_url('forums', 'm=topics&s='.$x),
 				'title' => htmlspecialchars($structure['forums'][$x]['title'])
