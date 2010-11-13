@@ -106,8 +106,7 @@ foreach ($req_files as $req_file)
 
 if (!empty($path_skin))
 {
-	$t_plug = new XTemplate($path_skin);
-	$t = $t_plug;
+	$t = new XTemplate($path_skin);
 }
 
 $empty = true;
@@ -136,10 +135,10 @@ $sys['sublocation'] = $out['subtitle'];
 
 if ($ext_display_header)
 {
+	$t_plug = $t;
 	require_once $cfg['system_dir'] . '/header.php';
+	$t = $t_plug;
 }
-
-$t = $t_plug;
 
 if ($autoassigntags)
 {
