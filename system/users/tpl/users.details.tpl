@@ -43,14 +43,18 @@
 					<td>{PHP.L.Registered}:</td>
 					<td>{USERS_DETAILS_REGDATE}</td>
 				</tr>
+				<!-- IF {USERS_DETAILS_AVATAR} -->
 				<tr>
 					<td>{PHP.L.Avatar}:</td>
 					<td>{USERS_DETAILS_AVATAR}</td>
 				</tr>
+				<!-- ENDIF -->
+				<!-- IF {USERS_DETAILS_PHOTO} -->
 				<tr>
 					<td>{PHP.L.Photo}:</td>
 					<td>{USERS_DETAILS_PHOTO}</td>
 				</tr>
+				<!-- ENDIF -->
 			</table>
 		</div>
 

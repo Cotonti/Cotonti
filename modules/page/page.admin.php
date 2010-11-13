@@ -354,7 +354,7 @@ elseif ($a == 'update_cheked')
 $totalitems = $db->query("SELECT COUNT(*) FROM $db_pages WHERE ".$sqlwhere)->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=page&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $db->query("SELECT p.*, u.user_name, u.user_avatar
+$sql = $db->query("SELECT p.*, u.user_name
 	FROM $db_pages as p
 	LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 	WHERE $sqlwhere
@@ -392,7 +392,6 @@ while ($row = $sql->fetch())
 		'ADMIN_PAGE_ID_URL' => cot_url('page', 'id='.$row['page_id']),
 		'ADMIN_PAGE_TYPE' => $page_type,
 		'ADMIN_PAGE_OWNER' => cot_build_user($row['page_ownerid'], htmlspecialchars($row['user_name'])),
-		'ADMIN_PAGE_OWNER_AVATAR' => cot_build_userimage($row['user_avatar'], 'avatar'),
 		'ADMIN_PAGE_FILE_BOOL' => $row['page_file'],
 		'ADMIN_PAGE_URL_FOR_VALIDATED' => cot_url('admin', 'm=page&a=validate&id='.$row['page_id'].'&d='.$d.'&'.cot_xg()),
 		'ADMIN_PAGE_URL_FOR_DELETED' => cot_url('admin', 'm=page&a=delete&id='.$row['page_id'].'&d='.$d.'&'.cot_xg()),
@@ -400,6 +399,7 @@ while ($row = $sql->fetch())
 		'ADMIN_PAGE_ODDEVEN' => cot_build_oddeven($ii),
 		'ADMIN_PAGE_CAT_COUNT' => $sub_count
 	));
+	$t->assign(cot_generate_usertags($row['page_ownerid'], 'ADMIN_PAGE_OWNER_'), htmlspecialchars($row['user_name']));
 
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)

@@ -1565,27 +1565,14 @@ function cot_build_user($id, $user)
 }
 
 /**
- * Returns user avatar image
+ * Returns user group icon
  *
- * @param string $image Image src
+ * @param string $src Image file path
  * @return string
  */
-function cot_build_userimage($image, $type = 'none')
+function cot_build_groupicon($src)
 {
-	global $R;
-	if (empty($image) && $type == 'avatar')
-	{
-		return $R['img_avatar_default'];
-	}
-	if (empty($type))
-	{
-		$type = 'none';
-	}
-	if (!empty($image))
-	{
-		return cot_rc("img_$type", array('src' => $image));
-	}
-	return '';
+	return ($src) ? cot_rc("icon_group", array('src' => $src)) : '';
 }
 
 /**

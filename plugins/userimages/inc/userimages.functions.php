@@ -71,4 +71,33 @@ function cot_userimages_config_remove($code)
 	return $result;
 }
 
+/**
+ * Returns user image html code
+ *
+ * @param string $src File path
+ * @param string $code Userimage code
+ * @return string
+ */
+function cot_userimages_build($src, $code='')
+{
+	global $R;
+	if($src && $code && $R["userimg_$code"])
+	{
+		return cot_rc("userimg_img_$code", array('src' => $src, 'alt' => $L[$code], 'class' => $code));
+	}
+	if($src && $code)
+	{
+		return cot_rc('userimg_img', array('src' => $src, 'alt' => $L[$code], 'class' => $code));
+	}
+	if($src)
+	{
+		return cot_rc('userimg_img', array('src' => $src, 'alt' => '', 'class' => ''));
+	}
+	if($R["userimg_default_$code"])
+	{
+		return cot_rc("userimg_default_$code");
+	}
+	return '';
+}
+
 ?>

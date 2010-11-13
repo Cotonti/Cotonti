@@ -35,18 +35,24 @@
 						<td>{PHP.L.Language}:</td>
 						<td>{USERS_EDIT_LANG}</td>
 					</tr>
+					<!-- IF {USERS_EDIT_AVATAR} -->
 					<tr>
 						<td>{PHP.L.Avatar}:</td>
 						<td>{USERS_EDIT_AVATAR}</td>
 					</tr>
+					<!-- ENDIF -->
+					<!-- IF {USERS_EDIT_SIGNATURE} -->
 					<tr>
 						<td>{PHP.L.Signature}:</td>
 						<td>{USERS_EDIT_SIGNATURE}</td>
 					</tr>
+					<!-- ENDIF -->
+					<!-- IF {USERS_EDIT_PHOTO} -->
 					<tr>
 						<td>{PHP.L.Photo}:</td>
 						<td>{USERS_EDIT_PHOTO}</td>
 					</tr>
+					<!-- ENDIF -->
 					<tr>
 						<td>{PHP.themelang.usersedit.Newpassword}:</td>
 						<td>{USERS_EDIT_NEWPASS}<br />{PHP.themelang.usersedit.Newpasswordhint}</td>

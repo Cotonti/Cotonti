@@ -68,18 +68,9 @@ To change your recent e-mail please use this activation link:
  * Users
  */
 
-$L['pro_avatarnotvalid'] = 'This avatar is not a valid %1$s image.';	// New in 0.0.2
-$L['pro_avatarschoose'] = 'Click an image below to set it as your own avatar';
-$L['pro_avatarspreset'] = '...or click here to display a gallery of pre-loaded avatars';
-$L['pro_avatarsupload'] = 'Upload an avatar';
-$L['pro_avataruploadfailed'] = 'The upload failed, delete the old avatar before to free the slot!';
 $L['pro_emailandpass'] = 'You can not change both e-mail and password at a time'; // New in 0.0.5
 $L['pro_passdiffer'] = 'The 2 password fields do not match';
 $L['pro_passtoshort'] = 'The password must be at least 4 chars long and must consist of alphanumerical characters and underscore only.';
-$L['pro_photonotvalid'] = 'This photo is not a valid %1$s image.';	// New in 0.0.2
-$L['pro_photoupload'] = 'Upload a photography';
-$L['pro_sigotvalid'] = 'This signature is not a valid %1$s image.';	// New in 0.0.2
-$L['pro_sigupload'] = 'Upload a signature';
 $L['pro_subtitle'] = 'Your personal account';
 $L['pro_title'] = 'Profile';
 $L['pro_wrongpass'] = 'You didn\'t enter your present password, or it\'s wrong';

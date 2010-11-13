@@ -89,9 +89,6 @@ if ($a=='update')
 	$ruser['user_maingrp'] = cot_import('rusermaingrp','P','INT');
 	$ruser['user_banexpire'] = cot_import('ruserbanexpire','P','INT');
 	$ruser['user_country'] = cot_import('rusercountry','P','ALP');
-	$ruser['user_avatar'] = cot_import('ruseravatar','P','TXT');
-	$ruser['user_photo'] = cot_import('ruserphoto','P','TXT');
-	$ruser['user_signature'] = cot_import('rusersignature','P','TXT');
 	$ruser['user_text'] = cot_import('rusertext','P','HTM');
 	$ruser['user_email'] = cot_import('ruseremail','P','TXT');
 	$ruser['user_hideemail'] = cot_import('ruserhideemail','P','INT');
@@ -277,9 +274,6 @@ $useredit_array = array(
 	"USERS_EDIT_PMNOTIFY" => cot_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No'])),
 	"USERS_EDIT_TEXT" => cot_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
 	"USERS_EDIT_TEXTBOXER" => cot_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
-	"USERS_EDIT_AVATAR" => cot_inputbox('text', 'ruseravatar', $urr['user_avatar'], array('size' => 32, 'maxlength' => 255)),
-	"USERS_EDIT_PHOTO" => cot_inputbox('text', 'ruserphoto', $urr['user_photo'], array('size' => 32, 'maxlength' => 255)),
-	"USERS_EDIT_SIGNATURE" => cot_inputbox('text', 'rusersignature', $urr['user_signature'], array('size' => 32, 'maxlength' => 255)),
 	"USERS_EDIT_GENDER" => cot_selectbox_gender($urr['user_gender'], 'rusergender'),
 	"USERS_EDIT_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
 	"USERS_EDIT_TIMEZONE" => cot_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),

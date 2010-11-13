@@ -142,13 +142,11 @@ function cot_comments_display($ext_name, $code, $cat = '')
 		while ($row = $sql->fetch())
 		{
 			$i++;
-			$com_author = htmlspecialchars($row['com_author']);
 
 			$com_admin = ($auth_admin) ? cot_rc('comments_code_admin', array(
 					'ipsearch' => cot_build_ipsearch($row['com_authorip']),
 					'delete_url' => cot_url('plug', 'e=comments&a=delete&cat='.$cat.'&id='.$row['com_id'].'&'.cot_xg())
 				)) : '';
-			$com_authorlink = cot_build_user($row['com_authorid'], $com_author);
 
 			$com_text = cot_parse($row['com_text'], $cfg['plugin']['comments']['markup']);
 
@@ -168,15 +166,14 @@ function cot_comments_display($ext_name, $code, $cat = '')
 				'COMMENTS_ROW_ID' => $row['com_id'],
 				'COMMENTS_ROW_ORDER' => $i,
 				'COMMENTS_ROW_URL' => cot_url($link_area, $link_params, '#c'.$row['com_id']),
-				'COMMENTS_ROW_AUTHOR' => $com_authorlink,
+				'COMMENTS_ROW_AUTHOR' => cot_build_user($row['com_authorid'], htmlspecialchars($row['com_author'])),
 				'COMMENTS_ROW_AUTHORID' => $row['com_authorid'],
-				'COMMENTS_ROW_AVATAR' => cot_build_userimage($row['user_avatar'], 'avatar'),
 				'COMMENTS_ROW_TEXT' => $com_text,
 				'COMMENTS_ROW_DATE' => @date($cfg['dateformat'], $row['com_date'] + $usr['timezone'] * 3600),
 				'COMMENTS_ROW_ADMIN' => $com_admin,
 				'COMMENTS_ROW_EDIT' => $com_edit
 			));
-			$t->assign(cot_generate_usertags($pag, 'COMMENTS_ROW_AUTHOR'), $com_author);
+			$t->assign(cot_generate_usertags($row['com_authorid'], 'COMMENTS_ROW_AUTHOR_'), htmlspecialchars($row['com_author']));
 
 			/* === Hook - Part2 : Include === */
 			foreach ($extp as $pl)
