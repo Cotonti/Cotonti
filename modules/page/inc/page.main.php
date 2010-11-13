@@ -104,12 +104,6 @@ if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 	$sql =  $db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'");
 }
 
-$catpath = cot_build_catpath('page', $pag['page_cat']);
-$pag['page_fulltitle'] = empty($catpath) ? '' : $catpath .' ' . $cfg['separator']. ' ';
-$pag['page_fulltitle'] .= htmlspecialchars($pag['page_title']);
-$pag['page_fulltitle'] .= ($pag['page_totaltabs'] > 1 && !empty($pag['page_tabtitle'][$pag['page_tab'] - 1])) ? " (".$pag['page_tabtitle'][$pag['page_tab'] - 1].")" : '';// page_totaltabs - Not found befor this line bur after .... see
-
-
 $ratings = ($cat['ratings']) ? true : false;
 list($ratings_link, $ratings_display) = cot_build_ratings('p'.$id, $pag['page_pageurl'], $ratings);
 
@@ -175,10 +169,6 @@ if ($usr['isadmin'])
 		"PAGE_ADMIN_UNVALIDATE" => $validation
 	));
 }
-
-
-$text = cot_parse($pag['page_text'], $cfg['page']['markup']);
-$t->assign('PAGE_TEXT', $text);
 
 $pag['page_file'] = intval($pag['page_file']);
 if ($pag['page_file'] > 0)
