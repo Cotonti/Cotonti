@@ -76,14 +76,18 @@
 						<td>{PHP.L.Gender}:</td>
 						<td>{USERS_PROFILE_GENDER}</td>
 					</tr>
+					<!-- IF {USERS_PROFILE_AVATAR} -->
 					<tr>
 						<td>{PHP.L.Avatar}:</td>
 						<td>{USERS_PROFILE_AVATAR}</td>
 					</tr>
+					<!-- ENDIF -->
+					<!-- IF {USERS_PROFILE_PHOTO} -->
 					<tr>
 						<td>{PHP.L.Photo}:</td>
 						<td>{USERS_PROFILE_PHOTO}</td>
 					</tr>
+					<!-- ENDIF -->
 					<tr>
 						<td>{PHP.L.Signature}:</td>
 						<td>{USERS_PROFILE_TEXT}</td>

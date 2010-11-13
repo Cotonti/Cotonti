@@ -18,10 +18,8 @@ Hooks=profile.tags
 defined('COT_CODE') or die('Wrong URL');
 
 cot_require('userimages', true);
+cot_require_rc('userimages', true);
 $userimages = cot_userimages_config_get();
-
-// cot_require('userimages', true, 'resources'); whats wrong with this ???
-require_once cot_incfile('userimages', 'resources', $is_plugin = true);
 
 foreach($userimages as $code => $settings)
 {

@@ -241,21 +241,12 @@ $L['cfg_title_users_pasrec'] = array('Users - password recovery', 'Options: {PAS
  * Users Subsection
  */
 
-$L['cfg_av_maxsize'] = array('Avatar, maximum file size', 'Default: 8000 bytes');
-$L['cfg_av_maxx'] = array('Avatar, maximum width', 'Default: 64 pixels');
-$L['cfg_av_maxy'] = array('Avatar, maximum height', 'Default: 64 pixels');
 $L['cfg_disablereg'] = array('Disable registration process', 'Prevent users from registering new accounts');
 $L['cfg_disablewhosonline'] = array('Disable who\'s online', 'Automatically enabled if you turn on the Shield');
 $L['cfg_forcerememberme'] = array('Force &quot;remember me&quot;', 'Use it on multi-domain sites or if there are sudden logouts');
 $L['cfg_maxusersperpage'] = array('Maximum lines in userlist', '');
-$L['cfg_ph_maxsize'] = array('Photo, maximum file size', 'Default: 8000 bytes');
-$L['cfg_ph_maxx'] = array('Photo, maximum width', 'Default: 96 pixels');
-$L['cfg_ph_maxy'] = array('Photo, maximum height', 'Default: 96 pixels');
 $L['cfg_regnoactivation'] = array('Skip e-mail check for new users', '\'No\'recommended, for security reasons');
 $L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '');
-$L['cfg_sig_maxsize'] = array('Signature, maximum file size', 'Default: 50000 bytes');
-$L['cfg_sig_maxx'] = array('Signature, maximum width', 'Default: 468 pixels');
-$L['cfg_sig_maxy'] = array('Signature, maximum height', 'Default: 60 pixels');
 $L['cfg_user_email_noprotection'] = array('Disable password protection of e-mail change', '\'No\' recommended, for security reasons');
 $L['cfg_useremailchange'] = array('Allow users to change their e-mail address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');

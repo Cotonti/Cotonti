@@ -47,7 +47,7 @@
 
 <!-- BEGIN: COMMENTS_ROW -->
 	<div class="comments1">
-		<p>{COMMENTS_ROW_AVATAR}</p>
+		<p>{COMMENTS_ROW_AUTHOR_AVATAR}</p>
 		<p><a href="{COMMENTS_ROW_URL}" id="c{COMMENTS_ROW_ID}">{COMMENTS_ROW_ORDER}.</a> {COMMENTS_ROW_AUTHOR}</p>
 		<p>{COMMENTS_ROW_DATE}</p>
 	</div>
