@@ -3,7 +3,7 @@
  * English Language File for the Forums Module (forums.en.lang.php)
  *
  * @package forums
- * @version 0.7.0
+ * @version 0.9.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -23,27 +23,23 @@ $L['cfg_mergeforumposts'] = array('Post merge feature', 'Will merge user\'s post
 $L['cfg_mergetimeout'] = array('Post merge timeout', 'Will not merge user\'s posts if they are sent consecutively after the timeout (In hours), post merge must be on (Zero to disable this feature)');
 $L['cfg_maxpostsperpage'] = array('Max. posts per page', ' ');
 
+$L['cfg_allowusertext'] = array('Display signatures');
+$L['cfg_allowbbcodes'] = array('Enable BBcodes');
+$L['cfg_allowsmilies'] = array('Enable smilies');
+$L['cfg_allowprvtopics'] = array('Allow private topics');
+$L['cfg_allowviewers'] = array('Enable Viewers');
+$L['cfg_allowpolls'] = array('Enable Polls');
+$L['cfg_countposts'] = array('Count posts');
+$L['cfg_autoprune'] = array('Auto-prune topics after * days');
+$L['cfg_defstate'] = array('Check the counters');
+
 /**
  * Forums Administration
  */
 
-$L['forums_structure'] = 'Structure of the forums (categories)';
-$L['forums_emptytitle'] = 'Error: title empty';
-
 $L['forums_defstate'] = 'Default state';
 $L['forums_defstate_0'] = 'Folded';
 $L['forums_defstate_1'] = 'Unfolded';
-
-$L['forums_master'] = 'Master section';
-$L['forums_diplaysignatures'] = 'Display signatures';
-$L['forums_enablebbcodes'] = 'Enable BBcodes';
-$L['forums_enablesmilies'] = 'Enable smilies';
-$L['forums_enableprvtopics'] = 'Allow private topics';
-$L['forums_enableviewers'] = 'Enable Viewers';
-$L['forums_enablepolls'] = 'Enable Polls';
-$L['forums_countposts'] = 'Count posts';
-$L['forums_autoprune'] = 'Auto-prune topics after * days';
-$L['forums_postcounters'] = 'Check the counters';
 
 /**
  * Main

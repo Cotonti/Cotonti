@@ -45,7 +45,7 @@ defstate=10:radio::1:
  * Forums module setup file
  *
  * @package forums
- * @version 0.7.0
+ * @version 0.9.0
  * @author Neocrome, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
