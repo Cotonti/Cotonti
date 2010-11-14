@@ -3,7 +3,7 @@
  * Russian Language File for the Forums Module (forums.ru.lang.php)
  *
  * @package forums
- * @version 0.7.0
+ * @version 0.9.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2009
  * @license BSD
@@ -23,27 +23,23 @@ $L['cfg_mergeforumposts'] = array('Объединять сообщения', 'О
 $L['cfg_mergetimeout'] = array('Время ожидания для объединения сообщений', 'Последовательно опубликованные сообщения одного пользователя не будут объединены при превышении указанного времени (в часах), требует включения установки \'Объединять сообщения\' (0 для отключения)');
 $L['cfg_maxpostsperpage'] = array('Макс. количество сообщений на странице', ' ');
 
+$L['cfg_allowusertext'] = array('Показывать подписи');
+$L['cfg_allowbbcodes'] = array('Разрешить BBCodes');
+$L['cfg_allowsmilies'] = array('Разрешить смайлики');
+$L['cfg_allowprvtopics'] = array('Разрешить приватные темы');
+$L['cfg_allowviewers'] = array('Включить отображение просматривающих раздел');
+$L['cfg_allowpolls'] = array('Включить опросы');
+$L['cfg_countposts'] = array('Считать сообщения');
+$L['cfg_autoprune'] = array('Автоочистка тем через * дней');
+$L['cfg_defstate'] = array('Проверка счетчиков');
+
 /**
  * Forums Administration
  */
 
-$L['forums_structure'] = 'Структура форумов (разделы)';
-$L['forums_emptytitle'] = 'Ошибка: пустой заголовок';
-
 $L['forums_defstate'] = 'По умолчанию';
 $L['forums_defstate_0'] = 'Свернут';
 $L['forums_defstate_1'] = 'Развернут';
-
-$L['forums_master'] = 'Родительский раздел';
-$L['forums_diplaysignatures'] = 'Показывать подписи';
-$L['forums_enablebbcodes'] = 'Разрешить BBCodes';
-$L['forums_enablesmilies'] = 'Разрешить смайлики';
-$L['forums_enableprvtopics'] = 'Разрешить приватные темы';
-$L['forums_enableviewers'] = 'Включить отображение просматривающих раздел';
-$L['forums_enablepolls'] = 'Включить опросы';
-$L['forums_countposts'] = 'Считать сообщения';
-$L['forums_autoprune'] = 'Автоочистка тем через * дней';
-$L['forums_postcounters'] = 'Проверка счетчиков';
 
 /**
  * Main
