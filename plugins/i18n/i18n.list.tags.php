@@ -24,10 +24,12 @@ if ($i18n_enabled)
 	{
 		// Override category tags
 		$catpath = cot_i18n_build_catpath('page', $c, $i18n_locale);
+		$urlparams = (!$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != $cfg['defaultlang'])
+			? "c=$c&l=$i18n_locale" : "c=$c";
 		$t->assign(array(
 			'LIST_PAGETITLE' => $catpath,
 			'LIST_CATEGORY' => htmlspecialchars($cat_i18n['title']),
-			'LIST_CAT_RSS' => cot_url('rss', "c=$c&l=$i18n_locale"),
+			'LIST_CAT_RSS' => cot_url('rss', $urlparams),
 			'LIST_CATTITLE' => $cat_i18n['title'],
 			'LIST_CATPATH' => $catpath,
 			'LIST_CATDESC' => $cat_i18n['desc']
@@ -51,8 +53,17 @@ if ($i18n_enabled)
 				$lc_class = '';
 				$lc_selected = '';
 			}
+			$urlparams = $list_url_path;
+			if (!$cfg['plugin']['i18n']['omitmain'] || $lc != $cfg['defaultlang'])
+			{
+				$urlparams['l'] = $lc;
+			}
+			else
+			{
+				unset($urlparams['l']);
+			}
 			$t->assign(array(
-				'I18N_LANG_ROW_URL' => cot_url('page', array_merge($list_url_path, array('l' => $lc))),
+				'I18N_LANG_ROW_URL' => cot_url('page', $urlparams),
 				'I18N_LANG_ROW_CODE' => $lc,
 				'I18N_LANG_ROW_TITLE' => $i18n_locales[$lc],
 				'I18N_LANG_ROW_CLASS' => $lc_class,

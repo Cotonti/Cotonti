@@ -55,7 +55,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 				cot_error('page_titletooshort', 'title');
 			}
 			$pag_i18n['ipage_desc'] = cot_import('desc', 'P', 'TXT');
-			$pag_i18n['ipage_text'] = cot_import('text', 'P', 'HTM');
+			$pag_i18n['ipage_text'] = cot_import('translate_text', 'P', 'HTM');
 
 			if ($cot_error)
 			{
@@ -119,12 +119,12 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			// Update the translation
 			$pag_i18n['ipage_date'] = $sys['now_offset'];
 			$pag_i18n['ipage_title'] = cot_import('title', 'P', 'TXT');
-			if (mb_strlen($rpage['page_title']) < 2)
+			if (mb_strlen($pag_i18n['ipage_title']) < 2)
 			{
 				cot_error('page_titletooshort', 'rpagetitle');
 			}
 			$pag_i18n['ipage_desc'] = cot_import('desc', 'P', 'TXT');
-			$pag_i18n['ipage_text'] = cot_import('text', 'P', 'HTM');
+			$pag_i18n['ipage_text'] = cot_import('translate_text', 'P', 'HTM');
 
 			if ($cot_error)
 			{
@@ -149,13 +149,13 @@ if ($id > 0 && $stmt->rowCount() == 1)
 
 		$t = new XTemplate(cot_skinfile('i18n.page', true));
 		$t->assign(array(
-			'I18N_ACTION' => cot_url('plug', "e=i18n&m=page&a=edit&id=$id"),
+			'I18N_ACTION' => cot_url('plug', "e=i18n&m=page&a=edit&id=$id&l=$i18n_locale"),
 			'I18N_TITLE' => $L['i18n_editing'],
 			'I18N_ORIGINAL_LANG' => $i18n_locales[$cfg['defaultlang']],
 			'I18N_LOCALIZED_LANG' => $i18n_locales[$i18n_locale],
 			'I18N_PAGE_TITLE' => htmlspecialchars($pag['page_title']),
 			'I18N_PAGE_DESC' => htmlspecialchars($pag['page_desc']),
-			'I18N_PAGE_TEXT' => cot_parse($page_data['page_text'], $cfg['page']['markup']),
+			'I18N_PAGE_TEXT' => cot_parse($pag['page_text'], $cfg['page']['markup']),
 			'I18N_IPAGE_TITLE' => htmlspecialchars($pag_i18n['ipage_title']),
 			'I18N_IPAGE_DESC' => htmlspecialchars($pag_i18n['ipage_desc']),
 			'I18N_IPAGE_TEXT' => htmlspecialchars($pag_i18n['ipage_text']),

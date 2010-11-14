@@ -38,7 +38,7 @@
 			<em>{I18N_PAGE_TEXT}</em>
 		</td>
 		<td>
-			<textarea id="translate_text" name="text" class="editor">{I18N_IPAGE_TEXT}</textarea>
+			<textarea id="translate_text" name="translate_text" class="editor">{I18N_IPAGE_TEXT}</textarea>
 		</td>
 	</tr>
 	<tr>

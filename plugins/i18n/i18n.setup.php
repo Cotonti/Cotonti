@@ -4,7 +4,7 @@
 Code=i18n
 Name=Content Internationalization
 Description=Enables site contents translation into multiple languages
-Version=0.7.0
+Version=0.7.1
 Date=2010-nov-07
 Author=Trustmaster
 Copyright=Copyright (c) Cotonti Team 2010
@@ -20,6 +20,7 @@ Recommends_plugins=search
 [BEGIN_COT_EXT_CONFIG]
 cats=01:string:::Category codes
 locales=02:text::en|English:Site locales
+omitmain=03:radio::1:Omit language parameter in the URL if poiting to main language
 [END_COT_EXT_CONFIG]
 ==================== */
 

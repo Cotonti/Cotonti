@@ -22,7 +22,19 @@ $i18n_enabled = $i18n_read && cot_i18n_enabled($c);
 
 if ($i18n_enabled && $i18n_notmain)
 {
-	$list_url_path = array('c' => $c, 's' => $s, 'w' => $w, 'ord' => $o, 'p' => $p, 'l' => $i18n_locale);
+	$list_url_path = array('c' => $c, 'ord' => $o, 'p' => $p);
+	if ($s != $cfg['page'][$c]['order'])
+	{
+		$list_url_path['s'] = $s;
+	}
+	if ($w != $cfg['page'][$c]['way'])
+	{
+		$list_url_path['w'] = $w;
+	}
+	if (!$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != $cfg['defaultlang'])
+	{
+		$list_url_path['l'] = $i18n_locale;
+	}
 	$list_url = cot_url('page', $list_url_path);
 	
 	$join_columns .= ',i18n.*';

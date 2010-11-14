@@ -54,8 +54,8 @@ $cat = &$structure['page'][$c];
 
 if (empty($s))
 {
-	$s = $cat['order'];
-	$w = $cat['way'];
+	$s = $cfg['page'][$c]['order'];
+	$w = $cfg['page'][$c]['way'];
 }
 $s = empty($s) ? 'title' : $s;
 $w = empty($w) ? 'asc' : $w;
@@ -92,7 +92,15 @@ if (!$usr['isadmin'])
 {
 	$where['date'] = "page_date <= ".(int)$sys['now_offset'];
 }
-$list_url_path = array('c' =>$c, 's' => $s, 'w' => $w, 'ord' => $o, 'p' => $p);
+$list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
+if ($s != $cfg['page'][$c]['order'])
+{
+	$list_url_path['s'] = $s;
+}
+if ($w != $cfg['page'][$c]['way'])
+{
+	$list_url_path['w'] = $w;
+}
 $list_url = cot_url('page', $list_url_path);
 
 /* === Hook === */
