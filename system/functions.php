@@ -3811,16 +3811,24 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
 	$url = $name . '.php';
 	// Append query string if needed
-	if (!empty($args))
+	if (count($args) > 0)
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
 		$sep_len = strlen($sep);
 		$qs = '?';
-		foreach($args as $key => $val)
+		$i = 0;
+		foreach ($args as $key => $val)
 		{
-			$qs .= $key .'='.urlencode($val).$sep;
+			if ($val != '')
+			{
+				if ($i > 0)
+				{
+					$qs .= $sep;
+				}
+				$qs .= $key . '=' . urlencode($val);
+				$i++;
+			}
 		}
-		$qs = substr($qs, 0, -$sep_len);
 		$url .= $qs;
 	}
 	$url .= $tail;

@@ -15,6 +15,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['cfg_cats'] = array('Root categories to apply i18n on', 'Comma separated category codes');
 $L['cfg_locales'] = array('List of site locales', 'Each locale on new line, format: locale_code|Locale title');
+$L['cfg_omitmain'] = array('Omit language parameter in URLs if poiting to main language');
 
 // Plugin strings
 

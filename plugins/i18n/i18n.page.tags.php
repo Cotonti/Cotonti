@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=page.tags
-Tags=page.tpl:{I18N_LANG_ROW_URL},{I18N_LANG_ROW_CODE},{I18N_LANG_ROW_TITLE},{I18N_LANG_ROW_CLASS},{I18N_LANG_ROW_SELECTED},{PAGE_I18N_TRANSLATE}
+Tags=page.tpl:{I18N_LANG_ROW_URL},{I18N_LANG_ROW_CODE},{I18N_LANG_ROW_TITLE},{I18N_LANG_ROW_CLASS},{I18N_LANG_ROW_SELECTED},{PAGE_I18N_TRANSLATE},{PAGE_I18N_DELETE}
 [END_COT_EXT]
 ==================== */
 
@@ -37,10 +37,13 @@ if ($i18n_enabled)
 				$lc_class = '';
 				$lc_selected = '';
 			}
-			$lc_url = empty($pag['page_alias']) ? cot_url('page', "id=$id&l=$lc")
-				: cot_url('page', "al=$al&l=$lc");
+			$urlparams = empty($pag['page_alias']) ? array('id' => $id) : array('al' => $al);
+			if (!$cfg['plugin']['i18n']['omitmain'] || $lc != $cfg['defaultlang'])
+			{
+				$urlparams += array('l' => $lc);
+			}
 			$t->assign(array(
-				'I18N_LANG_ROW_URL' => $lc_url,
+				'I18N_LANG_ROW_URL' => cot_url('page', $urlparams),
 				'I18N_LANG_ROW_CODE' => $lc,
 				'I18N_LANG_ROW_TITLE' => $i18n_locales[$lc],
 				'I18N_LANG_ROW_CLASS' => $lc_class,
@@ -50,7 +53,7 @@ if ($i18n_enabled)
 		}
 		$t->parse('MAIN.I18N_LANG');
 	}
-	
+
 	if ($i18n_write)
 	{
 		// Translation tags
@@ -71,14 +74,14 @@ if ($i18n_enabled)
 			}
 		}
 	}
-	
+
 	if ($i18n_admin)
 	{
 		// Control tags
 		if ($pag_i18n)
 		{
 			// Delete translation
-			$t->assign('PAGE_ADMIN_EDIT', cot_rc_link(cot_url('plug', "e=i18n&m=page&a=delete&id=$id&l=$i18n_locale"), $L['Delete']));
+			$t->assign('PAGE_I18N_DELETE', cot_rc_link(cot_url('plug', "e=i18n&m=page&a=delete&id=$id&l=$i18n_locale"), $L['Delete']));
 		}
 	}
 }

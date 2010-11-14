@@ -23,8 +23,10 @@ if ($i18n_enabled && $i18n_notmain)
 	
 	if ($x_i18n)
 	{
+		$urlparams = (!$cfg['plugin']['i18n']['omitmain'] || $i18n_locale != $cfg['defaultlang'])
+			? "c=$i&l=$i18n_locale" : "c=$i";
 		$t->assign(array(
-			'LIST_ROWCAT_URL' => cot_url('page', "c=$i&l=$i18n_locale"),
+			'LIST_ROWCAT_URL' => cot_url('page', $urlparams),
 			'LIST_ROWCAT_TITLE' => $x_i18n['title'],
 			'LIST_ROWCAT_DESC' => $x_i18n['desc'],
 		));
