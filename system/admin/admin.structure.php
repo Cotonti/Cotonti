@@ -269,6 +269,7 @@ while ($row = $sql->fetch())
 		/*TODO*/		'ADMIN_STRUCTURE_JUMPTO_URL' => cot_url($n, 'c='.$structure_code),
 		'ADMIN_STRUCTURE_RIGHTS_URL' => cot_url('admin', 'm=rightsbyitem&ic='.$n.'&io='.$structure_code),
 		'ADMIN_STRUCTURE_OPTIONS_URL' => cot_url('admin', 'm=structure&n='.$n.'&id='.$structure_id.'&'.cot_xg()),
+		'ADMIN_STRUCTURE_CONFIG_URL' => cot_url('admin', 'm=config&n=edit&o=module&p='.$n.'&sub='.$structure_code),
 		'ADMIN_STRUCTURE_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
