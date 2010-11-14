@@ -9,7 +9,8 @@
 				<a href="{ADMIN_PAGE_STRUCTURE_RESYNCALL}" class="ajax" title="{PHP.L.adm_tpl_resyncalltitle}">{PHP.L.Resync}</a>
 			</li>
 		</ul>
-<!-- BEGIN: OPTIONS -->
+
+		<!-- BEGIN: OPTIONS -->
 		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post">
 		<table class="cells">
 			<tr>
@@ -61,8 +62,9 @@
 			</tr>
 		</table>
 		</form>
-<!-- END: OPTIONS -->
-<!-- BEGIN: DEFULT -->
+		<!-- END: OPTIONS -->
+
+		<!-- BEGIN: DEFULT -->
 		<h3>{PHP.L.editdeleteentries}:</h3>
 		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
@@ -76,7 +78,7 @@
 				<td class="coltop width10">{PHP.L.Pages}</td>
 				<td class="coltop width20">{PHP.L.Action}</td>
 			</tr>
-<!-- BEGIN: ROW -->
+			<!-- BEGIN: ROW -->
 			<tr>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}"><!-- IF {ADMIN_STRUCTURE_PATHFIELDIMG} -->{ADMIN_STRUCTURE_PATHFIELDIMG}<!-- ELSE -->{PHP.R.admin_icon_pathfieldnoimg}<!-- ENDIF -->{ADMIN_STRUCTURE_PATH}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
@@ -92,7 +94,7 @@
 				<td class="centerall action {ADMIN_STRUCTURE_ODDEVEN}">
 					<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a><a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax">{PHP.R.admin_icon_config}</a><!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF --><a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" >{PHP.R.admin_icon_jumpto}</a></td>
 			</tr>
-<!-- END: ROW -->
+			<!-- END: ROW -->
 			<tr>
 				<td class="valid" colspan="8"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 			</tr>
@@ -101,8 +103,9 @@
 		<p class="paging">
 			{ADMIN_STRUCTURE_PAGINATION_PREV}{ADMIN_STRUCTURE_PAGNAV}{ADMIN_STRUCTURE_PAGINATION_NEXT} <span class="a1">{PHP.L.Total}: {ADMIN_STRUCTURE_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_STRUCTURE_COUNTER_ROW}</span>
 		</p>
-<!-- END: DEFULT -->
-<!-- BEGIN: NEWCAT -->
+		<!-- END: DEFULT -->
+
+		<!-- BEGIN: NEWCAT -->
 		<h3>{PHP.L.addnewentry}:</h3>
 		<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax">
 		<table class="cells">
@@ -147,6 +150,6 @@
 			</tr>
 		</table>
 		</form>
-<!-- END: NEWCAT -->
+		<!-- END: NEWCAT -->
 
 <!-- END: MAIN -->

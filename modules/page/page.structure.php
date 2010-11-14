@@ -21,7 +21,7 @@ if ($n == 'page')
 {
 	cot_require('page');
 	$adminpath[] = array(cot_url('admin', 'm=page'), $L['Page']);
-	$adminpath[] = array (cot_url('admin', 'm=structure&n=page'), $L['Categories']);
+	$adminpath[] = array (cot_url('admin', 'm=structure&n=page'), $L['Structure']);
 	$adminhelp = $L['adm_help_structure'];
 }
 
