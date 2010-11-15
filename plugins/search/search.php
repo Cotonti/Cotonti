@@ -123,6 +123,13 @@ if (($tab == 'pag' || empty($tab))  && $cfg['page'] && $cfg['plugin']['search'][
 		$rsearch['pag']['sub'][] = 'all';
 	}
 
+	/* === Hook === */
+	foreach (cot_getextplugins('search.page.catlist') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	$t->assign(array(
 		'PLUGIN_PAGE_SEC_LIST' => cot_selectbox($rsearch['pag']['sub'], 'rpagsub[]', array_keys($pages_cat_list), array_values($pages_cat_list), false, 'multiple="multiple" style="width:50%"'),
 		'PLUGIN_PAGE_RES_SORT' => cot_selectbox($rsearch['pag']['sort'], 'rpagsort', array('date', 'title', 'count', 'cat'), array($L['plu_pag_res_sort1'], $L['plu_pag_res_sort2'], $L['plu_pag_res_sort3'], $L['plu_pag_res_sort4']), false),
@@ -235,11 +242,26 @@ if (!empty($sq))
 		$where_and = array_diff($where_and, array(''));
 		$where = implode(' AND ', $where_and);
 
-		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS * FROM $db_pages WHERE $where
-					ORDER BY page_".$rsearch['pag']['sort']." ".$rsearch['pag']['sort2']." LIMIT $d, ".$cfg['plugin']['search']['maxitems']);
+		/* === Hook === */
+		foreach (cot_getextplugins('search.page.query') as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
+
+		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS p.* $search_join_columns
+			FROM $db_pages AS p $search_join_condition
+			WHERE $where
+			ORDER BY page_".$rsearch['pag']['sort']." ".$rsearch['pag']['sort2']."
+			LIMIT $d, ".$cfg['plugin']['search']['maxitems']
+			. $search_union_query);
+
 		$items = $sql->rowCount();
 		$totalitems[] = $db->query('SELECT FOUND_ROWS()')->fetchColumn();
 		$jj = 0;
+		/* === Hook - Part 1 === */
+		$extp = cot_getextplugins('search.page.loop');
+		/* ===== */
 		while ($row = $sql->fetch())
 		{
 			$page_url = empty($row['page_alias']) ? cot_url('page', 'id='.$row['page_id'].'&highlight='.$hl) : cot_url('page', 'al='.$row['page_alias'].'&highlight='.$hl);
@@ -251,6 +273,12 @@ if (!empty($sq))
 				'PLUGIN_PR_ODDEVEN' => cot_build_oddeven($jj),
 				'PLUGIN_PR_NUM' => $jj
 			));
+			/* === Hook - Part 2 === */
+			foreach ($extp as $pl)
+			{
+				include $pl;
+			}
+			/* ===== */
 			$t->parse("MAIN.RESULTS.PAGES.ITEM");
 			$jj++;
 		}
