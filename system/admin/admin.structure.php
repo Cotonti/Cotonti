@@ -75,7 +75,8 @@ if ($a == 'update')
 		$oldcatcode = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ")->fetchColumn();
 		if ($oldcatcode != $rstructure['structure_code'])
 		{
-			$sql = $db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($n)."' AND auth_option='".$db->prep($roww['structure_code'])."'");
+			$db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($n)."' AND auth_option='".$db->prep($roww['structure_code'])."'");
+			$db->update($db_config, array("config_subcat" => $rstructure['structure_code']), "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($roww['structure_code'])."' AND config_owner='module'");
 			$area_updatecat = 'cot_'.$n.'_updatecat';
 			(function_exists($area_updatecat)) ? $area_updatecat($roww['structure_code'], $rstructure['structure_code']) : FALSE;
 			cot_auth_reorder();
@@ -130,6 +131,8 @@ elseif ($a == 'add')
 			$auth_permit = array(COT_GROUP_DEFAULT => 7, COT_GROUP_GUESTS => 5, COT_GROUP_MEMBERS => 7);
 			$auth_lock = array(COT_GROUP_DEFAULT => 0, COT_GROUP_GUESTS => 250, COT_GROUP_MEMBERS => 128);
 			cot_auth_add_item($n, $rstructure['structure_code'], $auth_permit, $auth_lock);
+			$area_addcat = 'cot_'.$n.'_addcat';
+			(function_exists($area_addcat)) ? $area_addcat($rstructure['structure_code']) : FALSE;
 			$cache && $cache->db->remove('structure', 'system');
 			cot_message('Added');
 		}
@@ -156,8 +159,11 @@ elseif ($a == 'delete')
 	}
 	/* ===== */
 
-	$sql = $db->delete($db_structure, "structure_code='".$db->prep($c)."' AND structure_area='".$db->prep($n)."'");
+	$db->delete($db_structure, "structure_code='".$db->prep($c)."' AND structure_area='".$db->prep($n)."'");
+	$db->delete($db_config, "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($c)."' AND config_owner='module'");
 	cot_auth_remove_item($n, $c);
+	$area_deletecat = 'cot_'.$n.'_deletecat';
+	(function_exists($area_deletecat)) ? $area_deletecat($c) : FALSE;
 	if ($cache)
 	{
 		$cache->db->remove('structure', 'system');
@@ -206,12 +212,6 @@ else
 	$totalitems = $db->query("SELECT COUNT(*) FROM $db_structure WHERE structure_area='".$db->prep($n)."'")->fetchColumn();
 	$pagenav = cot_pagenav('admin', 'm=structure&n='.$n, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 }
-
-$t->assign(array(
-	'ADMIN_STRUCTURE_UPDATE_FORM_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=update&d='.$d),
-	'ADMIN_PAGE_STRUCTURE_RESYNCALL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=resyncall&'.cot_xg().'&d='.$d),
-	'ADMIN_STRUCTURE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=structure')
-));
 
 $ii = 0;
 /* === Hook - Part1 : Set === */
@@ -336,6 +336,12 @@ foreach (cot_getextplugins('admin.structure.tags') as $pl)
 	include $pl;
 }
 /* ===== */
+
+$t->assign(array(
+	'ADMIN_STRUCTURE_UPDATE_FORM_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=update&d='.$d),
+	'ADMIN_PAGE_STRUCTURE_RESYNCALL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=resyncall&'.cot_xg().'&d='.$d),
+	'ADMIN_STRUCTURE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=structure')
+));
 
 $t->parse('MAIN');
 if (COT_AJAX)
