@@ -235,7 +235,7 @@ foreach ($cot_extrafields['pages'] as $row_p)
 }
 
 $ii = 0;
-$jj = 1;
+$jj = 0;
 $mm = 0;
 $kk = 0;
 $mtch = $cat['path'].".";
@@ -305,9 +305,8 @@ $t->assign(array(
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.loop');
 /* ===== */
-while ($pag = $sql->fetch() and ($jj <= $cfg['page']['maxrowsperpage']))
+while ($pag = $sql->fetch() and ($jj < $cfg['page']['maxrowsperpage']))
 {
-	$jj++;
 	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));
 	$t->assign(array(
 		'LIST_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
@@ -323,6 +322,7 @@ while ($pag = $sql->fetch() and ($jj <= $cfg['page']['maxrowsperpage']))
 	}
 	/* ===== */
 	$t->parse("MAIN.LIST_ROW");
+	$jj++;
 }
 
 /* === Hook === */
