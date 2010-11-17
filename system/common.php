@@ -287,7 +287,7 @@ if($usr['id']==0)
 	$usr['skin'] = empty($usr['skin']) ? $cfg['defaultskin'] : $usr['skin'];
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
 	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
-	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['abs_url']))); // Site related key for guests
+	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['domain']))); // Site related key for guests
 }
 
 /* === Hook === */
