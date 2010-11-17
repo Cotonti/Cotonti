@@ -342,7 +342,7 @@ if ($usr['id'] == 0)
 	$usr['theme'] = empty($usr['theme']) ? $cfg['defaulttheme'] : $usr['theme'];
 	$usr['scheme'] = empty($usr['scheme']) ? $cfg['defaultscheme'] : $usr['scheme'];
 	$usr['lang'] = empty($usr['lang']) ? $cfg['defaultlang'] : $usr['lang'];
-	$sys['xk'] = mb_strtoupper(dechex(crc32($sys['abs_url']))); // Site related key for guests
+	$sys['xk'] = mb_strtoupper(dechex(crc32($site_id))); // Site related key for guests
 }
 
 $lang = $usr['lang'];
