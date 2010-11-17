@@ -238,7 +238,7 @@ if($number_of_extrafields > 0)
 
 
 $ii=0;
-$jj=1;
+$jj=0;
 $mm=0;
 $kk=0;
 $mtch = $sed_cat[$c]['path'].".";
@@ -301,9 +301,8 @@ $t->assign(array(
 $extp = sed_getextplugins('list.loop');
 /* ===== */
 
-while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
+while ($pag = sed_sql_fetcharray($sql) and ($jj < $cfg['maxrowsperpage']))
 {
-	$jj++;
 	$pag['page_desc'] = htmlspecialchars($pag['page_desc']);
 	$page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 	$pag['page_pageurl'] = sed_url('page', $page_urlp);
@@ -420,6 +419,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj<=$cfg['maxrowsperpage']))
 	/* ===== */
 
 	$t->parse("MAIN.LIST_ROW");
+	$jj++;
 }
 
 
