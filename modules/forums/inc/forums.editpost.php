@@ -9,12 +9,11 @@
  * @copyright Copyright (c) 2008-2010 Cotonti Team
  * @license BSD License
  */
-
 defined('COT_CODE') or die('Wrong URL');
 
-$s = cot_import('s','G','ALP'); // saction cat
-$q = cot_import('q','G','INT');  // topic id
-$p = cot_import('p','G','INT'); // post id
+$s = cot_import('s', 'G', 'ALP'); // saction cat
+$q = cot_import('q', 'G', 'INT');  // topic id
+$p = cot_import('p', 'G', 'INT'); // post id
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.editpost.first') as $pl)
@@ -48,7 +47,7 @@ if ($row = $sql->fetch())
 	cot_block($usr['auth_read']);
 }
 else
-{ 
+{
 	cot_die();
 }
 
@@ -62,7 +61,7 @@ if ($rowt = $sql->fetch())
 	}
 }
 else
-{ 
+{
 	cot_die();
 }
 
@@ -75,30 +74,24 @@ if ($a == 'update')
 	}
 	/* ===== */
 
-	$rtext = cot_import('rtext','P','HTM');
-	$rtopictitle = cot_import('rtopictitle','P','TXT', 255);
-	$rtopicdesc = cot_import('rtopicdesc','P','TXT', 255);
+	$rtext = cot_import('rtext', 'P', 'HTM');
+	$rtopictitle = cot_import('rtopictitle', 'P', 'TXT', 255);
+	$rtopicdesc = cot_import('rtopicdesc', 'P', 'TXT', 255);
 	$rupdater = ($row['fp_posterid'] == $usr['id'] && ($sys['now_offset'] < $fp_updated + 300) && empty($fp_updater) ) ? '' : $usr['name'];
 
-	if(!empty($rtext))
+	if (!empty($rtext))
 	{
-		$rtext = $db->prep($rtext);
-		$sql = $db->query("UPDATE $db_forum_posts SET fp_text='$rtext', fp_updated='".$sys['now_offset']."', fp_updater='".$db->prep($rupdater)."' WHERE fp_id='$p'");
-	}
+		$db->update($db_forum_posts, array("fp_text" => $rtext, "fp_updated" => $sys['now_offset'], "fp_updater" => $rupdater), "fp_id='$p'");
 
-	if (!empty($rtopictitle) && $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
-	{
-		if (mb_substr($rtopictitle, 0 ,1) == "#")
+		if (!empty($rtopictitle) && $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 		{
-			$rtopictitle = str_replace('#', '', $rtopictitle);
+			if (mb_substr($rtopictitle, 0, 1) == "#")
+			{
+				$rtopictitle = str_replace('#', '', $rtopictitle);
+			}
+			$rtopicpreview = mb_substr(htmlspecialchars($rtext), 0, 128);
+			$db->update($db_forum_topics, array("ft_title" => $rtopictitle, "ft_desc" => $rtopicdesc, "ft_preview" => $rtopicpreview), "ft_id='$p'");
 		}
-		$sql = $db->query("UPDATE $db_forum_topics SET ft_title='".$db->prep($rtopictitle)."', ft_desc='".$db->prep($rtopicdesc)."' WHERE ft_id='$q'");
-	}
-
-	if (!empty($rtopictitle) && !empty($rtext))
-	{
-		$rtopicpreview = mb_substr(htmlspecialchars($rtext), 0, 128);
-		$sql = $db->query("UPDATE $db_forum_topics SET ft_preview='".$db->prep($rtopicpreview)."' WHERE ft_id='$q'");
 	}
 
 	/* === Hook === */
@@ -108,7 +101,7 @@ if ($a == 'update')
 	}
 	/* ===== */
 
-	cot_forum_sectionsetlast($fp_cat);
+	cot_forums_sectionsetlast($fp_cat);
 
 	if ($cache)
 	{
@@ -116,13 +109,13 @@ if ($a == 'update')
 		($cfg['cache_index']) && $cache->page->clear('index');
 	}
 
-	cot_redirect(cot_url('forums', "m=posts&p=".$p, '#'.$p, true));
+	cot_redirect(cot_url('forums', "m=posts&p=" . $p, '#' . $p, true));
 }
 cot_require_api('forms');
 
-$toptitle = cot_build_forumpath($s)." ".$cfg['separator']." ".cot_rc_link(cot_url('forums', "m=posts&p=".$p, "#".$p), (($rowt['ft_mode'] == 1) ? '# ' : '').htmlspecialchars($rowt['ft_title']));
-$toptitle .= $cfg['separator']." ".cot_rc_link(cot_url('forums', "m=editpost&s=$s&q=".$q."&p=".$p."&".cot_xg()), $L['Edit']);
-$toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
+$toptitle = cot_build_forumpath($s) . " " . $cfg['separator'] . " " . cot_rc_link(cot_url('forums', "m=posts&p=" . $p, "#" . $p), (($rowt['ft_mode'] == 1) ? '# ' : '') . htmlspecialchars($rowt['ft_title']));
+$toptitle .= $cfg['separator'] . " " . cot_rc_link(cot_url('forums', "m=editpost&s=$s&q=" . $q . "&p=" . $p . "&" . cot_xg()), $L['Edit']);
+$toptitle .= ( $usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $sys['sublocation'] = $structure['forums'][$s]['title'];
 $title_params = array(
@@ -159,8 +152,8 @@ if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY
 
 $t->assign(array(
 	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
-	"FORUMS_EDITPOST_SUBTITLE" => $L['forums_postedby'].": <a href=\"users.php?m=details&id=".$row['fp_posterid']."\">".$row['fp_postername']."</a> @ ".date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
-	"FORUMS_EDITPOST_SEND" => cot_url('forums', "m=editpost&a=update&s=".$s."&q=".$q."&p=".$p."&".cot_xg()),
+	"FORUMS_EDITPOST_SUBTITLE" => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $row['fp_posterid'] . "\">" . $row['fp_postername'] . "</a> @ " . date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
+	"FORUMS_EDITPOST_SEND" => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . cot_xg()),
 	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', $row['fp_text'], 20, 56, '', 'input_textarea_editor')
 ));
 
@@ -175,5 +168,4 @@ $t->parse("MAIN");
 $t->out("MAIN");
 
 require_once $cfg['system_dir'] . '/footer.php';
-
 ?>

@@ -287,9 +287,9 @@ function cot_page_config_order()
  * Recalculates page category counters
  *
  * @param string $cat Cat code
- * @return array
+ * @return int
  */
-function cot_page_count($cat)
+function cot_page_sync($cat)
 {
 	global $db, $db_structure, $db_pages;
 	$sql = $db->query("SELECT COUNT(*) FROM $db_pages

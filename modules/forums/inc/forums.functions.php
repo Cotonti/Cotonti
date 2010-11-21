@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Forums API
  *
@@ -8,7 +9,6 @@
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
-
 defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
@@ -16,9 +16,9 @@ cot_require_lang('forums', 'module');
 cot_require_rc('forums');
 
 // Global variables
-$GLOBALS['db_forum_posts']		= (isset($GLOBALS['db_forum_posts']))     ? $GLOBALS['db_forum_posts']     : $GLOBALS['db_x'] . 'forum_posts';
-$GLOBALS['db_forum_topics'] 	= (isset($GLOBALS['db_forum_topics']))    ? $GLOBALS['db_forum_topics']    : $GLOBALS['db_x'] . 'forum_topics';
-$GLOBALS['db_forum_stats']		= (isset($GLOBALS['db_forum_stats']))     ? $GLOBALS['db_forum_stats']     : $GLOBALS['db_x'] . 'forum_stats';
+$GLOBALS['db_forum_posts'] = (isset($GLOBALS['db_forum_posts'])) ? $GLOBALS['db_forum_posts'] : $GLOBALS['db_x'] . 'forum_posts';
+$GLOBALS['db_forum_topics'] = (isset($GLOBALS['db_forum_topics'])) ? $GLOBALS['db_forum_topics'] : $GLOBALS['db_x'] . 'forum_topics';
+$GLOBALS['db_forum_stats'] = (isset($GLOBALS['db_forum_stats'])) ? $GLOBALS['db_forum_stats'] : $GLOBALS['db_x'] . 'forum_stats';
 
 /**
  * Builds forum category path
@@ -38,12 +38,12 @@ function cot_build_forumpath($cat, $nolast=false, $mask = 'link_catpath')
 		$tmp[] = cot_rc($mask, array(
 			'url' => $cfg['mainurl'],
 			'title' => htmlspecialchars($cfg['maintitle'])
-		));
+			));
 	}
 	$tmp[] = cot_rc($mask, array(
 		'url' => cot_url('forums'),
 		'title' => $L['Forums']
-	));
+		));
 	$pathcodes = explode('.', $structure['forums'][$cat]['path']);
 	$last = count($pathcodes) - 1;
 	foreach ($pathcodes as $k => $x)
@@ -51,40 +51,19 @@ function cot_build_forumpath($cat, $nolast=false, $mask = 'link_catpath')
 		if ($k == 0)
 		{
 			$tmp[] = cot_rc($mask, array(
-				'url' => cot_url('forums', 'c='.$x, '#'.$x),
+				'url' => cot_url('forums', 'c=' . $x, '#' . $x),
 				'title' => htmlspecialchars($structure['forums'][$x]['title'])
-			));
+				));
 		}
 		else
 		{
-			$tmp[] = ($k === $last && $nolast) ? htmlspecialchars($structure['forums'][$x]['title'])
-				: cot_rc($mask, array(
-				'url' => cot_url('forums', 'm=topics&s='.$x),
-				'title' => htmlspecialchars($structure['forums'][$x]['title'])
-			));
+			$tmp[] = ($k === $last && $nolast) ? htmlspecialchars($structure['forums'][$x]['title']) : cot_rc($mask, array(
+					'url' => cot_url('forums', 'm=topics&s=' . $x),
+					'title' => htmlspecialchars($structure['forums'][$x]['title'])
+				));
 		}
 	}
-	return is_array($tmp) ? implode(' '.$cfg['separator'].' ', $tmp) : '';
-}
-
-/**
- * Removes a forum section and all its contents
- *
- * @param int $cat Section cat
- * @return int Total number of records removed
- */
-function cot_forum_deletesection($cat)
-{
-	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats, $db_auth;
-
-	$sql = $db->query("DELETE FROM $db_forum_posts WHERE fp_cat='$cat'");
-	$num = $db->affectedRows;
-	$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_cat='$cat'");
-	$num += $db->affectedRows;
-	$sql = $db->query("DELETE FROM $$db_forum_stats WHERE fs_id='$cat'");
-	$num += $db->affectedRows;
-	$num += cot_auth_remove_item('forums', $cat);
-	return $num;
+	return is_array($tmp) ? implode(' ' . $cfg['separator'] . ' ', $tmp) : '';
 }
 
 /**
@@ -95,7 +74,7 @@ function cot_forum_deletesection($cat)
  * @param int $param Selection parameter value
  * @return int
  */
-function cot_forum_prunetopics($mode, $section, $param)
+function cot_forums_prunetopics($mode, $section, $param)
 {
 	global $db, $cfg, $sys, $db_forum_topics, $db_forum_posts, $db_forum_stats, $L;
 
@@ -105,7 +84,7 @@ function cot_forum_prunetopics($mode, $section, $param)
 	switch ($mode)
 	{
 		case 'updated':
-			$limit = $sys['now'] - ($param*86400);
+			$limit = $sys['now'] - ($param * 86400);
 			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat='$section' AND ft_updated<'$limit' AND ft_sticky='0'");
 			break;
 
@@ -114,7 +93,7 @@ function cot_forum_prunetopics($mode, $section, $param)
 			break;
 	}
 
-	if ($sql1->rowCount()>0)
+	if ($sql1->rowCount() > 0)
 	{
 		while ($row1 = $sql1->fetch())
 		{
@@ -131,30 +110,13 @@ function cot_forum_prunetopics($mode, $section, $param)
 			$num += $db->affectedRows;
 			$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
 			$num1 += $db->affectedRows;
-
 		}
 
 		$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
 		$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num' WHERE fs_cat='$section'");
 	}
-	$num1 = ($num1=='') ? '0' : $num1;
+	$num1 = ($num1 == '') ? '0' : $num1;
 	return($num1);
-}
-
-/**
- * Recounts all counters for a given section
- *
- * @param string $section Section Code
- */
-function cot_forum_resync($section)
-{
-	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats;
-
-	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat='$section'");
-	$num1 = $sql->fetchColumn();
-	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='$section'");
-	$num = $sql->fetchColumn();
-	$sql = $db->query("UPDATE $db_forum_stats SET fs_postcount='$num', fs_topiccount='$num1' WHERE fs_cat='$section'");
 }
 
 /**
@@ -162,41 +124,20 @@ function cot_forum_resync($section)
  *
  * @param int $id Topic ID
  */
-function cot_forum_resynctopic($id)
+function cot_forums_resynctopic($id)
 {
 	global $db, $db_forum_topics, $db_forum_posts;
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$id'");
-	$num = $sql->fetchColumn();
-	$sql = $db->query("UPDATE $db_forum_topics SET ft_postcount='$num' WHERE ft_id='$id'");
+	$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$id'")->fetchColumn();
+	$db->update($db_forum_topics, array("ft_postcount" => $num), "ft_id='" . (int)$id . "'");
 
-	$sql = $db->query("SELECT fp_posterid, fp_postername, fp_updated
-    FROM $db_forum_posts
-    WHERE fp_topicid='$id'
-    ORDER BY fp_id DESC LIMIT 1");
-
+	$sql = $db->query("SELECT fp_posterid, fp_postername, fp_updated FROM $db_forum_posts WHERE fp_topicid='$id' ORDER BY fp_id DESC LIMIT 1");
 	if ($row = $sql->fetch())
 	{
-		$sql = $db->query("UPDATE $db_forum_topics
-        SET ft_lastposterid='".(int)$row['fp_posterid']."',
-            ft_lastpostername='".$db->prep($row['fp_last_postername'])."',
-            ft_updated='".(int)$row['fp_last_updated']."'
-        WHERE ft_id='$id'");
-
-	}
-}
-
-/**
- * Recalculates all counters in forums
- */
-function cot_forum_resyncall()
-{
-	global $db, $db_forum_stats;
-
-	$sql = $db->query("SELECT fs_cat FROM $db_forum_stats");
-	while ($row = $sql->fetch())
-	{
-		cot_forum_resync($row['fs_cat']);
+		$db->update($db_forum_topics, array("ft_lastposterid" => (int)$row['fp_posterid'],
+			"ft_lastpostername" => $row['fp_last_postername'],
+			"ft_updated" => (int)$row['fp_last_updated']
+			), "ft_id='" . (int)$id . "'");
 	}
 }
 
@@ -205,12 +146,12 @@ function cot_forum_resyncall()
  *
  * @param string $cat Section cat
  */
-function cot_forum_sectionsetlast($cat)
+function cot_forums_sectionsetlast($cat)
 {
 	global $db, $db_forum_topics, $db_forum_stats;
 	$sql = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_cat='$cat' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
 	$row = $sql->fetch();
-	$sql = $db->query("UPDATE $db_forum_stats SET fs_lt_id=".(int)$row['ft_id'].", fs_lt_title='".$db->prep($row['ft_title'])."', fs_lt_date=".(int)$row['ft_updated'].", fs_lt_posterid=".(int)$row['ft_lastposterid'].", fs_lt_postername='".$db->prep($row['ft_lastpostername'])."' WHERE fs_cat='$cat'");
+	$sql = $db->query("UPDATE $db_forum_stats SET fs_lt_id=" . (int)$row['ft_id'] . ", fs_lt_title='" . $db->prep($row['ft_title']) . "', fs_lt_date=" . (int)$row['ft_updated'] . ", fs_lt_posterid=" . (int)$row['ft_lastposterid'] . ", fs_lt_postername='" . $db->prep($row['ft_lastpostername']) . "' WHERE fs_cat='$cat'");
 }
 
 /**
@@ -224,50 +165,123 @@ function cot_forum_sectionsetlast($cat)
  */
 function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 {
-	global $cfg,  $structure, $cot_extrafields, $usr, $sys;
+	global $cfg, $structure, $cot_extrafields, $usr, $sys;
 
-	$new_elems = ($usr['id']>0 && $stat['fs_lt_date']>$usr['lastvisit'] && $stat['fs_lt_posterid']!=$usr['id']);
+	$new_elems = ($usr['id'] > 0 && $stat['fs_lt_date'] > $usr['lastvisit'] && $stat['fs_lt_posterid'] != $usr['id']);
 
 	$sections = array(
-		$tag_prefix."CAT" => $cat,
-		$tag_prefix."LOCKED" => $structure['forums'][$cat]['locked'],
-		$tag_prefix."TITLE" => $structure['forums'][$cat]['title'],
-		$tag_prefix."DESC" => cot_parse_autourls($structure['forums'][$cat]['desc']).($structure['forums'][$cat]['locked']) ? " ".$L['Locked'] : '',
-		$tag_prefix."ICON" => $structure['forums'][$cat]['icon'],
-		$tag_prefix."URL" => cot_url('forums', "m=topics&s=".$cat),
-		$tag_prefix."SECTIONSURL" => cot_url('forums', "c=".$cat),
-		$tag_prefix."NEWPOSTS" => $new_elems,
-		$tag_prefix."CAT_DEFSTATE" => htmlspecialchars($cfg['forums'][$cat]['defstate'])
+		$tag_prefix . "CAT" => $cat,
+		$tag_prefix . "LOCKED" => $structure['forums'][$cat]['locked'],
+		$tag_prefix . "TITLE" => $structure['forums'][$cat]['title'],
+		$tag_prefix . "DESC" => cot_parse_autourls($structure['forums'][$cat]['desc']) . ($structure['forums'][$cat]['locked']) ? " " . $L['Locked'] : '',
+		$tag_prefix . "ICON" => $structure['forums'][$cat]['icon'],
+		$tag_prefix . "URL" => cot_url('forums', "m=topics&s=" . $cat),
+		$tag_prefix . "SECTIONSURL" => cot_url('forums', "c=" . $cat),
+		$tag_prefix . "NEWPOSTS" => $new_elems,
+		$tag_prefix . "CAT_DEFSTATE" => htmlspecialchars($cfg['forums'][$cat]['defstate'])
 	);
 
 	if ($stat['fs_lt_date'] > 0)
 	{
 		$sections += array(
-			$tag_prefix."LASTPOSTDATE" => @date($cfg['formatmonthdayhourmin'], $stat['fs_lt_date'] + $usr['timezone'] * 3600),
-			$tag_prefix."LASTPOSTER" => cot_build_user($stat['fs_lt_posterid'], htmlspecialchars($stat['fs_lt_postername'])),
-			$tag_prefix."LASTPOST" => cot_rc_link($new_elems ? cot_url('forums', "m=posts&q=".$stat['fs_lt_id']."&n=unread", "#unread") : cot_url('forums', "m=posts&q=".$stat['fs_lt_id']."&n=last", "#bottom"), cot_cutstring($stat['fs_lt_title'], 32)),
-			$tag_prefix."TIMEAGO" => cot_build_timegap($stat['fs_lt_date'], $sys['now_offset'])
+			$tag_prefix . "LASTPOSTDATE" => @date($cfg['formatmonthdayhourmin'], $stat['fs_lt_date'] + $usr['timezone'] * 3600),
+			$tag_prefix . "LASTPOSTER" => cot_build_user($stat['fs_lt_posterid'], htmlspecialchars($stat['fs_lt_postername'])),
+			$tag_prefix . "LASTPOST" => cot_rc_link($new_elems ? cot_url('forums', "m=posts&q=" . $stat['fs_lt_id'] . "&n=unread", "#unread") : cot_url('forums', "m=posts&q=" . $stat['fs_lt_id'] . "&n=last", "#bottom"), cot_cutstring($stat['fs_lt_title'], 32)),
+			$tag_prefix . "TIMEAGO" => cot_build_timegap($stat['fs_lt_date'], $sys['now_offset'])
 		);
 	}
 
 	if (is_array($stat))
 	{
 		$sections += array(
-			$tag_prefix."TOPICCOUNT" => $stat['topiccount'],
-			$tag_prefix."POSTCOUNT" => $stat['postcount'],
-			$tag_prefix."VIEWCOUNT" => $stat['viewcount'],
-			$tag_prefix."VIEWCOUNT_SHORT" => ($stat['viewcount'] > 9999) ? floor($stat['viewcount']/1000)."k" : $stat['viewcount'],
+			$tag_prefix . "TOPICCOUNT" => $stat['topiccount'],
+			$tag_prefix . "POSTCOUNT" => $stat['postcount'],
+			$tag_prefix . "VIEWCOUNT" => $stat['viewcount'],
+			$tag_prefix . "VIEWCOUNT_SHORT" => ($stat['viewcount'] > 9999) ? floor($stat['viewcount'] / 1000) . "k" : $stat['viewcount'],
 		);
 	}
 
 	foreach ($cot_extrafields['structure'] as $row_c)
 	{
 		$uname = strtoupper($row_c['field_name']);
-		$sections[$tag_prefix.$uname.'_TITLE'] = isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description'];
-		$sections[$tag_prefix.$uname] = cot_build_extrafields_data('structure', $row_c, $structure['forums'][$cat][$row_c['field_name']]);
+		$sections[$tag_prefix . $uname . '_TITLE'] = isset($L['structure_' . $row_c['field_name'] . '_title']) ? $L['structure_' . $row_c['field_name'] . '_title'] : $row_c['field_description'];
+		$sections[$tag_prefix . $uname] = cot_build_extrafields_data('structure', $row_c, $structure['forums'][$cat][$row_c['field_name']]);
 	}
 
 	return $sections;
+}
+
+/**
+ * Recounts all counters for a given cat
+ *
+ * @param string $cat Cat code
+ * @return int topiccount
+ */
+function cot_forums_sync($cat)
+{
+	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats;
+	$num1 = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat='" . $db->prep($cat) . "'")->fetchColumn();
+	$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='" . $db->prep($cat) . "'")->fetchColumn();
+	$db->update($db_forum_stats, array("fs_postcount" => $num, "fs_topiccount" => $num1), "fs_cat='" . $db->prep($cat) . "'");
+	cot_forums_sectionsetlast($cat);
+	return (int)$num1;
+}
+
+/**
+ * Update forums category
+ *
+ * @param string $oldcat Old Cat code
+ * @param string $newcat New Cat code
+ * @return bool
+ */
+function cot_forums_updatecat($oldcat, $newcat)
+{
+	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats;
+
+	$upd = (bool)$db->update($db_forum_topics, array("ft_cat" => $newcat), "ft_cat='" . $db->prep($oldcat) . "'");
+	$upd &= (bool)$db->update($db_forum_posts, array("fp_cat" => $newcat), "fp_cat='" . $db->prep($oldcat) . "'");
+	$upd &= (bool)$db->update($db_forum_stats, array("fs_cat" => $newcat), "fs_cat='" . $db->prep($oldcat) . "'");
+
+	return $upd;
+}
+
+/**
+ * Delete forums category
+ *
+ * @param string $oldcat Old Cat code
+ * @param string $newcat New Cat code
+ * @return bool
+ */
+function cot_forums_deletecat($cat)
+{
+	global $db_forum_topics, $db_forum_posts, $db_forum_stats, $db;
+	$sql = $db->delete($db_forum_posts, "fp_cat='$cat'");
+	$sql = $db->delete($db_forum_topics, "ft_cat='$cat'");
+	$sql = $db->delete($db_forum_stats, "fs_cat='$cat'");
+}
+
+/**
+ * Insert forums category
+ *
+ * @param string $cat Cat code
+ * @return bool
+ */
+function cot_forums_insertcat($cat)
+{
+	global $db, $db_forum_stats;
+	$db->insert($db_forum_stats, array(
+		'fs_cat' => $cat,
+		'fs_lt_id' => 0,
+		'fs_lt_title' => '',
+		'fs_lt_date' => 0,
+		'fs_lt_posterid' => 0,
+		'fs_lt_postername' => '',
+		'fs_topiccount' => 0,
+		'fs_postcount' => 0,
+		'fs_viewcount' => 0
+	));
+
+	return true;
 }
 
 ?>

@@ -148,7 +148,13 @@ function cot_trash_delete($id)
  */
 function cot_trashpage_sync($data)
 {
-	global $cache, $cfg;
+	global $cache, $cfg, $db_structure;
+
+	cot_forums_resynctopic($data['ft_id']);
+	$items = cot_forums_sync($data['ft_cat']);
+	$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($data['ft_cat'])."' AND structure_area='forums'");
+	return TRUE;
+
 	cot_page_resync($data['page_cat']);
 	($cache && $cfg['cache_page']) && $cache->page->clear('page');
 	return true;
@@ -179,9 +185,10 @@ function cot_trashforumpost_check($data)
  */
 function cot_trashforumpost_sync($data)
 {
-	cot_forum_resynctopic($data['fp_topicid']);
-	cot_forum_sectionsetlast($data['fp_cat']);
-	cot_forum_resync($data['fp_cat']);
+	global $db_structure;
+	cot_forums_resynctopic($data['ft_id']);
+	$items = cot_forums_sync($data['ft_cat']);
+	$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($data['ft_cat'])."' AND structure_area='forums'");
 	return TRUE;
 }
 
@@ -193,9 +200,10 @@ function cot_trashforumpost_sync($data)
  */
 function cot_trashforumtopic_sync($data)
 {
-	cot_forum_resynctopic($data['ft_id']);
-	cot_forum_sectionsetlast($data['ft_cat']);
-	cot_forum_resync($data['ft_cat']);
+	global $db_structure;
+	cot_forums_resynctopic($data['ft_id']);
+	$items = cot_forums_sync($data['ft_cat']);
+	$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($data['ft_cat'])."' AND structure_area='forums'");
 	return TRUE;
 }
 
