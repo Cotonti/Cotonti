@@ -32,7 +32,7 @@ foreach (cot_getextplugins('forums.sections.first') as $pl)
 
 if ($n == 'markall' && $usr['id'] > 0)
 {
-	$sql = $db->query("UPDATE $db_users set user_lastvisit='".$sys['now_offset']."' WHERE user_id='".$usr['id']."'");
+	$db->update($db_users, array("user_lastvisit" => $sys['now_offset']), "user_id='".$usr['id']."'");
 	$usr['lastvisit'] = $sys['now_offset'];
 }
 
@@ -63,7 +63,7 @@ while ($row = $sql->fetch())
 {
 	if (!$cat_top[$row['fs_cat']]['fs_lt_id'])
 	{
-		cot_forum_sectionsetlast($row['fs_code']);
+		cot_forums_sectionsetlast($row['fs_code']);
 	}
 	$cat_top[$row['fs_cat']] = $row;
 	$cat_top[$row['fs_cat']]['topiccount'] = $cat_top[$row['fs_cat']]['fs_topiccount'];

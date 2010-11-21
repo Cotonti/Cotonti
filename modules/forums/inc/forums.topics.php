@@ -46,9 +46,9 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 	switch($a)
 	{
 		case 'delete':		
-			cot_forum_prunetopics('single', $s, $q);
+			cot_forums_prunetopics('single', $s, $q);
 			cot_log("Deleted topic #".$q, 'for');
-			cot_forum_sectionsetlast($s);
+			cot_forums_sectionsetlast($s);
 			/* === Hook === */
 			foreach (cot_getextplugins('forums.topics.delete.done') as $pl)
 			{
@@ -94,46 +94,46 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 				));
 			}
 			
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_cat='$ns' WHERE ft_id='$q' and ft_cat='$s'");
-			$sql = $db->query("UPDATE $db_forum_posts SET fp_cat='$ns' WHERE fp_cat='$s' and fp_topicid='$q'");
+			$db->update($db_forum_topics, array("ft_cat" => $ns), "ft_id='$q' and ft_cat='$s'");
+			$db->update($db_forum_posts, array("fp_cat" => $ns), "fp_cat='$s' and fp_topicid='$q'");	
 			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-'$num' WHERE fs_cat='$s'");
 			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount+1, fs_postcount=fs_postcount+'$num' WHERE fs_cat='$ns'");
 			
-			cot_forum_sectionsetlast($s);
-			cot_forum_sectionsetlast($ns);			
+			cot_forums_sectionsetlast($s);
+			cot_forums_sectionsetlast($ns);			
 			cot_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
 			break;
 		
 		case 'lock':
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_state=1, ft_sticky=0 WHERE ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 0 ), "ft_id='$q'");
 			cot_log("Locked topic #".$q, 'for');
 			break;
 
 		case 'sticky':
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=0 WHERE ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 1 ), "ft_id='$q'");
 			cot_log("Pinned topic #".$q, 'for');
 			break;
 		
 		case 'announcement':
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_sticky=1, ft_state=1 WHERE ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 1 ), "ft_id='$q'");
 			cot_log("Announcement topic #".$q, 'for');
 			break;
 		
 		case 'bump':
 			cot_check_xg();
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_updated='".$sys['now_offset']."' WHERE ft_id='$q'");
-			cot_forum_sectionsetlast($s);
+			$db->update($db_forum_topics, array("ft_updated" => $sys['now_offset']), "ft_id='$q'");
+			cot_forums_sectionsetlast($s);
 			cot_log("Bumped topic #".$q, 'for');
 			break;
 
 		case 'private':
 			cot_log("Made topic #".$q." private", 'for');
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_mode='1' WHERE ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_mode" => 1), "ft_id='$q'");
 			break;
 		
 		case 'clear':
 			cot_log("Resetted topic #".$q, 'for');
-			$sql = $db->query("UPDATE $db_forum_topics SET ft_sticky=0, ft_state=0, ft_mode=0 WHERE ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 0, "ft_mode" => 0), "ft_id='$q'");
 			break;
 	}
 	cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));

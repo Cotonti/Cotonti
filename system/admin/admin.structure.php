@@ -82,8 +82,8 @@ if ($a == 'update')
 			cot_auth_reorder();
 		}
 
-		$area_count = 'cot_'.$n.'_count';
-		$rstructure['structure_count'] = (function_exists($area_count)) ? $area_count($rstructure['structure_code']) : 0;
+		$area_sync = 'cot_'.$n.'_sync';
+		$rstructure['structure_count'] = (function_exists($area_sync)) ? $area_sync($rstructure['structure_code']) : 0;
 
 		$sql1 = $db->update($db_structure, $rstructure, "structure_id='".$i."'");
 	}
@@ -176,14 +176,14 @@ elseif ($a == 'resyncall')
 {
 	cot_check_xg();
 	$res = TRUE;
-	$area_count = 'cot_'.$n.'_count';
+	$area_sync = 'cot_'.$n.'_sync';
 	$sql = $db->query("SELECT structure_code FROM $db_structure WHERE structure_area='".$db->prep($n)."'");
 	while ($row = $sql->fetch())
 	{
-		if(function_exists($area_count))
+		if(function_exists($area_sync))
 		{
-			$items = (function_exists($area_count)) ? $area_count($cat) : 0;
-			$res &= $db->query("UPDATE $db_structure SET structure_count='".(int)$items."' WHERE structure_code='".$db->prep($cat)."' AND structure_area='page'");
+			$items = (function_exists($area_sync)) ? $area_sync($cat) : 0;		
+			$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($cat)."' AND structure_area='".$db->prep($n)."'");
 		}
 	}
 	$sql->closeCursor();

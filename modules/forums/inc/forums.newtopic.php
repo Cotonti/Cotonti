@@ -110,7 +110,7 @@ if ($a == 'newtopic')
 		
 		if ($cfg['forums'][$s]['autoprune'] > 0)
 		{
-			cot_forum_prunetopics('updated', $s, $cfg['forums'][$s]['autoprune']);
+			cot_forums_prunetopics('updated', $s, $cfg['forums'][$s]['autoprune']);
 		}
 		
 		if ($cfg['forums'][$s]['countposts'])
@@ -120,7 +120,7 @@ if ($a == 'newtopic')
 		
 		if (!$newprvtopic)
 		{
-			cot_forum_sectionsetlast($s);
+			cot_forums_sectionsetlast($s);
 		}
 		
 		/* === Hook === */
