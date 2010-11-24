@@ -23,8 +23,16 @@ if ($cfg['plugin']['tags']['pages'])
 	if (!isset($tags))
 	{
 		cot_require('tags', true);
+		if ($cfg['plugin']['i18n'] && $i18n_enabled && $i18n_notmain)
+		{
+			$tags_extra = array('tag_locale' => $i18n_locale);
+		}
+		else
+		{
+			$tags_extra = null;
+		}
 		$item_id = $pag['page_id'];
-		$tags = cot_tag_list($item_id);
+		$tags = cot_tag_list($item_id, 'pages', $tags_extra);
 	}
 	if (count($tags) > 0)
 	{

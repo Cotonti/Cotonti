@@ -41,6 +41,20 @@
 			<textarea id="translate_text" name="translate_text" class="editor">{I18N_IPAGE_TEXT}</textarea>
 		</td>
 	</tr>
+	<!-- BEGIN: TAGS -->
+	<tr>
+		<td>
+			{PHP.L.Tags}
+		</td>
+		<td>
+			<em>{I18N_PAGE_TAGS}</em>
+		</td>
+		<td>
+			{I18N_IPAGE_TAGS}
+			({PHP.L.tags_comma_separated})
+		</td>
+	</tr>
+	<!-- END: TAGS -->
 	<tr>
 		<td colspan="3">
 			<input type="submit" value="{PHP.L.Submit}" />
@@ -48,11 +62,4 @@
 	</tr>
 </table>
 </form>
-<script type="text/javascript">
-//<![CDATA[
-ckeditorConfig.width = "450";
-ckeditorConfig.height = "500";
-CKEDITOR.replace(document.getElementById("translate_text"), ckeditorConfig);
-//]]>
-</script>
 <!-- END: MAIN -->
