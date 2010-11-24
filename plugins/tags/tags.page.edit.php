@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=page.edit.update.done
+Hooks=page.edit.update.done,i18n.page.edit.update
 [END_COT_EXT]
 ==================== */
 
@@ -20,9 +20,18 @@ defined('COT_CODE') or die('Wrong URL');
 if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
 	cot_require('tags', true);
+	// I18n
+	if ($cot_current_hook == 'i18n.page.edit.update')
+	{
+		$tags_extra = array('tag_locale' => $i18n_locale);
+	}
+	else
+	{
+		$tags_extra = null;
+	}
 	$rtags = cot_import('rtags', 'P', 'TXT');
 	$tags = cot_tag_parse($rtags);
-	$old_tags = cot_tag_list($id);
+	$old_tags = cot_tag_list($id, 'pages', $tags_extra);
 	$kept_tags = array();
 	$new_tags = array();
 	// Find new tags, count old tags that have been left
@@ -44,7 +53,7 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 	$rem_tags = array_diff($old_tags, $kept_tags);
 	foreach ($rem_tags as $tag)
 	{
-		cot_tag_remove($tag, $id);
+		cot_tag_remove($tag, $id, 'pages', $tags_extra);
 	}
 	// Add new tags
 	$ncnt = count($new_tags);
@@ -59,7 +68,7 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 	}
 	for ($i = 0; $i < $lim; $i++)
 	{
-		cot_tag($new_tags[$i], $id);
+		cot_tag($new_tags[$i], $id, 'pages', $tags_extra);
 	}
 }
 

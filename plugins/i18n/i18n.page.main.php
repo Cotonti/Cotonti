@@ -2,6 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=page.main
+Order=5
 [END_COT_EXT]
 ==================== */
 

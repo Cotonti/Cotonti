@@ -20,8 +20,17 @@ defined('COT_CODE') or die('Wrong URL');
 if ($cfg['plugin']['tags']['pages'])
 {
 	cot_require('tags', true);
+	// I18n or not i18n
+	if ($cfg['plugin']['i18n'] && $i18n_enabled && $i18n_notmain)
+	{
+		$tags_extra = array('tag_locale' => $i18n_locale);
+	}
+	else
+	{
+		$tags_extra = null;
+	}
 	$item_id = $pag['page_id'];
-	$tags = cot_tag_list($item_id);
+	$tags = cot_tag_list($item_id, 'pages', $tags_extra);
 	$tag_keywords = implode(', ', $tags);
 	$out['keywords'] = $tag_keywords;
 }

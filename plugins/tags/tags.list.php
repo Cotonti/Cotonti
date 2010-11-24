@@ -21,6 +21,16 @@ defined('COT_CODE') or die('Wrong URL');
 if ($cfg['plugin']['tags']['pages'])
 {
 	cot_require('tags', true);
+	// I18n or not i18n
+	if ($cfg['plugin']['i18n'] && $i18n_enabled && $i18n_notmain)
+	{
+		$tags_extra = array('tag_locale' => $i18n_locale);
+		$tags_where .= " AND tag_locale = '$i18n_locale'";
+	}
+	else
+	{
+		$tags_extra = null;
+	}
 	// Get all subcategories
 	$tc_cats = array("'$c'");
 	$tc_path = $cot_cat[$c]['path'] . '.';
@@ -51,7 +61,7 @@ if ($cfg['plugin']['tags']['pages'])
 	$tc_res = $db->query("SELECT r.tag AS tag, COUNT(r.tag_item) AS cnt
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 		ON r.tag_item = p.page_id
-		WHERE r.tag_area = 'pages' AND p.page_cat IN ($tc_cats) AND p.page_state = 0
+		WHERE r.tag_area = 'pages' $tags_where AND p.page_cat IN ($tc_cats) AND p.page_state = 0
 		GROUP BY r.tag
 		ORDER BY $order $limit");
 	$tc_html = $R['tags_code_cloud_open'];

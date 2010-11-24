@@ -21,17 +21,27 @@ cot_require_rc('tags', true);
  * @param string $tag The tag (keyword)
  * @param int $item Item ID
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
+ * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
  */
-function cot_tag($tag, $item, $area = 'pages')
+function cot_tag($tag, $item, $area = 'pages', $extra = null)
 {
 	global $db, $db_tag_references;
 	$item = (int) $item;
-	if (cot_tag_isset($tag, $item, $area))
+	if (cot_tag_isset($tag, $item, $area, $extra))
 	{
 		return false;
 	}
-	$db->query("INSERT INTO $db_tag_references VALUES('$tag', $item, '$area')");
+	$data = array(
+		'tag' => $tag,
+		'tag_item' => $item,
+		'tag_area' => $area
+	);
+	if (!is_null($extra))
+	{
+		$data = array_merge($data, $extra);
+	}
+	$db->insert($db_tag_references, $data);
 	cot_tag_register($tag);
 	return true;
 }
@@ -92,7 +102,7 @@ function cot_tag_complete($tag, $min_length = 3)
 		return false;
 	}
 	$res = array();
-	$sql = $db->query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE '$tag%'");
+	$sql = $db->query("SELECT `tag` FROM $db_tags WHERE `tag` LIKE ?", array($tag . '%'));
 	while ($row = $sql->fetch())
 	{
 		$res[] = $row['tag'];
@@ -106,15 +116,23 @@ function cot_tag_complete($tag, $min_length = 3)
  *
  * @param string $tag The tag (keyword)
  * @param string $area Site area or empty to count in all areas
+ * @param mixed $extra Extra condition (name => value) for plugins
  * @return int
  */
-function cot_tag_count($tag, $area = '')
+function cot_tag_count($tag, $area = '', $extra = null)
 {
 	global $db, $db_tag_references;
-	$query = "SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag'";
+	$query = "SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = " . $db->quote($tag);
 	if (!empty($area))
 	{
-		$query .= " AND tag_area = '$area'";
+		$query .= " AND tag_area = " . $db->quote($area);
+	}
+	if (!is_null($extra))
+	{
+		foreach ($extra as $key => $val)
+		{
+			$query .= " AND $key = " . $db->quote($val);
+		}
 	}
 	return (int) $db->query($query)->fetchColumn();
 }
@@ -128,7 +146,7 @@ function cot_tag_count($tag, $area = '')
 function cot_tag_exists($tag)
 {
 	global $db, $db_tags;
-	return $db->query("SELECT COUNT(*) FROM $db_tags WHERE `tag` = '$tag'")->fetchColumn() == 1;
+	return $db->query("SELECT COUNT(*) FROM $db_tags WHERE `tag` = ?", array($tag))->fetchColumn() == 1;
 }
 
 /**
@@ -137,13 +155,23 @@ function cot_tag_exists($tag)
  * @param string $tag The tag (keyword)
  * @param int $item Item ID
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
+ * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
  */
-function cot_tag_isset($tag, $item, $area = 'pages')
+function cot_tag_isset($tag, $item, $area = 'pages', $extra = null)
 {
 	global $db, $db_tag_references;
 	$item = (int) $item;
-	$sql = $db->query("SELECT COUNT(*) FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
+	$query = "SELECT COUNT(*) FROM $db_tag_references
+		WHERE `tag` = " . $db->quote($tag) . " AND tag_item = $item AND tag_area = '$area'";
+	if (!is_null($extra))
+	{
+		foreach ($extra as $key => $val)
+		{
+			$query .= " AND $key = " . $db->quote($val);
+		}
+	}
+	$sql = $db->query($query);
 	return $sql->fetchColumn() == 1;
 }
 
@@ -152,13 +180,23 @@ function cot_tag_isset($tag, $item, $area = 'pages')
  *
  * @param int $item Item ID
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
+ * @param mixed $extra Extra condition (name => value) for plugins
  * @return array
  */
-function cot_tag_list($item, $area = 'pages')
+function cot_tag_list($item, $area = 'pages', $extra = null)
 {
 	global $db, $db_tag_references;
 	$res = array();
-	$sql = $db->query("SELECT `tag` FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
+	$query = "SELECT `tag` FROM $db_tag_references
+		WHERE tag_item = $item AND tag_area = '$area'";
+	if (!is_null($extra))
+	{
+		foreach ($extra as $key => $val)
+		{
+			$query .= " AND $key = " . $db->quote($val);
+		}
+	}
+	$sql = $db->query($query);
 	while ($row = $sql->fetch())
 	{
 		$res[] = $row['tag'];
@@ -252,7 +290,7 @@ function cot_tag_prep($tag)
 function cot_tag_register($tag)
 {
 	global $db, $db_tags;
-	$db->query("INSERT IGNORE INTO $db_tags VALUES('$tag')");
+	$db->query("INSERT IGNORE INTO $db_tags VALUES(" . $db->quote($tag) . ")");
 }
 
 /**
@@ -261,14 +299,24 @@ function cot_tag_register($tag)
  * @param string $tag The tag (keyword)
  * @param int $item Item ID
  * @param string $area Site area code (e.g. 'pages', 'forums', 'blog')
+ * @param mixed $extra Extra condition (name => value) for plugins
  * @return bool
  */
-function cot_tag_remove($tag, $item, $area = 'pages')
+function cot_tag_remove($tag, $item, $area = 'pages', $extra = null)
 {
 	global $db, $db_tag_references;
-	if (cot_tag_isset($tag, $item, $area))
+	if (cot_tag_isset($tag, $item, $area, $extra))
 	{
-		$db->query("DELETE FROM $db_tag_references WHERE `tag` = '$tag' AND tag_item = $item AND tag_area = '$area'");
+		$query = "DELETE FROM $db_tag_references
+			WHERE `tag` = " . $db->quote($tag) . " AND tag_item = $item AND tag_area = '$area'";
+		if (!is_null($extra))
+		{
+			foreach ($extra as $key => $val)
+			{
+				$query .= " AND $key = " . $db->quote($val);
+			}
+		}
+		$db->query($query);
 		return true;
 	}
 	return false;
@@ -280,20 +328,28 @@ function cot_tag_remove($tag, $item, $area = 'pages')
  *
  * @param int $item Item ID
  * @param string $area Site area
+ * @param mixed $extra Extra condition (name => value) for plugins
  * @return int
  */
-function cot_tag_remove_all($item = 0, $area = 'pages')
+function cot_tag_remove_all($item = 0, $area = 'pages', $extra = null)
 {
 	global $db, $db_tag_references;
 	if ($item == 0)
 	{
-		$db->query("DELETE FROM $db_tag_references WHERE tag_area = '$area'");
+		$query = "DELETE FROM $db_tag_references WHERE tag_area = '$area'";
 	}
 	else
 	{
-		$db->query("DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'");
+		$query = "DELETE FROM $db_tag_references WHERE tag_item = $item AND tag_area = '$area'";
 	}
-	return $db->affectedRows;
+	if (!is_null($extra))
+	{
+		foreach ($extra as $key => $val)
+		{
+			$query .= " AND $key = " . $db->quote($val);
+		}
+	}
+	return $db->query($query)->rowCount();
 }
 
 /**

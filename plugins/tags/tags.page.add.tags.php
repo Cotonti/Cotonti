@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=page.add.tags
+Hooks=page.add.tags,i18n.page.translate.tags
 Tags=page.add.tpl:{PAGEADD_FORM_TAGS},{PAGEADD_TOP_TAGS},{PAGEADD_TOP_TAGS_HINT}
 [END_COT_EXT]
 ==================== */
@@ -26,6 +26,13 @@ if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 		'PAGEADD_TOP_TAGS_HINT' => $L['tags_comma_separated'],
 		'PAGEADD_FORM_TAGS' => cot_rc('tags_input_editpage', array('tags' => ''))
 	));
+	if ($cot_current_hook == 'i18n.page.translate.tags')
+	{
+		$t->assign(array(
+			'I18N_PAGE_TAGS' => implode(', ', cot_tag_list($id)),
+			'I18N_IPAGE_TAGS' => cot_rc('tags_input_editpage', array('tags' => ''))
+		));
+	}
 	$t->parse('MAIN.TAGS');
 }
 

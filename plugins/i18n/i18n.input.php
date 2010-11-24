@@ -30,7 +30,7 @@ if (!$i18n_locales)
 
 // Select a locale
 $i18n_locale = cot_import('l', 'G', 'ALP');
-if (empty($i18n_locale) || !in_array($i18n_locale, array_keys($i18n_locales)))
+if (empty($i18n_locale) || !isset($i18n_locales[$i18n_locale]))
 {
 	$i18n_locale = $cfg['defaultlang'];
 }

@@ -154,13 +154,25 @@ function cot_tag_search_pages($query)
 		default:
 			$order = '';
 	}
-	$sql = $db->query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat
+	
+	/* == Hook == */
+	foreach (cot_getextplugins('tags.search.pages.query') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
+	$sql = $db->query("SELECT p.page_id, p.page_alias, p.page_title, p.page_cat $join_columns
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
-			ON r.tag_item = p.page_id
-		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0
+			ON r.tag_item = p.page_id $join_tables
+		WHERE r.tag_area = 'pages' AND ($query) AND p.page_id IS NOT NULL AND p.page_state = 0 $join_where
 		$order
 		LIMIT $d, {$cfg['maxrowsperpage']}");
 	$t->assign('TAGS_RESULT_TITLE', $L['tags_Found_in_pages']);
+
+	/* == Hook : Part 1 == */
+	$extp = cot_getextplugins('tags.search.pages.loop');
+	/* ===== */
 	while ($row = $sql->fetch())
 	{
 		$tags = cot_tag_list($row['page_id']);
@@ -181,6 +193,12 @@ function cot_tag_search_pages($query)
 			'TAGS_RESULT_ROW_PATH' => cot_build_catpath('page', $row['page_cat']),
 			'TAGS_RESULT_ROW_TAGS' => $tag_list
 		));
+		/* == Hook : Part 2 == */
+		foreach ($extp as $pl)
+		{
+			include $pl;
+		}
+		/* ===== */
 		$t->parse('MAIN.TAGS_RESULT.TAGS_RESULT_ROW');
 	}
 	$sql->closeCursor();
@@ -190,6 +208,14 @@ function cot_tag_search_pages($query)
 		'TAGS_PAGENEXT' => $pagenav['next'],
 		'TAGS_PAGNAV' => $pagenav['main']
 	));
+
+	/* == Hook == */
+	foreach (cot_getextplugins('tags.search.pages.tags') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
+
 	$t->parse('MAIN.TAGS_RESULT');
 }
 

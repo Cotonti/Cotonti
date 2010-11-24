@@ -172,7 +172,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 	}
 	elseif ($a == 'delete' && ($i18n_admin || $usr['id'] == $pag['ipage_translatorid']))
 	{
-		$db->delete($db_i18n_pages, "ipage_id = $id");
+		$db->delete($db_i18n_pages, "ipage_id = $id AND ipage_locale = '$i18n_locale'");
 		// TODO trash
 
 		/* === Hook === */
