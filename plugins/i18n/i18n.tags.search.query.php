@@ -21,7 +21,7 @@ global $i18n_structure, $i18n_locale, $db_i18n_pages;
 
 if (is_array($i18n_structure) && count($i18n_structure) > 0)
 {
-	cot_require('i18n', true);
+	require_once cot_incfile('i18n', 'plug');
 
 	// Join the translation table
 	$join_columns .= ', i18n.*';

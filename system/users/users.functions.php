@@ -10,8 +10,8 @@
  * @license BSD
  */
 // Requirements
-cot_require_lang('users', 'core');
-cot_require_rc('users');
+require_once cot_langfile('users', 'core');
+require_once cot_incfile('users', 'module', 'resources');
 
 // Extafield globals
 $GLOBALS['cot_extrafields']['users'] = (!empty($GLOBALS['cot_extrafields'][$GLOBALS['db_users']])) ? $GLOBALS['cot_extrafields'][$GLOBALS['db_users']] : array();

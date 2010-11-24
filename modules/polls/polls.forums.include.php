@@ -17,6 +17,6 @@ Hooks=forums.newtopic.first,forums.editpost.first,forums.posts.first,forums.topi
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('polls');
+require_once cot_incfile('polls', 'module');
 
 ?>

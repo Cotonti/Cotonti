@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
-	cot_require('tags', true);
+	require_once cot_incfile('tags', 'plug');
 	// I18n
 	if ($cot_current_hook == 'i18n.page.edit.update')
 	{

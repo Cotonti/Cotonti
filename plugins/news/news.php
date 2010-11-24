@@ -51,7 +51,7 @@ $c = (empty($c)||!isset($cot_cat[$c])) ? $indexcat : $c;
 
 if (isset($cats[$c]) && !empty($individual)) unset($cats[$c]);
 
-cot_require('users');
+require_once cot_incfile('users', 'module');
 require_once $cfg['plugins_dir'].'/news/inc/news.functions.php';
 
 if ($cfg['plugin']['news']['maxpages'] > 0 && !empty($c))

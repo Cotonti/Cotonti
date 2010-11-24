@@ -31,7 +31,7 @@ if(!empty($p))
 
 	if (file_exists(cot_langfile($p, 'plug')))
 	{
-		cot_require_lang($p, 'plug');
+		require_once cot_langfile($p, 'plug');
 	}
 
 	$extp = array();

@@ -39,7 +39,7 @@ require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
 
 // Self requirements
-cot_require_lang('rss', 'module');
+require_once cot_langfile('rss', 'module');
 
 // Input import
 $c = cot_import('c', 'G', 'ALP');
@@ -76,7 +76,7 @@ foreach (cot_getextplugins('rss.create') as $pl)
 
 if ($c == "topics")
 {
-	cot_require('forums');
+	require_once cot_incfile('forums', 'module');
 
 	$defult_c = false;
 	$topic_id = ($id == 'all') ? 0 : $id;
@@ -125,7 +125,7 @@ if ($c == "topics")
 }
 elseif ($c == "section")
 {
-	cot_require('forums');
+	require_once cot_incfile('forums', 'module');
 
 	$defult_c = false;
 	$forum_id = ($id == 'all') ? 0 : $id;;
@@ -173,7 +173,7 @@ elseif ($c == "section")
 }
 elseif ($c == "forums")
 {
-	cot_require('forums');
+	require_once cot_incfile('forums', 'module');
 
 	$defult_c = false;
 	$rss_title = $domain." : ".$L['rss_allforums_item_title'];
@@ -211,7 +211,7 @@ elseif ($c == "forums")
 }
 elseif ($defult_c)
 {
-	cot_require('page');
+	require_once cot_incfile('page', 'module');
 
 	if ($id != 'all')
 	{

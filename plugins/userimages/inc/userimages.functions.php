@@ -2,7 +2,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_api('configuration');
+require_once cot_incfile('configuration');
 
 /**
  * Get confuration for user image types

@@ -23,8 +23,8 @@ cot_block($usr['isadmin']);
 
 $t = new XTemplate(cot_skinfile('urleditor.admin', true));
 
-cot_require_api('forms');
-cot_require_lang('urleditor', 'plug');
+require_once cot_incfile('forms');
+require_once cot_langfile('urleditor', 'plug');
 
 $adminhelp = $L['adm_help_urls'];
 

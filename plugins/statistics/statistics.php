@@ -19,11 +19,11 @@ defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
 // TODO show statistics for installed modules only
 
-cot_require('forums');
-cot_require('page');
-cot_require('pfs');
-cot_require('pm');
-cot_require('polls');
+require_once cot_incfile('forums', 'module');
+require_once cot_incfile('page', 'module');
+require_once cot_incfile('pfs', 'module');
+require_once cot_incfile('pm', 'module');
+require_once cot_incfile('polls', 'module');
 
 $s = cot_import('s', 'G', 'TXT');
 

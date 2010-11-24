@@ -22,7 +22,7 @@ cot_block($usr['auth_read']);
 $tt = new XTemplate(cot_skinfile('referers.admin', true));
 
 $GLOBALS['db_referers'] = (isset($GLOBALS['db_referers'])) ? $GLOBALS['db_referers'] : $GLOBALS['db_x'] . 'referers';
-cot_require_lang('referers', 'plug');
+require_once cot_langfile('referers', 'plug');
 $adminhelp = $L['adm_help_referers'];
 
 $d = cot_import('d', 'G', 'INT');

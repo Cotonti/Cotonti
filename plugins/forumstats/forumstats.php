@@ -17,7 +17,7 @@ Hooks=standalone
 
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
-cot_require('forums');
+require_once cot_incfile('forums', 'module');
 
 $plugin_title = $L['plu_title'];
 

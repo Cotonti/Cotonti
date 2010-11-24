@@ -18,7 +18,7 @@ Tags=page.add.tpl:{PAGEADD_FORM_PFS},{PAGEADD_FORM_SFS},{PAGEADD_FORM_URL_PFS},{
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_require('pfs');
+require_once cot_incfile('pfs', 'module');
 
 if ($cot_current_hook == 'page.add.tags')
 {

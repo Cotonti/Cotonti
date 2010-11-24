@@ -24,11 +24,11 @@ require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
 
 // Additional API requirements
-cot_require_api('extrafields');
-cot_require('users');
+require_once cot_incfile('extrafields');
+require_once cot_incfile('users', 'module');
 
 // Self requirements
-cot_require('pm');
+require_once cot_incfile('pm', 'module');
 
 // Mode choice
 if (!in_array($m, array('send', 'message')))
@@ -36,5 +36,5 @@ if (!in_array($m, array('send', 'message')))
 	$m = 'list';
 }
 
-require_once cot_incfile('pm', $m);
+require_once cot_incfile('pm', 'module', $m);
 ?>

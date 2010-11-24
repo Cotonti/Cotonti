@@ -12,9 +12,9 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
-cot_require_lang('page', 'module');
-cot_require_rc('page');
-cot_require_api('forms');
+require_once cot_langfile('page', 'module');
+require_once cot_incfile('page', 'module', 'resources');
+require_once cot_incfile('forms');
 
 // Global variables
 $GLOBALS['db_pages'] = (isset($GLOBALS['db_pages'])) ? $GLOBALS['db_pages'] : $GLOBALS['db_x'] . 'pages';

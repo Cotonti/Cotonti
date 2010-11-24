@@ -24,7 +24,7 @@ $s = cot_import('s', 'G', 'ALP');
 
 if ($s == 'allpfs')
 {
-	require cot_incfile('pfs', 'admin.allpfs');
+	require cot_incfile('pfs', 'module', 'admin.allpfs');
 }
 else
 {

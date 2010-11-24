@@ -12,7 +12,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a');
 cot_block($usr['auth_write']);

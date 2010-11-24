@@ -14,8 +14,8 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 cot_block($usr['isadmin']);
 
-cot_require_api('auth');
-cot_require_api('uploads');
+require_once cot_incfile('auth');
+require_once cot_incfile('uploads');
 
 $t = new XTemplate(cot_skinfile('admin.users'));
 

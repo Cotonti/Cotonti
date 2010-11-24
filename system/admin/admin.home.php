@@ -11,7 +11,7 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-cot_require('page'); // FIXME hard dependency
+require_once cot_incfile('page', 'module'); // FIXME hard dependency
 
 //Version Checking
 preg_match('/Rev: ([0-9]+)/', $cfg['svnrevision'], $revmatch);

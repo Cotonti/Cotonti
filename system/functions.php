@@ -2234,7 +2234,7 @@ function cot_imagesharpen($imgdata, $source_width, $target_width)
  */
 function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 {
-	cot_require_api('extensions');
+	require_once cot_incfile('extensions');
 	$handle = opendir('./themes/');
 	while ($f = readdir($handle))
 	{
@@ -2674,25 +2674,30 @@ function cot_message($text, $class = 'ok', $src = 'default')
 /**
  * Returns path to include file
  *
- * @param string $extension Extension name
+ * @param string $name Extension or API name
+ * @param string $type Extension type: 'module', 'plug' or 'core' for core API
  * @param string $part Name of the extension part
- * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
  * @return string File path
  */
-function cot_incfile($extension, $part, $is_plugin = false)
+function cot_incfile($name, $type = 'core', $part = 'functions')
 {
 	global $cfg;
-	if ($is_plugin)
+	if ($type == 'core')
 	{
-		return $cfg['plugins_dir']."/$extension/inc/$extension.$part.php";
+		return $cfg['system_dir'] . "/$name.php";
 	}
-	elseif ($extension == 'admin' || $extension == 'users' || $extension == 'message')
+	elseif ($type == 'plug')
 	{
-		return $cfg['system_dir']."/$extension/$extension.$part.php";
+		return $cfg['plugins_dir']."/$name/inc/$name.$part.php";
+	}
+	elseif ($name == 'admin' || $name == 'users' || $name == 'message')
+	{
+		// Built-in extensions
+		return $cfg['system_dir']."/$name/$name.$part.php";
 	}
 	else
 	{
-		return $cfg['modules_dir']."/$extension/inc/$extension.$part.php";
+		return $cfg['modules_dir']."/$name/inc/$name.$part.php";
 	}
 }
 
@@ -2743,67 +2748,11 @@ function cot_langfile($name, $type = 'plug', $default = 'en')
 }
 
 /**
- * Requires an extension API and its attendant files
- *
- * @param string $name Extension name
- * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
- * @param string $part Extension part
- */
-function cot_require($name, $is_plugin = false, $part = 'functions')
-{
-	require_once cot_incfile($name, $part, $is_plugin);
-}
-
-/**
- * Requires a core API
- *
- * @param string $api_name API name
- */
-function cot_require_api($api_name)
-{
-	global $cfg;
-	require_once $cfg['system_dir'] . "/$api_name.php";
-}
-
-/**
- * Loads a requested language file into global $L array if it is not already there.
- *
- * @param string $name Extension name
- * @param bool $type Langfile type: 'plug', 'module' or 'core'
- * @param mixed $default Default (fallback) language code
- * @see cot_langfile()
- */
-function cot_require_lang($name, $type = 'plug', $default = 'en')
-{
-	global $cfg, $L, $Ls, $R, $themelang;
-	require_once cot_langfile($name, $type, $default);
-}
-
-/**
- * Loads a requested resource file into global $L array if it is not already there.
- *
- * @param string $name Extension name
- * @param bool $is_plugin TRUE if extension is a plugin, FALSE if it is a module
- */
-function cot_require_rc($name, $is_plugin = false)
-{
-	global $cfg, $L, $Ls, $R, $themeR, $usr;
-	require_once cot_incfile($name, 'resources', $is_plugin);
-	// Theme resources override
-	if($themeR)
-	{
-		$R = array_merge($R, $themeR);
-	}
-}
-
-/**
- * Auxilliary function that loads theme resources file into an array.
- * Used by cot_require_rc()
+ * Auxilliary function that returns theme resources as an array
  * 
- * @see cot_require_rc()
  * @return array Theme resource strings
  */
-function cot_require_rc_theme()
+function cot_get_rc_theme()
 {
 	global $usr;
 	$R = array();

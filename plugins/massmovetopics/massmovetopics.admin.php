@@ -17,7 +17,7 @@ Hooks=tools
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('forums');
+require_once cot_incfile('forums', 'module');
 
 $plugin_title = "Mass-move topics in forums";
 

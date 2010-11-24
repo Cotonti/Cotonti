@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'])
 {
-	cot_require('tags', true);
+	require_once cot_incfile('tags', 'plug');
 	$item_id = $row['ft_id'];
 	$tags = cot_tag_list($item_id, 'forums');
 	if (count($tags) > 0)

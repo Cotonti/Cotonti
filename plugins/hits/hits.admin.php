@@ -19,8 +19,8 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'hits');
 cot_block($usr['auth_read']);
 
-cot_require_lang('hits', 'plug');
-cot_require('hits', true);
+require_once cot_langfile('hits', 'plug');
+require_once cot_incfile('hits', 'plug');
 $tt = new XTemplate(cot_skinfile('hits.admin', true));
 
 $adminhelp = $L['adm_help_hits'];

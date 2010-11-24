@@ -18,7 +18,7 @@ Tags=recentitems.tpl:{PAGE_ROW_COMMENTS}
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('comments', true);
+require_once cot_incfile('comments', 'plug');
 
 $page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 $recentitems->assign(array(

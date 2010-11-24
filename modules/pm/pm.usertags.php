@@ -17,7 +17,7 @@ Hooks=users.usertags.main
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_require('pm');
+require_once cot_incfile('pm', 'module');
 
 $temp_array['PM'] = cot_build_pm($user_data['user_id']);
 $temp_array['PMNOTIFY'] = $cot_yesno[$user_data['user_pmnotify']];

@@ -12,7 +12,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('pfs'); // FIXME hard PFS dependency
+require_once cot_incfile('pfs', 'module'); // FIXME hard PFS dependency
 
 @clearstatcache();
 
@@ -171,7 +171,7 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = cot_skinfile(array('users', 'profile'));
 $t = new XTemplate($mskin);
 
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 $timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 foreach($timezonelist as $x)

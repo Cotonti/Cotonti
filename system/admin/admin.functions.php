@@ -12,11 +12,11 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
-cot_require_api('extrafields');
-cot_require_api('forms');
-cot_require_api('extensions');
-cot_require_lang('admin', 'core');
-cot_require_rc('admin');
+require_once cot_incfile('extrafields');
+require_once cot_incfile('forms');
+require_once cot_incfile('extensions');
+require_once cot_langfile('admin', 'core');
+require_once cot_incfile('admin', 'module', 'resources');
 
 /* ======== Defaulting the admin variables ========= */
 

@@ -17,8 +17,8 @@ Hooks=standalone
 
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
-cot_require('comments', true);
-cot_require_api('forms');
+require_once cot_incfile('comments', 'plug');
+require_once cot_incfile('forms');
 
 $m = cot_import('m', 'G', 'ALP');
 $a = cot_import('a', 'G', 'ALP');

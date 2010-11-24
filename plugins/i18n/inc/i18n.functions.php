@@ -11,8 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_lang('i18n', 'plug');
-cot_require_rc('i18n', true);
+require_once cot_langfile('i18n', 'plug');
+require_once cot_incfile('i18n', 'plug', 'resources');
 
 $GLOBALS['db_i18n_locales'] = (isset($GLOBALS['db_i18n_locales'])) ? $GLOBALS['db_i18n_locales'] : $GLOBALS['db_x'] . 'i18n_locales';
 $GLOBALS['db_i18n_pages'] = (isset($GLOBALS['db_i18n_pages'])) ? $GLOBALS['db_i18n_pages'] : $GLOBALS['db_x'] . 'i18n_pages';

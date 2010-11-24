@@ -50,6 +50,12 @@ class XTemplate
 		{
 			$this->restart($path);
 		}
+		// Theme resources override trick
+		global $R, $themeR;
+		if ($themeR)
+		{
+			$R = array_merge($R, $themeR);
+		}
 	}
 
 	/**

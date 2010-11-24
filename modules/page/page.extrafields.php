@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($n == 'page')
 {
-	cot_require('page');
+	require_once cot_incfile('page', 'module');
 	$adminpath[] = array(cot_url('admin', 'm=page'), $L['Page']);
 	$adminpath[] = array(cot_url('admin', 'm=extrafields&n=page'), $L['adm_extrafields']);
 	$adminhelp = $L['adm_help_pages_extrafield'];

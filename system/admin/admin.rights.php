@@ -118,7 +118,7 @@ foreach ($cot_modules as $code => $mod)
 {
 	if (file_exists(cot_langfile($code, 'module')))
 	{
-		cot_require_lang($code, 'module');
+		require_once cot_langfile($code, 'module');
 	}
 }
 

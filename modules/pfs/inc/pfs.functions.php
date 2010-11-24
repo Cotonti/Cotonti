@@ -12,10 +12,10 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
-cot_require_lang('pfs', 'module');
-cot_require_rc('pfs');
+require_once cot_langfile('pfs', 'module');
+require_once cot_incfile('pfs', 'module', 'resources');
 
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 // Global variables
 $GLOBALS['db_pfs'] = (isset($GLOBALS['db_pfs'])) ? $GLOBALS['db_pfs'] : $GLOBALS['db_x'] . 'pfs';

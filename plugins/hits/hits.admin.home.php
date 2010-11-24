@@ -17,8 +17,8 @@ Hooks=admin.home
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_lang('hits', 'plug');
-cot_require('hits', true);
+require_once cot_langfile('hits', 'plug');
+require_once cot_incfile('hits', 'plug');
 
 $tt = new XTemplate(cot_skinfile('hits.admin.home', true));
 //Show hit stats
@@ -68,7 +68,7 @@ if (!$cfg['plugin']['hits']['disableactivitystats'])
 
 	if ($cfg['forums'])
 	{
-		cot_require('forums');
+		require_once cot_incfile('forums', 'module');
 
 		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
 		$newtopics = $sql->fetchColumn();
@@ -84,7 +84,7 @@ if (!$cfg['plugin']['hits']['disableactivitystats'])
 
 	if ($cfg['pm'])
 	{
-	 cot_require('pm');
+	 require_once cot_incfile('pm', 'module');
 		$sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
 		$newpms = $sql->fetchColumn();
 	}

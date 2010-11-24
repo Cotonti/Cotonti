@@ -20,13 +20,13 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'trashcan');
 cot_block($usr['isadmin']);
 
-cot_require('users');
-$cfg['page'] && cot_require('page');
-$cfg['forums'] && cot_require('forums');
-$cfg['comments'] && cot_require('comments', true);
+require_once cot_incfile('users', 'module');
+$cfg['page'] && require_once cot_incfile('page', 'module');
+$cfg['forums'] && require_once cot_incfile('forums', 'module');
+$cfg['comments'] && require_once cot_incfile('comments', 'plug');
 
-cot_require('trashcan', true);
-cot_require_lang('trashcan', 'plug');
+require_once cot_incfile('trashcan', 'plug');
+require_once cot_langfile('trashcan', 'plug');
 
 $adminhelp = $L['adm_help_trashcan'];
 

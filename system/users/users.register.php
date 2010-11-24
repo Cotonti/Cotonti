@@ -12,7 +12,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_api('auth');
+require_once cot_incfile('auth');
 
 $v = cot_import('v','G','ALP');
 $y = cot_import('y','G','INT');
@@ -222,7 +222,7 @@ $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(cot_skinfile('users.register'));
 
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 $timezonelist = array('-12', '-11', '-10', '-09', '-08', '-07', '-06', '-05', '-04', '-03',  '-03.5', '-02', '-01', '+00', '+01', '+02', '+03', '+03.5', '+04', '+04.5', '+05', '+05.5', '+06', '+07', '+08', '+09', '+09.5', '+10', '+11', '+12');
 foreach($timezonelist as $x)

@@ -22,7 +22,7 @@ if ($cfg['plugin']['tags']['pages']
 	|| $cfg['plugin']['tags']['forums'] && defined('COT_FORUMS')
 	|| defined('COT_PLUG'))
 {
-	cot_require('tags', true);
+	require_once cot_incfile('tags', 'plug');
 }
 
 ?>

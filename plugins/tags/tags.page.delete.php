@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['pages'] && cot_auth('plug', 'tags', 'W'))
 {
-	cot_require('tags', true);
+	require_once cot_incfile('tags', 'plug');
 	if ($cot_current_hook == 'i18n.page.delete.done')
 	{
 		$tags_extra = array('tag_locale' => $i18n_locale);

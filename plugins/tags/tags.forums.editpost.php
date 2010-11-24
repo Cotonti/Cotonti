@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W') && $is_first_post)
 {
-	cot_require('tags', true);
+	require_once cot_incfile('tags', 'plug');
 	$rtags = cot_import('rtags', 'P', 'TXT');
 	$tags = cot_tag_parse($rtags);
 	$old_tags = cot_tag_list($q, 'forums');

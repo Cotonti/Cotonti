@@ -17,7 +17,7 @@ Hooks=admin.config.edit.loop
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('page');
+require_once cot_incfile('page', 'module');
 
 if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnajax'])
 {

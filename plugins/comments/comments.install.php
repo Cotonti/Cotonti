@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-require cot_incfile('comments', 'enablement', true);
+require cot_incfile('comments', 'plug', 'enablement');
 
 // Add options into module configs
 foreach ($com_modules_list as $mod_name)

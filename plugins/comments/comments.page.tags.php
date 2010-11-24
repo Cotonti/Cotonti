@@ -18,7 +18,7 @@ Tags=page.tpl:{PAGE_COMMENTS},{PAGE_COMMENTS_DISPLAY},{PAGE_COMMENTS_COUNT},{PAG
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('comments', true);
+require_once cot_incfile('comments', 'plug');
 
 $page_urlp = empty($pag['page_alias']) ? 'id='.$pag['page_id'] : 'al='.$pag['page_alias'];
 $t->assign(array(

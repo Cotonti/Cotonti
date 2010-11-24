@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
-cot_require_api('configuration');
+require_once cot_incfile('configuration');
 
 $t = new XTemplate(cot_skinfile('admin.config'));
 
@@ -214,7 +214,7 @@ switch($n)
 		
 		if ($o != 'core' && file_exists(cot_langfile($p, $o)))
 		{
-			cot_require_lang($p, $o);
+			require_once cot_langfile($p, $o);
 		}
 
 		/* === Hook  === */
@@ -278,10 +278,9 @@ switch($n)
 			elseif ($config_type == COT_CONFIG_TYPE_CALLBACK)
 			{
 				// Preload module/plugin functions
-				$is_plug = $config_owner == 'plug';
-				if (file_exists(cot_incfile($config_cat, 'functions', $is_plug)))
+				if (file_exists(cot_incfile($config_cat, $config_owner)))
 				{
-					require_once cot_incfile($config_cat, 'functions', $is_plug);
+					require_once cot_incfile($config_cat, $config_owner);
 				}
 				if ((preg_match('#^(\w+)\((.*?)\)$#', $row['config_variants'], $mt) && function_exists($mt[1])))
 				{

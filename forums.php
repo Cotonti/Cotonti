@@ -24,11 +24,11 @@ require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
 
 // Additional requirements
-cot_require_api('extrafields');
-cot_require('users');
+require_once cot_incfile('extrafields');
+require_once cot_incfile('users', 'module');
 
 // Self requirements
-cot_require('forums');
+require_once cot_incfile('forums', 'module');
 
 // Mode choice
 if (!in_array($m, array('topics', 'posts', 'editpost', 'newtopic')))
@@ -36,6 +36,6 @@ if (!in_array($m, array('topics', 'posts', 'editpost', 'newtopic')))
 	$m = 'sections';
 }
 
-include cot_incfile('forums', $m);
+include cot_incfile('forums', 'module', $m);
 
 ?>

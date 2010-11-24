@@ -18,7 +18,7 @@ Tags=forums.editpost.tpl:{FORUMS_EDITPOST_MYPFS};forums.editpost.tpl:{FORUMS_POS
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_require('pfs');
+require_once cot_incfile('pfs', 'module');
 
 // TODO unify field names for cleaner multihooking
 if ($cot_current_hook == 'forums.posts.newpost.tags')

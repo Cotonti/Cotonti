@@ -61,7 +61,7 @@ if ($cfg['plugin']['cleaner']['refprune'] > 0 && $cot_plugins['tools']['referers
 
 if ($cfg['pm'])
 {
-	cot_require('pm');
+	require_once cot_incfile('pm', 'module');
 	if ($cfg['plugin']['cleaner']['pmnotread'] > 0)
 	{
 		$timeago = $sys['now_offset'] - ($cfg['plugin']['cleaner']['pmnotread'] * 86400);

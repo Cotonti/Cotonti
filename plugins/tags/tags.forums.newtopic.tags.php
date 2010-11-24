@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'] && cot_auth('plug', 'tags', 'W'))
 {
-	cot_require('tags', true);
+	require_once cot_incfile('tags', 'plug');
 	$t->assign(array(
 		'FORUMS_NEWTOPIC_TOP_TAGS' => $L['Tags'],
 		'FORUMS_NEWTOPIC_TOP_TAGS_HINT' => $L['tags_comma_separated'],

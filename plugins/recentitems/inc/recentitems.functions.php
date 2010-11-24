@@ -11,8 +11,8 @@
 
 defined('COT_CODE') or die("Wrong URL.");
 
-cot_require_api('extrafields');
-cot_require_lang('recentitems', 'plug');
+require_once cot_incfile('extrafields');
+require_once cot_langfile('recentitems', 'plug');
 
 function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
 {

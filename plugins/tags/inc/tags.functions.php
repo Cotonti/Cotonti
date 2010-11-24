@@ -11,9 +11,9 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('tags', true, 'config');
-cot_require_lang('tags', 'plug');
-cot_require_rc('tags', true);
+require_once cot_incfile('tags', 'plug', 'config');
+require_once cot_langfile('tags', 'plug');
+require_once cot_incfile('tags', 'plug', 'resources');
 
 /**
  * Tags a given item from a specific area with a keyword

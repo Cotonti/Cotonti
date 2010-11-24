@@ -22,7 +22,7 @@ if ($usr['id'] > 0)
 {
 	$out['pms'] = cot_rc_link(cot_url('pm'), $L['Private_Messages']);
 
-	cot_require('pm');
+	require_once cot_incfile('pm', 'module');
 	if ($usr['newpm'])
 	{
 		$sqlpm = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0");
