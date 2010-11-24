@@ -82,14 +82,14 @@ else
 	require_once $cfg['system_dir'].'/common.php';
 }
 
-cot_require_api('forms');
-cot_require_api('extensions');
-cot_require_api('cotemplate');
-cot_require_lang('install', 'module');
-cot_require_lang('users', 'core');
-cot_require_lang('admin', 'core');
+require_once cot_incfile('forms');
+require_once cot_incfile('extensions');
+require_once cot_incfile('cotemplate');
+require_once cot_langfile('install', 'module');
+require_once cot_langfile('users', 'core');
+require_once cot_langfile('admin', 'core');
 
-cot_require_rc('install');
+require_once cot_incfile('install', 'module', 'resources');
 
 // Various Generic Vars needed to operate as Normal
 $theme = $cfg['defaulttheme'];
@@ -101,11 +101,11 @@ $file['sql'] = './setup/install.sql';
 
 if (!$cfg['new_install'])
 {
-	include cot_incfile('install', 'update');
+	include cot_incfile('install', 'module', 'update');
 }
 else
 {
-	include cot_incfile('install', 'install');
+	include cot_incfile('install', 'module', 'install');
 }
 
 ?>

@@ -20,7 +20,7 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'comments');
 cot_block($usr['isadmin']);
 
-cot_require('comments', true);
+require_once cot_incfile('comments', 'plug');
 
 $t = new XTemplate(cot_skinfile('comments.tools', true));
 

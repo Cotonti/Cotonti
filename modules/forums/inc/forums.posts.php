@@ -20,7 +20,7 @@ $d = ((int)$d > 0) ? (int)$d : 0;
 $quote = cot_import('quote', 'G', 'INT');
 
 require_once cot_langfile('countries', 'core');
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.posts.first') as $pl)

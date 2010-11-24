@@ -17,7 +17,7 @@ Hooks=users.query
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_require('hiddengroups', true);
+require_once cot_incfile('hiddengroups', 'plug');
 
 if(!cot_auth('plug', 'hiddengroups', '1'))
 {

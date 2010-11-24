@@ -20,8 +20,8 @@ require_once $cfg['system_dir'] . '/functions.php';
 require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
 
-cot_require('admin');
+require_once cot_incfile('admin', 'module');
 
-include cot_incfile('admin', 'main');
+include cot_incfile('admin', 'module', 'main');
 
 ?>

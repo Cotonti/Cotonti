@@ -21,10 +21,10 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users',
 cot_block($usr['isadmin']);
 
 $tt = new XTemplate(cot_skinfile('userimages.admin', true));
-cot_require('userimages', true);
-require_once cot_incfile('userimages', 'resources', true);
-cot_require_lang('userimages', 'plug');
-cot_require_api('configuration');
+require_once cot_incfile('userimages', 'plug');
+require_once cot_incfile('userimages', 'plug', 'resources');
+require_once cot_langfile('userimages', 'plug');
+require_once cot_incfile('configuration');
 
 $adminhelp = $L['userimages_help'];
 

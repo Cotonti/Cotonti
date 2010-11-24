@@ -18,7 +18,7 @@ Tags=pm.message.tpl:{PM_FORM_PFS};pm.send.tpl:{PMSEND_FORM_PFS}
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_require('pfs');
+require_once cot_incfile('pfs', 'module');
 
 $pfs = cot_build_pfs($usr['id'], 'newlink', 'newpmtext', $L['Mypfs']);
 $pfs .= (cot_auth('pfs', 'a', 'A')) ? ' &nbsp; '.cot_build_pfs(0, 'newlink', 'newpmtext', $L['SFS']) : '';

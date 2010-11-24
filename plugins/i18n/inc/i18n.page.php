@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-cot_require('page');
+require_once cot_incfile('page', 'module');
 
 $id = cot_import('id', 'G', 'INT');
 $l = cot_import('l', 'G', 'ALP');

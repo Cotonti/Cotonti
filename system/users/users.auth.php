@@ -144,7 +144,7 @@ $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(cot_skinfile('users.auth'));
 
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 if ($cfg['maintenance'])
 {

@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if ($cfg['plugin']['tags']['forums'])
 {
-	cot_require('tags', true);
+	require_once cot_incfile('tags', 'plug');
 	// Get all subcategories
 	$limit = $cfg['plugin']['tags']['lim_forums'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_forums'];
 	$tcloud = cot_tag_cloud('forums', $cfg['plugin']['tags']['order'], $limit);

@@ -18,7 +18,7 @@ Tags=statistics.tpl:{STATISTICS_TOTALDBCOMMENTS}
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('comments', true);
+require_once cot_incfile('comments', 'plug');
 
 $totaldbcomments = $db->countRows($db_com);
 $t->assign(array(

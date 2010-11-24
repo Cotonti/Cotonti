@@ -138,7 +138,7 @@ if ($pag['page_file'])
 }
 
 require_once $cfg['system_dir'] . '/header.php';
-cot_require('users');
+require_once cot_incfile('users', 'module');
 
 $mskin = cot_skinfile(array('page', $cat['tpl']));
 $t = new XTemplate($mskin);

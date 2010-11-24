@@ -12,8 +12,8 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
-cot_require_lang('pm', 'module');
-cot_require_rc('pm');
+require_once cot_langfile('pm', 'module');
+require_once cot_incfile('pm', 'module', 'resources');
 
 // Global variables
 $GLOBALS['db_pm'] = (isset($GLOBALS['db_pm'])) ? $GLOBALS['db_pm'] : $GLOBALS['db_x'] . 'pm';

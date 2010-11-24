@@ -17,7 +17,7 @@ Hooks=polls.functions.delete
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('comments', true);
+require_once cot_incfile('comments', 'plug');
 
 cot_comments_remove('polls', $id2);
 

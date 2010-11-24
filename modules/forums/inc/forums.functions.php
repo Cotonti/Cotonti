@@ -12,8 +12,8 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 // Requirements
-cot_require_lang('forums', 'module');
-cot_require_rc('forums');
+require_once cot_langfile('forums', 'module');
+require_once cot_incfile('forums', 'module', 'resources');
 
 // Global variables
 $GLOBALS['db_forum_posts'] = (isset($GLOBALS['db_forum_posts'])) ? $GLOBALS['db_forum_posts'] : $GLOBALS['db_x'] . 'forum_posts';

@@ -20,7 +20,7 @@ Hooks=admin
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a');
 cot_block($usr['isadmin']);
 
-cot_require('pm');
+require_once cot_incfile('pm', 'module');
 
 $t = new XTemplate(cot_skinfile('pm.admin', 'module'));
 

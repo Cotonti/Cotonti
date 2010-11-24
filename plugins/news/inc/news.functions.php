@@ -11,9 +11,9 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_api('extrafields');
-cot_require('page');
-cot_require_lang('news', 'plug');
+require_once cot_incfile('extrafields');
+require_once cot_incfile('page', 'module');
+require_once cot_langfile('news', 'plug');
 
 function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textlength = 0, $deftag = false)
 {
@@ -110,7 +110,7 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 
 		if ($cfg['plugin']['tags']['pages'])
 		{
-			cot_require('tags', true);
+			require_once cot_incfile('tags', 'plug');
 			$item_id = $pag['page_id'];
 			$tags = cot_tag_list($item_id);
 			if (count($tags) > 0)

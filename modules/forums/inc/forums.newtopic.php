@@ -159,7 +159,7 @@ foreach (cot_getextplugins('forums.newtopic.main') as $pl)
 	include $pl;
 }
 /* ===== */
-cot_require_api('forms');
+require_once cot_incfile('forms');
 require_once $cfg['system_dir'] . '/header.php';
 
 $mskin = cot_skinfile(array('forums', 'newtopic', $structure['forums'][$s]['tpl']));

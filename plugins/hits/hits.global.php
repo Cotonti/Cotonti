@@ -16,7 +16,7 @@ Hooks=global
  */
 
 defined('COT_CODE') or die('Wrong URL');
-cot_require('hits', true);
+require_once cot_incfile('hits', 'plug');
 
 if ($cache && $cache->mem)
 {

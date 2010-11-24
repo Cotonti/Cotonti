@@ -26,8 +26,8 @@ if($tl) $qs = strtr($qs, $cot_translitb);
 $d = (int) cot_import('d', 'G', 'INT');
 $perpage = $cfg['plugin']['tags']['perpage'];
 
-cot_require('page');
-cot_require('forums');
+require_once cot_incfile('page', 'module');
+require_once cot_incfile('forums', 'module');
 
 // Array to register areas with tag functions provided
 $tag_areas = array('pages', 'forums');

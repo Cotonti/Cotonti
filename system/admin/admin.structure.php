@@ -14,8 +14,8 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
-cot_require_api('extrafields');
-cot_require_api('auth');
+require_once cot_incfile('extrafields');
+require_once cot_incfile('auth');
 
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');

@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users', 'a');
 cot_block($usr['isadmin']);
 
-cot_require_api('extrafields');
+require_once cot_incfile('extrafields');
 
 $t = new XTemplate(cot_skinfile(array('admin', 'extrafields', $n)));
 

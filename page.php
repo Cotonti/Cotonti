@@ -24,11 +24,11 @@ $env['ext'] = 'page';
 $env['location'] = 'pages';
 
 // Additional API requirements
-cot_require_api('extrafields');
-cot_require('users');
+require_once cot_incfile('extrafields');
+require_once cot_incfile('users', 'module');
 
 // Self requirements
-cot_require('page');
+require_once cot_incfile('page', 'module');
 
 // Mode choice
 if (!in_array($m, array('add', 'edit')))
@@ -43,6 +43,6 @@ if (!in_array($m, array('add', 'edit')))
 	}
 }
 
-require_once cot_incfile('page', $m);
+require_once cot_incfile('page', 'module', $m);
 
 ?>

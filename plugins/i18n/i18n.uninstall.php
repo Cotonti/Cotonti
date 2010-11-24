@@ -14,7 +14,7 @@ defined('COT_CODE') or die('Wrong URL');
 if ($cfg['plugin']['tags'])
 {
 	// Remove i18n-specific tags
-	cot_require('tags', true);
+	require_once cot_incfile('tags', 'plug');
 	global $db_tag_references;
 	$db->query("DELETE FROM $db_tag_references WHERE tag_locale != ''");
 	$db->query("ALTER TABLE $db_tag_references DROP COLUMN `tag_locale`");

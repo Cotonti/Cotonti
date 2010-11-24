@@ -17,7 +17,7 @@ Hooks=global
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('bbcode', true);
+require_once cot_incfile('bbcode', 'plug');
 
 cot_bbcode_load();
 if ($cfg['plugin']['bbcode']['smilies'])

@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
-cot_require_api('auth');
+require_once cot_incfile('auth');
 
 $t = new XTemplate(cot_skinfile('admin.extensions'));
 

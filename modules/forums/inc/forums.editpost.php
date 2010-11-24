@@ -111,7 +111,7 @@ if ($a == 'update')
 
 	cot_redirect(cot_url('forums', "m=posts&p=" . $p, '#' . $p, true));
 }
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 $toptitle = cot_build_forumpath($s) . " " . $cfg['separator'] . " " . cot_rc_link(cot_url('forums', "m=posts&p=" . $p, "#" . $p), (($rowt['ft_mode'] == 1) ? '# ' : '') . htmlspecialchars($rowt['ft_title']));
 $toptitle .= $cfg['separator'] . " " . cot_rc_link(cot_url('forums', "m=editpost&s=$s&q=" . $q . "&p=" . $p . "&" . cot_xg()), $L['Edit']);

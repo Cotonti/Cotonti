@@ -17,12 +17,12 @@ Hooks=standalone
 
 (defined('COT_CODE') || defined('COT_PLUG')) or die('Wrong URL.');
 
-cot_require('users');
-cot_require('hits', true);
+require_once cot_incfile('users', 'module');
+require_once cot_incfile('hits', 'plug');
 
 if($cfg['plugin']['hiddengroups'])
 {
-	cot_require('hiddengroups', true);
+	require_once cot_incfile('hiddengroups', 'plug');
 	$mode = cot_hiddengroups_mode();
 }
 

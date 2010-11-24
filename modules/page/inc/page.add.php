@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'ALP');

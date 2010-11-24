@@ -146,7 +146,7 @@ foreach (cot_getextplugins('forums.topics.first') as $pl)
 }
 /* ===== */
 
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 $structure['forums'][$s]['desc'] = cot_parse_autourls($structure['forums'][$s]['desc']);
 

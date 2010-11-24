@@ -22,7 +22,7 @@ if ($cfg['plugin']['tags']['pages'])
 {
 	if (!isset($tags))
 	{
-		cot_require('tags', true);
+		require_once cot_incfile('tags', 'plug');
 		if ($cfg['plugin']['i18n'] && $i18n_enabled && $i18n_notmain)
 		{
 			$tags_extra = array('tag_locale' => $i18n_locale);

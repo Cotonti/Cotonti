@@ -12,8 +12,8 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
-cot_require_api('forms');
-cot_require_lang('polls', 'module');
+require_once cot_incfile('forms');
+require_once cot_langfile('polls', 'module');
 
 // Global variables
 $GLOBALS['db_polls'] 		 = (isset($GLOBALS['db_polls'])) ? $GLOBALS['db_polls'] : $GLOBALS['db_x'] . 'polls';

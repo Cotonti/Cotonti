@@ -24,11 +24,11 @@ require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
 
 // Additional API requirements
-cot_require_api('uploads');
+require_once cot_incfile('uploads');
 require_once './datas/extensions.php';
 
 // Self requirements
-cot_require('pfs');
+require_once cot_incfile('pfs', 'module');
 
 // Mode choice
 if (!in_array($m, array('edit', 'editfolder', 'view')))
@@ -36,6 +36,6 @@ if (!in_array($m, array('edit', 'editfolder', 'view')))
 	$m = 'main';
 }
 
-require_once cot_incfile('pfs', $m);
+require_once cot_incfile('pfs', 'module', $m);
 
 ?>

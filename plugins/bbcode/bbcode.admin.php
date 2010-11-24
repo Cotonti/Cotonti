@@ -17,7 +17,7 @@ Hooks=tools
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_lang('bbcode', 'plug');
+require_once cot_langfile('bbcode', 'plug');
 
 $bb_t = new XTemplate(cot_skinfile('bbcode.admin', true));
 

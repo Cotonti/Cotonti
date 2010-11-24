@@ -18,7 +18,7 @@ Tags=users.profile.tpl:
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('userimages', true);
+require_once cot_incfile('userimages', 'plug');
 $userimages = cot_userimages_config_get();
 
 if($_FILES)

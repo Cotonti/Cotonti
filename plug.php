@@ -91,8 +91,8 @@ else
 // Plugin requirements autoloading
 $req_files = array();
 $req_files[] = cot_langfile($extname, 'plug');
-$req_files[] = cot_incfile($extname, 'resources', true);
-$req_files[] = cot_incfile($extname, 'functions', true);
+$req_files[] = cot_incfile($extname, 'plug', 'resources');
+$req_files[] = cot_incfile($extname, 'plug', 'functions');
 
 foreach ($req_files as $req_file)
 {

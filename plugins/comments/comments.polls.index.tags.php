@@ -18,7 +18,7 @@ Tags=polls.index.tpl:{IPOLLS_COMMENTS}
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('comments', true);
+require_once cot_incfile('comments', 'plug');
 
 $indexpolls->assign('IPOLLS_COMMENTS', cot_comments_link('polls', 'id='.$poll_id, 'polls', $poll_id));
 ?>

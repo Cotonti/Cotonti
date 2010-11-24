@@ -20,7 +20,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users',
 cot_block($usr['isadmin']);
 
 $tt = new XTemplate(cot_skinfile('banlist.admin', true));
-cot_require_lang('banlist', 'plug');
+require_once cot_langfile('banlist', 'plug');
 
 $GLOBALS['db_banlist'] = (isset($GLOBALS['db_banlist'])) ? $GLOBALS['db_banlist'] : $GLOBALS['db_x'] . 'banlist';
 $adminhelp = $L['banlist_help'];

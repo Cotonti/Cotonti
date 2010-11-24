@@ -41,7 +41,7 @@ $inc_file = (empty($m)) ? 'home' : $m;
 $inc_file = (empty($s)) ? $inc_file : $inc_file.'.'.$s;
 if (in_array($inc_file, $standard_admin))
 {
-	$inc_file = cot_incfile('admin', $inc_file);
+	$inc_file = cot_incfile('admin', 'module', $inc_file);
 }
 else
 {
@@ -123,7 +123,7 @@ if (!COT_AJAX)
 		{
 			if (file_exists(cot_langfile($code, 'module')))
 			{
-				cot_require_lang($code, 'module');
+				require_once cot_langfile($code, 'module');
 				$title = $L[ucfirst($code)];
 			};
 			$title = isset($L[$info['Name']]) ? $L[$info['Name']] : $info['Name'];

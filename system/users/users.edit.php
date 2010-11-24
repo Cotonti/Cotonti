@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_api('auth');
+require_once cot_incfile('auth');
 
 $y = cot_import('y','P','TXT');
 $id = cot_import('id','G','INT');
@@ -143,24 +143,24 @@ if ($a=='update')
 			$newname = $db->prep($ruser['user_name']);
 			if ($cfg['forums'])
 			{
-				cot_require('forums');
+				require_once cot_incfile('forums', 'module');
 				$db->update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername="'.$oldname.'"');
 				$db->update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername="'.$oldname.'"');
 				$db->update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername="'.$oldname.'"');
 			}
 			if ($cfg['page'])
 			{
-				cot_require('page');
+				require_once cot_incfile('page', 'module');
 				$db->update($db_pages, array('page_author' => $newname), 'page_author="'.$oldname.'"');
 			}
 			if ($cfg['plugin']['comments'])
 			{
-				cot_require('comments', true);
+				require_once cot_incfile('comments', 'plug');
 				$db->update($db_com, array('com_author' => $newname), 'com_author="'.$oldname.'"');
 			}
 			if ($cfg['pm'])
 			{
-				cot_require('pm');
+				require_once cot_incfile('pm', 'module');
 				$db->update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser="'.$oldname.'"');
 			}
 			$db->update($db_online, array('online_name' => $newname), 'online_name="'.$oldname.'"');
@@ -246,7 +246,7 @@ require_once $cfg['system_dir'] . '/header.php';
 $mskin = cot_skinfile(array('users', 'edit', $usr['maingrp']));
 $t = new XTemplate($mskin);
 
-cot_require_api('forms');
+require_once cot_incfile('forms');
 
 $bhome = $cfg['homebreadcrumb'] ?
 	cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';

@@ -13,9 +13,9 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Requirements
-cot_require_api('auth');
-cot_require_api('configuration');
-cot_require_lang('admin', 'core');
+require_once cot_incfile('auth');
+require_once cot_incfile('configuration');
+require_once cot_langfile('admin', 'core');
 
 /**
  * A value returned by cot_extension_install() when updating and

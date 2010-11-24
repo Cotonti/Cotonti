@@ -17,6 +17,6 @@ Hooks=admin.config.edit.main
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require_lang('comments', $type);
+require_once cot_langfile('comments', $type);
 
 ?>

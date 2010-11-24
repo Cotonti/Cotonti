@@ -17,10 +17,10 @@ Hooks=standalone
 
 defined('COT_CODE') && defined('COT_PLUG') or die('Wrong URL');
 
-cot_require('page');
-cot_require('forums');
-cot_require('search', true);
-cot_require_api('forms');
+require_once cot_incfile('page', 'module');
+require_once cot_incfile('forums', 'module');
+require_once cot_incfile('search', 'plug');
+require_once cot_incfile('forms');
 
 $rsq = cot_import('rsq', 'P', 'TXT', $cfg['plugin']['search']['maxsigns']);
 $sq = cot_import('sq', 'G', 'TXT');

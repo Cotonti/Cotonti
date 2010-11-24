@@ -18,19 +18,19 @@ Tags=index.tpl:{PLUGIN_LATESTPAGES}
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_require('users');
-cot_require('recentitems', true);
+require_once cot_incfile('users', 'module');
+require_once cot_incfile('recentitems', 'plug');
 
 if ($cfg['plugin']['recentitems']['recentpages'] && $cfg['page'])
 {
-	cot_require('page');
+	require_once cot_incfile('page', 'module');
 	$res = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("PLUGIN_LATESTPAGES", $res);
 }
 
 if ($cfg['plugin']['recentitems']['recentforums'] && $cfg['forums'])
 {
-	cot_require('forums');
+	require_once cot_incfile('forums', 'module');
 	$res = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("PLUGIN_LATESTTOPICS", $res);
 }

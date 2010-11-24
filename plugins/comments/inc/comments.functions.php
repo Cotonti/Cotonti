@@ -10,9 +10,9 @@
  */
 
 // Requirements
-cot_require('users');
-cot_require_lang('comments', 'plug');
-cot_require_rc('comments', true);
+require_once cot_incfile('users', 'module');
+require_once cot_langfile('comments', 'plug');
+require_once cot_incfile('comments', 'plug', 'resources');
 
 // Table name globals
 $GLOBALS['db_com'] = (isset($GLOBALS['db_com'])) ? $GLOBALS['db_com'] : $GLOBALS['db_x'] . 'com';
@@ -82,7 +82,7 @@ function cot_comments_display($ext_name, $code, $cat = '')
 
 	if ($auth_write && $enabled)
 	{
-		cot_require_api('forms');
+		require_once cot_incfile('forms');
 	}
 
 	$t = new XTemplate(cot_skinfile('comments', true));
