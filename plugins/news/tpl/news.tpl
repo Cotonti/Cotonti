@@ -14,7 +14,7 @@
 <!-- END: PAGE_TAGS_ROW -->
 <!-- END: PAGE_TAGS -->
 <!-- BEGIN: PAGE_NO_TAGS -->
-			{PAGE_NO_TAGS}
+			{PHP.L.tags_Tag_cloud_none}
 <!-- END: PAGE_NO_TAGS -->
 		</p>
 		<p class="column floatright">

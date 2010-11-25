@@ -4,7 +4,7 @@
 Code=news
 Name=News
 Description=Pick up pages from a category and display the newest in the home page
-Version=0.7.0
+Version=0.7.1
 Date=2010-jan-03
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2010
