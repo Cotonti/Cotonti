@@ -16,7 +16,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('configuration');
 
-$t = new XTemplate(cot_skinfile('admin.config'));
+$t = new XTemplate(cot_tplfile('admin.config', 'core'));
 
 $adminpath[] = array(cot_url('admin', 'm=config'), $L['Configuration']);
 

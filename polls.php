@@ -82,7 +82,7 @@ foreach (cot_getextplugins('polls.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$t = new XTemplate(cot_skinfile('polls'));
+$t = new XTemplate(cot_tplfile('polls'));
 
 if (cot_check_messages())
 {

@@ -59,11 +59,11 @@ if (!empty($e))
 	$extname = $e;
     $exthook = 'standalone';
     $ext_display_header = true;
-    $path_skin = cot_skinfile($extname, true);
+    $path_skin = cot_tplfile($extname, 'plug');
     $autoassigntags = false;
     if (!file_exists($path_skin))
     {
-        $path_skin = cot_skinfile(array('plugin', $extname));
+        $path_skin = cot_tplfile(array('plugin', $extname));
         $autoassigntags = true;
     }
 }
@@ -72,7 +72,7 @@ elseif (!empty($o))
 	$extname = $o;
     $exthook = 'popup';
     $ext_display_header = false;
-    $path_skin = cot_skinfile(array('popup', $extname));
+    $path_skin = cot_tplfile(array('popup', $extname));
     $autoassigntags = true;
 }
 elseif (!empty($r))

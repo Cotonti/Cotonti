@@ -15,7 +15,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users',
 $usr['isadmin'] &= cot_auth('admin', 'a', 'A');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_skinfile('admin.rightsbyitem'));
+$t = new XTemplate(cot_tplfile('admin.rightsbyitem', 'core'));
 
 $ic = cot_import('ic', 'G', 'ALP');
 $io = cot_import('io', 'G', 'ALP');

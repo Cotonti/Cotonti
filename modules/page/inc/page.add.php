@@ -162,7 +162,7 @@ foreach (cot_getextplugins('page.add.main') as $pl)
 
 require_once $cfg['system_dir'].'/header.php';
 
-$mskin = cot_skinfile(array('page', 'add', $cot_cat[$rpage['page_cat']]['tpl']));
+$mskin = cot_tplfile(array('page', 'add', $cot_cat[$rpage['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 $pageadd_array = array(

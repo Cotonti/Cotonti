@@ -78,7 +78,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			cot_redirect(cot_url('page', $page_urlp, '', true));
 		}
 
-		$t = new XTemplate(cot_skinfile('i18n.page', true));
+		$t = new XTemplate(cot_tplfile('i18n.page', 'plug'));
 
 		// Get locales list
 		$lc_list = $i18n_locales;
@@ -147,7 +147,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			cot_redirect(cot_url('page', $page_urlp, '', true));
 		}
 
-		$t = new XTemplate(cot_skinfile('i18n.page', true));
+		$t = new XTemplate(cot_tplfile('i18n.page', 'plug'));
 		$t->assign(array(
 			'I18N_ACTION' => cot_url('plug', "e=i18n&m=page&a=edit&id=$id&l=$i18n_locale"),
 			'I18N_TITLE' => $L['i18n_editing'],

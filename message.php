@@ -170,7 +170,7 @@ foreach (cot_getextplugins('message.main') as $pl)
 $out['head'] .= $R['code_noindex'];
 $out['subtitle'] = $title;
 require_once $cfg['system_dir'].'/header.php';
-$t = new XTemplate(cot_skinfile('message'));
+$t = new XTemplate(cot_tplfile('message'));
 
 $errmsg = $title;
 $title .= ($usr['isadmin']) ? ' (#'.$msg.')' : '';

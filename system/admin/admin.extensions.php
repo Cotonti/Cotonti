@@ -16,7 +16,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('auth');
 
-$t = new XTemplate(cot_skinfile('admin.extensions'));
+$t = new XTemplate(cot_tplfile('admin.extensions', 'core'));
 
 $adminpath[] = array (cot_url('admin', 'm=extensions'), $L['Extensions']);
 
@@ -181,7 +181,20 @@ switch($a)
 							{
 								$line = explode(':', $taggroup);
 								$line[0] = trim($line[0]);
-								$tplbase = preg_replace('#\.tpl$#i', '', $line[0]);
+								$tplbase = explode('.', preg_replace('#\.tpl$#i', '', $line[0]));
+								// Detect template container type
+								if (in_array($tplbase[0], array('admin', 'users')))
+								{
+									$tpltype = 'core';
+								}
+								elseif (file_exists($cfg['plugins_dir'] . '/' . $tplbase[0]))
+								{
+									$tpltype = 'plug';
+								}
+								else
+								{
+									$tpltype = 'module';
+								}
 								$tags = explode(',', $line[1]);
 								$listtags = $line[0].' :<br />';
 								foreach($tags as $k => $v)
@@ -189,7 +202,7 @@ switch($a)
 									if(mb_substr(trim($v), 0, 1) == '{')
 									{
 										$listtags .= $v.' : ';
-										$found = cot_stringinfile(cot_skinfile($tplbase), trim($v));
+										$found = cot_stringinfile(cot_tplfile($tplbase, $tpltype), trim($v));
 										$listtags .= $found_txt[$found].'<br />';
 									}
 									else

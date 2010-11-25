@@ -21,7 +21,7 @@ cot_block($usr['auth_read']);
 
 require_once cot_langfile('hits', 'plug');
 require_once cot_incfile('hits', 'plug');
-$tt = new XTemplate(cot_skinfile('hits.admin', true));
+$tt = new XTemplate(cot_tplfile('hits.admin', 'plug'));
 
 $adminhelp = $L['adm_help_hits'];
 

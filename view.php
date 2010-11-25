@@ -100,7 +100,7 @@ if (preg_match_all('@<link[^>](.*?)>@si', $ext_head, $ext_links) > 0)
 }
 
 require_once $cfg['system_dir'].'/header.php';
-$t = new XTemplate(cot_skinfile('plugin'));
+$t = new XTemplate(cot_tplfile('plugin'));
 
 $t->assign(array(
 	"PLUGIN_TITLE" => $vt,

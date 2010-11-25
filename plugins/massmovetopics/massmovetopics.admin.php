@@ -24,7 +24,7 @@ $plugin_title = "Mass-move topics in forums";
 $sourceid = cot_import('sourceid', 'P', 'INT');
 $targetid = cot_import('targetid', 'P', 'INT');
 
-$t = new XTemplate(cot_skinfile('massmovetopics', true));
+$t = new XTemplate(cot_tplfile('massmovetopics', 'plug'));
 
 if ($a == 'move')
 {

@@ -23,7 +23,7 @@ $d = cot_import('d', 'G', 'INT');
 $d = empty($d) ? 0 : (int) $d;
 $mode = cot_import('mode', 'G', 'ALP');
 
-$t = new XTemplate(cot_skinfile(array('admin', 'structure', $n)));
+$t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
 
 /* === Hook === */
 foreach (cot_getextplugins('admin.structure.first') as $pl)

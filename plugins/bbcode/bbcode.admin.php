@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_langfile('bbcode', 'plug');
 
-$bb_t = new XTemplate(cot_skinfile('bbcode.admin', true));
+$bb_t = new XTemplate(cot_tplfile('bbcode.admin', 'plug'));
 
 $plugin_title = $L['adm_bbcodes'];
 $adminhelp = $L['adm_help_bbcodes'];

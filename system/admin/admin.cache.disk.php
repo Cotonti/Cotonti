@@ -16,7 +16,7 @@ define('COT_DISKCACHE_ONLYFILES', '*files*');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_skinfile('admin.cache.disk'));
+$t = new XTemplate(cot_tplfile('admin.cache.disk', 'core'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=cache&s=disk'), $L['adm_diskcache']);

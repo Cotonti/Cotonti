@@ -14,7 +14,7 @@
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('admin', 'a');
 cot_block($usr['auth_read']);
 
-$t = new XTemplate(cot_skinfile('admin.log'));
+$t = new XTemplate(cot_tplfile('admin.log', 'core'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=log'), $L['Log']);

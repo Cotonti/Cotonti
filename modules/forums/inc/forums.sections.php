@@ -124,7 +124,7 @@ foreach (cot_getextplugins('forums.sections.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$t = new XTemplate(cot_skinfile('forums.sections'));
+$t = new XTemplate(cot_tplfile('forums.sections'));
 
 $bhome = ($cfg['homebreadcrumb']) ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
 

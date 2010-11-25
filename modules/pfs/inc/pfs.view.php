@@ -58,7 +58,7 @@ else
 
 /* ============= */
 
-$t = new XTemplate(cot_skinfile('pfs.view'));
+$t = new XTemplate(cot_tplfile('pfs.view'));
 
 $t->assign(array(
 	'PFSVIEW_HEADER1' => $pfs_header1,

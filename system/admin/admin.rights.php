@@ -15,7 +15,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('users',
 $usr['isadmin'] &= cot_auth('admin', 'a', 'A');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_skinfile('admin.rights'));
+$t = new XTemplate(cot_tplfile('admin.rights', 'core'));
 
 $g = cot_import('g', 'G', 'INT');
 $advanced = cot_import('advanced', 'G', 'BOL');

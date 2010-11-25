@@ -84,7 +84,7 @@ elseif($a == 'restore')
 	cot_redirect(cot_url('admin', 'm=other&p=trashcan', '', true));
 }
 
-$tr_t = new XTemplate(cot_skinfile(($info) ? 'trashcan.info.admin' : 'trashcan.admin', true));
+$tr_t = new XTemplate(cot_tplfile(($info) ? 'trashcan.info.admin' : 'trashcan.admin', 'plug'));
 $totalitems = $db->countRows($db_trash);
 $pagenav = cot_pagenav('admin', 'm=trashcan', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 

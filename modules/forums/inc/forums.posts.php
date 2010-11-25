@@ -279,7 +279,7 @@ foreach (cot_getextplugins('forums.posts.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_skinfile(array('forums', 'posts', $structure['forums'][$s]['tpl']));
+$mskin = cot_tplfile(array('forums', 'posts', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
 $where['topicid'] = "fp_topicid='$q'";

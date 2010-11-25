@@ -11,7 +11,7 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-$t = new XTemplate(cot_skinfile('pfs.admin.allpfs'));
+$t = new XTemplate(cot_tplfile('pfs.admin.allpfs'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=pfs'), $L['PFS']);

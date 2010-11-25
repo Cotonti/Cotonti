@@ -167,7 +167,7 @@ foreach (cot_getextplugins('forums.topics.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_skinfile(array('forums' ,'topics', $structure['forums'][$s]['tpl']));
+$mskin = cot_tplfile(array('forums' ,'topics', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
 if ($cfg['forums'][$s]['allowviewers'])

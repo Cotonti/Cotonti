@@ -122,7 +122,7 @@ if (!$standalone)
 	require_once $cfg['system_dir'] . '/header.php';
 }
 
-$t = new XTemplate(cot_skinfile('pfs.edit'));
+$t = new XTemplate(cot_tplfile('pfs.edit'));
 
 if ($standalone)
 {

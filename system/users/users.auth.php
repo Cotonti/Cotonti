@@ -142,7 +142,7 @@ foreach (cot_getextplugins('users.auth.main') as $pl)
 $out['subtitle'] = $L['aut_logintitle'];
 $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_skinfile('users.auth'));
+$t = new XTemplate(cot_tplfile('users.auth', 'core'));
 
 require_once cot_incfile('forms');
 

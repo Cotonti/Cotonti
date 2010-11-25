@@ -117,7 +117,7 @@ $bhome = $cfg['homebreadcrumb'] ? cot_url($cfg['mainurl'], $cfg['maintitle']).' 
 $title = $bhome . $L['pasrec_title'];
 
 require_once $cfg['system_dir'].'/header.php';
-$t = new XTemplate(cot_skinfile('users.passrecover'));
+$t = new XTemplate(cot_tplfile('users.passrecover', 'core'));
 
 $t->assign(array(
 	'PASSRECOVER_TITLE' => $title,

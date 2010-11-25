@@ -76,7 +76,7 @@ require_once $cfg['system_dir'].'/header.php';
 
 if (!COT_AJAX)
 {
-	$t = new XTemplate(cot_skinfile('admin'));
+	$t = new XTemplate(cot_tplfile('admin', 'core'));
 
 	// Generate the admin menu
 	$admin_menu = array();

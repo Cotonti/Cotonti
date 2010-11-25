@@ -220,7 +220,7 @@ foreach (cot_getextplugins('users.register.main') as $pl)
 $out['subtitle'] = $L['aut_registertitle'];
 $out['head'] .= $R['code_noindex'];
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_skinfile('users.register'));
+$t = new XTemplate(cot_tplfile('users.register', 'core'));
 
 require_once cot_incfile('forms');
 

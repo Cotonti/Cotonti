@@ -267,7 +267,7 @@ if ($id)
 }
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_skinfile('pm.send'));
+$t = new XTemplate(cot_tplfile('pm.send'));
 
 if (!COT_AJAX)
 {

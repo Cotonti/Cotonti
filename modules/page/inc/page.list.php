@@ -168,7 +168,7 @@ foreach (cot_getextplugins('page.list.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_skinfile(array('page' ,'list', $cat['tpl']));
+$mskin = cot_tplfile(array('page' ,'list', $cat['tpl']));
 
 
 $t = new XTemplate($mskin);

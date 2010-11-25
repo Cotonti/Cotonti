@@ -17,7 +17,7 @@ cot_block($usr['isadmin']);
 require_once cot_incfile('auth');
 require_once cot_incfile('uploads');
 
-$t = new XTemplate(cot_skinfile('admin.users'));
+$t = new XTemplate(cot_tplfile('admin.users', 'core'));
 
 
 

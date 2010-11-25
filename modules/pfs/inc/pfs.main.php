@@ -320,7 +320,7 @@ elseif ($a=='deletefolder')
 $f = (empty($f)) ? '0' : $f;
 
 if (!$standalone) require_once $cfg['system_dir'] . '/header.php';
-$mskin = ($standalone) ? cot_skinfile(array('pfs', 'standalone')) : cot_skinfile('pfs');
+$mskin = ($standalone) ? cot_tplfile(array('pfs', 'standalone')) : cot_tplfile('pfs');
 $t = new XTemplate($mskin);
 
 if ($f>0)

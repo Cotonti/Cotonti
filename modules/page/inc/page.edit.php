@@ -218,7 +218,7 @@ foreach (cot_getextplugins('page.edit.main') as $pl)
 
 require_once $cfg['system_dir'].'/header.php';
 
-$mskin = cot_skinfile(array('page', 'edit', $cot_cat[$pag['page_cat']]['tpl']));
+$mskin = cot_tplfile(array('page', 'edit', $cot_cat[$pag['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 $pageedit_array = array(

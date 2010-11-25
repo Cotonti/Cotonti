@@ -21,7 +21,7 @@ require_once cot_incfile('page', 'module');
 
 if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnajax'])
 {
-	$sskin = cot_skinfile('news.admin', true);
+	$sskin = cot_tplfile('news.admin', 'plug');
 	$tt = new XTemplate($sskin);
 
 	$categories=explode(',', $config_value);

@@ -29,7 +29,7 @@ $cache && $cache->db->store('structure', $i18n_structure, 'i18n');
 if (empty($i18n_locale) || $i18n_locale == $cfg['defaultlang'])
 {
 	// Locale selection
-	$t = new XTemplate(cot_skinfile('i18n.locales', true));
+	$t = new XTemplate(cot_tplfile('i18n.locales', 'plug'));
 
 	foreach ($i18n_locales as $lc => $title)
 	{
@@ -123,7 +123,7 @@ else
 		cot_redirect(cot_url('plug', "e=i18n&m=structure&l=$i18n_locale&d=$d", '', true));
 	}
 
-	$t = new XTemplate(cot_skinfile('i18n.structure', true));
+	$t = new XTemplate(cot_tplfile('i18n.structure', 'plug'));
 
 	// Render table
 	$ii = 0;
