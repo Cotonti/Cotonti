@@ -214,16 +214,13 @@ function cot_tag_list($item, $area = 'pages', $extra = null)
 function cot_tag_parse($input)
 {
 	$res = array();
-	$invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n");
 	$tags = explode(',', $input);
 	foreach ($tags as $tag)
 	{
-		$tag = str_replace($invalid, ' ', $tag);
-		$tag = preg_replace('#\s\s+#', ' ', $tag);
-		$tag = trim($tag);
+		$tag = cot_tag_prep($tag);
 		if (!empty($tag))
 		{
-			$res[] = cot_tag_prep($tag);
+			$res[] = $tag;
 		}
 	}
 	$res = array_unique($res);
@@ -238,6 +235,7 @@ function cot_tag_parse($input)
  */
 function cot_tag_parse_query($qs)
 {
+	global $db;
 	$tokens1 = explode(';', $qs);
 	$cnt1 = count($tokens1);
 	for ($i = 0; $i < $cnt1; $i++)
@@ -252,11 +250,11 @@ function cot_tag_parse_query($qs)
 				if (mb_strpos($tag, '*') !== false)
 				{
 					$tag = str_replace('*', '%', $tag);
-					$tokens2[$j] = "r.tag LIKE '$tag'";
+					$tokens2[$j] = "r.tag LIKE " . $db->quote($tag);
 				}
 				else
 				{
-					$tokens2[$j] = "r.tag = '$tag'";
+					$tokens2[$j] = "r.tag = " . $db->quote($tag);
 				}
 			}
 			else
@@ -278,8 +276,11 @@ function cot_tag_parse_query($qs)
  */
 function cot_tag_prep($tag)
 {
-	global $db;
-	return $db->prep(mb_strtolower($tag));
+	static $invalid = array('`', '^', ':', '?', '=', '|', '\\', '/', '"', "\t", "\r\n", "\n");
+	$tag = str_replace($invalid, ' ', $tag);
+	$tag = preg_replace('#\s\s+#', ' ', $tag);
+	$tag = trim($tag);
+	return mb_strtolower($tag);
 }
 
 /**
@@ -371,7 +372,7 @@ function cot_tag_title($tag)
 function cot_tag_unregister($tag)
 {
 	global $db, $db_tags;
-	$db->query("DELETE FROM $db_tags WHERE `tag` = '$tag'");
+	$db->query("DELETE FROM $db_tags WHERE `tag` = " . $db->quote($tag));
 }
 
 /**
