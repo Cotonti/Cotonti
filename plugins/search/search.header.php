@@ -23,12 +23,12 @@ defined('SED_CODE') or die('Wrong URL');
 if (!empty($highlight))
 {
 	$out['compopup'] .= '<script type="text/javascript" src="'.$cfg['plugins_dir'].'/search/js/hl.js"></script>
-		<script type="text/javascript">$(document).ready(function() {$("div.fmsg").each(function() {';
+		<script type="text/javascript">$(document).ready(function() {$("body").each(function() {';
 
 	$highlight = explode(' ', $highlight);
 	foreach ($highlight as $key=>$value)
 	{
-		$out['compopup'] .= '$.highlight(this, \''.mb_strtoupper($value).'\');';
+		$out['compopup'] .= '$.highlight(this, "'.mb_strtoupper($value).'");';
 	}
 
 	$out['compopup'] .= '});});</script>';
