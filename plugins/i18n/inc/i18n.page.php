@@ -172,8 +172,16 @@ if ($id > 0 && $stmt->rowCount() == 1)
 	}
 	elseif ($a == 'delete' && ($i18n_admin || $usr['id'] == $pag['ipage_translatorid']))
 	{
+		// Send to trashcan if available
+		if ($cfg['plugin']['trashcan']['trash_page'])
+		{
+			require_once cot_incfile('trashcan', 'plug');
+			$row = $db->query("SELECT * FROM $db_i18n_pages
+				WHERE ipage_id = $id AND ipage_locale = '$i18n_locale'")->fetch();
+			cot_trash_put('i18n_page', $L['i18n_translation']." #$id ($i18n_locale) ".$row['ipage_title'], $id, $row);
+		}
+		
 		$db->delete($db_i18n_pages, "ipage_id = $id AND ipage_locale = '$i18n_locale'");
-		// TODO trash
 
 		/* === Hook === */
 		foreach (cot_getextplugins('i18n.page.delete.done') as $pl)

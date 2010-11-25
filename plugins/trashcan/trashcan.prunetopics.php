@@ -16,10 +16,14 @@ Hooks=forums.functions.prunetopics
  */
 
 defined('COT_CODE') or die('Wrong URL');
-require_once cot_incfile('trashcan', 'plug');
+
 
 if ($cfg['plugin']['trashcan']['trash_forum'])
 {
+	// We are inside cot_forum_prunetopics() function, so need some globals
+	global $trash_types, $db_trash, $db_x;
+	require_once cot_incfile('trashcan', 'plug');
+
 	$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
 	while ($row = $sql->fetch())
 	{

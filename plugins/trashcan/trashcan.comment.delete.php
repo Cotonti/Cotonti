@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=users.edit.update.delete
+Hooks=comments.delete
 [END_COT_EXT]
 ==================== */
 
