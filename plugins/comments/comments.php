@@ -218,7 +218,7 @@ elseif ($a == 'delete' && $usr['isadmin'])
 	{
 		$sql = $db->delete($db_com, "com_id='$id'");
 
-				/* == Hook == */
+		/* == Hook == */
 		foreach (cot_getextplugins('comments.delete') as $pl)
 		{
 			include $pl;
