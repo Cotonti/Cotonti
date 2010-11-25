@@ -51,7 +51,7 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 			$sql = $db->insert($db_trash, $trash);
 		}
 	}
-	cot_watch($db_trash, $trash);
+
 	$id = ($i) ? $db->lastInsertId() : false;
 	return $id;
 }
