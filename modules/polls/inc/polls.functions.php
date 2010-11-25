@@ -34,7 +34,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 	global $db, $cfg, $db_polls, $db_polls_options, $cot_error, $poll_id, $R, $L;
 	if (gettype($t) != 'object')
 	{
-		$t = new XTemplate(cot_skinfile('polls'));
+		$t = new XTemplate(cot_tplfile('polls'));
 		$block = "EDIT_POLL_FORM";
 		$poll_full_template = true;
 	}
@@ -299,7 +299,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$sql2 = $db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = '$id' AND $where LIMIT 1");
 	$alreadyvoted = ($sql2->rowCount() == 1) ? 1 : 0;
 
-	$themefile = (is_string($theme)) ? cot_skinfile(array('polls', $theme), 'module') : cot_skinfile($theme, 'module');
+	$themefile = (is_string($theme)) ? cot_tplfile(array('polls', $theme), 'module') : cot_tplfile($theme, 'module');
 	$t = new XTemplate($themefile);
 
 	if ($alreadyvoted) $poll_block = "POLL_VIEW_VOTED";

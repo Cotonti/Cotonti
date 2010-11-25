@@ -22,7 +22,7 @@ if (!file_exists("./setup/$branch"))
 
 include $file['config'];
 
-$mskin = cot_skinfile('install.update');
+$mskin = cot_tplfile('install.update');
 if (!file_exists($mskin))
 {
 	cot_diefatal($L['install_update_template_not_found']);

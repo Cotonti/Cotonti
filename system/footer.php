@@ -68,8 +68,16 @@ if (!COT_AJAX)
 	}
 	/* ===== */
 
-	$mskin = cot_skinfile($cfg['enablecustomhf'] ? array('footer', $env['location']) : 'footer', '+', defined('COT_ADMIN'));
-	$t = new XTemplate($mskin);
+	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] ? 'core' : 'module';
+	if ($cfg['enablecustomhf'])
+	{
+		$mtpl_base = (defined('COT_PLUG') && !empty($e)) ? array('footer', $e) : array('footer', $env['location']);
+	}
+	else
+	{
+		$mtpl_base = 'footer';
+	}
+	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
 	$t->assign(array(
 		"FOOTER_BOTTOMLINE" => $out['bottomline'],

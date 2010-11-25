@@ -20,7 +20,7 @@ cot_sendheaders();
 // Force Xtpl cache off
 $cfg['xtpl_cache'] = false;
 
-$mskin = cot_skinfile('install.install');
+$mskin = cot_tplfile('install.install');
 $t = new XTemplate($mskin);
 
 $site_url = (strpos($_SERVER['SERVER_PROTOCOL'], 'HTTPS') === false ? 'http://' : 'https://')

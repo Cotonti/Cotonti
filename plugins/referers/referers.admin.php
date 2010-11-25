@@ -19,7 +19,7 @@ Hooks=tools
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'referers');
 cot_block($usr['auth_read']);
 
-$tt = new XTemplate(cot_skinfile('referers.admin', true));
+$tt = new XTemplate(cot_tplfile('referers.admin', 'plug'));
 
 $GLOBALS['db_referers'] = (isset($GLOBALS['db_referers'])) ? $GLOBALS['db_referers'] : $GLOBALS['db_x'] . 'referers';
 require_once cot_langfile('referers', 'plug');

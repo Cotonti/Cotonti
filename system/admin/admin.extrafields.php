@@ -16,7 +16,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('extrafields');
 
-$t = new XTemplate(cot_skinfile(array('admin', 'extrafields', $n)));
+$t = new XTemplate(cot_tplfile(array('admin', 'extrafields', $n), 'core'));
 
 $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');

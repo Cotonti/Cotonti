@@ -137,7 +137,7 @@ foreach (cot_getextplugins('pm.list.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$t = new XTemplate(cot_skinfile('pm.list'));
+$t = new XTemplate(cot_tplfile('pm.list'));
 
 $jj = 0;
 

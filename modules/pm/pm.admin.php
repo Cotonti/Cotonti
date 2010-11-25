@@ -22,7 +22,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('pm', 'module');
 
-$t = new XTemplate(cot_skinfile('pm.admin', 'module'));
+$t = new XTemplate(cot_tplfile('pm.admin', 'module'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=pm'), $L['Private_Messages']);

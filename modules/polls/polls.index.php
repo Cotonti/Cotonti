@@ -23,7 +23,7 @@ if ($cfg['polls']['maxpolls'] > 0)
 	require_once cot_incfile('polls', 'module');
 
 	cot_poll_vote();
-	$indexpolls = new XTemplate(cot_skinfile(array('polls', 'index'), false));
+	$indexpolls = new XTemplate(cot_tplfile(array('polls', 'index'), false));
 
 	$sqlmode = ($cfg['polls']['mode'] == 'Recent polls') ? 'poll_creationdate DESC' :'RAND()';
 	$res = 0;

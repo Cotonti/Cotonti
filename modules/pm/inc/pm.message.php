@@ -97,7 +97,7 @@ foreach (cot_getextplugins('pm.main') as $pl)
 $pm_maindata = cot_parse($row['pm_text'], $cfg['pm']['markup']);
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_skinfile('pm.message'));
+$t = new XTemplate(cot_tplfile('pm.message'));
 
 if ($history)
 {

@@ -248,7 +248,7 @@ elseif ($defult_c)
 	}
 }
 
-$t = new XTemplate(cot_skinfile('rss'));
+$t = new XTemplate(cot_tplfile('rss'));
 $t->assign(array(
 	"RSS_ENCODING" => $cfg['rss']['rss_charset'],
 	"RSS_TITLE" => htmlspecialchars($rss_title),

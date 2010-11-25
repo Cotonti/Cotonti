@@ -78,13 +78,13 @@ function cot_get_news($cat, $themefile = "news", $limit = false, $d = 0, $textle
 
 	$pagenav = cot_pagenav('index', $news_link_params, $d, $totalnews, $limit, $catd);
 
-	if (file_exists(cot_skinfile($themefile, true)))
+	if (file_exists(cot_tplfile($themefile, 'plug')))
 	{
-		$news = new XTemplate(cot_skinfile($themefile, true));
+		$news = new XTemplate(cot_tplfile($themefile, 'plug'));
 	}
 	else
 	{
-		$news = new XTemplate(cot_skinfile('news', true));
+		$news = new XTemplate(cot_tplfile('news', 'plug'));
 	}
 
 	while ($pag = $sql->fetch())

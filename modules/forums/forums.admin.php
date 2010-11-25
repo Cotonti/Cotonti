@@ -19,7 +19,7 @@ Hooks=admin
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', 'any');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_skinfile('forums.admin', 'module'));
+$t = new XTemplate(cot_tplfile('forums.admin', 'module'));
 
 require_once cot_incfile('forums', 'module');
 

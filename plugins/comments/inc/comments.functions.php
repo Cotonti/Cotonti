@@ -85,7 +85,7 @@ function cot_comments_display($ext_name, $code, $cat = '')
 		require_once cot_incfile('forms');
 	}
 
-	$t = new XTemplate(cot_skinfile('comments', true));
+	$t = new XTemplate(cot_tplfile('comments', 'plug'));
 
 	/* == Hook == */
 	foreach (cot_getextplugins('comments.main') as $pl)

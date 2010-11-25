@@ -22,7 +22,7 @@ cot_block($usr['isadmin']);
 
 require_once cot_incfile('polls', 'module');
 
-$t = new XTemplate(cot_skinfile('polls.admin', 'module'));
+$t = new XTemplate(cot_tplfile('polls.admin', 'module'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=polls'), $L['Polls']);

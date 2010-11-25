@@ -20,7 +20,7 @@ Hooks=admin
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', 'any');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_skinfile('page.admin', 'module'));
+$t = new XTemplate(cot_tplfile('page.admin', 'module'));
 
 require_once cot_incfile('page', 'module');
 

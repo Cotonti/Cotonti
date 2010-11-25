@@ -1342,7 +1342,7 @@ function cot_build_ratings($code, $url, $display)
 		}
 	}
 
-	$t = new XTemplate(cot_skinfile('ratings'));
+	$t = new XTemplate(cot_tplfile('ratings'));
 
 	if (!$called && $usr['id'] > 0 && !$alreadyvoted)
 	{
@@ -2764,7 +2764,7 @@ function cot_get_rc_theme()
 }
 
 /**
- * Tries to detect and fetch a user scheme or returns FALSE on error.
+ * Tries to detect and fetch a user scheme CSS file or returns FALSE on error.
  *
  * @global array $usr User object
  * @global array $cfg Configuration
@@ -2834,16 +2834,20 @@ function cot_schemefile()
 }
 
 /**
- * Returns skin file path
+ * Returns path to a template file. The default search order is:
+ * 1) Current theme folder (plugins/ subdir for plugins)
+ * 2) Default theme folder (if current is not default)
+ * 3) tpl subdir in module/plugin folder (fallback template)
  *
  * @param mixed $base Item name (string), or base names (array)
- * @param mixed $plug Plugin flag (bool), or '+' (string) to probe plugin
+ * @param string $type Extension type: 'plug', 'module' or 'core'
  * @return string
  */
-function cot_skinfile($base, $plug = false)
+function cot_tplfile($base, $type = 'module')
 {
 	global $usr, $cfg;
 
+	// Get base name parts
 	if (is_string($base) && mb_strpos($base, '.') !== false)
 	{
 		$base = explode('.', $base);
@@ -2855,82 +2859,58 @@ function cot_skinfile($base, $plug = false)
 
 	$basename = $base[0];
 
-	if ((defined('COT_ADMIN')
-		|| defined('COT_MESSAGE') && $_SESSION['s_run_admin']))
+	// Possible search directories depending on extension type
+	if ($type == 'plug')
 	{
-		$admn = true;
-	}
-
-	if ($plug === '+')
-	{
-		$plug = false;
-		if (defined('COT_PLUG'))
-		{
-			global $e;
-
-			if (!empty($e))
-			{
-				$plug = true;
-				$basename = $e;
-				if ($cfg['enablecustomhf'])
-				{
-					$base[] = $e;
-				}
-			}
-		}
-	}
-
-	if ($plug === true)
-	{
-		$scan_prefix[] = './themes/'.$usr['theme'].'/plugins/';
+		// Plugin template paths
+		$scan_prefix[] = './themes/' . $usr['theme'] . '/plugins/';
 		if ($usr['theme'] != $cfg['defaulttheme'])
 		{
-			$scan_prefix[] = './themes/'.$cfg['defaulttheme'].'/plugins/';
+			$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/plugins/';
 		}
-		$scan_prefix[] = $cfg['plugins_dir'].'/'.$basename.'/tpl/';
+		$scan_prefix[] = $cfg['plugins_dir'] . '/' . $basename . '/tpl/';
 	}
-	else
+	elseif ($type == 'core')
 	{
-		$scan_prefix[] = './themes/'.$usr['theme'].'/'.$basename.'/';
-		if ($usr['theme'] != $cfg['defaulttheme'])
+		// Built-in core modules
+		if (defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'])
 		{
-			$scan_prefix[] = './themes/'.$cfg['defaulttheme'].'/'.$basename.'/';
-		}
-		if ((defined('COT_ADMIN') && $plug !== 'module'
-			|| defined('COT_MESSAGE') && $_SESSION['s_run_admin']))
-		{
-			$scan_prefix[] = $cfg['system_dir'].'/admin/tpl/';
+			$scan_prefix[] = $cfg['system_dir'] . '/admin/tpl/';
 		}
 		elseif (defined('COT_USERS'))
 		{
-			$scan_prefix[] = $cfg['system_dir'].'/users/tpl/';
-		}
-		else
-		{
-			$scan_prefix[] = $cfg['modules_dir'].'/'.$basename.'/tpl/';
+			$scan_prefix[] = $cfg['system_dir'] . '/users/tpl/';
 		}
 	}
-	$scan_prefix[] = './themes/'.$usr['theme'].'/';
-	if ($usr['theme'] != $cfg['defaulttheme'])
+	else
 	{
-		$scan_prefix[] = './themes/'.$cfg['defaulttheme'].'/';
+		// Module template paths
+		$scan_prefix[] = './themes/' . $usr['theme'] . '/';
+		if ($usr['theme'] != $cfg['defaulttheme'])
+		{
+			$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/';
+		}
+		$scan_prefix[] = $cfg['modules_dir'] . '/' . $basename . '/tpl/';
 	}
 
+	// Build template file name from base parts glued with dots
 	$base_depth = count($base);
 	for ($i = $base_depth; $i > 0; $i--)
 	{
 		$levels = array_slice($base, 0, $i);
-		$themefile = implode('.', $levels).'.tpl';
+		$themefile = implode('.', $levels) . '.tpl';
+		// Search in all available directories
 		foreach ($scan_prefix as $pfx)
 		{
-			if (file_exists($pfx.$themefile))
+			if (file_exists($pfx . $themefile))
 			{
-				return $pfx.$themefile;
+				return $pfx . $themefile;
 			}
 		}
 	}
 
-//	throw new Exception('Template file <em>'.implode('.', $base).'.tpl</em> was not found. Please check your theme.');
+	//	throw new Exception('Template file <em>'.implode('.', $base).'.tpl</em> was not found.
+	//	 Please check your theme.');
 	return '';
 }
 

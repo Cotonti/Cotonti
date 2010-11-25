@@ -74,7 +74,7 @@ if (empty($d))
 $bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
 
 $title = $bhome . cot_rc_link(cot_url('users'), $L['Users']);
-$localskin = cot_skinfile('users');
+$localskin = cot_tplfile('users', 'core');
 
 if(!empty($sq))
 {

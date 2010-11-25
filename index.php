@@ -53,7 +53,7 @@ foreach (cot_getextplugins('index.main') as $pl)
 
 require_once $cfg['system_dir'].'/header.php';
 
-$mskin = cot_skinfile('index');
+$mskin = cot_tplfile('index');
 $t = new XTemplate($mskin);
 
 /* === Hook === */

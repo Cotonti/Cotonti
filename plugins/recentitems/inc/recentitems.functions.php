@@ -17,7 +17,7 @@ require_once cot_langfile('recentitems', 'plug');
 function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $rightprescan = true)
 {
 	global $db, $totalrecent, $L, $cfg, $db_forum_topics, $theme, $usr, $sys, $R, $structure;
-	$recentitems = new XTemplate(cot_skinfile($template, true));
+	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
 	if ($rightprescan)
 	{
@@ -176,7 +176,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $textlength = 0, $rightprescan = true, $cat = '')
 {
 	global $db, $cot_cat, $db_pages, $db_users, $sys, $cfg, $L, $pag, $cot_extrafields, $usr;
-	$recentitems = new XTemplate(cot_skinfile($template, true));
+	$recentitems = new XTemplate(cot_tplfile($template, 'plug'));
 
 	if ($rightprescan || $cat)
 	{

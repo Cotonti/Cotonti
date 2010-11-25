@@ -162,7 +162,7 @@ foreach (cot_getextplugins('forums.newtopic.main') as $pl)
 require_once cot_incfile('forms');
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_skinfile(array('forums', 'newtopic', $structure['forums'][$s]['tpl']));
+$mskin = cot_tplfile(array('forums', 'newtopic', $structure['forums'][$s]['tpl']));
 $t = new XTemplate($mskin);
 
 cot_display_messages($t);
