@@ -31,11 +31,11 @@ function sed_tag_parse_query($qs)
 				if (mb_strpos($tag, '*') !== false)
 				{
 					$tag = str_replace('*', '%', $tag);
-					$tokens2[$j] = "r.tag LIKE '$tag'";
+					$tokens2[$j] = "r.tag LIKE '".sed_sql_prep($tag)."'";
 				}
 				else
 				{
-					$tokens2[$j] = "r.tag = '$tag'";
+					$tokens2[$j] = "r.tag = '".sed_sql_prep($tag)."'";
 				}
 			}
 			else
