@@ -20,12 +20,12 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (!empty($highlight))
 {
-	$search_embed = '$(document).ready(function() {$("div.fmsg").each(function() {';
+	$search_embed = '$(document).ready(function() {$("body").each(function() {';
 
 	$highlight = explode(' ', $highlight);
 	foreach ($highlight as $key=>$value)
 	{
-		$search_embed .= '$.highlight(this, \''.mb_strtoupper($value).'\');';
+		$search_embed .= '$.highlight(this, "'.mb_strtoupper($value).'");';
 	}
 
 	$search_embed .= '});});';
