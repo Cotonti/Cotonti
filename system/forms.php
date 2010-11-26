@@ -15,7 +15,7 @@ defined('COT_CODE') or die('Wrong URL');
 /**
  * Registers textarea instances to inform RichText editors that they need to be loaded
  */
-$GLOBALS['cot_textarea_count'] = 0;
+$cot_textarea_count = 0;
 
 /**
  * Generates a checkbox output

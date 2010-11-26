@@ -14,7 +14,7 @@ require_once cot_langfile('users', 'core');
 require_once cot_incfile('users', 'module', 'resources');
 
 // Extafield globals
-$GLOBALS['cot_extrafields']['users'] = (!empty($GLOBALS['cot_extrafields'][$GLOBALS['db_users']])) ? $GLOBALS['cot_extrafields'][$GLOBALS['db_users']] : array();
+$cot_extrafields['users'] = (!empty($cot_extrafields[$db_users])) ? $cot_extrafields[$db_users] : array();
 
 /**
  * Returns group link (button)

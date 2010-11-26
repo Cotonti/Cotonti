@@ -18,10 +18,10 @@ require_once cot_incfile('forms');
 require_once cot_incfile('extrafields');
 
 // Global variables
-$GLOBALS['db_pages'] = (isset($GLOBALS['db_pages'])) ? $GLOBALS['db_pages'] : $GLOBALS['db_x'] . 'pages';
+$db_pages = (isset($db_pages)) ? $db_pages : $db_x . 'pages';
 
-$GLOBALS['cot_extrafields']['pages'] = (!empty($GLOBALS['cot_extrafields'][$GLOBALS['db_pages']]))
-	? $GLOBALS['cot_extrafields'][$GLOBALS['db_pages']] : array();
+$cot_extrafields['pages'] = (!empty($cot_extrafields[$db_pages]))
+	? $cot_extrafields[$db_pages] : array();
 	
 /**
  * Cuts the page after 'more' tag or after the first page (if multipage)

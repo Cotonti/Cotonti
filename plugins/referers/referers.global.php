@@ -17,7 +17,7 @@ Hooks=global
 
 defined('COT_CODE') or die('Wrong URL');
 
-$GLOBALS['db_referers'] = (isset($GLOBALS['db_referers'])) ? $GLOBALS['db_referers'] : $GLOBALS['db_x'] . 'referers';
+$db_referers = (isset($db_referers)) ? $db_referers : $db_x . 'referers';
 
 $sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
 

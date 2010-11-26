@@ -21,7 +21,7 @@ cot_block($usr['auth_read']);
 
 $tt = new XTemplate(cot_tplfile('referers.admin', 'plug'));
 
-$GLOBALS['db_referers'] = (isset($GLOBALS['db_referers'])) ? $GLOBALS['db_referers'] : $GLOBALS['db_x'] . 'referers';
+$db_referers = (isset($db_referers)) ? $db_referers : $db_x . 'referers';
 require_once cot_langfile('referers', 'plug');
 $adminhelp = $L['adm_help_referers'];
 

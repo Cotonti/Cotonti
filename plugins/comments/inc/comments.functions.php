@@ -15,7 +15,7 @@ require_once cot_langfile('comments', 'plug');
 require_once cot_incfile('comments', 'plug', 'resources');
 
 // Table name globals
-$GLOBALS['db_com'] = (isset($GLOBALS['db_com'])) ? $GLOBALS['db_com'] : $GLOBALS['db_x'] . 'com';
+$db_com = (isset($db_com)) ? $db_com : $db_x . 'com';
 
 /**
  * Returns number of comments for item

@@ -16,9 +16,9 @@ require_once cot_incfile('forms');
 require_once cot_langfile('polls', 'module');
 
 // Global variables
-$GLOBALS['db_polls'] 		 = (isset($GLOBALS['db_polls'])) ? $GLOBALS['db_polls'] : $GLOBALS['db_x'] . 'polls';
-$GLOBALS['db_polls_options'] = (isset($GLOBALS['db_polls_options'])) ? $GLOBALS['db_polls_options'] : $GLOBALS['db_x'] . 'polls_options';
-$GLOBALS['db_polls_voters']  = (isset($GLOBALS['db_polls_voters'])) ? $GLOBALS['db_polls_voters'] : $GLOBALS['db_x'] . 'polls_voters';
+$db_polls 		 = (isset($db_polls)) ? $db_polls : $db_x . 'polls';
+$db_polls_options = (isset($db_polls_options)) ? $db_polls_options : $db_x . 'polls_options';
+$db_polls_voters  = (isset($db_polls_voters)) ? $db_polls_voters : $db_x . 'polls_voters';
 
 /**
  * Adds form for create/edit Poll
