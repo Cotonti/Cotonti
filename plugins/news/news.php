@@ -1,11 +1,11 @@
 <?php
 
 /* ====================
-  [BEGIN_COT_EXT]
-  Hooks=index.tags
-  Tags=index.tpl:{INDEX_NEWS}
-  [END_COT_EXT]
-  ==================== */
+[BEGIN_COT_EXT]
+Hooks=index.tags
+Tags=index.tpl:{INDEX_NEWS}
+[END_COT_EXT]
+==================== */
 
 /**
  * Pick up pages from a category and display the newest in the home page
@@ -57,7 +57,7 @@ foreach ($categories as $v)
 	}
 }
 
-if (!count($cats))
+if (count($cats) > 0)
 {
 	$catn = 0;
 	foreach ($cats as $k => $v)
@@ -67,6 +67,8 @@ if (!count($cats))
 		$catsub = cot_structure_children('page', $cat);
 		$where = "page_state = 0 AND page_cat <> 'system' AND page_date <= " . (int)$sys['now_offset'] . " AND page_cat IN ('" . implode("','", $catsub) . "')";
 		
+		$news_link_params = ($c != $indexcat) ? "c=" . $c : '';
+
 		/* === Hook - Part2 : Include === FIRST === */
 		foreach ($news_first_extp as $pl)
 		{
@@ -74,12 +76,15 @@ if (!count($cats))
 		}
 		/* ===== */
 		
-		$sql = $db->query("SELECT p.*, u.* FROM $db_pages AS p
-		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE " . $where . " ORDER BY page_date DESC LIMIT " . $v[3] . ", " . $v[1]);
-		$totalnews = $db->query("SELECT COUNT(*) FROM $db_pages	WHERE " . $where)->fetchColumn();
+		$sql = $db->query("SELECT p.*, u.* $news_join_columns
+			FROM $db_pages AS p
+				LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid $news_join_tables
+			WHERE $where
+			ORDER BY page_date DESC LIMIT " . $v[3] . ", " . $v[1]);
+		$totalnews = $db->query("SELECT COUNT(*)
+			FROM $db_pages AS p $news_join_tables
+			WHERE " . $where)->fetchColumn();
 
-		$news_link_params = ($c != $indexcat) ? "c=" . $c : '';
 		if (!$cfg['plugin']['news']['syncpagination'])
 		{
 			$news_link_params .= ($catn != 0 && $d != 0) ? '&d=' . $d : '';
