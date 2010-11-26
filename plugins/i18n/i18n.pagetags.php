@@ -18,7 +18,7 @@ Hooks=pagetags.main
 
 defined('COT_CODE') or die('Wrong URL');
 
-global $i18n_enabled, $i18n_notmain, $i18n_locale;
+global $i18n_enabled, $i18n_notmain, $i18n_locale, $i18n_write, $i18n_admin;
 
 if ($i18n_enabled && $i18n_notmain)
 {
@@ -66,6 +66,17 @@ if ($i18n_enabled && $i18n_notmain)
 				? htmlspecialchars($page_data['page_desc']) : $text,
 			'MORE' => $cutted ? cot_rc_link($page_data['page_pageurl'], $L['ReadMore']) : '',
 		));
+	}
+
+	$i18n_array['ADMIN_EDIT'] = '';
+
+	if ($i18n_write)
+	{
+		if ($i18n_admin || $pag_i18n['ipage_translatorid'] == $usr['id'])
+		{
+			// Edit translation
+			$i18n_array['ADMIN_EDIT'] = cot_rc_link(cot_url('plug', "e=i18n&m=page&a=edit&id=".$page_data['page_id']."&l=$i18n_locale"), $L['Edit']);
+		}
 	}
 	
 	$temp_array = array_merge($temp_array, $i18n_array);

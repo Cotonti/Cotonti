@@ -147,29 +147,6 @@ $t->assign(cot_generate_pagetags($pag, 'PAGE_', 0, $usr['isadmin']));
 $t->assign('PAGE_OWNER', cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])));
 $t->assign(cot_generate_usertags($pag, "PAGE_OWNER_"));
 
-if ($usr['isadmin'] || $usr['id'] == $pag['page_ownerid'])
-{
-	$t->assign('PAGE_ADMIN_EDIT', cot_rc_link(cot_url('page', 'm=edit&id='.$id), $L['Edit']));
-}
-
-if ($usr['isadmin'])
-{
-
-	if ($pag['page_state'] == 1)
-	{
-		$validation = cot_rc_link(cot_url('admin', 'm=page&a=validate&id='.$id.'&'.cot_xg()), $L['Validate']);
-	}
-	else
-	{
-		$validation = cot_rc_link(cot_url('admin', 'm=page&a=unvalidate&id='.$id.'&'.cot_xg()), $L['Putinvalidationqueue']);
-	}
-
-	$t->assign(array(
-		"PAGE_ADMIN_COUNT" => $pag['page_count'],
-		"PAGE_ADMIN_UNVALIDATE" => $validation
-	));
-}
-
 $pag['page_file'] = intval($pag['page_file']);
 if ($pag['page_file'] > 0)
 {
