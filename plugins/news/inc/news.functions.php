@@ -156,8 +156,10 @@ function sed_get_news($cat, $skinfile="news", $deftag="INDEX_NEWS",  $limit=fals
         foreach ($extrafields as $row)
         {
             $news->assign('PAGE_ROW_' . mb_strtoupper($row['field_name']),
-                sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"])
-                );
+                sed_build_extrafields_data('page', $row['field_type'], $row['field_name'], $pag["page_{$row['field_name']}"]));
+			isset($L['page_'.$row['field_name'].'_title'])
+				? $news->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']).'_TITLE', $L['page_'.$row['field_name'].'_title'])
+				: $news->assign('PAGE_ROW_'.mb_strtoupper($row['field_name']).'_TITLE', $row['field_description']);
         }
 
         /* === Hook - Part2 : Include === */
