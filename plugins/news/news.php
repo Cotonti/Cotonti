@@ -121,32 +121,6 @@ if (count($cats) > 0)
 			}
 			/* ===== */
 
-			if ($cfg['plugin']['tags']['pages'])
-			{
-				require_once cot_incfile('tags', 'plug');
-				$tags = cot_tag_list($pag['page_id']);
-				if (count($tags) > 0)
-				{
-					$tag_ii = 0;
-					foreach ($tags as $tag)
-					{
-						$tag_u = cot_urlencode($tag, $cfg['plugin']['tags']['translit']);
-						$tl = $lang != 'en' && $tag_u != urlencode($tag) ? '&tl=1' : '';
-						$news->assign(array(
-							'PAGE_TAGS_ROW_TAG' => $cfg['plugin']['tags']['title'] ? htmlspecialchars(cot_tag_title($tag)) : htmlspecialchars($tag),
-							'PAGE_TAGS_ROW_TAG_COUNT' => $tag_ii,
-							'PAGE_TAGS_ROW_URL' => cot_url('plug', 'e=tags&a=pages&t=' . $tag_u . $tl)
-						));
-						$news->parse('NEWS.PAGE_ROW.PAGE_TAGS.PAGE_TAGS_ROW');
-						$tag_ii++;
-					}
-					$news->parse('NEWS.PAGE_ROW.PAGE_TAGS');
-				}
-				else
-				{
-					$news->parse('NEWS.PAGE_ROW.PAGE_NO_TAGS');
-				}
-			}
 			$news->parse("NEWS.PAGE_ROW");
 		}
 
