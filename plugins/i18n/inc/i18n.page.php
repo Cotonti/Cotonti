@@ -41,7 +41,8 @@ if ($id > 0 && $stmt->rowCount() == 1)
 		{
 			// Submit new translation
 			$pag_i18n['ipage_id'] = $id;
-			$pag_i18n['ipage_locale'] = cot_import('locale', 'P', 'ALP');
+			$i18n_locale = cot_import('locale', 'P', 'ALP');
+			$pag_i18n['ipage_locale'] = $i18n_locale;
 			if (!in_array($pag_i18n['ipage_locale'], array_keys($i18n_locales)))
 			{
 				cot_error('i18n_incorrect_locale', 'locale');
