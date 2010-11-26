@@ -980,7 +980,7 @@ function sed_build_comments($code, $url, $display = true)
 	{
 		$pfs = ($usr['id']>0) ? sed_build_pfs($usr['id'], 'newcomment', 'rtext', $L['Mypfs']) : '';
 		$pfs .= (sed_auth('pfs', 'a', 'A')) ? ' &nbsp; '.sed_build_pfs(0, 'newcomment', 'rtext', $L['SFS']) : '';
-		$post_main = '<textarea class="minieditor" name="rtext" rows="10" cols="120">'.$rtext.'</textarea><br />'.$pfs;
+		$post_main = '<textarea class="minieditor" name="rtext" rows="10" cols="120">'.$rtext.'</textarea>'.$pfs;
 	}
 
 	$t->assign(array(
