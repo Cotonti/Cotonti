@@ -10,7 +10,7 @@
  * @license BSD
  */
 
-$GLOBALS['tc_styles'] = array(
+$tc_styles = array(
 	1 => 'xs',
 	5 => 's',
 	20 => 'm',
@@ -18,7 +18,7 @@ $GLOBALS['tc_styles'] = array(
 	999999999 => 'xl'
 );
 
-$GLOBALS['db_tags']	= (isset($GLOBALS['db_tags'])) ? $GLOBALS['db_tags'] : $GLOBALS['db_x'] . 'tags';
-$GLOBALS['db_tag_references'] = (isset($GLOBALS['db_tag_references'])) ? $GLOBALS['db_tag_references'] : $GLOBALS['db_x'] . 'tag_references';
+$db_tags	= (isset($db_tags)) ? $db_tags : $db_x . 'tags';
+$db_tag_references = (isset($db_tag_references)) ? $db_tag_references : $db_x . 'tag_references';
 
 ?>

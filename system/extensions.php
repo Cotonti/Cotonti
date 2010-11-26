@@ -31,7 +31,7 @@ define('COT_PLUGIN_DEFAULT_ORDER', 10);
 /**
  * These parts ($name.$part.php) are reserved handlers with no hooks
  */
-$GLOBALS['cot_ext_ignore_parts'] = array('configure', 'install', 'setup', 'uninstall');
+$cot_ext_ignore_parts = array('configure', 'install', 'setup', 'uninstall');
 
 /**
  * Applies custom SQL and PHP patches in a directory. Error and success

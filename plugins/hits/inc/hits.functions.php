@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$GLOBALS['db_stats'] = (isset($GLOBALS['db_stats'])) ? $GLOBALS['db_stats'] : $GLOBALS['db_x'] . 'stats';
+$db_stats = (isset($db_stats)) ? $db_stats : $db_x . 'stats';
 
 /*
  * =============================== Statistics API =============================

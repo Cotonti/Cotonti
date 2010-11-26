@@ -22,7 +22,7 @@ cot_block($usr['isadmin']);
 $tt = new XTemplate(cot_tplfile('banlist.admin', 'plug'));
 require_once cot_langfile('banlist', 'plug');
 
-$GLOBALS['db_banlist'] = (isset($GLOBALS['db_banlist'])) ? $GLOBALS['db_banlist'] : $GLOBALS['db_x'] . 'banlist';
+$db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
 $adminhelp = $L['banlist_help'];
 
 $d = cot_import('d', 'G', 'INT');

@@ -14,9 +14,9 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_langfile('i18n', 'plug');
 require_once cot_incfile('i18n', 'plug', 'resources');
 
-$GLOBALS['db_i18n_locales'] = (isset($GLOBALS['db_i18n_locales'])) ? $GLOBALS['db_i18n_locales'] : $GLOBALS['db_x'] . 'i18n_locales';
-$GLOBALS['db_i18n_pages'] = (isset($GLOBALS['db_i18n_pages'])) ? $GLOBALS['db_i18n_pages'] : $GLOBALS['db_x'] . 'i18n_pages';
-$GLOBALS['db_i18n_structure'] = (isset($GLOBALS['db_i18n_structure'])) ? $GLOBALS['db_i18n_structure'] : $GLOBALS['db_x'] . 'i18n_structure';
+$db_i18n_locales = (isset($db_i18n_locales)) ? $db_i18n_locales : $db_x . 'i18n_locales';
+$db_i18n_pages = (isset($db_i18n_pages)) ? $db_i18n_pages : $db_x . 'i18n_pages';
+$db_i18n_structure = (isset($db_i18n_structure)) ? $db_i18n_structure : $db_x . 'i18n_structure';
 
 /**
  * Builds internationalized category path

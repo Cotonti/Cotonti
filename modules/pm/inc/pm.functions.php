@@ -16,7 +16,7 @@ require_once cot_langfile('pm', 'module');
 require_once cot_incfile('pm', 'module', 'resources');
 
 // Global variables
-$GLOBALS['db_pm'] = (isset($GLOBALS['db_pm'])) ? $GLOBALS['db_pm'] : $GLOBALS['db_x'] . 'pm';
+$db_pm = (isset($db_pm)) ? $db_pm : $db_x . 'pm';
 
 /**
  * Returns usertags

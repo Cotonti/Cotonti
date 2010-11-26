@@ -477,6 +477,6 @@ function cot_load_extrafields()
 /* ======== Extrafields Pre-load ======== */
 
 cot_load_extrafields();
-$GLOBALS['cot_extrafields']['structure'] = (!empty($GLOBALS['cot_extrafields'][$GLOBALS['db_structure']])) ? $GLOBALS['cot_extrafields'][$GLOBALS['db_structure']] : array();
+$cot_extrafields['structure'] = (!empty($cot_extrafields[$db_structure])) ? $cot_extrafields[$db_structure] : array();
 
 ?>

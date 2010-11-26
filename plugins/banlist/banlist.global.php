@@ -17,7 +17,7 @@ Hooks=global
 
 defined('COT_CODE') or die('Wrong URL');
 
-$GLOBALS['db_banlist'] = (isset($GLOBALS['db_banlist'])) ? $GLOBALS['db_banlist'] : $GLOBALS['db_x'] . 'banlist';
+$db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
 
 $userip = explode('.', $usr['ip']);
 $ipmasks = "('".$userip[0].'.'.$userip[1].'.'.$userip[2].'.'.$userip[3]."','".$userip[0].'.'.$userip[1].'.'.$userip[2].".*','".$userip[0].'.'.$userip[1].".*.*','".$userip[0].".*.*.*')";
