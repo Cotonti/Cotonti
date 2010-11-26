@@ -28,7 +28,7 @@ if($cfg['plugin']['tags']['pages'] && sed_auth('plug', 'tags', 'W'))
 	$t->assign(array(
 	'PAGEADD_TOP_TAGS' => $L['Tags'],
 	'PAGEADD_TOP_TAGS_HINT' => $L['tags_comma_separated'],
-	'PAGEADD_FORM_TAGS' => '<input class="tags_input" type="text" name="rtags" />'
+	'PAGEADD_FORM_TAGS' => '<input class="tags_input" type="text" name="rtags" size="56" />'
 	));
 	$t->parse('MAIN.TAGS');
 }
