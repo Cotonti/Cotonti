@@ -203,7 +203,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'FILE_SIZE' => $page_data['page_size'],
 				'FILE_ICON' => $page_data['page_fileicon'],
 				'FILE_COUNT' => $page_data['page_filecount'],
-				"FILE_COUNTTIMES" => cot_declension($page_data['page_filecount'], $Ls['Times']),
+				'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
 				'FILE_NAME' => basename($page_data['page_url']),
 				'COUNT' => $page_data['page_count'],
 				'RATINGS' => $page_data['page_ratings'],
