@@ -212,6 +212,32 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 
 			);
 
+			// Admin tags
+			if ($usr['isadmin'] || $usr['id'] == $page_data['page_ownerid'])
+			{
+				$temp_array['ADMIN_EDIT'] = cot_rc_link(cot_url('page', 'm=edit&id='.$page_data['page_id']), $L['Edit']);
+			}
+			else
+			{
+				$temp_array['ADMIN_EDIT'] = '';
+			}
+
+			if ($usr['isadmin'])
+			{
+				if ($page_data['page_state'] == 1)
+				{
+					$temp_array['ADMIN_UNVALIDATE'] = cot_rc_link(cot_url('admin', 'm=page&a=validate&id='.$page_data['page_id'].'&x='.$sys['xk']), $L['Validate']);
+				}
+				else
+				{
+					$temp_array['ADMIN_UNVALIDATE'] = cot_rc_link(cot_url('admin', 'm=page&a=unvalidate&id='.$page_data['page_id'].'&x='.$sys['xk']), $L['Putinvalidationqueue']);
+				}
+			}
+			else
+			{
+				$temp_array['ADMIN_UNVALIDATE'] = '';
+			}
+
 			// Extrafields
 			foreach ($cot_extrafields['pages'] as $row)
 			{
