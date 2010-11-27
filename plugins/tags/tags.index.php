@@ -28,7 +28,7 @@ if($cfg['plugin']['tags']['pages'])
 	require_once $cfg['plugins_dir'].'/tags/inc/config.php';
 	$limit = $cfg['plugin']['tags']['lim_index'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_index'];
 	$tcloud = sed_tag_cloud($cfg['plugin']['tags']['index'], $cfg['plugin']['tags']['order'], $limit);
-	$tc_html = '<div class="tag_cloud">';
+	$tc_html = '<ul class="tag_cloud">';
 	foreach($tcloud as $tag => $cnt)
 	{
 		$tag_count++;
@@ -43,15 +43,15 @@ if($cfg['plugin']['tags']['pages'])
 				break;
 			}
 		}
-		$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index'].'&t='.$tag_u.$tl)
-			.'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a> ';
+		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index'].'&t='.$tag_u.$tl)
+			.'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a><span>'.$cnt.'</span></li>';
 	}
 	if($cfg['plugin']['tags']['more'] && $limit > 0)
 	{
 		$tc_html .= '<hr /><a class="more" href="'
 			.sed_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index']).'">'.$L['tags_All'].'</a>';
 	}
-	$tc_html .= '</div>';
+	$tc_html .= '</ul>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 	$t->assign(array(
 	'INDEX_TAG_CLOUD' => $tc_html,

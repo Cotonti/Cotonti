@@ -59,7 +59,7 @@ if($cfg['plugin']['tags']['pages'])
 		WHERE r.tag_area = 'pages' AND p.page_cat IN ($tc_cats) AND p.page_state = 0
 		GROUP BY r.tag
 		ORDER BY $order $limit");
-	$tc_html = '<div class="tag_cloud">';
+	$tc_html = '<ul class="tag_cloud">';
 	while($tc_row = sed_sql_fetchassoc($tc_res))
 	{
 		$tag_count++;
@@ -76,14 +76,14 @@ if($cfg['plugin']['tags']['pages'])
 				break;
 			}
 		}
-		$tc_html .= '<a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a> ';
+		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a><span>'.$cnt.'</span></li>';
 	}
 	sed_sql_freeresult($tc_res);
 	if($cfg['plugin']['tags']['more'] && !empty($limit))
 	{
 		$tc_html .= '<hr /><a class="more" href="'.sed_url('plug', 'e=tags&a=pages').'">'.$L['tags_All'].'</a>';
 	}
-	$tc_html .= '</div>';
+	$tc_html .= '</ul>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 
 	$t->assign(array(
