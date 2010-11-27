@@ -533,17 +533,17 @@ function cot_structure_children($area, $cat, $allsublev = true,  $firstcat = tru
 	$mtchlvl = mb_substr_count($mtch,".");
 
 	$catsub = array();
-	if ($firstcat && (($userrights && cot_auth($area, $cat, 'R') || !$userrights)))
+	if ($cat != '' && $firstcat && (($userrights && cot_auth($area, $cat, 'R') || !$userrights)))
 	{
 		$catsub[] = $cat;
 	}
 
-	foreach($structure[$area] as $i => $x)
+	foreach ($structure[$area] as $i => $x)
 	{
-		if(mb_substr($x['path'], 0, $mtchlen) == $mtch && (($userrights && cot_auth($area, $i, 'R') || !$userrights)))
+		if (($cat == '' || mb_substr($x['path'], 0, $mtchlen) == $mtch) && (($userrights && cot_auth($area, $i, 'R') || !$userrights)))
 		{
 			$subcat = mb_substr($x['path'], $mtchlen + 1);
-			if($allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
+			if ($cat == '' || $allsublev || (!$allsublev && mb_substr_count($x['path'],".") == $mtchlvl))
 			{
 				$i = ($sqlprep) ? $db->prep($i) : $i;
 				$catsub[] = $i;
