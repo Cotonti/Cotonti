@@ -30,7 +30,6 @@ recentforumstitle=17:string:::Recent forums title length limit
 newpages=18:radio::1:Recent pages in standalone module
 newpagestext=19:string:::New pages text length limit
 newforums=20:radio::1:Recent forums in standalone module
-newadditional=21:radio::0:Additional modules in standalone module
 itemsperpage=22:select:1,2,3,5,10,20,30,50,100,150,200,300,500:10:Elements per page in standalone module
 rightscan=23:radio::1:Enable prescanning category rights
 [END_COT_EXT_CONFIG]

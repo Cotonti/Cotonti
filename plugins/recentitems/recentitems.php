@@ -1,4 +1,5 @@
 <?php
+
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=standalone
@@ -14,12 +15,12 @@ Hooks=standalone
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
-
 defined('COT_CODE') or die("Wrong URL.");
 
 $days = cot_import('days', 'G', 'INT');
 $d = cot_import('d', 'G', 'INT');
-if (empty($d)) $d = '0';
+if (empty($d))
+	$d = '0';
 $mode = cot_import('mode', 'G', 'TXT');
 
 if ($days == 0)
@@ -56,7 +57,7 @@ if ($cfg['plugin']['recentitems']['newforums'] && $cfg['forums'] && (empty($mode
 	$t->assign("RECENT_FORUMS", $res);
 }
 
-if ($cfg['plugin']['recentitems']['newadditional'] && ($mode  != 'pages' || $mode != 'forums'))
+if ($mode != 'pages' || $mode != 'forums')
 {
 	/* === Hook === */
 	foreach (cot_getextplugins('recentitems.tags') as $pl)
@@ -67,14 +68,13 @@ if ($cfg['plugin']['recentitems']['newadditional'] && ($mode  != 'pages' || $mod
 }
 
 $totalpages = max($totalrecent);
-$days =($days > 0) ? "&days=".$days : "";
-$mode=(!empty($mode)) ? "&mode=".$mode : "";
-$pagenav = cot_pagenav('plug', 'e=recentitems'.$days.$mode, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage']);
+$days = ($days > 0) ? "&days=" . $days : "";
+$mode = (!empty($mode)) ? "&mode=" . $mode : "";
+$pagenav = cot_pagenav('plug', 'e=recentitems' . $days . $mode, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage']);
 
 $t->assign(array(
 	"PAGE_PAGENAV" => $pagenav['main'],
 	"PAGE_PAGEPREV" => $pagenav['prev'],
 	"PAGE_PAGENEXT" => $pagenav['next']
 ));
-
 ?>
