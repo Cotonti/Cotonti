@@ -916,7 +916,7 @@ function cot_unique($l=16)
 /**
  * Returns specific access permissions
  *
- * @param string $area Seditio area
+ * @param string $area Cotonti area
  * @param string $option Option to access
  * @param string $mask Access mask
  * @return mixed

@@ -51,8 +51,7 @@
 		</form>
 	</div>
 
-
-
+{FOOTER_JS}
 </body>
 </html>
 <!-- END: FOOTER -->

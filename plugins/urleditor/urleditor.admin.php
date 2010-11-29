@@ -41,7 +41,7 @@ if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'apache') !== false)
 # Rewrite engine options
 Options FollowSymLinks -Indexes
 RewriteEngine On
-# Server-relative path to seditio:
+# Server-relative path to Cotonti:
 RewriteBase "$site_uri"
 END;
 	$hta_flags = '[QSA,NC,NE,L]';

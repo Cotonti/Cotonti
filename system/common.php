@@ -1,10 +1,4 @@
 <?php
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
 /**
  * @package Cotonti
  * @version 0.7.0
