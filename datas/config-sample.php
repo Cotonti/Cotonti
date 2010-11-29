@@ -100,6 +100,7 @@ $cfg['plugins_dir'] = './plugins';
 $cfg['sig_dir'] = './datas/signatures/';
 $cfg['system_dir'] = './system';
 $cfg['th_dir'] = './datas/thumbs/';
+$cfg['extrafield_files_dir'] = './datas/exflds/';
 
 // ========================
 // Directory and file permissions for uploaded files
