@@ -1,11 +1,4 @@
-<?PHP
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
+<?php
 /**
  * Personal File Storage, image display
  *

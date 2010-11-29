@@ -9,6 +9,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+$out['footer_js'] = '';
+
 /* === Hook === */
 foreach (cot_getextplugins('footer.first') as $pl)
 {
@@ -87,7 +89,8 @@ if (!COT_AJAX)
 		"FOOTER_LOGSTATUS" => $out['logstatus'],
 		"FOOTER_PMREMINDER" => $out['pmreminder'],
 		"FOOTER_ADMINPANEL" => $out['adminpanel'],
-		"FOOTER_DEVMODE" => $out['devmode']
+		"FOOTER_DEVMODE" => $out['devmode'],
+		"FOOTER_JS" => $out['footer_js']
 	));
 
 	/* === Hook === */

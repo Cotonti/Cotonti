@@ -1,17 +1,13 @@
 <?php
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-[BEGIN_SED]
-File=users.auth.inc.php
-Version=102
-Updated=2006-apr-19
-Type=Core
-Author=Neocrome
-Description=User authication
-[END_SED]
-==================== */
+/**
+ * User Authentication
+ *
+ * @package Cotonti
+ * @version 0.7.0
+ * @author Neocrome, Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @license BSD
+ */
 
 defined('COT_CODE') or die('Wrong URL');
 

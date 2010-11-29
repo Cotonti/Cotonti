@@ -1,11 +1,4 @@
 <?php
-
-/* ====================
-Seditio - Website engine
-Copyright Neocrome
-http://www.neocrome.net
-==================== */
-
 /**
  * Forums topics display.
  *
