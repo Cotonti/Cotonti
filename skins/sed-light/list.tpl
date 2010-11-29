@@ -50,6 +50,14 @@
 				<td>
 					<strong><a href="{LIST_ROW_URL}">{LIST_ROW_TITLE}</a></strong> {LIST_ROW_FILEICON}<br />
 					<span class="desc">{LIST_ROW_DESC} ({PHP.L.Hits}: {LIST_ROW_COUNT})</span>
+					<p>
+						<!-- BEGIN: LIST_ROW_TAGS_ROW -->
+						<!-- IF {PHP.tag_i} > 0 -->, <!-- ENDIF --><a href="{LIST_ROW_TAGS_ROW_URL}" title="{LIST_ROW_TAGS_ROW_TAG}">{LIST_ROW_TAGS_ROW_TAG}</a>
+						<!-- END: LIST_ROW_TAGS_ROW -->
+						<!-- BEGIN: PAGE_NO_TAGS -->
+							{LIST_ROW_NO_TAGS}
+						<!-- END: PAGE_NO_TAGS -->
+					</p>
 				</td>
 				<td class="centerall">{LIST_ROW_COMMENTS}</td>
 				<td class="centerall">{LIST_ROW_RATINGS}</td>
