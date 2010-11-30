@@ -1154,7 +1154,7 @@ function cot_build_email($email, $hide = false)
 	{
 		return $L['Hidden'];
 	}
-	elseif (!empty($email) && preg_match('#^\p{L}[\.\p{L}\-]+@[\p{L}\.\-]+\.\p{L}+$#', $email))
+	elseif (!empty($email) && preg_match('#^\p{L}[\.\p{L}\-]+@[\p{L}\.\-]+\.\p{L}+$#u', $email))
 	{
 		return cot_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
 	}
@@ -1741,6 +1741,10 @@ function cot_headrc_consolidate()
 	foreach (cot_getextplugins('headrc') as $pl)
 	{
 		include $pl;
+	}
+	if (file_exists('./themes/'.$usr['theme'].'/'.$usr['theme'].'.headrc.php'))
+	{
+		include './themes/'.$usr['theme'].'/'.$usr['theme'].'.headrc.php';
 	}
 	
 	if (!is_array($cot_headrc_reg))
