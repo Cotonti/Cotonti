@@ -40,7 +40,7 @@ if (is_array($i18n_structure) && count($i18n_structure) > 0)
 		$tmp = array();
 		for ($i = 0; $i < $subcnt; $i++)
 		{
-			if (strpos($rsearch['pag']['sub'][$i], ':') !== false)
+			if (mb_strpos($rsearch['pag']['sub'][$i], ':') !== false)
 			{
 				list ($cat, $lc) = explode(':', $rsearch['pag']['sub'][$i]);
 				$i18n_search_cats[$lc][] = $cat;

@@ -57,11 +57,11 @@ if ($a == 'newtopic')
 	$newmsg = cot_import('newmsg','P','HTM');
 	$newtopicpreview = mb_substr(htmlspecialchars($newmsg), 0, 128);
 	
-	if (strlen($newtopictitle) < 2)
+	if (mb_strlen($newtopictitle) < 2)
 	{
 		cot_error('forums_titletooshort', 'newtopictitle');
 	}
-	if (strlen($newmsg) < 5)
+	if (mb_strlen($newmsg) < 5)
 	{
 		cot_error('forums_messagetooshort', 'newmsg');
 	}

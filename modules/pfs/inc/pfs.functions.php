@@ -67,7 +67,7 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 		return 0;
 	}
 
-	$newpath = cot_urlencode(strtolower($title));
+	$newpath = cot_urlencode(mb_strtolower($title));
 	if ($parentid > 0)
 	{
 		$newpath = cot_pfs_folderpath($parentid, TRUE).$newpath;

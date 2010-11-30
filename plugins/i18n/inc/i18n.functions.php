@@ -91,7 +91,7 @@ function cot_i18n_enabled($cat)
 	
 	foreach ($i18n_cats as $icat)
 	{
-		if (strpos($structure['page'][$cat]['path'], $icat . '.') !== false)
+		if (mb_strpos($structure['page'][$cat]['path'], $icat . '.') !== false)
 		{
 			return true;
 		}

@@ -18,7 +18,7 @@ Hooks=ajax
 
 defined('COT_CODE') or die('Wrong URL');
 
-$q = strtolower(cot_import('q', 'G', 'TXT'));
+$q = mb_strtolower(cot_import('q', 'G', 'TXT'));
 $q = $db->prep(urldecode($q));
 if (!empty($q))
 {

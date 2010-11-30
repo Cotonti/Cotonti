@@ -131,7 +131,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 	if (!empty($args))
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$sep_len = strlen($sep);
+		$sep_len = mb_strlen($sep);
 		$qs = mb_strpos($url, '?') !== false ? $sep : '?';
 		foreach($args as $key => $val)
 		{
@@ -142,7 +142,7 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 				$qs .= $key .'='.urlencode($val).$sep;
 			}
 		}
-		$qs = substr($qs, 0, -$sep_len);
+		$qs = mb_substr($qs, 0, -$sep_len);
 		$url .= $qs;
 	}
 	// Almost done

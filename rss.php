@@ -216,13 +216,13 @@ elseif ($defult_c)
 	if ($id != 'all')
 	{
 		$mtch = $cot_cat[$id]['path'].".";
-		$mtchlen = strlen($mtch);
+		$mtchlen = mb_strlen($mtch);
 		$catsub = array();
 		$catsub[] = $id;
 
 		foreach ($cot_cat as $i => $x)
 		{
-			if (substr($x['path'], 0, $mtchlen) == $mtch)
+			if (mb_substr($x['path'], 0, $mtchlen) == $mtch)
 			{
 				$catsub[] = $i;
 			}

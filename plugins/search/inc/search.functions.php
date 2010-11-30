@@ -15,7 +15,7 @@ function cot_clear_mark($text, $type, $words)
 {
 	global $cfg;
 	$text = trim($text);
-	if (strlen($text))
+	if (!empty($text))
 	{
 		$text = trim($text);
 		$text = preg_replace("'.\n'", " ", $text);
@@ -35,7 +35,7 @@ function cot_clear_mark($text, $type, $words)
 
 		foreach ($words as $i => $w)
 		{
-			$p = stripos($text, $w);
+			$p = mb_stripos($text, $w);
 			if ($p > 0)
 			{
 				$p_arr[] = $p;
@@ -57,7 +57,7 @@ function cot_clear_mark($text, $type, $words)
 				}
 				else
 				{
-					while($pos_beg > 0 && substr($text, $pos_beg, 1) != " ")
+					while($pos_beg > 0 && mb_substr($text, $pos_beg, 1) != " ")
 					{
 						$pos_beg--;
 					}
@@ -70,7 +70,7 @@ function cot_clear_mark($text, $type, $words)
 				}
 				else
 				{
-					while ($pos_end < $text_len && substr($text, $pos_end, 1) != " ")
+					while ($pos_end < $text_len && mb_substr($text, $pos_end, 1) != " ")
 					{
 						$pos_end++;
 					}
@@ -97,7 +97,7 @@ function cot_clear_mark($text, $type, $words)
 			}
 		}
 
-		if (strlen($text_result) < 10)
+		if (mb_strlen($text_result) < 10)
 		{
 			$len_cut = 255;
 			$len_txt = mb_strlen($text);

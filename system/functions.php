@@ -834,7 +834,7 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
  */
 function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
 {
-	if (strpos($domain, '.') === FALSE)
+	if (mb_strpos($domain, '.') === FALSE)
 	{
 		// Some browsers don't support cookies for local domains
 		$domain = '';
@@ -843,9 +843,9 @@ function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
 	if ($domain != '')
 	{
 		// Make sure www. is stripped and leading dot is added for subdomain support on some browsers
-		if (strtolower(substr($domain, 0, 4)) == 'www.')
+		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.')
 		{
-			$domain = substr($domain, 4);
+			$domain = mb_substr($domain, 4);
 		}
 		if ($domain[0] != '.')
 		{
@@ -1154,7 +1154,7 @@ function cot_build_email($email, $hide = false)
 	{
 		return $L['Hidden'];
 	}
-	elseif (!empty($email) && preg_match('#^\w[\._\w\-]+@[\w\.\-]+\.[a-z]+$#', $email))
+	elseif (!empty($email) && preg_match('#^\p{L}[\.\p{L}\-]+@[\p{L}\.\-]+\.\p{L}+$#', $email))
 	{
 		return cot_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
 	}
@@ -3742,7 +3742,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 	if (count($args) > 0)
 	{
 		$sep = $htmlspecialchars_bypass ? '&' : '&amp;';
-		$sep_len = strlen($sep);
+		$sep_len = mb_strlen($sep);
 		$qs = '?';
 		$i = 0;
 		foreach ($args as $key => $val)

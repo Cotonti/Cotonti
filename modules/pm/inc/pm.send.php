@@ -34,7 +34,7 @@ foreach (cot_getextplugins('pm.send.first') as $pl)
 /* ===== */
 if ($a == 'getusers')
 {
-	$q = strtolower(cot_import('q', 'G', 'TXT'));
+	$q = mb_strtolower(cot_import('q', 'G', 'TXT'));
 	$q = $db->prep(urldecode($q));
 	if (!empty($q))
 	{

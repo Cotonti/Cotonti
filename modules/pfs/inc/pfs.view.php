@@ -18,12 +18,12 @@ $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
 // cot_block($usr['auth_read']);
 
-$pos = mb_strlen(stristr($v, '-'));
+$pos = mb_strlen(mb_stristr($v, '-'));
 $fid = mb_substr($v, 0, -$pos);
 $imgpath = ($cfg['pfs']['pfsuserfolder']) ? $cfg['pfs_dir'].$fid.'/'.$v : $cfg['pfs_dir'].$v;
 
-$dotpos = strrpos($imgpath, '.')+1;
-$f_extension = strtolower(mb_substr($imgpath, $dotpos,4));
+$dotpos = mb_strrpos($imgpath, '.')+1;
+$f_extension = mb_strtolower(mb_substr($imgpath, $dotpos,4));
 
 if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported) )
 {
