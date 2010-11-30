@@ -255,7 +255,7 @@ foreach ($structure['page'] as $i => $x)
 	elseif (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $kk < $cfg['page']['maxlistsperpage'])
 	{
 		$sql4 = $db->query("SELECT SUM(structure_count) FROM $db_structure
-			WHERE structure_path LIKE '".$x['rpath']."%' ");
+			WHERE structure_path LIKE '".$x['rpath'].".%' OR  structure_path = '".$x['rpath']."'");
 		$sub_count = $sql4->fetchColumn();
 
 		$t->assign(array(

@@ -87,6 +87,7 @@ if ($a == 'update')
 
 		$sql1 = $db->update($db_structure, $rstructure, "structure_id='".$i."'");
 	}
+	cot_extrafield_movefiles();
 	cot_auth_clear('all');
 	if ($cache)
 	{

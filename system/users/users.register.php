@@ -105,7 +105,7 @@ if ($a=='add')
 		$userid = $db->lastInsertId();
 
 		$db->insert($db_groups_users, array('gru_userid' => (int)$userid, 'gru_groupid' => (int)$ruser['user_maingrp']));
-	
+		cot_extrafield_movefiles();
 		/* === Hook for the plugins === */
 		foreach (cot_getextplugins('users.register.add.done') as $pl)
 		{
