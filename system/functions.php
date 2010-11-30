@@ -687,7 +687,7 @@ function sed_obfuscate_eml($m)
 function sed_parse_autourls($text)
 {
 	$text = preg_replace('`(^|\s)(http|https|ftp)://([^\s"\'\[]+)`', '$1<a href="$2://$3">$2://$3</a>', $text);
-	$text = preg_replace_callback('`(^|\s)(\w[\._\w\-]+@[\w\.\-]+\.[a-z]+)`', 'sed_obfuscate_eml', $text);
+	$text = preg_replace_callback('`(^|\s)(\p{L}[\.\p{L}\-]+@[\p{L}\.\-]+\.\p{L}+)`u', 'sed_obfuscate_eml', $text);
 	return $text;
 }
 
@@ -1144,7 +1144,7 @@ function sed_build_email($email, $hide = false)
 	{
 		return $L['Hidden'];
 	}
-	elseif(!empty($email) && preg_match('#^\w[\._\w\-]+@[\w\.\-]+\.[a-z]+$#', $email))
+	elseif(!empty($email) && preg_match('#^\p{L}[\._\p{L}\-]+@[\p{L}\.\-]+\.\p{L}+$#u', $email))
 	{
 		return sed_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
 	}
@@ -4688,7 +4688,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 	{
 		$qs = '?';
 		$sep = $header ? '&' : '&amp;';
-		$sep_len = strlen($sep);
+		$sep_len = mb_strlen($sep);
 		foreach($args as $key => $val)
 		{
 			// Exclude static parameters that are not used in format,
@@ -4698,7 +4698,7 @@ function sed_url($name, $params = '', $tail = '', $header = false)
 				$qs .= $key .'=' . urlencode($val) . $sep;
 			}
 		}
-		$qs = substr($qs, 0, -$sep_len);
+		$qs = mb_substr($qs, 0, -$sep_len);
 		$url .= $qs;
 	}
 	// Almost done
@@ -4896,7 +4896,7 @@ function sed_xp()
  */
 function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
 {
-	if (strpos($domain, '.') === FALSE)
+	if (mb_strpos($domain, '.') === FALSE)
 	{
 		// Some browsers don't support cookies for local domains
 		$domain = '';
@@ -4905,9 +4905,9 @@ function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
 	if ($domain != '')
 	{
 		// Make sure www. is stripped and leading dot is added for subdomain support on some browsers
-		if (strtolower(substr($domain, 0, 4)) == 'www.')
+		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.')
 		{
-			$domain = substr($domain, 4);
+			$domain = mb_substr($domain, 4);
 		}
 		if ($domain[0] != '.')
 		{

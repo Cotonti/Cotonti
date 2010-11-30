@@ -93,8 +93,8 @@ if ($a=='newtopic')
 	$newprvtopic = (!$fs_allowprvtopics) ? 0 : $newprvtopic;
 
 
-	$error_string .= ( strlen($newtopictitle) < 2) ? $L["for_titletooshort"]."<br />" : '';
-	$error_string .= ( strlen($newmsg) < 5) ? $L["for_messagetooshort"]."<br />" : '';
+	$error_string .= ( mb_strlen($newtopictitle) < 2) ? $L["for_titletooshort"]."<br />" : '';
+	$error_string .= ( mb_strlen($newmsg) < 5) ? $L["for_messagetooshort"]."<br />" : '';
 	if($poll){
 	sed_poll_check();
 	}

@@ -254,13 +254,16 @@ else
 {
 	// == Category rss ==
 	$mtch = $sed_cat[$c]['path'].".";
-	$mtchlen = strlen($mtch);
+	$mtchlen = mb_strlen($mtch);
 	$catsub = array();
 	$catsub[] = $c;
 
 	foreach($sed_cat as $i => $x)
 	{
-		if(substr($x['path'], 0, $mtchlen)==$mtch) { $catsub[] = $i; }
+		if (mb_substr($x['path'], 0, $mtchlen)==$mtch)
+		{
+			$catsub[] = $i;
+		}
 	}
 
 	$sql = sed_sql_query("SELECT page_id, page_alias, page_type, page_title, page_text, page_cat, page_date FROM $db_pages WHERE page_state=0 AND page_cat NOT LIKE 'system' AND page_cat IN ('".implode("','", $catsub)."') ORDER by page_date DESC LIMIT ".$cfg_maxitems);
