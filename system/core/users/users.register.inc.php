@@ -100,7 +100,7 @@ if ($a=='add')
 	$error_string .= (!empty($bannedreason)) ? $L['aut_emailbanned'].$bannedreason."<br />" : '';
 	$error_string .= (mb_strlen($rusername)<2) ? $L['aut_usernametooshort']."<br />" : '';
 	$error_string .= (mb_strlen($rpassword1)<4 || sed_alphaonly($rpassword1)!=$rpassword1) ? $L['aut_passwordtooshort']."<br />" : '';
-	$error_string .= (mb_strlen($ruseremail)<4 || !preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$#i', $ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
+	$error_string .= (mb_strlen($ruseremail)<4 || !preg_match('#^[\p{L}-]+(\.[\p{L}-]+)*@[\p{L}-]+(\.[\p{L}-]{2,})+$#u', $ruseremail)) ? $L['aut_emailtooshort']."<br />" : '';
 	$error_string .= ($res1>0) ? $L['aut_usernamealreadyindb']."<br />" : '';
 	$error_string .= ($res2>0) ? $L['aut_emailalreadyindb']."<br />" : '';
 	$error_string .= ($rpassword1!=$rpassword2) ? $L['aut_passwordmismatch']."<br />" : '';

@@ -64,7 +64,7 @@ elseif (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false)
 	$conf_name = 'nginx.conf';
 	$loc = $site_uri;
 	if($site_uri[0] != '/') $loc = '/'.$loc;
-	if($site_uri[strlen($site_uri) - 1] != '/') $loc .= '/';
+	if($site_uri[mb_strlen($site_uri) - 1] != '/') $loc .= '/';
 	$hta_prefix = '';
 	$hta_flags = 'last;';
 	$hta_rule = 'rewrite';
@@ -259,11 +259,11 @@ if($a == 'save')
 		{
 			if(empty($qs))
 			{
-				$qs = substr($format, strpos($format, '?'));
+				$qs = mb_substr($format, mb_strpos($format, '?'));
 			}
 			else
 			{
-				$qs = substr($format, strpos($format, '?')) . $qs;
+				$qs = mb_substr($format, mb_strpos($format, '?')) . $qs;
 			}
 		}
 		elseif(!empty($qs))

@@ -476,7 +476,7 @@ if (!$cfg['disablehitstats'])
 	sed_stat_inc('totalpages');
 	sed_stat_update($sys['day']);
 
-	$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
+	$sys['referer'] = mb_substr($_SERVER['HTTP_REFERER'], 0, 255);
 
 	if (!empty($sys['referer'])
 		&& mb_stripos($sys['referer'], $cfg['mainurl']) === false
