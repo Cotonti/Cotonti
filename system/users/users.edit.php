@@ -169,6 +169,7 @@ if ($a=='update')
 		$ruser['user_auth'] = '';
 
 		$sql = $db->update($db_users, $ruser, 'user_id='.$id);
+		cot_extrafield_movefiles();
 		
 		$ruser['user_maingrp'] = ($ruser['user_maingrp'] < COT_GROUP_MEMBERS && $id==1) ? COT_GROUP_SUPERADMINS : $ruser['user_maingrp'];
 

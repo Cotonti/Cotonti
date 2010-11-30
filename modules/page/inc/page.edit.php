@@ -166,6 +166,7 @@ if ($a == 'update')
 		}
 
 		$sql = $db->update($db_pages, $rpage, 'page_id=?', array($id));
+		cot_extrafield_movefiles();
 		/* === Hook === */
 		foreach (cot_getextplugins('page.edit.update.done') as $pl)
 		{

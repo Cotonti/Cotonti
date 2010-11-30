@@ -83,7 +83,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 			$R["input_text_{$rc_name}"] = (!empty($R["input_text_{$rc_name}"])) ? $R["input_text_{$rc_name}"] : $extrafield['field_html'];
 
 			$result['FILE'] = cot_inputbox('file', $name, '');
-			$result['DELETE'] = cot_checkbox($data, 'rdel_'.$name, $L['Delete']);
+			$result['DELETE'] = cot_checkbox($data, 'rdel_' . $name, $L['Delete']);
 			$result['LINK'] = htmlspecialchars($data);
 			break;
 
@@ -154,8 +154,8 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 			global $lang, $cot_translit, $exfldfiles, $exfldsize, $cfg;
 			if ($source == 'P')
 			{
-				$import = $_FILE[$inputname];
-				$import['delete'] = cot_import('rdel_'.$inputname, 'P', 'BOL') ? 1 : 0;				
+				$import = $_FILES[$inputname];
+				$import['delete'] = cot_import('rdel_' . $inputname, 'P', 'BOL') ? 1 : 0;
 			}
 			elseif ($source == 'D')
 			{
@@ -172,24 +172,24 @@ function cot_import_extrafields($inputname, $extrafield, $source='P', $oldvalue=
 				$fname = str_replace('..', '.', $fname);
 				$fname = (empty($fname)) ? cot_unique() : $fname;
 
-				$fname .= (file_exists($cfg['extrafield_files_dir'] . $fname . '.' . $ext) && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
+				$fname .= ( file_exists($cfg['extrafield_files_dir'] . $fname . '.' . $ext) && $oldvalue != $fname . '.' . $ext) ? date("YmjGis") : '';
 
 				$fname .= '.' . $ext;
-				
-				$file['old'] = (!empty($oldvalue)) ? $cfg['extrafield_files_dir'] . $oldvalue : '';
+
+				$file['old'] = (!empty($oldvalue) && ($import['delete'] || $import['tmp_name'])) ? $cfg['extrafield_files_dir'] . $oldvalue : '';
 				$file['field'] = $extrafield['field_name'];
 				$file['tmp'] = (!$import['delete']) ? $import['tmp_name'] : '';
 				$file['new'] = (!$import['delete']) ? $cfg['extrafield_files_dir'] . $fname : '';
 				$exfldsize[$extrafield['field_name']] = $import['size'];
-				$uploadfiles[] = $file; 
+				$uploadfiles[] = $file;
 				$import = $fname;
 			}
-			elseif(is_array($import) && $import['delete'])
+			elseif (is_array($import) && $import['delete'])
 			{
 				$exfldsize[$extrafield['field_name']] = 0;
 				$import = '';
 				$file['old'] = (!empty($oldvalue)) ? $cfg['extrafield_files_dir'] . $oldvalue : '';
-				$uploadfiles[] = $file; 
+				$uploadfiles[] = $file;
 			}
 			else
 			{
@@ -498,6 +498,56 @@ function cot_extrafield_remove($location, $name)
 	$step2 = $db->query("ALTER TABLE $location DROP " . $column_prefix . "_" . $name);
 
 	return $step1 && $step2 && $step3;
+}
+
+/**
+ * Fixes the indexing of multiple file uploads from the format:
+ *
+ * $_FILES['field']['key']['index']
+ * To the more standard and appropriate:
+ * $array['index']['key']
+ * 
+ * @param array $file_post $_FILE array
+ * @return array
+ *
+ */
+function cot_extrafield_rearrayfiles(&$file_post)
+{
+	$file_arr = array();
+	$file_keys = array_keys($file_post);
+
+	foreach ($file_post['name'] as $name => $value)
+	{
+		foreach ($file_keys as $key)
+		{
+			$file_arr[$name][$key] = $file_post[$key][$name];
+		}
+	}
+
+	return $file_arr;
+}
+
+/**
+ * Moves and unset files in  the $uploadfiles array
+ */
+function cot_extrafield_movefiles()
+{
+	global $uploadfiles;
+	if (is_array($uploadfiles))
+	{
+		foreach ($uploadfiles as $uploadfile)
+		{
+			if (!empty($uploadfile['old']) && file_exists($uploadfile['old']))
+			{
+				@unlink($uploadfile['old']);
+			}
+			if (!empty($uploadfile['tmp']) && !empty($uploadfile['tmp']))
+			{
+				@move_uploaded_file($uploadfile['tmp'], $uploadfile['new']);
+			}
+		}
+		
+	}
 }
 
 /**

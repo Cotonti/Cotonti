@@ -137,7 +137,8 @@ if($a == 'update')
 		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);
 		$ruser['user_auth'] ='';
 		$db->update($db_users, $ruser, "user_id='".$usr['id']."'");
-
+		cot_extrafield_movefiles();
+		
 		/* === Hook === */
 		foreach (cot_getextplugins('profile.update.done') as $pl)
 		{
