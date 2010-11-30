@@ -259,7 +259,7 @@ while (list($i,$x) = each($sed_cat))
 	elseif (mb_substr($x['path'],0,$mtchlen)==$mtch && mb_substr_count($x['path'],".")==$mtchlvl && $kk<$cfg['maxlistsperpage'])
 	{
 		$sql4 = sed_sql_query("SELECT SUM(structure_pagecount) FROM $db_structure
-		WHERE structure_path LIKE '".$sed_cat[$i]['rpath']."%' ");
+		WHERE structure_path LIKE '".$sed_cat[$i]['rpath'].".%' OR  structure_path = '".$sed_cat[$i]['rpath']."'");
 		$sub_count = sed_sql_result($sql4,0,"SUM(structure_pagecount)");
 
 		$t-> assign(array(
