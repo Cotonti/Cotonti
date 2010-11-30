@@ -169,7 +169,7 @@ foreach (cot_getextplugins('profile.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_tplfile(array('users', 'profile', 'core'));
+$mskin = cot_tplfile(array('users', 'profile'), 'core');
 $t = new XTemplate($mskin);
 
 require_once cot_incfile('forms');
