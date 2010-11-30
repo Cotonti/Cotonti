@@ -234,74 +234,55 @@ foreach ($cot_extrafields['pages'] as $row_p)
 	$t->assign('LIST_TOP_'.$uname, cot_rc('list_link_field_name', array('cot_img_down'=>$arrows[$row_p['field_name']]['asc'],'cot_img_up'=>$arrows[$row_p['field_name']]['desc'],'list_link_url_down' => cot_url('page',  array('s' => $row['field_name'], 'w' => 'asc') + $list_url_path), 'list_link_url_up' => cot_url('page', array('s' => $row['field_name'], 'w' => 'desc') + $list_url_path))));
 }
 
-$ii = 0;
-$jj = 0;
-$mm = 0;
 $kk = 0;
-$mtch = $cat['path'].".";
-$mtchlen = mb_strlen($mtch);
-$mtchlvl = mb_substr_count($mtch, ".");
+$allsub = cot_structure_children('page', $c, false, false, true, false);
+$subcat =  array_slice($allsub, $dc, $cfg['page']['maxlistsperpage']);
 
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.rowcat.loop');
 /* ===== */
-foreach ($structure['page'] as $i => $x)
+foreach ($subcat as $x)
 {
-	if (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $mm < $dc)
+	$sub_count = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE 
+		structure_path LIKE '".$structure['page'][$x]['rpath'].".%' OR  structure_path = '".$structure['page'][$x]['rpath']."'")->fetchColumn();
+
+	$t->assign(array(
+		"LIST_ROWCAT_URL" => cot_url('page', 'c='.$x),
+		"LIST_ROWCAT_TITLE" => $structure['page'][$x]['title'],
+		"LIST_ROWCAT_DESC" => $structure['page'][$x]['desc'],
+		"LIST_ROWCAT_ICON" => $structure['page'][$x]['icon'],
+		"LIST_ROWCAT_COUNT" => $sub_count,
+		"LIST_ROWCAT_ODDEVEN" => cot_build_oddeven($kk),
+		"LIST_ROWCAT_NUM" => $kk
+	));
+
+	// Extra fields for structure
+	foreach ($cot_extrafields['structure'] as $row_c)
 	{
-		$mm++;
-		$ii++;
+		$uname = strtoupper($row_c['field_name']);
+		$t->assign('LIST_ROWCAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
+		$t->assign('LIST_ROWCAT_'.$uname, cot_build_extrafields_data('structure', $row_c, $structure['page'][$x][$row_c['field_name']]));
 	}
-	elseif (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl && $kk < $cfg['page']['maxlistsperpage'])
+
+	/* === Hook - Part2 : Include === */
+	foreach ($extp as $pl)
 	{
-		$sql4 = $db->query("SELECT SUM(structure_count) FROM $db_structure
-			WHERE structure_path LIKE '".$x['rpath'].".%' OR  structure_path = '".$x['rpath']."'");
-		$sub_count = $sql4->fetchColumn();
-
-		$t->assign(array(
-			"LIST_ROWCAT_URL" => cot_url('page', 'c='.$i),
-			"LIST_ROWCAT_TITLE" => $x['title'],
-			"LIST_ROWCAT_DESC" => $x['desc'],
-			"LIST_ROWCAT_ICON" => $x['icon'],
-			"LIST_ROWCAT_COUNT" => $sub_count,
-			"LIST_ROWCAT_ODDEVEN" => cot_build_oddeven($kk),
-			"LIST_ROWCAT_NUM" => $kk
-		));
-
-		// Extra fields for structure
-		foreach ($cot_extrafields['structure'] as $row_c)
-		{
-			$uname = strtoupper($row_c['field_name']);
-			$t->assign('LIST_ROWCAT_'.$uname.'_TITLE', isset($L['structure_'.$row_c['field_name'].'_title']) ?  $L['structure_'.$row_c['field_name'].'_title'] : $row_c['field_description']);
-			$t->assign('LIST_ROWCAT_'.$uname, cot_build_extrafields_data('structure', $row_c, $x[$row_c['field_name']]));
-		}
-
-
-		/* === Hook - Part2 : Include === */
-		foreach ($extp as $pl)
-		{
-			include $pl;
-		}
-		/* ===== */
-
-		$t->parse("MAIN.LIST_ROWCAT");
-		$kk++;
+		include $pl;
 	}
-	elseif (mb_substr($x['path'], 0, $mtchlen) == $mtch && mb_substr_count($x['path'], ".") == $mtchlvl)
-	{
-		$ii++;
-	}
+	/* ===== */
+
+	$t->parse("MAIN.LIST_ROWCAT");
+	$kk++;
 }
 
-$totalitems = $ii + $kk;
-$pagenav = cot_pagenav('list', $list_url_path + array('d' => $d), $dc, $totalitems, $cfg['page']['maxlistsperpage'], 'dc');
+$pagenav = cot_pagenav('list', $list_url_path + array('d' => $d), $dc, count($allsub), $cfg['page']['maxlistsperpage'], 'dc');
 
 $t->assign(array(
 	"LISTCAT_PAGEPREV" => $pagenav['prev'],
 	"LISTCAT_PAGENEXT" => $pagenav['next'],
 	"LISTCAT_PAGNAV" => $pagenav['main']
 ));
-
+$jj = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.loop');
 /* ===== */
