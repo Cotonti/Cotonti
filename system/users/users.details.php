@@ -67,7 +67,7 @@ foreach (cot_getextplugins('users.details.main') as $pl)
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$mskin = cot_tplfile(array('users', 'details', 'core'));
+$mskin = cot_tplfile(array('users', 'details'), 'core');
 $t = new XTemplate($mskin);
 
 $bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';

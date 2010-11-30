@@ -2909,8 +2909,7 @@ function cot_tplfile($base, $type = 'module')
 		}
 	}
 
-	//	throw new Exception('Template file <em>'.implode('.', $base).'.tpl</em> was not found.
-	//	 Please check your theme.');
+	throw new Exception('Template file '.implode('.', $base).'.tpl was not found.');
 	return '';
 }
 
