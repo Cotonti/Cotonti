@@ -843,7 +843,7 @@ class Cotpl_expr
 					$needle = array_pop($stack);
 					$haystack = array_pop($stack);
 					array_push($stack, is_string($haystack) && is_string($needle)
-						&& strpos($haystack, $needle) !== false);
+						&& mb_strpos($haystack, $needle) !== false);
 					break;
 				case COTPL_OP_DIV:
 					$divisor = array_pop($stack);
@@ -1049,7 +1049,7 @@ class Cotpl_var
 			$text = array_shift($chain);
 			foreach ($chain as $cbk)
 			{
-				if (strpos($cbk, '(') !== false
+				if (mb_strpos($cbk, '(') !== false
 					&& preg_match('`(\w+)\((.+?)\)`', $cbk, $mt))
 				{
 					$this->callbacks[] = array(

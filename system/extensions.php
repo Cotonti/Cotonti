@@ -623,7 +623,7 @@ function cot_file_phpdoc($filename)
                 $delim = mb_strpos($phpdoc[$i], ' ');
                 $key = mb_substr($phpdoc[$i], 0, $delim);
                 $contents = trim(preg_replace('#\r?\n\s\*\s?#', '',
-					substr($phpdoc[$i], $delim + 1)));
+					mb_substr($phpdoc[$i], $delim + 1)));
                 $res[$key] = $contents;
             }
         }

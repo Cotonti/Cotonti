@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 $db_referers = (isset($db_referers)) ? $db_referers : $db_x . 'referers';
 
-$sys['referer'] = substr($_SERVER['HTTP_REFERER'], 0, 255);
+$sys['referer'] = mb_substr($_SERVER['HTTP_REFERER'], 0, 255);
 
 if (!empty($sys['referer'])
 	&& mb_stripos($sys['referer'], $cfg['mainurl']) === false
