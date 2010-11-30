@@ -253,9 +253,9 @@ $t->assign(array(
 	"FORUMS_NEWTOPIC_SEND" => $newtopicurl,
 	"FORUMS_NEWTOPIC_TITLE" => "<input type=\"text\" class=\"text\" name=\"newtopictitle\" value=\"".htmlspecialchars($newtopictitle)."\" size=\"56\" maxlength=\"255\" />",
 	"FORUMS_NEWTOPIC_DESC" => "<input type=\"text\" class=\"text\" name=\"newtopicdesc\" value=\"".htmlspecialchars($newtopicdesc)."\" size=\"56\" maxlength=\"255\" />",
-	"FORUMS_NEWTOPIC_TEXT" => $post_main."<br />".$pfs."<br />&nbsp;<br />",
+	"FORUMS_NEWTOPIC_TEXT" => $post_main."".$pfs."",
 	"FORUMS_NEWTOPIC_TEXTONLY" => $post_main,
-	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."<br />".$pfs."<br />&nbsp;<br />",
+	"FORUMS_NEWTOPIC_TEXTBOXER" => $post_main."".$pfs."",
 	"FORUMS_NEWTOPIC_MYPFS" => $pfs,
 ));
 
