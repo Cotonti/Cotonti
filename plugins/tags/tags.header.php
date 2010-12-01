@@ -22,12 +22,14 @@ Order=10
 
 defined('SED_CODE') or die('Wrong URL');
 
-if($cfg['plugin']['tags']['pages']
-	&& (defined('SED_INDEX') || defined('SED_LIST') || defined('SED_PAGE'))
-	|| $cfg['plugin']['tags']['forums'] && defined('SED_FORUMS')
-	|| defined('SED_PLUG'))
-{
-	$out['compopup'] .= '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />';
-}
+// Set tag cloud style in main CSS, this file is obsolete
+
+//if($cfg['plugin']['tags']['pages']
+//	&& (defined('SED_INDEX') || defined('SED_LIST') || defined('SED_PAGE'))
+//	|| $cfg['plugin']['tags']['forums'] && defined('SED_FORUMS')
+//	|| defined('SED_PLUG'))
+//{
+//	$out['compopup'] .= '<link rel="stylesheet" type="text/css" href="'.$cfg['plugins_dir'].'/tags/style.css" />';
+//}
 
 ?>

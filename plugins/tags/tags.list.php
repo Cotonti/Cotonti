@@ -77,7 +77,7 @@ if($cfg['plugin']['tags']['pages'])
 				break;
 			}
 		}
-		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a><span>'.$cnt.'</span></li>';
+		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t)."</a>\r\n<span>".$cnt.'</span></li>';
 	}
 	sed_sql_freeresult($tc_res);
 	$tc_html .= '</ul>';

@@ -190,21 +190,21 @@ textarea { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; paddi
 }
 
 /* ============== Tag Cloud Fixes ============== */
-.tag_cloud					{ text-align:left; }
-.tag_cloud li					{ margin:0 5px 0 0; display:inline; }
-.tag_cloud li a				{  }
+.tag_cloud                    { text-align:center; margin:0; padding:0; list-style:none; line-height: 1.35em; }
+.tag_cloud li                    { margin:0 5px 0 0; display:inline; }
+.tag_cloud li a				{ }
 .tag_cloud li span				{ display:none; }
 
-.tag_cloud li a.xs				{ font-size:1.0em; color:#888; }
-.tag_cloud li a.xs:hover		{ color:#000; }
-.tag_cloud li a.s				{ font-size:1.4em; color:#666; }
-.tag_cloud li a.s:hover		{ color:#000; }
-.tag_cloud li a.m				{ font-size:1.6em; color:#444; }
-.tag_cloud li a.m:hover		{ color:#000; }
-.tag_cloud li a.l				{ font-size:1.8em; color:#222; }
-.tag_cloud li a.l:hover		{ color:#000; }
-.tag_cloud li a.xl				{ font-size:2.0em; color:#000; }
-.tag_cloud li a.xl:hover		{ color:#000; }
+.tag_cloud a.xs {font-size:10pt;color:#c4c4c4;}
+.tag_cloud a.xs:hover {color:#000;}
+.tag_cloud a.s {font-size:12pt;color:#336699;}
+.tag_cloud a.s:hover {color:#000;}
+.tag_cloud a.m {font-size:14pt;color:#A0522D;}
+.tag_cloud a.m:hover {color:#000;}
+.tag_cloud a.l {font-size:16pt;color:#B0C4DE;}
+.tag_cloud a.l:hover {color:#000;}
+.tag_cloud a.xl {font-size:18pt;color:#aad815;}
+.tag_cloud a.xl:hover {color:#000;}
 
 /* ============== Ratings CSS ============== */
 /* jQuery.Rating Plugin CSS - http://www.fyneworks.com/jquery/star-rating/ */
