@@ -60,7 +60,6 @@ $L['home_update_revision'] = 'Текущая версия: <span style="color:#C
  * Config Section
  */
 
-$L['core_email'] = 'Настройки E-mail'; // New in 0.7.0
 $L['core_forums'] = &$L['Forums'];
 $L['core_lang'] = &$L['Language'];
 $L['core_main'] = 'Настройки сайта';
@@ -81,18 +80,6 @@ $L['core_title'] = 'Заголовки (тэг &lt;title&gt;)';
 $L['core_users'] = &$L['Users'];
 
 $L['cfg_struct_defaults'] = 'Настройки по умолчанию для структуры';
-
-/**
- * Config Section
- * E-mail Subsection
- */
-
-$L['cfg_email_type'] = array('Тип отправки E-mail', ''); // New in 0.7.0
-$L['cfg_smtp_address'] = array('Адрес smtp сервера', 'Укажите если тип отправки E-mail выбран smtp'); // New in 0.7.0
-$L['cfg_smtp_port'] = array('Порт smtp сервера', 'Укажите если тип отправки E-mail выбран smtp'); // New in 0.7.0
-$L['cfg_smtp_login'] = array('Логин', 'Укажите если тип отправки E-mail выбран smtp'); // New in 0.7.0
-$L['cfg_smtp_password'] = array('Пароль', 'Укажите если тип отправки E-mail выбран smtp'); // New in 0.7.0
-$L['cfg_smtp_uses_ssl'] = array('Использовать SSL', 'Укажите если тип отправки E-mail выбран smtp'); // New in 0.7.0
 
 /**
  * Config Section
