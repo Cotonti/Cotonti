@@ -74,7 +74,7 @@
 		<h4>{PHP.L.Tags}</h4>
 		<div class="block">
 			{LIST_TAG_CLOUD}
-			<!-- IF {LIST_TAG_CLOUD_ALL_URL} -->{LIST_TAG_CLOUD_ALL_URL}<!-- ENDIF -->
+			{LIST_TAG_CLOUD_ALL_LINK}
 		</div>
 
 </div>

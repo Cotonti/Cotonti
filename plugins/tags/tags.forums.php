@@ -5,7 +5,7 @@ Code=tags
 Part=forums
 File=tags.forums
 Hooks=forums.sections.tags
-Tags=forums.sections.tpl:{FORUMS_SECTIONS_TAG_CLOUD},{FORUMS_SECTIONS_TOP_TAG_CLOUD}
+Tags=forums.sections.tpl:{FORUMS_SECTIONS_TAG_CLOUD},{FORUMS_TAG_CLOUD_ALL_LINK}
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
@@ -30,6 +30,7 @@ if($cfg['plugin']['tags']['forums'])
 	$limit = $cfg['plugin']['tags']['lim_forums'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_forums'];
 	$tcloud = sed_tag_cloud('forums', $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = '<ul class="tag_cloud">';
+	$tag_count = 0;
 	foreach($tcloud as $tag => $cnt)
 	{
 		$tag_count++;
@@ -46,16 +47,16 @@ if($cfg['plugin']['tags']['forums'])
 		}
 		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a><span>'.$cnt.'</span></li>';
 	}
-	if($cfg['plugin']['tags']['more'] && $limit > 0)
-	{
-		$tc_html .= '<hr /><a class="more" href="'.sed_url('plug', 'e=tags&a=forums').'">'.$L['tags_All'].'</a>';
-	}
 	$tc_html .= '</ul>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 	$t->assign(array(
-	'FORUMS_SECTIONS_TOP_TAG_CLOUD' => $L['tags_Tag_cloud'],
 	'FORUMS_SECTIONS_TAG_CLOUD' => $tc_html
 	));
+	if($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
+	{
+		$t->assign('FORUMS_TAG_CLOUD_ALL_LINK', '<a class="more" href="'
+			.sed_url('plug', 'e=tags&a=forums').'">'.$L['tags_All'].'</a>');
+	}
 }
 
 ?>

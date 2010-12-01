@@ -5,7 +5,7 @@ Code=tags
 Part=list
 File=tags.list
 Hooks=list.tags
-Tags=list.tpl:{LIST_TAG_CLOUD},{LIST_TOP_TAG_CLOUD}
+Tags=list.tpl:{LIST_TAG_CLOUD},{LIST_TAG_CLOUD_ALL_LINK}
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
@@ -60,6 +60,7 @@ if($cfg['plugin']['tags']['pages'])
 		GROUP BY r.tag
 		ORDER BY $order $limit");
 	$tc_html = '<ul class="tag_cloud">';
+	$tag_count = 0;
 	while($tc_row = sed_sql_fetchassoc($tc_res))
 	{
 		$tag_count++;
@@ -79,17 +80,17 @@ if($cfg['plugin']['tags']['pages'])
 		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=pages&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a><span>'.$cnt.'</span></li>';
 	}
 	sed_sql_freeresult($tc_res);
-	if($cfg['plugin']['tags']['more'] && !empty($limit))
-	{
-		$tc_html .= '<hr /><a class="more" href="'.sed_url('plug', 'e=tags&a=pages').'">'.$L['tags_All'].'</a>';
-	}
 	$tc_html .= '</ul>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 
 	$t->assign(array(
-	'LIST_TOP_TAG_CLOUD' => $L['tags_Tag_cloud'],
 	'LIST_TAG_CLOUD' => $tc_html
 	));
+	if($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
+	{
+		$t->assign('LIST_TAG_CLOUD_ALL_LINK', '<a class="more" href="'
+			.sed_url('plug', 'e=tags&a=pages').'">'.$L['tags_All'].'</a>');
+	}
 }
 
 ?>
