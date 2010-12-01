@@ -924,7 +924,7 @@ INSERT INTO `sed_stats` (`stat_name`, `stat_value`) VALUES
 CREATE TABLE `sed_structure` (
   `structure_id` mediumint(8) NOT NULL auto_increment,
   `structure_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `structure_path` varchar(16) collate utf8_unicode_ci NOT NULL default '',
+  `structure_path` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `structure_tpl` varchar(64) collate utf8_unicode_ci NOT NULL default '',
   `structure_title` varchar(100) collate utf8_unicode_ci NOT NULL,
   `structure_desc` varchar(255) collate utf8_unicode_ci NOT NULL default '',
