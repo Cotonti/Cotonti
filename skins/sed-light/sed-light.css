@@ -191,8 +191,8 @@ textarea { background-color:#fff; border:1px solid #dee4e9; color:#3E606F; paddi
 
 /* ============== Tag Cloud Fixes ============== */
 .tag_cloud					{ text-align:left; }
-.tag_cloud li					{ display:inline; white-space:nowrap; }
-.tag_cloud li a				{ padding:0 5px; }
+.tag_cloud li					{ margin:0 5px 0 0; display:inline; }
+.tag_cloud li a				{  }
 .tag_cloud li span				{ display:none; }
 
 .tag_cloud li a.xs				{ font-size:1.0em; color:#888; }
