@@ -71,7 +71,7 @@
 
 		<div class="paging">{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT} &nbsp; {PHP.L.Page}: {LIST_TOP_CURRENTPAGE}/{LIST_TOP_TOTALPAGES} {PHP.cfg.separator} {PHP.skinlang.list.linesperpage}: {LIST_TOP_MAXPERPAGE} {PHP.cfg.separator} {PHP.skinlang.list.linesinthissection}: {LIST_TOP_TOTALLINES}</div>
 
-		<h4>{LIST_TOP_TAG_CLOUD}</h4>
+		<h4>{PHP.L.Tags}</h4>
 		<div class="block">
 		{LIST_TAG_CLOUD}
 		</div>

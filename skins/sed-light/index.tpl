@@ -9,7 +9,7 @@
 </div>
 <div id="rSide">
 
-	<div class="rboxHD">{INDEX_TOP_TAG_CLOUD}:</div>
+	<div class="rboxHD">{PHP.L.Tags}:</div>
 	<div class="rboxBody">{INDEX_TAG_CLOUD}</div>
 	
 	<div class="rboxHD">{PHP.L.Polls}:</div>
