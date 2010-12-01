@@ -767,7 +767,7 @@ function cot_outputfilters($output)
 	}
 	/* ==== */
 
-	$output = str_ireplace('</form>', cot_xp().'</form>', $output);
+	$output = preg_replace('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i', '$0' . cot_xp(), $output);
 
 	return($output);
 }
