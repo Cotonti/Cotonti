@@ -3133,7 +3133,7 @@ function sed_outputfilters($output)
 	{ foreach($extp as $k => $pl) { include_once($cfg['plugins_dir'].'/'.$pl['pl_code'].'/'.$pl['pl_file'].'.php'); } }
 	/* ==== */
 
-	$output = str_ireplace('</form>', sed_xp().'</form>', $output);
+	$output = preg_replace('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i', '$0' . sed_xp(), $output);
 
 	return($output);
 }
