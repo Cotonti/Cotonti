@@ -12,7 +12,7 @@
 	<div class="rboxHD">{PHP.L.Tags}:</div>
 	<div class="rboxBody">
 		{INDEX_TAG_CLOUD}
-		<!-- IF {INDEX_TAG_CLOUD_ALL_URL} -->{INDEX_TAG_CLOUD_ALL_URL}<!-- ENDIF -->
+		{INDEX_TAG_CLOUD_ALL_LINK}
 	</div>
 	
 	<div class="rboxHD">{PHP.L.Polls}:</div>

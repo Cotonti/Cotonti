@@ -90,7 +90,7 @@
     <h4>{PHP.L.Tags}</h4>
     <div class="block">
         {FORUMS_SECTIONS_TAG_CLOUD}
-		<!-- IF {FORUMS_SECTIONS_TAG_CLOUD_ALL_URL} -->{FORUMS_SECTIONS_TAG_CLOUD_ALL_URL}<!-- ENDIF -->
+		{FORUMS_SECTIONS_TAG_CLOUD_ALL_LINK}
     </div>
 
 </div>
