@@ -45,7 +45,7 @@ if($cfg['plugin']['tags']['forums'])
 				break;
 			}
 		}
-		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a><span>'.$cnt.'</span></li>';
+		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a=forums&t='.$tag_u.$tl).'" class="'.$dim.'">'.htmlspecialchars($tag_t)."</a>\r\n<span>".$cnt.'</span></li>';
 	}
 	$tc_html .= '</ul>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
@@ -54,7 +54,7 @@ if($cfg['plugin']['tags']['forums'])
 	));
 	if($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
 	{
-		$t->assign('FORUMS_TAG_CLOUD_ALL_LINK', '<a class="more" href="'
+		$t->assign('FORUMS_SECTIONS_TAG_CLOUD_ALL_LINK', '<a class="more" href="'
 			.sed_url('plug', 'e=tags&a=forums').'">'.$L['tags_All'].'</a>');
 	}
 }
