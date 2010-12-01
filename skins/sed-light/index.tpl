@@ -10,7 +10,10 @@
 <div id="rSide">
 
 	<div class="rboxHD">{PHP.L.Tags}:</div>
-	<div class="rboxBody">{INDEX_TAG_CLOUD}</div>
+	<div class="rboxBody">
+		{INDEX_TAG_CLOUD}
+		<!-- IF {INDEX_TAG_CLOUD_ALL_URL} -->{INDEX_TAG_CLOUD_ALL_URL}<!-- ENDIF -->
+	</div>
 	
 	<div class="rboxHD">{PHP.L.Polls}:</div>
 	<div class="rboxBody">{PLUGIN_INDEXPOLLS}</div>
