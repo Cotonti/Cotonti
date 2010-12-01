@@ -615,7 +615,10 @@ function cot_selectbox_structure($area, $check, $name, $subcat = '', $hideprivat
 }
 
 /**
- * Sends mail with standard PHP mail()
+ * Sends mail with standard PHP mail().
+ * If cot_mail_custom() function exists, it will be called instead of the PHP
+ * function. This way custom mail delivery methods, such as SMTP, are
+ * supported.
  *
  * @global $cfg
  * @param string $fmail Recipient
@@ -628,6 +631,11 @@ function cot_selectbox_structure($area, $check, $name, $subcat = '', $hideprivat
 function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
 {
 	global $cfg, $cot_mail_senders;
+
+	if (function_exists('cot_mail_custom'))
+	{
+		return cot_mail($fmail, $subject, $body, $headers, $additional_parameters);
+	}
 
 	if (is_array($cot_mail_senders))
 	{

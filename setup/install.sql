@@ -79,12 +79,6 @@ CREATE TABLE `cot_config` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
-('core','email','01','email_type',2,'mail(Standard)','mail(Standard)','mail(Standard),smtp',''),
-('core','email','02','smtp_address',1,'','','',''),
-('core','email','03','smtp_port',1,'25','25','',''),
-('core','email','04','smtp_login',1,'','','',''),
-('core','email','05','smtp_password',1,'','','',''),
-('core','email','06','smtp_uses_ssl',3,'0','0','',''),
 ('core','lang','01','forcedefaultlang',3,'0','0','',''),
 ('core','main','01','adminemail',1,'admin@mysite.com','admin@mysite.com','',''),
 ('core','main','02','clustermode',3,'0','0','',''),
