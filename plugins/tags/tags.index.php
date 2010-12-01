@@ -5,7 +5,7 @@ Code=tags
 Part=index
 File=tags.index
 Hooks=index.tags
-Tags=index.tpl:{INDEX_TAG_CLOUD},{INDEX_TOP_TAG_CLOUD}
+Tags=index.tpl:{INDEX_TAG_CLOUD},{INDEX_TAG_CLOUD_ALL_LINK}
 Order=10
 [END_SED_EXTPLUGIN]
 ==================== */
@@ -28,6 +28,7 @@ if($cfg['plugin']['tags']['pages'])
 	require_once $cfg['plugins_dir'].'/tags/inc/config.php';
 	$limit = $cfg['plugin']['tags']['lim_index'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_index'];
 	$tcloud = sed_tag_cloud($cfg['plugin']['tags']['index'], $cfg['plugin']['tags']['order'], $limit);
+	$tag_count = 0;
 	$tc_html = '<ul class="tag_cloud">';
 	foreach($tcloud as $tag => $cnt)
 	{
@@ -46,17 +47,14 @@ if($cfg['plugin']['tags']['pages'])
 		$tc_html .= '<li><a href="'.sed_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index'].'&t='.$tag_u.$tl)
 			.'" class="'.$dim.'">'.htmlspecialchars($tag_t).'</a><span>'.$cnt.'</span></li>';
 	}
-	if($cfg['plugin']['tags']['more'] && $limit > 0)
-	{
-		$tc_html .= '<hr /><a class="more" href="'
-			.sed_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index']).'">'.$L['tags_All'].'</a>';
-	}
 	$tc_html .= '</ul>';
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
-	$t->assign(array(
-	'INDEX_TAG_CLOUD' => $tc_html,
-	'INDEX_TOP_TAG_CLOUD' => $L['tags_Tag_cloud']
-	));
+	$t->assign('INDEX_TAG_CLOUD', $tc_html);
+	if($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
+	{
+		$t->assign('INDEX_TAG_CLOUD_ALL_LINK', '<a class="more" href="'
+			.sed_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index']).'">'.$L['tags_All'].'</a>');
+	}
 }
 
 ?>
