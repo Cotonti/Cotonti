@@ -42,7 +42,7 @@ $cfg['dbversion'] = '0.6.12';
 
 if($cfg['customfuncs'])
 {
-	require_once($cfg['system_dir'].'/functions.custom.php');
+	require_once $cfg['system_dir'].'/functions.custom.php';
 }
 
 // Set default file permissions if not present in config
