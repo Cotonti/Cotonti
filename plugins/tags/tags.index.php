@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=index.tags
-Tags=index.tpl:{INDEX_TAG_CLOUD},{INDEX_TOP_TAG_CLOUD}
+Tags=index.tpl:{INDEX_TAG_CLOUD},{INDEX_TAG_CLOUD_ALL_LINK}
 [END_COT_EXT]
 ==================== */
 
@@ -24,6 +24,7 @@ if ($cfg['plugin']['tags']['pages'] || $cfg['plugin']['tags']['forums'])
 	$limit = $cfg['plugin']['tags']['lim_index'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_index'];
 	$tcloud = cot_tag_cloud($cfg['plugin']['tags']['index'], $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = $R['tags_code_cloud_open'];
+	$tag_count = 0;
 	foreach ($tcloud as $tag => $cnt)
 	{
 		$tag_count++;
@@ -44,16 +45,15 @@ if ($cfg['plugin']['tags']['pages'] || $cfg['plugin']['tags']['forums'])
 			'dim' => $dim
 		));
 	}
-	if ($cfg['plugin']['tags']['more'] && $limit > 0)
-	{
-		$tc_html .= cot_rc('tags_code_cloud_more', array('url' => cot_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index'])));
-	}
+
 	$tc_html .= $R['tags_code_cloud_close'];
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
-	$t->assign(array(
-		'INDEX_TAG_CLOUD' => $tc_html,
-		'INDEX_TOP_TAG_CLOUD' => $L['tags_Tag_cloud']
-	));
+	$t->assign('INDEX_TAG_CLOUD', $tc_html);
+	if ($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
+	{
+		$t->assign('INDEX_TAG_CLOUD_ALL_LINK', cot_rc('tags_code_cloud_more',
+			array('url' => cot_url('plug', 'e=tags&a='.$cfg['plugin']['tags']['index']))));
+	}
 }
 
 ?>
