@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=list.tags
-Tags=list.tpl:{LIST_TAG_CLOUD},{LIST_TOP_TAG_CLOUD}
+Tags=list.tpl:{LIST_TAG_CLOUD},{LIST_TAG_CLOUD_ALL_LINK}
 [END_COT_EXT]
 ==================== */
 
@@ -65,6 +65,7 @@ if ($cfg['plugin']['tags']['pages'])
 		GROUP BY r.tag
 		ORDER BY $order $limit");
 	$tc_html = $R['tags_code_cloud_open'];
+	$tag_count = 0;
 	while ($tc_row = $tc_res->fetch())
 	{
 		$tag_count++;
@@ -88,17 +89,15 @@ if ($cfg['plugin']['tags']['pages'])
 		));
 	}
 	$tc_res->closeCursor();
-	if ($cfg['plugin']['tags']['more'] && !empty($limit))
-	{
-		$tc_html .= cot_rc('tags_code_cloud_more', array('url' => cot_url('plug', 'e=tags&a=pages')));
-	}
 	$tc_html .= $R['tags_code_cloud_close'];
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
 
-	$t->assign(array(
-		'LIST_TOP_TAG_CLOUD' => $L['tags_Tag_cloud'],
-		'LIST_TAG_CLOUD' => $tc_html
-	));
+	$t->assign('LIST_TAG_CLOUD', $tc_html);
+	if ($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
+	{
+		$t->assign('LIST_TAG_CLOUD_ALL_LINK',
+			cot_rc('tags_code_cloud_more', array('url' => cot_url('plug', 'e=tags&a=pages'))));
+	}
 }
 
 ?>

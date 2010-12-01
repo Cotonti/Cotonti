@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=forums.sections.tags
-Tags=forums.sections.tpl:{FORUMS_SECTIONS_TAG_CLOUD},{FORUMS_SECTIONS_TOP_TAG_CLOUD}
+Tags=forums.sections.tpl:{FORUMS_SECTIONS_TAG_CLOUD},{FORUMS_SECTIONS_TAG_CLOUD_ALL_LINK}
 [END_COT_EXT]
 ==================== */
 
@@ -25,6 +25,7 @@ if ($cfg['plugin']['tags']['forums'])
 	$limit = $cfg['plugin']['tags']['lim_forums'] == 0 ? null : (int) $cfg['plugin']['tags']['lim_forums'];
 	$tcloud = cot_tag_cloud('forums', $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = $R['tags_code_cloud_open'];
+	$tag_count = 0;
 	foreach ($tcloud as $tag => $cnt)
 	{
 		$tag_count++;
@@ -45,16 +46,14 @@ if ($cfg['plugin']['tags']['forums'])
 			'dim' => $dim
 		));
 	}
-	if ($cfg['plugin']['tags']['more'] && $limit > 0)
-	{
-		$tc_html .= cot_rc('tags_code_cloud_more', array('url' => cot_url('plug', 'e=tags&a=forums')));
-	}
 	$tc_html .= $R['tags_code_cloud_close'];
 	$tc_html = ($tag_count > 0) ? $tc_html : $L['tags_Tag_cloud_none'];
-	$t->assign(array(
-		'FORUMS_SECTIONS_TOP_TAG_CLOUD' => $L['tags_Tag_cloud'],
-		'FORUMS_SECTIONS_TAG_CLOUD' => $tc_html
-	));
+	$t->assign('FORUMS_SECTIONS_TAG_CLOUD', $tc_html);
+	if ($cfg['plugin']['tags']['more'] && $limit > 0 && $tag_count == $limit)
+	{
+		$t->assign('FORUMS_SECTIONS_TAG_CLOUD_ALL_LINK',
+			cot_rc('tags_code_cloud_more', array('url' => cot_url('plug', 'e=tags&a=forums'))));
+	}
 }
 
 ?>
