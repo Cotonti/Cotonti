@@ -23,7 +23,7 @@ Order=10
 defined('SED_CODE') && defined('SED_PLUG') or die('Wrong URL');
 
 // Include functions
-require_once("plugins/search/inc/search.func.inc.php");
+require_once $cfg['plugins_dir'].'/search/inc/search.func.inc.php';
 
 // Read GET/POST params
 $sq = sed_import('sq','P','TXT',$cfg['plugin']['search']['maxsigns']);
