@@ -113,7 +113,7 @@ if ($a == 'update')
 }
 require_once cot_incfile('forms');
 
-$toptitle = cot_build_forumpath($s) . " " . $cfg['separator'] . " " . cot_rc_link(cot_url('forums', "m=posts&p=" . $p, "#" . $p), (($rowt['ft_mode'] == 1) ? '# ' : '') . htmlspecialchars($rowt['ft_title']));
+$toptitle = cot_forums_buildpath($s) . " " . $cfg['separator'] . " " . cot_rc_link(cot_url('forums', "m=posts&p=" . $p, "#" . $p), (($rowt['ft_mode'] == 1) ? '# ' : '') . htmlspecialchars($rowt['ft_title']));
 $toptitle .= $cfg['separator'] . " " . cot_rc_link(cot_url('forums', "m=editpost&s=$s&q=" . $q . "&p=" . $p . "&" . cot_xg()), $L['Edit']);
 $toptitle .= ( $usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 

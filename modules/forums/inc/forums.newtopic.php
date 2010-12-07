@@ -141,7 +141,7 @@ if ($a == 'newtopic')
 	}
 }
 
-$toptitle = cot_build_forumpath($s);
+$toptitle = cot_forums_buildpath($s);
 $toptitle .= ($usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
 
 $sys['sublocation'] = $structure['forums'][$s]['title'];

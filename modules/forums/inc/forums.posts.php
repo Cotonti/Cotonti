@@ -445,7 +445,7 @@ if ($rowt['ft_mode'] == 1)
 
 $rowt['ft_title'] = (($rowt['ft_mode'] == 1) ? "# " : '') . htmlspecialchars($rowt['ft_title']);
 
-$toptitle = cot_build_forumpath($s);
+$toptitle = cot_forums_buildpath($s);
 $toppath = $toptitle;
 $toptitle .= ' ' . $cfg['separator'] . ' ' . $rowt['ft_title'];
 $toptitle .= ( $usr['isadmin']) ? $R['forums_code_admin_mark'] : '';
