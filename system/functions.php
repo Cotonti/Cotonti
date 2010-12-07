@@ -2847,7 +2847,7 @@ function cot_schemefile()
 
 /**
  * Returns path to a template file. The default search order is:
- * 1) Current theme folder (plugins/ subdir for plugins)
+ * 1) Current theme folder (plugins/ subdir for plugins, admin/ subdir for admin)
  * 2) Default theme folder (if current is not default)
  * 3) tpl subdir in module/plugin folder (fallback template)
  *
@@ -2886,7 +2886,7 @@ function cot_tplfile($base, $type = 'module')
 	elseif ($type == 'core')
 	{
 		// Built-in core modules
-		if (defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'])
+		if(in_array($basename, array('header', 'footer')))
 		{
 			$scan_prefix[] = './themes/' . $usr['theme'] . '/admin/';
 			if ($using_alternative_theme)
@@ -2895,14 +2895,14 @@ function cot_tplfile($base, $type = 'module')
 			}
 			$scan_prefix[] = $cfg['system_dir'] . '/admin/tpl/';
 		}
-		elseif (defined('COT_USERS'))
+		else
 		{
-			$scan_prefix[] = './themes/' . $usr['theme'] . '/';
+			$scan_prefix[] = './themes/' . $usr['theme'] . '/' . $basename . '/';
 			if ($using_alternative_theme)
 			{
-				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/';
+				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/' . $basename . '/';
 			}
-			$scan_prefix[] = $cfg['system_dir'] . '/users/tpl/';
+			$scan_prefix[] = $cfg['system_dir'] . '/' . $basename . '/tpl/';
 		}
 	}
 	else
@@ -2932,7 +2932,7 @@ function cot_tplfile($base, $type = 'module')
 		}
 	}
 
-	throw new Exception('Template file '.implode('.', $base).'.tpl was not found.');
+	throw new Exception('Template file '.implode('.', $base).'.tpl ('.$type.') was not found.');
 	return '';
 }
 
