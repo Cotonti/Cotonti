@@ -4,7 +4,7 @@
 
 		<div class="block">
 			<h2 class="users">{USERS_REGISTER_TITLE}</h2>
-			<form name="login" action="{USERS_REGISTER_SEND}" method="post">
+			<form name="login" action="{USERS_REGISTER_SEND}" method="post" enctype="multipart/form-data" >
 				<table class="list">
 					<tr>
 						<td class="width30">{PHP.L.Username}:</td>

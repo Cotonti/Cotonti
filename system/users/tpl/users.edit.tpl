@@ -4,7 +4,7 @@
 
 		<div class="block">
 			<h2 class="users">{USERS_EDIT_TITLE}</h2>
-			<form action="{USERS_EDIT_SEND}" method="post" name="useredit">
+			<form action="{USERS_EDIT_SEND}" method="post" name="useredit" enctype="multipart/form-data">
 				<input type="hidden" name="id" value="{USERS_EDIT_ID}" />
 				<table class="cells">
 					<tr>
