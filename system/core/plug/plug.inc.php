@@ -36,16 +36,14 @@ if (!empty($p))
 }
 elseif (!empty($e))
 {
-	$path_lang_def	= $cfg['plugins_dir']."/$e/lang/$e.en.lang.php";
-	$path_lang_alt	= $cfg['plugins_dir']."/$e/lang/$e.$lang.lang.php";
 	$path_skin_ntg	= sed_skinfile('plugin');
 	$path_skin_def	= $cfg['plugins_dir']."/$e/$e.tpl";
 	$path_skin_alt	= sed_skinfile($e, true);
 
-	if (file_exists($path_lang_def))
-	{ require_once($path_lang_def); }
-	if (file_exists($path_lang_alt) && $lang!='en')
-	{ require_once($path_lang_alt); }
+	if (file_exists(sed_langfile($e)))
+	{
+		require_once(sed_langfile($e));
+	}
 	
 	if (file_exists($path_skin_alt))
 	{
