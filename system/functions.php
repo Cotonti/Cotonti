@@ -2870,13 +2870,14 @@ function cot_tplfile($base, $type = 'module')
 	}
 
 	$basename = $base[0];
+	$using_alternative_theme = ($usr['theme'] != $cfg['defaulttheme']);
 
 	// Possible search directories depending on extension type
 	if ($type == 'plug')
 	{
 		// Plugin template paths
 		$scan_prefix[] = './themes/' . $usr['theme'] . '/plugins/';
-		if ($usr['theme'] != $cfg['defaulttheme'])
+		if ($using_alternative_theme)
 		{
 			$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/plugins/';
 		}
@@ -2887,10 +2888,20 @@ function cot_tplfile($base, $type = 'module')
 		// Built-in core modules
 		if (defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'])
 		{
+			$scan_prefix[] = './themes/' . $usr['theme'] . '/admin/';
+			if ($using_alternative_theme)
+			{
+				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/admin/';
+			}
 			$scan_prefix[] = $cfg['system_dir'] . '/admin/tpl/';
 		}
 		elseif (defined('COT_USERS'))
 		{
+			$scan_prefix[] = './themes/' . $usr['theme'] . '/';
+			if ($using_alternative_theme)
+			{
+				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/';
+			}
 			$scan_prefix[] = $cfg['system_dir'] . '/users/tpl/';
 		}
 	}
@@ -2898,7 +2909,7 @@ function cot_tplfile($base, $type = 'module')
 	{
 		// Module template paths
 		$scan_prefix[] = './themes/' . $usr['theme'] . '/';
-		if ($usr['theme'] != $cfg['defaulttheme'])
+		if ($using_alternative_theme)
 		{
 			$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/';
 		}
