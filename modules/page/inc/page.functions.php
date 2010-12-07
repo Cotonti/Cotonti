@@ -146,7 +146,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 
 		if ($page_data['page_id'] > 0 && !empty($page_data['page_title']))
 		{
-			$catpath = cot_build_catpath('page', $page_data['page_cat']);
+			$catpath = cot_structure_buildpath('page', $page_data['page_cat']);
 			$page_data['page_pageurl'] = (empty($page_data['page_alias'])) ? cot_url('page', 'id='.$page_data['page_id']) : cot_url('page', 'al='.$page_data['page_alias']);
 			$page_data['page_fulltitle'] = $catpath." ".$cfg['separator'].' '.cot_rc_link($page_data['page_pageurl'], htmlspecialchars($page_data['page_title']));
 

@@ -42,7 +42,7 @@ while ($row = $sql->fetch())
 	$ii++;
 	$t->assign(array(
 		'ADMIN_FORUMS_ROW_II' => $ii,
-		'ADMIN_FORUMS_ROW_FORUMS' => cot_build_forumpath($row['ft_cat']),
+		'ADMIN_FORUMS_ROW_FORUMS' => cot_forums_buildpath($row['ft_cat']),
 		'ADMIN_FORUMS_ROW_URL' => cot_url('forums', 'm=posts&q='.$row['ft_id']),
 		'ADMIN_FORUMS_ROW_TITLE' => htmlspecialchars($row['ft_title']),
 		'ADMIN_FORUMS_ROW_POSTCOUNT' => $row['ft_postcount']

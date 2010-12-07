@@ -48,7 +48,7 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		{
 			$row['ft_title'] = cot_string_truncate($row['ft_title'], $titlelength, false). "...";
 		}
-		$build_forum = cot_build_forumpath($row['ft_cat']);
+		$build_forum = cot_forums_buildpath($row['ft_cat']);
 		$build_forum_short = cot_rc_link(cot_url('forums', 'm=topics&s=' . $row['ft_cat']), htmlspecialchars(cot_cutstring(stripslashes($forum_cats[$row['ft_cat']]['fs_title']), 16)));
 
 		if ($row['ft_mode'] == 1)
@@ -183,7 +183,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	while ($pag = $sql->fetch())
 	{
 		$jj++;
-		$catpath = cot_build_catpath('page', $pag['page_cat']);
+		$catpath = cot_structure_buildpath('page', $pag['page_cat']);
 		if ((int)$titlelength > 0)
 		{
 			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titlelength, false)) . "...";

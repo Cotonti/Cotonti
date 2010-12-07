@@ -1100,12 +1100,13 @@ function cot_build_age($birth)
  *
  * @param string $area Area code
  * @param string $cat Category code
- * @param string $mask Format mask
+ * @param bool $nolast Last element as simple text
  * @return string
  */
-function cot_build_catpath($area, $cat, $mask = 'link_catpath')
+function cot_structure_buildpath($area, $cat, $nolast = false)
 {
 	global $structure, $cfg;
+	$mask = 'link_catpath';
 	$mask = str_replace('%1$s', '{$url}', $mask);
 	$mask = str_replace('%2$s', '{$title}', $mask);
 	if ($cfg['homebreadcrumb'])
@@ -1117,12 +1118,11 @@ function cot_build_catpath($area, $cat, $mask = 'link_catpath')
 	}
 	$pathcodes = explode('.', $structure[$area][$cat]['path']);
 	$last = count($pathcodes) - 1;
-	$list = defined('COT_LIST');
 	foreach ($pathcodes as $k => $x)
 	{
 		if ($x != 'system')
 		{
-			$tmp[] = ($list && $k === $last) ? htmlspecialchars($structure[$area][$x]['title'])
+			$tmp[] = ($nolast && $k === $last) ? htmlspecialchars($structure[$area][$x]['title'])
 				: cot_rc($mask, array(
 				'url' => cot_url($area, 'c='.$x),
 				'title' => htmlspecialchars($structure[$area][$x]['title'])

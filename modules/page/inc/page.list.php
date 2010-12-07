@@ -139,7 +139,7 @@ if ($c == 'all' || $c == 'system' || $c == 'unvalidated')
 }
 else
 {
-	$catpath = cot_build_catpath('page', $c);
+	$catpath = cot_structure_buildpath('page', $c, true);
 }
 
 $totalpages = ceil($totallines / $cfg['page']['maxrowsperpage']);

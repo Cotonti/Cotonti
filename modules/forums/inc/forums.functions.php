@@ -25,25 +25,28 @@ $db_forum_stats = (isset($db_forum_stats)) ? $db_forum_stats : $db_x . 'forum_st
  *
  * @param string $cat Category code
  * @param bool $nolast Last link as simple text
- * @param string $mask Format mask
+ * @param bool $forumslink Show forums main link
  * @return string
  */
-function cot_build_forumpath($cat, $nolast=false, $mask = 'link_catpath')
+function cot_forums_buildpath($cat, $nolast = false, $forumslink = true)
 {
 	global $structure, $cfg, $L;
 	$mask = str_replace('%1$s', '{$url}', $mask);
 	$mask = str_replace('%2$s', '{$title}', $mask);
-	if ($cfg['homebreadcrumb'])
+	if ($cfg['homebreadcrumb'] && $forumslink)
 	{
 		$tmp[] = cot_rc($mask, array(
 			'url' => $cfg['mainurl'],
 			'title' => htmlspecialchars($cfg['maintitle'])
 			));
 	}
-	$tmp[] = cot_rc($mask, array(
-		'url' => cot_url('forums'),
-		'title' => $L['Forums']
-		));
+	if ($forumslink)
+	{
+		$tmp[] = cot_rc($mask, array(
+			'url' => cot_url('forums'),
+			'title' => $L['Forums']
+			));
+	}
 	$pathcodes = explode('.', $structure['forums'][$cat]['path']);
 	$last = count($pathcodes) - 1;
 	foreach ($pathcodes as $k => $x)

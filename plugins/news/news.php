@@ -135,7 +135,7 @@ if (count($cats) > 0)
 			"PAGE_ENTRIES_TOTAL" => $pagenav['entries'],
 			"PAGE_SUBMITNEWPOST" => (cot_auth('page', $cat, 'W')) ? cot_rc_link(cot_url('page', 'm=add&c=' . $cat), $L['Submitnew']) : '',
 			"PAGE_CATTITLE" => $structure['page'][$cat]['title'],
-			"PAGE_CATPATH" => cot_build_catpath('page', $cat),
+			"PAGE_CATPATH" => cot_structure_buildpath('page', $cat),
 			"PAGE_CAT" => $cat
 		));
 

@@ -322,7 +322,7 @@ if (!empty($sq))
 			{
 				$post_url = ($cfg['plugin']['search']['searchurl'] == 'Single') ? cot_url('forums', 'm=posts&id='.$row['fp_id'].'&highlight='.$hl) : cot_url('forums', 'm=posts&p='.$row['fp_id'].'&highlight='.$hl, '#'.$row['fp_id']);
 				$t->assign(array(
-					'PLUGIN_FR_CATEGORY' => cot_build_forumpath($row['ft_cat']),
+					'PLUGIN_FR_CATEGORY' => cot_forums_buildpath($row['ft_cat']),
 					'PLUGIN_FR_TITLE' => cot_rc_link($post_url, htmlspecialchars($row['ft_title'])),
 					'PLUGIN_FR_TEXT' => cot_clear_mark($row['fp_text'], 0, $words),
 					'PLUGIN_FR_TIME' => $row['ft_updated'] > 0 ? @date($cfg['dateformat'], $row['ft_updated'] + $usr['timezone'] * 3600) : @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600),
