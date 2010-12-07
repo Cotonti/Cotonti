@@ -511,7 +511,7 @@ function cot_extrafield_remove($location, $name)
  * @return array
  *
  */
-function cot_extrafield_rearrayfiles(&$file_post)
+function cot_import_filesarray(&$file_post)
 {
 	$file_arr = array();
 	$file_keys = array_keys($file_post);

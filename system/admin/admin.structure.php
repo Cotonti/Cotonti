@@ -44,7 +44,14 @@ if ($a == 'update')
 	$rstructurelocked = cot_import('rstructurelocked', 'P', 'ARR');
 	foreach ($cot_extrafields['structure'] as $row)
 	{
-		$rstructurearray[$row['field_name']] = cot_import('rstructure'.$row['field_name'], 'P', 'ARR');
+		if ($row['field_type'] != 'file' || $row['field_type'] != 'filesize')
+		{
+			$rstructurearray[$row['field_name']] = cot_import('rstructure'.$row['field_name'], 'P', 'ARR');
+		}
+		elseif($row['field_type'] == 'file')
+		{
+			$rstructurearray[$row['field_name']] = cot_import_filesarray('rstructure'.$row['field_name']);
+		}
 	}
 	$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 	$rtplforcedarr = cot_import('rtplforced', 'P', 'ARR');
