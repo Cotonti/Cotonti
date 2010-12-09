@@ -269,7 +269,7 @@ while (list($i,$x) = each($sed_cat))
 		"LIST_ROWCAT_ICON" => $x['icon'],
 		"LIST_ROWCAT_COUNT" => $sub_count,
 		"LIST_ROWCAT_ODDEVEN" => sed_build_oddeven($kk),
-        "LIST_ROWCAT_NUM" => $kk,
+        "LIST_ROWCAT_NUM" => $kk+1,
 		));
 
 		/* === Hook - Part2 : Include === */
@@ -345,7 +345,7 @@ while ($pag = sed_sql_fetcharray($sql) and ($jj < $cfg['maxrowsperpage']))
 	"LIST_ROW_RATINGS" => $list_ratings,
 	"LIST_ROW_ADMIN" => $pag['admin'],
 	"LIST_ROW_ODDEVEN" => sed_build_oddeven($jj),
-    "LIST_ROW_NUM" => $jj
+    "LIST_ROW_NUM" => $jj+1
 	));
 
 	// Adding LIST_ROW_TEXT tag
