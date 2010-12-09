@@ -66,7 +66,7 @@ if ($a=='add')
 	if (preg_match('/&#\d+;/', $ruser['user_name']) || preg_match('/[<>#\'"\/]/', $ruser['user_name'])) cot_error('aut_invalidloginchars', 'rusername');
 	if (mb_strlen($ruser['user_name']) < 2) cot_error('aut_usernametooshort', 'rusername');
 	if (mb_strlen($rpassword1) < 4 || cot_alphaonly($rpassword1) != $rpassword1) cot_error('aut_passwordtooshort', 'rpassword1');
-	if (mb_strlen($ruser['user_email']) < 4 || !preg_match('#^[\p{L}-]+(\.[\p{L}-]+)*@[\p{L}-]+(\.[\p{L}-]{2,})+$#u', $ruser['user_email']))
+	if (mb_strlen($ruser['user_email']) < 4 || !preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $ruser['user_email']))
 		cot_error('aut_emailtooshort', 'ruseremail');
 	if ($res1>0) cot_error('aut_usernamealreadyindb', 'rusername');
 	if ($res2>0) cot_error('aut_emailalreadyindb', 'ruseremail');

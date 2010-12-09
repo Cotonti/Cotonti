@@ -41,7 +41,7 @@ if ($a=='check')
     }
 	$rmdpass  = md5($rpassword);
 
-	$login_param = preg_match('#^[\p{L}-]+(\.[\p{L}-]+)*@[\p{L}-]+(\.[\p{L}-]{2,})+$#u', $rusername) ?
+	$login_param = preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $rusername) ?
 		'user_email' : 'user_name';
 
 	/**
