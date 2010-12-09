@@ -1162,7 +1162,7 @@ function cot_build_email($email, $hide = false)
 	{
 		return $L['Hidden'];
 	}
-	elseif (!empty($email) && preg_match('#^\p{L}[\.\p{L}\-]+@[\p{L}\.\-]+\.\p{L}+$#u', $email))
+	elseif (!empty($email) && preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $email))
 	{
 		return cot_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
 	}
