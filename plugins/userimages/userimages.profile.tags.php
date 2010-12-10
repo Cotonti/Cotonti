@@ -9,7 +9,7 @@ Hooks=profile.tags
  * Avatar and photo for users
  *
  * @package userimages
- * @version 0.9.0
+ * @version 0.9.1
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
@@ -25,7 +25,7 @@ foreach($userimages as $code => $settings)
 {
 	$userimg_existing = !empty($urr['user_'.$code]) ? cot_rc('userimg_existing', array(
 		'url_file' => $urr['user_'.$code],
-		'url_delete' => cot_url('plug', 'e=userimages&a=delete&code='.$code.'&'.cot_xg())
+		'url_delete' => cot_url('plug', 'r=userimages&a=delete&code='.$code.'&'.cot_xg())
 	)) : '';
 	$userimg_selectfile = cot_rc('userimg_selectfile', array(
 		'form_input' => cot_inputbox('file', $code, '', array('size' => 24))
