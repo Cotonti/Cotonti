@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=standalone
+Hooks=ajax
 [END_COT_EXT]
 ==================== */
 
@@ -9,7 +9,7 @@ Hooks=standalone
  * Avatar and photo for users
  *
  * @package userimages
- * @version 0.9.0
+ * @version 0.9.1
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
