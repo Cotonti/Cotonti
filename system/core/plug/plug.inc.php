@@ -127,8 +127,11 @@ elseif (!empty($e))
 		));
 	}
 
-	$t->parse("MAIN");
-	$t->out("MAIN");
+	if (is_object($t))
+	{
+		$t->parse("MAIN");
+		$t->out("MAIN");
+	}
 
 	require_once $cfg['system_dir'] . '/footer.php';
 }
