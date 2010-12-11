@@ -112,9 +112,9 @@ foreach (cot_getextplugins('page.list.query') as $pl)
 
 if(empty($sql_string))
 {
-	$sql_count = "SELECT COUNT(*) FROM $db_pages as p ".$join_condition." WHERE ".implode(" AND ", $where);
-	$sql_string = "SELECT p.*, u.* ".$join_columns."
-		FROM $db_pages as p ".$join_condition."
+	$sql_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition WHERE ".implode(" AND ", $where);
+	$sql_string = "SELECT p.*, u.* $join_columns
+		FROM $db_pages as p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE ".implode(" AND ", $where)."
 		ORDER BY page_$s $w LIMIT $d, ".$cfg['page']['maxrowsperpage'];

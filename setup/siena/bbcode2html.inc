@@ -18,7 +18,8 @@ $bbcode_installed = cot_plugin_installed('bbcode');
 
 if (cot_module_installed('page') && $cfg['page']['markup'])
 {
-	cot_require('page');
+	global $db_pages;
+	require_once cot_incfile('page', 'module');
 	// Attempt to override from HTML cache
 	cot_db_query("UPDATE $db_pages SET page_text = page_html WHERE page_html != '' AND page_type = 0");
 	if ($bbcode_installed)
@@ -39,7 +40,8 @@ if (cot_module_installed('page') && $cfg['page']['markup'])
 
 if (cot_module_installed('forums') && $cfg['forums']['markup'])
 {
-	cot_require('forums');
+	global $db_forum_posts;
+	require_once cot_incfile('forums', 'module');
 	// Attempt to override from HTML cache
 	cot_db_query("UPDATE $db_forum_posts SET fp_text = fp_html WHERE fp_html != ''");
 	if ($bbcode_installed)
@@ -59,7 +61,8 @@ if (cot_module_installed('forums') && $cfg['forums']['markup'])
 
 if (cot_module_installed('pm') && $cfg['pm']['markup'])
 {
-	cot_require('pm');
+	global $db_pm;
+	require_once cot_incfile('pm', 'module');
 	// Attempt to override from HTML cache
 	cot_db_query("UPDATE $db_pm SET pm_text = pm_html WHERE pm_html != ''");
 	if ($bbcode_installed)
@@ -79,7 +82,8 @@ if (cot_module_installed('pm') && $cfg['pm']['markup'])
 
 if (cot_plugin_installed('comments') && $cfg['plugin']['comments']['markup'])
 {
-	cot_require('comments', true);
+	global $db_com;
+	require_once cot_incfile('comments', 'plug');
 	// Attempt to override from HTML cache
 	cot_db_query("UPDATE $db_com SET com_text = com_html WHERE com_html != ''");
 	if ($bbcode_installed)

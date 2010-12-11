@@ -14,8 +14,8 @@ defined('COT_CODE') or die('Wrong URL');
 // Tags integration
 if ($cfg['plugin']['tags'])
 {
-	cot_require('tags', true);
-	global $db_tag_references;
+	global $db_tag_references, $db_x;
+	require_once cot_incfile('tags', 'plug');
 	// Add tag_locale column
 	$db->query("ALTER TABLE $db_tag_references ADD COLUMN `tag_locale` VARCHAR(8) NOT NULL DEFAULT ''");
 }
