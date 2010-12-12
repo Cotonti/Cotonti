@@ -54,10 +54,6 @@
 			</tr>
 			<!-- END: EXTRAFLD -->
 			<tr>
-				<td>{PHP.L.adm_enableratings}:</td>
-				<td>{ADMIN_STRUCTURE_RATINGS}</td>
-			</tr>
-			<tr>
 				<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 			</tr>
 		</table>

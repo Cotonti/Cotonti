@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=Pages
 Description=Pages and Categories
-Version=0.7.6
+Version=0.7.7
 Date=2010-nov-25
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010
@@ -26,7 +26,6 @@ maxlistsperpage=06:select:5,10,15,20,25,30,40,50,60,70,100,200,500:30:
 [BEGIN_COT_EXT_CONFIG_STRUCTURE]
 order=01:callback:cot_page_config_order():title:
 way=02:select:asc,desc:asc:
-ratings=11:radio::1:
 [END_COT_EXT_CONFIG_STRUCTURE]
 ==================== */
 

@@ -21,7 +21,6 @@ $L['cfg_count_admin'] = array('Count Administrators\' hits', '');
 $L['cfg_maxrowsperpage'] = array('Max. lines in lists', ' ');
 $L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');
 $L['cfg_order'] = array('Sorting column');
-$L['cfg_ratings'] = array('Enable ratings');
 $L['cfg_way'] = array('Sorting direction');
 
 /**

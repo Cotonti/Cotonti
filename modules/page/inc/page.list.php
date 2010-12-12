@@ -66,9 +66,6 @@ $sys['sublocation'] = $cat['title'];
 
 $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['page']['maxrowsperpage'] * 2 : $cfg['page']['maxrowsperpage'];
 
-$join_columns = ($cfg['disable_ratings']) ? '' : ", r.rating_average";
-$join_condition = ($cfg['disable_ratings']) ? '' : "LEFT JOIN $db_ratings as r ON r.rating_code=CONCAT('p',p.page_id)";
-
 $c = (empty($cat['title'])) ? 'all' : $c;
 cot_die((empty($cat['title'])) && !$usr['isadmin']);
 
@@ -149,8 +146,6 @@ $submitnewpage = ($usr['auth_write'] && $c != 'all' && $c != 'unvalidated') ? co
 
 $pagenav = cot_pagenav('list', $list_url_path + array('dc' => $dc), $d, $totallines, $cfg['page']['maxrowsperpage']);
 
-list($list_ratings, $list_ratings_display) = cot_build_ratings($item_code, cot_url('page', 'c=' . $c), $cat['ratings']);
-
 $title_params = array(
 	'TITLE' => $cat['title']
 );
@@ -182,8 +177,6 @@ $t->assign(array(
 	"LIST_CATPATH" => $catpath,
 	"LIST_CATDESC" => $cat['desc'],
 	"LIST_CATICON" => $cat['icon'],
-	"LIST_RATINGS" => $list_ratings,
-	"LIST_RATINGS_DISPLAY" => $list_ratings_display,
 	"LIST_EXTRATEXT" => $extratext,
 	"LIST_SUBMITNEWPAGE" => $submitnewpage,
 	"LIST_TOP_PAGINATION" => $pagenav['main'],

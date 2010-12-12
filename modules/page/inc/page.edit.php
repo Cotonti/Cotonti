@@ -97,10 +97,7 @@ if ($a == 'update')
 				$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
 			}
 
-			$id2 = "p".$id;
 			$sql = $db->delete($db_pages, "page_id='$id'");
-			$sql = $db->delete($db_ratings, "rating_code='$id2'");
-			$sql = $db->delete($db_rated, "rated_code='$id2'");
 			cot_log("Deleted page #".$id,'adm');
 			/* === Hook === */
 			foreach (cot_getextplugins('page.edit.delete.done') as $pl)
