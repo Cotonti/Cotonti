@@ -166,9 +166,6 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				$page_data['page_fileicon'] = '';
 			}
 
-			$item_code = 'p'.$page_data['page_id'];
-			list($page_data['page_ratings'], $page_data['page_ratings_display']) = cot_build_ratings($item_code, $page_data['page_pageurl'], $ratings);
-
 			$date_format = (!empty($date_format)) ? $date_format : $cfg['dateformat'];
 
 			$text = cot_parse($page_data['page_text'], $cfg['page']['markup']);
@@ -206,7 +203,6 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'FILE_COUNTTIMES' => cot_declension($page_data['page_filecount'], $Ls['Times']),
 				'FILE_NAME' => basename($page_data['page_url']),
 				'COUNT' => $page_data['page_count'],
-				'RATINGS' => $page_data['page_ratings'],
 				'ADMIN' => $admin_rights ? cot_rc('list_row_admin', array('unvalidate_url' => cot_url('admin', "m=page&a=unvalidate&id=".$page_data['page_id']."&".cot_xg()),'edit_url' => cot_url('page', "m=edit&id=".$page_data['page_id']))) : '',
 				'NOTAVAILIBLE' => ($page_data['page_date'] > $sys['now_offset']) ? $L['page_notavailable'].cot_build_timegap($sys['now_offset'], $pag['page_date']) : '',
 

@@ -24,12 +24,6 @@ INSERT INTO `cot_auth` (`auth_groupid`, `auth_code`, `auth_option`, `auth_rights
 (4, 'message', 'a', 1, 255, 1),
 (5, 'message', 'a', 255, 255, 1),
 (6, 'message', 'a', 131, 0, 1),
-(1, 'ratings', 'a', 1, 254, 1),
-(2, 'ratings', 'a', 1, 254, 1),
-(3, 'ratings', 'a', 0, 255, 1),
-(4, 'ratings', 'a', 3, 128, 1),
-(5, 'ratings', 'a', 255, 255, 1),
-(6, 'ratings', 'a', 131, 0, 1),
 (1, 'users', 'a', 1, 254, 1),
 (2, 'users', 'a', 0, 254, 1),
 (3, 'users', 'a', 0, 255, 1),
@@ -126,8 +120,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','performance','06','cache_page',3,'0','0','',''),
 ('core','performance','07','cache_index',3,'0','0','',''),
 ('core','performance','08','cache_forums',3,'0','0','',''),
-('core','ratings','01','disable_ratings',3,'0','0','',''),
-('core','ratings','02','ratings_allowchange',3,'0','0','',''),
 ('core','theme','01','forcedefaulttheme',3,'0','0','',''),
 ('core','theme','02','homebreadcrumb',3,'0','0','',''),
 ('core','theme','03','metakeywords',1,'','','',''),
@@ -278,26 +270,6 @@ CREATE TABLE `cot_plugins` (
   `pl_module` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY  (`pl_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `cot_rated` (
-  `rated_id` int unsigned NOT NULL auto_increment,
-  `rated_code` varchar(32) collate utf8_unicode_ci default NULL,
-  `rated_userid` int default NULL,
-  `rated_value` tinyint unsigned NOT NULL default '0',
-  PRIMARY KEY  (`rated_id`),
-  KEY `rated_code` (`rated_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `cot_ratings` (
-  `rating_id` int NOT NULL auto_increment,
-  `rating_code` varchar(32) collate utf8_unicode_ci NOT NULL default '',
-  `rating_state` tinyint NOT NULL default '0',
-  `rating_average` decimal(5,2) NOT NULL default '0.00',
-  `rating_creationdate` int NOT NULL default '0',
-  `rating_text` varchar(128) collate utf8_unicode_ci NOT NULL default '',
-  PRIMARY KEY  (`rating_id`),
-  KEY `rating_code` (`rating_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `cot_structure` (
   `structure_id` mediumint NOT NULL auto_increment,

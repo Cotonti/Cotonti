@@ -9,6 +9,8 @@
  * @license BSD
  */
 
+defined('COT_CODE') or die('Wrong URL');
+
 // Requirements
 require_once cot_incfile('users', 'module');
 require_once cot_langfile('comments', 'plug');

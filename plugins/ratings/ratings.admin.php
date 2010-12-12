@@ -1,20 +1,28 @@
 <?php
+/* ====================
+[BEGIN_COT_EXT]
+Hooks=tools
+[END_COT_EXT]
+==================== */
+
 /**
- * Administration panel - Ratings manager
+ * Administration panel - Manager of ratings
  *
- * @package Cotonti
+ * @package ratings
  * @version 0.7.0
- * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @author Cotonti Team
+ * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('ratings', 'a');
+list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 'ratings');
 cot_block($usr['isadmin']);
 
-$t = new XTemplate(cot_tplfile('admin.ratings', 'core'));
+require_once cot_incfile('ratings', 'plug');
+
+$t = new XTemplate(cot_tplfile('ratings.admin', 'plug'));
 
 $adminpath[] = array(cot_url('admin', 'm=other'), $L['Other']);
 $adminpath[] = array(cot_url('admin', 'm=ratings'), $L['Ratings']);

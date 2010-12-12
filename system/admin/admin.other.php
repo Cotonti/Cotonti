@@ -144,8 +144,7 @@ else
 		'ADMIN_OTHER_URL_DISKCACHE' => cot_url('admin', 'm=cache&s=disk'),
 		'ADMIN_OTHER_URL_BBCODE' => cot_url('admin', 'm=bbcode'),
 		'ADMIN_OTHER_URL_LOG' => cot_url('admin', 'm=log'),
-		'ADMIN_OTHER_URL_INFOS' => cot_url('admin', 'm=infos'),
-		'ADMIN_OTHER_URL_RATINGS' => cot_url('admin', 'm=ratings')
+		'ADMIN_OTHER_URL_INFOS' => cot_url('admin', 'm=infos')
 	));
 
 	/* === Hook === */

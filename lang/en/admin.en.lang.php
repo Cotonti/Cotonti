@@ -71,7 +71,6 @@ $L['core_pfs'] = &$L['PFS'];
 $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
-$L['core_ratings'] = &$L['Ratings'];
 $L['core_rss'] = &$L['RSS_Feeds'];// New in 0.7.0
 $L['core_structure'] = &$L['Categories'];// New in 0.7.0
 $L['core_theme'] = &$L['Themes'];
@@ -160,14 +159,6 @@ $L['cfg_theme_consolidate'] = array('Include theme CSS in consolidated CSS', 'Wo
  */
 
 $L['cfg_disable_plug'] = array('Disable the plugins', '');
-
-/**
- * Config Section
- * Ratings Subsection
- */
-
-$L['cfg_disable_ratings'] = array('Disable the ratings', '');
-$L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enabled it will allow users to change their rating.');	// New in 0.0.2
 
 /**
  * Config Section
@@ -286,7 +277,6 @@ $L['adm_tpl_forced'] = 'Same as';
 $L['adm_tpl_parent'] = 'Same as the parent category';
 $L['adm_tpl_resyncalltitle'] = 'Resync all page counters';
 $L['adm_tpl_resynctitle'] = 'Resync category page counters';
-$L['adm_enableratings'] = 'Enable ratings';	// New in 0.1.0
 $L['adm_help_structure'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.'; // Added in N-0.7.0
 
 /**
@@ -371,16 +361,6 @@ $L['adm_opt_setup_missing'] = 'Error: setup file missing!';	// New in 0.0.6
  */
 
 $L['adm_listisempty'] = 'List is empty';
-
-/**
- * Other Section
- * Ratings Subsection
- */
-
-$L['adm_ratings_already_del'] = 'Rating removed';	// New in 0.0.3
-$L['adm_ratings_totalitems'] = 'Total pages rated';
-$L['adm_ratings_totalvotes'] = 'Total votes';
-$L['adm_help_ratings'] = 'To reset a rating, simply delete it. It will be re-created with the first new vote.';
 
 /**
  * Other Section

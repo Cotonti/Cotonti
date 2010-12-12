@@ -104,9 +104,6 @@ if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 	$sql =  $db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'");
 }
 
-$ratings = ($cat['ratings']) ? true : false;
-list($ratings_link, $ratings_display) = cot_build_ratings('p'.$id, $pag['page_pageurl'], $ratings);
-
 if ($pag['page_cat'] == 'system')
 {
 	$title_params = array(

@@ -29,12 +29,6 @@
 				<a href="{ADMIN_OTHER_URL_INFOS}">{PHP.L.adm_infos}</a>
 			</td>
 		</tr>
-		<tr>
-			<td class="centerall">{PHP.R.admin_icon_ratings}</td>
-			<td>
-				<a href="{ADMIN_OTHER_URL_RATINGS}">{PHP.L.Ratings}</a>
-			</td>
-		</tr>
 	</table>
 
 <!-- BEGIN: SECTION -->

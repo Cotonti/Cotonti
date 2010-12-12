@@ -194,9 +194,9 @@ elseif ($a == 'delete')
 
 		$id2 = 'p'.$id;
 		$sql = $db->query("DELETE FROM $db_pages WHERE page_id='$id'");
-		$sql = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
-		$sql = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-		$sql = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
+//		$sql = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'"); // FIXME ratings dependency
+//		$sql = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
+//		$sql = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'], 'adm');
 
