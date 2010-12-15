@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=list.tags
-Tags=page.list.tpl:{LIST_RATINGS},{LIST_RATINGS_DISPLAY}
+Tags=page.list.tpl:{LIST_RATINGS_DISPLAY},{LIST_RATINGS_AVERAGE}
 [END_COT_EXT]
 ==================== */
 
@@ -18,9 +18,13 @@ Tags=page.list.tpl:{LIST_RATINGS},{LIST_RATINGS_DISPLAY}
 
 defined('COT_CODE') or die('Wrong URL');
 
+require_once cot_incfile('ratings', 'plug');
+
+list ($ratings_display, $ratings_average) = cot_ratings_display('page', $c, $c, true);
+
 $t->assign(array(
-	'LIST_RATINGS' => cot_ratings_link('page', 'c='.$c, 'page', $c),
-	'LIST_RATINGS_DISPLAY' => cot_ratings_display('page', $c)
+	'LIST_RATINGS_DISPLAY' => $ratings_display,
+	'LIST_RATINGS_AVERAGE' => $ratings_average
 ));
 
 ?>

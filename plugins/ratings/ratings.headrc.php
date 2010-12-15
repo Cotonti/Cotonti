@@ -17,7 +17,6 @@ Hooks=headrc
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_headrc_load_file($cfg['plugins_dir'] . '/ratings/js/jquery.MetaData.js');
 cot_headrc_load_file($cfg['plugins_dir'] . '/ratings/js/jquery.rating.js');
 cot_headrc_load_file($cfg['plugins_dir'] . '/ratings/js/ratings.js');
 ?>

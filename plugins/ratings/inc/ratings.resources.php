@@ -11,5 +11,5 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$R['admin_icon_ratings'] = '<img class="icon" src="../../images/icons/default/polls.png" alt="" />';
+$R['rat_code_fancy_star'] = '<a class="{$class}" title="{$title}">{$num}</a>';
 ?>
