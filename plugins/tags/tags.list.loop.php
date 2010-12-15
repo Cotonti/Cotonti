@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=page.list.loop
-Tags=list.tpl:{LIST_ROW_TAGS_ROW_TAG},{LIST_ROW_TAGS_ROW_URL},{LIST_ROW_NO_TAGS}
+Tags=page.list.tpl:{LIST_ROW_TAGS_ROW_TAG},{LIST_ROW_TAGS_ROW_URL},{LIST_ROW_NO_TAGS}
 [END_COT_EXT]
 ==================== */
 

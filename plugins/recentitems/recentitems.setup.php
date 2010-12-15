@@ -14,7 +14,6 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=R
 Lock_members=W12345A
-Requires_modules=index
 Recommends_modules=page,forums
 Recommends_plugins=comments
 [END_COT_EXT]

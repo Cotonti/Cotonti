@@ -40,7 +40,7 @@ $L['adm_help_pages_extrafield'] = '<p><em>Base HTML</em> is set automaticaly if 
 <li>page.tpl: {PAGE_XXXXX}, {PAGE_XXXXX_TITLE}</li>
 <li>page.add.tpl: {PAGEADD_FORM_XXXXX}, {PAGEADD_FORM_XXXXX_TITLE}</li>
 <li>page.edit.tpl: {PAGEEDIT_FORM_XXXXX}, {PAGEEDIT_FORM_XXXXX_TITLE}</li>
-<li>list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}</li>
+<li>page.list.tpl: {LIST_ROW_XXXXX}, {LIST_TOP_XXXXX}</li>
 </ul>';
 
 /**

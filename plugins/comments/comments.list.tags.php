@@ -2,7 +2,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=list.tags
-Tags=list.tpl:{LIST_COMMENTS},{LIST_COMMENTS_DISPLAY}
+Tags=page.list.tpl:{LIST_COMMENTS},{LIST_COMMENTS_DISPLAY}
 [END_COT_EXT]
 ==================== */
 

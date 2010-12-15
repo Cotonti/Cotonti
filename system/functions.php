@@ -634,10 +634,10 @@ function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 
 	if (function_exists('cot_mail_custom'))
 	{
-		return cot_mail($fmail, $subject, $body, $headers, $additional_parameters);
+		return cot_mail_custom($fmail, $subject, $body, $headers, $additional_parameters);
 	}
 
-	if (is_array($cot_mail_senders))
+	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0)
 	{
 		foreach ($cot_mail_senders as $func)
 		{
@@ -2703,8 +2703,8 @@ function cot_tplfile($base, $type = 'module')
 		}
 	}
 
-	throw new Exception('Template file '.implode('.', $base).'.tpl ('.$type.') was not found.');
-	return '';
+	// throw new Exception('Template file '.implode('.', $base).'.tpl ('.$type.') was not found.');
+	return false;
 }
 
 /*
