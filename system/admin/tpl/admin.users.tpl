@@ -33,7 +33,7 @@
 			</tr>
 <!-- END: USERS_ROW -->
 		</table>
-		<h3>{PHP.L.addnewentry}:</h3>
+		<h3>{PHP.L.Add}:</h3>
 		<form name="addlevel" id="addlevel" action="{ADMIN_USERS_FORM_URL}" method="post" class="ajax">
 		<table class="cells">
 			<tr>
