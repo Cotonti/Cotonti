@@ -29,7 +29,7 @@ if (!empty($highlight))
 	}
 
 	$search_embed .= '});});';
-	cot_headrc_output_embed($search_embed);
+	cot_rc_embed($search_embed);
 }
 
 ?>

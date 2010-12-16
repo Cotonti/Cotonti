@@ -26,19 +26,15 @@ if (function_exists('cot_textarea') && cot_auth('plug', 'ckeditor', 'W'))
 	// Main CKEditor file
 	if ($cfg['plugin']['ckeditor']['cdn'])
 	{
-		cot_headrc_output_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/ckeditor.js', 'js', true);
+		cot_rc_link_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/ckeditor.js', true);
 		if ($cfg['jquery'])
 		{
-			cot_headrc_output_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/adapters/jquery.js');
+			cot_rc_link_file('http://' . $cfg['plugin']['ckeditor']['cdn_url']. '/adapters/jquery.js');
 		}
 	}
 	else
 	{
-		cot_headrc_output_file($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js', 'js', true);
-		if ($cfg['jquery'])
-		{
-			cot_headrc_output_file($cfg['plugins_dir'] . '/ckeditor/lib/adapters/jquery.js');
-		}
+		cot_rc_link_file($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js', true);
 	}
 	// Load preset and connector
 	if ($usr['id'] > 0)
@@ -54,7 +50,7 @@ if (function_exists('cot_textarea') && cot_auth('plug', 'ckeditor', 'W'))
 		$preset_name = file_exists($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.group_1.set.js") ? 'group_1'
 			: 'default';
 	}
-	cot_headrc_output_file($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js");
+	cot_rc_link_file($cfg['plugins_dir'] . "/ckeditor/presets/ckeditor.$preset_name.set.js");
 }
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=headrc
+Hooks=rc
 [END_COT_EXT]
 ==================== */
 
@@ -21,7 +21,7 @@ defined('COT_CODE') or die('Wrong URL');
 
 if (!$cfg['plugin']['ckeditor']['cdn'] && $cfg['jquery'])
 {
-	cot_headrc_load_file($cfg['plugins_dir'] . '/ckeditor/lib/adapters/jquery.js');
+	cot_rc_add_file($cfg['plugins_dir'] . '/ckeditor/lib/adapters/jquery.js');
 }
 
 // Consolidate presets
@@ -30,12 +30,12 @@ while ($fname = readdir($dp))
 {
 	if (preg_match('#^ckeditor\.group_(\d+)\.set\.js$#', $fname, $mt))
 	{
-		cot_headrc_load_file($cfg['plugins_dir'] . '/ckeditor/presets/' . $fname, 'group_' . $mt[1]);
+		cot_rc_add_file($cfg['plugins_dir'] . '/ckeditor/presets/' . $fname, 'group_' . $mt[1]);
 	}
 }
 closedir($dp);
 
 // Default preset
-cot_headrc_load_file($cfg['plugins_dir'] . '/ckeditor/presets/ckeditor.default.set.js');
+cot_rc_add_file($cfg['plugins_dir'] . '/ckeditor/presets/ckeditor.default.set.js');
 
 ?>

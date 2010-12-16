@@ -528,9 +528,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('COT_NO_ANTIXSS') && !defin
 }
 
 /* ============ Head Resources ===========*/
-if (!$cot_headrc)
+if (!$cot_rc_html)
 {
-	cot_headrc_consolidate();
+	cot_rc_consolidate();
 }
 
 /* ======== Global hook ======== */

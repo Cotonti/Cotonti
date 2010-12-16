@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=headrc
+Hooks=rc
 [END_COT_EXT]
 ==================== */
 
@@ -17,5 +17,5 @@ Hooks=headrc
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_headrc_load_file($cfg['plugins_dir'].'/search/js/hl.js');
+cot_rc_add_file($cfg['plugins_dir'].'/search/js/hl.js');
 ?>

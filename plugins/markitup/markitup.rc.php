@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=headrc
+Hooks=rc
 [END_COT_EXT]
 ==================== */
 
@@ -34,22 +34,22 @@ if (!file_exists($smile_lang))
 $mkup_set = function_exists('cot_bbcode_parse') ? 'bbcode' : 'html';
 
 // Load head resources
-cot_headrc_load_file($smile_lang);
-cot_headrc_load_file('images/smilies/set.js');
-cot_headrc_load_file($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.js');
-cot_headrc_load_file($mkup_lang);
-cot_headrc_load_file($cfg['plugins_dir'] . '/markitup/js/jqModal.js');
-cot_headrc_load_file($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
-cot_headrc_load_file($cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css', 'global', 'css');
-cot_headrc_load_file($cfg['plugins_dir'] . '/markitup/style.css', 'global', 'css');
+cot_rc_add_file($smile_lang);
+cot_rc_add_file('images/smilies/set.js');
+cot_rc_add_file($cfg['plugins_dir'] . '/markitup/js/jquery.markitup.js');
+cot_rc_add_file($mkup_lang);
+cot_rc_add_file($cfg['plugins_dir'] . '/markitup/js/jqModal.js');
+cot_rc_add_file($cfg['plugins_dir'] . "/markitup/js/{$mkup_set}.set.js");
+cot_rc_add_file($cfg['plugins_dir'] . '/markitup/skins/' . $cfg['plugin']['markitup']['skin'] . '/style.css');
+cot_rc_add_file($cfg['plugins_dir'] . '/markitup/style.css');
 if ($cfg['plugin']['markitup']['chili'])
 {
-	cot_headrc_load_file($cfg['plugins_dir'].'/markitup/js/chili.js');
+	cot_rc_add_file($cfg['plugins_dir'].'/markitup/js/chili.js');
 }
 
 // User-specific setup
 $autorefresh = ($cfg['plugin']['markitup']['autorefresh']) ? 'true' : 'false';
-cot_headrc_load_embed('markitup.set', '$(document).ready(function() {
+cot_rc_add_embed('markitup.set', '$(document).ready(function() {
 	mySettings.previewAutorefresh = '.$autorefresh.';
 	mySettings.previewParserPath = "plug.php?r=markitup&x=" + $("input[name=\'x\'][type=\'hidden\']").eq(0).val();
 	mini.previewAutorefresh = '.$autorefresh.';

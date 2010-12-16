@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=headrc
+Hooks=rc
 [END_COT_EXT]
 ==================== */
 
@@ -17,12 +17,11 @@ Hooks=headrc
 
 defined('COT_CODE') or die('Wrong URL');
 
-
 //cot_headrc_load_file($cfg['plugins_dir'] . '/tags/style.css', 'global', 'css');
 if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['tags']['autocomplete'] > 0)
 {
-	cot_headrc_load_file('js/jquery.autocomplete.js');
-	cot_headrc_load_embed('tags.autocomplete', '$(document).ready(function(){
+	cot_rc_add_file('js/jquery.autocomplete.js');
+	cot_rc_add_embed('tags.autocomplete', '$(document).ready(function(){
 $(".autotags").autocomplete("'.cot_url('plug', 'r=tags').'", {multiple: true, minChars: '.$cfg['plugin']['tags']['autocomplete'].'});
 });');
 }

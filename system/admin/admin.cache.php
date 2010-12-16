@@ -30,7 +30,7 @@ if ($a == 'purge' && $cache)
 {
 	if (cot_check_xg() && $cache->clear())
 	{
-		cot_headrc_consolidate();
+		cot_rc_consolidate();
 		cot_message('adm_purgeall_done');
 	}
 	else

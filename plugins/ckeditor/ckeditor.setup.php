@@ -4,8 +4,8 @@
 Code=ckeditor
 Name=CKEditor
 Description=WYSIWYG HTML editor
-Version=0.7.0.2-3.4.1
-Date=2010-oct-08
+Version=0.7.3-3.4.1
+Date=2010-dec-16
 Author=CKSource, http://ckeditor.com/
 Copyright=(c) 2003 - 2010 CKSource - Frederico Knabben.
 Notes=Licensed under the terms of any of the following licenses: GPL, LGPL, MPL

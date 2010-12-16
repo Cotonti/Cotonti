@@ -48,11 +48,11 @@ $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspe
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
 $out['head_head'] = $out['head'];
 
-cot_headrc_output();
 if ($cfg['jquery'] && $cfg['jquery_cdn'])
 {
-	cot_headrc_output_file('https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js');
+	cot_rc_link_file('https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js', true);
 }
+cot_rc_output();
 
 if (isset($env['status']))
 {

@@ -9,14 +9,14 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$out['footer_js'] = '';
-
 /* === Hook === */
 foreach (cot_getextplugins('footer.first') as $pl)
 {
 	include $pl;
 }
 /* ===== */
+
+cot_rc_output(true);
 
 $i = explode(' ', microtime());
 $sys['endtime'] = $i[1] + $i[0];
