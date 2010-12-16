@@ -75,8 +75,9 @@ else
 {
 	$if_modified_since = false;
 }
-$if_none_match = stripslashes($_SERVER['HTTP_IF_NONE_MATCH']);
-if ($if_none_match == $etag && $if_modified_since >= $file_last_modified)
+
+if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == $etag
+	&& $if_modified_since >= $file_last_modified)
 {
 	header('HTTP/1.1 304 Not Modified');
 	exit;

@@ -245,7 +245,7 @@ else
 	if ($updated_ext && $cache)
 	{
 		$cache->clear();
-		cot_headrc_consolidate();
+		cot_rc_consolidate();
 	}
 
 	// BBcode2HTML

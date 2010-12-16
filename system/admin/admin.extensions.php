@@ -103,7 +103,7 @@ switch($a)
 		if (!empty($b) && $cache)
 		{
 			$cache->clear();
-			cot_headrc_consolidate();
+			cot_rc_consolidate();
 		}
 		if(file_exists($ext_info))
 		{
@@ -371,7 +371,7 @@ switch($a)
 		if ($cache)
 		{
 			$cache->clear();
-			cot_headrc_consolidate();
+			cot_rc_consolidate();
 		}
 		cot_clear_messages();
 		$t->parse('MAIN.EDIT');

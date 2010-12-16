@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=headrc
+Hooks=rc
 [END_COT_EXT]
 ==================== */
 
@@ -17,6 +17,6 @@ Hooks=headrc
 
 defined('COT_CODE') or die('Wrong URL');
 
-cot_headrc_load_file($cfg['plugins_dir'] . '/ratings/js/jquery.rating.js');
-cot_headrc_load_file($cfg['plugins_dir'] . '/ratings/js/ratings.js');
+cot_rc_add_file($cfg['plugins_dir'] . '/ratings/js/jquery.rating.js');
+cot_rc_add_file($cfg['plugins_dir'] . '/ratings/js/ratings.js');
 ?>
