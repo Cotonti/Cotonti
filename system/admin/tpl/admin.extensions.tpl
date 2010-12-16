@@ -9,8 +9,8 @@
 	<h2>{ADMIN_EXTENSIONS_TYPE} {ADMIN_EXTENSIONS_NAME}:</h2>
 	<table class="cells">
 		<tr>
-			<td class="width20">{PHP.L.Code}:</td>
-			<td class="width80">{ADMIN_EXTENSIONS_CODE}</td>
+			<td class="width30">{PHP.L.Code}:</td>
+			<td class="width70">{ADMIN_EXTENSIONS_CODE}</td>
 		</tr>
 		<tr>
 			<td>{PHP.L.Description}:</td>
@@ -77,19 +77,19 @@
 	<table class="cells">
 <!-- IF !{PHP.isinstalled} -->
 		<tr>
-			<td class="width20">
+			<td class="width30">
 				<a href="{ADMIN_EXTENSIONS_INSTALL_URL}" class="ajax">{PHP.L.adm_opt_install}</a>
 			</td>
-			<td class="width80">
+			<td class="width70">
 				{PHP.L.adm_opt_install_explain}
 			</td>
 		</tr>
 <!-- ELSE -->
 		<tr>
-			<td>
+			<td class="width30">
 				<a href="{ADMIN_EXTENSIONS_UPDATE_URL}" class="ajax">{PHP.L.adm_opt_update}</a>
 			</td>
-			<td>
+			<td class="width70">
 				{PHP.L.adm_opt_update_explain}
 			</td>
 		</tr>
@@ -162,8 +162,8 @@
 	<table class="cells">
 		<tr>
 			<td class="coltop width5">#</td>
-			<td class="coltop width15">{PHP.L.Part}</td>
-			<td class="coltop width80">{PHP.L.Files} / {PHP.L.Tags}</td>
+			<td class="coltop width25">{PHP.L.Part}</td>
+			<td class="coltop width70">{PHP.L.Files} / {PHP.L.Tags}</td>
 		</tr>
 <!-- BEGIN: ROW_ERROR_TAGS -->
 		<tr>
@@ -188,11 +188,11 @@
 	<table class="cells">
 		<tr>
 			<td class="coltop width5">&nbsp;</td>
-			<td class="coltop width30">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
+			<td class="coltop width25">{PHP.L.Name} {PHP.L.adm_clicktoedit}</td>
 			<td class="coltop width20">{PHP.L.Code}</td>
 			<td class="coltop width10">{PHP.L.Parts}</td>
 			<td class="coltop width20">{PHP.L.Status}</td>
-			<td class="coltop width15">{PHP.L.Action}</td>
+			<td class="coltop width20">{PHP.L.Action}</td>
 		</tr>
 <!-- BEGIN: ROW -->
 <!-- BEGIN: ROW_ERROR_EXT-->
@@ -246,10 +246,10 @@
 	<h2>{PHP.L.Hooks} ({ADMIN_EXTENSIONS_CNT_HOOK}):</h2>
 	<table class="cells">
 		<tr>
-			<td class="coltop width45">{PHP.L.Hooks}</td>
+			<td class="coltop width40">{PHP.L.Hooks}</td>
 			<td class="coltop width20">{PHP.L.Plugin}</td>
 			<td class="coltop width20">{PHP.L.Order}</td>
-			<td class="coltop width15">{PHP.L.Active}</td>
+			<td class="coltop width20">{PHP.L.Active}</td>
 		</tr>
 <!-- BEGIN: HOOKS -->
 		<tr>

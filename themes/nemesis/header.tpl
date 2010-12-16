@@ -16,7 +16,7 @@
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <!-- IF !({PHP.cfg.theme_consolidate} AND {PHP.cfg.forcedefaulttheme}) -->
-<link href="themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
+<link href="./themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
 <!-- ENDIF -->
 </head>
 
