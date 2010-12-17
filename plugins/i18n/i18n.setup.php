@@ -14,7 +14,7 @@ Lock_guests=12345A
 Auth_members=RW
 Lock_members=
 Requires_modules=page
-Recommends_plugins=search
+Recommends_plugins=search,tags
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]

@@ -60,7 +60,7 @@ $t->assign(array(
 	'TAGS_ORDER' => $tag_order
 ));
 
-if ($a == 'pages')
+if ($a == 'pages' && $cfg['page'])
 {
 	if(empty($qs))
 	{
@@ -77,7 +77,7 @@ if ($a == 'pages')
 		}
 	}
 }
-elseif ($a == 'forums')
+elseif ($a == 'forums' && $cfg['forums'])
 {
 	if (empty($qs))
 	{
@@ -136,6 +136,12 @@ else
 function cot_tag_search_pages($query)
 {
 	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
+
+	if (!$cfg['page'])
+	{
+		return;
+	}
+
 	$totalitems = $db->query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_pages AS p
 			ON r.tag_item = p.page_id
@@ -227,6 +233,12 @@ function cot_tag_search_pages($query)
 function cot_tag_search_forums($query)
 {
 	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $o, $row;
+
+	if (!$cfg['forums'])
+	{
+		return;
+	}
+
 	$totalitems = $db->query("SELECT COUNT(*)
 		FROM $db_tag_references AS r LEFT JOIN $db_forum_topics AS t
 			ON r.tag_item = t.ft_id
