@@ -13,6 +13,7 @@ Auth_guests=R
 Lock_guests=12345A
 Auth_members=RW
 Lock_members=
+Recommends_modules=page
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]

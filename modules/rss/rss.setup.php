@@ -12,6 +12,8 @@ Auth_guests=R
 Lock_guests=A
 Auth_members=R
 Lock_members=
+Recommends_modules=page,forums
+Recommends_plugins=comments
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]

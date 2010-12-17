@@ -14,6 +14,7 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=RW
 Lock_members=12345A
+Requires_plugins=bbcode
 [END_COT_EXT]
 ==================== */
 

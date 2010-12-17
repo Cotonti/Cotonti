@@ -14,7 +14,7 @@ Auth_guests=R
 Lock_guests=W12345A
 Auth_members=RW
 Lock_members=12345
-Requires_modules=page,forums
+Recommends_modules=page,forums
 [END_COT_EXT]
 
 [BEGIN_COT_EXT_CONFIG]
