@@ -29,7 +29,7 @@ cot_block($usr['auth_read']);
 
 if ($a == 'update')
 {
-	$sql1 = $db->query("SELECT page_cat, page_ownerid FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	$sql1 = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 	cot_die($sql1->rowCount() == 0);
 	$row1 = $sql1->fetch();
 
@@ -65,7 +65,7 @@ if ($a == 'update')
 	// Extra fields
 	foreach ($cot_extrafields['pages'] as $row)
 	{
-		$rpage[$row['field_name']] = cot_import_extrafields('rpage'.$row['field_name'], $row);
+		$rpage['page_'.$row['field_name']] = cot_import_extrafields('rpage'.$row['field_name'], $row, 'P', $row1['page_'.$row['field_name']]);
 	}
 
 	if ($usr['isadmin'])

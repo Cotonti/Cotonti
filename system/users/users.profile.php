@@ -57,7 +57,7 @@ if($a == 'update')
 	// Extra fields
 	foreach($cot_extrafields['users'] as $row)
 	{
-		$ruser[$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
+		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row, 'P', $urr['user_'.$row['field_name']]);
 	}
 	$ruser['user_birthdate'] = (int) cot_import_date('ruserbirthdate', false);
 

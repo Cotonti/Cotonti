@@ -48,7 +48,9 @@ if ($sys['protecttopadmin'])
 if ($a=='update')
 {
 	cot_check_xg();
-
+	
+	$row1 = $db->query("SELECT * FROM $db_users WHERE user_id='$id'")->fetch();
+	
 	/* === Hook === */
 	foreach (cot_getextplugins('users.edit.update.first') as $pl)
 	{
@@ -59,8 +61,6 @@ if ($a=='update')
 	$ruserdelete = cot_import('ruserdelete','P','BOL');
 	if ($ruserdelete && $sys['user_istopadmin'] && !$sys['edited_istopadmin'])
 	{
-		$sql = $db->query("SELECT * FROM $db_users WHERE user_id='$id'");
-		$row = $sql->fetch();
 		
 		$sql = $db->delete($db_users, "user_id='$id'");
 		$sql = $db->delete($db_groups_users, "gru_userid='$id'");
@@ -105,7 +105,7 @@ if ($a=='update')
 	// Extra fields
 	foreach($cot_extrafields['users'] as $row)
 	{
-		$ruser[$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row);
+		$ruser['user_'.$row['field_name']] = cot_import_extrafields('ruser'.$row['field_name'], $row, 'P', $row1['user_'.$row['field_name']]);
 	}
 
 	$rusergroupsms = cot_import('rusergroupsms', 'P', 'ARR');

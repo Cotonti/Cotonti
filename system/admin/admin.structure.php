@@ -58,6 +58,7 @@ if ($a == 'update')
 	
 	foreach ($rstructurecode as $i => $k)
 	{
+		$oldrow = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ")->fetch();
 		$rstructure['structure_code'] = cot_import($rstructurecode[$i], 'D', 'TXT');
 		$rstructure['structure_path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
 		$rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
@@ -66,7 +67,7 @@ if ($a == 'update')
 		$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
 		foreach ($cot_extrafields['structure'] as $row)
 		{
-			$rstructure[$row['field_name']] = cot_import_extrafields($rstructurearray[$row['field_name']][$i], $row, 'D');
+			$rstructure['structure_'.$row['field_name']] = cot_import_extrafields($rstructurearray[$row['field_name']][$i], $row, 'D', $oldrow['structure_'.$row['field_name']]);
 		}
 
 		$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
@@ -79,8 +80,7 @@ if ($a == 'update')
 		}
 		/* ===== */
 
-		$oldcatcode = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ")->fetchColumn();
-		if ($oldcatcode != $rstructure['structure_code'])
+		if ($oldrow['structure_code'] != $rstructure['structure_code'])
 		{
 			$db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($n)."' AND auth_option='".$db->prep($roww['structure_code'])."'");
 			$db->update($db_config, array("config_subcat" => $rstructure['structure_code']), "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($roww['structure_code'])."' AND config_owner='module'");
@@ -117,7 +117,7 @@ elseif ($a == 'add')
 
 	foreach ($cot_extrafields['structure'] as $row)
 	{
-		$rstructure[$row['field_name']] = cot_import_extrafields('rstructure'.$row['field_name'], $row);
+		$rstructure['structure_'.$row['field_name']] = cot_import_extrafields('rstructure'.$row['field_name'], $row);
 	}
 
 	$rtplmode = cot_import('rtplmode', 'P', 'INT');
