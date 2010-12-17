@@ -4,7 +4,7 @@
 Code=news
 Name=News
 Description=Pick up pages from a category and display the newest in the home page
-Version=0.7.1
+Version=0.7.2
 Date=2010-jan-03
 Author=Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2010
@@ -19,7 +19,7 @@ Requires_modules=page
 
 [BEGIN_COT_EXT_CONFIG]
 category=01:string::news:News category codes, comma separated
-maxpages=03:select:1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100:10:Recent pages displayed
+maxpages=03:string::10:Recent pages displayed
 syncpagination=04:radio::0:Enable pagination for additional categories
 [END_COT_EXT_CONFIG]
 ==================== */

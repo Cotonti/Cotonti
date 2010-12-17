@@ -25,8 +25,7 @@ require_once cot_langfile('banlist', 'plug');
 $db_banlist = (isset($db_banlist)) ? $db_banlist : $db_x . 'banlist';
 $adminhelp = $L['banlist_help'];
 
-$d = cot_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('banlist.admin.first') as $pl)

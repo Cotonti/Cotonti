@@ -29,8 +29,7 @@ $adminpath[] = array(cot_url('admin', 'm=ratings'), $L['Ratings']);
 $adminhelp = $L['adm_help_ratings'];
 
 $id = cot_import('id','G','TXT');
-$d = cot_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook  === */
 foreach (cot_getextplugins('admin.ratings.first') as $pl)

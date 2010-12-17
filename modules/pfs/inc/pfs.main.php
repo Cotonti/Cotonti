@@ -19,11 +19,8 @@ $c2 = cot_import('c2','G','ALP');					  //
 $userid = cot_import('userid','G','INT');			  // User ID or 0
 $gd_supported = array('jpg', 'jpeg', 'png', 'gif');
 
-$d = cot_import('d', 'G', 'INT');					   // Page number files
-$df = cot_import('df', 'G', 'INT');					   // page number folders
-
-$df = empty($df) ? 0 : (int) $df;
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['pfs']['maxpfsperpage']);   // Page number files
+list($pgf, $df) = cot_import_pagenav('df', $cfg['pfs']['maxpfsperpage']);   // page number folders
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pfs', 'a');
 cot_block($usr['auth_read']);

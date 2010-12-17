@@ -437,6 +437,39 @@ function cot_import_date($name, $usertimezone = true, $returnarray = false, $sou
 	return $result;
 }
 
+/**
+ * Imports pagination indexes
+ *
+ * @param string $var_name URL parameter name, e.g. 'pg' or 'd'
+ * @param int $max_items Max items per page
+ * @return array Array containing 2 items: page number and database offset
+ */
+function cot_import_pagenav($var_name, $max_items)
+{
+	global $cfg;
+
+	if ($cfg['easypagenav'])
+	{
+		$page = (int) cot_import($var_name, 'G', 'INT');
+		if ($page <= 0)
+		{
+			$page = 1;
+		}
+		$offset = ($page - 1) * $max_items;
+	}
+	else
+	{
+		$offset = (int) cot_import($var_name, 'G', 'INT');
+		if ($offset < 0)
+		{
+			$offset = 0;
+		}
+		$page = floor($offset / $max_items) + 1;
+	}
+
+	return array($page, $offset);
+}
+
 /*
  * =========================== Structure functions ===========================
  */
@@ -2453,7 +2486,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		);
 	}
 
-	global $L, $R;
+	global $L, $R, $cfg;
 
 	$each_side = 3; // Links each side
 
@@ -2480,7 +2513,19 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	$rel = '';
 
 	$totalpages = ceil($entries / $perpage);
-	$currentpage = floor($current / $perpage) + 1;
+//	if ($cfg['easypagenav'])
+//	{
+//		$currentpage = $current;
+//		if ($currentpage <= 0)
+//		{
+//			$currentpage = 1;
+//		}
+//		$current = ($currentpage - 1) * $perpage;
+//	}
+//	else
+//	{
+		$currentpage = floor($current / $perpage) + 1;
+//	}
 	$cur_left = $currentpage - $each_side;
 	if ($cur_left < 1) $cur_left = 1;
 	$cur_right = $currentpage + $each_side;
@@ -2495,7 +2540,14 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	$n = 0;
 	while ($i < $cur_left)
 	{
-		$args[$characters] = ($i - 1) * $perpage;
+		if ($cfg['easypagenav'])
+		{
+			$args[$characters] = $i == 1 ? null : $i;
+		}
+		else
+		{
+			$args[$characters] = ($i - 1) * $perpage;
+		}
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
@@ -2539,7 +2591,14 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	}
 	for ($j = $cur_left; $j <= $cur_right; $j++)
 	{
-		$args[$characters] = ($j - 1) * $perpage;
+		if ($cfg['easypagenav'])
+		{
+			$args[$characters] = $j == 1 ? null : $j;
+		}
+		else
+		{
+			$args[$characters] = ($j - 1) * $perpage;
+		}
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
@@ -2570,7 +2629,14 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		}
 		elseif ($i == $cur_right + 2)
 		{
-			$args[$characters] = ($i - 2 ) * $perpage;
+			if ($cfg['easypagenav'])
+			{
+				$args[$characters] = $i == 2 ? null : $i - 1;
+			}
+			else
+			{
+				$args[$characters] = ($i - 2) * $perpage;
+			}
 			if ($ajax_rel)
 			{
 				$ajax_args[$characters] = $args[$characters];
@@ -2587,7 +2653,14 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 				'num' => $i - 1
 			));
 		}
-		$args[$characters] = ($i - 1) * $perpage;
+		if ($cfg['easypagenav'])
+		{
+			$args[$characters] = $i == 1 ? null : $i;
+		}
+		else
+		{
+			$args[$characters] = ($i - 1) * $perpage;
+		}
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
@@ -2617,7 +2690,15 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 		{
 			$prev_n = 0;
 		}
-		$args[$characters] = $prev_n;
+		if ($cfg['easypagenav'])
+		{
+			$num = floor($prev_n / $perpage) + 1;
+			$args[$characters] = $num == 1 ? null : $num;
+		}
+		else
+		{
+			$args[$characters] = $prev_n;
+		}
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
@@ -2654,7 +2735,15 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 	if (($current + $perpage) < $entries)
 	{
 		$next_n = $current + $perpage;
-		$args[$characters] = $next_n;
+		if ($cfg['easypagenav'])
+		{
+			$num = floor($next_n / $perpage) + 1;
+			$args[$characters] = $num == 1 ? null : $num;
+		}
+		else
+		{
+			$args[$characters] = $next_n;
+		}
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
@@ -2671,7 +2760,15 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'num' => $next_n + 1
 		));
 		$last_n = ($totalpages - 1) * $perpage;
-		$args[$characters] = $last_n;
+		if ($cfg['easypagenav'])
+		{
+			$num = floor($last_n / $perpage) + 1;
+			$args[$characters] = $num == 1 ? null : $num;
+		}
+		else
+		{
+			$args[$characters] = $last_n;
+		}
 		if ($ajax_rel)
 		{
 			$ajax_args[$characters] = $args[$characters];
@@ -2692,7 +2789,7 @@ function cot_pagenav($module, $params, $current, $entries, $perpage, $characters
 			'url' => cot_url($module, $args, $hash),
 			'event' => $event,
 			'rel' => $rel,
-			'num' => $last_n / $perpage + 1
+			'num' => floor($last_n / $perpage) + 1
 			)): FALSE;
 	}
 

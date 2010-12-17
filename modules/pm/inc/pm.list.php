@@ -16,8 +16,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a
 cot_block($usr['auth_read']);
 
 $f = cot_import('f','G','ALP');				// Category inbox, sentbox, archive
-$d = cot_import('d','G','INT');				// Page number
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']);
 $a = cot_import('a','G','TXT');				// Action
 $filter = cot_import('filter','G','TXT');	// filter
 

@@ -14,7 +14,7 @@ defined('COT_CODE') or die('Wrong URL');
 $id = cot_import('id', 'G', 'INT');
 $s = cot_import('s', 'G', 'ALP', 13);
 $w = cot_import('w', 'G', 'ALP', 4);
-$d = cot_import('d', 'G', 'INT');
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxusersperpage']);
 $f = cot_import('f', 'G', 'ALP', 16);
 $g = cot_import('g', 'G', 'INT');
 $gm = cot_import('gm', 'G', 'INT');

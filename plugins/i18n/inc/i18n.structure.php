@@ -13,7 +13,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 cot_block($i18n_admin);
 
-$d = (int) cot_import('d', 'G', 'INT');
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('i18n.structure.first') as $pl)

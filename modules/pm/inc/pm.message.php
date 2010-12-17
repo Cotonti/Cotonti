@@ -20,8 +20,7 @@ cot_block($usr['auth_read']);
 $id = cot_import('id','G','INT');				// Message ID
 $q = cot_import('q','G','TXT');					// Quote
 $history = cot_import('history','G','BOL');		// Turn on history
-$d = cot_import('d','G','INT');					// Page number of history
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']);
 
 if (empty($id))
 {

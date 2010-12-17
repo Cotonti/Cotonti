@@ -19,8 +19,7 @@ require_once cot_incfile('auth');
 
 $id = cot_import('id', 'G', 'INT');
 $c = cot_import('c', 'G', 'TXT');
-$d = cot_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 $mode = cot_import('mode', 'G', 'ALP');
 
 $t = new XTemplate(cot_tplfile(array('admin', 'structure', $n), 'core'));
@@ -50,6 +49,7 @@ if ($a == 'update')
 		}
 		elseif($row['field_type'] == 'file')
 		{
+			// FIXME!
 			$rstructurearray[$row['field_name']] = cot_import_filesarray('rstructure'.$row['field_name']);
 		}
 	}

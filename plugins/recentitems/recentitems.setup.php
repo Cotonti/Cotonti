@@ -4,7 +4,7 @@
 Code=recentitems
 Name=Recent items
 Description=Recent pages, topics in forums, users, comments
-Version=0.7.0
+Version=0.7.1
 Date=2010-jan-03
 Author=esclkm & Cotonti Team
 Copyright=Partial copyright (c) Cotonti Team 2008-2010
@@ -20,16 +20,16 @@ Recommends_plugins=comments
 
 [BEGIN_COT_EXT_CONFIG]
 recentpages=11:radio::1:Recent pages on index
-maxpages=12:select:1,2,3,4,5,6,7,8,9,10,15,20,25,30:5:Recent pages displayed
+maxpages=12:string::5:Recent pages displayed
 recentpagestitle=13:string:::Recent pages title length limit
 recentpagestext=14:string:::Recent pages text length limit
 recentforums=15:radio::1:Recent forums on index
-maxtopics=16:select:1,2,3,4,5,6,7,8,9,10,15,20,25,30:5:Recent topics in forums displayed
+maxtopics=16:string::5:Recent topics in forums displayed
 recentforumstitle=17:string:::Recent forums title length limit
 newpages=18:radio::1:Recent pages in standalone module
 newpagestext=19:string:::New pages text length limit
 newforums=20:radio::1:Recent forums in standalone module
-itemsperpage=22:select:1,2,3,5,10,20,30,50,100,150,200,300,500:10:Elements per page in standalone module
+itemsperpage=22:string::10:Elements per page in standalone module
 rightscan=23:radio::1:Enable prescanning category rights
 [END_COT_EXT_CONFIG]
 ==================== */

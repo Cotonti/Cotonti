@@ -29,8 +29,7 @@ $adminhelp = $L['adm_help_page'];
 
 $id = cot_import('id', 'G', 'INT');
 
-$d = cot_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 $sorttype = cot_import('sorttype', 'R', 'ALP');
 $sorttype = empty($sorttype) ? 'id' : $sorttype;

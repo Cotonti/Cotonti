@@ -15,8 +15,7 @@ $id = cot_import('id', 'G', 'INT'); // post id
 $s = cot_import('s', 'G', 'ALP'); // saction cat
 $q = cot_import('q', 'G', 'INT'); // topic id
 $p = cot_import('p', 'G', 'INT'); // post id
-$d = cot_import('d', 'G', 'INT'); // page
-$d = ((int)$d > 0) ? (int)$d : 0;
+list($pg, $d) = cot_import_pagenav('d', $cfg['forums']['maxpostsperpage']); // page
 $quote = cot_import('quote', 'G', 'INT');
 
 require_once cot_langfile('countries', 'core');

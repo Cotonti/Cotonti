@@ -20,8 +20,8 @@ $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
 $o = cot_import('ord', 'G', 'ALP', 16); // sort field name without "page_"
 $p = cot_import('p', 'G', 'ALP', 16); // sort way (asc, desc)
-$d = cot_import('d', 'G', 'INT'); //page number for pages list
-$dc = cot_import('dc', 'G', 'INT');// page number for cats list
+list($pg, $d) = cot_import_pagenav('d', $cfg['page'][$c]['maxrowsperpage']); //page number for pages list
+list($pgc, $dc) = cot_import_pagenav('dc', $cfg['page'][$c]['maxrowsperpage']);// page number for cats list
 
 if ($c == 'all' || $c == 'system')
 {
@@ -64,7 +64,7 @@ $dc = empty($dc) ? 0 : (int) $dc;
 
 $sys['sublocation'] = $cat['title'];
 
-$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['page']['maxrowsperpage'] * 2 : $cfg['page']['maxrowsperpage'];
+$cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['page'][$c]['maxrowsperpage'] * 2 : $cfg['page'][$c]['maxrowsperpage'];
 
 $c = (empty($cat['title'])) ? 'all' : $c;
 cot_die((empty($cat['title'])) && !$usr['isadmin']);

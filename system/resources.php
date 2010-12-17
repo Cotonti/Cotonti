@@ -41,6 +41,7 @@ $R['icon_stars'] = '<img class="icon" src="images/icons/default/stars{$val}.png"
  * Pagination
  */
 
+$R['code_title_page_num'] = ' (' . $L['Page'] . ' {$num})';
 $R['link_pagenav_current'] = '<span class="pagenav_current"><a href="{$url}"{$event}{$rel}>{$num}</a></span>';
 $R['link_pagenav_first'] = '<span class="pagenav_first"><a href="{$url}"{$event}{$rel}>'.$L['pagenav_first'].'</a></span>';
 $R['link_pagenav_gap'] = '<span class="pagenav_pages">...</span>';
