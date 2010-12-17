@@ -60,7 +60,7 @@ function cot_comments_count($ext_name, $code)
  */
 function cot_comments_display($ext_name, $code, $cat = '')
 {
-	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $env;
+	global $db, $db_com, $db_users, $cfg, $usr, $L, $sys, $R, $env, $pg;
 
 	// Check permissions and enablement
 	list($auth_read, $auth_write, $auth_admin) = cot_auth('plug', 'comments');
@@ -79,7 +79,7 @@ function cot_comments_display($ext_name, $code, $cat = '')
 	$_SESSION['cot_com_back'][$ext_name][$cat][$code] = array($link_area, $link_params);
 
 	$d_var = 'dcm';
-	$d = cot_import($d_var, 'G', 'INT');
+	list($pg, $d) = cot_import_pagenav($d_var, $cfg['plugin']['comments']['maxcommentsperpage']);
 	$d = empty($d) ? 0 : (int) $d;
 
 	if ($auth_write && $enabled)

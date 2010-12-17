@@ -26,8 +26,7 @@ $adminhelp = $L['adm_help_bbcodes'];
 
 $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');
-$d = cot_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook === */
 foreach (cot_getextplugins('bbcode.admin.first') as $pl)

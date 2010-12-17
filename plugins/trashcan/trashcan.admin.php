@@ -31,8 +31,7 @@ require_once cot_langfile('trashcan', 'plug');
 $adminhelp = $L['adm_help_trashcan'];
 
 $id = cot_import('id', 'G', 'INT');
-$d = cot_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 $info = ($a == 'info') ? 1 : 0;
 
 /* === Hook === */

@@ -23,7 +23,8 @@ if(empty($qs)) $qs = cot_import('t', 'P', 'TXT');
 $tl = cot_import('tl', 'G', 'BOL');
 if($tl) $qs = strtr($qs, $cot_translitb);
 
-$d = (int) cot_import('d', 'G', 'INT');
+list($pg, $d) = cot_import_pagenav('d',  $cfg['maxrowsperpage']);
+$dt = cot_import('dt', 'G', 'INT');
 $perpage = $cfg['plugin']['tags']['perpage'];
 
 require_once cot_incfile('page', 'module');

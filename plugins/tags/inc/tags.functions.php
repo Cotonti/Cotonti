@@ -386,8 +386,8 @@ function cot_tag_unregister($tag)
  */
 function cot_tag_search_form($area = 'all')
 {
-	global $db, $d, $perpage, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
-	$limit = ($perpage > 0) ? "$d, $perpage" : NULL;
+	global $db, $dt, $perpage, $tl, $qs, $t, $L, $R, $cfg, $db_tag_references, $tc_styles;
+	$limit = ($perpage > 0) ? "$dt, $perpage" : NULL;
 	$tcloud = cot_tag_cloud($area, $cfg['plugin']['tags']['order'], $limit);
 	$tc_html = $R['tags_code_cloud_open'];
 	foreach ($tcloud as $tag => $cnt)
@@ -417,7 +417,7 @@ function cot_tag_search_form($area = 'all')
 		$where = $area == 'all' ? '' : "WHERE tag_area = '$area'";
 		$sql = $db->query("SELECT COUNT(DISTINCT `tag`) FROM $db_tag_references $where");
 		$totalitems = (int) $sql->fetchColumn();
-		$pagenav = cot_pagenav('plug','e=tags&a=' . $area, $d, $totalitems, $perpage);
+		$pagenav = cot_pagenav('plug','e=tags&a=' . $area, $dt, $totalitems, $perpage, 'dt');
 		$t->assign(array(
 			'TAGS_PAGEPREV' => $pagenav['prev'],
 			'TAGS_PAGENEXT' => $pagenav['next'],

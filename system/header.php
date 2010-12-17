@@ -26,6 +26,13 @@ $out['logstatus'] = ($usr['id'] > 0) ? $L['hea_youareloggedas'].' '.$usr['name']
 $out['userlist'] = (cot_auth('users', 'a', 'R')) ? cot_rc_link(cot_url('users'), $L['Users']) : '';
 
 unset($title_tags, $title_data);
+
+if (is_int($pg) && $pg > 1)
+{
+	// Append page number to subtitle
+	$out['subtitle'] .= cot_rc('code_title_page_num', array('num' => $pg));
+}
+
 $title_params = array(
 	'MAINTITLE' => $cfg['maintitle'],
 	'DESCRIPTION' => $cfg['subtitle'],

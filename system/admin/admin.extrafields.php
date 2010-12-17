@@ -21,8 +21,7 @@ $t = new XTemplate(cot_tplfile(array('admin', 'extrafields', $n), 'core'));
 $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');
 $name = cot_import('name', 'G', 'ALP');
-$d = cot_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 $parse_type = array('HTML', 'Text');
 

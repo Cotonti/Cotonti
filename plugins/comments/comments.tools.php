@@ -26,8 +26,7 @@ $t = new XTemplate(cot_tplfile('comments.tools', 'plug'));
 
 $adminhelp = $L['plu_help_comments'];
 
-$d = cot_import('d', 'G', 'INT');
-$d = empty($d) ? 0 : (int) $d;
+list($pg, $d) = cot_import_pagenav('d', $cfg['maxrowsperpage']);
 
 /* === Hook  === */
 foreach (cot_getextplugins('admin.comments.first') as $pl)

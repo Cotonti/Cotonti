@@ -13,13 +13,12 @@ defined('COT_CODE') or die('Wrong URL');
 
 $s = cot_import('s','G','ALP'); //Section CODE
 $q = cot_import('q','G','INT'); // topic id
-$d = cot_import('d','G','INT');  // Page
+list($pg, $d) = cot_import_pagenav('d', $cfg['forums']['maxtopicsperpage']);  // Page
 $o = cot_import('ord','G','ALP',16); //order
 $w = cot_import('w','G','ALP',4); // way
 
 $o = (empty($o)) ? 'updated' : $o;
 $w =  (empty($w)) ? 'desc' : $w;
-$d = ((int)$d > 0) ? (int)$d : 0;
 
 cot_die(empty($s) || !isset($structure['forums'][$s]));
 

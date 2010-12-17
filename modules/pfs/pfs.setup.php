@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=PFS
 Description=Personal File Space
-Version=0.7.0.6
+Version=0.7.7
 Date=2010-oct-05
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010
@@ -19,7 +19,7 @@ pfsuserfolder=01:radio::0:
 pfstimename=02:radio::0:
 pfsfilecheck=03:radio::1:
 pfsnomimepass=04:radio::1:
-maxpfsperpage=05:select:5,10,15,20,25,30,40,50,60,70,100,200,500:15:
+maxpfsperpage=05:string::15:
 pfs_winclose=05:radio::0:
 th_separator=06:separator:::
 th_amode=07:select:Disabled,GD1,GD2:GD2:
