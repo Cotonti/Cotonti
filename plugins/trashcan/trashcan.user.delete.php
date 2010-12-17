@@ -19,7 +19,7 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('trashcan', 'plug');
 if ($cfg['plugin']['trashcan']['trash_user'])
 {
-	cot_trash_put('user', $L['User']." #".$id." ".$row['user_name'], $id, $row);
+	cot_trash_put('user', $L['User']." #".$id." ".$row['user_name'], $id, $row1);
 }
 
 ?>

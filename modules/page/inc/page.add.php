@@ -58,7 +58,7 @@ if ($a == 'add')
 	// Extra fields
 	foreach ($cot_extrafields['pages'] as $row)
 	{
-		$rpage[$row['field_name']] = cot_import_extrafields('rpage'.$row['field_name'], $row);
+		$rpage['page_'.$row['field_name']] = cot_import_extrafields('rpage'.$row['field_name'], $row);
 	}
 
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $rpage['page_cat']);
