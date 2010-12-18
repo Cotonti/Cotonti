@@ -140,7 +140,6 @@ if ($a=='update')
 		if ($ruser['user_name'] != $urr['user_name'])
 		{
 			$oldname = $db->prep($urr['user_name']);
-			$newname = $db->prep($ruser['user_name']);
 			if ($cfg['forums'])
 			{
 				require_once cot_incfile('forums', 'module');

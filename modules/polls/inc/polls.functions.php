@@ -177,13 +177,23 @@ function cot_poll_save($type = 'index', $code = '')
 	{
 		if ((int)$poll_id > 0)
 		{
-			$sql = $db->query("UPDATE $db_polls SET  poll_state = '".(int)$poll_state."', poll_text = '".$db->prep($poll_text)."', poll_multiple = '".(int)$poll_multiple."' WHERE poll_id = '$poll_id'");
+			$db->update($db_polls, array(
+				'poll_state' => (int)$poll_state,
+				'poll_text' => $poll_text,
+				'poll_multiple' => (int)$poll_multiple
+				), "poll_id = '$poll_id'");
 			$newpoll_id = $poll_id;
 		}
 		else
 		{
-			$sql = $db->query("INSERT INTO $db_polls (poll_type, poll_state, poll_creationdate, poll_text, poll_multiple, poll_code)
-				VALUES ('".$db->prep($type)."', ".(int)$poll_state.", ".(int)$sys['now_offset'].", '".$db->prep($poll_text)."', '".(int)$poll_multiple."', '".(int)$code."')");
+			$db->insert($db_polls, array(
+				'poll_type' => $type,
+				'poll_state' => (int)$poll_state,
+				'poll_creationdate' => (int)$sys['now_offset'],
+				'poll_text' => $poll_text,
+				'poll_multiple' => (int)$poll_multiple,
+				'poll_code' => (int)$code
+			));
 			$newpoll_id = $db->lastInsertId();
 		}
 
@@ -194,12 +204,16 @@ function cot_poll_save($type = 'index', $code = '')
 				$key = mb_substr($key, 2);
 				if ((int)$key > 0 &&(int)$poll_id > 0)
 				{
-					$sql2 = $db->query("UPDATE $db_polls_options SET po_text = '".$db->prep($val)."' WHERE po_id = '".(int)$key."'");
+					$db->update($db_polls_options, array('po_text' => $val), "po_id = '".(int)$key."'");
 					$ids[] = $key;
 				}
 				else
 				{
-					$sql2 = $db->query( "INSERT into $db_polls_options (po_pollid, po_text, po_count) VALUES ('$newpoll_id', '".$db->prep($val)."', '0')");
+					$db->insert($db_polls_options, array(
+						'po_pollid' => $newpoll_id,
+						'po_text' => $val,
+						'po_count' => 0
+						));
 					$ids[] = $db->lastInsertId();
 				}
 
@@ -207,7 +221,7 @@ function cot_poll_save($type = 'index', $code = '')
 		}
 		if ((int)$poll_id > 0 && count($ids) > 0)
 		{
-			$sql2 = $db->query("DELETE FROM $db_polls_options WHERE po_pollid = '".(int)$newpoll_id."' AND po_id NOT IN ('".implode("','", $ids)."')");
+			$sql = $db->delete($db_polls_options, "po_pollid = '".(int)$newpoll_id."' AND po_id NOT IN ('".implode("','", $ids)."')");
 		}
 		return ($newpoll_id);
 	}
@@ -248,7 +262,11 @@ function cot_poll_vote()
 				}
 				if ($db->affectedRows > 0)
 				{
-					$sql2 = $db->query("INSERT INTO $db_polls_voters (pv_pollid, pv_userid, pv_userip) VALUES (".(int)$id.", ".(int)$usr['id'].", '".$usr['ip']."')");
+					$db->insert($db_polls_voters, array(
+						'pv_pollid' => (int)$id,
+						'pv_userid' => (int)$usr['id'],
+						'pv_userip' => (int)$usr['ip']
+						));
 				}
 			}
 		}
@@ -366,9 +384,9 @@ function cot_poll_delete($id, $type = '')
 	}
 	if ((int)$id > 0)
 	{
-		$sql = $db->query("DELETE FROM $db_polls WHERE poll_id = ".$id);
-		$sql = $db->query("DELETE FROM $db_polls_options WHERE po_pollid = ".$id);
-		$sql = $db->query("DELETE FROM $db_polls_voters WHERE pv_pollid = ".$id);
+		$db->delete($db_polls, "poll_id = ".$id);
+		$db->delete($db_polls_options, "po_pollid = ".$id);
+		$db->delete($db_polls_voters, "pv_pollid = ".$id);
 
 		/* === Hook === */
 		foreach (cot_getextplugins('polls.functions.delete') as $pl)
@@ -407,7 +425,7 @@ function cot_poll_lock($id, $state, $type = '')
 	}
 	if ((int)$id > 0)
 	{
-		$sql = $db->query("UPDATE $db_polls SET poll_state = '".(int)$state."' WHERE $where");
+		$db->update($db_polls, array('poll_state' => (int)$state), $where);
 	}
 
 	return (($db->affectedRows > 0) ? true : false);
@@ -431,8 +449,8 @@ function cot_poll_reset($id, $type = '')
 	}
 	if ((int)$id > 0)
 	{
-		$sql = $db->query("DELETE FROM $db_polls_voters WHERE pv_pollid = '$id'");
-		$sql = $db->query("UPDATE $db_polls_options SET po_count = 0 WHERE po_pollid = '$id'");
+		$db->delete($db_polls_voters, "pv_pollid = ".$id);
+		$db->update($db_polls_options, array('po_count' => 0), "po_pollid = '$id'");
 	}
 
 	return (($db->affectedRows > 0) ? true : false);

@@ -25,8 +25,7 @@ $db_stats = (isset($db_stats)) ? $db_stats : $db_x . 'stats';
 function cot_stat_create($name)
 {
 	global $db, $db_stats;
-
-	$db->query("INSERT INTO $db_stats (stat_name, stat_value) VALUES ('".$db->prep($name)."', 1)");
+	$db->insert($db_stats, array('stat_name' => $name, 'stat_value' => 1));
 }
 
 /**

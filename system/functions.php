@@ -730,24 +730,50 @@ function cot_online_update()
 			{
 				if (empty($sys['online_location']))
 				{
-					$db->query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
-						VALUES ('".$usr['ip']."', '".$db->prep($usr['name'])."', ".(int)$sys['now'].", '".$db->prep($env['location'])."',  '".$db->prep($sys['sublocation'])."', ".(int)$usr['id'].", 0, 0)");
+					$db->insert($db_online, array(
+						'online_ip' => $usr['ip'], 
+						'online_name' => $usr['name'],
+						'online_lastseen' => (int)$sys['now'],
+						'online_location' => $env['location'],
+						'online_subloc' => $sys['sublocation'],
+						'online_userid' => (int)$usr['id'],
+						'online_shield' => 0,
+						'online_hammer' => 0
+						));
 				}
 				else
 				{
-					$db->query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$db->prep($env['location'])."', online_subloc='".$db->prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_userid=".$usr['id']);
+					$db->update($db_online, array(
+						'online_lastseen' => $sys['now'],
+						'online_location' => $db->prep($env['location']), 
+						'online_subloc' => $db->prep($sys['sublocation']), 
+						'online_hammer' => (int)$sys['online_hammer']
+						), "online_userid=".$usr['id']);
 				}
 			}
 			else
 			{
 				if (empty($sys['online_location']))
 				{
-					$db->query("INSERT INTO $db_online (online_ip, online_name, online_lastseen, online_location, online_subloc, online_userid, online_shield, online_hammer)
-						VALUES ('".$usr['ip']."', 'v', ".(int)$sys['now'].", '".$db->prep($env['location'])."', '".$db->prep($sys['sublocation'])."', -1, 0, 0)");
+					$db->insert($db_online, array(
+						'online_ip' => $usr['ip'], 
+						'online_name' => 'v',
+						'online_lastseen' => (int)$sys['now'],
+						'online_location' => $env['location'],
+						'online_subloc' => $sys['sublocation'],
+						'online_userid' => -1,
+						'online_shield' => 0,
+						'online_hammer' => 0
+						));
 				}
 				else
 				{
-					$db->query("UPDATE $db_online SET online_lastseen='".$sys['now']."', online_location='".$env['location']."', online_subloc='".$db->prep($sys['sublocation'])."', online_hammer=".(int)$sys['online_hammer']." WHERE online_ip='".$usr['ip']."'");
+					$db->update($db_online, array(
+						'online_lastseen' => $sys['now'],
+						'online_location' => $db->prep($env['location']), 
+						'online_subloc' => $db->prep($sys['sublocation']), 
+						'online_hammer' => (int)$sys['online_hammer']
+						), "online_ip='".$usr['ip']);
 				}
 			}
 		}
@@ -762,7 +788,7 @@ function cot_online_update()
 		else
 		{
 			$online_timedout = $sys['now'] - $cfg['timedout'];
-			$db->query("DELETE FROM $db_online WHERE online_lastseen < $online_timedout");
+			$db->delete($db_online, "online_lastseen < $online_timedout");
 			$sys['whosonline_vis_count'] = $db->query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'")->fetchColumn();
 			$sql_o = $db->query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
 			$sys['whosonline_reg_count'] = $sql_o->rowCount();
@@ -2094,7 +2120,13 @@ function cot_log($text, $group='def')
 {
 	global $db, $db_logger, $sys, $usr, $_SERVER;
 
-	$sql = $db->query("INSERT INTO $db_logger (log_date, log_ip, log_name, log_group, log_text) VALUES (".(int)$sys['now_offset'].", '".$usr['ip']."', '".$db->prep($usr['name'])."', '$group', '".$db->prep($text.' - '.$_SERVER['REQUEST_URI'])."')");
+	$db->insert($db_logger, array(
+		'log_date' => (int)$sys['now_offset'],
+		'log_ip' => $usr['ip'],
+		'log_name' => $usr['name'],
+		'log_group' => $group,
+		'log_text' => $text.' - '.$_SERVER['REQUEST_URI'] 
+		));
 }
 
 /**
@@ -3482,8 +3514,7 @@ function cot_check_xp()
 function cot_shield_clearaction()
 {
 	global $db, $db_online, $usr;
-
-	$sql = $db->query("UPDATE $db_online SET online_action='' WHERE online_ip='".$usr['ip']."'");
+	$db->update($db_online, array('online_action' => ''), 'online_ip='.$usr['ip']);
 }
 
 /**
@@ -3551,7 +3582,7 @@ function cot_shield_update($shield_add, $shield_newaction)
 	if ($cfg['shieldenabled'])
 	{
 		$shield_newlimit = $sys['now'] + floor($shield_add * $cfg['shieldtadjust'] /100);
-		$sql = $db->query("UPDATE $db_online SET online_shield='$shield_newlimit', online_action='$shield_newaction' WHERE online_ip='".$usr['ip']."'");
+		$db->update($db_online, array('online_shield' => $shield_newlimit, 'online_action' => $shield_newaction), 'online_ip='.$usr['ip']);
 	}
 }
 

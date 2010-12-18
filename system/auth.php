@@ -193,8 +193,7 @@ function cot_auth_getvalue($mask)
 function cot_auth_remove_group($group_id)
 {
 	global $db, $db_auth;
-
-	$db->query("DELETE FROM $db_auth WHERE auth_groupid=$group_id");
+	$db->delete($db_auth, "auth_groupid=$group_id");
 	return $db->affectedRows;
 }
 
@@ -210,7 +209,7 @@ function cot_auth_remove_item($module_name, $item_id = null)
 	global $db, $db_auth;
 
 	$opt = is_null($item_id) ? '' : "AND auth_option='$item_id'";
-	$db->query("DELETE FROM $db_auth WHERE auth_code='$module_name' $opt");
+	$db->delete($db_auth, "auth_code='$module_name' $opt");
 	return $db->affectedRows;
 }
 

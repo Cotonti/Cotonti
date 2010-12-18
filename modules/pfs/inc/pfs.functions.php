@@ -81,29 +81,18 @@ function cot_pfs_createfolder($ownerid, $title='', $desc='', $parentid='', $ispu
 		cot_pfs_mkdir($cfg['pfs_thumbpath'].$newpath) or cot_redirect(cot_url('message', 'msg=500&redirect='.base64_encode('pfs.php'), '', true));
 	}
 
-	$sql = $db->query("INSERT INTO $db_pfs_folders
-		(pff_parentid,
-		pff_userid,
-		pff_title,
-		pff_date,
-		pff_updated,
-		pff_desc,
-		pff_path,
-		pff_ispublic,
-		pff_isgallery,
-		pff_count)
-		VALUES
-		(".(int)$parentid.",
-		".(int)$ownerid.",
-		'".$db->prep($title)."',
-		".(int)$sys['now'].",
-		".(int)$sys['now'].",
-		'".$db->prep($desc)."',
-		'".$db->prep($newpath)."',
-		".(int)$ispublic.",
-		".(int)$isgallery.",
-		0)"
-	);
+	$db->insert($db_pfs_folders, array(
+		'pff_parentid' => (int)$parentid,
+		'pff_userid' => (int)$ownerid,
+		'pff_title' => $title,
+		'pff_date' => (int)$sys['now'],
+		'pff_updated' => (int)$sys['now'],
+		'pff_desc' => $desc,
+		'pff_path' => $newpath,
+		'pff_ispublic' => (int)$ispublic,
+		'pff_isgallery' => (int)$isgallery,
+		'pff_count' => 0
+	));
 	return $db->lastInsertId();
 }
 
@@ -136,8 +125,7 @@ function cot_pfs_deletefile($userid, $id)
 		{
 			return FALSE;
 		}
-
-		$db->query("DELETE FROM $db_pfs WHERE pfs_id=".(int)$id);
+		$sql = $db->delete($db_pfs, "pfs_id='".(int)$id."'");
 		return TRUE;
 	}
 	else
@@ -178,7 +166,7 @@ function cot_pfs_deletefolder($userid, $folderid)
 				@rmdir($cfg['pfs_path'].$row['pff_path']);
 				@rmdir($cfg['pfs_thumbpath'].$row['pff_path']);
 			}
-			$db->query("DELETE FROM $db_pfs_folders WHERE pff_id=".(int)$row['pff_id']);
+			$sql = $db->delete($db_pfs_folders, "pff_id='".(int)$row['pff_id']."'");
 		}
 		if($sql->rowCount()>0)
 		{
@@ -227,9 +215,9 @@ function cot_pfs_deleteall($userid)
 			}
 		}
 	}
-	$sql = $db->query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid'");
+	$sql = $db->delete($db_pfs_folders, "pff_userid='".(int)$userid."'");
 	$num = $num + $db->affectedRows;
-	$sql = $db->query("DELETE FROM $db_pfs WHERE pfs_userid='$userid'");
+	$sql = $db->delete($db_pfs, "pfs_userid='".(int)$userid."'");
 	$num = $num + $db->affectedRows;
 
 	if ($cfg['pfs']['pfsuserfolder'] && $userid>0)
@@ -507,28 +495,19 @@ function cot_pfs_upload($userid, $folderid='')
 								include $pl;
 							}
 							/* ===== */
+							$db->insert($db_pfs, array(
+								'pfs_userid' => (int)$userid,
+								'pfs_date' => (int)$sys['now_offset'],
+								'pfs_file' => $u_sqlname,
+								'pfs_extension' => $f_extension,
+								'pfs_folderid' => (int)$folderid,
+								'pfs_desc' => $desc,
+								'pfs_size' => (int)$u_size,
+								'pfs_count' => 0
+								));
+							
+							$db->update($db_pfs_folders, array('pff_updated' => $sys['now']), 'pff_id="'.$folderid.'"');
 
-							$sql = $db->query("INSERT INTO $db_pfs
-							(pfs_userid,
-							pfs_date,
-							pfs_file,
-							pfs_extension,
-							pfs_folderid,
-							pfs_desc,
-							pfs_size,
-							pfs_count)
-							VALUES
-							(".(int)$userid.",
-							".(int)$sys['now_offset'].",
-							'".$db->prep($u_sqlname)."',
-							'".$db->prep($f_extension)."',
-							".(int)$folderid.",
-							'".$db->prep($desc)."',
-							".(int)$u_size.",
-							0) ");
-
-							$sql = $db->query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."'
-								WHERE pff_id='$folderid'");
 							$disp_errors .= $L['Yes'];
 							$pfs_totalsize += $u_size;
 
