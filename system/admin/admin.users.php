@@ -36,18 +36,22 @@ foreach (cot_getextplugins('admin.users.first') as $pl)
 
 if($n == 'add')
 {
-	$ntitle = cot_import('ntitle', 'P', 'TXT');
-	$ndesc = cot_import('ndesc', 'P', 'TXT');
-	$nicon = cot_import('nicon', 'P', 'TXT');
-	$nalias = cot_import('nalias', 'P', 'TXT');
-	$nlevel = cot_import('nlevel', 'P', 'LVL');
-	$nmaxsingle = min(cot_import('nmaxsingle', 'P', 'INT'), cot_get_uploadmax());
-	$nmaxtotal = cot_import('nmaxtotal', 'P', 'INT');
-	$ncopyrightsfrom = cot_import('ncopyrightsfrom', 'P', 'INT');
-	$ndisabled = cot_import('ndisabled', 'P', 'BOL');
-	$nmtmode = cot_import('nmtmode', 'P', 'BOL');
+	$rgroups['grp_title'] = cot_import('rtitle', 'P', 'TXT');
+	$rgroups['grp_desc'] = cot_import('rdesc', 'P', 'TXT');
+	$rgroups['grp_icon'] = cot_import('ricon', 'P', 'TXT');
+	$rgroups['grp_alias'] = cot_import('ralias', 'P', 'TXT');
+	$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'LVL');
+	$rgroups['grp_pfs_maxfile'] = (int)min(cot_import('rmaxsingle', 'P', 'INT'), cot_get_uploadmax());
+	$rgroups['grp_pfs_maxtotal'] = (int)cot_import('rmaxtotal', 'P', 'INT');	
+	$rgroups['grp_disabled'] = cot_import('rdisabled', 'P', 'BOL') ? 1 : 0;
+	$rgroups['grp_maintenance'] = cot_import('rmtmode', 'P', 'BOL') ? 1 : 0;
+	$rgroups['grp_ownerid'] = (int)$usr['id'];
 
-	$sql = (!empty($ntitle)) ? $db->query("INSERT INTO $db_groups (grp_alias, grp_level, grp_disabled, grp_maintenance, grp_title, grp_desc, grp_icon, grp_pfs_maxfile, grp_pfs_maxtotal, grp_ownerid) VALUES ('".$db->prep($nalias)."', ".(int)$nlevel.", ".(int)$ndisabled.", ".(int)$nmtmode.", '".$db->prep($ntitle)."', '".$db->prep($ndesc)."', '".$db->prep($nicon)."', ".(int)$nmaxsingle.", ".(int)$nmaxtotal.", ".(int)$usr['id'].")") : '';
+	$rcopyrightsfrom = cot_import('rcopyrightsfrom', 'P', 'INT');
+	if ($rgroups['grp_title'])
+	{
+		$db->insert($db_groups, $rgroups);
+	}
 	$grp_id = $db->lastInsertId();
 
 	/* === Hook === */
@@ -57,7 +61,7 @@ if($n == 'add')
 	}
 	/* ===== */
 
-	cot_auth_add_group($grp_id, $ncopyrightsfrom);
+	cot_auth_add_group($grp_id, $rcopyrightsfrom);
 
 	$cache->db->remove('cot_groups', 'system');
 
@@ -67,15 +71,15 @@ elseif($n == 'edit')
 {
 	if($a == 'update')
 	{
-		$rtitle = cot_import('rtitle', 'P', 'TXT');
-		$rdesc = cot_import('rdesc', 'P', 'TXT');
-		$ricon = cot_import('ricon', 'P', 'TXT');
-		$ralias = cot_import('ralias', 'P', 'TXT');
-		$rlevel = cot_import('rlevel', 'P', 'LVL');
-		$rmaxfile = min(cot_import('rmaxfile', 'P', 'INT'), cot_get_uploadmax());
-		$rmaxtotal = cot_import('rmaxtotal', 'P', 'INT');
-		$rdisabled = ($g < 6) ? 0 : cot_import('rdisabled', 'P', 'BOL');
-		$rmtmode = cot_import('rmtmode', 'P', 'BOL');
+		$rgroups['grp_title'] = cot_import('rtitle', 'P', 'TXT');
+		$rgroups['grp_desc'] = cot_import('rdesc', 'P', 'TXT');
+		$rgroups['grp_icon'] = cot_import('ricon', 'P', 'TXT');
+		$rgroups['grp_alias'] = cot_import('ralias', 'P', 'TXT');
+		$rgroups['grp_level'] = (int)cot_import('rlevel', 'P', 'LVL');
+		$rgroups['grp_pfs_maxfile'] = (int)min(cot_import('rmaxsingle', 'P', 'INT'), cot_get_uploadmax());
+		$rgroups['grp_pfs_maxtotal'] = (int)cot_import('rmaxtotal', 'P', 'INT');	
+		$rgroups['grp_disabled'] = cot_import('rdisabled', 'P', 'BOL') ? 1 : 0;
+		$rgroups['grp_maintenance'] = cot_import('rmtmode', 'P', 'BOL') ? 1 : 0;
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.users.update') as $pl)
@@ -84,12 +88,10 @@ elseif($n == 'edit')
 		}
 		/* ===== */
 
-		$rtitle = $db->prep($rtitle);
-	   	$rdesc = $db->prep($rdesc);
-	   	$ricon = $db->prep($ricon);
-	   	$ralias = $db->prep($ralias);
-
-		$sql = (!empty($rtitle)) ? $db->query("UPDATE $db_groups SET grp_title='$rtitle', grp_desc='$rdesc', grp_icon='$ricon', grp_alias='$ralias', grp_level='$rlevel', grp_pfs_maxfile='$rmaxfile', grp_pfs_maxtotal='$rmaxtotal', grp_disabled='$rdisabled', grp_maintenance='$rmtmode' WHERE grp_id='$g'") : '';
+		if ($rgroups['grp_title'])
+		{
+			$db->update($db_groups, $rgroups, "grp_id='$g'");
+		}
 
 		$cache->db->remove('cot_groups', 'system');
 
@@ -97,9 +99,9 @@ elseif($n == 'edit')
 	}
 	elseif($a == 'delete' && $g > 5)
 	{
-		$sql = $db->query("DELETE FROM $db_groups WHERE grp_id='$g'");
+		$sql = $db->delete($db_groups, "grp_id='$g'");
+		$sql = $db->delete($db_groups_users, "gru_groupid='$g'");
 		cot_auth_remove_group($g);
-		$sql = $db->query("DELETE FROM $db_groups_users WHERE gru_groupid='$g'");
 
 		/* === Hook === */
 		foreach (cot_getextplugins('admin.users.delete') as $pl)
@@ -153,7 +155,7 @@ elseif($n == 'edit')
 	}
 }
 
-if(!isset($showdefault) OR $showdefault == true)
+if(!isset($showdefault) || $showdefault == true)
 {
 	$sql = $db->query("SELECT DISTINCT(gru_groupid), COUNT(*) FROM $db_groups_users WHERE 1 GROUP BY gru_groupid");
 	while($row = $sql->fetch())
@@ -192,16 +194,16 @@ if(!isset($showdefault) OR $showdefault == true)
 
 	$t->assign(array(
 		'ADMIN_USERS_FORM_URL' => cot_url('admin', 'm=users&n=add'),
-		'ADMIN_USERS_NGRP_TITLE' => cot_inputbox('text', 'ntitle', '', 'size="40" maxlength="64"'),
-		'ADMIN_USERS_NGRP_DESC' => cot_inputbox('text', 'ndesc', '', 'size="40" maxlength="64"'),
-		'ADMIN_USERS_NGRP_ICON' => cot_inputbox('text', 'nicon', '', 'size="40" maxlength="128"'),
-		'ADMIN_USERS_NGRP_ALIAS' => cot_inputbox('text', 'nalias', '', 'size="40" maxlength="24"'),
-		'ADMIN_USERS_NGRP_PFS_MAXFILE' => cot_inputbox('text', 'nmaxfile', '', 'size="16" maxlength="16"'),
-		'ADMIN_USERS_NGRP_PFS_MAXTOTAL' => cot_inputbox('text', 'nmaxtotal', '', 'size="16" maxlength="16"'),
-		'ADMIN_USERS_NGRP_DISABLED' => cot_radiobox(0, 'ndisabled', array(1, 0), array($L['Yes'], $L['No'])),
-		'ADMIN_USERS_NGRP_MAINTENANCE' => cot_radiobox(0, 'nmtmode', array(1, 0), array($L['Yes'], $L['No'])),
-		'ADMIN_USERS_NGRP_RLEVEL' => cot_selectbox(50, 'nlevel', range(0, 99), range(0, 99), false),
-		'ADMIN_USERS_FORM_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'ncopyrightsfrom', array('5'))
+		'ADMIN_USERS_NGRP_TITLE' => cot_inputbox('text', 'rtitle', '', 'size="40" maxlength="64"'),
+		'ADMIN_USERS_NGRP_DESC' => cot_inputbox('text', 'rdesc', '', 'size="40" maxlength="64"'),
+		'ADMIN_USERS_NGRP_ICON' => cot_inputbox('text', 'ricon', '', 'size="40" maxlength="128"'),
+		'ADMIN_USERS_NGRP_ALIAS' => cot_inputbox('text', 'ralias', '', 'size="40" maxlength="24"'),
+		'ADMIN_USERS_NGRP_PFS_MAXFILE' => cot_inputbox('text', 'rmaxfile', '', 'size="16" maxlength="16"'),
+		'ADMIN_USERS_NGRP_PFS_MAXTOTAL' => cot_inputbox('text', 'rmaxtotal', '', 'size="16" maxlength="16"'),
+		'ADMIN_USERS_NGRP_DISABLED' => cot_radiobox(0, 'rdisabled', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_USERS_NGRP_MAINTENANCE' => cot_radiobox(0, 'rmtmode', array(1, 0), array($L['Yes'], $L['No'])),
+		'ADMIN_USERS_NGRP_RLEVEL' => cot_selectbox(50, 'rlevel', range(0, 99), range(0, 99), false),
+		'ADMIN_USERS_FORM_SELECTBOX_GROUPS' => cot_selectbox_groups(4, 'rcopyrightsfrom', array('5'))
 	));
 	/* === Hook === */
 	foreach (cot_getextplugins('admin.users.add.tags') as $pl)

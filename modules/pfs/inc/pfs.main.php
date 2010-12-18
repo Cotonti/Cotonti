@@ -181,26 +181,19 @@ if ($a=='upload')
 							}
 							/* ===== */
 
-							$sql = $db->query("INSERT INTO $db_pfs
-							(pfs_userid,
-							pfs_date,
-							pfs_file,
-							pfs_extension,
-							pfs_folderid,
-							pfs_desc,
-							pfs_size,
-							pfs_count)
-							VALUES
-							(".(int)$userid.",
-							".(int)$sys['now_offset'].",
-							'".$db->prep($u_sqlname)."',
-							'".$db->prep($f_extension)."',
-							".(int)$folderid.",
-							'".$db->prep($desc)."',
-							".(int)$u_size.",
-							0) ");
+							$db->insert($db_pfs, array(
+								'pfs_userid' => (int)$userid,
+								'pfs_date' => (int)$sys['now_offset'],
+								'pfs_file' => $u_sqlname,
+								'pfs_extension' => $f_extension,
+								'pfs_folderid' => (int)$folderid,
+								'pfs_desc' => $desc,
+								'pfs_size' => (int)$u_size,
+								'pfs_count' => 0
+								));
+							
+							$db->update($db_pfs_folders, array('pff_updated' => $sys['now']), 'pff_id="'.$folderid.'"');
 
-							$sql = $db->query("UPDATE $db_pfs_folders SET pff_updated='".$sys['now']."' WHERE pff_id='$folderid'");
 							$disp_errors .= $L['Yes'];
 							$pfs_totalsize += $u_size;
 
@@ -267,8 +260,7 @@ elseif ($a=='delete')
 				@unlink($cfg['th_dir_user'].$pfs_file);
 			}
 		}
-
-		$sql = $db->query("DELETE FROM $db_pfs WHERE pfs_id='$id'");
+		$sql = $db->delete(pfs_id, "pfs_id='".(int)$id."'");
 	}
 }
 elseif ($a=='newfolder')
@@ -280,32 +272,25 @@ elseif ($a=='newfolder')
 	$nisgallery = cot_import('nisgallery','P','BOL');
 	$ntitle = (empty($ntitle)) ? '???' : $ntitle;
 
-	$sql = $db->query("INSERT INTO $db_pfs_folders
-	(pff_userid,
-	pff_title,
-	pff_date,
-	pff_updated,
-	pff_desc,
-	pff_ispublic,
-	pff_isgallery,
-	pff_count)
-	VALUES
-	(".(int)$userid.",
-		'".$db->prep($ntitle)."',
-		".(int)$sys['now'].",
-		".(int)$sys['now'].",
-		'".$db->prep($ndesc)."',
-		".(int)$nispublic.",
-		".(int)$nisgallery.",
-		0)");
+	$db->insert($db_pfs_folders, array(
+		'pff_userid' => (int)$userid,
+		'pff_title' => $ntitle,
+		'pff_date' => (int)$sys['now'],
+		'pff_updated' => (int)$sys['now'],
+		'pff_desc' => $ndesc,
+		'pff_ispublic' => (int)$nispublic,
+		'pff_isgallery' => (int)$nisgallery,
+		'pff_count' => 0
+	));
+		
 	cot_redirect(cot_url('pfs', $more, '', true));
 }
 elseif ($a=='deletefolder')
 {
 	cot_block($usr['auth_write']);
 	cot_check_xg();
-	$sql = $db->query("DELETE FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$id' ");
-	$sql = $db->query("UPDATE $db_pfs SET pfs_folderid=0 WHERE pfs_userid='$userid' AND pfs_folderid='$id' ");
+	$sql = $db->delete($db_pfs_folders, "pff_userid='".(int)$userid."' AND pff_id='$id'");
+	$db->update($db_pfs, array('pfs_folderid' => 0), "pfs_userid='$userid' AND pfs_folderid='$id' ");
 }
 
 $f = (empty($f)) ? '0' : $f;
@@ -420,7 +405,7 @@ while ($row = $sqll->fetch())
 
 	if ($pfs_extension!=$pfs_realext)
 	{
-		$sql1 = $db->query("UPDATE $db_pfs SET pfs_extension='$pfs_realext' WHERE pfs_id='$pfs_id' " );
+		$db->update($db_pfs, array('pfs_extension' => $pfs_realext), "pfs_id='$pfs_id'");
 		$pfs_extension = $pfs_realext;
 	}
 
