@@ -290,29 +290,27 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					if ($usr['lastlog'] > $usr['lastvisit'])
 					{
 						$usr['lastvisit'] = $usr['lastlog'];
-						$update_lastvisit = ", user_lastvisit = " . $usr['lastvisit'];
+						$user_log['user_lastvisit'] = $usr['lastvisit'];
 					}
 
 					// Generate new security token
 					$token = cot_unique(16);
 					$sys['xk_prev'] = $sys['xk'];
 					$sys['xk'] = $token;
-					$update_token = ", user_token = '$token'";
+					$user_log['user_token'] = $token;
 				}
 
 
 				if (!$cfg['authcache'] || empty($row['user_auth']))
 				{
 					$usr['auth'] = cot_auth_build($usr['id'], $usr['maingrp']);
-					if($cfg['authcache']) $update_auth = ", user_auth='".serialize($usr['auth'])."'";
+					$cfg['authcache'] && $user_log['user_auth'] = serialize($usr['auth']);
 				}
-
-				$db->query("UPDATE $db_users
-					SET user_lastlog = {$sys['now_offset']} $update_lastvisit $update_token $update_auth
-					WHERE user_id='{$usr['id']}'");
-
-				unset($u, $passhash, $oldhash, $hashsalt, $hashsaltprev, $update_auth, $update_hashsalt,
-					$update_lastvisit, $update_sid);
+				
+				$user_log['user_lastlog'] = $sys['now_offset'];
+				
+				$db->update($db_users, $user_log, "user_id='{$usr['id']}'");
+				unset($u, $passhash, $oldhash, $hashsalt, $hashsaltprev, $user_log);
 			}
 		}
 	}

@@ -109,13 +109,13 @@ function cot_forums_prunetopics($mode, $section, $param)
 			}
 			/* ===== */
 
-			$sql = $db->query("DELETE FROM $db_forum_posts WHERE fp_topicid='$q'");
+			$sql = $db->delete($db_forum_posts, "fp_topicid='$q'");
 			$num += $db->affectedRows;
-			$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
+			$sql = $db->delete($db_forum_topics, "ft_id='$q'");
 			$num1 += $db->affectedRows;
 		}
 
-		$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
+		$sql = $db->delete($db_forum_topics, "ft_movedto='$q'");
 		$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num' WHERE fs_cat='$section'");
 	}
 	$num1 = ($num1 == '') ? '0' : $num1;
