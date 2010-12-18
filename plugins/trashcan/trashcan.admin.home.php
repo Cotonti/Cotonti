@@ -21,7 +21,7 @@ require_once cot_incfile('trashcan', 'plug');
 if ($cfg['plugin']['trashcan']['trash_prunedelay'] > 0)
 {
 	$timeago = $sys['now_offset'] - ($cfg['plugin']['trashcan']['trash_prunedelay'] * 86400);
-	$sqltmp = $db->query("DELETE FROM $db_trash WHERE tr_date<$timeago");
+	$sqltmp = $db->delete($db_trash, "tr_date < $timeago");
 	$deleted = $db->affectedRows;
 	if ($deleted > 0)
 	{

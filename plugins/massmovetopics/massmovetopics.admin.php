@@ -28,8 +28,8 @@ $t = new XTemplate(cot_tplfile('massmovetopics', 'plug'));
 
 if ($a == 'move')
 {
-	$sql = $db->query("UPDATE $db_forum_topics SET ft_cat='$targetid' WHERE ft_cat='$sourceid'");
-	$sql = $db->query("UPDATE $db_forum_posts SET fp_cat='$targetid' WHERE fp_cat='$sourceid'");
+	$sql = $db->update($db_forum_topics, array('ft_cat' => $targetid), "ft_cat='$sourceid'");
+	$sql = $db->update($db_forum_posts, array('fp_cat' => $targetid), "fp_cat='$sourceid'");
 	
 	cot_forums_count($sourceid);
 	cot_forums_count($targetid);

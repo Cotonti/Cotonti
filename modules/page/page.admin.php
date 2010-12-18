@@ -107,7 +107,7 @@ if ($a == 'validate')
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql = $db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='$id'");
+		$sql = $db->update($db_pages, array('page_state' => 0), "page_id='$id'");
 		$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$row['page_cat']."' ");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
@@ -148,7 +148,7 @@ elseif ($a == 'unvalidate')
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql = $db->query("UPDATE $db_pages SET page_state=1 WHERE page_id='$id'");
+		$sql = $db->update($db_pages, array('page_state' => 1), "page_id='$id'");
 		$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_unvalidated'], 'adm');
@@ -192,7 +192,7 @@ elseif ($a == 'delete')
 		}
 
 		$id2 = 'p'.$id;
-		$sql = $db->query("DELETE FROM $db_pages WHERE page_id='$id'");
+		$sql = $db->delete($db_pages, "page_id='$id'");
 //		$sql = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'"); // FIXME ratings dependency
 //		$sql = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
 //		$sql = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
@@ -254,7 +254,7 @@ elseif ($a == 'update_cheked')
 					$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 					cot_block($usr['isadmin_local']);
 
-					$sql = $db->query("UPDATE $db_pages SET page_state=0 WHERE page_id='".$id."'");
+					$sql = $db->update($db_pages, array('page_state' => 0), "page_id='$id'");
 					$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$row['page_cat']."' ");
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
@@ -311,10 +311,10 @@ elseif ($a == 'update_cheked')
 					}
 
 					$id2 = 'p'.$id;
-					$sql = $db->query("DELETE FROM $db_pages WHERE page_id='$id'");
-					$sql = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
-					$sql = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-					$sql = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
+					$sql = $db->delete($db_pages, "page_id='$id'");
+			//		$sql = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
+			//		$sql = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
+			//		$sql = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'],'adm');
 

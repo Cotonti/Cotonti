@@ -154,7 +154,7 @@ function cot_forums_sectionsetlast($cat)
 	global $db, $db_forum_topics, $db_forum_stats;
 	$sql = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_cat='$cat' AND ft_movedto='0' and ft_mode='0' ORDER BY ft_updated DESC LIMIT 1");
 	$row = $sql->fetch();
-	$sql = $db->query("UPDATE $db_forum_stats SET fs_lt_id=" . (int)$row['ft_id'] . ", fs_lt_title='" . $db->prep($row['ft_title']) . "', fs_lt_date=" . (int)$row['ft_updated'] . ", fs_lt_posterid=" . (int)$row['ft_lastposterid'] . ", fs_lt_postername='" . $db->prep($row['ft_lastpostername']) . "' WHERE fs_cat='$cat'");
+	$sql = $db->update($db_forum_stats, array('fs_lt_id' => (int)$row['ft_id'], 'fs_lt_title' => $row['ft_title'], 'fs_lt_date' => (int)$row['ft_updated'], 'fs_lt_posterid' => (int)$row['ft_lastposterid'], 'fs_lt_postername' => $row['ft_lastpostername']), "fs_cat='$cat'");
 }
 
 /**
