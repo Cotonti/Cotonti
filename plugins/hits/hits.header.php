@@ -34,8 +34,7 @@ if($cfg['plugin']['hits'] && $env['ext'] != 'admin')
 
 	if ($maxusers < $sys['whosonline_all_count'])
 	{
-		$sql = $db->query("UPDATE $db_stats SET stat_value='".$sys['whosonline_all_count']."'
-					WHERE stat_name='maxusers'");
+		$sql = $db->update($db_stats, array('stat_value' => $sys['whosonline_all_count']), "stat_name='maxusers'");
 	}
 }
 

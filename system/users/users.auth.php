@@ -78,7 +78,7 @@ if ($a=='check')
 		{
 			if ($sys['now'] > $row['user_banexpire'] && $row['user_banexpire']>0)
 			{
-				$sql = $db->query("UPDATE $db_users SET user_maingrp='4' WHERE user_id={$row['user_id']}");
+				$sql = $db->update($db_users, array('user_maingrp' => '4'),  "user_id={$row['user_id']}");
 			}
 			else
 			{
@@ -115,7 +115,7 @@ if ($a=='check')
 		}
 		/* ===== */
 
-		$sql = $db->query("DELETE FROM $db_online WHERE online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
+		$sql = $db->delete($db_online, "online_userid='-1' AND online_ip='".$usr['ip']."' LIMIT 1");
 		cot_uriredir_apply($cfg['redirbkonlogin']);
 		cot_uriredir_redirect(empty($redirect) ? cot_url('index') : base64_decode($redirect));
 	}

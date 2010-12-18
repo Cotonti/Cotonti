@@ -21,7 +21,7 @@ $nhidden = cot_import('nhidden', 'P', 'BOL');
 
 if($grp_id)
 {
-	$db->query("UPDATE $db_groups SET grp_hidden = ".(int)$nhidden." WHERE grp_id = ".(int)$grp_id);
+	$db->update($db_groups, array('grp_hidden' => (int)$nhidden),  "grp_id = ".(int)$grp_id);
 }
 
 $cache && $cache->db->remove('hiddenusers', 'system');

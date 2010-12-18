@@ -20,7 +20,7 @@ unset($revmatch);
 if ($cfg['svnrevision'] > $cfg['revision'])
 {
 	$cfg['revision'] = $cfg['svnrevision'];
-	$db->query("UPDATE ".$db_config." SET `config_value`= ".(int)$cfg['svnrevision']." WHERE `config_owner` = 'core' AND `config_cat` = 'version' AND `config_name` = 'revision' LIMIT 1");
+	$db->update($db_config, array('config_value' => (int)$cfg['svnrevision']), "config_owner = 'core' AND config_cat = 'version' AND config_name = 'revision' LIMIT 1");
 }
 
 $t = new XTemplate(cot_tplfile('admin.home', 'core'));

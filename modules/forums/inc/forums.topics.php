@@ -59,7 +59,7 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 				cot_die();
 			}
 			
-			$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
+			$sql = $db->delete($db_forum_topics, "ft_movedto='$q'");
 			
 			if ($ghost)
 			{

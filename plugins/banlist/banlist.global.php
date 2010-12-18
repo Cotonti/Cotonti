@@ -29,7 +29,7 @@ if ($sql->rowCount() > 0)
 	$row = $sql->fetch();
 	if ($sys['now'] > $row['banlist_expire'] && $row['banlist_expire'] > 0)
 	{
-		$sql = $db->query("DELETE FROM $db_banlist WHERE banlist_id='".$row['banlist_id']."' LIMIT 1");
+		$sql = $db->delete($db_banlist, "banlist_id='".$row['banlist_id']."' LIMIT 1");
 	}
 	else
 	{

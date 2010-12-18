@@ -141,8 +141,7 @@ if ($db->errno > 0 || $sql->rowCount() != 1)
 	if (!$cot_error)
 	{
 		// Success
-		$db->query("UPDATE $db_updates SET upd_value = '$branch'
-			WHERE upd_param = 'branch'");
+		$db->update($db_updates,  array('upd_value' => $branch), "upd_param = 'branch'");
 		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
 	}
 	else
@@ -230,8 +229,7 @@ else
 		}
 		else
 		{
-			$db->query("UPDATE $db_updates SET upd_value = '\$Rev: $new_rev \$'
-				WHERE upd_param = 'revision'");
+			$db->update($db_updates, array('upd_value' => "\$Rev: $new_rev \$"), "upd_param = 'revision'");
 		}
 		$t->assign('UPDATE_TITLE', cot_rc('install_update_success', array('rev' => $new_rev)));
 	}

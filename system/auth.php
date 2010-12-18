@@ -127,12 +127,12 @@ function cot_auth_clear($id = 'all')
 
 	if ($id == 'all')
 	{
-		$db->query("UPDATE $db_users SET user_auth=''");
+		$db->update($db_users, array('user_auth' => ''));
 		$cache && $cache->db->remove('cot_guest_auth', 'system');
 	}
 	else
 	{
-		$db->query("UPDATE $db_users SET user_auth='' WHERE user_id='$id'");
+		$db->update($db_users, array('user_auth' => '', "user_id='$id'"));
 	}
 	return $db->affectedRows;
 }

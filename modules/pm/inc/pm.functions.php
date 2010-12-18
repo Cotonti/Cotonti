@@ -136,7 +136,6 @@ function cot_star_pm($message_id)
 			{
 				$fromstate = ($row['pm_fromstate'] == 2) ?  1 : 2;
 				$sql2 = $db->update($db_pm, array('pm_tostate' => (int)$fromstate, 'pm_fromstate' => (int)$fromstate), "pm_id = '".$id."'");
-				$sql2 = $db->query("UPDATE $db_pm SET pm_tostate = ".(int)$fromstate.", pm_fromstate = ".(int)$fromstate." WHERE pm_id = '$id'");
 			}
 			elseif ($row['pm_touserid'] == $usr['id'])
 			{

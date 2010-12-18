@@ -181,7 +181,7 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 	$row = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' AND fp_topicid='$q' AND fp_cat='$s' LIMIT 1")->fetch();
 	is_array($row) || cot_die();
 
-	$sql = $db->query("DELETE FROM $db_forum_posts WHERE fp_id='$p' AND fp_topicid='$q' AND fp_cat='$s'");
+	$sql = $db->delete($db_forum_posts, "fp_id='$p' AND fp_topicid='$q' AND fp_cat='$s'");
 
 	if ($cfg['forums'][$s]['countposts'])
 	{
@@ -208,8 +208,8 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 		$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
 		if ($row = $sql->fetch())
 		{
-			$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_movedto='$q'");
-			$sql = $db->query("DELETE FROM $db_forum_topics WHERE ft_id='$q'");
+			$sql = $db->delete($db_forum_topics, "ft_movedto='$q'");
+			$sql = $db->delete($db_forum_topics, "ft_id='$q'");
 
 			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-1 WHERE fs_cat='$s'");
 
