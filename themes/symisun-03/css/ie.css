@@ -1,0 +1,4 @@
+#parent, #footer {
+	width:expression(document.body.clientWidth < 960 ? "960px" : "93%"); 
+	width:expression(document.body.clientWidth > 1200 ? "1200px" : "93%");
+	}

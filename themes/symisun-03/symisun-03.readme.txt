@@ -1,0 +1,41 @@
+-----------------------
+Cotonti Website engine
+Copyright  Cotonti
+http://www.cotonti.com
+----------------------
+
+For Cotonti version : 0.7.0 or newer
+Updated : 08.03.2010
+Cotonti skin : SymiSun-03
+Language : English (code:en)
+-----------------------
+Skin made by : SymiSun*
+Website : http://www.symisun.com
+Copyright © 2010 SymiSun*. All Rights Reserved.
+-----------------------
+
+Designed By: Stamatis Kritikos
+Programming By: Stamatis Kritikos
+
+NOTICE TO USER: PLEASE READ THIS CONTRACT CAREFULLY. BY USING ALL OR 
+ANY PORITION OF THE SOFTWARE YOU ACCEPT ALL THE TERMS AND CONDITIONS 
+OF THIS AGREEMENT.
+
+(i) The SymiSun-03 source code may be modified at the user's risk.
+
+(ii) Feel free to remove the link at the bottom of the template saying 
+Web Design by SymiSun*.
+
+(iii) SymiSun-03 may be used in other derived work. Any derived work 
+must contain a reference to the original work by SymiSun.com in its 
+source code and/or license agreement:
+Based on SymiSun-03 by SymiSun (http://www.symisun.com)
+
+THE REDISTRIBUTABLE CODE IS PROVIDED TO YOU "AS IS" WITHOUT WARRANTY 
+OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
+PARTICULAR PURPOSE. YOU ASSUME THE ENTIRE RISK AS TO THE ACCURACY 
+AND THE USE OF THE REDISTRIBUTABLE CODE. SYMISUN.COM, SHALL 
+NOT BE LIABLE FOR ANY DAMAGES WHATSOEVER ARISING OUT OF THE USE OF 
+OR INABILITY TO USE THE REDISTRIBUTABLE CODE, EVEN IF SYMISUN.COM, 
+HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
