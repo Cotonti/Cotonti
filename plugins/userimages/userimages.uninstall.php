@@ -3,5 +3,6 @@
 defined('COT_CODE') or die('Wrong URL');
 
 cot_config_remove('userimages');
+$cache && $cache->db->remove('cot_userimages_config', 'users');
 
 ?>

@@ -44,6 +44,15 @@ if($a == 'add')
 	cot_userimages_config_add($code, $width, $height, $crop);
 	cot_redirect(cot_url('admin', 'm=other&p=userimages', '', true));
 }
+if($a == 'edit')
+{
+	$code = cot_import('code', 'G', 'ALP');
+	$width = cot_import('userimg_width', 'P', 'INT');
+	$height = cot_import('userimg_height', 'P', 'INT');
+	$crop = cot_import('userimg_crop', 'P', 'TXT');
+	cot_userimages_config_edit($code, $width, $height, $crop);
+	cot_redirect(cot_url('admin', 'm=other&p=userimages', '', true));
+}
 if($a == 'remove')
 {
 	$code = cot_import('code', 'G', 'ALP');
@@ -59,6 +68,7 @@ foreach($userimg as $code => $settings)
 		'WIDTH' => $settings['width'],
 		'HEIGHT' => $settings['height'],
 		'CROP' => $settings['crop'],
+    'EDIT_URL' => cot_url('admin', 'm=other&p=userimages&a=edit&code='.$code),
 		'REMOVE' => cot_rc('userimg_remove', array('url' => cot_url('admin', 'm=other&p=userimages&a=remove&code='.$code)))
 	));
 	$tt->parse('MAIN.USERIMG_LIST');

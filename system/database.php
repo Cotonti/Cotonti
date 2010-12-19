@@ -334,7 +334,6 @@ class CotDB extends PDO {
 		$this->_startTimer();
 		if (count($parameters) > 0)
 		{
-			
 			$result = parent::prepare($query);
 			$this->_bindParams($result, $parameters);
 			if ($result->execute() === false && $this->errorCode() > 0)
