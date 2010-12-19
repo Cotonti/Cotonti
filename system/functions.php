@@ -2371,21 +2371,22 @@ function cot_tplfile($base, $type = 'module')
 	elseif ($type == 'core')
 	{
 		// Built-in core modules
-		if(in_array($basename, array('header', 'footer')))
+		if(in_array($basename, array('admin', 'header', 'footer')))
 		{
-			$scan_prefix[] = './themes/' . $usr['theme'] . '/admin/';
-			if ($using_alternative_theme)
-			{
-				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/admin/';
-			}
-			$scan_prefix[] = $cfg['system_dir'] . '/admin/tpl/';
-		}
-		else
-		{
+			$basename = 'admin';
 			$scan_prefix[] = './themes/' . $usr['theme'] . '/' . $basename . '/';
 			if ($using_alternative_theme)
 			{
 				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/' . $basename . '/';
+			}
+			$scan_prefix[] = $cfg['system_dir'] . '/' . $basename . '/tpl/';
+		}
+		else
+		{
+			$scan_prefix[] = './themes/' . $usr['theme'] . '/';
+			if ($using_alternative_theme)
+			{
+				$scan_prefix[] = './themes/' . $cfg['defaulttheme'] . '/';
 			}
 			$scan_prefix[] = $cfg['system_dir'] . '/' . $basename . '/tpl/';
 		}

@@ -49,11 +49,30 @@ function cot_userimages_config_add($code, $width, $height, $crop='')
 	if($crop) $cfg[] = $crop;
 	$options = array(array(
 		'name' => strtolower($code),
-		'type' => 1,
+		'type' => COT_CONFIG_TYPE_HIDDEN,
 		'default' => implode('x', $cfg),
 		'text' => $code
 	));
 	$result = cot_config_add('userimages', $options);
+	$cache && $cache->db->remove('cot_userimages_config', 'users');
+	return $result;
+}
+
+/**
+ * Edit a user image type
+ *
+ * @param string $code Code for image, also used for tpl tags
+ * @param int $width Image maximum width
+ * @param int $height Image maximum height
+ * @param string $crop Crop ratio, or 'fit' to use width/height to calculate ratio
+ * @return Entries modified
+ */
+function cot_userimages_config_edit($code, $width, $height, $crop='')
+{
+	$cfg = array(strval($width), strval($height));
+	if($crop) $cfg[] = $crop;
+	$options = array(strtolower($code) => implode('x', $cfg));
+	$result = cot_config_set('userimages', $options);
 	$cache && $cache->db->remove('cot_userimages_config', 'users');
 	return $result;
 }
