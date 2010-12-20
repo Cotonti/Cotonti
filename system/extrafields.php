@@ -10,6 +10,8 @@
  * @license BSD
  */
 
+defined('COT_CODE') or die('Wrong URL');
+
 /**
  * Returns Extra fields edit fields
  *

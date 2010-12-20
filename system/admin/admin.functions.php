@@ -66,58 +66,6 @@ function cot_linkif($url, $text, $cond)
 }
 
 /**
- * Returns a list of possible charsets
- *
- * @return array
- */
-function cot_loadcharsets()
-{
-	// FIXME this function is obviously obsolete
-	$result = array();
-	$result[] = array('ISO-10646-UTF-1', 'ISO-10646-UTF-1 / Universal Transfer Format');
-	$result[] = array('UTF-8', 'UTF-8 / Standard Unicode');
-	$result[] = array('ISO-8859-1', 'ISO-8859-1 / Western Europe');
-	$result[] = array('ISO-8859-2', 'ISO-8859-2 / Middle Europe');
-	$result[] = array('ISO-8859-3', 'ISO-8859-3 / Maltese');
-	$result[] = array('ISO-8859-4', 'ISO-8859-4 / Baltic');
-	$result[] = array('ISO-8859-5', 'ISO-8859-5 / Cyrillic');
-	$result[] = array('ISO-8859-6', 'ISO-8859-6 / Arabic');
-	$result[] = array('ISO-8859-7', 'ISO-8859-7 / Greek');
-	$result[] = array('ISO-8859-8', 'ISO-8859-8 / Hebrew');
-	$result[] = array('ISO-8859-9', 'ISO-8859-9 / Turkish');
-	$result[] = array('ISO-2022-KR', 'ISO-2022-KR / Korean');
-	$result[] = array('ISO-2022-JP', 'ISO-2022-JP / Japanese');
-	$result[] = array('windows-1250', 'windows-1250 / Central European');
-	$result[] = array('windows-1251', 'windows-1251 / Russian');
-	$result[] = array('windows-1252', 'windows-1252 / Western Europe');
-	$result[] = array('windows-1254', 'windows-1254 / Turkish');
-	$result[] = array('EUC-JP', 'EUC-JP / Japanese');
-	$result[] = array('GB2312', 'GB2312 / Chinese simplified');
-	$result[] = array('BIG5', 'BIG5 / Chinese traditional');
-	$result[] = array('tis-620', 'Tis-620 / Thai');
-	return $result;
-}
-
-/**
- * Returns a list of possible DOCTYPEs
- *
- * @return array
- */
-function cot_loaddoctypes()
-{
-	$result = array();
-	$result[] = array(0, 'HTML 4.01');
-	$result[] = array(1, 'HTML 4.01 Transitional');
-	$result[] = array(2, 'HTML 4.01 Frameset');
-	$result[] = array(3, 'XHTML 1.0 Strict');
-	$result[] = array(4, 'XHTML 1.0 Transitional');
-	$result[] = array(5, 'XHTML 1.0 Frameset');
-	$result[] = array(6, 'XHTML 1.1');
-	$result[] = array(7, 'XHTML 2');
-	return $result;
-}
-
-/**
  * Returns group selection dropdown code
  *
  * @param string $check Seleced value

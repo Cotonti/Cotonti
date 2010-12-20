@@ -3901,9 +3901,4 @@ if (isset($cfg['customfuncs']) && $cfg['customfuncs'])
 	require_once $cfg['system_dir'] . '/functions.custom.php';
 }
 
-if (isset($cfg['enable_obsolete']) && $cfg['enable_obsolete'])
-{
-    require_once $cfg['system_dir'] . '/obsolete.php';
-}
-
 ?>

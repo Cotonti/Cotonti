@@ -84,7 +84,7 @@ elseif ($a == 'del' && $id > 0)
 elseif ($a == 'clearcache')
 {
 	cot_bbcode_clearcache();
-	cot_cache_clearhtml() ? cot_message('adm_bbcodes_clearcache_done') : cot_message('Error');
+	cot_message('adm_bbcodes_clearcache_done');
 }
 
 $totalitems = $db->countRows($db_bbcode);
