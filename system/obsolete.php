@@ -8,18 +8,377 @@
  * @license BSD
  */
 
+defined('COT_CODE') or die('Wrong URL');
+
+// Requirements
+
+require_once cot_incfile('auth');
+require_once cot_incfile('extensions');
+require_once cot_incfile('forms');
+require_once cot_incfile('uploads');
+require_once cot_incfile('admin',		'module');
+require_once cot_incfile('page',		'module');
+require_once cot_incfile('pfs',			'module');
+require_once cot_incfile('users',		'module');
+require_once cot_incfile('bbcode',		'plug');
+require_once cot_incfile('tags',		'plug');
+require_once cot_incfile('trashcan',	'plug');
+require_once cot_incfile('userimages',	'plug');
+
+// Functions
+
+function sed_alphaonly($text)
+{
+	return cot_alphaonly($text);
+}
+
+/*
+ * ================================= Authorization Subsystem ==================================
+ */
+
+function sed_auth($area, $option, $mask = 'RWA')
+{
+	return cot_auth($area, $option, $mask);
+}
+
+function sed_auth_build($userid, $maingrp=0)
+{
+	return cot_auth_build($userid, $maingrp);
+}
+
+function sed_auth_clear($id='all')
+{
+	return cot_auth_clear($id);
+}
+
+function sed_block($allowed)
+{
+	return cot_block($allowed);
+}
+
+function sed_blockguests()
+{
+	return cot_blockguests();
+}
+
+/*
+ * ================================= BBCode Parser API ==================================
+ */
+
+function sed_bbcode_add($name, $mode, $pattern, $replacement, $container = true, $priority = 128, $plug = '', $postrender = false)
+{
+	return cot_bbcode_add($name, $mode, $pattern, $replacement, $container, $priority, $plug, $postrender);
+}
+
+function sed_bbcode_remove($id = 0, $plug = '')
+{
+	return cot_bbcode_remove($id, $plug);
+}
+
+function sed_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority = 128, $postrender = false)
+{
+	return cot_bbcode_update($id, $enabled, $name, $mode, $pattern, $replacement, $container, $priority, $postrender);
+}
+
+function sed_bbcode_load()
+{
+	return cot_bbcode_load();
+}
+
+function sed_bbcode_clearcache()
+{
+	return cot_bbcode_clearcache();
+}
+
+function sed_bbcode_parse($text, $post = false)
+{
+	if ($post)
+	{
+		return $text;
+	}
+	else
+	{
+		return cot_bbcode_parse($text);
+	}
+}
+
+function sed_bbcode_cdata($text)
+{
+	return cot_bbcode_cdata($text);
+}
+
+function sed_parse_autourls($text)
+{
+	return cot_parse_autourls($text);
+}
+
+function sed_parse($text, $parse_bbcodes = TRUE, $parse_smilies = TRUE, $parse_newlines = TRUE)
+{
+	$enable_markup = $parse_bbcodes;
+	return cot_parse($text, $enable_markup);
+}
+
+function sed_post_parse($text, $area = '')
+{
+	return $text;
+}
+
+/*
+ * =========================== Output forming functions ===========================
+ */
+
+function sed_build_addtxt($c1, $c2)
+{
+	return '';
+}
+
+function sed_build_age($birth)
+{
+	return cot_build_age($birth);
+}
+
+function sed_build_catpath($cat, $mask)
+{
+	return cot_structure_buildpath('page', $cat);
+}
+
+function sed_build_comments($code, $url, $display = true)
+{
+	trigger_error('sed_build_comments() is deprecated. Use comments plugin and its functions instead.');
+}
+
+function sed_build_country($flag)
+{
+	return cot_build_country($flag);
+}
+
+function sed_build_email($email, $hide = false)
+{
+	return cot_build_email($email, $hide);
+}
+
+function sed_build_extrafields($rowname, $tpl_tag, $extrafields, $data=array(), $importnew=FALSE)
+{
+	trigger_error('Extrafields API has been changed in Siena. Please use system/extrafields.php API.');
+}
+
+function sed_build_extrafields_data($rowname, $type, $field_name, $value)
+{
+	trigger_error('Extrafields API has been changed in Siena. Please use system/extrafields.php API.');
+}
+
+function sed_build_flag($flag)
+{
+	return cot_build_flag($flag);
+}
+
+function sed_build_forums($sectionid, $title, $category, $link = TRUE, $master = false)
+{
+	trigger_error('Forums are now using category structure, sed_build_forums() function is invalid. See cot_forums_buildpath().');
+}
+
+function sed_build_group($grpid)
+{
+	return cot_build_group($grpid);
+}
+
+function sed_build_groupsms($userid, $edit=FALSE, $maingrp=0)
+{
+	return cot_build_groupsms($userid, $edit, $maingrp);
+}
+
+function sed_build_icq($text)
+{
+	trigger_error('sed_build_icq() is deprecated.');
+	return '';
+}
+
+function sed_build_ipsearch($ip)
+{
+	return cot_build_ipsearch($ip);
+}
+
+function sed_build_msn($msn)
+{
+	return sed_build_email($msn);
+}
+
+function sed_build_oddeven($number)
+{
+	return cot_build_oddeven($number);
+}
+
+function sed_build_pfs($id, $c1, $c2, $title)
+{
+	return cot_build_pfs($id, $c1, $c2, $title);
+}
+
 /**
  * Returns user PM link
  *
  * @param int $user User ID
  * @return string
  */
-// TODO this function should be replaced with some hook-based integration
 function sed_build_pm($user)
 {
 	global $usr, $L, $R;
 	return cot_rc_link(cot_url('pm', 'm=send&to='.$user), $R['pm_icon'], array('title' => $L['pm_sendnew']));
 }
+
+function sed_build_ratings($code, $url, $display)
+{
+	trigger_error('sed_build_ratings() is deprecated. Use ratings plugin and its functions instead.');
+}
+
+function sed_build_stars($level)
+{
+	return cot_build_stars($level);
+}
+
+function sed_build_timegap($t1,$t2)
+{
+	return cot_build_timegap($t1, $t2);
+}
+
+function sed_build_timezone($tz)
+{
+	return cot_build_timezone($tz);
+}
+
+function sed_build_url($text, $maxlen=64)
+{
+	return cot_build_url($text, $maxlen);
+}
+
+function sed_build_user($id, $user)
+{
+	return cot_build_user($id, $user);
+}
+
+function sed_build_userimage($image, $type='none')
+{
+	return cot_userimages_build($image);
+}
+
+function sed_build_usertext($text)
+{
+	return cot_build_usertext($text);
+}
+
+/*
+ * ================================ Cache Subsystem ================================
+ */
+
+/**
+ * Clears cache item
+ *
+ * @param string $name Item name
+ * @return bool
+ */
+function sed_cache_clear($name)
+{
+	global $db, $db_cache;
+	//trigger_error('Deprecated since 0.7.0, use $cache->db object instead');
+	$db->query("DELETE FROM $db_cache WHERE c_name='$name'");
+	return(TRUE);
+}
+
+/**
+ * Clears cache completely
+ *
+ * @return bool
+ */
+function sed_cache_clearall()
+{
+	global $db, $db_cache;
+	//trigger_error('Deprecated since 0.7.0, use $cache->db object instead');
+	$db->query("DELETE FROM $db_cache");
+	return TRUE;
+}
+
+/**
+ * Clears HTML-cache
+ *
+ * @todo Add trigger support here to clean non-standard html fields
+ * @return bool
+ */
+function sed_cache_clearhtml()
+{
+	// There is no HTML-cache in Siena
+	return true;
+}
+
+/**
+ * Fetches cache value
+ *
+ * @param string $name Item name
+ * @return mixed
+ */
+function sed_cache_get($name)
+{
+	global $db, $cfg, $sys, $db_cache;
+	//trigger_error('Deprecated since 0.7.0, use $cache->db object instead');
+	$sql = $db->query("SELECT c_value FROM $db_cache WHERE c_name='$name' AND c_expire>'".$sys['now']."'");
+	if ($row = $sql->fetch())
+	{
+		return(unserialize($row['c_value']));
+	}
+	else
+	{
+		return(FALSE);
+	}
+}
+
+/**
+ * Get all cache data and import it into global scope
+ *
+ * @param int $auto Only with autoload flag
+ * @return mixed
+ */
+function sed_cache_getall($auto = 1)
+{
+	global $db, $cfg, $sys, $db_cache;
+	//trigger_error('Deprecated since 0.7.0, use $cache->db object instead');
+	$sql = $db->query("DELETE FROM $db_cache WHERE c_expire<'".$sys['now']."'");
+	if ($auto)
+	{
+		$sql = $db->query("SELECT c_name, c_value FROM $db_cache WHERE c_auto=1");
+	}
+	else
+	{
+		$sql = $db->query("SELECT c_name, c_value FROM $db_cache");
+	}
+	if ($sql->rowCount() > 0)
+	{
+		return($sql);
+	}
+	else
+	{
+		return(FALSE);
+	}
+}
+
+/**
+ * Puts an item into cache
+ *
+ * @param string $name Item name
+ * @param mixed $value Item value
+ * @param int $expire Expires in seconds
+ * @param int $auto Autload flag
+ * @return bool
+ */
+function sed_cache_store($name,$value,$expire,$auto="1")
+{
+	global $db, $db_cache, $sys, $cfg;
+	//trigger_error('Deprecated since 0.7.0, use $cache->db object instead');
+	if (!$cfg['cache']) return(FALSE);
+	$sql = $db->query("REPLACE INTO $db_cache (c_name, c_value, c_expire, c_auto) VALUES ('$name', '".$db->prep(serialize($value))."', '".($expire + $sys['now'])."', '$auto')");
+	return(TRUE);
+}
+
+/*
+ * ===============================================================================
+ */
 
 /**
  * Makes HTML sequences safe
@@ -38,6 +397,15 @@ function sed_cc($text)
 	return htmlspecialchars($text);
 }
 
+function sed_check_xg()
+{
+	return cot_check_xg();
+}
+
+function sed_check_xp()
+{
+	return cot_check_xp();
+}
 
 /**
  * Truncates a post and makes sure parsing is correct
@@ -62,54 +430,166 @@ function sed_cutpost($text, $max_chars, $parse_bbcodes = true)
 	return $text;
 }
 
-// FIXME this function is obsolete, or meta/title generation must be reworked
+function sed_cutstring($res, $l)
+{
+	return cot_cutstring($res, $l);
+}
+
+function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority="Width")
+{
+	return cot_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority);
+}
+
+function sed_die($cond=TRUE)
+{
+	return cot_die($cond);
+}
+
+function sed_diefatal($text='Reason is unknown.', $title='Fatal error')
+{
+	return cot_diefatal($text, $title);
+}
+
+/**
+ * Terminates with "disabled" error
+ *
+ * @param unknown_type $disabled
+ */
+function sed_dieifdisabled($disabled)
+{
+	global $env;
+	if ($disabled)
+	{
+		$env['status'] = '403 Forbidden';
+		cot_redirect(cot_url('message', "msg=940", '', true));
+	}
+}
+
+function sed_file_check($path, $name, $ext)
+{
+	return cot_file_check($path, $name, $ext);
+}
+
+/*
+ * ==================================== Forum Functions ==================================
+ */
+
+function sed_forum_info($id)
+{
+	trigger_error('Forums are now using category structure. sed_forum_info() is no longer valid.');
+}
+
+function sed_forum_prunetopics($mode, $section, $param)
+{
+	if (is_int($section))
+	{
+		trigger_error('Forums are now using category structure. String section key expected, integer given.');
+	}
+	return cot_forums_prunetopics($mode, $section, $param);
+}
+
+function sed_forum_sectionsetlast($id)
+{
+	if (is_int($id))
+	{
+		trigger_error('Forums are now using category structure. String section key expected, integer given.');
+	}
+	return cot_forums_sectionsetlast($id);
+}
+
+/*
+ * =======================================================================================
+ */
+
+function sed_getextplugins($hook, $cond='R')
+{
+	return cot_getextplugins($hook, $cond);
+}
+
+function sed_get_comcount($code)
+{
+	trigger_error('sed_get_comcount() is deprecated. Use comments plugin and its functions instead.');
+	return null;
+}
+
+function sed_get_uploadmax()
+{
+	return cot_get_uploadmax();
+}
+
+function sed_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
+{
+	return cot_import($name, $source, $filter, $maxlen, $dieonerror);
+}
+
+function sed_infoget($file, $limiter='SED', $maxsize=32768)
+{
+	return cot_infoget($file, $limiter, $maxsize);
+}
+
+/**
+ * Outputs standard javascript
+ *
+ * @deprecated
+ * @param string $more Extra javascript
+ * @return string
+ */
+function sed_javascript($more='')
+{
+	return '';
+}
+
+/**
+ * Returns a language file path for a plugin or FALSE on error.
+ *
+ * @param string $name Plugin name
+ * @param bool $core Use core module rather than a plugin
+ * @return bool
+ */
+function sed_langfile($name, $core = false, $loadlang=false)
+{
+	$type = $core ? 'core' : 'plug';
+	if ($core && !preg_match('#^admin#', $name) && !preg_match('#^users#', $name))
+	{
+		$type = 'module';
+	}
+	return cot_langfile($name, $type, $loadlang);
+}
+
+function sed_log($text, $group='def')
+{
+	return cot_log($text, $group);
+}
+
+function sed_log_sed_import($s, $e, $v, $o)
+{
+	return cot_log_import($s, $e, $v, $o);
+}
+
+function sed_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
+{
+	return cot_mail($fmail, $subject, $body, $headers, $additional_parameters);
+}
+
 function sed_htmlmetas()
 {
-		global $cfg;
-		$contenttype = ($cfg['doctypeid']>2 && $cfg['xmlclient']) ? "application/xhtml+xml" : "text/html";
-		$result = "<meta http-equiv=\"content-type\" content=\"".$contenttype."; charset=UTF-8\" />
-<meta name=\"description\" content=\"".$cfg['maintitle']." - ".$cfg['subtitle']."\" />
-<meta name=\"keywords\" content=\"".$cfg['metakeywords']."\" />
-<meta name=\"generator\" content=\"Cotonti http://www.cotonti.com\" />
-<meta http-equiv=\"expires\" content=\"Fri, Apr 01 1974 00:00:00 GMT\" />
-<meta http-equiv=\"pragma\" content=\"no-cache\" />
-<meta http-equiv=\"cache-control\" content=\"no-cache\" />
-<meta http-equiv=\"last-modified\" content=\"".gmdate("D, d M Y H:i:s")." GMT\" />
-<link rel=\"shortcut icon\" href=\"favicon.ico\" />
-";
-		return ($result);
+	trigger_error('sed_htmlmetas() is deprecated completely. Use new way of metas output.');
+	return '';
 }
 
-/**
- * JavaScript HTML obfuscator to protect some parts (like email) from bots
- *
- * @param string $text Source text
- * @return string
- */
-function sed_obfuscate($text)
+function sed_mktime($hour = false, $minute = false, $second = false, $month = false, $date = false, $year = false)
 {
-	$enc_string = '[';
-	$ut = utf8ToUnicode($text);
-	$length = count($ut);
-	for ($i = 0; $i < $length; $i++)
-	{
-		$enc_string .= $ut[$i].',';
-	}
-	$enc_string = substr($enc_string, 0, -1).']';
-	$name = 'a'.cot_unique(8);
-	$script = '<script type="text/javascript">var '.$name.' = '.$enc_string.','.$name.'_d = ""; for (var ii = 0; ii < '.$name.'.length; ii++) { var c = '.$name.'[ii]; '.$name.'_d += String.fromCharCode(c); } document.write('.$name.'_d)</script>';
-	return $script;
+	return cot_mktime($hour, $minute, $second, $month, $date, $year);
 }
 
-/**
- * Supplimentary email obfuscator callback
- *
- * @param array $m PCRE entry
- * @return string
- */
-function sed_obfuscate_eml($m)
+function sed_date2stamp($date)
 {
-	return $m[1] . sed_obfuscate('<a href="mailto:'.$m[2].'">'.$m[2].'</a>');
+	return cot_date2stamp($date);
+}
+
+function sed_stamp2date($stamp)
+{
+	return cot_stamp2date($stamp);
 }
 
 /**
@@ -128,10 +608,10 @@ function sed_obfuscate_eml($m)
  */
 function sed_pagination($url, $current, $entries, $perpage, $characters = 'd', $ajax = false, $target_div = '')
 {
-	if (function_exists('cot_pagination_custom'))
+	if (function_exists('sed_pagination_custom'))
 	{
 		// For custom pagination functions in plugins
-		return cot_pagination_custom($url, $current, $entries, $perpage, $characters, $onclick, $object);
+		return sed_pagination_custom($url, $current, $entries, $perpage, $characters, $onclick, $object);
 	}
 
 	if ($entries <= $perpage)
@@ -239,47 +719,151 @@ function sed_pagination_pn($url, $current, $entries, $perpage, $res_array = FALS
 	return $res_array ? array($res_l, $res_r) : $res_l.' '.$res_r;
 }
 
-// TODO this function is obsolete, doctype should be set in header.tpl
+function sed_pfs_deleteall($userid)
+{
+	return cot_pfs_deleteall($userid);
+}
+
+function sed_pfs_path($userid)
+{
+	return cot_pfs_path($userid);
+}
+
+function sed_pfs_relpath($userid)
+{
+	return cot_pfs_relpath($userid);
+}
+
+function sed_pfs_thumbpath($userid)
+{
+	return cot_pfs_thumbpath($userid);
+}
+
+function sed_readraw($file)
+{
+	return cot_readraw($file);
+}
+
+function sed_redirect($url)
+{
+	return cot_redirect($url);
+}
+
+function sed_safename($basename, $underscore = true, $postfix = '')
+{
+	return cot_safename($basename, $underscore, $postfix);
+}
+
+function sed_selectbox($check, $name, $values)
+{
+	return cot_selectbox($check, $name, $values);
+}
+
+function sed_selectbox_categories($check, $name, $hideprivate=TRUE)
+{
+	return cot_selectbox_categories($check, $name, '', $hideprivate);
+}
+
+function sed_selectbox_countries($check,$name)
+{
+	return cot_selectbox_countries($check, $name);
+}
+
+function sed_selectbox_date($utime, $mode, $ext='', $max_year = 2030)
+{
+	return cot_selectbox_date($utime, $mode, $ext, $max_year);
+}
+
+function sed_selectbox_folders($user, $skip, $check)
+{
+	return cot_selectbox_folders($user, $skip, $check);
+}
+
+function sed_selectbox_forumcat($check, $name)
+{
+	trigger_error('Forums now use category structure. Function sed_selectbox_forumcat() is deprecated.');
+}
+
+function sed_selectbox_gender($check,$name)
+{
+	return cot_selectbox_gender($check, $name);
+}
+
+function sed_selectbox_groups($check, $name, $skip=array(0))
+{
+	return cot_selectbox_groups($check, $name, $skip);
+}
+
+function sed_selectbox_lang($check, $name)
+{
+	return cot_selectbox_lang($check, $name);
+}
+
+function sed_selectbox_sections($check, $name)
+{
+	trigger_error('Forums now use category structure. Function sed_selectbox_sections() is deprecated.');
+	return null;
+}
+
+function sed_selectbox_users($to)
+{
+	trigger_error('This function is deprecated.');
+}
+
+function sed_sendheaders()
+{
+	return cot_sendheaders();
+}
+
 function sed_setdoctype($type)
 {
-	switch($type)
+	trigger_error('This function is deprecated.');
+}
+
+function sed_shield_clearaction()
+{
+	return cot_shield_clearaction();
+}
+
+function sed_shield_hammer($hammer,$action, $lastseen)
+{
+	return cot_shield_hammer($hammer, $action, $lastseen);
+}
+
+function sed_shield_protect()
+{
+	return cot_shield_protect();
+}
+
+function sed_shield_update($shield_add, $shield_newaction)
+{
+	return cot_shield_update($shield_add, $shield_newaction);
+}
+
+function sed_skinfile($base, $plug = false, $admn = false)
+{
+	if ($admn)
 	{
-		case '0': // HTML 4.01
-			return ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
-			break;
-
-		case '1': // HTML 4.01 Transitional
-			return ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
-			break;
-
-		case '2': // HTML 4.01 Frameset
-			return ("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\" \"http://www.w3.org/TR/html4/frameset.dtd\">");
-			break;
-
-		case '3': // XHTML 1.0 Strict
-			return ("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-			break;
-
-		case '4': // XHTML 1.0 Transitional
-			return ("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-			break;
-
-		case '5': // XHTML 1.0 Frameset
-			return ("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">");
-			break;
-
-		case '6': // XHTML 1.1
-			return ("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
-			break;
-
-		case '7': // XHTML 2  ;]
-			return ("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 2//EN\" \"http://www.w3.org/TR/xhtml2/DTD/xhtml2.dtd\">");
-			break;
-
-		default: // ...
-			return ("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-			break;
+		return cot_tplfile($base, 'core');
 	}
+	if ($plug)
+	{
+		return cot_tplfile($base, 'plug');
+	}
+	$bname = is_array($base) ? $base[0] : $base;
+	if (preg_match('#^users#', $bname))
+	{
+		return cot_tplfile($base, 'core');
+	}
+	else
+	{
+		return cot_tplfile($base, 'module');
+	}
+}
+
+function sed_smilies($res)
+{
+	return cot_smilies($res);
 }
 
 /**
@@ -292,6 +876,244 @@ function sed_sourcekey()
 {
 	global $sys;
 	return $sys['xk'];
+}
+
+/*
+ * ===================================== Statistics API ==========================================
+ */
+
+function sed_stat_create($name)
+{
+	return cot_stat_create($name);
+}
+
+function sed_stat_get($name)
+{
+	return cot_stat_get($name);
+}
+
+function sed_stat_inc($name)
+{
+	return cot_stat_inc($name);
+}
+
+function sed_stat_update($name)
+{
+	return cot_stat_update($name);
+}
+
+/*
+ * =========================================================================================
+ */
+
+function sed_stringinfile($file, $str, $maxsize=32768)
+{
+	return cot_stringinfile($file, $str, $maxsize);
+}
+
+/*
+ * ===================================== Tags API ==========================================
+ */
+
+function sed_tag($tag, $item, $area = 'pages')
+{
+	return cot_tag($tag, $item, $area);
+}
+
+function sed_tag_cloud($area = 'all', $order = 'tag', $limit = null)
+{
+	return cot_tag_cloud($area, $order, $limit);
+}
+
+function sed_tag_complete($tag, $min_length = 3)
+{
+	return cot_tag_complete($tag, $min_length);
+}
+
+function sed_tag_count($tag, $area = '')
+{
+	return cot_tag_count($tag, $area);
+}
+
+function sed_tag_exists($tag)
+{
+	return cot_tag_exists($tag);
+}
+
+function sed_tag_isset($tag, $item, $area = 'pages')
+{
+	return cot_tag_isset($tag, $item, $area);
+}
+
+function sed_tag_list($item, $area = 'pages')
+{
+	return cot_tag_list($item, $area);
+}
+
+function sed_tag_parse($input)
+{
+	return cot_tag_parse($input);
+}
+
+function sed_tag_prep($tag)
+{
+	return cot_tag_prep($tag);
+}
+
+function sed_tag_register($tag)
+{
+	return cot_tag_register($tag);
+}
+
+function sed_tag_remove($tag, $item, $area = 'pages')
+{
+	return cot_tag_remove($tag, $item, $area);
+}
+
+function sed_tag_remove_all($item = 0, $area = 'pages')
+{
+	return cot_tag_remove_all($item, $area);
+}
+
+function sed_tag_title($tag)
+{
+	return cot_tag_title($tag);
+}
+
+function sed_tag_unregister($tag)
+{
+	return cot_tag_unregister($tag);
+}
+
+/*
+ * ==========================================================================================
+ */
+
+function sed_themefile()
+{
+	return cot_schemefile();
+}
+
+function sed_title($mask, $tags, $data)
+{
+	trigger_error('Function sed_title() is deprecated. Use cot_title() instead');
+}
+
+function sed_trash_put($type, $title, $itemid, $datas)
+{
+	return cot_trash_put($type, $title, $itemid, $datas);
+}
+
+function sed_unique($l=16)
+{
+	return cot_unique($l);
+}
+
+function sed_url($name, $params = '', $tail = '', $header = false)
+{
+	return cot_url($name, $params, $tail, $header);
+}
+
+function sed_url_check($url)
+{
+	return cot_url_check($url);
+}
+
+function sed_urlencode($str, $translit = false)
+{
+	return cot_urlencode($str, $translit);
+}
+
+function sed_urldecode($str, $translit = false)
+{
+	return cot_urldecode($str, $translit);
+}
+
+function sed_uriredir_store()
+{
+	return cot_uriredir_store();
+}
+
+function sed_uriredir_apply($cfg_redir = true)
+{
+	return cot_uriredir_apply($cfg_redir);
+}
+
+function sed_uriredir_redirect($uri)
+{
+	return cot_uriredir_redirect($uri);
+}
+
+function sed_userinfo($id)
+{
+	return cot_userinfo($id);
+}
+
+function sed_userisonline($id)
+{
+	return cot_userisonline($id);
+}
+
+function sed_wraptext($str,$wrap=128)
+{
+	return cot_wraptext($str, $wrap);
+}
+
+function sed_xg()
+{
+	return cot_xg();
+}
+
+function sed_xp()
+{
+	return cot_xp();
+}
+
+function sed_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
+{
+	return cot_setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+}
+
+function sed_declension($digit, $expr, $onlyword = false, $canfrac = false)
+{
+    return cot_declension($digit, $expr, $onlyword, $canfrac);
+}
+
+function sed_get_plural($plural, $lang, $is_frac = false)
+{
+   return cot_get_plural($plural, $lang, $is_frac);
+}
+
+/**
+ * JavaScript HTML obfuscator to protect some parts (like email) from bots
+ *
+ * @param string $text Source text
+ * @return string
+ */
+function sed_obfuscate($text)
+{
+	$enc_string = '[';
+	$ut = utf8ToUnicode($text);
+	$length = count($ut);
+	for ($i = 0; $i < $length; $i++)
+	{
+		$enc_string .= $ut[$i].',';
+	}
+	$enc_string = substr($enc_string, 0, -1).']';
+	$name = 'a'.cot_unique(8);
+	$script = '<script type="text/javascript">var '.$name.' = '.$enc_string.','.$name.'_d = ""; for (var ii = 0; ii < '.$name.'.length; ii++) { var c = '.$name.'[ii]; '.$name.'_d += String.fromCharCode(c); } document.write('.$name.'_d)</script>';
+	return $script;
+}
+
+/**
+ * Supplimentary email obfuscator callback
+ *
+ * @param array $m PCRE entry
+ * @return string
+ */
+function sed_obfuscate_eml($m)
+{
+	return $m[1] . sed_obfuscate('<a href="mailto:'.$m[2].'">'.$m[2].'</a>');
 }
 
 /**

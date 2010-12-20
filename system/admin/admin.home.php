@@ -36,9 +36,9 @@ if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 }
 
 //Version Checking
-if ($cfg['check_updates'])
+if ($cfg['check_updates'] && $cache)
 {
-	$update_info = cot_cache_get('update_info');
+	$update_info = $cache->db->get('update_info');
 	if (!$update_info)
 	{
 		if (ini_get('allow_url_fopen'))
@@ -47,7 +47,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				cot_cache_store('update_info', $update_info, 86400, false);
+				$cache->db->store('update_info', $update_info, COT_DEFAULT_REALM, 86400);
 			}
 		}
 		elseif (function_exists('curl_init'))
@@ -59,7 +59,7 @@ if ($cfg['check_updates'])
 			if ($update_info)
 			{
 				$update_info = json_decode($update_info, TRUE);
-				cot_cache_store('update_info', $update_info, 86400, false);
+				$cache->db->store('update_info', $update_info, COT_DEFAULT_REALM, 86400);
 			}
 			curl_close($curl);
 		}

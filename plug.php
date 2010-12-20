@@ -41,8 +41,6 @@ else
 require_once $cfg['system_dir'] . '/common.php';
 require_once $cfg['system_dir'] . '/cotemplate.php';
 
-cot_dieifdisabled($cfg['disable_plug']);
-
 // Initial permission check
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', $env['ext']);
 cot_block($usr['auth_read']);
