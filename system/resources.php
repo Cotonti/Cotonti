@@ -104,6 +104,7 @@ $R['img_none'] = '<img src="{$src}" alt="'.$L['Image'].'" />';
 $R['img_pixel'] = '<img src="images/pixel.gif" width="{$x}" height="{$y}" alt="" />';
 $R['img_smilie'] = '<img src="{$src}" alt="{$name}" class="icon" />';
 $R['link_catpath'] = '<a href="{$url}" title="{$title}">{$title}</a>';
+$R['link_email'] = '<a href="mailto:{$email}">{$email}</a>';
 
 /**
  * Plugin Title

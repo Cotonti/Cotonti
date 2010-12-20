@@ -773,7 +773,7 @@ function cot_online_update()
 						'online_location' => $db->prep($env['location']), 
 						'online_subloc' => $db->prep($sys['sublocation']), 
 						'online_hammer' => (int)$sys['online_hammer']
-						), "online_ip='".$usr['ip']);
+						), "online_ip='".$usr['ip']."'");
 				}
 			}
 		}
@@ -1223,7 +1223,8 @@ function cot_build_email($email, $hide = false)
 	}
 	elseif (!empty($email) && preg_match('#^[\w\p{L}][\.\w\p{L}\-]+@[\w\p{L}\.\-]+\.[\w\p{L}]+$#u', $email))
 	{
-		return cot_obfuscate('<a href="mailto:'.$email.'">'.$email.'</a>');
+		$link = cot_rc('link_email', array('email' => $email));
+		return function_exists('cot_obfuscate') ? cot_obfuscate($link) : $link;
 	}
 }
 
@@ -1943,21 +1944,6 @@ function cot_diefatal($text='Reason is unknown.', $title='Fatal error')
 	$disp = "<strong><a href=\"".$cfg['mainurl']."\">".$cfg['maintitle']."</a></strong><br />";
 	$disp .= @date('Y-m-d H:i').'<br />'.$title.' : '.$text;
 	die($disp);
-}
-
-/**
- * Terminates with "disabled" error
- *
- * @param bool $disabled
- */
-function cot_dieifdisabled($disabled)
-{
-	global $env;
-	if ($disabled)
-	{
-		$env['status'] = '403 Forbidden';
-		cot_redirect(cot_url('message', "msg=940", '', true));
-	}
 }
 
 /**
