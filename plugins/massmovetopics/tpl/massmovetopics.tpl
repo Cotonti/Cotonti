@@ -26,7 +26,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" class="valid"><input type="submit" class="submit" value="{PHP.L.Move}" /></td>
+				<td colspan="2" class="valid"><button type="submit" class="submit">{PHP.L.Move}</button></td>
 			</tr>
 		</table>
 	</div>
