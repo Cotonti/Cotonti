@@ -19,7 +19,7 @@ Requires_modules=forums
 ==================== */
 
 /**
- * Statistics for the forums
+ * Forum Statistics
  *
  * @package forumstats
  * @version 0.7.0
