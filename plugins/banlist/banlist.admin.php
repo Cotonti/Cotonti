@@ -4,8 +4,9 @@
 Hooks=tools
 [END_COT_EXT]
 ==================== */
+
 /**
- * Administration panel - Banlist manager
+ * Banlist Manager
  *
  * @package Cotonti
  * @version 0.9.0
