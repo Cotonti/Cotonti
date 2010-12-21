@@ -1,6 +1,6 @@
 <?php
 /**
- * Russian Language File for ForumStats Plugin
+ * Russian Language File for Forumstats Plugin
  *
  * @package forumstats
  * @version 0.7.0
@@ -15,19 +15,19 @@ defined('COT_CODE') or die('Wrong URL.');
  * Plugin Title & Subtitle
  */
 
-$L['plu_title'] = 'Статистика форумов';
+$L['forumstats_title'] = 'Статистика форумов';
 
 /**
  * Plugin Body
  */
 
-$L['plu_hidden'] = '(Закрыто, доступ запрещен)';
-$L['plu_posterstop10'] = '10 самых активных пользователей';
-$L['plu_posts'] = 'Всего сообщений';
-$L['plu_repliedtop10'] = '10 самых активных тем';
-$L['plu_sections'] = 'Всего разделов';
-$L['plu_topics'] = 'Всего тем';
-$L['plu_viewedtop10'] = '10 самых просматриваемых тем';
-$L['plu_views'] = 'Всего просмотров';
+$L['forumstats_hidden'] = '(Закрыто, доступ запрещен)';
+$L['forumstats_posterstop10'] = '10 самых активных пользователей';
+$L['forumstats_posts'] = 'Всего сообщений';
+$L['forumstats_repliedtop10'] = '10 самых активных тем';
+$L['forumstats_sections'] = 'Всего разделов';
+$L['forumstats_topics'] = 'Всего тем';
+$L['forumstats_viewedtop10'] = '10 самых просматриваемых тем';
+$L['forumstats_views'] = 'Всего просмотров';
 
 ?>

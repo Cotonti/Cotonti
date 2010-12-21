@@ -1,28 +1,28 @@
 <!-- BEGIN: MAIN -->
 
-		<h2 class="stats">{PHP.L.plu_title}</h2>
+		<h2 class="stats">{PHP.L.forumstats_title}</h2>
 
-			<h3>{PHP.L.plu_title}</h3>
+			<h3>{PHP.L.forumstats_title}</h3>
 			<table class="cells">
 				<tr>
-					<td class="width90">{PHP.L.plu_sections}:</td>
+					<td class="width90">{PHP.L.forumstats_sections}:</td>
 					<td class="centerall width10">{FORUMSTATS_TOTALSECTIONS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.plu_topics}:</td>
+					<td>{PHP.L.forumstats_topics}:</td>
 					<td class="centerall">{FORUMSTATS_TOTALTOPICS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.plu_posts}:</td>
+					<td>{PHP.L.forumstats_posts}:</td>
 					<td class="centerall">{FORUMSTATS_TOTALPOSTS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.plu_views}:</td>
+					<td>{PHP.L.forumstats_views}:</td>
 					<td class="centerall">{FORUMSTATS_TOTALVIEWS}</td>
 				</tr>
 			</table>
 
-			<h3>{PHP.L.plu_repliedtop10}</h3>
+			<h3>{PHP.L.forumstats_repliedtop10}</h3>
 			<table class="cells">
 <!-- BEGIN: FORUMSTATS_REPLIEDTOP_USER -->
 				<tr>
@@ -34,13 +34,13 @@
 <!-- BEGIN: FORUMSTATS_REPLIEDTOP_NO_USER -->
 				<tr>
 					<td class="centerall width5">{FORUMSTATS_REPLIEDTOP_II}.</td>
-					<td class="width85">{FORUMSTATS_REPLIEDTOP_FORUMS} {PHP.cfg.separator} {PHP.L.plu_hidden}</td>
+					<td class="width85">{FORUMSTATS_REPLIEDTOP_FORUMS} {PHP.cfg.separator} {PHP.L.forumstats_hidden}</td>
 					<td class="centerall width10">{FORUMSTATS_REPLIEDTOP_POSTCOUNT}</td>
 				</tr>
 <!-- END: FORUMSTATS_REPLIEDTOP_NO_USER -->
 			</table>
 
-			<h3>{PHP.L.plu_viewedtop10}</h3>
+			<h3>{PHP.L.forumstats_viewedtop10}</h3>
 			<table class="cells">
 <!-- BEGIN: FORUMSTATS_VIEWEDTOP_USER -->
 				<tr>
@@ -52,13 +52,13 @@
 <!-- BEGIN: FORUMSTATS_VIEWEDTOP_NO_USER -->
 				<tr>
 					<td class="centerall width5">{FORUMSTATS_VIEWEDTOP_II}.</td>
-					<td class="width85">{FORUMSTATS_VIEWEDTOP_FORUMS} {PHP.cfg.separator} {PHP.L.plu_hidden}</td>
+					<td class="width85">{FORUMSTATS_VIEWEDTOP_FORUMS} {PHP.cfg.separator} {PHP.L.forumstats_hidden}</td>
 					<td class="centerall width10">{FORUMSTATS_VIEWEDTOP_VIEWCOUNT}</td>
 				</tr>
 <!-- END: FORUMSTATS_VIEWEDTOP_NO_USER -->
 			</table>
 
-			<h3>{PHP.L.plu_posterstop10}</h3>
+			<h3>{PHP.L.forumstats_posterstop10}</h3>
 			<table class="cells">
 <!-- BEGIN: POSTERSTOP -->
 				<tr>
