@@ -1,9 +1,8 @@
-<!-- BEGIN: ADMIN -->
+<!-- BEGIN: MAIN -->
 
 <script type="text/javascript">
 	var num = {CATNUM};
 </script>
-<script type="text/javascript" src="{PHP.cfg.plugins_dir}/news/js/news.admin.js"></script>
 
 <div id="catgenerator" style="display:none">
 	<table class="cells">
@@ -75,4 +74,4 @@
 	<p class="small">** {PHP.L.Template_help}</p>
 </div>
 
-<!-- END: ADMIN -->
+<!-- END: MAIN -->

@@ -50,7 +50,7 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 					"ADDCOUNT" => $v[1],
 					"ADDCUT" => $v[2]
 				));
-				$tt->parse("ADMIN.ADDITIONAL");
+				$tt->parse("MAIN.ADDITIONAL");
 			}
 		}
 	}
@@ -63,7 +63,7 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 		"ADDCOUNT" => '',
 		"ADDCUT" => ''
 	));
-	$tt->parse("ADMIN.ADDITIONAL");
+	$tt->parse("MAIN.ADDITIONAL");
 
 	$tt->assign(array(
 		"MAINCATEGORY" => $newscat,
@@ -71,9 +71,9 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 		"MAINCUT" => $indexz,
 		"CATNUM" => $jj
 	));
-	$tt->parse("ADMIN");
-	$div = $tt->text("ADMIN");
-
+	$tt->parse("MAIN");
+	$div = $tt->text("MAIN");
+	cot_rc_link_file($cfg['plugins_dir'].'/news/js/news.admin.js');
 	$t->assign(array(
 		"ADMIN_CONFIG_ROW_CONFIG_MORE" => $div.'<div id="helptext">'.$config_more.'</div>'
 	));
