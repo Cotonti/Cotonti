@@ -1,6 +1,6 @@
 <?php
 /**
- * English Language File for Hits
+ * English Language File for Hits Plugin
  *
  * @package Hits
  * @version 0.9.0
@@ -11,24 +11,25 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
-$L['adm_hits'] = 'Hits';
-$L['cfg_disableactivitystats'] = array('Do not display statistics of activity', 'Activity for the last 7 days<br />Displayed on the home page administration panel');
-$L['cfg_disabledbstats'] = array('Do not display database statistics', 'Displayed on the home page administration panel');
-$L['cfg_hit_precision'] = array('Optimized hit counter precision', ''); // New in 0.7.0
-
 /**
- * Other Section
- * Hits Subsection
+ * Plugin Config
  */
 
-$L['adm_byyear'] = 'By year';
-$L['adm_bymonth'] = 'By month';
-$L['adm_byweek'] = 'By week';
+$L['cfg_disableactivitystats'] = array('Do not display stats for the last 7 days', '(displayed on the home page administration panel)');
+$L['cfg_disabledbstats'] = array('Do not display database stats', '(displayed on the home page administration panel)');
+$L['cfg_hit_precision'] = array('Optimized hit counter precision', '');
 
-$L['adm_ref_lowhits'] = 'Purge entries where hits are lower than 5';
-$L['adm_maxhits'] = 'Maximum hitcount was reached %1$s, %2$s pages displayed this day.';
+/**
+ * Plugin Body
+ */
 
-$L['home_hitsmonth'] = 'Hits for the past 15 days';
-$L['home_pastdays'] = 'Activity for the past 7 days';
+$L['hits_maxhits'] = 'Maximum hitcount was reached %1$s, %2$s pages displayed this day.';
+
+$L['hits_byyear'] = 'By year';
+$L['hits_bymonth'] = 'By month';
+$L['hits_byweek'] = 'By week';
+
+$L['hits_hits'] = 'Hits for the past 15 days';
+$L['hits_activity'] = 'Activity for the past 7 days';
 
 ?>

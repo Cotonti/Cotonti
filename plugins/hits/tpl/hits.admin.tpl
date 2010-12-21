@@ -1,6 +1,8 @@
 <!-- BEGIN: MAIN -->
+
 	<h2>{PHP.L.Hits}</h2>
 	<p>{ADMIN_HITS_MAXHITS}</p>
+
 <!-- BEGIN: YEAR_OR_MONTH -->
 	<h3>{PHP.v}:</h3>
 	<table class="cells">
@@ -18,8 +20,9 @@
 <!-- END: ROW -->
 	</table>
 <!-- END: YEAR_OR_MONTH -->
+
 <!-- BEGIN: DEFAULT -->
-	<h3>{PHP.L.adm_byyear}:</h3>
+	<h3>{PHP.L.hits_byyear}:</h3>
 	<table class="cells">
 <!-- BEGIN: ROW_YEAR -->
 		<tr>
@@ -34,7 +37,7 @@
 		</tr>
 <!-- END: ROW_YEAR -->
 	</table>
-	<h3>{PHP.L.adm_bymonth}:</h3>
+	<h3>{PHP.L.hits_bymonth}:</h3>
 	<table class="cells">
 <!-- BEGIN: ROW_MONTH -->
 		<tr>
@@ -49,7 +52,7 @@
 		</tr>
 <!-- END: ROW_MONTH -->
 	</table>
-	<h3>{PHP.L.adm_byweek}:</h3>
+	<h3>{PHP.L.hits_byweek}:</h3>
 	<table class="cells">
 <!-- BEGIN: ROW_WEEK -->
 		<tr>
@@ -65,4 +68,5 @@
 <!-- END: ROW_WEEK -->
 	</table>
 <!-- END: DEFAULT -->
+
 <!-- END: MAIN -->
