@@ -116,9 +116,8 @@ if(empty($sql_string))
 		WHERE ".implode(" AND ", $where)."
 		ORDER BY page_$s $w LIMIT $d, ".$cfg['page']['maxrowsperpage'];
 }
-$sql = $db->query($sql_count);
-$totallines = $sql->fetchColumn();
-$sql = $db->query($sql_string);
+$totallines = $db->query($sql_count)->fetchColumn();
+$sqllist = $db->query($sql_string);
 
 /*
 $incl = "datas/content/list.$c.txt";
@@ -279,7 +278,7 @@ $jj = 0;
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('page.list.loop');
 /* ===== */
-while ($pag = $sql->fetch() and ($jj < $cfg['page']['maxrowsperpage']))
+while ($pag = $sqllist->fetch())
 {
 	$t->assign(cot_generate_pagetags($pag, 'LIST_ROW_', 0, $usr['isadmin']));
 	$t->assign(array(
