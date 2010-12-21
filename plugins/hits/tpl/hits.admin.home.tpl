@@ -1,9 +1,10 @@
 <!-- BEGIN: MAIN -->
+
 <!-- BEGIN: STAT -->
 <div class="block">
-	<h3>{PHP.L.home_hitsmonth}</h3>
+	<h3>{PHP.L.hits_hits}</h3>
 	<table class="cells">
-		<!-- BEGIN: ADMIN_HOME_ROW -->
+<!-- BEGIN: ADMIN_HOME_ROW -->
 		<tr>
 			<td class="width15">{ADMIN_HOME_DAY}</td>
 			<td class="centerall width40">
@@ -14,7 +15,7 @@
 			<td class="width25">{PHP.L.Hits}: {ADMIN_HOME_HITS}</td>
 			<td class="textcenter width20">{ADMIN_HOME_PERCENTBAR}%</td>
 		</tr>
-		<!-- END: ADMIN_HOME_ROW -->
+<!-- END: ADMIN_HOME_ROW -->
 	</table>
 	<p><a href="{ADMIN_HOME_MORE_HITS_URL}">{PHP.L.ReadMore}</a></p>
 </div>
@@ -22,7 +23,7 @@
 
 <!-- BEGIN: ACTIVITY -->
 <div class="block">
-	<h3>{PHP.L.home_pastdays}</h3>
+	<h3>{PHP.L.hits_activity}</h3>
 	<table class="cells">
 		<tr>
 			<td class="width80"><a href="{ADMIN_HOME_NEWUSERS_URL}">{PHP.L.home_newusers}</a></td>
@@ -47,4 +48,5 @@
 	</table>
 </div>
 <!-- END: ACTIVITY -->
+
 <!-- END: MAIN -->

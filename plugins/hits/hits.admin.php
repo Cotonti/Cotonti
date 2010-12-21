@@ -164,7 +164,7 @@ else
 		}
 
 		$tt->assign(array(
-			'ADMIN_HITS_MAXHITS' => sprintf($L['adm_maxhits'], $max_date, $max_hits)
+			'ADMIN_HITS_MAXHITS' => sprintf($L['hits_maxhits'], $max_date, $max_hits)
 		));
 	}
     $tt->parse('MAIN.DEFAULT');
