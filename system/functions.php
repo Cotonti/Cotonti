@@ -702,7 +702,6 @@ function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters =
 		{
 			mail($fmail, $subject, $body, $headers, $additional_parameters);
 		}
-		cot_stat_inc('totalmailsent');
 		return true;
 	}
 }

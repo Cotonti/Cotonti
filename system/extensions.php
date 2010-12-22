@@ -201,7 +201,19 @@ function cot_extension_install($name, $is_module = false, $update = false)
         cot_error('ext_setup_not_found');
         return false;
     }
+
+	$old_ext_format = false;
+
     $info = cot_infoget($setup_file, 'COT_EXT');
+	if (!$info && $cfg['enable_obsolete'])
+	{
+		// Try load old format info
+		$info = cot_infoget($setup_file, 'SED_EXTPLUGIN');
+		if ($info)
+		{
+			$old_ext_format = true;
+		}
+	}
     if ($info === false)
     {
         cot_error('ext_invalid_format');
@@ -257,6 +269,11 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			&& !in_array($mt[2], $cot_ext_ignore_parts))
         {
             $part_info = cot_infoget($path . "/$f", 'COT_EXT');
+			if (!$part_info && $cfg['enable_obsolete'])
+			{
+				// Try to load old format info
+				$part_info = cot_infoget($path . "/$f", 'SED_EXTPLUGIN');
+			}
             if ($part_info)
             {
                 if (empty($part_info['Hooks']))
@@ -288,6 +305,11 @@ function cot_extension_install($name, $is_module = false, $update = false)
 
     // Install config
     $info_cfg = cot_infoget($setup_file, 'COT_EXT_CONFIG');
+	if (!$info_cfg && $cfg['enable_obsolete'])
+	{
+		// Try to load old format config
+		$info_cfg = cot_infoget($setup_file, 'SED_EXTPLUGIN_CONFIG');
+	}
     $options = cot_config_parse($info_cfg, $is_module);
 
 	if ($update)
@@ -460,10 +482,17 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			}
 		}
 
-		if (file_exists($path . "/$name.install.php"))
+		$install_handler = $old_ext_format ? $setup_file : $path . "/$name.install.php";
+
+		if ($old_ext_format)
+		{
+			$action = 'install';
+		}
+
+		if (file_exists($install_handler))
 		{
 			// Run PHP install handler
-			$ret = include $path . "/$name.install.php";
+			$ret = include $install_handler;
 			if ($ret !== false)
 			{
 				$msg = $ret == 1 ? 'OK' : $ret;
@@ -574,9 +603,19 @@ function cot_extension_uninstall($name, $is_module = false)
     }
 
     // Run handler part
-    if (file_exists($path . "/$name.uninstall.php"))
+	if ($cfg['enable_obsolete'] && cot_infoget($path . "/$name.setup.php", 'SED_EXTPLUGIN'))
+	{
+		$action = 'uninstall';
+		$uninstall_handler = $path . "/$name.setup.php";
+	}
+	else
+	{
+		$uninstall_handler = $path . "/$name.uninstall.php";
+	}
+
+    if (file_exists($uninstall_handler))
     {
-        $ret = include $path . "/$name.uninstall.php";
+        $ret = include $uninstall_handler;
         if ($ret !== false)
         {
             cot_message(cot_rc('ext_executed_php', array('ret' => $ret)));
@@ -647,8 +686,8 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 	$fp = @fopen($file, 'r');
     if ($fp)
     {
-        $limiter_begin = "[BEGIN_" . $limiter . "]";
-        $limiter_end = "[END_" . $limiter . "]";
+        $limiter_begin = '[BEGIN_' . $limiter . ']';
+        $limiter_end = '[END_' . $limiter . ']';
         $data = fread($fp, $maxsize);
         $begin = mb_strpos($data, $limiter_begin);
         $end = mb_strpos($data, $limiter_end);
@@ -661,7 +700,7 @@ function cot_infoget($file, $limiter = 'COT_EXT', $maxsize = 32768)
 
             foreach ($lines as $k => $line)
             {
-                $linex = explode("=", $line);
+                $linex = explode('=', $line);
                 $ii = 1;
                 while (!empty($linex[$ii]))
                 {
