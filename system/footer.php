@@ -16,8 +16,6 @@ foreach (cot_getextplugins('footer.first') as $pl)
 }
 /* ===== */
 
-cot_rc_output(true);
-
 $i = explode(' ', microtime());
 $sys['endtime'] = $i[1] + $i[0];
 $sys['creationtime'] = round(($sys['endtime'] - $sys['starttime']), 3);

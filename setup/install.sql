@@ -117,7 +117,6 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
 ('core','performance','02','headrc_consolidate',3,'0','0','',''),
 ('core','performance','03','headrc_minify',3,'1','1','',''),
 ('core','performance','04','jquery_cdn',3,'0','0','',''),
-('core','performance','05','theme_consolidate',3,'0','0','',''),
 ('core','performance','06','cache_page',3,'0','0','',''),
 ('core','performance','07','cache_index',3,'0','0','',''),
 ('core','performance','08','cache_forums',3,'0','0','',''),
