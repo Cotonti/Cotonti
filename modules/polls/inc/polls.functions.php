@@ -31,7 +31,7 @@ $db_polls_voters  = (isset($db_polls_voters)) ? $db_polls_voters : $db_x . 'poll
  */
 function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 {
-	global $db, $cfg, $db_polls, $db_polls_options, $cot_error, $poll_id, $R, $L;
+	global $db, $cfg, $db_polls, $db_polls_options, $poll_id, $R, $L;
 	if (gettype($t) != 'object')
 	{
 		$t = new XTemplate(cot_tplfile('polls'));
@@ -39,7 +39,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 		$poll_full_template = true;
 	}
 	$counter = 0;
-	if ($cot_error && !empty($poll_id))
+	if (cot_error_found() && !empty($poll_id))
 	{
 		global  $poll_options, $poll_multiple, $poll_state, $poll_text;
 
@@ -171,9 +171,9 @@ function cot_poll_check()
  */
 function cot_poll_save($type = 'index', $code = '')
 {
-	global $db, $sys, $db_polls, $db_polls_options, $cot_error, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
+	global $db, $sys, $db_polls, $db_polls_options, $poll_id, $poll_text, $poll_multiple, $poll_state, $poll_options;
 
-	if (!empty($poll_id) && !$cot_error)
+	if (!empty($poll_id) && !cot_error_found())
 	{
 		if ((int)$poll_id > 0)
 		{

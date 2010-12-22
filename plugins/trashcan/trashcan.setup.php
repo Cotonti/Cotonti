@@ -4,7 +4,7 @@
 Code=trashcan
 Name=Trashcan
 Description=Trashcan
-Version=0.7.0
+Version=0.7.1
 Date=2010-sep-24
 Author=Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2008-2010

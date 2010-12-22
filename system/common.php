@@ -27,11 +27,6 @@ define('MQGPC', FALSE);
 error_reporting(E_ALL ^ E_NOTICE);
 if (COT_DEBUG) require_once $cfg['system_dir'].'/debug.php';
 
-if (isset($cfg['enable_obsolete']) && $cfg['enable_obsolete'])
-{
-    require_once $cfg['system_dir'] . '/obsolete.php';
-}
-
 register_shutdown_function('cot_shutdown');
 
 $sys['day'] = @date('Y-m-d');
@@ -537,6 +532,11 @@ if (!$cot_rc_html)
 }
 
 /* ======== Global hook ======== */
+
+if (isset($cfg['enable_obsolete']) && $cfg['enable_obsolete'])
+{
+    require_once $cfg['system_dir'] . '/obsolete.php';
+}
 
 foreach (cot_getextplugins('global') as $pl)
 {

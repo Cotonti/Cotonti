@@ -119,7 +119,7 @@ if ($a == 'update')
 			cot_redirect(cot_url('page', "c=".$row1['page_cat'], '', true));
 		}
 	}
-	elseif (!$cot_error)
+	elseif (!cot_error_found())
 	{
 		if (!empty($rpage['page_alias']))
 		{

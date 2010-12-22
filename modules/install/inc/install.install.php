@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				cot_error('install_error_sql', 'db_host');
 			}
 
-			if (!$cot_error)
+			if (!cot_error_found())
 			{
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'mysqlhost', $db_host);
@@ -189,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				cot_error(cot_rc('install_error_missing_file', array('file' => $file['config_sample'])));
 			}
 
-			if (!$cot_error)
+			if (!cot_error_found())
 			{
 				$config_contents = file_get_contents($file['config']);
 				cot_install_config_replace($config_contents, 'defaultlang', $rlang);
@@ -242,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				$install &= cot_extension_dependencies_statisfied($ext, false, $selected_modules, $selected_plugins);
 			}
 
-			if ($install && !$cot_error)
+			if ($install && !cot_error_found())
 			{
 				// Load groups
 				$cot_groups = array();
@@ -289,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			exit;
 	}
 
-	if ($cot_error)
+	if (cot_error_found())
 	{
 		// One step back
 		cot_redirect('install.php');

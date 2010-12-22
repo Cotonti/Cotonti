@@ -66,7 +66,7 @@ if ($a == 'newtopic')
 		cot_error('forums_messagetooshort', 'newmsg');
 	}
 	
-	if (!$cot_error)
+	if (!cot_error_found())
 	{
 		if (mb_substr($newtopictitle, 0 ,1) == "#")
 		{

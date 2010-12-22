@@ -58,7 +58,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			$pag_i18n['ipage_desc'] = cot_import('desc', 'P', 'TXT');
 			$pag_i18n['ipage_text'] = cot_import('translate_text', 'P', 'HTM');
 
-			if ($cot_error)
+			if (cot_error_found())
 			{
 				cot_redirect(cot_url('plug', "e=i18n&m=page&a=add&id=$id", '', true));
 				exit;
@@ -127,7 +127,7 @@ if ($id > 0 && $stmt->rowCount() == 1)
 			$pag_i18n['ipage_desc'] = cot_import('desc', 'P', 'TXT');
 			$pag_i18n['ipage_text'] = cot_import('translate_text', 'P', 'HTM');
 
-			if ($cot_error)
+			if (cot_error_found())
 			{
 				cot_redirect(cot_url('plug', "e=i18n&m=page&a=edit&id=$id&l=$i18n_locale", '', true));
 				exit;

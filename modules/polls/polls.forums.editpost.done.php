@@ -17,7 +17,7 @@ Hooks=forums.editpost.update.done
 
 defined('COT_CODE') or die('Wrong URL');
 
-if(!empty($poll) && $poll_id && $is_first_post && !$cot_error)
+if(!empty($poll) && $poll_id && $is_first_post && !cot_error_found())
 {
 	$number = cot_poll_save();
 }
