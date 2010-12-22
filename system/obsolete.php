@@ -151,6 +151,8 @@ function sed_build_catpath($cat, $mask)
 
 function sed_build_comments($code, $url, $display = true)
 {
+	global $cfg;
+
 	$ext_prefix = mb_substr($code, 0, 1);
 	$code = mb_substr($code, 1);
 	switch ($ext_prefix)
