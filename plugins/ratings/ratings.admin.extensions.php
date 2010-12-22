@@ -17,7 +17,7 @@ Hooks=admin.extensions.install.tags
 
 defined('COT_CODE') or die('Wrong URL');
 
-require cot_incfile('ratings', 'enablement', true);
+require cot_incfile('ratings', 'plug', 'enablement');
 
 if ($is_module && in_array($code, $rat_modules_list))
 {

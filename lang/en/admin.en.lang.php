@@ -259,6 +259,7 @@ $L['ext_executed_php'] = 'Executed PHP handler part: {$ret}';
 $L['ext_executed_sql'] = 'Executed SQL handler part: {$ret}';
 $L['ext_installing'] = 'Installing {$type} &quot;{$name}&quot;';
 $L['ext_invalid_format'] = 'This is not a valid Cotonti >= 0.9 extension. Please contact the developer';
+$L['ext_old_format'] = 'This is old Genoa/Seditio plugin. It may work incorrectly or not work at all.';
 $L['ext_patch_applied'] = 'Applied patch {$f}: {$msg}';
 $L['ext_patch_error'] = 'Error applying patch {$f}: {$msg}';
 $L['ext_setup_not_found'] = 'Setup file is not found';

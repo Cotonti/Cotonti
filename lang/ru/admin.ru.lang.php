@@ -259,6 +259,7 @@ $L['ext_executed_php'] = 'Выполнена часть PHP-хэндлера: {$
 $L['ext_executed_sql'] = 'Выполнена часть SQL-хэндлера: {$ret}';
 $L['ext_installing'] = 'Установка {$type} &quot;{$name}&quot;';
 $L['ext_invalid_format'] = 'Расширение несовместимо с Cotonti версии 0.9 и выше. Пожалуйста, свяжитесь с разработчиками.';
+$L['ext_old_format'] = 'Это старый плагин для Genoa/Seditio. Он может работать некорректно или не работать вовсе.';
 $L['ext_patch_applied'] = 'Установлен патч {$f}: {$msg}';
 $L['ext_patch_error'] = 'Ошибка установки патча {$f}: {$msg}';
 $L['ext_setup_not_found'] = 'Файл установок не найден';

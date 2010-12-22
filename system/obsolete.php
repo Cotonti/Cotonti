@@ -25,6 +25,11 @@ require_once cot_incfile('tags',		'plug');
 require_once cot_incfile('trashcan',	'plug');
 require_once cot_incfile('userimages',	'plug');
 
+// SED flags
+
+define('SED_CODE', true);
+define('SED_PLUG', true);
+
 // Functions
 
 function sed_alphaonly($text)

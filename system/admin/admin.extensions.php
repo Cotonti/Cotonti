@@ -107,7 +107,15 @@ switch($a)
 		}
 		if(file_exists($ext_info))
 		{
+			$old_ext_format = false;
 			$info = cot_infoget($ext_info, 'COT_EXT');
+			if (!$info && $cfg['enable_obsolete'])
+			{
+				// Try to load old format info
+				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
+				$old_ext_format = true;
+				cot_message('ext_old_format', 'warning');
+			}
 			$adminpath[] = array(cot_url('admin', "m=extensions&a=details&$arg=$code"), $info['Name']." ($code)");
 
 			$parts = array();
@@ -142,6 +150,11 @@ switch($a)
 				{
 					$extplugin_file = $dir . '/' . $code . '/' . $x;
 					$info_file = cot_infoget($extplugin_file, 'COT_EXT');
+					if (!$info_file && $cfg['enable_obsolete'])
+					{
+						// Try to load old format info
+						$info_file = cot_infoget($extplugin_file, 'SED_EXTPLUGIN');
+					}
 					$info_part = preg_match("#^$code\.([\w\.]+).php$#", $x, $mt) ? $mt[1] : 'main';
 
 					if(!empty($info_file['Error']))
@@ -465,6 +478,11 @@ switch($a)
 				if (file_exists($ext_info))
 				{
 					$info = cot_infoget($ext_info, 'COT_EXT');
+					if (!$info && $cfg['enable_obsolete'])
+					{
+						// Try to load old format info
+						$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
+					}
 
 					if (!empty($info['Error']))
 					{
