@@ -21,6 +21,8 @@ require_once cot_incfile('page',		'module');
 require_once cot_incfile('pfs',			'module');
 require_once cot_incfile('users',		'module');
 require_once cot_incfile('bbcode',		'plug');
+require_once cot_incfile('comments',	'plug');
+require_once cot_incfile('ratings',		'plug');
 require_once cot_incfile('tags',		'plug');
 require_once cot_incfile('trashcan',	'plug');
 require_once cot_incfile('userimages',	'plug');
@@ -149,7 +151,34 @@ function sed_build_catpath($cat, $mask)
 
 function sed_build_comments($code, $url, $display = true)
 {
-	trigger_error('sed_build_comments() is deprecated. Use comments plugin and its functions instead.');
+	$ext_prefix = mb_substr($code, 0, 1);
+	$code = mb_substr($code, 1);
+	switch ($ext_prefix)
+	{
+		case 'p':
+			$ext_name = 'page';
+			break;
+		case 'g':
+			$ext_name = 'gal';
+			break;
+		case 'u':
+			$ext_name = 'userwall';
+			break;
+		case 'v':
+			$ext_name = 'polls';
+			break;
+		default:
+			trigger_error('sed_build_comments() is deprecated. Use comments plugin and its functions instead.');
+			break;
+	}
+
+	$com_display = $display ? cot_comments_display($ext_name, $code) : '';
+	$com_count = cot_comments_count($ext_name, $code);
+	$com_link = cot_rc('comments_link', array(
+		'url' => $url . '#comments',
+		'count' => $cfg['plugin']['comments']['countcomments'] ? cot_comments_count($ext_name, $code) : ''
+	));
+	return array($com_link, $com_display, $com_count);
 }
 
 function sed_build_country($flag)
@@ -232,7 +261,28 @@ function sed_build_pm($user)
 
 function sed_build_ratings($code, $url, $display)
 {
-	trigger_error('sed_build_ratings() is deprecated. Use ratings plugin and its functions instead.');
+	$ext_prefix = mb_substr($code, 0, 1);
+	$code = mb_substr($code, 1);
+	switch ($ext_prefix)
+	{
+		case 'p':
+			$ext_name = 'page';
+			break;
+		case 'g':
+			$ext_name = 'gal';
+			break;
+		case 'u':
+			$ext_name = 'userwall';
+			break;
+		case 'v':
+			$ext_name = 'polls';
+			break;
+		default:
+			trigger_error('sed_build_ratings() is deprecated. Use ratings plugin and its functions instead.');
+			break;
+	}
+
+	return array(cot_ratings_display($ext_name, $code, '', $display == false), '');
 }
 
 function sed_build_stars($level)
