@@ -119,7 +119,7 @@ if ($a=='update')
 		cot_error('aut_passwordtooshort', 'rusernewpass');
 	}
 
-	if (!$cot_error)
+	if (!cot_error_found())
 	{
 		$ruser['user_password'] = (mb_strlen($rusernewpass)>0) ? md5($rusernewpass) : $urr['user_password'];
 

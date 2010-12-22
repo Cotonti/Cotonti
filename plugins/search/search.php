@@ -212,10 +212,10 @@ if (!empty($sq))
 		{
 			cot_error($L['plu_usernotexist'].$R['code_error_separator'], 'rsuser');
 		}
-		$touser = ($totalusers > 0 && !$cot_error) ? 'IN ('.implode(',', $touser_ids).')' : '';
+		$touser = ($totalusers > 0 && !cot_error_found()) ? 'IN ('.implode(',', $touser_ids).')' : '';
 	}
 
-	if (($tab == 'pag' || empty($tab)) && $cfg['page'] && $cfg['plugin']['search']['pagesearch'] && !$cot_error)
+	if (($tab == 'pag' || empty($tab)) && $cfg['page'] && $cfg['plugin']['search']['pagesearch'] && !cot_error_found())
 	{
 		$where_and['cat'] = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
 			"page_cat IN ('".$db->prep(implode("','", $rsearch['pag']['sub']))."')" : "page_cat IN ('".implode("','", $pag_catauth)."')"; 
@@ -287,7 +287,7 @@ if (!empty($sq))
 		}
 		unset($where_and, $where_or, $where);
 	}
-	if (($tab == 'frm' || empty($tab)) && is_array($cfg['forums']) && $cfg['plugin']['search']['forumsearch'] && !$cot_error)
+	if (($tab == 'frm' || empty($tab)) && is_array($cfg['forums']) && $cfg['plugin']['search']['forumsearch'] && !cot_error_found())
 	{
 		$where_and['cat'] = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
 			"s.fs_id IN ('".$db->prep(implode("','", $rsearch['frm']['sub']))."')" : "s.fs_id IN ('".implode("','", $frm_catauth)."')";
@@ -349,7 +349,7 @@ if (!empty($sq))
 	{
 		cot_error($L['plu_noneresult'].$R['code_error_separator']);
 	}
-	if (!$cot_error)
+	if (!cot_error_found())
 	{
 		$t->parse('MAIN.RESULTS');
 	}

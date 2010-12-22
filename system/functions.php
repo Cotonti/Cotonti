@@ -927,9 +927,9 @@ function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, 
  */
 function cot_shutdown()
 {
-	global $cache, $cot_error;
+	global $cache;
 	// Clear import buffer if everything's OK on POST
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$cot_error)
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found())
 	{
 		unset($_SESSION['cot_buffer']);
 	}
@@ -1782,7 +1782,7 @@ function cot_selectbox_theme($selected_theme, $selected_scheme, $input_name)
 
 /*
  * ======================== Error & Message + Logs API ========================
-*/
+ */
 
 /**
  * Checks if there are messages to display
@@ -1995,6 +1995,8 @@ function cot_display_messages($tpl)
 
 /**
  * Records an error message to be displayed on results page
+ *
+ * @global int $cot_error Global error counter
  * @param string $message Message lang string code or full text
  * @param string $src Error source identifier, such as field name for invalid input
  * @see cot_message()
@@ -2004,6 +2006,19 @@ function cot_error($message, $src = 'default')
 	global $cot_error;
 	$cot_error ? $cot_error++ : $cot_error = 1;
 	cot_message($message, 'error', $src);
+}
+
+/**
+ * Checks if any errors have been previously detected during current script execution
+ *
+ * @global int $cot_error Global error counter
+ * @global string $error_string Obsolete error message container string
+ * @return bool TRUE if any errors were found, FALSE otherwise
+ */
+function cot_error_found()
+{
+	global $cot_error, $error_string;
+	return (bool) $cot_error || !empty($error_string);
 }
 
 /**
@@ -3585,12 +3600,17 @@ function cot_xp()
  */
 function cot_redirect($url)
 {
-	global $cfg, $cot_error, $env;
+	global $cfg, $env, $error_string;
 
-	if ($cot_error && $_SERVER['REQUEST_METHOD'] == 'POST')
+	if (cot_error_found() && $_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 		// Save the POST data
 		cot_import_buffer_save();
+		if (!empty($error_string))
+		{
+			// Message should not be lost
+			cot_error($error_string);
+		}
 	}
 
 	if (!cot_url_check($url))

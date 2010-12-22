@@ -78,7 +78,7 @@ elseif ($a == 'send')
 	if (!empty($id))			// edit message
 
 	{
-		if (!$cot_error)
+		if (!cot_error_found())
 		{
 			$pm['pm_title'] = $newpmtitle;
 			$pm['pm_date'] = (int)$sys['now_offset'];
@@ -143,7 +143,7 @@ elseif ($a == 'send')
 			$totalrecipients = 1;
 		}
 
-		if (!$cot_error)
+		if (!cot_error_found())
 		{
 			$stats_enabled = function_exists('cot_stat_inc');
 			foreach ($touser_ids as $k => $userid)

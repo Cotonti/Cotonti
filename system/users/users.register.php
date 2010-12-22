@@ -72,7 +72,7 @@ if ($a=='add')
 	if ($res2>0) cot_error('aut_emailalreadyindb', 'ruseremail');
 	if ($rpassword1 != $rpassword2) cot_error('aut_passwordmismatch', 'rpassword2');
 
-	if (!$cot_error)
+	if (!cot_error_found())
 	{
 		if ($db->countRows($db_users)==0)
 		{

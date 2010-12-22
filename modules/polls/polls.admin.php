@@ -74,7 +74,7 @@ elseif($a == 'bump')
 
 cot_poll_check();
 
-if (!$cot_error)
+if (!cot_error_found())
 {
 	$number = cot_poll_save();
 
@@ -184,7 +184,7 @@ if ($n == 'options')
 	$formname = $L['editdeleteentries'];
 	$send_button = $L['Update'];
 }
-elseif ($cot_error)
+elseif (cot_error_found())
 {
 	if ($poll_id != 'new')
 	{

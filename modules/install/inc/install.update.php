@@ -138,7 +138,7 @@ if ($db->errno > 0 || $sql->rowCount() != 1)
 					'msg' => $L['Error']));
 		}
 	}
-	if (!$cot_error)
+	if (!cot_error_found())
 	{
 		// Success
 		$db->update($db_updates,  array('upd_value' => $branch), "upd_param = 'branch'");
@@ -212,7 +212,7 @@ else
 		}
 	}
 	
-	if ($new_rev === false || $cot_error)
+	if ($new_rev === false || cot_error_found())
 	{
 		// Display error message
 		$t->assign('UPDATE_TITLE', $L['install_update_error']);

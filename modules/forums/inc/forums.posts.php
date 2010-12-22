@@ -105,7 +105,7 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 	}
 	/* ===== */
 
-	if (!$cot_error && !empty($newmsg))
+	if (!cot_error_found() && !empty($newmsg))
 	{
 		if (!$merge)
 		{

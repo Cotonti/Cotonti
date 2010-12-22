@@ -328,7 +328,7 @@ switch($a)
 							'type' => $is_module ? $L['Module'] : $L['Plugin'],
 							'name' => $code
 						)),
-					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !$cot_error ? 'success' : 'error',
+					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !cot_error_found() ? 'success' : 'error',
 					'ADMIN_EXTENSIONS_EDIT_LOG' => cot_implode_messages(),
 					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
 				));
@@ -347,7 +347,7 @@ switch($a)
 							'type' => $is_module ? $L['Module'] : $L['Plugin'],
 							'name' => $code
 						)),
-					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !$cot_error ? 'success' : 'error',
+					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !cot_error_found() ? 'success' : 'error',
 					'ADMIN_EXTENSIONS_EDIT_LOG' => cot_implode_messages(),
 					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
 				));
@@ -366,7 +366,7 @@ switch($a)
 							'type' => $is_module ? $L['Module'] : $L['Plugin'],
 							'name' => $code
 						)),
-					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !$cot_error ? 'success' : 'error',
+					'ADMIN_EXTENSIONS_EDIT_RESULT' => $result && !cot_error_found() ? 'success' : 'error',
 					'ADMIN_EXTENSIONS_EDIT_LOG' => cot_implode_messages(),
 					'ADMIN_EXTENSIONS_EDIT_CONTINUE_URL' => cot_url('admin', "m=extensions&a=details&$arg=$code")
 				));

@@ -77,7 +77,7 @@ if ($m == 'edit' && $id > 0)
 			cot_error($L['plu_comtooshort'], 'comtext');
 		}
 
-		if (!$cot_error)
+		if (!cot_error_found())
 		{
 			$sql = $db->update($db_com, array('com_text' => $comtext), 'com_id=? AND com_code=?', array($id, $item));
 
@@ -168,7 +168,7 @@ if ($a == 'send' && $usr['auth_write'])
 		cot_error($L['com_commenttoolong'], 'rtext');
 	}
 
-	if (!$cot_error)
+	if (!cot_error_found())
 	{
 		$comarray = array(
 			'com_area' => $area,

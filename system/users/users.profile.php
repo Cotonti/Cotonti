@@ -79,7 +79,7 @@ if($a == 'update')
 		{
 			cot_error('pro_emailandpass', 'ruseremail');
 		}
-		if (!$cot_error)
+		if (!cot_error_found())
 		{
 			$db->update($db_users, array('user_password' => md5($rnewpass1)), "user_id='".$usr['id']."'");
 		}
@@ -99,7 +99,7 @@ if($a == 'update')
 			cot_error('aut_emailtooshort', 'ruseremail');
 		if ($res > 0) cot_error('aut_emailalreadyindb', 'ruseremail');
 
-		if (!$cot_error)
+		if (!cot_error_found())
 		{
 			if (!$cfg['user_email_noprotection'])
 			{
@@ -131,7 +131,7 @@ if($a == 'update')
 			}
 		}
 	}
-	if (!$cot_error)
+	if (!cot_error_found())
 	{
 		$ruser['user_birthdate'] = ($ruser['user_birthdate'] > $sys['now_offset']) ? ($sys['now_offset'] - 31536000) : $ruser['user_birthdate'];
 		$ruser['user_birthdate'] = ($ruser['user_birthdate'] == '0') ? '0000-00-00' : cot_stamp2date($ruser['user_birthdate']);

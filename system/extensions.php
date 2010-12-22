@@ -189,7 +189,7 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
  */
 function cot_extension_install($name, $is_module = false, $update = false)
 {
-    global $cfg, $L, $cot_error, $cache, $usr, $db_auth, $db_config, $db_users,
+    global $cfg, $L, $cache, $usr, $db_auth, $db_config, $db_users,
 		$db_updates, $db_core, $cot_groups, $cot_ext_ignore_parts, $db;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir'] . "/$name";
@@ -556,8 +556,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
  */
 function cot_extension_uninstall($name, $is_module = false)
 {
-    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache,
-		$cot_error, $db;
+    global $cfg, $db_auth, $db_config, $db_users, $db_updates, $cache, $db;
 
     $path = $is_module ? $cfg['modules_dir'] . "/$name" : $cfg['plugins_dir']
 		. "/$name";

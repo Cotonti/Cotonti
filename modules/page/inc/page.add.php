@@ -74,7 +74,7 @@ if ($a == 'add')
 	}
 	/* ===== */
 
-	if (!$cot_error)
+	if (!cot_error_found())
 	{
 		if (!empty($rpage['page_alias']))
 		{
