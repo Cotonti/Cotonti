@@ -153,7 +153,6 @@ $L['cfg_headrc_consolidate'] = array('Consolidate header and footer resources (J
 $L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
 $L['cfg_jquery_cdn'] = array('Use jQuery from Google Ajax APIs CDN');
 $L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // New in 0.7.0
-$L['cfg_theme_consolidate'] = array('Include theme CSS in consolidated CSS', 'Works only if the default theme is forced for all users');
 
 /**
  * Config Section

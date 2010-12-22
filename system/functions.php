@@ -3117,15 +3117,13 @@ function cot_rc_consolidate()
 	{
 		if ($type == 'css')
 		{
-			$target = 'header';
 			$separator = "\n";
 		}
 		elseif ($type == 'js')
 		{
-			$target = 'footer';
 			$separator = "\n;";
 		}
-		if ($cfg['headrc_consolidate'])
+		if ($cache && $cfg['headrc_consolidate'])
 		{
 			// Consolidation
 			foreach ($scope_data as $scope => $files)
@@ -3228,7 +3226,7 @@ function cot_rc_consolidate()
 				}
 
 				$rc_url = "rc.php?rc=$scope.$type";
-				$cot_rc_html[$target][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url));
+				$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url));
 			}
 		}
 		else
@@ -3239,7 +3237,7 @@ function cot_rc_consolidate()
 				{
 					foreach ($scope_data as $file)
 					{
-						$cot_rc_html[$target][$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $file));
+						$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $file));
 					}
 				}
 			}
@@ -3247,7 +3245,7 @@ function cot_rc_consolidate()
 			{
 				foreach ($cot_rc_reg[$type]['embed'] as $scope => $code)
 				{
-					$cot_rc_html[$target][$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code));
+					$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_embed", array('code' => $code));
 				}
 			}
 		}
@@ -3361,36 +3359,20 @@ function cot_rc_add_standard()
 	{
 		cot_rc_add_file('js/ajax_on.js');
 	}
-
-	if ($cfg['theme_consolidate'] && $cfg['forcedefaulttheme'])
-	{
-		cot_rc_add_file(cot_schemefile());
-	}
 }
 
 /**
  * Sends registered header resources to head output
  *
  * @global array $out Output snippets
- * @global array $cot_rc_html Header/footer HTML
- * @param bool $is_footer TRUE for footer resources output, will be included in header otherwise
+ * @global array $cot_rc_html Header HTML
  */
-function cot_rc_output($is_footer = false)
+function cot_rc_output()
 {
 	global $cot_rc_html,  $out, $usr;
-	if ($is_footer)
+	if (is_array($cot_rc_html))
 	{
-		$out_key = 'footer_js';
-		$rc_key = 'footer';
-	}
-	else
-	{
-		$out_key = 'head_head';
-		$rc_key = 'header';
-	}
-	if (is_array($cot_rc_html[$rc_key]))
-	{
-		foreach ($cot_rc_html[$rc_key] as $scope => $html)
+		foreach ($cot_rc_html as $scope => $html)
 		{
 			switch ($scope)
 			{
@@ -3409,14 +3391,14 @@ function cot_rc_output($is_footer = false)
 			}
 			if ($pass)
 			{
-				$out[$out_key] .= $html;
+				$out['head_head'] .= $html;
 			}
 		}
 	}
 }
 
 /**
- * A shortcut for plain output of an embedded stylesheet in the header of the page
+ * A shortcut for plain output of an embedded stylesheet/javascript in the header of the page
  *
  * @global array $out Output snippets
  * @param string $code Stylesheet or javascript code
@@ -3427,8 +3409,7 @@ function cot_rc_embed($code, $prepend = false, $type = 'js')
 {
 	global $out;
 	$embed = cot_rc("code_rc_{$type}_embed", array('code' => $code));
-	$key = $type == 'css' ? 'head_head' : 'footer_js';
-	$prepend ? $out[$key] = $embed . $out[$key] : $out[$key] .= $embed;
+	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
 }
 
 /**
@@ -3457,8 +3438,7 @@ function cot_rc_link_file($path, $prepend = false)
 	global $out;
 	$type = preg_match('#\.(js|css)$#i', $path, $m) ? strtolower($m[1]) : 'js';
 	$embed = cot_rc("code_rc_{$type}_file", array('url' => $path));
-	$key = $type == 'css' ? 'head_head' : 'footer_js';
-	$prepend ? $out[$key] = $embed . $out[$key] : $out[$key] .= $embed;
+	$prepend ? $out['head_head'] = $embed . $out['head_head'] : $out['head_head'] .= $embed;
 }
 
 /*

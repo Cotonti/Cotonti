@@ -153,7 +153,6 @@ $L['cfg_headrc_consolidate'] = array('Объединять ресурсы header
 $L['cfg_headrc_minify'] = array('Минифицировать объединённые JS/CSS');
 $L['cfg_jquery_cdn'] = array('Использовать jQuery из Google Ajax APIs CDN');
 $L['cfg_shared_drv'] = array('Драйвер кеша в ОЗУ', '(См. Модули - Внутренний кеш)'); // New in 0.7.0
-$L['cfg_theme_consolidate'] = array('Включить CSS темы в объединённый CSS', 'Работает только если тема по умолчанию установлена для всех пользователей');
 
 /**
  * Config Section

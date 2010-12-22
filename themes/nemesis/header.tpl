@@ -11,13 +11,10 @@
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />
 <meta http-equiv="last-modified" content="{HEADER_META_LASTMODIFIED} GMT" />
-{HEADER_HEAD}
 {HEADER_BASEHREF}
+{HEADER_HEAD}
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<!-- IF !({PHP.cfg.theme_consolidate} AND {PHP.cfg.forcedefaulttheme}) -->
-<link href="./themes/{PHP.theme}/css/{PHP.scheme}.css" type="text/css" rel="stylesheet" />
-<!-- ENDIF -->
 </head>
 
 <body>
