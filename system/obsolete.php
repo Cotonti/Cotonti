@@ -32,6 +32,21 @@ require_once cot_incfile('userimages',	'plug');
 define('SED_CODE', true);
 define('SED_PLUG', true);
 
+// Some obsolete globals
+$sed_cat = &$structure['page'];
+$sed_groups = &$cot_groups;
+$sed_extensions = &$cot_extensions;
+$sed_countries = &$cot_countries;
+$sed_usersonline = &$cot_usersonline;
+$sed_plugins = &$cot_plugins;
+$cfg['maxlistsperpage'] = $cfg['page']['maxlistsperpage'];
+
+// URL fixes
+$cot_urltrans['admin'][] = array(
+	'params' => array('m' => 'tools'),
+	'trans' => '{$_area}.php?m=other'
+);
+
 // Functions
 
 function sed_alphaonly($text)
