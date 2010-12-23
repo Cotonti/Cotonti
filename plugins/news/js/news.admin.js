@@ -2,11 +2,20 @@ function changecats()
 {
 	var newstext = '';
 	var unsetcats = '';
+	$('[name=maxpages]').val($('#cac_1').val());
 	for (var i = 1; i <= num; i++)
 	{
 		var mycat = $('#cay_'+i).val();
-		$('#cag_' + i).html(('{' + 'INDEX_NEWS_' + mycat + '}').toUpperCase());
-		$('#caf_' + i).html('news.' + mycat + '.tpl');
+		if(i > 1)
+		{
+			$('#cag_' + i).html(('{' + 'INDEX_NEWS_' + mycat + '}').toUpperCase());
+			$('#caf_' + i).html('news.' + mycat + '.tpl');
+		}
+		else
+		{
+			$('#cag_' + i).html(('{' + 'INDEX_NEWS}').toUpperCase());
+			$('#caf_' + i).html('news.tpl');			
+		}
 		if ($('#cat_' + i).length && mycat != '')
 		{
 			if (!(newstext.indexOf(mycat) + 1))
@@ -33,18 +42,6 @@ function changecats()
 			}
 		}
 	}
-	unsetcats = '';
-	if ($('[name=newsmaincac]').attr('checked'))
-	{
-		unsetcats = "|1";
-	}
-	if ($('#cam_main').val() != '' && $('#cam_main').val() != '0')
-	{
-		if(unsetcats == '')
-			unsetcats = "|";
-		unsetcats += '|' + $('#cam_main').val();
-	}
-	newstext = $('[name=newsmaincat]').val() + unsetcats+', ' + newstext;
 	$('[name=category]').val(newstext);
 }
 
@@ -60,19 +57,15 @@ $('select').live("change", function(){
 $('[name=cam]').live("change", function(){
 	changecats();
 });
-$('[name=newsmaincac]').live("click", function(){
-	changecats();
-});
 
 $(document).ready(function(){
 	$('#helptext').insertAfter('[name=maxpages]');
-	$('[name=maxpages]').insertBefore('#main_cat');
+	$('[name=maxpages]').insertBefore('#addoption').hide();
 	$("#cat_new").hide();
 	$("#catgenerator").show();
-	$('[name=category]').insertBefore('#addoption');
+	$('[name=category]').insertBefore('#addoption').hide();
 	$('[name=x]').insertBefore('#addoption');
-	$("#syncpag").html($('[name=syncpagination]').parent().html());
-	$('[name=category]').hide();
+	$("#syncpag").html($('[name=syncpagination]').parent().parent().html());
 	$('#catgenerator').parents('form#saveconfig').html($('#catgenerator').html());
 
 	for (var i = 1; i <= num + 1; i++)
@@ -110,11 +103,12 @@ $(document).ready(function(){
 	$('#addoption').click(function(){
 		num++;
 		var object = $('#cat_new').clone().attr("id", 'cat_' + num);
-		$(object).find('#cay_new').attr("id", 'cay_' + num);
-		$(object).find('#cac_new').attr("id", 'cac_' + num);
-		$(object).find('#cag_new').attr("id", 'cag_' + num);
-		$(object).find('#caf_new').attr("id", 'caf_' + num);
-		$(object).find('#cam_new').attr("id", 'cam_' + num);
+		$(object).find('#cay_new').show().attr("id", 'cay_' + num);
+		$(object).find('#cac_new').show().attr("id", 'cac_' + num);
+		$(object).find('#cag_new').show().attr("id", 'cag_' + num);
+		$(object).find('#caf_new').show().attr("id", 'caf_' + num);
+		$(object).find('#cam_new').show().attr("id", 'cam_' + num);
+		$(object).find('.deloption').show();
 		$(object).insertBefore('#addtr').show();
 		changecats();
 	});

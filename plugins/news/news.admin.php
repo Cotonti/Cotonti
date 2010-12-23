@@ -1,4 +1,5 @@
 <?php
+
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=admin.config.edit.loop
@@ -14,7 +15,6 @@ Hooks=admin.config.edit.loop
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
-
 defined('COT_CODE') or die('Wrong URL');
 
 require_once cot_incfile('page', 'module');
@@ -25,33 +25,22 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 	$sskin = cot_tplfile('news.admin', 'plug');
 	$tt = new XTemplate($sskin);
 
-	$categories=explode(',', $config_value);
+	$categories = explode(',', $config_value);
 	$jj = 0;
 	foreach ($categories as $k => $v)
 	{
-		$v = trim($v);
-		$v = explode('|', $v);
-		$checkin = isset($cot_cat[$v[0]]);
-		if ($checkin)
+		$v = explode('|', trim($v));
+		if (isset($structure['page'][$v[0]]))
 		{
-			if (empty($index))
-			{
-				$index = $v[0];
-				$indexd = (!empty($v[1])) ? 'checked=checked' : '';
-				$indexz = ((int)$v[2] > 0) ? $v[2] : '';
-			}
-			else
-			{
-				$jj++;
-				$v[2] = ((int)$v[2] > 0) ? $v[2] : '';
-				$tt->assign(array(
-					"ADDNUM" => $jj,
-					"ADDCATEGORY" => $v[0],
-					"ADDCOUNT" => $v[1],
-					"ADDCUT" => $v[2]
-				));
-				$tt->parse("MAIN.ADDITIONAL");
-			}
+			$jj++;
+			$v[2] = ((int)$v[2] > 0) ? $v[2] : '';
+			$tt->assign(array(
+				"ADDNUM" => $jj,
+				"ADDCATEGORY" => $v[0],
+				"ADDCOUNT" => $v[1],
+				"ADDCUT" => $v[2]
+			));
+			$tt->parse("MAIN.ADDITIONAL");
 		}
 	}
 	$newscat = cot_selectbox_categories($index, 'newsmaincat');
@@ -67,16 +56,13 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 
 	$tt->assign(array(
 		"MAINCATEGORY" => $newscat,
-		"UNSETADD" => $indexd,
-		"MAINCUT" => $indexz,
 		"CATNUM" => $jj
 	));
 	$tt->parse("MAIN");
 	$div = $tt->text("MAIN");
-	cot_rc_link_file($cfg['plugins_dir'].'/news/js/news.admin.js');
+
 	$t->assign(array(
-		"ADMIN_CONFIG_ROW_CONFIG_MORE" => $div.'<div id="helptext">'.$config_more.'</div>'
+		"ADMIN_CONFIG_ROW_CONFIG_MORE" => $div . '<div id="helptext">' . $config_more . '</div>'
 	));
 }
-
 ?>
