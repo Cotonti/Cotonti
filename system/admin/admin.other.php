@@ -116,6 +116,10 @@ else
 				if(file_exists($extplugin_info))
 				{
 					$info = cot_infoget($extplugin_info, 'COT_EXT');
+					if (!$info && $cfg['enable_obsolete'])
+					{
+						$info = cot_infoget($extplugin_info, 'SED_EXTPLUGIN');
+					}
 				}
 				else
 				{
