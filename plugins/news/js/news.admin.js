@@ -63,7 +63,7 @@ $(document).ready(function(){
 	num = $('.newscat').length - 1;
 	$('#helptext').insertAfter('[name=maxpages]');
 	$('[name=maxpages]').insertBefore('#addoption').hide();
-	$('[name=category]').insertBefore('#addoption').width('100%');
+	$('[name=category]').insertBefore('#addoption').width('100%').hide();
 	$('[name=x]').insertBefore('#addoption');
 	$("#cat_new").hide();
 	$("#syncpag").html($('[name=syncpagination]').parent().parent().html());
