@@ -19,8 +19,6 @@ require_once cot_incfile('uploads');
 
 $t = new XTemplate(cot_tplfile('admin.users', 'core'));
 
-
-
 $adminpath[] = array(cot_url('admin', 'm=users'), $L['Users']);
 
 $g = cot_import('g', 'G', 'INT');
