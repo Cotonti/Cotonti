@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * Contact Plugin for Cotonti CMF (English Localization)
+ * @version 2.00
+ * @author Seditio.by
+ * @copyright (c) 2008-2010 Seditio.by and Cotonti Team
+ * @license BSD
+ */
+
+defined('COT_CODE') or die('Wrong URL');
+
+/**
+ * Plugin Config
+ */
+
+$L['cfg_email'] = array('E-mail', '(leave empty to use Admin E-mail)');
+$L['cfg_minchars'] = array('Min. chars in message');
+
+/**
+ * Plugin Admin
+ */
+
+$L['contact_view'] = 'View message';
+$L['contact_markread'] = 'Mark as read';
+$L['contact_markunread'] = 'Mark as unread';
+$L['contact_new'] = 'new message';
+$L['contact_sent'] = 'Last reply';
+$L['contact_nosubject'] = 'No subject';
+
+/**
+ * Plugin Title & Subtitle
+ */
+
+$L['contact_title'] = 'Contact Us';
+$L['contact_subtitle'] = 'Contact Info';
+
+/**
+ * Plugin Body
+ */
+
+$L['contact_headercontact'] = 'Contact';
+$Ls['contact_headercontact'] = array('messages', 'message');
+$L['contact_entrytooshort'] = 'Message too short or missing';
+$L['contact_noname'] = 'Name missing';
+$L['contact_emailnotvalid'] = 'Incorrect E-mail';
+$L['contact_message_sent'] = 'Message sent';
+
+?>
