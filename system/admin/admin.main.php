@@ -154,7 +154,7 @@ if (!COT_AJAX)
 		'ADMIN_MAIN' => $adminmain,
 		'ADMIN_HELP' => $adminhelp
 	));
-
+	
 	/* === Hook for the plugins === */
 	foreach (cot_getextplugins('admin.tags') as $pl)
 	{
@@ -164,6 +164,10 @@ if (!COT_AJAX)
 
 	$t->parse('MAIN');
 	$t->out('MAIN');
+}
+else
+{
+	echo $adminmain;
 }
 
 require_once $cfg['system_dir'].'/footer.php';

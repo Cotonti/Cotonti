@@ -161,9 +161,4 @@ else
 	$adminmain = $t->text('MAIN');
 }
 
-if (COT_AJAX)
-{
-	echo $adminmain;
-}
-
 ?>

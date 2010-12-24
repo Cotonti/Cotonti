@@ -213,14 +213,7 @@ foreach (cot_getextplugins('admin.rights.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-if (COT_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
+$adminmain = $t->text('MAIN');
 
 $t->parse('RIGHTS_HELP');
 $adminhelp = $t->text('RIGHTS_HELP');
