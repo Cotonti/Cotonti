@@ -106,10 +106,10 @@ function cot_selectbox_categories($check, $name, $subcat = '', $hideprivate = tr
  * @param bool $admin_rights Page Admin Rights
  * @param bool $date_format DateTime Format
  * @param string $emptytitle Page title text if page is not exist
- *
+ * @param bool $cacheitem Cache tags
  * @return array
  */
-function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = 0, $dateformat='', $emptytitle='')
+function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $admin_rights = 0, $dateformat='', $emptytitle='', $cacheitem = true)
 {
 	global $db, $cot_extrafields, $cfg, $L, $Ls, $R, $pag_cache, $db_pages, $usr, $sys, $cot_yesno, $cot_cat;
 	
@@ -128,13 +128,13 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 	}
 	/* ===== */
 
-	if (is_array($page_data) && is_array($pag_cache['page_' . $page_data['page_id']]))
+	if (is_array($page_data) && is_array($pag_cache[$page_data['page_id']]))
 	{
-		$temp_array = $pag_cache['page_' . $page_data['page_id']];
+		$temp_array = $pag_cache[$page_data['page_id']];
 	}
-	elseif (is_array($pag_cache['page_' . $page_data]))
+	elseif (is_array($pag_cache[$page_data]))
 	{
-		$temp_array = $pag_cache['page_' . $page_data];
+		$temp_array = $pag_cache[$page_data];
 	}
 	else
 	{
@@ -255,6 +255,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				include $pl;
 			}
 			/* ===== */
+			$cacheitem && $pag_cache[$page_data['page_id']] = $temp_array;
 		}
 		else
 		{

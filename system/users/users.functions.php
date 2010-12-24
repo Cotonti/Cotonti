@@ -154,10 +154,10 @@ function cot_userisonline($id)
  * @param string $tag_prefix Prefix for tags
  * @param string $emptyname Name text if user is not exist
  * @param bool $allgroups Build info about all user groups
- *
+ * @param bool $cacheitem Cache tags
  * @return array
  */
-function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false)
+function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $allgroups = false, $cacheitem = true)
 {
 	global $db, $cot_extrafields, $cfg, $L, $cot_yesno, $themelang, $user_cache, $db_users, $usr;
 
@@ -176,13 +176,13 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	}
 	/* ===== */
 
-	if (is_array($user_data) && is_array($user_cache['user_' . $user_data['user_id']]))
+	if (is_array($user_data) && is_array($user_cache[$user_data['user_id']]))
 	{	
-		$temp_array = $user_cache['user_' . $user_data['user_id']];
+		$temp_array = $user_cache[$user_data['user_id']];
 	}
-	elseif (is_array($user_cache['user_' . $user_data]))
+	elseif (is_array($user_cache[$user_data]))
 	{
-		$temp_array = $user_cache['user_' . $user_data];
+		$temp_array = $user_cache[$user_data];
 	}
 	else
 	{
@@ -244,7 +244,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 			}
 			/* ===== */
 
-			$user_cache['user_' . $user_data['user_id']] = $temp_array;
+			$cacheitem && $user_cache[$user_data['user_id']] = $temp_array;
 		}
 		else
 		{
