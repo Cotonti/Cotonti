@@ -22,7 +22,7 @@
 		<tr>
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_CREATIONDATE}</td>
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_TYPE}</td>
-			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_CLOSED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
+			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_LOCKED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_TOTALVOTES}</td>
 			<td class="centerall action">
 				<a title="
