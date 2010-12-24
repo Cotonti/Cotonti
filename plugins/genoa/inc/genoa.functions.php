@@ -2,8 +2,8 @@
 /**
  * Deprecated and obsolete functions library for backwards compatibility
  *
- * @package Cotonti
- * @version 0.7.0
+ * @package genoa
+ * @version 0.9.0
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
  */
@@ -40,12 +40,6 @@ $sed_countries = &$cot_countries;
 $sed_usersonline = &$cot_usersonline;
 $sed_plugins = &$cot_plugins;
 $cfg['maxlistsperpage'] = $cfg['page']['maxlistsperpage'];
-
-// URL fixes
-$cot_urltrans['admin'][] = array(
-	'params' => array('m' => 'tools'),
-	'trans' => '{$_area}.php?m=other'
-);
 
 // Functions
 

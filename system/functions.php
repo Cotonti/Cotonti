@@ -470,6 +470,360 @@ function cot_import_pagenav($var_name, $max_items)
 	return array($page, $offset);
 }
 
+/**
+ * Sends mail with standard PHP mail().
+ * If cot_mail_custom() function exists, it will be called instead of the PHP
+ * function. This way custom mail delivery methods, such as SMTP, are
+ * supported.
+ *
+ * @global $cfg
+ * @param string $fmail Recipient
+ * @param string $subject Subject
+ * @param string $body Message body
+ * @param string $headers Message headers
+ * @param string $additional_parameters Additional parameters passed to sendmail
+ * @return bool
+ */
+function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
+{
+	global $cfg, $cot_mail_senders;
+
+	if (function_exists('cot_mail_custom'))
+	{
+		return cot_mail_custom($fmail, $subject, $body, $headers, $additional_parameters);
+	}
+
+	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0)
+	{
+		foreach ($cot_mail_senders as $func)
+		{
+			$ret &= $func($fmail, $subject, $body, $headers, $additional_parameters);
+		}
+		return $ret;
+	}
+
+	if (empty($fmail))
+	{
+		return false;
+	}
+	else
+	{
+		$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
+
+		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
+		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
+
+		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
+		$headers .= "Content-Type: text/plain; charset=UTF-8\n";
+		$headers .= "Content-Transfer-Encoding: 8bit\n";
+		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
+		if (ini_get('safe_mode'))
+		{
+			mail($fmail, $subject, $body, $headers);
+		}
+		else
+		{
+			mail($fmail, $subject, $body, $headers, $additional_parameters);
+		}
+		return true;
+	}
+}
+
+/**
+ * Checks if a module is currently installed and active
+ *
+ * @global array $cot_modules Module registry
+ * @param string $name Module name
+ * @return bool
+ */
+function cot_module_active($name)
+{
+	global $cot_modules;
+	return isset($cot_modules[$name]);
+}
+
+/**
+ * Updates online users table
+ * @global array $cfg
+ * @global array $sys
+ * @global array $usr
+ * @global array $out
+ * @global string $db_online
+ * @global Cache $cache
+ * @global array $cot_usersonline
+ * @global array $env
+ */
+function cot_online_update()
+{
+	global $db, $cfg, $sys, $usr, $out, $db_online, $cache, $cot_usersonline, $env, $Ls;
+	if (!$cfg['disablewhosonline'])
+	{
+		if ($env['location'] != $sys['online_location']
+			|| !empty($sys['sublocaction']) && $sys['sublocaction'] != $sys['online_subloc'])
+		{
+			if ($usr['id'] > 0)
+			{
+				if (empty($sys['online_location']))
+				{
+					$db->insert($db_online, array(
+						'online_ip' => $usr['ip'], 
+						'online_name' => $usr['name'],
+						'online_lastseen' => (int)$sys['now'],
+						'online_location' => $env['location'],
+						'online_subloc' => $sys['sublocation'],
+						'online_userid' => (int)$usr['id'],
+						'online_shield' => 0,
+						'online_hammer' => 0
+						));
+				}
+				else
+				{
+					$db->update($db_online, array(
+						'online_lastseen' => $sys['now'],
+						'online_location' => $db->prep($env['location']), 
+						'online_subloc' => $db->prep($sys['sublocation']), 
+						'online_hammer' => (int)$sys['online_hammer']
+						), "online_userid=".$usr['id']);
+				}
+			}
+			else
+			{
+				if (empty($sys['online_location']))
+				{
+					$db->insert($db_online, array(
+						'online_ip' => $usr['ip'], 
+						'online_name' => 'v',
+						'online_lastseen' => (int)$sys['now'],
+						'online_location' => $env['location'],
+						'online_subloc' => $sys['sublocation'],
+						'online_userid' => -1,
+						'online_shield' => 0,
+						'online_hammer' => 0
+						));
+				}
+				else
+				{
+					$db->update($db_online, array(
+						'online_lastseen' => $sys['now'],
+						'online_location' => $db->prep($env['location']), 
+						'online_subloc' => $db->prep($sys['sublocation']), 
+						'online_hammer' => (int)$sys['online_hammer']
+						), "online_ip='".$usr['ip']."'");
+				}
+			}
+		}
+		if ($cache && $cache->mem && $cache->mem->exists('whosonline', 'system'))
+		{
+			$whosonline_data = $cache->mem->get('whosonline', 'system');
+			$sys['whosonline_vis_count'] = $whosonline_data['vis_count'];
+			$sys['whosonline_reg_count'] = $whosonline_data['reg_count'];
+			$out['whosonline_reg_list'] = $whosonline_data['reg_list'];
+			unset($whosonline_data);
+		}
+		else
+		{
+			$online_timedout = $sys['now'] - $cfg['timedout'];
+			$db->delete($db_online, "online_lastseen < $online_timedout");
+			$sys['whosonline_vis_count'] = $db->query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'")->fetchColumn();
+			$sql_o = $db->query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
+			$sys['whosonline_reg_count'] = $sql_o->rowCount();
+			$ii_o = 0;
+			while ($row_o = $sql_o->fetch())
+			{
+				$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
+				$out['whosonline_reg_list'] .= cot_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
+				$cot_usersonline[] = $row_o['online_userid'];
+				$ii_o++;
+			}
+			$sql_o->closeCursor();
+			unset($ii_o, $sql_o, $row_o);
+			if ($cache && $cache->mem)
+			{
+				$whosonline_data = array(
+					'vis_count' => $sys['whosonline_vis_count'],
+					'reg_count' => $sys['whosonline_reg_count'],
+					'reg_list' => $out['whosonline_reg_list']
+				);
+				$cache->mem->store('whosonline', $whosonline_data, 'system', 30);
+			}
+		}
+		$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
+		$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : cot_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.cot_declension($sys['whosonline_vis_count'], $Ls['Guests']);
+	}
+}
+
+/**
+ * Standard SED output filters, adds XSS protection to forms
+ *
+ * @param unknown_type $output
+ * @return unknown
+ */
+function cot_outputfilters($output)
+{
+	global $cfg;
+
+	/* === Hook === */
+	foreach (cot_getextplugins('output') as $pl)
+	{
+		include $pl;
+	}
+	/* ==== */
+
+	$output = preg_replace('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i', '$0' . cot_xp(), $output);
+
+	return($output);
+}
+
+/**
+ * Checks if a plugin is currently installed and active
+ *
+ * @global array $cot_plugins_active Active plugins registry
+ * @param string $name Plugin name
+ * @return bool
+ */
+function cot_plugin_active($name)
+{
+	global $cot_plugins_active;
+	return is_array($cot_plugins_active) && in_array($name, $cot_plugins_active);
+}
+
+/**
+ * Removes a directory recursively
+ * @param string $dir Directory path
+ * @return int Number of files and folders removed
+ */
+function cot_rmdir($dir)
+{
+	static $cnt = 0;
+	$dp = opendir($dir);
+	while ($f = readdir($dp))
+	{
+		$path = $dir . '/' . $f;
+		if ($f != '.' && $f != '..' && is_dir($path))
+		{
+			cot_rmdir($path);
+		}
+		elseif ($f != '.' && $f != '..')
+		{
+			unlink($path);
+			$cnt++;
+		}
+	}
+	closedir($dp);
+	rmdir($dir);
+	$cnt++;
+	return $cnt;
+}
+
+/**
+ * Sends standard HTTP headers and disables browser cache
+ *
+ * @param string $content_type Content-Type value (without charset)
+ * @param string $response_code HTTP response code, e.g. '404 Not Found'
+ * @return bool
+ */
+function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
+{
+	global $cfg;
+	header('HTTP/1.1 ' . $response_code);
+	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
+	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+	header('Cache-Control: post-check=0,pre-check=0', FALSE);
+	header('Content-Type: '.$content_type.'; charset=UTF-8');
+	header('Cache-Control: no-store,no-cache,must-revalidate');
+	header('Cache-Control: post-check=0,pre-check=0', FALSE);
+	header('Pragma: no-cache');
+	return TRUE;
+}
+
+/**
+ * Set cookie with optional HttpOnly flag
+ * @param string $name The name of the cookie
+ * @param string $value The value of the cookie
+ * @param int $expire The time the cookie expires in unixtime
+ * @param string $path The path on the server in which the cookie will be available on.
+ * @param string $domain The domain that the cookie is available.
+ * @param bool $secure Indicates that the cookie should only be transmitted over a secure HTTPS connection. When set to TRUE, the cookie will only be set if a secure connection exists.
+ * @param bool $httponly HttpOnly flag
+ * @return bool
+ */
+function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
+{
+	if (mb_strpos($domain, '.') === FALSE)
+	{
+		// Some browsers don't support cookies for local domains
+		$domain = '';
+	}
+
+	if ($domain != '')
+	{
+		// Make sure www. is stripped and leading dot is added for subdomain support on some browsers
+		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.')
+		{
+			$domain = mb_substr($domain, 4);
+		}
+		if ($domain[0] != '.')
+		{
+			$domain = '.'.$domain;
+		}
+	}
+
+	return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+}
+
+/**
+ * Performs actions required right before shutdown
+ */
+function cot_shutdown()
+{
+	global $cache;
+	// Clear import buffer if everything's OK on POST
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found())
+	{
+		unset($_SESSION['cot_buffer']);
+	}
+	while (ob_get_level() > 0)
+	{
+		ob_end_flush();
+	}
+	$cache = null; // Need to destroy before DB connection is lost
+	$db = null;
+}
+
+/**
+ * Generates a title string by replacing submasks with assigned values
+ *
+ * @param string $area Area maskname or actual mask
+ * @param array $params An associative array of available parameters
+ * @return string
+ */
+function cot_title($mask, $params = array())
+{
+	global $cfg;
+	$res = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
+	is_array($params) ? $args = $params : mb_parse_str($params, $args);
+	if (preg_match_all('#\{(.+?)\}#', $res, $matches, PREG_SET_ORDER))
+	{
+		foreach($matches as $m)
+		{
+			$var = $m[1];
+			$res = str_replace($m[0], htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false), $res);
+		}
+	}
+	return $res;
+}
+
+/**
+ * Generates random string
+ *
+ * @param int $l Length
+ * @return string
+ */
+function cot_unique($l=16)
+{
+	return(mb_substr(md5(mt_rand()), 0, $l));
+}
+
 /*
  * =========================== Structure functions ===========================
  */
@@ -645,334 +999,6 @@ function cot_selectbox_structure($area, $check, $name, $subcat = '', $hideprivat
 	$result = cot_selectbox($check, $name, array_keys($result_array), array_values($result_array), false);
 
 	return($result);
-}
-
-/**
- * Sends mail with standard PHP mail().
- * If cot_mail_custom() function exists, it will be called instead of the PHP
- * function. This way custom mail delivery methods, such as SMTP, are
- * supported.
- *
- * @global $cfg
- * @param string $fmail Recipient
- * @param string $subject Subject
- * @param string $body Message body
- * @param string $headers Message headers
- * @param string $additional_parameters Additional parameters passed to sendmail
- * @return bool
- */
-function cot_mail($fmail, $subject, $body, $headers='', $additional_parameters = null)
-{
-	global $cfg, $cot_mail_senders;
-
-	if (function_exists('cot_mail_custom'))
-	{
-		return cot_mail_custom($fmail, $subject, $body, $headers, $additional_parameters);
-	}
-
-	if (is_array($cot_mail_senders) && count($cot_mail_senders) > 0)
-	{
-		foreach ($cot_mail_senders as $func)
-		{
-			$ret &= $func($fmail, $subject, $body, $headers, $additional_parameters);
-		}
-		return $ret;
-	}
-
-	if (empty($fmail))
-	{
-		return false;
-	}
-	else
-	{
-		$sitemaintitle = mb_encode_mimeheader($cfg['maintitle'], 'UTF-8', 'B', "\n");
-
-		$headers = (empty($headers)) ? "From: \"".$sitemaintitle."\" <".$cfg['adminemail'].">\n"."Reply-To: <".$cfg['adminemail'].">\n" : $headers;
-		$headers .= "Message-ID: <".md5(uniqid(microtime()))."@".$_SERVER['SERVER_NAME'].">\n";
-
-		$body .= "\n\n".$cfg['maintitle']." - ".$cfg['mainurl']."\n".$cfg['subtitle'];
-		$headers .= "Content-Type: text/plain; charset=UTF-8\n";
-		$headers .= "Content-Transfer-Encoding: 8bit\n";
-		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\n");
-		if (ini_get('safe_mode'))
-		{
-			mail($fmail, $subject, $body, $headers);
-		}
-		else
-		{
-			mail($fmail, $subject, $body, $headers, $additional_parameters);
-		}
-		return true;
-	}
-}
-
-/**
- * Updates online users table
- * @global array $cfg
- * @global array $sys
- * @global array $usr
- * @global array $out
- * @global string $db_online
- * @global Cache $cache
- * @global array $cot_usersonline
- * @global array $env
- */
-function cot_online_update()
-{
-	global $db, $cfg, $sys, $usr, $out, $db_online, $cache, $cot_usersonline, $env, $Ls;
-	if (!$cfg['disablewhosonline'])
-	{
-		if ($env['location'] != $sys['online_location']
-			|| !empty($sys['sublocaction']) && $sys['sublocaction'] != $sys['online_subloc'])
-		{
-			if ($usr['id'] > 0)
-			{
-				if (empty($sys['online_location']))
-				{
-					$db->insert($db_online, array(
-						'online_ip' => $usr['ip'], 
-						'online_name' => $usr['name'],
-						'online_lastseen' => (int)$sys['now'],
-						'online_location' => $env['location'],
-						'online_subloc' => $sys['sublocation'],
-						'online_userid' => (int)$usr['id'],
-						'online_shield' => 0,
-						'online_hammer' => 0
-						));
-				}
-				else
-				{
-					$db->update($db_online, array(
-						'online_lastseen' => $sys['now'],
-						'online_location' => $db->prep($env['location']), 
-						'online_subloc' => $db->prep($sys['sublocation']), 
-						'online_hammer' => (int)$sys['online_hammer']
-						), "online_userid=".$usr['id']);
-				}
-			}
-			else
-			{
-				if (empty($sys['online_location']))
-				{
-					$db->insert($db_online, array(
-						'online_ip' => $usr['ip'], 
-						'online_name' => 'v',
-						'online_lastseen' => (int)$sys['now'],
-						'online_location' => $env['location'],
-						'online_subloc' => $sys['sublocation'],
-						'online_userid' => -1,
-						'online_shield' => 0,
-						'online_hammer' => 0
-						));
-				}
-				else
-				{
-					$db->update($db_online, array(
-						'online_lastseen' => $sys['now'],
-						'online_location' => $db->prep($env['location']), 
-						'online_subloc' => $db->prep($sys['sublocation']), 
-						'online_hammer' => (int)$sys['online_hammer']
-						), "online_ip='".$usr['ip']."'");
-				}
-			}
-		}
-		if ($cache && $cache->mem && $cache->mem->exists('whosonline', 'system'))
-		{
-			$whosonline_data = $cache->mem->get('whosonline', 'system');
-			$sys['whosonline_vis_count'] = $whosonline_data['vis_count'];
-			$sys['whosonline_reg_count'] = $whosonline_data['reg_count'];
-			$out['whosonline_reg_list'] = $whosonline_data['reg_list'];
-			unset($whosonline_data);
-		}
-		else
-		{
-			$online_timedout = $sys['now'] - $cfg['timedout'];
-			$db->delete($db_online, "online_lastseen < $online_timedout");
-			$sys['whosonline_vis_count'] = $db->query("SELECT COUNT(*) FROM $db_online WHERE online_name='v'")->fetchColumn();
-			$sql_o = $db->query("SELECT DISTINCT o.online_name, o.online_userid FROM $db_online o WHERE o.online_name != 'v' ORDER BY online_name ASC");
-			$sys['whosonline_reg_count'] = $sql_o->rowCount();
-			$ii_o = 0;
-			while ($row_o = $sql_o->fetch())
-			{
-				$out['whosonline_reg_list'] .= ($ii_o > 0) ? ', ' : '';
-				$out['whosonline_reg_list'] .= cot_build_user($row_o['online_userid'], htmlspecialchars($row_o['online_name']));
-				$cot_usersonline[] = $row_o['online_userid'];
-				$ii_o++;
-			}
-			$sql_o->closeCursor();
-			unset($ii_o, $sql_o, $row_o);
-			if ($cache && $cache->mem)
-			{
-				$whosonline_data = array(
-					'vis_count' => $sys['whosonline_vis_count'],
-					'reg_count' => $sys['whosonline_reg_count'],
-					'reg_list' => $out['whosonline_reg_list']
-				);
-				$cache->mem->store('whosonline', $whosonline_data, 'system', 30);
-			}
-		}
-		$sys['whosonline_all_count'] = $sys['whosonline_reg_count'] + $sys['whosonline_vis_count'];
-		$out['whosonline'] = ($cfg['disablewhosonline']) ? '' : cot_declension($sys['whosonline_reg_count'], $Ls['Members']).', '.cot_declension($sys['whosonline_vis_count'], $Ls['Guests']);
-	}
-}
-
-/**
- * Standard SED output filters, adds XSS protection to forms
- *
- * @param unknown_type $output
- * @return unknown
- */
-function cot_outputfilters($output)
-{
-	global $cfg;
-
-	/* === Hook === */
-	foreach (cot_getextplugins('output') as $pl)
-	{
-		include $pl;
-	}
-	/* ==== */
-
-	$output = preg_replace('#<form\s+[^>]*method=["\']?post["\']?[^>]*>#i', '$0' . cot_xp(), $output);
-
-	return($output);
-}
-
-/**
- * Removes a directory recursively
- * @param string $dir Directory path
- * @return int Number of files and folders removed
- */
-function cot_rmdir($dir)
-{
-	static $cnt = 0;
-	$dp = opendir($dir);
-	while ($f = readdir($dp))
-	{
-		$path = $dir . '/' . $f;
-		if ($f != '.' && $f != '..' && is_dir($path))
-		{
-			cot_rmdir($path);
-		}
-		elseif ($f != '.' && $f != '..')
-		{
-			unlink($path);
-			$cnt++;
-		}
-	}
-	closedir($dp);
-	rmdir($dir);
-	$cnt++;
-	return $cnt;
-}
-
-/**
- * Sends standard HTTP headers and disables browser cache
- *
- * @param string $content_type Content-Type value (without charset)
- * @param string $response_code HTTP response code, e.g. '404 Not Found'
- * @return bool
- */
-function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
-{
-	global $cfg;
-	header('HTTP/1.1 ' . $response_code);
-	header('Expires: Mon, Apr 01 1974 00:00:00 GMT');
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-	header('Cache-Control: post-check=0,pre-check=0', FALSE);
-	header('Content-Type: '.$content_type.'; charset=UTF-8');
-	header('Cache-Control: no-store,no-cache,must-revalidate');
-	header('Cache-Control: post-check=0,pre-check=0', FALSE);
-	header('Pragma: no-cache');
-	return TRUE;
-}
-
-/**
- * Set cookie with optional HttpOnly flag
- * @param string $name The name of the cookie
- * @param string $value The value of the cookie
- * @param int $expire The time the cookie expires in unixtime
- * @param string $path The path on the server in which the cookie will be available on.
- * @param string $domain The domain that the cookie is available.
- * @param bool $secure Indicates that the cookie should only be transmitted over a secure HTTPS connection. When set to TRUE, the cookie will only be set if a secure connection exists.
- * @param bool $httponly HttpOnly flag
- * @return bool
- */
-function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
-{
-	if (mb_strpos($domain, '.') === FALSE)
-	{
-		// Some browsers don't support cookies for local domains
-		$domain = '';
-	}
-
-	if ($domain != '')
-	{
-		// Make sure www. is stripped and leading dot is added for subdomain support on some browsers
-		if (mb_strtolower(mb_substr($domain, 0, 4)) == 'www.')
-		{
-			$domain = mb_substr($domain, 4);
-		}
-		if ($domain[0] != '.')
-		{
-			$domain = '.'.$domain;
-		}
-	}
-
-	return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
-}
-
-/**
- * Performs actions required right before shutdown
- */
-function cot_shutdown()
-{
-	global $cache;
-	// Clear import buffer if everything's OK on POST
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && !cot_error_found())
-	{
-		unset($_SESSION['cot_buffer']);
-	}
-	while (ob_get_level() > 0)
-	{
-		ob_end_flush();
-	}
-	$cache = null; // Need to destroy before DB connection is lost
-	$db = null;
-}
-
-/**
- * Generates a title string by replacing submasks with assigned values
- *
- * @param string $area Area maskname or actual mask
- * @param array $params An associative array of available parameters
- * @return string
- */
-function cot_title($mask, $params = array())
-{
-	global $cfg;
-	$res = (!empty($cfg[$mask])) ? $cfg[$mask] : $mask;
-	is_array($params) ? $args = $params : mb_parse_str($params, $args);
-	if (preg_match_all('#\{(.+?)\}#', $res, $matches, PREG_SET_ORDER))
-	{
-		foreach($matches as $m)
-		{
-			$var = $m[1];
-			$res = str_replace($m[0], htmlspecialchars($args[$var], ENT_COMPAT, 'UTF-8', false), $res);
-		}
-	}
-	return $res;
-}
-
-/**
- * Generates random string
- *
- * @param int $l Length
- * @return string
- */
-function cot_unique($l=16)
-{
-	return(mb_substr(md5(mt_rand()), 0, $l));
 }
 
 /*

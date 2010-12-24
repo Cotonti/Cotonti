@@ -156,15 +156,18 @@ if (!$cot_plugins)
 {
 	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
+	$cot_plugins_active = array();
 	if ($sql->rowCount() > 0)
 	{
 		while ($row = $sql->fetch())
 		{
 			$cot_plugins[$row['pl_hook']][] = $row;
+			$cot_plugins_active[] = $row['pl_code'];
 		}
         $sql->closeCursor();
 	}
 	$cache && $cache->db->store('cot_plugins', $cot_plugins, 'system');
+	$cache && $cache->db->store('cot_plugins_active', $cot_plugins_active, 'system');
 }
 
 if (!$cot_modules)
@@ -532,11 +535,6 @@ if (!$cot_rc_html)
 }
 
 /* ======== Global hook ======== */
-
-if (isset($cfg['enable_obsolete']) && $cfg['enable_obsolete'])
-{
-    require_once $cfg['system_dir'] . '/obsolete.php';
-}
 
 foreach (cot_getextplugins('global') as $pl)
 {
