@@ -109,7 +109,7 @@ switch($a)
 		{
 			$old_ext_format = false;
 			$info = cot_infoget($ext_info, 'COT_EXT');
-			if (!$info && $cfg['enable_obsolete'])
+			if (!$info && cot_plugin_active('genoa'))
 			{
 				// Try to load old format info
 				$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');
@@ -150,7 +150,7 @@ switch($a)
 				{
 					$extplugin_file = $dir . '/' . $code . '/' . $x;
 					$info_file = cot_infoget($extplugin_file, 'COT_EXT');
-					if (!$info_file && $cfg['enable_obsolete'])
+					if (!$info_file && cot_plugin_active('genoa'))
 					{
 						// Try to load old format info
 						$info_file = cot_infoget($extplugin_file, 'SED_EXTPLUGIN');
@@ -478,7 +478,7 @@ switch($a)
 				if (file_exists($ext_info))
 				{
 					$info = cot_infoget($ext_info, 'COT_EXT');
-					if (!$info && $cfg['enable_obsolete'])
+					if (!$info && cot_plugin_active('genoa'))
 					{
 						// Try to load old format info
 						$info = cot_infoget($ext_info, 'SED_EXTPLUGIN');

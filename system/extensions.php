@@ -205,7 +205,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 	$old_ext_format = false;
 
     $info = cot_infoget($setup_file, 'COT_EXT');
-	if (!$info && $cfg['enable_obsolete'])
+	if (!$info && cot_plugin_active('genoa'))
 	{
 		// Try load old format info
 		$info = cot_infoget($setup_file, 'SED_EXTPLUGIN');
@@ -269,7 +269,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 			&& !in_array($mt[2], $cot_ext_ignore_parts))
         {
             $part_info = cot_infoget($path . "/$f", 'COT_EXT');
-			if (!$part_info && $cfg['enable_obsolete'])
+			if (!$part_info && cot_plugin_active('genoa'))
 			{
 				// Try to load old format info
 				$part_info = cot_infoget($path . "/$f", 'SED_EXTPLUGIN');
@@ -305,7 +305,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 
     // Install config
     $info_cfg = cot_infoget($setup_file, 'COT_EXT_CONFIG');
-	if (!$info_cfg && $cfg['enable_obsolete'])
+	if (!$info_cfg && cot_plugin_active('genoa'))
 	{
 		// Try to load old format config
 		$info_cfg = cot_infoget($setup_file, 'SED_EXTPLUGIN_CONFIG');
@@ -545,6 +545,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
     // Cleanup
     cot_auth_reorder();
     $cache && $cache->db->remove('cot_plugins', 'system');
+	$cache && $cache->db->remove('cot_plugins_active', 'system');
 
     return true;
 }
@@ -583,6 +584,7 @@ function cot_extension_uninstall($name, $is_module = false)
 
     // Clear cache
     $cache && $cache->db->remove('cot_plugins', 'system');
+	$cache && $cache->db->remove('cot_plugins_active', 'system');
 	$cache && $cache->db->remove('cot_cfg', 'system');
     $db->update($db_users, array('user_auth' => ''));
 
@@ -602,7 +604,7 @@ function cot_extension_uninstall($name, $is_module = false)
     }
 
     // Run handler part
-	if ($cfg['enable_obsolete'] && cot_infoget($path . "/$name.setup.php", 'SED_EXTPLUGIN'))
+	if (cot_plugin_active('genoa') && cot_infoget($path . "/$name.setup.php", 'SED_EXTPLUGIN'))
 	{
 		$action = 'uninstall';
 		$uninstall_handler = $path . "/$name.setup.php";
