@@ -111,13 +111,6 @@ foreach (cot_getextplugins('admin.cache.tags') as $pl)
 /* ===== */
 
 $t->parse('MAIN');
-if (COT_AJAX)
-{
-	$t->out('MAIN');
-}
-else
-{
-	$adminmain = $t->text('MAIN');
-}
+$adminmain = $t->text('MAIN');
 
 ?>
