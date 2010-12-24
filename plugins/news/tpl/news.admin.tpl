@@ -1,8 +1,4 @@
 <!-- BEGIN: MAIN -->
-
-<script type="text/javascript">
-	var num = {CATNUM};
-</script>
 <script src="{PHP.cfg.plugins_dir}/news/js/news.admin.js" type="text/javascript"></script>
 <div id="catgenerator" style="display:none"> <div style="display:none">{MAINCATEGORY}</div>
 	<table class="cells">
@@ -15,15 +11,15 @@
 			<td class="coltop width10">&nbsp;</td>
 		</tr>
 		<!-- BEGIN: ADDITIONAL -->
-		<tr id="cat_{ADDNUM}">
+		<tr id="cat_{ADDNUM}" class="newscat">
 			<td>
-				<input type="text" class="text" name="cay" id="cay_{ADDNUM}" value="{ADDCATEGORY}" size="32" maxlength="255" />
+				<input type="text" class="text cay" name="cay" value="{ADDCATEGORY}" size="32" maxlength="255" />
 				<div class="cat_exists" style="color:red; display:none;"> &nbsp; {PHP.L.Newscat_exists}</div>
 			</td>
-			<td><input type="text" class="text" name="cac" id="cac_{ADDNUM}" value="{ADDCOUNT}" size="3" maxlength="255" /></td>
-			<td><input type="text" class="text" name="cam" id="cam_{ADDNUM}" value="{ADDCUT}" size="4" maxlength="4" /></td>
-			<td class="cat_desc"><span id="cag_{ADDNUM}">&nbsp;</span></td>
-			<td class="cat_desc"><span id="caf_{ADDNUM}">&nbsp;</span></td>
+			<td><input type="text" class="text cac" name="cac" value="{ADDCOUNT}" size="3" maxlength="255" /></td>
+			<td><input type="text" class="text cam" name="cam" value="{ADDCUT}" size="4" maxlength="4" /></td>
+			<td class="cat_desc"><span class="cag">&nbsp;</span></td>
+			<td class="cat_desc"><span class="caf">&nbsp;</span></td>
 			<td colspan="2" class="cat_exists" style="color:red; display:none;">{PHP.L.Newscat_exists}</td>
 			<td><a href="#" class="deloption" style="display:none">{PHP.R.admin_icon_delete}</a></td>
 		</tr>

@@ -37,32 +37,30 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnaj
 			$tt->assign(array(
 				"ADDNUM" => $jj,
 				"ADDCATEGORY" => $v[0],
-				"ADDCOUNT" => $v[1],
-				"ADDCUT" => $v[2]
+				"ADDCOUNT" => ((int)$v[1] > 0) ? $v[1] : $cfg['plugin']['news']['maxpages'],
+				"ADDCUT" => ((int)$v[2] > 0) ? $v2 : ''
 			));
 			$tt->parse("MAIN.ADDITIONAL");
 		}
 	}
-	$newscat = cot_selectbox_categories($index, 'newsmaincat');
 
 	$jj++;
 	$tt->assign(array(
 		"ADDNUM" => 'new',
 		"ADDCATEGORY" => '',
-		"ADDCOUNT" => '',
+		"ADDCOUNT" => $cfg['plugin']['news']['maxpages'],
 		"ADDCUT" => ''
 	));
 	$tt->parse("MAIN.ADDITIONAL");
 
 	$tt->assign(array(
-		"MAINCATEGORY" => $newscat,
+		"MAINCATEGORY" => cot_selectbox_categories($index, 'newsmaincat'),
 		"CATNUM" => $jj
 	));
 	$tt->parse("MAIN");
-	$div = $tt->text("MAIN");
 
 	$t->assign(array(
-		"ADMIN_CONFIG_ROW_CONFIG_MORE" => $div . '<div id="helptext">' . $config_more . '</div>'
+		"ADMIN_CONFIG_ROW_CONFIG_MORE" => $tt->text("MAIN") . '<div id="helptext">' . $config_more . '</div>'
 	));
 }
 ?>
