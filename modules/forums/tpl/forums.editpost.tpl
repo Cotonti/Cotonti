@@ -23,10 +23,9 @@
 					</tr>
 					<!-- BEGIN: POLL -->
 					<tr>
-						<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/poll.js"></script>
+						<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/polls.js"></script>
 						<script type="text/javascript">
-							var ansCount = {EDIT_POLL_OPTIONSCOUNT};
-							var ansMax = {PHP.cfg.max_options_polls};
+							var ansMax = {PHP.cfg.polls.max_options_polls};
 						</script>
 						<td>{PHP.L.poll}:</td>
 						<td>
@@ -52,7 +51,7 @@
 					<!-- BEGIN: EDIT -->
 					<tr>
 						<td>&nbsp;</td>
-						<td>{EDIT_POLL_CLOSE} {EDIT_POLL_RESET} {EDIT_POLL_DELETE}</td>
+						<td>{EDIT_POLL_LOCKED} {EDIT_POLL_RESET} {EDIT_POLL_DELETE}</td>
 					</tr>
 					<!-- END: EDIT -->
 					<!-- END: POLL -->

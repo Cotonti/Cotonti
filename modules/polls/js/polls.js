@@ -1,3 +1,4 @@
+var ansCount = 1;
 $(".deloption").live("click",function () {
 	$(this).parent().children('.tbox').attr('value', '');
 	if (ansCount>2)
@@ -13,6 +14,7 @@ $(".deloption").live("click",function () {
 });
 
 $(document).ready(function(){
+	ansCount = $('.polloptiondiv').length;
 	$("#addoption").click(function () {
 		if (ansCount<ansMax)
 		{

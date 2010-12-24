@@ -1,11 +1,6 @@
 <!-- BEGIN: MAIN -->
 	<h2>{PHP.L.Polls}</h2>
-	<!-- IF {PHP.is_adminwarnings} -->
-	<div class="error">
-		<h4>{PHP.L.Message}</h4>
-		<p>{ADMIN_POLLS_ADMINWARNINGS}</p>
-	</div>
-	<!-- ENDIF -->
+	{FILE ./themes/nemesis/warnings.tpl}
 	<ul class="follow">
 		<li><a title="{PHP.L.Configuration}" href="{ADMIN_POLLS_CONF_URL}">{PHP.L.Configuration}</a></li>
 	</ul>
@@ -30,7 +25,13 @@
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_CLOSED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_TOTALVOTES}</td>
 			<td class="centerall action">
-				<a title="{PHP.L.Lock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.icon_lock}</a>
+				<a title="
+				   <!-- IF !{ADMIN_POLLS_ROW_POLL_LOCKED} -->
+				   {PHP.L.Lock}
+				   <!-- ELSE -->
+				   {PHP.L.Unlock}
+				   <!-- ENDIF -->				   
+				   " href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.icon_lock}</a>
 				<a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_URL_DEL}">{PHP.R.icon_delete}</a>
 				<a title="{PHP.L.Reset}" href="{ADMIN_POLLS_ROW_POLL_URL_RES}">{PHP.R.icon_reset}</a>
 				<a title="{PHP.L.Bump}" href="{ADMIN_POLLS_ROW_POLL_URL_BMP}">{PHP.R.icon_up}</a>
@@ -48,10 +49,9 @@
 	<h3>{ADMIN_POLLS_FORMNAME}:</h3>
 	<form id="addpoll" action="{ADMIN_POLLS_FORM_URL}" method="post">
 		<!-- IF {PHP.cfg.jquery} -->
-		<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/poll.js"></script>
+		<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/polls.js"></script>
 		<script type="text/javascript">
-			var ansCount = {EDIT_POLL_OPTIONSCOUNT};
-			var ansMax = {PHP.cfg.max_options_polls};
+			var ansMax = {PHP.cfg.polls.max_options_polls};
 		</script>		
 		<!-- ENDIF -->
 		<table class="cells">
@@ -76,7 +76,7 @@
 					{EDIT_POLL_MULTIPLE}
 					<!-- BEGIN: EDIT -->
 					<br />
-					{EDIT_POLL_CLOSE}
+					{EDIT_POLL_LOCKED}
 					<br />
 					{EDIT_POLL_RESET}
 					<br />

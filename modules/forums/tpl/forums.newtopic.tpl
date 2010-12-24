@@ -28,14 +28,13 @@
 					<td colspan="2">{FORUMS_NEWTOPIC_TEXT}</td>
 				</tr>
 				<!-- BEGIN: POLL -->
-<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/poll.js"></script>
-<script type="text/javascript">
-	var ansCount = {EDIT_POLL_OPTIONSCOUNT};
-	var ansMax = {PHP.cfg.max_options_polls};
-</script>
 				<tr>
 					<td>{PHP.L.poll}:</td>
 					<td>
+						<script type="text/javascript" src="{PHP.cfg.modules_dir}/polls/js/polls.js"></script>
+						<script type="text/javascript">
+							var ansMax = {PHP.cfg.polls.max_options_polls};
+						</script>
 						{EDIT_POLL_IDFIELD}
 						{EDIT_POLL_TEXT}
 					</td>
