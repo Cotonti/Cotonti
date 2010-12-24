@@ -102,7 +102,7 @@
 		<!-- END: DEFULT -->
 
 		<!-- BEGIN: NEWCAT -->
-		<h3>{PHP.L.addnewentry}:</h3>
+		<h3>{PHP.L.Add}:</h3>
 		<form name="addstructure" id="addstructure" action="{ADMIN_STRUCTURE_URL_FORM_ADD}" method="post" class="ajax" enctype="multipart/form-data">
 		<table class="cells">
 			<tr>

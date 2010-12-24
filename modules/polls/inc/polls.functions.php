@@ -90,9 +90,10 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 	if ((int)$id > 0)
 	{
 		$t->assign(array(
-			"EDIT_POLL_CLOSE" => cot_checkbox($poll_state, 'poll_state' , $L['Close']),
+			"EDIT_POLL_LOCKED" => cot_checkbox($poll_state, 'poll_state' , $L['Locked']),
 			"EDIT_POLL_RESET" => cot_checkbox(0, 'poll_reset' , $L['Reset']),
 			"EDIT_POLL_DELETE" => cot_checkbox(0, 'poll_delete' , $L['Delete']),
+			"EDIT_POLL_EDIT" => true,
 		));
 		$t->parse($block.".EDIT");
 	}
@@ -138,6 +139,7 @@ function cot_poll_check()
 		$poll_state = cot_import('poll_state', 'P', 'BOL');
 		$poll_options = cot_import('poll_option', 'P', 'ARR');
 
+		$poll_options_temp = array();
 		foreach ($poll_options as $key => $val)
 		{
 			$val = trim(cot_import($val, 'D', 'TXT'));

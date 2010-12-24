@@ -48,28 +48,28 @@ if($a == 'delete')
 	cot_check_xg();
 	cot_poll_delete($id);
 
-	$adminwarnings = $L['adm_polls_msg916_deleted'];
+	cot_message('adm_polls_msg916_deleted');
 }
 elseif($a == 'reset')
 {
 	cot_check_xg();
 	cot_poll_reset($id);
 
-	$adminwarnings = $L['adm_polls_msg916_reset'];
+	cot_message('adm_polls_msg916_reset');
 }
 elseif($a == 'lock')
 {
 	cot_check_xg();
 	cot_poll_lock($id, 3);
 
-	$adminwarnings = $L['Locked'];
+	cot_message('Locked');
 }
 elseif($a == 'bump')
 {
 	cot_check_xg();
 	$sql = $db->update($db_polls, array('poll_creationdate' => $sys['now_offset']),  "poll_id='$id'");
 
-	$adminwarnings = $L['adm_polls_msg916_bump'];
+	cot_message('adm_polls_msg916_bump');
 }
 
 cot_poll_check();
@@ -80,25 +80,15 @@ if (!cot_error_found())
 
 	if ($poll_id == 'new')
 	{
-		$adminwarnings = $L['polls_created'];
+		cot_message('polls_created');
 	}
 	elseif (!empty($poll_id))
 	{
-		$adminwarnings = $L['polls_updated'];
+		cot_message('polls_updated');
 	}
 
-	if ($cache && $cfg['cache_index'])
-	{
-		$cache->page->clear('index');
-	}
+	($cache && $cfg['cache_index']) && $cache->page->clear('index');
 }
-else
-{
-	$adminwarnings = cot_implode_messages();
-	cot_clear_messages();
-}
-
-$is_adminwarnings = isset($adminwarnings);
 
 if(!$filter)
 {
@@ -111,16 +101,13 @@ else
     $poll_filter = '"&filter='.$filter;
 }
 
-$sql = $db->query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type");
-$totalitems = $sql->fetchColumn();
+$totalitems = $db->query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type")->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = $db->query("SELECT * FROM $db_polls
 					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
-$indexheader = false;
-$forumheader = false;
 
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('polls.admin.loop');
@@ -128,35 +115,23 @@ $extp = cot_getextplugins('polls.admin.loop');
 
 while($row = $sql->fetch())
 {
+	$ii++;
 	$id = $row['poll_id'];
-	$type = $row['poll_type'];
-
-	if($type == 'index')
-	{
-		$admtypepoll = cot_url('polls', 'id='.$row['poll_id']);
-	}
-	else
-	{
-		$admtypepoll = cot_url('forums', 'm=posts&q='.$row['poll_id']);
-	}
-
-	$poll_state = ($row['poll_state']) ? '[-] ' : '';
-
-    $sql2 = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'");
-    $totalvotes = $sql2->fetchColumn();
+    $totalvotes = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'")->fetchColumn();
 
 	$t->assign(array(
 		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => date($cfg['formatyearmonthday'], $row['poll_creationdate']),
-		'ADMIN_POLLS_ROW_POLL_TYPE' => $variants[htmlspecialchars($type)][0],
+		'ADMIN_POLLS_ROW_POLL_TYPE' => $variants[htmlspecialchars($row['poll_type'])][0],
 		'ADMIN_POLLS_ROW_POLL_URL' => cot_url('admin', 'm=polls'.$poll_filter.'&n=options&d='.$d.'&id='.$row['poll_id']),
 		'ADMIN_POLLS_ROW_POLL_TEXT' => htmlspecialchars($row['poll_text']),
+		'ADMIN_POLLS_ROW_POLL_URL_LCK' => cot_url('admin', 'm=polls'.$poll_filter.'&a=lock&id='.$id.'&'.cot_xg()),
 		'ADMIN_POLLS_ROW_POLL_TOTALVOTES' => $totalvotes,
-		'ADMIN_POLLS_ROW_POLL_CLOSED' => $poll_state,
+		'ADMIN_POLLS_ROW_POLL_LOCKED' => ($row['poll_state']) ? '[-] ' : '',
 		'ADMIN_POLLS_ROW_POLL_URL_DEL' => cot_url('admin', 'm=polls'.$poll_filter.'&a=delete&id='.$id.'&'.cot_xg()),
 		'ADMIN_POLLS_ROW_POLL_URL_LCK' => cot_url('admin', 'm=polls'.$poll_filter.'&a=lock&id='.$id.'&'.cot_xg()),
 		'ADMIN_POLLS_ROW_POLL_URL_RES' => cot_url('admin', 'm=polls'.$poll_filter.'&a=reset&d='.$d.'&id='.$id.'&'.cot_xg()),
 		'ADMIN_POLLS_ROW_POLL_URL_BMP' => cot_url('admin', 'm=polls'.$poll_filter.'&a=bump&id='.$id.'&'.cot_xg()),
-		'ADMIN_POLLS_ROW_POLL_URL_OPN' => $admtypepoll,
+		'ADMIN_POLLS_ROW_POLL_URL_OPN' => ($row['poll_type'] == 'index') ? cot_url('polls', 'id='.$id) : cot_url('forums', 'm=posts&q='.$id),
 		'ADMIN_POLLS_ROW_POLL_ODDEVEN' => cot_build_oddeven($ii)
 	));
 
@@ -167,9 +142,7 @@ while($row = $sql->fetch())
 	}
 	/* ===== */
 
-	$t->parse('MAIN.POLLS_ROW');
-
-	$ii++;
+	$t->parse('MAIN.POLLS_ROW');	
 }
 
 if ($ii == 0)
@@ -194,14 +167,14 @@ elseif (cot_error_found())
 	}
 	else
 	{
-		$formname = $L['addnewentry'];
+		$formname = $L['Add'];
 		$send_button = $L['Create'];
 	}
 }
 else
 {
 	$poll_id='new';
-	$formname = $L['addnewentry'];
+	$formname = $L['Add'];
 	$send_button = $L['Create'];
 }
 
@@ -236,6 +209,8 @@ $t->assign(array(
 	'ADMIN_POLLS_EDIT_FORM' => $poll_text,
 	'ADMIN_POLLS_SEND_BUTTON' => $send_button
 ));
+
+cot_display_messages($t);
 
 /* === Hook  === */
 foreach (cot_getextplugins('polls.admin.tags') as $pl)

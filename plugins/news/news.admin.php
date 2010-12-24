@@ -20,7 +20,7 @@ defined('COT_CODE') or die('Wrong URL');
 require_once cot_incfile('page', 'module');
 $adminhelp = $L['news_help'];
 
-if ($p == 'news' && $config_name == 'category' && $cfg['jquery'] && $cfg['turnajax'])
+if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
 {
 	$sskin = cot_tplfile('news.admin', 'plug');
 	$tt = new XTemplate($sskin);

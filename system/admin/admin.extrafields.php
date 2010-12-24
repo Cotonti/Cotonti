@@ -86,7 +86,7 @@ if ($a == 'add')
 		}
 		else
 		{
-			cot_message('adm_extrafield_not_added');
+			cot_error('adm_extrafield_not_added');
 		}
 	}
 }
@@ -138,7 +138,7 @@ elseif ($a == 'upd')
 				}
 				else
 				{
-					cot_message(sprintf($L['adm_extrafield_not_updated'], $k));
+					cot_error(sprintf($L['adm_extrafield_not_updated'], $k));
 				}
 			}
 		}
@@ -159,7 +159,7 @@ elseif ($a == 'del' && isset($name))
 	}
 	else
 	{
-		cot_message('adm_extrafield_not_removed');
+		cot_error('adm_extrafield_not_removed');
 	}
 }
 
