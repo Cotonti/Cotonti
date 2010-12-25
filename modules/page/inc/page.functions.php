@@ -132,7 +132,7 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 	{
 		$temp_array = $pag_cache[$page_data['page_id']];
 	}
-	elseif (is_array($pag_cache[$page_data]))
+	elseif ((int)$page_data > 0 && is_array($pag_cache[$page_data]))
 	{
 		$temp_array = $pag_cache[$page_data];
 	}
