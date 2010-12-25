@@ -180,7 +180,7 @@ function cot_generate_usertags($user_data, $tag_prefix = '', $emptyname='', $all
 	{	
 		$temp_array = $user_cache[$user_data['user_id']];
 	}
-	elseif ((int)$user_data > 0 && is_array($user_cache[$user_data]))
+	elseif (is_int($page_data) && is_array($user_cache[$user_data]))
 	{
 		$temp_array = $user_cache[$user_data];
 	}
