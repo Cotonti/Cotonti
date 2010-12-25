@@ -501,9 +501,137 @@ function sed_cutstring($res, $l)
 	return cot_cutstring($res, $l);
 }
 
+/**
+ * Creates image thumbnail
+ *
+ * @param string $img_big Original image path
+ * @param string $img_small Thumbnail path
+ * @param int $small_x Thumbnail width
+ * @param int $small_y Thumbnail height
+ * @param bool $keepratio Keep original ratio
+ * @param string $extension Image type
+ * @param string $filen Original file name
+ * @param int $fsize File size in kB
+ * @param string $textcolor Text color
+ * @param int $textsize Text size
+ * @param string $bgcolor Background color
+ * @param int $bordersize Border thickness
+ * @param int $jpegquality JPEG quality in %
+ * @param string $dim_priority Resize priority dimension
+ */
 function sed_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority="Width")
 {
-	return cot_createthumb($img_big, $img_small, $small_x, $small_y, $keepratio, $extension, $filen, $fsize, $textcolor, $textsize, $bgcolor, $bordersize, $jpegquality, $dim_priority);
+	if (!function_exists('gd_info'))
+	{
+		return;
+	}
+
+	global $cfg;
+
+	$gd_supported = array('jpg', 'jpeg', 'png', 'gif');
+
+	switch($extension)
+	{
+		case 'gif':
+			$source = imagecreatefromgif ($img_big);
+			break;
+
+		case 'png':
+			$source = imagecreatefrompng($img_big);
+			break;
+
+		default:
+			$source = imagecreatefromjpeg($img_big);
+			break;
+	}
+
+	$big_x = imagesx($source);
+	$big_y = imagesy($source);
+
+	if (!$keepratio)
+	{
+		$thumb_x = $small_x;
+		$thumb_y = $small_y;
+	}
+	elseif ($dim_priority=="Width")
+	{
+		$thumb_x = $small_x;
+		$thumb_y = floor($big_y * ($small_x / $big_x));
+	}
+	else
+	{
+		$thumb_x = floor($big_x * ($small_y / $big_y));
+		$thumb_y = $small_y;
+	}
+
+	if ($textsize==0)
+	{
+		if ($cfg['th_amode']=='GD1')
+		{
+			$new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2);
+		}
+		else
+		{
+			$new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2);
+		}
+
+		$background_color = imagecolorallocate ($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
+		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2, $background_color);
+
+		if ($cfg['th_amode']=='GD1')
+		{
+			imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
+		else
+		{
+			imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
+
+	}
+	else
+	{
+		if ($cfg['th_amode']=='GD1')
+		{
+			$new = imagecreate($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6);
+		}
+		else
+		{
+			$new = imagecreatetruecolor($thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*3.5+6);
+		}
+
+		$background_color = imagecolorallocate($new, $bgcolor[0], $bgcolor[1] ,$bgcolor[2]);
+		imagefilledrectangle ($new, 0,0, $thumb_x+$bordersize*2, $thumb_y+$bordersize*2+$textsize*4+14, $background_color);
+		$text_color = imagecolorallocate($new, $textcolor[0],$textcolor[1],$textcolor[2]);
+
+		if ($cfg['th_amode']=='GD1')
+		{
+			imagecopyresized($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
+		else
+		{
+			imagecopyresampled($new, $source, $bordersize, $bordersize, 0, 0, $thumb_x, $thumb_y, $big_x, $big_y);
+		}
+
+		imagestring ($new, $textsize, $bordersize, $thumb_y+$bordersize+$textsize+1, $big_x."x".$big_y." ".$fsize."kb", $text_color);
+	}
+
+	switch($extension)
+	{
+		case 'gif':
+			imagegif($new, $img_small);
+			break;
+
+		case 'png':
+			imagepng($new, $img_small);
+			break;
+
+		default:
+			imagejpeg($new, $img_small, $jpegquality);
+			break;
+	}
+
+	imagedestroy($new);
+	imagedestroy($source);
 }
 
 function sed_die($cond=TRUE)

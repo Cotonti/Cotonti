@@ -35,6 +35,7 @@ $L['adm_help_pfsthumbs'] = 'Not available';
 
 $L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');
 $L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');	// New in 0.0.2
+$L['cfg_pfsmaxuploads'] = array('Max. concurrent uploads at a time', '');
 $L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in 0.0.2
 $L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in 0.0.2
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/FOLDERNAME/... Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this.');

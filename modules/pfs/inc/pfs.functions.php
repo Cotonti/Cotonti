@@ -418,7 +418,7 @@ function cot_pfs_upload($userid, $folderid='')
 
 	cot_die($npath===FALSE);
 
-	for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
+	for ($ii = 0; $ii < $cfg['pfs']['pfsmaxuploads']; $ii++)
 	{
 		$disp_errors = '';
 		$u_tmp_name = $_FILES['userfile']['tmp_name'][$ii];
@@ -526,11 +526,10 @@ function cot_pfs_upload($userid, $folderid='')
 									hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)),
 									hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
-								cot_createthumb($cfg['pfs_path'].$npath.$u_newname,
-									$cfg['pfs']['pfs_thumbpath'].$npath.$u_newname, $cfg['pfs']['th_x'],$cfg['pfs']['th_y'],
-									$cfg['pfs']['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext,
-									$cfg['pfs']['th_textsize'], $th_colorbg, $cfg['pfs']['th_border'], $cfg['pfs']['th_jpeg_quality'],
-									$cfg['pfs']['th_dimpriority']);
+								cot_imageresize($cfg['pfs_path'] . $npath . $u_newname,
+									$cfg['pfs']['pfs_thumbpath'] . $npath . $u_newname,
+									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+									$cfg['pfs']['th_jpeg_quality'], true);
 							}
 						}
 						else
