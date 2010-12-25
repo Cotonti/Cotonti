@@ -544,8 +544,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
 
     // Cleanup
     cot_auth_reorder();
-    $cache && $cache->db->remove('cot_plugins', 'system');
-	$cache && $cache->db->remove('cot_plugins_active', 'system');
+    $cache && $cache->clear();
 
     return true;
 }
@@ -583,9 +582,7 @@ function cot_extension_uninstall($name, $is_module = false)
     cot_message('ext_config_uninstalled');
 
     // Clear cache
-    $cache && $cache->db->remove('cot_plugins', 'system');
-	$cache && $cache->db->remove('cot_plugins_active', 'system');
-	$cache && $cache->db->remove('cot_cfg', 'system');
+    $cache && $cache->clear();
     $db->update($db_users, array('user_auth' => ''));
 
     // Run SQL script if present
