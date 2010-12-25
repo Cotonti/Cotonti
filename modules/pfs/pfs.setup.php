@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=PFS
 Description=Personal File Space
-Version=0.7.7
+Version=0.7.9
 Date=2010-oct-05
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2010
@@ -19,19 +19,20 @@ pfsuserfolder=01:radio::0:
 pfstimename=02:radio::0:
 pfsfilecheck=03:radio::1:
 pfsnomimepass=04:radio::1:
-maxpfsperpage=05:string::15:
-pfs_winclose=05:radio::0:
-th_separator=06:separator:::
-th_amode=07:select:Disabled,GD1,GD2:GD2:
-th_x=08:string::112:
-th_y=09:string::84:
-th_border=10:string::4:
-th_dimpriority=11:select:Width,Height:Width:
-th_keepratio=12:radio::1:
-th_jpeg_quality=13:select:0,5,10,20,30,40,50,60,70,75,80,85,90,95,100:85:
-th_colorbg=14:string::000000:
-th_colortext=15:string::FFFFFF:
-th_textsize=16:range:0,5:1:
+pfsmaxuploads=05:string::8:
+maxpfsperpage=06:string::15:
+pfs_winclose=07:radio::0:
+th_separator=08:separator:::
+th_amode=09:select:Disabled,GD1,GD2:GD2:
+th_x=10:string::112:
+th_y=11:string::84:
+th_border=12:string::4:
+th_dimpriority=13:select:Width,Height:Width:
+th_keepratio=14:radio::1:
+th_jpeg_quality=15:select:0,5,10,20,30,40,50,60,70,75,80,85,90,95,100:85:
+th_colorbg=16:string::000000:
+th_colortext=17:string::FFFFFF:
+th_textsize=18:range:0,5:1:
 [END_COT_EXT_CONFIG]
 ==================== */
 

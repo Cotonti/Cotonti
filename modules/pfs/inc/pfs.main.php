@@ -113,7 +113,7 @@ if ($a=='upload')
 		cot_die($sql->rowCount()==0);
 	}
 
-	for ($ii = 0; $ii < $cfg['pfsmaxuploads']; $ii++)
+	for ($ii = 0; $ii < $cfg['pfs']['pfsmaxuploads']; $ii++)
 	{
 		$disp_errors = '';
 		$u_tmp_name = $_FILES['userfile']['tmp_name'][$ii];
@@ -209,7 +209,9 @@ if ($a=='upload')
 								@unlink($cfg['th_dir_user'].$u_newname);
 								$th_colortext = array(hexdec(substr($cfg['pfs']['th_colortext'],0,2)), hexdec(substr($cfg['pfs']['th_colortext'],2,2)), hexdec(substr($cfg['pfs']['th_colortext'],4,2)));
 								$th_colorbg = array(hexdec(substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(substr($cfg['pfs']['th_colorbg'],4,2)));
-								cot_createthumb($cfg['pfs_dir_user'].$u_newname, $cfg['th_dir_user'].$u_newname, $cfg['pfs']['th_x'],$cfg['pfs']['th_y'], $cfg['pfs']['th_keepratio'], $f_extension, $u_newname, floor($u_size/1024), $th_colortext, $cfg['pfs']['th_textsize'], $th_colorbg, $cfg['pfs']['th_border'], $cfg['pfs']['th_jpeg_quality'], $cfg['pfs']['th_dimpriority']);
+								cot_imageresize($cfg['pfs_dir_user'] . $u_newname, $cfg['th_dir_user']  . $u_newname,
+									$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+									$cfg['pfs']['th_jpeg_quality'], true);
 							}
 						}
 						else
@@ -260,7 +262,7 @@ elseif ($a=='delete')
 				@unlink($cfg['th_dir_user'].$pfs_file);
 			}
 		}
-		$sql = $db->delete(pfs_id, "pfs_id='".(int)$id."'");
+		$sql = $db->delete($db_pfs, "pfs_id='".(int)$id."'");
 	}
 }
 elseif ($a=='newfolder')
@@ -415,7 +417,9 @@ while ($row = $sqll->fetch())
 		{
 			$th_colortext = array(hexdec(mb_substr($cfg['pfs']['th_colortext'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colortext'],4,2)));
 			$th_colorbg = array(hexdec(mb_substr($cfg['pfs']['th_colorbg'],0,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],2,2)), hexdec(mb_substr($cfg['pfs']['th_colorbg'],4,2)));
-			cot_createthumb($cfg['pfs_dir_user'].$pfs_file, $cfg['pfs']['th_dir_user'].$pfs_file, $cfg['pfs']['th_x'],$cfg['pfs']['th_y'], $cfg['pfs']['th_keepratio'], $pfs_extension, $pfs_file, $pfs_filesize, $th_colortext, $cfg['pfs']['th_textsize'], $th_colorbg, $cfg['pfs']['th_border'], $cfg['pfs']['th_jpeg_quality'], $cfg['pfs']['th_dimpriority']);
+			cot_imageresize($cfg['pfs_dir_user'] . $pfs_file, $cfg['pfs']['th_dir_user'] . $pfs_file,
+				$cfg['pfs']['th_x'], $cfg['pfs']['th_y'], 'fit', $th_colorbg,
+				$cfg['pfs']['th_jpeg_quality'], true);
 		}
 
 		if ($standalone)

@@ -73,8 +73,6 @@ $cfg['check_updates'] = FALSE;		// Automatically check for updates, set it TRUE 
 $cfg['redirmode'] = FALSE;			// 0 or 1, Set to '1' if you cannot sucessfully log in (IIS servers)
 $cfg['xmlclient'] = FALSE;  		// For testing-purposes only, else keep it off.
 $cfg['ipcheck'] = TRUE;  			// Will kill the logged-in session if the IP has changed
-$cfg['allowphp_override'] = FALSE; 	// General lock for execution of the PHP code by the core
-$cfg['pfsmaxuploads'] = 8;
 $cfg['authcache'] = TRUE;			// Auth cache in SQL tables. Set it FALSE if your huge database
 									// goes down because of that
 $cfg['customfuncs'] = FALSE;		// Includes file named functions.custom.php
