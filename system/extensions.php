@@ -139,10 +139,10 @@ function cot_extension_dependencies_statisfied($name, $is_module = false,
 	$info = cot_infoget("$path/$name.setup.php", 'COT_EXT');
 	$required_modules = empty($info['Requires_modules']) ? array()
 		: explode(',', $info['Requires_modules']);
-	 array_walk($required_modules, 'trim');
+	$required_modules = array_map('trim', $required_modules);
 	$required_plugins = empty($info['Requires_plugins']) ? array()
 		: explode(',', $info['Requires_plugins']);
-	array_walk($required_plugins, 'trim');
+	$required_plugins = array_map('trim', $required_plugins);
 
 	// Check each dependency
 	foreach ($required_modules as $req_ext)
@@ -283,7 +283,7 @@ function cot_extension_install($name, $is_module = false, $update = false)
                 else
                 {
                     $hooks = explode(',', $part_info['Hooks']);
-					is_array($hooks) ? array_walk($hooks, 'trim') : $hooks = array();
+					$hooks = is_array($hooks) ? array_map('trim', $hooks) : array();
                 }
                 foreach ($hooks as $hook)
                 {

@@ -241,10 +241,12 @@ function cot_tag_parse_query($qs)
 {
 	global $db;
 	$tokens1 = explode(';', $qs);
+	$tokens1 = array_map('trim', $tokens1);
 	$cnt1 = count($tokens1);
 	for ($i = 0; $i < $cnt1; $i++)
 	{
 		$tokens2 = explode(',', $tokens1[$i]);
+		$tokens2 = array_map('trim', $tokens2);
 		$cnt2 = count($tokens2);
 		for ($j = 0; $j < $cnt2; $j++)
 		{

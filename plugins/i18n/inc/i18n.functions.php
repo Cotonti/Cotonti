@@ -81,7 +81,7 @@ function cot_i18n_enabled($cat)
 	{
 		// Get configured cats
 		$i18n_cats = explode(',', $cfg['plugin']['i18n']['cats']);
-		array_walk($i18n_cats, 'trim');
+		$i18n_cats = array_map('trim', $i18n_cats);
 	}
 	
 	if (in_array($cat, $i18n_cats))
@@ -173,7 +173,7 @@ function cot_i18n_load_locales()
 	foreach ($lines as $line)
 	{
 		$lc = explode('|', $line);
-		array_walk($lc, 'trim');
+		$lc = array_map('trim', $lc);
 		if (!empty($lc[0]) && !empty($lc[1]))
 		{
 			$i18n_locales[$lc[0]] = $lc[1];
