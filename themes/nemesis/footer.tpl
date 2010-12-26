@@ -26,7 +26,7 @@
 			<li><a href="users.php?m=passrecover">{PHP.L.hea_lostpass}</a></li>
 <!-- END: GUEST -->
 <!-- BEGIN: USER -->
-			<li><strong>Hello, {PHP.usr.name} <!-- IF {PHP.usr.isadmin} --> &nbsp; [ <a href="admin.php" class="lower">{PHP.L.Adminpanel}</a> ]<!-- ENDIF --></strong></li>
+			<li><strong>Hello, {PHP.usr.name} <!-- IF {PHP.usr.maingrp} = 5 --> &nbsp; [ <a href="admin.php" class="lower">{PHP.L.Adminpanel}</a> ]<!-- ENDIF --></strong></li>
 			<!-- IF {PHP.usr.profile.user_avatar} --><li class="floatleft marginright10"><img src="{PHP.usr.profile.user_avatar}" alt="{PHP.L.Avatar}" /></li><!-- ELSE --><li class="floatleft marginright10"><img src="datas/defaultav/blank.png" alt="{PHP.L.Avatar}" /></li><!-- ENDIF -->
 			<li><a href="users.php" title="{PHP.L.Users}">{PHP.L.Users}</a></li>
 			<li><a href="users.php?m=profile" title="{PHP.L.Profile}">{PHP.L.Profile}</a></li>
