@@ -99,7 +99,7 @@ function cot_build_extrafields($name, $extrafield, $data)
 /**
  * Imports Extra fields data
  *
- * @param string $inputname Variable name
+ * @param string $inputname Variable name (or value for source=D)
  * @param array $extrafields Extra fields data
  * @param string $source Source type: G (GET), P (POST), C (COOKIE) or D (variable filtering)
  * @param string $oldvalue Old value of extrafield
@@ -531,7 +531,7 @@ function cot_import_filesarray($file_post)
 }
 
 /**
- * Moves and unset files in  the $uploadfiles array
+ * Moves and unset files in the $uploadfiles array
  */
 function cot_extrafield_movefiles()
 {
@@ -549,7 +549,6 @@ function cot_extrafield_movefiles()
 				@move_uploaded_file($uploadfile['tmp'], $uploadfile['new']);
 			}
 		}
-		
 	}
 }
 
