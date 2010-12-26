@@ -37,7 +37,7 @@
 	}
 	anim();
 </script>
-<p class="small textcenter">{PHP.themelang.ratings.Votes}: {POLL_VOTERS}</p>
+<p class="small textcenter">{PHP.L.Votes}: {POLL_VOTERS}</p>
 <!-- END: POLL_VIEW_VOTED -->
 
 <!-- BEGIN: POLL_VIEW_DISABLED -->
@@ -69,7 +69,7 @@
 	</tr>
 	<!-- END: POLLTABLE -->
 </table>
-<p>{PHP.themelang.page.Date} {POLL_SINCE_SHORT} {PHP.themelang.ratings.Votes} {POLL_VOTERS} </p>
+<p>{PHP.L.Date} {POLL_SINCE_SHORT} {PHP.L.Votes} {POLL_VOTERS} </p>
 <!-- END: POLL_VIEW_LOCKED -->
 
 <!-- BEGIN: INDEXPOLLS -->
