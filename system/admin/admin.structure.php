@@ -41,18 +41,20 @@ if ($a == 'update')
 	$rstructuredesc = cot_import('rstructuredesc', 'P', 'ARR');
 	$rstructureicon = cot_import('rstructureicon', 'P', 'ARR');
 	$rstructurelocked = cot_import('rstructurelocked', 'P', 'ARR');
+
 	foreach ($cot_extrafields['structure'] as $row)
 	{
 		if ($row['field_type'] != 'file' || $row['field_type'] != 'filesize')
 		{
-			$rstructurearray[$row['field_name']] = cot_import('rstructure'.$row['field_name'], 'P', 'ARR');
+			$rstructureextrafieldsarr[$row['field_name']] = cot_import('rstructure'.$row['field_name'], 'P', 'ARR');
 		}
 		elseif($row['field_type'] == 'file')
 		{
-			// FIXME!
-			$rstructurearray[$row['field_name']] = cot_import_filesarray('rstructure'.$row['field_name']);
+			// TODO FIXME!
+			//$rstructureextrafieldsarr[$row['field_name']] = cot_import_filesarray('rstructure'.$row['field_name']);
 		}
 	}
+
 	$rtplmodearr = cot_import('rstructuretplmode', 'P', 'ARR');
 	$rtplforcedarr = cot_import('rtplforced', 'P', 'ARR');
 	
@@ -65,9 +67,10 @@ if ($a == 'update')
 		$rstructure['structure_desc'] = cot_import($rstructuredesc[$i], 'D', 'TXT');
 		$rstructure['structure_icon'] = cot_import($rstructureicon[$i], 'D', 'TXT');
 		$rstructure['structure_locked'] = (cot_import($rstructurelocked[$i], 'D', 'BOL')) ? 1 : 0;
+
 		foreach ($cot_extrafields['structure'] as $row)
 		{
-			$rstructure['structure_'.$row['field_name']] = cot_import_extrafields($rstructurearray[$row['field_name']][$i], $row, 'D', $oldrow['structure_'.$row['field_name']]);
+			$rstructure['structure_'.$row['field_name']] = cot_import_extrafields($rstructureextrafieldsarr[$row['field_name']][$i], $row, 'D', $oldrow['structure_'.$row['field_name']]);
 		}
 
 		$rtplmode = cot_import($rtplmodearr[$i], 'D', 'INT');
