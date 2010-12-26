@@ -1,6 +1,6 @@
 <!-- BEGIN: POLL_VIEW -->
 	<div id = "poll_{POLL_ID}">
-		<form action="{POLL_FORM_URL}" method="post" id="poll_form_{POLL_ID}" class="ajax post-poll_{POLL_ID};index.php;z=polls&amp;mode=ajax">
+		<form action="{POLL_FORM_URL}" method="post" id="poll_form_{POLL_ID}" class="ajax post-poll_{POLL_ID};polls.php;mode=ajax">
 			<input type="hidden" name="poll_id" value="{POLL_ID}" />
 			<table class="cells">
 				<!-- BEGIN: POLLTABLE -->
