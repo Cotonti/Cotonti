@@ -35,9 +35,9 @@ foreach (cot_getextplugins('pm.first') as $pl)
 /* ===== */
 
 list($totalsentbox, $totalinbox) = cot_message_count($usr['id']);
-$sql = $db->query("SELECT * FROM $db_pm WHERE pm_id = '".$id."' LIMIT 1");
-cot_die($sql->rowCount() == 0);
-$row = $sql->fetch();
+$sql_pm = $db->query("SELECT * FROM $db_pm WHERE pm_id = '".$id."' LIMIT 1");
+cot_die($sql_pm->rowCount() == 0);
+$row = $sql_pm->fetch();
 
 $title = cot_rc_link(cot_url('pm'), $L['Private_Messages']) ." ".$cfg['separator'];
 
@@ -45,11 +45,11 @@ if ($row['pm_touserid'] == $usr['id'])
 {
 	if ($row['pm_tostate'] == 0)
 	{
-		$sql = $db->update($db_pm, array('pm_tostate' => '1'), "pm_id = '".$id."'");
-		$sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$usr['id']."' AND pm_tostate = 0");
-		if ($sql->fetchColumn() == 0)
+		$sql_pm = $db->update($db_pm, array('pm_tostate' => '1'), "pm_id = '".$id."'");
+		$sql_pm = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$usr['id']."' AND pm_tostate = 0");
+		if ($sql_pm->fetchColumn() == 0)
 		{
-			$sql = $db->update($db_users, array('user_newpm' => '0'), "user_id = '".$usr['id']."'");
+			$sql_pm = $db->update($db_users, array('user_newpm' => '0'), "user_id = '".$usr['id']."'");
 		}
 	}
 	$f = 'inbox';
@@ -100,11 +100,11 @@ $t = new XTemplate(cot_tplfile('pm.message'));
 
 if ($history)
 {
-	$sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
+	$sql_pm_history = $db->query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
 						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)");
-	$totallines = $sql->fetchColumn();
+	$totallines = $sql_pm_history->fetchColumn();
 	$d = ($d >= $totallines) ? (floor($totallines / $cfg['pm']['maxpmperpage']))*$cfg['pm']['maxpmperpage'] : $d;
-	$sql = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id = p.pm_touserid
+	$sql_pm_history = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id = p.pm_touserid
 						WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
 						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
 						ORDER BY pm_date DESC LIMIT $d,".$cfg['pm']['maxpmperpage']);
@@ -117,7 +117,7 @@ if ($history)
 	$extp = cot_getextplugins('pm.history.loop');
 	/* ===== */
 	$jj = 0;
-	while ($row2 = $sql->fetch())
+	while ($row2 = $sql_pm_history->fetch())
 	{
 		$jj++;
 		$row2['pm_icon_readstatus'] = ($row2['pm_tostate'] == '0') ?

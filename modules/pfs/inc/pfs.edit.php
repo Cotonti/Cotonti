@@ -73,9 +73,9 @@ if ($userid != $usr['id'])
 
 $title .= " ".$cfg['separator']." ".$L['Edit'];
 
-$sql = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
+$sql_pfs = $db->query("SELECT * FROM $db_pfs WHERE pfs_userid='$userid' AND pfs_id='$id' LIMIT 1");
 
-if ($row = $sql->fetch())
+if ($row = $sql_pfs->fetch())
 {
 	$pfs_id = $row['pfs_id'];
 	$pfs_file = $row['pfs_file'];
@@ -99,15 +99,15 @@ if ($a=='update' && !empty($id))
 	$folderid = cot_import('folderid','P','INT');
 	if ($folderid>0)
 	{
-		$sql = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid'");
-		cot_die($sql->rowCount()==0);
+		$sql_pfs_pffcount = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$folderid'");
+		cot_die($sql_pfs_pffcount->rowCount()==0);
 	}
 	else
 	{
 		$folderid = 0;
 	}
 
-	$sql = $db->query("UPDATE $db_pfs SET
+	$sql_pfs_update = $db->query("UPDATE $db_pfs SET
 		pfs_desc='".$db->prep($rdesc)."',
 		pfs_folderid='$folderid'
 		WHERE pfs_userid='$userid' AND pfs_id='$id'");

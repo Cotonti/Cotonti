@@ -108,17 +108,17 @@ foreach (cot_getextplugins('page.list.query') as $pl)
 }
 /* ===== */
 
-if(empty($sql_string))
+if(empty($sql_page_string))
 {
-	$sql_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition WHERE ".implode(" AND ", $where);
-	$sql_string = "SELECT p.*, u.* $join_columns
+	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition WHERE ".implode(" AND ", $where);
+	$sql_page_string = "SELECT p.*, u.* $join_columns
 		FROM $db_pages as p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE ".implode(" AND ", $where)."
 		ORDER BY page_$s $w LIMIT $d, ".$cfg['page']['maxrowsperpage'];
 }
-$totallines = $db->query($sql_count)->fetchColumn();
-$sqllist = $db->query($sql_string);
+$totallines = $db->query($sql_page_count)->fetchColumn();
+$sqllist = $db->query($sql_page_string);
 
 /*
 $incl = "datas/content/list.$c.txt";

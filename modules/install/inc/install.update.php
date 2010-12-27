@@ -100,11 +100,11 @@ else
 
 $db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 
-$sql = @$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
-$sql2 = @$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
-$old_branch = @$sql2->fetchColumn();
+$sql_install = @$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
+$sql_install_oldbranch = @$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
+$old_branch = @$sql_install_oldbranch->fetchColumn();
 
-if ($db->errno > 0 || $sql->rowCount() != 1)
+if ($db->errno > 0 || $sql_install->rowCount() != 1)
 {
 	// Is Genoa, perform upgrade
 	$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
@@ -162,7 +162,7 @@ elseif ($old_branch != $branch)
 else
 {
 	// Update the core
-	$upd_rev = $sql->fetchColumn();
+	$upd_rev = $sql_install->fetchColumn();
 	preg_match('#\$Rev: (\d+) \$#', $upd_rev, $mt);
 	$rev = (int) $mt[1];
 	$new_rev = cot_apply_patches("./setup/$branch", 'r' . $rev);

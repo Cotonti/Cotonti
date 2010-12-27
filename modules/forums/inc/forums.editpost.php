@@ -27,8 +27,8 @@ cot_check_xg();
 
 isset($structure['forums'][$s]) || cot_die();
 
-$sql = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_cat='$s' LIMIT 1");
-if ($row = $sql->fetch())
+$sql_forums = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_cat='$s' LIMIT 1");
+if ($row = $sql_forums->fetch())
 {
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
 
@@ -51,9 +51,9 @@ else
 	cot_die();
 }
 
-$sql = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
+$sql_forums = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
 
-if ($rowt = $sql->fetch())
+if ($rowt = $sql_forums->fetch())
 {
 	if ($rowt['ft_state'] && !$usr['isadmin'])
 	{

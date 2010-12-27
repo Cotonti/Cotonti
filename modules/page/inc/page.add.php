@@ -78,8 +78,8 @@ if ($a == 'add')
 	{
 		if (!empty($rpage['page_alias']))
 		{
-			$sql = $db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$db->prep($rpage['page_alias'])."'");
-			$rpage['page_alias'] = ($sql->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
+			$sql_page = $db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$db->prep($rpage['page_alias'])."'");
+			$rpage['page_alias'] = ($sql_page->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
 		}
 
 		if ($usr['isadmin'] && $cfg['page']['autovalidate'])
@@ -107,7 +107,7 @@ if ($a == 'add')
 		}
 		/* ===== */
 
-		$sql = $db->insert($db_pages, $rpage);
+		$sql_page_insert = $db->insert($db_pages, $rpage);
 		$id = $db->lastInsertId();
 		$r_url = (!$rpage['page_state']) ? cot_url('page', "id=".$id, '', true) : cot_url('message', "msg=300", '', true);
 		cot_extrafield_movefiles();

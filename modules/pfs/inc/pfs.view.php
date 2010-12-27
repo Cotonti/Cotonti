@@ -31,8 +31,8 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported)
 	$pfs_header2 = $R['code_pfs_header_end'];
 	$pfs_footer = $R['code_pfs_footer'];
 
-	$sql = $db->query("SELECT p.*, u.user_name FROM $db_pfs p, $db_users u WHERE p.pfs_file='$v' AND p.pfs_userid=u.user_id LIMIT 1");
-	if(!$row = $sql->fetch())
+	$sql_pfs = $db->query("SELECT p.*, u.user_name FROM $db_pfs p, $db_users u WHERE p.pfs_file='$v' AND p.pfs_userid=u.user_id LIMIT 1");
+	if(!$row = $sql_pfs->fetch())
 	{
 		$pfs_owner = $L['SFS'];
 	}
@@ -44,7 +44,7 @@ if (!empty($v) && file_exists($imgpath) && in_array($f_extension, $gd_supported)
 	$pfs_img = "<img src=\"".$imgpath."\" alt=\"".$row['pfs_desc']."\" />";
 	$pfs_imgsize = @getimagesize($imgpath);
 
-	$sql = $db->query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
+	$sql_pfs = $db->query("UPDATE $db_pfs SET pfs_count=pfs_count+1 WHERE pfs_file='$v' LIMIT 1");
 }
 else
 { cot_die(); }

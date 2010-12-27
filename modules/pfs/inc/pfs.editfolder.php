@@ -73,9 +73,9 @@ if ($userid!=$usr['id'])
 
 $title .= " ".$cfg['separator']." ".$L['Edit'];
 
-$sql = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
+$sql_pfs = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
 
-if ($row = $sql->fetch())
+if ($row = $sql_pfs->fetch())
 {
 	$pff_id=$row['pff_id'];
 	$pff_date = $row['pff_date'];
@@ -99,10 +99,10 @@ if ($a=='update' && !empty($f))
 	$folderid = cot_import('folderid','P','INT');
 	$rispublic = cot_import('rispublic','P','BOL');
 	$risgallery = cot_import('risgallery','P','BOL');
-	$sql = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
-	cot_die($sql->rowCount()==0);
+	$sql_pfs_pffcount = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
+	cot_die($sql_pfs_pffcount->rowCount()==0);
 
-	$sql = $db->query("UPDATE $db_pfs_folders SET
+	$sql_pfs_update = $db->query("UPDATE $db_pfs_folders SET
 		pff_title='".$db->prep($rtitle)."',
 		pff_updated='".$sys['now']."',
 		pff_desc='".$db->prep($rdesc)."',

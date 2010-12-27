@@ -59,12 +59,12 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 				cot_die();
 			}
 			
-			$sql = $db->delete($db_forum_topics, "ft_movedto='$q'");
+			$sql_forums = $db->delete($db_forum_topics, "ft_movedto='$q'");
 			
 			if ($ghost)
 			{
-				$sql1 = $db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id='$q' and ft_cat='$s'");
-				$row = $sql1->fetch();
+				$sql_forums_ghost = $db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id='$q' and ft_cat='$s'");
+				$row = $sql_forums_ghost->fetch();
 
 				$db->insert($db_forum_topics, array(
 					'ft_state' => 0,
@@ -88,8 +88,8 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			
 			$db->update($db_forum_topics, array("ft_cat" => $ns), "ft_id='$q' and ft_cat='$s'");
 			$db->update($db_forum_posts, array("fp_cat" => $ns), "fp_cat='$s' and fp_topicid='$q'");	
-			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-'$num' WHERE fs_cat='$s'");
-			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount+1, fs_postcount=fs_postcount+'$num' WHERE fs_cat='$ns'");
+			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-'$num' WHERE fs_cat='$s'");
+			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount+1, fs_postcount=fs_postcount+'$num' WHERE fs_cat='$ns'");
 			
 			cot_forums_sectionsetlast($s);
 			cot_forums_sectionsetlast($ns);			
@@ -166,8 +166,8 @@ if ($cfg['forums'][$s]['allowviewers'])
 {
 	
 	$v = 0;
-	$sqlv = $db->query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' and online_subloc='".$db->prep($structure['forums'][$s]['title'])."' ");
-	while ($rowv = $sqlv->fetch())
+	$sql_forums_view = $db->query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' and online_subloc='".$db->prep($structure['forums'][$s]['title'])."' ");
+	while ($rowv = $sql_forums_view->fetch())
 	{
 		if ($rowv['online_name'] != 'v')
 		{
@@ -236,7 +236,7 @@ $where = array_diff($where,array(''));
 $prvtopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(" AND ", $where)." AND ft_mode=1")->fetchColumn();
 $totaltopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(" AND ", $where))->fetchColumn();
 
-$sql = $db->query("SELECT t.* $join_columns FROM $db_forum_topics AS t $join_condition
+$sql_forums = $db->query("SELECT t.* $join_columns FROM $db_forum_topics AS t $join_condition
 	WHERE ".implode(" AND ", $where)." ORDER BY $order LIMIT $d, ".$cfg['forums']['maxtopicsperpage']);
 
 /* === Hook - Part1 : Set === */
@@ -244,7 +244,7 @@ $extp = cot_getextplugins('forums.topics.loop');
 /* ===== */
 
 $ft_num = 0;
-while ($row = $sql->fetch())
+while ($row = $sql_forums->fetch())
 {
 	$row['ft_icon'] = 'posts';
 	$row['ft_postisnew'] = FALSE;

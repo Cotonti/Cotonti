@@ -67,7 +67,7 @@ elseif($a == 'lock')
 elseif($a == 'bump')
 {
 	cot_check_xg();
-	$sql = $db->update($db_polls, array('poll_creationdate' => $sys['now_offset']),  "poll_id='$id'");
+	$sql_polls = $db->update($db_polls, array('poll_creationdate' => $sys['now_offset']),  "poll_id='$id'");
 
 	cot_message('adm_polls_msg916_bump');
 }
@@ -104,7 +104,7 @@ else
 $totalitems = $db->query("SELECT COUNT(*) FROM $db_polls WHERE $poll_type")->fetchColumn();
 $pagenav = cot_pagenav('admin', 'm=polls'.$poll_filter, $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
-$sql = $db->query("SELECT * FROM $db_polls
+$sql_polls = $db->query("SELECT * FROM $db_polls
 					WHERE $poll_type ORDER BY poll_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
 $ii = 0;
@@ -113,7 +113,7 @@ $ii = 0;
 $extp = cot_getextplugins('polls.admin.loop');
 /* ===== */
 
-while($row = $sql->fetch())
+while($row = $sql_polls->fetch())
 {
 	$ii++;
 	$id = $row['poll_id'];

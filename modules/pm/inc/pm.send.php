@@ -39,8 +39,8 @@ if ($a == 'getusers')
 	if (!empty($q))
 	{
 		$res = array();
-		$sql = $db->query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
-		while($row = $sql->fetch())
+		$sql_pm_users = $db->query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
+		while($row = $sql_pm_users->fetch())
 		{
 			$res[] = $row['user_name'];
 		}
@@ -85,7 +85,7 @@ elseif ($a == 'send')
 			$pm['pm_text'] = $newpmtext;
 			$pm['pm_fromstate'] = $fromstate;
 
-			$sql = $db->update($db_pm, $pm, "pm_id = '$id' AND pm_fromuserid = '".$usr['id']."' AND pm_tostate = '0'");
+			$sql_pm_update = $db->update($db_pm, $pm, "pm_id = '$id' AND pm_fromuserid = '".$usr['id']."' AND pm_tostate = '0'");
 		}
 		/* === Hook === */
 		foreach (cot_getextplugins('pm.send.update.done') as $pl)
@@ -115,9 +115,9 @@ elseif ($a == 'send')
 				}
 			}
 			$touser_sql = '('.implode(',', $touser_sql).')';
-			$sql = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
-			$totalrecipients = $sql->rowCount();
-			while($row = $sql->fetch())
+			$sql_pm_users = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_name IN $touser_sql");
+			$totalrecipients = $sql_pm_users->rowCount();
+			while($row = $sql_pm_users->fetch())
 			{
 				$touser_ids[] = $row['user_id'];
 				$touser_names[] = htmlspecialchars($row['user_name']);
@@ -156,15 +156,15 @@ elseif ($a == 'send')
 				$pm['pm_fromuser'] = $usr['name'];
 				$pm['pm_touserid'] = (int)$userid;
 				$pm['pm_tostate'] = 0;
-				$sql = $db->insert($db_pm, $pm);
-				$sql = $db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
+				$sql_pm = $db->insert($db_pm, $pm);
+				$sql_pm = $db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
 
 				if ($cfg['pm']['pm_allownotifications'])
 				{
-					$sql = $db->query("SELECT user_email, user_name, user_lang
+					$sql_pm = $db->query("SELECT user_email, user_name, user_lang
 						FROM $db_users WHERE user_id = '$userid' AND user_pmnotify = 1 AND user_maingrp > 3");
 
-					if ($row = $sql->fetch())
+					if ($row = $sql_pm->fetch())
 					{
 						cot_send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
 						if($stats_enabled) { cot_stat_inc('totalmailpmnot'); }
@@ -193,7 +193,7 @@ if (!empty($to))
 		$group = cot_import(mb_substr($to, 1, 8), 'D', 'INT');
 		if ($group > 1)
 		{
-			$sql = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp = '$group' ORDER BY user_name ASC");
+			$sql_pm_users = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp = '$group' ORDER BY user_name ASC");
 		}
 	}
 	else
@@ -212,13 +212,13 @@ if (!empty($to))
 		{
 			$touser_sql = implode(',', $touser_sql);
 			$touser_sql = '('.$touser_sql.')';
-			$sql = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_id IN $touser_sql");
+			$sql_pm_users = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_id IN $touser_sql");
 		}
 	}
-	$totalrecipients = $sql->rowCount();
+	$totalrecipients = $sql_pm_users->rowCount();
 	if ($totalrecipients > 0)
 	{
-		while ($row = $sql->fetch())
+		while ($row = $sql_pm_users->fetch())
 		{
 			$touser_ids[] = $row['user_id'];
 			$touser_names[] = htmlspecialchars($row['user_name']);
@@ -252,10 +252,10 @@ foreach (cot_getextplugins('pm.send.main') as $pl)
 /* ===== */
 if ($id)
 {
-	$sql = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id='".$id."' AND pm_tostate=0 LIMIT 1");
-	if ($sql->rowCount()!=0)
+	$sql_pm = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id='".$id."' AND pm_tostate=0 LIMIT 1");
+	if ($sql_pm->rowCount()!=0)
 	{
-		$row = $sql->fetch();
+		$row = $sql_pm->fetch();
 		$newpmtitle = (!empty($newpmtitle)) ? $newpmtitle : $row['pm_title'];
 		$newpmtext = (!empty($newpmtitle)) ? $newpmtext : $row['pm_text'];
 		$idurl = '&id='.$id;
