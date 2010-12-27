@@ -529,7 +529,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !defined('COT_NO_ANTIXSS') && !defin
 }
 
 /* ============ Head Resources ===========*/
-if (!$cot_rc_html)
+if (!$cot_rc_html || !$cache || !$cfg['headrc_consolidate'] || defined('COT_ADMIN'))
 {
 	cot_rc_consolidate();
 }
