@@ -2997,6 +2997,8 @@ function cot_rc_consolidate()
 {
 	global $cache, $cfg, $cot_rc_html, $cot_rc_reg, $env, $L, $R, $sys, $usr;
 
+	$is_admin_section = defined('COT_ADMIN');
+
 	// Load standard resources
 	cot_rc_add_standard();
 
@@ -3005,9 +3007,12 @@ function cot_rc_consolidate()
 	{
 		include $pl;
 	}
-	if (file_exists('./themes/'.$usr['theme'].'/'.$usr['theme'].'.rc.php'))
+	if (!$is_admin_section)
 	{
-		include './themes/'.$usr['theme'].'/'.$usr['theme'].'.rc.php';
+		if (file_exists('./themes/'.$usr['theme'].'/'.$usr['theme'].'.rc.php'))
+		{
+			include './themes/'.$usr['theme'].'/'.$usr['theme'].'.rc.php';
+		}
 	}
 
 	if (!is_array($cot_rc_reg))
@@ -3015,24 +3020,23 @@ function cot_rc_consolidate()
 		return false;
 	}
 
-	clearstatcache();
-
 	// Build the header CSS outputs
 	$cot_rc_html = array();
 
 	// Consolidate resources
-	foreach ($cot_rc_reg as $type => $scope_data)
+	if ($cache && $cfg['headrc_consolidate'] && !$is_admin_section)
 	{
-		if ($type == 'css')
+		clearstatcache();
+		foreach ($cot_rc_reg as $type => $scope_data)
 		{
-			$separator = "\n";
-		}
-		elseif ($type == 'js')
-		{
-			$separator = "\n;";
-		}
-		if ($cache && $cfg['headrc_consolidate'])
-		{
+			if ($type == 'css')
+			{
+				$separator = "\n";
+			}
+			elseif ($type == 'js')
+			{
+				$separator = "\n;";
+			}
 			// Consolidation
 			foreach ($scope_data as $scope => $files)
 			{
@@ -3137,7 +3141,12 @@ function cot_rc_consolidate()
 				$cot_rc_html[$scope] .= cot_rc("code_rc_{$type}_file", array('url' => $rc_url));
 			}
 		}
-		else
+		// Save the output
+		$cache && $cache->db->store('cot_rc_html', $cot_rc_html);
+	}
+	else
+	{
+		foreach ($cot_rc_reg as $type => $scope_data)
 		{
 			if (is_array($cot_rc_reg[$type]['files']))
 			{
@@ -3158,9 +3167,6 @@ function cot_rc_consolidate()
 			}
 		}
 	}
-
-	// Save the output
-	$cache && $cache->db->store('cot_rc_html', $cot_rc_html);
 }
 
 /**
