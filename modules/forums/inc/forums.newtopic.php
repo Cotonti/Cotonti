@@ -106,7 +106,7 @@ if ($a == 'newtopic')
 
 		$p = $db->lastInsertId();
 		
-		$sql = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount+1, fs_topiccount=fs_topiccount+1 WHERE fs_cat='$s'");
+		$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount+1, fs_topiccount=fs_topiccount+1 WHERE fs_cat='$s'");
 		
 		if ($cfg['forums'][$s]['autoprune'] > 0)
 		{
@@ -115,7 +115,7 @@ if ($a == 'newtopic')
 		
 		if ($cfg['forums'][$s]['countposts'])
 		{
-			$sql = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'");
+			$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='".$usr['id']."'");
 		}
 		
 		if (!$newprvtopic)

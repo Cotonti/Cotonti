@@ -34,10 +34,10 @@ foreach (cot_getextplugins('forums.admin.first') as $pl)
 /* ===== */
 
 
-$sql = $db->query("SELECT * FROM $db_forum_topics WHERE 1 ORDER BY ft_creationdate DESC LIMIT 10");
+$sql_forums = $db->query("SELECT * FROM $db_forum_topics WHERE 1 ORDER BY ft_creationdate DESC LIMIT 10");
 $ii = 0;
 
-while ($row = $sql->fetch())
+while ($row = $sql_forums->fetch())
 {
 	$ii++;
 	$t->assign(array(

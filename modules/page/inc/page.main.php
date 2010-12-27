@@ -27,16 +27,16 @@ foreach (cot_getextplugins('page.first') as $pl)
 /* ===== */
 
 $where = (!empty($al)) ? "page_alias='".$al."'" : "page_id='".$id."'";
-$sql = $db->query("SELECT p.*, u.* FROM $db_pages AS p
+$sql_page = $db->query("SELECT p.*, u.* FROM $db_pages AS p
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
 		WHERE $where LIMIT 1");
 	
-if($sql->rowCount() == 0)
+if($sql_page->rowCount() == 0)
 {
 	$env['status'] = '404 Not Found';
 	cot_redirect(cot_url('message', 'msg=404', '', true));
 }
-$pag = $sql->fetch();
+$pag = $sql_page->fetch();
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin'], $usr['auth_download']) = cot_auth('page', $pag['page_cat'], 'RWA1');
 cot_block($usr['auth_read']);
@@ -61,7 +61,7 @@ if (mb_substr($pag['page_text'], 0, 6) == 'redir:')
 {
 	$env['status'] = '303 See Other';
 	$redir = trim(str_replace('redir:', '', $pag['page_text']));
-	$sql = $db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$id."'");
+	$sql_page_update = $db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id='".$id."'");
 	header('Location: ' . (preg_match('#^(http|ftp)s?://#', $redir) ? '' : COT_ABSOLUTE_URL) . $redir);
 	exit;
 }
@@ -91,7 +91,7 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_do
 	if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 	{
 		$pag['page_filecount']++;
-		$sql = $db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$id);
+		$sql_page_update = $db->query("UPDATE $db_pages SET page_filecount=page_filecount+1 WHERE page_id=".(int)$id);
 	}
 	$redir = (preg_match('#^(http|ftp)s?://#', $pag['page_url']) ? '' : COT_ABSOLUTE_URL) . $pag['page_url'];
 	header('Location: ' . $redir);
@@ -101,7 +101,7 @@ if ($pag['page_file'] && $a == 'dl' && (($pag['page_file'] == 2 && $usr['auth_do
 if (!$usr['isadmin'] || $cfg['page']['count_admin'])
 {
 	$pag['page_count']++;
-	$sql =  $db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'");
+	$sql_page_update =  $db->query("UPDATE $db_pages SET page_count='".$pag['page_count']."' WHERE page_id='".$id."'");
 }
 
 if ($pag['page_cat'] == 'system')

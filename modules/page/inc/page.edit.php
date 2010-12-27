@@ -29,11 +29,11 @@ cot_block($usr['auth_read']);
 
 if ($a == 'update')
 {
-	$sql1 = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
-	cot_die($sql1->rowCount() == 0);
-	$row1 = $sql1->fetch();
+	$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	cot_die($sql_page->rowCount() == 0);
+	$row_page = $sql_page->fetch();
 
-	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $row1['page_cat']);
+	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $row_page['page_cat']);
 
 	/* === Hook === */
 	foreach (cot_getextplugins('page.edit.update.first') as $pl)
@@ -41,7 +41,7 @@ if ($a == 'update')
 		include $pl;
 	}
 	/* ===== */
-	cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row1['page_ownerid']);
+	cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $row_page['page_ownerid']);
 
 	$rpage['page_key'] = cot_import('rpagekey', 'P', 'TXT');
 	$rpage['page_alias'] = cot_import('rpagealias', 'P', 'ALP');
@@ -63,9 +63,9 @@ if ($a == 'update')
 	$rpage['page_expire'] = ($rpage['page_expire'] <= $rpage['page_begin']) ? $rpage['page_begin'] + 31536000 : $rpage['page_expire'];
 
 	// Extra fields
-	foreach ($cot_extrafields['pages'] as $row)
+	foreach ($cot_extrafields['pages'] as $row_extf)
 	{
-		$rpage['page_'.$row['field_name']] = cot_import_extrafields('rpage'.$row['field_name'], $row, 'P', $row1['page_'.$row['field_name']]);
+		$rpage['page_'.$row_extf['field_name']] = cot_import_extrafields('rpage'.$row_extf['field_name'], $row_extf, 'P', $row_page['page_'.$row_extf['field_name']]);
 	}
 
 	if ($usr['isadmin'])
@@ -88,16 +88,16 @@ if ($a == 'update')
 
 	if($rpagedelete)
 	{
-		$sql = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+		$sql_page_delete = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
 
-		if ($row = $sql->fetch())
+		if ($row_page_delete = $sql_page_delete->fetch())
 		{
-			if ($row['page_state'] != 1)
+			if ($row_page_delete['page_state'] != 1)
 			{
-				$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
+				$sql_page_delete = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row_page_delete['page_cat']."' ");
 			}
 
-			$sql = $db->delete($db_pages, "page_id='$id'");
+			$sql_page_delete = $db->delete($db_pages, "page_id='$id'");
 			cot_log("Deleted page #".$id,'adm');
 			/* === Hook === */
 			foreach (cot_getextplugins('page.edit.delete.done') as $pl)
@@ -109,31 +109,31 @@ if ($a == 'update')
 			{
 				if ($cfg['cache_page'])
 				{
-					$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row['page_cat']]['path']));
+					$cache->page->clear('page/' . str_replace('.', '/', $cot_cat[$row_page_delete['page_cat']]['path']));
 				}
 				if ($cfg['cache_index'])
 				{
 					$cache->page->clear('index');
 				}
 			}
-			cot_redirect(cot_url('page', "c=".$row1['page_cat'], '', true));
+			cot_redirect(cot_url('page', "c=".$row_page['page_cat'], '', true));
 		}
 	}
 	elseif (!cot_error_found())
 	{
 		if (!empty($rpage['page_alias']))
 		{
-			$sql = $db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$db->prep($rpage['page_alias'])."' AND page_id!='".$id."'");
-			$rpage['page_alias'] = ($sql->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
+			$sql_page_update = $db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$db->prep($rpage['page_alias'])."' AND page_id!='".$id."'");
+			$rpage['page_alias'] = ($sql_page_update->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
 		}
 
-		$sql = $db->query("SELECT page_cat, page_state FROM $db_pages WHERE page_id='$id' ");
-		$row = $sql->fetch();
+		$sql_page_update = $db->query("SELECT page_cat, page_state FROM $db_pages WHERE page_id='$id' ");
+		$row_page_update = $sql_page_update->fetch();
 
-		if ($row['page_cat'] != $rpage['page_cat'] /*&& ($row['page_state'] == 0 || $row['page_state'] == 2)*/)
+		if ($row_page_update['page_cat'] != $rpage['page_cat'] /*&& ($row_page_update['page_state'] == 0 || $row_page_update['page_state'] == 2)*/)
 		{
-			$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($row['page_cat'])."' ");
-			//$sql = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat)."' ");
+			$sql_page_update = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($row_page_update['page_cat'])."' ");
+			//$sql_page_update = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat)."' ");
 		}
 
 		//$usr['isadmin'] = cot_auth('page', $rpage['page_cat'], 'A');
@@ -143,7 +143,7 @@ if ($a == 'update')
 			if ($rpublish == 'OK' )
 			{
 				$rpage['page_state'] = 0;
-				if ($row['page_state'] == 1)
+				if ($row_page_update['page_state'] == 1)
 				{
 					$db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
 				}
@@ -157,12 +157,12 @@ if ($a == 'update')
 		{
 			$rpage['page_state'] = 1;
 		}
-		if ($rpage['page_state'] == 1 && $row['page_state'] != 1)
+		if ($rpage['page_state'] == 1 && $row_page_update['page_state'] != 1)
 		{
 			$db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->prep($rpage['page_cat'])."' ");
 		}
 
-		$sql = $db->update($db_pages, $rpage, 'page_id=?', array($id));
+		$sql_page_update = $db->update($db_pages, $rpage, 'page_id=?', array($id));
 		cot_extrafield_movefiles();
 		/* === Hook === */
 		foreach (cot_getextplugins('page.edit.update.done') as $pl)
@@ -192,9 +192,9 @@ if ($a == 'update')
 	}
 }
 
-$sql = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
-cot_die($sql->rowCount() == 0);
-$pag = $sql->fetch();
+$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+cot_die($sql_page->rowCount() == 0);
+$pag = $sql_page->fetch();
 
 list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('page', $pag['page_cat']);
 cot_block($usr['isadmin'] || $usr['auth_write'] && $usr['id'] == $pag['page_ownerid']);
@@ -254,11 +254,11 @@ if ($usr['isadmin'])
 $t->assign($pageedit_array);
 
 // Extra fields
-foreach($cot_extrafields['pages'] as $i => $row)
+foreach($cot_extrafields['pages'] as $i => $row_extf)
 {
-	$uname = strtoupper($row['field_name']);
-	$t->assign('PAGEEDIT_FORM_'.$uname, cot_build_extrafields('rpage'.$row['field_name'], $row, $rpage[$row['field_name']]));
-	$t->assign('PAGEEDIT_FORM_'.$uname.'_TITLE', isset($L['page_'.$row['field_name'].'_title']) ?  $L['page_'.$row['field_name'].'_title'] : $row['field_description']);
+	$uname = strtoupper($row_extf['field_name']);
+	$t->assign('PAGEEDIT_FORM_'.$uname, cot_build_extrafields('rpage'.$row_extf['field_name'], $row_extf, $rpage[$row_extf['field_name']]));
+	$t->assign('PAGEEDIT_FORM_'.$uname.'_TITLE', isset($L['page_'.$row_extf['field_name'].'_title']) ?  $L['page_'.$row_extf['field_name'].'_title'] : $row_extf['field_description']);
 }
 
 // Error and message handling

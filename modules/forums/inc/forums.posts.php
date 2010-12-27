@@ -31,19 +31,19 @@ if (!empty($n) || !empty($p) || !empty($id))
 {
 	if (!empty($q) && ($n == 'last' || ($n == 'unread' && $usr['id'] > 0)))
 	{
-		$sql = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' ORDER by fp_id DESC LIMIT 1");
+		$sql_forums = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' ORDER by fp_id DESC LIMIT 1");
 	}
 	elseif ($n == 'unread' && !empty($q) && $usr['id'] > 0)
 	{
-		$sql = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid
+		$sql_forums = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid
 			FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_updated > " . $usr['lastvisit'] . " ORDER by fp_id ASC LIMIT 1");
 	}
 	elseif (!empty($p) || !empty($id))
 	{
 		$p = ($p > 0) ? $p : $id;
-		$sql = $db->query("SELECT fp_topicid, fp_cat, fp_posterid FROM $db_forum_posts WHERE fp_id='$p' LIMIT 1");
+		$sql_forums = $db->query("SELECT fp_topicid, fp_cat, fp_posterid FROM $db_forum_posts WHERE fp_id='$p' LIMIT 1");
 	}
-	if ($row = $sql->fetch())
+	if ($row = $sql_forums->fetch())
 	{
 		$p = $row['fp_id'];
 		$q = $row['fp_topicid'];
@@ -53,8 +53,8 @@ if (!empty($n) || !empty($p) || !empty($id))
 }
 elseif (!empty($q))
 {
-	$sql = $db->query("SELECT ft_cat FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
-	if ($row = $sql->fetch())
+	$sql_forums = $db->query("SELECT ft_cat FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
+	if ($row = $sql_forums->fetch())
 	{
 		$s = $row['ft_cat'];
 	}
@@ -81,8 +81,8 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 
 	$db->query("SELECT ft_state FROM $db_forum_topics WHERE ft_id='$q'")->fetchColumn() && cot_die();
 
-	$sql = $db->query("SELECT fp_id, fp_text, fp_posterid, fp_creation, fp_updated, fp_updater FROM $db_forum_posts WHERE fp_topicid='" . $q . "' ORDER BY fp_creation DESC LIMIT 1");
-	if ($row = $sql->fetch())
+	$sql_forums = $db->query("SELECT fp_id, fp_text, fp_posterid, fp_creation, fp_updated, fp_updater FROM $db_forum_posts WHERE fp_topicid='" . $q . "' ORDER BY fp_creation DESC LIMIT 1");
+	if ($row = $sql_forums->fetch())
 	{
 		if ($cfg['forums']['antibumpforums'] && ( ($usr['id'] == 0 && $row['fp_posterid'] == 0 &&
 			$row['fp_posterip'] == $usr['ip']) || ($row['fp_posterid'] > 0 && $row['fp_posterid'] == $usr['id']) ))
@@ -122,15 +122,15 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			));
 			$p = $db->lastInsertId();
 
-			$sql = $db->query("UPDATE $db_forum_topics SET
+			$sql_forums = $db->query("UPDATE $db_forum_topics SET
 				ft_postcount=ft_postcount+1, ft_updated='" . $sys['now_offset'] . "',
 				ft_lastposterid='" . $usr['id'] . "', ft_lastpostername='" . $db->prep($usr['name']) . "'
 				WHERE ft_id='$q'");
 
-			$sql = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount+1 WHERE fs_cat='$s'");
+			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount+1 WHERE fs_cat='$s'");
 			if ($cfg['forums'][$s]['countposts'])
 			{
-				$sql = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='" . $usr['id'] . "'");
+				$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='" . $usr['id'] . "'");
 			}
 		}
 		else
@@ -181,11 +181,11 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 	$row = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' AND fp_topicid='$q' AND fp_cat='$s' LIMIT 1")->fetch();
 	is_array($row) || cot_die();
 
-	$sql = $db->delete($db_forum_posts, "fp_id='$p' AND fp_topicid='$q' AND fp_cat='$s'");
+	$sql_forums = $db->delete($db_forum_posts, "fp_id='$p' AND fp_topicid='$q' AND fp_cat='$s'");
 
 	if ($cfg['forums'][$s]['countposts'])
 	{
-		$sql = $db->query("UPDATE $db_users SET user_postcount=user_postcount-1 WHERE user_id='" . $fp_posterid . "' AND user_postcount>0");
+		$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount-1 WHERE user_id='" . $fp_posterid . "' AND user_postcount>0");
 	}
 
 	cot_log("Deleted post #" . $p, 'for');
@@ -205,13 +205,13 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 
 	if ($db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$q'")->fetchColumn() == 0)
 	{
-		$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
-		if ($row = $sql->fetch())
+		$sql_forums = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
+		if ($row = $sql_forums->fetch())
 		{
-			$sql = $db->delete($db_forum_topics, "ft_movedto='$q'");
-			$sql = $db->delete($db_forum_topics, "ft_id='$q'");
+			$sql_forums = $db->delete($db_forum_topics, "ft_movedto='$q'");
+			$sql_forums = $db->delete($db_forum_topics, "ft_id='$q'");
 
-			$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-1 WHERE fs_cat='$s'");
+			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-1 WHERE fs_cat='$s'");
 
 			/* === Hook === */
 			foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl)
@@ -228,15 +228,15 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 	else
 	{
 		// There's at least 1 post left, let's resync
-		$sql = $db->query("SELECT fp_id, fp_posterid, fp_postername, fp_updated FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_cat='$s' ORDER BY fp_id DESC LIMIT 1");
-		if ($row = $sql->fetch())
+		$sql_forums = $db->query("SELECT fp_id, fp_posterid, fp_postername, fp_updated FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_cat='$s' ORDER BY fp_id DESC LIMIT 1");
+		if ($row = $sql_forums->fetch())
 		{
-			$sql = $db->query("UPDATE $db_forum_topics SET
+			$sql_forums = $db->query("UPDATE $db_forum_topics SET
 				ft_postcount=ft_postcount-1, ft_lastposterid='" . (int)$row['fp_posterid'] . "',
 				ft_lastpostername='" . $db->prep($row['fp_postername']) . "', ft_updated='" . (int)$row['fp_updated'] . "'
 				WHERE ft_id='$q'");
 
-			$sql = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount-1 WHERE fs_id='$s'");
+			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount-1 WHERE fs_id='$s'");
 
 			cot_forums_sectionsetlast($s);
 
@@ -245,8 +245,8 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 	}
 }
 
-$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
-if ($rowt = $sql->fetch())
+$sql_forums = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
+if ($rowt = $sql_forums->fetch())
 {
 	if ($rowt['ft_mode'] == 1 && !($usr['isadmin'] || $rowt['ft_firstposterid'] == $usr['id']))
 	{
@@ -258,8 +258,8 @@ else
 	cot_die();
 }
 
-$sql = $db->query("UPDATE $db_forum_topics SET ft_viewcount=ft_viewcount+1 WHERE ft_id='$q'");
-$sql = $db->query("UPDATE $db_forum_stats SET fs_viewcount=fs_viewcount+1 WHERE fs_cat='$s'");
+$sql_forums = $db->query("UPDATE $db_forum_topics SET ft_viewcount=ft_viewcount+1 WHERE ft_id='$q'");
+$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_viewcount=fs_viewcount+1 WHERE fs_cat='$s'");
 
 $title_params = array(
 	'FORUM' => $L['Forums'],
@@ -304,7 +304,7 @@ if (!empty($p))
 	$d = $cfg['forums']['maxpostsperpage'] * floor($postsbefore / $cfg['forums']['maxpostsperpage']);
 }
 
-$sql = $db->query("SELECT p.*, u.* $join_columns
+$sql_forums = $db->query("SELECT p.*, u.* $join_columns
 	FROM $db_forum_posts AS p LEFT JOIN $db_users AS u ON u.user_id=p.fp_posterid $join_condition
 	WHERE " . implode(" AND ", $where) . " ORDER BY $order LIMIT $d, " . $cfg['forums']['maxpostsperpage']);
 
@@ -312,7 +312,7 @@ $sql = $db->query("SELECT p.*, u.* $join_columns
 $extp = cot_getextplugins('forums.posts.loop');
 /* ===== */
 $fp_num = 0;
-while ($row = $sql->fetch())
+while ($row = $sql_forums->fetch())
 {
 	$row['fp_updated'] = @date($cfg['dateformat'], $row['fp_updated'] + $usr['timezone'] * 3600);
 	$row['user_text'] = ($cfg['forums'][$s]['allowusertext']) ? $row['user_text'] : '';
@@ -397,8 +397,8 @@ if (!$notlastpage && !$rowt['ft_state'] && $usr['id'] > 0 && $allowreplybox && $
 {
 	if ($quote > 0)
 	{
-		$sql4 = $db->query("SELECT fp_id, fp_text, fp_postername, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_cat='$s' AND fp_id='$quote' LIMIT 1");
-		if ($row4 = $sql4->fetch())
+		$sql_forums_quote = $db->query("SELECT fp_id, fp_text, fp_postername, fp_posterid FROM $db_forum_posts WHERE fp_topicid='$q' AND fp_cat='$s' AND fp_id='$quote' LIMIT 1");
+		if ($row4 = $sql_forums_quote->fetch())
 		{
 			$newmsg = cot_rc('forums_code_quote', array(
 				'url' => cot_url('forums', 'm=posts&p=' . $row4['fp_id'] . '#' . $row4['fp_id']),

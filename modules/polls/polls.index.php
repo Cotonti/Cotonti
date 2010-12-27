@@ -27,12 +27,12 @@ if ($cfg['polls']['maxpolls'] > 0)
 
 	$sqlmode = ($cfg['polls']['mode'] == 'Recent polls') ? 'poll_creationdate DESC' :'RAND()';
 	$res = 0;
-	$sql_p = $db->query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode LIMIT ".$cfg['polls']['maxpolls']);
+	$sql_polls = $db->query("SELECT * FROM $db_polls WHERE poll_type='index' AND poll_state='0' ORDER by $sqlmode LIMIT ".$cfg['polls']['maxpolls']);
 
 	/* === Hook - Part1 === */
 	$extp = cot_getextplugins('polls.index.tags');
 	/* ===== */
-	while ($row_p = $sql_p->fetch())
+	while ($row_p = $sql_polls->fetch())
 	{
 		$res++;
 		$poll_form = cot_poll_form($row_p, cot_url('index', ''), 'index');

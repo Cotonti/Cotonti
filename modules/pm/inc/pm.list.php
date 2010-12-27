@@ -113,11 +113,11 @@ $out['head'] .= $R['code_noindex'];
 
 /* === Title === */
 
-$sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter");
-$totallines = $sql->fetchColumn();
+$sql_pm = $db->query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter");
+$totallines = $sql_pm->fetchColumn();
 $d = ($d >= $totallines) ? (floor($totallines / $cfg['pm']['maxpmperpage'])) * $cfg['pm']['maxpmperpage'] : $d;
 $elem = ($f == 'sentbox') ? 'pm_touserid' : 'pm_fromuserid';
-$sql = $db->query("SELECT p.*, u.* FROM $db_pm AS p
+$sql_pm = $db->query("SELECT p.*, u.* FROM $db_pm AS p
 		LEFT JOIN $db_users AS u
 		ON u.user_id = p.$elem
 		WHERE $sqlfilter
@@ -144,7 +144,7 @@ $jj = 0;
 $extp = cot_getextplugins('pm.list.loop');
 /* ===== */
 
-while ($row = $sql->fetch())
+while ($row = $sql_pm->fetch())
 {
 	$jj++;
 	$row['pm_icon_readstatus'] = ($row['pm_tostate'] == '0') ?

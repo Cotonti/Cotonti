@@ -58,8 +58,8 @@ if (!$cot_sections_vw)
 	$cache && $cache->mem && $cache->mem->store('sections_vw', $cot_sections_vw, 'forums', 120);
 }
 
-$sql = $db->query("SELECT * FROM $db_forum_stats WHERE 1 ORDER by fs_cat DESC");
-while ($row = $sql->fetch())
+$sql_forums = $db->query("SELECT * FROM $db_forum_stats WHERE 1 ORDER by fs_cat DESC");
+while ($row = $sql_forums->fetch())
 {
 	if (!$cat_top[$row['fs_cat']]['fs_lt_id'])
 	{
