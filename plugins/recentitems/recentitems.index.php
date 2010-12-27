@@ -3,7 +3,7 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=index.tags
-Tags=index.tpl:{PLUGIN_LATESTPAGES}
+Tags=index.tpl:{RECENT_PAGES},{RECENT_FORUMS}
 [END_COT_EXT]
 ==================== */
 
@@ -34,4 +34,5 @@ if ($cfg['plugin']['recentitems']['recentforums'] && $cfg['forums'])
 	$res = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
 	$t->assign("RECENT_FORUMS", $res);
 }
+
 ?>
