@@ -20,8 +20,9 @@ $w = cot_import('w', 'G', 'ALP', 4); // order way (asc, desc)
 $c = cot_import('c', 'G', 'TXT'); // cat code
 $o = cot_import('ord', 'G', 'ALP', 16); // sort field name without "page_"
 $p = cot_import('p', 'G', 'ALP', 16); // sort way (asc, desc)
-list($pg, $d) = cot_import_pagenav('d', $cfg['page'][$c]['maxrowsperpage']); //page number for pages list
-list($pgc, $dc) = cot_import_pagenav('dc', $cfg['page'][$c]['maxrowsperpage']);// page number for cats list
+$maxrowsperpage = ($cfg['page'][$c]['maxrowsperpage']) ? $cfg['page'][$c]['maxrowsperpage'] : $cfg['page']['__default']['maxrowsperpage'];
+list($pg, $d) = cot_import_pagenav('d', $maxrowsperpage); //page number for pages list
+list($pgc, $dc) = cot_import_pagenav('dc', $maxrowsperpage);// page number for cats list
 
 if ($c == 'all' || $c == 'system')
 {
