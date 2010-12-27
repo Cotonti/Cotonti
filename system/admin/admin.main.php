@@ -82,6 +82,7 @@ if (!COT_AJAX)
 	$admin_menu = array();
 	// Standard admin areas
 	$admin_menu[] = array(
+		'code' => 'home',
 		'url' => cot_url('admin'),
 		'icon' => $R['admin_menu_icon_home'],
 		'class' => empty($m) ? 'sel' : ''
@@ -89,11 +90,13 @@ if (!COT_AJAX)
 	if ($usr['admin_config'])
 	{
 		$admin_menu[] = array(
+			'code' => 'config',
 			'url' => cot_url('admin', 'm=config'),
 			'icon' => $R['admin_menu_icon_config'],
 			'class' => $m == 'config' ? 'sel' : ''
 		);
 		$admin_menu[] = array(
+			'code' => 'extensions',
 			'url' => cot_url('admin', 'm=extensions'),
 			'icon' => $R['admin_menu_icon_extensions'],
 			'class' => $m == 'extensions' ? 'sel' : ''
@@ -102,6 +105,7 @@ if (!COT_AJAX)
 	if ($usr['admin_users'])
 	{
 		$admin_menu[] = array(
+			'code' => 'users',
 			'url' => cot_url('admin', 'm=users'),
 			'icon' => $R['admin_menu_icon_users'],
 			'class' => $m == 'users' ? 'sel' : ''
@@ -110,6 +114,7 @@ if (!COT_AJAX)
 	if ($usr['isadmin'])
 	{
 		$admin_menu[] = array(
+			'code' => 'other',
 			'url' => cot_url('admin', "m=other"),
 			'icon' => $R['admin_menu_icon_other'],
 			'class' => $m == 'other' ? 'sel' : ''
@@ -129,6 +134,7 @@ if (!COT_AJAX)
 			$title = isset($L[$info['Name']]) ? $L[$info['Name']] : $info['Name'];
 			$src = $cfg['modules_dir'] . "/$code/" . trim($info['Admin_icon']);
 			$admin_menu[] = array(
+				'code' => $code,
 				'url' => cot_url('admin', "m=$code"),
 				'icon' => cot_rc('admin_menu_icon_module', array('code' => $code, 'src' => $src, 'title' => $title)),
 				'class' => $m == $code ? 'sel' : ''
@@ -140,6 +146,7 @@ if (!COT_AJAX)
 	foreach ($admin_menu as $item)
 	{
 		$t->assign(array(
+			'ADMIN_MENU_CODE' => $item['code'],
 			'ADMIN_MENU_URL' => $item['url'],
 			'AMDIN_MENU_TITLE' => $item['title'],
 			'ADMIN_MENU_ICON' => $item['icon'],
