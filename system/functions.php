@@ -448,6 +448,11 @@ function cot_import_pagenav($var_name, $max_items)
 {
 	global $cfg;
 
+	if($max_items <= 0)
+	{
+		throw new Exception('Invalid $max_items ('.$max_items.') for pagination.');
+	}
+
 	if ($cfg['easypagenav'])
 	{
 		$page = (int) cot_import($var_name, 'G', 'INT');
