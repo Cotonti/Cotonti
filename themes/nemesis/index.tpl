@@ -25,13 +25,13 @@
 
 		<div class="clear block">
 			<h2 class="warning"><a href="plug.php?e=recentitems">{PHP.L.recentitems_title}</a></h2>
-				<!-- IF {PLUGIN_LATESTPAGES} -->
+				<!-- IF {RECENT_PAGES} -->
 				<h3>{PHP.L.recentitems_pages}</h3>
 				{RECENT_PAGES}
 				<!-- ELSE -->
 				<div class="warning">{PHP.L.recentitems_nonewpages}</div>
 				<!-- ENDIF -->
-				<!-- IF {PLUGIN_LATESTTOPICS} -->
+				<!-- IF {RECENT_FORUMS} -->
 				<h3>{PHP.L.recentitems_forums}</h3>
 				{RECENT_FORUMS}
 				<!-- ELSE -->
