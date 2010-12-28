@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=users.edit.update.first
+Hooks=users.edit.tags
 [END_COT_EXT]
 ==================== */
 
@@ -9,7 +9,7 @@ Hooks=users.edit.update.first
  * Avatar and photo for users
  *
  * @package userimages
- * @version 0.9.1
+ * @version 1.0
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD

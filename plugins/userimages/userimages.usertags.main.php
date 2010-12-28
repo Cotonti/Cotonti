@@ -9,7 +9,7 @@ Hooks=usertags.main
  * Avatar and photo for users
  *
  * @package userimages
- * @version 0.9.1
+ * @version 1.0
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD

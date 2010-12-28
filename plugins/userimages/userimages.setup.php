@@ -4,7 +4,7 @@
 Code=userimages
 Name=User Images
 Description=Avatar and photo for users
-Version=0.9.1
+Version=1.0
 Date=2010-nov-08
 Author=Koradhil, Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2008-2010
@@ -21,7 +21,7 @@ Lock_members=12345
  * Avatar and photo for users
  *
  * @package userimages
- * @version 0.9.1
+ * @version 1.0
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
