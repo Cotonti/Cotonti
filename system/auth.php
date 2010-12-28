@@ -118,21 +118,21 @@ function cot_auth_add_item($module_name, $item_id, $auth_permit = array(), $auth
 /**
  * Clears user permissions cache
  *
- * @param mixed $id User ID or 'all'
+ * @param mixed $id User ID (int) or 'all'
  * @return int Number of items affected
  */
 function cot_auth_clear($id = 'all')
 {
-	global $db, $db_users, $cfg, $cache;
+	global $db, $db_users, $cache;
 
-	if ($id == 'all')
+	if (is_int($id))
 	{
-		$db->update($db_users, array('user_auth' => ''));
-		$cache && $cache->db->remove('cot_guest_auth', 'system');
+		$db->update($db_users, array('user_auth' => ''), "user_id=$id");
 	}
 	else
 	{
-		$db->update($db_users, array('user_auth' => '', "user_id='$id'"));
+		$db->update($db_users, array('user_auth' => ''));
+		$cache && $cache->db->remove('cot_guest_auth', 'system');
 	}
 	return $db->affectedRows;
 }
