@@ -8,8 +8,8 @@ Hooks=admin.users.update
 /**
  * Hidden groups
  *
- * @package Cotonti
- * @version 0.9.0
+ * @package hiddengroups
+ * @version 1.0
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
@@ -17,13 +17,13 @@ Hooks=admin.users.update
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-$rhidden = cot_import('rhidden', 'P', 'BOL');
+$rgroups['grp_hidden'] = cot_import('rhidden', 'P', 'BOL');
 
-if(!empty($rtitle))
+if(!empty($rgroups['grp_title']))
 {
-	$db->update($db_groups, array('grp_hidden' => (int)$rhidden), "grp_id = ".(int)$g);
+	$db->update($db_groups, array('grp_hidden' => (int)$rgroups['grp_hidden']), "grp_id = ".(int)$g);
 }
 
-$cache && $cache->db->remove('hiddenusers', 'system');
+$cache && $cache->db->remove('cot_hiddenusers', 'system');
 
 ?>

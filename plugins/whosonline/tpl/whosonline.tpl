@@ -27,7 +27,7 @@
 						<td colspan="2">{PHP.L.Visitor} #{GUEST_NUMBER}</td>
 						<td>{GUEST_LOCATION} {GUEST_SUBLOCATION}</td>
 						<td>{GUEST_LASTSEEN}</td>
-						<td>{GUEST_IP}</td>
+						<!-- IF {PHP.usr.isadmin} --><td>{GUEST_IP}</td><!-- ENDIF -->
 					</tr>
 					<!-- END: GUESTS -->
 				</tbody>
