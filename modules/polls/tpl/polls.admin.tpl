@@ -25,11 +25,11 @@
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_LOCKED}<a href="{ADMIN_POLLS_ROW_POLL_URL}">{ADMIN_POLLS_ROW_POLL_TEXT}</a></td>
 			<td class="textcenter">{ADMIN_POLLS_ROW_POLL_TOTALVOTES}</td>
 			<td class="centerall action">
-        <!-- IF !{ADMIN_POLLS_ROW_POLL_LOCKED} -->
-        <a title="{PHP.L.Lock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.polls_icon_lock}</a>
-        <!-- ELSE -->
-        <a title="{PHP.L.Unlock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.polls_icon_unlock}</a>
-        <!-- ENDIF -->
+				<!-- IF !{ADMIN_POLLS_ROW_POLL_LOCKED} -->
+				<a title="{PHP.L.Lock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.polls_icon_lock}</a>
+				<!-- ELSE -->
+				<a title="{PHP.L.Unlock}" href="{ADMIN_POLLS_ROW_POLL_URL_LCK}">{PHP.R.polls_icon_unlock}</a>
+				<!-- ENDIF -->
 				<a title="{PHP.L.Delete}" href="{ADMIN_POLLS_ROW_POLL_URL_DEL}">{PHP.R.polls_icon_delete}</a>
 				<a title="{PHP.L.Reset}" href="{ADMIN_POLLS_ROW_POLL_URL_RES}">{PHP.R.polls_icon_reset}</a>
 				<a title="{PHP.L.Bump}" href="{ADMIN_POLLS_ROW_POLL_URL_BMP}">{PHP.R.polls_icon_bump}</a>
