@@ -25,6 +25,7 @@ require_once $cfg['system_dir'] . '/cotemplate.php';
 
 // Self requirements
 require_once cot_incfile('polls', 'module');
+require_once cot_incfile('polls', 'module', 'resources');
 
 /* === Hook === */
 foreach (cot_getextplugins('polls.first') as $pl)
@@ -38,9 +39,8 @@ cot_block($usr['auth_read']);
 
 $mode = cot_import('mode', 'G', 'ALP');
 
-if ($mode == 'ajax' || 'COT_AJAX')
+if ($mode == 'ajax' || COT_AJAX)
 {
-
 	/* === Hook === */
 	foreach (cot_getextplugins('polls.ajax') as $pl)
 	{
