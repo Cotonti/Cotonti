@@ -28,7 +28,7 @@ if (empty($mod))
 {
 	if (empty($pl))
 	{
-		if (!empty($a))
+		if (!empty($a) && $a != 'hooks')
 		{
 			cot_print($m, $a, $mod, $pl, $part);
 			cot_die();
@@ -389,7 +389,32 @@ switch($a)
 		cot_clear_messages();
 		$t->parse('MAIN.EDIT');
 	break;
+	/* =============== */
+	case 'hooks':
+	/* =============== */
+		$adminpath[] = array(cot_url('admin', 'm=extensions&a=hooks'), $L['Hooks']);
+
+		$sql = $db->query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
+
+		while($row = $sql->fetch())
+		{
+			$t->assign(array(
+				'ADMIN_EXTENSIONS_HOOK' => $row['pl_hook'],
+				'ADMIN_EXTENSIONS_CODE' => $row['pl_code'],
+				'ADMIN_EXTENSIONS_ORDER' => $row['pl_order'],
+				'ADMIN_EXTENSIONS_ACTIVE' => $cot_yesno[$row['pl_active']]
+			));
+			$t->parse('MAIN.HOOKS.HOOKS_ROW');
+		}
+
+		$t->assign(array(
+			'ADMIN_EXTENSIONS_CNT_HOOK' => $sql->rowCount()
+		));
+		$t->parse('MAIN.HOOKS');
+	break;
+	/* =============== */
 	default:
+	/* =============== */
 		foreach (array('module', 'plug') as $type)
 		{
 			$sql = $db->query("SELECT DISTINCT(config_cat), COUNT(*) FROM $db_config
@@ -501,7 +526,7 @@ switch($a)
 						$totalinstalled = $sql2->fetchColumn();
 						$cnt_parts += $totalinstalled;
 
-						if ($totalinstalled == 0)
+						if ($totalinstalled == 0 && ($type != 'module' || !cot_module_installed($x)))
 						{
 							$part_status = 3;
 							$info['Partscount'] = '?';
@@ -513,7 +538,7 @@ switch($a)
 							{
 								$part_status = 2;
 							}
-							elseif ($totalactive == 0)
+							elseif ($totalactive == 0 && $totalinstalled > 0)
 							{
 								$part_status = 0;
 							}
@@ -525,7 +550,7 @@ switch($a)
 
 						$ifthistools = $tools[$x];
 						$ent_code = $cfgentries[$x];
-						$if_plg_standalone = $type == 'plug' ? $standalone[$x] : true;
+						$if_plg_standalone = $type == 'plug' ? $standalone[$x] : cot_module_installed($x);
 						$ifstruct = $struct[$x];
 						$ifexflds = $extraflds[$x];
 
@@ -582,29 +607,10 @@ switch($a)
 			$t->parse('MAIN.DEFAULT.SECTION');
 		}
 
-		if($o == 'code')
-		{
-			$sql = $db->query("SELECT * FROM $db_plugins ORDER BY pl_code ASC, pl_hook ASC, pl_order ASC");
-		}
-		else
-		{
-			$sql = $db->query("SELECT * FROM $db_plugins ORDER BY pl_hook ASC, pl_code ASC, pl_order ASC");
-		}
-
-		while($row = $sql->fetch())
-		{
-			$t->assign(array(
-				'ADMIN_EXTENSIONS_HOOK' => $row['pl_hook'],
-				'ADMIN_EXTENSIONS_CODE' => $row['pl_code'],
-				'ADMIN_EXTENSIONS_ORDER' => $row['pl_order'],
-				'ADMIN_EXTENSIONS_ACTIVE' => $cot_yesno[$row['pl_active']]
-			));
-			$t->parse('MAIN.DEFAULT.HOOKS');
-		}
-
 		$t->assign(array(
-			'ADMIN_EXTENSIONS_CNT_HOOK' => $sql->rowCount()
+			'ADMIN_EXTENSIONS_HOOKS_URL' => cot_url('admin', 'm=extensions&a=hooks')
 		));
+
 		$t->parse('MAIN.DEFAULT');
 	break;
 }
