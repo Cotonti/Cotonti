@@ -21,8 +21,8 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('plug', 
 cot_block($usr['isadmin']);
 
 require_once cot_incfile('users', 'module');
-$cfg['page'] && require_once cot_incfile('page', 'module');
-$cfg['forums'] && require_once cot_incfile('forums', 'module');
+cot_module_active('page') && require_once cot_incfile('page', 'module');
+cot_module_active('forums') && require_once cot_incfile('forums', 'module');
 $cfg['comments'] && require_once cot_incfile('comments', 'plug');
 
 require_once cot_incfile('trashcan', 'plug');
@@ -104,25 +104,25 @@ while($row = $sql->fetch())
 		case 'comment':
 			$icon = $R['admin_icon_comments'];
 			$typestr = $L['Comment'];
-			$enabled = ($cfg['plugin']['comments']) ? 1 : 0;
+			$enabled = cot_plugin_active('comments') ? 1 : 0;
 			break;
 
 		case 'forumpost':
 			$icon = $R['admin_icon_forums_posts'];
 			$typestr = $L['Post'];
-			$enabled = ($cfg['forums']) ? 1 : 0;
+			$enabled = cot_module_active('forums') ? 1 : 0;
 			break;
 
 		case 'forumtopic':
 			$icon = $R['admin_icon_forums_topics'];
 			$typestr = $L['Topic'];
-			$enabled = ($cfg['forums']) ? 1 : 0;
+			$enabled = cot_module_active('forums') ? 1 : 0;
 			break;
 
 		case 'page':
 			$icon = $R['admin_icon_page'];
 			$typestr = $L['Page'];
-			$enabled = ($cfg['page']) ? 1 : 0;
+			$enabled =cot_module_active('page') ? 1 : 0;
 			break;
 
 		case 'user':

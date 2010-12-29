@@ -12,7 +12,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Tags integration
-if ($cfg['plugin']['tags'])
+if (cot_plugin_active('tags'))
 {
 	require_once cot_incfile('tags', 'plug');
 	global $db_tag_references;

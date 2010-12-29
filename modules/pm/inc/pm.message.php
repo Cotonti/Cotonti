@@ -203,7 +203,7 @@ if ($usr['auth_write'])
 		"PM_FORM_SEND" => cot_url('pm', 'm=send&a=send&to='.$to),
 		"PM_FORM_TITLE" => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 		"PM_FORM_TEXT" => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
-		"PM_AJAX_MARKITUP" => (COT_AJAX && $cfg['plugin']['markitup'] && $cfg['jquery'] && $cfg['turnajax'])
+		"PM_AJAX_MARKITUP" => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
 	));
 
 	/* === Hook === */

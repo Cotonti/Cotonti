@@ -104,7 +104,7 @@ foreach (cot_getextplugins('search.first') as $pl)
 }
 /* ===== */
 
-if (($tab == 'pag' || empty($tab))  && $cfg['page'] && $cfg['plugin']['search']['pagesearch'])
+if (($tab == 'pag' || empty($tab))  && cot_module_active('page') && $cfg['plugin']['search']['pagesearch'])
 {
 	// Making the category list
 	$pages_cat_list['all'] = $L['plu_allcategories'];
@@ -144,7 +144,7 @@ if (($tab == 'pag' || empty($tab))  && $cfg['page'] && $cfg['plugin']['search'][
 	}
 }
 
-if (($tab == 'frm' || empty($tab)) && is_array($cfg['forums']) && $cfg['plugin']['search']['forumsearch'])
+if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugin']['search']['forumsearch'])
 {
 	$forum_cat_list['all'] = $L['plu_allsections'];
 	foreach($structure['forums'] as $key => $val)
@@ -215,7 +215,7 @@ if (!empty($sq))
 		$touser = ($totalusers > 0 && !cot_error_found()) ? 'IN ('.implode(',', $touser_ids).')' : '';
 	}
 
-	if (($tab == 'pag' || empty($tab)) && $cfg['page'] && $cfg['plugin']['search']['pagesearch'] && !cot_error_found())
+	if (($tab == 'pag' || empty($tab)) && cot_module_active('page') && $cfg['plugin']['search']['pagesearch'] && !cot_error_found())
 	{
 		$where_and['cat'] = ($rsearch['pag']['sub'][0] != 'all' && count($rsearch['pag']['sub']) > 0) ?
 			"page_cat IN ('".$db->prep(implode("','", $rsearch['pag']['sub']))."')" : "page_cat IN ('".implode("','", $pag_catauth)."')"; 
@@ -287,7 +287,7 @@ if (!empty($sq))
 		}
 		unset($where_and, $where_or, $where);
 	}
-	if (($tab == 'frm' || empty($tab)) && is_array($cfg['forums']) && $cfg['plugin']['search']['forumsearch'] && !cot_error_found())
+	if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugin']['search']['forumsearch'] && !cot_error_found())
 	{
 		$where_and['cat'] = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
 			"s.fs_id IN ('".$db->prep(implode("','", $rsearch['frm']['sub']))."')" : "s.fs_id IN ('".implode("','", $frm_catauth)."')";

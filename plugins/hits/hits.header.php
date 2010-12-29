@@ -16,7 +16,7 @@ Hooks=header.main
  */
 
 defined('COT_CODE') or die('Wrong URL');
-if($cfg['plugin']['hits'] && $env['ext'] != 'admin')
+if (cot_plugin_active('hits') && $env['ext'] != 'admin')
 {
 	require_once cot_incfile('hits', 'plug');
 

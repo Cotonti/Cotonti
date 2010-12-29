@@ -293,7 +293,7 @@ $t->assign(array(
 	"PMSEND_FORM_TITLE" => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 	"PMSEND_FORM_TEXT" => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
 	"PMSEND_FORM_TOUSER" => cot_textarea('newpmrecipient', $touser, 3, 56),
-	"PMSEND_AJAX_MARKITUP" => (COT_AJAX && $cfg['plugin']['markitup'] && $cfg['jquery'] && $cfg['turnajax'])
+	"PMSEND_AJAX_MARKITUP" => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
 ));
 
 if (!$id)

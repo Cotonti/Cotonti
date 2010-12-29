@@ -21,7 +21,7 @@ function cot_clear_mark($text, $type, $words)
 		$text = preg_replace("'.\n'", " ", $text);
 		$text = preg_replace("'.\t'", " ", $text);
 		$text = preg_replace("' +'", " ", $text);
-		if ($cfg['plugin']['bbcode'])
+		if (cot_plugin_active('bbcode'))
 		{// BB
 			$text = preg_replace("'\[img.*?/img\]'si", "", $text);
 			$text = preg_replace("'\[thumb.*?/thumb\]'si", "", $text);
