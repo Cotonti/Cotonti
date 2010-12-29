@@ -530,10 +530,10 @@ class Cotpl_data
 		{
 			$code = $this->cleanup($code);
 		}
-		$chunks = preg_split('`({.+?})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$chunks = preg_split('`(\{(?:[\w\.]+)(?:\|.+?)?\})`', $code, -1, PREG_SPLIT_DELIM_CAPTURE);
 		foreach ($chunks as $chunk)
 		{
-			if (preg_match('`^{((?:[\w\.]+)(?:|.+?)?)}$`', $chunk, $m))
+			if (preg_match('`^\{((?:[\w\.]+)(?:\|.+?)?)\}$`', $chunk, $m))
 			{
 				$this->chunks[] = new Cotpl_var($m[1]);
 			}
