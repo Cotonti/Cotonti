@@ -581,10 +581,6 @@ function cot_extension_uninstall($name, $is_module = false)
     cot_message('ext_auth_uninstalled');
     cot_message('ext_config_uninstalled');
 
-    // Clear cache
-    $cache && $cache->clear();
-    $db->update($db_users, array('user_auth' => ''));
-
     // Run SQL script if present
     if (file_exists($path . "/setup/$name.uninstall.sql"))
     {
@@ -634,6 +630,10 @@ function cot_extension_uninstall($name, $is_module = false)
         // Unregister from updates table
         $db->delete($db_updates, "upd_param = '$name.ver'");
     }
+
+	// Clear cache
+	$db->update($db_users, array('user_auth' => ''));
+	$cache && $cache->clear();
 }
 
 /**

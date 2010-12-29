@@ -3025,6 +3025,9 @@ function cot_rc_consolidate()
 		return false;
 	}
 
+	// CSS should go first
+	ksort($cot_rc_reg);
+
 	// Build the header CSS outputs
 	$cot_rc_html = array();
 

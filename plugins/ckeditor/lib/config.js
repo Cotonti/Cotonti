@@ -1,0 +1,1 @@
+/* CKEditor configuration stub - Is overloaded */

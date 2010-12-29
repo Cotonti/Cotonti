@@ -35,7 +35,12 @@ if (function_exists('cot_textarea') && cot_auth('plug', 'ckeditor', 'W'))
 	else
 	{
 		cot_rc_link_file($cfg['plugins_dir'] . '/ckeditor/lib/ckeditor.js', true);
+		if ($cfg['jquery'])
+		{
+			cot_rc_link_file($cfg['plugins_dir'] . '/ckeditor/lib/adapters/jquery.js');
+		}
 	}
+	
 	// Load preset and connector
 	if ($usr['id'] > 0)
 	{
