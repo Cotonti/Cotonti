@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['tags'])
+if (cot_plugin_active('tags'))
 {
 	// Remove i18n-specific tags
 	require_once cot_incfile('tags', 'plug');

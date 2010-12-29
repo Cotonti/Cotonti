@@ -140,24 +140,24 @@ if ($a=='update')
 		if ($ruser['user_name'] != $urr['user_name'])
 		{
 			$oldname = $db->prep($urr['user_name']);
-			if ($cfg['forums'])
+			if (cot_module_active('forums'))
 			{
 				require_once cot_incfile('forums', 'module');
 				$db->update($db_forum_topics, array('ft_lastpostername' => $newname), 'ft_lastpostername="'.$oldname.'"');
 				$db->update($db_forum_topics, array('ft_firstpostername' => $newname), 'ft_firstpostername="'.$oldname.'"');
 				$db->update($db_forum_posts, array('fp_postername' => $newname), 'fp_postername="'.$oldname.'"');
 			}
-			if ($cfg['page'])
+			if (cot_module_active('page'))
 			{
 				require_once cot_incfile('page', 'module');
 				$db->update($db_pages, array('page_author' => $newname), 'page_author="'.$oldname.'"');
 			}
-			if ($cfg['plugin']['comments'])
+			if (cot_plugin_active('comments'))
 			{
 				require_once cot_incfile('comments', 'plug');
 				$db->update($db_com, array('com_author' => $newname), 'com_author="'.$oldname.'"');
 			}
-			if ($cfg['pm'])
+			if (cot_module_active('pm'))
 			{
 				require_once cot_incfile('pm', 'module');
 				$db->update($db_pm, array('pm_fromuser' => $newname), 'pm_fromuser="'.$oldname.'"');

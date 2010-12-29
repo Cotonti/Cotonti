@@ -66,7 +66,7 @@ if (!$cfg['plugin']['hits']['disableactivitystats'])
 	$sql = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_date > '$timeback'");
 	$newpages = $sql->fetchColumn();
 
-	if ($cfg['forums'])
+	if (cot_module_active('forums'))
 	{
 		require_once cot_incfile('forums', 'module');
 
@@ -82,7 +82,7 @@ if (!$cfg['plugin']['hits']['disableactivitystats'])
 		$newcomments = cot_get_newcomments($timeback);
 	}
 
-	if ($cfg['pm'])
+	if (cot_module_active('pm'))
 	{
 	 require_once cot_incfile('pm', 'module');
 		$sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");

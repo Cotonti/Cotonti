@@ -61,7 +61,7 @@ $t->assign(array(
 	'TAGS_ORDER' => $tag_order
 ));
 
-if ($a == 'pages' && $cfg['page'])
+if ($a == 'pages' && cot_module_active('page'))
 {
 	if(empty($qs))
 	{
@@ -78,7 +78,7 @@ if ($a == 'pages' && $cfg['page'])
 		}
 	}
 }
-elseif ($a == 'forums' && $cfg['forums'])
+elseif ($a == 'forums' && cot_module_active('forums'))
 {
 	if (empty($qs))
 	{
@@ -138,7 +138,7 @@ function cot_tag_search_pages($query)
 {
 	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_pages, $o, $row;
 
-	if (!$cfg['page'])
+	if (!cot_module_active('page'))
 	{
 		return;
 	}
@@ -235,7 +235,7 @@ function cot_tag_search_forums($query)
 {
 	global $db, $t, $L, $cfg, $usr, $qs, $d, $db_tag_references, $db_forum_topics, $o, $row;
 
-	if (!$cfg['forums'])
+	if (!cot_module_active('forums'))
 	{
 		return;
 	}

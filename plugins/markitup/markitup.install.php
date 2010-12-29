@@ -12,7 +12,7 @@
 defined('COT_CODE') or die('Wrong URL');
 
 // Installing new bbcodes
-if ($cfg['plugin']['bbcode'])
+if (cot_plugin_active('bbcode'))
 {
 	cot_bbcode_remove(0, 'markitup');
 

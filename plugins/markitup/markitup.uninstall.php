@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-if ($cfg['plugin']['bbcode'])
+if (cot_plugin_active('bbcode'))
 {
 	// Remove plugin bbcodes
 	cot_bbcode_remove(0, 'markitup');

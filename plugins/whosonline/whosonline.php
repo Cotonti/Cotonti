@@ -20,7 +20,7 @@ Hooks=standalone
 require_once cot_incfile('users', 'module');
 require_once cot_incfile('hits', 'plug');
 
-if($cfg['plugin']['hiddengroups'])
+if (cot_plugin_active('hiddengroups'))
 {
 	require_once cot_incfile('hiddengroups', 'plug');
 	$mode = cot_hiddengroups_mode();
