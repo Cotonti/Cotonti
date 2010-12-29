@@ -8,8 +8,8 @@ Hooks=admin.users.edit.tags
 /**
  * Hidden groups
  *
- * @package Cotonti
- * @version 0.9.0
+ * @package hiddengroups
+ * @version 1.0
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD

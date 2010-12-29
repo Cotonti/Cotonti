@@ -3,7 +3,7 @@
  * English Language File for Hiddengroups Plugin
  *
  * @package hiddengroups
- * @version 0.7.0
+ * @version 1.0
  * @author Cotonti Translators Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD

@@ -4,7 +4,7 @@
 Code=hiddengroups
 Name=Hidden Groups
 Description=Hide groups and/or its members
-Version=0.9.6
+Version=1.0
 Date=2010-nov-04
 Author=Koradhil, Cotonti Team
 Copyright=Copyright (c) Cotonti Team 2008-2010

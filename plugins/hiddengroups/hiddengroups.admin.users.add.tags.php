@@ -8,8 +8,8 @@ Hooks=admin.users.add.tags
 /**
  * Hidden groups
  *
- * @package Cotonti
- * @version 0.9.0
+ * @package hiddengroups
+ * @version 1.0
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
@@ -17,6 +17,6 @@ Hooks=admin.users.add.tags
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-$t->assign('ADMIN_USERS_NGRP_HIDDEN', cot_radiobox(0, 'nhidden', array(1, 0), array($L['Yes'], $L['No'])));
+$t->assign('ADMIN_USERS_NGRP_HIDDEN', cot_radiobox(0, 'rhidden', array(1, 0), array($L['Yes'], $L['No'])));
 
 ?>

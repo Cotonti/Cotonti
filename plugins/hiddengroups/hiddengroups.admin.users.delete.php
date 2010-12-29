@@ -8,8 +8,8 @@ Hooks=admin.users.update
 /**
  * Hidden groups
  *
- * @package Cotonti
- * @version 0.9.0
+ * @package hiddengroups
+ * @version 1.0
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2010
  * @license BSD
@@ -17,6 +17,6 @@ Hooks=admin.users.update
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-$cache && $cache->db->remove('hiddenusers', 'system');
+$cache && $cache->db->remove('cot_hiddenusers', 'system');
 
 ?>
