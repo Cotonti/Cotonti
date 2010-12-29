@@ -21,6 +21,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('polls',
 cot_block($usr['isadmin']);
 
 require_once cot_incfile('polls', 'module');
+require_once cot_incfile('polls', 'module', 'resources');
 
 $t = new XTemplate(cot_tplfile('polls.admin', 'module'));
 
@@ -37,7 +38,7 @@ $variants['index'] = array($L['Main'], "index");
 $variants['forum'] = array($L['Forums'], "forum");
 
 /* === Hook === */
-foreach (cot_getextplugins('adim.polls.first') as $pl)
+foreach (cot_getextplugins('polls.admin.first') as $pl)
 {
 	include $pl;
 }
