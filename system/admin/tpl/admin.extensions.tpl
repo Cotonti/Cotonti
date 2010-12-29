@@ -182,6 +182,26 @@
 	</table>
 <!-- END: DETAILS -->
 
+<!-- BEGIN: HOOKS -->
+	<h2>{PHP.L.Hooks} ({ADMIN_EXTENSIONS_CNT_HOOK}):</h2>
+	<table class="cells">
+		<tr>
+			<td class="coltop width40">{PHP.L.Hooks}</td>
+			<td class="coltop width20">{PHP.L.Plugin}</td>
+			<td class="coltop width20">{PHP.L.Order}</td>
+			<td class="coltop width20">{PHP.L.Active}</td>
+		</tr>
+<!-- BEGIN: HOOKS_ROW -->
+		<tr>
+			<td>{ADMIN_EXTENSIONS_HOOK}</td>
+			<td>{ADMIN_EXTENSIONS_CODE}</td>
+			<td class="centerall">{ADMIN_EXTENSIONS_ORDER}</td>
+			<td class="centerall">{ADMIN_EXTENSIONS_ACTIVE}</td>
+		</tr>
+<!-- END: HOOKS_ROW -->
+	</table>
+<!-- END: HOOKS -->
+
 <!-- BEGIN: DEFAULT -->
 <!-- BEGIN: SECTION-->
 	<h2>{ADMIN_EXTENSIONS_SECTION_TITLE} ({ADMIN_EXTENSIONS_CNT_EXTP}):</h2>
@@ -214,14 +234,14 @@
 			<td class="centerall">{ADMIN_EXTENSIONS_PARTSCOUNT}</td>
 			<td class="centerall">{ADMIN_EXTENSIONS_STATUS}</td>
 			<td class="centerall action">
-<!-- IF {PHP.ent_code} > 0 -->
+<!-- IF {PHP.totalinstalled} -->
 				<a title="{PHP.L.Configuration}" href="{ADMIN_EXTENSIONS_EDIT_URL}">{PHP.R.admin_icon_config}</a>
 <!-- ENDIF -->
-<!-- IF {PHP.part_status} != 3 -->
+<!-- IF {PHP.totalinstalled} -->
 				<a title="{PHP.L.Rights}" href="{ADMIN_EXTENSIONS_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a>
 <!-- ENDIF -->
 <!-- IF {PHP.ifthistools} -->
-				<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}">{PHP.R.admin_icon_tools}</a>
+				<a title="{PHP.L.Admin}" href="{ADMIN_EXTENSIONS_JUMPTO_URL_TOOLS}">{PHP.R.admin_icon_tools}</a>
 <!-- ENDIF -->
 <!-- IF {PHP.if_plg_standalone} -->
 				<a title="{PHP.L.Open}" href="{ADMIN_EXTENSIONS_JUMPTO_URL}">{PHP.R.admin_icon_jumpto}</a>
@@ -243,23 +263,13 @@
 <!-- END: ROW_ERROR -->
 	</table>
 <!-- END: SECTION -->
-	<h2>{PHP.L.Hooks} ({ADMIN_EXTENSIONS_CNT_HOOK}):</h2>
-	<table class="cells">
-		<tr>
-			<td class="coltop width40">{PHP.L.Hooks}</td>
-			<td class="coltop width20">{PHP.L.Plugin}</td>
-			<td class="coltop width20">{PHP.L.Order}</td>
-			<td class="coltop width20">{PHP.L.Active}</td>
-		</tr>
-<!-- BEGIN: HOOKS -->
-		<tr>
-			<td>{ADMIN_EXTENSIONS_HOOK}</td>
-			<td>{ADMIN_EXTENSIONS_CODE}</td>
-			<td class="centerall">{ADMIN_EXTENSIONS_ORDER}</td>
-			<td class="centerall">{ADMIN_EXTENSIONS_ACTIVE}</td>
-		</tr>
-<!-- END: HOOKS -->
-	</table>
+
+<ul>
+	<li>
+		<h3><a href="{ADMIN_EXTENSIONS_HOOKS_URL}">{PHP.L.Hooks}</a></h3>
+	</li>
+</ul>
+
 <!-- END: DEFAULT -->
 <!-- BEGIN: EDIT -->
 		<h2>{ADMIN_EXTENSIONS_EDIT_TITLE}</h2>
