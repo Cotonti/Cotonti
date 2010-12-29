@@ -17,7 +17,7 @@ require_once cot_incfile('tags', 'plug', 'resources');
 
 // Global variables
 $db_tags = (isset($db_tags)) ? $db_tags : $db_x . 'tags';
-$db_tag_refrences = (isset($$db_tag_refrences)) ? $db_tag_refrences : $db_x . '$db_tag_refrences';
+$db_tag_refrences = (isset($$db_tag_refrences)) ? $db_tag_refrences : $db_x . 'tag_references';
 
 /**
  * Tags a given item from a specific area with a keyword
@@ -239,7 +239,7 @@ function cot_tag_parse($input)
  */
 function cot_tag_parse_query($qs)
 {
-	global $db;
+	global $db, $db_tag_refrences;
 	$tokens1 = explode(';', $qs);
 	$tokens1 = array_map('trim', $tokens1);
 	$cnt1 = count($tokens1);
@@ -253,14 +253,23 @@ function cot_tag_parse_query($qs)
 			$tag = cot_tag_prep($tokens2[$j]);
 			if (!empty($tag))
 			{
+
 				if (mb_strpos($tag, '*') !== false)
 				{
 					$tag = str_replace('*', '%', $tag);
-					$tokens2[$j] = "r.tag LIKE " . $db->quote($tag);
+					$op = 'LIKE ' . $db->quote($tag);
 				}
 				else
 				{
-					$tokens2[$j] = "r.tag = " . $db->quote($tag);
+					$op = '= ' . $db->quote($tag);
+				}
+				if ($j == 0)
+				{
+					$tokens2[$j] = 'r.tag ' . $op;
+				}
+				else
+				{
+					$tokens2[$j] = "EXISTS (SELECT * FROM $db_tag_refrences AS r{$i}_{$j} WHERE r{$i}_{$j}.tag_item = p.page_id AND r{$i}_{$j}.tag $op)";
 				}
 			}
 			else
