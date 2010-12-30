@@ -21,7 +21,7 @@ $adminhelp = $L['ipsearch_help'];
 
 $t = new XTemplate(cot_tplfile('ipsearch', 'plug'));
 $t->assign(array(
-	'IPSEARCH_FORM_URL' => cot_url('admin', 'm=tools&p=ipsearch&a=search&'.cot_xg()),
+	'IPSEARCH_FORM_URL' => cot_url('admin', 'm=other&p=ipsearch&a=search&'.cot_xg()),
 	'IPSEARCH_ID' => $id
 ));
 
