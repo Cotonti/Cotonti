@@ -91,7 +91,8 @@ while($row = $sql->fetch())
 	$t->assign(array(
 		'ADMIN_LOG_ROW_LOG_ID' => $row['log_id'],
 		'ADMIN_LOG_ROW_DATE' => date($cfg['dateformat'], $row['log_date']),
-		'ADMIN_LOG_ROW_URL_IP_SEARCH' => cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$row['log_ip'].'&'.cot_xg()),
+		'ADMIN_LOG_ROW_URL_IP_SEARCH' => cot_plugin_active('ipsearch') ?
+			cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$row['log_ip'].'&'.cot_xg()) : '',
 		'ADMIN_LOG_ROW_LOG_IP' => $row['log_ip'],
 		'ADMIN_LOG_ROW_LOG_NAME' => $row['log_name'],
 		'ADMIN_LOG_ROW_URL_LOG_GROUP' => cot_url('admin', 'm=log&n='.$row['log_group']),

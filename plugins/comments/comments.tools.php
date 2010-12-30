@@ -47,7 +47,7 @@ $is_adminwarnings = isset($adminwarnings);
 
 $totalitems = $db->countRows($db_com);
 
-$pagenav = cot_pagenav('admin', 'm=tools&p=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
+$pagenav = cot_pagenav('admin', 'm=other&p=comments', $d, $totalitems, $cfg['maxrowsperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
 
 $sql = $db->query("SELECT * FROM $db_com WHERE 1 ORDER BY com_id DESC LIMIT $d, ".$cfg['maxrowsperpage']);
 
@@ -93,7 +93,7 @@ while ($row = $sql->fetch())
 	}
 
 	$t->assign(array(
-		'ADMIN_COMMENTS_ITEM_DEL_URL' => cot_url('admin', 'm=tools&p=comments&a=delete&id='.$row['com_id'].'&'.cot_xg()),
+		'ADMIN_COMMENTS_ITEM_DEL_URL' => cot_url('admin', 'm=other&p=comments&a=delete&id='.$row['com_id'].'&'.cot_xg()),
 		'ADMIN_COMMENTS_ITEM_ID' => $row['com_id'],
 		'ADMIN_COMMENTS_CODE' => $row['com_code'],
 		'ADMIN_COMMENTS_AUTHOR' => $row['com_author'],

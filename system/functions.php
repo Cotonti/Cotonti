@@ -1286,7 +1286,14 @@ function cot_build_ipsearch($ip)
 	global $sys;
 	if (!empty($ip))
 	{
-		return cot_rc_link(cot_url('admin', 'm=tools&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']), $ip);
+		if(cot_plugin_active('ipsearch'))
+		{
+			return cot_rc_link(cot_url('admin', 'm=other&p=ipsearch&a=search&id='.$ip.'&x='.$sys['xk']), $ip);
+		}
+		else
+		{
+			return $ip;
+		}
 	}
 	return '';
 }
