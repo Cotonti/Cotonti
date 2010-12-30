@@ -130,6 +130,7 @@ $url = parse_url($cfg['mainurl']);
 $sys['secure'] = $url['scheme'] == 'https' ? true : false;
 $sys['scheme'] = $url['scheme'];
 $sys['site_uri'] = $url['path'];
+$sys['host'] = $url['host'];
 $sys['domain'] = preg_replace('#^www\.#', '', $url['host']);
 if (empty($cfg['cookiedomain'])) $cfg['cookiedomain'] = $sys['domain'];
 if ($sys['site_uri'][mb_strlen($sys['site_uri']) - 1] != '/') $sys['site_uri'] .= '/';

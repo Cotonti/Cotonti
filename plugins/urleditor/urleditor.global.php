@@ -27,7 +27,7 @@ if (!is_array($cot_urltrans))
 		$parts = explode("\t", $line);
 		$rule = array();
 		$rule['trans'] = $parts[2];
-		$parts[1] == '*' ? $rule['params'] = array() : mb_parse_str($parts[1], $rule['params']);
+		$parts[1] == '*' ? $rule['params'] = array() : parse_str($parts[1], $rule['params']);
 		foreach($rule['params'] as $key => $val)
 		{
 			if (mb_strpos($val, '|') !== false)
@@ -54,7 +54,7 @@ if (!is_array($cot_urltrans))
  */
 function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypass = false)
 {
-	global $cfg, $cot_urltrans;
+	global $cfg, $cot_urltrans, $sys;
 	// Preprocess arguments
 	is_array($params) ? $args = $params : mb_parse_str($params, $args);
 	$area = empty($cot_urltrans[$name]) ? '*' : $name;
@@ -84,9 +84,8 @@ function cot_url_custom($name, $params = '', $tail = '', $htmlspecialchars_bypas
 		}
 	}
 	// Some special substitutions
-	$mainurl = parse_url($cfg['mainurl']);
 	$spec['_area'] = $name;
-	$spec['_host'] = $mainurl['host'];
+	$spec['_host'] = $sys['host'];
 	$spec['_rhost'] = $_SERVER['HTTP_HOST'];
 	$spec['_path'] = COT_SITE_URI;
 	// Transform the data into URL

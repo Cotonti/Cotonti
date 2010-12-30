@@ -2953,8 +2953,8 @@ function cot_rc($name, $params = array())
 	global $R, $L;
 	$res = isset($R[$name]) ? $R[$name]
 		: (isset($L[$name]) ? $L[$name] : $name);
-	is_array($params) ? $args = $params : mb_parse_str($params, $args);
-	if (preg_match_all('#\{\$(.+?)\}#', $res, $matches, PREG_SET_ORDER))
+	is_array($params) ? $args = $params : parse_str($params, $args);
+	if (preg_match_all('#\{\$(\w+)\}#', $res, $matches, PREG_SET_ORDER))
 	{
 		foreach($matches as $m)
 		{
@@ -3573,7 +3573,7 @@ function cot_url($name, $params = '', $tail = '', $htmlspecialchars_bypass = fal
 
 	global $cfg;
 	// Preprocess arguments
-	is_array($params) ? $args = $params : mb_parse_str($params, $args);
+	is_array($params) ? $args = $params : parse_str($params, $args);
 	$url = $name . '.php';
 	// Append query string if needed
 	if (count($args) > 0)
