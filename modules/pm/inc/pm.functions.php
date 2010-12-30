@@ -16,6 +16,7 @@ require_once cot_langfile('pm', 'module');
 require_once cot_incfile('pm', 'module', 'resources');
 
 // Global variables
+global $db_pm, $db_x;
 $db_pm = (isset($db_pm)) ? $db_pm : $db_x . 'pm';
 
 /**

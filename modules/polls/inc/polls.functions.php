@@ -16,6 +16,7 @@ require_once cot_incfile('forms');
 require_once cot_langfile('polls', 'module');
 
 // Global variables
+global $db_polls, $db_polls_options, $db_polls_voters, $db_x;
 $db_polls 		 = (isset($db_polls)) ? $db_polls : $db_x . 'polls';
 $db_polls_options = (isset($db_polls_options)) ? $db_polls_options : $db_x . 'polls_options';
 $db_polls_voters  = (isset($db_polls_voters)) ? $db_polls_voters : $db_x . 'polls_voters';

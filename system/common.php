@@ -61,7 +61,7 @@ else
 require_once $cfg['system_dir'].'/database.php';
 try
 {
-	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']/*, array(PDO::ATTR_PERSISTENT => true)*/);
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
 catch (PDOException $e)
 {

@@ -17,6 +17,7 @@ require_once cot_langfile('comments', 'plug');
 require_once cot_incfile('comments', 'plug', 'resources');
 
 // Table name globals
+global $db_com, $db_x;
 $db_com = (isset($db_com)) ? $db_com : $db_x . 'com';
 
 /**

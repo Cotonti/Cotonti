@@ -11,6 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+global $db_stats, $db_x;
 $db_stats = (isset($db_stats)) ? $db_stats : $db_x . 'stats';
 
 /*

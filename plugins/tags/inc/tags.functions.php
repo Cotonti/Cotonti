@@ -16,6 +16,7 @@ require_once cot_langfile('tags', 'plug');
 require_once cot_incfile('tags', 'plug', 'resources');
 
 // Global variables
+global $db_tags, $db_tag_refrences, $db_x;
 $db_tags = (isset($db_tags)) ? $db_tags : $db_x . 'tags';
 $db_tag_refrences = (isset($$db_tag_refrences)) ? $db_tag_refrences : $db_x . 'tag_references';
 
