@@ -56,7 +56,7 @@ class CotDB extends PDO {
 	public function  __construct($dsn, $username, $passwd, $options = array())
 	{
 		global $cfg;
-		if (!empty($cfg['mysqlcharset']))
+		if (!empty($cfg['mysqlcharset']) && version_compare(PHP_VERSION, '5.3.0', '!='))
 		{
 			$collation_query = "SET NAMES '{$cfg['mysqlcharset']}'";
 			if (!empty($cfg['mysqlcollate']) )

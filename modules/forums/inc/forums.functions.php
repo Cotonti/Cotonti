@@ -16,6 +16,7 @@ require_once cot_langfile('forums', 'module');
 require_once cot_incfile('forums', 'module', 'resources');
 
 // Global variables
+global $db_forum_posts, $db_forum_topics, $db_forum_stats, $db_x;
 $db_forum_posts = (isset($db_forum_posts)) ? $db_forum_posts : $db_x . 'forum_posts';
 $db_forum_topics = (isset($db_forum_topics)) ? $db_forum_topics : $db_x . 'forum_topics';
 $db_forum_stats = (isset($db_forum_stats)) ? $db_forum_stats : $db_x . 'forum_stats';

@@ -10,7 +10,8 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$db_bbcode = (isset($db_bbcode)) ? $db_bbcode : $db_x . 'bbcode';
+global $db_bbcode;
+$db_bbcode = isset($db_bbcode) ? $db_bbcode : $db_x . 'bbcode';
 
 /**
  * Registers a new bbcode in database.

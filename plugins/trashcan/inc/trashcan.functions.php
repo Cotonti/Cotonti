@@ -11,6 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+global $db_trash, $db_users, $db_x, $trash_types;
 $db_trash = isset($db_trash) ? $db_trash : $db_x . 'trash';
 
 $trash_types = array(

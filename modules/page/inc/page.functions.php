@@ -18,6 +18,7 @@ require_once cot_incfile('forms');
 require_once cot_incfile('extrafields');
 
 // Global variables
+global $cot_extrafields, $db_pages, $db_x;
 $db_pages = (isset($db_pages)) ? $db_pages : $db_x . 'pages';
 
 $cot_extrafields['pages'] = (!empty($cot_extrafields[$db_pages]))

@@ -18,6 +18,7 @@ require_once cot_incfile('pfs', 'module', 'resources');
 require_once cot_incfile('forms');
 
 // Global variables
+global $db_pfs, $db_pfs_folders, $db_x;
 $db_pfs = (isset($db_pfs)) ? $db_pfs : $db_x . 'pfs';
 $db_pfs_folders = (isset($db_pfs_folders)) ? $db_pfs_folders : $db_x . 'pfs_folders';
 
