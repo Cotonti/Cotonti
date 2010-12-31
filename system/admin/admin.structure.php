@@ -270,7 +270,7 @@ while ($row = $sql->fetch())
 		'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? '' : $R['admin_icon_pathfieldimg'],
 		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="3" maxlength="255"'),
 		'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
-		'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode['.$structure_id.']', array('1'. '2', '3'), array($L['adm_tpl_empty'], $L['adm_tpl_forced'].'  '.$cat_selectbox, $L['adm_tpl_parent']), '', '<br />'),
+		'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode['.$structure_id.']', array('1', '3', '2'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />'),
 		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="18" maxlength="255"'),
 		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
 		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
@@ -292,7 +292,7 @@ while ($row = $sql->fetch())
 		// extra fields universal tags
 		$t->assign('ADMIN_STRUCTURE_EXTRAFLD', cot_build_extrafields('rstructure'.$row2['field_name'],  $row2, $row['structure_'.$row2['field_name']]));
 		$t->assign('ADMIN_STRUCTURE_EXTRAFLD_TITLE', isset($L['structure_'.$row2['field_name'].'_title']) ?  $L['structure_'.$row2['field_name'].'_title'] : $row2['field_description']);
-		$t->parse(($id) ? 'MAIN.OPTIONS.EXTRAFLD' : 'MAIN.DEFULT.ROW.EXTRAFLD');
+		$t->parse(($id) ? 'MAIN.OPTIONS.EXTRAFLD' : 'MAIN.DEFAULT.ROW.EXTRAFLD');
 	}
 
 	/* === Hook - Part2 : Include === */
@@ -302,7 +302,7 @@ while ($row = $sql->fetch())
 	}
 	/* ===== */
 
-	$t->parse(($id) ? 'MAIN.OPTIONS' : 'MAIN.DEFULT.ROW');
+	$t->parse(($id) ? 'MAIN.OPTIONS' : 'MAIN.DEFAULT.ROW');
 }
 if(!$id)
 {
@@ -313,7 +313,7 @@ if(!$id)
 		'ADMIN_STRUCTURE_TOTALITEMS' => $totalitems,
 		'ADMIN_STRUCTURE_COUNTER_ROW' => $ii,
 	));
-	$t->parse('MAIN.DEFULT');
+	$t->parse('MAIN.DEFAULT');
 
 	$t->assign(array(
 		'ADMIN_STRUCTURE_URL_FORM_ADD' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=add'),
