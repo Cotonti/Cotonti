@@ -39,13 +39,7 @@
 			</tr>
 			<tr>
 				<td>{PHP.L.adm_tpl_mode}:</td>
-				<td>{ADMIN_STRUCTURE_TPLMODE}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Order}:</td>
-				<td class="{ADMIN_STRUCTURE_ODDEVEN}">
-					{ADMIN_STRUCTURE_ORDER}{ADMIN_STRUCTURE_WAY} ({PHP.L.adm_sortingorder})
-				</td>
+				<td>{ADMIN_STRUCTURE_TPLMODE} {ADMIN_STRUCTURE_SELECT}</td>
 			</tr>
 			<!-- BEGIN: EXTRAFLD -->
 			<tr>
@@ -56,11 +50,14 @@
 			<tr>
 				<td class="valid" colspan="2"><input type="submit" class="submit" value="{PHP.L.Update}" /></td>
 			</tr>
+			<tr>
+				<td colspan="2"><a href="{ADMIN_STRUCTURE_CONFIG_URL}">{PHP.L.Configuration}</a></td>
+			</tr>
 		</table>
 		</form>
 		<!-- END: OPTIONS -->
 
-		<!-- BEGIN: DEFULT -->
+		<!-- BEGIN: DEFAULT -->
 		<h3>{PHP.L.editdeleteentries}:</h3>
 		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax" enctype="multipart/form-data" >
 		<table class="cells">
@@ -70,7 +67,6 @@
 				<td class="coltop width20">{PHP.L.Title}</td>
 				<td class="coltop width5">{PHP.L.TPL}</td>
 				<td class="coltop width10">{PHP.L.Locked}</td>
-				<td class="coltop width15">{PHP.L.Order}</td>
 				<td class="coltop width10">{PHP.L.Pages}</td>
 				<td class="coltop width20">{PHP.L.Action}</td>
 			</tr>
@@ -81,11 +77,6 @@
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_SYM}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_LOCKED}</td>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">
-					{ADMIN_STRUCTURE_ORDER}
-					<br />
-					{ADMIN_STRUCTURE_WAY}
-				</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_COUNT}</td>
 				<td class="centerall action {ADMIN_STRUCTURE_ODDEVEN}">
 					<a title="{PHP.L.Rights}" href="{ADMIN_STRUCTURE_RIGHTS_URL}">{PHP.R.admin_icon_rights2}</a><a title="{PHP.L.Options}" href="{ADMIN_STRUCTURE_OPTIONS_URL}" class="ajax">{PHP.R.admin_icon_config}</a><!-- IF {PHP.dozvil} --><a title="{PHP.L.Delete}" href="{ADMIN_STRUCTURE_UPDATE_DEL_URL}" class="ajax">{PHP.R.admin_icon_delete}</a><!-- ENDIF --><a href="{ADMIN_STRUCTURE_JUMPTO_URL}" title="{PHP.L.Pages}" >{PHP.R.admin_icon_jumpto}</a> <a href="{ADMIN_STRUCTURE_CONFIG_URL}" title="{PHP.L.Config}" >{PHP.R.admin_icon_config}</a></td>
@@ -99,7 +90,7 @@
 		<p class="paging">
 			{ADMIN_STRUCTURE_PAGINATION_PREV}{ADMIN_STRUCTURE_PAGNAV}{ADMIN_STRUCTURE_PAGINATION_NEXT} <span class="a1">{PHP.L.Total}: {ADMIN_STRUCTURE_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_STRUCTURE_COUNTER_ROW}</span>
 		</p>
-		<!-- END: DEFULT -->
+		<!-- END: DEFAULT -->
 
 		<!-- BEGIN: NEWCAT -->
 		<h3>{PHP.L.Add}:</h3>
@@ -128,10 +119,6 @@
 			<tr>
 				<td>{PHP.L.Locked}:</td>
 				<td>{ADMIN_STRUCTURE_LOCKED}</td>
-			</tr>
-			<tr>
-				<td>{PHP.L.Order}:</td>
-				<td>{ADMIN_STRUCTURE_ORDER}{ADMIN_STRUCTURE_WAY}</td>
 			</tr>
 			<!-- BEGIN: EXTRAFLD -->
 			<tr>

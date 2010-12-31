@@ -18,6 +18,7 @@ Hooks=rc
 defined('COT_CODE') or die('Wrong URL');
 
 // Language selection
+global $lang;
 // FIXME language selection is currently site-wide, not per user
 $mkup_lang = $cfg['plugins_dir']."/markitup/lang/$lang.lang.js";
 if (!file_exists($mkup_lang))
