@@ -16,7 +16,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Ratings Subsection
  */
 
-$L['cfg_enable_ratings'] = 'Включить рейтинги';
+$L['cfg_enable_ratings'] = array('Включить рейтинги');
 $L['cfg_ratings_allowchange'] = array('Разрешить изменение рейтинга', 'Разрешить пользователям изменять ранее выставленный рейтинг');
 
 /**
