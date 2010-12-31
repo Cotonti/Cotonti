@@ -16,7 +16,7 @@ defined('COT_CODE') or die('Wrong URL.');
  * Ratings Subsection
  */
 
-$L['cfg_enable_ratings'] = 'Enable ratings';
+$L['cfg_enable_ratings'] = array('Enable ratings');
 $L['cfg_ratings_allowchange'] = array('Allow Ratings to be changed?', 'If enabled it will allow users to change their rating.');
 
 /**
