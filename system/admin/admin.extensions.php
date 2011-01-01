@@ -100,10 +100,14 @@ switch($a)
 				cot_message('adm_partrunning');
 			break;
 		}
-		if (!empty($b) && $cache)
+		if (!empty($b))
 		{
-			$cache->clear();
-			cot_rc_consolidate();
+			$db->update($db_users, array('user_auth' => ''));
+			if ($cache)
+			{
+				$cache->clear();
+				cot_rc_consolidate();
+			}
 		}
 		if(file_exists($ext_info))
 		{
@@ -381,6 +385,7 @@ switch($a)
 				cot_die();
 			break;
 		}
+		$db->update($db_users, array('user_auth' => ''));
 		if ($cache)
 		{
 			$cache->clear();

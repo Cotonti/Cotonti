@@ -69,6 +69,7 @@ $L['forums_searchinforums'] = 'Search in forums';
 $L['forums_markasread'] = 'Mark all posts as read';
 $L['forums_foldall'] = 'Fold all';
 $L['forums_unfoldall'] = 'Unfold all';
+$L['forums_viewers'] = 'Viewers';
 
 $L['forums_nonewposts'] = 'No new posts';
 $L['forums_newposts'] = 'New posts';

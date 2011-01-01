@@ -29,11 +29,7 @@
 			   <!-- BEGIN: SECTION -->
 			   <tr>
 				<td class="centerall">
-					<!-- IF {FORUMS_SECTIONS_ROW_ICON} -->
-					<img src="{FORUMS_SECTIONS_ROW_ICON}" alt="" />
-					<!-- ELSE -->
-						{PHP.R.icon_users}
-					<!-- ENDIF -->
+					{FORUMS_SECTIONS_ROW_ICON}
 				</td>
 				<td>
 					<h4><a href="{FORUMS_SECTIONS_ROW_URL}">{FORUMS_SECTIONS_ROW_TITLE}</a></h4>

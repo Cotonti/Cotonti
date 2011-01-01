@@ -32,6 +32,7 @@ $db_forum_stats = (isset($db_forum_stats)) ? $db_forum_stats : $db_x . 'forum_st
 function cot_forums_buildpath($cat, $nolast = false, $forumslink = true)
 {
 	global $structure, $cfg, $L;
+	$mask = 'link_catpath';
 	$mask = str_replace('%1$s', '{$url}', $mask);
 	$mask = str_replace('%2$s', '{$title}', $mask);
 	if ($cfg['homebreadcrumb'] && $forumslink)
@@ -174,34 +175,38 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 	$new_elems = ($usr['id'] > 0 && $stat['fs_lt_date'] > $usr['lastvisit'] && $stat['fs_lt_posterid'] != $usr['id']);
 
 	$sections = array(
-		$tag_prefix . "CAT" => $cat,
-		$tag_prefix . "LOCKED" => $structure['forums'][$cat]['locked'],
-		$tag_prefix . "TITLE" => $structure['forums'][$cat]['title'],
-		$tag_prefix . "DESC" => cot_parse_autourls($structure['forums'][$cat]['desc']) . ($structure['forums'][$cat]['locked']) ? " " . $L['Locked'] : '',
-		$tag_prefix . "ICON" => $structure['forums'][$cat]['icon'],
-		$tag_prefix . "URL" => cot_url('forums', "m=topics&s=" . $cat),
-		$tag_prefix . "SECTIONSURL" => cot_url('forums', "c=" . $cat),
-		$tag_prefix . "NEWPOSTS" => $new_elems,
-		$tag_prefix . "CAT_DEFSTATE" => htmlspecialchars($cfg['forums'][$cat]['defstate'])
+		$tag_prefix . 'CAT' => $cat,
+		$tag_prefix . 'LOCKED' => $structure['forums'][$cat]['locked'],
+		$tag_prefix . 'TITLE' => $structure['forums'][$cat]['title'],
+		$tag_prefix . 'DESC' => cot_parse_autourls($structure['forums'][$cat]['desc']) . ($structure['forums'][$cat]['locked']) ? ' ' . $L['Locked'] : '',
+		$tag_prefix . 'ICON' => empty($structure['forums'][$cat]['icon']) ? '' : cot_rc('img_structure_cat', array(
+				'icon' => $structure['forums'][$cat]['icon'],
+				'title' => htmlspecialchars($structure['forums'][$cat]['title']),
+				'desc' => htmlspecialchars($structure['forums'][$cat]['desc'])
+			)),
+		$tag_prefix . 'URL' => cot_url('forums', 'm=topics&s=' . $cat),
+		$tag_prefix . 'SECTIONSURL' => cot_url('forums', 'c=' . $cat),
+		$tag_prefix . 'NEWPOSTS' => $new_elems,
+		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars($cfg['forums'][$cat]['defstate']),
 	);
 
 	if ($stat['fs_lt_date'] > 0)
 	{
 		$sections += array(
-			$tag_prefix . "LASTPOSTDATE" => @date($cfg['formatmonthdayhourmin'], $stat['fs_lt_date'] + $usr['timezone'] * 3600),
-			$tag_prefix . "LASTPOSTER" => cot_build_user($stat['fs_lt_posterid'], htmlspecialchars($stat['fs_lt_postername'])),
-			$tag_prefix . "LASTPOST" => cot_rc_link($new_elems ? cot_url('forums', "m=posts&q=" . $stat['fs_lt_id'] . "&n=unread", "#unread") : cot_url('forums', "m=posts&q=" . $stat['fs_lt_id'] . "&n=last", "#bottom"), cot_cutstring($stat['fs_lt_title'], 32)),
-			$tag_prefix . "TIMEAGO" => cot_build_timegap($stat['fs_lt_date'], $sys['now_offset'])
+			$tag_prefix . 'LASTPOSTDATE' => @date($cfg['formatmonthdayhourmin'], $stat['fs_lt_date'] + $usr['timezone'] * 3600),
+			$tag_prefix . 'LASTPOSTER' => cot_build_user($stat['fs_lt_posterid'], htmlspecialchars($stat['fs_lt_postername'])),
+			$tag_prefix . 'LASTPOST' => cot_rc_link($new_elems ? cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=unread', '#unread') : cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=last', '#bottom'), cot_cutstring($stat['fs_lt_title'], 32)),
+			$tag_prefix . 'TIMEAGO' => cot_build_timegap($stat['fs_lt_date'], $sys['now_offset'])
 		);
 	}
 
 	if (is_array($stat))
 	{
 		$sections += array(
-			$tag_prefix . "TOPICCOUNT" => $stat['topiccount'],
-			$tag_prefix . "POSTCOUNT" => $stat['postcount'],
-			$tag_prefix . "VIEWCOUNT" => $stat['viewcount'],
-			$tag_prefix . "VIEWCOUNT_SHORT" => ($stat['viewcount'] > 9999) ? floor($stat['viewcount'] / 1000) . "k" : $stat['viewcount'],
+			$tag_prefix . 'TOPICCOUNT' => $stat['topiccount'],
+			$tag_prefix . 'POSTCOUNT' => $stat['postcount'],
+			$tag_prefix . 'VIEWCOUNT' => $stat['viewcount'],
+			$tag_prefix . 'VIEWCOUNT_SHORT' => ($stat['viewcount'] > 9999) ? floor($stat['viewcount'] / 1000) . 'k' : $stat['viewcount'],
 		);
 	}
 

@@ -848,15 +848,6 @@ function cot_load_structure()
 
 	while ($row = $sql->fetch())
 	{
-		if (!empty($row['structure_icon']))
-		{
-			$row['structure_icon'] = cot_rc('img_structure_cat', array(
-				'icon' => $row['structure_icon'],
-				'title' => htmlspecialchars($row['structure_title']),
-				'desc' => htmlspecialchars($row['structure_desc'])
-			));
-		}
-
 		$path2 = mb_strrpos($row['structure_path'], '.');
 
 		$row['structure_tpl'] = (empty($row['structure_tpl'])) ? $row['structure_code'] : $row['structure_tpl'];
@@ -885,7 +876,8 @@ function cot_load_structure()
 			'title' => $row['structure_title'],
 			'desc' => $row['structure_desc'],
 			'icon' => $row['structure_icon'],
-			'locked' => $row['structure_locked']
+			'locked' => $row['structure_locked'],
+			'icon' => $row['structure_icon']
 		);
 
 		if (is_array($cot_extrafields['structure']))

@@ -32,7 +32,7 @@ foreach (cot_getextplugins('forums.sections.first') as $pl)
 
 if ($n == 'markall' && $usr['id'] > 0)
 {
-	$db->update($db_users, array("user_lastvisit" => $sys['now_offset']), "user_id='".$usr['id']."'");
+	$db->update($db_users, array('user_lastvisit' => $sys['now_offset']), "user_id='".$usr['id']."'");
 	$usr['lastvisit'] = $sys['now_offset'];
 }
 
@@ -129,10 +129,10 @@ $t = new XTemplate(cot_tplfile('forums.sections'));
 $bhome = ($cfg['homebreadcrumb']) ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).$cfg['separator'].' ' : '';
 
 $t->assign(array(
-	"FORUMS_RSS" => cot_url('rss', 'c=forums'),
-	"FORUMS_SECTIONS_PAGETITLE" => $bhome.cot_rc_link(cot_url('forums'), $L['Forums']),
-	"FORUMS_SECTIONS_MARKALL" =>  ($usr['id']>0) ? cot_rc_link(cot_url('forums', "n=markall"), $L['forums_markallasread']) : '',
-	"FORUMS_SECTIONS_WHOSONLINE" => $out['whosonline']." : ".$out['whosonline_reg_list']
+	'FORUMS_RSS' => cot_url('rss', 'c=forums'),
+	'FORUMS_SECTIONS_PAGETITLE' => $bhome.cot_rc_link(cot_url('forums'), $L['Forums']),
+	'FORUMS_SECTIONS_MARKALL' =>  ($usr['id']>0) ? cot_rc_link(cot_url('forums', "n=markall"), $L['forums_markallasread']) : '',
+	'FORUMS_SECTIONS_WHOSONLINE' => $out['whosonline']." : ".$out['whosonline_reg_list']
 ));
 
 
@@ -161,8 +161,8 @@ foreach ($fstlvl as $x)
 					$zz++;
 					$t->assign(cot_generate_sectiontags($z, 'FORUMS_SECTIONS_ROW_', $cat_top[$z]));
 					$t->assign(array(
-						"FORUMS_SECTIONS_ROW_ODDEVEN" => cot_build_oddeven($zz),
-						"FORUMS_SECTIONS_ROW_NUM" => $zz,
+						'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($zz),
+						'FORUMS_SECTIONS_ROW_NUM' => $zz,
 					));
 					/* === Hook - Part2 : Include === */
 					foreach ($extpss as $pl)
@@ -170,7 +170,7 @@ foreach ($fstlvl as $x)
 						include $pl;
 					}
 					/* ===== */
-					$t->parse("MAIN.FORUMS_SECTIONS.CAT.SECTION.SUBSECTION");
+					$t->parse('MAIN.FORUMS_SECTIONS.CAT.SECTION.SUBSECTION');
 				}
 			}
 			$yy++;
@@ -186,11 +186,11 @@ foreach ($fstlvl as $x)
 
 			}
 			$t->assign(array(
-				"FORUMS_SECTIONS_ROW_ACTIVITY" => cot_rc('forums_icon_section_activity', array('secact_num'=>$secact_num)),
-				"FORUMS_SECTIONS_ROW_ACTIVITYVALUE" => $secact_num,
-				"FORUMS_SECTIONS_ROW_VIEWERS" => $cot_sections_vw_cur,
-				"FORUMS_SECTIONS_ROW_ODDEVEN" => cot_build_oddeven($yy),
-				"FORUMS_SECTIONS_ROW_NUM" => $yy,
+				'FORUMS_SECTIONS_ROW_ACTIVITY' => cot_rc('forums_icon_section_activity', array('secact_num'=>$secact_num)),
+				'FORUMS_SECTIONS_ROW_ACTIVITYVALUE' => $secact_num,
+				'FORUMS_SECTIONS_ROW_VIEWERS' => $cot_sections_vw_cur,
+				'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($yy),
+				'FORUMS_SECTIONS_ROW_NUM' => $yy,
 			));
 			/* === Hook - Part2 : Include === */
 			foreach ($extps as $pl)
@@ -198,7 +198,7 @@ foreach ($fstlvl as $x)
 				include $pl;
 			}
 			/* ===== */
-			$t->parse("MAIN.FORUMS_SECTIONS.CAT.SECTION");
+			$t->parse('MAIN.FORUMS_SECTIONS.CAT.SECTION');
 		}
 	}
 	$xx++;
@@ -222,9 +222,9 @@ foreach ($fstlvl as $x)
 
 	$t->assign(cot_generate_sectiontags($x, 'FORUMS_SECTIONS_ROW_', $cat_top[$x]));
 	$t->assign(array(
-		"FORUMS_SECTIONS_ROW_FOLD" => $fold,
-		"FORUMS_SECTIONS_ROW_ODDEVEN" => cot_build_oddeven($xx),
-		"FORUMS_SECTIONS_ROW_NUM" => $xx,
+		'FORUMS_SECTIONS_ROW_FOLD' => $fold,
+		'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($xx),
+		'FORUMS_SECTIONS_ROW_NUM' => $xx,
 	));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
@@ -232,9 +232,9 @@ foreach ($fstlvl as $x)
 		include $pl;
 	}
 	/* ===== */
-	$t->parse("MAIN.FORUMS_SECTIONS.CAT");
+	$t->parse('MAIN.FORUMS_SECTIONS.CAT');
 }
-$t->parse("MAIN.FORUMS_SECTIONS");
+$t->parse('MAIN.FORUMS_SECTIONS');
 
 /* === Hook === */
 foreach (cot_getextplugins('forums.sections.tags') as $pl)
@@ -243,8 +243,8 @@ foreach (cot_getextplugins('forums.sections.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 
