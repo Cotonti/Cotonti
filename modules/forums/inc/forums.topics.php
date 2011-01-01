@@ -283,8 +283,8 @@ while ($row = $sql_forums->fetch())
 		}
 		else
 		{
-			$row['ft_icon'] .= ($row['ft_sticky']) ? '_sticky' : $row['ft_icon'];
-			$row['ft_icon'] .=  ($row['ft_state']) ? '_locked' : $row['ft_icon'];
+			$row['ft_icon'] .= ($row['ft_sticky']) ? '_sticky' : '';
+			$row['ft_icon'] .=  ($row['ft_state']) ? '_locked' : '';
 		}
 		
 		$row['ft_icon'] = cot_rc('forums_icon_topic', array('icon' => $row['ft_icon']));

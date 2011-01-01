@@ -69,6 +69,7 @@ $L['forums_searchinforums'] = 'Поиск в форумах';
 $L['forums_markasread'] = 'Отметить все как прочитанные';
 $L['forums_foldall'] = 'Свернуть все';
 $L['forums_unfoldall'] = 'Развернуть все';
+$L['forums_viewers'] = 'Просматривают';
 
 $L['forums_nonewposts'] = 'Нет новых сообщений';
 $L['forums_newposts'] = 'Есть новые сообщения';

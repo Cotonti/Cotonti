@@ -73,7 +73,7 @@
 
 			<p class="paging">
 				<!-- BEGIN: FORUMS_SECTIONS_VIEWERS -->
-				<span class="a1">{PHP.L.Viewers}: {FORUMS_TOPICS_VIEWERS} {FORUMS_TOPICS_VIEWER_NAMES}</span>
+				<span class="a1">{PHP.L.forums_viewers}: {FORUMS_TOPICS_VIEWERS} {FORUMS_TOPICS_VIEWER_NAMES}</span>
 				<!-- END: FORUMS_SECTIONS_VIEWERS -->
 				{FORUMS_TOPICS_PAGEPREV}{FORUMS_TOPICS_PAGES}{FORUMS_TOPICS_PAGENEXT}
 			</p>
