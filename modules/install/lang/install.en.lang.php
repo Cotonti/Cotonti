@@ -18,7 +18,7 @@ $L['Next'] = 'Next';
 
 $L['install_adminacc'] = 'Administrator Account';
 $L['install_body_title'] = 'Cotonti Web Installer';
-$L['install_body_message1'] = 'This script will setup the basic install and configuration of Cotonti for you. You must have already created the database with your host, this script will not be able to create it for you.';
+$L['install_body_message1'] = 'This script will setup the basic install and configuration of Cotonti for you. <strong>You must have already created the database</strong> with your host, this script will not be able to create it for you.';
 $L['install_body_message2'] = 'It is recommended to copy datas/config-sample.php to datas/config.php and set CHMOD 666 on datas/config.php before running this script.';
 $L['install_chmod_value'] = 'CHMOD {$chmod}';
 $L['install_complete'] = 'Installation has been successfully completed!';
@@ -35,7 +35,7 @@ $L['install_error_sql'] = 'Unable to connect to MySQL database. Please check you
 $L['install_error_sql_db'] = 'Unable to select the MySQL database. Please check your settings.';
 $L['install_error_sql_ext'] = 'Cotonti requires PHP extension pdo_mysql to be loaded';
 $L['install_error_sql_script'] = 'SQL script execution failed: {$msg}';
-$L['install_error_sql_ver'] = 'Cotonti requires MySQL version 5.0.0 or greater. Your version is {$ver}';
+$L['install_error_sql_ver'] = 'Cotonti requires MySQL version 5.0.7 or greater. Your version is {$ver}';
 $L['install_error_mainurl'] = 'You must supply the main URL for your site.';
 $L['install_error_mbstring'] = 'Cotonti requires PHP extension mbstring to be loaded';
 $L['install_error_missing_file'] = 'Missing {$file}. Please reupload this file to continue.';
