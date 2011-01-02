@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				cot_error('install_error_sql_ext');
 			}
 			if (empty($db->error) && function_exists('version_compare')
-				&& !version_compare($db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.0', '>='))
+				&& !version_compare($db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.7', '>='))
 			{
 				cot_error(cot_rc('install_error_sql_ver', array('ver' => $db->getAttribute(PDO::ATTR_SERVER_VERSION))));
 			}
@@ -128,6 +128,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			}
 			break;
 		case 2:
+			// Create missing cache folders
+			$cache_subfolders = array('cot', 'static', 'system', 'templates');
+			foreach ($cache_subfolders as $sub)
+			{
+				if (!file_exists($cfg['cache_dir'] . '/' . $sub))
+				{
+					mkdir($cfg['cache_dir'] . '/' . $sub, $cfg['dir_perms']);
+				}
+			}
+
 			// Database setup
 			$db_x = cot_import('db_x', 'P', 'TXT');
 			
@@ -365,6 +375,19 @@ switch ($step)
 			$status['pfs_dir'] = $R['install_code_not_found'];
 		}
 		/* ------------------- */
+		if (is_dir($cfg['extrafield_files_dir']))
+		{
+			$status['exflds_dir'] = (substr(decoct(fileperms($cfg['extrafield_files_dir'])), -4) >= $cfg['dir_perms'])
+				? $R['install_code_writable']
+				: cot_rc('install_code_invalid', array('text' =>
+					cot_rc('install_chmod_value', array('chmod' =>
+						substr(decoct(fileperms($cfg['extrafield_files_dir'])), -4)))));
+		}
+		else
+		{
+			$status['exflds_dir'] = $R['install_code_not_found'];
+		}
+		/* ------------------- */
 		if (is_dir($cfg['photos_dir']))
 		{
 			$status['photos_dir'] = (substr(decoct(fileperms($cfg['photos_dir'])), -4) >= $cfg['dir_perms'])
@@ -446,7 +469,7 @@ switch ($step)
 			? $R['install_code_available'] : $R['install_code_not_available'];
 //		$status['mysql_ver'] = '/ '
 //		. ($db && function_exists('version_compare')
-//				&& version_compare(@mysql_get_server_info($db), '5.0.0', '>='))
+//				&& version_compare(@mysql_get_server_info($db), '5.0.7', '>='))
 //			? cot_rc('install_code_valid',
 //				array('text' => cot_rc('install_ver_valid',
 //					array('ver' => mysql_get_server_info($db)))))
@@ -456,6 +479,7 @@ switch ($step)
 			'INSTALL_AV_DIR' => $status['av_dir'],
 			'INSTALL_CACHE_DIR' => $status['cache_dir'],
 			'INSTALL_PFS_DIR' => $status['pfs_dir'],
+			'INSTALL_EXFLDS_DIR' => $status['exflds_dir'],
 			'INSTALL_PHOTOS_DIR' => $status['photos_dir'],
 			'INSTALL_SIG_DIR' => $status['sig_dir'],
 			'INSTALL_TH_DIR' => $status['th_dir'],

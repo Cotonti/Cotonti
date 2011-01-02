@@ -38,8 +38,8 @@ $i = explode(' ', microtime());
 $sys['starttime'] = $i[1] + $i[0];
 
 $cfg['svnrevision'] = '$Rev$'; //DO NOT MODIFY this is set by SVN automatically
-$cfg['version'] = '0.7.0';
-$cfg['dbversion'] = '0.7.0';
+$cfg['version'] = '0.9.0';
+$cfg['dbversion'] = '0.9.0';
 
 // Set default file permissions if not present in config
 if (!isset($cfg['file_perms']))

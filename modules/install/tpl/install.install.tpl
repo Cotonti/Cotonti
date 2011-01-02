@@ -57,6 +57,7 @@
 						<li><strong class="file" title="{PHP.L.File}">{PHP.file.sql}</strong> {INSTALL_SQL_FILE}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.av_dir}</strong> {INSTALL_AV_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.cache_dir}</strong> {INSTALL_CACHE_DIR}</li>
+						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.extrafield_files_dir}</strong> {INSTALL_EXFLDS_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.pfs_dir}</strong> {INSTALL_PFS_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.photos_dir}</strong> {INSTALL_PHOTOS_DIR}</li>
 						<li><strong class="folder" title="{PHP.L.Folder}">{PHP.cfg.sig_dir}</strong> {INSTALL_SIG_DIR}</li>
