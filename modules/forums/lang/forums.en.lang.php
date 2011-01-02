@@ -33,6 +33,8 @@ $L['cfg_countposts'] = array('Count posts');
 $L['cfg_autoprune'] = array('Auto-prune topics after * days');
 $L['cfg_defstate'] = array('Check the counters');
 
+$L['info_desc'] = 'Cotonti Bulletin Board Module: sections, subsections, topics, posts. Simple forums for community sites and support.';
+
 /**
  * Forums Administration
  */

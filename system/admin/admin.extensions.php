@@ -278,11 +278,17 @@ switch($a)
 				}
 			}
 
+			$L['info_desc'] = '';
+			if (file_exists(cot_langfile($code, $type)))
+			{
+				include cot_langfile($code, $type);
+			}
+
 			$t->assign(array(
 				'ADMIN_EXTENSIONS_NAME' => $info['Name'],
 				'ADMIN_EXTENSIONS_TYPE' => $type == 'module' ? $L['Module'] : $L['Plugin'],
 				'ADMIN_EXTENSIONS_CODE' => $code,
-				'ADMIN_EXTENSIONS_DESCRIPTION' => $info['Description'],
+				'ADMIN_EXTENSIONS_DESCRIPTION' => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
 				'ADMIN_EXTENSIONS_VERSION' => $info['Version'],
 				'ADMIN_EXTENSIONS_DATE' => $info['Date'],
 				'ADMIN_EXTENSIONS_CONFIG_URL' => cot_url('admin', "m=config&n=edit&o=$type&p=$code"),

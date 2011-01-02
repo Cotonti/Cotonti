@@ -29,6 +29,8 @@ $L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotont
 $L['adm_help_pfsfiles'] = 'Not available';
 $L['adm_help_pfsthumbs'] = 'Not available';
 
+$L['info_desc'] = 'Organized storage for file uploads provided to registered users (Personal File Space) and entire site (Site File Space)';
+
 /**
  * Config
  */

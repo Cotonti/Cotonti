@@ -22,6 +22,8 @@ $L['cfg_maxlistsperpage'] = array('Max. lists per page', ' ');
 $L['cfg_order'] = array('Sorting column');
 $L['cfg_way'] = array('Sorting direction');
 
+$L['info_desc'] = 'Extensible content management functionality: pages and page categories.';
+
 /**
  * Structure Confing
  */
