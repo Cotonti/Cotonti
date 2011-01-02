@@ -587,7 +587,7 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 		$info = cot_infoget($ext_setup, 'COT_EXT');
 		if (is_array($info))
 		{
-			if (!empty($info["Requires_modules"]) || !empty($info['Requires_plugins']))
+			if (!empty($info['Requires_modules']) || !empty($info['Requires_plugins']))
 			{
 				$modules_list = empty($info['Requires_modules']) ? $L['None']
 					: implode(', ', explode(',', $info['Requires_modules']));
@@ -621,10 +621,16 @@ function cot_install_parse_extensions($ext_type, $default_list = array(), $selec
 			{
 				$checked = in_array($f, $default_list);
 			}
+			$type = $ext_type == 'Module' ? 'module' : 'plug';
+			$L['info_desc'] = '';
+			if (file_exists(cot_langfile($f, $type)))
+			{
+				include cot_langfile($f, $type);
+			}
 			$t->assign(array(
 				"{$ext_type_uc}_ROW_CHECKBOX" => cot_checkbox($checked, "install_{$ext_type_lc}s[$f]"),
 				"{$ext_type_uc}_ROW_TITLE" => $info['Name'],
-				"{$ext_type_uc}_ROW_DESCRIPTION" => $info['Description'],
+				"{$ext_type_uc}_ROW_DESCRIPTION" => empty($L['info_desc']) ? $info['Description'] : $L['info_desc'],
 				"{$ext_type_uc}_ROW_REQUIRES" => $requires,
 				"{$ext_type_uc}_ROW_RECOMMENDS" => $recommends
 			));
