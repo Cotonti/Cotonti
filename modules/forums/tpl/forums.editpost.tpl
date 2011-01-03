@@ -10,7 +10,7 @@
 				<table class="cells">
 					<!-- BEGIN: FORUMS_EDITPOST_FIRSTPOST -->
 					<tr>
-						<td class="width20">{PHP.L.Topic}:</td>
+						<td class="width20">{PHP.L.forums_topic}:</td>
 						<td class="width80">{FORUMS_EDITPOST_TOPICTITTLE}</td>
 					</tr>
 					<tr>

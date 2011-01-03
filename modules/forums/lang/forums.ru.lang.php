@@ -47,8 +47,8 @@ $L['forums_defstate_1'] = 'Развернут';
  * Main
  */
 
-$L['forum_topic'] = 'Тема';
-$L['forum_topics'] = 'Темы';
+$L['forums_topic'] = 'Тема';
+$L['forums_topics'] = 'Темы';
 
 $L['forums_antibump'] = 'Активирована система защиты от поднятия тем: вы не можете создавать несколько сообщений подряд';
 $L['forums_keepmovedlink'] = 'Оставить ссылку в старом разделе';

@@ -10,7 +10,7 @@
 		<h2 class="stats">{PHP.L.Statistics}</h2>
 			<table class="cells">
 				<tr>
-					<td>{PHP.L.forum_topics}:</td>
+					<td>{PHP.L.forums_topics}:</td>
 					<td class="centerall">{ADMIN_FORUMS_TOTALTOPICS}</td>
 				</tr>
 				<tr>

@@ -91,6 +91,6 @@ CREATE TABLE IF NOT EXISTS `cot_forum_topics` (
 -- Default forums categories
 INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path`, `structure_tpl`, `structure_title`,
    `structure_desc`, `structure_icon`, `structure_locked`, `structure_count`) VALUES
-('forums', 'pub', '1', '', 'Articles', '', 'images/icons/default/forums.png', 0, 0),
+('forums', 'pub', '1', '', 'Public', '', 'images/icons/default/forums.png', 0, 0),
 ('forums', 'general', '1.1', '', 'General discussion', 'General discussion', 'images/icons/default/forums.png', 0, 0),
 ('forums', 'offtopic', '1.2', '', 'Off-topic', 'Various and off-topic', 'images/icons/default/forums.png', 0, 0);

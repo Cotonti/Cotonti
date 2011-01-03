@@ -41,7 +41,7 @@ if (!empty($n) || !empty($p) || !empty($id))
 	elseif (!empty($p) || !empty($id))
 	{
 		$p = ($p > 0) ? $p : $id;
-		$sql_forums = $db->query("SELECT fp_topicid, fp_cat, fp_posterid FROM $db_forum_posts WHERE fp_id='$p' LIMIT 1");
+		$sql_forums = $db->query("SELECT fp_id, fp_topicid, fp_cat, fp_posterid FROM $db_forum_posts WHERE fp_id='$p' LIMIT 1");
 	}
 	if ($row = $sql_forums->fetch())
 	{
@@ -170,6 +170,8 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($p) && ($usr['isadmin'] || $fp_posterid == $usr['id']))
 {
 	cot_check_xg();
+
+	
 
 	/* === Hook === */
 	foreach (cot_getextplugins('forums.posts.delete.first') as $pl)

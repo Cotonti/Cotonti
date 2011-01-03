@@ -48,7 +48,7 @@ $L['forums_defstate_1'] = 'Unfolded';
  */
 
 $L['forums_topic'] = 'Topic';
-$L['forums_topic'] = 'Topics';
+$L['forums_topics'] = 'Topics';
  
 $L['forums_antibump'] = 'The anti-bump protection is up, you cannot post twice in a row.';
 $L['forums_keepmovedlink'] = 'Keep a Moved Topic link';
