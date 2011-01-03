@@ -17,4 +17,6 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['cfg_mode'] = array('Stealth mode', 'Hide users in userlist/whosonline if their maingroup or a subgroup is hidden.');
 
+$L['info_desc'] = 'Makes selected groups and/or its members invisible on various site areas';
+
 ?>

@@ -22,6 +22,8 @@ $L['cfg_rss_charset'] = array('RSS charset', ' '); // New in 0.7.0
 $L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
 $L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
 
+$L['info_desc'] = 'Generates RSS/Atom feeds for your site';
+
 /**
  * Main
  */

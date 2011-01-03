@@ -99,4 +99,6 @@ $L['cfg_searchurl'] = array('Type of forum post link to use', 'Single uses a Sin
 $L['cfg_addfields']= array('Additional pages fields for search, separated by commas', 'Example "page_extra1,page_extra2,page_key"');
 $L['cfg_extrafilters']= array('Show extrafilters on main search page');
 
+$L['info_desc'] = 'Search in pages, forums and other site areas with advanced options';
+
 ?>

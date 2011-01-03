@@ -42,4 +42,6 @@ HTM;
 
 $L['cfg_smilies'] = array('Enable smilies', '');
 
+$L['info_desc'] = 'Enables BBCode parsing everywhere on site and disables default HTML parsing. Administrator can customize bbcodes with Admin tool. Also adds support for smilie codes and smilie sets.';
+
 ?>

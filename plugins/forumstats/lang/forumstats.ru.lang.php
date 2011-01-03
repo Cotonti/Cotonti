@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['info_desc'] = 'Общая статистика по форумам';
+
 /**
  * Plugin Title & Subtitle
  */

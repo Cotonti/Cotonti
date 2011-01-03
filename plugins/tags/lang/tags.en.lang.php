@@ -52,4 +52,6 @@ $L['cfg_title'] = array('Capitalize first letters of keywords');
 $L['cfg_translit'] = array('Transliterate tags in URLs');
 $L['cfg_autocomplete'] = array('Min. chars for autocomplete', '0 - disable autocompete');
 
+$L['info_desc'] = 'Provides tags - site content keywords, tag clouds, tag search and API';
+
 ?>

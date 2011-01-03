@@ -28,6 +28,8 @@ $L['cfg_countcomments'] = array('Считать комментарии', 'Пок
 $L['cfg_parsebbcodecom'] = array('Парсинг BBCode в комментариях', ' ');
 $L['cfg_parsesmiliescom'] = array('Парсинг смайликов в комментариях', ' ');
 
+$L['info_desc'] = 'Система комментариев для Cotonti с API и интеграцией со страницами, списками, опросами, RSS и другими расширениями.';
+
 /**
  * Plugin Body
  */

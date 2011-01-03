@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['info_desc'] = 'Перечисляет пользователей онлайн на главной и отдельной странице';
+
 /**
  * Plugin Title & Subtitle
  */

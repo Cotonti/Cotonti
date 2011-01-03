@@ -27,6 +27,8 @@ $L['cfg_countcomments'] = array('Count comments', 'Display number of comments ne
 $L['cfg_parsebbcodecom'] = array('Parse BBcodes in comments', '');
 $L['cfg_parsesmiliescom'] = array('Parse smilies in comments', '');
 
+$L['info_desc'] = 'Comments system for Cotonti with API and integration with pages, lists, polls, RSS and other extensions.';
+
 /**
  * Plugin Body
  */
