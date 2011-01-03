@@ -840,23 +840,27 @@ function cot_load_structure()
 {
 	global $db, $db_structure, $db_extra_fields, $cfg, $L, $cot_extrafields, $structure, $R;
 	$structure = array();
-	$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
+	$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_area ASC, structure_path ASC");
 
 	/* == Hook: Part 1 ==*/
 	$extp = cot_getextplugins('structure');
 	/* ================= */
 
+	$path = array(); // code path tree
+	$tpath = array(); // title path tree
+	$parent_tpl = '';
+
 	while ($row = $sql->fetch())
 	{
-		$path2 = mb_strrpos($row['structure_path'], '.');
+		$last_dot = mb_strrpos($row['structure_path'], '.');
 
-		$row['structure_tpl'] = (empty($row['structure_tpl'])) ? $row['structure_code'] : $row['structure_tpl'];
+		$row['structure_tpl'] = empty($row['structure_tpl']) ? $row['structure_code'] : $row['structure_tpl'];
 
-		if ($path2 > 0)
+		if ($last_dot > 0)
 		{
-			$path1 = mb_substr($row['structure_path'], 0, ($path2));
-			$path[$row['structure_path']] = $path[$path1].'.'.$row['structure_code'];
-			$tpath[$row['structure_path']] = $tpath[$path1].' '.$cfg['separator'].' '.$row['structure_title'];
+			$path1 = mb_substr($row['structure_path'], 0, $last_dot);
+			$path[$row['structure_path']] = $path[$path1] . '.' . $row['structure_code'];
+			$tpath[$row['structure_path']] = $tpath[$path1] . ' ' . $cfg['separator'] . ' ' . $row['structure_title'];
 			$row['structure_tpl'] = ($row['structure_tpl'] == 'same_as_parent') ? $parent_tpl : $row['structure_tpl'];
 		}
 		else
