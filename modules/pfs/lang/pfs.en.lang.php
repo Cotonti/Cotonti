@@ -36,10 +36,10 @@ $L['info_desc'] = 'Organized storage for file uploads provided to registered use
  */
 
 $L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');
-$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');	// New in 0.0.2
+$L['cfg_pfsfilecheck'] = array('File Check', 'If Enabled will check any uploaded files through the '.$L['PFS'].', or images through the profile. To insure they are valid files. &quot;Yes&quot; recommended, for security reasons.');
 $L['cfg_pfsmaxuploads'] = array('Max. concurrent uploads at a time', '');
-$L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');	// New in 0.0.2
-$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');	// New in 0.0.2
+$L['cfg_pfsnomimepass'] = array('No Mimetype Pass', 'If Enabled will it will allow uploaded files to pass even if there is no mimetype in the config file.');
+$L['cfg_pfstimename'] = array('Time-based filenames', 'Generate filenames based on current time stamp. By default the original file name is used with some necessary character conversions.');
 $L['cfg_pfsuserfolder'] = array('Folder storage mode', 'If enabled, will store the user files in subfolders /datas/users/USERID/FOLDERNAME/... Must be set at the FIRST setup of the site ONLY. As soon as a file is uploaded, it\'s too late to change this.');
 $L['cfg_flashupload'] = array('Use flash uploader', 'Allows uploading many files at once.'); // New in 1.0.0
 $L['cfg_pfs_winclose'] = array('Close popup window after bbcode insertion');
@@ -59,16 +59,16 @@ $L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Wi
  * Main
  */
 
-$L['pfs_cancelall'] = 'Cancel All'; /// 0.7.0
-$L['pfs_direxists'] = 'Such a folder already exists.<br />Old path: %1$s<br />New path: %2$s'; // 0.7.0
+$L['pfs_cancelall'] = 'Cancel All';
+$L['pfs_direxists'] = 'Such a folder already exists.<br />Old path: %1$s<br />New path: %2$s';
 $L['pfs_extallowed'] = 'Extensions allowed';
-$L['pfs_filecheckfail'] = 'Warning: File Check Failed for Extension: %1$s Filename - %2$s';	// New in N-0.0.2
-$L['pfs_filechecknomime'] = 'Warning: No Mime Type data was found for the Extension: %1$s Filename - %2$s';	// New in N-0.0.2
+$L['pfs_filecheckfail'] = 'Warning: File Check Failed for Extension: %1$s Filename - %2$s';
+$L['pfs_filechecknomime'] = 'Warning: No Mime Type data was found for the Extension: %1$s Filename - %2$s';
 $L['pfs_fileexists'] = 'The upload failed, there\'s already a file with this name?';
 $L['pfs_filelistempty'] = 'List is empty.';
-$L['pfs_filemimemissing'] = 'The mime type for %1$s is missing. Upload Failed';	// New in N-0.0.2
-$L['pfs_filenotmoved'] = 'The upload failed, temporary file cannot be moved.';	// New in 0.0.3
-$L['pfs_filenotvalid'] = 'This is not a valid %1$s file.';	// New in N-0.0.2
+$L['pfs_filemimemissing'] = 'The mime type for %1$s is missing. Upload Failed';
+$L['pfs_filenotmoved'] = 'The upload failed, temporary file cannot be moved.';
+$L['pfs_filenotvalid'] = 'This is not a valid %1$s file.';
 $L['pfs_filesintheroot'] = 'File(s) in the root';
 $L['pfs_filesinthisfolder'] = 'File(s) in this folder';
 $L['pfs_filetoobigorext'] = 'The upload failed, this file is too big maybe, or the extension is not allowed?';
@@ -80,15 +80,15 @@ $L['pfs_maxsize'] = 'Maximum size for a file';
 $L['pfs_maxspace'] = 'Maximum space allowed';
 $L['pfs_newfile'] = 'Upload a file:';
 $L['pfs_newfolder'] = 'Create a new folder:';
-$L['pfs_onpage'] = 'On this page'; // 0.7.0
-$L['pfs_parentfolder'] = 'Parent folder'; // 0.7.0
-$L['pfs_pastefile'] = 'Paste as file link'; // 0.7.0
-$L['pfs_pasteimage'] = 'Paste as image'; // 0.7.0
-$L['pfs_pastethumb'] = 'Paste as thumbnail'; // 0.7.0
-$L['pfs_resizeimages'] = 'to scale the image?';	// New in N-0.0.2
+$L['pfs_onpage'] = 'On this page';
+$L['pfs_parentfolder'] = 'Parent folder';
+$L['pfs_pastefile'] = 'Paste as file link';
+$L['pfs_pasteimage'] = 'Paste as image';
+$L['pfs_pastethumb'] = 'Paste as thumbnail';
+$L['pfs_resizeimages'] = 'to scale the image?';
 $L['pfs_title'] = 'My Personal File Space';
 $L['pfs_totalsize'] = 'Total size';
-$L['pfs_uploadfiles'] = 'Upload Files'; // 0.7.0
+$L['pfs_uploadfiles'] = 'Upload Files';
 
 /**
  * Moved from theme.lang
