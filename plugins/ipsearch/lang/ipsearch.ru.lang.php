@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['info_desc'] = 'Поиск по IP в базе пользователей';
+
 /**
  * Plugin Body
  */

@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['info_desc'] = 'Implements avatars, photos and signature images for users';
+
 $L['userimages_width'] = 'Width';
 $L['userimages_height'] = 'Height';
 $L['userimages_cropratio'] = 'Crop ratio';

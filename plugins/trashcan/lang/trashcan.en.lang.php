@@ -27,6 +27,8 @@ $L['cfg_trash_prunedelay'] = array('Remove the items from the trash can after * 
 $L['cfg_trash_user'] = array('Use the trash can for the users', '');
 $L['cfg_trash_comment'] = array('Use the trash can for the comments', '');
 
+$L['info_desc'] = 'Saves removed items in trash can for a while, so that they can be restored if necessary';
+
 /**
   * TrashCan Section
  */
@@ -37,7 +39,7 @@ Restore: Put the item back in the live database<br />
 <b>Note</b>:<br />
 - restoring a forum topic will also restore all the posts that belongs to the topic<br />
 - restoring a post in a deleted topic will restore the whole topic (if available) and all the child posts.<br />';
-$L['adm_trashcan_deleted'] = "Item deleted";
-$L['adm_trashcan_prune'] = "Trash emptied";
-$L['adm_trashcan_restored'] = "Item restored";
+$L['adm_trashcan_deleted'] = 'Item deleted';
+$L['adm_trashcan_prune'] = 'Trash emptied';
+$L['adm_trashcan_restored'] = 'Item restored';
 ?>

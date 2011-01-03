@@ -52,6 +52,8 @@ $L['cfg_maxpolls'] = array('Number of polls displayed on index');
 $L['cfg_mode'] = array('Poll display mode on index', '&quot;Recent polls&quot; displays last poll(s)<br />&quot;Random polls&quot; displays random poll(s)');
 $L['cfg_mode_params'] = array('Recent polls', 'Random polls');
 
+$L['info_desc'] = 'Lets the users vote for one or multiple options';
+
 /**
  * Moved from theme.lang
  */

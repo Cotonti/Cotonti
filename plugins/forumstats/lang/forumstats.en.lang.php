@@ -11,6 +11,8 @@
 
 defined('COT_CODE') or die('Wrong URL.');
 
+$L['info_desc'] = 'Overall forums statistics';
+
 /**
  * Plugin Title & Subtitle
  */

@@ -42,4 +42,6 @@ You can change rule order by simply dragging the rows and dropping them at desir
 <li><strong>Save</strong> button will save rules and apply changes immediately. It will also apply changes on your .htaccess (if writable) and provide you with .htaccess/IsapiRewrite4.ini/nginx.conf (depending on your server type).</li>
 </ol>';
 
+$L['info_desc'] = 'With this plugin you can set custom rules for URL transformation in Admin Panel';
+
 ?>

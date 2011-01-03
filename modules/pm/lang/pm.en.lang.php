@@ -26,6 +26,8 @@ $L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
 $L['cfg_pm_maxsize'] = array('Maximum length for messages', 'Default: 10000 chars');
 $L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in 0.0.6
 
+$L['info_desc'] = 'Private messaging system is on-site user communication similar to e-mail';
+
 /**
  * Main
  */

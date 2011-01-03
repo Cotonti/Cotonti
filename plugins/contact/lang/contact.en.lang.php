@@ -17,6 +17,8 @@ defined('COT_CODE') or die('Wrong URL');
 $L['cfg_email'] = array('E-mail', '(leave empty to use Admin E-mail)');
 $L['cfg_minchars'] = array('Min. chars in message');
 
+$L['info_desc'] = 'Contact form for user feedback delivered by e-mail and recorded in database';
+
 /**
  * Plugin Admin
  */

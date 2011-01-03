@@ -17,6 +17,8 @@ $L['cfg_cats'] = array('Root categories to apply i18n on', 'Comma separated cate
 $L['cfg_locales'] = array('List of site locales', 'Each locale on new line, format: locale_code|Locale title');
 $L['cfg_omitmain'] = array('Omit language parameter in URLs if poiting to main language');
 
+$L['info_desc'] = 'Site contents (pages, categories, tags, etc.) can be translated and presented in multiple languages if this plugin is enabled.';
+
 // Plugin strings
 
 $L['i18n_adding'] = 'Adding new translation';
