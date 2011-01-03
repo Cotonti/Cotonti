@@ -145,9 +145,6 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
  * Performance Subsection
  */
 
-$L['cfg_cache_forums'] = array('Page cache in forums', 'Caches entire pages output for guests');
-$L['cfg_cache_index'] = array('Page cache on index', 'Index will be static for all guests');
-$L['cfg_cache_page'] = array('Page cache in page and list', 'Caches entire pages for guests');
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
 $L['cfg_headrc_consolidate'] = array('Consolidate header and footer resources (JS/CSS)');
 $L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
