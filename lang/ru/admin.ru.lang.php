@@ -4,9 +4,9 @@
  * Russian Language File for the Admin Module (admin.ru.lang.php)
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

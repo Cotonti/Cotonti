@@ -6,7 +6,7 @@ Description=Provides RSS/Atom feeds for your site
 Version=0.7.4
 Date=2010-jun-22
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2010
+Copyright=(c) Cotonti Team 2008-2011
 Notes=BSD License
 Auth_guests=R
 Lock_guests=A
@@ -31,7 +31,7 @@ rss_postmaxsymbols=06:string:::
  * @package rss
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 ?>

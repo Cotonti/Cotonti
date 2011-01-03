@@ -5,7 +5,7 @@
  * @package forums
  * @version 0.0.3
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2009 Cotonti Team
+ * @copyright Copyright (c) 2008-2011 Cotonti Team
  * @license BSD License
  */
 

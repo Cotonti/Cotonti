@@ -6,7 +6,7 @@ Description=Views static contents from datas/html
 Version=0.7.0.2
 Date=2010-jun-22
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2010
+Copyright=(c) Cotonti Team 2008-2011
 Notes=Supports .html, .htm and .txt
 Auth_guests=R
 Lock_guests=A
@@ -21,7 +21,7 @@ Lock_members=
  * @package view
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 ?>

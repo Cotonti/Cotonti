@@ -2,9 +2,9 @@
 /**
  * Cache subsystem library
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2009-2010
+ * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
  */
 

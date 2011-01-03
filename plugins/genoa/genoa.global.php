@@ -11,7 +11,7 @@ Hooks=global
  * @package genoa
  * @version 0.9.0
  * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2010
+ * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD
  */
 

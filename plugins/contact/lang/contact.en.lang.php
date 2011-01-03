@@ -4,7 +4,7 @@
  * Contact Plugin for Cotonti CMF (English Localization)
  * @version 2.00
  * @author Seditio.by
- * @copyright (c) 2008-2010 Seditio.by and Cotonti Team
+ * @copyright (c) 2008-2011 Seditio.by and Cotonti Team
  * @license BSD
  */
 

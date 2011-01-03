@@ -11,7 +11,7 @@ Hooks=trashcan.api
  * @package page
  * @version 0.8.1
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

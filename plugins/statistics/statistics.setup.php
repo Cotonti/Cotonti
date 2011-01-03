@@ -7,7 +7,7 @@ Description=All kind of statistics about the site
 Version=0.7.0
 Date=2010-jan-03
 Author=Neocrome & Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2010
+Copyright=Partial copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -24,7 +24,7 @@ Requires_modules=forums,page,pfs,pm,polls
  * @package statistics
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

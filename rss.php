@@ -3,9 +3,9 @@
  * RSS module
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author medar, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2010
+ * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
  * @deprecated Deprecated since Cotonti Siena
  */

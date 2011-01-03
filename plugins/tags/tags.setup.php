@@ -7,7 +7,7 @@ Description=Provides tags - site content keywords, tag clouds, tag search and AP
 Version=0.7.4
 Date=2010-dec-16
 Author=Trustmaster
-Copyright=All rights reserved (c) Vladimir Sibirov 2008-2010
+Copyright=All rights reserved (c) Vladimir Sibirov 2008-2011
 Notes=BSD License.
 SQL=
 Auth_guests=R
@@ -40,7 +40,7 @@ autocomplete=23:select:0,1,2,3,4,5,6:3:Min. chars for autocomplete
  * @package tags
  * @version 0.7.0
  * @author Trustmaster, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

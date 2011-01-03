@@ -11,7 +11,7 @@ Hooks=admin.home
  * @package Hits
  * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

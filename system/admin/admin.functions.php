@@ -3,9 +3,9 @@
  * Admin function library.
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @copyright Copyright (c) 2008-2011 Cotonti Team
  * @license BSD License
  */
 

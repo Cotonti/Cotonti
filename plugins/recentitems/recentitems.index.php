@@ -13,7 +13,7 @@ Tags=index.tpl:{RECENT_PAGES},{RECENT_FORUMS}
  * @package recentitmes
  * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 defined('COT_CODE') or die('Wrong URL');

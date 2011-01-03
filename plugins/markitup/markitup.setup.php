@@ -7,7 +7,7 @@ Description=Plain-source BBcode/HTML editor using jQuery
 Version=0.7.4
 Date=2010-dec-16
 Author=Jay Salvat, http://markitup.jaysalvat.com
-Copyright=Copyright (C) 2007-2010 Jay Salvat
+Copyright=Copyright (C) 2007-2011 Jay Salvat
 Notes=Dual licensed under the MIT and GPL licenses.
 SQL=
 Auth_guests=R
@@ -29,7 +29,7 @@ chili=03:radio::0:Enable Chili tags
  * @package markitup
  * @version 0.7.0
  * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

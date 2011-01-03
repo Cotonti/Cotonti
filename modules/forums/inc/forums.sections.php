@@ -3,7 +3,7 @@
 /**
  * @package forums
  * @version 0.7.1
- * @copyright Copyright (c) 2008-2010 Cotonti Team
+ * @copyright Copyright (c) 2008-2011 Cotonti Team
  * @license BSD
  */
 

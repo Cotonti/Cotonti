@@ -12,7 +12,7 @@ Order=10
  * @package mcaptcha
  * @version 0.1.0
  * @author Trustmaster, esclkm
- * @copyright Copyright (c) Vladimir Sibirov and Pavel Mikulik 2008-2010
+ * @copyright Copyright (c) Vladimir Sibirov and Pavel Mikulik 2008-2011
  * @license BSD
  */
 

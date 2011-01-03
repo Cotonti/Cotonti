@@ -11,7 +11,7 @@ Hooks=forums.topics.query
  * @package polls
  * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD License
  */
 

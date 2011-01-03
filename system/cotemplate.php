@@ -8,7 +8,7 @@
  * @package Cotonti
  * @version 2.5
  * @author Vladimir Sibirov a.k.a. Trustmaster
- * @copyright Copyright (c) Cotonti Team 2009-2010
+ * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
  */
 

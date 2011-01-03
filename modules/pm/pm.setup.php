@@ -6,7 +6,7 @@ Description=On-site user communication like e-mail
 Version=0.7.7
 Date=2010-nov-01
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2010
+Copyright=(c) Cotonti Team 2008-2011
 Notes=BSD License
 Auth_guests=
 Lock_guests=W12345A
@@ -28,7 +28,7 @@ maxpmperpage=04:string::15:
  * @package pm
  * @version 0.7.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

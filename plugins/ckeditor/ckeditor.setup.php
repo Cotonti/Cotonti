@@ -29,7 +29,7 @@ cdn_url=02:string::ckeditor-fluid.appspot.com:CDN URL (without protocol part and
  * @package ckeditor
  * @version 0.7.0
  * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2010
+ * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD
  */
 

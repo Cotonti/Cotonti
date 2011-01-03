@@ -7,7 +7,7 @@ Description=Search with extended features
 Version=4.0.3
 Date=2010-dec-16
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2010
+Copyright=Partial copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -36,7 +36,7 @@ extrafilters=09:radio::1:Show extrafilters on main search page
  * @package search
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD License
  */
 

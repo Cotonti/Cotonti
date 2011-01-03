@@ -3,7 +3,7 @@
  * @package install
  * @version 0.7.0
  * @author Kilandor, Trustmaster
- * @copyright Copyright (c) Cotonti Team 2009-2010
+ * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
  */
 
