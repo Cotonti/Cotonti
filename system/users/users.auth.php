@@ -144,16 +144,16 @@ require_once cot_incfile('forms');
 
 if ($cfg['maintenance'])
 {
-	$t->assign(array("USERS_AUTH_MAINTENANCERES" => $cfg['maintenancereason']));
-	$t->parse("MAIN.USERS_AUTH_MAINTENANCE");
+	$t->assign(array('USERS_AUTH_MAINTENANCERES' => $cfg['maintenancereason']));
+	$t->parse('MAIN.USERS_AUTH_MAINTENANCE');
 }
 
 $t->assign(array(
-	"USERS_AUTH_TITLE" => $L['aut_logintitle'],
-	"USERS_AUTH_SEND" => cot_url('users', 'm=auth&a=check' . (empty($redirect) ? '' : "&redirect=$redirect")),
-	"USERS_AUTH_USER" => cot_inputbox('text', 'rusername', $rusername, array('size' => '16', 'maxlength' => '32')),
-	"USERS_AUTH_PASSWORD" => cot_inputbox('password', 'rpassword', '', array('size' => '16', 'maxlength' => '32')),
-	"USERS_AUTH_REGISTER" => cot_url('users', 'm=register')
+	'USERS_AUTH_TITLE' => $L['aut_logintitle'],
+	'USERS_AUTH_SEND' => cot_url('users', 'm=auth&a=check' . (empty($redirect) ? '' : "&redirect=$redirect")),
+	'USERS_AUTH_USER' => cot_inputbox('text', 'rusername', $rusername, array('size' => '16', 'maxlength' => '32')),
+	'USERS_AUTH_PASSWORD' => cot_inputbox('password', 'rpassword', '', array('size' => '16', 'maxlength' => '32')),
+	'USERS_AUTH_REGISTER' => cot_url('users', 'm=register')
 ));
 
 /* === Hook === */
@@ -163,8 +163,8 @@ foreach (cot_getextplugins('users.auth.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 ?>

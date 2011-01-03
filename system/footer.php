@@ -80,15 +80,15 @@ if (!COT_AJAX)
 	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
 
 	$t->assign(array(
-		"FOOTER_BOTTOMLINE" => $out['bottomline'],
-		"FOOTER_CREATIONTIME" => $out['creationtime'],
-		"FOOTER_COPYRIGHT" => $out['copyright'],
-		"FOOTER_SQLSTATISTICS" => $out['sqlstatistics'],
-		"FOOTER_LOGSTATUS" => $out['logstatus'],
-		"FOOTER_PMREMINDER" => $out['pmreminder'],
-		"FOOTER_ADMINPANEL" => $out['adminpanel'],
-		"FOOTER_DEVMODE" => $out['devmode'],
-		"FOOTER_JS" => $out['footer_js']
+		'FOOTER_BOTTOMLINE' => $out['bottomline'],
+		'FOOTER_CREATIONTIME' => $out['creationtime'],
+		'FOOTER_COPYRIGHT' => $out['copyright'],
+		'FOOTER_SQLSTATISTICS' => $out['sqlstatistics'],
+		'FOOTER_LOGSTATUS' => $out['logstatus'],
+		'FOOTER_PMREMINDER' => $out['pmreminder'],
+		'FOOTER_ADMINPANEL' => $out['adminpanel'],
+		'FOOTER_DEVMODE' => $out['devmode'],
+		'FOOTER_JS' => $out['footer_js']
 	));
 
 	/* === Hook === */
@@ -100,15 +100,15 @@ if (!COT_AJAX)
 
 	if ($usr['id'] > 0)
 	{
-		$t->parse("FOOTER.USER");
+		$t->parse('FOOTER.USER');
 	}
 	else
 	{
-		$t->parse("FOOTER.GUEST");
+		$t->parse('FOOTER.GUEST');
 	}
 
-	$t->parse("FOOTER");
-	$t->out("FOOTER");
+	$t->parse('FOOTER');
+	$t->out('FOOTER');
 }
 
 /* === Hook === */

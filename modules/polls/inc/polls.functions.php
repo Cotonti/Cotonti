@@ -36,7 +36,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 	if (gettype($t) != 'object')
 	{
 		$t = new XTemplate(cot_tplfile('polls'));
-		$block = "EDIT_POLL_FORM";
+		$block = 'EDIT_POLL_FORM';
 		$poll_full_template = true;
 	}
 	$counter = 0;
@@ -50,7 +50,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 			if ($val != '')
 			{
 				$counter++;
-				$t->assign("EDIT_POLL_OPTION_TEXT", cot_inputbox('text', $key, htmlspecialchars($val), 'size="40" maxlength="128"'));
+				$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', $key, htmlspecialchars($val), 'size="40" maxlength="128"'));
 				$t->parse($block.".OPTIONS");
 			}
 		}
@@ -68,7 +68,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 			while ($row1 = $sql1->fetch())
 			{
 				$counter++;
-				$t->assign("EDIT_POLL_OPTION_TEXT", cot_inputbox('text', 'poll_option[id'.$row1['po_id'].']', htmlspecialchars($row1['po_text']), 'size="40" maxlength="128"'));
+				$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[id'.$row1['po_id'].']', htmlspecialchars($row1['po_text']), 'size="40" maxlength="128"'));
 				$t->parse($block.".OPTIONS");
 			}
 		}
@@ -77,34 +77,34 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 	while ($counter < 2)
 	{
 		$counter++;
-		$t->assign("EDIT_POLL_OPTION_TEXT", cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
+		$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
 		$t->parse($block.".OPTIONS");
 	}
 
 	if ($counter < $cfg['polls']['max_options_polls'])
 	{
 		$counter++;
-		$t->assign("EDIT_POLL_OPTION_TEXT", cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
+		$t->assign('EDIT_POLL_OPTION_TEXT', cot_inputbox('text', 'poll_option[]', '', 'size="40" maxlength="128"'));
 		$t->parse($block.".OPTIONS");
 	}
 
 	if ((int)$id > 0)
 	{
 		$t->assign(array(
-			"EDIT_POLL_LOCKED" => cot_checkbox($poll_state, 'poll_state' , $L['Locked']),
-			"EDIT_POLL_RESET" => cot_checkbox(0, 'poll_reset' , $L['Reset']),
-			"EDIT_POLL_DELETE" => cot_checkbox(0, 'poll_delete' , $L['Delete']),
-			"EDIT_POLL_EDIT" => true,
+			'EDIT_POLL_LOCKED' => cot_checkbox($poll_state, 'poll_state' , $L['Locked']),
+			'EDIT_POLL_RESET' => cot_checkbox(0, 'poll_reset' , $L['Reset']),
+			'EDIT_POLL_DELETE' => cot_checkbox(0, 'poll_delete' , $L['Delete']),
+			'EDIT_POLL_EDIT' => true,
 		));
 		$t->parse($block.".EDIT");
 	}
 
 	$t->assign(array(
-		"EDIT_POLL_TEXT" => cot_inputbox('text', 'poll_text', $poll_text, 'size="64" maxlength="255"'),
-		"EDIT_POLL_IDFIELD" => cot_inputbox('hidden', 'poll_id', $id),
-		"EDIT_POLL_OPTIONSCOUNT" => $counter,
-		"EDIT_POLL_ID" => $id,
-		"EDIT_POLL_MULTIPLE" => cot_checkbox($poll_multiple, 'poll_state' , $L['polls_multiple']),
+		'EDIT_POLL_TEXT' => cot_inputbox('text', 'poll_text', $poll_text, 'size="64" maxlength="255"'),
+		'EDIT_POLL_IDFIELD' => cot_inputbox('hidden', 'poll_id', $id),
+		'EDIT_POLL_OPTIONSCOUNT' => $counter,
+		'EDIT_POLL_ID' => $id,
+		'EDIT_POLL_MULTIPLE' => cot_checkbox($poll_multiple, 'poll_state' , $L['polls_multiple']),
 	));
 	if ($poll_full_template == true)
 	{
@@ -323,10 +323,10 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$themefile = (is_string($theme)) ? cot_tplfile(array('polls', $theme), 'module') : cot_tplfile($theme, 'module');
 	$t = new XTemplate($themefile);
 
-	if ($alreadyvoted) $poll_block = "POLL_VIEW_VOTED";
-	elseif (!$canvote) $poll_block = "POLL_VIEW_DISABLED";
-	elseif ($row['poll_state']) $poll_block = "POLL_VIEW_LOCKED";
-	else $poll_block = "POLL_VIEW";
+	if ($alreadyvoted) $poll_block = 'POLL_VIEW_VOTED';
+	elseif (!$canvote) $poll_block = 'POLL_VIEW_DISABLED';
+	elseif ($row['poll_state']) $poll_block = 'POLL_VIEW_LOCKED';
+	else $poll_block = 'POLL_VIEW';
 
 	$sql2 = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid = '$id'");
 	$totalvotes = $sql2->fetchColumn();
@@ -343,22 +343,22 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 		$polloptions = cot_parse($row1['po_text'], $cfg['polls']['markup']);
 
 		$t->assign(array(
-			"POLL_OPTIONS" => $polloptions,
-			"POLL_PER" => $percent,
-			"POLL_COUNT" => $po_count,
-			"POLL_INPUT" => $polloptions_input
+			'POLL_OPTIONS' => $polloptions,
+			'POLL_PER' => $percent,
+			'POLL_COUNT' => $po_count,
+			'POLL_INPUT' => $polloptions_input
 		));
 		$t->parse($poll_block.".POLLTABLE");
 	}
 
 	$t->assign(array(
-		"POLL_VOTERS" => $totalvotes,
-		"POLL_SINCE" => date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
-		"POLL_SINCE_SHORT" => date($cfg['formatmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
-		"POLL_TITLE" => cot_parse($row['poll_text'], $cfg['polls']['markup']),
-		"POLL_ID" => $id,
-		"POLL_FORM_URL" => (empty($formlink)) ? cot_url('polls', 'id='.$id) : $formlink,
-		"POLL_FORM_BUTTON" => $pollbutton
+		'POLL_VOTERS' => $totalvotes,
+		'POLL_SINCE' => date($cfg['dateformat'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
+		'POLL_SINCE_SHORT' => date($cfg['formatmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
+		'POLL_TITLE' => cot_parse($row['poll_text'], $cfg['polls']['markup']),
+		'POLL_ID' => $id,
+		'POLL_FORM_URL' => (empty($formlink)) ? cot_url('polls', 'id='.$id) : $formlink,
+		'POLL_FORM_BUTTON' => $pollbutton
 	));
 	$t->parse($poll_block);
 	

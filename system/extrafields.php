@@ -370,11 +370,11 @@ function cot_extrafield_add($location, $name, $type, $html, $variants="", $defau
 			break;
 		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
 			break;
-		case 'textarea': $sqltype = "TEXT";
+		case 'textarea': $sqltype = 'TEXT';
 			break;
 		case 'select': $sqltype = "VARCHAR(255)";
 			break;
-		case 'checkbox': $sqltype = "BOOL";
+		case 'checkbox': $sqltype = 'BOOL';
 			break;
 		case 'radio': $sqltype = "VARCHAR(255)";
 			break;
@@ -455,11 +455,11 @@ function cot_extrafield_update($location, $oldname, $name, $type, $html, $varian
 			break;
 		case 'currency': $sqltype = "DOUBLE(13,2) NOT NULL default '0'";
 			break;
-		case 'textarea': $sqltype = "TEXT";
+		case 'textarea': $sqltype = 'TEXT';
 			break;
 		case 'select': $sqltype = "VARCHAR(255)";
 			break;
-		case 'checkbox': $sqltype = "BOOL";
+		case 'checkbox': $sqltype = 'BOOL';
 			break;
 		case 'radio': $sqltype = "VARCHAR(255)";
 			break;

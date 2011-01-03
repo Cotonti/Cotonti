@@ -189,31 +189,31 @@ $profile_form_email = cot_inputbox('text', 'ruseremail', $urr['user_email'], arr
 $editor_class = $cfg['parsebbcodeusertext'] ? 'minieditor' : '';
 
 $useredit_array = array(
-	"USERS_PROFILE_TITLE" => cot_rc_link(cot_url('users', 'm=profile'), $L['pro_title']),
-	"USERS_PROFILE_SUBTITLE" => $L['pro_subtitle'],
-	"USERS_PROFILE_FORM_SEND" => cot_url('users', "m=profile&a=update&".cot_xg()),
-	"USERS_PROFILE_ID" => $urr['user_id'],
-	"USERS_PROFILE_NAME" => htmlspecialchars($urr['user_name']),
-	"USERS_PROFILE_MAINGRP" => cot_build_group($urr['user_maingrp']),
-	"USERS_PROFILE_GROUPS" => cot_build_groupsms($urr['user_id'], FALSE, $urr['user_maingrp']),
-	"USERS_PROFILE_COUNTRY" => cot_selectbox_countries($urr['user_country'], 'rusercountry'),
-	"USERS_PROFILE_TEXT" => cot_textarea('rusertext', $urr['user_text'], 8, 56, array('class' => $editor_class)),
-	"USERS_PROFILE_EMAIL" => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No'])),
-	"USERS_PROFILE_EMAILPASS" => cot_inputbox('password', 'rmailpass', '', array('size' => 12, 'maxlength' => 32)),
-	"USERS_PROFILE_HIDEEMAIL" => $profile_form_hideemail,
-	"USERS_PROFILE_PMNOTIFY" => cot_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No'])),
-	"USERS_PROFILE_THEME" => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
-	"USERS_PROFILE_LANG" => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
-	"USERS_PROFILE_GENDER" => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),
-	"USERS_PROFILE_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
-	"USERS_PROFILE_TIMEZONE" => $profile_form_timezone,
-	"USERS_PROFILE_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
-	"USERS_PROFILE_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
-	"USERS_PROFILE_LOGCOUNT" => $urr['user_logcount'],
-	"USERS_PROFILE_ADMINRIGHTS" => '',
-	"USERS_PROFILE_OLDPASS" => cot_inputbox('password', 'roldpass', '', array('size' => 12, 'maxlength' => 32)),
-	"USERS_PROFILE_NEWPASS1" => cot_inputbox('password', 'rnewpass1', '', array('size' => 12, 'maxlength' => 32)),
-	"USERS_PROFILE_NEWPASS2" => cot_inputbox('password', 'rnewpass2', '', array('size' => 12, 'maxlength' => 32)),
+	'USERS_PROFILE_TITLE' => cot_rc_link(cot_url('users', 'm=profile'), $L['pro_title']),
+	'USERS_PROFILE_SUBTITLE' => $L['pro_subtitle'],
+	'USERS_PROFILE_FORM_SEND' => cot_url('users', "m=profile&a=update&".cot_xg()),
+	'USERS_PROFILE_ID' => $urr['user_id'],
+	'USERS_PROFILE_NAME' => htmlspecialchars($urr['user_name']),
+	'USERS_PROFILE_MAINGRP' => cot_build_group($urr['user_maingrp']),
+	'USERS_PROFILE_GROUPS' => cot_build_groupsms($urr['user_id'], FALSE, $urr['user_maingrp']),
+	'USERS_PROFILE_COUNTRY' => cot_selectbox_countries($urr['user_country'], 'rusercountry'),
+	'USERS_PROFILE_TEXT' => cot_textarea('rusertext', $urr['user_text'], 8, 56, array('class' => $editor_class)),
+	'USERS_PROFILE_EMAIL' => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No'])),
+	'USERS_PROFILE_EMAILPASS' => cot_inputbox('password', 'rmailpass', '', array('size' => 12, 'maxlength' => 32)),
+	'USERS_PROFILE_HIDEEMAIL' => $profile_form_hideemail,
+	'USERS_PROFILE_PMNOTIFY' => cot_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No'])),
+	'USERS_PROFILE_THEME' => cot_selectbox_theme($urr['user_theme'], $urr['user_scheme'], 'rusertheme'),
+	'USERS_PROFILE_LANG' => cot_selectbox_lang($urr['user_lang'], 'ruserlang'),
+	'USERS_PROFILE_GENDER' => cot_selectbox_gender($urr['user_gender'] ,'rusergender'),
+	'USERS_PROFILE_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
+	'USERS_PROFILE_TIMEZONE' => $profile_form_timezone,
+	'USERS_PROFILE_REGDATE' => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
+	'USERS_PROFILE_LASTLOG' => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
+	'USERS_PROFILE_LOGCOUNT' => $urr['user_logcount'],
+	'USERS_PROFILE_ADMINRIGHTS' => '',
+	'USERS_PROFILE_OLDPASS' => cot_inputbox('password', 'roldpass', '', array('size' => 12, 'maxlength' => 32)),
+	'USERS_PROFILE_NEWPASS1' => cot_inputbox('password', 'rnewpass1', '', array('size' => 12, 'maxlength' => 32)),
+	'USERS_PROFILE_NEWPASS2' => cot_inputbox('password', 'rnewpass2', '', array('size' => 12, 'maxlength' => 32)),
 );
 $t->assign($useredit_array);
 
@@ -243,8 +243,8 @@ if ($cfg['useremailchange'])
 	$t->parse('MAIN.USERS_PROFILE_EMAILCHANGE');
 }
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 

@@ -143,18 +143,18 @@ cot_display_messages($t);
 if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 {
 	$t->assign(array(
-		"FORUMS_EDITPOST_TOPICTITTLE" => cot_inputbox('text', 'rtopictitle', htmlspecialchars($rowt['ft_title']), array('size' => 56, 'maxlength' => 255)),
-		"FORUMS_EDITPOST_TOPICDESCRIPTION" => cot_inputbox('text', 'rtopicdesc', htmlspecialchars($rowt['ft_desc']), array('size' => 56, 'maxlength' => 255)),
+		'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', htmlspecialchars($rowt['ft_title']), array('size' => 56, 'maxlength' => 255)),
+		'FORUMS_EDITPOST_TOPICDESCRIPTION' => cot_inputbox('text', 'rtopicdesc', htmlspecialchars($rowt['ft_desc']), array('size' => 56, 'maxlength' => 255)),
 	));
-	$t->parse("MAIN.FORUMS_EDITPOST_FIRSTPOST");
+	$t->parse('MAIN.FORUMS_EDITPOST_FIRSTPOST');
 }
 
 
 $t->assign(array(
-	"FORUMS_EDITPOST_PAGETITLE" => $toptitle,
-	"FORUMS_EDITPOST_SUBTITLE" => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $row['fp_posterid'] . "\">" . $row['fp_postername'] . "</a> @ " . date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
-	"FORUMS_EDITPOST_SEND" => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . cot_xg()),
-	"FORUMS_EDITPOST_TEXT" => cot_textarea('rtext', $row['fp_text'], 20, 56, '', 'input_textarea_editor')
+	'FORUMS_EDITPOST_PAGETITLE' => $toptitle,
+	'FORUMS_EDITPOST_SUBTITLE' => $L['forums_postedby'] . ": <a href=\"users.php?m=details&id=" . $row['fp_posterid'] . "\">" . $row['fp_postername'] . "</a> @ " . date($cfg['dateformat'], $fp_updated + $usr['timezone'] * 3600),
+	'FORUMS_EDITPOST_SEND' => cot_url('forums', "m=editpost&a=update&s=" . $s . "&q=" . $q . "&p=" . $p . "&" . cot_xg()),
+	'FORUMS_EDITPOST_TEXT' => cot_textarea('rtext', $row['fp_text'], 20, 56, '', 'input_textarea_editor')
 ));
 
 /* === Hook === */
@@ -164,8 +164,8 @@ foreach (cot_getextplugins('forums.editpost.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 ?>

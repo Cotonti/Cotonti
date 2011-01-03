@@ -205,23 +205,23 @@ foreach (cot_getextplugins('users.filters') as $pl)
 /* ===== */
 
 $t->assign(array(
-	"USERS_TITLE" => $title,
-	"USERS_SUBTITLE" => $L['use_subtitle'],
-	"USERS_CURRENTFILTER" => $f,
-	"USERS_TOP_CURRENTPAGE" => $currentpage,
-	"USERS_TOP_TOTALPAGE" => $totalpage,
-	"USERS_TOP_MAXPERPAGE" => $cfg['maxusersperpage'],
-	"USERS_TOP_TOTALUSERS" => $totalusers,
-	"USERS_TOP_PAGNAV" => $pagenav['main'],
-	"USERS_TOP_PAGEPREV" => $pagenav['prev'],
-	"USERS_TOP_PAGENEXT" => $pagenav['next'],
-	"USERS_TOP_FILTER_ACTION" => cot_url('users', 'f=search'),
-	"USERS_TOP_FILTERS_COUNTRY" => $countryfilters,
-	"USERS_TOP_FILTERS_MAINGROUP" => $maingrpfilters,
-	"USERS_TOP_FILTERS_GROUP" => $grpfilters,
-	"USERS_TOP_FILTERS_SEARCH" => cot_inputbox('text', 'y', $y, array('size' => 8, 'maxlength' => 8)),
-	"USERS_TOP_FILTERS_SUBMIT" => cot_inputbox('submit', 'submit', $L['Search']),
-	"USERS_TOP_PM" => "PM",
+	'USERS_TITLE' => $title,
+	'USERS_SUBTITLE' => $L['use_subtitle'],
+	'USERS_CURRENTFILTER' => $f,
+	'USERS_TOP_CURRENTPAGE' => $currentpage,
+	'USERS_TOP_TOTALPAGE' => $totalpage,
+	'USERS_TOP_MAXPERPAGE' => $cfg['maxusersperpage'],
+	'USERS_TOP_TOTALUSERS' => $totalusers,
+	'USERS_TOP_PAGNAV' => $pagenav['main'],
+	'USERS_TOP_PAGEPREV' => $pagenav['prev'],
+	'USERS_TOP_PAGENEXT' => $pagenav['next'],
+	'USERS_TOP_FILTER_ACTION' => cot_url('users', 'f=search'),
+	'USERS_TOP_FILTERS_COUNTRY' => $countryfilters,
+	'USERS_TOP_FILTERS_MAINGROUP' => $maingrpfilters,
+	'USERS_TOP_FILTERS_GROUP' => $grpfilters,
+	'USERS_TOP_FILTERS_SEARCH' => cot_inputbox('text', 'y', $y, array('size' => 8, 'maxlength' => 8)),
+	'USERS_TOP_FILTERS_SUBMIT' => cot_inputbox('submit', 'submit', $L['Search']),
+	'USERS_TOP_PM' => 'PM',
 ));
 
 $asc = explode($k, cot_url('users', array('s' => $k, 'w'=> 'asc') + $users_url_path));
@@ -258,11 +258,11 @@ while($urr = $sqlusers->fetch())
 {
 	$jj++;
 	$t->assign(array(
-		"USERS_ROW_ODDEVEN" => cot_build_oddeven($jj),
-        "USERS_ROW_NUM" => $jj,
-		"USERS_ROW" => $urr
+		'USERS_ROW_ODDEVEN' => cot_build_oddeven($jj),
+        'USERS_ROW_NUM' => $jj,
+		'USERS_ROW' => $urr
 	));
-	$t->assign(cot_generate_usertags($urr, "USERS_ROW_"));
+	$t->assign(cot_generate_usertags($urr, 'USERS_ROW_'));
 	/* === Hook - Part2 : Include === */
 	foreach ($extp as $pl)
 	{
@@ -270,7 +270,7 @@ while($urr = $sqlusers->fetch())
 	}
 	/* ===== */
 
-	$t -> parse("MAIN.USERS_ROW");
+	$t -> parse('MAIN.USERS_ROW');
 }
 
 /* === Hook === */
@@ -280,8 +280,8 @@ foreach (cot_getextplugins('users.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 ?>

@@ -70,7 +70,7 @@ while ($row = $sql_users->fetch())
 		'USER_LINK' => cot_build_user($row['online_userid'], htmlspecialchars($row['online_name'])),
 		'USER_LASTSEEN' => cot_build_timegap($row['online_lastseen'], $sys['now'])
 	));
-	$t->assign(cot_generate_usertags($row, "USER_"));
+	$t->assign(cot_generate_usertags($row, 'USER_'));
 	$t->parse('MAIN.USERS');
 }
 

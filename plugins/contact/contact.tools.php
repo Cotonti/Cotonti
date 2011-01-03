@@ -101,7 +101,7 @@ if(($a == '') && !empty($id))
         'CONTACT_TEXT' => $row['contact_text'],
         'CONTACT_REPLY' => $row['contact_reply'],
         'CONTACT_FORM_SEND' => cot_url("admin", 'm=other&p=contact&a=send&id='.$row['contact_id']),
-        "CONTACT_FORM_TEXT" => cot_textarea('rtext', $rtext, 8, 64),
+        'CONTACT_FORM_TEXT' => cot_textarea('rtext', $rtext, 8, 64),
     ));
     $tuman->parse('MAIN.VIEW');
 

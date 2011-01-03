@@ -142,7 +142,7 @@ $t = new XTemplate($mskin);
 
 $t->assign(cot_generate_pagetags($pag, 'PAGE_', 0, $usr['isadmin']));
 $t->assign('PAGE_OWNER', cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])));
-$t->assign(cot_generate_usertags($pag, "PAGE_OWNER_"));
+$t->assign(cot_generate_usertags($pag, 'PAGE_OWNER_'));
 
 $pag['page_file'] = intval($pag['page_file']);
 if ($pag['page_file'] > 0)
@@ -166,11 +166,11 @@ if ($pag['page_file'] > 0)
 		}
 
 		$t->assign(array(
-			"PAGE_FILE_SIZE" => $pag['page_size'],
-			"PAGE_FILE_COUNT" => $pag['page_filecount'],
-			"PAGE_FILE_ICON" => $pag['page_fileicon'],
-			"PAGE_FILE_NAME" => basename($pag['page_url']),
-			"PAGE_FILE_COUNTTIMES" => cot_declension($pag['page_filecount'], $Ls['Times'])
+			'PAGE_FILE_SIZE' => $pag['page_size'],
+			'PAGE_FILE_COUNT' => $pag['page_filecount'],
+			'PAGE_FILE_ICON' => $pag['page_fileicon'],
+			'PAGE_FILE_NAME' => basename($pag['page_url']),
+			'PAGE_FILE_COUNTTIMES' => cot_declension($pag['page_filecount'], $Ls['Times'])
 		));
 
 		if (($pag['page_file'] === 2 && $usr['id'] == 0) || ($pag['page_file'] === 2 && !$usr['auth_download']))

@@ -51,7 +51,7 @@ foreach($structure['forums'] as $key => $val)
 }
 
 $t->assign(array('MASSMOVETOPICS_FORM_URL' => cot_url('admin', 'm=other&p=massmovetopics&a=move')));
-$t->parse("MAIN");
-$plugin_body .= $t->text("MAIN");
+$t->parse('MAIN');
+$plugin_body .= $t->text('MAIN');
 
 ?>

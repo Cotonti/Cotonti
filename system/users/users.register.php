@@ -233,18 +233,18 @@ $form_timezone = cot_selectbox($ruser['user_timezone'], 'rtimezone', $timezoneli
 $form_timezone .= ' '.$usr['gmttime']." / ".date($cfg['dateformat'], $sys['now_offset'] + $usr['timezone']*3600).' '.$usr['timetext'];
 
 $useredit_array = array(
-	"USERS_REGISTER_TITLE" => $L['aut_registertitle'],
-	"USERS_REGISTER_SUBTITLE" => $L['aut_registersubtitle'],
-	"USERS_REGISTER_ADMINEMAIL" => $cot_adminemail,
-	"USERS_REGISTER_SEND" => cot_url('users', 'm=register&a=add'),
-	"USERS_REGISTER_USER" => cot_inputbox('text', 'rusername', $ruser['user_name'], array('size' => 24, 'maxlength' => 100)),
-	"USERS_REGISTER_EMAIL" => cot_inputbox('text', 'ruseremail', $ruser['user_email'], array('size' => 24, 'maxlength' => 64)),
-	"USERS_REGISTER_PASSWORD" => cot_inputbox('password', 'rpassword1', '', array('size' => 8, 'maxlength' => 32)),
-	"USERS_REGISTER_PASSWORDREPEAT" => cot_inputbox('password', 'rpassword2', '', array('size' => 8, 'maxlength' => 32)),
-	"USERS_REGISTER_COUNTRY" => cot_selectbox_countries($ruser['user_country'], 'rcountry'),
-	"USERS_REGISTER_TIMEZONE" => $form_timezone,
-	"USERS_REGISTER_GENDER" => cot_selectbox_gender($ruser['user_gender'],'rusergender'),
-	"USERS_REGISTER_BIRTHDATE" => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
+	'USERS_REGISTER_TITLE' => $L['aut_registertitle'],
+	'USERS_REGISTER_SUBTITLE' => $L['aut_registersubtitle'],
+	'USERS_REGISTER_ADMINEMAIL' => $cot_adminemail,
+	'USERS_REGISTER_SEND' => cot_url('users', 'm=register&a=add'),
+	'USERS_REGISTER_USER' => cot_inputbox('text', 'rusername', $ruser['user_name'], array('size' => 24, 'maxlength' => 100)),
+	'USERS_REGISTER_EMAIL' => cot_inputbox('text', 'ruseremail', $ruser['user_email'], array('size' => 24, 'maxlength' => 64)),
+	'USERS_REGISTER_PASSWORD' => cot_inputbox('password', 'rpassword1', '', array('size' => 8, 'maxlength' => 32)),
+	'USERS_REGISTER_PASSWORDREPEAT' => cot_inputbox('password', 'rpassword2', '', array('size' => 8, 'maxlength' => 32)),
+	'USERS_REGISTER_COUNTRY' => cot_selectbox_countries($ruser['user_country'], 'rcountry'),
+	'USERS_REGISTER_TIMEZONE' => $form_timezone,
+	'USERS_REGISTER_GENDER' => cot_selectbox_gender($ruser['user_gender'],'rusergender'),
+	'USERS_REGISTER_BIRTHDATE' => cot_selectbox_date(cot_mktime(1, 0, 0, $rmonth, $rday, $ryear), 'short', '', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
 );
 $t->assign($useredit_array);
 
@@ -266,8 +266,8 @@ foreach (cot_getextplugins('users.register.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 

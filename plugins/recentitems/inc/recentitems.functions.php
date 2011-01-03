@@ -114,40 +114,40 @@ function cot_build_recentforums($template, $mode = 'recent', $maxperpage = 5, $d
 		}
 
 		$recentitems->assign(array(
-			"FORUM_ROW_ID" => $row['ft_id'],
-			"FORUM_ROW_STATE" => $row['ft_state'],
-			"FORUM_ROW_ICON" => $row['ft_icon'],
-			"FORUM_ROW_TITLE" => htmlspecialchars($row['ft_title']),
-			"FORUM_ROW_PATH" => $build_forum,
-			"FORUM_ROW_PATH_SHORT" => $build_forum_short,
-			"FORUM_ROW_DESC" => htmlspecialchars($row['ft_desc']),
-			"FORUM_ROW_PREVIEW" => $row['ft_preview'] . '...',
-			"FORUM_ROW_CREATIONDATE" => @date($cfg['formatmonthdayhourmin'], $row['ft_creationdate'] + $usr['timezone'] * 3600),
-			"FORUM_ROW_UPDATED" => $row['ft_lastposturl'],
-			"FORUM_ROW_TIMEAGO" => $row['ft_timago'],
-			"FORUM_ROW_POSTCOUNT" => $row['ft_postcount'],
-			"FORUM_ROW_REPLYCOUNT" => $row['ft_replycount'],
-			"FORUM_ROW_VIEWCOUNT" => $row['ft_viewcount'],
-			"FORUM_ROW_FIRSTPOSTER" => $row['ft_firstpostername'],
-			"FORUM_ROW_LASTPOSTER" => $row['ft_lastpostername'],
-			"FORUM_ROW_URL" => $row['ft_url'],
-			"FORUM_ROW_PAGES" => $row['ft_pages'],
-			"FORUM_ROW_MAXPAGES" => $row['ft_maxpages'],
-			"FORUM_ROW_NUM" => $ft_num,
-			"FORUM_ROW_ODDEVEN" => cot_build_oddeven($ft_num),
-			"FORUM_ROW" => $row
+			'FORUM_ROW_ID' => $row['ft_id'],
+			'FORUM_ROW_STATE' => $row['ft_state'],
+			'FORUM_ROW_ICON' => $row['ft_icon'],
+			'FORUM_ROW_TITLE' => htmlspecialchars($row['ft_title']),
+			'FORUM_ROW_PATH' => $build_forum,
+			'FORUM_ROW_PATH_SHORT' => $build_forum_short,
+			'FORUM_ROW_DESC' => htmlspecialchars($row['ft_desc']),
+			'FORUM_ROW_PREVIEW' => $row['ft_preview'] . '...',
+			'FORUM_ROW_CREATIONDATE' => @date($cfg['formatmonthdayhourmin'], $row['ft_creationdate'] + $usr['timezone'] * 3600),
+			'FORUM_ROW_UPDATED' => $row['ft_lastposturl'],
+			'FORUM_ROW_TIMEAGO' => $row['ft_timago'],
+			'FORUM_ROW_POSTCOUNT' => $row['ft_postcount'],
+			'FORUM_ROW_REPLYCOUNT' => $row['ft_replycount'],
+			'FORUM_ROW_VIEWCOUNT' => $row['ft_viewcount'],
+			'FORUM_ROW_FIRSTPOSTER' => $row['ft_firstpostername'],
+			'FORUM_ROW_LASTPOSTER' => $row['ft_lastpostername'],
+			'FORUM_ROW_URL' => $row['ft_url'],
+			'FORUM_ROW_PAGES' => $row['ft_pages'],
+			'FORUM_ROW_MAXPAGES' => $row['ft_maxpages'],
+			'FORUM_ROW_NUM' => $ft_num,
+			'FORUM_ROW_ODDEVEN' => cot_build_oddeven($ft_num),
+			'FORUM_ROW' => $row
 		));
-		$recentitems->parse("MAIN.TOPICS_ROW");
+		$recentitems->parse('MAIN.TOPICS_ROW');
 	}
 
 	if ($d == 0 && $ft_num == 0)
 	{
-		$recentitems->parse("MAIN.NO_TOPICS_FOUND");
+		$recentitems->parse('MAIN.NO_TOPICS_FOUND');
 	}
 
-	$recentitems->parse("MAIN");
+	$recentitems->parse('MAIN');
 
-	return ($d == 0 || $ft_num > 0) ? $recentitems->text("MAIN") : '';
+	return ($d == 0 || $ft_num > 0) ? $recentitems->text('MAIN') : '';
 }
 
 function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d = 0, $titlelength = 0, $textlength = 0, $rightprescan = true, $cat = '')
@@ -190,12 +190,12 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		}
 		$recentitems->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $textlength));
 		$recentitems->assign(array(
-			"PAGE_ROW_SHORTTITLE" => htmlspecialchars($pag['page_title']),
-			"PAGE_ROW_OWNER" => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-			"PAGE_ROW_ODDEVEN" => cot_build_oddeven($jj),
-			"PAGE_ROW_NUM" => $jj
+			'PAGE_ROW_SHORTTITLE' => htmlspecialchars($pag['page_title']),
+			'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
+			'PAGE_ROW_ODDEVEN' => cot_build_oddeven($jj),
+			'PAGE_ROW_NUM' => $jj
 		));
-		$recentitems->assign(cot_generate_usertags($pag, "PAGE_ROW_OWNER_"));
+		$recentitems->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
 
 		/* === Hook - Part2 === */
 		foreach ($extp as $pl)
@@ -204,16 +204,16 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 		}
 		/* ===== */
 
-		$recentitems->parse("MAIN.PAGE_ROW");
+		$recentitems->parse('MAIN.PAGE_ROW');
 	}
 
 	if ($d == 0 && $jj == 0)
 	{
-		$recentitems->parse("MAIN.NO_PAGES_FOUND");
+		$recentitems->parse('MAIN.NO_PAGES_FOUND');
 	}
 
-	$recentitems->parse("MAIN");
-	return ($d == 0 || $jj > 0) ? $recentitems->text("MAIN") : '';
+	$recentitems->parse('MAIN');
+	return ($d == 0 || $jj > 0) ? $recentitems->text('MAIN') : '';
 }
 
 ?>

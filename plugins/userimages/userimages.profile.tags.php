@@ -36,8 +36,8 @@ foreach($userimages as $code => $settings)
 		'selectfile' => $userimg_selectfile
 	));
 	$t->assign(array(
-		"USERS_PROFILE_".strtoupper($code) => $userimg_html,
-		"USERS_PROFILE_".strtoupper($code)."_SELECT" => $userimg_selectfile
+		'USERS_PROFILE_'.strtoupper($code) => $userimg_html,
+		'USERS_PROFILE_'.strtoupper($code)."_SELECT" => $userimg_selectfile
 	));
 }
 

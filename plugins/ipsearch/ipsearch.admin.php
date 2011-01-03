@@ -96,7 +96,7 @@ if ($a == 'search')
 	));
 	$t->parse('MAIN.IPSEARCH_RESULTS');
 }
-$t->parse("MAIN");
-$plugin_body .= $t->text("MAIN");
+$t->parse('MAIN');
+$plugin_body .= $t->text('MAIN');
 
 ?>

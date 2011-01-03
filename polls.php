@@ -100,9 +100,9 @@ elseif ((int)$id > 0)
 	$poll_form = cot_poll_form($id);
 
 	$t->assign(array(
-		"POLLS_TITLE" => cot_parse($poll_form['poll_text'], $cfg['polls']['markup']),
-		"POLLS_FORM" => $poll_form['poll_block'],
-		"POLLS_VIEWALL" => cot_rc_link(cot_url('polls', 'id=viewall'), $L['polls_viewarchives'])
+		'POLLS_TITLE' => cot_parse($poll_form['poll_text'], $cfg['polls']['markup']),
+		'POLLS_FORM' => $poll_form['poll_block'],
+		'POLLS_VIEWALL' => cot_rc_link(cot_url('polls', 'id=viewall'), $L['polls_viewarchives'])
 	));
 
 	/* === Hook === */
@@ -112,7 +112,7 @@ elseif ((int)$id > 0)
 	}
 	/* ===== */
 
-	$t->parse("MAIN.POLLS_VIEW");
+	$t->parse('MAIN.POLLS_VIEW');
 
 	$extra = $L['polls_notyetvoted'];
 	if ($alreadyvoted)
@@ -121,10 +121,10 @@ elseif ((int)$id > 0)
 	}
 
 	$t->assign(array(
-		"POLLS_EXTRATEXT" => $extra,
+		'POLLS_EXTRATEXT' => $extra,
 	));
 
-	$t->parse("MAIN.POLLS_EXTRA");
+	$t->parse('MAIN.POLLS_EXTRA');
 }
 else
 {
@@ -138,11 +138,11 @@ else
 	{
 		$jj++;
 		$t->assign(array(
-			"POLL_DATE" => date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
-			"POLL_HREF" => cot_url('polls', 'id='.$row['poll_id']),
-			"POLL_TEXT" => cot_parse($row['poll_text'], $cfg['polls']['markup']),
-			"POLL_NUM" => $jj,
-			"POLL_ODDEVEN" => cot_build_oddeven($jj)
+			'POLL_DATE' => date($cfg['formatyearmonthday'], $row['poll_creationdate'] + $usr['timezone'] * 3600),
+			'POLL_HREF' => cot_url('polls', 'id='.$row['poll_id']),
+			'POLL_TEXT' => cot_parse($row['poll_text'], $cfg['polls']['markup']),
+			'POLL_NUM' => $jj,
+			'POLL_ODDEVEN' => cot_build_oddeven($jj)
 		));
 
 		/* === Hook - Part2 === */
@@ -152,14 +152,14 @@ else
 		}
 		/* ===== */
 
-		$t->parse("MAIN.POLLS_VIEWALL.POLL_ROW");
+		$t->parse('MAIN.POLLS_VIEWALL.POLL_ROW');
 	}
 
 	if ($jj == 0)
 	{
-		$t->parse("MAIN.POLLS_VIEWALL.POLL_NONE");
+		$t->parse('MAIN.POLLS_VIEWALL.POLL_NONE');
 	}
-	$t->parse("MAIN.POLLS_VIEWALL");
+	$t->parse('MAIN.POLLS_VIEWALL');
 }
 
 /* === Hook === */
@@ -169,8 +169,8 @@ foreach (cot_getextplugins('polls.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 require_once $cfg['system_dir'] . '/footer.php';
 
 ?>

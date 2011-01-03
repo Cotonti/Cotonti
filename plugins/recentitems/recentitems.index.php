@@ -25,14 +25,14 @@ if ($cfg['plugin']['recentitems']['recentpages'] && cot_module_active('page'))
 {
 	require_once cot_incfile('page', 'module');
 	$res = cot_build_recentpages('recentitems.pages.index', 'recent', $cfg['plugin']['recentitems']['maxpages'], 0, $cfg['plugin']['recentitems']['recentpagestitle'], $cfg['plugin']['recentitems']['recentpagestext'], $cfg['plugin']['recentitems']['rightscan']);
-	$t->assign("RECENT_PAGES", $res);
+	$t->assign('RECENT_PAGES', $res);
 }
 
 if ($cfg['plugin']['recentitems']['recentforums'] && cot_module_active('forums'))
 {
 	require_once cot_incfile('forums', 'module');
 	$res = cot_build_recentforums('recentitems.forums.index', 'recent', $cfg['plugin']['recentitems']['maxtopics'], 0, $cfg['plugin']['recentitems']['recentforumstitle'], $cfg['plugin']['recentitems']['rightscan']);
-	$t->assign("RECENT_FORUMS", $res);
+	$t->assign('RECENT_FORUMS', $res);
 }
 
 ?>

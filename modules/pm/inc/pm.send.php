@@ -271,8 +271,8 @@ $t = new XTemplate(cot_tplfile('pm.send'));
 
 if (!COT_AJAX)
 {
-	$t->parse("MAIN.BEFORE_AJAX");
-	$t->parse("MAIN.AFTER_AJAX");
+	$t->parse('MAIN.BEFORE_AJAX');
+	$t->parse('MAIN.AFTER_AJAX');
 }
 
 cot_display_messages($t);
@@ -282,23 +282,23 @@ $title = $bhome . cot_rc_link(cot_url('pm'), $L['Private_Messages']).' '.$cfg['s
 $title .= (!$id) ? $L['pmsend_title'] : $L['Edit'].' #'.$id;
 
 $t->assign(array(
-	"PMSEND_TITLE" => $title,
-	"PMSEND_SUBTITLE" => $L['pmsend_subtitle'],
-	"PMSEND_SENDNEWPM" => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
-	"PMSEND_INBOX" => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
-	"PMSEND_INBOX_COUNT" => $totalinbox,
-	"PMSEND_SENTBOX" => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
-	"PMSEND_SENTBOX_COUNT" => $totalsentbox,
-	"PMSEND_FORM_SEND" => cot_url('pm', 'm=send&a=send'.$idurl),
-	"PMSEND_FORM_TITLE" => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
-	"PMSEND_FORM_TEXT" => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
-	"PMSEND_FORM_TOUSER" => cot_textarea('newpmrecipient', $touser, 3, 56),
-	"PMSEND_AJAX_MARKITUP" => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
+	'PMSEND_TITLE' => $title,
+	'PMSEND_SUBTITLE' => $L['pmsend_subtitle'],
+	'PMSEND_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
+	'PMSEND_INBOX' => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
+	'PMSEND_INBOX_COUNT' => $totalinbox,
+	'PMSEND_SENTBOX' => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
+	'PMSEND_SENTBOX_COUNT' => $totalsentbox,
+	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
+	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
+	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
+	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56),
+	'PMSEND_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
 ));
 
 if (!$id)
 {
-	$t->parse("MAIN.PMSEND_USERLIST");
+	$t->parse('MAIN.PMSEND_USERLIST');
 }
 
 /* === Hook === */
@@ -308,8 +308,8 @@ foreach (cot_getextplugins('pm.send.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 ?>

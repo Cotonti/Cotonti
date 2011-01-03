@@ -167,25 +167,25 @@ $mskin = cot_tplfile(array('page', 'add', $cot_cat[$rpage['page_cat']]['tpl']));
 $t = new XTemplate($mskin);
 
 $pageadd_array = array(
-	"PAGEADD_PAGETITLE" => $L['page_addtitle'],
-	"PAGEADD_SUBTITLE" => $L['page_addsubtitle'],
-	"PAGEADD_ADMINEMAIL" => "mailto:".$cfg['adminemail'],
-	"PAGEADD_FORM_SEND" => cot_url('page', 'm=add&a=add'),
-	"PAGEADD_FORM_CAT" => cot_selectbox_categories($rpage['page_cat'], 'rpagecat'),
-	"PAGEADD_FORM_CAT_SHORT" => cot_selectbox_categories($rpage['page_cat'], 'rpagecat', $c),
-	"PAGEADD_FORM_KEY" => cot_inputbox('text', 'rpagekey', $rpage['page_key'], array('size' => '16', 'maxlength' => '16')),
-	"PAGEADD_FORM_ALIAS" => cot_inputbox('text', 'rpagealias', $rpage['page_alias'], array('size' => '32', 'maxlength' => '255')),
-	"PAGEADD_FORM_TITLE" => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], array('size' => '64', 'maxlength' => '255')),
-	"PAGEADD_FORM_DESC" => cot_inputbox('text', 'rpagedesc', $rpage['page_desc'], array('size' => '64', 'maxlength' => '255')),
-	"PAGEADD_FORM_AUTHOR" => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('size' => '16', 'maxlength' => '24')),
-	"PAGEADD_FORM_OWNER" => cot_build_user($usr['id'], htmlspecialchars($usr['name'])),
-	"PAGEADD_FORM_OWNERID" => $usr['id'],
-	"PAGEADD_FORM_BEGIN" => cot_selectbox_date($sys['now_offset'], 'long', 'rpagebegin'),
-	"PAGEADD_FORM_EXPIRE" => cot_selectbox_date($sys['now_offset'] + 31536000, 'long', 'rpageexpire'),
-	"PAGEADD_FORM_FILE" => cot_selectbox($rpage['page_file'], 'rpagefile', range(0, 2), array($L['No'], $L['Yes'], $L['Members_only']), false),
-	"PAGEADD_FORM_URL" => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('size' => '56', 'maxlength' => '255')),
-	"PAGEADD_FORM_SIZE" => cot_inputbox('text', 'rpagesize', $rpage['page_size'], array('size' => '56', 'maxlength' => '255')),
-	"PAGEADD_FORM_TEXT" => cot_textarea('rpagetext', $rpage['page_text'], 24, 120, '', 'input_textarea_editor')
+	'PAGEADD_PAGETITLE' => $L['page_addtitle'],
+	'PAGEADD_SUBTITLE' => $L['page_addsubtitle'],
+	'PAGEADD_ADMINEMAIL' => "mailto:".$cfg['adminemail'],
+	'PAGEADD_FORM_SEND' => cot_url('page', 'm=add&a=add'),
+	'PAGEADD_FORM_CAT' => cot_selectbox_categories($rpage['page_cat'], 'rpagecat'),
+	'PAGEADD_FORM_CAT_SHORT' => cot_selectbox_categories($rpage['page_cat'], 'rpagecat', $c),
+	'PAGEADD_FORM_KEY' => cot_inputbox('text', 'rpagekey', $rpage['page_key'], array('size' => '16', 'maxlength' => '16')),
+	'PAGEADD_FORM_ALIAS' => cot_inputbox('text', 'rpagealias', $rpage['page_alias'], array('size' => '32', 'maxlength' => '255')),
+	'PAGEADD_FORM_TITLE' => cot_inputbox('text', 'rpagetitle', $rpage['page_title'], array('size' => '64', 'maxlength' => '255')),
+	'PAGEADD_FORM_DESC' => cot_inputbox('text', 'rpagedesc', $rpage['page_desc'], array('size' => '64', 'maxlength' => '255')),
+	'PAGEADD_FORM_AUTHOR' => cot_inputbox('text', 'rpageauthor', $rpage['page_author'], array('size' => '16', 'maxlength' => '24')),
+	'PAGEADD_FORM_OWNER' => cot_build_user($usr['id'], htmlspecialchars($usr['name'])),
+	'PAGEADD_FORM_OWNERID' => $usr['id'],
+	'PAGEADD_FORM_BEGIN' => cot_selectbox_date($sys['now_offset'], 'long', 'rpagebegin'),
+	'PAGEADD_FORM_EXPIRE' => cot_selectbox_date($sys['now_offset'] + 31536000, 'long', 'rpageexpire'),
+	'PAGEADD_FORM_FILE' => cot_selectbox($rpage['page_file'], 'rpagefile', range(0, 2), array($L['No'], $L['Yes'], $L['Members_only']), false),
+	'PAGEADD_FORM_URL' => cot_inputbox('text', 'rpageurl', $rpage['page_url'], array('size' => '56', 'maxlength' => '255')),
+	'PAGEADD_FORM_SIZE' => cot_inputbox('text', 'rpagesize', $rpage['page_size'], array('size' => '56', 'maxlength' => '255')),
+	'PAGEADD_FORM_TEXT' => cot_textarea('rpagetext', $rpage['page_text'], 24, 120, '', 'input_textarea_editor')
 );
 
 $t->assign($pageadd_array);
@@ -214,8 +214,8 @@ if ($usr['isadmin'])
 	$t->parse('MAIN.ADMIN');
 }
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'].'/footer.php';
 

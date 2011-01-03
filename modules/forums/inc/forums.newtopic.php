@@ -168,18 +168,18 @@ $t = new XTemplate($mskin);
 cot_display_messages($t);
 
 $t->assign(array(
-	"FORUMS_NEWTOPIC_PAGETITLE" => $toptitle ,
-	"FORUMS_NEWTOPIC_SUBTITLE" => htmlspecialchars(cot_parse_autourls($structure['forums'][$s]['desc'])),
-	"FORUMS_NEWTOPIC_SEND" => cot_url('forums', "m=newtopic&a=newtopic&s=".$s),
-	"FORUMS_NEWTOPIC_TITLE" => cot_inputbox('text', 'newtopictitle', htmlspecialchars($newtopictitle), array('size' => 56, 'maxlength' => 255)),
-	"FORUMS_NEWTOPIC_DESC" => cot_inputbox('text', 'newtopicdesc', htmlspecialchars($newtopicdesc), array('size' => 56, 'maxlength' => 255)),
-	"FORUMS_NEWTOPIC_TEXT" => cot_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor')
+	'FORUMS_NEWTOPIC_PAGETITLE' => $toptitle ,
+	'FORUMS_NEWTOPIC_SUBTITLE' => htmlspecialchars(cot_parse_autourls($structure['forums'][$s]['desc'])),
+	'FORUMS_NEWTOPIC_SEND' => cot_url('forums', "m=newtopic&a=newtopic&s=".$s),
+	'FORUMS_NEWTOPIC_TITLE' => cot_inputbox('text', 'newtopictitle', htmlspecialchars($newtopictitle), array('size' => 56, 'maxlength' => 255)),
+	'FORUMS_NEWTOPIC_DESC' => cot_inputbox('text', 'newtopicdesc', htmlspecialchars($newtopicdesc), array('size' => 56, 'maxlength' => 255)),
+	'FORUMS_NEWTOPIC_TEXT' => cot_textarea('newmsg', htmlspecialchars($newmsg), 20, 56, '', 'input_textarea_editor')
 ));
 
 if ($cfg['forums'][$s]['allowprvtopics'])
 {
-	$t->assign("FORUMS_NEWTOPIC_ISPRIVATE", cot_checkbox($newprvtopic, newprvtopic));
-	$t->parse("MAIN.PRIVATE");
+	$t->assign('FORUMS_NEWTOPIC_ISPRIVATE', cot_checkbox($newprvtopic, newprvtopic));
+	$t->parse('MAIN.PRIVATE');
 }
 
 /* === Hook === */
@@ -189,8 +189,8 @@ foreach (cot_getextplugins('forums.newtopic.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 
