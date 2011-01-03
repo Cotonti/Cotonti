@@ -24,7 +24,7 @@ $L['adm_pm_totalsent'] = 'Total of private messages ever sent';
 
 $L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
 $L['cfg_pm_maxsize'] = array('Maximum length for messages', 'Default: 10000 chars');
-$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');  // New in 0.0.6
+$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');
 
 $L['info_desc'] = 'Private messaging system is on-site user communication similar to e-mail';
 
@@ -45,7 +45,7 @@ $L['pm_multiplerecipients'] = 'This private messages was also sent to %1$s other
 $L['pm_norecipient'] = 'No recipient specified';
 $L['pm_notifytitle'] = 'New private message';
 $L['pm_putinarchives'] = 'Put in archives';
-$L['pm_deletefromarchives'] = 'Delete from archives';  // New in N-0.7.0
+$L['pm_deletefromarchives'] = 'Delete from archives';
 $L['pm_replyto'] = 'Reply to this user';
 $L['pm_sendnew'] = 'Send a new private message';
 $L['pm_sentbox'] = 'Sent-box';
@@ -53,17 +53,17 @@ $L['pm_sentboxsubtitle'] = 'Sent messages';
 $L['pm_titletooshort'] = 'The title is too short or missing';
 $L['pm_toomanyrecipients'] = '%1$s recipients maximum please';
 $L['pm_wrongname'] = 'At least one recipient was wrong, and so removed from the list';
-$L['pm_messageshistory'] = 'Messages history'; // New in N-0.7.0
-$L['pm_notmovetosentbox'] = 'Do not move to "Sentbox"'; // New in N-0.7.0
+$L['pm_messageshistory'] = 'Messages history';
+$L['pm_notmovetosentbox'] = 'Do not move to "Sentbox"';
 
-$L['pm_filter'] = 'Filter'; // New in N-0.7.0
-$L['pm_all'] = 'View all'; // New in N-0.7.0
-$L['pm_starred'] = 'Starred'; // New in N-0.7.0
-$L['pm_unread'] = 'Unread'; // New in N-0.7.0
-$L['pm_deletefromstarred'] = 'Delete from Starred'; // New in N-0.7.0
-$L['pm_putinstarred'] = 'Add to Starred'; // New in N-0.7.0
-$L['pm_read'] = 'Read'; // New in N-0.7.0
-$L['pm_selected'] = 'Selected'; // New in N-0.7.0
+$L['pm_filter'] = 'Filter';
+$L['pm_all'] = 'View all';
+$L['pm_starred'] = 'Starred';
+$L['pm_unread'] = 'Unread';
+$L['pm_deletefromstarred'] = 'Delete from Starred';
+$L['pm_putinstarred'] = 'Add to Starred';
+$L['pm_read'] = 'Read';
+$L['pm_selected'] = 'Selected';
 	
 /**
  * Private messages: notification

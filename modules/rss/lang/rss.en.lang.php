@@ -16,11 +16,11 @@ defined('COT_CODE') or die('Wrong URL.');
  * RSS Subsection
  */
 
-$L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' '); // New in 0.7.0
-$L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' '); // New in 0.7.0
-$L['cfg_rss_charset'] = array('RSS charset', ' '); // New in 0.7.0
-$L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
-$L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default'); // New in 0.7.0
+$L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' ');
+$L['cfg_rss_maxitems'] = array('Max. items in RSS feed', ' ');
+$L['cfg_rss_charset'] = array('RSS charset', ' ');
+$L['cfg_rss_pagemaxsymbols'] = array('Pages. Cut element description longer than N symbols', 'Disabled by default');
+$L['cfg_rss_postmaxsymbols'] = array('Posts. Cut element description longer than N symbols', 'Disabled by default');
 
 $L['info_desc'] = 'Generates RSS/Atom feeds for your site';
 

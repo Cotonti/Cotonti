@@ -66,13 +66,13 @@ $L['core_main'] = 'Main Settings';
 $L['core_menus'] = &$L['Menus'];
 $L['core_page'] = &$L['Pages'];
 $L['core_parser'] = &$L['Parser'];
-$L['core_performance'] = 'Performance'; // New in 0.7.0
+$L['core_performance'] = 'Performance';
 $L['core_pfs'] = &$L['PFS'];
 $L['core_plug'] = &$L['Plugins'];
 $L['core_pm'] = &$L['Private_Messages'];
 $L['core_polls'] = &$L['Polls'];
-$L['core_rss'] = &$L['RSS_Feeds'];// New in 0.7.0
-$L['core_structure'] = &$L['Categories'];// New in 0.7.0
+$L['core_rss'] = &$L['RSS_Feeds'];
+$L['core_structure'] = &$L['Categories'];
 $L['core_theme'] = &$L['Themes'];
 $L['core_time'] = 'Time and Date';
 $L['core_title'] = 'Titles (&lt;title&gt; tag)';
@@ -100,12 +100,12 @@ $L['cfg_cookiepath'] = array('Path for cookies', 'Default: empty');
 $L['cfg_devmode'] = array('Debugging mode', 'Don\'t let this enabled on live sites');
 $L['cfg_easypagenav'] = array('User friendly pagination', 'Uses page numbers in URLs instead of DB offsets');
 $L['cfg_hostip'] = array('Server IP', 'The IP of the server, optional.');
-$L['cfg_jquery'] = array('Enable jQuery', '');	// New in 0.0.1
-$L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');	// New in 0.0.2
-$L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');	// New in 0.0.2
+$L['cfg_jquery'] = array('Enable jQuery', '');
+$L['cfg_maintenance'] = array('Maintenance mode', 'Let only authorized personel access to site');
+$L['cfg_maintenancereason'] = array('Maintenance reason', 'Optional, should better be short');
 $L['cfg_maxrowsperpage'] = array('Max. items per page', 'Default item limit for pagination');
-$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');	// New in 0.6.1
-$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');	// New in 0.6.1
+$L['cfg_redirbkonlogin'] = array('Redirect back on login', 'Redirect back to page user viewed before login');
+$L['cfg_redirbkonlogout'] = array('Redirect back on logout', 'Redirect back to page user viewed before logout');
 $L['cfg_shieldenabled'] = array('Enable the Shield', 'Anti-spamming and anti-hammering');
 $L['cfg_shieldtadjust'] = array('Adjust Shield timers (in %)', 'The higher, the harder to spam');
 $L['cfg_shieldzhammer'] = array('Anti-hammer after * fast hits', 'The smaller, the faster the auto-ban 3 minutes happens');
@@ -145,14 +145,14 @@ $L['cfg_menu9'] = array('Menu slot #9<br />{PHP.cfg.menu9} in all tpl files', ''
  * Performance Subsection
  */
 
-$L['cfg_cache_forums'] = array('Page cache in forums', 'Caches entire pages output for guests'); // New in 0.7.0
-$L['cfg_cache_index'] = array('Page cache on index', 'Index will be static for all guests'); // New in 0.7.0
-$L['cfg_cache_page'] = array('Page cache in page and list', 'Caches entire pages for guests'); // New in 0.7.0
+$L['cfg_cache_forums'] = array('Page cache in forums', 'Caches entire pages output for guests');
+$L['cfg_cache_index'] = array('Page cache on index', 'Index will be static for all guests');
+$L['cfg_cache_page'] = array('Page cache in page and list', 'Caches entire pages for guests');
 $L['cfg_gzip'] = array('Gzip', 'Gzip compression of the HTML output');
 $L['cfg_headrc_consolidate'] = array('Consolidate header and footer resources (JS/CSS)');
 $L['cfg_headrc_minify'] = array('Minify consolidated JS/CSS');
 $L['cfg_jquery_cdn'] = array('Use jQuery from Google Ajax APIs CDN');
-$L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)'); // New in 0.7.0
+$L['cfg_shared_drv'] = array('Shared memory cache driver', '(go to Other - Cache)');
 
 /**
  * Config Section
@@ -170,7 +170,7 @@ $L['cfg_charset'] = array('HTML charset', '');
 $L['cfg_disablesysinfos'] = array('Turn off page creation time', 'In footer.tpl');
 $L['cfg_doctypeid'] = array('Document Type', '&lt;!DOCTYPE&gt; of the HTML layout');
 $L['cfg_forcedefaulttheme'] = array('Force the default theme for all users', '');
-$L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');	// New in 0.0.2
+$L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');
 $L['cfg_keepcrbottom'] = array('Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}', 'In footer.tpl');
 $L['cfg_metakeywords'] = array('HTML Meta keywords (comma separated)', 'Search engines');
 $L['cfg_msg_separate'] = array('Display messages separately for each source', '');
@@ -279,7 +279,7 @@ $L['adm_tpl_forced'] = 'Same as';
 $L['adm_tpl_parent'] = 'Same as the parent category';
 $L['adm_tpl_resyncalltitle'] = 'Resync all page counters';
 $L['adm_tpl_resynctitle'] = 'Resync category page counters';
-$L['adm_help_structure'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.'; // Added in N-0.7.0
+$L['adm_help_structure'] = 'The pages that belong to the category &quot;system&quot; are not displayed in the public listings, it\'s to make standalone pages.';
 
 /**
  * Structure Section
@@ -305,7 +305,7 @@ $L['adm_rightspergroup'] = 'Rights per group';
 $L['adm_maxsizesingle'] = 'Max size for a single file in '.$L['PFS'].' (KB)';
 $L['adm_maxsizeallpfs'] = 'Max size of all files together in '.$L['PFS'].' (KB)';
 $L['adm_copyrightsfrom'] = 'Set the same rights as the group';
-$L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';	// New in 0.0.2
+$L['adm_rights_maintenance'] = 'Access to site when maintenance mode on';
 
 /**
  * Users Section
@@ -335,13 +335,13 @@ $L['adm_paused'] = 'Paused';
 $L['adm_running'] = 'Running';
 $L['adm_partrunning'] = 'Partially running';
 $L['adm_partstopped'] = 'Partially stopped';
-$L['adm_installed'] = 'Installed';	// New in 0.0.6
+$L['adm_installed'] = 'Installed';
 $L['adm_notinstalled'] = 'Not installed';
 
-$L['adm_plugsetup'] = 'Plugin Setup';	// New in 0.0.6
-$L['adm_override_guests'] = 'System override, guests and inactive are not allowed to admin';	// New in 0.0.6
-$L['adm_override_banned'] = 'System override, Banned';	// New in 0.0.6
-$L['adm_override_admins'] = 'System override, Administrators';	// New in 0.0.6
+$L['adm_plugsetup'] = 'Plugin Setup';
+$L['adm_override_guests'] = 'System override, guests and inactive are not allowed to admin';
+$L['adm_override_banned'] = 'System override, Banned';
+$L['adm_override_admins'] = 'System override, Administrators';
 
 $L['adm_opt_install'] = 'Install';
 $L['adm_opt_install_explain'] = 'This will make a new install of this extension';
@@ -356,7 +356,7 @@ $L['adm_opt_unpause'] = 'Un-pause';
 $L['adm_opt_unpauseall'] = 'Un-pause all';
 $L['adm_opt_unpauseall_explain'] = 'This will un-pause (enable) all the plugin parts.';
 
-$L['adm_opt_setup_missing'] = 'Error: setup file missing!';	// New in 0.0.6
+$L['adm_opt_setup_missing'] = 'Error: setup file missing!';
 
 /**
  * Tools Section
@@ -369,10 +369,10 @@ $L['adm_listisempty'] = 'List is empty';
  * Cache Subsection
  */
 
-$L['adm_delcacheitem'] = 'Cache item removed';	// New in 0.0.2
+$L['adm_delcacheitem'] = 'Cache item removed';
 $L['adm_internalcache'] = 'Internal cache';
-$L['adm_purgeall_done'] = 'Cache cleared completely';	// New in 0.0.2
-$L['adm_diskcache'] = 'Disk cache';	// New in 0.6.1
+$L['adm_purgeall_done'] = 'Cache cleared completely';
+$L['adm_diskcache'] = 'Disk cache';
 
 /**
  * Other Section
@@ -421,8 +421,8 @@ $L['adm_failed'] = 'Failed';
 $L['adm_from'] = 'From';
 $L['adm_more'] = 'More tools...';
 $L['adm_purgeall'] = 'Purge all';
-$L['adm_queue_unvalidated'] = 'Unvalidated';	// New in 0.0.3
-$L['adm_queue_validated'] = 'Validated';	// New in 0.0.3
+$L['adm_queue_unvalidated'] = 'Unvalidated';
+$L['adm_queue_validated'] = 'Validated';
 $L['adm_required'] = '(Required)';
 $L['adm_setby'] = 'Set by';
 $L['adm_to'] = 'To';
