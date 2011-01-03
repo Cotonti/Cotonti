@@ -11,7 +11,7 @@
 					<a href="forums.php?c=fold#top" rel="nofollow">{PHP.L.forums_foldall}</a><span class="spaced">/</span><a href="forums.php?c=unfold#top" rel="nofollow">{PHP.L.forums_unfoldall}</a>
 				</td>
 				<td class="coltop" class="width20">{PHP.L.Lastpost}</td>
-				<td class="coltop" class="width10">{PHP.L.Topics}</td>
+				<td class="coltop" class="width10">{PHP.L.forums_topics}</td>
 				<td class="coltop" class="width10">{PHP.L.Posts}</td>
 				<td class="coltop" class="width10">{PHP.L.Activity}</td>
 			</tr>

@@ -94,3 +94,8 @@ INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path
 ('forums', 'pub', '1', '', 'Public', '', 'images/icons/default/forums.png', 0, 0),
 ('forums', 'general', '1.1', '', 'General discussion', 'General discussion', 'images/icons/default/forums.png', 0, 0),
 ('forums', 'offtopic', '1.2', '', 'Off-topic', 'Various and off-topic', 'images/icons/default/forums.png', 0, 0);
+
+INSERT INTO `cot_forum_stats` (`fs_cat`, `fs_topiccount`, `fs_postcount`, `fs_viewcount`) VALUES
+('pub', 0, 0, 0),
+('general', 0, 0, 0),
+('offtopic', 0, 0, 0);
