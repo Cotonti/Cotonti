@@ -4,9 +4,9 @@
  * English Language File for the Users Module (users.en.lang.php)
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Cotonti Translators Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

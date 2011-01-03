@@ -4,7 +4,7 @@
  * Used by static resource consolidation and cache
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Julien Lecomte, massively modified by Cotonti Team
  * @link http://www.julienlecomte.net/blog/2007/08/13/
  * @license BSD

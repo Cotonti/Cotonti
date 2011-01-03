@@ -12,7 +12,7 @@ Tags=page.list.tpl:{I18N_LANG_ROW_URL},{I18N_LANG_ROW_CODE},{I18N_LANG_ROW_TITLE
  * @package i18n
  * @version 0.7.0
  * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2010
+ * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD License
  */
 

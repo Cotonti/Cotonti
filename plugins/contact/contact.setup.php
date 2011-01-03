@@ -7,7 +7,7 @@ Description=Contact form for user feedback delivered by e-mail and recorded in d
 Version=2.1.0
 Date=2010-12-24
 Author=Seditio.by
-Copyright=&copy; 2008 - 2010 Seditio.by
+Copyright=&copy; 2008-2011 Seditio.by
 Notes=
 Auth_guests=RW
 Lock_guests=12345A
@@ -27,7 +27,7 @@ minchars=12:string::5:Min post length, chars
  * @package contact
  * @version 2.1
  * @author Seditio.by
- * @copyright (c) 2008-2010 Seditio.by and Cotonti Team
+ * @copyright (c) 2008-2011 Seditio.by and Cotonti Team
  * @license BSD
  */
 

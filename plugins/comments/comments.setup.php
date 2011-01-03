@@ -7,7 +7,7 @@ Description=Comments system for Cotonti
 Version=0.7.3
 Date=2010-jan-03
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2010
+Copyright=Partial copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A
@@ -36,7 +36,7 @@ markup=12:radio::1:Enable markup in comments
  * @package comments
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

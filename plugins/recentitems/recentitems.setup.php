@@ -7,7 +7,7 @@ Description=Recent pages, topics in forums, users, comments
 Version=0.7.1
 Date=2010-jan-03
 Author=esclkm & Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2010
+Copyright=Partial copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -40,7 +40,7 @@ rightscan=23:radio::1:Enable prescanning category rights
  * @package recentitems
  * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

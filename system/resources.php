@@ -3,9 +3,9 @@
  * Static and dynamic resource (e.g. HTML) strings. Can be overriden by skin files and other code.
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2009-2010
+ * @copyright Copyright (c) Cotonti Team 2009-2011
  * @license BSD
  */
 

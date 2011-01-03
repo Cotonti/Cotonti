@@ -6,7 +6,7 @@
  * It drops all existing HTML cache at the end.
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Trustmaster
  * @copyright Copyright (c) 2008 Cotonti Team
  * @license BSD License

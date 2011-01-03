@@ -7,7 +7,7 @@ Description=Ratings plugin with jQuery stars
 Version=0.7.2
 Date=2010-dec-16
 Author=Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2008-2010
+Copyright=Copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
 Auth_guests=R
 Lock_guests=12345A
@@ -27,7 +27,7 @@ ratings_allowchange=01:radio:0,1:0:Allow users to change their ratings
  * @package ratings
  * @version 0.7.0
  * @author Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

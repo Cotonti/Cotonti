@@ -12,7 +12,7 @@ Hooks=admin.config.edit.loop
  * @package news
  * @version 0.7.0
  * @author esclkm
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 defined('COT_CODE') or die('Wrong URL');

@@ -6,7 +6,7 @@ Description=Cotonti Bulletin Board Module
 Version=0.8.2
 Date=2010-oct-05
 Author=Neocrome & Cotonti Team
-Copyright=(c) Cotonti Team 2008-2010
+Copyright=(c) Cotonti Team 2008-2011
 Notes=BSD License
 Auth_guests=R
 Lock_guests=A
@@ -47,7 +47,7 @@ defstate=10:radio::1:
  * @package forums
  * @version 0.9.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

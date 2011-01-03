@@ -7,7 +7,7 @@ Description=Avatar and photo for users
 Version=1.0
 Date=2010-nov-08
 Author=Koradhil, Cotonti Team
-Copyright=Copyright (c) Cotonti Team 2008-2010
+Copyright=Copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
 SQL=
 Auth_guests=
@@ -23,7 +23,7 @@ Lock_members=12345
  * @package userimages
  * @version 1.0
  * @author Koradhil, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

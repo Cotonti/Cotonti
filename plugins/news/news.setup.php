@@ -7,7 +7,7 @@ Description=Pick up pages from a category and display the newest in the home pag
 Version=0.7.2
 Date=2010-jan-03
 Author=Cotonti Team
-Copyright=Partial copyright (c) Cotonti Team 2008-2010
+Copyright=Partial copyright (c) Cotonti Team 2008-2011
 Notes=BSD License
 SQL=
 Auth_guests=R
@@ -30,7 +30,7 @@ syncpagination=04:radio::0:Enable pagination for additional categories
  * @package news
  * @version 0.7.0
  * @author esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

@@ -11,7 +11,7 @@ Hooks=ajax
  * @package ratings
  * @version 0.7.0
  * @author Trustmaster
- * @copyright Copyright (c) Cotonti Team 2008-2010
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 

@@ -3,9 +3,9 @@
  * Administration panel
  *
  * @package Cotonti
- * @version 0.7.0
+ * @version 0.9.0
  * @author Neocrome, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2009
+ * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
  */
 
