@@ -118,7 +118,7 @@ if (!$sent)
 		'CONTACT_FORM_AUTHOR' => ($usr['id'] == 0) ? cot_inputbox('text', 'ruser', $ruser, 'size="24" maxlength="24"')
 				: cot_inputbox('text', 'ruser', $usr['name'], 'size="24" maxlength="24" readonly="readonly"'),
 		'CONTACT_FORM_EMAIL' => cot_inputbox('text', 'remail', $remail, 'size="24"'),
-		"CONTACT_FORM_SUBJECT" => cot_inputbox('text', 'rsubject', $rsubject, 'size="24"'),
+		'CONTACT_FORM_SUBJECT' => cot_inputbox('text', 'rsubject', $rsubject, 'size="24"'),
 		'CONTACT_FORM_TEXT' => cot_textarea('rtext', $rtext, 8, 50, 'style="width:90%"')
 	));
 

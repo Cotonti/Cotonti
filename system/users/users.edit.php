@@ -254,34 +254,34 @@ $bhome = $cfg['homebreadcrumb'] ?
 $protected = $sys['protecttopadmin'] ? array('disabled' => 'disabled') : array();
 
 $useredit_array = array(
-	"USERS_EDIT_TITLE" => $bhome.cot_rc_link(cot_url('users'), $L['Users']).' '.$cfg['separator'].' '
+	'USERS_EDIT_TITLE' => $bhome.cot_rc_link(cot_url('users'), $L['Users']).' '.$cfg['separator'].' '
 		.cot_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])).' '.$cfg['separator']
 		.cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit']),
-	"USERS_EDIT_SUBTITLE" => $L['useed_subtitle'],
-	"USERS_EDIT_SEND" => cot_url('users', 'm=edit&a=update&'.cot_xg().'&id='.$urr['user_id']),
-	"USERS_EDIT_ID" => $urr['user_id'],
-	"USERS_EDIT_NAME" => cot_inputbox('text', 'rusername', $urr['user_name'], array('size' => 32, 'maxlength' => 100) + $protected),
-	"USERS_EDIT_ACTIVE" => $user_form_active,
-	"USERS_EDIT_BANNED" => $user_form_banned,
-	"USERS_EDIT_THEME" => cot_inputbox('text', 'rusertheme', $urr['user_theme'], array('size' => 32, 'maxlength' => 32)),
-	"USERS_EDIT_LANG" => cot_inputbox('text', 'ruserlang', $urr['user_lang'], array('size' => 32, 'maxlength' => 32)),
-	"USERS_EDIT_NEWPASS" => cot_inputbox('password', 'rusernewpass', '', array('size' => 16, 'maxlength' => 16) + $protected),
-	"USERS_EDIT_MAINGRP" => cot_build_group($urr['user_maingrp']),
-	"USERS_EDIT_GROUPS" => cot_build_groupsms($urr['user_id'], $usr['isadmin'], $urr['user_maingrp']),
-	"USERS_EDIT_COUNTRY" => cot_selectbox_countries($urr['user_country'], 'rusercountry'),
-	"USERS_EDIT_EMAIL" => cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)),
-	"USERS_EDIT_HIDEEMAIL" => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No'])),
-	"USERS_EDIT_PMNOTIFY" => cot_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No'])),
-	"USERS_EDIT_TEXT" => cot_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
-	"USERS_EDIT_TEXTBOXER" => cot_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
-	"USERS_EDIT_GENDER" => cot_selectbox_gender($urr['user_gender'], 'rusergender'),
-	"USERS_EDIT_BIRTHDATE" => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
-	"USERS_EDIT_TIMEZONE" => cot_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),
-	"USERS_EDIT_REGDATE" => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
-	"USERS_EDIT_LASTLOG" => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone']*3600)." ".$usr['timetext'],
-	"USERS_EDIT_LOGCOUNT" => $urr['user_logcount'],
-	"USERS_EDIT_LASTIP" => cot_build_ipsearch($urr['user_lastip']),
-	"USERS_EDIT_DELETE" => ($sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array($L['Yes'], $L['No'])) . cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : $L['na'],
+	'USERS_EDIT_SUBTITLE' => $L['useed_subtitle'],
+	'USERS_EDIT_SEND' => cot_url('users', 'm=edit&a=update&'.cot_xg().'&id='.$urr['user_id']),
+	'USERS_EDIT_ID' => $urr['user_id'],
+	'USERS_EDIT_NAME' => cot_inputbox('text', 'rusername', $urr['user_name'], array('size' => 32, 'maxlength' => 100) + $protected),
+	'USERS_EDIT_ACTIVE' => $user_form_active,
+	'USERS_EDIT_BANNED' => $user_form_banned,
+	'USERS_EDIT_THEME' => cot_inputbox('text', 'rusertheme', $urr['user_theme'], array('size' => 32, 'maxlength' => 32)),
+	'USERS_EDIT_LANG' => cot_inputbox('text', 'ruserlang', $urr['user_lang'], array('size' => 32, 'maxlength' => 32)),
+	'USERS_EDIT_NEWPASS' => cot_inputbox('password', 'rusernewpass', '', array('size' => 16, 'maxlength' => 16) + $protected),
+	'USERS_EDIT_MAINGRP' => cot_build_group($urr['user_maingrp']),
+	'USERS_EDIT_GROUPS' => cot_build_groupsms($urr['user_id'], $usr['isadmin'], $urr['user_maingrp']),
+	'USERS_EDIT_COUNTRY' => cot_selectbox_countries($urr['user_country'], 'rusercountry'),
+	'USERS_EDIT_EMAIL' => cot_inputbox('text', 'ruseremail', $urr['user_email'], array('size' => 32, 'maxlength' => 64)),
+	'USERS_EDIT_HIDEEMAIL' => cot_radiobox($urr['user_hideemail'], 'ruserhideemail', array(1, 0), array($L['Yes'], $L['No'])),
+	'USERS_EDIT_PMNOTIFY' => cot_radiobox($urr['user_pmnotify'], 'ruserpmnotify', array(1, 0), array($L['Yes'], $L['No'])),
+	'USERS_EDIT_TEXT' => cot_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
+	'USERS_EDIT_TEXTBOXER' => cot_textarea('rusertext', $urr['user_text'], 4, 56, '', 'input_textarea_editor'),
+	'USERS_EDIT_GENDER' => cot_selectbox_gender($urr['user_gender'], 'rusergender'),
+	'USERS_EDIT_BIRTHDATE' => cot_selectbox_date(cot_date2stamp($urr['user_birthdate']), 'short', 'ruserbirthdate', date('Y', $sys['now_offset']), date('Y', $sys['now_offset']) - 100, false),
+	'USERS_EDIT_TIMEZONE' => cot_inputbox('text', 'rusertimezone', $urr['user_timezone'], array('size' => 32, 'maxlength' => 16)),
+	'USERS_EDIT_REGDATE' => @date($cfg['dateformat'], $urr['user_regdate'] + $usr['timezone'] * 3600)." ".$usr['timetext'],
+	'USERS_EDIT_LASTLOG' => @date($cfg['dateformat'], $urr['user_lastlog'] + $usr['timezone']*3600)." ".$usr['timetext'],
+	'USERS_EDIT_LOGCOUNT' => $urr['user_logcount'],
+	'USERS_EDIT_LASTIP' => cot_build_ipsearch($urr['user_lastip']),
+	'USERS_EDIT_DELETE' => ($sys['user_istopadmin']) ? cot_radiobox(0, 'ruserdelete', array(1, 0), array($L['Yes'], $L['No'])) . cot_checkbox(false, 'ruserdelpfs', $L['PFS']) : $L['na'],
 );
 $t->assign($useredit_array);
 
@@ -304,8 +304,8 @@ foreach (cot_getextplugins('users.edit.tags') as $pl)
 /* ===== */
 
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 

@@ -35,32 +35,32 @@ if ($p == 'news' && $config_name == 'category' && $cfg['jquery'])
 			$jj++;
 			$v[2] = ((int)$v[2] > 0) ? $v[2] : '';
 			$tt->assign(array(
-				"ADDNUM" => $jj,
-				"ADDCATEGORY" => $v[0],
-				"ADDCOUNT" => ((int)$v[1] > 0) ? $v[1] : $cfg['plugin']['news']['maxpages'],
-				"ADDCUT" => ((int)$v[2] > 0) ? $v2 : ''
+				'ADDNUM' => $jj,
+				'ADDCATEGORY' => $v[0],
+				'ADDCOUNT' => ((int)$v[1] > 0) ? $v[1] : $cfg['plugin']['news']['maxpages'],
+				'ADDCUT' => ((int)$v[2] > 0) ? $v2 : ''
 			));
-			$tt->parse("MAIN.ADDITIONAL");
+			$tt->parse('MAIN.ADDITIONAL');
 		}
 	}
 
 	$jj++;
 	$tt->assign(array(
-		"ADDNUM" => 'new',
-		"ADDCATEGORY" => '',
-		"ADDCOUNT" => $cfg['plugin']['news']['maxpages'],
-		"ADDCUT" => ''
+		'ADDNUM' => 'new',
+		'ADDCATEGORY' => '',
+		'ADDCOUNT' => $cfg['plugin']['news']['maxpages'],
+		'ADDCUT' => ''
 	));
-	$tt->parse("MAIN.ADDITIONAL");
+	$tt->parse('MAIN.ADDITIONAL');
 
 	$tt->assign(array(
-		"MAINCATEGORY" => cot_selectbox_categories($index, 'newsmaincat'),
-		"CATNUM" => $jj
+		'MAINCATEGORY' => cot_selectbox_categories($index, 'newsmaincat'),
+		'CATNUM' => $jj
 	));
-	$tt->parse("MAIN");
+	$tt->parse('MAIN');
 
 	$t->assign(array(
-		"ADMIN_CONFIG_ROW_CONFIG_MORE" => $tt->text("MAIN") . '<div id="helptext">' . $config_more . '</div>'
+		'ADMIN_CONFIG_ROW_CONFIG_MORE' => $tt->text('MAIN') . '<div id="helptext">' . $config_more . '</div>'
 	));
 }
 ?>

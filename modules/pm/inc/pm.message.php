@@ -127,13 +127,13 @@ if ($history)
 		if ($row2['pm_fromuserid']==$usr['id'])
 		{// sentbox
 			$row2['pm_icon_edit'] = ($row2['pm_tostate'] == 0) ? cot_rc_link(cot_url('pm', 'm=send&id='.$row2['pm_id']), $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '';
-			$pm_user = cot_generate_usertags($usr['profile'], "PM_ROW_USER_");
+			$pm_user = cot_generate_usertags($usr['profile'], 'PM_ROW_USER_');
 			$titstar = ($row2['pm_fromstate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
 			$star_class = ($row2['pm_fromstate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
 		}
 		else
 		{//inbox
-			$pm_user = cot_generate_usertags($row_user, "PM_ROW_USER_");
+			$pm_user = cot_generate_usertags($row_user, 'PM_ROW_USER_');
 			$titstar = ($row2['pm_tostate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
 			$star_class = ($row2['pm_tostate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
 		}
@@ -147,18 +147,18 @@ if ($history)
 		$star2 = '<div class="'.$star_class.'">'.$row2['pm_icon_starred'].'</div>';
 
 		$t->assign(array(
-			"PM_ROW_ID" => $row2['pm_id'],
-			"PM_ROW_STATE" => $row2['pm_tostate'],
-			"PM_ROW_STAR" => $star2,
-			"PM_ROW_DATE" => @date($cfg['dateformat'], $row2['pm_date'] + $usr['timezone'] * 3600),
-			"PM_ROW_TITLE" => cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
-			"PM_ROW_TEXT" => $pm_data,
-			"PM_ROW_ICON_STATUS" => $row2['pm_icon_readstatus'],
-			"PM_ROW_ICON_STARRED" => $row2['pm_icon_starred'],
-			"PM_ROW_ICON_DELETE" => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d), $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
-			"PM_ROW_ICON_EDIT" => $row2['pm_icon_edit'],
-			"PM_ROW_ODDEVEN" => cot_build_oddeven($jj),
-			"PM_ROW_NUM" => $jj
+			'PM_ROW_ID' => $row2['pm_id'],
+			'PM_ROW_STATE' => $row2['pm_tostate'],
+			'PM_ROW_STAR' => $star2,
+			'PM_ROW_DATE' => @date($cfg['dateformat'], $row2['pm_date'] + $usr['timezone'] * 3600),
+			'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
+			'PM_ROW_TEXT' => $pm_data,
+			'PM_ROW_ICON_STATUS' => $row2['pm_icon_readstatus'],
+			'PM_ROW_ICON_STARRED' => $row2['pm_icon_starred'],
+			'PM_ROW_ICON_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d), $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
+			'PM_ROW_ICON_EDIT' => $row2['pm_icon_edit'],
+			'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
+			'PM_ROW_NUM' => $jj
 		));
 		$t->assign($pm_user);
 		/* === Hook - Part2 : Include === */
@@ -168,20 +168,20 @@ if ($history)
 		}
 		/* ===== */
 
-		$t->parse("MAIN.HISTORY.PM_ROW");
+		$t->parse('MAIN.HISTORY.PM_ROW');
 	}
 
 	if ($jj == 0)
 	{
-		$t->parse("MAIN.HISTORY.PM_ROW_EMPTY");
+		$t->parse('MAIN.HISTORY.PM_ROW_EMPTY');
 	}
 	$t->assign(array(
-		"PM_FORM_UPDATE" => cot_url('pm', cot_xg()),
-		"PM_PAGEPREV" => $pagenav['prev'],
-		"PM_PAGENEXT" => $pagenav['next'],
+		'PM_FORM_UPDATE' => cot_url('pm', cot_xg()),
+		'PM_PAGEPREV' => $pagenav['prev'],
+		'PM_PAGENEXT' => $pagenav['next'],
 		'PM_PAGES' => $pagenav['main']
 	));
-	$t->parse("MAIN.HISTORY");
+	$t->parse('MAIN.HISTORY');
 }
 
 if ($usr['auth_write'])
@@ -199,11 +199,11 @@ if ($usr['auth_write'])
 	$onclick = "insertText(document, 'newlink', 'newpmtext', '[quote]'+$('#pm_text').text()+'[/quote]'); return false;";
 
 	$t->assign(array(
-		"PM_QUOTE" => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$d), $L['Quote'], array('onclick' => $onclick)),
-		"PM_FORM_SEND" => cot_url('pm', 'm=send&a=send&to='.$to),
-		"PM_FORM_TITLE" => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
-		"PM_FORM_TEXT" => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
-		"PM_AJAX_MARKITUP" => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
+		'PM_QUOTE' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q=quote&history='.$history.'&d='.$d), $L['Quote'], array('onclick' => $onclick)),
+		'PM_FORM_SEND' => cot_url('pm', 'm=send&a=send&to='.$to),
+		'PM_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
+		'PM_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
+		'PM_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
 	));
 
 	/* === Hook === */
@@ -213,35 +213,35 @@ if ($usr['auth_write'])
 	}
 	/* ===== */
 
-	$t->parse("MAIN.REPLY");
+	$t->parse('MAIN.REPLY');
 }
 if (!COT_AJAX)
 {
-	$t->parse("MAIN.BEFORE_AJAX");
-	$t->parse("MAIN.AFTER_AJAX");
+	$t->parse('MAIN.BEFORE_AJAX');
+	$t->parse('MAIN.AFTER_AJAX');
 }
 
 $pm_username=cot_build_user($row_user['user_id'], htmlspecialchars($row_user['user_name']));
 $t->assign(array(
-	"PM_PAGETITLE" => $title.' '.$cfg['separator'].' '.$pm_username.' '.$cfg['separator'].' '.cot_rc_link(cot_url('pm', 'm=message&id='.$id),htmlspecialchars($row['pm_title'])),
-	"PM_SENDNEWPM" => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
-	"PM_INBOX" => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
-	"PM_INBOX_COUNT" => $totalinbox,
-	"PM_SENTBOX" => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
-	"PM_SENTBOX_COUNT" => $totalsentbox,
-	"PM_ID" => $row['pm_id'],
-	"PM_STATE" => $row['pm_tostate'],
-	"PM_STAR" => $star,
-	"PM_DATE" => @date($cfg['dateformat'], $row['pm_date'] + $usr['timezone'] * 3600),
-	"PM_TITLE" => htmlspecialchars($row['pm_title']),
-	"PM_TEXT" => '<div id="pm_text">'.$pm_maindata.'</div>',
-	"PM_ICON_STARRED" => $row['pm_icon_starred'],
-	"PM_DELETE" => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
-	"PM_EDIT" => $row['pm_icon_edit'],
-	"PM_HISTORY" => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messageshistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
-	"PM_SENT_TYPE" => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
+	'PM_PAGETITLE' => $title.' '.$cfg['separator'].' '.$pm_username.' '.$cfg['separator'].' '.cot_rc_link(cot_url('pm', 'm=message&id='.$id),htmlspecialchars($row['pm_title'])),
+	'PM_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
+	'PM_INBOX' => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
+	'PM_INBOX_COUNT' => $totalinbox,
+	'PM_SENTBOX' => cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox'], array('class'=>'ajax')),
+	'PM_SENTBOX_COUNT' => $totalsentbox,
+	'PM_ID' => $row['pm_id'],
+	'PM_STATE' => $row['pm_tostate'],
+	'PM_STAR' => $star,
+	'PM_DATE' => @date($cfg['dateformat'], $row['pm_date'] + $usr['timezone'] * 3600),
+	'PM_TITLE' => htmlspecialchars($row['pm_title']),
+	'PM_TEXT' => '<div id="pm_text">'.$pm_maindata.'</div>',
+	'PM_ICON_STARRED' => $row['pm_icon_starred'],
+	'PM_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
+	'PM_EDIT' => $row['pm_icon_edit'],
+	'PM_HISTORY' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messageshistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),
+	'PM_SENT_TYPE' => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
 ));
-$t->assign(cot_generate_usertags($row_user, "PM_USER_"));
+$t->assign(cot_generate_usertags($row_user, 'PM_USER_'));
 
 /* === Hook === */
 foreach (cot_getextplugins('pm.tags') as $pl)
@@ -252,12 +252,12 @@ foreach (cot_getextplugins('pm.tags') as $pl)
 
 if (COT_AJAX && $history)
 {
-	$t->out("MAIN.HISTORY");
+	$t->out('MAIN.HISTORY');
 }
 else
 {
-	$t->parse("MAIN");
-	$t->out("MAIN");
+	$t->parse('MAIN');
+	$t->out('MAIN');
 }
 require_once $cfg['system_dir'] . '/footer.php';
 

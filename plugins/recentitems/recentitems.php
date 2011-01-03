@@ -45,14 +45,14 @@ if ($cfg['plugin']['recentitems']['newpages'] && cot_module_active('page') && (e
 {
 	require_once cot_incfile('page', 'module');
 	$res = cot_build_recentpages('recentitems.pages', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $pagetitlelimit, $cfg['plugin']['recentitems']['newpagestext'], $cfg['plugin']['recentitems']['rightscan']);
-	$t->assign("RECENT_PAGES", $res);
+	$t->assign('RECENT_PAGES', $res);
 }
 
 if ($cfg['plugin']['recentitems']['newforums'] && cot_module_active('forums') && (empty($mode) || $mode == 'forums'))
 {
 	require_once cot_incfile('forums', 'module');
 	$res = cot_build_recentforums('recentitems.forums', $timeback, $cfg['plugin']['recentitems']['itemsperpage'], $d, $forumtitlelimit, $cfg['plugin']['recentitems']['rightscan']);
-	$t->assign("RECENT_FORUMS", $res);
+	$t->assign('RECENT_FORUMS', $res);
 }
 
 if ($mode != 'pages' || $mode != 'forums')
@@ -71,8 +71,8 @@ $mode = (!empty($mode)) ? "&mode=" . $mode : "";
 $pagenav = cot_pagenav('plug', 'e=recentitems' . $days . $mode, $d, $totalpages, $cfg['plugin']['recentitems']['itemsperpage']);
 
 $t->assign(array(
-	"PAGE_PAGENAV" => $pagenav['main'],
-	"PAGE_PAGEPREV" => $pagenav['prev'],
-	"PAGE_PAGENEXT" => $pagenav['next']
+	'PAGE_PAGENAV' => $pagenav['main'],
+	'PAGE_PAGEPREV' => $pagenav['prev'],
+	'PAGE_PAGENEXT' => $pagenav['next']
 ));
 ?>

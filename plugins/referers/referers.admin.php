@@ -81,7 +81,7 @@ if($sql->rowCount() > 0)
 			/* ===== */
 			$tt->parse('MAIN.REFERERS_ROW.REFERERS_URI');
 		}
-		$tt->parse("MAIN.REFERERS_ROW");
+		$tt->parse('MAIN.REFERERS_ROW');
 		$ii++;
 	}
 	$is_ref_empty = true;

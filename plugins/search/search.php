@@ -132,7 +132,7 @@ if (($tab == 'pag' || empty($tab))  && cot_module_active('page') && $cfg['plugin
 	$t->assign(array(
 		'PLUGIN_PAGE_SEC_LIST' => cot_selectbox($rsearch['pag']['sub'], 'rpagsub[]', array_keys($pages_cat_list), array_values($pages_cat_list), false, 'multiple="multiple" style="width:50%"'),
 		'PLUGIN_PAGE_RES_SORT' => cot_selectbox($rsearch['pag']['sort'], 'rpagsort', array('date', 'title', 'count', 'cat'), array($L['plu_pag_res_sort1'], $L['plu_pag_res_sort2'], $L['plu_pag_res_sort3'], $L['plu_pag_res_sort4']), false),
-		'PLUGIN_PAGE_RES_SORT_WAY' => cot_radiobox($rsearch['pag']['sort2'], 'rpagsort2', array("DESC", "ASC"), array($L['plu_sort_desc'],  $L['plu_sort_asc'])),
+		'PLUGIN_PAGE_RES_SORT_WAY' => cot_radiobox($rsearch['pag']['sort2'], 'rpagsort2', array('DESC', 'ASC'), array($L['plu_sort_desc'],  $L['plu_sort_asc'])),
 		'PLUGIN_PAGE_SEARCH_NAMES' => cot_checkbox(($rsearch['pag']['title'] == 1 || count($rsearch['pag']['sub']) == 0), 'rpagtitle', $L['plu_pag_search_names']),
 		'PLUGIN_PAGE_SEARCH_DESC' => cot_checkbox(($rsearch['pag']['desc'] == 1 || count($rsearch['pag']['sub']) == 0), 'rpagdesc', $L['plu_pag_search_desc']),
 		'PLUGIN_PAGE_SEARCH_TEXT' => cot_checkbox(($rsearch['pag']['text'] == 1 || count($rsearch['pag']['sub']) == 0), 'rpagtext', $L['plu_pag_search_text']),
@@ -165,7 +165,7 @@ if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugi
 	$t->assign(array(
 		'PLUGIN_FORUM_SEC_LIST' => cot_selectbox($rsearch['frm']['sub'], 'rfrmsub[]', array_keys($forum_cat_list), array_values($forum_cat_list), false, 'multiple="multiple" style="width:50%"'),
 		'PLUGIN_FORUM_RES_SORT' => cot_selectbox($rsearch['frm']['sort'], 'rfrmsort', array('updated', 'creationdate', 'title', 'postcount', 'viewcount', 'sectionid'), array($L['plu_frm_res_sort1'], $L['plu_frm_res_sort2'], $L['plu_frm_res_sort3'], $L['plu_frm_res_sort4'], $L['plu_frm_res_sort5'], $L['plu_frm_res_sort6']), false),
-		'PLUGIN_FORUM_RES_SORT_WAY' => cot_radiobox($rsearch['frm']['sort2'], 'rfrmsort2', array("DESC", "ASC"), array($L['plu_sort_desc'],  $L['plu_sort_asc'])),
+		'PLUGIN_FORUM_RES_SORT_WAY' => cot_radiobox($rsearch['frm']['sort2'], 'rfrmsort2', array('DESC', 'ASC'), array($L['plu_sort_desc'],  $L['plu_sort_asc'])),
 		'PLUGIN_FORUM_SEARCH_NAMES' => cot_checkbox(($rsearch['frm']['title'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmtitle', $L['plu_frm_search_names']),
 		'PLUGIN_FORUM_SEARCH_POST' => cot_checkbox(($rsearch['frm']['text'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmtext', $L['plu_frm_search_post']),
 		'PLUGIN_FORUM_SEARCH_ANSW' => cot_checkbox(($rsearch['frm']['reply'] == 1 || count($rsearch['frm']['sub']) == 0), 'rfrmreply', $L['plu_frm_search_answ'])
@@ -278,7 +278,7 @@ if (!empty($sq))
 				include $pl;
 			}
 			/* ===== */
-			$t->parse("MAIN.RESULTS.PAGES.ITEM");
+			$t->parse('MAIN.RESULTS.PAGES.ITEM');
 			$jj++;
 		}
 		if ($jj > 0)

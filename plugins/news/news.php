@@ -103,15 +103,15 @@ if (count($cats) > 0)
 		while ($pag = $sql->fetch())
 		{
 			$jj++;
-			$news->assign(cot_generate_pagetags($pag, "PAGE_ROW_", $v[2]));
+			$news->assign(cot_generate_pagetags($pag, 'PAGE_ROW_', $v[2]));
 			$news->assign(array(
-				"PAGE_ROW_NEWSPATH" => cot_rc_link(cot_url('index', 'c=' . $pag['page_cat']), htmlspecialchars($structure['page'][$row['page_cat']]['title'])),
-				"PAGE_ROW_CATDESC" => htmlspecialchars($structure['page'][$pag['page_cat']]['desc']),
-				"PAGE_ROW_OWNER" => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
-				"PAGE_ROW_ODDEVEN" => cot_build_oddeven($jj),
-				"PAGE_ROW_NUM" => $jj
+				'PAGE_ROW_NEWSPATH' => cot_rc_link(cot_url('index', 'c=' . $pag['page_cat']), htmlspecialchars($structure['page'][$row['page_cat']]['title'])),
+				'PAGE_ROW_CATDESC' => htmlspecialchars($structure['page'][$pag['page_cat']]['desc']),
+				'PAGE_ROW_OWNER' => cot_build_user($pag['page_ownerid'], htmlspecialchars($pag['user_name'])),
+				'PAGE_ROW_ODDEVEN' => cot_build_oddeven($jj),
+				'PAGE_ROW_NUM' => $jj
 			));
-			$news->assign(cot_generate_usertags($pag, "PAGE_ROW_OWNER_"));
+			$news->assign(cot_generate_usertags($pag, 'PAGE_ROW_OWNER_'));
 
 			/* === Hook - Part2 : Include === LOOP === */
 			foreach ($news_extp as $pl)
@@ -120,22 +120,22 @@ if (count($cats) > 0)
 			}
 			/* ===== */
 
-			$news->parse("NEWS.PAGE_ROW");
+			$news->parse('NEWS.PAGE_ROW');
 		}
 
 		$news->assign(array(
-			"PAGE_PAGENAV" => $pagenav['main'],
-			"PAGE_PAGEPREV" => $pagenav['prev'],
-			"PAGE_PAGENEXT" => $pagenav['next'],
-			"PAGE_PAGELAST" => $pagenav['last'],
-			"PAGE_PAGENUM" => $pagenav['current'],
-			"PAGE_PAGECOUNT" => $pagenav['total'],
-			"PAGE_ENTRIES_ONPAGE" => $pagenav['onpage'],
-			"PAGE_ENTRIES_TOTAL" => $pagenav['entries'],
-			"PAGE_SUBMITNEWPOST" => (cot_auth('page', $cat, 'W')) ? cot_rc_link(cot_url('page', 'm=add&c=' . $cat), $L['Submitnew']) : '',
-			"PAGE_CATTITLE" => $structure['page'][$cat]['title'],
-			"PAGE_CATPATH" => cot_structure_buildpath('page', $cat),
-			"PAGE_CAT" => $cat
+			'PAGE_PAGENAV' => $pagenav['main'],
+			'PAGE_PAGEPREV' => $pagenav['prev'],
+			'PAGE_PAGENEXT' => $pagenav['next'],
+			'PAGE_PAGELAST' => $pagenav['last'],
+			'PAGE_PAGENUM' => $pagenav['current'],
+			'PAGE_PAGECOUNT' => $pagenav['total'],
+			'PAGE_ENTRIES_ONPAGE' => $pagenav['onpage'],
+			'PAGE_ENTRIES_TOTAL' => $pagenav['entries'],
+			'PAGE_SUBMITNEWPOST' => (cot_auth('page', $cat, 'W')) ? cot_rc_link(cot_url('page', 'm=add&c=' . $cat), $L['Submitnew']) : '',
+			'PAGE_CATTITLE' => $structure['page'][$cat]['title'],
+			'PAGE_CATPATH' => cot_structure_buildpath('page', $cat),
+			'PAGE_CAT' => $cat
 		));
 
 		/* === Hook - Part2 : Include === TAGS === */
@@ -145,8 +145,8 @@ if (count($cats) > 0)
 		}
 		/* ===== */
 
-		$news->parse("NEWS");
-		$t->assign(($catn == 0) ? "INDEX_NEWS" : "INDEX_NEWS_" . strtoupper($v[0]), $news->text("NEWS"));
+		$news->parse('NEWS');
+		$t->assign(($catn == 0) ? 'INDEX_NEWS' : 'INDEX_NEWS_' . strtoupper($v[0]), $news->text('NEWS'));
 
 		$catn++;
 	}

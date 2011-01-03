@@ -179,10 +179,10 @@ if ($cfg['forums'][$s]['allowviewers'])
 	$fs_viewers = $v;
 	
 	$t->assign(array(
-		"FORUMS_TOPICS_VIEWERS" => $fs_viewers,
-		"FORUMS_TOPICS_VIEWER_NAMES" => $fs_viewers_names
+		'FORUMS_TOPICS_VIEWERS' => $fs_viewers,
+		'FORUMS_TOPICS_VIEWER_NAMES' => $fs_viewers_names
 	));
-	$t->parse("MAIN.FORUMS_SECTIONS_VIEWERS");
+	$t->parse('MAIN.FORUMS_SECTIONS_VIEWERS');
 	
 }
 
@@ -205,8 +205,8 @@ if (count($arraychilds) > 0)
 				WHERE fs_cat IN (\"".implode('", "', $all)."\") ORDER BY fs_lt_date DESC")->fetch();
 		$t->assign(cot_generate_sectiontags($cat, 'FORUMS_SECTIONS_ROW_', $stat + $last));
 		$t->assign(array(
-			"FORUMS_SECTIONS_ROW_ODDEVEN" => cot_build_oddeven($jj),
-			"FORUMS_SECTIONS_ROW_NUM" => $jj
+			'FORUMS_SECTIONS_ROW_ODDEVEN' => cot_build_oddeven($jj),
+			'FORUMS_SECTIONS_ROW_NUM' => $jj
 		));
 		
 		/* === Hook - Part2 : Include === */
@@ -216,9 +216,9 @@ if (count($arraychilds) > 0)
 		}
 		/* ===== */
 		
-		$t->parse("MAIN.FORUMS_SECTIONS.FORUMS_SECTIONS_ROW_SECTION");
+		$t->parse('MAIN.FORUMS_SECTIONS.FORUMS_SECTIONS_ROW_SECTION');
 	}
-	$t->parse("MAIN.FORUMS_SECTIONS");
+	$t->parse('MAIN.FORUMS_SECTIONS');
 }
 
 $where['cat'] = "ft_cat='".$db->prep($s)."'".($usr['isadmin']) ? '' : "AND ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".(int)$usr['id'].")";
@@ -299,26 +299,26 @@ while ($row = $sql_forums->fetch())
 	}
 	
 	$t->assign(array(
-		"FORUMS_TOPICS_ROW_ID" => $row['ft_id'],
-		"FORUMS_TOPICS_ROW_STATE" => $row['ft_state'],
-		"FORUMS_TOPICS_ROW_ICON" => $row['ft_icon'],
-		"FORUMS_TOPICS_ROW_TITLE" => htmlspecialchars($row['ft_title']),
-		"FORUMS_TOPICS_ROW_DESC" => htmlspecialchars($row['ft_desc']),
-		"FORUMS_TOPICS_ROW_CREATIONDATE" => @date($cfg['formatmonthdayhourmin'], $row['ft_creationdate'] + $usr['timezone'] * 3600),
-		"FORUMS_TOPICS_ROW_UPDATED" => $row['ft_lastposturl'],
-		"FORUMS_TOPICS_ROW_TIMEAGO" => cot_build_timegap($row['ft_updated'],$sys['now_offset']),
-		"FORUMS_TOPICS_ROW_POSTCOUNT" => $row['ft_postcount'],
-		"FORUMS_TOPICS_ROW_REPLYCOUNT" => $row['ft_replycount'],
-		"FORUMS_TOPICS_ROW_VIEWCOUNT" => $row['ft_viewcount'],
-		"FORUMS_TOPICS_ROW_FIRSTPOSTER" => cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername'])),
-		"FORUMS_TOPICS_ROW_LASTPOSTER" => $row['ft_lastpostername'],
-		"FORUMS_TOPICS_ROW_URL" => $row['ft_url'],
-		"FORUMS_TOPICS_ROW_PREVIEW" => $row['ft_preview'].'...',
-		"FORUMS_TOPICS_ROW_PAGES" => $row['ft_pages'],
-		"FORUMS_TOPICS_ROW_MAXPAGES" => $row['ft_maxpages'],
-		"FORUMS_TOPICS_ROW_ODDEVEN" => cot_build_oddeven($ft_num),
-		"FORUMS_TOPICS_ROW_NUM" => $ft_num,
-		"FORUMS_TOPICS_ROW" => $row,
+		'FORUMS_TOPICS_ROW_ID' => $row['ft_id'],
+		'FORUMS_TOPICS_ROW_STATE' => $row['ft_state'],
+		'FORUMS_TOPICS_ROW_ICON' => $row['ft_icon'],
+		'FORUMS_TOPICS_ROW_TITLE' => htmlspecialchars($row['ft_title']),
+		'FORUMS_TOPICS_ROW_DESC' => htmlspecialchars($row['ft_desc']),
+		'FORUMS_TOPICS_ROW_CREATIONDATE' => @date($cfg['formatmonthdayhourmin'], $row['ft_creationdate'] + $usr['timezone'] * 3600),
+		'FORUMS_TOPICS_ROW_UPDATED' => $row['ft_lastposturl'],
+		'FORUMS_TOPICS_ROW_TIMEAGO' => cot_build_timegap($row['ft_updated'],$sys['now_offset']),
+		'FORUMS_TOPICS_ROW_POSTCOUNT' => $row['ft_postcount'],
+		'FORUMS_TOPICS_ROW_REPLYCOUNT' => $row['ft_replycount'],
+		'FORUMS_TOPICS_ROW_VIEWCOUNT' => $row['ft_viewcount'],
+		'FORUMS_TOPICS_ROW_FIRSTPOSTER' => cot_build_user($row['ft_firstposterid'], htmlspecialchars($row['ft_firstpostername'])),
+		'FORUMS_TOPICS_ROW_LASTPOSTER' => $row['ft_lastpostername'],
+		'FORUMS_TOPICS_ROW_URL' => $row['ft_url'],
+		'FORUMS_TOPICS_ROW_PREVIEW' => $row['ft_preview'].'...',
+		'FORUMS_TOPICS_ROW_PAGES' => $row['ft_pages'],
+		'FORUMS_TOPICS_ROW_MAXPAGES' => $row['ft_maxpages'],
+		'FORUMS_TOPICS_ROW_ODDEVEN' => cot_build_oddeven($ft_num),
+		'FORUMS_TOPICS_ROW_NUM' => $ft_num,
+		'FORUMS_TOPICS_ROW' => $row,
 	));
 	
 	/* === Hook - Part2 : Include === */
@@ -328,7 +328,7 @@ while ($row = $sql_forums->fetch())
 	}
 	/* ===== */
 	
-	$t->parse("MAIN.FORUMS_TOPICS_ROW");
+	$t->parse('MAIN.FORUMS_TOPICS_ROW');
 }
 
 $pagenav = cot_pagenav('forums', "m=topics&s=$s&ord=$o&w=$w", $d, $totaltopics, $cfg['forums']['maxtopicsperpage']);
@@ -361,23 +361,23 @@ function cursort($trigger, $way)
 }
 
 $t->assign(array(
-	"FORUMS_TOPICS_PARENT_SECTION_ID" => $s,
-	"FORUMS_TOPICS_SECTION_RSS" => cot_url('rss', "c=section&id=$s"),
-	"FORUMS_TOPICS_PAGETITLE" => $toptitle,
-	"FORUMS_TOPICS_SHORTTITLE" => htmlspecialchars($structure['forums'][$s]['title']),
-	"FORUMS_TOPICS_SUBTITLE" => $structure['forums'][$s]['desc'],
-	"FORUMS_TOPICS_NEWTOPICURL" => cot_url('forums', "m=newtopic&s=".$s),
-	"FORUMS_TOPICS_PAGES" => $pagenav['main'],
-	"FORUMS_TOPICS_PAGEPREV" => $pagenav['prev'],
-	"FORUMS_TOPICS_PAGENEXT" => $pagenav['next'],
-	"FORUMS_TOPICS_PRVTOPICS" => $prvtopics,
-	"FORUMS_TOPICS_JUMPBOX" => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
-	"FORUMS_TOPICS_TITLE_TOPICS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=title&w=".rev($w)), $L['forums_topics'].' '.cursort($o == 'title', $w), 'rel="nofollow"'),
-	"FORUMS_TOPICS_TITLE_VIEWS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=viewcount&w=".rev($w)), $L['Views']." ".cursort($o == 'viewcount', $w), 'rel="nofollow"'),
-	"FORUMS_TOPICS_TITLE_POSTS" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Posts']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
-	"FORUMS_TOPICS_TITLE_REPLIES" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Replies']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
-	"FORUMS_TOPICS_TITLE_STARTED" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=creationdate&w=".rev($w)), $L['Started']." ".cursort($o == 'creationdate', $w), 'rel="nofollow"'),
-	"FORUMS_TOPICS_TITLE_LASTPOST" => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=updated&w=".rev($w)), $L['Lastpost']." ".cursort($o == 'updated', $w), 'rel="nofollow"')
+	'FORUMS_TOPICS_PARENT_SECTION_ID' => $s,
+	'FORUMS_TOPICS_SECTION_RSS' => cot_url('rss', "c=section&id=$s"),
+	'FORUMS_TOPICS_PAGETITLE' => $toptitle,
+	'FORUMS_TOPICS_SHORTTITLE' => htmlspecialchars($structure['forums'][$s]['title']),
+	'FORUMS_TOPICS_SUBTITLE' => $structure['forums'][$s]['desc'],
+	'FORUMS_TOPICS_NEWTOPICURL' => cot_url('forums', "m=newtopic&s=".$s),
+	'FORUMS_TOPICS_PAGES' => $pagenav['main'],
+	'FORUMS_TOPICS_PAGEPREV' => $pagenav['prev'],
+	'FORUMS_TOPICS_PAGENEXT' => $pagenav['next'],
+	'FORUMS_TOPICS_PRVTOPICS' => $prvtopics,
+	'FORUMS_TOPICS_JUMPBOX' => cot_selectbox($s, 'jumpbox', array_keys($jumpbox), array_values($jumpbox), false, 'onchange="redirect(this)"'),
+	'FORUMS_TOPICS_TITLE_TOPICS' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=title&w=".rev($w)), $L['forums_topics'].' '.cursort($o == 'title', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_VIEWS' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=viewcount&w=".rev($w)), $L['Views']." ".cursort($o == 'viewcount', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_POSTS' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Posts']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_REPLIES' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=postcount&w=".rev($w)), $L['Replies']." ".cursort($o == 'postcount', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_STARTED' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=creationdate&w=".rev($w)), $L['Started']." ".cursort($o == 'creationdate', $w), 'rel="nofollow"'),
+	'FORUMS_TOPICS_TITLE_LASTPOST' => cot_rc_link(cot_url('forums', "m=topics&s=".$s."&ord=updated&w=".rev($w)), $L['Lastpost']." ".cursort($o == 'updated', $w), 'rel="nofollow"')
 ));
 
 
@@ -388,8 +388,8 @@ foreach (cot_getextplugins('forums.topics.tags') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 

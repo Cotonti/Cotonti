@@ -73,11 +73,11 @@ $t = new XTemplate($mskin);
 $bhome = $cfg['homebreadcrumb'] ? cot_rc_link($cfg['mainurl'], htmlspecialchars($cfg['maintitle'])).' '.$cfg['separator'].' ' : '';
 
 $t->assign(array(
-	"USERS_DETAILS_TITLE" => $bhome . cot_rc_link(cot_url('users'), $L['Users']).' '.$cfg['separator'].' '.cot_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])),
-	"USERS_DETAILS_SUBTITLE" => $L['use_subtitle'],
+	'USERS_DETAILS_TITLE' => $bhome . cot_rc_link(cot_url('users'), $L['Users']).' '.$cfg['separator'].' '.cot_build_user($urr['user_id'], htmlspecialchars($urr['user_name'])),
+	'USERS_DETAILS_SUBTITLE' => $L['use_subtitle'],
 ));
 
-$t->assign(cot_generate_usertags($urr, "USERS_DETAILS_", '', true));
+$t->assign(cot_generate_usertags($urr, 'USERS_DETAILS_', '', true));
 
 /* === Hook === */
 foreach (cot_getextplugins('users.details.tags') as $pl)
@@ -89,14 +89,14 @@ foreach (cot_getextplugins('users.details.tags') as $pl)
 if ($usr['isadmin'])
 {
 	$t-> assign(array(
-		"USERS_DETAILS_ADMIN_EDIT" => cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])
+		'USERS_DETAILS_ADMIN_EDIT' => cot_rc_link(cot_url('users', 'm=edit&id='.$urr['user_id']), $L['Edit'])
 	));
 
-	$t->parse("MAIN.USERS_DETAILS_ADMIN");
+	$t->parse('MAIN.USERS_DETAILS_ADMIN');
 }
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 

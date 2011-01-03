@@ -111,12 +111,12 @@ require_once $cfg['system_dir'] . '/header.php';
 $t = new XTemplate(cot_tplfile('plugin'));
 
 $t->assign(array(
-	"PLUGIN_TITLE" => $vt,
-	"PLUGIN_BODY" => $ext_body
+	'PLUGIN_TITLE' => $vt,
+	'PLUGIN_BODY' => $ext_body
 ));
 
-$t->parse("MAIN");
-$t->out("MAIN");
+$t->parse('MAIN');
+$t->out('MAIN');
 
 require_once $cfg['system_dir'] . '/footer.php';
 

@@ -250,12 +250,12 @@ elseif ($defult_c)
 
 $t = new XTemplate(cot_tplfile('rss'));
 $t->assign(array(
-	"RSS_ENCODING" => $cfg['rss']['rss_charset'],
-	"RSS_TITLE" => htmlspecialchars($rss_title),
-	"RSS_LINK" => $rss_link,
-	"RSS_LANG" => $cfg['defaultlang'],
-	"RSS_DESCRIPTION" => htmlspecialchars($rss_description),
-	"RSS_DATE" => date("r", time())
+	'RSS_ENCODING' => $cfg['rss']['rss_charset'],
+	'RSS_TITLE' => htmlspecialchars($rss_title),
+	'RSS_LINK' => $rss_link,
+	'RSS_LANG' => $cfg['defaultlang'],
+	'RSS_DESCRIPTION' => htmlspecialchars($rss_description),
+	'RSS_DATE' => date("r", time())
 ));
 
 if (count($items) > 0)
@@ -263,12 +263,12 @@ if (count($items) > 0)
 	foreach ($items as $item)
 	{
 		$t->assign(array(
-			"RSS_ROW_TITLE" => htmlspecialchars($item['title']),
-			"RSS_ROW_DESCRIPTION" => cot_convert_relative_urls($item['description']),
-			"RSS_ROW_DATE" => $item['pubDate'],
-			"RSS_ROW_LINK" => $item['link']
+			'RSS_ROW_TITLE' => htmlspecialchars($item['title']),
+			'RSS_ROW_DESCRIPTION' => cot_convert_relative_urls($item['description']),
+			'RSS_ROW_DATE' => $item['pubDate'],
+			'RSS_ROW_LINK' => $item['link']
 		));
-		$t->parse("MAIN.ITEM_ROW");
+		$t->parse('MAIN.ITEM_ROW');
 	}
 }
 
@@ -279,8 +279,8 @@ foreach (cot_getextplugins('rss.output') as $pl)
 }
 /* ===== */
 
-$t->parse("MAIN");
-$out_rss = $t->out("MAIN");
+$t->parse('MAIN');
+$out_rss = $t->out('MAIN');
 
 if ($usr['id'] === 0 && $cache)
 {
