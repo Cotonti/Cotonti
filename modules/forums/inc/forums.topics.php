@@ -219,7 +219,8 @@ if (count($arraychilds) > 0)
 	$t->parse('MAIN.FORUMS_SECTIONS');
 }
 
-$where['cat'] = "ft_cat='".$db->prep($s)."'".($usr['isadmin']) ? '' : "AND ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".(int)$usr['id'].")";
+$where['cat'] = "ft_cat='".$db->prep($s)."'";
+$where['admin'] = ($usr['isadmin']) ? '' : "(ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".(int)$usr['id']."))";
 $order = "ft_sticky DESC, ft_$o $w";
 $join_columns = '';
 $join_condition = '';

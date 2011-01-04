@@ -211,19 +211,28 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 		$tag_prefix . 'NEWPOSTS' => $new_elems,
 		$tag_prefix . 'CAT_DEFSTATE' => htmlspecialchars($cfg['forums'][$cat]['defstate']),
 	);
-
-	if ($stat['fs_lt_date'] > 0)
-	{
-		$sections += array(
-			$tag_prefix . 'LASTPOSTDATE' => @date($cfg['formatmonthdayhourmin'], $stat['fs_lt_date'] + $usr['timezone'] * 3600),
-			$tag_prefix . 'LASTPOSTER' => cot_build_user($stat['fs_lt_posterid'], htmlspecialchars($stat['fs_lt_postername'])),
-			$tag_prefix . 'LASTPOST' => cot_rc_link($new_elems ? cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=unread', '#unread') : cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=last', '#bottom'), cot_cutstring($stat['fs_lt_title'], 32)),
-			$tag_prefix . 'TIMEAGO' => cot_build_timegap($stat['fs_lt_date'], $sys['now_offset'])
-		);
-	}
-
+	
 	if (is_array($stat))
 	{
+		if ($stat['fs_lt_date'] > 0)
+		{
+			$sections += array(
+				$tag_prefix . 'LASTPOSTDATE' => @date($cfg['formatmonthdayhourmin'], $stat['fs_lt_date'] + $usr['timezone'] * 3600),
+				$tag_prefix . 'LASTPOSTER' => cot_build_user($stat['fs_lt_posterid'], htmlspecialchars($stat['fs_lt_postername'])),
+				$tag_prefix . 'LASTPOST' => cot_rc_link($new_elems ? cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=unread', '#unread') : cot_url('forums', 'm=posts&q=' . $stat['fs_lt_id'] . '&n=last', '#bottom'), cot_cutstring($stat['fs_lt_title'], 32)),
+				$tag_prefix . 'TIMEAGO' => cot_build_timegap($stat['fs_lt_date'], $sys['now_offset'])
+			);
+		}
+		else
+		{
+			$sections += array(
+				$tag_prefix . 'LASTPOSTDATE' => '',
+				$tag_prefix . 'LASTPOSTER' => '',
+				$tag_prefix . 'LASTPOST' => '',
+				$tag_prefix . 'TIMEAGO' => ''
+			);			
+		}
+
 		$sections += array(
 			$tag_prefix . 'TOPICCOUNT' => $stat['topiccount'],
 			$tag_prefix . 'POSTCOUNT' => $stat['postcount'],
