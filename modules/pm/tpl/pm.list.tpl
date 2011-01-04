@@ -10,7 +10,7 @@
 
 			<p class="paging">
 				{PM_INBOX}<span class="spaced">{PHP.cfg.separator}</span>{PM_SENTBOX}<span class="spaced">{PHP.cfg.separator}</span>{PM_SENDNEWPM}<br />
-				{PHP.L.pm_filter}: {PM_FILTER_UNREAD}, {PM_FILTER_STARRED}, {PM_FILTER_ALL}
+				{PHP.L.Filter}: {PM_FILTER_UNREAD}, {PM_FILTER_STARRED}, {PM_FILTER_ALL}
 			</p>
 		
 			<form action="{PM_FORM_UPDATE}" method="post" name="update" id="update" class="ajax">
@@ -46,7 +46,7 @@
 					<!-- END: PM_ROW -->
 					<!-- BEGIN: PM_ROW_EMPTY -->
 					<tr>
-						<td colspan="7">{PHP.L.None}</td>
+						<td class="centerall" colspan="7">{PHP.L.None}</td>
 					</tr>
 					<!-- END: PM_ROW_EMPTY -->
 				</table>
