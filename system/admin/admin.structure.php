@@ -236,7 +236,7 @@ $extp = cot_getextplugins('admin.structure.loop');
 /* ===== */
 while ($row = $sql->fetch())
 {
-	($id) && $adminpath[] = array (cot_url('admin', "m=structure&n='.$n.'&mode='.$mode.'&id=".$id), htmlspecialchars($row['structure_title']));
+	($id) && $adminpath[] = array (cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&id='.$id), htmlspecialchars($row['structure_title']));
 
 	$ii++;
 	$structure_id = $row['structure_id'];
