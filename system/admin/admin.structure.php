@@ -85,10 +85,10 @@ if ($a == 'update')
 
 		if ($oldrow['structure_code'] != $rstructure['structure_code'])
 		{
-			$db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($n)."' AND auth_option='".$db->prep($roww['structure_code'])."'");
-			$db->update($db_config, array("config_subcat" => $rstructure['structure_code']), "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($roww['structure_code'])."' AND config_owner='module'");
+			$db->update($db_auth, array("auth_option" => $rstructure['structure_code']), "auth_code='".$db->prep($n)."' AND auth_option='".$db->prep($oldrow['structure_code'])."'");
+			$db->update($db_config, array("config_subcat" => $rstructure['structure_code']), "config_cat='".$db->prep($n)."' AND config_subcat='".$db->prep($oldrow['structure_code'])."' AND config_owner='module'");
 			$area_updatecat = 'cot_'.$n.'_updatecat';
-			(function_exists($area_updatecat)) ? $area_updatecat($roww['structure_code'], $rstructure['structure_code']) : FALSE;
+			(function_exists($area_updatecat)) ? $area_updatecat($oldrow['structure_code'], $rstructure['structure_code']) : FALSE;
 			cot_auth_reorder();
 		}
 
