@@ -396,6 +396,7 @@ $L['adm_check_missing'] = 'Missing';
 $L['adm_phpver'] = 'PHP engine version';
 $L['adm_zendver'] = 'Zend engine version';
 $L['adm_interface'] = 'Interface between webserver and PHP';
+$L['adm_cachedrivers'] = 'Cache drivers';
 $L['adm_os'] = 'Operating system';
 $L['adm_clocks'] = 'Clocks';
 $L['adm_time1'] = '#1: Raw server time';
