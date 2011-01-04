@@ -164,15 +164,15 @@ $L['cfg_disable_plug'] = array('Disable the plugins', '');
  */
 
 $L['cfg_charset'] = array('HTML charset', '');
-$L['cfg_disablesysinfos'] = array('Turn off page creation time', 'In footer.tpl');
+$L['cfg_disablesysinfos'] = array('Turn off page creation time', '(used in footer.tpl)');
 $L['cfg_doctypeid'] = array('Document Type', '&lt;!DOCTYPE&gt; of the HTML layout');
 $L['cfg_forcedefaulttheme'] = array('Force the default theme for all users', '');
 $L['cfg_homebreadcrumb'] = array('Show Home in breadcrumb', 'Put the link to the main page in the beginning of breadcrumb');
-$L['cfg_keepcrbottom'] = array('Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}', 'In footer.tpl');
-$L['cfg_metakeywords'] = array('HTML Meta keywords (comma separated)', 'Search engines');
+$L['cfg_keepcrbottom'] = array('Keep the copyright notice in the tag {FOOTER_BOTTOMLINE}', '(used in footer.tpl)');
+$L['cfg_metakeywords'] = array('HTML Meta keywords', '(comma separated)');
 $L['cfg_msg_separate'] = array('Display messages separately for each source', '');
-$L['cfg_separator'] = array('Generic separator', 'Default:>');
-$L['cfg_showsqlstats'] = array('Show SQL queries statistics', 'In footer.tpl');
+$L['cfg_separator'] = array('Generic separator', '(used in breadcrumbs etc)');
+$L['cfg_showsqlstats'] = array('Show SQL queries statistics', '(used in footer.tpl)');
 
 /**
  * Config Section
@@ -226,7 +226,7 @@ $L['cfg_regrequireadmin'] = array('Administrators must validate new accounts', '
 $L['cfg_user_email_noprotection'] = array('Disable password protection of e-mail change', '\'No\' recommended, for security reasons');
 $L['cfg_useremailchange'] = array('Allow users to change their e-mail address', '\'No\' recommended, for security reasons');
 $L['cfg_usertextimg'] = array('Allow images and HTML in user signature', '\'No\' recommended, for security reasons');
-$L['cfg_usertextmax'] = array('Maximum length for user signature', 'Default: 300 chars');
+$L['cfg_usertextmax'] = array('Maximum length for user signature', '');
 
 /**
  * Config Section
