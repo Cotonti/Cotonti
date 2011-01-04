@@ -3526,7 +3526,15 @@ function cot_redirect($url)
 
 	if (!cot_url_check($url))
 	{
+		// No redirects to foreign domains
 		$url = COT_ABSOLUTE_URL . $url;
+	}
+
+	if (COT_AJAX)
+	{
+		// Save AJAX state, some browsers loose it after redirect (e.g. FireFox 3.6)
+		$sep = strpos($url, '?') === false ? '?' : '&';
+		$url .= $sep . '_ajax=1';
 	}
 
 	if (isset($env['status']))
