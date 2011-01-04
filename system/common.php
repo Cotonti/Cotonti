@@ -149,7 +149,7 @@ $sys['url_redirect'] = 'redirect='.$sys['uri_redir'];
 $redirect = cot_import('redirect','G','SLU');
 $out['uri'] = str_replace('&', '&amp;', $sys['uri_curr']);
 
-define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER['X-Requested-With']));
+define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER['X-Requested-With']) || $_GET['_ajax'] == 1);
 
 /* ======== Plugins ======== */
 
