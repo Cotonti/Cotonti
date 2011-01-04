@@ -23,6 +23,7 @@ cot_block($usr['isadmin']);
 $t = new XTemplate(cot_tplfile('page.admin', 'module'));
 
 require_once cot_incfile('page', 'module');
+require_once cot_incfile('users', 'module');
 
 $adminpath[] = array(cot_url('admin', 'm=page'), $L['Pages']);
 $adminhelp = $L['adm_help_page'];
