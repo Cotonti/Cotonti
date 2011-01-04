@@ -29,7 +29,7 @@ cot_block($usr['auth_read']);
 
 if ($a == 'update')
 {
-	$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
 	cot_die($sql_page->rowCount() == 0);
 	$row_page = $sql_page->fetch();
 
@@ -88,7 +88,7 @@ if ($a == 'update')
 
 	if($rpagedelete)
 	{
-		$sql_page_delete = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+		$sql_page_delete = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
 
 		if ($row_page_delete = $sql_page_delete->fetch())
 		{
@@ -192,7 +192,7 @@ if ($a == 'update')
 	}
 }
 
-$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
 cot_die($sql_page->rowCount() == 0);
 $pag = $sql_page->fetch();
 

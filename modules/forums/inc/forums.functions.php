@@ -85,16 +85,20 @@ function cot_forums_prunetopics($mode, $section, $param)
 
 	$num = 0;
 	$num1 = 0;
+	if (!is_int($param))
+	{
+		$param = (int) $param;
+	}
 
 	switch ($mode)
 	{
 		case 'updated':
 			$limit = $sys['now'] - ($param * 86400);
-			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat='$section' AND ft_updated<'$limit' AND ft_sticky='0'");
+			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat=".$db->qoute($section)." AND ft_updated < $limit AND ft_sticky='0'");
 			break;
 
 		case 'single':
-			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat='$section' AND ft_id='$param'");
+			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat=".$db->qoute($section)." AND ft_id=$param");
 			break;
 	}
 
@@ -111,14 +115,14 @@ function cot_forums_prunetopics($mode, $section, $param)
 			}
 			/* ===== */
 
-			$sql = $db->delete($db_forum_posts, "fp_topicid='$q'");
+			$sql = $db->delete($db_forum_posts, "fp_topicid=$q");
 			$num += $db->affectedRows;
-			$sql = $db->delete($db_forum_topics, "ft_id='$q'");
+			$sql = $db->delete($db_forum_topics, "ft_id=$q");
 			$num1 += $db->affectedRows;
 		}
 
-		$sql = $db->delete($db_forum_topics, "ft_movedto='$q'");
-		$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-'$num1', fs_postcount=fs_postcount-'$num' WHERE fs_cat='$section'");
+		$sql = $db->delete($db_forum_topics, "ft_movedto=$q");
+		$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-$num1, fs_postcount=fs_postcount-$num WHERE fs_cat=".$db->qoute($section));
 	}
 	$num1 = ($num1 == '') ? '0' : $num1;
 	return($num1);
@@ -133,16 +137,21 @@ function cot_forums_resynctopic($id)
 {
 	global $db, $db_forum_topics, $db_forum_posts;
 
-	$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$id'")->fetchColumn();
-	$db->update($db_forum_topics, array("ft_postcount" => $num), "ft_id='" . (int)$id . "'");
+	if (!is_int($id))
+	{
+		$id = (int) $id;
+	}
 
-	$sql = $db->query("SELECT fp_posterid, fp_postername, fp_updated FROM $db_forum_posts WHERE fp_topicid='$id' ORDER BY fp_id DESC LIMIT 1");
+	$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid=$id")->fetchColumn();
+	$db->update($db_forum_topics, array("ft_postcount" => $num), "ft_id=$id");
+
+	$sql = $db->query("SELECT fp_posterid, fp_postername, fp_updated FROM $db_forum_posts WHERE fp_topicid=$id ORDER BY fp_id DESC LIMIT 1");
 	if ($row = $sql->fetch())
 	{
 		$db->update($db_forum_topics, array("ft_lastposterid" => (int)$row['fp_posterid'],
 			"ft_lastpostername" => $row['fp_last_postername'],
 			"ft_updated" => (int)$row['fp_last_updated']
-			), "ft_id='" . (int)$id . "'");
+			), "ft_id=$id");
 	}
 }
 
@@ -265,8 +274,8 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 function cot_forums_sync($cat)
 {
 	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats;
-	$num1 = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat='" . $db->prep($cat) . "'")->fetchColumn();
-	$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='" . $db->prep($cat) . "'")->fetchColumn();
+	$num1 = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat=" . $db->quote($cat))->fetchColumn();
+	$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat=" . $db->quote($cat))->fetchColumn();
 	cot_forums_sectionsetlast($cat, $num, $num1);
 	return (int)$num1;
 }
@@ -282,9 +291,9 @@ function cot_forums_updatecat($oldcat, $newcat)
 {
 	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats;
 
-	$upd = (bool)$db->update($db_forum_topics, array("ft_cat" => $newcat), "ft_cat='" . $db->prep($oldcat) . "'");
-	$upd &= (bool)$db->update($db_forum_posts, array("fp_cat" => $newcat), "fp_cat='" . $db->prep($oldcat) . "'");
-	$upd &= (bool)$db->update($db_forum_stats, array("fs_cat" => $newcat), "fs_cat='" . $db->prep($oldcat) . "'");
+	$upd = (bool)$db->update($db_forum_topics, array('ft_cat' => $newcat), 'ft_cat=' . $db->quote($oldcat));
+	$upd &= (bool)$db->update($db_forum_posts, array('fp_cat' => $newcat), 'fp_cat=' . $db->quote($oldcat));
+	$upd &= (bool)$db->update($db_forum_stats, array('fs_cat' => $newcat), 'fs_cat=' . $db->quote($oldcat));
 
 	return $upd;
 }
@@ -299,9 +308,9 @@ function cot_forums_updatecat($oldcat, $newcat)
 function cot_forums_deletecat($cat)
 {
 	global $db_forum_topics, $db_forum_posts, $db_forum_stats, $db;
-	$sql = $db->delete($db_forum_posts, "fp_cat='$cat'");
-	$sql = $db->delete($db_forum_topics, "ft_cat='$cat'");
-	$sql = $db->delete($db_forum_stats, "fs_cat='$cat'");
+	$sql = $db->delete($db_forum_posts, 'fp_cat=' . $db->quote($cat));
+	$sql = $db->delete($db_forum_topics, 'ft_cat=' . $db->quote($cat));
+	$sql = $db->delete($db_forum_stats, 'fs_cat=' . $db->quote($cat));
 }
 
 ?>
