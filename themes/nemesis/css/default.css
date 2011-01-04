@@ -30,8 +30,8 @@ sup			{ top:-.5em; }
 /* 3. Headings
 -------------------------------------------------- */
 
-h2	{ color:#a01517; font-size:1.1em; text-shadow:0 1px 0 #fff; margin-bottom:15px; padding:8px 8px 8px 40px; background-color:#ccc; background-position:10px 9px; background-repeat: no-repeat; }
-h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-position:10px 9px; background-repeat: no-repeat; }
+h2	{ color:#a01517; font-size:1.1em; text-shadow:0 1px 0 #fff; margin-bottom:15px; padding:8px 8px 8px 40px; background-color:#ccc; background-position:10px 50%; background-repeat:no-repeat; }
+h3	{ color:#000; font-size:1em; font-weight:bold; margin:10px 0 5px; background-position:10px 50%; background-repeat:no-repeat; }
 
 .admin		{ background-image:url(../../../images/icons/default/prefs.png); }
 .comments	{ background-image:url(../../../images/icons/default/comments.png); }
@@ -184,7 +184,7 @@ label input						{ vertical-align:middle; }
 .pagenav_current a	{ color:#555; }
 .pagenav_small		{ text-align:right; font-size:.9em; }
 
-.spaced				{ margin:0 8px; }
+.spaced				{ border:none!important; margin:0 8px!important; padding:0!important; }
 
 /* 8. Comments
 -------------------------------------------------- */
