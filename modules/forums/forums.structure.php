@@ -21,7 +21,7 @@ if ($n == 'forums')
 {
 	require_once cot_incfile('forums', 'module');
 	$adminpath[] = array(cot_url('admin'), $L['Forums']);
-	$adminpath[] = array (cot_url('admin', 'm=structure&area=forums'), $L['Categories']);
+	$adminpath[] = array (cot_url('admin', 'm=structure&n=forums'), $L['Categories']);
 	$adminhelp = $L['adm_help_structure'];
 }
 
