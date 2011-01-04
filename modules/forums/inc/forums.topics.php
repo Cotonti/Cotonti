@@ -88,11 +88,9 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			
 			$db->update($db_forum_topics, array("ft_cat" => $ns), "ft_id='$q' and ft_cat='$s'");
 			$db->update($db_forum_posts, array("fp_cat" => $ns), "fp_cat='$s' and fp_topicid='$q'");	
-			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-'$num' WHERE fs_cat='$s'");
-			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount+1, fs_postcount=fs_postcount+'$num' WHERE fs_cat='$ns'");
 			
-			cot_forums_sectionsetlast($s);
-			cot_forums_sectionsetlast($ns);			
+			cot_forums_sectionsetlast($s, "fs_postcount-'$num'", "fs_topiccount-1");
+			cot_forums_sectionsetlast($ns, "fs_postcount+'$num'", "fs_topiccount+1");			
 			cot_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
 			break;
 		

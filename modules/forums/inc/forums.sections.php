@@ -63,7 +63,7 @@ while ($row = $sql_forums->fetch())
 {
 	if (!$cat_top[$row['fs_cat']]['fs_lt_id'])
 	{
-		cot_forums_sectionsetlast($row['fs_code']);
+		cot_forums_sectionsetlast($row['fs_cat']);
 	}
 	$cat_top[$row['fs_cat']] = $row;
 	$cat_top[$row['fs_cat']]['topiccount'] = $cat_top[$row['fs_cat']]['fs_topiccount'];

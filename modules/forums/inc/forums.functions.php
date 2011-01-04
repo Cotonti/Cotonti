@@ -150,18 +150,30 @@ function cot_forums_resynctopic($id)
  * Changes last message for the section
  *
  * @param string $cat Section cat
+ * @param string $postcount Post count
+ * @param string $topiccount Topic count 
+ * @param string $viewcount View count  
  */
-function cot_forums_sectionsetlast($cat)
+function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewcount='')
 {
 	global $db, $db_forum_topics, $db_forum_stats;
-	$row = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_cat='$cat' AND ft_movedto='' AND ft_mode='0' ORDER BY ft_updated DESC LIMIT 1")->fetch();
-	$db->update($db_forum_stats, array(
-		'fs_lt_id' => (int)$row['ft_id'], 
-		'fs_lt_title' => $row['ft_title'], 
-		'fs_lt_date' => (int)$row['ft_updated'], 
-		'fs_lt_posterid' => (int)$row['ft_lastposterid'], 
-		'fs_lt_postername' => $row['ft_lastpostername']
-		), "fs_cat='$cat'");
+	$row = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_cat='".$db->prep($cat)."' AND ft_movedto='' AND ft_mode='0' ORDER BY ft_updated DESC LIMIT 1")->fetch();
+	
+	$i_postcount = ($postcount != '' && is_int($postcount)) ? $postcount : 1;
+	$i_topiccount = ($topiccount != '' && is_int($topiccount)) ? $topiccount : 1;
+	
+	$postcount = (!empty($postcount)) ? ", fs_postcount = ".$postcount : '';
+	$topiccount = (!empty($topiccount)) ? ", fs_topiccount = ".$topiccount : '';
+	$viewcount = (!empty($viewcount)) ? ", fs_viewcount = ".$viewcount : '';
+	
+	$db->query("INSERT INTO $db_forum_stats 
+		(fs_cat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername, fs_topiccount, fs_postcount, fs_viewcount)
+		VALUES ('".$db->prep($cat)."', '".(int)$row['ft_id']."', '".$row['ft_title']."', '".(int)$row['ft_updated']."', '".(int)$row['ft_lastposterid']."', '".$row['ft_lastpostername']."', '$i_topiccount', '$i_postcount', '0')
+		ON DUPLICATE KEY UPDATE 
+		fs_lt_id = '".(int)$row['ft_id']."',  fs_lt_title = '".$row['ft_title']."', fs_lt_date = '".(int)$row['ft_updated']."', 
+		fs_lt_posterid = '".(int)$row['ft_lastposterid']."', fs_lt_postername = '".$row['ft_lastpostername']."' $postcount $topiccount $viewcount");
+
+	return true;
 }
 
 /**
@@ -236,8 +248,7 @@ function cot_forums_sync($cat)
 	global $db, $db_forum_topics, $db_forum_posts, $db_forum_stats;
 	$num1 = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_cat='" . $db->prep($cat) . "'")->fetchColumn();
 	$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='" . $db->prep($cat) . "'")->fetchColumn();
-	$db->update($db_forum_stats, array("fs_postcount" => $num, "fs_topiccount" => $num1), "fs_cat='" . $db->prep($cat) . "'");
-	cot_forums_sectionsetlast($cat);
+	cot_forums_sectionsetlast($cat, $num, $num1);
 	return (int)$num1;
 }
 
@@ -272,30 +283,6 @@ function cot_forums_deletecat($cat)
 	$sql = $db->delete($db_forum_posts, "fp_cat='$cat'");
 	$sql = $db->delete($db_forum_topics, "ft_cat='$cat'");
 	$sql = $db->delete($db_forum_stats, "fs_cat='$cat'");
-}
-
-/**
- * Insert forums category
- *
- * @param string $cat Cat code
- * @return bool
- */
-function cot_forums_insertcat($cat)
-{
-	global $db, $db_forum_stats;
-	$db->insert($db_forum_stats, array(
-		'fs_cat' => $cat,
-		'fs_lt_id' => 0,
-		'fs_lt_title' => '',
-		'fs_lt_date' => 0,
-		'fs_lt_posterid' => 0,
-		'fs_lt_postername' => '',
-		'fs_topiccount' => 0,
-		'fs_postcount' => 0,
-		'fs_viewcount' => 0
-	));
-
-	return true;
 }
 
 ?>
