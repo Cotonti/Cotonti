@@ -126,8 +126,9 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 				ft_postcount=ft_postcount+1, ft_updated='" . $sys['now_offset'] . "',
 				ft_lastposterid='" . $usr['id'] . "', ft_lastpostername='" . $db->prep($usr['name']) . "'
 				WHERE ft_id='$q'");
-
-			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount+1 WHERE fs_cat='$s'");
+			
+			cot_forums_sectionsetlast($s, "fs_postcount+1");
+			
 			if ($cfg['forums'][$s]['countposts'])
 			{
 				$sql_forums = $db->query("UPDATE $db_users SET user_postcount=user_postcount+1 WHERE user_id='" . $usr['id'] . "'");
@@ -147,6 +148,8 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 				"fp_updater" => $rupdater, "fp_posterip" => $usr['ip']), "fp_id='" . $row['fp_id'] . "' LIMIT 1");
 
 			$db->update($db_forum_topics, array("ft_updated" => $sys['now_offset']), "ft_id='$q'");
+			
+			cot_forums_sectionsetlast($s);
 		}
 		/* === Hook === */
 		foreach (cot_getextplugins('forums.posts.newpost.done') as $pl)
@@ -154,8 +157,6 @@ if ($a == 'newpost' && !empty($s) && !empty($q))
 			include $pl;
 		}
 		/* ===== */
-
-		cot_forums_sectionsetlast($s);
 
 		if ($cache)
 		{
@@ -213,8 +214,6 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 			$sql_forums = $db->delete($db_forum_topics, "ft_movedto='$q'");
 			$sql_forums = $db->delete($db_forum_topics, "ft_id='$q'");
 
-			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-1, fs_postcount=fs_postcount-1 WHERE fs_cat='$s'");
-
 			/* === Hook === */
 			foreach (cot_getextplugins('forums.posts.emptytopicdel') as $pl)
 			{
@@ -223,7 +222,7 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 			/* ===== */
 
 			cot_log("Delete topic #" . $q . " (no post left)", 'for');
-			cot_forums_sectionsetlast($s);
+			cot_forums_sectionsetlast($s, "fs_postcount-1", "fs_topiccount-1");
 		}
 		cot_redirect(cot_url('forums', "m=topics&s=" . $s, '', true));
 	}
@@ -238,9 +237,7 @@ elseif ($a == 'delete' && $usr['id'] > 0 && !empty($s) && !empty($q) && !empty($
 				ft_lastpostername='" . $db->prep($row['fp_postername']) . "', ft_updated='" . (int)$row['fp_updated'] . "'
 				WHERE ft_id='$q'");
 
-			$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount-1 WHERE fs_id='$s'");
-
-			cot_forums_sectionsetlast($s);
+			cot_forums_sectionsetlast($s, "fs_postcount-1");
 
 			cot_redirect(cot_url('forums', "m=posts&p=" . $row['fp_id'], '#' . $row['fp_id'], true));
 		}

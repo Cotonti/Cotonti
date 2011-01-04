@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS `cot_forum_posts` (
 
 -- Forum stats
 CREATE TABLE IF NOT EXISTS `cot_forum_stats` (
-  `fs_id` int(11) unsigned NOT NULL auto_increment,
   `fs_cat` varchar(255) collate utf8_unicode_ci NOT NULL default '',
   `fs_lt_id` int(11) NOT NULL default '0',
   `fs_lt_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
@@ -55,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `cot_forum_stats` (
   `fs_topiccount` int(11) NOT NULL default '0',
   `fs_postcount` int(11) NOT NULL default '0',
   `fs_viewcount` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`fs_id`)
+  PRIMARY KEY  (`fs_cat`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Forum topics
@@ -94,8 +93,3 @@ INSERT INTO `cot_structure` (`structure_area`, `structure_code`, `structure_path
 ('forums', 'pub', '1', '', 'Public', '', 'images/icons/default/forums.png', 0, 0),
 ('forums', 'general', '1.1', '', 'General discussion', 'General discussion', 'images/icons/default/forums.png', 0, 0),
 ('forums', 'offtopic', '1.2', '', 'Off-topic', 'Various and off-topic', 'images/icons/default/forums.png', 0, 0);
-
-INSERT INTO `cot_forum_stats` (`fs_cat`, `fs_topiccount`, `fs_postcount`, `fs_viewcount`) VALUES
-('pub', 0, 0, 0),
-('general', 0, 0, 0),
-('offtopic', 0, 0, 0);

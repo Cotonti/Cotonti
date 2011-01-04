@@ -106,8 +106,6 @@ if ($a == 'newtopic')
 
 		$p = $db->lastInsertId();
 		
-		$sql_forums = $db->query("UPDATE $db_forum_stats SET fs_postcount=fs_postcount+1, fs_topiccount=fs_topiccount+1 WHERE fs_cat='$s'");
-		
 		if ($cfg['forums'][$s]['autoprune'] > 0)
 		{
 			cot_forums_prunetopics('updated', $s, $cfg['forums'][$s]['autoprune']);
@@ -120,7 +118,7 @@ if ($a == 'newtopic')
 		
 		if (!$newprvtopic)
 		{
-			cot_forums_sectionsetlast($s);
+			cot_forums_sectionsetlast($s, "fs_postcount+1", "fs_topiccount+1");
 		}
 		
 		/* === Hook === */
