@@ -33,6 +33,7 @@ $t->assign(array(
 	'ADMIN_INFOS_PHPVER' => (function_exists('phpversion')) ? phpversion() : $L['adm_help_config'],
 	'ADMIN_INFOS_ZENDVER' => (function_exists('zend_version')) ? zend_version() : $L['adm_help_config'],
 	'ADMIN_INFOS_INTERFACE' => (function_exists('php_sapi_name')) ? php_sapi_name() : $L['adm_help_config'],
+	'ADMIN_INFOS_CACHEDRIVERS' => implode(', ', $cot_cache_drivers),
 	'ADMIN_INFOS_OS' => (function_exists('php_uname')) ? php_uname() : $L['adm_help_config'],
 	'ADMIN_INFOS_DATE' => date('Y-m-d H:i'),
 	'ADMIN_INFOS_GMDATE' => gmdate('Y-m-d H:i'),

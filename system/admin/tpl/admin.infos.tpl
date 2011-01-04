@@ -9,8 +9,13 @@
 			<td>{PHP.L.adm_zendver}</td>
 			<td class="textcenter">{ADMIN_INFOS_ZENDVER}</td>
 		</tr>
+        <tr>
 			<td>{PHP.L.adm_interface}</td>
 			<td class="textcenter">{ADMIN_INFOS_INTERFACE}</td>
+		</tr>
+        <tr>
+			<td>{PHP.L.adm_cachedrivers}</td>
+			<td class="textcenter">{ADMIN_INFOS_CACHEDRIVERS}</td>
 		</tr>
 		<tr>
 			<td>{PHP.L.adm_os}</td>
