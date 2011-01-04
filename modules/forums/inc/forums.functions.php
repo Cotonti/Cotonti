@@ -157,7 +157,8 @@ function cot_forums_resynctopic($id)
 function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewcount='')
 {
 	global $db, $db_forum_topics, $db_forum_stats;
-	$row = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics WHERE ft_cat='".$db->prep($cat)."' AND ft_movedto='' AND ft_mode='0' ORDER BY ft_updated DESC LIMIT 1")->fetch();
+	$row = $db->query("SELECT ft_id, ft_lastposterid, ft_lastpostername, ft_updated, ft_title FROM $db_forum_topics
+		WHERE ft_cat='".$db->prep($cat)."' AND ft_movedto='' AND ft_mode='0' ORDER BY ft_updated DESC LIMIT 1")->fetch();
 	
 	$i_postcount = ($postcount != '' && is_int($postcount)) ? $postcount : 1;
 	$i_topiccount = ($topiccount != '' && is_int($topiccount)) ? $topiccount : 1;
@@ -167,11 +168,15 @@ function cot_forums_sectionsetlast($cat, $postcount = '', $topiccount='', $viewc
 	$viewcount = (!empty($viewcount)) ? ", fs_viewcount = ".$viewcount : '';
 	
 	$db->query("INSERT INTO $db_forum_stats 
-		(fs_cat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername, fs_topiccount, fs_postcount, fs_viewcount)
-		VALUES ('".$db->prep($cat)."', '".(int)$row['ft_id']."', '".$row['ft_title']."', '".(int)$row['ft_updated']."', '".(int)$row['ft_lastposterid']."', '".$row['ft_lastpostername']."', '$i_topiccount', '$i_postcount', '0')
+		(fs_cat, fs_lt_id, fs_lt_title, fs_lt_date, fs_lt_posterid, fs_lt_postername, fs_topiccount, fs_postcount,
+			fs_viewcount)
+		VALUES (".$db->quote($cat).", ".(int)$row['ft_id'].", ".$db->quote($row['ft_title']).", "
+			.(int)$row['ft_updated'].", ".(int)$row['ft_lastposterid'].", ".$db->quote($row['ft_lastpostername'])
+			.",$i_topiccount, $i_postcount, 0)
 		ON DUPLICATE KEY UPDATE 
-		fs_lt_id = '".(int)$row['ft_id']."',  fs_lt_title = '".$row['ft_title']."', fs_lt_date = '".(int)$row['ft_updated']."', 
-		fs_lt_posterid = '".(int)$row['ft_lastposterid']."', fs_lt_postername = '".$row['ft_lastpostername']."' $postcount $topiccount $viewcount");
+			fs_lt_id = ".(int)$row['ft_id'].",  fs_lt_title = ".$db->quote($row['ft_title']).",
+			fs_lt_date = ".(int)$row['ft_updated'].", fs_lt_posterid = ".(int)$row['ft_lastposterid'].",
+			fs_lt_postername = ".$db->quote($row['ft_lastpostername'])." $postcount $topiccount $viewcount");
 
 	return true;
 }
