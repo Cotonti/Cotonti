@@ -26,6 +26,11 @@ foreach (cot_getextplugins('page.add.first') as $pl)
 /* ===== */
 cot_block($usr['auth_write']);
 
+if ($structure['page'][$c]['locked'])
+{
+	cot_redirect(cot_url('message', 'msg=602', '', true));
+}
+
 if ($a == 'add')
 {
 	cot_shield_protect();
@@ -65,6 +70,11 @@ if ($a == 'add')
 	cot_block($usr['auth_write']);
 
 	if (empty($rpage['page_cat'])) cot_error('page_catmissing', 'rpagecat');
+	if ($structure['page'][$rpage['page_cat']]['locked'])
+	{
+		require_once cot_langfile('message', 'core');
+		cot_error('msg602_body', 'rpagecat');
+	}
 	if (mb_strlen($rpage['page_title']) < 2) cot_error('page_titletooshort', 'rpagetitle');
 
 	/* === Hook === */
