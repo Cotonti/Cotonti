@@ -21,10 +21,12 @@ hr		{ margin:4px 0 1px; border: 1px solid; border-color:#ddd transparent transpa
 /* 2. Structure
 -------------------------------------------------- */
 
-#container	{ font-size:.9em; width:960px; margin:0 auto; }
-#user		{ text-align:right; padding:30px 45px 0; height:30px; background:url(img/user.png) no-repeat 0 0; position:relative; }
+.body		{ font-size:.9em; width:960px; margin:0 auto; position:relative; }
+
+#user		{ text-align:right; padding:30px 45px 0; height:30px; width:870px; background:url(img/user.png) no-repeat 0 0; position:relative; }
 #user a		{ font-weight:bold; }
 #user li#hi	{ position:absolute; top:30px; left:45px; }
+
 #main		{ padding:0 45px; }
 #center		{ width:550px; margin-right:40px;  }
 #side		{ width:280px; }
@@ -38,7 +40,7 @@ hr		{ margin:4px 0 1px; border: 1px solid; border-color:#ddd transparent transpa
 -------------------------------------------------- */
 
 h1,h2,h3,h4,h5,h6 { font-weight:normal; font-size:1em; margin:0; padding:0; position:relative; }
-h1		{ color:#036; padding:8px 0 0 45px; height:52px; background:url(img/crumbs.png) no-repeat 0 0; }
+h1		{ color:#036; margin:0 auto; padding:8px 45px 0; height:52px; width:870px!important; background:url(img/crumbs.png) no-repeat 50% 0; }
 h1 a		{ font-weight:bold; padding:0 10px; }
 h2		{ font:normal 2em "Times New Roman"; margin:10px 0; padding-bottom:2px; border-bottom:1px solid; }
 h3		{ color:#4f789f; font:normal 1.6em "Times New Roman"; margin:5px 0; }
@@ -108,7 +110,7 @@ div.help										{ color:#00529b; background-color:#bde5f8; background-image:ur
 /* 5. Admin Menu
 -------------------------------------------------- */
 
-#adminmenu			{ padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; overflow:auto; }
+#adminmenu			{ padding:15px 45px; background:url(img/adminmenu.png) no-repeat 0 0; width:870px; overflow:auto; }
 #adminmenu li			{ padding:12px 15px 10px; height:60px; width:115px; background:url(img/menuitem.png) no-repeat 0 0; display:block; float:left; }
 #adminmenu li a		{ color:#3b3b3b; text-align:center; display:block; height:100%; opacity:.6; zoom:1; filter:alpha(opacity=60); }
 #adminmenu li a:hover	{ text-decoration:none; opacity:.8; zoom:1; filter:alpha(opacity=80); }
@@ -153,10 +155,9 @@ input, select, button			{ padding:2px; }
 /* 9. Pagination
 -------------------------------------------------- */
 
-.paging		{ margin:10px 0 20px 0; text-align:center; font-size:.9em; }
-.paging img	{ vertical-align:-3px; }
-.paging span.a1	{ border:1px dashed #7f7772; padding:2px 8px; margin:1px; }
-.paging span.a1 a	{  }
+.paging			{ margin:10px 0 20px 0; text-align:center; font-size:.9em; }
+.paging img		{ vertical-align:-3px; }
+.paging span		{ border:1px dashed #7f7772; padding:2px 8px; margin:1px; }
 
 .pagenav_prev, .pagenav_next, .pagenav_first, .pagenav_last, .pagenav_pages, .pagenav_current { padding:2px 6px; margin:1px; border:1px dashed #7f7772; }
 .pagenav_prev a, .pagenav_next a, .pagenav_first a, .pagenav_last a, .pagenav_pages a	{ color:#555; }

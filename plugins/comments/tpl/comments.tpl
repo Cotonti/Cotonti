@@ -60,7 +60,7 @@
 
 <!-- BEGIN: PAGNAVIGATOR -->
 <p class="paging">{COMMENTS_PAGES_PAGESPREV}{COMMENTS_PAGES_PAGNAV}{COMMENTS_PAGES_PAGESNEXT}</p>
-<p class="paging"><span class="a1">{COMMENTS_PAGES_INFO}</span></p>
+<p class="paging"><span>{COMMENTS_PAGES_INFO}</span></p>
 <!-- END: PAGNAVIGATOR -->
 
 <!-- BEGIN: COMMENTS_NEWCOMMENT -->

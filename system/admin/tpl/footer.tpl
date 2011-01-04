@@ -1,7 +1,5 @@
 <!-- BEGIN: FOOTER -->
 
-</div>
-
 <div id="footer">
 	<ul>
 		<li><a href="admin.php">{PHP.L.Home}</a></li>

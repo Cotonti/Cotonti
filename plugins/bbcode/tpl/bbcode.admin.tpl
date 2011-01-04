@@ -36,7 +36,7 @@
 			</form>
 <!-- END: ADMIN_BBCODE_ROW -->
 			</table>
-			<p class="paging">{ADMIN_BBCODE_PAGINATION_PREV} {ADMIN_BBCODE_PAGNAV} {ADMIN_BBCODE_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_BBCODE_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_BBCODE_COUNTER_ROW}</span></p>
+			<p class="paging">{ADMIN_BBCODE_PAGINATION_PREV} {ADMIN_BBCODE_PAGNAV} {ADMIN_BBCODE_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_BBCODE_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_BBCODE_COUNTER_ROW}</span></p>
 			<h3>{PHP.L.adm_bbcodes_new}:</h3>
 			<table class="cells">
 				<tr>

@@ -20,7 +20,7 @@
 				<!-- END: LIST_ROW -->
 			</div>
 			<!-- IF {LIST_TOP_PAGINATION} -->
-			<p class="paging clear"><span class="a1">{PHP.L.Page} {LIST_TOP_CURRENTPAGE} {PHP.L.Of} {LIST_TOP_TOTALPAGES}</span>{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT}</p>
+			<p class="paging clear"><span>{PHP.L.Page} {LIST_TOP_CURRENTPAGE} {PHP.L.Of} {LIST_TOP_TOTALPAGES}</span>{LIST_TOP_PAGEPREV}{LIST_TOP_PAGINATION}{LIST_TOP_PAGENEXT}</p>
 			<!-- ENDIF -->
 		</div>
 

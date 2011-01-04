@@ -25,7 +25,7 @@
 				</form>
 <!-- END: ADMIN_BANLIST_ROW -->
 			</table>
-			<p class="paging">{ADMIN_BANLIST_PAGINATION_PREV}{ADMIN_BANLIST_PAGNAV}{ADMIN_BANLIST_PAGINATION_NEXT}<span class="a1">{PHP.L.Total}: {ADMIN_BANLIST_TOTALITEMS}, <span class="lower">{PHP.L.Onpage}</span>: {ADMIN_BANLIST_COUNTER_ROW}</span></p>
+			<p class="paging">{ADMIN_BANLIST_PAGINATION_PREV}{ADMIN_BANLIST_PAGNAV}{ADMIN_BANLIST_PAGINATION_NEXT}<span>{PHP.L.Total}: {ADMIN_BANLIST_TOTALITEMS}, <span class="lower">{PHP.L.Onpage}</span>: {ADMIN_BANLIST_COUNTER_ROW}</span></p>
 			<h3>{PHP.L.Add}:</h3>
 			<form name="addbanlist" id="addbanlist" action="{ADMIN_BANLIST_URLFORMADD}" method="post" class="ajax">
 				<table class="cells">
