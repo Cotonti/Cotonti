@@ -70,17 +70,17 @@ $cfg['page']['maxrowsperpage'] = ($c == 'all' || $c == 'system') ? $cfg['page'][
 $c = (empty($cat['title'])) ? 'all' : $c;
 cot_die((empty($cat['title'])) && !$usr['isadmin']);
 
-$where['state'] = "(page_state=0 OR page_state=2)";
+$where['state'] = '(page_state=0 OR page_state=2)';
 if ($c == 'unvalidated')
 {
-	$where['state'] = "page_state = 1";
-	$where['ownerid'] = "page_ownerid = " . $usr['id'];
+	$where['state'] = 'page_state = 1';
+	$where['ownerid'] = 'page_ownerid = ' . $usr['id'];
 	$cat['title'] = $L['page_validation'];
 	$cat['desc'] = $L['page_validation_desc'];
 }
 elseif ($c != 'all')
 {
-	$where['cat'] = "page_cat='$c'";
+	$where['cat'] = 'page_cat=' . $db->quote($c);
 }
 if (!empty($o) && !empty($p) && $p != 'password')
 {
@@ -88,7 +88,7 @@ if (!empty($o) && !empty($p) && $p != 'password')
 }
 if (!$usr['isadmin'])
 {
-	$where['date'] = "page_date <= ".(int)$sys['now_offset'];
+	$where['date'] = 'page_date <= '.(int)$sys['now_offset'];
 }
 $list_url_path = array('c' =>$c, 'ord' => $o, 'p' => $p);
 if ($s != $cfg['page'][$c]['order'])
@@ -110,11 +110,11 @@ foreach (cot_getextplugins('page.list.query') as $pl)
 
 if(empty($sql_page_string))
 {
-	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition WHERE ".implode(" AND ", $where);
+	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition WHERE ".implode(' AND ', $where);
 	$sql_page_string = "SELECT p.*, u.* $join_columns
 		FROM $db_pages as p $join_condition
 		LEFT JOIN $db_users AS u ON u.user_id=p.page_ownerid
-		WHERE ".implode(" AND ", $where)."
+		WHERE ".implode(' AND ', $where)."
 		ORDER BY page_$s $w LIMIT $d, ".$cfg['page']['maxrowsperpage'];
 }
 $totallines = $db->query($sql_page_count)->fetchColumn();
@@ -241,7 +241,7 @@ $extp = cot_getextplugins('page.list.rowcat.loop');
 foreach ($subcat as $x)
 {
 	$sub_count = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE 
-		structure_path LIKE '".$structure['page'][$x]['rpath'].".%' OR  structure_path = '".$structure['page'][$x]['rpath']."'")->fetchColumn();
+		structure_path LIKE '".$db->prep($structure['page'][$x]['rpath']).".%' OR  structure_path = ".$db->quote($structure['page'][$x]['rpath']))->fetchColumn();
 
 	$t->assign(array(
 		'LIST_ROWCAT_URL' => cot_url('page', 'c='.$x),

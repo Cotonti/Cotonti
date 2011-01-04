@@ -11,7 +11,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$s = cot_import('s','G','ALP'); //Section CODE
+$s = cot_import('s','G','TXT'); // Section CODE
 $q = cot_import('q','G','INT'); // topic id
 list($pg, $d) = cot_import_pagenav('d', $cfg['forums']['maxtopicsperpage']);  // Page
 $o = cot_import('ord','G','ALP',16); //order
@@ -53,24 +53,24 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 			$ns = cot_import('ns','P','ALP');
 			$ghost = cot_import('ghost','P','BOL');
 			
-			$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat='$s' and fp_topicid='$q'")->fetchColumn();
+			$num = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_cat=".$db->quote($s)." AND fp_topicid = $q")->fetchColumn();
 			if ($num < 1 || $s == $ns)
 			{
 				cot_die();
 			}
 			
-			$sql_forums = $db->delete($db_forum_topics, "ft_movedto='$q'");
+			$sql_forums = $db->delete($db_forum_topics, "ft_movedto = $q");
 			
 			if ($ghost)
 			{
-				$sql_forums_ghost = $db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id='$q' and ft_cat='$s'");
+				$sql_forums_ghost = $db->query("SELECT ft_title, ft_desc, ft_mode, ft_creationdate, ft_firstposterid, ft_firstpostername FROM $db_forum_topics WHERE ft_id= $q AND ft_cat = " . $db->quote($s));
 				$row = $sql_forums_ghost->fetch();
 
 				$db->insert($db_forum_topics, array(
 					'ft_state' => 0,
 					'ft_mode' => (int)$row['ft_mode'],
 					'ft_sticky' => 0,
-					'ft_cat' => (int)$s,
+					'ft_cat' => $s,
 					'ft_title' => $row['ft_title'],
 					'ft_desc' => $row['ft_desc'],
 					'ft_preview' => $row['ft_preview'],
@@ -86,44 +86,44 @@ if ($usr['isadmin'] && !empty($q) && !empty($a))
 				));
 			}
 			
-			$db->update($db_forum_topics, array("ft_cat" => $ns), "ft_id='$q' and ft_cat='$s'");
-			$db->update($db_forum_posts, array("fp_cat" => $ns), "fp_cat='$s' and fp_topicid='$q'");	
+			$db->update($db_forum_topics, array("ft_cat" => $ns), "ft_id=$q AND ft_cat=" . $db->quote($s));
+			$db->update($db_forum_posts, array("fp_cat" => $ns), "fp_topicid=$q AND fp_cat=" . $db->quote($s));
 			
 			cot_forums_sectionsetlast($s, "fs_postcount-'$num'", "fs_topiccount-1");
 			cot_forums_sectionsetlast($ns, "fs_postcount+'$num'", "fs_topiccount+1");			
-			cot_log("Moved topic #".$q." from section #".$s." to section #".$ns, 'for');
+			cot_log("Moved topic #$q from section #$s to section #".$ns, 'for');
 			break;
 		
 		case 'lock':
-			$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 0 ), "ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 0 ), "ft_id=$q");
 			cot_log("Locked topic #".$q, 'for');
 			break;
 
 		case 'sticky':
-			$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 1 ), "ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 1 ), "ft_id=$q");
 			cot_log("Pinned topic #".$q, 'for');
 			break;
 		
 		case 'announcement':
-			$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 1 ), "ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_state" => 1, "ft_sticky"=> 1 ), "ft_id=$q");
 			cot_log("Announcement topic #".$q, 'for');
 			break;
 		
 		case 'bump':
 			cot_check_xg();
-			$db->update($db_forum_topics, array("ft_updated" => $sys['now_offset']), "ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_updated" => $sys['now_offset']), "ft_id=$q");
 			cot_forums_sectionsetlast($s);
 			cot_log("Bumped topic #".$q, 'for');
 			break;
 
 		case 'private':
 			cot_log("Made topic #".$q." private", 'for');
-			$db->update($db_forum_topics, array("ft_mode" => 1), "ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_mode" => 1), "ft_id=$q");
 			break;
 		
 		case 'clear':
 			cot_log("Resetted topic #".$q, 'for');
-			$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 0, "ft_mode" => 0), "ft_id='$q'");
+			$db->update($db_forum_topics, array("ft_state" => 0, "ft_sticky"=> 0, "ft_mode" => 0), "ft_id=$q");
 			break;
 	}
 	cot_redirect(cot_url('forums', "m=topics&s=".$s, '', true));
@@ -164,7 +164,7 @@ if ($cfg['forums'][$s]['allowviewers'])
 {
 	
 	$v = 0;
-	$sql_forums_view = $db->query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' and online_subloc='".$db->prep($structure['forums'][$s]['title'])."' ");
+	$sql_forums_view = $db->query("SELECT online_name, online_userid FROM $db_online WHERE online_location='Forums' AND online_subloc=".$db->quote($structure['forums'][$s]['title']));
 	while ($rowv = $sql_forums_view->fetch())
 	{
 		if ($rowv['online_name'] != 'v')
@@ -221,7 +221,7 @@ if (count($arraychilds) > 0)
 	$t->parse('MAIN.FORUMS_SECTIONS');
 }
 
-$where['cat'] = "ft_cat='".$db->prep($s)."'";
+$where['cat'] = 'ft_cat='.$db->quote($s);
 $where['admin'] = ($usr['isadmin']) ? '' : "(ft_mode=0 OR (ft_mode=1 AND ft_firstposterid=".(int)$usr['id']."))";
 $order = "ft_sticky DESC, ft_$o $w";
 $join_columns = '';
@@ -234,11 +234,11 @@ foreach (cot_getextplugins('forums.topics.query') as $pl)
 }
 /* ===== */
 $where = array_diff($where,array(''));
-$prvtopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(" AND ", $where)." AND ft_mode=1")->fetchColumn();
-$totaltopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(" AND ", $where))->fetchColumn();
+$prvtopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(' AND ', $where).' AND ft_mode=1')->fetchColumn();
+$totaltopics = $db->query("SELECT COUNT(*) FROM $db_forum_topics AS t $join_condition WHERE  ".implode(' AND ', $where))->fetchColumn();
 
 $sql_forums = $db->query("SELECT t.* $join_columns FROM $db_forum_topics AS t $join_condition
-	WHERE ".implode(" AND ", $where)." ORDER BY $order LIMIT $d, ".$cfg['forums']['maxtopicsperpage']);
+	WHERE ".implode(' AND ', $where)." ORDER BY $order LIMIT $d, ".$cfg['forums']['maxtopicsperpage']);
 
 /* === Hook - Part1 : Set === */
 $extp = cot_getextplugins('forums.topics.loop');

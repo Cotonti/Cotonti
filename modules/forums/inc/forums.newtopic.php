@@ -12,7 +12,7 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
-$s = cot_import('s','G','ALP'); // saction cat
+$s = cot_import('s','G','TXT'); // section cat
 
 cot_blockguests();
 cot_die(empty($s));
@@ -35,9 +35,9 @@ foreach (cot_getextplugins('forums.newtopic.rights') as $pl)
 /* ===== */
 cot_block($usr['auth_write']);
 
-if (!$cfg['forums'][$s]['defstate'])
+if (!$cfg['forums'][$s]['locked'])
 {
-	cot_redirect(cot_url('message', "msg=602", '', true));
+	cot_redirect(cot_url('message', 'msg=602', '', true));
 }
 
 if ($a == 'newtopic')

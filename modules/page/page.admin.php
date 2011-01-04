@@ -102,14 +102,14 @@ if ($a == 'validate')
 	}
 	/* ===== */
 
-	$sql_page = $db->query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
+	$sql_page = $db->query("SELECT page_cat FROM $db_pages WHERE page_id=$id");
 	if ($row = $sql_page->fetch())
 	{
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
 		$sql_page = $db->update($db_pages, array('page_state' => 0), "page_id='$id'");
-		$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$row['page_cat']."' ");
+		$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code=".$db->quote($row['page_cat']));
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
@@ -143,14 +143,14 @@ elseif ($a == 'unvalidate')
 	}
 	/* ===== */
 
-	$sql_page = $db->query("SELECT page_cat FROM $db_pages WHERE page_id='$id'");
+	$sql_page = $db->query("SELECT page_cat FROM $db_pages WHERE page_id=$id");
 	if ($row = $sql_page->fetch())
 	{
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql_page = $db->update($db_pages, array('page_state' => 1), "page_id='$id'");
-		$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
+		$sql_page = $db->update($db_pages, array('page_state' => 1), "page_id=$id");
+		$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code=".$db->quote($row['page_cat']));
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_unvalidated'], 'adm');
 
@@ -184,19 +184,15 @@ elseif ($a == 'delete')
 	}
 	/* ===== */
 
-	$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id='$id' LIMIT 1");
+	$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=$id LIMIT 1");
 	if ($row = $sql_page->fetch())
 	{
 		if ($row['page_state'] != 1)
 		{
-			$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
+			$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code=".$db->quote($row['page_cat']));
 		}
 
-		$id2 = 'p'.$id;
-		$sql_page = $db->delete($db_pages, "page_id='$id'");
-//		$sql_page = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'"); // FIXME ratings dependency
-//		$sql_page = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-//		$sql_page = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
+		$sql_page = $db->delete($db_pages, "page_id=$id");
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'], 'adm');
 
@@ -248,15 +244,15 @@ elseif ($a == 'update_cheked')
 				}
 				/* ===== */
 
-				$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id='".$i."'");
+				$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=".(int)$i);
 				if ($row = $sql_page->fetch())
 				{
 					$id = $row['page_id'];
 					$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 					cot_block($usr['isadmin_local']);
 
-					$sql_page = $db->update($db_pages, array('page_state' => 0), "page_id='$id'");
-					$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code='".$row['page_cat']."' ");
+					$sql_page = $db->update($db_pages, array('page_state' => 0), "page_id=$id");
+					$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code=".$db->quote($row['page_cat']));
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
 
@@ -302,20 +298,16 @@ elseif ($a == 'update_cheked')
 				}
 				/* ===== */
 
-				$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id='".$i."' LIMIT 1");
+				$sql_page = $db->query("SELECT * FROM $db_pages WHERE page_id=".(int)$i." LIMIT 1");
 				if ($row = $sql_page->fetch())
 				{
 					$id = $row['page_id'];
 					if ($row['page_state'] != 1)
 					{
-						$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row['page_cat']."' ");
+						$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$db->quote($row['page_cat']));
 					}
 
-					$id2 = 'p'.$id;
-					$sql_page = $db->delete($db_pages, "page_id='$id'");
-			//		$sql_page = $db->query("DELETE FROM $db_ratings WHERE rating_code='$id2'");
-			//		$sql_page = $db->query("DELETE FROM $db_rated WHERE rated_code='$id2'");
-			//		$sql_page = $db->query("DELETE FROM $db_com WHERE com_code='$id2'");//TODO: if comments plug not instaled this row generated error
+					$sql_page = $db->delete($db_pages, "page_id=$id");
 
 					cot_log($L['Page'].' #'.$id.' - '.$L['Deleted'],'adm');
 
@@ -384,7 +376,7 @@ while ($row = $sql_page->fetch())
 	$row['page_pageurl'] = cot_url('page', $page_urlp);
 	$catpath = cot_structure_buildpath('page', $row['page_cat']);
 	$row['page_fulltitle'] = $catpath.' '.$cfg['separator'].' <a href="'.$row['page_pageurl'].'">'.htmlspecialchars($row['page_title']).'</a>';
-	$sql_page_subcount = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '".$cot_cat[$row["page_cat"]]['rpath']."%' ");
+	$sql_page_subcount = $db->query("SELECT SUM(structure_count) FROM $db_structure WHERE structure_path LIKE '".$db->prep($cot_cat[$row["page_cat"]]['rpath'])."%' ");
 	$sub_count = $sql_page_subcount->fetchColumn();
 	$row['page_file'] = intval($row['page_file']);
 	$t->assign(cot_generate_pagetags($row, 'ADMIN_PAGE_', 200));

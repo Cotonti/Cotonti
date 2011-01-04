@@ -60,7 +60,7 @@ if ($a == 'update')
 	
 	foreach ($rstructurecode as $i => $k)
 	{
-		$oldrow = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id='".$i."' ")->fetch();
+		$oldrow = $db->query("SELECT structure_code FROM $db_structure WHERE structure_id=".(int)$i)->fetch();
 		$rstructure['structure_code'] = cot_import($rstructurecode[$i], 'D', 'TXT');
 		$rstructure['structure_path'] = cot_import($rstructurepath[$i], 'D', 'TXT');
 		$rstructure['structure_title'] = cot_import($rstructuretitle[$i], 'D', 'TXT');
@@ -95,14 +95,13 @@ if ($a == 'update')
 		$area_sync = 'cot_'.$n.'_sync';
 		$rstructure['structure_count'] = (function_exists($area_sync)) ? $area_sync($rstructure['structure_code']) : 0;
 
-		$sql1 = $db->update($db_structure, $rstructure, "structure_id='".$i."'");
+		$sql1 = $db->update($db_structure, $rstructure, "structure_id=".(int)$i);
 	}
 	cot_extrafield_movefiles();
 	cot_auth_clear('all');
 	if ($cache)
 	{
-		$cache->db->remove('structure', 'system');
-		$cfg['cache_'.$n] &&  $cache->page->clear($n);
+		$cache->clear();
 	}
 
 	cot_message('Updated');
@@ -144,7 +143,7 @@ elseif ($a == 'add')
 			cot_auth_add_item($n, $rstructure['structure_code'], $auth_permit, $auth_lock);
 			$area_addcat = 'cot_'.$n.'_addcat';
 			(function_exists($area_addcat)) ? $area_addcat($rstructure['structure_code']) : FALSE;
-			$cache && $cache->db->remove('structure', 'system');
+			$cache && $cache->clear();
 			cot_message('Added');
 		}
 		else
@@ -156,7 +155,6 @@ elseif ($a == 'add')
 	{
 		cot_message('Error');
 	}
-	($cache && $cfg['cache_'.$n]) && $cache->page->clear($n);
 	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$d, '', true));
 }
 elseif ($a == 'delete')
@@ -177,8 +175,7 @@ elseif ($a == 'delete')
 	(function_exists($area_deletecat)) ? $area_deletecat($c) : FALSE;
 	if ($cache)
 	{
-		$cache->db->remove('structure', 'system');
-		$cfg['cache_'.$n] && $cache->page->clear($n);
+		$cache->clear();
 	}
 	cot_message('Deleted');
 	cot_redirect(cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&d='.$d, '', true));
@@ -205,7 +202,7 @@ elseif ($a == 'resyncall')
 
 if($id > 0)
 {
-	$sql = $db->query("SELECT * FROM $db_structure WHERE structure_id='$id' LIMIT 1");
+	$sql = $db->query("SELECT * FROM $db_structure WHERE structure_id=$id LIMIT 1");
 	cot_die($sql->rowCount() == 0);
 }
 elseif($mode && ($mode=='all' || $structure[$mode]))

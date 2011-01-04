@@ -18,8 +18,8 @@ foreach (cot_getextplugins('forums.sections.rights') as $pl)
 /* ===== */
 cot_block($usr['auth_read']);
 
-$s = cot_import('s','G','ALP');
-$c = cot_import('c','G','ALP');
+$s = cot_import('s','G','TXT');
+$c = cot_import('c','G','TXT');
 
 $sys['sublocation'] = $L['Home'];
 
@@ -32,14 +32,14 @@ foreach (cot_getextplugins('forums.sections.first') as $pl)
 
 if ($n == 'markall' && $usr['id'] > 0)
 {
-	$db->update($db_users, array('user_lastvisit' => $sys['now_offset']), "user_id='".$usr['id']."'");
+	$db->update($db_users, array('user_lastvisit' => $sys['now_offset']), "user_id=".$usr['id']);
 	$usr['lastvisit'] = $sys['now_offset'];
 }
 
 if (!$cot_sections_act)
 {
 	$timeback = $sys['now'] - 604800; // 7 days
-	$sqltmp = $db->query("SELECT fp_cat, COUNT(*) FROM $db_forum_posts WHERE fp_creation>'$timeback' GROUP BY fp_cat");
+	$sqltmp = $db->query("SELECT fp_cat, COUNT(*) FROM $db_forum_posts WHERE fp_creation > $timeback GROUP BY fp_cat");
 	while ($tmprow = $sqltmp->fetch())
 	{
 		$cot_sections_act[$tmprow['fp_cat']] = $tmprow['COUNT(*)'];

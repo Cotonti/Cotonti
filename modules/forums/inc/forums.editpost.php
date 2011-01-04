@@ -11,7 +11,7 @@
  */
 defined('COT_CODE') or die('Wrong URL');
 
-$s = cot_import('s', 'G', 'ALP'); // saction cat
+$s = cot_import('s', 'G', 'TXT'); // section cat
 $q = cot_import('q', 'G', 'INT');  // topic id
 $p = cot_import('p', 'G', 'INT'); // post id
 
@@ -27,7 +27,8 @@ cot_check_xg();
 
 isset($structure['forums'][$s]) || cot_die();
 
-$sql_forums = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id='$p' and fp_topicid='$q' and fp_cat='$s' LIMIT 1");
+$sql_forums = $db->query("SELECT * FROM $db_forum_posts WHERE fp_id = ? and fp_topicid = ? and fp_cat = ?",
+	array($p, $q, $s));
 if ($row = $sql_forums->fetch())
 {
 	list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('forums', $s);
@@ -41,7 +42,7 @@ if ($row = $sql_forums->fetch())
 
 	if (!$usr['isadmin'] && $row['fp_posterid'] != $usr['id'])
 	{
-		cot_log("Attempt to edit a post without rights", 'sec');
+		cot_log('Attempt to edit a post without rights', 'sec');
 		cot_die();
 	}
 	cot_block($usr['auth_read']);
@@ -51,13 +52,13 @@ else
 	cot_die();
 }
 
-$sql_forums = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id='$q' LIMIT 1");
+$sql_forums = $db->query("SELECT ft_state, ft_mode, ft_title, ft_desc FROM $db_forum_topics WHERE ft_id = $q LIMIT 1");
 
 if ($rowt = $sql_forums->fetch())
 {
 	if ($rowt['ft_state'] && !$usr['isadmin'])
 	{
-		cot_redirect(cot_url('message', "msg=603", '', true));
+		cot_redirect(cot_url('message', 'msg=603', '', true));
 	}
 }
 else
@@ -83,14 +84,14 @@ if ($a == 'update')
 	{
 		$db->update($db_forum_posts, array("fp_text" => $rtext, "fp_updated" => $sys['now_offset'], "fp_updater" => $rupdater), "fp_id='$p'");
 
-		if (!empty($rtopictitle) && $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
+		if (!empty($rtopictitle) && $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 		{
 			if (mb_substr($rtopictitle, 0, 1) == "#")
 			{
 				$rtopictitle = str_replace('#', '', $rtopictitle);
 			}
 			$rtopicpreview = mb_substr(htmlspecialchars($rtext), 0, 128);
-			$db->update($db_forum_topics, array("ft_title" => $rtopictitle, "ft_desc" => $rtopicdesc, "ft_preview" => $rtopicpreview), "ft_id='$p'");
+			$db->update($db_forum_topics, array("ft_title" => $rtopictitle, "ft_desc" => $rtopicdesc, "ft_preview" => $rtopicpreview), "ft_id = $p");
 		}
 	}
 
@@ -140,7 +141,7 @@ $t = new XTemplate($mskin);
 
 cot_display_messages($t);
 
-if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid='$q' ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
+if ($db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 {
 	$t->assign(array(
 		'FORUMS_EDITPOST_TOPICTITTLE' => cot_inputbox('text', 'rtopictitle', htmlspecialchars($rowt['ft_title']), array('size' => 56, 'maxlength' => 255)),
