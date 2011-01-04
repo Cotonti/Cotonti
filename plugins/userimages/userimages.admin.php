@@ -9,7 +9,7 @@ Hooks=tools
  * Avatar and photo for users
  *
  * @package userimages
- * @version 1.0
+ * @version 1.1
  * @author Koradhil, Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -23,7 +23,7 @@ cot_block($usr['isadmin']);
 $tt = new XTemplate(cot_tplfile('userimages.admin', 'plug'));
 require_once cot_incfile('userimages', 'plug');
 require_once cot_incfile('userimages', 'plug', 'resources');
-require_once cot_langfile('userimages', 'plug');
+require_once cot_langfile('userimages');
 require_once cot_incfile('configuration');
 
 $adminhelp = $L['userimages_help'];
@@ -68,7 +68,7 @@ foreach($userimg as $code => $settings)
 		'WIDTH' => $settings['width'],
 		'HEIGHT' => $settings['height'],
 		'CROP' => $settings['crop'],
-    'EDIT_URL' => cot_url('admin', 'm=other&p=userimages&a=edit&code='.$code),
+		'EDIT_URL' => cot_url('admin', 'm=other&p=userimages&a=edit&code='.$code),
 		'REMOVE' => cot_rc('userimg_remove', array('url' => cot_url('admin', 'm=other&p=userimages&a=remove&code='.$code)))
 	));
 	$tt->parse('MAIN.USERIMG_LIST');

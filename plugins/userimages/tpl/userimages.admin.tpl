@@ -4,9 +4,9 @@
 	<thead>
 		<tr>
 			<th>{PHP.L.Code}</th>
-			<th style="width:15%;">{PHP.L.Width}</th>
-			<th style="width:15%;">{PHP.L.Height}</th>
-			<th style="width:27%;">{PHP.L.CropRatio}</th>
+			<th style="width:15%;">{PHP.L.userimages_width}</th>
+			<th style="width:15%;">{PHP.L.userimages_height}</th>
+			<th style="width:27%;">{PHP.L.userimages_cropratio}</th>
 			<th style="width:13%;"></th>
 		</tr>
 	</thead>
@@ -18,8 +18,8 @@
 			<td><input type="text" name="userimg_width" size="10" value="{WIDTH}" /> px</td>
 			<td><input type="text" name="userimg_height" size="10" value="{HEIGHT}" /> px</td>
 			<td><select name="userimg_crop">
-				<option value="">{PHP.L.CropNone}</option>
-				<option<!-- IF {CROP} == 'fit' --> selected="selected"<!-- ENDIF --> value="fit">{PHP.L.CropFit}</option>
+				<option value="">{PHP.L.userimages_cropnone}</option>
+				<option<!-- IF {CROP} == 'fit' --> selected="selected"<!-- ENDIF --> value="fit">{PHP.L.userimages_cropfit}</option>
 				<option<!-- IF {CROP} == '1:1' --> selected="selected"<!-- ENDIF --> value="1:1">1:1</option>
 				<option<!-- IF {CROP} == '1:2' --> selected="selected"<!-- ENDIF --> value="1:2">1:2</option>
 				<option<!-- IF {CROP} == '2:3' --> selected="selected"<!-- ENDIF --> value="2:3">2:3</option>
@@ -42,12 +42,12 @@
   <tfoot>
     <form action="admin.php?m=other&p=userimages&a=add" method="post">
 		<tr>
-			<td><strong>{PHP.L.AddNew}:</strong> <input type="text" name="userimg_code" size="30" /></td>
+			<td><strong>{PHP.L.userimages_addnew}:</strong> <input type="text" name="userimg_code" size="30" /></td>
 			<td><input type="text" name="userimg_width" size="10" /> px</td>
 			<td><input type="text" name="userimg_height" size="10" /> px</td>
 			<td><select name="userimg_crop">
-				<option value="">{PHP.L.CropNone}</option>
-				<option value="fit">{PHP.L.CropFit}</option>
+				<option value="">{PHP.L.userimages_cropnone}</option>
+				<option value="fit">{PHP.L.userimages_cropfit}</option>
 				<option value="1:1">1:1</option>
 				<option value="1:2">1:2</option>
 				<option value="2:3">2:3</option>

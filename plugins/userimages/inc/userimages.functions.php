@@ -41,21 +41,32 @@ function cot_userimages_config_get($ignorecache=false)
  * @param int $width Image maximum width
  * @param int $height Image maximum height
  * @param string $crop Crop ratio, or 'fit' to use width/height to calculate ratio
- * @return Entries modified
+ * @return bool
  */
-function cot_userimages_config_add($code, $width, $height, $crop='')
+function cot_userimages_config_add($code, $width, $height, $crop='', $force=false)
 {
-	$cfg = array(strval($width), strval($height));
-	if($crop) $cfg[] = $crop;
-	$options = array(array(
-		'name' => strtolower($code),
-		'type' => COT_CONFIG_TYPE_HIDDEN,
-		'default' => implode('x', $cfg),
-		'text' => $code
-	));
-	$result = cot_config_add('userimages', $options);
-	$cache && $cache->db->remove('cot_userimages_config', 'users');
-	return $result;
+	global $db, $db_users;
+	$exists = $db->query("SHOW COLUMNS FROM $db_users LIKE 'user_".$db->prep($code)."'")->rowCount() > 0;
+	if(!$exists)
+	{
+		$db->query("ALTER TABLE $db_users ADD `user_".$db->prep($code)."`
+					varchar(255) collate utf8_unicode_ci NOT NULL default ''");
+	}
+	if(!$exists || $force)
+	{
+		$cfg = array(strval($width), strval($height));
+		if($crop) $cfg[] = $crop;
+		$options = array(array(
+			'name' => strtolower($code),
+			'type' => COT_CONFIG_TYPE_HIDDEN,
+			'default' => implode('x', $cfg),
+			'text' => $code
+		));
+		$result = cot_config_add('userimages', $options);
+		$cache && $cache->db->remove('cot_userimages_config', 'users');
+		return $result;
+	}
+	return FALSE;
 }
 
 /**
@@ -83,9 +94,14 @@ function cot_userimages_config_edit($code, $width, $height, $crop='')
  * @param string $code User image code
  * @return DB query result
  */
-function cot_userimages_config_remove($code)
+function cot_userimages_config_remove($code, $dropcolumn=true)
 {
+	global $db, $db_users;
 	$result = cot_config_remove('userimages', false, strtolower($code));
+	if($result && $dropcolumn)
+	{
+		$db->query("ALTER TABLE $db_users DROP `user_".$db->prep($code)."`");
+	}
 	$cache && $cache->db->remove('cot_userimages_config', 'users');
 	return $result;
 }

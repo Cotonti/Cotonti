@@ -18,6 +18,7 @@ $L['userimages_height'] = 'Высота';
 $L['userimages_cropratio'] = 'Отношение обрезки';
 $L['userimages_cropnone'] = 'Нет (оригинальная ширина:высота)';
 $L['userimages_cropfit'] = 'Подогнать (целевая ширина:высота)';
+$L['userimages_addnew'] = 'Добавить';
 
 $L['userimages_avatarnotvalid'] = 'Этот аватар не является действительным изображением %1$s.';
 $L['userimages_avatarschoose'] = 'Щелкните на изображении внизу, чтобы установить его в качестве вашего аватара';
