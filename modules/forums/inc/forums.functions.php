@@ -94,11 +94,11 @@ function cot_forums_prunetopics($mode, $section, $param)
 	{
 		case 'updated':
 			$limit = $sys['now'] - ($param * 86400);
-			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat=".$db->qoute($section)." AND ft_updated < $limit AND ft_sticky='0'");
+			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat=".$db->quote($section)." AND ft_updated < $limit AND ft_sticky='0'");
 			break;
 
 		case 'single':
-			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat=".$db->qoute($section)." AND ft_id=$param");
+			$sql1 = $db->query("SELECT * FROM $db_forum_topics WHERE ft_cat=".$db->quote($section)." AND ft_id=$param");
 			break;
 	}
 
@@ -122,7 +122,7 @@ function cot_forums_prunetopics($mode, $section, $param)
 		}
 
 		$sql = $db->delete($db_forum_topics, "ft_movedto=$q");
-		$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-$num1, fs_postcount=fs_postcount-$num WHERE fs_cat=".$db->qoute($section));
+		$sql = $db->query("UPDATE $db_forum_stats SET fs_topiccount=fs_topiccount-$num1, fs_postcount=fs_postcount-$num WHERE fs_cat=".$db->quote($section));
 	}
 	$num1 = ($num1 == '') ? '0' : $num1;
 	return($num1);

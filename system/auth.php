@@ -31,10 +31,10 @@ $cot_auth_default_permit = array(
  */
 $cot_auth_default_lock = array(
 	COT_GROUP_DEFAULT => '0',
-	COT_GROUP_GUESTS => 'W12345A',
+	COT_GROUP_GUESTS => 'A',
 	COT_GROUP_INACTIVE => 'W12345A',
 	COT_GROUP_BANNED => 'RW12345A',
-	COT_GROUP_MEMBERS => 'A',
+	COT_GROUP_MEMBERS => '0',
 	COT_GROUP_SUPERADMINS => 'RW12345A'
 );
 
@@ -193,7 +193,7 @@ function cot_auth_getvalue($mask)
 function cot_auth_remove_group($group_id)
 {
 	global $db, $db_auth;
-	$db->delete($db_auth, "auth_groupid=$group_id");
+	$db->delete($db_auth, 'auth_groupid=' . (int)$group_id);
 	return $db->affectedRows;
 }
 
@@ -208,7 +208,7 @@ function cot_auth_remove_item($module_name, $item_id = null)
 {
 	global $db, $db_auth;
 
-	$opt = is_null($item_id) ? '' : "AND auth_option='$item_id'";
+	$opt = is_null($item_id) ? '' : 'AND auth_option=' . $db->quote($item_id);
 	$db->delete($db_auth, "auth_code='$module_name' $opt");
 	return $db->affectedRows;
 }

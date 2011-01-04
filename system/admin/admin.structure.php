@@ -138,8 +138,8 @@ elseif ($a == 'add')
 		if ($sql->rowCount() == 0 || $rstructure['structure_code'] != 'all')
 		{
 			$sql = $db->insert($db_structure, $rstructure);
-			$auth_permit = array(COT_GROUP_DEFAULT => 7, COT_GROUP_GUESTS => 5, COT_GROUP_MEMBERS => 7);
-			$auth_lock = array(COT_GROUP_DEFAULT => 0, COT_GROUP_GUESTS => 250, COT_GROUP_MEMBERS => 128);
+			$auth_permit = array(COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW');
+			$auth_lock = array(COT_GROUP_DEFAULT => '0', COT_GROUP_GUESTS => 'A', COT_GROUP_MEMBERS => '0');
 			cot_auth_add_item($n, $rstructure['structure_code'], $auth_permit, $auth_lock);
 			$area_addcat = 'cot_'.$n.'_addcat';
 			(function_exists($area_addcat)) ? $area_addcat($rstructure['structure_code']) : FALSE;
