@@ -24,7 +24,7 @@
 <!-- END: TOPICS_ROW -->
 <!-- BEGIN: NO_TOPICS_FOUND -->
 	<tr>
-		<td colspan="4">{PHP.L.recentitems_nonewposts}</td>
+		<td class="centerall" colspan="4">{PHP.L.recentitems_nonewposts}</td>
 	</tr>
 <!-- END: NO_TOPICS_FOUND -->
 </table>

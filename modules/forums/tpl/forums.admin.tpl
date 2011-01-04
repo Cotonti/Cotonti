@@ -34,7 +34,4 @@
 <!-- END: ADMIN_FORUMS_ROW_USER -->
 
 			</table>
-
-
-
 <!-- END: MAIN -->

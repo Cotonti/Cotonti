@@ -15,8 +15,8 @@ a			{ color:#172973; text-decoration:none; }
 a:hover		{ text-decoration:underline; }
 a img		{ border:0; }
 
-hr		{ margin:4px 0 1px; border: 1px solid; border-color:#ddd transparent transparent transparent; }
-* html hr	{ margin:4px 0 1px; border: 1px solid #ddd; }
+hr		{ margin:4px 0 1px; border:1px solid; border-color:#ddd transparent transparent transparent; }
+* html hr	{ margin:4px 0 1px; border:1px solid #ddd; }
 
 /* 2. Structure
 -------------------------------------------------- */
@@ -134,10 +134,10 @@ table.flat td	{ padding:0; border:0; }
 .coltop		{ text-align:center; line-height:1.4em; vertical-align:middle; font-size:.9em; background-color:#4f789f!important; color:#fff; }
 .coltop img	{ vertical-align:middle; }
 .centerall 	{ text-align:center; vertical-align:middle; }
-.valid 		{ height:48px; text-align:center; vertical-align:middle; border:0!important; }
+.valid 		{ height:5em; text-align:center; vertical-align:middle; border:0!important; }
 
-td.group_begin { border: none; background-color: #88bfef; padding: 3px 10px 1px 10px!important; text-align: center; color: #663f3f; }
-td.group_end { border: none; background-color: #4488bb; padding: 0!important; font-size: 4px; }
+td.group_begin	{ color:#4f789f; border:none!important; }
+td.group_end		{ font-size:0; padding:0!important; border:none!important; }
 
 /* 7. Polls
 -------------------------------------------------- */
