@@ -12,8 +12,7 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Config Section
- * RSS Subsection
+ * Module Section
  */
 
 $L['cfg_rss_timetolive'] = array('Refresh RSS cache every N seconds', ' ');
@@ -28,8 +27,8 @@ $L['info_desc'] = 'Generates RSS/Atom feeds for your site';
  * Main
  */
 
-$L['rss_allforums_item_title'] = 'Last posts on forum';
+$L['rss_allforums_item_title'] = 'Last forum posts';
 $L['rss_title'] = 'RSS';
-$L['rss_topic_item_desc'] = 'Last posts in topic';
+$L['rss_topic_item_desc'] = 'Last topic posts';
 
 ?>

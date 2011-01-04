@@ -12,27 +12,7 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Admin
- */
-
-$L['adm_gd'] = 'GD graphical library';
-$L['adm_allpfs'] = 'All '.$L['PFS'];
-$L['adm_allfiles'] = 'All files';
-$L['adm_thumbnails'] = 'Thumbnails';
-$L['adm_orphandbentries'] = 'Orphan DB entries';
-$L['adm_orphanfiles'] = 'Orphan files';
-$L['adm_delallthumbs'] = 'Delete all thumbnails';
-$L['adm_rebuildallthumbs']= 'Delete and rebuild all thumbnails';
-$L['adm_help_allpfs'] = $L['PFS'].' of all registered users';
-$L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotonti won\'t be able to create thumbnails for images. Go for '.$L['Configuration'].' &gt; '.$L['PFS'].' and set &quot;Thumbnails generation&quot; to &quot;'.$L['Disabled'].'&quot;.';
-
-$L['adm_help_pfsfiles'] = 'Not available';
-$L['adm_help_pfsthumbs'] = 'Not available';
-
-$L['info_desc'] = 'Organized storage for file uploads provided to registered users (Personal File Space) and entire site (Site File Space)';
-
-/**
- * Config
+ * Module Config
  */
 
 $L['cfg_maxpfsperpage'] = array('Max. elements on page', ' ');
@@ -54,6 +34,24 @@ $L['cfg_th_separator'] = 'Thumbnail Options';
 $L['cfg_th_textsize'] = array('Thumbnails, size of the text', '');
 $L['cfg_th_x'] = array('Thumbnails, width', 'Default: 112 pixels');
 $L['cfg_th_y'] = array('Thumbnails, height', 'Default: 84 pixel, recommended: Width x 0.75');
+
+/**
+ * Other
+ */
+
+$L['adm_gd'] = 'GD graphical library';
+$L['adm_allpfs'] = 'All '.$L['PFS'];
+$L['adm_allfiles'] = 'All files';
+$L['adm_thumbnails'] = 'Thumbnails';
+$L['adm_orphandbentries'] = 'Orphan DB entries';
+$L['adm_orphanfiles'] = 'Orphan files';
+$L['adm_delallthumbs'] = 'Delete all thumbnails';
+$L['adm_rebuildallthumbs']= 'Delete and rebuild all thumbnails';
+$L['adm_help_allpfs'] = $L['PFS'].' of all registered users';
+$L['adm_nogd'] = 'The GD graphical library is not supported by this host, Cotonti won\'t be able to create thumbnails for images. Go for '.$L['Configuration'].' &gt; '.$L['PFS'].' and set &quot;Thumbnails generation&quot; to &quot;'.$L['Disabled'].'&quot;.';
+$L['adm_help_pfsfiles'] = 'Not available';
+$L['adm_help_pfsthumbs'] = 'Not available';
+$L['info_desc'] = 'Organized storage for file uploads provided to registered users (Personal File Space) and entire site (Site File Space)';
 
 /**
  * Main
@@ -89,10 +87,6 @@ $L['pfs_resizeimages'] = 'to scale the image?';
 $L['pfs_title'] = 'My Personal File Space';
 $L['pfs_totalsize'] = 'Total size';
 $L['pfs_uploadfiles'] = 'Upload Files';
-
-/**
- * Moved from theme.lang
- */
 
 $L['pfs_insertasthumbnail'] = 'Insert as thumbnail';
 $L['pfs_insertasimage'] = 'Insert as fullsize image';

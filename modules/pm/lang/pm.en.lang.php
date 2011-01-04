@@ -12,28 +12,27 @@
 defined('COT_CODE') or die('Wrong URL.');
 
 /**
- * Admin
+ * Module Config
+ */
+
+$L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
+$L['cfg_pm_maxsize'] = array('Maximum length for messages', '');
+$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');
+$L['info_desc'] = 'Private messaging system is on-site user communication similar to e-mail';
+
+/**
+ * Other
  */
 
 $L['adm_pm_totaldb'] = 'Private messages in the database';
 $L['adm_pm_totalsent'] = 'Total of private messages ever sent';
 
 /**
- * Config
- */
-
-$L['cfg_pm_allownotifications'] = array('Allow PM notifications by e-mail', '');
-$L['cfg_pm_maxsize'] = array('Maximum length for messages', 'Default: 10000 chars');
-$L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');
-
-$L['info_desc'] = 'Private messaging system is on-site user communication similar to e-mail';
-
-/**
  * Main
  */
 
-$L['pmsend_subtitle'] = 'New private message submission form';
 $L['pmsend_title'] = 'Send a new private message';
+$L['pmsend_subtitle'] = 'New private message submission form';
 
 $L['pm_archives'] = 'Archives';
 $L['pm_arcsubtitle'] = 'Old messages, newest is at top';

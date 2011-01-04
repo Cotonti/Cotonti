@@ -35,7 +35,7 @@
 						<td><input type="checkbox" class="checkbox"  name="fromstate" value="3" /> {PHP.L.pm_notmovetosentbox}</td>
 					</tr>
 					<tr>
-						<td colspan="2" class="valid"><input type="submit" value="{PHP.L.Submit}" /></td>
+						<td colspan="2" class="valid"><button type="submit">{PHP.L.Submit}</button></td>
 					</tr>
 				</table>
 			</form>
