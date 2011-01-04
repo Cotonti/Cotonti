@@ -223,21 +223,26 @@ function cot_generate_sectiontags($cat, $tag_prefix = '', $stat = NULL)
 				$tag_prefix . 'TIMEAGO' => cot_build_timegap($stat['fs_lt_date'], $sys['now_offset'])
 			);
 		}
-		else
-		{
-			$sections += array(
-				$tag_prefix . 'LASTPOSTDATE' => '',
-				$tag_prefix . 'LASTPOSTER' => '',
-				$tag_prefix . 'LASTPOST' => '',
-				$tag_prefix . 'TIMEAGO' => ''
-			);			
-		}
 
 		$sections += array(
 			$tag_prefix . 'TOPICCOUNT' => $stat['topiccount'],
 			$tag_prefix . 'POSTCOUNT' => $stat['postcount'],
 			$tag_prefix . 'VIEWCOUNT' => $stat['viewcount'],
 			$tag_prefix . 'VIEWCOUNT_SHORT' => ($stat['viewcount'] > 9999) ? floor($stat['viewcount'] / 1000) . 'k' : $stat['viewcount'],
+		);
+	}
+
+	if (!is_array($stat) || !$stat['fs_lt_date'])
+	{
+		$sections += array(
+			$tag_prefix . 'LASTPOSTDATE' => '',
+			$tag_prefix . 'LASTPOSTER' => '',
+			$tag_prefix . 'LASTPOST' => '',
+			$tag_prefix . 'TIMEAGO' => '',
+			$tag_prefix . 'TOPICCOUNT' => 0,
+			$tag_prefix . 'POSTCOUNT' => 0,
+			$tag_prefix . 'VIEWCOUNT' => 0,
+			$tag_prefix . 'VIEWCOUNT_SHORT' => 0,
 		);
 	}
 
