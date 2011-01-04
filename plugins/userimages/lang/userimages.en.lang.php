@@ -18,6 +18,7 @@ $L['userimages_height'] = 'Height';
 $L['userimages_cropratio'] = 'Crop ratio';
 $L['userimages_cropnone'] = 'None (original width:height)';
 $L['userimages_cropfit'] = 'Fit (target width:height)';
+$L['userimages_addnew'] = 'Add new';
 
 $L['userimages_avatarnotvalid'] = 'This avatar is not a valid %1$s image.';
 $L['userimages_avatarschoose'] = 'Click an image below to set it as your own avatar';
