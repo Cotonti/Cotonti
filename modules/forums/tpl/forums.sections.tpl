@@ -57,7 +57,7 @@
 
 	</table>
 	<!-- END: FORUMS_SECTIONS -->
-	<p class="paging"><span class="a1"><a href="plug.php?e=search&amp;tab=frm">{PHP.L.forums_searchinforums}</a></span><span class="a1"><a href="plug.php?e=forumstats">{PHP.L.Statistics}</a></span><span class="a1"><a href="forums.php?n=markall" rel="nofollow">{PHP.L.forums_markasread}</a></span></p>
+	<p class="paging"><span><a href="plug.php?e=search&amp;tab=frm">{PHP.L.forums_searchinforums}</a></span><span><a href="plug.php?e=forumstats">{PHP.L.Statistics}</a></span><span><a href="forums.php?n=markall" rel="nofollow">{PHP.L.forums_markasread}</a></span></p>
 </div>
 
 <div class="block">

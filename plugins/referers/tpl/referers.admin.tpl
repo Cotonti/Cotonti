@@ -27,7 +27,7 @@
 <!-- END: REFERERS_ROW -->
 <!-- IF {PHP.is_ref_empty} -->
 			</table>
-			<p class="paging">{ADMIN_REFERERS_PAGINATION_PREV}{ADMIN_REFERERS_PAGNAV}{ADMIN_REFERERS_PAGINATION_NEXT} <span class="a1">{PHP.L.Total} : {ADMIN_REFERERS_TOTALITEMS}, {PHP.L.adm_polls_on_page} : {ADMIN_REFERERS_ON_PAGE}</span></p>
+			<p class="paging">{ADMIN_REFERERS_PAGINATION_PREV}{ADMIN_REFERERS_PAGNAV}{ADMIN_REFERERS_PAGINATION_NEXT} <span>{PHP.L.Total} : {ADMIN_REFERERS_TOTALITEMS}, {PHP.L.adm_polls_on_page}: {ADMIN_REFERERS_ON_PAGE}</span></p>
 <!-- ELSE -->
 			<table class="cells">
 				<tr>

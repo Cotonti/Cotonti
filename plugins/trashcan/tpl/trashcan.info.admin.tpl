@@ -40,5 +40,5 @@
 		<!-- END: TRASHCAN_INFOROW -->
 	</table>
 	<!-- END: TRASHCAN_ROW -->
-	<span class="a1">{PHP.L.Total}: {ADMIN_TRASHCAN_TOTALITEMS}</span>
+	<p class="paging"><span>{PHP.L.Total}: {ADMIN_TRASHCAN_TOTALITEMS}</span></p>
 <!-- END: MAIN -->
