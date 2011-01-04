@@ -32,11 +32,6 @@ function cot_trash_page_sync($data)
 {
 	global $cache, $cfg, $db_structure;
 
-	cot_forums_resynctopic($data['ft_id']);
-	$items = cot_forums_sync($data['ft_cat']);
-	$db->update($db_structure, array("structure_count" => (int)$items), "structure_code='".$db->prep($data['ft_cat'])."' AND structure_area='forums'");
-	return TRUE;
-
 	cot_page_resync($data['page_cat']);
 	($cache && $cfg['cache_page']) && $cache->page->clear('page');
 	return true;
