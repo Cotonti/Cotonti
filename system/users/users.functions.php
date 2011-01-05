@@ -57,7 +57,7 @@ function cot_build_groupsms($userid, $edit = FALSE, $maingrp = 0)
 {
 	global $db, $db_groups_users, $cot_groups, $L, $usr, $R;
 
-	$sql = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$userid'");
+	$sql = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$userid");
 
 	while ($row = $sql->fetch())
 	{

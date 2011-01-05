@@ -195,11 +195,11 @@ function cot_pfs_deleteall($userid)
 {
 	global $db, $db_pfs_folders, $db_pfs, $cfg;
 
-	if (!$userid)
+	if (!$userid || !is_int($userid))
 	{
 		return 0;
 	}
-	$sql = $db->query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid='$userid'");
+	$sql = $db->query("SELECT pfs_file, pfs_folderid FROM $db_pfs WHERE pfs_userid=$userid");
 
 	while($row = $sql->fetch())
 	{
@@ -600,7 +600,8 @@ function cot_selectbox_folders($user, $skip, $check, $name = 'folderid')
 {
 	global $db, $db_pfs_folders, $R;
 
-	$sql = $db->query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid='$user' ORDER BY pff_title ASC");
+	$user = (int) $user;
+	$sql = $db->query("SELECT pff_id, pff_title, pff_isgallery, pff_ispublic FROM $db_pfs_folders WHERE pff_userid=$user ORDER BY pff_title ASC");
 
 	$check = (empty($check) || $check == '/') ? '0' : $check;
 
@@ -634,7 +635,7 @@ function cot_userinfo($id)
 {
 	global $db, $db_users;
 
-	$sql = $db->query("SELECT * FROM $db_users WHERE user_id='$id'");
+	$sql = $db->query("SELECT * FROM $db_users WHERE user_id=" . (int)$id);
 	if ($res = $sql->fetch())
 	{
 		return ($res);

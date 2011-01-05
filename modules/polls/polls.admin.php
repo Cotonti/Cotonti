@@ -68,7 +68,7 @@ elseif($a == 'lock')
 elseif($a == 'bump')
 {
 	cot_check_xg();
-	$sql_polls = $db->update($db_polls, array('poll_creationdate' => $sys['now_offset']),  "poll_id='$id'");
+	$sql_polls = $db->update($db_polls, array('poll_creationdate' => $sys['now_offset']),  "poll_id=$id");
 
 	cot_message('adm_polls_msg916_bump');
 }
@@ -118,7 +118,7 @@ while($row = $sql_polls->fetch())
 {
 	$ii++;
 	$id = $row['poll_id'];
-    $totalvotes = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid='$id'")->fetchColumn();
+    $totalvotes = $db->query("SELECT SUM(po_count) FROM $db_polls_options WHERE po_pollid=$id")->fetchColumn();
 
 	$t->assign(array(
 		'ADMIN_POLLS_ROW_POLL_CREATIONDATE' => date($cfg['formatyearmonthday'], $row['poll_creationdate']),

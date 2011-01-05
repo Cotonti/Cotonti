@@ -60,7 +60,7 @@ else
 		$updated_cnt = 0;
 		for ($i = 0; $i < $cnt; $i++)
 		{
-			$code = cot_import($codes[$i], 'D', 'ALP');
+			$code = cot_import($codes[$i], 'D', 'TXT');
 			if (isset($titles[$i]))
 			{
 				// Updating a translation
@@ -75,7 +75,7 @@ else
 					{
 						// Remove
 						$removed_cnt += $db->delete($db_i18n_structure,
-							"istructure_code = '$code' AND istructure_locale = '$i18n_locale'");
+							"istructure_code = ".$db->quote($code)." AND istructure_locale = '$i18n_locale'");
 					}
 					elseif (empty($i18n_structure[$code][$i18n_locale]['title']))
 					{
@@ -93,7 +93,7 @@ else
 						$updated_cnt += $db->update($db_i18n_structure, array(
 							'istructure_title' => $title,
 							'istructure_desc' => $desc
-						), "istructure_code = '$code' AND istructure_locale = '$i18n_locale'");
+						), "istructure_code = ".$db->quote($code)." AND istructure_locale = '$i18n_locale'");
 					}
 				}
 			}

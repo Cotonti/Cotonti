@@ -41,8 +41,8 @@ foreach (cot_getextplugins('admin.ratings.first') as $pl)
 if($a == 'delete')
 {
 	cot_check_xg();
-	$db->delete($db_ratings, "rating_code = '$id'");
-	$db->delete($db_rated, "rated_code = '$id'");
+	$db->delete($db_ratings, 'rating_code = ' . $db->quote($id));
+	$db->delete($db_rated, 'rated_code = ' . $db->quote($id));
 
 	cot_message('adm_ratings_already_del');
 }
@@ -61,7 +61,7 @@ $extp = cot_getextplugins('admin.ratings.loop');
 while($row = $sql->fetch())
 {
 	$id2 = $row['rating_code'];
-	$sql1 = $db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code='$id2'");
+	$sql1 = $db->query("SELECT COUNT(*) FROM $db_rated WHERE rated_code=" . $db->quote($id2));
 	$votes = $sql1->fetchColumn();
 
 	$rat_type = mb_substr($row['rating_code'], 0, 1);

@@ -73,7 +73,7 @@ if ($userid!=$usr['id'])
 
 $title .= " ".$cfg['separator']." ".$L['Edit'];
 
-$sql_pfs = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' LIMIT 1");
+$sql_pfs = $db->query("SELECT * FROM $db_pfs_folders WHERE pff_userid=$userid AND pff_id=$f LIMIT 1");
 
 if ($row = $sql_pfs->fetch())
 {
@@ -97,18 +97,18 @@ if ($a=='update' && !empty($f))
 	$rtitle = cot_import('rtitle','P','TXT');
 	$rdesc = cot_import('rdesc','P','TXT');
 	$folderid = cot_import('folderid','P','INT');
-	$rispublic = cot_import('rispublic','P','BOL');
-	$risgallery = cot_import('risgallery','P','BOL');
-	$sql_pfs_pffcount = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid='$userid' AND pff_id='$f' ");
+	$rispublic = (int) cot_import('rispublic','P','BOL');
+	$risgallery = (int) cot_import('risgallery','P','BOL');
+	$sql_pfs_pffcount = $db->query("SELECT pff_id FROM $db_pfs_folders WHERE pff_userid=$userid AND pff_id=$f");
 	cot_die($sql_pfs_pffcount->rowCount()==0);
 
 	$sql_pfs_update = $db->query("UPDATE $db_pfs_folders SET
 		pff_title='".$db->prep($rtitle)."',
 		pff_updated='".$sys['now']."',
 		pff_desc='".$db->prep($rdesc)."',
-		pff_ispublic='$rispublic',
-		pff_isgallery='$risgallery'
-		WHERE pff_userid='$userid' AND pff_id='$f' " );
+		pff_ispublic=$rispublic,
+		pff_isgallery=$risgallery
+		WHERE pff_userid=$userid AND pff_id=$f" );
 
 	cot_redirect(cot_url('pfs', $more, '', true));
 }

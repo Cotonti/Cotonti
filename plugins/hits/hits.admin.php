@@ -38,7 +38,7 @@ foreach (cot_getextplugins('hits.admin.first') as $pl)
 if($f == 'year' || $f == 'month')
 {
     $adminpath[] = array(cot_url('admin', 'm=other&p=hits&f='.$f.'&v='.$v), '('.$v.')');
-    $sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '$v%' ORDER BY stat_name DESC");
+    $sql = $db->query("SELECT * FROM $db_stats WHERE stat_name LIKE '".$db->prep($v)."%' ORDER BY stat_name DESC");
 
     while($row = $sql->fetch())
     {

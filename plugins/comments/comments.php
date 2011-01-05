@@ -23,8 +23,8 @@ require_once cot_incfile('forms');
 $m = cot_import('m', 'G', 'ALP');
 $a = cot_import('a', 'G', 'ALP');
 $id = (int) cot_import('id', 'G', 'INT');
-$item = cot_import('item', 'G', 'ALP');
-$cat = cot_import('cat', 'G', 'ALP');
+$item = cot_import('item', 'G', 'TXT');
+$cat = cot_import('cat', 'G', 'TXT');
 $area = cot_import('area', 'G', 'ALP');
 
 $plugin_title = $L['plu_title'];
@@ -59,7 +59,7 @@ if ($m == 'edit' && $id > 0)
 		}
 		/* ===== */
 
-		$sql1 = $db->query("SELECT * FROM $db_com WHERE com_id=$id AND com_code='$item' LIMIT 1");
+		$sql1 = $db->query("SELECT * FROM $db_com WHERE com_id=? AND com_code=? LIMIT 1", array($id, $item));
 		cot_die($sql1->rowCount() == 0);
 		$row = $sql1->fetch();
 
@@ -112,7 +112,7 @@ if ($m == 'edit' && $id > 0)
 	));
 	$t->parse('MAIN.COMMENTS_TITLE');
 
-	$sql = $db->query("SELECT * FROM $db_com WHERE com_id=$id AND com_code='$item' AND com_area='$area'");
+	$sql = $db->query("SELECT * FROM $db_com WHERE com_id=? AND com_code=? AND com_area=?", array($id, $item, $area));
 	cot_die($sql->rowCount() != 1);
 	$com = $sql->fetch();
 
@@ -216,7 +216,7 @@ elseif ($a == 'delete' && $usr['isadmin'])
 
 	if ($row = $sql->fetch())
 	{
-		$sql = $db->delete($db_com, "com_id='$id'");
+		$sql = $db->delete($db_com, "com_id=$id");
 
 		/* == Hook == */
 		foreach (cot_getextplugins('comments.delete') as $pl)

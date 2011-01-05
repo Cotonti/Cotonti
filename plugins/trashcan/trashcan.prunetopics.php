@@ -24,11 +24,11 @@ if ($cfg['plugin']['trashcan']['trash_forum'])
 	global $trash_types, $db_trash, $db_x;
 	require_once cot_incfile('trashcan', 'plug');
 
-	$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id='$q'");
+	$sql = $db->query("SELECT * FROM $db_forum_topics WHERE ft_id=$q");
 	while ($row = $sql->fetch())
 	{
 		$parenttrashid = cot_trash_put('forumtopic', $L['Topic']." #".$q, $q, $row);
-		cot_trash_put('forumpost', 'Posts topic #'.$q, 0, "fp_topicid='$q'", $parenttrashid);
+		cot_trash_put('forumpost', 'Posts topic #'.$q, 0, "fp_topicid=$q", $parenttrashid);
 	}
 }
 ?>

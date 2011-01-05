@@ -85,7 +85,7 @@ elseif ($a == 'send')
 			$pm['pm_text'] = $newpmtext;
 			$pm['pm_fromstate'] = $fromstate;
 
-			$sql_pm_update = $db->update($db_pm, $pm, "pm_id = '$id' AND pm_fromuserid = '".$usr['id']."' AND pm_tostate = '0'");
+			$sql_pm_update = $db->update($db_pm, $pm, "pm_id = $id AND pm_fromuserid = ".$usr['id']." AND pm_tostate = '0'");
 		}
 		/* === Hook === */
 		foreach (cot_getextplugins('pm.send.update.done') as $pl)
@@ -119,7 +119,7 @@ elseif ($a == 'send')
 			$totalrecipients = $sql_pm_users->rowCount();
 			while($row = $sql_pm_users->fetch())
 			{
-				$touser_ids[] = $row['user_id'];
+				$touser_ids[] = (int) $row['user_id'];
 				$touser_names[] = htmlspecialchars($row['user_name']);
 			}
 			if ($totalrecipients < $touser_req )
@@ -138,8 +138,8 @@ elseif ($a == 'send')
 			{
 				cot_error('pm_norecipient', 'newpmrecipient');
 			}
-			$touser_ids[] = $to;
-			$touser = $to;
+			$touser_ids[] = (int) $to;
+			$touser = (int) $to;
 			$totalrecipients = 1;
 		}
 
@@ -154,7 +154,7 @@ elseif ($a == 'send')
 				$pm['pm_fromstate'] = $fromstate;
 				$pm['pm_fromuserid'] = (int)$usr['id'];
 				$pm['pm_fromuser'] = $usr['name'];
-				$pm['pm_touserid'] = (int)$userid;
+				$pm['pm_touserid'] = $userid;
 				$pm['pm_tostate'] = 0;
 				$sql_pm = $db->insert($db_pm, $pm);
 				$sql_pm = $db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
@@ -162,7 +162,7 @@ elseif ($a == 'send')
 				if ($cfg['pm']['pm_allownotifications'])
 				{
 					$sql_pm = $db->query("SELECT user_email, user_name, user_lang
-						FROM $db_users WHERE user_id = '$userid' AND user_pmnotify = 1 AND user_maingrp > 3");
+						FROM $db_users WHERE user_id = $userid AND user_pmnotify = 1 AND user_maingrp > 3");
 
 					if ($row = $sql_pm->fetch())
 					{
@@ -193,7 +193,7 @@ if (!empty($to))
 		$group = cot_import(mb_substr($to, 1, 8), 'D', 'INT');
 		if ($group > 1)
 		{
-			$sql_pm_users = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp = '$group' ORDER BY user_name ASC");
+			$sql_pm_users = $db->query("SELECT user_id, user_name FROM $db_users WHERE user_maingrp = $group ORDER BY user_name ASC");
 		}
 	}
 	else
@@ -205,7 +205,7 @@ if (!empty($to))
 			$userid = cot_import($i, 'D', 'INT');
 			if ($userid > 0)
 			{
-				$touser_sql[] = "'".$userid."'";
+				$touser_sql[] = $userid;
 			}
 		}
 		if (count($touser_sql) > 0)
@@ -252,7 +252,7 @@ foreach (cot_getextplugins('pm.send.main') as $pl)
 /* ===== */
 if ($id)
 {
-	$sql_pm = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id='".$id."' AND pm_tostate=0 LIMIT 1");
+	$sql_pm = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id=$id AND pm_tostate=0 LIMIT 1");
 	if ($sql_pm->rowCount()!=0)
 	{
 		$row = $sql_pm->fetch();
