@@ -1553,6 +1553,7 @@ function cot_imageresize($source, $target='return', $target_width=99999, $target
 		default:
 			$fn_create = 'imagecreatefromjpeg';
 			$fn_output = 'imagejpeg';
+			$sharpen = ($target_width < 75 || $target_height < 75) ? false : $sharpen;
 		break;
 	}
 	$source_data = $fn_create($source);

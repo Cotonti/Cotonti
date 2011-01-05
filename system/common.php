@@ -24,7 +24,8 @@ if (version_compare(PHP_VERSION, '6.0.0', '<='))
 	}
 }
 define('MQGPC', FALSE);
-error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(0);
+ini_set("display_errors", 0);
 if (COT_DEBUG) require_once $cfg['system_dir'].'/debug.php';
 
 register_shutdown_function('cot_shutdown');
