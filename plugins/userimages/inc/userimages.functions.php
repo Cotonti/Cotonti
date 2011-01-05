@@ -116,6 +116,7 @@ function cot_userimages_config_remove($code, $dropcolumn=true)
 function cot_userimages_build($src, $code='')
 {
 	global $R;
+	include cot_incfile('userimages', 'plug', 'resources');
 	if($src && $code && $R["userimg_img_$code"])
 	{
 		return cot_rc("userimg_img_$code", array('src' => $src, 'alt' => $L[$code], 'class' => $code));
