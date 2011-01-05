@@ -612,10 +612,10 @@ class MySQL_cache extends Db_cache_driver
 			$i = 0;
 			foreach ($this->removed_data as $entry)
 			{
-				$c_name = $db->prep($entry['id']);
-				$c_realm = $db->prep($entry['realm']);
+				$c_name = $db->quote($entry['id']);
+				$c_realm = $db->quote($entry['realm']);
 				$or = $i == 0 ? '' : ' OR';
-				$q .= $or." (c_name = '$c_name' AND c_realm = '$c_realm')";
+				$q .= $or." (c_name = $c_name AND c_realm = $c_realm)";
 				$i++;
 			}
 			$db->query($q);
@@ -626,12 +626,12 @@ class MySQL_cache extends Db_cache_driver
 			$i = 0;
 			foreach ($this->writeback_data as $entry)
 			{
-				$c_name = $db->prep($entry['id']);
-				$c_realm = $db->prep($entry['realm']);
+				$c_name = $db->quote($entry['id']);
+				$c_realm = $db->quote($entry['realm']);
 				$c_expire = $entry['ttl'] > 0 ? $sys['now'] + $entry['ttl'] : 0;
-				$c_value = $db->prep(serialize($entry['data']));
+				$c_value = $db->quote(serialize($entry['data']));
 				$comma = $i == 0 ? '' : ',';
-				$q .= $comma."('$c_name', '$c_realm', $c_expire, '$c_value')";
+				$q .= $comma."($c_name, $c_realm, $c_expire, $c_value)";
 				$i++;
 			}
 			$q .= " ON DUPLICATE KEY UPDATE c_value=VALUES(c_value), c_expire=VALUES(c_expire)";
@@ -651,7 +651,7 @@ class MySQL_cache extends Db_cache_driver
 		}
 		else
 		{
-			$db->query("DELETE FROM $db_cache WHERE c_realm = '$realm'");
+			$db->query("DELETE FROM $db_cache WHERE c_realm = " . $db->quote($realm));
 		}
 		$this->buffer = array();
 		return TRUE;
@@ -663,7 +663,7 @@ class MySQL_cache extends Db_cache_driver
 	public function exists($id, $realm = COT_DEFAULT_REALM)
 	{
 		global $db, $db_cache;
-		$sql = $db->query("SELECT c_value FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
+		$sql = $db->query("SELECT c_value FROM $db_cache WHERE c_realm = ".$db->quote($realm)." AND c_name = ".$db->quote($id));
 		$res = $sql->rowCount() == 1;
 		if ($res)
 		{
@@ -738,7 +738,7 @@ class MySQL_cache extends Db_cache_driver
 	public function remove_now($id, $realm = COT_DEFAULT_REALM)
 	{
 		global $db, $db_cache;
-		$db->query("DELETE FROM $db_cache WHERE c_realm = '$realm' AND c_name = '$id'");
+		$db->query("DELETE FROM $db_cache WHERE c_realm = ".$db->quote($realm)." AND c_name = ".$db->quote($id));
 		unset($this->buffer[$realm][$id]);
 		return $db->affectedRows == 1;
 	}
@@ -755,12 +755,12 @@ class MySQL_cache extends Db_cache_driver
 	public function store_now($id, $data, $realm = COT_DEFAULT_REALM, $ttl = COT_DEFAULT_TTL)
 	{
 		global $db, $db_cache;
-		$c_name = $db->prep($id);
-		$c_realm = $db->prep($realm);
+		$c_name = $db->quote($id);
+		$c_realm = $db->quote($realm);
 		$c_expire = $ttl > 0 ? $sys['now'] + $ttl : 0;
-		$c_value = $db->prep(serialize($data));
+		$c_value = $db->quote(serialize($data));
 		$db->query("INSERT INTO $db_cache (c_name, c_realm, c_expire, c_value)
-			VALUES ('$c_name', '$c_realm', $c_expire, '$c_value')");
+			VALUES ($c_name, $c_realm, $c_expire, $c_value)");
 		$this->buffer[$realm][$id] = $data;
 		return $db->affectedRows == 1;
 	}
@@ -1313,12 +1313,12 @@ class Cache
 	public function bind($event, $id, $realm = COT_DEFAULT_REALM, $type = COT_CACHE_TYPE_DEFAULT)
 	{
 		global $db, $db_cache_bindings;
-		$c_event = $db->prep($event);
-		$c_id = $db->prep($id);
-		$c_realm = $db->prep($realm);
+		$c_event = $db->quote($event);
+		$c_id = $db->quote($id);
+		$c_realm = $db->quote($realm);
 		$c_type = (int) $type;
 		$db->query("INSERT INTO `$db_cache_bindings` (c_event, c_id, c_realm, c_type)
-			VALUES ('$c_event', '$c_id', '$c_realm', $c_type)");
+			VALUES ($c_event, $c_id, $c_realm, $c_type)");
 		$res = $db->affectedRows == 1;
 		if ($res)
 		{
@@ -1515,12 +1515,12 @@ class Cache
 	public function unbind($realm, $id = '')
 	{
 		global $db, $db_cache_bindings;
-		$c_realm = $db->prep($realm);
-		$q = "DELETE FROM `$db_cache_bindings` WHERE c_realm = '$c_realm'";
+		$c_realm = $db->quote($realm);
+		$q = "DELETE FROM `$db_cache_bindings` WHERE c_realm = $c_realm";
 		if (!empty($id))
 		{
-			$c_id = $db->prep($id);
-			$q .= " AND c_id = '$c_id'";
+			$c_id = $db->quote($id);
+			$q .= " AND c_id = $c_id";
 		}
 		$db->query($q);
 		$res = $db->affectedRows;

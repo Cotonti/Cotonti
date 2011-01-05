@@ -97,7 +97,7 @@ if ($a == 'update')
 				$sql_page_delete = $db->query("UPDATE $db_structure SET structure_count=structure_count-1 WHERE structure_code='".$row_page_delete['page_cat']."' ");
 			}
 
-			$sql_page_delete = $db->delete($db_pages, "page_id='$id'");
+			$sql_page_delete = $db->delete($db_pages, "page_id=$id");
 			cot_log("Deleted page #".$id,'adm');
 			/* === Hook === */
 			foreach (cot_getextplugins('page.edit.delete.done') as $pl)
@@ -123,11 +123,11 @@ if ($a == 'update')
 	{
 		if (!empty($rpage['page_alias']))
 		{
-			$sql_page_update = $db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$db->prep($rpage['page_alias'])."' AND page_id!='".$id."'");
+			$sql_page_update = $db->query("SELECT page_id FROM $db_pages WHERE page_alias='".$db->prep($rpage['page_alias'])."' AND page_id!=$id");
 			$rpage['page_alias'] = ($sql_page_update->rowCount() > 0) ? $rpage['page_alias'].rand(1000, 9999) : $rpage['page_alias'];
 		}
 
-		$sql_page_update = $db->query("SELECT page_cat, page_state FROM $db_pages WHERE page_id='$id' ");
+		$sql_page_update = $db->query("SELECT page_cat, page_state FROM $db_pages WHERE page_id=$id");
 		$row_page_update = $sql_page_update->fetch();
 
 		if ($row_page_update['page_cat'] != $rpage['page_cat'] /*&& ($row_page_update['page_state'] == 0 || $row_page_update['page_state'] == 2)*/)

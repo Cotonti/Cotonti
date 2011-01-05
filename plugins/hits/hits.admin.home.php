@@ -60,20 +60,20 @@ if (!$cfg['plugin']['hits']['disableactivitystats'])
 {
 	$timeback = $sys['now_offset'] - (7 * 86400);// 7 days
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_regdate>'$timeback'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_users WHERE user_regdate > $timeback");
 	$newusers = $sql->fetchColumn();
 
-	$sql = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_date > '$timeback'");
+	$sql = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_date > $timeback");
 	$newpages = $sql->fetchColumn();
 
 	if (cot_module_active('forums'))
 	{
 		require_once cot_incfile('forums', 'module');
 
-		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate>'$timeback'");
+		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_topics WHERE ft_creationdate > $timeback");
 		$newtopics = $sql->fetchColumn();
 
-		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated>'$timeback'");
+		$sql = $db->query("SELECT COUNT(*) FROM $db_forum_posts WHERE fp_updated > $timeback");
 		$newposts = $sql->fetchColumn();
 	}
 
@@ -85,7 +85,7 @@ if (!$cfg['plugin']['hits']['disableactivitystats'])
 	if (cot_module_active('pm'))
 	{
 	 require_once cot_incfile('pm', 'module');
-		$sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_date>'$timeback'");
+		$sql = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_date > $timeback");
 		$newpms = $sql->fetchColumn();
 	}
 

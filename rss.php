@@ -79,9 +79,9 @@ if ($c == "topics")
 	require_once cot_incfile('forums', 'module');
 
 	$defult_c = false;
-	$topic_id = ($id == 'all') ? 0 : $id;
+	$topic_id = ($id == 'all') ? 0 : (int) $id;
 
-	$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
+	$sql = "SELECT * FROM $db_forum_topics WHERE ft_id=$topic_id";
 	$res = $db->query($sql);
 	if ($db->affectedRows > 0)
 	{
@@ -102,11 +102,11 @@ if ($c == "topics")
 		}
 
 		// get number of posts in topic
-		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid='$topic_id'";
+		$sql = "SELECT COUNT(*) FROM $db_forum_posts WHERE fp_topicid=$topic_id";
 		$res = $db->query($sql);
 		$totalposts = $res->fetchColumn();
 
-		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid='$topic_id' ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
+		$sql = "SELECT * FROM $db_forum_posts WHERE fp_topicid=$topic_id ORDER BY fp_creation DESC LIMIT ".$cfg['rss']['rss_maxitems'];
 		$res = $db->query($sql);
 		$i = 0;
 		while ($row = $res->fetch())
@@ -148,7 +148,7 @@ elseif ($c == "section")
 			$topic_id = $row['fp_topicid'];
 
 			$flag_private = 0;
-			$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
+			$sql = "SELECT * FROM $db_forum_topics WHERE ft_id=$topic_id";
 			$res2 = $db->query($sql);
 			$row2 = $res2->fetch();
 			$topic_title = $row2['ft_title'];
@@ -189,7 +189,7 @@ elseif ($c == "forums")
 		$forum_id = $row['fp_cat'];
 
 		$flag_private = 0;
-		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id='$topic_id'";
+		$sql = "SELECT * FROM $db_forum_topics WHERE ft_id=$topic_id";
 		$res2 = $db->query($sql);
 		$row2 = $res2->fetch();
 		$topic_title = $row2['ft_title'];

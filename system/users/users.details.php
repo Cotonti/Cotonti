@@ -31,7 +31,7 @@ foreach (cot_getextplugins('users.details.first') as $pl)
 
 if(!empty($u) && !empty($id))
 {
-	$sql = $db->query("SELECT user_id FROM $db_users WHERE user_name='".$db->prep($u)."' AND user_id ='$id' LIMIT 1");
+	$sql = $db->query("SELECT user_id FROM $db_users WHERE user_name='".$db->prep($u)."' AND user_id =$id LIMIT 1");
 	$u = $sql->fetch();
 	$id = $u['user_id'];
 }
@@ -48,7 +48,7 @@ elseif(empty($id) && $usr['id']>0)
 }
 
 
-$sql = $db->query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
+$sql = $db->query("SELECT * FROM $db_users WHERE user_id=$id LIMIT 1");
 cot_die($sql->rowCount()==0);
 $urr = $sql->fetch();
 

@@ -82,7 +82,7 @@ if ($a == 'update')
 
 	if (!empty($rtext))
 	{
-		$db->update($db_forum_posts, array("fp_text" => $rtext, "fp_updated" => $sys['now_offset'], "fp_updater" => $rupdater), "fp_id='$p'");
+		$db->update($db_forum_posts, array("fp_text" => $rtext, "fp_updated" => $sys['now_offset'], "fp_updater" => $rupdater), "fp_id=$p");
 
 		if (!empty($rtopictitle) && $db->query("SELECT fp_id FROM $db_forum_posts WHERE fp_topicid = $q ORDER BY fp_id ASC LIMIT 1")->fetchColumn() == $p)
 		{

@@ -39,7 +39,7 @@ function cot_stat_get($name)
 {
 	global $db, $db_stats;
 
-	$sql = $db->query("SELECT stat_value FROM $db_stats where stat_name='$name' LIMIT 1");
+	$sql = $db->query("SELECT stat_value FROM $db_stats where stat_name=".$db->quote($name)." LIMIT 1");
 	return ($sql->rowCount() > 0) ? (int) $sql->fetchColumn() : FALSE;
 }
 
@@ -52,7 +52,7 @@ function cot_stat_get($name)
 function cot_stat_inc($name, $value = 1)
 {
 	global $db, $db_stats;
-	$db->query("UPDATE $db_stats SET stat_value=stat_value+$value WHERE stat_name='$name'");
+	$db->query("UPDATE $db_stats SET stat_value=stat_value+$value WHERE stat_name=".$db->quote($name));
 }
 
 /**

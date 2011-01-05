@@ -31,11 +31,11 @@ foreach (cot_getextplugins('users.edit.first') as $pl)
 }
 /* ===== */
 
-$sql = $db->query("SELECT user_name, user_password, user_maingrp, user_email  FROM $db_users WHERE user_id='$id' LIMIT 1");
+$sql = $db->query("SELECT user_name, user_password, user_maingrp, user_email  FROM $db_users WHERE user_id=$id LIMIT 1");
 cot_die($sql->rowCount()==0);
 $urr = $sql->fetch();
 
-$sql1 = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid='$id' and gru_groupid='".COT_GROUP_SUPERADMINS."'");
+$sql1 = $db->query("SELECT gru_groupid FROM $db_groups_users WHERE gru_userid=$id and gru_groupid='".COT_GROUP_SUPERADMINS."'");
 $sys['edited_istopadmin'] = ($sql1->rowCount()>0) ? TRUE : FALSE;
 $sys['user_istopadmin'] = cot_auth('admin', 'a', 'A');
 $sys['protecttopadmin'] = $sys['edited_istopadmin'] && !$sys['user_istopadmin'];
@@ -49,7 +49,7 @@ if ($a=='update')
 {
 	cot_check_xg();
 	
-	$row1 = $db->query("SELECT * FROM $db_users WHERE user_id='$id'")->fetch();
+	$row1 = $db->query("SELECT * FROM $db_users WHERE user_id=$id")->fetch();
 	
 	/* === Hook === */
 	foreach (cot_getextplugins('users.edit.update.first') as $pl)
@@ -62,8 +62,8 @@ if ($a=='update')
 	if ($ruserdelete && $sys['user_istopadmin'] && !$sys['edited_istopadmin'])
 	{
 		
-		$sql = $db->delete($db_users, "user_id='$id'");
-		$sql = $db->delete($db_groups_users, "gru_userid='$id'");
+		$sql = $db->delete($db_users, "user_id=$id");
+		$sql = $db->delete($db_groups_users, "gru_userid=$id");
 
 		if (cot_import('ruserdelpfs','P','BOL'))// TODO PFS SEPARATE
 		{
@@ -185,7 +185,7 @@ if ($a=='update')
 		{
 			if (isset($rusergroupsms[$k]) && $usr['level'] >= $cot_groups[$k]['level'])
 			{
-				$sql = $db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid='$id' AND gru_groupid='$k'");
+				$sql = $db->query("SELECT gru_userid FROM $db_groups_users WHERE gru_userid=$id AND gru_groupid=$k");
 				if ($sql->rowCount() == 0 && !(($id == 1 && $k == COT_GROUP_BANNED) || ($id == 1 && $k == COT_GROUP_INACTIVE)))
 				{
 					$sql = $db->insert($db_groups_users, array('gru_userid' => (int)$id, 'gru_groupid' => (int)$k));
@@ -193,7 +193,7 @@ if ($a=='update')
 			}
 			elseif (!($id == 1 && $k == COT_GROUP_SUPERADMINS))
 			{
-				$sql = $db->delete($db_groups_users, "gru_userid='$id' AND gru_groupid='$k'");
+				$sql = $db->delete($db_groups_users, "gru_userid=$id AND gru_groupid=$k");
 			}
 		}
 
@@ -223,7 +223,7 @@ if ($a=='update')
 	}
 }
 
-$sql = $db->query("SELECT * FROM $db_users WHERE user_id='$id' LIMIT 1");
+$sql = $db->query("SELECT * FROM $db_users WHERE user_id=$id LIMIT 1");
 $urr = $sql->fetch();
 
 $title_params = array(

@@ -312,10 +312,10 @@ function cot_config_remove($name, $is_module = false, $option = '', $category = 
     global $db, $db_config;
 
     $type = $is_module ? 'module' : 'plug';
-    $where = "config_owner = '$type' AND config_cat = '$name'";
+    $where = "config_owner = '$type' AND config_cat = " . $db->quote($name);
 	if (!empty($category))
 	{
-		$where .= " AND config_subcat = '$category'";
+		$where .= " AND config_subcat = " . $db->quote($category);
 	}
 	
     if (is_array($option))

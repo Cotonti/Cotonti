@@ -35,7 +35,7 @@ foreach (cot_getextplugins('pm.first') as $pl)
 /* ===== */
 
 list($totalsentbox, $totalinbox) = cot_message_count($usr['id']);
-$sql_pm = $db->query("SELECT * FROM $db_pm WHERE pm_id = '".$id."' LIMIT 1");
+$sql_pm = $db->query("SELECT * FROM $db_pm WHERE pm_id = $id LIMIT 1");
 cot_die($sql_pm->rowCount() == 0);
 $row = $sql_pm->fetch();
 
@@ -45,7 +45,7 @@ if ($row['pm_touserid'] == $usr['id'])
 {
 	if ($row['pm_tostate'] == 0)
 	{
-		$sql_pm = $db->update($db_pm, array('pm_tostate' => '1'), "pm_id = '".$id."'");
+		$sql_pm = $db->update($db_pm, array('pm_tostate' => '1'), "pm_id = $id");
 		$sql_pm = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$usr['id']."' AND pm_tostate = 0");
 		if ($sql_pm->fetchColumn() == 0)
 		{
@@ -71,7 +71,7 @@ else
 {
 	cot_die();
 }
-$sql_user = $db->query("SELECT * FROM $db_users WHERE user_id = '".$to."' LIMIT 1");
+$sql_user = $db->query("SELECT * FROM $db_users WHERE user_id = $to LIMIT 1");
 $row_user = $sql_user->fetch();
 
 
@@ -100,13 +100,13 @@ $t = new XTemplate(cot_tplfile('pm.message'));
 
 if ($history)
 {
-	$sql_pm_history = $db->query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
-						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)");
+	$sql_pm_history = $db->query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = $to AND pm_fromstate <> 3)
+						OR (pm_fromuserid = $to AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)");
 	$totallines = $sql_pm_history->fetchColumn();
 	$d = ($d >= $totallines) ? (floor($totallines / $cfg['pm']['maxpmperpage']))*$cfg['pm']['maxpmperpage'] : $d;
 	$sql_pm_history = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id = p.pm_touserid
-						WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = '".$to."' AND pm_fromstate <> 3)
-						OR (pm_fromuserid = '".$to."' AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
+						WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = $to AND pm_fromstate <> 3)
+						OR (pm_fromuserid = $to AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
 						ORDER BY pm_date DESC LIMIT $d,".$cfg['pm']['maxpmperpage']);
 
 	$pm_totalpages = ceil($totallines / $cfg['pm']['maxpmperpage']);

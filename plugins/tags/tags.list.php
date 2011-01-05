@@ -32,13 +32,13 @@ if ($cfg['plugin']['tags']['pages'])
 		$tags_extra = null;
 	}
 	// Get all subcategories
-	$tc_cats = array("'$c'");
+	$tc_cats = array($db->quote($c));
 	$tc_path = $cot_cat[$c]['path'] . '.';
 	foreach ($cot_cat as $key => $val)
 	{
 		if (mb_strpos($val['path'], $tc_path) !== false)
 		{
-			$tc_cats[] = "'$key'";
+			$tc_cats[] = $db->quote($key);
 		}
 	}
 	$tc_cats = implode(',', $tc_cats);

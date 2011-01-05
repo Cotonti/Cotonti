@@ -67,8 +67,8 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 function cot_trash_restore($id)
 {
 	global $db, $db_trash, $trash_types;
-
-	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
+	$id = (int) $id;
+	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id=$id LIMIT 1");
 	if ($res = $tsql->fetch())
 	{
 		$data = unserialize($res['tr_datas']);
@@ -129,8 +129,8 @@ function cot_trash_restore($id)
 function cot_trash_delete($id)
 {
 	global $db, $db_trash;
-
-	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id='$id' LIMIT 1");
+	$id = (int) $id;
+	$tsql = $db->query("SELECT * FROM $db_trash WHERE tr_id=$id LIMIT 1");
 	if ($res = $tsql->fetch())
 	{
 		$db->delete($db_trash, "tr_id='".$res['tr_id']."'");

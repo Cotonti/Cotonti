@@ -37,7 +37,7 @@ if ($a == 'request' && $email != '')
 		if (empty($validationkey) || $validationkey == "0")
 		{
 			$validationkey = md5(microtime());
-			$sql = $db->update($db_users, array('user_lostpass' => $validationkey, 'user_lastip' => $usr['ip']), "user_id='$ruserid'");
+			$sql = $db->update($db_users, array('user_lostpass' => $validationkey, 'user_lastip' => $usr['ip']), "user_id=$ruserid");
 		}
 
 		cot_shield_update(60, "Password recovery email sent");
@@ -88,7 +88,7 @@ elseif ($a == 'auth' && mb_strlen($v) == 32)
 
 		$validationkey = md5(microtime());
 		$newpass = cot_randompass();
-		$sql = $db->update($db_users, array('user_password' => md5($newpass), 'user_lostpass' => $validationkey), "user_id='$ruserid'");
+		$sql = $db->update($db_users, array('user_password' => md5($newpass), 'user_lostpass' => $validationkey), "user_id=$ruserid");
 
 		$rsubject = $cfg['maintitle']." - ".$L['pasrec_title'];
 		$rbody = $L['Hi']." ".$rusername.",\n\n".$L['pasrec_email2']."\n\n".$newpass."\n\n".$L['aut_contactadmin'];

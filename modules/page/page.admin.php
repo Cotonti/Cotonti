@@ -108,7 +108,7 @@ if ($a == 'validate')
 		$usr['isadmin_local'] = cot_auth('page', $row['page_cat'], 'A');
 		cot_block($usr['isadmin_local']);
 
-		$sql_page = $db->update($db_pages, array('page_state' => 0), "page_id='$id'");
+		$sql_page = $db->update($db_pages, array('page_state' => 0), "page_id=$id");
 		$sql_page = $db->query("UPDATE $db_structure SET structure_count=structure_count+1 WHERE structure_code=".$db->quote($row['page_cat']));
 
 		cot_log($L['Page'].' #'.$id.' - '.$L['adm_queue_validated'], 'adm');
