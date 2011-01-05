@@ -11,6 +11,9 @@
 
 defined('COT_CODE') or die('Wrong URL');
 
+error_reporting(-1);
+ini_set("display_errors", 1);
+
 /**
  * Accepts several variables and prints their values in debug mode (var dump).
  *
