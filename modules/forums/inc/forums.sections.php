@@ -203,21 +203,10 @@ foreach ($fstlvl as $x)
 	}
 	$xx++;
 
-	if ($c == 'fold')
+	$fold = !$cfg['forums'][$x]['defstate'];
+	if($c)
 	{
-		$fold = true;
-	}
-	elseif ($c == 'unfold')
-	{
-		$fold = true;
-	}
-	elseif (!empty($c))
-	{
-		$fold = ($c == $x) ? false : true;
-	}
-	else
-	{
-		$fold = !$cfg['forums'][$x]['defstate'];
+		$fold = (int)($c=='fold' ? true : ($c=='unfold' ? false : ($c==$x ? false : true)));
 	}
 
 	$t->assign(cot_generate_sectiontags($x, 'FORUMS_SECTIONS_ROW_', $cat_top[$x]));
