@@ -25,7 +25,7 @@
 				</td>
 			</tr>
 		</tbody>
-		<tbody id="blk_{FORUMS_SECTIONS_ROW_CAT}"<!-- IF !{FORUMS_SECTIONS_ROW_FOLD} --> class="hidden"<!-- ENDIF -->>
+		<tbody id="blk_{FORUMS_SECTIONS_ROW_CAT}"<!-- IF {FORUMS_SECTIONS_ROW_FOLD} --> class="hidden"<!-- ENDIF -->>
 			   <!-- BEGIN: SECTION -->
 			   <tr>
 				<td class="centerall">
