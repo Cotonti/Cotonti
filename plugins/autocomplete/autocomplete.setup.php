@@ -4,7 +4,7 @@
 Code=autocomplete
 Name=Autocomplete
 Description=autocomplete script
-Version=0.8
+Version=0.8.1
 Date=2011-jan-8
 Author=esclkm
 Copyright=Copyright (c) Cotonti Team 2008-2011
@@ -16,11 +16,6 @@ Auth_members=RW
 Lock_members=12345A
 Recommends_plugins=htmlpurifier
 [END_COT_EXT]
-
-[BEGIN_COT_EXT_CONFIG]
-cdn=01:radio::0:Use CDN-hosted CKEditor
-cdn_url=02:string::ckeditor-fluid.appspot.com:CDN URL (without protocol part and trailing slash)
-[END_COT_EXT_CONFIG]
 ==================== */
 
 /**
