@@ -104,7 +104,7 @@ function cot_poll_edit_form($id, $t = '', $block = 'MAIN', $type = '')
 		'EDIT_POLL_IDFIELD' => cot_inputbox('hidden', 'poll_id', $id),
 		'EDIT_POLL_OPTIONSCOUNT' => $counter,
 		'EDIT_POLL_ID' => $id,
-		'EDIT_POLL_MULTIPLE' => cot_checkbox($poll_multiple, 'poll_state' , $L['polls_multiple']),
+		'EDIT_POLL_MULTIPLE' => cot_checkbox($poll_multiple, 'poll_multiple' , $L['polls_multiple']),
 	));
 	if ($poll_full_template == true)
 	{
@@ -191,7 +191,7 @@ function cot_poll_save($type = 'index', $code = '')
 		{
 			$db->insert($db_polls, array(
 				'poll_type' => $type,
-				'poll_state' => (int)$poll_state,
+				'poll_state' => (int)0,
 				'poll_creationdate' => (int)$sys['now_offset'],
 				'poll_text' => $poll_text,
 				'poll_multiple' => (int)$poll_multiple,
@@ -320,7 +320,7 @@ function cot_poll_form($id, $formlink = '', $theme = '', $type = '')
 	$sql2 = $db->query("SELECT pv_id FROM $db_polls_voters WHERE pv_pollid = $id AND $where LIMIT 1");
 	$alreadyvoted = ($sql2->rowCount() == 1) ? 1 : 0;
 
-	$themefile = (is_string($theme)) ? cot_tplfile(array('polls', $theme), 'module') : cot_tplfile($theme, 'module');
+	$themefile = cot_tplfile(array('polls', $theme), 'module');
 	$t = new XTemplate($themefile);
 
 	if ($alreadyvoted) $poll_block = 'POLL_VIEW_VOTED';
