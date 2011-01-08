@@ -1,10 +1,4 @@
 <!-- BEGIN: MAIN -->
-<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$("#rsuser").autocomplete("plug.php?r=search", { multiple: true, minChars: 3 });
-	});
-</script>
 <div class="mboxHD">{PLUGIN_TITLE}</div>
 <div class="mboxBody">
 	<div>{PHP.L.plu_subtitle_all}</div>

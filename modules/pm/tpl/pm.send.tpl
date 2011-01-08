@@ -40,12 +40,6 @@
 				</table>
 			</form>
 		</div>
-	<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#newpmrecipient").autocomplete("pm.php?a=getusers&m=send", {multiple: true, minChars: 3});
-		});
-	</script>
 
 <!-- IF {PMSEND_AJAX_MARKITUP} -->
 	<script type="text/javascript">

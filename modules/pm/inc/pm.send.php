@@ -32,25 +32,7 @@ foreach (cot_getextplugins('pm.send.first') as $pl)
 	include $pl;
 }
 /* ===== */
-if ($a == 'getusers')
-{
-	$q = mb_strtolower(cot_import('q', 'G', 'TXT'));
-	$q = $db->prep(urldecode($q));
-	if (!empty($q))
-	{
-		$res = array();
-		$sql_pm_users = $db->query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
-		while($row = $sql_pm_users->fetch())
-		{
-			$res[] = $row['user_name'];
-		}
-		$userlist = implode("\n", $res);
-		cot_sendheaders();
-	}
-	echo $userlist;
-	die();
-}
-elseif ($a == 'send')
+if ($a == 'send')
 {
 	cot_shield_protect();
 	$newpmtitle = cot_import('newpmtitle', 'P', 'TXT');
@@ -292,7 +274,7 @@ $t->assign(array(
 	'PMSEND_FORM_SEND' => cot_url('pm', 'm=send&a=send'.$idurl),
 	'PMSEND_FORM_TITLE' => cot_inputbox('text', 'newpmtitle', htmlspecialchars($newpmtitle), 'size="56" maxlength="255"'),
 	'PMSEND_FORM_TEXT' => cot_textarea('newpmtext', htmlspecialchars($newpmtext), 8, 56, '', 'input_textarea_editor'),
-	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56),
+	'PMSEND_FORM_TOUSER' => cot_textarea('newpmrecipient', $touser, 3, 56, 'class="userinput"'),
 	'PMSEND_AJAX_MARKITUP' => (COT_AJAX && cot_plugin_active('markitup') && $cfg['jquery'] && $cfg['turnajax'])
 ));
 
