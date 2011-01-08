@@ -170,8 +170,8 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 			$date_format = (!empty($date_format)) ? $date_format : $cfg['dateformat'];
 
 			$text = cot_parse($page_data['page_text'], $cfg['page']['markup']);
-			$text = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
-			$cutted = (mb_strlen($page_data['page_text']) > mb_strlen($text)) ? true : false;
+			$text_cut = ((int)$textlength > 0) ? cot_string_truncate($text, $textlength) : cot_cut_more($text);
+			$cutted = (mb_strlen($text) > mb_strlen($text_cut)) ? true : false;
 
 			$temp_array = array(
 				'URL' => $page_data['page_pageurl'],
@@ -190,6 +190,8 @@ function cot_generate_pagetags($page_data, $tag_prefix = '', $textlength = 0, $a
 				'KEY' => htmlspecialchars($page_data['page_key']),
 				'DESC' => htmlspecialchars($page_data['page_desc']),
 				'TEXT' => $text,
+				'TEXT_CUT' => $text_cut,
+				'TEXT_IS_CUT' => $cutted,
 				'DESC_OR_TEXT' => (!empty($page_data['page_desc'])) ? htmlspecialchars($page_data['page_desc']) : $text,
 				'MORE' => ($cutted) ? cot_rc_link($page_data['page_pageurl'], $L['ReadMore']) : "",
 				'AUTHOR' => htmlspecialchars($page_data['page_author']),

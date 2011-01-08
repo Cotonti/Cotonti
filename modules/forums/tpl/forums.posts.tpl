@@ -8,10 +8,10 @@
 			<td class="width90">
 				<a href="{FORUMS_POSTS_BUMP_URL}" title="{PHP.L.forums_explain1}">{PHP.L.Bump}</a> {PHP.cfg.separator}
 				<a href="{FORUMS_POSTS_LOCK_URL}" title="{PHP.L.forums_explain2}">{PHP.L.Lock}</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_STICKY_URL}" title="{PHP.L.forums_explain3'}">{PHP.L.Makesticky}</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_STICKY_URL}" title="{PHP.L.forums_explain3}">{PHP.L.Makesticky}</a> {PHP.cfg.separator}
 				<a href="{FORUMS_POSTS_ANNOUNCE_URL}" title="{PHP.L.forums_explain4}">{PHP.L.Announcement}</a> {PHP.cfg.separator}
 				<a href="{FORUMS_POSTS_PRIVATE_URL}" title="{PHP.L.forums_explain5}">{PHP.L.Private} (#)</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_CLEAR_URL}" title="{PHP.L.forums_explain6'}">{PHP.L.Default}</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_CLEAR_URL}" title="{PHP.L.forums_explain6}">{PHP.L.Default}</a> {PHP.cfg.separator}
 				<a href="{FORUMS_POSTS_DELETE_URL}" title="{PHP.L.forums_explain7}">{PHP.L.Delete}</a>
 			</td>
 		</tr>
