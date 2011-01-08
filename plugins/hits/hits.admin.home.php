@@ -56,7 +56,7 @@ if (!$cfg['plugin']['hits']['disablehitstats'])
 }
 
 //Show activity stats
-if (!$cfg['plugin']['hits']['disableactivitystats'])
+if (!$cfg['plugin']['hits']['disableactivitystats'] && cot_module_active('page'))
 {
 	$timeback = $sys['now_offset'] - (7 * 86400);// 7 days
 
