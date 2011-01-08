@@ -22,7 +22,10 @@
 		</p>
 	</div>
 
-    <div class="textbox">{PAGE_ROW_TEXT}{PAGE_ROW_MORE}</div>
+    <div class="textbox">
+		{PAGE_ROW_TEXT_CUT}
+		<!-- IF {PAGE_ROW_TEXT_IS_CUT} -->{PAGE_ROW_MORE}<!-- ENDIF -->
+	</div>
 
 	<hr class="clear divider" />
 <!-- END: PAGE_ROW -->

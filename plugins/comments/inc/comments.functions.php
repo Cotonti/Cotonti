@@ -110,9 +110,9 @@ function cot_comments_display($ext_name, $code, $cat = '')
 	if ($auth_write && $enabled)
 	{
 
-		$allowed_time = cot_build_timegap($sys['now_offset'] - $cfg['plugin']['comedit']['time'] * 60,
+		$allowed_time = cot_build_timegap($sys['now_offset'] - $cfg['plugin']['comments']['time'] * 60,
 			$sys['now_offset']);
-		$com_hint = sprintf($L['plu_comhint'], $allowed_time);
+		$com_hint = cot_rc('com_edithint', array('time' => $allowed_time));
 
 		/* == Hook == */
 		foreach (cot_getextplugins('comments.newcomment.tags') as $pl)
