@@ -16,13 +16,13 @@ defined('COT_CODE') or die('Wrong URL');
  */
 $R['code_option_empty'] = '---';
 $R['code_time_separator'] = ':';
-$R['input_checkbox'] = '<label><input type="checkbox" class="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
+$R['input_checkbox'] = '<label><input type="checkbox" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
 $R['input_default'] = '<input type="{$type}" name="{$name}" value="{$value}"{$attrs} />{$error}';
 $R['input_option'] = '<option value="{$value}"{$selected}>{$title}</option>';
-$R['input_radio'] = '<label><input type="radio" class="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
+$R['input_radio'] = '<label><input type="radio" name="{$name}" value="{$value}"{$checked}{$attrs} /> {$title}</label>';
 $R['input_radio_separator'] = ' ';
 $R['input_select'] = '<select name="{$name}"{$attrs}>{$options}</select>{$error}';
-$R['input_text'] = '<input type="text" class="text" name="{$name}" value="{$value}"{$attrs} />{$error}';
+$R['input_text'] = '<input type="text" name="{$name}" value="{$value}" {$attrs} />{$error}';
 $R['input_textarea'] = '<textarea name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_editor'] =  '<textarea class="editor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';
 $R['input_textarea_minieditor'] =  '<textarea class="minieditor" name="{$name}" rows="{$rows}" cols="{$cols}"{$attrs}>{$value}</textarea>{$error}';

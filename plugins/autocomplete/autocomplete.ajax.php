@@ -1,18 +1,17 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-File=search.ajax
 Hooks=ajax
 [END_COT_EXT]
 ==================== */
 
 /**
- * Search standalone.
+ * Users Names file for Autocomplete plugin
  *
- * @package search
- * @version 0.7.0
- * @author Neocrome, Spartan, Boss, esclkm, Cotonti Team
- * @copyright Copyright (c) Cotonti Team 2008-2011
+ * @package autocomplete
+ * @version 0.8.0
+ * @author esclkm
+ * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD
  */
 
@@ -23,8 +22,8 @@ $q = $db->prep(urldecode($q));
 if (!empty($q))
 {
 	$res = array();
-	$sql = $db->query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
-	while ($row = $sql->fetch())
+	$sql_pm_users = $db->query("SELECT `user_name` FROM $db_users WHERE `user_name` LIKE '$q%'");
+	while($row = $sql_pm_users->fetch())
 	{
 		$res[] = $row['user_name'];
 	}
