@@ -300,7 +300,7 @@ CREATE TABLE `cot_users` (
   `user_password` varchar(32) collate utf8_unicode_ci NOT NULL default '',
   `user_maingrp` int NOT NULL default '4',
   `user_country` char(2) collate utf8_unicode_ci NOT NULL default '',
-  `user_text` text collate utf8_unicode_ci NOT NULL,
+  `user_text` text collate utf8_unicode_ci NOT NULL default '',
   `user_timezone` decimal(2,1) NOT NULL default '0',
   `user_birthdate` DATE NOT NULL DEFAULT '0000-00-00',
   `user_gender` char(1) collate utf8_unicode_ci NOT NULL default 'U',
