@@ -21,7 +21,7 @@
 		<tbody id="{FORUMS_SECTIONS_ROW_CAT_CODE}">
 			<tr>
 				<td class="forumssection" colspan="6">
-						{FORUMS_SECTIONS_ROW_TITLE}
+						<a href="{FORUMS_SECTIONS_ROW_SECTIONSURL}">{FORUMS_SECTIONS_ROW_TITLE}</a>
 				</td>
 			</tr>
 		</tbody>
