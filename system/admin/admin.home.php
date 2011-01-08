@@ -11,8 +11,6 @@
 
 (defined('COT_CODE') && defined('COT_ADMIN')) or die('Wrong URL.');
 
-require_once cot_incfile('page', 'module'); // FIXME hard dependency
-
 //Version Checking
 preg_match('/Rev: ([0-9]+)/', $cfg['svnrevision'], $revmatch);
 $cfg['svnrevision'] = $revmatch[1];
@@ -27,8 +25,16 @@ $t = new XTemplate(cot_tplfile('admin.home', 'core'));
 
 $adminpath[] = array(cot_url('admin', 'm=home'), $L['Home']);
 
-$pagesqueued = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
-$pagesqueued = $pagesqueued->fetchColumn();
+if (cot_module_active('page'))
+{
+	require_once cot_incfile('page', 'module');
+	$pagesqueued = $db->query("SELECT COUNT(*) FROM $db_pages WHERE page_state='1'");
+	$pagesqueued = $pagesqueued->fetchColumn();
+	$t->assign(array(
+		'ADMIN_HOME_URL' => cot_url('admin', 'm=page'),
+		'ADMIN_HOME_PAGESQUEUED' => $pagesqueued
+	));
+}
 
 if (!function_exists('gd_info') && $cfg['th_amode'] != 'Disabled')
 {
@@ -75,8 +81,6 @@ if ($cfg['check_updates'] && $cache)
 }
 
 $t->assign(array(
-	'ADMIN_HOME_URL' => cot_url('admin', 'm=page'),
-	'ADMIN_HOME_PAGESQUEUED' => $pagesqueued,
 	'ADMIN_HOME_VERSION' => $cfg['version'],
 	'ADMIN_HOME_REVISION' => $L['home_rev'].$cfg['revision'],
 	'ADMIN_HOME_DB_VERSION' => $cfg['dbversion']
