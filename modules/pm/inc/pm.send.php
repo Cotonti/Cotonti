@@ -138,15 +138,15 @@ if ($a == 'send')
 				$pm['pm_fromuser'] = $usr['name'];
 				$pm['pm_touserid'] = $userid;
 				$pm['pm_tostate'] = 0;
-				$sql_pm = $db->insert($db_pm, $pm);
-				$sql_pm = $db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
+				$pmsql = $db->insert($db_pm, $pm);
+				$pmsql = $db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
 
 				if ($cfg['pm']['pm_allownotifications'])
 				{
-					$sql_pm = $db->query("SELECT user_email, user_name, user_lang
+					$pmsql = $db->query("SELECT user_email, user_name, user_lang
 						FROM $db_users WHERE user_id = $userid AND user_pmnotify = 1 AND user_maingrp > 3");
 
-					if ($row = $sql_pm->fetch())
+					if ($row = $pmsql->fetch())
 					{
 						cot_send_translated_mail($row['user_lang'], $row['user_email'], htmlspecialchars($row['user_name']));
 						if($stats_enabled) { cot_stat_inc('totalmailpmnot'); }
@@ -234,10 +234,10 @@ foreach (cot_getextplugins('pm.send.main') as $pl)
 /* ===== */
 if ($id)
 {
-	$sql_pm = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id=$id AND pm_tostate=0 LIMIT 1");
-	if ($sql_pm->rowCount()!=0)
+	$pmsql = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id=p.pm_touserid WHERE pm_id=$id AND pm_tostate=0 LIMIT 1");
+	if ($pmsql->rowCount()!=0)
 	{
-		$row = $sql_pm->fetch();
+		$row = $pmsql->fetch();
 		$newpmtitle = (!empty($newpmtitle)) ? $newpmtitle : $row['pm_title'];
 		$newpmtext = (!empty($newpmtitle)) ? $newpmtext : $row['pm_text'];
 		$idurl = '&id='.$id;
@@ -249,7 +249,7 @@ if ($id)
 }
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_tplfile('pm.send'));
+$t = new XTemplate(cot_tplfile(array('pm', 'send', $pmalttpl)));
 
 if (!COT_AJAX)
 {
