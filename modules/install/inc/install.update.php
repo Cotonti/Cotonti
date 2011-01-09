@@ -190,7 +190,7 @@ else
 	}
 	$installed_plugs = array();
 	$res = $db->query("SELECT DISTINCT(pl_code) FROM $db_plugins
-		WHERE pl_module = 0 AND pl_active = 1");
+		WHERE pl_module = 0");
 	while ($row = $res->fetch(PDO::FETCH_NUM))
 	{
 		$installed_plugs[] = $row[0];
