@@ -1,4 +1,4 @@
-/* r1016 delete plug passrecover & add email config */
+/* r1027 delete plug passrecover & add email config */
 DELETE FROM `cot_auth` WHERE `auth_code` = 'plug' AND `auth_option` = 'passrecover' LIMIT 6;
 DELETE FROM `cot_plugins` WHERE `pl_code` = 'passrecover' LIMIT 1;
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES 

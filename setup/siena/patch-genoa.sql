@@ -1,50 +1,10 @@
-/* r881 add config for RSS in admin-panel  */
-INSERT INTO `cot_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value` ,`config_default` ,`config_text`) VALUES ('core', 'rss', '01', 'disable_rss', 3, '0', '', 'Disable the RSS feeds');
-INSERT INTO `cot_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value` ,`config_default` ,`config_text`) VALUES ('core', 'rss', '02', 'rss_timetolive', 2, '30', '', 'Refresh RSS cache every N seconds');
-INSERT INTO `cot_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value` ,`config_default` ,`config_text`) VALUES ('core', 'rss', '03', 'rss_maxitems', 2, '40', '', 'Max. items in RSS');
-INSERT INTO `cot_config` (`config_owner` ,`config_cat` ,`config_order` ,`config_name` ,`config_type` ,`config_value` ,`config_default` ,`config_text`) VALUES ('core', 'rss', '04', 'rss_charset', 4, 'UTF-8', '', 'RSS charset');
+/* r1016 split conf parametrs from page section to structure section */
+UPDATE `cot_config` SET `config_cat` = 'structure' WHERE `config_owner` = 'core' AND `config_cat` = 'page' AND `config_name` = 'maxrowsperpage' LIMIT 1 ;
+UPDATE `cot_config` SET `config_cat` = 'structure' WHERE `config_owner` = 'core' AND `config_cat` = 'page' AND `config_name` = 'maxlistsperpage' LIMIT 1 ;
 
-/* r899 add config for sync pages navigation, added news admin part  */
-INSERT INTO `cot_plugins` (`pl_hook` , `pl_code` , `pl_part` , `pl_title` , `pl_file` , `pl_order` , `pl_active` ) VALUES ('admin.config.edit.loop', 'news', 'adminconfig', 'News', 'news.admin', 10, 1);
-UPDATE `cot_config` SET `config_default` = '1,2,3,4,5,6,7,8,9,10,15,20,25,30,50,100' WHERE `config_owner` = 'plug' AND `config_cat` = 'news' AND   `config_name` = 'maxpages' LIMIT 1 ;
-UPDATE `cot_config` SET `config_name` = 'syncpagination' WHERE `config_owner` = 'plug' AND `config_cat` = 'news' AND `config_name` = 'addpagination' LIMIT 1 ;
-
-/* r930 Reinstall recentitems plugin */
-DELETE FROM `cot_plugins` WHERE `pl_code` = 'recentitems';
-DELETE FROM `cot_config` WHERE `config_cat` = 'recentitems';
-
-INSERT INTO `cot_plugins` (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active) VALUES
-('index.tags', 'recentitems', 'recent.index', 'Recent items', 'recentitems.index', 10, 1),
-('standalone', 'recentitems', 'main', 'Recent items', 'recentitems', 10, 1);
-
-INSERT INTO `cot_config` (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES
-('plug', 'recentitems', '23', 'rightscan', 3, '1', '', 'Enable prescanning category rights'),
-('plug', 'recentitems', '21', 'newadditional', 3, '0', '', 'Additional modules in standalone module'),
-('plug', 'recentitems', '22', 'itemsperpage', 2, '10', '1,2,3,5,10,20,30,50,100,150,200,300,500', 'Elements per page in standalone module'),
-('plug', 'recentitems', '17', 'recentforumstitle', 1, '', '', 'Recent forums title length limit'),
-('plug', 'recentitems', '18', 'newpages', 3, '1', '', 'Recent pages in standalone module'),
-('plug', 'recentitems', '19', 'newpagestext', 1, '', '', 'New pages text length limit'),
-('plug', 'recentitems', '20', 'newforums', 3, '1', '', 'Recent forums in standalone module'),
-('plug', 'recentitems', '16', 'maxtopics', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent topics in forums displayed'),
-('plug', 'recentitems', '15', 'recentforums', 3, '1', '', 'Recent forums on index'),
-('plug', 'recentitems', '14', 'recentpagestext', 1, '', '', 'Recent pages text length limit'),
-('plug', 'recentitems', '13', 'recentpagestitle', 1, '', '', 'Recent pages title length limit'),
-('plug', 'recentitems', '12', 'maxpages', 2, '5', '1,2,3,4,5,6,7,8,9,10,15,20,25,30', 'Recent pages displayed'),
-('plug', 'recentitems', '11', 'recentpages', 3, '1', '', 'Recent pages on index'),
-('core', 'rss', '05', 'rss_pagemaxsymbols', 1, '', '', 'Pages. Cut element description longer than N symbols'),
-('core', 'rss', '06', 'rss_commentmaxsymbols', 1, '', '', 'Comments. Cut element description longer than N symbols'),
-('core', 'rss', '07', 'rss_postmaxsymbols', 1, '', '', 'Posts. Cut element description longer than N symbols');
-
-/* r1016 delete plug passrecover & add email config */
+/* r1027 delete plug passrecover & add email config */
 DELETE FROM `cot_auth` WHERE `auth_code` = 'plug' AND `auth_option` = 'passrecover' LIMIT 6;
 DELETE FROM `cot_plugins` WHERE `pl_code` = 'passrecover' LIMIT 1;
-INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_text`) VALUES
-('core', 'email', '01', 'email_type', 2, 'mail(Standart)', '', ''),
-('core', 'email', '02', 'smtp_address', 2, '', '', ''),
-('core', 'email', '03', 'smtp_port', 2, '25', '', ''),
-('core', 'email', '04', 'smtp_login', 2, '', '', ''),
-('core', 'email', '05', 'smtp_password', 2, '', '', ''),
-('core', 'email', '06', 'smtp_uses_ssl', 3, '0', '', '');
 
 /* r1035 delete plug adminqv */
 DELETE FROM `cot_auth` WHERE `auth_code` = 'plug' AND `auth_option` = 'adminqv' LIMIT 6;
@@ -75,13 +35,6 @@ UPDATE `cot_users` SET `user_country` = 'gb' WHERE `user_country` IN ('en', 'sx'
 UPDATE `cot_users` SET `user_country` = '00' WHERE `user_country` IN ('eu', 'yi');
 UPDATE `cot_users` SET `user_country` = 'rs' WHERE `user_country` = 'kv';
 UPDATE `cot_users` SET `user_country` = 'cd' WHERE `user_country` = 'zr';
-
-/* r1059 Ajax in tags plugin */
-INSERT INTO `cot_plugins` (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active) VALUES
-('ajax', 'tags', 'ajax', 'Tags', 'tags.ajax', 10, 1);
-
-INSERT INTO `cot_config` (config_owner, config_cat, config_order, config_name, config_type, config_value, config_default, config_text) VALUES
-('plug', 'tags', '13', 'autocomplete', 2, '3', '0,1,2,3,4,5,6', 'Min. chars for aucomplete');
 
 /* r1062-1065 Cache tables update */
 ALTER TABLE `cot_cache` MODIFY `c_name` varchar(120) collate utf8_unicode_ci NOT NULL;
@@ -129,13 +82,6 @@ UPDATE `cot_config` SET config_default = '1', config_variants = '' WHERE config_
 UPDATE `cot_config` SET config_default = '1', config_variants = '' WHERE config_owner = 'core' AND config_name = 'expand_comments';
 UPDATE `cot_config` SET config_default = '15', config_variants = '5,10,15,20,25,30,40,50,60,70,100,200,500' WHERE config_owner = 'core' AND config_name = 'maxcommentsperpage';
 UPDATE `cot_config` SET config_default = '0', config_variants = '0,1024,2048,4096,8192,16384,32768,65536' WHERE config_owner = 'core' AND config_name = 'commentsize';
-UPDATE `cot_config` SET config_default = 'mail(Standart)', config_variants = 'mail(Standart),smtp' WHERE config_owner = 'core' AND config_name = 'email_type';
-UPDATE `cot_config` SET config_default = '', config_variants = '' WHERE config_owner = 'core' AND config_name = 'smtp_address';
-UPDATE `cot_config` SET config_default = '25', config_variants = '' WHERE config_owner = 'core' AND config_name = 'smtp_port';
-UPDATE `cot_config` SET config_default = '', config_variants = '' WHERE config_owner = 'core' AND config_name = 'smtp_login';
-UPDATE `cot_config` SET config_default = '', config_variants = '' WHERE config_owner = 'core' AND config_name = 'smtp_password';
-UPDATE `cot_config` SET config_default = '0', config_variants = '' WHERE config_owner = 'core' AND config_name = 'smtp_uses_ssl';
-UPDATE `cot_config` SET config_default = '0', config_variants = '' WHERE config_owner = 'core' AND config_name = 'disable_forums';
 UPDATE `cot_config` SET config_default = '0', config_variants = '' WHERE config_owner = 'core' AND config_name = 'hideprivateforums';
 UPDATE `cot_config` SET config_default = '20', config_variants = '5,10,15,20,25,30,35,40,50' WHERE config_owner = 'core' AND config_name = 'hottopictrigger';
 UPDATE `cot_config` SET config_default = '30', config_variants = '5,10,15,20,25,30,40,50,60,70,100,200,500' WHERE config_owner = 'core' AND config_name = 'maxtopicsperpage';
@@ -345,47 +291,14 @@ INSERT INTO `cot_updates` (`upd_param`, `upd_value`)
 	VALUES ('branch', 'siena');
 
 /* r1134 Modify icon paths to match new structure */
-UPDATE `cot_forum_sections` SET `fs_icon` = 'system/admin/img/forums.png' WHERE `fs_icon` = 'images/admin/forums.gif';
-
-/* r1147 Page cache enablement options */
-INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
-('core','performance','31','cache_page',3,'0','0','',''),
-('core','performance','32','cache_index',3,'0','0','',''),
-('core','performance','33','cache_forums',3,'0','0','','');
+UPDATE `cot_forum_sections` SET `fs_icon` = 'images/icons/default/forums.png' WHERE `fs_icon` = 'images/admin/forums.gif';
 
 /* r1152  Remove comments system and config from core to plugin */
-UPDATE `cot_auth` SET auth_code = 'plug', auth_option = 'comments' WHERE auth_code = 'comments' AND auth_option = 'a';
-
-UPDATE `cot_config` SET config_name = 'parsebbcodepm' WHERE config_owner = 'core' AND config_cat = 'parser' AND config_name = 'parsebbcodecom';
-UPDATE `cot_config` SET config_name = 'parsesmiliespm' WHERE config_owner = 'core' AND config_cat = 'parser' AND config_name = 'parsesmiliescom';
-DELETE FROM `cot_config` WHERE config_owner = 'core' AND config_cat = 'comments' AND config_name = 'disable_comments';
-INSERT INTO `cot_config` VALUES ('plug', 'comments', '1', 'time', 2, '10', '10', '1,2,3,4,5,6,7,8,9,10,15,30,60,90,120,180', 'Comments editable timeout for users, minutes');
-INSERT INTO `cot_config` VALUES ('plug', 'comments', '2', 'mail', 3, '0', '0', '0,1', 'Notify about new comments by email?');
-INSERT INTO `cot_config` VALUES ('plug', 'comments', '3', 'markitup', 2, 'Yes', 'Yes', 'No,Yes', 'Use markitup?');
-UPDATE `cot_config` SET config_owner = 'plug', config_order = '06' WHERE config_owner = 'core' AND config_cat = 'comments' AND config_name = 'expand_comments';
-UPDATE `cot_config` SET config_owner = 'plug', config_order = '07' WHERE config_owner = 'core' AND config_cat = 'comments' AND config_name = 'maxcommentsperpage';
-UPDATE `cot_config` SET config_owner = 'plug', config_order = '08' WHERE config_owner = 'core' AND config_cat = 'comments' AND config_name = 'commentsize';
-UPDATE `cot_config` SET config_owner = 'plug', config_order = '09' WHERE config_owner = 'core' AND config_cat = 'comments' AND config_name = 'countcomments';
-UPDATE `cot_config` SET config_owner = 'plug', config_cat = 'comments', config_order = '04' WHERE config_owner = 'core' AND config_cat = 'trash' AND config_name = 'trash_comment';
-UPDATE `cot_config` SET config_owner = 'plug', config_cat = 'comments', config_order = '05' WHERE config_owner = 'core' AND config_cat = 'rss' AND config_name = 'rss_commentmaxsymbols';
-INSERT INTO `cot_config` VALUES ('plug', 'comments', '10', 'parsebbcodecom', 3, '1', '1', '0,1', 'Parse BBcode in comments');
-INSERT INTO `cot_config` VALUES ('plug', 'comments', '11', 'parsesmiliescom', 3, '1', '1', '0,1', 'Parse smilies in comments');
-
+DELETE FROM `cot_auth` WHERE auth_code = 'comments';
+DELETE FROM `cot_config` WHERE config_owner = 'core' AND config_cat = 'comments';
 DELETE FROM `cot_core` WHERE ct_code = 'comments';
 DELETE FROM `cot_core` WHERE ct_code = 'ratings';
 DELETE FROM `cot_core` WHERE ct_code = 'trash';
-UPDATE `cot_core` SET ct_id = '2' WHERE ct_code = 'forums';
-UPDATE `cot_core` SET ct_id = '3', ct_lock = '0' WHERE ct_code = 'index';
-UPDATE `cot_core` SET ct_id = '4' WHERE ct_code = 'message';
-UPDATE `cot_core` SET ct_id = '5' WHERE ct_code = 'page';
-UPDATE `cot_core` SET ct_id = '6' WHERE ct_code = 'pfs';
-UPDATE `cot_core` SET ct_id = '7' WHERE ct_code = 'plug';
-UPDATE `cot_core` SET ct_id = '8' WHERE ct_code = 'pm';
-UPDATE `cot_core` SET ct_id = '9' WHERE ct_code = 'polls';
-UPDATE `cot_core` SET ct_id = '10' WHERE ct_code = 'users';
-
-ALTER TABLE `cot_polls` ADD COLUMN poll_comcount mediumint(8) unsigned default '0';
-ALTER TABLE `cot_polls` ADD COLUMN poll_comments tinyint(1) NOT NULL default 1;
 
 /* r1164  Update settings from search plugin */
 DELETE FROM `cot_config` WHERE config_owner = 'plug' AND config_cat = 'search' AND config_name = 'maxitems_ext';
@@ -395,7 +308,9 @@ DELETE FROM `cot_config` WHERE config_owner = 'plug' AND config_cat = 'search' A
 INSERT INTO `cot_config` VALUES ('plug', 'search', '5', 'pagesearch', 3, '1', '1', '', 'Enable pages search');
 INSERT INTO `cot_config` VALUES ('plug', 'search', '6', 'forumsearch', 3, '1', '1', '', 'Enable forums search');
 
-/* r1168 Fix for comments plugin and cache cleanup */
+/* r1168 Delete plugin comedit */
+DELETE FROM `cot_auth` WHERE auth_code = 'comedit';
+DELETE FROM `cot_config` WHERE config_cat = 'comedit';
 DELETE FROM `cot_plugins` WHERE `pl_code` = 'comedit';
 
 TRUNCATE `cot_cache`;
@@ -403,14 +318,7 @@ TRUNCATE `cot_cache`;
 /* r1169 a fix for config options type */
 UPDATE `cot_config` SET `config_type` = 1
   WHERE `config_name` IN ('th_x', 'th_y', 'th_border', 'th_colorbg', 'th_colortext', 'av_maxsize', 'av_maxx',
-    'av_maxy', 'usertextmax', 'sig_maxsize', 'sig_maxx', 'sig_maxy', 'ph_maxsize', 'ph_maxx', 'ph_maxy',
-	'smtp_address', 'smtp_port', 'smtp_login', 'smtp_password');
-
-/* r1194  Update settings from search plugin */
-INSERT INTO `cot_config` VALUES ('plug', 'search', '9', 'extrafilters', 3, '1', '1', '', 'Show extrafilters on main search page');
-
-INSERT INTO `cot_plugins` (pl_hook, pl_code, pl_part, pl_title, pl_file, pl_order, pl_active) VALUES
-('ajax', 'search', 'ajax', 'Search', 'search.ajax', 10, 1);
+    'av_maxy', 'usertextmax', 'sig_maxsize', 'sig_maxx', 'sig_maxy', 'ph_maxsize', 'ph_maxx', 'ph_maxy');
 
 /* r1195 Error message output control */
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`)
@@ -433,7 +341,7 @@ INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_
   `config_default`, `config_text`) VALUES
 ('core', 'users', '21', 'forcerememberme', 3, '0', '', '');
 
-/* r1093 new options for extrafields */
+/* r1293 new options for extrafields */
 ALTER TABLE `cot_extra_fields` ADD COLUMN `field_default` text collate utf8_unicode_ci NOT NULL;
 ALTER TABLE `cot_extra_fields` ADD COLUMN `field_required` tinyint(1) unsigned NOT NULL default '0';
 ALTER TABLE `cot_extra_fields` ADD COLUMN `field_parse` varchar(32) collate utf8_unicode_ci NOT NULL default 'HTML';
@@ -483,6 +391,11 @@ UPDATE `cot_bbcode` SET `bbc_replacement` = 'return ''<pre class="code">''.cot_b
 
 /* r1370 Remove obsolete parser configs */
 DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'parser';
+
+/* r1374 Remove trashcan options  and trashcan table*/
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'trash';
+
+DROP TABLE IF EXISTS `cot_trash`;
 
 /* r1446 JS/CSS consolidator settings */
 INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
@@ -536,3 +449,36 @@ ALTER TABLE `cot_forum_posts` ADD KEY (`fp_cat`);
 ALTER TABLE `cot_forum_topics` ADD KEY (`ft_cat`);
 
 DELETE FROM `cot_plugins` WHERE `pl_code` = 'forums' AND `pl_hook` = 'admin';
+
+/* r1514 Remove obsolete configuration fields for avatar/photo/signature */
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'av_maxsize';
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'av_maxx';
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'av_maxy';
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'ph_maxsize';
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'ph_maxx';
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'ph_maxy';
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'sig_maxsize';
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'sig_maxx';
+DELETE FROM `cot_config` WHERE `config_cat` = 'users' AND `config_name` = 'sig_maxy';
+
+/* r1572 Remove SMTP email settings and leave it up to plugins and remove index module from registry*/
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'email';
+
+DELETE FROM `cot_core` WHERE `ct_code` = 'index';
+
+/* r1592 Ratings tables update */
+ALTER TABLE `cot_ratings` ADD COLUMN `rating_area` varchar(64) collate utf8_unicode_ci NOT NULL default '';
+ALTER TABLE `cot_ratings` MODIFY `rating_code` varchar(255) collate utf8_unicode_ci NOT NULL default '';
+
+ALTER TABLE `cot_rated` ADD COLUMN `rated_area` varchar(64) collate utf8_unicode_ci NOT NULL default '';
+ALTER TABLE `cot_rated` MODIFY `rated_code` varchar(255) collate utf8_unicode_ci NOT NULL default '';
+
+/* r1601 Pagination tweaks */
+INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`, `config_default`, `config_variants`, `config_text`) VALUES
+('core','main','44','easypagenav',3,'1','1','','');
+
+UPDATE `cot_config` SET `config_type` = 1 WHERE `config_name` IN ('maxrowsperpage', 'maxusersperpage');
+
+/* r1620 Remove unused options */
+DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'performance' AND `config_name` = 'theme_consolidate';
+
