@@ -1,34 +1,34 @@
-$('.star-rating').live('mouseenter', function () {
-	if (!$(this).hasClass('star-rating-readonly'))
+$('.pm-star').live('mouseenter', function () {
+	if (!$(this).hasClass('pm-star-readonly'))
 	{
-		$(this).addClass('star-rating-hover');
-		if ($(this).hasClass('star-rating-on'))
+		$(this).addClass('pm-star-hover');
+		if ($(this).hasClass('pm-star-on'))
 		{
-			$(this).addClass('star-rating-off').removeClass('star-rating-on');
+			$(this).addClass('pm-star-off').removeClass('pm-star-on');
 		}
 	}
 });
 
-$('.star-rating').live('mouseleave',	function () {
-	if (!$(this).hasClass('star-rating-readonly'))
+$('.pm-star-rating').live('mouseleave',	function () {
+	if (!$(this).hasClass('pm-star-readonly'))
 	{
-		$(this).removeClass('star-rating-hover');
-		if ($(this).hasClass('star-rating-off'))
+		$(this).removeClass('pm-star-hover');
+		if ($(this).hasClass('pm-star-off'))
 		{
-			$(this).addClass('star-rating-on').removeClass('star-rating-off');
+			$(this).addClass('pm-star-on').removeClass('pm-star-off');
 		}
 	}
 });
 
-$('.star-rating').live('click', function () {
-	if (!$(this).hasClass('star-rating-readonly') || !ajaxEnabled)
+$('.pm-star').live('click', function () {
+	if (!$(this).hasClass('pm-star-readonly') || !ajaxEnabled)
 	{
 		var txt = $(this).children('a').attr('href');
 		ajaxSend({
 			url: txt,
 			divId: 'pagePreview'
 		});
-		$(this).toggleClass('star-rating-off');
+		$(this).toggleClass('pm-star-off');
 		return(false);
 	}
 });

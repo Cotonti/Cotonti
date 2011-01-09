@@ -44,7 +44,7 @@ if ($a == 'send')
 	{
 		cot_error('pm_bodytooshort', 'newpmtext');
 	}
-	if (mb_strlen($newpmtext) > $cfg['pm']['pm_maxsize'])
+	if (mb_strlen($newpmtext) > $cfg['pm']['maxsize'])
 	{
 		cot_error('pm_bodytoolong', 'newpmtext');
 	}
@@ -141,7 +141,7 @@ if ($a == 'send')
 				$pmsql = $db->insert($db_pm, $pm);
 				$pmsql = $db->update($db_users, array('user_newpm' => '1'), "user_id = '".$usr['id']."'");
 
-				if ($cfg['pm']['pm_allownotifications'])
+				if ($cfg['pm']['allownotifications'])
 				{
 					$pmsql = $db->query("SELECT user_email, user_name, user_lang
 						FROM $db_users WHERE user_id = $userid AND user_pmnotify = 1 AND user_maingrp > 3");
