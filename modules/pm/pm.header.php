@@ -25,8 +25,7 @@ if ($usr['id'] > 0)
 	require_once cot_incfile('pm', 'module');
 	if ($usr['newpm'])
 	{
-		$sql_pm = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0");
-		$usr['messages'] = $sql_pm->fetchColumn();
+		$usr['messages'] = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid='".$usr['id']."' AND pm_tostate=0")->fetchColumn();
 	}
 	$out['pmreminder'] = cot_rc_link(cot_url('pm'),
 		($usr['messages'] > 0) ? cot_declension($usr['messages'], $Ls['Privatemessages']) : $L['hea_noprivatemessages']

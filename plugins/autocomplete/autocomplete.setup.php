@@ -4,7 +4,7 @@
 Code=autocomplete
 Name=Autocomplete
 Description=autocomplete script
-Version=0.8.1
+Version=0.8.2
 Date=2011-jan-8
 Author=esclkm
 Copyright=Copyright (c) Cotonti Team 2008-2011
@@ -16,6 +16,11 @@ Auth_members=RW
 Lock_members=12345A
 Recommends_plugins=htmlpurifier
 [END_COT_EXT]
+
+[BEGIN_COT_EXT_CONFIG]
+autocomplete=23:select:0,1,2,3,4,5,6:3:Min. chars for autocomplete
+css=99:radio:0,1:1:Enable plugin CSS
+[END_COT_EXT_CONFIG]
 ==================== */
 
 /**

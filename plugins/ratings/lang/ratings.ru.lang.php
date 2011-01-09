@@ -18,6 +18,7 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['cfg_enable_ratings'] = array('Включить рейтинги');
 $L['cfg_ratings_allowchange'] = array('Разрешить изменение рейтинга', 'Разрешить пользователям изменять ранее выставленный рейтинг');
+$L['cfg_css'] = array('Подключить CSS плагина');
 
 $L['info_desc'] = 'Рейтинги со звездами, работающие в один клик. Использует jQuery.';
 

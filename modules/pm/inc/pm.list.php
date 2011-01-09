@@ -16,7 +16,7 @@ list($usr['auth_read'], $usr['auth_write'], $usr['isadmin']) = cot_auth('pm', 'a
 cot_block($usr['auth_read']);
 
 $f = cot_import('f','G','ALP');				// Category inbox, sentbox, archive
-list($pg, $d) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']);
+list($pg, $d) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']); // pagination
 $a = cot_import('a','G','TXT');				// Action
 $filter = cot_import('filter','G','TXT');	// filter
 
@@ -112,31 +112,19 @@ $out['subtitle'] = cot_title('title_pm_main', $title_params);
 $out['head'] .= $R['code_noindex'];
 
 /* === Title === */
-
-$sql_pm = $db->query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter");
-$totallines = $sql_pm->fetchColumn();
-$d = ($d >= $totallines) ? (floor($totallines / $cfg['pm']['maxpmperpage'])) * $cfg['pm']['maxpmperpage'] : $d;
+$totallines = $db->query("SELECT COUNT(*) FROM $db_pm WHERE $sqlfilter")->fetchColumn();
 $elem = ($f == 'sentbox') ? 'pm_touserid' : 'pm_fromuserid';
-$sql_pm = $db->query("SELECT p.*, u.* FROM $db_pm AS p
+$pm_sql = $db->query("SELECT p.*, u.* FROM $db_pm AS p
 		LEFT JOIN $db_users AS u
 		ON u.user_id = p.$elem
 		WHERE $sqlfilter
 		ORDER BY pm_date DESC LIMIT  $d,".$cfg['pm']['maxpmperpage']);
 
-$totalpages = ceil($totallines / $cfg['pm']['maxpmperpage']);
-$currentpage = ceil($d / $cfg['pm']['maxpmperpage'])+1;
 $pagenav = cot_pagenav('pm', 'f='.$f.'&filter='.$filter, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax']);
-
-/* === Hook === */
-foreach (cot_getextplugins('pm.list.main') as $pl)
-{
-	include $pl;
-}
-/* ===== */
 
 require_once $cfg['system_dir'] . '/header.php';
 
-$t = new XTemplate(cot_tplfile('pm.list'));
+$t = new XTemplate(cot_tplfile(array('pm', 'list', $pmalttpl)));
 
 $jj = 0;
 
@@ -144,7 +132,7 @@ $jj = 0;
 $extp = cot_getextplugins('pm.list.loop');
 /* ===== */
 
-while ($row = $sql_pm->fetch())
+while ($row = $pm_sql->fetch())
 {
 	$jj++;
 	$row['pm_icon_readstatus'] = ($row['pm_tostate'] == '0') ?
@@ -224,8 +212,8 @@ $t->assign(array(
 	'PM_PAGEPREV' => $pagenav['prev'],
 	'PM_PAGENEXT' => $pagenav['next'],
 	'PM_PAGES' => $pagenav['main'],
-	'PM_CURRENTPAGE' => $currentpage,
-	'PM_TOTALPAGES' => ($totalpages == 0 )? "1" : $totalpages,
+	'PM_CURRENTPAGE' => $pagenav['current'],
+	'PM_TOTALPAGES' => $pagenav['total'],
 	'PM_SENT_TYPE' => ($f == 'sentbox') ? $L['Recipient'] : $L['Sender']
 ));
 

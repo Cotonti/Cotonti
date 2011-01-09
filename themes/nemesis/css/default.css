@@ -199,25 +199,7 @@ label input						{ vertical-align:middle; }
 .bar_front 	{ background-color:#cde8fb; border-right:0px solid #333; color:#ddd; height:8px; font-size:1px; }
 .bar_back 	{ background-color:#fff; border:1px solid #333; height:8px; }
 
-/* 12. Tags
--------------------------------------------------- */
-
-.tag_cloud	{ }
-.tag_cloud li	{ }
-.tag_cloud a	{ }
-
-.tag_cloud a.xs			{ color:#c4c4c4; }
-.tag_cloud a.xs:hover	{ color:#000; }
-.tag_cloud a.s			{ font-size:1.2em; color:#336699; }
-.tag_cloud a.s:hover		{ color:#000; }
-.tag_cloud a.m			{ font-size:1.4em; color:#A0522D; }
-.tag_cloud a.m:hover		{ color:#000; }
-.tag_cloud a.l			{ font-size:1.6em; color:#B0C4DE; }
-.tag_cloud a.l:hover		{ color:#000; }
-.tag_cloud a.xl			{ font-size:1.8em; color:#aad815; }
-.tag_cloud a.xl:hover	{ color:#000; }
-
-/* 13. Forums
+/* 10. Forums
 -------------------------------------------------- */
 
 .b1 img			{ margin:0 5px 0 0; vertical-align:-5px!important; }
@@ -227,31 +209,15 @@ label input						{ vertical-align:middle; }
 #newf			{ margin:10px 0; }
 #newf li			{ margin-right:10px; display:inline; }
 
-/* 14. Search
+/* 11. Search
 -------------------------------------------------- */
 
 .search-res			{ margin:0 0 10px; overflow:auto; }
 .search-res .small	{ color:#000; }
 .search-hl      		{ font-weight:bold; padding:0 2px; background:yellow; }
 
-/* 15. Lists
+/* 12. Lists
 -------------------------------------------------- */
 
 ul.bullets li	{ padding-left:25px; background:url(../img/bullets.png) no-repeat 5px 2px; }
 ol			{ margin-left:20px; list-style-type:decimal; }
-
-/* 16. Ratings
--------------------------------------------------- */
-
-/* jQuery.Rating Plugin CSS - http://www.fyneworks.com/jquery/star-rating/ */
-div.rating-cancel,div.star-rating{float:left;width:17px;height:15px;text-indent:-999em;cursor:pointer;display:block;background:transparent;overflow:hidden}
-div.rating-cancel,div.rating-cancel a{background:url(../../../images/delete.png) no-repeat 0 -16px}
-div.star-rating,div.star-rating a{background:url(../../../images/star.png) no-repeat 0 0px}
-div.rating-cancel a,div.star-rating a{display:block;width:16px;height:100%;background-position:0 0px;border:0;font-size:0}
-div.star-rating-on a{background-position:0 -16px!important}
-div.star-rating-hover a{background-position:0 -32px}
-/* Read Only CSS */
-div.star-rating-readonly a{cursor:default !important}
-/* Partial Star CSS */
-div.star-rating{background:transparent!important;overflow:hidden!important}
-/* END jQuery.Rating Plugin CSS */

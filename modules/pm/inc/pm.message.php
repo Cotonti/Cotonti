@@ -20,7 +20,7 @@ cot_block($usr['auth_read']);
 $id = cot_import('id','G','INT');				// Message ID
 $q = cot_import('q','G','TXT');					// Quote
 $history = cot_import('history','G','BOL');		// Turn on history
-list($pg, $d) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']);
+list($pg, $d) = cot_import_pagenav('d', $cfg['pm']['maxpmperpage']); //pagination history
 
 if (empty($id))
 {
@@ -35,9 +35,9 @@ foreach (cot_getextplugins('pm.first') as $pl)
 /* ===== */
 
 list($totalsentbox, $totalinbox) = cot_message_count($usr['id']);
-$sql_pm = $db->query("SELECT * FROM $db_pm WHERE pm_id = $id LIMIT 1");
-cot_die($sql_pm->rowCount() == 0);
-$row = $sql_pm->fetch();
+$pmsql = $db->query("SELECT * FROM $db_pm WHERE pm_id = $id LIMIT 1");
+cot_die($pmsql->rowCount() == 0);
+$row = $pmsql->fetch();
 
 $title = cot_rc_link(cot_url('pm'), $L['Private_Messages']) ." ".$cfg['separator'];
 
@@ -45,11 +45,10 @@ if ($row['pm_touserid'] == $usr['id'])
 {
 	if ($row['pm_tostate'] == 0)
 	{
-		$sql_pm = $db->update($db_pm, array('pm_tostate' => '1'), "pm_id = $id");
-		$sql_pm = $db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$usr['id']."' AND pm_tostate = 0");
-		if ($sql_pm->fetchColumn() == 0)
+		$db->update($db_pm, array('pm_tostate' => '1'), "pm_id = $id");
+		if ($db->query("SELECT COUNT(*) FROM $db_pm WHERE pm_touserid = '".$usr['id']."' AND pm_tostate = 0")->fetchColumn() == 0)
 		{
-			$sql_pm = $db->update($db_users, array('user_newpm' => '0'), "user_id = '".$usr['id']."'");
+			$db->update($db_users, array('user_newpm' => '0'), "user_id = '".$usr['id']."'");
 		}
 	}
 	$f = 'inbox';
@@ -71,9 +70,7 @@ else
 {
 	cot_die();
 }
-$sql_user = $db->query("SELECT * FROM $db_users WHERE user_id = $to LIMIT 1");
-$row_user = $sql_user->fetch();
-
+$row_user = $db->query("SELECT * FROM $db_users WHERE user_id = $to LIMIT 1")->fetch();
 
 $star = '<div class="'.$star_class.'">'.$row['pm_icon_starred'].'</div>';
 $row['pm_icon_starred'] = cot_rc_link(cot_url('pm', 'a=star&&id='.$row['pm_id']), $R['pm_icon_archive'], array('title' => $titstar));
@@ -96,21 +93,17 @@ foreach (cot_getextplugins('pm.main') as $pl)
 $pm_maindata = cot_parse($row['pm_text'], $cfg['pm']['markup']);
 
 require_once $cfg['system_dir'] . '/header.php';
-$t = new XTemplate(cot_tplfile('pm.message'));
+$t = new XTemplate(cot_tplfile(array('pm', 'message', $pmalttpl)));
 
 if ($history)
 {
-	$sql_pm_history = $db->query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = $to AND pm_fromstate <> 3)
-						OR (pm_fromuserid = $to AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)");
-	$totallines = $sql_pm_history->fetchColumn();
-	$d = ($d >= $totallines) ? (floor($totallines / $cfg['pm']['maxpmperpage']))*$cfg['pm']['maxpmperpage'] : $d;
+	$totallines = $db->query("SELECT COUNT(*) FROM $db_pm WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = $to AND pm_fromstate <> 3)
+						OR (pm_fromuserid = $to AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)")->fetchColumn();
 	$sql_pm_history = $db->query("SELECT *, u.user_name FROM $db_pm AS p LEFT JOIN $db_users AS u ON u.user_id = p.pm_touserid
 						WHERE (pm_fromuserid = '".$usr['id']."' AND pm_touserid = $to AND pm_fromstate <> 3)
 						OR (pm_fromuserid = $to AND pm_touserid = '".$usr['id']."' AND pm_tostate <> 3)
 						ORDER BY pm_date DESC LIMIT $d,".$cfg['pm']['maxpmperpage']);
 
-	$pm_totalpages = ceil($totallines / $cfg['pm']['maxpmperpage']);
-	$pm_currentpage = ceil ($d / $cfg['pm']['maxpmperpage'])+1;
 	$pagenav = cot_pagenav('pm', 'm=message&id='.$id.'&history='.$history.'&q='.$q, $d, $totallines, $cfg['pm']['maxpmperpage'], 'd', '', $cfg['jquery'] && $cfg['turnajax'], 'ajaxHistory');
 
 	/* === Hook - Part1 : Set === */
@@ -124,7 +117,7 @@ if ($history)
 				cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), $R['pm_icon_new'], array('title' => $L['pm_unread'], 'class'=>'ajax'))
 				: cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), $R['pm_icon'], array('title' => $L['pm_read'], 'class'=>'ajax'));
 
-		if ($row2['pm_fromuserid']==$usr['id'])
+		if ($row2['pm_fromuserid'] == $usr['id'])
 		{// sentbox
 			$row2['pm_icon_edit'] = ($row2['pm_tostate'] == 0) ? cot_rc_link(cot_url('pm', 'm=send&id='.$row2['pm_id']), $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '';
 			$pm_user = cot_generate_usertags($usr['profile'], 'PM_ROW_USER_');

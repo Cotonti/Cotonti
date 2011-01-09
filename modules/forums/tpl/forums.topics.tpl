@@ -9,7 +9,7 @@
 					<td class="coltop width45">{PHP.L.Subforums}</td>
 					<td class="coltop width30">{PHP.L.Lastpost}</td>
 					<td class="coltop width10">{PHP.L.Posts}</td>
-					<td class="coltop width10">{PHP.L.Topics}</td>
+					<td class="coltop width10">{PHP.L.forums_topics}</td>
 				</tr>
 				<!-- BEGIN: FORUMS_SECTIONS_ROW_SECTION -->
 				<tr>
