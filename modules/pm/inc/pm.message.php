@@ -54,8 +54,7 @@ if ($row['pm_touserid'] == $usr['id'])
 	$f = 'inbox';
 	$title .= ' '.cot_rc_link(cot_url('pm', 'f=inbox'), $L['pm_inbox']);
 	$to = $row['pm_fromuserid'];
-	$titstar = ($row2['pm_tostate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
-	$star_class = ($row['pm_tostate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
+	$star_class = ($row['pm_tostate'] == 2) ?  1 : 0;
 }
 elseif ($row['pm_fromuserid'] == $usr['id'])
 {
@@ -63,17 +62,13 @@ elseif ($row['pm_fromuserid'] == $usr['id'])
 	$title .= ' '.cot_rc_link(cot_url('pm', 'f=sentbox'), $L['pm_sentbox']);
 	$row['pm_icon_edit'] = ($row['pm_tostate'] == 0) ? cot_rc_link(cot_url('pm', 'm=send&id='.$row['pm_id']), $L['Edit']) : '';
 	$to = $row['pm_touserid'];
-	$titstar = ($row2['pm_fromstate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
-	$star_class = ($row['pm_fromstate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
+	$star_class = ($row['pm_fromstate'] == 2) ?  1 : 0;
 }
 else
 {
 	cot_die();
 }
 $row_user = $db->query("SELECT * FROM $db_users WHERE user_id = $to LIMIT 1")->fetch();
-
-$star = '<div class="'.$star_class.'">'.$row['pm_icon_starred'].'</div>';
-$row['pm_icon_starred'] = cot_rc_link(cot_url('pm', 'a=star&&id='.$row['pm_id']), $R['pm_icon_archive'], array('title' => $titstar));
 
 $title_params = array(
 	'PM' => $L['Private_Messages'],
@@ -121,33 +116,27 @@ if ($history)
 		{// sentbox
 			$row2['pm_icon_edit'] = ($row2['pm_tostate'] == 0) ? cot_rc_link(cot_url('pm', 'm=send&id='.$row2['pm_id']), $R['pm_icon_edit'], array('title' => $L['Edit'], 'class'=>'ajax')) : '';
 			$pm_user = cot_generate_usertags($usr['profile'], 'PM_ROW_USER_');
-			$titstar = ($row2['pm_fromstate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
-			$star_class = ($row2['pm_fromstate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
+			$star_class2 = ($row2['pm_fromstate'] == 2) ? 1 : 0;
 		}
 		else
 		{//inbox
 			$pm_user = cot_generate_usertags($row_user, 'PM_ROW_USER_');
-			$titstar = ($row2['pm_tostate'] == 2) ? $L['pm_deletefromstarred'] : $L['pm_putinstarred'];
-			$star_class = ($row2['pm_tostate'] == 2) ? 'star-rating star-rating-on' : 'star-rating';
+			$star_class2 = ($row2['pm_tostate'] == 2) ? 1 : 0;
 		}
 
 		$pm_data = cot_parse($row2['pm_text'], $cfg['pm']['markup']);
 
 		$row2['pm_icon_delete'] = cot_rc_link(cot_url('pm', 'a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d),
 				$R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax'));
-		$row2['pm_icon_starred'] = cot_rc_link(cot_url('pm', '&a=star&id='.$row2['pm_id']),
-				$R['pm_icon_archive'], array('title' => $arch_lab));
-		$star2 = '<div class="'.$star_class.'">'.$row2['pm_icon_starred'].'</div>';
 
 		$t->assign(array(
 			'PM_ROW_ID' => $row2['pm_id'],
 			'PM_ROW_STATE' => $row2['pm_tostate'],
-			'PM_ROW_STAR' => $star2,
+			'PM_ROW_STAR' => cot_rc($star_class2 ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d))),
 			'PM_ROW_DATE' => @date($cfg['dateformat'], $row2['pm_date'] + $usr['timezone'] * 3600),
 			'PM_ROW_TITLE' => cot_rc_link(cot_url('pm', 'm=message&id='.$row2['pm_id']), htmlspecialchars($row2['pm_title']), array('class'=>'ajax')),
 			'PM_ROW_TEXT' => $pm_data,
 			'PM_ROW_ICON_STATUS' => $row2['pm_icon_readstatus'],
-			'PM_ROW_ICON_STARRED' => $row2['pm_icon_starred'],
 			'PM_ROW_ICON_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row2['pm_id'].'&f='.$f.'&d='.$d), $R['pm_icon_trashcan'], array('title' => $L['Delete'], 'class'=>'ajax')),
 			'PM_ROW_ICON_EDIT' => $row2['pm_icon_edit'],
 			'PM_ROW_ODDEVEN' => cot_build_oddeven($jj),
@@ -224,11 +213,10 @@ $t->assign(array(
 	'PM_SENTBOX_COUNT' => $totalsentbox,
 	'PM_ID' => $row['pm_id'],
 	'PM_STATE' => $row['pm_tostate'],
-	'PM_STAR' => $star,
+	'PM_STAR' => cot_rc($star_class ? 'pm_icon_unstar' : 'pm_icon_star', array('link' => cot_url('pm', 'f='.$f.'&filter='.$filter.'&a=star&id='.$row['pm_id'].'&d='.$d))),
 	'PM_DATE' => @date($cfg['dateformat'], $row['pm_date'] + $usr['timezone'] * 3600),
 	'PM_TITLE' => htmlspecialchars($row['pm_title']),
 	'PM_TEXT' => '<div id="pm_text">'.$pm_maindata.'</div>',
-	'PM_ICON_STARRED' => $row['pm_icon_starred'],
 	'PM_DELETE' => cot_rc_link(cot_url('pm', 'm=edit&a=delete&'.cot_xg().'&id='.$row['pm_id'].'&f='.$f), $L['Delete'], array('class'=>'ajax')),
 	'PM_EDIT' => $row['pm_icon_edit'],
 	'PM_HISTORY' => cot_rc_link(cot_url('pm', 'm=message&id='.$id.'&q='.$q.'&history=1&d='.$d), $L['pm_messageshistory'], array("rel" => "get-ajaxHistory", 'class'=>'ajax')),

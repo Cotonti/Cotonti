@@ -53,7 +53,7 @@ $out['meta_charset'] = 'UTF-8';
 $out['meta_desc'] = htmlspecialchars($out['desc']);
 $out['meta_keywords'] = empty($out['keywords']) ? $cfg['metakeywords'] : htmlspecialchars($out['keywords']);
 $out['meta_lastmod'] = gmdate('D, d M Y H:i:s');
-$out['head_head'] = $out['head'];
+$out['head_head'] .= $out['head'];
 
 if ($cfg['jquery'] && $cfg['jquery_cdn'])
 {
@@ -72,13 +72,6 @@ else
 
 if (!COT_AJAX)
 {
-	/* === Hook === */
-	foreach (cot_getextplugins('header.main') as $pl)
-	{
-		include $pl;
-	}
-	/* ===== */
-
 	$mtpl_type = defined('COT_ADMIN') || defined('COT_MESSAGE') && $_SESSION['s_run_admin'] ? 'core' : 'module';
 	if ($cfg['enablecustomhf'])
 	{
@@ -88,7 +81,14 @@ if (!COT_AJAX)
 	{
 		$mtpl_base = 'header';
 	}
-	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));
+	$t = new XTemplate(cot_tplfile($mtpl_base, $mtpl_type));	
+	
+	/* === Hook === */
+	foreach (cot_getextplugins('header.main') as $pl)
+	{
+		include $pl;
+	}
+	/* ===== */
 
 	$t->assign(array(
 		'HEADER_TITLE' => $plug_title . $out['fulltitle'],

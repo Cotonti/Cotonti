@@ -1,0 +1,8 @@
+/* PM
+-------------------------------------------------- */
+
+div.pm-star{float:left;width:17px;height:15px;text-indent:-999em;cursor:pointer;display:block;background:transparent!important;overflow:hidden!important}
+div.pm-star,div.pm-star a{background:url(../../../images/icons/default/star.png) no-repeat 0 0px}
+div.pm-star a{display:block;width:16px;height:100%;background-position:0 0px;border:0;font-size:0}
+div.pm-star-on a{background-position:0 -16px!important}
+div.pm-star-hover a{background-position:0 -32px}

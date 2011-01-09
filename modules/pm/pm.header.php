@@ -1,7 +1,7 @@
 <?php
 /* ====================
 [BEGIN_COT_EXT]
-Hooks=header.tags
+Hooks=header.main
 Tags=header.tpl:{HEADER_USER_PMS},{HEADER_USER_PMREMINDER}
 [END_COT_EXT]
 ==================== */
@@ -35,5 +35,10 @@ if ($usr['id'] > 0)
 		'HEADER_USER_PMS' => $out['pms'],
 		'HEADER_USER_PMREMINDER' => $out['pmreminder']
 	));
+}
+
+if ($cfg['pm']['css'] && $env['ext'] == 'pm')
+{
+	cot_rc_link_file($cfg['modules_dir'] . '/pm/tpl/pm.css');
 }
 ?>
