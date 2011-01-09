@@ -4,7 +4,7 @@
 Code=autocomplete
 Name=Autocomplete
 Description=autocomplete script
-Version=0.8.2
+Version=0.8.3
 Date=2011-jan-8
 Author=esclkm
 Copyright=Copyright (c) Cotonti Team 2008-2011

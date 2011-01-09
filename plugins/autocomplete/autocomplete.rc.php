@@ -2,7 +2,6 @@
 /* ====================
 [BEGIN_COT_EXT]
 Hooks=rc
-Tags=header.tpl:{HEADER_HEAD}
 [END_COT_EXT]
 ==================== */
 
@@ -27,7 +26,7 @@ if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['autocomplete']['autoco
 		cot_rc_add_file($cfg['plugins_dir'] . '/autocomplete/lib/jquery.autocomplete.css');
 	}
 	
-	cot_rc_add_embed('
+	cot_rc_add_embed('autocomplete', '
 		$(document).ready(function(){
 		$(".userinput").autocomplete("plug.php?r=autocomplete", {multiple: true, minChars: '.$cfg['plugin']['autocomplete']['autocomplete'].'});
 		});
