@@ -28,7 +28,9 @@ if ($cfg['jquery'] && $cfg['turnajax'] && $cfg['plugin']['autocomplete']['autoco
 	
 	cot_rc_add_embed('autocomplete', '
 		$(document).ready(function(){
+		 $(".userinput").live("focus", function() {
 		$(".userinput").autocomplete("plug.php?r=autocomplete", {multiple: true, minChars: '.$cfg['plugin']['autocomplete']['autocomplete'].'});
+		});
 		});
 	');
 }
