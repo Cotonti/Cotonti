@@ -32,7 +32,7 @@ $L['All'] = 'Все';
 $L['Allcategories'] = 'Все категории';
 $L['Allpages'] = 'Все страницы';
 $L['Alltimesare'] = 'Время указано в';
-$L['Announcement'] = 'Обьявление';
+$L['Announcement'] = 'Объявление';
 $L['Anonymous'] = 'Анонимный';
 $L['Archives'] = 'Архив';
 $L['Ascending'] = 'По возрастанию';
@@ -252,7 +252,7 @@ $L['Replies'] = 'Ответы';
 $L['Reply'] = 'Ответ';
 $L['Reset'] = 'Сброс';
 $L['Restore'] = 'Восстановить';
-$L['Resync'] = 'Синхронизовать';
+$L['Resync'] = 'Синхронизировать';
 $L['Resynced'] = 'Синхронизовано';
 $L['Right'] = 'По правому краю';
 $L['Rights'] = 'Права';
@@ -409,8 +409,8 @@ $L['foo_sqlaverage'] = 'Среднее время SQL';
  * Extra fields
  */
 
-$L['field_pregmatch'] = 'Значение поля не верное';
-$L['field_notinarray'] = 'Значение поля не верное';
+$L['field_pregmatch'] = 'Значение поля не верно';
+$L['field_notinarray'] = 'Значение поля не верно';
 $L['field_required'] = 'Поле должно быть заполнено';
 
 /**
