@@ -25,6 +25,26 @@
 			<div id="content">
 				<h3>{UPDATE_TITLE}</h3>
 				{FILE ./themes/nemesis/warnings.tpl}
+
+				<!-- BEGIN: PARSER -->
+				<form action="install.php" method="get">
+						<ul>
+							<li class="title">{PHP.L.install_parsing}</li>
+							<li><input type="radio" name="parser" value="html" checked="checked" /> HTML</li>
+							<li><input type="radio" name="parser" value="bbcode" /> BBCode</li>
+							<li><em>{PHP.L.install_parsing_hint}</em></li>
+						</ul>
+					<div style="text-align:center"><input type="submit" value="{PHP.L.Next}" /></div>
+				</form>
+				<!-- END: PARSER -->
+
+				<!-- BEGIN: COMPLETED -->
+				<p class="complete">
+					<span>{PHP.L.install_upgrade_success_note}</span>
+
+					<a href="index.php">{PHP.L.install_view_site}</a>
+				</p>
+				<!-- END: COMPLETED -->
 			</div>
 		</div>
 	</body>
