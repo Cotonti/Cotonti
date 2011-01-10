@@ -161,10 +161,4 @@ $db_structure 		= $db_x.'structure';
 $db_updates			= $db_x.'updates';
 $db_users 			= $db_x.'users';
 
-/**
- * Set it TRUE if you want to convert your old BBcode database to HTML.
- * Remove it otherwise.
- */
-$cfg['bbcode2html'] = false;
-
 ?>

@@ -107,47 +107,124 @@ $old_branch = @$sql_install_oldbranch->fetchColumn();
 if ($db->errno > 0 || $sql_install->rowCount() != 1)
 {
 	// Is Genoa, perform upgrade
-	$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
-	$error = $db->runScript($script);
-	if (empty($error))
+	$parser = cot_import('parser', 'G', 'ALP');
+
+	if (is_null($parser) || !in_array($parser, array('html', 'bbcode')))
 	{
-		cot_message(cot_rc('install_update_patch_applied',
-			array('f' => "setup/$branch/patch-$prev_branch.sql",
-				'msg' => 'OK')));
+		// Parser choice required
+		$t->parse('MAIN.PARSER');
+		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade',
+			array('from' => $prev_branch, 'to' => $branch)));
 	}
 	else
 	{
-		cot_error(cot_rc('install_update_patch_error',
-			array('f' => "setup/$branch/patch-$prev_branch.sql",
-				'msg' => $error)));
-	}
-	if (file_exists("./setup/$branch/patch-$prev_branch.inc"))
-	{
-		$ret = include "./setup/$branch/patch-$prev_branch.inc";
-		if ($ret !== false)
+
+		// Run SQL patches for core
+		$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
+		$error = $db->runScript($script);
+		if (empty($error))
 		{
-			$msg = $ret == 1 ? 'OK' : $ret;
-			cot_message('install_update_patch_applied',
-				array('f' => "setup/$branch/patch-$prev_branch.inc",
-					'msg' => $ret));
+			cot_message(cot_rc('install_update_patch_applied',
+				array('f' => "setup/$branch/patch-$prev_branch.sql",
+					'msg' => 'OK')));
 		}
 		else
 		{
-			cot_error('install_update_patch_error',
-				array('f' => "setup/$branch/patch-$prev_branch.inc",
-					'msg' => $L['Error']));
+			cot_error(cot_rc('install_update_patch_error',
+				array('f' => "setup/$branch/patch-$prev_branch.sql",
+					'msg' => $error)));
 		}
-	}
-	if (!cot_error_found())
-	{
-		// Success
-		$db->update($db_updates,  array('upd_value' => $branch), "upd_param = 'branch'");
-		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
-	}
-	else
-	{
-		// Error
-		$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_error', array('ver' => $branch)));
+
+		// Run PHP patches
+		if (file_exists("./setup/$branch/patch-$prev_branch.inc"))
+		{
+			$ret = include "./setup/$branch/patch-$prev_branch.inc";
+			if ($ret !== false)
+			{
+				$msg = $ret == 1 ? 'OK' : $ret;
+				cot_message('install_update_patch_applied',
+					array('f' => "setup/$branch/patch-$prev_branch.inc",
+						'msg' => $ret));
+			}
+			else
+			{
+				cot_error('install_update_patch_error',
+					array('f' => "setup/$branch/patch-$prev_branch.inc",
+						'msg' => $L['Error']));
+			}
+		}
+
+		// Update modules
+		foreach (array('forums', 'page', 'pfs', 'pm', 'polls') as $code)
+		{
+			$ret = cot_extension_install($code, true, true);
+			if ($ret === false)
+			{
+				cot_error(cot_rc('ext_update_error', array(
+					'type' => $L['Module'],
+					'name' => $code
+				)));
+			}
+		}
+
+		// Update installed Siena plugins and uninstall Genoa plugins
+		$res = $db->query("SELECT DISTINCT(pl_code) FROM $db_plugins
+			WHERE pl_module = 0");
+		while ($row = $res->fetch(PDO::FETCH_NUM))
+		{
+			$code = $row[0];
+			$setup_file = $cfg['plugins_dir'] . '/' . $code . '/' . $code . '.setup.php';
+			if (file_exists($setup_file) && cot_infoget($setup_file))
+			{
+				// Update
+				cot_extension_install($code, false, true);
+			}
+			else
+			{
+				// Uninstall
+				$qcode = $db->quote($code);
+				$db->delete($db_auth, "auth_option = $qcode");
+				$db->delete($db_config, "config_cat = $qcode");
+				$db->delete($db_plugins, "pl_code = $qcode");
+			}
+		}
+		$res->closeCursor();
+
+		// Install URLEditor if urltrans.dat is non-standard
+		if (file_exists('datas/urltrans.dat'))
+		{
+			$urltrans_dat = trim(file_get_contents('datas/urltrans.dat'));
+			if ($urltrans_dat != '*	*	{$_area}.php')
+			{
+				cot_extension_install('urleditor');
+			}
+		}
+
+		// Install bbcode or convert to HTML
+		cot_extension_install('bbcode');
+		if ($parser == 'html')
+		{
+			require_once './setup/siena/bbcode2html.inc';
+			cot_message('BBcode =&gt; HTML: OK');
+			cot_extension_uninstall('bbcode');
+		}
+
+		// Install userimages plugin
+		cot_extension_install('userimages');
+
+		// Display results
+		if (!cot_error_found())
+		{
+			// Success
+			$t->parse('MAIN.COMPLETED');
+			$db->update($db_updates,  array('upd_value' => $branch), "upd_param = 'branch'");
+			$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_success', array('ver' => $branch)));
+		}
+		else
+		{
+			// Error
+			$t->assign('UPDATE_TITLE', cot_rc('install_upgrade_error', array('ver' => $branch)));
+		}
 	}
 
 	$t->assign(array(
@@ -211,7 +288,7 @@ else
 			)));
 		}
 	}
-	
+
 	if ($new_rev === false || cot_error_found())
 	{
 		// Display error message
@@ -244,16 +321,6 @@ else
 	{
 		$cache->clear();
 		cot_rc_consolidate();
-	}
-
-	// BBcode2HTML
-	if ($cfg['bbcode2html'])
-	{
-		require_once './setup/siena/bbcode2html.inc';
-		cot_message('BBcode 2 HTML: OK');
-		$config_contents = file_get_contents($file['config']);
-		$config_contents = preg_replace("#^\\\$cfg\['bbcode2html'\]\s*=\s*.*?;#m", '$cfg[\'bbcode2html\'] = false;', $config_contents);
-		file_put_contents($file['config'], $config_contents);
 	}
 }
 
