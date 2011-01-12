@@ -87,20 +87,23 @@ $L['forums_announcment'] = 'Announcement';
 $L['forums_newannouncment'] = 'New announcement';
 $L['forums_movedoutofthissection'] = 'Moved out of this section';
 
-$L['forums_explain1'] = 'Make topic first in the topics list (until another topic is updated)';
-$L['forums_explain2'] = 'Lock topic (disable new posts)';
-$L['forums_explain3'] = 'Keep topic first in the topics list (until topic is reset to default status)';
-$L['forums_explain4'] = 'Mark topic as announcement';
-$L['forums_explain5'] = 'Mark topic as private (access for moderator(s) and topic starter only)';
-$L['forums_explain6'] = 'Reset topic to default status';
-$L['forums_explain7'] = 'Delete topic';
+$L['forums_announcement'] = 'Announcement';
+$L['forums_bump'] = 'Bump';
+$L['forums_makesticky'] = 'Sticky';
+$L['forums_private'] = 'Private';
+
+$L['forums_explainbump'] = 'Make topic first in the topics list (until another topic is updated)';
+$L['forums_explainlock'] = 'Lock topic (disable new posts)';
+$L['forums_explainsticky'] = 'Keep topic first in the topics list (until topic is reset to default status)';
+$L['forums_explainannounce'] = 'Mark topic as announcement';
+$L['forums_explainprivate'] = 'Mark topic as private (access for moderator(s) and topic starter only)';
+$L['forums_explaindefault'] = 'Reset topic to default status';
+$L['forums_explaindelete'] = 'Delete topic';
 
 /**
  * Unused?
  */
 
-$L['adm_help_forums'] = 'Not available';
-$L['adm_help_forums_structure'] = 'Not available';
 $L['forums_polltooshort'] = 'Poll options must be equal, or greater than 2';
 $L['for_onlinestatus0'] = 'user is offline';
 $L['for_onlinestatus1'] = 'user is online';

@@ -1,29 +1,5 @@
 <!-- BEGIN: MAIN -->
 
-<!-- BEGIN: FORUMS_POSTS_ADMIN -->
-<form id="movetopic" action="{FORUMS_POSTS_MOVE_URL}" method="post">
-	<table class="flat">
-		<tr>
-			<td class="textright width10">{PHP.L.forums_topicoptions}:</td>
-			<td class="width90">
-				<a href="{FORUMS_POSTS_BUMP_URL}" title="{PHP.L.forums_explain1}">{PHP.L.Bump}</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_LOCK_URL}" title="{PHP.L.forums_explain2}">{PHP.L.Lock}</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_STICKY_URL}" title="{PHP.L.forums_explain3}">{PHP.L.Makesticky}</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_ANNOUNCE_URL}" title="{PHP.L.forums_explain4}">{PHP.L.Announcement}</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_PRIVATE_URL}" title="{PHP.L.forums_explain5}">{PHP.L.Private} (#)</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_CLEAR_URL}" title="{PHP.L.forums_explain6}">{PHP.L.Default}</a> {PHP.cfg.separator}
-				<a href="{FORUMS_POSTS_DELETE_URL}" title="{PHP.L.forums_explain7}">{PHP.L.Delete}</a>
-			</td>
-		</tr>
-		<tr>
-			<td class="textright">{PHP.L.Move}:</td>
-			<td>{FORUMS_POSTS_MOVEBOX_SELECT}<span class="small spaced">{FORUMS_POSTS_MOVEBOX_KEEP} {PHP.L.forums_keepmovedlink}</span><button type="submit">{PHP.L.Move}</button>
-			</td>
-		</tr>
-	</table>
-</form>
-<!-- END: FORUMS_POSTS_ADMIN -->
-
 <!-- BEGIN: FORUMS_POSTS_TOPICPRIVATE -->
 <div class="error">{PHP.L.forums_privatetopic}</div>
 <!-- END: FORUMS_POSTS_TOPICPRIVATE -->
@@ -37,6 +13,31 @@
 
 <div class="block">
 	<h2 class="forums">{FORUMS_POSTS_PAGETITLE}</h2>
+
+<!-- BEGIN: FORUMS_POSTS_ADMIN -->
+<form id="movetopic" action="{FORUMS_POSTS_MOVE_URL}" method="post" class="marginbottom10">
+	<table class="flat">
+		<tr>
+			<td class="textright width10">{PHP.L.forums_topicoptions}:</td>
+			<td class="width90">
+				<a href="{FORUMS_POSTS_BUMP_URL}" title="{PHP.L.forums_explainbump}">{PHP.L.forums_bump}</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_LOCK_URL}" title="{PHP.L.forums_explainlock}">{PHP.L.Lock}</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_STICKY_URL}" title="{PHP.L.forums_explainsticky}">{PHP.L.forums_makesticky}</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_ANNOUNCE_URL}" title="{PHP.L.forums_explainannounce}">{PHP.L.forums_announcement}</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_PRIVATE_URL}" title="{PHP.L.forums_explainprivate}">{PHP.L.forums_private} (#)</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_CLEAR_URL}" title="{PHP.L.forums_explaindefault}">{PHP.L.Default}</a> {PHP.cfg.separator}
+				<a href="{FORUMS_POSTS_DELETE_URL}" title="{PHP.L.forums_explaindelete}">{PHP.L.Delete}</a>
+			</td>
+		</tr>
+		<tr>
+			<td class="textright">{PHP.L.Move}:</td>
+			<td>{FORUMS_POSTS_MOVEBOX_SELECT}<span class="small spaced">{FORUMS_POSTS_MOVEBOX_KEEP} {PHP.L.forums_keepmovedlink}</span><button type="submit">{PHP.L.Move}</button>
+			</td>
+		</tr>
+	</table>
+</form>
+<!-- END: FORUMS_POSTS_ADMIN -->
+
 	<table class="cells">
 		<tr>
 			<td class="coltop width20">{PHP.L.Author}</td>
@@ -68,7 +69,7 @@
 		</tr>
 		<tr>
 			<td class="small {FORUMS_POSTS_ROW_ODDEVEN}">
-						{PHP.L.Posts}: {FORUMS_POSTS_ROW_POSTCOUNT}
+						{PHP.L.forums_posts}: {FORUMS_POSTS_ROW_POSTCOUNT}
 			</td>
 			<td class="small {FORUMS_POSTS_ROW_ODDEVEN}">
 						{FORUMS_POSTS_ROW_USERTEXT}
