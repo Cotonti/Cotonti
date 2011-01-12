@@ -1652,7 +1652,7 @@ function sed_sql_insert($table_name, $data, $prefix = '')
 	{
 		$data_tmp[$prefix.$key] = $val;
 	}
-	return $db->insert($table_name, $data);
+	return $db->insert($table_name, $data_tmp);
 }
 
 

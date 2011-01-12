@@ -47,7 +47,7 @@ $L['com_nocommentsyet'] = 'No comments yet';
 $L['com_regonly'] = 'Only registered users can post new comments';
 
 $L['plu_comgup'] = ' left';
-$L['com_edithint'] = 'Your comment will be available for editing for {$time}';
+$L['com_edithint'] = 'Your comment will be available for editing for {$time}.';
 
 $L['plu_comlive'] = 'New comment on our site';
 $L['plu_comlive1'] = 'Edited comment on the site';
