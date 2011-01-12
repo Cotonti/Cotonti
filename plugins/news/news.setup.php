@@ -19,8 +19,8 @@ Requires_modules=page
 
 [BEGIN_COT_EXT_CONFIG]
 category=01:string::news:News category codes, comma separated
-maxpages=03:string::10:Recent pages displayed
-syncpagination=04:radio::0:Enable pagination for additional categories
+maxpages=02:string::10:Recent pages displayed
+syncpagination=03:radio::0:Enable pagination for additional categories
 [END_COT_EXT_CONFIG]
 ==================== */
 
