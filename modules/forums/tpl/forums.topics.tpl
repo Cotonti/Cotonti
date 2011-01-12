@@ -82,7 +82,7 @@
 
 			<div class="block">
 				<h2 class="info">Info</h2>
-				<table class="fico">
+				<table class="fico small">
 					<tr>
 						<td>{PHP.R.forums_icon_posts}{PHP.L.forums_nonewposts}</td>
 						<td>{PHP.R.forums_icon_posts_new}{PHP.L.forums_newposts}</td>

@@ -87,20 +87,23 @@ $L['forums_announcment'] = 'Обьявление';
 $L['forums_newannouncment'] = 'Новые обьявления';
 $L['forums_movedoutofthissection'] = 'Перенесена в другой раздел';
 
-$L['forums_explain1'] = 'Поднять тему (до обновления другой темы)';
-$L['forums_explain2'] = 'Заблокировать тему (запретить новые сообщения)';
-$L['forums_explain3'] = 'Закрепить тему (до сброса статуса в значение по умолчанию)';
-$L['forums_explain4'] = 'Пометить тему как объявление';
-$L['forums_explain5'] = 'Частная тема (доступ только для модераторов и автора темы)';
-$L['forums_explain6'] = 'Сбросить статус в значение по умолчанию';
-$L['forums_explain7'] = 'Удалить тему';
+$L['forums_announcement'] = 'Объявление';
+$L['forums_bump'] = 'Поднять';
+$L['forums_makesticky'] = 'Прикрепить тему';
+$L['forums_private'] = 'Приватная тема';
+
+$L['forums_explainbump'] = 'Поднять тему (до обновления другой темы)';
+$L['forums_explainlock'] = 'Заблокировать тему (запретить новые сообщения)';
+$L['forums_explainsticky'] = 'Закрепить тему (до сброса статуса в значение по умолчанию)';
+$L['forums_explainannounce'] = 'Пометить тему как объявление';
+$L['forums_explainprivate'] = 'Частная тема (доступ только для модераторов и автора темы)';
+$L['forums_explaindefault'] = 'Сбросить статус в значение по умолчанию';
+$L['forums_explaindelete'] = 'Удалить тему';
 
 /**
  * Unused?
  */
 
-$L['adm_help_forums'] = 'Недоступно';
-$L['adm_help_forums_structure'] = 'Недоступно';
 $L['forums_polltooshort'] = 'Количество вариантов ответа должно быть не менее двух';
 $L['for_onlinestatus0'] = 'не в сети';
 $L['for_onlinestatus1'] = 'в сети';
