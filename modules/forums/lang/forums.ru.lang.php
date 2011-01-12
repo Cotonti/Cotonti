@@ -47,6 +47,8 @@ $L['forums_defstate_1'] = 'Развернут';
  * Main
  */
 
+$L['forums_post'] = 'Сообщение';
+$L['forums_posts'] = 'Сообщения';
 $L['forums_topic'] = 'Тема';
 $L['forums_topics'] = 'Темы';
 

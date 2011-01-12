@@ -47,6 +47,8 @@ $L['forums_defstate_1'] = 'Unfolded';
  * Main
  */
 
+$L['forums_post'] = 'Post';
+$L['forums_posts'] = 'Posts';
 $L['forums_topic'] = 'Topic';
 $L['forums_topics'] = 'Topics';
  
