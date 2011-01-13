@@ -283,6 +283,7 @@ $L['adm_help_structure'] = 'Страницы категории &laquo;system&ra
  * Extrafields Subsection
  */
 
+$L['adm_extrafields_desc'] = 'Создание / правка дополнительных полей';
 $L['adm_help_structure_extrafield'] = 'HTML-код поля установится в значение по умолчанию автоматически, если его очистить и обновить<br /><br />
 <b>Новые тэги в tpl-файлах:</b><br /><br />
 <u>list.tpl:</u><br /><br />

@@ -14,7 +14,7 @@
 					<td class="centerall">{ADMIN_FORUMS_TOTALTOPICS}</td>
 				</tr>
 				<tr>
-					<td>{PHP.L.Posts}:</td>
+					<td>{PHP.L.forums_posts}:</td>
 					<td class="centerall">{ADMIN_FORUMS_TOTALPOSTS}</td>
 				</tr>
 				<tr>

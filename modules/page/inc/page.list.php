@@ -110,6 +110,7 @@ foreach (cot_getextplugins('page.list.query') as $pl)
 
 if(empty($sql_page_string))
 {
+	$where = array_diff($where,array(''));
 	$sql_page_count = "SELECT COUNT(*) FROM $db_pages as p $join_condition WHERE ".implode(' AND ', $where);
 	$sql_page_string = "SELECT p.*, u.* $join_columns
 		FROM $db_pages as p $join_condition
