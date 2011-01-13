@@ -3,11 +3,7 @@
 		{FILE ./themes/nemesis/warnings.tpl}
 		<ul class="follow">
 			<li><a title="{PHP.L.Configuration}" href="{ADMIN_USERS_URL}">{PHP.L.Configuration}</a></li>
-<!-- IF {PHP.lincif_extfld} -->
 			<li><a href="{ADMIN_USERS_EXTRAFIELDS_URL}">{PHP.L.adm_extrafields_desc}</a></li>
-<!-- ELSE -->
-			<li>{PHP.L.adm_extrafields_desc}</li>
-<!-- ENDIF -->
 		</ul>
 <!-- BEGIN: ADMIN_USERS_DEFAULT -->
 		<table class="cells">

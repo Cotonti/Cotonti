@@ -63,26 +63,19 @@
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=menus">{PHP.L.home_ql_b1_4}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=lang">{PHP.L.home_ql_b1_5}</a></li>
 					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=time">{PHP.L.home_ql_b1_6}</a></li>
+					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=parser">{PHP.L.home_ql_b2_4}</a></li>
+					<li><a href="admin.php?m=extrafields&amp;n=structure">{PHP.L.home_ql_b2_3}</a></li>
 				</ul>
 			</div>
+<!-- IF {PHP.cfg.page} -->			
 			<div class="block">
-				<h3>{PHP.L.Configuration}</h3>
-				<ul class="follow">
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=plug">{PHP.L.Plugins}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=forums">{PHP.L.Forums}</a></li>
-				</ul>
-			</div>
-			<div class="block">
-<!-- IF {PHP.cfg.module.page} -->
 				<h3>{PHP.L.Pages}</h3>
 				<ul class="follow">
-					<li><a href="page.php?m=add">{PHP.L.addnewentry}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n=pages">{PHP.L.home_ql_b2_2}</a></li>
-					<li><a href="admin.php?m=extrafields&amp;n=structure">{PHP.L.home_ql_b2_3}</a></li>
-					<li><a href="admin.php?m=config&amp;n=edit&amp;o=core&amp;p=parser">{PHP.L.home_ql_b2_4}</a></li>
+					<li><a href="page.php?m=add">{PHP.L.Add}</a></li>
+					<li><a href="admin.php?m=extrafields&amp;n=page">{PHP.L.home_ql_b2_2}</a></li>
 				</ul>
-<!-- ENDIF -->
 			</div>
+<!-- ENDIF -->
 			<div class="block">
 				<h3>{PHP.L.Users}</h3>
 				<ul class="follow">
