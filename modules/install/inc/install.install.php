@@ -29,7 +29,7 @@ $site_url = str_replace('\\', '/', $site_url);
 $site_url = preg_replace('#/$#', '', $site_url);
 define('COT_ABSOLUTE_URL', $site_url . '/');
 
-if ($step != 2)
+if ($step > 2)
 {
 	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
 }
@@ -113,10 +113,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			{
 				cot_error('install_error_sql_ext');
 			}
-			if (empty($db->error) && function_exists('version_compare')
-				&& !version_compare($db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.7', '>='))
+			// Try to detect mysql version from system and PHP, connection is not available yet
+			$mysql_out = @shell_exec('mysql -V');
+			if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt))
 			{
-				cot_error(cot_rc('install_error_sql_ver', array('ver' => $db->getAttribute(PDO::ATTR_SERVER_VERSION))));
+				if (!version_compare($mt[0], '5.0.7', '>='))
+				{
+					cot_error(cot_rc('install_error_sql_ver', array('ver' => $mt[0])));
+				}
+			}
+			elseif (function_exists('mysql_get_client_info'))
+			{
+				// Try to detect from PHP Client API version
+				$mysql_out = mysql_get_client_info();
+				if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt)
+					&& !version_compare($mt[0], '5.0.7', '>='))
+				{
+					cot_error(cot_rc('install_error_sql_ver', array('ver' => $mt[0])));
+				}
 			}
 
 			if (!file_exists($file['config']))
@@ -148,6 +162,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			catch (PDOException $e)
 			{
 				cot_error('install_error_sql', 'db_host');
+			}
+
+			if (empty($db->error) && function_exists('version_compare')
+				&& !version_compare($db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.7', '>='))
+			{
+				cot_error(cot_rc('install_error_sql_ver', array('ver' => $db->getAttribute(PDO::ATTR_SERVER_VERSION))));
 			}
 
 			if (!cot_error_found())
@@ -467,13 +487,34 @@ switch ($step)
 			? $R['install_code_available'] : $R['install_code_not_available'];
 		$status['mysql'] = (extension_loaded('pdo_mysql'))
 			? $R['install_code_available'] : $R['install_code_not_available'];
-//		$status['mysql_ver'] = '/ '
-//		. ($db && function_exists('version_compare')
-//				&& version_compare(@mysql_get_server_info($db), '5.0.7', '>='))
-//			? cot_rc('install_code_valid',
-//				array('text' => cot_rc('install_ver_valid',
-//					array('ver' => mysql_get_server_info($db)))))
-//			: $R['install_code_not_available'];
+
+		// Try to detect mysql version from system and PHP, connection is not available yet
+		$mysql_out = @shell_exec('mysql -V');
+		if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt))
+		{
+			if (version_compare($mt[0], '5.0.7', '>='))
+			{
+				$status['mysql_ver'] = cot_rc('install_code_valid', array('text' => cot_rc('install_ver_valid', array('ver' => $mt[0]))));
+			}
+			else
+			{
+				$status['mysql_ver'] = cot_rc('install_code_invalid', array('text' => cot_rc('install_ver_invalid', array('ver' => $mt[0]))));
+			}
+		}
+		elseif (function_exists('mysql_get_client_info'))
+		{
+			// Try to detect from PHP Client API version
+			$mysql_out = mysql_get_client_info();
+			if ($mysql_out && preg_match('#\d+\.\d+\.\d+#', $mysql_out, $mt)
+				&& !version_compare($mt[0], '5.0.7', '>='))
+			{
+				$status['mysql_ver'] = cot_rc('install_code_valid', array('text' => cot_rc('install_ver_valid', array('ver' => $mt[0]))));
+			}
+			else
+			{
+				$status['mysql_ver'] = cot_rc('install_code_invalid', array('text' => cot_rc('install_ver_invalid', array('ver' => $mt[0]))));
+			}
+		}
 
 		$t->assign(array(
 			'INSTALL_AV_DIR' => $status['av_dir'],
