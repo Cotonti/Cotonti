@@ -153,7 +153,7 @@ foreach ($fstlvl as $x)
 		$yy = 0;
 		foreach ($nxtlvl[$x] as $y)
 		{
-			if (is_array($nxtlvl[$y]) && !$cfg['forums'][$y]['defstate'])
+			if (is_array($nxtlvl[$y]) && $cfg['forums'][$y]['defstate'])
 			{
 				$zz = 0;
 				foreach ($nxtlvl[$y] as $z)
@@ -180,9 +180,9 @@ foreach ($fstlvl as $x)
 			$secact_num = 0;
 			if ($secact_max)
 			{
-				$secact_num = round(6.25 * $cot_sections_act[$fsn['fs_id']] / $secact_max);
+				$secact_num = round(6.25 * $cot_sections_act[$fsn['fs_cat']] / $secact_max);
 				$secact_num = ($secact_num>5) ? 5 : $secact_num;
-				$secact_num =  (!$secact_num && $cot_sections_act[$fsn['fs_id']]>1) ? 1 : $secact_num;
+				$secact_num =  (!$secact_num && $cot_sections_act[$fsn['fs_cat']]>1) ? 1 : $secact_num;
 
 			}
 			$t->assign(array(

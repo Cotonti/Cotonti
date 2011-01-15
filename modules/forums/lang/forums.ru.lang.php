@@ -31,17 +31,10 @@ $L['cfg_allowviewers'] = array('Включить отображение прос
 $L['cfg_allowpolls'] = array('Включить опросы');
 $L['cfg_countposts'] = array('Считать сообщения');
 $L['cfg_autoprune'] = array('Автоочистка тем через * дней');
-$L['cfg_defstate'] = array('Проверка счетчиков');
+$L['cfg_defstate'] = array('По умолчанию');
+$L['cfg_defstate_params'] = array('Свернут', 'Развернут');
 
 $L['info_desc'] = 'Модуль форумов для Cotonti: разделы, подразделы, темы и сообщения. Простой форум для сайтов с сообществом или поддержкой.';
-
-/**
- * Forums Administration
- */
-
-$L['forums_defstate'] = 'По умолчанию';
-$L['forums_defstate_0'] = 'Свернут';
-$L['forums_defstate_1'] = 'Развернут';
 
 /**
  * Main
