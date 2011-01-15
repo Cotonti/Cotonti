@@ -2985,9 +2985,9 @@ function cot_rc_attr_string($attrs)
 			$attr_str .= ' ' . $key . '="' . htmlspecialchars($val) . '"';
 		}
 	}
-	else
+	elseif ($attrs)
 	{
-		$attr_str = $attrs;
+		$attr_str = ' ' . $attrs;
 	}
 	return $attr_str;
 }
@@ -3349,7 +3349,7 @@ function cot_rc_embed($code, $prepend = false, $type = 'js')
 function cot_rc_link($url, $text, $attrs = '')
 {
 	$link_attrs = cot_rc_attr_string($attrs);
-	return '<a href="'.$url.'"'.$link_attrs.'>'.$text.'</a>';
+	return '<a href="' . $url . '"' . $link_attrs . '>' . $text . '</a>';
 }
 
 /**
