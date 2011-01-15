@@ -241,6 +241,12 @@ while ($row = $sql->fetch())
 	$pathfielddep = count(explode(".", $row['structure_path']));
 	$dozvil = ($row['structure_count'] > 0) ? false : true;
 	
+	$pathspaceimg = '';
+	for($pathfielddepi = 1; $pathfielddepi < $pathfielddep; $pathfielddepi++)
+	{
+		$pathspaceimg .= '.'.$R['admin_icon_blank'];
+	}
+	
 	if (empty($row['structure_tpl']))
 	{
 		$structure_tpl_sym = '-';
@@ -269,12 +275,13 @@ while ($row = $sql->fetch())
 	$t->assign(array(
 		'ADMIN_STRUCTURE_UPDATE_DEL_URL' => cot_url('admin', 'm=structure&n='.$n.'&mode='.$mode.'&a=delete&id='.$structure_id.'&c='.$row['structure_code'].'&d='.$d.'&'.cot_xg()),
 		'ADMIN_STRUCTURE_ID' => $structure_id,
-		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="8" maxlength="255"'),
-		'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? '' : $R['admin_icon_pathfieldimg'],
-		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="3" maxlength="255"'),
+		'ADMIN_STRUCTURE_CODE' => cot_inputbox('text', 'rstructurecode['.$structure_id.']', $structure_code, 'size="10" maxlength="255"'),
+		'ADMIN_STRUCTURE_SPACEIMG' => $pathspaceimg,
+		'ADMIN_STRUCTURE_PATHFIELDIMG' => (mb_strpos($row['structure_path'], '.') == 0) ? $R['admin_icon_pathfieldnoimg'] : $R['admin_icon_pathfieldimg'],
+		'ADMIN_STRUCTURE_PATH' => cot_inputbox('text', 'rstructurepath['.$structure_id.']', $row['structure_path'], 'size="12" maxlength="255"'),
 		'ADMIN_STRUCTURE_TPL_SYM' => $structure_tpl_sym,
 		'ADMIN_STRUCTURE_TPLMODE' => cot_radiobox($check_tpl, 'rstructuretplmode['.$structure_id.']', array('1', '3', '2'), array($L['adm_tpl_empty'], $L['adm_tpl_parent'], $L['adm_tpl_forced']), '', '<br />'),
-		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="18" maxlength="255"'),
+		'ADMIN_STRUCTURE_TITLE' => cot_inputbox('text', 'rstructuretitle['.$structure_id.']', $row['structure_title'], 'size="32" maxlength="255"'),
 		'ADMIN_STRUCTURE_DESC' => cot_inputbox('text', 'rstructuredesc['.$structure_id.']', $row['structure_desc'], 'size="64" maxlength="255"'),
 		'ADMIN_STRUCTURE_ICON' => cot_inputbox('text', 'rstructureicon['.$structure_id.']', $row['structure_icon'], 'size="64" maxlength="128"'),
 		'ADMIN_STRUCTURE_LOCKED' => cot_checkbox($row['structure_locked'], 'rstructurelocked['.$structure_id.']'),

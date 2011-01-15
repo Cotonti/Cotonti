@@ -62,17 +62,17 @@
 		<form name="savestructure" id="savestructure" action="{ADMIN_STRUCTURE_UPDATE_FORM_URL}" method="post" class="ajax" enctype="multipart/form-data" >
 		<table class="cells">
 			<tr>
-				<td class="coltop width10">{PHP.L.Path}</td>
+				<td class="coltop width20">{PHP.L.Path}</td>
 				<td class="coltop width10">{PHP.L.Code}</td>
 				<td class="coltop width20">{PHP.L.Title}</td>
 				<td class="coltop width5">{PHP.L.TPL}</td>
 				<td class="coltop width10">{PHP.L.Locked}</td>
-				<td class="coltop width10">{PHP.L.Pages}</td>
-				<td class="coltop width20">{PHP.L.Action}</td>
+				<td class="coltop width5">{PHP.L.Pages}</td>
+				<td class="coltop width15">{PHP.L.Action}</td>
 			</tr>
 			<!-- BEGIN: ROW -->
 			<tr>
-				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}"><!-- IF {ADMIN_STRUCTURE_PATHFIELDIMG} -->{ADMIN_STRUCTURE_PATHFIELDIMG}<!-- ELSE -->{PHP.R.admin_icon_pathfieldnoimg}<!-- ENDIF -->{ADMIN_STRUCTURE_PATH}</td>
+				<td class="{ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_SPACEIMG}{ADMIN_STRUCTURE_PATH}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_CODE}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TITLE}</td>
 				<td class="centerall {ADMIN_STRUCTURE_ODDEVEN}">{ADMIN_STRUCTURE_TPL_SYM}</td>
