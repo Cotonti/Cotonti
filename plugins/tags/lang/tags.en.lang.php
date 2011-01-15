@@ -50,7 +50,6 @@ $L['cfg_pages'] = array('Enable tags in pages');
 $L['cfg_perpage'] = array('Tags displayed per page in standalone cloud, 0 is all at once');
 $L['cfg_title'] = array('Capitalize first letters of keywords');
 $L['cfg_translit'] = array('Transliterate tags in URLs');
-$L['cfg_css'] = array('Enable plugin CSS');
 
 $L['info_desc'] = 'Provides tags - site content keywords, tag clouds, tag search and API';
 

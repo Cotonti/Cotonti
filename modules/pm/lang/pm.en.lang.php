@@ -18,7 +18,6 @@ defined('COT_CODE') or die('Wrong URL.');
 $L['cfg_allownotifications'] = array('Allow PM notifications by e-mail', '');
 $L['cfg_maxsize'] = array('Maximum length for messages', '');
 $L['cfg_maxpmperpage'] = array('Max. messages per page', ' ');
-$L['cfg_css'] = array('Enable module CSS');
 $L['info_desc'] = 'Private messaging system is on-site user communication similar to e-mail';
 
 /**
@@ -35,17 +34,13 @@ $L['adm_pm_totalsent'] = 'Total of private messages ever sent';
 $L['pmsend_title'] = 'Send a new private message';
 $L['pmsend_subtitle'] = 'New private message submission form';
 
-$L['pm_archives'] = 'Archives';
-$L['pm_arcsubtitle'] = 'Old messages, newest is at top';
 $L['pm_bodytoolong'] = 'The body of the private message is too long, '.$cfg['pm']['pm_maxsize'].' chars maximum';
 $L['pm_bodytooshort'] = 'The body of the private message is too short or missing';
 $L['pm_inbox'] = 'Inbox';
 $L['pm_inboxsubtitle'] = 'Private messages, newest is at top';
-$L['pm_multiplerecipients'] = 'This private messages was also sent to %1$s other recipient(s).';
 $L['pm_norecipient'] = 'No recipient specified';
 $L['pm_notifytitle'] = 'New private message';
-$L['pm_putinarchives'] = 'Put in archives';
-$L['pm_deletefromarchives'] = 'Delete from archives';
+$Ls['Privatemessages'] = array('new private messages','new private message');
 $L['pm_replyto'] = 'Reply to this user';
 $L['pm_sendnew'] = 'Send a new private message';
 $L['pm_sentbox'] = 'Sent-box';
@@ -72,15 +67,5 @@ $L['pm_selected'] = 'Selected';
 $L['pm_notify'] = 'Hi %1$s,
 You are receiving this e-mail because there is a new private message in your inbox from %2$s
 Click this link to read it: %3$s';
-
-/**
- * Moved from theme.lang
- */
-
-$L['pm_sendmessagetohint'] = '(up to 10 recipients, separated by commas)';
-$L['pm_newmessage'] = 'New message';
-$L['pm_sendtoarchives'] = 'Send to archives';
-$L['pm_selectall'] = 'Select all';
-$L['pm_unselectall'] = 'Unselect all';
 
 ?>
