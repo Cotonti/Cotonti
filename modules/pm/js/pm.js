@@ -9,7 +9,7 @@ $('.pm-star').live('mouseenter', function () {
 	}
 });
 
-$('.pm-star-rating').live('mouseleave',	function () {
+$('.pm-star').live('mouseleave', function () {
 	if (!$(this).hasClass('pm-star-readonly'))
 	{
 		$(this).removeClass('pm-star-hover');
@@ -29,6 +29,7 @@ $('.pm-star').live('click', function () {
 			divId: 'pagePreview'
 		});
 		$(this).toggleClass('pm-star-off');
+		$(this).children('a').attr('title', '')
 		return(false);
 	}
 });
