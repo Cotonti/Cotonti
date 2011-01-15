@@ -63,6 +63,7 @@ $R['admin_icon_ipsearch'] = '<img class="icon" src="system/admin/img/ipsearch.pn
 $R['admin_icon_join1'] = '<img class="icon" src="system/admin/img/join1.png" alt="" />';
 $R['admin_icon_join2'] = '<img class="icon" src="system/admin/img/join2.png" alt="" />';
 $R['admin_icon_journals'] = '<img class="icon" src="system/admin/img/journals.png" alt="" />';
+$R['admin_icon_blank'] = '<img class="icon" src="system/admin/img/blank.png" alt="" />';
 
 $R['admin_icon_jumpto'] = 
 	'<img class="icon" src="images/icons/default/arrow-jump.png" alt="" />';
