@@ -265,7 +265,6 @@ $title .= (!$id) ? $L['pmsend_title'] : $L['Edit'].' #'.$id;
 
 $t->assign(array(
 	'PMSEND_TITLE' => $title,
-	'PMSEND_SUBTITLE' => $L['pmsend_subtitle'],
 	'PMSEND_SENDNEWPM' => ($usr['auth_write']) ? cot_rc_link(cot_url('pm', 'm=send'), $L['pm_sendnew'], array('class'=>'ajax')) : '',
 	'PMSEND_INBOX' => cot_rc_link(cot_url('pm'), $L['pm_inbox'], array('class'=>'ajax')),
 	'PMSEND_INBOX_COUNT' => $totalinbox,

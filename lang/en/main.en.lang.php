@@ -341,7 +341,6 @@ $Ls['Hours'] = array('hours','hour');
 $Ls['Members'] = array('members','member');
 $Ls['Minutes'] = array('minutes','minute');
 $Ls['Pages'] = array('pages','page');
-$Ls['Privatemessages'] = array('new private messages','new private message');
 $Ls['Seconds'] = array('seconds','second');
 $Ls['Times'] = array('times','time');
 

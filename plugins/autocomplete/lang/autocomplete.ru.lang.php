@@ -17,6 +17,5 @@ defined('COT_CODE') or die('Wrong URL.');
 
 $L['plu_title'] = 'Автодополнение';
 $L['cfg_autocomplete'] = array('Мин. символов для автодополнения', '0 - отключает автодополнение');
-$L['cfg_css'] = array('Подключить CSS плагина');
 
 ?>

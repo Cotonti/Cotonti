@@ -6,7 +6,7 @@
 
 		<div class="block">
 			<h2 class="comments">{PMSEND_TITLE}</h2>
-			<p class="small">{PMSEND_SUBTITLE}</p>
+			<p class="small">{PHP.L.pmsend_subtitle}</p>
 			<p class="paging">{PMSEND_INBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENTBOX}<span class="spaced">{PHP.cfg.separator}</span>{PMSEND_SENDNEWPM}</div>
 
 			{FILE ./themes/nemesis/warnings.tpl}

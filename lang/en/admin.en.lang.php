@@ -233,6 +233,7 @@ $L['cfg_usertextmax'] = array('Maximum length for user signature', '');
  * Common strings
  */
 $L['cfg_markup'] = array('Enable markup', 'Enables HTML/BBcode or other parsing which is installed in your system');
+$L['cfg_css'] = array('Enable module/plugin CSS');
 
 /**
  * Extension management
