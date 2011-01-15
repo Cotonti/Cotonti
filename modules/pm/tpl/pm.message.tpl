@@ -57,6 +57,7 @@
 
 			<div id="ajaxHistory"> &nbsp;
 				<!-- BEGIN: HISTORY -->
+				<h3>{PHP.L.pm_messagehistory}</h3>
 				<table class="cells">
 					<!-- BEGIN: PM_ROW -->
 					<tr>
