@@ -15,8 +15,7 @@
 			<li><a href="{PHP.cfg.mainurl}" title="{PHP.L.Home}">{PHP.L.Home}</a></li>
 			<li><a href="forums.php" title="{PHP.L.Forums}">{PHP.L.Forums}</a></li>
 			<li><a href="page.php?c=news" title="{PHP.L.News}">{PHP.L.News}</a></li>
-			<li><a href="#" title="{PHP.L.Contact}">{PHP.L.Contact}</a></li>
-			<li><a href="#" title="{PHP.L.Sitemap}">{PHP.L.Sitemap}</a></li>
+			<li><a href="users.php" title="{PHP.L.Users}">{PHP.L.Users}</a></li>
 		</ul>
 		<ul id="account" class="column">
 <!-- BEGIN: GUEST -->
@@ -28,7 +27,6 @@
 <!-- BEGIN: USER -->
 			<li><strong>Hello, {PHP.usr.name} <!-- IF {PHP.usr.maingrp} = 5 --> &nbsp; [ <a href="admin.php" class="lower">{PHP.L.Adminpanel}</a> ]<!-- ENDIF --></strong></li>
 			<!-- IF {PHP.usr.profile.user_avatar} --><li class="floatleft marginright10"><img src="{PHP.usr.profile.user_avatar}" alt="{PHP.L.Avatar}" /></li><!-- ELSE --><li class="floatleft marginright10"><img src="datas/defaultav/blank.png" alt="{PHP.L.Avatar}" /></li><!-- ENDIF -->
-			<li><a href="users.php" title="{PHP.L.Users}">{PHP.L.Users}</a></li>
 			<li><a href="users.php?m=profile" title="{PHP.L.Profile}">{PHP.L.Profile}</a></li>
 			<li><a href="pm.php" title="{PHP.L.Private_messages}">{PHP.L.Private_Messages}</a></li>
 			<li><a href="pfs.php" title="{PHP.L.PFS}">{PHP.L.PFS}</a></li>

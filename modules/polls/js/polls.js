@@ -1,4 +1,5 @@
 var ansCount = 1;
+var ansMax = 100;
 $(".deloption").live("click",function () {
 	$(this).parent().children('.tbox').attr('value', '');
 	if (ansCount>2)
