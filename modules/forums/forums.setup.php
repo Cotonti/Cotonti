@@ -3,7 +3,7 @@
 [BEGIN_COT_EXT]
 Name=Forums
 Description=Cotonti Bulletin Board Module
-Version=0.8.3
+Version=0.8.4
 Date=2010-oct-05
 Author=Neocrome & Cotonti Team
 Copyright=(c) Cotonti Team 2008-2011
@@ -37,7 +37,7 @@ allowviewers=06:radio::1:
 countposts=07:radio::1:
 allowpolls=08:radio::1:
 autoprune=09:string::365:
-defstate=10:radio::1:
+defstate=10:select:0,1:1:
 [END_COT_EXT_CONFIG_STRUCTURE]
 ==================== */
 

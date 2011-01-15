@@ -12,20 +12,20 @@
 				</td>
 				<td class="coltop" class="width20">{PHP.L.Lastpost}</td>
 				<td class="coltop" class="width10">{PHP.L.forums_topics}</td>
-				<td class="coltop" class="width10">{PHP.L.Posts}</td>
+				<td class="coltop" class="width10">{PHP.L.forums_posts}</td>
 				<td class="coltop" class="width10">{PHP.L.Activity}</td>
 			</tr>
 		</thead>
 
 		<!-- BEGIN: CAT -->
-		<tbody id="{FORUMS_SECTIONS_ROW_CAT_CODE}">
+		<tbody id="{FORUMS_SECTIONS_ROW_CAT}">
 			<tr>
 				<td class="forumssection" colspan="6">
-						<a href="{FORUMS_SECTIONS_ROW_SECTIONSURL}">{FORUMS_SECTIONS_ROW_TITLE}</a>
+						<a href="{FORUMS_SECTIONS_ROW_SECTIONSURL}" onclick="return toggleblock('blk_{FORUMS_SECTIONS_ROW_CAT}')">{FORUMS_SECTIONS_ROW_TITLE}</a>
 				</td>
 			</tr>
 		</tbody>
-		<tbody id="blk_{FORUMS_SECTIONS_ROW_CAT}"<!-- IF {FORUMS_SECTIONS_ROW_FOLD} --> class="hidden"<!-- ENDIF -->>
+		<tbody id="blk_{FORUMS_SECTIONS_ROW_CAT}"<!-- IF {FORUMS_SECTIONS_ROW_FOLD} --> style="display:none;"<!-- ENDIF -->>
 			   <!-- BEGIN: SECTION -->
 			   <tr>
 				<td class="centerall">

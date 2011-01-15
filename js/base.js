@@ -26,6 +26,7 @@ function toggleblock(id){
     else {
         bl.style.display = 'none';
     }
+	return false;
 }
 
 // Inserts text into textarea at cursor position

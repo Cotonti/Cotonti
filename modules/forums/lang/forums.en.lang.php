@@ -31,17 +31,10 @@ $L['cfg_allowviewers'] = array('Enable Viewers');
 $L['cfg_allowpolls'] = array('Enable Polls');
 $L['cfg_countposts'] = array('Count posts');
 $L['cfg_autoprune'] = array('Auto-prune topics after * days');
-$L['cfg_defstate'] = array('Check the counters');
+$L['cfg_defstate'] = array('Default state');
+$L['cfg_defstate_params'] = array('Folded', 'Unfolded');
 
 $L['info_desc'] = 'Cotonti Bulletin Board Module: sections, subsections, topics, posts. Simple forums for community sites and support.';
-
-/**
- * Forums Administration
- */
-
-$L['forums_defstate'] = 'Default state';
-$L['forums_defstate_0'] = 'Folded';
-$L['forums_defstate_1'] = 'Unfolded';
 
 /**
  * Main
