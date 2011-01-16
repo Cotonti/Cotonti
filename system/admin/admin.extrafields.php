@@ -34,8 +34,7 @@ foreach (cot_getextplugins('admin.extrafields.first') as $pl)
 
 if ($n == 'structure')
 {
-	$adminpath[] = array(cot_url('admin', 'm=structure'), $L['Categories']);
-	$adminpath[] = array(cot_url('admin', 'm=extrafields&n=structure'), $L['adm_extrafields']);
+	$adminpath[] = array(cot_url('admin', 'm=extrafields&n=structure'), $L['adm_extrafields']. " (".$L['Categories'].")");
 	$adminhelp = $L['adm_help_structure_extrafield'];
 	$extra_path = 'm=extrafields&n=structure';
 	$location = $db_structure;
