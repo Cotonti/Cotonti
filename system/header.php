@@ -173,7 +173,7 @@ if (!COT_AJAX)
 		include $pl;
 	}
 	/* ===== */
-
+	
 	$t->parse('HEADER');
 	$t->out('HEADER');
 }
