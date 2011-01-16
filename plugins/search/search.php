@@ -290,7 +290,7 @@ if (!empty($sq))
 	if (($tab == 'frm' || empty($tab)) && cot_module_active('forums') && $cfg['plugin']['search']['forumsearch'] && !cot_error_found())
 	{
 		$where_and['cat'] = ($rsearch['frm']['sub'][0] != 'all' && count($rsearch['frm']['sub'])>0) ?
-			"s.ft_cat IN ('".$db->prep(implode("','", $rsearch['frm']['sub']))."')" : "s.ft_cat IN ('".implode("','", $frm_catauth)."')";
+			"t.ft_cat IN ('".$db->prep(implode("','", $rsearch['frm']['sub']))."')" : "t.ft_cat IN ('".implode("','", $frm_catauth)."')";
 		$where_and['reply'] = ($rsearch['frm']['reply'] == '1') ? "t.ft_postcount > 1" : "";
 		$where_and['time'] = ($rsearch['set']['limit'] > 0) ? "p.fp_creation >= ".$rsearch['set']['from']." AND p.fp_updated <= ".$rsearch['set']['to'] : "";
 		$where_and['user'] = (!empty($touser)) ? "p.fp_posterid ".$touser_ids : "";
@@ -308,7 +308,7 @@ if (!empty($sq))
 		$maxitems = ($maxitems < 0) ? 0 : $maxitems;
 
 		$sql = $db->query("SELECT SQL_CALC_FOUND_ROWS p.*, t.*
-			 	FROM $db_forum_posts p, $db_forum_topics t
+			 	FROM $db_forum_posts AS p, $db_forum_topics AS t
 				WHERE $where AND p.fp_topicid = t.ft_id
 				GROUP BY t.ft_id ORDER BY ft_".$rsearch['frm']['sort']." ".$rsearch['frm']['sort2']."
 				LIMIT $d, $maxitems");
