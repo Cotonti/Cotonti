@@ -222,7 +222,7 @@ elseif ($a == 'delete')
 		cot_die();
 	}
 }
-elseif ($a == 'update_cheked')
+elseif ($a == 'update_checked')
 {
 	$paction = cot_import('paction', 'P', 'TXT');
 
@@ -238,7 +238,7 @@ elseif ($a == 'update_cheked')
 			if ($s[$i] == '1' || $s[$i] == 'on')
 			{
 				/* === Hook  === */
-				foreach (cot_getextplugins('page.admin.cheked_validate') as $pl)
+				foreach (cot_getextplugins('page.admin.checked_validate') as $pl)
 				{
 					include $pl;
 				}
@@ -292,7 +292,7 @@ elseif ($a == 'update_cheked')
 			if ($s[$i] == '1' || $s[$i] == 'on')
 			{
 				/* === Hook  === */
-				foreach (cot_getextplugins('page.admin.cheked_delete') as $pl)
+				foreach (cot_getextplugins('page.admin.checked_delete') as $pl)
 				{
 					include $pl;
 				}
@@ -415,7 +415,7 @@ $t->assign(array(
 	'ADMIN_PAGE_URL_ADD' => cot_url('page', 'm=add'),
 	'ADMIN_PAGE_URL_EXTRAFIELDS' => cot_url('admin', 'm=extrafields&n=page'),
 	'ADMIN_PAGE_URL_STRUCTURE' => cot_url('admin', 'm=structure&n=page'),
-	'ADMIN_PAGE_FORM_URL' => cot_url('admin', 'm=page&a=update_cheked&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter.'&d='.$d),
+	'ADMIN_PAGE_FORM_URL' => cot_url('admin', 'm=page&a=update_checked&sorttype='.$sorttype.'&sortway='.$sortway.'&filter='.$filter.'&d='.$d),
 	'ADMIN_PAGE_ORDER' => cot_selectbox($sorttype, 'sorttype', array_keys($sort_type), array_values($sort_type), false),
 	'ADMIN_PAGE_WAY' => cot_selectbox($sortway, 'sortway', array_keys($sort_way), array_values($sort_way), false),
 	'ADMIN_PAGE_FILTER' => cot_selectbox($filter, 'filter', array_keys($filter_type), array_values($filter_type), false),

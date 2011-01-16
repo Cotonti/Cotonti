@@ -3,7 +3,7 @@
  * Trashcan API
  *
  * @package Trashcan
- * @version 0.7.0
+ * @version 0.9.0
  * @author Cotonti Team
  * @copyright Copyright (c) Cotonti Team 2008-2011
  * @license BSD
@@ -41,10 +41,10 @@ function cot_trash_put($type, $title, $itemid, $datas, $parentid = '0')
 		$trash['tr_datas'] = serialize($datas);
 		$sql = $db->insert($db_trash, $trash);
 	}
-	else
+	elseif (is_string($datas))
 	{
-		$databasename = isset($trash_types[$type]) ? $trash_types[$type] : $type;
-		$sql_s = $db->query("SELECT * FROM $databasename WHERE $datas");
+		$tablename = isset($trash_types[$type]) ? $trash_types[$type] : $type;
+		$sql_s = $db->query("SELECT * FROM $tablename WHERE $datas");
 		while ($row_s = $sql_s->fetch())
 		{
 			$i++;
