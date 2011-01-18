@@ -15,7 +15,7 @@
 					<!-- IF {LIST_ROW_DESC} --><p class="small marginbottom10">{LIST_ROW_DESC}</p><!-- ENDIF -->
 					<!-- IF {PHP.usr.isadmin} --><p class="small marginbottom10">{LIST_ROW_ADMIN} ({LIST_ROW_COUNT})</p><!-- ENDIF -->
 					<div>{LIST_ROW_TEXT}</div>
-					<!-- IF {LIST_ROW_MORE} -->{PHP.R.list_more}<!-- ENDIF -->
+					<!-- IF {LIST_ROW_MORE} -->{LIST_ROW_MORE}<!-- ENDIF -->
 					<hr />
 				<!-- END: LIST_ROW -->
 			</div>
