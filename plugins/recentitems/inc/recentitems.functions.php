@@ -184,7 +184,7 @@ function cot_build_recentpages($template, $mode = 'recent', $maxperpage = 5, $d 
 	{
 		$jj++;
 		$catpath = cot_structure_buildpath('page', $pag['page_cat']);
-		if ((int)$titlelength > 0)
+		if ((int)$titlelength > 0 && mb_strlen($pag['page_title']) > $titlelength)
 		{
 			$pag['page_title'] = (cot_string_truncate($pag['page_title'], $titlelength, false)) . "...";
 		}
