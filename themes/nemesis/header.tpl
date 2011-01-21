@@ -31,27 +31,31 @@
 				<span>Start here</span>
 			</a>
 		</li>
+		<!-- IF {PHP.cot_modules.forums} -->
 		<li>
 			<a href="forums.php" title="{PHP.L.Forums}">
 				{PHP.L.Forums}
 				<span>Discussions</span>
 			</a>
 		</li>
+		<!-- ENDIF -->
 		<li>
 			<a href="page.php?c=news" title="{PHP.L.News}">
 				{PHP.L.News}
 				<span>Our updates</span>
 			</a>
 		</li>
+		<!-- IF {PHP.cot_modules.rss} -->
 		<li>
 			<a href="rss.php" title="{PHP.L.RSS_Feeds}">
 				RSS
 				<span>Subscribe me</span>
 			</a>
 		</li>
+		<!-- ENDIF -->
 	</ul>
 
-	<!-- IF {PHP.z} == "index" -->
+	<!-- IF {PHP.env.ext} == "index" -->
 	<div id="slider" class="body">
 		<img src="themes/{PHP.theme}/img/front_image.png" alt="" id="front_image" />
 	</div>
