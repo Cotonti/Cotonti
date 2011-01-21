@@ -38,27 +38,27 @@ if ($step > 2)
 switch ($step)
 {
 	case 2:
-		$db_host = cot_import('db_host', 'P', 'TXT');
-		$db_user = cot_import('db_user', 'P', 'TXT');
-		$db_pass = cot_import('db_pass', 'P', 'TXT');
-		$db_name = cot_import('db_name', 'P', 'TXT');
+		$db_host = cot_import('db_host', 'P', 'TXT', 0, false, true);
+		$db_user = cot_import('db_user', 'P', 'TXT', 0, false, true);
+		$db_pass = cot_import('db_pass', 'P', 'TXT', 0, false, true);
+		$db_name = cot_import('db_name', 'P', 'TXT', 0, false, true);
 		break;
 
 	case 3:
-		$cfg['mainurl'] = cot_import('mainurl', 'P', 'TXT');
-		$user['name'] = cot_import('user_name', 'P', 'TXT', 100, TRUE);
+		$cfg['mainurl'] = cot_import('mainurl', 'P', 'TXT', 0, false, true);
+		$user['name'] = cot_import('user_name', 'P', 'TXT', 100, false, true);
 		$user['pass'] = cot_import('user_pass', 'P', 'TXT', 16);
 		$user['pass2'] = cot_import('user_pass2', 'P', 'TXT', 16);
-		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, TRUE);
-		$user['country'] = cot_import('user_country', 'P', 'TXT');
-		$rtheme = explode(':', cot_import('theme', 'P', 'TXT'));
+		$user['email'] = cot_import('user_email', 'P', 'TXT', 64, false, true);
+		$user['country'] = cot_import('user_country', 'P', 'TXT', 0, false, true);
+		$rtheme = explode(':', cot_import('theme', 'P', 'TXT', 0, false, true));
 		$rscheme = $rtheme[1];
 		$rtheme = $rtheme[0];
-		$rlang = cot_import('lang', 'P', 'TXT');
+		$rlang = cot_import('lang', 'P', 'TXT', 0, false, true);
 		break;
 	case 4:
 		// Extension selection
-		$install_modules = cot_import('install_modules', 'P', 'ARR');
+		$install_modules = cot_import('install_modules', 'P', 'ARR', 0, false, true);
 		$selected_modules = array();
 		if (is_array($install_modules))
 		{
@@ -70,7 +70,7 @@ switch ($step)
 				}
 			}
 		}
-		$install_plugins = cot_import('install_plugins', 'P', 'ARR');
+		$install_plugins = cot_import('install_plugins', 'P', 'ARR', 0, false, true);
 		$selected_plugins = array();
 		if (is_array($install_plugins))
 		{
@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 			}
 
 			// Database setup
-			$db_x = cot_import('db_x', 'P', 'TXT');
+			$db_x = cot_import('db_x', 'P', 'TXT', 0, false, true);
 			
 			try
 			{
@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				cot_error('install_error_sql', 'db_host');
 			}
 
-			if (empty($db->error) && function_exists('version_compare')
+			if (!cot_error_found() && function_exists('version_compare')
 				&& !version_compare($db->getAttribute(PDO::ATTR_SERVER_VERSION), '5.0.7', '>='))
 			{
 				cot_error(cot_rc('install_error_sql_ver', array('ver' => $db->getAttribute(PDO::ATTR_SERVER_VERSION))));
@@ -544,7 +544,7 @@ switch ($step)
 		break;
 	case 3:
 		// Settings
-		if ($_POST['step'] != 3)
+		if ($_POST['step'] != 3 && !cot_check_messages())
 		{
 			$rtheme = $theme;
 			$rscheme = $scheme;
