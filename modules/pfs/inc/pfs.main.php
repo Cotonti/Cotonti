@@ -570,7 +570,7 @@ if ($standalone)
 	{
 		$addthumb = "'".$cfg['pfs_thumbpath']."' + gfile";
 		$addpix = 'gfile';
-		$addfile = "'".$cfg['pfs_path']."' + gfile";
+		$addfile = "'".$cfg['pfs_dir']."' + gfile";
 	}
 	else
 	{
@@ -583,7 +583,6 @@ if ($standalone)
 	cot_sendheaders();
 
 	$t->assign(array(
-		'PFS_JAVASCRIPT' => cot_javascript(),
 		'PFS_HEADER_JAVASCRIPT' => cot_rc('pfs_code_header_javascript'),
 		'PFS_C1' => $c1,
 		'PFS_C2' => $c2,
