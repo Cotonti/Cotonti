@@ -128,7 +128,6 @@ $t = new XTemplate(cot_tplfile('pfs.editfolder'));
 if ($standalone)
 {
 	$t->assign(array(
-		'PFS_JAVASCRIPT' => cot_javascript(),
 		'PFS_C1' => $c1,
 		'PFS_C2' => $c2
 	));
