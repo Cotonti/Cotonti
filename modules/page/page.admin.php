@@ -48,7 +48,6 @@ $sort_type = array(
 	'expire' => $L['Expire'],
 	'rating' => $L['Rating'],
 	'count' => $L['Hits'],
-	'comcount' => $L['Comments'],//TODO: if comments plug not instaled this row generated error
 	'file' => $L['adm_fileyesno'],
 	'url' => $L['adm_fileurl'],
 	'size' => $L['adm_filesize'],
