@@ -1,7 +1,7 @@
 <?php
 /**
  * @package install
- * @version 0.7.0
+ * @version 0.9.0
  * @author Trustmaster
  * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD
@@ -9,9 +9,6 @@
 
 defined('COT_CODE') or die('Wrong URL');
 define('COT_UPDATE', true);
-
-$branch = 'siena';
-$prev_branch = 'genoa';
 
 cot_sendheaders();
 
@@ -98,13 +95,7 @@ else
 	cot_error('install_update_config_error');
 }
 
-$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
-
-$sql_install = @$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
-$sql_install_oldbranch = @$db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'branch'");
-$old_branch = @$sql_install_oldbranch->fetchColumn();
-
-if ($db->errno > 0 || $sql_install->rowCount() != 1)
+if (defined('COT_UPGRADE'))
 {
 	// Is Genoa, perform upgrade
 	$parser = cot_import('parser', 'G', 'ALP');
@@ -118,7 +109,6 @@ if ($db->errno > 0 || $sql_install->rowCount() != 1)
 	}
 	else
 	{
-
 		// Run SQL patches for core
 		$script = file_get_contents("./setup/$branch/patch-$prev_branch.sql");
 		$error = $db->runScript($script);
@@ -136,22 +126,19 @@ if ($db->errno > 0 || $sql_install->rowCount() != 1)
 		}
 
 		// Run PHP patches
-		if (file_exists("./setup/$branch/patch-$prev_branch.inc"))
+		$ret = include "./setup/$branch/patch-$prev_branch.inc";
+		if ($ret !== false)
 		{
-			$ret = include "./setup/$branch/patch-$prev_branch.inc";
-			if ($ret !== false)
-			{
-				$msg = $ret == 1 ? 'OK' : $ret;
-				cot_message('install_update_patch_applied',
-					array('f' => "setup/$branch/patch-$prev_branch.inc",
-						'msg' => $ret));
-			}
-			else
-			{
-				cot_error('install_update_patch_error',
-					array('f' => "setup/$branch/patch-$prev_branch.inc",
-						'msg' => $L['Error']));
-			}
+			$msg = $ret == 1 ? 'OK' : $ret;
+			cot_message('install_update_patch_applied',
+				array('f' => "setup/$branch/patch-$prev_branch.inc",
+					'msg' => $ret));
+		}
+		else
+		{
+			cot_error('install_update_patch_error',
+				array('f' => "setup/$branch/patch-$prev_branch.inc",
+					'msg' => $L['Error']));
 		}
 
 		// Update modules
@@ -212,6 +199,15 @@ if ($db->errno > 0 || $sql_install->rowCount() != 1)
 		// Install userimages plugin
 		cot_extension_install('userimages');
 
+		// Update config theme and scheme
+		$config_contents = file_get_contents($file['config']);
+		$config_contents = preg_replace('#^\$cfg\[\'defaultscheme\'\]\s*=\s*\'.*?\';\n?#m', '', $config_contents);
+		$config_contents = preg_replace('#^\$cfg\[\'defaulttheme\'\]\s*=\s*\'.*?\';#m',
+			"\$cfg['defaultscheme'] = 'default';", $config_contents);
+		$config_contents = preg_replace('#^\$cfg\[\'defaultskin\'\]\s*=\s*\'.*?\';#m',
+			"\$cfg['defaulttheme'] = 'nemesis';", $config_contents);
+		file_put_contents($file['config'], $config_contents);
+
 		// Display results
 		if (!cot_error_found())
 		{
@@ -232,13 +228,10 @@ if ($db->errno > 0 || $sql_install->rowCount() != 1)
 		'UPDATE_TO' => $branch
 	));
 }
-elseif ($old_branch != $branch)
-{
-	die("Upgrade from $old_branch is not supported");
-}
 else
 {
 	// Update the core
+	$sql_install = $db->query("SELECT upd_value FROM $db_updates WHERE upd_param = 'revision'");
 	$upd_rev = $sql_install->fetchColumn();
 	preg_match('#\$Rev: (\d+) \$#', $upd_rev, $mt);
 	$rev = (int) $mt[1];

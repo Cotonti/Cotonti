@@ -24,7 +24,7 @@ if (!file_exists('./datas/config.php'))
 
 require_once './datas/config.php';
 
-if ($cfg['new_install'])
+if (isset($cfg['new_install']) && $cfg['new_install'])
 {
 	header('Location: install.php');
 	exit;

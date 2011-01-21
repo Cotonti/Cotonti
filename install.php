@@ -34,11 +34,14 @@ if (empty($cfg['lang_dir']))
 	$cfg['lang_dir'] = './lang';
 }
 
+$cfg['customfuncs'] = false;
+$cfg['cache'] = false;
+
 require_once $cfg['system_dir'].'/functions.php';
 require_once 'system/debug.php';
 
-$cfg['cache'] = false;
-if ($cfg['new_install'])
+
+if (isset($cfg['new_install']) && $cfg['new_install'])
 {
 	require_once $cfg['system_dir'].'/database.php';
 
@@ -79,6 +82,22 @@ if ($cfg['new_install'])
 }
 else
 {
+	$branch = 'siena';
+	$prev_branch = 'genoa';
+
+	require_once $cfg['system_dir'].'/database.php';
+
+	$db = new CotDB('mysql:host='.$cfg['mysqlhost'].';dbname='.$cfg['mysqldb'], $cfg['mysqluser'], $cfg['mysqlpassword']);
+
+	$sql_install = @$db->query("SHOW TABLES LIKE '$db_updates'");
+
+	if ($sql_install->rowCount() != 1)
+	{
+		define('COT_UPGRADE', true);
+		define('COT_DEBUG', true);
+		$cfg['defaulttheme'] = 'nemesis';
+		$cfg['defaultscheme'] = 'default';
+	}
 	require_once $cfg['system_dir'].'/common.php';
 }
 
