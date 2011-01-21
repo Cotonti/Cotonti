@@ -580,7 +580,7 @@ function cot_online_update()
 				if (empty($sys['online_location']))
 				{
 					$db->insert($db_online, array(
-						'online_ip' => $usr['ip'], 
+						'online_ip' => $usr['ip'],
 						'online_name' => $usr['name'],
 						'online_lastseen' => (int)$sys['now'],
 						'online_location' => $env['location'],
@@ -594,8 +594,8 @@ function cot_online_update()
 				{
 					$db->update($db_online, array(
 						'online_lastseen' => $sys['now'],
-						'online_location' => $db->prep($env['location']), 
-						'online_subloc' => $db->prep($sys['sublocation']), 
+						'online_location' => $db->prep($env['location']),
+						'online_subloc' => $db->prep($sys['sublocation']),
 						'online_hammer' => (int)$sys['online_hammer']
 						), "online_userid=".$usr['id']);
 				}
@@ -605,7 +605,7 @@ function cot_online_update()
 				if (empty($sys['online_location']))
 				{
 					$db->insert($db_online, array(
-						'online_ip' => $usr['ip'], 
+						'online_ip' => $usr['ip'],
 						'online_name' => 'v',
 						'online_lastseen' => (int)$sys['now'],
 						'online_location' => $env['location'],
@@ -619,8 +619,8 @@ function cot_online_update()
 				{
 					$db->update($db_online, array(
 						'online_lastseen' => $sys['now'],
-						'online_location' => $db->prep($env['location']), 
-						'online_subloc' => $db->prep($sys['sublocation']), 
+						'online_location' => $db->prep($env['location']),
+						'online_subloc' => $db->prep($sys['sublocation']),
 						'online_hammer' => (int)$sys['online_hammer']
 						), "online_ip='".$usr['ip']."'");
 				}
@@ -849,7 +849,15 @@ function cot_load_structure()
 {
 	global $db, $db_structure, $db_extra_fields, $cfg, $L, $cot_extrafields, $structure, $R;
 	$structure = array();
-	$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_area ASC, structure_path ASC");
+	if (defined('COT_UPGRADE'))
+	{
+		$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_path ASC");
+		$row['structure_area'] = 'page';
+	}
+	else
+	{
+		$sql = $db->query("SELECT * FROM $db_structure ORDER BY structure_area ASC, structure_path ASC");
+	}
 
 	/* == Hook: Part 1 ==*/
 	$extp = cot_getextplugins('structure');
@@ -2037,7 +2045,7 @@ function cot_log($text, $group='def')
 		'log_ip' => $usr['ip'],
 		'log_name' => $usr['name'],
 		'log_group' => $group,
-		'log_text' => $text.' - '.$_SERVER['REQUEST_URI'] 
+		'log_text' => $text.' - '.$_SERVER['REQUEST_URI']
 		));
 }
 
@@ -2158,7 +2166,7 @@ function cot_langfile($name, $type = 'plug', $default = 'en')
 
 /**
  * Auxilliary function that returns theme resources as an array
- * 
+ *
  * @return array Theme resource strings
  */
 function cot_get_rc_theme()

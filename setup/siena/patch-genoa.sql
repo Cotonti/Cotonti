@@ -333,13 +333,6 @@ DELETE FROM `cot_config` WHERE config_owner = 'core' AND config_cat = 'skin' AND
     config_name = 'doctypeid';
 
 /* r1266 Things that have been forgotten previously */
-/* r1237 Authentication/security improvement */
-ALTER TABLE `cot_users` CHANGE COLUMN `user_hashsalt` `user_token` char(16) collate utf8_unicode_ci NOT NULL default '';
-
-/* r1247 "remember me" enforcement option */
-INSERT INTO `cot_config` (`config_owner`, `config_cat`, `config_order`, `config_name`, `config_type`, `config_value`,
-  `config_default`, `config_text`) VALUES
-('core', 'users', '21', 'forcerememberme', 3, '0', '', '');
 
 /* r1293 new options for extrafields */
 ALTER TABLE `cot_extra_fields` ADD COLUMN `field_default` text collate utf8_unicode_ci NOT NULL;
@@ -433,6 +426,23 @@ ALTER TABLE `cot_config` ADD KEY (`config_owner`, `config_cat`, `config_name`);
 ALTER TABLE `cot_structure` DROP COLUMN `structure_order`;
 ALTER TABLE `cot_structure` DROP COLUMN `structure_ratings`;
 ALTER TABLE `cot_structure` ADD KEY (`structure_code`);
+
+/* r1473 */
+CREATE TABLE IF NOT EXISTS `cot_forum_stats` (
+  `fs_id` int(11) unsigned NOT NULL auto_increment,
+  `fs_code` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  `fs_lt_id` int(11) NOT NULL default '0',
+  `fs_lt_title` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `fs_lt_date` int(11) NOT NULL default '0',
+  `fs_lt_posterid` int(11) NOT NULL default '-1',
+  `fs_lt_postername` varchar(100) collate utf8_unicode_ci NOT NULL,
+  `fs_topiccount` mediumint(8) NOT NULL default '0',
+  `fs_topiccount_pruned` int(11) default '0',
+  `fs_postcount` int(11) NOT NULL default '0',
+  `fs_postcount_pruned` int(11) default '0',
+  `fs_viewcount` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`fs_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 TRUNCATE TABLE `cot_cache`;
 

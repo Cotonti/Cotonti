@@ -21,8 +21,8 @@ if (cot_module_installed('forums'))
 	   `structure_desc`, `structure_icon`, `structure_locked`, `structure_count`) VALUES
 		('forums', '".$row['fn_code']."', '".$row['fn_code']."', '', '".$row['fn_title']."', '".$row['fn_desc']."', '".$row['fn_icon']."', 0, 0)");
 
-		$auth_permit = array(COT_GROUP_DEFAULT => 7, COT_GROUP_GUESTS => 5, COT_GROUP_MEMBERS => 7);
-		$auth_lock = array(COT_GROUP_DEFAULT => 0, COT_GROUP_GUESTS => 250, COT_GROUP_MEMBERS => 128);
+		$auth_permit = array(COT_GROUP_DEFAULT => 'RW', COT_GROUP_GUESTS => 'R', COT_GROUP_MEMBERS => 'RW');
+		$auth_lock = array(COT_GROUP_DEFAULT => '0', COT_GROUP_GUESTS => 'A', COT_GROUP_MEMBERS => '0');
 		cot_auth_add_item('forums', $row['fn_code'], $auth_permit, $auth_lock);
 	}
 

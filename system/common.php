@@ -154,7 +154,7 @@ define('COT_AJAX', !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || !empty($_SERVER[
 
 /* ======== Plugins ======== */
 
-if (!$cot_plugins)
+if (!$cot_plugins && !defined('COT_INSTALL'))
 {
 	$sql = $db->query("SELECT pl_code, pl_file, pl_hook, pl_module FROM $db_plugins
 		WHERE pl_active = 1 ORDER BY pl_hook ASC, pl_order ASC");
@@ -311,9 +311,9 @@ if (!empty($_COOKIE[$site_id]) || !empty($_SESSION[$site_id]))
 					$usr['auth'] = cot_auth_build($usr['id'], $usr['maingrp']);
 					$cfg['authcache'] && $user_log['user_auth'] = serialize($usr['auth']);
 				}
-				
+
 				$user_log['user_lastlog'] = $sys['now_offset'];
-				
+
 				$db->update($db_users, $user_log, "user_id='{$usr['id']}'");
 				unset($u, $passhash, $oldhash, $hashsalt, $hashsaltprev, $user_log);
 			}
