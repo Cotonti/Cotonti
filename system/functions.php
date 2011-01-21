@@ -148,9 +148,10 @@ function cot_getextplugins($hook, $cond='R')
  * @param string $filter Filter type
  * @param int $maxlen Length limit
  * @param bool $dieonerror Die with fatal error on wrong input
+ * @param bool $buffer Try to load from input buffer (previously submitted) if current value is empty
  * @return mixed
  */
-function cot_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
+function cot_import($name, $source, $filter, $maxlen = 0, $dieonerror = false, $buffer = false)
 {
 	global $cot_import_filters;
 
@@ -166,6 +167,10 @@ function cot_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 			$log = TRUE;
 			if ($filter=='ARR')
 			{
+				if ($buffer)
+				{
+					$v = cot_import_buffered($name, $v);
+				}
 				return($v);
 			}
 			break;
@@ -197,6 +202,10 @@ function cot_import($name, $source, $filter, $maxlen=0, $dieonerror=FALSE)
 
 	if ($v=='' || $v == NULL)
 	{
+		if ($buffer)
+		{
+			$v = cot_import_buffered($name, $v);
+		}
 		return($v);
 	}
 
@@ -3531,7 +3540,7 @@ function cot_redirect($url)
 		$url = COT_ABSOLUTE_URL . $url;
 	}
 
-	if (COT_AJAX)
+	if (defined('COT_AJAX') && COT_AJAX)
 	{
 		// Save AJAX state, some browsers loose it after redirect (e.g. FireFox 3.6)
 		$sep = strpos($url, '?') === false ? '?' : '&';
