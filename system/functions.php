@@ -752,7 +752,7 @@ function cot_sendheaders($content_type = 'text/html', $response_code = '200 OK')
  * @param bool $httponly HttpOnly flag
  * @return bool
  */
-function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = false)
+function cot_setcookie($name, $value, $expire, $path, $domain, $secure = false, $httponly = true)
 {
 	if (mb_strpos($domain, '.') === FALSE)
 	{
