@@ -52,8 +52,8 @@
 	<div id="magnifier">
 		<form id="search" action="plug.php?e=search" method="post">
 			<p>
-			<input type="text" name="rsq" id="s1" value="{PHP.L.Search}..." onblur="if(this.value=='') this.value='{PHP.L.Search}...';" onfocus="if(this.value=='{PHP.L.Search}...') this.value='';" />
-			<input type="submit" value="{PHP.L.Search}" id="s2" title="{PHP.L.Search}!" />
+				<input type="text" name="rsq" value="{PHP.L.Search}..." onblur="if(this.value=='') this.value='{PHP.L.Search}...';" onfocus="if(this.value=='{PHP.L.Search}...') this.value='';" />
+				<button type="submit" title="{PHP.L.Search}!">{PHP.L.Search}</button>
 			</p>
 		</form>
 	</div>
