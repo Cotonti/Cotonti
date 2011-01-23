@@ -26,7 +26,7 @@ if ($cot_current_hook == 'page.add.tags')
 }
 else
 {
-	$pfs_tag = 'PAGEAEDIT';
+	$pfs_tag = 'PAGEEDIT';
 }
 
 $t->assign(array(
