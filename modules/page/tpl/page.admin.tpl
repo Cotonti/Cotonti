@@ -80,8 +80,8 @@
 				<td class="centerall action {ADMIN_PAGE_ODDEVEN}">
 					<!-- IF {PHP.row.page_state} == 1 --><a title="{PHP.L.Validate}" href="{ADMIN_PAGE_URL_FOR_VALIDATED}" class="ajax">{PHP.R.icon_news}</a><!-- ENDIF -->
 					<a title="{PHP.L.Delete}" href="{ADMIN_PAGE_URL_FOR_DELETED}" class="ajax">{PHP.R.icon_delete}</a>
-					<a title="{PHP.L.Open}" href="{ADMIN_PAGE_ID_URL}">{PHP.R.admin_icon_jumpto}</a>
-					<a title="{PHP.L.Edit}" href="{ADMIN_PAGE_URL_FOR_EDIT}">{PHP.R.admin_icon_config}</a>
+					<a title="{PHP.L.Open}" href="{ADMIN_PAGE_ID_URL}" target="_blank">{PHP.R.admin_icon_jumpto}</a>
+					<a title="{PHP.L.Edit}" href="{ADMIN_PAGE_URL_FOR_EDIT}" target="_blank">{PHP.R.admin_icon_config}</a>
 				</td>
 			</tr>
 <!-- END: PAGE_ROW -->
