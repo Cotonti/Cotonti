@@ -83,7 +83,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="valid" colspan="2"><input type="submit" class="submit" value="{ADMIN_POLLS_SEND_BUTTON}" /></td>
+				<td class="valid" colspan="2"><button type="submit">{ADMIN_POLLS_SEND_BUTTON}</button></td>
 			</tr>
 		</table>
 	</form>

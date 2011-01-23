@@ -57,7 +57,7 @@
 						<option value="delete" >{PHP.L.Delete}</option>
 						<option value="star" selected="selected">{PHP.L.pm_putinstarred}</option>
 					</select>
-					<input type="submit" name="delete" value="{PHP.L.Confirm}" />
+					<button type="submit" name="delete">{PHP.L.Confirm}</button>
 				</p>
 				<p class="paging">{PM_PAGEPREV}{PM_PAGES}{PM_PAGENEXT}</p>
 				<!-- ENDIF -->
