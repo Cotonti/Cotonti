@@ -53,11 +53,10 @@ if ($cfg['polls']['maxpolls'] > 0)
 		$indexpolls->parse('INDEXPOLLS.POLL');
 
 	}
-	if ($res)
-	{
-		$indexpolls->assign('IPOLLS_ALL', cot_url('polls', 'id=viewall'));
-	}
-	else
+
+	$indexpolls->assign('IPOLLS_ALL', cot_url('polls', 'id=viewall'));
+
+	if (!$res)
 	{
 		$indexpolls->assign('IPOLLS_ERROR', $L['None']);
 		$indexpolls->parse('INDEXPOLLS.ERROR');
