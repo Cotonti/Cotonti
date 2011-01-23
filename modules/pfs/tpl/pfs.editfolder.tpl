@@ -49,7 +49,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="valid">
-						<input type="submit" class="submit" value="{PHP.L.Update}" />
+						<button type="submit">{PHP.L.Update}</button>
 					</td>
 				</tr>
 			</table>

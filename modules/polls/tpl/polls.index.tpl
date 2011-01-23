@@ -6,7 +6,7 @@
 			<!-- BEGIN: POLLTABLE -->
 			<li><label>{POLL_INPUT}{POLL_OPTIONS}</label></li>
 			<!-- END: POLLTABLE -->
-			<li><input type="submit" class="submit" value="{PHP.L.polls_Vote}" title="{PHP.L.polls_Vote}" /></li>
+			<li><button type="submit" title="{PHP.L.polls_Vote}">{PHP.L.polls_Vote}</button></li>
 		</ul>
 	</form>
 </div>

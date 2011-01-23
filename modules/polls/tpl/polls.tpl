@@ -17,7 +17,7 @@
 				<!-- END: POLLTABLE -->
 				<tr>
 					<td class="valid" colspan="4">
-						<input type="submit" class="submit" value="{PHP.L.polls_Vote}" title="{PHP.L.polls_Vote}" />
+						<button type="submit" title="{PHP.L.polls_Vote}">{PHP.L.polls_Vote}</button>
 					</td>
 				</tr>
 			</table>

@@ -120,7 +120,7 @@
 				<!-- END: PFS_UPLOAD_FORM_ROW -->
 				<tr>
 					<td colspan="3" class="valid">
-						<input type="submit" class="submit" value="{PHP.L.Upload}" />
+						<button type="submit">{PHP.L.Upload}</button>
 					</td>
 				</tr>
 			</table>
