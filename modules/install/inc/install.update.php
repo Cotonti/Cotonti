@@ -1,7 +1,7 @@
 <?php
 /**
  * @package install
- * @version 0.9.0
+ * @version 0.7.0
  * @author Trustmaster
  * @copyright Copyright (c) Cotonti Team 2010-2011
  * @license BSD
@@ -140,6 +140,12 @@ if (defined('COT_UPGRADE'))
 				array('f' => "setup/$branch/patch-$prev_branch.inc",
 					'msg' => $L['Error']));
 		}
+
+		// Unregister modules which have no registration anymore
+		$db->delete($db_core, "ct_code IN ('index', 'comments', 'ratings', 'trash')");
+
+		// Set Module versions to Genoa version before upgrade
+		$db->update($db_core, array('ct_version' => '0.8.99'), '1');
 
 		// Update modules
 		foreach (array('forums', 'page', 'pfs', 'pm', 'polls') as $code)

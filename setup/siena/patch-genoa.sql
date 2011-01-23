@@ -382,6 +382,10 @@ UPDATE `cot_bbcode` SET `bbc_replacement` = 'return cot_obfuscate(''<a href="mai
 UPDATE `cot_bbcode` SET `bbc_replacement` = 'return ''<pre class="code">''.cot_bbcode_cdata($input[1]).''</pre>'';'
 	WHERE `bbc_name` = 'code';
 
+/* 0.7.0.4 (r1359) Forums icon fix */
+UPDATE `cot_forum_sections` SET `fs_icon` = 'images/icons/default/forums.png'
+  WHERE `fs_icon` = 'system/admin/tpl/img/forums.png';
+
 /* r1370 Remove obsolete parser configs */
 DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'parser';
 
@@ -492,3 +496,6 @@ UPDATE `cot_config` SET `config_type` = 1 WHERE `config_name` IN ('maxrowsperpag
 /* r1620 Remove unused options */
 DELETE FROM `cot_config` WHERE `config_owner` = 'core' AND `config_cat` = 'performance' AND `config_name` = 'theme_consolidate';
 
+/* 0.8.3 (r1686) Forums stats change primary key */
+ALTER TABLE `cot_forum_stats` DROP `fs_id`;
+ALTER TABLE `cot_forum_stats` ADD PRIMARY KEY (`fs_cat`);
